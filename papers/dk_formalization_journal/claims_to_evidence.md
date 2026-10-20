@@ -20,7 +20,7 @@ application/audit case.
 | YWS is a downstream statistical specialization supported by its own Lean layer. | `YuWangSamworth2015/YuWangSamworth2015/CitationSurface.lean`, theorem modules under `Symmetric/` and `Rectangular/`. | YWS is secondary in this journal manuscript. |
 | The YWS source audit found two printed defects. | `YuWangSamworth2015/` audit/grounding files and machine-checked correction/refutation declarations. | The defects are equation (4)'s missing square and Theorem 3's rank-boundary convention. |
 | The current YWS census has 24 tracking entries: 22 printed-source entries and 2 explicit additions; all 24 are verified and 7 rows use corrected statements. | `snapshots/census_macros.tex` and the underlying YWS census generator/source. | “7 corrected rows” does not mean seven independent source defects. |
-| The project used AI throughout formalization and manuscript preparation, and the primary author began with no prior formal theorem-proving experience and limited background in the required spectral/operator theory. | `papers/dk_formalization_workshop/paper.tex`, the earlier journal-draft Remarks/process appendix, retained development notes, and repository/model provenance records. | Present this as a documented single-project case and author observation. Do not infer a controlled causal effect of AI or estimate prevalence across formalization projects. |
+| AI assisted the formalization and prose preparation. | Repository/model provenance and the explicit disclosure in `paper.tex` and `appendix_process.tex`. | No learning-effectiveness or workflow-effectiveness claim is made. |
 
 ## Claims deliberately removed from the journal manuscript
 
@@ -34,10 +34,24 @@ contribution statement:
 - practitioner surveys or human--LLM workflow taxonomy; and
 - broad process-study conclusions from the workshop paper.
 
-The journal manuscript does retain a narrower methodological observation: the
-primary author's documented starting background, the extensive role of AI in
-learning/implementation/review, the limits encountered in source matching, and
-an explicit disclosure that AI models also drafted and edited prose.
+The journal manuscript retains an explicit disclosure that AI models contributed
+to proof development and drafted or edited prose. The author's learning
+trajectory is not a mathematical contribution of this paper.
 
 The workshop paper is still a useful source of editorial improvements, especially
 its explicit separation of formal verification from source correspondence.
+
+## Additional small-angle result (outside the 29-target source inventory)
+
+| Claim | Evidence | Status in this revision |
+|---|---|---|
+| For every 0 < theta < pi/2 the two principal angles equal theta. | `counterexample.tex`, target frame and projection calculation; `SmallAngleCounterexample.principalAngles_eq`. | Conventional proof supplied; new Lean proof source not yet compiler-checked. |
+| The canonical direct displacement has trace norm 8 sin(theta/2); the competitor has 4 sin(theta). | `counterexample.tex`, polar-factor identification and singular-value lists. Lean lemmas `kyFanSum_displacement_R`, `kyFanSum_displacement_W` use the equivalent square-root form for the former. | Conventional proof plus symbolic identity checks; new Lean source uncompiled here. |
+| No positive largest-angle threshold repairs Proposition 4.4. | Mathematical corollary in `counterexample.tex`; `arbitrarilySmall_fullDisplacement_refuted`; source-facing alias in `Section4SmallAngle.lean`. | New result, separately tracked. Do not add a thirtieth historical source target. |
+| The 2005 Grassmann-space paper repeats the pi/3 extremal assertion. | Qiu--Zhang--Li, Section 5, item 3; `submission/LITERATURE_AUDIT.md`. | Particular item verified from author-uploaded text; no claim against the main metric theorems. |
+| General norm-class limitations and Q-norm minimization predate this work. | Bolotnikov--Li--Rodman (2001), Theorem 3.1 and Lemma 3.3. | Explicit prior art; no new Q-norm principle or first-discovery claim. |
+
+The axiom/interface audit is
+`DavisKahan/Sources/DavisKahan1970/Audits/SmallAngleCounterexample.lean`.
+The presence of a proof file or audit command is not a successful compiler run.
+`submission/VALIDATION.md` is the revision-specific validation record.

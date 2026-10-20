@@ -1,4 +1,4 @@
-# dk_formalization_journal
+# Davis--Kahan (1970) in Lean: Formalization, Counterexample, and Repair
 
 This directory contains the journal manuscript on the Lean formalization and
 mathematical audit of Davis--Kahan perturbation theory. The scope is now fixed:
@@ -7,9 +7,9 @@ mathematical audit of Davis--Kahan perturbation theory. The scope is now fixed:
   operator-theoretic infrastructure required to formalize it;
 - **secondary application:** Yu--Wang--Samworth (YWS), where it gives a compact
   statistical specialization and an independent source-audit case;
-- **methodological observation:** a concise discussion of AI-assisted
-  formalization and the primary author's starting background, together with an
-  explicit AI-use disclosure; and
+- **additional mathematical result:** an explicit family refuting full-displacement
+  trace-norm minimality at every positive acute angle, with a conventional proof
+  and new Lean proof source whose local compiler check remains to be run; and
 - **out of scope for this manuscript:** downstream application projects and the
   workshop paper's empirical human--LLM/process study, practitioner corpus, and
   resource-accounting analysis.
@@ -19,6 +19,29 @@ particular, this journal draft adopts its sharper separation between kernel
 verification and semantic/source correspondence, its treatment of representation
 mismatches, and its more precise language for source defects. It does not import
 the workshop paper's process-study contribution as a journal-paper contribution.
+
+## October 20 revision
+
+The manuscript now leads with a conventional proof of the parameterized
+counterexample, including the exact polar factor and displacement spectra.
+The new result strengthens the existing fixed-angle refutation; it is separate
+from the original 29-source-target count. **The new Lean module has not yet
+been compiled in the overlay-author environment.** This does not alter the
+existing build verification of the source inventory. The precise checks and
+commands are in `submission/VALIDATION.md`.
+
+`counterexample.tex` contains the new mathematical section. The source-facing
+extension is `DavisKahan/Sources/DavisKahan1970/Section4SmallAngle.lean`, a
+separate import from the existing `Section4.lean`. The associated audit prints
+axiom dependencies. The current manuscript and inquiry drafts do not claim
+that this additional source has already passed Lean.
+
+The shared manuscript targets Research in the Mathematical Sciences first and
+AFM as an alternative. `submission/` contains unsent inquiries, a focused
+literature note, and the author-confirmation items still needed before formal
+submission. The Q-norm repair is credited to established theory. The prior
+chat's precise attribution to Zhang--Qiu (2010) is excluded pending inspection
+of the actual passage.
 
 ## Current mathematical status
 
@@ -45,31 +68,27 @@ The manuscript should not revert to the older finite-gap specialization as the
 main theorem.
 
 A key correspondence point is also part of the journal story. The source's
-positive `sin Theta` operator acts on trial coordinates, while the Lean theorem
-uses the rectangular map `(I - F0 F0*) E0`. These are not literally the same
-operator. The modulus of the rectangular map is the source positive sine
-operator, so the relevant unitarily invariant norms agree. The paper should
+positive `sin Theta` operator acts on trial coordinates, as does the selected
+public Lean statement. Its analytic proof uses the rectangular map
+`(I - F0 F0*) E0`. The modulus of this rectangular map is the positive sine
+operator, and the relevant unitarily invariant norms agree. The paper should
 state this bridge explicitly rather than identify the two representations.
 
 ## Manuscript organization
 
-`paper.tex` is the journal manuscript. Its intended structure is:
+`paper.tex` is the journal manuscript. Its structure is:
 
-1. mathematical motivation and contribution statement;
-2. a concise statement of Davis--Kahan scope, with detailed counting deferred to
-   the appendix;
-3. the full-scope sine-theta theorem and the modulus identification connecting
-   the Lean operator to the source angle operator;
-4. mathematical architecture: direct rotations, operator ideals/majorization,
-   Sylvester separation, unbounded operators, and formal ancestry;
-5. the Proposition 4.4 counterexample, proof diagnosis, and Q-norm repair;
-6. YWS as a shorter statistical specialization and source-audit case;
-7. AI-assisted formalization as an observation about the changing tooling
-   landscape, with limitations stated explicitly;
-8. related work, conclusion, and an AI-assistance disclosure;
-9. references; then
-10. appendices containing the detailed result inventory, review methodology,
-    model/tool details, and artifact organization.
+1. mathematical motivation and source scope;
+2. the parameterized Proposition 4.4 counterexample, proof diagnosis, Q-norm
+   consequence, and relationship to prior minimization theory;
+3. the full-scope sine-theta theorem, explicit separation hypotheses, modulus
+   identity, and Sylvester reduction;
+4. mathematical architecture and formal ancestry;
+5. YWS as a shorter statistical specialization and source-audit case;
+6. related work, conclusion, AI-assistance disclosure, and artifact availability;
+7. references; then
+8. appendices with Lean-reading notation, result inventory, correspondence review,
+   artifact organization, and separate extension validation status.
 
 `appendix_process.tex` now contains supporting review methodology and the
 complete Davis--Kahan inventory. It is not an empirical process-study appendix.
@@ -156,9 +175,8 @@ tooling/submodules that are absent from a lightweight source archive.
 - Keep implementation/project-management chronology out of the main scientific
   narrative unless it is required to explain a mathematical audit result.
 - Keep the workshop paper's empirical resource accounting, practitioner corpus,
-  and workflow taxonomy out of this manuscript. A concise author-background and
-  AI-tooling observation, plus full disclosure of AI use in formalization and
-  prose preparation, belongs in the journal paper.
+  workflow taxonomy, and the personal learning narrative out of this manuscript.
+  Disclose AI use in formalization and prose preparation explicitly.
 - Put declaration inventories and detailed review mechanics in appendices or
   supplemental material.
 - Do not infer source fidelity from declaration names. Use the reviewed source

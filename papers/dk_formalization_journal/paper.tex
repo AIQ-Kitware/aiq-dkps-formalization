@@ -8,6 +8,7 @@
 \usepackage{microtype}
 \usepackage{graphicx}
 \usepackage[numbers,sort&compress]{natbib}
+\usepackage{xurl}
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 \usepackage[nameinlink]{cleveref}
 \usepackage[T1]{fontenc}
@@ -77,13 +78,10 @@
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{remark}[theorem]{Remark}
+\newtheorem{corollary}[theorem]{Corollary}
 
 \input{snapshots/census_macros.tex}
-\input{snapshots/openalex_bibliometrics_macros.tex}
 
-% Manually populated from Google Scholar on the same date as the OpenAlex observation.
-\newcommand{\GoogleScholarDavisKahanCitations}{2086}
-\newcommand{\GoogleScholarYuWangSamworthCitations}{1067}
 
 \newcommand{\Lean}{\textsc{Lean}}
 \newcommand{\YWS}{Yu--Wang--Samworth}
@@ -94,7 +92,7 @@
 \newcommand{\DKRefutedCount}{1}
 \newcommand{\DKSemanticAcceptedCount}{29}
 
-\title{Formalizing Davis--Kahan Perturbation Theory in Lean}
+\title{Davis--Kahan (1970) in Lean:\\ Formalization, Counterexample, and Repair}
 % Additional authors are expected; keep the confirmed ordering below stable.
 
 \author[1]{Jonathan Crall}
@@ -114,112 +112,116 @@
   \texttt{cep@jhu.edu}
 }
 
-\date{Draft -- September 2026}
+\date{20 October 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We formalize in Lean~4 the operator perturbation theory developed by Davis and
-Kahan in their 1970 paper on rotations of eigenspaces.  The development covers
-the paper's result-level mathematical content, including the real and complex,
-infinite-dimensional, unbounded-operator, and unitarily invariant norm settings
-used in the source.  Of the 29 results selected by an explicit source-level
-counting rule, 28 are proved at the stated scope.  Proposition~4.4 is false as
-printed: we give a machine-checked counterexample in $\mathbb{R}^4$, locate the
-invalid inequality in the published proof, and prove a corrected theorem for
-$Q$-norms.
+We formalize the operator perturbation theory of Davis and Kahan's 1970 paper
+in Lean~4. Of its 29 result-level targets, 28 are proved at their reviewed
+source scope. Proposition~4.4, which asserts full-displacement minimality of
+the direct rotation for every unitarily invariant norm under a real
+short-angle hypothesis, is false. A machine-checked counterexample in
+$\mathbb R^4$ lies inside the stated $\pi/3$ regime. We extend its construction
+to every angle $0<\theta<\pi/2$: the direct rotation has trace-norm displacement
+$8\sin(\theta/2)$, while an admissible orthogonal competitor has displacement
+$4\sin\theta$. Thus no positive angle threshold restores the assertion.
+We identify the failed inequality in the original proof and formalize a
+$Q$-norm correction derived from its valid squared-displacement theorem.
 
-The single-angle sine theorem illustrates the analytic scope of the
-formalization.  Its formal statement permits unbounded self-adjoint operators,
-finite and half-infinite spectral separation, and where-defined unitarily
-invariant norms.  The public Lean statement is written on a positive trial-coordinate
-$\sin\Theta_0$ operator.  Its proof reduces to the rectangular complementary
-block $(I-F_0F_0^*)E_0$: Lean proves that the positive sine is exactly the
-modulus of this block, and the two have the same supported unitarily invariant
-norms.
-
-Reaching this scope required formal theory for principal angles and direct
-rotations, approximation numbers and symmetric operator ideals, Borel spectral
-calculus, unbounded self-adjoint operators, real/complex transfer, and Sylvester
-equations.  We also formalize the theorem-level claims of Yu, Wang, and
-Samworth as a finite-dimensional statistical specialization and verify two
-printed defects in that paper.
+The remaining development includes real and complex Hilbert spaces,
+unbounded self-adjoint operators, finite and ordered half-infinite spectral
+separation, and where-defined unitarily invariant norms. We explain the
+operator identity connecting the positive sine of the source angle to the
+rectangular map used in the Sylvester proof. Reusable foundations include
+principal-angle geometry, direct rotations, symmetric operator ideals,
+spectral calculus, and domain-sensitive Sylvester estimates. A secondary
+application formalizes the statistical variant of Yu, Wang, and Samworth
+and corrects two printed source defects. The contribution combines an
+explicit correction to a classical assertion with a formal treatment of
+the surrounding theory; related norm-minimization limitations and
+$Q$-norm results in earlier literature are distinguished throughout.
 \end{abstract}
+
+\noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
+direct rotations; unitarily invariant norms; formalized mathematics; Lean.
+
+\smallskip
+\noindent\textbf{Mathematics Subject Classification (2020):}
+47A55, 15A42, 68V20.
+
+\smallskip
+\noindent\textbf{Corresponding author:} Jonathan Crall
+(\texttt{jon.crall@kitware.com}).
 
 \section{Introduction}
 \label{sec:introduction}
 
-Davis and Kahan's perturbation theory for spectral subspaces connects
-perturbations of self-adjoint operators to geometric changes in their spectral
-subspaces \citep{davis1970rotation,kato1976perturbation,stewart1990matrix}.
-The sine-theta inequality is its best-known descendant, especially in matrix
-statistics, but the 1970 paper has a broader operator-theoretic scope.  It
-develops canonical direct rotations between subspaces, extremal properties
-under unitarily invariant norms, Sylvester-operator estimates, generalized sine
-and tangent bounds, and results for unbounded self-adjoint operators.  These
-ideas remain part of the standard perturbation toolkit
-\citep{wedin1972perturbation,chen2021spectral}.  On
-\OpenAlexRetrievedDate{}, OpenAlex indexed \OpenAlexDavisKahanCitations{}
-citing works for Davis--Kahan and \OpenAlexYuWangSamworthCitations{} for
-Yu--Wang--Samworth (YWS); Google Scholar reported
-\GoogleScholarDavisKahanCitations{} and \GoogleScholarYuWangSamworthCitations{}
-citations, respectively.
+A spectral subspace can change substantially under a small perturbation when
+nearby spectral values are poorly separated. Davis and Kahan's perturbation
+theory quantifies this dependence by comparing angles between subspaces with
+a residual divided by a spectral gap \citep{davis1970rotation}. Its familiar
+matrix sine-theta inequality is part of a broader theory of direct rotations,
+unitarily invariant norms, Sylvester equations, and unbounded self-adjoint
+operators. These connections support applications in numerical spectral
+approximation and statistical eigenspace estimation
+\citep{stewart1990matrix,yu2015davis,chen2021spectral}.
 
-Lean~4 is an interactive theorem prover whose kernel checks elaborated proof
-terms, and Mathlib is its community mathematical library
-\citep{demoura2021lean4,mathlib2020}.  Formalizing Davis--Kahan therefore asks
-two mathematical questions.  First, can the stated result be proved from a
-precise collection of encoded hypotheses?  Second, does that encoded statement
-have the same scope as the result in the paper?  The second question is
-substantive here because boundedness, scalar field, spectral-gap geometry,
-operator domains, and the class of admissible norms all change the meaning of a
-perturbation theorem.
+We give a Lean~4 formalization of the result-level content of the original
+1970 paper. The scope includes the real and complex, infinite-dimensional,
+and unbounded settings appearing in the source. Twenty-eight of the
+29 targets have proofs at their reviewed source scope. The remaining target,
+Proposition~4.4, has a formal counterexample. The count includes the four
+unnumbered Section~2 theorems and the named results proved in the subsequent
+sections; it excludes definitions, proof-local claims, and results attributed
+to other authors. Appendix~\ref{app:dk-inventory} gives the complete account.
 
-The distinction appears already in the sine theorem.  A finite
-interval/exterior gap gives a useful Davis--Kahan estimate, but the source also
-proves ordered half-infinite separation cases.  Likewise, replacing an
-unbounded operator by a bounded matrix statement preserves the familiar shape
-of the inequality while losing part of the theorem.  Our formal endpoint keeps
-these cases and makes the domain hypotheses explicit.  A different issue arises
-in Section~4: Proposition~4.4 has no proof at its printed scope because the
-claim itself is false.
+Proposition~4.4 asserts that a direct rotation minimizes the full displacement
+from the identity in every unitarily invariant norm when the subspaces are
+real and their largest principal angle is at most $\pi/3$. Our checked
+four-dimensional counterexample has both principal angles equal to $\pi/4$.
+Section~\ref{sec:prop44} gives a parameterized construction and a conventional
+proof showing failure at arbitrarily small positive angles. The same
+calculation identifies why changing only the numerical angle bound cannot
+repair the statement. A valid correction restricts the norm class: the
+squared-displacement theorem, Proposition~4.3, implies full-displacement
+minimality for $Q$-norms.
 
-The formalization consequently required operator theory beyond the matrix-level
-statement usually associated with Davis--Kahan.  We developed the needed
-principal-angle geometry, symmetric operator ideals, spectral calculus,
-unbounded-operator interfaces, direct rotations, and Sylvester estimates as
-reusable mathematics.  Some of the spectral infrastructure was adapted or
-generalized from the Spectra Lean development \citep{bornemann2026spectra}; the
-resulting reusable declarations are organized under the \texttt{TauCeti}
-namespaces.
+This correction has a specific relationship to prior work.
+Bolotnikov, Li, and Rodman established $Q$-norm minimization and failures for
+other unitarily invariant norms in unitary completion problems
+\citep{bolotnikov2001minimal}. Qiu, Zhang, and Li subsequently repeated the
+$\pi/3$ full-displacement assertion in their discussion of direct rotations
+\citep[Section~5]{qiu2006grassmann}. We identify the false assertion and its
+failed proof step, give explicit real witnesses within every positive
+short-angle regime, and connect the correction to the valid neighboring
+result. We make no priority claim for the general trace-norm obstruction or
+for the established $Q$-norm principle.
 
-YWS \citep{yu2015davis} provides a smaller statistical specialization.  Its
-population-gap bound packages the subspace perturbation estimate in a form that
-can be combined directly with stochastic control of matrix-estimation error.
-We use it as a secondary test of the finite-dimensional spectral geometry and
-of source-level checking; its formalization exposed one algebraic typo and one
-boundary-convention error.
+The full formalization also requires choices that affect the mathematical
+meaning of the perturbation theorems. An unbounded operator carries its domain;
+a residual identity is initially an identity on that domain. An ordered
+half-infinite gap cannot be replaced by the assumption that one spectral
+block lies in a compact interval. The positive sine of an angle acts on
+trial coordinates, whereas its rectangular representative maps into the
+ambient space. Section~\ref{sec:sine-theta} states these distinctions
+mathematically and gives the formal sine-theta theorem. In particular, an
+exact modulus identity relates the two sine representations.
 
-\paragraph{Contributions.}
-\begin{enumerate}
-  \item We give a Lean treatment of all \DKResultCount{} result-level targets
-        in Davis and Kahan's 1970 paper under an explicit counting rule.
-        \DKProvedCount{} are proved at the scope stated in the source, and
-        Proposition~4.4 is refuted by a checked counterexample.
-  \item We formalize the single-angle sine theorem in its unbounded,
-        real/complex, finite-or-half-infinite gap setting with where-defined
-        unitarily invariant norms, and prove the modulus identity that connects
-        the Lean operator to Davis and Kahan's positive $\sin\Theta_0$ operator.
-  \item We formalize the direct-rotation, operator-ideal, Sylvester, generalized
-        sine/tangent, and branch-selection theory needed for the rest of the
-        paper, building reusable operator-theoretic foundations where the
-        required interfaces were absent.
-  \item We identify the failure of Davis--Kahan Proposition~4.4 inside its
-        advertised short-angle regime and prove a corrected full-displacement
-        theorem for $Q$-norms.  As a secondary application, we formalize YWS
-        Theorems~1--3 and verify two printed source defects.
-\end{enumerate}
+The reusable theory developed for this purpose comprises projection and
+principal-angle geometry, polar decomposition, symmetric operator ideals,
+Borel spectral calculus, and Sylvester estimates. Mathlib supplies the
+underlying mathematical library \citep{mathlib2020}; portions of the spectral
+infrastructure were adapted or generalized from Spectra
+\citep{bornemann2026spectra}. The Yu--Wang--Samworth development is a
+secondary finite-dimensional application. Its source audit identifies an
+algebraic typo and a singular-value boundary convention, separately from the
+false Davis--Kahan proposition.
+
+The paper is organized around the mathematical results and their formal
+representations. The proof-generation process and AI assistance are documented
+in Appendix~\ref{app:formalization-process}.
 
 \section{Scope of the Davis--Kahan formalization}
 \label{sec:coverage}
@@ -245,6 +247,8 @@ The formalization follows these dependencies through infinite-dimensional
 Hilbert spaces where they occur in the source, including the approximation-number
 machinery needed to state unitarily invariant norm comparisons without reducing
 them to finite matrices.
+
+\input{counterexample.tex}
 
 \section{A full-scope sine-theta formalization}
 \label{sec:sine-theta}
@@ -323,32 +327,60 @@ positive sine operator.
 
 \subsection{Gap geometry and the inequality}
 
-The source includes three forms of spectral separation.  The familiar case
-places one diagonal block in a finite interval $[\beta,\alpha]$ and the other
-outside its open $\delta$-neighborhood.  The Appendix to Section~6 also permits
-ordered half-infinite separation: one block may be semibounded above while the
-other is semibounded below at distance at least $\delta$, in either order.  The
-Lean predicate \texttt{FormBoundedSylvesterGap} has constructors for all three
-configurations.  The source spectral hypotheses imply the corresponding
-form-bounded separation used by the Sylvester estimate.
+Fix $\delta>0$. The separation hypothesis has the following alternatives.
+For some $\beta\leq\alpha$, one of the two spectra
+$\sigma(A_0)$ and $\sigma(\Lambda_1)$ lies in $[\beta,\alpha]$ and the other
+lies in
+\[
+ (-\infty,\beta-\delta]\;\cup\;[\alpha+\delta,\infty).
+\]
+Alternatively, for some real $b$, the operator forms satisfy either
+\[
+ A_0\geq (b+\delta)I,\quad \Lambda_1\leq bI,
+ \qquad\text{or}\qquad
+ A_0\leq bI,\quad \Lambda_1\geq (b+\delta)I.
+\]
+Each form inequality is asserted on the domain of the corresponding operator;
+for example, $A_0\geq aI$ means
+$\langle A_0x,x\rangle\geq a\|x\|^2$ for every
+$x\in\operatorname{dom}(A_0)$. For self-adjoint operators the source's ordered
+spectral half-line hypotheses imply these form bounds. The Lean predicate
+\texttt{FormBoundedSylvesterGap} records precisely the finite-interval
+alternative, in either spectral order, and these two ordered form alternatives.
+
+Both blocks may be unbounded in an ordered configuration. For instance,
+on $\ell^2(\mathbb N_{\geq1})$, take diagonal operators
+$A_0e_n=(n+\delta)e_n$ and $\Lambda_1e_n=-ne_n$, on the domains where their
+images are square summable. They satisfy the first ordered configuration
+with $b=0$, while neither spectrum lies in a finite interval. This example
+explains why retaining the half-infinite alternatives changes the theorem's
+applicability.
 
 The source also writes a common-domain equality for the unbounded trial
 configuration.  That equality discharges the forward domain condition consumed
 by \texttt{IsTrialResidual}.  Source correspondence is checked from the combined
 hypotheses, with this equality supplying the required domain condition.
 
-With these definitions, the selected formal theorem states the
-where-defined inequality
+\begin{theorem}[Sine-theta estimate]
+\label{thm:sine-theta}
+Let the scalar field be $\mathbb R$ or $\mathbb C$, let $E$ be separable,
+and let $A$, $A_0$, and $\Lambda_1$ be self-adjoint operators on the
+Hilbert spaces above. Suppose the isometries, domain inclusions, residual
+identity, exact complementary decomposition, and one of the three gap
+configurations hold. Let $N$ be a supported normalized symmetric
+operator-ideal norm. Whenever $\sin\Theta_0$ and $R$ belong to its domain,
 \begin{equation}
-  \delta\,N(\sin\Theta_0)\leq N(R),
-  \label{eq:dk-sine}
+ \delta\,N(\sin\Theta_0)\leq N(R).
+ \label{eq:dk-sine}
 \end{equation}
-for real or complex separable Hilbert spaces and possibly unbounded
-self-adjoint $A$, $A_0$, and $\Lambda_1$.  ``Where-defined'' means that the
-operator-ideal gauge is finite on both displayed operators.  The implementation
-first proves the corresponding estimate for $S=(I-F_0F_0^*)E_0$ and then uses
-\cref{eq:modulus-sine} together with modulus invariance of the symmetric ideal
-gauge.
+\end{theorem}
+
+The word ``where-defined'' refers to the two ideal-membership hypotheses.
+They are retained explicitly rather than inferred from a finite-dimensional
+analogy. The proof first estimates the rectangular map
+$S=(I-F_0F_0^*)E_0$ and then uses \cref{eq:modulus-sine} and modulus invariance
+of the ideal gauge. This is the Lean statement of the theorem, with the
+ambient Hilbert-space typeclasses suppressed.
 
 Appendix~\ref{app:lean-guide} summarizes the general Lean notation used in the
 displayed signatures.
@@ -379,13 +411,34 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     N.Mem (sourceDirectedSinThetaOperator E0 F0) ->
     N.Mem R ->
       delta * N.gaugeReal (sourceDirectedSinThetaOperator E0 F0) <=
-        N.gaugeReal R := by
+        N.gaugeReal R
 \end{lstlisting}
 
 The theorem contains all three separation configurations encoded by its gap
 hypothesis.  The ordered half-infinite cases have distinct hypotheses from
 the finite interval/exterior specialization, so source correspondence is checked
 against the complete family of gap hypotheses.
+
+\subsection{Why the Sylvester estimate gives the angle bound}
+
+Set $X=F_1^*E_0$. The exact complementary decomposition gives
+$S=F_1X$, and multiplication by the isometry $F_1$ preserves the supported
+singular-value gauges. Self-adjointness, the domain hypotheses, and the
+residual identity yield the Sylvester relation
+\[
+ \Lambda_1 X-XA_0=F_1^*R
+\]
+on $\operatorname{dom}(A_0)$, with the left side represented by the bounded
+right side. The separated Sylvester estimate gives
+\[
+ \delta N(X)\leq N(F_1^*R)\leq N(R).
+\]
+Combining this with $N(X)=N(S)=N(\sin\Theta_0)$ proves the conclusion.
+For unbounded operators, deriving the domain compatibility for $X$ is part of
+the argument; the displayed relation is not an everywhere-defined composition
+of unbounded maps. The constant-one estimate uses the specified interval or
+ordered gap geometry, rather than an arbitrary assertion that the two spectra
+are disjoint.
 
 \section{Mathematical architecture of the Davis--Kahan development}
 \label{sec:dk-rest}
@@ -462,7 +515,7 @@ The analytic engine behind the sine and tangent estimates is the Sylvester map
 \[
   X \longmapsto AX-XB.
 \]
-When the spectra of self-adjoint $A$ and $B$ are separated by a gap $\delta$,
+Under the interval/exterior or ordered spectral-gap configurations used above,
 Davis and Kahan obtain lower bounds of the form
 \[
   \delta\,N(X) \leq N(AX-XB).
@@ -508,105 +561,6 @@ integration with Tau Ceti \citep{tauceti2026}.  The paper-specific
 Davis--Kahan package contains the source statements, examples, and the
 Proposition~4.4 counterexample; Appendix~\ref{app:source-review} records the
 statement-level review procedure.
-
-\section{Proposition 4.4: refutation and repair}
-\label{sec:prop44}
-
-Davis--Kahan Proposition~4.4 asserts, in the real finite-dimensional case, that
-when the largest principal angle is at most $\pi/3$, the direct rotation
-minimizes every unitarily invariant norm of the full displacement $I-W$ among
-unitaries carrying one subspace onto the other.  The statement is false.
-
-\subsection{A four-dimensional counterexample}
-
-Let $E=\mathbb{R}^4$ and
-\[
-  U=\operatorname{span}\{e_0,e_1\}.
-\]
-Define the orthogonal map $W=\tfrac12 H$ using
-\[
-H=
-\begin{pmatrix}
- 1&-1&-1&-1\\
- 1& 1& 1&-1\\
--1&-1& 1&-1\\
- 1&-1& 1& 1
-\end{pmatrix},
-\qquad
-V=W(U).
-\]
-Both principal angles between $U$ and $V$ are $\pi/4$, so the pair satisfies
-the printed $\pi/3$ hypothesis.  The singular values of $I-W$ are
-$(\sqrt2,\sqrt2,0,0)$, hence
-\[
-  \|I-W\|_1=2\sqrt2.
-\]
-For the direct rotation $R$ from $U$ to $V$, all four singular values of $I-R$
-are $\sqrt{2-\sqrt2}$, giving
-\[
-  \|I-R\|_1=4\sqrt{2-\sqrt2}>2\sqrt2.
-\]
-Thus an admissible competitor has smaller trace-norm displacement than the
-direct rotation.  The construction, its acuteness and principal-angle bounds,
-the singular-value calculations, and the strict inequality are all checked in
-Lean.
-
-\subsection{Where the printed proof fails}
-
-The counterexample also pinpoints the invalid step in the proof.  Write
-$K=I-W$, and let $\Omega_1$ and $\Omega_2$ be the two principal-plane
-projections used by Davis and Kahan.  Their equation~(4.3) requires, on this
-configuration,
-\begin{equation}
-  \|K\|_4
-  \geq
-  \|K\Omega_1\|_2+\|K\Omega_2\|_2,
-  \label{eq:dk43-false}
-\end{equation}
-where $\|\cdot\|_j$ denotes the Ky Fan $j$-norm.  The witness gives
-\[
-  \|K\|_4=2\sqrt2,
-  \qquad
-  \|K\Omega_1\|_2=\|K\Omega_2\|_2=2,
-\]
-so \cref{eq:dk43-false} would require $2\sqrt2\ge4$.  Orthogonality of the two
-domain planes does not force the images under $K$ to be orthogonal, and the
-singular-value sums of the restrictions therefore need not add.
-
-Proposition~4.3 remains valid.  It concerns the squared displacement
-$(I-W)^*(I-W)$, for which the formalization proves the source majorization
-statement and its unitarily invariant norm consequences.  The two neighboring
-claims therefore have different dispositions: squared-displacement
-majorization is valid, while arbitrary unitarily invariant norm minimality of
-the full displacement fails.
-
-\subsection{A Q-norm repair}
-
-The formal development proves a natural correction.  Call a unitarily invariant
-norm $N$ a $Q$-norm if there is a unitarily invariant norm $M$ such that
-\begin{equation}
-  N(X)^2=M(X^*X)
-  \label{eq:qnorm-def}
-\end{equation}
-for every $X$.  Proposition~4.3 applied to $M$ immediately yields the valid
-full-displacement estimate
-\begin{equation}
-  N(I-R)\leq N(I-W)
-  \label{eq:qnorm-repair}
-\end{equation}
-for the direct rotation $R$.  The Lean theorem proves
-\cref{eq:qnorm-repair} over every \texttt{RCLike} scalar field.  Its angle
-assumption is the acuteness condition needed to construct the direct rotation;
-the printed $\pi/3$ threshold is absent.  Conversely, the trace norm used above is formally shown not
-to satisfy this $Q$-norm predicate on the witness space.
-
-Earlier work on canonical unitary completion already records failures for
-Schatten norms below the quadratic regime, including trace-norm phenomena
-\citep{bolotnikov2001minimal}.  The present counterexample is inside the
-Davis--Kahan short-angle hypothesis and directly refutes Proposition~4.4 as
-printed.  Later literature has repeated the short-angle claim
-\citep{qiu2006grassmann}; the formal result therefore serves as a correction to
-a still-propagated statement.
 
 \section{Yu--Wang--Samworth as a statistical specialization}
 \label{sec:yws}
@@ -657,57 +611,6 @@ by zero through the ambient dimension and places the terminal convention after
 that dimension.  A checked $2\times2$ rank-one example witnesses the failure
 of the printed convention.
 
-\section{AI-assisted formalization and the changing tooling landscape}
-\label{sec:ai-landscape}
-
-The starting point of this project differs substantially from the traditional
-model of a formalization led by an expert in both the mathematics and the proof
-assistant.  At the outset, the primary author had no prior experience with
-formal theorem proving and had not studied most of the spectral and operator
-theory needed for Davis--Kahan beyond basic linear algebra and set theory.  The
-project nevertheless reached a checked formal treatment of the result-level
-content of the 1970 paper, including its unbounded and infinite-dimensional
-arguments.  The gap between that starting background and the resulting formal scope is an
-observation about the practical capabilities of contemporary formalization
-tools.  For the primary author, a project at this level of operator theory would
-not have been attempted without AI assistance; the tools made it possible to
-learn Lean and the required mathematics while constructing the development.
-
-Large language models were used throughout the work.  ChatGPT, Claude Code, and
-Codex-family agents explained unfamiliar mathematical material, proposed proof
-decompositions, searched the repository and external formal libraries, wrote
-Lean definitions and proofs, used compiler feedback to repair them, compared
-formal statements with source passages, and helped draft and edit the
-manuscript.  Formalization also became a way to learn the underlying
-mathematics: definitions and domain conditions that could be passed over during
-informal reading had to be made explicit before Lean would accept the intended
-argument.
-
-The experience also exposed limits of this workflow.  During development, an
-agent could produce a valid theorem and describe the task as complete even when
-the statement covered only bounded operators, only finite-dimensional spaces,
-or a narrower spectral-gap configuration.  Successful compilation certifies
-the encoded proposition; it does not identify which informal theorem was
-encoded.  Repeated source comparison, including reviews performed in fresh
-model contexts and review by the human authors, was therefore part of the
-workflow.  Proposition~4.4 illustrates the converse situation: persistent
-proof failure eventually led to mathematical analysis of the source claim and
-to a counterexample.  The weaker statements obtained along the way were not
-accepted under the original label.
-
-Long-horizon Lean agents and persistent formalization environments are now
-being developed explicitly around compiler feedback, library search, planning,
-and theorem reuse \citep{zhang2026leanmarathon,mathcode2026,autolean2026}.
-Human--AI interaction in advanced mathematical formalization is also becoming a
-subject of study \citep{collins2026humanai,anthropic2026zeta}.  This project
-provides one detailed case in that changing landscape.  It does not isolate the
-causal contribution of model capability, Mathlib growth, local library
-construction, workflow design, or human review; no controlled comparison among
-those factors was performed.  It does show that the amount of prior expertise
-required to initiate a deep formalization can be much lower than the expertise
-embodied in the finished development, provided that kernel checking is paired
-with sustained mathematical review of what has actually been stated.
-
 \section{Related work}
 \label{sec:related}
 
@@ -731,57 +634,55 @@ present work because it develops spectral and operator infrastructure in Lean;
 we directly adapted and generalized parts of that development
 \citep{bornemann2026spectra}.
 
-AI-assisted theorem proving has progressed from statement translation and
-sketch-guided proving to long-horizon repository-scale workflows
-\citep{wu2022autoformalization,jiang2023dsp,zhang2026leanmarathon}.
-FormalAlign, ShadowBench, and EconCSLib study or expose the separate problem of
-agreement between an informal claim and its formal statement
-\citep{lu2025formalalign,han2026shadowbench,garg2026econcs}.  The Davis--Kahan
-experience gives this issue a concrete operator-theoretic form: the
-half-infinite gap cases and the modulus relation in
-\cref{eq:modulus-sine} are mathematical conditions for matching the source,
-even after Lean has checked the proof.
+The source comparison concerns mathematical hypotheses and representations:
+operator domains, spectral-gap geometry, scalar fields, and ideal membership.
+The exact modulus identity in \cref{eq:modulus-sine} is one such correspondence.
+The mathematical meaning of a displayed Lean theorem is established by these
+connections and its hypotheses, separately from the kernel's proof check.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-The formalization recovers the operator-theoretic breadth of Davis and Kahan's
-1970 paper in Lean: direct rotations, unitarily invariant norm extremality,
-Sylvester separation, generalized sine and tangent estimates, branch selection,
-and the unbounded single-angle theory.  The full result-level accounting has
-one mathematical exception.  Proposition~4.4 is false under its published
-hypotheses; the checked four-dimensional counterexample locates the failure in
-the proof, while Proposition~4.3 supplies the squared-displacement theorem from
-which a valid $Q$-norm repair follows.
+The formal development treats the result-level content of Davis and Kahan's
+1970 paper, including its unbounded and infinite-dimensional settings.
+Twenty-eight source targets are proved at their reviewed scope, and
+Proposition~4.4 is refuted by a checked real four-dimensional example.
+The parameterized construction in \cref{thm:small-angle} shows that no positive
+principal-angle threshold restores full-displacement minimality in trace norm.
+The failed blockwise Ky Fan inequality explains the error in the printed proof;
+the valid squared-displacement theorem gives the $Q$-norm correction.
 
-The project also clarifies several formalization choices that are easy to hide
-in a matrix-only restatement.  Approximation numbers carry singular-value
-arguments into infinite-dimensional operator ideals.  Domain-carrying partial
-maps make the unbounded hypotheses visible.  Form-bounded Sylvester gaps encode
-both finite and half-infinite spectral separation.  The selected Lean theorem
-is stated on a positive trial-coordinate $\sin\Theta_0$ operator; the
-rectangular complementary block remains the Sylvester proof representative,
-and its modulus is exactly that positive sine.
+The perturbation results depend on distinctions that remain visible in the
+formal theorem: an unbounded operator's domain, the alternatives for spectral
+separation, and the ideal-membership conditions under which its norm is finite.
+The sine-theta theorem is stated on the source's positive trial-coordinate
+angle operator. Its exact modulus relation to the rectangular Sylvester
+representative supplies the connection used in the proof.
 
-The reusable layer now contains much of the mathematics needed to express these
-statements, so the paper-specific proofs can depend on general operator theory.  The YWS development
-shows how a smaller population-gap theorem can reuse the same spectral geometry
-and also demonstrates the value of checking algebraic identities and endpoint
-conventions.  The AI-assisted development process adds a separate observation:
-a formalizer can now begin far outside both the subject-matter and Lean expert
-communities and still build a substantial checked development, while the burden
-of deciding whether the checked statement is the intended mathematics remains
-a human mathematical responsibility supported by explicit review.
+The resulting projection, direct-rotation, ideal, and Sylvester interfaces are
+reusable outside the source-specific statements. The YWS application exhibits
+this reuse in finite-dimensional statistical perturbation theory. The
+mathematical correction, the formal representation choices, and the checked
+classical results together describe the contribution of the development.
 
 \section*{AI assistance disclosure}
 ChatGPT, Claude, and Codex-family models were used throughout the formalization
 and manuscript preparation.  Their uses included mathematical discussion,
 literature and library search, proof decomposition, Lean code generation,
 compiler-driven proof repair, source-to-statement review, and drafting and
-editing manuscript prose.  The human authors selected the mathematical claims,
-directed the formalization and review, checked source interpretations, and take
-responsibility for the content of the paper.  Appendix~\ref{app:formalization-process}
+editing manuscript prose.  Human direction covered the target statements, scope decisions, source
+comparison, and acceptance of proposed counterexamples and repairs. AI tools
+are not authors; responsibility for the manuscript remains with its human
+authors.  Appendix~\ref{app:formalization-process}
 gives additional workflow and model details.
+
+\section*{Code and data availability}
+The Lean sources, dependency pins, source-correspondence records, and manuscript
+sources are openly available at
+\url{https://github.com/AIQ-Kitware/aiq-dkps-formalization}.
+Appendix~\ref{app:artifact} identifies the mathematical modules and reproduction
+commands. No human-subject dataset or empirical evaluation is part of this
+mathematical article.
 
 \section*{Acknowledgments}
 

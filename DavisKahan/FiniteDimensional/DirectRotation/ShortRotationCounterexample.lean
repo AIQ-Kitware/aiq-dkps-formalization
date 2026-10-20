@@ -121,12 +121,14 @@ def U4 : Submodule ℝ E4 := Submodule.span ℝ {sv 0, sv 1}
 /-- The target subspace `W(U)`. -/
 def V4 : Submodule ℝ E4 := U4.map Wequiv.toLinearMap
 
-private theorem mem_U4 {x : E4} (hx : x ∈ U4) : x = x 0 • sv 0 + x 1 • sv 1 := by
+/-- Coordinates in the source two-plane. -/
+theorem mem_U4 {x : E4} (hx : x ∈ U4) : x = x 0 • sv 0 + x 1 • sv 1 := by
   obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
   ext i
   fin_cases i <;> simp [sv]
 
-private theorem coord_eq_zero_of_mem_U4 {x : E4} (hx : x ∈ U4) :
+/-- The last two coordinates vanish on the source plane. -/
+theorem coord_eq_zero_of_mem_U4 {x : E4} (hx : x ∈ U4) :
     x 2 = 0 ∧ x 3 = 0 := by
   obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
   constructor <;> simp [sv]
@@ -144,7 +146,8 @@ private theorem projection_U4_apply (x : E4) :
     simp [sv, inner_add_left, inner_sub_right, real_inner_smul_left,
       EuclideanSpace.inner_single_left]
 
-private theorem projection_U4_coord (x : E4) (i : Fin 4) :
+/-- Coordinate formula for the source projection. -/
+theorem projection_U4_coord (x : E4) (i : Fin 4) :
     projection U4 x i = if i = 0 then x 0 else if i = 1 then x 1 else 0 := by
   rw [projection_U4_apply]
   fin_cases i <;> simp [sv]
@@ -373,7 +376,8 @@ def mbasis : OrthonormalBasis (Fin 4) ℝ E4 :=
       rw [coe_basisOfLinearIndependentOfCardEqFinrank]
       exact orthonormal_mv)
 
-private theorem mbasis_coe (i : Fin 4) : mbasis i = mv i := by
+/-- The explicit diagonal/anti-diagonal orthonormal basis. -/
+theorem mbasis_coe (i : Fin 4) : mbasis i = mv i := by
   rw [mbasis]
   rw [show ⇑((basisOfLinearIndependentOfCardEqFinrank
       orthonormal_mv.linearIndependent
