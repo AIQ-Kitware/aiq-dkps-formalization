@@ -379,10 +379,18 @@ theorem kyFanSum_pinch_le
       map_add, map_sub]
     push_cast
     module
-  have htri := kyFanSum_add_le k A
-    (U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap)
+  have htri := LinearMap.kyFanSum_add_le A
+    (U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap) k
+  have htri' : kyFanSum k (A +
+      U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap) ≤
+      kyFanSum k A +
+        kyFanSum k (U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap) := by
+    rw [kyFanSum_eq_linearMap_kyFanSum k _,
+      kyFanSum_eq_linearMap_kyFanSum k A,
+      kyFanSum_eq_linearMap_kyFanSum k _]
+    exact htri
   rw [← hpinch, kyFanSum_real_smul k (pinch U A) (by norm_num),
-    kyFanSum_unitary_comp, kyFanSum_comp_unitary] at htri
+    kyFanSum_unitary_comp, kyFanSum_comp_unitary] at htri'
   linarith
 
 /-- Invertibility makes every finite singular value strictly positive. -/

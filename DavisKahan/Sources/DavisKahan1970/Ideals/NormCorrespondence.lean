@@ -302,13 +302,19 @@ noncomputable def finiteNorm (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
             TauCeti.sum_filter_lt_eq_sum_fin hm (fun k => B.singularValues k),
             ← TauCeti.kyFanSum_eq_sum_fin, ← TauCeti.kyFanSum_eq_sum_fin,
             ← TauCeti.kyFanSum_eq_sum_fin]
-          exact TauCeti.kyFanSum_add_le m A B
+          rw [TauCeti.kyFanSum_eq_linearMap_kyFanSum m (A + B),
+            TauCeti.kyFanSum_eq_linearMap_kyFanSum m A,
+            TauCeti.kyFanSum_eq_linearMap_kyFanSum m B]
+          exact LinearMap.kyFanSum_add_le A B m
         · have huniv :
               (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
             Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
           rw [huniv, ← TauCeti.kyFanSum_eq_sum_fin,
             ← TauCeti.kyFanSum_eq_sum_fin, ← TauCeti.kyFanSum_eq_sum_fin]
-          exact TauCeti.kyFanSum_add_le n A B
+          rw [TauCeti.kyFanSum_eq_linearMap_kyFanSum n (A + B),
+            TauCeti.kyFanSum_eq_linearMap_kyFanSum n A,
+            TauCeti.kyFanSum_eq_linearMap_kyFanSum n B]
+          exact LinearMap.kyFanSum_add_le A B n
       show Φ.gauge n (fun i : Fin n => (A + B).singularValues (i : ℕ)) ≤
         Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ)) +
           Φ.gauge n (fun i : Fin n => B.singularValues (i : ℕ))
