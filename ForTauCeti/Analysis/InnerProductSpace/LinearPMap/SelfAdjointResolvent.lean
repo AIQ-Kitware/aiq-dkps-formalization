@@ -361,9 +361,17 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
   have hsa : _root_.IsSelfAdjoint (resolvent A (c : ℂ)) := isSelfAdjoint_resolvent_ofReal hA hc
   have hrad : spectralRadius ℂ (resolvent A (c : ℂ)) ≤ ENNReal.ofReal s⁻¹ := by
     refine iSup₂_le fun μ hμ => ?_
-    calc (‖μ‖₊ : ℝ≥0∞) = ENNReal.ofReal ‖μ‖ := by
-          rw [← ENNReal.ofReal_coe_nnreal]; norm_cast
-      _ ≤ ENNReal.ofReal s⁻¹ := ENNReal.ofReal_le_ofReal (hspec μ hμ)
+    rcases eq_or_ne μ 0 with rfl | hμ0
+    · simp
+    · have hμspec : μ ∈ _root_.spectrum ℂ (resolvent A (c : ℂ)) := by
+        have hμ' : μ ∈ _root_.spectrum ℂ (resolvent A (c : ℂ)) ∪ {0} := by
+          simpa only [quasispectrum_eq_spectrum_union_zero] using hμ
+        rcases hμ' with hμ' | hμ'
+        · exact hμ'
+        · exact (hμ0 hμ').elim
+      calc (‖μ‖₊ : ℝ≥0∞) = ENNReal.ofReal ‖μ‖ := by
+            rw [← ENNReal.ofReal_coe_nnreal]; norm_cast
+        _ ≤ ENNReal.ofReal s⁻¹ := ENNReal.ofReal_le_ofReal (hspec μ hμspec)
   calc ‖resolvent A (c : ℂ)‖
       = (spectralRadius ℂ (resolvent A (c : ℂ))).toReal :=
         hsa.toReal_spectralRadius_complex_eq_norm.symm

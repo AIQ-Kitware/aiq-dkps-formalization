@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
 public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
 
 /-!
@@ -218,7 +218,7 @@ theorem tendsto_genDiffQuot_genToGroup (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ
 a self-adjoint operator is that operator again. -/
 theorem generator_genToGroup (hA : IsSelfAdjoint A) :
     TauCeti.OneParameterUnitaryGroup.generator (genToGroup hA) = A := by
-  refine (eq_of_le_of_isSelfAdjoint hA
+  refine (_root_.LinearPMap.eq_of_le_of_isSelfAdjoint hA
     (TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator (genToGroup hA)) ?_).symm
   refine ⟨fun ψ hψ => ?_, ?_⟩
   · -- the domain inclusion, which is the same limit computation

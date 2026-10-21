@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import Mathlib.Analysis.Matrix.Hermitian
 
 
 /-!
@@ -146,11 +147,11 @@ theorem singularValues_offDiagonal_two_by_two (r : ℝ) :
   let A : EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] EuclideanSpace 𝕜 (Fin 2) :=
     Matrix.toEuclideanLin !![(0 : 𝕜), (r : 𝕜); (r : 𝕜), 0]
   -- symmetry is exactly hermitianness of the underlying matrix
-  have hsym : A.IsSymmetric :=
-    Matrix.isSymmetric_toEuclideanLin_iff.mpr (by
-      ext i j
-      fin_cases i <;> fin_cases j <;>
-        simp [Matrix.conjTranspose_apply, RCLike.conj_ofReal])
+  have hmat : (!![(0 : 𝕜), (r : 𝕜); (r : 𝕜), 0] : Matrix (Fin 2) (Fin 2) 𝕜).IsHermitian := by
+    ext i j
+    fin_cases i <;> fin_cases j <;>
+      norm_num [Matrix.IsHermitian, Matrix.conjTranspose_apply, RCLike.conj_ofReal]
+  have hsym : A.IsSymmetric := Matrix.isSymmetric_toEuclideanLin_iff.mpr hmat
   have hsq : A ∘ₗ A = (((r ^ 2 : ℝ) : 𝕜) • LinearMap.id) := by
     ext x i
     fin_cases i <;>
@@ -193,8 +194,8 @@ theorem singularValues_lowerLeft_two_by_two (r : ℝ) :
       ext j <;> fin_cases j <;>
       simp [A, LinearMap.comp_apply, Matrix.toLpLin_apply,
         Matrix.vecHead, Matrix.vecTail, EuclideanSpace.basisFun_apply,
-        sq_abs] <;>
-      ring
+        sq_abs]
+    all_goals ring
   refine singularValues_eq_pair_of_gram_eq finrank_euclideanSpace_fin
     (EuclideanSpace.basisFun (Fin 2) 𝕜) A (abs_nonneg r) le_rfl
     (abs_nonneg r) ?_

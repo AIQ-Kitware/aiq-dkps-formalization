@@ -794,7 +794,7 @@ include hdom hadj in
 /-- **The double-angle tangent operator transports the diagonal domains.**
 
 `tan 2Theta = 2X(1 - X†X)⁻¹` maps `dom A₀` into `dom A₁`, which is the
-`MapsDomainTo` half of `TauCeti.LinearPMap.SylvesterEquation A₁ A₀ tan2Θ C`.
+`MapsDomainTo` half of `_root_.LinearPMap.SylvesterEquation A₁ A₀ tan2Θ C`.
 It follows immediately once the resolvent is known to preserve `dom A₀`:
 the tangent operator is the resolvent followed by `X`, and `X` transports the
 domains by hypothesis. -/
@@ -907,7 +907,7 @@ C := (X ∘ R ∘ G  +  X ∘ B₀₁ ∘ X  -  B₁₀) ∘ R
 ```
 
 Every factor of `C` is a continuous linear map, so this is the `equation` field
-of `TauCeti.LinearPMap.SylvesterEquation A₁ A₀ (X ∘ R) C`; the `mapsTo_domain`
+of `_root_.LinearPMap.SylvesterEquation A₁ A₀ (X ∘ R) C`; the `mapsTo_domain`
 field is `doubleAngleTangent_mapsDomainTo`.  Doubling gives `tan 2Theta`.
 
 Feeding this to `kyFan_unbounded_sylvester_le_of_semibounded_direct` with
@@ -940,7 +940,7 @@ include hdom hadj in
 /-- **`tan 2Theta` satisfies a genuine unbounded Sylvester equation.**
 
 Packages the two preceding results as the actual
-`TauCeti.LinearPMap.SylvesterEquation H.A1 H.A0 (X ∘L R) C` structure, with
+`_root_.LinearPMap.SylvesterEquation H.A1 H.A0 (X ∘L R) C` structure, with
 
 ```
 C = (X ∘ R ∘ G  +  X ∘ B₀₁ ∘ X  -  B₁₀) ∘ R
@@ -968,7 +968,7 @@ theorem doubleAngleTangent_sylvesterEquation
     (hRmem : ∀ y : H.A0.domain, R (y : E0) ∈ H.A0.domain)
     (hRight : ∀ u : E0, ((1 : E0 →L[𝕜] E0) - riccatiGram X) (R u) = u)
     (hLeft : ∀ u : E0, R (((1 : E0 →L[𝕜] E0) - riccatiGram X) u) = u) :
-    TauCeti.LinearPMap.SylvesterEquation H.A1 H.A0 (X ∘L R)
+    _root_.LinearPMap.SylvesterEquation H.A1 H.A0 (X ∘L R)
       ((X ∘L R ∘L riccatiGramCommutator H X +
         X ∘L H.B01 ∘L X - H.B10) ∘L R) where
   mapsTo_domain := fun x => hdom ⟨R (x : E0), hRmem x⟩

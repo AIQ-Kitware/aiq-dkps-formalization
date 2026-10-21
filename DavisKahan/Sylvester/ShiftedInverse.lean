@@ -234,7 +234,7 @@ theorem norm_sylvester_le_of_intervalExterior
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B α)
     (hAres : TauCeti.LinearPMap.LeftShiftedInverseBound A
       ((α + β) / 2) ((α - β) / 2 + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C) :
     δ * ‖X‖ ≤ ‖C‖ := by
   obtain ⟨J, hJleft, hJnorm⟩ := hAres
   set c : ℝ := (α + β) / 2 with hc
@@ -318,7 +318,7 @@ theorem norm_sylvester_le_of_exteriorInterval
     (hAhigh : TauCeti.LinearPMap.SemiboundedAbove A α)
     (hBres : TauCeti.LinearPMap.TwoSidedShiftedInverseBound B
       ((α + β) / 2) ((α - β) / 2 + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C) :
     δ * ‖X‖ ≤ ‖C‖ := by
   obtain ⟨J, hJdom, _hJleft, hJright, hJnorm⟩ := hBres
   set c : ℝ := (α + β) / 2 with hc

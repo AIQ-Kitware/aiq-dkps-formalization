@@ -230,7 +230,6 @@ topics:
   - Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
   - Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator
   - Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
-  - Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
   - Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
   - Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
   - Analysis.InnerProductSpace.BlockLowerBound
@@ -610,7 +609,6 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
   - Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
   - Analysis.InnerProductSpace.BlockLowerBound
-  - Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
   - Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator
   - Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
   - Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse

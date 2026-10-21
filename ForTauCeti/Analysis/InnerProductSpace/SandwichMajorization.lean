@@ -395,7 +395,7 @@ theorem approximationNumber_adjoint_sandwich_weaklyMajorized [CompleteSpace E]
       (fun i : Fin (finrank 𝕜 E) =>
         M.approximationNumber (i : ℕ) * D.approximationNumber (i : ℕ) ^ 2) := by
   have hMpos : (M : E →ₗ[𝕜] E).IsPositive :=
-    ((ContinuousLinearMap.nonneg_iff_isPositive M).mp hM).toLinearMap
+    ((ContinuousLinearMap.nonneg_iff_isPositive).mp hM).toLinearMap
   have hcoe : ((ContinuousLinearMap.adjoint D ∘L M ∘L D : E →L[𝕜] E) : E →ₗ[𝕜] E)
       = (D : E →ₗ[𝕜] E).adjoint ∘ₗ (M : E →ₗ[𝕜] E) ∘ₗ (D : E →ₗ[𝕜] E) := rfl
   have hmain := singularValues_adjoint_sandwich_weaklyMajorized hMpos (D : E →ₗ[𝕜] E)

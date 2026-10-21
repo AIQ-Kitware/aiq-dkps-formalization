@@ -440,7 +440,7 @@ theorem theorem5_2_symmetricNorming_complex
     {X R : F →L[ℂ] E} {c δ : ℝ} (hδ : 0 < δ)
     (hAlow : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B c)
-    (hsyl : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hsyl : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   symmetricNorming_of_kyFanDominant N hδ hR
@@ -460,7 +460,7 @@ theorem theorem5_2_symmetricNorming_real
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X R : F →L[ℝ] E} {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A B δ)
-    (hsyl : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hsyl : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   symmetricNorming_of_kyFanDominant N hδ hR
@@ -486,7 +486,7 @@ theorem theorem5_2_orderedGap_symmetricNorming_real
     {X R : F →L[ℝ] E} {c δ : ℝ} (hδ : 0 < δ)
     (hAlow : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B c)
-    (hsyl : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hsyl : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   theorem5_2_symmetricNorming_real N hA hB hδ
@@ -513,7 +513,7 @@ theorem theorem5_2_sourceExact_complex
     {X R : F →L[ℂ] E} {c δ : ℝ} (hδ : 0 < δ)
     (hAlow : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B c)
-    (hsyl : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hsyl : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   theorem5_2 N.toFanDominantIdealFamily hA hB hδ hAlow hBhigh hsyl hR
@@ -530,7 +530,7 @@ theorem theorem5_2_sourceExact_real
     {X R : F →L[ℝ] E} {c δ : ℝ} (hδ : 0 < δ)
     (hAlow : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B c)
-    (hsyl : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hsyl : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   DavisKahan.Sylvester.davisKahan1970_sylvester_real

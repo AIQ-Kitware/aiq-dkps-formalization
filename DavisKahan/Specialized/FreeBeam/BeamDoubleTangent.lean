@@ -462,7 +462,8 @@ theorem beamLowReflection_isSelfAdjoint (ε : ℝ) :
   have hone : IsSelfAdjoint (1 : BeamL2 →L[ℂ] BeamL2) := star_one _
   have hQ : IsSelfAdjoint (beamLowProjection ε) :=
     TauCeti.LinearPMap.isSelfAdjoint_specProjection _ _ _
-  exact (h2.smul hQ).sub hone
+  have h2Q : IsSelfAdjoint ((2 : ℂ) • beamLowProjection ε) := h2.smul hQ
+  exact IsSelfAdjoint.sub (R := BeamL2 →L[ℂ] BeamL2) h2Q hone
 
 /-- The reflection is an involution. -/
 theorem beamLowReflection_sq (ε : ℝ) :

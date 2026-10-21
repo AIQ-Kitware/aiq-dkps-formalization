@@ -38,7 +38,7 @@ the same operator. -/
 theorem operatorAbs_toContinuousLinearMap_eq_modulus (A : E →ₗ[𝕜] F) :
     (operatorAbs A).toContinuousLinearMap = A.toContinuousLinearMap.modulus := by
   refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
-  · exact (ContinuousLinearMap.nonneg_iff_isPositive _).mpr
+  · exact (ContinuousLinearMap.nonneg_iff_isPositive).mpr
       ((LinearMap.isPositive_toContinuousLinearMap_iff (operatorAbs A)).mpr
         (isPositive_operatorAbs A))
   · ext x

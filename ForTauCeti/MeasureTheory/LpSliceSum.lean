@@ -194,7 +194,6 @@ theorem sliceSum_slice (μ : ℕ → Measure X) (n : ℕ) :
     simp [slice]
   · intro m hm
     convert measure_empty (μ := μ m)
-    refine Set.ext fun x => ?_
     simp [slice, hm]
 
 /-- **The slice sum, pushed forward along the first coordinate, is the sum of its members.**

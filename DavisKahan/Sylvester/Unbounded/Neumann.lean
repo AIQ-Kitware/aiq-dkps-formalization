@@ -128,7 +128,7 @@ theorem Sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     {ρ δ : ℝ} (hρ : 0 ≤ ρ) (hδ : 0 < δ)
     (hInvNorm : ‖hAinv.inv‖ ≤ (ρ + δ)⁻¹)
     (hB : ‖B‖ ≤ ρ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation
+    (hEq : _root_.LinearPMap.SylvesterEquation
       A (B.toLinearMap.toPMap ⊤) X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
@@ -271,7 +271,7 @@ theorem SylvesterEquation_boundedRealization
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     {X C : F →L[𝕜] E} {T : F →L[𝕜] F}
     (hAclosed : A.IsClosed) (hBdense : Dense (B.domain : Set F))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hT : ∀ y : B.domain, T (y : F) = B y) :
     TauCeti.LinearPMap.UnboundedBoundedSylvesterEquation A T X C := by
   have hAclosedRange : IsClosed (Set.range fun z : A.domain => ((z : E), A z)) := by

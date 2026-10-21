@@ -153,8 +153,8 @@ theorem formBoundedSylvesterGap_pmap {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- A domain-aware Sylvester equation transports. -/
 theorem sylvesterEquation_pmap {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {X C : F →L[𝕜] E}
-    (h : TauCeti.LinearPMap.SylvesterEquation A B X C) :
-    TauCeti.LinearPMap.SylvesterEquation (pmap (e := e) A) (pmap (e := e) B)
+    (h : _root_.LinearPMap.SylvesterEquation A B X C) :
+    _root_.LinearPMap.SylvesterEquation (pmap (e := e) A) (pmap (e := e) B)
       (clm (e := e) X) (clm (e := e) C) where
   mapsTo_domain x := h.mapsTo_domain (domainOut (e := e) B x)
   equation x := congrArg (of (e := e)) (h.equation (domainOut (e := e) B x))

@@ -64,7 +64,7 @@ theorem unbounded_adjoint_residual_block_identity
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
     (_hΛ₁ : _root_.IsSelfAdjoint D.Λ₁) :
-    TauCeti.LinearPMap.SylvesterEquation D.A₀ D.Λ₁
+    _root_.LinearPMap.SylvesterEquation D.A₀ D.Λ₁
       (D.X.adjoint ∘L D.F₁)
       (-(D.residual.adjoint ∘L D.F₁)) := by
   have hA_symm : ∀ x y : D.A.domain,

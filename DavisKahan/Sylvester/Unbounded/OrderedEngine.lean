@@ -44,7 +44,7 @@ structure OrderedSylvesterEngine : Prop where
       (_hδ : 0 < δ)
       (_hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
       (_hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
-      (_hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+      (_hEq : _root_.LinearPMap.SylvesterEquation A B X C)
       (_hC : N.Mem C),
       N.Mem X ∧
         δ * N.gauge X ≤
@@ -61,7 +61,7 @@ structure OrderedSylvesterEngine : Prop where
       (_hδ : 0 < δ)
       (_hAc : TauCeti.LinearPMap.SemiboundedAbove A c)
       (_hBc : TauCeti.LinearPMap.SemiboundedBelow B (c + δ))
-      (_hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+      (_hEq : _root_.LinearPMap.SylvesterEquation A B X C)
       (_hC : N.Mem C),
       N.Mem X ∧
         δ * N.gauge X ≤

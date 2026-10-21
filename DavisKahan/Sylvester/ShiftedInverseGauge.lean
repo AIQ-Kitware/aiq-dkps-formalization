@@ -116,7 +116,7 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B α)
     (hAres : TauCeti.LinearPMap.TwoSidedShiftedInverseBound A ((α + β) / 2)
       ((α - β) / 2 + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith
@@ -131,7 +131,7 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     simp only [hTdef, add_apply, smul_apply, ContinuousLinearMap.id_apply]
     rw [hSeq y]
     abel
-  have hEqT : TauCeti.LinearPMap.SylvesterEquation
+  have hEqT : _root_.LinearPMap.SylvesterEquation
       A (T.toLinearMap.toPMap ⊤) X C :=
     SylvesterEquation_boundedRealization hAclosed hBdense hEq hT
   -- shift both blocks by the center
@@ -145,7 +145,7 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     change A x + (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) (x : E) =
       A x - c𝕜 • (x : E)
     simp [sub_eq_add_neg]
-  have hEq' : TauCeti.LinearPMap.SylvesterEquation
+  have hEq' : _root_.LinearPMap.SylvesterEquation
       A' (S.toLinearMap.toPMap ⊤) X C := by
     refine ⟨fun x => hEqT.mapsTo_domain x, fun x => ?_⟩
     have h1 : A ⟨X (x : F), hEqT.mapsTo_domain x⟩ -

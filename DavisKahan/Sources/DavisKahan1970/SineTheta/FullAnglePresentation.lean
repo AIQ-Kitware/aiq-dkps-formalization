@@ -242,8 +242,8 @@ theorem fullAngleBlockC_nonneg
     0 ≤ fullAngleBlockC U V := by
   rw [fullAngleBlockC, ContinuousLinearMap.nonneg_iff_isPositive]
   exact continuousOrthogonalBlockSum_isPositive
-    ((ContinuousLinearMap.nonneg_iff_isPositive _).mp (directedAngleBlockC_nonneg U V))
-    ((ContinuousLinearMap.nonneg_iff_isPositive _).mp
+    ((ContinuousLinearMap.nonneg_iff_isPositive).mp (directedAngleBlockC_nonneg U V))
+    ((ContinuousLinearMap.nonneg_iff_isPositive).mp
       (directedAngleBlockC_nonneg Uᗮ Vᗮ))
 
 /-- Closed source-angle comparison `Theta ≤ c`, represented directly as the

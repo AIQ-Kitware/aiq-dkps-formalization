@@ -48,9 +48,20 @@ theorem realSpectrum_nonempty_of_selfAdjoint [Nontrivial E]
     by_contra hempty
     rw [Set.not_nonempty_iff_eq_empty] at hempty
     have hzeroRadius : spectralRadius ℂ T = 0 := by
-      show (⨆ k ∈ spectrum ℂ T, (‖k‖₊ : ENNReal)) = 0
-      rw [hempty]
-      simp
+      rw [spectralRadius, ENNReal.iSup_eq_zero]
+      intro z
+      rw [ENNReal.iSup_eq_zero]
+      intro hz
+      rcases eq_or_ne z 0 with rfl | hz0
+      · simp
+      · have hzspec : z ∈ spectrum ℂ T := by
+          have hz' : z ∈ spectrum ℂ T ∪ {0} := by
+            simpa only [quasispectrum_eq_spectrum_union_zero] using hz
+          rcases hz' with hz' | hz'
+          · exact hz'
+          · exact (hz0 (by simpa using hz')).elim
+        rw [hempty] at hzspec
+        simpa using hzspec
     have hTzero : T = 0 := by
       have hnormZero : ((‖T‖₊ : ENNReal)) = 0 := by
         rw [← hrad]

@@ -432,8 +432,8 @@ theorem closedSylvesterEquation_complexify
     {A : E →ₗ.[ℝ] E}
     {B : F →ₗ.[ℝ] F}
     {X C : F →L[ℝ] E}
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
-    TauCeti.LinearPMap.SylvesterEquation (complexify A) (complexify B)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C) :
+    _root_.LinearPMap.SylvesterEquation (complexify A) (complexify B)
       (RealComplexification.complexify X)
       (RealComplexification.complexify C) := by
   refine {

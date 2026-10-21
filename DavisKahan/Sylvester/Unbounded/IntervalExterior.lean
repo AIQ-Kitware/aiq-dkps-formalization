@@ -155,7 +155,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRig
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
     (hσB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
         Set.Icc β α)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   obtain ⟨hBlow, hBhigh⟩ := semibounded_of_spectrum_subset_Icc hB hβα hσB
@@ -185,7 +185,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
         Set.Icc β α)
     (hσB : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith

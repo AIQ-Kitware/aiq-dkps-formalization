@@ -215,8 +215,9 @@ statement stops being formal: no `compLp` of a general continuous linear map is 
 Mathlib supplies only the bound `‖L.compLp f‖ ≤ ‖L‖ * ‖f‖`. -/
 theorem norm_ofRealLp (f : Lp ℝ p μ) : ‖(ofRealLp f : Lp K p μ)‖ = ‖f‖ := by
   rw [Lp.norm_def, Lp.norm_def]
-  congr 1
-  refine eLpNorm_congr_norm_ae ?_
+  refine congrArg ENNReal.toReal (eLpNorm_congr_norm_ae
+    ((Lp.memLp (ofRealLp (K := K) f)).aestronglyMeasurable)
+    ((Lp.memLp f).aestronglyMeasurable) ?_)
   filter_upwards [coeFn_ofRealLp (K := K) f] with x hx
   rw [hx, RCLike.norm_ofReal, Real.norm_eq_abs]
 

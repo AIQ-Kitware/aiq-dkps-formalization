@@ -10,6 +10,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 public import Mathlib.Analysis.InnerProductSpace.ProdL2
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
@@ -109,6 +110,9 @@ coordinate.
 -/
 
 public section
+
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower
 
 namespace TauCeti
 
@@ -433,7 +437,7 @@ theorem exists_selfAdjoint_contraction_extension_of_column_gram_le
         = A * A + ContinuousLinearMap.adjoint B ∘L B := add_comm _ _
       _ ≤ 1 := hgram'
   have hBnn : (0 : E →L[ℂ] E) ≤ ContinuousLinearMap.adjoint B ∘L B :=
-    (ContinuousLinearMap.nonneg_iff_isPositive _).mpr
+    (ContinuousLinearMap.nonneg_iff_isPositive).mpr
       (ContinuousLinearMap.isPositive_adjoint_comp_self B)
   have hG : (0 : E →L[ℂ] E) ≤ 1 - A * A := hBnn.trans hBG
   -- Steps 2 and 3: the positive square root of the defect, and its commutation with `A`.

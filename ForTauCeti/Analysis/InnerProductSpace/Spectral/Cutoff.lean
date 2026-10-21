@@ -6,10 +6,13 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.InnerProductSpace.Positive
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
+public import ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra
 
 /-!
 # Spectral cutoffs of a positive operator
@@ -81,6 +84,9 @@ kernel pair and needs this one.
 -/
 
 public section
+
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower
 
 namespace TauCeti
 
@@ -248,7 +254,7 @@ private theorem re_inner_mul_self {A : H →L[ℂ] H} (hsa : IsSelfAdjoint A) (y
 omit [CompleteSpace H] in
 private theorem nonneg_re_inner {B : H →L[ℂ] H} (hB : 0 ≤ B) (y : H) :
     0 ≤ RCLike.re ⟪B y, y⟫_ℂ :=
-  ((ContinuousLinearMap.nonneg_iff_isPositive B).mp hB).2 y
+  ((ContinuousLinearMap.nonneg_iff_isPositive).mp hB).2 y
 
 omit [CompleteSpace H] in
 private theorem re_inner_real_smul_self (c : ℝ) (y : H) :
@@ -412,7 +418,7 @@ theorem norm_comp_cfc_one_sub_tailCutoff_le
   set C : E →L[ℂ] E := Tc.adjoint ∘L Tc with hCdef
   have hu0 : 0 < u := hu
   have hCnonneg : (0 : E →L[ℂ] E) ≤ C :=
-    (ContinuousLinearMap.nonneg_iff_isPositive _).2
+    (ContinuousLinearMap.nonneg_iff_isPositive).2
       (ContinuousLinearMap.isPositive_adjoint_comp_self Tc)
   have hCspec_nonneg : ∀ x ∈ spectrum ℝ C, 0 ≤ x := fun x hx =>
     spectrum_nonneg_of_nonneg hCnonneg hx
@@ -474,7 +480,7 @@ theorem mul_norm_cfc_tailCutoff_le_norm_apply
   set C : E →L[ℂ] E := Tc.adjoint ∘L Tc with hCdef
   have hu0 : 0 < u := hu
   have hCnonneg : (0 : E →L[ℂ] E) ≤ C :=
-    (ContinuousLinearMap.nonneg_iff_isPositive _).2
+    (ContinuousLinearMap.nonneg_iff_isPositive).2
       (ContinuousLinearMap.isPositive_adjoint_comp_self Tc)
   have hCspec_nonneg : ∀ x ∈ spectrum ℝ C, 0 ≤ x := fun x hx =>
     spectrum_nonneg_of_nonneg hCnonneg hx
@@ -499,7 +505,7 @@ theorem mul_norm_cfc_tailCutoff_le_norm_apply
   have hPcLower : ∀ z : E, u * ‖Pc z‖ ≤ ‖Tc (Pc z)‖ := by
     intro z
     have hpositive :=
-      (ContinuousLinearMap.nonneg_iff_isPositive _).mp hlowerCfcNonneg
+      (ContinuousLinearMap.nonneg_iff_isPositive).mp hlowerCfcNonneg
     have hform := hpositive.re_inner_nonneg_left z
     rw [hlowerIdentity] at hform
     have henergy :

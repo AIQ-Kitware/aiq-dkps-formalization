@@ -723,7 +723,7 @@ theorem sourceCosine_nonnegative (x : U) :
   change 0 ≤ RCLike.re
     ⟪ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
       (x : H), (x : H)⟫_ℂ
-  have hpos := (ContinuousLinearMap.nonneg_iff_isPositive _).mp
+  have hpos := (ContinuousLinearMap.nonneg_iff_isPositive).mp
     (ContinuousLinearMap.modulus_nonneg (spectraCanonicalIntertwiner U V))
   exact hpos.re_inner_nonneg_left (x : H)
 

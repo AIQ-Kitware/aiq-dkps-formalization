@@ -100,7 +100,7 @@ theorem davisKahan1970_sylvester_complex
     {X C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
       δ * N.gauge X ≤

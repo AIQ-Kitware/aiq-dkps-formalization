@@ -315,10 +315,19 @@ theorem norm_le_of_selfAdjoint_spectrum_subset_closedBall
     (hspec : spectrum 𝕜 T ⊆ Metric.closedBall 0 ρ) : ‖T‖ ≤ ρ := by
   have hSA : IsSelfAdjoint T := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hSelf
   have hrad : spectralRadius 𝕜 T = ‖T‖₊ := ContinuousLinearMap.spectralRadius_eq_nnnorm T hSA
+  have hquasispec : quasispectrum 𝕜 T ⊆ Metric.closedBall 0 ρ := by
+    intro z hz
+    have hz' : z ∈ spectrum 𝕜 T ∪ {0} := by
+      simpa only [quasispectrum_eq_spectrum_union_zero] using hz
+    rcases hz' with hzspec | hzzero
+    · exact hspec hzspec
+    · have : z = 0 := by simpa using hzzero
+      subst z
+      simp [Metric.mem_closedBall, hρ]
   have hbound : spectralRadius 𝕜 T ≤ (ρ.toNNReal : ENNReal) := by
     refine iSup₂_le fun z hz => ?_
     have hzρ : ‖z‖ ≤ ρ := by
-      simpa [Metric.mem_closedBall, dist_zero_right] using hspec hz
+      simpa [Metric.mem_closedBall, dist_zero_right] using hquasispec hz
     have : ‖z‖₊ ≤ ρ.toNNReal := by
       rw [← NNReal.coe_le_coe, coe_nnnorm, Real.coe_toNNReal ρ hρ]; exact hzρ
     exact_mod_cast this

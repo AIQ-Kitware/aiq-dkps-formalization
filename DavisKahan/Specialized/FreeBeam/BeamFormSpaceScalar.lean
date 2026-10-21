@@ -509,7 +509,11 @@ theorem denseRange_beamEmbed : DenseRange (beamEmbed (𝕜 := 𝕜)) := by
         _ ≤ ε / 4 + (ε / 4) * 1 :=
             add_le_add hre (mul_le_mul him hI (norm_nonneg _) hδ.le)
         _ = 2 * (ε / 4) := by ring
-    have hb := eLpNorm_le_of_ae_bound (p := 2) hbound
+    have hb := eLpNorm_le_of_ae_bound (p := 2)
+      (Lp.aestronglyMeasurable (G -
+        (contToLp (𝕜 := 𝕜) (fun t => ((pre.eval t : ℝ) : 𝕜)) (by fun_prop) +
+          (RCLike.I : 𝕜) • contToLp (𝕜 := 𝕜)
+            (fun t => ((pim.eval t : ℝ) : 𝕜)) (by fun_prop)))) hbound
     rw [measure_univ, ENNReal.one_rpow, one_mul] at hb
     rw [Lp.norm_def]
     calc (eLpNorm (⇑(G - _)) 2 unitIocMeasure).toReal

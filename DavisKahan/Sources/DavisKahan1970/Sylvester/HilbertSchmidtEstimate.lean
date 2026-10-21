@@ -46,7 +46,7 @@ theorem hilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C) :
     ENNReal.ofReal (δ ^ 2) * approximationNumberEnergy X ≤
       approximationNumberEnergy C := by
   by_cases hC : approximationNumberEnergy C ≠ ⊤
@@ -86,7 +86,7 @@ theorem hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : approximationNumberEnergy C ≠ ⊤) :
     approximationNumberEnergy X ≠ ⊤ ∧
       δ * ContinuousLinearMap.hilbertSchmidtNorm X ≤ ContinuousLinearMap.hilbertSchmidtNorm C :=
@@ -105,7 +105,7 @@ theorem hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : ∀ lam ∈ TauCeti.LinearPMap.realSpectrum A, ∀ α ∈ TauCeti.LinearPMap.realSpectrum B,
       δ ≤ |lam - α|)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : approximationNumberEnergy C ≠ ⊤) :
     approximationNumberEnergy X ≠ ⊤ ∧
       δ * ContinuousLinearMap.hilbertSchmidtNorm X ≤ ContinuousLinearMap.hilbertSchmidtNorm C :=
