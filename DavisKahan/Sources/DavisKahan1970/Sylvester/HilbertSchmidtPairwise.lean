@@ -59,7 +59,11 @@ theorem hilbertSchmidtTensor_hasVectorSpectralGap
   refine TauCeti.HilbertSchmidt.hasVectorSpectralGap_sylvesterGroup hA hB (hSBasis F)
     ?_ (hilbertSchmidtTensor C hC)
   intro lam hlam alp halp
-  have h := hgap (lam : ℂ) hlam (alp : ℂ) halp
+  have hlamRoot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A :=
+    (mem_spectrum_iff_root A (lam : ℂ)).mp hlam
+  have halpRoot : (alp : ℂ) ∈ _root_.LinearPMap.spectrum B :=
+    (mem_spectrum_iff_root B (alp : ℂ)).mp halp
+  have h := hgap (lam : ℂ) hlamRoot (alp : ℂ) halpRoot
   rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs] at h
 
 /-- **Davis--Kahan square-norm Sylvester estimate at arbitrary pairwise
@@ -115,11 +119,21 @@ theorem hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     obtain ⟨ar, -, rfl⟩ :=
       spectrum_subset_real_of_isSelfAdjoint
         (PartialMapComplexification.isSelfAdjoint_complexify hB) hα
-    have h := hgap lr (by
-        rwa [PartialMapComplexification.realSpectrum_complexify A,
-          Set.mem_preimage]) ar (by
-        rwa [PartialMapComplexification.realSpectrum_complexify B,
-          Set.mem_preimage])
+    have hlamLocal : ((lr : ℝ) : ℂ) ∈
+        TauCeti.LinearPMap.spectrum (PartialMapComplexification.complexify A) :=
+      (mem_spectrum_iff_root (PartialMapComplexification.complexify A)
+        ((lr : ℝ) : ℂ)).mpr hlam
+    have halpLocal : ((ar : ℝ) : ℂ) ∈
+        TauCeti.LinearPMap.spectrum (PartialMapComplexification.complexify B) :=
+      (mem_spectrum_iff_root (PartialMapComplexification.complexify B)
+        ((ar : ℝ) : ℂ)).mpr hα
+    have hrealA : lr ∈ TauCeti.LinearPMap.realSpectrum A := by
+      rw [PartialMapComplexification.realSpectrum_complexify A, Set.mem_preimage]
+      exact hlamLocal
+    have hrealB : ar ∈ TauCeti.LinearPMap.realSpectrum B := by
+      rw [PartialMapComplexification.realSpectrum_complexify B, Set.mem_preimage]
+      exact halpLocal
+    have h := hgap lr hrealA ar hrealB
     rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
   have hCcomplex : approximationNumberEnergy
       (RealComplexification.complexify C) ≠ ⊤ :=

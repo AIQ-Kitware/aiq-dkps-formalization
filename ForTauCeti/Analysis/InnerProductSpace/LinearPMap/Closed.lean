@@ -1067,41 +1067,6 @@ theorem mem_realSpectrum_of_eigenvector {A : E →ₗ.[𝕜] E} {lam : ℝ} {x :
   rw [heig, sub_self, map_zero] at hzero
   exact hx hzero.symm
 
-/-- Spectral-set separation for two partial maps, possibly on different Hilbert
-spaces. -/
-def SpectralSetsSeparated (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
-    (s t : Set ℝ) (d : ℝ) : Prop :=
-  ∀ a ∈ realSpectrum A, a ∈ s →
-    ∀ b ∈ realSpectrum B, b ∈ t → d ≤ |a - b|
-
-/-- Spectral-set separation is symmetric in the two maps. -/
-theorem SpectralSetsSeparated.symm
-    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
-    {s t : Set ℝ} {d : ℝ}
-    (h : SpectralSetsSeparated A B s t d) :
-    SpectralSetsSeparated B A t s d := by
-  intro b hb ht a ha hs
-  simpa [abs_sub_comm] using h a ha hs b hb ht
-
-/-- Weakening the required gap preserves spectral-set separation. -/
-theorem SpectralSetsSeparated.mono_gap
-    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
-    {s t : Set ℝ} {d e : ℝ}
-    (h : SpectralSetsSeparated A B s t d) (hed : e ≤ d) :
-    SpectralSetsSeparated A B s t e := by
-  intro a ha hs b hb ht
-  exact hed.trans (h a ha hs b hb ht)
-
-/-- Restricting either selected spectral set preserves separation. -/
-theorem SpectralSetsSeparated.mono_sets
-    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
-    {s s' t t' : Set ℝ} {d : ℝ}
-    (h : SpectralSetsSeparated A B s t d)
-    (hs : s' ⊆ s) (ht : t' ⊆ t) :
-    SpectralSetsSeparated A B s' t' d := by
-  intro a ha has' b hb hbt'
-  exact h a ha (hs has') b hb (ht hbt')
-
 end LinearPMap
 end TauCeti
 

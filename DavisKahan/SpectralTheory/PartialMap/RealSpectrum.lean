@@ -155,28 +155,16 @@ theorem realSpectrum_eq_spectraSpectrum (A : E →ₗ.[ℂ] E) :
 
 /-! ## The spectrum of a self-adjoint operator is real
 
-Tau Ceti proves the more general `RCLike` statement that the spectrum lies on
-the zero-imaginary axis. The paper-facing wrapper retains the donor spectrum
-type used by its downstream theorem, translating its membership to the
-canonical spectrum before applying that result. -/
+Tau Ceti proves the more general `RCLike` statement that the canonical
+`LinearPMap` spectrum lies on the zero-imaginary axis. This paper-facing result
+now states that canonical spectrum directly. -/
 
 /-- **A self-adjoint partial map has real spectrum.** -/
 theorem spectrum_subset_real_of_isSelfAdjoint {A : E →ₗ.[ℂ] E}
     (hA : IsSelfAdjoint A) :
-    TauCeti.LinearPMap.spectrum A ⊆ Complex.ofReal '' Set.univ := by
+    _root_.LinearPMap.spectrum A ⊆ Complex.ofReal '' Set.univ := by
   intro z hz
-  have hzLocalNot : z ∉ TauCeti.LinearPMap.resolventSet A :=
-    TauCeti.LinearPMap.mem_spectrum_iff.mp hz
-  have hzRoot : z ∈ _root_.LinearPMap.spectrum A := by
-    change z ∉ _root_.LinearPMap.resolventSet A
-    intro hRoot
-    obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp hRoot
-    exact hzLocalNot <| TauCeti.LinearPMap.mem_resolventSet_iff.mpr ⟨R, {
-      mem_domain := hR.mem_domain
-      smul_sub_apply := hR.smul_sub_apply
-      apply_smul_sub := hR.apply_smul_sub
-    }⟩
-  have him : z.im = 0 := hA.spectrum_subset_im_eq_zero hzRoot
+  have him : z.im = 0 := hA.spectrum_subset_im_eq_zero hz
   exact ⟨z.re, Set.mem_univ _, by simp [Complex.ext_iff, him]⟩
 
 end DavisKahan
