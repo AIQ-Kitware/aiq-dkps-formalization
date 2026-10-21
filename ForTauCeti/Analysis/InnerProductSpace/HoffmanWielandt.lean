@@ -17,7 +17,7 @@ module
 
 public import Mathlib.Algebra.Order.Rearrangement
 public import Mathlib.Analysis.Convex.Birkhoff
-public import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
+public import TauCeti.Analysis.InnerProductSpace.SchurHorn
 
 
 /-! # Hoffman–Wielandt building blocks
@@ -142,18 +142,18 @@ theorem sum_eigenvalues_mul_re_inner_self_le
         RCLike.re ⟪hT.eigenvectorBasis hn k, S (hT.eigenvectorBasis hn k)⟫_𝕜
       ≤ ∑ i, hT.eigenvalues hn i * hS.eigenvalues hn i := by
   set u := hT.eigenvectorBasis hn with hu
-  set M : Matrix (Fin n) (Fin n) ℝ := fun k j => schurWeight hS hn u j k with hM
+  set M : Matrix (Fin n) (Fin n) ℝ := u.schurWeight (hS.eigenvectorBasis hn) with hM
   -- `M` is doubly stochastic (rows/cols are the Schur weights).
   have hMds : M ∈ doublyStochastic ℝ (Fin n) := by
-    rw [mem_doublyStochastic_iff_sum]
-    exact ⟨fun k j => schurWeight_nonneg hS hn u j k,
-      fun k => schurWeight_row_sum hS hn u k, fun j => schurWeight_col_sum hS hn u j⟩
+    simpa [hM] using u.schurWeight_mem_doublyStochastic (hS.eigenvectorBasis hn)
   -- The diagonal of `S` in `u` is `∑ⱼ Mₖⱼ λⱼ(S)`.
   have hdiag : ∀ k, RCLike.re ⟪u k, S (u k)⟫_𝕜 = ∑ j, M k j * hS.eigenvalues hn j := by
     intro k
     rw [show ⟪u k, S (u k)⟫_𝕜 = ⟪S (u k), u k⟫_𝕜 from (hS (u k) (u k)).symm,
-      re_inner_orthonormalBasis_self_eq_sum_eigenvalues_mul hS hn u k]
-    exact Finset.sum_congr rfl fun j _ => by rw [hM]; ring
+      hS.re_inner_apply_self_eq_sum_schurWeight_mul_eigenvalues hn u k]
+    exact Finset.sum_congr rfl fun j _ => by
+      rw [hM, OrthonormalBasis.schurWeight_apply, OrthonormalBasis.schurWeight_apply,
+        norm_inner_symm]
   simp_rw [hdiag]
   exact sum_mul_sum_mul_le_sum_mul_of_antitone (hT.eigenvalues_antitone hn)
     (hS.eigenvalues_antitone hn) hMds

@@ -1513,7 +1513,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SeparableCyclic.lean` — 204 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Basic.lean` — 204 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Block.lean` — 203 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/SchurHorn.lean` — 202 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RectangularPartialIsometry.lean` — 201 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityUniqueness.lean` — 197 lines · Lean source
 - [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SubspaceTransport.lean` — 190 lines · Lean source
