@@ -22,7 +22,7 @@ finite-dimensional singular-value files.
 -/
 
 namespace TauCeti
-open Module _root_.TauCeti.LinearMap
+open Module (finrank)
 open DavisKahan.ExactSinTheta
 open scoped InnerProductSpace
 
@@ -121,7 +121,7 @@ theorem apply_finiteSourceRightSingularBasis_eq_zero_of_singularValue_eq_zero
     (hi : finiteSourceSingularValue A i = 0) :
     A (finiteSourceRightSingularBasis A i) = 0 := by
   have h := apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero
-    A.rangeRestrict.toLinearMap hi
+    A.rangeRestrict.toLinearMap (by simpa [finiteSourceSingularValue] using hi)
   exact congrArg Subtype.val h
 
 omit [CompleteSpace F] in
@@ -184,7 +184,8 @@ theorem adjoint_apply_finiteSourceLeftSingularVector
       ((finiteSourceSingularValue A i : ℝ) : ℂ) •
         finiteSourceRightSingularBasis A i := by
     simpa [Ar, ur, finiteSourceSingularValue, finiteSourceRightSingularBasis] using
-      (adjoint_apply_leftSingularVector Ar.toLinearMap hi)
+      (adjoint_apply_leftSingularVector Ar.toLinearMap
+        (by simpa [Ar, finiteSourceSingularValue] using hi))
   have hu : finiteSourceLeftSingularVector A i = (ur : F) := by
     rfl
   apply ext_inner_right ℂ

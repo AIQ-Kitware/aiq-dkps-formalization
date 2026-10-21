@@ -156,8 +156,8 @@ private theorem exists_ambient_unitary_intertwining
     ∃ W : K ≃ₗᵢ[𝕜] K,
       W.toLinearMap ∘ₗ ι.toLinearMap =
         ι.toLinearMap ∘ₗ U.toLinearMap := by
-  obtain ⟨W, hW⟩ := exists_linearIsometryEquiv_map_eq_of_inner_eq
-    (φ := fun x : H => ι x) (ψ := fun x : H => ι (U x)) (by
+  obtain ⟨W, hW⟩ := TauCeti.exists_linearIsometryEquiv_of_inner_eq
+    (v := fun x : H => ι x) (w := fun x : H => ι (U x)) (by
       intro x y
       rw [ι.inner_map_map, ι.inner_map_map, U.inner_map_map])
   refine ⟨W, ?_⟩

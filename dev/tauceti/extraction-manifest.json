@@ -1065,18 +1065,18 @@
       "source_declarations": [],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.GramMatrix",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Gram.Rigidity",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "moved; introduced at Davis--Kahan commit 56f7495; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "partially upstreamed; TauCeti Gram.Rigidity now owns equal-inner-product range and span isometries, finite-dimensional ambient isometry extension, and Gram-matrix characterization; the local module retains approximate rigid-motion alignment and coordinate-family results; original source introduced at Davis--Kahan commit 56f7495; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
-        "ForTauCeti.Analysis.Normed.Operator.LinearIsometry"
+        "TauCeti.Analysis.InnerProductSpace.Gram.Rigidity"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
+      "status": "partially-upstreamed",
       "upstream_pr": null
     },
     {
