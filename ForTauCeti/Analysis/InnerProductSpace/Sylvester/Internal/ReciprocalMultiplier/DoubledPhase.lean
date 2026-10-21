@@ -369,8 +369,11 @@ theorem kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
       cert.apply_le_mass_mul
         (TauCeti.UnitarilyInvariantSeminorm.kyFan 𝕜
           (WithLp 2 (E × E)) (WithLp 2 (F × F)) (2 * k))
-  have hbound' := hbound.trans (mul_le_mul_of_nonneg_right hmass
-    (TauCeti.kyFanSum_nonneg _ _))
+  have hnonneg : 0 ≤ TauCeti.kyFanSum (2 * k)
+      (UnitarilyInvariantSeminorm.orthogonalBlockSum C C) := by
+    rw [TauCeti.kyFanSum_eq_linearMap_kyFanSum]
+    exact LinearMap.kyFanSum_nonneg _ _
+  have hbound' := hbound.trans (mul_le_mul_of_nonneg_right hmass hnonneg)
   have hscale :
       TauCeti.kyFanSum (2 * k)
           (((δ : ℝ) : 𝕜) •
