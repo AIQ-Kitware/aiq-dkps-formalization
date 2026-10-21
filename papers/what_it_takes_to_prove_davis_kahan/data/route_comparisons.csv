@@ -1,0 +1,5 @@
+comparison_id,case,route_left,route_right,hypotheses_left,hypotheses_right,mathematical_gain_or_loss,source_witness,proof_witness,review_status
+C1,sine_theta,full,finite,,,,,,unresolved
+C2,sine_theta,full,rectangular,,,,,,unresolved
+C3,direct_rotation,refutation,qnorm,,,,,,unresolved
+C4,direct_rotation,refutation,small_angle,,,,,,unresolved

@@ -1,0 +1,60 @@
+{
+  "schema": "dk-proof-archaeology/cases/v1",
+  "cases": [
+    {
+      "id": "sine_theta",
+      "label": "Full-scope single-angle sine theorem",
+      "source_id": "S2-sin-theta",
+      "build_targets": [
+        "DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation",
+        "DavisKahan.FiniteDimensional.SinTheta.TrialMap"
+      ],
+      "graph_targets": ["DavisKahan.All"],
+      "roots": [
+        {"id": "full", "role": "selected full-scope theorem", "name": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike"},
+        {"id": "rectangular", "role": "rectangular where-defined proof engine", "name": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike"},
+        {"id": "finite", "role": "finite-dimensional comparison, not an equivalent source theorem", "name": "TauCeti.DavisKahan.FiniteDimensional.generalizedSinTheta_residual_le"}
+      ],
+      "math_steps": [
+        {"id": "S1", "label": "Complementary residual identity", "requires": [], "statement": "Derive F1* R = Lambda1 X - X A0 on the permitted domain, with X = F1* E0.", "lean_candidates": ["TauCeti.DavisKahan1970.IsTrialResidual", "TauCeti.DavisKahan1970.IsExactSpectralDecomposition"], "source_locator": "", "source_review": "pending"},
+        {"id": "S2", "label": "Sylvester gap inequality", "requires": ["S1"], "statement": "Control the complementary block from the interval/exterior OR ordered half-infinite form gap.", "lean_candidates": ["TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike"], "source_locator": "", "source_review": "pending"},
+        {"id": "S3", "label": "Where-defined norm transport", "requires": ["S2"], "statement": "Transport Ky Fan control to a supported normalized symmetric operator ideal, keeping membership assumptions explicit.", "lean_candidates": ["TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike"], "source_locator": "", "source_review": "pending"},
+        {"id": "S4", "label": "Modulus and directed-angle bridge", "requires": [], "statement": "Identify the modulus of the rectangular sine block with the positive directed sine operator.", "lean_candidates": ["TauCeti.DavisKahan1970.sourceDirectedSinThetaOperator_eq_modulus"], "source_locator": "", "source_review": "pending"},
+        {"id": "S5", "label": "Full-scope conclusion", "requires": ["S3", "S4"], "statement": "For both scalar fields, conclude delta * N(sin Theta0) <= N(R) with unbounded self-adjoint blocks and where-defined ideal membership.", "lean_candidates": ["TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike"], "source_locator": "", "source_review": "pending"}
+      ],
+      "branch_probes": [
+        {"id": "H1-extremal-branch", "question": "Does the selected formal proof graph reach the Section 4 full-displacement theorem or its correction?", "declarations": ["TauCeti.DavisKahan1970.proposition4_4_printedStatement", "TauCeti.DavisKahan1970.proposition4_4_refuted", "TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm"]},
+        {"id": "H3-modulus-bridge", "question": "Does the full-scope proof graph reach the specific modulus bridge?", "declarations": ["TauCeti.DavisKahan1970.sourceDirectedSinThetaOperator_eq_modulus"]},
+        {"id": "H2-Sylvester-route", "question": "Does the full-scope proof graph reach its rectangular proof engine?", "declarations": ["TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike"]}
+      ]
+    },
+    {
+      "id": "direct_rotation",
+      "label": "Direct-rotation extremality and Proposition 4.4",
+      "source_id": "DK-4.4-prop",
+      "build_targets": [
+        "DavisKahan.Sources.DavisKahan1970.Section4",
+        "DavisKahan.FiniteDimensional.DirectRotation.QNorm",
+        "DavisKahan.Sources.DavisKahan1970.Section4SmallAngle",
+        "DavisKahan.Sources.DavisKahan1970.Audits.SmallAngleCounterexample"
+      ],
+      "graph_targets": ["DavisKahan.All", "DavisKahan.Sources.DavisKahan1970.Section4SmallAngle"],
+      "roots": [
+        {"id": "refutation", "role": "refutation of printed Proposition 4.4", "name": "TauCeti.DavisKahan1970.proposition4_4_refuted"},
+        {"id": "qnorm", "role": "proved Q-norm repair", "name": "TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm"},
+        {"id": "small_angle", "role": "verified October 20 parameterized extension, independently built", "name": "TauCeti.DavisKahan.FiniteDimensional.arbitrarilySmall_fullDisplacement_refuted"}
+      ],
+      "math_steps": [
+        {"id": "D1", "label": "Geometric setting", "requires": [], "statement": "Identify source and target subspaces, principal angles, and admissible rotations.", "lean_candidates": ["TauCeti.DavisKahan1970.proposition4_4_printedStatement"], "source_locator": "", "source_review": "pending"},
+        {"id": "D2", "label": "Valid extremality boundary", "requires": ["D1"], "statement": "Separate restricted displacement and squared-displacement inequalities from unsquared full displacement.", "lean_candidates": ["TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm"], "source_locator": "", "source_review": "pending"},
+        {"id": "D3", "label": "Refute the printed implication", "requires": ["D1"], "statement": "Display an admissible real competitor of smaller trace-norm displacement inside the pi/3 condition.", "lean_candidates": ["TauCeti.DavisKahan1970.proposition4_4_refuted"], "source_locator": "", "source_review": "pending"},
+        {"id": "D4", "label": "Small-angle parameterization", "requires": ["D3"], "statement": "Show the same failure for arbitrarily small positive angles, without counting another original 1970 result.", "lean_candidates": ["TauCeti.DavisKahan.FiniteDimensional.arbitrarilySmall_fullDisplacement_refuted"], "source_locator": "", "source_review": "pending"},
+        {"id": "D5", "label": "Complex phase explanation", "requires": ["D3", "D4"], "statement": "Compare Davis--Kahan Example 4.2 with the realification of the complex 2x2 phase construction; do not claim this bridge is Lean-proved before a separate build.", "lean_candidates": [], "source_locator": "", "source_review": "pending"}
+      ],
+      "branch_probes": [
+        {"id": "D4-strengthening", "question": "Is the parameterized theorem visible in the indexed imported environment?", "declarations": ["TauCeti.DavisKahan.FiniteDimensional.arbitrarilySmall_fullDisplacement_refuted"]},
+        {"id": "D2-qnorm", "question": "Does the Q-norm proof appear in the refutation's named dependency closure?", "declarations": ["TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm"]}
+      ]
+    }
+  ]
+}

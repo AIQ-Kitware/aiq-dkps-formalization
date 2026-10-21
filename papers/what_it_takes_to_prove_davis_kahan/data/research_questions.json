@@ -1,0 +1,17 @@
+{
+  "schema": "dk-proof-archaeology/questions/v1",
+  "questions": [
+    {"id": "RQ1", "question": "Which mathematical assertions and exact hypotheses suffice to derive the full-scope sine theorem?", "deliverable": "Mathematical proof with step-specific source and formal witnesses, including unbounded domains."},
+    {"id": "RQ2", "question": "Which reductions are original, modern reformulations, or independent alternative proofs?", "deliverable": "Side-by-side derivations with their different hypotheses and conclusions."},
+    {"id": "RQ3", "question": "Which historical antecedents are explicitly cited in 1970, and which are retrospective?", "deliverable": "Page-verified historical register, not publication-date arrows."},
+    {"id": "RQ4", "question": "Where are operator domains, gap alternatives, scalar field, and ideal membership essential?", "deliverable": "Hypothesis matrix for finite, bounded, and unbounded routes."},
+    {"id": "RQ5", "question": "How is the Section 4 extremal branch related to the main sine theorem, and why does Proposition 4.4 fail?", "deliverable": "A mathematical branch comparison and source-specific correction."},
+    {"id": "RQ6", "question": "Which sharp estimates or eliminations are new beyond already published work?", "deliverable": "Separate new-theorem register; prior-art and Lean proof checks before novelty claims."}
+  ],
+  "hypotheses": [
+    {"id": "H1", "case": "sine_theta", "claim": "A residual/Sylvester route avoids invoking Section 4 full-displacement extremality.", "status": "unresolved", "requires": "Mathematical proof review AND original-paper citation; the named Lean closure is only supporting evidence."},
+    {"id": "H2", "case": "sine_theta", "claim": "Finite interval/exterior and half-infinite ordered spectral gaps require distinguishable analytic work at unbounded scope.", "status": "unresolved", "requires": "Exhibit both Sylvester derivations and their form-domain assumptions."},
+    {"id": "H3", "case": "sine_theta", "claim": "The modulus identification is a load-bearing bridge for the chosen positive-sine formulation.", "status": "unresolved", "requires": "Check actual modulus theorem and alternative mathematical representation."},
+    {"id": "H4", "case": "sine_theta", "claim": "An alternate bounded/finite proof avoids some of the full-scope mathematical prerequisites.", "status": "unresolved", "requires": "State two proved routes and compare hypotheses; module counts do not qualify."}
+  ]
+}
