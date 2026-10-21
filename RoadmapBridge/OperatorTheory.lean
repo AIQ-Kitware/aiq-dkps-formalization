@@ -4,12 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
-import ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
 import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
 import ForTauCeti.Analysis.Matrix.SpectralProjection
 import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
+import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Dominance
+import TauCeti.Analysis.OperatorIdeal.Family.Schatten
+import TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
 
 /-! # Operator-theory signature regressions
 
@@ -42,36 +44,26 @@ end Rank
 
 section Gauges
 
-example (Phi : SymmetricGauge) (a : ℕ → NNReal) :
-    Phi.extend (fun n => (a n : ENNReal)) =
-      ⨆ N : ℕ, (Phi (SymmetricGauge.truncate a N) : ENNReal) :=
-  Phi.extend_eq_iSup_truncate a
-
-example (Phi : SymmetricGauge) {a b : ℕ → ENNReal} (ha : Antitone a)
-    (h : ∀ k, ∑ n ∈ Finset.range k, a n ≤ ∑ n ∈ Finset.range k, b n) :
-    Phi.extend a ≤ Phi.extend b :=
-  Phi.extend_le_extend_of_forall_sum_le ha h
-
 variable {𝕜 : Type u} [RCLike 𝕜]
   {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   {F : Type w} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 noncomputable example (Phi : SymmetricGauge) : OperatorIdealFamily.{u, v, w} 𝕜 :=
-  symmetricGaugeFamily 𝕜 Phi
+  Phi.operatorIdealFamily 𝕜
 
 example (Phi : SymmetricGauge) (T : E →L[𝕜] F) :
-    (symmetricGaugeFamily.{u, w, v} 𝕜 Phi).gauge T.adjoint =
-      (symmetricGaugeFamily.{u, v, w} 𝕜 Phi).gauge T :=
-  gauge_adjoint_symmetricGaugeFamily Phi T
+    (Phi.operatorIdealFamily.{u, w, v} 𝕜).gauge T.adjoint =
+      (Phi.operatorIdealFamily.{u, v, w} 𝕜).gauge T := by
+  rw [SymmetricGauge.operatorIdealFamily_gauge, SymmetricGauge.operatorIdealFamily_gauge,
+    SymmetricGauge.opGauge_adjoint]
 
-example (Phi : SymmetricGauge) : IsKyFanDominant (symmetricGaugeFamily.{u, v, w} 𝕜 Phi) :=
+example (Phi : SymmetricGauge) :
+    (Phi.operatorIdealFamily.{u, v, w} 𝕜).IsKyFanDominant :=
   inferInstance
 
-example (p : ℝ) (hp : 1 ≤ p) : (schattenFamily.{u, v, w} 𝕜 p hp).IsComplete :=
-  isComplete_schattenFamily hp
-
-example : schattenFamilyInf.{u, v, w} 𝕜 = OperatorIdealFamily.opNorm.{u, v, w} 𝕜 :=
-  schattenFamilyInf_eq_opNorm 𝕜
+example (p : ℝ) (hp : 1 ≤ p) :
+    (OperatorIdealFamily.schatten.{u, v, w} 𝕜 p hp).IsComplete :=
+  inferInstance
 
 example [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
     (T : E →L[𝕜] F) (n : ℕ) :
