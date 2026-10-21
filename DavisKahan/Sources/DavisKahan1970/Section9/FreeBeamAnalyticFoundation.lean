@@ -6,7 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import Mathlib.Analysis.InnerProductSpace.PiL2

@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import Mathlib.Tactic
