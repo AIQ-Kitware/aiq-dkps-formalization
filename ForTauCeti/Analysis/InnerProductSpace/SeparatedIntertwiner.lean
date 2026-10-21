@@ -320,13 +320,11 @@ theorem cayley_intertwines {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
     (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y)) :
     X ∘L cayley hB = cayley hA ∘L X := by
-  have hres := resolvent_intertwines' (A := A) (B := B) (X := X)
-    (negI_mem_resolventSet hA) (negI_mem_resolventSet hB) hmaps hint
-  refine ContinuousLinearMap.ext fun φ => ?_
-  have hr := congrArg (fun T : F →L[ℂ] E => T φ) hres
-  simp only [ContinuousLinearMap.coe_comp, Function.comp_apply] at hr
-  simp only [cayley, ContinuousLinearMap.coe_comp, Function.comp_apply,
-    add_apply, one_apply_eq_self, smul_apply, map_add, map_smul, hr]
+  have hBA : B.Intertwines A X := ⟨hmaps, fun y => (hint y).symm⟩
+  change X ∘L B.cayley = A.cayley ∘L X
+  exact hBA.comp_cayley_eq
+    (_root_.IsSelfAdjoint.mem_resolventSet_of_im_ne_zero hB (by simp))
+    (_root_.IsSelfAdjoint.mem_resolventSet_of_im_ne_zero hA (by simp))
 
 /-- **An intertwiner intertwines the continuous functional calculi.**
 

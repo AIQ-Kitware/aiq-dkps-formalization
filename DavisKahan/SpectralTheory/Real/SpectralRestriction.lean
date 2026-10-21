@@ -181,8 +181,13 @@ theorem conjugateOperator_cayley (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) :
           (PartialMapComplexification.complexify A) (-Complex.I)) := by
     rw [conjugateOperator_tauCetiResolvent A hA (by simp) hni hconjI,
       TauCeti.LinearPMap.adjoint_resolvent hAℂ hni hconjI]
-  simp only [TauCeti.LinearPMap.cayley, conjugateOperator_add, conjugateOperator_one,
-    conjugateOperator_complex_smul, hkey, star_add, star_one, star_smul,
+  have hkeyRoot := hkey
+  rw [TauCeti.LinearPMap.local_resolvent_eq_root
+    (_root_.IsSelfAdjoint.mem_resolventSet_of_im_ne_zero hAℂ (by simp))] at hkeyRoot
+  change conjugateOperator (_root_.LinearPMap.cayley (PartialMapComplexification.complexify A))
+      = star (_root_.LinearPMap.cayley (PartialMapComplexification.complexify A))
+  simp only [_root_.LinearPMap.cayley, conjugateOperator_add, conjugateOperator_one,
+    conjugateOperator_complex_smul, hkeyRoot, star_add, star_one, star_smul,
     ContinuousLinearMap.star_eq_adjoint]
   rfl
 

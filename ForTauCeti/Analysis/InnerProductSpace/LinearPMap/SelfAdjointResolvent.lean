@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift
-public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley
 public import Mathlib.Analysis.InnerProductSpace.LinearPMap
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
@@ -263,88 +263,64 @@ theorem adjoint_resolvent {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) {z : ℂ
   rw [local_resolvent_eq_root hzRoot, local_resolvent_eq_root hzcRoot]
   exact hA.adjoint_resolvent hzRoot
 
-/-! ### The Cayley transform
+/-! ### Tau Ceti's Cayley transform
 
-`U = (A - i)(A + i)⁻¹`, written as `1 - 2i·R(-i)` so that boundedness is manifest
-and no domain bookkeeping is needed.  It is the bridge from the unbounded
-self-adjoint `A` to a *bounded unitary*, where Mathlib's continuous functional
-calculus applies. -/
+Tau Ceti owns the canonical Cayley transform and its norm, surjectivity,
+unitarity, and star-normality proofs. The local names here are compatibility
+lemmas for the spectral-measure migration; they contain no second construction.
+-/
 
-/-- `-i` is a resolvent point of a self-adjoint operator. -/
+/-- Compatibility spelling for the upstream nonreal resolvent fact. -/
 theorem negI_mem_resolventSet {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
-    (-Complex.I) ∈ resolventSet A :=
-  mem_resolventSet_of_im_ne_zero hA (by simp)
+    (-Complex.I) ∈ resolventSet A := by
+  exact root_mem_resolventSet_toLocal
+    (_root_.IsSelfAdjoint.mem_resolventSet_of_im_ne_zero hA (by simp))
 
-/-- `i` is a resolvent point of a self-adjoint operator. -/
+/-- Compatibility spelling for the upstream nonreal resolvent fact. -/
 theorem I_mem_resolventSet {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
-    Complex.I ∈ resolventSet A :=
-  mem_resolventSet_of_im_ne_zero hA (by simp)
+    Complex.I ∈ resolventSet A := by
+  exact root_mem_resolventSet_toLocal
+    (_root_.IsSelfAdjoint.mem_resolventSet_of_im_ne_zero hA (by simp))
 
-/-- **The Cayley transform** `(A - i)(A + i)⁻¹`, in the manifestly bounded form
-`1 + 2i·R(-i)`.
+/-- Compatibility spelling for Tau Ceti's canonical Cayley transform. -/
+noncomputable abbrev cayley {A : E →ₗ.[ℂ] E} (_hA : IsSelfAdjoint A) : E →L[ℂ] E :=
+  _root_.LinearPMap.cayley A
 
-The canonical resolvent inverts `-i • I - A`, so `(A + i)⁻¹ = -R(-i)` and the
-`-2i` of the `(A - z)` convention becomes `+2i` here. -/
-@[expose]
-noncomputable def cayley {A : E →ₗ.[ℂ] E} (_hA : IsSelfAdjoint A) : E →L[ℂ] E :=
-  1 + (2 * Complex.I) • resolvent A (-Complex.I)
-
-/-- Rewrite form of `cayley`, so call sites need not unfold the definition.
-
-Added 2026-07-30: `SpectralMeasure/Construction` was doing `simp [cayley]`, which needs
-the body exposed. Tau Ceti's `api-design` rubric asks for the lemma instead. -/
+/-- Compatibility rewrite for the upstream Cayley definition. -/
 theorem cayley_def {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
-    cayley hA = 1 + (2 * Complex.I) • resolvent A (-Complex.I) := (rfl)
+    cayley hA = 1 + (2 * Complex.I) • resolvent A (-Complex.I) := by
+  ext ξ
+  change _root_.LinearPMap.cayley A ξ = _
+  rw [_root_.LinearPMap.cayley_apply]
+  simp only [add_apply, one_apply_eq_self, smul_apply]
+  rw [local_resolvent_eq_root
+    (_root_.IsSelfAdjoint.mem_resolventSet_of_im_ne_zero hA (by simp))]
 
-/-- On a vector, `U ξ = (i • I - A) R(-i) ξ`, i.e. `(A - i)` applied to the
-preimage of `ξ` under `A + i`, that preimage being `-R(-i) ξ`.
-
-Deliberately **not** `@[simp]`: it rewrites the Cayley
-transform into a resolvent expression, which is not a normal form — downstream proofs
-work with `cayley` folded and unfold it by name where they mean to. -/
+/-- Compatibility application theorem, expressed through the legacy resolvent notation. -/
 theorem cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :
     cayley hA ξ
       = Complex.I • resolvent A (-Complex.I) ξ
         - A ⟨resolvent A (-Complex.I) ξ,
             resolvent_mem_domain (negI_mem_resolventSet hA) ξ⟩ := by
+  rw [cayley_def]
   set h := negI_mem_resolventSet hA with hh
   set x := resolvent A (-Complex.I) ξ with hx
   have hmem : x ∈ A.domain := resolvent_mem_domain h ξ
   have hsolve : (-Complex.I) • x - A ⟨x, hmem⟩ = ξ := smul_sub_apply_resolvent h ξ
   have hAx : A ⟨x, hmem⟩ = -(Complex.I • x) - ξ := by
-    rw [← hsolve]; module
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
+    rw [← hsolve]
+    module
   change ξ + (2 * Complex.I) • x = Complex.I • x - A ⟨x, hmem⟩
   rw [hAx]
   module
 
-/-- **The Cayley transform is isometric.**  Both `‖(A - i)x‖²` and `‖(A + i)x‖²`
-equal `‖Ax‖² + ‖x‖²`, by the exact norm identity. -/
 @[simp]
 theorem norm_cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :
     ‖cayley hA ξ‖ = ‖ξ‖ := by
-  have hsym : A.IsFormalAdjoint A := by
-    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
-    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
-  set h := negI_mem_resolventSet hA with hh
-  set x := resolvent A (-Complex.I) ξ with hx
-  have hmem : x ∈ A.domain := resolvent_mem_domain h ξ
-  have hsolve : (-Complex.I) • x - A ⟨x, hmem⟩ = ξ := smul_sub_apply_resolvent h ξ
-  -- both shifts have the same norm, by the exact identity at `z = ±i`
-  have hplus := norm_sub_smul_sq hsym (-Complex.I) ⟨x, hmem⟩
-  have hminus := norm_sub_smul_sq hsym Complex.I ⟨x, hmem⟩
-  simp only [Complex.neg_re, Complex.I_re, neg_zero, Complex.neg_im, Complex.I_im,
-    Complex.ofReal_zero, zero_smul, sub_zero, neg_one_sq, one_pow, one_mul] at hplus hminus
-  have hsq : ‖cayley hA ξ‖ ^ 2 = ‖ξ‖ ^ 2 := by
-    -- do not rewrite `ξ` in the goal: it occurs inside `x = R(-i) ξ`
-    have hxi : ‖ξ‖ ^ 2 = ‖A ⟨x, hmem⟩ - (-Complex.I) • x‖ ^ 2 := by
-      rw [← hsolve, norm_sub_rev]
-    rw [cayley_apply hA ξ, norm_sub_rev, hxi, hminus, hplus]
-  have h2 := congrArg Real.sqrt hsq
-  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at h2
+  change ‖_root_.LinearPMap.cayley A ξ‖ = ‖ξ‖
+  exact _root_.IsSelfAdjoint.norm_cayley_apply hA ξ
 
-/-- The Cayley transform preserves inner products (polarisation of isometry). -/
+/-- The Cayley transform preserves inner products. -/
 theorem inner_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ η : E) :
     ⟪cayley hA ξ, cayley hA η⟫_ℂ = ⟪ξ, η⟫_ℂ := by
   let L : E →ₗᵢ[ℂ] E :=
@@ -352,61 +328,20 @@ theorem inner_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ η : E) :
       norm_map' := norm_cayley_apply hA }
   exact L.inner_map_map ξ η
 
-/-- **The Cayley transform is surjective.**  Given `η`, solve `(i • I - A) y = η` —
-possible because `i` is a resolvent point — and take `ξ = (-i • I - A) y`, which is
-`-(A + i) y`. -/
 theorem surjective_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
     Function.Surjective (cayley hA) := by
-  intro η
-  set hi := I_mem_resolventSet hA with hhi
-  set hni := negI_mem_resolventSet hA with hhni
-  set y : E := resolvent A Complex.I η with hy
-  have hymem : y ∈ A.domain := resolvent_mem_domain hi η
-  have hsolve : Complex.I • y - A ⟨y, hymem⟩ = η := smul_sub_apply_resolvent hi η
-  -- `ξ := (-i • I - A) y`
-  refine ⟨(-Complex.I) • y - A ⟨y, hymem⟩, ?_⟩
-  -- `R(-i)` inverts `-i • I - A` on the domain
-  have hR : resolvent A (-Complex.I) ((-Complex.I) • y - A ⟨y, hymem⟩) = y :=
-    resolvent_smul_sub_apply hni ⟨y, hymem⟩
-  rw [cayley_apply hA]
-  -- both the operator application and the shift collapse via `hR`
-  have hdom : (⟨resolvent A (-Complex.I) ((-Complex.I) • y - A ⟨y, hymem⟩),
-      resolvent_mem_domain hni _⟩ : A.domain) = ⟨y, hymem⟩ := Subtype.ext hR
-  rw [hdom, hR]
-  exact hsolve
+  change Function.Surjective (_root_.LinearPMap.cayley A)
+  exact _root_.IsSelfAdjoint.cayley_surjective hA
 
-/-- **The Cayley transform of a self-adjoint operator is unitary.** -/
 theorem cayley_mem_unitary {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
     cayley hA ∈ unitary (E →L[ℂ] E) := by
-  have hstar : ContinuousLinearMap.adjoint (cayley hA) * cayley hA = 1 := by
-    refine ContinuousLinearMap.ext fun ξ => ?_
-    refine ext_inner_right ℂ fun η => ?_
-    calc ⟪(ContinuousLinearMap.adjoint (cayley hA) * cayley hA) ξ, η⟫_ℂ
-        = ⟪cayley hA ξ, cayley hA η⟫_ℂ := by
-          rw [show (ContinuousLinearMap.adjoint (cayley hA) * cayley hA) ξ
-              = ContinuousLinearMap.adjoint (cayley hA) (cayley hA ξ) from rfl,
-            ContinuousLinearMap.adjoint_inner_left]
-      _ = ⟪ξ, η⟫_ℂ := inner_cayley hA ξ η
-      _ = ⟪(1 : E →L[ℂ] E) ξ, η⟫_ℂ := (rfl)
-  have hmul : cayley hA * ContinuousLinearMap.adjoint (cayley hA) = 1 := by
-    refine ContinuousLinearMap.ext fun ξ => ?_
-    obtain ⟨ζ, rfl⟩ := surjective_cayley hA ξ
-    have : ContinuousLinearMap.adjoint (cayley hA) (cayley hA ζ) = ζ := by
-      have := congrArg (fun T : E →L[ℂ] E => T ζ) hstar
-      simpa using this
-    -- states the goal with the definition unfolded, in the shape the next step needs;
-    -- there is no `_apply` lemma to rewrite with here.
-    change cayley hA (ContinuousLinearMap.adjoint (cayley hA) (cayley hA ζ)) = _
-    rw [this]
-    rfl
-  rw [Unitary.mem_iff, ContinuousLinearMap.star_eq_adjoint]
-  exact ⟨hstar, hmul⟩
+  change _root_.LinearPMap.cayley A ∈ unitary (E →L[ℂ] E)
+  exact _root_.IsSelfAdjoint.cayley_mem_unitary hA
 
-/-- The Cayley transform is star-normal, so Mathlib's continuous functional
-calculus applies to it. -/
 instance isStarNormal_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
-    IsStarNormal (cayley hA) :=
-  isStarNormal_of_mem_unitary (cayley_mem_unitary hA)
+    IsStarNormal (cayley hA) := by
+  change IsStarNormal (_root_.LinearPMap.cayley A)
+  exact _root_.IsSelfAdjoint.isStarNormal_cayley hA
 
 end SelfAdjoint
 
