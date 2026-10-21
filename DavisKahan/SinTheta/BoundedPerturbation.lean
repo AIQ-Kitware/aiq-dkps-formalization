@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
 import DavisKahan.SinTheta.Unbounded.SpectrumGap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -44,21 +44,6 @@ variable {H F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
-omit [CompleteSpace H] in
-/-- The DK bounded sum is exactly the canonical partial-map perturbation.
-
-Was stated over `Spectra.Operator.perturbedOp` until 2026-07-28; the canonical
-object is now `TauCeti.LinearPMap.perturb`
-(the completed Spectra removal). -/
-theorem toLinearPMap_addBounded_eq_perturbedOp
-    (A : H →ₗ.[𝕜] H) (V : H →L[𝕜] H) :
-    (TauCeti.LinearPMap.addBounded A V) =
-      TauCeti.LinearPMap.perturb A
-        (TauCeti.LinearPMap.boundedPerturbation A V) := by
-  refine LinearPMap.ext_iff.mpr ⟨rfl, ?_⟩
-  intro x hx hy
-  rfl
-
 /-- Bounded Kato--Rellich: a bounded self-adjoint perturbation of a self-adjoint
 partial map is self-adjoint on the same domain. -/
 theorem addBounded_isSelfAdjoint
@@ -68,9 +53,13 @@ theorem addBounded_isSelfAdjoint
     _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V) := by
   have hV' : _root_.IsSelfAdjoint V :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hV
-  change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
-  rw [toLinearPMap_addBounded_eq_perturbedOp]
-  exact TauCeti.LinearPMap.isSelfAdjoint_perturb_bounded hA hV'
+  have hadd : TauCeti.LinearPMap.addBounded A V = V.toLinearMap +ᵥ A := by
+    refine LinearPMap.ext_iff.mpr ⟨rfl, ?_⟩
+    intro x hx hy
+    change A ⟨x, hx⟩ + V x = V x + A ⟨x, hy⟩
+    exact add_comm _ _
+  rw [hadd]
+  exact _root_.LinearPMap.isSelfAdjoint_perturb_bounded hA hV'
 
 /-- Package a bounded perturbation and two invariant block embeddings as the
 paper-shaped unbounded residual data.  The residual identity is automatic and

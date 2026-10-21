@@ -2654,16 +2654,10 @@
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
       "source_declarations": [
-        "boundedPerturbation",
-        "boundedPerturbation_apply",
-        "isSelfAdjoint_perturb_bounded",
         "isSelfAdjoint_toPMap_top",
         "isSelfAdjoint_unitaryConj",
         "map_mem_unitaryConj_domain",
         "mem_unitaryConj_domain_iff",
-        "perturb",
-        "perturb_apply",
-        "perturb_domain",
         "unitaryConj",
         "unitaryConj_apply",
         "unitaryConj_apply_map"
