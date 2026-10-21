@@ -603,6 +603,7 @@ theorem exists_finiteRestrictionApproximationNumber_add_gt
         (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε :=
   T.exists_finiteRestrictionApproximationNumber_add_gt n ε hε
 
+omit [CompleteSpace F₀] in
 /-- Subadditivity of the Ky Fan gauge over `ℂ`. -/
 theorem kyFanApproximationGauge_add_le_complex
     (k : ℕ) (K L : E₀ →L[ℂ] F₀) :
