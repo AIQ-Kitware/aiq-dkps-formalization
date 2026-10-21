@@ -1413,9 +1413,15 @@ private theorem nuclearENorm_gramOperatorR {X Y : Type v}
     [NormedAddCommGroup Y] [InnerProductSpace ℝ Y] [CompleteSpace Y]
     (A : X →L[ℝ] Y) :
     (gramOperatorR A).nuclearENorm = A.hilbertSchmidtENorm ^ 2 := by
+  have hnuclear (T : X →L[ℝ] X) :
+      T.nuclearENorm = ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) := by
+    rw [ContinuousLinearMap.nuclearENorm_def]
+    refine tsum_congr fun n => ?_
+    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+    simp
   have hsum : (gramOperatorR A).nuclearENorm =
       ∑' n : ℕ, ENNReal.ofReal (A.approximationNumber n) ^ (2 : ℝ) := by
-    rw [ContinuousLinearMap.nuclearENorm]
+    rw [hnuclear]
     refine tsum_congr fun n => ?_
     rw [approximationNumber_gramOperator_real A n,
       ← Real.rpow_natCast (A.approximationNumber n) 2,
@@ -1459,10 +1465,14 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_hilbertSchmidt
         (gramOperatorR (1 - W)).nuclearENorm := by
     rw [ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,
       ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge]
-    refine iSup_mono fun k => ENNReal.ofReal_le_ofReal ?_
+    refine iSup_mono fun k => ?_
     have hk := proposition4_3_nonacute_real U V J W hWunitary hWmap k
     rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
-    simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge] using hk
+    have hk' : ((gramOperatorR (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k : ℝ) ≤
+        ((gramOperatorR (1 - W)).kyFanGauge k : ℝ) := by
+      simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
+        ContinuousLinearMap.kyFanGaugeReal] using hk
+    exact ENNReal.coe_le_coe.mpr (NNReal.coe_le_coe.mp hk')
   rw [nuclearENorm_gramOperatorR, nuclearENorm_gramOperatorR] at hnuc
   rw [← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_natCast _ 2] at hnuc
   exact (ENNReal.rpow_le_rpow_iff (by norm_num)).mp hnuc

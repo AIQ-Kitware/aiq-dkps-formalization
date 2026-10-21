@@ -299,7 +299,8 @@ theorem about operators.
 The exponent-two counterpart uses the basis-independent energy identity proved
 in `ApproximationNumber.EnergyComparison`. -/
 theorem schattenENorm_one (T : E →L[𝕜] F) : T.schattenENorm 1 = T.nuclearENorm := by
-  simp [schattenENorm, nuclearENorm]
+  simp [schattenENorm, ContinuousLinearMap.nuclearENorm_def,
+    approximationNumber_eq_singularValue_toReal]
 
 end AgreementAtOne
 

@@ -7,8 +7,8 @@ import DavisKahan.SpectralTheory.OperatorAngle
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
+import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
-import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 import TauCeti.Analysis.OperatorIdeal.Family.Schatten
 import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
 import DavisKahan.SpectralTheory.AbstractSpectrum
@@ -238,11 +238,7 @@ noncomputable def traceClass :
 
 /-- Hilbert--Schmidt ideal. -/
 noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  let N := TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt 𝕜
-  letI : N.toOperatorIdealFamily.IsComplete := by
-    rw [TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt_toOperatorIdealFamily]
-    infer_instance
-  exact ofCanonical N
+  exact ofCanonical (TauCeti.hilbertSchmidtIdealFamily 𝕜)
 
 /-- The symmetric-family adapter needed by `ofCanonical`; its gauge and completeness are the
 canonical TauCeti Ky Fan family. -/

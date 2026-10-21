@@ -9,7 +9,6 @@ import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
 import ForTauCeti.Analysis.Matrix.SpectralProjection
 import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
-import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Dominance
 import TauCeti.Analysis.OperatorIdeal.Family.Schatten
 import TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
 
@@ -57,9 +56,9 @@ example (Phi : SymmetricGauge) (T : E →L[𝕜] F) :
   rw [SymmetricGauge.operatorIdealFamily_gauge, SymmetricGauge.operatorIdealFamily_gauge,
     SymmetricGauge.opGauge_adjoint]
 
-example (Phi : SymmetricGauge) :
-    (Phi.operatorIdealFamily.{u, v, w} 𝕜).IsKyFanDominant :=
-  inferInstance
+example (Phi : SymmetricGauge) {A B : E →L[𝕜] F}
+    (h : ∀ k, A.kyFanGauge k ≤ B.kyFanGauge k) : Phi.opGauge A ≤ Phi.opGauge B :=
+  Phi.opGauge_le_of_forall_kyFanGauge_le h
 
 example (p : ℝ) (hp : 1 ≤ p) :
     (OperatorIdealFamily.schatten.{u, v, w} 𝕜 p hp).IsComplete :=
