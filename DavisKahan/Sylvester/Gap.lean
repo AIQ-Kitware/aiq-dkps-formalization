@@ -135,7 +135,7 @@ block by a unitary. -/
 theorem RealSpectrumIntervalExteriorGap.unitaryConj_left
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {β α δ : ℝ}
     (W : E ≃ₗᵢ[𝕜] E') (h : RealSpectrumIntervalExteriorGap A B β α δ) :
-    RealSpectrumIntervalExteriorGap (TauCeti.LinearPMap.unitaryConj W A) B β α δ := by
+    RealSpectrumIntervalExteriorGap (_root_.LinearPMap.unitaryConj W A) B β α δ := by
   rw [RealSpectrumIntervalExteriorGap, TauCeti.LinearPMap.realSpectrum_unitaryConj]
   exact h
 
@@ -145,7 +145,7 @@ block by a unitary. -/
 theorem RealSpectrumIntervalExteriorGap.unitaryConj_right
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {β α δ : ℝ}
     (V : F ≃ₗᵢ[𝕜] F') (h : RealSpectrumIntervalExteriorGap A B β α δ) :
-    RealSpectrumIntervalExteriorGap A (TauCeti.LinearPMap.unitaryConj V B) β α δ := by
+    RealSpectrumIntervalExteriorGap A (_root_.LinearPMap.unitaryConj V B) β α δ := by
   rw [RealSpectrumIntervalExteriorGap, TauCeti.LinearPMap.realSpectrum_unitaryConj]
   exact h
 
@@ -155,7 +155,7 @@ block**, in every configuration. -/
 theorem FormBoundedSylvesterGap.unitaryConj_left
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {δ : ℝ}
     (W : E ≃ₗᵢ[𝕜] E') (h : FormBoundedSylvesterGap A B δ) :
-    FormBoundedSylvesterGap (TauCeti.LinearPMap.unitaryConj W A) B δ := by
+    FormBoundedSylvesterGap (_root_.LinearPMap.unitaryConj W A) B δ := by
   cases h with
   | intervalExterior hβα hgap =>
       exact .intervalExterior hβα (hgap.unitaryConj_left W)
@@ -172,7 +172,7 @@ block**, in every configuration. -/
 theorem FormBoundedSylvesterGap.unitaryConj_right
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {δ : ℝ}
     (V : F ≃ₗᵢ[𝕜] F') (h : FormBoundedSylvesterGap A B δ) :
-    FormBoundedSylvesterGap A (TauCeti.LinearPMap.unitaryConj V B) δ := by
+    FormBoundedSylvesterGap A (_root_.LinearPMap.unitaryConj V B) δ := by
   cases h with
   | intervalExterior hβα hgap =>
       exact .intervalExterior hβα (hgap.unitaryConj_right V)

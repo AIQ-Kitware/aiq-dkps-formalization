@@ -135,7 +135,7 @@ theorem sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
     (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
     (W : H ≃ₗᵢ[𝕜] H)
-    (hBeq : B = TauCeti.LinearPMap.unitaryConj W A)
+    (hBeq : B = _root_.LinearPMap.unitaryConj W A)
     (D : H →L[𝕜] H)
     (hdomain : A.domain = B.domain)
     (hperturbation : ∀ (x : H) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
@@ -150,7 +150,7 @@ theorem sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming
         U.starProjection) ≤ N.gauge D := by
   subst hBeq
   have hUrred : TauCeti.LinearPMap.ReducesSubspace
-      (TauCeti.LinearPMap.unitaryConj W A)
+      (_root_.LinearPMap.unitaryConj W A)
       (U.map (W.toLinearEquiv : H →ₗ[𝕜] H)) :=
     TauCeti.LinearPMap.reducesSubspace_unitaryConj W A U hUred
   have hperp : (U.map (W.toLinearEquiv : H →ₗ[𝕜] H))ᗮ =
@@ -159,7 +159,7 @@ theorem sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming
   -- the first crossed gap: conjugate the complementary block
   have hgapUV : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hUred)
-      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.unitaryConj W A)
+      (TauCeti.LinearPMap.reducingRestriction (_root_.LinearPMap.unitaryConj W A)
         (U.map (W.toLinearEquiv : H →ₗ[𝕜] H))ᗮ hUrred.orthogonal) δ := by
     refine FormBoundedSylvesterGap.reducingRestriction_congr_right hperp.symm
       (TauCeti.LinearPMap.reducesSubspace_unitaryConj W A Uᗮ hUred.orthogonal)
@@ -168,7 +168,7 @@ theorem sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming
     exact hgap.unitaryConj_right (TauCeti.LinearPMap.submoduleMapIsometry W Uᗮ)
   -- the second crossed gap: conjugate the selected block
   have hgapVU : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.unitaryConj W A)
+      (TauCeti.LinearPMap.reducingRestriction (_root_.LinearPMap.unitaryConj W A)
         (U.map (W.toLinearEquiv : H →ₗ[𝕜] H)) hUrred)
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ := by
     rw [TauCeti.LinearPMap.reducingRestriction_unitaryConj W A U hUred]
@@ -248,7 +248,7 @@ theorem sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
     DavisKahan.reflectionPerturbation_isSelfAdjoint V Eop hEop
   have hDideal := reflectionPerturbation_normingMem_and_gauge_le N V Eop hEmem
   have hBeq : TauCeti.LinearPMap.addBounded A D =
-      TauCeti.LinearPMap.unitaryConj V.reflection A :=
+      _root_.LinearPMap.unitaryConj V.reflection A :=
     DavisKahan.addBounded_reflectionPerturbation_eq_unitaryConj V Eop hmem hint
   have hBsa : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A D) :=
     DavisKahan.addBounded_isSelfAdjoint A hA D hDsa

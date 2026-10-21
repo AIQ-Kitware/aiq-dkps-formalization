@@ -6,14 +6,14 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 
 /-!
 # Unitary transport of the domain-aware spectral vocabulary
 
-`unitaryConj U A = U A U⁻¹` already exists for partial linear maps, together with
+`_root_.LinearPMap.unitaryConj U A = U A U⁻¹` already exists for partial linear maps, together with
 its domain description, its intertwining law and the transfer of
 self-adjointness.  What was missing is that the rest of the unbounded spectral
 vocabulary travels with it.
@@ -66,13 +66,13 @@ variable {H H' : Type v}
 is what makes every transport statement below an equivalence rather than a
 one-way implication. -/
 theorem unitaryConj_symm_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) :
-    unitaryConj W.symm (unitaryConj W A) = A := by
+    _root_.LinearPMap.unitaryConj W.symm (_root_.LinearPMap.unitaryConj W A) = A := by
   refine _root_.LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
   · ext x
-    simp only [mem_unitaryConj_domain_iff, LinearIsometryEquiv.symm_symm,
+    simp only [_root_.LinearPMap.mem_unitaryConj_domain_iff, LinearIsometryEquiv.symm_symm,
       W.symm_apply_apply]
   · intro x hx _
-    rw [unitaryConj_apply, unitaryConj_apply]
+    rw [_root_.LinearPMap.unitaryConj_apply, _root_.LinearPMap.unitaryConj_apply]
     simp only [LinearIsometryEquiv.symm_symm, W.symm_apply_apply]
 
 /-! ### The real resolvent set and the real spectrum -/
@@ -82,18 +82,19 @@ inverse conjugates. -/
 theorem mem_realResolventSet_unitaryConj_of_mem
     (W : H ≃ₗᵢ[𝕜] H') {A : H →ₗ.[𝕜] H} {lam : ℝ}
     (h : lam ∈ realResolventSet A) :
-    lam ∈ realResolventSet (unitaryConj W A) := by
+    lam ∈ realResolventSet (_root_.LinearPMap.unitaryConj W A) := by
   obtain ⟨R, hleft, hright⟩ := mem_realResolventSet_iff.mp h
   refine mem_realResolventSet_iff.mpr
     ⟨W.toLinearIsometry.toContinuousLinearMap ∘L R ∘L
       W.symm.toLinearIsometry.toContinuousLinearMap, ?_, ?_⟩
   · intro x
-    have hx : W.symm (x : H') ∈ A.domain := x.2
+    have hx : W.symm (x : H') ∈ A.domain :=
+      (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2
     have h := congrArg W (hleft ⟨W.symm (x : H'), hx⟩)
     simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
       LinearIsometry.coe_toContinuousLinearMap,
       LinearIsometryEquiv.coe_toLinearIsometry]
-    rw [unitaryConj_apply]
+    rw [_root_.LinearPMap.unitaryConj_apply]
     rw [(by rw [map_sub, map_smul, W.symm_apply_apply] :
       W.symm (W (A ⟨W.symm (x : H'), hx⟩) - (lam : 𝕜) • (x : H')) =
         A ⟨W.symm (x : H'), hx⟩ - (lam : 𝕜) • W.symm (x : H'))]
@@ -102,13 +103,14 @@ theorem mem_realResolventSet_unitaryConj_of_mem
     have hy := hright (W.symm y)
     obtain ⟨hmem, heq⟩ := hy
     refine ⟨?_, ?_⟩
-    · change W.symm (W (R (W.symm y))) ∈ A.domain
-      rw [W.symm_apply_apply]
-      exact hmem
+    · apply (_root_.LinearPMap.mem_unitaryConj_domain_iff).mpr
+      simpa only [ContinuousLinearMap.coe_comp, Function.comp_apply,
+        LinearIsometry.coe_toContinuousLinearMap,
+        LinearIsometryEquiv.coe_toLinearIsometry, W.symm_apply_apply] using hmem
     · simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
         LinearIsometry.coe_toContinuousLinearMap,
         LinearIsometryEquiv.coe_toLinearIsometry]
-      rw [unitaryConj_apply]
+      rw [_root_.LinearPMap.unitaryConj_apply]
       have hcongr : (⟨W.symm (W (R (W.symm y))), by
             rw [W.symm_apply_apply]; exact hmem⟩ : A.domain) =
           ⟨R (W.symm y), hmem⟩ := Subtype.ext (W.symm_apply_apply _)
@@ -118,7 +120,7 @@ theorem mem_realResolventSet_unitaryConj_of_mem
 
 /-- The real resolvent set is invariant under unitary conjugation. -/
 theorem realResolventSet_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) :
-    realResolventSet (unitaryConj W A) = realResolventSet A := by
+    realResolventSet (_root_.LinearPMap.unitaryConj W A) = realResolventSet A := by
   ext lam
   refine ⟨fun h => ?_, mem_realResolventSet_unitaryConj_of_mem W⟩
   have h' := mem_realResolventSet_unitaryConj_of_mem W.symm h
@@ -126,7 +128,7 @@ theorem realResolventSet_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[�
 
 /-- The real spectrum is invariant under unitary conjugation. -/
 theorem realSpectrum_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) :
-    realSpectrum (unitaryConj W A) = realSpectrum A := by
+    realSpectrum (_root_.LinearPMap.unitaryConj W A) = realSpectrum A := by
   ext lam
   rw [mem_realSpectrum_iff, mem_realSpectrum_iff, realResolventSet_unitaryConj]
 
@@ -135,14 +137,15 @@ theorem realSpectrum_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜]
 /-- A lower form bound transports to the unitary conjugate. -/
 theorem semiboundedBelow_unitaryConj_of
     (W : H ≃ₗᵢ[𝕜] H') {A : H →ₗ.[𝕜] H} {c : ℝ}
-    (h : SemiboundedBelow A c) : SemiboundedBelow (unitaryConj W A) c := by
+    (h : SemiboundedBelow A c) : SemiboundedBelow (_root_.LinearPMap.unitaryConj W A) c := by
   rw [semiboundedBelow_iff] at h ⊢
   intro x
-  have hx : W.symm (x : H') ∈ A.domain := x.2
+  have hx : W.symm (x : H') ∈ A.domain :=
+    (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2
   have hnorm : ‖(x : H')‖ = ‖W.symm (x : H')‖ := (W.symm.norm_map _).symm
-  have hinner : ⟪(unitaryConj W A) x, (x : H')⟫_𝕜 =
+  have hinner : ⟪(_root_.LinearPMap.unitaryConj W A) x, (x : H')⟫_𝕜 =
       ⟪A ⟨W.symm (x : H'), hx⟩, W.symm (x : H')⟫_𝕜 := by
-    rw [unitaryConj_apply]
+    rw [_root_.LinearPMap.unitaryConj_apply]
     rw [← W.symm.inner_map_map (W (A ⟨W.symm (x : H'), hx⟩)) (x : H'),
       W.symm_apply_apply]
   rw [hnorm, hinner]
@@ -151,14 +154,15 @@ theorem semiboundedBelow_unitaryConj_of
 /-- An upper form bound transports to the unitary conjugate. -/
 theorem semiboundedAbove_unitaryConj_of
     (W : H ≃ₗᵢ[𝕜] H') {A : H →ₗ.[𝕜] H} {c : ℝ}
-    (h : SemiboundedAbove A c) : SemiboundedAbove (unitaryConj W A) c := by
+    (h : SemiboundedAbove A c) : SemiboundedAbove (_root_.LinearPMap.unitaryConj W A) c := by
   rw [semiboundedAbove_iff] at h ⊢
   intro x
-  have hx : W.symm (x : H') ∈ A.domain := x.2
+  have hx : W.symm (x : H') ∈ A.domain :=
+    (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2
   have hnorm : ‖(x : H')‖ = ‖W.symm (x : H')‖ := (W.symm.norm_map _).symm
-  have hinner : ⟪(unitaryConj W A) x, (x : H')⟫_𝕜 =
+  have hinner : ⟪(_root_.LinearPMap.unitaryConj W A) x, (x : H')⟫_𝕜 =
       ⟪A ⟨W.symm (x : H'), hx⟩, W.symm (x : H')⟫_𝕜 := by
-    rw [unitaryConj_apply]
+    rw [_root_.LinearPMap.unitaryConj_apply]
     rw [← W.symm.inner_map_map (W (A ⟨W.symm (x : H'), hx⟩)) (x : H'),
       W.symm_apply_apply]
   rw [hnorm, hinner]
@@ -167,7 +171,7 @@ theorem semiboundedAbove_unitaryConj_of
 /-- Lower form bounds are invariant under unitary conjugation. -/
 theorem semiboundedBelow_unitaryConj_iff
     (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) (c : ℝ) :
-    SemiboundedBelow (unitaryConj W A) c ↔ SemiboundedBelow A c := by
+    SemiboundedBelow (_root_.LinearPMap.unitaryConj W A) c ↔ SemiboundedBelow A c := by
   refine ⟨fun h => ?_, semiboundedBelow_unitaryConj_of W⟩
   have h' := semiboundedBelow_unitaryConj_of W.symm h
   rwa [unitaryConj_symm_unitaryConj] at h'
@@ -175,7 +179,7 @@ theorem semiboundedBelow_unitaryConj_iff
 /-- Upper form bounds are invariant under unitary conjugation. -/
 theorem semiboundedAbove_unitaryConj_iff
     (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) (c : ℝ) :
-    SemiboundedAbove (unitaryConj W A) c ↔ SemiboundedAbove A c := by
+    SemiboundedAbove (_root_.LinearPMap.unitaryConj W A) c ↔ SemiboundedAbove A c := by
   refine ⟨fun h => ?_, semiboundedAbove_unitaryConj_of W⟩
   have h' := semiboundedAbove_unitaryConj_of W.symm h
   rwa [unitaryConj_symm_unitaryConj] at h'
@@ -194,38 +198,45 @@ orthogonal projection onto `U.map W` is `W ∘ P_U ∘ W⁻¹`
 (`Submodule.starProjection_map_apply`) and the orthogonal complement of an image
 is the image of the complement (`Submodule.map_orthogonal_equiv`). -/
 theorem reducesSubspace_unitaryConj (hred : ReducesSubspace A U) :
-    ReducesSubspace (unitaryConj W A)
+    ReducesSubspace (_root_.LinearPMap.unitaryConj W A)
       (U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) := by
   have hperp : (U.map (W.toLinearEquiv : H →ₗ[𝕜] H'))ᗮ =
       Uᗮ.map (W.toLinearEquiv : H →ₗ[𝕜] H') :=
     (Submodule.map_orthogonal_equiv U W).symm
   refine ReducesSubspace.of_components ?_ ?_ ?_ ?_
   · intro x
-    rw [Submodule.starProjection_map_apply, mem_unitaryConj_domain_iff,
+    rw [Submodule.starProjection_map_apply, _root_.LinearPMap.mem_unitaryConj_domain_iff,
       W.symm_apply_apply]
-    exact hred.projection_mem_domain ⟨W.symm (x : H'), x.2⟩
+    exact hred.projection_mem_domain ⟨W.symm (x : H'),
+      (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩
   · intro x
     rw [Submodule.starProjection_congr_apply hperp, Submodule.starProjection_map_apply,
-      mem_unitaryConj_domain_iff, W.symm_apply_apply]
-    exact hred.orthogonalProjection_mem_domain ⟨W.symm (x : H'), x.2⟩
+      _root_.LinearPMap.mem_unitaryConj_domain_iff, W.symm_apply_apply]
+    exact hred.orthogonalProjection_mem_domain ⟨W.symm (x : H'),
+      (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩
   · intro x hx
     have hpre : W.symm (x : H') ∈ U := by
       obtain ⟨z, hz, hzx⟩ := Submodule.mem_map.mp hx
       have hzz : W.symm (x : H') = z := by rw [← hzx]; exact W.symm_apply_apply z
       rw [hzz]; exact hz
-    rw [unitaryConj_apply]
+    rw [_root_.LinearPMap.unitaryConj_apply]
     exact Submodule.mem_map.mpr
-      ⟨A ⟨W.symm (x : H'), x.2⟩, hred.invariant ⟨W.symm (x : H'), x.2⟩ hpre, rfl⟩
+      ⟨A ⟨W.symm (x : H'),
+          (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩,
+        hred.invariant ⟨W.symm (x : H'),
+          (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩ hpre, rfl⟩
   · intro x hx
     rw [hperp] at hx ⊢
     have hpre : W.symm (x : H') ∈ Uᗮ := by
       obtain ⟨z, hz, hzx⟩ := Submodule.mem_map.mp hx
       have hzz : W.symm (x : H') = z := by rw [← hzx]; exact W.symm_apply_apply z
       rw [hzz]; exact hz
-    rw [unitaryConj_apply]
+    rw [_root_.LinearPMap.unitaryConj_apply]
     exact Submodule.mem_map.mpr
-      ⟨A ⟨W.symm (x : H'), x.2⟩,
-        hred.orthogonal_invariant ⟨W.symm (x : H'), x.2⟩ hpre, rfl⟩
+      ⟨A ⟨W.symm (x : H'),
+          (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩,
+        hred.orthogonal_invariant ⟨W.symm (x : H'),
+          (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩ hpre, rfl⟩
 
 /-- The restriction of a unitary equivalence to a subspace and its image. -/
 noncomputable def submoduleMapIsometry :
@@ -252,18 +263,19 @@ conjugating the restriction of `A` to `U` by the restricted unitary
 `U ≃ₗᵢ U.map W`.  Both sides have domain `{x ∈ U.map W | W⁻¹ x ∈ dom A}` and both
 send `x` to `W (A (W⁻¹ x))`, so this is an equality on the nose. -/
 theorem reducingRestriction_unitaryConj (hred : ReducesSubspace A U) :
-    reducingRestriction (unitaryConj W A) (U.map (W.toLinearEquiv : H →ₗ[𝕜] H'))
+    reducingRestriction (_root_.LinearPMap.unitaryConj W A) (U.map (W.toLinearEquiv : H →ₗ[𝕜] H'))
         (reducesSubspace_unitaryConj W A U hred) =
-      unitaryConj (submoduleMapIsometry W U) (reducingRestriction A U hred) := by
+      _root_.LinearPMap.unitaryConj (submoduleMapIsometry W U) (reducingRestriction A U hred) := by
   refine _root_.LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
   · ext z
-    rw [mem_reducingRestriction_domain_iff, mem_unitaryConj_domain_iff,
-      mem_unitaryConj_domain_iff, mem_reducingRestriction_domain_iff,
+    rw [mem_reducingRestriction_domain_iff, _root_.LinearPMap.mem_unitaryConj_domain_iff,
+      _root_.LinearPMap.mem_unitaryConj_domain_iff, mem_reducingRestriction_domain_iff,
       submoduleMapIsometry_symm_coe_apply]
   · rintro u hx hy
     apply Subtype.ext
     have hxA : W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H') ∈ A.domain :=
-      (mem_reducingRestriction_domain_iff _ _ _ u).mp hx
+      (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp
+        ((mem_reducingRestriction_domain_iff _ _ _ u).mp hx)
     have hxU : W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H') ∈ U := by
       obtain ⟨z, hz, hzx⟩ := Submodule.mem_map.mp u.2
       have hzz : W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H') = z := by
@@ -272,15 +284,21 @@ theorem reducingRestriction_unitaryConj (hred : ReducesSubspace A U) :
     have hxD : (⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxU⟩ : U) ∈
         (reducingRestriction A U hred).domain :=
       (mem_reducingRestriction_domain_iff A U hred _).mpr hxA
-    have hL : ((reducingRestriction (unitaryConj W A)
+    have hL : ((reducingRestriction (_root_.LinearPMap.unitaryConj W A)
           (U.map (W.toLinearEquiv : H →ₗ[𝕜] H'))
           (reducesSubspace_unitaryConj W A U hred) ⟨u, hx⟩ :
             U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H') =
-        W (A ⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxA⟩) :=
-      coe_reducingRestriction_apply (unitaryConj W A)
-        (U.map (W.toLinearEquiv : H →ₗ[𝕜] H'))
-        (reducesSubspace_unitaryConj W A U hred) u hxA
-    have hR : ((unitaryConj (submoduleMapIsometry W U)
+        W (A ⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxA⟩) := by
+      calc
+        _ = (_root_.LinearPMap.unitaryConj W A)
+              ⟨u, (_root_.LinearPMap.mem_unitaryConj_domain_iff).mpr hxA⟩ :=
+          coe_reducingRestriction_apply (_root_.LinearPMap.unitaryConj W A)
+            (U.map (W.toLinearEquiv : H →ₗ[𝕜] H'))
+            (reducesSubspace_unitaryConj W A U hred) u
+            ((_root_.LinearPMap.mem_unitaryConj_domain_iff).mpr hxA)
+        _ = W (A ⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxA⟩) := by
+          rw [_root_.LinearPMap.unitaryConj_apply]
+    have hR : ((_root_.LinearPMap.unitaryConj (submoduleMapIsometry W U)
           (reducingRestriction A U hred) ⟨u, hy⟩ :
             U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H') =
         W (A ⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxA⟩) := by
@@ -290,12 +308,26 @@ theorem reducingRestriction_unitaryConj (hred : ReducesSubspace A U) :
           A ⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxA⟩ :=
         coe_reducingRestriction_apply A U hred
           ⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxU⟩ hxA
-      calc ((unitaryConj (submoduleMapIsometry W U)
+      have hsymm : (submoduleMapIsometry W U).symm
+          (u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) =
+            ⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxU⟩ := by
+        apply Subtype.ext
+        exact submoduleMapIsometry_symm_coe_apply W U u
+      have hArg :
+          (⟨(submoduleMapIsometry W U).symm u,
+            (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp hy⟩ :
+              (reducingRestriction A U hred).domain) =
+            ⟨⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxU⟩, hxD⟩ := by
+        apply Subtype.ext
+        exact hsymm
+      calc ((_root_.LinearPMap.unitaryConj (submoduleMapIsometry W U)
             (reducingRestriction A U hred) ⟨u, hy⟩ :
               U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H')
           = W (((reducingRestriction A U hred
               ⟨⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxU⟩,
-                hxD⟩ : U) : H)) := rfl
+                hxD⟩ : U) : H)) := by
+              rw [_root_.LinearPMap.unitaryConj_apply,
+                submoduleMapIsometry_coe_apply, hArg]
         _ = W (A ⟨W.symm ((u : U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) : H'), hxA⟩) := by
               rw [hstep]
     rw [hL, hR]

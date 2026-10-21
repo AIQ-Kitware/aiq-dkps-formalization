@@ -1460,7 +1460,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Analysis/Fourier/HaagerupZsido/Fourier.lean` — 303 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumIntertwining.lean` — 300 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/SpectralCutoff.lean` — 297 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Constructions.lean` — 294 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Constructions.lean` — historical inventory entry; removed after its unitary-conjugation API landed in Tau Ceti
 - [ ] `ForTauCeti/Analysis/Normed/Operator/SylvesterBoundedInverse.lean` — 293 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/BorelNatural.lean` — 289 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean` — 288 lines · Lean source

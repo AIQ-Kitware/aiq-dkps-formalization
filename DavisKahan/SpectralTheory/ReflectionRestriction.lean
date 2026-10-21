@@ -148,7 +148,7 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
           ⟨V.reflectionOperator (x : H), hmem x⟩ =
         V.reflectionOperator (A x)) :
     TauCeti.LinearPMap.addBounded A (reflectionPerturbation V Eop) =
-      TauCeti.LinearPMap.unitaryConj V.reflection A := by
+      _root_.LinearPMap.unitaryConj V.reflection A := by
   -- `V.reflection.symm = V.reflection` and `reflectionOperator = reflection` both hold
   -- definitionally, so the only content is that `J` preserves `dom A` in both
   -- directions and that the intertwining determines the action.
@@ -159,10 +159,10 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
     rwa [hrefl] at h
   have hdomain : (TauCeti.LinearPMap.addBounded A
       (reflectionPerturbation V Eop)).domain =
-      (TauCeti.LinearPMap.unitaryConj V.reflection A).domain := by
+      (_root_.LinearPMap.unitaryConj V.reflection A).domain := by
     ext y
     rw [TauCeti.LinearPMap.addBounded_domain,
-      TauCeti.LinearPMap.mem_unitaryConj_domain_iff]
+      _root_.LinearPMap.mem_unitaryConj_domain_iff]
     refine ⟨fun hy => hmem' y hy, fun hy => ?_⟩
     have hy' : V.reflection y ∈ A.domain := hy
     have h := hmem' _ hy'
@@ -183,7 +183,7 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
             hmem ⟨V.reflection y, hJy⟩⟩ := by rw [hcongr]
     _ = V.reflectionOperator (A ⟨V.reflection y, hJy⟩) :=
         hint ⟨V.reflection y, hJy⟩
-    _ = (TauCeti.LinearPMap.unitaryConj V.reflection A) ⟨y, hz⟩ := rfl
+    _ = (_root_.LinearPMap.unitaryConj V.reflection A) ⟨y, hz⟩ := rfl
 
 omit [CompleteSpace H] in
 /-- **The reflected perturbation intertwines whenever the reflection commutes with

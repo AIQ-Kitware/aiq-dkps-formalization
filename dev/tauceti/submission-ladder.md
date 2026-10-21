@@ -244,10 +244,12 @@ base Tau Ceti has already accepted.
 
 ### Rung L — Closed operators on LinearPMap: graphs, constructions and form bounds (T15a)
 
-**6 new, cumulative closed slice 142.**
+**6 new, cumulative closed slice 142.** This is the historical extraction count;
+the local unitary-conjugation module has since been removed after its consumers
+migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
   - `Analysis.InnerProductSpace.LinearPMap.Closed`
-  - `Analysis.InnerProductSpace.LinearPMap.Constructions`
+  - `Analysis.InnerProductSpace.LinearPMap.Constructions` (now upstreamed; local donor removed)
   - `Analysis.InnerProductSpace.LinearPMap.GraphCore`
   - `Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint`
   - `Analysis.InnerProductSpace.LinearPMap.Sylvester`

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
@@ -38,7 +38,7 @@ transports any partial map -- but it is retained so that this name and
 noncomputable def unitaryConjugate
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (_hA : IsSelfAdjoint A) : K →ₗ.[ℂ] K :=
-  TauCeti.LinearPMap.unitaryConj W A
+  _root_.LinearPMap.unitaryConj W A
 
 omit [CompleteSpace K] in
 /-- The domain of a unitary conjugate is the image of the original domain. -/
@@ -121,22 +121,22 @@ theorem mem_resolventSet_unitaryConj_of_mem
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ}
     (hz : z ∈ TauCeti.LinearPMap.resolventSet A) :
     z ∈ TauCeti.LinearPMap.resolventSet
-      (TauCeti.LinearPMap.unitaryConj W A) := by
+      (_root_.LinearPMap.unitaryConj W A) := by
   obtain ⟨R, hR⟩ := hz
   -- `IsResolventAt` has three fields: the domain condition, the right inverse, and the
   -- left inverse.  Each transports by conjugating with `W`.
   refine ⟨unitaryConjugateBounded W R, fun φ => ?_, fun φ => ?_, fun ψ => ?_⟩
   · rw [unitaryConjugateBounded_apply,
-      TauCeti.LinearPMap.mem_unitaryConj_domain_iff, W.symm_apply_apply]
+      _root_.LinearPMap.mem_unitaryConj_domain_iff, W.symm_apply_apply]
     exact hR.mem_domain _
   · have hφ := congrArg W (hR.smul_sub_apply (W.symm φ))
-    simpa only [TauCeti.LinearPMap.unitaryConj_apply,
+    simpa only [_root_.LinearPMap.unitaryConj_apply,
       unitaryConjugateBounded_apply, map_sub, map_smul,
       W.symm_apply_apply, W.apply_symm_apply] using hφ
   · let x : A.domain := ⟨W.symm (ψ : K), ψ.property⟩
     have hx := congrArg W (hR.apply_smul_sub x)
     simpa only [x, unitaryConjugateBounded_apply,
-      TauCeti.LinearPMap.unitaryConj_apply, map_sub, map_smul,
+      _root_.LinearPMap.unitaryConj_apply, map_sub, map_smul,
       W.symm_apply_apply, W.apply_symm_apply] using hx
 
 omit [CompleteSpace H] [CompleteSpace K] in
@@ -144,15 +144,15 @@ omit [CompleteSpace H] [CompleteSpace K] in
 operator. -/
 theorem unitaryConj_symm_unitaryConj
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) :
-    TauCeti.LinearPMap.unitaryConj W.symm
-        (TauCeti.LinearPMap.unitaryConj W A) = A := by
+    _root_.LinearPMap.unitaryConj W.symm
+        (_root_.LinearPMap.unitaryConj W A) = A := by
   refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
   · ext x
-    simp only [TauCeti.LinearPMap.mem_unitaryConj_domain_iff,
+    simp only [_root_.LinearPMap.mem_unitaryConj_domain_iff,
       LinearIsometryEquiv.symm_symm, W.symm_apply_apply]
   · intro x hx hy
-    rw [TauCeti.LinearPMap.unitaryConj_apply,
-      TauCeti.LinearPMap.unitaryConj_apply]
+    rw [_root_.LinearPMap.unitaryConj_apply,
+      _root_.LinearPMap.unitaryConj_apply]
     simp only [LinearIsometryEquiv.symm_symm, W.symm_apply_apply]
 
 omit [CompleteSpace H] [CompleteSpace K] in
@@ -160,12 +160,12 @@ omit [CompleteSpace H] [CompleteSpace K] in
 theorem mem_resolventSet_unitaryConj_iff
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ} :
     z ∈ TauCeti.LinearPMap.resolventSet
-        (TauCeti.LinearPMap.unitaryConj W A) ↔
+        (_root_.LinearPMap.unitaryConj W A) ↔
       z ∈ TauCeti.LinearPMap.resolventSet A := by
   constructor
   · intro hz
     have hz' := mem_resolventSet_unitaryConj_of_mem
-      W.symm (TauCeti.LinearPMap.unitaryConj W A) hz
+      W.symm (_root_.LinearPMap.unitaryConj W A) hz
     rwa [unitaryConj_symm_unitaryConj W A] at hz'
   · exact mem_resolventSet_unitaryConj_of_mem W A
 
@@ -179,7 +179,7 @@ theorem mem_resolventSet_unitaryConjugate_iff
         (unitaryConjugate W A hA) ↔
       z ∈ TauCeti.LinearPMap.resolventSet A := by
   change z ∈ TauCeti.LinearPMap.resolventSet
-      (TauCeti.LinearPMap.unitaryConj W A) ↔
+      (_root_.LinearPMap.unitaryConj W A) ↔
     z ∈ TauCeti.LinearPMap.resolventSet A
   exact mem_resolventSet_unitaryConj_iff W A
 
@@ -187,8 +187,8 @@ theorem mem_resolventSet_unitaryConjugate_iff
 theorem unitaryConjugate_isSelfAdjoint
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) : _root_.IsSelfAdjoint (unitaryConjugate W A hA) := by
-  change IsSelfAdjoint (TauCeti.LinearPMap.unitaryConj W A)
-  exact TauCeti.LinearPMap.isSelfAdjoint_unitaryConj hA
+  change IsSelfAdjoint (_root_.LinearPMap.unitaryConj W A)
+  exact _root_.LinearPMap.isSelfAdjoint_unitaryConj hA
 
 omit [CompleteSpace K] in
 /-- The real spectrum is invariant under unitary conjugation. -/

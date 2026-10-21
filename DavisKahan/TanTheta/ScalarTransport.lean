@@ -380,10 +380,10 @@ noncomputable def scalarTransport (D : UnboundedCompressionTrialData Z) :
     UnboundedCompressionTrialData (ScalarTransport.submodule (e := e) Z) := by
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   refine
-    { compression := TauCeti.LinearPMap.unitaryConj W
+    { compression := _root_.LinearPMap.unitaryConj W
         (ScalarTransport.pmap (e := e) D.compression)
       compression_isSelfAdjoint :=
-        TauCeti.LinearPMap.isSelfAdjoint_unitaryConj
+        _root_.LinearPMap.isSelfAdjoint_unitaryConj
           ((ScalarTransport.isSelfAdjoint_pmap_iff e).2 D.compression_isSelfAdjoint)
       residual := scalarTransportSubspaceCLM (e := e) Z D.residual
       residual_orthogonal := ?_ }
@@ -452,7 +452,7 @@ theorem semiboundedAbove_scalarTransport_iff
       TauCeti.LinearPMap.SemiboundedAbove D.compression alpha := by
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   change TauCeti.LinearPMap.SemiboundedAbove
-      (TauCeti.LinearPMap.unitaryConj W (ScalarTransport.pmap (e := e) D.compression)) alpha ↔ _
+      (_root_.LinearPMap.unitaryConj W (ScalarTransport.pmap (e := e) D.compression)) alpha ↔ _
   rw [TauCeti.LinearPMap.semiboundedAbove_unitaryConj_iff,
     ScalarTransport.semiboundedAbove_pmap_iff]
 
