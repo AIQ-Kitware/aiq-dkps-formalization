@@ -349,11 +349,10 @@
       "roadmap_focus": "sylvester-hilbert-schmidt",
       "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
+      "tauceti_population": "The blockwise lower-bound reassembly is provided by the accepted, more general TauCeti.Analysis.Normed.Group.BlockLowerBound API; the remaining listed modules are local donor mathematics.",
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
-        "ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator",
@@ -3292,7 +3291,6 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid"
       ],
@@ -3379,7 +3377,7 @@
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BlockLowerBound",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Group.BlockLowerBound",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
@@ -3390,8 +3388,9 @@
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "Removed from ForTauCeti after the Sylvester spectral-gap consumer compiled against TauCeti.Analysis.Normed.Group.BlockLowerBound. Tau Ceti generalizes the block maps from continuous endomorphisms to arbitrary functions between seminormed groups. The original staging_module is retained only as provenance."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3747,7 +3746,7 @@
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound",
+        "TauCeti.Analysis.Normed.Group.BlockLowerBound",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid",
