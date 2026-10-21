@@ -47,7 +47,7 @@ real assembly is the same five steps as the complex one, instantiated at `ℝ`.
 The complex spectral-separation hypotheses are `TauCeti.LinearPMap.SemiboundedBelow`/
 `TauCeti.LinearPMap.SemiboundedAbove` for the exact block together with resolvent-set avoidance for
 the complementary block, and the latter is stated through
-`TauCeti.LinearPMap.spectrum`, which exists over `ℂ` only.  The maintained real
+the complex partial-map spectrum `_root_.LinearPMap.spectrum`.  The maintained real
 tree instead carries the scalar-generic `FormBoundedSylvesterGap`, which covers
 all three of the source's separation configurations — the printed
 interval/exterior one over `realSpectrum`, and both ordered half-line ones — and
