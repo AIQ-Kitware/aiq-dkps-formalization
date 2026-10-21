@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Pairwise spectral separation for two closed self-adjoint blocks
@@ -18,7 +18,7 @@ three stronger interval/exterior and ordered gap configurations.
 ## Migration note (phase S2, 2026-07-28)
 
 The spectrum here was `Spectra.Resolvent.spectrum : Set ℝ` and is now
-`TauCeti.LinearPMap.spectrum : Set ℂ` (the completed Spectra removal).
+`_root_.LinearPMap.spectrum : Set ℂ` (the completed Spectra removal).
 The separation is therefore measured by `‖lam - α‖` in `ℂ` rather than `|lam - α|`
 in `ℝ`.  This is the *same* condition whenever the operators are self-adjoint —
 their spectra are real — and it is the honest statement otherwise, which the
@@ -45,8 +45,8 @@ def LinearPMap.PairwiseSpectrumGap
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F) (δ : ℝ) : Prop :=
-  ∀ lam ∈ TauCeti.LinearPMap.spectrum A,
-    ∀ α ∈ TauCeti.LinearPMap.spectrum B,
+  ∀ lam ∈ _root_.LinearPMap.spectrum A,
+    ∀ α ∈ _root_.LinearPMap.spectrum B,
       δ ≤ ‖lam - α‖
 
 namespace LinearPMap.PairwiseSpectrumGap
@@ -80,8 +80,8 @@ theorem disjoint
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ : ℝ}
     (h : LinearPMap.PairwiseSpectrumGap A B δ) (hδ : 0 < δ) :
-    Disjoint (TauCeti.LinearPMap.spectrum A)
-      (TauCeti.LinearPMap.spectrum B) := by
+    Disjoint (_root_.LinearPMap.spectrum A)
+      (_root_.LinearPMap.spectrum B) := by
   refine Set.disjoint_left.mpr ?_
   intro lam hlamA hlamB
   have hsep : δ ≤ ‖lam - lam‖ := h lam hlamA lam hlamB
@@ -131,8 +131,8 @@ theorem disjoint
     {A : E →ₗ.[ℂ] E}
     {B : F →ₗ.[ℂ] F} {δ : ℝ}
     (h : PairwiseSpectrumGap A B δ) (hδ : 0 < δ) :
-    Disjoint (TauCeti.LinearPMap.spectrum A)
-      (TauCeti.LinearPMap.spectrum B) := by
+    Disjoint (_root_.LinearPMap.spectrum A)
+      (_root_.LinearPMap.spectrum B) := by
   exact LinearPMap.PairwiseSpectrumGap.disjoint h hδ
 
 end PairwiseSpectrumGap
