@@ -98,7 +98,6 @@ topics:
   - Analysis.InnerProductSpace.Gram.Operator
   - Analysis.InnerProductSpace.AngleGeometry
   - Analysis.InnerProductSpace.FrameFactorization
-  - Analysis.InnerProductSpace.HoffmanWielandt
   - Analysis.InnerProductSpace.EigenvalueChange
 - id: T09
   title: Approximation numbers
@@ -449,7 +448,6 @@ rungs:
   - Analysis.InnerProductSpace.Gram.Matrix
   - Analysis.InnerProductSpace.Gram.Operator
   - Analysis.InnerProductSpace.HilbertSchmidt.Energy
-  - Analysis.InnerProductSpace.HoffmanWielandt
   - Analysis.InnerProductSpace.KyFan
   - Analysis.InnerProductSpace.MoorePenroseInverse
   - Analysis.InnerProductSpace.NearIsometry
