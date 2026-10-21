@@ -1544,7 +1544,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteValueFibers.lean` — 165 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagMeasureNatural.lean` — 164 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/Reflection.lean` — 163 lines · Lean source
-- [x] `ForTauCeti/Analysis/Matrix/EntrywiseOpNorm.lean` — 163 lines · Lean source
+- [x] Upstreamed as `TauCeti.Analysis.Matrix.EntrywiseOpNorm` (former `ForTauCeti/Analysis/Matrix/EntrywiseOpNorm.lean`); consumers now use the upstream API.
 - [x] `ForTauCeti/Analysis/InnerProductSpace/ReducingSubspace.lean` — 162 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Spectral/Gap.lean` — 161 lines · Lean source
 - [ ] `ForTauCeti/Analysis/CStarAlgebra/TrigonometricSeries.lean` — 160 lines · Lean source

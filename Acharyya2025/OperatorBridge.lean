@@ -22,7 +22,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
 import Acharyya2025.MathlibBridge
 import Acharyya2025.Weyl
-import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
+import TauCeti.Analysis.Matrix.EntrywiseOpNorm
 
 open scoped BigOperators RealInnerProductSpace
 open Module (finrank)
@@ -45,20 +45,6 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 def MatrixL2OperatorClose {n : Nat} (A B : SqMat n) (ε : Real) : Prop :=
   ∀ x : EuclideanSpace Real (Fin n),
     ‖Matrix.toEuclideanLin (A - B) x‖ ≤ ε * ‖x‖
-
-/--
-The `ℓ¹`–`ℓ²` comparison on Euclidean coordinates: `∑ |xⱼ| ≤ √n · ‖x‖₂`.
-
-Role: internal helper / standard norm-comparison fact.
-
-Formalized by Claude Fable 5 (claude-fable-5[1m]).
--/
-theorem sum_abs_le_sqrt_card_mul_norm {n : Nat} (x : EuclideanSpace Real (Fin n)) :
-    -- Conclusion: the ℓ¹ norm of `x`'s coordinates is at most `√n` times its ℓ² norm.
-    ∑ j : Fin n, |x j| ≤ Real.sqrt n * ‖x‖ := by
-  -- Thin ℝ-instantiation of the Mathlib-staged RCLike version.
-  simpa [Real.norm_eq_abs, Fintype.card_fin] using
-    EuclideanSpace.sum_norm_le_sqrt_card_mul_norm x
 
 /--
 Entrywise closeness gives honest `ℓ² → ℓ²` operator-norm closeness with
@@ -88,8 +74,13 @@ theorem matrixL2OperatorClose_of_entrywise
   -- applied to the difference matrix `A - B`.
   have hentry' : ∀ i j, |(A - B) i j| ≤ ε := by
     intro i j; rw [Matrix.sub_apply]; exact hentry i j
-  exact Matrix.norm_toEuclideanLin_le_of_entry_le_fin
-    (fun i j => by simpa only [Real.norm_eq_abs] using hentry' i j) x
+  have hentry'' : ∀ i j, ‖(A - B) i j‖ ≤ ε := by
+    intro i j
+    rw [Real.norm_eq_abs]
+    exact hentry' i j
+  simpa only [Fintype.card_fin] using
+    (Matrix.norm_toEuclideanLin_le_of_entry_le_square
+      (𝕜 := ℝ) (ι := Fin n) (A := A - B) (ε := ε) hentry'' x)
 
 /--
 A Hermitian (over `ℝ`: symmetric) matrix induces a symmetric operator on

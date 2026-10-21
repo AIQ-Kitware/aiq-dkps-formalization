@@ -227,7 +227,6 @@
       "staging_modules": [
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
-        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.Analysis.Matrix.SpectralProjection",
         "ForTauCeti.Analysis.Matrix.Spectrum",
@@ -245,7 +244,6 @@
       "staging_modules": [
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
-        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.MeasureTheory.CfcMeasurable",
         "ForTauCeti.Probability.Moments.CenteredScatter",
@@ -1669,7 +1667,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 2356fd0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
+        "TauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable"
       ],
       "blocked_dependencies": [],
@@ -1703,9 +1701,9 @@
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.Probability.Moments.MatrixConcentration"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "upstreamed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "Deleted the duplicate finite-dimensional entrywise-to-operator norm estimates after validating TauCeti.Analysis.Matrix.EntrywiseOpNorm. Consumers use its generalized rectangular or square-index bounds directly. The ℓ¹-to-ℓ² estimate is taken from Mathlib's PiLp.sum_norm_le_sqrt_card_mul_norm. Historical staging path retained here."
     },
     {
       "source_module": "ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable",
@@ -1718,7 +1716,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 82989e1; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
+        "TauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity",
         "Mathlib.Analysis.Matrix.Hermitian",
         "Mathlib.Analysis.Matrix.Order",
@@ -1948,7 +1946,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 2356fd0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
-        "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
+        "TauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "ForTauCeti.Probability.Moments.Variance"
       ],
       "blocked_dependencies": [],

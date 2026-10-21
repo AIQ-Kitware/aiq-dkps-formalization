@@ -16,7 +16,7 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); prose symbol `Ŝ` → `Shat
 module
 
 public import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
-public import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
+public import TauCeti.Analysis.Matrix.EntrywiseOpNorm
 public import ForTauCeti.Probability.Moments.Variance
 
 
@@ -214,7 +214,13 @@ theorem measure_forall_norm_toEuclideanLin_sub_le_ge
         ⊆ {ω | ∀ x : EuclideanSpace ℝ (Fin n),
             ‖Matrix.toEuclideanLin (Shat ω - A) x‖ ≤ (n : ℝ) * η * ‖x‖} := by
     intro ω hω x
-    exact Matrix.norm_toEuclideanLin_le_of_entry_le_fin (fun i j => by simpa using hω i j) x
+    have hentry : ∀ i j, ‖(Shat ω - A) i j‖ ≤ η := by
+      intro i j
+      rw [Real.norm_eq_abs, Matrix.sub_apply]
+      exact hω i j
+    simpa only [Fintype.card_fin] using
+      (Matrix.norm_toEuclideanLin_le_of_entry_le_square
+        (𝕜 := ℝ) (ι := Fin n) (A := Shat ω - A) (ε := η) hentry x)
   -- the bad (some-entry-far) event, bounded above by the shared entrywise estimate
   have hbad : P {ω | ∃ k l, η < |Shat ω k l - A k l|}
       ≤ ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) :=
