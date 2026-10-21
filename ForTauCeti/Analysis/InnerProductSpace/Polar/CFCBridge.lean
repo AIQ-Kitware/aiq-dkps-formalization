@@ -216,9 +216,10 @@ theorem continuousLinearMap_polar_decomposition (A : H →L[ℂ] H) :
     ∃ U : H →L[ℂ] H, IsPartialIsometry U ∧ A = U ∘L CFC.abs A := by
   refine ⟨(polarFactor (A : H →ₗ[ℂ] H)).toContinuousLinearMap, ?_, ?_⟩
   · -- transport `IsPartialIsometry` across the (definitional) star-monoid bridge
-    have h := isPartialIsometry_polarFactor (A : H →ₗ[ℂ] H)
-    ext x
-    exact congrArg (fun f : H →ₗ[ℂ] H => f x) h
+    exact (ContinuousLinearMap.isPartialIsometry_iff_starMul).mp <|
+      (LinearMap.isPartialIsometry_toContinuousLinearMap_iff).mpr <|
+        (LinearMap.isPartialIsometry_iff_starMul).mpr
+          (isPartialIsometry_polarFactor (A : H →ₗ[ℂ] H))
   · rw [show CFC.abs A = CFC.abs ((A : H →ₗ[ℂ] H)).toContinuousLinearMap from rfl,
       ← operatorAbs_toContinuousLinearMap_eq_cfcAbs (A : H →ₗ[ℂ] H)]
     ext x

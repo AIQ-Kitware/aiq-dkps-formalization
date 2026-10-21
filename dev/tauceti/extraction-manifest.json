@@ -28,7 +28,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
-        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
@@ -110,7 +109,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
-        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
@@ -118,7 +116,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
         "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularPartialIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
@@ -148,7 +145,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
-        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
@@ -477,7 +473,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
-        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
@@ -1323,13 +1318,13 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PartialIsometry",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
-      "provenance_class": "moved; introduced at Davis--Kahan commit 3676b55; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "Originally moved from ForMathlib to ForTauCeti; removed from the staging tree after TauCeti accepted the same generic and operator partial-isometry APIs. Current consumers import TauCeti.Analysis.InnerProductSpace.PartialIsometry.",
       "direct_dependencies": [
         "Mathlib"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
+      "status": "upstreamed",
       "upstream_pr": null
     },
     {
@@ -1343,7 +1338,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 3676b55; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry",
+        "TauCeti.Analysis.InnerProductSpace.PartialIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus"
       ],
@@ -2203,7 +2198,7 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
-        "ForTauCeti.Analysis.InnerProductSpace.PartialIsometry"
+        "TauCeti.Analysis.InnerProductSpace.PartialIsometry"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
