@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
 public import Mathlib.MeasureTheory.Function.ContinuousMapDense
+public import TauCeti.Analysis.InnerProductSpace.OperatorIdentities
 
 /-!
 # Polarised diagonal integrals
@@ -71,26 +72,6 @@ namespace BorelCalculus
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable {a : H →L[ℂ] H}
 
-section PolarizationIdentity
-
-omit [CompleteSpace H] in
-/-- **Polarisation for a bounded operator.**  The sesquilinear form of `T` is
-recovered from its quadratic form by the four-term complex polarisation sum. -/
-theorem inner_polarization (T : H →L[ℂ] H) (ψ ξ : H) :
-    (1 / 4 : ℂ) *
-        (⟪ξ + ψ, T (ξ + ψ)⟫_ℂ
-          + Complex.I * ⟪ξ + Complex.I • ψ, T (ξ + Complex.I • ψ)⟫_ℂ
-          - ⟪ξ - ψ, T (ξ - ψ)⟫_ℂ
-          - Complex.I * ⟪ξ - Complex.I • ψ, T (ξ - Complex.I • ψ)⟫_ℂ)
-      = ⟪ψ, T ξ⟫_ℂ := by
-  simp only [map_add, map_sub, map_smul, inner_add_left, inner_add_right,
-    inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right, Complex.conj_I]
-  ring_nf
-  rw [Complex.I_sq]
-  ring
-
-end PolarizationIdentity
-
 section Pair
 
 variable (ha : IsStarNormal a)
@@ -122,7 +103,7 @@ theorem pair_of_continuous (f : C(spectrum ℂ a, ℂ)) (ψ ξ : H) :
     pair ha (fun x => f x) ψ ξ = ⟪ψ, cfcHom ha f ξ⟫_ℂ := by
   rw [pair, integral_diagMeasure, integral_diagMeasure, integral_diagMeasure,
     integral_diagMeasure]
-  exact inner_polarization (cfcHom ha f) ψ ξ
+  exact _root_.ContinuousLinearMap.inner_polarization (cfcHom ha f) ψ ξ
 
 omit [CompleteSpace H] in
 /-- Two symbols close in `L¹` of a dominating measure have close integrals
