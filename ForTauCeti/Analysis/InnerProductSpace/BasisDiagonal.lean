@@ -8,7 +8,7 @@ or a new file next to `OrthonormalBasis` in `PiL2`.
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.BasisSpan
+public import TauCeti.Analysis.InnerProductSpace.BasisSpan
 public import ForTauCeti.Analysis.InnerProductSpace.EigenblockSpan
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 public import Mathlib.Analysis.InnerProductSpace.Spectrum

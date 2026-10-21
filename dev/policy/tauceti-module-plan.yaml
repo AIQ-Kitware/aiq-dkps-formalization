@@ -33,7 +33,6 @@ topics:
 - id: T01
   title: Positive square root, operator modulus, functional calculus
   modules:
-  - Analysis.InnerProductSpace.BasisSpan
   - Analysis.InnerProductSpace.CourantFischer
   - Analysis.InnerProductSpace.PositiveSqrt
   - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
@@ -392,7 +391,6 @@ rungs:
 - id: A
   title: Positive square root, operator modulus, polar decomposition
   seeds:
-  - Analysis.InnerProductSpace.BasisSpan
   - Analysis.InnerProductSpace.CourantFischer
   - Analysis.InnerProductSpace.OperatorModulus
   - Analysis.InnerProductSpace.Polar.Decomposition
@@ -462,7 +460,6 @@ rungs:
   - Analysis.InnerProductSpace.AlignedBasis
   - Analysis.InnerProductSpace.AngleGeometry
   - Analysis.InnerProductSpace.Basic
-  - Analysis.InnerProductSpace.BasisSpan
   - Analysis.InnerProductSpace.CourantFischer
   - Analysis.InnerProductSpace.EigenvalueChange
   - Analysis.InnerProductSpace.FiniteFrame

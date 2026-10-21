@@ -8,7 +8,7 @@ next to `LinearMap.IsSymmetric.eigenvectorBasis`.
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.BasisSpan
+public import TauCeti.Analysis.InnerProductSpace.BasisSpan
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 /-! # Identifying spans of the sorted eigenvector basis with eigenspaces
