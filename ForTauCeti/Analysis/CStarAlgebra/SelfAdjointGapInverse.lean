@@ -8,6 +8,7 @@ module
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
+public import TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
 /-!
 # Norm and inverse bounds from real spectral position
@@ -17,22 +18,16 @@ Two consequences of where a self-adjoint element sits on the real line:
 * `TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc`: `‖a‖ ≤ r` **iff** the real
   spectrum is contained in `[-r, r]`. This is the isometric continuous functional
   calculus specialized to the identity function.
-* `TauCeti.isUnit_of_forall_le_abs` and
-  `TauCeti.IsSelfAdjoint.norm_ringInverse_le`: if the real spectrum avoids the open
-  interval `(-r, r)` then `a` is a unit whose inverse has norm at most `r⁻¹`.
+* The spectral-gap inverse estimate is upstream as
+  `IsSelfAdjoint.isUnit_and_norm_ringInverse_le`.
 
-Invertibility needs no self-adjointness and no norm: it is exactly
-`spectrum.isUnit_of_zero_notMem`, since a spectral gap around `0` in particular keeps
-`0` out of the spectrum. Only the quantitative bound on the inverse uses the
-functional calculus.
+This module retains only the norm/spectrum equivalence, which is not yet in Tau Ceti. Together
+with the upstream inverse estimate, it supplies the analytic input to the constant-one
+interval/exterior Sylvester estimate for the Davis--Kahan `sin Θ` theorem (shift-and-invert
+argument).
 
-These are the analytic inputs to the constant-one interval/exterior Sylvester estimate
-for the Davis--Kahan `sin Θ` theorem (shift-and-invert argument).
-
-Proposed Mathlib destinations: the two norm results belong beside `norm_cfc_le_iff` in
+Proposed Mathlib destination: the norm result belongs beside `norm_cfc_le_iff` in
 `Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Isometric.lean`.
-`isUnit_of_forall_le_abs` uses no analysis and belongs instead near
-`spectrum.zero_notMem_iff` in `Mathlib/Algebra/Algebra/Spectrum/Basic.lean`.
 
 ## Provenance
 
@@ -53,23 +48,6 @@ public section
 
 namespace TauCeti
 
-section Unit
-
-variable {A : Type*} [Ring A] [Algebra ℝ A] {a : A} {r : ℝ}
-
-/-- An element whose real spectrum is bounded away from `0` is a unit.
-
-Neither self-adjointness nor a norm is needed: the hypothesis is used only to rule out
-`0 ∈ spectrum ℝ a`. -/
-theorem isUnit_of_forall_le_abs (hr : 0 < r) (hσ : ∀ x ∈ spectrum ℝ a, r ≤ |x|) :
-    IsUnit a := by
-  refine spectrum.isUnit_of_zero_notMem ℝ fun h => ?_
-  have h0 := hσ 0 h
-  rw [abs_zero] at h0
-  linarith
-
-end Unit
-
 variable {A : Type*} [CStarAlgebra A] {a : A} {r : ℝ}
 
 /-- A self-adjoint element of a C⋆-algebra has norm at most `r` exactly when its real
@@ -79,17 +57,5 @@ theorem IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc (ha : IsSelfAdjoint a) (hr
   conv_lhs => rw [← cfc_id ℝ a]
   rw [norm_cfc_le_iff (id : ℝ → ℝ) a hr]
   simp [Set.subset_def, Set.mem_Icc, Real.norm_eq_abs, abs_le]
-
-/-- If the real spectrum of a self-adjoint element avoids the open interval `(-r, r)`,
-its inverse has norm at most `r⁻¹`.
-
-`TauCeti.isUnit_of_forall_le_abs` supplies the invertibility, so `Ring.inverse a` is a
-genuine two-sided inverse here. -/
-theorem IsSelfAdjoint.norm_ringInverse_le (ha : IsSelfAdjoint a) (hr : 0 < r)
-    (hσ : ∀ x ∈ spectrum ℝ a, r ≤ |x|) : ‖Ring.inverse a‖ ≤ r⁻¹ := by
-  rw [← cfc_ringInverse_id (R := ℝ) a (isUnit_of_forall_le_abs hr hσ)]
-  refine norm_cfc_le (by positivity) fun x hx => ?_
-  rw [Real.norm_eq_abs, abs_inv]
-  exact inv_anti₀ hr (hσ x hx)
 
 end TauCeti

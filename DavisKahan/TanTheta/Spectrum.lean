@@ -179,11 +179,11 @@ theorem coercive_of_compress_spectrum_exterior
     rw [hM₁def]
     exact le_abs_of_spectrum_exterior hspec
   have hM₁unit : IsUnit M₁ :=
-    TauCeti.isUnit_of_forall_le_abs (A := ↥Z →L[ℂ] ↥Z) hrd hM₁spec
+    (hM₁sa.isUnit_and_norm_ringInverse_le (A := ↥Z →L[ℂ] ↥Z) hrd hM₁spec).1
   set J : ↥Z →L[ℂ] ↥Z := Ring.inverse M₁
   have hJ1 : J * M₁ = 1 := Ring.inverse_mul_cancel _ hM₁unit
   have hJnorm : ‖J‖ ≤ ((β - α) / 2 + δ)⁻¹ :=
-    TauCeti.IsSelfAdjoint.norm_ringInverse_le (A := ↥Z →L[ℂ] ↥Z) hM₁sa hrd hM₁spec
+    (hM₁sa.isUnit_and_norm_ringInverse_le (A := ↥Z →L[ℂ] ↥Z) hrd hM₁spec).2
   intro x hx
   set v : Z := ⟨x, hx⟩ with hv
   have hJv : J (M₁ v) = v := by
