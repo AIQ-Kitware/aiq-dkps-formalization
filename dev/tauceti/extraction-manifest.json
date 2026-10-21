@@ -48,8 +48,6 @@
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "ForTauCeti.Analysis.Normed.FiniteLpGauge",
         "ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact",
-        "ForTauCeti.Analysis.Normed.SchattenGauge",
-        "ForTauCeti.Analysis.Normed.SupGauge",
         "ForTauCeti.Analysis.Normed.SymmetricGauge",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
@@ -73,7 +71,6 @@
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
         "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
         "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
@@ -2380,12 +2377,11 @@
         "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
-      ],
-      "status": "staged-needs-current-validation",
+      "downstream_users": [],
+      "status": "consumed-upstream",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "The local supremum-gauge definition and extension proof were deleted after consumption of Tau Ceti.SymmetricGauge.supGauge and extend_supGauge. The DKPS antitone specialization is no longer a maintained local declaration.",
+      "maintained_module": "TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
     },
     {
       "source_module": "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport",
@@ -5078,21 +5074,20 @@
         "supGauge_extend_of_antitone"
       ],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.Normed.SupGauge",
-      "final_tauceti_module": "TauCeti.Analysis.Normed.SupGauge",
+      "staging_module": null,
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-number",
       "provenance_class": "supremum-gauge theory moved from the removed parallel sequence-gauge module",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.Normed.SymmetricGauge"
+        "TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
-      ],
-      "status": "staged-needs-current-validation",
+      "downstream_users": [],
+      "status": "consumed-upstream",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "The local supremum-gauge definition and extension proof were deleted after consumption of Tau Ceti.SymmetricGauge.supGauge and extend_supGauge. The DKPS antitone specialization is no longer a maintained local declaration.",
+      "maintained_module": "TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
     },
     {
       "source_module": "new or refactored directly in ForTauCeti",
@@ -5103,27 +5098,29 @@
       ],
       "current_namespace": "TauCeti.SymmetricGauge",
       "staging_module": "ForTauCeti.Analysis.Normed.SymmetricGauge",
-      "final_tauceti_module": "TauCeti.Analysis.Normed.SymmetricGauge",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-number",
       "provenance_class": "canonical dominated-sequence extension; no antitone assumption on the B60 input",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.Convex.Majorization",
-        "Mathlib.Algebra.BigOperators.Finsupp.Basic",
-        "Mathlib.Data.Finsupp.Basic",
-        "Mathlib.Data.Finsupp.Order",
-        "Mathlib.Data.NNReal.Basic",
-        "Mathlib.Topology.Algebra.InfiniteSum.ENNReal"
+        "TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic",
+        "ForTauCeti.Analysis.Convex.Majorization"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.Normed.SchattenGauge",
-        "ForTauCeti.Analysis.Normed.SupGauge",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
+        "DavisKahan.Sources.DavisKahan1970.Section8"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "upstream-consumed-with-dkps-bridge",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "Tau Ceti now owns SymmetricGauge and its sequence-extension laws. The file imports Tau Ceti and retains only DKPS finite-vector/finite-gauge bridge results.",
+      "maintained_module": "ForTauCeti.Analysis.Normed.SymmetricGauge",
+      "maintained_declarations": [
+        "SymmetricGauge.ofFin",
+        "SymmetricGauge.toFiniteSymmetricGauge",
+        "SymmetricGauge.le_of_prefixSum_le",
+        "SymmetricGauge.mono_weaklyMajorized",
+        "SymmetricGauge.extend_eq_iSup_ofFin"
+      ]
     },
     {
       "source_module": "new or refactored directly in ForTauCeti",
@@ -5135,32 +5132,29 @@
         "isComplete_schattenFamily"
       ],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
+      "staging_module": null,
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-number",
       "provenance_class": "single scalar-generic rectangular family constructor; includes the Schatten scale",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.Normed.SchattenGauge",
-        "ForTauCeti.Analysis.Normed.SupGauge",
-        "ForTauCeti.Analysis.Normed.SymmetricGauge",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten"
+        "TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
+        "TauCeti.Analysis.OperatorIdeal.Family.Schatten",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ExtendedSequence"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "DavisKahan.Explorations.SourceUnitaryInvariantNormFanDominance",
-        "RoadmapBridge.OperatorTheory"
+        "DavisKahan.Explorations.SourceUnitaryInvariantNormFanDominance"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "consumed-upstream-with-dkps-result-retained",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "The duplicate induced-family, Schatten, and supremum-family code was deleted after migration to Tau Ceti.Analysis.OperatorIdeal.Family.SymmetricGauge and Family.Schatten. The approximation-sequence bridge and diagonal-realization uniqueness result remain in ExtendedSequence.",
+      "maintained_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ExtendedSequence",
+      "maintained_declarations": [
+        "TauCeti.approxSeq",
+        "TauCeti.approxSeq_antitone",
+        "TauCeti.symmetricGauge_eq_of_approxSeq_eq"
+      ]
     },
     {
       "source_module": "new or refactored directly in ForTauCeti",

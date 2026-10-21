@@ -174,7 +174,7 @@ while the Weyl bridge above it is `ℝ`-only.
 
 Names are the API surface, so these are in scope even where the mathematics is fine.
 
-- `OperatorIdeals:276` **`symmetricGaugeFamily_injective`** concludes a pointwise
+- `OperatorIdeals:276` **`symmetricGauge_eq_of_approxSeq_eq`** concludes a pointwise
   `Φ.extend a = Ψ.extend a` on antitone sequences, not `Function.Injective`.
 - `MajorizationAndAngles:249` **`sum_sq_eigenvalues_sub_ge`** is named `_ge` with a `≤`
   conclusion; its separation constant `γ` appears in three hypotheses and nowhere in the

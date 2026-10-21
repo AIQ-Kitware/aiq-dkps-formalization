@@ -106,14 +106,14 @@
     {
       "id": "schatten-foundation",
       "title": "Approximation-number Schatten infrastructure",
-      "module": "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge",
-      "file": "ForTauCeti/Analysis/OperatorIdeal/Family/SymmetricGauge.lean",
-      "declaration": "TauCeti.schattenFamily",
+      "module": "TauCeti.Analysis.OperatorIdeal.Family.Schatten",
+      "file": null,
+      "declaration": "TauCeti.OperatorIdealFamily.schatten",
       "kind": "proof_candidate",
       "dependencies": [],
       "frontier_nodes": [],
       "confidence": "high",
-      "notes": "The former interface contract was replaced by implementations in ForTauCeti. The revised port removes the parallel schattenIdealFamily constructor: schattenFamily is induced by the canonical SymmetricGauge over arbitrary RCLike fields, with independent source and target universes. This migration awaits compilation; no new build verification is claimed."
+      "notes": "The duplicate DKPS Schatten gauge and family were removed after verification against the pinned Tau Ceti APIs. TauCeti.OperatorIdealFamily.schatten and SymmetricGauge.lpGauge now own the implementation and completeness result."
     },
     {
       "id": "schatten-family",
@@ -127,7 +127,7 @@
       ],
       "frontier_nodes": [],
       "confidence": "high",
-      "notes": "The approximation-number power-sum triangle inequality remains here and uses generic rectangular Ky Fan dominance. The canonical family and its completeness instance isComplete_schattenFamily are in Family.SymmetricGauge. The revised port awaits compilation."
+      "notes": "The approximation-number power-sum triangle inequality remains here and uses generic rectangular Ky Fan dominance. The canonical family and completeness instance are provided by TauCeti.Analysis.OperatorIdeal.Family.Schatten."
     },
     {
       "id": "free-beam-mode-ode",
