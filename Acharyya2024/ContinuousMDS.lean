@@ -81,25 +81,26 @@ theorem continuousRawStress_empiricalPopulation
     (hh : Measurable h) (hΔ : ∀ m, Measurable (Δ m))
     (hΔ' : ∀ m, Measurable fun m' => Δ m' m) :
     continuousRawStress d Δ
-        (TauCeti.Probability.empiricalPopulation φ : Measure M) h
+        (TauCeti.Probability.empiricalMeasureOfFintype φ : Measure M) h
       = ((Fintype.card κ : Real))⁻¹ * ((Fintype.card κ : Real))⁻¹ *
           ∑ i, ∑ j, (‖h (φ i) - h (φ j)‖ - Δ (φ i) (φ j)) ^ 2 := by
   classical
   have hinner : ∀ m' : M,
       ∫ m'', (‖h m' - h m''‖ - Δ m' m'') ^ 2
-          ∂(TauCeti.Probability.empiricalPopulation φ : Measure M)
+          ∂(TauCeti.Probability.empiricalMeasureOfFintype φ : Measure M)
         = ((Fintype.card κ : Real))⁻¹ * ∑ j, (‖h m' - h (φ j)‖ - Δ m' (φ j)) ^ 2 := by
     intro m'
     have hmeas : StronglyMeasurable fun m'' : M => (‖h m' - h m''‖ - Δ m' m'') ^ 2 :=
       (((measurable_const.sub hh).norm.sub (hΔ m')).pow_const 2).stronglyMeasurable
-    rw [TauCeti.Probability.integral_empiricalPopulation hmeas, smul_eq_mul]
+    rw [TauCeti.Probability.integral_empiricalMeasureOfFintype hmeas, smul_eq_mul]
   rw [continuousRawStress]
   simp_rw [hinner]
   have houter : StronglyMeasurable fun m' : M =>
       ((Fintype.card κ : Real))⁻¹ * ∑ j, (‖h m' - h (φ j)‖ - Δ m' (φ j)) ^ 2 := by
     refine (measurable_const.mul (Finset.measurable_sum _ fun j _ => ?_)).stronglyMeasurable
     exact (((hh.sub measurable_const).norm.sub (hΔ' (φ j))).pow_const 2)
-  rw [TauCeti.Probability.integral_empiricalPopulation houter, smul_eq_mul, ← Finset.mul_sum,
+  rw [TauCeti.Probability.integral_empiricalMeasureOfFintype houter, smul_eq_mul,
+    ← Finset.mul_sum,
     ← mul_assoc]
 
 /--
@@ -113,7 +114,7 @@ theorem continuousRawStress_empiricalPopulation_fin
     (hh : Measurable h) (hΔ : ∀ m, Measurable (Δ m))
     (hΔ' : ∀ m, Measurable fun m' => Δ m' m) :
     continuousRawStress d Δ
-        (TauCeti.Probability.empiricalPopulation φ : Measure M) h
+        (TauCeti.Probability.empiricalMeasureOfFintype φ : Measure M) h
       = ((n : Real))⁻¹ * ((n : Real))⁻¹ *
           rawStress n d (fun i j => Δ (φ i) (φ j)) (fun i => h (φ i)) := by
   have := continuousRawStress_empiricalPopulation (κ := Fin n) d φ Δ h hh hΔ hΔ'
@@ -135,13 +136,13 @@ of the pairwise errors. -/
 theorem lpPairDistErr_empiricalPopulation
     {κ : Type*} [Fintype κ] [Nonempty κ] (d : Nat) {p : Real} (hp : 0 ≤ p)
     (φ : κ → M) (ψ χ : M → Rvec d) (hψ : Measurable ψ) (hχ : Measurable χ) :
-    lpPairDistErr d (TauCeti.Probability.empiricalPopulation φ : Measure M) p ψ χ
+    lpPairDistErr d (TauCeti.Probability.empiricalMeasureOfFintype φ : Measure M) p ψ χ
       = ((Fintype.card κ : Real))⁻¹ * ((Fintype.card κ : Real))⁻¹ *
           ∑ i, ∑ j, |‖ψ (φ i) - ψ (φ j)‖ - ‖χ (φ i) - χ (φ j)‖| ^ p := by
   classical
   have hinner : ∀ m' : M,
       ∫ m'', |‖ψ m' - ψ m''‖ - ‖χ m' - χ m''‖| ^ p
-          ∂(TauCeti.Probability.empiricalPopulation φ : Measure M)
+          ∂(TauCeti.Probability.empiricalMeasureOfFintype φ : Measure M)
         = ((Fintype.card κ : Real))⁻¹ *
             ∑ j, |‖ψ m' - ψ (φ j)‖ - ‖χ m' - χ (φ j)‖| ^ p := by
     intro m'
@@ -150,7 +151,7 @@ theorem lpPairDistErr_empiricalPopulation
       ((Real.continuous_rpow_const hp).measurable.comp
         (((measurable_const.sub hψ).norm.sub
           (measurable_const.sub hχ).norm).abs)).stronglyMeasurable
-    rw [TauCeti.Probability.integral_empiricalPopulation hmeas, smul_eq_mul]
+    rw [TauCeti.Probability.integral_empiricalMeasureOfFintype hmeas, smul_eq_mul]
   rw [lpPairDistErr]
   simp_rw [hinner]
   have houter : StronglyMeasurable fun m' : M =>
@@ -160,7 +161,8 @@ theorem lpPairDistErr_empiricalPopulation
     exact (Real.continuous_rpow_const hp).measurable.comp
       (((hψ.sub measurable_const).norm.sub
         (hχ.sub measurable_const).norm).abs)
-  rw [TauCeti.Probability.integral_empiricalPopulation houter, smul_eq_mul, ← Finset.mul_sum,
+  rw [TauCeti.Probability.integral_empiricalMeasureOfFintype houter, smul_eq_mul,
+    ← Finset.mul_sum,
     ← mul_assoc]
 
 /--
@@ -188,7 +190,7 @@ theorem tendsto_measure_lpPairDistErr_gt
     {ε : Real} (hε : 0 < ε) :
     Filter.Tendsto
       (fun u => Q {ω | ε < lpPairDistErr d
-        (TauCeti.Probability.empiricalPopulation φ : Measure M) p (ψ u ω) χ})
+        (TauCeti.Probability.empiricalMeasureOfFintype φ : Measure M) p (ψ u ω) χ})
       Filter.atTop (𝓝 0) := by
   classical
   set δ : Real := min 1 ε with hδdef
@@ -199,7 +201,7 @@ theorem tendsto_measure_lpPairDistErr_gt
     exact_mod_cast Fintype.card_pos
   -- a uniform pairwise bound `δ` forces the averaged `p`-th power below `ε`
   have hsub : ∀ u, {ω | ε < lpPairDistErr d
-        (TauCeti.Probability.empiricalPopulation φ : Measure M) p (ψ u ω) χ}
+        (TauCeti.Probability.empiricalMeasureOfFintype φ : Measure M) p (ψ u ω) χ}
       ⊆ ⋃ q : κ × κ,
           {ω | δ < |‖ψ u ω (φ q.1) - ψ u ω (φ q.2)‖ - ‖χ (φ q.1) - χ (φ q.2)‖|} := by
     intro u ω hω
@@ -254,7 +256,7 @@ theorem tendsto_measure_lpPairDistErr_gt
       (fun q _ => hconv q.1 q.2 δ hδpos)
     simpa using this
   · calc Q {ω | ε < lpPairDistErr d
-            (TauCeti.Probability.empiricalPopulation φ : Measure M) p (ψ u ω) χ}
+            (TauCeti.Probability.empiricalMeasureOfFintype φ : Measure M) p (ψ u ω) χ}
         ≤ Q (⋃ q : κ × κ,
             {ω | δ < |‖ψ u ω (φ q.1) - ψ u ω (φ q.2)‖ - ‖χ (φ q.1) - χ (φ q.2)‖|}) :=
           measure_mono (hsub u)
