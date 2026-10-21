@@ -7,7 +7,6 @@ import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import DavisKahan.SpectralTheory.PartialMap.BoundedRealization

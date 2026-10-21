@@ -7,7 +7,6 @@ import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 import DavisKahan.SpectralTheory.BoundedFromSpectrum
 import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
 open TauCeti.DavisKahan.Sylvester
