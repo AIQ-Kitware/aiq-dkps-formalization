@@ -7,7 +7,7 @@ already present there in a comparable form.
 -/
 
 import Mathlib
-import ForTauCeti.MeasureTheory.Function.ConvergenceInMeasure
+import TauCeti.MeasureTheory.Function.ConvergenceInMeasure
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

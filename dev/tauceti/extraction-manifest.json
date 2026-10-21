@@ -266,7 +266,6 @@
       "staging_modules": [
         "ForTauCeti.MeasureTheory.CfcMeasurable",
         "ForTauCeti.MeasureTheory.CompactExists",
-        "ForTauCeti.MeasureTheory.Function.ConvergenceInMeasure",
         "TauCeti.MeasureTheory.Measure.Typeclasses.Probability"
       ]
     },
@@ -1916,8 +1915,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "All three local convergence-in-measure results were removed after verifying the identical TauCeti.MeasureTheory.Function.ConvergenceInMeasure statements. Acharyya2024 and the challenge axiom audit import the canonical module directly. Historical staging path retained here."
     },
     {
       "source_module": "ForTauCeti.MeasureTheory.Measure.Typeclasses.Probability",

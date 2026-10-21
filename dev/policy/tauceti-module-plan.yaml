@@ -295,7 +295,6 @@ topics:
   - Analysis.Matrix.EntrywiseOpNorm
   - Analysis.Matrix.SpectralFunctionMeasurable
   - Analysis.Matrix.Spectrum
-  - MeasureTheory.Function.ConvergenceInMeasure
   - Analysis.Matrix.SpectralProjection
 - id: T20
   title: Sample moments and matrix concentration
@@ -654,7 +653,6 @@ rungs:
   - Analysis.Matrix.EntrywiseOpNorm
   - Analysis.Matrix.SpectralFunctionMeasurable
   - Analysis.Matrix.Spectrum
-  - MeasureTheory.Function.ConvergenceInMeasure
   - Analysis.Matrix.SpectralProjection
 - id: S
   title: Sample moments and matrix concentration (T20)
