@@ -15,9 +15,8 @@ open TauCeti.DavisKahan.Sylvester
 
 The resolvent construction lives in `DavisKahan.SpectralTheory.GapResolvent`;
 these are the two `sin Θ` endpoints it feeds, in operator norm and in an
-arbitrary unitarily invariant ideal gauge.  Both are Spectra-free since
-2026-07-28 — the gap resolvent is now built from
-`TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap`.
+arbitrary unitarily invariant ideal gauge. The spectral-gap norm estimate is
+provided by Tau Ceti's `IsSelfAdjoint.norm_resolvent_le_of_spectrum_gap`.
 -/
 
 namespace TauCeti
