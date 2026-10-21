@@ -870,7 +870,8 @@ theorem not_davisKahanProposition4_4_Finite :
     (UnitarilyInvariantSeminorm.kyFan (𝕜 := ℝ) (E := E4) (F := E4) 4)
   have hle : kyFanSum 4 (LinearMap.id - (directRotation U4 V4 acute).toLinearMap) ≤
       kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
-    simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using hN
+    simpa only [UnitarilyInvariantSeminorm.kyFan_apply,
+      TauCeti.kyFanSum_eq_linearMap_kyFanSum] using hN
   exact absurd hle (not_le.mpr kyFanSum_lt)
 
 open ShortRotationCounterexample in
@@ -888,7 +889,8 @@ theorem kyFan_not_isQNorm :
   have hle := directRotation_fullDisplacement_qnorm _ hQ U4 V4 acute Wequiv rfl
   have hle' : kyFanSum 4 (LinearMap.id - (directRotation U4 V4 acute).toLinearMap) ≤
       kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
-    simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using hle
+    simpa only [UnitarilyInvariantSeminorm.kyFan_apply,
+      TauCeti.kyFanSum_eq_linearMap_kyFanSum] using hle
   exact absurd hle' (not_le.mpr kyFanSum_lt)
 
 end DavisKahan.FiniteDimensional

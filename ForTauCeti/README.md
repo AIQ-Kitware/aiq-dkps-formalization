@@ -138,21 +138,15 @@ manifest/checkers when an old record disagrees with the present repository.
 
 ## Finite-dimensional unitarily invariant seminorms
 
-`TauCeti.UnitarilyInvariantSeminorm 𝕜 E F` extends
-`Seminorm 𝕜 (E →ₗ[𝕜] F)`. Endomorphisms use `E = F`; there is no
-separate square structure or conversion to one. The canonical modules are:
+`TauCeti.UnitarilyInvariantSeminorm 𝕜 E F` from the pinned Tau Ceti dependency
+is the canonical rectangular API. `ForTauCeti` no longer defines a parallel
+`Basic` structure; DKPS consumers use Tau Ceti's structure and its accepted
+Ky Fan, Frobenius, nuclear, and operator-norm constructors directly.
 
-- `Analysis.InnerProductSpace.KyFan`: rectangular singular-value prefix sums,
-  their triangle inequality, scaling, and variational witnesses.
-- `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic` and `.Majorization`:
-  the seminorm structure, two-sided orbits, and rectangular Fan dominance.
-- `.Gauge`: diagonal gauge representation, adjoint invariance, and `apply_operatorAbs`
-  for the square specialization. `.Instances`: one operator norm, Frobenius norm,
-  Ky Fan family, and nuclear norm for rectangular maps.
-
-`kyFanSum_le_iff_forall_seminorm` states the comparison in both directions.
-The forward implication uses the convex hull of the two-sided unitary orbit;
-the reverse implication tests the concrete Ky Fan seminorms. Constructors use
-`Seminorm.of`, which supplies the inherited zero and negation laws as well as
-subadditivity and absolute homogeneity. The local real-module infrastructure
-is not registered as a global instance.
+The remaining files under
+`Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/` are donor extensions
+and migration adapters still used downstream. They are not a second owner for
+the accepted structure or constructors, and adapters are removed as their
+paper consumers move to the upstream API. In particular, the paper-facing
+finite symmetric-gauge presentation remains in `DavisKahan`, where its
+source correspondence belongs.

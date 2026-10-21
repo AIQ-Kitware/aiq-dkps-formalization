@@ -688,7 +688,8 @@ theorem kyFan_sinTwoTheta_le
     (UnitarilyInvariantSeminorm.kyFan
       (𝕜 := 𝕜) (E := E) (F := E) k)
   have h := sinTwoTheta_perturbation_le NK hA hB hU hV hab hgap
-  simpa only [NK, UnitarilyInvariantSeminorm.kyFan_apply] using h
+  simpa only [NK, UnitarilyInvariantSeminorm.kyFan_apply,
+    TauCeti.kyFanSum_eq_linearMap_kyFanSum] using h
 
 end DavisKahan.FiniteDimensional
 end TauCeti

@@ -1,0 +1,192 @@
+/-
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Fable 5
+-/
+module
+
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+
+/-! # UI-seminorm transport along isometric embeddings
+
+Tau Ceti supplies the canonical unitarily-invariant seminorm and transport along isometric
+equivalences. These two constructions extend that API to isometric embeddings by using zero-padded
+composition on the codomain or the adjoint embedding on the domain. -/
+
+public section
+
+namespace TauCeti.UnitarilyInvariantSeminorm
+
+/-! The following forwarding lemmas are temporary migration shims. Downstream modules are being
+rewritten to the canonical Tau Ceti `map_*` API; remove these once the consumers have moved. -/
+
+theorem nonneg {𝕜 E F : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F) (A : E →ₗ[𝕜] F) : 0 ≤ N A :=
+  apply_nonneg N A
+
+theorem apply_zero {𝕜 E F : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F) : N 0 = 0 :=
+  map_zero N
+
+theorem add_le {𝕜 E F : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F) (A B : E →ₗ[𝕜] F) :
+    N (A + B) ≤ N A + N B :=
+  map_add_le_add N A B
+
+theorem smul_eq {𝕜 E F : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F) (a : 𝕜) (A : E →ₗ[𝕜] F) :
+    N (a • A) = ‖a‖ * N A :=
+  map_smul_eq_mul N a A
+
+theorem apply_neg {𝕜 E F : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F) (A : E →ₗ[𝕜] F) :
+    N (-A) = N A :=
+  map_neg_eq_map N A
+
+theorem invariant {𝕜 E F : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
+    (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] F) :
+    N (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = N A :=
+  N.map_linearIsometryEquiv_comp_comp U V A
+
+theorem invariant_left {𝕜 E F : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
+    (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :
+    N (U.toLinearMap ∘ₗ A) = N A :=
+  N.map_linearIsometryEquiv_comp U A
+
+theorem invariant_right {𝕜 E F : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
+    (V : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] F) :
+    N (A ∘ₗ V.toLinearMap) = N A :=
+  N.map_comp_linearIsometryEquiv V A
+
+theorem eq_of_same_singularValues {𝕜 E F : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F) {A B : E →ₗ[𝕜] F}
+    (h : A.singularValues = B.singularValues) : N A = N B :=
+  N.map_eq_of_singularValues_eq h
+
+open scoped InnerProductSpace
+open _root_.LinearMap
+
+variable {𝕜 E F : Type*} [RCLike 𝕜]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+
+/-- Pull a rectangular UI norm back along an isometric embedding of the
+codomain.  The transported norm measures `A : E → H` by measuring
+`ι ∘ A : E → F`. -/
+@[expose]
+noncomputable def codomainIsometryTransport
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    [FiniteDimensional 𝕜 H]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
+    (ι : H →ₗᵢ[𝕜] F) :
+    UnitarilyInvariantSeminorm 𝕜 E H where
+  toSeminorm := Seminorm.of
+    (fun A => N (ι.toLinearMap ∘ₗ A))
+    (fun A B => by
+      have hmap : ι.toLinearMap ∘ₗ (A + B) =
+          (ι.toLinearMap ∘ₗ A) + (ι.toLinearMap ∘ₗ B) := by
+        ext x
+        simp
+      rw [hmap]
+      exact map_add_le_add N _ _)
+    (fun a A => by
+      have hmap : ι.toLinearMap ∘ₗ (a • A) =
+          a • (ι.toLinearMap ∘ₗ A) := by
+        ext x
+        simp
+      rw [hmap]
+      exact map_smul_eq_mul N _ _)
+  map_linearIsometryEquiv_comp_comp' U V A := by
+        apply N.map_eq_of_singularValues_eq
+        calc
+          (ι.toLinearMap ∘ₗ (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap)).singularValues =
+              (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues :=
+            singularValues_linearIsometry_comp ι _
+          _ = A.singularValues := by
+            rw [singularValues_unitary_comp, singularValues_comp_unitary]
+          _ = (ι.toLinearMap ∘ₗ A).singularValues :=
+            (singularValues_linearIsometry_comp ι A).symm
+
+/-- Codomain transport, unfolded. -/
+@[simp] theorem codomainIsometryTransport_apply
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    [FiniteDimensional 𝕜 H]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
+    (ι : H →ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] H) :
+    N.codomainIsometryTransport ι A = N (ι.toLinearMap ∘ₗ A) :=
+  (rfl)
+
+/-- Pull a rectangular UI norm back along the adjoint of an isometric
+embedding of the domain.  The transported norm measures `A : H → F` by the
+zero-padded map `A ∘ ι⋆ : E → F`. -/
+@[expose]
+noncomputable def domainIsometryTransport
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    [FiniteDimensional 𝕜 H]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
+    (ι : H →ₗᵢ[𝕜] E) :
+    UnitarilyInvariantSeminorm 𝕜 H F where
+  toSeminorm := Seminorm.of
+    (fun A => N (A ∘ₗ LinearMap.adjoint ι.toLinearMap))
+    (fun A B => by
+      have hmap : (A + B) ∘ₗ LinearMap.adjoint ι.toLinearMap =
+          (A ∘ₗ LinearMap.adjoint ι.toLinearMap) +
+            (B ∘ₗ LinearMap.adjoint ι.toLinearMap) := by
+        ext x
+        simp
+      rw [hmap]
+      exact map_add_le_add N _ _)
+    (fun a A => by
+      have hmap : (a • A) ∘ₗ LinearMap.adjoint ι.toLinearMap =
+          a • (A ∘ₗ LinearMap.adjoint ι.toLinearMap) := by
+        ext x
+        simp
+      rw [hmap]
+      exact map_smul_eq_mul N _ _)
+  map_linearIsometryEquiv_comp_comp' U V A := by
+        apply N.map_eq_of_singularValues_eq
+        calc
+          ((U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) ∘ₗ
+              LinearMap.adjoint ι.toLinearMap).singularValues =
+              (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues :=
+            singularValues_comp_adjoint_linearIsometry ι _
+          _ = A.singularValues := by
+            rw [singularValues_unitary_comp, singularValues_comp_unitary]
+          _ = (A ∘ₗ LinearMap.adjoint ι.toLinearMap).singularValues :=
+            (singularValues_comp_adjoint_linearIsometry ι A).symm
+
+/-- Domain transport, unfolded. -/
+@[simp] theorem domainIsometryTransport_apply
+    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    [FiniteDimensional 𝕜 H]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
+    (ι : H →ₗᵢ[𝕜] E) (A : H →ₗ[𝕜] F) :
+    N.domainIsometryTransport ι A =
+      N (A ∘ₗ LinearMap.adjoint ι.toLinearMap) :=
+  (rfl)
+
+
+
+end TauCeti.UnitarilyInvariantSeminorm

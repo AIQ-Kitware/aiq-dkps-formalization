@@ -264,8 +264,9 @@ theorem directRotation_minimizes_sum_sq_basis_angles
     ext x
     simp [displacementSquare, AW, map_sub,
       LinearMap.comp_apply]
-  change UnitarilyInvariantSeminorm.nuclear (displacementSquare R) ≤
-    UnitarilyInvariantSeminorm.nuclear
+  change UnitarilyInvariantSeminorm.nuclear (𝕜 := 𝕜) (E := E) (F := E)
+      (displacementSquare R) ≤
+    UnitarilyInvariantSeminorm.nuclear (𝕜 := 𝕜) (E := E) (F := E)
       (displacementSquare W.toLinearMap) at h
   rw [hdispR, hdispW,
     UnitarilyInvariantSeminorm.nuclear_adjoint_comp_self_eq_sum_sq_norm AR b,

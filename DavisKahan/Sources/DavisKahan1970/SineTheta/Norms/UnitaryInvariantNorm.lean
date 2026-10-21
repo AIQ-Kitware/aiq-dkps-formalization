@@ -77,19 +77,19 @@ structure SymmetricNormingFunction where
   finiteNorm : ∀ n : ℕ,
     TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)) (EuclideanSpace ℂ (Fin n))
   normalized :
-    (finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ)
+    (finiteNorm 1).basisGauge (EuclideanSpace.basisFun (Fin 1) ℂ)
       (fun _ => 1) = 1
   zero_pad : ∀ {n : ℕ} (x : Fin n → ℝ),
-    (finiteNorm (n + 1)).gauge
+    (finiteNorm (n + 1)).basisGauge
         (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (zeroPad x) =
-      (finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+      (finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ) x
 
 namespace SymmetricNormingFunction
 
 /-- The finite symmetric gauge associated to the paper norm. -/
 def finiteGauge (N : SymmetricNormingFunction) (n : ℕ)
     (x : Fin n → ℝ) : ℝ :=
-  (N.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+  (N.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ) x
 
 /-- The first `n` approximation singular values of a rectangular bounded
 operator. -/
@@ -144,7 +144,7 @@ def gauge
 theorem finiteGauge_def (N : SymmetricNormingFunction) (n : ℕ)
     (x : Fin n → ℝ) :
     N.finiteGauge n x =
-      (N.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x :=
+  (N.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ) x :=
   rfl
 
 /-- Source normalization in one dimension. -/
@@ -205,8 +205,8 @@ theorem prefixGauge_le_of_all_kyFan_le
     N.prefixGauge n A ≤ N.prefixGauge n B := by
   let NA := N.finiteNorm n
   let b := EuclideanSpace.basisFun (Fin n) ℂ
-  change NA.gauge b (approximationPrefix n A) ≤
-    NA.gauge b (approximationPrefix n B)
+  change NA.basisGauge b (approximationPrefix n A) ≤
+    NA.basisGauge b (approximationPrefix n B)
   apply NA.gauge_le_gauge_of_prefix_sums_le b
   · intro i j hij
     exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
@@ -248,8 +248,8 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
     c * N.prefixGauge n A ≤ N.prefixGauge n B := by
   let NA := N.finiteNorm n
   let b := EuclideanSpace.basisFun (Fin n) ℂ
-  have hdom : NA.gauge b (c • approximationPrefix n A) ≤
-      NA.gauge b (approximationPrefix n B) := by
+  have hdom : NA.basisGauge b (c • approximationPrefix n A) ≤
+      NA.basisGauge b (approximationPrefix n B) := by
     apply NA.gauge_le_gauge_of_prefix_sums_le b
     · intro i j hij
       exact mul_le_mul_of_nonneg_left

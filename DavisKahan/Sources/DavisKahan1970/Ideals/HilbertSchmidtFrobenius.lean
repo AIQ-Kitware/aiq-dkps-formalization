@@ -81,12 +81,13 @@ theorem hilbertSchmidtNorm_eq_frobenius
     [FiniteDimensional 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     ContinuousLinearMap.hilbertSchmidtNorm A =
-      UnitarilyInvariantSeminorm.frobenius A.toLinearMap := by
+      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := F)
+        A.toLinearMap := by
   rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy]
   rw [approximationNumberEnergy_eq_ofReal_sum_sq_singularValues,
     ENNReal.toReal_ofReal (Finset.sum_nonneg fun i _ => sq_nonneg _)]
-  exact (UnitarilyInvariantSeminorm.frobenius_eq_sqrt_sum_sq_singularValues
-    A.toLinearMap).symm
+  rw [UnitarilyInvariantSeminorm.frobenius_apply_eq_sqrt_sum_sq_singularValues]
+  rw [← A.toLinearMap.sum_fin_singularValues (· ^ 2) (by simp)]
 
 end
 

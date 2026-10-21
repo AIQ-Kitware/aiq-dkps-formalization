@@ -103,39 +103,41 @@ example (k : ℕ) (A B : E →ₗ[𝕜] F) :
   kyFanSum_add_le k A B
 
 example (N : UnitarilyInvariantSeminorm 𝕜 E F)
-    (U : unitary (F →ₗ[𝕜] F)) (V : unitary (E →ₗ[𝕜] E))
+    (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E)
     (A : E →ₗ[𝕜] F) :
-    N ((U : F →ₗ[𝕜] F) ∘ₗ A ∘ₗ (V : E →ₗ[𝕜] E)) = N A :=
-  N.unitary_invariant' U V A
+    N (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = N A :=
+  N.map_linearIsometryEquiv_comp_comp U V A
 
 example {A B : E →ₗ[𝕜] F} :
-    (∀ k, kyFanSum k A ≤ kyFanSum k B) ↔
-      ∀ N : UnitarilyInvariantSeminorm 𝕜 E F, N A ≤ N B :=
-  UnitarilyInvariantSeminorm.kyFanSum_le_iff_forall_seminorm
+    (∀ k, A.kyFanSum k ≤ B.kyFanSum k) →
+      ∀ N : UnitarilyInvariantSeminorm 𝕜 E F, N A ≤ N B := by
+  intro h N
+  exact N.map_le_of_kyFanSum_le h
 
 example (N : UnitarilyInvariantSeminorm 𝕜 E E) (A : E →ₗ[𝕜] E) :
     N (operatorAbs A) = N A := N.apply_operatorAbs A
 
 noncomputable example : UnitarilyInvariantSeminorm 𝕜 E E :=
-  UnitarilyInvariantSeminorm.frobenius
+  UnitarilyInvariantSeminorm.frobenius 𝕜 E E
 
 example {n : ℕ} (A : E →ₗ[𝕜] F) (hn : Module.finrank 𝕜 E = n)
     (b : OrthonormalBasis (Fin n) 𝕜 E) :
-    UnitarilyInvariantSeminorm.frobenius A = Real.sqrt (∑ i, ‖A (b i)‖ ^ 2) :=
-  UnitarilyInvariantSeminorm.frobenius_apply_basis A hn b
+    UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := F) A =
+      Real.sqrt (∑ i, ‖A (b i)‖ ^ 2) := by
+  simpa [hn] using UnitarilyInvariantSeminorm.frobenius_apply b A
 
 example (A : E →ₗ[𝕜] F) :
-    UnitarilyInvariantSeminorm.kyFan 0 A = 0 := by
-  simp [UnitarilyInvariantSeminorm.kyFan_apply, kyFanSum]
+    UnitarilyInvariantSeminorm.kyFan (𝕜 := 𝕜) (E := E) (F := F) 0 A = 0 := by
+  simp [UnitarilyInvariantSeminorm.kyFan_apply, LinearMap.kyFanSum_def]
 
-example (A : E →ₗ[𝕜] F) :
-    UnitarilyInvariantSeminorm.schattenNorm 2 (by norm_num) A =
-      UnitarilyInvariantSeminorm.frobenius A :=
-  UnitarilyInvariantSeminorm.schattenNorm_two_apply A
+example : UnitarilyInvariantSeminorm.schatten 𝕜 E F 2 =
+    UnitarilyInvariantSeminorm.frobenius 𝕜 E F :=
+  UnitarilyInvariantSeminorm.schatten_two
 
 example [CompleteSpace E] (A : E →L[𝕜] F) :
     A.hilbertSchmidtEnergy (stdOrthonormalBasis 𝕜 E).toHilbertBasis =
-      ENNReal.ofReal (UnitarilyInvariantSeminorm.frobenius A.toLinearMap ^ 2) :=
+      ENNReal.ofReal (UnitarilyInvariantSeminorm.frobenius
+        (𝕜 := 𝕜) (E := E) (F := F) A.toLinearMap ^ 2) :=
   UnitarilyInvariantSeminorm.hilbertSchmidtEnergy_eq_ofReal_frobenius_sq A
 
 end UnifiedUIN

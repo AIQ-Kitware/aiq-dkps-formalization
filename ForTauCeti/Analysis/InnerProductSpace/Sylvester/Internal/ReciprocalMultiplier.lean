@@ -400,10 +400,11 @@ theorem finiteUnitaryOrbitCertificate_of_reciprocalInterpolation
         ⟪eF i, C (eE j)⟫_𝕜 := by
     simpa only [RCLike.ofReal_sub] using
       basisFirst_coefficient_equation eF eE α β hcoeff i j
-  refine ⟨n, a, U, V, ?_, hmass⟩
-  have hX := sum_basisMatrixUnit eF eE X
-  have hC := sum_basisMatrixUnit eF eE C
-  calc
+  have hrepr : ((δ : 𝕜)) • X = ∑ r, a r •
+      ((U r).toLinearMap ∘ₗ C ∘ₗ (V r).toLinearMap) := by
+    have hX := sum_basisMatrixUnit eF eE X
+    have hC := sum_basisMatrixUnit eF eE C
+    calc
     ((δ : 𝕜)) • X =
         ((δ : 𝕜)) •
           (∑ i, ∑ j, ⟪eF i, X (eE j)⟫_𝕜 •
@@ -437,10 +438,18 @@ theorem finiteUnitaryOrbitCertificate_of_reciprocalInterpolation
           basisMatrixUnit eF eE i j) := by
       simp only [map_sum, map_smul]
     _ = S C := by rw [← hC]
-    _ = ∑ r, a r •
-        ((U r).toLinearMap ∘ₗ C ∘ₗ (V r).toLinearMap) := by
-      simp only [S, LinearMap.sum_apply, LinearMap.smul_apply,
-        unitaryOrbitAction_apply]
+      _ = ∑ r, a r •
+          ((U r).toLinearMap ∘ₗ C ∘ₗ (V r).toLinearMap) := by
+        simp only [S, LinearMap.sum_apply, LinearMap.smul_apply,
+          unitaryOrbitAction_apply]
+  refine ⟨n, {
+    coeff := a
+    left := U
+    right := V
+    sum_smul_comp_comp_eq := hrepr.symm
+  }, ?_⟩
+  rw [TauCeti.UnitaryOrbitCertificate.mass_def]
+  exact hmass
 
 /-- A doubled-real reciprocal interpolation recombines from matrix units into
 an exact finite orthogonal-orbit certificate for arbitrary real maps. -/
@@ -496,8 +505,11 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_reciprocalInterpolat
     conv_lhs => rw [sum_basisMatrixUnit eF eE A]
     simp only [map_sum, map_smul, blockDiagonal]
     rfl
-  refine ⟨q, w, U, V, ?_, ?_⟩
-  · calc
+  have hrepr : delta • UnitarilyInvariantSeminorm.orthogonalBlockSum X X =
+      ∑ r, w r • ((U r).toLinearMap ∘ₗ
+        UnitarilyInvariantSeminorm.orthogonalBlockSum C C ∘ₗ
+          (V r).toLinearMap) := by
+    calc
       delta • UnitarilyInvariantSeminorm.orthogonalBlockSum X X =
           delta • ∑ i, ∑ j, ⟪eF i, X (eE j)⟫_ℝ •
             UnitarilyInvariantSeminorm.orthogonalBlockSum
@@ -541,7 +553,16 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_reciprocalInterpolat
             (V r).toLinearMap) := by
         simp only [S, LinearMap.sum_apply, LinearMap.smul_apply,
           unitaryOrbitAction_apply]
-  · simpa only [Real.norm_eq_abs] using hmass
+  have hmass' : (∑ r, ‖w r‖) ≤ mass := by
+    simpa only [Real.norm_eq_abs] using hmass
+  refine ⟨q, {
+    coeff := w
+    left := U
+    right := V
+    sum_smul_comp_comp_eq := hrepr.symm
+  }, ?_⟩
+  rw [TauCeti.UnitaryOrbitCertificate.mass_def]
+  exact hmass'
 
 /-- **Every finite reciprocal multiplier with gap `δ` satisfies the sharp
 simultaneous Ky Fan prefix estimate**, over every `RCLike` scalar field.

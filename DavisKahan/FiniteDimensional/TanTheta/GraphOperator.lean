@@ -70,10 +70,10 @@ theorem frobenius_tanTheta_le
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
-    δ * UnitarilyInvariantSeminorm.frobenius (tanThetaEmbedding U X) ≤
-      UnitarilyInvariantSeminorm.frobenius (residual A X M) :=
+    δ * UnitarilyInvariantSeminorm.frobenius 𝕜 F E (tanThetaEmbedding U X) ≤
+      UnitarilyInvariantSeminorm.frobenius 𝕜 F E (residual A X M) :=
   tanTheta_perturbation_le
-    (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E))
+    (UnitarilyInvariantSeminorm.frobenius 𝕜 F E)
     hA hU X hM hGalerkin hδ hgap
 
 /-- Ky Fan coordinate tangent bound. -/
@@ -87,7 +87,8 @@ theorem kyFan_tanTheta_le
         (tanThetaEmbedding U X) ≤
       TauCeti.kyFanSum k
         (residual A X M) := by
-  simpa [UnitarilyInvariantSeminorm.kyFan_apply] using
+  simpa only [UnitarilyInvariantSeminorm.kyFan_apply,
+    kyFanSum_eq_sum_range, LinearMap.kyFanSum_def] using
     tanTheta_perturbation_le
       (UnitarilyInvariantSeminorm.kyFan
         (𝕜 := 𝕜) (E := F) (F := E) k)

@@ -311,11 +311,15 @@ theorem uiNorm_comp_trialGramSqrtEquiv_symm_le
   calc
     N (A ∘ₗ (trialGramSqrtEquiv X hX).symm.toLinearMap) ≤
         N A * ‖(trialGramSqrtEquiv X hX).symm.toLinearMap.toContinuousLinearMap‖ :=
-      N.comp_le_mul_opNorm A (trialGramSqrtEquiv X hX).symm.toLinearMap
+      (N.map_comp_le_right A _ (c :=
+        ‖(trialGramSqrtEquiv X hX).symm.toLinearMap.toContinuousLinearMap‖)
+        fun y =>
+          (trialGramSqrtEquiv X hX).symm.toLinearMap.toContinuousLinearMap.le_opNorm y).trans_eq
+        (by ring)
     _ ≤ N A * ε⁻¹ :=
       mul_le_mul_of_nonneg_left
         (opNorm_trialGramSqrtEquiv_symm_le X hX hframe hε)
-        (N.nonneg A)
+        (apply_nonneg N A)
 
 /-- Recomposition on the right by the inverse coordinate factor recovers the
 isometric range representative. -/

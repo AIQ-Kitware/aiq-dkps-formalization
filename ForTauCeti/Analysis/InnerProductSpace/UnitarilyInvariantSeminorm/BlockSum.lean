@@ -22,6 +22,8 @@ formalization (Kitware, Inc.). The vector majorization descent remains in
 
 public section
 
+set_option linter.style.haveILetI false
+
 namespace TauCeti
 
 open scoped InnerProductSpace BigOperators
@@ -296,8 +298,12 @@ theorem singularValues_orthogonalBlockSum_congr
     (hB : B₁.singularValues = B₂.singularValues) :
     (orthogonalBlockSum A₁ B₁).singularValues =
       (orthogonalBlockSum A₂ B₂).singularValues := by
-  obtain ⟨UA, VA, hA'⟩ := exists_unitary_factorization_of_singularValues_eq hA
-  obtain ⟨UB, VB, hB'⟩ := exists_unitary_factorization_of_singularValues_eq hB
+  obtain ⟨UA, VA, hA'⟩ := LinearMap.mem_twoSidedUnitaryOrbit.mp
+    (LinearMap.mem_twoSidedUnitaryOrbit_iff_singularValues_eq.mpr hA)
+  obtain ⟨UB, VB, hB'⟩ := LinearMap.mem_twoSidedUnitaryOrbit.mp
+    (LinearMap.mem_twoSidedUnitaryOrbit_iff_singularValues_eq.mpr hB)
+  have hA' : A₁ = UA.toLinearMap ∘ₗ A₂ ∘ₗ VA.toLinearMap := hA'.symm
+  have hB' : B₁ = UB.toLinearMap ∘ₗ B₂ ∘ₗ VB.toLinearMap := hB'.symm
   rw [hA', hB', ← orthogonalBlockSum_comp, ← orthogonalBlockSum_comp,
     orthogonalBlockSum_linearIsometryEquiv, orthogonalBlockSum_linearIsometryEquiv,
     singularValues_unitary_comp, singularValues_comp_unitary]
@@ -324,8 +330,8 @@ theorem apply_orthogonalBlockSum_eq_of_singularValues_smul_eq
   calc
     c * N (orthogonalBlockSum S₁ S₂)
         = N ((c : 𝕜) • orthogonalBlockSum S₁ S₂) := by
-          rw [N.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hc]
-    _ = N (orthogonalBlockSum P₁ P₂) := N.eq_of_same_singularValues hblock
+          rw [map_smul_eq_mul, RCLike.norm_ofReal, abs_of_nonneg hc]
+    _ = N (orthogonalBlockSum P₁ P₂) := N.map_eq_of_singularValues_eq hblock
 
 /-- Doubling a rectangular map in an orthogonal block sum repeats every
 singular value twice.  The quotient `i / 2` expresses the interleaved sorted
@@ -460,8 +466,6 @@ private theorem real_smul_linearMap_eq {X Y : Type*}
     [NormedAddCommGroup X] [InnerProductSpace 𝕜 X]
     [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y]
     (r : ℝ) (T : X →ₗ[𝕜] Y) : r • T = ((r : 𝕜)) • T := by
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
   change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
   rfl
 
@@ -478,10 +482,10 @@ theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
     [FiniteDimensional 𝕜 E₁] [FiniteDimensional 𝕜 E₂]
     [FiniteDimensional 𝕜 F₁] [FiniteDimensional 𝕜 F₂]
     {A C : E₁ →ₗ[𝕜] F₁} {B D : E₂ →ₗ[𝕜] F₂}
-    (hA : A ∈ convexHull ℝ (twoSidedUnitaryOrbit C))
-    (hB : B ∈ convexHull ℝ (twoSidedUnitaryOrbit D)) :
+    (hA : A ∈ convexHull ℝ (LinearMap.twoSidedUnitaryOrbit C))
+    (hB : B ∈ convexHull ℝ (LinearMap.twoSidedUnitaryOrbit D)) :
     orthogonalBlockSum A B ∈
-      convexHull ℝ (twoSidedUnitaryOrbit (orthogonalBlockSum C D)) := by
+      convexHull ℝ (LinearMap.twoSidedUnitaryOrbit (orthogonalBlockSum C D)) := by
   classical
   rcases mem_convexHull_iff_exists_fintype.mp hA with
     ⟨ι, instι, w, z, hw, hwsum, hz, hzsum⟩
@@ -503,12 +507,17 @@ theorem orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
       _ = ∑ i, w i := by simp [hvsum]
       _ = 1 := hwsum
   · intro p
-    rcases hz p.1 with ⟨U₁, V₁, hp₁⟩
-    rcases ht p.2 with ⟨U₂, V₂, hp₂⟩
+    obtain ⟨U₁, V₁, hp₁⟩ := LinearMap.mem_twoSidedUnitaryOrbit.mp (hz p.1)
+    obtain ⟨U₂, V₂, hp₂⟩ := LinearMap.mem_twoSidedUnitaryOrbit.mp (ht p.2)
+    apply LinearMap.mem_twoSidedUnitaryOrbit.mpr
     refine ⟨LinearIsometryEquiv.withLpProdCongr 2 U₁ U₂,
       LinearIsometryEquiv.withLpProdCongr 2 V₁ V₂, ?_⟩
     ext x
-    all_goals simp [orthogonalBlockSum, hp₁, hp₂, LinearMap.comp_apply]
+    apply WithLp.ofLp_injective 2
+    change (U₁ (C (V₁ x.ofLp.1)), U₂ (D (V₂ x.ofLp.2))) =
+      (z p.1 x.ofLp.1, t p.2 x.ofLp.2)
+    exact Prod.ext (congrArg (fun f : E₁ →ₗ[𝕜] F₁ => f x.ofLp.1) hp₁)
+      (congrArg (fun f : E₂ →ₗ[𝕜] F₂ => f x.ofLp.2) hp₂)
   · have hfirst :
         (∑ p : ι × κ, (w p.1 * v p.2) • z p.1) = A := by
       rw [Fintype.sum_prod_type]
@@ -593,10 +602,11 @@ theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
     (hA : ∀ k, kyFanSum k A ≤ kyFanSum k C)
     (hB : ∀ k, kyFanSum k B ≤ kyFanSum k D) :
     NB (orthogonalBlockSum A B) ≤ NB (orthogonalBlockSum C D) := by
-  apply NB.apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
-  exact orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
+  have hconv := orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
     (mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le hA)
     (mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le hB)
+  exact NB.apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
+    (A := orthogonalBlockSum A B) (B := orthogonalBlockSum C D) hconv
 
 /-- Pointwise singular-value dominance implies norm dominance.
 -/

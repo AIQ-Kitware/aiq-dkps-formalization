@@ -23,6 +23,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.SingularValues
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.KyFan
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
@@ -479,6 +480,16 @@ theorem kyFanSum_eq_sum_fin (k : ℕ) (A : E →ₗ[𝕜] F) :
 theorem kyFanSum_eq_sum_range (k : ℕ) (A : E →ₗ[𝕜] F) :
     kyFanSum k A = ∑ i ∈ Finset.range k, A.singularValues i :=
   Fin.sum_univ_eq_sum_range (fun i => A.singularValues i) k
+
+/-- The local finite-prefix presentation agrees with Tau Ceti's canonical Ky Fan sum. -/
+theorem kyFanSum_eq_linearMap_kyFanSum (k : ℕ) (A : E →ₗ[𝕜] F) :
+    kyFanSum k A = A.kyFanSum k := by
+  rw [kyFanSum_eq_sum_range, LinearMap.kyFanSum_def]
+
+/-- The finite-prefix presentation is the canonical Tau Ceti Ky Fan seminorm. -/
+theorem kyFanSum_eq_kyFan (k : ℕ) (A : E →ₗ[𝕜] F) :
+    kyFanSum k A = UnitarilyInvariantSeminorm.kyFan 𝕜 E F k A := by
+  rw [kyFanSum_eq_linearMap_kyFanSum, ← UnitarilyInvariantSeminorm.kyFan_apply]
 
 /-- Ky Fan sums are nonnegative, being sums of singular values. -/
 theorem kyFanSum_nonneg (k : ℕ) (A : E →ₗ[𝕜] F) : 0 ≤ kyFanSum k A :=

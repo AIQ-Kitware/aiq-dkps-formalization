@@ -299,11 +299,12 @@ private theorem kyFanSum_smul_compression_le_of_intervalExteriorGap
   -- states the goal with the local definitions unfolded, in the exact shape the
   -- following rewrite needs. `simp only` on those definitions normalises further
   -- and the rewrite then has nothing to match -- tried, and it fails here.
-  change (UnitarilyInvariantSeminorm.kyFan k) (((δ : ℝ) : 𝕜) • X) ≤
-    (UnitarilyInvariantSeminorm.kyFan k) C
-  rw [(UnitarilyInvariantSeminorm.kyFan k).smul_eq,
+  rw [TauCeti.kyFanSum_eq_kyFan k (((δ : ℝ) : 𝕜) • X),
+    TauCeti.kyFanSum_eq_kyFan k C]
+  rw [map_smul_eq_mul,
     RCLike.norm_ofReal, abs_of_nonneg hδ.le]
-  exact kyFan_sylvester_le_of_intervalGap hBWperp hAU hδ hgap' hEq k
+  simpa only [TauCeti.kyFanSum_eq_kyFan] using
+    kyFan_sylvester_le_of_intervalGap hBWperp hAU hδ hgap' hEq k
 
 /-- **The orthogonal block sum turns the two diagonal Ky Fan bounds into a bound
 on the projector difference.**  Transport the two compressions into
@@ -469,20 +470,10 @@ theorem sinAngleOperator_perturbation_le
     intro k
     have hbase0 :=
       kyFanSum_smul_compression_le_of_intervalExteriorGap hB hA hV hUperp hδ hgapVU k
+    rw [TauCeti.kyFanSum_real_smul k XVU hδ.le] at hbase0
     have hbase : δ * TauCeti.kyFanSum k XVU ≤
         TauCeti.kyFanSum k CVU := by
-      -- the extracted lemma states the bound with `δ` inside the norm; this pulls it
-      -- out, which is the form the adjoint manipulations below expect.
-      rw [show TauCeti.kyFanSum k
-              (((δ : ℝ) : 𝕜) • XVU) =
-            δ * TauCeti.kyFanSum k XVU from by
-          -- `kyFanSum` is `kyFan` under a different name; naming the `kyFan`
-          -- form is what lets `smul_eq` fire on the scalar.
-          change (UnitarilyInvariantSeminorm.kyFan k) (((δ : ℝ) : 𝕜) • XVU) = _
-          rw [(UnitarilyInvariantSeminorm.kyFan k).smul_eq,
-            RCLike.norm_ofReal, abs_of_nonneg hδ.le]
-          rfl] at hbase0
-      exact hbase0
+      simpa [CVU] using hbase0
     have hleft :
         TauCeti.kyFanSum k
             (-XVU.adjoint) =
@@ -490,9 +481,13 @@ theorem sinAngleOperator_perturbation_le
       calc
         TauCeti.kyFanSum k
             (-XVU.adjoint) =
-            TauCeti.kyFanSum k
+          TauCeti.kyFanSum k
               XVU.adjoint := by
-          exact (UnitarilyInvariantSeminorm.kyFan k).apply_neg XVU.adjoint
+          rw [TauCeti.kyFanSum_eq_kyFan k (-XVU.adjoint),
+            TauCeti.kyFanSum_eq_kyFan k XVU.adjoint]
+          exact map_neg_eq_map
+            (UnitarilyInvariantSeminorm.kyFan (𝕜 := 𝕜) (E := Uᗮ) (F := V) k)
+            XVU.adjoint
         _ = TauCeti.kyFanSum k XVU := by
           unfold TauCeti.kyFanSum
           exact Finset.sum_congr rfl fun i _ =>
@@ -698,9 +693,10 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PointSpectraSeparated M ⊤ A Uᗮ δ) :
-    δ * UnitarilyInvariantSeminorm.frobenius
+    δ * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
         (sinThetaEmbedding U X) ≤
-      UnitarilyInvariantSeminorm.frobenius (residual A X M) := by
+      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
+        (residual A X M) := by
   have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
   let Y : F →ₗ[𝕜] Uᗮ :=
@@ -719,14 +715,23 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     sylvester_projectedResidual_eq hA hU hUperp X M
   have hSylv := frobenius_sylvester_le_of_pointSpectraSeparated
     hAU hM hδ hgap' hEq
-  have hY : UnitarilyInvariantSeminorm.frobenius Y =
-      UnitarilyInvariantSeminorm.frobenius (sinThetaEmbedding U X) := by
+  have hY : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := Uᗮ) Y =
+      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
+        (sinThetaEmbedding U X) := by
     rw [← UnitarilyInvariantSeminorm.frobenius_subtype_comp Uᗮ Y]
     congr 1
-  have hC : UnitarilyInvariantSeminorm.frobenius C ≤
-      UnitarilyInvariantSeminorm.frobenius (residual A X M) := by
-    exact UnitarilyInvariantSeminorm.frobenius_projection_comp_le
-      Uᗮ (residual A X M)
+  have hC : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := Uᗮ) C ≤
+      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
+        (residual A X M) := by
+    have hCembed : Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C =
+        complementaryProjection U ∘ₗ residual A X M := by
+      ext x
+      simp [C, complementaryProjection, projection, LinearMap.comp_apply]
+    rw [← UnitarilyInvariantSeminorm.frobenius_subtype_comp Uᗮ C, hCembed]
+    have hproj := (UnitarilyInvariantSeminorm.frobenius
+      (𝕜 := 𝕜) (E := F) (F := E)).map_starProjection_comp_le Uᗮ
+        (residual A X M).toContinuousLinearMap
+    simpa [complementaryProjection, projection] using hproj
   rw [hY] at hSylv
   exact hSylv.trans hC
 
@@ -792,7 +797,7 @@ theorem kyFan_sinTheta_le
     (UnitarilyInvariantSeminorm.kyFan
       (𝕜 := 𝕜) (E := E) (F := E) k)
   have h := sinTheta_perturbation_le NK hA hB hU hV hδ hgap
-  simpa only [NK, UnitarilyInvariantSeminorm.kyFan_apply] using h
+  simpa only [NK, TauCeti.kyFanSum_eq_kyFan] using h
 
 /-- General two-sided spectral separation with the `π/2` constant.  The
 ambient transport proof is complete; the only open analytic input is the Ky Fan
