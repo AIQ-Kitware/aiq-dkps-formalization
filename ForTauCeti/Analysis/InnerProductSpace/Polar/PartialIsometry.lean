@@ -6,8 +6,7 @@ Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
-public import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
-public import ForTauCeti.Analysis.InnerProductSpace.RectangularPartialIsometry
+public import TauCeti.Analysis.InnerProductSpace.PartialIsometry
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.Analysis.Normed.Operator.Extend
 
@@ -451,7 +450,8 @@ theorem polarPartial_comp_adjoint_comp_polarPartial (M : E →L[𝕜] F) :
 /-- **The rectangular polar factor is a partial isometry** (Conway VI.3.9). -/
 theorem polarPartial_isPartialIsometry (M : E →L[𝕜] F) :
     M.polarPartial.IsPartialIsometry :=
-  M.polarPartial_comp_adjoint_comp_polarPartial
+  ContinuousLinearMap.isPartialIsometry_iff.mpr
+    M.polarPartial_comp_adjoint_comp_polarPartial
 
 /-- The adjoint form of the partial-isometry identity, `W⋆ W W⋆ = W⋆`. -/
 theorem adjoint_comp_polarPartial_comp_adjoint (M : E →L[𝕜] F) :

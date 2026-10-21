@@ -44,8 +44,6 @@ topics:
 - id: T02
   title: Polar decomposition and partial isometries
   modules:
-  - Analysis.InnerProductSpace.PartialIsometry
-  - Analysis.InnerProductSpace.RectangularPartialIsometry
   - Analysis.InnerProductSpace.Polar.Decomposition
   - Analysis.InnerProductSpace.Polar.Isometry
   - Analysis.InnerProductSpace.Polar.PartialIsometry
@@ -399,7 +397,6 @@ rungs:
   - Analysis.InnerProductSpace.BasisSpan
   - Analysis.InnerProductSpace.CourantFischer
   - Analysis.InnerProductSpace.OperatorModulus
-  - Analysis.InnerProductSpace.PartialIsometry
   - Analysis.InnerProductSpace.Polar.Decomposition
   - Analysis.InnerProductSpace.PositiveSqrt
   - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
@@ -481,7 +478,6 @@ rungs:
   - Analysis.InnerProductSpace.NearIsometry
   - Analysis.InnerProductSpace.OperatorModulus
   - Analysis.InnerProductSpace.OrthogonalSeries
-  - Analysis.InnerProductSpace.PartialIsometry
   - Analysis.InnerProductSpace.Polar.Decomposition
   - Analysis.InnerProductSpace.Polar.Isometry
   - Analysis.InnerProductSpace.Polar.PartialIsometry

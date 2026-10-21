@@ -16,7 +16,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
-public import ForTauCeti.Analysis.InnerProductSpace.PartialIsometry
+public import TauCeti.Analysis.InnerProductSpace.PartialIsometry
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
@@ -255,9 +255,9 @@ theorem norm_polarFactor_apply_of_mem {A : E →ₗ[𝕜] E} {x : E} (hx : x ∈
 /-- `U` is a partial isometry. -/
 theorem isPartialIsometry_polarFactor (A : E →ₗ[𝕜] E) :
     IsPartialIsometry (polarFactor A) :=
-  isPartialIsometry_of_isometryOn (K := (ker A)ᗮ)
-    (by rw [ker_polarFactor, Submodule.orthogonal_orthogonal])
-    (fun _ hx => norm_polarFactor_apply_of_mem hx)
+  (LinearMap.isPartialIsometry_iff_starMul).mp <| by
+    rw [LinearMap.isPartialIsometry_iff_norm_map, ker_polarFactor]
+    exact fun _ hx => norm_polarFactor_apply_of_mem hx
 
 /-! ### Invertible case: `U` is unitary -/
 
