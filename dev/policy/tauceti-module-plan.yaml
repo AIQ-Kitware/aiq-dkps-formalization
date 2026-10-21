@@ -76,7 +76,6 @@ topics:
   title: Majorization, Schur-Horn, and unitarily invariant norms
   modules:
   - Analysis.Convex.Majorization
-  - Analysis.InnerProductSpace.SchurHorn
   - Analysis.InnerProductSpace.Singular.Subspace
   - Analysis.InnerProductSpace.KyFan
   - Analysis.InnerProductSpace.DiagonalOperator
@@ -407,7 +406,6 @@ rungs:
   - Analysis.Convex.Majorization
   - Analysis.InnerProductSpace.KyFan
   - Analysis.InnerProductSpace.Projection.Geometry
-  - Analysis.InnerProductSpace.SchurHorn
   - Analysis.InnerProductSpace.Singular.Subspace
   - Analysis.InnerProductSpace.Spectrum
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
@@ -482,7 +480,6 @@ rungs:
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
   - Analysis.InnerProductSpace.ReducingSubspace
   - Analysis.InnerProductSpace.SchattenNorm
-  - Analysis.InnerProductSpace.SchurHorn
   - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
   - Analysis.InnerProductSpace.Singular.Subspace
   - Analysis.InnerProductSpace.Singular.System

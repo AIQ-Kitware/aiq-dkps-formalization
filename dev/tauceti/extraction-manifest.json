@@ -36,7 +36,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
@@ -148,7 +147,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
-        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
@@ -191,7 +189,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.ReducedExtension",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
@@ -212,8 +209,7 @@
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt",
-        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
+        "ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt"
       ]
     },
     {
@@ -473,7 +469,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap",
-        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
@@ -1043,7 +1038,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 9543631; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
+        "TauCeti.Analysis.InnerProductSpace.SchurHorn"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1117,7 +1112,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit dd93e70; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
+        "TauCeti.Analysis.InnerProductSpace.SchurHorn"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1491,14 +1486,13 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SchurHorn",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "moved; introduced at Davis--Kahan commit 9543631; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "moved into the accepted upstream Tau Ceti Schur--Horn API; the upstream theorems generalize the donor basis-specific results",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer"
+        "TauCeti.Analysis.InnerProductSpace.SchurHorn"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
+      "status": "upstreamed",
       "upstream_pr": null
     },
     {
@@ -1533,7 +1527,7 @@
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
-        "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
+        "TauCeti.Analysis.InnerProductSpace.SchurHorn"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],

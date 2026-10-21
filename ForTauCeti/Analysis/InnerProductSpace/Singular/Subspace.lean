@@ -25,7 +25,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.SingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-public import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
+public import TauCeti.Analysis.InnerProductSpace.SchurHorn
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 
 
@@ -143,7 +143,7 @@ theorem sum_re_inner_abs_self_eq_sum_singularValues (A : E →ₗ[𝕜] E)
   have key : ∀ b' : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E,
       ∑ k, RCLike.re ⟪operatorAbs A (b' k), b' k⟫_𝕜
         = ∑ i : Fin (finrank 𝕜 E), hsym.eigenvalues rfl i :=
-    fun b' => sum_re_inner_orthonormalBasis_self_eq_sum_eigenvalues hsym rfl b'
+    fun b' => hsym.sum_re_inner_apply_self_eq_sum_eigenvalues rfl b'
   rw [key b, ← key (hP.isSymmetric.eigenvectorBasis rfl)]
   refine Finset.sum_congr rfl fun k _ => ?_
   set w := hP.isSymmetric.eigenvectorBasis rfl with hw
@@ -206,8 +206,7 @@ theorem sum_sq_singularValues (A : E →ₗ[𝕜] F) {n : ℕ} (hn : finrank �
   have h1 : ∑ i : Fin n, A.singularValues (i : ℕ) ^ 2
       = ∑ i, A.isSymmetric_adjoint_comp_self.eigenvalues hn i :=
     Finset.sum_congr rfl fun i _ => A.sq_singularValues_fin hn i
-  rw [h1, ← sum_re_inner_orthonormalBasis_self_eq_sum_eigenvalues
-    A.isSymmetric_adjoint_comp_self hn b]
+  rw [h1, ← A.isSymmetric_adjoint_comp_self.sum_re_inner_apply_self_eq_sum_eigenvalues hn b]
   exact Finset.sum_congr rfl fun k _ => by
     rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
 

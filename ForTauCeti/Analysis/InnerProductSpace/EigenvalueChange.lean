@@ -26,7 +26,7 @@ module
 
 public import Mathlib.Analysis.Convex.Birkhoff
 public import Mathlib.GroupTheory.Perm.Support
-public import ForTauCeti.Analysis.InnerProductSpace.SchurHorn
+public import TauCeti.Analysis.InnerProductSpace.SchurHorn
 
 
 /-! # Davis's eigenvalue-change lower bound (Davis 1963, Theorem 4.1)
@@ -283,37 +283,11 @@ theorem diag_mem_convexHull_perm_spectrum (hT : T.IsSymmetric) (hS : S.IsSymmetr
   set v := hT.eigenvectorBasis hn with hv
   set W₀ : Fin n → ℝ := hS.eigenvalues hn with hW0
   set c₀ : Fin n → ℝ := fun k => RCLike.re ⟪v k, S (v k)⟫_𝕜 with hc0
-  set M : Matrix (Fin n) (Fin n) ℝ := fun k i => schurWeight hS hn v i k with hM
-  -- `M` is doubly stochastic (its rows/columns are the Schur weights).
-  have hMds : M ∈ doublyStochastic ℝ (Fin n) := by
-    rw [mem_doublyStochastic_iff_sum]
-    refine ⟨fun a b => ?_, fun a => ?_, fun b => ?_⟩
-    · simp only [hM]; exact schurWeight_nonneg hS hn v b a
-    · simp only [hM]; exact schurWeight_row_sum hS hn v a
-    · simp only [hM]; exact schurWeight_col_sum hS hn v b
-  -- The diagonal is `M *ᵥ (spectrum of S)`.
-  have hcMW : c₀ = M *ᵥ W₀ := by
-    funext k
-    have hsym : ⟪v k, S (v k)⟫_𝕜 = ⟪S (v k), v k⟫_𝕜 := (hS (v k) (v k)).symm
-    -- states the goal as the inner-product identity the structure lemma expects.
-    change RCLike.re ⟪v k, S (v k)⟫_𝕜 = (M *ᵥ W₀) k
-    rw [hsym, re_inner_orthonormalBasis_self_eq_sum_eigenvalues_mul hS hn v k]
-    simp only [hM, hW0, Matrix.mulVec, dotProduct]
-    exact Finset.sum_congr rfl fun i _ => by ring
-  -- Birkhoff: extract a finite convex combination of permutation matrices.
-  have hMconv : M ∈ convexHull ℝ
-      {N : Matrix (Fin n) (Fin n) ℝ | ∃ σ : Equiv.Perm (Fin n), σ.permMatrix ℝ = N} := by
-    rw [← doublyStochastic_eq_convexHull_permMatrix]; exact hMds
-  obtain ⟨ι, _, a, Q, ha0, ha1, hQ, hQsum⟩ := mem_convexHull_iff_exists_fintype.mp hMconv
-  choose σ hσ using hQ
-  -- Push through `· *ᵥ W₀`: `c₀ = ∑ aₖ • (W₀ ∘ σₖ)`.
-  have hcombo : c₀ = ∑ k, a k • (W₀ ∘ ⇑(σ k)) := by
-    rw [hcMW, ← hQsum, Matrix.sum_mulVec]
-    refine Finset.sum_congr rfl fun k _ => ?_
-    rw [Matrix.smul_mulVec, ← hσ k, Matrix.permMatrix_mulVec]
-  have hmem0 : c₀ ∈ convexHull ℝ (Set.range fun π : Equiv.Perm (Fin n) => W₀ ∘ (⇑π)) :=
-    mem_convexHull_of_exists_fintype a (fun k => W₀ ∘ ⇑(σ k)) ha0 ha1
-      (fun k => Set.mem_range_self (σ k)) hcombo.symm
+  -- Tau Ceti's general Schur--Horn theorem gives this permutohedron membership directly.
+  have hmem0 : c₀ ∈ convexHull ℝ
+      (Set.range fun π : Equiv.Perm (Fin n) => W₀ ∘ (⇑π)) := by
+    simpa [c₀, W₀, inner_re_symm (𝕜 := 𝕜)] using
+      hS.re_inner_apply_self_mem_convexHull_eigenvalues_comp_perm hn v
   -- Transfer the membership through the linear identification `(Fin n → ℝ) ≃ₗ EuclideanSpace`.
   set L := (WithLp.linearEquiv 2 ℝ (Fin n → ℝ)).symm.toLinearMap with hL
   have hLimg := LinearMap.image_convexHull L (Set.range fun π : Equiv.Perm (Fin n) => W₀ ∘ (⇑π))
