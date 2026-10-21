@@ -86,129 +86,6 @@ theorem eigenvalues_operatorAbs (A : E →ₗ[𝕜] E) :
     (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis rfl i,
     A.singularValues_fin rfl i]
 
-/-! ### The Ky Fan trace inequality (F1.a–b) -/
-
-/-- **Fractional knapsack**: an antitone list, integrated against weights in
-`[0, 1]` of total mass exactly `k`, is at most its top-`k` sum. -/
-private theorem sum_mul_le_sum_top {n k : ℕ} (hk : k ≤ n) {lam c : Fin n → ℝ}
-    (hlam : Antitone lam) (h0 : ∀ j, 0 ≤ c j) (h1 : ∀ j, c j ≤ 1)
-    (hsum : ∑ j, c j = k) :
-    ∑ j, lam j * c j
-      ≤ ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), lam j := by
-  rcases lt_or_eq_of_le hk with hkn | rfl
-  · set t := lam ⟨k, hkn⟩ with ht
-    have hhead : ∀ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k),
-        lam j * c j ≤ lam j + t * (c j - 1) := by
-      intro j hj
-      have hjk : (j : ℕ) < k := (Finset.mem_filter.mp hj).2
-      have hle : t ≤ lam j := hlam (Fin.le_def.mpr hjk.le)
-      nlinarith [mul_nonneg (sub_nonneg.mpr hle) (sub_nonneg.mpr (h1 j))]
-    have htail : ∀ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k),
-        lam j * c j ≤ t * c j := by
-      intro j hj
-      have hjk : ¬ (j : ℕ) < k := (Finset.mem_filter.mp hj).2
-      have hle : lam j ≤ t := hlam (Fin.le_def.mpr (Nat.le_of_not_lt hjk))
-      nlinarith [mul_nonneg (sub_nonneg.mpr hle) (h0 j)]
-    have hsplit := (Finset.sum_filter_add_sum_filter_not Finset.univ
-      (fun j : Fin n => (j : ℕ) < k) (fun j => lam j * c j)).symm
-    have hhead_eq : ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k),
-        (lam j + t * (c j - 1))
-        = ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), lam j
-          + t * (∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), c j) - t * k := by
-      have hcard : (Finset.univ.filter (fun j : Fin n => (j : ℕ) < k)).card = k := by
-        rcases lt_or_eq_of_le hk with hlt | rfl
-        · have hfilter : Finset.univ.filter (fun j : Fin n => (j : ℕ) < k) =
-              Finset.Iio (⟨k, hlt⟩ : Fin n) := by
-            ext j
-            simp [Fin.lt_def]
-          rw [hfilter, Fin.card_Iio]
-        · have hfilter : Finset.univ.filter (fun j : Fin k => (j : ℕ) < k) =
-              Finset.univ := by
-            ext j
-            simp
-          rw [hfilter, Finset.card_univ, Fintype.card_fin]
-      simp only [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_sub_distrib,
-        Finset.sum_const, hcard, nsmul_eq_mul, mul_one]
-      ring
-    have htail_eq : ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), t * c j
-        = t * ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), c j :=
-      (Finset.mul_sum _ _ _).symm
-    have hcsplit : ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), c j
-        + ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), c j = k := by
-      rw [Finset.sum_filter_add_sum_filter_not]; exact hsum
-    have hmul := congrArg (fun z => t * z) hcsplit
-    simp only [mul_add] at hmul
-    calc ∑ j, lam j * c j
-        = ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), lam j * c j
-          + ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), lam j * c j := hsplit
-      _ ≤ (∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k),
-            (lam j + t * (c j - 1)))
-          + ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), t * c j :=
-          add_le_add (Finset.sum_le_sum hhead) (Finset.sum_le_sum htail)
-      _ = ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), lam j := by
-          rw [hhead_eq, htail_eq]
-          linarith [hmul]
-  · have hall : ∀ j, c j = 1 := by
-      intro j
-      by_contra hne
-      have hlt : c j < 1 := lt_of_le_of_ne (h1 j) hne
-      have hstrict : ∑ j', c j' < k := by
-        calc ∑ j', c j' < ∑ _j' : Fin k, (1 : ℝ) :=
-              Finset.sum_lt_sum (fun j' _ => h1 j') ⟨j, Finset.mem_univ j, hlt⟩
-          _ = k := by
-              rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul, mul_one]
-      rw [hsum] at hstrict
-      exact lt_irrefl _ hstrict
-    have hfilter : (Finset.univ.filter (fun j : Fin k => (j : ℕ) < k)) = Finset.univ := by
-      ext j; simp
-    rw [hfilter]
-    exact le_of_eq (Finset.sum_congr rfl fun j _ => by rw [hall j, mul_one])
-
-/-- **The Ky Fan trace inequality.**  For a symmetric operator `S` and an
-orthonormal family `w : Fin k → E`,
-`∑ᵢ re ⟪S (w i), w i⟫ ≤ ∑_{j < k} λⱼ(S)` — the trace of `S` compressed to any
-`k`-dimensional subspace is at most the sum of the `k` largest eigenvalues.
-(Ky Fan's maximum principle; implies the Schur–Horn partial-sum
-inequalities.) -/
-theorem sum_re_inner_le_sum_eigenvalues_top {S : E →ₗ[𝕜] E} (hS : S.IsSymmetric)
-    {n : ℕ} (hn : finrank 𝕜 E = n) {k : ℕ} (hk : k ≤ n) {w : Fin k → E}
-    (hw : Orthonormal 𝕜 w) :
-    ∑ i, RCLike.re ⟪S (w i), w i⟫_𝕜
-      ≤ ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), hS.eigenvalues hn j := by
-  set b := hS.eigenvectorBasis hn with hb
-  set c : Fin n → ℝ := fun j => ∑ i : Fin k, ‖b.repr (w i) j‖ ^ 2 with hc
-  have hswap : ∑ i, RCLike.re ⟪S (w i), w i⟫_𝕜 = ∑ j, hS.eigenvalues hn j * c j := by
-    have hdiag : ∀ i, RCLike.re ⟪S (w i), w i⟫_𝕜
-        = ∑ j : Fin n, hS.eigenvalues hn j * ‖b.repr (w i) j‖ ^ 2 := fun i =>
-      LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hS hn (w i)
-    simp_rw [hdiag, hc, Finset.mul_sum]
-    exact Finset.sum_comm
-  rw [hswap]
-  refine sum_mul_le_sum_top hk (hS.eigenvalues_antitone hn)
-    (fun j => Finset.sum_nonneg fun i _ => sq_nonneg _) (fun j => ?_) ?_
-  · -- Bessel: the `j`-th column mass is at most `‖b j‖² = 1`.
-    have hbess := Orthonormal.norm_sq_starProjection_span_image hw Finset.univ (b j)
-    have hcontr : ‖(Submodule.span 𝕜 (w '' ↑(Finset.univ : Finset (Fin k)))).starProjection
-        (b j)‖ ^ 2 ≤ 1 := by
-      have h1 := Submodule.norm_starProjection_apply_le
-        (Submodule.span 𝕜 (w '' ↑(Finset.univ : Finset (Fin k)))) (b j)
-      have h2 : ‖b j‖ = 1 := b.orthonormal.norm_eq_one j
-      nlinarith [norm_nonneg ((Submodule.span 𝕜
-        (w '' ↑(Finset.univ : Finset (Fin k)))).starProjection (b j))]
-    rw [hbess] at hcontr
-    calc c j = ∑ i : Fin k, ‖⟪w i, b j⟫_𝕜‖ ^ 2 :=
-          Finset.sum_congr rfl fun i _ => by rw [b.repr_apply_apply, ← norm_inner_symm]
-      _ ≤ 1 := hcontr
-  · -- Parseval: the total mass is `k`.
-    have hcomm : ∑ j, c j = ∑ i : Fin k, ∑ j : Fin n, ‖b.repr (w i) j‖ ^ 2 := by
-      rw [hc]; exact Finset.sum_comm
-    have hone : ∀ i : Fin k, ∑ j : Fin n, ‖b.repr (w i) j‖ ^ 2 = 1 := by
-      intro i
-      simp_rw [b.repr_apply_apply]
-      rw [b.sum_sq_norm_inner_right (w i), hw.1 i, one_pow]
-    rw [hcomm, Finset.sum_congr rfl fun i _ => hone i]
-    simp
-
 /-! ### The Ky Fan variational principle (F1.c) -/
 
 /-- Index plumbing: a top-`k` filtered sum over `Fin n` is a sum over `Fin k`.
@@ -265,10 +142,20 @@ private theorem re_sum_inner_map_le_sum_singularValues_square {A : E →ₗ[𝕜
     intro i j
     rw [W.symm.inner_map_map]
     exact hu i j
-  have htr1 := sum_re_inner_le_sum_eigenvalues_top (isPositive_operatorAbs A).isSymmetric rfl hk hu'
-  have htr2 := sum_re_inner_le_sum_eigenvalues_top (isPositive_operatorAbs A).isSymmetric rfl hk hv
+  have htr1 := LinearMap.IsSymmetric.sum_re_inner_apply_self_le_sum_eigenvalues
+    (isPositive_operatorAbs A).isSymmetric rfl hu'
+  have htr2 := LinearMap.IsSymmetric.sum_re_inner_apply_self_le_sum_eigenvalues
+    (isPositive_operatorAbs A).isSymmetric rfl hv
   rw [eigenvalues_operatorAbs A] at htr1 htr2
-  rw [sum_filter_lt_eq_sum_fin hk (fun j => A.singularValues j)] at htr1 htr2
+  have htr1' : (∑ i, RCLike.re ⟪operatorAbs A (W.symm (u i)), W.symm (u i)⟫_𝕜) ≤
+      ∑ j ∈ Finset.univ.filter (fun j : Fin (finrank 𝕜 E) => (j : ℕ) < k),
+        A.singularValues (j : ℕ) := by
+    simpa only [Fintype.card_fin] using htr1
+  have htr2' : (∑ i, RCLike.re ⟪operatorAbs A (v i), v i⟫_𝕜) ≤
+      ∑ j ∈ Finset.univ.filter (fun j : Fin (finrank 𝕜 E) => (j : ℕ) < k),
+        A.singularValues (j : ℕ) := by
+    simpa only [Fintype.card_fin] using htr2
+  rw [sum_filter_lt_eq_sum_fin hk (fun j => A.singularValues j)] at htr1' htr2'
   calc RCLike.re (∑ i, ⟪u i, A (v i)⟫_𝕜)
       = ∑ i, RCLike.re ⟪u i, A (v i)⟫_𝕜 := map_sum _ _ _
     _ ≤ ∑ i, (RCLike.re ⟪operatorAbs A (W.symm (u i)), W.symm (u i)⟫_𝕜 / 2
@@ -280,9 +167,9 @@ private theorem re_sum_inner_map_le_sum_singularValues_square {A : E →ₗ[𝕜
     _ ≤ (∑ i : Fin k, A.singularValues (i : ℕ)) / 2
         + (∑ i : Fin k, A.singularValues (i : ℕ)) / 2 := by
         have h1 : ∑ i, RCLike.re ⟪operatorAbs A (W.symm (u i)), W.symm (u i)⟫_𝕜
-            ≤ ∑ i : Fin k, A.singularValues (i : ℕ) := htr1
+            ≤ ∑ i : Fin k, A.singularValues (i : ℕ) := htr1'
         have h2 : ∑ i, RCLike.re ⟪operatorAbs A (v i), v i⟫_𝕜
-            ≤ ∑ i : Fin k, A.singularValues (i : ℕ) := htr2
+            ≤ ∑ i : Fin k, A.singularValues (i : ℕ) := htr2'
         linarith
     _ = ∑ i : Fin k, A.singularValues (i : ℕ) := by ring
 
