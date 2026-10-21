@@ -198,7 +198,7 @@ theorem abs_pinch_competitor_eq_abs_canonicalIntertwiner
   have hsq : TauCeti.operatorAbs (pinch U W.symm.toLinearMap) ∘ₗ
       TauCeti.operatorAbs (pinch U W.symm.toLinearMap) =
       (canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V := by
-    rw [TauCeti.operatorAbs, LinearMap.IsPositive.sqrt_mul_self]
+    rw [TauCeti.operatorAbs, LinearMap.IsPositive.sqrt_sq]
     exact hgram
   exact LinearMap.IsPositive.sqrt_unique
     (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V))

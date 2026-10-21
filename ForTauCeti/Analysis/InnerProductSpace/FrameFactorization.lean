@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
+public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 
@@ -137,7 +137,7 @@ rectangular map. -/
 theorem norm_trialGramSqrt_apply (X : F →ₗ[𝕜] E) (x : F) :
     ‖trialGramSqrt X x‖ = ‖X x‖ := by
   have hsq : ‖trialGramSqrt X x‖ ^ 2 = ‖X x‖ ^ 2 :=
-    (X.isPositive_adjoint_comp_self.sq_norm_sqrt_apply x).trans <| by
+    (X.isPositive_adjoint_comp_self.norm_sqrt_apply_sq x).trans <| by
       rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left,
         ← norm_sq_eq_re_inner (𝕜 := 𝕜)]
   rw [← Real.sqrt_sq (norm_nonneg (trialGramSqrt X x)),

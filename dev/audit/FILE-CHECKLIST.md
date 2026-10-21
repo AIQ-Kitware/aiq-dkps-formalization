@@ -1395,7 +1395,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` — 571 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/ResolventSandwich.lean` — 562 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean` — 555 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` — 545 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` — 533 lines · Lean source; positive square root now comes from TauCeti.
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean` — 542 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Spectral/Cutoff.lean` — 540 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Complexification.lean` — 538 lines · Lean source
@@ -1519,7 +1519,8 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityUniqueness.lean` — 197 lines · Lean source
 - [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SubspaceTransport.lean` — 190 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Internal/SpectralBounds.lean` — 187 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean` — 186 lines · Lean source
+- [x] `ForTauCeti/Analysis/InnerProductSpace/Positive/SquareRoot/Eigenspace.lean` — 57 lines · retained positive-eigenspace lemma; square-root API upstreamed.
+- [x] `ForTauCeti/Analysis/InnerProductSpace/ZeroExtension.lean` — upstreamed to `TauCeti.Analysis.InnerProductSpace.ZeroExtension`; `KyFan` uses the canonical extension.
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/TwoLevelOperator.lean` — 185 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/Family/OperatorNorm.lean` — 183 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean` — 182 lines · Lean source

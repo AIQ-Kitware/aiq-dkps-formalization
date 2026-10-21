@@ -51,19 +51,17 @@ base Tau Ceti has already accepted.
 
 ### Rung A — Positive square root, operator modulus, polar decomposition
 
-**18 new, cumulative closed slice 18.**
+**16 new, cumulative closed slice 16.**
 
   - `Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport`
-  - `Analysis.InnerProductSpace.BasisSpan`
   - `Analysis.InnerProductSpace.Complexification.Basic`
   - `Analysis.InnerProductSpace.Complexification.FunctionalCalculus`
   - `Analysis.InnerProductSpace.Complexification.Spectrum`
   - `Analysis.InnerProductSpace.CourantFischer`
   - `Analysis.InnerProductSpace.OperatorModulus`
   - `Analysis.InnerProductSpace.OperatorRealAlgebra`
-  - `Analysis.InnerProductSpace.PartialIsometry`
   - `Analysis.InnerProductSpace.Polar.Decomposition`
-  - `Analysis.InnerProductSpace.PositiveSqrt`
+  - `Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace`
   - `Analysis.InnerProductSpace.Projection.Blocks`
   - `Analysis.InnerProductSpace.Projection.ScalarTransport`
   - `Analysis.InnerProductSpace.RealContinuousFunctionalCalculus`
@@ -74,7 +72,7 @@ base Tau Ceti has already accepted.
 
 ### Rung B — Singular values (square and rectangular)
 
-**3 new, cumulative closed slice 21.**
+**3 new, cumulative closed slice 19.**
 
   - `Analysis.InnerProductSpace.RectangularSingularValues`
   - `Analysis.InnerProductSpace.Singular.Values`
@@ -82,7 +80,7 @@ base Tau Ceti has already accepted.
 
 ### Rung C — Rectangular approximation numbers  ← *this is the advertised PR1 topic*
 
-**4 new, cumulative closed slice 25.**
+**4 new, cumulative closed slice 23.**
 
   - `Analysis.OperatorIdeal.ApproximationNumber.Basic`
   - `Analysis.OperatorIdeal.ApproximationNumber.Rank`
@@ -91,7 +89,7 @@ base Tau Ceti has already accepted.
 
 ### Rung D — Ky Fan majorization and unitarily invariant seminorms
 
-**16 new, cumulative closed slice 41.**
+**15 new, cumulative closed slice 38.**
 
   - `Analysis.Convex.Majorization`
   - `Analysis.InnerProductSpace.Basic`
@@ -107,12 +105,11 @@ base Tau Ceti has already accepted.
   - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge`
   - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances`
   - `Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization`
-  - `Analysis.InnerProductSpace.ZeroExtension`
   - `Analysis.Normed.Operator.LinearIsometry`
 
 ### Rung E — Principal-angle prerequisites
 
-**3 new, cumulative closed slice 44.**
+**3 new, cumulative closed slice 41.**
 
   - `Analysis.InnerProductSpace.AlignedBasis`
   - `Analysis.InnerProductSpace.PrincipalAngles`
@@ -120,7 +117,7 @@ base Tau Ceti has already accepted.
 
 ### Rung F — Ky Fan gauges and operator ideal families
 
-**31 new, cumulative closed slice 75.**
+**31 new, cumulative closed slice 72.**
 
   - `Analysis.InnerProductSpace.HilbertSchmidt.Energy`
   - `Analysis.InnerProductSpace.Singular.System`
@@ -154,11 +151,11 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.Family.TraceClass`
   - `Topology.ENNRealLiminf`
 
-**Cumulative after F: 58 of 311 `ForTauCeti` modules.**
+**Cumulative after F: 58 of 297 `ForTauCeti` modules.**
 
 ### Rung G — Foundations completion — the rest of topics T01-T10
 
-**32 new, cumulative closed slice 107.**
+**30 new, cumulative closed slice 102.**
 
   - `Analysis.CStarAlgebra.RealSpectrumFunctionalCalculus`
   - `Analysis.InnerProductSpace.AngleGeometry`
@@ -176,7 +173,6 @@ base Tau Ceti has already accepted.
   - `Analysis.InnerProductSpace.Polar.PartialIsometry`
   - `Analysis.InnerProductSpace.Projection.Gap`
   - `Analysis.InnerProductSpace.QuadraticFormBounds`
-  - `Analysis.InnerProductSpace.RectangularPartialIsometry`
   - `Analysis.InnerProductSpace.ReducedExtension`
   - `Analysis.InnerProductSpace.SchattenNorm`
   - `Analysis.InnerProductSpace.Spectral.Gap`
@@ -191,11 +187,10 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation`
   - `Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff`
   - `Analysis.OperatorIdeal.ApproximationNumber.SameSequence`
-  - `Analysis.SpecialFunctions.Sqrt`
 
 ### Rung H — Hilbert-Schmidt operators (T11)
 
-**4 new, cumulative closed slice 111.**
+**4 new, cumulative closed slice 106.**
 
   - `Analysis.InnerProductSpace.HilbertSchmidt.Conjugation`
   - `Analysis.InnerProductSpace.HilbertSchmidt.Lp`
@@ -204,7 +199,7 @@ base Tau Ceti has already accepted.
 
 ### Rung I — The Haagerup-Zsido kernel and its Fourier transform (T12)
 
-**8 new, cumulative closed slice 119.**
+**8 new, cumulative closed slice 114.**
 
   - `Analysis.Fourier.ExponentialAbs`
   - `Analysis.Fourier.HaagerupZsido.Defs`
@@ -217,7 +212,7 @@ base Tau Ceti has already accepted.
 
 ### Rung J — One-parameter unitary groups and Stone's theorem (T13)
 
-**6 new, cumulative closed slice 125.**
+**6 new, cumulative closed slice 120.**
 
   - `Analysis.InnerProductSpace.IntertwiningUnitary`
   - `Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic`
@@ -228,15 +223,14 @@ base Tau Ceti has already accepted.
 
 ### Rung K — Borel functional calculus and projection-valued measures (T14)
 
-**11 new, cumulative closed slice 136.**
+**10 new, cumulative closed slice 130.**
 
   - `Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure`
   - `Analysis.InnerProductSpace.BorelCalculus.Multiplicative`
   - `Analysis.InnerProductSpace.BorelCalculus.Operator`
   - `Analysis.InnerProductSpace.BorelCalculus.PVM`
   - `Analysis.InnerProductSpace.BorelCalculus.Polarization`
-  - `Analysis.InnerProductSpace.ProjValMeasure.Additivity`
-  - `Analysis.InnerProductSpace.ProjValMeasure.Basic`
+  - `Analysis.InnerProductSpace.OperatorExt`
   - `Analysis.InnerProductSpace.ProjValMeasure.Subspace`
   - `MeasureTheory.CfcMeasurable`
   - `MeasureTheory.CompactExists`
@@ -249,6 +243,9 @@ the local unitary-conjugation module has since been removed after its consumers
 migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
   - `Analysis.InnerProductSpace.LinearPMap.Closed`
+  - `Analysis.InnerProductSpace.LinearPMap.GraphCore`
+  - `Analysis.InnerProductSpace.LinearPMap.Sylvester`
+  - `Analysis.InnerProductSpace.LinearPMap.UnitaryTransport`
   - `Analysis.InnerProductSpace.LinearPMap.Constructions` (now upstreamed; local donor removed)
   - `Analysis.InnerProductSpace.LinearPMap.GraphCore`
   - `Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint`
@@ -257,7 +254,7 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung M — Resolvents of self-adjoint LinearPMap operators, and semiboundedness (T15b)
 
-**9 new, cumulative closed slice 151.**
+**9 new, cumulative closed slice 143.**
 
   - `Analysis.CStarAlgebra.SelfAdjointGapInverse`
   - `Analysis.InnerProductSpace.LinearPMap.RealLowerBound`
@@ -271,10 +268,9 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung N — The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)
 
-**16 new, cumulative closed slice 167.**
+**15 new, cumulative closed slice 158.**
 
   - `Analysis.InnerProductSpace.BlockLowerBound`
-  - `Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal`
   - `Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator`
   - `Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds`
   - `Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse`
@@ -292,7 +288,7 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung O — Sylvester equations and the Rosenblum theorem (T16)
 
-**16 new, cumulative closed slice 183.**
+**16 new, cumulative closed slice 174.**
 
   - `Analysis.InnerProductSpace.CoerciveUnit`
   - `Analysis.InnerProductSpace.HilbertSchmidt.Block`
@@ -313,7 +309,7 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung P — Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)
 
-**8 new, cumulative closed slice 191.**
+**8 new, cumulative closed slice 182.**
 
   - `Analysis.InnerProductSpace.DoubleAngle.Vector`
   - `Analysis.InnerProductSpace.Residual.AngleEmbedding`
@@ -326,7 +322,7 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung Q — The Yu-Wang-Samworth statistical variant (T18)
 
-**3 new, cumulative closed slice 194.**
+**3 new, cumulative closed slice 185.**
 
   - `Analysis.InnerProductSpace.EigenblockSpan`
   - `Analysis.InnerProductSpace.Spectral.EigenFrame`
@@ -334,40 +330,34 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung R — Matrix spectra and spectral measurability (T19)
 
-**7 new, cumulative closed slice 201.**
+**3 new, cumulative closed slice 188.**
 
   - `Analysis.Matrix.EntrywiseEigenvalue`
-  - `Analysis.Matrix.EntrywiseOpNorm`
   - `Analysis.Matrix.SpectralFunctionMeasurable`
   - `Analysis.Matrix.SpectralProjection`
-  - `Analysis.Matrix.Spectrum`
-  - `MeasureTheory.Function.ConvergenceInMeasure`
-  - `MeasureTheory.Measure.Typeclasses.Probability`
 
 ### Rung S — Sample moments and matrix concentration (T20)
 
-**5 new, cumulative closed slice 206.**
+**3 new, cumulative closed slice 191.**
 
   - `Probability.Moments.CenteredScatter`
-  - `Probability.Moments.MatrixConcentration`
   - `Probability.Moments.SampleMean`
-  - `Probability.Moments.SampleSecondMoment`
   - `Probability.Moments.Variance`
 
 ### Rung T — Matrix rank factorization and positive semidefiniteness (T21)
 
-**2 new, cumulative closed slice 208.**
+**2 new, cumulative closed slice 193.**
 
   - `LinearAlgebra.Matrix.PosDef`
   - `LinearAlgebra.Matrix.RankFactorization`
 
 ### Rung U — Berge's maximum theorem and approximate minimizers (T22)
 
-**2 new, cumulative closed slice 210.**
+**2 new, cumulative closed slice 195.**
 
   - `Topology.ApproxMinimizer`
   - `Topology.Berge`
-**Cumulative: 179 of 311 `ForTauCeti` modules — the ladder is total.**
+**Cumulative: 179 of 297 `ForTauCeti` modules — the ladder is total.**
 
 It briefly was not.  Three modules merged in after rung U closed on 2026-07-29
 and no rung's closure reached them; they were placed on 2026-07-30 by matching

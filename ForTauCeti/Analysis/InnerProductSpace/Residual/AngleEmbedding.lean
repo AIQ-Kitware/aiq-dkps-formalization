@@ -174,8 +174,7 @@ theorem cosThetaGram_add_sinThetaGram_eq_id (U : Submodule 𝕜 E)
 theorem cosThetaMagnitude_sq (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
     cosThetaMagnitude U X ∘ₗ cosThetaMagnitude U X = cosThetaGram U X := by
-  simpa [cosThetaMagnitude, cosThetaGram, trialGramSqrt] using
-    (cosThetaEmbedding U X).isPositive_adjoint_comp_self.sqrt_mul_self
+  simp [cosThetaMagnitude, cosThetaGram, trialGramSqrt]
 
 /-- The positive coordinate cosine has exactly the kernel of the rectangular
 cosine block. -/
@@ -275,8 +274,7 @@ theorem singularValues_cosTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
     (cosTwoThetaEmbedding U X).singularValues =
       (cosTwoThetaSourceOperator U X).singularValues := by
-  simpa [cosTwoThetaEmbedding] using
-    singularValues_linearIsometry_comp X (cosTwoThetaSourceOperator U X)
+  simp [cosTwoThetaEmbedding]
 
 /-- Injectivity of the rectangular and source-coordinate double-angle cosine
 blocks is equivalent. -/

@@ -149,7 +149,7 @@ theorem sum_re_inner_abs_self_eq_sum_singularValues (A : E →ₗ[𝕜] E)
   set w := hP.isSymmetric.eigenvectorBasis rfl with hw
   rw [show operatorAbs A (w k)
         = (Real.sqrt (hP.isSymmetric.eigenvalues rfl k) : 𝕜) • w k from
-      hP.sqrt_apply_eigenvectorBasis k,
+      hP.sqrt_apply_eigenvectorBasis rfl k,
     re_inner_real_smul_self_of_norm_one (w.orthonormal.norm_eq_one k)]
   exact (A.singularValues_fin rfl k).symm
 

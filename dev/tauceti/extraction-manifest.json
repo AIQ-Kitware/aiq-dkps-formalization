@@ -28,7 +28,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
-        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
@@ -49,7 +49,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
-        "ForTauCeti.Analysis.InnerProductSpace.ZeroExtension",
+        "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "ForTauCeti.Analysis.Normed.FiniteLpGauge",
         "ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact",
         "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
@@ -110,7 +110,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
-        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
         "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
@@ -143,7 +143,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
-        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
@@ -159,7 +159,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
-        "ForTauCeti.Analysis.InnerProductSpace.ZeroExtension",
+        "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "ForTauCeti.Analysis.Normed.FiniteLpGauge",
         "ForTauCeti.Analysis.Normed.Operator.LinearIsometry"
       ]
@@ -460,7 +460,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
-        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
@@ -502,7 +502,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
-        "ForTauCeti.Analysis.InnerProductSpace.ZeroExtension",
+        "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
@@ -1080,7 +1080,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit b806b36; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
       "blocked_dependencies": [],
@@ -1189,7 +1189,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.ZeroExtension",
+        "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "Mathlib.Analysis.InnerProductSpace.SingularValues"
       ],
       "blocked_dependencies": [],
@@ -1326,7 +1326,7 @@
       "direct_dependencies": [
         "Mathlib",
         "TauCeti.Analysis.InnerProductSpace.PartialIsometry",
-        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+        "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus"
       ],
       "blocked_dependencies": [],
@@ -1355,20 +1355,27 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.PositiveSqrt",
-      "source_declarations": [],
-      "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PositiveSqrt",
+      "source_declarations": [
+        "LinearMap.IsPositive.apply_eq_smul_of_apply_apply_eq_smul"
+      ],
+      "current_namespace": "LinearMap.IsPositive",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
+      "final_tauceti_module": "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
       "provenance_class": "moved; introduced at Davis--Kahan commit 3676b55; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.InnerProductSpace.Positive.SquareRoot"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "upstreamed",
-      "upstream_pr": null
+      "downstream_users": [
+        "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
+        "DavisKahan.Geometry.Angle.Proposition35Infinite"
+      ],
+      "status": "partially-upstreamed",
+      "upstream_pr": null,
+      "migration_note": "TauCeti now owns the positive square root, its uniqueness, kernel/range, positivity, and modulus API. The local file was reduced to the additional positive-eigenspace lemma and renamed to Positive.SquareRoot.Eigenspace."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.PrincipalAngles",
@@ -1507,7 +1514,7 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt"
+        "TauCeti.Analysis.InnerProductSpace.Positive.SquareRoot"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1700,7 +1707,7 @@
       ],
       "status": "upstreamed",
       "upstream_pr": null,
-      "migration_note": "Deleted the duplicate finite-dimensional entrywise-to-operator norm estimates after validating TauCeti.Analysis.Matrix.EntrywiseOpNorm. Consumers use its generalized rectangular or square-index bounds directly. The ℓ¹-to-ℓ² estimate is taken from Mathlib's PiLp.sum_norm_le_sqrt_card_mul_norm. Historical staging path retained here."
+      "migration_note": "Deleted the duplicate finite-dimensional entrywise-to-operator norm estimates after validating TauCeti.Analysis.Matrix.EntrywiseOpNorm. Consumers use its generalized rectangular or square-index bounds directly. The \u2113\u00b9-to-\u2113\u00b2 estimate is taken from Mathlib's PiLp.sum_norm_le_sqrt_card_mul_norm. Historical staging path retained here."
     },
     {
       "source_module": "ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable",
@@ -5032,11 +5039,9 @@
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances",
       "source_declarations": [
-        "TauCeti.zeroExtension",
-        "TauCeti.zeroExtension_apply",
-        "TauCeti.zeroExtension_add",
-        "TauCeti.zeroExtension_smul",
-        "TauCeti.singularValues_zeroExtension"
+        "LinearMap.zeroExtension",
+        "LinearMap.zeroExtension_apply",
+        "LinearMap.singularValues_zeroExtension"
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.ZeroExtension",
@@ -5045,15 +5050,15 @@
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "Dependency-layer extraction for the unified rectangular seminorm migration. Copyright (c) 2026 Kitware, Inc.; Apache 2.0.",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
-        "Mathlib.Analysis.InnerProductSpace.ProdL2"
+        "TauCeti.Analysis.InnerProductSpace.ZeroExtension"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.KyFan"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "Deleted the duplicate zero-extension definition and singular-value theorem; the Ky Fan consumer uses TauCeti.LinearMap.zeroExtension and its canonical singular-value result. Additivity is proved directly by extensionality in the consumer."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",

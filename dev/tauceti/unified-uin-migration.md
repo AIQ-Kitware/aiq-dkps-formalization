@@ -47,8 +47,11 @@ of the canonical structure. `kyFanSum_le_iff_forall_seminorm` proves the convers
 by selecting each concrete Ky Fan seminorm. This preserves the link between
 vector majorization, Ky Fan dominance, and comparison in all UINs.
 
-`ZeroExtension` and `DiagonalOperator` contain operator constructions, not norm
-structures. Scalar and variational singular-value facts live in `KyFan`.
+The zero-extension operator and its singular-value theorem are now provided by
+`TauCeti.Analysis.InnerProductSpace.ZeroExtension`; the local duplicate was
+deleted, and `KyFan` consumes TauCeti's declaration. `DiagonalOperator` remains
+an operator construction, not a norm structure. Scalar and variational
+singular-value facts live in `KyFan`.
 Approximation-number modules import that norm-free layer rather than a UIN
 constructor merely to prove the triangle inequality.
 
@@ -108,7 +111,6 @@ Remove these tracked files after extracting the overlay:
 
 ```bash
 lake build \
-  ForTauCeti.Analysis.InnerProductSpace.ZeroExtension \
   ForTauCeti.Analysis.InnerProductSpace.KyFan \
   ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
 lake build \

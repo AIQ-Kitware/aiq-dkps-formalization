@@ -8,6 +8,7 @@ module
 public import Mathlib.Analysis.InnerProductSpace.Positive
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.Positive.SquareRoot
 
 
 /-!
@@ -509,36 +510,24 @@ theorem selfAdjointFunctionalCalculus_comm
     simpa [LinearMap.comp_apply, hT.apply_eigenvectorBasis, map_smul] using h.symm
   rw [selfAdjointFunctionalCalculus_apply_of_apply_eq_smul hT f hBeig]
 
-/-- **Spectral positive square root** of a positive symmetric operator `T`, as the
-functional calculus of `Real.sqrt`:
-`sqrt T = ∑ᵢ √λᵢ • (rank-one projection onto the `i`-th eigenvector)`, where `λᵢ ≥ 0`
-are the eigenvalues of `T`.  Source: Horn--Johnson Thm 7.2.6.
-
-This was once a second `noncomputable def` with that sum written out, and the
-library proved the two coincide by `rfl` — one object defined twice.  The
-duplicate has been collapsed; the uniqueness theory that only the square root
-has (`sqrt_unique`, `ker_sqrt`, `range_sqrt`, `sqrt_mul_self`) is unchanged and
-still lives in `ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean`, which now
-imports this module rather than the other way round. -/
-@[expose]
-noncomputable def _root_.LinearMap.IsPositive.sqrt
-    {T : E →ₗ[𝕜] E} (hT : T.IsPositive) : E →ₗ[𝕜] E :=
-  selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt
-
 /-- The spectral square root is the finite self-adjoint functional calculus of
-`Real.sqrt`.  True by definition; kept because it is the name downstream proofs
-rewrite with. -/
+`Real.sqrt`, identified with TauCeti's canonical square-root operator. -/
 theorem selfAdjointFunctionalCalculus_sqrt
     {T : E →ₗ[𝕜] E} (hT : T.IsPositive) :
-    selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt = hT.sqrt :=
-  rfl
+    selfAdjointFunctionalCalculus hT.isSymmetric Real.sqrt = hT.sqrt := by
+  apply (hT.isSymmetric.eigenvectorBasis rfl).toBasis.ext
+  intro i
+  rw [OrthonormalBasis.coe_toBasis,
+    selfAdjointFunctionalCalculus_apply_eigenvectorBasis]
+  exact (LinearMap.IsPositive.sqrt_apply_eigenvectorBasis hT rfl i).symm
 
 /-- Commutation passes from a positive operator to its positive square root. -/
 theorem sqrt_comm
     {T B : E →ₗ[𝕜] E} (hT : T.IsPositive)
     (hBT : B ∘ₗ T = T ∘ₗ B) :
     B ∘ₗ hT.sqrt = hT.sqrt ∘ₗ B := by
-  rw [← selfAdjointFunctionalCalculus_sqrt hT]
-  exact selfAdjointFunctionalCalculus_comm hT.isSymmetric Real.sqrt hBT
+  change B * T = T * B at hBT
+  change B * hT.sqrt = hT.sqrt * B
+  exact hT.commute_sqrt hBT
 
 end TauCeti
