@@ -2208,7 +2208,7 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtEnergy",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
-      "provenance_class": "authored in place 2026-07-28: the rectangular Hilbert-Schmidt energy in ENNReal, with Parseval, the adjoint swap and basis independence; replaces the C-only, self-adjoint-only Spectra lemmas that DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean used to import",
+      "provenance_class": "authored in place 2026-07-28: the rectangular Hilbert-Schmidt energy in ENNReal, the adjoint swap and basis independence; Parseval is consumed from the accepted TauCeti.Analysis.InnerProductSpace.Parseval API",
       "direct_dependencies": [
         "Mathlib"
       ],
@@ -2216,7 +2216,8 @@
       "downstream_users": [
         "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis"
       ],
-      "status": "staged",
+      "status": "staged-partial",
+      "migration_note": "Removed the duplicate HilbertBasis.hasSum_norm_inner_sq and HilbertBasis.tsum_enorm_inner_sq declarations. Energy expansion proofs now use TauCeti.Analysis.InnerProductSpace.Parseval.tsum_enorm_sq_inner. The energy definition and operator-energy results remain donor mathematics under broader API migration.",
       "upstream_pr": null
     },
     {
