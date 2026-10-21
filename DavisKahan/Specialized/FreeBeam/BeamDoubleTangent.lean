@@ -71,11 +71,19 @@ noncomputable section
 
 /-- The block-diagonal part of the perturbation relative to the trial splitting. -/
 def beamRitzDiagonal (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
-  beamTrial.diagonalPart (beamPerturbation ε)
+  beamTrial.diagBlock (beamPerturbation ε)
 
 /-- The block-off-diagonal part: the paper's `R̂` together with its adjoint. -/
 def beamRitzOffDiagonal (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
-  beamTrial.offDiagonalPart (beamPerturbation ε)
+  beamTrial.offDiagBlock (beamPerturbation ε)
+
+/-- The off-diagonal block is the defect from its diagonal block, specialized to the beam
+perturbation. -/
+theorem beamRitzOffDiagonal_eq (ε : ℝ) :
+    beamRitzOffDiagonal ε = beamPerturbation ε - beamRitzDiagonal ε := by
+  change beamTrial.offDiagBlock (beamPerturbation ε) =
+    beamPerturbation ε - beamTrial.diagBlock (beamPerturbation ε)
+  exact Submodule.offDiagBlock_eq_sub_diagBlock beamTrial (beamPerturbation ε)
 
 /-- The block-diagonal part of a symmetric operator is symmetric. -/
 theorem beamRitzDiagonal_isSelfAdjoint (ε : ℝ) :
@@ -107,7 +115,9 @@ theorem beamRitzOffDiagonal_isSelfAdjoint (ε : ℝ) :
       ⟪beamRitzDiagonal ε u, v⟫_ℂ = ⟪u, beamRitzDiagonal ε v⟫_ℂ :=
     fun u v => beamRitzDiagonal_isSelfAdjoint ε u v
   have hoff : ∀ z : BeamL2, beamRitzOffDiagonal ε z
-      = beamPerturbation ε z - beamRitzDiagonal ε z := fun z => rfl
+      = beamPerturbation ε z - beamRitzDiagonal ε z := by
+    intro z
+    exact congrArg (fun f : BeamL2 →L[ℂ] BeamL2 => f z) (beamRitzOffDiagonal_eq ε)
   show ⟪beamRitzOffDiagonal ε x, y⟫_ℂ = ⟪x, beamRitzOffDiagonal ε y⟫_ℂ
   rw [hoff, hoff, inner_sub_left, inner_sub_right, hsym, hdsym]
 
@@ -167,7 +177,11 @@ theorem beamRitzOffDiagonal_apply (ε : ℝ) (v : BeamL2) :
       = beamPerturbation ε v
         - (beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection v))
           + beamTrialᗮ.starProjection
-              (beamPerturbation ε (beamTrialᗮ.starProjection v))) := rfl
+              (beamPerturbation ε (beamTrialᗮ.starProjection v))) := by
+    rw [beamRitzOffDiagonal_eq, beamRitzDiagonal]
+    change (beamPerturbation ε) v -
+      (beamTrial.diagBlock (beamPerturbation ε)) v = _
+    rw [Submodule.diagBlock_apply]
   have hv : beamTrial.starProjection v + beamTrialᗮ.starProjection v = v := by
     rw [Submodule.starProjection_orthogonal_apply]
     abel
@@ -259,7 +273,8 @@ theorem beamComparison_add_offDiagonal (ε : ℝ) {x : BeamL2}
   have h2 : (beamPerturbed ε) ⟨x, hx⟩
       = beamOperator ⟨x, hx⟩ + beamPerturbation ε x := rfl
   have h3 : beamRitzOffDiagonal ε x
-      = beamPerturbation ε x - beamRitzDiagonal ε x := rfl
+      = beamPerturbation ε x - beamRitzDiagonal ε x :=
+    congrArg (fun f : BeamL2 →L[ℂ] BeamL2 => f x) (beamRitzOffDiagonal_eq ε)
   rw [beamComparison_apply, h2, h3]
   abel
 
@@ -556,8 +571,8 @@ theorem beamLowReflection_comm (ε : ℝ)
 /-- The tangent of the double angle `2θ` at a trial vector: the ratio of the odd and
 even blocks of the reducing reflection `Z`, relative to the trial splitting. -/
 def beamTanTwoThetaAt (ε : ℝ) (x : BeamL2) : ℝ :=
-  ‖beamTrial.offDiagonalPart (beamLowReflection ε) x‖
-    / ‖beamTrial.diagonalPart (beamLowReflection ε) x‖
+  ‖beamTrial.offDiagBlock (beamLowReflection ε) x‖
+    / ‖beamTrial.diagBlock (beamLowReflection ε) x‖
 
 /-- **The largest double-angle tangent** between the affine trial subspace and the
 perturbed beam's low spectral subspace. -/
@@ -628,20 +643,20 @@ theorem beamTanTwoThetaAt_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100)
           + 4 * ‖beamRitzOffDiagonal ε‖ ^ 2) :=
         Real.sqrt_pos.mpr (by positivity)
       positivity
-    have hdenpos : 0 < ‖beamTrial.diagonalPart (beamLowReflection ε) x‖ :=
+    have hdenpos : 0 < ‖beamTrial.diagBlock (beamLowReflection ε) x‖ :=
       lt_of_lt_of_le (by positivity) hpole
     have hboundge : 2 * ‖beamRitzOffDiagonal ε‖
         ≤ tangentTwoThetaExactBound ε * ((1001 / 2 : ℝ) - ritzHigh ε) := by
       rw [hbound, div_mul_eq_mul_div, le_div_iff₀ hgapPos]
       nlinarith [norm_beamRitzOffDiagonal_le ε, norm_nonneg (beamRitzOffDiagonal ε), hσ0]
     have hmul : 2 * ‖beamRitzOffDiagonal ε‖
-          * ‖beamTrial.diagonalPart (beamLowReflection ε) x‖
+          * ‖beamTrial.diagBlock (beamLowReflection ε) x‖
         ≤ tangentTwoThetaExactBound ε * ((1001 / 2 : ℝ) - ritzHigh ε)
-          * ‖beamTrial.diagonalPart (beamLowReflection ε) x‖ :=
+          * ‖beamTrial.diagBlock (beamLowReflection ε) x‖ :=
       mul_le_mul_of_nonneg_right hboundge (norm_nonneg _)
     rw [beamTanTwoThetaAt, div_le_iff₀ hdenpos]
     nlinarith [hgap, hmul, hδ, norm_nonneg
-      (beamTrial.offDiagonalPart (beamLowReflection ε) x)]
+      (beamTrial.offDiagBlock (beamLowReflection ε) x)]
 
 /-- **Davis--Kahan 1970, equation (9.7), for the genuine free-beam operator.**
 

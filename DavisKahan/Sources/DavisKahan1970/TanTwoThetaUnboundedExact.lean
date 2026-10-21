@@ -95,8 +95,8 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
       (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
       (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)) :
     IsUnit
-        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z *
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z) ∧
+        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z *
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z) ∧
       N.Mem (reflectionTangentCorner
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
       (b - a) * N.gauge (reflectionTangentCorner
@@ -109,7 +109,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
   have hred : TauCeti.LinearPMap.ReducesSubspace A U :=
     TauCeti.LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic
   have hgU : ∀ y ∈ U,
-      ‖U.offDiagonalPart Z y‖ ≤
+      ‖U.offDiagBlock Z y‖ ≤
         TauCeti.crossBlockBound (b - a) ‖B‖ * ‖y‖ := by
     intro y hy
     exact TauCeti.norm_offDiagonalPart_apply_le_specRange hA hB hZsa hZ2 hZdom
@@ -118,10 +118,10 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
     TauCeti.crossBlockBound_nonneg (norm_nonneg B)
   have hg1 : TauCeti.crossBlockBound (b - a) ‖B‖ < 1 :=
     crossBlockBound_lt_one (sub_pos.mpr hab) (norm_nonneg B)
-  have hSle : ‖U.offDiagonalPart Z‖ ≤ TauCeti.crossBlockBound (b - a) ‖B‖ :=
+  have hSle : ‖U.offDiagBlock Z‖ ≤ TauCeti.crossBlockBound (b - a) ‖B‖ :=
     norm_offDiagonalPart_le hZsa hg0 hgU
-  have hS1 : ‖U.offDiagonalPart Z‖ < 1 := lt_of_le_of_lt hSle hg1
-  have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) :=
+  have hS1 : ‖U.offDiagBlock Z‖ < 1 := lt_of_le_of_lt hSle hg1
+  have hCC : IsUnit (U.diagBlock Z * U.diagBlock Z) :=
     isUnit_diagonalPart_sq_of_forall_mem hZsa hZ2 hg0 hg1 hgU
   have hstrong : StronglyTendsto
       (fun n : ℕ => cutoffCorner (TauCeti.spectralCutoffSeq hA c n))
@@ -145,7 +145,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
   have hRmem' : N.Mem (reflectionResidualCorner U B) := by
     simpa [U] using hRmem
   have hUI := N.mul_gauge_le_of_all_mul_kyFan_le hhalf hRmem' hscaled
-  change IsUnit (U.diagonalPart Z * U.diagonalPart Z) ∧
+  change IsUnit (U.diagBlock Z * U.diagBlock Z) ∧
       N.Mem (reflectionTangentCorner U Z) ∧
       (b - a) * N.gauge (reflectionTangentCorner U Z) ≤
         2 * N.gauge (reflectionResidualCorner U B)

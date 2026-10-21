@@ -18,8 +18,8 @@ open TauCeti.DavisKahan.Angle
 /-!
 # The unbounded `tan 2Θ` block, and its transport to the paper's tangent
 
-`unboundedReflectionTangent U Z = S · (C²)⁻¹ · C`, with `C = U.diagonalPart Z`
-and `S = U.offDiagonalPart Z` the blocks of a self-adjoint involution `Z`
+`unboundedReflectionTangent U Z = S · (C²)⁻¹ · C`, with `C = U.diagBlock Z`
+and `S = U.offDiagBlock Z` the blocks of a self-adjoint involution `Z`
 relative to `U ⊕ Uᗮ`.  Like the `sin 2Θ` block it is a proof vehicle, and the
 question is what a symmetric ideal sees in it.
 
@@ -169,23 +169,23 @@ private theorem proj_add_orthogonal :
 omit [CompleteSpace E] in
 /-- The diagonal part written as the two corner products. -/
 theorem diagonalPart_eq_corners :
-    U.diagonalPart Z
+    U.diagBlock Z
       = U.starProjection * Z * U.starProjection
         + Uᗮ.starProjection * Z * Uᗮ.starProjection := by
-  rw [Submodule.diagonalPart_eq]
+  rw [Submodule.diagBlock_def]
   rfl
 
 omit [CompleteSpace E] in
 /-- The off-diagonal part written as the two corner products. -/
 theorem offDiagonalPart_eq_corners :
-    U.offDiagonalPart Z
+    U.offDiagBlock Z
       = U.starProjection * Z * Uᗮ.starProjection
         + Uᗮ.starProjection * Z * U.starProjection := by
   have hsum := proj_add_orthogonal (𝕜 := 𝕜) U
   have hZ : Z = (U.starProjection + Uᗮ.starProjection) * Z
       * (U.starProjection + Uᗮ.starProjection) := by
     rw [hsum, one_mul, mul_one]
-  rw [Submodule.offDiagonalPart_eq, diagonalPart_eq_corners]
+  rw [Submodule.offDiagBlock_eq_sub_diagBlock, diagonalPart_eq_corners]
   nth_rewrite 1 [hZ]
   noncomm_ring
 
@@ -200,8 +200,8 @@ omit [CompleteSpace E] in
 /-- **`C² + S² = 1`.**  The blocks of a self-adjoint involution relative to
 `U ⊕ Uᗮ` satisfy the Pythagorean identity: this is `Z² = 1` read on the diagonal. -/
 theorem diagonalPart_sq_add_offDiagonalPart_sq (hZ : Z * Z = 1) :
-    U.diagonalPart Z * U.diagonalPart Z
-        + U.offDiagonalPart Z * U.offDiagonalPart Z = 1 := by
+    U.diagBlock Z * U.diagBlock Z
+        + U.offDiagBlock Z * U.offDiagBlock Z = 1 := by
   rw [diagonalPart_eq_corners, offDiagonalPart_eq_corners]
   exact block_sq_add (proj_sq U) (orthogonal_sq U) (proj_mul_orthogonal U)
     (orthogonal_mul_proj U) (proj_add_orthogonal U) hZ
@@ -210,8 +210,8 @@ omit [CompleteSpace E] in
 /-- **`C S + S C = 0`.**  The same identity read off the diagonal: the two blocks
 of a self-adjoint involution anticommute. -/
 theorem diagonalPart_anticommute_offDiagonalPart (hZ : Z * Z = 1) :
-    U.diagonalPart Z * U.offDiagonalPart Z
-        + U.offDiagonalPart Z * U.diagonalPart Z = 0 := by
+    U.diagBlock Z * U.offDiagBlock Z
+        + U.offDiagBlock Z * U.diagBlock Z = 0 := by
   rw [diagonalPart_eq_corners, offDiagonalPart_eq_corners]
   exact block_anticomm (proj_sq U) (orthogonal_sq U) (proj_mul_orthogonal U)
     (orthogonal_mul_proj U) (proj_add_orthogonal U) hZ
@@ -219,27 +219,27 @@ theorem diagonalPart_anticommute_offDiagonalPart (hZ : Z * Z = 1) :
 omit [CompleteSpace E] in
 /-- Anticommuting with `C` makes `S²` *commute* with `C`. -/
 theorem offDiagonalPart_sq_commute_diagonalPart (hZ : Z * Z = 1) :
-    U.offDiagonalPart Z * U.offDiagonalPart Z * U.diagonalPart Z
-      = U.diagonalPart Z * (U.offDiagonalPart Z * U.offDiagonalPart Z) := by
+    U.offDiagBlock Z * U.offDiagBlock Z * U.diagBlock Z
+      = U.diagBlock Z * (U.offDiagBlock Z * U.offDiagBlock Z) := by
   have h := diagonalPart_anticommute_offDiagonalPart U hZ
-  have h1 : U.offDiagonalPart Z * U.diagonalPart Z
-      = -(U.diagonalPart Z * U.offDiagonalPart Z) := by
+  have h1 : U.offDiagBlock Z * U.diagBlock Z
+      = -(U.diagBlock Z * U.offDiagBlock Z) := by
     rw [eq_neg_iff_add_eq_zero, add_comm]; exact h
-  calc U.offDiagonalPart Z * U.offDiagonalPart Z * U.diagonalPart Z
-      = U.offDiagonalPart Z * (U.offDiagonalPart Z * U.diagonalPart Z) := by
+  calc U.offDiagBlock Z * U.offDiagBlock Z * U.diagBlock Z
+      = U.offDiagBlock Z * (U.offDiagBlock Z * U.diagBlock Z) := by
         rw [mul_assoc]
-    _ = U.offDiagonalPart Z * -(U.diagonalPart Z * U.offDiagonalPart Z) := by rw [h1]
-    _ = -((U.offDiagonalPart Z * U.diagonalPart Z) * U.offDiagonalPart Z) := by
+    _ = U.offDiagBlock Z * -(U.diagBlock Z * U.offDiagBlock Z) := by rw [h1]
+    _ = -((U.offDiagBlock Z * U.diagBlock Z) * U.offDiagBlock Z) := by
         noncomm_ring
-    _ = -(-(U.diagonalPart Z * U.offDiagonalPart Z) * U.offDiagonalPart Z) := by rw [h1]
-    _ = U.diagonalPart Z * (U.offDiagonalPart Z * U.offDiagonalPart Z) := by
+    _ = -(-(U.diagBlock Z * U.offDiagBlock Z) * U.offDiagBlock Z) := by rw [h1]
+    _ = U.diagBlock Z * (U.offDiagBlock Z * U.offDiagBlock Z) := by
         noncomm_ring
 
 
 omit [CompleteSpace E] in
 /-- The `U` corner of `S²`: only the `(1,2)(2,1)` product survives. -/
 theorem corner_offDiagonalPart_sq (Z : E →L[𝕜] E) :
-    U.starProjection * (U.offDiagonalPart Z * U.offDiagonalPart Z) * U.starProjection
+    U.starProjection * (U.offDiagBlock Z * U.offDiagBlock Z) * U.starProjection
       = U.starProjection * Z * Uᗮ.starProjection * Z * U.starProjection := by
   have a1 : ∀ x : E →L[𝕜] E, U.starProjection * (U.starProjection * x)
       = U.starProjection * x := fun x => by rw [← mul_assoc, proj_sq U]
@@ -275,12 +275,12 @@ Everything a unitarily invariant norm sees in `unboundedReflectionTangent` is
 therefore determined by `S`. -/
 theorem gram_unboundedReflectionTangent
     (hZsa : IsSelfAdjoint Z) (hZ : Z * Z = 1)
-    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z)) :
+    (hCC : IsUnit (U.diagBlock Z * U.diagBlock Z)) :
     (unboundedReflectionTangent U Z).adjoint * unboundedReflectionTangent U Z
-      = U.offDiagonalPart Z * U.offDiagonalPart Z *
-          Ring.inverse (U.diagonalPart Z * U.diagonalPart Z) := by
-  set C := U.diagonalPart Z with hCdef
-  set S := U.offDiagonalPart Z with hSdef
+      = U.offDiagBlock Z * U.offDiagBlock Z *
+          Ring.inverse (U.diagBlock Z * U.diagBlock Z) := by
+  set C := U.diagBlock Z with hCdef
+  set S := U.offDiagBlock Z with hSdef
   have hCsa : IsSelfAdjoint C := TauCeti.isSelfAdjoint_diagonalPart hZsa
   have hSsa : IsSelfAdjoint S := TauCeti.isSelfAdjoint_offDiagonalPart hZsa
   have hCCsa : star (C * C) = C * C := by
@@ -348,13 +348,13 @@ is `sin 2Θ / cos 2Θ` there. -/
 theorem gram_unboundedReflectionTangent_eq_offDiagonal
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] {Z : E →L[𝕜] E}
     (hZsa : IsSelfAdjoint Z) (hZ : Z * Z = 1)
-    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z)) :
+    (hCC : IsUnit (U.diagBlock Z * U.diagBlock Z)) :
     (unboundedReflectionTangent U Z).adjoint * unboundedReflectionTangent U Z
-      = U.offDiagonalPart Z * U.offDiagonalPart Z *
+      = U.offDiagBlock Z * U.offDiagBlock Z *
           Ring.inverse ((1 : E →L[𝕜] E)
-            - U.offDiagonalPart Z * U.offDiagonalPart Z) := by
-  have hpy : U.diagonalPart Z * U.diagonalPart Z
-      = (1 : E →L[𝕜] E) - U.offDiagonalPart Z * U.offDiagonalPart Z := by
+            - U.offDiagBlock Z * U.offDiagBlock Z) := by
+  have hpy : U.diagBlock Z * U.diagBlock Z
+      = (1 : E →L[𝕜] E) - U.offDiagBlock Z * U.offDiagBlock Z := by
     rw [eq_sub_iff_add_eq]
     exact diagonalPart_sq_add_offDiagonalPart_sq U hZ
   rw [gram_unboundedReflectionTangent U hZsa hZ hCC, hpy]
@@ -376,8 +376,8 @@ Together with `gram_unboundedReflectionTangent` this says the tangent is
 theorem starProjection_offDiagonal_sq_reflection
     (U V : Submodule ℂ Ec) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     U.starProjection *
-        (U.offDiagonalPart V.reflectionOperator *
-          U.offDiagonalPart V.reflectionOperator) * U.starProjection
+        (U.offDiagBlock V.reflectionOperator *
+          U.offDiagBlock V.reflectionOperator) * U.starProjection
       = directedSinTwoAngleOperatorC U V * directedSinTwoAngleOperatorC U V := by
   rw [corner_offDiagonalPart_sq]
   have hRR : V.reflectionOperator * V.reflectionOperator = 1 :=
@@ -421,14 +421,14 @@ variable (U V : Submodule ℂ Ec) [U.HasOrthogonalProjection] [V.HasOrthogonalPr
 omit [CompleteSpace Ec] in
 /-- The off-diagonal block of the reflection in `V`, in corner form. -/
 theorem offDiagonalPart_reflection_eq :
-    U.offDiagonalPart V.reflectionOperator
+    U.offDiagBlock V.reflectionOperator
       = 2 * (((1 : Ec →L[ℂ] Ec) - U.starProjection) *
             projectorDifference U V * U.starProjection
           + U.starProjection * projectorDifference U V *
             ((1 : Ec →L[ℂ] Ec) - U.starProjection)) := by
   have hp : U.starProjection * U.starProjection = U.starProjection := proj_sq U
   have hQ : projectorDifference U V = V.starProjection - U.starProjection := rfl
-  rw [Submodule.offDiagonalPart_eq, Submodule.diagonalPart_eq,
+  rw [Submodule.offDiagBlock_eq_sub_diagBlock, Submodule.diagBlock_def,
     Submodule.reflectionOperator_eq_two_smul_sub_id V]
   simp only [two_smul, Submodule.starProjection_orthogonal',
     show ∀ f g : Ec →L[ℂ] Ec, f ∘L g = f * g from fun _ _ => rfl]
@@ -446,7 +446,7 @@ theorem tanTwoBlockRepresentative_mul_signedCosTwo
     (hinv : IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
       projectorDifference U V))) :
     tanTwoBlockRepresentative U V * signedCosTwo U V
-      = U.offDiagonalPart V.reflectionOperator := by
+      = U.offDiagBlock V.reflectionOperator := by
   have hsec : doubleSecant U V * signedCosTwo U V = 1 :=
     Ring.inverse_mul_cancel _ hinv
   rw [tanTwoBlockRepresentative_eq hinv, offDiagonalPart_reflection_eq]
@@ -480,10 +480,10 @@ theorem unboundedReflectionTangent_reflection_eq
   have hK : signedCosTwo U V = (1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
       projectorDifference U V) := rfl
   have hKunit : IsUnit (signedCosTwo U V) := by rw [hK]; exact hinv
-  have hdiag : U.diagonalPart V.reflectionOperator
+  have hdiag : U.diagBlock V.reflectionOperator
       = U.reflectionOperator * signedCosTwo U V :=
     diagonalPart_reflection_eq_reflection_mul_signedCosTwo
-  have hoff : U.offDiagonalPart V.reflectionOperator
+  have hoff : U.offDiagBlock V.reflectionOperator
       = tanTwoBlockRepresentative U V * signedCosTwo U V :=
     (tanTwoBlockRepresentative_mul_signedCosTwo U V hinv).symm
   -- the signed cosine commutes with the reflection in `U`
@@ -500,7 +500,7 @@ theorem unboundedReflectionTangent_reflection_eq
     rw [h2c, hKP]
     noncomm_ring
   -- the diagonal block squares to the signed cosine squared
-  have hCC : U.diagonalPart V.reflectionOperator * U.diagonalPart V.reflectionOperator
+  have hCC : U.diagBlock V.reflectionOperator * U.diagBlock V.reflectionOperator
       = signedCosTwo U V * signedCosTwo U V := by
     rw [hdiag]
     calc U.reflectionOperator * signedCosTwo U V *
@@ -543,7 +543,7 @@ theorem unboundedReflectionTangent_reflection_eq
 /-! ### The pole hypothesis is a consequence, not an assumption
 
 The unbounded `tan 2Θ` theorem's ordered-gap hypotheses already force the
-diagonal block `C = U.diagonalPart J_V` to be invertible; that is the first
+diagonal block `C = U.diagBlock J_V` to be invertible; that is the first
 component of its conclusion.  And `C = J_U · (1 - 2(P_V - P_U)²)`, so a unit
 diagonal block *is* a unit signed doubled cosine, which is exactly what excludes
 the quarter-turn poles of `tan 2Θ`.  A caller therefore never has to certify
@@ -552,21 +552,21 @@ the quarter-turn poles of `tan 2Θ`.  A caller therefore never has to certify
 omit [CompleteSpace Ec] in
 /-- **A unit diagonal block is a unit signed doubled cosine.**
 
-`U.diagonalPart J_V = J_U · (1 - 2(P_V - P_U)²)` with `J_U` a self-adjoint
+`U.diagBlock J_V = J_U · (1 - 2(P_V - P_U)²)` with `J_U` a self-adjoint
 involution, hence a unit; and `IsUnit (C · C)` gives `IsUnit C` in any monoid. -/
 theorem isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
-    (h : IsUnit (U.diagonalPart V.reflectionOperator *
-      U.diagonalPart V.reflectionOperator)) :
+    (h : IsUnit (U.diagBlock V.reflectionOperator *
+      U.diagBlock V.reflectionOperator)) :
     IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
       projectorDifference U V)) := by
-  have hC : IsUnit (U.diagonalPart V.reflectionOperator) := by
+  have hC : IsUnit (U.diagBlock V.reflectionOperator) := by
     rw [← pow_two] at h
     exact (isUnit_pow_iff two_ne_zero).mp h
   have hJJ := TauCeti.DavisKahan.reflectionOperator_mul_self_complex U
   have hJU : IsUnit U.reflectionOperator :=
     ⟨⟨U.reflectionOperator, U.reflectionOperator, hJJ, hJJ⟩, rfl⟩
   have hK : signedCosTwo U V
-      = U.reflectionOperator * U.diagonalPart V.reflectionOperator := by
+      = U.reflectionOperator * U.diagBlock V.reflectionOperator := by
     rw [diagonalPart_reflection_eq_reflection_mul_signedCosTwo, ← mul_assoc, hJJ,
       one_mul]
   have hunit : IsUnit (signedCosTwo U V) := by rw [hK]; exact hJU.mul hC
@@ -579,8 +579,8 @@ Composition of `isUnit_signedCosTwo_of_isUnit_diagonalPart_sq` with
 what lets the source-facing `tan 2Θ` theorem state the paper's `|tan 2Θ|` without
 asking its caller for an independent pole certificate. -/
 theorem cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
-    (h : IsUnit (U.diagonalPart V.reflectionOperator *
-      U.diagonalPart V.reflectionOperator)) :
+    (h : IsUnit (U.diagBlock V.reflectionOperator *
+      U.diagBlock V.reflectionOperator)) :
     ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0 :=
   cos_two_ne_zero_of_isUnit_one_sub_two_mul_projectorDifference_sq
     (isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V h)
@@ -659,16 +659,16 @@ complexification.  No second analytic proof is involved. -/
 theorem extendedGauge_unboundedReflectionTangent_real
     (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (N : ExactSinTheta.SymmetricNormingFunction)
-    (hCC : IsUnit (U.diagonalPart V.reflectionOperator *
-      U.diagonalPart V.reflectionOperator)) :
+    (hCC : IsUnit (U.diagBlock V.reflectionOperator *
+      U.diagBlock V.reflectionOperator)) :
     N.extendedGauge (unboundedReflectionTangent U V.reflectionOperator)
       = N.extendedGauge (absTanTwoAngleOperatorR U V) := by
   have hZ : complexify V.reflectionOperator
       = (complexifySubmodule V).reflectionOperator :=
     complexify_reflectionOperator V
-  have hCCc : IsUnit ((complexifySubmodule U).diagonalPart
+  have hCCc : IsUnit ((complexifySubmodule U).diagBlock
         ((complexifySubmodule V).reflectionOperator) *
-      (complexifySubmodule U).diagonalPart
+      (complexifySubmodule U).diagBlock
         ((complexifySubmodule V).reflectionOperator)) := by
     rw [← hZ, diagonalPart_complexifySubmodule, ← complexify_mul,
       isUnit_complexify_iff]

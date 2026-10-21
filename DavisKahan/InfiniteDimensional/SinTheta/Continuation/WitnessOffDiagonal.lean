@@ -50,12 +50,12 @@ theorem starProjection_map_eq_zero_of_isOffDiagonal
     (V : H →L[ℂ] H) (hoff : Submodule.IsOffDiagonal U V)
     {u : H} (hu : u ∈ U) :
     U.starProjection (V u) = 0 := by
-  change U.diagonalPart V = 0 at hoff
+  change U.diagBlock V = 0 at hoff
   have hdiag := congrArg (fun T : H →L[ℂ] H => T u) hoff
   have hQu : Uᗮ.starProjection u = 0 := by
     rw [Submodule.starProjection_orthogonal_apply,
       Submodule.starProjection_eq_self_iff.mpr hu, sub_self]
-  simpa only [Submodule.diagonalPart, ContinuousLinearMap.comp_apply,
+  simpa only [Submodule.diagBlock, ContinuousLinearMap.comp_apply,
     add_apply, zero_apply, Submodule.starProjection_eq_self_iff.mpr hu,
     hQu, map_zero, add_zero] using hdiag
 
@@ -67,13 +67,13 @@ theorem starProjection_orthogonal_map_eq_zero_of_isOffDiagonal
     (V : H →L[ℂ] H) (hoff : Submodule.IsOffDiagonal U V)
     {w : H} (hw : w ∈ Uᗮ) :
     Uᗮ.starProjection (V w) = 0 := by
-  change U.diagonalPart V = 0 at hoff
+  change U.diagBlock V = 0 at hoff
   have hdiag := congrArg (fun T : H →L[ℂ] H => T w) hoff
   have hPw : U.starProjection w = 0 :=
     (Submodule.starProjection_apply_eq_zero_iff U).2 hw
   have hQw : Uᗮ.starProjection w = w :=
     Submodule.starProjection_eq_self_iff.mpr hw
-  simpa only [Submodule.diagonalPart, ContinuousLinearMap.comp_apply,
+  simpa only [Submodule.diagBlock, ContinuousLinearMap.comp_apply,
     add_apply, zero_apply, hPw, hQw, map_zero, zero_add] using hdiag
 
 /-- In the source subspace, the diagonal block of `A + V` is just the

@@ -154,9 +154,9 @@ theorem tanTwoTheta_ambient_unbounded_reducing_sineSequence_symmetricNorming_rea
       hV.mapsDomain hV.commutes hUa hUb hab N hBsa hBmem
   have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent_real U V N hunit
   -- the complexified pole exclusion, on the angle spectrum
-  have hunitC : IsUnit ((complexifySubmodule U).diagonalPart
+  have hunitC : IsUnit ((complexifySubmodule U).diagBlock
       (complexifySubmodule V).reflectionOperator *
-      (complexifySubmodule U).diagonalPart
+      (complexifySubmodule U).diagBlock
         (complexifySubmodule V).reflectionOperator) := by
     rw [← TauCeti.DavisKahan.complexify_reflectionOperator,
       diagonalPart_complexifySubmodule, ← Foundation.RealComplexification.complexify_mul,

@@ -240,7 +240,7 @@ hypothesis.**  `‖sin 2Θ₀ x‖ ≤ (2‖B‖ / √(δ² + 4‖B‖²)) ‖x�
 spectral subspace, `δ = b - a`. -/
 theorem norm_offDiagonalPart_apply_le_specRange {x : H}
     (hx : x ∈ LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) :
-    ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).offDiagonalPart Z x‖ ≤
+    ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).offDiagBlock Z x‖ ≤
       crossBlockBound (b - a) ‖B‖ * ‖x‖ :=
   norm_offDiagonalPart_apply_le_of_tendsto
     (LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic) hB
@@ -264,7 +264,7 @@ tangent is defined. -/
 theorem diagonalBlockBound_mul_le_norm_diagonalPart_apply_specRange {x : H}
     (hx : x ∈ LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) :
     diagonalBlockBound (b - a) ‖B‖ * ‖x‖ ≤
-      ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z x‖ :=
+      ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z x‖ :=
   diagonalBlockBound_mul_le_norm_diagonalPart_apply_of_tendsto
     (LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic) hB
     hZsa hZ2 hZdom hZcomm hUa hUb (fun n : ℕ => |c| + n)
@@ -282,9 +282,9 @@ constant `2`. -/
 theorem gap_mul_norm_offDiagonalPart_apply_le_specRange {x : H}
     (hx : x ∈ LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) :
     (b - a) *
-        ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).offDiagonalPart Z x‖ ≤
+        ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).offDiagBlock Z x‖ ≤
       2 * ‖B‖ *
-        ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z x‖ :=
+        ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z x‖ :=
   gap_mul_norm_offDiagonalPart_apply_le_of_tendsto
     (LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic) hB
     hZsa hZ2 hZdom hZcomm hUa hUb (fun n : ℕ => |c| + n)

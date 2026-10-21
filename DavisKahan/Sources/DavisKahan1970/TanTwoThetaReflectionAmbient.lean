@@ -193,9 +193,9 @@ reflection through `U` times the signed doubled cosine.  Squaring therefore
 removes the harmless reflection factor. -/
 theorem diagonalPart_reflection_eq_reflection_mul_signedCosTwo
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    U.diagonalPart V.reflectionOperator = U.reflectionOperator * signedCosTwo U V := by
+    U.diagBlock V.reflectionOperator = U.reflectionOperator * signedCosTwo U V := by
   unfold signedCosTwo
-  rw [Submodule.diagonalPart_eq,
+  rw [Submodule.diagBlock_def,
     Submodule.reflectionOperator_eq_two_smul_sub_id U,
     Submodule.reflectionOperator_eq_two_smul_sub_id V]
   simp only [two_smul, Submodule.starProjection_orthogonal', comp_eq_mul_reflection]
@@ -415,14 +415,14 @@ private theorem bounded_reflection_equation_on_U
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ)
     (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hcommZ : Z ∘L (A + H) = (A + H) ∘L Z)
-    (hNL : N * L = U.offDiagonalPart Z)
-    (hdiag : U.diagonalPart Z = U.reflectionOperator * N)
+    (hNL : N * L = U.offDiagBlock Z)
+    (hdiag : U.diagBlock Z = U.reflectionOperator * N)
     (hNU : ∀ x ∈ U, N x ∈ U)
     (hNUperp : ∀ x ∈ Uᗮ, N x ∈ Uᗮ)
     (x : E) (hx : x ∈ U) :
     N (L (A x)) - A (N (L x)) = H (N x) + N (H x) := by
-  let C : E →L[ℂ] E := U.diagonalPart Z
-  let S : E →L[ℂ] E := U.offDiagonalPart Z
+  let C : E →L[ℂ] E := U.diagBlock Z
+  let S : E →L[ℂ] E := U.offDiagBlock Z
   have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
   have hAred : A.Reduces U := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
   have hAUperp : ∀ y ∈ Uᗮ, A y ∈ Uᗮ := hAred.2
@@ -751,18 +751,18 @@ private theorem reflection_block_data
               U.starProjection * projectorDifference U V *
                 (1 - U.starProjection)) * signedCosTwo U V := by
       rw [mul_add, add_mul, hXlower, hXupper]
-    have hoff : U.offDiagonalPart V.reflectionOperator =
+    have hoff : U.offDiagBlock V.reflectionOperator =
         2 * ((1 - U.starProjection) * projectorDifference U V * U.starProjection +
           U.starProjection * projectorDifference U V *
             (1 - U.starProjection)) := by
-      rw [Submodule.offDiagonalPart_eq, Submodule.diagonalPart_eq,
+      rw [Submodule.offDiagBlock_eq_sub_diagBlock, Submodule.diagBlock_def,
         Submodule.reflectionOperator_eq_two_smul_sub_id V]
       simp only [two_smul, Submodule.starProjection_orthogonal', comp_eq_mul_reflection]
       rw [hQ, ← ContinuousLinearMap.one_def]
       noncomm_ring [hp]
-    have hNL : N * L = U.offDiagonalPart V.reflectionOperator := by
+    have hNL : N * L = U.offDiagBlock V.reflectionOperator := by
       change signedCosTwo U V * tanTwoBlockRepresentative U V =
-        U.offDiagonalPart V.reflectionOperator
+        U.offDiagBlock V.reflectionOperator
       rw [tanTwoBlockRepresentative_eq hinv, hoff]
       calc
         signedCosTwo U V *
@@ -791,7 +791,7 @@ private theorem reflection_block_data
                     U.starProjection +
                   U.starProjection * projectorDifference U V *
                     (1 - U.starProjection)) := by rw [hNR, mul_one]
-    have hdiag : U.diagonalPart V.reflectionOperator =
+    have hdiag : U.diagBlock V.reflectionOperator =
         U.reflectionOperator * N := by
       simpa only [N] using
         (diagonalPart_reflection_eq_reflection_mul_signedCosTwo (U := U) (V := V))
@@ -922,23 +922,23 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
       exact Submodule.starProjection_eq_self_iff.mpr hx
     simpa only [hxproj] using
       (tendsto_const_nhds : Filter.Tendsto (fun _ : ℕ => x) Filter.atTop (nhds x))
-  have hS1 : ‖U.offDiagonalPart Z‖ < 1 :=
+  have hS1 : ‖U.offDiagBlock Z‖ < 1 :=
     TauCeti.norm_offDiagonalPart_lt_one_of_tendsto
       hred hBodd hZsa hZ2 hZdom hZcomm hUa hUb
       (fun _ : ℕ => ‖A‖) (fun _ => Ω) (fun _ => norm_nonneg A) hab hconv
-  have hSS : ‖U.offDiagonalPart Z * U.offDiagonalPart Z‖ < 1 := by
-    have hmul := norm_mul_le (U.offDiagonalPart Z) (U.offDiagonalPart Z)
-    nlinarith [norm_nonneg (U.offDiagonalPart Z)]
-  have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := by
+  have hSS : ‖U.offDiagBlock Z * U.offDiagBlock Z‖ < 1 := by
+    have hmul := norm_mul_le (U.offDiagBlock Z) (U.offDiagBlock Z)
+    nlinarith [norm_nonneg (U.offDiagBlock Z)]
+  have hCC : IsUnit (U.diagBlock Z * U.diagBlock Z) := by
     have hsum := TauCeti.diagonalPart_sq_add_offDiagonalPart_sq (U := U) hZ2
-    have hrewrite : U.diagonalPart Z * U.diagonalPart Z =
-        1 - U.offDiagonalPart Z * U.offDiagonalPart Z := by
+    have hrewrite : U.diagBlock Z * U.diagBlock Z =
+        1 - U.offDiagBlock Z * U.offDiagBlock Z := by
       rw [← hsum]
       abel
     rw [hrewrite]
     exact ⟨Units.oneSub _ hSS, rfl⟩
   let N : E →L[ℂ] E := signedCosTwo U V
-  have hdiag : U.diagonalPart Z = U.reflectionOperator * N := by
+  have hdiag : U.diagBlock Z = U.reflectionOperator * N := by
     simpa only [Z, N] using
       (diagonalPart_reflection_eq_reflection_mul_signedCosTwo (U := U) (V := V))
   have hNP : N * U.starProjection = U.starProjection * N := by
@@ -950,7 +950,7 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
   have hJ2 : U.reflectionOperator * U.reflectionOperator = 1 := by
     rw [ContinuousLinearMap.mul_def, Submodule.reflectionOperator_involutive,
       ← ContinuousLinearMap.one_def]
-  have hdiagSq : U.diagonalPart Z * U.diagonalPart Z = N * N := by
+  have hdiagSq : U.diagBlock Z * U.diagBlock Z = N * N := by
     rw [hdiag]
     calc
       (U.reflectionOperator * N) * (U.reflectionOperator * N) =

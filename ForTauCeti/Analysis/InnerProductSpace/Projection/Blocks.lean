@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-public import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
+public import TauCeti.Analysis.InnerProductSpace.Projection.Block
 
 /-!
 # Projection blocks and reflections
@@ -18,10 +18,11 @@ subspace.  This module is independent of the Davis--Kahan theory.
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForMathlib` at Davis--Kahan commit
-  `df036cd`; it has had no prior home.
-* Extraction class: **authored in place**, for Tau Ceti — `ForMathlib` was
-  retired on 2026-07-29 and `ForTauCeti` is the single staging library, whose
-  destination is Tau Ceti and not Mathlib (`ForTauCeti/README.md`).
+  `df036cd`; the canonical diagonal and off-diagonal block operators have since
+  been upstreamed to `TauCeti.Analysis.InnerProductSpace.Projection.Block`.
+* Extraction class: **partially upstreamed** — this module now contains only
+  donor-specific consequences and the reflection-operator adapter; it uses
+  Tau Ceti's canonical `diagBlock` and `offDiagBlock` definitions.
 * Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
@@ -63,49 +64,32 @@ noncomputable def reflectionOperator (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] : E →L[𝕜] E :=
   U.reflection.toLinearIsometry.toContinuousLinearMap
 
-/-- Diagonal part of an operator relative to `U ⊕ Uᗮ`. -/
-noncomputable def diagonalPart (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (A : E →L[𝕜] E) : E →L[𝕜] E :=
-  U.starProjection ∘L A ∘L U.starProjection +
-    Uᗮ.starProjection ∘L A ∘L Uᗮ.starProjection
-
-/-- Off-diagonal part of an operator relative to `U ⊕ Uᗮ`. -/
-noncomputable def offDiagonalPart (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (A : E →L[𝕜] E) : E →L[𝕜] E :=
-  A - U.diagonalPart A
-
 /-- The operator has vanishing diagonal blocks relative to `U`. -/
 def IsOffDiagonal (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (A : E →L[𝕜] E) : Prop := U.diagonalPart A = 0
-
-/-- The diagonal part as a sum of two pinches.  The definition is not exposed
-across module boundaries, so consumers rewrite with this. -/
-theorem diagonalPart_eq (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (A : E →L[𝕜] E) :
-    U.diagonalPart A =
-      U.starProjection ∘L A ∘L U.starProjection +
-        Uᗮ.starProjection ∘L A ∘L Uᗮ.starProjection := by
-  simp only [diagonalPart]
+    (A : E →L[𝕜] E) : Prop := U.diagBlock A = 0
 
 /-- The off-diagonal part as the diagonal-part defect. -/
-theorem offDiagonalPart_eq (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (A : E →L[𝕜] E) : U.offDiagonalPart A = A - U.diagonalPart A := by
-  simp only [offDiagonalPart]
+theorem offDiagBlock_eq_sub_diagBlock (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (A : E →L[𝕜] E) : U.offDiagBlock A = A - U.diagBlock A := by
+  have h := U.diagBlock_add_offDiagBlock A
+  calc
+    U.offDiagBlock A = (U.diagBlock A + U.offDiagBlock A) - U.diagBlock A := by abel
+    _ = A - U.diagBlock A := by rw [h]
 
 /-- Pointwise form of the diagonal part. -/
-theorem diagonalPart_apply (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+theorem diagBlock_apply (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) (x : E) :
-    U.diagonalPart A x =
+    U.diagBlock A x =
       U.starProjection (A (U.starProjection x)) +
         Uᗮ.starProjection (A (Uᗮ.starProjection x)) := by
-  rw [diagonalPart_eq]
+  rw [Submodule.diagBlock_def]
   simp only [add_apply, ContinuousLinearMap.comp_apply]
 
 /-- Pointwise form of the off-diagonal part. -/
-theorem offDiagonalPart_apply (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+theorem offDiagBlock_apply (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) (x : E) :
-    U.offDiagonalPart A x = A x - U.diagonalPart A x := by
-  rw [offDiagonalPart_eq]
+    U.offDiagBlock A x = A x - U.diagBlock A x := by
+  rw [offDiagBlock_eq_sub_diagBlock]
   simp only [sub_apply]
 
 /-- Pointwise formula for reflection. -/
@@ -210,26 +194,6 @@ theorem starProjection_orthogonal_apply (U : Submodule 𝕜 E)
   rw [Submodule.starProjection_orthogonal]
   simp
 
-/-- Twice the diagonal pinch is `A + JAJ`. -/
-theorem two_smul_diagonalPart_eq_add_reflectionConjugate
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (A : E →L[𝕜] E) :
-    (2 : 𝕜) • U.diagonalPart A =
-      A + U.reflectionOperator ∘L A ∘L U.reflectionOperator := by
-  ext x
-  simp only [diagonalPart, ContinuousLinearMap.comp_apply, add_apply, smul_apply]
-  simp_rw [starProjection_orthogonal_apply, reflectionOperator_apply]
-  simp only [map_sub, map_smul]
-  module
-
-/-- Twice the off-diagonal extraction is `A-JAJ`. -/
-theorem two_smul_offDiagonalPart_eq_sub_reflectionConjugate
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (A : E →L[𝕜] E) :
-    (2 : 𝕜) • U.offDiagonalPart A =
-      A - U.reflectionOperator ∘L A ∘L U.reflectionOperator := by
-  unfold offDiagonalPart
-  rw [smul_sub, two_smul_diagonalPart_eq_add_reflectionConjugate]
-  module
-
 /-! ### Numerical range of a block-diagonal operator
 
 An operator that commutes with the reflection is determined block by block, and
@@ -246,28 +210,39 @@ about projections only. -/
 `⟪(P A P + P' A P') x, x⟫ = ⟪A (P x), P x⟫ + ⟪A (P' x), P' x⟫`, each pinch term
 read off on its own summand.  No hypothesis on `A`: the pinch is *defined* to
 discard the cross terms, and this identity says what survives. -/
-theorem inner_diagonalPart_apply_self (U : Submodule 𝕜 E)
+theorem inner_diagBlock_apply_self (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (A : E →L[𝕜] E) (x : E) :
-    ⟪U.diagonalPart A x, x⟫_𝕜 =
+    ⟪U.diagBlock A x, x⟫_𝕜 =
       ⟪A (U.starProjection x), U.starProjection x⟫_𝕜 +
         ⟪A (Uᗮ.starProjection x), Uᗮ.starProjection x⟫_𝕜 := by
-  simp only [diagonalPart, add_apply, ContinuousLinearMap.comp_apply,
+  simp only [Submodule.diagBlock_def, add_apply, ContinuousLinearMap.comp_apply,
     inner_add_left, inner_starProjection_left_eq_right]
 
 /-- **Commuting with the reflection is the same as being block diagonal.**
 
 `J A J = A` forces `A` to equal its own diagonal pinch.  Immediate from
-`two_smul_diagonalPart_eq_add_reflectionConjugate`, which says
+`two_smul_diagBlock`, which says
 `2 (P A P + P' A P') = A + J A J`. -/
-theorem diagonalPart_eq_self_of_reflectionConjugate (U : Submodule 𝕜 E)
+theorem diagBlock_eq_self_of_reflectionConjugate (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] {A : E →L[𝕜] E}
-    (hA : U.reflectionOperator ∘L A ∘L U.reflectionOperator = A) :
-    U.diagonalPart A = A := by
-  have h := two_smul_diagonalPart_eq_add_reflectionConjugate U A
-  rw [hA, ← two_smul 𝕜 A] at h
-  have h2 := congrArg (fun T : E →L[𝕜] E => (2 : 𝕜)⁻¹ • T) h
-  simpa only [smul_smul, inv_mul_cancel₀ (two_ne_zero : (2 : 𝕜) ≠ 0),
-    one_smul] using h2
+    (hA : (U.reflection : E →L[𝕜] E) ∘L A ∘L (U.reflection : E →L[𝕜] E) = A) :
+    U.diagBlock A = A := by
+  let J : E →L[𝕜] E := U.reflection
+  have hJ : J * J = 1 := by
+    ext x
+    change U.reflection (U.reflection x) = x
+    exact U.reflection_reflection x
+  have hA' : J * A * J = A := by
+    change U.reflection ∘L A ∘L U.reflection = A
+    exact hA
+  have hcomm : Commute J A := by
+    rw [commute_iff_eq]
+    calc
+      J * A = J * A * (J * J) := by rw [hJ, mul_one]
+      _ = (J * A * J) * J := by noncomm_ring
+      _ = A * J := by rw [hA']
+  apply U.diagBlock_eq_self_iff.mpr
+  exact U.commute_reflection_iff.mp (by simpa only [J] using hcomm)
 
 /-- **A block-diagonal operator with nonnegative blocks has nonnegative
 numerical range.**
@@ -281,8 +256,8 @@ theorem re_inner_apply_self_nonneg_of_reflectionConjugate (U : Submodule 𝕜 E)
     (hU : ∀ x ∈ U, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
     (hUperp : ∀ x ∈ Uᗮ, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) (x : E) :
     0 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
-  have hdiag := diagonalPart_eq_self_of_reflectionConjugate U hA
-  have hsplit := inner_diagonalPart_apply_self U A x
+  have hdiag := diagBlock_eq_self_of_reflectionConjugate U hA
+  have hsplit := inner_diagBlock_apply_self U A x
   rw [hdiag] at hsplit
   rw [hsplit, map_add]
   exact add_nonneg (hU _ (U.starProjection_apply_mem x))

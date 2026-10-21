@@ -169,7 +169,7 @@ theorem directRotation_displacementSquare_eq (U V : Submodule ℂ H)
 step of Proposition 4.3's chain is an equality. -/
 theorem diagonalPart_directRotation_displacementSquare (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
-    U.diagonalPart ((1 - star (spectraDirectRotation U V hacute)) *
+    U.diagBlock ((1 - star (spectraDirectRotation U V hacute)) *
         (1 - spectraDirectRotation U V hacute)) =
       (1 - star (spectraDirectRotation U V hacute)) *
         (1 - spectraDirectRotation U V hacute) := by
@@ -184,7 +184,7 @@ theorem diagonalPart_directRotation_displacementSquare (U V : Submodule ℂ H)
     rw [hAeq, sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, hCcomm]
     congr 1
     rw [two_mul, mul_two]
-  apply Submodule.diagonalPart_eq_self_of_reflectionConjugate
+  apply Submodule.diagBlock_eq_self_of_reflectionConjugate
   have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
     rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
       smul_mul_assoc, mul_smul_comm, hcomm]
@@ -218,7 +218,7 @@ theorem nonacuteDirectRotation_displacementSquare_eq (U V : Submodule ℂ H)
 theorem diagonalPart_nonacuteDirectRotation_displacementSquare_complex (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V) :
-    U.diagonalPart ((1 - star (nonacuteDirectRotation U V J)) *
+    U.diagBlock ((1 - star (nonacuteDirectRotation U V J)) *
         (1 - nonacuteDirectRotation U V J)) =
       (1 - star (nonacuteDirectRotation U V J)) *
         (1 - nonacuteDirectRotation U V J) := by
@@ -233,7 +233,7 @@ theorem diagonalPart_nonacuteDirectRotation_displacementSquare_complex (U V : Su
     rw [hAeq, sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, hCcomm]
     congr 1
     rw [two_mul, mul_two]
-  apply Submodule.diagonalPart_eq_self_of_reflectionConjugate
+  apply Submodule.diagBlock_eq_self_of_reflectionConjugate
   have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
     rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
       smul_mul_assoc, mul_smul_comm, hcomm]
@@ -279,7 +279,7 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
     ext x
     simp
   have hchart : ∀ T : H →L[ℂ] H,
-      kyFanApproximationGauge k (U.diagonalPart ((1 - star T) * (1 - T))) =
+      kyFanApproximationGauge k (U.diagBlock ((1 - star T) * (1 - T))) =
         kyFanApproximationGauge k (continuousOrthogonalBlockSum
           (gramOperator ((1 - T) ∘L U.subtypeL))
           (gramOperator ((1 - T) ∘L Uᗮ.subtypeL))) := by
@@ -288,7 +288,7 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
       rw [star_sub, star_one]
     rw [hst,
       ← kyFanApproximationGauge_conj_eq_complex hL hR hRL
-        (U.diagonalPart (star (1 - T) * (1 - T))) k,
+        (U.diagBlock (star (1 - T) * (1 - T))) k,
       orthogonalDecomposition_conj_diagonalPart U (star (1 - T) * (1 - T)),
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_complex,
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_complex]
@@ -310,7 +310,7 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
   calc kyFanApproximationGauge k
         ((1 - star (spectraDirectRotation U V hacute)) *
           (1 - spectraDirectRotation U V hacute))
-      = kyFanApproximationGauge k (U.diagonalPart
+      = kyFanApproximationGauge k (U.diagBlock
           ((1 - star (spectraDirectRotation U V hacute)) *
             (1 - spectraDirectRotation U V hacute))) := by
         rw [diagonalPart_directRotation_displacementSquare U V hacute]
@@ -322,7 +322,7 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
           (gramOperator ((1 - W) ∘L U.subtypeL))
           (gramOperator ((1 - W) ∘L Uᗮ.subtypeL))) := hblock
     _ = kyFanApproximationGauge k
-          (U.diagonalPart ((1 - star W) * (1 - W))) := (hchart W).symm
+          (U.diagBlock ((1 - star W) * (1 - W))) := (hchart W).symm
     _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
         kyFanApproximationGauge_diagonalPart_le_complex U _ k
 
@@ -354,7 +354,7 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
     ext x
     simp
   have hchart : ∀ T : H →L[ℂ] H,
-      kyFanApproximationGauge k (U.diagonalPart ((1 - star T) * (1 - T))) =
+      kyFanApproximationGauge k (U.diagBlock ((1 - star T) * (1 - T))) =
         kyFanApproximationGauge k (continuousOrthogonalBlockSum
           (gramOperator ((1 - T) ∘L U.subtypeL))
           (gramOperator ((1 - T) ∘L U.orthogonal.subtypeL))) := by
@@ -363,7 +363,7 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
       rw [star_sub, star_one]
     rw [hst,
       ← kyFanApproximationGauge_conj_eq_complex hL hR hRL
-        (U.diagonalPart (star (1 - T) * (1 - T))) k,
+        (U.diagBlock (star (1 - T) * (1 - T))) k,
       orthogonalDecomposition_conj_diagonalPart U (star (1 - T) * (1 - T)),
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_complex,
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_complex]
@@ -385,7 +385,7 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
   calc kyFanApproximationGauge k
         ((1 - star (nonacuteDirectRotation U V J)) *
           (1 - nonacuteDirectRotation U V J))
-      = kyFanApproximationGauge k (U.diagonalPart
+      = kyFanApproximationGauge k (U.diagBlock
           ((1 - star (nonacuteDirectRotation U V J)) *
             (1 - nonacuteDirectRotation U V J))) := by
         rw [diagonalPart_nonacuteDirectRotation_displacementSquare_complex U V J]
@@ -396,7 +396,7 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
           (gramOperator ((1 - W) ∘L U.subtypeL))
           (gramOperator ((1 - W) ∘L U.orthogonal.subtypeL))) := hblock
     _ = kyFanApproximationGauge k
-          (U.diagonalPart ((1 - star W) * (1 - W))) := (hchart W).symm
+          (U.diagBlock ((1 - star W) * (1 - W))) := (hchart W).symm
     _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
         kyFanApproximationGauge_diagonalPart_le_complex U _ k
 

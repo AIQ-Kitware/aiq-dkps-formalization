@@ -90,17 +90,17 @@ variable {A : H →ₗ.[ℂ] H} {B Z : H →L[ℂ] H} {a b τ : ℝ}
 eigenvalue. -/
 theorem norm_sq_offDiagonalPart_of_doubleAngleEigenvector
     (hZsa : IsSelfAdjoint Z) {x : H} (hx1 : ‖x‖ = 1) {q : ℝ}
-    (heig : U.offDiagonalPart Z (U.offDiagonalPart Z x) =
+    (heig : U.offDiagBlock Z (U.offDiagBlock Z x) =
       ((q ^ 2 : ℝ) : ℂ) • x) :
-    ‖U.offDiagonalPart Z x‖ ^ 2 = q ^ 2 := by
+    ‖U.offDiagBlock Z x‖ ^ 2 = q ^ 2 := by
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
-  have h : ⟪U.offDiagonalPart Z x, U.offDiagonalPart Z x⟫_ℂ =
+  have h : ⟪U.offDiagBlock Z x, U.offDiagBlock Z x⟫_ℂ =
       ((q ^ 2 : ℝ) : ℂ) := by
-    rw [hSsym x (U.offDiagonalPart Z x), heig, inner_smul_right,
+    rw [hSsym x (U.offDiagBlock Z x), heig, inner_smul_right,
       inner_self_eq_norm_sq_to_K, hx1]
     norm_num
-  have h2 : ((‖U.offDiagonalPart Z x‖ ^ 2 : ℝ) : ℂ) = ((q ^ 2 : ℝ) : ℂ) := by
+  have h2 : ((‖U.offDiagBlock Z x‖ ^ 2 : ℝ) : ℂ) = ((q ^ 2 : ℝ) : ℂ) := by
     rw [← h, inner_self_eq_norm_sq_to_K]
     norm_cast
   exact_mod_cast h2
@@ -108,7 +108,7 @@ theorem norm_sq_offDiagonalPart_of_doubleAngleEigenvector
 /-- **Equation (7.6) at an exact double-angle eigenvector.**
 
 If `x` is a unit vector of the trial subspace lying in `D(A)` and `S² x = q² x`
-for the odd block `S = U.offDiagonalPart Z`, then
+for the odd block `S = U.offDiagBlock Z`, then
 
 `δ q² ≤ Re ⟪B x, C (S x)⟫ - Re ⟪B (C x), S x⟫`,   `δ = b - a`.
 
@@ -127,48 +127,48 @@ theorem gap_mul_sq_le_paired_of_doubleAngleEigenvector
     (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     {x : A.domain} (hxU : (x : H) ∈ U) (hx1 : ‖(x : H)‖ = 1) {q : ℝ}
-    (heig : U.offDiagonalPart Z (U.offDiagonalPart Z (x : H)) =
+    (heig : U.offDiagBlock Z (U.offDiagBlock Z (x : H)) =
       ((q ^ 2 : ℝ) : ℂ) • (x : H)) :
     (b - a) * q ^ 2 ≤
       RCLike.re ⟪B (x : H),
-          U.diagonalPart Z (U.offDiagonalPart Z (x : H))⟫_ℂ -
-        RCLike.re ⟪B (U.diagonalPart Z (x : H)),
-          U.offDiagonalPart Z (x : H)⟫_ℂ := by
+          U.diagBlock Z (U.offDiagBlock Z (x : H))⟫_ℂ -
+        RCLike.re ⟪B (U.diagBlock Z (x : H)),
+          U.offDiagBlock Z (x : H)⟫_ℂ := by
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
   have hCsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_diagonalPart (U := U) hZsa)
-  have hSmem : U.offDiagonalPart Z (x : H) ∈ A.domain :=
+  have hSmem : U.offDiagBlock Z (x : H) ∈ A.domain :=
     TauCeti.mem_domain_offDiagonalPart hred hZdom x
-  have hSU : U.offDiagonalPart Z (x : H) ∈ Uᗮ :=
+  have hSU : U.offDiagBlock Z (x : H) ∈ Uᗮ :=
     TauCeti.offDiagonalPart_mem_orthogonal_of_mem U Z hxU
-  have hnormS : ‖U.offDiagonalPart Z (x : H)‖ ^ 2 = q ^ 2 :=
+  have hnormS : ‖U.offDiagBlock Z (x : H)‖ ^ 2 = q ^ 2 :=
     norm_sq_offDiagonalPart_of_doubleAngleEigenvector (U := U) hZsa hx1 heig
   have hsyl := TauCeti.sylvester_offDiagonalPart_of_mem hred hB hZdom hZcomm x hxU
   have hpair := congrArg
-    (fun w : H => RCLike.re ⟪w, U.offDiagonalPart Z (x : H)⟫_ℂ) hsyl
+    (fun w : H => RCLike.re ⟪w, U.offDiagBlock Z (x : H)⟫_ℂ) hsyl
   simp only [inner_add_left, map_add] at hpair
   have hlow : b * q ^ 2 ≤
-      RCLike.re ⟪A ⟨U.offDiagonalPart Z (x : H), hSmem⟩,
-        U.offDiagonalPart Z (x : H)⟫_ℂ := by
-    have h := hUb ⟨U.offDiagonalPart Z (x : H), hSmem⟩ hSU
-    calc b * q ^ 2 = b * ‖U.offDiagonalPart Z (x : H)‖ ^ 2 := by rw [hnormS]
+      RCLike.re ⟪A ⟨U.offDiagBlock Z (x : H), hSmem⟩,
+        U.offDiagBlock Z (x : H)⟫_ℂ := by
+    have h := hUb ⟨U.offDiagBlock Z (x : H), hSmem⟩ hSU
+    calc b * q ^ 2 = b * ‖U.offDiagBlock Z (x : H)‖ ^ 2 := by rw [hnormS]
       _ ≤ _ := h
-  have hhigh : RCLike.re ⟪U.offDiagonalPart Z (A x),
-      U.offDiagonalPart Z (x : H)⟫_ℂ ≤ a * q ^ 2 := by
-    have hswap : ⟪U.offDiagonalPart Z (A x), U.offDiagonalPart Z (x : H)⟫_ℂ =
+  have hhigh : RCLike.re ⟪U.offDiagBlock Z (A x),
+      U.offDiagBlock Z (x : H)⟫_ℂ ≤ a * q ^ 2 := by
+    have hswap : ⟪U.offDiagBlock Z (A x), U.offDiagBlock Z (x : H)⟫_ℂ =
         ((q ^ 2 : ℝ) : ℂ) * ⟪A x, (x : H)⟫_ℂ := by
-      rw [hSsym (A x) (U.offDiagonalPart Z (x : H)), heig, inner_smul_right]
+      rw [hSsym (A x) (U.offDiagBlock Z (x : H)), heig, inner_smul_right]
     rw [hswap]
     have hx := hUa x hxU
     rw [hx1, one_pow, mul_one] at hx
     rw [← Complex.real_smul, RCLike.smul_re]
     nlinarith [sq_nonneg q, hx]
-  have hmove : RCLike.re ⟪U.diagonalPart Z (B (x : H)),
-      U.offDiagonalPart Z (x : H)⟫_ℂ =
+  have hmove : RCLike.re ⟪U.diagBlock Z (B (x : H)),
+      U.offDiagBlock Z (x : H)⟫_ℂ =
       RCLike.re ⟪B (x : H),
-        U.diagonalPart Z (U.offDiagonalPart Z (x : H))⟫_ℂ := by
-    rw [hCsym (B (x : H)) (U.offDiagonalPart Z (x : H))]
+        U.diagBlock Z (U.offDiagBlock Z (x : H))⟫_ℂ := by
+    rw [hCsym (B (x : H)) (U.offDiagBlock Z (x : H))]
   rw [hmove] at hpair
   linarith [hpair, hlow, hhigh]
 
@@ -177,18 +177,18 @@ theorem gap_mul_sq_le_paired_of_doubleAngleEigenvector
 theorem norm_sq_diagonalPart_of_doubleAngleEigenvector
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     {x : H} (hxU : x ∈ U) (hx1 : ‖x‖ = 1) {q : ℝ}
-    (heig : U.offDiagonalPart Z (U.offDiagonalPart Z x) =
+    (heig : U.offDiagBlock Z (U.offDiagBlock Z x) =
       ((q ^ 2 : ℝ) : ℂ) • x) :
-    ‖U.diagonalPart Z x‖ ^ 2 = 1 - q ^ 2 ∧
-      ‖U.diagonalPart Z (U.offDiagonalPart Z x)‖ ^ 2 =
+    ‖U.diagBlock Z x‖ ^ 2 = 1 - q ^ 2 ∧
+      ‖U.diagBlock Z (U.offDiagBlock Z x)‖ ^ 2 =
         q ^ 2 * (1 - q ^ 2) := by
   have hZnorm : ∀ v : H, ‖Z v‖ = ‖v‖ :=
     TauCeti.norm_apply_of_isSelfAdjoint_of_mul_self hZsa hZ2
-  have hSU : U.offDiagonalPart Z x ∈ Uᗮ :=
+  have hSU : U.offDiagBlock Z x ∈ Uᗮ :=
     TauCeti.offDiagonalPart_mem_orthogonal_of_mem U Z hxU
-  have hnormS : ‖U.offDiagonalPart Z x‖ ^ 2 = q ^ 2 :=
+  have hnormS : ‖U.offDiagBlock Z x‖ ^ 2 = q ^ 2 :=
     norm_sq_offDiagonalPart_of_doubleAngleEigenvector (U := U) hZsa hx1 heig
-  have hnormSS : ‖U.offDiagonalPart Z (U.offDiagonalPart Z x)‖ ^ 2 =
+  have hnormSS : ‖U.offDiagBlock Z (U.offDiagBlock Z x)‖ ^ 2 =
       q ^ 2 * q ^ 2 := by
     rw [heig, norm_smul, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg (sq_nonneg q), hx1, mul_one]
@@ -222,21 +222,21 @@ theorem doubleAngleEigenvalue_lt_one
     (hab : a < b)
     {x : A.domain} (hxU : (x : H) ∈ U) (hx1 : ‖(x : H)‖ = 1) {q : ℝ}
     (hq : 0 < q)
-    (heig : U.offDiagonalPart Z (U.offDiagonalPart Z (x : H)) =
+    (heig : U.offDiagBlock Z (U.offDiagBlock Z (x : H)) =
       ((q ^ 2 : ℝ) : ℂ) • (x : H)) :
     q < 1 := by
   obtain ⟨hCx, hCSx⟩ := norm_sq_diagonalPart_of_doubleAngleEigenvector
     (U := U) hZsa hZ2 hxU hx1 heig
   by_contra hcon
   have hcon : 1 ≤ q := not_lt.mp hcon
-  have hnn := sq_nonneg ‖U.diagonalPart Z (x : H)‖
+  have hnn := sq_nonneg ‖U.diagBlock Z (x : H)‖
   have hq1 : q ^ 2 = 1 := by nlinarith [hCx, hnn]
-  have hCx0 : U.diagonalPart Z (x : H) = 0 := by
+  have hCx0 : U.diagBlock Z (x : H) = 0 := by
     refine norm_eq_zero.mp ?_
-    nlinarith [norm_nonneg (U.diagonalPart Z (x : H)), hCx, hq1]
-  have hCSx0 : U.diagonalPart Z (U.offDiagonalPart Z (x : H)) = 0 := by
+    nlinarith [norm_nonneg (U.diagBlock Z (x : H)), hCx, hq1]
+  have hCSx0 : U.diagBlock Z (U.offDiagBlock Z (x : H)) = 0 := by
     refine norm_eq_zero.mp ?_
-    nlinarith [norm_nonneg (U.diagonalPart Z (U.offDiagonalPart Z (x : H))),
+    nlinarith [norm_nonneg (U.diagBlock Z (U.offDiagBlock Z (x : H))),
       hCSx, hq1]
   have hmain := gap_mul_sq_le_paired_of_doubleAngleEigenvector hred hB hZsa
     hZdom hZcomm hUa hUb hxU hx1 heig
@@ -250,15 +250,15 @@ satisfies.  Everything the Ky Fan step needs is an exact consequence of
 theorem inner_of_doubleAngleEigenfamily
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1) {n : ℕ} (x : Fin n → H)
     (hx : Orthonormal ℂ x) {q : Fin n → ℝ}
-    (heig : ∀ i, U.offDiagonalPart Z (U.offDiagonalPart Z (x i)) =
+    (heig : ∀ i, U.offDiagBlock Z (U.offDiagBlock Z (x i)) =
       (((q i) ^ 2 : ℝ) : ℂ) • x i)
     (i j : Fin n) :
-    ⟪U.offDiagonalPart Z (x i), U.offDiagonalPart Z (x j)⟫_ℂ =
+    ⟪U.offDiagBlock Z (x i), U.offDiagBlock Z (x j)⟫_ℂ =
         (((q j) ^ 2 : ℝ) : ℂ) * (if i = j then (1 : ℂ) else 0) ∧
-      ⟪U.diagonalPart Z (x i), U.diagonalPart Z (x j)⟫_ℂ =
+      ⟪U.diagBlock Z (x i), U.diagBlock Z (x j)⟫_ℂ =
         ((1 - (q j) ^ 2 : ℝ) : ℂ) * (if i = j then (1 : ℂ) else 0) ∧
-      ⟪U.diagonalPart Z (U.offDiagonalPart Z (x i)),
-          U.diagonalPart Z (U.offDiagonalPart Z (x j))⟫_ℂ =
+      ⟪U.diagBlock Z (U.offDiagBlock Z (x i)),
+          U.diagBlock Z (U.offDiagBlock Z (x j))⟫_ℂ =
         (((q j) ^ 2 * (1 - (q j) ^ 2) : ℝ) : ℂ) *
           (if i = j then (1 : ℂ) else 0) := by
   classical
@@ -268,20 +268,20 @@ theorem inner_of_doubleAngleEigenfamily
     (TauCeti.isSelfAdjoint_diagonalPart (U := U) hZsa)
   have hite : ⟪x i, x j⟫_ℂ = if i = j then (1 : ℂ) else 0 :=
     (orthonormal_iff_ite.mp hx) i j
-  have hpyth : ∀ v : H, U.diagonalPart Z (U.diagonalPart Z v) +
-      U.offDiagonalPart Z (U.offDiagonalPart Z v) = v := by
+  have hpyth : ∀ v : H, U.diagBlock Z (U.diagBlock Z v) +
+      U.offDiagBlock Z (U.offDiagBlock Z v) = v := by
     intro v
     have h := TauCeti.diagonalPart_sq_add_offDiagonalPart_sq (U := U) hZ2
     have h2 := congrArg (fun T : H →L[ℂ] H => T v) h
     simpa using h2
-  have hSS : ⟪U.offDiagonalPart Z (x i), U.offDiagonalPart Z (x j)⟫_ℂ =
+  have hSS : ⟪U.offDiagBlock Z (x i), U.offDiagBlock Z (x j)⟫_ℂ =
       (((q j) ^ 2 : ℝ) : ℂ) * (if i = j then (1 : ℂ) else 0) := by
-    rw [hSsym (x i) (U.offDiagonalPart Z (x j)), heig j, inner_smul_right, hite]
+    rw [hSsym (x i) (U.offDiagBlock Z (x j)), heig j, inner_smul_right, hite]
   refine ⟨hSS, ?_, ?_⟩
-  · have hCC : ⟪U.diagonalPart Z (x i), U.diagonalPart Z (x j)⟫_ℂ =
-        ⟪x i, U.diagonalPart Z (U.diagonalPart Z (x j))⟫_ℂ :=
-      hCsym (x i) (U.diagonalPart Z (x j))
-    have hsplit : U.diagonalPart Z (U.diagonalPart Z (x j)) =
+  · have hCC : ⟪U.diagBlock Z (x i), U.diagBlock Z (x j)⟫_ℂ =
+        ⟪x i, U.diagBlock Z (U.diagBlock Z (x j))⟫_ℂ :=
+      hCsym (x i) (U.diagBlock Z (x j))
+    have hsplit : U.diagBlock Z (U.diagBlock Z (x j)) =
         x j - (((q j) ^ 2 : ℝ) : ℂ) • x j := by
       have h := hpyth (x j)
       rw [heig j] at h
@@ -289,21 +289,21 @@ theorem inner_of_doubleAngleEigenfamily
     rw [hCC, hsplit, inner_sub_right, inner_smul_right, hite]
     push_cast
     ring
-  · have hCC : ⟪U.diagonalPart Z (U.offDiagonalPart Z (x i)),
-        U.diagonalPart Z (U.offDiagonalPart Z (x j))⟫_ℂ =
-        ⟪U.offDiagonalPart Z (x i),
-          U.diagonalPart Z (U.diagonalPart Z
-            (U.offDiagonalPart Z (x j)))⟫_ℂ :=
+  · have hCC : ⟪U.diagBlock Z (U.offDiagBlock Z (x i)),
+        U.diagBlock Z (U.offDiagBlock Z (x j))⟫_ℂ =
+        ⟪U.offDiagBlock Z (x i),
+          U.diagBlock Z (U.diagBlock Z
+            (U.offDiagBlock Z (x j)))⟫_ℂ :=
       hCsym _ _
-    have hSSS : U.offDiagonalPart Z (U.offDiagonalPart Z
-        (U.offDiagonalPart Z (x j))) =
-        (((q j) ^ 2 : ℝ) : ℂ) • U.offDiagonalPart Z (x j) := by
+    have hSSS : U.offDiagBlock Z (U.offDiagBlock Z
+        (U.offDiagBlock Z (x j))) =
+        (((q j) ^ 2 : ℝ) : ℂ) • U.offDiagBlock Z (x j) := by
       rw [← map_smul, ← heig j]
-    have hsplit : U.diagonalPart Z (U.diagonalPart Z
-        (U.offDiagonalPart Z (x j))) =
-        U.offDiagonalPart Z (x j) -
-          (((q j) ^ 2 : ℝ) : ℂ) • U.offDiagonalPart Z (x j) := by
-      have h := hpyth (U.offDiagonalPart Z (x j))
+    have hsplit : U.diagBlock Z (U.diagBlock Z
+        (U.offDiagBlock Z (x j))) =
+        U.offDiagBlock Z (x j) -
+          (((q j) ^ 2 : ℝ) : ℂ) • U.offDiagBlock Z (x j) := by
+      have h := hpyth (U.offDiagBlock Z (x j))
       rw [hSSS] at h
       linear_combination (norm := module) h
     rw [hCC, hsplit, inner_sub_right, inner_smul_right, hSS]
@@ -366,7 +366,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_doubleAngleEigenfamily
     (hxU : ∀ i, ((x i : A.domain) : H) ∈ U)
     (hxon : Orthonormal ℂ fun i => ((x i : A.domain) : H))
     {q : Fin n → ℝ} (hq : ∀ i, 0 < q i)
-    (heig : ∀ i, U.offDiagonalPart Z (U.offDiagonalPart Z
+    (heig : ∀ i, U.offDiagBlock Z (U.offDiagBlock Z
         ((x i : A.domain) : H)) =
       (((q i) ^ 2 : ℝ) : ℂ) • ((x i : A.domain) : H)) :
     (b - a) * ∑ i, q i / √(1 - (q i) ^ 2) ≤
@@ -384,54 +384,54 @@ theorem gap_mul_sum_tangent_le_kyFan_of_doubleAngleEigenfamily
     (fun i => ((x i : A.domain) : H)) hxon heig i j
   -- the three auxiliary orthonormal systems
   have hyon : Orthonormal ℂ fun i =>
-      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z ((x i : A.domain) : H)) :=
+      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z ((x i : A.domain) : H)) :=
     orthonormal_scaled_of_inner_eq hq fun i j => (hgram i j).1
   have huon : Orthonormal ℂ fun i =>
       (((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z ((x i : A.domain) : H)) :=
+        U.diagBlock Z ((x i : A.domain) : H)) :=
     orthonormal_scaled_of_inner_eq hcpos fun i j => by
       rw [Real.sq_sqrt (hc0 j).le]
       exact (hgram i j).2.1
   have hvon : Orthonormal ℂ fun i =>
       ((((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H))) :=
+        U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H))) :=
     orthonormal_scaled_of_inner_eq
       (fun i => mul_pos (hq i) (hcpos i)) fun i j => by
         rw [mul_pow, Real.sq_sqrt (hc0 j).le]
         exact (hgram i j).2.2
   have hnegon : Orthonormal ℂ fun i =>
-      -(((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z ((x i : A.domain) : H)) := by
+      -(((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z ((x i : A.domain) : H)) := by
     have h := orthonormal_signFlip hyon (fun _ => false)
     simpa using h
   -- the per-index estimate, divided by `qᵢ cᵢ`
   have hstep : ∀ i, (b - a) * (q i / √(1 - (q i) ^ 2)) ≤
       RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
         B ((x i : A.domain) : H)⟫_ℂ +
       RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-          U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.offDiagBlock Z ((x i : A.domain) : H)),
         B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ := by
+          U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ := by
     intro i
     have hqc : 0 < q i * √(1 - (q i) ^ 2) := mul_pos (hq i) (hcpos i)
     have hmain := gap_mul_sq_le_paired_of_doubleAngleEigenvector hred hB hZsa
       hZdom hZcomm hUa hUb (hxU i) (hx1 i) (heig i)
     have hterm1 : RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+        U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
         B ((x i : A.domain) : H)⟫_ℂ =
         (q i * √(1 - (q i) ^ 2))⁻¹ *
           RCLike.re ⟪B ((x i : A.domain) : H),
-            U.diagonalPart Z (U.offDiagonalPart Z
+            U.diagBlock Z (U.offDiagBlock Z
               ((x i : A.domain) : H))⟫_ℂ := by
       rw [inner_smul_left, ← Complex.ofReal_inv, Complex.conj_ofReal,
         ← Complex.real_smul, RCLike.smul_re, inner_re_symm]
     have hterm2 : RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-        U.offDiagonalPart Z ((x i : A.domain) : H)),
+        U.offDiagBlock Z ((x i : A.domain) : H)),
         B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ =
+          U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ =
         -((q i * √(1 - (q i) ^ 2))⁻¹ *
-          RCLike.re ⟪B (U.diagonalPart Z ((x i : A.domain) : H)),
-            U.offDiagonalPart Z ((x i : A.domain) : H)⟫_ℂ) := by
+          RCLike.re ⟪B (U.diagBlock Z ((x i : A.domain) : H)),
+            U.offDiagBlock Z ((x i : A.domain) : H)⟫_ℂ) := by
       rw [mul_inv]
       simp only [map_smul, inner_neg_left, inner_smul_left, inner_smul_right,
         ← Complex.ofReal_inv, Complex.conj_ofReal]
@@ -446,32 +446,32 @@ theorem gap_mul_sum_tangent_le_kyFan_of_doubleAngleEigenfamily
     have hpos : (0 : ℝ) ≤ (q i * √(1 - (q i) ^ 2))⁻¹ := by positivity
     nlinarith [mul_le_mul_of_nonneg_left hmain hpos]
   have hsum1 : ∑ i, RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-      U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+      U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
       B ((x i : A.domain) : H)⟫_ℂ ≤ kyFanApproximationGauge n B :=
     sum_le_kyFanApproximationGauge_of_orthonormal B hvon hxon (fun _ => le_rfl)
   have hsum2 : ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-      U.offDiagonalPart Z ((x i : A.domain) : H)),
+      U.offDiagBlock Z ((x i : A.domain) : H)),
       B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ ≤
+        U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ ≤
       kyFanApproximationGauge n B :=
     sum_le_kyFanApproximationGauge_of_orthonormal B hnegon huon (fun _ => le_rfl)
   calc (b - a) * ∑ i, q i / √(1 - (q i) ^ 2)
       = ∑ i, (b - a) * (q i / √(1 - (q i) ^ 2)) := by rw [Finset.mul_sum]
     _ ≤ ∑ i, (RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
           B ((x i : A.domain) : H)⟫_ℂ +
           RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-            U.offDiagonalPart Z ((x i : A.domain) : H)),
+            U.offDiagBlock Z ((x i : A.domain) : H)),
             B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-              U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ) :=
+              U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ) :=
         Finset.sum_le_sum fun i _ => hstep i
     _ = (∑ i, RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
           B ((x i : A.domain) : H)⟫_ℂ) +
         ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-          U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.offDiagBlock Z ((x i : A.domain) : H)),
           B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-            U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ :=
+            U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ :=
         Finset.sum_add_distrib
     _ ≤ 2 * kyFanApproximationGauge n B := by linarith [hsum1, hsum2]
 
@@ -488,7 +488,7 @@ def IsDoubleAngleEigenbasis (A : H →ₗ.[ℂ] H) (U : Submodule ℂ H)
     (∀ i, ((y i : A.domain) : H) ∈ U) ∧
       (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
       (∀ i, 0 < q i) ∧
-      (∀ i, U.offDiagonalPart Z (U.offDiagonalPart Z ((y i : A.domain) : H)) =
+      (∀ i, U.offDiagBlock Z (U.offDiagBlock Z ((y i : A.domain) : H)) =
         (((q i) ^ 2 : ℝ) : ℂ) • ((y i : A.domain) : H)) ∧
       kyFanApproximationGauge k T ≤ ∑ i, q i / √(1 - (q i) ^ 2)
 
@@ -579,29 +579,29 @@ because `x` is fixed by the cutoff. -/
 theorem abs_norm_sq_offDiagonalPart_sub_le_of_approximate
     (hZsa : IsSelfAdjoint Z) (Ω : TauCeti.BoundedCutoff A U τ) {x : H}
     (hxΩ : Ω.toProj x = x) (hx1 : ‖x‖ = 1) {q ε : ℝ}
-    (heig : ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z x)) -
+    (heig : ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z x)) -
       ((q ^ 2 : ℝ) : ℂ) • x‖ ≤ ε) :
-    |‖U.offDiagonalPart Z x‖ ^ 2 - q ^ 2| ≤ ε := by
+    |‖U.offDiagBlock Z x‖ ^ 2 - q ^ 2| ≤ ε := by
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
   have hΩsym := TauCeti.inner_swap_of_isSelfAdjoint Ω.isSelfAdjoint
-  have hd : RCLike.re ⟪x, Ω.toProj (U.offDiagonalPart Z
-        (U.offDiagonalPart Z x)) - ((q ^ 2 : ℝ) : ℂ) • x⟫_ℂ =
-      ‖U.offDiagonalPart Z x‖ ^ 2 - q ^ 2 := by
-    have h1 : ⟪x, Ω.toProj (U.offDiagonalPart Z
-        (U.offDiagonalPart Z x))⟫_ℂ =
-        ⟪U.offDiagonalPart Z x, U.offDiagonalPart Z x⟫_ℂ := by
-      rw [← hΩsym x (U.offDiagonalPart Z (U.offDiagonalPart Z x)), hxΩ,
-        ← hSsym x (U.offDiagonalPart Z x)]
+  have hd : RCLike.re ⟪x, Ω.toProj (U.offDiagBlock Z
+        (U.offDiagBlock Z x)) - ((q ^ 2 : ℝ) : ℂ) • x⟫_ℂ =
+      ‖U.offDiagBlock Z x‖ ^ 2 - q ^ 2 := by
+    have h1 : ⟪x, Ω.toProj (U.offDiagBlock Z
+        (U.offDiagBlock Z x))⟫_ℂ =
+        ⟪U.offDiagBlock Z x, U.offDiagBlock Z x⟫_ℂ := by
+      rw [← hΩsym x (U.offDiagBlock Z (U.offDiagBlock Z x)), hxΩ,
+        ← hSsym x (U.offDiagBlock Z x)]
     rw [inner_sub_right, inner_smul_right, h1, inner_self_eq_norm_sq_to_K,
       inner_self_eq_norm_sq_to_K, hx1]
     simp [← Complex.ofReal_pow]
-  calc |‖U.offDiagonalPart Z x‖ ^ 2 - q ^ 2|
-      = |RCLike.re ⟪x, Ω.toProj (U.offDiagonalPart Z
-          (U.offDiagonalPart Z x)) - ((q ^ 2 : ℝ) : ℂ) • x⟫_ℂ| := by rw [hd]
-    _ ≤ ‖⟪x, Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z x)) -
+  calc |‖U.offDiagBlock Z x‖ ^ 2 - q ^ 2|
+      = |RCLike.re ⟪x, Ω.toProj (U.offDiagBlock Z
+          (U.offDiagBlock Z x)) - ((q ^ 2 : ℝ) : ℂ) • x⟫_ℂ| := by rw [hd]
+    _ ≤ ‖⟪x, Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z x)) -
           ((q ^ 2 : ℝ) : ℂ) • x⟫_ℂ‖ := Complex.abs_re_le_norm _
-    _ ≤ ‖x‖ * ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z x)) -
+    _ ≤ ‖x‖ * ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z x)) -
           ((q ^ 2 : ℝ) : ℂ) • x‖ := norm_inner_le_norm _ _
     _ ≤ ε := by rw [hx1, one_mul]; exact heig
 
@@ -630,11 +630,11 @@ theorem gap_mul_sq_le_paired_of_approximateDoubleAngleEigenvector
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     (Ω : TauCeti.BoundedCutoff A U τ) {x : H}
     (hxΩ : Ω.toProj x = x) (hx1 : ‖x‖ = 1) {q ε : ℝ}
-    (heig : ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z x)) -
+    (heig : ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z x)) -
       ((q ^ 2 : ℝ) : ℂ) • x‖ ≤ ε) :
     (b - a) * q ^ 2 ≤ (τ + |b|) * ε +
-      (RCLike.re ⟪B x, U.diagonalPart Z (U.offDiagonalPart Z x)⟫_ℂ -
-        RCLike.re ⟪B (U.diagonalPart Z x), U.offDiagonalPart Z x⟫_ℂ) := by
+      (RCLike.re ⟪B x, U.diagBlock Z (U.offDiagBlock Z x)⟫_ℂ -
+        RCLike.re ⟪B (U.diagBlock Z x), U.offDiagBlock Z x⟫_ℂ) := by
   classical
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
@@ -643,22 +643,22 @@ theorem gap_mul_sq_le_paired_of_approximateDoubleAngleEigenvector
   have hΩsym := TauCeti.inner_swap_of_isSelfAdjoint Ω.isSelfAdjoint
   have hxdom : x ∈ A.domain := Ω.mem_domain_of_eq hxΩ
   have hxU : x ∈ U := Ω.mem_subspace_of_eq hxΩ
-  have hSmem : U.offDiagonalPart Z x ∈ A.domain :=
+  have hSmem : U.offDiagBlock Z x ∈ A.domain :=
     TauCeti.mem_domain_offDiagonalPart hred hZdom ⟨x, hxdom⟩
-  have hSU : U.offDiagonalPart Z x ∈ Uᗮ :=
+  have hSU : U.offDiagBlock Z x ∈ Uᗮ :=
     TauCeti.offDiagonalPart_mem_orthogonal_of_mem U Z hxU
   have hsyl := TauCeti.sylvester_offDiagonalPart_of_mem hred hB hZdom hZcomm
     ⟨x, hxdom⟩ hxU
   have hpair := congrArg
-    (fun w : H => RCLike.re ⟪w, U.offDiagonalPart Z x⟫_ℂ) hsyl
+    (fun w : H => RCLike.re ⟪w, U.offDiagBlock Z x⟫_ℂ) hsyl
   simp only [inner_add_left, map_add] at hpair
-  have hlow : b * ‖U.offDiagonalPart Z x‖ ^ 2 ≤
-      RCLike.re ⟪A ⟨U.offDiagonalPart Z x, hSmem⟩, U.offDiagonalPart Z x⟫_ℂ :=
-    hUb ⟨U.offDiagonalPart Z x, hSmem⟩ hSU
-  have hgram : |‖U.offDiagonalPart Z x‖ ^ 2 - q ^ 2| ≤ ε :=
+  have hlow : b * ‖U.offDiagBlock Z x‖ ^ 2 ≤
+      RCLike.re ⟪A ⟨U.offDiagBlock Z x, hSmem⟩, U.offDiagBlock Z x⟫_ℂ :=
+    hUb ⟨U.offDiagBlock Z x, hSmem⟩ hSU
+  have hgram : |‖U.offDiagBlock Z x‖ ^ 2 - q ^ 2| ≤ ε :=
     abs_norm_sq_offDiagonalPart_sub_le_of_approximate hZsa Ω hxΩ hx1 heig
-  have hblow : b * q ^ 2 - |b| * ε ≤ b * ‖U.offDiagonalPart Z x‖ ^ 2 := by
-    have hkey : |b * (‖U.offDiagonalPart Z x‖ ^ 2 - q ^ 2)| ≤ |b| * ε := by
+  have hblow : b * q ^ 2 - |b| * ε ≤ b * ‖U.offDiagBlock Z x‖ ^ 2 := by
+    have hkey : |b * (‖U.offDiagBlock Z x‖ ^ 2 - q ^ 2)| ≤ |b| * ε := by
       rw [abs_mul]
       exact mul_le_mul_of_nonneg_left hgram (abs_nonneg b)
     nlinarith [neg_le_of_abs_le hkey]
@@ -673,23 +673,23 @@ theorem gap_mul_sq_le_paired_of_approximateDoubleAngleEigenvector
       Subtype.ext hxΩ
     rw [hsub, hxΩ, hx1, mul_one] at h
     exact h
-  have hhigh : RCLike.re ⟪U.offDiagonalPart Z (A ⟨x, hxdom⟩),
-      U.offDiagonalPart Z x⟫_ℂ ≤ a * q ^ 2 + τ * ε := by
-    have h1 : ⟪U.offDiagonalPart Z (A ⟨x, hxdom⟩),
-        U.offDiagonalPart Z x⟫_ℂ =
-        ⟪A ⟨x, hxdom⟩, U.offDiagonalPart Z (U.offDiagonalPart Z x)⟫_ℂ :=
-      hSsym (A ⟨x, hxdom⟩) (U.offDiagonalPart Z x)
+  have hhigh : RCLike.re ⟪U.offDiagBlock Z (A ⟨x, hxdom⟩),
+      U.offDiagBlock Z x⟫_ℂ ≤ a * q ^ 2 + τ * ε := by
+    have h1 : ⟪U.offDiagBlock Z (A ⟨x, hxdom⟩),
+        U.offDiagBlock Z x⟫_ℂ =
+        ⟪A ⟨x, hxdom⟩, U.offDiagBlock Z (U.offDiagBlock Z x)⟫_ℂ :=
+      hSsym (A ⟨x, hxdom⟩) (U.offDiagBlock Z x)
     have h2 : ⟪A ⟨x, hxdom⟩,
-        U.offDiagonalPart Z (U.offDiagonalPart Z x)⟫_ℂ =
+        U.offDiagBlock Z (U.offDiagBlock Z x)⟫_ℂ =
         ⟪A ⟨x, hxdom⟩,
-          Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z x))⟫_ℂ := by
+          Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z x))⟫_ℂ := by
       rw [← hΩsym (A ⟨x, hxdom⟩)
-        (U.offDiagonalPart Z (U.offDiagonalPart Z x)), hAxfix]
+        (U.offDiagBlock Z (U.offDiagBlock Z x)), hAxfix]
     have h3 : ⟪A ⟨x, hxdom⟩,
-        Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z x))⟫_ℂ =
+        Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z x))⟫_ℂ =
         ((q ^ 2 : ℝ) : ℂ) * ⟪A ⟨x, hxdom⟩, x⟫_ℂ +
-          ⟪A ⟨x, hxdom⟩, Ω.toProj (U.offDiagonalPart Z
-            (U.offDiagonalPart Z x)) - ((q ^ 2 : ℝ) : ℂ) • x⟫_ℂ := by
+          ⟪A ⟨x, hxdom⟩, Ω.toProj (U.offDiagBlock Z
+            (U.offDiagBlock Z x)) - ((q ^ 2 : ℝ) : ℂ) • x⟫_ℂ := by
       rw [inner_sub_right, inner_smul_right]
       ring
     rw [h1, h2, h3]
@@ -697,7 +697,7 @@ theorem gap_mul_sq_le_paired_of_approximateDoubleAngleEigenvector
       have h := hUa ⟨x, hxdom⟩ hxU
       rwa [hx1, one_pow, mul_one] at h
     have hleak : RCLike.re ⟪A ⟨x, hxdom⟩,
-        Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z x)) -
+        Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z x)) -
           ((q ^ 2 : ℝ) : ℂ) • x⟫_ℂ ≤ τ * ε := by
       refine le_trans (le_abs_self _) ?_
       refine le_trans (Complex.abs_re_le_norm _) ?_
@@ -706,32 +706,32 @@ theorem gap_mul_sq_le_paired_of_approximateDoubleAngleEigenvector
         (le_trans (norm_nonneg _) hAxnorm)
     rw [map_add, ← Complex.real_smul, RCLike.smul_re]
     nlinarith [hform, hleak, sq_nonneg q]
-  have hmove : RCLike.re ⟪U.diagonalPart Z (B x), U.offDiagonalPart Z x⟫_ℂ =
-      RCLike.re ⟪B x, U.diagonalPart Z (U.offDiagonalPart Z x)⟫_ℂ := by
-    rw [hCsym (B x) (U.offDiagonalPart Z x)]
+  have hmove : RCLike.re ⟪U.diagBlock Z (B x), U.offDiagBlock Z x⟫_ℂ =
+      RCLike.re ⟪B x, U.diagBlock Z (U.offDiagBlock Z x)⟫_ℂ := by
+    rw [hCsym (B x) (U.offDiagBlock Z x)]
   linarith [hpair, hlow, hhigh, hblow, hmove]
 
 /-- The double-angle Pythagoras identity at an arbitrary vector: `‖C v‖² =
 ‖v‖² - ‖S v‖²`, a consequence of `C² + S² = 1` alone. -/
 theorem norm_sq_diagonalPart_apply (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (v : H) :
-    ‖U.diagonalPart Z v‖ ^ 2 =
-      ‖v‖ ^ 2 - ‖U.offDiagonalPart Z v‖ ^ 2 := by
+    ‖U.diagBlock Z v‖ ^ 2 =
+      ‖v‖ ^ 2 - ‖U.offDiagBlock Z v‖ ^ 2 := by
   have hCsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_diagonalPart (U := U) hZsa)
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
-  have hpyth : U.diagonalPart Z (U.diagonalPart Z v) +
-      U.offDiagonalPart Z (U.offDiagonalPart Z v) = v := by
+  have hpyth : U.diagBlock Z (U.diagBlock Z v) +
+      U.offDiagBlock Z (U.offDiagBlock Z v) = v := by
     have h := TauCeti.diagonalPart_sq_add_offDiagonalPart_sq (U := U) hZ2
     have h2 := congrArg (fun T : H →L[ℂ] H => T v) h
     simpa using h2
-  have hCC : ⟪U.diagonalPart Z v, U.diagonalPart Z v⟫_ℂ =
-      ⟪v, U.diagonalPart Z (U.diagonalPart Z v)⟫_ℂ := hCsym v _
-  have hSS : ⟪U.offDiagonalPart Z v, U.offDiagonalPart Z v⟫_ℂ =
-      ⟪v, U.offDiagonalPart Z (U.offDiagonalPart Z v)⟫_ℂ := hSsym v _
-  have hsum : ⟪U.diagonalPart Z v, U.diagonalPart Z v⟫_ℂ +
-      ⟪U.offDiagonalPart Z v, U.offDiagonalPart Z v⟫_ℂ = ⟪v, v⟫_ℂ := by
+  have hCC : ⟪U.diagBlock Z v, U.diagBlock Z v⟫_ℂ =
+      ⟪v, U.diagBlock Z (U.diagBlock Z v)⟫_ℂ := hCsym v _
+  have hSS : ⟪U.offDiagBlock Z v, U.offDiagBlock Z v⟫_ℂ =
+      ⟪v, U.offDiagBlock Z (U.offDiagBlock Z v)⟫_ℂ := hSsym v _
+  have hsum : ⟪U.diagBlock Z v, U.diagBlock Z v⟫_ℂ +
+      ⟪U.offDiagBlock Z v, U.offDiagBlock Z v⟫_ℂ = ⟪v, v⟫_ℂ := by
     rw [hCC, hSS, ← inner_add_right, hpyth]
   have h := congrArg RCLike.re hsum
   simp only [map_add, inner_self_eq_norm_sq_to_K] at h
@@ -752,16 +752,16 @@ theorem abs_norm_sq_offDiagonalPart_sum_sub_le
     {n : ℕ} {x : Fin n → H}
     (hx : Orthonormal ℂ x) (hxΩ : ∀ i, Ω.toProj (x i) = x i)
     {q : Fin n → ℝ} {ε : ℝ}
-    (heig : ∀ i, ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (x i))) -
+    (heig : ∀ i, ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (x i))) -
       ((q i ^ 2 : ℝ) : ℂ) • x i‖ ≤ ε)
     (γ : Fin n → ℂ) :
-    |‖U.offDiagonalPart Z (∑ i, γ i • x i)‖ ^ 2 -
+    |‖U.offDiagBlock Z (∑ i, γ i • x i)‖ ^ 2 -
         ∑ i, ‖γ i‖ ^ 2 * q i ^ 2| ≤
       n * ε * ∑ i, ‖γ i‖ ^ 2 := by
   classical
   set g : H := ∑ i, γ i • x i with hgdef
   set d : Fin n → H := fun i =>
-    Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (x i))) -
+    Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (x i))) -
       ((q i ^ 2 : ℝ) : ℂ) • x i with hddef
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
@@ -771,7 +771,7 @@ theorem abs_norm_sq_offDiagonalPart_sum_sub_le
     exact Finset.sum_congr rfl fun i _ => by rw [map_smul, hxΩ i]
   have hgnorm : ‖g‖ ^ 2 = ∑ i, ‖γ i‖ ^ 2 :=
     norm_sq_sum_smul_of_orthonormal hx γ
-  have hsplit : Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z g)) =
+  have hsplit : Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z g)) =
       (∑ i, (γ i * ((q i ^ 2 : ℝ) : ℂ)) • x i) + ∑ i, γ i • d i := by
     rw [hgdef, map_sum, map_sum, map_sum, ← Finset.sum_add_distrib]
     refine Finset.sum_congr rfl fun i _ => ?_
@@ -794,14 +794,14 @@ theorem abs_norm_sq_offDiagonalPart_sum_sub_le
       _ = n * ε * ‖g‖ := by
           rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
           ring
-  have hkey : ‖U.offDiagonalPart Z g‖ ^ 2 =
-      RCLike.re ⟪g, Ω.toProj (U.offDiagonalPart Z
-        (U.offDiagonalPart Z g))⟫_ℂ := by
-    have h1 : ⟪g, Ω.toProj (U.offDiagonalPart Z
-        (U.offDiagonalPart Z g))⟫_ℂ =
-        ⟪U.offDiagonalPart Z g, U.offDiagonalPart Z g⟫_ℂ := by
-      rw [← hΩsym g (U.offDiagonalPart Z (U.offDiagonalPart Z g)), hgΩ,
-        ← hSsym g (U.offDiagonalPart Z g)]
+  have hkey : ‖U.offDiagBlock Z g‖ ^ 2 =
+      RCLike.re ⟪g, Ω.toProj (U.offDiagBlock Z
+        (U.offDiagBlock Z g))⟫_ℂ := by
+    have h1 : ⟪g, Ω.toProj (U.offDiagBlock Z
+        (U.offDiagBlock Z g))⟫_ℂ =
+        ⟪U.offDiagBlock Z g, U.offDiagBlock Z g⟫_ℂ := by
+      rw [← hΩsym g (U.offDiagBlock Z (U.offDiagBlock Z g)), hgΩ,
+        ← hSsym g (U.offDiagBlock Z g)]
     rw [h1, inner_self_eq_norm_sq_to_K]
     simp [← Complex.ofReal_pow]
   rw [hkey, hsplit, inner_add_right, map_add]
@@ -856,16 +856,16 @@ and `sum_le_kyFanApproximationGauge_of_contraction` applies with constant `1`.
 entry alone.  No eigenvector relation is needed: `‖S x‖² = ⟪x, S² x⟫`. -/
 theorem norm_sq_offDiagonalPart_of_compressedDiagonal
     (hZsa : IsSelfAdjoint Z) {x : H} {q : ℝ}
-    (hself : ⟪x, U.offDiagonalPart Z (U.offDiagonalPart Z x)⟫_ℂ =
+    (hself : ⟪x, U.offDiagBlock Z (U.offDiagBlock Z x)⟫_ℂ =
       ((q ^ 2 : ℝ) : ℂ)) :
-    ‖U.offDiagonalPart Z x‖ ^ 2 = q ^ 2 := by
+    ‖U.offDiagBlock Z x‖ ^ 2 = q ^ 2 := by
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
-  have h : ⟪U.offDiagonalPart Z x, U.offDiagonalPart Z x⟫_ℂ =
+  have h : ⟪U.offDiagBlock Z x, U.offDiagBlock Z x⟫_ℂ =
       ((q ^ 2 : ℝ) : ℂ) := by
-    rw [hSsym x (U.offDiagonalPart Z x)]
+    rw [hSsym x (U.offDiagBlock Z x)]
     exact hself
-  have h2 : ((‖U.offDiagonalPart Z x‖ ^ 2 : ℝ) : ℂ) = ((q ^ 2 : ℝ) : ℂ) := by
+  have h2 : ((‖U.offDiagBlock Z x‖ ^ 2 : ℝ) : ℂ) = ((q ^ 2 : ℝ) : ℂ) := by
     rw [← h, inner_self_eq_norm_sq_to_K]
     norm_cast
   exact_mod_cast h2
@@ -892,53 +892,53 @@ theorem gap_mul_sq_le_paired_of_compressedDoubleAngleEigenvector
     (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     {x : A.domain} (hxU : (x : H) ∈ U) (hx1 : ‖(x : H)‖ = 1) {q : ℝ}
-    (hself : ⟪(x : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z (x : H))⟫_ℂ = ((q ^ 2 : ℝ) : ℂ))
-    (hres : RCLike.re ⟪A x, U.offDiagonalPart Z
-        (U.offDiagonalPart Z (x : H)) - ((q ^ 2 : ℝ) : ℂ) • (x : H)⟫_ℂ ≤ 0) :
+    (hself : ⟪(x : H), U.offDiagBlock Z
+      (U.offDiagBlock Z (x : H))⟫_ℂ = ((q ^ 2 : ℝ) : ℂ))
+    (hres : RCLike.re ⟪A x, U.offDiagBlock Z
+        (U.offDiagBlock Z (x : H)) - ((q ^ 2 : ℝ) : ℂ) • (x : H)⟫_ℂ ≤ 0) :
     (b - a) * q ^ 2 ≤
       RCLike.re ⟪B (x : H),
-          U.diagonalPart Z (U.offDiagonalPart Z (x : H))⟫_ℂ -
-        RCLike.re ⟪B (U.diagonalPart Z (x : H)),
-          U.offDiagonalPart Z (x : H)⟫_ℂ := by
+          U.diagBlock Z (U.offDiagBlock Z (x : H))⟫_ℂ -
+        RCLike.re ⟪B (U.diagBlock Z (x : H)),
+          U.offDiagBlock Z (x : H)⟫_ℂ := by
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
   have hCsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_diagonalPart (U := U) hZsa)
-  have hSmem : U.offDiagonalPart Z (x : H) ∈ A.domain :=
+  have hSmem : U.offDiagBlock Z (x : H) ∈ A.domain :=
     TauCeti.mem_domain_offDiagonalPart hred hZdom x
-  have hSU : U.offDiagonalPart Z (x : H) ∈ Uᗮ :=
+  have hSU : U.offDiagBlock Z (x : H) ∈ Uᗮ :=
     TauCeti.offDiagonalPart_mem_orthogonal_of_mem U Z hxU
-  have hnormS : ‖U.offDiagonalPart Z (x : H)‖ ^ 2 = q ^ 2 :=
+  have hnormS : ‖U.offDiagBlock Z (x : H)‖ ^ 2 = q ^ 2 :=
     norm_sq_offDiagonalPart_of_compressedDiagonal (U := U) hZsa hself
   have hsyl := TauCeti.sylvester_offDiagonalPart_of_mem hred hB hZdom hZcomm x hxU
   have hpair := congrArg
-    (fun w : H => RCLike.re ⟪w, U.offDiagonalPart Z (x : H)⟫_ℂ) hsyl
+    (fun w : H => RCLike.re ⟪w, U.offDiagBlock Z (x : H)⟫_ℂ) hsyl
   simp only [inner_add_left, map_add] at hpair
   have hlow : b * q ^ 2 ≤
-      RCLike.re ⟪A ⟨U.offDiagonalPart Z (x : H), hSmem⟩,
-        U.offDiagonalPart Z (x : H)⟫_ℂ := by
-    have h := hUb ⟨U.offDiagonalPart Z (x : H), hSmem⟩ hSU
-    calc b * q ^ 2 = b * ‖U.offDiagonalPart Z (x : H)‖ ^ 2 := by rw [hnormS]
+      RCLike.re ⟪A ⟨U.offDiagBlock Z (x : H), hSmem⟩,
+        U.offDiagBlock Z (x : H)⟫_ℂ := by
+    have h := hUb ⟨U.offDiagBlock Z (x : H), hSmem⟩ hSU
+    calc b * q ^ 2 = b * ‖U.offDiagBlock Z (x : H)‖ ^ 2 := by rw [hnormS]
       _ ≤ _ := h
-  have hhigh : RCLike.re ⟪U.offDiagonalPart Z (A x),
-      U.offDiagonalPart Z (x : H)⟫_ℂ ≤ a * q ^ 2 := by
-    have hswap : ⟪U.offDiagonalPart Z (A x), U.offDiagonalPart Z (x : H)⟫_ℂ =
+  have hhigh : RCLike.re ⟪U.offDiagBlock Z (A x),
+      U.offDiagBlock Z (x : H)⟫_ℂ ≤ a * q ^ 2 := by
+    have hswap : ⟪U.offDiagBlock Z (A x), U.offDiagBlock Z (x : H)⟫_ℂ =
         ((q ^ 2 : ℝ) : ℂ) * ⟪A x, (x : H)⟫_ℂ +
-          ⟪A x, U.offDiagonalPart Z (U.offDiagonalPart Z (x : H)) -
+          ⟪A x, U.offDiagBlock Z (U.offDiagBlock Z (x : H)) -
             ((q ^ 2 : ℝ) : ℂ) • (x : H)⟫_ℂ := by
-      rw [hSsym (A x) (U.offDiagonalPart Z (x : H)), inner_sub_right,
+      rw [hSsym (A x) (U.offDiagBlock Z (x : H)), inner_sub_right,
         inner_smul_right]
       ring
     rw [hswap, map_add, ← Complex.real_smul, RCLike.smul_re]
     have hx := hUa x hxU
     rw [hx1, one_pow, mul_one] at hx
     nlinarith [sq_nonneg q, hx, hres]
-  have hmove : RCLike.re ⟪U.diagonalPart Z (B (x : H)),
-      U.offDiagonalPart Z (x : H)⟫_ℂ =
+  have hmove : RCLike.re ⟪U.diagBlock Z (B (x : H)),
+      U.offDiagBlock Z (x : H)⟫_ℂ =
       RCLike.re ⟪B (x : H),
-        U.diagonalPart Z (U.offDiagonalPart Z (x : H))⟫_ℂ := by
-    rw [hCsym (B (x : H)) (U.offDiagonalPart Z (x : H))]
+        U.diagBlock Z (U.offDiagBlock Z (x : H))⟫_ℂ := by
+    rw [hCsym (B (x : H)) (U.offDiagBlock Z (x : H))]
   rw [hmove] at hpair
   linarith [hpair, hlow, hhigh]
 
@@ -948,26 +948,26 @@ the contraction argument needs, the deficit being the leakage `‖S² x‖² - q
 theorem norm_sq_diagonalPart_of_compressedDiagonal
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     {x : H} (hx1 : ‖x‖ = 1) {q : ℝ}
-    (hself : ⟪x, U.offDiagonalPart Z (U.offDiagonalPart Z x)⟫_ℂ =
+    (hself : ⟪x, U.offDiagBlock Z (U.offDiagBlock Z x)⟫_ℂ =
       ((q ^ 2 : ℝ) : ℂ)) :
-    ‖U.diagonalPart Z x‖ ^ 2 = 1 - q ^ 2 ∧
-      ‖U.diagonalPart Z (U.offDiagonalPart Z x)‖ ^ 2 ≤
+    ‖U.diagBlock Z x‖ ^ 2 = 1 - q ^ 2 ∧
+      ‖U.diagBlock Z (U.offDiagBlock Z x)‖ ^ 2 ≤
         q ^ 2 * (1 - q ^ 2) := by
-  have hnormS : ‖U.offDiagonalPart Z x‖ ^ 2 = q ^ 2 :=
+  have hnormS : ‖U.offDiagBlock Z x‖ ^ 2 = q ^ 2 :=
     norm_sq_offDiagonalPart_of_compressedDiagonal (U := U) hZsa hself
   have hCx := norm_sq_diagonalPart_apply (U := U) hZsa hZ2 x
   have hCSx := norm_sq_diagonalPart_apply (U := U) hZsa hZ2
-    (U.offDiagonalPart Z x)
+    (U.offDiagBlock Z x)
   have hbig : q ^ 2 * q ^ 2 ≤
-      ‖U.offDiagonalPart Z (U.offDiagonalPart Z x)‖ ^ 2 := by
+      ‖U.offDiagBlock Z (U.offDiagBlock Z x)‖ ^ 2 := by
     have h1 : ‖((q ^ 2 : ℝ) : ℂ)‖ ≤
-        ‖x‖ * ‖U.offDiagonalPart Z (U.offDiagonalPart Z x)‖ := by
+        ‖x‖ * ‖U.offDiagBlock Z (U.offDiagBlock Z x)‖ := by
       rw [← hself]
       exact norm_inner_le_norm _ _
     rw [hx1, one_mul, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg (sq_nonneg q)] at h1
     nlinarith [h1, sq_nonneg q,
-      norm_nonneg (U.offDiagonalPart Z (U.offDiagonalPart Z x))]
+      norm_nonneg (U.offDiagBlock Z (U.offDiagBlock Z x))]
   refine ⟨by rw [hCx, hx1, hnormS]; ring, ?_⟩
   rw [hCSx, hnormS]
   nlinarith [hbig]
@@ -989,23 +989,23 @@ theorem compressedDoubleAngleEigenvalue_lt_one
     (hab : a < b)
     {x : A.domain} (hxU : (x : H) ∈ U) (hx1 : ‖(x : H)‖ = 1) {q : ℝ}
     (hq : 0 < q)
-    (hself : ⟪(x : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z (x : H))⟫_ℂ = ((q ^ 2 : ℝ) : ℂ))
-    (hres : RCLike.re ⟪A x, U.offDiagonalPart Z
-        (U.offDiagonalPart Z (x : H)) - ((q ^ 2 : ℝ) : ℂ) • (x : H)⟫_ℂ ≤ 0) :
+    (hself : ⟪(x : H), U.offDiagBlock Z
+      (U.offDiagBlock Z (x : H))⟫_ℂ = ((q ^ 2 : ℝ) : ℂ))
+    (hres : RCLike.re ⟪A x, U.offDiagBlock Z
+        (U.offDiagBlock Z (x : H)) - ((q ^ 2 : ℝ) : ℂ) • (x : H)⟫_ℂ ≤ 0) :
     q < 1 := by
   obtain ⟨hCx, hCSx⟩ := norm_sq_diagonalPart_of_compressedDiagonal
     (U := U) hZsa hZ2 hx1 hself
   by_contra hcon
   have hcon : 1 ≤ q := not_lt.mp hcon
-  have hnn := sq_nonneg ‖U.diagonalPart Z (x : H)‖
+  have hnn := sq_nonneg ‖U.diagBlock Z (x : H)‖
   have hq1 : q ^ 2 = 1 := by nlinarith [hCx, hnn]
-  have hCx0 : U.diagonalPart Z (x : H) = 0 := by
+  have hCx0 : U.diagBlock Z (x : H) = 0 := by
     refine norm_eq_zero.mp ?_
-    nlinarith [norm_nonneg (U.diagonalPart Z (x : H)), hCx, hq1]
-  have hCSx0 : U.diagonalPart Z (U.offDiagonalPart Z (x : H)) = 0 := by
+    nlinarith [norm_nonneg (U.diagBlock Z (x : H)), hCx, hq1]
+  have hCSx0 : U.diagBlock Z (U.offDiagBlock Z (x : H)) = 0 := by
     refine norm_eq_zero.mp ?_
-    nlinarith [norm_nonneg (U.diagonalPart Z (U.offDiagonalPart Z (x : H))),
+    nlinarith [norm_nonneg (U.diagBlock Z (U.offDiagBlock Z (x : H))),
       hCSx, hq1]
   have hmain := gap_mul_sq_le_paired_of_compressedDoubleAngleEigenvector hred hB
     hZsa hZdom hZcomm hUa hUb hxU hx1 hself hres
@@ -1028,13 +1028,13 @@ appears.  Only the third system, handled separately, acquires a defect. -/
 theorem inner_of_compressedDoubleAngleEigenfamily
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1) {n : ℕ} (x : Fin n → H)
     (hx : Orthonormal ℂ x) {q : Fin n → ℝ}
-    (hgram : ∀ i j, ⟪x j, U.offDiagonalPart Z
-        (U.offDiagonalPart Z (x i))⟫_ℂ =
+    (hgram : ∀ i j, ⟪x j, U.offDiagBlock Z
+        (U.offDiagBlock Z (x i))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0))
     (i j : Fin n) :
-    ⟪U.offDiagonalPart Z (x i), U.offDiagonalPart Z (x j)⟫_ℂ =
+    ⟪U.offDiagBlock Z (x i), U.offDiagBlock Z (x j)⟫_ℂ =
         (((q j) ^ 2 : ℝ) : ℂ) * (if i = j then (1 : ℂ) else 0) ∧
-      ⟪U.diagonalPart Z (x i), U.diagonalPart Z (x j)⟫_ℂ =
+      ⟪U.diagBlock Z (x i), U.diagBlock Z (x j)⟫_ℂ =
         ((1 - (q j) ^ 2 : ℝ) : ℂ) * (if i = j then (1 : ℂ) else 0) := by
   classical
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
@@ -1043,22 +1043,22 @@ theorem inner_of_compressedDoubleAngleEigenfamily
     (TauCeti.isSelfAdjoint_diagonalPart (U := U) hZsa)
   have hite : ⟪x i, x j⟫_ℂ = if i = j then (1 : ℂ) else 0 :=
     (orthonormal_iff_ite.mp hx) i j
-  have hpyth : ∀ v : H, U.diagonalPart Z (U.diagonalPart Z v) +
-      U.offDiagonalPart Z (U.offDiagonalPart Z v) = v := by
+  have hpyth : ∀ v : H, U.diagBlock Z (U.diagBlock Z v) +
+      U.offDiagBlock Z (U.offDiagBlock Z v) = v := by
     intro v
     have h := TauCeti.diagonalPart_sq_add_offDiagonalPart_sq (U := U) hZ2
     have h2 := congrArg (fun T : H →L[ℂ] H => T v) h
     simpa using h2
-  have hSS : ⟪U.offDiagonalPart Z (x i), U.offDiagonalPart Z (x j)⟫_ℂ =
+  have hSS : ⟪U.offDiagBlock Z (x i), U.offDiagBlock Z (x j)⟫_ℂ =
       (((q j) ^ 2 : ℝ) : ℂ) * (if i = j then (1 : ℂ) else 0) := by
-    rw [hSsym (x i) (U.offDiagonalPart Z (x j))]
+    rw [hSsym (x i) (U.offDiagBlock Z (x j))]
     exact hgram j i
   refine ⟨hSS, ?_⟩
-  have hCC : ⟪U.diagonalPart Z (x i), U.diagonalPart Z (x j)⟫_ℂ =
-      ⟪x i, U.diagonalPart Z (U.diagonalPart Z (x j))⟫_ℂ :=
-    hCsym (x i) (U.diagonalPart Z (x j))
-  have hsplit : U.diagonalPart Z (U.diagonalPart Z (x j)) =
-      x j - U.offDiagonalPart Z (U.offDiagonalPart Z (x j)) := by
+  have hCC : ⟪U.diagBlock Z (x i), U.diagBlock Z (x j)⟫_ℂ =
+      ⟪x i, U.diagBlock Z (U.diagBlock Z (x j))⟫_ℂ :=
+    hCsym (x i) (U.diagBlock Z (x j))
+  have hsplit : U.diagBlock Z (U.diagBlock Z (x j)) =
+      x j - U.offDiagBlock Z (U.offDiagBlock Z (x j)) := by
     have h := hpyth (x j)
     linear_combination (norm := module) h
   rw [hCC, hsplit, inner_sub_right, hite, hgram j i]
@@ -1087,12 +1087,12 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_compressed
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1) {n : ℕ} (x : Fin n → H)
     (hx : Orthonormal ℂ x) {q : Fin n → ℝ} (hq : ∀ i, 0 < q i)
     (hq1 : ∀ i, q i < 1)
-    (hgram : ∀ i j, ⟪x j, U.offDiagonalPart Z
-        (U.offDiagonalPart Z (x i))⟫_ℂ =
+    (hgram : ∀ i j, ⟪x j, U.offDiagBlock Z
+        (U.offDiagBlock Z (x i))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0))
     (α : Fin n → ℂ) :
     ‖∑ i, α i • ((((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z (U.offDiagonalPart Z (x i)))‖ ^ 2 ≤
+        U.diagBlock Z (U.offDiagBlock Z (x i)))‖ ^ 2 ≤
       (1 : ℝ) ^ 2 * ∑ i, ‖α i‖ ^ 2 := by
   classical
   have hc0 : ∀ i, 0 < 1 - (q i) ^ 2 := fun i => by nlinarith [hq i, hq1 i]
@@ -1112,25 +1112,25 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_compressed
   obtain ⟨g, hgdef⟩ : ∃ g : H, g = ∑ i, β i • x i := ⟨_, rfl⟩
   -- the combination is `C S g`
   have hcomb : ∑ i, α i • ((((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-      U.diagonalPart Z (U.offDiagonalPart Z (x i))) =
-      U.diagonalPart Z (U.offDiagonalPart Z g) := by
+      U.diagBlock Z (U.offDiagBlock Z (x i))) =
+      U.diagBlock Z (U.offDiagBlock Z g) := by
     rw [hgdef, map_sum, map_sum]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [map_smul, map_smul, smul_smul]
     simp only [hβdef]
   -- the first auxiliary system is orthonormal
   have hyon : Orthonormal ℂ fun i =>
-      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)) :=
+      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i)) :=
     orthonormal_scaled_of_inner_eq hq fun i j =>
       (inner_of_compressedDoubleAngleEigenfamily (U := U) hZsa hZ2 x hx
         hgram i j).1
   -- `‖S g‖² = ∑ |βᵢ|² qᵢ²`
-  have hSg : U.offDiagonalPart Z g = ∑ i, (β i * ((q i : ℝ) : ℂ)) •
-      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)) := by
+  have hSg : U.offDiagBlock Z g = ∑ i, (β i * ((q i : ℝ) : ℂ)) •
+      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i)) := by
     rw [hgdef, map_sum]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [map_smul, smul_smul, mul_assoc, mul_inv_cancel₀ (hqne i), mul_one]
-  have hnormSg : ‖U.offDiagonalPart Z g‖ ^ 2 = ∑ i, ‖β i‖ ^ 2 * q i ^ 2 := by
+  have hnormSg : ‖U.offDiagBlock Z g‖ ^ 2 = ∑ i, ‖β i‖ ^ 2 * q i ^ 2 := by
     rw [hSg, norm_sq_sum_smul_of_orthonormal hyon]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos (hq i)]
@@ -1144,11 +1144,11 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_compressed
     rw [norm_mul, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg (sq_nonneg (q i))]
     ring
-  have hSSg : U.offDiagonalPart Z (U.offDiagonalPart Z g) =
-      ∑ j, β j • U.offDiagonalPart Z (U.offDiagonalPart Z (x j)) := by
+  have hSSg : U.offDiagBlock Z (U.offDiagBlock Z g) =
+      ∑ j, β j • U.offDiagBlock Z (U.offDiagBlock Z (x j)) := by
     rw [hgdef, map_sum, map_sum]
     exact Finset.sum_congr rfl fun j _ => by rw [map_smul, map_smul]
-  have hxi : ∀ i, ⟪x i, U.offDiagonalPart Z (U.offDiagonalPart Z g)⟫_ℂ =
+  have hxi : ∀ i, ⟪x i, U.offDiagBlock Z (U.offDiagBlock Z g)⟫_ℂ =
       β i * (((q i) ^ 2 : ℝ) : ℂ) := by
     intro i
     rw [hSSg, inner_sum, Finset.sum_eq_single i]
@@ -1158,7 +1158,7 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_compressed
     · intro hi
       exact absurd (Finset.mem_univ i) hi
   have hterm : ∀ i : Fin n, ⟪(β i * (((q i) ^ 2 : ℝ) : ℂ)) • x i,
-      U.offDiagonalPart Z (U.offDiagonalPart Z g)⟫_ℂ =
+      U.offDiagBlock Z (U.offDiagBlock Z g)⟫_ℂ =
       ((‖β i‖ ^ 2 * q i ^ 4 : ℝ) : ℂ) := by
     intro i
     have hnz : ‖β i * (((q i) ^ 2 : ℝ) : ℂ)‖ ^ 2 = ‖β i‖ ^ 2 * q i ^ 4 := by
@@ -1166,18 +1166,18 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_compressed
         abs_of_nonneg (sq_nonneg (q i))]
       ring
     rw [inner_smul_left, hxi i, conj_mul_eq_ofReal_norm_sq, hnz]
-  have hinner : ⟪p, U.offDiagonalPart Z (U.offDiagonalPart Z g)⟫_ℂ =
+  have hinner : ⟪p, U.offDiagBlock Z (U.offDiagBlock Z g)⟫_ℂ =
       ((‖p‖ ^ 2 : ℝ) : ℂ) := by
     rw [hpnorm, hpdef, sum_inner, Finset.sum_congr rfl fun i _ => hterm i]
     push_cast
     ring
-  have hple : ‖p‖ ≤ ‖U.offDiagonalPart Z (U.offDiagonalPart Z g)‖ := by
+  have hple : ‖p‖ ≤ ‖U.offDiagBlock Z (U.offDiagBlock Z g)‖ := by
     have hre : ‖p‖ ^ 2 ≤
-        ‖p‖ * ‖U.offDiagonalPart Z (U.offDiagonalPart Z g)‖ := by
+        ‖p‖ * ‖U.offDiagBlock Z (U.offDiagBlock Z g)‖ := by
       have h1 : ((‖p‖ ^ 2 : ℝ) : ℂ) =
-          ⟪p, U.offDiagonalPart Z (U.offDiagonalPart Z g)⟫_ℂ := hinner.symm
+          ⟪p, U.offDiagBlock Z (U.offDiagBlock Z g)⟫_ℂ := hinner.symm
       have h2 : ‖((‖p‖ ^ 2 : ℝ) : ℂ)‖ ≤
-          ‖p‖ * ‖U.offDiagonalPart Z (U.offDiagonalPart Z g)‖ := by
+          ‖p‖ * ‖U.offDiagBlock Z (U.offDiagBlock Z g)‖ := by
         rw [h1]
         exact norm_inner_le_norm _ _
       rwa [Complex.norm_real, Real.norm_eq_abs,
@@ -1187,13 +1187,13 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_compressed
     · rw [← h]
       exact norm_nonneg _
   have hSSglow : ∑ i, ‖β i‖ ^ 2 * q i ^ 4 ≤
-      ‖U.offDiagonalPart Z (U.offDiagonalPart Z g)‖ ^ 2 := by
+      ‖U.offDiagBlock Z (U.offDiagBlock Z g)‖ ^ 2 := by
     rw [← hpnorm]
     have := mul_self_le_mul_self (norm_nonneg p) hple
     nlinarith [this]
   -- assemble
   have hpythg := norm_sq_diagonalPart_apply (U := U) hZsa hZ2
-    (U.offDiagonalPart Z g)
+    (U.offDiagBlock Z g)
   have hfinal : ∑ i, ‖β i‖ ^ 2 * q i ^ 2 - ∑ i, ‖β i‖ ^ 2 * q i ^ 4 =
       ∑ i, ‖α i‖ ^ 2 := by
     rw [← Finset.sum_sub_distrib]
@@ -1231,17 +1231,17 @@ theorem re_inner_compressedResidual_eq_zero_of_apply_eq_sum
     {n : ℕ} (x : Fin n → A.domain)
     (hxon : Orthonormal ℂ fun i => ((x i : A.domain) : H))
     {q : Fin n → ℝ}
-    (hgram : ∀ i j, ⟪((x j : A.domain) : H), U.offDiagonalPart Z
-        (U.offDiagonalPart Z ((x i : A.domain) : H))⟫_ℂ =
+    (hgram : ∀ i j, ⟪((x j : A.domain) : H), U.offDiagBlock Z
+        (U.offDiagBlock Z ((x i : A.domain) : H))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0))
     {i : Fin n} {γ : Fin n → ℂ}
     (hA : A (x i) = ∑ j, γ j • ((x j : A.domain) : H)) :
-    RCLike.re ⟪A (x i), U.offDiagonalPart Z
-        (U.offDiagonalPart Z ((x i : A.domain) : H)) -
+    RCLike.re ⟪A (x i), U.offDiagBlock Z
+        (U.offDiagBlock Z ((x i : A.domain) : H)) -
           (((q i) ^ 2 : ℝ) : ℂ) • ((x i : A.domain) : H)⟫_ℂ = 0 := by
   classical
-  have hz : ⟪A (x i), U.offDiagonalPart Z
-      (U.offDiagonalPart Z ((x i : A.domain) : H)) -
+  have hz : ⟪A (x i), U.offDiagBlock Z
+      (U.offDiagBlock Z ((x i : A.domain) : H)) -
         (((q i) ^ 2 : ℝ) : ℂ) • ((x i : A.domain) : H)⟫_ℂ = 0 := by
     rw [hA, sum_inner]
     refine Finset.sum_eq_zero fun j _ => ?_
@@ -1280,18 +1280,18 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
     (hxU : ∀ i, ((x i : A.domain) : H) ∈ U)
     (hxon : Orthonormal ℂ fun i => ((x i : A.domain) : H))
     {q : Fin n → ℝ} (hq : ∀ i, 0 < q i)
-    (hgram : ∀ i j, ⟪((x j : A.domain) : H), U.offDiagonalPart Z
-        (U.offDiagonalPart Z ((x i : A.domain) : H))⟫_ℂ =
+    (hgram : ∀ i j, ⟪((x j : A.domain) : H), U.offDiagBlock Z
+        (U.offDiagBlock Z ((x i : A.domain) : H))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0))
-    (hres : ∀ i, RCLike.re ⟪A (x i), U.offDiagonalPart Z
-        (U.offDiagonalPart Z ((x i : A.domain) : H)) -
+    (hres : ∀ i, RCLike.re ⟪A (x i), U.offDiagBlock Z
+        (U.offDiagBlock Z ((x i : A.domain) : H)) -
           (((q i) ^ 2 : ℝ) : ℂ) • ((x i : A.domain) : H)⟫_ℂ ≤ 0) :
     (b - a) * ∑ i, q i / √(1 - (q i) ^ 2) ≤
       2 * kyFanApproximationGauge n B := by
   classical
   have hx1 : ∀ i, ‖((x i : A.domain) : H)‖ = 1 := fun i => hxon.norm_eq_one i
-  have hself : ∀ i, ⟪((x i : A.domain) : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z ((x i : A.domain) : H))⟫_ℂ =
+  have hself : ∀ i, ⟪((x i : A.domain) : H), U.offDiagBlock Z
+      (U.offDiagBlock Z ((x i : A.domain) : H))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) := fun i => by
     rw [hgram i i, ite_eq_left rfl, mul_one]
   have hq1 : ∀ i, q i < 1 := fun i =>
@@ -1305,16 +1305,16 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
     hZsa hZ2 (fun i => ((x i : A.domain) : H)) hxon hgram i j
   -- the two exactly orthonormal auxiliary systems
   have hyon : Orthonormal ℂ fun i =>
-      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z ((x i : A.domain) : H)) :=
+      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z ((x i : A.domain) : H)) :=
     orthonormal_scaled_of_inner_eq hq fun i j => (hgram2 i j).1
   have huon : Orthonormal ℂ fun i =>
       (((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z ((x i : A.domain) : H)) :=
+        U.diagBlock Z ((x i : A.domain) : H)) :=
     orthonormal_scaled_of_inner_eq hcpos fun i j => by
       rw [Real.sq_sqrt (hc0 j).le]
       exact (hgram2 i j).2
   have hnegon : Orthonormal ℂ fun i =>
-      -(((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z ((x i : A.domain) : H)) := by
+      -(((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z ((x i : A.domain) : H)) := by
     have h := orthonormal_signFlip hyon (fun _ => false)
     simpa using h
   -- the one contraction system
@@ -1323,32 +1323,32 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
   -- the per-index estimate, divided by `qᵢ cᵢ`
   have hstep : ∀ i, (b - a) * (q i / √(1 - (q i) ^ 2)) ≤
       RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
         B ((x i : A.domain) : H)⟫_ℂ +
       RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-          U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.offDiagBlock Z ((x i : A.domain) : H)),
         B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ := by
+          U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ := by
     intro i
     have hqc : 0 < q i * √(1 - (q i) ^ 2) := mul_pos (hq i) (hcpos i)
     have hmain := gap_mul_sq_le_paired_of_compressedDoubleAngleEigenvector hred
       hB hZsa hZdom hZcomm hUa hUb (hxU i) (hx1 i) (hself i) (hres i)
     have hterm1 : RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+        U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
         B ((x i : A.domain) : H)⟫_ℂ =
         (q i * √(1 - (q i) ^ 2))⁻¹ *
           RCLike.re ⟪B ((x i : A.domain) : H),
-            U.diagonalPart Z (U.offDiagonalPart Z
+            U.diagBlock Z (U.offDiagBlock Z
               ((x i : A.domain) : H))⟫_ℂ := by
       rw [inner_smul_left, ← Complex.ofReal_inv, Complex.conj_ofReal,
         ← Complex.real_smul, RCLike.smul_re, inner_re_symm]
     have hterm2 : RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-        U.offDiagonalPart Z ((x i : A.domain) : H)),
+        U.offDiagBlock Z ((x i : A.domain) : H)),
         B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ =
+          U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ =
         -((q i * √(1 - (q i) ^ 2))⁻¹ *
-          RCLike.re ⟪B (U.diagonalPart Z ((x i : A.domain) : H)),
-            U.offDiagonalPart Z ((x i : A.domain) : H)⟫_ℂ) := by
+          RCLike.re ⟪B (U.diagBlock Z ((x i : A.domain) : H)),
+            U.offDiagBlock Z ((x i : A.domain) : H)⟫_ℂ) := by
       rw [mul_inv]
       simp only [map_smul, inner_neg_left, inner_smul_left, inner_smul_right,
         ← Complex.ofReal_inv, Complex.conj_ofReal]
@@ -1363,7 +1363,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
     have hpos : (0 : ℝ) ≤ (q i * √(1 - (q i) ^ 2))⁻¹ := by positivity
     nlinarith [mul_le_mul_of_nonneg_left hmain hpos]
   have hsum1 : ∑ i, RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-      U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+      U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
       B ((x i : A.domain) : H)⟫_ℂ ≤ kyFanApproximationGauge n B := by
     have h := sum_le_kyFanApproximationGauge_of_contraction B zero_le_one
       zero_le_one hcontr
@@ -1371,28 +1371,28 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
       (fun _ => le_rfl)
     simpa using h
   have hsum2 : ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-      U.offDiagonalPart Z ((x i : A.domain) : H)),
+      U.offDiagBlock Z ((x i : A.domain) : H)),
       B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ ≤
+        U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ ≤
       kyFanApproximationGauge n B :=
     sum_le_kyFanApproximationGauge_of_orthonormal B hnegon huon (fun _ => le_rfl)
   calc (b - a) * ∑ i, q i / √(1 - (q i) ^ 2)
       = ∑ i, (b - a) * (q i / √(1 - (q i) ^ 2)) := by rw [Finset.mul_sum]
     _ ≤ ∑ i, (RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
           B ((x i : A.domain) : H)⟫_ℂ +
           RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-            U.offDiagonalPart Z ((x i : A.domain) : H)),
+            U.offDiagBlock Z ((x i : A.domain) : H)),
             B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-              U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ) :=
+              U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ) :=
         Finset.sum_le_sum fun i _ => hstep i
     _ = (∑ i, RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z (U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
           B ((x i : A.domain) : H)⟫_ℂ) +
         ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
-          U.offDiagonalPart Z ((x i : A.domain) : H)),
+          U.offDiagBlock Z ((x i : A.domain) : H)),
           B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
-            U.diagonalPart Z ((x i : A.domain) : H)))⟫_ℂ :=
+            U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ :=
         Finset.sum_add_distrib
     _ ≤ 2 * kyFanApproximationGauge n B := by linarith [hsum1, hsum2]
 
@@ -1411,11 +1411,11 @@ def IsCompressedDoubleAngleEigenbasis (A : H →ₗ.[ℂ] H) (U : Submodule ℂ 
     (∀ i, ((y i : A.domain) : H) ∈ U) ∧
       (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
       (∀ i, 0 < q i) ∧
-      (∀ i j, ⟪((y j : A.domain) : H), U.offDiagonalPart Z
-          (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+      (∀ i j, ⟪((y j : A.domain) : H), U.offDiagBlock Z
+          (U.offDiagBlock Z ((y i : A.domain) : H))⟫_ℂ =
         (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0)) ∧
-      (∀ i, RCLike.re ⟪A (y i), U.offDiagonalPart Z
-          (U.offDiagonalPart Z ((y i : A.domain) : H)) -
+      (∀ i, RCLike.re ⟪A (y i), U.offDiagBlock Z
+          (U.offDiagBlock Z ((y i : A.domain) : H)) -
             (((q i) ^ 2 : ℝ) : ℂ) • ((y i : A.domain) : H)⟫_ℂ ≤ 0) ∧
       kyFanApproximationGauge k T ≤ ∑ i, q i / √(1 - (q i) ^ 2)
 
@@ -1553,13 +1553,13 @@ Two honest limits of the passage, both visible in the statements below.
 -/
 
 /-- The compression of `S² = sin² 2Θ` to a subspace `W`, as a linear map of `W`:
-`w ↦ P_W (S (S w))` for the odd block `S = U.offDiagonalPart Z`. -/
+`w ↦ P_W (S (S w))` for the odd block `S = U.offDiagBlock Z`. -/
 def offDiagonalSqCompression (U : Submodule ℂ H) [U.HasOrthogonalProjection]
     (Z : H →L[ℂ] H) (W : Submodule ℂ H) [W.HasOrthogonalProjection] :
     W →ₗ[ℂ] W :=
   (W.orthogonalProjectionOnto.comp
-    ((U.offDiagonalPart Z).comp
-      ((U.offDiagonalPart Z).comp W.subtypeL))).toLinearMap
+    ((U.offDiagBlock Z).comp
+      ((U.offDiagBlock Z).comp W.subtypeL))).toLinearMap
 
 omit [CompleteSpace H] in
 /-- Pointwise form of the compression. -/
@@ -1567,7 +1567,7 @@ theorem offDiagonalSqCompression_apply (W : Submodule ℂ H)
     [W.HasOrthogonalProjection] (w : W) :
     offDiagonalSqCompression U Z W w =
       W.orthogonalProjectionOnto
-        (U.offDiagonalPart Z (U.offDiagonalPart Z (w : H))) := rfl
+        (U.offDiagBlock Z (U.offDiagBlock Z (w : H))) := rfl
 
 /-- **The compression of `S²` is symmetric.**  `S` is self-adjoint because `Z`
 is, and an orthogonal projection is self-adjoint, so the compression of a
@@ -1582,8 +1582,8 @@ theorem isSymmetric_offDiagonalSqCompression (hZsa : IsSelfAdjoint Z)
   rw [offDiagonalSqCompression_apply, offDiagonalSqCompression_apply,
     Submodule.inner_orthogonalProjectionOnto_eq_of_mem_right,
     Submodule.inner_orthogonalProjectionOnto_eq_of_mem_left]
-  rw [hSsym (U.offDiagonalPart Z (w : H)) (w' : H),
-    hSsym (w : H) (U.offDiagonalPart Z (w' : H))]
+  rw [hSsym (U.offDiagBlock Z (w : H)) (w' : H),
+    hSsym (w : H) (U.offDiagBlock Z (w' : H))]
 
 /-- **The construction term: a compressed double-angle eigenfamily on any
 finite-dimensional `A`-invariant trial subspace.**
@@ -1613,11 +1613,11 @@ theorem exists_compressedDoubleAngleEigenfamily_of_invariantSubspace
         (∀ i, ((y i : A.domain) : H) ∈ U) ∧
         (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
         (∀ i, 0 ≤ q i) ∧
-        (∀ i j, ⟪((y j : A.domain) : H), U.offDiagonalPart Z
-            (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+        (∀ i j, ⟪((y j : A.domain) : H), U.offDiagBlock Z
+            (U.offDiagBlock Z ((y i : A.domain) : H))⟫_ℂ =
           (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0)) ∧
-        (∀ i, RCLike.re ⟪A (y i), U.offDiagonalPart Z
-            (U.offDiagonalPart Z ((y i : A.domain) : H)) -
+        (∀ i, RCLike.re ⟪A (y i), U.offDiagBlock Z
+            (U.offDiagBlock Z ((y i : A.domain) : H)) -
               (((q i) ^ 2 : ℝ) : ℂ) • ((y i : A.domain) : H)⟫_ℂ = 0) := by
   classical
   have hsym := isSymmetric_offDiagonalSqCompression (U := U) (Z := Z) hZsa W
@@ -1625,12 +1625,12 @@ theorem exists_compressedDoubleAngleEigenfamily_of_invariantSubspace
   set μ := hsym.eigenvalues hk with hμ
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
-  have hgram0 : ∀ i j, ⟪((e j : W) : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z ((e i : W) : H))⟫_ℂ =
+  have hgram0 : ∀ i j, ⟪((e j : W) : H), U.offDiagBlock Z
+      (U.offDiagBlock Z ((e i : W) : H))⟫_ℂ =
       ((μ i : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0) := by
     intro i j
-    have h1 : ⟪((e j : W) : H), U.offDiagonalPart Z
-        (U.offDiagonalPart Z ((e i : W) : H))⟫_ℂ =
+    have h1 : ⟪((e j : W) : H), U.offDiagBlock Z
+        (U.offDiagBlock Z ((e i : W) : H))⟫_ℂ =
         ⟪e j, offDiagonalSqCompression U Z W (e i)⟫_ℂ := by
       rw [offDiagonalSqCompression_apply,
         Submodule.inner_orthogonalProjectionOnto_eq_of_mem_left]
@@ -1641,12 +1641,12 @@ theorem exists_compressedDoubleAngleEigenfamily_of_invariantSubspace
     intro i
     have h := hgram0 i i
     rw [ite_eq_left rfl, mul_one] at h
-    rw [← hSsym ((e i : W) : H) (U.offDiagonalPart Z ((e i : W) : H))] at h
-    have h2 : ((‖U.offDiagonalPart Z ((e i : W) : H)‖ ^ 2 : ℝ) : ℂ) =
+    rw [← hSsym ((e i : W) : H) (U.offDiagBlock Z ((e i : W) : H))] at h
+    have h2 : ((‖U.offDiagBlock Z ((e i : W) : H)‖ ^ 2 : ℝ) : ℂ) =
         ((μ i : ℝ) : ℂ) := by
       rw [← h, inner_self_eq_norm_sq_to_K]
       norm_cast
-    have h3 : ‖U.offDiagonalPart Z ((e i : W) : H)‖ ^ 2 = μ i := by
+    have h3 : ‖U.offDiagBlock Z ((e i : W) : H)‖ ^ 2 = μ i := by
       exact_mod_cast h2
     rw [← h3]
     positivity
@@ -1654,8 +1654,8 @@ theorem exists_compressedDoubleAngleEigenfamily_of_invariantSubspace
   have hyon : Orthonormal ℂ fun i => ((e i : W) : H) := by
     have h := (e.orthonormal).comp_linearIsometry W.subtypeₗᵢ
     simpa [Function.comp_def] using h
-  have hgramq : ∀ i j, ⟪((e j : W) : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z ((e i : W) : H))⟫_ℂ =
+  have hgramq : ∀ i j, ⟪((e j : W) : H), U.offDiagBlock Z
+      (U.offDiagBlock Z ((e i : W) : H))⟫_ℂ =
       (((√(μ i)) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0) := by
     intro i j
     rw [hsq i]
@@ -1713,7 +1713,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
     ∃ (y : Fin k → A.domain) (q : Fin k → ℝ),
       (∀ i, ((y i : A.domain) : H) ∈ W) ∧
         (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
-        (∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 = q i ^ 2) ∧
+        (∀ i, ‖U.offDiagBlock Z ((y i : A.domain) : H)‖ ^ 2 = q i ^ 2) ∧
         (∀ i, 0 ≤ q i) ∧ (∀ i, q i < 1) ∧
         (b - a) * ∑ i, q i / √(1 - (q i) ^ 2) ≤
           2 * kyFanApproximationGauge k B := by
@@ -1722,10 +1722,10 @@ theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
     exists_compressedDoubleAngleEigenfamily_of_invariantSubspace (U := U)
       (A := A) (Z := Z) hZsa hWdom hWU hWinv hk
   have hx1 : ∀ i, ‖((y i : A.domain) : H)‖ = 1 := fun i => hyon.norm_eq_one i
-  have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+  have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagBlock Z
+      (U.offDiagBlock Z ((y i : A.domain) : H))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) := fun i => by rw [hgram i i, ite_eq_left rfl, mul_one]
-  have hnorm : ∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 =
+  have hnorm : ∀ i, ‖U.offDiagBlock Z ((y i : A.domain) : H)‖ ^ 2 =
       (q i) ^ 2 := fun i =>
     norm_sq_offDiagonalPart_of_compressedDiagonal (U := U) hZsa (hself i)
   have hq1 : ∀ i, q i < 1 := by
@@ -1751,8 +1751,8 @@ theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
     simpa using hsub
   have hσmem : ∀ j, 0 < q (σ j) := fun j =>
     (hsmem _).mp (s.equivFin.symm j).2
-  have hgram' : ∀ i j, ⟪((y (σ j) : A.domain) : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z ((y (σ i) : A.domain) : H))⟫_ℂ =
+  have hgram' : ∀ i j, ⟪((y (σ j) : A.domain) : H), U.offDiagBlock Z
+      (U.offDiagBlock Z ((y (σ i) : A.domain) : H))⟫_ℂ =
       (((q (σ i)) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0) := by
     intro i j
     rw [hgram (σ i) (σ j)]
@@ -1810,8 +1810,8 @@ def HasInvariantDoubleAngleFiltration (A : H →ₗ.[ℂ] H) (U : Submodule ℂ 
         (∀ i, ((y i : A.domain) : H) ∈ W) →
         (Orthonormal ℂ fun i => ((y i : A.domain) : H)) →
         (∀ i, 0 ≤ q i) →
-        (∀ i j, ⟪((y j : A.domain) : H), U.offDiagonalPart Z
-            (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+        (∀ i j, ⟪((y j : A.domain) : H), U.offDiagBlock Z
+            (U.offDiagBlock Z ((y i : A.domain) : H))⟫_ℂ =
           (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0)) →
         (∀ i, 0 < q i) ∧
           kyFanApproximationGauge k T ≤ ∑ i, q i / √(1 - (q i) ^ 2)
@@ -1933,39 +1933,39 @@ block `S = sin 2Θ₀` there.  This is the reflection-picture analogue of
 operator *the* `tan 2Θ₀` rather than a free variable. -/
 def IsDoubleAngleTangent (U : Submodule ℂ H) [U.HasOrthogonalProjection]
     (Z T : H →L[ℂ] H) : Prop :=
-  ∀ x ∈ U, T (U.diagonalPart Z x) = U.offDiagonalPart Z x
+  ∀ x ∈ U, T (U.diagBlock Z x) = U.offDiagBlock Z x
 
 /-- A trial-subspace contraction bound for the odd block transfers to `Uᗮ`.
 `S` is self-adjoint and carries `Uᗮ` into `U`, so `‖S x‖² = ⟪x, S (S x)⟫` may be
 estimated with the bound applied at `S x ∈ U`. -/
 theorem norm_offDiagonalPart_apply_le_of_mem_orthogonal
     (hZsa : IsSelfAdjoint Z) {g : ℝ} (hg0 : 0 ≤ g)
-    (hgU : ∀ y ∈ U, ‖U.offDiagonalPart Z y‖ ≤ g * ‖y‖)
+    (hgU : ∀ y ∈ U, ‖U.offDiagBlock Z y‖ ≤ g * ‖y‖)
     {x : H} (hx : x ∈ Uᗮ) :
-    ‖U.offDiagonalPart Z x‖ ≤ g * ‖x‖ := by
+    ‖U.offDiagBlock Z x‖ ≤ g * ‖x‖ := by
   have hSsym := TauCeti.inner_swap_of_isSelfAdjoint
     (TauCeti.isSelfAdjoint_offDiagonalPart (U := U) hZsa)
-  have hSxU : U.offDiagonalPart Z x ∈ U :=
+  have hSxU : U.offDiagBlock Z x ∈ U :=
     TauCeti.offDiagonalPart_mem_of_mem_orthogonal U Z hx
-  have h1 : ⟪U.offDiagonalPart Z x, U.offDiagonalPart Z x⟫_ℂ =
-      ⟪x, U.offDiagonalPart Z (U.offDiagonalPart Z x)⟫_ℂ :=
-    hSsym x (U.offDiagonalPart Z x)
-  have hn : ‖U.offDiagonalPart Z x‖ ^ 2 =
-      ‖⟪U.offDiagonalPart Z x, U.offDiagonalPart Z x⟫_ℂ‖ := by
+  have h1 : ⟪U.offDiagBlock Z x, U.offDiagBlock Z x⟫_ℂ =
+      ⟪x, U.offDiagBlock Z (U.offDiagBlock Z x)⟫_ℂ :=
+    hSsym x (U.offDiagBlock Z x)
+  have hn : ‖U.offDiagBlock Z x‖ ^ 2 =
+      ‖⟪U.offDiagBlock Z x, U.offDiagBlock Z x⟫_ℂ‖ := by
     rw [inner_self_eq_norm_sq_to_K, norm_pow, RCLike.norm_ofReal,
       abs_of_nonneg (norm_nonneg _)]
-  have h2 : ‖U.offDiagonalPart Z x‖ ^ 2 ≤
-      ‖x‖ * ‖U.offDiagonalPart Z (U.offDiagonalPart Z x)‖ := by
+  have h2 : ‖U.offDiagBlock Z x‖ ^ 2 ≤
+      ‖x‖ * ‖U.offDiagBlock Z (U.offDiagBlock Z x)‖ := by
     rw [hn, h1]
     exact norm_inner_le_norm _ _
-  have h3 : ‖U.offDiagonalPart Z (U.offDiagonalPart Z x)‖ ≤
-      g * ‖U.offDiagonalPart Z x‖ := hgU _ hSxU
+  have h3 : ‖U.offDiagBlock Z (U.offDiagBlock Z x)‖ ≤
+      g * ‖U.offDiagBlock Z x‖ := hgU _ hSxU
   by_contra hcon
   rw [not_le] at hcon
-  have hXn : ‖x‖ * ‖U.offDiagonalPart Z (U.offDiagonalPart Z x)‖ ≤
-      ‖x‖ * (g * ‖U.offDiagonalPart Z x‖) :=
+  have hXn : ‖x‖ * ‖U.offDiagBlock Z (U.offDiagBlock Z x)‖ ≤
+      ‖x‖ * (g * ‖U.offDiagBlock Z x‖) :=
     mul_le_mul_of_nonneg_left h3 (norm_nonneg x)
-  have hnpos : 0 < ‖U.offDiagonalPart Z x‖ :=
+  have hnpos : 0 < ‖U.offDiagBlock Z x‖ :=
     lt_of_le_of_lt (mul_nonneg hg0 (norm_nonneg x)) hcon
   nlinarith [hnpos, hXn, h2, hcon]
 
@@ -1974,8 +1974,8 @@ two halves of the orthogonal splitting land in orthogonal subspaces, so the two
 squared bounds add with no cross term and **no factor is lost**. -/
 theorem norm_offDiagonalPart_apply_le
     (hZsa : IsSelfAdjoint Z) {g : ℝ} (hg0 : 0 ≤ g)
-    (hgU : ∀ y ∈ U, ‖U.offDiagonalPart Z y‖ ≤ g * ‖y‖) (x : H) :
-    ‖U.offDiagonalPart Z x‖ ≤ g * ‖x‖ := by
+    (hgU : ∀ y ∈ U, ‖U.offDiagBlock Z y‖ ≤ g * ‖y‖) (x : H) :
+    ‖U.offDiagBlock Z x‖ ≤ g * ‖x‖ := by
   set p := U.starProjection x with hp
   set r := Uᗮ.starProjection x with hr
   have hpU : p ∈ U := U.starProjection_apply_mem x
@@ -1983,48 +1983,48 @@ theorem norm_offDiagonalPart_apply_le
   have hsum : p + r = x :=
     Submodule.starProjection_add_starProjection_orthogonal x
   have hpr : ⟪p, r⟫_ℂ = 0 := (Submodule.mem_orthogonal U r).mp hrU p hpU
-  have hSp : U.offDiagonalPart Z p ∈ Uᗮ :=
+  have hSp : U.offDiagBlock Z p ∈ Uᗮ :=
     TauCeti.offDiagonalPart_mem_orthogonal_of_mem U Z hpU
-  have hSr : U.offDiagonalPart Z r ∈ U :=
+  have hSr : U.offDiagBlock Z r ∈ U :=
     TauCeti.offDiagonalPart_mem_of_mem_orthogonal U Z hrU
-  have hSpr : ⟪U.offDiagonalPart Z p, U.offDiagonalPart Z r⟫_ℂ = 0 := by
-    have h := (Submodule.mem_orthogonal U (U.offDiagonalPart Z p)).mp hSp
-      (U.offDiagonalPart Z r) hSr
+  have hSpr : ⟪U.offDiagBlock Z p, U.offDiagBlock Z r⟫_ℂ = 0 := by
+    have h := (Submodule.mem_orthogonal U (U.offDiagBlock Z p)).mp hSp
+      (U.offDiagBlock Z r) hSr
     exact inner_eq_zero_symm.mp h
   have hxsq : ‖x‖ * ‖x‖ = ‖p‖ * ‖p‖ + ‖r‖ * ‖r‖ := by
     rw [← hsum]
     exact norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero p r hpr
-  have hSxeq : U.offDiagonalPart Z x =
-      U.offDiagonalPart Z p + U.offDiagonalPart Z r := by
+  have hSxeq : U.offDiagBlock Z x =
+      U.offDiagBlock Z p + U.offDiagBlock Z r := by
     rw [← hsum, map_add]
-  have hSsq : ‖U.offDiagonalPart Z x‖ * ‖U.offDiagonalPart Z x‖ =
-      ‖U.offDiagonalPart Z p‖ * ‖U.offDiagonalPart Z p‖ +
-        ‖U.offDiagonalPart Z r‖ * ‖U.offDiagonalPart Z r‖ := by
+  have hSsq : ‖U.offDiagBlock Z x‖ * ‖U.offDiagBlock Z x‖ =
+      ‖U.offDiagBlock Z p‖ * ‖U.offDiagBlock Z p‖ +
+        ‖U.offDiagBlock Z r‖ * ‖U.offDiagBlock Z r‖ := by
     rw [hSxeq]
     exact norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ hSpr
-  have hbp : ‖U.offDiagonalPart Z p‖ ≤ g * ‖p‖ := hgU p hpU
-  have hbr : ‖U.offDiagonalPart Z r‖ ≤ g * ‖r‖ :=
+  have hbp : ‖U.offDiagBlock Z p‖ ≤ g * ‖p‖ := hgU p hpU
+  have hbr : ‖U.offDiagBlock Z r‖ ≤ g * ‖r‖ :=
     norm_offDiagonalPart_apply_le_of_mem_orthogonal hZsa hg0 hgU hrU
-  have hsp : ‖U.offDiagonalPart Z p‖ * ‖U.offDiagonalPart Z p‖ ≤
+  have hsp : ‖U.offDiagBlock Z p‖ * ‖U.offDiagBlock Z p‖ ≤
       (g * ‖p‖) * (g * ‖p‖) := mul_self_le_mul_self (norm_nonneg _) hbp
-  have hsr : ‖U.offDiagonalPart Z r‖ * ‖U.offDiagonalPart Z r‖ ≤
+  have hsr : ‖U.offDiagBlock Z r‖ * ‖U.offDiagBlock Z r‖ ≤
       (g * ‖r‖) * (g * ‖r‖) := mul_self_le_mul_self (norm_nonneg _) hbr
   have hgx : (g * ‖x‖) * (g * ‖x‖) =
       (g * ‖p‖) * (g * ‖p‖) + (g * ‖r‖) * (g * ‖r‖) := by
     linear_combination (g * g) * hxsq
-  have hfin : ‖U.offDiagonalPart Z x‖ * ‖U.offDiagonalPart Z x‖ ≤
+  have hfin : ‖U.offDiagBlock Z x‖ * ‖U.offDiagBlock Z x‖ ≤
       (g * ‖x‖) * (g * ‖x‖) := by rw [hgx, hSsq]; linarith [hsp, hsr]
   by_contra hcon
   rw [not_le] at hcon
-  have hnpos : 0 < ‖U.offDiagonalPart Z x‖ :=
+  have hnpos : 0 < ‖U.offDiagBlock Z x‖ :=
     lt_of_le_of_lt (mul_nonneg hg0 (norm_nonneg x)) hcon
   nlinarith [hfin, hcon, hnpos, mul_nonneg hg0 (norm_nonneg x)]
 
 /-- Operator-norm form of the ambient contraction bound. -/
 theorem norm_offDiagonalPart_le
     (hZsa : IsSelfAdjoint Z) {g : ℝ} (hg0 : 0 ≤ g)
-    (hgU : ∀ y ∈ U, ‖U.offDiagonalPart Z y‖ ≤ g * ‖y‖) :
-    ‖U.offDiagonalPart Z‖ ≤ g :=
+    (hgU : ∀ y ∈ U, ‖U.offDiagBlock Z y‖ ≤ g * ‖y‖) :
+    ‖U.offDiagBlock Z‖ ≤ g :=
   ContinuousLinearMap.opNorm_le_bound _ hg0
     (norm_offDiagonalPart_apply_le hZsa hg0 hgU)
 
@@ -2032,11 +2032,11 @@ theorem norm_offDiagonalPart_le
 soon as `S²` is a strict contraction, so `cos 2Θ₀` is boundedly invertible and
 the tangent is a bounded operator. -/
 theorem isUnit_diagonalPart_sq (hZ2 : Z * Z = 1)
-    (h : ‖U.offDiagonalPart Z * U.offDiagonalPart Z‖ < 1) :
-    IsUnit (U.diagonalPart Z * U.diagonalPart Z) := by
+    (h : ‖U.offDiagBlock Z * U.offDiagBlock Z‖ < 1) :
+    IsUnit (U.diagBlock Z * U.diagBlock Z) := by
   have hsum := TauCeti.diagonalPart_sq_add_offDiagonalPart_sq (U := U) hZ2
-  have hCC : U.diagonalPart Z * U.diagonalPart Z =
-      1 - U.offDiagonalPart Z * U.offDiagonalPart Z := by
+  have hCC : U.diagBlock Z * U.diagBlock Z =
+      1 - U.offDiagBlock Z * U.offDiagBlock Z := by
     rw [← hsum]; abel
   rw [hCC]
   exact ⟨Units.oneSub _ h, rfl⟩
@@ -2054,29 +2054,29 @@ def unboundedReflectionTangent {𝕜 : Type*} [RCLike 𝕜] {G : Type*}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
     (Z : G →L[𝕜] G) : G →L[𝕜] G :=
-  U.offDiagonalPart Z *
-    Ring.inverse (U.diagonalPart Z * U.diagonalPart Z) * U.diagonalPart Z
+  U.offDiagBlock Z *
+    Ring.inverse (U.diagBlock Z * U.diagBlock Z) * U.diagBlock Z
 
 omit [CompleteSpace H] in
 /-- **The defining identity of the tangent**: `tan 2Θ₀ ∘ cos 2Θ₀ = sin 2Θ₀`. -/
 theorem unboundedReflectionTangent_comp_diagonalPart
-    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z)) :
-    unboundedReflectionTangent U Z ∘L U.diagonalPart Z =
-      U.offDiagonalPart Z := by
+    (hCC : IsUnit (U.diagBlock Z * U.diagBlock Z)) :
+    unboundedReflectionTangent U Z ∘L U.diagBlock Z =
+      U.offDiagBlock Z := by
   have hinv := Ring.inverse_mul_cancel _ hCC
-  have hassoc : unboundedReflectionTangent U Z * U.diagonalPart Z =
-      U.offDiagonalPart Z *
-        (Ring.inverse (U.diagonalPart Z * U.diagonalPart Z) *
-          (U.diagonalPart Z * U.diagonalPart Z)) := by
+  have hassoc : unboundedReflectionTangent U Z * U.diagBlock Z =
+      U.offDiagBlock Z *
+        (Ring.inverse (U.diagBlock Z * U.diagBlock Z) *
+          (U.diagBlock Z * U.diagBlock Z)) := by
     rw [unboundedReflectionTangent]
     noncomm_ring
-  show unboundedReflectionTangent U Z * U.diagonalPart Z = _
+  show unboundedReflectionTangent U Z * U.diagBlock Z = _
   rw [hassoc, hinv, mul_one]
 
 omit [CompleteSpace H] in
 /-- The constructed operator really is a double-angle tangent. -/
 theorem isDoubleAngleTangent_unboundedReflectionTangent
-    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z)) :
+    (hCC : IsUnit (U.diagBlock Z * U.diagBlock Z)) :
     IsDoubleAngleTangent U Z (unboundedReflectionTangent U Z) := by
   intro x _
   exact congrArg (fun T : H →L[ℂ] H => T x)
@@ -2097,13 +2097,13 @@ theorem crossBlockBound_lt_one {δ nB : ℝ} (hδ : 0 < δ) (hnB : 0 ≤ nB) :
 /-- **The pole is excluded from a trial-subspace contraction bound alone.** -/
 theorem isUnit_diagonalPart_sq_of_forall_mem
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1) {g : ℝ} (hg0 : 0 ≤ g)
-    (hg1 : g < 1) (hgU : ∀ y ∈ U, ‖U.offDiagonalPart Z y‖ ≤ g * ‖y‖) :
-    IsUnit (U.diagonalPart Z * U.diagonalPart Z) := by
-  have hS : ‖U.offDiagonalPart Z‖ ≤ g := norm_offDiagonalPart_le hZsa hg0 hgU
-  have hmul : ‖U.offDiagonalPart Z * U.offDiagonalPart Z‖ ≤
-      ‖U.offDiagonalPart Z‖ * ‖U.offDiagonalPart Z‖ := norm_mul_le _ _
+    (hg1 : g < 1) (hgU : ∀ y ∈ U, ‖U.offDiagBlock Z y‖ ≤ g * ‖y‖) :
+    IsUnit (U.diagBlock Z * U.diagBlock Z) := by
+  have hS : ‖U.offDiagBlock Z‖ ≤ g := norm_offDiagonalPart_le hZsa hg0 hgU
+  have hmul : ‖U.offDiagBlock Z * U.offDiagBlock Z‖ ≤
+      ‖U.offDiagBlock Z‖ * ‖U.offDiagBlock Z‖ := norm_mul_le _ _
   refine isUnit_diagonalPart_sq hZ2 ?_
-  nlinarith [hmul, hS, norm_nonneg (U.offDiagonalPart Z)]
+  nlinarith [hmul, hS, norm_nonneg (U.offDiagBlock Z)]
 
 section GenuineTangentExists
 
@@ -2141,7 +2141,7 @@ theorem isDoubleAngleTangent_unboundedReflectionTangent_specRange
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) := by
   have hgU : ∀ y ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic,
       ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-          measurableSet_Iic).offDiagonalPart Z y‖ ≤
+          measurableSet_Iic).offDiagBlock Z y‖ ≤
         TauCeti.crossBlockBound (b - a) ‖B‖ * ‖y‖ := fun y hy =>
     TauCeti.norm_offDiagonalPart_apply_le_specRange hA hB hZsa hZ2 hZdom
       hZcomm hUa hUb hab hy
@@ -2174,8 +2174,8 @@ theorem sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
     {n : ℕ} (x : Fin n → H) (hxU : ∀ i, x i ∈ U)
     (hxon : Orthonormal ℂ x) {q : Fin n → ℝ}
     (hq : ∀ i, 0 < q i) (hq1 : ∀ i, q i < 1)
-    (hgram : ∀ i j, ⟪x j, U.offDiagonalPart Z
-        (U.offDiagonalPart Z (x i))⟫_ℂ =
+    (hgram : ∀ i j, ⟪x j, U.offDiagBlock Z
+        (U.offDiagBlock Z (x i))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0)) :
     ∑ i, q i / √(1 - (q i) ^ 2) ≤ kyFanApproximationGauge n T := by
   classical
@@ -2188,17 +2188,17 @@ theorem sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
   have hG := fun i j => inner_of_compressedDoubleAngleEigenfamily
     (U := U) hZsa hZ2 x hxon hgram i j
   have hu : Orthonormal ℂ fun i =>
-      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)) :=
+      (((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i)) :=
     orthonormal_scaled_of_inner_eq hq (fun i j => (hG i j).1)
   have hv : Orthonormal ℂ fun i =>
-      (((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.diagonalPart Z (x i)) := by
+      (((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.diagBlock Z (x i)) := by
     refine orthonormal_scaled_of_inner_eq hcpos ?_
     intro i j
     rw [(hG i j).2, hcsq j]
   refine sum_le_kyFanApproximationGauge_of_orthonormal T hu hv ?_
   intro i
-  have hTv : T (((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.diagonalPart Z (x i)) =
-      ((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i) := by
+  have hTv : T (((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.diagBlock Z (x i)) =
+      ((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i) := by
     rw [map_smul, hT (x i) (hxU i)]
   rw [hTv, inner_smul_left, inner_smul_right, (hG i i).1]
   rw [ite_eq_left rfl, mul_one]
@@ -2248,7 +2248,7 @@ theorem sum_tangent_le_kyFan_of_invariantSubspace
     ∃ (y : Fin k → A.domain) (q : Fin k → ℝ),
       (∀ i, ((y i : A.domain) : H) ∈ W) ∧
         (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
-        (∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 = q i ^ 2) ∧
+        (∀ i, ‖U.offDiagBlock Z ((y i : A.domain) : H)‖ ^ 2 = q i ^ 2) ∧
         (∀ i, 0 ≤ q i) ∧ (∀ i, q i < 1) ∧
         ∑ i, q i / √(1 - (q i) ^ 2) ≤ kyFanApproximationGauge k T := by
   classical
@@ -2256,10 +2256,10 @@ theorem sum_tangent_le_kyFan_of_invariantSubspace
     exists_compressedDoubleAngleEigenfamily_of_invariantSubspace (U := U)
       (A := A) (Z := Z) hZsa hWdom hWU hWinv hk
   have hx1 : ∀ i, ‖((y i : A.domain) : H)‖ = 1 := fun i => hyon.norm_eq_one i
-  have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+  have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagBlock Z
+      (U.offDiagBlock Z ((y i : A.domain) : H))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) := fun i => by rw [hgram i i, ite_eq_left rfl, mul_one]
-  have hnorm : ∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 =
+  have hnorm : ∀ i, ‖U.offDiagBlock Z ((y i : A.domain) : H)‖ ^ 2 =
       (q i) ^ 2 := fun i =>
     norm_sq_offDiagonalPart_of_compressedDiagonal (U := U) hZsa (hself i)
   have hq1 : ∀ i, q i < 1 := by
@@ -2285,8 +2285,8 @@ theorem sum_tangent_le_kyFan_of_invariantSubspace
     simpa using hsub
   have hσmem : ∀ j, 0 < q (σ j) := fun j =>
     (hsmem _).mp (s.equivFin.symm j).2
-  have hgram' : ∀ i j, ⟪((y (σ j) : A.domain) : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z ((y (σ i) : A.domain) : H))⟫_ℂ =
+  have hgram' : ∀ i j, ⟪((y (σ j) : A.domain) : H), U.offDiagBlock Z
+      (U.offDiagBlock Z ((y (σ i) : A.domain) : H))⟫_ℂ =
       (((q (σ i)) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0) := by
     intro i j
     rw [hgram (σ i) (σ j)]
@@ -2350,8 +2350,8 @@ theorem kyFan_eq_sum_tangent_of_isCompressedDoubleAngleEigenbasis
         kyFanApproximationGauge k T = ∑ i, q i / √(1 - (q i) ^ 2) := by
   obtain ⟨y, q, hyU, hyon, hqpos, hygram, hyres, hle⟩ := hT k
   have hx1 : ∀ i, ‖((y i : A.domain) : H)‖ = 1 := fun i => hyon.norm_eq_one i
-  have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagonalPart Z
-      (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
+  have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagBlock Z
+      (U.offDiagBlock Z ((y i : A.domain) : H))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) := fun i => by
     rw [hygram i i, ite_eq_left rfl, mul_one]
   have hq1 : ∀ i, q i < 1 := fun i =>
@@ -2565,7 +2565,7 @@ theorem reflectionZ_unitVector (i : Fin 3) :
 
 /-- The odd block sends `e₀` to `(2/3) e₂`. -/
 theorem offDiagonalPart_unitVector_zero :
-    trial.offDiagonalPart reflectionZ (unitVector 0) =
+    trial.offDiagBlock reflectionZ (unitVector 0) =
       (2 / 3 : ℂ) • unitVector 2 := by
   have hU0 : trial.starProjection (unitVector 0) = unitVector 0 := by
     rw [trial_starProjection, inner_unitVector]
@@ -2578,13 +2578,13 @@ theorem offDiagonalPart_unitVector_zero :
     rw [inner_sub_right, inner_smul_right, inner_unitVector_axis,
       inner_unitVector]
     simp
-  rw [Submodule.offDiagonalPart_apply, Submodule.diagonalPart_apply, hU0, hP0,
+  rw [Submodule.offDiagBlock_apply, Submodule.diagBlock_apply, hU0, hP0,
     map_zero, map_zero, reflectionZ_unitVector, trial_starProjection, hin]
   module
 
 /-- The odd block sends `e₂` to `(2/3)(e₀ + e₁)`. -/
 theorem offDiagonalPart_unitVector_two :
-    trial.offDiagonalPart reflectionZ (unitVector 2) =
+    trial.offDiagBlock reflectionZ (unitVector 2) =
       (2 / 3 : ℂ) • (unitVector 0 + unitVector 1) := by
   have hU2 : trial.starProjection (unitVector 2) = 0 := by
     rw [trial_starProjection, inner_unitVector]
@@ -2597,7 +2597,7 @@ theorem offDiagonalPart_unitVector_two :
     rw [inner_sub_right, inner_smul_right, inner_unitVector_axis,
       inner_unitVector]
     norm_num
-  rw [Submodule.offDiagonalPart_apply, Submodule.diagonalPart_apply, hU2, hP2,
+  rw [Submodule.offDiagBlock_apply, Submodule.diagBlock_apply, hU2, hP2,
     map_zero, map_zero, reflectionZ_unitVector,
     trial_orthogonal_starProjection, hin, axis]
   module
@@ -2605,8 +2605,8 @@ theorem offDiagonalPart_unitVector_two :
 /-- `S² e₀ = (4/9)(e₀ + e₁)`: the square of the odd block leaves the line
 `ℂ e₀`. -/
 theorem offDiagonalPart_sq_unitVector_zero :
-    trial.offDiagonalPart reflectionZ
-        (trial.offDiagonalPart reflectionZ (unitVector 0)) =
+    trial.offDiagBlock reflectionZ
+        (trial.offDiagBlock reflectionZ (unitVector 0)) =
       (4 / 9 : ℂ) • (unitVector 0 + unitVector 1) := by
   rw [offDiagonalPart_unitVector_zero, map_smul, offDiagonalPart_unitVector_two,
     smul_smul]
@@ -2614,8 +2614,8 @@ theorem offDiagonalPart_sq_unitVector_zero :
 
 /-- **The compressed diagonal Gram condition holds at `e₀` with `q = 2/3`.** -/
 theorem inner_unitVector_zero_offDiagonalPart_sq :
-    ⟪unitVector 0, trial.offDiagonalPart reflectionZ
-        (trial.offDiagonalPart reflectionZ (unitVector 0))⟫_ℂ =
+    ⟪unitVector 0, trial.offDiagBlock reflectionZ
+        (trial.offDiagBlock reflectionZ (unitVector 0))⟫_ℂ =
       ((((2 : ℝ) / 3) ^ 2 : ℝ) : ℂ) := by
   rw [offDiagonalPart_sq_unitVector_zero, inner_smul_right, inner_add_right,
     inner_unitVector, inner_unitVector]
@@ -2624,8 +2624,8 @@ theorem inner_unitVector_zero_offDiagonalPart_sq :
 /-- **The exact double-angle eigenvector relation fails at the same vector.**
 This is the witness that the compressed hypothesis is a real weakening. -/
 theorem not_doubleAngleEigenvector_unitVector_zero :
-    trial.offDiagonalPart reflectionZ
-        (trial.offDiagonalPart reflectionZ (unitVector 0)) ≠
+    trial.offDiagBlock reflectionZ
+        (trial.offDiagBlock reflectionZ (unitVector 0)) ≠
       ((((2 : ℝ) / 3) ^ 2 : ℝ) : ℂ) • unitVector 0 := by
   rw [offDiagonalPart_sq_unitVector_zero]
   intro h
@@ -2793,7 +2793,7 @@ theorem gap_mul_sum_tangent_le_kyFan_on_model :
     ∃ (y : Fin 1 → unperturbed.domain) (q : Fin 1 → ℝ),
       (∀ i, ((y i : unperturbed.domain) : Model) ∈ (ℂ ∙ unitVector 0)) ∧
         (Orthonormal ℂ fun i => ((y i : unperturbed.domain) : Model)) ∧
-        (∀ i, ‖trial.offDiagonalPart reflectionZ
+        (∀ i, ‖trial.offDiagBlock reflectionZ
           ((y i : unperturbed.domain) : Model)‖ ^ 2 = q i ^ 2) ∧
         (∀ i, 0 ≤ q i) ∧ (∀ i, q i < 1) ∧
         ((1 : ℝ) - 0) * ∑ i, q i / √(1 - (q i) ^ 2) ≤

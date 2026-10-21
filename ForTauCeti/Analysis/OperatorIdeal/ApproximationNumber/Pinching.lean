@@ -36,7 +36,7 @@ The pinch is an average of two unitary conjugations.  `Submodule.reflectionOpera
 2 (P_U A P_U + P_Uᗮ A P_Uᗮ) = A + J A J
 ```
 
-(`Submodule.two_smul_diagonalPart_eq_add_reflectionConjugate`).  Conjugating by a
+(`Submodule.two_smul_diagBlock`).  Conjugating by a
 contraction cannot increase a Ky Fan gauge, and the gauge is subadditive, so the
 average is dominated.  No majorization theory is needed at this level: the
 majorization content is already inside subadditivity of the gauge.
@@ -147,11 +147,16 @@ The pinch is the average of `A` and its reflection conjugate, and the gauge is
 subadditive and conjugation-invariant. -/
 theorem kyFanApproximationGauge_diagonalPart_le_complex
     (U : Submodule ℂ E) [U.HasOrthogonalProjection] (A : E →L[ℂ] E) (k : ℕ) :
-    kyFanApproximationGauge k (U.diagonalPart A) ≤
+    kyFanApproximationGauge k (U.diagBlock A) ≤
       kyFanApproximationGauge k A := by
-  have hsplit := Submodule.two_smul_diagonalPart_eq_add_reflectionConjugate
-    (𝕜 := ℂ) U A
-  have hsum : kyFanApproximationGauge k ((2 : ℂ) • U.diagonalPart A) ≤
+  have hR : U.reflectionOperator = (U.reflection : E →L[ℂ] E) := by
+    ext x
+    exact Submodule.reflectionOperator_apply_eq_reflection U x
+  have hsplit : (2 : ℂ) • U.diagBlock A =
+      A + U.reflectionOperator ∘L A ∘L U.reflectionOperator := by
+    simpa [hR, ← Nat.cast_smul_eq_nsmul ℂ] using
+      (Submodule.two_smul_diagBlock (𝕜 := ℂ) U A)
+  have hsum : kyFanApproximationGauge k ((2 : ℂ) • U.diagBlock A) ≤
       2 * kyFanApproximationGauge k A := by
     rw [hsplit]
     refine (kyFanApproximationGauge_add_le_complex k A

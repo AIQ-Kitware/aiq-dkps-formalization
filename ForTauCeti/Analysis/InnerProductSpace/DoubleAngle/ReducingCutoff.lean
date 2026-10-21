@@ -306,7 +306,7 @@ include hA hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab
 form bounds.  Selecting it as a spectral half-line, as
 `TauCeti.norm_offDiagonalPart_apply_le_specRange` does, is not needed. -/
 theorem norm_offDiagonalPart_lt_one_reducing :
-    ‖U.offDiagonalPart Z‖ < 1 :=
+    ‖U.offDiagBlock Z‖ < 1 :=
   norm_offDiagonalPart_lt_one_of_tendsto hred hB hZsa hZ2 hZdom hZcomm hUa hUb
     (fun n : ℕ => (n : ℝ)) (fun n => reducingCutoffSeq hA hred n)
     (fun n => Nat.cast_nonneg n) hab
@@ -315,7 +315,7 @@ theorem norm_offDiagonalPart_lt_one_reducing :
 /-- The uniform cross-block bound `‖sin 2Θ₀‖ ≤ 2‖B‖/√(δ² + 4‖B‖²)`, for any
 reducing subspace. -/
 theorem norm_offDiagonalPart_le_reducing :
-    ‖U.offDiagonalPart Z‖ ≤ crossBlockBound (b - a) ‖B‖ :=
+    ‖U.offDiagBlock Z‖ ≤ crossBlockBound (b - a) ‖B‖ :=
   norm_offDiagonalPart_le_of_tendsto hred hB hZsa hZ2 hZdom hZcomm hUa hUb
     (fun n : ℕ => (n : ℝ)) (fun n => reducingCutoffSeq hA hred n)
     (fun n => Nat.cast_nonneg n) hab
@@ -324,7 +324,7 @@ theorem norm_offDiagonalPart_le_reducing :
 /-- The pointwise cross-block bound on the trial subspace, for any reducing
 subspace: `‖sin 2Θ₀ x‖ ≤ (2‖B‖/√(δ² + 4‖B‖²)) ‖x‖` for `x ∈ U`. -/
 theorem norm_offDiagonalPart_apply_le_reducing {x : H} (hx : x ∈ U) :
-    ‖U.offDiagonalPart Z x‖ ≤ crossBlockBound (b - a) ‖B‖ * ‖x‖ :=
+    ‖U.offDiagBlock Z x‖ ≤ crossBlockBound (b - a) ‖B‖ * ‖x‖ :=
   norm_offDiagonalPart_apply_le_of_tendsto hred hB hZsa hZ2 hZdom hZcomm hUa hUb
     (fun n : ℕ => (n : ℝ)) (fun n => reducingCutoffSeq hA hred n)
     (fun n => Nat.cast_nonneg n) hab (tendsto_reducingCutoffSeq hA hred hx)
@@ -333,7 +333,7 @@ theorem norm_offDiagonalPart_apply_le_reducing {x : H} (hx : x ∈ U) :
 `κ = δ/√(δ² + 4‖B‖²) > 0`. -/
 theorem diagonalBlockBound_mul_le_norm_diagonalPart_apply_reducing {x : H}
     (hx : x ∈ U) :
-    diagonalBlockBound (b - a) ‖B‖ * ‖x‖ ≤ ‖U.diagonalPart Z x‖ :=
+    diagonalBlockBound (b - a) ‖B‖ * ‖x‖ ≤ ‖U.diagBlock Z x‖ :=
   diagonalBlockBound_mul_le_norm_diagonalPart_apply_of_tendsto hred hB hZsa hZ2
     hZdom hZcomm hUa hUb (fun n : ℕ => (n : ℝ))
     (fun n => reducingCutoffSeq hA hred n) (fun n => Nat.cast_nonneg n) hab hx
@@ -342,7 +342,7 @@ theorem diagonalBlockBound_mul_le_norm_diagonalPart_apply_reducing {x : H}
 /-- **The branch-free `tan 2Θ₀` inequality, for any reducing subspace**:
 `δ ‖sin 2Θ₀ x‖ ≤ 2 ‖B‖ ‖cos 2Θ₀ x‖` on `U`. -/
 theorem gap_mul_norm_offDiagonalPart_apply_le_reducing {x : H} (hx : x ∈ U) :
-    (b - a) * ‖U.offDiagonalPart Z x‖ ≤ 2 * ‖B‖ * ‖U.diagonalPart Z x‖ :=
+    (b - a) * ‖U.offDiagBlock Z x‖ ≤ 2 * ‖B‖ * ‖U.diagBlock Z x‖ :=
   gap_mul_norm_offDiagonalPart_apply_le_of_tendsto hred hB hZsa hZ2 hZdom hZcomm
     hUa hUb (fun n : ℕ => (n : ℝ)) (fun n => reducingCutoffSeq hA hred n)
     (fun n => Nat.cast_nonneg n) hab hx (tendsto_reducingCutoffSeq hA hred hx)

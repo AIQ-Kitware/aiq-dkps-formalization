@@ -111,18 +111,18 @@ variable (U : Submodule ℝ E) [U.HasOrthogonalProjection]
 omit [CompleteSpace E] in
 /-- The even reflection block commutes with complexification. -/
 theorem diagonalPart_complexifySubmodule (Z : E →L[ℝ] E) :
-    (complexifySubmodule U).diagonalPart (complexify Z) =
-      complexify (U.diagonalPart Z) := by
-  rw [Submodule.diagonalPart_eq, Submodule.diagonalPart_eq,
+    (complexifySubmodule U).diagBlock (complexify Z) =
+      complexify (U.diagBlock Z) := by
+  rw [Submodule.diagBlock_def, Submodule.diagBlock_def,
     starProjection_complexifySubmodule, starProjection_complexifySubmodule_orthogonal,
     complexify_add, complexify_comp, complexify_comp, complexify_comp, complexify_comp]
 
 omit [CompleteSpace E] in
 /-- The odd reflection block commutes with complexification. -/
 theorem offDiagonalPart_complexifySubmodule (Z : E →L[ℝ] E) :
-    (complexifySubmodule U).offDiagonalPart (complexify Z) =
-      complexify (U.offDiagonalPart Z) := by
-  rw [Submodule.offDiagonalPart_eq, Submodule.offDiagonalPart_eq,
+    (complexifySubmodule U).offDiagBlock (complexify Z) =
+      complexify (U.offDiagBlock Z) := by
+  rw [Submodule.offDiagBlock_eq_sub_diagBlock, Submodule.offDiagBlock_eq_sub_diagBlock,
     complexify_sub, diagonalPart_complexifySubmodule]
 
 end Blocks
@@ -152,7 +152,7 @@ tangent is `S · (C²)⁻¹ · C` in the operator ring, and complexification is 
 unital ring map that carries the unit `C²` to the unit `(Cℂ)²`. -/
 theorem unboundedReflectionTangent_complexifySubmodule
     (U : Submodule ℝ E) [U.HasOrthogonalProjection] (Z : E →L[ℝ] E)
-    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z)) :
+    (hCC : IsUnit (U.diagBlock Z * U.diagBlock Z)) :
     unboundedReflectionTangent (complexifySubmodule U) (complexify Z) =
       complexify (unboundedReflectionTangent U Z) := by
   rw [unboundedReflectionTangent, unboundedReflectionTangent,
@@ -568,7 +568,7 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
       A ⟨Z (x : E), hZdom x⟩ + B (Z (x : E)) = Z (A x) + Z (B (x : E)))
     (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
-    (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
+    (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
@@ -578,14 +578,14 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
       2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
   classical
   -- the pole is excluded over `ℝ` exactly as it is over `ℂ`
-  have hSS : ‖U.offDiagonalPart Z * U.offDiagonalPart Z‖ < 1 := by
-    have hle : ‖U.offDiagonalPart Z * U.offDiagonalPart Z‖ ≤
-        ‖U.offDiagonalPart Z‖ * ‖U.offDiagonalPart Z‖ := norm_mul_le _ _
-    nlinarith [norm_nonneg (U.offDiagonalPart Z)]
-  have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := by
+  have hSS : ‖U.offDiagBlock Z * U.offDiagBlock Z‖ < 1 := by
+    have hle : ‖U.offDiagBlock Z * U.offDiagBlock Z‖ ≤
+        ‖U.offDiagBlock Z‖ * ‖U.offDiagBlock Z‖ := norm_mul_le _ _
+    nlinarith [norm_nonneg (U.offDiagBlock Z)]
+  have hCC : IsUnit (U.diagBlock Z * U.diagBlock Z) := by
     have hsum := TauCeti.diagonalPart_sq_add_offDiagonalPart_sq (U := U) hZ2
-    have hCCeq : U.diagonalPart Z * U.diagonalPart Z =
-        1 - U.offDiagonalPart Z * U.offDiagonalPart Z := by
+    have hCCeq : U.diagBlock Z * U.diagBlock Z =
+        1 - U.offDiagBlock Z * U.offDiagBlock Z := by
       rw [← hsum]; abel
     rw [hCCeq]
     exact ⟨Units.oneSub _ hSS, rfl⟩
@@ -641,7 +641,7 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
             im (x : RealComplexification E)⟫_ℝ := rfl
     rw [hsplit, RealComplexification.norm_sq, mul_add]
     linarith
-  have hS1' : ‖(complexifySubmodule U).offDiagonalPart (complexify Z)‖ < 1 := by
+  have hS1' : ‖(complexifySubmodule U).offDiagBlock (complexify Z)‖ < 1 := by
     rw [offDiagonalPart_complexifySubmodule, norm_complexify]
     exact hS1
   have hstrong' : TauCeti.ApproximationNumber.StronglyTendsto
@@ -690,7 +690,7 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient_real
       A ⟨Z (x : E), hZdom x⟩ + B (Z (x : E)) = Z (A x) + Z (B (x : E)))
     (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
-    (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
+    (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
@@ -723,7 +723,7 @@ theorem mem_and_gauge_le_reflectionTangentCorner_real
       A ⟨Z (x : E), hZdom x⟩ + B (Z (x : E)) = Z (A x) + Z (B (x : E)))
     (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
-    (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
+    (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
@@ -773,14 +773,14 @@ substitute for `rw`, whose motive is not type correct across an equality of
 subspaces that occurs in an instance argument. -/
 theorem diagonalPart_congr {U V : Submodule k G} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (h : U = V) (T : G →L[k] G) :
-    U.diagonalPart T = V.diagonalPart T := by
+    U.diagBlock T = V.diagBlock T := by
   subst h
   rfl
 
 /-- The odd reflection block depends on the subspace only through its value. -/
 theorem offDiagonalPart_congr {U V : Submodule k G} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (h : U = V) (T : G →L[k] G) :
-    U.offDiagonalPart T = V.offDiagonalPart T := by
+    U.offDiagBlock T = V.offDiagBlock T := by
   subst h
   rfl
 
@@ -823,13 +823,13 @@ theorem tanTwoTheta_unbounded_residual_opNorm_real
     (hx : x ∈ TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) :
     (b - a) *
         ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
-          measurableSet_Iic).offDiagonalPart Z x‖ ≤
+          measurableSet_Iic).offDiagBlock Z x‖ ≤
       2 * ‖B‖ *
         ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
-          measurableSet_Iic).diagonalPart Z x‖ ∧
+          measurableSet_Iic).diagBlock Z x‖ ∧
     TauCeti.diagonalBlockBound (b - a) ‖B‖ * ‖x‖ ≤
       ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
-        measurableSet_Iic).diagonalPart Z x‖ := by
+        measurableSet_Iic).diagBlock Z x‖ := by
   classical
   have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
@@ -907,15 +907,15 @@ theorem tanTwoTheta_unbounded_residual_opNorm_real
     (by rw [← complexify_mul, hZ2, complexify_one]) hZdom' hZcomm' hUa' hUb' hab hxc
   -- and the descent
   have hoff : (TauCeti.LinearPMap.specRange hAc (Set.Iic c)
-        measurableSet_Iic).offDiagonalPart (complexify Z) =
+        measurableSet_Iic).offDiagBlock (complexify Z) =
       complexify ((TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
-        measurableSet_Iic).offDiagonalPart Z) := by
+        measurableSet_Iic).offDiagBlock Z) := by
     rw [← offDiagonalPart_congr hUeq (complexify Z)]
     exact offDiagonalPart_complexifySubmodule _ Z
   have hdiag : (TauCeti.LinearPMap.specRange hAc (Set.Iic c)
-        measurableSet_Iic).diagonalPart (complexify Z) =
+        measurableSet_Iic).diagBlock (complexify Z) =
       complexify ((TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
-        measurableSet_Iic).diagonalPart Z) := by
+        measurableSet_Iic).diagBlock Z) := by
     rw [← diagonalPart_congr hUeq (complexify Z)]
     exact diagonalPart_complexifySubmodule _ Z
   rw [hoff, hdiag, complexify_ofReal, complexify_ofReal, ofReal.norm_map,
@@ -946,9 +946,9 @@ theorem tanTwoTheta_unbounded_residual_div_real
     (hx : x ∈ TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)
     (hx0 : x ≠ 0) :
     ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
-        measurableSet_Iic).offDiagonalPart Z x‖ /
+        measurableSet_Iic).offDiagBlock Z x‖ /
       ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
-        measurableSet_Iic).diagonalPart Z x‖ ≤ 2 * ‖B‖ / (b - a) := by
+        measurableSet_Iic).diagBlock Z x‖ ≤ 2 * ‖B‖ / (b - a) := by
   obtain ⟨htan, hpole⟩ := tanTwoTheta_unbounded_residual_opNorm_real hA hB hZsa hZ2
     hZdom hZcomm hUa hUb hab hx
   have hδ : 0 < b - a := by linarith
@@ -959,7 +959,7 @@ theorem tanTwoTheta_unbounded_residual_div_real
       Real.sqrt_pos.mpr (by positivity)
     positivity
   have hden : 0 < ‖(TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
-      measurableSet_Iic).diagonalPart Z x‖ :=
+      measurableSet_Iic).diagBlock Z x‖ :=
     lt_of_lt_of_le (by positivity) hpole
   rw [div_le_div_iff₀ hden hδ]
   linarith [htan]

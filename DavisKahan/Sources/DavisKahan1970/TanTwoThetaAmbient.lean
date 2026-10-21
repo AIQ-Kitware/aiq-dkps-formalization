@@ -1185,7 +1185,7 @@ omit [CompleteSpace E] in
 private theorem isOffDiagonal_of_maps_orthogonal'
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
     Submodule.IsOffDiagonal U H := by
-  change U.diagonalPart H = 0
+  change U.diagBlock H = 0
   apply ContinuousLinearMap.ext
   intro x
   have hPzero : U.starProjection (H (U.starProjection x)) = 0 :=
@@ -1196,7 +1196,7 @@ private theorem isOffDiagonal_of_maps_orthogonal'
       Submodule.starProjection_eq_self_iff.mpr
         (hHUperp (Uᗮ.starProjection x) (Uᗮ.starProjection_apply_mem x)),
       sub_self]
-  simp only [Submodule.diagonalPart, ContinuousLinearMap.comp_apply,
+  simp only [Submodule.diagBlock, ContinuousLinearMap.comp_apply,
     add_apply, hPzero, hQzero, add_zero, zero_apply]
 
 private theorem kyFan_upperBlock_eq_compression (K : E →L[ℂ] E) (k : ℕ) :

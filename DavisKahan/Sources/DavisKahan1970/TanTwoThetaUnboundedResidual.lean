@@ -107,13 +107,13 @@ theorem tanTwoTheta_unbounded_residual_opNorm_complex
     (hx : x ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) :
     (b - a) *
         ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-          measurableSet_Iic).offDiagonalPart Z x‖ ≤
+          measurableSet_Iic).offDiagBlock Z x‖ ≤
       2 * ‖B‖ *
         ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-          measurableSet_Iic).diagonalPart Z x‖ ∧
+          measurableSet_Iic).diagBlock Z x‖ ∧
     TauCeti.diagonalBlockBound (b - a) ‖B‖ * ‖x‖ ≤
       ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-        measurableSet_Iic).diagonalPart Z x‖ :=
+        measurableSet_Iic).diagBlock Z x‖ :=
   ⟨TauCeti.gap_mul_norm_offDiagonalPart_apply_le_specRange hA hB hZsa hZ2 hZdom
       hZcomm hUa hUb hab hx,
    TauCeti.diagonalBlockBound_mul_le_norm_diagonalPart_apply_specRange hA hB
@@ -139,9 +139,9 @@ theorem tanTwoTheta_unbounded_residual_div_complex
     (hx : x ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)
     (hx0 : x ≠ 0) :
     ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-        measurableSet_Iic).offDiagonalPart Z x‖ /
+        measurableSet_Iic).offDiagBlock Z x‖ /
       ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-        measurableSet_Iic).diagonalPart Z x‖ ≤ 2 * ‖B‖ / (b - a) := by
+        measurableSet_Iic).diagBlock Z x‖ ≤ 2 * ‖B‖ / (b - a) := by
   obtain ⟨htan, hpole⟩ := tanTwoTheta_unbounded_residual_opNorm_complex hA hB hZsa hZ2
     hZdom hZcomm hUa hUb hab hx
   have hδ : 0 < b - a := by linarith
@@ -152,7 +152,7 @@ theorem tanTwoTheta_unbounded_residual_div_complex
       Real.sqrt_pos.mpr (by positivity)
     positivity
   have hden : 0 < ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-      measurableSet_Iic).diagonalPart Z x‖ :=
+      measurableSet_Iic).diagBlock Z x‖ :=
     lt_of_lt_of_le (by positivity) hpole
   rw [div_le_div_iff₀ hden hδ]
   linarith [htan]

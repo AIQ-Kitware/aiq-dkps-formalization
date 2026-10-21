@@ -123,9 +123,9 @@ private theorem kyFan_upper_eq_lower_of_skewAdjoint_unboundedAmbientExact
 omit [CompleteSpace G] in
 private theorem diagonalPart_eq_zero_of_isOddFor_unboundedAmbientExact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection] {K : G →L[ℂ] G}
-    (hK : TauCeti.IsOddFor U K) : U.diagonalPart K = 0 := by
+    (hK : TauCeti.IsOddFor U K) : U.diagBlock K = 0 := by
   ext x
-  rw [Submodule.diagonalPart_apply]
+  rw [Submodule.diagBlock_apply]
   have hlow : K (U.starProjection x) ∈ Uᗮ :=
     hK.1 _ (U.starProjection_apply_mem x)
   have hupp : K (Uᗮ.starProjection x) ∈ U :=
@@ -139,8 +139,8 @@ private theorem diagonalPart_eq_zero_of_isOddFor_unboundedAmbientExact
 omit [CompleteSpace G] in
 private theorem diagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact
     (U : Submodule ℂ G) [U.HasOrthogonalProjection] (K : G →L[ℂ] G) :
-    diagonalPair Uᗮ U K = U.offDiagonalPart K := by
-  rw [diagonalPair, Submodule.offDiagonalPart_eq, Submodule.diagonalPart_eq]
+    diagonalPair Uᗮ U K = U.offDiagBlock K := by
+  rw [diagonalPair, Submodule.offDiagBlock_eq_sub_diagBlock, Submodule.diagBlock_def]
   simp only [Submodule.orthogonal_orthogonal, Submodule.starProjection_orthogonal',
     comp_eq_mul_unboundedAmbientExact]
   have hp : U.starProjection * U.starProjection = U.starProjection :=
@@ -152,7 +152,7 @@ private theorem diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExac
     {U : Submodule ℂ G} [U.HasOrthogonalProjection] {K : G →L[ℂ] G}
     (hK : TauCeti.IsOddFor U K) : diagonalPair Uᗮ U K = K := by
   rw [diagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact]
-  rw [Submodule.offDiagonalPart_eq,
+  rw [Submodule.offDiagBlock_eq_sub_diagBlock,
     diagonalPart_eq_zero_of_isOddFor_unboundedAmbientExact hK, sub_zero]
 
 /-! ## The reflection tangent is an odd skew-adjoint block -/
@@ -160,11 +160,11 @@ private theorem diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExac
 omit [CompleteSpace G] in
 private theorem ringInverse_diagonalPart_sq_mem_orthogonal_of_mem_orthogonal_unboundedAmbientExact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection] {Z : G →L[ℂ] G}
-    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z))
+    (hCC : IsUnit (U.diagBlock Z * U.diagBlock Z))
     {y : G} (hy : y ∈ Uᗮ) :
-    Ring.inverse (U.diagonalPart Z * U.diagonalPart Z) y ∈ Uᗮ := by
+    Ring.inverse (U.diagBlock Z * U.diagBlock Z) y ∈ Uᗮ := by
   have hcomm : Commute U.starProjection
-      (Ring.inverse (U.diagonalPart Z * U.diagonalPart Z)) :=
+      (Ring.inverse (U.diagBlock Z * U.diagBlock Z)) :=
     commute_ringInverse hCC
       ((commute_starProjection_diagonalPart U Z).mul_right
         (commute_starProjection_diagonalPart U Z))
@@ -179,7 +179,7 @@ omit [CompleteSpace G] in
 /-- The whole reflection tangent exchanges the two source summands. -/
 theorem isOddFor_unboundedReflectionTangent_exact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection] {Z : G →L[ℂ] G}
-    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z)) :
+    (hCC : IsUnit (U.diagBlock Z * U.diagBlock Z)) :
     TauCeti.IsOddFor U (unboundedReflectionTangent U Z) := by
   refine ⟨?_, ?_⟩
   · intro y hy
@@ -196,10 +196,10 @@ having two complementary directed tangent blocks that are adjoints up to sign. -
 theorem adjoint_unboundedReflectionTangent_eq_neg_exact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection] {Z : G →L[ℂ] G}
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
-    (hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z)) :
+    (hCC : IsUnit (U.diagBlock Z * U.diagBlock Z)) :
     (unboundedReflectionTangent U Z).adjoint = -unboundedReflectionTangent U Z := by
-  set C := U.diagonalPart Z
-  set S := U.offDiagonalPart Z
+  set C := U.diagBlock Z
+  set S := U.offDiagBlock Z
   set T := unboundedReflectionTangent U Z
   set D := Ring.inverse (C * C)
   have hCsa : IsSelfAdjoint C := TauCeti.isSelfAdjoint_diagonalPart (U := U) hZsa
@@ -283,8 +283,8 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
     IsUnit
-        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z *
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z) ∧
+        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z *
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z) ∧
       N.Mem (unboundedReflectionTangent
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
       (b - a) * N.gauge (unboundedReflectionTangent
@@ -295,7 +295,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
   have hred : TauCeti.LinearPMap.ReducesSubspace A U :=
     TauCeti.LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic
   have hgU : ∀ y ∈ U,
-      ‖U.offDiagonalPart Z y‖ ≤ TauCeti.crossBlockBound (b - a) ‖B‖ * ‖y‖ := by
+      ‖U.offDiagBlock Z y‖ ≤ TauCeti.crossBlockBound (b - a) ‖B‖ * ‖y‖ := by
     intro y hy
     exact TauCeti.norm_offDiagonalPart_apply_le_specRange hA hB hZsa hZ2 hZdom
       hZcomm hUa hUb hab hy
@@ -303,10 +303,10 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
     TauCeti.crossBlockBound_nonneg (norm_nonneg B)
   have hg1 : TauCeti.crossBlockBound (b - a) ‖B‖ < 1 :=
     crossBlockBound_lt_one (sub_pos.mpr hab) (norm_nonneg B)
-  have hSle : ‖U.offDiagonalPart Z‖ ≤ TauCeti.crossBlockBound (b - a) ‖B‖ :=
+  have hSle : ‖U.offDiagBlock Z‖ ≤ TauCeti.crossBlockBound (b - a) ‖B‖ :=
     norm_offDiagonalPart_le hZsa hg0 hgU
-  have hS1 : ‖U.offDiagonalPart Z‖ < 1 := lt_of_le_of_lt hSle hg1
-  have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) :=
+  have hS1 : ‖U.offDiagBlock Z‖ < 1 := lt_of_le_of_lt hSle hg1
+  have hCC : IsUnit (U.diagBlock Z * U.diagBlock Z) :=
     isUnit_diagonalPart_sq_of_forall_mem hZsa hZ2 hg0 hg1 hgU
   have hstrong : StronglyTendsto
       (fun n : ℕ => cutoffCorner (TauCeti.spectralCutoffSeq hA c n)) atTop
@@ -385,7 +385,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
     intro k
     linarith [hwhole k]
   have hUI := N.mul_gauge_le_of_all_mul_kyFan_le hhalf hBmem hscaled
-  change IsUnit (U.diagonalPart Z * U.diagonalPart Z) ∧
+  change IsUnit (U.diagBlock Z * U.diagBlock Z) ∧
       N.Mem T ∧ (b - a) * N.gauge T ≤ 2 * N.gauge B
   refine ⟨hCC, hUI.1, ?_⟩
   nlinarith [hUI.2]
@@ -426,7 +426,7 @@ reducing subspace**, on the block representative.
 spectral selection of `U` removed. -/
 theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorming_complex
     (N : SymmetricNormingFunction) (hBsa : IsSelfAdjoint B) (hBmem : N.Mem B) :
-    IsUnit (U.diagonalPart Z * U.diagonalPart Z) ∧
+    IsUnit (U.diagBlock Z * U.diagBlock Z) ∧
       N.Mem (unboundedReflectionTangent U Z) ∧
       (b - a) * N.gauge (unboundedReflectionTangent U Z) ≤ 2 * N.gauge B := by
   have hCC := isUnit_diagonalPart_sq_reducing_exact hA hred hB hZsa hZ2 hZdom
@@ -596,9 +596,9 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symm
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
     IsUnit
-        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart
+        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock
             (V.reflectionOperator) *
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock
             (V.reflectionOperator)) ∧
       N.Mem (unboundedReflectionTangent
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)
@@ -819,14 +819,14 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetr
         2 * N.gauge (blockCompression Uᗮ U B) := by
   have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
   have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
-  have hS1 : ‖U.offDiagonalPart V.reflectionOperator‖ < 1 :=
+  have hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1 :=
     norm_offDiagonalPart_lt_one_reducing_exact hA hred hB hZsa hZ2 hV.mapsDomain
       hV.commutes hUa hUb hab
-  have hsq : ‖U.offDiagonalPart V.reflectionOperator *
-      U.offDiagonalPart V.reflectionOperator‖ < 1 := by
-    have h := norm_mul_le (U.offDiagonalPart V.reflectionOperator)
-      (U.offDiagonalPart V.reflectionOperator)
-    nlinarith [norm_nonneg (U.offDiagonalPart V.reflectionOperator)]
+  have hsq : ‖U.offDiagBlock V.reflectionOperator *
+      U.offDiagBlock V.reflectionOperator‖ < 1 := by
+    have h := norm_mul_le (U.offDiagBlock V.reflectionOperator)
+      (U.offDiagBlock V.reflectionOperator)
+    nlinarith [norm_nonneg (U.offDiagBlock V.reflectionOperator)]
   have hinv := TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V
     (isUnit_diagonalPart_sq hZ2 hsq)
   obtain ⟨-, -, hmem, hle⟩ :=
@@ -919,18 +919,18 @@ ambient spelling; `approximationNumber_reflectionTangentCorner` and
 `hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock` read
 off the singular values. -/
 theorem approximationNumber_tanTwoDirectedCorner
-    (hS1 : ‖U.offDiagonalPart V.reflectionOperator‖ < 1) (n : ℕ) :
+    (hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1) (n : ℕ) :
     (projectionBlock Uᗮ U
         (2 * (projectorDifference U V * doubleSecant U V))).approximationNumber n =
       Real.tan (Real.arcsin
         ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n)) := by
   have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
   have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
-  have hsq : ‖U.offDiagonalPart V.reflectionOperator *
-      U.offDiagonalPart V.reflectionOperator‖ < 1 := by
-    have h := norm_mul_le (U.offDiagonalPart V.reflectionOperator)
-      (U.offDiagonalPart V.reflectionOperator)
-    nlinarith [norm_nonneg (U.offDiagonalPart V.reflectionOperator)]
+  have hsq : ‖U.offDiagBlock V.reflectionOperator *
+      U.offDiagBlock V.reflectionOperator‖ < 1 := by
+    have h := norm_mul_le (U.offDiagBlock V.reflectionOperator)
+      (U.offDiagBlock V.reflectionOperator)
+    nlinarith [norm_nonneg (U.offDiagBlock V.reflectionOperator)]
   have hinv := TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V
     (isUnit_diagonalPart_sq hZ2 hsq)
   have hcorner : reflectionTangentCorner U V.reflectionOperator =
@@ -990,14 +990,14 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex
     DavisKahan.ReflectionIntertwines.ofReducesSubspace hV
   have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
   have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
-  have hS1 : ‖U.offDiagonalPart V.reflectionOperator‖ < 1 :=
+  have hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1 :=
     norm_offDiagonalPart_lt_one_reducing_exact hA hred hB hZsa hZ2 hV'.mapsDomain
       hV'.commutes hUa hUb hab
-  have hsq : ‖U.offDiagonalPart V.reflectionOperator *
-      U.offDiagonalPart V.reflectionOperator‖ < 1 := by
-    have h := norm_mul_le (U.offDiagonalPart V.reflectionOperator)
-      (U.offDiagonalPart V.reflectionOperator)
-    nlinarith [norm_nonneg (U.offDiagonalPart V.reflectionOperator)]
+  have hsq : ‖U.offDiagBlock V.reflectionOperator *
+      U.offDiagBlock V.reflectionOperator‖ < 1 := by
+    have h := norm_mul_le (U.offDiagBlock V.reflectionOperator)
+      (U.offDiagBlock V.reflectionOperator)
+    nlinarith [norm_nonneg (U.offDiagBlock V.reflectionOperator)]
   have hinv := TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V
     (isUnit_diagonalPart_sq hZ2 hsq)
   have hcorner : reflectionTangentCorner U V.reflectionOperator =
