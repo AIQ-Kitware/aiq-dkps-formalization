@@ -132,8 +132,9 @@ theorem extend_approxSeq_smul (c : 𝕜) (A : E →L[𝕜] F) :
     simp only [approxSeq, ContinuousLinearMap.approximationNumber_smul]
     rw [← ENNReal.ofReal_coe_nnreal, ← ENNReal.ofReal_mul (by positivity)]
     rfl
-  rw [hseq, Φ.extend_smul]
-  rfl
+  rw [hseq]
+  change Φ.extend (((‖c‖ₑ : ℝ≥0∞) • approxSeq A)) = ‖c‖ₑ * Φ.extend (approxSeq A)
+  rw [Φ.extend_smul]
 
 /-- **The gauge dominates the operator norm**, via `a₀ T = ‖T‖`. -/
 theorem enorm_le_extend_approxSeq (A : E →L[𝕜] F) :
@@ -142,7 +143,7 @@ theorem enorm_le_extend_approxSeq (A : E →L[𝕜] F) :
     simp only [approxSeq, ContinuousLinearMap.approximationNumber_index_zero]
     rw [← ofReal_norm]
   calc ‖A‖ₑ = approxSeq A 0 := h0.symm
-    _ ≤ Φ.extend (approxSeq A) := Φ.le_extend _ 0
+    _ ≤ Φ.extend (approxSeq A) := le_trans (le_iSup (approxSeq A) 0) (Φ.iSup_le_extend _)
 
 /-- **The composition bound.**  `approxSeq` of `L ∘L A ∘L R` is dominated
 termwise by `‖L‖ * ‖R‖` times `approxSeq A`, and `extend_mono` plus
@@ -391,8 +392,12 @@ theorem gauge_schattenFamily_antitone {p q : ℝ} (hp : 1 ≤ p) (hq : 1 ≤ q)
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (T : E →L[𝕜] F) :
     (schattenFamily 𝕜 q hq).gauge T ≤ (schattenFamily 𝕜 p hp).gauge T :=
-  SymmetricGauge.extend_le_extend_of_le
-    (fun c => schattenGaugeFun_antitone hp hq hpq c) (approxSeq T)
+  (schattenGauge q hq).extend_le_iff.2 fun b hb => by
+    calc (schattenGauge q hq b : ℝ≥0∞)
+        ≤ (schattenGauge p hp b : ℝ≥0∞) := by
+          exact_mod_cast schattenGaugeFun_antitone hp hq hpq b
+      _ ≤ (schattenGauge p hp).extend (approxSeq T) :=
+        (schattenGauge p hp).apply_le_extend hb
 
 
 /-- The diagonal adjoint-invariant view of a finite-exponent Schatten family. -/
@@ -443,11 +448,13 @@ theorem schattenFamilySymmetric_two_eq_hilbertSchmidtIdealFamily (𝕜 : Type u)
 
 /-- The infinity endpoint is the family induced by the supremum gauge. -/
 noncomputable def schattenFamilyInf (𝕜 : Type u) [RCLike 𝕜] :
-    OperatorIdealFamily.{u, v, w} 𝕜 := symmetricGaugeFamily 𝕜 supGauge
+    OperatorIdealFamily.{u, v, w} 𝕜 :=
+  symmetricGaugeFamily 𝕜 SymmetricGauge.supGauge
 
 /-- The adjoint-invariant diagonal view of the infinity endpoint. -/
 noncomputable def schattenFamilyInfSymmetric (𝕜 : Type u) [RCLike 𝕜] :
-    SymmetricOperatorIdealFamily.{u, v} 𝕜 := symmetricGaugeFamilySymmetric 𝕜 supGauge
+    SymmetricOperatorIdealFamily.{u, v} 𝕜 :=
+  symmetricGaugeFamilySymmetric 𝕜 SymmetricGauge.supGauge
 
 /-- The infinity gauge is the supremum of the approximation-number sequence. -/
 theorem gauge_schattenFamilyInf {E : Type v} {F : Type w}
@@ -455,7 +462,7 @@ theorem gauge_schattenFamilyInf {E : Type v} {F : Type w}
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (T : E →L[𝕜] F) :
     (schattenFamilyInf.{u, v, w} 𝕜).gauge T = ⨆ n, approxSeq T n :=
-  supGauge_extend _
+  SymmetricGauge.extend_supGauge _
 
 /-- The infinity endpoint is exactly the operator-norm family, not a distinct ideal. -/
 theorem schattenFamilyInf_eq_opNorm (𝕜 : Type u) [RCLike 𝕜] :
@@ -463,7 +470,7 @@ theorem schattenFamilyInf_eq_opNorm (𝕜 : Type u) [RCLike 𝕜] :
   apply OperatorIdealFamily.ext
   intro E F _ _ _ _ _ _ T
   rw [OperatorIdealFamily.gauge_opNorm]
-  change supGauge.extend (approxSeq T) = ‖T‖ₑ
+  change SymmetricGauge.supGauge.extend (approxSeq T) = ‖T‖ₑ
   rw [supGauge_extend_of_antitone (approxSeq_antitone T), approxSeq,
     approximationNumber_index_zero, ofReal_norm]
 

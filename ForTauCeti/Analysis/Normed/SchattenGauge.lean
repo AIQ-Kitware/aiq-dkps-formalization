@@ -139,11 +139,11 @@ operator ideal family, which is what the roadmap's `schattenFamily` names. -/
 @[expose]
 noncomputable def schattenGauge (p : ℝ) (hp : 1 ≤ p) : SymmetricGauge where
   toFun := schattenGaugeFun p
-  add_le := schattenGaugeFun_add_le hp
-  smul := schattenGaugeFun_smul hp
-  symm := fun σ a => schattenGaugeFun_symm σ a
-  mono := fun _ _ hab => schattenGaugeFun_mono hp hab
-  normalized := schattenGaugeFun_normalized hp
+  map_add_le' := schattenGaugeFun_add_le hp
+  map_smul' := schattenGaugeFun_smul hp
+  map_equivMapDomain' := fun σ a => schattenGaugeFun_symm σ a
+  monotone' := fun _ _ hab => schattenGaugeFun_mono hp hab
+  map_single_zero_one' := schattenGaugeFun_normalized hp
 
 /-- The bundled gauge applies as `schattenGaugeFun`. -/
 @[simp]
