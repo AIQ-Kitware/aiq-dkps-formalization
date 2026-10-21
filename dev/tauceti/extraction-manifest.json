@@ -647,8 +647,9 @@
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": null,
+      "migration_note": "TauCeti 273ea28e now proves approximation-number adjoint invariance and rank preservation. The local approximationNumber_adjoint is only the real-coercion adapter; the duplicate rank proof and infimum argument were removed. The separate compact-operator adjoint consequence remains local and is derived from the local compactness/approximation-number criterion."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.CourantFischer",
