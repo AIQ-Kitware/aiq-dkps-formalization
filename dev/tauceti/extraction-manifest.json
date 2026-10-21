@@ -624,9 +624,9 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "Against TauCeti 273ea28e and Mathlib e3e75e86, the local real-valued approximationNumber constructor now coerces TauCeti ContinuousLinearMap.singularValue. Shared laws for best approximation, norm/rank bounds, perturbation, additive indices, composition, and homogeneity forward to TauCeti proofs. The real-valued infimum and API remain as a compatibility boundary for existing downstream estimates; continue migrating consumers before deleting this adapter and retain only genuinely missing results."
     },
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint",
