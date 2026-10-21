@@ -811,9 +811,9 @@ theorem sinTheta_model_equality
       (rotatedModelSubspace (𝕜 := 𝕜) θ))
         = N ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
             (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
-          rw [N.smul_eq, norm_ofReal_sub_of_lt hab]
+          rw [map_smul_eq_mul N, norm_ofReal_sub_of_lt hab]
     _ = N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) :=
-      N.eq_of_same_singularValues hsing.symm
+      N.map_eq_of_singularValues_eq hsing.symm
 
 /-- Equality case for the `tan Θ` theorem.
 
@@ -848,9 +848,9 @@ theorem tanTheta_model_equality
         N (((b - a : ℝ) : 𝕜) • tanAngleOperator
           (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
-      rw [N.smul_eq, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
+      rw [map_smul_eq_mul N, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
     _ = N (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ) :=
-      N.eq_of_same_singularValues hsing
+      N.map_eq_of_singularValues_eq hsing
 
 set_option maxHeartbeats 800000 in
 /-- Equality case for the `sin 2Θ` theorem.
@@ -961,11 +961,11 @@ theorem sinTwoTheta_model_equality
         (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) =
         N (((b - a : ℝ) : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) := by
-      rw [N.smul_eq, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
+      rw [map_smul_eq_mul N, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
     _ = N (((2 : ℝ) : 𝕜) • modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) :=
-      N.eq_of_same_singularValues hsing
+      N.map_eq_of_singularValues_eq hsing
     _ = 2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-      rw [N.smul_eq]
+      rw [map_smul_eq_mul N]
       norm_num
 
 set_option maxHeartbeats 800000 in
@@ -1027,12 +1027,12 @@ theorem tanTwoTheta_model_equality
         N (((b - a : ℝ) : 𝕜) • tanTwoAngleOperator
           (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
-      rw [N.smul_eq, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
+      rw [map_smul_eq_mul N, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
     _ = N (((2 : ℝ) : 𝕜) • modelTanTwoThetaPerturbation
           (𝕜 := 𝕜) a b θ) :=
-      N.eq_of_same_singularValues hsing
+      N.map_eq_of_singularValues_eq hsing
     _ = 2 * N (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
-      rw [N.smul_eq]
+      rw [map_smul_eq_mul N]
       norm_num
 
 set_option maxHeartbeats 1000000 in
@@ -2056,7 +2056,7 @@ theorem tanTheta_perturbation_le_model_equality
       (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues := by
     rw [singularValues_modelRotatedOffDiagonal,
       singularValues_modelTanThetaPerturbation hab htan, abs_of_nonneg hprod]
-  rw [modelTanThetaPerturbedOperator_sub_base, N.eq_of_same_singularValues hsing]
+  rw [modelTanThetaPerturbedOperator_sub_base, N.map_eq_of_singularValues_eq hsing]
   exact tanTheta_model_equality N hab hθ0 hθ1
 
 /-- **The `tan Θ` source bound is attained by a genuine admissible pair.**
@@ -2225,7 +2225,7 @@ theorem sinTwoTheta_model_equality_of_admissiblePair
       2 * N (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
         modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b) := by
   rw [modelSinTwoThetaPerturbedOperator_sub_base,
-    N.eq_of_same_singularValues (singularValues_modelSinTwoThetaResidual hab hθ0 hθ1)]
+    N.map_eq_of_singularValues_eq (singularValues_modelSinTwoThetaResidual hab hθ0 hθ1)]
   exact sinTwoTheta_model_equality N hab hθ0 hθ1
 
 /-- The reflection-residual `sin 2Θ` theorem specialized to the planar sharpness
@@ -2440,7 +2440,7 @@ theorem tanTwoTheta_perturbation_le_model_equality
   have hneg : N (-modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) =
       N (modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
     rw [show (-modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) =
-      ((-1 : 𝕜) • modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) by module, N.smul_eq]
+      ((-1 : 𝕜) • modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) by module, map_smul_eq_mul N]
     simp
   rw [modelTanTwoThetaPerturbedOperator_sub_base, hneg]
   exact tanTwoTheta_model_equality N hab hθ0 hθ1

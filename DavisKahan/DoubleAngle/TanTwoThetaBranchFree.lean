@@ -347,7 +347,7 @@ theorem absTanTwoTheta0_offDiagonal_le
         TauCeti.kyFanSum_eq_of_finrank_le hk' H]
       exact hkey (finrank 𝕜 E) le_rfl
   have hN := N.apply_le_of_kyFanSum_le hprefix
-  rw [N.smul_eq, N.smul_eq] at hN
+  rw [map_smul_eq_mul N, map_smul_eq_mul N] at hN
   have hnorm1 : ‖(((b - a : ℝ)) : 𝕜)‖ = b - a := by
     rw [RCLike.norm_ofReal]
     exact abs_of_nonneg hba

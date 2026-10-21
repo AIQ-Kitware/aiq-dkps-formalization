@@ -51,6 +51,6 @@ theorem sinThetaFrobenius_nonneg (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     0 ≤ sinThetaFrobenius U V := by
   rw [sinThetaFrobenius_eq]
-  exact (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).nonneg _
+  exact apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _
 
 end TauCeti

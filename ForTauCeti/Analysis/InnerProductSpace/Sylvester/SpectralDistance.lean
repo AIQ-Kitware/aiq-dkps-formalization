@@ -231,10 +231,10 @@ theorem uiNorm_sylvester_le_of_spectralDistance
       kyFan_sylvester_le_of_spectralDistance hA hB hδ hgap hEq k
   calc
     δ * N X = N (((δ : 𝕜)) • X) := by
-      rw [N.smul_eq, RCLike.norm_ofReal, abs_of_pos hδ]
+      rw [map_smul_eq_mul N, RCLike.norm_ofReal, abs_of_pos hδ]
     _ ≤ N (((p : 𝕜)) • C) := hscaled
     _ = p * N C := by
-      rw [N.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hp0]
+      rw [map_smul_eq_mul N, RCLike.norm_ofReal, abs_of_nonneg hp0]
     _ = (Real.pi / 2) * N C := by rfl
 
 /-! ## Arbitrary disjoint spectra: the sharp Hilbert--Schmidt estimate

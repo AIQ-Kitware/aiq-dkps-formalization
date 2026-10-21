@@ -528,7 +528,7 @@ theorem tanTwoTheta0_offDiagonal_le
     exact kyFan_tanTwoTheta0_offDiagonal_le hA hH hAU hHU hHUperp hTmem
       hTzero hUb hUa hinv hT1 tanTwoTheta0 htan k
   have hN := N.apply_le_of_kyFanSum_le hprefix
-  rw [N.smul_eq, N.smul_eq] at hN
+  rw [map_smul_eq_mul N, map_smul_eq_mul N] at hN
   have hnorm1 : ‖(((b - a : ℝ)) : 𝕜)‖ = b - a := by
     rw [RCLike.norm_ofReal]
     exact abs_of_nonneg hba

@@ -398,7 +398,8 @@ theorem yuWangSamworth_sinTheta_frame_le
   have hfrob : sinThetaFrobenius U V ≤
       2 * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / Δ := by
     refine le_two_mul_div_of_sq_gap_mul_sq_le hΔ
-      ((UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).nonneg _) (hkey.trans ?_)
+      (apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _)
+      (hkey.trans ?_)
     rw [UnitarilyInvariantSeminorm.sq_frobenius_apply (hA.eigenvectorBasis hn) (B - A)]
     exact sum_sq_norm_frameResidual_le hA hB hn hv
   -- Dimension-scaled operator-norm branch.

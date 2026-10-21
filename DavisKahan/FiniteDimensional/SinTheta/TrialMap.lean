@@ -265,7 +265,7 @@ theorem generalizedSinTheta0_residual_le_of_gramLowerBound
     N hA hV X hM hδ hε hgram hgap
   have hnorm : N sinTheta0 = N (sinThetaEmbedding V
       (orthonormalizedEmbedding X (hgram.injective hε))) :=
-    N.eq_of_same_singularValues hsin
+    N.map_eq_of_singularValues_eq hsin
   rw [hnorm]
   exact hcanonical
 

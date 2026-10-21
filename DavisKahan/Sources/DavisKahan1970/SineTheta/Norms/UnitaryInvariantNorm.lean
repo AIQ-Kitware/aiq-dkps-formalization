@@ -161,7 +161,7 @@ theorem finiteGauge_zeroPad (N : SymmetricNormingFunction)
 /-- Finite gauges are nonnegative. -/
 theorem finiteGauge_nonneg (N : SymmetricNormingFunction)
     {n : ℕ} (x : Fin n → ℝ) : 0 ≤ N.finiteGauge n x :=
-  (N.finiteNorm n).nonneg _
+  apply_nonneg (N.finiteNorm n) _
 
 /-- Finite gauges are absolutely homogeneous. -/
 theorem finiteGauge_smul (N : SymmetricNormingFunction)

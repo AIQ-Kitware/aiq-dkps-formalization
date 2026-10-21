@@ -645,7 +645,7 @@ theorem tanTheta0_ritzResidual_le
     exact kyFan_tanTheta0_ritzResidual_le hA hU X hβα hδ hgap
       tanTheta0 htan k
   have hN := N.apply_le_of_kyFanSum_le hprefix
-  rw [N.smul_eq] at hN
+  rw [map_smul_eq_mul N] at hN
   simpa [RCLike.norm_ofReal, abs_of_pos hδ] using hN
 
 /-- **The residual conclusion of the 1970 `tan Θ` theorem.**

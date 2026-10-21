@@ -80,8 +80,8 @@ theorem directRotation_fullDisplacement_qnorm
     rw [hM, hM, ← displacementSquare_eq_adjoint_comp,
       ← displacementSquare_eq_adjoint_comp]
     exact directRotation_displacementSquare_uiNorm M U V hacute W hmap
-  nlinarith [N.nonneg (LinearMap.id - (directRotation U V hacute).toLinearMap),
-    N.nonneg (LinearMap.id - W.toLinearMap), hsq]
+  nlinarith [apply_nonneg N (LinearMap.id - (directRotation U V hacute).toLinearMap),
+    apply_nonneg N (LinearMap.id - W.toLinearMap), hsq]
 
 end DavisKahan.FiniteDimensional
 end TauCeti

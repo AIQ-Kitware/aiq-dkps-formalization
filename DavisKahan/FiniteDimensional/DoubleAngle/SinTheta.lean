@@ -98,6 +98,33 @@ omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
 private theorem coe_equiv_apply (f : E ≃ₗᵢ[𝕜] E) (v : E) :
     (f.toLinearEquiv : E →ₗ[𝕜] E) v = f v := rfl
 
+-- A linear isometry equivalence has the same underlying linear map whether it is
+-- obtained through `toLinearMap` or through the canonical coercion.  The
+-- unitarily invariant seminorm API uses the latter, while the reflection
+-- identities in this file use the former.
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+private theorem map_toLinearMap_comp (N : UnitarilyInvariantSeminorm 𝕜 E E)
+    (J : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] E) :
+    N (J.toLinearMap ∘ₗ A) = N A := by
+  have hJ : J.toLinearMap = (J : E →ₗ[𝕜] E) := by
+    ext x
+    rfl
+  rw [hJ]
+  exact N.map_linearIsometryEquiv_comp J A
+
+omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
+private theorem map_toLinearMap_comp_comp (N : UnitarilyInvariantSeminorm 𝕜 E E)
+    (J K : E ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] E) :
+    N (J.toLinearMap ∘ₗ A ∘ₗ K.toLinearMap) = N A := by
+  have hJ : J.toLinearMap = (J : E →ₗ[𝕜] E) := by
+    ext x
+    rfl
+  have hK : K.toLinearMap = (K : E →ₗ[𝕜] E) := by
+    ext x
+    rfl
+  rw [hJ, hK]
+  exact N.map_linearIsometryEquiv_comp_comp J K A
+
 omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
 /-- The scalar `((2 : ℝ) : 𝕜)`-multiple agrees with the `ℕ`-double appearing in
 `Submodule.reflection_apply`.  Auxiliary. -/
@@ -195,10 +222,10 @@ theorem sin_two_theta_reflection_le (N : UnitarilyInvariantSeminorm 𝕜 E E)
           : E →L[𝕜] E) : E →ₗ[𝕜] E)
       = N (((2 : ℝ) : 𝕜) • ((Uᗮ.starProjection ∘L W.starProjection
           ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)) := by
-        rw [N.smul_eq, RCLike.norm_ofReal]
+        rw [map_smul_eq_mul N, RCLike.norm_ofReal]
         norm_num
     _ = N (((V'.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E))
-        := by rw [hconj, N.invariant_left, hkey]
+        := by rw [hconj, map_toLinearMap_comp N W.reflection, hkey]
     _ ≤ N (T' - T) / (b - a) := hmain
 
 /-- **The subspace Davis–Kahan sin 2Θ theorem, every unitarily invariant
@@ -254,11 +281,11 @@ theorem sin_two_theta_starProjection_le (N : UnitarilyInvariantSeminorm 𝕜 E E
     calc N (V.reflection.toLinearMap ∘ₗ (T - S) ∘ₗ V.reflection.toLinearMap
           + (S - T))
         ≤ N (V.reflection.toLinearMap ∘ₗ (T - S) ∘ₗ V.reflection.toLinearMap)
-          + N (S - T) := N.add_le _ _
+          + N (S - T) := map_add_le_add N _ _
       _ = N (T - S) + N (S - T) := by
-          rw [N.invariant V.reflection V.reflection (T - S)]
+          rw [map_toLinearMap_comp_comp N V.reflection V.reflection (T - S)]
       _ = 2 * N (S - T) := by
-          rw [show T - S = -(S - T) by abel, N.apply_neg]
+          rw [show T - S = -(S - T) by abel, map_neg_eq_map N]
           ring
   have h2 : N (V.reflection.toLinearMap ∘ₗ T ∘ₗ V.reflection.toLinearMap - T)
         / (b - a)
@@ -522,7 +549,7 @@ theorem sinTwoTheta_perturbation_le
   have hscale :
       N (sinTwoAngleOperator U V) =
         2 * N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) := by
-    rw [sinTwoAngleOperator_eq_two_smul_cross, N.smul_eq]
+    rw [sinTwoAngleOperator_eq_two_smul_cross, map_smul_eq_mul N]
     norm_num
   rw [hscale]
   calc
@@ -570,7 +597,7 @@ theorem sinTwoTheta_reflectionDefect_le
   have hscale :
       N (sinTwoAngleOperator U V) =
         2 * N (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) := by
-    rw [sinTwoAngleOperator_eq_two_smul_cross, N.smul_eq]
+    rw [sinTwoAngleOperator_eq_two_smul_cross, map_smul_eq_mul N]
     norm_num
   rw [hscale]
   simpa [mul_assoc, mul_left_comm, mul_comm] using hmirror
@@ -617,18 +644,25 @@ theorem reflectionDefect_le_two_mul_perturbation
     rw [hb]
     abel
   have hconjNorm : N (J ∘ₗ (A - B) ∘ₗ J) = N (A - B) := by
-    simpa [J] using N.invariant V.reflection V.reflection (A - B)
+    change N (V.reflection.toLinearMap ∘ₗ (A - B) ∘ₗ V.reflection.toLinearMap) =
+      N (A - B)
+    have hJ : V.reflection.toLinearMap =
+        (V.reflection : E →ₗ[𝕜] E) := by
+      ext x
+      rfl
+    rw [hJ]
+    exact N.map_linearIsometryEquiv_comp_comp V.reflection V.reflection (A - B)
   calc
     N (reflectionDefect V A) =
         N (J ∘ₗ (A - B) ∘ₗ J - (A - B)) := by rw [hdef]
     _ ≤ N (J ∘ₗ (A - B) ∘ₗ J) + N (-(A - B)) := by
       rw [sub_eq_add_neg]
-      exact N.add_le _ _
+      exact map_add_le_add N _ _
     _ = N (A - B) + N (A - B) := by
-      rw [hconjNorm, N.apply_neg]
+      rw [hconjNorm, map_neg_eq_map N]
     _ = 2 * N (B - A) := by
       have hsub : A - B = -(B - A) := by abel
-      rw [hsub, N.apply_neg]
+      rw [hsub, map_neg_eq_map N]
       ring
 
 /-- The canonical spectral-subspace `sin 2 Theta` theorem. -/
