@@ -1583,7 +1583,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Analysis/Normed/Operator/FiniteRankCompact.lean` — 103 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/Projector.lean` — 97 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Residual/TrialMap.lean` — 97 lines · Lean source
-- [x] `ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean` — 96 lines · Lean source
+- [x] `ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean` — 61 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/LeadingCutoff.lean` — 96 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralProjectionGroup.lean` — 95 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/DiagonalExample.lean` — 94 lines · Lean source

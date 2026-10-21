@@ -155,11 +155,12 @@ theorem norm_sylvester_le_of_spectrum_intervalExterior
     shifted_spectrum_interior hc hrdef hBspec
   have hB₁norm : ‖B₁‖ ≤ r :=
     (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
-  have hA₁unit : IsUnit A₁ := TauCeti.isUnit_of_forall_le_abs hrd hA₁spec
+  have hA₁unit : IsUnit A₁ :=
+    (hA₁sa.isUnit_and_norm_ringInverse_le (A := F →L[ℂ] F) hrd hA₁spec).1
   set J : F →L[ℂ] F := Ring.inverse A₁
   have hJ1 : J * A₁ = 1 := Ring.inverse_mul_cancel _ hA₁unit
   have hJnorm : ‖J‖ ≤ (r + d)⁻¹ :=
-    TauCeti.IsSelfAdjoint.norm_ringInverse_le hA₁sa hrd hA₁spec
+    (hA₁sa.isUnit_and_norm_ringInverse_le (A := F →L[ℂ] F) hrd hA₁spec).2
   -- the shifted Sylvester equation
   have hEq₁ : A₁ ∘L X - X ∘L B₁ = C := by
     have h1 : algebraMap ℝ (F →L[ℂ] F) c ∘L X =
@@ -426,12 +427,13 @@ theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
     shifted_spectrum_interior hc hrdef hBspec
   have hB₁norm : ‖B₁‖ ≤ r :=
     (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
-  have hA₁unit : IsUnit A₁ := TauCeti.isUnit_of_forall_le_abs hrd hA₁spec
+  have hA₁unit : IsUnit A₁ :=
+    (hA₁sa.isUnit_and_norm_ringInverse_le (A := F₁ →L[ℂ] F₁) hrd hA₁spec).1
   set J : F₁ →L[ℂ] F₁ := Ring.inverse A₁
   have hJ1 : J * A₁ = 1 := Ring.inverse_mul_cancel _ hA₁unit
   have hJ2 : A₁ * J = 1 := Ring.mul_inverse_cancel _ hA₁unit
   have hJnorm : ‖J‖ ≤ (r + d)⁻¹ :=
-    TauCeti.IsSelfAdjoint.norm_ringInverse_le hA₁sa hrd hA₁spec
+    (hA₁sa.isUnit_and_norm_ringInverse_le (A := F₁ →L[ℂ] F₁) hrd hA₁spec).2
   have hEq₁ : A₁ ∘L X - X ∘L B₁ = C := by
     have h1 : algebraMap ℝ (F₁ →L[ℂ] F₁) c ∘L X =
         X ∘L algebraMap ℝ (E₁ →L[ℂ] E₁) c := by
