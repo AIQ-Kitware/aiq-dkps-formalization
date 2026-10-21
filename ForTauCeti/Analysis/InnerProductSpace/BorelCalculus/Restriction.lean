@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicDecomposition
-public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
+public import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
 public import Mathlib.Topology.ContinuousMap.StoneWeierstrass

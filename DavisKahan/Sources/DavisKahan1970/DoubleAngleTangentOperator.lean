@@ -521,7 +521,7 @@ theorem norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le
   have hdenv : 0 < 1 - v ^ 2 := by nlinarith
   have htanv0 : 0 ≤ DavisKahan.TanTwoTheta.doubleAngleTangent v :=
     DavisKahan.TanTwoTheta.doubleAngleTangent_nonneg hv0 hv1
-  let PVM : ProjValMeasure E0 := gramSpectralPVM X
+  let PVM : ProjValMeasure ℝ E0 := gramSpectralPVM X
   let Q : E0 →L[ℂ] E0 := PVM.proj (Set.Iic (u ^ 2)) measurableSet_Iic
   let T := doubleAngleTangentOperator X hcontractive
   show ‖T ∘L Q‖ ≤ DavisKahan.TanTwoTheta.doubleAngleTangent v
@@ -643,7 +643,7 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
   have hau : a < u := by dsimp only [u]; linarith
   have huv : u < v := by dsimp only [u]; linarith
   have hu0 : 0 ≤ u := ha0.trans hau.le
-  let PVM : ProjValMeasure E0 := gramSpectralPVM X
+  let PVM : ProjValMeasure ℝ E0 := gramSpectralPVM X
   let P : E0 →L[ℂ] E0 := PVM.proj (Set.Ioi (u ^ 2)) measurableSet_Ioi
   let Q : E0 →L[ℂ] E0 := PVM.proj (Set.Iic (u ^ 2)) measurableSet_Iic
   let T := doubleAngleTangentOperator X hcontractive

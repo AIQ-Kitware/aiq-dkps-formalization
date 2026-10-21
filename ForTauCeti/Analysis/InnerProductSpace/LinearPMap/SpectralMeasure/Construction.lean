@@ -155,7 +155,7 @@ chain acquired — `specProjection_eq_borelCalculus` and `specProjection_def` he
 `BorelCalculus/PVM.lean` — after which removing the attribute cost **zero** sites.  A consumer
 that rewrites by lemma rather than reducing through a body does not care whether the body is
 exposed, so each such rewiring retires consumers for every definition in the chain at once. -/
-noncomputable def spectralPVM : TauCeti.ProjValMeasure H :=
+noncomputable def spectralPVM : TauCeti.ProjValMeasure ℝ H :=
   BorelCalculus.toProjValMeasure (isStarNormal_cayley hA) (measurable_cayleyInv hA)
 
 /-- Rewrite form of `spectralPVM`, so a call site need not unfold the definition. -/

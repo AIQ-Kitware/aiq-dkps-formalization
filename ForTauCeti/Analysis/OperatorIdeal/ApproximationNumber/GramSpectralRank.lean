@@ -110,7 +110,7 @@ theorem gramLinearPMap_isSelfAdjoint (X : E0 →L[ℂ] E1) :
   LinearPMap.isSelfAdjoint_toPMap_top (gramOperator_isSelfAdjoint X)
 
 /-- The native Tau Ceti spectral PVM of `X†X`. -/
-noncomputable def gramSpectralPVM (X : E0 →L[ℂ] E1) : ProjValMeasure E0 :=
+noncomputable def gramSpectralPVM (X : E0 →L[ℂ] E1) : ProjValMeasure ℝ E0 :=
   LinearPMap.spectralPVM (gramLinearPMap_isSelfAdjoint X)
 
 /-- Definitional bridge between the named Gram PVM and Tau Ceti's pointwise

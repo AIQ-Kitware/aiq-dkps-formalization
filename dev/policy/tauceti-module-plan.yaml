@@ -192,8 +192,7 @@ topics:
   - Analysis.InnerProductSpace.BorelCalculus.Operator
   - Analysis.InnerProductSpace.BorelCalculus.PVM
   - Analysis.InnerProductSpace.BorelCalculus.Polarization
-  - Analysis.InnerProductSpace.ProjValMeasure.Basic
-  - Analysis.InnerProductSpace.ProjValMeasure.Additivity
+  - Analysis.InnerProductSpace.OperatorExt
   - Analysis.InnerProductSpace.ProjValMeasure.Subspace
   - MeasureTheory.CfcMeasurable
   - MeasureTheory.CompactExists
@@ -205,7 +204,6 @@ topics:
   - Analysis.InnerProductSpace.LinearPMap.Constructions
   - Analysis.InnerProductSpace.LinearPMap.GraphCore
   - Analysis.InnerProductSpace.LinearPMap.Sylvester
-  - Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint
   - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
   - Analysis.InnerProductSpace.QuadraticFormBounds
 - id: T15b
@@ -575,8 +573,7 @@ rungs:
   - Analysis.InnerProductSpace.BorelCalculus.Operator
   - Analysis.InnerProductSpace.BorelCalculus.PVM
   - Analysis.InnerProductSpace.BorelCalculus.Polarization
-  - Analysis.InnerProductSpace.ProjValMeasure.Additivity
-  - Analysis.InnerProductSpace.ProjValMeasure.Basic
+  - Analysis.InnerProductSpace.OperatorExt
   - Analysis.InnerProductSpace.ProjValMeasure.Subspace
   - MeasureTheory.CfcMeasurable
   - MeasureTheory.CompactExists
@@ -587,7 +584,6 @@ rungs:
   - Analysis.InnerProductSpace.LinearPMap.Closed
   - Analysis.InnerProductSpace.LinearPMap.Constructions
   - Analysis.InnerProductSpace.LinearPMap.GraphCore
-  - Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint
   - Analysis.InnerProductSpace.LinearPMap.Sylvester
   - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
   - Analysis.InnerProductSpace.QuadraticFormBounds

@@ -5,22 +5,22 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
+public import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+public import Mathlib.MeasureTheory.Constructions.BorelSpace.Real
 
 /-!
 # The range of a projection-valued measure, as a subspace
 
-For a `TauCeti.ProjValMeasure` and a measurable set, the range of the attached
-projection, packaged as a submodule, together with the membership and
-idempotence facts that make it usable.
+For the upstream `TauCeti.ProjValMeasure ℝ` and a measurable set, the range of
+the attached projection, packaged as a submodule, together with the range
+characterization and Mathlib projection identification that make it usable.
 
 **Moved here from `DavisKahan/SpectralTheory/PVMSubspace.lean` on 2026-07-31.**
 Its docstring said the declarations *intentionally live in the DKPS bridge
 namespace*, and that was true when they were adapters over `Spectra.ProjValMeasure`
-from outside.  The structure was repointed to `TauCeti.ProjValMeasure` on
-2026-07-28 and now lives in this directory, so the adapters sit beside the thing
-they adapt rather than in a bridge that no longer bridges anything.
+from outside. The carrier now uses Tau Ceti's general PVM directly; this file
+retains only the genuinely additional range-subspace results.
 
 ## Provenance
 
@@ -30,9 +30,9 @@ they adapt rather than in a bridge that no longer bridges anything.
   `Spectra.ProjValMeasure` to `TauCeti.ProjValMeasure` (2026-07-28).
 * **Original authors / copyright / licence:** Jon Crall, OpenAI GPT-5.6 Thinking;
   Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
-* **Extraction class:** *moved, not restated.*  No statement, signature, proof,
-  attribute, declaration name or namespace changed; the move is a file boundary
-  and the imports it forces.
+* **Extraction class:** *adapted to upstream representation.* The local PVM
+  structure was removed in favor of `TauCeti.ProjValMeasure ℝ`; the range
+  lemmas remain local because they are absent from the upstream API.
 * **Spectra influence:** none remaining.  The declarations were adapters over
   `Spectra.ProjValMeasure` when they were written; the structure underneath is
   `TauCeti`'s own, and the `ForTauCeti` import firewall admits only Mathlib,
@@ -51,26 +51,26 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- The range of a measurable projection from a Spectra projection-valued
 measure, packaged as a submodule. -/
 @[expose]
-noncomputable def pvmRangeSubspace (P : TauCeti.ProjValMeasure H)
+noncomputable def pvmRangeSubspace (P : TauCeti.ProjValMeasure ℝ H)
     (B : Set ℝ) (hB : MeasurableSet B) : Submodule ℂ H :=
   (P.proj B hB).range
 
 /-- The subspace attached to a projection-valued measure is the range of its projection. -/
 @[simp]
-theorem pvmRangeSubspace_eq_range (P : TauCeti.ProjValMeasure H)
+theorem pvmRangeSubspace_eq_range (P : TauCeti.ProjValMeasure ℝ H)
     (B : Set ℝ) (hB : MeasurableSet B) :
     pvmRangeSubspace P B hB = (P.proj B hB).range :=
   rfl
 
 /-- Every projected vector belongs to the corresponding range subspace. -/
-theorem pvmProjection_mem_rangeSubspace (P : TauCeti.ProjValMeasure H)
+theorem pvmProjection_mem_rangeSubspace (P : TauCeti.ProjValMeasure ℝ H)
     (B : Set ℝ) (hB : MeasurableSet B) (x : H) :
     P.proj B hB x ∈ pvmRangeSubspace P B hB := by
   exact ⟨x, rfl⟩
 
 /-- A vector in the range of a PVM projection is fixed by that projection. -/
 theorem pvmProjection_eq_self_of_mem_rangeSubspace
-    (P : TauCeti.ProjValMeasure H) (B : Set ℝ)
+    (P : TauCeti.ProjValMeasure ℝ H) (B : Set ℝ)
     (hB : MeasurableSet B) {x : H}
     (hx : x ∈ pvmRangeSubspace P B hB) :
     P.proj B hB x = x := by
@@ -81,7 +81,7 @@ theorem pvmProjection_eq_self_of_mem_rangeSubspace
 
 /-- Membership in a PVM range is equivalent to being fixed by the
 projection. -/
-theorem mem_pvmRangeSubspace_iff (P : TauCeti.ProjValMeasure H)
+theorem mem_pvmRangeSubspace_iff (P : TauCeti.ProjValMeasure ℝ H)
     (B : Set ℝ) (hB : MeasurableSet B) (x : H) :
     x ∈ pvmRangeSubspace P B hB ↔ P.proj B hB x = x := by
   constructor
@@ -91,7 +91,7 @@ theorem mem_pvmRangeSubspace_iff (P : TauCeti.ProjValMeasure H)
 
 /-- The range of a measurable PVM projection is complete. -/
 noncomputable instance pvmRangeSubspace_completeSpace
-    (P : TauCeti.ProjValMeasure H) (B : Set ℝ)
+    (P : TauCeti.ProjValMeasure ℝ H) (B : Set ℝ)
     (hB : MeasurableSet B) :
     CompleteSpace (pvmRangeSubspace P B hB) := by
   change CompleteSpace (P.proj B hB).range
@@ -101,7 +101,7 @@ noncomputable instance pvmRangeSubspace_completeSpace
 /-- The range of a measurable PVM projection admits an orthogonal
 projection. -/
 noncomputable instance pvmRangeSubspace_hasOrthogonalProjection
-    (P : TauCeti.ProjValMeasure H) (B : Set ℝ)
+    (P : TauCeti.ProjValMeasure ℝ H) (B : Set ℝ)
     (hB : MeasurableSet B) :
     (pvmRangeSubspace P B hB).HasOrthogonalProjection := by
   change (P.proj B hB).range.HasOrthogonalProjection
@@ -110,7 +110,7 @@ noncomputable instance pvmRangeSubspace_hasOrthogonalProjection
 
 /-- The PVM projection is the Mathlib star projection onto its range. -/
 theorem pvmProjection_eq_starProjection_rangeSubspace
-    (P : TauCeti.ProjValMeasure H) (B : Set ℝ)
+    (P : TauCeti.ProjValMeasure ℝ H) (B : Set ℝ)
     (hB : MeasurableSet B) :
     P.proj B hB = (pvmRangeSubspace P B hB).starProjection := by
   apply ContinuousLinearMap.ext

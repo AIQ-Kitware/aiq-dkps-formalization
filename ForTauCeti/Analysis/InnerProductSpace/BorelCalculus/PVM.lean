@@ -6,7 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative
-public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
+public import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.OperatorExt
 
 /-!
 # Projection-valued measures from the Borel calculus
@@ -14,7 +15,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
 Applying the bounded Borel functional calculus to indicator functions turns a
 normal operator into a projection-valued measure.  The sets are indexed along an
 arbitrary measurable *relabelling* `κ : spectrum ℂ a → ℝ`, because
-`TauCeti.ProjValMeasure` is a measure on the Borel sets of `ℝ` while the
+`TauCeti.ProjValMeasure ℝ` is a measure on the Borel sets of `ℝ` while the
 spectrum of a normal operator lives in `ℂ`; for a self-adjoint operator `κ` will
 be the real part, and for the Cayley transform of an unbounded self-adjoint
 operator it will be the inverse Cayley map.
@@ -31,9 +32,9 @@ there so that the unbounded Cayley case is an instance rather than a special cas
 ## Provenance
 
 *New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`.
-The target structure `TauCeti.ProjValMeasure` is Spectra's, ported in
-`ForTauCeti/Analysis/InnerProductSpace/ProjValMeasure/Basic.lean`; the
-construction filling it here is not.
+The target structure is the upstream, measurable-space-general
+`TauCeti.ProjValMeasure`, specialized to `ℝ`; only the construction filling it
+here remains local.
 -/
 
 public section
@@ -107,7 +108,8 @@ theorem inner_specProj_self (B : Set ℝ) (hB : MeasurableSet B) (ξ : H) :
 /-- The whole line carries the identity. -/
 theorem specProj_univ :
     specProj (H := H) ha hκ Set.univ MeasurableSet.univ = ContinuousLinearMap.id ℂ H := by
-  refine op_ext_of_inner_self fun ξ => ?_
+  apply op_ext_of_inner_self
+  intro ξ
   rw [inner_specProj_self]
   have hm : ((specDiag ha κ ξ) Set.univ).toReal = ‖ξ‖ ^ 2 := by
     rw [specDiag, Measure.map_apply hκ MeasurableSet.univ, Set.preimage_univ,
@@ -141,7 +143,7 @@ theorem specProj_inter (B₁ B₂ : Set ℝ) (hB₁ : MeasurableSet B₁) (hB₂
 measurable relabelling `κ` of its spectrum. -/
 -- `@[expose]` for the same reason as `spectralPVM`, which is built from this and whose
 -- exposed body cannot reference an unexposed one. Recorded debt, not an endorsement.
-noncomputable def toProjValMeasure : TauCeti.ProjValMeasure H where
+noncomputable def toProjValMeasure : TauCeti.ProjValMeasure ℝ H where
   proj := specProj ha hκ
   diag := specDiag ha κ
   diag_finite := isFiniteMeasure_specDiag ha hκ
@@ -201,7 +203,7 @@ theorem measurable_reCoord : Measurable (reCoord (T := T)) :=
 
 /-- **The spectral measure of a bounded self-adjoint operator**, indexed along
 the real part of its spectrum. -/
-noncomputable def boundedPVM : TauCeti.ProjValMeasure H :=
+noncomputable def boundedPVM : TauCeti.ProjValMeasure ℝ H :=
   toProjValMeasure hT.isStarNormal measurable_reCoord
 
 omit [CompleteSpace H] in

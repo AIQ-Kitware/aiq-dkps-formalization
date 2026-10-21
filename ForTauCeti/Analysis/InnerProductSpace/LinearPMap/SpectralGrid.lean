@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
-public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
+public import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
 
 /-!
 # The `ε`-grid on the line, and which of its cells carry spectrum

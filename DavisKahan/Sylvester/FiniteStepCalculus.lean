@@ -210,7 +210,7 @@ theorem spectralProjection_pairwise_orthogonal
 /-- Finite additivity of a projection-valued measure over a pairwise disjoint
 family: the projection of the union is the sum of the projections. -/
 theorem pvm_proj_iUnion_fin
-    (P : TauCeti.ProjValMeasure H) {n : ℕ} (cell : Fin n → Set ℝ)
+    (P : TauCeti.ProjValMeasure ℝ H) {n : ℕ} (cell : Fin n → Set ℝ)
     (hcell : ∀ i, MeasurableSet (cell i))
     (hdisj : Set.PairwiseDisjoint Set.univ cell) :
     ∑ i, P.proj (cell i) (hcell i) =

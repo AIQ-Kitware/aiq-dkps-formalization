@@ -56,7 +56,7 @@ theorem coe_reCoord (A : H →L[ℂ] H) (hA : A.IsSymmetric)
 operator. -/
 noncomputable def boundedSelfAdjointSpectralPVM
     (A : H →L[ℂ] H) (hA : A.IsSymmetric) :
-    TauCeti.ProjValMeasure H :=
+    TauCeti.ProjValMeasure ℝ H :=
   TauCeti.BorelCalculus.boundedPVM
     ((ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mpr hA)
 
@@ -118,7 +118,7 @@ theorem boundedSelfAdjointSpectralProjection_eq_starProjection
     (s : Set ℝ) (hs : MeasurableSet s) :
     boundedSelfAdjointSpectralProjection A hA s hs =
       (boundedSelfAdjointSpectralSubspace A hA s hs).starProjection := by
-  set P : TauCeti.ProjValMeasure H := boundedSelfAdjointSpectralPVM A hA with hP
+  set P : TauCeti.ProjValMeasure ℝ H := boundedSelfAdjointSpectralPVM A hA with hP
   set Q := boundedSelfAdjointSpectralProjection A hA s hs with hQ
   have hidem : ∀ y : H, Q (Q y) = Q y := fun y => by
     have h := congrArg (fun T : H →L[ℂ] H => T y) (P.proj_idem s hs)
@@ -144,7 +144,7 @@ theorem boundedSelfAdjointSpectralProjection_isOrthogonalProjection
     (s : Set ℝ) (hs : MeasurableSet s) :
     IsOrthogonalProjection
       (boundedSelfAdjointSpectralProjection A hA s hs) := by
-  let P : TauCeti.ProjValMeasure H := boundedSelfAdjointSpectralPVM A hA
+  let P : TauCeti.ProjValMeasure ℝ H := boundedSelfAdjointSpectralPVM A hA
   change IsOrthogonalProjection (P.proj s hs)
   constructor
   · apply ContinuousLinearMap.ext
