@@ -164,21 +164,6 @@ theorem kyFanSum_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
     kyFanSum k A ≤ kyFanSum k B :=
   Finset.sum_le_sum fun i _ => h i
 
-/-- Ky Fan sums are unchanged by a unitary on the codomain. -/
-theorem kyFanSum_unitary_comp (k : ℕ) (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :
-    kyFanSum k (U.toLinearMap ∘ₗ A) = kyFanSum k A := by
-  unfold kyFanSum
-  exact congrArg (fun s : ℕ →₀ ℝ => ∑ i : Fin k, s (i : ℕ))
-    (LinearMap.singularValues_linearIsometryEquiv_comp U A)
-
-/-- Ky Fan sums are unchanged by a unitary on the domain.  With `kyFanSum_unitary_comp` this is
-the two-sided unitary invariance that makes each Ky Fan sum a unitarily invariant norm. -/
-theorem kyFanSum_comp_unitary (k : ℕ) (A : E →ₗ[𝕜] F) (U : E ≃ₗᵢ[𝕜] E) :
-    kyFanSum k (A ∘ₗ U.toLinearMap) = kyFanSum k A := by
-  unfold kyFanSum
-  exact congrArg (fun s : ℕ →₀ ℝ => ∑ i : Fin k, s (i : ℕ))
-    (LinearMap.singularValues_comp_linearIsometryEquiv A U)
-
 /-- Ky Fan sums are absolutely homogeneous under real scaling. -/
 theorem kyFanSum_real_smul (k : ℕ) (A : E →ₗ[𝕜] F) {r : ℝ} (hr : 0 ≤ r) :
     kyFanSum k (((r : 𝕜)) • A) = r * kyFanSum k A := by
