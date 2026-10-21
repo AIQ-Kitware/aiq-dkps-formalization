@@ -28,7 +28,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 public import ForTauCeti.Analysis.InnerProductSpace.Spectrum
-public import ForTauCeti.Analysis.InnerProductSpace.ZeroExtension
+public import TauCeti.Analysis.InnerProductSpace.ZeroExtension
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
 
@@ -197,7 +197,7 @@ theorem eigenvalues_operatorAbs (A : E →ₗ[𝕜] E) :
     (fun i j hij => A.singularValues_antitone (by exact_mod_cast hij))
     fun i => ?_
   rw [show operatorAbs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
-    (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis i,
+    (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis rfl i,
     A.singularValues_fin rfl i]
 
 /-! ### The Ky Fan trace inequality (F1.a–b) -/
@@ -338,7 +338,7 @@ private theorem re_sum_inner_map_le_sum_singularValues_square {A : E →ₗ[𝕜
   set W := choosePolarUnitary A with hW
   set R := (isPositive_operatorAbs A).sqrt with hR
   have hRsymm : R.IsSymmetric := (isPositive_operatorAbs A).sqrt_isPositive.isSymmetric
-  have hRR : R ∘ₗ R = operatorAbs A := (isPositive_operatorAbs A).sqrt_mul_self
+  have hRR : R ∘ₗ R = operatorAbs A := (isPositive_operatorAbs A).sqrt_sq
   -- Pull the polar unitary across and split `|A|` symmetrically.
   have hterm : ∀ i, ⟪u i, A (v i)⟫_𝕜 = ⟪R (W.symm (u i)), R (v i)⟫_𝕜 := by
     intro i
@@ -353,7 +353,7 @@ private theorem re_sum_inner_map_le_sum_singularValues_square {A : E →ₗ[𝕜
           rw [← hRR]; rfl
       _ = ⟪R (W.symm (u i)), R (v i)⟫_𝕜 := (hRsymm (W.symm (u i)) (R (v i))).symm
   have hquad : ∀ x : E, ‖R x‖ ^ 2 = RCLike.re ⟪operatorAbs A x, x⟫_𝕜 := fun x =>
-    (isPositive_operatorAbs A).sq_norm_sqrt_apply x
+    (isPositive_operatorAbs A).norm_sqrt_apply_sq x
   have hterm_le : ∀ i, RCLike.re ⟪u i, A (v i)⟫_𝕜
       ≤ RCLike.re ⟪operatorAbs A (W.symm (u i)), W.symm (u i)⟫_𝕜 / 2
         + RCLike.re ⟪operatorAbs A (v i), v i⟫_𝕜 / 2 := by
@@ -416,7 +416,8 @@ private theorem exists_orthonormal_re_sum_inner_map_eq_square (A : E →ₗ[𝕜
       rw [hv]
       simp only
       rw [show operatorAbs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
-        (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis (Fin.castLE hk i),
+        (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis rfl
+          (Fin.castLE hk i),
         ← A.singularValues_fin rfl (Fin.castLE hk i)]
       rfl
     rw [hu]
@@ -506,8 +507,14 @@ private theorem kyFanSum_add_le_square (k : ℕ) (A B : E →ₗ[𝕜] E) :
 /-- The Ky Fan triangle inequality for arbitrary rectangular maps and every prefix length. -/
 theorem kyFanSum_add_le (k : ℕ) (A B : E →ₗ[𝕜] F) :
     kyFanSum k (A + B) ≤ kyFanSum k A + kyFanSum k B := by
-  have h := kyFanSum_add_le_square k (zeroExtension A) (zeroExtension B)
-  simpa only [← zeroExtension_add, kyFanSum, singularValues_zeroExtension] using h
+  have h := kyFanSum_add_le_square k (LinearMap.zeroExtension A) (LinearMap.zeroExtension B)
+  have hext : LinearMap.zeroExtension (A + B) =
+      LinearMap.zeroExtension A + LinearMap.zeroExtension B := by
+    ext z
+    simp only [LinearMap.zeroExtension_apply, LinearMap.add_apply]
+    rw [← WithLp.toLp_add]
+    exact congrArg (WithLp.toLp 2) (by ext <;> simp)
+  simpa only [← hext, kyFanSum, LinearMap.singularValues_zeroExtension] using h
 
 
 /-- Pointwise singular-value domination gives Ky Fan domination. -/
@@ -571,7 +578,7 @@ a unitarily invariant norm is compared through its complete gauge sequence. -/
 theorem singularValues_smul (a : 𝕜) (A : E →ₗ[𝕜] F) :
     (a • A).singularValues = ‖a‖ • A.singularValues := by
   ext i
-  simp [singularValues_smul_apply]
+  simp
 
 /-- **Rectangular Ky Fan variational principle, upper bound.**
 
@@ -607,9 +614,9 @@ theorem re_sum_inner_map_le_kyFanSum
     rw [hfin]
     omega
   have h := re_sum_inner_map_le_sum_singularValues_square
-    (A := zeroExtension A) hk' hu' hv'
-  simpa [u', v', zeroExtension_apply, WithLp.prod_inner_apply,
-    kyFanSum, singularValues_zeroExtension] using h
+    (A := LinearMap.zeroExtension A) hk' hu' hv'
+  simpa [u', v', LinearMap.zeroExtension_apply, WithLp.prod_inner_apply,
+    kyFanSum, LinearMap.singularValues_zeroExtension] using h
 
 /-- A convenient witness form of the rectangular Ky Fan upper bound. -/
 theorem sum_le_kyFanSum_of_orthonormal

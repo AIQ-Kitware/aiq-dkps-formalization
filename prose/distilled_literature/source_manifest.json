@@ -1453,7 +1453,7 @@
       "target_note": "Higham2008_selected_matrix_functions.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/PositiveSqrt.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/Positive/SquareRoot/Eigenspace.lean"
       ],
       "existing_assets": [],
       "scope": "Selected polar decomposition, positive square root, and nearest-isometry results.",

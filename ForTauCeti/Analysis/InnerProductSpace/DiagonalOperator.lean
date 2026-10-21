@@ -165,7 +165,7 @@ theorem exists_unitary_diagOp_factorization (hn : finrank 𝕜 E = n)
       = ((A.singularValues (i : ℕ) : ℝ) : 𝕜) • w i := by
     intro i
     rw [show operatorAbs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
-      (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis i,
+      (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis rfl i,
       ← A.singularValues_fin rfl i]
   have habs : operatorAbs A
       = K.toLinearMap ∘ₗ diagOp b (fun i => A.singularValues (i : ℕ))

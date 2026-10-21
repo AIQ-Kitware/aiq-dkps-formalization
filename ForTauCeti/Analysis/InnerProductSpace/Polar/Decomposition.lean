@@ -14,7 +14,7 @@ Sub-dev III of the operator polar decomposition project — COMPLETE
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.PositiveSqrt
+public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 public import TauCeti.Analysis.InnerProductSpace.PartialIsometry
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
@@ -101,14 +101,14 @@ noncomputable def operatorAbs (A : E →ₗ[𝕜] F) : E →ₗ[𝕜] E :=
 
 /-- `|A|² = A⋆A`. -/
 theorem operatorAbs_mul_self (A : E →ₗ[𝕜] F) : operatorAbs A ∘ₗ operatorAbs A = A.adjoint ∘ₗ A :=
-  (LinearMap.isPositive_adjoint_comp_self A).sqrt_mul_self
+  (LinearMap.isPositive_adjoint_comp_self A).sqrt_sq
 
 /-- **The polar norm identity** `‖|A| x‖ = ‖A x‖`. Not in HJ (SVD route); this is the seed of the
 isometry route (Conway VI.3.9). -/
 @[simp]
 theorem norm_operatorAbs_apply (A : E →ₗ[𝕜] F) (x : E) : ‖operatorAbs A x‖ = ‖A x‖ := by
   have hsq : ‖operatorAbs A x‖ ^ 2 = ‖A x‖ ^ 2 :=
-    ((LinearMap.isPositive_adjoint_comp_self A).sq_norm_sqrt_apply x).trans <| by
+    ((LinearMap.isPositive_adjoint_comp_self A).norm_sqrt_apply_sq x).trans <| by
       rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, ← norm_sq_eq_re_inner (𝕜 := 𝕜)]
   rw [← Real.sqrt_sq (norm_nonneg (operatorAbs A x)), ← Real.sqrt_sq (norm_nonneg (A x)), hsq]
 

@@ -34,7 +34,7 @@ topics:
   title: Positive square root, operator modulus, functional calculus
   modules:
   - Analysis.InnerProductSpace.CourantFischer
-  - Analysis.InnerProductSpace.PositiveSqrt
+  - Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
   - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
   - Analysis.InnerProductSpace.OperatorModulus
   - Analysis.InnerProductSpace.Spectrum
@@ -52,7 +52,6 @@ topics:
   modules:
   - Analysis.InnerProductSpace.Singular.Values
   - Analysis.InnerProductSpace.RectangularSingularValues
-  - Analysis.InnerProductSpace.ZeroExtension
   - Analysis.InnerProductSpace.Singular.System
   - Analysis.InnerProductSpace.MoorePenroseInverse
 - id: T26
@@ -389,7 +388,7 @@ rungs:
   - Analysis.InnerProductSpace.CourantFischer
   - Analysis.InnerProductSpace.OperatorModulus
   - Analysis.InnerProductSpace.Polar.Decomposition
-  - Analysis.InnerProductSpace.PositiveSqrt
+  - Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
   - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 - id: B
   title: Singular values (square and rectangular)
@@ -471,7 +470,7 @@ rungs:
   - Analysis.InnerProductSpace.Polar.Decomposition
   - Analysis.InnerProductSpace.Polar.Isometry
   - Analysis.InnerProductSpace.Polar.PartialIsometry
-  - Analysis.InnerProductSpace.PositiveSqrt
+  - Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
   - Analysis.InnerProductSpace.PrincipalAngles
   - Analysis.InnerProductSpace.Projection.Blocks
   - Analysis.InnerProductSpace.Projection.Gap
