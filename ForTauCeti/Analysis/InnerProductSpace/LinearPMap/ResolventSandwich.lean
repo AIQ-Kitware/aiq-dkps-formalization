@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
-public import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
 public import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-!
@@ -39,7 +39,7 @@ Carrier-free, in `TauCeti.ContinuousLinearMap`:
 
 * `le_smul_one_of_upperFormBoundOn_top` — an upper form bound *is* an upper
   Loewner bound, for a symmetric operator.  This is the missing companion of
-  `isPositive_of_lowerFormBoundOn_top` in `QuadraticFormBounds.lean`.
+  `ContinuousLinearMap.isPositive_of_lowerFormBoundOn_top` from Tau Ceti.
 * `norm_apply_le_of_coercive`, `lowerFormBoundOn_top_of_coercive`,
   `upperFormBoundOn_top_of_coercive` — a bounded operator satisfying
   `c ‖R φ‖² ≤ re ⟪R φ, φ⟫` is positive and bounded above by `c⁻¹`.
@@ -120,7 +120,7 @@ namespace ContinuousLinearMap
 
 /-! ### Form bounds and the Loewner order
 
-`QuadraticFormBounds.lean` grounds the *lower* form bound on `⊤` against
+Tau Ceti's quadratic-form API grounds the *lower* form bound on `⊤` against
 Mathlib's `IsPositive`.  The upper bound has the same grounding, and it is the
 one this file needs: an upper form bound at constant `c` says exactly that the
 operator is below `c • 1`. -/
@@ -155,7 +155,8 @@ theorem isPositive_smul_one_sub_of_upperFormBoundOn_top {R : E →L[𝕜] E}
       rw [happ φ, inner_sub_left, map_sub, inner_smul_left, RCLike.conj_ofReal,
         RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
     rw [hval]
-    have hb := h φ Submodule.mem_top
+    have hb := (_root_.ContinuousLinearMap.upperFormBoundOn_iff R ⊤ c).1 h φ
+      Submodule.mem_top
     linarith
 
 /-- **An upper form bound is a Loewner upper bound.**  The companion of
@@ -193,6 +194,7 @@ is immediate: the dominating term `c ‖R φ‖²` is already nonnegative. -/
 theorem lowerFormBoundOn_top_of_coercive {R : E →L[𝕜] E} {c : ℝ} (hc : 0 ≤ c)
     (hR : ∀ φ : E, c * ‖R φ‖ ^ 2 ≤ RCLike.re ⟪R φ, φ⟫_𝕜) :
     R.LowerFormBoundOn ⊤ 0 := by
+  apply (_root_.ContinuousLinearMap.lowerFormBoundOn_iff R ⊤ 0).2
   intro φ _
   refine le_trans ?_ (hR φ)
   rw [zero_mul]
@@ -204,6 +206,7 @@ upper half of the sandwich: Cauchy--Schwarz once more, now fed the norm bound
 theorem upperFormBoundOn_top_of_coercive {R : E →L[𝕜] E} {c : ℝ} (hc : 0 < c)
     (hR : ∀ φ : E, c * ‖R φ‖ ^ 2 ≤ RCLike.re ⟪R φ, φ⟫_𝕜) :
     R.UpperFormBoundOn ⊤ c⁻¹ := by
+  apply (_root_.ContinuousLinearMap.upperFormBoundOn_iff R ⊤ c⁻¹).2
   intro φ _
   have hn := norm_apply_le_of_coercive hc hR φ
   calc RCLike.re ⟪R φ, φ⟫_𝕜 ≤ ‖R φ‖ * ‖φ‖ :=
@@ -254,7 +257,8 @@ theorem coercive_rightInverse_of_lowerFormBoundOn_top {T R : E →L[𝕜] E}
     (β - lam) * ‖R φ‖ ^ 2 ≤ RCLike.re ⟪R φ, φ⟫_𝕜 := by
   have key := re_inner_self_sub_smul T lam (R φ)
   rw [hR φ] at key
-  have hb := hform (R φ) Submodule.mem_top
+  have hb := (_root_.ContinuousLinearMap.lowerFormBoundOn_iff T ⊤ β).1 hform
+    (R φ) Submodule.mem_top
   rw [key]
   linarith
 
@@ -270,7 +274,7 @@ theorem rightInverse_sandwich_of_lowerFormBoundOn_top {T R : E →L[𝕜] E}
   have hcoer := coercive_rightInverse_of_lowerFormBoundOn_top hform hR
   have hsym := isSymmetric_of_rightInverse_sub_smul hT hR
   refine ⟨(_root_.ContinuousLinearMap.nonneg_iff_isPositive).mpr
-      (isPositive_of_lowerFormBoundOn_top hsym
+      (_root_.ContinuousLinearMap.isPositive_of_lowerFormBoundOn_top hsym
         (lowerFormBoundOn_top_of_coercive (by linarith) hcoer)), ?_⟩
   exact le_smul_one_of_upperFormBoundOn_top hsym
     (upperFormBoundOn_top_of_coercive (by linarith) hcoer)
@@ -401,7 +405,7 @@ theorem isPositive_neg_resolvent_of_lowerFormBound (hA : IsSelfAdjoint A) {β la
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) :
     (-resolvent A (lam : ℂ)).IsPositive :=
-  TauCeti.ContinuousLinearMap.isPositive_of_lowerFormBoundOn_top
+  _root_.ContinuousLinearMap.isPositive_of_lowerFormBoundOn_top
     ((isSelfAdjoint_resolvent_ofReal hA hlam).neg.isSymmetric)
     (lowerFormBoundOn_neg_resolvent_of_lowerFormBound hlt hform hlam)
 

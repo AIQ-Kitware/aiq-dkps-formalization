@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-public import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator
 
 /-!
@@ -208,7 +208,9 @@ theorem sinTheta_directed_of_formBounds
     (hUhi : A.LowerFormBoundOn U (c + g))
     (hVlo : B.UpperFormBoundOn V c) :
     ‖(V.starProjection ∘L U.starProjection : E →L[𝕜] E)‖ ≤ ‖B - A‖ / g :=
-  sinTheta_directed_coercive hA hB hU hV hg hUhi hVlo
+  sinTheta_directed_coercive hA hB hU hV hg
+    ((_root_.ContinuousLinearMap.lowerFormBoundOn_iff A U (c + g)).1 hUhi)
+    ((_root_.ContinuousLinearMap.upperFormBoundOn_iff B V c).1 hVlo)
 
 
 end Submodule
