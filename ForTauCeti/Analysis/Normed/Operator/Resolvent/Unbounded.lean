@@ -376,7 +376,7 @@ inverts `mu • I - A`.
 
 Over `ℝ` the hypothesis reads `|mu - lambda| * ‖R(lambda)‖ < 1`, since the norm of a real number
 is its absolute value. -/
-theorem mem_resolventSet_of_norm_mul_lt_one (h : lambda ∈ resolventSet A)
+theorem mem_resolventSet_of_norm_mul_lt_one_general (h : lambda ∈ resolventSet A)
     (hmu : ‖mu - lambda‖ * ‖resolvent A lambda‖ < 1) : mu ∈ resolventSet A := by
   obtain ⟨U, hUright, hUleft, hcomm⟩ := exists_inverse_one_sub_smul_resolvent hmu
   refine ⟨resolvent A lambda ∘L U, fun y => resolvent_mem_domain h (U y), fun y => ?_, fun x => ?_⟩
@@ -402,7 +402,7 @@ theorem isOpen_resolventSet (A : E →ₗ.[𝕜] E) : IsOpen (resolventSet A) :=
   intro lambda h
   refine ⟨1 / (‖resolvent A lambda‖ + 1), by positivity, fun mu hmu => ?_⟩
   rw [Metric.mem_ball, dist_eq_norm] at hmu
-  refine mem_resolventSet_of_norm_mul_lt_one h ?_
+  refine mem_resolventSet_of_norm_mul_lt_one_general h ?_
   have hlt : ‖mu - lambda‖ * (‖resolvent A lambda‖ + 1) < 1 :=
     (lt_div_iff₀ (by positivity)).mp (by simpa using hmu)
   calc ‖mu - lambda‖ * ‖resolvent A lambda‖

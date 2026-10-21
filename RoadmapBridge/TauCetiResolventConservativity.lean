@@ -5,6 +5,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import Mathlib
 import ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded
 
+noncomputable section
+
 /-!
 # Roadmap bridge: the unbounded-resolvent generalization is conservative over `ℝ`
 
@@ -263,7 +265,7 @@ theorem mem_resolventSet_of_norm_mul_lt_one {A : X →ₗ.[ℝ] X} {lambda mu : 
     (h : lambda ∈ LinearPMap.resolventSet A)
     (hmu : |mu - lambda| * ‖LinearPMap.resolvent A lambda‖ < 1) :
     mu ∈ LinearPMap.resolventSet A :=
-  LinearPMap.mem_resolventSet_of_norm_mul_lt_one h (by rwa [Real.norm_eq_abs])
+  LinearPMap.mem_resolventSet_of_norm_mul_lt_one_general h (by rwa [Real.norm_eq_abs])
 
 /-- Upstream declaration 25 of 30: `TauCeti.LinearPMap.isOpen_resolventSet`.  The topology on
 the scalars is the one `ℝ` already carries, so the openness statement is unchanged; had the

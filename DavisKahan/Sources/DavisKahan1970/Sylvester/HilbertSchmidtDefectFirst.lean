@@ -61,7 +61,7 @@ private theorem hasClosedSylvesterEquation_of_generator
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (z : (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
       (TauCeti.LinearPMap.genToGroup hB) (hSBasis F))).domain) :
-    TauCeti.LinearPMap.SylvesterEquation A B
+    _root_.LinearPMap.SylvesterEquation A B
       (ofLp (hSBasis F) (z : lp (fun _ : HSIndex F => E) 2))
       (ofLp (hSBasis F) (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
         (TauCeti.LinearPMap.genToGroup hB) (hSBasis F)) z)) := by
@@ -102,9 +102,9 @@ theorem hilbertSchmidt_sylvester_defectFirst
     {X C : F →L[ℂ] E}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hunique : ∀ {Y : F →L[ℂ] E},
-      TauCeti.LinearPMap.SylvesterEquation A B Y 0 → Y = 0)
+      _root_.LinearPMap.SylvesterEquation A B Y 0 → Y = 0)
     (hC : approximationNumberEnergy C ≠ ⊤)
     (hCgap : TauCeti.LinearPMap.HasVectorSpectralGap
       (isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
@@ -120,11 +120,11 @@ theorem hilbertSchmidt_sylvester_defectFirst
   set X0 := ofLp (hSBasis F) z0 with hX0
   have hEq0raw := hasClosedSylvesterEquation_of_generator hA hB ⟨z0, hz0⟩
   have hcOp : ofLp (hSBasis F) c = C := toOperator_hilbertSchmidtTensor C hC
-  have hEq0 : TauCeti.LinearPMap.SylvesterEquation A B X0 C := by
+  have hEq0 : _root_.LinearPMap.SylvesterEquation A B X0 C := by
     have h := hEq0raw
     rw [hgen, hcOp] at h
     exact h
-  have hhom : TauCeti.LinearPMap.SylvesterEquation A B (X - X0) 0 := by
+  have hhom : _root_.LinearPMap.SylvesterEquation A B (X - X0) 0 := by
     simpa using hEq.sub hEq0
   have hXX0 : X = X0 := sub_eq_zero.mp (hunique hhom)
   have hX0mem : approximationNumberEnergy X0 ≠ ⊤ := approximationNumberEnergy_ne_top_toOperator z0

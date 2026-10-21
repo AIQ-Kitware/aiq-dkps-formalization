@@ -193,7 +193,15 @@ theorem eq_zero_of_anticommutator_nonpos {A K : H →L[ℂ] H}
     intro z
     rw [ENNReal.iSup_eq_zero]
     intro hz
-    exact_mod_cast hzero z hz
+    rcases eq_or_ne z 0 with rfl | hz0
+    · simp
+    · have hzspec : z ∈ spectrum ℂ K := by
+        have hz' : z ∈ spectrum ℂ K ∪ {0} := by
+          simpa only [quasispectrum_eq_spectrum_union_zero] using hz
+        rcases hz' with hz' | hz'
+        · exact hz'
+        · exact (hz0 (by simpa using hz')).elim
+      exact_mod_cast hzero z hzspec
   have hnn : ‖K‖₊ = 0 := by
     have := (K.spectralRadius_eq_nnnorm hKsa).symm.trans hrad
     exact_mod_cast this

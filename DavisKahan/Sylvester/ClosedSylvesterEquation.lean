@@ -44,7 +44,7 @@ Proof irrelevance identifies it with the witness the equation stores. -/
 theorem equation_of_mem
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     {X C : F →L[𝕜] E}
-    (h : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (h : _root_.LinearPMap.SylvesterEquation A B X C)
     (x : B.domain) (hx : X (x : F) ∈ A.domain) :
     A ⟨X (x : F), hx⟩ - X (B x) = C (x : F) := by
   have heq := h.equation x

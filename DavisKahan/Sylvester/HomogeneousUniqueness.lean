@@ -46,7 +46,7 @@ theorem closedSylvester_homogeneous_eq_zero_complex
     {X : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ)
   have hzero : N.Mem (0 : F →L[ℂ] E) := by
@@ -73,10 +73,10 @@ theorem closedSylvester_solution_unique_complex
     {X Y C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A B δ)
-    (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
-    (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
+    (hX : _root_.LinearPMap.SylvesterEquation A B X C)
+    (hY : _root_.LinearPMap.SylvesterEquation A B Y C) :
     X = Y := by
-  have hsub : TauCeti.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
+  have hsub : _root_.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
     simpa using hX.sub hY
   have hz := closedSylvester_homogeneous_eq_zero_complex
     hA hB hδ hgap hsub
@@ -99,7 +99,7 @@ theorem closedSylvester_homogeneous_eq_zero_real
     {X : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)
   have hzero : N.Mem (0 : F →L[ℝ] E) := by
@@ -126,10 +126,10 @@ theorem closedSylvester_solution_unique_real
     {X Y C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A B δ)
-    (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
-    (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
+    (hX : _root_.LinearPMap.SylvesterEquation A B X C)
+    (hY : _root_.LinearPMap.SylvesterEquation A B Y C) :
     X = Y := by
-  have hsub : TauCeti.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
+  have hsub : _root_.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
     simpa using hX.sub hY
   have hz := closedSylvester_homogeneous_eq_zero_real
     hA hB hδ hgap hsub

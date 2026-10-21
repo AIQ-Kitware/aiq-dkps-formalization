@@ -35,7 +35,7 @@ theorem directOrderedSylvesterEngine_lowerUpper
     (hδ : 0 < δ)
     (hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
     (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧
       δ * N.gauge X ≤
@@ -62,7 +62,7 @@ theorem directOrderedSylvesterEngine_upperLower
     (hδ : 0 < δ)
     (hAc : TauCeti.LinearPMap.SemiboundedAbove A c)
     (hBc : TauCeti.LinearPMap.SemiboundedBelow B (c + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X R)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧
       δ * N.gauge X ≤

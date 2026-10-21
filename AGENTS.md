@@ -126,22 +126,25 @@ reusable foundations are developed there. Completing every obligation from the
 1970 paper is not a prerequisite for polishing independent mathematics for Tau
 Ceti.
 
-The repository now runs on a **dual-track** policy.
+The repository follows an **upstream-first consumption** policy.
 
-### Primary track — Tau Ceti extraction
+### Primary track — consume accepted Tau Ceti and Mathlib mathematics
 
-Polish and upstream stable, paper-independent foundations into `ForTauCeti` (the
-staging home whose declarations already carry their final `TauCeti.*`
-namespaces), in small dependency-closed clusters. This is the current default
-work. `ForTauCeti` is the polished destination for reusable mathematics; Mathlib
-is not the near-term target for this contribution.
+Pin this repository to the current accepted Tau Ceti revision and its exact
+Mathlib/toolchain inputs. Before adding or maintaining a foundation, inspect
+those installed sources for an accepted equivalent or stronger API. Use upstream
+declarations directly, migrate consumers, and delete displaced local proofs.
+`ForTauCeti` is a shrinking donor for mathematics not yet accepted upstream; it
+is not a parallel implementation of Tau Ceti APIs. Keep paper-facing and census
+declarations in their established homes when source correspondence requires
+them, and forward their proofs to upstream results when available.
 
 ### Foundation-building route
 
-When a task asks for the foundation-building route, use
-[`dev/foundation-building.md`](dev/foundation-building.md) as the execution contract. Build the
-paper-independent mathematical layer in `ForTauCeti` at its natural scope, then make the
-paper-facing theorem a downstream consumer.
+When a task asks for new foundation work, first verify that Tau Ceti and Mathlib
+do not already provide it. Keep genuinely missing reusable mathematics in the
+smallest dependency-closed `ForTauCeti` donor cluster, then make paper-facing
+theorems downstream consumers.
 
 ### Maintenance track — Davis--Kahan source fidelity
 
@@ -164,17 +167,16 @@ every unbounded arbitrary-ideal endpoint.
 Current build graph, after the Spectra removal completed 2026-07-29:
 
 ```text
-Mathlib      TauCeti
-   ↑            ↑
-   └── ForTauCeti
-            ↑
-        DavisKahan   (DavisKahan / paper may import ForTauCeti)
+Mathlib ─→ TauCeti ─────────→ DavisKahan
+              ↓                  ↑
+         ForTauCeti donors ──────┘
 ```
 
 - `ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`. Enforced by
   `dev/policy/import-layers.yaml`, checked with `aiq-lean imports check`.
 - `DavisKahan` remains its own package and the paper-facing home of the work; it
-  may consume `ForTauCeti`.
+  may consume accepted Tau Ceti APIs directly and import `ForTauCeti` only for
+  mathematics that has not landed upstream.
 - **Spectra is retired.** No maintained module imports it, its source tree is no
   longer vendored, and the `external/Spectra` submodule is gone. The removal
   plan and port ledger under `dev/tauceti/` are historical records, not current
@@ -208,16 +210,10 @@ Mathlib      TauCeti
   A checker with no checkout reports `UNAVAILABLE` (exit 3) and `aiq-lean gates run`
   prints it as `unavailable`, counted as neither passed nor failed — never make a
   gate green by removing the thing it checks.
-- Stage the maintained implementation in `ForTauCeti`. Only an explicit submission
-  task should run `scripts/export_for_tauceti.py --write`, which requires an
-  editable checkout and refuses the Lake package copy;
-  `scripts/export_for_tauceti.py --check` is safe during ordinary work.
-- **`ForTauCeti` is the permanent product.** Maintain it as an elegant package
-  with a coherent API, one canonical spelling per concept, and provenance on
-  every module. Roadmaps and submission copies are derived from it; it is not a
-  holding area to drain into Tau Ceti.
-- Reusable mathematics is written for extraction: keep paper-specific wrappers
-  downstream and record exact provenance.
+- Use upstream APIs directly when accepted. Do not export or copy an already
+  accepted implementation back out of `ForTauCeti`; retire its duplicate and
+  update consumers. Retain only genuinely unmerged donor mathematics, with
+  coherent APIs and exact provenance. Paper-specific wrappers stay downstream.
 - A source claim shown false is completed as a source-fidelity disposition by a
   machine-checked counterexample or refutation satisfying the printed hypotheses.
   **Refutation also creates a separate best-effort repair obligation.** Diagnose
@@ -233,20 +229,18 @@ Mathlib      TauCeti
 
 ### Convergence before submission
 
-The maintained architecture has one direction:
+The maintained dependency direction is:
 
 ```text
-Mathlib / TauCeti foundations
-            ↓
-ForTauCeti reusable API
-            ↓
-DavisKahan paper-specific consumers and wrappers
+Mathlib / TauCeti accepted foundations ──────→ DavisKahan
+                    ↓                              ↑
+             ForTauCeti donors ────────────────────┘
 ```
 
-When the same concept appears in more than one local layer, inspect the actual
-types, hypotheses, and consumers before calling it a duplicate. Then choose one
-canonical owner, move the reusable proof there, migrate consumers in dependency
-order, and delete the displaced definition. A carrier difference such as
+When a concept appears locally and upstream, inspect actual types, hypotheses,
+and consumers before calling it a duplicate. Prefer the accepted upstream
+declaration, migrate consumers in dependency order, and delete the displaced
+definition. A carrier difference such as
 `E →ₗ[𝕜] E` versus `E →L[𝕜] E` is a design question to settle, not a spelling
 difference to hide behind a forwarding facade.
 
@@ -287,31 +281,19 @@ partial map, and density and closedness are hypotheses.
 How that migration was done, and what it cost, is in Git history; it is not an
 execution contract, and the same is true of the U1 and Spectra migrations.
 
-### `ForTauCeti` is the deliverable, and the bar is the platonic ideal roadmap
+### `ForTauCeti` is the unmerged donor layer
 
-**`ForTauCeti` is the elegant mathematics library this repository builds, and
-every paper proof is built on it.** There is no second staging area.
-
-**Do not finish by deleting it.** Agents have repeatedly tried to complete this
-work by merging code into `TauCeti` and removing `ForTauCeti`. The `TauCeti/`
-copy is an *output* of `scripts/export_for_tauceti.py`, generated and never
-hand-applied; `ForTauCeti` is the thing being built, and the roadmaps and
-mechanical ports are generated **from** it.
-
-When a Tau Ceti roadmap is accepted we open a PR from `ForTauCeti`. The work
-before that is to make `ForTauCeti` satisfy the **platonic ideal Tau Ceti
-roadmap** — the roadmap a reviewer *would* write — so that whatever is accepted,
-we already have what it needs. That includes paper references, adversarial
-review of the statements, and everything that makes a library elegant at Mathlib
-quality. Meeting a roadmap we wrote ourselves does not clear this bar. See
-[`ForTauCeti/README.md`](ForTauCeti/README.md).
+`ForTauCeti` remains buildable while it contains reusable mathematics not yet
+accepted upstream. It may shrink as those results land in Tau Ceti or Mathlib;
+do not retain duplicate APIs merely to preserve a staging package. Do not delete
+unmerged results to reduce the directory. See [`ForTauCeti/README.md`](ForTauCeti/README.md).
 
 ### Roadmap relationship and Tau Ceti governance
 
 Tau Ceti admits new mathematical declarations against an accepted roadmap
 target, one topic per PR, with a green build and the standard axiom allowlist.
-`ForTauCeti` is the local proof of the proposed API; submission packaging lives
-under `dev/tauceti/`.
+This repository consumes accepted APIs; roadmap proposals and any future
+submission packaging live under `dev/tauceti/`.
 
 The roadmap is an external review surface. A coordination checkout may be present
 at `submodules/TauCetiRoadmap`, and tools also accept `--roadmap-root` or

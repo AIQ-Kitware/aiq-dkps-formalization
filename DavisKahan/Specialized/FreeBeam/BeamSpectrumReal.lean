@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 import DavisKahan.Specialized.FreeBeam.BeamClassicalReal
 import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
+import ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra
 import Mathlib.Tactic
 
 /-!
@@ -18,6 +19,27 @@ the free-beam characteristic equation, and obtains the source gap `{0} ∪ (500,
 
 open scoped InnerProductSpace ENNReal
 open MeasureTheory TauCeti
+
+noncomputable local instance realOperatorAlgebra :
+    Algebra ℝ (TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ) →L[ℝ]
+      TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ)) :=
+  ContinuousLinearMap.realAlgebra (𝕜 := ℝ)
+    (E := TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ))
+
+local instance operatorScalarTower : IsScalarTower ℝ
+    (TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ) →L[ℝ]
+      TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ))
+    (TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ) →L[ℝ]
+      TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ)) where
+  smul_assoc r A B := by
+    change (algebraMap ℝ _ r * A) * B = algebraMap ℝ _ r * (A * B)
+    simp [mul_assoc]
+
+local instance realOperatorScalarTower : IsScalarTower ℝ ℝ
+    (TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ) →L[ℝ]
+      TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ)) :=
+  ContinuousLinearMap.realIsScalarTower (𝕜 := ℝ)
+    (E := TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ))
 
 namespace TauCeti
 namespace DavisKahan

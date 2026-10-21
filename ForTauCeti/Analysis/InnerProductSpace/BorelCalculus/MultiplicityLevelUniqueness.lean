@@ -179,9 +179,10 @@ section Slice
 variable {X : Type*} [MeasurableSpace X]
 
 /-- Finiteness of the `L²` seminorm, phrased through the quadratic Lebesgue integral. -/
-theorem eLpNorm_two_lt_top_iff_lintegral (ν : Measure X) (f : X → ℂ) :
+theorem eLpNorm_two_lt_top_iff_lintegral (ν : Measure X) (f : X → ℂ)
+    (hf : AEStronglyMeasurable f ν) :
     eLpNorm f 2 ν < ∞ ↔ ∫⁻ x, ‖f x‖ₑ ^ 2 ∂ν < ∞ := by
-  rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (by norm_num) (by norm_num)]
+  rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (by norm_num) (by norm_num) hf]
   have h2 : ((2 : ℝ≥0∞)).toReal = ((2 : ℕ) : ℝ) := by norm_num
   rw [h2]
   refine Iff.of_eq (congrArg (· < ∞) (lintegral_congr fun x => ?_))
@@ -191,8 +192,9 @@ theorem eLpNorm_two_lt_top_iff_lintegral (ν : Measure X) (f : X → ℂ) :
 theorem memLp_two_section {ν : ℕ → Measure X} {f : X × ℕ → ℂ} (hm : Measurable f)
     (hf : ∫⁻ p, ‖f p‖ₑ ^ 2 ∂(sliceSum ν) < ∞) (n : ℕ) :
     MemLp (fun z => f (z, n)) 2 (ν n) := by
-  refine ⟨(hm.comp (measurable_id.prodMk measurable_const)).aestronglyMeasurable, ?_⟩
-  rw [eLpNorm_two_lt_top_iff_lintegral]
+  change eLpNorm (fun z => f (z, n)) 2 (ν n) < ∞
+  rw [eLpNorm_two_lt_top_iff_lintegral (ν n) (fun z => f (z, n))
+    (hm.comp (measurable_id.prodMk measurable_const)).aestronglyMeasurable]
   rw [lintegral_sliceSum ν (hm.enorm.pow_const 2)] at hf
   exact (ENNReal.le_tsum n).trans_lt hf
 
@@ -283,10 +285,15 @@ theorem spectralGeneratedLE_mulLp_datumSymbol (E : MultiplicityDatum ℂ) {S : S
     rw [tsum_eq_single (j : ℕ) ?_]
     · exact ne_of_lt (lt_of_le_of_lt (measure_mono (Set.subset_univ _)) (measure_lt_top _ _))
     · intro n hn
-      convert measure_empty (μ := E.base.restrict (E.level n))
-      refine Set.eq_empty_iff_forall_notMem.mpr fun z hz => ?_
-      simp only [Set.mem_ofPred_eq, Set.mem_prod, Set.mem_singleton_iff] at hz
-      exact hn hz.2
+      have ht : MeasurableSet {x | (x, n) ∈
+          (S ∩ E.level ↑j) ×ˢ ({(j : ℕ)} : Set ℕ)} := by
+        exact (hAm j).preimage (measurable_id.prodMk measurable_const)
+      rw [Measure.restrict_apply ht]
+      have hset : {x | (x, n) ∈ (S ∩ E.level ↑j) ×ˢ ({(j : ℕ)} : Set ℕ)} ∩
+          E.level n = ∅ := by
+        ext z
+        simp [Set.mem_prod, hn]
+      rw [hset, measure_empty]
   refine spectralGeneratedLE_of_generators
     (fun j => indicatorConstLp 2 (hAm j) (hAfin j) (1 : ℂ)) fun x => ?_
   refine mem_closure_iSup_cyclicSubspace_of_forall_inner _ _ fun w hw => ?_
@@ -492,8 +499,8 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S
         simp
       rw [lintegral_congr hzero, lintegral_zero]
   have hW2 : MemLp W 2 D.measure := by
-    refine ⟨hWm.aestronglyMeasurable, ?_⟩
-    rw [eLpNorm_two_lt_top_iff_lintegral, hlint]
+    change eLpNorm W 2 D.measure < ∞
+    rw [eLpNorm_two_lt_top_iff_lintegral D.measure W hWm.aestronglyMeasurable, hlint]
     exact measure_lt_top _ _
   set w : Lp ℂ 2 D.measure := hW2.toLp W with hwdef
   have hwcoe : (w : ℂ × ℕ → ℂ) =ᵐ[D.measure] W := hW2.coeFn_toLp
@@ -645,7 +652,10 @@ theorem base_level_diff_eq_zero_of_operatorUnitaryEquiv {D E : MultiplicityDatum
   have htrans := spectralGeneratedLE_of_intertwines _ e he hupper
   -- But the set fills `D.level k` with positive measure, so on the `D` side they cannot.
   refine not_spectralGeneratedLE_mulLp_datumSymbol D hSm ?_ htrans
-  rw [Set.inter_eq_self_of_subset_left fun z hz => hz.1]
+  have hset : (D.level k \ E.level k) ∩ D.level k = D.level k \ E.level k := by
+    ext z
+    simp [and_comm]
+  rw [hset]
   exact hpos
 
 /-- **The level sets of a multiplicity datum are unitary invariants.**  This is the level-set

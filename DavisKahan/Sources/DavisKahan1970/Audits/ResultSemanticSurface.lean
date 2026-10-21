@@ -84,7 +84,7 @@ theorem theorem5_2_real_ordered_sourceAudit
     (hδ : 0 < δ)
     (hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
     (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   exact TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real

@@ -447,9 +447,9 @@ theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
           abel
       _ = C := by rw [h1, sub_self, sub_zero, hEq]
   -- package the inverse for the Neumann ideal engine
-  have hEq' : TauCeti.LinearPMap.SylvesterEquation
+  have hEq' : _root_.LinearPMap.SylvesterEquation
       (A₁.toLinearMap.toPMap ⊤) (B₁.toLinearMap.toPMap ⊤) X C :=
-    TauCeti.LinearPMap.SylvesterEquation.ofBounded hEq₁
+    _root_.LinearPMap.SylvesterEquation.ofBounded hEq₁
   refine Sylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
     ⟨J, fun y => Submodule.mem_top, ?_, ?_⟩ B₁ hr0 hd hJnorm hB₁norm hEq' hC
   · intro y

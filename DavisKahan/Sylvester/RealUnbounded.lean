@@ -46,7 +46,7 @@ theorem real_unbounded_sylvester_kyFan
     {X C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (k : ℕ) :
     δ * kyFanApproximationGauge k X ≤
       kyFanApproximationGauge k C := by
@@ -82,7 +82,7 @@ theorem davisKahan1970_sylvester_real
     {X C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
       δ * N.gauge X ≤

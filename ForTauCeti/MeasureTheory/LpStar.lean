@@ -58,8 +58,8 @@ theorem coeFn_star_lp (F : Lp R p μ) :
 /-- Pointwise star preserves the `Lᵖ` norm. -/
 theorem norm_star_lp (F : Lp R p μ) : ‖star F‖ = ‖F‖ := by
   rw [Lp.norm_def, Lp.norm_def]
-  congr 1
-  refine eLpNorm_congr_norm_ae ?_
+  refine congrArg ENNReal.toReal (eLpNorm_congr_norm_ae
+    ((Lp.memLp (star F)).aestronglyMeasurable) ((Lp.memLp F).aestronglyMeasurable) ?_)
   filter_upwards [coeFn_star_lp F] with x hx
   rw [hx, norm_star]
 

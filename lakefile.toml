@@ -16,9 +16,8 @@ pp.unicode.fun = true
 autoImplicit = false
 
 # BEGIN Tau Ceti dependency
-# Tau Ceti is the upstream integration target. `ForTauCeti` is the maintained
-# reusable-math package in this repository; its declarations already live in
-# final `TauCeti.*` namespaces.
+# Tau Ceti is authoritative for APIs accepted upstream. `ForTauCeti` is a
+# shrinking donor for reusable mathematics that is not yet available there.
 #
 # This is a pinned Git dependency, NOT a submodule path dependency. That boundary
 # is load-bearing: the ordinary build must work when the coordination repositories
@@ -29,7 +28,7 @@ autoImplicit = false
 [[require]]
 name = "TauCeti"
 git = "https://github.com/TauCetiProject/TauCeti.git"
-rev = "1b39d420ac84ed9a5a7d536ce19b37818ad29c39"
+rev = "428b86bf62b6b357ae7ac6c3b53fd96237e8cd3b"
 # END Tau Ceti dependency
 
 # BEGIN authoritative root Mathlib dependency
@@ -38,6 +37,7 @@ rev = "1b39d420ac84ed9a5a7d536ce19b37818ad29c39"
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
+rev = "e3e75e86143b43849829fdcd44a39a6b0fe35234"
 # END authoritative root Mathlib dependency
 
 # ForTauCeti: the reusable-mathematics package. Declarations live in their final

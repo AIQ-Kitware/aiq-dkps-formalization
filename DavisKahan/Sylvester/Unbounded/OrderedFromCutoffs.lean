@@ -326,7 +326,7 @@ theorem interfaceDoubleCutoff_sylvester_equation
     (PBi : SpectralCutoffInterface B hB)
     (TBi : BoundedTruncationInterface B hB PBi)
     {X C : F →L[ℂ] E}
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (a b τA τB : ℝ) :
     interfaceFilledTruncation PAi TAi a τA ∘L
         (PAi.cutoff τA ∘L X ∘L PBi.cutoff τB) -

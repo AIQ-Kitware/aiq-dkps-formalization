@@ -639,7 +639,7 @@ theorem polarFactor_add_star_eq_two_absoluteValue :
       hEcross (E y) hEycross]
   have hEzero : E = 0 := by
     have hs : star E * E = 0 := by rw [hEsa.star_eq]; exact hEE
-    exact (CStarRing.star_mul_self_eq_zero_iff E).mp hs
+    exact (star_mul_self_eq_zero (x := E)).mp hs
   have : (W + star W) - (A + A) = 0 := hEdef.symm.trans hEzero
   exact sub_eq_zero.mp this
 
@@ -673,7 +673,7 @@ theorem canonicalPolarFactor_sourceCompression_nonnegative (x : H) :
   have hnonneg : (0 : H →L[𝕜] H) ≤
       ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) :=
     ContinuousLinearMap.modulus_nonneg _
-  exact ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hnonneg).re_inner_nonneg_left
+  exact ((ContinuousLinearMap.nonneg_iff_isPositive).mp hnonneg).re_inner_nonneg_left
     (U.starProjection x)
 
 /-- Positivity of the complementary diagonal compression. -/
@@ -1023,7 +1023,7 @@ private theorem apply_eq_zero_of_nonneg_inner_self_eq_zero
   have hRR : CFC.sqrt S * CFC.sqrt S = S := CFC.sqrt_mul_sqrt_self S hS
   have hRnn : (0 : H →L[𝕜] H) ≤ CFC.sqrt S := CFC.sqrt_nonneg S
   have hRsa : IsSelfAdjoint (CFC.sqrt S) :=
-    ((ContinuousLinearMap.nonneg_iff_isPositive _).mp hRnn).isSelfAdjoint
+    ((ContinuousLinearMap.nonneg_iff_isPositive).mp hRnn).isSelfAdjoint
   have hkey : ⟪CFC.sqrt S x, CFC.sqrt S x⟫_𝕜 = ⟪x, S x⟫_𝕜 := by
     rw [← ContinuousLinearMap.adjoint_inner_right, ← ContinuousLinearMap.star_eq_adjoint,
       hRsa.star_eq, ← mul_apply_eq_comp, hRR]

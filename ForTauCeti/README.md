@@ -1,9 +1,9 @@
 # ForTauCeti - reusable mathematics for Tau Ceti
 
-`ForTauCeti` is the maintained reusable-mathematics product of this repository.
-It is not a temporary holding directory to be drained into a submodule. Paper-
-specific wrappers stay downstream; reusable definitions and proofs belong here
-when they meet the package boundary.
+`ForTauCeti` is the shrinking donor for reusable mathematics not yet accepted
+upstream in Tau Ceti or Mathlib. It is not a parallel implementation of
+accepted APIs. Paper-facing and census declarations stay downstream where their
+source correspondence requires them.
 
 Current repository policy is owned by [`../AGENTS.md`](../AGENTS.md). This README
 keeps only the durable package contract. Mutable module counts, roadmap coverage,
@@ -13,23 +13,24 @@ not to prose snapshots.
 ## Architecture
 
 ```text
-Mathlib      TauCeti
-   \          /
-    ForTauCeti
-        |
-    DavisKahan and paper libraries
+Mathlib ─→ TauCeti ─────────────→ DavisKahan and paper libraries
+              ↓                         ↑
+         ForTauCeti donors ─────────────┘
 ```
 
 - `ForTauCeti` may depend on Mathlib, Tau Ceti, and itself.
-- Paper libraries may consume `ForTauCeti`.
+- Paper libraries may consume Tau Ceti directly and may consume `ForTauCeti`
+  only for mathematics not yet accepted upstream.
 - `ForMathlib` is retired; historical documents may still mention its old paths
   and declaration names.
 - Spectra is retired as a maintained dependency. Attribution remains in source
   headers, `retired/Spectra.UPSTREAM.md`, and the historical engineering records.
-- Tau Ceti is a pinned Lake dependency, materialised under `.lake/packages`. An
-  editable checkout is an optional explicit input (`--tauceti-root` /
-  `TAUCETI_ROOT`). Coordination repositories under `submodules/` are not build
-  dependencies. Maintained implementations are edited here.
+- Tau Ceti is a pinned Lake dependency, materialised under `.lake/packages`, at
+  the same toolchain and Mathlib revision as this repository. An editable
+  checkout is an optional explicit input (`--tauceti-root` / `TAUCETI_ROOT`).
+  Coordination repositories under `submodules/` are not build dependencies.
+  Inspect the pinned upstream source before retaining local foundations; remove
+  local duplicates and migrate consumers when an accepted API already exists.
 
 The import firewall is enforced by `dev/policy/import-layers.yaml`.
 
@@ -115,23 +116,18 @@ aiq-lean ratchet check dev/policy/ratchet.yaml
 python3 scripts/check_tauceti_roadmap_topics.py
 python3 scripts/check_tauceti_readiness.py
 python3 scripts/derive_tauceti_submission_ladder.py --check
-python3 scripts/export_for_tauceti.py --check
 ```
 
 Do not copy the tools' current counts into this README. If a checker is no longer
 load-bearing, follow `AGENTS.md`: prefer removing obsolete tooling to creating a
 second status system around it.
 
-## Tau Ceti export
+## Upstream API use
 
-Roadmaps and submission copies are derived from this maintained package. During
-ordinary work, use `scripts/export_for_tauceti.py --check` to verify deterministic
-mapping without modifying any checkout.
-
-Only an explicit Tau Ceti submission task should run `--write`, which requires an
-editable checkout, or advance the pinned Tau Ceti revision in `lake-manifest.json`. A submission copy is an output; deleting
-`ForTauCeti` after export would delete the maintained product rather than finish
-the work.
+Use Tau Ceti declarations directly after acceptance. Do not copy accepted code
+back into this donor directory or preserve forwarding aliases as the final
+design. Keep only genuinely unmerged results here, with exact provenance and
+their current consumers.
 
 ## What is historical
 

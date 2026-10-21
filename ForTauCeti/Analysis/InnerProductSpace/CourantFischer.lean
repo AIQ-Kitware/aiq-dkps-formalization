@@ -496,7 +496,7 @@ private theorem eigenvalues_sub_le
     (RCLike.re_le_norm _).trans (norm_inner_le_norm _ _)
   have hbnd : ‖(S - T) x‖ * ‖x‖ ≤ ε := by
     have := hε x
-    rwa [hnx, mul_one] at this ⊢
+    rw [hnx, mul_one] at this ⊢; assumption
   calc hS.eigenvalues hn k - hT.eigenvalues hn k
       ≤ RCLike.re ⟪S x, x⟫_𝕜 - RCLike.re ⟪T x, x⟫_𝕜 := by linarith
     _ = RCLike.re ⟪(S - T) x, x⟫_𝕜 := hdiff

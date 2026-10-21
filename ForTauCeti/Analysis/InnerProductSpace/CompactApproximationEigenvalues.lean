@@ -327,7 +327,12 @@ theorem norm_comp_subtypeL_orthogonal_le (hAc : IsCompactOperator A)
       rcases eq_or_ne k 0 with rfl | hk0
       · simp
       · have hev : Module.End.HasEigenvalue (S : Module.End 𝕜 (Wᗮ : Submodule 𝕜 E)) k :=
-          (hSc.hasEigenvalue_iff_mem_spectrum hk0).mpr hk
+          (hSc.hasEigenvalue_iff_mem_spectrum hk0).mpr (by
+            have hk' : k ∈ _root_.spectrum 𝕜 S ∪ {0} := by
+              simpa only [quasispectrum_eq_spectrum_union_zero] using hk
+            rcases hk' with hk' | hk'
+            · exact hk'
+            · exact (hk0 hk').elim)
         obtain ⟨y, hy, hy0⟩ :=
           Submodule.exists_mem_ne_zero_of_ne_bot (Module.End.hasEigenvalue_iff.mp hev)
         have hyeq : A (y : E) = k • (y : E) := by
@@ -590,8 +595,13 @@ theorem finrank_eigenspace_eq_card_approximationNumber_eq (hAc : IsCompactOperat
           n).mp hcon) (Nat.not_lt.mpr h1)
       exact le_antisymm (not_lt.mp hle) hge
   have hcard : Nat.card {n : ℕ // A.approximationNumber n = μ} = N - M := by
+    have hcongrEquiv : {n : ℕ // A.approximationNumber n = μ} ≃
+        {n : ℕ // n ∈ Set.Ico M N} :=
+      Equiv.subtypeEquivRight fun n => by
+        change n ∈ {n : ℕ | A.approximationNumber n = μ} ↔ n ∈ Set.Ico M N
+        rw [hset]
     have hcongr : Nat.card {n : ℕ // A.approximationNumber n = μ} =
-        Nat.card (Set.Ico M N : Set ℕ) := Nat.card_congr (Equiv.setCongr hset)
+        Nat.card (Set.Ico M N : Set ℕ) := Nat.card_congr hcongrEquiv
     rw [hcongr, Nat.card_eq_fintype_card, Fintype.card_Ico, Nat.card_Ico]
   rw [hcard, hN, hM, finrank_eigenSpan_Ici hAc hAs hμ]
   omega
