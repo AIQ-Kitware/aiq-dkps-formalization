@@ -51,9 +51,8 @@ theorem Sylvester_homogeneous_eq_zero_of_disjoint_spectrum
       (_root_.LinearPMap.spectrum B))
     (hEq : _root_.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
-  have hdisjLocal := (disjoint_spectrum_iff_root A B).mpr hdisj
   refine TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum hA hB
-    (fun y => hEq.mapsTo_domain y) (fun y => ?_) hdisjLocal
+    (fun y => hEq.mapsTo_domain y) (fun y => ?_) hdisj
   simpa using sub_eq_zero.mp (hEq.equation y)
 
 /-- Positive pairwise spectral distance gives homogeneous uniqueness for raw

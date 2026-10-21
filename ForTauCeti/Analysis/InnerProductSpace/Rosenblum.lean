@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 public import Mathlib.Topology.UrysohnsLemma
 
 /-!
@@ -221,11 +221,15 @@ variable {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} (hA : IsSelfAdjoint A) (h
 
 /-- A continuous separator of the two real spectra: `0` on `A`'s, `1` on `B`'s,
 valued in `[0,1]`.  Urysohn, using that both are closed and disjoint. -/
-theorem exists_spectralSeparator (hdisj : Disjoint (spectrum A) (spectrum B)) :
-    ∃ f : C(ℝ, ℝ), Set.EqOn f 0 (Complex.ofReal ⁻¹' spectrum A) ∧
-      Set.EqOn f 1 (Complex.ofReal ⁻¹' spectrum B) ∧ ∀ x, f x ∈ Set.Icc (0 : ℝ) 1 := by
-  refine exists_continuous_zero_one_of_isClosed (isClosed_realSpectrum A)
-    (isClosed_realSpectrum B) ?_
+theorem exists_spectralSeparator
+    (hdisj : Disjoint (_root_.LinearPMap.spectrum A) (_root_.LinearPMap.spectrum B)) :
+    ∃ f : C(ℝ, ℝ),
+      Set.EqOn f 0 (Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A) ∧
+      Set.EqOn f 1 (Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B) ∧
+      ∀ x, f x ∈ Set.Icc (0 : ℝ) 1 := by
+  refine exists_continuous_zero_one_of_isClosed
+    (_root_.LinearPMap.isClosed_preimage_ofReal_spectrum A)
+    (_root_.LinearPMap.isClosed_preimage_ofReal_spectrum B) ?_
   refine Set.disjoint_left.mpr fun lam hlamA hlamB => ?_
   exact Set.disjoint_left.mp hdisj hlamA hlamB
 
@@ -235,7 +239,7 @@ spectrum.  This is `SpectralSupport`, transported through the pushforward that
 defines `spectralPVM`. -/
 theorem ae_cayleyInv_mem_spectrum (v : E) :
     ∀ᵐ w ∂(BorelCalculus.diagMeasure (isStarNormal_cayley hA) v),
-      ((cayleyInv hA w : ℝ) : ℂ) ∈ spectrum A := by
+      ((cayleyInv hA w : ℝ) : ℂ) ∈ _root_.LinearPMap.spectrum A := by
   have hmeas : MeasurableSet (Complex.ofReal ⁻¹' resolventSet A) :=
     ((isOpen_resolventSet A).preimage Complex.continuous_ofReal).measurableSet
   have hzero : (spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A) = 0 :=
@@ -251,7 +255,13 @@ theorem ae_cayleyInv_mem_spectrum (v : E) :
   rw [hmap] at hzero
   have := MeasureTheory.compl_mem_ae_iff.mpr hzero
   filter_upwards [this] with w hw
-  exact hw
+  have hnotLocal : ((cayleyInv hA w : ℝ) : ℂ) ∉ resolventSet A := hw
+  have hnotRoot : ((cayleyInv hA w : ℝ) : ℂ) ∉ _root_.LinearPMap.resolventSet A := by
+    intro hroot
+    obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp hroot
+    exact hnotLocal (mem_resolventSet_iff.mpr ⟨R,
+      ⟨hR.mem_domain, hR.smul_sub_apply, hR.apply_smul_sub⟩⟩)
+  exact (_root_.LinearPMap.mem_spectrum_iff A _).2 hnotRoot
 
 end Rosenblum
 
@@ -264,7 +274,7 @@ everywhere, for every `n`** — no limit is needed there.  The separator vanishe
 on `A`'s spectrum, and almost every point of the Cayley spectrum has its
 coordinate in that spectrum. -/
 theorem cfcHom_separator_eq_zero (hA : IsSelfAdjoint A) (f : C(ℝ, ℝ))
-    (hfA : Set.EqOn f 0 (Complex.ofReal ⁻¹' spectrum A)) (n : ℕ)
+    (hfA : Set.EqOn f 0 (Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A)) (n : ℕ)
     (g : C(_root_.spectrum ℂ (cayley hA), ℂ))
     (hgval : ∀ w, g w = cayleySymbolFun f n (w : ℂ)) :
     cfcHom (isStarNormal_cayley hA) g = 0 := by
@@ -293,7 +303,7 @@ The separator is `1` on `B`'s spectrum, almost every Cayley point has its
 coordinate there, and almost every Cayley point differs from the singularity
 `1`, where the damping factor would otherwise kill the symbol. -/
 theorem tendsto_cfcHom_separator (hB : IsSelfAdjoint B) (f : C(ℝ, ℝ))
-    (hfB : Set.EqOn f 1 (Complex.ofReal ⁻¹' spectrum B))
+    (hfB : Set.EqOn f 1 (Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B))
     (hf01 : ∀ x, f x ∈ Set.Icc (0 : ℝ) 1)
     (g : ℕ → C(_root_.spectrum ℂ (cayley hB), ℂ))
     (hgval : ∀ n w, g n w = cayleySymbolFun f n (w : ℂ)) (ξ : F) :
@@ -363,7 +373,7 @@ theorem eq_zero_of_intertwines_of_disjoint_spectrum
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {X : F →L[ℂ] E}
     (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
     (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y))
-    (hdisj : Disjoint (spectrum A) (spectrum B)) :
+    (hdisj : Disjoint (_root_.LinearPMap.spectrum A) (_root_.LinearPMap.spectrum B)) :
     X = 0 := by
   obtain ⟨f, hfA, hfB, hf01⟩ := exists_spectralSeparator (A := A) (B := B) hdisj
   set K : Set ℂ := _root_.spectrum ℂ (cayley hA) ∪ _root_.spectrum ℂ (cayley hB) with hKdef

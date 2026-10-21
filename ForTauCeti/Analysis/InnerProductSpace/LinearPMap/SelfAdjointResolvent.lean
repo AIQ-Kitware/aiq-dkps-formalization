@@ -225,11 +225,9 @@ theorem mem_resolventSet_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoin
 
 /-- **The spectrum of a self-adjoint operator is real.** -/
 theorem spectrum_subset_real {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
-    spectrum A ⊆ Complex.ofReal '' Set.univ := by
+    _root_.LinearPMap.spectrum A ⊆ Complex.ofReal '' Set.univ := by
   intro z hz
-  have him : z.im = 0 := by
-    by_contra him
-    exact (mem_spectrum_iff.mp hz) (mem_resolventSet_of_im_ne_zero hA him)
+  have him : z.im = 0 := hA.spectrum_subset_im_eq_zero hz
   exact ⟨z.re, Set.mem_univ _, by simp [Complex.ext_iff, him]⟩
 
 /-- The resolvent of a self-adjoint operator at a non-real point is bounded by
@@ -277,13 +275,17 @@ that by `s⁻¹`, and for a self-adjoint element the norm *is* the spectral radi
 No projection-valued measure and no functional calculus appear. -/
 theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
     {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) {c s : ℝ} (hs : 0 < s)
-    (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s), (lam : ℂ) ∉ spectrum A) :
+    (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum A) :
     ∃ R : E →L[ℂ] E, ‖R‖ ≤ s⁻¹ ∧
       (∀ ψ : A.domain, R ((c : ℂ) • (ψ : E) - A ψ) = (ψ : E)) ∧
       ∀ φ : E, ∃ hmem : R φ ∈ A.domain,
         (c : ℂ) • R φ - A ⟨R φ, hmem⟩ = φ := by
   have hcmem : c ∈ Set.Ioo (c - s) (c + s) := ⟨by linarith, by linarith⟩
-  have hc : (c : ℂ) ∈ resolventSet A := notMem_spectrum_iff.mp (hgap c hcmem)
+  have hcRoot : (c : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
+    by_contra hnot
+    exact hgap c hcmem ((_root_.LinearPMap.mem_spectrum_iff A (c : ℂ)).2 hnot)
+  have hc : (c : ℂ) ∈ resolventSet A := root_mem_resolventSet_toLocal hcRoot
   refine ⟨resolvent A (c : ℂ), ?_, fun ψ => resolvent_smul_sub_apply hc ψ, fun φ =>
     ⟨resolvent_mem_domain hc φ, smul_sub_apply_resolvent hc φ⟩⟩
   -- every spectral point of the bounded resolvent has modulus at most `s⁻¹`
@@ -294,8 +296,16 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
     · -- `c + μ⁻¹` is a spectral point of `A`, hence real and outside the gap
       have hnot : (c : ℂ) - μ⁻¹ ∉ resolventSet A := fun hmem =>
         notMem_spectrum_resolvent hc hμ0 hmem hμ
-      obtain ⟨r, -, hr⟩ := spectrum_subset_real hA (mem_spectrum_iff.mpr hnot)
-      have hrspec : (r : ℂ) ∈ spectrum A := by rw [hr]; exact mem_spectrum_iff.mpr hnot
+      have hnotRoot : (c : ℂ) - μ⁻¹ ∉ _root_.LinearPMap.resolventSet A := by
+        intro hmem
+        exact hnot (root_mem_resolventSet_toLocal hmem)
+      have hμspectrum : (c : ℂ) - μ⁻¹ ∈ _root_.LinearPMap.spectrum A :=
+        (_root_.LinearPMap.mem_spectrum_iff A _).2 hnotRoot
+      obtain ⟨r, -, hr⟩ := spectrum_subset_real hA
+        hμspectrum
+      have hrspec : (r : ℂ) ∈ _root_.LinearPMap.spectrum A := by
+        rw [hr]
+        exact hμspectrum
       have hrgap : r ∉ Set.Ioo (c - s) (c + s) := fun hmem => hgap r hmem hrspec
       have hge : s ≤ |c - r| := by
         rw [Set.mem_Ioo, not_and_or, not_lt, not_lt] at hrgap
@@ -303,7 +313,7 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
         · rw [abs_of_nonneg (by linarith)]; linarith
         · rw [abs_of_nonpos (by linarith)]; linarith
       have hinvnorm : ‖μ‖⁻¹ = |c - r| := by
-        rw [← norm_inv, show μ⁻¹ = (c : ℂ) - (r : ℂ) by rw [hr]; ring,
+        rw [← norm_inv, show μ⁻¹ = (c : ℂ) - (r : ℂ) by rw [hr]; ring_nf,
           ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
       have hpos : 0 < ‖μ‖ := norm_pos_iff.mpr hμ0
       have hsle : s ≤ ‖μ‖⁻¹ := hinvnorm ▸ hge

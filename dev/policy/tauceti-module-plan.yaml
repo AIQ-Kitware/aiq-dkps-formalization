@@ -202,7 +202,6 @@ topics:
   modules:
   - Analysis.InnerProductSpace.LinearPMap.Resolvent
   - Analysis.InnerProductSpace.LinearPMap.ResolventBound
-  - Analysis.InnerProductSpace.LinearPMap.ResolventOpen
   - Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
   - Analysis.InnerProductSpace.LinearPMap.RealLowerBound
   - Analysis.CStarAlgebra.SelfAdjointGapInverse
@@ -566,7 +565,6 @@ rungs:
   - Analysis.InnerProductSpace.LinearPMap.RealLowerBound
   - Analysis.InnerProductSpace.LinearPMap.Resolvent
   - Analysis.InnerProductSpace.LinearPMap.ResolventBound
-  - Analysis.InnerProductSpace.LinearPMap.ResolventOpen
   - Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
   - Analysis.InnerProductSpace.SeparatedIntertwiner
   - Analysis.InnerProductSpace.LinearPMap.Shift

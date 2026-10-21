@@ -56,37 +56,11 @@ theorem mem_local_resolventSet_iff_root
       apply_smul_sub := hR.apply_smul_sub
     }⟩
 
-/-- The donor and accepted partial-map spectra have the same membership. -/
-theorem mem_spectrum_iff_root
-    (A : E →ₗ.[𝕜] E) (z : 𝕜) :
-    z ∈ TauCeti.LinearPMap.spectrum A ↔
-      z ∈ _root_.LinearPMap.spectrum A := by
-  rw [TauCeti.LinearPMap.mem_spectrum_iff,
-    _root_.LinearPMap.mem_spectrum_iff]
-  exact not_congr (mem_local_resolventSet_iff_root A z)
-
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
 variable {F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- The donor and accepted partial-map spectra have the same disjointness
-relation. This keeps the remaining donor theorem boundary conversion in one
-place while its consumers use Tau Ceti's spectrum. -/
-theorem disjoint_spectrum_iff_root
-    (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F) :
-    Disjoint (TauCeti.LinearPMap.spectrum A) (TauCeti.LinearPMap.spectrum B) ↔
-      Disjoint (_root_.LinearPMap.spectrum A) (_root_.LinearPMap.spectrum B) := by
-  rw [Set.disjoint_left, Set.disjoint_left]
-  constructor
-  · intro h z hzA hzB
-    exact h (mem_spectrum_iff_root A z |>.mpr hzA)
-      (mem_spectrum_iff_root B z |>.mpr hzB)
-  · intro h z hzA hzB
-    exact h (mem_spectrum_iff_root A z |>.mp hzA)
-      (mem_spectrum_iff_root B z |>.mp hzB)
 
 omit [CompleteSpace E] in
 /-- The old sign-convention inverse condition and the donor complex-resolvent
