@@ -3972,26 +3972,33 @@
     {
       "source_module": "ForMathlib",
       "source_declarations": [
-        "IsOffDiagonal",
-        "diagonalPart",
-        "norm_reflectionOperator_le_one",
-        "offDiagonalPart",
+        "starProjection_congr",
+        "starProjection_congr_apply",
         "reflectionOperator",
+        "IsOffDiagonal",
+        "offDiagBlock_eq_sub_diagBlock",
+        "diagBlock_apply",
+        "offDiagBlock_apply",
         "reflectionOperator_apply",
-        "reflectionOperator_comm_of_reduces",
+        "reflectionOperator_apply_of_mem",
+        "reflectionOperator_apply_eq_reflection",
         "reflectionOperator_involutive",
+        "reflectionOperator_eq_two_smul_sub_id",
         "reflectionOperator_norm_map",
         "reflectionOperator_surjective",
+        "norm_reflectionOperator_le_one",
+        "reflectionOperator_comm_of_reduces",
         "starProjection_orthogonal_apply",
-        "two_smul_diagonalPart_eq_add_reflectionConjugate",
-        "two_smul_offDiagonalPart_eq_sub_reflectionConjugate"
+        "inner_diagBlock_apply_self",
+        "diagonalPart_eq_self_of_reflectionConjugate",
+        "re_inner_apply_self_nonneg_of_reflectionConjugate"
       ],
       "current_namespace": "Submodule",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjectionBlocks",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "staged in ForTauCeti",
+      "provenance_class": "partially upstreamed: Tau Ceti owns the canonical diagonal/off-diagonal block operators and their core algebra; this staging module retains only the listed donor-specific extensions",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace"
       ],
@@ -3999,8 +4006,30 @@
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "staged-partial",
+      "upstream_pr": null,
+      "accepted_upstream_declarations": [
+        "diagBlock",
+        "offDiagBlock",
+        "diagBlock_def",
+        "offDiagBlock_def",
+        "diagBlock_add",
+        "diagBlock_smul",
+        "offDiagBlock_add",
+        "offDiagBlock_smul",
+        "diagBlock_zero",
+        "offDiagBlock_zero",
+        "diagBlock_neg",
+        "offDiagBlock_neg",
+        "diagBlock_sub",
+        "offDiagBlock_sub",
+        "diagBlock_add_offDiagBlock",
+        "two_smul_diagBlock",
+        "two_smul_offDiagBlock",
+        "commute_reflection_iff",
+        "offDiagBlock_eq_zero_iff",
+        "diagBlock_eq_self_iff"
+      ]
     },
     {
       "source_module": "ForMathlib",

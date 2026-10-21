@@ -352,9 +352,13 @@ theorem gauge_diagonalPart_le
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) (hA : I.mem A) :
-    I.mem (U.diagonalPart A) ∧
-      I.gauge (U.diagonalPart A) ≤ I.gauge A := by
+    I.mem (U.diagBlock A) ∧
+      I.gauge (U.diagBlock A) ≤ I.gauge A := by
   let J := U.reflectionOperator
+  have hR : J = (U.reflection : E →L[𝕜] E) := by
+    dsimp [J]
+    ext x
+    exact Submodule.reflectionOperator_apply_eq_reflection U x
   have hJ : TauCeti.LinearPMap.IsUnitaryOperator J :=
     ⟨U.reflectionOperator_norm_map, U.reflectionOperator_surjective⟩
   have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
@@ -362,12 +366,13 @@ theorem gauge_diagonalPart_le
   have hconjMem : I.mem (J ∘L A ∘L J) := I.ideal_mem J J hA
   have hconjGauge : I.gauge (J ∘L A ∘L J) = I.gauge A :=
     I.unitary_invariant J J A hJ hJ hJinv hJinv hA
-  have hformula : (2 : 𝕜) • U.diagonalPart A = A + J ∘L A ∘L J :=
-    Submodule.two_smul_diagonalPart_eq_add_reflectionConjugate U A
+  have hformula : (2 : 𝕜) • U.diagBlock A = A + J ∘L A ∘L J :=
+    by simpa [hR, ← Nat.cast_smul_eq_nsmul 𝕜] using
+      (Submodule.two_smul_diagBlock U A)
   have hsumMem : I.mem (A + J ∘L A ∘L J) := I.add_mem hA hconjMem
-  have hhalf : ((2 : 𝕜)⁻¹) • ((2 : 𝕜) • U.diagonalPart A) =
-      U.diagonalPart A := by module
-  have hdiagMem : I.mem (U.diagonalPart A) := by
+  have hhalf : ((2 : 𝕜)⁻¹) • ((2 : 𝕜) • U.diagBlock A) =
+      U.diagBlock A := by module
+  have hdiagMem : I.mem (U.diagBlock A) := by
     rw [← hhalf, hformula]
     exact I.smul_mem _ hsumMem
   refine ⟨hdiagMem, ?_⟩
@@ -397,9 +402,13 @@ theorem gauge_offDiagonalPart_le
     (I : SymmetricNormIdeal (𝕜 := 𝕜) (E := E))
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) (hA : I.mem A) :
-    I.mem (U.offDiagonalPart A) ∧
-      I.gauge (U.offDiagonalPart A) ≤ I.gauge A := by
+    I.mem (U.offDiagBlock A) ∧
+      I.gauge (U.offDiagBlock A) ≤ I.gauge A := by
   let J := U.reflectionOperator
+  have hR : J = (U.reflection : E →L[𝕜] E) := by
+    dsimp [J]
+    ext x
+    exact Submodule.reflectionOperator_apply_eq_reflection U x
   have hJ : TauCeti.LinearPMap.IsUnitaryOperator J :=
     ⟨U.reflectionOperator_norm_map, U.reflectionOperator_surjective⟩
   have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
@@ -409,13 +418,14 @@ theorem gauge_offDiagonalPart_le
     simpa using I.smul_mem (-1 : 𝕜) hconjMem
   have hconjGauge : I.gauge (J ∘L A ∘L J) = I.gauge A :=
     I.unitary_invariant J J A hJ hJ hJinv hJinv hA
-  have hformula : (2 : 𝕜) • U.offDiagonalPart A = A - J ∘L A ∘L J :=
-    Submodule.two_smul_offDiagonalPart_eq_sub_reflectionConjugate U A
+  have hformula : (2 : 𝕜) • U.offDiagBlock A = A - J ∘L A ∘L J :=
+    by simpa [hR, ← Nat.cast_smul_eq_nsmul 𝕜] using
+      (Submodule.two_smul_offDiagBlock U A)
   have hdiffMem : I.mem (A - J ∘L A ∘L J) := by
     simpa [sub_eq_add_neg] using I.add_mem hA hnegConjMem
-  have hhalf : ((2 : 𝕜)⁻¹) • ((2 : 𝕜) • U.offDiagonalPart A) =
-      U.offDiagonalPart A := by module
-  have hoffMem : I.mem (U.offDiagonalPart A) := by
+  have hhalf : ((2 : 𝕜)⁻¹) • ((2 : 𝕜) • U.offDiagBlock A) =
+      U.offDiagBlock A := by module
+  have hoffMem : I.mem (U.offDiagBlock A) := by
     rw [← hhalf, hformula]
     exact I.smul_mem _ hdiffMem
   refine ⟨hoffMem, ?_⟩

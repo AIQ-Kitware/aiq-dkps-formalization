@@ -20,8 +20,8 @@ against `U ⊕ Uᗮ`:
 This module records what `Z² = 1` says about the four blocks, in the
 representation-free form
 
-* `D := U.diagonalPart Z` — the block-diagonal part `diag (D₀, -D₁)`;
-* `S := U.offDiagonalPart Z` — the block-off-diagonal part, carrying `G`.
+* `D := U.diagBlock Z` — the block-diagonal part `diag (D₀, -D₁)`;
+* `S := U.offDiagBlock Z` — the block-off-diagonal part, carrying `G`.
 
 Then `D` and `S` are self-adjoint, `D + S = Z`, and
 
@@ -84,58 +84,58 @@ theorem starProjection_orthogonal_eq_zero_of_mem [Uᗮ.HasOrthogonalProjection]
 variable (U) in
 /-- On `U` the diagonal part of `Z` is the `U`-component of `Z x`. -/
 theorem diagonalPart_apply_of_mem (Z : E →L[𝕜] E) {x : E} (hx : x ∈ U) :
-    U.diagonalPart Z x = U.starProjection (Z x) := by
-  rw [Submodule.diagonalPart_apply, Submodule.starProjection_eq_self_iff.mpr hx,
+    U.diagBlock Z x = U.starProjection (Z x) := by
+  rw [Submodule.diagBlock_apply, Submodule.starProjection_eq_self_iff.mpr hx,
     starProjection_orthogonal_eq_zero_of_mem hx, map_zero, map_zero, add_zero]
 
 variable (U) in
 /-- On `Uᗮ` the diagonal part of `Z` is the `Uᗮ`-component of `Z x`. -/
 theorem diagonalPart_apply_of_mem_orthogonal (Z : E →L[𝕜] E) {x : E}
-    (hx : x ∈ Uᗮ) : U.diagonalPart Z x = Uᗮ.starProjection (Z x) := by
+    (hx : x ∈ Uᗮ) : U.diagBlock Z x = Uᗮ.starProjection (Z x) := by
   have h0 : U.starProjection x = 0 := (U.starProjection_apply_eq_zero_iff).mpr hx
-  rw [Submodule.diagonalPart_apply, h0, map_zero, map_zero, zero_add,
+  rw [Submodule.diagBlock_apply, h0, map_zero, map_zero, zero_add,
     Submodule.starProjection_eq_self_iff.mpr hx]
 
 variable (U) in
 /-- On `U` the off-diagonal part of `Z` is the `Uᗮ`-component of `Z x`. -/
 theorem offDiagonalPart_apply_of_mem (Z : E →L[𝕜] E) {x : E} (hx : x ∈ U) :
-    U.offDiagonalPart Z x = Uᗮ.starProjection (Z x) := by
-  rw [Submodule.offDiagonalPart_apply, diagonalPart_apply_of_mem U Z hx,
+    U.offDiagBlock Z x = Uᗮ.starProjection (Z x) := by
+  rw [Submodule.offDiagBlock_apply, diagonalPart_apply_of_mem U Z hx,
     Submodule.starProjection_orthogonal_apply]
 
 variable (U) in
 /-- On `Uᗮ` the off-diagonal part of `Z` is the `U`-component of `Z x`. -/
 theorem offDiagonalPart_apply_of_mem_orthogonal (Z : E →L[𝕜] E) {x : E}
-    (hx : x ∈ Uᗮ) : U.offDiagonalPart Z x = U.starProjection (Z x) := by
-  rw [Submodule.offDiagonalPart_apply, diagonalPart_apply_of_mem_orthogonal U Z hx,
+    (hx : x ∈ Uᗮ) : U.offDiagBlock Z x = U.starProjection (Z x) := by
+  rw [Submodule.offDiagBlock_apply, diagonalPart_apply_of_mem_orthogonal U Z hx,
     Submodule.starProjection_orthogonal_apply]
   abel
 
 variable (U) in
 /-- The diagonal part preserves `U`. -/
 theorem diagonalPart_mem_of_mem (Z : E →L[𝕜] E) {x : E} (hx : x ∈ U) :
-    U.diagonalPart Z x ∈ U := by
+    U.diagBlock Z x ∈ U := by
   rw [diagonalPart_apply_of_mem U Z hx]
   exact U.starProjection_apply_mem _
 
 variable (U) in
 /-- The diagonal part preserves `Uᗮ`. -/
 theorem diagonalPart_mem_orthogonal_of_mem_orthogonal (Z : E →L[𝕜] E) {x : E}
-    (hx : x ∈ Uᗮ) : U.diagonalPart Z x ∈ Uᗮ := by
+    (hx : x ∈ Uᗮ) : U.diagBlock Z x ∈ Uᗮ := by
   rw [diagonalPart_apply_of_mem_orthogonal U Z hx]
   exact Uᗮ.starProjection_apply_mem _
 
 variable (U) in
 /-- The off-diagonal part carries `U` into `Uᗮ`. -/
 theorem offDiagonalPart_mem_orthogonal_of_mem (Z : E →L[𝕜] E) {x : E}
-    (hx : x ∈ U) : U.offDiagonalPart Z x ∈ Uᗮ := by
+    (hx : x ∈ U) : U.offDiagBlock Z x ∈ Uᗮ := by
   rw [offDiagonalPart_apply_of_mem U Z hx]
   exact Uᗮ.starProjection_apply_mem _
 
 variable (U) in
 /-- The off-diagonal part carries `Uᗮ` into `U`. -/
 theorem offDiagonalPart_mem_of_mem_orthogonal (Z : E →L[𝕜] E) {x : E}
-    (hx : x ∈ Uᗮ) : U.offDiagonalPart Z x ∈ U := by
+    (hx : x ∈ Uᗮ) : U.offDiagBlock Z x ∈ U := by
   rw [offDiagonalPart_apply_of_mem_orthogonal U Z hx]
   exact U.starProjection_apply_mem _
 
@@ -143,8 +143,8 @@ end Parity
 
 /-- The two parts recompose the operator. -/
 theorem diagonalPart_add_offDiagonalPart (Z : E →L[𝕜] E) :
-    U.diagonalPart Z + U.offDiagonalPart Z = Z := by
-  rw [Submodule.offDiagonalPart_eq]
+    U.diagBlock Z + U.offDiagBlock Z = Z := by
+  rw [Submodule.offDiagBlock_eq_sub_diagBlock]
   abel
 
 section Involution
@@ -175,21 +175,26 @@ variable (U) in
 then `D² + S² = 1` for the two blocks of `Z` relative to `U`.  Blockwise this is
 the pair `D₀² + G⋆G = 1`, `D₁² + G G⋆ = 1`. -/
 theorem diagonalPart_sq_add_offDiagonalPart_sq {Z : E →L[𝕜] E} (hZ : Z * Z = 1) :
-    U.diagonalPart Z * U.diagonalPart Z +
-      U.offDiagonalPart Z * U.offDiagonalPart Z = 1 := by
+    U.diagBlock Z * U.diagBlock Z +
+      U.offDiagBlock Z * U.offDiagBlock Z = 1 := by
   set W : E →L[𝕜] E :=
     U.reflectionOperator ∘L Z ∘L U.reflectionOperator with hWdef
+  have hR : U.reflectionOperator = (U.reflection : E →L[𝕜] E) := by
+    ext x
+    exact Submodule.reflectionOperator_apply_eq_reflection U x
   have hWW : W * W = 1 := reflectionConjugate_mul_self hZ
-  have hD : (2 : 𝕜) • U.diagonalPart Z = Z + W :=
-    Submodule.two_smul_diagonalPart_eq_add_reflectionConjugate U Z
-  have hS : (2 : 𝕜) • U.offDiagonalPart Z = Z - W :=
-    Submodule.two_smul_offDiagonalPart_eq_sub_reflectionConjugate U Z
-  have hkey : (4 : 𝕜) • (U.diagonalPart Z * U.diagonalPart Z +
-      U.offDiagonalPart Z * U.offDiagonalPart Z) = (4 : 𝕜) • (1 : E →L[𝕜] E) := by
-    have hexp : (4 : 𝕜) • (U.diagonalPart Z * U.diagonalPart Z +
-        U.offDiagonalPart Z * U.offDiagonalPart Z) =
-        ((2 : 𝕜) • U.diagonalPart Z) * ((2 : 𝕜) • U.diagonalPart Z) +
-          ((2 : 𝕜) • U.offDiagonalPart Z) * ((2 : 𝕜) • U.offDiagonalPart Z) := by
+  have hD : (2 : 𝕜) • U.diagBlock Z = Z + W :=
+    by simpa [hR, hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
+      (Submodule.two_smul_diagBlock U Z)
+  have hS : (2 : 𝕜) • U.offDiagBlock Z = Z - W :=
+    by simpa [hR, hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
+      (Submodule.two_smul_offDiagBlock U Z)
+  have hkey : (4 : 𝕜) • (U.diagBlock Z * U.diagBlock Z +
+      U.offDiagBlock Z * U.offDiagBlock Z) = (4 : 𝕜) • (1 : E →L[𝕜] E) := by
+    have hexp : (4 : 𝕜) • (U.diagBlock Z * U.diagBlock Z +
+        U.offDiagBlock Z * U.offDiagBlock Z) =
+        ((2 : 𝕜) • U.diagBlock Z) * ((2 : 𝕜) • U.diagBlock Z) +
+          ((2 : 𝕜) • U.offDiagBlock Z) * ((2 : 𝕜) • U.offDiagBlock Z) := by
       rw [smul_mul_smul_comm, smul_mul_smul_comm, ← smul_add]
       norm_num
     rw [hexp, hD, hS]
@@ -205,21 +210,26 @@ blockwise this is the intertwining relation `D₁ G = G D₀`, which is the
 double-angle content of the reflected pair. -/
 theorem diagonalPart_mul_offDiagonalPart_add_offDiagonalPart_mul_diagonalPart
     {Z : E →L[𝕜] E} (hZ : Z * Z = 1) :
-    U.diagonalPart Z * U.offDiagonalPart Z +
-      U.offDiagonalPart Z * U.diagonalPart Z = 0 := by
+    U.diagBlock Z * U.offDiagBlock Z +
+      U.offDiagBlock Z * U.diagBlock Z = 0 := by
   set W : E →L[𝕜] E :=
     U.reflectionOperator ∘L Z ∘L U.reflectionOperator with hWdef
+  have hR : U.reflectionOperator = (U.reflection : E →L[𝕜] E) := by
+    ext x
+    exact Submodule.reflectionOperator_apply_eq_reflection U x
   have hWW : W * W = 1 := reflectionConjugate_mul_self hZ
-  have hD : (2 : 𝕜) • U.diagonalPart Z = Z + W :=
-    Submodule.two_smul_diagonalPart_eq_add_reflectionConjugate U Z
-  have hS : (2 : 𝕜) • U.offDiagonalPart Z = Z - W :=
-    Submodule.two_smul_offDiagonalPart_eq_sub_reflectionConjugate U Z
-  have hkey : (4 : 𝕜) • (U.diagonalPart Z * U.offDiagonalPart Z +
-      U.offDiagonalPart Z * U.diagonalPart Z) = (4 : 𝕜) • (0 : E →L[𝕜] E) := by
-    have hexp : (4 : 𝕜) • (U.diagonalPart Z * U.offDiagonalPart Z +
-        U.offDiagonalPart Z * U.diagonalPart Z) =
-        ((2 : 𝕜) • U.diagonalPart Z) * ((2 : 𝕜) • U.offDiagonalPart Z) +
-          ((2 : 𝕜) • U.offDiagonalPart Z) * ((2 : 𝕜) • U.diagonalPart Z) := by
+  have hD : (2 : 𝕜) • U.diagBlock Z = Z + W :=
+    by simpa [hR, hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
+      (Submodule.two_smul_diagBlock U Z)
+  have hS : (2 : 𝕜) • U.offDiagBlock Z = Z - W :=
+    by simpa [hR, hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
+      (Submodule.two_smul_offDiagBlock U Z)
+  have hkey : (4 : 𝕜) • (U.diagBlock Z * U.offDiagBlock Z +
+      U.offDiagBlock Z * U.diagBlock Z) = (4 : 𝕜) • (0 : E →L[𝕜] E) := by
+    have hexp : (4 : 𝕜) • (U.diagBlock Z * U.offDiagBlock Z +
+        U.offDiagBlock Z * U.diagBlock Z) =
+        ((2 : 𝕜) • U.diagBlock Z) * ((2 : 𝕜) • U.offDiagBlock Z) +
+          ((2 : 𝕜) • U.offDiagBlock Z) * ((2 : 𝕜) • U.diagBlock Z) := by
       rw [smul_mul_smul_comm, smul_mul_smul_comm, ← smul_add]
       norm_num
     rw [hexp, hD, hS]
@@ -240,7 +250,7 @@ norms then `‖D x‖² + ‖S x‖² = ‖x‖²` for `x ∈ U`: the two blocks
 orthogonal.  Blockwise this is `D₀² + G⋆G = 1` tested at `x`. -/
 theorem norm_sq_diagonalPart_add_norm_sq_offDiagonalPart_of_mem
     {Z : E →L[𝕜] E} (hZ : ∀ v : E, ‖Z v‖ = ‖v‖) {x : E} (hx : x ∈ U) :
-    ‖U.diagonalPart Z x‖ ^ 2 + ‖U.offDiagonalPart Z x‖ ^ 2 = ‖x‖ ^ 2 := by
+    ‖U.diagBlock Z x‖ ^ 2 + ‖U.offDiagBlock Z x‖ ^ 2 = ‖x‖ ^ 2 := by
   rw [diagonalPart_apply_of_mem U Z hx, offDiagonalPart_apply_of_mem U Z hx,
     ← Submodule.norm_sq_eq_add_norm_sq_starProjection (Z x) U, hZ]
 
@@ -248,7 +258,7 @@ theorem norm_sq_diagonalPart_add_norm_sq_offDiagonalPart_of_mem
 `Uᗮ`: blockwise `D₁² + G G⋆ = 1`. -/
 theorem norm_sq_diagonalPart_add_norm_sq_offDiagonalPart_of_mem_orthogonal
     {Z : E →L[𝕜] E} (hZ : ∀ v : E, ‖Z v‖ = ‖v‖) {x : E} (hx : x ∈ Uᗮ) :
-    ‖U.diagonalPart Z x‖ ^ 2 + ‖U.offDiagonalPart Z x‖ ^ 2 = ‖x‖ ^ 2 := by
+    ‖U.diagBlock Z x‖ ^ 2 + ‖U.offDiagBlock Z x‖ ^ 2 = ‖x‖ ^ 2 := by
   rw [diagonalPart_apply_of_mem_orthogonal U Z hx,
     offDiagonalPart_apply_of_mem_orthogonal U Z hx, add_comm,
     ← Submodule.norm_sq_eq_add_norm_sq_starProjection (Z x) U, hZ]
@@ -261,18 +271,18 @@ variable [CompleteSpace E] {U}
 
 /-- The diagonal part of a self-adjoint operator is self-adjoint. -/
 theorem isSelfAdjoint_diagonalPart {Z : E →L[𝕜] E} (hZ : IsSelfAdjoint Z) :
-    IsSelfAdjoint (U.diagonalPart Z) := by
+    IsSelfAdjoint (U.diagBlock Z) := by
   have hcomp : ∀ V : Submodule 𝕜 E, ∀ _ : V.HasOrthogonalProjection,
       IsSelfAdjoint (V.starProjection ∘L Z ∘L V.starProjection) := by
     intro V _
     exact hZ.conjugate_self (isSelfAdjoint_starProjection V)
-  rw [Submodule.diagonalPart_eq]
+  rw [Submodule.diagBlock_def]
   exact (hcomp U inferInstance).add (hcomp Uᗮ inferInstance)
 
 /-- The off-diagonal part of a self-adjoint operator is self-adjoint. -/
 theorem isSelfAdjoint_offDiagonalPart {Z : E →L[𝕜] E} (hZ : IsSelfAdjoint Z) :
-    IsSelfAdjoint (U.offDiagonalPart Z) := by
-  rw [Submodule.offDiagonalPart_eq]
+    IsSelfAdjoint (U.offDiagBlock Z) := by
+  rw [Submodule.offDiagBlock_eq_sub_diagBlock]
   exact hZ.sub (isSelfAdjoint_diagonalPart hZ)
 
 end Operator

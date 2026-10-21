@@ -16,8 +16,8 @@ that is *odd* for the splitting `U ⊕ Uᗮ` (it exchanges the two summands), an
 let `Z` be a bounded operator that commutes with `A + B` on `D(A)` and preserves
 `D(A)`.  Writing
 
-* `C := U.diagonalPart Z`   (the even block of `Z`),
-* `S := U.offDiagonalPart Z` (the odd block of `Z`),
+* `C := U.diagBlock Z`   (the even block of `Z`),
+* `S := U.offDiagBlock Z` (the odd block of `Z`),
 
 this module proves the two facts the unbounded double-angle theory rests on.
 
@@ -83,8 +83,8 @@ section Domain
 /-- **The even block preserves the domain.** -/
 theorem mem_domain_diagonalPart (hred : LinearPMap.ReducesSubspace A U)
     (hZ : LinearPMap.MapsDomainTo A A Z) (x : A.domain) :
-    U.diagonalPart Z (x : H) ∈ A.domain := by
-  rw [Submodule.diagonalPart_apply]
+    U.diagBlock Z (x : H) ∈ A.domain := by
+  rw [Submodule.diagBlock_apply]
   refine A.domain.add_mem ?_ ?_
   · exact hred.projection_mem_domain
       ⟨Z (U.starProjection (x : H)), hZ ⟨_, hred.projection_mem_domain x⟩⟩
@@ -94,8 +94,8 @@ theorem mem_domain_diagonalPart (hred : LinearPMap.ReducesSubspace A U)
 /-- **The odd block preserves the domain.** -/
 theorem mem_domain_offDiagonalPart (hred : LinearPMap.ReducesSubspace A U)
     (hZ : LinearPMap.MapsDomainTo A A Z) (x : A.domain) :
-    U.offDiagonalPart Z (x : H) ∈ A.domain := by
-  rw [Submodule.offDiagonalPart_apply]
+    U.offDiagBlock Z (x : H) ∈ A.domain := by
+  rw [Submodule.offDiagBlock_apply]
   exact A.domain.sub_mem (hZ x) (mem_domain_diagonalPart hred hZ x)
 
 end Domain
@@ -119,12 +119,12 @@ which in blocks is `A₁ G x - G A₀ x = -D₁ B x - B D₀ x`.  Every term is 
 `S x ∈ D(A) ∩ Uᗮ` and `C x ∈ D(A) ∩ U` by `mem_domain_offDiagonalPart` and
 `mem_domain_diagonalPart`. -/
 theorem sylvester_offDiagonalPart_of_mem (x : A.domain) (hx : (x : H) ∈ U) :
-    A ⟨U.offDiagonalPart Z (x : H), mem_domain_offDiagonalPart hred hZdom x⟩ +
-        B (U.diagonalPart Z (x : H)) =
-      U.offDiagonalPart Z (A x) + U.diagonalPart Z (B (x : H)) := by
+    A ⟨U.offDiagBlock Z (x : H), mem_domain_offDiagonalPart hred hZdom x⟩ +
+        B (U.diagBlock Z (x : H)) =
+      U.offDiagBlock Z (A x) + U.diagBlock Z (B (x : H)) := by
   classical
-  set C : H →L[𝕜] H := U.diagonalPart Z with hCdef
-  set S : H →L[𝕜] H := U.offDiagonalPart Z with hSdef
+  set C : H →L[𝕜] H := U.diagBlock Z with hCdef
+  set S : H →L[𝕜] H := U.offDiagBlock Z with hSdef
   have hCmem : C (x : H) ∈ A.domain := mem_domain_diagonalPart hred hZdom x
   have hSmem : S (x : H) ∈ A.domain := mem_domain_offDiagonalPart hred hZdom x
   have hCU : C (x : H) ∈ U := diagonalPart_mem_of_mem U Z hx
@@ -167,12 +167,12 @@ theorem sylvester_offDiagonalPart_of_mem (x : A.domain) (hx : (x : H) ∈ U) :
 `sylvester_offDiagonalPart_of_mem`, with the same conclusion. -/
 theorem sylvester_offDiagonalPart_of_mem_orthogonal (x : A.domain)
     (hx : (x : H) ∈ Uᗮ) :
-    A ⟨U.offDiagonalPart Z (x : H), mem_domain_offDiagonalPart hred hZdom x⟩ +
-        B (U.diagonalPart Z (x : H)) =
-      U.offDiagonalPart Z (A x) + U.diagonalPart Z (B (x : H)) := by
+    A ⟨U.offDiagBlock Z (x : H), mem_domain_offDiagonalPart hred hZdom x⟩ +
+        B (U.diagBlock Z (x : H)) =
+      U.offDiagBlock Z (A x) + U.diagBlock Z (B (x : H)) := by
   classical
-  set C : H →L[𝕜] H := U.diagonalPart Z with hCdef
-  set S : H →L[𝕜] H := U.offDiagonalPart Z with hSdef
+  set C : H →L[𝕜] H := U.diagBlock Z with hCdef
+  set S : H →L[𝕜] H := U.offDiagBlock Z with hSdef
   have hCmem : C (x : H) ∈ A.domain := mem_domain_diagonalPart hred hZdom x
   have hSmem : S (x : H) ∈ A.domain := mem_domain_offDiagonalPart hred hZdom x
   have hCU : C (x : H) ∈ Uᗮ := diagonalPart_mem_orthogonal_of_mem_orthogonal U Z hx
@@ -214,9 +214,9 @@ theorem sylvester_offDiagonalPart_of_mem_orthogonal (x : A.domain)
 inclusions.  Branch-free: no sign of `cos 2θ` is selected anywhere, because the
 sign is absorbed into `C x`. -/
 theorem sylvester_offDiagonalPart (x : A.domain) :
-    A ⟨U.offDiagonalPart Z (x : H), mem_domain_offDiagonalPart hred hZdom x⟩ +
-        B (U.diagonalPart Z (x : H)) =
-      U.offDiagonalPart Z (A x) + U.diagonalPart Z (B (x : H)) := by
+    A ⟨U.offDiagBlock Z (x : H), mem_domain_offDiagonalPart hred hZdom x⟩ +
+        B (U.diagBlock Z (x : H)) =
+      U.offDiagBlock Z (A x) + U.diagBlock Z (B (x : H)) := by
   classical
   set x₀ : A.domain := ⟨U.starProjection (x : H), hred.projection_mem_domain x⟩
     with hx₀
@@ -229,22 +229,22 @@ theorem sylvester_offDiagonalPart (x : A.domain) :
     (U.starProjection_apply_mem (x : H))
   have h₁ := sylvester_offDiagonalPart_of_mem_orthogonal hred hB hZdom hZcomm x₁
     (Uᗮ.starProjection_apply_mem (x : H))
-  have hAS : A ⟨U.offDiagonalPart Z (x : H),
+  have hAS : A ⟨U.offDiagBlock Z (x : H),
         mem_domain_offDiagonalPart hred hZdom x⟩ =
-      A ⟨U.offDiagonalPart Z (x₀ : H),
+      A ⟨U.offDiagBlock Z (x₀ : H),
           mem_domain_offDiagonalPart hred hZdom x₀⟩ +
-        A ⟨U.offDiagonalPart Z (x₁ : H),
+        A ⟨U.offDiagBlock Z (x₁ : H),
           mem_domain_offDiagonalPart hred hZdom x₁⟩ := by
     rw [← A.map_add]
     exact congrArg (fun y : A.domain => A y)
-      (Subtype.ext (show U.offDiagonalPart Z (x : H) =
-        U.offDiagonalPart Z (x₀ : H) + U.offDiagonalPart Z (x₁ : H) by
+      (Subtype.ext (show U.offDiagBlock Z (x : H) =
+        U.offDiagBlock Z (x₀ : H) + U.offDiagBlock Z (x₁ : H) by
           rw [hcoe, map_add]))
   have hAx : A x = A x₀ + A x₁ := by
     rw [← A.map_add]
     exact congrArg (fun y : A.domain => A y) hsum
-  have hCx : U.diagonalPart Z (x : H) =
-      U.diagonalPart Z (x₀ : H) + U.diagonalPart Z (x₁ : H) := by
+  have hCx : U.diagBlock Z (x : H) =
+      U.diagBlock Z (x₀ : H) + U.diagBlock Z (x₁ : H) := by
     rw [hcoe, map_add]
   have hBx : B (x : H) = B (x₀ : H) + B (x₁ : H) := by rw [hcoe, map_add]
   rw [hAS, hCx, hAx, hBx]

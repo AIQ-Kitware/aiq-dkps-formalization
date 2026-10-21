@@ -101,7 +101,7 @@ beam.  This is the hypothesis the Ky Fan endpoint takes and the pointwise bound
 of `beamTanTwoThetaAt_le` did not need. -/
 theorem norm_offDiagonalPart_beamLowReflection_lt_one (ε : ℝ) (hε : 0 < ε)
     (hε100 : ε < 100) :
-    ‖beamTrial.offDiagonalPart (beamLowReflection ε)‖ < 1 := by
+    ‖beamTrial.offDiagBlock (beamLowReflection ε)‖ < 1 := by
   have hab : ritzHigh ε < (1001 / 2 : ℝ) := by
     have h := ritzHigh_lt_five_hundred hε100
     linarith

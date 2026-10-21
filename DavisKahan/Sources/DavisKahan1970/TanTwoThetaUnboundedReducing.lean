@@ -103,14 +103,14 @@ include hA hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab
 
 /-- The cross-block contraction bound at an arbitrary reducing subspace. -/
 theorem norm_offDiagonalPart_lt_one_reducing_exact :
-    ‖U.offDiagonalPart Z‖ < 1 :=
+    ‖U.offDiagBlock Z‖ < 1 :=
   TauCeti.norm_offDiagonalPart_lt_one_reducing hA hred hB hZsa hZ2 hZdom hZcomm
     hUa hUb hab
 
 /-- Pole exclusion at an arbitrary reducing subspace: the reflection's diagonal
 block is invertible. -/
 theorem isUnit_diagonalPart_sq_reducing_exact :
-    IsUnit (U.diagonalPart Z * U.diagonalPart Z) :=
+    IsUnit (U.diagBlock Z * U.diagBlock Z) :=
   isUnit_diagonalPart_sq_of_forall_mem hZsa hZ2
     (TauCeti.crossBlockBound_nonneg (norm_nonneg B))
     (crossBlockBound_lt_one (sub_pos.mpr hab) (norm_nonneg B))
@@ -141,7 +141,7 @@ with the spectral selection of `U` removed. -/
 theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (hRmem : N.Mem (blockCompression Uᗮ U B)) :
-    IsUnit (U.diagonalPart Z * U.diagonalPart Z) ∧
+    IsUnit (U.diagBlock Z * U.diagBlock Z) ∧
       N.Mem (reflectionTangentCorner U Z) ∧
       (b - a) * N.gauge (reflectionTangentCorner U Z) ≤
         2 * N.gauge (blockCompression Uᗮ U B) := by
@@ -206,7 +206,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmet
         2 * N.gauge (blockCompression Uᗮ U B) := by
   have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
   have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
-  have hS1 : ‖U.offDiagonalPart V.reflectionOperator‖ < 1 :=
+  have hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1 :=
     norm_offDiagonalPart_lt_one_reducing_exact hA hred hB hZsa hZ2 hV.mapsDomain
       hV.commutes hUa hUb hab
   have hsame := hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock U V

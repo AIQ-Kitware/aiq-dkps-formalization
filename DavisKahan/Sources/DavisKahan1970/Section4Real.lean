@@ -864,16 +864,16 @@ private theorem kyFanApproximationGauge_gramOperator_mono_real {X Y Z : Type*}
 omit [CompleteSpace E] in
 /-- Even reflection blocks commute with scalar extension. -/
 private theorem diagonalPart_complexify_real (A : E →L[ℝ] E) :
-    (complexifySubmodule U).diagonalPart (complexify A) =
-      complexify (U.diagonalPart A) := by
-  rw [Submodule.diagonalPart_eq, Submodule.diagonalPart_eq,
+    (complexifySubmodule U).diagBlock (complexify A) =
+      complexify (U.diagBlock A) := by
+  rw [Submodule.diagBlock_def, Submodule.diagBlock_def,
     starProjection_complexifySubmodule, starProjection_complexifySubmodule_orthogonal,
     complexify_add, complexify_comp, complexify_comp, complexify_comp, complexify_comp]
 
 /-- Pinching contracts every real Ky Fan approximation gauge. -/
 private theorem kyFanApproximationGauge_diagonalPart_le_real
     (A : E →L[ℝ] E) (k : ℕ) :
-    kyFanApproximationGauge k (U.diagonalPart A) ≤ kyFanApproximationGauge k A := by
+    kyFanApproximationGauge k (U.diagBlock A) ≤ kyFanApproximationGauge k A := by
   rw [← kyFanApproximationGauge_complexify, ← kyFanApproximationGauge_complexify,
     ← diagonalPart_complexify_real U]
   exact TauCeti.ApproximationNumber.kyFanApproximationGauge_diagonalPart_le_complex
@@ -939,7 +939,7 @@ private theorem competitor_admissible_orthogonal_real (W : E →L[ℝ] E)
 /-- The real nonacute rotation's squared displacement is already block diagonal. -/
 private theorem diagonalPart_nonacuteDirectRotation_displacementSquare_real
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V) :
-    U.diagonalPart ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
+    U.diagBlock ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) =
       (1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) := by
@@ -966,7 +966,7 @@ private theorem diagonalPart_nonacuteDirectRotation_displacementSquare_real
     rw [hAeq, sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, hCcomm]
     congr 1
     rw [two_mul, mul_two]
-  apply Submodule.diagonalPart_eq_self_of_reflectionConjugate
+  apply Submodule.diagBlock_eq_self_of_reflectionConjugate
   have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
     rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
       smul_mul_assoc, mul_smul_comm, hcomm]
@@ -1007,7 +1007,7 @@ theorem proposition4_3_nonacute_real
     ext x
     simp
   have hchart : ∀ T : E →L[ℝ] E,
-      kyFanApproximationGauge k (U.diagonalPart ((1 - star T) * (1 - T))) =
+      kyFanApproximationGauge k (U.diagBlock ((1 - star T) * (1 - T))) =
         kyFanApproximationGauge k (continuousOrthogonalBlockSum
           (gramOperatorR ((1 - T) ∘L U.subtypeL))
           (gramOperatorR ((1 - T) ∘L U.orthogonal.subtypeL))) := by
@@ -1016,7 +1016,7 @@ theorem proposition4_3_nonacute_real
       rw [star_sub, star_one]
     rw [hst,
       ← kyFanApproximationGauge_conj_eq_real hL hR hRL
-        (U.diagonalPart (star (1 - T) * (1 - T))) k,
+        (U.diagBlock (star (1 - T) * (1 - T))) k,
       orthogonalDecomposition_conj_diagonalPart U (star (1 - T) * (1 - T)),
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_real,
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_real]
@@ -1041,7 +1041,7 @@ theorem proposition4_3_nonacute_real
     kyFanApproximationGauge k
         ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) =
-      kyFanApproximationGauge k (U.diagonalPart
+      kyFanApproximationGauge k (U.diagBlock
         ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J))) := by
         rw [diagonalPart_nonacuteDirectRotation_displacementSquare_real U V J]
@@ -1053,7 +1053,7 @@ theorem proposition4_3_nonacute_real
           (gramOperatorR ((1 - W) ∘L U.subtypeL))
           (gramOperatorR ((1 - W) ∘L U.orthogonal.subtypeL))) := hblock
     _ = kyFanApproximationGauge k
-          (U.diagonalPart ((1 - star W) * (1 - W))) := (hchart W).symm
+          (U.diagBlock ((1 - star W) * (1 - W))) := (hchart W).symm
     _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
       kyFanApproximationGauge_diagonalPart_le_real U _ k
 

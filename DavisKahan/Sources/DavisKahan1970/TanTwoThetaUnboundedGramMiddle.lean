@@ -118,16 +118,16 @@ theorem sq_norm_offDiagonalPart_sq_sum_ge
     {n : ℕ} {x : Fin n → H}
     (hx : Orthonormal ℂ x)
     {q : Fin n → ℝ} {ε : ℝ} (hε : 0 ≤ ε) (hq1 : ∀ i, q i ^ 2 ≤ 1)
-    (heig : ∀ i, ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (x i))) -
+    (heig : ∀ i, ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (x i))) -
       ((q i ^ 2 : ℝ) : ℂ) • x i‖ ≤ ε)
     (β : Fin n → ℂ) :
     (∑ i, ‖β i‖ ^ 2 * q i ^ 4) - 2 * (n * ε) * (∑ i, ‖β i‖ ^ 2) ≤
-      ‖U.offDiagonalPart Z
-        (U.offDiagonalPart Z (∑ i, β i • x i))‖ ^ 2 := by
+      ‖U.offDiagBlock Z
+        (U.offDiagBlock Z (∑ i, β i • x i))‖ ^ 2 := by
   classical
   set g : H := ∑ i, β i • x i with hgdef
   set d : Fin n → H := fun i =>
-    Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (x i))) -
+    Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (x i))) -
       ((q i ^ 2 : ℝ) : ℂ) • x i with hddef
   set p : H := ∑ i, (β i * ((q i ^ 2 : ℝ) : ℂ)) • x i with hpdef
   have hgnorm : ‖g‖ ^ 2 = ∑ i, ‖β i‖ ^ 2 :=
@@ -138,7 +138,7 @@ theorem sq_norm_offDiagonalPart_sq_sum_ge
     rw [norm_mul, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg (sq_nonneg (q i))]
     ring
-  have hsplit : Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z g)) =
+  have hsplit : Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z g)) =
       p + ∑ i, β i • d i := by
     rw [hgdef, hpdef, map_sum, map_sum, map_sum, ← Finset.sum_add_distrib]
     refine Finset.sum_congr rfl fun i _ => ?_
@@ -168,13 +168,13 @@ theorem sq_norm_offDiagonalPart_sq_sum_ge
       nlinarith [sq_nonneg ‖β i‖, h4, sq_nonneg (q i)]
     nlinarith [hpnorm, hgnorm, norm_nonneg p, norm_nonneg g, hterm]
   have htri : ‖p‖ - ‖∑ i, β i • d i‖ ≤
-      ‖U.offDiagonalPart Z (U.offDiagonalPart Z g)‖ := by
+      ‖U.offDiagBlock Z (U.offDiagBlock Z g)‖ := by
     refine le_trans ?_ (Ω.norm_toProj_apply_le _)
     rw [hsplit]
     have h := norm_sub_le (p + ∑ i, β i • d i) (∑ i, β i • d i)
     rw [add_sub_cancel_right] at h
     linarith
-  set N : ℝ := ‖U.offDiagonalPart Z (U.offDiagonalPart Z g)‖ with hNdef
+  set N : ℝ := ‖U.offDiagBlock Z (U.offDiagBlock Z g)‖ with hNdef
   have hN0 : 0 ≤ N := norm_nonneg _
   have hD0 : 0 ≤ ‖∑ i, β i • d i‖ := norm_nonneg _
   have hP0 : 0 ≤ ‖p‖ := norm_nonneg _
@@ -202,10 +202,10 @@ theorem sq_norm_sum_smul_offDiagonalPart_le_of_approximate
     (hx : Orthonormal ℂ x) (hxΩ : ∀ i, Ω.toProj (x i) = x i)
     {q : Fin n → ℝ} {ε θ c : ℝ} (hε : 0 ≤ ε) (hθ : 0 < θ)
     (hqθ : ∀ i, θ ≤ q i)
-    (heig : ∀ i, ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (x i))) -
+    (heig : ∀ i, ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (x i))) -
       ((q i ^ 2 : ℝ) : ℂ) • x i‖ ≤ ε)
     (hc : 1 + (n : ℝ) * ε / θ ^ 2 ≤ c ^ 2) (α : Fin n → ℂ) :
-    ‖∑ i, α i • (-((((q i : ℝ)) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)))‖ ^ 2 ≤
+    ‖∑ i, α i • (-((((q i : ℝ)) : ℂ)⁻¹ • U.offDiagBlock Z (x i)))‖ ^ 2 ≤
       c ^ 2 * ∑ i, ‖α i‖ ^ 2 := by
   classical
   have hqpos : ∀ i, 0 < q i := fun i => lt_of_lt_of_le hθ (hqθ i)
@@ -213,7 +213,7 @@ theorem sq_norm_sum_smul_offDiagonalPart_le_of_approximate
   set β : Fin n → ℂ := fun i => α i * (((q i : ℝ) : ℂ))⁻¹ with hβdef
   set g : H := ∑ i, β i • x i with hgdef
   have hcomb : ∑ i, α i • (-((((q i : ℝ)) : ℂ)⁻¹ •
-      U.offDiagonalPart Z (x i))) = -(U.offDiagonalPart Z g) := by
+      U.offDiagBlock Z (x i))) = -(U.offDiagBlock Z g) := by
     rw [hgdef, map_sum, ← Finset.sum_neg_distrib]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [map_smul, smul_neg, smul_smul]
@@ -232,7 +232,7 @@ theorem sq_norm_sum_smul_offDiagonalPart_le_of_approximate
     have hsq : θ ^ 2 ≤ q i ^ 2 := by nlinarith [hqθ i, hθ, hqpos i]
     nlinarith [sq_nonneg ‖β i‖, hsq]
   have hgram := abs_norm_sq_offDiagonalPart_sum_sub_le hZsa Ω hx hxΩ heig β
-  have hupper : ‖U.offDiagonalPart Z g‖ ^ 2 ≤
+  have hupper : ‖U.offDiagBlock Z g‖ ^ 2 ≤
       ∑ i, ‖α i‖ ^ 2 + (n * ε) * ∑ i, ‖β i‖ ^ 2 := by
     have h := le_of_abs_le hgram
     rw [hAB] at h
@@ -260,11 +260,11 @@ theorem sq_norm_sum_smul_diagonalPart_le_of_approximate
     (hx : Orthonormal ℂ x) (hxΩ : ∀ i, Ω.toProj (x i) = x i)
     {q : Fin n → ℝ} {ε κ c : ℝ} (hε : 0 ≤ ε) (hκ : 0 < κ)
     (hκq : ∀ i, κ ^ 2 ≤ 1 - q i ^ 2)
-    (heig : ∀ i, ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (x i))) -
+    (heig : ∀ i, ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (x i))) -
       ((q i ^ 2 : ℝ) : ℂ) • x i‖ ≤ ε)
     (hc : 1 + (n : ℝ) * ε / κ ^ 2 ≤ c ^ 2) (α : Fin n → ℂ) :
     ‖∑ i, α i • ((((√(1 - q i ^ 2) : ℝ)) : ℂ)⁻¹ •
-      U.diagonalPart Z (x i))‖ ^ 2 ≤ c ^ 2 * ∑ i, ‖α i‖ ^ 2 := by
+      U.diagBlock Z (x i))‖ ^ 2 ≤ c ^ 2 * ∑ i, ‖α i‖ ^ 2 := by
   classical
   have hc0 : ∀ i, 0 < 1 - q i ^ 2 := fun i => lt_of_lt_of_le (by positivity) (hκq i)
   have hcpos : ∀ i, 0 < √(1 - q i ^ 2) := fun i => Real.sqrt_pos.mpr (hc0 i)
@@ -273,7 +273,7 @@ theorem sq_norm_sum_smul_diagonalPart_le_of_approximate
   set γ : Fin n → ℂ := fun i => α i * (((√(1 - q i ^ 2) : ℝ) : ℂ))⁻¹ with hγdef
   set h : H := ∑ i, γ i • x i with hhdef
   have hcomb : ∑ i, α i • ((((√(1 - q i ^ 2) : ℝ)) : ℂ)⁻¹ •
-      U.diagonalPart Z (x i)) = U.diagonalPart Z h := by
+      U.diagBlock Z (x i)) = U.diagBlock Z h := by
     rw [hhdef, map_sum]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [map_smul, smul_smul]
@@ -294,7 +294,7 @@ theorem sq_norm_sum_smul_diagonalPart_le_of_approximate
   have hhnorm : ‖h‖ ^ 2 = ∑ i, ‖γ i‖ ^ 2 :=
     norm_sq_sum_smul_of_orthonormal hx γ
   have hlower : ∑ i, ‖γ i‖ ^ 2 * q i ^ 2 - (n * ε) * ∑ i, ‖γ i‖ ^ 2 ≤
-      ‖U.offDiagonalPart Z h‖ ^ 2 := by
+      ‖U.offDiagBlock Z h‖ ^ 2 := by
     have h1 := neg_le_of_abs_le hgram
     linarith [h1]
   have hα0 : (0 : ℝ) ≤ ∑ i, ‖α i‖ ^ 2 :=
@@ -328,11 +328,11 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_approximate
     (hx : Orthonormal ℂ x) (hxΩ : ∀ i, Ω.toProj (x i) = x i)
     {q : Fin n → ℝ} {ε θ κ c : ℝ} (hε : 0 ≤ ε) (hθ : 0 < θ) (hκ : 0 < κ)
     (hqθ : ∀ i, θ ≤ q i) (hκq : ∀ i, κ ^ 2 ≤ 1 - q i ^ 2)
-    (heig : ∀ i, ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (x i))) -
+    (heig : ∀ i, ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (x i))) -
       ((q i ^ 2 : ℝ) : ℂ) • x i‖ ≤ ε)
     (hc : 1 + 3 * (n : ℝ) * ε / (θ ^ 2 * κ ^ 2) ≤ c ^ 2) (α : Fin n → ℂ) :
     ‖∑ i, α i • ((((q i * √(1 - q i ^ 2)) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z (U.offDiagonalPart Z (x i)))‖ ^ 2 ≤
+        U.diagBlock Z (U.offDiagBlock Z (x i)))‖ ^ 2 ≤
       c ^ 2 * ∑ i, ‖α i‖ ^ 2 := by
   classical
   have hqpos : ∀ i, 0 < q i := fun i => lt_of_lt_of_le hθ (hqθ i)
@@ -347,8 +347,8 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_approximate
     with hβdef
   set g : H := ∑ i, β i • x i with hgdef
   have hcomb : ∑ i, α i • ((((q i * √(1 - q i ^ 2)) : ℝ) : ℂ)⁻¹ •
-      U.diagonalPart Z (U.offDiagonalPart Z (x i))) =
-      U.diagonalPart Z (U.offDiagonalPart Z g) := by
+      U.diagBlock Z (U.offDiagBlock Z (x i))) =
+      U.diagBlock Z (U.offDiagBlock Z g) := by
     rw [hgdef, map_sum, map_sum]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [map_smul, map_smul, smul_smul]
@@ -378,7 +378,7 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_approximate
   have hgram := abs_norm_sq_offDiagonalPart_sum_sub_le hZsa Ω hx hxΩ heig β
   have hsq := sq_norm_offDiagonalPart_sq_sum_ge (Z := Z) Ω hx hε hq1 heig β
   have hpyth := norm_sq_diagonalPart_apply (U := U) hZsa hZ2
-    (U.offDiagonalPart Z g)
+    (U.offDiagBlock Z g)
   have hα0 : (0 : ℝ) ≤ ∑ i, ‖α i‖ ^ 2 :=
     Finset.sum_nonneg fun i _ => sq_nonneg _
   have hnε : (0 : ℝ) ≤ (n : ℝ) * ε := mul_nonneg (Nat.cast_nonneg n) hε
@@ -503,7 +503,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
     {q : Fin n → ℝ} {ρ θ κ c : ℝ} (hρ : 0 ≤ ρ) (hθ : 0 < θ) (hθ1 : θ ≤ 1)
     (hκ : 0 < κ) (hκ1 : κ ≤ 1)
     (hqθ : ∀ i, θ ≤ q i) (hκq : ∀ i, κ ^ 2 ≤ 1 - q i ^ 2)
-    (heig : ∀ i, ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (x i))) -
+    (heig : ∀ i, ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (x i))) -
       ((q i ^ 2 : ℝ) : ℂ) • x i‖ ≤ ρ * q i / 4)
     (hc1 : 1 ≤ c)
     (hc : 1 + 3 * (n : ℝ) * (ρ / 4) / (θ ^ 2 * κ ^ 2) ≤ c ^ 2) :
@@ -525,8 +525,8 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
     rwa [Real.sqrt_sq hκ.le] at h
   have hx1 : ∀ i, ‖x i‖ = 1 := fun i => hx.norm_eq_one i
   have hε0 : (0 : ℝ) ≤ ρ / 4 := by linarith
-  have heig' : ∀ i, ‖Ω.toProj (U.offDiagonalPart Z
-      (U.offDiagonalPart Z (x i))) - ((q i ^ 2 : ℝ) : ℂ) • x i‖ ≤ ρ / 4 := by
+  have heig' : ∀ i, ‖Ω.toProj (U.offDiagBlock Z
+      (U.offDiagBlock Z (x i))) - ((q i ^ 2 : ℝ) : ℂ) • x i‖ ≤ ρ / 4 := by
     intro i
     refine le_trans (heig i) ?_
     have := hq1 i
@@ -555,20 +555,20 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
     exact Finset.sum_nonneg fun m _ =>
       (reflectionResidualCorner U B).approximationNumber_nonneg m
   have hxU : ∀ i, x i ∈ U := fun i => Ω.mem_subspace_of_eq (hxΩ i)
-  have hSU : ∀ i, U.offDiagonalPart Z (x i) ∈ Uᗮ :=
+  have hSU : ∀ i, U.offDiagBlock Z (x i) ∈ Uᗮ :=
     fun i => TauCeti.offDiagonalPart_mem_orthogonal_of_mem U Z (hxU i)
-  have hCSU : ∀ i, U.diagonalPart Z (U.offDiagonalPart Z (x i)) ∈ Uᗮ :=
+  have hCSU : ∀ i, U.diagBlock Z (U.offDiagBlock Z (x i)) ∈ Uᗮ :=
     fun i => TauCeti.diagonalPart_mem_orthogonal_of_mem_orthogonal U Z (hSU i)
-  have hCU : ∀ i, U.diagonalPart Z (x i) ∈ U :=
+  have hCU : ∀ i, U.diagBlock Z (x i) ∈ U :=
     fun i => TauCeti.diagonalPart_mem_of_mem U Z (hxU i)
   -- the per-index estimate, divided by `qᵢ cᵢ`
   have hstep : ∀ i, (b - a) * (q i / √(1 - q i ^ 2)) ≤
       (τ + |b|) * ρ / (4 * κ) +
       (RCLike.re ⟪(((q i * √(1 - q i ^ 2)) : ℝ) : ℂ)⁻¹ •
-          U.diagonalPart Z (U.offDiagonalPart Z (x i)), B (x i)⟫_ℂ +
-        RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)),
+          U.diagBlock Z (U.offDiagBlock Z (x i)), B (x i)⟫_ℂ +
+        RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i)),
           B ((((√(1 - q i ^ 2) : ℝ) : ℂ)⁻¹ •
-            U.diagonalPart Z (x i)))⟫_ℂ) := by
+            U.diagBlock Z (x i)))⟫_ℂ) := by
     intro i
     have hqc : 0 < q i * √(1 - q i ^ 2) := mul_pos (hqpos i) (hcpos i)
     have hqne : q i ≠ 0 := (hqpos i).ne'
@@ -576,17 +576,17 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
     have hmain := gap_mul_sq_le_paired_of_approximateDoubleAngleEigenvector hred
       hB hZsa hZdom hZcomm hUa hUb Ω (hxΩ i) (hx1 i) (heig i)
     have hterm1 : RCLike.re ⟪(((q i * √(1 - q i ^ 2)) : ℝ) : ℂ)⁻¹ •
-        U.diagonalPart Z (U.offDiagonalPart Z (x i)), B (x i)⟫_ℂ =
+        U.diagBlock Z (U.offDiagBlock Z (x i)), B (x i)⟫_ℂ =
         (q i * √(1 - q i ^ 2))⁻¹ *
           RCLike.re ⟪B (x i),
-            U.diagonalPart Z (U.offDiagonalPart Z (x i))⟫_ℂ := by
+            U.diagBlock Z (U.offDiagBlock Z (x i))⟫_ℂ := by
       rw [inner_smul_left, ← Complex.ofReal_inv, Complex.conj_ofReal,
         ← Complex.real_smul, RCLike.smul_re, inner_re_symm]
-    have hterm2 : RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)),
-        B ((((√(1 - q i ^ 2) : ℝ) : ℂ)⁻¹ • U.diagonalPart Z (x i)))⟫_ℂ =
+    have hterm2 : RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i)),
+        B ((((√(1 - q i ^ 2) : ℝ) : ℂ)⁻¹ • U.diagBlock Z (x i)))⟫_ℂ =
         -((q i * √(1 - q i ^ 2))⁻¹ *
-          RCLike.re ⟪B (U.diagonalPart Z (x i)),
-            U.offDiagonalPart Z (x i)⟫_ℂ) := by
+          RCLike.re ⟪B (U.diagBlock Z (x i)),
+            U.offDiagBlock Z (x i)⟫_ℂ) := by
       rw [mul_inv]
       simp only [map_smul, inner_neg_left, inner_smul_left, inner_smul_right,
         ← Complex.ofReal_inv, Complex.conj_ofReal]
@@ -595,9 +595,9 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
       ring
     rw [hterm1, hterm2]
     set P1 : ℝ := RCLike.re ⟪B (x i),
-      U.diagonalPart Z (U.offDiagonalPart Z (x i))⟫_ℂ with hP1def
-    set P2 : ℝ := RCLike.re ⟪B (U.diagonalPart Z (x i)),
-      U.offDiagonalPart Z (x i)⟫_ℂ with hP2def
+      U.diagBlock Z (U.offDiagBlock Z (x i))⟫_ℂ with hP1def
+    set P2 : ℝ := RCLike.re ⟪B (U.diagBlock Z (x i)),
+      U.offDiagBlock Z (x i)⟫_ℂ with hP2def
     have hinv0 : (0 : ℝ) ≤ (q i * √(1 - q i ^ 2))⁻¹ := le_of_lt (inv_pos.mpr hqc)
     have hmul := mul_le_mul_of_nonneg_left hmain hinv0
     have hexpand : (q i * √(1 - q i ^ 2))⁻¹ *
@@ -622,7 +622,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
     rw [hdiv]
     linarith [hmul, herr]
   have hsum1 : ∑ i, RCLike.re ⟪(((q i * √(1 - q i ^ 2)) : ℝ) : ℂ)⁻¹ •
-      U.diagonalPart Z (U.offDiagonalPart Z (x i)), B (x i)⟫_ℂ ≤
+      U.diagBlock Z (U.offDiagBlock Z (x i)), B (x i)⟫_ℂ ≤
       c * 1 * kyFanApproximationGauge n (reflectionResidualCorner U B) :=
     sum_le_kyFanApproximationGauge_reflectionResidualCorner_of_contraction B
       hc0' zero_le_one
@@ -631,8 +631,8 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
         hx hxΩ hε0 hθ hκ hqθ hκq heig' hc)
       (fun α => sq_norm_sum_smul_le_of_orthonormal hx (le_refl (1 : ℝ)) α)
       (fun _ => le_rfl)
-  have hsum2 : ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)),
-      B ((((√(1 - q i ^ 2) : ℝ) : ℂ)⁻¹ • U.diagonalPart Z (x i)))⟫_ℂ ≤
+  have hsum2 : ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i)),
+      B ((((√(1 - q i ^ 2) : ℝ) : ℂ)⁻¹ • U.diagBlock Z (x i)))⟫_ℂ ≤
       c * c * kyFanApproximationGauge n (reflectionResidualCorner U B) :=
     sum_le_kyFanApproximationGauge_reflectionResidualCorner_of_contraction B
       hc0' hc0'
@@ -647,17 +647,17 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
       = ∑ i, (b - a) * (q i / √(1 - q i ^ 2)) := by rw [Finset.mul_sum]
     _ ≤ ∑ i, ((τ + |b|) * ρ / (4 * κ) +
         (RCLike.re ⟪(((q i * √(1 - q i ^ 2)) : ℝ) : ℂ)⁻¹ •
-            U.diagonalPart Z (U.offDiagonalPart Z (x i)), B (x i)⟫_ℂ +
-          RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)),
+            U.diagBlock Z (U.offDiagBlock Z (x i)), B (x i)⟫_ℂ +
+          RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i)),
             B ((((√(1 - q i ^ 2) : ℝ) : ℂ)⁻¹ •
-              U.diagonalPart Z (x i)))⟫_ℂ)) :=
+              U.diagBlock Z (x i)))⟫_ℂ)) :=
         Finset.sum_le_sum fun i _ => hstep i
     _ = (n : ℝ) * ((τ + |b|) * ρ / (4 * κ)) +
         ((∑ i, RCLike.re ⟪(((q i * √(1 - q i ^ 2)) : ℝ) : ℂ)⁻¹ •
-            U.diagonalPart Z (U.offDiagonalPart Z (x i)), B (x i)⟫_ℂ) +
-          ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i)),
+            U.diagBlock Z (U.offDiagBlock Z (x i)), B (x i)⟫_ℂ) +
+          ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i)),
             B ((((√(1 - q i ^ 2) : ℝ) : ℂ)⁻¹ •
-              U.diagonalPart Z (x i)))⟫_ℂ) := by
+              U.diagBlock Z (x i)))⟫_ℂ) := by
         rw [Finset.sum_add_distrib, Finset.sum_add_distrib, Finset.sum_const,
           Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
     _ ≤ 2 * c ^ 2 * kyFanApproximationGauge n (reflectionResidualCorner U B) +
@@ -688,7 +688,7 @@ theorem coe_gramOperator_reflectionSineCorner_comp_cutoffCorner_apply
     (hZsa : IsSelfAdjoint Z) (Ω : TauCeti.BoundedCutoff A U τ) {y : U}
     (hy : cutoffCorner Ω y = y) :
     ((gramOperator (reflectionSineCorner U Z ∘L cutoffCorner Ω) y : U) : H) =
-      Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z ((y : U) : H))) := by
+      Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z ((y : U) : H))) := by
   have hadj : (reflectionSineCorner U Z ∘L cutoffCorner Ω).adjoint =
       cutoffCorner Ω ∘L (reflectionSineCorner U Z).adjoint := by
     rw [ContinuousLinearMap.adjoint_comp,
@@ -724,24 +724,24 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
-    (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
+    (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     (hτ : 0 ≤ τ) (Ω : TauCeti.BoundedCutoff A U τ) (k : ℕ)
     {θ : ℝ} (hθ : 0 < θ) (hθ1 : θ < 1) :
     (b - a) * ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
         ((reflectionSineCorner U Z ∘L cutoffCorner Ω).approximationNumber p)) ≤
       2 * kyFanApproximationGauge k (reflectionResidualCorner U B) +
         θ * (3 * k * kyFanApproximationGauge k (reflectionResidualCorner U B) /
-              (2 * (√(1 - ‖U.offDiagonalPart Z‖ ^ 2)) ^ 2) +
-            k * (τ + |b|) / (4 * √(1 - ‖U.offDiagonalPart Z‖ ^ 2)) +
-            (b - a) * k / √(1 - ‖U.offDiagonalPart Z‖ ^ 2)) := by
+              (2 * (√(1 - ‖U.offDiagBlock Z‖ ^ 2)) ^ 2) +
+            k * (τ + |b|) / (4 * √(1 - ‖U.offDiagBlock Z‖ ^ 2)) +
+            (b - a) * k / √(1 - ‖U.offDiagBlock Z‖ ^ 2)) := by
   classical
   set X : U →L[ℂ] Uᗮ := reflectionSineCorner U Z ∘L cutoffCorner Ω with hXdef
   have hgramAmb : ∀ v : U, cutoffCorner Ω v = v →
       ((gramOperator X v : U) : H) =
-        Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z ((v : U) : H))) :=
+        Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z ((v : U) : H))) :=
     fun v hv =>
       coe_gramOperator_reflectionSineCorner_comp_cutoffCorner_apply hZsa Ω hv
-  set r : ℝ := ‖U.offDiagonalPart Z‖ with hrdef
+  set r : ℝ := ‖U.offDiagBlock Z‖ with hrdef
   have hr0 : 0 ≤ r := norm_nonneg _
   have hrsq : r ^ 2 < 1 := by nlinarith
   set κ : ℝ := √(1 - r ^ 2) with hκdef
@@ -815,21 +815,21 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     rw [hκsq]
     nlinarith
   have heig : ∀ j : Fin m,
-      ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (y j))) -
+      ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (y j))) -
         ((q j ^ 2 : ℝ) : ℂ) • y j‖ ≤ ρ * q j / 4 := by
     intro j
     have hres := M.gram_residual (Fin.castLE hmc j)
     rw [hqcast j] at hres
     have hcoe : (((gramOperator X (M.right (Fin.castLE hmc j)) -
         ((q j : ℂ)) ^ 2 • M.right (Fin.castLE hmc j)) : U) : H) =
-        Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (y j))) -
+        Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (y j))) -
           ((q j ^ 2 : ℝ) : ℂ) • y j := by
       simp only [hydef]
       rw [Submodule.coe_sub, Submodule.coe_smul, hgramAmb _ (hfix j)]
       norm_cast
     have hnorm : ‖gramOperator X (M.right (Fin.castLE hmc j)) -
         ((q j : ℂ)) ^ 2 • M.right (Fin.castLE hmc j)‖ =
-        ‖Ω.toProj (U.offDiagonalPart Z (U.offDiagonalPart Z (y j))) -
+        ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (y j))) -
           ((q j ^ 2 : ℝ) : ℂ) • y j‖ := by
       rw [← hcoe]
       rfl
@@ -989,13 +989,13 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_of_cutoff
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
-    (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
+    (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     (hτ : 0 ≤ τ) (Ω : TauCeti.BoundedCutoff A U τ) (k : ℕ) :
     (b - a) * ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
         ((reflectionSineCorner U Z ∘L cutoffCorner Ω).approximationNumber p)) ≤
       2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
   classical
-  set r : ℝ := ‖U.offDiagonalPart Z‖ with hrdef
+  set r : ℝ := ‖U.offDiagBlock Z‖ with hrdef
   have hr0 : 0 ≤ r := norm_nonneg _
   have hrsq : r ^ 2 < 1 := by nlinarith
   set κ : ℝ := √(1 - r ^ 2) with hκdef
@@ -1054,7 +1054,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
-    (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
+    (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
     (hproj : ∀ i, TauCeti.ApproximationNumber.IsOrthogonalProjectionMap
@@ -1098,7 +1098,7 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
-    (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
+    (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
@@ -1161,7 +1161,7 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
-    (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
+    (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
@@ -1196,7 +1196,7 @@ theorem mem_and_gauge_le_reflectionTangentCorner
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : H) ∈ Uᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
-    (hab : a < b) (hS1 : ‖U.offDiagonalPart Z‖ < 1)
+    (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto

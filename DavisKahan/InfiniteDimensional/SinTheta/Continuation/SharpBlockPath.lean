@@ -45,13 +45,13 @@ theorem isOffDiagonal_smul
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     (K : Hspace →L[ℂ] Hspace) (hK : Submodule.IsOffDiagonal U K) (c : ℂ) :
     Submodule.IsOffDiagonal U (c • K) := by
-  change U.diagonalPart K = 0 at hK
-  change U.diagonalPart (c • K) = 0
+  change U.diagBlock K = 0 at hK
+  change U.diagBlock (c • K) = 0
   apply ContinuousLinearMap.ext
   intro x
   have hx := congrArg (fun T : Hspace →L[ℂ] Hspace => T x) hK
   have hcx := congrArg (fun y : Hspace => c • y) hx
-  simpa [Submodule.diagonalPart, ContinuousLinearMap.comp_apply] using hcx
+  simpa [Submodule.diagBlock, ContinuousLinearMap.comp_apply] using hcx
 
 /-- Compression between two orthogonal-coordinate spaces cannot increase the
 operator norm. -/

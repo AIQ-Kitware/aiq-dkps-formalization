@@ -1472,10 +1472,16 @@ theorem reflection_conjugate_eq_star_of_intertwines_of_diagonalBlocks_pos
       two_smul]
     abel
   -- Both `J_U W J_U` and `W⋆` are `2 T - W`, the diagonal pinch construction.
-  have hdiag : U.diagonalPart W = T := by
-    rw [Submodule.diagonalPart_eq, ← hPdef, ← hP'def, hTdef, hC₀def, hC₁def]
+  have hdiag : U.diagBlock W = T := by
+    rw [Submodule.diagBlock_def, ← hPdef, ← hP'def, hTdef, hC₀def, hC₁def]
     simp only [← ContinuousLinearMap.mul_def, mul_assoc]
-  have hpinch := Submodule.two_smul_diagonalPart_eq_add_reflectionConjugate U W
+  have hR : U.reflectionOperator = (U.reflection : H →L[ℂ] H) := by
+    ext x
+    exact Submodule.reflectionOperator_apply_eq_reflection U x
+  have hpinch : (2 : ℂ) • U.diagBlock W =
+      W + U.reflectionOperator ∘L W ∘L U.reflectionOperator := by
+    simpa [hR, ← Nat.cast_smul_eq_nsmul ℂ] using
+      (Submodule.two_smul_diagBlock U W)
   rw [hdiag] at hpinch
   have hJ : U.reflectionOperator * W * U.reflectionOperator = (2 : ℂ) • T - W := by
     rw [hpinch]

@@ -783,7 +783,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 
 /-- **The pinch of `A` relative to `U ⊕ Uᗮ`, charted as an orthogonal block sum.**
 
-`Submodule.diagonalPart` discards the off-diagonal blocks but keeps the operator on the
+`Submodule.diagBlock` discards the off-diagonal blocks but keeps the operator on the
 ambient space `H`.  Read through Mathlib's isometric decomposition
 `H ≃ₗᵢ WithLp 2 (U × Uᗮ)` it becomes literally the block sum of the two compressions,
 which is the form the exact Ky Fan prefix formula
@@ -800,7 +800,7 @@ theorem orthogonalDecomposition_conj_diagonalPart
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [CompleteSpace (U : Type v)] [CompleteSpace ((Uᗮ : Submodule 𝕜 H) : Type v)]
     (A : H →L[𝕜] H) :
-    (U.orthogonalDecomposition : H →L[𝕜] WithLp 2 (U × Uᗮ)) ∘L U.diagonalPart A ∘L
+    (U.orthogonalDecomposition : H →L[𝕜] WithLp 2 (U × Uᗮ)) ∘L U.diagBlock A ∘L
         (U.orthogonalDecomposition.symm : WithLp 2 (U × Uᗮ) →L[𝕜] H) =
       continuousOrthogonalBlockSum (U.orthogonalProjectionOnto ∘L A ∘L U.subtypeL)
         (Uᗮ.orthogonalProjectionOnto ∘L A ∘L Uᗮ.subtypeL) := by
@@ -846,9 +846,9 @@ theorem orthogonalDecomposition_conj_diagonalPart
       rw [← Submodule.coe_orthogonalProjectionOnto_apply, h0]
       rfl
     rw [hz, zero_add]
-  have hdiag : U.diagonalPart A ((w.fst : H) + (w.snd : H)) =
+  have hdiag : U.diagBlock A ((w.fst : H) + (w.snd : H)) =
       U.starProjection (A (w.fst : H)) + Uᗮ.starProjection (A (w.snd : H)) := by
-    simp only [Submodule.diagonalPart, add_apply, ContinuousLinearMap.comp_apply]
+    simp only [Submodule.diagBlock, add_apply, ContinuousLinearMap.comp_apply]
     rw [hfst, hsnd]
   simp only [ContinuousLinearMap.comp_apply, hsymmcoe, hdiag, hcoe,
     continuousOrthogonalBlockSum_apply]
