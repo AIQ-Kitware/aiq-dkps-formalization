@@ -68,7 +68,6 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
         "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
@@ -2367,20 +2366,19 @@
         "TauCeti.DavisKahan.Experimental.ExactSinTheta.KyFanDominantIdealFamily"
       ],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
+      "staging_module": null,
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFan.Dominance",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
       "provenance_class": "restructured 2026-07-28: the Fan-dominance field of KyFanDominantIdealFamily becomes a class over the canonical family, as item S2 of the symmetric-ideals roadmap specifies, with instances for the operator-norm, Ky Fan and trace-class families",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass"
+        "TauCeti.Analysis.OperatorIdeal.Family.KyFan.Dominance"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "consumed-upstream",
       "upstream_pr": null,
-      "migration_note": "The local Ky Fan dominance layer remains because it packages DKPS approximation-number Ky Fan gauges. Its trace-class instance now consumes Tau Ceti's canonical symmetric trace-class family."
+      "migration_note": "The duplicate DKPS IsKyFanDominant class and standard operator-norm, Ky Fan, and trace-class instances were deleted after consumption of Tau Ceti.Analysis.OperatorIdeal.Family.KyFan.Dominance. DKPS retains only its real-valued approximation-number Ky Fan gauge."
     },
     {
       "source_module": "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport",
