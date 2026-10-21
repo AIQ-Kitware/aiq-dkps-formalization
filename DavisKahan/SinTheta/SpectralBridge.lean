@@ -35,7 +35,7 @@ spectral API used by the canonical unbounded theorem.  This avoids maintaining
 an unrelated bounded spectrum placeholder and makes bounded gap hypotheses
 eligible for a direct full-domain specialization bridge. -/
 noncomputable def boundedRealSpectrum (A : E →L[𝕜] E) : Set ℝ :=
-  TauCeti.LinearPMap.realSpectrum (A.toLinearMap.toPMap ⊤)
+  _root_.LinearPMap.realSpectrum (A.toLinearMap.toPMap ⊤)
 
 /-- The real spectrum is contained in a set. -/
 def SpectrumInRealSet (A : E →L[𝕜] E) (s : Set ℝ) : Prop :=

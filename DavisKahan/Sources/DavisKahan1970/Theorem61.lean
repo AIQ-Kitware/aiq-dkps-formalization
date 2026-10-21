@@ -361,8 +361,8 @@ theorem theorem6_2_real
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {ε : ℝ} (hε : 0 < ε) (hframe : LowerFrameBound E₀ ε)
     {δ : ℝ} (hδ : 0 < δ)
-    (hdist : ∀ lam ∈ TauCeti.LinearPMap.realSpectrum A₀,
-      ∀ α ∈ TauCeti.LinearPMap.realSpectrum Λ₁, δ ≤ |lam - α|)
+    (hdist : ∀ lam ∈ _root_.LinearPMap.realSpectrum A₀,
+      ∀ α ∈ _root_.LinearPMap.realSpectrum Λ₁, δ ≤ |lam - α|)
     (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (sectionSixSinThetaBlockReal E₀ F₁ hframe hε))
     (hR : approximationNumberEnergy R ≠ ⊤) :

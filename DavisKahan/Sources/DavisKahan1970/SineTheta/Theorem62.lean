@@ -292,7 +292,7 @@ structure RealTheorem62Data where
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
   spectral_distance :
-    ∀ lam ∈ TauCeti.LinearPMap.realSpectrum data.A₀, ∀ α ∈ TauCeti.LinearPMap.realSpectrum data.Λ₁,
+    ∀ lam ∈ _root_.LinearPMap.realSpectrum data.A₀, ∀ α ∈ _root_.LinearPMap.realSpectrum data.Λ₁,
       gap ≤ |lam - α|
 
 namespace RealTheorem62Data

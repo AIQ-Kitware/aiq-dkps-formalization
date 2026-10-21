@@ -58,9 +58,9 @@ theorem beamRealModel_sourceFacts :
     _root_.IsSelfAdjoint beamOperator ∧
       closure classicalFreeBeamGraph =
         (beamOperator.graph : Set (BeamL2 × BeamL2)) ∧
-      TauCeti.LinearPMap.realSpectrum beamOperator = insert 0 beamEigenvalues ∧
+      _root_.LinearPMap.realSpectrum beamOperator = insert 0 beamEigenvalues ∧
       (∃ f : ℕ → ℝ, StrictMono f ∧ Set.range f = beamEigenvalues ∧
-        ∀ n, 500 < f n ∧ f n ∈ TauCeti.LinearPMap.realSpectrum beamOperator) := by
+        ∀ n, 500 < f n ∧ f n ∈ _root_.LinearPMap.realSpectrum beamOperator) := by
   exact ⟨beamOperator_isSelfAdjoint,
     closure_classicalFreeBeamGraph_eq_graph,
     realSpectrum_beamOperator_eq_insert_zero,

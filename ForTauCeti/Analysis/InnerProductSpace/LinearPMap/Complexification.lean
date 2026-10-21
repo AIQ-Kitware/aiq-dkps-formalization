@@ -373,10 +373,12 @@ theorem mem_realResolventSet_complexifyReal_iff
 
 /-- The real spectrum is exactly preserved by raw `LinearPMap` complexification. -/
 theorem realSpectrum_complexifyReal (A : E →ₗ.[ℝ] E) :
-    realSpectrum (complexifyReal A) = realSpectrum A := by
+    _root_.LinearPMap.realSpectrum (complexifyReal A) =
+      _root_.LinearPMap.realSpectrum A := by
   ext lam
-  simp only [mem_realSpectrum_iff]
-  rw [mem_realResolventSet_complexifyReal_iff A lam]
+  simp only [canonical_realSpectrum_eq_compl_realResolventSet,
+    Set.mem_compl_iff]
+  exact not_congr (mem_realResolventSet_complexifyReal_iff A lam)
 
 /-- The embedded real-domain map is continuous. -/
 private theorem continuous_complexifyRealOfRealDomain

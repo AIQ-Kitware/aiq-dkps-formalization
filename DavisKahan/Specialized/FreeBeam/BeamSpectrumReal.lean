@@ -145,7 +145,7 @@ theorem beamResolvent_eigenvalue_classify {mu : ℝ} (hmu : mu ≠ 0)
 
 /-- Every real spectral point of the real free beam is an eigenvalue. -/
 theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
-    (hlam : lam ∈ TauCeti.LinearPMap.realSpectrum beamOperator) :
+    (hlam : lam ∈ _root_.LinearPMap.realSpectrum beamOperator) :
     ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
       beamOperator x = lam • (x : BeamL2) := by
   by_contra hcon
@@ -258,7 +258,7 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
 
 /-- The real spectrum consists only of zero and characteristic fourth powers. -/
 theorem realSpectrum_beamOperator_subset :
-    TauCeti.LinearPMap.realSpectrum beamOperator ⊆
+    _root_.LinearPMap.realSpectrum beamOperator ⊆
       {0} ∪ {lam : ℝ | ∃ beta : ℝ,
         0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4} := by
   intro lam hlam
@@ -269,7 +269,7 @@ theorem realSpectrum_beamOperator_subset :
 
 /-- Source spectral gap: every nonzero spectral point of the real free beam exceeds `500`. -/
 theorem realSpectrum_beamOperator_subset_gap :
-    TauCeti.LinearPMap.realSpectrum beamOperator ⊆ ({0} : Set ℝ) ∪ Set.Ioi 500 := by
+    _root_.LinearPMap.realSpectrum beamOperator ⊆ ({0} : Set ℝ) ∪ Set.Ioi 500 := by
   intro lam hlam
   rcases realSpectrum_beamOperator_subset hlam with h0 | ⟨beta, hβ, hchar, hlameq⟩
   · exact Or.inl h0

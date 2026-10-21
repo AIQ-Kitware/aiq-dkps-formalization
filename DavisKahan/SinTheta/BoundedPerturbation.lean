@@ -147,7 +147,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁) :
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum Λ₁) :
     δ * ‖X.adjoint ∘L F₁‖ ≤ ‖V‖ := by
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
@@ -183,7 +183,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁) :
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum Λ₁) :
     δ * ‖X.adjoint ∘L F₁‖ ≤ ‖V‖ := by
   exact sinTheta_addBounded_opNorm_of_spectrum_gap A hA V hV
     A₀ hA₀ Λ₁ hΛ₁ X F₁ hXdom hXintertwines hF₁dom hF₁intertwines
@@ -229,7 +229,7 @@ theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
     (hA₀high : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction (TauCeti.LinearPMap.addBounded A V)
           (addBounded_isSelfAdjoint A hA V hV) T hT)) :
     δ * ‖(selfAdjointSpectralSubspaceInclusion A hA B hB).adjoint ∘L

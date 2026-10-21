@@ -50,7 +50,10 @@ gives the orthogonal complement. The residual is `R = T E₀ - E₀ A₀` on
 is `T F₁ = F₁ Λ₁` on `dom Λ₁`. Both domain inclusions are explicit below.
 
 The separation premise is written out in the theorem below, not hidden
-behind a new alias or the library's `FormBoundedSylvesterGap` inductive:
+behind a new alias or the library's `FormBoundedSylvesterGap` inductive.
+All four spectral inclusions refer to the canonical
+`_root_.LinearPMap.realSpectrum` supplied by TauCeti; they do not mention
+the retired donor spectrum:
 
 1. One real spectrum lies in `[β, α]` and the other at least `δ` outside,
    allowing either orientation.
@@ -98,11 +101,11 @@ theorem sinTheta_unbounded_explicitSeparation_whereDefinedUIN_rclike
       -- Bounded spectral interval, with the other spectrum outside the gap.
       -- Either A₀ or Λ₁ may occupy the interval.
       (∃ β α : ℝ, β ≤ α ∧
-        ((TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum Λ₁ ⊆
+        ((_root_.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+          _root_.LinearPMap.realSpectrum Λ₁ ⊆
             {t : ℝ | t ≤ β - δ ∨ α + δ ≤ t}) ∨
-         (TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum A₀ ⊆
+         (_root_.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+          _root_.LinearPMap.realSpectrum A₀ ⊆
             {t : ℝ | t ≤ β - δ ∨ α + δ ≤ t}))) ∨
       -- The trial block lies above the complementary block.
       (∃ c : ℝ,

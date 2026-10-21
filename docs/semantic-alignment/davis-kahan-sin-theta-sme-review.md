@@ -83,11 +83,18 @@ primitives, but `SpectralSetsSeparated A B Set.univ Set.univ delta` alone does *
 express the three configurations needed here: disjoint interlaced real spectral sets can
 have positive pairwise distance without satisfying the interval/exterior or ordered cases.
 
-In the uploaded DKPS source, `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean`
-already defines declarations with these same names using the repository's older
-`realResolventSet` construction; TauCeti's current `realSpectrum` instead uses the built-in
-partial-map `spectrum`. A future dependency synchronization must reconcile the definitions
-and prove the appropriate spectrum comparison; it cannot simply import both duplicate names.
+The migration to the canonical spectrum is now staged across the full
+sine-theta proof path. `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean`
+no longer defines a duplicate real spectrum. Instead it proves a real/complex
+scalar-generic equivalence between the remaining *legacy* `A - λ` inverse and
+the accepted `λ I - A` resolvent; the inverses differ by a sign. The visible
+separation conditions use the official upstream real-spectrum definition.
+The complex spectral branch of the Sylvester engine likewise uses the accepted
+`_root_.LinearPMap.spectrum`. See
+`dev/tauceti/proof-lineage/2026-10-20-canonical-spectrum-migration.md` for the
+historical revision anchors, exact equivalence, and outstanding compile repair
+instructions. The worktree was statically checked; the migration changes still
+require their Lean build on the maintainer's machine.
 
 `TauCeti.LinearPMap.SemiboundedBelow`/`SemiboundedAbove` currently come from the DKPS
 `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Sylvester.lean` file, not the upstream

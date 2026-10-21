@@ -78,7 +78,7 @@ theorem selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
     (B : Set ℝ) (hB : MeasurableSet B)
     {a b : ℝ} (hdisj : B ∩ Set.Ioo a b = ∅) :
     ∀ lam ∈ Set.Ioo a b,
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA B hB) := by
   intro lam hlam
   have hleft : 0 < lam - a := by linarith [hlam.1]

@@ -913,7 +913,7 @@ theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
       push_cast; ring, ← hmuinv, inv_inv]
 
 /-- **Every real spectral point of the free beam is an eigenvalue.**  The free beam has no
-continuous or residual real spectrum at all: if `lam` is in `TauCeti.LinearPMap.realSpectrum beamOperator` then
+continuous or residual real spectrum at all: if `lam` is in `_root_.LinearPMap.realSpectrum beamOperator` then
 `B x = lam x` for some nonzero `x` in the domain.
 
 This is the Fredholm alternative for the compact variational resolvent, run in the direction
@@ -924,7 +924,7 @@ contradicting `lam ∈ realSpectrum`; if it *is* an eigenvalue, then
 `exists_beamOperator_apply_of_beamResolvent_smul` inverts it to an eigenvector of `B` for
 `((1+lam)⁻¹)⁻¹ - 1 = lam`. -/
 theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
-    (hlam : lam ∈ TauCeti.LinearPMap.realSpectrum beamOperator) :
+    (hlam : lam ∈ _root_.LinearPMap.realSpectrum beamOperator) :
     ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
       beamOperator x = (lam : ℂ) • (x : BeamL2) := by
   by_contra hcon
@@ -1048,7 +1048,7 @@ fourth powers of the characteristic roots.  Every spectral point is now an eigen
 (`exists_eigenvector_of_mem_realSpectrum_beamOperator`), it is nonnegative because the
 operator is, and a positive one carries a characteristic root. -/
 theorem realSpectrum_beamOperator_subset :
-    TauCeti.LinearPMap.realSpectrum beamOperator
+    _root_.LinearPMap.realSpectrum beamOperator
       ⊆ {0} ∪ {lam : ℝ | ∃ beta : ℝ,
           0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4} := by
   intro lam hlam
@@ -1062,7 +1062,7 @@ This is Davis--Kahan 1970 Section 9's `α₃ > 500` — including that the whole
 spectrum, not just the third eigenvalue, clears the bound — proved for the genuine
 self-adjoint fourth-derivative realization. -/
 theorem realSpectrum_beamOperator_subset_gap :
-    TauCeti.LinearPMap.realSpectrum beamOperator ⊆ ({0} : Set ℝ) ∪ Set.Ioi 500 := by
+    _root_.LinearPMap.realSpectrum beamOperator ⊆ ({0} : Set ℝ) ∪ Set.Ioi 500 := by
   intro lam hlam
   rcases realSpectrum_beamOperator_subset hlam with h0 | ⟨beta, hβ, hchar, hlameq⟩
   · exact Or.inl h0

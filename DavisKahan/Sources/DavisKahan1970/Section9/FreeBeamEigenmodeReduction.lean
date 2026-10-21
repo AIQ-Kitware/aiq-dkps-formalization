@@ -115,7 +115,7 @@ by a nonzero domain eigenvector. -/
 def PositiveSpectrumIsPointSpectrum
     (A : H →ₗ.[ℂ] H) : Prop :=
   ∀ lambda : ℝ,
-    lambda ∈ TauCeti.LinearPMap.realSpectrum A → 0 < lambda →
+    lambda ∈ _root_.LinearPMap.realSpectrum A → 0 < lambda →
       ∃ x : A.domain, PartialMapEigenpair A lambda x
 
 omit [CompleteSpace H] in
@@ -126,7 +126,7 @@ theorem positive_spectrum_characterization_of_pointSpectrum_and_regularity
     (hpoint : PositiveSpectrumIsPointSpectrum A)
     (hregular : PositiveEigenmodeRegularity A) :
     ∀ lambda : ℝ,
-      lambda ∈ TauCeti.LinearPMap.realSpectrum A → 0 < lambda →
+      lambda ∈ _root_.LinearPMap.realSpectrum A → 0 < lambda →
       ∃ beta : ℝ,
         0 < beta ∧
         FreeBeam.characteristic beta = 0 ∧
@@ -143,7 +143,7 @@ theorem positive_spectrum_gt_five_hundred_of_pointSpectrum_and_regularity
     (L : FreeBeam.PositiveRootLocalization)
     (hpoint : PositiveSpectrumIsPointSpectrum A)
     (hregular : PositiveEigenmodeRegularity A)
-    {lambda : ℝ} (hlambda : lambda ∈ TauCeti.LinearPMap.realSpectrum A)
+    {lambda : ℝ} (hlambda : lambda ∈ _root_.LinearPMap.realSpectrum A)
     (hpositive : 0 < lambda) :
     500 < lambda := by
   obtain ⟨beta, hbeta, hroot, hlambda_beta⟩ :=

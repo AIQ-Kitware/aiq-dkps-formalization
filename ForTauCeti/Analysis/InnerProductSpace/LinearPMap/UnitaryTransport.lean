@@ -128,9 +128,11 @@ theorem realResolventSet_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[�
 
 /-- The real spectrum is invariant under unitary conjugation. -/
 theorem realSpectrum_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) :
-    realSpectrum (_root_.LinearPMap.unitaryConj W A) = realSpectrum A := by
-  ext lam
-  rw [mem_realSpectrum_iff, mem_realSpectrum_iff, realResolventSet_unitaryConj]
+    _root_.LinearPMap.realSpectrum (_root_.LinearPMap.unitaryConj W A) =
+      _root_.LinearPMap.realSpectrum A := by
+  rw [canonical_realSpectrum_eq_compl_realResolventSet,
+    canonical_realSpectrum_eq_compl_realResolventSet,
+    realResolventSet_unitaryConj]
 
 /-! ### Operator-form semibounds -/
 

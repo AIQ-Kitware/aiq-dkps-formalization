@@ -57,7 +57,7 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁)
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum Λ₁)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
       δ * N.gaugeReal (X.adjoint ∘L F₁) ≤ N.gaugeReal V := by
@@ -131,7 +131,7 @@ theorem sinTheta_addBounded_gauge_block_of_spectrum_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁)
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum Λ₁)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
       δ * N.gaugeReal (X.adjoint ∘L F₁) ≤

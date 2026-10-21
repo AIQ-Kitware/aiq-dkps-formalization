@@ -1,0 +1,15 @@
+{
+  "research_result": "S2-sin-theta",
+  "canonical_reference": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+  "headline_theorem": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike",
+  "explicit_presentation": "TauCeti.DavisKahan1970.sinTheta_unbounded_explicitSeparation_whereDefinedUIN_rclike",
+  "pre_upstream_revision": "acac427e5a34b769bfe52359216acfc6b6dd5582",
+  "pre_migration_revision": "2bca6ddd155878315acdcef2e93049d218d524b3",
+  "tau_ceti_revision": "14b2d241ddc09c76f3354c7324b8be49e81a4245",
+  "mathlib_revision": "e3e75e86143b43849829fdcd44a39a6b0fe35234",
+  "lean_toolchain": "leanprover/lean4:v4.36.0-rc1",
+  "pre_upstream_presentation_sha256": "0008940235391e5f3012a88a3dd6cbfb52600ea87df430d764fe84db1912d576",
+  "pre_migration_gap_sha256": "3f4bceb51cabe1d7bc7238007f24a0b81b85fb0072a9dc9896e65faddaeff70e",
+  "normalization_invariant": "The legacy real resolvent of A-lambda uses the negative of the canonical resolvent of lambda*I-A; the two spectral sets are propositionally equivalent, not definitionally equal at the legacy boundary.",
+  "graph_status": "Not regenerated in overlay authoring environment; run the repository's existing leanq and prerequisite-trace tools after Lean verification."
+}

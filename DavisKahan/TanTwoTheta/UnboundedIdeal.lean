@@ -102,7 +102,7 @@ theorem tanTwoTheta_addBounded_gauge_of_spectrum_gap
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute
@@ -198,7 +198,7 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute

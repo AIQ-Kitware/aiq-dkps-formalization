@@ -55,12 +55,12 @@ theorem real_freeBeam_operator_isSelfAdjoint_and_graphClosure :
 Besides the two-dimensional zero eigenspace, the real spectrum is an increasing sequence of
 positive eigenvalues, every one of which is larger than `500`. -/
 theorem real_freeBeam_spectrum_decomposition :
-    TauCeti.LinearPMap.realSpectrum realBeamOperator =
+    _root_.LinearPMap.realSpectrum realBeamOperator =
         insert 0 DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
       (∃ f : ℕ → ℝ, StrictMono f ∧
         Set.range f =
           DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
-        ∀ n, 500 < f n ∧ f n ∈ TauCeti.LinearPMap.realSpectrum realBeamOperator) := by
+        ∀ n, 500 < f n ∧ f n ∈ _root_.LinearPMap.realSpectrum realBeamOperator) := by
   exact ⟨
     DavisKahan.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero,
     DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues⟩
@@ -81,7 +81,7 @@ theorem real_freeBeam_eigenvalue_indexing :
           x ∈ DavisKahan.FreeBeam.Model.Real.beamTrial) ∧
       (∃ f : ℕ → ℝ, StrictMono f ∧
         Set.range f = DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
-        ∀ n, 500 < f n ∧ f n ∈ TauCeti.LinearPMap.realSpectrum realBeamOperator) ∧
+        ∀ n, 500 < f n ∧ f n ∈ _root_.LinearPMap.realSpectrum realBeamOperator) ∧
       (∀ (lam : ℝ), 0 < lam →
         ∀ (x y : realBeamOperator.domain),
           (x : RealBeamL2) ≠ 0 →

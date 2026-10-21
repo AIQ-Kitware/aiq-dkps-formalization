@@ -70,7 +70,7 @@ theorem tanTwoTheta_addBounded_of_spectrum_gap
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)

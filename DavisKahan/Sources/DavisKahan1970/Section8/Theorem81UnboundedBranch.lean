@@ -131,7 +131,7 @@ well, so the form is at least `c ‖x‖²` for every `c < α + δ`. -/
 theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
     {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) {alpha delta : ℝ} (_hdelta : 0 < delta)
     (hrep : ∀ lam ∈ Set.Ioo alpha (alpha + delta),
-      ((lam : ℝ) : ℂ) ∉ TauCeti.LinearPMap.spectrum B)
+      ((lam : ℝ) : ℂ) ∉ _root_.LinearPMap.spectrum B)
     (x : B.domain) (hx : (x : H) ∈ (canonicalLowBranchUnbounded hB alpha)ᗮ) :
     (alpha + delta) * ‖(x : H)‖ ^ 2 ≤ (⟪B x, (x : H)⟫_ℂ).re := by
   have hgapzero : TauCeti.LinearPMap.specProjection hB
@@ -139,8 +139,9 @@ theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
     refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hB _ _ ?_
     intro lam hlam
     have := hrep lam hlam
-    rw [TauCeti.LinearPMap.notMem_spectrum_iff] at this
-    exact this
+    have hresRoot : ((lam : ℝ) : ℂ) ∈ _root_.LinearPMap.resolventSet B := by
+      simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using this
+    exact (mem_local_resolventSet_iff_root B _).mpr hresRoot
   have hxIoi : (x : H) ∈ TauCeti.LinearPMap.specRange hB (Set.Ioi alpha)
       measurableSet_Ioi := by
     rw [← canonicalLowBranchUnbounded_orthogonal hB alpha]
@@ -231,7 +232,7 @@ theorem theorem8_1_canonicalBranchUnbounded_form
   have hHsa : IsSelfAdjoint Hop :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hH
   have hrep : ∀ lam ∈ Set.Ioo alpha (alpha + delta),
-      ((lam : ℝ) : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      ((lam : ℝ) : ℂ) ∉ _root_.LinearPMap.spectrum
         (TauCeti.LinearPMap.addBounded A Hop) := by
     intro lam hlam
     exact DavisKahan.notMem_spectrum_addBounded_of_offDiagonal_form_gap A Hop P hA hHsa
@@ -305,19 +306,19 @@ which Theorem 8.1 inherits, and they too are given spectrally. -/
 theorem theorem8_1_maximalAngle_le_of_spectrumIn_unbounded
     (hA : IsSelfAdjoint A) (hHsa : IsSelfAdjoint Hop)
     (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P
         (by simpa only [Submodule.orthogonal_orthogonal] using hredPperp.orthogonal))
       ⊆ Set.Iic alpha)
-    (hPperpSpec : TauCeti.LinearPMap.realSpectrum
+    (hPperpSpec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A Pᗮ hredPperp)
       ⊆ Set.Ici (alpha + delta))
     {M : Submodule ℂ H} [M.HasOrthogonalProjection]
     (hM : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) M)
-    (hMspec : TauCeti.LinearPMap.realSpectrum
+    (hMspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) M hM)
       ⊆ Set.Iic alpha)
-    (hMperpSpec : TauCeti.LinearPMap.realSpectrum
+    (hMperpSpec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Mᗮ
         hM.orthogonal) ⊆ Set.Ici (alpha + delta))
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)

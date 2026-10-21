@@ -144,8 +144,8 @@ theorem realSpectrum_reducingRestriction_congr {A B : Hc →ₗ.[ℂ] Hc} (h : A
     {U : Submodule ℂ Hc} [U.HasOrthogonalProjection]
     (hA : TauCeti.LinearPMap.ReducesSubspace A U)
     (hB : TauCeti.LinearPMap.ReducesSubspace B U) :
-    TauCeti.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A U hA)
-      = TauCeti.LinearPMap.realSpectrum
+    _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A U hA)
+      = _root_.LinearPMap.realSpectrum
         (TauCeti.LinearPMap.reducingRestriction B U hB) := by
   subst h
   rfl
@@ -204,13 +204,13 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hsmall : ‖Hop‖ < delta / 2) :
@@ -221,7 +221,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) delta :=
     .intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)
-  have hB0spec : TauCeti.LinearPMap.realSpectrum (TauCeti.LinearPMap.addBounded A Hop)
+  have hB0spec : _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.addBounded A Hop)
       ⊆ Set.Icc beta alpha ∪ bandExterior beta alpha delta := by
     intro x hx
     rcases DavisKahan.realSpectrum_subset_union_of_reduces hQred hx with h | h
@@ -247,7 +247,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
     congr 1
     module
   have hspec : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
-      TauCeti.LinearPMap.realSpectrum (pathOperator A Hop t)
+      _root_.LinearPMap.realSpectrum (pathOperator A Hop t)
         ⊆ Set.Icc l r ∪ bandExterior l r d := by
     intro t ht
     have hnorm : ‖((-t : ℝ)) • Hop‖ ≤ gam := by
@@ -313,12 +313,12 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
       pathOperator_zero A Hop
     have hQred' : TauCeti.LinearPMap.ReducesSubspace (pathOperator A Hop 0) Q := by
       rw [hB0path]; exact hQred
-    have hQperp' : TauCeti.LinearPMap.realSpectrum
+    have hQperp' : _root_.LinearPMap.realSpectrum
         (TauCeti.LinearPMap.reducingRestriction (pathOperator A Hop 0) Qᗮ
           hQred'.orthogonal) ⊆ bandExterior l r d := by
       rw [realSpectrum_reducingRestriction_congr hB0path hQred'.orthogonal hQred.orthogonal]
       exact fun x hx => hextsub (hQperp hx)
-    have hbandspec : TauCeti.LinearPMap.realSpectrum
+    have hbandspec : _root_.LinearPMap.realSpectrum
         (TauCeti.LinearPMap.reducingRestriction (pathOperator A Hop 0)
           (pathBand hA hHop l r 0) (reducesSubspace_pathBand hA hHop l r 0))
         ⊆ Set.Icc l r :=
@@ -344,7 +344,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
       (pathBand hA hHop l r 1) := reducesSubspace_pathBand hA hHop l r 1
     have hd' : 0 < delta / 2 - gam := by rw [hgamdef]; linarith
     have hlr' : beta - delta / 2 ≤ alpha + delta / 2 := by linarith
-    have hPspec' : TauCeti.LinearPMap.realSpectrum
+    have hPspec' : _root_.LinearPMap.realSpectrum
         (TauCeti.LinearPMap.reducingRestriction (pathOperator A Hop 1) P hPred')
         ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2) := by
       rw [realSpectrum_reducingRestriction_congr hApath hPred' hPred]
@@ -354,7 +354,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
           (bandExterior l r d) (DavisKahan.measurableSet_bandExterior l r d) :=
       (DavisKahan.specRange_bandExterior_eq_orthogonal
         (isSelfAdjoint_pathOperator hA hHop 1) hlr hd (hspec 1 ⟨zero_le_one, le_rfl⟩)).symm
-    have hWspec : TauCeti.LinearPMap.realSpectrum
+    have hWspec : _root_.LinearPMap.realSpectrum
         (TauCeti.LinearPMap.reducingRestriction (pathOperator A Hop 1)
           (pathBand hA hHop l r 1)ᗮ hWred.orthogonal)
         ⊆ bandExterior (beta - delta / 2) (alpha + delta / 2) (delta / 2 - gam) := by
@@ -456,13 +456,13 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
@@ -506,13 +506,13 @@ theorem theorem8_2_residualHalfGap_unbounded_complex
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℂ] Hc)‖ < delta / 2) :
@@ -569,19 +569,19 @@ theorem theorem8_2_residualHalfGap_unbounded_complex
   have hQred' : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A D) K') Q := by
     rw [htotal]; exact hQred
-  have hQspec' : TauCeti.LinearPMap.realSpectrum
+  have hQspec' : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A D) K') Q hQred')
       ⊆ Set.Icc beta alpha := by
     rw [realSpectrum_reducingRestriction_congr htotal hQred' hQred]
     exact hQspec
-  have hQperp' : TauCeti.LinearPMap.realSpectrum
+  have hQperp' : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A D) K') Qᗮ
         hQred'.orthogonal) ⊆ bandExterior beta alpha delta := by
     rw [realSpectrum_reducingRestriction_congr htotal hQred'.orthogonal hQred.orthogonal]
     exact hQperp
-  have hPspec' : TauCeti.LinearPMap.realSpectrum
+  have hPspec' : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A D) P hPred')
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2) := by
     rw [← hrestr]
@@ -600,13 +600,13 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
@@ -641,13 +641,13 @@ theorem theorem8_2_perturbationHalfGap_unbounded_real
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hsmall : ‖Hop‖ < delta / 2) :
@@ -671,7 +671,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_real
       (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q) := by
     rw [hsum]
     exact TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hQred
-  have hQspecC : TauCeti.LinearPMap.realSpectrum
+  have hQspecC : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
         (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q) hQredC)
@@ -681,7 +681,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_real
       DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal
         hQred _]
     exact hQspec
-  have hQperpC : TauCeti.LinearPMap.realSpectrum
+  have hQperpC : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
         (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q)ᗮ
@@ -693,7 +693,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_real
       (DavisKahan.Foundation.RealComplexification.complexifySubmodule_orthogonal Q).symm
       hQred.orthogonal _]
     exact hQperp
-  have hPspecC : TauCeti.LinearPMap.realSpectrum
+  have hPspecC : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.complexifyReal A)
         (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) hPredC)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2) := by
@@ -729,13 +729,13 @@ theorem theorem8_2_residualHalfGap_unbounded_real
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hRsmall : ‖Hop ∘L (P.subtypeL : P →L[ℝ] Er)‖ < delta / 2) :
@@ -759,7 +759,7 @@ theorem theorem8_2_residualHalfGap_unbounded_real
       (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q) := by
     rw [hsum]
     exact TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hQred
-  have hQspecC : TauCeti.LinearPMap.realSpectrum
+  have hQspecC : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
         (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q) hQredC)
@@ -769,7 +769,7 @@ theorem theorem8_2_residualHalfGap_unbounded_real
       DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal
         hQred _]
     exact hQspec
-  have hQperpC : TauCeti.LinearPMap.realSpectrum
+  have hQperpC : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
         (DavisKahan.Foundation.RealComplexification.complexifySubmodule Q)ᗮ
@@ -780,7 +780,7 @@ theorem theorem8_2_residualHalfGap_unbounded_real
       (DavisKahan.Foundation.RealComplexification.complexifySubmodule_orthogonal Q).symm
       hQred.orthogonal _]
     exact hQperp
-  have hPspecC : TauCeti.LinearPMap.realSpectrum
+  have hPspecC : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.complexifyReal A)
         (DavisKahan.Foundation.RealComplexification.complexifySubmodule P) hPredC)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2) := by
@@ -809,13 +809,13 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
@@ -839,13 +839,13 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
@@ -874,13 +874,13 @@ theorem theorem8_2_branch_maximalAngle_lt_unbounded_source_complex
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
@@ -904,13 +904,13 @@ theorem theorem8_2_branch_maximalAngle_lt_unbounded_source_real
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)

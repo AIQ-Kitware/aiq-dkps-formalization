@@ -20,7 +20,8 @@ any theorem from the obsolete cutoff facade.
 transports the spectral gap to the form-bounded one in **every** configuration:
 the ordered branches by `semiboundedBelow_of_spectrum_subset_Ici` and its mirror
 (`SpectralTheory/OrderedHalfLine.lean`, the half-line form of the spectral
-theorem), the interval branch by `realSpectrum_eq_spectraSpectrum`.  Going back,
+theorem), the interval branch by definitional equality of the canonical real spectrum with the
+real preimage of the canonical complex spectrum.  Going back,
 only `SpectralSylvesterGap.intervalExterior_of_formBounded` is proved — turning a
 form bound into a spectral containment is the half of the spectral theorem this
 tree does not have.
@@ -56,21 +57,17 @@ theorem sylvesterIntervalExteriorGap_of_realSpectrum
   rcases hgap with hgap | hgap
   · left
     constructor
-    · simpa only [realSpectrum_eq_spectraSpectrum] using hgap.1
+    · exact hgap.1
     · intro lam hlam hlamSpec
-      have hreal : lam ∈ TauCeti.LinearPMap.realSpectrum B := by
-        simpa only [realSpectrum_eq_spectraSpectrum, Set.mem_preimage]
-          using hlamSpec
+      have hreal : lam ∈ _root_.LinearPMap.realSpectrum B := hlamSpec
       rcases hgap.2 hreal with hleft | hright
       · exact (not_lt_of_ge hleft) hlam.1
       · exact (not_lt_of_ge hright) hlam.2
   · right
     constructor
-    · simpa only [realSpectrum_eq_spectraSpectrum] using hgap.1
+    · exact hgap.1
     · intro lam hlam hlamSpec
-      have hreal : lam ∈ TauCeti.LinearPMap.realSpectrum A := by
-        simpa only [realSpectrum_eq_spectraSpectrum, Set.mem_preimage]
-          using hlamSpec
+      have hreal : lam ∈ _root_.LinearPMap.realSpectrum A := hlamSpec
       rcases hgap.2 hreal with hleft | hright
       · exact (not_lt_of_ge hleft) hlam.1
       · exact (not_lt_of_ge hright) hlam.2
@@ -121,7 +118,7 @@ theorem davisKahan1970_sylvester_complex
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The spectral interval/exterior configuration is the `realSpectrum` one, since
-`realSpectrum_eq_spectraSpectrum` identifies the two spectra. -/
+both predicates use the same canonical spectrum. -/
 theorem realSpectrumIntervalExteriorGap_of_spectral
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     {β α δ : ℝ}
@@ -129,24 +126,24 @@ theorem realSpectrumIntervalExteriorGap_of_spectral
     RealSpectrumIntervalExteriorGap A B β α δ := by
   rcases hgap with hgap | hgap
   · left
-    refine ⟨by simpa only [realSpectrum_eq_spectraSpectrum] using hgap.1, ?_⟩
+    refine ⟨hgap.1, ?_⟩
     intro lam hlam
     rcases le_or_gt lam (β - δ) with h | h
     · exact Or.inl h
     rcases le_or_gt (α + δ) lam with h' | h'
     · exact Or.inr h'
     exact absurd
-      (by simpa only [realSpectrum_eq_spectraSpectrum, Set.mem_preimage] using hlam)
+      hlam
       (hgap.2 lam ⟨h, h'⟩)
   · right
-    refine ⟨by simpa only [realSpectrum_eq_spectraSpectrum] using hgap.1, ?_⟩
+    refine ⟨hgap.1, ?_⟩
     intro lam hlam
     rcases le_or_gt lam (β - δ) with h | h
     · exact Or.inl h
     rcases le_or_gt (α + δ) lam with h' | h'
     · exact Or.inr h'
     exact absurd
-      (by simpa only [realSpectrum_eq_spectraSpectrum, Set.mem_preimage] using hlam)
+      hlam
       (hgap.2 lam ⟨h, h'⟩)
 
 /-- **The spectral gap implies the form-bounded gap, in every configuration.**
