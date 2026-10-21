@@ -2089,7 +2089,7 @@ noncomputable def finiteRankOperatorNormIdealFamily :
           finiteRankOperatorNormGauge A + finiteRankOperatorNormGauge B
         simp only [finiteRankOperatorNormGauge, ite_eq_left hA,
           ite_eq_left hB, ite_eq_left hAB]
-        exact (operatorNormIdealFamily.{0, v, v} ℂ).gauge_add_le A B
+        exact (OperatorIdealFamily.opNorm.{0, v, v} ℂ).gauge_add_le A B
       · simp [finiteRankOperatorNormGauge, ite_eq_right hB]
     · simp [finiteRankOperatorNormGauge, ite_eq_right hA]
   gauge_smul c A := by
@@ -2112,7 +2112,7 @@ noncomputable def finiteRankOperatorNormIdealFamily :
           ‖c‖ₑ * finiteRankOperatorNormGauge A
         simp only [finiteRankOperatorNormGauge, ite_eq_left hA,
           ite_eq_left hcA]
-        exact (operatorNormIdealFamily.{0, v, v} ℂ).gauge_smul c A
+        exact (OperatorIdealFamily.opNorm.{0, v, v} ℂ).gauge_smul c A
       · have hcA : ¬ ProbeFiniteRank (c • A) := by
           intro h
           exact hA ((probeFiniteRank_smul_iff c hc A).mp h)
@@ -2137,7 +2137,7 @@ noncomputable def finiteRankOperatorNormIdealFamily :
         probeFiniteRank_comp L hA R
       simp only [finiteRankOperatorNormGauge, ite_eq_left hA,
         ite_eq_left hcomp]
-      exact (operatorNormIdealFamily.{0, v, v} ℂ).gauge_comp_le L A R
+      exact (OperatorIdealFamily.opNorm.{0, v, v} ℂ).gauge_comp_le L A R
     · simp only [finiteRankOperatorNormGauge, ite_eq_right hA]
       by_cases hL : L = 0
       · have hzero : L ∘L A ∘L R = 0 := by
