@@ -167,9 +167,9 @@ theorem kyFanSum_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
 /-- Ky Fan sums are absolutely homogeneous under real scaling. -/
 theorem kyFanSum_real_smul (k : ℕ) (A : E →ₗ[𝕜] F) {r : ℝ} (hr : 0 ≤ r) :
     kyFanSum k (((r : 𝕜)) • A) = r * kyFanSum k A := by
-  unfold kyFanSum
-  rw [Finset.mul_sum]
-  simp [LinearMap.singularValues_smul, abs_of_nonneg hr, Finsupp.smul_apply, smul_eq_mul]
+  rw [kyFanSum_eq_linearMap_kyFanSum k (((r : 𝕜)) • A),
+    kyFanSum_eq_linearMap_kyFanSum k A, LinearMap.kyFanSum_smul,
+    RCLike.norm_of_nonneg hr]
 
 /-- A convenient witness form of the rectangular Ky Fan upper bound. -/
 theorem sum_le_kyFanSum_of_orthonormal
