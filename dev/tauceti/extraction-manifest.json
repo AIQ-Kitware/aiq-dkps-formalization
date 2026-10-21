@@ -2777,7 +2777,6 @@
         "cayley_apply",
         "cayley_mem_unitary",
         "eq_zero_of_orthogonal_shiftRange",
-        "exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap",
         "injective_shiftMap",
         "inner_apply_self_isReal",
         "inner_cayley",
@@ -2792,7 +2791,6 @@
         "norm_sub_smul_sq",
         "shiftMap",
         "shiftMap_apply",
-        "spectrum_subset_real",
         "surjective_cayley",
         "surjective_shiftMap"
       ],
@@ -2804,6 +2802,7 @@
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
         "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary",
         "Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap",
         "Mathlib.Analysis.InnerProductSpace.LinearPMap"
@@ -2816,9 +2815,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
         "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "The self-adjoint spectrum reality statement and sharp spectral-gap resolvent estimate have moved to Tau Ceti APIs. Davis--Kahan retains its source-facing inverse orientation, now forwarded directly from Tau Ceti. Remaining resolvent and Cayley consumers are still being migrated."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",

@@ -223,13 +223,6 @@ theorem mem_resolventSet_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoin
     hA.mem_resolventSet_of_im_ne_zero hz
   exact root_mem_resolventSet_toLocal hroot
 
-/-- **The spectrum of a self-adjoint operator is real.** -/
-theorem spectrum_subset_real {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
-    _root_.LinearPMap.spectrum A ⊆ Complex.ofReal '' Set.univ := by
-  intro z hz
-  have him : z.im = 0 := hA.spectrum_subset_im_eq_zero hz
-  exact ⟨z.re, Set.mem_univ _, by simp [Complex.ext_iff, him]⟩
-
 /-- The resolvent of a self-adjoint operator at a non-real point is bounded by
 the reciprocal distance to the real axis. -/
 theorem norm_resolvent_le_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
@@ -261,84 +254,6 @@ theorem adjoint_resolvent {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) {z : ℂ
   let hzcRoot := local_mem_resolventSet_toRoot hzc
   rw [local_resolvent_eq_root hzRoot, local_resolvent_eq_root hzcRoot]
   exact hA.adjoint_resolvent hzRoot
-
-/-- **The Davis--Kahan gap-resolvent bound.**  If the spectrum of a self-adjoint
-`A` avoids the open interval `(c - s, c + s)` then `c • I - A` has a bounded
-two-sided inverse of norm at most `s⁻¹`.
-
-The inverse exhibited is the canonical resolvent `resolvent A c`, which inverts
-`c • I - A`; the norm bound is insensitive to that choice of sign.
-
-The proof is a C⋆-algebra argument about the *bounded* operator `R`: spectral
-mapping puts `spectrum R \ {0}` inside `(c - ·)⁻¹ '' spectrum A`, the gap bounds
-that by `s⁻¹`, and for a self-adjoint element the norm *is* the spectral radius.
-No projection-valued measure and no functional calculus appear. -/
-theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
-    {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) {c s : ℝ} (hs : 0 < s)
-    (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
-      (lam : ℂ) ∉ _root_.LinearPMap.spectrum A) :
-    ∃ R : E →L[ℂ] E, ‖R‖ ≤ s⁻¹ ∧
-      (∀ ψ : A.domain, R ((c : ℂ) • (ψ : E) - A ψ) = (ψ : E)) ∧
-      ∀ φ : E, ∃ hmem : R φ ∈ A.domain,
-        (c : ℂ) • R φ - A ⟨R φ, hmem⟩ = φ := by
-  have hcmem : c ∈ Set.Ioo (c - s) (c + s) := ⟨by linarith, by linarith⟩
-  have hcRoot : (c : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
-    by_contra hnot
-    exact hgap c hcmem ((_root_.LinearPMap.mem_spectrum_iff A (c : ℂ)).2 hnot)
-  have hc : (c : ℂ) ∈ resolventSet A := root_mem_resolventSet_toLocal hcRoot
-  refine ⟨resolvent A (c : ℂ), ?_, fun ψ => resolvent_smul_sub_apply hc ψ, fun φ =>
-    ⟨resolvent_mem_domain hc φ, smul_sub_apply_resolvent hc φ⟩⟩
-  -- every spectral point of the bounded resolvent has modulus at most `s⁻¹`
-  have hspec : ∀ μ ∈ _root_.spectrum ℂ (resolvent A (c : ℂ)), ‖μ‖ ≤ s⁻¹ := by
-    intro μ hμ
-    rcases eq_or_ne μ 0 with rfl | hμ0
-    · simpa using (by positivity : (0:ℝ) ≤ s⁻¹)
-    · -- `c + μ⁻¹` is a spectral point of `A`, hence real and outside the gap
-      have hnot : (c : ℂ) - μ⁻¹ ∉ resolventSet A := fun hmem =>
-        notMem_spectrum_resolvent hc hμ0 hmem hμ
-      have hnotRoot : (c : ℂ) - μ⁻¹ ∉ _root_.LinearPMap.resolventSet A := by
-        intro hmem
-        exact hnot (root_mem_resolventSet_toLocal hmem)
-      have hμspectrum : (c : ℂ) - μ⁻¹ ∈ _root_.LinearPMap.spectrum A :=
-        (_root_.LinearPMap.mem_spectrum_iff A _).2 hnotRoot
-      obtain ⟨r, -, hr⟩ := spectrum_subset_real hA
-        hμspectrum
-      have hrspec : (r : ℂ) ∈ _root_.LinearPMap.spectrum A := by
-        rw [hr]
-        exact hμspectrum
-      have hrgap : r ∉ Set.Ioo (c - s) (c + s) := fun hmem => hgap r hmem hrspec
-      have hge : s ≤ |c - r| := by
-        rw [Set.mem_Ioo, not_and_or, not_lt, not_lt] at hrgap
-        rcases hrgap with h | h
-        · rw [abs_of_nonneg (by linarith)]; linarith
-        · rw [abs_of_nonpos (by linarith)]; linarith
-      have hinvnorm : ‖μ‖⁻¹ = |c - r| := by
-        rw [← norm_inv, show μ⁻¹ = (c : ℂ) - (r : ℂ) by rw [hr]; ring_nf,
-          ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
-      have hpos : 0 < ‖μ‖ := norm_pos_iff.mpr hμ0
-      have hsle : s ≤ ‖μ‖⁻¹ := hinvnorm ▸ hge
-      have hcancel : ‖μ‖⁻¹ * ‖μ‖ = 1 := inv_mul_cancel₀ (ne_of_gt hpos)
-      rw [show s⁻¹ = 1 / s by ring, le_div_iff₀ hs]
-      nlinarith [hsle, hpos, hcancel]
-  -- for a self-adjoint element the norm *is* the spectral radius
-  have hsa : _root_.IsSelfAdjoint (resolvent A (c : ℂ)) := isSelfAdjoint_resolvent_ofReal hA hc
-  have hrad : spectralRadius ℂ (resolvent A (c : ℂ)) ≤ ENNReal.ofReal s⁻¹ := by
-    refine iSup₂_le fun μ hμ => ?_
-    rcases eq_or_ne μ 0 with rfl | hμ0
-    · simp
-    · have hμspec : μ ∈ _root_.spectrum ℂ (resolvent A (c : ℂ)) := by
-        have hμ' : μ ∈ _root_.spectrum ℂ (resolvent A (c : ℂ)) ∪ {0} := by
-          simpa only [quasispectrum_eq_spectrum_union_zero] using hμ
-        rcases hμ' with hμ' | hμ'
-        · exact hμ'
-        · exact (hμ0 hμ').elim
-      calc (‖μ‖₊ : ℝ≥0∞) = ENNReal.ofReal ‖μ‖ := by
-            rw [← ENNReal.ofReal_coe_nnreal]; norm_cast
-        _ ≤ ENNReal.ofReal s⁻¹ := ENNReal.ofReal_le_ofReal (hspec μ hμspec)
-  calc ‖resolvent A (c : ℂ)‖
-      = (spectralRadius ℂ (resolvent A (c : ℂ))).toReal :=
-        hsa.toReal_spectralRadius_complex_eq_norm.symm
-    _ ≤ s⁻¹ := ENNReal.toReal_le_of_le_ofReal (by positivity) hrad
 
 /-! ### The Cayley transform
 
