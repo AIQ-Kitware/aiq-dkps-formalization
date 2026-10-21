@@ -17,7 +17,6 @@
         "ForTauCeti.Analysis.Convex.Majorization",
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
@@ -99,7 +98,6 @@
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
-        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
@@ -138,7 +136,6 @@
         "ForTauCeti.Analysis.Convex.Majorization",
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
         "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
@@ -177,7 +174,6 @@
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
-        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
@@ -215,7 +211,6 @@
       "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
       "tauceti_target_marker": null,
       "staging_modules": [
-        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt",
         "ForTauCeti.Analysis.InnerProductSpace.SchurHorn"
@@ -230,7 +225,6 @@
       "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
-        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
@@ -249,7 +243,6 @@
       "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
-        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.EntrywiseOpNorm",
@@ -459,7 +452,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.BasisSpan",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
@@ -1026,8 +1018,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "The local selected-span definition and all its lemmas were removed after confirming that TauCeti.Analysis.InnerProductSpace.BasisSpan provides the same generalized Set/Fintype API, plus additional span lemmas. Courant-Fischer, eigenblock-span, and diagonal-basis consumers now import Tau Ceti's module. Historical source path retained here."
     },
     {
       "source_module": "ForTauCeti.Probability.Moments.CenteredScatter",

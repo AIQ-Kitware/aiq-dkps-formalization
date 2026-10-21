@@ -24,7 +24,7 @@ module
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
-public import ForTauCeti.Analysis.InnerProductSpace.BasisSpan
+public import TauCeti.Analysis.InnerProductSpace.BasisSpan
 
 /-! # Courant–Fischer min-max and Weyl's eigenvalue perturbation inequality
 
