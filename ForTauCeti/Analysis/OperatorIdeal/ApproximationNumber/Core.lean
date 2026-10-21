@@ -710,9 +710,9 @@ The two orthonormal families `x` and `y` are hypotheses, not conclusions: they s
 `E` and `F` have room for `k` orthonormal vectors, without which no such `u`, `v` can exist.
 
 The min--max lower bound `hlb` is what turns the ambient approximation numbers into
-approximation numbers of a *finite-dimensional* restriction; the finite-dimensional
+approximation numbers of a *finite-dimensional* restriction; Tau Ceti's finite-dimensional
 rectangular Ky Fan principle
-`exists_orthonormal_re_sum_inner_map_eq_kyFanSum` then attains them exactly, and
+`LinearMap.exists_orthonormal_sum_inner_eq_kyFanSum` then attains them exactly, and
 the compression is transported back along the inclusion and the projection, which are
 isometric on the vectors involved. -/
 theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
@@ -805,8 +805,7 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
       = kyFanApproximationGauge k (K ∘L W.subtypeL) :=
     kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq W' (K ∘L W.subtypeL) hKW k
   obtain ⟨u', v', hu', hv', heq⟩ :=
-    TauCeti.exists_orthonormal_re_sum_inner_map_eq_kyFanSum
-      K'.toLinearMap hkW hkW'
+    K'.toLinearMap.exists_orthonormal_sum_inner_eq_kyFanSum hkW hkW'
   have hbridge : TauCeti.kyFanSum k K'.toLinearMap
       = kyFanApproximationGauge k K' :=
     kyFanSum_eq_kyFanApproximationGauge k K'.toLinearMap
@@ -826,7 +825,18 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
     have hsum : (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
         = ∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜 :=
       Finset.sum_congr rfl fun i _ => (hpair i).symm
-    rw [hsum, heq, hbridge, hgaugeK']
+    have hreal : RCLike.re (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
+        = kyFanApproximationGauge k (K ∘L W.subtypeL) := by
+      calc
+        RCLike.re (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
+            = RCLike.re (∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜) :=
+              congrArg RCLike.re hsum
+        _ = K'.toLinearMap.kyFanSum k := by rw [heq]; simp
+        _ = TauCeti.kyFanSum k K'.toLinearMap :=
+          (TauCeti.kyFanSum_eq_linearMap_kyFanSum k K'.toLinearMap).symm
+        _ = kyFanApproximationGauge k K' := hbridge
+        _ = kyFanApproximationGauge k (K ∘L W.subtypeL) := hgaugeK'
+    rw [hreal]
     exact hgaugeW
 
 /-- **The Ky Fan gauge is approached by orthonormal pairings**, over `ℂ`.
