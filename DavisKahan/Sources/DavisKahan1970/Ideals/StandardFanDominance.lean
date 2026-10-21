@@ -95,7 +95,14 @@ theorem finiteRankGaugeClosure_adjoint
   intro ε hε
   obtain ⟨R, hrank, hmem, hgauge⟩ := hA.2 ε hε
   have hsub : A.adjoint - R.adjoint = (A - R).adjoint := (map_sub _ A R).symm
-  refine ⟨R.adjoint, ContinuousLinearMap.rank_adjoint_lt_aleph0 R hrank, ?_, ?_⟩
+  have hRle : R.rank ≤ (R.rank.toNat : Cardinal) :=
+    le_of_eq (Cardinal.cast_toNat_of_lt_aleph0 hrank).symm
+  have hRlin : (R : E →ₗ[𝕜] F).rank ≤ R.rank.toNat := by exact_mod_cast hRle
+  have hAdj : (R.adjoint : F →ₗ[𝕜] E).rank ≤ R.rank.toNat :=
+    (ContinuousLinearMap.rank_adjoint_le_iff R).2 hRlin
+  have hAdjCard : R.adjoint.rank ≤ (R.rank.toNat : Cardinal) := by exact_mod_cast hAdj
+  have hAdjFinite := hAdjCard.trans_lt Cardinal.natCast_lt_aleph0
+  refine ⟨R.adjoint, hAdjFinite, ?_, ?_⟩
   · rw [hsub]
     exact (N.mem_adjoint_iff _).mpr hmem
   · rw [hsub, N.gauge_adjoint]
