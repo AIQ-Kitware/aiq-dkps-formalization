@@ -37,7 +37,7 @@ except ImportError:  # pragma: no cover - environment guidance, not logic
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 # Only DavisKahan uses this reachability policy; ForTauCeti is glob-built.
 LIB_DIRS = ("DavisKahan",)
-NONPRODUCTION_SEGMENTS = {"Experimental", "MathAhead", "Audits"}
+NONPRODUCTION_SEGMENTS = {"Experimental", "Explorations", "MathAhead", "Audits"}
 CURATED_ROOT = "DavisKahan"
 DEV_ROOT = "DavisKahan.All"
 AUDIT_SCRIPT = ROOT / "scripts/audit_full_paper_sine_theta.py"
@@ -140,7 +140,7 @@ def main() -> None:
         if is_nonproduction(dep)
     )
     check2 = report(
-        "2. no production module imports Experimental/MathAhead/Audits", crossing)
+        "2. no production module imports staging, exploration, or audit modules", crossing)
 
     leaked = sorted(m for m in covered if is_nonproduction(m))
     check2b = report(

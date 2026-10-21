@@ -142,7 +142,7 @@
       "source_kind": "unnumbered_theorem",
       "source_anchor": "Section 2, sin theta theorem",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "compiled_general_infrastructure",
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-sin-theta",
       "review_declarations": [

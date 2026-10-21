@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5, Claude Opus 5
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
+import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 import DavisKahan.Sylvester.ShiftedInverseGauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
@@ -76,7 +77,9 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
   -- The upstream theorem inverts `c • I - A`; the Davis--Kahan statement is about `A - c`,
   -- so the witness is the negated resolvent.  The norm bound is unaffected.
   obtain ⟨R, hnorm, hleft, hright⟩ :=
-    TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs hgap
+    TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs
+      (fun lam hlam hmem => hgap lam hlam
+        ((TauCeti.DavisKahan.mem_spectrum_iff_root A _).mp hmem))
   refine ⟨-R, by simpa using hnorm, fun ψ => ?_, fun φ => ?_⟩
   · have h := hleft ψ
     have harg : A ψ - (c : ℂ) • (ψ : H) = -((c : ℂ) • (ψ : H) - A ψ) := by module
@@ -134,7 +137,9 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
       _root_.LinearPMap.spectrum (TauCeti.LinearPMap.addBounded A K) := by
   rw [_root_.LinearPMap.mem_spectrum_iff, not_not]
   obtain ⟨R, hnorm, hleft, hright⟩ :=
-    TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs hgap
+    TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs
+      (fun lam hlam hmem => hgap lam hlam
+        ((TauCeti.DavisKahan.mem_spectrum_iff_root A _).mp hmem))
   have hKR : ‖K ∘L R‖ < 1 := by
     have h1 : ‖K ∘L R‖ ≤ ‖K‖ * ‖R‖ := ContinuousLinearMap.opNorm_comp_le _ _
     have h2 : ‖K‖ * ‖R‖ ≤ ‖K‖ * s⁻¹ :=
@@ -327,7 +332,8 @@ theorem twoSidedShiftedInverseBound_of_coercive_comp
       _ ≤ ‖A x - ((lam : ℝ) : ℂ) • (x : H)‖ := htri
   have hres := (TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound hA
     hpos hnorm).1
-  simpa [_root_.LinearPMap.spectrum] using hres
+  simpa [_root_.LinearPMap.spectrum, TauCeti.DavisKahan.mem_local_resolventSet_iff_root]
+    using hres
 
 end DavisKahan
 end TauCeti

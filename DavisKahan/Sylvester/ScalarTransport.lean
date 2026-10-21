@@ -130,8 +130,9 @@ omit [CompleteSpace E] in
 /-- and hence so is the real spectrum. -/
 theorem realSpectrum_pmap (A : E →ₗ.[𝕜] E) :
     _root_.LinearPMap.realSpectrum (pmap (e := e) A) = _root_.LinearPMap.realSpectrum A := by
-  unfold _root_.LinearPMap.realSpectrum
-  rw [realResolventSet_pmap]
+  rw [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
+    TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
+    realResolventSet_pmap]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The three-constructor separation transports, constructor by constructor. -/

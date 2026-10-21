@@ -72,8 +72,8 @@ theorem realSpectrum_reducingRestriction_complexifyReal
       = _root_.LinearPMap.realSpectrum
           (TauCeti.LinearPMap.reducingRestriction A P hred) := by
   rw [← unitaryConj_complexifyReal_reducingRestriction hred hredC,
-    _root_.LinearPMap.realSpectrum_unitaryConj,
-    _root_.LinearPMap.realSpectrum_complexifyReal]
+    TauCeti.LinearPMap.realSpectrum_unitaryConj,
+    TauCeti.LinearPMap.realSpectrum_complexifyReal]
 
 omit [CompleteSpace E] in
 /-- The same, for a subspace merely *presented* as a complexification.  The

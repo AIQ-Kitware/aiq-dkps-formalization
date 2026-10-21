@@ -37,6 +37,8 @@ rules:
       # of carriers, which is what registers the calculus at an arbitrary `RCLike`
       # field
       - "ContinuousFunctionalCalculus"
+      # norm comparisons stated directly for Mathlib's EuclideanSpace carrier
+      - "EuclideanSpace"
       # inequalities between real-extended-nonneg-valued functions, e.g.
       # Minkowski at p = 2 for `tsum`
       - "ENNReal"
@@ -55,6 +57,8 @@ rules:
       - "LinearPMap"
       # additions to Mathlib's measure theory, stated for its own objects
       - "MeasureTheory"
+      # entrywise-to-operator norm bounds stated directly for Mathlib matrices
+      - "Matrix"
       # facts about a Mathlib `OrthonormalBasis`
       - "OrthonormalBasis"
       # facts about `Real`-valued functions, e.g. `Real.abs_sin_...`

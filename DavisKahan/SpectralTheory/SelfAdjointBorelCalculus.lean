@@ -124,9 +124,13 @@ theorem realSpectrum_eq_toPMap_top_spectrum
       Complex.ofReal ⁻¹'
         _root_.LinearPMap.spectrum ((A : H →ₗ[ℂ] H).toPMap ⊤) := by
   ext r
-  show (r : ℂ) ∈ spectrum ℂ A ↔ (r : ℂ) ∉ TauCeti.LinearPMap.resolventSet _
+  show (r : ℂ) ∈ spectrum ℂ A ↔
+    (r : ℂ) ∉ _root_.LinearPMap.resolventSet ((A : H →ₗ[ℂ] H).toPMap ⊤)
   rw [spectrum.mem_iff, Algebra.algebraMap_eq_smul_one,
-    ← IsUnit.neg_iff, neg_sub, mem_resolventSet_toPMap_top_iff A (r : ℂ)]
+    ← IsUnit.neg_iff, neg_sub]
+  exact not_congr ((mem_resolventSet_toPMap_top_iff A (r : ℂ)).symm.trans
+    (TauCeti.DavisKahan.mem_local_resolventSet_iff_root
+      ((A : H →ₗ[ℂ] H).toPMap ⊤) (r : ℂ)))
 
 /-- The real spectrum of a bounded self-adjoint operator is closed. -/
 theorem isClosed_realSpectrum_boundedSelfAdjoint

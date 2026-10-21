@@ -60,6 +60,19 @@ variable {ι : Type*} {E F : Type*}
 variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
+private theorem mem_local_spectrum_iff_root
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+    (A : G →ₗ.[ℂ] G) (z : ℂ) :
+    z ∈ TauCeti.LinearPMap.spectrum A ↔ z ∈ _root_.LinearPMap.spectrum A := by
+  rw [TauCeti.LinearPMap.mem_spectrum_iff, _root_.LinearPMap.mem_spectrum_iff]
+  apply not_congr
+  rw [TauCeti.LinearPMap.mem_resolventSet_iff, _root_.LinearPMap.mem_resolventSet_iff]
+  constructor
+  · rintro ⟨R, hR⟩
+    exact ⟨R, ⟨hR.mem_domain, hR.smul_sub_apply, hR.apply_smul_sub⟩⟩
+  · rintro ⟨R, hR⟩
+    exact ⟨R, ⟨hR.mem_domain, hR.smul_sub_apply, hR.apply_smul_sub⟩⟩
+
 /-- A block with a zero factor is the zero block. -/
 theorem blockFun_eq_zero_left (b : HilbertBasis ι ℂ F) (Q : F →L[ℂ] F)
     (f : lp (fun _ : ι => E) 2) : blockFun b (0 : E →L[ℂ] E) Q f = 0 := by
@@ -141,7 +154,9 @@ theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
     TauCeti.LinearPMap.exists_mem_spectrum_of_specProjection_ne_zero hA _ _ hPz
   obtain ⟨alp, halpCell, halpSpec⟩ :=
     TauCeti.LinearPMap.exists_mem_spectrum_of_specProjection_ne_zero hB _ _ hQz
-  have hsep : δ ≤ |lam - alp| := hgap lam hlamSpec alp halpSpec
+  have hsep : δ ≤ |lam - alp| := hgap lam
+    ((mem_local_spectrum_iff_root _ _).mp hlamSpec) alp
+    ((mem_local_spectrum_iff_root _ _).mp halpSpec)
   have hlamNear : |lam - (k : ℝ) * ε| ≤ ε :=
     TauCeti.LinearPMap.abs_sub_le_of_mem_gridCell hε k hlamCell
   have halpNear : |alp - (l : ℝ) * ε| ≤ ε :=

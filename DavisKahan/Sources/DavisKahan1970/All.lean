@@ -12,14 +12,15 @@ import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.Sources.DavisKahan1970.Directed
 import DavisKahan.Sources.DavisKahan1970.DirectedReal
+import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
 import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
+import DavisKahan.Sources.DavisKahan1970.SineTheta.ExplicitSeparationPresentation
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.PartIIIPresentation
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ExplicitSeparationPresentation
 import DavisKahan.Sources.DavisKahan1970.Proposition61
 import DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite
 import DavisKahan.Sources.DavisKahan1970.Section1
@@ -46,6 +47,7 @@ import DavisKahan.Sources.DavisKahan1970.Section4Examples
 import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
 import DavisKahan.Sources.DavisKahan1970.Section4LowDimensional
 import DavisKahan.Sources.DavisKahan1970.Section4Real
+import DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 import DavisKahan.Sources.DavisKahan1970.Section5
 import DavisKahan.Sources.DavisKahan1970.Section5BanachSylvester
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
@@ -67,6 +69,7 @@ import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
 import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
@@ -75,9 +78,9 @@ import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 import DavisKahan.Sources.DavisKahan1970.TanTheta
 import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
+import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
-import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbientBranchFree
@@ -85,6 +88,7 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfiniteReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
@@ -94,7 +98,6 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
 import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
 import DavisKahan.Sources.DavisKahan1970.TangentSingularValuesReal

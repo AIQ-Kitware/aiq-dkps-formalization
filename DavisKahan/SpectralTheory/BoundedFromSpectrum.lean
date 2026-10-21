@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
+import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 
@@ -66,7 +67,10 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
       (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A := by
     intro lam hlam
     by_contra hnot
-    exact hlam (hσ hnot)
+    have hroot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
+      rw [_root_.LinearPMap.mem_spectrum_iff]
+      exact fun hres => hnot ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root A _).2 hres)
+    exact hlam (hσ hroot)
   -- the spectral projection of the complement vanishes
   have hprojc :
       TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl = 0 :=

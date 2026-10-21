@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.TanTheta.RitzPair
+import DavisKahan.TanTheta.ScalarTransport
 import DavisKahan.TanTheta.Spectrum
 import DavisKahan.TanTheta.Theorem63DirectedAngleBridge
 import DavisKahan.TanTheta.Theorem63FiniteSource

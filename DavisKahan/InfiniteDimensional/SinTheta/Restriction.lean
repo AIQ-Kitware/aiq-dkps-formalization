@@ -89,11 +89,19 @@ theorem boundedRealSpectrum_eq_realSpectrum (X : E →L[𝕜] E) :
     TauCeti.DavisKahan.ExactSinTheta.boundedRealSpectrum X =
       TauCeti.DavisKahan.Foundation.realSpectrum X := by
   ext lam
-  show lam ∈ (TauCeti.LinearPMap.realResolventSet
-      ((X.toLinearMap.toPMap ⊤)))ᶜ ↔
+  change (lam : 𝕜) ∈ _root_.LinearPMap.spectrum
+      (X.toLinearMap.toPMap (⊤ : Submodule 𝕜 E)) ↔
     (lam : 𝕜) ∈ spectrum 𝕜 X
-  rw [Set.mem_compl_iff, mem_realResolventSet_ofBounded_iff, spectrum.mem_iff,
-    Algebra.algebraMap_eq_smul_one, ← IsUnit.neg_iff, neg_sub]
+  rw [_root_.LinearPMap.mem_spectrum_iff, spectrum.mem_iff,
+    Algebra.algebraMap_eq_smul_one]
+  apply not_congr
+  have hbridge := TauCeti.LinearPMap.mem_realResolventSet_iff_mem_canonical_resolventSet
+    (X.toLinearMap.toPMap (⊤ : Submodule 𝕜 E)) lam
+  have hbounded := mem_realResolventSet_ofBounded_iff X lam
+  exact hbridge.symm.trans (hbounded.trans (by
+    rw [show X - (lam : 𝕜) • (1 : E →L[𝕜] E) =
+      -(((lam : 𝕜) • (1 : E →L[𝕜] E)) - X) by module,
+      IsUnit.neg_iff]))
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Orthogonal projection on the left is contractive in operator norm. -/
