@@ -234,9 +234,11 @@ private def kyFanGaugeSeminorm (k : ℕ) : Seminorm ℂ (E →L[ℂ] F) where
   neg' T := T.kyFanGaugeReal_neg k
   smul' c T := kyFanGaugeReal_smul c T k
 
+omit [CompleteSpace F] in
 private theorem kyFanGaugeSeminorm_apply (k : ℕ) (T : E →L[ℂ] F) :
     kyFanGaugeSeminorm (E := E) (F := F) k T = T.kyFanGaugeReal k := rfl
 
+omit [CompleteSpace F] in
 /-- **A finite Ky Fan gauge is operator-norm continuous.**  It is a seminorm bounded by
 `k‖·‖`, hence Lipschitz. -/
 theorem continuous_kyFanGaugeReal (k : ℕ) :
