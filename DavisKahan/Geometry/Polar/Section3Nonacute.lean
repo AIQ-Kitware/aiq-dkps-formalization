@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Geometry.Polar.Section3Elementary
 import DavisKahan.Geometry.Polar.PolarIntertwining
-import ForTauCeti.Analysis.Normed.Operator.LinearIsometry
+import Mathlib.Analysis.Normed.Operator.LinearIsometry
 import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra

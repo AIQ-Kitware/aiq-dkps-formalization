@@ -48,7 +48,6 @@
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "ForTauCeti.Analysis.Normed.FiniteLpGauge",
         "ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact",
-        "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
         "ForTauCeti.Analysis.Normed.SchattenGauge",
         "ForTauCeti.Analysis.Normed.SupGauge",
         "ForTauCeti.Analysis.Normed.SymmetricGauge",
@@ -150,8 +149,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
-        "ForTauCeti.Analysis.Normed.FiniteLpGauge",
-        "ForTauCeti.Analysis.Normed.Operator.LinearIsometry"
+        "ForTauCeti.Analysis.Normed.FiniteLpGauge"
       ]
     },
     {
@@ -477,7 +475,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
-        "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
         "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
@@ -1777,19 +1774,20 @@
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.LinearIsometry",
       "source_declarations": [],
-      "current_namespace": "TauCeti",
+      "current_namespace": "LinearIsometryEquiv",
       "staging_module": "ForTauCeti.Analysis.Normed.Operator.LinearIsometry",
-      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.LinearIsometry",
+      "final_tauceti_module": "Mathlib.Analysis.Normed.Operator.LinearIsometry",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "moved; introduced at Davis--Kahan commit 36d670a; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "local convenience helper retired; LinearIsometryEquiv.ofEq is provided by Mathlib, and the subtype-value simp lemma had no production consumers",
       "direct_dependencies": [
         "Mathlib"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The staging module was deleted: its only local declaration was an unused rfl convenience theorem for LinearIsometryEquiv.ofEq. The sole production importer now imports Mathlib.Analysis.Normed.Operator.LinearIsometry directly."
     },
     {
       "source_module": "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
