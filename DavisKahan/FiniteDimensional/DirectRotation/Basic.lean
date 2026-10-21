@@ -284,9 +284,15 @@ theorem projection_comm_abs_canonicalIntertwiner
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     projection U ∘ₗ TauCeti.operatorAbs (canonicalIntertwiner U V) =
       TauCeti.operatorAbs (canonicalIntertwiner U V) ∘ₗ projection U := by
-  exact TauCeti.sqrt_comm
-    (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V))
-    (projection_comm_canonicalIntertwiner_gram U V)
+  have hT := LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V)
+  have hcomm : Commute (projection U)
+      ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) := by
+    change projection U ∘ₗ ((canonicalIntertwiner U V).adjoint ∘ₗ
+      canonicalIntertwiner U V) =
+      ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) ∘ₗ projection U
+    exact projection_comm_canonicalIntertwiner_gram U V
+  change projection U * hT.sqrt = hT.sqrt * projection U
+  exact hT.commute_sqrt hcomm
 
 
 omit [FiniteDimensional 𝕜 E] in
@@ -545,9 +551,17 @@ theorem reflectionProduct_comm_abs_canonicalIntertwiner
         TauCeti.operatorAbs (canonicalIntertwiner U V) =
       TauCeti.operatorAbs (canonicalIntertwiner U V) ∘ₗ
         (reflectionProduct U V).toLinearMap := by
-  exact TauCeti.sqrt_comm
-    (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V))
-    (reflectionProduct_comm_canonicalIntertwiner_gram U V)
+  have hT := LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V)
+  have hcomm : Commute ((reflectionProduct U V).toLinearMap)
+      ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) := by
+    change (reflectionProduct U V).toLinearMap ∘ₗ
+        ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) =
+      ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) ∘ₗ
+        (reflectionProduct U V).toLinearMap
+    exact reflectionProduct_comm_canonicalIntertwiner_gram U V
+  change (reflectionProduct U V).toLinearMap * hT.sqrt =
+    hT.sqrt * (reflectionProduct U V).toLinearMap
+  exact hT.commute_sqrt hcomm
 
 /-- The square of the canonical direct rotation is the ordered product of the
 reflections. -/

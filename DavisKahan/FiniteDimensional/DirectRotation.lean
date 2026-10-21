@@ -456,8 +456,18 @@ theorem directRotation_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     have hc : Commute (directRotation U V hacute).toLinearMap
         (directRotationCosine U V) := hcomm
     exact (Commute.one_right _).sub_right (hc.mul_right hc)
-  exact TauCeti.sqrt_comm
-    (LinearMap.isPositive_adjoint_comp_self (projection U - projection V)) hgram
+  have hT := LinearMap.isPositive_adjoint_comp_self (projection U - projection V)
+  have hcomm : Commute ((directRotation U V hacute).toLinearMap)
+      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) := by
+    change (directRotation U V hacute).toLinearMap ∘ₗ
+      ((projection U - projection V).adjoint ∘ₗ
+      (projection U - projection V)) =
+      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) ∘ₗ
+        (directRotation U V hacute).toLinearMap
+    exact hgram
+  change (directRotation U V hacute).toLinearMap * hT.sqrt =
+    hT.sqrt * (directRotation U V hacute).toLinearMap
+  exact hT.commute_sqrt hcomm
 
 /-- **`Θ` commutes with `P`** (Davis--Kahan Proposition 3.5), at the level of
 `sin Θ`.  `P_U` commutes with the Gram operator `S⋆S = cos²Θ`, and the
@@ -500,8 +510,16 @@ theorem projection_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     have hc2 : Commute (projection U)
         (directRotationCosine U V ∘ₗ directRotationCosine U V) := hcomm
     exact (Commute.one_right _).sub_right hc2
-  exact TauCeti.sqrt_comm
-    (LinearMap.isPositive_adjoint_comp_self (projection U - projection V)) hgram
+  have hT := LinearMap.isPositive_adjoint_comp_self (projection U - projection V)
+  have hcomm : Commute (projection U)
+      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) := by
+    change projection U ∘ₗ ((projection U - projection V).adjoint ∘ₗ
+      (projection U - projection V)) =
+      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) ∘ₗ
+        projection U
+    exact hgram
+  change projection U * hT.sqrt = hT.sqrt * projection U
+  exact hT.commute_sqrt hcomm
 
 /-- **`Θ` commutes with `Q`** (Davis--Kahan Proposition 3.5), at the level of
 `sin Θ`, by the symmetry of `sin Θ` in the two subspaces. -/
@@ -578,8 +596,16 @@ theorem directRotationCosine_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     have hone : (LinearMap.id : E →ₗ[𝕜] E) = 1 := rfl
     simp only [hmul, hone]
     noncomm_ring
-  exact TauCeti.sqrt_comm
-    (LinearMap.isPositive_adjoint_comp_self (projection U - projection V)) hgram
+  have hT := LinearMap.isPositive_adjoint_comp_self (projection U - projection V)
+  have hcomm : Commute (directRotationCosine U V)
+      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) := by
+    change directRotationCosine U V ∘ₗ ((projection U - projection V).adjoint ∘ₗ
+      (projection U - projection V)) =
+      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) ∘ₗ
+        directRotationCosine U V
+    exact hgram
+  change directRotationCosine U V * hT.sqrt = hT.sqrt * directRotationCosine U V
+  exact hT.commute_sqrt hcomm
 
 /-- **`Θ` commutes with `cos Θ`** — Davis--Kahan Proposition 3.5, on the angle
 operator. -/

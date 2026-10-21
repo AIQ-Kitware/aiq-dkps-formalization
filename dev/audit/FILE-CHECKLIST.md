@@ -1395,7 +1395,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` — 571 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/ResolventSandwich.lean` — 562 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean` — 555 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` — 533 lines · Lean source; positive square root now comes from TauCeti.
+- [x] `ForTauCeti/Analysis/InnerProductSpace/SelfAdjointFunctionalCalculus.lean` — 524 lines · Lean source; positive square root now comes from TauCeti.
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean` — 542 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Spectral/Cutoff.lean` — 540 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Complexification.lean` — 538 lines · Lean source
