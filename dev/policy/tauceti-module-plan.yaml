@@ -53,10 +53,9 @@ topics:
   - Analysis.InnerProductSpace.Singular.System
   - Analysis.InnerProductSpace.MoorePenroseInverse
 - id: T26
-  title: Inner-product identities, linear isometries, approximate rigid-motion alignment, orthogonal
+  title: Inner-product identities, approximate rigid-motion alignment, orthogonal
     series, projection geometry, and reducing subspaces
   modules:
-  - Analysis.Normed.Operator.LinearIsometry
   - Analysis.Normed.Operator.Restriction
   - Analysis.InnerProductSpace.Basic
   - Analysis.InnerProductSpace.Gram.Matrix
@@ -415,7 +414,6 @@ rungs:
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
-  - Analysis.Normed.Operator.LinearIsometry
   - Analysis.Normed.Operator.Restriction
 - id: F
   title: Ky Fan gauges and operator ideal families
@@ -483,7 +481,6 @@ rungs:
   - Analysis.InnerProductSpace.TwoDimensionalSingularValues
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
   - Analysis.Normed.FiniteLpGauge
-  - Analysis.Normed.Operator.LinearIsometry
   - Analysis.Normed.Operator.Restriction
   - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
   - Analysis.OperatorIdeal.ApproximationNumber.Basic
