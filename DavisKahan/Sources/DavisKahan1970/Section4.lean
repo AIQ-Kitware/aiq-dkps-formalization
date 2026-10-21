@@ -637,7 +637,7 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_opNorm
   have hk := proposition4_3_infiniteDimensional_nonacute U V J W hWunitary hWmap 1
   rw [displacementSquare_eq_gramOperator, displacementSquare_eq_gramOperator] at hk
   simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
-    ContinuousLinearMap.kyFanGauge_one, norm_gramOperator] at hk
+    ContinuousLinearMap.kyFanGaugeReal_one, norm_gramOperator] at hk
   exact le_of_sq_le_sq hk (norm_nonneg _)
 
 /-- **Davis--Kahan 1970, the Hilbert--Schmidt consequence of Proposition 4.3**, at the

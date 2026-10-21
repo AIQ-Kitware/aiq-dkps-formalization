@@ -357,7 +357,7 @@ private theorem finite_leak_step (hT : T.IsSymmetric)
   have hKyTan : kyFanApproximationGauge k' (theorem63DirectedTangent F V) =
       ∑ n ∈ Finset.range k', Real.tan (Real.arcsin
         (approximationSingularValue n (theorem63DirectedSineBlock F V))) := by
-    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htanvals n
     unfold approximationSingularValue at h
@@ -663,7 +663,7 @@ theorem theorem6_3_infiniteTrial_of_formBounds
   have hKyTan : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (approximationSingularValue n (theorem63DirectedSineBlock Z V))) := by
-    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htan n
     unfold approximationSingularValue at h

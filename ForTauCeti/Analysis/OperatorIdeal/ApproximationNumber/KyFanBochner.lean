@@ -20,11 +20,11 @@ over `RCLike`, while the Bochner half is stated for complex operator spaces.
 ## Minkowski's integral inequality
 
 ```
-(∫ f a ∂μ).kyFanGauge k ≤ ∫ (f a).kyFanGauge k ∂μ.
+(∫ f a ∂μ).kyFanGaugeReal k ≤ ∫ (f a).kyFanGaugeReal k ∂μ.
 ```
 
 The gauge is a genuine seminorm — subadditivity is the Ky Fan triangle inequality, the one
-nontrivial input — and it is continuous because `T.kyFanGauge k ≤ k * ‖T‖`.  Both statements
+nontrivial input — and it is continuous because `T.kyFanGaugeReal k ≤ k * ‖T‖`.  Both statements
 of this half, the continuity and the integral estimate, are over `ℂ`: the underlying seminorm
 inequality `seminorm_integral_le` holds over any `RCLike` scalar field, but it needs the real
 normed-space structure `[NormedSpace ℝ X]` and `[IsScalarTower ℝ 𝕜 X]` on the space being
@@ -41,10 +41,10 @@ norm inequality for scalars finishes the estimate.
 ## Unitary invariance
 
 ```
-(L ∘L T ∘L R).kyFanGauge k = T.kyFanGauge k    for unitary `L` and `R`.
+(L ∘L T ∘L R).kyFanGaugeReal k = T.kyFanGaugeReal k    for unitary `L` and `R`.
 ```
 
-The `≤` half is the two-sided ideal inequality `kyFanGauge_comp_le` with both norms at most
+The `≤` half is the two-sided ideal inequality `kyFanGaugeReal_comp_le` with both norms at most
 one; the `≥` half is the same inequality applied to `T = L⋆ (L T R) R⋆`, whose factors are
 unitary as well.  Nothing in this half is field-specific, so it is stated over an arbitrary
 `RCLike` scalar field.  This is what makes a Ky Fan gauge blind to the unitary orbit of an
@@ -64,7 +64,7 @@ gauge of the operator being conjugated.
 * Extraction class: **restated and reproved**.  The source was an uncompiled proof sketch:
   it named a `Seminorm.integral_le` that does not exist in Mathlib, dropped its unitary
   invariance onto an unstated `norm_eq_one_of_isometry_and_surjective`, and was fixed to
-  `ℂ`.  The statements move to `ContinuousLinearMap.kyFanGauge`, the unitary-invariance
+  `ℂ`.  The statements move to `ContinuousLinearMap.kyFanGaugeReal`, the unitary-invariance
   scalars to an arbitrary `RCLike` field, and the two missing inputs are proved here.  The
   Bochner statements remain over `ℂ`, for the instance reason recorded above.
 * Extraction motive: the arbitrary-Hilbert-space `π/2` Sylvester estimate in every finite
@@ -175,25 +175,25 @@ theorem norm_le_one_of_mem_unitary {L : E →L[𝕜] E}
     exact le_of_eq (norm_map_of_mem_unitary hL x)
 
 /-- Sandwiching between two contractions cannot increase a Ky Fan gauge. -/
-theorem kyFanGauge_comp_comp_le_of_norm_le_one {L : F →L[𝕜] F} {R : E →L[𝕜] E}
+theorem kyFanGaugeReal_comp_comp_le_of_norm_le_one {L : F →L[𝕜] F} {R : E →L[𝕜] E}
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (T : E →L[𝕜] F) (k : ℕ) :
-    (L ∘L T ∘L R).kyFanGauge k ≤ T.kyFanGauge k := by
-  refine (kyFanGauge_comp_le L T R k).trans ?_
-  have hg : 0 ≤ T.kyFanGauge k := T.kyFanGauge_nonneg k
-  calc ‖L‖ * T.kyFanGauge k * ‖R‖
-      ≤ 1 * T.kyFanGauge k * ‖R‖ := by
+    (L ∘L T ∘L R).kyFanGaugeReal k ≤ T.kyFanGaugeReal k := by
+  refine (kyFanGaugeReal_comp_le L T R k).trans ?_
+  have hg : 0 ≤ T.kyFanGaugeReal k := T.kyFanGaugeReal_nonneg k
+  calc ‖L‖ * T.kyFanGaugeReal k * ‖R‖
+      ≤ 1 * T.kyFanGaugeReal k * ‖R‖ := by
         exact mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right hL hg) (norm_nonneg R)
-    _ = T.kyFanGauge k * ‖R‖ := by rw [one_mul]
-    _ ≤ T.kyFanGauge k * 1 := mul_le_mul_of_nonneg_left hR hg
-    _ = T.kyFanGauge k := mul_one _
+    _ = T.kyFanGaugeReal k * ‖R‖ := by rw [one_mul]
+    _ ≤ T.kyFanGaugeReal k * 1 := mul_le_mul_of_nonneg_left hR hg
+    _ = T.kyFanGaugeReal k := mul_one _
 
 /-- **Every finite Ky Fan gauge is invariant under multiplication by a unitary on either
 side.**  The `≥` half is the `≤` half applied to `T = L⋆ (L T R) R⋆`. -/
-theorem kyFanGauge_unitary_comp_comp {L : F →L[𝕜] F} {R : E →L[𝕜] E}
+theorem kyFanGaugeReal_unitary_comp_comp {L : F →L[𝕜] F} {R : E →L[𝕜] E}
     (hL : L ∈ unitary (F →L[𝕜] F)) (hR : R ∈ unitary (E →L[𝕜] E))
     (T : E →L[𝕜] F) (k : ℕ) :
-    (L ∘L T ∘L R).kyFanGauge k = T.kyFanGauge k := by
-  refine le_antisymm (kyFanGauge_comp_comp_le_of_norm_le_one (norm_le_one_of_mem_unitary hL)
+    (L ∘L T ∘L R).kyFanGaugeReal k = T.kyFanGaugeReal k := by
+  refine le_antisymm (kyFanGaugeReal_comp_comp_le_of_norm_le_one (norm_le_one_of_mem_unitary hL)
     (norm_le_one_of_mem_unitary hR) T k) ?_
   have hrecover : (star L ∘L (L ∘L T ∘L R) ∘L star R) = T := by
     have hx : ∀ x : E, R (star R x) = x := fun x => by
@@ -206,9 +206,9 @@ theorem kyFanGauge_unitary_comp_comp {L : F →L[𝕜] F} {R : E →L[𝕜] E}
     simp only [comp_apply]
     rw [hx, hy]
   calc
-    T.kyFanGauge k = (star L ∘L (L ∘L T ∘L R) ∘L star R).kyFanGauge k := by rw [hrecover]
-    _ ≤ (L ∘L T ∘L R).kyFanGauge k :=
-      kyFanGauge_comp_comp_le_of_norm_le_one
+    T.kyFanGaugeReal k = (star L ∘L (L ∘L T ∘L R) ∘L star R).kyFanGaugeReal k := by rw [hrecover]
+    _ ≤ (L ∘L T ∘L R).kyFanGaugeReal k :=
+      kyFanGaugeReal_comp_comp_le_of_norm_le_one
         (norm_le_one_of_mem_unitary (Unitary.star_mem hL))
         (norm_le_one_of_mem_unitary (Unitary.star_mem hR)) _ k
 
@@ -228,34 +228,34 @@ without an `_apply` lemma, and that lemma has to unfold the definition, which un
 repository's Tau Ceti rubric would mean an `@[expose]` that buys nothing — every consumer
 wants the two theorems below, not the bundled object. -/
 private def kyFanGaugeSeminorm (k : ℕ) : Seminorm ℂ (E →L[ℂ] F) where
-  toFun T := T.kyFanGauge k
-  map_zero' := kyFanGauge_zero k
-  add_le' S T := kyFanGauge_add_le_complex S T k
-  neg' T := T.kyFanGauge_neg k
-  smul' c T := kyFanGauge_smul c T k
+  toFun T := T.kyFanGaugeReal k
+  map_zero' := kyFanGaugeReal_zero k
+  add_le' S T := kyFanGaugeReal_add_le_complex S T k
+  neg' T := T.kyFanGaugeReal_neg k
+  smul' c T := kyFanGaugeReal_smul c T k
 
 private theorem kyFanGaugeSeminorm_apply (k : ℕ) (T : E →L[ℂ] F) :
-    kyFanGaugeSeminorm (E := E) (F := F) k T = T.kyFanGauge k := rfl
+    kyFanGaugeSeminorm (E := E) (F := F) k T = T.kyFanGaugeReal k := rfl
 
 /-- **A finite Ky Fan gauge is operator-norm continuous.**  It is a seminorm bounded by
 `k‖·‖`, hence Lipschitz. -/
-theorem continuous_kyFanGauge (k : ℕ) :
-    Continuous fun T : E →L[ℂ] F => T.kyFanGauge k := by
+theorem continuous_kyFanGaugeReal (k : ℕ) :
+    Continuous fun T : E →L[ℂ] F => T.kyFanGaugeReal k := by
   refine (LipschitzWith.of_dist_le_mul (K := Real.toNNReal (k : ℝ)) fun S T => ?_).continuous
   have h := abs_sub_map_le_sub (kyFanGaugeSeminorm (E := E) (F := F) k) S T
   rw [kyFanGaugeSeminorm_apply, kyFanGaugeSeminorm_apply, kyFanGaugeSeminorm_apply] at h
-  have hle : |S.kyFanGauge k - T.kyFanGauge k| ≤ (k : ℝ) * ‖S - T‖ :=
-    h.trans (kyFanGauge_le_nat_mul_opNorm (S - T) k)
+  have hle : |S.kyFanGaugeReal k - T.kyFanGaugeReal k| ≤ (k : ℝ) * ‖S - T‖ :=
+    h.trans (kyFanGaugeReal_le_nat_mul_opNorm (S - T) k)
   rwa [Real.dist_eq, dist_eq_norm, Real.coe_toNNReal _ (Nat.cast_nonneg k)]
 
 /-- **Minkowski's integral inequality for a finite Ky Fan gauge**: the gauge of a Bochner
 integral of operators is at most the integral of the gauges. -/
-theorem kyFanGauge_integral_le
+theorem kyFanGaugeReal_integral_le
     {α : Type*} [MeasurableSpace α] {μ : Measure α}
     (k : ℕ) {f : α → E →L[ℂ] F} (hf : Integrable f μ) :
-    (∫ a, f a ∂μ).kyFanGauge k ≤ ∫ a, (f a).kyFanGauge k ∂μ := by
+    (∫ a, f a ∂μ).kyFanGaugeReal k ≤ ∫ a, (f a).kyFanGaugeReal k ∂μ := by
   have h := seminorm_integral_le (kyFanGaugeSeminorm (E := E) (F := F) k)
-    (Nat.cast_nonneg k) (fun T => kyFanGauge_le_nat_mul_opNorm T k) hf
+    (Nat.cast_nonneg k) (fun T => kyFanGaugeReal_le_nat_mul_opNorm T k) hf
   rw [kyFanGaugeSeminorm_apply] at h
   simpa only [kyFanGaugeSeminorm_apply] using h
 

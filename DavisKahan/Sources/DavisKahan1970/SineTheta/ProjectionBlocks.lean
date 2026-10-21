@@ -117,7 +117,7 @@ theorem diagonalPair_all_kyFan_le
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk
     have h := diagonalPair_gauge_le

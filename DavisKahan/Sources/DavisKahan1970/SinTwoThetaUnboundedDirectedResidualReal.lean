@@ -109,7 +109,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_real
         2 * kyFanApproximationGauge k R := by
   intro k
   rcases Nat.eq_zero_or_pos k with rfl | hk
-  · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
   have hDsa' : IsSelfAdjoint ((-2 : ℝ) • trialOffDiagonalPart V M R) := by
@@ -283,7 +283,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
         2 * kyFanApproximationGauge k R := by
   intro k
   rcases Nat.eq_zero_or_pos k with rfl | hk
-  · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
   have hDsa' : IsSelfAdjoint ((-2 : ℝ) • trialOffDiagonalPart V M R) := by

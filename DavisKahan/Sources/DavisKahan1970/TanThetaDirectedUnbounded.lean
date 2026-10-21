@@ -117,7 +117,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_complex
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unbounded_infiniteTrial_ideal
       (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos) A hA D hdelta hgap
@@ -159,7 +159,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_real
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unbounded_infiniteTrial_ideal_real A hA
       (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hkpos) D hdelta hgap
@@ -237,7 +237,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_complex
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := D.trial.ideal_of_formBounds V
       (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos) hdelta hupper hcross
@@ -281,7 +281,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_real
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unboundedCompression_ideal_real
       (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hkpos) D.trial V hdelta hupper

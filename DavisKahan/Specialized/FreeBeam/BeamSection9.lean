@@ -1134,13 +1134,14 @@ instance : beamKyFanTwo.toOperatorIdealFamily.IsComplete :=
 approximation numbers in the sum are bounded by the operator norm. -/
 theorem beamKyFanTwo_gaugeReal_le (T : BeamL2 →L[ℂ] BeamL2) :
     beamKyFanTwo.gaugeReal T ≤ 2 * ‖T‖ := by
-  have hsum : ContinuousLinearMap.kyFanGauge T 2 ≤ 2 * ‖T‖ := by
-    rw [ContinuousLinearMap.kyFanGauge, Finset.sum_range_succ, Finset.sum_range_succ,
+  have hsum : ContinuousLinearMap.kyFanGaugeReal T 2 ≤ 2 * ‖T‖ := by
+    rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum, Finset.sum_range_succ,
+      Finset.sum_range_succ,
       Finset.sum_range_zero, zero_add]
     have h0 := T.approximationNumber_le_norm 0
     have h1 := T.approximationNumber_le_norm 1
     linarith
-  have hnonneg : 0 ≤ ContinuousLinearMap.kyFanGauge T 2 :=
+  have hnonneg : 0 ≤ ContinuousLinearMap.kyFanGaugeReal T 2 :=
     le_trans (norm_nonneg T)
       (opNorm_le_kyFanApproximationGauge (k := 2) (by norm_num) T)
   have hval : beamKyFanTwo.gaugeReal T
@@ -1607,7 +1608,8 @@ theorem kyFanTwo_beamResidual_le (ε : ℝ) :
     rw [hz]
     exact norm_beamPerturbation_comp_trialIncl_le ε
   have h1 := approximationSingularValue_one_beamResidual_le ε
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  change (beamResidual ε).kyFanGaugeReal 2 ≤ residualKyFanTwo ε
+  rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero,
     zero_add, residualKyFanTwo]
   exact add_le_add h0 h1

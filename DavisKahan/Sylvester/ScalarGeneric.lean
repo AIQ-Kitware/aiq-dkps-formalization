@@ -112,7 +112,7 @@ instance hasUnboundedSylvesterKyFan_complex :
     intro E F _ _ _ _ _ _ A B hA hB X C δ hδ hgap hEq k
     by_cases hk : k = 0
     · subst k
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
       have hraw := davisKahan1970_sylvester_complex
         (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos) hA hB hδ hgap hEq

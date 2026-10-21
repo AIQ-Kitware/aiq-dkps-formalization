@@ -103,10 +103,11 @@ theorem norm_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
   rw [← A.approximationNumber_index_zero, ← B.approximationNumber_index_zero, h 0]
 
 /-- Equal approximation numbers give equal Ky Fan gauges. -/
-theorem kyFanGauge_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
+theorem kyFanGaugeReal_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
     (h : A.HasSameApproximationNumbers B) (k : ℕ) :
-    A.kyFanGauge k = B.kyFanGauge k :=
-  Finset.sum_congr rfl fun n _ => h n
+    A.kyFanGaugeReal k = B.kyFanGaugeReal k := by
+  rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
+  exact Finset.sum_congr rfl fun n _ => h n
 
 end HasSameApproximationNumbers
 

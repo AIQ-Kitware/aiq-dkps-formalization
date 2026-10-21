@@ -188,7 +188,8 @@ theorem sum_approximationPrefix
     (n : ℕ) (A : E →L[𝕜] F) :
     ∑ i : Fin n, approximationPrefix n A i =
       kyFanApproximationGauge n A := by
-  rw [kyFanApproximationGauge]
+  rw [kyFanApproximationGauge_eq_kyFanGauge,
+    ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   simp only [approximationPrefix]
   exact Fin.sum_univ_eq_sum_range (fun m => approximationSingularValue m A) n
 
@@ -225,7 +226,9 @@ theorem prefixGauge_le_of_all_kyFan_le
           (fun k => approximationSingularValue k A) m,
         Fin.sum_univ_eq_sum_range
           (fun k => approximationSingularValue k B) m]
-      exact h m
+      simpa only [kyFanApproximationGauge_eq_kyFanGauge,
+        ContinuousLinearMap.kyFanGaugeReal_eq_sum,
+        approximationSingularValue] using h m
     · have huniv :
           (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
             Finset.univ :=
@@ -270,7 +273,9 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
             (fun k => approximationSingularValue k A) m,
           Fin.sum_univ_eq_sum_range
             (fun k => approximationSingularValue k B) m]
-        exact h m
+        simpa only [kyFanApproximationGauge_eq_kyFanGauge,
+          ContinuousLinearMap.kyFanGaugeReal_eq_sum,
+          approximationSingularValue] using h m
       · have huniv :
             (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
               Finset.univ :=

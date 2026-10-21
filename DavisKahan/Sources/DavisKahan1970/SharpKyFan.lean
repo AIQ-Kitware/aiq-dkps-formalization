@@ -72,7 +72,7 @@ theorem stablePairError_le_uniform
 theorem kyFanApproximationGauge_mono_length
     (K : E1 →L[ℂ] E0) {m k : ℕ} (hmk : m ≤ k) :
     kyFanApproximationGauge m K ≤ kyFanApproximationGauge k K := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   rw [← Finset.sum_range_add_sum_Ico
     (f := fun n => K.approximationNumber n) hmk]
   exact le_add_of_nonneg_right (Finset.sum_nonneg fun n _ =>

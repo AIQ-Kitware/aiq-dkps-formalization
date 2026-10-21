@@ -39,7 +39,7 @@ class IsKyFanDominant {𝕜 : Type u} [RCLike 𝕜] (N : OperatorIdealFamily.{u,
       [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       {A B : E →L[𝕜] F},
-      (∀ k, A.kyFanGauge k ≤ B.kyFanGauge k) → N.gauge A ≤ N.gauge B
+      (∀ k, A.kyFanGaugeReal k ≤ B.kyFanGaugeReal k) → N.gauge A ≤ N.gauge B
 
 namespace IsKyFanDominant
 
@@ -53,7 +53,7 @@ a member whenever the majorizing one is, and its gauge is no larger. -/
 theorem mem_carrier_and_gauge_le (N : OperatorIdealFamily.{u, v, w} 𝕜)
     [IsKyFanDominant N] {A B : E →L[𝕜] F}
     (hB : B ∈ N.carrier)
-    (hAB : ∀ k, A.kyFanGauge k ≤ B.kyFanGauge k) :
+    (hAB : ∀ k, A.kyFanGaugeReal k ≤ B.kyFanGaugeReal k) :
     A ∈ N.carrier ∧ N.gauge A ≤ N.gauge B := by
   have hle := IsKyFanDominant.gauge_le_of_forall_kyFanGauge_le (N := N) hAB
   exact ⟨ne_top_of_le_ne_top hB hle, hle⟩
@@ -61,7 +61,7 @@ theorem mem_carrier_and_gauge_le (N : OperatorIdealFamily.{u, v, w} 𝕜)
 /-- Equal Ky Fan gauges force equal ideal gauges. -/
 theorem gauge_eq_of_forall_kyFanGauge_eq (N : OperatorIdealFamily.{u, v, w} 𝕜)
     [IsKyFanDominant N] {A B : E →L[𝕜] F}
-    (h : ∀ k, A.kyFanGauge k = B.kyFanGauge k) :
+    (h : ∀ k, A.kyFanGaugeReal k = B.kyFanGaugeReal k) :
     N.gauge A = N.gauge B :=
   le_antisymm
     (IsKyFanDominant.gauge_le_of_forall_kyFanGauge_le (N := N) fun k => (h k).le)
@@ -74,7 +74,8 @@ instance isKyFanDominant_operatorNormIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
     IsKyFanDominant (operatorNormIdealFamily.{u, v, w} 𝕜) where
   gauge_le_of_forall_kyFanGauge_le {_E _F} _ _ _ _ _ _ {_A _B} h := by
     have h1 := h 1
-    rw [ContinuousLinearMap.kyFanGauge_one, ContinuousLinearMap.kyFanGauge_one] at h1
+    rw [ContinuousLinearMap.kyFanGaugeReal_one,
+      ContinuousLinearMap.kyFanGaugeReal_one] at h1
     simpa [operatorNormIdealFamily] using ENNReal.ofReal_le_ofReal h1
 
 /-- A Ky Fan family is dominated by hypothesis at its own index. -/

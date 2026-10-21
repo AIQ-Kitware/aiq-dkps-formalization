@@ -419,9 +419,9 @@ theorem kyFanApproximationGauge_scalarTransport_residual
   calc
     kyFanApproximationGauge k (D.scalarTransport (e := e)).residual =
         kyFanApproximationGauge k (ScalarTransport.clm (e := e) D.residual) := by
-      change ((D.scalarTransport (e := e)).residual).kyFanGauge k =
-        (ScalarTransport.clm (e := e) D.residual).kyFanGauge k
-      exact ContinuousLinearMap.HasSameApproximationNumbers.kyFanGauge_eq
+      change ((D.scalarTransport (e := e)).residual).kyFanGaugeReal k =
+        (ScalarTransport.clm (e := e) D.residual).kyFanGaugeReal k
+      exact ContinuousLinearMap.HasSameApproximationNumbers.kyFanGaugeReal_eq
         (ContinuousLinearMap.HasSameApproximationNumbers.symm hcoord) k
     _ = kyFanApproximationGauge k D.residual :=
       ScalarTransport.kyFanApproximationGauge_clm k D.residual

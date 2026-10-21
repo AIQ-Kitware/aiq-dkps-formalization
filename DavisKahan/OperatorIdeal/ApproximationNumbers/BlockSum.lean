@@ -659,7 +659,11 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
     -- block currently supplies the larger one.  The resulting allocation is a
     -- split of `k` into `r` and `k - r`, hence one of the candidates.
     obtain ⟨r, hrk, hle⟩ := exists_split_prefix_sum_le a b c hmax k
-    refine le_trans hle ?_
+    have hle' : kyFanApproximationGauge k (continuousOrthogonalBlockSum A B) ≤
+        kyFanApproximationGauge r A + kyFanApproximationGauge (k - r) B := by
+      simpa [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum,
+        approximationSingularValue, ha, hb, hcdef] using hle
+    refine le_trans hle' ?_
     exact Finset.le_sup'
       (f := fun r => kyFanApproximationGauge r A + kyFanApproximationGauge (k - r) B)
       (Finset.mem_range.mpr (by omega))
@@ -669,7 +673,9 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
     apply Finset.sup'_le
     intro r hr
     have hrle : r ≤ k := Nat.lt_succ_iff.mp (Finset.mem_range.mp hr)
-    exact split_prefix_sum_le a b c hac hbc hmin k r (k - r) (by omega)
+    have hsplit := split_prefix_sum_le a b c hac hbc hmin k r (k - r) (by omega)
+    simpa [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum,
+      approximationSingularValue, ha, hb, hcdef] using hsplit
 
 /-- Weak majorization is stable under orthogonal block sum.  This is the
 infinite-dimensional singular-value content of Davis--Kahan Lemma 6.1. -/
@@ -698,7 +704,7 @@ theorem approximationSingularValue_eq_kyFan_succ_sub
     (n : ℕ) (A : E →L[𝕜] F) :
     A.approximationNumber n =
       kyFanApproximationGauge (n + 1) A - kyFanApproximationGauge n A := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   rw [Finset.sum_range_succ]
   simp []
 
@@ -724,17 +730,17 @@ theorem hasSameApproximationNumbers_continuousOrthogonalBlockSum
       kyFanApproximationGauge_continuousOrthogonalBlockSum] <;>
     apply le_antisymm
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGauge_eq k))
-      (fun k => le_of_eq (hB.kyFanGauge_eq k)) _
+      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k))
+      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k)) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGauge_eq k).symm)
-      (fun k => le_of_eq (hB.kyFanGauge_eq k).symm) _
+      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k).symm)
+      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k).symm) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGauge_eq k))
-      (fun k => le_of_eq (hB.kyFanGauge_eq k)) _
+      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k))
+      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k)) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGauge_eq k).symm)
-      (fun k => le_of_eq (hB.kyFanGauge_eq k).symm) _
+      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k).symm)
+      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k).symm) _
 
 
 /-- Heterogeneous version: orthogonal block sums preserve complete singular
@@ -765,17 +771,17 @@ theorem sameApproximationSingularSequence_continuousOrthogonalBlockSum
     kyFanApproximationGauge_continuousOrthogonalBlockSum]
   congr 1 <;> apply le_antisymm
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGauge_eq k))
-      (fun k => le_of_eq (hB.kyFanGauge_eq k)) _
+      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k))
+      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k)) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGauge_eq k).symm)
-      (fun k => le_of_eq (hB.kyFanGauge_eq k).symm) _
+      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k).symm)
+      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k).symm) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGauge_eq k))
-      (fun k => le_of_eq (hB.kyFanGauge_eq k)) _
+      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k))
+      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k)) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGauge_eq k).symm)
-      (fun k => le_of_eq (hB.kyFanGauge_eq k).symm) _
+      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k).symm)
+      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k).symm) _
 
 section PinchChart
 

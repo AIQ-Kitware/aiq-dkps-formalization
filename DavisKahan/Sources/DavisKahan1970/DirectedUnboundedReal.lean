@@ -175,7 +175,7 @@ theorem kyFanApproximationGauge_complexifyTrialData_residual
     (data : Theorem63TrialData Z V) (k : ℕ) :
     kyFanApproximationGauge k (complexifyTrialData data).residual =
       kyFanApproximationGauge k data.residual := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_complexifyTrialData_residual data n
 
@@ -305,7 +305,7 @@ theorem theorem6_3_ideal_infiniteData_exists_real
     have htanKy : kyFanApproximationGauge k tanTheta0 =
         ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
           (approximationSingularValue n (theorem63DirectedSineBlockReal Z V))) := by
-      unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
     exact hcore
@@ -331,7 +331,7 @@ theorem theorem6_3_ideal_infiniteData_real
   have htanKy : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (approximationSingularValue n (theorem63DirectedSineBlockReal Z V))) := by
-    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     exact Finset.sum_congr rfl fun n _ => htan n
   rw [htanKy]
   exact hcore

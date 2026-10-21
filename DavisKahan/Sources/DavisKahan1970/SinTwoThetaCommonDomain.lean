@@ -231,7 +231,7 @@ theorem sinTwoTheta_commonDomain_block_kyFan
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart P 0 R) :=
     isSelfAdjoint_trialOffDiagonalPart
@@ -323,7 +323,7 @@ theorem sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
     intro k
     by_cases hk0 : k = 0
     · subst k
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have hk : 0 < k := Nat.pos_of_ne_zero hk0
       have hblock := sinTwoTheta_commonDomain_block_kyFan
         hT hdom hP hQ R hres hgapPos hgap k

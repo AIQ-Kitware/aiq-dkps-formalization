@@ -482,7 +482,7 @@ omit [CompleteSpace Er] in
 private theorem kyFanApproximationGauge_zero_real {Fr : Type v}
     [NormedAddCommGroup Fr] [InnerProductSpace ℝ Fr]
     (T : Er →L[ℝ] Fr) : kyFanApproximationGauge 0 T = 0 := by
-  simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
 
 open DavisKahan DavisKahan.RealSpectralRestriction in
 /-- **Davis--Kahan 1970, directed `sin 2Θ` theorem over a REAL Hilbert space,
@@ -734,7 +734,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGa
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) (fun k => ?_)
   · exact ⟨hmain.1, by linarith [hmain.2]⟩
   · rcases Nat.eq_zero_or_pos k with rfl | hk
-    · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have h := DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
         (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) A hA Eop hEop B S hB hS
         hβα hδ hBlow hBhigh hBcomplSpec
@@ -854,7 +854,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricN
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) (fun k => ?_)
   · exact ⟨hmain.1, by linarith [hmain.2]⟩
   · rcases Nat.eq_zero_or_pos k with rfl | hk
-    · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have h := DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap
         (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) A hA Eop hEop B S hB hS
         hδ hgap (KyFanDominantIdealFamily.kyFan_mem k hk Eop)

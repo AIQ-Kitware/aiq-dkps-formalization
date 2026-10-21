@@ -230,7 +230,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
@@ -383,7 +383,7 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
     intro k
     by_cases hk0 : k = 0
     · subst k
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have hk : 0 < k := Nat.pos_of_ne_zero hk0
       have hmain :=
         sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike

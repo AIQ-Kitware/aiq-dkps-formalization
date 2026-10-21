@@ -50,7 +50,10 @@ noncomputable def kyFanNormalizedUnitaryInvariantNorm
     rw [gauge_kyFanSymmetricIdealFamily, ENNReal.toReal_ofReal
       (kyFanApproximationGauge_nonneg k V)]
     have hsum : kyFanApproximationGauge k V
-        = ∑ n ∈ Finset.range k, approximationSingularValue n V := rfl
+        = ∑ n ∈ Finset.range k, approximationSingularValue n V := by
+      change V.kyFanGaugeReal k = _
+      rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp only [approximationSingularValue]
     rw [hsum]
     have hval : ∀ n ∈ Finset.range k,
         approximationSingularValue n V = if n = 0 then 1 else 0 := fun n _ =>

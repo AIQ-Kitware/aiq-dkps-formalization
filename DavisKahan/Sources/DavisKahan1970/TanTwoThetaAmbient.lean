@@ -1431,7 +1431,7 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
       kyFanApproximationGauge k (tanTwoBlockRepresentative U V) := by
     rw [absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
     exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
-      (tanTwoBlockRepresentative U V)).kyFanGauge_eq k
+      (tanTwoBlockRepresentative U V)).kyFanGaugeReal_eq k
   rw [hmodulus]
   linarith [hcombine.trans hpinch]
 

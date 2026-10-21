@@ -37,7 +37,7 @@ X = ∫ m(t) • (e^{itA} C e^{-itB}) dt
 ```
 
 with `‖∫ f‖ ≤ ∫ ‖f‖` and the unitary invariance of the operator norm.  Replacing the norm
-by `kyFanGauge k` needs both ingredients again, and neither is formal: the gauge is not the
+by `kyFanGaugeReal k` needs both ingredients again, and neither is formal: the gauge is not the
 norm of the space being integrated in, so Minkowski's inequality has to be proved for it,
 and its two-sided unitary invariance is a genuine ideal statement.  Both are paper-independent
 and live upstream, in
@@ -88,14 +88,14 @@ variable {Fc : Type v} [NormedAddCommGroup Fc] [InnerProductSpace ℂ Fc]
 /-- The unitary orbit appearing in the Fourier inverse preserves every finite Ky Fan gauge.
 
 Sylvester-specific glue: the general two-sided invariance is
-`ContinuousLinearMap.kyFanGauge_unitary_comp_comp`, and all this adds is that the two Fourier
+`ContinuousLinearMap.kyFanGaugeReal_unitary_comp_comp`, and all this adds is that the two Fourier
 group elements are unitary.  It is the Ky Fan analogue of `norm_unitary_left_right`. -/
-private theorem kyFanGauge_unitaryGroup_orbit
+private theorem kyFanGaugeReal_unitaryGroup_orbit
     (A : Fc →L[ℂ] Fc) (hA : A.IsSymmetric)
     (B : Ec →L[ℂ] Ec) (hB : B.IsSymmetric)
     (t : ℝ) (C : Ec →L[ℂ] Fc) (k : ℕ) :
-    (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)).kyFanGauge k = C.kyFanGauge k :=
-  ContinuousLinearMap.kyFanGauge_unitary_comp_comp
+    (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)).kyFanGaugeReal k = C.kyFanGaugeReal k :=
+  ContinuousLinearMap.kyFanGaugeReal_unitary_comp_comp
     (unitaryGroup_mem_unitary A hA t) (unitaryGroup_mem_unitary B hB (-t)) C k
 
 /-- **The universal `π/2` Sylvester estimate in every finite Ky Fan gauge**, on arbitrary
@@ -104,7 +104,7 @@ complex Hilbert spaces.
 For bounded self-adjoint `A`, `B` with `d`-separated spectra and `A X − X B = C`,
 
 ```
-d · kyFanGauge k X ≤ (π/2) · kyFanGauge k C    for every k.
+d · kyFanGaugeReal k X ≤ (π/2) · kyFanGaugeReal k C    for every k.
 ```
 
 `norm_sylvester_le_of_generalSeparation` is the case `k = 1`. -/
@@ -115,28 +115,28 @@ theorem kyFan_sylvester_le_of_generalSeparation_complex
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) (k : ℕ) :
-    d * X.kyFanGauge k ≤ (Real.pi / 2) * C.kyFanGauge k := by
+    d * X.kyFanGaugeReal k ≤ (Real.pi / 2) * C.kyFanGaugeReal k := by
   rw [separatedSylvester_reconstruction hA hB hd hsep X C hEq]
   unfold separatedSylvesterSolution
   have hint := separatedSylvester_integrable hA hB hd C
   calc
     d * (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
-          (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))).kyFanGauge k
+          (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))).kyFanGaugeReal k
         ≤ d * ∫ t : ℝ,
           (separatedSylvesterMultiplier d hd t •
-            (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))).kyFanGauge k := by
+            (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))).kyFanGaugeReal k := by
       gcongr
-      exact ContinuousLinearMap.kyFanGauge_integral_le k hint
+      exact ContinuousLinearMap.kyFanGaugeReal_integral_le k hint
     _ = d * ∫ t : ℝ,
-          ‖separatedSylvesterMultiplier d hd t‖ * C.kyFanGauge k := by
+          ‖separatedSylvesterMultiplier d hd t‖ * C.kyFanGaugeReal k := by
       congr 1
       apply integral_congr_ae
       filter_upwards [] with t
-      rw [ContinuousLinearMap.kyFanGauge_smul,
-        kyFanGauge_unitaryGroup_orbit A hA B hB t C k]
-    _ = d * ((∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖) * C.kyFanGauge k) := by
+      rw [ContinuousLinearMap.kyFanGaugeReal_smul,
+        kyFanGaugeReal_unitaryGroup_orbit A hA B hB t C k]
+    _ = d * ((∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖) * C.kyFanGaugeReal k) := by
       rw [integral_mul_const]
-    _ = (Real.pi / 2) * C.kyFanGauge k := by
+    _ = (Real.pi / 2) * C.kyFanGaugeReal k := by
       rw [l1_norm_separatedSylvesterMultiplier d hd]
       field_simp [ne_of_gt hd]
 
@@ -179,7 +179,7 @@ theorem kyFan_sylvester_le_of_generalSeparation_real
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) (k : ℕ) :
-    d * X.kyFanGauge k ≤ (Real.pi / 2) * C.kyFanGauge k := by
+    d * X.kyFanGaugeReal k ≤ (Real.pi / 2) * C.kyFanGaugeReal k := by
   have hfan := kyFan_sylvester_le_of_generalSeparation_complex
     ((complexify_isSymmetric_iff A).2 hA) ((complexify_isSymmetric_iff B).2 hB) hd
     (spectraSeparated_top_complexify hsep) (complexify_sylvesterEquation hEq) k

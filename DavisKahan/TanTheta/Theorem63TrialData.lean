@@ -526,7 +526,7 @@ private theorem kyFan_core_of_le_finrank (data : Theorem63TrialData Z V)
     abel
   have hsum := sum_le_kyFanApproximationGauge_of_orthonormal
     data.residual hu hv hscalar
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge at hsum ⊢
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum] at hsum ⊢
   rw [Finset.mul_sum, ← Fin.sum_univ_eq_sum_range]
   simpa [castIndex, approximationSingularValue] using hsum
 

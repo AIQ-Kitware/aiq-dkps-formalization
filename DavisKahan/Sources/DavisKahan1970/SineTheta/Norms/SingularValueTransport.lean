@@ -117,7 +117,7 @@ theorem kyFanApproximationGauge_eq
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
     (h : SameApproximationSingularSequence A B) (k : ℕ) :
     kyFanApproximationGauge k A = kyFanApproximationGauge k B :=
-  ContinuousLinearMap.HasSameApproximationNumbers.kyFanGauge_eq h k
+  ContinuousLinearMap.HasSameApproximationNumbers.kyFanGaugeReal_eq h k
 
 end SameApproximationSingularSequence
 
@@ -241,7 +241,9 @@ theorem trans {A B C : E →L[𝕜] F}
 theorem kyFanApproximationGauge_eq {A B : E →L[𝕜] F}
     (h : SameApproximationSingularValues A B) (k : ℕ) :
     kyFanApproximationGauge k A = kyFanApproximationGauge k B := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  change A.kyFanGaugeReal k = B.kyFanGaugeReal k
+  rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
+    ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_congr rfl fun n _ => h n
 
 section IdealGauge
