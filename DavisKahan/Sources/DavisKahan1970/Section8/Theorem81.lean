@@ -172,7 +172,7 @@ theorem theorem8_1_canonicalBranch
   -- `A` also leaves `Pᗮ` invariant.
   have hAPperp : ∀ x ∈ Pᗮ, A x ∈ Pᗮ := by
     intro x hx
-    exact map_mem_orthogonal_of_forall_map_mem hAsym hAP hx
+    exact LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hAsym (p := P) hAP hx
   -- Repulsion, with `Pᗮ` as the high side.
   have hrep : realSpectrum (A + H) ⊆ Set.Iic alpha ∪ Set.Ici (alpha + delta) := by
     refine realSpectrum_add_offDiagonal_subset_exterior_of_form_gap A H Pᗮ hA hH
@@ -421,7 +421,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
   have hAsym : A.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
   have hAPperp : ∀ x ∈ Pᗮ, A x ∈ Pᗮ := fun x hx =>
-    map_mem_orthogonal_of_forall_map_mem hAsym hAP hx
+    LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hAsym (p := P) hAP hx
   constructor
   · intro hangle
     have hMQ : M = canonicalLowBranch (A + H) hAHop alpha :=

@@ -190,7 +190,7 @@ theorem sinTwoTheta_eigenvector_product_le
   have heig' : A x + H x = (lam : 𝕜) • x := by
     simpa using heig
   simpa [projection, complementaryProjection, mul_assoc] using
-    sin_two_theta_le hA hH hU hlower hupper hHbound hx heig'
+    hA.sin_two_theta_le hH hU hlower hupper hHbound hx heig'
 
 /-- Vanishing-pinch product estimate, the 1963 ancestor of `tan 2Θ`.
 -/
@@ -201,7 +201,7 @@ theorem tanTwoTheta_eigenvector_product_le
     {a b ε lam : ℝ} (_hab : a < b)
     (hupper : ∀ z ∈ Uᗮ, RCLike.re ⟪A z, z⟫_𝕜 ≤ a * ‖z‖ ^ 2)
     (hlower : ∀ y ∈ U, b * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜)
-    {x : E} (hx : ‖x‖ = 1) (heig : (A + H) x = (lam : 𝕜) • x)
+    {x : E} (_hx : ‖x‖ = 1) (heig : (A + H) x = (lam : 𝕜) • x)
     (hHnorm : ‖H.toContinuousLinearMap‖ ≤ ε) :
     (b - a) * ‖projection U x‖ * ‖complementaryProjection U x‖ ≤
       |‖projection U x‖ ^ 2 - ‖complementaryProjection U x‖ ^ 2| * ε := by
@@ -211,7 +211,7 @@ theorem tanTwoTheta_eigenvector_product_le
   have heig' : A x + H x = (lam : 𝕜) • x := by
     simpa using heig
   simpa [projection, complementaryProjection, mul_assoc] using
-    tan_two_theta_le hA hH hU hlower hupper hHbound hHU hHUperp hx heig'
+    hA.tan_two_theta_le hH hU hlower hupper hHbound hHU hHUperp heig'
 
 end DavisKahan.FiniteDimensional
 end TauCeti

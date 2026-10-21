@@ -265,7 +265,6 @@ topics:
   - Analysis.InnerProductSpace.Residual.AngleEmbedding
   - Analysis.InnerProductSpace.Residual.Ritz
   - Analysis.InnerProductSpace.Residual.TrialMap
-  - Analysis.InnerProductSpace.DoubleAngle.Vector
   # The Appendix to Section 6 pole exclusion, and the cutoff families that supply
   # its `Omega_tau -> I`.  `SpectralCutoff` gives the family of a spectral
   # half-line; `ReducingCutoff` gives it for an arbitrary reducing subspace, from
@@ -626,7 +625,6 @@ rungs:
   - Analysis.InnerProductSpace.Complexification.FunctionalCalculus
   - Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
   - Analysis.InnerProductSpace.BoundedOperator.SinTheta
-  - Analysis.InnerProductSpace.DoubleAngle.Vector
   - Analysis.InnerProductSpace.Residual.AngleEmbedding
   - Analysis.InnerProductSpace.Residual.Ritz
   - Analysis.InnerProductSpace.Residual.TrialMap
