@@ -6,7 +6,7 @@ Authors: Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
-public import ForTauCeti.Analysis.SpecialFunctions.Sqrt
+public import TauCeti.Analysis.SpecialFunctions.Sqrt
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 public import Mathlib.Analysis.Normed.Ring.Units
 

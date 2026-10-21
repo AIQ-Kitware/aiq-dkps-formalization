@@ -123,7 +123,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
-        "ForTauCeti.Analysis.SpecialFunctions.Sqrt"
+        "TauCeti.Analysis.SpecialFunctions.Sqrt"
       ]
     },
     {
@@ -274,7 +274,7 @@
         "ForTauCeti.MeasureTheory.CfcMeasurable",
         "ForTauCeti.MeasureTheory.CompactExists",
         "ForTauCeti.MeasureTheory.Function.ConvergenceInMeasure",
-        "ForTauCeti.MeasureTheory.Measure.Typeclasses.Probability"
+        "TauCeti.MeasureTheory.Measure.Typeclasses.Probability"
       ]
     },
     {
@@ -1286,7 +1286,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.SpecialFunctions.Sqrt"
+        "TauCeti.Analysis.SpecialFunctions.Sqrt"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1359,7 +1359,7 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
-        "ForTauCeti.Analysis.SpecialFunctions.Sqrt"
+        "TauCeti.Analysis.SpecialFunctions.Sqrt"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1380,7 +1380,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
+      "status": "upstreamed",
       "upstream_pr": null
     },
     {
@@ -1871,8 +1871,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "The duplicate local square-root estimates were removed after verifying TauCeti.Analysis.SpecialFunctions.Sqrt at the pinned dependency. Polar and near-isometry consumers import the Tau Ceti module directly. The staging path is retained here as historical provenance."
     },
     {
       "source_module": "ForMathlib.MeasureTheory.CfcMeasurable",
@@ -1939,8 +1940,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "The local complement-measure lemma was removed after verifying the identical MeasureTheory.Measure.one_sub_measure_compl_le API in TauCeti.MeasureTheory.Measure.Typeclasses.Probability. Acharyya2025 and DkpsQuench2026 consumers use the canonical theorem directly. The staging path is retained as historical provenance."
     },
     {
       "source_module": "ForMathlib.Probability.Moments.MatrixConcentration",
