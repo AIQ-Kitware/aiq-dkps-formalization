@@ -7,11 +7,10 @@ import DavisKahan.SpectralTheory.OperatorAngle
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
-import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
-import ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
-import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
 import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
+import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+import TauCeti.Analysis.OperatorIdeal.Family.Schatten
+import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import DavisKahan.Sylvester.ScalarTransport
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
@@ -221,17 +220,29 @@ noncomputable def compactOperator :
 /-- Schatten `p` ideal induced by the canonical symmetric gauge. -/
 noncomputable def schatten
     {p : ℝ} (hp : 1 ≤ p) :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofCanonical (TauCeti.schattenFamilySymmetric 𝕜 p hp)
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  let N := TauCeti.SymmetricOperatorIdealFamily.schatten 𝕜 p hp
+  letI : N.toOperatorIdealFamily.IsComplete := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.schatten_toOperatorIdealFamily]
+    infer_instance
+  exact ofCanonical N
 
 /-- Trace-class ideal. -/
 noncomputable def traceClass :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofCanonical (TauCeti.traceClassIdealFamily 𝕜)
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  let N := TauCeti.SymmetricOperatorIdealFamily.traceClass 𝕜
+  letI : N.toOperatorIdealFamily.IsComplete := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.traceClass_toOperatorIdealFamily]
+    infer_instance
+  exact ofCanonical N
 
 /-- Hilbert--Schmidt ideal. -/
-noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofCanonical (TauCeti.hilbertSchmidtIdealFamily 𝕜)
+noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  let N := TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt 𝕜
+  letI : N.toOperatorIdealFamily.IsComplete := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt_toOperatorIdealFamily]
+    infer_instance
+  exact ofCanonical N
 
 /-- The symmetric-family adapter needed by `ofCanonical`; its gauge and completeness are the
 canonical TauCeti Ky Fan family. -/
