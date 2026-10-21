@@ -19,7 +19,7 @@ import Acharyya2024.Common
 import Acharyya2025.Deterministic
 import Acharyya2025.MathlibBridge
 import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
-import ForTauCeti.Analysis.Matrix.Spectrum
+import TauCeti.Analysis.Matrix.Eigenvalues
 import Acharyya2025.GramRealization
 
 open scoped BigOperators Matrix
@@ -212,9 +212,9 @@ above satisfies it too, with every eigenvalue zero. -/
 theorem eigenvalues₀_classicalMDSMatrix_dist_eq_zero_of_le {n d : Nat} (ψ : Config n d)
     {i : Fin (Fintype.card (Fin n))} (hi : d ≤ (i : Nat)) :
     (posSemidef_and_rank_le_classicalMDSMatrix_dist ψ).1.isHermitian.eigenvalues₀ i = 0 :=
-  TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le
+  Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le
     (posSemidef_and_rank_le_classicalMDSMatrix_dist ψ).1
-    (posSemidef_and_rank_le_classicalMDSMatrix_dist ψ).2 hi
+    (posSemidef_and_rank_le_classicalMDSMatrix_dist ψ).2 i hi
 
 /-- The quadratic form of the population matrix of a Euclidean placement is the squared norm
 of the corresponding combination of recentred points. -/

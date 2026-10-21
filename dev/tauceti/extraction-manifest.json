@@ -229,7 +229,6 @@
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.Analysis.Matrix.SpectralProjection",
-        "ForTauCeti.Analysis.Matrix.Spectrum",
         "ForTauCeti.MeasureTheory.CfcMeasurable"
       ]
     },
@@ -1741,17 +1740,23 @@
       "source_declarations": [],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.Matrix.Spectrum",
-      "final_tauceti_module": "TauCeti.Analysis.Matrix.Spectrum",
+      "final_tauceti_module": "TauCeti.Analysis.Matrix.Eigenvalues",
       "ownership_class": "tauceti",
       "roadmap_target": "matrix-spectral",
       "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.Matrix.Eigenvalues"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "Acharyya2025.ManifoldCondition",
+        "Acharyya2025.MatrixPerturbation",
+        "Challenge.RankPsdRealization.Leaderboard",
+        "DkpsQuench2026.Spectral.Regularity"
+      ],
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "Deleted the duplicate rank-count, PSD eigenvalue nonnegativity, and zero-tail theorems after verifying the exact statements in TauCeti.Analysis.Matrix.Eigenvalues. Paper and challenge consumers now use the canonical root Matrix declarations."
     },
     {
       "source_module": "ForTauCeti.Analysis.Normed.FiniteLpGauge + ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm + ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization",
