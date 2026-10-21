@@ -138,12 +138,17 @@ of `specProjection_eq_zero_of_subset_resolventSet`; it is what lets empty cells
 be discarded and the separation hypothesis be used on the survivors. -/
 theorem exists_mem_spectrum_of_specProjection_ne_zero (B : Set ℝ) (hB : MeasurableSet B)
     (h : specProjection hA B hB ≠ 0) :
-    ∃ lam ∈ B, (lam : ℂ) ∈ spectrum A := by
+    ∃ lam ∈ B, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
   by_contra hcon
   push Not at hcon
   refine h (specProjection_eq_zero_of_subset_resolventSet hA B hB fun lam hlam => ?_)
   have := hcon lam hlam
-  rwa [spectrum, Set.mem_compl_iff, not_not] at this
+  have hroot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
+    by_contra hnot
+    exact this ((_root_.LinearPMap.mem_spectrum_iff A _).2 hnot)
+  obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp hroot
+  exact mem_resolventSet_iff.mpr ⟨R,
+    ⟨hR.mem_domain, hR.smul_sub_apply, hR.apply_smul_sub⟩⟩
 
 end LinearPMap
 end TauCeti

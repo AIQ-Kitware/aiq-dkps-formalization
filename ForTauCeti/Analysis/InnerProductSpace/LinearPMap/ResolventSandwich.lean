@@ -531,22 +531,28 @@ real `l < β` in the resolvent set; the spectral measure therefore gives no mass
 to `(-∞, β)`, and `le_re_inner_of_specProjection_Iio_eq_zero` converts that into
 the form bound. -/
 theorem lowerFormBound_of_spectrum_subset_Ici (hA : IsSelfAdjoint A) {β : ℝ}
-    (hσ : spectrum A ⊆ (RCLike.ofReal (K := ℂ) '' Set.Ici β)) (x : A.domain) :
+    (hσ : _root_.LinearPMap.spectrum A ⊆
+      (RCLike.ofReal (K := ℂ) '' Set.Ici β)) (x : A.domain) :
     β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re := by
   refine le_re_inner_of_specProjection_Iio_eq_zero hA ?_ x
   refine specProjection_eq_zero_of_subset_resolventSet hA _ measurableSet_Iio
     fun l hl => ?_
-  rw [← notMem_spectrum_iff]
-  intro hmem
-  have hl' : l ∈ Set.Ici β := mem_of_subset_ofReal_image hσ hmem
-  exact absurd (Set.mem_Ici.mp hl') (not_le.mpr (Set.mem_Iio.mp hl))
+  have hroot : (l : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
+    by_contra hnot
+    have hmem : (l : ℂ) ∈ _root_.LinearPMap.spectrum A :=
+      (_root_.LinearPMap.mem_spectrum_iff A _).2 hnot
+    have hl' : l ∈ Set.Ici β := mem_of_subset_ofReal_image hσ hmem
+    exact absurd (Set.mem_Ici.mp hl') (not_le.mpr (Set.mem_Iio.mp hl))
+  obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp hroot
+  exact mem_resolventSet_iff.mpr ⟨R,
+    ⟨hR.mem_domain, hR.smul_sub_apply, hR.apply_smul_sub⟩⟩
 
 /-- **The sandwich under the spectral hypothesis.**  The same statement as
 `neg_resolvent_sandwich_of_lowerFormBound`, with `spectrum A ⊆ [β, ∞)` in place of
 the form bound. -/
 theorem neg_resolvent_sandwich_of_spectrum_subset_Ici (hA : IsSelfAdjoint A)
     {β lam : ℝ} (hlt : lam < β)
-    (hσ : spectrum A ⊆ (RCLike.ofReal (K := ℂ) '' Set.Ici β)) :
+    (hσ : _root_.LinearPMap.spectrum A ⊆ (RCLike.ofReal (K := ℂ) '' Set.Ici β)) :
     (0 : E →L[ℂ] E)
         ≤ -resolvent A (lam : ℂ) ∧
       -resolvent A (lam : ℂ)

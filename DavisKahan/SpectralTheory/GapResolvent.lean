@@ -78,8 +78,7 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
   -- so the witness is the negated resolvent.  The norm bound is unaffected.
   obtain ⟨R, hnorm, hleft, hright⟩ :=
     TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs
-      (fun lam hlam hmem => hgap lam hlam
-        ((TauCeti.DavisKahan.mem_spectrum_iff_root A _).mp hmem))
+      (fun lam hlam hmem => hgap lam hlam hmem)
   refine ⟨-R, by simpa using hnorm, fun ψ => ?_, fun φ => ?_⟩
   · have h := hleft ψ
     have harg : A ψ - (c : ℂ) • (ψ : H) = -((c : ℂ) • (ψ : H) - A ψ) := by module
@@ -138,8 +137,7 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
   rw [_root_.LinearPMap.mem_spectrum_iff, not_not]
   obtain ⟨R, hnorm, hleft, hright⟩ :=
     TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs
-      (fun lam hlam hmem => hgap lam hlam
-        ((TauCeti.DavisKahan.mem_spectrum_iff_root A _).mp hmem))
+      (fun lam hlam hmem => hgap lam hlam hmem)
   have hKR : ‖K ∘L R‖ < 1 := by
     have h1 : ‖K ∘L R‖ ≤ ‖K‖ * ‖R‖ := ContinuousLinearMap.opNorm_comp_le _ _
     have h2 : ‖K‖ * ‖R‖ ≤ ‖K‖ * s⁻¹ :=

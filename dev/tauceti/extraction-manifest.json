@@ -374,7 +374,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
@@ -2703,31 +2702,24 @@
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
       "source_declarations": [
-        "disjoint_spectrum_resolventSet",
         "mem_of_subset_ofReal_image",
-        "mem_spectrum_iff",
-        "notMem_spectrum_iff",
-        "resolventSet_eq_compl",
-        "spectrum",
-        "spectrum_eq_compl",
-        "subset_ofReal_image_of_forall",
-        "union_spectrum_resolventSet"
+        "subset_ofReal_image_of_forall"
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
+      "final_tauceti_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
-      "provenance_class": "staged in ForTauCeti",
+      "provenance_class": "local glue over TauCeti canonical spectrum",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
         "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner"
       ],
-      "status": "staged",
+      "status": "local-consumer-helper",
       "upstream_pr": null
     },
     {
@@ -2749,7 +2741,6 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent"
       ],
       "status": "staged",
@@ -3552,30 +3543,6 @@
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
       "source_declarations": [
-        "isClosed_realSpectrum",
-        "isClosed_spectrum",
-        "measurableSet_realSpectrum"
-      ],
-      "current_namespace": "TauCeti.LinearPMap",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
-      "ownership_class": "tauceti",
-      "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
-      "provenance_class": "staged in ForTauCeti",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
-        "Mathlib"
-      ],
-      "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.Rosenblum"
-      ],
-      "status": "staged",
-      "upstream_pr": null
-    },
-    {
-      "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
-      "source_declarations": [
         "ae_cayleyInv_mem_spectrum",
         "cayleyCoordFun",
         "cayleySymbolFun",
@@ -3602,7 +3569,7 @@
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
+        "TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport",
         "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner",
         "Mathlib"
@@ -4971,7 +4938,6 @@
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
         "RoadmapBridge.TauCetiResolventConservativity"
       ],
       "status": "staged",
