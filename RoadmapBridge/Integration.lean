@@ -99,8 +99,8 @@ example (N : UnitarilyInvariantSeminorm 𝕜 E F) (a : 𝕜)
   map_smul_eq_mul N a A
 
 example (k : ℕ) (A B : E →ₗ[𝕜] F) :
-    kyFanSum k (A + B) ≤ kyFanSum k A + kyFanSum k B :=
-  kyFanSum_add_le k A B
+    (A + B).kyFanSum k ≤ A.kyFanSum k + B.kyFanSum k :=
+  LinearMap.kyFanSum_add_le A B k
 
 example (N : UnitarilyInvariantSeminorm 𝕜 E F)
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E)

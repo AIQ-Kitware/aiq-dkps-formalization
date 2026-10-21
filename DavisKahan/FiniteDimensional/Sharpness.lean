@@ -802,7 +802,7 @@ theorem sinTheta_model_equality
         ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
           (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues := by
     rw [singularValues_modelSinThetaPerturbation hab hθ0 (le_of_lt hθ1),
-      TauCeti.singularValues_smul,
+      LinearMap.singularValues_smul,
       singularValues_sinAngle_model hθ0 (le_of_lt hθ1)]
     ext i
     simp [pairSingularValues, norm_ofReal_sub_of_lt hab]
@@ -837,7 +837,7 @@ theorem tanTheta_model_equality
       (((b - a : ℝ) : 𝕜) • tanAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
         (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues := by
-    rw [TauCeti.singularValues_smul,
+    rw [LinearMap.singularValues_smul,
       singularValues_tanAngle_model hθ0 hθ1,
       singularValues_modelTanThetaPerturbation hab htan]
     ext i
@@ -944,8 +944,8 @@ theorem sinTwoTheta_model_equality
         (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).singularValues =
         (((2 : ℝ) : 𝕜) • modelSinTwoThetaPerturbation
           (𝕜 := 𝕜) a b θ).singularValues := by
-    rw [TauCeti.singularValues_smul,
-      TauCeti.singularValues_smul,
+    rw [LinearMap.singularValues_smul,
+      LinearMap.singularValues_smul,
       singularValues_sinAngle_model (𝕜 := 𝕜) (by linarith) (by linarith),
       singularValues_modelSinTwoThetaPerturbation hab hθ0 hθ1]
     have h2 : ‖((2 : ℝ) : 𝕜)‖ = 2 := by
@@ -1006,8 +1006,8 @@ theorem tanTwoTheta_model_equality
         (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
         (((2 : ℝ) : 𝕜) • modelTanTwoThetaPerturbation
           (𝕜 := 𝕜) a b θ).singularValues := by
-    rw [TauCeti.singularValues_smul,
-      TauCeti.singularValues_smul,
+    rw [LinearMap.singularValues_smul,
+      LinearMap.singularValues_smul,
       singularValues_tanTwoAngle_model hθ0 hθ1,
       singularValues_modelTanTwoThetaPerturbation hab htan]
     have h2 : ‖((2 : ℝ) : 𝕜)‖ = 2 := by
@@ -1222,7 +1222,7 @@ private theorem singularValues_smul_of_pair_eq
     (hS : S.singularValues = pairSingularValues s s)
     (hP : P.singularValues = pairSingularValues (c * s) (c * s)) :
     (((c : ℝ) : 𝕜) • S).singularValues = P.singularValues := by
-  rw [TauCeti.singularValues_smul, hS, hP,
+  rw [LinearMap.singularValues_smul, hS, hP,
     RCLike.norm_ofReal, abs_of_nonneg hc]
   ext i
   simp only [pairSingularValues, Finsupp.smul_apply, Finsupp.add_apply,
