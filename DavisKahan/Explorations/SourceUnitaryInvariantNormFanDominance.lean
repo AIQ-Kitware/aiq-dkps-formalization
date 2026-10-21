@@ -89,7 +89,6 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
 import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
