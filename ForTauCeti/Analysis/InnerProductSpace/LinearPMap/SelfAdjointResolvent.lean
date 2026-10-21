@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import Mathlib.Analysis.InnerProductSpace.LinearPMap
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
@@ -30,15 +31,19 @@ The argument is the classical one, in three steps:
 
 ## Provenance
 
-* **Extraction class:** *new*.  Statement and proof are ours.
-* **Spectra influence:** Spectra proves the same criterion
-  (`Spectra.YosidaHille.isSelfAdjoint_to_surjective`,
-  `Spectra.Resolvent.mem_resolventSet_of_im_ne_zero`) and that is what told us
-  the criterion was needed here; per
-  the completed Tau Ceti adaptation, theorem
-  selection is attributable even when the proof is independent.  The proof below
-  was written against Mathlib's `LinearPMap` adjoint API and shares no lemma with
-  Spectra's, which routes through the Cayley transform and Yosida--Hille.
+* **Extraction class:** mixed. The shift estimate, closed-range argument, and
+  gap-specific bounded inverse remain donor mathematics. Tau Ceti now owns the
+  general off-real resolvent criterion, its norm bound, and the adjoint and
+  self-adjointness laws for resolvents; the corresponding local proofs forward
+  to those declarations.
+* **Representation boundary:** the older donor resolvent lives under
+  `TauCeti.LinearPMap`, while the accepted API extends root `LinearPMap`. A
+  single private conversion layer keeps existing consumers compiling while
+  they move to the accepted resolver and spectrum. It is temporary migration
+  support, not a second public API.
+* **Spectra influence:** Spectra's resolvent criterion helped identify the
+  needed result. The accepted Tau Ceti statements and proofs are the maintained
+  implementation.
 -/
 
 public section
@@ -93,6 +98,34 @@ theorem norm_sub_smul_ge_abs_im {A : E →ₗ.[ℂ] E} (hsym : A.IsFormalAdjoint
     mul_nonneg (abs_nonneg z.im) (norm_nonneg ((x : E)))]
 
 end Estimate
+
+/-! ### Temporary compatibility for consumers of the donor resolvent API
+
+Tau Ceti's resolvent and the donor's older resolvent have the same inverse
+fields, but live under different namespace-level definitions. Keep the conversion
+in one place while dependent modules migrate to the upstream representation. -/
+
+private theorem root_mem_resolventSet_toLocal {A : E →ₗ.[ℂ] E} {z : ℂ}
+    (h : z ∈ _root_.LinearPMap.resolventSet A) : z ∈ resolventSet A := by
+  obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp h
+  exact mem_resolventSet_iff.mpr ⟨R, ⟨hR.mem_domain, hR.smul_sub_apply, hR.apply_smul_sub⟩⟩
+
+private theorem local_mem_resolventSet_toRoot {A : E →ₗ.[ℂ] E} {z : ℂ}
+    (h : z ∈ resolventSet A) : z ∈ _root_.LinearPMap.resolventSet A := by
+  obtain ⟨R, hR⟩ := mem_resolventSet_iff.mp h
+  exact _root_.LinearPMap.mem_resolventSet_iff.mpr ⟨R, ⟨hR.mem_domain, hR.smul_sub_apply,
+    hR.apply_smul_sub⟩⟩
+
+private theorem local_resolvent_eq_root {A : E →ₗ.[ℂ] E} {z : ℂ}
+    (h : z ∈ _root_.LinearPMap.resolventSet A) :
+    resolvent A z = _root_.LinearPMap.resolvent A z := by
+  have hR := _root_.LinearPMap.isResolventAt_resolvent h
+  have hLocal : IsResolventAt A z (_root_.LinearPMap.resolvent A z) := {
+    mem_domain := hR.mem_domain
+    smul_sub_apply := hR.smul_sub_apply
+    apply_smul_sub := hR.apply_smul_sub
+  }
+  exact resolvent_eq_of_isResolventAt hLocal
 
 section SelfAdjoint
 
@@ -178,56 +211,17 @@ theorem surjective_shiftMap {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
   exact this
 
 /-- **A self-adjoint operator has real spectrum**, quantitatively: every `z` off
-the real axis lies in the resolvent set. -/
+the real axis lies in the local resolvent set.
+
+The proof uses Tau Ceti's general `RCLike` resolvent theorem. The final conversion
+only adapts its root `LinearPMap.IsResolventAt` witness to the still-local
+`TauCeti.LinearPMap.IsResolventAt` API; remove this adapter when consumers finish
+migrating to Tau Ceti's canonical resolvent set. -/
 theorem mem_resolventSet_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
     {z : ℂ} (hz : z.im ≠ 0) : z ∈ resolventSet A := by
-  have hsym : A.IsFormalAdjoint A := by
-    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
-    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
-  have habs : 0 < |z.im| := abs_pos.mpr hz
-  -- The canonical resolvent inverts `z • I - A`, which is `-(shiftMap A z)`; negating a
-  -- bijection is a bijection, so the equivalence is the one built from `shiftMap` composed
-  -- with negation.
-  set sm : A.domain →ₗ[ℂ] E := -(shiftMap A z) with hsm
-  have hsmapp : ∀ x : A.domain, sm x = z • (x : E) - A x := by
-    intro x
-    rw [hsm]
-    simp only [LinearMap.neg_apply, shiftMap_apply]
-    module
-  have hbij : Function.Bijective sm := by
-    constructor
-    · intro a b hab
-      exact injective_shiftMap hsym hz (neg_injective (by simpa [hsm] using hab))
-    · intro y
-      obtain ⟨x, hx⟩ := surjective_shiftMap hA hz (-y)
-      exact ⟨x, by rw [hsm]; simp [hx]⟩
-  let e : A.domain ≃ₗ[ℂ] E := LinearEquiv.ofBijective sm hbij
-  have hesymm : ∀ y : E, sm (e.symm y) = y := fun y => e.apply_symm_apply y
-  set Rlin : E →ₗ[ℂ] E := A.domain.subtype ∘ₗ (e.symm : E →ₗ[ℂ] A.domain) with hRlin
-  have hbound : ∀ y : E, ‖Rlin y‖ ≤ |z.im|⁻¹ * ‖y‖ := by
-    intro y
-    have h := norm_sub_smul_ge_abs_im hsym z (e.symm y)
-    have hy : A (e.symm y) - z • ((e.symm y : A.domain) : E) = -y := by
-      have h0 := hesymm y
-      rw [hsmapp] at h0
-      linear_combination (norm := module) -h0
-    rw [hy, norm_neg] at h
-    have hRn : ‖Rlin y‖ = ‖((e.symm y : A.domain) : E)‖ := (rfl)
-    rw [hRn]
-    rw [inv_mul_eq_div, le_div_iff₀ habs, mul_comm]
-    exact h
-  refine mem_resolventSet_iff.mpr
-    ⟨Rlin.mkContinuous (|z.im|⁻¹) hbound, fun φ => (e.symm φ).2, fun φ => ?_, fun ψ => ?_⟩
-  · -- right inverse: `(z • I - A) (R φ) = φ`, which is `sm (e.symm φ) = φ`
-    have h := hesymm φ
-    rw [hsmapp] at h
-    exact h
-  · -- left inverse on the domain: `R ((z • I - A) ψ) = ψ`
-    have hinv : e.symm (sm ψ) = ψ := e.symm_apply_apply ψ
-    -- states the goal with the definition unfolded, in the shape the next step needs;
-    -- there is no `_apply` lemma to rewrite with here.
-    change ((e.symm (z • (ψ : E) - A ψ) : A.domain) : E) = (ψ : E)
-    rw [show z • (ψ : E) - A ψ = sm ψ from (hsmapp ψ).symm, hinv]
+  have hroot : z ∈ _root_.LinearPMap.resolventSet A :=
+    hA.mem_resolventSet_of_im_ne_zero hz
+  exact root_mem_resolventSet_toLocal hroot
 
 /-- **The spectrum of a self-adjoint operator is real.** -/
 theorem spectrum_subset_real {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
@@ -243,48 +237,19 @@ the reciprocal distance to the real axis. -/
 theorem norm_resolvent_le_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
     {z : ℂ} (hz : z.im ≠ 0) :
     ‖resolvent A z‖ ≤ |z.im|⁻¹ := by
-  have hsym : A.IsFormalAdjoint A := by
-    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
-    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
-  have habs : 0 < |z.im| := abs_pos.mpr hz
-  set hmem := mem_resolventSet_of_im_ne_zero hA hz
-  refine ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun y => ?_
-  have hdom : resolvent A z y ∈ A.domain := resolvent_mem_domain hmem y
-  have hsolve : z • resolvent A z y - A ⟨resolvent A z y, hdom⟩ = y :=
-    smul_sub_apply_resolvent hmem y
-  have h := norm_sub_smul_ge_abs_im hsym z ⟨resolvent A z y, hdom⟩
-  have hflip : A (⟨resolvent A z y, hdom⟩ : A.domain)
-      - z • ((⟨resolvent A z y, hdom⟩ : A.domain) : E) = -y := by
-    linear_combination (norm := module) -hsolve
-  rw [hflip, norm_neg] at h
-  rw [inv_mul_eq_div, le_div_iff₀ habs, mul_comm]
-  exact h
+  have hroot : z ∈ _root_.LinearPMap.resolventSet A :=
+    hA.mem_resolventSet_of_im_ne_zero hz
+  rw [local_resolvent_eq_root hroot]
+  exact hA.norm_resolvent_le hz
 
 /-- The resolvent of a self-adjoint operator at a **real** point is a
 self-adjoint bounded operator. -/
 theorem isSelfAdjoint_resolvent_ofReal {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
     {c : ℝ} (hc : (c : ℂ) ∈ resolventSet A) :
     _root_.IsSelfAdjoint (resolvent A (c : ℂ)) := by
-  have hsym : A.IsFormalAdjoint A := by
-    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
-    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
-  rw [ContinuousLinearMap.isSelfAdjoint_iff']
-  symm
-  rw [ContinuousLinearMap.eq_adjoint_iff]
-  intro x y
-  -- write both arguments as `(c • I - A)` of a domain point and use symmetry
-  set px : A.domain := ⟨resolvent A (c : ℂ) x, resolvent_mem_domain hc x⟩ with hpx
-  set py : A.domain := ⟨resolvent A (c : ℂ) y, resolvent_mem_domain hc y⟩ with hpy
-  have hx : (c : ℂ) • (px : E) - A px = x := smul_sub_apply_resolvent hc x
-  have hy : (c : ℂ) • (py : E) - A py = y := smul_sub_apply_resolvent hc y
-  have hstep : ⟪(px : E), (c : ℂ) • (py : E) - A py⟫_ℂ
-      = ⟪(c : ℂ) • (px : E) - A px, (py : E)⟫_ℂ := by
-    rw [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
-      Complex.conj_ofReal, hsym px py]
-  calc ⟪resolvent A (c : ℂ) x, y⟫_ℂ
-      = ⟪(px : E), (c : ℂ) • (py : E) - A py⟫_ℂ := by rw [hy]
-    _ = ⟪(c : ℂ) • (px : E) - A px, (py : E)⟫_ℂ := hstep
-    _ = ⟪x, resolvent A (c : ℂ) y⟫_ℂ := by rw [hx]
+  let hcRoot := local_mem_resolventSet_toRoot hc
+  rw [local_resolvent_eq_root hcRoot]
+  exact hA.isSelfAdjoint_resolvent hcRoot (by simp)
 
 /-- **The adjoint of the resolvent is the resolvent at the conjugate point:**
 `R(z)⋆ = R(z̄)`.
@@ -294,22 +259,10 @@ Both sides are pinned by the two-sided inverse property: writing `u = R(z) x` an
 theorem adjoint_resolvent {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) {z : ℂ}
     (hz : z ∈ resolventSet A) (hzc : (starRingEnd ℂ) z ∈ resolventSet A) :
     ContinuousLinearMap.adjoint (resolvent A z) = resolvent A ((starRingEnd ℂ) z) := by
-  have hsym : A.IsFormalAdjoint A := by
-    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
-    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
-  symm
-  rw [ContinuousLinearMap.eq_adjoint_iff]
-  intro x y
-  set u : A.domain := ⟨resolvent A ((starRingEnd ℂ) z) x, resolvent_mem_domain hzc x⟩ with hu
-  set v : A.domain := ⟨resolvent A z y, resolvent_mem_domain hz y⟩ with hv
-  have hux : (starRingEnd ℂ) z • (u : E) - A u = x := smul_sub_apply_resolvent hzc x
-  have hvy : z • (v : E) - A v = y := smul_sub_apply_resolvent hz y
-  calc ⟪resolvent A ((starRingEnd ℂ) z) x, y⟫_ℂ
-      = ⟪(u : E), z • (v : E) - A v⟫_ℂ := by rw [hvy]
-    _ = ⟪(starRingEnd ℂ) z • (u : E) - A u, (v : E)⟫_ℂ := by
-        rw [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
-          starRingEnd_self_apply, hsym u v]
-    _ = ⟪x, resolvent A z y⟫_ℂ := by rw [hux]
+  let hzRoot := local_mem_resolventSet_toRoot hz
+  let hzcRoot := local_mem_resolventSet_toRoot hzc
+  rw [local_resolvent_eq_root hzRoot, local_resolvent_eq_root hzcRoot]
+  exact hA.adjoint_resolvent hzRoot
 
 /-- **The Davis--Kahan gap-resolvent bound.**  If the spectrum of a self-adjoint
 `A` avoids the open interval `(c - s, c + s)` then `c • I - A` has a bounded
