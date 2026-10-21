@@ -876,7 +876,7 @@ private theorem kyFanApproximationGauge_diagonalPart_le_real
     kyFanApproximationGauge k (U.diagBlock A) ≤ kyFanApproximationGauge k A := by
   rw [← kyFanApproximationGauge_complexify, ← kyFanApproximationGauge_complexify,
     ← diagonalPart_complexify_real U]
-  exact TauCeti.ApproximationNumber.kyFanApproximationGauge_diagonalPart_le_complex
+  exact TauCeti.ApproximationNumber.kyFanApproximationGauge_diagBlock_le_complex
     (complexifySubmodule U) (complexify A) k
 
 omit [CompleteSpace E] in

@@ -34,7 +34,7 @@ kyFan_k(2 − 2C)                        -- D's squared displacement, already pi
 * The second is `kyFanApproximationGauge_blockSum_le` fed by Proposition 4.1 on `U` and on
   `Uᗮ`, squared through `approximationNumber_gramOperator_complex` (`aₙ(X†X) = aₙ(X)²`).
 * The last is the Fan--Hoffman pinching contraction
-  `kyFanApproximationGauge_diagonalPart_le_complex`.
+  `kyFanApproximationGauge_diagBlock_le_complex`.
 
 ## Two things that are *not* extra work
 
@@ -324,7 +324,7 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
     _ = kyFanApproximationGauge k
           (U.diagBlock ((1 - star W) * (1 - W))) := (hchart W).symm
     _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
-        kyFanApproximationGauge_diagonalPart_le_complex U _ k
+        kyFanApproximationGauge_diagBlock_le_complex U _ k
 
 /-- **Davis--Kahan Proposition 4.3 at the matched-crossed-defect nonacute scope.** -/
 theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H)
@@ -398,7 +398,7 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
     _ = kyFanApproximationGauge k
           (U.diagBlock ((1 - star W) * (1 - W))) := (hchart W).symm
     _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
-        kyFanApproximationGauge_diagonalPart_le_complex U _ k
+        kyFanApproximationGauge_diagBlock_le_complex U _ k
 
 end
 
