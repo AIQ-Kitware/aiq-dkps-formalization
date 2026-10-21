@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 4.8, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
@@ -97,6 +97,7 @@ theorem upperFormBoundOn_top_of_spectrum_subset_Iic
     (T : H →L[𝕜] H) (hT : IsSelfAdjoint T) {c : ℝ}
     (hσ : spectrum ℝ T ⊆ Set.Iic c) :
     T.UpperFormBoundOn ⊤ c := by
+  apply (_root_.ContinuousLinearMap.upperFormBoundOn_iff T ⊤ c).2
   intro x _
   exact re_inner_le_of_spectrum_subset_Iic T hT hσ x
 
@@ -105,6 +106,7 @@ theorem lowerFormBoundOn_top_of_spectrum_subset_Ici
     (T : H →L[𝕜] H) (hT : IsSelfAdjoint T) {c : ℝ}
     (hσ : spectrum ℝ T ⊆ Set.Ici c) :
     T.LowerFormBoundOn ⊤ c := by
+  apply (_root_.ContinuousLinearMap.lowerFormBoundOn_iff T ⊤ c).2
   intro x _
   exact le_re_inner_of_spectrum_subset_Ici T hT hσ x
 
@@ -158,6 +160,7 @@ theorem upperFormBoundOn_of_restriction_spectrum_subset_Iic
     (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
     (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Iic c) :
     A.UpperFormBoundOn U c := by
+  apply (_root_.ContinuousLinearMap.upperFormBoundOn_iff A U c).2
   intro x hx
   exact re_inner_le_on_subspace_of_restriction_spectrum_subset_Iic hA hU hσ hx
 
@@ -168,6 +171,7 @@ theorem lowerFormBoundOn_of_restriction_spectrum_subset_Ici
     (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
     (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Ici c) :
     A.LowerFormBoundOn U c := by
+  apply (_root_.ContinuousLinearMap.lowerFormBoundOn_iff A U c).2
   intro x hx
   exact le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici hA hU hσ hx
 

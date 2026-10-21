@@ -196,7 +196,6 @@ topics:
   - Analysis.InnerProductSpace.LinearPMap.GraphCore
   - Analysis.InnerProductSpace.LinearPMap.Sylvester
   - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
-  - Analysis.InnerProductSpace.QuadraticFormBounds
 - id: T15b
   title: Resolvents of self-adjoint LinearPMap operators, and semiboundedness
   modules:
@@ -557,7 +556,6 @@ rungs:
   - Analysis.InnerProductSpace.LinearPMap.GraphCore
   - Analysis.InnerProductSpace.LinearPMap.Sylvester
   - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
-  - Analysis.InnerProductSpace.QuadraticFormBounds
 - id: M
   title: Resolvents of self-adjoint LinearPMap operators, and semiboundedness (T15b)
   seeds:

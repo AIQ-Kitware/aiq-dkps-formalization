@@ -175,7 +175,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
-        "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
         "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.ReducedExtension",
@@ -446,7 +445,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
-        "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
         "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.ReducedExtension",
@@ -3873,7 +3871,7 @@
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
-        "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
+        "TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
       ],
@@ -4009,20 +4007,24 @@
         "UpperFormBoundOn"
       ],
       "current_namespace": "ContinuousLinearMap",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
+      "staging_module": null,
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "staged in ForTauCeti",
+      "provenance_class": "accepted upstream; local duplicate removed",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder"
+        "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventSandwich",
+        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
+        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "The definitions and basic form-bound API are now imported from Tau Ceti.Analysis.InnerProductSpace.QuadraticForm.Bounds. Downstream consumers use Tau Ceti's predicates and its iff lemmas where the definitions are intentionally opaque."
     },
     {
       "source_module": "ForMathlib",
@@ -4385,7 +4387,7 @@
       "provenance_class": "staged in ForTauCeti; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; current overlay awaits Lean compilation",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
-        "ForTauCeti.Analysis.InnerProductSpace.QuadraticFormBounds",
+        "TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
         "Mathlib.Analysis.InnerProductSpace.StarOrder"

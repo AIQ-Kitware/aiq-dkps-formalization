@@ -85,7 +85,11 @@ theorem opNorm_starProjection_sub_le_of_formBounds
     (hWhi : B.LowerFormBoundOn W (c + g))
     (hWlo : B.UpperFormBoundOn Wᗮ c) :
     ‖(U.starProjection - W.starProjection : H →L[𝕜] H)‖ ≤ ‖B - A‖ / g :=
-  opNorm_starProjection_sub_le_of_coercive hA hB hU hW hg hUhi hUlo hWhi hWlo
+  opNorm_starProjection_sub_le_of_coercive hA hB hU hW hg
+    ((_root_.ContinuousLinearMap.lowerFormBoundOn_iff A U (c + g)).1 hUhi)
+    ((_root_.ContinuousLinearMap.upperFormBoundOn_iff A Uᗮ c).1 hUlo)
+    ((_root_.ContinuousLinearMap.lowerFormBoundOn_iff B W (c + g)).1 hWhi)
+    ((_root_.ContinuousLinearMap.upperFormBoundOn_iff B Wᗮ c).1 hWlo)
 
 
 end Submodule
