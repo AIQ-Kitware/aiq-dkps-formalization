@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.Specialized.FreeBeam.BeamSpectrum
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
@@ -656,7 +657,7 @@ def beamTrialZero : beamTrial →ₗ.[ℂ] beamTrial :=
 /-- The trial-block compression of the unperturbed beam operator is
 self-adjoint. -/
 theorem beamTrialZero_isSelfAdjoint : _root_.IsSelfAdjoint beamTrialZero :=
-  TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := 0)
+  _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := 0)
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (fun _ _ => by simp))
 
 /-- **The largest sine of the angle** between the affine trial subspace and the exact

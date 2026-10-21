@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Canonical
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -92,13 +93,13 @@ noncomputable def toGeneral
     data := D
     exactMap := P.F₀
     ambient_selfAdjoint :=
-      TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+      _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.ambient_symmetric)
     trial_selfAdjoint :=
-      TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A₀)
+      _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A₀)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.trial_symmetric)
     complement_selfAdjoint :=
-      TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.Λ₁)
+      _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.Λ₁)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.complement_symmetric)
     exact_decomposition := P.exact_decomposition
     gap := P.gap

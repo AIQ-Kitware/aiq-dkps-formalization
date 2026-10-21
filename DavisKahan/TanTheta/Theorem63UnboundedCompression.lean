@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 
 import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.SpectralTheory.BoundedTruncation
 
 open TauCeti.DavisKahan.Angle
@@ -129,7 +130,7 @@ noncomputable def ofBounded {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
     (data : Theorem63TrialData Z V) : UnboundedCompressionTrialData Z where
   compression := (data.compression.toLinearMap.toPMap ⊤)
   compression_isSelfAdjoint :=
-    TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := _)
+    _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := _)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr data.compression_isSymmetric)
   residual := data.residual
   residual_orthogonal := data.residual_orthogonal

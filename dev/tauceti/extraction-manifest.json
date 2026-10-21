@@ -2654,7 +2654,6 @@
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
       "source_declarations": [
-        "isSelfAdjoint_toPMap_top",
         "isSelfAdjoint_unitaryConj",
         "map_mem_unitaryConj_domain",
         "mem_unitaryConj_domain_iff",

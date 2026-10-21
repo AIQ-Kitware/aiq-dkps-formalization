@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Anthropic Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
@@ -259,16 +260,16 @@ theorem forward_all_kyFan
     PartialMap.reducingRestriction_isSelfAdjoint
       ((P.A.toLinearMap.toPMap ⊤)) P.U
       (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A))
   have hL : _root_.IsSelfAdjoint D.Λ₁ :=
     PartialMap.reducingRestriction_isSelfAdjoint
       ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
       (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B))
   have hEq := unbounded_adjoint_residual_block_identity D
-    (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+    (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B)) hA0 hL
   -- The only mathematical substitution against the complex file.
   have hraw := real_unbounded_sylvester_kyFan hA0 hL P.gap_pos
@@ -323,16 +324,16 @@ theorem reverse_all_kyFan
     PartialMap.reducingRestriction_isSelfAdjoint
       ((P.B.toLinearMap.toPMap ⊤)) P.V
       (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B))
   have hL : _root_.IsSelfAdjoint D.Λ₁ :=
     PartialMap.reducingRestriction_isSelfAdjoint
       ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
       (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A))
   have hEq := unbounded_adjoint_residual_block_identity D
-    (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+    (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A)) hA0 hL
   have hraw := real_unbounded_sylvester_kyFan hA0 hL P.gap_pos
     P.gap_V_to_Uperp hEq k

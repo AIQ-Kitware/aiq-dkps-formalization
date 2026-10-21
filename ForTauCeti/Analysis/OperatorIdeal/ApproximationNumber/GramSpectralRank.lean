@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralVectorBounds
 
@@ -107,7 +108,7 @@ def gramLinearPMap (X : E0 →L[ℂ] E1) : E0 →ₗ.[ℂ] E0 :=
 /-- The native Tau Ceti self-adjointness proof for the Gram partial map. -/
 theorem gramLinearPMap_isSelfAdjoint (X : E0 →L[ℂ] E1) :
     IsSelfAdjoint (gramLinearPMap X) :=
-  LinearPMap.isSelfAdjoint_toPMap_top (gramOperator_isSelfAdjoint X)
+  _root_.LinearPMap.isSelfAdjoint_toPMap_top (gramOperator_isSelfAdjoint X)
 
 /-- The native Tau Ceti spectral PVM of `X†X`. -/
 noncomputable def gramSpectralPVM (X : E0 →L[ℂ] E1) : ProjValMeasure ℝ E0 :=
