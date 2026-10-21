@@ -266,7 +266,7 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 **15 new, cumulative closed slice 154.**
 
-  - `Analysis.InnerProductSpace.BlockLowerBound`
+  - `TauCeti.Analysis.Normed.Group.BlockLowerBound` (accepted upstream)
   - `Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator`
   - `Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds`
   - `Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse`

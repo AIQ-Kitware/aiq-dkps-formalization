@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate
-public import ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound
+public import TauCeti.Analysis.Normed.Group.BlockLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness

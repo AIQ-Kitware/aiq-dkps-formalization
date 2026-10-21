@@ -219,7 +219,7 @@ topics:
   - Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
   - Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
   - Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
-  - Analysis.InnerProductSpace.BlockLowerBound
+  # Blockwise lower bounds now come from TauCeti.Analysis.Normed.Group.BlockLowerBound.
 - id: T23
   title: Approximation numbers and finite ranks of spectral bands
   modules:
@@ -572,7 +572,7 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
   - Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
   - Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
-  - Analysis.InnerProductSpace.BlockLowerBound
+  # Blockwise lower bounds now come from TauCeti.Analysis.Normed.Group.BlockLowerBound.
   - Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator
   - Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
   - Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse

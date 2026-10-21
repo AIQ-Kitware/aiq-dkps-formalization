@@ -30,8 +30,8 @@ a bound in terms of `‖z‖` would be useless.
 The per-block estimate is the Bhatia--Davis--McIntosh bound applied blockwise; see
 `prose/distilled_literature/BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex`.
 The reassembly is
-`ForTauCeti/Analysis/InnerProductSpace/BlockLowerBound.lean`, which follows nothing
-in particular.
+`TauCeti.Analysis.Normed.Group.BlockLowerBound`, which generalizes this reassembly
+step to arbitrary functions between seminormed groups.
 
 ## Provenance
 
