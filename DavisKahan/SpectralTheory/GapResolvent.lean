@@ -8,7 +8,6 @@ import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 import DavisKahan.Sylvester.ShiftedInverseGauge
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 import TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 
