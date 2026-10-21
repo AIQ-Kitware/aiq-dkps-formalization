@@ -305,8 +305,14 @@ theorem singularValues_orthogonalBlockSum_congr
   have hA' : A₁ = UA.toLinearMap ∘ₗ A₂ ∘ₗ VA.toLinearMap := hA'.symm
   have hB' : B₁ = UB.toLinearMap ∘ₗ B₂ ∘ₗ VB.toLinearMap := hB'.symm
   rw [hA', hB', ← orthogonalBlockSum_comp, ← orthogonalBlockSum_comp,
-    orthogonalBlockSum_linearIsometryEquiv, orthogonalBlockSum_linearIsometryEquiv,
-    singularValues_unitary_comp, singularValues_comp_unitary]
+    orthogonalBlockSum_linearIsometryEquiv, orthogonalBlockSum_linearIsometryEquiv]
+  change ((LinearIsometryEquiv.withLpProdCongr 2 UA UB :
+    (WithLp 2 (F₁ × F₂)) →ₗ[𝕜] (WithLp 2 (F₁ × F₂))) ∘ₗ
+      orthogonalBlockSum A₂ B₂ ∘ₗ
+      (LinearIsometryEquiv.withLpProdCongr 2 VA VB :
+        (WithLp 2 (E₁ × E₂)) →ₗ[𝕜] (WithLp 2 (E₁ × E₂)))).singularValues = _
+  simp only [LinearMap.singularValues_linearIsometryEquiv_comp,
+    LinearMap.singularValues_comp_linearIsometryEquiv]
 
 /-- **A blockwise scalar singular-value identity transfers to every unitarily invariant
 seminorm on the block sum.**

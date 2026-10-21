@@ -125,7 +125,9 @@ noncomputable def codomainIsometryTransport
               (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues :=
             singularValues_linearIsometry_comp ι _
           _ = A.singularValues := by
-            rw [singularValues_unitary_comp, singularValues_comp_unitary]
+            change ((U : H →ₗ[𝕜] H) ∘ₗ A ∘ₗ (V : E →ₗ[𝕜] E)).singularValues = _
+            simp only [LinearMap.singularValues_linearIsometryEquiv_comp,
+              LinearMap.singularValues_comp_linearIsometryEquiv]
           _ = (ι.toLinearMap ∘ₗ A).singularValues :=
             (singularValues_linearIsometry_comp ι A).symm
 
@@ -173,7 +175,9 @@ noncomputable def domainIsometryTransport
               (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues :=
             singularValues_comp_adjoint_linearIsometry ι _
           _ = A.singularValues := by
-            rw [singularValues_unitary_comp, singularValues_comp_unitary]
+            change ((U : F →ₗ[𝕜] F) ∘ₗ A ∘ₗ (V : H →ₗ[𝕜] H)).singularValues = _
+            simp only [LinearMap.singularValues_linearIsometryEquiv_comp,
+              LinearMap.singularValues_comp_linearIsometryEquiv]
           _ = (A ∘ₗ LinearMap.adjoint ι.toLinearMap).singularValues :=
             (singularValues_comp_adjoint_linearIsometry ι A).symm
 

@@ -1119,13 +1119,6 @@
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.KyFan",
       "source_declarations": [
-        "TauCeti.singularValues_unitary_comp",
-        "TauCeti.singularValues_comp_unitary",
-        "TauCeti.isSymmetric_real_smul",
-        "TauCeti.eigenvalues_real_smul",
-        "TauCeti.singularValues_real_smul",
-        "TauCeti.singularValues_comp_le",
-        "TauCeti.singularValues_comp_le'",
         "TauCeti.eigenvalues_operatorAbs",
         "TauCeti.sum_re_inner_le_sum_eigenvalues_top",
         "TauCeti.sum_filter_lt_eq_sum_fin",
@@ -1140,8 +1133,6 @@
         "TauCeti.kyFanSum_unitary_comp",
         "TauCeti.kyFanSum_comp_unitary",
         "TauCeti.kyFanSum_real_smul",
-        "TauCeti.singularValues_smul_apply",
-        "TauCeti.singularValues_smul",
         "TauCeti.re_sum_inner_map_le_kyFanSum",
         "TauCeti.sum_le_kyFanSum_of_orthonormal",
         "TauCeti.orthonormal_unimodular_smul",
@@ -1153,7 +1144,7 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.KyFan",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "moved; introduced at Davis--Kahan commit 199390a; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "partially upstreamed: Mathlib/TauCeti singular-value isometry invariance, scalar homogeneity, and bounded-factor comparison replace the corresponding local proofs; remaining local Ky Fan variational and trace results are maintained here; introduced at Davis--Kahan commit 199390a; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
@@ -1179,7 +1170,7 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "partially-upstreamed",
       "upstream_pr": null
     },
     {
