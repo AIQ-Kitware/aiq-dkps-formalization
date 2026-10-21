@@ -151,7 +151,7 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ)
     (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     {lam : ℝ} (hlam : lam ∈ Set.Ioo a b) :
-    ((lam : ℝ) : ℂ) ∉ TauCeti.LinearPMap.spectrum
+    ((lam : ℝ) : ℂ) ∉ _root_.LinearPMap.spectrum
       (TauCeti.LinearPMap.addBounded A Hop) := by
   obtain ⟨hla, hlb⟩ := hlam
   set ε : ℝ := min (lam - a) (b - lam) with hεdef
@@ -210,7 +210,7 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     linarith [hgoal, h0]
   have hres := TauCeti.LinearPMap.mem_resolventSet_of_coercive_comp hAH
     (J := U.reflectionOperator) (Submodule.reflectionOperator_norm_map U) hε hcoer
-  simpa [TauCeti.LinearPMap.spectrum] using hres
+  simpa [_root_.LinearPMap.spectrum] using hres
 
 end
 

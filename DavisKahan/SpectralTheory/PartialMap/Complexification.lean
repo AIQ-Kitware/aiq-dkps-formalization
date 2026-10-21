@@ -712,24 +712,25 @@ omit [CompleteSpace E] in
 coordinatewise complexification. -/
 theorem closed_realSpectrum_complexify
     (A : E →ₗ.[ℝ] E) :
-    TauCeti.LinearPMap.realSpectrum (complexify A) = TauCeti.LinearPMap.realSpectrum A := by
+    _root_.LinearPMap.realSpectrum (complexify A) = _root_.LinearPMap.realSpectrum A := by
   ext lam
-  change lam ∉ TauCeti.LinearPMap.realResolventSet (complexify A) ↔
-    lam ∉ TauCeti.LinearPMap.realResolventSet A
-  rw [mem_realResolventSet_complexify_iff A lam]
+  simp only [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
+    Set.mem_compl_iff]
+  exact not_congr (mem_realResolventSet_complexify_iff A lam)
 
 omit [CompleteSpace E] in
 /-- The real spectrum of a real closed operator is the genuine real spectrum
 of its complexification. -/
 theorem realSpectrum_complexify
     (A : E →ₗ.[ℝ] E) :
-    TauCeti.LinearPMap.realSpectrum A
+    _root_.LinearPMap.realSpectrum A
       = Complex.ofReal ⁻¹'
-          TauCeti.LinearPMap.spectrum (complexify A) := by
-  -- `realSpectrum` inverts `A - lam` while `spectrum` inverts `lam • I - A`, so this is no
-  -- longer a definitional identity; `realSpectrum_eq_spectraSpectrum` is the bridge.
-  rw [← closed_realSpectrum_complexify A]
-  exact realSpectrum_eq_spectraSpectrum (complexify A)
+          _root_.LinearPMap.spectrum (complexify A) := by
+  -- Both sides now use TauCeti's canonical spectrum; only complexification
+  -- remains a mathematical equivalence to establish.
+  change _root_.LinearPMap.realSpectrum A =
+    _root_.LinearPMap.realSpectrum (complexify A)
+  exact (closed_realSpectrum_complexify A).symm
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Complexification preserves every constructor of the manuscript gap
@@ -748,25 +749,25 @@ theorem unboundedSylvesterGap_complexify
       · left
         constructor
         · intro lam hlam
-          have hlamA : lam ∈ TauCeti.LinearPMap.realSpectrum (complexify A) := hlam
-          have hlam' : lam ∈ TauCeti.LinearPMap.realSpectrum A := by
+          have hlamA : lam ∈ _root_.LinearPMap.realSpectrum (complexify A) := hlam
+          have hlam' : lam ∈ _root_.LinearPMap.realSpectrum A := by
             rwa [closed_realSpectrum_complexify A] at hlamA
           exact hgap.1 hlam'
         · intro lam hlam
-          have hlamB : lam ∈ TauCeti.LinearPMap.realSpectrum (complexify B) := hlam
-          have hlam' : lam ∈ TauCeti.LinearPMap.realSpectrum B := by
+          have hlamB : lam ∈ _root_.LinearPMap.realSpectrum (complexify B) := hlam
+          have hlam' : lam ∈ _root_.LinearPMap.realSpectrum B := by
             rwa [closed_realSpectrum_complexify B] at hlamB
           exact hgap.2 hlam'
       · right
         constructor
         · intro lam hlam
-          have hlamB : lam ∈ TauCeti.LinearPMap.realSpectrum (complexify B) := hlam
-          have hlam' : lam ∈ TauCeti.LinearPMap.realSpectrum B := by
+          have hlamB : lam ∈ _root_.LinearPMap.realSpectrum (complexify B) := hlam
+          have hlam' : lam ∈ _root_.LinearPMap.realSpectrum B := by
             rwa [closed_realSpectrum_complexify B] at hlamB
           exact hgap.1 hlam'
         · intro lam hlam
-          have hlamA : lam ∈ TauCeti.LinearPMap.realSpectrum (complexify A) := hlam
-          have hlam' : lam ∈ TauCeti.LinearPMap.realSpectrum A := by
+          have hlamA : lam ∈ _root_.LinearPMap.realSpectrum (complexify A) := hlam
+          have hlam' : lam ∈ _root_.LinearPMap.realSpectrum A := by
             rwa [closed_realSpectrum_complexify A] at hlamA
           exact hgap.2 hlam'
   | leftAboveRightBelow c hA hB =>

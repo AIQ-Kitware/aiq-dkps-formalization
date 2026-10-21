@@ -73,10 +73,10 @@ structure BeamFoundationCompletionData where
   firstPositiveSpectralValue_eq :
     firstPositiveSpectralValue = rootLocalization.firstPositiveRoot ^ 4
   spectrum_nonnegative :
-    TauCeti.LinearPMap.realSpectrum (traceModel.toPartialMapOfGraphNorm
+    _root_.LinearPMap.realSpectrum (traceModel.toPartialMapOfGraphNorm
       free_dense graphConstant_pos graph_lower_bound) ⊆ Set.Ici 0
   positive_spectrum_characterization : ∀ lambda : ℝ,
-    lambda ∈ TauCeti.LinearPMap.realSpectrum
+    lambda ∈ _root_.LinearPMap.realSpectrum
       (traceModel.toPartialMapOfGraphNorm free_dense
         graphConstant_pos graph_lower_bound) →
     0 < lambda →

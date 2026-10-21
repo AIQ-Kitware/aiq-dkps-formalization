@@ -145,8 +145,8 @@ theorem sinTheta_from_printed_separation
     (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
     (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (htrialSpec : TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α)
-    (hcomplSpec : TauCeti.LinearPMap.realSpectrum Λ₁ ⊆
+    (htrialSpec : _root_.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α)
+    (hcomplSpec : _root_.LinearPMap.realSpectrum Λ₁ ⊆
       {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x})
     (hR : N.Mem R) :
     N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
@@ -175,8 +175,8 @@ theorem sinTheta_from_printed_separation_rclike
     (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
     (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (htrialSpec : TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α)
-    (hcomplSpec : TauCeti.LinearPMap.realSpectrum Λ₁ ⊆
+    (htrialSpec : _root_.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α)
+    (hcomplSpec : _root_.LinearPMap.realSpectrum Λ₁ ⊆
       {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x})
     (hR : N.Mem R) :
     N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧

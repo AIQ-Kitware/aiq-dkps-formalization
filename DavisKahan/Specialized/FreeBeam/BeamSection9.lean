@@ -457,7 +457,7 @@ theorem exists_pos_eigenpair_beamOperator :
 /-- **The positive real spectrum of the free beam is nonempty**, with every witness above
 the paper's `500`.  This is Davis--Kahan Section 9's `α₃`, exhibited rather than assumed. -/
 theorem exists_five_hundred_lt_mem_realSpectrum_beamOperator :
-    ∃ alpha : ℝ, 500 < alpha ∧ alpha ∈ TauCeti.LinearPMap.realSpectrum beamOperator := by
+    ∃ alpha : ℝ, 500 < alpha ∧ alpha ∈ _root_.LinearPMap.realSpectrum beamOperator := by
   obtain ⟨lam, x, hlam, hx0, heig⟩ := exists_pos_eigenpair_beamOperator
   exact ⟨lam, eigenvalue_gt_five_hundred hlam hx0 heig,
     TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator)
@@ -466,7 +466,7 @@ theorem exists_five_hundred_lt_mem_realSpectrum_beamOperator :
 /-- The real spectrum of the free beam contains a nonzero point.  This is the form in which
 the Section 9 finite-data certificate consumes the existence of `α₃`. -/
 theorem exists_mem_realSpectrum_beamOperator_ne_zero :
-    ∃ alpha : ℝ, alpha ∈ TauCeti.LinearPMap.realSpectrum beamOperator ∧ alpha ≠ 0 := by
+    ∃ alpha : ℝ, alpha ∈ _root_.LinearPMap.realSpectrum beamOperator ∧ alpha ≠ 0 := by
   obtain ⟨alpha, halpha, hmem⟩ := exists_five_hundred_lt_mem_realSpectrum_beamOperator
   exact ⟨alpha, hmem, by linarith⟩
 
@@ -771,7 +771,7 @@ theorem measurableSet_beamLowSet : MeasurableSet beamLowSet := measurableSet_Iic
 clears `500.5`, not merely `500`: the characteristic roots exceed `4.73` and
 `4.73⁴ = 500.5466…`. -/
 theorem realSpectrum_beamOperator_subset_sharp :
-    TauCeti.LinearPMap.realSpectrum beamOperator ⊆ ({0} : Set ℝ) ∪ Set.Ioi (1001 / 2) := by
+    _root_.LinearPMap.realSpectrum beamOperator ⊆ ({0} : Set ℝ) ∪ Set.Ioi (1001 / 2) := by
   intro lam hlam
   rcases realSpectrum_beamOperator_subset hlam with h0 | ⟨beta, hbeta, hchar, hlameq⟩
   · exact Or.inl h0
@@ -791,7 +791,7 @@ theorem beamOperator_mem_resolventSet_of_mem_lowSet_diff {lam : ℝ}
   -- `realSpectrum` is the complement of `realResolventSet`, which inverts `A - lam`; the
   -- canonical `resolventSet` inverts `lam • I - A`.  The two agree, but only through the
   -- bridge -- this step used to be `fun hr => hcon hr` by definitional unfolding.
-  have hmem : lam ∈ TauCeti.LinearPMap.realSpectrum beamOperator := fun hr =>
+  have hmem : lam ∈ _root_.LinearPMap.realSpectrum beamOperator := fun hr =>
     hcon ((mem_realResolventSet_iff_mem_spectraResolvent beamOperator lam).mp hr)
   rcases realSpectrum_beamOperator_subset_sharp hmem with h0 | hgt
   · exact hlam.2 h0
@@ -886,7 +886,7 @@ theorem beamSinTwoTheta_nonneg (ε : ℝ) : 0 ≤ beamSinTwoTheta ε :=
 complementary block has no spectrum there. -/
 theorem beamHigh_spectrum_avoids :
     ∀ lam ∈ Set.Ioo ((0 : ℝ) - 1001 / 2) ((0 : ℝ) + 1001 / 2),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction beamOperator beamOperator_isSelfAdjoint
           beamLowSetᶜ measurableSet_beamLowSet.compl) :=
   selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
@@ -1100,7 +1100,7 @@ open DavisKahan1970.Section9 in
 Every field is now discharged rather than postulated: the two Gram matrices and the two
 Ritz values are the compressions computed in `beamRitz_matrix` and
 `beamResidualGram_matrix`, and the third eigenvalue is a point of
-`TauCeti.LinearPMap.realSpectrum beamOperator` supplied by
+`_root_.LinearPMap.realSpectrum beamOperator` supplied by
 `exists_five_hundred_lt_mem_realSpectrum_beamOperator`, whose lower bound `500` comes with
 it.  The record no longer takes a spectral point as a hypothesis; the only inputs are the
 paper's two numerical constraints on `ε`. -/

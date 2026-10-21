@@ -54,7 +54,7 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
     {A : H →ₗ.[ℂ] H}
     (hA : IsSelfAdjoint A)
     {β α : ℝ} (hβα : β ≤ α)
-    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+    (hσ : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆
         Set.Icc β α) :
     ∃ R : BoundedRealization (𝕜 := ℂ) (E := H) A,
       ‖R.operator - (((β + α) / 2 : ℝ) : ℂ) •

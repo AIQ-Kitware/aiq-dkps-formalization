@@ -50,7 +50,7 @@ theorem section7_sinTwoTheta_ideal
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
@@ -86,7 +86,7 @@ theorem section7_tanTwoTheta_ideal
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute

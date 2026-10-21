@@ -238,7 +238,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
@@ -348,13 +348,9 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
     intro lam hlam
     rw [unitaryConjugate_spectrum_eq e Λ hΛ]
     intro hmem
-    exact hBcomplSpec lam hlam
-      ((mem_spectrum_iff_root Λ (lam : ℂ)).mpr hmem)
+    exact hBcomplSpec lam hlam hmem
   have hΛJspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum ΛJ := by
-    intro lam hlam hmem
-    exact hΛJspecRoot lam hlam
-      ((mem_spectrum_iff_root ΛJ (lam : ℂ)).mp hmem)
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum ΛJ := hΛJspecRoot
   have hraw := sinTheta_addBounded_gauge_block_of_spectrum_gap
     N A hA R hR A₀ hA₀ ΛJ hΛJ X F₁ hXdom hXint hFdom hFint
       hβα hδ hBlow hBhigh hΛJspec hRmem
@@ -454,7 +450,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
@@ -490,7 +486,7 @@ theorem sinTwoTheta_addBounded_gauge_of_spectrum_gap
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
@@ -560,7 +556,7 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
@@ -617,7 +613,7 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
@@ -646,7 +642,7 @@ theorem sinTwoTheta_addBounded_of_spectrum_gap
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl)) :
     δ * ‖directedSinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)

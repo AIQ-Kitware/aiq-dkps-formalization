@@ -68,7 +68,7 @@ two-sided inverse of norm at most `s⁻¹`. -/
 theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {c s : ℝ} (hs : 0 < s)
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A) :
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum A) :
     ∃ R : H →L[ℂ] H, ‖R‖ ≤ s⁻¹ ∧
       (∀ ψ : A.domain, R (A ψ - (c : ℂ) • (ψ : H)) = (ψ : H)) ∧
       ∀ φ : H, ∃ hmem : R φ ∈ A.domain,
@@ -98,7 +98,7 @@ theorem twoSidedShiftedInverseBound_of_spectrum_gap
     {A : H →ₗ.[ℂ] H}
     (hA : IsSelfAdjoint A) {c s : ℝ} (hs : 0 < s)
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A) :
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum A) :
     TauCeti.DavisKahan.Sylvester.TwoSidedShiftedInverseBound
       A c s := by
   obtain ⟨R, hnorm, hleft, hright⟩ :=
@@ -129,10 +129,10 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (K : H →L[ℂ] H)
     {c s : ℝ} (hs : 0 < s) (hK : ‖K‖ < s)
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A) :
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum A) :
     ((c : ℝ) : ℂ) ∉
-      TauCeti.LinearPMap.spectrum (TauCeti.LinearPMap.addBounded A K) := by
-  rw [TauCeti.LinearPMap.notMem_spectrum_iff]
+      _root_.LinearPMap.spectrum (TauCeti.LinearPMap.addBounded A K) := by
+  rw [_root_.LinearPMap.mem_spectrum_iff, not_not]
   obtain ⟨R, hnorm, hleft, hright⟩ :=
     TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs hgap
   have hKR : ‖K ∘L R‖ < 1 := by
@@ -208,10 +208,10 @@ theorem spectrum_addBounded_subset_of_gap
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (K : H →L[ℂ] H)
     {alpha beta delta gam : ℝ} (hab : beta ≤ alpha) (_hdelta : 0 < delta)
     (hgam : ‖K‖ ≤ gam) (_hgamlt : 2 * gam < delta)
-    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A →
+    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A →
       lam ∈ Set.Icc beta alpha ∪ {x : ℝ | x ≤ beta - delta ∨ alpha + delta ≤ x}) :
     ∀ lam : ℝ,
-      (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum (TauCeti.LinearPMap.addBounded A K) →
+      (lam : ℂ) ∈ _root_.LinearPMap.spectrum (TauCeti.LinearPMap.addBounded A K) →
       lam ∈ Set.Icc (beta - gam) (alpha + gam) ∪
         {x : ℝ | x ≤ beta - gam - (delta - 2 * gam) ∨
           alpha + gam + (delta - 2 * gam) ≤ x} := by
@@ -236,7 +236,7 @@ theorem spectrum_addBounded_subset_of_gap
         exact h1 ⟨h, le_of_not_gt hcon⟩)
   -- in either open gap, choose the half-width and apply the perturbation lemma
   have hkey : ∀ s : ℝ, gam < s →
-      (∀ mu ∈ Set.Ioo (lam - s) (lam + s), (mu : ℂ) ∉ TauCeti.LinearPMap.spectrum A) →
+      (∀ mu ∈ Set.Ioo (lam - s) (lam + s), (mu : ℂ) ∉ _root_.LinearPMap.spectrum A) →
       False := by
     intro s hs hmiss
     exact notMem_spectrum_addBounded_of_spectrum_gap hA K
@@ -327,7 +327,7 @@ theorem twoSidedShiftedInverseBound_of_coercive_comp
       _ ≤ ‖A x - ((lam : ℝ) : ℂ) • (x : H)‖ := htri
   have hres := (TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound hA
     hpos hnorm).1
-  simpa [TauCeti.LinearPMap.spectrum] using hres
+  simpa [_root_.LinearPMap.spectrum] using hres
 
 end DavisKahan
 end TauCeti

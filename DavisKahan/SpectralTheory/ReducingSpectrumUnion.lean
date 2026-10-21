@@ -71,16 +71,19 @@ If `lam` inverts both blocks, the direct sum of the two block inverses inverts
 theorem realSpectrum_subset_union_of_reduces
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (hred : TauCeti.LinearPMap.ReducesSubspace A U) :
-    TauCeti.LinearPMap.realSpectrum A ⊆
-      TauCeti.LinearPMap.realSpectrum
+    _root_.LinearPMap.realSpectrum A ⊆
+      _root_.LinearPMap.realSpectrum
           (TauCeti.LinearPMap.reducingRestriction A U hred) ∪
-        TauCeti.LinearPMap.realSpectrum
+        _root_.LinearPMap.realSpectrum
           (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) := by
   intro lam hlam
   by_contra hcon
   simp only [Set.mem_union, not_or] at hcon
   obtain ⟨h1, h2⟩ := hcon
-  rw [TauCeti.LinearPMap.mem_realSpectrum_iff, not_not] at h1 h2
+  rw [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
+    Set.mem_compl_iff, not_not] at h1 h2
+  rw [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
+    Set.mem_compl_iff] at hlam
   obtain ⟨R1, hL1, hRt1⟩ := h1
   obtain ⟨R2, hL2, hRt2⟩ := h2
   refine hlam ?_

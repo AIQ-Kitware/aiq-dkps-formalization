@@ -47,7 +47,7 @@ quadratic-form bound. -/
 theorem semiboundedBelow_of_spectrum_subset_Ici
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {c : ℝ}
-    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+    (hσ : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆
         Set.Ici c) :
     TauCeti.LinearPMap.SemiboundedBelow A c := by
   intro x
@@ -65,7 +65,7 @@ quadratic-form bound. -/
 theorem semiboundedAbove_of_spectrum_subset_Iic
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {c : ℝ}
-    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+    (hσ : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆
         Set.Iic c) :
     TauCeti.LinearPMap.SemiboundedAbove A c := by
   intro x

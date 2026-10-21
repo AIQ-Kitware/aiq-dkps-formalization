@@ -61,9 +61,9 @@ theorem directedGap_bandSubspace_le
     (K : H →L[ℂ] H) (hK : K.IsSymmetric)
     (hAB : B = TauCeti.LinearPMap.addBounded A K)
     {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
-    (_hAspec : TauCeti.LinearPMap.realSpectrum A ⊆
+    (_hAspec : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ bandExterior l r d)
-    (hBspec : TauCeti.LinearPMap.realSpectrum B ⊆
+    (hBspec : _root_.LinearPMap.realSpectrum B ⊆
       Set.Icc l r ∪ bandExterior l r d) :
     d * Submodule.directedProjectionGap (bandSubspace hA l r) (bandSubspace hB l r) ≤ ‖K‖ := by
   subst hAB
@@ -90,9 +90,9 @@ theorem subspaceGap_bandSubspace_le
     (K : H →L[ℂ] H) (hK : K.IsSymmetric)
     (hAB : B = TauCeti.LinearPMap.addBounded A K)
     {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
-    (hAspec : TauCeti.LinearPMap.realSpectrum A ⊆
+    (hAspec : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ bandExterior l r d)
-    (hBspec : TauCeti.LinearPMap.realSpectrum B ⊆
+    (hBspec : _root_.LinearPMap.realSpectrum B ⊆
       Set.Icc l r ∪ bandExterior l r d) :
     d * Submodule.projectionGap (bandSubspace hA l r) (bandSubspace hB l r) ≤ ‖K‖ := by
   have hnegK : (-K).IsSymmetric := by
@@ -243,9 +243,9 @@ theorem le_of_band_exterior_spectra
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hWred : TauCeti.LinearPMap.ReducesSubspace B W)
     {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred) ⊆ Set.Icc l r)
-    (hWspec : TauCeti.LinearPMap.realSpectrum
+    (hWspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction B Wᗮ hWred.orthogonal)
       ⊆ bandExterior l r d) :
     P ≤ W := by

@@ -315,7 +315,7 @@ structure RealCommonDomainTheorem62Data where
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
   spectral_distance :
-    ∀ lam ∈ TauCeti.LinearPMap.realSpectrum source.A₀, ∀ α ∈ TauCeti.LinearPMap.realSpectrum source.Λ₁,
+    ∀ lam ∈ _root_.LinearPMap.realSpectrum source.A₀, ∀ α ∈ _root_.LinearPMap.realSpectrum source.Λ₁,
       gap ≤ |lam - α|
 
 namespace RealCommonDomainTheorem62Data

@@ -129,8 +129,8 @@ theorem realResolventSet_pmap (A : E →ₗ.[𝕜] E) :
 omit [CompleteSpace E] in
 /-- and hence so is the real spectrum. -/
 theorem realSpectrum_pmap (A : E →ₗ.[𝕜] E) :
-    TauCeti.LinearPMap.realSpectrum (pmap (e := e) A) = TauCeti.LinearPMap.realSpectrum A := by
-  unfold TauCeti.LinearPMap.realSpectrum
+    _root_.LinearPMap.realSpectrum (pmap (e := e) A) = _root_.LinearPMap.realSpectrum A := by
+  unfold _root_.LinearPMap.realSpectrum
   rw [realResolventSet_pmap]
 
 omit [CompleteSpace E] [CompleteSpace F] in

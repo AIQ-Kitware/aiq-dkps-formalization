@@ -15,7 +15,8 @@ open TauCeti.DavisKahan.Sylvester
 
 The fully unbounded interval/exterior Sylvester estimates at
 unitary-invariant ideal scope, with both blocks closed self-adjoint
-operators and all spectral hypotheses phrased through the Spectra spectrum:
+operators and all spectral hypotheses phrased through the accepted
+`_root_.LinearPMap.spectrum`:
 
 * `semibounded_of_spectrum_subset_Icc` — spectral inclusion in `[β, α]`
   yields the matching quadratic-form bounds, through the bounded
@@ -27,7 +28,7 @@ operators and all spectral hypotheses phrased through the Spectra spectrum:
   avoiding `(β - δ, α + δ)` gives `X ∈ N` and `δ · gauge X ≤ gauge C`.
 
 The interval block is secretly bounded (`BoundedFromSpectrum`), the
-exterior block carries the Spectra-backed shifted resolvent
+exterior block carries a domain-aware shifted resolvent
 (`twoSidedShiftedInverseBound_of_spectrum_gap`), and the ideal-scope
 Neumann engines of `SinTheta/Unbounded/Gauge.lean` finish both orientations.
 -/
@@ -49,11 +50,11 @@ variable {E F : Type v}
 namespace Sylvester
 
 /-- **Interval/exterior separation** for two self-adjoint closed operators, stated over the
-Spectra spectrum.  Either orientation is permitted: one operator's real spectrum sits inside
+canonical `LinearPMap.spectrum`. Either orientation is permitted: one operator's real spectrum sits inside
 `[β, α]` while the other avoids the `δ`-enlargement `(β - δ, α + δ)`.
 
 `RealSpectrumIntervalExteriorGap` (`Sylvester/Gap.lean`) is the `realSpectrum` spelling of the
-same configuration; `realSpectrum_eq_spectraSpectrum` identifies the two spectra.
+same configuration; both use TauCeti's canonical real/complex spectrum.
 
 **Placed here rather than in either consumer.**  `Sylvester/Unbounded/AllGap.lean` and
 `SinTheta/Unbounded/IntervalExterior.lean` each carried a character-for-character copy of this
@@ -63,14 +64,14 @@ so the single surviving definition has to live in the module they share. -/
 def SpectralIntervalExteriorGap
     (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F)
     (β α δ : ℝ) : Prop :=
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+  (Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆
         Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B) ∨
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum B) ∨
+  (Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B ⊆
         Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum A)
 
 end Sylvester
 
@@ -81,7 +82,7 @@ theorem semibounded_of_spectrum_subset_Icc
     {B : F →ₗ.[ℂ] F}
     (hB : IsSelfAdjoint B)
     {β α : ℝ} (hβα : β ≤ α)
-    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
+    (hσ : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B ⊆
         Set.Icc β α) :
     TauCeti.LinearPMap.SemiboundedBelow B β ∧
       TauCeti.LinearPMap.SemiboundedAbove B α := by
@@ -152,8 +153,8 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRig
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℂ] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hσA : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
-    (hσB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum A)
+    (hσB : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B ⊆
         Set.Icc β α)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
@@ -181,10 +182,10 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℂ] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hσA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+    (hσA : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆
         Set.Icc β α)
     (hσB : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B)
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum B)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by

@@ -70,14 +70,14 @@ spectral projection vanishes. -/
 theorem specProjection_gaps_eq_zero
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {l r d : ℝ}
     (hlr : l ≤ r) (hd : 0 < d)
-    (hspec : TauCeti.LinearPMap.realSpectrum A ⊆
+    (hspec : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ {x : ℝ | x ≤ l - d ∨ r + d ≤ x}) :
     TauCeti.LinearPMap.specProjection hA
         (Set.Ioo (l - d) l ∪ Set.Ioo r (r + d))
         (measurableSet_Ioo.union measurableSet_Ioo) = 0 := by
   refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _ _ ?_
   intro lam hlam
-  have hnot : lam ∉ TauCeti.LinearPMap.realSpectrum A := by
+  have hnot : lam ∉ _root_.LinearPMap.realSpectrum A := by
     intro hmem
     rcases hspec hmem with h | h
     · rcases hlam with h' | h'
@@ -90,15 +90,10 @@ theorem specProjection_gaps_eq_zero
       · rcases h with h | h
         · linarith [h'.1]
         · linarith [h'.2]
-  rw [TauCeti.LinearPMap.mem_realSpectrum_iff, not_not] at hnot
-  have := (realSpectrum_eq_spectraSpectrum A)
-  by_contra hcon
-  exact (by
-    have : lam ∈ TauCeti.LinearPMap.realSpectrum A := by
-      rw [this, Set.mem_preimage, TauCeti.LinearPMap.mem_spectrum_iff]
-      exact hcon
-    rw [TauCeti.LinearPMap.mem_realSpectrum_iff] at this
-    exact this hnot)
+  have hnotSpectrum : (lam : ℂ) ∉ _root_.LinearPMap.spectrum A := hnot
+  have hresRoot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
+    simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
+  exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
 
 /-- The exterior of the band, as a set. -/
 def bandExterior (l r d : ℝ) : Set ℝ := {x : ℝ | x ≤ l - d ∨ r + d ≤ x}
@@ -117,7 +112,7 @@ the orthogonal complement of the band range with the exterior range. -/
 theorem specRange_bandExterior_eq_orthogonal
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {l r d : ℝ}
     (hlr : l ≤ r) (hd : 0 < d)
-    (hspec : TauCeti.LinearPMap.realSpectrum A ⊆
+    (hspec : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ bandExterior l r d) :
     TauCeti.LinearPMap.specRange hA (bandExterior l r d)
         (measurableSet_bandExterior l r d)
@@ -167,7 +162,7 @@ theorem specRange_bandExterior_eq_orthogonal
 /-- **The band block's real spectrum lies in the band.** -/
 theorem realSpectrum_specRestrict_Icc_subset
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {l r : ℝ} :
-    TauCeti.LinearPMap.realSpectrum
+    _root_.LinearPMap.realSpectrum
         (selfAdjointSpectralRestriction A hA (Set.Icc l r) measurableSet_Icc)
       ⊆ Set.Icc l r := by
   intro lam hlam
@@ -178,7 +173,6 @@ theorem realSpectrum_specRestrict_Icc_subset
     intro a b hdisj hmem
     have := selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
       A hA (Set.Icc l r) measurableSet_Icc hdisj lam hmem
-    rw [realSpectrum_eq_spectraSpectrum] at hlam
     exact this hlam
   rcases lt_or_ge lam l with h | h
   · refine havoid (lam - 1) l ?_ ⟨by linarith, h⟩
@@ -196,7 +190,7 @@ theorem realSpectrum_specRestrict_Icc_subset
 /-- **The exterior block's real spectrum lies in the exterior.** -/
 theorem realSpectrum_specRestrict_bandExterior_subset
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {l r d : ℝ} :
-    TauCeti.LinearPMap.realSpectrum
+    _root_.LinearPMap.realSpectrum
         (selfAdjointSpectralRestriction A hA (bandExterior l r d)
           (measurableSet_bandExterior l r d))
       ⊆ bandExterior l r d := by
@@ -214,7 +208,6 @@ theorem realSpectrum_specRestrict_bandExterior_subset
   have := selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
     A hA (bandExterior l r d) (measurableSet_bandExterior l r d) hdisj lam
     ⟨hcon.1, hcon.2⟩
-  rw [realSpectrum_eq_spectraSpectrum] at hlam
   exact this hlam
 
 /-! ## Transport to an arbitrary reducing subspace
@@ -232,7 +225,7 @@ theorem realSpectrum_reducingRestriction_band_subset
     {W : Submodule ℂ H} [W.HasOrthogonalProjection]
     (hW : W = TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc)
     (hred : TauCeti.LinearPMap.ReducesSubspace A W) :
-    TauCeti.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
+    _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
       ⊆ Set.Icc l r := by
   subst hW
   exact realSpectrum_specRestrict_Icc_subset hA
@@ -245,7 +238,7 @@ theorem realSpectrum_reducingRestriction_bandExterior_subset
     (hW : W = TauCeti.LinearPMap.specRange hA (bandExterior l r d)
       (measurableSet_bandExterior l r d))
     (hred : TauCeti.LinearPMap.ReducesSubspace A W) :
-    TauCeti.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
+    _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
       ⊆ bandExterior l r d := by
   subst hW
   exact realSpectrum_specRestrict_bandExterior_subset hA
@@ -280,17 +273,16 @@ theorem realSpectrum_addBounded_subset_of_gap
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (K : H →L[ℂ] H)
     {alpha beta delta gam : ℝ} (hab : beta ≤ alpha) (hdelta : 0 < delta)
     (hgam : ‖K‖ ≤ gam) (hgamlt : 2 * gam < delta)
-    (hgap : TauCeti.LinearPMap.realSpectrum A ⊆
+    (hgap : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc beta alpha ∪ bandExterior beta alpha delta) :
-    TauCeti.LinearPMap.realSpectrum (TauCeti.LinearPMap.addBounded A K) ⊆
+    _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.addBounded A K) ⊆
       Set.Icc (beta - gam) (alpha + gam) ∪
         bandExterior (beta - gam) (alpha + gam) (delta - 2 * gam) := by
   intro lam hlam
   refine spectrum_addBounded_subset_of_gap hA K hab hdelta hgam hgamlt ?_ lam ?_
   · intro mu hmu
-    exact hgap (by rw [realSpectrum_eq_spectraSpectrum]; exact hmu)
-  · rw [realSpectrum_eq_spectraSpectrum] at hlam
-    exact hlam
+    exact hgap hmu
+  · exact hlam
 
 /-! ## Half-line spectrum gives a form bound
 
@@ -302,42 +294,34 @@ half-line energy bounds of the spectral measure do the rest. -/
 /-- **Spectrum in `Iic c` gives the upper form bound.** -/
 theorem re_inner_le_of_realSpectrum_subset_Iic
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {c : ℝ}
-    (h : TauCeti.LinearPMap.realSpectrum A ⊆ Set.Iic c) (x : A.domain) :
+    (h : _root_.LinearPMap.realSpectrum A ⊆ Set.Iic c) (x : A.domain) :
     (⟪A x, (x : H)⟫_ℂ).re ≤ c * ‖(x : H)‖ ^ 2 := by
   refine TauCeti.LinearPMap.re_inner_le_of_specProjection_Ioi_eq_zero hA ?_ x
   refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _ _ ?_
   intro lam hlam
-  have hnot : lam ∉ TauCeti.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
+  have hnot : lam ∉ _root_.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
     simp only [Set.mem_Iic, not_le]
     exact hlam)
-  rw [TauCeti.LinearPMap.mem_realSpectrum_iff, not_not] at hnot
-  by_contra hcon
-  have : lam ∈ TauCeti.LinearPMap.realSpectrum A := by
-    rw [realSpectrum_eq_spectraSpectrum, Set.mem_preimage,
-      TauCeti.LinearPMap.mem_spectrum_iff]
-    exact hcon
-  rw [TauCeti.LinearPMap.mem_realSpectrum_iff] at this
-  exact this hnot
+  have hnotSpectrum : (lam : ℂ) ∉ _root_.LinearPMap.spectrum A := hnot
+  have hresRoot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
+    simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
+  exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
 
 /-- **Spectrum in `Ici c` gives the lower form bound.** -/
 theorem le_re_inner_of_realSpectrum_subset_Ici
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {c : ℝ}
-    (h : TauCeti.LinearPMap.realSpectrum A ⊆ Set.Ici c) (x : A.domain) :
+    (h : _root_.LinearPMap.realSpectrum A ⊆ Set.Ici c) (x : A.domain) :
     c * ‖(x : H)‖ ^ 2 ≤ (⟪A x, (x : H)⟫_ℂ).re := by
   refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iio_eq_zero hA ?_ x
   refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _ _ ?_
   intro lam hlam
-  have hnot : lam ∉ TauCeti.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
+  have hnot : lam ∉ _root_.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
     simp only [Set.mem_Ici, not_le]
     exact hlam)
-  rw [TauCeti.LinearPMap.mem_realSpectrum_iff, not_not] at hnot
-  by_contra hcon
-  have : lam ∈ TauCeti.LinearPMap.realSpectrum A := by
-    rw [realSpectrum_eq_spectraSpectrum, Set.mem_preimage,
-      TauCeti.LinearPMap.mem_spectrum_iff]
-    exact hcon
-  rw [TauCeti.LinearPMap.mem_realSpectrum_iff] at this
-  exact this hnot
+  have hnotSpectrum : (lam : ℂ) ∉ _root_.LinearPMap.spectrum A := hnot
+  have hresRoot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
+    simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
+  exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
 
 /-- A subspace admitting an orthogonal projection inside a complete ambient space
 is itself complete. -/
@@ -349,7 +333,7 @@ noncomputable local instance instCompleteSpaceCoeBandForm
 theorem re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {U : Submodule ℂ H}
     [U.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace A U) {c : ℝ}
-    (h : TauCeti.LinearPMap.realSpectrum
+    (h : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A U hred) ⊆ Set.Iic c)
     (x : A.domain) (hx : (x : H) ∈ U) :
     (⟪A x, (x : H)⟫_ℂ).re ≤ c * ‖(x : H)‖ ^ 2 := by
@@ -367,7 +351,7 @@ below.** -/
 theorem le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {U : Submodule ℂ H}
     [U.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace A U) {c : ℝ}
-    (h : TauCeti.LinearPMap.realSpectrum
+    (h : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A U hred) ⊆ Set.Ici c)
     (x : A.domain) (hx : (x : H) ∈ U) :
     c * ‖(x : H)‖ ^ 2 ≤ (⟪A x, (x : H)⟫_ℂ).re := by

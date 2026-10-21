@@ -287,11 +287,11 @@ theorem sinTheta_unbounded_intervalExterior_symmetricNorming_rclike
     (hβα : β ≤ α)
     (hδ : 0 < δ)
     (hspectral :
-      (TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum Λ₁ ⊆
+      (_root_.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+          _root_.LinearPMap.realSpectrum Λ₁ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨
-        (TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum A₀ ⊆
+        (_root_.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+          _root_.LinearPMap.realSpectrum A₀ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
     (hR : N.Mem R) :
     N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧

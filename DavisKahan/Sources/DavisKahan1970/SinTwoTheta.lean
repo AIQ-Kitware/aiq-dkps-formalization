@@ -183,7 +183,7 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E)
     (sinTwoTheta₀ : SinThetaRepresentative
@@ -237,7 +237,7 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimens
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E)
     (_hStrictDimension :
@@ -272,7 +272,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
@@ -311,7 +311,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequal
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
@@ -338,7 +338,7 @@ directed statements above, at the same unbounded scope and with the same
 form-bounded Sylvester predicate between the two real spectral restrictions,
 which is the weaker of this tree's two spellings of spectral separation; the
 `ℂ`-only resolvent-set spelling used above has no real counterpart, since
-`TauCeti.LinearPMap.spectrum` is defined over `ℂ`.
+`_root_.LinearPMap.spectrum` is defined over `ℂ`.
 
 The ambient (whole-space) half `δ ‖sin 2Θ‖ ≤ 2‖H‖` over the reals is
 `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real`. -/
@@ -714,7 +714,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGa
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (DavisKahan.selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem Eop) :
     N.Mem (DavisKahan.sinTwoThetaIdealBlock
@@ -774,7 +774,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_c
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
       (DavisKahan.selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem Eop) :
     N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC

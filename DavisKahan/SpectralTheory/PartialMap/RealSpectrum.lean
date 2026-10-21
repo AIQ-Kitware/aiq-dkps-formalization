@@ -30,10 +30,10 @@ variable {E : Type v}
 
 /-! ### The donor and upstream resolvent representations
 
-The paper-facing layer still uses the normed donor resolvent in a few places,
-while Tau Ceti's accepted `LinearPMap` API uses Mathlib's continuous resolvent.
-Their inverse records have the same three fields, so conversion is centralized
-here for the remaining consumers. -/
+The mathematical endpoints use TauCeti's canonical partial-map spectrum.
+A few constructive source arguments still use the old donor resolvent with the
+same inverse-record fields. Those witnesses are translated here only at
+remaining legacy consumers; canonical spectral predicates stay in statements. -/
 
 omit [CompleteSpace E] in
 /-- Membership in the donor and upstream resolvent sets is equivalent. -/
@@ -88,70 +88,16 @@ theorem disjoint_spectrum_iff_root
       (mem_spectrum_iff_root B z |>.mp hzB)
 
 omit [CompleteSpace E] in
-/-- Membership in the closed-operator real resolvent is exactly membership of
-the real scalar in the canonical resolvent set.
-
-The two predicates invert opposite shifts — `realResolventSet` asks for a bounded
-two-sided inverse of `A - lam`, while `TauCeti.LinearPMap.resolventSet` asks for one of
-`lam • I - A` — so they are *not* definitionally equal, and this was a `rfl` only while the
-resolvent core used the `A - z` convention.  They do describe the same set: the two shifts
-differ by a sign, and negating a bounded two-sided inverse gives a bounded two-sided inverse
-of the negated map.  That negation is the whole content of the proof. -/
+/-- The old sign-convention inverse condition and the donor complex-resolvent
+interface agree.  The hard sign change is proved once, scalar-generically, in
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean` and the donor
+complex resolvent has a separately proved equivalence with canonical TauCeti. -/
 theorem mem_realResolventSet_iff_mem_spectraResolvent
     (A : E →ₗ.[ℂ] E) (lam : ℝ) :
     lam ∈ TauCeti.LinearPMap.realResolventSet A ↔
-      (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A := by
-  rw [TauCeti.LinearPMap.mem_realResolventSet_iff, TauCeti.LinearPMap.mem_resolventSet_iff]
-  constructor
-  · rintro ⟨R, hleft, hright⟩
-    refine ⟨-R, fun y => neg_mem (hright y).choose, fun y => ?_, fun x => ?_⟩
-    · have h := (hright y).choose_spec
-      have hneg : A
-            (⟨(-R) y, neg_mem (hright y).choose⟩ : A.domain)
-          = -(A ⟨R y, (hright y).choose⟩) :=
-        _root_.LinearPMap.map_neg A ⟨R y, (hright y).choose⟩
-      rw [hneg]
-      simp only [_root_.neg_apply]
-      linear_combination (norm := module) h
-    · have h := hleft x
-      have harg : (lam : ℂ) • (x : E) - A x
-          = -(A x - (lam : ℂ) • (x : E)) := by module
-      simp only [_root_.neg_apply, harg, map_neg, neg_neg]
-      exact h
-  · rintro ⟨R, hR⟩
-    refine ⟨-R, fun x => ?_, fun y => ?_⟩
-    · -- the scalar is abstracted so that the `RCLike` coercion of `realResolventSet` and the
-      -- `ℂ` coercion of `IsResolventAt`, which are defeq but not syntactically equal, unify
-      have hstep : ∀ c : ℂ, R (c • (x : E) - A x) = (x : E) →
-          (-R) (A x - c • (x : E)) = (x : E) := by
-        intro c hc
-        have harg : A x - c • (x : E)
-            = -(c • (x : E) - A x) := by module
-        rw [_root_.neg_apply, harg, map_neg, hc, neg_neg]
-      exact hstep _ (hR.apply_smul_sub x)
-    · refine ⟨neg_mem (hR.mem_domain y), ?_⟩
-      have h := hR.smul_sub_apply y
-      have hneg : A
-            (⟨(-R) y, neg_mem (hR.mem_domain y)⟩ : A.domain)
-          = -(A ⟨R y, hR.mem_domain y⟩) :=
-        _root_.LinearPMap.map_neg A ⟨R y, hR.mem_domain y⟩
-      rw [hneg]
-      simp only [_root_.neg_apply]
-      linear_combination (norm := module) h
-
-omit [CompleteSpace E] in
-/-- The generic closed-operator real spectrum agrees with the genuine spectrum
-after specializing the scalar field to `ℂ`.
-
-Complementation of `mem_realResolventSet_iff_mem_spectraResolvent`; like it, this was a
-`rfl` only under the `A - z` convention. -/
-theorem realSpectrum_eq_spectraSpectrum (A : E →ₗ.[ℂ] E) :
-    TauCeti.LinearPMap.realSpectrum A
-      = Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A := by
-  ext lam
-  rw [Set.mem_preimage, TauCeti.LinearPMap.mem_spectrum_iff,
-    TauCeti.LinearPMap.mem_realSpectrum_iff,
-    mem_realResolventSet_iff_mem_spectraResolvent A lam]
+      (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A :=
+  (TauCeti.LinearPMap.mem_realResolventSet_iff_mem_canonical_resolventSet A lam).trans
+    (mem_local_resolventSet_iff_root A (lam : ℂ)).symm
 
 /-! ## The spectrum of a self-adjoint operator is real
 

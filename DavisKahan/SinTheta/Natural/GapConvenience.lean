@@ -49,8 +49,8 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial operator sits above the complementary one. -/
 theorem trialAbove_complementBelow
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ c : ℝ}
-    (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆ Set.Ici (c + δ))
-    (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆ Set.Iic c) :
+    (hA : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆ Set.Ici (c + δ))
+    (hB : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B ⊆ Set.Iic c) :
     SpectralSylvesterGap A B δ :=
   .leftAboveRightBelow c hA hB
 
@@ -58,8 +58,8 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The trial operator sits below the complementary one. -/
 theorem trialBelow_complementAbove
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F} {δ c : ℝ}
-    (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆ Set.Iic c)
-    (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆ Set.Ici (c + δ)) :
+    (hA : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆ Set.Iic c)
+    (hB : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B ⊆ Set.Ici (c + δ)) :
     SpectralSylvesterGap A B δ :=
   .leftBelowRightAbove c hA hB
 

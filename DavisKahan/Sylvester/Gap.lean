@@ -37,7 +37,7 @@ direction is proved here**:
   `FormBoundedSylvesterGap` in **every** configuration, the ordered branches by
   `semiboundedBelow_of_spectrum_subset_Ici` and its mirror
   (`SpectralTheory/OrderedHalfLine.lean`), the interval branch by
-  `realSpectrum_eq_spectraSpectrum`;
+  definitional equality with the accepted real-spectrum preimage;
 * the converse holds for the **interval/exterior branch only**
   (`SpectralSylvesterGap.intervalExterior_of_formBounded`).  Recovering a
   spectral containment from a form bound is the half of the spectral theorem
@@ -76,15 +76,15 @@ so it is stated over `LinearPMap` and the closedness hypotheses live with the
 theorems that consume the gap.
 
 `SpectralIntervalExteriorGap` is the same configuration spelled through
-`ofReal ⁻¹' LinearPMap.spectrum`; `realSpectrum_eq_spectraSpectrum` identifies
-the two spectra, and `sylvesterIntervalExteriorGap_of_realSpectrum` transports
+`ofReal ⁻¹' LinearPMap.spectrum`; both use the canonical spectral carrier,
+and `sylvesterIntervalExteriorGap_of_realSpectrum` transports
 this predicate to that one. -/
 def RealSpectrumIntervalExteriorGap
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (β α δ : ℝ) : Prop :=
-  (TauCeti.LinearPMap.realSpectrum A ⊆ Set.Icc β α ∧
-    TauCeti.LinearPMap.realSpectrum B ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x}) ∨
-  (TauCeti.LinearPMap.realSpectrum B ⊆ Set.Icc β α ∧
-    TauCeti.LinearPMap.realSpectrum A ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x})
+  (_root_.LinearPMap.realSpectrum A ⊆ Set.Icc β α ∧
+    _root_.LinearPMap.realSpectrum B ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x}) ∨
+  (_root_.LinearPMap.realSpectrum B ⊆ Set.Icc β α ∧
+    _root_.LinearPMap.realSpectrum A ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x})
 
 /-- Every gap configuration the `sin Θ` endpoint needs, over the canonical
 partial-map representation, with the two ordered configurations given as
@@ -136,7 +136,7 @@ theorem RealSpectrumIntervalExteriorGap.unitaryConj_left
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {β α δ : ℝ}
     (W : E ≃ₗᵢ[𝕜] E') (h : RealSpectrumIntervalExteriorGap A B β α δ) :
     RealSpectrumIntervalExteriorGap (_root_.LinearPMap.unitaryConj W A) B β α δ := by
-  rw [RealSpectrumIntervalExteriorGap, TauCeti.LinearPMap.realSpectrum_unitaryConj]
+  rw [RealSpectrumIntervalExteriorGap, _root_.LinearPMap.realSpectrum_unitaryConj]
   exact h
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -146,7 +146,7 @@ theorem RealSpectrumIntervalExteriorGap.unitaryConj_right
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {β α δ : ℝ}
     (V : F ≃ₗᵢ[𝕜] F') (h : RealSpectrumIntervalExteriorGap A B β α δ) :
     RealSpectrumIntervalExteriorGap A (_root_.LinearPMap.unitaryConj V B) β α δ := by
-  rw [RealSpectrumIntervalExteriorGap, TauCeti.LinearPMap.realSpectrum_unitaryConj]
+  rw [RealSpectrumIntervalExteriorGap, _root_.LinearPMap.realSpectrum_unitaryConj]
   exact h
 
 omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace E'] in

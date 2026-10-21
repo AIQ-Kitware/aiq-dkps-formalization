@@ -103,8 +103,8 @@ theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
     (hUA : generator U = A) (hVB : generator V = Bop)
     (b : HilbertBasis ι ℂ F) {δ ε : ℝ} (hε : 0 < ε)
-    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A →
-      ∀ alp : ℝ, (alp : ℂ) ∈ TauCeti.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
+    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A →
+      ∀ alp : ℝ, (alp : ℂ) ∈ _root_.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
     (s : ℝ) (k l : ℤ)
     (hUcomm : ∀ (t : ℝ) (y : E), gridProj hA ε k (U.U t y) = U.U t (gridProj hA ε k y))
     (hVcomm : ∀ (t : ℝ) (y : F), gridProj hB ε l (V.U t y) = V.U t (gridProj hB ε l y))
@@ -212,8 +212,8 @@ private theorem enorm_eq_ofReal_norm {X : Type*} [NormedAddCommGroup X] (x : X) 
 /-- **The global lower bound at a fixed grid width.**  The block bounds sum. -/
 theorem norm_sub_smul_ge_of_grid (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
     (b : HilbertBasis ι ℂ F) {δ ε : ℝ} (hε : 0 < ε)
-    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A →
-      ∀ alp : ℝ, (alp : ℂ) ∈ TauCeti.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
+    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A →
+      ∀ alp : ℝ, (alp : ℂ) ∈ _root_.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
     (s : ℝ)
     (z : (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
       (TauCeti.LinearPMap.genToGroup hB) b)).domain) :
@@ -261,8 +261,8 @@ theorem norm_sub_smul_ge_of_grid (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
 vector. -/
 theorem hasVectorSpectralGap_sylvesterGroup (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
     (b : HilbertBasis ι ℂ F) {δ : ℝ}
-    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ TauCeti.LinearPMap.spectrum A →
-      ∀ alp : ℝ, (alp : ℂ) ∈ TauCeti.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
+    (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A →
+      ∀ alp : ℝ, (alp : ℂ) ∈ _root_.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
     (f : lp (fun _ : ι => E) 2) :
     TauCeti.LinearPMap.HasVectorSpectralGap
       (isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)

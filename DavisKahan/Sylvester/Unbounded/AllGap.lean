@@ -14,7 +14,7 @@ import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 # Spectral all-gap unbounded Sylvester theorem
 
 This module states the source-facing all-gap predicate entirely through the
-genuine spectrum.  It covers the interval/exterior configuration and both
+canonical spectrum.  It covers the interval/exterior configuration and both
 ordered half-line configurations.  The capstone converts the ordered spectral
 containments to form bounds and then calls the direct interface-parametric
 finite-Ky-Fan engine, instantiated by the native spectral cutoffs.  Those
@@ -39,7 +39,7 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 /-- All three source gap configurations, each stated as a containment of the
-Spectra spectrum -- the form Davis--Kahan 1970 uses.
+canonical `LinearPMap.spectrum` -- the form Davis--Kahan 1970 uses.
 
 `FormBoundedSylvesterGap` states the two ordered configurations as operator-form
 bounds instead; it implies this predicate, and no converse is proved. -/
@@ -52,15 +52,15 @@ inductive SpectralSylvesterGap
       (hgap : SpectralIntervalExteriorGap A B β α δ)
   | leftAboveRightBelow
       (c : ℝ)
-      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+      (hA : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆
         Set.Ici (c + δ))
-      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
+      (hB : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B ⊆
         Set.Iic c)
   | leftBelowRightAbove
       (c : ℝ)
-      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
+      (hA : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆
         Set.Iic c)
-      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
+      (hB : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B ⊆
         Set.Ici (c + δ))
 
 /-- Source-facing Theorem 5.2 wrapper with spectral hypotheses in every

@@ -115,16 +115,16 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_complex
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A) {P : Submodule ℂ Hc}
     [P.HasOrthogonalProjection] (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     {b a : ℝ} (hba : b ≤ a)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred) ⊆ Set.Icc b a) :
     ∃ (hPdom : ∀ v : P, (v : Hc) ∈ A.domain) (M : P →L[ℂ] P),
       ∀ v : P, ((M v : P) : Hc) = A ⟨(v : Hc), hPdom v⟩ := by
   have hblock : IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A P hPred) :=
     TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A P hPred hA.dense_domain hA
+  -- The canonical real spectrum is definitionally the real preimage of the
+  -- canonical complex spectrum. No extra compatibility theorem is needed.
   obtain ⟨Rz, -⟩ := DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
-    hblock hba (by
-      rw [← TauCeti.DavisKahan.realSpectrum_eq_spectraSpectrum]
-      exact hPspec)
+    hblock hba hPspec
   have hdomP : ∀ v : P, v ∈ (TauCeti.LinearPMap.reducingRestriction A P hPred).domain := by
     intro v
     rw [Rz.domain_eq_top]
@@ -150,7 +150,7 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_real
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A) {P : Submodule ℝ Er}
     [P.HasOrthogonalProjection] (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     {b a : ℝ} (hba : b ≤ a)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred) ⊆ Set.Icc b a) :
     ∃ (hPdom : ∀ v : P, (v : Er) ∈ A.domain) (M : P →L[ℝ] P),
       ∀ v : P, ((M v : P) : Er) = A ⟨(v : Er), hPdom v⟩ := by
@@ -159,11 +159,15 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_real
   have hBC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal
       (TauCeti.LinearPMap.reducingRestriction A P hPred)) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hblock
+  -- The nontrivial step is preservation of the spectrum by real
+  -- complexification, not another real-slice-to-spectrum conversion.
+  have hspecBC : _root_.LinearPMap.realSpectrum
+      (TauCeti.LinearPMap.complexifyReal
+        (TauCeti.LinearPMap.reducingRestriction A P hPred)) ⊆ Set.Icc b a := by
+    rw [_root_.LinearPMap.realSpectrum_complexifyReal]
+    exact hPspec
   obtain ⟨Rz, -⟩ := DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
-    hBC hba (by
-      rw [← TauCeti.DavisKahan.realSpectrum_eq_spectraSpectrum,
-        TauCeti.LinearPMap.realSpectrum_complexifyReal]
-      exact hPspec)
+    hBC hba hspecBC
   have hdomP : ∀ v : P, v ∈ (TauCeti.LinearPMap.reducingRestriction A P hPred).domain := by
     intro v
     have h : (ofReal v : RealComplexification P) ∈
@@ -207,13 +211,13 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_complex
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
@@ -243,13 +247,13 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_real
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
@@ -284,13 +288,13 @@ theorem theorem8_2_residual_sourceExact_unbounded_complex
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
@@ -337,13 +341,13 @@ theorem theorem8_2_residual_sourceExact_unbounded_real
     (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hQred : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.addBounded A Hop) Q)
-    (hQspec : TauCeti.LinearPMap.realSpectrum
+    (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
       ⊆ Set.Icc beta alpha)
-    (hQperp : TauCeti.LinearPMap.realSpectrum
+    (hQperp : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Qᗮ
         hQred.orthogonal) ⊆ bandExterior beta alpha delta)
-    (hPspec : TauCeti.LinearPMap.realSpectrum
+    (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)

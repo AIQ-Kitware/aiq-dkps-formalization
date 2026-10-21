@@ -48,7 +48,7 @@ theorem sinTheta_unbounded_opNorm_of_spectrum_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum D.Λ₁) :
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum D.Λ₁) :
     δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by
   have hΛsa : IsSelfAdjoint D.Λ₁ :=
     LinearPMap.isSelfAdjoint_def.mpr
@@ -75,7 +75,7 @@ theorem sinTheta_unbounded_gauge_of_spectrum_gap
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum D.Λ₁)
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum D.Λ₁)
     (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤

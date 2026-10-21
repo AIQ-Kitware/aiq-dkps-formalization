@@ -103,7 +103,7 @@ theorem hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
     {X C : F →L[ℝ] E}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : ∀ lam ∈ TauCeti.LinearPMap.realSpectrum A, ∀ α ∈ TauCeti.LinearPMap.realSpectrum B,
+    (hgap : ∀ lam ∈ _root_.LinearPMap.realSpectrum A, ∀ α ∈ _root_.LinearPMap.realSpectrum B,
       δ ≤ |lam - α|)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : approximationNumberEnergy C ≠ ⊤) :
