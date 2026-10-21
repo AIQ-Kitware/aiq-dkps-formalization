@@ -11,7 +11,7 @@ Adapted from: Spectra (https://github.com/adambornemann-glitch/Spectra),
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import Mathlib.Analysis.Complex.Norm
 public import Mathlib.Data.PNat.Basic
 public import Mathlib.Algebra.Star.Unitary
@@ -45,9 +45,10 @@ self-adjoint operator (Stone's theorem):
   deficiency-surjectivity — through every one of these definitions, because its
   resolvent is constructed from exactly those three inputs.  Here they collapse
   to a single `IsSelfAdjoint A`, because
-  `mem_resolventSet_of_im_ne_zero` adapts Tau Ceti's general theorem to the
-  local resolvent representation. That also removes the dependency on
-  Spectra's `Resolvent/Range.lean` entirely.
+  Tau Ceti's canonical `LinearPMap` resolvent supplies every nonreal resolvent
+  point directly. These approximants now use that accepted resolver rather than
+  the donor copy. That also removes the dependency on Spectra's
+  `Resolvent/Range.lean` entirely.
 -/
 
 public section
@@ -97,27 +98,33 @@ variable {A : H →ₗ.[ℂ] H}
 /-- The resolvent at `z = in`. -/
 @[expose]
 noncomputable def resolventAtIn (_hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
-  resolvent A (I * (n : ℂ))
+  _root_.LinearPMap.resolvent A (I * (n : ℂ))
 
 /-- The resolvent at `z = -in`. -/
 @[expose]
 noncomputable def resolventAtNegIn (_hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :=
-  resolvent A (-I * (n : ℂ))
+  _root_.LinearPMap.resolvent A (-I * (n : ℂ))
 
 /-- `‖R(in)‖ ≤ 1/n`. -/
 theorem norm_resolventAtIn_le (hA : IsSelfAdjoint A) (n : ℕ+) :
     ‖resolventAtIn hA n‖ ≤ ((n : ℝ))⁻¹ := by
-  have h := norm_resolvent_le_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n)
-  rwa [abs_I_mul_pnat_im] at h
+  have h := hA.norm_resolvent_le (I_mul_pnat_im_ne_zero n)
+  have habs : |RCLike.im (I * (n : ℂ))| = (n : ℝ) := by
+    change |(I * (n : ℂ)).im| = (n : ℝ)
+    exact abs_I_mul_pnat_im n
+  simpa only [resolventAtIn, habs] using h
 
 /-- `‖R(-in)‖ ≤ 1/n`. -/
 theorem norm_resolventAtNegIn_le (hA : IsSelfAdjoint A) (n : ℕ+) :
     ‖resolventAtNegIn hA n‖ ≤ ((n : ℝ))⁻¹ := by
-  have h := norm_resolvent_le_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n)
+  have h := hA.norm_resolvent_le (neg_I_mul_pnat_im_ne_zero n)
   have habs : |(-I * (n : ℂ)).im| = (n : ℝ) := by
     simp only [neg_mul, neg_im, abs_neg]
     exact abs_I_mul_pnat_im n
-  rwa [habs] at h
+  have habs' : |RCLike.im (-I * (n : ℂ))| = (n : ℝ) := by
+    change |(-I * (n : ℂ)).im| = (n : ℝ)
+    exact habs
+  simpa only [resolventAtNegIn, habs'] using h
 
 /-! ### The Yosida approximants -/
 
@@ -154,26 +161,11 @@ noncomputable def yosidaJNeg (hA : IsSelfAdjoint A) (n : ℕ+) : H →L[ℂ] H :
 /-- `R(in)⋆ = R(-in)`. -/
 theorem adjoint_resolventAtIn (hA : IsSelfAdjoint A) (n : ℕ+) :
     ContinuousLinearMap.adjoint (resolventAtIn hA n) = resolventAtNegIn hA n := by
-  have hsym : A.IsFormalAdjoint A := by
-    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
-    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
-  symm
-  rw [ContinuousLinearMap.eq_adjoint_iff]
-  intro x y
-  set hin := mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n) with hin_def
-  set hnin := mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n) with hnin_def
-  set u : A.domain := ⟨resolvent A (-I * (n : ℂ)) x, resolvent_mem_domain hnin x⟩ with hu
-  set v : A.domain := ⟨resolvent A (I * (n : ℂ)) y, resolvent_mem_domain hin y⟩ with hv
-  have hux : (-I * (n : ℂ)) • (u : H) - A u = x := smul_sub_apply_resolvent hnin x
-  have hvy : (I * (n : ℂ)) • (v : H) - A v = y := smul_sub_apply_resolvent hin y
-  have hconj : (starRingEnd ℂ) (-I * (n : ℂ)) = I * (n : ℂ) := by
-    rw [map_mul, map_neg, Complex.conj_I, Complex.conj_natCast, neg_neg]
-  calc ⟪resolventAtNegIn hA n x, y⟫_ℂ
-      = ⟪(u : H), (I * (n : ℂ)) • (v : H) - A v⟫_ℂ := by rw [hvy]; rfl
-    _ = ⟪(-I * (n : ℂ)) • (u : H) - A u, (v : H)⟫_ℂ := by
-        rw [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
-          hconj, hsym u v]
-    _ = ⟪x, resolventAtIn hA n y⟫_ℂ := by rw [hux]; rfl
+  have hin : (I * (n : ℂ)) ∈ A.resolventSet :=
+    hA.mem_resolventSet_of_im_ne_zero (I_mul_pnat_im_ne_zero n)
+  have hconj : (starRingEnd ℂ) (I * (n : ℂ)) = -I * (n : ℂ) := by
+    rw [map_mul, Complex.conj_I, Complex.conj_natCast]
+  simpa [resolventAtIn, resolventAtNegIn, hconj] using hA.adjoint_resolvent hin
 
 /-- `R(-in)⋆ = R(in)`. -/
 theorem adjoint_resolventAtNegIn (hA : IsSelfAdjoint A) (n : ℕ+) :
@@ -260,19 +252,20 @@ contraction bound `‖Jₙ‖ ≤ 1` then spreads it to all of `H` by density. -
 theorem yosidaJ_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
     (φ : H) (hφ : φ ∈ A.domain) :
     yosidaJ hA n φ = φ + resolventAtIn hA n (A ⟨φ, hφ⟩) := by
-  have hz : (I * (n : ℂ)) ∈ resolventSet A :=
-    mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n)
-  have h1 : resolvent A (I * (n : ℂ)) ((I * (n : ℂ)) • φ - A ⟨φ, hφ⟩) = φ :=
-    resolvent_smul_sub_apply hz ⟨φ, hφ⟩
+  have hz : (I * (n : ℂ)) ∈ A.resolventSet :=
+    hA.mem_resolventSet_of_im_ne_zero (I_mul_pnat_im_ne_zero n)
+  have h1 : _root_.LinearPMap.resolvent A (I * (n : ℂ))
+      ((I * (n : ℂ)) • φ - A ⟨φ, hφ⟩) = φ :=
+    _root_.LinearPMap.resolvent_smul_sub_apply hz ⟨φ, hφ⟩
   -- rewrite inside `h1` rather than in the goal: `φ` occurs in `hφ`, so rewriting
   -- it in the goal produces an ill-typed motive
-  have h2 : (I * (n : ℂ)) • resolvent A (I * (n : ℂ)) φ
-      - resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩) = φ := by
+  have h2 : (I * (n : ℂ)) • _root_.LinearPMap.resolvent A (I * (n : ℂ)) φ
+      - _root_.LinearPMap.resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩) = φ := by
     rwa [map_sub, map_smul] at h1
   -- states the goal with the definition unfolded, in the shape the next step needs;
   -- there is no `_apply` lemma to rewrite with here.
-  change (I * (n : ℂ)) • resolvent A (I * (n : ℂ)) φ
-    = φ + resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩)
+  change (I * (n : ℂ)) • _root_.LinearPMap.resolvent A (I * (n : ℂ)) φ
+    = φ + _root_.LinearPMap.resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩)
   exact eq_add_of_sub_eq h2
 
 /-- `Jₙφ → φ` for `φ` in the domain. -/
@@ -338,17 +331,18 @@ theorem tendsto_yosidaJ (hA : IsSelfAdjoint A) (ψ : H) :
 theorem yosidaJNeg_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
     (φ : H) (hφ : φ ∈ A.domain) :
     yosidaJNeg hA n φ = φ + resolventAtNegIn hA n (A ⟨φ, hφ⟩) := by
-  have hz : (-I * (n : ℂ)) ∈ resolventSet A :=
-    mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n)
-  have h1 : resolvent A (-I * (n : ℂ)) ((-I * (n : ℂ)) • φ - A ⟨φ, hφ⟩) = φ :=
-    resolvent_smul_sub_apply hz ⟨φ, hφ⟩
-  have h2 : (-I * (n : ℂ)) • resolvent A (-I * (n : ℂ)) φ
-      - resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩) = φ := by
+  have hz : (-I * (n : ℂ)) ∈ A.resolventSet :=
+    hA.mem_resolventSet_of_im_ne_zero (neg_I_mul_pnat_im_ne_zero n)
+  have h1 : _root_.LinearPMap.resolvent A (-I * (n : ℂ))
+      ((-I * (n : ℂ)) • φ - A ⟨φ, hφ⟩) = φ :=
+    _root_.LinearPMap.resolvent_smul_sub_apply hz ⟨φ, hφ⟩
+  have h2 : (-I * (n : ℂ)) • _root_.LinearPMap.resolvent A (-I * (n : ℂ)) φ
+      - _root_.LinearPMap.resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩) = φ := by
     rwa [map_sub, map_smul] at h1
   -- states the goal with the definition unfolded, in the shape the next step needs;
   -- there is no `_apply` lemma to rewrite with here.
-  change (-I * (n : ℂ)) • resolvent A (-I * (n : ℂ)) φ
-    = φ + resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩)
+  change (-I * (n : ℂ)) • _root_.LinearPMap.resolvent A (-I * (n : ℂ)) φ
+    = φ + _root_.LinearPMap.resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩)
   exact eq_add_of_sub_eq h2
 
 /-- `Jₙ⁻φ → φ` for `φ` in the domain. -/
@@ -427,16 +421,16 @@ theorem yosidaApprox_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
     (φ : H) (hφ : φ ∈ A.domain) :
     yosidaApproximant hA n φ = yosidaJ hA n (A ⟨φ, hφ⟩) := by
   have h := yosidaJ_apply_of_mem_domain hA n φ hφ
-  have hRA : resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩)
-      = (I * (n : ℂ)) • resolvent A (I * (n : ℂ)) φ - φ := by
-    have h0 : (I * (n : ℂ)) • resolvent A (I * (n : ℂ)) φ
-        = φ + resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩) := h
+  have hRA : _root_.LinearPMap.resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩)
+      = (I * (n : ℂ)) • _root_.LinearPMap.resolvent A (I * (n : ℂ)) φ - φ := by
+    have h0 : (I * (n : ℂ)) • _root_.LinearPMap.resolvent A (I * (n : ℂ)) φ
+        = φ + _root_.LinearPMap.resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩) := h
     rw [h0]; abel
   -- The goal is the squared-resolvent identity with the `n ^ 2` factor already
   -- collected; `hRA` is stated in the un-collected form, so `rw [hRA]` matches only
   -- after the two sides are put in this shape.
-  change -((n : ℂ) ^ 2 • resolvent A (I * (n : ℂ)) φ) - (I * (n : ℂ)) • φ
-    = (I * (n : ℂ)) • resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩)
+  change -((n : ℂ) ^ 2 • _root_.LinearPMap.resolvent A (I * (n : ℂ)) φ) - (I * (n : ℂ)) • φ
+    = (I * (n : ℂ)) • _root_.LinearPMap.resolvent A (I * (n : ℂ)) (A ⟨φ, hφ⟩)
   rw [hRA, smul_sub, smul_smul, I_pnat_sq]
   module
 
@@ -451,15 +445,15 @@ theorem yosidaApproxNeg_apply_of_mem_domain (hA : IsSelfAdjoint A) (n : ℕ+)
     (φ : H) (hφ : φ ∈ A.domain) :
     yosidaApproxNeg hA n φ = yosidaJNeg hA n (A ⟨φ, hφ⟩) := by
   have h := yosidaJNeg_apply_of_mem_domain hA n φ hφ
-  have hRA : resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩)
-      = (-I * (n : ℂ)) • resolvent A (-I * (n : ℂ)) φ - φ := by
-    have h0 : (-I * (n : ℂ)) • resolvent A (-I * (n : ℂ)) φ
-        = φ + resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩) := h
+  have hRA : _root_.LinearPMap.resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩)
+      = (-I * (n : ℂ)) • _root_.LinearPMap.resolvent A (-I * (n : ℂ)) φ - φ := by
+    have h0 : (-I * (n : ℂ)) • _root_.LinearPMap.resolvent A (-I * (n : ℂ)) φ
+        = φ + _root_.LinearPMap.resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩) := h
     rw [h0]; abel
   -- Mirror of the previous lemma with the opposite sign; same reason `rw [hRA]`
   -- cannot fire on the goal as elaborated.
-  change -((n : ℂ) ^ 2 • resolvent A (-I * (n : ℂ)) φ) + (I * (n : ℂ)) • φ
-    = (-I * (n : ℂ)) • resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩)
+  change -((n : ℂ) ^ 2 • _root_.LinearPMap.resolvent A (-I * (n : ℂ)) φ) + (I * (n : ℂ)) • φ
+    = (-I * (n : ℂ)) • _root_.LinearPMap.resolvent A (-I * (n : ℂ)) (A ⟨φ, hφ⟩)
   rw [hRA, smul_sub, smul_smul, negI_pnat_sq]
   module
 
@@ -557,18 +551,18 @@ estimate be applied to the pair `(Aₘˢʸᵐ, Aₙˢʸᵐ)`. -/
 /-- The symmetric Yosida approximants commute pairwise. -/
 theorem commute_yosidaApproxSym (hA : IsSelfAdjoint A) (m n : ℕ+) :
     Commute (yosidaApproximantSym hA m) (yosidaApproximantSym hA n) := by
-  have hIn : ∀ k : ℕ+, (I * (k : ℂ)) ∈ resolventSet A := fun k =>
-    mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero k)
-  have hNIn : ∀ k : ℕ+, (-I * (k : ℂ)) ∈ resolventSet A := fun k =>
-    mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero k)
+  have hIn : ∀ k : ℕ+, (I * (k : ℂ)) ∈ A.resolventSet := fun k =>
+    hA.mem_resolventSet_of_im_ne_zero (I_mul_pnat_im_ne_zero k)
+  have hNIn : ∀ k : ℕ+, (-I * (k : ℂ)) ∈ A.resolventSet := fun k =>
+    hA.mem_resolventSet_of_im_ne_zero (neg_I_mul_pnat_im_ne_zero k)
   unfold yosidaApproximantSym resolventAtIn resolventAtNegIn
   refine Commute.smul_left ?_ _ |>.smul_right _
   refine Commute.add_left ?_ ?_ <;> refine Commute.add_right ?_ ?_ <;>
     first
-      | exact resolvent_commute (hIn m) (hIn n)
-      | exact resolvent_commute (hIn m) (hNIn n)
-      | exact resolvent_commute (hNIn m) (hIn n)
-      | exact resolvent_commute (hNIn m) (hNIn n)
+      | exact _root_.LinearPMap.resolvent_comm (hIn m) (hIn n)
+      | exact _root_.LinearPMap.resolvent_comm (hIn m) (hNIn n)
+      | exact _root_.LinearPMap.resolvent_comm (hNIn m) (hIn n)
+      | exact _root_.LinearPMap.resolvent_comm (hNIn m) (hNIn n)
 
 /-! ### The approximating flows are Cauchy -/
 

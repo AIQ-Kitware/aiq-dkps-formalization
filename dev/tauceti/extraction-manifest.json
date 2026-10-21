@@ -3131,7 +3131,7 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
         "Mathlib"
@@ -3141,8 +3141,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": null,
+      "migration_note": "Yosida resolvents, their sharp norm estimates, and the adjoint-resolvent identity now use Tau Ceti's canonical LinearPMap resolver directly. The approximation and group-convergence mathematics remains local. The spectral-projection consumer temporarily converts at the existing local Borel-calculus boundary."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",

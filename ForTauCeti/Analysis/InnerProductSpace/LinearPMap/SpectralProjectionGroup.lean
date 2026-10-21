@@ -54,12 +54,26 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 is a linear combination of two resolvents. -/
 theorem specProjection_comm_yosidaApproxSym (n : ℕ+) :
     Commute (specProjection hA B hB) (yosidaApproximantSym hA n) := by
+  have him : (I * (n : ℂ)).im ≠ 0 := I_mul_pnat_im_ne_zero n
+  have hnim : (-I * (n : ℂ)).im ≠ 0 := neg_I_mul_pnat_im_ne_zero n
+  have hrootIn : (I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
+    hA.mem_resolventSet_of_im_ne_zero him
+  have hrootNegIn : (-I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
+    hA.mem_resolventSet_of_im_ne_zero hnim
+  have hlocalIn := root_mem_resolventSet_toLocal hrootIn
+  have hlocalNegIn := root_mem_resolventSet_toLocal hrootNegIn
   have h1 : Commute (specProjection hA B hB) (resolventAtIn hA n) :=
-    specProjection_comm_resolvent' hA (I_mul_pnat_im_ne_zero n)
-      (mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n)) B hB
+    by
+      change Commute (specProjection hA B hB)
+        (_root_.LinearPMap.resolvent A (I * (n : ℂ)))
+      rw [← local_resolvent_eq_root hrootIn]
+      exact specProjection_comm_resolvent' hA him hlocalIn B hB
   have h2 : Commute (specProjection hA B hB) (resolventAtNegIn hA n) :=
-    specProjection_comm_resolvent' hA (neg_I_mul_pnat_im_ne_zero n)
-      (mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n)) B hB
+    by
+      change Commute (specProjection hA B hB)
+        (_root_.LinearPMap.resolvent A (-I * (n : ℂ)))
+      rw [← local_resolvent_eq_root hrootNegIn]
+      exact specProjection_comm_resolvent' hA hnim hlocalNegIn B hB
   rw [yosidaApproximantSym]
   exact (h1.add_right h2).smul_right (-((n : ℂ) ^ 2 / 2))
 
