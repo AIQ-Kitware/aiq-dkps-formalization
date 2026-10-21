@@ -284,8 +284,12 @@ theorem weaklyMajorized_comp_castLE {N n : ℕ} (h : n ≤ N) {x y : Fin N → �
   left_nonneg := fun i => hxy.left_nonneg _
   right_nonneg := fun i => hxy.right_nonneg _
   prefix_le := fun k => by
-    rw [prefixSum_comp_castLE, prefixSum_comp_castLE]
-    exact hxy.prefix_le _
+    calc
+      prefixSum k (fun i : Fin n => x (Fin.castLE h i)) = prefixSum (min k n) x :=
+        prefixSum_comp_castLE h x k
+      _ ≤ prefixSum (min k n) y := hxy.prefix_le (min k n)
+      _ = prefixSum k (fun i : Fin n => y (Fin.castLE h i)) :=
+        (prefixSum_comp_castLE h y k).symm
 
 end Restriction
 

@@ -81,7 +81,7 @@ corresponding prefix sum. -/
 theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
     (k n : ℕ) (x : Fin n → ℝ) (hxanti : Antitone x)
     (hx0 : ∀ i, 0 ≤ x i) :
-    (kyFanFiniteNorm k n).gauge
+    (kyFanFiniteNorm k n).basisGauge
         (EuclideanSpace.basisFun (Fin n) ℂ) x =
       FiniteVector.prefixSum k x := by
   let b := EuclideanSpace.basisFun (Fin n) ℂ
@@ -128,9 +128,9 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
 
 /-- The finite Ky Fan gauges are coherent under appending a zero coordinate. -/
 theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
-    (kyFanFiniteNorm k (n + 1)).gauge
+    (kyFanFiniteNorm k (n + 1)).basisGauge
         (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (zeroPad x) =
-      (kyFanFiniteNorm k n).gauge
+      (kyFanFiniteNorm k n).basisGauge
         (EuclideanSpace.basisFun (Fin n) ℂ) x := by
   let absx : Fin n → ℝ := fun i => |x i|
   let pi : Equiv.Perm (Fin n) :=
@@ -145,18 +145,18 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
     FiniteVector.zeroPadRight_nonneg hy0
 
   have hsmall :
-      (kyFanFiniteNorm k n).gauge
+      (kyFanFiniteNorm k n).basisGauge
           (EuclideanSpace.basisFun (Fin n) ℂ) y =
-        (kyFanFiniteNorm k n).gauge
+        (kyFanFiniteNorm k n).basisGauge
           (EuclideanSpace.basisFun (Fin n) ℂ) x := by
     calc
-      (kyFanFiniteNorm k n).gauge
+      (kyFanFiniteNorm k n).basisGauge
           (EuclideanSpace.basisFun (Fin n) ℂ) y =
-          (kyFanFiniteNorm k n).gauge
+          (kyFanFiniteNorm k n).basisGauge
             (EuclideanSpace.basisFun (Fin n) ℂ) absx := by
         exact (kyFanFiniteNorm k n).gauge_perm
           (EuclideanSpace.basisFun (Fin n) ℂ) absx pi
-      _ = (kyFanFiniteNorm k n).gauge
+      _ = (kyFanFiniteNorm k n).basisGauge
             (EuclideanSpace.basisFun (Fin n) ℂ) x := by
         exact uinGauge_abs (kyFanFiniteNorm k n)
           (EuclideanSpace.basisFun (Fin n) ℂ) x
@@ -176,16 +176,16 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
 
   rw [SymmetricIdeal.zeroPad_eq_zeroPadRight]
   calc
-    (kyFanFiniteNorm k (n + 1)).gauge
+    (kyFanFiniteNorm k (n + 1)).basisGauge
         (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
         (FiniteVector.zeroPadRight (m := 1) x) =
-      (kyFanFiniteNorm k (n + 1)).gauge
+      (kyFanFiniteNorm k (n + 1)).basisGauge
         (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
         (fun i => |FiniteVector.zeroPadRight (m := 1) x i|) := by
           exact (uinGauge_abs (kyFanFiniteNorm k (n + 1))
             (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
             (FiniteVector.zeroPadRight (m := 1) x)).symm
-    _ = (kyFanFiniteNorm k (n + 1)).gauge
+    _ = (kyFanFiniteNorm k (n + 1)).basisGauge
         (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
         (((fun i => |FiniteVector.zeroPadRight (m := 1) x i|) ∘
           zeroPadPerm pi)) := by
@@ -193,7 +193,7 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
             (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
             (fun i => |FiniteVector.zeroPadRight (m := 1) x i|)
             (zeroPadPerm pi)).symm
-    _ = (kyFanFiniteNorm k (n + 1)).gauge
+    _ = (kyFanFiniteNorm k (n + 1)).basisGauge
         (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
         (FiniteVector.zeroPadRight (m := 1) y) := by rw [hpermPad]
     _ = FiniteVector.prefixSum k (FiniteVector.zeroPadRight (m := 1) y) :=
@@ -201,10 +201,10 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
         _ hpadyanti hpady0
     _ = FiniteVector.prefixSum k y :=
       FiniteVector.prefixSum_zeroPadRight k y
-    _ = (kyFanFiniteNorm k n).gauge
+    _ = (kyFanFiniteNorm k n).basisGauge
         (EuclideanSpace.basisFun (Fin n) ℂ) y :=
       (kyFanFiniteNorm_gauge_of_antitone_nonneg k n y hyanti hy0).symm
-    _ = (kyFanFiniteNorm k n).gauge
+    _ = (kyFanFiniteNorm k n).basisGauge
         (EuclideanSpace.basisFun (Fin n) ℂ) x := hsmall
 
 /-- The Ky Fan `k` norm, for positive `k`, as an actual member of the coherent

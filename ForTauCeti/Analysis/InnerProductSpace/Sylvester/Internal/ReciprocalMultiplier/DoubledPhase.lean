@@ -256,8 +256,12 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
     conv_lhs => rw [sum_basisMatrixUnit eF eE A]
     simp only [map_sum, map_smul, blockDiagonal]
     rfl
-  refine ⟨q, fun r => ((w r : ℝ) : 𝕜), U, V, ?_, ?_⟩
-  · calc
+  have hrepr : ((δ : ℝ) : 𝕜) •
+      UnitarilyInvariantSeminorm.orthogonalBlockSum X X =
+        ∑ r, ((w r : ℝ) : 𝕜) • ((U r).toLinearMap ∘ₗ
+          UnitarilyInvariantSeminorm.orthogonalBlockSum C C ∘ₗ
+            (V r).toLinearMap) := by
+    calc
       ((δ : ℝ) : 𝕜) • UnitarilyInvariantSeminorm.orthogonalBlockSum X X =
           ((δ : ℝ) : 𝕜) • ∑ i, ∑ j, ⟪eF i, X (eE j)⟫_𝕜 •
             UnitarilyInvariantSeminorm.orthogonalBlockSum
@@ -301,12 +305,21 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
             (V r).toLinearMap) := by
         simp only [S, LinearMap.sum_apply, LinearMap.smul_apply,
           unitaryOrbitAction_apply]
-  · calc
+  have hmass' : (∑ r, ‖((w r : ℝ) : 𝕜)‖) ≤ mass := by
+    calc
       (∑ r, ‖((w r : ℝ) : 𝕜)‖) = ∑ r, |w r| := by
         apply Finset.sum_congr rfl
         intro r _
         rw [RCLike.norm_ofReal]
       _ ≤ mass := hmass
+  refine ⟨q, {
+    coeff := fun r => ((w r : ℝ) : 𝕜)
+    left := U
+    right := V
+    sum_smul_comp_comp_eq := hrepr.symm
+  }, ?_⟩
+  rw [TauCeti.UnitaryOrbitCertificate.mass_def]
+  exact hmass'
 
 /-- **Generic sharp Ky Fan reciprocal-multiplier estimate from approximate
 Fourier interpolation.**  The complex coefficients descend to doubled phase
@@ -344,9 +357,20 @@ theorem kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
   have hcert :=
     finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
       eF eE α β hinterp hcoeff
-  have hbound :=
-    TauCeti.UnitarilyInvariantSeminorm.kyFanSum_le_of_finiteUnitaryOrbitCertificate
-      (2 * k) hcert
+  rcases hcert with ⟨_, cert, hmass⟩
+  have hbound :
+      TauCeti.kyFanSum (2 * k)
+          (((δ : ℝ) : 𝕜) •
+            UnitarilyInvariantSeminorm.orthogonalBlockSum X X) ≤
+        cert.mass * TauCeti.kyFanSum (2 * k)
+          (UnitarilyInvariantSeminorm.orthogonalBlockSum C C) := by
+    simpa only [TauCeti.UnitarilyInvariantSeminorm.kyFan_apply,
+      TauCeti.kyFanSum_eq_sum_range, LinearMap.kyFanSum_def] using
+      cert.apply_le_mass_mul
+        (TauCeti.UnitarilyInvariantSeminorm.kyFan 𝕜
+          (WithLp 2 (E × E)) (WithLp 2 (F × F)) (2 * k))
+  have hbound' := hbound.trans (mul_le_mul_of_nonneg_right hmass
+    (TauCeti.kyFanSum_nonneg _ _))
   have hscale :
       TauCeti.kyFanSum (2 * k)
           (((δ : ℝ) : 𝕜) •
@@ -358,11 +382,11 @@ theorem kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
   rw [hscale,
     TauCeti.UnitarilyInvariantSeminorm.kyFanSum_orthogonalBlockSum_self,
     TauCeti.UnitarilyInvariantSeminorm.kyFanSum_orthogonalBlockSum_self]
-      at hbound
+      at hbound'
   have hbound' :
       δ * TauCeti.kyFanSum k X ≤
         (Real.pi / 2 + eps) * K := by
-    dsimp only [K] at hbound ⊢
+    dsimp only [K] at hbound' ⊢
     nlinarith
   have hepsK : eps * K ≤ eta := by
     rw [show eps = eta / (K + 1) from rfl, div_mul_eq_mul_div,

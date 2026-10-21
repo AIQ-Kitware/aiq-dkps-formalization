@@ -83,17 +83,22 @@ theorem sinTwoThetaEmbedding_uiNorm_le_two_mul
     (X : F →ₗᵢ[𝕜] E) :
     N (sinTwoThetaEmbedding U X) ≤ 2 * N (sinThetaEmbedding U X) := by
   rw [sinTwoThetaEmbedding, N.smul_eq, RCLike.norm_ofNat]
-  have hcomp := N.comp_le_mul_opNorm
-    (sinThetaEmbedding U X) (cosThetaMagnitude U X)
+  have hcomp := N.map_comp_le_right (sinThetaEmbedding U X) (cosThetaMagnitude U X)
+    (c := ‖(cosThetaMagnitude U X).toContinuousLinearMap‖)
+    (fun x => (cosThetaMagnitude U X).toContinuousLinearMap.le_opNorm x)
+  have hcomp' : N (sinThetaEmbedding U X ∘ₗ cosThetaMagnitude U X) ≤
+      N (sinThetaEmbedding U X) *
+        ‖(cosThetaMagnitude U X).toContinuousLinearMap‖ := by
+    simpa only [mul_comm] using hcomp
   calc
     2 * N (sinThetaEmbedding U X ∘ₗ cosThetaMagnitude U X)
         ≤ 2 * (N (sinThetaEmbedding U X) *
           ‖(cosThetaMagnitude U X).toContinuousLinearMap‖) :=
-      mul_le_mul_of_nonneg_left hcomp (by positivity)
+      mul_le_mul_of_nonneg_left hcomp' (by positivity)
     _ ≤ 2 * (N (sinThetaEmbedding U X) * 1) :=
       mul_le_mul_of_nonneg_left
         (mul_le_mul_of_nonneg_left
-          (cosThetaMagnitude_opNorm_le_one U X) (N.nonneg _))
+          (cosThetaMagnitude_opNorm_le_one U X) (apply_nonneg N _))
         (by positivity)
     _ = 2 * N (sinThetaEmbedding U X) := by ring
 

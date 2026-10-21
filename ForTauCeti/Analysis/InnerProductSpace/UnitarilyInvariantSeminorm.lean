@@ -5,7 +5,8 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Transport
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances

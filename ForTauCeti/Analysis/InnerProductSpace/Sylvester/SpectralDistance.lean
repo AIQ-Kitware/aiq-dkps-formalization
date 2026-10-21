@@ -143,7 +143,7 @@ theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
     ∃ m : ℝ, 0 ≤ m ∧ m ≤ Real.pi / 2 ∧
       ∃ Y : E →ₗ[𝕜] F,
         Y ∈ convexHull ℝ
-          (UnitarilyInvariantSeminorm.twoSidedUnitaryOrbit C) ∧
+          (LinearMap.twoSidedUnitaryOrbit C) ∧
         (((δ : 𝕜)) • X) = ((m : 𝕜)) • Y := by
   let p : ℝ := Real.pi / 2
   have hp : 0 < p := by
@@ -254,8 +254,8 @@ theorem frobenius_sylvester_le_of_pointSpectraSeparated
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
-    δ * UnitarilyInvariantSeminorm.frobenius X ≤
-      UnitarilyInvariantSeminorm.frobenius C := by
+    δ * UnitarilyInvariantSeminorm.frobenius 𝕜 E F X ≤
+      UnitarilyInvariantSeminorm.frobenius 𝕜 E F C := by
   classical
   set bA := hA.eigenvectorBasis rfl with hbA
   set bB := hB.eigenvectorBasis rfl with hbB
@@ -298,8 +298,8 @@ theorem frobenius_sylvester_le_of_pointSpectraSeparated
   have htot : δ ^ 2 * (∑ j, ‖X (bB j)‖ ^ 2) ≤ ∑ j, ‖C (bB j)‖ ^ 2 := by
     rw [Finset.mul_sum]
     exact Finset.sum_le_sum fun j _ => hcol j
-  rw [UnitarilyInvariantSeminorm.frobenius_apply_basis X rfl bB,
-    UnitarilyInvariantSeminorm.frobenius_apply_basis C rfl bB,
+  rw [UnitarilyInvariantSeminorm.frobenius_apply bB X,
+    UnitarilyInvariantSeminorm.frobenius_apply bB C,
     ← Real.sqrt_sq hδ.le, ← Real.sqrt_mul (by positivity)]
   exact Real.sqrt_le_sqrt htot
 

@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 public import ForTauCeti.Analysis.Convex.Majorization
 public import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
 public import ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
-public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
 
 /-!
 # Ky Fan majorization for rectangular unitarily invariant norms
@@ -34,6 +34,9 @@ formalization (Kitware, Inc.). The vector majorization descent remains in
 -/
 
 public section
+
+set_option linter.style.haveILetI false
+
 
 namespace TauCeti
 
@@ -66,7 +69,80 @@ variable (N : UnitarilyInvariantSeminorm 𝕜 E F)
 /- `Module ℝ (E →ₗ[𝕜] F)` is a *local* instance in `Basic`, so it does not survive the
 import.  Re-enable it here; making it global would put a second `Module ℝ` structure on
 every `𝕜`-linear map space, which is why it is local in the first place. -/
-attribute [local instance] realModuleLinearMap
+local instance realModuleLinearMap : Module ℝ (E →ₗ[𝕜] F) :=
+  Module.compHom (E →ₗ[𝕜] F) (algebraMap ℝ 𝕜)
+
+/-- A Tau Ceti orbit certificate whose coefficient mass is bounded by a prescribed budget.
+The underlying representation and its norm bound are supplied by Tau Ceti's canonical
+`UnitaryOrbitCertificate`; this predicate records the budget needed by the Sylvester estimates. -/
+@[expose]
+def HasFiniteUnitaryOrbitCertificate (mass : ℝ) (X C : E →ₗ[𝕜] F) : Prop :=
+  ∃ (n : ℕ) (cert : TauCeti.UnitaryOrbitCertificate (Fin n) C X), cert.mass ≤ mass
+
+/- Convert a scaled point of the real convex hull of a two-sided unitary orbit into a Tau Ceti
+orbit certificate with the same coefficient-mass budget. -/
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+theorem hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull
+    {m mass : ℝ} (hm : 0 ≤ m) (hmass : m ≤ mass)
+    {X Y C : E →ₗ[𝕜] F}
+    (hY : Y ∈ convexHull ℝ (LinearMap.twoSidedUnitaryOrbit C))
+    (hX : X = ((m : 𝕜)) • Y) :
+    HasFiniteUnitaryOrbitCertificate mass X C := by
+  classical
+  rcases mem_convexHull_iff_exists_fintype.mp hY with
+    ⟨ι, instι, w, z, hw, hwsum, hz, hzsum⟩
+  letI : Fintype ι := instι
+  have hz' : ∀ i, ∃ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E),
+      U.toLinearMap ∘ₗ C ∘ₗ V.toLinearMap = z i := by
+    intro i
+    exact LinearMap.mem_twoSidedUnitaryOrbit.mp (hz i)
+  choose U V hUV using hz'
+  have real_smul_linearMap_eq (r : ℝ) (T : E →ₗ[𝕜] F) :
+      r • T = ((r : 𝕜)) • T := by
+    change (algebraMap ℝ 𝕜 r) • T = ((r : 𝕜)) • T
+    rfl
+  have hzsum' : ∑ i, ((w i : 𝕜) • z i) = Y := by
+    calc
+      ∑ i, ((w i : 𝕜) • z i) = ∑ i, (w i • z i) := by
+        apply Finset.sum_congr rfl
+        intro i hi
+        exact (real_smul_linearMap_eq (w i) (z i)).symm
+      _ = Y := hzsum
+  have hrepr :
+      ∑ i, (((m * w i : ℝ) : 𝕜)) •
+        ((U i).toLinearMap ∘ₗ C ∘ₗ (V i).toLinearMap) = X := by
+    calc
+      ∑ i, (((m * w i : ℝ) : 𝕜)) •
+          ((U i).toLinearMap ∘ₗ C ∘ₗ (V i).toLinearMap) =
+          ∑ i, (((m * w i : ℝ) : 𝕜)) • z i := by
+        apply Finset.sum_congr rfl
+        intro i hi
+        rw [hUV i]
+      _ = ((m : 𝕜)) • ∑ i, ((w i : 𝕜) • z i) := by
+        rw [Finset.smul_sum]
+        apply Finset.sum_congr rfl
+        intro i hi
+        rw [smul_smul, RCLike.ofReal_mul]
+      _ = ((m : 𝕜)) • Y := by rw [hzsum']
+      _ = X := hX.symm
+  let cert : TauCeti.UnitaryOrbitCertificate ι C X := {
+    coeff := fun i => (((m * w i : ℝ) : 𝕜))
+    left := U
+    right := V
+    sum_smul_comp_comp_eq := hrepr
+  }
+  let certFin := cert.reindex (Fintype.equivFin ι)
+  refine ⟨Fintype.card ι, certFin, ?_⟩
+  calc
+      certFin.mass = cert.mass := cert.mass_reindex (Fintype.equivFin ι)
+      _ = ∑ i, ‖(((m * w i : ℝ) : 𝕜))‖ := cert.mass_def
+      _ = m * ∑ i, w i := by
+        rw [Finset.mul_sum]
+        apply Finset.sum_congr rfl
+        intro i hi
+        rw [RCLike.norm_ofReal, abs_of_nonneg (mul_nonneg hm (hw i))]
+      _ = m := by rw [hwsum, mul_one]
+      _ ≤ mass := hmass
 
 
 /-- Extend a unitary action on an isometrically embedded coordinate space to
@@ -191,19 +267,23 @@ private theorem twoSidedAction_mem_convexHull
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     {A C : E₀ →ₗ[𝕜] F₀}
-    (hA : A ∈ convexHull ℝ (twoSidedUnitaryOrbit C))
+    (hA : A ∈ convexHull ℝ (LinearMap.twoSidedUnitaryOrbit C))
     (U : F₀ ≃ₗᵢ[𝕜] F₀) (V : E₀ ≃ₗᵢ[𝕜] E₀) :
     U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap ∈
-      convexHull ℝ (twoSidedUnitaryOrbit C) := by
+      convexHull ℝ (LinearMap.twoSidedUnitaryOrbit C) := by
   let L := twoSidedActionLinear (𝕜 := 𝕜) U V
-  have hmem : L A ∈ L '' convexHull ℝ (twoSidedUnitaryOrbit C) :=
+  have hmem : L A ∈ L '' convexHull ℝ (LinearMap.twoSidedUnitaryOrbit C) :=
     ⟨A, hA, rfl⟩
   rw [L.image_convexHull] at hmem
   apply convexHull_mono (𝕜 := ℝ) ?_ hmem
-  rintro Y ⟨Y0, ⟨U0, V0, rfl⟩, rfl⟩
+  rintro Y ⟨Y0, hY0, rfl⟩
+  change Y0 ∈ LinearMap.twoSidedUnitaryOrbit C at hY0
+  obtain ⟨U0, V0, hY0eq⟩ := LinearMap.mem_twoSidedUnitaryOrbit.mp hY0
+  apply LinearMap.mem_twoSidedUnitaryOrbit.mpr
   refine ⟨U0.trans U, V.trans V0, ?_⟩
   ext x
-  rfl
+  change U (U0 (C (V0 (V x)))) = U (Y0 (V x))
+  exact congrArg U (LinearMap.congr_fun hY0eq (V x))
 
 /-- Lift a square coordinate operator to a rectangular map after arbitrary
 left and right coordinate unitaries, extending those unitaries to the ambient
@@ -330,10 +410,10 @@ private theorem coordinateLift_diagOp_mem_convexHull_of_conj
         diagOp (EuclideanSpace.basisFun (Fin d) 𝕜) q ∘ₗ P'.toLinearMap)
     (hq : coordinateLift ιE ιF
         (diagOp (EuclideanSpace.basisFun (Fin d) 𝕜) q) ∈
-      convexHull ℝ (twoSidedUnitaryOrbit B)) :
+      convexHull ℝ (LinearMap.twoSidedUnitaryOrbit B)) :
     coordinateLift ιE ιF
         (diagOp (EuclideanSpace.basisFun (Fin d) 𝕜) f) ∈
-      convexHull ℝ (twoSidedUnitaryOrbit B) := by
+      convexHull ℝ (LinearMap.twoSidedUnitaryOrbit B) := by
   obtain ⟨UF, VE, hfac⟩ := coordinateLift_unitary_factorization
     ιE ιF P P' (diagOp (EuclideanSpace.basisFun (Fin d) 𝕜) q)
   rw [hdiag, hfac]
@@ -351,7 +431,7 @@ above. -/
 theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
     {A B : E →ₗ[𝕜] F}
     (h : ∀ k, kyFanSum k A ≤ kyFanSum k B) :
-    A ∈ convexHull ℝ (twoSidedUnitaryOrbit B) := by
+    A ∈ convexHull ℝ (LinearMap.twoSidedUnitaryOrbit B) := by
   classical
   let d : ℕ := min (finrank 𝕜 E) (finrank 𝕜 F)
   have hdE : d ≤ finrank 𝕜 E := by
@@ -366,9 +446,9 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
   let z : Fin d → ℝ := fun i => A.singularValues (i : ℕ)
   let y : Fin d → ℝ := fun i => B.singularValues (i : ℕ)
   let K : Set (Fin d → ℝ) :=
-    L ⁻¹' convexHull ℝ (twoSidedUnitaryOrbit B)
+    L ⁻¹' convexHull ℝ (LinearMap.twoSidedUnitaryOrbit B)
   have hKconv : Convex ℝ K :=
-    (convex_convexHull ℝ (twoSidedUnitaryOrbit B)).linear_preimage L
+    (convex_convexHull ℝ (LinearMap.twoSidedUnitaryOrbit B)).linear_preimage L
   have hswap : ∀ q ∈ K, ∀ j l : Fin d,
       q ∘ Equiv.swap j l ∈ K := by
     intro q hq j l
@@ -403,7 +483,7 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
       (LinearIsometryEquiv.refl 𝕜 _) R hdiag' hq
   have hrankA : finrank 𝕜 A.range ≤ d := finrank_range_le_min A
   have hrankB : finrank 𝕜 B.range ≤ d := finrank_range_le_min B
-  have hLy : L y ∈ twoSidedUnitaryOrbit B := by
+  have hLy : L y ∈ LinearMap.twoSidedUnitaryOrbit B := by
     have hsigma : (L y).singularValues = B.singularValues := by
       -- unfolds the private helper `coordinateLift`. It has no `_apply` lemma because
       -- it is file-local plumbing rather than public API, so there is nothing to
@@ -412,9 +492,7 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
         B.singularValues
       rw [singularValues_coordinateLift,
         singularValues_singularValueDiagonal B hrankB]
-    obtain ⟨U, V, hfac⟩ :=
-      exists_unitary_factorization_of_singularValues_eq hsigma
-    exact ⟨U, V, hfac⟩
+    exact (LinearMap.mem_twoSidedUnitaryOrbit_iff_singularValues_eq).2 hsigma
   have hyK : y ∈ K := subset_convexHull ℝ _ hLy
   have hzanti : Antitone z := fun i j hij =>
     A.singularValues_antitone (Fin.le_def.mp hij)
@@ -445,28 +523,65 @@ theorem mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
       A.singularValues
     rw [singularValues_coordinateLift,
       singularValues_singularValueDiagonal A hrankA]
-  obtain ⟨U, V, hfac⟩ :=
-    exists_unitary_factorization_of_singularValues_eq hsigmaA
+  have hzOrbit : L z ∈ LinearMap.twoSidedUnitaryOrbit A :=
+    (LinearMap.mem_twoSidedUnitaryOrbit_iff_singularValues_eq).2 hsigmaA.symm
+  obtain ⟨U, V, hfac⟩ := LinearMap.mem_twoSidedUnitaryOrbit.mp hzOrbit
+  have hfac' : U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap = L z := by
+    ext x
+    exact congrArg (fun f : E →ₗ[𝕜] F => f x) hfac
   -- restates the hypothesis through the private helper `L`, which has no
   -- characteristic lemma to rewrite with: it is file-local plumbing, not API.
-  change L z ∈ convexHull ℝ (twoSidedUnitaryOrbit B) at hzK
-  rw [hfac]
-  exact twoSidedAction_mem_convexHull hzK U V
+  change L z ∈ convexHull ℝ (LinearMap.twoSidedUnitaryOrbit B) at hzK
+  have hA : A = U.symm.toLinearMap ∘ₗ L z ∘ₗ V.symm.toLinearMap := by
+    calc
+      A = U.symm.toLinearMap ∘ₗ
+          (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) ∘ₗ V.symm.toLinearMap := by
+            ext x
+            simp [LinearMap.comp_apply]
+      _ = U.symm.toLinearMap ∘ₗ L z ∘ₗ V.symm.toLinearMap := by rw [hfac']
+  rw [hA]
+  exact twoSidedAction_mem_convexHull hzK U.symm V.symm
 
 
-/-- Convex-hull domination by a two-sided unitary orbit implies domination in
+/- Convex-hull domination by a two-sided unitary orbit implies domination in
 any rectangular unitarily invariant norm.
 
 The proof extracts the existing finite orbit certificate with mass one and
 then applies the certificate norm bound. -/
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 theorem apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
     {A B : E →ₗ[𝕜] F}
-    (h : A ∈ convexHull ℝ (twoSidedUnitaryOrbit B)) :
+    (h : A ∈ convexHull ℝ (LinearMap.twoSidedUnitaryOrbit B)) :
     N A ≤ N B := by
-  have hcert : HasFiniteUnitaryOrbitCertificate 1 A B :=
-    hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull
-      (m := 1) (mass := 1) zero_le_one le_rfl h (by simp)
-  simpa using N.apply_le_of_finiteUnitaryOrbitCertificate hcert
+  have hhull : A ∈ B.twoSidedUnitaryOrbitHull := by
+    classical
+    rcases mem_convexHull_iff_exists_fintype.mp h with
+      ⟨ι, instι, w, z, hw, hwsum, hz, hzsum⟩
+    letI : Fintype ι := instι
+    have hz' : ∀ i, ∃ (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E),
+        U.toLinearMap ∘ₗ B ∘ₗ V.toLinearMap = z i := by
+      intro i
+      exact LinearMap.mem_twoSidedUnitaryOrbit.mp (hz i)
+    choose U V hUV using hz'
+    have hsum : ∑ i, ((w i : 𝕜) • z i) = A := by
+      calc
+        ∑ i, ((w i : 𝕜) • z i) = ∑ i, (w i • z i) := by
+          apply Finset.sum_congr rfl
+          intro i hi
+          change (algebraMap ℝ 𝕜 (w i)) • z i = (w i : 𝕜) • z i
+          rfl
+        _ = A := hzsum
+    apply LinearMap.mem_twoSidedUnitaryOrbitHull.mpr
+    refine ⟨Fintype.card ι, fun i => w ((Fintype.equivFin ι).symm i),
+      fun i => z ((Fintype.equivFin ι).symm i), ?_, ?_, ?_, ?_⟩
+    · intro i
+      exact hw _
+    · exact (Fintype.equivFin ι).symm.sum_comp w ▸ hwsum
+    · intro i
+      exact hz _
+    · rw [← hsum]
+      exact (Fintype.equivFin ι).symm.sum_comp fun i => (w i : 𝕜) • z i
+  exact N.map_le_of_mem_twoSidedUnitaryOrbitHull hhull
 
 
 /-- Fan dominance for rectangular maps: domination of all Ky Fan sums implies
@@ -489,7 +604,7 @@ theorem apply_comp_le {C : F →ₗ[𝕜] F} {X : E →ₗ[𝕜] F} {c : ℝ} (h
           kyFanSum_le_of_singularValues_le (fun i => by
             rw [singularValues_real_smul X hc i]
             exact singularValues_comp_le hc hC X i) k
-    _ = c * N X := by rw [N.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hc]
+    _ = c * N X := by rw [map_smul_eq_mul, RCLike.norm_ofReal, abs_of_nonneg hc]
 
 /-- **The ideal property (right factor).**  If `‖C y‖ ≤ c ‖y‖` for `0 ≤ c`, then
 `N (X ∘ₗ C) ≤ N X * c`. -/
@@ -501,7 +616,7 @@ theorem apply_comp_le' {X : E →ₗ[𝕜] F} {C : E →ₗ[𝕜] E} {c : ℝ} (
           kyFanSum_le_of_singularValues_le (fun i => by
             rw [singularValues_real_smul X hc i]
             exact singularValues_comp_le' hc hC i) k
-    _ = N X * c := by rw [N.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hc, mul_comm]
+    _ = N X * c := by rw [map_smul_eq_mul, RCLike.norm_ofReal, abs_of_nonneg hc, mul_comm]
 
 
 

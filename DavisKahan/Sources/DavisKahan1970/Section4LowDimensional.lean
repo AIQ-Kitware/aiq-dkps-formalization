@@ -97,7 +97,11 @@ theorem example4_1_directRotation_uiNorm_le_reflection_of_le_pi_div_three
       have hhalf : Real.sin (theta / 2) ≤ 1 / 2 :=
         sin_half_le_one_half_of_le_pi_div_three h0 hθ
       nlinarith
-  exact (TauCeti.UnitarilyInvariantSeminorm.kyFanSum_le_iff_forall_seminorm).1 hky N
+  apply N.map_le_of_kyFanSum_le
+  intro k
+  rw [← TauCeti.kyFanSum_eq_linearMap_kyFanSum k _,
+    ← TauCeti.kyFanSum_eq_linearMap_kyFanSum k _]
+  exact hky k
 
 /-- Package the two plane competitors in Example 4.1.  `false` is the direct
 rotation and `true` is the reflecting competitor. -/

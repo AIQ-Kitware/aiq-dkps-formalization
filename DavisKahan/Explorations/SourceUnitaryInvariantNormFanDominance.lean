@@ -2672,8 +2672,8 @@ private theorem symmetricNorming_prefixGauge_le_cross
     M.prefixGauge n A ≤ M.prefixGauge n B := by
   let MN := M.finiteNorm n
   let b := EuclideanSpace.basisFun (Fin n) ℂ
-  change MN.gauge b (SymmetricNormingFunction.approximationPrefix n A) ≤
-    MN.gauge b (SymmetricNormingFunction.approximationPrefix n B)
+  change MN.basisGauge b (SymmetricNormingFunction.approximationPrefix n A) ≤
+    MN.basisGauge b (SymmetricNormingFunction.approximationPrefix n B)
   apply MN.gauge_le_gauge_of_prefix_sums_le b
   · intro i j hij
     exact approximationSingularValue_antitone A (Fin.le_def.mp hij)

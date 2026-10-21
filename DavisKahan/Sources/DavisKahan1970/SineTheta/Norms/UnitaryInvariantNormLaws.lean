@@ -199,9 +199,9 @@ theorem prefixGauge_le_of_all_kyFan_le_hetero (N : SymmetricNormingFunction)
     (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B) (n : ℕ) :
     N.prefixGauge n A ≤ N.prefixGauge n B := by
-  change (N.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ)
+  change (N.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ)
       (approximationPrefix n A) ≤
-    (N.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ)
+      (N.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ)
       (approximationPrefix n B)
   apply (N.finiteNorm n).gauge_le_gauge_of_prefix_sums_le
   · intro i j hij

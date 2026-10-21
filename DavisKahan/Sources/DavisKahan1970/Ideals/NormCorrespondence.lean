@@ -121,7 +121,7 @@ variable {n : ℕ}
 /-- The gauge of any unitarily invariant norm ignores the signs of the
 diagonal. -/
 theorem uinGauge_abs (x : Fin n → ℝ) :
-    N.gauge b (fun i => |x i|) = N.gauge b x := by
+    N.basisGauge b (fun i => |x i|) = N.basisGauge b x := by
   have h1 := N.apply_eq_gauge finrank_euclideanSpace_fin b (TauCeti.diagOp b x)
   have h2 := N.apply_eq_gauge finrank_euclideanSpace_fin b
     (TauCeti.diagOp b fun i => |x i|)
@@ -130,7 +130,7 @@ theorem uinGauge_abs (x : Fin n → ℝ) :
 
 /-- The gauge of any unitarily invariant norm vanishes on the zero vector. -/
 @[simp]
-theorem uinGauge_zero : N.gauge b (0 : Fin n → ℝ) = 0 := by
+theorem uinGauge_zero : N.basisGauge b (0 : Fin n → ℝ) = 0 := by
   simpa using N.gauge_real_smul b 0 (0 : Fin n → ℝ)
 
 end UnitarilyInvariantGauge
@@ -331,30 +331,28 @@ noncomputable def finiteNorm (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
       show Φ.gauge n (fun i : Fin n => (c • A).singularValues (i : ℕ)) =
         ‖c‖ * Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ))
       rw [hs, Φ.smul, abs_of_nonneg (norm_nonneg c)])
-  unitary_invariant' :=
-    TauCeti.UnitarilyInvariantSeminorm.unitary_invariant_of_isometry
-      (fun U V A => by
-        have h : (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues =
-            A.singularValues := by
-          rw [show (U.toLinearMap :
-                  EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))
-                = ↑U.toLinearEquiv from rfl,
-            show (V.toLinearMap :
-                  EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))
-                = ↑V.toLinearEquiv from rfl,
-            TauCeti.singularValues_unitary_comp,
-            TauCeti.singularValues_comp_unitary]
-        show Φ.gauge n (fun i : Fin n =>
-            (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues (i : ℕ)) =
-          Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ))
-        rw [h])
+  map_linearIsometryEquiv_comp_comp' U V A := by
+    have h : (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues =
+        A.singularValues := by
+      rw [show (U.toLinearMap :
+              EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))
+            = ↑U.toLinearEquiv from rfl,
+        show (V.toLinearMap :
+              EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))
+            = ↑V.toLinearEquiv from rfl,
+        TauCeti.singularValues_unitary_comp,
+        TauCeti.singularValues_comp_unitary]
+    change Φ.gauge n (fun i : Fin n =>
+        (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues (i : ℕ)) =
+      Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ))
+    rw [h]
 
 /-- **The induced finite norm has exactly the source gauge.**  Both the
 normalization and the zero-padding law of the reconstructed family reduce to
 the corresponding source law through this identity. -/
 theorem finiteNorm_gauge (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
     (x : Fin n → ℝ) :
-    (Φ.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x =
+    (Φ.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ) x =
       Φ.gauge n x := by
   obtain ⟨π, hπ⟩ :=
     exists_perm_singularValues_diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x

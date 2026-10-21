@@ -180,9 +180,11 @@ theorem complementaryTrialBlock_residual_le_of_intervalGap
       N (complementaryProjection V ∘ₗ generalResidual A X M)
           ≤ ‖(complementaryProjection V).toContinuousLinearMap‖ *
               N (generalResidual A X M) :=
-        N.comp_le_opNorm_mul _ _
+        N.map_comp_le_left _ _ (c :=
+          ‖(complementaryProjection V).toContinuousLinearMap‖)
+          (fun x => (complementaryProjection V).toContinuousLinearMap.le_opNorm x)
       _ ≤ 1 * N (generalResidual A X M) :=
-        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
+        mul_le_mul_of_nonneg_right hproj (apply_nonneg N _)
       _ = N (generalResidual A X M) := one_mul _
   have hSylvester :=
     uiNorm_sylvester_le_of_unorderedIntervalGap NV hAV hM hδ hgap' hEq

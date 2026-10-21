@@ -101,8 +101,8 @@ theorem totalRotation_add_eigenvalueMotion_le
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) ^ 2 := by
   have h := rotation_add_displacement_le_hilbertSchmidt_intertwining
     hA hB hn hover hsep
-  rw [UnitarilyInvariantSeminorm.frobenius_sq (𝕜 := 𝕜) (E := E) (B - A) hn
-    (hA.eigenvectorBasis hn)]
+  rw [UnitarilyInvariantSeminorm.sq_frobenius_apply
+    (𝕜 := 𝕜) (E := E) (F := E) (hA.eigenvectorBasis hn) (B - A)]
   simpa [totalRotationEnergy, eigenvalueMotionEnergy] using h
 
 /-- Davis 1963, Theorem 4.1: the squared eigenvalue motion dominates diagonal
@@ -136,8 +136,8 @@ theorem diagonalPerturbation_sub_offDiagonal_le_eigenvalueMotion
   rw [hsymm] at hmotion
   rw [hoff] at hmotion
   unfold eigenbasisOffDiagonalEnergy eigenvalueMotionEnergy
-  rw [UnitarilyInvariantSeminorm.frobenius_sq (𝕜 := 𝕜) (E := E) (B - A) hn
-    (hA.eigenvectorBasis hn)]
+  rw [UnitarilyInvariantSeminorm.sq_frobenius_apply
+    (𝕜 := 𝕜) (E := E) (F := E) (hA.eigenvectorBasis hn) (B - A)]
   simpa only [eigenbasisPinchEnergy] using hmotion
 
 /-- Davis's off-diagonal corollary for total rotation in the canonical sorted
@@ -160,8 +160,8 @@ theorem totalRotation_le_two_mul_offDiagonal
   have h := rotation_le_two_mul_offDiag hA hB hn hγ hsepB hpinchSmall
     hover hsepMixed
   unfold totalRotationEnergy eigenbasisOffDiagonalEnergy eigenbasisPinchEnergy
-  rw [UnitarilyInvariantSeminorm.frobenius_sq (𝕜 := 𝕜) (E := E) (B - A) hn
-    (hA.eigenvectorBasis hn)]
+  rw [UnitarilyInvariantSeminorm.sq_frobenius_apply
+    (𝕜 := 𝕜) (E := E) (F := E) (hA.eigenvectorBasis hn) (B - A)]
   exact h
 
 /-- **An operator-norm bound gives a pointwise bound.**

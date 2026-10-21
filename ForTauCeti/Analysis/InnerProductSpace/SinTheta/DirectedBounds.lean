@@ -148,9 +148,14 @@ private theorem sinTheta_residual_le_of_sylvester
       N (complementaryProjection U ∘ₗ residual A X M)
           ≤ ‖(complementaryProjection U).toContinuousLinearMap‖ *
               N (residual A X M) :=
-        N.comp_le_opNorm_mul _ _
+        N.map_comp_le_left _ _ (c :=
+            ‖(complementaryProjection U).toContinuousLinearMap‖) (by
+          intro x
+          change ‖Uᗮ.starProjection x‖ ≤
+            ‖(complementaryProjection U).toContinuousLinearMap‖ * ‖x‖
+          exact (complementaryProjection U).toContinuousLinearMap.le_opNorm x)
       _ ≤ 1 * N (residual A X M) :=
-        mul_le_mul_of_nonneg_right hproj (N.nonneg _)
+        mul_le_mul_of_nonneg_right hproj (apply_nonneg N _)
       _ = N (residual A X M) := one_mul _
   have hS := hsylv Y C hEq
   rw [hY] at hS

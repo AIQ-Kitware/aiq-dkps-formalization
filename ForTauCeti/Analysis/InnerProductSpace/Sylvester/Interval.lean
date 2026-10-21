@@ -171,11 +171,11 @@ private theorem uiNorm_sylvester_le_of_form_bounds_aux
   have hadd : ∀ f g : E →L[𝕜] F, N' (f + g) ≤ N' f + N' g := by
     intro f g
     simp only [N', ContinuousLinearMap.toLinearMap_add]
-    exact N.add_le _ _
+    exact map_add_le_add N _ _
   have hsmul : ∀ (a : 𝕜) (f : E →L[𝕜] F), N' (a • f) = ‖a‖ * N' f := by
     intro a f
     simp only [N', ContinuousLinearMap.toLinearMap_smul]
-    exact N.smul_eq _ _
+    exact map_smul_eq_mul N _ _
   have hidealL : ∀ D : F →L[𝕜] F, ∀ T : E →L[𝕜] F,
       N' (D ∘L T) ≤ ‖D‖ * N' T := by
     intro D T
@@ -183,7 +183,9 @@ private theorem uiNorm_sylvester_le_of_form_bounds_aux
     -- maps and `N`'s ideal API over `∘ₗ` on the underlying ones; the two are the same term,
     -- so this `change` is the entire translation between the two spellings.
     change N (D.toLinearMap ∘ₗ T.toLinearMap) ≤ ‖D‖ * N T.toLinearMap
-    have h := N.comp_le_opNorm_mul D.toLinearMap T.toLinearMap
+    have h := N.map_comp_le_left D.toLinearMap T.toLinearMap
+      (c := ‖D.toLinearMap.toContinuousLinearMap‖)
+      (fun y => D.toLinearMap.toContinuousLinearMap.le_opNorm y)
     have hD : D.toLinearMap.toContinuousLinearMap = D := by
       ext x
       rfl
@@ -193,11 +195,13 @@ private theorem uiNorm_sylvester_le_of_form_bounds_aux
     intro T D
     -- As `hidealL`: the same `∘L` / `∘ₗ` translation, on the other side.
     change N (T.toLinearMap ∘ₗ D.toLinearMap) ≤ N T.toLinearMap * ‖D‖
-    have h := N.comp_le_mul_opNorm T.toLinearMap D.toLinearMap
+    have h := N.map_comp_le_right T.toLinearMap D.toLinearMap
+      (c := ‖D.toLinearMap.toContinuousLinearMap‖)
+      (fun x => D.toLinearMap.toContinuousLinearMap.le_opNorm x)
     have hD : D.toLinearMap.toContinuousLinearMap = D := by
       ext x
       rfl
-    rwa [hD] at h
+    simpa only [hD, mul_comm] using h
   have hEq' : A' ∘L X' - X' ∘L B' = C' := by
     ext x
     simpa [A', B', X', C', ContinuousLinearMap.comp_apply] using
@@ -239,7 +243,7 @@ theorem uiNorm_sylvester_le_of_orderedGap
       have hx : x = 0 := Subsingleton.elim _ _
       subst x
       simp
-    simp [hX0, hC0, N.apply_zero]
+    simp [hX0, hC0]
   rcases subsingleton_or_nontrivial F with _ | _
   · have hX0 : X = 0 := by
       ext x
@@ -247,7 +251,7 @@ theorem uiNorm_sylvester_le_of_orderedGap
     have hC0 : C = 0 := by
       ext x
       exact Subsingleton.elim _ _
-    simp [hX0, hC0, N.apply_zero]
+    simp [hX0, hC0]
   let : NeZero (Module.finrank 𝕜 E) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
   let : NeZero (Module.finrank 𝕜 F) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
   rcases hgap with hBA | hAB
@@ -275,11 +279,10 @@ theorem uiNorm_sylvester_le_of_orderedGap
     have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint :=
       sylvester_adjoint_neg hA hB hEq
     have hbound := uiNorm_sylvester_le_of_form_bounds_aux
-      (UnitarilyInvariantSeminorm.adjointTransport N)
+      N.compAdjoint
       hB hA hδ hBform hAform hEqAdj
-    rw [UnitarilyInvariantSeminorm.adjointTransport_apply,
-      UnitarilyInvariantSeminorm.adjointTransport_neg_adjoint_apply] at hbound
-    exact hbound
+    simpa only [UnitarilyInvariantSeminorm.compAdjoint_apply,
+      LinearMap.adjoint_adjoint, map_neg_eq_map] using hbound
 
 /-- Sharp constant-one interval/exterior Sylvester estimate in every
 rectangular UI norm.
@@ -305,14 +308,14 @@ theorem uiNorm_sylvester_le_of_intervalGap
       have hx : x = 0 := Subsingleton.elim _ _
       subst x
       simp
-    rw [hX0, N.apply_zero, mul_zero]
-    exact N.nonneg C
+    rw [hX0, map_zero, mul_zero]
+    exact apply_nonneg N C
   rcases subsingleton_or_nontrivial F with _ | _
   · have hX0 : X = 0 := by
       ext x
       exact Subsingleton.elim _ _
-    rw [hX0, N.apply_zero, mul_zero]
-    exact N.nonneg C
+    rw [hX0, map_zero, mul_zero]
+    exact apply_nonneg N C
   let : NeZero (Module.finrank 𝕜 E) :=
     ⟨Nat.ne_of_gt Module.finrank_pos⟩
   let : NeZero (Module.finrank 𝕜 F) :=
@@ -342,26 +345,14 @@ theorem uiNorm_sylvester_le_of_intervalGap
   have hPolar : H ∘ₗ X - Z ∘ₗ T = Y :=
     abs_comp_sub_comp_of_sylvester hShift
   have hZnorm : N Z = N X := by
-    -- `Z` is definitionally `U.symm.toLinearMap ∘ₗ X`, and `N.invariant` is stated over that
+    -- `Z` is definitionally `U.symm.toLinearMap ∘ₗ X`, and unitary invariance is stated over that
     -- composite; the goal has to be in that form before the lemma can be cited.
     change N (U.symm.toLinearMap ∘ₗ X) = N X
-    have h := N.invariant U.symm (LinearIsometryEquiv.refl 𝕜 E) X
-    have hcomp : U.symm.toLinearMap ∘ₗ X ∘ₗ
-        (LinearIsometryEquiv.refl 𝕜 E).toLinearMap =
-        U.symm.toLinearMap ∘ₗ X := by
-      ext x
-      rfl
-    rwa [hcomp] at h
+    exact N.map_linearIsometryEquiv_comp U.symm X
   have hYnorm : N Y = N C := by
     -- `Y` is definitionally `U.symm.toLinearMap ∘ₗ C`; same step as `hZnorm`.
     change N (U.symm.toLinearMap ∘ₗ C) = N C
-    have h := N.invariant U.symm (LinearIsometryEquiv.refl 𝕜 E) C
-    have hcomp : U.symm.toLinearMap ∘ₗ C ∘ₗ
-        (LinearIsometryEquiv.refl 𝕜 E).toLinearMap =
-        U.symm.toLinearMap ∘ₗ C := by
-      ext x
-      rfl
-    rwa [hcomp] at h
+    exact N.map_linearIsometryEquiv_comp U.symm C
   let H' : F →L[𝕜] F := H.toContinuousLinearMap
   let T' : E →L[𝕜] E := T.toContinuousLinearMap
   let X' : E →L[𝕜] F := X.toContinuousLinearMap
@@ -371,11 +362,11 @@ theorem uiNorm_sylvester_le_of_intervalGap
   have hadd : ∀ f g : E →L[𝕜] F, N' (f + g) ≤ N' f + N' g := by
     intro f g
     simp only [N', ContinuousLinearMap.toLinearMap_add]
-    exact N.add_le _ _
+    exact map_add_le_add N _ _
   have hsmul : ∀ (q : 𝕜) (f : E →L[𝕜] F), N' (q • f) = ‖q‖ * N' f := by
     intro q f
     simp only [N', ContinuousLinearMap.toLinearMap_smul]
-    exact N.smul_eq _ _
+    exact map_smul_eq_mul N _ _
   have hidealL : ∀ D : F →L[𝕜] F, ∀ Q : E →L[𝕜] F,
       N' (D ∘L Q) ≤ ‖D‖ * N' Q := by
     intro D Q
@@ -383,7 +374,9 @@ theorem uiNorm_sylvester_le_of_intervalGap
     -- maps and `N`'s ideal API over `∘ₗ` on the underlying ones; the two are the same term,
     -- so this `change` is the entire translation between the two spellings.
     change N (D.toLinearMap ∘ₗ Q.toLinearMap) ≤ ‖D‖ * N Q.toLinearMap
-    have h := N.comp_le_opNorm_mul D.toLinearMap Q.toLinearMap
+    have h := N.map_comp_le_left D.toLinearMap Q.toLinearMap
+      (c := ‖D.toLinearMap.toContinuousLinearMap‖)
+      (fun y => D.toLinearMap.toContinuousLinearMap.le_opNorm y)
     have hD : D.toLinearMap.toContinuousLinearMap = D := by ext x; rfl
     rwa [hD] at h
   have hidealR : ∀ Q : E →L[𝕜] F, ∀ D : E →L[𝕜] E,
@@ -391,9 +384,11 @@ theorem uiNorm_sylvester_le_of_intervalGap
     intro Q D
     -- As `hidealL`: the same `∘L` / `∘ₗ` translation, on the other side.
     change N (Q.toLinearMap ∘ₗ D.toLinearMap) ≤ N Q.toLinearMap * ‖D‖
-    have h := N.comp_le_mul_opNorm Q.toLinearMap D.toLinearMap
+    have h := N.map_comp_le_right Q.toLinearMap D.toLinearMap
+      (c := ‖D.toLinearMap.toContinuousLinearMap‖)
+      (fun x => D.toLinearMap.toContinuousLinearMap.le_opNorm x)
     have hD : D.toLinearMap.toContinuousLinearMap = D := by ext x; rfl
-    rwa [hD] at h
+    simpa only [hD, mul_comm] using h
   have hPolar' : H' ∘L X' - Z' ∘L T' = Y' := by
     ext x
     simpa [H', T', X', Z', Y', ContinuousLinearMap.comp_apply] using
@@ -423,9 +418,10 @@ theorem opNorm_sylvester_le_of_intervalGap
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ) (hgap : IntervalSylvesterGap A B a b δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
-    δ * ‖X.toContinuousLinearMap‖ ≤ ‖C.toContinuousLinearMap‖ :=
-  uiNorm_sylvester_le_of_intervalGap UnitarilyInvariantSeminorm.opNorm
-    hA hB hδ hgap hEq
+    δ * ‖X.toContinuousLinearMap‖ ≤ ‖C.toContinuousLinearMap‖ := by
+  simpa only [UnitarilyInvariantSeminorm.opNorm_apply] using
+    uiNorm_sylvester_le_of_intervalGap
+      (UnitarilyInvariantSeminorm.opNorm 𝕜 E F) hA hB hδ hgap hEq
 
 /-- Sharp constant-one interval/exterior Sylvester estimate in either
 orientation.
@@ -446,11 +442,10 @@ theorem uiNorm_sylvester_le_of_unorderedIntervalGap
   · have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint :=
       sylvester_adjoint_neg hA hB hEq
     have hbound := uiNorm_sylvester_le_of_intervalGap
-      (UnitarilyInvariantSeminorm.adjointTransport N)
+      N.compAdjoint
       hB hA hδ hreverse hEqAdj
-    rw [UnitarilyInvariantSeminorm.adjointTransport_apply,
-      UnitarilyInvariantSeminorm.adjointTransport_neg_adjoint_apply] at hbound
-    exact hbound
+    simpa only [UnitarilyInvariantSeminorm.compAdjoint_apply,
+      LinearMap.adjoint_adjoint, map_neg_eq_map] using hbound
 
 /-- Ky Fan specialization of the sharp interval/exterior Sylvester
 estimate.  The hard work is already contained in
@@ -465,8 +460,9 @@ theorem kyFan_sylvester_le_of_intervalGap
     δ * TauCeti.kyFanSum k X ≤
       TauCeti.kyFanSum k C := by
   have h := uiNorm_sylvester_le_of_intervalGap
-    (UnitarilyInvariantSeminorm.kyFan k) hA hB hδ hgap hEq
-  simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using h
+    (UnitarilyInvariantSeminorm.kyFan 𝕜 E F k) hA hB hδ hgap hEq
+  simpa only [UnitarilyInvariantSeminorm.kyFan_apply,
+    LinearMap.kyFanSum_def, TauCeti.kyFanSum_eq_sum_range] using h
 
 /-- Ordered positivity/coercivity form used by the existing integral-free
 proof.
