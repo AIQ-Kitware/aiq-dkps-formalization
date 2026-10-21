@@ -253,6 +253,15 @@ Planning inventories under `dev/tauceti/` record earlier campaigns and may be
 useful evidence, but the current source tree and pinned Mathlib/Tau Ceti APIs are
 the ground truth. Revalidate an inventory row before acting on it.
 
+Maintain [`dev/tauceti/dkps-upstream-contribution-census.md`](dev/tauceti/dkps-upstream-contribution-census.md)
+as a historical provenance ledger when a DKPS-derived theorem lands upstream
+or its local counterpart is retired. Distinguish explicit proof adaptation,
+transitive use of an upstream dependency, and independent work on the same
+roadmap node; preserve pre-DKPS/Spectra ancestry when applicable. Record a
+submission separately from an integration and do not infer a merge from
+`closed` or from an old campaign snapshot. This is documentation, not a new
+CI gate or monitoring workflow.
+
 ### Representation migrations are required implementation work
 
 A green build is an invariant to preserve during a migration, not a reason to

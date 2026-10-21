@@ -95,6 +95,13 @@ policy.
 
 ## Provenance
 
+For the *outbound* side of that provenance, see
+[`../dev/tauceti/dkps-upstream-contribution-census.md`](../dev/tauceti/dkps-upstream-contribution-census.md):
+a deliberately incomplete record of accepted/submitted TauCeti PRs, proof
+lineage, and independently developed overlapping results. A local module's
+history and a roadmap-node overlap are not sufficient evidence that the
+corresponding upstream proof was adapted from DKPS.
+
 Every staged module should explain where its mathematics and Lean implementation
 came from. Record the original repository/source, relevant source commit or paper,
 original module/declaration names when useful, authorship/copyright and license,

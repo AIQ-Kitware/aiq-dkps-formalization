@@ -5,7 +5,10 @@ models, centered on the data kernel perspective space (DKPS) and the
 multidimensional-scaling / spectral-perturbation infrastructure needed to make
 those theorem statements precise.
 
-`ForTauCeti` is the deliverable. Everything else either feeds it or consumes it.
+The maintained mathematical results and paper-facing formalizations are the
+output of this repository. `ForTauCeti` is a **shrinking donor layer** for
+reusable results not yet integrated into TauCeti or Mathlib, not a competing
+upstream library; accepted mathematical APIs are consumed directly.
 
 ## The libraries
 
@@ -15,7 +18,7 @@ report "proved in the default build" rather than "proved".
 
 | Library | Role |
 | --- | --- |
-| `ForTauCeti` | **The product.** The elegant, paper-independent operator-theory library staged for upstream, with declarations already carrying their final `TauCeti.*` namespaces. Polished roadmaps are generated *from* it. |
+| `ForTauCeti` | **Unmerged donor mathematics.** Reusable operator-theory results still needed downstream; migrated or deleted as TauCeti/Mathlib APIs land. Some declarations already use their intended `TauCeti.*` namespaces. |
 | `DavisKahan` | The paper-facing Davis--Kahan library, targeting the full Hilbert-space 1970 theory rather than its finite-dimensional specialization. May consume `ForTauCeti`. |
 | `YuWangSamworth2015` | Yu--Wang--Samworth (2015): Theorems 1--3, Corollary 1, Lemma A1, and the appendix identities, with source defects recorded explicitly. Sorry-free. |
 | `RoadmapBridge` | Discharges roadmap signatures with the delivered declarations, so "delivered" is a claim the compiler checks rather than a name match. |
@@ -56,12 +59,22 @@ They are maintained by hand. When a declaration is renamed or moved, the census
 entry is edited in the same commit — that is the maintenance, and inferring it
 automatically is what previously produced status that looked healthy and was not.
 
+## Contributions integrated into TauCeti
+
+The [DKPS-to-TauCeti contribution and mathematical-lineage census](dev/tauceti/dkps-upstream-contribution-census.md) records PRs explicitly
+adapted from this repository, submitted but unaccepted ports, and independent
+TauCeti work on overlapping Hilbert-space roadmaps. It is **an incomplete
+historical audit**, with evidence and source-provenance qualifications; a
+shared roadmap topic is not enough to establish that a proof originated here.
+The current upstream-consumption and remaining bridge-retirement work is
+recorded in [the engineering handoff](dev/tauceti/upstream_consumption_reducing_2026-10-21.md).
+
 ## Repository layout
 
 ```text
 .
-├── ForTauCeti.lean          # root module for the deliverable
-├── ForTauCeti/              # the staged upstream library: operator ideals, approximation
+├── ForTauCeti.lean          # root module for the shrinking donor layer
+├── ForTauCeti/              # remaining donor proofs: operator ideals, approximation
 │                            #   numbers, polar decomposition, spectral order, sin-theta
 ├── RoadmapBridge.lean       # root module for the roadmap-to-delivery bridge
 ├── RoadmapBridge/           # each roadmap signature discharged by the delivered declaration
@@ -177,15 +190,17 @@ ratchet thresholds, accepted findings, the gate list. See
 
 ### `ForTauCeti`
 
-The library this repository exists to produce: reusable operator theory in
-upstream idiom, generalized past the papers that motivated it (typically from `ℝ`
-to `RCLike 𝕜`, and from finite dimensions to a Hilbert space), with declarations
-already in their final `TauCeti.*` namespaces and provenance on every module. The
-paper libraries import it and keep only thin paper-facing specializations.
+The **remaining donor layer** of reusable operator theory, often generalized
+beyond the motivating papers (for example from `ℝ` to `RCLike 𝕜`, or from
+finite-dimensional spaces to Hilbert spaces). Paper libraries use canonical
+TauCeti and Mathlib results directly when available, and otherwise import the
+mathematics that has not yet landed upstream.
 
-It is not a holding pen and there is no terminal state in which it is empty; the
-roadmaps and mechanical ports are generated **from** it. See
-`ForTauCeti/README.md`.
+This is not a permanent second implementation of already accepted APIs. Modules
+and compatibility bridges should shrink as their consumers migrate, while
+mathematically distinct unmerged results remain. See
+[`ForTauCeti/README.md`](ForTauCeti/README.md) and the
+[upstream-contribution census](dev/tauceti/dkps-upstream-contribution-census.md).
 
 ### `DavisKahan`
 
