@@ -81,8 +81,13 @@ theorem singularValues_diagOp_comp_perm
     congr 1
     rw [← OrthonormalBasis.equiv_apply_basis b b π j,
       LinearIsometryEquiv.symm_apply_apply]
-  rw [hconj, TauCeti.singularValues_unitary_comp,
-    TauCeti.singularValues_comp_unitary]
+  rw [hconj]
+  change (((b.equiv b π).symm :
+      EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) ∘ₗ
+    diagOp b x ∘ₗ (b.equiv b π :
+      EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))).singularValues = _
+  simp only [LinearMap.singularValues_linearIsometryEquiv_comp,
+    LinearMap.singularValues_comp_linearIsometryEquiv]
 
 /-- Every real vector can be permuted so that its absolute values decrease. -/
 theorem exists_perm_abs_antitone (x : Fin n → ℝ) :
@@ -138,9 +143,8 @@ end UnitarilyInvariantGauge
 /-- Singular values scale by the modulus of a complex scalar. -/
 theorem singularValues_smul_complex {n : ℕ} (a : ℂ)
     (A : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) (i : ℕ) :
-    (a • A).singularValues i = ‖a‖ * A.singularValues i :=
-  TauCeti.singularValues_smul_apply
-    a A i
+    (a • A).singularValues i = ‖a‖ * A.singularValues i := by
+  simp
 
 namespace SymmetricNormingFunction
 
@@ -334,14 +338,10 @@ noncomputable def finiteNorm (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
   map_linearIsometryEquiv_comp_comp' U V A := by
     have h : (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues =
         A.singularValues := by
-      rw [show (U.toLinearMap :
-              EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))
-            = ↑U.toLinearEquiv from rfl,
-        show (V.toLinearMap :
-              EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))
-            = ↑V.toLinearEquiv from rfl,
-        TauCeti.singularValues_unitary_comp,
-        TauCeti.singularValues_comp_unitary]
+      change ((U : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) ∘ₗ
+        A ∘ₗ (V : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))).singularValues = _
+      simp only [LinearMap.singularValues_linearIsometryEquiv_comp,
+        LinearMap.singularValues_comp_linearIsometryEquiv]
     change Φ.gauge n (fun i : Fin n =>
         (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues (i : ℕ)) =
       Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ))

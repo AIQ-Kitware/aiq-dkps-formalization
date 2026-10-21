@@ -602,8 +602,9 @@ theorem apply_comp_le {C : F →ₗ[𝕜] F} {X : E →ₗ[𝕜] F} {c : ℝ} (h
       ≤ N (((c : 𝕜)) • X) :=
         N.apply_le_of_kyFanSum_le fun k =>
           kyFanSum_le_of_singularValues_le (fun i => by
-            rw [singularValues_real_smul X hc i]
-            exact singularValues_comp_le hc hC X i) k
+            simp only [LinearMap.singularValues_smul, RCLike.norm_ofReal,
+              abs_of_nonneg hc, Finsupp.smul_apply, smul_eq_mul]
+            exact LinearMap.singularValues_comp_le C X hC i) k
     _ = c * N X := by rw [map_smul_eq_mul, RCLike.norm_ofReal, abs_of_nonneg hc]
 
 /-- **The ideal property (right factor).**  If `‖C y‖ ≤ c ‖y‖` for `0 ≤ c`, then
@@ -614,8 +615,12 @@ theorem apply_comp_le' {X : E →ₗ[𝕜] F} {C : E →ₗ[𝕜] E} {c : ℝ} (
       ≤ N (((c : 𝕜)) • X) :=
         N.apply_le_of_kyFanSum_le fun k =>
           kyFanSum_le_of_singularValues_le (fun i => by
-            rw [singularValues_real_smul X hc i]
-            exact singularValues_comp_le' hc hC i) k
+            simp only [LinearMap.singularValues_smul, RCLike.norm_ofReal,
+              abs_of_nonneg hc, Finsupp.smul_apply, smul_eq_mul]
+            rw [← LinearMap.singularValues_adjoint (X ∘ₗ C), LinearMap.adjoint_comp,
+              ← LinearMap.singularValues_adjoint X]
+            exact LinearMap.singularValues_comp_le C.adjoint X.adjoint
+              (fun y => LinearMap.norm_adjoint_apply_le hc hC y) i) k
     _ = N X * c := by rw [map_smul_eq_mul, RCLike.norm_ofReal, abs_of_nonneg hc, mul_comm]
 
 

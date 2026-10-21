@@ -69,127 +69,10 @@ variable {𝕜 E F F' : Type*} [RCLike 𝕜]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
   [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [FiniteDimensional 𝕜 F']
 
-/-! ### Singular values under unitaries, scaling, and bounded factors (F0) -/
+/-! ### Singular values under absolute homogeneity and bounded factors
 
-/-- Post-composing with a unitary does not change the singular values. -/
-theorem singularValues_unitary_comp (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :
-    (U.toLinearMap ∘ₗ A).singularValues = A.singularValues := by
-  refine singularValues_eq_of_gram_eq ?_
-  rw [LinearMap.adjoint_comp, U.adjoint_toLinearMap_eq_symm]
-  ext x
-  simp only [LinearMap.comp_apply, LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe,
-    LinearIsometryEquiv.symm_apply_apply]
-
-/-- Pre-composing with a unitary does not change the singular values. -/
-theorem singularValues_comp_unitary (A : E →ₗ[𝕜] F) (U : E ≃ₗᵢ[𝕜] E) :
-    (A ∘ₗ U.toLinearMap).singularValues = A.singularValues := by
-  have hgram : (A ∘ₗ U.toLinearMap).adjoint ∘ₗ (A ∘ₗ U.toLinearMap)
-      = U.symm.toLinearMap ∘ₗ (A.adjoint ∘ₗ A) ∘ₗ U.symm.symm.toLinearMap := by
-    rw [LinearMap.adjoint_comp, U.adjoint_toLinearMap_eq_symm, LinearIsometryEquiv.symm_symm]
-    ext x
-    simp only [LinearMap.comp_apply, LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe]
-  ext i
-  rcases lt_or_ge i (finrank 𝕜 E) with hi | hi
-  · rw [(A ∘ₗ U.toLinearMap).singularValues_of_lt rfl hi, A.singularValues_of_lt rfl hi]
-    congr 1
-    calc (A ∘ₗ U.toLinearMap).isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨i, hi⟩
-        = (isSymmetric_conj_unitary A.isSymmetric_adjoint_comp_self
-            U.symm).eigenvalues rfl ⟨i, hi⟩ :=
-          congrFun (LinearMap.IsSymmetric.eigenvalues_congr hgram _ _ rfl) _
-      _ = A.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨i, hi⟩ :=
-          congrFun (eigenvalues_conj_unitary A.isSymmetric_adjoint_comp_self rfl U.symm) _
-  · rw [(A ∘ₗ U.toLinearMap).singularValues_of_finrank_le hi,
-      A.singularValues_of_finrank_le hi]
-
-omit [FiniteDimensional 𝕜 E] in
-/-- Real-smul of a symmetric operator is symmetric. -/
-theorem isSymmetric_real_smul {S : E →ₗ[𝕜] E} (hS : S.IsSymmetric) (r : ℝ) :
-    (((r : 𝕜)) • S).IsSymmetric := fun x y => by
-  simp only [LinearMap.smul_apply, inner_smul_left, inner_smul_right, RCLike.conj_ofReal]
-  rw [hS x y]
-
-/-- Sorted eigenvalues scale under a nonnegative real scaling. -/
-theorem eigenvalues_real_smul {S : E →ₗ[𝕜] E} (hS : S.IsSymmetric) {n : ℕ}
-    (hn : finrank 𝕜 E = n) {r : ℝ} (hr : 0 ≤ r) :
-    (isSymmetric_real_smul hS r).eigenvalues hn = fun i => r * hS.eigenvalues hn i := by
-  refine LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis _ hn (hS.eigenvectorBasis hn)
-    (fun i j hij => mul_le_mul_of_nonneg_left (hS.eigenvalues_antitone hn hij) hr)
-    fun i => ?_
-  rw [LinearMap.smul_apply, hS.apply_eigenvectorBasis hn i, smul_smul, ← RCLike.ofReal_mul]
-
-/-- The adjoint of a real scaling. -/
-private theorem adjoint_real_smul (A : E →ₗ[𝕜] F) (r : ℝ) :
-    (((r : 𝕜)) • A).adjoint = ((r : 𝕜)) • A.adjoint := by
-  symm
-  rw [LinearMap.eq_adjoint_iff]
-  intro x y
-  simp only [LinearMap.smul_apply, inner_smul_left, inner_smul_right, RCLike.conj_ofReal,
-    LinearMap.adjoint_inner_left]
-
-/-- Singular values scale by `r` under a nonnegative real scaling. -/
-theorem singularValues_real_smul (A : E →ₗ[𝕜] F) {r : ℝ} (hr : 0 ≤ r) (i : ℕ) :
-    (((r : 𝕜)) • A).singularValues i = r * A.singularValues i := by
-  rcases lt_or_ge i (finrank 𝕜 E) with hi | hi
-  · have hgram : (((r : 𝕜)) • A).adjoint ∘ₗ (((r : 𝕜)) • A)
-        = ((r ^ 2 : ℝ) : 𝕜) • (A.adjoint ∘ₗ A) := by
-      rw [adjoint_real_smul]
-      ext x
-      simp only [LinearMap.comp_apply, LinearMap.smul_apply, map_smul, smul_smul,
-        ← RCLike.ofReal_mul, sq]
-    -- Not shortened: every step here is a congruence term applied to explicit arguments
-    -- (`congrFun (LinearMap.IsSymmetric.eigenvalues_congr ..) ⟨i, hi⟩`), not a
-    -- name `simp` could pick up, and the
-    -- order is forced -- the two `eigenvalues_*` rewrites must fire before `Real.sqrt_mul`
-    -- has a product to split.
-    rw [(((r : 𝕜)) • A).singularValues_of_lt rfl hi, A.singularValues_of_lt rfl hi,
-      congrFun (LinearMap.IsSymmetric.eigenvalues_congr hgram
-        (((r : 𝕜)) • A).isSymmetric_adjoint_comp_self
-        (isSymmetric_real_smul A.isSymmetric_adjoint_comp_self (r ^ 2)) rfl) ⟨i, hi⟩,
-      congrFun (eigenvalues_real_smul A.isSymmetric_adjoint_comp_self rfl
-        (by positivity : (0:ℝ) ≤ r ^ 2)) ⟨i, hi⟩,
-      Real.sqrt_mul (by positivity) _, Real.sqrt_sq hr]
-  · rw [(((r : 𝕜)) • A).singularValues_of_finrank_le hi, A.singularValues_of_finrank_le hi,
-      mul_zero]
-
-/-- **Domination by a bounded left factor:** `σᵢ(C ∘ A) ≤ c σᵢ(A)` when
-`‖C y‖ ≤ c ‖y‖`.  Via Loewner monotonicity of the Gram eigenvalues. -/
-theorem singularValues_comp_le {C : F →ₗ[𝕜] F'} {c : ℝ} (hc : 0 ≤ c)
-    (hC : ∀ y, ‖C y‖ ≤ c * ‖y‖) (A : E →ₗ[𝕜] F) (i : ℕ) :
-    (C ∘ₗ A).singularValues i ≤ c * A.singularValues i := by
-  rcases lt_or_ge i (finrank 𝕜 E) with hi | hi
-  · have hsm := isSymmetric_real_smul A.isSymmetric_adjoint_comp_self (c ^ 2)
-    have hforms : ∀ x, RCLike.re ⟪((C ∘ₗ A).adjoint ∘ₗ (C ∘ₗ A)) x, x⟫_𝕜
-        ≤ RCLike.re ⟪(((c ^ 2 : ℝ) : 𝕜) • (A.adjoint ∘ₗ A)) x, x⟫_𝕜 := by
-      intro x
-      have h1 : RCLike.re ⟪((C ∘ₗ A).adjoint ∘ₗ (C ∘ₗ A)) x, x⟫_𝕜 = ‖(C ∘ₗ A) x‖ ^ 2 := by
-        rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
-      have h2 : RCLike.re ⟪(((c ^ 2 : ℝ) : 𝕜) • (A.adjoint ∘ₗ A)) x, x⟫_𝕜
-          = c ^ 2 * ‖A x‖ ^ 2 := by
-        simp [inner_smul_left, LinearMap.adjoint_inner_left]
-      rw [h1, h2]
-      have h3 : ‖(C ∘ₗ A) x‖ ≤ c * ‖A x‖ := hC (A x)
-      nlinarith [norm_nonneg ((C ∘ₗ A) x), norm_nonneg (A x),
-        mul_nonneg hc (norm_nonneg (A x))]
-    have hloew := LinearMap.IsSymmetric.eigenvalue_mono
-      (C ∘ₗ A).isSymmetric_adjoint_comp_self hsm rfl hforms ⟨i, hi⟩
-    rw [congrFun (eigenvalues_real_smul A.isSymmetric_adjoint_comp_self rfl
-      (by positivity : (0:ℝ) ≤ c ^ 2)) ⟨i, hi⟩] at hloew
-    rw [(C ∘ₗ A).singularValues_of_lt rfl hi, A.singularValues_of_lt rfl hi]
-    calc √((C ∘ₗ A).isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨i, hi⟩)
-        ≤ √(c ^ 2 * A.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨i, hi⟩) :=
-          Real.sqrt_le_sqrt hloew
-      _ = c * √(A.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨i, hi⟩) := by
-          rw [Real.sqrt_mul (by positivity) _, Real.sqrt_sq hc]
-  · rw [(C ∘ₗ A).singularValues_of_finrank_le hi, A.singularValues_of_finrank_le hi, mul_zero]
-
-/-- **Domination by a bounded right factor:**
-`σᵢ(X ∘ C) ≤ c σᵢ(X)`.  Via `singularValues_adjoint`. -/
-theorem singularValues_comp_le' {X : E →ₗ[𝕜] F} {C : E →ₗ[𝕜] E} {c : ℝ} (hc : 0 ≤ c)
-    (hC : ∀ y, ‖C y‖ ≤ c * ‖y‖) (i : ℕ) :
-    (X ∘ₗ C).singularValues i ≤ c * X.singularValues i := by
-  rw [← LinearMap.singularValues_adjoint (X ∘ₗ C), LinearMap.adjoint_comp,
-    ← LinearMap.singularValues_adjoint X]
-  exact singularValues_comp_le hc (fun y => norm_adjoint_apply_le hc hC y) X.adjoint i
+The composition, scalar-homogeneity, and left-factor comparison facts are provided by
+Mathlib's `LinearMap.singularValues_*` API. -/
 
 /-- The sorted eigenvalues of the modulus `|A|` are the singular values. -/
 theorem eigenvalues_operatorAbs (A : E →ₗ[𝕜] E) :
@@ -558,52 +441,23 @@ theorem kyFanSum_adjoint (k : ℕ) (A : E →ₗ[𝕜] F) :
 theorem kyFanSum_unitary_comp (k : ℕ) (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :
     kyFanSum k (U.toLinearMap ∘ₗ A) = kyFanSum k A := by
   unfold kyFanSum
-  rw [singularValues_unitary_comp]
+  exact congrArg (fun s : ℕ →₀ ℝ => ∑ i : Fin k, s (i : ℕ))
+    (LinearMap.singularValues_linearIsometryEquiv_comp U A)
 
 /-- Ky Fan sums are unchanged by a unitary on the domain.  With `kyFanSum_unitary_comp` this is
 the two-sided unitary invariance that makes each Ky Fan sum a unitarily invariant norm. -/
 theorem kyFanSum_comp_unitary (k : ℕ) (A : E →ₗ[𝕜] F) (U : E ≃ₗᵢ[𝕜] E) :
     kyFanSum k (A ∘ₗ U.toLinearMap) = kyFanSum k A := by
   unfold kyFanSum
-  rw [singularValues_comp_unitary]
+  exact congrArg (fun s : ℕ →₀ ℝ => ∑ i : Fin k, s (i : ℕ))
+    (LinearMap.singularValues_comp_linearIsometryEquiv A U)
 
 /-- Ky Fan sums are absolutely homogeneous under real scaling. -/
 theorem kyFanSum_real_smul (k : ℕ) (A : E →ₗ[𝕜] F) {r : ℝ} (hr : 0 ≤ r) :
     kyFanSum k (((r : 𝕜)) • A) = r * kyFanSum k A := by
   unfold kyFanSum
   rw [Finset.mul_sum]
-  exact Finset.sum_congr rfl fun i _ => singularValues_real_smul A hr i
-
-/-- Singular values scale by the norm of an arbitrary scalar. -/
-theorem singularValues_smul_apply (a : 𝕜) (A : E →ₗ[𝕜] F) (i : ℕ) :
-    (a • A).singularValues i = ‖a‖ * A.singularValues i := by
-  have hgram : (a • A).adjoint ∘ₗ (a • A) =
-      (((‖a‖ : ℝ) : 𝕜) • A).adjoint ∘ₗ (((‖a‖ : ℝ) : 𝕜) • A) := by
-    ext x
-    apply ext_inner_right 𝕜
-    intro y
-    rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left,
-      LinearMap.comp_apply, LinearMap.adjoint_inner_left]
-    simp only [LinearMap.smul_apply, inner_smul_left, inner_smul_right,
-      RCLike.conj_ofReal]
-    rw [← mul_assoc, RCLike.mul_conj]
-    ring
-  calc
-    (a • A).singularValues i =
-        (((‖a‖ : ℝ) : 𝕜) • A).singularValues i :=
-      congrArg (fun s : ℕ →₀ ℝ => s i)
-        (singularValues_eq_of_gram_eq hgram)
-    _ = ‖a‖ * A.singularValues i :=
-      singularValues_real_smul A (norm_nonneg a) i
-
-
-/-- Bundled singular-value sequence of a scalar multiple.  This is the
-Finsupp-level companion to `singularValues_smul_apply`; it is convenient when
-a unitarily invariant norm is compared through its complete gauge sequence. -/
-theorem singularValues_smul (a : 𝕜) (A : E →ₗ[𝕜] F) :
-    (a • A).singularValues = ‖a‖ • A.singularValues := by
-  ext i
-  simp
+  simp [LinearMap.singularValues_smul, abs_of_nonneg hr, Finsupp.smul_apply, smul_eq_mul]
 
 /-- **Rectangular Ky Fan variational principle, upper bound.**
 

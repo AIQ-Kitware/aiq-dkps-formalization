@@ -620,7 +620,7 @@ theorem singularValues_orthogonal_familyIsometry_comm
   calc
     Suv.singularValues = (Svu ∘ₗ O.toLinearMap).singularValues :=
       singularValues_eq_of_gram_eq hrotGram
-    _ = Svu.singularValues := singularValues_comp_unitary Svu O
+    _ = Svu.singularValues := LinearMap.singularValues_comp_linearIsometryEquiv Svu O
 
 /-- **Factor a projection composite through the coordinate isometry.**  `starProjection`
 onto `span (range u)` is `ι_u ∘ ι_u⋆`, so any operator postcomposed with it factors as
