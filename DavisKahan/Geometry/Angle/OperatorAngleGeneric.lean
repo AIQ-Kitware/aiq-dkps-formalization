@@ -133,26 +133,25 @@ theorem isSelfAdjoint_sinAngleOperator : IsSelfAdjoint (sinAngleOperator U V) :=
 /-- The ambient sine operator is a contraction. -/
 theorem norm_sinAngleOperator_le_one : ‖sinAngleOperator U V‖ ≤ 1 := by
   rw [sinAngleOperator, ContinuousLinearMap.norm_modulus,
-    Submodule.norm_starProjection_sub_eq_max]
+    ← Submodule.projectionGap_def U V,
+    Submodule.projectionGap_eq_max,
+    Submodule.directedProjectionGap_def,
+    Submodule.directedProjectionGap_def]
   apply max_le
   · calc
-      ‖(1 - V.starProjection) ∘L U.starProjection‖
-          ≤ ‖1 - V.starProjection‖ * ‖U.starProjection‖ :=
+      ‖Vᗮ.starProjection ∘L U.starProjection‖
+          ≤ ‖Vᗮ.starProjection‖ * ‖U.starProjection‖ :=
         ContinuousLinearMap.opNorm_comp_le _ _
-      _ ≤ 1 * 1 := by
-        rw [show (1 - V.starProjection : E →L[𝕜] E) = Vᗮ.starProjection from
-          (Submodule.starProjection_orthogonal' V).symm]
-        exact mul_le_mul Vᗮ.starProjection_norm_le U.starProjection_norm_le
+      _ ≤ 1 * 1 :=
+        mul_le_mul Vᗮ.starProjection_norm_le U.starProjection_norm_le
           (norm_nonneg _) zero_le_one
       _ = 1 := by ring
   · calc
-      ‖(1 - U.starProjection) ∘L V.starProjection‖
-          ≤ ‖1 - U.starProjection‖ * ‖V.starProjection‖ :=
+      ‖Uᗮ.starProjection ∘L V.starProjection‖
+          ≤ ‖Uᗮ.starProjection‖ * ‖V.starProjection‖ :=
         ContinuousLinearMap.opNorm_comp_le _ _
-      _ ≤ 1 * 1 := by
-        rw [show (1 - U.starProjection : E →L[𝕜] E) = Uᗮ.starProjection from
-          (Submodule.starProjection_orthogonal' U).symm]
-        exact mul_le_mul Uᗮ.starProjection_norm_le V.starProjection_norm_le
+      _ ≤ 1 * 1 :=
+        mul_le_mul Uᗮ.starProjection_norm_le V.starProjection_norm_le
           (norm_nonneg _) zero_le_one
       _ = 1 := by ring
 

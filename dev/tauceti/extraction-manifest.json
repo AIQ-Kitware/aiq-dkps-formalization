@@ -4022,7 +4022,7 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjectionGap",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "staged in ForTauCeti",
+      "provenance_class": "The symmetric and directed projection-gap definitions and their standard identities are now provided by TauCeti.Analysis.InnerProductSpace.Projection.Gap. The staging module retains only the additional crossed-intersection comparison theorems, and its consumers use Tau Ceti's canonical gap API.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks"
       ],

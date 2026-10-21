@@ -349,13 +349,13 @@ theorem directedGap_asymmetric_coordinateHalfSpace (b : HilbertBasis ℤ 𝕜 H)
       (halmosSourceDefect_coordinateHalfSpace_ne_bot b)
   have hzero : Submodule.directedProjectionGap (coordinateHalfSpace b 1) (coordinateHalfSpace b 0)
     = 0 :=
-    Submodule.directedProjectionGap_eq_zero_of_le
+    (Submodule.directedProjectionGap_eq_zero_iff _ _).mpr
       (coordinateHalfSpace_le_coordinateHalfSpace b (by norm_num))
   refine ⟨hone, hzero, ?_⟩
   have hmax : Submodule.projectionGap (coordinateHalfSpace b 1) (coordinateHalfSpace b 0)
       = max (Submodule.directedProjectionGap (coordinateHalfSpace b 1) (coordinateHalfSpace b 0))
         (Submodule.directedProjectionGap (coordinateHalfSpace b 0) (coordinateHalfSpace b 1)) :=
-    Submodule.projectionGap_eq_max_directedProjectionGap _ _
+    Submodule.projectionGap_eq_max _ _
   rw [hmax, hone, hzero]
   norm_num
 

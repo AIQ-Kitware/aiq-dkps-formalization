@@ -26,13 +26,9 @@ into the staging layer.
 and was filed under the paper's namespace.  It now lives in `Submodule`, the
 namespace of its conclusion's head symbol.
 
-**Two declarations were deleted rather than moved.**  `norm_add_eq_max_of_block`
-and `norm_starProjection_sub_eq_max` were one-line re-exports of
-`ContinuousLinearMap.norm_add_eq_max_of_block` and
-`Submodule.norm_starProjection_sub_eq_max`, which already exist in
-`Projection/Blocks.lean` and `Projection/Gap.lean`; the second would in fact have
-collided with its own target once this file moved into `Submodule`.
-Consumers use the canonical declarations directly.
+The gap geometry used here is owned by Tau Ceti's
+`Submodule.projectionGap_eq_max`; the paper theorem is stated directly in terms
+of the source-facing projector norm below.
 -/
 
 public section
@@ -53,8 +49,8 @@ satisfy the sharp bound
 
 `‖P_U − P_W‖ ≤ ‖B − A‖ / g`
 
-with constant one and no equal-rank hypothesis.  Combines the projector-difference
-identity `Submodule.norm_starProjection_sub_eq_max` with the two dimension-free
+with constant one and no equal-rank hypothesis. Combines Tau Ceti's canonical
+projector-gap identity with the two dimension-free
 directed `sin Θ` estimates `Submodule.sinTheta_directed_coercive`. -/
 theorem opNorm_starProjection_sub_le_of_coercive
     {A B : H →L[𝕜] H} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -66,15 +62,14 @@ theorem opNorm_starProjection_sub_le_of_coercive
     (hWc : ∀ x ∈ W, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪B x, x⟫_𝕜)
     (hWlo : ∀ x ∈ Wᗮ, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2) :
     ‖(U.starProjection - W.starProjection : H →L[𝕜] H)‖ ≤ ‖B - A‖ / g := by
-  rw [U.norm_starProjection_sub_eq_max W]
+  rw [← Submodule.projectionGap_def U W,
+    Submodule.projectionGap_eq_max,
+    Submodule.directedProjectionGap_def,
+    Submodule.directedProjectionGap_def]
   refine max_le ?_ ?_
-  · rw [show (1 - W.starProjection : H →L[𝕜] H) = Wᗮ.starProjection from
-      (Submodule.starProjection_orthogonal' W).symm]
-    exact sinTheta_directed_coercive hA hB hU
+  · exact sinTheta_directed_coercive hA hB hU
       (ContinuousLinearMap.IsSymmetric.reduces_of_invariant hB hW.2) hg hUc hWlo
-  · rw [show (1 - U.starProjection : H →L[𝕜] H) = Uᗮ.starProjection from
-      (Submodule.starProjection_orthogonal' U).symm]
-    have h := sinTheta_directed_coercive hB hA hW
+  · have h := sinTheta_directed_coercive hB hA hW
       (ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA hU.2) hg hWc hUlo
     rwa [show ‖A - B‖ = ‖B - A‖ from by rw [← neg_sub, norm_neg]] at h
 

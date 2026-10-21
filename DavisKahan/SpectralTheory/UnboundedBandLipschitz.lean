@@ -15,7 +15,7 @@ band subspaces at projection distance at most `‖K‖ / d`.
 
 The estimate is the unbounded `sin Θ` theorem read at the operator norm
 (`directedGap_le_of_reducingGap_unbounded_complex`), applied once in each
-orientation and combined by `projectionGap_eq_max_directedProjectionGap`.  The
+orientation and combined by `projectionGap_eq_max`.  The
 separation it consumes is `formBoundedSylvesterGap_band_exterior`.
 
 This is what replaces the bounded proof's Riesz-projection continuity: no
@@ -106,7 +106,7 @@ theorem subspaceGap_bandSubspace_le
   have h1 := directedGap_bandSubspace_le hA hB K hK hAB hlr hd hAspec hBspec
   have h2 := directedGap_bandSubspace_le hB hA (-K) hnegK hBA hlr hd hBspec hAspec
   rw [norm_neg] at h2
-  have hmax := Submodule.projectionGap_eq_max_directedProjectionGap
+  have hmax := Submodule.projectionGap_eq_max
     (bandSubspace hA l r) (bandSubspace hB l r)
   show d * (bandSubspace hA l r).projectionGap (bandSubspace hB l r) ≤ ‖K‖
   rw [hmax]

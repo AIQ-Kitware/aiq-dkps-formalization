@@ -376,9 +376,10 @@ theorem sinTheta_symmetric
     show ‖U.starProjection - V.starProjection‖ =
       max ‖Vᗮ.starProjection ∘L U.starProjection‖
         ‖Uᗮ.starProjection ∘L V.starProjection‖
-    rw [Submodule.norm_starProjection_sub_eq_max,
-      Submodule.starProjection_orthogonal' V,
-      Submodule.starProjection_orthogonal' U]
+    rw [← Submodule.projectionGap_def U V,
+      Submodule.projectionGap_eq_max,
+      Submodule.directedProjectionGap_def,
+      Submodule.directedProjectionGap_def]
   rw [hmax, mul_max_of_nonneg _ _ hd.le]
   exact max_le h1 h2
 

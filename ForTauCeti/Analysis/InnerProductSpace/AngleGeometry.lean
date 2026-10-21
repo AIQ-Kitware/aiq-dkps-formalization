@@ -179,7 +179,7 @@ theorem eq_zero_of_projectionGap_lt_one {U V : Submodule 𝕜 E}
     calc ‖x‖ = ‖(U.starProjection - V.starProjection : E →L[𝕜] E) x‖ := by rw [hval]
       _ ≤ ‖(U.starProjection - V.starProjection : E →L[𝕜] E)‖ * ‖x‖ :=
           ContinuousLinearMap.le_opNorm _ _
-      _ = U.projectionGap V * ‖x‖ := rfl
+      _ = U.projectionGap V * ‖x‖ := by rw [Submodule.projectionGap_def]
   nlinarith [hle, hxpos, h]
 
 omit [FiniteDimensional 𝕜 E] in
@@ -204,7 +204,8 @@ theorem eq_zero_of_directedProjectionGap_lt_one {U V : Submodule 𝕜 E}
     calc ‖x‖ = ‖(Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) x‖ := by rw [hval]
       _ ≤ ‖(Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E)‖ * ‖x‖ :=
           ContinuousLinearMap.le_opNorm _ _
-      _ = U.directedProjectionGap V * ‖x‖ := rfl
+      _ = U.directedProjectionGap V * ‖x‖ := by
+        rw [Submodule.directedProjectionGap_def]
   nlinarith [hle, hxpos, h]
 
 omit [FiniteDimensional 𝕜 E] in
@@ -273,8 +274,7 @@ theorem directedProjectionGap_lt_one_of_transverse {U V : Submodule 𝕜 E}
   · subst hU
     have h0 : (Vᗮ.starProjection ∘L (⊥ : Submodule 𝕜 E).starProjection) = 0 := by
       ext x; simp
-    change ‖Vᗮ.starProjection ∘L (⊥ : Submodule 𝕜 E).starProjection‖ < 1
-    rw [h0]
+    rw [Submodule.directedProjectionGap_def, h0]
     simp
   set K : Set E := (U : Set E) ∩ Metric.sphere (0 : E) 1 with hKdef
   have hKcompact : IsCompact K :=
@@ -339,7 +339,10 @@ theorem directedProjectionGap_lt_one_of_transverse {U V : Submodule 𝕜 E}
       _ ≤ c * ‖U.starProjection z‖ := hbound _ (U.starProjection_apply_mem z)
       _ ≤ c * ‖z‖ :=
           mul_le_mul_of_nonneg_left (U.norm_starProjection_apply_le z) hcnonneg
-  exact lt_of_le_of_lt hop hclt
+  have hgap : U.directedProjectionGap V ≤ c := by
+    rw [Submodule.directedProjectionGap_def]
+    exact hop
+  exact lt_of_le_of_lt hgap hclt
 
 /-- **The converse the acute case needs: in finite dimension the printed acute
 condition forces the projection gap below one.**
@@ -352,7 +355,7 @@ theorem projectionGap_lt_one_of_isAcute {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : IsAcute U V) : U.projectionGap V < 1 := by
   have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  rw [Submodule.projectionGap_eq_max_directedProjectionGap]
+  rw [Submodule.projectionGap_eq_max]
   exact max_lt (directedProjectionGap_lt_one_of_transverse h.1)
     (directedProjectionGap_lt_one_of_transverse h.2)
 
@@ -386,7 +389,8 @@ theorem one_le_projectionGap_of_forall_exists_unit_lt {U V : Submodule 𝕜 E}
           ContinuousLinearMap.le_opNorm _ _
       _ = ‖U.starProjection - V.starProjection‖ := by rw [hxnorm, mul_one]
   have : c ≤ U.projectionGap V := by
-    have hgap : U.projectionGap V = ‖U.starProjection - V.starProjection‖ := rfl
+    have hgap : U.projectionGap V = ‖U.starProjection - V.starProjection‖ :=
+      Submodule.projectionGap_def U V
     rw [hgap]
     rw [hxnorm] at hle
     linarith
@@ -597,9 +601,10 @@ theorem opNorm_projection_sub_eq_opNorm_sinThetaMap (U V : Submodule 𝕜 E)
   have hdir : ‖Uᗮ.starProjection ∘L V.starProjection‖ =
       ‖Vᗮ.starProjection ∘L U.starProjection‖ := by
     simpa only [hspanU, hspanV] using hdirSpan
-  rw [Submodule.norm_starProjection_sub_eq_max,
-    ← Submodule.starProjection_orthogonal' V,
-    ← Submodule.starProjection_orthogonal' U,
+  rw [← Submodule.projectionGap_def U V,
+    Submodule.projectionGap_eq_max,
+    Submodule.directedProjectionGap_def,
+    Submodule.directedProjectionGap_def,
     hdir, max_self]
 
 /-- Family-level principal angles agree with the canonical submodule API: the

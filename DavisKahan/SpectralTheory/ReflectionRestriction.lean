@@ -517,15 +517,8 @@ theorem subspaceGap_eq_directedGap_reflection
     U.projectionGap (U.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)) =
       U.directedProjectionGap (U.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)) := by
   let W := U.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)
-  change ‖U.starProjection - W.starProjection‖ =
-    ‖Wᗮ.starProjection ∘L U.starProjection‖
-  rw [Submodule.norm_starProjection_sub_eq_max]
-  rw [show (1 - W.starProjection : H →L[ℂ] H) = Wᗮ.starProjection from
-      (Submodule.starProjection_orthogonal' W).symm,
-    show (1 - U.starProjection : H →L[ℂ] H) = Uᗮ.starProjection from
-      (Submodule.starProjection_orthogonal' U).symm]
-  change max (U.directedProjectionGap W) (W.directedProjectionGap U) = U.directedProjectionGap W
-  rw [← directedGap_reflection_symm U V, max_self]
+  rw [Submodule.projectionGap_eq_max,
+    ← directedGap_reflection_symm U V, max_self]
 
 omit [CompleteSpace H] in
 /-- Conjugation by reflection carries the projection onto a subspace to the
