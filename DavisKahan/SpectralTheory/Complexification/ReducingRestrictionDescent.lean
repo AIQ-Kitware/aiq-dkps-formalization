@@ -44,7 +44,7 @@ theorem unitaryConj_complexifyReal_reducingRestriction
     (hred : TauCeti.LinearPMap.ReducesSubspace A P)
     (hredC : TauCeti.LinearPMap.ReducesSubspace
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)) :
-    TauCeti.LinearPMap.unitaryConj (complexifySubmoduleEquiv P)
+    _root_.LinearPMap.unitaryConj (complexifySubmoduleEquiv P)
         (TauCeti.LinearPMap.complexifyReal
           (TauCeti.LinearPMap.reducingRestriction A P hred))
       = TauCeti.LinearPMap.reducingRestriction

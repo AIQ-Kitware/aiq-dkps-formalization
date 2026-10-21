@@ -201,7 +201,6 @@ topics:
   title: 'Closed operators on LinearPMap: graphs, constructions and form bounds'
   modules:
   - Analysis.InnerProductSpace.LinearPMap.Closed
-  - Analysis.InnerProductSpace.LinearPMap.Constructions
   - Analysis.InnerProductSpace.LinearPMap.GraphCore
   - Analysis.InnerProductSpace.LinearPMap.Sylvester
   - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
@@ -582,7 +581,6 @@ rungs:
   title: 'Closed operators on LinearPMap: graphs, constructions and form bounds (T15a)'
   seeds:
   - Analysis.InnerProductSpace.LinearPMap.Closed
-  - Analysis.InnerProductSpace.LinearPMap.Constructions
   - Analysis.InnerProductSpace.LinearPMap.GraphCore
   - Analysis.InnerProductSpace.LinearPMap.Sylvester
   - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
