@@ -96,9 +96,9 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantSemin
   -- The operator seminorm on `E →L[𝕜] E` induced by `N`.
   set N' : (E →L[𝕜] E) → ℝ := fun f => N (f : E →ₗ[𝕜] E) with hN'
   have hadd : ∀ f h : E →L[𝕜] E, N' (f + h) ≤ N' f + N' h := fun f h => by
-    simp only [hN', ContinuousLinearMap.toLinearMap_add]; exact N.add_le _ _
+    simp only [hN', ContinuousLinearMap.toLinearMap_add]; exact map_add_le_add N _ _
   have hsmul : ∀ (a : 𝕜) (f : E →L[𝕜] E), N' (a • f) = ‖a‖ * N' f := fun a f => by
-    simp only [hN', ContinuousLinearMap.toLinearMap_smul]; exact N.smul_eq _ _
+    simp only [hN', ContinuousLinearMap.toLinearMap_smul]; exact map_smul_eq_mul N _ _
   have hidealL : ∀ C f : E →L[𝕜] E, N' (C ∘L f) ≤ ‖C‖ * N' f := fun C f => by
     simp only [hN']
     exact N.apply_comp_le (norm_nonneg C) fun y => C.le_opNorm y
@@ -127,7 +127,7 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantSemin
           N.apply_comp_le' zero_le_one fun y => by
             rw [one_mul]; exact V.norm_starProjection_apply_le y
       _ = N (T - S) := mul_one _
-      _ = N (S - T) := by rw [show (T - S : E →ₗ[𝕜] E) = -(S - T) by abel, N.apply_neg]
+      _ = N (S - T) := by rw [show (T - S : E →ₗ[𝕜] E) = -(S - T) by abel, map_neg_eq_map N]
   -- `N (Q ∘ P) = N' X` by star-invariance of `N`.
   have hstar : N ((Q ∘L P : E →L[𝕜] E) : E →ₗ[𝕜] E) = N' X := by
     have hPsym : (P : E →ₗ[𝕜] E).IsSymmetric := U.starProjection_isSymmetric

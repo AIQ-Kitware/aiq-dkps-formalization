@@ -59,7 +59,7 @@ theorem yuWangSamworth_lemma5_columns
       LinearIsometryEquiv.norm_map]
   rw [hUnorm] at h
   have hF : 0 ≤ frob A :=
-    (UnitarilyInvariantSeminorm.frobenius 𝕜 E F).nonneg A
+    apply_nonneg (UnitarilyInvariantSeminorm.frobenius 𝕜 E F) A
   calc
     frob (U.adjoint ∘ₗ A ∘ₗ W)
         ≤ ‖U.toContinuousLinearMap‖ *
@@ -148,7 +148,7 @@ theorem yuWangSamworth_lemma5_rows
   have hrecoverC : U ∘ₗ C ∘ₗ W.adjoint = A := by
     simpa only [hCdef] using hrecover
   have hC : 0 ≤ frob C :=
-    (UnitarilyInvariantSeminorm.frobenius 𝕜 Q P).nonneg C
+    apply_nonneg (UnitarilyInvariantSeminorm.frobenius 𝕜 Q P) C
   have hWnorm :
       ‖W.adjoint.toContinuousLinearMap‖ = ‖W.toContinuousLinearMap‖ := by
     simp only [LinearMap.adjoint_toContinuousLinearMap,

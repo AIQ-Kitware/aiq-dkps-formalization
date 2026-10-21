@@ -7,6 +7,8 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.LinearPMap
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSeparation
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Reducing
+public import TauCeti.Topology.Algebra.Module.LinearPMap.Restrict
 
 /-!
 # Domain-aware infrastructure for partial linear maps
@@ -174,7 +176,37 @@ theorem orthogonal
     rw [Submodule.orthogonal_orthogonal] at hx ⊢
     exact h.invariant x hx
 
+/-- Convert the historical four-component donor condition into the canonical Tau Ceti
+reducing-subspace structure.  The second projection-domain condition is redundant: it follows
+from the first because `P_{Uᗮ} x = x - P_U x`. -/
+theorem toIsReducing
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (h : ReducesSubspace A U) : _root_.LinearPMap.IsReducing A U where
+  starProjection_mem_domain hx := h.projection_mem_domain ⟨_, hx⟩
+  isInvariant := (_root_.LinearPMap.isInvariant_iff (A := A) (U := U)).2
+    (fun x hx => h.invariant x hx)
+  isInvariant_orthogonal := (_root_.LinearPMap.isInvariant_iff (A := A) (U := Uᗮ)).2
+    (fun x hx => h.orthogonal_invariant x hx)
+
+/-- Any canonical Tau Ceti reducing subspace satisfies the donor condition. -/
+theorem ofIsReducing
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (h : _root_.LinearPMap.IsReducing A U) : ReducesSubspace A U := by
+  refine of_components (fun x => h.starProjection_mem_domain x.property) (fun x => ?_)
+    (fun x hx => h.isInvariant.apply_mem x hx)
+    (fun x hx => h.isInvariant_orthogonal.apply_mem x hx)
+  rw [Submodule.starProjection_orthogonal_val]
+  exact h.sub_starProjection_mem_domain x.property
+
 end ReducesSubspace
+
+/-- The donor reducing condition and Tau Ceti's canonical reducing condition are equivalent.
+The donor formulation retained both domain-preservation conjuncts for historical reasons; the
+canonical formulation needs only one. -/
+theorem reducesSubspace_iff_isReducing
+    {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] :
+    ReducesSubspace A U ↔ _root_.LinearPMap.IsReducing A U :=
+  ⟨ReducesSubspace.toIsReducing, ReducesSubspace.ofIsReducing⟩
 
 /-- The operator domain inside a reducing subspace. -/
 def reducingRestrictionDomain
@@ -285,31 +317,40 @@ theorem coe_reducingRestriction_apply
     ((reducingRestriction A U hred
         ⟨x, (mem_reducingRestriction_domain_iff A U hred x).mpr hx⟩ : U) : E) =
       A ⟨(x : E), hx⟩ := (rfl)
+/-- The donor restriction is the *same partial linear map* as the canonical Tau Ceti
+restriction.  This equality is the migration boundary: accepted Tau Ceti theorems now own the
+mathematics of density, closedness, symmetry, and self-adjointness.  Consumers may still use the
+source-era spelling until their signatures are rewritten. -/
+theorem reducingRestriction_eq_restrict
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) :
+    reducingRestriction A U hred = A.restrict hred.toIsReducing.isInvariant := by
+  refine _root_.LinearPMap.ext ?_ ?_
+  · apply Submodule.ext
+    intro x
+    have hOld : x ∈ (reducingRestriction A U hred).domain ↔
+        (x : E) ∈ A.domain :=
+      mem_reducingRestriction_domain_iff A U hred x
+    have hNew : x ∈ (A.restrict hred.toIsReducing.isInvariant).domain ↔
+        (x : E) ∈ A.domain :=
+      _root_.LinearPMap.mem_restrict_domain hred.toIsReducing.isInvariant
+    exact hOld.trans hNew.symm
+  · intro x hx hy
+    apply Subtype.ext
+    have hxA : (x : E) ∈ A.domain :=
+      (mem_reducingRestriction_domain_iff A U hred x).mp hx
+    exact (coe_reducingRestriction_apply A U hred x hxA).trans
+      ((_root_.LinearPMap.coe_restrict_apply
+        hred.toIsReducing.isInvariant ⟨x, hy⟩).symm)
+
 /-- A dense partial-map domain remains dense after restriction to a reducing
 subspace. -/
 theorem reducingRestriction_dense
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) (hA : Dense (A.domain : Set E)) :
     Dense ((reducingRestriction A U hred).domain : Set U) := by
-  rw [reducingRestriction_domain, dense_iff_closure_eq]
-  ext u
-  simp only [Set.mem_univ, iff_true]
-  have hu : (u : E) ∈ closure (A.domain : Set E) := by
-    rw [hA.closure_eq]
-    trivial
-  obtain ⟨s, hs, hs_lim⟩ := mem_closure_iff_seq_limit.mp hu
-  let t : ℕ → U := fun n =>
-    ⟨U.starProjection (s n), U.starProjection_apply_mem (s n)⟩
-  refine mem_closure_iff_seq_limit.mpr ⟨t, ?_, ?_⟩
-  · intro n
-    exact hred.projection_mem_domain ⟨s n, hs n⟩
-  · have hlim := (U.starProjection.continuous.tendsto (u : E)).comp hs_lim
-    have hfix : U.starProjection (u : E) = (u : E) :=
-      Submodule.starProjection_eq_self_iff.mpr u.property
-    -- names the sequence explicitly so the limit lemma matches its shape.
-    change Tendsto (fun n => t n) atTop (𝓝 u)
-    apply tendsto_subtype_rng.mpr
-    simpa [t, hfix, Function.comp_def] using hlim
+  rw [reducingRestriction_eq_restrict A U hred]
+  exact hred.toIsReducing.dense_restrict_domain hA
 
 /-- Closedness of the graph is preserved by restriction to a reducing
 subspace.  The hypothesis is stated as a graph range to make it directly
@@ -321,33 +362,11 @@ theorem reducingRestriction_closedGraph
     IsClosed (Set.range fun x : (reducingRestriction A U hred).domain =>
       (((x : (reducingRestriction A U hred).domain) : U),
         reducingRestriction A U hred x)) := by
-  let coords : U × U → E × E := fun p => ((p.1 : E), (p.2 : E))
-  have hcoords : Continuous coords :=
-    (U.subtypeL.continuous.comp continuous_fst).prodMk
-      (U.subtypeL.continuous.comp continuous_snd)
-  rw [show Set.range (fun x : (reducingRestriction A U hred).domain =>
-      (((x : (reducingRestriction A U hred).domain) : U),
-        reducingRestriction A U hred x)) =
-      coords ⁻¹' (Set.range fun x : A.domain => ((x : E), A x)) by
-    ext p
-    constructor
-    · rintro ⟨x, rfl⟩
-      exact ⟨reducingRestrictionDomainToAmbient A U x, rfl⟩
-    · rintro ⟨x, hx⟩
-      have hx0 : (x : E) = (p.1 : E) := congrArg Prod.fst hx
-      have hx1 : A x = (p.2 : E) := congrArg Prod.snd hx
-      have hpdom : (p.1 : E) ∈ A.domain := hx0 ▸ x.property
-      let u : (reducingRestriction A U hred).domain := ⟨p.1, hpdom⟩
-      refine ⟨u, Prod.ext rfl ?_⟩
-      apply Subtype.ext
-      -- states the goal with the local definition unfolded, in the shape the next step
-      -- needs.
-      change A (reducingRestrictionDomainToAmbient A U u) = (p.2 : E)
-      have hxu : reducingRestrictionDomainToAmbient A U u = x := by
-        apply Subtype.ext
-        exact hx0.symm
-      simpa [hxu] using hx1]
-  exact hA.preimage hcoords
+  have hClosed : A.IsClosed := (isClosed_iff_range_isClosed A).2 hA
+  have hRestrict : (A.restrict hred.toIsReducing.isInvariant).IsClosed :=
+    hClosed.restrict hred.toIsReducing.isInvariant
+  rw [reducingRestriction_eq_restrict A U hred]
+  exact (isClosed_iff_range_isClosed _).1 hRestrict
 
 /-- Adjoint-domain membership of a reducing restriction is exactly ambient
 adjoint-domain membership for the included vector. -/
@@ -820,47 +839,11 @@ reducing subspace. -/
 theorem reducingRestriction_isSelfAdjoint
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [CompleteSpace E] [CompleteSpace U]
-    (hred : ReducesSubspace A U) (hDense : Dense (A.domain : Set E))
+    (hred : ReducesSubspace A U) (_hDense : Dense (A.domain : Set E))
     (hA : _root_.IsSelfAdjoint A) :
     _root_.IsSelfAdjoint (reducingRestriction A U hred) := by
-  let R := reducingRestriction A U hred
-  -- states the goal against the bundled predicate so the structure lemma applies.
-  change _root_.IsSelfAdjoint R
-  rw [LinearPMap.isSelfAdjoint_def] at hA ⊢
-  refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
-  · ext y
-    -- states the goal against the bundled predicate so the structure lemma applies.
-    change y ∈ R.adjoint.domain ↔ y ∈ R.domain
-    rw [show R = reducingRestriction A U hred by rfl,
-      mem_reducingRestriction_adjoint_domain_iff A U hred]
-    rw [hA]
-    rfl
-  · intro y hyAdj hyR
-    let yAdj : U := R.adjoint ⟨y, hyAdj⟩
-    let yAct : U := R ⟨y, hyR⟩
-    have hformal := LinearPMap.adjoint_isFormalAdjoint
-      (reducingRestriction_dense A U hred hDense) ⟨y, hyAdj⟩
-    have hAformal := LinearPMap.adjoint_isFormalAdjoint hDense
-    rw [hA] at hAformal
-    have hAsymm : IsSymmetric A := by
-      intro x z
-      exact hAformal x z
-    have hsymm := reducingRestriction_isSymmetric A U hred hAsymm
-    have hinner : (fun x : U => ⟪yAdj, x⟫_𝕜) =
-        fun x : U => ⟪yAct, x⟫_𝕜 := by
-      apply Continuous.ext_on (reducingRestriction_dense A U hred hDense)
-      · exact continuous_const.inner continuous_id
-      · exact continuous_const.inner continuous_id
-      · intro x hx
-        let xDom : R.domain := ⟨x, hx⟩
-        calc
-          ⟪yAdj, x⟫_𝕜 = ⟪y, R xDom⟫_𝕜 := by
-            simpa [yAdj, xDom] using hformal xDom
-          _ = ⟪yAct, x⟫_𝕜 := by
-            simpa [yAct, xDom, R] using (hsymm ⟨y, hyR⟩ xDom).symm
-    have hzero : ⟪yAdj - yAct, yAdj - yAct⟫_𝕜 = 0 := by
-      rw [inner_sub_left, congrFun hinner (yAdj - yAct), sub_self]
-    exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
+  rw [reducingRestriction_eq_restrict A U hred]
+  exact hred.toIsReducing.isSelfAdjoint_restrict hA
 
 /-- Graph norm associated with a partial linear map. -/
 noncomputable def graphNorm (A : E →ₗ.[𝕜] E) (x : A.domain) : ℝ :=

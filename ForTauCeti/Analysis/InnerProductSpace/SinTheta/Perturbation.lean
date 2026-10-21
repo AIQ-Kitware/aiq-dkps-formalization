@@ -379,7 +379,7 @@ private theorem uiNorm_projection_sub_le_of_kyFanSum_le
     rw [← UnitarilyInvariantSeminorm.orthogonalBlockSum_smul]
     exact h
   have hNB : δ * NB Xblock ≤ NB Cblock := by
-    rw [NB.smul_eq, RCLike.norm_ofReal, abs_of_nonneg hδ.le] at hNBscaled
+    rw [map_smul_eq_mul NB, RCLike.norm_ofReal, abs_of_nonneg hδ.le] at hNBscaled
     exact hNBscaled
   -- The ambient operator represented by a block map in the `U ⊕ Uᗮ` domain
   -- and `Vᗮ ⊕ V` codomain coordinates.  This uses the exact adjoint appearing
@@ -528,7 +528,7 @@ theorem sinAngleOperator_perturbation_le
     module
   have hcheckerNorm :
       N (H ∘ₗ projection U - projection V ∘ₗ H) ≤ N H := by
-    rw [hchecker, N.smul_eq, RCLike.norm_ofReal,
+    rw [hchecker, map_smul_eq_mul N, RCLike.norm_ofReal,
       abs_of_nonneg (by positivity : 0 ≤ (2 : ℝ)⁻¹)]
     calc
       (2 : ℝ)⁻¹ * N (H ∘ₗ JU.toLinearMap - JV.toLinearMap ∘ₗ H) ≤
@@ -536,9 +536,21 @@ theorem sinAngleOperator_perturbation_le
             (N (H ∘ₗ JU.toLinearMap) + N (-(JV.toLinearMap ∘ₗ H))) := by
         gcongr
         simpa [sub_eq_add_neg] using
-          N.add_le (H ∘ₗ JU.toLinearMap) (-(JV.toLinearMap ∘ₗ H))
+          map_add_le_add N (H ∘ₗ JU.toLinearMap) (-(JV.toLinearMap ∘ₗ H))
       _ = (2 : ℝ)⁻¹ * (N H + N H) := by
-        rw [N.apply_neg, N.invariant_right JU H, N.invariant_left JV H]
+        have hJU : JU.toLinearMap = (JU : E →ₗ[𝕜] E) := by
+          ext x
+          simp
+        have hJV : JV.toLinearMap = (JV : E →ₗ[𝕜] E) := by
+          ext x
+          simp
+        have hright : N (H ∘ₗ JU.toLinearMap) = N H := by
+          rw [hJU]
+          exact N.map_comp_linearIsometryEquiv JU H
+        have hleft : N (JV.toLinearMap ∘ₗ H) = N H := by
+          rw [hJV]
+          exact N.map_linearIsometryEquiv_comp JV H
+        rw [map_neg_eq_map N, hright, hleft]
       _ = N H := by ring
   exact hNB.trans (by simpa [H] using hcheckerNorm)
 

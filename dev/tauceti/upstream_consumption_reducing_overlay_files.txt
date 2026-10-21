@@ -1,0 +1,17 @@
+DavisKahan/DoubleAngle/TanTwoThetaBranchFree.lean
+DavisKahan/DoubleAngle/TanTwoThetaKyFan.lean
+DavisKahan/FiniteDimensional/DirectRotation/Majorization.lean
+DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean
+DavisKahan/FiniteDimensional/DoubleAngle/SinTheta.lean
+DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean
+DavisKahan/FiniteDimensional/Sharpness.lean
+DavisKahan/FiniteDimensional/SinTheta/TrialMap.lean
+DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean
+ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean
+ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean
+ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean
+ForTauCeti/Analysis/InnerProductSpace/SinTheta/UnitarilyInvariant.lean
+ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralDistance.lean
+ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/Transport.lean
+dev/tauceti/upstream_consumption_reducing_2026-10-21.md
+dev/tauceti/upstream_consumption_reducing_overlay_files.txt

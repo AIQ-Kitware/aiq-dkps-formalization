@@ -296,11 +296,16 @@ theorem uiNorm_pinch_le
       LinearEquiv.coe_coe, Submodule.reflection_apply, two_smul,
       map_add, map_sub]
     module
-  have htri := N.add_le A
+  have htri := map_add_le_add N A
     (U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap)
+  have hreflection : U.reflection.toLinearMap =
+      (U.reflection : E →ₗ[𝕜] E) := by
+    ext x
+    simp
   have hinv : N (U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap) = N A := by
-    rw [N.invariant_left, N.invariant_right]
-  rw [← hpinch, N.smul_eq, RCLike.norm_ofNat, hinv] at htri
+    rw [hreflection]
+    exact N.map_linearIsometryEquiv_comp_comp U.reflection U.reflection A
+  rw [← hpinch, map_smul_eq_mul N, RCLike.norm_ofNat, hinv] at htri
   linarith
 
 

@@ -253,7 +253,7 @@ theorem yuWangSamworth_alignedFrame_le
       (Submodule.span 𝕜 (Set.range v)) :=
     by
       rw [sinThetaFrobenius_eq]
-      exact (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).nonneg _
+      exact apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _
   calc Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2)
       ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
@@ -319,7 +319,7 @@ theorem yuWangSamworth_alignedFrame_le_residual
       (Submodule.span 𝕜 (Set.range v)) :=
     by
       rw [sinThetaFrobenius_eq]
-      exact (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).nonneg _
+      exact apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _
   calc Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2)
       ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum

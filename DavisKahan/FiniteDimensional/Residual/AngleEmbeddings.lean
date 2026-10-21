@@ -82,7 +82,7 @@ theorem sinTwoThetaEmbedding_uiNorm_le_two_mul
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E) :
     N (sinTwoThetaEmbedding U X) ≤ 2 * N (sinThetaEmbedding U X) := by
-  rw [sinTwoThetaEmbedding, N.smul_eq, RCLike.norm_ofNat]
+  rw [sinTwoThetaEmbedding, map_smul_eq_mul N, RCLike.norm_ofNat]
   have hcomp := N.map_comp_le_right (sinThetaEmbedding U X) (cosThetaMagnitude U X)
     (c := ‖(cosThetaMagnitude U X).toContinuousLinearMap‖)
     (fun x => (cosThetaMagnitude U X).toContinuousLinearMap.le_opNorm x)
@@ -394,8 +394,8 @@ theorem tanThetaEmbedding_residual_le_of_orderedGap
       -- `F` is the subsingleton here, not `E`
       have hx : x = 0 := Subsingleton.elim _ _
       simp [hx]
-    rw [hT, N.apply_zero, mul_zero]
-    exact N.nonneg _
+    rw [hT, map_zero N, mul_zero]
+    exact apply_nonneg N _
   · obtain ⟨β, α, hβα, hMspec, hAspec⟩ :=
       exists_intervalGap_of_orderedGap hM hgap
     have htrans := isTransverse_of_orderedRitzGap

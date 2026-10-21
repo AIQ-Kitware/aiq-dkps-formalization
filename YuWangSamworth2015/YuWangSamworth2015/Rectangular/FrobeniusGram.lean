@@ -138,7 +138,8 @@ theorem frobenius_rightGram_sub_le
         Â.adjoint ∘ₗ D + D.adjoint ∘ₗ A := by
     simpa only [D] using rightGram_sub_rightGram A Â
   rw [hidentity]
-  refine (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).add_le _ _ |>.trans ?_
+  refine (map_add_le_add
+    (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _ _).trans ?_
   have hleft :
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (Â.adjoint ∘ₗ D) ≤
         ‖Â.toContinuousLinearMap‖ *
@@ -180,7 +181,8 @@ theorem frobenius_leftGram_sub_le
         D ∘ₗ Â.adjoint + A ∘ₗ D.adjoint := by
     simpa only [D] using leftGram_sub_leftGram A Â
   rw [hidentity]
-  refine (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F)).add_le _ _ |>.trans ?_
+  refine (map_add_le_add
+    (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F)) _ _).trans ?_
   have hleft :
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F) (D ∘ₗ Â.adjoint) ≤
         ‖Â.toContinuousLinearMap‖ *

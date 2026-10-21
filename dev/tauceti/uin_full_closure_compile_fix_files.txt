@@ -1,0 +1,17 @@
+DavisKahan/DoubleAngle/TanTwoThetaBranchFree.lean
+DavisKahan/DoubleAngle/TanTwoThetaKyFan.lean
+DavisKahan/FiniteDimensional/DirectRotation/Majorization.lean
+DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean
+DavisKahan/FiniteDimensional/DoubleAngle/SinTheta.lean
+DavisKahan/FiniteDimensional/Residual/AngleEmbeddings.lean
+DavisKahan/FiniteDimensional/Sharpness.lean
+DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean
+DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean
+ForTauCeti/Analysis/InnerProductSpace/SinTheta/Frobenius.lean
+ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean
+ForTauCeti/Analysis/InnerProductSpace/SinTheta/UnitarilyInvariant.lean
+ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralDistance.lean
+YuWangSamworth2015/YuWangSamworth2015/Appendix/Lemma5.lean
+YuWangSamworth2015/YuWangSamworth2015/Core/Procrustes.lean
+YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean
+dev/tauceti/uin_full_closure_compile_fix_files.txt

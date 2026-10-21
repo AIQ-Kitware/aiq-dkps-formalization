@@ -543,7 +543,7 @@ rewrite the final UI-norm projector theorem needs. -/
 theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     N (projection U - projection V) = N (sinAngleOperator U V) :=
-  N.eq_of_same_singularValues (singularValues_projection_sub_projection U V)
+  N.map_eq_of_singularValues_eq (singularValues_projection_sub_projection U V)
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The one-sided double-angle map is exactly twice the cross block.
