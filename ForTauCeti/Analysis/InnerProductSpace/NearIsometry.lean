@@ -14,7 +14,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]); golf pass by Claude Opus 4.8
 -/
 module
 
-public import ForTauCeti.Analysis.SpecialFunctions.Sqrt
+public import TauCeti.Analysis.SpecialFunctions.Sqrt
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 

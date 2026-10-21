@@ -33,7 +33,6 @@ topics:
 - id: T01
   title: Positive square root, operator modulus, functional calculus
   modules:
-  - Analysis.SpecialFunctions.Sqrt
   - Analysis.InnerProductSpace.BasisSpan
   - Analysis.InnerProductSpace.CourantFischer
   - Analysis.InnerProductSpace.PositiveSqrt
@@ -298,7 +297,6 @@ topics:
   - Analysis.Matrix.SpectralFunctionMeasurable
   - Analysis.Matrix.Spectrum
   - MeasureTheory.Function.ConvergenceInMeasure
-  - MeasureTheory.Measure.Typeclasses.Probability
   - Analysis.Matrix.SpectralProjection
 - id: T20
   title: Sample moments and matrix concentration
@@ -530,7 +528,6 @@ rungs:
   - Analysis.OperatorIdeal.Family.Schatten
   - Topology.ENNRealLiminf
   - Analysis.OperatorIdeal.Family.TraceClass
-  - Analysis.SpecialFunctions.Sqrt
   - LinearAlgebra.Dimension.RankComp
   - SetTheory.Cardinal.Lift
 - id: H
@@ -661,7 +658,6 @@ rungs:
   - Analysis.Matrix.SpectralFunctionMeasurable
   - Analysis.Matrix.Spectrum
   - MeasureTheory.Function.ConvergenceInMeasure
-  - MeasureTheory.Measure.Typeclasses.Probability
   - Analysis.Matrix.SpectralProjection
 - id: S
   title: Sample moments and matrix concentration (T20)
