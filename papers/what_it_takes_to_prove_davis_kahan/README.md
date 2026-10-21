@@ -7,6 +7,7 @@ foundations of Davis and Kahan's 1970 spectral-subspace perturbation theory.
   ordered work packages, publication criteria, and reproducibility steps.
 - [Sine-theta pilot](cases/sine_theta.md): the first theorem-level study,
   including the mathematical reduction and a checklist of open evidence work.
+- [Evidence tools](TOOLS.md): executable collection and research-evidence workflow for the sine-theta and direct-rotation cases.
 
 The pilot uses the complete, source-reviewed formalization already maintained
 in `DavisKahan/` and `ForTauCeti/`. Its intended output is a readable mathematical

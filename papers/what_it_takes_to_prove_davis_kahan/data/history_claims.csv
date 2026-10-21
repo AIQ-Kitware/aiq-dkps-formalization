@@ -1,0 +1,9 @@
+claim_id,case,step,work,year,locator_1970,locator_prior,relationship,source_status,exact_mathematical_relation,notes
+HS1,sine_theta,S1,Davis--Kahan 1970,1970,,,original_proof,to_check,,Locate complementary-block residual equation and domain restrictions
+HS2,sine_theta,S2,Rosenblum operator equation,1956,,,candidate_predecessor,to_check,,Compare actual spectral separation assumptions and constants
+HS3,sine_theta,S3,Classical unitarily invariant norm theory,,,,candidate_predecessor,to_check,,Identify precise singular-value and ideal results used
+HS4,sine_theta,S4,Subspace angle and projection geometry,,,,candidate_predecessor,to_check,,Search 1970 geometry bibliography before claiming ancestry
+HS5,sine_theta,S5,Davis--Kahan 1970,1970,,,original_proof,to_check,,Identify theorem and standing hypotheses
+HD1,direct_rotation,D1,Davis--Kahan 1970 Section 4,1970,,,original_proof,to_check,,Check Proposition 4.4 and Example 4.2 separately
+HD2,direct_rotation,D2,Bolotnikov Li Rodman,2001,,,later_reformulation,to_check,,Establish Q-norm relationship without assigning priority from dates
+HD3,direct_rotation,D5,Zhang Qiu direct rotations,2010,,Section 4 p. 1615,later_reformulation,source_passage_checked,,The 2010 article notes general trace-norm nonminimality; this does not show the small-angle case
