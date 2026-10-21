@@ -208,140 +208,97 @@ theorem reducesSubspace_iff_isReducing
     ReducesSubspace A U ↔ _root_.LinearPMap.IsReducing A U :=
   ⟨ReducesSubspace.toIsReducing, ReducesSubspace.ofIsReducing⟩
 
-/-- The operator domain inside a reducing subspace. -/
+/-- Compatibility name for the canonical domain preimage of `A` along the inclusion
+of `U`.  No separate restricted-domain submodule is constructed. -/
 def reducingRestrictionDomain
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) : Submodule 𝕜 U where
-  carrier := {x | (x : E) ∈ A.domain}
-  zero_mem' := A.domain.zero_mem
-  add_mem' hx hy := A.domain.add_mem hx hy
-  smul_mem' c _ hx := A.domain.smul_mem c hx
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) : Submodule 𝕜 U :=
+  A.domain.comap U.subtype
 
 /-- Membership in the restricted domain is membership of the ambient vector in
 `A.domain`: restricting the domain to `U` adds no condition beyond lying in `U`,
 which the subtype already carries. -/
 @[simp] theorem mem_reducingRestrictionDomain_iff
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) (x : U) :
-    x ∈ reducingRestrictionDomain A U ↔ (x : E) ∈ A.domain :=
-  Iff.rfl
+    x ∈ reducingRestrictionDomain A U ↔ (x : E) ∈ A.domain := by
+  simp only [reducingRestrictionDomain, Submodule.mem_comap, Submodule.subtype_apply]
 
-/-- A restricted-domain vector viewed in the ambient partial-map domain. -/
-def reducingRestrictionDomainToAmbient
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
-    (x : reducingRestrictionDomain A U) : A.domain :=
-  ⟨((x : reducingRestrictionDomain A U) : U), x.property⟩
+/-- Historical name for Tau Ceti's canonical restriction of a partial linear map.
+The operator, its domain and its action are now *defined* by `LinearPMap.restrict`,
+not constructed a second time in the donor. -/
+-- The compatibility spelling must reduce to the canonical Tau Ceti restriction.
+-- This is a transparent alias, not a second operator representation.
+@[expose]
+noncomputable def reducingRestriction
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U) : U →ₗ.[𝕜] U :=
+  A.restrict hred.toIsReducing.isInvariant
 
-/-- Viewing a restricted-domain vector in the ambient domain does not move it.
-The two subtypes differ only in which membership proof they carry. -/
-@[simp] theorem reducingRestrictionDomainToAmbient_coe
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
-    (x : reducingRestrictionDomain A U) :
-    ((reducingRestrictionDomainToAmbient A U x : A.domain) : E) =
-      ((x : reducingRestrictionDomain A U) : U) := (rfl)
-/-- Action of a partial map restricted to a reducing subspace. -/
-def reducingRestrictionLinearMap
+/-- The restricted partial map has the canonical domain preimage. -/
+@[simp] theorem reducingRestriction_domain
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) :
-    reducingRestrictionDomain A U →ₗ[𝕜] U where
-  toFun x :=
-    ⟨A (reducingRestrictionDomainToAmbient A U x),
-      hred.invariant (reducingRestrictionDomainToAmbient A U x)
-        (((x : reducingRestrictionDomain A U) : U).property)⟩
-  map_add' x y := by
-    apply Subtype.ext
-    simp only [Submodule.coe_add]
-    rw [show reducingRestrictionDomainToAmbient A U (x + y) =
-      reducingRestrictionDomainToAmbient A U x +
-        reducingRestrictionDomainToAmbient A U y from rfl]
-    exact A.toFun.map_add _ _
-  map_smul' c x := by
-    apply Subtype.ext
-    simp only [Submodule.coe_smul, RingHom.id_apply]
-    rw [show reducingRestrictionDomainToAmbient A U (c • x) =
-      c • reducingRestrictionDomainToAmbient A U x from rfl]
-    exact A.toFun.map_smul c _
-
-/-- The restricted map acts by the ambient one: `A|_U x = A x`, read through the
-two coercions.  This is where `ReducesSubspace` earns its keep — it is what
-makes `A x` land back in `U` so the corestriction typechecks. -/
-@[simp] theorem coe_reducingRestrictionLinearMap
+    (reducingRestriction A U hred).domain = reducingRestrictionDomain A U := by
+  exact _root_.LinearPMap.restrict_domain hred.toIsReducing.isInvariant
+/-- Membership in the canonical restriction's domain is ambient domain membership. -/
+theorem mem_reducingRestriction_domain_iff
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : ReducesSubspace A U) (x : reducingRestrictionDomain A U) :
-    ((reducingRestrictionLinearMap A U hred x : U) : E) =
-      A (reducingRestrictionDomainToAmbient A U x) := (rfl)
-/-- Projection of an ambient domain vector into the restricted domain. -/
+    (hred : ReducesSubspace A U) (x : U) :
+    x ∈ (reducingRestriction A U hred).domain ↔ (x : E) ∈ A.domain := by
+  exact _root_.LinearPMap.mem_restrict_domain hred.toIsReducing.isInvariant
+
+/-- Include a domain vector of the native restriction in the ambient domain.
+This uses the public domain-membership theorem, not opacity-sensitive unfolding. -/
+-- Exposed only because the ambient subtype coercion is definitionally the identity;
+-- consumers should use `reducingRestrictionDomainToAmbient_coe` for rewriting.
+@[expose]
+def reducingRestrictionDomainToAmbient
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U)
+    (x : (reducingRestriction A U hred).domain) : A.domain :=
+  ⟨(x : U), (mem_reducingRestriction_domain_iff A U hred _).mp x.property⟩
+
+@[simp] theorem reducingRestrictionDomainToAmbient_coe
+    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (hred : ReducesSubspace A U)
+    (x : (reducingRestriction A U hred).domain) :
+    ((reducingRestrictionDomainToAmbient A U hred x : A.domain) : E) =
+      ((x : (reducingRestriction A U hred).domain) : U) := rfl
+
+/-- Orthogonally project an ambient domain vector into the domain of the
+canonical restriction. -/
+-- Expose the projection witness so its nested subtype coercions simplify.
+@[expose]
 noncomputable def projectDomainToReducingRestriction
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) (x : A.domain) :
-    reducingRestrictionDomain A U :=
+    (reducingRestriction A U hred).domain :=
   ⟨⟨U.starProjection (x : E), U.starProjection_apply_mem (x : E)⟩,
-    hred.projection_mem_domain x⟩
+    (mem_reducingRestriction_domain_iff A U hred _).mpr
+      (hred.projection_mem_domain x)⟩
 
-/-- Projecting an ambient domain vector into the restricted domain is the
-orthogonal projection onto `U`.  It stays in the domain because `A` reduces
-`U`. -/
 @[simp] theorem coe_projectDomainToReducingRestriction
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) (x : A.domain) :
     (((projectDomainToReducingRestriction A U hred x :
-        reducingRestrictionDomain A U) : U) : E) =
-      U.starProjection (x : E) := (rfl)
-/-- The partial map induced on a reducing subspace.  Density and closedness
-are properties supplied separately by the theorem using this construction. -/
-noncomputable def reducingRestriction
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : ReducesSubspace A U) : U →ₗ.[𝕜] U where
-  domain := reducingRestrictionDomain A U
-  toFun := reducingRestrictionLinearMap A U hred
+        (reducingRestriction A U hred).domain) : U) : E) =
+      U.starProjection (x : E) := rfl
 
-/-- The restricted partial map has the restricted domain, definitionally. -/
-@[simp] theorem reducingRestriction_domain
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : ReducesSubspace A U) :
-    (reducingRestriction A U hred).domain = reducingRestrictionDomain A U := (rfl)
-/-- Membership in the restricted domain, stated without naming the intermediate
-domain submodule.  This is the form a consumer outside this module can use: the
-restricted operator's domain is `U`-vectors that already lay in `A.domain`. -/
-theorem mem_reducingRestriction_domain_iff
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : ReducesSubspace A U) (x : U) :
-    x ∈ (reducingRestriction A U hred).domain ↔ (x : E) ∈ A.domain := Iff.rfl
-
-/-- **The reducing restriction acts by the ambient partial map**, read through
-the two coercions and indexed by an ambient-domain proof rather than by the
-restricted domain's subtype.  `coe_reducingRestrictionLinearMap` says the same
-about the underlying linear map; this is the partial-map form, and it is what a
-consumer needs to compute with a restriction it did not build. -/
+/-- The canonical restriction acts by the ambient partial map on vectors of `U`.
+The subtype proofs are irrelevant to the value of the partial map. -/
 theorem coe_reducingRestriction_apply
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) (x : U) (hx : (x : E) ∈ A.domain) :
     ((reducingRestriction A U hred
         ⟨x, (mem_reducingRestriction_domain_iff A U hred x).mpr hx⟩ : U) : E) =
-      A ⟨(x : E), hx⟩ := (rfl)
-/-- The donor restriction is the *same partial linear map* as the canonical Tau Ceti
-restriction.  This equality is the migration boundary: accepted Tau Ceti theorems now own the
-mathematics of density, closedness, symmetry, and self-adjointness.  Consumers may still use the
-source-era spelling until their signatures are rewritten. -/
+      A ⟨(x : E), hx⟩ := by
+  exact _root_.LinearPMap.coe_restrict_apply hred.toIsReducing.isInvariant _
+
+/-- No bridge proof is needed: the donor spelling is the canonical restriction. -/
 theorem reducingRestriction_eq_restrict
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : ReducesSubspace A U) :
-    reducingRestriction A U hred = A.restrict hred.toIsReducing.isInvariant := by
-  refine _root_.LinearPMap.ext ?_ ?_
-  · apply Submodule.ext
-    intro x
-    have hOld : x ∈ (reducingRestriction A U hred).domain ↔
-        (x : E) ∈ A.domain :=
-      mem_reducingRestriction_domain_iff A U hred x
-    have hNew : x ∈ (A.restrict hred.toIsReducing.isInvariant).domain ↔
-        (x : E) ∈ A.domain :=
-      _root_.LinearPMap.mem_restrict_domain hred.toIsReducing.isInvariant
-    exact hOld.trans hNew.symm
-  · intro x hx hy
-    apply Subtype.ext
-    have hxA : (x : E) ∈ A.domain :=
-      (mem_reducingRestriction_domain_iff A U hred x).mp hx
-    exact (coe_reducingRestriction_apply A U hred x hxA).trans
-      ((_root_.LinearPMap.coe_restrict_apply
-        hred.toIsReducing.isInvariant ⟨x, hy⟩).symm)
+    reducingRestriction A U hred = A.restrict hred.toIsReducing.isInvariant :=
+  rfl
 
 /-- A dense partial-map domain remains dense after restriction to a reducing
 subspace. -/
@@ -388,7 +345,9 @@ theorem mem_reducingRestriction_adjoint_domain_iff
           (⟨U.starProjection (x : E),
             U.starProjection_apply_mem (x : E)⟩ : U) :=
         hproj.subtype_mk _
-      exact hprojU.subtype_mk fun x => hred.projection_mem_domain x
+      exact hprojU.subtype_mk fun x =>
+        (mem_reducingRestriction_domain_iff A U hred _).mpr
+          (hred.projection_mem_domain x)
     have hcomp : Continuous fun x : A.domain =>
         ⟪y, (reducingRestriction A U hred)
           (projectDomainToReducingRestriction A U hred x)⟫_𝕜 :=
@@ -409,10 +368,18 @@ theorem mem_reducingRestriction_adjoint_domain_iff
         exact Submodule.inner_right_of_mem_orthogonal y.property
           (hred.orthogonal_invariant xo
             (Uᗮ.starProjection_apply_mem (x : E)))
+      have hprojectAction :
+          (((reducingRestriction A U hred)
+              (projectDomainToReducingRestriction A U hred x) : U) : E) =
+            A xu := by
+        exact coe_reducingRestriction_apply A U hred
+          ⟨U.starProjection (x : E), U.starProjection_apply_mem (x : E)⟩
+          (hred.projection_mem_domain x)
       calc
         ⟪y, (reducingRestriction A U hred)
             (projectDomainToReducingRestriction A U hred x)⟫_𝕜 =
-            ⟪(y : E), A xu⟫_𝕜 := (rfl)
+            ⟪(y : E), A xu⟫_𝕜 := by
+              simp only [Submodule.coe_inner, hprojectAction]
         _ = ⟪(y : E), A xu + A xo⟫_𝕜 := by
               rw [inner_add_right, horth, add_zero]
         _ = ⟪(y : E), A (xu + xo)⟫_𝕜 := by
@@ -423,15 +390,38 @@ theorem mem_reducingRestriction_adjoint_domain_iff
     exact hcomp
   · intro hy
     have hincl : Continuous fun x : (reducingRestriction A U hred).domain =>
-        reducingRestrictionDomainToAmbient A U x := by
+        reducingRestrictionDomainToAmbient A U hred x := by
       have hcoe : Continuous fun x : (reducingRestriction A U hred).domain =>
           (((x : (reducingRestriction A U hred).domain) : U) : E) :=
         U.subtypeL.continuous.comp
           (reducingRestriction A U hred).domain.subtypeL.continuous
-      exact hcoe.subtype_mk fun x => x.property
+      exact hcoe.subtype_mk fun x =>
+        (mem_reducingRestriction_domain_iff A U hred _).mp x.property
     have hcomp := hy.comp hincl
     have hcomp' : Continuous fun x : (reducingRestriction A U hred).domain =>
-        ⟪(y : E), A (reducingRestrictionDomainToAmbient A U x)⟫_𝕜 := hcomp
+        ⟪(y : E), A (reducingRestrictionDomainToAmbient A U hred x)⟫_𝕜 := hcomp
+    have hfun :
+        (fun x : (reducingRestriction A U hred).domain =>
+          ⟪(y : E), A (reducingRestrictionDomainToAmbient A U hred x)⟫_𝕜) =
+        (fun x : (reducingRestriction A U hred).domain =>
+          ⟪y, (reducingRestriction A U hred) x⟫_𝕜) := by
+      funext x
+      have hact :
+          (((reducingRestriction A U hred) x : U) : E) =
+            A (reducingRestrictionDomainToAmbient A U hred x) := by
+        exact _root_.LinearPMap.coe_restrict_apply
+          hred.toIsReducing.isInvariant x
+      rw [← hact]
+      simp only [Submodule.coe_inner]
+    rw [hfun] at hcomp'
+    have hfun' :
+        (fun x : (reducingRestriction A U hred).domain =>
+          ⟪y, (reducingRestriction A U hred) x⟫_𝕜) =
+        ((innerₛₗ 𝕜 y).comp (reducingRestriction A U hred).toFun) := by
+      funext x
+      simp only [LinearMap.comp_apply, coe_innerₛₗ_apply,
+        _root_.LinearPMap.toFun_eq_coe]
+    rw [hfun'] at hcomp'
     exact hcomp'
 
 /-- Symmetry passes to a reducing restriction of a partial map. -/
@@ -443,9 +433,9 @@ theorem reducingRestriction_isSymmetric
     ∀ x y : (reducingRestriction A U hred).domain,
       ⟪reducingRestriction A U hred x, (y : U)⟫_𝕜 =
         ⟪(x : U), reducingRestriction A U hred y⟫_𝕜 := by
+  have hFormal : A.IsFormalAdjoint A := fun x y => hA x y
   intro x y
-  exact hA (reducingRestrictionDomainToAmbient A U x)
-    (reducingRestrictionDomainToAmbient A U y)
+  exact (hFormal.restrict hred.toIsReducing.isInvariant) x y
 
 /-- A linear map on a submodule has a bounded extension to the ambient space. -/
 structure BoundedExtension (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) where

@@ -63,8 +63,8 @@ instead of a theorem to apply. -/
 noncomputable def boundedReducingBlock
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.Reduces U) : U →ₗ.[𝕜] U :=
-  TauCeti.LinearPMap.reducingRestriction (A.toLinearMap.toPMap ⊤) U
-    (ofBounded_reducesSubspace A U hred)
+  (A.toLinearMap.toPMap ⊤).restrict
+    (ofBounded_reducesSubspace A U hred).toIsReducing.isInvariant
 
 /-- The block of a bounded operator on the orthogonal complement of a subspace
 it reduces.  A reducing subspace's complement is reducing, so this needs no
@@ -72,8 +72,8 @@ hypothesis beyond `hred`. -/
 noncomputable def boundedReducingBlockCompl
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.Reduces U) : Uᗮ →ₗ.[𝕜] Uᗮ :=
-  TauCeti.LinearPMap.reducingRestriction (A.toLinearMap.toPMap ⊤) Uᗮ
-    (ofBounded_reducesSubspace A U hred).orthogonal
+  (A.toLinearMap.toPMap ⊤).restrict
+    ((ofBounded_reducesSubspace A U hred).orthogonal.toIsReducing.isInvariant)
 
 end PartialMap
 end DavisKahanExt
