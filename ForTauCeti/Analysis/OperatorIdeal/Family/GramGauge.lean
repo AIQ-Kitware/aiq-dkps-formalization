@@ -63,6 +63,16 @@ variable {E0 E1 : Type v}
   [NormedAddCommGroup E0] [InnerProductSpace ℂ E0] [CompleteSpace E0]
   [NormedAddCommGroup E1] [InnerProductSpace ℂ E1] [CompleteSpace E1]
 
+private theorem nuclearENorm_eq_tsum_approximationNumber {G H : Type v}
+    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+    (T : G →L[ℂ] H) :
+    T.nuclearENorm = ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) := by
+  rw [ContinuousLinearMap.nuclearENorm_def]
+  refine tsum_congr fun n => ?_
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  simp
+
 /-- **The nuclear norm of a Gram operator is the square of the Hilbert--Schmidt norm.**
 
 `‖X⋆X‖₁ = ‖X‖_HS²`, in `ℝ≥0∞` and hence with no trace-class or Hilbert--Schmidt hypothesis:
@@ -75,7 +85,7 @@ theorem nuclearENorm_gramOperator (X : E0 →L[ℂ] E1) :
     (gramOperator X).nuclearENorm = X.hilbertSchmidtENorm ^ 2 := by
   have hsum : (gramOperator X).nuclearENorm =
       ∑' n : ℕ, ENNReal.ofReal (X.approximationNumber n) ^ (2 : ℝ) := by
-    rw [ContinuousLinearMap.nuclearENorm]
+    rw [nuclearENorm_eq_tsum_approximationNumber]
     refine tsum_congr fun n => ?_
     rw [approximationNumber_gramOperator_complex X n,
       ← Real.rpow_natCast (X.approximationNumber n) 2,

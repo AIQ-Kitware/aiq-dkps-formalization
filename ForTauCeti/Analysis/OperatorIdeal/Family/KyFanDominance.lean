@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 public import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
 
 /-!
@@ -93,13 +94,15 @@ instance isKyFanDominant_kyFanIdealFamily (𝕜 : Type u) [RCLike 𝕜]
 
 /-- The nuclear norm is the supremum of the Ky Fan gauges, so dominance is monotonicity of
 that supremum. -/
-instance isKyFanDominant_traceClassIdealFamily (𝕜 : Type u) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
+instance isKyFanDominant_traceClassIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
     IsKyFanDominant (traceClassIdealFamily.{u, v} 𝕜).toOperatorIdealFamily where
   gauge_le_of_forall_kyFanGauge_le {_E _F} _ _ _ _ _ _ {_A _B} h := by
     rw [gauge_traceClassIdealFamily, gauge_traceClassIdealFamily,
       ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,
       ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge]
-    exact iSup_mono fun k => ENNReal.ofReal_le_ofReal (h k)
+    refine iSup_mono fun k => ?_
+    apply ENNReal.coe_le_coe.mpr
+    apply NNReal.coe_le_coe.mp
+    simpa [ContinuousLinearMap.kyFanGaugeReal] using h k
 
 end TauCeti
