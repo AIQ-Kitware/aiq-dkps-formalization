@@ -28,6 +28,65 @@ universe v
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
+/-! ### The donor and upstream resolvent representations
+
+The paper-facing layer still uses the normed donor resolvent in a few places,
+while Tau Ceti's accepted `LinearPMap` API uses Mathlib's continuous resolvent.
+Their inverse records have the same three fields, so conversion is centralized
+here for the remaining consumers. -/
+
+omit [CompleteSpace E] in
+/-- Membership in the donor and upstream resolvent sets is equivalent. -/
+theorem mem_local_resolventSet_iff_root
+    (A : E →ₗ.[ℂ] E) (z : ℂ) :
+    z ∈ TauCeti.LinearPMap.resolventSet A ↔
+      z ∈ _root_.LinearPMap.resolventSet A := by
+  rw [TauCeti.LinearPMap.mem_resolventSet_iff,
+    _root_.LinearPMap.mem_resolventSet_iff]
+  constructor
+  · rintro ⟨R, hR⟩
+    exact ⟨R, {
+      mem_domain := hR.mem_domain
+      smul_sub_apply := hR.smul_sub_apply
+      apply_smul_sub := hR.apply_smul_sub
+    }⟩
+  · rintro ⟨R, hR⟩
+    exact ⟨R, {
+      mem_domain := hR.mem_domain
+      smul_sub_apply := hR.smul_sub_apply
+      apply_smul_sub := hR.apply_smul_sub
+    }⟩
+
+omit [CompleteSpace E] in
+/-- The donor and accepted partial-map spectra have the same membership. -/
+theorem mem_spectrum_iff_root
+    (A : E →ₗ.[ℂ] E) (z : ℂ) :
+    z ∈ TauCeti.LinearPMap.spectrum A ↔
+      z ∈ _root_.LinearPMap.spectrum A := by
+  rw [TauCeti.LinearPMap.mem_spectrum_iff,
+    _root_.LinearPMap.mem_spectrum_iff]
+  exact not_congr (mem_local_resolventSet_iff_root A z)
+
+variable {F : Type v}
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The donor and accepted partial-map spectra have the same disjointness
+relation. This keeps the remaining donor theorem boundary conversion in one
+place while its consumers use Tau Ceti's spectrum. -/
+theorem disjoint_spectrum_iff_root
+    (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F) :
+    Disjoint (TauCeti.LinearPMap.spectrum A) (TauCeti.LinearPMap.spectrum B) ↔
+      Disjoint (_root_.LinearPMap.spectrum A) (_root_.LinearPMap.spectrum B) := by
+  rw [Set.disjoint_left, Set.disjoint_left]
+  constructor
+  · intro h z hzA hzB
+    exact h (mem_spectrum_iff_root A z |>.mpr hzA)
+      (mem_spectrum_iff_root B z |>.mpr hzB)
+  · intro h z hzA hzB
+    exact h (mem_spectrum_iff_root A z |>.mp hzA)
+      (mem_spectrum_iff_root B z |>.mp hzB)
+
 omit [CompleteSpace E] in
 /-- Membership in the closed-operator real resolvent is exactly membership of
 the real scalar in the canonical resolvent set.
