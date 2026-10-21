@@ -563,7 +563,9 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
         rw [hamb]
     _ = (U.starProjection ∘L J ∘L Uᗮ.starProjection).approximationNumber n := by
         rw [← hstar, ContinuousLinearMap.star_eq_adjoint,
-          ContinuousLinearMap.approximationNumber_adjoint]
+          ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+          ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+          ContinuousLinearMap.singularValue_adjoint]
     _ = ((U.starProjection ∘L J ∘L Uᗮ.starProjection) ∘L J).approximationNumber n :=
         (ContinuousLinearMap.hasSameApproximationNumbers_comp_right hJnorm hJnorm
           hJJ n).symm

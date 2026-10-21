@@ -13,10 +13,10 @@ public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 /-!
 # Adjoint invariance of approximation numbers
 
-Tau Ceti proves adjoint invariance for its canonical `ℝ≥0` approximation numbers. The real-valued
-statement retained here is the coercion adapter used by DKPS estimates. The compact-adjoint result
-below remains local because it is derived from the maintained compactness/approximation-number
-criterion.
+Tau Ceti proves adjoint invariance for its canonical `ℝ≥0` approximation numbers. The redundant
+real-valued adjoint theorem has been removed; consumers now use that canonical result through the
+real-view equation where needed. The compact-adjoint result remains local because it follows from
+the maintained compactness/approximation-number criterion, for which Tau Ceti has no equivalent.
 
 ## Provenance
 
@@ -39,18 +39,6 @@ variable {E : Type v} {F : Type w}
 variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-/-- Adjoint invariance for the real-valued compatibility view. -/
-@[simp]
-theorem approximationNumber_adjoint (T : E →L[𝕜] F) (n : ℕ) :
-    T.adjoint.approximationNumber n = T.approximationNumber n := by
-  rw [approximationNumber_eq_singularValue_toReal, approximationNumber_eq_singularValue_toReal,
-    singularValue_adjoint]
-
-/-- Adjoint invariance as an equality of sequences. -/
-theorem approximationNumber_adjoint_eq (T : E →L[𝕜] F) :
-    T.adjoint.approximationNumber = T.approximationNumber :=
-  funext fun n => approximationNumber_adjoint T n
-
 /-- **Schauder's theorem for Hilbert spaces:** the adjoint of a compact operator is compact.
 
 Compactness on a complete Hilbert target is equivalent to the vanishing of the approximation
@@ -58,7 +46,12 @@ numbers. Tau Ceti now supplies adjoint invariance of those numbers, so this loca
 an equality rewrite. -/
 theorem isCompactOperator_adjoint {T : E →L[𝕜] F} (hT : IsCompactOperator T) :
     IsCompactOperator T.adjoint := by
-  rw [isCompactOperator_iff_tendsto_approximationNumber, approximationNumber_adjoint_eq]
+  rw [isCompactOperator_iff_tendsto_approximationNumber]
+  have hadj : T.adjoint.approximationNumber = T.approximationNumber := by
+    funext n
+    rw [approximationNumber_eq_singularValue_toReal,
+      approximationNumber_eq_singularValue_toReal, singularValue_adjoint]
+  rw [hadj]
   exact (isCompactOperator_iff_tendsto_approximationNumber T).1 hT
 
 /-- Schauder's theorem in both directions. -/

@@ -197,7 +197,10 @@ variable {E : Type v} {F : Type w}
 theorem kyFanGaugeReal_adjoint (T : E →L[𝕜] F) (k : ℕ) :
     T.adjoint.kyFanGaugeReal k = T.kyFanGaugeReal k := by
   rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
-  exact Finset.sum_congr rfl fun n _ => approximationNumber_adjoint T n
+  apply Finset.sum_congr rfl
+  intro n hn
+  rw [approximationNumber_eq_singularValue_toReal,
+    approximationNumber_eq_singularValue_toReal, singularValue_adjoint]
 
 end Adjoint
 
