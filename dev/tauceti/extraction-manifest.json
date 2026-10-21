@@ -350,6 +350,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
+        "ForTauCeti.Analysis.InnerProductSpace.OperatorExt",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions",
@@ -374,8 +375,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
         "ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded"
       ]
@@ -395,6 +394,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
+        "ForTauCeti.Analysis.InnerProductSpace.OperatorExt",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
@@ -427,8 +427,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
         "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
@@ -2614,7 +2612,7 @@
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic"
+        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -2970,7 +2968,7 @@
       "provenance_class": "new",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity"
+        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3334,15 +3332,17 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic"
+        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.BlockLowerBound",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the ℝ specialization is used directly. Historical source and declaration inventory retained here."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3377,10 +3377,12 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity"
+        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Restriction",
+        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Subspace"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the ℝ specialization is used directly. Historical source and declaration inventory retained here."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3426,7 +3428,7 @@
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity"
+        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -5265,6 +5267,27 @@
       "status": "staged-needs-current-validation",
       "upstream_pr": null,
       "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+    },
+    {
+      "source_module": "new -- adapted from Mathlib ext_inner_map",
+      "source_declarations": [
+        "op_ext_of_inner_self"
+      ],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.OperatorExt",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.OperatorExt",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Borel functional calculus and projection-valued measures",
+      "provenance_class": "adapted from Mathlib",
+      "direct_dependencies": [
+        "Mathlib.Analysis.InnerProductSpace.LinearMap"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM"
+      ],
+      "status": "staged",
+      "upstream_pr": null
     }
   ]
 }

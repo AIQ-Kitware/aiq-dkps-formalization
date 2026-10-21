@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
+public import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
 
 /-!
 # A lower bound proved blockwise

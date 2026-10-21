@@ -53,8 +53,8 @@ argument in several PVM declarations. -/
 local notation "Eℂ" => RealComplexification E
 /-- Conjugate a projection-valued measure by the canonical real-structure
 conjugation. -/
-noncomputable def conjugatePVM (P : TauCeti.ProjValMeasure Eℂ) :
-    TauCeti.ProjValMeasure Eℂ where
+noncomputable def conjugatePVM (P : TauCeti.ProjValMeasure ℝ Eℂ) :
+    TauCeti.ProjValMeasure ℝ Eℂ where
   proj B hB := conjugateOperator (P.proj B hB)
   diag z := P.diag (conjugation z)
   diag_finite z := P.diag_finite (conjugation z)
@@ -75,14 +75,14 @@ noncomputable def conjugatePVM (P : TauCeti.ProjValMeasure Eℂ) :
 
 /-- Conjugating a PVM conjugates each of its projections. -/
 @[simp]
-theorem conjugatePVM_proj (P : TauCeti.ProjValMeasure Eℂ)
+theorem conjugatePVM_proj (P : TauCeti.ProjValMeasure ℝ Eℂ)
     (B : Set ℝ) (hB : MeasurableSet B) :
     (conjugatePVM P).proj B hB = conjugateOperator (P.proj B hB) :=
   rfl
 
 /-- Conjugating a PVM conjugates each of its diagonal measures. -/
 @[simp]
-theorem conjugatePVM_diag (P : TauCeti.ProjValMeasure Eℂ) (z : Eℂ) :
+theorem conjugatePVM_diag (P : TauCeti.ProjValMeasure ℝ Eℂ) (z : Eℂ) :
     (conjugatePVM P).diag z = P.diag (conjugation z) :=
   rfl
 

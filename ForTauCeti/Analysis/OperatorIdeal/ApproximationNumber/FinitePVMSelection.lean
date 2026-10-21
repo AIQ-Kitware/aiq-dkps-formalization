@@ -45,7 +45,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- A natural-number rank lower bound on a PVM projection yields an orthonormal
 family of that length inside its range. -/
 theorem exists_orthonormal_mem_pvmRange_of_natCast_le_rank
-    (P : TauCeti.ProjValMeasure H) (B : Set ℝ) (hB : MeasurableSet B)
+    (P : TauCeti.ProjValMeasure ℝ H) (B : Set ℝ) (hB : MeasurableSet B)
     (m : ℕ) (hm : (m : Cardinal) ≤ (P.proj B hB).rank) :
     ∃ v : Fin m → H, Orthonormal ℂ v ∧
       ∀ i, v i ∈ (P.proj B hB).range := by
@@ -78,7 +78,7 @@ theorem exists_orthonormal_mem_pvmRange_of_natCast_le_rank
 
 /-- Vectors selected from disjoint PVM ranges are orthogonal. -/
 theorem inner_eq_zero_of_mem_disjoint_pvmRanges
-    (P : TauCeti.ProjValMeasure H)
+    (P : TauCeti.ProjValMeasure ℝ H)
     {B₁ B₂ : Set ℝ} (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂)
     (hdisj : Disjoint B₁ B₂) {x y : H}
     (hx : x ∈ (P.proj B₁ hB₁).range)
@@ -109,7 +109,7 @@ theorem inner_eq_zero_of_mem_disjoint_pvmRanges
 for the intervening closed band.  The proof embeds the lower-cutoff range into
 the product of the upper and band ranges using finite additivity of the PVM. -/
 theorem natCast_sub_le_rank_pvm_Icc_of_cutoff_bounds
-    (P : TauCeti.ProjValMeasure H) {lo hi : ℝ} (hlohi : lo ≤ hi)
+    (P : TauCeti.ProjValMeasure ℝ H) {lo hi : ℝ} (hlohi : lo ≤ hi)
     (p q : ℕ)
     (hlower : (q : Cardinal) ≤ (P.proj (Set.Ici lo) measurableSet_Ici).rank)
     (hupper : (P.proj (Set.Ioi hi) measurableSet_Ioi).rank ≤ (p : Cardinal)) :

@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralVectorBounds
-public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
+public import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
 
 /-!
 # Rayleigh--Ritz: a trial subspace certifies a spectral gap
