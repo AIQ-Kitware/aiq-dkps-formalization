@@ -59,7 +59,8 @@ theorem reducingRestriction_inclusion_mem_domain
     (hred : TauCeti.LinearPMap.ReducesSubspace A U)
     (x : (TauCeti.LinearPMap.reducingRestriction A U hred).domain) :
     reducingSubspaceInclusion U (x : U) ∈ A.domain :=
-  x.property
+  (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred (x : U)).mp
+    x.property
 
 omit [CompleteSpace E] in
 /-- The inclusion intertwines the restricted and ambient operators. -/
@@ -71,8 +72,10 @@ theorem reducingRestriction_inclusion_intertwines
     A ⟨reducingSubspaceInclusion U (x : U),
         reducingRestriction_inclusion_mem_domain A U hred x⟩ =
       reducingSubspaceInclusion U
-        (TauCeti.LinearPMap.reducingRestriction A U hred x) :=
-  rfl
+        (TauCeti.LinearPMap.reducingRestriction A U hred x) := by
+  simpa only [reducingSubspaceInclusion, Submodule.subtypeL_apply] using
+    (TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred (x : U)
+      (reducingRestriction_inclusion_mem_domain A U hred x)).symm
 
 /-- Adjoint-domain membership of the restriction is exactly ambient
 adjoint-domain membership for the included vector. -/
