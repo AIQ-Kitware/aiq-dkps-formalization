@@ -54,7 +54,7 @@ theorem measurable_cmds_matrix {Ω : Type} [MeasurableSpace Ω]
     (measurable_pi_apply b).comp ((measurable_pi_apply a).comp hD)
   have hsq : ∀ a b : Fin n, Measurable fun ω => (Dhat u ω a b) ^ 2 := fun a b =>
     (hentry a b).pow_const 2
-  refine measurable_pi_lambda _ fun i => measurable_pi_lambda _ fun j => ?_
+  refine Measurable.of_eval fun i => Measurable.of_eval fun j => ?_
   show Measurable fun ω =>
     -(1 / 2 : ℝ) * doubleCenter (fun a b => (Dhat u ω a b) ^ 2) i j
   refine Measurable.const_mul ?_ _

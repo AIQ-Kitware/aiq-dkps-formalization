@@ -140,17 +140,22 @@ lemma expectation_converges_of_prob_converges_bounded {Ω : Type*} [MeasurableSp
             intro u;
             refine' MeasureTheory.integral_mono_of_nonneg _ _ _;
             · exact Filter.Eventually.of_forall fun ω => abs_nonneg _;
-            · refine' MeasureTheory.Integrable.add _ _ <;> norm_num;
-              refine' MeasureTheory.Integrable.indicator _ _;
-              · norm_num;
-              · exact measurableSet_lt measurable_const ( h_meas u |> Measurable.norm );
+            · refine MeasureTheory.Integrable.add (integrable_const ε) ?_
+              have hs : MeasurableSet {ω | ε < |X u ω|} :=
+                measurableSet_lt measurable_const (h_meas u).norm
+              have hconst : Integrable (fun ω : Ω =>
+                  if ε < |X u ω| then M else 0) P := by
+                change Integrable ({ω | ε < |X u ω|}.indicator (fun _ : Ω => M)) P
+                exact (integrable_const M).indicator hs
+              simpa [mul_ite] using hconst
             · filter_upwards [ h_bound u ] with ω hω using by split_ifs <;> linarith;
           refine' ⟨ 0, fun u _ => le_trans ( h_integral_le u ) _ ⟩;
           rw [ MeasureTheory.integral_add, MeasureTheory.integral_const_mul ] <;> norm_num;
           · erw [ MeasureTheory.integral_indicator ( measurableSet_lt measurable_const ( h_meas u |> Measurable.norm ) ) ] ; aesop;
-          · refine' MeasureTheory.Integrable.indicator _ _;
-            · norm_num;
-            · exact measurableSet_lt measurable_const ( h_meas u |> Measurable.norm )
+          · have hs : MeasurableSet {ω | ε < |X u ω|} :=
+                measurableSet_lt measurable_const (h_meas u).norm
+            change Integrable ({ω | ε < |X u ω|}.indicator (fun _ : Ω => M)) P
+            exact (integrable_const M).indicator hs
         rw [ Metric.tendsto_nhds ];
         intro ε hε;
         obtain ⟨ N, hN ⟩ := h_conv_in_measure_aux ( ε / 2 ) ( half_pos hε );
@@ -1175,7 +1180,7 @@ theorem stronglyMeasurable_combined_loss_of_printed (n d d' : ℕ)
         learn (fun i : Fin n => (ps (Fin.castSucc i), ys (Fin.castSucc i)))
           (ps (Fin.last n)) :=
       (hMlearn ((fun i : Fin n => ps (Fin.castSucc i)), ps (Fin.last n))).comp
-        (measurable_pi_lambda _ fun i => measurable_pi_apply _)
+      (Measurable.of_eval fun i => measurable_pi_apply (Fin.castSucc i))
     exact (hlossSM.measurable.comp
       (hpred.prodMk (measurable_pi_apply (Fin.last n)))).stronglyMeasurable
   have huncurry := MeasureTheory.stronglyMeasurable_uncurry_of_continuous_of_stronglyMeasurable
@@ -1388,7 +1393,8 @@ lemma risk_convergence_of_aligned_embeddings (n d d' : ℕ)
           · refine' Measurable.aestronglyMeasurable _;
             refine' Measurable.comp ( show Measurable ( combined_loss_fn n d d' learn loss ) from _ ) _;
             · exact Continuous.measurable ( combined_loss_continuous n d d' learn loss h_cont_learn h_cont_loss );
-            · exact Measurable.prodMk ( h_meas_psi _ ) ( measurable_pi_lambda _ fun _ => measurable_pi_apply _ |> Measurable.snd );
+            · exact Measurable.prodMk ( h_meas_psi _ )
+                (Measurable.of_eval fun _ => (measurable_pi_apply _).snd);
           · simpa [loss_est_fn, combined_loss_fn] using hG _;
         · -- The loss function is continuous, hence integrable.
           have h_integrable : Integrable (fun ω => loss_true_fn n d d' learn loss ω) (Measure.pi fun x => P) := by
@@ -1431,7 +1437,7 @@ theorem risk_converges_fixed_n_printed (n d d' : ℕ)
     fun u ω i => (e u).symm (psi_hat u ω i) with hpsi'
   have hmeas' : ∀ u, Measurable (psi' u) := by
     intro u
-    refine measurable_pi_lambda _ fun i => ?_
+    refine Measurable.of_eval fun i => ?_
     exact ((e u).symm.continuous.measurable).comp ((h_meas_psi u).eval)
   -- the alignment is absorbed into the estimator
   have hconv' : ConvergesInProbabilityToZero (Measure.pi (fun _ : Fin (n + 1) => P))
@@ -1450,10 +1456,10 @@ theorem risk_converges_fixed_n_printed (n d d' : ℕ)
   have hmeas_est : ∀ u, Measurable (loss_est_fn n d d' learn loss psi' u) := by
     intro u
     exact hSM.measurable.comp ((hmeas' u).prodMk
-      (measurable_pi_lambda _ fun i => (measurable_pi_apply i).snd))
+      (Measurable.of_eval fun i => (measurable_pi_apply i).snd))
   have hmeas_true : Measurable (loss_true_fn n d d' learn loss) :=
-    hSM.measurable.comp ((measurable_pi_lambda _ fun i => (measurable_pi_apply i).fst).prodMk
-      (measurable_pi_lambda _ fun i => (measurable_pi_apply i).snd))
+    hSM.measurable.comp ((Measurable.of_eval fun i => (measurable_pi_apply i).fst).prodMk
+      (Measurable.of_eval fun i => (measurable_pi_apply i).snd))
   have hmain := risk_convergence_of_aligned_embeddings_printed n d d' P learn loss psi'
     hconv' hA2 hA4 hmeas_est hmeas_true h_dom
   have hrisk : ∀ u, risk_est n d d' P learn loss (psi' u)
