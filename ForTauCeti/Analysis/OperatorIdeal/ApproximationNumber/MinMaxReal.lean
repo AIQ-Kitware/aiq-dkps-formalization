@@ -13,6 +13,7 @@ public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometr
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unique
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 
 /-!
 # The real threshold theorem for approximation numbers
@@ -286,14 +287,14 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound_real
   hasMinMaxLowerBound_real.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
     T n hr0
 
-/-- **The Ky Fan triangle inequality over real Hilbert spaces.**  The complex case is
-`ContinuousLinearMap.kyFanGaugeReal_add_le_complex`; both are the same theorem,
-`kyFanGaugeReal_add_le_of_hasMinMaxLowerBound`, applied to the min--max lower bound for their
-field.  Over `ℝ` that bound is `hasMinMaxLowerBound_real`, which is where the
-complexification in this file is spent. -/
+omit [CompleteSpace F] in
+/-- **The Ky Fan triangle inequality** over real Hilbert spaces. This forwards to TauCeti's
+canonical approximation-number gauge inequality. -/
 theorem kyFanGaugeReal_add_le_real (S T : E →L[ℝ] F) (k : ℕ) :
     (S + T).kyFanGaugeReal k ≤ S.kyFanGaugeReal k + T.kyFanGaugeReal k :=
-  ContinuousLinearMap.kyFanGaugeReal_add_le_of_hasMinMaxLowerBound hasMinMaxLowerBound_real S T k
+  by
+    change ((S + T).kyFanGauge k : ℝ) ≤ S.kyFanGauge k + T.kyFanGauge k
+    exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le S T k
 
 /-- `ℝ` has the min--max lower bound for every pair of Hilbert spaces.  With this instance
 every construction stated over `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` — the

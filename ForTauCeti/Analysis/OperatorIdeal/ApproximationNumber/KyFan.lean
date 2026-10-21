@@ -10,6 +10,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGau
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 
 /-!
 # Ky Fan gauges of approximation numbers
@@ -28,31 +29,10 @@ numbers, are what an operator-ideal theory is built from.
 
 ## The triangle inequality
 
-Everything else here is a one-line consequence of the corresponding statement about
-approximation numbers.  The exception, and the reason this module exists, is
-
-```
-(S + T).kyFanGaugeReal k ≤ S.kyFanGaugeReal k + T.kyFanGaugeReal k,
-```
-
-which is *false* term by term — `aₙ` is not subadditive — and is proved in three steps:
-
-1. in finite dimensions it is the Ky Fan norm inequality of
-   `ForTauCeti/Analysis/InnerProductSpace/KyFan`, transported
-   along `ContinuousLinearMap.approximationNumber_eq_singularValues`;
-2. for a finite-dimensional *source* and arbitrary codomain, compress the codomain to the
-   (finite-dimensional) range of `S ⊕ T`, which changes no approximation number;
-3. in general, localize: `aₙ(S + T)` is approached by the restrictions of `S + T` to
-   `(n+1)`-generated subspaces
-   (`ContinuousLinearMap.exists_finiteRestrictionApproximationNumber_gt_of_lt`), and `k`
-   of those subspaces can be spanned together into a single finite-dimensional `V` on
-   which step 2 applies.
-
-Step 3 is where this used to depend on `vendor/Spectra`: the localization statement was
-proved there from projection-valued measures.  It is now
-`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean`, so the whole
-chain is Mathlib-only.  Steps 2 and 3 are stated over `ℂ` because that is where the
-min--max theorem lives.
+TauCeti owns the general Ky Fan gauge triangle inequality. The local theorem
+`kyFanGaugeReal_add_le_of_exists_finiteRestriction` remains as a field-generic localization
+result for callers that provide finite-source approximation directly; the real and complex
+Hilbert-space inequalities forward to TauCeti.
 
 ## Provenance
 
@@ -487,16 +467,14 @@ theorem exists_finiteRestrictionApproximationNumber_add_gt
         (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε :=
   hasMinMaxLowerBound_complex.exists_finiteRestrictionApproximationNumber_add_gt T n ε hε
 
-/-- **The Ky Fan triangle inequality**, in full generality: arbitrary bounded operators
-between complex Hilbert spaces, no compactness or finite-dimensionality.
-
-This is the inequality that makes every Ky Fan gauge a norm, and hence the one every
-symmetric operator ideal built on approximation numbers depends on.  The argument is
-`kyFanGaugeReal_add_le_of_exists_finiteRestriction`; what is complex-specific is only the
-min-max input it consumes. -/
+omit [CompleteSpace F] in
+/-- **The Ky Fan triangle inequality** for bounded operators between complex Hilbert spaces.
+This forwards to TauCeti's canonical approximation-number gauge inequality. -/
 theorem kyFanGaugeReal_add_le_complex (S T : E →L[ℂ] F) (k : ℕ) :
     (S + T).kyFanGaugeReal k ≤ S.kyFanGaugeReal k + T.kyFanGaugeReal k :=
-  kyFanGaugeReal_add_le_of_hasMinMaxLowerBound hasMinMaxLowerBound_complex S T k
+  by
+    change ((S + T).kyFanGauge k : ℝ) ≤ S.kyFanGauge k + T.kyFanGauge k
+    exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le S T k
 
 end Triangle
 
