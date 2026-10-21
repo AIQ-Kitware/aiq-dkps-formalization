@@ -257,7 +257,7 @@ operator-norm limit is only the start of the argument rather than the whole of i
 instance isComplete_traceClassIdealFamily {𝕜 : Type u} [RCLike 𝕜]
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] :
     (traceClassIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete where
-  completeSpace := by
+  completeSpace_carrier := by
     intro E F _ _ _ _ _ _
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
     -- the gauge dominates the operator norm, so the sequence is Cauchy there too
@@ -297,7 +297,8 @@ instance isComplete_traceClassIdealFamily {𝕜 : Type u} [RCLike 𝕜]
       rw [TauCeti.OperatorIdealFamily.mem_carrier_iff, hsplit]
       refine ne_top_of_le_ne_top ?_
         ((traceClassIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge_add_le _ _)
-      refine ENNReal.add_ne_top.mpr ⟨?_, (a N₁).gauge_val_ne_top⟩
+      refine ENNReal.add_ne_top.mpr ⟨?_, OperatorIdealFamily.Elem.gauge_val_ne_top
+        (N := (traceClassIdealFamily.{u, v} 𝕜).toOperatorIdealFamily) (a N₁)⟩
       exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top (hN₁ N₁ le_rfl)
     refine ⟨TauCeti.OperatorIdealFamily.Elem.mk hmemL, ?_⟩
     rw [Metric.tendsto_atTop]
@@ -310,7 +311,12 @@ instance isComplete_traceClassIdealFamily {𝕜 : Type u} [RCLike 𝕜]
       exact hN n hn
     have hle : ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ ≤ ε / 2 := by
       have := ENNReal.toReal_mono ENNReal.ofReal_ne_top hgauge
-      rwa [ENNReal.toReal_ofReal (by positivity)] at this
+      have hreal : ((a n).val - L).nuclearENorm.toReal ≤ ε / 2 := by
+        rwa [ENNReal.toReal_ofReal (by positivity)] at this
+      rw [OperatorIdealFamily.Elem.norm_def, OperatorIdealFamily.Elem.val_sub,
+        OperatorIdealFamily.Elem.val_mk]
+      change ((a n).val - L).nuclearENorm.toReal ≤ ε / 2
+      exact hreal
     calc dist (a n) (TauCeti.OperatorIdealFamily.Elem.mk hmemL)
         = ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ := dist_eq_norm _ _
       _ ≤ ε / 2 := hle
@@ -329,5 +335,7 @@ variable {E F : Type v}
 carrier and the named predicate never diverge. -/
 theorem mem_traceClassIdealFamily_carrier_iff (A : E →L[𝕜] F) :
     A ∈ ((traceClassIdealFamily.{u, v} 𝕜)).toOperatorIdealFamily.carrier ↔
-      A.IsTraceClass := (Iff.rfl)
+      A.IsTraceClass := by
+  rw [OperatorIdealFamily.mem_carrier_iff]
+  rfl
 end TauCeti

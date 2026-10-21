@@ -56,7 +56,9 @@ theorem mem_carrier_and_gauge_le (N : OperatorIdealFamily.{u, v, w} 𝕜)
     (hAB : ∀ k, A.kyFanGaugeReal k ≤ B.kyFanGaugeReal k) :
     A ∈ N.carrier ∧ N.gauge A ≤ N.gauge B := by
   have hle := IsKyFanDominant.gauge_le_of_forall_kyFanGauge_le (N := N) hAB
-  exact ⟨ne_top_of_le_ne_top hB hle, hle⟩
+  refine ⟨(OperatorIdealFamily.mem_carrier_iff (N := N)).mpr ?_, hle⟩
+  have hB' : N.gauge B ≠ ∞ := (OperatorIdealFamily.mem_carrier_iff (N := N)).mp hB
+  exact ne_top_of_le_ne_top hB' hle
 
 /-- Equal Ky Fan gauges force equal ideal gauges. -/
 theorem gauge_eq_of_forall_kyFanGauge_eq (N : OperatorIdealFamily.{u, v, w} 𝕜)
@@ -70,13 +72,13 @@ theorem gauge_eq_of_forall_kyFanGauge_eq (N : OperatorIdealFamily.{u, v, w} 𝕜
 end IsKyFanDominant
 
 /-- The operator norm is the first Ky Fan gauge, so dominance is the `k = 1` instance. -/
-instance isKyFanDominant_operatorNormIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
-    IsKyFanDominant (operatorNormIdealFamily.{u, v, w} 𝕜) where
+instance isKyFanDominant_operatorNormFamily (𝕜 : Type u) [RCLike 𝕜] :
+    IsKyFanDominant (OperatorIdealFamily.opNorm.{u, v, w} 𝕜) where
   gauge_le_of_forall_kyFanGauge_le {_E _F} _ _ _ _ _ _ {_A _B} h := by
     have h1 := h 1
     rw [ContinuousLinearMap.kyFanGaugeReal_one,
       ContinuousLinearMap.kyFanGaugeReal_one] at h1
-    simpa [operatorNormIdealFamily] using ENNReal.ofReal_le_ofReal h1
+    simpa [OperatorIdealFamily.gauge_opNorm] using ENNReal.ofReal_le_ofReal h1
 
 /-- A Ky Fan family is dominated by hypothesis at its own index. -/
 instance isKyFanDominant_kyFanIdealFamily (𝕜 : Type u) [RCLike 𝕜]

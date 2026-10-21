@@ -331,7 +331,7 @@ unconditional; the proof is the translation between the two idioms, using the
 fact that `Elem`'s norm is exactly the `Core`'s gauge on members. -/
 instance isComplete_ofCore (N : Core.{u, v} 𝕜) :
     (ofCore N).toOperatorIdealFamily.IsComplete where
-  completeSpace := by
+  completeSpace_carrier := by
     intro E F _ _ _ _ _ _
     have hnorm : ∀ x : (ofCore N).toOperatorIdealFamily.Elem E F,
         ‖x‖ = N.gauge x.val := fun x =>
@@ -349,7 +349,9 @@ instance isComplete_ofCore (N : Core.{u, v} 𝕜) :
       rw [dist_eq_norm, hnorm] at h
       exact h
     obtain ⟨L, hLmem, hL⟩ := N.gauge_complete (fun n => (a n).val) hmem hcauchy
-    refine ⟨OperatorIdealFamily.Elem.mk (gauge_ofCore_ne_top_iff.mpr hLmem), ?_⟩
+    refine ⟨OperatorIdealFamily.Elem.mk
+      ((OperatorIdealFamily.mem_carrier_iff (N := (ofCore N).toOperatorIdealFamily)).mpr
+        (gauge_ofCore_ne_top_iff.mpr hLmem)), ?_⟩
     rw [Metric.tendsto_atTop]
     intro ε hε
     obtain ⟨M, hM⟩ := hL ε hε

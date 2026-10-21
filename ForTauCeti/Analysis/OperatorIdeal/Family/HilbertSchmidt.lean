@@ -496,7 +496,7 @@ exists because the gauge dominates the operator norm, then bound its energy, and
 of each difference, by the `liminf` along the sequence. -/
 instance isComplete_hilbertSchmidtIdealFamily {𝕜 : Type u} [RCLike 𝕜] :
     (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete where
-  completeSpace := by
+  completeSpace_carrier := by
     intro E F _ _ _ _ _ _
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
     -- the gauge dominates the operator norm, so the sequence is Cauchy there too
@@ -558,7 +558,8 @@ instance isComplete_hilbertSchmidtIdealFamily {𝕜 : Type u} [RCLike 𝕜] :
       rw [TauCeti.OperatorIdealFamily.mem_carrier_iff, hsplit]
       refine ne_top_of_le_ne_top ?_
         ((hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge_add_le _ _)
-      refine ENNReal.add_ne_top.mpr ⟨?_, (a N₁).gauge_val_ne_top⟩
+      refine ENNReal.add_ne_top.mpr ⟨?_, OperatorIdealFamily.Elem.gauge_val_ne_top
+        (N := (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily) (a N₁)⟩
       exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top (hN₁ N₁ le_rfl)
     refine ⟨TauCeti.OperatorIdealFamily.Elem.mk hmemL, ?_⟩
     rw [Metric.tendsto_atTop]
@@ -573,7 +574,12 @@ instance isComplete_hilbertSchmidtIdealFamily {𝕜 : Type u} [RCLike 𝕜] :
       have hne : ((a n).val - L).hilbertSchmidtENorm ≠ ⊤ :=
         ne_top_of_le_ne_top ENNReal.ofReal_ne_top hgauge
       have := ENNReal.toReal_mono ENNReal.ofReal_ne_top hgauge
-      rwa [ENNReal.toReal_ofReal (by positivity)] at this
+      have hreal : ((a n).val - L).hilbertSchmidtENorm.toReal ≤ ε / 2 := by
+        rwa [ENNReal.toReal_ofReal (by positivity)] at this
+      rw [OperatorIdealFamily.Elem.norm_def, OperatorIdealFamily.Elem.val_sub,
+        OperatorIdealFamily.Elem.val_mk]
+      change ((a n).val - L).hilbertSchmidtENorm.toReal ≤ ε / 2
+      exact hreal
     calc dist (a n) (TauCeti.OperatorIdealFamily.Elem.mk hmemL)
         = ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ := dist_eq_norm _ _
       _ ≤ ε / 2 := hle
@@ -584,7 +590,9 @@ theorem mem_hilbertSchmidtIdealFamily_carrier_iff {𝕜 : Type u} [RCLike 𝕜] 
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (A : E →L[𝕜] F) :
     A ∈ (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.carrier ↔
-      A.IsHilbertSchmidt := (Iff.rfl)
+    A.IsHilbertSchmidt := by
+  rw [OperatorIdealFamily.mem_carrier_iff]
+  rfl
 /-- The gauge of the Hilbert--Schmidt family is the Hilbert--Schmidt norm. -/
 @[simp] theorem hilbertSchmidtIdealFamily_gauge {𝕜 : Type u} [RCLike 𝕜] {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]

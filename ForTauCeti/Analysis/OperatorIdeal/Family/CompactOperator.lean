@@ -120,7 +120,8 @@ noncomputable def compactOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
     · have hcomp : IsCompactOperator (L ∘L A ∘L R) :=
         (hA.comp_clm R).clm_comp L
       simp only [ite_eq_left hA, ite_eq_left hcomp]
-      exact (operatorNormIdealFamily.{u, v, w} 𝕜).gauge_comp_le L A R
+      simpa only [OperatorIdealFamily.gauge_opNorm] using
+        (OperatorIdealFamily.opNorm.{u, v, w} 𝕜).gauge_comp_le L A R
     · simp only [ite_eq_right hA]
       by_cases hL : L = 0
       · have hzero : L ∘L A ∘L R = 0 := by
@@ -167,7 +168,7 @@ theorem mem_carrier_compactOperatorIdealFamily {A : E →L[𝕜] F} :
   · simp [hA]
 
 /-- On the ideal, the gauge is the operator norm; the compact family differs from
-`operatorNormIdealFamily` only in its carrier. -/
+`OperatorIdealFamily.opNorm` only in its carrier. -/
 theorem gauge_compactOperatorIdealFamily_of_isCompactOperator
     {A : E →L[𝕜] F} (hA : IsCompactOperator A) :
     (compactOperatorIdealFamily.{u, v, w} 𝕜).gauge A = ‖A‖ₑ := by
@@ -211,7 +212,7 @@ operator norm, and on them the ideal norm *is* the operator norm, so the ideal
 inherits completeness from the ambient operator space. -/
 instance instIsCompleteCompactOperatorIdealFamily :
     (compactOperatorIdealFamily.{u, v, w} 𝕜).IsComplete where
-  completeSpace := by
+  completeSpace_carrier := by
     intro E F _ _ _ _ _ _
     have hclosed : IsClosed
         (_root_.compactOperator (RingHom.id 𝕜) E F : Set (E →L[𝕜] F)) :=

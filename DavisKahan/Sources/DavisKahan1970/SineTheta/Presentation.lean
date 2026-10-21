@@ -501,8 +501,9 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
   have hSmod : N.Mem S.modulus := by
     simpa only [hsin_eq] using hsin
   have hS : N.Mem S := by
-    change S ∈ N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.carrier
-    exact (N.toSymmetricOperatorIdealFamily.modulus_mem_iff S).mp hSmod
+    apply (N.toSymmetricOperatorIdealFamily.mem_iff_mem_carrier S).mpr
+    exact (N.toSymmetricOperatorIdealFamily.modulus_mem_iff S).mp
+      ((N.toSymmetricOperatorIdealFamily.mem_iff_mem_carrier S.modulus).mp hSmod)
   have hrect :=
     sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike
       (𝕜 := 𝕜) N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ hgap

@@ -458,10 +458,11 @@ theorem gauge_schattenFamilyInf {E : Type v} {F : Type w}
   supGauge_extend _
 
 /-- The infinity endpoint is exactly the operator-norm family, not a distinct ideal. -/
-theorem schattenFamilyInf_eq_operatorNormIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
-    schattenFamilyInf.{u, v, w} 𝕜 = operatorNormIdealFamily.{u, v, w} 𝕜 := by
+theorem schattenFamilyInf_eq_opNorm (𝕜 : Type u) [RCLike 𝕜] :
+    schattenFamilyInf.{u, v, w} 𝕜 = OperatorIdealFamily.opNorm.{u, v, w} 𝕜 := by
   apply OperatorIdealFamily.ext
   intro E F _ _ _ _ _ _ T
+  rw [OperatorIdealFamily.gauge_opNorm]
   change supGauge.extend (approxSeq T) = ‖T‖ₑ
   rw [supGauge_extend_of_antitone (approxSeq_antitone T), approxSeq,
     approximationNumber_index_zero, ofReal_norm]
@@ -473,7 +474,7 @@ in the gauge. -/
 instance isComplete_schattenFamily {𝕜 : Type u} [RCLike 𝕜]
     {p : ℝ} (hp : 1 ≤ p) :
     (schattenFamily.{u, v, w} 𝕜 p hp).IsComplete where
-  completeSpace := by
+  completeSpace_carrier := by
     intro E F _ _ _ _ _ _
     have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one hp
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
@@ -519,7 +520,8 @@ instance isComplete_schattenFamily {𝕜 : Type u} [RCLike 𝕜]
       rw [TauCeti.OperatorIdealFamily.mem_carrier_iff, hsplit]
       refine ne_top_of_le_ne_top ?_
         ((schattenFamily.{u, v, w} 𝕜 p hp).gauge_add_le _ _)
-      refine ENNReal.add_ne_top.mpr ⟨?_, (a N₁).gauge_val_ne_top⟩
+      refine ENNReal.add_ne_top.mpr ⟨?_, OperatorIdealFamily.Elem.gauge_val_ne_top
+        (N := schattenFamily.{u, v, w} 𝕜 p hp) (a N₁)⟩
       rw [gauge_schattenFamily]
       exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top (hN₁ N₁ le_rfl)
     refine ⟨TauCeti.OperatorIdealFamily.Elem.mk hmemL, ?_⟩
@@ -533,8 +535,8 @@ instance isComplete_schattenFamily {𝕜 : Type u} [RCLike 𝕜]
       exact hN n hn
     have hle : ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ ≤ ε / 2 := by
       have := ENNReal.toReal_mono ENNReal.ofReal_ne_top hgauge
-      change ((schattenFamily 𝕜 p hp).gauge
-        (a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL).val).toReal ≤ ε / 2
+      rw [OperatorIdealFamily.Elem.norm_def, OperatorIdealFamily.Elem.val_sub,
+        OperatorIdealFamily.Elem.val_mk]
       simpa only [gauge_schattenFamily, TauCeti.OperatorIdealFamily.Elem.val_sub,
         TauCeti.OperatorIdealFamily.Elem.val_mk,
         ENNReal.toReal_ofReal (by positivity : (0:ℝ) ≤ ε / 2)] using this
