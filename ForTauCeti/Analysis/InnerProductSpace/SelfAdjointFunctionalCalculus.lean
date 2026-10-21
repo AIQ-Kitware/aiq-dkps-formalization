@@ -521,13 +521,4 @@ theorem selfAdjointFunctionalCalculus_sqrt
     selfAdjointFunctionalCalculus_apply_eigenvectorBasis]
   exact (LinearMap.IsPositive.sqrt_apply_eigenvectorBasis hT rfl i).symm
 
-/-- Commutation passes from a positive operator to its positive square root. -/
-theorem sqrt_comm
-    {T B : E →ₗ[𝕜] E} (hT : T.IsPositive)
-    (hBT : B ∘ₗ T = T ∘ₗ B) :
-    B ∘ₗ hT.sqrt = hT.sqrt ∘ₗ B := by
-  change B * T = T * B at hBT
-  change B * hT.sqrt = hT.sqrt * B
-  exact hT.commute_sqrt hBT
-
 end TauCeti

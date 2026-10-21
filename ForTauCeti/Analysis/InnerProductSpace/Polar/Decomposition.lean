@@ -366,8 +366,12 @@ theorem operatorAbs_comm_of_normal {A : E →ₗ[𝕜] E}
   have hcomm : A ∘ₗ (A.adjoint ∘ₗ A) =
       (A.adjoint ∘ₗ A) ∘ₗ A := by
     rw [← LinearMap.comp_assoc, ← hnormal]
-  exact TauCeti.sqrt_comm
-    (LinearMap.isPositive_adjoint_comp_self A) hcomm
+  have hcomm' : Commute A (A.adjoint ∘ₗ A) := by
+    change A ∘ₗ (A.adjoint ∘ₗ A) = (A.adjoint ∘ₗ A) ∘ₗ A
+    exact hcomm
+  change A * (LinearMap.isPositive_adjoint_comp_self A).sqrt =
+    (LinearMap.isPositive_adjoint_comp_self A).sqrt * A
+  exact (LinearMap.isPositive_adjoint_comp_self A).commute_sqrt hcomm'
 
 /-- Uniqueness of the unitary factor in an invertible polar decomposition.
 If `A = U H` with `U` unitary and `H` positive, then the canonical polar factor
