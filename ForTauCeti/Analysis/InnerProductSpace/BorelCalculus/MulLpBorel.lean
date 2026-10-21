@@ -144,7 +144,7 @@ theorem borelCalculus_comp_val_mulLp {h : ℂ → ℂ} (hm : Measurable h) {C' :
         = ⟪F, mulLp ρ hm' hC' F⟫_ℂ := fun F =>
     integral_comp_val_diagMeasure_eq_inner_mulLp ρ hg hgC hm hm' hC' heq F
   rw [hint (ξ + ψ), hint (ξ + Complex.I • ψ), hint (ξ - ψ), hint (ξ - Complex.I • ψ)]
-  exact inner_polarization (mulLp ρ hm' hC') ψ ξ
+  exact _root_.ContinuousLinearMap.inner_polarization (mulLp ρ hm' hC') ψ ξ
 
 include hg hgC in
 /-- **The spectral projection of a Borel set acts on the model as multiplication by the

@@ -2597,7 +2597,6 @@
       "source_declarations": [
         "diagMeasure_le_sum",
         "exists_continuous_integral_norm_sub_le",
-        "inner_polarization",
         "isFiniteMeasure_sum_diagMeasure",
         "norm_integral_sub_integral_le",
         "norm_pair_sub_pair_le",
@@ -2610,9 +2609,10 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
-      "provenance_class": "staged in ForTauCeti",
+      "provenance_class": "staged Borel integral-transport layer; shared operator polarization identity now comes from TauCeti.Analysis.InnerProductSpace.OperatorIdentities",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
+        "TauCeti.Analysis.InnerProductSpace.OperatorIdentities",
         "Mathlib"
       ],
       "blocked_dependencies": [],
