@@ -14,8 +14,8 @@ Given a population Gram matrix `B` that is positive semidefinite with
 
 The sorted-eigenvalue hypotheses are stated against Mathlib's
 `Matrix.IsHermitian.eigenvalues₀`; nonnegativity and the vanishing rank-`d` tail are
-`TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg` and
-`TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le`.  We prove:
+`Matrix.PosSemidef.eigenvalues₀_nonneg` and
+`Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le`.  We prove:
 
 * `rank_eq_finrank_range_toEuclideanLin` — the matrix rank of `B` is the finrank of the
   range of `toEuclideanLin B`, which is what carries the rank hypothesis across;
@@ -41,7 +41,7 @@ import Acharyya2025.ConfigPerturbation
 import Acharyya2025.OperatorBridge
 import Acharyya2025.GramRigidity
 import Acharyya2025.GramRealization
-import ForTauCeti.Analysis.Matrix.Spectrum
+import TauCeti.Analysis.Matrix.Eigenvalues
 import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
@@ -110,7 +110,7 @@ noncomputable def topEigenvalue {B : Matrix (Fin n) (Fin n) ℝ}
 theorem topEigenvalue_nonneg {B : Matrix (Fin n) (Fin n) ℝ}
     (hn : 0 < n) (hB : B.PosSemidef) :
     0 ≤ topEigenvalue hn hB :=
-  TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg hB _
+  Matrix.PosSemidef.eigenvalues₀_nonneg hB _
 
 /-- Every sorted eigenvalue is bounded by the canonical leading-eigenvalue
 ceiling. -/
@@ -123,7 +123,7 @@ theorem eigenvalues₀_le_topEigenvalue {B : Matrix (Fin n) (Fin n) ℝ}
 
 For positive semidefinite `B` with `B.rank ≤ d` the sorted eigenvalues vanish from index
 `d` on — the paper's rank-`d` structure (Assumption 1).  That is
-`TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le`, which counts nonzero sorted
+`Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le`, which counts nonzero sorted
 eigenvalues against the rank; the transport below relates the matrix rank to the range of
 the induced operator and is what the configuration bound consumes. -/
 
@@ -248,7 +248,7 @@ theorem gram_spectralConfig_eq {d : ℕ} (hd : d ≤ n)
   have hlam_nonneg : ∀ k : Fin n, 0 ≤ lam k := by
     intro k
     rw [hlam, eigenvalues_toEuclideanLin_eq_eigenvalues₀]
-    exact TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg hB _
+    exact Matrix.PosSemidef.eigenvalues₀_nonneg hB _
   -- `√λ_{castLE k} · √λ_{castLE k} = λ_{castLE k}` since `λ ≥ 0`.
   have hsqsq : ∀ k : Fin d,
       spectralConfig (Matrix.toEuclideanLin B) hS hd i k
@@ -273,7 +273,8 @@ theorem gram_spectralConfig_eq {d : ℕ} (hd : d ≤ n)
   have htail : ∀ k : Fin n, d ≤ (k : ℕ) → lam k = 0 := by
     intro k hk
     rw [hlam, eigenvalues_toEuclideanLin_eq_eigenvalues₀]
-    exact TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le hB hrank (by simpa using hk)
+    exact Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le hB hrank
+      (Fin.cast (Fintype.card_fin n).symm k) (by simpa using hk)
   have hext : ∑ k ∈ Finset.univ.filter (fun k : Fin n => (k : ℕ) < d),
         (lam k * (u k i) * (u k j))
       = ∑ k : Fin n, (lam k * (u k i) * (u k j)) := by
@@ -352,7 +353,8 @@ theorem exists_isometry_configFrobError_le_of_entrywise_close
   have htail : ∀ j : Fin n, d ≤ (j : ℕ) → hT.eigenvalues finrank_euclideanSpace_fin j = 0 := by
     intro j hj
     rw [hTsym, eigenvalues_toEuclideanLin_eq_eigenvalues₀]
-    exact TauCeti.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le hB hrank (by simpa using hj)
+    exact Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le hB hrank
+      (Fin.cast (Fintype.card_fin n).symm j) (by simpa using hj)
   have hΛ' : ∀ l : Fin n, hT.eigenvalues finrank_euclideanSpace_fin l ≤ Λ := by
     intro l
     rw [hTsym, eigenvalues_toEuclideanLin_eq_eigenvalues₀]

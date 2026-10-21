@@ -293,7 +293,6 @@ topics:
   modules:
   - Analysis.Matrix.EntrywiseEigenvalue
   - Analysis.Matrix.SpectralFunctionMeasurable
-  - Analysis.Matrix.Spectrum
   - Analysis.Matrix.SpectralProjection
 - id: T20
   title: Sample moments and matrix concentration
@@ -648,7 +647,6 @@ rungs:
   seeds:
   - Analysis.Matrix.EntrywiseEigenvalue
   - Analysis.Matrix.SpectralFunctionMeasurable
-  - Analysis.Matrix.Spectrum
   - Analysis.Matrix.SpectralProjection
 - id: S
   title: Sample moments and matrix concentration (T20)

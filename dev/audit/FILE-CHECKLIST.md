@@ -1569,7 +1569,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/Complexification/Spectrum.lean` — 130 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/BlockEstimate.lean` — 129 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Compact.lean` — 129 lines · Lean source
-- [x] `ForTauCeti/Analysis/Matrix/Spectrum.lean` — 126 lines · Lean source
+- [x] Upstreamed as `TauCeti.Analysis.Matrix.Eigenvalues`; consumers use the canonical sorted-eigenvalue rank and positivity lemmas.
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteValueSeparation.lean` — 126 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Singular/Values.lean` — 124 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Space.lean` — 114 lines · Lean source

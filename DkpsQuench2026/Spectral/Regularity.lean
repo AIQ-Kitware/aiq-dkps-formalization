@@ -17,6 +17,7 @@ whole argument.
 
 import DkpsQuench2026.Geometry.CenteredCovariance
 import DkpsQuench2026.Spectral.GramSpectrum
+import TauCeti.Analysis.Matrix.Eigenvalues
 
 set_option linter.mathlibStandardSet false
 
@@ -937,7 +938,7 @@ theorem eigenvalues₀_reference_centeredGram_lower
   rcases le_or_gt κ 0 with hκ | hκ
   · have : (n : Real) * (κ / 2) ≤ 0 := mul_nonpos_of_nonneg_of_nonpos hnpos.le (by linarith)
     exact this.trans
-      (TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg (configGramPosSemidef zref) i)
+      (Matrix.PosSemidef.eigenvalues₀_nonneg (configGramPosSemidef zref) i)
   · have hquad' : ∀ x : Vec d,
         ((n : Real) * (κ / 2)) * ‖x‖ ^ 2 ≤
           ∑ j : Fin n, (∑ a : Fin d, x a * zref j a) ^ 2 := by
