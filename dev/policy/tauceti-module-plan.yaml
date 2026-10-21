@@ -134,7 +134,6 @@ topics:
   - Analysis.OperatorIdeal.Family.Basic
   - Analysis.OperatorIdeal.Family.CompactOperator
   - Analysis.OperatorIdeal.Family.HilbertSchmidt
-  - Analysis.OperatorIdeal.Family.KyFan
   - Analysis.OperatorIdeal.Family.KyFanDominance
   - Analysis.OperatorIdeal.Family.OperatorNorm
   - Analysis.OperatorIdeal.Family.Schatten
@@ -425,7 +424,6 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.MinMax
   - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
   - Analysis.OperatorIdeal.Family.Basic
-  - Analysis.OperatorIdeal.Family.KyFan
   - Analysis.OperatorIdeal.Family.KyFanDominance
   - Analysis.OperatorIdeal.Family.OperatorNorm
   - Analysis.OperatorIdeal.Family.TraceClass
@@ -495,7 +493,6 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.SameSequence
   - Analysis.OperatorIdeal.Family.Basic
   - Analysis.OperatorIdeal.Family.HilbertSchmidt
-  - Analysis.OperatorIdeal.Family.KyFan
   - Analysis.OperatorIdeal.Family.KyFanDominance
   - Analysis.OperatorIdeal.Family.OperatorNorm
   - Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison

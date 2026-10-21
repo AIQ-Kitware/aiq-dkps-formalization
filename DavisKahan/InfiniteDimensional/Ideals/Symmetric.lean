@@ -8,10 +8,10 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
 import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
 import ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
 import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
+import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
 import DavisKahan.SpectralTheory.AbstractSpectrum
 import DavisKahan.Sylvester.ScalarTransport
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
@@ -233,11 +233,23 @@ noncomputable def traceClass :
 noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofCanonical (TauCeti.hilbertSchmidtIdealFamily 𝕜)
 
+/-- The symmetric-family adapter needed by `ofCanonical`; its gauge and completeness are the
+canonical TauCeti Ky Fan family. -/
+private noncomputable def kyFanSymmetricOperatorIdealFamily (k : ℕ) (hk : 0 < k) :
+    TauCeti.SymmetricOperatorIdealFamily 𝕜 where
+  toOperatorIdealFamily := TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk
+  gauge_adjoint := by
+    intro E F _ _ _ _ _ _ A
+    simp
+
 /-- Ky Fan `k` gauge for positive `k`. -/
 noncomputable def kyFan
     (k : ℕ) (hk : 0 < k) :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofCanonical (TauCeti.kyFanIdealFamily 𝕜 k hk)
+    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  letI : (kyFanSymmetricOperatorIdealFamily k hk).toOperatorIdealFamily.IsComplete := by
+    change (TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
+    infer_instance
+  exact ofCanonical (kyFanSymmetricOperatorIdealFamily k hk)
 
 /-- Unitary invariance of a symmetric ideal norm.
 

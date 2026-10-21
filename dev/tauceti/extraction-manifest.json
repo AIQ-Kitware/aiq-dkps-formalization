@@ -70,7 +70,6 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
         "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
@@ -2317,12 +2316,11 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFanBochner",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
       ],
       "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "Against TauCeti 273ea28e and Mathlib e3e75e86, the local real-valued kyFanGauge constructor was removed. The retained kyFanGaugeReal is a coercion adapter to TauCeti's canonical NNReal gauge; its finite-sum bridge now drives the downstream real-valued estimates. Consumer modules were migrated to this bridge and built through RoadmapBridge and the Davis-Kahan Part III presentation. The local KyFan support layer remains temporarily for real coercion and finite-restriction arguments; follow-up work should replace any local facts already covered by TauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan and retain only missing bridge results."
+      "migration_note": "Against TauCeti fa1365a1 and Mathlib e3e75e86, kyFanGaugeReal is only the real coercion of TauCeti's canonical NNReal gauge. The duplicate symmetric ideal-family module was deleted; the paper-facing norm package constructs its symmetric view directly from TauCeti.OperatorIdealFamily.kyFan. Local approximation-number localization and real-coercion support remain while their consumers are migrated."
     },
     {
       "source_module": "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric",
@@ -2331,22 +2329,22 @@
         "TauCeti.DavisKahan.Experimental.ExactSinTheta.isComplete_kyFanSymmetricIdealFamily"
       ],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFan",
+      "staging_module": null,
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
-      "provenance_class": "copied and specialised 2026-07-28: the Ky Fan symmetric ideal family at \ud835\udd5c = \u2102, with the HasKyFanApproximationGaugeTriangle capability hypothesis discharged rather than assumed; rfl-equal to the generic construction it came from",
+      "provenance_class": "upstreamed family and completeness proof; the local symmetric-family adapter now lives with the paper-facing SymmetricNormIdeal consumer",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
+        "TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "Deleted the duplicate local Ky Fan family laws and completeness proof. DavisKahan.InfiniteDimensional.Ideals.Symmetric now applies TauCeti.OperatorIdealFamily.kyFan directly through a paper-layer symmetric-family adapter."
     },
     {
       "source_module": "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
@@ -2359,7 +2357,7 @@
       "provenance_class": "authored in place 2026-07-28: the nuclear norm as the supremum of the Ky Fan gauges, and the trace-class ideal as a TauCeti.SymmetricOperatorIdealFamily; possible only once the Ky Fan triangle inequality became Spectra-free",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan"
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],

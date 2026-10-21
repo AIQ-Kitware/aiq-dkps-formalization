@@ -5,7 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 public import ForTauCeti.Topology.ENNRealLiminf
 
 /-!
