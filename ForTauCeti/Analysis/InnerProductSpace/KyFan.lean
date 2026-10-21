@@ -150,10 +150,6 @@ theorem kyFanSum_eq_kyFan (k : ℕ) (A : E →ₗ[𝕜] F) :
     kyFanSum k A = UnitarilyInvariantSeminorm.kyFan 𝕜 E F k A := by
   rw [kyFanSum_eq_linearMap_kyFanSum, ← UnitarilyInvariantSeminorm.kyFan_apply]
 
-/-- Ky Fan sums are nonnegative, being sums of singular values. -/
-theorem kyFanSum_nonneg (k : ℕ) (A : E →ₗ[𝕜] F) : 0 ≤ kyFanSum k A :=
-  Finset.sum_nonneg fun i _ => A.singularValues_nonneg i
-
 /-- Ky Fan sums saturate at `k = finrank`: larger `k` adds only zeros. -/
 theorem kyFanSum_eq_of_finrank_le {k : ℕ} (hk : finrank 𝕜 E ≤ k) (A : E →ₗ[𝕜] F) :
     kyFanSum k A = kyFanSum (finrank 𝕜 E) A := by
@@ -167,12 +163,6 @@ theorem kyFanSum_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
     (h : ∀ i, A.singularValues i ≤ B.singularValues i) (k : ℕ) :
     kyFanSum k A ≤ kyFanSum k B :=
   Finset.sum_le_sum fun i _ => h i
-
-/-- Ky Fan sums are adjoint-invariant, since the singular values are. -/
-theorem kyFanSum_adjoint (k : ℕ) (A : E →ₗ[𝕜] F) :
-    kyFanSum k A.adjoint = kyFanSum k A := by
-  unfold kyFanSum
-  rw [LinearMap.singularValues_adjoint]
 
 /-- Ky Fan sums are unchanged by a unitary on the codomain. -/
 theorem kyFanSum_unitary_comp (k : ℕ) (U : F ≃ₗᵢ[𝕜] F) (A : E →ₗ[𝕜] F) :
