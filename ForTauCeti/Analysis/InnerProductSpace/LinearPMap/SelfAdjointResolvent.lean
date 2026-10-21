@@ -105,18 +105,26 @@ Tau Ceti's resolvent and the donor's older resolvent have the same inverse
 fields, but live under different namespace-level definitions. Keep the conversion
 in one place while dependent modules migrate to the upstream representation. -/
 
-private theorem root_mem_resolventSet_toLocal {A : E →ₗ.[ℂ] E} {z : ℂ}
+/-- Temporary migration bridge from Tau Ceti's canonical resolvent set to the
+legacy local resolver used by the spectral-measure construction. Remove this
+bridge with that construction's resolver migration. -/
+theorem root_mem_resolventSet_toLocal {A : E →ₗ.[ℂ] E} {z : ℂ}
     (h : z ∈ _root_.LinearPMap.resolventSet A) : z ∈ resolventSet A := by
   obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp h
   exact mem_resolventSet_iff.mpr ⟨R, ⟨hR.mem_domain, hR.smul_sub_apply, hR.apply_smul_sub⟩⟩
 
-private theorem local_mem_resolventSet_toRoot {A : E →ₗ.[ℂ] E} {z : ℂ}
+/-- Temporary migration bridge from the legacy local resolver to Tau Ceti's
+canonical resolvent set. -/
+theorem local_mem_resolventSet_toRoot {A : E →ₗ.[ℂ] E} {z : ℂ}
     (h : z ∈ resolventSet A) : z ∈ _root_.LinearPMap.resolventSet A := by
   obtain ⟨R, hR⟩ := mem_resolventSet_iff.mp h
   exact _root_.LinearPMap.mem_resolventSet_iff.mpr ⟨R, ⟨hR.mem_domain, hR.smul_sub_apply,
     hR.apply_smul_sub⟩⟩
 
-private theorem local_resolvent_eq_root {A : E →ₗ.[ℂ] E} {z : ℂ}
+/-- Temporary bridge identifying the legacy local inverse with Tau Ceti's
+canonical inverse. The local spectral-measure construction is the remaining
+consumer; delete this theorem when it moves to the canonical resolver. -/
+theorem local_resolvent_eq_root {A : E →ₗ.[ℂ] E} {z : ℂ}
     (h : z ∈ _root_.LinearPMap.resolventSet A) :
     resolvent A z = _root_.LinearPMap.resolvent A z := by
   have hR := _root_.LinearPMap.isResolventAt_resolvent h
