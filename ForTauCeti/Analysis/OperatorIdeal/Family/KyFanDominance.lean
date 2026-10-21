@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 public import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
+public import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
 
 /-!
 # Ky Fan dominance of rectangular operator ideal families
@@ -82,10 +83,13 @@ instance isKyFanDominant_operatorNormFamily (𝕜 : Type u) [RCLike 𝕜] :
 
 /-- A Ky Fan family is dominated by hypothesis at its own index. -/
 instance isKyFanDominant_kyFanIdealFamily (𝕜 : Type u) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
-    IsKyFanDominant (kyFanIdealFamily.{u, v} 𝕜 k hk).toOperatorIdealFamily where
+    (k : ℕ) (hk : 0 < k) :
+    IsKyFanDominant (OperatorIdealFamily.kyFan.{u, v, v} 𝕜 k hk) where
   gauge_le_of_forall_kyFanGauge_le {_E _F} _ _ _ _ _ _ {_A _B} h :=
-    ENNReal.ofReal_le_ofReal (h k)
+    by
+      rw [OperatorIdealFamily.gauge_kyFan, OperatorIdealFamily.gauge_kyFan]
+      apply (ENNReal.toReal_le_toReal ENNReal.coe_ne_top ENNReal.coe_ne_top).mp
+      simpa [ContinuousLinearMap.kyFanGaugeReal] using h k
 
 /-- The nuclear norm is the supremum of the Ky Fan gauges, so dominance is monotonicity of
 that supremum. -/

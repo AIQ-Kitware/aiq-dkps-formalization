@@ -6,7 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 import DavisKahan.OperatorIdeal.CanonicalRealView
-import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families
@@ -232,23 +231,6 @@ theorem carrier_kyFanSymmetricIdealFamily
       (E := E) (F := F) = ⊤ := by
   ext A
   simp
-
-/-- This family is the staged `TauCeti.kyFanIdealFamily`, over any field where both are
-defined.
-
-**The two capability classes are now the same fact one layer apart.**  This one assumes the
-Ky Fan triangle inequality; `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` assumes the
-min--max lower bound the triangle inequality is *proved from*, and since 2026-07-31 that
-lower bound holds over `ℝ` as well as `ℂ`.  So the staged family is no longer the
-complex-only one of the pair — the sentence this docstring used to end with, that the
-capability class *"survives only for the real-scalar case"*, is out of date.  What survives
-is the redundancy: two classes stating the same capability at two depths, of which only the
-deeper one is now needed. -/
-theorem kyFanSymmetricIdealFamily_eq_kyFanIdealFamily (𝕜 : Type u) [RCLike 𝕜]
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
-    kyFanSymmetricIdealFamily.{u, v} (𝕜 := 𝕜) k hk
-      = TauCeti.kyFanIdealFamily.{u, v} 𝕜 k hk :=
-  rfl
 
 /-- The real-valued Ky Fan gauge is recovered from the canonical one. -/
 @[simp]

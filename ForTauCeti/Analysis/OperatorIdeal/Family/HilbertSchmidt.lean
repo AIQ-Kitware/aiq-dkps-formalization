@@ -336,11 +336,11 @@ theorem isHilbertSchmidt_of_finiteDimensional [FiniteDimensional 𝕜 E] (T : E 
 operator-norm convergence: if `T i → T` pointwise on a basis, the limit's energy is at most
 the `liminf` of the energies.
 
-This is the step that replaces the Ky Fan shortcut.  `kyFanIdealFamily` gets completeness
-from `‖A‖ ≤ kyFanGaugeReal k A ≤ k ‖A‖`, so a gauge-Cauchy sequence is norm-Cauchy *and* the
-norm limit is automatically a gauge limit.  The Hilbert--Schmidt gauge is not equivalent to
-the operator norm, so the second half fails and the limit has to be controlled term by term
-instead -- which is Fatou's lemma in the shape a `tsum` of `ℝ≥0∞` already provides.
+This is the step that replaces the Ky Fan shortcut. TauCeti's canonical Ky Fan family gets
+completeness from `‖A‖ ≤ kyFanGauge k A ≤ k ‖A‖`, so a gauge-Cauchy sequence is norm-Cauchy
+*and* the norm limit is automatically a gauge limit. The Hilbert--Schmidt gauge is not
+equivalent to the operator norm, so the limit has to be controlled term by term instead.
+Fatou's lemma provides the needed bound as a `tsum` of `ℝ≥0∞`.
 
 The proof is by finite sections rather than through `MeasureTheory.lintegral_liminf_le`
 against the counting measure.  The two are the same argument, but the measure route obliges
@@ -488,8 +488,8 @@ noncomputable def hilbertSchmidtIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
 
 /-- **The Hilbert--Schmidt ideal is complete.**
 
-The `kyFanIdealFamily` route is unavailable here -- that one gets completeness from
-`‖A‖ ≤ kyFanGaugeReal k A ≤ k ‖A‖`, so its gauge limit *is* its operator-norm limit -- and the
+The canonical Ky Fan family route is unavailable here -- that one gets completeness from
+`‖A‖ ≤ kyFanGauge k A ≤ k ‖A‖`, so its gauge limit *is* its operator-norm limit -- and the
 Hilbert--Schmidt gauge is not equivalent to the operator norm.  What replaces it is
 `ContinuousLinearMap.hilbertSchmidtENorm_le_liminf`: take the operator-norm limit, which
 exists because the gauge dominates the operator norm, then bound its energy, and the energy

@@ -141,7 +141,6 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport`
   - `Analysis.OperatorIdeal.Family.Basic`
   - `Analysis.OperatorIdeal.Family.HilbertSchmidt`
-  - `Analysis.OperatorIdeal.Family.KyFan`
   - `Analysis.OperatorIdeal.Family.KyFanDominance`
   - `Analysis.OperatorIdeal.Family.OperatorNorm`
   - `Analysis.OperatorIdeal.Family.Schatten`
