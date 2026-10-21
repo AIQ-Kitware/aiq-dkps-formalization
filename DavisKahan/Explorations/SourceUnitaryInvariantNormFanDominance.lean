@@ -83,7 +83,14 @@ Do not attempt to prove unconditional `HasFanDominance` from the base record;
 the countermodel proves that implication false.
 -/
 import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
-import ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ExtendedSequence
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+import ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance
+import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
@@ -211,8 +218,8 @@ theorem hasFanDominanceSeparable_of_symmetricGaugeRepresentation
   rcases hrep with ⟨Φ, hΦ⟩
   intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ A B hAB
   rw [hΦ A, hΦ B]
-  apply Φ.extend_le_extend_of_forall_sum_le
-    (TauCeti.approxSeq_antitone A) (TauCeti.approxSeq_antitone B)
+  apply Φ.extend_le_extend_of_forall_sum_le (b := TauCeti.approxSeq B)
+    (TauCeti.approxSeq_antitone A)
   intro k
   have hk := hAB k
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge] at hk
@@ -226,7 +233,8 @@ theorem hasFanDominanceSeparable_of_symmetricGaugeRepresentation
       rw [ENNReal.ofReal_sum_of_nonneg
         (fun i _ => B.approximationNumber_nonneg i)]
       rfl]
-  exact ENNReal.ofReal_le_ofReal hk
+  exact ENNReal.ofReal_le_ofReal (by
+    simpa only [ContinuousLinearMap.kyFanGaugeReal_eq_sum] using hk)
 
 /-!
 ## Probe 2: recover finite-dimensional Fan dominance directly from the source laws

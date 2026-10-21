@@ -78,49 +78,27 @@ The three objects in play are:
   approximation-number prefixes, with `Mem A ↔ extendedGauge A ≠ ⊤`.
 * `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Axiomatic` — the
   finite-list object, `gauge : ∀ n, (Fin n → ℝ) → ℝ` with the printed axioms.
-* `TauCeti.SymmetricGauge` (`ForTauCeti/Analysis/Normed/SymmetricGauge.lean`) —
+* `TauCeti.SymmetricGauge` (`TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic`) —
   Calkin's symmetric norming function on `(ℕ →₀ ℝ≥0)`, with `extend` to
-  `ℕ → ℝ≥0∞`.
+  `ℕ → ℝ≥0∞`. DKPS consumes this canonical type and retains only its finite-vector
+  bridge in `ForTauCeti/Analysis/Normed/SymmetricGauge.lean`.
 
 The first two are already tied: `SymmetricNormingFunction.Axiomatic.equiv :
 SymmetricNormingFunction ≃ SymmetricNormingFunction.Axiomatic`, both round trips
-proved. So the *source* correspondence is closed, and the open architectural
-question is only whether `TauCeti.SymmetricGauge` can replace
-`SymmetricNormingFunction` as the durable abstraction underneath.
+proved. So the *source* correspondence is closed. The operator-ideal layer is
+now upstream too: Tau Ceti's `SymmetricGauge.operatorIdealFamily` and
+`OperatorIdealFamily.schatten` provide the canonical induced families over
+`RCLike` fields and independent source and target universes. DKPS deleted its
+parallel family, ℓᵖ gauge, and supremum-gauge implementations.
 
-**It cannot today, and the blocker is at the operator-ideal layer, not at the
-gauge layer.** `TauCeti.symmetricGaugeFamily`, the construction that turns a
-`SymmetricGauge` into an operator ideal family, is
-
-```lean
-noncomputable def symmetricGaugeFamily : OperatorIdealFamily ℂ
-```
-
-in `ForTauCeti/Analysis/OperatorIdeal/Family/SymmetricGauge.lean`, and every
-theorem it is built from (`approxSeq`, `extend_approxSeq_add_le`,
-`extend_approxSeq_smul`, `enorm_le_extend_approxSeq`, `extend_approxSeq_comp_le`)
-is stated with `[InnerProductSpace ℂ E]`. The file states the reason itself:
-`ContinuousLinearMap.kyFanGauge_add_le_complex` is unconditional over `ℂ`, while
-its `RCLike`-generic counterpart carries
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜`, so a general-field family
-would have to carry that class in its signature — and the accepted roadmap states
-the family over `ℂ`.
-
-`PaperUnitaryInvariantNorm` has no such restriction: its `gauge` is real-valued
-and its `Mem`/`extendedGauge` are stated for `A : E →L[𝕜] F` with `[RCLike 𝕜]`
-and unequal source and target spaces, which is exactly why the real and
-rectangular Davis--Kahan endpoints can use it. Migrating the 29-result surface
-onto `SymmetricGauge` today would therefore lose real scalar support and
-rectangular operator support at the ideal layer.
-
-**Consequently the norm pilot in the current pass is not attempted.** The precise
-missing object is an `RCLike`-generic `symmetricGaugeFamily`, i.e. an
-`OperatorIdealFamily 𝕜` for `[RCLike 𝕜]`, presumably carrying
-`HasMinMaxLowerBoundEverywhere 𝕜` — the same capability class that
-`sinTheta_unbounded_formGap_paperUINorm_rclike` already carries and for which both
-source fields have instances. Producing it is a Tau Ceti roadmap question
-(the roadmap currently fixes the family at `ℂ`), not a local refactor, and the
-roadmap is a review surface this repository treats as read-only.
+`ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ExtendedSequence` retains
+the real-to-`ℝ≥0∞` approximation-sequence bridge and the diagonal realization
+result that agreement on all such operator gauges determines the extension on
+antitone sequences. The paper-specific `SymmetricNormingFunction` records remain
+because they state the finite unitarily invariant seminorm interface used by the
+source-facing norm theorems. Their relation to the upstream sequence gauge is a
+separate representation question; no paper theorem or norm hypothesis is
+narrowed by the operator-family migration.
 
 ## Eventual mathematical names for the class-A objects
 

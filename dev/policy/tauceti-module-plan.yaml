@@ -144,9 +144,6 @@ topics:
   - Analysis.Normed.FiniteLpGauge
   - Topology.ENNRealLiminf
   - Analysis.Normed.SymmetricGauge
-  - Analysis.Normed.SchattenGauge
-  - Analysis.OperatorIdeal.Family.SymmetricGauge
-  - Analysis.Normed.SupGauge
 - id: T11
   title: Hilbert-Schmidt operators
   modules:
@@ -427,7 +424,6 @@ rungs:
   - Analysis.OperatorIdeal.Family.KyFanDominance
   - Analysis.OperatorIdeal.Family.OperatorNorm
   - Analysis.OperatorIdeal.Family.TraceClass
-  - Analysis.OperatorIdeal.Family.SymmetricGauge
 - id: G
   title: Foundations completion — the rest of topics T01-T10
   seeds:

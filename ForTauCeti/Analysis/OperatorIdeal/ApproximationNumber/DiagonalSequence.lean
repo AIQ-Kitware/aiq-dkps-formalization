@@ -301,7 +301,7 @@ theorem le_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤
 /-- **The approximation numbers of a diagonal operator are its coefficients.**
 
 This is the identity `{lane:FTC-DIAGEXACT}` was posted for, and the one
-`symmetricGaugeFamily_injective` needs: it gives, for every antitone nonnegative
+`symmetricGauge_eq_of_approxSeq_eq` uses: it gives, for every antitone nonnegative
 bounded sequence, an operator realising it as an approximation-number sequence. -/
 theorem approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
     (hc : ∀ i, ‖c i‖ ≤ K) (hanti : Antitone fun i => ‖c i‖) (n : ℕ) :
