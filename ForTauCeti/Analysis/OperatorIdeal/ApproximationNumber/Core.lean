@@ -136,7 +136,9 @@ theorem approximationSingularValue_adjoint
     (n : ℕ) (K : E →L[𝕜] F) :
     approximationSingularValue n K.adjoint =
       approximationSingularValue n K := by
-  exact (K.approximationNumber_adjoint n)
+  simp only [approximationSingularValue,
+    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.singularValue_adjoint]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Ideal inequality for approximation singular values. -/

@@ -210,7 +210,8 @@ theorem enorm_le_schattenENorm {p : ℝ} (hp0 : 0 < p) (T : E →L[𝕜] F) :
 what makes the Schatten family *symmetric*. -/
 theorem schattenENorm_adjoint (p : ℝ) (T : E →L[𝕜] F) :
     T.adjoint.schattenENorm p = T.schattenENorm p := by
-  simp only [schattenENorm, approximationNumber_adjoint]
+  simp only [schattenENorm, approximationNumber_eq_singularValue_toReal,
+    singularValue_adjoint]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The two-sided ideal bound.** -/

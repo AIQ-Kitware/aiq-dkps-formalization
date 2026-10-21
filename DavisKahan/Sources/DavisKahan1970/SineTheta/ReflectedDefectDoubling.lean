@@ -132,7 +132,9 @@ private theorem reflectedDefectBlocks_same
   calc
     (projectionBlock Wᗮ U D).approximationNumber n =
         (projectionBlock Wᗮ U D).adjoint.approximationNumber n :=
-      (ContinuousLinearMap.approximationNumber_adjoint _ n).symm
+      by rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+        ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+        ContinuousLinearMap.singularValue_adjoint]
     _ = (V.reflectionOperator ∘L
           (projectionBlock Wᗮ U D).adjoint).approximationNumber n :=
       (hleft n).symm
@@ -165,7 +167,9 @@ private theorem offDiagonalBlocks_same
   calc
     (projectionBlock Vᗮ V S).approximationNumber n =
         (projectionBlock Vᗮ V S).adjoint.approximationNumber n :=
-      (ContinuousLinearMap.approximationNumber_adjoint _ n).symm
+      by rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+        ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+        ContinuousLinearMap.singularValue_adjoint]
     _ = (projectionBlock V Vᗮ S).approximationNumber n := by rw [hadj]
     _ = (projectionBlock Vᗮᗮ Vᗮ S).approximationNumber n := by
       rw [hperpBlock]

@@ -318,7 +318,9 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers :
       = directedSinTwoAngleOperatorC U V from by
         rw [← directedSinAngleOperatorC,
           directedSinAngleOperatorC_reflected_eq_directedSinTwoAngleOperatorC]] at hmod
-  rw [hmod, ← hadj, ContinuousLinearMap.approximationNumber_adjoint]
+  rw [hmod, ← hadj, ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.singularValue_adjoint]
 
 end Transport
 

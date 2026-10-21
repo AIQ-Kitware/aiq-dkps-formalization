@@ -153,7 +153,8 @@ theorem enorm_le_nuclearENorm (T : E →L[𝕜] F) : ‖T‖ₑ ≤ T.nuclearENo
 /-- **Adjoint invariance**, immediate from invariance of the approximation
 numbers.  This is the field that makes the trace-class family *symmetric*. -/
 theorem nuclearENorm_adjoint (T : E →L[𝕜] F) : T.adjoint.nuclearENorm = T.nuclearENorm := by
-  simp only [nuclearENorm, approximationNumber_adjoint]
+  simp only [nuclearENorm, approximationNumber_eq_singularValue_toReal,
+    singularValue_adjoint]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The two-sided ideal bound.** -/

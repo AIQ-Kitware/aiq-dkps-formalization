@@ -307,7 +307,8 @@ theorem extend_approxSeq_adjoint (A : E →L[𝕜] F) :
     Φ.extend (approxSeq (ContinuousLinearMap.adjoint A)) = Φ.extend (approxSeq A) := by
   congr 1
   funext n
-  simp only [approxSeq, ContinuousLinearMap.approximationNumber_adjoint]
+  simp only [approxSeq, approximationNumber_eq_singularValue_toReal,
+    singularValue_adjoint]
 
 end Symmetric
 

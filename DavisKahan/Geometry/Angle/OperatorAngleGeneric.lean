@@ -902,7 +902,9 @@ theorem directedSinTwoAngleOperator_hasSameApproximationNumbers_swap :
     modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • W) n,
     show ((2 : ℝ) • star W) = ((2 : ℝ) • W).adjoint by
       rw [← ContinuousLinearMap.star_eq_adjoint, hstar2],
-    ContinuousLinearMap.approximationNumber_adjoint]
+    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.singularValue_adjoint]
 
 end Swap
 
