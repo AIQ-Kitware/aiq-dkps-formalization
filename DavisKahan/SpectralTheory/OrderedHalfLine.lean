@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
+import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
 
@@ -56,7 +57,10 @@ theorem semiboundedBelow_of_spectrum_subset_Ici
     refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _
       measurableSet_Iio fun lam hlam => ?_
     by_contra hnot
-    exact absurd (hσ hnot) (by simpa using not_le.mpr hlam)
+    have hroot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
+      rw [_root_.LinearPMap.mem_spectrum_iff]
+      exact fun hres => hnot ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root A _).2 hres)
+    exact absurd (hσ hroot) (by simpa using not_le.mpr hlam)
   simpa using
     TauCeti.LinearPMap.le_re_inner_of_specProjection_Iio_eq_zero hA hzero x
 
@@ -74,7 +78,10 @@ theorem semiboundedAbove_of_spectrum_subset_Iic
     refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _
       measurableSet_Ioi fun lam hlam => ?_
     by_contra hnot
-    exact absurd (hσ hnot) (by simpa using not_le.mpr hlam)
+    have hroot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
+      rw [_root_.LinearPMap.mem_spectrum_iff]
+      exact fun hres => hnot ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root A _).2 hres)
+    exact absurd (hσ hroot) (by simpa using not_le.mpr hlam)
   simpa using
     TauCeti.LinearPMap.re_inner_le_of_specProjection_Ioi_eq_zero hA hzero x
 

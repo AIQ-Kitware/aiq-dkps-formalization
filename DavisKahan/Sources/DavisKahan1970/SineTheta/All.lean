@@ -14,8 +14,8 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngleReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.FiniteMultiplicity
 import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngle
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks

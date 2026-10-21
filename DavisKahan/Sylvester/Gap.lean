@@ -136,7 +136,7 @@ theorem RealSpectrumIntervalExteriorGap.unitaryConj_left
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {β α δ : ℝ}
     (W : E ≃ₗᵢ[𝕜] E') (h : RealSpectrumIntervalExteriorGap A B β α δ) :
     RealSpectrumIntervalExteriorGap (_root_.LinearPMap.unitaryConj W A) B β α δ := by
-  rw [RealSpectrumIntervalExteriorGap, _root_.LinearPMap.realSpectrum_unitaryConj]
+  rw [RealSpectrumIntervalExteriorGap, TauCeti.LinearPMap.realSpectrum_unitaryConj]
   exact h
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -146,7 +146,7 @@ theorem RealSpectrumIntervalExteriorGap.unitaryConj_right
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {β α δ : ℝ}
     (V : F ≃ₗᵢ[𝕜] F') (h : RealSpectrumIntervalExteriorGap A B β α δ) :
     RealSpectrumIntervalExteriorGap A (_root_.LinearPMap.unitaryConj V B) β α δ := by
-  rw [RealSpectrumIntervalExteriorGap, _root_.LinearPMap.realSpectrum_unitaryConj]
+  rw [RealSpectrumIntervalExteriorGap, TauCeti.LinearPMap.realSpectrum_unitaryConj]
   exact h
 
 omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace E'] in

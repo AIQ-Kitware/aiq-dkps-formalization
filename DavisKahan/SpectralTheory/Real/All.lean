@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
 import DavisKahan.SpectralTheory.Real.RealMultiplicityModel
 import DavisKahan.SpectralTheory.Real.SpectralCutoff
 import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
 /-! # `DavisKahan/SpectralTheory/Real` -/

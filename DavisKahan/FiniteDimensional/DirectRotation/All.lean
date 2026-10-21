@@ -11,5 +11,6 @@ import DavisKahan.FiniteDimensional.DirectRotation.Majorization
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes
 import DavisKahan.FiniteDimensional.DirectRotation.QNorm
 import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
+import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

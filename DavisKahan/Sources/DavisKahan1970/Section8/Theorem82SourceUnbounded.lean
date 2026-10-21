@@ -164,7 +164,7 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_real
   have hspecBC : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.complexifyReal
         (TauCeti.LinearPMap.reducingRestriction A P hPred)) ⊆ Set.Icc b a := by
-    rw [_root_.LinearPMap.realSpectrum_complexifyReal]
+    rw [TauCeti.LinearPMap.realSpectrum_complexifyReal]
     exact hPspec
   obtain ⟨Rz, -⟩ := DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
     hBC hba hspecBC

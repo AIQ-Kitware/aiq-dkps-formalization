@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -105,7 +106,15 @@ theorem selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
     rw [hdisj] at this
     exact this
   intro hnot
-  exact hnot (TauCeti.LinearPMap.mem_resolventSet_specRestrict_of_gap hA B hB hε hgap)
+  have hres : (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet
+      (selfAdjointSpectralRestriction A hA B hB) := by
+    convert (TauCeti.LinearPMap.mem_resolventSet_specRestrict_of_gap hA B hB hε hgap)
+      using 1
+    rfl
+  have hroot := (TauCeti.DavisKahan.mem_local_resolventSet_iff_root
+    (selfAdjointSpectralRestriction A hA B hB) (lam : ℂ)).mp hres
+  exact (_root_.LinearPMap.mem_spectrum_iff
+    (selfAdjointSpectralRestriction A hA B hB) (lam : ℂ)).mp hnot hroot
 
 end DavisKahan
 end TauCeti

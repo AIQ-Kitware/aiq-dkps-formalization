@@ -788,11 +788,11 @@ theorem beamOperator_mem_resolventSet_of_mem_lowSet_diff {lam : ℝ}
     (hlam : lam ∈ beamLowSet \ ({0} : Set ℝ)) :
     (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet beamOperator := by
   by_contra hcon
-  -- `realSpectrum` is the complement of `realResolventSet`, which inverts `A - lam`; the
-  -- canonical `resolventSet` inverts `lam • I - A`.  The two agree, but only through the
-  -- bridge -- this step used to be `fun hr => hcon hr` by definitional unfolding.
+  -- The canonical real spectrum is the real preimage of the canonical complex
+  -- spectrum, so its nonmembership witness is exactly the resolvent hypothesis.
   have hmem : lam ∈ _root_.LinearPMap.realSpectrum beamOperator := fun hr =>
-    hcon ((mem_realResolventSet_iff_mem_spectraResolvent beamOperator lam).mp hr)
+    hcon ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root
+      beamOperator (lam : ℂ)).mpr hr)
   rcases realSpectrum_beamOperator_subset_sharp hmem with h0 | hgt
   · exact hlam.2 h0
   · have hle : lam ≤ (1001 : ℝ) / 2 := hlam.1

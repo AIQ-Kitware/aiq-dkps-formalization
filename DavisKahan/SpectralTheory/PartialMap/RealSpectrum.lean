@@ -23,10 +23,10 @@ namespace DavisKahan
 
 open scoped InnerProductSpace
 
-universe v
+universe u v
 
-variable {E : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
 
 /-! ### The donor and upstream resolvent representations
 
@@ -35,10 +35,9 @@ A few constructive source arguments still use the old donor resolvent with the
 same inverse-record fields. Those witnesses are translated here only at
 remaining legacy consumers; canonical spectral predicates stay in statements. -/
 
-omit [CompleteSpace E] in
 /-- Membership in the donor and upstream resolvent sets is equivalent. -/
 theorem mem_local_resolventSet_iff_root
-    (A : E →ₗ.[ℂ] E) (z : ℂ) :
+    (A : E →ₗ.[𝕜] E) (z : 𝕜) :
     z ∈ TauCeti.LinearPMap.resolventSet A ↔
       z ∈ _root_.LinearPMap.resolventSet A := by
   rw [TauCeti.LinearPMap.mem_resolventSet_iff,
@@ -57,15 +56,17 @@ theorem mem_local_resolventSet_iff_root
       apply_smul_sub := hR.apply_smul_sub
     }⟩
 
-omit [CompleteSpace E] in
 /-- The donor and accepted partial-map spectra have the same membership. -/
 theorem mem_spectrum_iff_root
-    (A : E →ₗ.[ℂ] E) (z : ℂ) :
+    (A : E →ₗ.[𝕜] E) (z : 𝕜) :
     z ∈ TauCeti.LinearPMap.spectrum A ↔
       z ∈ _root_.LinearPMap.spectrum A := by
   rw [TauCeti.LinearPMap.mem_spectrum_iff,
     _root_.LinearPMap.mem_spectrum_iff]
   exact not_congr (mem_local_resolventSet_iff_root A z)
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+  [CompleteSpace E]
 
 variable {F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]

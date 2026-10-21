@@ -7645,7 +7645,7 @@
     "bindings": {
       "sinTheta": "DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike",
       "tanTheta": null,
-      "sinTwoTheta": "DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike",
+      "sinTwoTheta": "DavisKahan1970.sinTwoTheta_commonDomain_presentation_whereDefinedUIN_rclike",
       "tanTwoTheta": null
     }
   },

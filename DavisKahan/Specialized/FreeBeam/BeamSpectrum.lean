@@ -927,6 +927,7 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
     (hlam : lam ∈ _root_.LinearPMap.realSpectrum beamOperator) :
     ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
       beamOperator x = (lam : ℂ) • (x : BeamL2) := by
+  rw [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet] at hlam
   by_contra hcon
   push Not at hcon
   set R := beamCoerciveFormData.resolvent with hRdef

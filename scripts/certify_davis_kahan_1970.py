@@ -466,7 +466,8 @@ def main() -> int:
         ("01-aggregate-check", [
             "aiq-lean", "source", "aggregates",
             "--base", "DavisKahan", "--library", "DavisKahan",
-            "--skip-dir", "Experimental", "--skip-dir", "MathAhead", "--skip-dir", "Audits",
+            "--skip-dir", "Experimental", "--skip-dir", "Explorations",
+            "--skip-dir", "MathAhead", "--skip-dir", "Audits",
             "--root-import", "DavisKahan",
             "--header-file", "dev/policy/aggregate-header.txt", "--check",
         ]),
