@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
 
 /-!

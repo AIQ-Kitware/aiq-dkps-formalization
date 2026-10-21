@@ -7,7 +7,6 @@ module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralVectorBounds
 
 /-!

@@ -5,7 +5,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 import DavisKahan.All
 import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import ForTauCeti.Analysis.Normed.Operator.Restriction
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
 
 /-! # Direct canonical consumers
