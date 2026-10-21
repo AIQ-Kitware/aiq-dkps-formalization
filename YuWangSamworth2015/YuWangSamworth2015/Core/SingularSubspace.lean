@@ -136,9 +136,7 @@ theorem rightSingularSubspace_sinTheta_le
     (isInvariant_pointSpectralSubspace (rightGram A) (Set.Icc a b))
     (isInvariant_pointSpectralSubspace (rightGram Â) (Set.Icc a b)) hδ hgap
   -- names the application so the norm bound applies to it directly.
-  change δ * ‖(sinThetaMap (rightSingularSubspace A (Set.Icc a b))
-      (rightSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
-    ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ at hdk
+  simp only [UnitarilyInvariantSeminorm.opNorm_apply] at hdk
   exact hdk.trans (opNorm_rightGram_sub_le A Â)
 
 /-- Left singular-subspace counterpart.
@@ -158,9 +156,7 @@ theorem leftSingularSubspace_sinTheta_le
     (isInvariant_pointSpectralSubspace (leftGram A) (Set.Icc a b))
     (isInvariant_pointSpectralSubspace (leftGram Â) (Set.Icc a b)) hδ hgap
   -- names the application so the norm bound applies to it directly.
-  change δ * ‖(sinThetaMap (leftSingularSubspace A (Set.Icc a b))
-      (leftSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
-    ‖(leftGram Â - leftGram A).toContinuousLinearMap‖ at hdk
+  simp only [UnitarilyInvariantSeminorm.opNorm_apply] at hdk
   exact hdk.trans (opNorm_leftGram_sub_le A Â)
 
 /-- Hermitian-dilation form controlling left and right singular subspaces in a
@@ -178,11 +174,13 @@ theorem singularSubspace_dilation_sinTheta_le
         (pointSpectralSubspace (hermitianDilation Â) Ω)).toContinuousLinearMap‖ ≤
       (Real.pi / 2) *
         ‖(hermitianDilation Â - hermitianDilation A).toContinuousLinearMap‖ := by
-  exact sinTheta_perturbation_le_of_spectralDistance
+  have h := sinTheta_perturbation_le_of_spectralDistance
     (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := (WithLp 2 (E × F))) (F := (WithLp 2 (E × F))))
     (isSymmetric_hermitianDilation A) (isSymmetric_hermitianDilation Â)
     (isInvariant_pointSpectralSubspace (hermitianDilation A) Ω)
     (isInvariant_pointSpectralSubspace (hermitianDilation Â) Ω) hδ hgap
+  simp only [UnitarilyInvariantSeminorm.opNorm_apply] at h
+  exact h
 
 /-- Equal-dimensional right singular subspaces admit an isometric
 identification; the aligned-frame theorem in `Statistics.lean` chooses the

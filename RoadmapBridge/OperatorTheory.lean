@@ -70,8 +70,8 @@ example (Phi : SymmetricGauge) : IsKyFanDominant (symmetricGaugeFamily.{u, v, w}
 example (p : ℝ) (hp : 1 ≤ p) : (schattenFamily.{u, v, w} 𝕜 p hp).IsComplete :=
   isComplete_schattenFamily hp
 
-example : schattenFamilyInf.{u, v, w} 𝕜 = operatorNormIdealFamily.{u, v, w} 𝕜 :=
-  schattenFamilyInf_eq_operatorNormIdealFamily 𝕜
+example : schattenFamilyInf.{u, v, w} 𝕜 = OperatorIdealFamily.opNorm.{u, v, w} 𝕜 :=
+  schattenFamilyInf_eq_opNorm 𝕜
 
 example [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
     (T : E →L[𝕜] F) (n : ℕ) :
