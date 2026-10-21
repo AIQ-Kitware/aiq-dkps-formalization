@@ -67,8 +67,8 @@ gives the total mass `∑_j cⱼ = ∑_{i<k} ‖D wᵢ‖²`, which the trace in
 sums than the truncated sequence `j ↦ if j < k then σⱼ(D)² else 0`, and Abel
 summation against the decreasing weights `μ` finishes the estimate.
 
-No von Neumann trace inequality and no alignment unitary are needed: the Ky Fan
-maximum principle in the form `sum_re_inner_le_sum_eigenvalues_top` already
+No von Neumann trace inequality and no alignment unitary are needed: Tau Ceti's
+`LinearMap.IsSymmetric.sum_re_inner_apply_self_le_sum_eigenvalues` already
 carries the rearrangement content.
 
 ## References
@@ -164,12 +164,13 @@ theorem sum_sq_norm_apply_le_sum_range_sq_singularValues
       = RCLike.re ⟪(D.adjoint ∘ₗ D) (v i), v i⟫_𝕜 := by
     intro i
     rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
-  have hkf := sum_re_inner_le_sum_eigenvalues_top
-    D.isSymmetric_adjoint_comp_self (n := finrank 𝕜 E) rfl hm hv
+  have hkf := LinearMap.IsSymmetric.sum_re_inner_apply_self_le_sum_eigenvalues
+    D.isSymmetric_adjoint_comp_self rfl hv
   rw [Finset.sum_congr rfl fun i (_ : i ∈ Finset.univ) => hform i]
   refine hkf.trans (le_of_eq ?_)
-  rw [Finset.sum_congr rfl fun j (_ : j ∈ _) => (D.sq_singularValues_fin rfl j).symm,
-    sum_filter_lt_eq_sum_fin hm (fun j => D.singularValues j ^ 2)]
+  rw [Finset.sum_congr rfl fun j (_ : j ∈ _) => (D.sq_singularValues_fin rfl j).symm]
+  simp only [Fintype.card_fin]
+  rw [sum_filter_lt_eq_sum_fin hm (fun j => D.singularValues j ^ 2)]
   exact Fin.sum_univ_eq_sum_range (fun j => D.singularValues j ^ 2) m
 
 /-! ### The prefix inequality -/
