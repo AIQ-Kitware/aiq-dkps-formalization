@@ -153,10 +153,17 @@ theorem kyFanSum_eq_kyFan (k : ℕ) (A : E →ₗ[𝕜] F) :
 /-- Ky Fan sums saturate at `k = finrank`: larger `k` adds only zeros. -/
 theorem kyFanSum_eq_of_finrank_le {k : ℕ} (hk : finrank 𝕜 E ≤ k) (A : E →ₗ[𝕜] F) :
     kyFanSum k A = kyFanSum (finrank 𝕜 E) A := by
-  rw [kyFanSum_eq_sum_range, kyFanSum_eq_sum_range]
-  refine (Finset.sum_subset (fun i hi => Finset.mem_range.mpr
-    (lt_of_lt_of_le (Finset.mem_range.mp hi) hk)) fun i _ hi => ?_).symm
-  exact A.singularValues_of_finrank_le (by simpa using hi)
+  rw [kyFanSum_eq_linearMap_kyFanSum k A,
+    kyFanSum_eq_linearMap_kyFanSum (finrank 𝕜 E) A]
+  have hrank : finrank 𝕜 (LinearMap.range A) ≤ finrank 𝕜 E :=
+    LinearMap.finrank_range_le A
+  calc
+    A.kyFanSum k = A.kyFanSum (min k (finrank 𝕜 (LinearMap.range A))) :=
+      (LinearMap.kyFanSum_min_finrank_range A k).symm
+    _ = A.kyFanSum (min (finrank 𝕜 E) (finrank 𝕜 (LinearMap.range A))) := by
+      rw [min_eq_right (hrank.trans hk), min_eq_right hrank]
+    _ = A.kyFanSum (finrank 𝕜 E) :=
+      LinearMap.kyFanSum_min_finrank_range A (finrank 𝕜 E)
 
 /-- Pointwise singular-value domination gives Ky Fan domination. -/
 theorem kyFanSum_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
