@@ -3,4 +3,4 @@
 -/
 import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
-#print axioms TauCeti.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq
+#print axioms TauCeti.gram_eq_iff_exists_linearIsometryEquiv

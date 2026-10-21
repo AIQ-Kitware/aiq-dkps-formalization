@@ -53,8 +53,8 @@ topics:
   - Analysis.InnerProductSpace.Singular.System
   - Analysis.InnerProductSpace.MoorePenroseInverse
 - id: T26
-  title: Inner-product identities, linear isometries, Gram rigidity, orthogonal series, projection geometry,
-    and reducing subspaces
+  title: Inner-product identities, linear isometries, approximate rigid-motion alignment, orthogonal
+    series, projection geometry, and reducing subspaces
   modules:
   - Analysis.Normed.Operator.LinearIsometry
   - Analysis.Normed.Operator.Restriction

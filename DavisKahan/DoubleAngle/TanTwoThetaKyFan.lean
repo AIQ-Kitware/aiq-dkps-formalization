@@ -63,7 +63,7 @@ namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
 open TauCeti.DavisKahan.TanTwoTheta
-open Module _root_.TauCeti.LinearMap
+open Module (finrank)
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜]
