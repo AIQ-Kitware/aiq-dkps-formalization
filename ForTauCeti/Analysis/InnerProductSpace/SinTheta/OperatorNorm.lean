@@ -18,7 +18,8 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
-public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+import Mathlib.Analysis.InnerProductSpace.Semisimple
 public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
@@ -90,7 +91,7 @@ theorem starProjection_comp_toContinuousLinearMap_comm {T : E →ₗ[𝕜] E}
   have hrest : x - U.starProjection x ∈ Uᗮ := U.sub_starProjection_mem_orthogonal x
   have hTpx : T (U.starProjection x) ∈ U := hUinv _ hpx
   have hTrest : T (x - U.starProjection x) ∈ Uᗮ :=
-    map_mem_orthogonal_of_forall_map_mem hT hUinv hrest
+    LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hT (p := U) hUinv hrest
   have hsplit : T x = T (U.starProjection x) + T (x - U.starProjection x) := by
     rw [← map_add]; congr 1; abel
   have hzero : U.starProjection (T (x - U.starProjection x)) = 0 :=
@@ -343,7 +344,7 @@ theorem sin_two_theta_le_of_eigenvalues
     {x : E} (hx : ‖x‖ = 1) {μ : ℝ} (hμ : T x + S x = (μ : 𝕜) • x) :
     (b - a) * (‖((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖
       * ‖x - ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖) ≤ ε := by
-  refine sin_two_theta_le hT hS (fun u hu => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hu)
+  refine hT.sin_two_theta_le hS (fun u hu => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hu)
     (fun u hu => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn
       (fun i hi => hb i hi) hu)
     (fun w hw => ?_) hε hx hμ
@@ -366,15 +367,15 @@ theorem tan_two_theta_le_of_eigenvalues
       ∀ u' ∈ (hT.eigenvectorBasis hn).spanIndices ↑s, ⟪u, S u'⟫_𝕜 = 0)
     (hSUperp : ∀ w ∈ (hT.eigenvectorBasis hn).spanIndices (↑s)ᶜ,
       ∀ w' ∈ (hT.eigenvectorBasis hn).spanIndices (↑s)ᶜ, ⟪w, S w'⟫_𝕜 = 0)
-    {x : E} (hx : ‖x‖ = 1) {μ : ℝ} (hμ : T x + S x = (μ : 𝕜) • x) :
+    {x : E} (_hx : ‖x‖ = 1) {μ : ℝ} (hμ : T x + S x = (μ : 𝕜) • x) :
     (b - a) * (‖((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖
         * ‖x - ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖)
       ≤ |‖((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖ ^ 2
           - ‖x - ((hT.eigenvectorBasis hn).spanIndices ↑s).starProjection x‖ ^ 2| * ε := by
-  refine tan_two_theta_le hT hS (fun u hu => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hu)
+  refine hT.tan_two_theta_le hS (fun u hu => LinearMap.IsSymmetric.map_mem_spanIndices hT hn _ hu)
     (fun u hu => LinearMap.IsSymmetric.le_re_inner_apply_self_of_mem_spanIndices hT hn
       (fun i hi => hb i hi) hu)
-    (fun w hw => ?_) hε hSU (fun w hw w' hw' => ?_) hx hμ
+    (fun w hw => ?_) hε hSU (fun w hw w' hw' => ?_) hμ
   · rw [OrthonormalBasis.orthogonal_spanIndices] at hw
     exact LinearMap.IsSymmetric.re_inner_apply_self_le_of_mem_spanIndices hT hn
       (fun i hi => ha i hi) hw

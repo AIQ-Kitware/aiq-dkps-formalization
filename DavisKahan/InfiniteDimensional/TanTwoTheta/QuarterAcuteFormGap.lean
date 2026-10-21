@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
 import DavisKahan.SinTheta.FrameFactorization
@@ -130,7 +130,7 @@ theorem reflected_centered_form_lower
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
   have hUperp : ∀ y ∈ Uᗮ, A y ∈ Uᗮ := by
     intro y hy
-    exact map_mem_orthogonal_of_forall_map_mem hAsym hAU hy
+    exact LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hAsym (p := U) hAU hy
   let p : E := U.starProjection x
   let m : E := x - U.starProjection x
   have hp : p ∈ U := U.starProjection_apply_mem x

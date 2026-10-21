@@ -151,7 +151,7 @@ base Tau Ceti has already accepted.
   - `Analysis.OperatorIdeal.Family.TraceClass`
   - `Topology.ENNRealLiminf`
 
-**Cumulative after F: 58 of 297 `ForTauCeti` modules.**
+**Cumulative after F: 58 of 296 `ForTauCeti` modules.**
 
 ### Rung G — Foundations completion — the rest of topics T01-T10
 
@@ -309,9 +309,8 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung P — Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)
 
-**8 new, cumulative closed slice 182.**
+**7 new, cumulative closed slice 181.**
 
-  - `Analysis.InnerProductSpace.DoubleAngle.Vector`
   - `Analysis.InnerProductSpace.Residual.AngleEmbedding`
   - `Analysis.InnerProductSpace.Residual.Ritz`
   - `Analysis.InnerProductSpace.Residual.TrialMap`
@@ -322,7 +321,7 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung Q — The Yu-Wang-Samworth statistical variant (T18)
 
-**3 new, cumulative closed slice 185.**
+**3 new, cumulative closed slice 184.**
 
   - `Analysis.InnerProductSpace.EigenblockSpan`
   - `Analysis.InnerProductSpace.Spectral.EigenFrame`
@@ -330,7 +329,7 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung R — Matrix spectra and spectral measurability (T19)
 
-**3 new, cumulative closed slice 188.**
+**3 new, cumulative closed slice 187.**
 
   - `Analysis.Matrix.EntrywiseEigenvalue`
   - `Analysis.Matrix.SpectralFunctionMeasurable`
@@ -338,7 +337,7 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung S — Sample moments and matrix concentration (T20)
 
-**3 new, cumulative closed slice 191.**
+**3 new, cumulative closed slice 190.**
 
   - `Probability.Moments.CenteredScatter`
   - `Probability.Moments.SampleMean`
@@ -346,18 +345,18 @@ migrated to Tau Ceti's accepted `LinearPMap.unitaryConj` API.
 
 ### Rung T — Matrix rank factorization and positive semidefiniteness (T21)
 
-**2 new, cumulative closed slice 193.**
+**2 new, cumulative closed slice 192.**
 
   - `LinearAlgebra.Matrix.PosDef`
   - `LinearAlgebra.Matrix.RankFactorization`
 
 ### Rung U — Berge's maximum theorem and approximate minimizers (T22)
 
-**2 new, cumulative closed slice 195.**
+**2 new, cumulative closed slice 194.**
 
   - `Topology.ApproxMinimizer`
   - `Topology.Berge`
-**Cumulative: 179 of 297 `ForTauCeti` modules — the ladder is total.**
+**Cumulative: 179 of 296 `ForTauCeti` modules — the ladder is total.**
 
 It briefly was not.  Three modules merged in after rung U closed on 2026-07-29
 and no rung's closure reached them; they were placed on 2026-07-30 by matching

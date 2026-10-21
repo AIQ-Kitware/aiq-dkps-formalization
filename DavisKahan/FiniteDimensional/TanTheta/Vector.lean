@@ -45,7 +45,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
@@ -242,7 +242,7 @@ theorem tan_theta_le (hT : T.IsSymmetric)
     ∀ x ∈ Z, δ * ‖x - V.starProjection x‖ ≤ ρ * ‖V.starProjection x‖ := by
   -- `Vᗮ` is `T`-invariant, and `T − c` contracts it to the strip half-width.
   have hVperp : ∀ u ∈ Vᗮ, T u ∈ Vᗮ := fun u hu =>
-    map_mem_orthogonal_of_forall_map_mem hT hVinv hu
+    LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hT (p := V) hVinv hu
   have hstrip : ∀ u ∈ Vᗮ, ‖T u - (((α + β) / 2 : ℝ) : 𝕜) • u‖ ≤ (β - α) / 2 * ‖u‖ :=
     fun u hu => norm_map_sub_midpoint_smul_le hT hVperp hαβ hVa hVb hu
   -- The complementary-side tangent bound: `δ ‖P_Z u‖ ≤ ρ ‖u − P_Z u‖` on `Vᗮ`.

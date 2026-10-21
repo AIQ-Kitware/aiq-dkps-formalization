@@ -131,7 +131,7 @@ theorem sin_two_theta_reflection_le (N : UnitarilyInvariantSeminorm 𝕜 E E)
     have h := isSymmetric_conj_unitary hT (W.reflection (𝕜 := 𝕜))
     rwa [Submodule.reflection_symm] at h
   have hUperp_inv : ∀ x ∈ Uᗮ, T x ∈ Uᗮ := fun x hx =>
-    map_mem_orthogonal_of_forall_map_mem hT hUinv hx
+    LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hT (p := U) hUinv hx
   set V' : Submodule 𝕜 E :=
     Uᗮ.map ((W.reflection (𝕜 := 𝕜)).toLinearEquiv : E →ₗ[𝕜] E) with hV'def
   -- `V'` is `T'`-invariant.

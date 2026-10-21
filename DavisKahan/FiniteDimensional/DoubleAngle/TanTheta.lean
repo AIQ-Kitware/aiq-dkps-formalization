@@ -20,7 +20,7 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 
 /-! # The subspace tan 2Θ theorem: block identities and the gated statement
 
@@ -176,7 +176,8 @@ private theorem starProjection_map_comm (hT : T.IsSymmetric) {U : Submodule 𝕜
   rw [hsplit, map_add,
     Submodule.starProjection_eq_self_iff.mpr (hUinv _ (U.starProjection_apply_mem w)),
     (Submodule.starProjection_apply_eq_zero_iff U).mpr
-      (map_mem_orthogonal_of_forall_map_mem hT hUinv (U.sub_starProjection_mem_orthogonal w)),
+      (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hT (p := U) hUinv
+        (U.sub_starProjection_mem_orthogonal w)),
     add_zero]
 
 /-- A symmetric operator commutes with the reflection through an invariant
@@ -227,7 +228,7 @@ private theorem le_re_inner_reflection_map (hT : T.IsSymmetric) {U : Submodule �
     (b - a) / 2 * ‖w‖ ^ 2
       ≤ RCLike.re ⟪w, U.reflection (T w - (((a + b) / 2 : ℝ) : 𝕜) • w)⟫_𝕜 := by
   have hUperp : ∀ u ∈ Uᗮ, T u ∈ Uᗮ := fun u hu =>
-    map_mem_orthogonal_of_forall_map_mem hT hUinv hu
+    LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hT (p := U) hUinv hu
   have hpU : U.starProjection w ∈ U := U.starProjection_apply_mem w
   have hmU : w - U.starProjection w ∈ Uᗮ := U.sub_starProjection_mem_orthogonal w
   have hpyth := norm_sq_starProjection_add_norm_sq_sub U w

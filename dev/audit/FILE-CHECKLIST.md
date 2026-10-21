@@ -1418,7 +1418,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Residual/AngleEmbedding.lean` — 456 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/CyclicModel.lean` — 449 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/SeparatedIntertwiner.lean` — 447 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/Vector.lean` — 442 lines · Lean source
 - [x] `ForTauCeti/Analysis/SpecialFunctions/Integral/RationalQuadratic.lean` — 433 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean` — 426 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/AlmostInvariant.lean` — 418 lines · Lean source
