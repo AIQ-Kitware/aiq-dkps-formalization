@@ -153,7 +153,8 @@ theorem sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
       (UnitarilyInvariantSeminorm.kyFan
         (𝕜 := 𝕜) (E := F) (F := E) k)
       hA hU X hM hδ hCompressionSpectrum hOutside
-    simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using hk
+    simpa only [UnitarilyInvariantSeminorm.kyFan_apply,
+      kyFanSum_eq_linearMap_kyFanSum] using hk
   have hMem2 : N.Mem (((2 : ℝ) : 𝕜) • R) := by
     intro htop
     rw [N.extendedGauge_smul, htwo] at htop

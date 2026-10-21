@@ -65,7 +65,7 @@ omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] [CompleteSp
 private theorem kyFanApproximationGauge_zero' {F : Type v}
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) : kyFanApproximationGauge 0 A = 0 := by
-  simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
 
 /-- A bound assumed for every member of the source norm class gives the Ky Fan
 inequalities at every level, because the Ky Fan norms *are* members. -/

@@ -35,7 +35,7 @@ both are defined.
 The ideal is everything and its norm is *equivalent* to the operator norm,
 
 ```
-‖A‖ ≤ A.kyFanGauge k ≤ k * ‖A‖   (for 0 < k),
+‖A‖ ≤ A.kyFanGaugeReal k ≤ k * ‖A‖   (for 0 < k),
 ```
 
 so completeness is inherited from the bounded operators.  Both inequalities are used: the
@@ -77,21 +77,21 @@ identically `0`, which satisfies the other three but is not a norm. -/
 noncomputable def kyFanIdealFamily (𝕜 : Type u) [RCLike 𝕜]
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     SymmetricOperatorIdealFamily.{u, v} 𝕜 where
-  gauge A := ENNReal.ofReal (A.kyFanGauge k)
+  gauge A := ENNReal.ofReal (A.kyFanGaugeReal k)
   gauge_add_le A B := by
-    rw [← ENNReal.ofReal_add (A.kyFanGauge_nonneg k) (B.kyFanGauge_nonneg k)]
+    rw [← ENNReal.ofReal_add (A.kyFanGaugeReal_nonneg k) (B.kyFanGaugeReal_nonneg k)]
     exact ENNReal.ofReal_le_ofReal
-      (kyFanGauge_add_le_of_hasMinMaxLowerBound HasMinMaxLowerBoundEverywhere.out A B k)
+      (kyFanGaugeReal_add_le_of_hasMinMaxLowerBound HasMinMaxLowerBoundEverywhere.out A B k)
   gauge_smul c A := by
-    rw [kyFanGauge_smul, ENNReal.ofReal_mul (norm_nonneg c), ofReal_norm]
+    rw [kyFanGaugeReal_smul, ENNReal.ofReal_mul (norm_nonneg c), ofReal_norm]
   enorm_le_gauge A := by
     rw [← ofReal_norm]
     exact ENNReal.ofReal_le_ofReal (A.opNorm_le_kyFanGauge hk)
   gauge_comp_le L A R := by
     rw [← ofReal_norm, ← ofReal_norm, ← ENNReal.ofReal_mul (norm_nonneg L),
-      ← ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) (A.kyFanGauge_nonneg k))]
-    exact ENNReal.ofReal_le_ofReal (kyFanGauge_comp_le L A R k)
-  gauge_adjoint A := by rw [kyFanGauge_adjoint]
+      ← ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) (A.kyFanGaugeReal_nonneg k))]
+    exact ENNReal.ofReal_le_ofReal (kyFanGaugeReal_comp_le L A R k)
+  gauge_adjoint A := by rw [kyFanGaugeReal_adjoint]
 
 variable {𝕜 : Type u} [RCLike 𝕜]
   [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
@@ -101,7 +101,7 @@ variable {E F : Type v}
 
 /-- The gauge of the Ky Fan family is the Ky Fan gauge at index `k`. -/
 @[simp] theorem gauge_kyFanIdealFamily (k : ℕ) (hk : 0 < k) (A : E →L[𝕜] F) :
-    (kyFanIdealFamily.{u, v} 𝕜 k hk).gauge A = ENNReal.ofReal (A.kyFanGauge k) := (rfl)
+    (kyFanIdealFamily.{u, v} 𝕜 k hk).gauge A = ENNReal.ofReal (A.kyFanGaugeReal k) := (rfl)
 /-- Every bounded operator has finite Ky Fan gauge -- a finite sum of approximation numbers, each
 bounded by the operator norm -- so the Ky Fan ideal is all of `E →L[𝕜] F`. -/
 theorem gauge_kyFanIdealFamily_ne_top (k : ℕ) (hk : 0 < k) (A : E →L[𝕜] F) :
@@ -117,8 +117,8 @@ approximation numbers, so it never reaches `∞`. -/
 
 /-- The real-valued Ky Fan gauge is recovered from the canonical one. -/
 @[simp] theorem toReal_gauge_kyFanIdealFamily (k : ℕ) (hk : 0 < k) (A : E →L[𝕜] F) :
-    ((kyFanIdealFamily.{u, v} 𝕜 k hk).gauge A).toReal = A.kyFanGauge k :=
-  ENNReal.toReal_ofReal (A.kyFanGauge_nonneg k)
+    ((kyFanIdealFamily.{u, v} 𝕜 k hk).gauge A).toReal = A.kyFanGaugeReal k :=
+  ENNReal.toReal_ofReal (A.kyFanGaugeReal_nonneg k)
 
 /-- The finite Ky Fan ideal is complete. -/
 instance isComplete_kyFanIdealFamily (k : ℕ) (hk : 0 < k) :
@@ -126,8 +126,8 @@ instance isComplete_kyFanIdealFamily (k : ℕ) (hk : 0 < k) :
   completeSpace := by
     intro E F _ _ _ _ _ _
     have hnorm : ∀ x : (kyFanIdealFamily.{u, v} 𝕜 k hk).toOperatorIdealFamily.Elem E F,
-        ‖x‖ = x.val.kyFanGauge k :=
-      fun x => ENNReal.toReal_ofReal (x.val.kyFanGauge_nonneg k)
+        ‖x‖ = x.val.kyFanGaugeReal k :=
+      fun x => ENNReal.toReal_ofReal (x.val.kyFanGaugeReal_nonneg k)
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
     have hop : CauchySeq fun n => (a n).val :=
       TauCeti.OperatorIdealFamily.Elem.cauchySeq_val ha
@@ -139,9 +139,9 @@ instance isComplete_kyFanIdealFamily (k : ℕ) (hk : 0 < k) :
     obtain ⟨M, hM⟩ := hL (ε / k) (div_pos hε hkR)
     refine ⟨M, fun n hn => ?_⟩
     rw [dist_eq_norm, hnorm]
-    calc ((a n).val - L).kyFanGauge k
+    calc ((a n).val - L).kyFanGaugeReal k
         ≤ (k : ℝ) * ‖(a n).val - L‖ :=
-          ContinuousLinearMap.kyFanGauge_le_nat_mul_opNorm _ k
+          ContinuousLinearMap.kyFanGaugeReal_le_nat_mul_opNorm _ k
       _ < (k : ℝ) * (ε / k) := by
           refine mul_lt_mul_of_pos_left ?_ hkR
           simpa [dist_eq_norm] using hM n hn

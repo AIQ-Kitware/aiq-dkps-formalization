@@ -225,7 +225,7 @@ theorem kyFanApproximationGauge_blockCompression_complexify
         (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
           (complexify K)) =
       kyFanApproximationGauge k (blockCompression Ω Γ K) := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_blockCompression_complexify Ω Γ K n
 

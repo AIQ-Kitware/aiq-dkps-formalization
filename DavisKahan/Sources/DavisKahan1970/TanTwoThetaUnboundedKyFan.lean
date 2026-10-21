@@ -1781,8 +1781,9 @@ theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
     have hmk : m ≤ k := by
       rw [hm]
       simpa using Finset.card_le_card (Finset.subset_univ s)
-    simp only [kyFanApproximationGauge_eq_kyFanGauge,
-      ContinuousLinearMap.kyFanGauge]
+    change B.kyFanGaugeReal m ≤ B.kyFanGaugeReal k
+    rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
+      ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_le_sum_of_subset_of_nonneg
       (fun x hx => Finset.mem_range.mpr
         (lt_of_lt_of_le (Finset.mem_range.mp hx) hmk))
@@ -2314,8 +2315,9 @@ theorem sum_tangent_le_kyFan_of_invariantSubspace
     have hmk : m ≤ k := by
       rw [hm]
       simpa using Finset.card_le_card (Finset.subset_univ s)
-    simp only [kyFanApproximationGauge_eq_kyFanGauge,
-      ContinuousLinearMap.kyFanGauge]
+    change T.kyFanGaugeReal m ≤ T.kyFanGaugeReal k
+    rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
+      ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_le_sum_of_subset_of_nonneg
       (fun x hx => Finset.mem_range.mpr
         (lt_of_lt_of_le (Finset.mem_range.mp hx) hmk))

@@ -35,7 +35,7 @@ to this file is the continuous high-energy spectral cutoff, which is `private`.
   every strict lower bound for `aₙ(T)` is realized by a uniform lower modulus on a real
   `(n+1)`-dimensional subspace — the real Courant--Fischer localization;
 * `TauCeti.ApproximationNumber.hasMinMaxLowerBound_real`: the packaged form, which is the
-  hypothesis `kyFanGauge_add_le_of_exists_finiteRestriction` takes over `RCLike 𝕜` and which
+  hypothesis `kyFanGaugeReal_add_le_of_exists_finiteRestriction` takes over `RCLike 𝕜` and which
   until now only `ℂ` could discharge;
 * `TauCeti.ApproximationNumber.exists_finiteRestrictionApproximationNumber_gt_of_lt_real`;
 * `TauCeti.ApproximationNumber.approximationNumber_isLUB_finiteRestrictions_real`;
@@ -287,13 +287,13 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound_real
     T n hr0
 
 /-- **The Ky Fan triangle inequality over real Hilbert spaces.**  The complex case is
-`ContinuousLinearMap.kyFanGauge_add_le_complex`; both are the same theorem,
-`kyFanGauge_add_le_of_hasMinMaxLowerBound`, applied to the min--max lower bound for their
+`ContinuousLinearMap.kyFanGaugeReal_add_le_complex`; both are the same theorem,
+`kyFanGaugeReal_add_le_of_hasMinMaxLowerBound`, applied to the min--max lower bound for their
 field.  Over `ℝ` that bound is `hasMinMaxLowerBound_real`, which is where the
 complexification in this file is spent. -/
-theorem kyFanGauge_add_le_real (S T : E →L[ℝ] F) (k : ℕ) :
-    (S + T).kyFanGauge k ≤ S.kyFanGauge k + T.kyFanGauge k :=
-  ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound hasMinMaxLowerBound_real S T k
+theorem kyFanGaugeReal_add_le_real (S T : E →L[ℝ] F) (k : ℕ) :
+    (S + T).kyFanGaugeReal k ≤ S.kyFanGaugeReal k + T.kyFanGaugeReal k :=
+  ContinuousLinearMap.kyFanGaugeReal_add_le_of_hasMinMaxLowerBound hasMinMaxLowerBound_real S T k
 
 /-- `ℝ` has the min--max lower bound for every pair of Hilbert spaces.  With this instance
 every construction stated over `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` — the

@@ -146,7 +146,7 @@ theorem kyFanApproximationGauge_add_le
     (k : ℕ) (K L : E →L[𝕜] F) :
     kyFanApproximationGauge k (K + L) ≤
       kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
-  ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound
+  ContinuousLinearMap.kyFanGaugeReal_add_le_of_hasMinMaxLowerBound
     ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out K L k
 
 
@@ -160,7 +160,7 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto
     Tendsto
       (fun i => kyFanApproximationGauge k (K ∘L P i))
       l (𝓝 (kyFanApproximationGauge k K)) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact tendsto_finsetSum (Finset.range k)
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto
       hPproj hP n K)

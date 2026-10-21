@@ -163,7 +163,7 @@ theorem sinTheta_spectrum_block_all_kyFan
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     have hdnorm : ‖((d : ℝ) : ℂ)‖ = d := by simp [abs_of_pos hd]
     have hraw := sinTheta_spectrum_block_gauge
@@ -277,7 +277,7 @@ theorem symmetric_sinTheta_spectrum_all_kyFan
         ((V.starProjection - U.starProjection).modulus) := by
     rw [(crossSineSum_same_projectionDiff U V).kyFanApproximationGauge_eq k]
     exact ((modulus_hasSameApproximationNumbers
-      (V.starProjection - U.starProjection)).kyFanGauge_eq k).symm
+      (V.starProjection - U.starProjection)).kyFanGaugeReal_eq k).symm
   rw [kyFanApproximationGauge_smul, hdnorm, hsine] at hcombine
   exact hcombine.trans hpinch
 

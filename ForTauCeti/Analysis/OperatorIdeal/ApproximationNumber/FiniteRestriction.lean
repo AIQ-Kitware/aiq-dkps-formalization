@@ -192,7 +192,7 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
 
 /-- Every positive tolerance admits a finite source restriction whose approximation number
 is within that tolerance of the ambient one.  This is the exact hypothesis
-`ContinuousLinearMap.kyFanGauge_add_le_of_exists_finiteRestriction` consumes, so it is the
+`ContinuousLinearMap.kyFanGaugeReal_add_le_of_exists_finiteRestriction` consumes, so it is the
 last step before the Ky Fan triangle inequality holds over any field with a min--max lower
 bound rather than over `ℂ` alone. -/
 theorem exists_finiteRestrictionApproximationNumber_add_gt
@@ -224,7 +224,7 @@ complexification.  Together they are what lets the trace-class family be built o
 
 Note what it does *not* assume: the Ky Fan triangle inequality itself.  Assuming that would
 be assuming a theorem, and this class is one layer below it — the inequality is derived, in
-`ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound`. -/
+`ContinuousLinearMap.kyFanGaugeReal_add_le_of_hasMinMaxLowerBound`. -/
 class HasMinMaxLowerBoundEverywhere (𝕜 : Type u) [RCLike 𝕜] : Prop where
   out : ∀ {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]

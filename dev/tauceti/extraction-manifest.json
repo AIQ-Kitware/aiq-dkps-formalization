@@ -2,7 +2,7 @@
   "_schema": "tauceti-extraction-manifest/v1",
   "_comment": "Machine-readable record of the Tau Ceti extraction. `clusters` drives scripts/check_dependency_layers.py (rule 6, closure) and scripts/export_for_tauceti.py (staging->TauCeti copy). `records` carries the per-module provenance and ownership detail required by the campaign spec.",
   "davis_kahan_commit": "492710d3642112c879cff9713169df31f1ad8163",
-  "tauceti_submodule_commit": "3a1967e3fc5a6d76912b438e119e25a67291c4f1",
+  "tauceti_submodule_commit": "273ea28e12515bd7f9e5c2aefd933352264b83e1",
   "clusters": [
     {
       "cluster": "approximation-number",
@@ -2338,8 +2338,9 @@
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": null,
+      "migration_note": "Against TauCeti 273ea28e and Mathlib e3e75e86, the local real-valued kyFanGauge constructor was removed. The retained kyFanGaugeReal is a coercion adapter to TauCeti's canonical NNReal gauge; its finite-sum bridge now drives the downstream real-valued estimates. Consumer modules were migrated to this bridge and built through RoadmapBridge and the Davis-Kahan Part III presentation. The local KyFan support layer remains temporarily for real coercion and finite-restriction arguments; follow-up work should replace any local facts already covered by TauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan and retain only missing bridge results."
     },
     {
       "source_module": "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric",

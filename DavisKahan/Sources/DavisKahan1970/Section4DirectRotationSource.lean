@@ -160,7 +160,7 @@ theorem corollary4_1_directRotation_sourceExact_complex
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
   obtain ⟨hmem, hle⟩ :=
     N.toFanDominantIdealFamily.majorization_mem_and_gauge_le hmem₀
-      (fun k => le_of_eq (hsame.kyFanGauge_eq k))
+      (fun k => le_of_eq (hsame.kyFanGaugeReal_eq k))
   exact ⟨hmem, hle.trans hle₀⟩
 
 /-- **Davis--Kahan 1970, Proposition 4.3, on the source's own direct rotation.** -/
@@ -239,7 +239,7 @@ theorem corollary4_1_directRotation_sourceExact_real
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
   obtain ⟨hmem, hle⟩ :=
     N.toFanDominantIdealFamily.majorization_mem_and_gauge_le hmem₀
-      (fun k => le_of_eq (hsame.kyFanGauge_eq k))
+      (fun k => le_of_eq (hsame.kyFanGaugeReal_eq k))
   exact ⟨hmem, hle.trans hle₀⟩
 
 /-- **Davis--Kahan 1970, Proposition 4.3 over `ℝ`, on the source's own direct

@@ -253,7 +253,7 @@ theorem splitKyFanGauge_two_mul_of_same
       have := Finset.mem_range.mp hr
       omega
     rw [hgauge]
-    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     exact sum_range_add_sum_range_le_two_mul
       (antitone_approximationSingularValue A) hr2
   · have hmem : k ∈ Finset.range (2 * k + 1) := Finset.mem_range.mpr (by omega)

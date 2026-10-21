@@ -856,7 +856,7 @@ private theorem kyFanApproximationGauge_gramOperator_mono_real {X Y Z : Type*}
     (h : ∀ n, A.approximationNumber n ≤ B.approximationNumber n) (k : ℕ) :
     kyFanApproximationGauge k (gramOperatorR A) ≤
       kyFanApproximationGauge k (gramOperatorR B) := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   rw [approximationNumber_gramOperator_real, approximationNumber_gramOperator_real]
   nlinarith [h n, A.approximationNumber_nonneg n]
@@ -1438,7 +1438,7 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_opNorm
   have hk := proposition4_3_nonacute_real U V J W hWunitary hWmap 1
   rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
   simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
-    ContinuousLinearMap.kyFanGauge_one, gramOperatorR,
+    ContinuousLinearMap.kyFanGaugeReal_one, gramOperatorR,
     ContinuousLinearMap.norm_adjoint_comp_self] at hk
   nlinarith [norm_nonneg (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J),
     norm_nonneg (1 - W)]

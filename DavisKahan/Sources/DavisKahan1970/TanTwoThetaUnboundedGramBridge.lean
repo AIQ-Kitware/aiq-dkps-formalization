@@ -718,7 +718,7 @@ theorem kyFan_reflectionTangentCorner_le
     kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         ((reflectionSineCorner U Z).approximationNumber n)) := by
-  rw [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_le_sum fun n _ =>
     approximationNumber_reflectionTangentCorner_le hZsa hZ2 hS1 n
 

@@ -187,7 +187,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
         kyFanApproximationGauge k (tanBlockRepresentative U V) := by
     rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
     exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
-      (tanBlockRepresentative U V)).kyFanGauge_eq k
+      (tanBlockRepresentative U V)).kyFanGaugeReal_eq k
   rw [hmodulus]
   exact hcombine.trans hpinch
 

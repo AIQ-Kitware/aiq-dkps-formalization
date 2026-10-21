@@ -240,7 +240,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike
   intro k
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain := sinTheta_unbounded_formGap_idealFamily_rclike
       (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hkpos)

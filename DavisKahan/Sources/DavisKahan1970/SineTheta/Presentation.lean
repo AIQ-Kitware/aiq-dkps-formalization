@@ -456,7 +456,7 @@ theorem sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     have hmain :=
       sinTheta_unbounded_formGap_symmetricNorming_rclike
@@ -561,7 +561,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_complex
   intro k
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain :=
       FormBoundedIsometricSinThetaProblem.result_complex
@@ -715,7 +715,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real
   intro k
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain :=
       FormBoundedIsometricSinThetaProblem.result_real

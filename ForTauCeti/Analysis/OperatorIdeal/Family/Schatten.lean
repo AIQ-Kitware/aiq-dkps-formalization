@@ -63,7 +63,7 @@ the same length.
 
 The proof is the whole point of the module: the truncated sequences are weakly majorized —
 antitone and nonnegative because approximation numbers are, and prefix-comparable because
-that comparison *is* `kyFanGauge_add_le` — so
+that comparison *is* `kyFanGaugeReal_add_le` — so
 `TauCeti.FiniteVector.lpGauge_mono_weaklyMajorized`
 applies, and finite Minkowski splits the right-hand side. -/
 theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →L[𝕜] F) (k : ℕ) :
@@ -90,7 +90,7 @@ theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →
         TauCeti.FiniteVector.prefixSum_comp_val
           (fun n => S.approximationNumber n + T.approximationNumber n) j,
         Finset.sum_add_distrib]
-      exact kyFanGauge_add_le S T (min j k)
+      simpa only [kyFanGaugeReal_eq_sum] using kyFanGaugeReal_add_le S T (min j k)
   calc TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (S + T).approximationNumber i)
       ≤ TauCeti.FiniteVector.lpGauge p
           (fun i : Fin k => S.approximationNumber i + T.approximationNumber i) :=

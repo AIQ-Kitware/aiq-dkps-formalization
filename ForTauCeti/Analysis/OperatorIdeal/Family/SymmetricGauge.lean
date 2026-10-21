@@ -90,12 +90,12 @@ variable {E F : Type*}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Prefix sums of `approxSeq (A + B)` are dominated by those of the sum
-sequence.  This is `kyFanGauge_add_le` pushed into `ℝ≥0∞`. -/
+sequence.  This is `kyFanGaugeReal_add_le` pushed into `ℝ≥0∞`. -/
 theorem approxSeq_prefix_add_le (A B : E →L[𝕜] F) (k : ℕ) :
     ∑ n ∈ Finset.range k, approxSeq (A + B) n
       ≤ ∑ n ∈ Finset.range k, (approxSeq A n + approxSeq B n) := by
-  have hky := ContinuousLinearMap.kyFanGauge_add_le A B k
-  simp only [ContinuousLinearMap.kyFanGauge] at hky
+  have hky := ContinuousLinearMap.kyFanGaugeReal_add_le A B k
+  simp only [ContinuousLinearMap.kyFanGaugeReal_eq_sum] at hky
   -- Both sides are `ofReal` of a finite sum of nonnegative reals.
   have hL : ∑ n ∈ Finset.range k, approxSeq (A + B) n
       = ENNReal.ofReal (∑ n ∈ Finset.range k, (A + B).approximationNumber n) := by
@@ -330,7 +330,7 @@ noncomputable def symmetricGaugeFamilySymmetric (𝕜 : Type u) [RCLike 𝕜]
 
 /-- **Milestone B2.**  A family induced by a symmetric gauge is Ky Fan dominant.
 
-The hypothesis `∀ k, A.kyFanGauge k ≤ B.kyFanGauge k` *is* prefix-sum domination
+The hypothesis `∀ k, A.kyFanGaugeReal k ≤ B.kyFanGaugeReal k` *is* prefix-sum domination
 of the approximation-number sequences, which is exactly what
 `SymmetricGauge.extend_le_extend_of_forall_sum_le` consumes.  Only the first sequence needs
 antitonicity, supplied by
@@ -345,7 +345,7 @@ instance isKyFanDominant_symmetricGaugeFamily :
         ≤ ∑ n ∈ Finset.range k, approxSeq B n := by
       intro k
       have hk := h k
-      simp only [ContinuousLinearMap.kyFanGauge] at hk
+      simp only [ContinuousLinearMap.kyFanGaugeReal_eq_sum] at hk
       rw [show (∑ n ∈ Finset.range k, approxSeq A n)
             = ENNReal.ofReal (∑ n ∈ Finset.range k, A.approximationNumber n) by
           rw [ENNReal.ofReal_sum_of_nonneg

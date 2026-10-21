@@ -107,8 +107,8 @@ theorem symmetricNorming_of_kyFanDominant
   refine N.mul_gauge_le_of_all_mul_kyFan_le hd hY (fun k => ?_)
   rcases Nat.eq_zero_or_pos k with rfl | hk
   · rw [kyFanApproximationGauge, kyFanApproximationGauge,
-      ContinuousLinearMap.kyFanGauge_zero_index,
-      ContinuousLinearMap.kyFanGauge_zero_index, mul_zero]
+      ContinuousLinearMap.kyFanGaugeReal_zero_index,
+      ContinuousLinearMap.kyFanGaugeReal_zero_index, mul_zero]
   · have hM := h (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk)
       (KyFanDominantIdealFamily.kyFan_mem k hk Y)
     rw [KyFanDominantIdealFamily.kyFan_gauge,
@@ -150,8 +150,8 @@ theorem kyFanDominant_of_symmetricNorming
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le M hd hY (fun k => ?_)
   rcases Nat.eq_zero_or_pos k with rfl | hk
   · rw [kyFanApproximationGauge, kyFanApproximationGauge,
-      ContinuousLinearMap.kyFanGauge_zero_index,
-      ContinuousLinearMap.kyFanGauge_zero_index, mul_zero]
+      ContinuousLinearMap.kyFanGaugeReal_zero_index,
+      ContinuousLinearMap.kyFanGaugeReal_zero_index, mul_zero]
   · have hN := (h (kyFanNormingFunction k hk) (kyFanNormingFunction_mem k hk Y)).2
     rwa [kyFanNormingFunction_gauge, kyFanNormingFunction_gauge] at hN
 

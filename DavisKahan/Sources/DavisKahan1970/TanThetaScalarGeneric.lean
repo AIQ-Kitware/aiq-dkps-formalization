@@ -225,7 +225,7 @@ theorem symmetricNorming_rclike
   have htanKy : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (approximationSingularValue n (directedSineBlock Z V))) := by
-    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     exact Finset.sum_congr rfl fun n _ => by
       simpa only [approximationSingularValue] using htan n
   rwa [htanKy]

@@ -25,7 +25,7 @@ in `ℝ≥0∞`, so it is defined for every bounded operator and is `∞` exactl
 The nuclear norm is the supremum of the Ky Fan gauges, so its triangle inequality *is* the
 Ky Fan triangle inequality, taken to the limit.  That inequality is the one whose only
 proof in this repository used to run through `vendor/Spectra`'s projection-valued measures;
-since 2026-07-28 it is `ContinuousLinearMap.kyFanGauge_add_le_complex`, proved from Mathlib's
+since 2026-07-28 it is `ContinuousLinearMap.kyFanGaugeReal_add_le_complex`, proved from Mathlib's
 continuous functional calculus, and the trace-class ideal follows immediately.
 
 **Everything is stated over `RCLike 𝕜`.**  The Ky Fan triangle inequality is what the scalar
@@ -84,19 +84,19 @@ noncomputable def nuclearENorm (T : E →L[𝕜] F) : ℝ≥0∞ :=
 /-- The nuclear norm is the supremum of the Ky Fan gauges.  Every property of it below is
 read off this identity. -/
 theorem nuclearENorm_eq_iSup_kyFanGauge (T : E →L[𝕜] F) :
-    T.nuclearENorm = ⨆ k : ℕ, ENNReal.ofReal (T.kyFanGauge k) := by
+    T.nuclearENorm = ⨆ k : ℕ, ENNReal.ofReal (T.kyFanGaugeReal k) := by
   rw [nuclearENorm, ENNReal.tsum_eq_iSup_nat]
   refine iSup_congr fun k => ?_
-  rw [kyFanGauge, ENNReal.ofReal_sum_of_nonneg]
+  rw [kyFanGaugeReal_eq_sum, ENNReal.ofReal_sum_of_nonneg]
   exact fun n _ => T.approximationNumber_nonneg n
 
 /-- Every finite Ky Fan gauge is dominated by the nuclear norm, of which it is a
 partial sum.  This is the inequality that makes the nuclear norm the supremum of
 the Ky Fan family rather than merely an upper bound for it. -/
 theorem ofReal_kyFanGauge_le_nuclearENorm (T : E →L[𝕜] F) (k : ℕ) :
-    ENNReal.ofReal (T.kyFanGauge k) ≤ T.nuclearENorm := by
+    ENNReal.ofReal (T.kyFanGaugeReal k) ≤ T.nuclearENorm := by
   rw [nuclearENorm_eq_iSup_kyFanGauge]
-  exact le_iSup (fun j : ℕ => ENNReal.ofReal (T.kyFanGauge j)) k
+  exact le_iSup (fun j : ℕ => ENNReal.ofReal (T.kyFanGaugeReal j)) k
 
 /-- The nuclear norm vanishes on the zero operator: all of its approximation
 numbers are `0`. -/
@@ -117,12 +117,12 @@ theorem nuclearENorm_add_le [HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (S T : E
     (S + T).nuclearENorm ≤ S.nuclearENorm + T.nuclearENorm := by
   rw [nuclearENorm_eq_iSup_kyFanGauge]
   refine iSup_le fun k => ?_
-  calc ENNReal.ofReal ((S + T).kyFanGauge k)
-      ≤ ENNReal.ofReal (S.kyFanGauge k + T.kyFanGauge k) :=
+  calc ENNReal.ofReal ((S + T).kyFanGaugeReal k)
+      ≤ ENNReal.ofReal (S.kyFanGaugeReal k + T.kyFanGaugeReal k) :=
         ENNReal.ofReal_le_ofReal
-          (kyFanGauge_add_le_of_hasMinMaxLowerBound HasMinMaxLowerBoundEverywhere.out S T k)
-    _ = ENNReal.ofReal (S.kyFanGauge k) + ENNReal.ofReal (T.kyFanGauge k) :=
-        ENNReal.ofReal_add (S.kyFanGauge_nonneg k) (T.kyFanGauge_nonneg k)
+          (kyFanGaugeReal_add_le_of_hasMinMaxLowerBound HasMinMaxLowerBoundEverywhere.out S T k)
+    _ = ENNReal.ofReal (S.kyFanGaugeReal k) + ENNReal.ofReal (T.kyFanGaugeReal k) :=
+        ENNReal.ofReal_add (S.kyFanGaugeReal_nonneg k) (T.kyFanGaugeReal_nonneg k)
     _ ≤ S.nuclearENorm + T.nuclearENorm :=
         add_le_add (S.ofReal_kyFanGauge_le_nuclearENorm k)
           (T.ofReal_kyFanGauge_le_nuclearENorm k)
@@ -210,8 +210,8 @@ theorem isTraceClass_iff_summable (T : E →L[𝕜] F) :
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- On a trace-class operator every Ky Fan gauge is bounded by the nuclear norm read as a
 real number. -/
-theorem kyFanGauge_le_toReal_nuclearENorm (T : E →L[𝕜] F) (hT : T.IsTraceClass) (k : ℕ) :
-    T.kyFanGauge k ≤ T.nuclearENorm.toReal := by
+theorem kyFanGaugeReal_le_toReal_nuclearENorm (T : E →L[𝕜] F) (hT : T.IsTraceClass) (k : ℕ) :
+    T.kyFanGaugeReal k ≤ T.nuclearENorm.toReal := by
   have h := T.ofReal_kyFanGauge_le_nuclearENorm k
   rw [← ENNReal.ofReal_toReal hT] at h
   exact (ENNReal.ofReal_le_ofReal_iff ENNReal.toReal_nonneg).mp h

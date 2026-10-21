@@ -200,7 +200,7 @@ theorem kyFanApproximationGauge_complexifyUnboundedCompressionTrialData_residual
     (D : UnboundedCompressionTrialData Z) (k : ℕ) :
     kyFanApproximationGauge k (complexifyUnboundedCompressionTrialData D).residual =
       kyFanApproximationGauge k D.residual := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_complexifyUnboundedCompressionTrialData_residual D n
 
@@ -332,7 +332,7 @@ theorem theorem6_3_unboundedCompression_ideal_exists_real
     have htanKy : kyFanApproximationGauge k tanTheta0 =
         ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
           (approximationSingularValue n (theorem63DirectedSineBlockReal Z V))) := by
-      unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
     exact hcore
@@ -359,7 +359,7 @@ theorem theorem6_3_unboundedCompression_ideal_real
   have htanKy : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (approximationSingularValue n (theorem63DirectedSineBlockReal Z V))) := by
-    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     exact Finset.sum_congr rfl fun n _ => htan n
   rw [htanKy]
   exact hcore

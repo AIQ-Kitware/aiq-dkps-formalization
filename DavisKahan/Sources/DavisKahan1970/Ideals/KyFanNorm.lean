@@ -85,8 +85,11 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
         (EuclideanSpace.basisFun (Fin n) ℂ) x =
       FiniteVector.prefixSum k x := by
   let b := EuclideanSpace.basisFun (Fin n) ℂ
-  change TauCeti.kyFanSum k
-      (TauCeti.diagOp b x) = FiniteVector.prefixSum k x
+  change TauCeti.UnitarilyInvariantSeminorm.kyFan
+      (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin n))
+      (F := EuclideanSpace ℂ (Fin n)) k (TauCeti.diagOp b x) =
+        FiniteVector.prefixSum k x
+  rw [TauCeti.UnitarilyInvariantSeminorm.kyFan_apply]
   rcases le_total k n with hkn | hnk
   · have hprefix :
         FiniteVector.prefixSum k x =
@@ -107,6 +110,7 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
           intro i hi
           simp [f, lt_of_lt_of_le i.isLt hkn]
     rw [hprefix]
+    rw [← TauCeti.kyFanSum_eq_linearMap_kyFanSum]
     unfold TauCeti.kyFanSum
     apply Finset.sum_congr rfl
     intro i hi
@@ -116,6 +120,7 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
       ⟨i, lt_of_lt_of_le i.isLt hkn⟩
   · have hstab :=
       TauCeti.kyFanSum_eq_of_finrank_le (k := k) (by simpa using hnk) (TauCeti.diagOp b x)
+    rw [← TauCeti.kyFanSum_eq_linearMap_kyFanSum]
     rw [hstab]
     rw [finrank_euclideanSpace_fin]
     rw [FiniteVector.prefixSum_eq_full_sum_of_le x hnk]
@@ -261,7 +266,7 @@ private theorem kyFanApproximationGauge_mono_length_local
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) {m k : ℕ} (hmk : m ≤ k) :
     kyFanApproximationGauge m A ≤ kyFanApproximationGauge k A := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   rw [← Finset.sum_range_add_sum_Ico
     (f := fun n => A.approximationNumber n) hmk]
   exact le_add_of_nonneg_right (Finset.sum_nonneg fun n _ =>
@@ -330,7 +335,7 @@ theorem all_kyFan_le_of_every_ext_finiteGaugeendedGauge_le
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     have hN := h (kyFanNormingFunction k hk)
     rw [kyFanNormingFunction_extendedGauge, kyFanNormingFunction_extendedGauge] at hN
@@ -349,7 +354,7 @@ theorem all_mul_kyFan_le_of_every_symmetricNorming_gauge_le
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_zero_index]
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     simpa [kyFanNormingFunction_gauge] using h (kyFanNormingFunction k hk)
 

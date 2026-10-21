@@ -296,7 +296,7 @@ theorem sum_absDoubleAngleTangent_le_add_error
   rw [hreindex] at hpart₁
   have hkyfanmono : kyFanApproximationGauge m H ≤
       kyFanApproximationGauge S.card H := by
-    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_le_sum_of_subset_of_nonneg ?_ ?_
     · have hcard : m ≤ S.card := by
         rw [hmdef, hS₁def]
@@ -469,7 +469,7 @@ theorem kyFan_absTanTwoTheta_le_of_invariantSubspace
   have hgauge : kyFanApproximationGauge k tanTwoTheta =
       ∑ n ∈ S, absDoubleAngleTangent (approximationSingularValue n T) := by
     rw [hSdef, Finset.sum_image (fun x _ y _ h => π.symm.injective h)]
-    unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [← htan (π.symm j), Equiv.apply_symm_apply]
     rfl

@@ -177,7 +177,7 @@ theorem kyFanApproximationGauge_theorem63Residual_complexify
     kyFanApproximationGauge k
         (theorem63Residual (complexify T) (complexifySubmodule Z)) =
       kyFanApproximationGauge k (theorem63ResidualReal T Z) := by
-  unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_theorem63Residual_complexify T Z n
 
@@ -441,7 +441,7 @@ theorem tanTheta_directed_bounded_symmetricNorming_real
         Finset.sum (Finset.range k) (fun n =>
           Real.tan (Real.arcsin
             (approximationSingularValue n (theorem63DirectedSineBlockReal Z V)))) := by
-      unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
     exact hcore
@@ -629,11 +629,11 @@ theorem tanTheta_directed_bounded_perturbation_symmetricNorming_real
         Finset.sum (Finset.range k) (fun n =>
           Real.tan (Real.arcsin
             (approximationSingularValue n (theorem63DirectedSineBlockReal Z V)))) := by
-      unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     have hres : kyFanApproximationGauge k (theorem63ResidualReal T Z) ≤
         kyFanApproximationGauge k (P ∘L Z.subtypeL) := by
-      unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
       exact Finset.sum_le_sum fun n _ =>
         approximationSingularValue_theorem63ResidualReal_le_of_invariant T P Z hinv n
     rw [htanKy]
