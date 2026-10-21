@@ -2797,10 +2797,10 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
-      "provenance_class": "staged in ForTauCeti",
+      "provenance_class": "partially upstreamed; Cayley construction and core unitary proofs now use canonical Tau Ceti APIs",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
-        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
         "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary",
         "Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap",
         "Mathlib.Analysis.InnerProductSpace.LinearPMap"
@@ -2815,7 +2815,7 @@
       ],
       "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "The self-adjoint spectrum reality statement and sharp spectral-gap resolvent estimate have moved to Tau Ceti APIs. Davis--Kahan retains its source-facing inverse orientation, now forwarded directly from Tau Ceti. Remaining resolvent and Cayley consumers are still being migrated."
+      "migration_note": "Tau Ceti now owns the canonical Cayley transform, its isometry, surjectivity, unitarity, star-normality, off-real resolvent facts, and adjoint laws. The local construction and proofs were removed; short local spellings remain for the spectral-measure and complexification consumers while they migrate. The shift estimate, closed-range argument, and remaining local resolvent adapter are still donor mathematics."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3594,18 +3594,20 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
-      "provenance_class": "staged in ForTauCeti",
+      "provenance_class": "partially upstreamed; Cayley intertwining now forwards to Tau Ceti",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
         "Mathlib"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.Rosenblum"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": null,
+      "migration_note": "The local self-adjoint partial-map intertwiner now uses Tau Ceti's `Intertwines.comp_cayley_eq`; its resolvent conversion and additional functional-calculus API remain local for downstream consumers."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
