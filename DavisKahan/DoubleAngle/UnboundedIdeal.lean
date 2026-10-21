@@ -343,11 +343,18 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
   have hFiso : IsometricEmbedding F₁ := by
     intro y
     rfl
-  have hΛJspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum ΛJ := by
+  have hΛJspecRoot : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ _root_.LinearPMap.spectrum ΛJ := by
     intro lam hlam
     rw [unitaryConjugate_spectrum_eq e Λ hΛ]
+    intro hmem
     exact hBcomplSpec lam hlam
+      ((mem_spectrum_iff_root Λ (lam : ℂ)).mpr hmem)
+  have hΛJspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum ΛJ := by
+    intro lam hlam hmem
+    exact hΛJspecRoot lam hlam
+      ((mem_spectrum_iff_root ΛJ (lam : ℂ)).mp hmem)
   have hraw := sinTheta_addBounded_gauge_block_of_spectrum_gap
     N A hA R hR A₀ hA₀ ΛJ hΛJ X F₁ hXdom hXint hFdom hFint
       hβα hδ hBlow hBhigh hΛJspec hRmem
