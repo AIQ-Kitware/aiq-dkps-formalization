@@ -134,7 +134,7 @@ theorem singularValues_diagOp (hn : finrank 𝕜 E = n)
     pow_le_pow_left₀ (hx0 j) (hx_anti hij) 2
   have heig : (diagOp b x).isSymmetric_adjoint_comp_self.eigenvalues hn
       = fun i => x i ^ 2 :=
-    (eigenvalues_congr hgram (diagOp b x).isSymmetric_adjoint_comp_self
+    (LinearMap.IsSymmetric.eigenvalues_congr hgram (diagOp b x).isSymmetric_adjoint_comp_self
       (isSymmetric_diagOp b (x * x)) hn).trans
       (LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis _ hn b hsq_anti fun i => by
         rw [diagOp_apply_basis]

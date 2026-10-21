@@ -8,7 +8,7 @@ corollary combining with Result A (Theorem 4.1). Tickets PD-18 + BL1/BL2/BL4/BL5
 
 import ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary
 import ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange
-import ForTauCeti.Analysis.InnerProductSpace.Spectrum
+import TauCeti.Analysis.InnerProductSpace.Spectrum
 
 /-! # Davis's sharper total-rotation estimate (Davis 1963, Theorem 3.2)
 
@@ -78,13 +78,20 @@ theorem rotation_add_displacement_le_hilbertSchmidt
     have hcross : ∀ j, ‖⟪hS.eigenvectorBasis hn j, (S - T) (hT.eigenvectorBasis hn i)⟫_𝕜‖ ^ 2
         = (hT.eigenvalues hn i - hS.eigenvalues hn j) ^ 2
             * ‖⟪hS.eigenvectorBasis hn j, hT.eigenvectorBasis hn i⟫_𝕜‖ ^ 2 := fun j => by
-      have h := inner_eigenvectorBasis_map_sub_eigenvectorBasis hS hT hn j i
+      have h := LinearMap.IsSymmetric.inner_sub_apply_of_apply_eq_smul_of_apply_eq_smul
+        hS (hS.apply_eigenvectorBasis hn j) (hT.apply_eigenvectorBasis hn i)
       have h2 : ⟪hS.eigenvectorBasis hn j, (S - T) (hT.eigenvectorBasis hn i)⟫_𝕜
           = -(((hT.eigenvalues hn i - hS.eigenvalues hn j : ℝ) : 𝕜)
               * ⟪hS.eigenvectorBasis hn j, hT.eigenvectorBasis hn i⟫_𝕜) := by
-        rw [← h, ← inner_neg_right]
-        congr 1
-        simp [LinearMap.sub_apply]
+        calc
+          _ = -⟪hS.eigenvectorBasis hn j,
+                (T - S) (hT.eigenvectorBasis hn i)⟫_𝕜 := by
+              rw [show (S - T) (hT.eigenvectorBasis hn i) =
+                -((T - S) (hT.eigenvectorBasis hn i)) by simp [LinearMap.sub_apply],
+                inner_neg_right]
+          _ = -(((hT.eigenvalues hn i - hS.eigenvalues hn j : ℝ) : 𝕜)
+                * ⟪hS.eigenvectorBasis hn j, hT.eigenvectorBasis hn i⟫_𝕜) := by
+              rw [h, ← RCLike.ofReal_sub]
       rw [h2, norm_neg, norm_mul, mul_pow, RCLike.norm_ofReal, sq_abs]
     -- Parseval: the overlaps sum to `‖xᵢ‖² = 1`
     have hparse : ∑ j, ‖⟪hS.eigenvectorBasis hn j, hT.eigenvectorBasis hn i⟫_𝕜‖ ^ 2 = 1 := by

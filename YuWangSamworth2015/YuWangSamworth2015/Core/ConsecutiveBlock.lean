@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 
 /-! # Consecutive eigenvalue blocks and the two-sided boundary gap
 
@@ -64,7 +64,6 @@ in `YuWangSamworth2015/Symmetric/Theorem2.lean`.
 public section
 
 namespace YuWangSamworth2015
-open TauCeti
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)

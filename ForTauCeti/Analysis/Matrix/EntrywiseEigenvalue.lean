@@ -14,7 +14,7 @@ Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]); golfed (collapse a
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import TauCeti.Analysis.Matrix.EntrywiseOpNorm
 public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 
@@ -74,6 +74,7 @@ theorem abs_eigenvalues₀_sub_le_of_entry_le {𝕜 : Type*} [RCLike 𝕜]
     simpa [Fintype.card_fin] using
       Matrix.norm_toEuclideanLin_le_of_entry_le_square hentry' x
   -- Weyl on the symmetric operators.
-  exact abs_eigenvalue_sub_eigenvalue_le (opSym hAhat) (opSym hA) finrank_euclideanSpace hop k
+  exact LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le
+    (opSym hAhat) (opSym hA) finrank_euclideanSpace hop k
 
 end TauCeti.Matrix

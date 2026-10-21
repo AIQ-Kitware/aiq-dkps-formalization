@@ -24,7 +24,7 @@ identity `A A⋆ = U (A⋆A) U⁻¹` with `U = choosePolarUnitary A`.
 module
 
 public import Mathlib.Analysis.InnerProductSpace.SingularValues
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import TauCeti.Analysis.InnerProductSpace.SchurHorn
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 
@@ -258,7 +258,8 @@ theorem abs_sq_singularValues_sub_le {A Â : E →ₗ[𝕜] F} {a â ε : ℝ}
     {n : ℕ} (hn : finrank 𝕜 E = n) (k : Fin n) :
     |Â.singularValues k ^ 2 - A.singularValues k ^ 2| ≤ (a + â) * ε := by
   rw [Â.sq_singularValues_fin hn, A.sq_singularValues_fin hn]
-  exact abs_eigenvalue_sub_eigenvalue_le Â.isSymmetric_adjoint_comp_self
+  exact LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le
+    Â.isSymmetric_adjoint_comp_self
     A.isSymmetric_adjoint_comp_self hn
     (fun x => norm_gram_sub_gram_apply_le hâ hε hA hÂ hE x) k
 
@@ -436,7 +437,7 @@ theorem eigenvalues_conj_unitary {S : E →ₗ[𝕜] E} (hS : S.IsSymmetric)
     ext v
     simp only [LinearMap.comp_apply, LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe,
       LinearIsometryEquiv.symm_symm, LinearIsometryEquiv.symm_apply_apply]
-  have hcong := eigenvalues_congr hback
+  have hcong := LinearMap.IsSymmetric.eigenvalues_congr hback
     (isSymmetric_conj_unitary (isSymmetric_conj_unitary hS U) U.symm) hS hn
   have := eigenvalues_conj_unitary_le (isSymmetric_conj_unitary hS U) hn U.symm k
   rwa [hcong] at this
@@ -467,7 +468,8 @@ theorem eigenvalues_gram_adjoint (A : E →ₗ[𝕜] E) (hn : finrank 𝕜 E = n
   have hAA : A.adjoint.adjoint ∘ₗ A.adjoint = (choosePolarUnitary A).toLinearMap
       ∘ₗ (A.adjoint ∘ₗ A) ∘ₗ (choosePolarUnitary A).symm.toLinearMap := by
     rw [LinearMap.adjoint_adjoint]; exact comp_adjoint_eq_conj_adjoint_comp A
-  have hcong := eigenvalues_congr hAA A.adjoint.isSymmetric_adjoint_comp_self
+  have hcong := LinearMap.IsSymmetric.eigenvalues_congr hAA
+    A.adjoint.isSymmetric_adjoint_comp_self
     (isSymmetric_conj_unitary A.isSymmetric_adjoint_comp_self (choosePolarUnitary A)) hn
   rw [hcong, eigenvalues_conj_unitary A.isSymmetric_adjoint_comp_self hn (choosePolarUnitary A)]
 

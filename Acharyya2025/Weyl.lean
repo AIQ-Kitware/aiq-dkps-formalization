@@ -24,7 +24,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
 import Mathlib
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import TauCeti.Analysis.InnerProductSpace.CourantFischer
 
 open scoped BigOperators RealInnerProductSpace
 open Module (finrank)
@@ -185,4 +185,4 @@ theorem abs_eigenvalues_sub_le
     (k : Fin n) :
     -- Conclusion: |λₖ(T) − λₖ(S)| ≤ ε (eigenvalues move by at most ‖T − S‖op).
     |hT.eigenvalues hn k - hS.eigenvalues hn k| ≤ ε :=
-  TauCeti.abs_eigenvalue_sub_eigenvalue_le hT hS hn hε k
+  LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le hT hS hn hε k

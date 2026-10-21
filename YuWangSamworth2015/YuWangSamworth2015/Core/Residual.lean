@@ -11,7 +11,7 @@ in the foundation library.
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.ResidualGap
 
@@ -223,7 +223,7 @@ theorem sum_sq_norm_residualColumn_le_of_opNorm (hT : T.IsSymmetric) (hS : S.IsS
       have := hε (hS.eigenvectorBasis hn j)
       rwa [(hS.eigenvectorBasis hn).orthonormal.norm_eq_one j, mul_one] at this
     have hδ : |hS.eigenvalues hn j - hT.eigenvalues hn j| ≤ ε :=
-      abs_eigenvalue_sub_eigenvalue_le hS hT hn hε j
+      LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le hS hT hn hε j
     have htri : ‖residualColumn hT hS hn j‖ ≤ 2 * ε := by
       rw [residualColumn_eq]
       refine (norm_sub_le _ _).trans ?_
@@ -402,7 +402,7 @@ theorem sum_sq_norm_frameResidual_le_of_opNorm (hT : T.IsSymmetric) (hS : S.IsSy
       have := hε (w i)
       rwa [hw.orthonormal.norm_eq_one i, mul_one] at this
     have hδ : |hS.eigenvalues hn (e i) - hT.eigenvalues hn (e i)| ≤ ε :=
-      abs_eigenvalue_sub_eigenvalue_le hS hT hn hε (e i)
+      LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le hS hT hn hε (e i)
     have htri : ‖(hT.eigenvalues hn (e i) : 𝕜) • w i - T (w i)‖ ≤ 2 * ε := by
       rw [frameResidual_eq hT hS hn hw i]
       refine (norm_sub_le _ _).trans ?_

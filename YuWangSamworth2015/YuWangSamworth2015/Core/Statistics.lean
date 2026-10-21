@@ -935,7 +935,7 @@ theorem mixedGap_of_populationGap_weyl {A B : E →ₗ[𝕜] E} (hA : A.IsSymmet
     (i : Fin d) (k : Fin n) (hk : k ∉ Set.range e) :
     Δ - ε ≤ |hA.eigenvalues hn (e i) - hB.eigenvalues hn k| := by
   have hweyl : |hB.eigenvalues hn k - hA.eigenvalues hn k| ≤ ε :=
-    abs_eigenvalue_sub_eigenvalue_le hB hA hn hε k
+    LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le hB hA hn hε k
   have htri : |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|
       ≤ |hA.eigenvalues hn (e i) - hB.eigenvalues hn k|
         + |hB.eigenvalues hn k - hA.eigenvalues hn k| := abs_sub_le _ _ _

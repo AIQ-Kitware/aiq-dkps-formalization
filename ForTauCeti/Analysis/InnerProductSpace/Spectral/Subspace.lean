@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 public import Mathlib.Analysis.Normed.Operator.Banach

@@ -7,8 +7,8 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.SingularValues
 public import Mathlib.Analysis.InnerProductSpace.Positive
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-public import ForTauCeti.Analysis.InnerProductSpace.Spectrum
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.Spectrum
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 
@@ -224,15 +224,6 @@ theorem hasEigenvalue_adjointCompSelf_iff_selfCompAdjoint
 
 /-! ### Equality of the sorted nonzero spectra -/
 
-/-- Sorted eigenvalues are congruent along an operator equality.  (A primed variant of
-`TauCeti.eigenvalues_congr` from `SingularSubspace.lean`, restated here to keep this
-file's import footprint minimal; the two should be merged when upstreaming.) -/
-theorem eigenvalues_congr' {G : Type*} [NormedAddCommGroup G]
-    [InnerProductSpace 𝕜 G] [FiniteDimensional 𝕜 G] {S₁ S₂ : G →ₗ[𝕜] G} (h : S₁ = S₂)
-    (hS₁ : S₁.IsSymmetric) (hS₂ : S₂.IsSymmetric) {m : ℕ} (hm : finrank 𝕜 G = m) :
-    hS₁.eigenvalues hm = hS₂.eigenvalues hm := by
-  subst h; rfl
-
 private theorem card_filter_eigenvalues_real_eq {G : Type*} [NormedAddCommGroup G]
     [InnerProductSpace 𝕜 G] [FiniteDimensional 𝕜 G] {S : G →ₗ[𝕜] G} (hS : S.IsSymmetric)
     {m : ℕ} (hm : finrank 𝕜 G = m) (c : ℝ) :
@@ -282,7 +273,7 @@ theorem _root_.LinearMap.singularValues_adjoint (A : E →ₗ[𝕜] F) :
   · rcases lt_or_ge k (finrank 𝕜 E) with hkd | hkd
     · have h3 : A.adjoint.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨k, hkn⟩ =
           (isSymmetric_self_comp_adjoint A).eigenvalues rfl ⟨k, hkn⟩ :=
-        congrFun (eigenvalues_congr' (by rw [adjoint_adjoint])
+        congrFun (LinearMap.IsSymmetric.eigenvalues_congr (by rw [adjoint_adjoint])
           A.adjoint.isSymmetric_adjoint_comp_self (isSymmetric_self_comp_adjoint A) rfl) _
       rw [A.adjoint.singularValues_of_lt rfl hkn, A.singularValues_of_lt rfl hkd, h3,
         ← eigenvalues_adjointCompSelf_eq_selfCompAdjoint A rfl rfl hkd hkn]
@@ -309,7 +300,7 @@ theorem sq_singularValues_selfCompAdjoint (A : E →ₗ[𝕜] F) {n : ℕ}
   have h1 := A.adjoint.sq_singularValues_fin hn i
   rw [A.singularValues_adjoint_apply] at h1
   rw [h1]
-  exact congrFun (eigenvalues_congr' (by rw [adjoint_adjoint])
+  exact congrFun (LinearMap.IsSymmetric.eigenvalues_congr (by rw [adjoint_adjoint])
     A.adjoint.isSymmetric_adjoint_comp_self (isSymmetric_self_comp_adjoint A) hn) i
 
 /-- Every positive squared singular value of `A` is an eigenvalue of `AA†`. -/
@@ -424,7 +415,7 @@ theorem singularValues_eq_of_gram_eq {F' : Type*} [NormedAddCommGroup F']
   rcases lt_or_ge i (finrank 𝕜 E) with hi | hi
   · rw [A.singularValues_of_lt rfl hi, B.singularValues_of_lt rfl hi]
     congr 1
-    exact congrFun (eigenvalues_congr h A.isSymmetric_adjoint_comp_self
+    exact congrFun (LinearMap.IsSymmetric.eigenvalues_congr h A.isSymmetric_adjoint_comp_self
       B.isSymmetric_adjoint_comp_self rfl) _
   · rw [A.singularValues_of_finrank_le hi, B.singularValues_of_finrank_le hi]
 

@@ -9,7 +9,7 @@ public import Mathlib.Analysis.InnerProductSpace.SingularValues
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.LinearAlgebra.Basis.Basic
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 
 /-!
 # Min--max lower bounds for approximation numbers

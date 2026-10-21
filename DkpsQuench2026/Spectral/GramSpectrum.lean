@@ -77,7 +77,7 @@ theorem eigenvalues₀_configGram_eq_eigenvalues_finiteGramOperator
     (configGramPosSemidef z).isHermitian.eigenvalues₀ i =
       (TauCeti.isSymmetric_finiteGramOperator ℝ z).eigenvalues
         finrank_euclideanSpace i := by
-  have hcongr := TauCeti.eigenvalues_congr'
+  have hcongr := LinearMap.IsSymmetric.eigenvalues_congr
     (toEuclideanLin_configGram_eq_finiteGramOperator z)
     (opSym (configGramPosSemidef z).isHermitian)
     (TauCeti.isSymmetric_finiteGramOperator ℝ z)

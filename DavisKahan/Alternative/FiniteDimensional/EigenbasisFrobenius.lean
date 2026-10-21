@@ -5,8 +5,8 @@ Authors: Jon Crall, Claude Fable 5, Claude Opus 4.8
 -/
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import Mathlib.Analysis.InnerProductSpace.PiL2
-import ForTauCeti.Analysis.InnerProductSpace.Spectrum
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import TauCeti.Analysis.InnerProductSpace.Spectrum
+import TauCeti.Analysis.InnerProductSpace.CourantFischer
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 
 /-!
@@ -124,8 +124,10 @@ theorem sum_cross_norm_inner_eigenvectorBasis_sq_le_offDiag_block
     intro i hi j hj
     have hsq : ‖⟪u i, (S - T) (v j)⟫_𝕜‖ ^ 2
         = (hS.eigenvalues hn j - hT.eigenvalues hn i) ^ 2 * ‖⟪u i, v j⟫_𝕜‖ ^ 2 := by
-      simp only [hu, hv, inner_eigenvectorBasis_map_sub_eigenvectorBasis hT hS hn i j,
-        norm_mul, RCLike.norm_ofReal, mul_pow, sq_abs]
+      simp only [hu, hv,
+        LinearMap.IsSymmetric.inner_sub_apply_of_apply_eq_smul_of_apply_eq_smul
+          hT (hT.apply_eigenvectorBasis hn i) (hS.apply_eigenvectorBasis hn j),
+        ← RCLike.ofReal_sub, norm_mul, RCLike.norm_ofReal, mul_pow, sq_abs]
     have hsqgap : gap ^ 2 ≤ (hS.eigenvalues hn j - hT.eigenvalues hn i) ^ 2 := by
       rw [show (hS.eigenvalues hn j - hT.eigenvalues hn i) ^ 2
           = |hT.eigenvalues hn i - hS.eigenvalues hn j| ^ 2 by rw [sq_abs]; ring]
@@ -357,7 +359,7 @@ theorem gap_of_rank_floor
     ∀ i j : Fin n, (i : ℕ) < d → d ≤ (j : ℕ) →
       α / 2 ≤ |hT.eigenvalues hn i - hS.eigenvalues hn j| := by
   intro i j hi hj
-  have hweyl := abs_eigenvalue_sub_eigenvalue_le hT hS hn hε j
+  have hweyl := LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le hT hS hn hε j
   rw [htail j hj, zero_sub, abs_neg] at hweyl
   have hSj : hS.eigenvalues hn j ≤ α / 2 := (le_abs_self _).trans (hweyl.trans hsmall)
   have := hα i hi
@@ -367,7 +369,7 @@ theorem gap_of_rank_floor
 **Gap from a spectral gap in `T` (population gap, via Weyl).**  If `T`'s leading
 eigenvalues are at least `a` and its trailing eigenvalues at most `b` — a spectral gap
 `a − b` in `T` alone — and `S` is `ε`-operator-close to `T`, then the hybrid separation
-holds with `gap = (a − b) − ε`.  Weyl's inequality (`abs_eigenvalue_sub_eigenvalue_le`) pushes each
+holds with `gap = (a − b) − ε`.  Weyl's inequality (`LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le`) pushes each
 trailing sample eigenvalue up to at most `b + ε`, leaving `a − (b + ε)` below every
 leading eigenvalue of `T`.
 
@@ -385,7 +387,7 @@ theorem gap_of_eigengap
     ∀ i j : Fin n, (i : ℕ) < d → d ≤ (j : ℕ) →
       a - b - ε ≤ |hT.eigenvalues hn i - hS.eigenvalues hn j| := by
   intro i j hi hj
-  have hweyl := abs_le.mp (abs_eigenvalue_sub_eigenvalue_le hT hS hn hε j)
+  have hweyl := abs_le.mp (LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le hT hS hn hε j)
   -- `hweyl.1 : -ε ≤ λⱼ(T) - λⱼ(S)`, so `λⱼ(S) ≤ λⱼ(T) + ε ≤ b + ε`.
   have hSj : hS.eigenvalues hn j ≤ b + ε := by linarith [htrail j hj, hweyl.1]
   have hTi : a ≤ hT.eigenvalues hn i := hlead i hi
@@ -529,7 +531,7 @@ theorem notMem_Ioo_eigenvalues_of_notMem_Ioo
     (hε : ∀ x : E, ‖(T - S) x‖ ≤ ε * ‖x‖) :
     ∀ j ∈ t, hS.eigenvalues hn j ∉ Set.Ioo (a - (δ - ε)) (b + (δ - ε)) := by
   intro j hj
-  have hw := abs_le.mp (abs_eigenvalue_sub_eigenvalue_le hT hS hn hε j)
+  have hw := abs_le.mp (LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le hT hS hn hε j)
   have htj := htail j hj
   rw [Set.mem_Ioo, not_and_or, not_lt, not_lt] at htj ⊢
   rcases htj with h | h

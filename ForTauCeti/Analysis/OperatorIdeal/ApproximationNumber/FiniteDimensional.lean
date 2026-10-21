@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.LinearAlgebra.Basis.Basic
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 
 /-!
 # Approximation numbers on finite-dimensional Hilbert spaces
@@ -207,7 +207,12 @@ private theorem approximationNumber_le_singularValues
     have hWdim : finrank 𝕜 W = n := by
       dsimp only [W]
       rw [b.finrank_spanIndices_set, Set.ncard_eq_toFinset_card',
-        Set.toFinset_ofPred, Finset.card_filter_lt hnlt.le]
+        Set.toFinset_ofPred]
+      have hfilter : Finset.univ.filter (fun i : Fin (finrank 𝕜 E) => (i : ℕ) < n) =
+          Finset.Iio k := by
+        ext i
+        simp [Fin.lt_def, k]
+      rw [hfilter, Fin.card_Iio]
     have hPrank : W.starProjection.rank = (n : Cardinal) := by
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
