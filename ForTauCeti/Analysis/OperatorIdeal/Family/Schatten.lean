@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 public import ForTauCeti.Analysis.Normed.FiniteLpGauge
-public import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
+public import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
 public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
 public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison

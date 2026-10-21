@@ -71,7 +71,6 @@
         "ForTauCeti.Analysis.OperatorIdeal.Family.KyFanDominance",
         "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
         "ForTauCeti.LinearAlgebra.Dimension.RankComp",
@@ -2347,7 +2346,7 @@
       "source_module": "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
       "source_declarations": [],
       "current_namespace": "ContinuousLinearMap",
-      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",
+      "staging_module": null,
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.TraceClass",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
@@ -2358,8 +2357,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "consumed-upstream",
+      "upstream_pr": null,
+      "migration_note": "The local trace-class family and completeness adapter were deleted. Tau Ceti.Analysis.OperatorIdeal.Family.TraceClass now supplies the rectangular and symmetric families, summability characterization, Schatten endpoint identity, and completeness."
     },
     {
       "source_module": "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric",
@@ -2380,8 +2380,7 @@
       "downstream_users": [],
       "status": "consumed-upstream",
       "upstream_pr": null,
-      "migration_note": "The local supremum-gauge definition and extension proof were deleted after consumption of Tau Ceti.SymmetricGauge.supGauge and extend_supGauge. The DKPS antitone specialization is no longer a maintained local declaration.",
-      "maintained_module": "TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
+      "migration_note": "The local Ky Fan dominance layer remains because it packages DKPS approximation-number Ky Fan gauges. Its trace-class instance now consumes Tau Ceti's canonical symmetric trace-class family."
     },
     {
       "source_module": "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport",

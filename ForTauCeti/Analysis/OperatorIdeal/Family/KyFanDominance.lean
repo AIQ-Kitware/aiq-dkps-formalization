@@ -6,9 +6,9 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
-public import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
+public import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
 
 /-!
 # Ky Fan dominance of rectangular operator ideal families
@@ -94,10 +94,11 @@ instance isKyFanDominant_kyFanIdealFamily (𝕜 : Type u) [RCLike 𝕜]
 
 /-- The nuclear norm is the supremum of the Ky Fan gauges, so dominance is monotonicity of
 that supremum. -/
-instance isKyFanDominant_traceClassIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
-    IsKyFanDominant (traceClassIdealFamily.{u, v} 𝕜).toOperatorIdealFamily where
+instance isKyFanDominant_traceClass (𝕜 : Type u) [RCLike 𝕜] :
+    IsKyFanDominant (SymmetricOperatorIdealFamily.traceClass.{u, v} 𝕜).toOperatorIdealFamily where
   gauge_le_of_forall_kyFanGauge_le {_E _F} _ _ _ _ _ _ {_A _B} h := by
-    rw [gauge_traceClassIdealFamily, gauge_traceClassIdealFamily,
+    rw [SymmetricOperatorIdealFamily.traceClass_toOperatorIdealFamily 𝕜,
+      OperatorIdealFamily.gauge_traceClass, OperatorIdealFamily.gauge_traceClass,
       ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,
       ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge]
     refine iSup_mono fun k => ?_
