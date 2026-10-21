@@ -28,7 +28,7 @@ autoImplicit = false
 [[require]]
 name = "TauCeti"
 git = "https://github.com/TauCetiProject/TauCeti.git"
-rev = "8562ddf8b92f8cb389c5a321fe6e31c60f14c6f0"
+rev = "706eed0743aff603330be3d30377ffae6f4aed3e"
 # END Tau Ceti dependency
 
 # BEGIN authoritative root Mathlib dependency
