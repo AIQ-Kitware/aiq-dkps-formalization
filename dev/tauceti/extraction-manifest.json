@@ -190,13 +190,11 @@
       "cluster": "hoffman-wielandt",
       "roadmap_target": "The Hoffman--Wielandt inequality and the sorted von Neumann trace bound.",
       "roadmap_focus": "eigenvalue-perturbation",
-      "status": "staged-unreviewed",
+      "status": "upstreamed",
       "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_population": "The sorted von Neumann trace and Hoffman--Wielandt inequalities are maintained in TauCeti.Analysis.InnerProductSpace.HoffmanWielandt; the local implementation has been removed.",
       "tauceti_target_marker": null,
-      "staging_modules": [
-        "ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt"
-      ]
+      "staging_modules": []
     },
     {
       "cluster": "matrix-spectral",
@@ -800,7 +798,13 @@
     },
     {
       "source_module": "ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.sum_mul_comp_perm_le_sum_mul_of_antitone",
+        "TauCeti.sum_mul_sum_mul_le_sum_mul_of_antitone",
+        "TauCeti.sum_eigenvalues_mul_re_inner_self_le",
+        "TauCeti.sum_sq_norm_apply_eq_sum_sq_eigenvalues",
+        "TauCeti.sum_sq_eigenvalues_sub_le_sum_sq_norm_apply"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse",
       "final_tauceti_module": "TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse",
@@ -1084,15 +1088,15 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HoffmanWielandt",
       "ownership_class": "tauceti",
       "roadmap_target": "hoffman-wielandt",
-      "provenance_class": "moved; introduced at Davis--Kahan commit dd93e70; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "upstreamed Hoffman--Wielandt and von Neumann trace results; the local implementation is retired",
       "direct_dependencies": [
-        "Mathlib",
-        "TauCeti.Analysis.InnerProductSpace.SchurHorn"
+        "TauCeti.Analysis.InnerProductSpace.HoffmanWielandt"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The local rearrangement, Birkhoff, von Neumann, and Hoffman--Wielandt proofs were deleted. YuWangSamworth2015.Core.Residual now imports TauCeti's theorem and preserves its paper-facing overlap bounds as explicit forwarding wrappers; arbitrary ordered-eigenframe extensions remain local."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.IntertwiningUnitary",
