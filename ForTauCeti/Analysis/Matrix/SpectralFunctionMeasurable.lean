@@ -24,7 +24,7 @@ public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metric
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metrizable
 public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
-public import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
+public import TauCeti.Analysis.Matrix.EntrywiseOpNorm
 public import Mathlib.Analysis.Matrix.Order
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Complex
@@ -133,7 +133,8 @@ theorem abs_eigenvalues₀_le_of_entry_le {𝕜 : Type*} [RCLike 𝕜]
     rw [hu]
     exact (opSym hB).apply_eigenvectorBasis finrank_euclideanSpace k
   have hle : ‖Matrix.toEuclideanLin B (u k)‖ ≤ (n : ℝ) * β * ‖u k‖ :=
-    Matrix.norm_toEuclideanLin_le_of_entry_le_fin hβ (u k)
+    by simpa [Fintype.card_fin] using
+      Matrix.norm_toEuclideanLin_le_of_entry_le_square hβ (u k)
   rwa [happly, norm_smul, RCLike.norm_ofReal, hnorm1, mul_one, mul_one] at hle
 
 /-- One-sided form of the entrywise eigenvalue bound.  A consumer that only needs a

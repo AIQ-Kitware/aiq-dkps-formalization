@@ -11,7 +11,7 @@ integrability needed to expand the covariance matrix.
 -/
 
 import DkpsQuench2026.Geometry.Population
-import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
+import Mathlib.Analysis.InnerProductSpace.PiL2
 
 set_option linter.mathlibStandardSet false
 
@@ -274,7 +274,7 @@ theorem empiricalCovariance_quadratic_floor_of_entrywise
   have hl1 :
       ∑ a : Fin d, |x a| ≤ Real.sqrt d * ‖x‖ := by
     simpa [Real.norm_eq_abs, Fintype.card_fin] using
-      (EuclideanSpace.sum_norm_le_sqrt_card_mul_norm x)
+      (PiLp.sum_norm_le_sqrt_card_mul_norm x)
 
   have hl1_sq :
       (∑ a : Fin d, |x a|) ^ 2 ≤ (d : Real) * ‖x‖ ^ 2 := by

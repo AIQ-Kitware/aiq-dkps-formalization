@@ -81,7 +81,7 @@ redone is the real-inner-product arithmetic in the proofs below — the places w
 inner product is used as a real number without a `RCLike.re`.
 
 **This is a different situation from the entrywise operator-norm bound in
-`ForTauCeti/Analysis/Matrix/EntrywiseOpNorm.lean`**, whose `RCLike` form needs a
+`TauCeti.Analysis.Matrix.EntrywiseOpNorm`**, whose `RCLike` form needs a
 re-derivation because `Matrix.toEuclideanLin` changes convention over `𝕜`.  Here the
 statements are convention-free and only the proofs move.
 

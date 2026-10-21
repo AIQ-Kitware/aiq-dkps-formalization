@@ -292,7 +292,6 @@ topics:
   title: Matrix spectra and spectral measurability
   modules:
   - Analysis.Matrix.EntrywiseEigenvalue
-  - Analysis.Matrix.EntrywiseOpNorm
   - Analysis.Matrix.SpectralFunctionMeasurable
   - Analysis.Matrix.Spectrum
   - Analysis.Matrix.SpectralProjection
@@ -650,7 +649,6 @@ rungs:
   title: Matrix spectra and spectral measurability (T19)
   seeds:
   - Analysis.Matrix.EntrywiseEigenvalue
-  - Analysis.Matrix.EntrywiseOpNorm
   - Analysis.Matrix.SpectralFunctionMeasurable
   - Analysis.Matrix.Spectrum
   - Analysis.Matrix.SpectralProjection

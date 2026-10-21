@@ -7,7 +7,7 @@ import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
-import ForTauCeti.Analysis.Matrix.EntrywiseOpNorm
+import TauCeti.Analysis.Normed.Lp.PiLp
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -727,7 +727,7 @@ theorem norm_apply_sub_familyIsometry_le {d : ℕ} (T : E0 →L[ℂ] E1)
           (WithLp.toLp 2 (fun i => (tau i : ℂ) * coeff i) :
             EuclideanSpace ℂ (Fin d))‖ ≤ Real.sqrt d * b := by
   have hL1 : (∑ i : Fin d, ‖coeff i‖) ≤ Real.sqrt d := by
-    have h := EuclideanSpace.sum_norm_le_sqrt_card_mul_norm coeff
+    have h := PiLp.sum_norm_le_sqrt_card_mul_norm coeff
     rw [hcoeff, mul_one] at h
     simpa using h
   have hidentity :
