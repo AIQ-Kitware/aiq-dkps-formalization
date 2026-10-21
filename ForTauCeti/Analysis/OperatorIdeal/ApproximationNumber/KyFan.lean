@@ -227,7 +227,10 @@ theorem kyFanGaugeReal_add_le_of_finiteDimensional (k : ℕ) (A B : E →ₗ[�
       A.toContinuousLinearMap.kyFanGaugeReal k + B.toContinuousLinearMap.kyFanGaugeReal k := by
   rw [← kyFanSum_eq_kyFanGauge k (A + B),
     ← kyFanSum_eq_kyFanGauge k A, ← kyFanSum_eq_kyFanGauge k B]
-  exact TauCeti.kyFanSum_add_le k A B
+  rw [TauCeti.kyFanSum_eq_linearMap_kyFanSum k (A + B),
+    TauCeti.kyFanSum_eq_linearMap_kyFanSum k A,
+    TauCeti.kyFanSum_eq_linearMap_kyFanSum k B]
+  exact LinearMap.kyFanSum_add_le A B k
 
 end FiniteDimensional
 
