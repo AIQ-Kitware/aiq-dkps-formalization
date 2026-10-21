@@ -277,9 +277,10 @@ theorem sinTheta_addBounded_spectralProjection_sub_opNorm_of_formBounds
     show ‖U.starProjection - W.starProjection‖ =
       max ‖Wᗮ.starProjection ∘L U.starProjection‖
         ‖Uᗮ.starProjection ∘L W.starProjection‖
-    rw [Submodule.norm_starProjection_sub_eq_max,
-      Submodule.starProjection_orthogonal' W,
-      Submodule.starProjection_orthogonal' U]
+    rw [← Submodule.projectionGap_def U W,
+      Submodule.projectionGap_eq_max,
+      Submodule.directedProjectionGap_def,
+      Submodule.directedProjectionGap_def]
   rw [selfAdjointSpectralProjection_eq_starProjection A hA B hB,
     selfAdjointSpectralProjection_eq_starProjection (TauCeti.LinearPMap.addBounded A V)
       (addBounded_isSelfAdjoint A hA V hV) S hS]

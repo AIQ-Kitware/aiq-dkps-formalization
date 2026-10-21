@@ -37,7 +37,7 @@ generic two-subspace geometry and lives in `ForTauCeti`:
 * `Submodule.directedProjectionGap_eq_one_of_inf_orthogonal_ne_bot` — a nonzero
   crossed intersection pins its directed gap at `1`;
 * `Submodule.projectionGap_eq_directedProjectionGap_of_inf_orthogonal_eq_bot_iff`
-  — the combination, through `projectionGap_eq_max_directedProjectionGap`.
+  — the combination, through `projectionGap_eq_max`.
 
 ## Why (3.5) is not implied by (1.5)
 

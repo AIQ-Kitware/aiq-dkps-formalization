@@ -497,24 +497,21 @@ theorem sinAngle_reflected_eq_sinTwoAngle
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     U.projectionGap (reflectedSubspace V U) = ‖sinTwoAngleOperator U V‖ := by
-  have hgap : U.projectionGap (reflectedSubspace V U) =
-      ‖(U.starProjection -
-        (reflectedSubspace V U).starProjection : E →L[𝕜] E)‖ := rfl
-  rw [hgap, Submodule.norm_starProjection_sub_eq_max]
-  have h1 : (1 - (reflectedSubspace V U).starProjection : E →L[𝕜] E) ∘L
+  rw [Submodule.projectionGap_eq_max,
+    Submodule.directedProjectionGap_def,
+    Submodule.directedProjectionGap_def]
+  have h1 : ((reflectedSubspace V U)ᗮ).starProjection ∘L
       U.starProjection =
       V.reflectionOperator ∘L
         (Uᗮ.starProjection ∘L V.reflectionOperator ∘L U.starProjection) := by
-    rw [← Submodule.starProjection_orthogonal' (reflectedSubspace V U),
-      starProjection_orthogonal_reflectedSubspace]
+    rw [starProjection_orthogonal_reflectedSubspace]
     ext x
     rfl
-  have h2 : (1 - U.starProjection : E →L[𝕜] E) ∘L
+  have h2 : Uᗮ.starProjection ∘L
       (reflectedSubspace V U).starProjection =
       (Uᗮ.starProjection ∘L V.reflectionOperator ∘L U.starProjection) ∘L
         V.reflectionOperator := by
-    rw [← Submodule.starProjection_orthogonal' U,
-      starProjection_reflectedSubspace]
+    rw [starProjection_reflectedSubspace]
     ext x
     rfl
   rw [h1, h2, complementary_comp_reflection_comp_projection,

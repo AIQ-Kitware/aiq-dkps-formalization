@@ -289,7 +289,7 @@ theorem source_target_projectionGap_eq_one
     (b : HilbertBasis (ℕ × Bool) 𝕜 H) :
     (sourceSubspace b).projectionGap (targetSubspace b) = 1 := by
   apply le_antisymm
-  · rw [Submodule.projectionGap_eq_max_directedProjectionGap]
+  · rw [Submodule.projectionGap_eq_max]
     exact max_le (Submodule.directedProjectionGap_le_one _ _)
       (Submodule.directedProjectionGap_le_one _ _)
   · apply one_le_projectionGap_of_forall_exists_unit_lt

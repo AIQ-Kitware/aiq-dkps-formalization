@@ -38,7 +38,7 @@ theorem mul_subspaceGap_le_of_two_directedGap_le
     δ * U.projectionGap V ≤ r := by
   have hmax : U.projectionGap V =
       max (U.directedProjectionGap V) (V.directedProjectionGap U) :=
-    U.projectionGap_eq_max_directedProjectionGap V
+    U.projectionGap_eq_max V
   rw [hmax, mul_max_of_nonneg _ _ hδ]
   exact max_le hUV hVU
 

@@ -379,7 +379,7 @@ theorem sinTheta_spectrum_symmetric
     sinTheta_spectrum hB hA hV hU hd hab' hVspec' hUspec'
   rw [show A - B = -(B - A) by abel, norm_neg] at h2
   have hmax : U.projectionGap V = max (U.directedProjectionGap V) (V.directedProjectionGap U) :=
-    U.projectionGap_eq_max_directedProjectionGap V
+    U.projectionGap_eq_max V
   rw [hmax, mul_max_of_nonneg _ _ hd.le]
   exact max_le h1 h2
 

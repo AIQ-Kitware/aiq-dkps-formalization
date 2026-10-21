@@ -294,7 +294,7 @@ theorem norm_fullAngleBlockC_eq_maximalAngle
     norm_directedAngleBlockC Uᗮ Vᗮ,
     directedProjectionGap_orthogonal U V,
     maximalAngle,
-    Submodule.projectionGap_eq_max_directedProjectionGap]
+    Submodule.projectionGap_eq_max]
   rcases le_total (U.directedProjectionGap V) (V.directedProjectionGap U) with h | h
   · rw [max_eq_right h, max_eq_right (Real.arcsin_le_arcsin h)]
   · rw [max_eq_left h, max_eq_left (Real.arcsin_le_arcsin h)]

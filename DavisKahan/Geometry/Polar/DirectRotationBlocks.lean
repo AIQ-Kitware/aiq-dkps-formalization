@@ -137,7 +137,7 @@ The paper's `S₀` and `S₁` are the two crossed blocks of the direct rotation,
 `C₀² ≥ ½`, which constrains only the `Pℋ` block, force the companion bound `C₁² ≥ ½` on
 `P̃ℋ` -- an implication that is **false** without a unitary intertwiner: `U ⊆ V` with
 `dim V > dim U` has `C₀² = 1` and `C₁²` with `0` in its numerical range.  Equality of the two
-directed gaps needs acuteness (`Submodule.projectionGap_eq_max_directedProjectionGap` gives
+directed gaps needs acuteness (`Submodule.projectionGap_eq_max` gives
 only the maximum), and this is the acute half of it. -/
 theorem norm_projection_apply_le_of_forall_mem_source
     (hacute : IsUniformlyAcute U V) {r : ℝ} (hr : 0 ≤ r)
