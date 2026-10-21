@@ -5,8 +5,10 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 import DavisKahan.BoundedOperator.Problem
 import DavisKahan.SpectralTheory.AbstractSpectrum
+import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
@@ -195,13 +197,16 @@ omit [CompleteSpace K] in
 theorem unitaryConjugate_spectrum_eq
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) :
-    TauCeti.LinearPMap.spectrum (unitaryConjugate W A hA) =
-      TauCeti.LinearPMap.spectrum A := by
+    _root_.LinearPMap.spectrum (unitaryConjugate W A hA) =
+      _root_.LinearPMap.spectrum A := by
   ext lam
-  change ((lam : ℂ) ∉ TauCeti.LinearPMap.resolventSet
-      (unitaryConjugate W A hA)) ↔
-    ((lam : ℂ) ∉ TauCeti.LinearPMap.resolventSet A)
-  exact not_congr (mem_resolventSet_unitaryConjugate_iff W A hA)
+  change lam ∉ _root_.LinearPMap.resolventSet
+      (unitaryConjugate W A hA) ↔
+    lam ∉ _root_.LinearPMap.resolventSet A
+  apply not_congr
+  exact (mem_local_resolventSet_iff_root (unitaryConjugate W A hA) lam).symm.trans
+    ((mem_resolventSet_unitaryConjugate_iff W A hA).trans
+      (mem_local_resolventSet_iff_root A lam))
 
 /-- Restriction of an ambient unitary to a submodule and its transported
 image.  This same-ambient-space form is exactly what reflection transport

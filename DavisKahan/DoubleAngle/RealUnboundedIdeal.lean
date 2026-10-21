@@ -30,8 +30,8 @@ The complex directed endpoints
 (`sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap` and its perturbation
 form) are stated for a `KyFanDominantIdealFamily (𝕜 := ℂ)`, a scalar-fixed
 class with no gauge transport across complexification, and their spectral
-hypotheses are phrased through `TauCeti.LinearPMap.spectrum`, which only exists
-over `ℂ`.  Both obstructions disappear if the argument is run over the reals
+hypotheses use the complex partial-map spectrum `_root_.LinearPMap.spectrum`.
+Both obstructions disappear if the argument is run over the reals
 directly: the reflection geometry, the rectangular ideal interface, and the
 bounded-perturbation residual packaging are all scalar-generic, and the real
 unbounded `sin Θ` theorem `sinTheta_unbounded_real` already carries the
