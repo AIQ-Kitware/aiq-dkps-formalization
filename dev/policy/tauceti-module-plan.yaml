@@ -298,8 +298,6 @@ topics:
 - id: T20
   title: Sample moments and matrix concentration
   modules:
-  - Probability.Moments.MatrixConcentration
-  - Probability.Moments.SampleSecondMoment
   - Probability.Moments.SampleMean
   - Probability.Moments.Variance
   - Probability.Moments.CenteredScatter
@@ -656,9 +654,7 @@ rungs:
   title: Sample moments and matrix concentration (T20)
   seeds:
   - Probability.Moments.CenteredScatter
-  - Probability.Moments.MatrixConcentration
   - Probability.Moments.SampleMean
-  - Probability.Moments.SampleSecondMoment
   - Probability.Moments.Variance
 - id: T
   title: Matrix rank factorization and positive semidefiniteness (T21)

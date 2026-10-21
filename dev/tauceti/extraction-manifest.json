@@ -247,9 +247,7 @@
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.MeasureTheory.CfcMeasurable",
         "ForTauCeti.Probability.Moments.CenteredScatter",
-        "ForTauCeti.Probability.Moments.MatrixConcentration",
         "ForTauCeti.Probability.Moments.SampleMean",
-        "ForTauCeti.Probability.Moments.SampleSecondMoment",
         "ForTauCeti.Probability.Moments.Variance"
       ]
     },
@@ -1945,37 +1943,36 @@
       "roadmap_target": "probability-concentration",
       "provenance_class": "moved; introduced at Davis--Kahan commit 2356fd0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "TauCeti.Analysis.Matrix.EntrywiseOpNorm",
-        "ForTauCeti.Probability.Moments.Variance"
+        "TauCeti.Analysis.Matrix.Eigenvalues",
+        "TauCeti.Probability.Moments.Chebyshev"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "Challenge.MatrixConcentration.Leaderboard",
-        "ForTauCeti.Probability.Moments.SampleSecondMoment"
+        "Challenge.MatrixConcentration.Leaderboard"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "upstreamed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "Deleted the local Chebyshev/union-bound, operator-norm, and eigenvalue concentration implementations after migrating the maintained Challenge audit to TauCeti.Probability.Moments.MatrixConcentration. The upstream generic API covers real square matrices and additionally supports rectangular matrices and RCLike scalars. The historical staging path is retained for provenance."
     },
     {
       "source_module": "ForMathlib.Probability.Moments.SampleCovariance",
       "source_declarations": [],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Probability.Moments.SampleSecondMoment",
-      "final_tauceti_module": "TauCeti.Probability.Moments.SampleSecondMoment",
+      "final_tauceti_module": "TauCeti.Analysis.Matrix.SampleSecondMoment + TauCeti.Probability.Moments.MatrixConcentration",
       "ownership_class": "tauceti",
       "roadmap_target": "probability-concentration",
       "provenance_class": "moved; introduced at Davis--Kahan commit f9309f7; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Probability.Moments.MatrixConcentration",
-        "ForTauCeti.Probability.Moments.SampleMean"
+        "TauCeti.Analysis.Matrix.SampleSecondMoment",
+        "TauCeti.Probability.Moments.MatrixConcentration"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "Deleted the local empirical second-moment definitions and the redundant IID/eigenvalue specializations after confirming that TauCeti.Analysis.Matrix.SampleSecondMoment and TauCeti.Probability.Moments.MatrixConcentration provide the canonical definition and more general results."
     },
     {
       "source_module": "ForMathlib.Probability.Moments.SampleMean",

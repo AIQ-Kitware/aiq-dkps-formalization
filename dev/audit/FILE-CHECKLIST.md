@@ -1655,10 +1655,10 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Probability/Moments/SampleMean.lean` — 276 lines · Lean source
 - [x] `ForTauCeti/Probability/Moments/CenteredScatter.lean` — 270 lines · Lean source
 - [ ] `ForTauCeti/Probability/VStatistic.lean` — 238 lines · Lean source
-- [x] `ForTauCeti/Probability/Moments/MatrixConcentration.lean` — 235 lines · Lean source
+- [x] Upstreamed as `TauCeti.Probability.Moments.MatrixConcentration`; consumers now use the generic concentration API.
 - [ ] `ForTauCeti/Probability/ProductConvergence.lean` — 195 lines · Lean source
 - [ ] `ForTauCeti/Probability/RigidAlignment.lean` — 142 lines · Lean source
-- [ ] `ForTauCeti/Probability/Moments/SampleSecondMoment.lean` — 141 lines · Lean source
+- [x] Upstreamed as `TauCeti.Analysis.Matrix.SampleSecondMoment` and `TauCeti.Probability.Moments.MatrixConcentration`; the local IID specializations were deleted.
 - [x] `ForTauCeti/Probability/Moments/Variance.lean` — 84 lines · Lean source
 
 ### ForTauCeti/README.md :: documentation
