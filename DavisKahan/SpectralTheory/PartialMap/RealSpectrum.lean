@@ -96,16 +96,9 @@ theorem realSpectrum_eq_spectraSpectrum (A : E →ₗ.[ℂ] E) :
 
 /-! ## The spectrum of a self-adjoint operator is real
 
-**Now proved natively, 2026-07-28.**  This lemma briefly had a canonical
-statement and a proof borrowed from `Spectra.Resolvent.mem_resolventSet_of_im_ne_zero`,
-because the native argument needs the `±i` deficiency-surjectivity of a
-self-adjoint partial map.  That is now
-`TauCeti.LinearPMap.mem_resolventSet_of_im_ne_zero` in
-`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean`,
-proved from Mathlib's `LinearPMap` adjoint API — the estimate
-`|Im z| ‖x‖ ≤ ‖(A - z)x‖`, closed range from closedness of `A`, dense range from
-"no non-real eigenvalues" — so the borrowed proof and this file's last Spectra
-import are both gone. -/
+Tau Ceti proves the more general `RCLike` statement that the spectrum lies on
+the zero-imaginary axis. This local spectrum still uses the donor resolvent
+representation, so the wrapper forwards through its temporary adapter. -/
 
 /-- **A self-adjoint partial map has real spectrum.** -/
 theorem spectrum_subset_real_of_isSelfAdjoint {A : E →ₗ.[ℂ] E}

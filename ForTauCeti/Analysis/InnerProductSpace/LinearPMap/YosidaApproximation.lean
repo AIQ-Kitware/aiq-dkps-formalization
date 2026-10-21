@@ -45,9 +45,8 @@ self-adjoint operator (Stone's theorem):
   deficiency-surjectivity — through every one of these definitions, because its
   resolvent is constructed from exactly those three inputs.  Here they collapse
   to a single `IsSelfAdjoint A`, because
-  `TauCeti.LinearPMap.mem_resolventSet_of_im_ne_zero` (proved in
-  `SelfAdjointResolvent.lean`) derives resolvent-set membership at *any* non-real
-  point directly from self-adjointness.  That also removes the dependency on
+  `mem_resolventSet_of_im_ne_zero` adapts Tau Ceti's general theorem to the
+  local resolvent representation. That also removes the dependency on
   Spectra's `Resolvent/Range.lean` entirely.
 -/
 
