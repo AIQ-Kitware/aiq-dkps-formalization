@@ -8,7 +8,7 @@ Staged for Tau Ceti: pinching contracts every Ky Fan approximation gauge.
 module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
-public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import TauCeti.Analysis.InnerProductSpace.Projection.Block
 
 /-!
 # Pinching contracts Ky Fan approximation gauges
@@ -29,7 +29,7 @@ displacement — Proposition 4.3's route.
 
 ## Why it is three lines
 
-The pinch is an average of two unitary conjugations.  `Submodule.reflectionOperator`
+The pinch is an average of two unitary conjugations.  `Submodule.reflection`
 `J = 2P_U − 1` is a self-adjoint unitary, and
 
 ```
@@ -71,27 +71,30 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- **Conjugating by a reflection preserves Ky Fan approximation gauges.**
 
-A reflection is a contraction in both slots, so the gauge cannot grow; it is
+A reflection is an isometry in both slots, so the gauge cannot grow; it is
 also involutive, so it cannot shrink either.  Only the `≤` direction is used
 below, but the equality is the honest statement. -/
 theorem kyFanApproximationGauge_reflectionConjugate_le
     (U : Submodule ℂ E) [U.HasOrthogonalProjection] (A : E →L[ℂ] E) (k : ℕ) :
     kyFanApproximationGauge k
-        (U.reflectionOperator ∘L A ∘L U.reflectionOperator) ≤
+        ((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)) ≤
       kyFanApproximationGauge k A := by
+  let J : E →L[ℂ] E := U.reflection
   have h := kyFanApproximationGauge_comp_le (𝕜 := ℂ) k
-    U.reflectionOperator A U.reflectionOperator
-  have hJ : ‖(U.reflectionOperator : E →L[ℂ] E)‖ ≤ 1 :=
-    Submodule.norm_reflectionOperator_le_one U
+    J A J
+  have hJ : ‖J‖ ≤ 1 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one ?_
+    intro x
+    change ‖U.reflection x‖ ≤ 1 * ‖x‖
+    simpa only [one_mul] using le_of_eq (U.reflection.norm_map x)
   have hnn : 0 ≤ kyFanApproximationGauge k A :=
     kyFanApproximationGauge_nonneg k A
   refine h.trans ?_
-  have h1 : ‖(U.reflectionOperator : E →L[ℂ] E)‖ *
+  have h1 : ‖J‖ *
       kyFanApproximationGauge k A ≤ 1 * kyFanApproximationGauge k A :=
     mul_le_mul_of_nonneg_right hJ hnn
   calc
-    ‖(U.reflectionOperator : E →L[ℂ] E)‖ * kyFanApproximationGauge k A *
-        ‖(U.reflectionOperator : E →L[ℂ] E)‖ ≤
+    ‖J‖ * kyFanApproximationGauge k A * ‖J‖ ≤
         1 * kyFanApproximationGauge k A * 1 :=
       mul_le_mul h1 hJ (norm_nonneg _) (by linarith)
     _ = kyFanApproximationGauge k A := by ring
@@ -145,22 +148,19 @@ theorem kyFanApproximationGauge_conj_eq_complex {F : Type v} [NormedAddCommGroup
 
 The pinch is the average of `A` and its reflection conjugate, and the gauge is
 subadditive and conjugation-invariant. -/
-theorem kyFanApproximationGauge_diagonalPart_le_complex
+theorem kyFanApproximationGauge_diagBlock_le_complex
     (U : Submodule ℂ E) [U.HasOrthogonalProjection] (A : E →L[ℂ] E) (k : ℕ) :
     kyFanApproximationGauge k (U.diagBlock A) ≤
       kyFanApproximationGauge k A := by
-  have hR : U.reflectionOperator = (U.reflection : E →L[ℂ] E) := by
-    ext x
-    exact Submodule.reflectionOperator_apply_eq_reflection U x
   have hsplit : (2 : ℂ) • U.diagBlock A =
-      A + U.reflectionOperator ∘L A ∘L U.reflectionOperator := by
-    simpa [hR, ← Nat.cast_smul_eq_nsmul ℂ] using
+      A + (U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E) := by
+    simpa [← Nat.cast_smul_eq_nsmul ℂ] using
       (Submodule.two_smul_diagBlock (𝕜 := ℂ) U A)
   have hsum : kyFanApproximationGauge k ((2 : ℂ) • U.diagBlock A) ≤
       2 * kyFanApproximationGauge k A := by
     rw [hsplit]
     refine (kyFanApproximationGauge_add_le_complex k A
-      (U.reflectionOperator ∘L A ∘L U.reflectionOperator)).trans ?_
+      ((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E))).trans ?_
     have := kyFanApproximationGauge_reflectionConjugate_le U A k
     linarith
   rw [kyFanApproximationGauge_smul] at hsum
