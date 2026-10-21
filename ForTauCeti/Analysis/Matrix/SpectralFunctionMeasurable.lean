@@ -23,7 +23,7 @@ public import Mathlib.Analysis.Matrix.Hermitian
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Basic
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metric
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metrizable
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import TauCeti.Analysis.Matrix.EntrywiseOpNorm
 public import Mathlib.Analysis.Matrix.Order
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
@@ -94,7 +94,7 @@ theorem eigenvalues₀_eq_eigenvalues_toEuclideanLin {𝕜 : Type*} [RCLike 𝕜
     (hB : B.IsHermitian) (i : Fin (Fintype.card (Fin n))) :
     hB.eigenvalues₀ i
       = (opSym hB).eigenvalues finrank_euclideanSpace_fin (Fin.cast (Fintype.card_fin n) i) :=
-  TauCeti.eigenvalues_cast _ _ _ _ _
+  LinearMap.IsSymmetric.eigenvalues_cast _ _ _ _ _
 
 /-- The operator enumeration read back as the matrix one. -/
 theorem eigenvalues_toEuclideanLin_eq_eigenvalues₀ {𝕜 : Type*} [RCLike 𝕜]

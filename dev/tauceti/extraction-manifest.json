@@ -20,7 +20,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
@@ -41,7 +40,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
-        "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum",
@@ -100,7 +98,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary",
         "ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse",
         "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
@@ -117,7 +114,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
-        "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
         "TauCeti.Analysis.SpecialFunctions.Sqrt"
@@ -135,7 +131,6 @@
         "ForTauCeti.Analysis.Convex.Majorization",
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
         "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
@@ -149,7 +144,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
-        "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic",
@@ -177,7 +171,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange",
         "ForTauCeti.Analysis.InnerProductSpace.FiniteFrame",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
@@ -192,7 +185,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
-        "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
@@ -208,7 +200,6 @@
       "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
       "tauceti_target_marker": null,
       "staging_modules": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt"
       ]
     },
@@ -221,7 +212,6 @@
       "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.Analysis.Matrix.SpectralProjection",
@@ -237,7 +227,6 @@
       "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.MeasureTheory.CfcMeasurable",
@@ -447,7 +436,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
         "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
@@ -479,7 +467,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
-        "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier",
@@ -681,16 +668,13 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.CourantFischer",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (finite-dimensional min-max support)",
-      "provenance_class": "copied (namespace renamed ForMathlib -> TauCeti)",
+      "provenance_class": "moved into the accepted upstream Tau Ceti Courant--Fischer API; all maintained spectral, min-max, monotonicity, and Weyl declarations are supplied upstream",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax"
-      ],
-      "status": "staged",
+      "downstream_users": [],
+      "status": "upstreamed",
       "upstream_pr": null
     },
     {
@@ -708,7 +692,7 @@
       "roadmap_target": "Part B / PR 1",
       "provenance_class": "copied (ForMathlib.* helper refs rewritten to TauCeti.*)",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank",
         "Mathlib.Analysis.InnerProductSpace.Projection.Basic",
@@ -744,7 +728,7 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer"
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -792,7 +776,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: representation of an operator ideal family)",
-      "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `ℝ≥0∞` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
+      "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `\u211d\u22650\u221e` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
       "direct_dependencies": [
         "Mathlib"
       ],
@@ -813,7 +797,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: first instance of the canonical family; the Ky Fan instance is the second and is still parked in DavisKahan)",
-      "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E →L[𝕜] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
+      "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E \u2192L[\ud835\udd5c] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
@@ -1176,13 +1160,13 @@
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "moved; introduced at Davis--Kahan commit 199390a; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
-        "ForTauCeti.Analysis.InnerProductSpace.Spectrum",
+        "TauCeti.Analysis.InnerProductSpace.Spectrum",
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "Mathlib.Analysis.InnerProductSpace.SingularValues"
       ],
@@ -1419,7 +1403,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 82d20de; authors Jon Crall, GPT-5.6 High, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer"
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
@@ -1506,7 +1490,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit caa0966; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "TauCeti.Analysis.InnerProductSpace.Positive.SquareRoot"
       ],
       "blocked_dependencies": [],
@@ -1525,7 +1509,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 29506b0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "TauCeti.Analysis.InnerProductSpace.SchurHorn"
       ],
@@ -1577,13 +1561,13 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Spectrum",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "moved; introduced at Davis--Kahan commit 56f7495; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "specialization removed; TauCeti.Analysis.InnerProductSpace.Spectrum provides the more general eigenvector cross-term identity",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.InnerProductSpace.Spectrum"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
+      "status": "upstreamed",
       "upstream_pr": null
     },
     {
@@ -1663,7 +1647,7 @@
       "roadmap_target": "matrix-spectral",
       "provenance_class": "moved; introduced at Davis--Kahan commit 2356fd0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "TauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable"
       ],
@@ -1700,7 +1684,7 @@
       ],
       "status": "upstreamed",
       "upstream_pr": null,
-      "migration_note": "Deleted the duplicate finite-dimensional entrywise-to-operator norm estimates after validating TauCeti.Analysis.Matrix.EntrywiseOpNorm. Consumers use its generalized rectangular or square-index bounds directly. The ℓ¹-to-ℓ² estimate is taken from Mathlib's PiLp.sum_norm_le_sqrt_card_mul_norm. Historical staging path retained here."
+      "migration_note": "Deleted the duplicate finite-dimensional entrywise-to-operator norm estimates after validating TauCeti.Analysis.Matrix.EntrywiseOpNorm. Consumers use its generalized rectangular or square-index bounds directly. The \u2113\u00b9-to-\u2113\u00b2 estimate is taken from Mathlib's PiLp.sum_norm_le_sqrt_card_mul_norm. Historical staging path retained here."
     },
     {
       "source_module": "ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable",
@@ -1712,7 +1696,7 @@
       "roadmap_target": "matrix-spectral",
       "provenance_class": "moved; introduced at Davis--Kahan commit 82989e1; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "TauCeti.Analysis.Matrix.EntrywiseOpNorm",
         "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity",
         "Mathlib.Analysis.Matrix.Hermitian",
@@ -2371,7 +2355,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFan",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
-      "provenance_class": "copied and specialised 2026-07-28: the Ky Fan symmetric ideal family at 𝕜 = ℂ, with the HasKyFanApproximationGaugeTriangle capability hypothesis discharged rather than assumed; rfl-equal to the generic construction it came from",
+      "provenance_class": "copied and specialised 2026-07-28: the Ky Fan symmetric ideal family at \ud835\udd5c = \u2102, with the HasKyFanApproximationGaugeTriangle capability hypothesis discharged rather than assumed; rfl-equal to the generic construction it came from",
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
@@ -3326,7 +3310,7 @@
       ],
       "status": "upstreamed",
       "upstream_pr": null,
-      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the ℝ specialization is used directly. Historical source and declaration inventory retained here."
+      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the \u211d specialization is used directly. Historical source and declaration inventory retained here."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3366,7 +3350,7 @@
       ],
       "status": "upstreamed",
       "upstream_pr": null,
-      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the ℝ specialization is used directly. Historical source and declaration inventory retained here."
+      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the \u211d specialization is used directly. Historical source and declaration inventory retained here."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -4240,7 +4224,7 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
@@ -4493,7 +4477,7 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
+        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
         "Mathlib.Analysis.Normed.Operator.Banach"

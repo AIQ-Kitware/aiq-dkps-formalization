@@ -20,7 +20,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 import Mathlib.Analysis.InnerProductSpace.Semisimple
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 

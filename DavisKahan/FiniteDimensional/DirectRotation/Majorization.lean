@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes
 import DavisKahan.FiniteDimensional.Core.OperatorBlocks
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import TauCeti.Analysis.InnerProductSpace.CourantFischer
 import ForTauCeti.Analysis.InnerProductSpace.KyFan
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization

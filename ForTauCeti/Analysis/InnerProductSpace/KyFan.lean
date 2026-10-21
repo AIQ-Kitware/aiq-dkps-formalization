@@ -22,12 +22,12 @@ inequality for all Ky Fan norms — weak majorization
 module
 
 public import Mathlib.Analysis.InnerProductSpace.SingularValues
-public import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
-public import ForTauCeti.Analysis.InnerProductSpace.Spectrum
+public import TauCeti.Analysis.InnerProductSpace.Spectrum
 public import TauCeti.Analysis.InnerProductSpace.ZeroExtension
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
@@ -94,7 +94,7 @@ theorem singularValues_comp_unitary (A : E →ₗ[𝕜] F) (U : E ≃ₗᵢ[𝕜
     calc (A ∘ₗ U.toLinearMap).isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨i, hi⟩
         = (isSymmetric_conj_unitary A.isSymmetric_adjoint_comp_self
             U.symm).eigenvalues rfl ⟨i, hi⟩ :=
-          congrFun (eigenvalues_congr hgram _ _ rfl) _
+          congrFun (LinearMap.IsSymmetric.eigenvalues_congr hgram _ _ rfl) _
       _ = A.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨i, hi⟩ :=
           congrFun (eigenvalues_conj_unitary A.isSymmetric_adjoint_comp_self rfl U.symm) _
   · rw [(A ∘ₗ U.toLinearMap).singularValues_of_finrank_le hi,
@@ -136,11 +136,13 @@ theorem singularValues_real_smul (A : E →ₗ[𝕜] F) {r : ℝ} (hr : 0 ≤ r)
       simp only [LinearMap.comp_apply, LinearMap.smul_apply, map_smul, smul_smul,
         ← RCLike.ofReal_mul, sq]
     -- Not shortened: every step here is a congruence term applied to explicit arguments
-    -- (`congrFun (eigenvalues_congr ..) ⟨i, hi⟩`), not a name `simp` could pick up, and the
+    -- (`congrFun (LinearMap.IsSymmetric.eigenvalues_congr ..) ⟨i, hi⟩`), not a
+    -- name `simp` could pick up, and the
     -- order is forced -- the two `eigenvalues_*` rewrites must fire before `Real.sqrt_mul`
     -- has a product to split.
     rw [(((r : 𝕜)) • A).singularValues_of_lt rfl hi, A.singularValues_of_lt rfl hi,
-      congrFun (eigenvalues_congr hgram (((r : 𝕜)) • A).isSymmetric_adjoint_comp_self
+      congrFun (LinearMap.IsSymmetric.eigenvalues_congr hgram
+        (((r : 𝕜)) • A).isSymmetric_adjoint_comp_self
         (isSymmetric_real_smul A.isSymmetric_adjoint_comp_self (r ^ 2)) rfl) ⟨i, hi⟩,
       congrFun (eigenvalues_real_smul A.isSymmetric_adjoint_comp_self rfl
         (by positivity : (0:ℝ) ≤ r ^ 2)) ⟨i, hi⟩,
@@ -229,8 +231,20 @@ private theorem sum_mul_le_sum_top {n k : ℕ} (hk : k ≤ n) {lam c : Fin n →
         (lam j + t * (c j - 1))
         = ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), lam j
           + t * (∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), c j) - t * k := by
+      have hcard : (Finset.univ.filter (fun j : Fin n => (j : ℕ) < k)).card = k := by
+        rcases lt_or_eq_of_le hk with hlt | rfl
+        · have hfilter : Finset.univ.filter (fun j : Fin n => (j : ℕ) < k) =
+              Finset.Iio (⟨k, hlt⟩ : Fin n) := by
+            ext j
+            simp [Fin.lt_def]
+          rw [hfilter, Fin.card_Iio]
+        · have hfilter : Finset.univ.filter (fun j : Fin k => (j : ℕ) < k) =
+              Finset.univ := by
+            ext j
+            simp
+          rw [hfilter, Finset.card_univ, Fintype.card_fin]
       simp only [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_sub_distrib,
-        Finset.sum_const, Finset.card_filter_lt hk, nsmul_eq_mul, mul_one]
+        Finset.sum_const, hcard, nsmul_eq_mul, mul_one]
       ring
     have htail_eq : ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), t * c j
         = t * ∑ j ∈ Finset.univ.filter (fun j : Fin n => ¬ (j : ℕ) < k), c j :=

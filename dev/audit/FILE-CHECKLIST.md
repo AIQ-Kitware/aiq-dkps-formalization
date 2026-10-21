@@ -1386,7 +1386,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/RayleighRitz.lean` — 618 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean` — 616 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/MultiplicityModelReal.lean` — 612 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean` — 609 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Complexification/FunctionalCalculus.lean` — 600 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RectangularUnitarilyInvariantSeminorm/Majorization.lean` — 594 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/Spectral/GapProjection.lean` — 594 lines · Lean source
@@ -1595,7 +1594,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Operator.lean` — 81 lines · Lean source
 - [x] `ForTauCeti/Analysis/Matrix/EntrywiseEigenvalue.lean` — 78 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/Commutant.lean` — 77 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/Spectrum.lean` — 77 lines · Lean source
 - [ ] `ForTauCeti/Analysis/CStarAlgebra/PositiveSquareRootCommute.lean` — 76 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Basic.lean` — 75 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointMaximal.lean` — 74 lines · Lean source

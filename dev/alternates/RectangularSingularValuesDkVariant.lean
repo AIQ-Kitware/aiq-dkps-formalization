@@ -14,7 +14,7 @@ Courant--Fischer names it used were repointed to the canonical API when the
 
 import Mathlib.Analysis.InnerProductSpace.SingularValues
 import Mathlib.Analysis.InnerProductSpace.Positive
-import ForTauCeti.Analysis.InnerProductSpace.CourantFischer
+import TauCeti.Analysis.InnerProductSpace.CourantFischer
 
 
 /-!

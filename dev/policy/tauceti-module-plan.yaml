@@ -33,11 +33,9 @@ topics:
 - id: T01
   title: Positive square root, operator modulus, functional calculus
   modules:
-  - Analysis.InnerProductSpace.CourantFischer
   - Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
   - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
   - Analysis.InnerProductSpace.OperatorModulus
-  - Analysis.InnerProductSpace.Spectrum
   - Analysis.CStarAlgebra.RealSpectrumFunctionalCalculus
 - id: T02
   title: Polar decomposition and partial isometries
@@ -383,7 +381,6 @@ rungs:
 - id: A
   title: Positive square root, operator modulus, polar decomposition
   seeds:
-  - Analysis.InnerProductSpace.CourantFischer
   - Analysis.InnerProductSpace.OperatorModulus
   - Analysis.InnerProductSpace.Polar.Decomposition
   - Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
@@ -407,7 +404,6 @@ rungs:
   - Analysis.InnerProductSpace.KyFan
   - Analysis.InnerProductSpace.Projection.Geometry
   - Analysis.InnerProductSpace.Singular.Subspace
-  - Analysis.InnerProductSpace.Spectrum
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 - id: E
   title: Principal-angle prerequisites
@@ -451,7 +447,6 @@ rungs:
   - Analysis.InnerProductSpace.AlignedBasis
   - Analysis.InnerProductSpace.AngleGeometry
   - Analysis.InnerProductSpace.Basic
-  - Analysis.InnerProductSpace.CourantFischer
   - Analysis.InnerProductSpace.EigenvalueChange
   - Analysis.InnerProductSpace.FiniteFrame
   - Analysis.InnerProductSpace.FrameFactorization
@@ -487,7 +482,6 @@ rungs:
   - Analysis.InnerProductSpace.Spectral.Cutoff
   - Analysis.InnerProductSpace.Spectral.Gap
   - Analysis.InnerProductSpace.Spectral.Subspace
-  - Analysis.InnerProductSpace.Spectrum
   - Analysis.InnerProductSpace.TwoDimensionalSingularValues
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
   - Analysis.Normed.FiniteLpGauge

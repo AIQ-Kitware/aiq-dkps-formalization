@@ -173,7 +173,8 @@ theorem le_eigenvalues_finiteGramOperator_of_forall_le_sum_sq
   have hfloor : ∀ x : E, a * ‖x‖ ^ 2 ≤ ‖finiteAnalysis 𝕜 v x‖ ^ 2 := fun x => by
     rw [norm_sq_finiteAnalysis]
     exact h x
-  have hcongr := eigenvalues_congr' (finiteGramOperator_eq_selfCompAdjoint 𝕜 v)
+  have hcongr := LinearMap.IsSymmetric.eigenvalues_congr
+    (finiteGramOperator_eq_selfCompAdjoint 𝕜 v)
     (isSymmetric_finiteGramOperator 𝕜 v)
     (isSymmetric_self_comp_adjoint (finiteAnalysis 𝕜 v)) hn
   rw [congrFun hcongr k]
@@ -189,7 +190,8 @@ theorem sum_sq_floor_of_le_eigenvalues_finiteGramOperator
       a ≤ (isSymmetric_finiteGramOperator 𝕜 v).eigenvalues hn k)
     (x : E) :
     a * ‖x‖ ^ 2 ≤ ∑ i, ‖inner 𝕜 (v i) x‖ ^ 2 := by
-  have hcongr := eigenvalues_congr' (finiteGramOperator_eq_selfCompAdjoint 𝕜 v)
+  have hcongr := LinearMap.IsSymmetric.eigenvalues_congr
+    (finiteGramOperator_eq_selfCompAdjoint 𝕜 v)
     (isSymmetric_finiteGramOperator 𝕜 v)
     (isSymmetric_self_comp_adjoint (finiteAnalysis 𝕜 v)) hn
   have hlowE : ∀ i : Fin (finrank 𝕜 E),
