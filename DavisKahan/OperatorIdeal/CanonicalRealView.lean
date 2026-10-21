@@ -87,7 +87,8 @@ noncomputable abbrev gaugeReal (A : E →L[𝕜] F) : ℝ :=
 
 /-- `Mem` is exactly membership in the canonical carrier. -/
 theorem mem_iff_mem_carrier (A : E →L[𝕜] F) :
-    N.Mem A ↔ A ∈ N.toOperatorIdealFamily.carrier := Iff.rfl
+    N.Mem A ↔ A ∈ N.toOperatorIdealFamily.carrier := by
+  rw [OperatorIdealFamily.mem_carrier_iff]
 
 /-- The real gauge is the `toReal` of the stored `ℝ≥0∞` gauge. -/
 theorem gaugeReal_eq_toReal (A : E →L[𝕜] F) :
@@ -103,24 +104,30 @@ theorem gaugeReal_modulus_eq (A : E →L[𝕜] F) :
 
 /-- The zero operator lies in every ideal. -/
 theorem zero_mem : N.Mem (0 : E →L[𝕜] F) :=
-  N.toOperatorIdealFamily.carrier.zero_mem
+  (N.mem_iff_mem_carrier 0).mpr N.toOperatorIdealFamily.carrier.zero_mem
 
 /-- Ideals are closed under addition. -/
 theorem add_mem {A B : E →L[𝕜] F} (hA : N.Mem A) (hB : N.Mem B) : N.Mem (A + B) :=
-  N.toOperatorIdealFamily.carrier.add_mem hA hB
+  (N.mem_iff_mem_carrier (A + B)).mpr
+    (N.toOperatorIdealFamily.carrier.add_mem
+      ((N.mem_iff_mem_carrier A).mp hA) ((N.mem_iff_mem_carrier B).mp hB))
 
 /-- Ideals are closed under scalar multiplication. -/
 theorem smul_mem (c : 𝕜) {A : E →L[𝕜] F} (hA : N.Mem A) : N.Mem (c • A) :=
-  N.toOperatorIdealFamily.carrier.smul_mem _ hA
+  (N.mem_iff_mem_carrier (c • A)).mpr
+    (N.toOperatorIdealFamily.carrier.smul_mem _ ((N.mem_iff_mem_carrier A).mp hA))
 
 /-- A symmetric ideal is closed under adjoints. -/
 theorem adjoint_mem {A : E →L[𝕜] F} (hA : N.Mem A) : N.Mem A.adjoint :=
-  N.adjoint_mem_carrier hA
+  (N.mem_iff_mem_carrier A.adjoint).mpr
+    (N.adjoint_mem_carrier ((N.mem_iff_mem_carrier A).mp hA))
 
 /-- The two-sided ideal law: outer composition stays in the ideal. -/
 theorem comp_mem (L : F →L[𝕜] G) {A : E →L[𝕜] F} (R : H →L[𝕜] E) (hA : N.Mem A) :
     N.Mem (L ∘L A ∘L R) :=
-  N.toOperatorIdealFamily.comp_mem_carrier _ _ hA
+  (N.mem_iff_mem_carrier (L ∘L A ∘L R)).mpr
+    (N.toOperatorIdealFamily.comp_mem_carrier L R
+      ((N.mem_iff_mem_carrier A).mp hA))
 
 /-- The real gauge is nonnegative on members. -/
 theorem gaugeReal_nonneg {A : E →L[𝕜] F} (_hA : N.Mem A) : 0 ≤ N.gaugeReal A :=
@@ -194,7 +201,7 @@ theorem gaugeReal_complete [N.toOperatorIdealFamily.IsComplete]
     obtain ⟨M, hM⟩ := hcauchy ε hε
     exact ⟨M, fun m hm n hn => by rw [hdist]; exact hM m n hm hn⟩
   obtain ⟨l, hl⟩ := cauchySeq_tendsto_of_complete hcs
-  refine ⟨l.val, l.val_mem, fun ε hε => ?_⟩
+  refine ⟨l.val, (N.mem_iff_mem_carrier l.val).mpr l.val_mem, fun ε hε => ?_⟩
   rw [Metric.tendsto_atTop] at hl
   obtain ⟨M, hM⟩ := hl ε hε
   refine ⟨M, fun n hn => ?_⟩

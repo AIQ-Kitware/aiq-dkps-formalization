@@ -269,7 +269,7 @@ limit back into an ideal-norm limit. -/
 instance isComplete_kyFanSymmetricIdealFamily
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.IsComplete where
-  completeSpace := by
+  completeSpace_carrier := by
     intro E F _ _ _ _ _ _
     have hnorm : ∀ x : (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.Elem E F,
         ‖x‖ = kyFanApproximationGauge k x.val :=
@@ -284,7 +284,9 @@ instance isComplete_kyFanSymmetricIdealFamily
       exact opNorm_le_kyFanApproximationGauge hk _
     obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
     refine ⟨TauCeti.OperatorIdealFamily.Elem.mk
-      (gauge_kyFanSymmetricIdealFamily_ne_top k hk L), ?_⟩
+      ((OperatorIdealFamily.mem_carrier_iff
+        (N := (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily)).mpr
+        (gauge_kyFanSymmetricIdealFamily_ne_top k hk L)), ?_⟩
     have hkR : (0 : ℝ) < k := by exact_mod_cast hk
     rw [Metric.tendsto_atTop] at hL ⊢
     intro ε hε

@@ -123,22 +123,27 @@ approximation numbers, so it never reaches `∞`. -/
 /-- The finite Ky Fan ideal is complete. -/
 instance isComplete_kyFanIdealFamily (k : ℕ) (hk : 0 < k) :
     (kyFanIdealFamily.{u, v} 𝕜 k hk).toOperatorIdealFamily.IsComplete where
-  completeSpace := by
+  completeSpace_carrier := by
     intro E F _ _ _ _ _ _
     have hnorm : ∀ x : (kyFanIdealFamily.{u, v} 𝕜 k hk).toOperatorIdealFamily.Elem E F,
         ‖x‖ = x.val.kyFanGaugeReal k :=
-      fun x => ENNReal.toReal_ofReal (x.val.kyFanGaugeReal_nonneg k)
+      fun x => by
+        rw [OperatorIdealFamily.Elem.norm_def, toReal_gauge_kyFanIdealFamily]
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
     have hop : CauchySeq fun n => (a n).val :=
       TauCeti.OperatorIdealFamily.Elem.cauchySeq_val ha
     obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
-    refine ⟨TauCeti.OperatorIdealFamily.Elem.mk (gauge_kyFanIdealFamily_ne_top k hk L), ?_⟩
+    refine ⟨TauCeti.OperatorIdealFamily.Elem.mk
+      ((TauCeti.OperatorIdealFamily.mem_carrier_iff
+        (N := (kyFanIdealFamily.{u, v} 𝕜 k hk).toOperatorIdealFamily)).mpr
+          (gauge_kyFanIdealFamily_ne_top k hk L)), ?_⟩
     have hkR : (0 : ℝ) < k := by exact_mod_cast hk
     rw [Metric.tendsto_atTop] at hL ⊢
     intro ε hε
     obtain ⟨M, hM⟩ := hL (ε / k) (div_pos hε hkR)
     refine ⟨M, fun n hn => ?_⟩
     rw [dist_eq_norm, hnorm]
+    rw [OperatorIdealFamily.Elem.val_sub, OperatorIdealFamily.Elem.val_mk]
     calc ((a n).val - L).kyFanGaugeReal k
         ≤ (k : ℝ) * ‖(a n).val - L‖ :=
           ContinuousLinearMap.kyFanGaugeReal_le_nat_mul_opNorm _ k

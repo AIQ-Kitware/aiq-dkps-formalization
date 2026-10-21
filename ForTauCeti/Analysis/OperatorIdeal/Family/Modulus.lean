@@ -66,27 +66,29 @@ theorem gauge_modulus_eq
     N.toOperatorIdealFamily.gauge T.modulus =
       N.toOperatorIdealFamily.gauge T := by
   let S := N.toOperatorIdealFamily
-  have hnorms := polarPartial_and_adjoint_enorm_le_one_rectangular T
+  have hU : ‖T.polarPartial‖ ≤ 1 := norm_polarPartial_le_one_rectangular T
+  have hUa : ‖T.polarPartial.adjoint‖ ≤ 1 := by
+    rw [ContinuousLinearMap.adjoint.norm_map]
+    exact hU
   apply le_antisymm
   · calc
       S.gauge T.modulus = S.gauge (T.polarPartial.adjoint ∘L T) := by
         rw [T.adjoint_polarPartial_comp_self]
       _ ≤ S.gauge T :=
-        S.gauge_comp_left_le_of_norm_le_one hnorms.2 T
+        S.gauge_comp_left_le_self hUa T
   · calc
       S.gauge T = S.gauge (T.polarPartial ∘L T.modulus) := by
         rw [T.polarPartial_comp_modulus]
       _ ≤ S.gauge T.modulus :=
-        S.gauge_comp_left_le_of_norm_le_one hnorms.1 T.modulus
+        S.gauge_comp_left_le_self hU T.modulus
 
 /-- An operator belongs to a symmetric ideal exactly when its modulus does. -/
 theorem modulus_mem_iff
     (N : SymmetricOperatorIdealFamily.{u, v} K) (T : E →L[K] F) :
     T.modulus ∈ N.toOperatorIdealFamily.carrier ↔
       T ∈ N.toOperatorIdealFamily.carrier := by
-  change N.toOperatorIdealFamily.gauge T.modulus ≠ ∞ ↔
-    N.toOperatorIdealFamily.gauge T ≠ ∞
-  rw [N.gauge_modulus_eq T]
+  rw [OperatorIdealFamily.mem_carrier_iff, OperatorIdealFamily.mem_carrier_iff,
+    N.gauge_modulus_eq T]
 
 end
 
