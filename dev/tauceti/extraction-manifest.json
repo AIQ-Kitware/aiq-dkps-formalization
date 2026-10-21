@@ -1132,18 +1132,16 @@
         "TauCeti.kyFanSum_unitary_comp",
         "TauCeti.kyFanSum_comp_unitary",
         "TauCeti.kyFanSum_real_smul",
-        "TauCeti.re_sum_inner_map_le_kyFanSum",
         "TauCeti.sum_le_kyFanSum_of_orthonormal",
         "TauCeti.orthonormal_unimodular_smul",
-        "TauCeti.sum_abs_le_kyFanSum_of_orthonormal",
-        "TauCeti.exists_orthonormal_re_sum_inner_map_eq_kyFanSum"
+        "TauCeti.sum_abs_le_kyFanSum_of_orthonormal"
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.KyFan",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.KyFan",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "partially upstreamed: Mathlib/TauCeti singular-value isometry invariance, scalar homogeneity, bounded-factor comparison, and the Ky Fan symmetric trace inequality replace the corresponding local proofs; remaining local Ky Fan variational and trace results are maintained here; introduced at Davis--Kahan commit 199390a; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "partially upstreamed: Mathlib/TauCeti singular-value isometry invariance, scalar homogeneity, bounded-factor comparison, the Ky Fan symmetric trace inequality, and the rectangular Ky Fan upper-bound and attainment principles replace the corresponding local proofs; remaining local coefficient-witness and real/complex phase results are maintained here; introduced at Davis--Kahan commit 199390a; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",

@@ -14,10 +14,9 @@ orthonormal families `u`, `v` of length `k`,
 
 `re (∑ i, ⟪u i, K (v i)⟫) ≤ kyFanApproximationGauge k K`.
 
-The finite principle (`re_sum_inner_map_le_kyFanSum`) requires both
-spaces finite-dimensional.  The proof here compresses `K` to the spans of the
-two families — a map between `k`-dimensional spaces — where the finite
-principle and the finite bridge
+The proof compresses `K` to the spans of the two families — a map between
+`k`-dimensional spaces — where Tau Ceti's canonical finite-dimensional
+variational principle and the finite bridge
 `kyFanSum_eq_kyFanApproximationGauge` apply, and then transports
 back along the ideal inequality `approximationSingularValue_comp_le`, using
 that the orthogonal projection and the subspace inclusion are contractions.
@@ -83,10 +82,14 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
       Submodule.starProjection_eq_self_iff.mpr (humem i)]
   -- finite Ky Fan principle on the compression
   have hfin : RCLike.re (∑ i, ⟪u' i, K' (v' i)⟫_𝕜) ≤
-      TauCeti.kyFanSum
-        k K'.toLinearMap :=
-    TauCeti.re_sum_inner_map_le_kyFanSum
-      hkle hu' hv'
+      TauCeti.kyFanSum k K'.toLinearMap := by
+    calc
+      RCLike.re (∑ i, ⟪u' i, K' (v' i)⟫_𝕜)
+          ≤ ‖∑ i, ⟪u' i, K' (v' i)⟫_𝕜‖ := RCLike.re_le_norm _
+      _ ≤ K'.toLinearMap.kyFanSum k := by
+        simpa using K'.toLinearMap.norm_sum_inner_le_kyFanSum hu' hv'
+      _ = TauCeti.kyFanSum k K'.toLinearMap :=
+        (TauCeti.kyFanSum_eq_linearMap_kyFanSum k K'.toLinearMap).symm
   -- finite bridge to the approximation-number prefix
   have hK'id : K'.toLinearMap.toContinuousLinearMap = K' := by
     ext x; rfl
