@@ -292,7 +292,7 @@ theorem sinThetaFrobenius_orthogonalSharpness (hε : 0 < ε) (hd : 1 ≤ d)
       Real.sqrt d := by
   classical
   rw [eigenspace_orthogonalSharpnessPopulation, eigenspace_orthogonalSharpnessSample b hε,
-    sinThetaFrobenius_spanIndices_of_subset_compl b (finrank_of_orthonormalBasis b) _ _
+    sinThetaFrobenius_spanIndices_of_subset_compl b _ _
       (fun i hi => by
         simp only [Set.mem_ofPred_eq] at hi
         simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_not]

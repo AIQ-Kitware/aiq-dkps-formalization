@@ -99,8 +99,8 @@ theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
   let V : Submodule 𝕜 E := Submodule.span 𝕜 (bS '' (↑s : Set (Fin n)))
   have hn : finrank 𝕜 E = n := by
     rw [Module.finrank_eq_card_basis bT.toBasis, Fintype.card_fin]
-  rw [sinThetaFrobenius_eq, UnitarilyInvariantSeminorm.frobenius_apply_basis (𝕜 := 𝕜) (E := E)
-    _ hn bT]
+  rw [sinThetaFrobenius_eq,
+    UnitarilyInvariantSeminorm.frobenius_apply bT (sinThetaMap U V)]
   congr 1
   have hcol : ∀ i : Fin n,
       ‖sinThetaMap U V (bT i)‖ ^ 2 =
@@ -399,8 +399,7 @@ theorem yuWangSamworth_sinTheta_frame_le
       2 * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / Δ := by
     refine le_two_mul_div_of_sq_gap_mul_sq_le hΔ
       ((UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).nonneg _) (hkey.trans ?_)
-    rw [UnitarilyInvariantSeminorm.frobenius_sq (𝕜 := 𝕜) (E := E) (B - A) hn
-      (hA.eigenvectorBasis hn)]
+    rw [UnitarilyInvariantSeminorm.sq_frobenius_apply (hA.eigenvectorBasis hn) (B - A)]
     exact sum_sq_norm_frameResidual_le hA hB hn hv
   -- Dimension-scaled operator-norm branch.
   have hop : sinThetaFrobenius U V ≤
@@ -955,7 +954,7 @@ Disjoint index sets span orthogonal subspaces, so every principal angle is a
 right angle: the sine cross-projection is the projector onto the first block and
 its Frobenius norm is the square root of that block's dimension. -/
 theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
-    (b : OrthonormalBasis (Fin n) 𝕜 E) (hn : finrank 𝕜 E = n)
+    (b : OrthonormalBasis (Fin n) 𝕜 E)
     (S T : Set (Fin n)) [DecidablePred (· ∈ S)] (hdisj : S ⊆ Tᶜ) :
     sinThetaFrobenius (b.spanIndices S) (b.spanIndices T) =
       Real.sqrt S.toFinset.card := by
@@ -972,8 +971,8 @@ theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
     change ((b.spanIndices T)ᗮ).starProjection ((b.spanIndices S).starProjection x) =
       (b.spanIndices S).starProjection x
     exact Submodule.starProjection_eq_self_iff.mpr hmem
-  rw [sinThetaFrobenius_eq, hsin, UnitarilyInvariantSeminorm.frobenius_apply_basis (𝕜 := 𝕜) (E
-    := E) _ hn b]
+  rw [sinThetaFrobenius_eq, hsin,
+    UnitarilyInvariantSeminorm.frobenius_apply b (projection (b.spanIndices S))]
   have hspan : b.spanIndices S =
       Submodule.span 𝕜 (b '' (↑S.toFinset : Set (Fin n))) := by
     rw [OrthonormalBasis.spanIndices_eq_span, Set.coe_toFinset]

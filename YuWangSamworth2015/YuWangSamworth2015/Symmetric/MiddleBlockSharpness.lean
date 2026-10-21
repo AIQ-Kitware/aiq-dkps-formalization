@@ -374,7 +374,7 @@ theorem sinThetaFrobenius_middleSharpness (hε : 0 < ε) (hε1 : ε < 3)
   classical
   rw [eigenspace_middleSharpnessPopulation b,
     eigenspace_middleSharpnessSample b hε hε1,
-    sinThetaFrobenius_spanIndices_of_subset_compl b (finrank_eq_of_orthonormalBasis b)
+    sinThetaFrobenius_spanIndices_of_subset_compl b
       _ _ (fun i hi => by simp only [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi ⊢; omega)]
   congr 1
   rw [Set.toFinset_ofPred, card_filter_val_Ico p (p - 2 * d) (p - d) (by omega)]
