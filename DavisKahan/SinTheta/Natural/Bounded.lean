@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Natural.Generalized
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.SinTheta.Natural.Real
 
 open TauCeti.DavisKahan.Sylvester
@@ -50,7 +51,7 @@ theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
       ((A0.toLinearMap.toPMap ⊤))
       (selfAdjointSpectralRestriction
         ((A.toLinearMap.toPMap ⊤))
-        (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+        (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
         Sᶜ hS.compl) δ)
     (hR : N.Mem
@@ -59,34 +60,34 @@ theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
       ((ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion
           ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+          (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS ∘L
         (selfAdjointSpectralSubspaceInclusion
           ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+          (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS).adjoint) ∘L X) ∧
       δ * N.gauge
         ((ContinuousLinearMap.id ℂ E -
           selfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
-            (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+            (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS ∘L
           (selfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
-            (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+            (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS).adjoint) ∘L X)
         ≤ N.gauge
           (generalResidual A X A0) := by
   apply sinTheta_unbounded_spectralSubspace_of_spectrumGap
     N ((A.toLinearMap.toPMap ⊤))
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
       S hS ((A0.toLinearMap.toPMap ⊤))
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A0)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A0)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA0))
       X (generalResidual A X A0) hX
   case hXdom => intro x; simp
@@ -108,7 +109,7 @@ theorem generalizedSinTheta_bounded_spectralSubspace_of_spectrumGap
       ((A0.toLinearMap.toPMap ⊤))
       (selfAdjointSpectralRestriction
         ((A.toLinearMap.toPMap ⊤))
-        (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+        (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
         Sᶜ hS.compl) δ)
     (hR : N.Mem
@@ -117,24 +118,24 @@ theorem generalizedSinTheta_bounded_spectralSubspace_of_spectrumGap
       (directedSinThetaOperator X
         (selfAdjointSpectralSubspaceInclusion
           ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+          (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS) hframe hε) ∧
       δ * ε * N.gauge
         (directedSinThetaOperator X
           (selfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
-            (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+            (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS) hframe hε)
         ≤ N.gauge
           (generalResidual A X A0) := by
   apply generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
     N ((A.toLinearMap.toPMap ⊤))
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
       S hS ((A0.toLinearMap.toPMap ⊤))
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A0)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A0)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA0))
       X (generalResidual A X A0) hδ hε hframe
   case hXdom => intro x; simp
@@ -165,7 +166,7 @@ theorem sinTheta_bounded_spectralSubspace_real
       ((A0.toLinearMap.toPMap ⊤))
       (realSelfAdjointSpectralRestriction
         ((A.toLinearMap.toPMap ⊤))
-        (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+        (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
         Sᶜ hS.compl) δ)
     (hR : N.Mem
@@ -174,34 +175,34 @@ theorem sinTheta_bounded_spectralSubspace_real
       ((ContinuousLinearMap.id ℝ E -
         realSelfAdjointSpectralSubspaceInclusion
           ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+          (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS ∘L
         (realSelfAdjointSpectralSubspaceInclusion
           ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+          (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS).adjoint) ∘L X) ∧
       δ * N.gauge
         ((ContinuousLinearMap.id ℝ E -
           realSelfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
-            (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+            (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS ∘L
           (realSelfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
-            (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+            (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS).adjoint) ∘L X)
         ≤ N.gauge
           (generalResidual A X A0) := by
   apply sinTheta_unbounded_real_spectralSubspace
     N ((A.toLinearMap.toPMap ⊤))
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
       S hS ((A0.toLinearMap.toPMap ⊤))
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A0)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A0)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA0))
       X (generalResidual A X A0) hX
   case hXdom => intro x; simp
@@ -224,7 +225,7 @@ theorem sinTheta_generalized_bounded_spectralSubspace_real
       ((A0.toLinearMap.toPMap ⊤))
       (realSelfAdjointSpectralRestriction
         ((A.toLinearMap.toPMap ⊤))
-        (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+        (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
         Sᶜ hS.compl) δ)
     (hR : N.Mem
@@ -233,24 +234,24 @@ theorem sinTheta_generalized_bounded_spectralSubspace_real
       (directedSinThetaOperatorReal X
         (realSelfAdjointSpectralSubspaceInclusion
           ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+          (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS) hframe hε) ∧
       δ * ε * N.gauge
         (directedSinThetaOperatorReal X
           (realSelfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
-            (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+            (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS) hframe hε)
         ≤ N.gauge
           (generalResidual A X A0) := by
   apply generalizedSinTheta_unbounded_real_spectralSubspace
     N ((A.toLinearMap.toPMap ⊤))
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
       S hS ((A0.toLinearMap.toPMap ⊤))
-      (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A0)
+      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A0)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA0))
       X (generalResidual A X A0) hδ hε hframe
   case hXdom => intro x; simp

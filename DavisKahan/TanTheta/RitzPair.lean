@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.TanTheta.Theorem63UnboundedCompression
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.TanTheta.UnboundedSpectrum
 
 open TauCeti.DavisKahan.Sylvester
@@ -96,7 +97,7 @@ noncomputable def ofTrialBlock (D : BoundedCompressionTrialBlock A Z) :
   trial :=
     { compression := D.operator.toLinearMap.toPMap ⊤
       compression_isSelfAdjoint :=
-        TauCeti.LinearPMap.isSelfAdjoint_toPMap_top D.operator_selfAdjoint
+        _root_.LinearPMap.isSelfAdjoint_toPMap_top D.operator_selfAdjoint
       residual := D.residual
       residual_orthogonal := fun z z' =>
         (Submodule.mem_orthogonal' _ _).mp (D.residual_mem_orthogonal z) _ z'.2 }

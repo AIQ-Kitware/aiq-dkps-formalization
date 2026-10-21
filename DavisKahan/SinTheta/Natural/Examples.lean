@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Natural.Bounded
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.SinTheta.Natural.Reducing
 import DavisKahan.SinTheta.Natural.GapConvenience
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
@@ -140,14 +141,14 @@ example
     (hgap : SpectralSylvesterGap
       ((A0.toLinearMap.toPMap ⊤))
       (selfAdjointSpectralRestriction ((A.toLinearMap.toPMap ⊤))
-        (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+        (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)) Sᶜ hS.compl) δ) :
     δ * ‖(ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+          (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)) S hS ∘L
         (selfAdjointSpectralSubspaceInclusion ((A.toLinearMap.toPMap ⊤))
-          (TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
+          (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)) S hS).adjoint) ∘L X‖
       ≤ ‖generalResidual A X A0‖ := by
   have hmain := sinTheta_bounded_spectralSubspace_of_spectrumGap
@@ -190,10 +191,10 @@ theorem realPlane_zeroResidual_model :
     simp [A, U, TauCeti.LinearPMap.ReducesSubspace,
       TauCeti.LinearPMap.InvariantSubspace]
   have hA : IsSelfAdjoint A := by
-    exact TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := (0 : RealPlane →L[ℝ] RealPlane))
+    exact _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := (0 : RealPlane →L[ℝ] RealPlane))
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (by intro x y; simp))
   have hA0 : _root_.IsSelfAdjoint A0 := by
-    exact TauCeti.LinearPMap.isSelfAdjoint_toPMap_top (T := (0 : RealPlane →L[ℝ] RealPlane))
+    exact _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := (0 : RealPlane →L[ℝ] RealPlane))
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (by intro x y; simp))
   have hA0upper : TauCeti.LinearPMap.SemiboundedAbove A0 0 := by
     intro x

@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import DavisKahan.All
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import ForTauCeti.Analysis.Normed.Operator.Restriction
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
@@ -48,7 +49,7 @@ example (T : E →ₗ.[K] F) :
 
 example [CompleteSpace E] (A : E →L[K] E) (hA : A.IsSymmetric) :
     IsSelfAdjoint ((A : E →ₗ[K] E).toPMap ⊤) :=
-  TauCeti.LinearPMap.isSelfAdjoint_toPMap_top
+  _root_.LinearPMap.isSelfAdjoint_toPMap_top
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)
 
 example [CompleteSpace E] {A B : E →L[K] E}

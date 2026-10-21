@@ -2,10 +2,6 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
-Adapted from: Spectra (https://github.com/adambornemann-glitch/Spectra),
-  `Spectra/Operator/Bounded.lean` at
-  commit `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`, Copyright (c) 2026 Spectra
-  Formalization Project, Apache 2.0.  See `## Provenance` below.
 -/
 module
 
@@ -13,35 +9,22 @@ public import Mathlib.Analysis.InnerProductSpace.LinearPMap
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
-# Partial-map self-adjointness and unitary conjugation
+# Partial-map unitary conjugation during consumer migration
 
-* `TauCeti.LinearPMap.isSelfAdjoint_toPMap_top`: a bounded self-adjoint operator,
-  viewed as a partial map on all of `H`, is self-adjoint in the `LinearPMap`
-  sense.
-
-Bounded Kato--Rellich now uses Tau Ceti's accepted theorem directly. The
-remaining self-adjointness and unitary-conjugation declarations are still under
-upstream-consumption review.
+The declarations in this module have accepted counterparts in Tau Ceti's
+`LinearPMap.Constructions`. They remain temporarily while downstream consumers
+switch to Tau Ceti's root `LinearPMap` API; this module is not a distinct
+mathematical foundation to maintain.
 
 ## Provenance
 
-* **Original repository:** Spectra, commit `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`.
-* **Original declarations:** the self-adjointness obligation inside
-  `Spectra.Operator.SelfAdjointOperator.ofBounded` in
-  `Spectra/Operator/Bounded.lean`. The unitary-conjugation API was developed in
-  DKPS for its domain-aware spectral consumers.
-* **Original authors / copyright / licence:** Copyright (c) 2026 Spectra
-  Formalization Project, Apache 2.0.  Apache 2.0 §4(b): **modified** — see below.
-  §4(c): notices retained here and in the file header.
-* **Extraction class:** *generalized* for the bounded self-adjointness lemma;
-  *new reusable mathematics* for unitary conjugation.
-* **Semantic differences:**
-  1. Spectra's `ofBounded` produces its bundled `SelfAdjointOperator` structure.
-     Only the self-adjointness *fact* is ported, over the raw `LinearPMap`,
-     because the DKPS `U1` migration is removing bundled closed-operator
-     wrappers rather than adding one.
-  2. Domain-defined perturbation and bounded Kato--Rellich declarations were
-     removed here after direct migration to Tau Ceti's accepted APIs.
+* **Original repository:** Davis--Kahan/DKPS formalization (Kitware, Inc.).
+* **Original implementation:** the unitary-conjugation definitions and laws
+  were introduced in this repository. Tau Ceti later accepted equivalent
+  declarations in `TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions`.
+* **Current extraction class:** duplicate awaiting consumer migration; remove
+  this module when its remaining imports have moved to the accepted upstream
+  module.
 -/
 
 public section
@@ -53,22 +36,6 @@ open scoped InnerProductSpace
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
-
-section Bounded
-
-variable [CompleteSpace H]
-
-/-- A bounded self-adjoint operator is self-adjoint as a partial map on `⊤`. -/
-theorem isSelfAdjoint_toPMap_top {T : H →L[𝕜] H} (hT : IsSelfAdjoint T) :
-    IsSelfAdjoint ((T : H →ₗ[𝕜] H).toPMap ⊤) := by
-  have hdense : Dense ((⊤ : Submodule 𝕜 H) : Set H) := by
-    rw [Submodule.top_coe]; exact dense_univ
-  have hTadj : ContinuousLinearMap.adjoint T = T :=
-    (ContinuousLinearMap.star_eq_adjoint T).symm.trans hT
-  rw [_root_.LinearPMap.isSelfAdjoint_def,
-    ContinuousLinearMap.toPMap_adjoint_eq_adjoint_toPMap_of_dense T hdense, hTadj]
-
-end Bounded
 
 section UnitaryConj
 
