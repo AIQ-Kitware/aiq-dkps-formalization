@@ -1,0 +1,46 @@
+{
+  "schema": "dk-proof-archaeology/git-history-targets/v1",
+  "explanation": "Curated Git path probes, not mathematical dependency or ancestry assertions. Each path can be absent or renamed at historical revisions.",
+  "cases": {
+    "sine_theta": {
+      "paths": [
+        "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+        "DavisKahan/FiniteDimensional/SinTheta/TrialMap.lean",
+        "DavisKahan/README.md",
+        "dev/davis-kahan-1970-formalization-result-inventory.json",
+        "dev/davis-kahan-1970-full-source-census.json",
+        "dev/davis-kahan-1970-source-atom-inventory.json",
+        "dev/davis-kahan-1970-completion-handoff.md",
+        "ForTauCeti/README.md",
+        "dev/tauceti/spectra-provenance-map.md"
+      ],
+      "needles": [
+        "sinTheta_unbounded_formGap_whereDefinedUIN_rclike",
+        "sourceDirectedSinThetaOperator_eq_modulus",
+        "FormBoundedSylvesterGap",
+        "IsTrialResidual"
+      ],
+      "ledger_ids": ["S2-sin-theta"]
+    },
+    "direct_rotation": {
+      "paths": [
+        "DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean",
+        "DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean",
+        "DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean",
+        "DavisKahan/FiniteDimensional/DirectRotation/Majorization.lean",
+        "DavisKahan/Sources/DavisKahan1970/Section4.lean",
+        "DavisKahan/Sources/DavisKahan1970/Section4SmallAngle.lean",
+        "dev/davis-kahan-1970-formalization-result-inventory.json",
+        "dev/davis-kahan-1970-full-source-census.json",
+        "papers/dk_formalization_journal/counterexample.tex"
+      ],
+      "needles": [
+        "not_davisKahanProposition4_4_Finite",
+        "arbitrarilySmall_fullDisplacement_refuted",
+        "directRotation_fullDisplacement_qnorm",
+        "Proposition 4.4"
+      ],
+      "ledger_ids": ["DK-4.4-prop"]
+    }
+  }
+}

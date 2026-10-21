@@ -155,3 +155,13 @@ as a repository asset; store a file digest and scholarly locator instead.
 
 **First useful result:** finish the sine-theta derivation and its historical
 annotations before widening this into an all-29-results dependency atlas.
+
+## Historical versions of this formalization
+
+For Git revision archaeology, theorem-source evolution, deleted/renamed module
+tracing, historical changes in source-census claims, and comparing saved
+`leanq` graphs from two built revisions, see
+[HISTORY_TOOLS.md](HISTORY_TOOLS.md). Those tools can inspect any locally
+accessible Git commit **without** checking it out or modifying the repository.
+They keep Git-source evidence distinct from cited historical mathematics and
+from compiler verification at a particular revision.
