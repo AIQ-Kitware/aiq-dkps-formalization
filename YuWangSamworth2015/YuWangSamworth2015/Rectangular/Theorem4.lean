@@ -48,6 +48,7 @@ Two deliberate departures from the printed statement, both recorded in
 
 namespace YuWangSamworth2015
 open TauCeti
+open LinearMap.IsSymmetric (IsOrderedEigenframe)
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators

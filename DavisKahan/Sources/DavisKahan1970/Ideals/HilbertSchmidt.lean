@@ -7,7 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Data.ENNReal.Inv
+import Mathlib.Basic.ENNReal.Inv
 
 /-!
 # The source square or Hilbert--Schmidt norm
@@ -212,7 +212,8 @@ theorem approximationNumberEnergy_comp_le
 
 /-- **The two-sided ideal property**, at the level of finite approximation-number
 energy.  `ContinuousLinearMap.IsHilbertSchmidt.comp` is the same fact about the
-canonical predicate; the two are identified by `isHilbertSchmidt_iff_approximationNumberEnergy_ne_top`
+canonical predicate; the two are identified by
+`isHilbertSchmidt_iff_approximationNumberEnergy_ne_top`
 once the coordinate bridge is in scope. -/
 theorem approximationNumberEnergy_ne_top_comp
     {𝕜 : Type u} [RCLike 𝕜]

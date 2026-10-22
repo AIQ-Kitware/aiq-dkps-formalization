@@ -39,6 +39,8 @@ public section
 namespace YuWangSamworth2015
 open TauCeti
 
+open LinearMap.IsSymmetric (IsOrderedEigenframe isOrderedEigenframe_iff)
+open LinearMap.IsSymmetric (isOrderedEigenframe_eigenvectorBasis)
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -277,7 +279,7 @@ eigenvalues, and then take `V = (v_r,…,v_s)` and `V̂ = (v̂_r,…,v̂_s)` to 
 matrices with orthonormal columns satisfying `Σ vⱼ = λⱼ vⱼ` and `Σ̂ v̂ⱼ = λ̂ⱼ v̂ⱼ`.
 Removing the sample eigengap is the paper's contribution, so the sample block
 must be allowed to cut through a repeated `λ̂`; the hypothesis is exactly
-`TauCeti.IsOrderedEigenframe` for both operators at a common index embedding.
+`LinearMap.IsSymmetric.IsOrderedEigenframe` for both operators at a common index embedding.
 
 The theorems below are that statement.  `CorrespondingEigenblock` — which pins
 both blocks to Mathlib's chosen eigenbases — is recovered from them as the
@@ -349,10 +351,10 @@ theorem yuWangSamworth_sinTheta_le_residual
   have hR0 : 0 ≤ R := Finset.sum_nonneg fun i _ => sq_nonneg _
   have hkey : Δ ^ 2 * sinThetaFrobenius U V ^ 2 ≤ R := by
     rw [sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
-      hu.orthonormal hv.orthonormal]
+      (isOrderedEigenframe_iff.mp hu).orthonormal (isOrderedEigenframe_iff.mp hv).orthonormal]
     exact sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le hA
       hΔ.le (hu.pointInternalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
-      fun i => hu.toIsEigenFamily.eigenvalue_mem_restrictedPointSpectrum i
+      fun i => (isOrderedEigenframe_iff.mp hu).eigenvalue_mem_restrictedPointSpectrum i
   have hs0 : 0 ≤ sinThetaFrobenius U V :=
     sinThetaFrobenius_nonneg U V
   rw [le_div_iff₀ hΔ]
@@ -390,10 +392,10 @@ theorem yuWangSamworth_sinTheta_frame_le
   set R := ∑ i, ‖(hA.eigenvalues hn (e i) : 𝕜) • v i - A (v i)‖ ^ 2 with hR
   have hkey : Δ ^ 2 * sinThetaFrobenius U V ^ 2 ≤ R := by
     rw [hR, sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
-      hu.orthonormal hv.orthonormal]
+      (isOrderedEigenframe_iff.mp hu).orthonormal (isOrderedEigenframe_iff.mp hv).orthonormal]
     exact sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le hA
       hΔ.le (hu.pointInternalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
-      fun i => hu.toIsEigenFamily.eigenvalue_mem_restrictedPointSpectrum i
+      fun i => (isOrderedEigenframe_iff.mp hu).eigenvalue_mem_restrictedPointSpectrum i
   -- Frobenius branch.
   have hfrob : sinThetaFrobenius U V ≤
       2 * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / Δ := by
@@ -588,7 +590,9 @@ theorem yuWangSamworth_alignedBasis_frame_le
           min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   obtain ⟨u', v', hu', hv', hspanU, hspanV, hsum⟩ :=
-    exists_aligned_orthonormalBasis hu.finrank_span hv.finrank_span
+    exists_aligned_orthonormalBasis
+      (by simpa only [Fintype.card_fin] using hu.finrank_span)
+      (by simpa only [Fintype.card_fin] using hv.finrank_span)
   refine ⟨u', v', hu', hv', hspanU, hspanV, ?_⟩
   have hsine := yuWangSamworth_sinTheta_frame_le hu hv hΔ hgap
   have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
@@ -623,7 +627,9 @@ theorem yuWangSamworth_alignedBasis_le_residual
         Real.sqrt 2 *
           Real.sqrt (∑ i, ‖(hA.eigenvalues hn (e i) : 𝕜) • v i - A (v i)‖ ^ 2) / Δ := by
   obtain ⟨u', v', hu', hv', hspanU, hspanV, hsum⟩ :=
-    exists_aligned_orthonormalBasis hu.finrank_span hv.finrank_span
+    exists_aligned_orthonormalBasis
+      (by simpa only [Fintype.card_fin] using hu.finrank_span)
+      (by simpa only [Fintype.card_fin] using hv.finrank_span)
   refine ⟨u', v', hu', hv', hspanU, hspanV, ?_⟩
   have hsine := yuWangSamworth_sinTheta_le_residual hu hv hΔ hgap
   have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))

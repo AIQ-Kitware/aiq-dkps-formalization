@@ -84,6 +84,7 @@ the choice of presentation is a notational one and is machine-checked.
 
 namespace YuWangSamworth2015
 
+open LinearMap.IsSymmetric (isOrderedEigenframe_iff)
 open TauCeti YuWangSamworth2015.DavisKahanTheory
 open scoped InnerProductSpace BigOperators
 open Module (finrank)

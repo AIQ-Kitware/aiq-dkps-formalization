@@ -44,8 +44,9 @@ review overlay is for the maintainer's next compilation pass.
 | Sylvester foundations, including [#14951](https://github.com/TauCetiProject/TauCeti/pull/14951) | The finite Sylvester solver and bounded operator wrapper/module were removed (`4bcd2338`, `2d763193`); consumers use `ContinuousLinearMap.sylvester`. | Gap-specific, UI-seminorm and unbounded analytic estimates that are not consequences of the basic equation API alone |
 | Canonical point spectrum | Local `restrictedPointSpectrum` and `PointSpectrumIn` representations retired; consumers use opaque-safe `Module.End.*` theorem API (`1bf4bb1f`). | `restrictedPointSpectrum_restrict` and `pointSpectrumIn_restrict_iff`: actual subtype-restriction transport; linear-map projector and local invariant-subspace presentation, where still used |
 
-The local `ForTauCeti.Analysis.InnerProductSpace.Spectral.EigenFrame` **is not**
-retired. Its remaining structure is a separate next step, as described below.
+The local `ForTauCeti.Analysis.InnerProductSpace.Spectral.EigenFrame` remains
+because it contains independent gap-separated theorems. The two parallel
+representations are retired by the follow-on overlay, as described below.
 
 ## Concrete review corrections in this overlay
 
@@ -76,38 +77,35 @@ retired. Its remaining structure is a separate next step, as described below.
 
 ## Next implementation queue, in dependency order
 
-### 1. Consume SSP-D01 eigenfamily/eigenframe API — highest priority
+### 1. SSP-D01 eigenfamily/eigenframe consumption — submitted for compilation
 
-The accepted module `TauCeti.Analysis.InnerProductSpace.Spectral.Eigenframe`
-provides:
+The next overlay migrates the maintained callers of the formerly local
+`TauCeti.IsEigenFamily` and `TauCeti.IsOrderedEigenframe` to the accepted
+`Module.End.IsEigenfamily` and
+`LinearMap.IsSymmetric.IsOrderedEigenframe` (SSP-D01 [#18942](https://github.com/TauCetiProject/TauCeti/pull/18942)).
+The duplicated structure, ordered-frame predicate, constructors, dimension,
+invariance, and restricted-spectrum lemmas are no longer maintained locally.
+`ForTauCeti/.../Spectral/EigenFrame.lean` now supplies **only two independent
+population-gap results**, specialized to `Fin d` but proved over the canonical
+ordered-frame predicate:
 
-- `Module.End.IsEigenfamily` and eigenfamily span, restricted-point-spectrum,
-  and finrank results;
-- `LinearMap.IsSymmetric.IsOrderedEigenframe` and its constructions;
-- `LinearMap.IsSymmetric.CorrespondingEigenblocks` for two operators with the
-  same indexed eigenvalue selection.
+- `LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices`;
+- `LinearMap.IsSymmetric.IsOrderedEigenframe.pointInternalGap_span`.
 
-The remaining local source is
-`ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean`:
-`TauCeti.IsEigenFamily` and `TauCeti.IsOrderedEigenframe` duplicate the
-canonical representation (with the latter locally specialized to `Fin d`).
-This is **accepted but not yet consumed**. The direct maintained caller group
-includes `ForTauCeti/.../Spectral/ResidualGap.lean` and YWS
-`Core/{Residual,Procrustes,Statistics}.lean`,
-`Symmetric/{Theorem1,Theorem2}.lean`, and `Rectangular/Theorem4.lean`.
+The latter uses the upstream eigenfamily containment and span-invariance
+lemmas, and re-expresses the complementary orthonormal basis locally. It does
+not assume Mathlib's eigenvector choice on the perturbed side. The YWS
+paper-facing theorem names and mathematical conclusions remain unchanged.
 
-First rewrite the *substantive* consumers of the canonical eigenfamily and
-ordered eigenframe, including changes of namespaces and index types. Then
-remove the duplicate local structures and forwarding lemmas only when every
-caller is migrated. Do not paper over the namespace mismatch with a permanent
-alias or make the proofs depend on Mathlib's arbitrarily chosen eigenvectors.
-**Preserve** the gap-separated local
-`IsOrderedEigenframe.span_eq_spanIndices` and
-`IsOrderedEigenframe.pointInternalGap_span`: #18942 expressly deferred these
-results. They may need new statements/proofs over the upstream structure,
-but must not be dropped or weakened to achieve a line-count reduction.
+Changed consumer cluster: `Spectral/{EigenFrame,ResidualGap}.lean`, YWS
+`Core/{Residual,Statistics,Procrustes}.lean`,
+`Symmetric/{Theorem1,Theorem2}.lean`, and
+`Rectangular/{Theorem4,SourceTheorem3}.lean`.
+This overlay has been source-checked but requires the maintainer's Lean
+compilation; the earlier verified mathematical results are not being called
+unverified merely because this new refactor has not yet been compiled.
 
-Focused starting build:
+Focused build (always cache first):
 
 ```bash
 lake exe cache get
@@ -115,9 +113,20 @@ lake build \
   ForTauCeti.Analysis.InnerProductSpace.Spectral.EigenFrame \
   ForTauCeti.Analysis.InnerProductSpace.Spectral.ResidualGap \
   YuWangSamworth2015.Core.Residual \
+  YuWangSamworth2015.Core.Statistics \
+  YuWangSamworth2015.Core.Procrustes \
+  YuWangSamworth2015.Symmetric.Theorem1 \
   YuWangSamworth2015.Symmetric.Theorem2 \
-  YuWangSamworth2015.Rectangular.Theorem4
+  YuWangSamworth2015.Rectangular.Theorem4 \
+  YuWangSamworth2015.Rectangular.SourceTheorem3
 ```
+
+After the focused build, run `lake build` for downstream closure. If this
+refactor compiles, the next candidate is to compare the YWS
+`CorrespondingEigenblock` (which fixes a chosen eigenbasis/index set) with
+upstream `LinearMap.IsSymmetric.CorrespondingEigenblocks` (which quantifies over
+*arbitrary* matching frames). Preserve the stronger choice-independent YWS
+statements; never collapse these definitions based on matching names alone.
 
 ### 2. Finish genuinely redundant restriction presentation, selectively
 
