@@ -695,11 +695,18 @@ theorem reducesSubspace_specRange : ReducesSubspace A (specRange hA B hB) := by
     change (x : H) - (specRange hA B hB).starProjection (x : H) ∈ A.domain
     rw [← hstar]
     exact A.domain.sub_mem x.property (specProjection_mem_domain hA B hB x)
-  · intro x hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     exact apply_mem_specRange hA B hB hx
-  · intro x hx
-    rw [← specRange_compl hA B hB] at hx ⊢
-    exact apply_mem_specRange hA Bᶜ hB.compl hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
+    have heq := congrArg (fun U : Submodule ℂ H => (x : H) ∈ U)
+      (specRange_compl hA B hB)
+    have hx' : (x : H) ∈ specRange hA Bᶜ hB.compl :=
+      heq.mpr hx
+    have hmem := apply_mem_specRange hA Bᶜ hB.compl hx'
+    exact (congrArg (fun U : Submodule ℂ H => A x ∈ U)
+      (specRange_compl hA B hB)).mp hmem
 
 /-- **The restriction of a self-adjoint operator to one of its spectral
 ranges.** -/

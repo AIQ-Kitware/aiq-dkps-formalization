@@ -109,21 +109,13 @@ theorem MapsDomainTo.comp
   intro z
   exact hX ⟨Y (z : G), hY z⟩
 
--- `@[expose]` for the same reason as `MapsDomainTo` above: consumers *apply* the
--- statement (`h x hx : A x ∈ U`), which is unfolding by definition.
-/-- A subspace is invariant under a partial linear map on its domain. -/
-@[expose]
-def InvariantSubspace
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
-  ∀ x : A.domain, (x : E) ∈ U → A x ∈ U
-
 /-- A subspace reduces a partial linear map when both orthogonal projections
 preserve its domain and both summands are invariant. -/
 def ReducesSubspace
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : Prop :=
   (∀ x : A.domain, U.starProjection (x : E) ∈ A.domain) ∧
   (∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain) ∧
-  InvariantSubspace A U ∧ InvariantSubspace A Uᗮ
+  A.IsInvariant U ∧ A.IsInvariant Uᗮ
 
 /-- Build a `ReducesSubspace` from its four components.  The definition is a
 conjunction whose body is not exposed across module boundaries, so this is the
@@ -132,7 +124,7 @@ theorem ReducesSubspace.of_components
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (h₁ : ∀ x : A.domain, U.starProjection (x : E) ∈ A.domain)
     (h₂ : ∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain)
-    (h₃ : InvariantSubspace A U) (h₄ : InvariantSubspace A Uᗮ) :
+    (h₃ : A.IsInvariant U) (h₄ : A.IsInvariant Uᗮ) :
     ReducesSubspace A U := ⟨h₁, h₂, h₃, h₄⟩
 
 namespace ReducesSubspace
@@ -154,13 +146,13 @@ theorem orthogonalProjection_mem_domain
 /-- The selected summand of a reducing subspace is invariant. -/
 theorem invariant
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (h : ReducesSubspace A U) : InvariantSubspace A U :=
+    (h : ReducesSubspace A U) : A.IsInvariant U :=
   h.2.2.1
 
 /-- The complementary summand of a reducing subspace is invariant. -/
 theorem orthogonal_invariant
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (h : ReducesSubspace A U) : InvariantSubspace A Uᗮ :=
+    (h : ReducesSubspace A U) : A.IsInvariant Uᗮ :=
   h.2.2.2
 
 /-- Orthogonal complementation preserves the reducing-subspace property. -/
@@ -172,9 +164,10 @@ theorem orthogonal
   · intro x
     simpa only [Submodule.orthogonal_orthogonal] using
       h.projection_mem_domain x
-  · intro x hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     rw [Submodule.orthogonal_orthogonal] at hx ⊢
-    exact h.invariant x hx
+    exact h.invariant.apply_mem x hx
 
 /-- Convert the historical four-component donor condition into the canonical Tau Ceti
 reducing-subspace structure.  The second projection-domain condition is redundant: it follows
@@ -184,17 +177,16 @@ theorem toIsReducing
     (h : ReducesSubspace A U) : _root_.LinearPMap.IsReducing A U where
   starProjection_mem_domain hx := h.projection_mem_domain ⟨_, hx⟩
   isInvariant := (_root_.LinearPMap.isInvariant_iff (A := A) (U := U)).2
-    (fun x hx => h.invariant x hx)
+    (fun x hx => h.invariant.apply_mem x hx)
   isInvariant_orthogonal := (_root_.LinearPMap.isInvariant_iff (A := A) (U := Uᗮ)).2
-    (fun x hx => h.orthogonal_invariant x hx)
+    (fun x hx => h.orthogonal_invariant.apply_mem x hx)
 
 /-- Any canonical Tau Ceti reducing subspace satisfies the donor condition. -/
 theorem ofIsReducing
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (h : _root_.LinearPMap.IsReducing A U) : ReducesSubspace A U := by
   refine of_components (fun x => h.starProjection_mem_domain x.property) (fun x => ?_)
-    (fun x hx => h.isInvariant.apply_mem x hx)
-    (fun x hx => h.isInvariant_orthogonal.apply_mem x hx)
+    h.isInvariant h.isInvariant_orthogonal
   rw [Submodule.starProjection_orthogonal_val]
   exact h.sub_starProjection_mem_domain x.property
 
@@ -366,7 +358,7 @@ theorem mem_reducingRestriction_adjoint_domain_iff
         exact (U.starProjection_add_starProjection_orthogonal (x : E)).symm
       have horth : ⟪(y : E), A xo⟫_𝕜 = 0 := by
         exact Submodule.inner_right_of_mem_orthogonal y.property
-          (hred.orthogonal_invariant xo
+          (hred.orthogonal_invariant.apply_mem xo
             (Uᗮ.starProjection_apply_mem (x : E)))
       have hprojectAction :
           (((reducingRestriction A U hred)

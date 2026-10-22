@@ -304,12 +304,25 @@ intentionally opaque.
 
 The local `restrictedPointSpectrum_restrict` and
 `pointSpectrumIn_restrict_iff` results remain as DKPS-specific bridges between
-`A.restrict hU` and ambient eigenvectors under the donor's `IsInvariant`
-presentation; #14418 does not provide that transfer theorem. `IsInvariant`,
-the linear-map-valued `spectralProjection`, and projection helpers remain local
-and were not part of this slice. The core donor and all 25 changed maintained
+`A.restrict hU` and ambient eigenvectors; #14418 does not provide that transfer
+theorem. The former local `LinearPMap.InvariantSubspace` predicate has since
+been deleted in favor of Tau Ceti's canonical
+`LinearPMap.IsInvariant`/`LinearPMap.isInvariant_iff`, present in the pinned
+revision `7205a079ee99f6962eb39fadd8067517ae38bf73`. The old definition and
+theorem statement both expressed
+`∀ x : A.domain, (x : E) ∈ U → A x ∈ U`; the canonical API has exactly that
+statement and scalar/carrier scope. The donor `ReducesSubspace` record remains,
+with its invariant fields stated using the canonical predicate, and its
+maintained Riccati, spectrum, unitary-transport, and spectral-measure consumers
+now use that API directly. This retires the local definition (six source lines)
+without adding a forwarding alias. The linear-map-valued `spectralProjection`
+and its projection helpers remain local. The core donor and all 25 changed maintained
 modules, including the paper-facing finite wrappers, YWS consumers, and
 `RoadmapBridge.Integration`, compiled at the pinned dependency revision.
+The invariant-predicate retirement and seven touched Lean modules also compile
+at that same pin, including `LinearPMap.Closed`, `UnitaryTransport`, spectral
+measure construction, both unbounded Riccati interfaces, the reducing-spectrum
+union theorem, and natural sine-theta examples.
 The touched `Challenge.DavisKahan1970.Conformance` and `.Leaderboard`
 targets also compile, and comparator preflight passes the migrated point-spectrum
 rows. One pre-existing `sinTheta_wholeSpace_symmetricNorming` signature mismatch
