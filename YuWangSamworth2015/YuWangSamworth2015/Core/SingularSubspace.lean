@@ -8,6 +8,7 @@ module
 public import YuWangSamworth2015.Core.Statistics
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
+public import TauCeti.Analysis.InnerProductSpace.SingularSubspace.Perturbation
 public import YuWangSamworth2015.Core.Residual
 
 /-!
@@ -119,10 +120,45 @@ theorem hermitianDilation_sq (A : E →ₗ[𝕜] F) :
   apply WithLp.ofLp_injective 2
   ext <;> simp [rightGram, leftGram]
 
-/-- Right singular-subspace `sin Θ` theorem obtained from the Gram operators.
--/
+/-! ### The upstream singular-subspace perturbation interface
+
+The paper-facing statements below retain the historical `rightSingularSubspace`,
+`leftSingularSubspace` and `sinThetaMap` spellings. Their mathematical bounds are
+now applications of the canonical TauCeti `LinearMap` results, not independent
+Davis--Kahan/Sylvester/Gram perturbation proofs. These private conversions can
+be deleted when the legacy representation is retired. -/
+
+private theorem rightSingularSubspace_eq_canonical (A : E →ₗ[𝕜] F) (Ω : Set ℝ) :
+    rightSingularSubspace A Ω = A.rightSingularSubspace Ω := by
+  rw [rightSingularSubspace, TauCeti.pointSpectralSubspace, TauCeti.rightGram,
+    LinearMap.rightSingularSubspace_eq_pointSpectralSubspace,
+    Module.End.pointSpectralSubspace_eq_span]
+
+private theorem leftSingularSubspace_eq_canonical (A : E →ₗ[𝕜] F) (Ω : Set ℝ) :
+    leftSingularSubspace A Ω = A.leftSingularSubspace Ω := by
+  rw [leftSingularSubspace, TauCeti.pointSpectralSubspace, TauCeti.leftGram,
+    LinearMap.leftSingularSubspace_eq_pointSpectralSubspace,
+    Module.End.pointSpectralSubspace_eq_span]
+
+private theorem pointSpectrumIn_to_canonical {G : Type*}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    {T : G →ₗ[𝕜] G} {U : Submodule 𝕜 G} {Ω : Set ℝ}
+    (h : TauCeti.PointSpectrumIn T U Ω) : Module.End.PointSpectrumIn T U Ω := by
+  refine Module.End.pointSpectrumIn_iff.mpr ?_
+  intro x hxU hx0 μ hx
+  exact h (TauCeti.mem_restrictedPointSpectrum hxU hx0 hx)
+
+private theorem norm_sinThetaMap_eq_canonical {G : Type*}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [FiniteDimensional 𝕜 G]
+    (U V : Submodule 𝕜 G) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ‖(TauCeti.sinThetaMap U V).toContinuousLinearMap‖ = ‖U.sinThetaMap V‖ := by
+  congr 1
+  ext x; simp [TauCeti.sinThetaMap, TauCeti.complementaryProjection, TauCeti.projection]
+
+/-- Right singular-subspace `sin Θ` theorem, as a specialization of the
+canonical TauCeti Gram perturbation theorem. -/
 theorem rightSingularSubspace_sinTheta_le
-    {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (hδ : 0 < δ)
+    {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (_hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap (rightGram A)
       (rightSingularSubspace A (Set.Icc a b)) (rightGram Â)
       (rightSingularSubspace Â (Set.Icc a b))ᗮ a b δ) :
@@ -130,19 +166,27 @@ theorem rightSingularSubspace_sinTheta_le
         (rightSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  have hdk := sinTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := E) (F
-    := E))
-    (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
-    (isInvariant_pointSpectralSubspace (rightGram A) (Set.Icc a b))
-    (isInvariant_pointSpectralSubspace (rightGram Â) (Set.Icc a b)) hδ hgap
-  -- names the application so the norm bound applies to it directly.
-  simp only [UnitarilyInvariantSeminorm.opNorm_apply] at hdk
-  exact hdk.trans (opNorm_rightGram_sub_le A Â)
+  have hgap' : Module.End.PointIntervalExteriorGap (A.adjoint ∘ₗ A)
+      (A.rightSingularSubspace (Set.Icc a b)) (Â.adjoint ∘ₗ Â)
+      (Â.rightSingularSubspace (Set.Icc a b))ᗮ a b δ := by
+    refine ⟨?_, ?_⟩
+    · rw [← rightSingularSubspace_eq_canonical A (Set.Icc a b)]
+      exact pointSpectrumIn_to_canonical hgap.1
+    · rw [← rightSingularSubspace_eq_canonical Â (Set.Icc a b)]
+      exact pointSpectrumIn_to_canonical hgap.2
+  have h := LinearMap.mul_norm_sinThetaMap_rightSingularSubspace_le A Â hgap'
+  rw [← rightSingularSubspace_eq_canonical A (Set.Icc a b),
+    ← rightSingularSubspace_eq_canonical Â (Set.Icc a b),
+    ← norm_sinThetaMap_eq_canonical] at h
+  have hsub : (Â - A).toContinuousLinearMap =
+      Â.toContinuousLinearMap - A.toContinuousLinearMap := by
+    ext x; rfl
+  rw [← hsub] at h
+  exact h
 
-/-- Left singular-subspace counterpart.
--/
+/-- Left singular-subspace counterpart, reusing the canonical Gram theorem. -/
 theorem leftSingularSubspace_sinTheta_le
-    {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (hδ : 0 < δ)
+    {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (_hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap (leftGram A)
       (leftSingularSubspace A (Set.Icc a b)) (leftGram Â)
       (leftSingularSubspace Â (Set.Icc a b))ᗮ a b δ) :
@@ -150,14 +194,23 @@ theorem leftSingularSubspace_sinTheta_le
         (leftSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  have hdk := sinTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := F) (F
-    := F))
-    (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
-    (isInvariant_pointSpectralSubspace (leftGram A) (Set.Icc a b))
-    (isInvariant_pointSpectralSubspace (leftGram Â) (Set.Icc a b)) hδ hgap
-  -- names the application so the norm bound applies to it directly.
-  simp only [UnitarilyInvariantSeminorm.opNorm_apply] at hdk
-  exact hdk.trans (opNorm_leftGram_sub_le A Â)
+  have hgap' : Module.End.PointIntervalExteriorGap (A ∘ₗ A.adjoint)
+      (A.leftSingularSubspace (Set.Icc a b)) (Â ∘ₗ Â.adjoint)
+      (Â.leftSingularSubspace (Set.Icc a b))ᗮ a b δ := by
+    refine ⟨?_, ?_⟩
+    · rw [← leftSingularSubspace_eq_canonical A (Set.Icc a b)]
+      exact pointSpectrumIn_to_canonical hgap.1
+    · rw [← leftSingularSubspace_eq_canonical Â (Set.Icc a b)]
+      exact pointSpectrumIn_to_canonical hgap.2
+  have h := LinearMap.mul_norm_sinThetaMap_leftSingularSubspace_le A Â hgap'
+  rw [← leftSingularSubspace_eq_canonical A (Set.Icc a b),
+    ← leftSingularSubspace_eq_canonical Â (Set.Icc a b),
+    ← norm_sinThetaMap_eq_canonical] at h
+  have hsub : (Â - A).toContinuousLinearMap =
+      Â.toContinuousLinearMap - A.toContinuousLinearMap := by
+    ext x; rfl
+  rw [← hsub] at h
+  exact h
 
 /-- Hermitian-dilation form controlling left and right singular subspaces in a
 single Davis--Kahan application.
