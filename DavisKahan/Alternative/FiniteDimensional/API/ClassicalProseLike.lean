@@ -309,10 +309,10 @@ structure CanonicalProjectorDifferenceGapClassicalProseLike (A B : E →ₗ[𝕜
   A_symm : A.IsSymmetric
   B_symm : B.IsSymmetric
   gap_pos : 0 < g
-  A_high : PointSpectrumIn A (pointSpectralSubspace A s) (Set.Ici (c + g))
-  Aperp_low : PointSpectrumIn A (pointSpectralSubspace A s)ᗮ (Set.Iic c)
-  B_high : PointSpectrumIn B (pointSpectralSubspace B t) (Set.Ici (c + g))
-  Bperp_low : PointSpectrumIn B (pointSpectralSubspace B t)ᗮ (Set.Iic c)
+  A_high : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g))
+  Aperp_low : PointSpectrumIn A (Module.End.pointSpectralSubspace A s)ᗮ (Set.Iic c)
+  B_high : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Ici (c + g))
+  Bperp_low : PointSpectrumIn B (Module.End.pointSpectralSubspace B t)ᗮ (Set.Iic c)
   perturbation_nonneg : 0 ≤ ε
   perturbation_bound : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖
 
@@ -323,7 +323,7 @@ theorem spectralProjector_difference_opNorm_classical_prose_like
     {A B : E →ₗ[𝕜] E} {s t : Set ℝ} {c g ε : ℝ}
     (hgap : CanonicalProjectorDifferenceGapClassicalProseLike A B s t c g ε) :
     ‖projectorDifferenceOperatorClassicalProseLike
-        (pointSpectralSubspace A s) (pointSpectralSubspace B t)‖ ≤ ε / g := by
+        (Module.End.pointSpectralSubspace A s) (Module.End.pointSpectralSubspace B t)‖ ≤ ε / g := by
   exact opNorm_pointSpectralSubspace_sub_le hgap.A_symm hgap.B_symm hgap.gap_pos
     hgap.A_high hgap.Aperp_low hgap.B_high hgap.Bperp_low
     hgap.perturbation_nonneg hgap.perturbation_bound

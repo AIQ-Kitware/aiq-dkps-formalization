@@ -163,10 +163,10 @@ arbitrary `HybridGap`; constant one requires a stronger gap predicate.
 theorem singularSubspace_dilation_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {Ω : Set ℝ} {δ : ℝ} (hδ : 0 < δ)
     (hgap : HybridGap (hermitianDilation A) (hermitianDilation Â)
-      (pointSpectralSubspace (hermitianDilation A) Ω)
-      (pointSpectralSubspace (hermitianDilation Â) Ω) δ) :
-    δ * ‖(sinThetaMap (pointSpectralSubspace (hermitianDilation A) Ω)
-        (pointSpectralSubspace (hermitianDilation Â) Ω)).toContinuousLinearMap‖ ≤
+      (Module.End.pointSpectralSubspace (hermitianDilation A) Ω)
+      (Module.End.pointSpectralSubspace (hermitianDilation Â) Ω) δ) :
+    δ * ‖(sinThetaMap (Module.End.pointSpectralSubspace (hermitianDilation A) Ω)
+        (Module.End.pointSpectralSubspace (hermitianDilation Â) Ω)).toContinuousLinearMap‖ ≤
       (Real.pi / 2) *
         ‖(hermitianDilation Â - hermitianDilation A).toContinuousLinearMap‖ := by
   have h := sinTheta_perturbation_le_of_spectralDistance

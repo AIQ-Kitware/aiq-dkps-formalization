@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.PointSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 public import Mathlib.Analysis.Normed.Operator.Banach
@@ -95,17 +96,11 @@ theorem mem_restrictedPointSpectrum {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E
 def PointSpectrumIn (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (Ω : Set ℝ) : Prop :=
   restrictedPointSpectrum A U ⊆ Ω
 
-/-- Canonical finite-dimensional spectral subspace selected by a real set. -/
-@[expose]
-noncomputable def pointSpectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    Submodule 𝕜 E :=
-  Submodule.span 𝕜 {x | ∃ lam ∈ Ω, Module.End.HasEigenvector A (lam : 𝕜) x}
-
 /-- Canonical orthogonal spectral projector. -/
 @[expose]
 noncomputable def spectralProjection (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     E →ₗ[𝕜] E :=
-  ((pointSpectralSubspace A Ω).starProjection : E →L[𝕜] E)
+  ((Module.End.pointSpectralSubspace A Ω).starProjection : E →L[𝕜] E)
 
 /-- The orthogonal projector onto a finite-dimensional subspace, as a linear
 map. -/
@@ -158,22 +153,13 @@ theorem isInvariant_orthogonal_of_isSymmetric {A : E →ₗ[𝕜] E}
   exact Submodule.inner_right_of_mem_orthogonal (hU u hu) hx
 
 omit [FiniteDimensional 𝕜 E] in
-/-- The canonical spectral subspace reduces its operator.  Symmetry is not
-needed for this algebraic fact; it is needed later for orthogonal reduction and
-for completeness of the real eigenvector decomposition.
--/
+/-- The accepted point-spectral subspace is invariant under its operator.
+No symmetry or finite-dimensionality is needed for this algebraic fact. -/
 theorem isInvariant_pointSpectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    IsInvariant A (pointSpectralSubspace A Ω) := by
+    IsInvariant A (Module.End.pointSpectralSubspace A Ω) := by
   intro x hx
-  refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
-  · rintro y ⟨lam, hlam, hy⟩
-    rw [Module.End.mem_eigenspace_iff.mp hy.1]
-    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨lam, hlam, hy⟩)
-  · simp
-  · intro x y _ _ hx hy
-    simpa only [map_add] using (pointSpectralSubspace A Ω).add_mem hx hy
-  · intro c x _ hx
-    simpa only [map_smul] using (pointSpectralSubspace A Ω).smul_mem c hx
+  exact (Module.End.map_pointSpectralSubspace_le (A := A) (Ω := Ω))
+    (Submodule.mem_map_of_mem hx)
 
 /-! ### Restriction to an invariant subspace and the restricted-spectrum bridge
 
@@ -326,58 +312,18 @@ end SpectralOrder
 /-- The canonical projector has the expected range.
 -/
 theorem range_spectralProjection (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    LinearMap.range (spectralProjection A Ω) = pointSpectralSubspace A Ω := by
-  exact Submodule.range_starProjection (pointSpectralSubspace A Ω)
+    LinearMap.range (spectralProjection A Ω) = Module.End.pointSpectralSubspace A Ω := by
+  exact Submodule.range_starProjection (Module.End.pointSpectralSubspace A Ω)
 
 omit [FiniteDimensional 𝕜 E] in
-/-- Spectral selection is independent of the chosen eigenbasis.
--/
-theorem pointSpectralSubspace_eq_span_eigenvectors (A : E →ₗ[𝕜] E)
-    (Ω : Set ℝ) :
-    pointSpectralSubspace A Ω =
-      Submodule.span 𝕜 {x | ∃ lam ∈ Ω, Module.End.HasEigenvector A (lam : 𝕜) x} :=
-  rfl
+/-- The canonical spectral subspace carries only eigenvalues selected by `Ω`.
 
-omit [FiniteDimensional 𝕜 E] in
-/-- **The spectral subspace selected by `Ω` carries only spectrum in `Ω`.**
-
-`pointSpectralSubspace A Ω` is *defined* as a span of eigenvectors whose eigenvalues lie in
-`Ω`, but that does not immediately say the span contains no *other* eigenvector: a sum of
-eigenvectors could a priori be an eigenvector for a fresh eigenvalue.  It cannot, and this
-is the theorem saying so.
-
-The proof is eigenspace independence, not symmetry or finite dimension: the span sits
-inside `⨆ μ ∈ Ω, eigenspace A μ`, and an eigenvector for `lam ∉ Ω` would lie in the
-intersection of `eigenspace A lam` with the supremum of the *others*, which
-`Module.End.eigenspaces_iSupIndep` makes trivial.  So `A` needs no hypotheses at all.
-
-**This was a hypothesis, not a theorem.**  Production perturbation statements carried it as
-`hAselected : PointSpectrumIn A (pointSpectralSubspace A (Set.Icc a b)) (Set.Icc a b)`, which is
-exactly this conclusion at `Ω = Set.Icc a b`; a caller had to discharge, by hand, a fact
-that holds unconditionally. -/
+This is the accepted, dimension-free point-spectrum containment theorem in
+`Module.End`; the donor's independent eigenspace-independence proof is retired. -/
 theorem pointSpectrumIn_pointSpectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    PointSpectrumIn A (pointSpectralSubspace A Ω) Ω := by
+    PointSpectrumIn A (Module.End.pointSpectralSubspace A Ω) Ω := by
   intro lam hlam
-  obtain ⟨x, hxU, hx0, hxeq⟩ := mem_restrictedPointSpectrum_iff.mp hlam
-  by_contra hlamΩ
-  -- The span of the selected eigenvectors sits inside the supremum of their eigenspaces.
-  have hspan : pointSpectralSubspace A Ω ≤
-      ⨆ μ ∈ ((↑) '' Ω : Set 𝕜), Module.End.eigenspace A μ := by
-    rw [pointSpectralSubspace, Submodule.span_le]
-    rintro y ⟨lam', hlam'Ω, hy⟩
-    exact Submodule.mem_iSup_of_mem _
-      (Submodule.mem_iSup_of_mem ⟨lam', hlam'Ω, rfl⟩ hy.1)
-  -- Every eigenvalue that supremum ranges over is different from `lam`.
-  have hle : (⨆ μ ∈ ((↑) '' Ω : Set 𝕜), Module.End.eigenspace A μ) ≤
-      ⨆ μ, ⨆ _ : μ ≠ (lam : 𝕜), Module.End.eigenspace A μ := by
-    refine iSup_le fun μ => iSup_le fun hμ => ?_
-    obtain ⟨r, hrΩ, hr⟩ := hμ
-    refine le_iSup_of_le μ (le_iSup_of_le (fun hcon => hlamΩ ?_) le_rfl)
-    exact (RCLike.ofReal_inj.mp (hr.trans hcon)) ▸ hrΩ
-  -- Independence of eigenspaces then forces `x = 0`.
-  have hdisj := (iSupIndep_def.mp (Module.End.eigenspaces_iSupIndep A)) (lam : 𝕜)
-  exact hx0 (Submodule.mem_bot 𝕜 |>.mp
-    (hdisj.le_bot ⟨Module.End.mem_eigenspace_iff.mpr hxeq, hle (hspan hxU)⟩))
-
-
+  obtain ⟨x, hxU, hxne, hxeig⟩ := mem_restrictedPointSpectrum_iff.mp hlam
+  exact (Module.End.pointSpectrumIn_iff.mp
+    (Module.End.pointSpectrumIn_pointSpectralSubspace A Ω)) x hxU hxne lam hxeig
 end TauCeti

@@ -597,10 +597,10 @@ theorem sinTheta_pointSpectralSubspace_le
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hBoutside : PointSpectrumIn B (pointSpectralSubspace B (Set.Icc a b))ᗮ
+    (hBoutside : PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * N (sinThetaMap (pointSpectralSubspace A (Set.Icc a b))
-        (pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) := by
+    δ * N (sinThetaMap (Module.End.pointSpectralSubspace A (Set.Icc a b))
+        (Module.End.pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) := by
   exact sinTheta_perturbation_le N hA hB
     (isInvariant_pointSpectralSubspace A (Set.Icc a b))
     (isInvariant_pointSpectralSubspace B (Set.Icc a b)) hδ
@@ -770,9 +770,9 @@ difference. -/
 theorem opNorm_spectralProjection_sub_spectralProjection_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hrank : finrank 𝕜 (pointSpectralSubspace A (Set.Icc a b)) =
-      finrank 𝕜 (pointSpectralSubspace B (Set.Icc a b)))
-    (hBoutside : PointSpectrumIn B (pointSpectralSubspace B (Set.Icc a b))ᗮ
+    (hrank : finrank 𝕜 (Module.End.pointSpectralSubspace A (Set.Icc a b)) =
+      finrank 𝕜 (Module.End.pointSpectralSubspace B (Set.Icc a b)))
+    (hBoutside : PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * ‖(spectralProjection A (Set.Icc a b) -
         spectralProjection B (Set.Icc a b)).toContinuousLinearMap‖ ≤

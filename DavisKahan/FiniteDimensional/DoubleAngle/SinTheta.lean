@@ -670,9 +670,9 @@ theorem sinTwoTheta_pointSpectralSubspace_le
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {Ω : Set ℝ} {a b : ℝ} (hab : a < b)
-    (hgap : TwoBlockFormGap A (pointSpectralSubspace A Ω) a b) :
-    (b - a) * N (sinTwoAngleOperator (pointSpectralSubspace A Ω)
-        (pointSpectralSubspace B Ω)) ≤ 2 * N (B - A) := by
+    (hgap : TwoBlockFormGap A (Module.End.pointSpectralSubspace A Ω) a b) :
+    (b - a) * N (sinTwoAngleOperator (Module.End.pointSpectralSubspace A Ω)
+        (Module.End.pointSpectralSubspace B Ω)) ≤ 2 * N (B - A) := by
   exact sinTwoTheta_perturbation_le N hA hB
     (isInvariant_pointSpectralSubspace A Ω) (isInvariant_pointSpectralSubspace B Ω) hab hgap
 

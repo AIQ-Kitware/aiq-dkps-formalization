@@ -255,8 +255,27 @@ from `87dad819828705ed8329ff53b9bc53634a064b1a` to
 `f91b6396a35d847a87a0d37519325918356bc0fc`, preserving the Lean 4.36.0-rc1
 and Mathlib pins. The YWS two-theorem forwarding overlay (v3) compiled at that
 pin, as confirmed by the DKPS maintainer. The follow-on canonical-interface
-retirement described in this section should be committed only after its focused
-and full Lean builds. Keep the former pin for historical regression triage.
+retirement was likewise completed before the present spectral-subspace migration.
+Keep the former pin for historical regression triage.
+
+**Canonical point-spectral-subspace follow-up (2026-10-21):** the maintained
+finite-dimensional donor no longer defines `TauCeti.pointSpectralSubspace`.
+The old span-of-eigenvectors representation is already provided by the
+accepted `Module.End.pointSpectralSubspace` and its
+`Module.End.pointSpectralSubspace_eq_span` characterization in
+`TauCeti.Analysis.InnerProductSpace.PointSpectrum` (pin
+`f91b6396a35d847a87a0d37519325918356bc0fc`). The migration uses the
+upstream subspace directly in the finite-dimensional `ForTauCeti` perturbation
+lemmas, paper-facing Davis–Kahan APIs, and the remaining YWS Hermitian-dilation
+corollary. It also retires the redundant local span-equation theorem, replaces
+the local eigenspace-independence proof by
+`Module.End.pointSpectrumIn_pointSpectralSubspace`, and uses
+`Module.End.map_pointSpectralSubspace_le` for invariance. This is **not** a
+claim that local `restrictedPointSpectrum`, `PointSpectrumIn`, `IsInvariant`,
+or the linear-map-valued `spectralProjection` have been retired: their remaining
+consumers and carrier requirements need a distinct migration. The upstream
+point-spectral-subspace definition selects precisely the same eigenvector span,
+with no extra symmetry or finite-dimensional hypothesis.
 
 **Retirement acceptance criterion:** for each replaced local theorem, record
 (1) exact upstream declaration and accepted commit; (2) original statement

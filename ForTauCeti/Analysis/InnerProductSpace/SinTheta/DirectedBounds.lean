@@ -28,7 +28,7 @@ strength of conclusion:
 * **Residual form** — `δ ‖sin Θ‖ ≤ ‖R‖` for `R = A X - X M`, in every unitarily
   invariant norm, with the ordered-gap and spectral-distance variants;
 * **Directed form** — the one-sided operator-norm and UI-norm bounds on
-  `‖(pointSpectralSubspace B t)ᗮ.starProjection ∘L (pointSpectralSubspace A s).starProjection‖`;
+  `‖P_(spec B t)ᗮ P_(spec A s)‖`, with canonical point-spectral subspaces;
 * **Two-sided form** — the projector-difference bounds
   `‖P_A - P_B‖ ≤ ε / g` and its factor-two companion.
 
@@ -305,11 +305,11 @@ and dispatches through the dimension-free coercive Sylvester core. -/
 theorem opNorm_pointSpectralSubspace_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g ε : ℝ} (hg : 0 < g)
-    (hUspec : PointSpectrumIn A (pointSpectralSubspace A s) (Set.Ici (c + g)))
-    (hVspec : PointSpectrumIn B (pointSpectralSubspace B t) (Set.Iic c))
+    (hUspec : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
+    (hVspec : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
-    ‖((pointSpectralSubspace B t).starProjection ∘L
-        (pointSpectralSubspace A s).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
+    ‖((Module.End.pointSpectralSubspace B t).starProjection ∘L
+        (Module.End.pointSpectralSubspace A s).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
   opNorm_directed_sinTheta_le hA hB (isInvariant_pointSpectralSubspace A s)
     (isInvariant_pointSpectralSubspace B t) hg hUspec hVspec hε0 hε
 
@@ -343,10 +343,10 @@ theorem uiNorm_pointSpectralSubspace_directed_sinTheta_le
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g : ℝ} (hg : 0 < g)
-    (hUspec : PointSpectrumIn A (pointSpectralSubspace A s) (Set.Ici (c + g)))
-    (hVspec : PointSpectrumIn B (pointSpectralSubspace B t) (Set.Iic c)) :
-    N (((pointSpectralSubspace B t).starProjection ∘L
-        (pointSpectralSubspace A s).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
+    (hUspec : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
+    (hVspec : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Iic c)) :
+    N (((Module.End.pointSpectralSubspace B t).starProjection ∘L
+        (Module.End.pointSpectralSubspace A s).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (B - A) / g :=
   uiNorm_directed_sinTheta_le N hA hB (isInvariant_pointSpectralSubspace A s)
     (isInvariant_pointSpectralSubspace B t) hg hUspec hVspec
@@ -449,13 +449,13 @@ the generic projection geometry. -/
 theorem opNorm_pointSpectralSubspace_sub_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g ε : ℝ} (hg : 0 < g)
-    (hAhi : PointSpectrumIn A (pointSpectralSubspace A s) (Set.Ici (c + g)))
-    (hAlo : PointSpectrumIn A (pointSpectralSubspace A s)ᗮ (Set.Iic c))
-    (hBhi : PointSpectrumIn B (pointSpectralSubspace B t) (Set.Ici (c + g)))
-    (hBlo : PointSpectrumIn B (pointSpectralSubspace B t)ᗮ (Set.Iic c))
+    (hAhi : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
+    (hAlo : PointSpectrumIn A (Module.End.pointSpectralSubspace A s)ᗮ (Set.Iic c))
+    (hBhi : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Ici (c + g)))
+    (hBlo : PointSpectrumIn B (Module.End.pointSpectralSubspace B t)ᗮ (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
-    ‖((pointSpectralSubspace A s).starProjection
-        - (pointSpectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
+    ‖((Module.End.pointSpectralSubspace A s).starProjection
+        - (Module.End.pointSpectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
   opNorm_starProjection_sub_le hA hB (isInvariant_pointSpectralSubspace A s)
     (isInvariant_pointSpectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
 
@@ -465,13 +465,13 @@ their operators automatically). -/
 theorem opNorm_pointSpectralSubspace_sub_le_two {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g ε : ℝ} (hg : 0 < g)
-    (hAhi : PointSpectrumIn A (pointSpectralSubspace A s) (Set.Ici (c + g)))
-    (hAlo : PointSpectrumIn A (pointSpectralSubspace A s)ᗮ (Set.Iic c))
-    (hBhi : PointSpectrumIn B (pointSpectralSubspace B t) (Set.Ici (c + g)))
-    (hBlo : PointSpectrumIn B (pointSpectralSubspace B t)ᗮ (Set.Iic c))
+    (hAhi : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
+    (hAlo : PointSpectrumIn A (Module.End.pointSpectralSubspace A s)ᗮ (Set.Iic c))
+    (hBhi : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Ici (c + g)))
+    (hBlo : PointSpectrumIn B (Module.End.pointSpectralSubspace B t)ᗮ (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
-    ‖((pointSpectralSubspace A s).starProjection
-        - (pointSpectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ 2 * (ε / g) :=
+    ‖((Module.End.pointSpectralSubspace A s).starProjection
+        - (Module.End.pointSpectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ 2 * (ε / g) :=
   opNorm_starProjection_sub_le_two hA hB (isInvariant_pointSpectralSubspace A s)
     (isInvariant_pointSpectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
 

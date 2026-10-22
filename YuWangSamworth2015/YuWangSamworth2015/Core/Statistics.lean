@@ -506,7 +506,7 @@ theorem yuWangSamworth_intervalBlock_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
     {a b Δ : ℝ} (hΔ : 0 < Δ)
-    (_hUeq : U = pointSpectralSubspace A (Set.Icc a b))
+    (_hUeq : U = Module.End.pointSpectralSubspace A (Set.Icc a b))
     (hcorr : CorrespondingEigenblock hA hB U V)
     (hgap : PointInternalGap A U Δ) :
     sinThetaFrobenius U V ≤
