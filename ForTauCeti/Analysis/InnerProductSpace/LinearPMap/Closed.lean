@@ -344,19 +344,6 @@ theorem mem_reducingRestriction_adjoint_domain_iff
     rw [hfun'] at hcomp'
     exact hcomp'
 
-/-- Symmetry passes to a reducing restriction of a partial map. -/
-theorem reducingRestriction_isSymmetric
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : _root_.LinearPMap.IsReducing A U)
-    (hA : ∀ x y : A.domain,
-      ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜) :
-    ∀ x y : (reducingRestriction A U hred).domain,
-      ⟪reducingRestriction A U hred x, (y : U)⟫_𝕜 =
-        ⟪(x : U), reducingRestriction A U hred y⟫_𝕜 := by
-  have hFormal : A.IsFormalAdjoint A := fun x y => hA x y
-  intro x y
-  exact (hFormal.restrict hred.isInvariant) x y
-
 /-- A linear map on a submodule has a bounded extension to the ambient space. -/
 structure BoundedExtension (D : Submodule 𝕜 F) (T : D →ₗ[𝕜] E) where
   operator : F →L[𝕜] E

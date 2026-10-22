@@ -84,17 +84,6 @@ theorem mem_reducingRestriction_adjoint_domain_iff
   TauCeti.LinearPMap.mem_reducingRestriction_adjoint_domain_iff
     A U hred y
 
-omit [CompleteSpace E] in
-/-- Symmetry passes to the reducing restriction. -/
-theorem reducingRestriction_isSymmetric
-    (A : E →ₗ.[𝕜] E)
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : _root_.LinearPMap.IsReducing A U)
-    (hA : TauCeti.LinearPMap.IsSymmetric A) :
-    TauCeti.LinearPMap.IsSymmetric
-      (TauCeti.LinearPMap.reducingRestriction A U hred) :=
-  TauCeti.LinearPMap.reducingRestriction_isSymmetric A U hred hA
-
 end PartialMap
 end DavisKahanExt
 end TauCeti
