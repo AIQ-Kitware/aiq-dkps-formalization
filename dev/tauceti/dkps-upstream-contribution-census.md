@@ -383,6 +383,20 @@ of reproving the Gram estimate by splitting the perturbation into two terms.
 The Gram donor, Frobenius, Theorem 4, and rank-one modules compile at TauCeti
 `7205a079ee99f6962eb39fadd8067517ae38bf73`.
 
+**Adjoint norm-bound retirement (2026-10-22):**
+`ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace` no longer defines a
+second pointwise adjoint norm estimate.
+`ForTauCeti.Analysis.InnerProductSpace.AlignedBasis` now calls the accepted
+`LinearMap.norm_adjoint_apply_le` from
+`TauCeti.Analysis.InnerProductSpace.Adjoint`; the other maintained consumer,
+rectangular UIN majorization, already called this upstream declaration directly.
+The upstream result has the same finite-dimensional hypotheses and pointwise
+bound as the deleted donor theorem. This is downstream consumption of an
+accepted API, not a new claim about proof provenance: the deleted local proof
+was authored by Claude, and no DKPS ancestry is inferred for the Tau Ceti
+declaration. The change is verified against the pinned TauCeti tree
+`dded4e1133eb74742ae658ebd8de8d66f8d2b470`.
+
 **Retirement acceptance criterion:** for each replaced local theorem, record
 (1) exact upstream declaration and accepted commit; (2) original statement
 and hypothesis comparison, including rank, scalar field, spectra/gap

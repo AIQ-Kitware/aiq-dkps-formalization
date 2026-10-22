@@ -19,6 +19,7 @@ values are the principal-angle cosines.
 module
 
 public import Mathlib.LinearAlgebra.Basis.Defs
+public import TauCeti.Analysis.InnerProductSpace.Adjoint
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
@@ -117,7 +118,7 @@ theorem overlapOp_contraction {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv 
       rw [one_mul, LinearIsometry.coe_toLinearMap]
       exact le_of_eq ((familyIsometry hu).norm_map y)
   calc ‖(familyIsometry hu).toLinearMap.adjoint (familyIsometry hv x)‖
-      ≤ 1 * ‖familyIsometry hv x‖ := norm_adjoint_apply_le (by norm_num) hiso _
+      ≤ 1 * ‖familyIsometry hv x‖ := LinearMap.norm_adjoint_apply_le (by norm_num) hiso _
     _ = ‖x‖ := by rw [one_mul, (familyIsometry hv).norm_map]
 
 /-- **The overlap sum equals `∑ σ²`.** The sum of squared singular values of the
