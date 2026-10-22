@@ -218,31 +218,6 @@ theorem reducingRestriction_eq_restrict
     reducingRestriction A U hred = A.restrict hred.isInvariant :=
   rfl
 
-/-- A dense partial-map domain remains dense after restriction to a reducing
-subspace. -/
-theorem reducingRestriction_dense
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : _root_.LinearPMap.IsReducing A U) (hA : Dense (A.domain : Set E)) :
-    Dense ((reducingRestriction A U hred).domain : Set U) := by
-  rw [reducingRestriction_eq_restrict A U hred]
-  exact hred.dense_restrict_domain hA
-
-/-- Closedness of the graph is preserved by restriction to a reducing
-subspace.  The hypothesis is stated as a graph range to make it directly
-applicable to compatibility records as well as raw partial maps. -/
-theorem reducingRestriction_closedGraph
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : _root_.LinearPMap.IsReducing A U)
-    (hA : IsClosed (Set.range fun x : A.domain => ((x : E), A x))) :
-    IsClosed (Set.range fun x : (reducingRestriction A U hred).domain =>
-      (((x : (reducingRestriction A U hred).domain) : U),
-        reducingRestriction A U hred x)) := by
-  have hClosed : A.IsClosed := (isClosed_iff_range_isClosed A).2 hA
-  have hRestrict : (A.restrict hred.isInvariant).IsClosed :=
-    hClosed.restrict hred.isInvariant
-  rw [reducingRestriction_eq_restrict A U hred]
-  exact (isClosed_iff_range_isClosed _).1 hRestrict
-
 /-- Adjoint-domain membership of a reducing restriction is exactly ambient
 adjoint-domain membership for the included vector. -/
 theorem mem_reducingRestriction_adjoint_domain_iff
