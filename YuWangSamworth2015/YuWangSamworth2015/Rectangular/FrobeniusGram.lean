@@ -18,8 +18,9 @@ Yu--Wang--Samworth argument.  For `D = Â - A`, it proves
 
 and the analogous left-Gram estimate.  The proof deliberately goes through the
 basis-free Hilbert--Schmidt ideal law already available in the repository, then
-uses the finite-dimensional Frobenius realization.  This avoids duplicating a
-basis expansion and works uniformly over every `RCLike` scalar field.
+uses the finite-dimensional Frobenius realization. The left-Gram bound follows
+from the right-Gram bound for the adjoint, using Frobenius adjoint invariance.
+This avoids duplicating the Gram expansion and works over every `RCLike` field.
 -/
 
 namespace YuWangSamworth2015
@@ -185,46 +186,18 @@ theorem frobenius_leftGram_sub_le
         UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A) := by
   let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
   let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-  let D : E →ₗ[𝕜] F := Â - A
-  have hidentityCLM :=
-    ContinuousLinearMap.self_comp_adjoint_sub_self_comp_adjoint
-      Â.toContinuousLinearMap A.toContinuousLinearMap
-  have hidentity :
-      leftGram Â - leftGram A =
-        D ∘ₗ Â.adjoint + A ∘ₗ D.adjoint := by
-    ext x
-    have hx := congrArg (fun T : F →L[𝕜] F => T x) hidentityCLM
-    simp [leftGram, D]
-  rw [hidentity]
-  refine (map_add_le_add
-    (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F)) _ _).trans ?_
-  have hleft :
-      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F) (D ∘ₗ Â.adjoint) ≤
-        ‖Â.toContinuousLinearMap‖ *
-          UnitarilyInvariantSeminorm.frobenius 𝕜 E F D := by
-    have h := frobenius_comp_rectangular_le_opNorm_mul
-      (E := F) (F := E) Â D.adjoint
-    rw [← (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F)).apply_adjoint
-      (D ∘ₗ Â.adjoint), LinearMap.adjoint_comp,
-      LinearMap.adjoint_adjoint]
-    simpa only [rectangularFrobenius_adjoint] using h
-  have hright :
-      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F) (A ∘ₗ D.adjoint) ≤
-        ‖A.toContinuousLinearMap‖ *
-          UnitarilyInvariantSeminorm.frobenius 𝕜 E F D := by
-    have h := frobenius_comp_rectangular_le_opNorm_mul
-      (E := F) (F := E) A D.adjoint
-    simpa only [rectangularFrobenius_adjoint] using h
-  calc
-    UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F) (D ∘ₗ Â.adjoint) +
-          UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F) (A ∘ₗ D.adjoint)
-        ≤ ‖Â.toContinuousLinearMap‖ *
-              UnitarilyInvariantSeminorm.frobenius 𝕜 E F D +
-            ‖A.toContinuousLinearMap‖ *
-              UnitarilyInvariantSeminorm.frobenius 𝕜 E F D :=
-      add_le_add hleft hright
-    _ = (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
-          UnitarilyInvariantSeminorm.frobenius 𝕜 E F D := by ring
+  -- Left Gram is the right Gram of the adjoint.  Invariance of the
+  -- rectangular Frobenius norm under adjoint gives the same coefficient.
+  have h := frobenius_rightGram_sub_le A.adjoint Â.adjoint
+  have hgram (T : E →ₗ[𝕜] F) :
+      rightGram T.adjoint = leftGram T := by
+    simp only [rightGram, leftGram, LinearMap.adjoint_adjoint]
+  have hdiff :
+      UnitarilyInvariantSeminorm.frobenius 𝕜 F E (Â.adjoint - A.adjoint) =
+        UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A) := by
+    simpa only [map_sub] using rectangularFrobenius_adjoint (Â - A)
+  simpa only [hgram, hdiff, LinearMap.adjoint_toContinuousLinearMap,
+    LinearIsometryEquiv.norm_map] using h
 
 omit [FiniteDimensional 𝕜 F] in
 /-- The common Gram coefficient is bounded by the source-shaped

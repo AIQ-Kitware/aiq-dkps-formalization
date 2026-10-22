@@ -423,6 +423,19 @@ of reproving the Gram estimate by splitting the perturbation into two terms.
 The Gram donor, Frobenius, Theorem 4, and rank-one modules compile at TauCeti
 `7205a079ee99f6962eb39fadd8067517ae38bf73`.
 
+**Rectangular adjoint-duality follow-up (2026-10-22):**
+`YuWangSamworth2015.Rectangular.FrobeniusGram` derives the left Gram
+Frobenius bound from the right Gram bound applied to the adjoint, together
+with `rectangularFrobenius_adjoint`. This retires a second independent
+cross-dimensional Gram expansion and ideal-law proof. The operator-norm
+Gram coefficient results continue to consume TauCeti's accepted right and
+left Gram perturbation bounds directly. In `Rectangular.RankOne`, a common
+private real inequality replaces four repeated coefficient transports.
+The fixed-eigenbasis and arbitrary-frame singular-vector interfaces remain
+distinct; no theorem, hypothesis, or inequality coefficient changes.
+This is local proof consolidation using established upstream Gram bounds,
+not a claim that a new Frobenius theorem was accepted upstream.
+
 **Adjoint norm-bound retirement (2026-10-22):**
 `ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace` no longer defines a
 second pointwise adjoint norm estimate.

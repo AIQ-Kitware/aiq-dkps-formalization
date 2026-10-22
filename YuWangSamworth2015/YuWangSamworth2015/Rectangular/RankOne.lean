@@ -27,6 +27,18 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
+/-- Transfer the sharp symmetric rank-one bound through either Gram
+perturbation estimate, retaining the source-shaped coefficient. -/
+private theorem singularVector_gramCoefficient_le {g a b Δ : ℝ}
+    (hΔ : 0 < Δ) (hg : g ≤ (2 * a + b) * b) :
+    2 * Real.sqrt 2 * g / Δ ≤ 2 * Real.sqrt 2 * (2 * a + b) * b / Δ := by
+  calc
+    2 * Real.sqrt 2 * g / Δ ≤
+        2 * Real.sqrt 2 * ((2 * a + b) * b) / Δ :=
+      div_le_div_of_nonneg_right
+        (mul_le_mul_of_nonneg_left hg (by positivity)) hΔ.le
+    _ = _ := by ring
+
 /-- Right singular-vector corollary, in intrinsic operator-norm form. -/
 theorem yuWangSamworth_rightSingularVector_opNormCoefficient_le
     {A Â : E →ₗ[𝕜] F} {u v : E}
@@ -50,21 +62,8 @@ theorem yuWangSamworth_rightSingularVector_opNormCoefficient_le
     hu hv hAu hÂv
     (by simpa only [CorrespondingRightSingularBlock] using hcorr)
     hΔ hgap
-  refine ⟨c, hc, hbase.trans ?_⟩
-  have hgram := opNorm_rightGram_sub_le_paperCoefficient A Â
-  calc
-    2 * Real.sqrt 2 *
-          ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ / Δ
-        ≤ 2 * Real.sqrt 2 *
-            ((2 * ‖A.toContinuousLinearMap‖ +
-              ‖(Â - A).toContinuousLinearMap‖) *
-              ‖(Â - A).toContinuousLinearMap‖) / Δ := by
-          exact div_le_div_of_nonneg_right
-            (mul_le_mul_of_nonneg_left hgram (by positivity)) hΔ.le
-    _ = 2 * Real.sqrt 2 *
-          (2 * ‖A.toContinuousLinearMap‖ +
-            ‖(Â - A).toContinuousLinearMap‖) *
-          ‖(Â - A).toContinuousLinearMap‖ / Δ := by ring
+  exact ⟨c, hc, hbase.trans (singularVector_gramCoefficient_le hΔ
+    (opNorm_rightGram_sub_le_paperCoefficient A Â))⟩
 
 /-- Left singular-vector corollary, in intrinsic operator-norm form. -/
 theorem yuWangSamworth_leftSingularVector_opNormCoefficient_le
@@ -89,21 +88,8 @@ theorem yuWangSamworth_leftSingularVector_opNormCoefficient_le
     hu hv hAu hÂv
     (by simpa only [CorrespondingLeftSingularBlock] using hcorr)
     hΔ hgap
-  refine ⟨c, hc, hbase.trans ?_⟩
-  have hgram := opNorm_leftGram_sub_le_paperCoefficient A Â
-  calc
-    2 * Real.sqrt 2 *
-          ‖(leftGram Â - leftGram A).toContinuousLinearMap‖ / Δ
-        ≤ 2 * Real.sqrt 2 *
-            ((2 * ‖A.toContinuousLinearMap‖ +
-              ‖(Â - A).toContinuousLinearMap‖) *
-              ‖(Â - A).toContinuousLinearMap‖) / Δ := by
-          exact div_le_div_of_nonneg_right
-            (mul_le_mul_of_nonneg_left hgram (by positivity)) hΔ.le
-    _ = 2 * Real.sqrt 2 *
-          (2 * ‖A.toContinuousLinearMap‖ +
-            ‖(Â - A).toContinuousLinearMap‖) *
-          ‖(Â - A).toContinuousLinearMap‖ / Δ := by ring
+  exact ⟨c, hc, hbase.trans (singularVector_gramCoefficient_le hΔ
+    (opNorm_leftGram_sub_le_paperCoefficient A Â))⟩
 
 /-- Literal `σ₁(A)` form of the right singular-vector corollary. -/
 theorem yuWangSamworth_rightSingularVector_le
@@ -189,21 +175,8 @@ theorem yuWangSamworth_rightSingularVector_frame_opNormCoefficient_le
   obtain ⟨c, hc, hbase⟩ := yuWangSamworth_eigenvector_frame_le
     (hA := isSymmetric_rightGram A) (hB := isSymmetric_rightGram Â)
     (hn := hn) (j := j) hu hv hAu hÂv hΔ hgap
-  refine ⟨c, hc, hbase.trans ?_⟩
-  have hgram := opNorm_rightGram_sub_le_paperCoefficient A Â
-  calc
-    2 * Real.sqrt 2 *
-          ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ / Δ
-        ≤ 2 * Real.sqrt 2 *
-            ((2 * ‖A.toContinuousLinearMap‖ +
-              ‖(Â - A).toContinuousLinearMap‖) *
-              ‖(Â - A).toContinuousLinearMap‖) / Δ := by
-          exact div_le_div_of_nonneg_right
-            (mul_le_mul_of_nonneg_left hgram (by positivity)) hΔ.le
-    _ = 2 * Real.sqrt 2 *
-          (2 * ‖A.toContinuousLinearMap‖ +
-            ‖(Â - A).toContinuousLinearMap‖) *
-          ‖(Â - A).toContinuousLinearMap‖ / Δ := by ring
+  exact ⟨c, hc, hbase.trans (singularVector_gramCoefficient_le hΔ
+    (opNorm_rightGram_sub_le_paperCoefficient A Â))⟩
 
 /-- Left singular-vector corollary at the printed hypothesis, in intrinsic
 operator-norm form. -/
@@ -227,21 +200,8 @@ theorem yuWangSamworth_leftSingularVector_frame_opNormCoefficient_le
   obtain ⟨c, hc, hbase⟩ := yuWangSamworth_eigenvector_frame_le
     (hA := isSymmetric_leftGram A) (hB := isSymmetric_leftGram Â)
     (hn := hm) (j := j) hu hv hAu hÂv hΔ hgap
-  refine ⟨c, hc, hbase.trans ?_⟩
-  have hgram := opNorm_leftGram_sub_le_paperCoefficient A Â
-  calc
-    2 * Real.sqrt 2 *
-          ‖(leftGram Â - leftGram A).toContinuousLinearMap‖ / Δ
-        ≤ 2 * Real.sqrt 2 *
-            ((2 * ‖A.toContinuousLinearMap‖ +
-              ‖(Â - A).toContinuousLinearMap‖) *
-              ‖(Â - A).toContinuousLinearMap‖) / Δ := by
-          exact div_le_div_of_nonneg_right
-            (mul_le_mul_of_nonneg_left hgram (by positivity)) hΔ.le
-    _ = 2 * Real.sqrt 2 *
-          (2 * ‖A.toContinuousLinearMap‖ +
-            ‖(Â - A).toContinuousLinearMap‖) *
-          ‖(Â - A).toContinuousLinearMap‖ / Δ := by ring
+  exact ⟨c, hc, hbase.trans (singularVector_gramCoefficient_le hΔ
+    (opNorm_leftGram_sub_le_paperCoefficient A Â))⟩
 
 /-- Literal `σ₁(A)` form of the right singular-vector corollary, at the printed
 hypothesis. -/
