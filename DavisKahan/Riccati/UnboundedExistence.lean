@@ -48,7 +48,7 @@ namespace ContractiveReducingGraphSelection
 theorem invariant
     {H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)}
     (S : ContractiveReducingGraphSelection H) :
-    TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph S.X) :=
   S.reduces.2.2.1
 

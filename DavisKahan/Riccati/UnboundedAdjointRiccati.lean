@@ -144,7 +144,7 @@ unbounded `tan 2Theta` estimate. -/
 theorem adjoint_riccati_of_invariant_orthogonal
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) (hadj : PreservesAdjointRiccatiDomains H X)
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (z : H.A1.domain) :
     H.A0 ⟨(ContinuousLinearMap.adjoint X) (z : E1), hadj z⟩ =
@@ -212,7 +212,7 @@ theorem gram_commutator_eq
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     {X : E0 →L[𝕜] E1} (hdom : PreservesRiccatiDomains H X)
     (hadj : PreservesAdjointRiccatiDomains H X)
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (hric : ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
@@ -301,7 +301,7 @@ commutator (ticket T1.3), which is what licenses the band construction: the
 factor `n` is exactly what the `1/n!` of the exponential absorbs. -/
 theorem norm_riccatiGram_pow_commutator_le
     (hcontr : ‖riccatiGram X‖ ≤ 1)
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (hric : ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
@@ -391,7 +391,7 @@ against a *geometric* series, so this — not the contractive form — is what
 reaches the Riccati resolvent `(1 - X†X)⁻¹`, where the coefficients are all `1`
 and `Σ n` diverges. Indexed at `n + 1` to avoid natural subtraction. -/
 theorem norm_riccatiGram_pow_succ_commutator_le
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (hric : ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
@@ -487,7 +487,7 @@ include hdom hadj in
 `n ≥ 1` it is the intended `n‖T‖ⁿ⁻¹`.  This is the summand form, so it is what
 gets summed over a `Finset` and then over `ℕ`. -/
 theorem norm_riccatiGram_pow_commutator_le_geom
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (hric : ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
@@ -755,7 +755,7 @@ This is the domain half of `MapsDomainTo A₁ A₀ tan2Θ` for
 consumes. -/
 theorem riccatiGram_resolvent_mem_domain
     (hlt : ‖riccatiGram X‖ < 1)
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (hric : ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
@@ -800,7 +800,7 @@ the tangent operator is the resolvent followed by `X`, and `X` transports the
 domains by hypothesis. -/
 theorem doubleAngleTangent_mapsDomainTo
     (hlt : ‖riccatiGram X‖ < 1)
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (hric : ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
@@ -862,7 +862,7 @@ with no density extension anywhere — every factor is already a continuous line
 map.  Without it one would have to extend the commutator from `dom A₀` by
 density just to name `C`. -/
 theorem riccatiGram_resolvent_commutator_eq
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (hric : ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
@@ -916,7 +916,7 @@ Feeding this to `kyFan_unbounded_sylvester_le_of_semibounded_direct` with
 `X ∘ R ∘ G`, and it is exactly why this route gives a defect form rather than
 the sharp constant — see the sharp tan(2Theta) note in Git history. -/
 theorem doubleAngleTangent_sylvester_eq
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (hric : ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
@@ -959,7 +959,7 @@ and doubling both sides turns `X ∘ R` into `tan 2Theta`.
 exactly why this yields a defect form rather than the sharp constant.  See
 the sharp tan(2Theta) note in Git history. -/
 theorem doubleAngleTangent_sylvesterEquation
-    (hinv : TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+    (hinv : (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph X)ᗮ)
     (hric : ∀ x : H.A0.domain,
       H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) =
