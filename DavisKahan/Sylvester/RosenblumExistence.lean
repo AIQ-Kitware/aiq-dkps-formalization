@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
 import DavisKahan.SpectralTheory.CircleRieszEndpoints
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator
+import TauCeti.Analysis.InnerProductSpace.Sylvester
 
 /-!
 # Rosenblum's theorem: solving the Sylvester equation
@@ -406,9 +406,13 @@ noncomputable def sylvesterEquiv (hr : 0 < radius)
     (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)
     (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B) :
     (F →L[ℂ] E) ≃L[ℂ] (F →L[ℂ] E) :=
-  ContinuousLinearEquiv.ofBijective (ContinuousLinearMap.sylvesterOperatorL A B)
+  ContinuousLinearEquiv.ofBijective (ContinuousLinearMap.sylvester A B)
     (LinearMap.ker_eq_bot'.mpr fun X hX => by
-      have hX' : A ∘L X - X ∘L B = 0 := hX
+      have hX' : A ∘L X - X ∘L B = 0 := by
+        calc
+          _ = ContinuousLinearMap.sylvester A B X := by
+            rw [ContinuousLinearMap.sylvester_apply]
+          _ = 0 := hX
       have h := rosenblumSolution_comp_sub_comp A B X hr hA hB
       rw [hX', rosenblumSolution_zero] at h
       exact h.symm)

@@ -453,4 +453,14 @@ finite-dimensional solver. Repository search found no maintained consumer of
 the removed local declarations. The local ordered and interval/exterior gap
 predicates remain: they are consumed by source-facing finite-dimensional and
 unbounded Sylvester estimates and are not replaced by the upstream equation API.
+The parallel bounded `ContinuousLinearMap.sylvesterOperator` and
+`sylvesterOperatorL` definitions, their linearity/coercivity wrappers, and the
+donor module `ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator` have
+also been removed. Bounded sine-theta, infinite-dimensional Sylvester, and
+Rosenblum consumers now state their equations through Tau Ceti's canonical
+`ContinuousLinearMap.sylvester`; the two operator-norm sine estimates use its
+accepted quadratic-form bound directly. The local operator-norm specialization
+`opNorm_le_div_of_comp_sub_comp_eq` was deleted after its consumers moved.
+The remaining local Sylvester bounds in `Bound.lean` support unitarily invariant
+gauges and other estimates not supplied by the accepted operator-norm theorem.
 The `ForTauCeti` and `DavisKahan.All` targets compile after the retirement.

@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
-public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator
+public import TauCeti.Analysis.InnerProductSpace.Sylvester
 
 /-!
 # Dimension-free Davis--Kahan `sin Θ`
@@ -31,9 +31,10 @@ the canonical Mathlib namespace of the object extended; the conclusion's head
 symbol is `Submodule.starProjection`, so it is now in `Submodule`.  The statement
 and the proof are unchanged apart from spelling the compatibility aliases
 `Reduces`, `projection` and `norm_sylvester_le_of_coercive` as the canonical
-`ContinuousLinearMap.Reduces`, `Submodule.starProjection` and
-`TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq` they forwarded
-to. Consumers now use these canonical declarations directly.
+`ContinuousLinearMap.Reduces` and `Submodule.starProjection`. Its Sylvester
+step now applies Tau Ceti's stronger
+`mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le` directly.
+Consumers use `ContinuousLinearMap.sylvester` for the equation representation.
 -/
 
 public section
@@ -78,8 +79,8 @@ form `≤ c‖·‖²` on `V`,
 
 This is the genuine infinite-dimensional `sin Θ` bound: the analytic core is the
 integral-free Sylvester estimate
-`TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq` (no spectral
-measure, no dimension or completeness hypothesis on the *bound* itself), and the
+`ContinuousLinearMap.mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le`
+(no spectral measure, no dimension or completeness hypothesis on the *bound* itself), and the
 block construction `A ∘L P + (c+g)(1−P)`, `B ∘L Q + c(1−Q)` uses only the
 dimension-free projection commutation
 `ContinuousLinearMap.starProjection_apply_comm_of_reduces`.  The
@@ -150,7 +151,8 @@ theorem sinTheta_directed_coercive
     rw [hre, hpyth]
     nlinarith [hVc (Q x) hqx]
   -- Sylvester relation A' X - X B' = Y
-  have hsylv : ContinuousLinearMap.sylvesterOperator A' B' X = Y := by
+  have hsylv : ContinuousLinearMap.sylvester A' B' X = Y := by
+    rw [ContinuousLinearMap.sylvester_apply]
     change A' ∘L X - X ∘L B' = Y
     ext x
     have hQxV : Q x ∈ V := V.starProjection_apply_mem x
@@ -185,9 +187,13 @@ theorem sinTheta_directed_coercive
       _ ≤ ‖B - A‖ * ‖x‖ := by
           refine mul_le_mul_of_nonneg_left ?_ (norm_nonneg _)
           rw [hQ]; exact V.norm_starProjection_apply_le x
-  have hXbound : ‖X‖ ≤ ‖B - A‖ / g :=
-    (TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq
-        hA'sym hB'sym hg hA'c hB'c hsylv).trans (by gcongr)
+  have hXbound : ‖X‖ ≤ ‖B - A‖ / g := (le_div_iff₀ hg).2 (by
+    calc ‖X‖ * g ≤ ‖ContinuousLinearMap.sylvester A' B' X‖ := by
+          simpa [mul_comm] using
+            (ContinuousLinearMap.mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le
+              hA'c hB'c X)
+      _ = ‖Y‖ := congrArg norm hsylv
+      _ ≤ ‖B - A‖ := hYnorm)
   have hstar : star (Q ∘L P : E →L[𝕜] E) = P ∘L Q := by
     rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
       ← ContinuousLinearMap.star_eq_adjoint, ← ContinuousLinearMap.star_eq_adjoint,

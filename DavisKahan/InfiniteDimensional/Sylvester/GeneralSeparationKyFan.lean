@@ -114,7 +114,7 @@ theorem kyFan_sylvester_le_of_generalSeparation_complex
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) (k : ℕ) :
+    (hEq : ContinuousLinearMap.sylvester A B X = C) (k : ℕ) :
     d * X.kyFanGaugeReal k ≤ (Real.pi / 2) * C.kyFanGaugeReal k := by
   rw [separatedSylvester_reconstruction hA hB hd hsep X C hEq]
   unfold separatedSylvesterSolution
@@ -153,16 +153,16 @@ omit [CompleteSpace Er] [CompleteSpace Fr] in
 /-- Complexification commutes with the bounded Sylvester operator. -/
 private theorem complexify_sylvesterOperator
     (A : Fr →L[ℝ] Fr) (B : Er →L[ℝ] Er) (X : Er →L[ℝ] Fr) :
-    complexify (ContinuousLinearMap.sylvesterOperator A B X) =
-      ContinuousLinearMap.sylvesterOperator (complexify A) (complexify B) (complexify X) := by
-  simp [ContinuousLinearMap.sylvesterOperator, complexify_comp, complexify_sub]
+    complexify (ContinuousLinearMap.sylvester A B X) =
+      ContinuousLinearMap.sylvester (complexify A) (complexify B) (complexify X) := by
+  simp [ContinuousLinearMap.sylvester, complexify_comp, complexify_sub]
 
 omit [CompleteSpace Er] [CompleteSpace Fr] in
 /-- A bounded real Sylvester equation complexifies exactly. -/
 private theorem complexify_sylvesterEquation
     {A : Fr →L[ℝ] Fr} {B : Er →L[ℝ] Er} {X C : Er →L[ℝ] Fr}
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
-    ContinuousLinearMap.sylvesterOperator (complexify A) (complexify B) (complexify X) =
+    (hEq : ContinuousLinearMap.sylvester A B X = C) :
+    ContinuousLinearMap.sylvester (complexify A) (complexify B) (complexify X) =
       complexify C := by
   rw [← complexify_sylvesterOperator, hEq]
 
@@ -178,7 +178,7 @@ theorem kyFan_sylvester_le_of_generalSeparation_real
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) (k : ℕ) :
+    (hEq : ContinuousLinearMap.sylvester A B X = C) (k : ℕ) :
     d * X.kyFanGaugeReal k ≤ (Real.pi / 2) * C.kyFanGaugeReal k := by
   have hfan := kyFan_sylvester_le_of_generalSeparation_complex
     ((complexify_isSymmetric_iff A).2 hA) ((complexify_isSymmetric_iff B).2 hB) hd
@@ -212,7 +212,7 @@ theorem idealGauge_sylvester_le_of_generalSeparation_real
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C)
+    (hEq : ContinuousLinearMap.sylvester A B X = C)
     (hC : N.Mem C) :
     N.Mem X ∧ d * N.gauge X ≤ (Real.pi / 2) * N.gauge C := by
   have hc : (0 : ℝ) < Real.pi / 2 := by positivity

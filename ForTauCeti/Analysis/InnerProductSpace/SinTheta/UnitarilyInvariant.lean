@@ -25,6 +25,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
+import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 
 /-! # The unitarily-invariant-norm Davis–Kahan sin-Θ theorem
 
@@ -106,9 +107,14 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantSemin
     simp only [hN']
     exact N.apply_comp_le' (norm_nonneg C) fun y => C.le_opNorm y
   -- The abstract Sylvester bound gives `N' X ≤ N' Y / g`.
+  have hsylv' : A ∘L X - X ∘L B = Y := by
+    calc
+      _ = ContinuousLinearMap.sylvester A B X := by
+        rw [ContinuousLinearMap.sylvester_apply]
+      _ = Y := hsylv
   have hbound : N' X ≤ N' Y / g :=
     TauCeti.ContinuousLinearMap.le_div_of_comp_sub_comp_eq hadd hsmul hidealL hidealR
-      hAsym hBsym hg hAc hBc hsylv
+      hAsym hBsym hg hAc hBc hsylv'
   -- `N' Y ≤ N (S − T)` by the ideal property (both projections are contractions).
   have hYcoe : (Y : E →ₗ[𝕜] E) = (P : E →ₗ[𝕜] E) ∘ₗ ((T - S) ∘ₗ (Q : E →ₗ[𝕜] E)) := by
     ext x
