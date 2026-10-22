@@ -73,8 +73,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     (W : Submodule 𝕜 H) [W.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction A U hred)
-      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
+      (A.restrict hred.isInvariant)
+      (A.restrict hred.orthogonal.isInvariant) δ)
     (hJdom : ∀ x : A.domain, W.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (TauCeti.LinearPMap.addBounded A D)
@@ -86,20 +86,18 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
         N.gauge (U.starProjection ∘L D ∘L
           (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection) := by
   set Uc := (Uᗮ : Submodule 𝕜 H) with hUc
-  set A₀ := TauCeti.LinearPMap.reducingRestriction A U hred with hA₀def
-  set Λ := TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal with hΛdef
+  set A₀ := A.restrict hred.isInvariant with hA₀def
+  set Λ := A.restrict hred.orthogonal.isInvariant with hΛdef
   set J : H →L[𝕜] H := W.reflectionOperator with hJ
   set X : U →L[𝕜] H := U.subtypeL with hX
   set F₁ : Uc →L[𝕜] H := J ∘L Uc.subtypeL with hF₁
   have hXdom : ∀ x : A₀.domain, X (x : U) ∈ A.domain := fun x =>
-    (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred _).mp x.2
+    (_root_.LinearPMap.mem_restrict_domain hred.isInvariant).mp x.2
   have hXint : ∀ x : A₀.domain,
       A ⟨X (x : U), hXdom x⟩ = X (A₀ x) := fun x =>
-    (TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred (x : U)
-      (hXdom x)).symm
+    (_root_.LinearPMap.coe_restrict_apply hred.isInvariant _).symm
   have hUcdom : ∀ y : Λ.domain, ((y : Uc) : H) ∈ A.domain := fun y =>
-    (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A Uᗮ hred.orthogonal
-      _).mp y.2
+    (_root_.LinearPMap.mem_restrict_domain hred.orthogonal.isInvariant).mp y.2
   have hF₁dom : ∀ y : Λ.domain, F₁ (y : Uc) ∈ A.domain := fun y =>
     hJdom ⟨((y : Uc) : H), hUcdom y⟩
   have hF₁int : ∀ y : Λ.domain,
@@ -107,8 +105,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
         F₁ (Λ y) := by
     intro y
     have hAy : A ⟨((y : Uc) : H), hUcdom y⟩ = ((Λ y : Uc) : H) :=
-      (TauCeti.LinearPMap.coe_reducingRestriction_apply A Uᗮ hred.orthogonal
-        (y : Uc) (hUcdom y)).symm
+      (_root_.LinearPMap.coe_restrict_apply hred.orthogonal.isInvariant _).symm
     calc
       (TauCeti.LinearPMap.addBounded A D) ⟨F₁ (y : Uc), hF₁dom y⟩
           = J (A ⟨((y : Uc) : H), hUcdom y⟩) :=
@@ -119,10 +116,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     isometricEmbedding_reflection_comp W (fun _ => rfl)
   have hraw := sinTheta_addBounded_gauge_block_of_formGap_rclike
     N A hA D hD
-    A₀ (by simpa only [hA₀def, TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
-      hred.isSelfAdjoint_restrict hA)
-    Λ (by simpa only [hΛdef, TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
-      hred.orthogonal.isSelfAdjoint_restrict hA)
+    A₀ (by simpa only [hA₀def] using hred.isSelfAdjoint_restrict hA)
+    Λ (by simpa only [hΛdef] using hred.orthogonal.isSelfAdjoint_restrict hA)
     X F₁ hXdom hXint hF₁dom hF₁int hF₁iso hδ hgap hDmem
   have hFproj : F₁ ∘L F₁.adjoint =
       (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection := by
@@ -222,8 +217,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction A U hred)
-      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ) :
+      (A.restrict hred.isInvariant)
+      (A.restrict hred.orthogonal.isInvariant) δ) :
     ∀ k : ℕ,
       δ * kyFanApproximationGauge k (sinTwoThetaIdealBlock U V) ≤
         2 * kyFanApproximationGauge k R := by
@@ -302,8 +297,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction A U hred)
-      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
+      (A.restrict hred.isInvariant)
+      (A.restrict hred.orthogonal.isInvariant) δ)
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock U V) ∧
       δ * N.gauge (sinTwoThetaIdealBlock U V) ≤ 2 * N.gauge R := by
@@ -343,8 +338,8 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction A U hred)
-      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
+      (A.restrict hred.isInvariant)
+      (A.restrict hred.orthogonal.isInvariant) δ)
     (hRmem : N.Mem R) :
     N.Mem (Angle.directedSinTwoAngleOperator V U) ∧
       δ * N.gauge (Angle.directedSinTwoAngleOperator V U) ≤ 2 * N.gauge R := by
@@ -370,8 +365,8 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction A U hred)
-      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ) :
+      (A.restrict hred.isInvariant)
+      (A.restrict hred.orthogonal.isInvariant) δ) :
     N.Mem (Angle.directedSinTwoAngleOperator V U) →
     N.Mem R →
       δ * N.gaugeReal (Angle.directedSinTwoAngleOperator V U) ≤ 2 * N.gaugeReal R := by
@@ -420,10 +415,9 @@ theorem sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
         R p + ((M p : P) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
-      (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        hQred.orthogonal.isInvariant) δ) :
     (N.Mem (Angle.directedSinTwoAngleOperator P Q) →
       N.Mem R →
         δ * N.gaugeReal (Angle.directedSinTwoAngleOperator P Q) ≤
