@@ -225,6 +225,50 @@ in `Rectangular/RankOne.lean` against the existing arbitrary-frame rank-one
 statements; eliminate a duplicate only when its source interface is subsumed.
 The source-specific population-gap and rank-boundary mathematics must remain.
 
+### 1c. Rectangular adjoint duality and rank-one Gram normalization
+
+The rank-one comparison found **no redundant hypothesis interface** to retire.
+`RankOne.lean`'s four fixed-basis variants accept a
+`CorrespondingRightSingularBlock` or `CorrespondingLeftSingularBlock` with a
+restricted-point-spectrum gap; the four arbitrary-frame variants instead fix a
+sorted eigenvalue index and impose a gap at every other population index.
+The stronger applicability of arbitrary sample frames does not make these
+assumption bundles definitionally interchangeable. All eight named theorems
+remain, with exactly their previous statements and paper/supporting status.
+
+The implementation does eliminate duplicate proofs:
+
+* `Rectangular/FrobeniusGram.lean` now proves the left-Gram **Frobenius**
+  perturbation inequality from `frobenius_rightGram_sub_le` applied to the
+  adjoint map, via `rightGram T.adjoint = leftGram T` and the existing
+  `rectangularFrobenius_adjoint`. The independent left-Gram difference expansion,
+  ideal-law estimates, and summation proof are retired. The **operator-norm**
+  left-Gram proof stays as a direct application of TauCeti's accepted
+  `ContinuousLinearMap.norm_self_comp_adjoint_sub_self_comp_adjoint_le`, not an
+  unnecessary detour through a local duality result.
+* `Rectangular/RankOne.lean` now shares one private real-number coefficient
+  inequality across the right/left, fixed-basis/arbitrary-frame corollaries.
+  Their four repeated arithmetic transport proofs are retired. The symmetric
+  eigenvector results, Gram perturbation estimates, gap assumptions, and eight
+  public theorem statements are unchanged.
+
+This pass changes neither the TauCeti pin nor any source census declaration.
+The next candidate is a declaration-by-declaration comparison of the remaining
+rectangular Frobenius ideal-law helpers with accepted upstream laws, retaining
+the cross-dimensional bounds where no exact match exists.
+
+Focused build:
+
+```bash
+lake exe cache get
+lake build \
+  YuWangSamworth2015.Rectangular.FrobeniusGram \
+  YuWangSamworth2015.Rectangular.Theorem4 \
+  YuWangSamworth2015.Rectangular.RankOne \
+  YuWangSamworth2015.Appendix.Lemma5 \
+  YuWangSamworth2015.Rectangular.SourceTheorem3
+```
+
 ### 2. Finish genuinely redundant restriction presentation, selectively
 
 The four-field `LinearPMap.ReducesSubspace` is already gone. Do **not** redo its
