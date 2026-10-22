@@ -152,7 +152,7 @@ theorem pointInternalGap_twoLevelOperator :
   intro lam μ hlam hμ
   -- On `U` the operator is multiplication by `b`.
   have hb : lam = b := by
-    obtain ⟨x, hxU, hx0, hxeq⟩ := mem_restrictedPointSpectrum_iff.mp hlam
+    obtain ⟨x, hxU, hx0, hxeq⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
     have hproj : projection U x = x := Submodule.starProjection_eq_self_iff.mpr hxU
     rw [twoLevelOperator_apply, hproj] at hxeq
     have hsm : ((b : ℝ) : 𝕜) • x = ((lam : ℝ) : 𝕜) • x := by
@@ -160,7 +160,7 @@ theorem pointInternalGap_twoLevelOperator :
     exact_mod_cast (eq_of_smul_eq_smul_right hx0 hsm).symm
   -- On `Uᗮ` it is multiplication by `a`.
   have ha : μ = a := by
-    obtain ⟨x, hxU, hx0, hxeq⟩ := mem_restrictedPointSpectrum_iff.mp hμ
+    obtain ⟨x, hxU, hx0, hxeq⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hμ
     have hproj : projection U x = 0 := by
       change U.starProjection x = 0
       rw [Submodule.starProjection_apply_eq_zero_iff]

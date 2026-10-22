@@ -81,13 +81,13 @@ example {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} {δ : ℝ}
 
 example {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} {δ c : ℝ} (hgap : PointInternalGap A U δ)
-    (hspec : PointSpectrumIn A U (Set.Iic c)) :
+    (hspec : Module.End.PointSpectrumIn A U (Set.Iic c)) :
     ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
   upperFormBound_of_pointSpectrumIn hA hgap.1 hspec
 
 example {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} {δ c : ℝ} (hgap : PointInternalGap A U δ)
-    (hspec : PointSpectrumIn A U (Set.Ici c)) :
+    (hspec : Module.End.PointSpectrumIn A U (Set.Ici c)) :
     ∀ x ∈ U, c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 :=
   lowerFormBound_of_pointSpectrumIn hA hgap.1 hspec
 

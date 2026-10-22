@@ -20,7 +20,7 @@ The seams are not hypothetical.  All three are recorded regressions or review fi
    take an `hAselected` asserting spectral containment for the selected block
    `Module.End.pointSpectralSubspace A (Set.Icc a b)`. That fact holds without
    an additional hypothesis, and
-   is now proved once, as `pointSpectrumIn_pointSpectralSubspace`.  Nothing prevents a future edit
+   is now proved once, as `Module.End.pointSpectrumIn_pointSpectralSubspace`.  Nothing prevents a future edit
    from
    re-adding the argument, and the library would still build; the example below would not.
 2. **One rectangular seminorm interface.** The examples exercise the inherited `Seminorm`
@@ -46,7 +46,7 @@ open scoped BigOperators
 
 /-! ## Seam 1 — the spectral subspace supplies its own spectral-containment hypothesis
 
-`pointSpectrumIn_pointSpectralSubspace` is the theorem that made the `hAselected` argument
+`Module.End.pointSpectrumIn_pointSpectralSubspace` is the theorem that made the `hAselected` argument
 redundant.
 The example restates the sin-Θ bound with *only* the exterior hypothesis about `B`; if
 `hAselected` ever returns to the signature, this stops elaborating. -/
@@ -59,7 +59,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDi
 example (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hBoutside : PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
+    (hBoutside : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinThetaMap (Module.End.pointSpectralSubspace A (Set.Icc a b))
         (Module.End.pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) :=
@@ -68,8 +68,8 @@ example (N : UnitarilyInvariantSeminorm 𝕜 E E)
 /-- The hypothesis that was removed, on its own: it is a theorem, for every operator and
 every set, with no side condition. -/
 example (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    PointSpectrumIn A (Module.End.pointSpectralSubspace A Ω) Ω :=
-  pointSpectrumIn_pointSpectralSubspace A Ω
+    Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A Ω) Ω :=
+  Module.End.pointSpectrumIn_pointSpectralSubspace A Ω
 
 end SpectralSubspaceSinTheta
 

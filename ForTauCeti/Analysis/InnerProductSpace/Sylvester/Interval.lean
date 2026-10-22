@@ -321,7 +321,11 @@ theorem uiNorm_sylvester_le_of_intervalGap
   let : NeZero (Module.finrank 𝕜 F) :=
     ⟨Nat.ne_of_gt Module.finrank_pos⟩
   let j₀ : Fin (Module.finrank 𝕜 E) := ⟨0, Module.finrank_pos⟩
-  have hj₀ := hgap.1 (eigenvalue_mem_restrictedPointSpectrum_top hB j₀)
+  have hj₀mem : hB.eigenvalues rfl j₀ ∈ Set.Icc a b := by
+    obtain ⟨x, hxTop, hx0, hBx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp
+      (eigenvalue_mem_restrictedPointSpectrum_top hB j₀)
+    exact (Module.End.pointSpectrumIn_iff.mp hgap.1) x hxTop hx0 _ hBx
+  have hj₀ := hj₀mem
   have hab : a ≤ b := hj₀.1.trans hj₀.2
   let m : ℝ := (a + b) / 2
   let r : ℝ := (b - a) / 2

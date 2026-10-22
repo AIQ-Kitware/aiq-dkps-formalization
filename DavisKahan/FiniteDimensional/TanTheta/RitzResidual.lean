@@ -45,8 +45,8 @@ the exact subspace is contained in `[α + δ, ∞)`. -/
 def TanThetaIntervalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
     (β α δ : ℝ) : Prop :=
-  PointSpectrumIn (compression A X) ⊤ (Set.Icc β α) ∧
-    PointSpectrumIn A Uᗮ (Set.Ici (α + δ))
+  Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Icc β α) ∧
+    Module.End.PointSpectrumIn A Uᗮ (Set.Ici (α + δ))
 
 /-- The paper's interval hypotheses force the trial and exact subspaces to be
 transverse.  Thus the tangent has no `π/2` pole; this is a conclusion, not an
@@ -69,7 +69,7 @@ theorem isTransverse_of_tanThetaIntervalGap
   have hTopRed : IsInvariant (compression A X) ⊤ := by
     intro z _
     exact Submodule.mem_top
-  have hMspec : PointSpectrumIn (compression A X) ⊤ (Set.Iic α) := by
+  have hMspec : Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Iic α) := by
     intro lam hlam
     exact (hgap.1 hlam).2
   have hMupper :
@@ -460,7 +460,7 @@ theorem tanThetaResidualWitness_scalar
         adjoint_apply_sinTheta_leftSingularVector U X hσzero
     have hMupper : RCLike.re ⟪M v, v⟫_𝕜 ≤ α := by
       have hTopRed : IsInvariant M ⊤ := fun z _ => Submodule.mem_top
-      have hspec : PointSpectrumIn M ⊤ (Set.Iic α) := by
+      have hspec : Module.End.PointSpectrumIn M ⊤ (Set.Iic α) := by
         intro lam hlam
         exact (hgap.1 hlam).2
       have hbound : RCLike.re ⟪M v, v⟫_𝕜 ≤ α * ‖v‖ ^ 2 :=

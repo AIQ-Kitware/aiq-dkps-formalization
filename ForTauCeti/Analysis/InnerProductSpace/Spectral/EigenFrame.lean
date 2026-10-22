@@ -87,8 +87,8 @@ theorem isInvariant_span (h : IsEigenFamily T c y) :
 
 /-- Every recorded eigenvalue is carried by the span. -/
 theorem eigenvalue_mem_restrictedPointSpectrum (h : IsEigenFamily T c y) (i : ι) :
-    c i ∈ restrictedPointSpectrum T (Submodule.span 𝕜 (Set.range y)) :=
-  mem_restrictedPointSpectrum (Submodule.subset_span ⟨i, rfl⟩) (h.orthonormal.ne_zero i)
+    c i ∈ Module.End.restrictedPointSpectrum T (Submodule.span 𝕜 (Set.range y)) :=
+  Module.End.mem_restrictedPointSpectrum (Submodule.subset_span ⟨i, rfl⟩) (h.orthonormal.ne_zero i)
     (h.apply_eq i)
 
 /-- The span of an eigenfamily has the dimension of its index type. -/
@@ -103,15 +103,15 @@ eigenvalue on the other, so every coordinate of a vector with a new eigenvalue
 vanishes and the vector is `0`.
 
 This is what makes an eigenframe hypothesis usable as a *spectral* hypothesis:
-`PointInternalGap` quantifies over `restrictedPointSpectrum`, which a caller can only
+`PointInternalGap` quantifies over `Module.End.restrictedPointSpectrum`, which a caller can only
 control through a statement of this kind. -/
 theorem restrictedPointSpectrum_span_subset [Finite ι] [FiniteDimensional 𝕜 E]
     (h : IsEigenFamily T c y) (hT : T.IsSymmetric) :
-    restrictedPointSpectrum T (Submodule.span 𝕜 (Set.range y)) ⊆ Set.range c := by
+    Module.End.restrictedPointSpectrum T (Submodule.span 𝕜 (Set.range y)) ⊆ Set.range c := by
   classical
   have _ : Fintype ι := Fintype.ofFinite ι
   intro lam hlam
-  obtain ⟨x, hxU, hx0, hxEig⟩ := mem_restrictedPointSpectrum_iff.mp hlam
+  obtain ⟨x, hxU, hx0, hxEig⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
   by_contra hnot
   -- Every coordinate of `x` against the family vanishes.
   have hcoord : ∀ i, ⟪y i, x⟫_𝕜 = 0 := by

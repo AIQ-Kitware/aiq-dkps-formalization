@@ -50,7 +50,8 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 @[expose]
 def PointSpectraSeparated (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (δ : ℝ) : Prop :=
-  ∀ lam μ, lam ∈ restrictedPointSpectrum A U → μ ∈ restrictedPointSpectrum B V →
+  ∀ lam μ, lam ∈ Module.End.restrictedPointSpectrum A U →
+    μ ∈ Module.End.restrictedPointSpectrum B V →
     δ ≤ |lam - μ|
 
 /-- The mixed separation used by the `sin Θ` theorem: the selected block of
@@ -86,14 +87,15 @@ The complementary subspace, when needed, is supplied explicitly by the caller. -
 @[expose]
 def PointIntervalExteriorGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (a b δ : ℝ) : Prop :=
-  PointSpectrumIn A U (Set.Icc a b) ∧
-    PointSpectrumIn B V {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}
+  Module.End.PointSpectrumIn A U (Set.Icc a b) ∧
+    Module.End.PointSpectrumIn B V {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}
 
 /-- The one-sided gap used by the tangent theorems. -/
 @[expose]
 def OrderedGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (δ : ℝ) : Prop :=
-  ∀ lam μ, lam ∈ restrictedPointSpectrum A U → μ ∈ restrictedPointSpectrum B V →
+  ∀ lam μ, lam ∈ Module.End.restrictedPointSpectrum A U →
+    μ ∈ Module.End.restrictedPointSpectrum B V →
     lam + δ ≤ μ
 
 /-- Ordered separation of the two diagonal blocks of `A`, in either
@@ -118,8 +120,8 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 turns a hypothesis a caller can check into the one the theorems consume. -/
 theorem orderedGap_of_restrictedPointSpectrum_subset {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
     {B : F →ₗ[𝕜] F} {V : Submodule 𝕜 F} {a δ : ℝ}
-    (hA : restrictedPointSpectrum A U ⊆ Set.Iic a)
-    (hB : restrictedPointSpectrum B V ⊆ Set.Ici (a + δ)) :
+    (hA : Module.End.restrictedPointSpectrum A U ⊆ Set.Iic a)
+    (hB : Module.End.restrictedPointSpectrum B V ⊆ Set.Ici (a + δ)) :
     OrderedGap A U B V δ := by
   intro lam μ hlam hμ
   have h1 : lam ≤ a := hA hlam
@@ -131,13 +133,15 @@ omit [FiniteDimensional 𝕜 E] in
 ordered internal gap. -/
 theorem orderedInternalGap_of_pointSpectrumIn_Iic_Ici
     {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} {a b : ℝ}
-    (hUa : PointSpectrumIn A U (Set.Iic a))
-    (hUb : PointSpectrumIn A Uᗮ (Set.Ici b)) :
+    (hUa : Module.End.PointSpectrumIn A U (Set.Iic a))
+    (hUb : Module.End.PointSpectrumIn A Uᗮ (Set.Ici b)) :
     OrderedInternalGap A U (b - a) := by
   left
   intro lam μ hlam hμ
-  have hlam_le : lam ≤ a := hUa hlam
-  have hb_le_hμ : b ≤ μ := hUb hμ
+  obtain ⟨x, hxU, hx0, hAx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
+  obtain ⟨y, hyU, hy0, hAy⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hμ
+  have hlam_le : lam ≤ a := (Module.End.pointSpectrumIn_iff.mp hUa) x hxU hx0 lam hAx
+  have hb_le_hμ : b ≤ μ := (Module.End.pointSpectrumIn_iff.mp hUb) y hyU hy0 μ hAy
   linarith
 
 omit [FiniteDimensional 𝕜 E] in

@@ -26,7 +26,7 @@ proof expands `P_{Uᗮ} wᵢ` in an eigenfamily of `T|Uᗮ` (`exists_isEigenFami
 each coordinate is multiplied by `lam i − μₖ`, and every such difference is at
 least `Δ` because `lam i` and `μₖ` sit on opposite sides of the gap.
 
-Because the trial values are only required to lie in `restrictedPointSpectrum T U`,
+Because the trial values are only required to lie in `Module.End.restrictedPointSpectrum T U`,
 the statement is insensitive to which eigenvectors were chosen inside a repeated
 eigenspace — the point of `TauCeti.IsEigenFamily`.
 
@@ -102,7 +102,7 @@ of `T|Uᗮ` followed by Bessel. -/
 theorem sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le (hT : T.IsSymmetric)
     {U : Submodule 𝕜 E} {Δ : ℝ} (hΔ : 0 ≤ Δ)
     (hgap : PointInternalGap T U Δ) {d : ℕ} (w : Fin d → E) (lam : Fin d → ℝ)
-    (hlam : ∀ i, lam i ∈ restrictedPointSpectrum T U) :
+    (hlam : ∀ i, lam i ∈ Module.End.restrictedPointSpectrum T U) :
     Δ ^ 2 * ∑ i, ‖Uᗮ.starProjection (w i)‖ ^ 2
       ≤ ∑ i, ‖(lam i : 𝕜) • w i - T (w i)‖ ^ 2 := by
   classical

@@ -173,8 +173,8 @@ theorem sinTheta_residual_le
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hMspec : PointSpectrumIn M ⊤ (Set.Icc a b))
-    (hAspec : PointSpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
+    (hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b))
+    (hAspec : Module.End.PointSpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
   refine (sinTheta_residual_le_of_sylvester (c := 1) N hA hU X zero_le_one
     ?_).trans_eq (one_mul _)
@@ -206,7 +206,7 @@ theorem sinTheta_residual_le_of_orderedGap
     apply hgap lam μ hlam
     -- restates the spectrum membership through the restriction, the form the
     -- following step matches.
-    change μ ∈ restrictedPointSpectrum (A.restrict hUperp) ⊤ at hμ
+    change μ ∈ Module.End.restrictedPointSpectrum (A.restrict hUperp) ⊤ at hμ
     rw [restrictedPointSpectrum_restrict A hUperp] at hμ
     exact hμ
   exact (uiNorm_sylvester_le_of_orderedGap (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
@@ -231,7 +231,7 @@ theorem sinTheta_residual_le_of_spectralDistance
   have hUperp := isInvariant_orthogonal_of_isSymmetric hA hU
   have hgap' : PointSpectraSeparated (A.restrict hUperp) ⊤ M ⊤ δ := by
     intro lam μ hlam hμ
-    have hlam' : lam ∈ restrictedPointSpectrum A Uᗮ := by
+    have hlam' : lam ∈ Module.End.restrictedPointSpectrum A Uᗮ := by
       rw [← restrictedPointSpectrum_restrict A hUperp]
       exact hlam
     have hsep := hgap μ lam hμ hlam'
@@ -260,8 +260,8 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : IsInvariant A U) (hV : IsInvariant B V)
     {c g ε : ℝ} (hg : 0 < g)
-    (hUspec : PointSpectrumIn A U (Set.Ici (c + g)))
-    (hVspec : PointSpectrumIn B V (Set.Iic c))
+    (hUspec : Module.End.PointSpectrumIn A U (Set.Ici (c + g)))
+    (hVspec : Module.End.PointSpectrumIn B V (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖(V.starProjection ∘L U.starProjection : E →L[𝕜] E)‖ ≤ ε / g := by
   have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
@@ -300,13 +300,13 @@ Related Lean work: `YuanheZ/lean-stat-learning-theory`,
 `216e578c9576bab6b0abc3ba6c65762536768e96`, proves a closely matching
 interval/set-separated cross-projection estimate named
 `davisKahan_spectralProjection_hdp`.  That proof is finite-dimensional and
-centered-shift based; this theorem instead exposes the local `PointSpectrumIn` API
+centered-shift based; this theorem instead exposes the local `Module.End.PointSpectrumIn` API
 and dispatches through the dimension-free coercive Sylvester core. -/
 theorem opNorm_pointSpectralSubspace_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g ε : ℝ} (hg : 0 < g)
-    (hUspec : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
-    (hVspec : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Iic c))
+    (hUspec : Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
+    (hVspec : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((Module.End.pointSpectralSubspace B t).starProjection ∘L
         (Module.End.pointSpectralSubspace A s).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
@@ -324,8 +324,8 @@ theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : IsInvariant A U) (hV : IsInvariant B V)
     {c g : ℝ} (hg : 0 < g)
-    (hUspec : PointSpectrumIn A U (Set.Ici (c + g)))
-    (hVspec : PointSpectrumIn B V (Set.Iic c)) :
+    (hUspec : Module.End.PointSpectrumIn A U (Set.Ici (c + g)))
+    (hVspec : Module.End.PointSpectrumIn B V (Set.Iic c)) :
     N ((V.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (B - A) / g := by
   have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
@@ -343,8 +343,8 @@ theorem uiNorm_pointSpectralSubspace_directed_sinTheta_le
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g : ℝ} (hg : 0 < g)
-    (hUspec : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
-    (hVspec : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Iic c)) :
+    (hUspec : Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
+    (hVspec : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Iic c)) :
     N (((Module.End.pointSpectralSubspace B t).starProjection ∘L
         (Module.End.pointSpectralSubspace A s).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (B - A) / g :=
@@ -355,7 +355,7 @@ theorem uiNorm_pointSpectralSubspace_directed_sinTheta_le
 
 The generic `RCLike` projector theorem now supplies the sharp factor-one bound
 without an equal-rank hypothesis.  Finite-dimensional spectral decomposition is
-used only to turn the four `PointSpectrumIn` assumptions into quadratic-form bounds;
+used only to turn the four `Module.End.PointSpectrumIn` assumptions into quadratic-form bounds;
 all projection geometry and Sylvester analysis are inherited from the supported
 dimension-free core. -/
 
@@ -373,10 +373,10 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     (hU : IsInvariant A U) (hW : IsInvariant B W)
     {c g ε : ℝ} (hg : 0 < g)
-    (hUhi : PointSpectrumIn A U (Set.Ici (c + g)))
-    (hUlo : PointSpectrumIn A Uᗮ (Set.Iic c))
-    (hWhi : PointSpectrumIn B W (Set.Ici (c + g)))
-    (hWlo : PointSpectrumIn B Wᗮ (Set.Iic c))
+    (hUhi : Module.End.PointSpectrumIn A U (Set.Ici (c + g)))
+    (hUlo : Module.End.PointSpectrumIn A Uᗮ (Set.Iic c))
+    (hWhi : Module.End.PointSpectrumIn B W (Set.Ici (c + g)))
+    (hWlo : Module.End.PointSpectrumIn B Wᗮ (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖(U.starProjection - W.starProjection : E →L[𝕜] E)‖ ≤ ε / g := by
   have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
@@ -428,8 +428,10 @@ theorem opNorm_starProjection_sub_le_two {A B : E →ₗ[𝕜] E}
     {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     (hU : IsInvariant A U) (hW : IsInvariant B W)
     {c g ε : ℝ} (hg : 0 < g)
-    (hUhi : PointSpectrumIn A U (Set.Ici (c + g))) (hUlo : PointSpectrumIn A Uᗮ (Set.Iic c))
-    (hWhi : PointSpectrumIn B W (Set.Ici (c + g))) (hWlo : PointSpectrumIn B Wᗮ (Set.Iic c))
+    (hUhi : Module.End.PointSpectrumIn A U (Set.Ici (c + g)))
+    (hUlo : Module.End.PointSpectrumIn A Uᗮ (Set.Iic c))
+    (hWhi : Module.End.PointSpectrumIn B W (Set.Ici (c + g)))
+    (hWlo : Module.End.PointSpectrumIn B Wᗮ (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖(U.starProjection - W.starProjection : E →L[𝕜] E)‖ ≤ 2 * (ε / g) := by
   have hsharp := opNorm_starProjection_sub_le hA hB hU hW hg
@@ -449,10 +451,10 @@ the generic projection geometry. -/
 theorem opNorm_pointSpectralSubspace_sub_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g ε : ℝ} (hg : 0 < g)
-    (hAhi : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
-    (hAlo : PointSpectrumIn A (Module.End.pointSpectralSubspace A s)ᗮ (Set.Iic c))
-    (hBhi : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Ici (c + g)))
-    (hBlo : PointSpectrumIn B (Module.End.pointSpectralSubspace B t)ᗮ (Set.Iic c))
+    (hAhi : Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
+    (hAlo : Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A s)ᗮ (Set.Iic c))
+    (hBhi : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Ici (c + g)))
+    (hBlo : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B t)ᗮ (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((Module.End.pointSpectralSubspace A s).starProjection
         - (Module.End.pointSpectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
@@ -465,10 +467,10 @@ their operators automatically). -/
 theorem opNorm_pointSpectralSubspace_sub_le_two {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {s t : Set ℝ}
     {c g ε : ℝ} (hg : 0 < g)
-    (hAhi : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
-    (hAlo : PointSpectrumIn A (Module.End.pointSpectralSubspace A s)ᗮ (Set.Iic c))
-    (hBhi : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Ici (c + g)))
-    (hBlo : PointSpectrumIn B (Module.End.pointSpectralSubspace B t)ᗮ (Set.Iic c))
+    (hAhi : Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g)))
+    (hAlo : Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A s)ᗮ (Set.Iic c))
+    (hBhi : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Ici (c + g)))
+    (hBlo : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B t)ᗮ (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((Module.End.pointSpectralSubspace A s).starProjection
         - (Module.End.pointSpectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ 2 * (ε / g) :=

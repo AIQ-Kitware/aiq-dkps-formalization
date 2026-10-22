@@ -1536,9 +1536,9 @@ private theorem isInvariant_span_singleton {A : Plane 𝕜 →ₗ[𝕜] Plane �
 
 private theorem restrictedPointSpectrum_span_singleton_subset {A : Plane 𝕜 →ₗ[𝕜] Plane 𝕜}
     {u : Plane 𝕜} (hu : u ≠ 0) {lam : ℝ} (h : A u = (lam : 𝕜) • u) :
-    restrictedPointSpectrum A (Submodule.span 𝕜 {u}) ⊆ {lam} := by
+    Module.End.restrictedPointSpectrum A (Submodule.span 𝕜 {u}) ⊆ {lam} := by
   intro μ hμ
-  rw [mem_restrictedPointSpectrum_iff] at hμ
+  rw [Module.End.mem_restrictedPointSpectrum_iff] at hμ
   obtain ⟨x, hxU, hx0, hxeq⟩ := hμ
   rw [Submodule.mem_span_singleton] at hxU
   obtain ⟨c, rfl⟩ := hxU

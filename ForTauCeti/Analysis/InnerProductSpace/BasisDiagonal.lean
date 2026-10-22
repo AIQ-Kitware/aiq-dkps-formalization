@@ -201,10 +201,10 @@ coefficient at some index of `s`.
 This is what turns a spectral-gap hypothesis into arithmetic on `c`. -/
 theorem restrictedPointSpectrum_basisDiagonal_subset (b : OrthonormalBasis ι 𝕜 E)
     (c : ι → ℝ) (s : Set ι) :
-    restrictedPointSpectrum (basisDiagonal b c) (b.spanIndices s) ⊆ c '' s := by
+    Module.End.restrictedPointSpectrum (basisDiagonal b c) (b.spanIndices s) ⊆ c '' s := by
   classical
   intro lam hlam
-  obtain ⟨x, hxs, hx0, hxeq⟩ := mem_restrictedPointSpectrum_iff.mp hlam
+  obtain ⟨x, hxs, hx0, hxeq⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
   -- `x` also lies in the eigenspace, which is the level set block.
   have hxlevel : x ∈ b.spanIndices {i | (c i : 𝕜) = (lam : 𝕜)} := by
     rw [← eigenspace_basisDiagonal]
