@@ -81,10 +81,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike_probe
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
-      (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.orthogonal.isInvariant) δ) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
     N.Mem Hop →
       δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -111,8 +109,8 @@ theorem sinTwoTheta_directed_whereDefinedUIN_rclike_production_probe
     (hres : ∀ v : trial, A ⟨(v : E), htrialDom v⟩ = R v + ((M v : trial) : E))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction A gapCarrier hred)
-      (TauCeti.LinearPMap.reducingRestriction A gapCarrierᗮ hred.orthogonal) δ) :
+      (A.restrict hred.isInvariant)
+      (A.restrict hred.orthogonal.isInvariant) δ) :
     N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) →
     N.Mem R →
       δ * N.gaugeReal
@@ -134,8 +132,8 @@ theorem sinTwoTheta_complete_whereDefinedUIN_rclike_production_probe
     (hQ : _root_.LinearPMap.IsReducing T Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction T Q hQ)
-      (TauCeti.LinearPMap.reducingRestriction T Qᗮ hQ.orthogonal) δ) :
+      (T.restrict hQ.isInvariant)
+      (T.restrict hQ.orthogonal.isInvariant) δ) :
     (∀ R : P →L[𝕜] E,
       (∀ p : P, ∀ hp : (p : E) ∈ T.domain,
         T ⟨(p : E), hp⟩ = A ⟨(p : E), by rw [← hdom]; exact hp⟩ + R p) →
