@@ -277,6 +277,10 @@ change does not claim that the broader restriction bridge has been retired.
 The upstream result is in the canonical reducing API associated with
 [#13980](https://github.com/TauCetiProject/TauCeti/pull/13980); that PR remains
 classified as related API refinement, not a direct DKPS proof port.
+The now-unused donor and Davis--Kahan symmetry forwarding theorems were also
+removed; Tau Ceti's `LinearPMap.IsFormalAdjoint.restrict` is the canonical
+symmetry-preservation result, and maintained-source search found no callers of
+the forwarding names.
 
 **Historical dependency pin:** the October 21 YWS consumption overlay updated TauCeti
 from `87dad819828705ed8329ff53b9bc53634a064b1a` to
