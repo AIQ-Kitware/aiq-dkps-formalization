@@ -45,13 +45,12 @@ singular-subspace argument that consumes them.
   gap condition, or a spectral subspace — and its one non-Mathlib dependency,
   `norm_gram_sub_gram_apply_le`, already lives in
   `ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean`.
-* Deliberately **not** migrated with it: `rightSingularSubspace` and
-  `leftSingularSubspace`, which depend on `pointSpectralSubspace` (still in
-  `DavisKahan/FiniteDimensional/Core`), and the Hermitian-dilation block,
-  which is unused outside its defining file.  (This note used to add that the
-  name was homonymous with an unrelated bounded `hermitianDilation` in
-  `TauCeti.DavisKahanExt`; no such declaration exists, so that half of the
-  recorded reason is void.)
+* The former paper-local `rightSingularSubspace` and `leftSingularSubspace`
+  definitions have been retired: `YuWangSamworth2015.Core.SingularSubspace`
+  consumes `LinearMap.rightSingularSubspace` and
+  `LinearMap.leftSingularSubspace` from TauCeti, built on its canonical
+  point-spectral subspaces. The paper-facing Hermitian-dilation block remains
+  in the YWS module; this Gram operator file does not implement it.
 * Spectra influence: none.
 -/
 

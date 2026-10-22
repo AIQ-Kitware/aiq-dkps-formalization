@@ -52,16 +52,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
-/-- Right singular subspace selected by squared singular values in `Ω`. -/
-noncomputable def rightSingularSubspace (A : E →ₗ[𝕜] F) (Ω : Set ℝ) :
-    Submodule 𝕜 E :=
-  pointSpectralSubspace (rightGram A) Ω
-
-/-- Left singular subspace selected by squared singular values in `Ω`. -/
-noncomputable def leftSingularSubspace (A : E →ₗ[𝕜] F) (Ω : Set ℝ) :
-    Submodule 𝕜 F :=
-  pointSpectralSubspace (leftGram A) Ω
-
 /-- The product-coordinate block map underlying the Hermitian dilation. -/
 noncomputable def hermitianDilationProd (A : E →ₗ[𝕜] F) :
     (E × F) →ₗ[𝕜] (E × F) where
@@ -120,95 +110,47 @@ theorem hermitianDilation_sq (A : E →ₗ[𝕜] F) :
   apply WithLp.ofLp_injective 2
   ext <;> simp [rightGram, leftGram]
 
-/-! ### The upstream singular-subspace perturbation interface
+/-! ### Canonical singular-subspace perturbation interface
 
-The paper-facing statements below retain the historical `rightSingularSubspace`,
-`leftSingularSubspace` and `sinThetaMap` spellings. Their mathematical bounds are
-now applications of the canonical TauCeti `LinearMap` results, not independent
-Davis--Kahan/Sylvester/Gram perturbation proofs. These private conversions can
-be deleted when the legacy representation is retired. -/
+The YWS singular-subspace bounds are specializations of the accepted TauCeti
+Gram perturbation results. The selected subspaces, interval/exterior gap, and
+sine map below use TauCeti's canonical APIs directly. No separate singular
+subspace representation or compatibility conversions are maintained here. -/
 
-private theorem rightSingularSubspace_eq_canonical (A : E →ₗ[𝕜] F) (Ω : Set ℝ) :
-    rightSingularSubspace A Ω = A.rightSingularSubspace Ω := by
-  rw [rightSingularSubspace, TauCeti.pointSpectralSubspace, TauCeti.rightGram,
-    LinearMap.rightSingularSubspace_eq_pointSpectralSubspace,
-    Module.End.pointSpectralSubspace_eq_span]
-
-private theorem leftSingularSubspace_eq_canonical (A : E →ₗ[𝕜] F) (Ω : Set ℝ) :
-    leftSingularSubspace A Ω = A.leftSingularSubspace Ω := by
-  rw [leftSingularSubspace, TauCeti.pointSpectralSubspace, TauCeti.leftGram,
-    LinearMap.leftSingularSubspace_eq_pointSpectralSubspace,
-    Module.End.pointSpectralSubspace_eq_span]
-
-private theorem pointSpectrumIn_to_canonical {G : Type*}
-    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
-    {T : G →ₗ[𝕜] G} {U : Submodule 𝕜 G} {Ω : Set ℝ}
-    (h : TauCeti.PointSpectrumIn T U Ω) : Module.End.PointSpectrumIn T U Ω := by
-  refine Module.End.pointSpectrumIn_iff.mpr ?_
-  intro x hxU hx0 μ hx
-  exact h (TauCeti.mem_restrictedPointSpectrum hxU hx0 hx)
-
-private theorem norm_sinThetaMap_eq_canonical {G : Type*}
-    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [FiniteDimensional 𝕜 G]
-    (U V : Submodule 𝕜 G) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖(TauCeti.sinThetaMap U V).toContinuousLinearMap‖ = ‖U.sinThetaMap V‖ := by
-  congr 1
-  ext x; simp [TauCeti.sinThetaMap, TauCeti.complementaryProjection, TauCeti.projection]
-
-/-- Right singular-subspace `sin Θ` theorem, as a specialization of the
-canonical TauCeti Gram perturbation theorem. -/
+/-- Right singular-subspace `sin Θ` theorem, using the canonical Gram
+perturbation theorem with the same spectral window on both operators. -/
 theorem rightSingularSubspace_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (_hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap (rightGram A)
-      (rightSingularSubspace A (Set.Icc a b)) (rightGram Â)
-      (rightSingularSubspace Â (Set.Icc a b))ᗮ a b δ) :
-    δ * ‖(sinThetaMap (rightSingularSubspace A (Set.Icc a b))
-        (rightSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
+    (hgap : Module.End.PointIntervalExteriorGap (A.adjoint ∘ₗ A)
+      (A.rightSingularSubspace (Set.Icc a b)) (Â.adjoint ∘ₗ Â)
+      (Â.rightSingularSubspace (Set.Icc a b))ᗮ a b δ) :
+    δ * ‖(A.rightSingularSubspace (Set.Icc a b)).sinThetaMap
+        (Â.rightSingularSubspace (Set.Icc a b))‖ ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  have hgap' : Module.End.PointIntervalExteriorGap (A.adjoint ∘ₗ A)
-      (A.rightSingularSubspace (Set.Icc a b)) (Â.adjoint ∘ₗ Â)
-      (Â.rightSingularSubspace (Set.Icc a b))ᗮ a b δ := by
-    refine ⟨?_, ?_⟩
-    · rw [← rightSingularSubspace_eq_canonical A (Set.Icc a b)]
-      exact pointSpectrumIn_to_canonical hgap.1
-    · rw [← rightSingularSubspace_eq_canonical Â (Set.Icc a b)]
-      exact pointSpectrumIn_to_canonical hgap.2
-  have h := LinearMap.mul_norm_sinThetaMap_rightSingularSubspace_le A Â hgap'
-  rw [← rightSingularSubspace_eq_canonical A (Set.Icc a b),
-    ← rightSingularSubspace_eq_canonical Â (Set.Icc a b),
-    ← norm_sinThetaMap_eq_canonical] at h
+  have h := LinearMap.mul_norm_sinThetaMap_rightSingularSubspace_le A Â hgap
   have hsub : (Â - A).toContinuousLinearMap =
       Â.toContinuousLinearMap - A.toContinuousLinearMap := by
-    ext x; rfl
+    ext x
+    rfl
   rw [← hsub] at h
   exact h
 
-/-- Left singular-subspace counterpart, reusing the canonical Gram theorem. -/
+/-- Left singular-subspace `sin Θ` counterpart, using the accepted Gram bound. -/
 theorem leftSingularSubspace_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {a b δ : ℝ} (_hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap (leftGram A)
-      (leftSingularSubspace A (Set.Icc a b)) (leftGram Â)
-      (leftSingularSubspace Â (Set.Icc a b))ᗮ a b δ) :
-    δ * ‖(sinThetaMap (leftSingularSubspace A (Set.Icc a b))
-        (leftSingularSubspace Â (Set.Icc a b))).toContinuousLinearMap‖ ≤
+    (hgap : Module.End.PointIntervalExteriorGap (A ∘ₗ A.adjoint)
+      (A.leftSingularSubspace (Set.Icc a b)) (Â ∘ₗ Â.adjoint)
+      (Â.leftSingularSubspace (Set.Icc a b))ᗮ a b δ) :
+    δ * ‖(A.leftSingularSubspace (Set.Icc a b)).sinThetaMap
+        (Â.leftSingularSubspace (Set.Icc a b))‖ ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  have hgap' : Module.End.PointIntervalExteriorGap (A ∘ₗ A.adjoint)
-      (A.leftSingularSubspace (Set.Icc a b)) (Â ∘ₗ Â.adjoint)
-      (Â.leftSingularSubspace (Set.Icc a b))ᗮ a b δ := by
-    refine ⟨?_, ?_⟩
-    · rw [← leftSingularSubspace_eq_canonical A (Set.Icc a b)]
-      exact pointSpectrumIn_to_canonical hgap.1
-    · rw [← leftSingularSubspace_eq_canonical Â (Set.Icc a b)]
-      exact pointSpectrumIn_to_canonical hgap.2
-  have h := LinearMap.mul_norm_sinThetaMap_leftSingularSubspace_le A Â hgap'
-  rw [← leftSingularSubspace_eq_canonical A (Set.Icc a b),
-    ← leftSingularSubspace_eq_canonical Â (Set.Icc a b),
-    ← norm_sinThetaMap_eq_canonical] at h
+  have h := LinearMap.mul_norm_sinThetaMap_leftSingularSubspace_le A Â hgap
   have hsub : (Â - A).toContinuousLinearMap =
       Â.toContinuousLinearMap - A.toContinuousLinearMap := by
-    ext x; rfl
+    ext x
+    rfl
   rw [← hsub] at h
   exact h
 
@@ -237,17 +179,15 @@ theorem singularSubspace_dilation_sinTheta_le
 
 /-- Equal-dimensional right singular subspaces admit an isometric
 identification; the aligned-frame theorem in `Statistics.lean` chooses the
-identification minimizing basis discrepancy.
--/
+identification minimizing basis discrepancy. -/
 theorem nonempty_rightSingularSubspace_isometry
     {A Â : E →ₗ[𝕜] F} {Ω : Set ℝ}
-    (hrank : finrank 𝕜 (rightSingularSubspace A Ω) =
-      finrank 𝕜 (rightSingularSubspace Â Ω)) :
-    Nonempty (rightSingularSubspace Â Ω ≃ₗᵢ[𝕜]
-      rightSingularSubspace A Ω) :=
-  ⟨(stdOrthonormalBasis 𝕜 (rightSingularSubspace Â Ω)).equiv
-    (stdOrthonormalBasis 𝕜 (rightSingularSubspace A Ω)) (finCongr hrank.symm)⟩
-
+    (hrank : finrank 𝕜 (A.rightSingularSubspace Ω) =
+      finrank 𝕜 (Â.rightSingularSubspace Ω)) :
+    Nonempty (Â.rightSingularSubspace Ω ≃ₗᵢ[𝕜]
+      A.rightSingularSubspace Ω) :=
+  ⟨(stdOrthonormalBasis 𝕜 (Â.rightSingularSubspace Ω)).equiv
+    (stdOrthonormalBasis 𝕜 (A.rightSingularSubspace Ω)) (finCongr hrank.symm)⟩
 
 
 open scoped InnerProductSpace
