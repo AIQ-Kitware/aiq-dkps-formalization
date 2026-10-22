@@ -334,6 +334,21 @@ the exact perturbation-norm equality comes from
 `74d007dcb`. The YWS core, Frobenius-Gram, and Theorem 4 consumers compile at
 the pinned TauCeti revision.
 
+**Canonical Gram perturbation follow-up (2026-10-21):**
+`ForTauCeti.Analysis.InnerProductSpace.Gram.Operator` no longer duplicates the
+finite-dimensional right/left Gram difference identities or their operator-norm
+bounds. `YuWangSamworth2015.Rectangular.FrobeniusGram` now applies Tau Ceti's
+`ContinuousLinearMap.adjoint_comp_self_sub_adjoint_comp_self`,
+`self_comp_adjoint_sub_self_comp_adjoint`, and corresponding norm-bound
+theorems directly, converting their continuous-map results to algebraic maps
+only for the existing Frobenius arguments. The paper-shaped coefficient
+wrappers remain downstream and preserve the YWS constants. The stronger
+pointwise `norm_gram_sub_gram_apply_le` foundation remains in
+`ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace`; its assumptions and
+pointwise conclusion still support the symmetric YWS result. The Gram donor,
+Frobenius, Theorem 4, and rank-one modules compile at TauCeti
+`7205a079ee99f6962eb39fadd8067517ae38bf73`.
+
 **Retirement acceptance criterion:** for each replaced local theorem, record
 (1) exact upstream declaration and accepted commit; (2) original statement
 and hypothesis comparison, including rank, scalar field, spectra/gap
