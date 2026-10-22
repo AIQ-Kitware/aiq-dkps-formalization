@@ -61,16 +61,15 @@ def CorrespondingEigenblock {A B : E →ₗ[𝕜] E}
 
 /-- **The introduction rule for `CorrespondingEigenblock`.**
 
-Every theorem below *consumes* this hypothesis, and the only elimination it
-needs is the `obtain` in `yuWangSamworth_sinTheta_le`, which is in this file and
-so can see the definition.  A caller outside the file could not build one at
-all: the body is not exposed, and there was no introduction rule — which is why
-the hypothesis had no instance anywhere in the repository until
-`YuWangSamworth2015/YuWangSamworth2015/Core/TopEigenblock.lean`.
+The index-selected YWS specializations consume this datum. Its internal
+representation is deliberately hidden from other modules; the constructors in
+`Core/TopEigenblock.lean` make it usable for concrete spectral blocks.
 
-Supplying the rule rather than `@[expose]`-ing the definition keeps the index
-bookkeeping an implementation detail; see the general rule against exposing
-bodies recorded on `spectralPVM`. -/
+This introduction rule retains the chosen-eigenbasis semantics. The separate
+`CorrespondingEigenblock.toCorrespondingEigenblocks` lemma forgets that choice
+and supplies TauCeti's more general frame-based witness. The implication only
+goes one way: it must not be used to narrow a source-facing arbitrary-frame
+theorem to a chosen-eigenbasis statement. -/
 theorem correspondingEigenblock_of_spanIndices {A B : E →ₗ[𝕜] E}
     {hA : A.IsSymmetric} {hB : B.IsSymmetric} {U V : Submodule 𝕜 E}
     {n : ℕ} (hn : finrank 𝕜 E = n) (s : Finset (Fin n))
@@ -78,6 +77,45 @@ theorem correspondingEigenblock_of_spanIndices {A B : E →ₗ[𝕜] E}
     (hV : V = (hB.eigenvectorBasis hn).spanIndices ↑s) :
     CorrespondingEigenblock hA hB U V :=
   ⟨n, hn, s, hU, hV⟩
+
+omit [FiniteDimensional 𝕜 E] in
+/-- **Every ordered eigenframe of the canonical eigenbasis spans its block.**
+The bridge from the index-set formulation `CorrespondingEigenblock` to the frame
+formulation: selecting the indices `s` by their increasing enumeration gives an
+ordered eigenframe whose span is `spanIndices ↑s`. -/
+theorem span_range_eigenvectorBasis_orderEmbOfFin {n d : ℕ}
+    (b : OrthonormalBasis (Fin n) 𝕜 E) {s : Finset (Fin n)} (hcard : s.card = d) :
+    Submodule.span 𝕜 (Set.range fun i => b ((s.orderEmbOfFin hcard).toEmbedding i)) =
+      b.spanIndices (↑s : Set (Fin n)) := by
+  rw [OrthonormalBasis.spanIndices_eq_span,
+    show (fun i => b ((s.orderEmbOfFin hcard).toEmbedding i))
+      = ⇑b ∘ ⇑(s.orderEmbOfFin hcard).toEmbedding from rfl,
+    Set.range_comp]
+  congr 1
+  simp
+
+/-- A pair of canonical eigenbasis-selected blocks is a pair of corresponding
+ordered eigenblocks in TauCeti's more general, frame-independent interface.
+The converse does not hold: an upstream frame may select an arbitrary subspace
+inside a repeated eigenspace, rather than Mathlib's chosen eigenbasis span. -/
+theorem CorrespondingEigenblock.toCorrespondingEigenblocks {A B : E →ₗ[𝕜] E}
+    {hA : A.IsSymmetric} {hB : B.IsSymmetric} {U V : Submodule 𝕜 E}
+    (hcorr : CorrespondingEigenblock hA hB U V) :
+    ∃ (n d : ℕ) (hn : finrank 𝕜 E = n) (e : Fin d ↪ Fin n),
+      LinearMap.IsSymmetric.CorrespondingEigenblocks hA hB hn e U V := by
+  classical
+  obtain ⟨n, hn, s, hU, hV⟩ := hcorr
+  let e : Fin s.card ↪ Fin n := (s.orderEmbOfFin rfl).toEmbedding
+  refine ⟨n, s.card, hn, e, ?_⟩
+  apply LinearMap.IsSymmetric.correspondingEigenblocks_iff.mpr
+  refine ⟨(fun i => hA.eigenvectorBasis hn (e i)),
+    (fun i => hB.eigenvectorBasis hn (e i)),
+    isOrderedEigenframe_eigenvectorBasis hA hn e,
+    isOrderedEigenframe_eigenvectorBasis hB hn e, ?_, ?_⟩
+  · exact hU.trans ((span_range_eigenvectorBasis_orderEmbOfFin
+      (hA.eigenvectorBasis hn) (s := s) rfl).symm)
+  · exact hV.trans ((span_range_eigenvectorBasis_orderEmbOfFin
+      (hB.eigenvectorBasis hn) (s := s) rfl).symm)
 
 
 /-- **The complement identity.**  The canonical Frobenius sine of two equally
@@ -130,21 +168,6 @@ theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
       rw [← sinThetaSq_blockFamily_eq_sum_cross bS bT rfl rfl,
         sinThetaSq_comm,
         sinThetaSq_blockFamily_eq_sum_cross bT bS rfl rfl]
-
-/-- A spectral subspace of an eigenbasis reduces the operator: it is spanned by
-eigenvectors, each of which maps to a scalar multiple of itself. -/
-theorem reduces_spanIndices {n : ℕ} {B : E →ₗ[𝕜] E} (hB : B.IsSymmetric)
-    (hn : finrank 𝕜 E = n) (s : Set (Fin n)) :
-    IsInvariant B ((hB.eigenvectorBasis hn).spanIndices s) := by
-  intro x hx
-  rw [OrthonormalBasis.spanIndices_eq_span] at hx ⊢
-  refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
-  · rintro y ⟨i, hip, rfl⟩
-    rw [hB.apply_eigenvectorBasis hn i]
-    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨i, hip, rfl⟩)
-  · rw [map_zero]; exact Submodule.zero_mem _
-  · intro a b _ _ ha hb; rw [map_add]; exact Submodule.add_mem _ ha hb
-  · intro c a _ ha; rw [map_smul]; exact Submodule.smul_mem _ c ha
 
 /-- **An orthonormal family is the image of a `Finset` under some orthonormal
 basis.**  Precisely: given an embedding `e : Fin d ↪ Fin n` of index types, with
@@ -421,22 +444,6 @@ theorem yuWangSamworth_sinTheta_frame_le
   · rw [min_eq_left hle]; exact hop
   · rw [min_eq_right hle]; exact hfrob
 
-omit [FiniteDimensional 𝕜 E] in
-/-- **Every ordered eigenframe of the canonical eigenbasis spans its block.**
-The bridge from the index-set formulation `CorrespondingEigenblock` to the frame
-formulation: selecting the indices `s` by their increasing enumeration gives an
-ordered eigenframe whose span is `spanIndices ↑s`. -/
-theorem span_range_eigenvectorBasis_orderEmbOfFin {n d : ℕ}
-    (b : OrthonormalBasis (Fin n) 𝕜 E) {s : Finset (Fin n)} (hcard : s.card = d) :
-    Submodule.span 𝕜 (Set.range fun i => b ((s.orderEmbOfFin hcard).toEmbedding i)) =
-      b.spanIndices (↑s : Set (Fin n)) := by
-  rw [OrthonormalBasis.spanIndices_eq_span,
-    show (fun i => b ((s.orderEmbOfFin hcard).toEmbedding i))
-      = ⇑b ∘ ⇑(s.orderEmbOfFin hcard).toEmbedding from rfl,
-    Set.range_comp]
-  congr 1
-  simp
-
 /-- **Theorem 2 for the canonically indexed blocks.**
 
 The specialization of `yuWangSamworth_sinTheta_frame_le` in which the two frames
@@ -514,9 +521,11 @@ theorem yuWangSamworth_intervalBlock_le
     sinThetaFrobenius U V ≤
       2 * min (Real.sqrt (finrank 𝕜 U) * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
-  obtain ⟨n, hn, s, -, hVp⟩ := id hcorr
-  refine yuWangSamworth_sinTheta_le hA hB ?_ hcorr rfl hΔ hgap
-  rw [hVp]; exact reduces_spanIndices hB hn ↑s
+  have hV : IsInvariant B V := by
+    obtain ⟨_n, _d, _hn, _e, hcanonical⟩ := hcorr.toCorrespondingEigenblocks
+    intro x hx
+    exact hcanonical.apply_mem_right hx
+  exact yuWangSamworth_sinTheta_le hA hB hV hcorr rfl hΔ hgap
 
 /-- Procrustes-aligned orthonormal bases. -/
 theorem exists_aligned_orthonormalBasis

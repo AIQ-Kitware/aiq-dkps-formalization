@@ -11,9 +11,9 @@ second permanent library implementation.
 ## Start here
 
 1. [**Current upstream-consumption review and next work (2026-10-22)**](upstream-consumption-review-2026-10-22.md)
-   — reviewed changes since the Luna overnight instructions, concrete
-   corrections, the next accepted SSP-D01 eigenframe migration, and blocked
-   boundaries. This is the current *action queue*.
+   — reviewed upstream-consumption changes, the compiled SSP-D01 eigenframe
+   retirement, the one-way corresponding-eigenblock comparison, and remaining
+   scope-sensitive or unmerged boundaries. This is the current *action queue*.
 2. [**DKPS-to-TauCeti contribution and mathematical-lineage census**](dkps-upstream-contribution-census.md)
    — initial, incomplete PR/result provenance ledger. Separates direct
    adaptation, broader campaign activity, independent overlapping results,
