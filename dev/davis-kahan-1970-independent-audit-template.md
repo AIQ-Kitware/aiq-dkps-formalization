@@ -280,7 +280,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominanceWhereDefined`
 
-Source location candidates: `DavisKahan/Explorations/SourceUnitaryInvariantNormFanDominance.lean:2448`, `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:337`
+Source location candidate: `DavisKahan/OperatorIdeal/NormalizedUnitaryInvariantNorm.lean:337`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
