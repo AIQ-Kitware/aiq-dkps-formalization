@@ -65,9 +65,8 @@ over it. It is divided at its own `## Perturbation form` boundary:
   `sinTheta_perturbation_le_of_orderedGap`, `sinTheta_pointSpectralSubspace_le`,
   `opNorm_sinThetaMap_le_of_intervalGap`,
   `frobenius_sinTheta_residual_le_of_spectralDistance`,
-  `opNorm_projection_sub_projection_le`,
-  `opNorm_spectralProjection_sub_spectralProjection_le`, `frobenius_sinTheta_le`,
-  `kyFan_sinTheta_le` and `sinTheta_perturbation_le_of_spectralDistance`.
+  `frobenius_sinTheta_le`, `kyFan_sinTheta_le` and
+  `sinTheta_perturbation_le_of_spectralDistance`.
 
 The seam is that transport: nothing in `DirectedBounds` mentions a domain
 isometry, and everything kept here does. **No statement, signature, proof,
@@ -798,42 +797,6 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     simpa [complementaryProjection, projection] using hproj
   rw [hY] at hSylv
   exact hSylv.trans hC
-
-/-- Difference-of-projectors operator-norm form.
--/
-theorem opNorm_projection_sub_projection_le
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
-    (hrank : finrank 𝕜 U = finrank 𝕜 V)
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    δ * ‖(projection U - projection V).toContinuousLinearMap‖ ≤
-      ‖(B - A).toContinuousLinearMap‖ := by
-  rw [opNorm_projection_sub_eq_opNorm_sinThetaMap U V hrank]
-  exact opNorm_sinThetaMap_le_of_intervalGap hA hB hU hV hδ hgap
-
-/-- **Canonical finite spectral-projector Davis--Kahan theorem.**
-
-This is the standard interval/exterior projector statement with canonical
-spectral subspaces.  The equal-rank hypothesis is exactly what turns the
-one-sided cross-projection estimate into the norm of the full projector
-difference. -/
-theorem opNorm_spectralProjection_sub_spectralProjection_le
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hrank : finrank 𝕜 (Module.End.pointSpectralSubspace A (Set.Icc a b)) =
-      finrank 𝕜 (Module.End.pointSpectralSubspace B (Set.Icc a b)))
-    (hBoutside : PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
-      {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * ‖(spectralProjection A (Set.Icc a b) -
-        spectralProjection B (Set.Icc a b)).toContinuousLinearMap‖ ≤
-      ‖(B - A).toContinuousLinearMap‖ := by
-  simpa [spectralProjection, projection] using
-    opNorm_projection_sub_projection_le hA hB
-      (isInvariant_pointSpectralSubspace A (Set.Icc a b))
-      (isInvariant_pointSpectralSubspace B (Set.Icc a b))
-      hrank hδ ⟨pointSpectrumIn_pointSpectralSubspace A (Set.Icc a b), hBoutside⟩
 
 /-- Frobenius form.
 -/
