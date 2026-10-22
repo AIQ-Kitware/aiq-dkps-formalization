@@ -143,7 +143,7 @@ theorem unboundedBlockGraph_invariant_iff_strongRiccatiCore
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) :
     (PreservesRiccatiDomains H X ∧
-      TauCeti.LinearPMap.InvariantSubspace (unboundedBlockOperatorCore H)
+      (unboundedBlockOperatorCore H).IsInvariant
         (unboundedBlockGraph X)) ↔
       StrongSolvesRiccati H X := by
   rw [strongSolvesRiccati_iff_pointwise]
