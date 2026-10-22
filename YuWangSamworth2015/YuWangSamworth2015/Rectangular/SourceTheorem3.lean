@@ -84,7 +84,7 @@ the choice of presentation is a notational one and is machine-checked.
 
 namespace YuWangSamworth2015
 
-open LinearMap.IsSymmetric (isOrderedEigenframe_iff)
+open LinearMap.IsSymmetric (IsOrderedEigenframe isOrderedEigenframe_iff)
 open TauCeti YuWangSamworth2015.DavisKahanTheory
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -345,7 +345,7 @@ theorem IsRightSingularBlock.toOrderedFrame {p q d r s : ℕ}
     {hr : r ≤ s} {hd : d = s - r + 1} {V : Fin d → EuclideanSpace ℝ (Fin q)}
     (hV : IsRightSingularBlock A hr hd V)
     (hrd : r + d = s + 1) (hsq : s + 1 ≤ q) :
-    IsOrderedRightSingularFrame A (finrank_euclidean q)
+    IsOrderedEigenframe (isSymmetric_rightGram A) (finrank_euclidean q)
       (consecutiveEmb (hrd.trans_le hsq)) V := by
   refine isOrderedEigenframe_iff.mpr { orthonormal := hV.1, apply_eq := ?_ }
   intro i
@@ -361,7 +361,7 @@ theorem IsLeftSingularBlock.toOrderedFrame {p q d r s : ℕ}
     {hr : r ≤ s} {hd : d = s - r + 1} {U : Fin d → EuclideanSpace ℝ (Fin p)}
     (hU : IsLeftSingularBlock A hr hd U)
     (hrd : r + d = s + 1) (hsp : s + 1 ≤ p) :
-    IsOrderedLeftSingularFrame A (finrank_euclidean p)
+    IsOrderedEigenframe (isSymmetric_leftGram A) (finrank_euclidean p)
       (consecutiveEmb (hrd.trans_le hsp)) U := by
   refine isOrderedEigenframe_iff.mpr { orthonormal := hU.1, apply_eq := ?_ }
   intro i

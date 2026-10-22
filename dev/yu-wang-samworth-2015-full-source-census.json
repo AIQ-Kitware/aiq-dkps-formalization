@@ -1260,7 +1260,7 @@
       "lean_declarations": [
         "LinearMap.rightSingularSubspace",
         "YuWangSamworth2015.rightSingularSubspace_sinTheta_le",
-        "YuWangSamworth2015.DavisKahanTheory.IsOrderedRightSingularFrame",
+        "LinearMap.IsSymmetric.IsOrderedEigenframe",
         "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_frame_le",
         "YuWangSamworth2015.DavisKahanTheory.CorrespondingRightSingularBlock",
         "YuWangSamworth2015.DavisKahanTheory.RightSingularInternalGap",
@@ -1411,7 +1411,7 @@
       "lean_declarations": [
         "LinearMap.leftSingularSubspace",
         "YuWangSamworth2015.leftSingularSubspace_sinTheta_le",
-        "YuWangSamworth2015.DavisKahanTheory.IsOrderedLeftSingularFrame",
+        "LinearMap.IsSymmetric.IsOrderedEigenframe",
         "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_frame_le",
         "YuWangSamworth2015.DavisKahanTheory.CorrespondingLeftSingularBlock",
         "YuWangSamworth2015.DavisKahanTheory.LeftSingularInternalGap",

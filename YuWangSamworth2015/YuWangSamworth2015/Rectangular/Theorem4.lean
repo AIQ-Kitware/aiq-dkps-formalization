@@ -73,26 +73,6 @@ def CorrespondingLeftSingularBlock (A Â : E →ₗ[𝕜] F)
   CorrespondingEigenblock (isSymmetric_leftGram A)
     (isSymmetric_leftGram Â) U V
 
-private theorem correspondingEigenblock_reduces_perturbed
-    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
-    [FiniteDimensional 𝕜 H]
-    {G Ĝ : H →ₗ[𝕜] H} (hG : G.IsSymmetric) (hĜ : Ĝ.IsSymmetric)
-    {U V : Submodule 𝕜 H}
-    (hcorr : CorrespondingEigenblock hG hĜ U V) : IsInvariant Ĝ V := by
-  obtain ⟨_n, _d, _hn, _e, hcanonical⟩ := hcorr.toCorrespondingEigenblocks
-  intro x hx
-  exact hcanonical.apply_mem_right hx
-
-private theorem correspondingEigenblock_finrank_eq
-    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
-    [FiniteDimensional 𝕜 H]
-    {G Ĝ : H →ₗ[𝕜] H} (hG : G.IsSymmetric) (hĜ : Ĝ.IsSymmetric)
-    {U V : Submodule 𝕜 H}
-    (hcorr : CorrespondingEigenblock hG hĜ U V) :
-    finrank 𝕜 U = finrank 𝕜 V := by
-  obtain ⟨_n, _d, _hn, _e, hcanonical⟩ := hcorr.toCorrespondingEigenblocks
-  exact (hcanonical.finrank_left).trans (hcanonical.finrank_right).symm
-
 /-- The minimum in Theorem 2 transports through a common Gram coefficient
 without choosing an operator/Frobenius branch globally. -/
 private theorem gram_min_le_scaled_min {d : ℕ}
@@ -129,9 +109,9 @@ private theorem yuWangSamworth_gram_sinTheta_le
       c * perturbFrob) :
     sinThetaFrobenius U V ≤
       2 * c * min (Real.sqrt d * perturbOp) perturbFrob / Δ := by
+  obtain ⟨_n, _d, _hn, _e, hcanonical⟩ := hcorr.toCorrespondingEigenblocks
   have hbase := yuWangSamworth_sinTheta_le hG hĜ
-    (correspondingEigenblock_reduces_perturbed hG hĜ hcorr)
-    hcorr hrank hΔ hgap
+    (fun x hx => hcanonical.apply_mem_right hx) hcorr hrank hΔ hgap
   refine hbase.trans ?_
   have hmin := gram_min_le_scaled_min (d := d) hop hfrob
   calc
@@ -162,12 +142,13 @@ private theorem yuWangSamworth_gram_alignedBasis_le
       Real.sqrt (∑ i, ‖v i - u i‖ ^ 2) ≤
         2 * Real.sqrt 2 * c *
           min (Real.sqrt d * perturbOp) perturbFrob / Δ := by
+  obtain ⟨_n, _d, _hn, _e, hcanonical⟩ := hcorr.toCorrespondingEigenblocks
   have hrankV : finrank 𝕜 V = d := by
     rw [← hrankU]
-    exact (correspondingEigenblock_finrank_eq hG hĜ hcorr).symm
+    exact (hcanonical.finrank_right).trans (hcanonical.finrank_left).symm
   obtain ⟨u, v, hu, hv, hspanU, hspanV, hbase⟩ :=
     yuWangSamworth_alignedBasis_le hG hĜ
-      (correspondingEigenblock_reduces_perturbed hG hĜ hcorr)
+      (fun x hx => hcanonical.apply_mem_right hx)
       hcorr hrankU hrankV hΔ hgap
   refine ⟨u, v, hu, hv, hspanU, hspanV, hbase.trans ?_⟩
   have hmin := gram_min_le_scaled_min (d := d) hop hfrob
@@ -277,18 +258,6 @@ theorem yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
   · exact opNorm_leftGram_sub_le_paperCoefficient A Â
   · exact frobenius_leftGram_sub_le_paperCoefficient A Â
 
-/-- In positive finite domain dimension, the population operator norm is its
-top singular value.
-
-Paper-facing specialization of
-`TauCeti.opNorm_eq_singularValues_zero`, which states the same identity with the
-dimension supplied explicitly.  Kept only because the Yu--Wang--Samworth
-statements are phrased with `[Nontrivial E]` rather than a named dimension; it
-carries no proof of its own and should be inlined when this lane migrates. -/
-theorem opNorm_eq_topSingularValue [Nontrivial E] (A : E →ₗ[𝕜] F) :
-    ‖A.toContinuousLinearMap‖ = A.singularValues 0 :=
-  TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos
-
 /-- Literal source-coefficient form of the right-singular sine bound. -/
 theorem yuWangSamworth_rightSingularSubspace_le
     {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 E} [Nontrivial E]
@@ -301,7 +270,7 @@ theorem yuWangSamworth_rightSingularSubspace_le
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A] using
+  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
     yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
@@ -317,7 +286,7 @@ theorem yuWangSamworth_leftSingularSubspace_le
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A] using
+  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
     yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
@@ -337,7 +306,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_le
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A] using
+  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
     yuWangSamworth_rightSingularAlignedBasis_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
@@ -357,7 +326,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_le
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A] using
+  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
     yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
@@ -374,32 +343,6 @@ Passing to the Gram operators — the paper's own route — `A vⱼ = σⱼ uⱼ
 `A⋆A vⱼ = σⱼ² vⱼ`, so the printed hypothesis is an ordered eigenframe of
 `rightGram A` at the indices of the sorted squared singular values.
 -/
-
-/-- **An ordered right singular frame**: an orthonormal family of right singular
-vectors of `A` belonging to the squared singular values at the indices `e`.
-Equivalently, an ordered eigenframe of the right Gram operator `A⋆A`. -/
-def IsOrderedRightSingularFrame (A : E →ₗ[𝕜] F) {n : ℕ} (hn : finrank 𝕜 E = n)
-    {d : ℕ} (e : Fin d ↪ Fin n) (v : Fin d → E) : Prop :=
-  IsOrderedEigenframe (isSymmetric_rightGram A) hn e v
-
-/-- **An ordered left singular frame**, the same for `A A⋆`. -/
-def IsOrderedLeftSingularFrame (A : E →ₗ[𝕜] F) {m : ℕ} (hm : finrank 𝕜 F = m)
-    {d : ℕ} (e : Fin d ↪ Fin m) (u : Fin d → F) : Prop :=
-  IsOrderedEigenframe (isSymmetric_leftGram A) hm e u
-
-/-- The characteristic lemma for `IsOrderedRightSingularFrame`. -/
-theorem isOrderedRightSingularFrame_iff {A : E →ₗ[𝕜] F} {n : ℕ}
-    {hn : finrank 𝕜 E = n} {d : ℕ} {e : Fin d ↪ Fin n} {v : Fin d → E} :
-    IsOrderedRightSingularFrame A hn e v ↔
-      IsOrderedEigenframe (isSymmetric_rightGram A) hn e v :=
-  Iff.rfl
-
-/-- The characteristic lemma for `IsOrderedLeftSingularFrame`. -/
-theorem isOrderedLeftSingularFrame_iff {A : E →ₗ[𝕜] F} {m : ℕ}
-    {hm : finrank 𝕜 F = m} {d : ℕ} {e : Fin d ↪ Fin m} {u : Fin d → F} :
-    IsOrderedLeftSingularFrame A hm e u ↔
-      IsOrderedEigenframe (isSymmetric_leftGram A) hm e u :=
-  Iff.rfl
 
 /-- Generic Gram transport for the sine-distance part of Theorem 3, at frame
 generality. -/
@@ -473,8 +416,8 @@ denominator is the *intrinsic* gap of `A⋆A`, which — unlike the paper's prin
 theorem yuWangSamworth_rightSingularSubspace_frame_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d : ℕ} {hn : finrank 𝕜 E = n}
     {e : Fin d ↪ Fin n} {v vHat : Fin d → E}
-    (hv : IsOrderedRightSingularFrame A hn e v)
-    (hvHat : IsOrderedRightSingularFrame Â hn e vHat)
+    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn e v)
+    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn e vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
       Δ ≤ |(isSymmetric_rightGram A).eigenvalues hn (e i) -
@@ -484,9 +427,9 @@ theorem yuWangSamworth_rightSingularSubspace_frame_le
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A] using
+  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
     yuWangSamworth_gram_sinTheta_frame_le
-      (isOrderedRightSingularFrame_iff.mp hv) (isOrderedRightSingularFrame_iff.mp hvHat)
+      hv hvHat
       hΔ hgap (opNorm_rightGram_sub_le_paperCoefficient A Â)
       (frobenius_rightGram_sub_le_paperCoefficient A Â)
 
@@ -495,8 +438,8 @@ corrected rank-boundary convention.** -/
 theorem yuWangSamworth_leftSingularSubspace_frame_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d : ℕ} {hm : finrank 𝕜 F = m}
     {e : Fin d ↪ Fin m} {u û : Fin d → F}
-    (hu : IsOrderedLeftSingularFrame A hm e u)
-    (hû : IsOrderedLeftSingularFrame Â hm e û)
+    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm e u)
+    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm e û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin m), k ∉ Set.range (⇑e) →
       Δ ≤ |(isSymmetric_leftGram A).eigenvalues hm (e i) -
@@ -506,9 +449,9 @@ theorem yuWangSamworth_leftSingularSubspace_frame_le
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A] using
+  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
     yuWangSamworth_gram_sinTheta_frame_le
-      (isOrderedLeftSingularFrame_iff.mp hu) (isOrderedLeftSingularFrame_iff.mp hû)
+      hu hû
       hΔ hgap (opNorm_leftGram_sub_le_paperCoefficient A Â)
       (frobenius_leftGram_sub_le_paperCoefficient A Â)
 
@@ -517,8 +460,8 @@ the corrected rank-boundary convention.** -/
 theorem yuWangSamworth_rightSingularAlignedBasis_frame_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d : ℕ} {hn : finrank 𝕜 E = n}
     {e : Fin d ↪ Fin n} {v vHat : Fin d → E}
-    (hv : IsOrderedRightSingularFrame A hn e v)
-    (hvHat : IsOrderedRightSingularFrame Â hn e vHat)
+    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn e v)
+    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn e vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
       Δ ≤ |(isSymmetric_rightGram A).eigenvalues hn (e i) -
@@ -531,9 +474,9 @@ theorem yuWangSamworth_rightSingularAlignedBasis_frame_le
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A] using
+  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
     yuWangSamworth_gram_alignedBasis_frame_le
-      (isOrderedRightSingularFrame_iff.mp hv) (isOrderedRightSingularFrame_iff.mp hvHat)
+      hv hvHat
       hΔ hgap (opNorm_rightGram_sub_le_paperCoefficient A Â)
       (frobenius_rightGram_sub_le_paperCoefficient A Â)
 
@@ -542,8 +485,8 @@ the corrected rank-boundary convention.** -/
 theorem yuWangSamworth_leftSingularAlignedBasis_frame_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d : ℕ} {hm : finrank 𝕜 F = m}
     {e : Fin d ↪ Fin m} {u û : Fin d → F}
-    (hu : IsOrderedLeftSingularFrame A hm e u)
-    (hû : IsOrderedLeftSingularFrame Â hm e û)
+    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm e u)
+    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm e û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin m), k ∉ Set.range (⇑e) →
       Δ ≤ |(isSymmetric_leftGram A).eigenvalues hm (e i) -
@@ -556,9 +499,9 @@ theorem yuWangSamworth_leftSingularAlignedBasis_frame_le
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [opNorm_eq_topSingularValue A] using
+  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
     yuWangSamworth_gram_alignedBasis_frame_le
-      (isOrderedLeftSingularFrame_iff.mp hu) (isOrderedLeftSingularFrame_iff.mp hû)
+      hu hû
       hΔ hgap (opNorm_leftGram_sub_le_paperCoefficient A Â)
       (frobenius_leftGram_sub_le_paperCoefficient A Â)
 

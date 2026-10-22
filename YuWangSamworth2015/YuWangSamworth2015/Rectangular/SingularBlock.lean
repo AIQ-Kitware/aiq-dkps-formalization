@@ -60,6 +60,7 @@ printed one is false exactly where these two differ.
 
 namespace YuWangSamworth2015
 open TauCeti
+open LinearMap.IsSymmetric (IsOrderedEigenframe)
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -158,8 +159,10 @@ This is the corrected theorem.  Under the printed convention
 theorem yuWangSamworth_rightSingularSubspace_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d r s : ℕ} {hn : finrank 𝕜 E = n}
     (hsn : s + 1 ≤ n) (hd : r + d = s + 1) {v vHat : Fin d → E}
-    (hv : IsOrderedRightSingularFrame A hn (consecutiveEmb (hd.trans_le hsn)) v)
-    (hvHat : IsOrderedRightSingularFrame Â hn (consecutiveEmb (hd.trans_le hsn)) vHat)
+    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn
+      (consecutiveEmb (hd.trans_le hsn)) v)
+    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn
+      (consecutiveEmb (hd.trans_le hsn)) vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin n, (q : ℕ) + 1 = r → (p : ℕ) = r →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
@@ -177,8 +180,10 @@ theorem yuWangSamworth_rightSingularSubspace_block_le
 theorem yuWangSamworth_leftSingularSubspace_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d r s : ℕ} {hm : finrank 𝕜 F = m}
     (hsm : s + 1 ≤ m) (hd : r + d = s + 1) {u û : Fin d → F}
-    (hu : IsOrderedLeftSingularFrame A hm (consecutiveEmb (hd.trans_le hsm)) u)
-    (hû : IsOrderedLeftSingularFrame Â hm (consecutiveEmb (hd.trans_le hsm)) û)
+    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm
+      (consecutiveEmb (hd.trans_le hsm)) u)
+    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm
+      (consecutiveEmb (hd.trans_le hsm)) û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin m, (q : ℕ) + 1 = r → (p : ℕ) = r →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
@@ -196,8 +201,10 @@ theorem yuWangSamworth_leftSingularSubspace_block_le
 theorem yuWangSamworth_rightSingularAlignedBasis_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d r s : ℕ} {hn : finrank 𝕜 E = n}
     (hsn : s + 1 ≤ n) (hd : r + d = s + 1) {v vHat : Fin d → E}
-    (hv : IsOrderedRightSingularFrame A hn (consecutiveEmb (hd.trans_le hsn)) v)
-    (hvHat : IsOrderedRightSingularFrame Â hn (consecutiveEmb (hd.trans_le hsn)) vHat)
+    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn
+      (consecutiveEmb (hd.trans_le hsn)) v)
+    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn
+      (consecutiveEmb (hd.trans_le hsn)) vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin n, (q : ℕ) + 1 = r → (p : ℕ) = r →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
@@ -218,8 +225,10 @@ theorem yuWangSamworth_rightSingularAlignedBasis_block_le
 theorem yuWangSamworth_leftSingularAlignedBasis_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d r s : ℕ} {hm : finrank 𝕜 F = m}
     (hsm : s + 1 ≤ m) (hd : r + d = s + 1) {u û : Fin d → F}
-    (hu : IsOrderedLeftSingularFrame A hm (consecutiveEmb (hd.trans_le hsm)) u)
-    (hû : IsOrderedLeftSingularFrame Â hm (consecutiveEmb (hd.trans_le hsm)) û)
+    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm
+      (consecutiveEmb (hd.trans_le hsm)) u)
+    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm
+      (consecutiveEmb (hd.trans_le hsm)) û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin m, (q : ℕ) + 1 = r → (p : ℕ) = r →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
@@ -265,8 +274,10 @@ theorem, as for the sine conclusion. -/
 theorem yuWangSamworth_rightSingularAlignedFrame_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d r s : ℕ} {hn : finrank 𝕜 E = n}
     (hsn : s + 1 ≤ n) (hd : r + d = s + 1) {v vHat : Fin d → E}
-    (hv : IsOrderedRightSingularFrame A hn (consecutiveEmb (hd.trans_le hsn)) v)
-    (hvHat : IsOrderedRightSingularFrame Â hn (consecutiveEmb (hd.trans_le hsn)) vHat)
+    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn
+      (consecutiveEmb (hd.trans_le hsn)) v)
+    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn
+      (consecutiveEmb (hd.trans_le hsn)) vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin n, (q : ℕ) + 1 = r → (p : ℕ) = r →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
@@ -288,8 +299,10 @@ theorem yuWangSamworth_rightSingularAlignedFrame_block_le
 theorem yuWangSamworth_leftSingularAlignedFrame_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d r s : ℕ} {hm : finrank 𝕜 F = m}
     (hsm : s + 1 ≤ m) (hd : r + d = s + 1) {u û : Fin d → F}
-    (hu : IsOrderedLeftSingularFrame A hm (consecutiveEmb (hd.trans_le hsm)) u)
-    (hû : IsOrderedLeftSingularFrame Â hm (consecutiveEmb (hd.trans_le hsm)) û)
+    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm
+      (consecutiveEmb (hd.trans_le hsm)) u)
+    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm
+      (consecutiveEmb (hd.trans_le hsm)) û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin m, (q : ℕ) + 1 = r → (p : ℕ) = r →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
