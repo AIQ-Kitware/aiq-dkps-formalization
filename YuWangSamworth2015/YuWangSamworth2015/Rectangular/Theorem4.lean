@@ -79,9 +79,9 @@ private theorem correspondingEigenblock_reduces_perturbed
     {G Ĝ : H →ₗ[𝕜] H} (hG : G.IsSymmetric) (hĜ : Ĝ.IsSymmetric)
     {U V : Submodule 𝕜 H}
     (hcorr : CorrespondingEigenblock hG hĜ U V) : IsInvariant Ĝ V := by
-  obtain ⟨n, hn, s, -, hV⟩ := hcorr
-  rw [hV]
-  exact reduces_spanIndices hĜ hn ↑s
+  obtain ⟨_n, _d, _hn, _e, hcanonical⟩ := hcorr.toCorrespondingEigenblocks
+  intro x hx
+  exact hcanonical.apply_mem_right hx
 
 private theorem correspondingEigenblock_finrank_eq
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
@@ -90,9 +90,8 @@ private theorem correspondingEigenblock_finrank_eq
     {U V : Submodule 𝕜 H}
     (hcorr : CorrespondingEigenblock hG hĜ U V) :
     finrank 𝕜 U = finrank 𝕜 V := by
-  obtain ⟨n, hn, s, hU, hV⟩ := hcorr
-  rw [hU, hV, (hG.eigenvectorBasis hn).finrank_spanIndices,
-    (hĜ.eigenvectorBasis hn).finrank_spanIndices]
+  obtain ⟨_n, _d, _hn, _e, hcanonical⟩ := hcorr.toCorrespondingEigenblocks
+  exact (hcanonical.finrank_left).trans (hcanonical.finrank_right).symm
 
 /-- The minimum in Theorem 2 transports through a common Gram coefficient
 without choosing an operator/Frobenius branch globally. -/

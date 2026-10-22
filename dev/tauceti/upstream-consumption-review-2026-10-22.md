@@ -121,12 +121,64 @@ lake build \
   YuWangSamworth2015.Rectangular.SourceTheorem3
 ```
 
-After the focused build, run `lake build` for downstream closure. If this
-refactor compiles, the next candidate is to compare the YWS
-`CorrespondingEigenblock` (which fixes a chosen eigenbasis/index set) with
-upstream `LinearMap.IsSymmetric.CorrespondingEigenblocks` (which quantifies over
-*arbitrary* matching frames). Preserve the stronger choice-independent YWS
-statements; never collapse these definitions based on matching names alone.
+The maintainer subsequently compiled the eigenframe migration and its
+Acharyya2025 consumer fix. That compilation closes the basic SSP-D01
+representation-retirement pass, including its corrected lint/import changes.
+The module-system warnings in legacy Davis--Kahan files remain nonblocking;
+do not turn individual files into `module` without migrating their imports.
+
+### 1a. Corresponding-eigenblock comparison — next consumption pass
+
+The YWS `CorrespondingEigenblock` is a **strict specialization**, not a
+redundant spelling of accepted TauCeti `CorrespondingEigenblocks`:
+
+- DKPS fixes *both* subspaces to the same index `Finset` in the particular
+  Mathlib-chosen eigenvector bases of the two operators.
+- TauCeti permits any two ordered orthonormal eigenframes spanning the blocks,
+  even when the selected indices cut a repeated *sample* eigenvalue.
+- Therefore only DKPS `CorrespondingEigenblock` implies TauCeti
+  `CorrespondingEigenblocks`, not conversely. Replacing the YWS predicate in
+  existing theorem statements without checking the proofs would change their
+  quantifier scope; the source-facing `..._frame_...` results are already
+  correctly stated with arbitrary frames and must be preserved.
+
+This follow-on overlay adds the one-way theorem
+`YuWangSamworth2015.CorrespondingEigenblock.toCorrespondingEigenblocks`. It
+chooses the increasing embedding of the existing finite index set, reuses
+TauCeti's canonical ordered-eigenframe constructors, and explicitly transports
+its spans with the existing `span_range_eigenvectorBasis_orderEmbOfFin`
+identity before applying `correspondingEigenblocks_iff`.
+The rectangular Gram-transfer lemmas now use the accepted
+`CorrespondingEigenblocks.apply_mem_right` and `.finrank_left` / `.finrank_right`
+results for invariance and equal dimension; the YWS interval-block theorem
+uses the same accepted invariance result. The now-unused local
+`reduces_spanIndices` induction proof is deleted. No paper-facing inequality,
+eigenframe theorem, or definition changes its statement.
+
+**Still to do after compilation:** evaluate consumers of
+`CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` for direct
+canonical hypotheses one declaration at a time; some deliberately require the
+chosen-basis datum. Do not delete the local `CorrespondingEigenblock` before
+removing or genuinely migrating its concrete constructors in
+`Core/TopEigenblock.lean` and the sharpness examples. A proof of *equivalence*
+with TauCeti's predicate must not be asserted: it is false without extra
+uniqueness/separation hypotheses.
+
+Focused build for this pass:
+
+```bash
+lake exe cache get
+lake build \
+  YuWangSamworth2015.Core.Statistics \
+  YuWangSamworth2015.Rectangular.Theorem4 \
+  YuWangSamworth2015.Core.TopEigenblock \
+  YuWangSamworth2015.Rectangular.SourceTheorem3 \
+  YuWangSamworth2015.Symmetric.MiddleBlockSharpness
+```
+
+Then run the normal aggregate `lake build`. The previous compiled migration
+is established by the maintainer's report; this new comparison and its proof
+refactor are the only newly introduced Lean changes to verify.
 
 ### 2. Finish genuinely redundant restriction presentation, selectively
 
