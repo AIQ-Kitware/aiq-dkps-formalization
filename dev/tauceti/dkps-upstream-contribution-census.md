@@ -319,10 +319,12 @@ without adding a forwarding alias. The linear-map-valued `spectralProjection`
 and its projection helpers remain local. The core donor and all 25 changed maintained
 modules, including the paper-facing finite wrappers, YWS consumers, and
 `RoadmapBridge.Integration`, compiled at the pinned dependency revision.
-The invariant-predicate retirement and seven touched Lean modules also compile
-at that same pin, including `LinearPMap.Closed`, `UnitaryTransport`, spectral
-measure construction, both unbounded Riccati interfaces, the reducing-spectrum
-union theorem, and natural sine-theta examples.
+The invariant-predicate retirement and its nine touched Lean modules also
+compile at that same pin, including `LinearPMap.Closed`, `UnitaryTransport`,
+spectral measure construction, complex spectral descent, unbounded reflection,
+both unbounded Riccati interfaces, the reducing-spectrum union theorem, and
+natural sine-theta examples. The standalone source UIN conformance module and
+the complete `ForTauCeti` and `DavisKahan.All` targets compile at the same pin.
 The touched `Challenge.DavisKahan1970.Conformance` and `.Leaderboard`
 targets also compile, and comparator preflight passes the migrated point-spectrum
 rows. One pre-existing `sinTheta_wholeSpace_symmetricNorming` signature mismatch

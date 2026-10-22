@@ -515,11 +515,17 @@ theorem realSpecRange_reduces
   · intro x
     rw [Submodule.starProjection_orthogonal_apply, ← hstar]
     exact A.domain.sub_mem x.property (realSpecProjection_mem_domain hA hS x)
-  · intro x hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     exact apply_mem_realSpecRange hA S hS hx
-  · intro x hx
-    rw [← realSpecRange_compl hA S hS] at hx ⊢
-    exact apply_mem_realSpecRange hA Sᶜ hS.compl hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
+    have heq := congrArg (fun U : Submodule ℝ E => (x : E) ∈ U)
+      (realSpecRange_compl hA S hS)
+    have hx' : (x : E) ∈ realSpecRange hA Sᶜ hS.compl := heq.mpr hx
+    have hmem := apply_mem_realSpecRange hA Sᶜ hS.compl hx'
+    exact (congrArg (fun U : Submodule ℝ E => A x ∈ U)
+      (realSpecRange_compl hA S hS)).mp hmem
 
 end
 
