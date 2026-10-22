@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # Gram operators of a linear map
@@ -16,35 +16,27 @@ squared singular values of `A` — which is what makes them the carrier of the
 singular-subspace theory: a right singular subspace of `A` is a spectral
 subspace of `A⋆A`, a left one a spectral subspace of `AA⋆`.
 
-This module records the operators, their symmetry, and the two facts a
-perturbation argument needs:
-
-* an exact difference identity, `rightGram_sub_rightGram` and its dual, which
-  splits `Â⋆Â - A⋆A` into two terms each carrying one factor of `Â - A`;
-* the operator-norm bound that follows, `opNorm_rightGram_sub_le` and its dual:
-  `‖Â⋆Â - A⋆A‖ ≤ (‖Â‖ + ‖A‖) ‖Â - A‖`.
-
-The bound is stated with `toContinuousLinearMap` on both sides because the
-operator norm is only available on the bundled continuous map; in finite
-dimensions the two carry the same data.
+This module records the Gram operators and their symmetry. Perturbation
+identities and operator-norm bounds are provided by Tau Ceti's accepted
+`ContinuousLinearMap` API, which also works in arbitrary dimension.
 
 ## Sources
 
 That `A⋆A` and `A A⋆` are positive with eigenvalues the squared singular values is
 standard singular-value theory (Horn--Johnson, *Matrix Analysis*; distilled in
-`prose/distilled_literature/HornJohnson2013_selected_matrix_analysis.tex`).  The
-exact difference identity and the perturbation bound are shaped by the
-singular-subspace argument that consumes them.
+`prose/distilled_literature/HornJohnson2013_selected_matrix_analysis.tex`).
+Tau Ceti's `Analysis/InnerProductSpace/Gram/Perturbation` module owns the
+perturbation identities and bounds.
 
 ## Provenance
 
 * Original module: `DavisKahan/Specialized/SingularSubspace.lean`, where this
   API sat alongside the paper-specific singular-subspace definitions.
-* Extraction class: **relocation**, unchanged mathematics.  Migrated because it
-  is generic — nothing here mentions a paper, a
-  gap condition, or a spectral subspace — and its one non-Mathlib dependency,
-  `norm_gram_sub_gram_apply_le`, already lives in
-  `ForTauCeti/Analysis/InnerProductSpace/SingularSubspace.lean`.
+* Extraction class: **relocation**, unchanged Gram definitions and symmetry
+  facts. Migrated because they are generic: nothing here mentions a paper, a
+  gap condition, or a spectral subspace. The former finite-dimensional Gram
+  perturbation identities and operator-norm proofs were retired on
+  2026-10-21 in favor of Tau Ceti's accepted arbitrary-dimensional API.
 * The former paper-local `rightSingularSubspace` and `leftSingularSubspace`
   definitions have been retired: `YuWangSamworth2015.Core.SingularSubspace`
   consumes `LinearMap.rightSingularSubspace` and
@@ -58,8 +50,7 @@ public section
 
 namespace TauCeti
 
-open scoped InnerProductSpace BigOperators
-open Module (finrank)
+open scoped InnerProductSpace
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -84,68 +75,5 @@ noncomputable def leftGram (A : E →ₗ[𝕜] F) : F →ₗ[𝕜] F :=
 /-- The left Gram operator is symmetric and positive semidefinite. -/
 theorem isSymmetric_leftGram (A : E →ₗ[𝕜] F) : (leftGram A).IsSymmetric := by
   simpa [leftGram] using A.adjoint.isSymmetric_adjoint_comp_self
-
-/-- **Gram perturbation identity.**  Each summand carries exactly one factor of
-`Â - A`, which is what turns a first-order perturbation of `A` into a
-first-order perturbation of `A⋆A`. -/
-theorem rightGram_sub_rightGram (A Â : E →ₗ[𝕜] F) :
-    rightGram Â - rightGram A =
-      Â.adjoint ∘ₗ (Â - A) + (Â - A).adjoint ∘ₗ A := by
-  ext x
-  simp [rightGram, map_sub]
-
-/-- Left-Gram perturbation identity, dual to `rightGram_sub_rightGram`. -/
-theorem leftGram_sub_leftGram (A Â : E →ₗ[𝕜] F) :
-    leftGram Â - leftGram A =
-      (Â - A) ∘ₗ Â.adjoint + A ∘ₗ (Â - A).adjoint := by
-  ext x
-  simp [leftGram, map_sub]
-
-/-- **Operator-norm Gram perturbation bound**, `‖Â⋆Â - A⋆A‖ ≤ (‖Â‖ + ‖A‖)‖Â - A‖`. -/
-theorem opNorm_rightGram_sub_le (A Â : E →ₗ[𝕜] F) :
-    ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ ≤
-      (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
-        ‖(Â - A).toContinuousLinearMap‖ := by
-  refine (rightGram Â - rightGram A).toContinuousLinearMap.opNorm_le_bound
-    (by positivity) fun x => ?_
-  have h := norm_gram_sub_gram_apply_le
-    (a := ‖A.toContinuousLinearMap‖)
-    (â := ‖Â.toContinuousLinearMap‖)
-    (ε := ‖(Â - A).toContinuousLinearMap‖)
-    (norm_nonneg _) (norm_nonneg _)
-    (fun y => A.toContinuousLinearMap.le_opNorm y)
-    (fun y => Â.toContinuousLinearMap.le_opNorm y)
-    (fun y => (Â - A).toContinuousLinearMap.le_opNorm y) x
-  simpa [rightGram, add_comm] using h
-
-/-- Operator-norm perturbation bound for the left Gram operator. -/
-theorem opNorm_leftGram_sub_le (A Â : E →ₗ[𝕜] F) :
-    ‖(leftGram Â - leftGram A).toContinuousLinearMap‖ ≤
-      (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
-        ‖(Â - A).toContinuousLinearMap‖ := by
-  refine (leftGram Â - leftGram A).toContinuousLinearMap.opNorm_le_bound
-    (by positivity) fun x => ?_
-  -- The adjoint's operator norm is not needed: `norm_adjoint_apply_le` bounds
-  -- `‖A⋆y‖` by `‖A‖‖y‖` directly, which is what keeps the stated bound in terms
-  -- of `‖A‖` and `‖Â‖`.
-  have hAadj : ∀ y, ‖A.adjoint y‖ ≤ ‖A.toContinuousLinearMap‖ * ‖y‖ :=
-    fun y => norm_adjoint_apply_le (norm_nonneg _)
-      (fun z => A.toContinuousLinearMap.le_opNorm z) y
-  have hÂadj : ∀ y, ‖Â.adjoint y‖ ≤ ‖Â.toContinuousLinearMap‖ * ‖y‖ :=
-    fun y => norm_adjoint_apply_le (norm_nonneg _)
-      (fun z => Â.toContinuousLinearMap.le_opNorm z) y
-  have hdiffadj : ∀ y,
-      ‖(Â.adjoint - A.adjoint) y‖ ≤ ‖(Â - A).toContinuousLinearMap‖ * ‖y‖ :=
-    fun y => by
-      have h := norm_adjoint_apply_le (norm_nonneg _)
-        (fun z => (Â - A).toContinuousLinearMap.le_opNorm z) y
-      simpa [map_sub] using h
-  have h := norm_gram_sub_gram_apply_le
-    (A := A.adjoint) (Â := Â.adjoint)
-    (a := ‖A.toContinuousLinearMap‖)
-    (â := ‖Â.toContinuousLinearMap‖)
-    (ε := ‖(Â - A).toContinuousLinearMap‖)
-    (norm_nonneg _) (norm_nonneg _) hAadj hÂadj hdiffadj x
-  simpa [leftGram, map_sub, add_comm] using h
 
 end TauCeti

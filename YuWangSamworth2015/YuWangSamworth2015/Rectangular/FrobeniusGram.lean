@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import YuWangSamworth2015.GroundedImports
+import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
 
@@ -132,11 +133,18 @@ theorem frobenius_rightGram_sub_le
         (rightGram Â - rightGram A) ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A) := by
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
   let D : E →ₗ[𝕜] F := Â - A
+  have hidentityCLM :=
+    ContinuousLinearMap.adjoint_comp_self_sub_adjoint_comp_self
+      Â.toContinuousLinearMap A.toContinuousLinearMap
   have hidentity :
       rightGram Â - rightGram A =
         Â.adjoint ∘ₗ D + D.adjoint ∘ₗ A := by
-    simpa only [D] using rightGram_sub_rightGram A Â
+    ext x
+    have hx := congrArg (fun T : E →L[𝕜] E => T x) hidentityCLM
+    simp [rightGram, D]
   rw [hidentity]
   refine (map_add_le_add
     (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _ _).trans ?_
@@ -175,11 +183,18 @@ theorem frobenius_leftGram_sub_le
         (leftGram Â - leftGram A) ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A) := by
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
   let D : E →ₗ[𝕜] F := Â - A
+  have hidentityCLM :=
+    ContinuousLinearMap.self_comp_adjoint_sub_self_comp_adjoint
+      Â.toContinuousLinearMap A.toContinuousLinearMap
   have hidentity :
       leftGram Â - leftGram A =
         D ∘ₗ Â.adjoint + A ∘ₗ D.adjoint := by
-    simpa only [D] using leftGram_sub_leftGram A Â
+    ext x
+    have hx := congrArg (fun T : F →L[𝕜] F => T x) hidentityCLM
+    simp [leftGram, D]
   rw [hidentity]
   refine (map_add_le_add
     (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := F)) _ _).trans ?_
@@ -242,9 +257,18 @@ theorem opNorm_rightGram_sub_le_paperCoefficient
       (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  refine (opNorm_rightGram_sub_le A Â).trans ?_
-  exact mul_le_mul_of_nonneg_right
-    (sum_opNorm_le_paperCoefficient A Â) (norm_nonneg _)
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  have h := ContinuousLinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_le
+    Â.toContinuousLinearMap A.toContinuousLinearMap
+  have hgram :
+      ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ =
+        ‖Â.toContinuousLinearMap.adjoint ∘L Â.toContinuousLinearMap -
+          A.toContinuousLinearMap.adjoint ∘L A.toContinuousLinearMap‖ := by
+    congr 1
+  rw [hgram]
+  exact h.trans (mul_le_mul_of_nonneg_right
+    (sum_opNorm_le_paperCoefficient A Â) (norm_nonneg _))
 
 /-- Left-Gram operator-norm counterpart with the exact paper coefficient. -/
 theorem opNorm_leftGram_sub_le_paperCoefficient
@@ -253,9 +277,18 @@ theorem opNorm_leftGram_sub_le_paperCoefficient
       (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  refine (opNorm_leftGram_sub_le A Â).trans ?_
-  exact mul_le_mul_of_nonneg_right
-    (sum_opNorm_le_paperCoefficient A Â) (norm_nonneg _)
+  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  have h := ContinuousLinearMap.norm_self_comp_adjoint_sub_self_comp_adjoint_le
+    Â.toContinuousLinearMap A.toContinuousLinearMap
+  have hgram :
+      ‖(leftGram Â - leftGram A).toContinuousLinearMap‖ =
+        ‖Â.toContinuousLinearMap ∘L Â.toContinuousLinearMap.adjoint -
+          A.toContinuousLinearMap ∘L A.toContinuousLinearMap.adjoint‖ := by
+    congr 1
+  rw [hgram]
+  exact h.trans (mul_le_mul_of_nonneg_right
+    (sum_opNorm_le_paperCoefficient A Â) (norm_nonneg _))
 
 /-- Frobenius perturbation bound for the right Gram operator with the exact
 coefficient displayed in Yu--Wang--Samworth Theorem 3 (Theorem 4 in the 2014
