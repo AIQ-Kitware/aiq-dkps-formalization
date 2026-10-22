@@ -25,6 +25,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.SingularValues
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
 public import TauCeti.Analysis.InnerProductSpace.SchurHorn
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 
@@ -41,9 +42,8 @@ terms of `Â − A`.
 
 * `TauCeti.norm_adjoint_apply_le`: the adjoint of a `c`-bounded operator is
   `c`-bounded (`‖A⋆‖ ≤ ‖A‖` in elementwise form).
-* `TauCeti.norm_gram_sub_gram_apply_le`: `‖(Â⋆Â − A⋆A) x‖ ≤ (a + â) ε ‖x‖`
-  when `A, Â, Â − A` are `a`-, `â`-, `ε`-bounded, via
-  `Â⋆Â − A⋆A = Â⋆(Â − A) + (Â − A)⋆A`.
+* `TauCeti.norm_gram_sub_gram_apply_le`: the pointwise consequence of Tau Ceti's
+  accepted operator-norm perturbation estimate for Gram operators.
 * `TauCeti.abs_sq_singularValues_sub_le`: Weyl for squared singular values,
   `|σₖ(Â)² − σₖ(A)²| ≤ (a + â) ε` — the singular-value stability underlying the
   singular-subspace bound.
@@ -69,6 +69,9 @@ open Module (finrank)
 variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+
+local instance instCompleteSpaceE : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+local instance instCompleteSpaceF : CompleteSpace F := FiniteDimensional.complete 𝕜 F
 
 omit [FiniteDimensional 𝕜 E] in
 /-- **The quadratic form of a real dilation at a unit vector is the dilation factor**:
@@ -103,31 +106,68 @@ theorem norm_adjoint_apply_le {A : E →ₗ[𝕜] F} {c : ℝ} (hc : 0 ≤ c)
     nlinarith [key, hpos]
 
 /-- **Gram-operator perturbation bound.** With `A, Â, Â − A` bounded by `a, â, ε`
-respectively, `‖(Â⋆Â − A⋆A) x‖ ≤ (a + â) ε ‖x‖`.  From the splitting
-`Â⋆Â − A⋆A = Â⋆(Â − A) + (Â − A)⋆A`, the two pieces are bounded by `â ε` and
-`ε a` (using `norm_adjoint_apply_le`). -/
+respectively, `‖(Â⋆Â − A⋆A) x‖ ≤ (a + â) ε ‖x‖`. This pointwise form is
+obtained from Tau Ceti's accepted operator-norm bound after converting the three
+pointwise assumptions to operator-norm bounds. -/
 theorem norm_gram_sub_gram_apply_le {A Â : E →ₗ[𝕜] F} {a â ε : ℝ}
     (hâ : 0 ≤ â) (hε : 0 ≤ ε)
     (hA : ∀ x, ‖A x‖ ≤ a * ‖x‖) (hÂ : ∀ x, ‖Â x‖ ≤ â * ‖x‖)
     (hE : ∀ x, ‖(Â - A) x‖ ≤ ε * ‖x‖) (x : E) :
     ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A) x‖ ≤ (a + â) * ε * ‖x‖ := by
-  have hadj : (Â - A).adjoint = Â.adjoint - A.adjoint := map_sub _ _ _
-  have hsplit : (Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A) x
-      = Â.adjoint ((Â - A) x) + (Â - A).adjoint (A x) := by
-    simp only [LinearMap.sub_apply, LinearMap.comp_apply, map_sub, hadj]
-    abel
-  rw [hsplit]
-  calc ‖Â.adjoint ((Â - A) x) + (Â - A).adjoint (A x)‖
-      ≤ ‖Â.adjoint ((Â - A) x)‖ + ‖(Â - A).adjoint (A x)‖ := norm_add_le _ _
-    _ ≤ â * ‖(Â - A) x‖ + ε * ‖A x‖ := by
-        gcongr
-        · exact norm_adjoint_apply_le hâ hÂ _
-        · exact norm_adjoint_apply_le hε hE _
-    _ ≤ â * (ε * ‖x‖) + ε * (a * ‖x‖) := by
-        gcongr
-        · exact hE x
-        · exact hA x
-    _ = (a + â) * ε * ‖x‖ := by ring
+  by_cases hE0 : Subsingleton E
+  · have hx : x = 0 := Subsingleton.elim _ _
+    subst x
+    simp
+  · have hnonzero : ∃ y : E, y ≠ 0 := by
+      by_contra h
+      apply hE0
+      refine ⟨fun x y => ?_⟩
+      have hx : x = 0 := by
+        by_contra hx
+        exact h ⟨x, hx⟩
+      have hy : y = 0 := by
+        by_contra hy
+        exact h ⟨y, hy⟩
+      rw [hx, hy]
+    have ha : 0 ≤ a := by
+      by_contra hna
+      obtain ⟨y, hy⟩ := hnonzero
+      have hypos : 0 < ‖y‖ := norm_pos_iff.mpr hy
+      have hnonneg : 0 ≤ ‖A y‖ := norm_nonneg _
+      exact (not_lt_of_ge (hnonneg.trans (hA y)))
+        (mul_neg_of_neg_of_pos (lt_of_not_ge hna) hypos)
+    let Ac := A.toContinuousLinearMap
+    let Âc := Â.toContinuousLinearMap
+    have hAop : ‖Ac‖ ≤ a := Ac.opNorm_le_bound ha hA
+    have hÂop : ‖Âc‖ ≤ â := Âc.opNorm_le_bound hâ hÂ
+    have hdiff : ∀ z, ‖(Âc - Ac) z‖ ≤ ε * ‖z‖ := by
+      intro z
+      change ‖(Â - A) z‖ ≤ ε * ‖z‖
+      exact hE z
+    have hdiffop : ‖Âc - Ac‖ ≤ ε := (Âc - Ac).opNorm_le_bound hε hdiff
+    have hgramEq :
+        (Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap =
+          Âc.adjoint ∘L Âc - Ac.adjoint ∘L Ac := by
+      ext z
+      simp [Ac, Âc, LinearMap.adjoint_eq_toCLM_adjoint]
+    have hgramNorm :
+        ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap‖ ≤ (a + â) * ε := by
+      rw [hgramEq]
+      calc
+        ‖Âc.adjoint ∘L Âc - Ac.adjoint ∘L Ac‖ ≤
+            (‖Âc‖ + ‖Ac‖) * ‖Âc - Ac‖ :=
+          ContinuousLinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_le Âc Ac
+        _ ≤ (â + a) * ε := by
+          exact mul_le_mul (add_le_add hÂop hAop) hdiffop (norm_nonneg _)
+            (add_nonneg hâ ha)
+        _ = (a + â) * ε := by ring
+    calc
+      ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A) x‖ =
+          ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap x‖ := rfl
+      _ ≤ ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap‖ * ‖x‖ :=
+        (Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap.le_opNorm x
+      _ ≤ (a + â) * ε * ‖x‖ :=
+        mul_le_mul_of_nonneg_right hgramNorm (norm_nonneg x)
 
 /-- **Trace of the modulus = sum of singular values.** For an endomorphism
 `A : E →ₗ[𝕜] E`, `∑ₖ re⟪|A| bₖ, bₖ⟫ = ∑ᵢ σᵢ(A)` in any orthonormal basis `b`.

@@ -375,8 +375,12 @@ only for the existing Frobenius arguments. The paper-shaped coefficient
 wrappers remain downstream and preserve the YWS constants. The stronger
 pointwise `norm_gram_sub_gram_apply_le` foundation remains in
 `ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace`; its assumptions and
-pointwise conclusion still support the symmetric YWS result. The Gram donor,
-Frobenius, Theorem 4, and rank-one modules compile at TauCeti
+pointwise conclusion still support the symmetric YWS result. Its finite-
+dimensional proof now converts those pointwise assumptions to operator norms
+and applies Tau Ceti's accepted
+`ContinuousLinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_le` instead
+of reproving the Gram estimate by splitting the perturbation into two terms.
+The Gram donor, Frobenius, Theorem 4, and rank-one modules compile at TauCeti
 `7205a079ee99f6962eb39fadd8067517ae38bf73`.
 
 **Retirement acceptance criterion:** for each replaced local theorem, record
