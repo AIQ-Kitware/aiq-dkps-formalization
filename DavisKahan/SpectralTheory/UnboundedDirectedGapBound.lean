@@ -67,7 +67,8 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
   have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
   have hA0 : IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A P hPred) :=
-    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A P hPred hA.dense_domain hA
+    by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      hPred.isSelfAdjoint_restrict hA
   have hX : DavisKahan.IsometricEmbedding (P.subtypeL : P →L[ℂ] Hc) := fun _ => rfl
   have hXdom : ∀ x : (TauCeti.LinearPMap.reducingRestriction A P hPred).domain,
       (P.subtypeL (x : P) : Hc) ∈ (TauCeti.LinearPMap.addBounded A Hop).domain := by

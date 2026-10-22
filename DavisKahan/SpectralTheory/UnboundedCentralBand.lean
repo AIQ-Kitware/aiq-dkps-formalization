@@ -338,7 +338,8 @@ theorem re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic
     (x : A.domain) (hx : (x : H) ∈ U) :
     (⟪A x, (x : H)⟫_ℂ).re ≤ c * ‖(x : H)‖ ^ 2 := by
   have hres : IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A U hred) :=
-    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred hA.dense_domain hA
+    by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      hred.isSelfAdjoint_restrict hA
   have hxdom : (⟨(x : H), hx⟩ : U) ∈
       (TauCeti.LinearPMap.reducingRestriction A U hred).domain := x.2
   have hb := re_inner_le_of_realSpectrum_subset_Iic hres h
@@ -356,7 +357,8 @@ theorem le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici
     (x : A.domain) (hx : (x : H) ∈ U) :
     c * ‖(x : H)‖ ^ 2 ≤ (⟪A x, (x : H)⟫_ℂ).re := by
   have hres : IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A U hred) :=
-    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred hA.dense_domain hA
+    by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      hred.isSelfAdjoint_restrict hA
   have hxdom : (⟨(x : H), hx⟩ : U) ∈
       (TauCeti.LinearPMap.reducingRestriction A U hred).domain := x.2
   have hb := le_re_inner_of_realSpectrum_subset_Ici hres h

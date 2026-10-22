@@ -312,11 +312,14 @@ theorem forward_all_kyFan
         kyFanApproximationGauge k P.forwardResidualBlock := by
   intro k
   set D := P.forwardData with hD
-  have hA0 : _root_.IsSelfAdjoint D.A₀ :=
-    PartialMap.reducingRestriction_isSelfAdjoint P.A U P.reduces_A_U P.selfAdjoint_A
-  have hL : _root_.IsSelfAdjoint D.Λ₁ :=
-    PartialMap.reducingRestriction_isSelfAdjoint P.B Vᗮ
-      P.reduces_B_V.orthogonal P.selfAdjoint_B
+  have hA0 : _root_.IsSelfAdjoint D.A₀ := by
+    simpa only [hD, forwardData,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      P.reduces_A_U.isSelfAdjoint_restrict P.selfAdjoint_A
+  have hL : _root_.IsSelfAdjoint D.Λ₁ := by
+    simpa only [hD, forwardData,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      P.reduces_B_V.orthogonal.isSelfAdjoint_restrict P.selfAdjoint_B
   have hEq := unbounded_adjoint_residual_block_identity D P.selfAdjoint_B hA0 hL
   -- The only step that is not scalar-generic on its own; see the module docstring.
   have hraw := unbounded_sylvester_kyFan hA0 hL P.gap_pos P.gap_U_to_Vperp hEq k
@@ -366,11 +369,14 @@ theorem reverse_all_kyFan
         kyFanApproximationGauge k P.reverseResidualBlock := by
   intro k
   set D := P.reverseData with hD
-  have hA0 : _root_.IsSelfAdjoint D.A₀ :=
-    PartialMap.reducingRestriction_isSelfAdjoint P.B V P.reduces_B_V P.selfAdjoint_B
-  have hL : _root_.IsSelfAdjoint D.Λ₁ :=
-    PartialMap.reducingRestriction_isSelfAdjoint P.A Uᗮ
-      P.reduces_A_U.orthogonal P.selfAdjoint_A
+  have hA0 : _root_.IsSelfAdjoint D.A₀ := by
+    simpa only [hD, reverseData,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      P.reduces_B_V.isSelfAdjoint_restrict P.selfAdjoint_B
+  have hL : _root_.IsSelfAdjoint D.Λ₁ := by
+    simpa only [hD, reverseData,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      P.reduces_A_U.orthogonal.isSelfAdjoint_restrict P.selfAdjoint_A
   have hEq := unbounded_adjoint_residual_block_identity D P.selfAdjoint_A hA0 hL
   have hraw := unbounded_sylvester_kyFan hA0 hL P.gap_pos P.gap_V_to_Uperp hEq k
   -- Mirror of the forward case: the ambient transport lemma again produces the adjoint

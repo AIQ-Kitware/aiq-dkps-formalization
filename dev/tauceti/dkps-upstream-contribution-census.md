@@ -264,6 +264,20 @@ and derives the compressed spectrum from
 The generic invariant-subspace, ordered-gap, general spectral-distance, and
 unbounded estimates remain in DKPS because #19268 does not subsume them.
 
+**Canonical self-adjoint restriction follow-up (2026-10-22):** the donor
+`LinearPMap.reducingRestriction_isSelfAdjoint` theorem and its Davis--Kahan
+`PartialMap` forwarding theorem have been removed. Their maintained consumers
+now apply the accepted `LinearPMap.IsReducing.isSelfAdjoint_restrict` API
+directly, using `reducingRestriction_eq_restrict` only to align the retained
+local restriction spelling with the upstream `A.restrict` result. The donor
+theorem added only a redundant dense-domain premise (already implied by
+self-adjointness) and forwarded to that exact upstream theorem. The local
+`reducingRestriction` construction remains for its domain-aware consumers; this
+change does not claim that the broader restriction bridge has been retired.
+The upstream result is in the canonical reducing API associated with
+[#13980](https://github.com/TauCetiProject/TauCeti/pull/13980); that PR remains
+classified as related API refinement, not a direct DKPS proof port.
+
 **Historical dependency pin:** the October 21 YWS consumption overlay updated TauCeti
 from `87dad819828705ed8329ff53b9bc53634a064b1a` to
 `f91b6396a35d847a87a0d37519325918356bc0fc`, preserving the Lean 4.36.0-rc1

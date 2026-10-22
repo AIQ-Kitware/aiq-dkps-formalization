@@ -234,21 +234,15 @@ local instance instCompleteSpaceCoeReducingCutoffC
     (W : Submodule ℂ H) [W.HasOrthogonalProjection] : CompleteSpace W :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
-/-- The restriction of a self-adjoint operator to a reducing subspace is
-self-adjoint.  A self-adjoint partial map is densely defined, so the density
-hypothesis of `LinearPMap.reducingRestriction_isSelfAdjoint` is automatic. -/
-theorem isSelfAdjoint_reducingRestriction (hA : IsSelfAdjoint A)
-    (hred : _root_.LinearPMap.IsReducing A U) :
-    IsSelfAdjoint (LinearPMap.reducingRestriction A U hred) :=
-  LinearPMap.reducingRestriction_isSelfAdjoint A U hred hA.dense_domain hA
-
 /-- **The cutoff family of an arbitrary reducing subspace**: the spectral bands
 `1_{[-n,n]}(A|_U)` of the restriction, carried into the ambient space. -/
 noncomputable def reducingCutoffSeq (hA : IsSelfAdjoint A)
     (hred : _root_.LinearPMap.IsReducing A U) (n : ℕ) :
     BoundedCutoff A U (n : ℝ) :=
   BoundedCutoff.ofReducingRestriction hred
-    (spectralBandCutoff (isSelfAdjoint_reducingRestriction hA hred)
+    (spectralBandCutoff
+      (by simpa only [LinearPMap.reducingRestriction_eq_restrict] using
+        hred.isSelfAdjoint_restrict hA)
       (Nat.cast_nonneg n))
 
 /-- **The cutoffs converge strongly to the identity on the reducing subspace.**
@@ -258,7 +252,9 @@ theorem tendsto_reducingCutoffSeq (hA : IsSelfAdjoint A)
     (hred : _root_.LinearPMap.IsReducing A U) {x : H} (hx : x ∈ U) :
     Filter.Tendsto (fun n : ℕ => (reducingCutoffSeq hA hred n).toProj x)
       Filter.atTop (nhds x) := by
-  have hAU := isSelfAdjoint_reducingRestriction hA hred
+  have hAU : IsSelfAdjoint (LinearPMap.reducingRestriction A U hred) := by
+    simpa only [LinearPMap.reducingRestriction_eq_restrict] using
+      hred.isSelfAdjoint_restrict hA
   have hshift : Filter.Tendsto (fun n : ℕ => (n : ℝ)) Filter.atTop Filter.atTop :=
     tendsto_natCast_atTop_atTop
   have hband : Filter.Tendsto

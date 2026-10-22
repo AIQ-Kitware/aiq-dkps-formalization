@@ -256,18 +256,20 @@ theorem forward_all_kyFan
         kyFanApproximationGauge k P.forwardResidualBlock := by
   intro k
   set D := P.forwardData with hD
-  have hA0 : _root_.IsSelfAdjoint D.A₀ :=
-    PartialMap.reducingRestriction_isSelfAdjoint
-      ((P.A.toLinearMap.toPMap ⊤)) P.U
-      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
-      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A))
-  have hL : _root_.IsSelfAdjoint D.Λ₁ :=
-    PartialMap.reducingRestriction_isSelfAdjoint
-      ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
-      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
-      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B))
+  have hA0 : _root_.IsSelfAdjoint D.A₀ := by
+    simpa only [hD, forwardData,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace
+        P.A P.U P.reduces_A_U).isSelfAdjoint_restrict
+        (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A))
+  have hL : _root_.IsSelfAdjoint D.Λ₁ := by
+    simpa only [hD, forwardData,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace
+        P.B P.V P.reduces_B_V).orthogonal.isSelfAdjoint_restrict
+        (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B))
   have hEq := unbounded_adjoint_residual_block_identity D
     (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B)) hA0 hL
@@ -320,18 +322,20 @@ theorem reverse_all_kyFan
         kyFanApproximationGauge k P.reverseResidualBlock := by
   intro k
   set D := P.reverseData with hD
-  have hA0 : _root_.IsSelfAdjoint D.A₀ :=
-    PartialMap.reducingRestriction_isSelfAdjoint
-      ((P.B.toLinearMap.toPMap ⊤)) P.V
-      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
-      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B))
-  have hL : _root_.IsSelfAdjoint D.Λ₁ :=
-    PartialMap.reducingRestriction_isSelfAdjoint
-      ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
-      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
-      (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A))
+  have hA0 : _root_.IsSelfAdjoint D.A₀ := by
+    simpa only [hD, reverseData,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace
+        P.B P.V P.reduces_B_V).isSelfAdjoint_restrict
+        (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.B)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B))
+  have hL : _root_.IsSelfAdjoint D.Λ₁ := by
+    simpa only [hD, reverseData,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace
+        P.A P.U P.reduces_A_U).orthogonal.isSelfAdjoint_restrict
+        (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A))
   have hEq := unbounded_adjoint_residual_block_identity D
     (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := P.A)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A)) hA0 hL

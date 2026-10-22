@@ -13,14 +13,10 @@ import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 /-!
 # Restrictions of closed operators to reducing subspaces
 
-This module gives a scalar-generic restriction construction for a densely
-specified closed operator and an orthogonally complemented reducing subspace.
-The construction keeps domains explicit, proves density and graph closedness,
-and shows that self-adjointness passes to the restriction.
-
-The result is independent of spectral theory.  Spectral packages only need to
-produce the reducing-subspace laws; the closed restriction and its inclusion
-intertwining are then canonical.
+This module gives the source-facing inclusion, domain, and intertwining API for
+the canonical restriction of a closed partial map to an orthogonally
+complemented reducing subspace. The restriction, its closedness, and
+self-adjointness preservation are supplied by Tau Ceti's `LinearPMap` API.
 -/
 
 namespace TauCeti
@@ -98,17 +94,6 @@ theorem reducingRestriction_isSymmetric
     TauCeti.LinearPMap.IsSymmetric
       (TauCeti.LinearPMap.reducingRestriction A U hred) :=
   TauCeti.LinearPMap.reducingRestriction_isSymmetric A U hred hA
-
-/-- A self-adjoint operator restricts to a self-adjoint operator on every
-reducing subspace. -/
-theorem reducingRestriction_isSelfAdjoint
-    (A : E →ₗ.[𝕜] E)
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : _root_.LinearPMap.IsReducing A U)
-    (hA : _root_.IsSelfAdjoint A) :
-    _root_.IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A U hred) :=
-  TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred
-    hA.dense_domain hA
 
 end PartialMap
 end DavisKahanExt
