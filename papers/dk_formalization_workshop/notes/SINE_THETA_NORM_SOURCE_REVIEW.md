@@ -70,12 +70,12 @@ Formalization 2 substitutes `S` directly into its conclusion.
 
 Existing formal support includes the polar identities in
 `ForTauCeti/Analysis/InnerProductSpace/Polar/PartialIsometry.lean` and the ideal
-laws in `ForTauCeti/Analysis/OperatorIdeal/Family/Basic.lean`. The explicit
-`source_gauge_modulus_eq_rectangular` theorem in
-`DavisKahan/Explorations/SourceUnitaryInvariantNormFanDominance.lean` proves
-the gauge equality for the normalized family over the complex field. That
-particular theorem is complex-specific; it is not evidence by itself of a
-scalar-generic theorem. This revision adds the mathematical explanation to the
+laws in `ForTauCeti/Analysis/OperatorIdeal/Family/Basic.lean`. The historical
+exploration at
+`DavisKahan/Explorations/Historical/SourceUnitaryInvariantNormFanDominance.lean`
+contains a complex-specific `source_gauge_modulus_eq_rectangular` proof. It is
+archived after the API migrations and is not current compiler evidence or, by
+itself, evidence of a scalar-generic theorem. This revision adds the mathematical explanation to the
 paper, without claiming a new compiled bridge theorem.
 
 ## What `N.gaugeReal` and its premises mean
