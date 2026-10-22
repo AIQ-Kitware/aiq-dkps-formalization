@@ -278,6 +278,10 @@ The unbounded Section 8 Theorem 8.2 source module now states its spectral
 hypotheses and derives its Ritz blocks directly with `A.restrict hred.isInvariant`
 and Tau Ceti's public restriction-domain and coercion lemmas; its hypotheses and
 conclusions are unchanged.
+The unbounded directed scalar-generic `sin 2Θ` source module now also states its
+form-gap hypotheses over canonical `A.restrict` operators and uses Tau Ceti's
+restriction-domain, coercion, and self-adjointness results directly; the theorem
+scope and conclusions are unchanged.
 The upstream result is in the canonical reducing API associated with
 [#13980](https://github.com/TauCetiProject/TauCeti/pull/13980); that PR remains
 classified as related API refinement, not a direct DKPS proof port.
