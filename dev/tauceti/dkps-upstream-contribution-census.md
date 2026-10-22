@@ -253,6 +253,17 @@ an isolated checkout against the newly pinned TauCeti main revision.
 | [#19268](https://github.com/TauCetiProject/TauCeti/pull/19268), `UnitarilyInvariantSeminorm.mul_map_starProjection_orthogonal_pointSpectralSubspace_comp_le_map_sylvester_apply` (and its automatic-`Ioo` specialization) in `UnitarilyInvariantSeminorm/SinTheta/Spectral.lean` | `ForTauCeti/.../SinTheta/Perturbation.lean`: `sinTheta_pointSpectralSubspace_le` | **Upstream consumption:** the finite-dimensional canonical spectral-selection proof now applies the accepted residual theorem to the compressed reference operator and transports the rectangular sine/residual back through the subspace inclusion. The source-facing declaration, positive-gap premise, selected interval, exterior-spectrum premise, and constant remain unchanged. Generic invariant-subspace, ordered-gap, general spectral-distance, and unbounded theorems remain because C19 does not subsume them. |
 | [#19145](https://github.com/TauCetiProject/TauCeti/pull/19145), `ProjValMeasure.polarizedComplexMeasure_variation_univ_le` and `instIsFiniteMeasurePolarizedVariation` in `ProjValMeasure/Variation.lean` | Spectral-measure integration and polarized-measure consumers; inspect `ForTauCeti/Analysis/InnerProductSpace/{ProjValMeasure,BorelCalculus,LinearPMap}` as dependencies become canonical | **No matching maintained local variation theorem was found to delete wholesale.** This is a new sharp bound using DKPS-derived PVM/polarization infrastructure from #17527/#19000, not proof that all donor Borel calculus or unbounded spectral measures can be retired. Enable the canonical `IsFiniteMeasure` instance at qualified consumer sites and eliminate local ad hoc domination arguments only if a true duplicate is located. Replaces closed attempt [#19009](https://github.com/TauCetiProject/TauCeti/pull/19009). |
 
+**C19 wrapper retirement follow-up (2026-10-22):** the donor theorem
+`sinTheta_pointSpectralSubspace_le` in `SinTheta/Perturbation.lean` was a
+square-operator wrapper around the accepted rectangular theorem. Its only
+maintained consumer was the `RoadmapBridge` seam; that example now applies
+TauCeti's theorem directly with the selected-space inclusion as the trial map,
+and derives the compressed spectrum from
+`pointSpectrumIn_restrict_iff` plus
+`pointSpectrumIn_pointSpectralSubspace`. The 63-line donor wrapper was deleted.
+The generic invariant-subspace, ordered-gap, general spectral-distance, and
+unbounded estimates remain in DKPS because #19268 does not subsume them.
+
 **Historical dependency pin:** the October 21 YWS consumption overlay updated TauCeti
 from `87dad819828705ed8329ff53b9bc53634a064b1a` to
 `f91b6396a35d847a87a0d37519325918356bc0fc`, preserving the Lean 4.36.0-rc1

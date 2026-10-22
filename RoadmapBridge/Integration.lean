@@ -17,12 +17,11 @@ nothing and adds no public name: its only job is to stop elaborating if the seam
 The seams are not hypothetical.  All three are recorded regressions or review findings:
 
 1. **A redundant hypothesis on a public signature.**  `sinTheta_pointSpectralSubspace_le` used to
-   take an `hAselected` asserting spectral containment for the selected block
-   `Module.End.pointSpectralSubspace A (Set.Icc a b)`. That fact holds without
-   an additional hypothesis, and
-   is now proved once, as `Module.End.pointSpectrumIn_pointSpectralSubspace`.  Nothing prevents a future edit
-   from
-   re-adding the argument, and the library would still build; the example below would not.
+   take an `hAselected` asserting spectral containment for the selected block;
+   that premise follows from `Module.End.pointSpectrumIn_pointSpectralSubspace`.
+   The parallel square-operator wrapper has since been removed in favor of
+   Tau Ceti's accepted rectangular residual theorem. The example below keeps
+   that theorem connected to canonical point-spectral selections.
 2. **One rectangular seminorm interface.** The examples exercise the inherited `Seminorm`
    laws, independent domain and codomain unitaries, Fan dominance in both directions, and
    the square specialization. They identify the single Frobenius construction with the
@@ -44,29 +43,56 @@ namespace RoadmapBridge.Integration
 open TauCeti
 open scoped BigOperators
 
-/-! ## Seam 1 — the spectral subspace supplies its own spectral-containment hypothesis
+/-! ## Seam 1 — the accepted rectangular theorem handles canonical selections
 
-`Module.End.pointSpectrumIn_pointSpectralSubspace` is the theorem that made the `hAselected` argument
-redundant.
-The example restates the sin-Θ bound with *only* the exterior hypothesis about `B`; if
-`hAselected` ever returns to the signature, this stops elaborating. -/
+The accepted Tau Ceti result consumes a trial map into the ambient space and
+states the residual bound in a rectangular unitarily invariant seminorm. This
+example checks the canonical point-spectral selection directly, deriving its
+spectral-containment hypothesis from the public restriction and point-spectrum
+APIs rather than relying on a parallel square-operator wrapper. -/
 
 section SpectralSubspaceSinTheta
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
 
-example (N : UnitarilyInvariantSeminorm 𝕜 E E)
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {a b δ : ℝ} (hδ : 0 < δ)
+example {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {a b δ : ℝ}
     (hBoutside : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * N (sinThetaMap (Module.End.pointSpectralSubspace A (Set.Icc a b))
-        (Module.End.pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) :=
-  sinTheta_pointSpectralSubspace_le N hA hB hδ hBoutside
+    let U := Module.End.pointSpectralSubspace A (Set.Icc a b)
+    let V := Module.End.pointSpectralSubspace B (Set.Icc a b)
+    let hU : IsInvariant A U := isInvariant_pointSpectralSubspace A (Set.Icc a b)
+    let M := A.restrict hU
+    let N : UnitarilyInvariantSeminorm 𝕜 U E :=
+      UnitarilyInvariantSeminorm.kyFan (𝕜 := 𝕜) (E := U) (F := E) 1
+    δ * N ((Vᗮ.starProjection ∘L U.subtypeₗᵢ.toContinuousLinearMap) : U →L[𝕜] E) ≤
+      N (B.toContinuousLinearMap.sylvester M.toContinuousLinearMap
+        U.subtypeₗᵢ.toContinuousLinearMap) := by
+  let U := Module.End.pointSpectralSubspace A (Set.Icc a b)
+  let V := Module.End.pointSpectralSubspace B (Set.Icc a b)
+  have hU : IsInvariant A U := isInvariant_pointSpectralSubspace A (Set.Icc a b)
+  let M := A.restrict hU
+  have hM : M.IsSymmetric := hA.restrict_invariant hU
+  have hMspec : Module.End.PointSpectrumIn (M : U →ₗ[𝕜] U) ⊤ (Set.Icc a b) :=
+    (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2
+      (Module.End.pointSpectrumIn_pointSpectralSubspace A (Set.Icc a b))
+  have hBspec : Module.End.PointSpectrumIn (B : E →ₗ[𝕜] E)
+      (Module.End.pointSpectralSubspace B (Set.Icc a b)ᶜ)
+      (Set.Ioo (a - δ) (b + δ))ᶜ := by
+    rw [Module.End.pointSpectrumIn_iff]
+    intro x hxV hx0 lam hxEig
+    have hxV' : x ∈ Vᗮ := by
+      rw [hB.orthogonal_pointSpectralSubspace (Set.Icc a b)]
+      exact hxV
+    change lam ∈ (Set.Ioo (a - δ) (b + δ))ᶜ
+    exact (Module.End.pointSpectrumIn_iff.mp hBoutside) x hxV' hx0 lam hxEig
+  exact UnitarilyInvariantSeminorm.mul_map_starProjection_orthogonal_pointSpectralSubspace_comp_le_map_sylvester_apply
+    (N := UnitarilyInvariantSeminorm.kyFan (𝕜 := 𝕜) (E := U) (F := E) 1)
+    (A := B.toContinuousLinearMap) (M := M.toContinuousLinearMap)
+    (Ω := Set.Icc a b) hB hM hMspec hBspec U.subtypeₗᵢ.toContinuousLinearMap
 
-/-- The hypothesis that was removed, on its own: it is a theorem, for every operator and
-every set, with no side condition. -/
+/-- Canonical point-spectral subspaces provide their own spectral-containment input. -/
 example (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
     Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A Ω) Ω :=
   Module.End.pointSpectrumIn_pointSpectralSubspace A Ω
