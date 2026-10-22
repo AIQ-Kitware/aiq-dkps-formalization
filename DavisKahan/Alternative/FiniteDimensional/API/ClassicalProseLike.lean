@@ -274,10 +274,10 @@ structure ProjectorDifferenceGapClassicalProseLike (A B : E →ₗ[𝕜] E)
   U_reduces : IsInvariant A U
   W_reduces : IsInvariant B W
   gap_pos : 0 < g
-  U_high : PointSpectrumIn A U (Set.Ici (c + g))
-  Uperp_low : PointSpectrumIn A Uᗮ (Set.Iic c)
-  W_high : PointSpectrumIn B W (Set.Ici (c + g))
-  Wperp_low : PointSpectrumIn B Wᗮ (Set.Iic c)
+  U_high : Module.End.PointSpectrumIn A U (Set.Ici (c + g))
+  Uperp_low : Module.End.PointSpectrumIn A Uᗮ (Set.Iic c)
+  W_high : Module.End.PointSpectrumIn B W (Set.Ici (c + g))
+  Wperp_low : Module.End.PointSpectrumIn B Wᗮ (Set.Iic c)
   perturbation_nonneg : 0 ≤ ε
   perturbation_bound : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖
 
@@ -309,10 +309,10 @@ structure CanonicalProjectorDifferenceGapClassicalProseLike (A B : E →ₗ[𝕜
   A_symm : A.IsSymmetric
   B_symm : B.IsSymmetric
   gap_pos : 0 < g
-  A_high : PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g))
-  Aperp_low : PointSpectrumIn A (Module.End.pointSpectralSubspace A s)ᗮ (Set.Iic c)
-  B_high : PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Ici (c + g))
-  Bperp_low : PointSpectrumIn B (Module.End.pointSpectralSubspace B t)ᗮ (Set.Iic c)
+  A_high : Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A s) (Set.Ici (c + g))
+  Aperp_low : Module.End.PointSpectrumIn A (Module.End.pointSpectralSubspace A s)ᗮ (Set.Iic c)
+  B_high : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B t) (Set.Ici (c + g))
+  Bperp_low : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B t)ᗮ (Set.Iic c)
   perturbation_nonneg : 0 ≤ ε
   perturbation_bound : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖
 

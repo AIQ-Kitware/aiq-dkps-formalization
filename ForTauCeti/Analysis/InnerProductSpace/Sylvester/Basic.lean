@@ -75,8 +75,8 @@ spectrum of `A` outside `(a-δ,b+δ)`. -/
 @[expose]
 def IntervalSylvesterGap (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
     (a b δ : ℝ) : Prop :=
-  PointSpectrumIn B ⊤ (Set.Icc a b) ∧
-    PointSpectrumIn A ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}
+  Module.End.PointSpectrumIn B ⊤ (Set.Icc a b) ∧
+    Module.End.PointSpectrumIn A ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}
 
 /-- Interval/exterior separation in either orientation.  The first branch has
 the spectrum of `B` in `[a,b]` and that of `A` outside the enlarged interval;
@@ -108,12 +108,12 @@ theorem sylvesterOperator_injective {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E
   intro i
   let α : ℝ := hA.eigenvalues rfl i
   let β : ℝ := hB.eigenvalues rfl j
-  have hα : α ∈ restrictedPointSpectrum A ⊤ :=
-    mem_restrictedPointSpectrum Submodule.mem_top
+  have hα : α ∈ Module.End.restrictedPointSpectrum A ⊤ :=
+    Module.End.mem_restrictedPointSpectrum Submodule.mem_top
       ((hA.eigenvectorBasis rfl).orthonormal.ne_zero i)
       (by dsimp [α]; exact hA.apply_eigenvectorBasis rfl i)
-  have hβ : β ∈ restrictedPointSpectrum B ⊤ :=
-    mem_restrictedPointSpectrum Submodule.mem_top
+  have hβ : β ∈ Module.End.restrictedPointSpectrum B ⊤ :=
+    Module.End.mem_restrictedPointSpectrum Submodule.mem_top
       ((hB.eigenvectorBasis rfl).orthonormal.ne_zero j)
       (by dsimp [β]; exact hB.apply_eigenvectorBasis rfl j)
   have hαβ : α ≠ β := by

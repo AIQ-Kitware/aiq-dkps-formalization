@@ -124,7 +124,7 @@ theorem yuWangSamworth_equation1_opNorm_le
   have hUeq : U = Submodule.span 𝕜 (Set.range fun _ : Fin 1 => v) := by
     rw [hU, Set.range_const]
   have hUinv : IsInvariant Sig U := by rw [hUeq]; exact hfamU.isInvariant_span
-  have hUspec : PointSpectrumIn Sig U (Set.Icc lam lam) := by
+  have hUspec : Module.End.PointSpectrumIn Sig U (Set.Icc lam lam) := by
     rw [hUeq]
     refine (hfamU.restrictedPointSpectrum_span_subset hSig).trans ?_
     rintro x ⟨i, rfl⟩
@@ -147,7 +147,7 @@ theorem yuWangSamworth_equation1_opNorm_le
       (fun k : ({j}ᶜ : Set (Fin p)) => lamhat (k : Fin p))
       (fun k : ({j}ᶜ : Set (Fin p)) => bhat (k : Fin p)) :=
     ⟨bhat.orthonormal.comp _ Subtype.val_injective, fun k => hbhat _⟩
-  have hVperpSpec : PointSpectrumIn Sighat Vᗮ
+  have hVperpSpec : Module.End.PointSpectrumIn Sighat Vᗮ
       {mu | mu ∉ Set.Ioo (lam - δ) (lam + δ)} := by
     rw [hVperpEq]
     refine (hfamV.restrictedPointSpectrum_span_subset hSighat).trans ?_

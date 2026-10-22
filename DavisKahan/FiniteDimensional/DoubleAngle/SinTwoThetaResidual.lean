@@ -45,8 +45,8 @@ theorem sinTwoTheta_residual_le
     [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hMspec : PointSpectrumIn M ⊤ (Set.Icc a b))
-    (hAspec : PointSpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
+    (hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b))
+    (hAspec : Module.End.PointSpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
   have hdouble := sinTwoThetaEmbedding_uiNorm_le_two_mul N U X
   have hsingle := sinTheta_residual_le N hA hU X hM hδ hMspec hAspec

@@ -226,7 +226,7 @@ theorem sinTheta_perturbation_le
   let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
     N.domainIsometryTransport U.subtypeₗᵢ
   have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
-  have hMspec : PointSpectrumIn (A.restrict hU) ⊤ (Set.Icc a b) :=
+  have hMspec : Module.End.PointSpectrumIn (A.restrict hU) ⊤ (Set.Icc a b) :=
     (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
   have hres :
       δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) ≤
@@ -597,7 +597,7 @@ theorem sinTheta_pointSpectralSubspace_le
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hBoutside : PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
+    (hBoutside : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinThetaMap (Module.End.pointSpectralSubspace A (Set.Icc a b))
         (Module.End.pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) := by
@@ -609,15 +609,13 @@ theorem sinTheta_pointSpectralSubspace_le
   have hM : M.IsSymmetric := hA.restrict_invariant hU
   let X : U →ₗᵢ[𝕜] E := U.subtypeₗᵢ
   let NU : UnitarilyInvariantSeminorm 𝕜 U E := N.domainIsometryTransport X
-  have hMspecLocal : PointSpectrumIn M ⊤ (Set.Icc a b) :=
+  have hMspecLocal : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b) :=
     (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2
-      (pointSpectrumIn_pointSpectralSubspace A (Set.Icc a b))
+      (Module.End.pointSpectrumIn_pointSpectralSubspace A (Set.Icc a b))
   have hMspec : Module.End.PointSpectrumIn (M : U →ₗ[𝕜] U) ⊤ (Set.Icc a b) := by
     rw [Module.End.pointSpectrumIn_iff]
     intro x hxU hx0 lam hxEig
-    have hmem : lam ∈ restrictedPointSpectrum M ⊤ :=
-      mem_restrictedPointSpectrum hxU hx0 hxEig
-    exact hMspecLocal hmem
+    exact (Module.End.pointSpectrumIn_iff.mp hMspecLocal) x hxU hx0 lam hxEig
   have hBspec : Module.End.PointSpectrumIn (B : E →ₗ[𝕜] E)
       (Module.End.pointSpectralSubspace (B : E →ₗ[𝕜] E) (Set.Icc a b)ᶜ)
       (Set.Ioo (a - δ) (b + δ))ᶜ := by
@@ -626,10 +624,8 @@ theorem sinTheta_pointSpectralSubspace_le
     have hxV' : x ∈ Vᗮ := by
       rw [hB.orthogonal_pointSpectralSubspace (Set.Icc a b)]
       exact hxV
-    have hmem : lam ∈ restrictedPointSpectrum B Vᗮ :=
-      mem_restrictedPointSpectrum hxV' hx0 hxEig
     change lam ∈ (Set.Ioo (a - δ) (b + δ))ᶜ
-    exact hBoutside hmem
+    exact (Module.End.pointSpectrumIn_iff.mp hBoutside) x hxV' hx0 lam hxEig
   have hcore := by
     exact NU.mul_map_starProjection_orthogonal_pointSpectralSubspace_comp_le_map_sylvester_apply
       (A := B.toContinuousLinearMap) (M := M.toContinuousLinearMap)
@@ -769,7 +765,7 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
   have hAU : AU.IsSymmetric := hA.restrict_invariant hUperp
   have hgap' : PointSpectraSeparated AU ⊤ M ⊤ δ := by
     intro lam mu hlam hmu
-    have hlam' : lam ∈ restrictedPointSpectrum A Uᗮ := by
+    have hlam' : lam ∈ Module.End.restrictedPointSpectrum A Uᗮ := by
       rw [← restrictedPointSpectrum_restrict A hUperp]
       exact hlam
     have hsep := hgap mu lam hmu hlam'

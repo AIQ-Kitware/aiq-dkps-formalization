@@ -115,8 +115,8 @@ structure AboveBelowSpectralGapProseLike (T S : E →ₗ[𝕜] E)
   U_reduces : IsInvariant T U
   V_reduces : IsInvariant S V
   gap_pos : 0 < g
-  U_spectrum : PointSpectrumIn T U (Set.Ici (c + g))
-  V_spectrum : PointSpectrumIn S V (Set.Iic c)
+  U_spectrum : Module.End.PointSpectrumIn T U (Set.Ici (c + g))
+  V_spectrum : Module.End.PointSpectrumIn S V (Set.Iic c)
 
 omit [CompleteSpace E] in
 /-- Spectral-hypothesis prose-like Davis--Kahan Part III `sin Θ` theorem.
@@ -144,8 +144,8 @@ structure CanonicalSpectralGapProseLike (T S : E →ₗ[𝕜] E)
   T_symm : T.IsSymmetric
   S_symm : S.IsSymmetric
   gap_pos : 0 < g
-  U_spectrum : PointSpectrumIn T (Module.End.pointSpectralSubspace T s) (Set.Ici (c + g))
-  V_spectrum : PointSpectrumIn S (Module.End.pointSpectralSubspace S t) (Set.Iic c)
+  U_spectrum : Module.End.PointSpectrumIn T (Module.End.pointSpectralSubspace T s) (Set.Ici (c + g))
+  V_spectrum : Module.End.PointSpectrumIn S (Module.End.pointSpectralSubspace S t) (Set.Iic c)
 
 omit [CompleteSpace E] in
 /-- Canonical spectral-subspace prose-like Davis--Kahan Part III `sin Θ`

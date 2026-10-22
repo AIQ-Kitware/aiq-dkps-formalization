@@ -120,10 +120,10 @@ unwanted exact spectrum of `A` on `Vᗮ` outside the enlarged interval.  The
 second branch reverses those roles, as allowed in Davis--Kahan Theorem 6.1. -/
 def TrialComplementIntervalGap (M : F →ₗ[𝕜] F) (A : E →ₗ[𝕜] E)
     (V : Submodule 𝕜 E) (a b δ : ℝ) : Prop :=
-  (PointSpectrumIn M ⊤ (Set.Icc a b) ∧
-      PointSpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) ∨
-    (PointSpectrumIn A Vᗮ (Set.Icc a b) ∧
-      PointSpectrumIn M ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)})
+  (Module.End.PointSpectrumIn M ⊤ (Set.Icc a b) ∧
+      Module.End.PointSpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) ∨
+    (Module.End.PointSpectrumIn A Vᗮ (Set.Icc a b) ∧
+      Module.End.PointSpectrumIn M ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)})
 
 /-- **Raw generalized sine-block residual estimate, every UI norm.**
 
@@ -283,8 +283,8 @@ theorem generalizedSinTheta_residual_le
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
-    (hMspec : PointSpectrumIn M ⊤ (Set.Icc a b))
-    (hAspec : PointSpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
+    (hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b))
+    (hAspec : Module.End.PointSpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * ε * N (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       N (generalResidual A X M) := by
   have htransport := lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock

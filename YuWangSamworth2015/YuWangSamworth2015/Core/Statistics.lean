@@ -469,11 +469,11 @@ theorem yuWangSamworth_sinTheta_le
       Δ ≤ |hA.eigenvalues hn j - hA.eigenvalues hn k| := by
     intro j hj k hk
     apply hgap.2 (hA.eigenvalues hn j) (hA.eigenvalues hn k)
-    · refine mem_restrictedPointSpectrum ?_
+    · refine Module.End.mem_restrictedPointSpectrum ?_
         ((hA.eigenvectorBasis hn).orthonormal.ne_zero j)
         (hA.apply_eigenvectorBasis hn j)
       exact (hA.eigenvectorBasis hn).mem_spanIndices_of_mem hj
-    · refine mem_restrictedPointSpectrum ?_
+    · refine Module.End.mem_restrictedPointSpectrum ?_
         ((hA.eigenvectorBasis hn).orthonormal.ne_zero k)
         (hA.apply_eigenvectorBasis hn k)
       rw [OrthonormalBasis.orthogonal_spanIndices]
@@ -728,7 +728,7 @@ theorem yuWangSamworth_eigenvector_le
     (hcorr : CorrespondingEigenblock hA hB
       (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}))
     (hΔ : 0 < Δ)
-    (hgap : ∀ ν ∈ restrictedPointSpectrum A (Submodule.span 𝕜 {u})ᗮ,
+    (hgap : ∀ ν ∈ Module.End.restrictedPointSpectrum A (Submodule.span 𝕜 {u})ᗮ,
       Δ ≤ |lam - ν|) :
     ∃ c : 𝕜, ‖c‖ = 1 ∧
       ‖c • v - u‖ ≤ 2 * Real.sqrt 2 * ‖(B - A).toContinuousLinearMap‖ / Δ := by
@@ -746,7 +746,7 @@ theorem yuWangSamworth_eigenvector_le
   have hgap' : PointInternalGap A (Submodule.span 𝕜 {u}) Δ := by
     refine ⟨hU, ?_⟩
     intro l ν hl hν
-    obtain ⟨x, hxU, hx0, hAx⟩ := mem_restrictedPointSpectrum_iff.mp hl
+    obtain ⟨x, hxU, hx0, hAx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hl
     rw [Submodule.mem_span_singleton] at hxU
     obtain ⟨a, rfl⟩ := hxU
     have heq : (lam : 𝕜) • (a • u) = (l : 𝕜) • (a • u) := by

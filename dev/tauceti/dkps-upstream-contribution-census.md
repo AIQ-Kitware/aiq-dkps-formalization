@@ -277,11 +277,45 @@ corollary. It also retires the redundant local span-equation theorem, replaces
 the local eigenspace-independence proof by
 `Module.End.pointSpectrumIn_pointSpectralSubspace`, and uses
 `Module.End.map_pointSpectralSubspace_le` for invariance. This is **not** a
-claim that local `restrictedPointSpectrum`, `PointSpectrumIn`, `IsInvariant`,
-or the linear-map-valued `spectralProjection` have been retired: their remaining
-consumers and carrier requirements need a distinct migration. The upstream
-point-spectral-subspace definition selects precisely the same eigenvector span,
-with no extra symmetry or finite-dimensional hypothesis.
+The upstream point-spectral-subspace definition selects precisely the same
+eigenvector span, with no extra symmetry or finite-dimensional hypothesis.
+
+**Canonical restricted point-spectrum follow-up (2026-10-21):** the duplicate
+`TauCeti.restrictedPointSpectrum` and `TauCeti.PointSpectrumIn` definitions,
+their two membership lemmas, and the local proof
+`pointSpectrumIn_pointSpectralSubspace` have now been retired against the
+accepted [#14418](https://github.com/TauCetiProject/TauCeti/pull/14418)
+declarations in `TauCeti.Analysis.InnerProductSpace.PointSpectrum`, introduced
+by TauCeti commit `1f2ab68732510bdfccdd517505193dc128901c7d` and present in the
+pinned tree `7205a079ee99f6962eb39fadd8067517ae38bf73`. Maintained consumers
+now use `Module.End.restrictedPointSpectrum`,
+`Module.End.mem_restrictedPointSpectrum_iff`,
+`Module.End.mem_restrictedPointSpectrum`, `Module.End.PointSpectrumIn`,
+`Module.End.pointSpectrumIn_iff`, and
+`Module.End.pointSpectrumIn_pointSpectralSubspace` directly. The upstream
+predicate and membership statements express the same eigenvalue/eigenvector
+conditions as the donor versions, while the accepted APIs work over general
+`RCLike` endomorphisms without imposing the donor's inner-product-space
+context. Source-facing Davis--Kahan and YWS statements retain their spectral
+sets, gap orientations, scalar generality, and conclusions. Consumers that
+previously applied `PointSpectrumIn` as a subset now use the public
+`pointSpectrumIn_iff` characterization, since the upstream predicate is
+intentionally opaque.
+
+The local `restrictedPointSpectrum_restrict` and
+`pointSpectrumIn_restrict_iff` results remain as DKPS-specific bridges between
+`A.restrict hU` and ambient eigenvectors under the donor's `IsInvariant`
+presentation; #14418 does not provide that transfer theorem. `IsInvariant`,
+the linear-map-valued `spectralProjection`, and projection helpers remain local
+and were not part of this slice. The core donor and all 25 changed maintained
+modules, including the paper-facing finite wrappers, YWS consumers, and
+`RoadmapBridge.Integration`, compiled at the pinned dependency revision.
+The touched `Challenge.DavisKahan1970.Conformance` and `.Leaderboard`
+targets also compile, and comparator preflight passes the migrated point-spectrum
+rows. One pre-existing `sinTheta_wholeSpace_symmetricNorming` signature mismatch
+remains; the aggregate `Challenge` target also has an unrelated missing
+`TauCeti.abs_eigenvalues_sub_le_opNorm` reference in its Mathlib-candidate
+leaderboard.
 
 **Retirement acceptance criterion:** for each replaced local theorem, record
 (1) exact upstream declaration and accepted commit; (2) original statement
