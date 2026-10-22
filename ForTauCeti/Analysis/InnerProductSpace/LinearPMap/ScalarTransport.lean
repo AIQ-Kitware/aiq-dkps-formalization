@@ -24,6 +24,8 @@ let a theorem proved at `ℝ` and at `ℂ` be read at an arbitrary `RCLike` fiel
 
 ## Main results
 
+* `TauCeti.ScalarTransport.isReducing_pmap_iff` transports Tau Ceti's canonical
+  reducing-subspace predicate.
 * `TauCeti.ScalarTransport.reducesSubspace_pmap_iff`.
 * `TauCeti.ScalarTransport.pmap_addBounded`.
 
@@ -64,8 +66,8 @@ theorem starProjection_orthogonal_of (S : Submodule 𝕜 E) [S.HasOrthogonalProj
 /-- A subspace of the transported space is invariant under the transported
 operator exactly when it was invariant. -/
 theorem invariantSubspace_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E) :
-    LinearPMap.InvariantSubspace (pmap (e := e) A) (submodule (e := e) S) ↔
-      LinearPMap.InvariantSubspace A S := by
+    (pmap (e := e) A).IsInvariant (submodule (e := e) S) ↔ A.IsInvariant S := by
+  rw [_root_.LinearPMap.isInvariant_iff, _root_.LinearPMap.isInvariant_iff]
   constructor
   · intro h x hx
     have hd : (of (e := e) (x : E)) ∈ (pmap (e := e) A).domain :=
@@ -79,53 +81,49 @@ theorem invariantSubspace_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E
       (h ⟨out (e := e) (x : ScalarTransport e E), hd⟩ ((mem_submodule (e := e)).mp hx))
 
 /-- **A subspace reduces the transported operator exactly when it reduces the
-original.**  All four components are membership statements about the same
-vectors, and the transport changes neither the domain, the action, the
-orthogonal complement, nor the orthogonal projection. -/
-theorem reducesSubspace_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E)
+original.**  The canonical domain-preservation and invariance conditions are
+unchanged by scalar transport. -/
+theorem isReducing_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E)
     [S.HasOrthogonalProjection] :
-    LinearPMap.ReducesSubspace (pmap (e := e) A) (submodule (e := e) S) ↔
-      LinearPMap.ReducesSubspace A S := by
+    _root_.LinearPMap.IsReducing (pmap (e := e) A) (submodule (e := e) S) ↔
+      _root_.LinearPMap.IsReducing A S := by
   have hinvS := invariantSubspace_pmap_iff (e := e) (A := A) S
   have hinvSc := invariantSubspace_pmap_iff (e := e) (A := A) Sᗮ
-  have hortho : LinearPMap.InvariantSubspace (pmap (e := e) A)
+  have hortho : (pmap (e := e) A).IsInvariant
         (submodule (e := e) Sᗮ) ↔
-      LinearPMap.InvariantSubspace (pmap (e := e) A) (submodule (e := e) S)ᗮ := by
+      (pmap (e := e) A).IsInvariant (submodule (e := e) S)ᗮ := by
     rw [submodule_orthogonal]
   constructor
   · intro h
-    refine LinearPMap.ReducesSubspace.of_components (fun x => ?_) (fun x => ?_)
-      (hinvS.mp h.invariant) (hinvSc.mp (hortho.mpr h.orthogonal_invariant))
-    · have hd : (of (e := e) (x : E)) ∈ (pmap (e := e) A).domain :=
-        (mem_pmap_domain_iff (e := e) (A := A) _).mpr x.2
-      have hx := h.projection_mem_domain ⟨of (e := e) (x : E), hd⟩
-      rw [starProjection_of] at hx
-      exact (mem_pmap_domain_iff (e := e) (A := A) _).mp hx
-    · have hd : (of (e := e) (x : E)) ∈ (pmap (e := e) A).domain :=
-        (mem_pmap_domain_iff (e := e) (A := A) _).mpr x.2
-      have hx := h.orthogonalProjection_mem_domain ⟨of (e := e) (x : E), hd⟩
-      rw [starProjection_orthogonal_of] at hx
-      exact (mem_pmap_domain_iff (e := e) (A := A) _).mp hx
+    refine ⟨?_, (hinvS.mp h.isInvariant),
+      (hinvSc.mp (hortho.mpr h.isInvariant_orthogonal))⟩
+    intro x hx
+    have hd : (of (e := e) x) ∈ (pmap (e := e) A).domain :=
+      (mem_pmap_domain_iff (e := e) (A := A) _).mpr hx
+    have hx := h.starProjection_mem_domain hd
+    rw [starProjection_of] at hx
+    exact (mem_pmap_domain_iff (e := e) (A := A) _).mp hx
   · intro h
-    refine LinearPMap.ReducesSubspace.of_components (fun x => ?_) (fun x => ?_)
-      (hinvS.mpr h.invariant) (hortho.mp (hinvSc.mpr h.orthogonal_invariant))
-    · have hd : out (e := e) (x : ScalarTransport e E) ∈ A.domain :=
-        (mem_pmap_domain_iff (e := e) (A := A) _).mp x.2
-      have hx := h.projection_mem_domain ⟨out (e := e) (x : ScalarTransport e E), hd⟩
-      refine (mem_pmap_domain_iff (e := e) (A := A) _).mpr ?_
-      rw [show (submodule (e := e) S).starProjection (x : ScalarTransport e E)
-          = of (e := e) (S.starProjection (out (e := e) (x : ScalarTransport e E)))
-        from starProjection_of (e := e) S _]
-      exact hx
-    · have hd : out (e := e) (x : ScalarTransport e E) ∈ A.domain :=
-        (mem_pmap_domain_iff (e := e) (A := A) _).mp x.2
-      have hx := h.orthogonalProjection_mem_domain
-        ⟨out (e := e) (x : ScalarTransport e E), hd⟩
-      refine (mem_pmap_domain_iff (e := e) (A := A) _).mpr ?_
-      rw [show (submodule (e := e) S)ᗮ.starProjection (x : ScalarTransport e E)
-          = of (e := e) (Sᗮ.starProjection (out (e := e) (x : ScalarTransport e E)))
-        from starProjection_orthogonal_of (e := e) S _]
-      exact hx
+    refine ⟨?_, (hinvS.mpr h.isInvariant),
+      (hortho.mp (hinvSc.mpr h.isInvariant_orthogonal))⟩
+    intro x hx
+    have hd : out (e := e) (x : ScalarTransport e E) ∈ A.domain :=
+      (mem_pmap_domain_iff (e := e) (A := A) _).mp hx
+    have hx := h.starProjection_mem_domain hd
+    refine (mem_pmap_domain_iff (e := e) (A := A) _).mpr ?_
+    rw [show (submodule (e := e) S).starProjection (x : ScalarTransport e E)
+        = of (e := e) (S.starProjection (out (e := e) (x : ScalarTransport e E)))
+      from starProjection_of (e := e) S _]
+    exact hx
+
+/-- Compatibility theorem for consumers that still use the donor reduction predicate. -/
+theorem reducesSubspace_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E)
+    [S.HasOrthogonalProjection] :
+    TauCeti.LinearPMap.ReducesSubspace (pmap (e := e) A) (submodule (e := e) S) ↔
+      TauCeti.LinearPMap.ReducesSubspace A S := by
+  rw [TauCeti.LinearPMap.reducesSubspace_iff_isReducing,
+    TauCeti.LinearPMap.reducesSubspace_iff_isReducing]
+  exact isReducing_pmap_iff (e := e) S
 
 
 /-- The transport commutes with adding a bounded operator. -/
