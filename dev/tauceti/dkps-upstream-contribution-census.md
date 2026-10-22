@@ -120,15 +120,17 @@ byte-identical.
 | [#19005](https://github.com/TauCetiProject/TauCeti/pull/19005) | SA-B49: PVM almost-everywhere/null-set filter | Adapted from Kitware DKPS PVM measure theory | D, B |
 | [#19229](https://github.com/TauCetiProject/TauCeti/pull/19229) | SSP-D12: singular-subspace Gram perturbation | Adapted from DKPS singular-subspace perturbation theory | D, M21 |
 | [#19252](https://github.com/TauCetiProject/TauCeti/pull/19252) | SSP-C20: equal-rank spectral projector bound | Based on maintained DKPS projection/perturbation proof | D, M21 |
+| [#19268](https://github.com/TauCetiProject/TauCeti/pull/19268) | SSP-C19: canonical spectral-subspace residual sine bound | Adapted from `ForTauCeti/.../SinTheta/DirectedBounds.lean` and `.../Spectral/Subspace.lean`; the accepted module names both donor sources | D, M21 |
 
 *This table is not a claim that all 29 PRs merged through GitHub's native merge
 API or that all their final declarations have been rechecked on current main.*
 The October 13 source audit independently established the six `M13` cases;
 other rows rely on the PR provenance text and Bors integration label unless
-explicitly marked `M21`. The `M21` rows are #19229 and #19252: the named
-`SingularSubspace/Perturbation.lean` and `Projection/SpectralPerturbation.lean`
-declarations were found on TauCeti main, but historical proof descent
-is still being audited.
+explicitly marked `M21`. The `M21` rows are #19229, #19252, and #19268: the
+named `SingularSubspace/Perturbation.lean`, `Projection/SpectralPerturbation.lean`,
+and `UnitarilyInvariantSeminorm/SinTheta/Spectral.lean` declarations were found
+on TauCeti main. The PR provenance identifies the DKPS donor modules; final
+proof descent remains subject to a declaration-level diff audit.
 
 ## B. DKPS-origin submissions without established upstream integration
 
@@ -155,7 +157,7 @@ attempt, not an accepted TauCeti theorem.
 | [#16293](https://github.com/TauCetiProject/TauCeti/pull/16293) | MSS-B11–B13 Hermitian threshold-projector proposal citing DKPS source | Closed, no Bors label; acceptance not established |
 | [#19009](https://github.com/TauCetiProject/TauCeti/pull/19009) | SA-B42 older variation attempt; explicitly replaced by #19145 | Closed, no Bors label |
 | [#18927](https://github.com/TauCetiProject/TauCeti/pull/18927), [#18942](https://github.com/TauCetiProject/TauCeti/pull/18942) | SA-E32–E34 spectral grid and SSP-D01 ordered eigenframes | Open |
-| [#19242](https://github.com/TauCetiProject/TauCeti/pull/19242), [#19268](https://github.com/TauCetiProject/TauCeti/pull/19268), [#19277](https://github.com/TauCetiProject/TauCeti/pull/19277) | SSP-C23 pairwise pi/2; SSP-C19 spectral residual; SSP-C09/C10 reduced extensions | Open |
+| [#19242](https://github.com/TauCetiProject/TauCeti/pull/19242), [#19277](https://github.com/TauCetiProject/TauCeti/pull/19277) | SSP-C23 pairwise pi/2; SSP-C09/C10 reduced extensions | Open |
 | [#19299](https://github.com/TauCetiProject/TauCeti/pull/19299), [#19329](https://github.com/TauCetiProject/TauCeti/pull/19329), [#19338](https://github.com/TauCetiProject/TauCeti/pull/19338) | SSP-C27 Gram transfer; SSP-C28/C29 sine-to-tangent; SSP-D19 right singular-vector gap | Open |
 
 The first-wave campaign's `manifest.json` and `roadmap_port_index.json`
@@ -236,35 +238,39 @@ an actual proof or mathematical idea lineage are distinct relationships.
 
 ## D. October 21 integration-to-retirement frontier: what the three merges unlock
 
-Three PRs were checked against their final subject modules on TauCeti `main`
+Four PRs were checked against their final subject modules on TauCeti `main`
 on 2026-10-21, not merely against Bors titles. Their upstream declarations
 are present. **No code is deleted by recording their acceptance.** The
-maintained DKPS snapshot available for this audit is from 12:13 October 21
-(DKPS `7cd3d7a11b91`), supplemented by the user's later successful canonical
-restriction and seminorm compilation reports; the user's latest checkout is
-not re-snapshotted here.
+maintained DKPS baseline for the retirement comparisons is commit
+`ec7c6d13`, which includes the earlier canonical restriction, seminorm, and
+singular-subspace migrations. The C19 consumption below was then compiled in
+an isolated checkout against the newly pinned TauCeti main revision.
 
 | Accepted PR and main API | Candidate donor consumers | What can be removed; what must remain |
 | --- | --- | --- |
 | [#19252](https://github.com/TauCetiProject/TauCeti/pull/19252), `Submodule.mul_projectionGap_le_norm_sub_of_pointIntervalExteriorGap` and `Module.End.mul_norm_sub_starProjection_pointSpectralSubspace_le` in `Projection/SpectralPerturbation.lean` | Finite-dimensional DKPS/YWS equal-rank projection-gap and spectral-projector perturbation corollaries | Refactor mathematically matching **finite-dimensional constant-one** proofs to use these accepted theorems, then remove redundant local proofs. Do **not** replace infinite-dimensional, unbounded, unequal-rank, differently oriented, or ideal-norm theorems just because they mention projector gaps. Depends on independent upstream gap identity [#15983](https://github.com/TauCetiProject/TauCeti/pull/15983) and sine theorem [#16545](https://github.com/TauCetiProject/TauCeti/pull/16545). |
 | [#19229](https://github.com/TauCetiProject/TauCeti/pull/19229), `LinearMap.mul_norm_sinThetaMap_rightSingularSubspace_le` and `...leftSingularSubspace_le` in `SingularSubspace/Perturbation.lean` | `YuWangSamworth2015/YuWangSamworth2015/Core/SingularSubspace.lean`: `rightSingularSubspace_sinTheta_le` and `leftSingularSubspace_sinTheta_le`; removed donor-only singular-subspace definitions | **Upstream consumption:** the two paper-facing theorem names were retained and their mathematical estimates already compiled when forwarded to #19229. This follow-on retirement changes their binder types to canonical `Module.End.PointIntervalExteriorGap`, their selected subspaces to `LinearMap.rightSingularSubspace` / `.leftSingularSubspace`, and their sine maps to `Submodule.sinThetaMap`. It deletes two legacy definitions and four private proof conversions. The original donor statement used a common `Icc a b` selection and explicit `0 < δ`; these conditions remain in the new specializations, while upstream itself permits arbitrary separate spectral sets and does not need strict positivity. YWS Hermitian dilation, Gram blocks, and other application results remain, as they are not superseded by these two theorems. |
+| [#19268](https://github.com/TauCetiProject/TauCeti/pull/19268), `UnitarilyInvariantSeminorm.mul_map_starProjection_orthogonal_pointSpectralSubspace_comp_le_map_sylvester_apply` (and its automatic-`Ioo` specialization) in `UnitarilyInvariantSeminorm/SinTheta/Spectral.lean` | `ForTauCeti/.../SinTheta/Perturbation.lean`: `sinTheta_pointSpectralSubspace_le` | **Upstream consumption:** the finite-dimensional canonical spectral-selection proof now applies the accepted residual theorem to the compressed reference operator and transports the rectangular sine/residual back through the subspace inclusion. The source-facing declaration, positive-gap premise, selected interval, exterior-spectrum premise, and constant remain unchanged. Generic invariant-subspace, ordered-gap, general spectral-distance, and unbounded theorems remain because C19 does not subsume them. |
 | [#19145](https://github.com/TauCetiProject/TauCeti/pull/19145), `ProjValMeasure.polarizedComplexMeasure_variation_univ_le` and `instIsFiniteMeasurePolarizedVariation` in `ProjValMeasure/Variation.lean` | Spectral-measure integration and polarized-measure consumers; inspect `ForTauCeti/Analysis/InnerProductSpace/{ProjValMeasure,BorelCalculus,LinearPMap}` as dependencies become canonical | **No matching maintained local variation theorem was found to delete wholesale.** This is a new sharp bound using DKPS-derived PVM/polarization infrastructure from #17527/#19000, not proof that all donor Borel calculus or unbounded spectral measures can be retired. Enable the canonical `IsFiniteMeasure` instance at qualified consumer sites and eliminate local ad hoc domination arguments only if a true duplicate is located. Replaces closed attempt [#19009](https://github.com/TauCetiProject/TauCeti/pull/19009). |
 
-**Dependency pin:** the October 21 YWS consumption overlay updated TauCeti
+**Historical dependency pin:** the October 21 YWS consumption overlay updated TauCeti
 from `87dad819828705ed8329ff53b9bc53634a064b1a` to
 `f91b6396a35d847a87a0d37519325918356bc0fc`, preserving the Lean 4.36.0-rc1
 and Mathlib pins. The YWS two-theorem forwarding overlay (v3) compiled at that
 pin, as confirmed by the DKPS maintainer. The follow-on canonical-interface
 retirement was likewise completed before the present spectral-subspace migration.
-Keep the former pin for historical regression triage.
+Keep the former pin for historical regression triage. This consumption run
+verified live TauCeti `main` at `7205a079ee99f6962eb39fadd8067517ae38bf73`
+with the same Lean toolchain and Mathlib revision, then committed that pin in
+DKPS commit `5cf2439c`.
 
 **Canonical point-spectral-subspace follow-up (2026-10-21):** the maintained
 finite-dimensional donor no longer defines `TauCeti.pointSpectralSubspace`.
 The old span-of-eigenvectors representation is already provided by the
 accepted `Module.End.pointSpectralSubspace` and its
 `Module.End.pointSpectralSubspace_eq_span` characterization in
-`TauCeti.Analysis.InnerProductSpace.PointSpectrum` (pin
-`f91b6396a35d847a87a0d37519325918356bc0fc`). The migration uses the
+`TauCeti.Analysis.InnerProductSpace.PointSpectrum` (now pinned at
+`7205a079ee99f6962eb39fadd8067517ae38bf73`). The migration uses the
 upstream subspace directly in the finite-dimensional `ForTauCeti` perturbation
 lemmas, paper-facing Davis–Kahan APIs, and the remaining YWS Hermitian-dilation
 corollary. It also retires the redundant local span-equation theorem, replaces

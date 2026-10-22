@@ -19,6 +19,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Spectral
 
 /-!
 # The complete finite-dimensional `sin Θ` theorem family
@@ -601,10 +602,61 @@ theorem sinTheta_pointSpectralSubspace_le
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinThetaMap (Module.End.pointSpectralSubspace A (Set.Icc a b))
         (Module.End.pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) := by
-  exact sinTheta_perturbation_le N hA hB
-    (isInvariant_pointSpectralSubspace A (Set.Icc a b))
-    (isInvariant_pointSpectralSubspace B (Set.Icc a b)) hδ
-    ⟨pointSpectrumIn_pointSpectralSubspace A (Set.Icc a b), hBoutside⟩
+  have _hδ := hδ
+  let U := Module.End.pointSpectralSubspace A (Set.Icc a b)
+  let V := Module.End.pointSpectralSubspace B (Set.Icc a b)
+  have hU : IsInvariant A U := isInvariant_pointSpectralSubspace A (Set.Icc a b)
+  let M := A.restrict hU
+  have hM : M.IsSymmetric := hA.restrict_invariant hU
+  let X : U →ₗᵢ[𝕜] E := U.subtypeₗᵢ
+  let NU : UnitarilyInvariantSeminorm 𝕜 U E := N.domainIsometryTransport X
+  have hMspecLocal : PointSpectrumIn M ⊤ (Set.Icc a b) :=
+    (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2
+      (pointSpectrumIn_pointSpectralSubspace A (Set.Icc a b))
+  have hMspec : Module.End.PointSpectrumIn (M : U →ₗ[𝕜] U) ⊤ (Set.Icc a b) := by
+    rw [Module.End.pointSpectrumIn_iff]
+    intro x hxU hx0 lam hxEig
+    have hmem : lam ∈ restrictedPointSpectrum M ⊤ :=
+      mem_restrictedPointSpectrum hxU hx0 hxEig
+    exact hMspecLocal hmem
+  have hBspec : Module.End.PointSpectrumIn (B : E →ₗ[𝕜] E)
+      (Module.End.pointSpectralSubspace (B : E →ₗ[𝕜] E) (Set.Icc a b)ᶜ)
+      (Set.Ioo (a - δ) (b + δ))ᶜ := by
+    rw [Module.End.pointSpectrumIn_iff]
+    intro x hxV hx0 lam hxEig
+    have hxV' : x ∈ Vᗮ := by
+      rw [hB.orthogonal_pointSpectralSubspace (Set.Icc a b)]
+      exact hxV
+    have hmem : lam ∈ restrictedPointSpectrum B Vᗮ :=
+      mem_restrictedPointSpectrum hxV' hx0 hxEig
+    change lam ∈ (Set.Ioo (a - δ) (b + δ))ᶜ
+    exact hBoutside hmem
+  have hcore := by
+    exact NU.mul_map_starProjection_orthogonal_pointSpectralSubspace_comp_le_map_sylvester_apply
+      (A := B.toContinuousLinearMap) (M := M.toContinuousLinearMap)
+      (Ω := Set.Icc a b) hB hM hMspec hBspec X.toContinuousLinearMap
+  have hBco : (B.toContinuousLinearMap : E →ₗ[𝕜] E) = B := rfl
+  rw [hBco] at hcore
+  have hcross :
+      ((Vᗮ.starProjection ∘L X.toContinuousLinearMap : U →L[𝕜] E) : U →ₗ[𝕜] E) =
+        sinThetaEmbedding V X := by
+    ext x
+    rfl
+  have hsylvester :
+      (((B.toContinuousLinearMap).sylvester M.toContinuousLinearMap X.toContinuousLinearMap :
+        U →L[𝕜] E) : U →ₗ[𝕜] E) = residual B X M := by
+    ext x
+    simp [ContinuousLinearMap.sylvester_apply, residual, LinearMap.comp_apply]
+  have hbound : δ * NU (sinThetaEmbedding V X) ≤ NU (residual B X M) := by
+    simpa only [hcross, hsylvester, V] using hcore
+  have hsin : NU (sinThetaEmbedding V X) = N (sinThetaMap U V) :=
+    domainTransport_sinThetaEmbedding_apply N U V
+  have hresBound : NU (residual B X M) ≤ N (B - A) :=
+    domainTransport_residual_le (B := B) N hU
+  calc
+    δ * N (sinThetaMap U V) = δ * NU (sinThetaEmbedding V X) := by rw [hsin]
+    _ ≤ NU (residual B X M) := hbound
+    _ ≤ N (B - A) := hresBound
 
 /-- **Sharp one-sided interval/exterior `sin Θ` bound in operator norm.**
 
