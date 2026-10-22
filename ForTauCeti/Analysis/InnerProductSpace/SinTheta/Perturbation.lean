@@ -62,7 +62,7 @@ over it. It is divided at its own `## Perturbation form` boundary:
 * this file keeps the **perturbation form** — the six private lemmas transporting
   a bound across the canonical isometric inclusion of a subspace, and the wrappers
   built on them: `sinTheta_perturbation_le`, `sinAngleOperator_perturbation_le`,
-  `sinTheta_perturbation_le_of_orderedGap`, `sinTheta_pointSpectralSubspace_le`,
+  `sinTheta_perturbation_le_of_orderedGap`,
   `opNorm_sinThetaMap_le_of_intervalGap`,
   `frobenius_sinTheta_residual_le_of_spectralDistance`,
   `frobenius_sinTheta_le`, `kyFan_sinTheta_le` and
@@ -589,68 +589,6 @@ theorem sinTheta_perturbation_le_of_orderedGap
     δ * N (sinThetaMap U V) =
         δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) := by rw [hsin]
     _ ≤ NU (residual B U.subtypeₗᵢ (A.restrict hU)) := hres
-    _ ≤ N (B - A) := hresBound
-
-/-- Canonical spectral-projector statement with no eigenbasis in the API.
--/
-theorem sinTheta_pointSpectralSubspace_le
-    (N : UnitarilyInvariantSeminorm 𝕜 E E)
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hBoutside : Module.End.PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
-      {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * N (sinThetaMap (Module.End.pointSpectralSubspace A (Set.Icc a b))
-        (Module.End.pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) := by
-  have _hδ := hδ
-  let U := Module.End.pointSpectralSubspace A (Set.Icc a b)
-  let V := Module.End.pointSpectralSubspace B (Set.Icc a b)
-  have hU : IsInvariant A U := isInvariant_pointSpectralSubspace A (Set.Icc a b)
-  let M := A.restrict hU
-  have hM : M.IsSymmetric := hA.restrict_invariant hU
-  let X : U →ₗᵢ[𝕜] E := U.subtypeₗᵢ
-  let NU : UnitarilyInvariantSeminorm 𝕜 U E := N.domainIsometryTransport X
-  have hMspecLocal : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b) :=
-    (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2
-      (Module.End.pointSpectrumIn_pointSpectralSubspace A (Set.Icc a b))
-  have hMspec : Module.End.PointSpectrumIn (M : U →ₗ[𝕜] U) ⊤ (Set.Icc a b) := by
-    rw [Module.End.pointSpectrumIn_iff]
-    intro x hxU hx0 lam hxEig
-    exact (Module.End.pointSpectrumIn_iff.mp hMspecLocal) x hxU hx0 lam hxEig
-  have hBspec : Module.End.PointSpectrumIn (B : E →ₗ[𝕜] E)
-      (Module.End.pointSpectralSubspace (B : E →ₗ[𝕜] E) (Set.Icc a b)ᶜ)
-      (Set.Ioo (a - δ) (b + δ))ᶜ := by
-    rw [Module.End.pointSpectrumIn_iff]
-    intro x hxV hx0 lam hxEig
-    have hxV' : x ∈ Vᗮ := by
-      rw [hB.orthogonal_pointSpectralSubspace (Set.Icc a b)]
-      exact hxV
-    change lam ∈ (Set.Ioo (a - δ) (b + δ))ᶜ
-    exact (Module.End.pointSpectrumIn_iff.mp hBoutside) x hxV' hx0 lam hxEig
-  have hcore := by
-    exact NU.mul_map_starProjection_orthogonal_pointSpectralSubspace_comp_le_map_sylvester_apply
-      (A := B.toContinuousLinearMap) (M := M.toContinuousLinearMap)
-      (Ω := Set.Icc a b) hB hM hMspec hBspec X.toContinuousLinearMap
-  have hBco : (B.toContinuousLinearMap : E →ₗ[𝕜] E) = B := rfl
-  rw [hBco] at hcore
-  have hcross :
-      ((Vᗮ.starProjection ∘L X.toContinuousLinearMap : U →L[𝕜] E) : U →ₗ[𝕜] E) =
-        sinThetaEmbedding V X := by
-    ext x
-    rfl
-  have hsylvester :
-      (((B.toContinuousLinearMap).sylvester M.toContinuousLinearMap X.toContinuousLinearMap :
-        U →L[𝕜] E) : U →ₗ[𝕜] E) = residual B X M := by
-    ext x
-    simp [ContinuousLinearMap.sylvester_apply, residual, LinearMap.comp_apply]
-  have hbound : δ * NU (sinThetaEmbedding V X) ≤ NU (residual B X M) := by
-    simpa only [hcross, hsylvester, V] using hcore
-  have hsin : NU (sinThetaEmbedding V X) = N (sinThetaMap U V) :=
-    domainTransport_sinThetaEmbedding_apply N U V
-  have hresBound : NU (residual B X M) ≤ N (B - A) :=
-    domainTransport_residual_le (B := B) N hU
-  calc
-    δ * N (sinThetaMap U V) = δ * NU (sinThetaEmbedding V X) := by rw [hsin]
-    _ ≤ NU (residual B X M) := hbound
     _ ≤ N (B - A) := hresBound
 
 /-- **Sharp one-sided interval/exterior `sin Θ` bound in operator norm.**
