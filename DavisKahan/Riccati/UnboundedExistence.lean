@@ -39,7 +39,7 @@ structure ContractiveReducingGraphSelection
   X : E0 →L[𝕜] E1
   preservesDomains : PreservesRiccatiDomains H X
   norm_lt_one : ‖X‖ < 1
-  reduces : TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorCore H)
+  reduces : _root_.LinearPMap.IsReducing (unboundedBlockOperatorCore H)
     (unboundedBlockGraph X)
 
 namespace ContractiveReducingGraphSelection
@@ -50,7 +50,7 @@ theorem invariant
     (S : ContractiveReducingGraphSelection H) :
     (unboundedBlockOperatorCore H).IsInvariant
       (unboundedBlockGraph S.X) :=
-  S.reduces.2.2.1
+  S.reduces.isInvariant
 
 /-- A domain-compatible selected reducing graph satisfies the strong unbounded
 Riccati equation. -/
@@ -68,7 +68,7 @@ theorem exists_strongRiccati_solution
     (S : ContractiveReducingGraphSelection H) :
     ∃ X : E0 →L[𝕜] E1,
       StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
-      TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorCore H)
+      _root_.LinearPMap.IsReducing (unboundedBlockOperatorCore H)
         (unboundedBlockGraph X) :=
   ⟨S.X, S.strongSolvesRiccati, S.norm_lt_one, S.reduces⟩
 
@@ -80,7 +80,7 @@ theorem exists_strongRiccati_solution_of_selected_reducing_graph
     (hselection : Nonempty (ContractiveReducingGraphSelection H)) :
     ∃ X : E0 →L[𝕜] E1,
       StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
-      TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorCore H)
+      _root_.LinearPMap.IsReducing (unboundedBlockOperatorCore H)
         (unboundedBlockGraph X) := by
   obtain ⟨S⟩ := hselection
   exact S.exists_strongRiccati_solution

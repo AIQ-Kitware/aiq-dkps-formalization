@@ -80,8 +80,8 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hred : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -372,8 +372,8 @@ theorem norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hred : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -408,8 +408,8 @@ theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hred : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -437,8 +437,8 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hred : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -464,8 +464,8 @@ theorem subspaceGap_le_of_orderedFormGap_unbounded
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hred : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -491,8 +491,8 @@ theorem subspaceGap_le_of_orderedFormGap_unbounded_printed
     (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
-    (hredP : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
-    (hQ : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
+    (hredP : _root_.LinearPMap.IsReducing A Pᗮ)
+    (hQ : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
     (hPlow : ∀ x : A.domain, (x : E) ∈ P →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ alpha * ‖(x : E)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : E) ∈ Pᗮ →
@@ -546,8 +546,8 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed
     (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
-    (hredP : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
-    (hQ : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
+    (hredP : _root_.LinearPMap.IsReducing A Pᗮ)
+    (hQ : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
     (hPlow : ∀ x : A.domain, (x : E) ∈ P →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ alpha * ‖(x : E)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : E) ∈ Pᗮ →
@@ -597,8 +597,8 @@ theorem norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed
     (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
-    (hredP : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
-    (hQ : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
+    (hredP : _root_.LinearPMap.IsReducing A Pᗮ)
+    (hQ : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
     (hPlow : ∀ x : A.domain, (x : E) ∈ P →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ alpha * ‖(x : E)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : E) ∈ Pᗮ →

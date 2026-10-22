@@ -393,7 +393,7 @@ and reduces nothing. -/
 theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
     {A : E →ₗ.[ℝ] E} (hA : IsSelfAdjoint A)
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]

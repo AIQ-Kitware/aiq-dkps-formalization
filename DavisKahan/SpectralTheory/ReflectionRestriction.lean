@@ -620,18 +620,14 @@ range with the orthogonal complement).  This is the complex counterpart of
 theorem selfAdjointSpectralSubspace_reducing
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) :
-    TauCeti.LinearPMap.ReducesSubspace A (selfAdjointSpectralSubspace A hA B hB) := by
+    _root_.LinearPMap.IsReducing A (selfAdjointSpectralSubspace A hA B hB) := by
   have hcompl : selfAdjointSpectralSubspace A hA Bᶜ hB.compl =
       (selfAdjointSpectralSubspace A hA B hB)ᗮ :=
     selfAdjointSpectralSubspace_compl_eq_orthogonal A hA B hB
-  refine TauCeti.LinearPMap.ReducesSubspace.of_components ?_ ?_ ?_ ?_
-  · intro x
+  refine ⟨?_, ?_, ?_⟩
+  · intro x hx
     rw [← selfAdjointSpectralProjection_eq_starProjection A hA B hB]
-    exact selfAdjointSpectralProjection_mem_domain A hA hB x
-  · intro x
-    have hx := selfAdjointSpectralProjection_mem_domain A hA hB.compl x
-    rw [selfAdjointSpectralProjection_eq_starProjection A hA Bᶜ hB.compl] at hx
-    rwa [Submodule.starProjection_congr_apply hcompl] at hx
+    exact selfAdjointSpectralProjection_mem_domain A hA hB ⟨x, hx⟩
   · intro x hx
     exact selfAdjoint_maps_spectralSubspace A hA hB x hx
   · intro x hx

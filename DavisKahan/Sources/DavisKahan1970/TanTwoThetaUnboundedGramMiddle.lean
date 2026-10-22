@@ -488,7 +488,7 @@ Two errors appear and both are charged once:
   `c²`.  Both pairings are charged to the **same** gauge `kyFanApproximationGauge
   n B`, which is where the sharp `2` comes from. -/
 theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -715,7 +715,7 @@ The `τ` in `M` is multiplied by `θ⁴`, never by a cutoff error that grows wit
 `τ`: this is the ordering that distinguishes the route from the spectral-cutoff
 lane. -/
 theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -980,7 +980,7 @@ from the bound: the cutoff level `τ`, the Gram-band radius `ρ` and the retenti
 threshold `θ`.  That is what makes the cutoff net of the next theorem
 unconstrained. -/
 theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_of_cutoff
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1045,7 +1045,7 @@ levels `σ i`, since the bound of the previous theorem contains no `τ` — whos
 compressed corners are orthogonal projections increasing strongly to the
 identity of `U`, the fixed-cutoff bound passes to the limit. -/
 theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1089,7 +1089,7 @@ The compressed cutoffs are *not* asked to be orthogonal projections:
 so the hypothesis this endpoint used to carry was redundant and is discharged
 internally. -/
 theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1152,7 +1152,7 @@ end ScalarGenericAmbientBound
 compressed-eigenfamily endpoints of `TanTwoThetaUnboundedKyFan.lean` are stated
 in, now with no extremality hypothesis. -/
 theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1187,7 +1187,7 @@ extremality hypothesis `IsCompressedDoubleAngleEigenbasis` deleted rather than
 discharged. -/
 theorem mem_and_gauge_le_reflectionTangentCorner
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,

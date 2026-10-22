@@ -97,39 +97,32 @@ theorem pullback_reducesSubspace_of_intertwines_projection
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hproj : e.toContinuousLinearMap ∘L U.starProjection =
       V.starProjection ∘L e.toContinuousLinearMap)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A V) :
-    TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing A V) :
+    _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.pullback A e) U := by
   have hprojOrth : e.toContinuousLinearMap ∘L Uᗮ.starProjection =
       Vᗮ.starProjection ∘L e.toContinuousLinearMap :=
     intertwines_orthogonal_projection_of_intertwines_projection e U V hproj
-  rcases hred with ⟨hVdom, hVOrthDom, hVinv, hVOrthInv⟩
-  refine ⟨?_, ?_, ?_, ?_⟩
-  · intro x
-    change e (U.starProjection (x : E)) ∈ A.domain
-    have hintertwine := congrArg (fun T : E →L[𝕜] E => T (x : E)) hproj
+  refine ⟨?_, ?_, ?_⟩
+  · intro x hx
+    change e (U.starProjection x) ∈ A.domain
+    have hintertwine := congrArg (fun T : E →L[𝕜] E => T x) hproj
     change e (U.starProjection (x : E)) =
       V.starProjection (e (x : E)) at hintertwine
     rw [hintertwine]
-    exact hVdom (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
-  · intro x
-    change e (Uᗮ.starProjection (x : E)) ∈ A.domain
-    have hintertwine := congrArg (fun T : E →L[𝕜] E => T (x : E)) hprojOrth
-    change e (Uᗮ.starProjection (x : E)) =
-      Vᗮ.starProjection (e (x : E)) at hintertwine
-    rw [hintertwine]
-    exact hVOrthDom (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
+    exact hred.starProjection_mem_domain
+      (TauCeti.LinearPMap.pullbackDomainToOriginal A e ⟨x, hx⟩).property
   · intro x hx
     -- Unfolded directly: `x : (pullback A e).domain` blocks a rewrite with
     -- `pullbackLinearMap_apply`, but the `change` itself is definitional.
     change e.symm (A (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)) ∈ U
     apply symm_map_mem_of_intertwines_projection e U V hproj
-    apply hVinv (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
-    exact map_mem_of_intertwines_projection e U V hproj hx
+    apply hred.isInvariant.apply_mem _
+      (map_mem_of_intertwines_projection e U V hproj hx)
   · intro x hx
     change e.symm (A (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)) ∈ Uᗮ
     apply symm_map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth
-    apply hVOrthInv (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)
+    apply hred.isInvariant_orthogonal.apply_mem _
     exact map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth hx
 
 variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
@@ -142,9 +135,9 @@ coordinate graph by the canonical graph-rotation pullback. -/
 theorem unboundedGraphRotationPullback_reduces_zeroGraph
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1)
-    (hred : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing
       (unboundedBlockOperatorCore H) (unboundedBlockGraph X)) :
-    TauCeti.LinearPMap.ReducesSubspace
+    _root_.LinearPMap.IsReducing
       (unboundedGraphRotationPullback H X)
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) := by
   exact pullback_reducesSubspace_of_intertwines_projection
@@ -165,9 +158,9 @@ original raw block core reduces the Riccati graph. -/
 theorem unboundedBlockDiagonalCore_reduces_zeroGraph
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1)
-    (hred : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing
       (unboundedBlockOperatorCore H) (unboundedBlockGraph X)) :
-    TauCeti.LinearPMap.ReducesSubspace
+    _root_.LinearPMap.IsReducing
       (unboundedBlockDiagonalCore H X)
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) :=
   unboundedGraphRotationPullback_reduces_zeroGraph H X hred

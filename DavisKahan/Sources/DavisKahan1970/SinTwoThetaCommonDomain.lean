@@ -53,19 +53,19 @@ omit [CompleteSpace E] in
 It is required only for vectors already in the operator domain, not for all of `P`. -/
 theorem commonDomain_projection_mem
     (hdom : T.domain = A.domain)
-    (hP : TauCeti.LinearPMap.ReducesSubspace A P) (x : T.domain) :
+    (hP : _root_.LinearPMap.IsReducing A P) (x : T.domain) :
     P.starProjection (x : E) ∈ T.domain := by
   obtain ⟨y, hy⟩ := x
   have hy' : y ∈ A.domain := hdom ▸ hy
   show P.starProjection y ∈ T.domain
   rw [hdom]
-  exact hP.projection_mem_domain (⟨y, hy'⟩)
+  exact hP.starProjection_mem_domain hy'
 
 omit [CompleteSpace E] in
 /-- Reflection preserves the common domain even when its trial restriction is unbounded. -/
 theorem commonDomain_reflection_mem
     (hdom : T.domain = A.domain)
-    (hP : TauCeti.LinearPMap.ReducesSubspace A P) (x : T.domain) :
+    (hP : _root_.LinearPMap.IsReducing A P) (x : T.domain) :
     P.reflectionOperator (x : E) ∈ T.domain := by
   rw [Submodule.reflectionOperator_apply]
   exact T.domain.sub_mem
@@ -84,7 +84,7 @@ It is NOT an assumption that the unbounded trial operator is zero or bounded. -/
 theorem commonDomain_trialReflection_intertwines
     (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
-    (hP : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hP : _root_.LinearPMap.IsReducing A P)
     (R : P →L[K] E)
     (hres : ∀ p : P, ∀ hp : (p : E) ∈ T.domain,
       T (⟨(p : E), hp⟩) =
@@ -108,7 +108,7 @@ theorem commonDomain_trialReflection_intertwines
         P.orthogonal.starProjection (R p) := by
     rw [hres p hp, map_add]
     have hin : A (⟨(p : E), by rw [← hdom]; exact hp⟩) ∈ P :=
-      hP.invariant _ p.property
+      hP.isInvariant.apply_mem _ p.property
     have hz : P.orthogonal.starProjection
         (A (⟨(p : E), by rw [← hdom]; exact hp⟩)) = 0 := by
       rw [Submodule.starProjection_orthogonal_apply,
@@ -214,9 +214,9 @@ theorem commonDomain_trialReflection_intertwines
 theorem sinTwoTheta_commonDomain_block_kyFan
     (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
-    (hP : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hP : _root_.LinearPMap.IsReducing A P)
     {Q : Submodule K E} [Q.HasOrthogonalProjection]
-    (hQ : TauCeti.LinearPMap.ReducesSubspace T Q)
+    (hQ : _root_.LinearPMap.IsReducing T Q)
     (R : P →L[K] E)
     (hres : ∀ p : P, ∀ hp : (p : E) ∈ T.domain,
       T (⟨(p : E), hp⟩) =
@@ -302,9 +302,9 @@ theorem sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} K)
     (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
-    (hP : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hP : _root_.LinearPMap.IsReducing A P)
     {Q : Submodule K E} [Q.HasOrthogonalProjection]
-    (hQ : TauCeti.LinearPMap.ReducesSubspace T Q)
+    (hQ : _root_.LinearPMap.IsReducing T Q)
     (R : P →L[K] E)
     (hres : ∀ p : P, ∀ hp : (p : E) ∈ T.domain,
       T (⟨(p : E), hp⟩) =
@@ -349,8 +349,8 @@ theorem sinTwoTheta_commonDomain_whereDefinedUIN_rclike
     {A T : E →ₗ.[K] E} (hA : IsSelfAdjoint A) (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
     {P Q : Submodule K E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hP : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQ : TauCeti.LinearPMap.ReducesSubspace T Q)
+    (hP : _root_.LinearPMap.IsReducing A P)
+    (hQ : _root_.LinearPMap.IsReducing T Q)
     {gap : Real} (hgapPos : 0 < gap)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction T Q hQ)

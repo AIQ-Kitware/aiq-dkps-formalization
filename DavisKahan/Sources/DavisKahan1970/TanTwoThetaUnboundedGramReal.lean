@@ -382,33 +382,35 @@ theorem isOddFor_complexifySubmodule (hB : TauCeti.IsOddFor U B) :
 omit [CompleteSpace E] in
 /-- The reducing-subspace property is preserved by complexification. -/
 theorem reducesSubspace_complexifyReal
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) :
-    TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.complexifyReal A)
+    (hred : _root_.LinearPMap.IsReducing A U) :
+    _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.complexifyReal A)
       (complexifySubmodule U) := by
-  refine TauCeti.LinearPMap.ReducesSubspace.of_components ?_ ?_ ?_ ?_
-  · intro x
+  refine ⟨?_, ?_, ?_⟩
+  · intro x hx
+    let xd : (TauCeti.LinearPMap.complexifyReal A).domain := ⟨x, hx⟩
     rw [starProjection_complexifySubmodule,
       TauCeti.LinearPMap.mem_complexifyReal_domain_iff, re_complexify, im_complexify]
-    exact ⟨hred.projection_mem_domain (TauCeti.LinearPMap.complexificationDomainRe A x),
-      hred.projection_mem_domain (TauCeti.LinearPMap.complexificationDomainIm A x)⟩
-  · intro x
-    rw [starProjection_complexifySubmodule_orthogonal,
-      TauCeti.LinearPMap.mem_complexifyReal_domain_iff, re_complexify, im_complexify]
-    exact ⟨hred.orthogonalProjection_mem_domain
-        (TauCeti.LinearPMap.complexificationDomainRe A x),
-      hred.orthogonalProjection_mem_domain
-        (TauCeti.LinearPMap.complexificationDomainIm A x)⟩
-  · intro x hx
+    exact ⟨hred.starProjection_mem_domain
+        (TauCeti.LinearPMap.complexificationDomainRe A xd).property,
+      hred.starProjection_mem_domain
+        (TauCeti.LinearPMap.complexificationDomainIm A xd).property⟩
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     rw [mem_complexifySubmodule] at hx
     rw [mem_complexifySubmodule, TauCeti.LinearPMap.complexifyReal_apply_re,
       TauCeti.LinearPMap.complexifyReal_apply_im]
-    exact ⟨hred.invariant _ hx.1, hred.invariant _ hx.2⟩
-  · intro x hx
+    exact ⟨hred.isInvariant.apply_mem (TauCeti.LinearPMap.complexificationDomainRe A x) hx.1,
+      hred.isInvariant.apply_mem (TauCeti.LinearPMap.complexificationDomainIm A x) hx.2⟩
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     rw [← complexifySubmodule_orthogonal, mem_complexifySubmodule] at hx
     rw [← complexifySubmodule_orthogonal, mem_complexifySubmodule,
       TauCeti.LinearPMap.complexifyReal_apply_re,
       TauCeti.LinearPMap.complexifyReal_apply_im]
-    exact ⟨hred.orthogonal_invariant _ hx.1, hred.orthogonal_invariant _ hx.2⟩
+    exact ⟨hred.isInvariant_orthogonal.apply_mem
+        (TauCeti.LinearPMap.complexificationDomainRe A x) hx.1,
+      hred.isInvariant_orthogonal.apply_mem
+        (TauCeti.LinearPMap.complexificationDomainIm A x) hx.2⟩
 
 omit [CompleteSpace E] in
 /-- Domain transport is preserved by complexification. -/
@@ -442,8 +444,8 @@ omit [CompleteSpace E] in
 This is the transport of the paper's "`V` reduces `A + H`" hypothesis. -/
 theorem reducesSubspace_addBounded_complexifyReal
     {V : Submodule ℝ E} [V.HasOrthogonalProjection]
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V) :
-    TauCeti.LinearPMap.ReducesSubspace
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V) :
+    _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify B))
       (complexifySubmodule V) := by
   rw [← complexifyReal_addBounded]
@@ -561,7 +563,7 @@ Neither this endpoint nor its complex sibling
 cutoffs to be orthogonal projections: `isOrthogonalProjectionMap_cutoffCorner`
 proves that unconditionally for every `BoundedCutoff`. -/
 theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -683,7 +685,7 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
 compressed-eigenfamily endpoints are stated in, now over real scalars and with no
 extremality hypothesis. -/
 theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient_real
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -716,7 +718,7 @@ arbitrary-unitarily-invariant-norm endpoint of the unbounded `tan 2Θ` chain, wi
 scalars. -/
 theorem mem_and_gauge_le_reflectionTangentCorner_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,

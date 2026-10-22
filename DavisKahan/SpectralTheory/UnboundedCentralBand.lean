@@ -224,7 +224,7 @@ theorem realSpectrum_reducingRestriction_band_subset
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {l r : ℝ}
     {W : Submodule ℂ H} [W.HasOrthogonalProjection]
     (hW : W = TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A W) :
+    (hred : _root_.LinearPMap.IsReducing A W) :
     _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
       ⊆ Set.Icc l r := by
   subst hW
@@ -237,7 +237,7 @@ theorem realSpectrum_reducingRestriction_bandExterior_subset
     {W : Submodule ℂ H} [W.HasOrthogonalProjection]
     (hW : W = TauCeti.LinearPMap.specRange hA (bandExterior l r d)
       (measurableSet_bandExterior l r d))
-    (hred : TauCeti.LinearPMap.ReducesSubspace A W) :
+    (hred : _root_.LinearPMap.IsReducing A W) :
     _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
       ⊆ bandExterior l r d := by
   subst hW
@@ -256,8 +256,8 @@ theorem formBoundedSylvesterGap_band_exterior
     (hW : W = TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc)
     (hW' : W' = TauCeti.LinearPMap.specRange hB (bandExterior l r d)
       (measurableSet_bandExterior l r d))
-    (hredA : TauCeti.LinearPMap.ReducesSubspace A W)
-    (hredB : TauCeti.LinearPMap.ReducesSubspace B W') :
+    (hredA : _root_.LinearPMap.IsReducing A W)
+    (hredB : _root_.LinearPMap.IsReducing B W') :
     TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A W hredA)
       (TauCeti.LinearPMap.reducingRestriction B W' hredB) d :=
@@ -332,7 +332,7 @@ noncomputable local instance instCompleteSpaceCoeBandForm
 /-- **A block placed in `Iic c` bounds the ambient form on that block.** -/
 theorem re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {U : Submodule ℂ H}
-    [U.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace A U) {c : ℝ}
+    [U.HasOrthogonalProjection] (hred : _root_.LinearPMap.IsReducing A U) {c : ℝ}
     (h : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A U hred) ⊆ Set.Iic c)
     (x : A.domain) (hx : (x : H) ∈ U) :
@@ -350,7 +350,7 @@ theorem re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic
 below.** -/
 theorem le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {U : Submodule ℂ H}
-    [U.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace A U) {c : ℝ}
+    [U.HasOrthogonalProjection] (hred : _root_.LinearPMap.IsReducing A U) {c : ℝ}
     (h : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A U hred) ⊆ Set.Ici c)
     (x : A.domain) (hx : (x : H) ∈ U) :

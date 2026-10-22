@@ -40,42 +40,42 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 omit [CompleteSpace H] in
 /-- **The energy splits along a reducing subspace.** -/
 theorem re_inner_split_of_reduces {B : H →ₗ.[ℂ] H} {Q : Submodule ℂ H}
-    [Q.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace B Q)
+    [Q.HasOrthogonalProjection] (hred : _root_.LinearPMap.IsReducing B Q)
     (x : B.domain) :
     (⟪B x, (x : H)⟫_ℂ).re
-      = (⟪B ⟨Q.starProjection (x : H), hred.projection_mem_domain x⟩,
+      = (⟪B ⟨Q.starProjection (x : H), hred.starProjection_mem_domain x.property⟩,
           Q.starProjection (x : H)⟫_ℂ).re
-        + (⟪B ⟨Qᗮ.starProjection (x : H), hred.orthogonalProjection_mem_domain x⟩,
+        + (⟪B ⟨Qᗮ.starProjection (x : H), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩,
             Qᗮ.starProjection (x : H)⟫_ℂ).re := by
-  have hxeq : x = (⟨Q.starProjection (x : H), hred.projection_mem_domain x⟩ : B.domain)
-      + ⟨Qᗮ.starProjection (x : H), hred.orthogonalProjection_mem_domain x⟩ :=
+  have hxeq : x = (⟨Q.starProjection (x : H), hred.starProjection_mem_domain x.property⟩ : B.domain)
+      + ⟨Qᗮ.starProjection (x : H), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ :=
     Subtype.ext (by
       show (x : H) = Q.starProjection (x : H) + Qᗮ.starProjection (x : H)
       rw [Submodule.starProjection_orthogonal_apply]
       abel)
-  have hcross1 : (⟪B (⟨Q.starProjection (x : H), hred.projection_mem_domain x⟩ : B.domain),
+  have hcross1 : (⟪B (⟨Q.starProjection (x : H), hred.starProjection_mem_domain x.property⟩ : B.domain),
       Qᗮ.starProjection (x : H)⟫_ℂ) = 0 :=
     (Submodule.mem_orthogonal Q _).mp (Qᗮ.starProjection_apply_mem _) _
-      (hred.invariant _ (Q.starProjection_apply_mem _))
+      (hred.isInvariant.apply_mem _ (Q.starProjection_apply_mem _))
   have hcross2 : (⟪B (⟨Qᗮ.starProjection (x : H),
-      hred.orthogonalProjection_mem_domain x⟩ : B.domain),
+      TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ : B.domain),
       Q.starProjection (x : H)⟫_ℂ) = 0 := by
     refine (Submodule.mem_orthogonal Qᗮ _).mp ?_ _
-      (hred.orthogonal_invariant _ (Qᗮ.starProjection_apply_mem _))
+      (hred.isInvariant_orthogonal _ (Qᗮ.starProjection_apply_mem _))
     rw [Submodule.orthogonal_orthogonal]
     exact Q.starProjection_apply_mem _
   have hexpand : (⟪B x, (x : H)⟫_ℂ)
-      = ⟪B (⟨Q.starProjection (x : H), hred.projection_mem_domain x⟩ : B.domain),
+      = ⟪B (⟨Q.starProjection (x : H), hred.starProjection_mem_domain x.property⟩ : B.domain),
           Q.starProjection (x : H)⟫_ℂ
         + ⟪B (⟨Qᗮ.starProjection (x : H),
-            hred.orthogonalProjection_mem_domain x⟩ : B.domain),
+            TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ : B.domain),
           Qᗮ.starProjection (x : H)⟫_ℂ := by
     have hstep : (⟪B x, (x : H)⟫_ℂ)
-        = ⟪B ((⟨Q.starProjection (x : H), hred.projection_mem_domain x⟩ : B.domain)
-              + ⟨Qᗮ.starProjection (x : H), hred.orthogonalProjection_mem_domain x⟩),
-            (((⟨Q.starProjection (x : H), hred.projection_mem_domain x⟩ : B.domain)
+        = ⟪B ((⟨Q.starProjection (x : H), hred.starProjection_mem_domain x.property⟩ : B.domain)
+              + ⟨Qᗮ.starProjection (x : H), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩),
+            (((⟨Q.starProjection (x : H), hred.starProjection_mem_domain x.property⟩ : B.domain)
               + ⟨Qᗮ.starProjection (x : H),
-                  hred.orthogonalProjection_mem_domain x⟩ : B.domain) : H)⟫_ℂ := by
+                  TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ : B.domain) : H)⟫_ℂ := by
       exact congrArg (fun z : B.domain => (⟪B z, (z : H)⟫_ℂ)) hxeq
     rw [hstep, _root_.LinearPMap.map_add]
     show ⟪_ + _, (Q.starProjection (x : H) + Qᗮ.starProjection (x : H))⟫_ℂ = _
@@ -91,19 +91,19 @@ is at most the `α`-shifted energy of its component in the branch's complement.
 The paper reads it on `Pᗮ`; it holds on the whole domain. -/
 theorem theorem8_1_upperCompressionRepulsion_unbounded
     {B : H →ₗ.[ℂ] H} {Q : Submodule ℂ H} [Q.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace B Q) {alpha : ℝ}
+    (hred : _root_.LinearPMap.IsReducing B Q) {alpha : ℝ}
     (hQlow : ∀ y : B.domain, (y : H) ∈ Q →
       (⟪B y, (y : H)⟫_ℂ).re ≤ alpha * ‖(y : H)‖ ^ 2)
     (x : B.domain) :
     (⟪B x, (x : H)⟫_ℂ).re - alpha * ‖(x : H)‖ ^ 2 ≤
-      (⟪B ⟨Qᗮ.starProjection (x : H), hred.orthogonalProjection_mem_domain x⟩,
+      (⟪B ⟨Qᗮ.starProjection (x : H), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩,
         Qᗮ.starProjection (x : H)⟫_ℂ).re
         - alpha * ‖Qᗮ.starProjection (x : H)‖ ^ 2 := by
   have hsplit := re_inner_split_of_reduces hred x
   have hnorm : ‖(x : H)‖ ^ 2
       = ‖Q.starProjection (x : H)‖ ^ 2 + ‖Qᗮ.starProjection (x : H)‖ ^ 2 :=
     Submodule.norm_sq_eq_add_norm_sq_starProjection (x : H) Q
-  have hlow := hQlow ⟨Q.starProjection (x : H), hred.projection_mem_domain x⟩
+  have hlow := hQlow ⟨Q.starProjection (x : H), hred.starProjection_mem_domain x.property⟩
     (Q.starProjection_apply_mem _)
   rw [hsplit, hnorm]
   nlinarith [hlow]
@@ -114,20 +114,20 @@ omit [CompleteSpace H] in
 The dual reading, against the complement's lower form bound. -/
 theorem theorem8_1_lowerCompressionRepulsion_unbounded
     {B : H →ₗ.[ℂ] H} {Q : Submodule ℂ H} [Q.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace B Q) {c : ℝ}
+    (hred : _root_.LinearPMap.IsReducing B Q) {c : ℝ}
     (hQhigh : ∀ y : B.domain, (y : H) ∈ Qᗮ →
       c * ‖(y : H)‖ ^ 2 ≤ (⟪B y, (y : H)⟫_ℂ).re)
     (x : B.domain) :
     c * ‖(x : H)‖ ^ 2 - (⟪B x, (x : H)⟫_ℂ).re ≤
       c * ‖Q.starProjection (x : H)‖ ^ 2
-        - (⟪B ⟨Q.starProjection (x : H), hred.projection_mem_domain x⟩,
+        - (⟪B ⟨Q.starProjection (x : H), hred.starProjection_mem_domain x.property⟩,
             Q.starProjection (x : H)⟫_ℂ).re := by
   have hsplit := re_inner_split_of_reduces hred x
   have hnorm : ‖(x : H)‖ ^ 2
       = ‖Q.starProjection (x : H)‖ ^ 2 + ‖Qᗮ.starProjection (x : H)‖ ^ 2 :=
     Submodule.norm_sq_eq_add_norm_sq_starProjection (x : H) Q
   have hhigh := hQhigh
-    ⟨Qᗮ.starProjection (x : H), hred.orthogonalProjection_mem_domain x⟩
+    ⟨Qᗮ.starProjection (x : H), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩
     (Qᗮ.starProjection_apply_mem _)
   rw [hsplit, hnorm]
   nlinarith [hhigh]

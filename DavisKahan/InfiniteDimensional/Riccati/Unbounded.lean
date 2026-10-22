@@ -61,7 +61,7 @@ theorem exists_strongRiccati_solution
     (hselection : Nonempty (ContractiveReducingGraphSelection H)) :
     ∃ X : E0 →L[𝕜] E1,
       StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
-      TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperator H)
+      _root_.LinearPMap.IsReducing (unboundedBlockOperator H)
         (unboundedBlockGraph X) := by
   exact constructedStrongRiccatiSolution_of_selectedGraph H hselection
 
@@ -85,7 +85,7 @@ diagonalization and identifies the two coordinate restrictions. -/
 theorem unbounded_blockDiagonalization
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := F0) (E1 := F1))
     {X : F0 →L[ℂ] F1} (hX : StrongSolvesRiccati H X)
-    (hred : TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperator H)
+    (hred : _root_.LinearPMap.IsReducing (unboundedBlockOperator H)
       (unboundedBlockGraph X)) :
     ∃ W Winv : WithLp 2 (F0 × F1) →L[ℂ] WithLp 2 (F0 × F1),
       TauCeti.LinearPMap.UnitaryEquivalent
@@ -93,7 +93,7 @@ theorem unbounded_blockDiagonalization
         (unboundedBlockOperator H) W Winv ∧
       W ∘L Submodule.starProjection (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) =
         Submodule.starProjection (unboundedBlockGraph X) ∘L W ∧
-      TauCeti.LinearPMap.ReducesSubspace
+      _root_.LinearPMap.IsReducing
         (unboundedBlockDiagonalOperator H X)
         (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) ∧
       TauCeti.LinearPMap.UnitaryEquivalent

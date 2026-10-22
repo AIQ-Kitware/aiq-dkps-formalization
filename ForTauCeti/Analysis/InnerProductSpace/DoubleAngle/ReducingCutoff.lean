@@ -99,7 +99,7 @@ Every field transports directly, because the inclusion is an isometry with
 `ι⋆ ι = 1` and `A` acts on `U`-vectors of `D(A)` exactly as `A|_U` does. -/
 noncomputable def BoundedCutoff.ofReducingRestriction
     {A : G →ₗ.[𝕜] G} {U : Submodule 𝕜 G} [U.HasOrthogonalProjection]
-    (hred : LinearPMap.ReducesSubspace A U) {τ : ℝ}
+    (hred : _root_.LinearPMap.IsReducing A U) {τ : ℝ}
     (Ω : BoundedCutoff (LinearPMap.reducingRestriction A U hred) ⊤ τ) :
     BoundedCutoff A U τ where
   toProj := liftProj U Ω.toProj
@@ -154,7 +154,7 @@ noncomputable def BoundedCutoff.ofReducingRestriction
 /-- The projection of a transported cutoff, applied to a vector of `U`. -/
 theorem BoundedCutoff.ofReducingRestriction_toProj_apply
     {A : G →ₗ.[𝕜] G} {U : Submodule 𝕜 G} [U.HasOrthogonalProjection]
-    (hred : LinearPMap.ReducesSubspace A U) {τ : ℝ}
+    (hred : _root_.LinearPMap.IsReducing A U) {τ : ℝ}
     (Ω : BoundedCutoff (LinearPMap.reducingRestriction A U hred) ⊤ τ)
     {x : G} (hx : x ∈ U) :
     (BoundedCutoff.ofReducingRestriction hred Ω).toProj x =
@@ -238,14 +238,14 @@ local instance instCompleteSpaceCoeReducingCutoffC
 self-adjoint.  A self-adjoint partial map is densely defined, so the density
 hypothesis of `LinearPMap.reducingRestriction_isSelfAdjoint` is automatic. -/
 theorem isSelfAdjoint_reducingRestriction (hA : IsSelfAdjoint A)
-    (hred : LinearPMap.ReducesSubspace A U) :
+    (hred : _root_.LinearPMap.IsReducing A U) :
     IsSelfAdjoint (LinearPMap.reducingRestriction A U hred) :=
   LinearPMap.reducingRestriction_isSelfAdjoint A U hred hA.dense_domain hA
 
 /-- **The cutoff family of an arbitrary reducing subspace**: the spectral bands
 `1_{[-n,n]}(A|_U)` of the restriction, carried into the ambient space. -/
 noncomputable def reducingCutoffSeq (hA : IsSelfAdjoint A)
-    (hred : LinearPMap.ReducesSubspace A U) (n : ℕ) :
+    (hred : _root_.LinearPMap.IsReducing A U) (n : ℕ) :
     BoundedCutoff A U (n : ℝ) :=
   BoundedCutoff.ofReducingRestriction hred
     (spectralBandCutoff (isSelfAdjoint_reducingRestriction hA hred)
@@ -255,7 +255,7 @@ noncomputable def reducingCutoffSeq (hA : IsSelfAdjoint A)
 This is the `τ → ∞` input the pole-exclusion endpoints need, now available for
 every reducing subspace rather than only for a spectral half-line. -/
 theorem tendsto_reducingCutoffSeq (hA : IsSelfAdjoint A)
-    (hred : LinearPMap.ReducesSubspace A U) {x : H} (hx : x ∈ U) :
+    (hred : _root_.LinearPMap.IsReducing A U) {x : H} (hx : x ∈ U) :
     Filter.Tendsto (fun n : ℕ => (reducingCutoffSeq hA hred n).toProj x)
       Filter.atTop (nhds x) := by
   have hAU := isSelfAdjoint_reducingRestriction hA hred
@@ -286,7 +286,7 @@ section Unconditional
 variable {A : H →ₗ.[ℂ] H} {B Z : H →L[ℂ] H} {U : Submodule ℂ H}
   [U.HasOrthogonalProjection] {a b : ℝ}
 
-variable (hA : IsSelfAdjoint A) (hred : LinearPMap.ReducesSubspace A U)
+variable (hA : IsSelfAdjoint A) (hred : _root_.LinearPMap.IsReducing A U)
   (hB : IsOddFor U B) (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
   (hZdom : LinearPMap.MapsDomainTo A A Z)
   (hZcomm : ∀ x : A.domain,

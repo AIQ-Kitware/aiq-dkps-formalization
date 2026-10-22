@@ -709,9 +709,9 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
     {U : Submodule K E} [U.HasOrthogonalProjection]
     (V : Submodule K E) [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U →
       RCLike.re ⟪A x, (x : E)⟫_K ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -758,8 +758,8 @@ theorem sinTwoTheta_directed_commonDomain_presentation_whereDefinedUIN_rclike
     (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
     {P Q : Submodule K E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hP : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQ : TauCeti.LinearPMap.ReducesSubspace T Q)
+    (hP : _root_.LinearPMap.IsReducing A P)
+    (hQ : _root_.LinearPMap.IsReducing T Q)
     (R : P →L[K] E)
     (hres : ∀ p : P, ∀ hp : (p : E) ∈ T.domain,
       T (⟨(p : E), hp⟩) =
@@ -786,8 +786,8 @@ theorem sinTwoTheta_commonDomain_presentation_whereDefinedUIN_rclike
     {A T : E →ₗ.[K] E} (hA : IsSelfAdjoint A) (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
     {P Q : Submodule K E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hP : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQ : TauCeti.LinearPMap.ReducesSubspace T Q)
+    (hP : _root_.LinearPMap.IsReducing A P)
+    (hQ : _root_.LinearPMap.IsReducing T Q)
     {gap : Real} (hgapPos : 0 < gap)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction T Q hQ)
@@ -914,9 +914,9 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
     {U : Submodule ℂ Ec} [U.HasOrthogonalProjection]
     (V : Submodule ℂ Ec) [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain, (x : Ec) ∈ U →
       RCLike.re ⟪A x, (x : Ec)⟫_ℂ ≤ a * ‖(x : Ec)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Ec) ∈ Uᗮ →
@@ -938,9 +938,9 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
     {U : Submodule ℝ Er} [U.HasOrthogonalProjection]
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain, (x : Er) ∈ U →
       RCLike.re ⟪A x, (x : Er)⟫_ℝ ≤ a * ‖(x : Er)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Er) ∈ Uᗮ →
@@ -962,10 +962,10 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_com
     {U : Submodule ℂ Ec} [U.HasOrthogonalProjection]
     (V : Submodule ℂ Ec) [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor U B)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain, (x : Ec) ∈ U →
       RCLike.re ⟪A x, (x : Ec)⟫_ℂ ≤ a * ‖(x : Ec)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Ec) ∈ Uᗮ →
@@ -985,10 +985,10 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rea
     {U : Submodule ℝ Er} [U.HasOrthogonalProjection]
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor U B)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain, (x : Er) ∈ U →
       RCLike.re ⟪A x, (x : Er)⟫_ℝ ≤ a * ‖(x : Er)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Er) ∈ Uᗮ →

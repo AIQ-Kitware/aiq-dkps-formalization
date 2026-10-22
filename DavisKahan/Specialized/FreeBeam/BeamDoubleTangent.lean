@@ -344,23 +344,20 @@ theorem beamComparison_apply_of_mem_orthogonal (ε : ℝ) {x : BeamL2}
 summands are invariant, because `Â` was built block-diagonal and the free beam maps the
 complement into itself. -/
 theorem beamComparison_reduces (ε : ℝ) :
-    TauCeti.LinearPMap.ReducesSubspace (beamComparison ε) beamTrial := by
-  refine TauCeti.LinearPMap.ReducesSubspace.of_components ?_ ?_ ?_ ?_
-  · intro x
-    exact beamTrial_le_domain (beamTrial.starProjection_apply_mem (x : BeamL2))
-  · intro x
-    have hxd : (x : BeamL2) ∈ beamOperator.domain := x.2
-    rw [Submodule.starProjection_orthogonal_apply]
-    exact beamOperator.domain.sub_mem hxd
-      (beamTrial_le_domain (beamTrial.starProjection_apply_mem _))
+    _root_.LinearPMap.IsReducing (beamComparison ε) beamTrial := by
+  refine ⟨?_, ?_, ?_⟩
   · intro x hx
+    exact beamTrial_le_domain (beamTrial.starProjection_apply_mem x)
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     have hxd : (x : BeamL2) ∈ beamOperator.domain := x.2
     have heq : (beamComparison ε) x
         = beamTrial.starProjection (beamPerturbation ε (x : BeamL2)) :=
       beamComparison_apply_of_mem_beamTrial ε hx hxd
     rw [heq]
     exact beamTrial.starProjection_apply_mem _
-  · intro x hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     have hxd : (x : BeamL2) ∈ beamOperator.domain := x.2
     have heq : (beamComparison ε) x
         = beamOperator ⟨(x : BeamL2), hxd⟩

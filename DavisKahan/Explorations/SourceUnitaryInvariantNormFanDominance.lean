@@ -24,7 +24,7 @@ import DavisKahan.Sources.DavisKahan1970.SectionTwo
 namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
-namespace FanDominanceExploration
+namespace SourceUINConformance
 
 open scoped ENNReal InnerProductSpace TauCeti.CompleteSubspace
 
@@ -76,8 +76,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike_probe
     {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
     (Hop : E →L[𝕜] E) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
@@ -106,7 +106,7 @@ theorem sinTwoTheta_directed_whereDefinedUIN_rclike_production_probe
     {trial gapCarrier : Submodule 𝕜 E}
     [trial.HasOrthogonalProjection] [gapCarrier.HasOrthogonalProjection]
     {M : trial →L[𝕜] trial} {R : trial →L[𝕜] E}
-    (hred : TauCeti.LinearPMap.ReducesSubspace A gapCarrier)
+    (hred : _root_.LinearPMap.IsReducing A gapCarrier)
     (htrialDom : ∀ v : trial, (v : E) ∈ A.domain)
     (hres : ∀ v : trial, A ⟨(v : E), htrialDom v⟩ = R v + ((M v : trial) : E))
     {δ : ℝ} (hδ : 0 < δ)
@@ -130,8 +130,8 @@ theorem sinTwoTheta_complete_whereDefinedUIN_rclike_production_probe
     {A T : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
     {P Q : Submodule 𝕜 E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hP : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQ : TauCeti.LinearPMap.ReducesSubspace T Q)
+    (hP : _root_.LinearPMap.IsReducing A P)
+    (hQ : _root_.LinearPMap.IsReducing T Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction T Q hQ)
@@ -155,7 +155,7 @@ theorem sinTwoTheta_complete_whereDefinedUIN_rclike_production_probe
 
 end
 
-end FanDominanceExploration
+end SourceUINConformance
 end ExactSinTheta
 end DavisKahan
 end TauCeti

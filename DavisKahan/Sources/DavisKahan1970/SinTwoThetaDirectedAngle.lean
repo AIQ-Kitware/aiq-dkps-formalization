@@ -117,7 +117,7 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
@@ -232,7 +232,7 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : E) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
     {δ : ℝ} (hδ : 0 < δ)

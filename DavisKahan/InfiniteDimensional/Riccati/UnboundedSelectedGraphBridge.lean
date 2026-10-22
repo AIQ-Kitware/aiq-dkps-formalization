@@ -126,7 +126,7 @@ noncomputable def ContractiveReducingGraphSelection.ofAmbientAngularGraph
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
     (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))
     (hnorm : ‖rectangularAngularPart Y‖ < 1)
-    (hred : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing
       (unboundedBlockOperatorCore H)
       (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
     ContractiveReducingGraphSelection H where
@@ -146,12 +146,12 @@ theorem exists_strongRiccati_solution_of_ambientAngularGraph
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
     (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))
     (hnorm : ‖rectangularAngularPart Y‖ < 1)
-    (hred : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing
       (unboundedBlockOperatorCore H)
       (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
     ∃ X : E0 →L[ℂ] E1,
       StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
-      TauCeti.LinearPMap.ReducesSubspace (unboundedBlockOperatorCore H)
+      _root_.LinearPMap.IsReducing (unboundedBlockOperatorCore H)
         (unboundedBlockGraph X) := by
   exact (ContractiveReducingGraphSelection.ofAmbientAngularGraph
     H Y hY hdom hnorm hred).exists_strongRiccati_solution

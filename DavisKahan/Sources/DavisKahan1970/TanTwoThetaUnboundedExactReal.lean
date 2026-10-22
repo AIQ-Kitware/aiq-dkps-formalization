@@ -659,7 +659,7 @@ variable {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E} {U : Submodule ℝ E}
   [U.HasOrthogonalProjection] {a b : ℝ}
 
 variable (hA : _root_.IsSelfAdjoint A)
-  (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+  (hred : _root_.LinearPMap.IsReducing A U)
   (hB : TauCeti.IsOddFor U B)
   (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
   (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -761,7 +761,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
     (N : SymmetricNormingFunction)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     (hA : _root_.IsSelfAdjoint A)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
     (hV : DavisKahan.ReflectionIntertwines A B V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
@@ -921,9 +921,9 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hA : _root_.IsSelfAdjoint A)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b)
@@ -1012,9 +1012,9 @@ theorem tanTwoTheta_directed_unboundedResidual_normalizedUIN_real
     (N : NormalizedUnitaryInvariantNorm.{0, _} ℂ)
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hA : _root_.IsSelfAdjoint A)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b)

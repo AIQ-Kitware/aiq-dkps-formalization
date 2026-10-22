@@ -81,18 +81,19 @@ def IsOddFor (U : Submodule 𝕜 H) (B : H →L[𝕜] H) : Prop :=
 section Domain
 
 /-- **The even block preserves the domain.** -/
-theorem mem_domain_diagonalPart (hred : LinearPMap.ReducesSubspace A U)
+theorem mem_domain_diagonalPart (hred : _root_.LinearPMap.IsReducing A U)
     (hZ : LinearPMap.MapsDomainTo A A Z) (x : A.domain) :
     U.diagBlock Z (x : H) ∈ A.domain := by
   rw [Submodule.diagBlock_apply]
   refine A.domain.add_mem ?_ ?_
-  · exact hred.projection_mem_domain
-      ⟨Z (U.starProjection (x : H)), hZ ⟨_, hred.projection_mem_domain x⟩⟩
-  · exact hred.orthogonalProjection_mem_domain
-      ⟨Z (Uᗮ.starProjection (x : H)), hZ ⟨_, hred.orthogonalProjection_mem_domain x⟩⟩
+  · exact hred.starProjection_mem_domain
+      (hZ ⟨U.starProjection (x : H), hred.starProjection_mem_domain x.property⟩)
+  · exact TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred
+      (hZ ⟨Uᗮ.starProjection (x : H),
+        TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩)
 
 /-- **The odd block preserves the domain.** -/
-theorem mem_domain_offDiagonalPart (hred : LinearPMap.ReducesSubspace A U)
+theorem mem_domain_offDiagonalPart (hred : _root_.LinearPMap.IsReducing A U)
     (hZ : LinearPMap.MapsDomainTo A A Z) (x : A.domain) :
     U.offDiagBlock Z (x : H) ∈ A.domain := by
   rw [Submodule.offDiagBlock_apply]
@@ -102,7 +103,7 @@ end Domain
 
 section Sylvester
 
-variable (hred : LinearPMap.ReducesSubspace A U) (hB : IsOddFor U B)
+variable (hred : _root_.LinearPMap.IsReducing A U) (hB : IsOddFor U B)
   (hZdom : LinearPMap.MapsDomainTo A A Z)
   (hZcomm : ∀ x : A.domain,
     A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
@@ -145,11 +146,11 @@ theorem sylvester_offDiagonalPart_of_mem (x : A.domain) (hx : (x : H) ∈ U) :
     rw [← this]
     simp only [add_apply, hCdef, hSdef, map_add]
   -- the four memberships that decide which projection survives
-  have hACU : A ⟨C (x : H), hCmem⟩ ∈ U := hred.invariant.apply_mem _ hCU
-  have hASU : A ⟨S (x : H), hSmem⟩ ∈ Uᗮ := hred.orthogonal_invariant.apply_mem _ hSU
+  have hACU : A ⟨C (x : H), hCmem⟩ ∈ U := hred.isInvariant.apply_mem _ hCU
+  have hASU : A ⟨S (x : H), hSmem⟩ ∈ Uᗮ := hred.isInvariant_orthogonal.apply_mem _ hSU
   have hBCU : B (C (x : H)) ∈ Uᗮ := hB.1 _ hCU
   have hBSU : B (S (x : H)) ∈ U := hB.2 _ hSU
-  have hAxU : (A x) ∈ U := hred.invariant.apply_mem _ hx
+  have hAxU : (A x) ∈ U := hred.isInvariant.apply_mem _ hx
   have hBxU : B (x : H) ∈ Uᗮ := hB.1 _ hx
   -- project the commutation identity onto `Uᗮ`
   have hcomm := hZcomm x
@@ -191,11 +192,11 @@ theorem sylvester_offDiagonalPart_of_mem_orthogonal (x : A.domain)
       (diagonalPart_add_offDiagonalPart U Z)
     rw [← this]
     simp only [add_apply, hCdef, hSdef, map_add]
-  have hACU : A ⟨C (x : H), hCmem⟩ ∈ Uᗮ := hred.orthogonal_invariant.apply_mem _ hCU
-  have hASU : A ⟨S (x : H), hSmem⟩ ∈ U := hred.invariant.apply_mem _ hSU
+  have hACU : A ⟨C (x : H), hCmem⟩ ∈ Uᗮ := hred.isInvariant_orthogonal.apply_mem _ hCU
+  have hASU : A ⟨S (x : H), hSmem⟩ ∈ U := hred.isInvariant.apply_mem _ hSU
   have hBCU : B (C (x : H)) ∈ U := hB.2 _ hCU
   have hBSU : B (S (x : H)) ∈ Uᗮ := hB.1 _ hSU
-  have hAxU : (A x) ∈ Uᗮ := hred.orthogonal_invariant.apply_mem _ hx
+  have hAxU : (A x) ∈ Uᗮ := hred.isInvariant_orthogonal.apply_mem _ hx
   have hBxU : B (x : H) ∈ U := hB.2 _ hx
   have hcomm := hZcomm x
   have hproj := congrArg U.starProjection hcomm
@@ -218,10 +219,11 @@ theorem sylvester_offDiagonalPart (x : A.domain) :
         B (U.diagBlock Z (x : H)) =
       U.offDiagBlock Z (A x) + U.diagBlock Z (B (x : H)) := by
   classical
-  set x₀ : A.domain := ⟨U.starProjection (x : H), hred.projection_mem_domain x⟩
+  set x₀ : A.domain := ⟨U.starProjection (x : H), hred.starProjection_mem_domain x.property⟩
     with hx₀
   set x₁ : A.domain :=
-    ⟨Uᗮ.starProjection (x : H), hred.orthogonalProjection_mem_domain x⟩ with hx₁
+    ⟨Uᗮ.starProjection (x : H),
+      TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ with hx₁
   have hsum : x = x₀ + x₁ :=
     Subtype.ext (U.starProjection_add_starProjection_orthogonal (x : H)).symm
   have hcoe : (x : H) = (x₀ : H) + (x₁ : H) := congrArg Subtype.val hsum

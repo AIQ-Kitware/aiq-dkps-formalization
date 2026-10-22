@@ -605,21 +605,17 @@ theorem realSelfAdjoint_apply_spectralProjection
 theorem realSelfAdjointSpectralSubspace_reducing
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
-    TauCeti.LinearPMap.ReducesSubspace A
+    _root_.LinearPMap.IsReducing A
       (realSelfAdjointSpectralSubspace A hA S hS) := by
   let U := realSelfAdjointSpectralSubspace A hA S hS
   let Uc := realSelfAdjointSpectralSubspace A hA Sᶜ hS.compl
   have hUc : Uc = Uᗮ := realSelfAdjointSpectralSubspace_compl A hA S hS
-  refine ⟨?_, ?_, ?_, ?_⟩
-  · intro x
-    rw [← realSelfAdjointSpectralProjection_eq_starProjection]
-    exact realSelfAdjointSpectralProjection_mem_domain A hA hS x
-  · intro x
-    have hx := realSelfAdjointSpectralProjection_mem_domain A hA hS.compl x
-    rw [realSelfAdjointSpectralProjection_eq_starProjection,
-      Submodule.starProjection_congr_apply hUc] at hx
-    exact hx
+  refine ⟨?_, ?_, ?_⟩
   · intro x hx
+    rw [← realSelfAdjointSpectralProjection_eq_starProjection]
+    exact realSelfAdjointSpectralProjection_mem_domain A hA hS ⟨x, hx⟩
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     rw [← Submodule.starProjection_eq_self_iff] at hx ⊢
     rw [← realSelfAdjointSpectralProjection_eq_starProjection] at hx ⊢
     have hcomm := realSelfAdjoint_apply_spectralProjection A hA hS x
@@ -628,7 +624,8 @@ theorem realSelfAdjointSpectralSubspace_reducing
           realSelfAdjointSpectralProjection_mem_domain A hA hS x⟩ : A.domain) = x :=
       Subtype.ext hx
     simpa [hsub] using hcomm.symm
-  · intro x hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     rw [← hUc] at hx ⊢
     rw [← Submodule.starProjection_eq_self_iff] at hx ⊢
     rw [← realSelfAdjointSpectralProjection_eq_starProjection] at hx ⊢

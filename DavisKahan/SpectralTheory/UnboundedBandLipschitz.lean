@@ -49,7 +49,7 @@ instance bandSubspace_hasOrthogonalProjection {A : H →ₗ.[ℂ] H} (hA : IsSel
 
 /-- The band subspace reduces the operator. -/
 theorem reducesSubspace_bandSubspace {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (l r : ℝ) :
-    TauCeti.LinearPMap.ReducesSubspace A (bandSubspace hA l r) :=
+    _root_.LinearPMap.IsReducing A (bandSubspace hA l r) :=
   TauCeti.LinearPMap.reducesSubspace_specRange hA _ _
 
 /-- **The directed half of the Lipschitz estimate.**
@@ -67,7 +67,7 @@ theorem directedGap_bandSubspace_le
       Set.Icc l r ∪ bandExterior l r d) :
     d * Submodule.directedProjectionGap (bandSubspace hA l r) (bandSubspace hB l r) ≤ ‖K‖ := by
   subst hAB
-  have hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A K)
+  have hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A K)
       (bandSubspace hB l r) := reducesSubspace_bandSubspace hB l r
   have hperp : (bandSubspace hB l r)ᗮ =
       TauCeti.LinearPMap.specRange hB (bandExterior l r d)
@@ -240,8 +240,8 @@ theorem le_of_band_exterior_spectra
     {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     (hAB : B = TauCeti.LinearPMap.addBounded A (0 : H →L[ℂ] H))
     {P W : Submodule ℂ H} [P.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hWred : TauCeti.LinearPMap.ReducesSubspace B W)
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hWred : _root_.LinearPMap.IsReducing B W)
     {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
     (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred) ⊆ Set.Icc l r)

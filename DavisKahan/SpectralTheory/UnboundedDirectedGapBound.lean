@@ -54,8 +54,8 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
     (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap

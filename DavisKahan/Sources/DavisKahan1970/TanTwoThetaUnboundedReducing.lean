@@ -72,7 +72,7 @@ variable {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
 strongly to its identity. -/
 theorem stronglyTendsto_cutoffCorner_reducingCutoffSeq
     {A : G →ₗ.[ℂ] G} (hA : IsSelfAdjoint A) {U : Submodule ℂ G}
-    [U.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace A U) :
+    [U.HasOrthogonalProjection] (hred : _root_.LinearPMap.IsReducing A U) :
     StronglyTendsto
       (fun n : ℕ => cutoffCorner (TauCeti.reducingCutoffSeq hA hred n))
       atTop (ContinuousLinearMap.id ℂ U) := by
@@ -87,7 +87,7 @@ section Endpoints
 variable {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G} {U : Submodule ℂ G}
   [U.HasOrthogonalProjection] {a b : ℝ}
 
-variable (hA : IsSelfAdjoint A) (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+variable (hA : IsSelfAdjoint A) (hred : _root_.LinearPMap.IsReducing A U)
   (hB : TauCeti.IsOddFor U B)
   (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
   (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -188,7 +188,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmet
     {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G} {a b : ℝ}
     {U : Submodule ℂ G} [U.HasOrthogonalProjection]
     (V : Submodule ℂ G) [V.HasOrthogonalProjection]
-    (hA : IsSelfAdjoint A) (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hA : IsSelfAdjoint A) (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
     (hV : DavisKahan.ReflectionIntertwines A B V)
     (hUa : ∀ x : A.domain, (x : G) ∈ U →

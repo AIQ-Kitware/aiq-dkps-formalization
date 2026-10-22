@@ -118,7 +118,7 @@ private theorem approximationNumber_realAmbientDoubleSine_complexify
     _ = (realAmbientDoubleSine U V).approximationNumber n := hright
 
 variable (hA : _root_.IsSelfAdjoint A)
-  (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+  (hred : _root_.LinearPMap.IsReducing A U)
   (hB : TauCeti.IsOddFor U B)
   (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
   (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)

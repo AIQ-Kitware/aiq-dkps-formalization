@@ -189,7 +189,7 @@ A spectral development can produce the same reducing restriction under two
 different names for one subspace -- `selfAdjointSpectralSubspace A hA Bᶜ hB.compl`
 and `(selfAdjointSpectralSubspace A hA B hB)ᗮ`, for instance.  Those are equal
 submodules but distinct *types*, so the restrictions are not interchangeable by
-`rw`.  `HasOrthogonalProjection`, `CompleteSpace` and `ReducesSubspace` are all
+`rw`.  `HasOrthogonalProjection`, `CompleteSpace` and `_root_.LinearPMap.IsReducing` are all
 `Prop`s, so substituting the subspace equality identifies everything else. -/
 
 omit [CompleteSpace E] in
@@ -200,8 +200,8 @@ theorem FormBoundedSylvesterGap.reducingRestriction_congr_right
     [p.HasOrthogonalProjection] [q.HasOrthogonalProjection]
     [CompleteSpace p] [CompleteSpace q]
     (h : p = q)
-    (hp : TauCeti.LinearPMap.ReducesSubspace A p)
-    (hq : TauCeti.LinearPMap.ReducesSubspace A q) {δ : ℝ}
+    (hp : _root_.LinearPMap.IsReducing A p)
+    (hq : _root_.LinearPMap.IsReducing A q) {δ : ℝ}
     (hgap : FormBoundedSylvesterGap X
       (TauCeti.LinearPMap.reducingRestriction A p hp) δ) :
     FormBoundedSylvesterGap X
@@ -216,8 +216,8 @@ theorem FormBoundedSylvesterGap.reducingRestriction_congr_left
     [p.HasOrthogonalProjection] [q.HasOrthogonalProjection]
     [CompleteSpace p] [CompleteSpace q]
     (h : p = q)
-    (hp : TauCeti.LinearPMap.ReducesSubspace A p)
-    (hq : TauCeti.LinearPMap.ReducesSubspace A q) {δ : ℝ}
+    (hp : _root_.LinearPMap.IsReducing A p)
+    (hq : _root_.LinearPMap.IsReducing A q) {δ : ℝ}
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A p hp) X δ) :
     FormBoundedSylvesterGap

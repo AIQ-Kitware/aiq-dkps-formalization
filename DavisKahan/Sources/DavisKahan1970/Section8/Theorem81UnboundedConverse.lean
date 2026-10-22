@@ -65,7 +65,7 @@ reflection identity by two is the whole rest of the proof. -/
 theorem starProjection_specProjection_comm_of_reduces
     {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) {Q : Submodule ℂ H}
     [Q.HasOrthogonalProjection]
-    (hQ : TauCeti.LinearPMap.ReducesSubspace B Q)
+    (hQ : _root_.LinearPMap.IsReducing B Q)
     (S : Set ℝ) (hS : MeasurableSet S) (x : H) :
     Q.starProjection (TauCeti.LinearPMap.specProjection hB S hS x)
       = TauCeti.LinearPMap.specProjection hB S hS (Q.starProjection x) := by
@@ -171,7 +171,7 @@ A reducing subspace of `A + H` inside the closed quarter turn from `P` is the
 canonical spectral branch. -/
 theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hredPperp : _root_.LinearPMap.IsReducing A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : H) ∈ P →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : H) ∈ Pᗮ →
@@ -179,7 +179,7 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (M : Submodule ℂ H) [M.HasOrthogonalProjection]
-    (hM : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) M)
+    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M)
     (hMangle : maximalAngle P M ≤ Real.pi / 4) :
     M = canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha := by
   have hHsa : IsSelfAdjoint Hop :=
@@ -234,7 +234,7 @@ ordered form bounds on the domain, which is the reading the unbounded quarter-an
 theorem and the spectral branch both use. -/
 theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hredPperp : _root_.LinearPMap.IsReducing A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : H) ∈ P →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : H) ∈ Pᗮ →
@@ -242,7 +242,7 @@ theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (M : Submodule ℂ H) [M.HasOrthogonalProjection]
-    (hM : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) M) :
+    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M) :
     maximalAngle P M ≤ Real.pi / 4 ↔
       ((∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : H) ∈ M →
           RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : H)⟫_ℂ ≤

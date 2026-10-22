@@ -41,8 +41,8 @@ omit [CompleteSpace E] in
 /-- **The complexified block is the block of the complexification.** -/
 theorem unitaryConj_complexifyReal_reducingRestriction
     {A : E →ₗ.[ℝ] E} {P : Submodule ℝ E} [P.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hredC : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing A P)
+    (hredC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)) :
     _root_.LinearPMap.unitaryConj (complexifySubmoduleEquiv P)
         (TauCeti.LinearPMap.complexifyReal
@@ -63,8 +63,8 @@ omit [CompleteSpace E] in
 /-- **The printed spectral placement survives complexification.** -/
 theorem realSpectrum_reducingRestriction_complexifyReal
     {A : E →ₗ.[ℝ] E} {P : Submodule ℝ E} [P.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hredC : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing A P)
+    (hredC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)) :
     _root_.LinearPMap.realSpectrum
         (TauCeti.LinearPMap.reducingRestriction
@@ -84,8 +84,8 @@ theorem realSpectrum_reducingRestriction_complexifyReal_of_eq
     {A : E →ₗ.[ℝ] E} {P : Submodule ℝ E} [P.HasOrthogonalProjection]
     {W : Submodule ℂ (TauCeti.RealComplexification E)} [W.HasOrthogonalProjection]
     (hW : W = complexifySubmodule P)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hredC : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing A P)
+    (hredC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) W) :
     _root_.LinearPMap.realSpectrum
         (TauCeti.LinearPMap.reducingRestriction

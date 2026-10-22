@@ -67,7 +67,7 @@ unbounded double-angle files. -/
 theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (D : H →L[𝕜] H) (hD : D.IsSymmetric)
     (W : Submodule 𝕜 H) [W.HasOrthogonalProjection]
@@ -217,7 +217,7 @@ at an arbitrary reducing subspace. -/
 theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike
     (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
@@ -297,7 +297,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
@@ -338,7 +338,7 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
@@ -365,7 +365,7 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
     (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
@@ -410,8 +410,8 @@ theorem sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
     (Hop : H →L[𝕜] H) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {M : P →L[𝕜] P} {R : P →L[𝕜] H}
     (hPdom : ∀ p : P, (p : H) ∈ (TauCeti.LinearPMap.addBounded A Hop).domain)

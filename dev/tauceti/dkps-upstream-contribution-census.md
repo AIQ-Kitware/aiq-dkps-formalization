@@ -311,12 +311,13 @@ been deleted in favor of Tau Ceti's canonical
 revision `7205a079ee99f6962eb39fadd8067517ae38bf73`. The old definition and
 theorem statement both expressed
 `∀ x : A.domain, (x : E) ∈ U → A x ∈ U`; the canonical API has exactly that
-statement and scalar/carrier scope. The donor `ReducesSubspace` record remains,
-with its invariant fields stated using the canonical predicate, and its
-maintained Riccati, spectrum, unitary-transport, and spectral-measure consumers
-now use that API directly. This retires the local definition (six source lines)
-without adding a forwarding alias. The linear-map-valued `spectralProjection`
-and its projection helpers remain local. The core donor and all 25 changed maintained
+statement and scalar/carrier scope. The donor `ReducesSubspace` record has since
+also been retired. Its four conjuncts are represented by Tau Ceti's canonical
+`LinearPMap.IsReducing`; complementary-projection domain preservation follows
+from `sub_starProjection_mem_domain`. Maintained Riccati, spectrum,
+unitary-transport, spectral-measure, and paper-facing consumers now use the
+canonical record directly, with no forwarding alias. The linear-map-valued
+`spectralProjection` and its projection helpers remain local. The core donor and all 25 changed maintained
 modules, including the paper-facing finite wrappers, YWS consumers, and
 `RoadmapBridge.Integration`, compiled at the pinned dependency revision.
 The invariant-predicate retirement and its nine touched Lean modules also

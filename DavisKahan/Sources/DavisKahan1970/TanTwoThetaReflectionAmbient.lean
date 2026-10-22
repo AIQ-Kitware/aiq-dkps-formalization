@@ -852,16 +852,14 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
     exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
   have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
-  have hred : TauCeti.LinearPMap.ReducesSubspace Ap U := by
-    refine TauCeti.LinearPMap.ReducesSubspace.of_components ?_ ?_ ?_ ?_
-    · intro x
-      exact Submodule.mem_top
-    · intro x
-      exact Submodule.mem_top
-    · intro x hx
+  have hred : _root_.LinearPMap.IsReducing Ap U := by
+    refine ⟨(by intro x hx; exact Submodule.mem_top), ?_, ?_⟩
+    · rw [_root_.LinearPMap.isInvariant_iff]
+      intro x hx
       change A (x : E) ∈ U
       exact hAU _ hx
-    · intro x hx
+    · rw [_root_.LinearPMap.isInvariant_iff]
+      intro x hx
       change A (x : E) ∈ Uᗮ
       exact hAUperp _ hx
   have hBodd : TauCeti.IsOddFor U H := ⟨hHU, hHUperp⟩
