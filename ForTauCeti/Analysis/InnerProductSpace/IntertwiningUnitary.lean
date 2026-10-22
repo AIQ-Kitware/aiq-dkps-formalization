@@ -52,20 +52,13 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpac
 
 /-! ### The projection onto the span of a basis subset
 
-**This is not a spectral projection**, and the name says so.  It is the
-orthogonal projector onto
-`b.spanIndices ↑S`, the span of the basis vectors indexed by `S`; a spectral
-projection is `TauCeti.spectralProjection A Ω`, the projector
-onto the spectral subspace of an *operator* over a real set.  The two used to
-share the base name `spectralProjection` and differ only by namespace, so
-dropping `DavisKahan.FiniteDimensional` — which `RUB-NS-PAPER` slice 2c has to do — made
-Lean reject the import with *"environment already contains
-`TauCeti.spectralProjection`"*.
+This is the orthogonal projector onto `b.spanIndices ↑S`, the span of the basis
+vectors indexed by `S`. A point-spectral projection is expressed directly as
+`(Module.End.pointSpectralSubspace A Ω).starProjection`.
 
-It sits in `OrthonormalBasis` rather than `TauCeti` because that is the
-namespace of the object it extends (`ForTauCeti/README.md` §2), and because
-`OrthonormalBasis.spanIndices` in `BasisSpan.lean` is the submodule it projects
-onto.
+It sits in `OrthonormalBasis` because that is the namespace of the object it
+extends (`ForTauCeti/README.md` §2), and because `OrthonormalBasis.spanIndices`
+in `BasisSpan.lean` is the submodule it projects onto.
 -/
 
 /-- Orthogonal projection onto the span of a subset `S` of an orthonormal basis; the building block
