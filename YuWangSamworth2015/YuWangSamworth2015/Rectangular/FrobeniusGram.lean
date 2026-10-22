@@ -5,8 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import YuWangSamworth2015.GroundedImports
 import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
+import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
 
 /-!
 # Frobenius perturbation bounds for rectangular Gram operators
@@ -16,116 +15,23 @@ Yu--Wang--Samworth argument.  For `D = Â - A`, it proves
 
 `‖Â⋆Â - A⋆A‖_F ≤ (‖Â‖ + ‖A‖) ‖D‖_F`
 
-and the analogous left-Gram estimate.  The proof deliberately goes through the
-basis-free Hilbert--Schmidt ideal law already available in the repository, then
-uses the finite-dimensional Frobenius realization. The left-Gram bound follows
-from the right-Gram bound for the adjoint, using Frobenius adjoint invariance.
-This avoids duplicating the Gram expansion and works over every `RCLike` field.
+and the analogous left-Gram estimate. The proof consumes Tau Ceti's
+cross-dimensional Schatten ideal law at `p = 2` and its Frobenius endpoint.
+The left-Gram bound follows from the right-Gram bound for the adjoint, using
+Tau Ceti's Schatten adjoint invariance. Both results hold over `RCLike`.
 -/
 
 namespace YuWangSamworth2015
 open TauCeti
 namespace DavisKahanTheory
 
-open scoped InnerProductSpace BigOperators ENNReal
-
-open DavisKahan.ExactSinTheta
+open scoped InnerProductSpace BigOperators
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
-
-/-- Every operator between finite-dimensional Hilbert spaces is
-Hilbert--Schmidt in the paper's approximation-number model. -/
-private theorem approximationNumberEnergy_ne_top_finite
-    (A : E →L[𝕜] F) [CompleteSpace E] [CompleteSpace F] :
-    approximationNumberEnergy A ≠ ⊤ := by
-  rw [approximationNumberEnergy_eq_ofReal_sum_sq_singularValues]
-  exact ENNReal.ofReal_ne_top
-
-/-- A rectangular Frobenius norm is invariant under adjoint. -/
-theorem rectangularFrobenius_adjoint (A : E →ₗ[𝕜] F) :
-    UnitarilyInvariantSeminorm.frobenius 𝕜 F E A.adjoint =
-      UnitarilyInvariantSeminorm.frobenius 𝕜 E F A := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-  have h := ContinuousLinearMap.hilbertSchmidtNorm_adjoint A.toContinuousLinearMap
-  rw [← LinearMap.adjoint_toContinuousLinearMap,
-    hilbertSchmidtNorm_eq_frobenius,
-    hilbertSchmidtNorm_eq_frobenius] at h
-  exact h
-
-/-- The Frobenius norm of a square product is bounded by the operator norm of
-its left factor times the rectangular Frobenius norm of its right factor.
-
-The intermediate Hilbert space may differ from the domain/codomain of the
-square product; this is the cross-dimensional ideal estimate needed for Gram
-operators. -/
-theorem frobenius_comp_rectangular_le_opNorm_mul
-    (C : F →ₗ[𝕜] E) (A : E →ₗ[𝕜] F) :
-    UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (C ∘ₗ A) ≤
-      ‖C.toContinuousLinearMap‖ *
-        UnitarilyInvariantSeminorm.frobenius 𝕜 E F A := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-  have hA : approximationNumberEnergy A.toContinuousLinearMap ≠ ⊤ :=
-    approximationNumberEnergy_ne_top_finite A.toContinuousLinearMap
-  have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_le
-    C.toContinuousLinearMap
-    ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).2 hA)
-    (ContinuousLinearMap.id 𝕜 E)
-  rw [ContinuousLinearMap.comp_id] at h
-  have h' :
-      ContinuousLinearMap.hilbertSchmidtNorm
-          (C.toContinuousLinearMap ∘L A.toContinuousLinearMap) ≤
-        ‖C.toContinuousLinearMap‖ *
-          ContinuousLinearMap.hilbertSchmidtNorm A.toContinuousLinearMap :=
-    h.trans (mul_le_of_le_one_right
-      (mul_nonneg (norm_nonneg _)
-        (ContinuousLinearMap.hilbertSchmidtNorm_nonneg A.toContinuousLinearMap))
-      ContinuousLinearMap.norm_id_le)
-  rw [hilbertSchmidtNorm_eq_frobenius,
-    hilbertSchmidtNorm_eq_frobenius] at h'
-  have hcomp :
-      (C.toContinuousLinearMap ∘L A.toContinuousLinearMap).toLinearMap =
-        C ∘ₗ A := by
-    ext x
-    rfl
-  rwa [hcomp] at h'
-
-/-- Two-sided rectangular Frobenius ideal inequality.  This is the reusable
-operator-ideal statement behind both the Gram estimates and Appendix Lemma A1
-(Lemma 5 in the 2014 preprint). -/
-theorem rectangularFrobenius_twoSided_comp_le
-    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
-      [FiniteDimensional 𝕜 G]
-    {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
-      [FiniteDimensional 𝕜 H]
-    (L : F →ₗ[𝕜] G) (A : E →ₗ[𝕜] F) (R : H →ₗ[𝕜] E) :
-    UnitarilyInvariantSeminorm.frobenius 𝕜 H G (L ∘ₗ A ∘ₗ R) ≤
-      ‖L.toContinuousLinearMap‖ *
-        UnitarilyInvariantSeminorm.frobenius 𝕜 E F A *
-          ‖R.toContinuousLinearMap‖ := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-  let : CompleteSpace G := FiniteDimensional.complete 𝕜 G
-  let : CompleteSpace H := FiniteDimensional.complete 𝕜 H
-  have hA : approximationNumberEnergy A.toContinuousLinearMap ≠ ⊤ :=
-    approximationNumberEnergy_ne_top_finite A.toContinuousLinearMap
-  have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_le
-    L.toContinuousLinearMap
-    ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).2 hA)
-    R.toContinuousLinearMap
-  rw [hilbertSchmidtNorm_eq_frobenius,
-    hilbertSchmidtNorm_eq_frobenius] at h
-  have hcomp :
-      (L.toContinuousLinearMap ∘L A.toContinuousLinearMap ∘L
-        R.toContinuousLinearMap).toLinearMap = L ∘ₗ A ∘ₗ R := by
-    ext x
-    rfl
-  rwa [hcomp] at h
 
 /-- Frobenius perturbation bound for the right Gram operator. -/
 theorem frobenius_rightGram_sub_le
@@ -150,21 +56,26 @@ theorem frobenius_rightGram_sub_le
   refine (map_add_le_add
     (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _ _).trans ?_
   have hleft :
-      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (Â.adjoint ∘ₗ D) ≤
+      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)
+          (Â.adjoint ∘ₗ D) ≤
         ‖Â.toContinuousLinearMap‖ *
           UnitarilyInvariantSeminorm.frobenius 𝕜 E F D := by
-    have h := frobenius_comp_rectangular_le_opNorm_mul Â.adjoint D
-    simpa only [LinearMap.adjoint_toContinuousLinearMap,
+    have h := UnitarilyInvariantSeminorm.schatten_comp_le_left 2 Â.adjoint D
+      (fun y => Â.adjoint.toContinuousLinearMap.le_opNorm y)
+    simpa only [UnitarilyInvariantSeminorm.schatten_two,
+      LinearMap.adjoint_toContinuousLinearMap,
       LinearIsometryEquiv.norm_map] using h
   have hright :
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (D.adjoint ∘ₗ A) ≤
         ‖A.toContinuousLinearMap‖ *
           UnitarilyInvariantSeminorm.frobenius 𝕜 E F D := by
-    have h := frobenius_comp_rectangular_le_opNorm_mul A.adjoint D
+    have h := UnitarilyInvariantSeminorm.schatten_comp_le_left 2 A.adjoint D
+      (fun y => A.adjoint.toContinuousLinearMap.le_opNorm y)
     rw [← (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).apply_adjoint
       (D.adjoint ∘ₗ A), LinearMap.adjoint_comp,
       LinearMap.adjoint_adjoint]
-    simpa only [LinearMap.adjoint_toContinuousLinearMap,
+    simpa only [UnitarilyInvariantSeminorm.schatten_two,
+      LinearMap.adjoint_toContinuousLinearMap,
       LinearIsometryEquiv.norm_map] using h
   calc
     UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (Â.adjoint ∘ₗ D) +
@@ -195,7 +106,8 @@ theorem frobenius_leftGram_sub_le
   have hdiff :
       UnitarilyInvariantSeminorm.frobenius 𝕜 F E (Â.adjoint - A.adjoint) =
         UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A) := by
-    simpa only [map_sub] using rectangularFrobenius_adjoint (Â - A)
+    have h := UnitarilyInvariantSeminorm.schatten_apply_adjoint 2 (Â - A)
+    simpa only [map_sub, UnitarilyInvariantSeminorm.schatten_two] using h
   simpa only [hgram, hdiff, LinearMap.adjoint_toContinuousLinearMap,
     LinearIsometryEquiv.norm_map] using h
 

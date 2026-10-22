@@ -436,6 +436,22 @@ distinct; no theorem, hypothesis, or inequality coefficient changes.
 This is local proof consolidation using established upstream Gram bounds,
 not a claim that a new Frobenius theorem was accepted upstream.
 
+**Rectangular Frobenius ideal-law retirement (2026-10-22):**
+At the existing TauCeti dependency pin `773bcb657352235c6348ff45be9b7f19f147c19e`,
+`TauCeti.UnitarilyInvariantSeminorm.schatten_comp_le_left`,
+`schatten_comp_comp_le`, `schatten_two`, and `schatten_apply_adjoint` directly
+subsume the finite-dimensional, cross-dimensional left and two-sided Frobenius
+ideal laws and adjoint invariance formerly proved in
+`YuWangSamworth2015.Rectangular.FrobeniusGram`. The public local wrappers
+`frobenius_comp_rectangular_le_opNorm_mul`,
+`rectangularFrobenius_twoSided_comp_le`, and `rectangularFrobenius_adjoint`,
+and the private finite-approximation-energy proof have been retired.
+The Gram proof and Appendix Lemma A1 now consume the accepted results directly;
+the row recovery direction uses the unchanged column contraction theorem on
+adjoints. No paper-level theorem/hypothesis, ideal constant, or TauCeti pin is
+changed. The independent paper-specific Hilbert--Schmidt ideal framework and
+its more general consumers remain.
+
 **Adjoint norm-bound retirement (2026-10-22):**
 `ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace` no longer defines a
 second pointwise adjoint norm estimate.

@@ -52,26 +52,21 @@ theorem yuWangSamworth_lemma5_columns
     frob
         (U.adjoint ∘ₗ A ∘ₗ W) ≤
       frob A := by
-  have h := rectangularFrobenius_twoSided_comp_le U.adjoint A W
-  have hUnorm :
-      ‖U.adjoint.toContinuousLinearMap‖ = ‖U.toContinuousLinearMap‖ := by
-    simp only [LinearMap.adjoint_toContinuousLinearMap,
-      LinearIsometryEquiv.norm_map]
-  rw [hUnorm] at h
-  have hF : 0 ≤ frob A :=
-    apply_nonneg (UnitarilyInvariantSeminorm.frobenius 𝕜 E F) A
-  calc
-    frob (U.adjoint ∘ₗ A ∘ₗ W)
-        ≤ ‖U.toContinuousLinearMap‖ *
-            frob A *
-              ‖W.toContinuousLinearMap‖ := h
-    _ ≤ 1 * frob A *
-          ‖W.toContinuousLinearMap‖ := by
-      exact mul_le_mul_of_nonneg_right
-        (mul_le_mul_of_nonneg_right hU hF) (norm_nonneg _)
-    _ ≤ 1 * frob A * 1 := by
-      exact mul_le_mul_of_nonneg_left hW (by simp)
-    _ = frob A := by ring
+  have hUadj : ∀ y : F, ‖U.adjoint y‖ ≤ (1 : ℝ) * ‖y‖ := by
+    intro y
+    calc
+      ‖U.adjoint y‖ ≤ ‖U.adjoint.toContinuousLinearMap‖ * ‖y‖ :=
+        U.adjoint.toContinuousLinearMap.le_opNorm y
+      _ = ‖U.toContinuousLinearMap‖ * ‖y‖ := by
+        rw [LinearMap.adjoint_toContinuousLinearMap, LinearIsometryEquiv.norm_map]
+      _ ≤ 1 * ‖y‖ := mul_le_mul_of_nonneg_right hU (norm_nonneg y)
+  have hWbound : ∀ x : Q, ‖W x‖ ≤ (1 : ℝ) * ‖x‖ := by
+    intro x
+    exact (W.toContinuousLinearMap.le_opNorm x).trans
+      (mul_le_mul_of_nonneg_right hW (norm_nonneg x))
+  have h := UnitarilyInvariantSeminorm.schatten_comp_comp_le 2
+    U.adjoint A W hUadj zero_le_one hWbound
+  simpa only [UnitarilyInvariantSeminorm.schatten_two, one_mul] using h
 
 /-- Lemma A1 with the source's orthonormal-column hypotheses expressed
 coordinate-freely as pointwise norm preservation. -/
@@ -147,34 +142,20 @@ theorem yuWangSamworth_lemma5_rows
   have hCdef : C = U.adjoint ∘ₗ A ∘ₗ W := rfl
   have hrecoverC : U ∘ₗ C ∘ₗ W.adjoint = A := by
     simpa only [hCdef] using hrecover
-  have hC : 0 ≤ frob C :=
-    apply_nonneg (UnitarilyInvariantSeminorm.frobenius 𝕜 Q P) C
-  have hWnorm :
-      ‖W.adjoint.toContinuousLinearMap‖ = ‖W.toContinuousLinearMap‖ := by
-    simp only [LinearMap.adjoint_toContinuousLinearMap,
-      LinearIsometryEquiv.norm_map]
+  have hUadj : ‖U.adjoint.toContinuousLinearMap‖ ≤ 1 := by
+    simpa only [LinearMap.adjoint_toContinuousLinearMap,
+      LinearIsometryEquiv.norm_map] using hU
+  have hWadj : ‖W.adjoint.toContinuousLinearMap‖ ≤ 1 := by
+    simpa only [LinearMap.adjoint_toContinuousLinearMap,
+      LinearIsometryEquiv.norm_map] using hW
   apply le_antisymm
   · simpa only [hCdef] using yuWangSamworth_lemma5_columns A U W hU hW
   · calc
-      frob A =
-          frob
-            (U ∘ₗ C ∘ₗ W.adjoint) := by rw [hrecoverC]
-      _ ≤ ‖U.toContinuousLinearMap‖ *
-            frob C *
-              ‖W.adjoint.toContinuousLinearMap‖ :=
-        rectangularFrobenius_twoSided_comp_le U C W.adjoint
-      _ = ‖U.toContinuousLinearMap‖ *
-            frob C *
-              ‖W.toContinuousLinearMap‖ := by rw [hWnorm]
-      _ ≤ 1 * frob C *
-            ‖W.toContinuousLinearMap‖ := by
-        exact mul_le_mul_of_nonneg_right
-          (mul_le_mul_of_nonneg_right hU hC) (norm_nonneg _)
-      _ ≤ 1 * frob C * 1 := by
-        exact mul_le_mul_of_nonneg_left hW (by simp)
-      _ = frob C := by ring
-      _ = frob
-            (U.adjoint ∘ₗ A ∘ₗ W) := by rw [hCdef]
+      frob A = frob (U ∘ₗ C ∘ₗ W.adjoint) := by rw [hrecoverC]
+      _ ≤ frob C := by
+        simpa only [LinearMap.adjoint_adjoint] using
+          yuWangSamworth_lemma5_columns C U.adjoint W.adjoint hUadj hWadj
+      _ = frob (U.adjoint ∘ₗ A ∘ₗ W) := by rw [hCdef]
 
 /-- Precomposition by the adjoint of a linear isometry preserves the
 rectangular Frobenius norm.  This is the row-side analogue of
@@ -191,8 +172,10 @@ private theorem rectangularFrobenius_comp_adjoint_linearIsometry
         (A ∘ₗ W.toLinearMap.adjoint) =
         frob
           (A ∘ₗ W.toLinearMap.adjoint).adjoint :=
-      (rectangularFrobenius_adjoint
-        (A ∘ₗ W.toLinearMap.adjoint)).symm
+      (by
+        simpa only [UnitarilyInvariantSeminorm.schatten_two] using
+          (UnitarilyInvariantSeminorm.schatten_apply_adjoint
+            2 (A ∘ₗ W.toLinearMap.adjoint)).symm)
     _ = frob
           (W.toLinearMap ∘ₗ A.adjoint) := by
       rw [LinearMap.adjoint_comp, LinearMap.adjoint_adjoint]
@@ -200,7 +183,9 @@ private theorem rectangularFrobenius_comp_adjoint_linearIsometry
       UnitarilyInvariantSeminorm.frobenius_linearIsometry_comp
         W A.adjoint
     _ = frob A :=
-      rectangularFrobenius_adjoint A
+      (by
+        simpa only [UnitarilyInvariantSeminorm.schatten_two] using
+          (UnitarilyInvariantSeminorm.schatten_apply_adjoint 2 A))
 
 /-- Lemma A1 in the literal orthonormal-row API.  Here `U` and `W` bundle the
 transposed row maps, whose columns are orthonormal.

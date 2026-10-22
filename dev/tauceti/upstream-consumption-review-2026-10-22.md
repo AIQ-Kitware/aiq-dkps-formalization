@@ -269,6 +269,57 @@ lake build \
   YuWangSamworth2015.Rectangular.SourceTheorem3
 ```
 
+### 1d. Retire duplicate rectangular Frobenius ideal laws via Schatten p=2
+
+At the pinned Tau Ceti revision `773bcb657352235c6348ff45be9b7f19f147c19e`,
+`UnitarilyInvariantSeminorm.Schatten` already supplies cross-dimensional
+left-factor and two-sided ideal estimates for all `p >= 1`:
+`schatten_comp_le_left`, `schatten_comp_comp_le`, and the endpoint
+`schatten_two : schatten ... 2 = frobenius ...`. It also supplies
+`schatten_apply_adjoint`, including the rectangular adjoint invariance
+previously reproved through Hilbert--Schmidt approximation energy.
+
+`Rectangular/FrobeniusGram.lean` consequently removes the local
+`frobenius_comp_rectangular_le_opNorm_mul`,
+`rectangularFrobenius_twoSided_comp_le`, `rectangularFrobenius_adjoint`,
+and its private `approximationNumberEnergy_ne_top_finite`. These laws were
+already subsumed by Tau Ceti's Schatten-2 results **for finite-dimensional
+real/complex inner product spaces and all intermediate dimensions**. The
+operator-norm factors are converted to the required pointwise bounds by
+`LinearMap.toContinuousLinearMap.le_opNorm`.
+
+The right-Gram Frobenius proof directly applies `schatten_comp_le_left 2`;
+the left-Gram proof obtains adjoint invariance from `schatten_apply_adjoint 2`.
+Appendix Lemma A1's contraction theorem uses `schatten_comp_comp_le 2` with
+both constants set to one; its row/recovery theorem reuses the column
+contraction theorem with adjointed factors instead of a second independent
+ideal inequality. The row-side isometry proof also uses upstream adjoint
+invariance directly. The two Davis--Kahan Hilbert--Schmidt imports are no
+longer needed by the Gram module; their separate paper-specific mathematics
+is not deleted.
+
+This changes **no paper-facing theorem statement or hypothesis**, no
+coefficient, no scalar field or rank assumption, and no Tau Ceti pin.
+Appendix Lemma A1's source-facing interfaces and the Gram perturbation
+results remain. No source census row changes: the retired items were
+supporting rectangular wrappers, not paper-obligation declarations.
+
+Focused compilation gate:
+
+```bash
+lake exe cache get
+lake build \
+  YuWangSamworth2015.Rectangular.FrobeniusGram \
+  YuWangSamworth2015.Appendix.Lemma5 \
+  YuWangSamworth2015.Rectangular.Theorem4 \
+  YuWangSamworth2015.Rectangular.SourceTheorem3
+```
+
+**Follow-on:** compare the remaining source-specific linear-isometry and
+Hilbert--Schmidt bridge consumers against Tau Ceti's canonical Schatten
+inequalities; preserve genuinely stronger arbitrary-ideal or unbounded
+statements instead of treating a finite-dimensional result as equivalent.
+
 ### 2. Finish genuinely redundant restriction presentation, selectively
 
 The four-field `LinearPMap.ReducesSubspace` is already gone. Do **not** redo its
