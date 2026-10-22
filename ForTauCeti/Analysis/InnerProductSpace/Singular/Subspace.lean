@@ -12,8 +12,8 @@ additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
 
 Groundwork for the Yu–Wang–Samworth singular-vector extension: perturbing the
-Gram operator `A⋆A` by `Â⋆Â − A⋆A`, controlled by `Â − A`.  Includes the operator
-adjoint norm bound `‖A⋆‖ = ‖A‖` in elementwise form.
+Gram operator `A⋆A` by `Â⋆Â − A⋆A`, controlled by `Â − A`. The adjoint norm
+bound used here is Tau Ceti's `LinearMap.norm_adjoint_apply_le`.
 
 Plan step W0.1(d) added by Claude Opus 4.8 (claude-opus-4-8[1m]): the
 singular-value symmetry `σ(A⋆) = σ(A)` for a square operator, proved through the
@@ -40,8 +40,6 @@ terms of `Â − A`.
 
 ## Main results
 
-* `TauCeti.norm_adjoint_apply_le`: the adjoint of a `c`-bounded operator is
-  `c`-bounded (`‖A⋆‖ ≤ ‖A‖` in elementwise form).
 * `TauCeti.norm_gram_sub_gram_apply_le`: the pointwise consequence of Tau Ceti's
   accepted operator-norm perturbation estimate for Gram operators.
 * `TauCeti.abs_sq_singularValues_sub_le`: Weyl for squared singular values,
@@ -86,24 +84,6 @@ private theorem re_inner_real_smul_self_of_norm_one {c : ℝ} {v : E} (hv : ‖v
     RCLike.re ⟪(c : 𝕜) • v, v⟫_𝕜 = c := by
   rw [inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq, hv]
   simp
-
-/-- **The adjoint preserves an operator-norm bound.** If `‖A x‖ ≤ c ‖x‖` for all
-`x`, then `‖A⋆ y‖ ≤ c ‖y‖` for all `y` — the elementwise form of `‖A⋆‖ = ‖A‖`.
-Proof: `‖A⋆ y‖² = re⟪y, A (A⋆ y)⟫ ≤ ‖y‖ ‖A (A⋆ y)‖ ≤ c ‖y‖ ‖A⋆ y‖`. -/
-theorem norm_adjoint_apply_le {A : E →ₗ[𝕜] F} {c : ℝ} (hc : 0 ≤ c)
-    (h : ∀ x, ‖A x‖ ≤ c * ‖x‖) (y : F) : ‖A.adjoint y‖ ≤ c * ‖y‖ := by
-  have key : ‖A.adjoint y‖ ^ 2 ≤ c * ‖y‖ * ‖A.adjoint y‖ :=
-    calc ‖A.adjoint y‖ ^ 2
-        = RCLike.re ⟪A.adjoint y, A.adjoint y⟫_𝕜 := (inner_self_eq_norm_sq _).symm
-      _ = RCLike.re ⟪y, A (A.adjoint y)⟫_𝕜 := by rw [LinearMap.adjoint_inner_left]
-      _ ≤ ‖⟪y, A (A.adjoint y)⟫_𝕜‖ := RCLike.re_le_norm _
-      _ ≤ ‖y‖ * ‖A (A.adjoint y)‖ := norm_inner_le_norm _ _
-      _ ≤ ‖y‖ * (c * ‖A.adjoint y‖) := by gcongr; exact h _
-      _ = c * ‖y‖ * ‖A.adjoint y‖ := by ring
-  rcases eq_or_ne ‖A.adjoint y‖ 0 with h0 | h0
-  · rw [h0]; positivity
-  · have hpos : 0 < ‖A.adjoint y‖ := (norm_nonneg _).lt_of_ne (Ne.symm h0)
-    nlinarith [key, hpos]
 
 /-- **Gram-operator perturbation bound.** With `A, Â, Â − A` bounded by `a, â, ε`
 respectively, `‖(Â⋆Â − A⋆A) x‖ ≤ (a + â) ε ‖x‖`. This pointwise form is
