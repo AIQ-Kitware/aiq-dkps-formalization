@@ -144,8 +144,8 @@ structure CanonicalSpectralGapProseLike (T S : E →ₗ[𝕜] E)
   T_symm : T.IsSymmetric
   S_symm : S.IsSymmetric
   gap_pos : 0 < g
-  U_spectrum : PointSpectrumIn T (pointSpectralSubspace T s) (Set.Ici (c + g))
-  V_spectrum : PointSpectrumIn S (pointSpectralSubspace S t) (Set.Iic c)
+  U_spectrum : PointSpectrumIn T (Module.End.pointSpectralSubspace T s) (Set.Ici (c + g))
+  V_spectrum : PointSpectrumIn S (Module.End.pointSpectralSubspace S t) (Set.Iic c)
 
 omit [CompleteSpace E] in
 /-- Canonical spectral-subspace prose-like Davis--Kahan Part III `sin Θ`
@@ -158,8 +158,8 @@ norm. -/
 theorem partIII_sinTheta_uiNorm_canonical_spectral_prose_like
     (N : UnitarilyInvariantSeminorm 𝕜 E E) {T S : E →ₗ[𝕜] E}
     {s t : Set ℝ} {c g : ℝ} (hgap : CanonicalSpectralGapProseLike T S s t c g) :
-    N ((directedSinThetaOperatorProseLike (pointSpectralSubspace T s) (pointSpectralSubspace S t) :
-        E →L[𝕜] E) : E →ₗ[𝕜] E)
+    N ((directedSinThetaOperatorProseLike (Module.End.pointSpectralSubspace T s)
+          (Module.End.pointSpectralSubspace S t) : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (S - T) / g := by
   exact uiNorm_pointSpectralSubspace_directed_sinTheta_le N hgap.T_symm hgap.S_symm
     hgap.gap_pos hgap.U_spectrum hgap.V_spectrum

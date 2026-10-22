@@ -17,8 +17,9 @@ nothing and adds no public name: its only job is to stop elaborating if the seam
 The seams are not hypothetical.  All three are recorded regressions or review findings:
 
 1. **A redundant hypothesis on a public signature.**  `sinTheta_pointSpectralSubspace_le` used to
-   take an `hAselected : PointSpectrumIn A (pointSpectralSubspace A (Set.Icc a b)) (Set.Icc a b)`
-   argument.  That fact is *free* — it holds of the spectral subspace by construction — and
+   take an `hAselected` asserting spectral containment for the selected block
+   `Module.End.pointSpectralSubspace A (Set.Icc a b)`. That fact holds without
+   an additional hypothesis, and
    is now proved once, as `pointSpectrumIn_pointSpectralSubspace`.  Nothing prevents a future edit
    from
    re-adding the argument, and the library would still build; the example below would not.
@@ -58,15 +59,16 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDi
 example (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hBoutside : PointSpectrumIn B (pointSpectralSubspace B (Set.Icc a b))ᗮ
+    (hBoutside : PointSpectrumIn B (Module.End.pointSpectralSubspace B (Set.Icc a b))ᗮ
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * N (sinThetaMap (pointSpectralSubspace A (Set.Icc a b))
-        (pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) :=
+    δ * N (sinThetaMap (Module.End.pointSpectralSubspace A (Set.Icc a b))
+        (Module.End.pointSpectralSubspace B (Set.Icc a b))) ≤ N (B - A) :=
   sinTheta_pointSpectralSubspace_le N hA hB hδ hBoutside
 
 /-- The hypothesis that was removed, on its own: it is a theorem, for every operator and
 every set, with no side condition. -/
-example (A : E →ₗ[𝕜] E) (Ω : Set ℝ) : PointSpectrumIn A (pointSpectralSubspace A Ω) Ω :=
+example (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
+    PointSpectrumIn A (Module.End.pointSpectralSubspace A Ω) Ω :=
   pointSpectrumIn_pointSpectralSubspace A Ω
 
 end SpectralSubspaceSinTheta
