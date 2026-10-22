@@ -175,7 +175,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus"
       ]
@@ -312,7 +311,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
@@ -362,7 +360,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
@@ -459,7 +456,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum",
@@ -1625,7 +1621,6 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Probability.Moments.MatrixConcentration",
         "RoadmapBridge.OperatorTheory"
       ],
       "status": "staged-needs-current-validation",
@@ -1651,8 +1646,7 @@
         "DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator",
         "DkpsQuench2026.Geometry.Covariance",
         "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
-        "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
-        "ForTauCeti.Probability.Moments.MatrixConcentration"
+        "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable"
       ],
       "status": "upstreamed",
       "upstream_pr": null,
@@ -2310,8 +2304,7 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFanBochner",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence"
       ],
       "status": "partially-upstreamed",
       "upstream_pr": null,
@@ -2732,14 +2725,13 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure"
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness"
-      ],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The former local SelfAdjointMaximal staging file was removed by DKPS commit 3791c88a. The remaining StoneUniqueness consumer imports the accepted TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal module (PR #18915) and calls LinearPMap.eq_of_le_of_isSelfAdjoint. The recorded historical source declarations are retained for provenance, not as a claim that all original statements were copied unchanged."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -2965,7 +2957,6 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport"
@@ -3042,7 +3033,7 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone"
       ],
@@ -3850,7 +3841,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
         "TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
+        "TauCeti.Analysis.InnerProductSpace.Sylvester"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -4170,7 +4161,7 @@
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector",
+        "TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
         "Mathlib"
@@ -4683,8 +4674,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -4699,17 +4689,18 @@
       ],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SylvesterOperator",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound"
+        "TauCeti.Analysis.InnerProductSpace.Sylvester"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The local bounded Sylvester operator, its linearity/coercivity wrappers, and this donor module were removed by DKPS commit 2d763193. Maintained equation consumers now use the accepted ContinuousLinearMap.sylvester in TauCeti.Analysis.InnerProductSpace.Sylvester (the Sylvester foundation includes PR #14951). The retired declaration spellings are historical source inventory, not current staging declarations or an assertion of literal declaration-by-declaration equivalence."
     },
     {
       "source_module": "ForMathlib",
@@ -5056,9 +5047,7 @@
         "Mathlib.Analysis.Normed.Operator.LinearIsometry"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge"
-      ],
+      "downstream_users": [],
       "status": "staged-needs-current-validation",
       "upstream_pr": null,
       "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."

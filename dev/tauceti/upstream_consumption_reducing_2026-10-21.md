@@ -1,5 +1,14 @@
 # Upstream consumption: native reducing restrictions and UI-seminorm API
 
+**Historical October 21 checkpoint — not the current migration queue.**
+The four-field `LinearPMap.ReducesSubspace` predicate and its conversion lemmas
+have since been deleted; the finite/partial-map consumers were migrated to
+`LinearPMap.IsReducing` and `A.restrict` in the overnight commits. Some genuine
+local `reducingRestriction` operations, domain transport, and stronger
+adjoint-domain theorems **remain**. Use the [October 22 review](upstream-consumption-review-2026-10-22.md)
+for the present source inventory and next tasks. Statements below describe
+what was true *at this checkpoint*, not current pending instructions.
+
 ## Exact checkpoint
 
 - Apply over DKPS commit `7cd3d7a11b91` (the 2026-10-21 12:13 snapshot).

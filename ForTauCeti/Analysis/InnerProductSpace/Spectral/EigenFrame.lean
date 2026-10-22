@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 
-Staged for Tau Ceti: additions to `Mathlib/Analysis/InnerProductSpace/Spectrum.lean`,
-next to `LinearMap.IsSymmetric.eigenvectorBasis`.
+The core eigenfamily/ordered-eigenframe interfaces have been accepted in
+`TauCeti.Analysis.InnerProductSpace.Spectral.Eigenframe` (SSP-D01, PR #18942).
+This file retains older declaration spellings and gap-separated block results
+pending dependency-closed migration; it is not the upstream canonical owner.
 -/
 module
 
@@ -37,6 +39,16 @@ point of the file — a *gap-separated* ordered eigenframe spans the canonical
 `spanIndices` block no matter which eigenvectors were chosen
 (`IsOrderedEigenframe.span_eq_spanIndices`).  So a spectral gap makes the block
 canonical, and without one it genuinely is not.
+
+## Current upstream boundary (2026-10-22)
+
+Canonical Tau Ceti names are `Module.End.IsEigenfamily`,
+`LinearMap.IsSymmetric.IsOrderedEigenframe`, and
+`LinearMap.IsSymmetric.CorrespondingEigenblocks`. The local `Fin d`-indexed
+predicates below have not yet been rewritten onto those representations.
+The local gap-separated `IsOrderedEigenframe.span_eq_spanIndices` and
+`IsOrderedEigenframe.pointInternalGap_span` are additional results *not*
+included in SSP-D01; keep their mathematical content through the migration.
 
 ## Main results
 
