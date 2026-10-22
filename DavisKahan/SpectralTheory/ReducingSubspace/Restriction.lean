@@ -73,17 +73,6 @@ theorem reducingRestriction_inclusion_intertwines
     (TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred (x : U)
       (reducingRestriction_inclusion_mem_domain A U hred x)).symm
 
-/-- Adjoint-domain membership of the restriction is exactly ambient
-adjoint-domain membership for the included vector. -/
-theorem mem_reducingRestriction_adjoint_domain_iff
-    (A : E →ₗ.[𝕜] E)
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : _root_.LinearPMap.IsReducing A U) (y : U) :
-    y ∈ (TauCeti.LinearPMap.reducingRestriction A U hred).adjoint.domain ↔
-      (y : E) ∈ A.adjoint.domain :=
-  TauCeti.LinearPMap.mem_reducingRestriction_adjoint_domain_iff
-    A U hred y
-
 end PartialMap
 end DavisKahanExt
 end TauCeti

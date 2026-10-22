@@ -281,6 +281,12 @@ The now-unused donor and Davis--Kahan symmetry forwarding theorems were also
 removed; Tau Ceti's `LinearPMap.IsFormalAdjoint.restrict` is the canonical
 symmetry-preservation result, and maintained-source search found no callers of
 the forwarding names.
+The unused local density and closed-graph restriction wrappers were removed
+after confirming that no maintained modules consume them; their statements
+follow directly from Tau Ceti's `IsReducing.dense_restrict_domain` and
+`IsClosed.restrict`. The Davis--Kahan adjoint-domain forwarding alias is also
+gone. Its donor theorem remains because the corresponding upstream adjoint-domain
+argument is private, so it is not yet replaceable by a public API.
 
 **Historical dependency pin:** the October 21 YWS consumption overlay updated TauCeti
 from `87dad819828705ed8329ff53b9bc53634a064b1a` to
