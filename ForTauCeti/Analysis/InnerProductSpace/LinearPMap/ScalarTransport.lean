@@ -26,7 +26,6 @@ let a theorem proved at `ℝ` and at `ℂ` be read at an arbitrary `RCLike` fiel
 
 * `TauCeti.ScalarTransport.isReducing_pmap_iff` transports Tau Ceti's canonical
   reducing-subspace predicate.
-* `TauCeti.ScalarTransport.reducesSubspace_pmap_iff`.
 * `TauCeti.ScalarTransport.pmap_addBounded`.
 
 ## Provenance
@@ -115,16 +114,6 @@ theorem isReducing_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E)
         = of (e := e) (S.starProjection (out (e := e) (x : ScalarTransport e E)))
       from starProjection_of (e := e) S _]
     exact hx
-
-/-- Compatibility theorem for consumers that still use the donor reduction predicate. -/
-theorem reducesSubspace_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E)
-    [S.HasOrthogonalProjection] :
-    TauCeti.LinearPMap.ReducesSubspace (pmap (e := e) A) (submodule (e := e) S) ↔
-      TauCeti.LinearPMap.ReducesSubspace A S := by
-  rw [TauCeti.LinearPMap.reducesSubspace_iff_isReducing,
-    TauCeti.LinearPMap.reducesSubspace_iff_isReducing]
-  exact isReducing_pmap_iff (e := e) S
-
 
 /-- The transport commutes with adding a bounded operator. -/
 theorem pmap_addBounded (A : E →ₗ.[𝕜] E) (T : E →L[𝕜] E) :

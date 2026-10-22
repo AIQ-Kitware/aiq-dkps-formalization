@@ -210,15 +210,15 @@ theorem gauge_blockCompression_orthogonal_transport
 omit [CompleteSpace E] in
 /-- Reduction of `A + B` is scalar invariant, in the spelling consumed by the
 source-facing `tan 2Θ` theorem. -/
-theorem reducesSubspace_addBounded_pmap_iff
+theorem isReducing_addBounded_pmap_iff
     {A : E →ₗ.[𝕜] E} (B : E →L[𝕜] E)
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection] :
-    TauCeti.LinearPMap.ReducesSubspace
+    _root_.LinearPMap.IsReducing
         (TauCeti.LinearPMap.addBounded (pmap (e := e) A) (clm (e := e) B))
         (submodule (e := e) V) ↔
-      TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A B) V := by
+      _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V := by
   rw [← pmap_addBounded]
-  exact reducesSubspace_pmap_iff (e := e) V
+  exact isReducing_pmap_iff (e := e) V
 
 end ScalarTransport
 end TauCeti
