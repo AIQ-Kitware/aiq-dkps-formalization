@@ -186,7 +186,7 @@ theorem directedResidual_sylvesterEquation
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (hU : A.Reduces U)
     {X : F →L[𝕜] E} {M : F →L[𝕜] F} :
-    ContinuousLinearMap.sylvesterOperator (A.restrict hU.2) M
+    ContinuousLinearMap.sylvester (A.restrict hU.2) M
       (((Uᗮ.starProjection ∘L X)).codRestrict Uᗮ (fun _x => Uᗮ.starProjection_apply_mem _)) =
       ((Uᗮ.starProjection ∘L DavisKahan.residual A X M)).codRestrict Uᗮ
         (fun _x => Uᗮ.starProjection_apply_mem _) := by
@@ -208,7 +208,7 @@ theorem directedPerturbation_sylvesterEquation
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : A.Reduces U) (hV : B.Reduces V) :
-    ContinuousLinearMap.sylvesterOperator (B.restrict hV.2)
+    ContinuousLinearMap.sylvester (B.restrict hV.2)
       (A.restrict hU.1)
       (((Vᗮ.starProjection ∘L U.subtypeL)).codRestrict Vᗮ
         (fun _x => Vᗮ.starProjection_apply_mem _)) =
@@ -217,7 +217,7 @@ theorem directedPerturbation_sylvesterEquation
   apply ContinuousLinearMap.ext
   intro x
   apply Subtype.ext
-  simp only [ContinuousLinearMap.sylvesterOperator, sub_apply, ContinuousLinearMap.comp_apply]
+  simp only [ContinuousLinearMap.sylvester, sub_apply]
   have hVperp : B.Reduces Vᗮ := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hB hV.2
   have hcomm := ContinuousLinearMap.starProjection_apply_comm_of_reduces B Vᗮ hVperp (x : E)
   change B (Vᗮ.starProjection (x : E)) - Vᗮ.starProjection (A (x : E)) =

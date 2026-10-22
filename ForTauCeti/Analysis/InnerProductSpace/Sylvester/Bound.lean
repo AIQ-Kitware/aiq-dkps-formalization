@@ -41,8 +41,8 @@ taken in the `LinearMap.IsSymmetric` sense, with no reference to adjoints.
   symmetric operator with `|re ⟪C x, x⟫| ≤ κ * ‖x‖ ^ 2` has `‖C‖ ≤ κ`.
 * `TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_add_comp_eq`: the
   coercive (Lyapunov) form, `‖X‖ ≤ ‖Y‖ / (2 * δ)`.
-* `TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq`: the
-  separated (Davis–Kahan-facing) form, `‖X‖ ≤ ‖Y‖ / g`.
+* The separated operator-norm case is provided directly by Tau Ceti's
+  `mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le`.
 
 ## References
 
@@ -487,24 +487,6 @@ theorem opNorm_le_div_of_comp_add_comp_eq (hA : A.IsSymmetric) (hB : B.IsSymmetr
     (fun C f => ContinuousLinearMap.opNorm_comp_le C f)
     (fun f C => ContinuousLinearMap.opNorm_comp_le f C)
     hA hB hδ hAc hBc hXY
-
-/-- **Operator-norm bound for the Sylvester equation, separated (Davis–Kahan)
-form.**  If the quadratic form of `A` is at least `c + g` and that of `B` at
-most `c`, and `A ∘L X - X ∘L B = Y`, then `‖X‖ ≤ ‖Y‖ / g`.
-
-This is the constant-one estimate behind the dimension-free `sin Θ` theorem:
-the gap `g` divides the residual with no `π / 2` and no dimensional factor.
-It is `le_div_of_comp_sub_comp_eq_rectangular` at `N = ‖·‖`. -/
-theorem opNorm_le_div_of_comp_sub_comp_eq (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {c g : ℝ} (hg : 0 < g)
-    (hAc : ∀ x, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (hBc : ∀ v, RCLike.re ⟪B v, v⟫_𝕜 ≤ c * ‖v‖ ^ 2)
-    (hXY : A ∘L X - X ∘L B = Y) : ‖X‖ ≤ ‖Y‖ / g :=
-  le_div_of_comp_sub_comp_eq_rectangular (N := fun f : F →L[𝕜] E => ‖f‖)
-    (fun f g => norm_add_le f g) (fun a f => norm_smul a f)
-    (fun C f => ContinuousLinearMap.opNorm_comp_le C f)
-    (fun f C => ContinuousLinearMap.opNorm_comp_le f C)
-    hA hB hg hAc hBc hXY
 
 end OperatorNormSylvesterBound
 

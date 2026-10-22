@@ -134,7 +134,7 @@ theorem norm_sylvester_le_of_orderedSeparation_rclike
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvester A B X = C) :
     d * ‖X‖ ≤ ‖C‖ := by
   obtain ⟨c, hBc, hAc⟩ := exists_common_cut_of_orderedSeparation_rclike hsep
   set β : ℝ := min (-(‖B‖ * ‖(1 : E →L[𝕜] E)‖) - 1) (c - 1) with hβ
@@ -164,14 +164,14 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvester A B X = C) :
     d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
   have hEqr : (A.restrictScalars ℝ) ∘L (X.restrictScalars ℝ)
       - (X.restrictScalars ℝ) ∘L (B.restrictScalars ℝ) = C.restrictScalars ℝ := by
     ext x
     have := congrArg (fun T : E →L[𝕜] F => T x) hEq
-    simpa [ContinuousLinearMap.sylvesterOperator] using this
-  have hEqc : ContinuousLinearMap.sylvesterOperator (complexify (A.restrictScalars ℝ))
+    simpa [ContinuousLinearMap.sylvester] using this
+  have hEqc : ContinuousLinearMap.sylvester (complexify (A.restrictScalars ℝ))
       (complexify (B.restrictScalars ℝ)) (complexify (X.restrictScalars ℝ)) =
       complexify (C.restrictScalars ℝ) := by
     show complexify (A.restrictScalars ℝ) ∘L complexify (X.restrictScalars ℝ)
@@ -256,7 +256,7 @@ theorem sinTheta_residual
   let C : F →L[𝕜] Uᗮ :=
     (((Uᗮ).starProjection ∘L residual A X M)).codRestrict Uᗮ
       (fun x => Uᗮ.starProjection_apply_mem _)
-  have hEq : ContinuousLinearMap.sylvesterOperator (A.restrict hU.2) M Y = C :=
+  have hEq : ContinuousLinearMap.sylvester (A.restrict hU.2) M Y = C :=
     directedResidual_sylvesterEquation hA hU
   have hsep' : OrderedSpectraSeparated M ⊤
       (A.restrict hU.2) ⊤ d := by

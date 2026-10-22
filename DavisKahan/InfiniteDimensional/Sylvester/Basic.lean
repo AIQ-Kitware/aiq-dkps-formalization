@@ -7,7 +7,7 @@ import DavisKahan.InfiniteDimensional.Ideals.Symmetric
 import DavisKahan.InfiniteDimensional.Ideals.CompactIntegral
 import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
 import DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator
+import TauCeti.Analysis.InnerProductSpace.Sylvester
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
@@ -66,7 +66,7 @@ theorem norm_sylvester_le_of_orderedSeparation
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvester A B X = C) :
     d * ‖X‖ ≤ ‖C‖ := by
   have hrep := orderedSylvester_reconstruction hA hB hd hsep hEq
   have hgint : Integrable (Set.indicator (Set.Ici 0)
@@ -127,7 +127,7 @@ theorem separatedSylvester_reconstruction
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (X C : Ec →L[ℂ] Fc)
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvester A B X = C) :
     X = separatedSylvesterSolution A B d hd C := by
   unfold separatedSylvesterSolution
   exact separatedSylvester_reconstruction_complex hA hB hd hsep X C hEq
@@ -148,8 +148,8 @@ theorem sylvester_solve
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (C : Ec →L[ℂ] Fc) :
-    ContinuousLinearMap.sylvesterOperator A B (separatedSylvesterSolution A B d hd C) = C := by
-  unfold ContinuousLinearMap.sylvesterOperator separatedSylvesterSolution
+    ContinuousLinearMap.sylvester A B (separatedSylvesterSolution A B d hd C) = C := by
+  unfold ContinuousLinearMap.sylvester separatedSylvesterSolution
   exact spectral_step_integral_right_inverse hA hB hd hsep C
 
 /-- Universal Bhatia--Davis--McIntosh bound. -/
@@ -159,7 +159,7 @@ theorem norm_sylvester_le_of_generalSeparation
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C) :
+    (hEq : ContinuousLinearMap.sylvester A B X = C) :
     d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
   rw [separatedSylvester_reconstruction hA hB hd hsep X C hEq]
   have hint := separatedSylvester_integrable hA hB hd C
@@ -191,11 +191,14 @@ theorem sylvester_unique
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     {X Y : Ec →L[ℂ] Fc}
-    (hX : ContinuousLinearMap.sylvesterOperator A B X = ContinuousLinearMap.sylvesterOperator A B
+    (hX : ContinuousLinearMap.sylvester A B X = ContinuousLinearMap.sylvester A B
       Y) :
     X = Y := by
-  have hzero : ContinuousLinearMap.sylvesterOperator A B (X - Y) = 0 := by
-    rw [ContinuousLinearMap.sylvesterOperator_sub, hX, sub_self]
+  have hzero : ContinuousLinearMap.sylvester A B (X - Y) = 0 := by
+    calc
+      _ = ContinuousLinearMap.sylvester A B X - ContinuousLinearMap.sylvester A B Y :=
+        map_sub (ContinuousLinearMap.sylvester A B) X Y
+      _ = 0 := by rw [hX, sub_self]
   have hle := norm_sylvester_le_of_generalSeparation hA hB hd hsep hzero
   rw [norm_zero, mul_zero] at hle
   have hnorm : ‖X - Y‖ = 0 := by
@@ -215,7 +218,7 @@ theorem compact_mem_of_separatedSylvester_solution
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     {X C : Ec →L[ℂ] Fc}
-    (hEq : ContinuousLinearMap.sylvesterOperator A B X = C)
+    (hEq : ContinuousLinearMap.sylvester A B X = C)
     (hC : IsCompactOperator C) :
     IsCompactOperator X := by
   have hrep := separatedSylvester_reconstruction_complex hA hB hd hsep X C hEq

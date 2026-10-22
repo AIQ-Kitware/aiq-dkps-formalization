@@ -11,14 +11,13 @@ The dimension-free operator-norm Davis–Kahan sin-Θ theorem
 `‖Q̂ ∘L P‖ ≤ ε / g`, where `P` projects onto a `T`-invariant subspace `U` whose
 quadratic form is `≥ (c+g)‖·‖²` and `Q̂` onto an `S`-invariant subspace `V` whose
 quadratic form is `≤ c‖·‖²`.  The operator norm `‖Q̂ ∘L P‖` *is* `‖sinΘ‖_op`.
-Built on the Sylvester operator bound (`opNorm_le_div_of_comp_sub_comp_eq`)
-without any dimension factor.
+Built on Tau Ceti's Sylvester bound without any dimension factor.
 -/
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
-public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+public import TauCeti.Analysis.InnerProductSpace.Sylvester
 import Mathlib.Analysis.InnerProductSpace.Semisimple
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
@@ -149,8 +148,7 @@ theorem exists_isSymmetric_comp_sub_comp_eq (hT : T.IsSymmetric) (hS : S.IsSymme
     ∃ A B : E →L[𝕜] E, A.IsSymmetric ∧ B.IsSymmetric ∧
       (∀ x, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) ∧
       (∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2) ∧
-      A ∘L (U.starProjection ∘L V.starProjection)
-          - (U.starProjection ∘L V.starProjection) ∘L B
+      ContinuousLinearMap.sylvester A B (U.starProjection ∘L V.starProjection)
         = U.starProjection
             ∘L (LinearMap.toContinuousLinearMap T - LinearMap.toContinuousLinearMap S)
             ∘L V.starProjection := by
@@ -243,7 +241,8 @@ theorem exists_isSymmetric_comp_sub_comp_eq (hT : T.IsSymmetric) (hS : S.IsSymme
       simp only [hY, ContinuousLinearMap.comp_apply, sub_apply, hTc, hSc,
         LinearMap.coe_toContinuousLinearMap', map_sub]
     rw [sub_apply, hAX, hXB, hYx, hTP]
-  exact ⟨A, B, hAsym, hBsym, hAc, hBc, hsylv⟩
+  exact ⟨A, B, hAsym, hBsym, hAc, hBc,
+    by simpa only [ContinuousLinearMap.sylvester_apply] using hsylv⟩
 
 /-- **The operator-norm Davis–Kahan sin-Θ theorem.**  Let `T, S` be symmetric,
 `U` a `T`-invariant subspace with quadratic form `≥ (c+g)‖·‖²`, and `V` an
@@ -286,8 +285,12 @@ theorem norm_starProjection_comp_starProjection_le (hT : T.IsSymmetric) (hS : S.
           rw [hQ]; exact V.norm_starProjection_apply_le x
   -- Sylvester bound: `‖X‖ ≤ ‖Y‖ / g ≤ ε / g`.
   have hXbound : ‖X‖ ≤ ε / g :=
-    calc ‖X‖ ≤ ‖Y‖ / g :=
-          TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_sub_comp_eq hAsym hBsym hg hAc hBc hsylv
+    calc ‖X‖ ≤ ‖Y‖ / g := (le_div_iff₀ hg).2 (by
+          calc ‖X‖ * g ≤ ‖ContinuousLinearMap.sylvester A B X‖ := by
+                simpa [mul_comm] using
+                  ContinuousLinearMap.mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le
+                    hAc hBc X
+            _ = ‖Y‖ := congrArg norm hsylv)
       _ ≤ ε / g := by gcongr
   -- `‖Q ∘L P‖ = ‖P ∘L Q‖ = ‖X‖`.
   have hstar : star (Q ∘L P) = P ∘L Q := by
