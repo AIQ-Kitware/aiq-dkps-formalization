@@ -145,11 +145,11 @@ theorem sylvester_offDiagonalPart_of_mem (x : A.domain) (hx : (x : H) ∈ U) :
     rw [← this]
     simp only [add_apply, hCdef, hSdef, map_add]
   -- the four memberships that decide which projection survives
-  have hACU : A ⟨C (x : H), hCmem⟩ ∈ U := hred.invariant _ hCU
-  have hASU : A ⟨S (x : H), hSmem⟩ ∈ Uᗮ := hred.orthogonal_invariant _ hSU
+  have hACU : A ⟨C (x : H), hCmem⟩ ∈ U := hred.invariant.apply_mem _ hCU
+  have hASU : A ⟨S (x : H), hSmem⟩ ∈ Uᗮ := hred.orthogonal_invariant.apply_mem _ hSU
   have hBCU : B (C (x : H)) ∈ Uᗮ := hB.1 _ hCU
   have hBSU : B (S (x : H)) ∈ U := hB.2 _ hSU
-  have hAxU : (A x) ∈ U := hred.invariant _ hx
+  have hAxU : (A x) ∈ U := hred.invariant.apply_mem _ hx
   have hBxU : B (x : H) ∈ Uᗮ := hB.1 _ hx
   -- project the commutation identity onto `Uᗮ`
   have hcomm := hZcomm x
@@ -191,11 +191,11 @@ theorem sylvester_offDiagonalPart_of_mem_orthogonal (x : A.domain)
       (diagonalPart_add_offDiagonalPart U Z)
     rw [← this]
     simp only [add_apply, hCdef, hSdef, map_add]
-  have hACU : A ⟨C (x : H), hCmem⟩ ∈ Uᗮ := hred.orthogonal_invariant _ hCU
-  have hASU : A ⟨S (x : H), hSmem⟩ ∈ U := hred.invariant _ hSU
+  have hACU : A ⟨C (x : H), hCmem⟩ ∈ Uᗮ := hred.orthogonal_invariant.apply_mem _ hCU
+  have hASU : A ⟨S (x : H), hSmem⟩ ∈ U := hred.invariant.apply_mem _ hSU
   have hBCU : B (C (x : H)) ∈ U := hB.2 _ hCU
   have hBSU : B (S (x : H)) ∈ Uᗮ := hB.1 _ hSU
-  have hAxU : (A x) ∈ Uᗮ := hred.orthogonal_invariant _ hx
+  have hAxU : (A x) ∈ Uᗮ := hred.orthogonal_invariant.apply_mem _ hx
   have hBxU : B (x : H) ∈ U := hB.2 _ hx
   have hcomm := hZcomm x
   have hproj := congrArg U.starProjection hcomm
