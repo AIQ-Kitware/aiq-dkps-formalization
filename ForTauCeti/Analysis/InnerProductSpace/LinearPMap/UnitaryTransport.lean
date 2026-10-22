@@ -195,27 +195,22 @@ variable (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) (U : Submodule 𝕜 
 
 /-- The image subspace of a reducing subspace reduces the conjugated operator.
 
-Both halves of `ReducesSubspace` transport for the same two reasons: the
+Both halves of `_root_.LinearPMap.IsReducing` transport for the same two reasons: the
 orthogonal projection onto `U.map W` is `W ∘ P_U ∘ W⁻¹`
 (`Submodule.starProjection_map_apply`) and the orthogonal complement of an image
 is the image of the complement (`Submodule.map_orthogonal_equiv`). -/
-theorem reducesSubspace_unitaryConj (hred : ReducesSubspace A U) :
-    ReducesSubspace (_root_.LinearPMap.unitaryConj W A)
+theorem reducesSubspace_unitaryConj (hred : _root_.LinearPMap.IsReducing A U) :
+    _root_.LinearPMap.IsReducing (_root_.LinearPMap.unitaryConj W A)
       (U.map (W.toLinearEquiv : H →ₗ[𝕜] H')) := by
   have hperp : (U.map (W.toLinearEquiv : H →ₗ[𝕜] H'))ᗮ =
       Uᗮ.map (W.toLinearEquiv : H →ₗ[𝕜] H') :=
     (Submodule.map_orthogonal_equiv U W).symm
-  refine ReducesSubspace.of_components ?_ ?_ ?_ ?_
-  · intro x
-    rw [Submodule.starProjection_map_apply, _root_.LinearPMap.mem_unitaryConj_domain_iff,
-      W.symm_apply_apply]
-    exact hred.projection_mem_domain ⟨W.symm (x : H'),
-      (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩
-  · intro x
-    rw [Submodule.starProjection_congr_apply hperp, Submodule.starProjection_map_apply,
+  refine ⟨?_, ?_, ?_⟩
+  · intro x hx
+    rw [Submodule.starProjection_map_apply,
       _root_.LinearPMap.mem_unitaryConj_domain_iff, W.symm_apply_apply]
-    exact hred.orthogonalProjection_mem_domain ⟨W.symm (x : H'),
-      (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩
+    exact hred.starProjection_mem_domain
+      ((_root_.LinearPMap.mem_unitaryConj_domain_iff).mp hx)
   · rw [_root_.LinearPMap.isInvariant_iff]
     intro x hx
     have hpre : W.symm (x : H') ∈ U := by
@@ -226,7 +221,7 @@ theorem reducesSubspace_unitaryConj (hred : ReducesSubspace A U) :
     exact Submodule.mem_map.mpr
       ⟨A ⟨W.symm (x : H'),
           (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩,
-        hred.invariant.apply_mem ⟨W.symm (x : H'),
+        hred.isInvariant.apply_mem ⟨W.symm (x : H'),
           (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩ hpre, rfl⟩
   · rw [_root_.LinearPMap.isInvariant_iff]
     intro x hx
@@ -239,7 +234,7 @@ theorem reducesSubspace_unitaryConj (hred : ReducesSubspace A U) :
     exact Submodule.mem_map.mpr
       ⟨A ⟨W.symm (x : H'),
           (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩,
-        hred.orthogonal_invariant.apply_mem ⟨W.symm (x : H'),
+        hred.isInvariant_orthogonal.apply_mem ⟨W.symm (x : H'),
           (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩ hpre, rfl⟩
 
 /-- The restriction of a unitary equivalence to a subspace and its image. -/
@@ -266,7 +261,7 @@ Restricting `W A W⁻¹` to the image subspace is the same partial map as
 conjugating the restriction of `A` to `U` by the restricted unitary
 `U ≃ₗᵢ U.map W`.  Both sides have domain `{x ∈ U.map W | W⁻¹ x ∈ dom A}` and both
 send `x` to `W (A (W⁻¹ x))`, so this is an equality on the nose. -/
-theorem reducingRestriction_unitaryConj (hred : ReducesSubspace A U) :
+theorem reducingRestriction_unitaryConj (hred : _root_.LinearPMap.IsReducing A U) :
     reducingRestriction (_root_.LinearPMap.unitaryConj W A) (U.map (W.toLinearEquiv : H →ₗ[𝕜] H'))
         (reducesSubspace_unitaryConj W A U hred) =
       _root_.LinearPMap.unitaryConj (submoduleMapIsometry W U) (reducingRestriction A U hred) := by

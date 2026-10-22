@@ -421,7 +421,7 @@ be half-infinite. -/
 theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_complex
     (hA : IsSelfAdjoint A)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
@@ -526,7 +526,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)

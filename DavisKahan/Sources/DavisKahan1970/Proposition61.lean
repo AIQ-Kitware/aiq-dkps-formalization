@@ -325,8 +325,8 @@ theorem proposition6_1_commonDomain_sinAngleOperator_complex
     (N : SymmetricNormingFunction)
     {A B : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (hU : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing B V)
     (Hop : E →L[ℂ] E)
     (hdomain : A.domain = B.domain)
     (hperturbation : ∀ (x : E) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
@@ -363,8 +363,8 @@ theorem proposition6_1_commonDomain_complex
     (N : SymmetricNormingFunction)
     {A B : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (hU : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing B V)
     (Hop : E →L[ℂ] E)
     (hdomain : A.domain = B.domain)
     (hperturbation : ∀ (x : E) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
@@ -396,8 +396,8 @@ theorem proposition6_1_commonDomain_projectorDifference_real
     (N : SymmetricNormingFunction)
     {A B : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℝ Er} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (hU : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing B V)
     (Hop : Er →L[ℝ] Er)
     (hdomain : A.domain = B.domain)
     (hperturbation : ∀ (x : Er) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
@@ -439,8 +439,8 @@ theorem proposition6_1_commonDomain_real
     (N : SymmetricNormingFunction)
     {A B : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℝ Er} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (hU : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing B V)
     (Hop : Er →L[ℝ] Er)
     (hdomain : A.domain = B.domain)
     (hperturbation : ∀ (x : Er) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
@@ -495,8 +495,8 @@ theorem proposition6_1_commonDomain_projectorDifference
     (N : SymmetricNormingFunction)
     {A B : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (hU : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing B V)
     (Hop : E →L[𝕜] E)
     (hdomain : A.domain = B.domain)
     (hperturbation : ∀ (x : E) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
@@ -543,8 +543,8 @@ theorem proposition6_1_commonDomain_presentation_rclike
     (N : SymmetricNormingFunction)
     {A B : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (hU : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing B V)
     (Hop : E →L[𝕜] E)
     (hdomain : A.domain = B.domain)
     (hperturbation : ∀ (x : E) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),

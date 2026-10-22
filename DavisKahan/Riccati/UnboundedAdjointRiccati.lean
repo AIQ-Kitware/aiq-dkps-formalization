@@ -90,7 +90,7 @@ because it is not a consequence of the ambient graph equality alone"), and the
 adjoint side is no better.
 
 Concretely, reduction *does* give something, just not enough. Writing
-`R₀ := (I + X†X)⁻¹`, the projection-preserves-domain half of `ReducesSubspace`
+`R₀ := (I + X†X)⁻¹`, the projection-preserves-domain half of `_root_.LinearPMap.IsReducing`
 applied to `(u, 0)` and to `(0, z)` yields
 
 ```
@@ -135,7 +135,7 @@ theorem unboundedBlockGraphOrthogonalDomainVector_mem
 /-- **The adjoint Riccati equation.**
 
 Invariance of the *orthogonal complement* of the angular graph — the half of
-`ReducesSubspace` that plain invariance does not give — is exactly the statement
+`_root_.LinearPMap.IsReducing` that plain invariance does not give — is exactly the statement
 that `X†` intertwines the two diagonal blocks up to the off-diagonal coupling.
 
 Together with `strongSolvesRiccati_iff_pointwise` this is what makes the

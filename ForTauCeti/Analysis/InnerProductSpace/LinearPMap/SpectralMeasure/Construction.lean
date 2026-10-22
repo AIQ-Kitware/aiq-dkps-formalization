@@ -684,17 +684,12 @@ theorem specRange_compl :
 
 /-- **A spectral range reduces the operator.**  Both orthogonal components
 preserve the domain and are invariant under the self-adjoint partial map. -/
-theorem reducesSubspace_specRange : ReducesSubspace A (specRange hA B hB) := by
+theorem reducesSubspace_specRange : _root_.LinearPMap.IsReducing A (specRange hA B hB) := by
   have hstar := specProjection_eq_starProjection_specRange hA B hB
-  refine ReducesSubspace.of_components ?_ ?_ ?_ ?_
-  · intro x
+  refine ⟨?_, ?_, ?_⟩
+  · intro x hx
     rw [← hstar]
-    exact specProjection_mem_domain hA B hB x
-  · intro x
-    rw [Submodule.starProjection_orthogonal]
-    change (x : H) - (specRange hA B hB).starProjection (x : H) ∈ A.domain
-    rw [← hstar]
-    exact A.domain.sub_mem x.property (specProjection_mem_domain hA B hB x)
+    exact specProjection_mem_domain hA B hB ⟨x, hx⟩
   · rw [_root_.LinearPMap.isInvariant_iff]
     intro x hx
     exact apply_mem_specRange hA B hB hx

@@ -60,7 +60,7 @@ instance canonicalLowBranchUnbounded_hasOrthogonalProjection
 /-- The branch reduces the perturbed operator. -/
 theorem canonicalLowBranchUnbounded_reduces
     {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (alpha : ℝ) :
-    TauCeti.LinearPMap.ReducesSubspace B (canonicalLowBranchUnbounded hB alpha) :=
+    _root_.LinearPMap.IsReducing B (canonicalLowBranchUnbounded hB alpha) :=
   TauCeti.LinearPMap.reducesSubspace_specRange hB _ _
 
 /-- The complement of the branch is the spectral range of the open upper
@@ -214,7 +214,7 @@ The repulsion is `notMem_spectrum_addBounded_of_offDiagonal_form_gap`; the two
 bounds are the half-line energy bounds of the spectral measure. -/
 theorem theorem8_1_canonicalBranchUnbounded_form
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hredP : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hredP : _root_.LinearPMap.IsReducing A P)
     (hPhigh : ∀ x : A.domain, (x : H) ∈ P →
       (alpha + delta) * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     (hPperpLow : ∀ x : A.domain, (x : H) ∈ Pᗮ →
@@ -256,14 +256,14 @@ off-diagonal.  The branch `Q` reduces `A + H`, carries `Λ₀ ≤ α` and
 `Λ₁ ≥ α + δ`, and satisfies the printed `Θ(P, Q) ≤ π/4`. -/
 theorem theorem8_1_canonicalBranchUnbounded_printed
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hredPperp : _root_.LinearPMap.IsReducing A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : H) ∈ P →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : H) ∈ Pᗮ →
       (alpha + delta) * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
-    TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop)
+    _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop)
         (canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha) ∧
       (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain,
         (x : H) ∈ canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha →
@@ -305,7 +305,7 @@ closed quarter turn.  The hypotheses on `A` and `H` are the `tan 2θ` theorem's,
 which Theorem 8.1 inherits, and they too are given spectrally. -/
 theorem theorem8_1_maximalAngle_le_of_spectrumIn_unbounded
     (hA : IsSelfAdjoint A) (hHsa : IsSelfAdjoint Hop)
-    (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hredPperp : _root_.LinearPMap.IsReducing A Pᗮ)
     (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P
         (by simpa only [Submodule.orthogonal_orthogonal] using hredPperp.orthogonal))
@@ -314,7 +314,7 @@ theorem theorem8_1_maximalAngle_le_of_spectrumIn_unbounded
       (TauCeti.LinearPMap.reducingRestriction A Pᗮ hredPperp)
       ⊆ Set.Ici (alpha + delta))
     {M : Submodule ℂ H} [M.HasOrthogonalProjection]
-    (hM : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) M)
+    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M)
     (hMspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) M hM)
       ⊆ Set.Iic alpha)
@@ -324,7 +324,7 @@ theorem theorem8_1_maximalAngle_le_of_spectrumIn_unbounded
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
     TauCeti.DavisKahanExt.maximalAngle P M ≤ Real.pi / 4 := by
-  have hredP : TauCeti.LinearPMap.ReducesSubspace A P := by
+  have hredP : _root_.LinearPMap.IsReducing A P := by
     simpa only [Submodule.orthogonal_orthogonal] using hredPperp.orthogonal
   have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     DavisKahan.addBounded_isSelfAdjoint A hA Hop

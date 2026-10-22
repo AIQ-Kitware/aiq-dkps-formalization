@@ -31,13 +31,13 @@ omit [CompleteSpace E] in
 /-- **A reducing projection commutes with the operator on its domain.** -/
 theorem starProjection_apply_eq_of_reduces
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (x : A.domain) :
+    (hred : _root_.LinearPMap.IsReducing A U) (x : A.domain) :
     U.starProjection (A x) =
-      A ⟨U.starProjection (x : E), hred.projection_mem_domain x⟩ := by
+      A ⟨U.starProjection (x : E), hred.starProjection_mem_domain x.property⟩ := by
   obtain ⟨a, ha, hadef⟩ : ∃ a, ∃ h : a ∈ A.domain, a = U.starProjection (x : E) :=
-    ⟨_, hred.projection_mem_domain x, rfl⟩
+    ⟨_, hred.starProjection_mem_domain x.property, rfl⟩
   obtain ⟨b, hb, hbdef⟩ : ∃ b, ∃ h : b ∈ A.domain, b = Uᗮ.starProjection (x : E) :=
-    ⟨_, hred.orthogonalProjection_mem_domain x, rfl⟩
+    ⟨_, TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property, rfl⟩
   have haU : a ∈ U := hadef ▸ U.starProjection_apply_mem _
   have hbU : b ∈ Uᗮ := hbdef ▸ Uᗮ.starProjection_apply_mem _
   have hsplit : (x : E) = a + b := by
@@ -47,10 +47,10 @@ theorem starProjection_apply_eq_of_reduces
   have hgoal : U.starProjection (A x) = A ⟨a, ha⟩ := by
     rw [hxeq, _root_.LinearPMap.map_add, map_add]
     have h1 : U.starProjection (A (⟨a, ha⟩ : A.domain)) = A ⟨a, ha⟩ :=
-      Submodule.starProjection_eq_self_iff.mpr (hred.invariant ⟨a, ha⟩ haU)
+      Submodule.starProjection_eq_self_iff.mpr (hred.isInvariant.apply_mem ⟨a, ha⟩ haU)
     have h2 : U.starProjection (A (⟨b, hb⟩ : A.domain)) = 0 := by
       rw [Submodule.starProjection_apply_eq_zero_iff]
-      exact hred.orthogonal_invariant ⟨b, hb⟩ hbU
+      exact hred.isInvariant_orthogonal ⟨b, hb⟩ hbU
     rw [h1, h2, add_zero]
   rw [hgoal]
   congr 1
@@ -70,7 +70,7 @@ If `lam` inverts both blocks, the direct sum of the two block inverses inverts
 `A - lam`, because `A` acts blockwise on a reducing decomposition. -/
 theorem realSpectrum_subset_union_of_reduces
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) :
+    (hred : _root_.LinearPMap.IsReducing A U) :
     _root_.LinearPMap.realSpectrum A ⊆
       _root_.LinearPMap.realSpectrum
           (TauCeti.LinearPMap.reducingRestriction A U hred) ∪
@@ -92,9 +92,9 @@ theorem realSpectrum_subset_union_of_reduces
   · -- left inverse
     intro x
     obtain ⟨a, ha, hadef⟩ : ∃ a, ∃ h : a ∈ A.domain, a = U.starProjection (x : E) :=
-      ⟨_, hred.projection_mem_domain x, rfl⟩
+      ⟨_, hred.starProjection_mem_domain x.property, rfl⟩
     obtain ⟨b, hb, hbdef⟩ : ∃ b, ∃ h : b ∈ A.domain, b = Uᗮ.starProjection (x : E) :=
-      ⟨_, hred.orthogonalProjection_mem_domain x, rfl⟩
+      ⟨_, TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property, rfl⟩
     have haU : a ∈ U := hadef ▸ U.starProjection_apply_mem _
     have hbU : b ∈ Uᗮ := hbdef ▸ Uᗮ.starProjection_apply_mem _
     -- the `U` leg
@@ -107,9 +107,9 @@ theorem realSpectrum_subset_union_of_reduces
       have hcomm := starProjection_apply_eq_of_reduces hred x
       show U.starProjection (A x - (lam : 𝕜) • (x : E)) = _
       rw [map_sub, hcomm, map_smul]
-      show (A ⟨U.starProjection (x : E), hred.projection_mem_domain x⟩ : E)
+      show (A ⟨U.starProjection (x : E), hred.starProjection_mem_domain x.property⟩ : E)
         - (lam : 𝕜) • U.starProjection (x : E) = (A ⟨a, ha⟩ : E) - (lam : 𝕜) • a
-      have hsub : (⟨U.starProjection (x : E), hred.projection_mem_domain x⟩ : A.domain)
+      have hsub : (⟨U.starProjection (x : E), hred.starProjection_mem_domain x.property⟩ : A.domain)
           = ⟨a, ha⟩ := Subtype.ext hadef.symm
       rw [hsub, ← hadef]
     -- the `Uᗮ` leg
@@ -123,9 +123,9 @@ theorem realSpectrum_subset_union_of_reduces
       have hcomm := starProjection_apply_eq_of_reduces hred.orthogonal x
       show Uᗮ.starProjection (A x - (lam : 𝕜) • (x : E)) = _
       rw [map_sub, hcomm, map_smul]
-      show (A ⟨Uᗮ.starProjection (x : E), hred.orthogonal.projection_mem_domain x⟩ : E)
+      show (A ⟨Uᗮ.starProjection (x : E), hred.orthogonal.starProjection_mem_domain x.property⟩ : E)
         - (lam : 𝕜) • Uᗮ.starProjection (x : E) = (A ⟨b, hb⟩ : E) - (lam : 𝕜) • b
-      have hsub : (⟨Uᗮ.starProjection (x : E), hred.orthogonal.projection_mem_domain x⟩
+      have hsub : (⟨Uᗮ.starProjection (x : E), hred.orthogonal.starProjection_mem_domain x.property⟩
           : A.domain) = ⟨b, hb⟩ := Subtype.ext hbdef.symm
       rw [hsub, ← hbdef]
     show (U.subtypeL (R1 (U.orthogonalProjectionOnto (A x - (lam : 𝕜) • (x : E)))) : E)
@@ -215,15 +215,17 @@ theorem reducesSubspace_of_isSelfAdjoint_of_invariant
     [U.HasOrthogonalProjection]
     (hproj : ∀ x : A.domain, U.starProjection (x : E) ∈ A.domain)
     (hinv : A.IsInvariant U) :
-    TauCeti.LinearPMap.ReducesSubspace A U := by
+    _root_.LinearPMap.IsReducing A U := by
   have hperp : ∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain := by
     intro x
     have h : Uᗮ.starProjection (x : E) = (x : E) - U.starProjection (x : E) :=
       Submodule.starProjection_orthogonal_apply U (x : E)
     rw [h]
     exact A.domain.sub_mem x.2 (hproj x)
-  exact TauCeti.LinearPMap.ReducesSubspace.of_components hproj hperp hinv
-    (invariantSubspace_orthogonal_of_isSelfAdjoint hA hproj hinv)
+  refine ⟨?_, hinv, ?_⟩
+  · intro x hx
+    exact hproj ⟨x, hx⟩
+  · exact invariantSubspace_orthogonal_of_isSelfAdjoint hA hproj hinv
 
 end DavisKahan
 end TauCeti

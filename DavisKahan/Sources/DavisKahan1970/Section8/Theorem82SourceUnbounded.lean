@@ -113,7 +113,7 @@ section RitzBlock
 theorem exists_ritzBlock_of_realSpectrum_subset_Icc_complex
     {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A) {P : Submodule ℂ Hc}
-    [P.HasOrthogonalProjection] (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    [P.HasOrthogonalProjection] (hPred : _root_.LinearPMap.IsReducing A P)
     {b a : ℝ} (hba : b ≤ a)
     (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred) ⊆ Set.Icc b a) :
@@ -148,7 +148,7 @@ realization is the real Ritz block. -/
 theorem exists_ritzBlock_of_realSpectrum_subset_Icc_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A) {P : Submodule ℝ Er}
-    [P.HasOrthogonalProjection] (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    [P.HasOrthogonalProjection] (hPred : _root_.LinearPMap.IsReducing A P)
     {b a : ℝ} (hba : b ≤ a)
     (hPspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction A P hPred) ⊆ Set.Icc b a) :
@@ -208,8 +208,8 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_complex
     (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
@@ -244,8 +244,8 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_real
     (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
@@ -285,8 +285,8 @@ theorem theorem8_2_residual_sourceExact_unbounded_complex
     (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
@@ -338,8 +338,8 @@ theorem theorem8_2_residual_sourceExact_unbounded_real
     (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Q hQred)

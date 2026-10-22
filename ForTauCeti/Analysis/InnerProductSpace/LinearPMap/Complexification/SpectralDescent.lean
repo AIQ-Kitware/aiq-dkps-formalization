@@ -506,15 +506,12 @@ theorem apply_mem_realSpecRange
 theorem realSpecRange_reduces
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
-    ReducesSubspace A (realSpecRange hA S hS) := by
+    _root_.LinearPMap.IsReducing A (realSpecRange hA S hS) := by
   have hstar := realSpecProjection_eq_starProjection hA S hS
-  refine ReducesSubspace.of_components ?_ ?_ ?_ ?_
-  · intro x
+  refine ⟨?_, ?_, ?_⟩
+  · intro x hx
     rw [← hstar]
-    exact realSpecProjection_mem_domain hA hS x
-  · intro x
-    rw [Submodule.starProjection_orthogonal_apply, ← hstar]
-    exact A.domain.sub_mem x.property (realSpecProjection_mem_domain hA hS x)
+    exact realSpecProjection_mem_domain hA hS ⟨x, hx⟩
   · rw [_root_.LinearPMap.isInvariant_iff]
     intro x hx
     exact apply_mem_realSpecRange hA S hS hx

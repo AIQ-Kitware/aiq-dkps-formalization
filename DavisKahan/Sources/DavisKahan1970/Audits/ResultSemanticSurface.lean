@@ -389,7 +389,7 @@ theorem sinTwoTheta_directed_orientation_sourceAudit_complex
     [CompleteSpace trial]
     {ritz : trial →L[ℂ] trial} {residual : trial →L[ℂ] Hc}
     {gapCarrier : Submodule ℂ Hc} [gapCarrier.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A gapCarrier)
+    (hred : _root_.LinearPMap.IsReducing A gapCarrier)
     (hVdom : ∀ v : trial, (v : Hc) ∈ A.domain)
     (hres : ∀ v : trial, A ⟨(v : Hc), hVdom v⟩ = residual v + ((ritz v : trial) : Hc))
     {δ : ℝ} (hδ : 0 < δ)
@@ -414,7 +414,7 @@ theorem sinTwoTheta_directed_orientation_sourceAudit_real
     [CompleteSpace trial]
     {ritz : trial →L[ℝ] trial} {residual : trial →L[ℝ] Er}
     {gapCarrier : Submodule ℝ Er} [gapCarrier.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A gapCarrier)
+    (hred : _root_.LinearPMap.IsReducing A gapCarrier)
     (hVdom : ∀ v : trial, (v : Er) ∈ A.domain)
     (hres : ∀ v : trial, A ⟨(v : Er), hVdom v⟩ = residual v + ((ritz v : trial) : Er))
     {δ : ℝ} (hδ : 0 < δ)

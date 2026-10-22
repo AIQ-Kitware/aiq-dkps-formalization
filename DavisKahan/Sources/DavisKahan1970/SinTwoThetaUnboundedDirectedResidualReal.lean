@@ -270,7 +270,7 @@ arbitrary reducing subspace.**
 theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_real
     (hA : IsSelfAdjoint A)
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : E) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
     {δ : ℝ} (hδ : 0 < δ)
@@ -367,7 +367,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hVdom : ∀ v : V, (v : E) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
     {δ : ℝ} (hδ : 0 < δ)

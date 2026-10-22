@@ -44,8 +44,8 @@ variable (N : NormalizedSymmetricOperatorIdealFamily.{u, v} K)
 variable {A T : E →ₗ.[K] E} (hA : IsSelfAdjoint A) (hT : IsSelfAdjoint T)
   (hdom : T.domain = A.domain)
 variable {P Q : Submodule K E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-  (hP : TauCeti.LinearPMap.ReducesSubspace A P)
-  (hQ : TauCeti.LinearPMap.ReducesSubspace T Q)
+  (hP : _root_.LinearPMap.IsReducing A P)
+  (hQ : _root_.LinearPMap.IsReducing T Q)
 variable {gap : Real} (hgapPos : 0 < gap)
   (hgap : FormBoundedSylvesterGap
     (TauCeti.LinearPMap.reducingRestriction T Q hQ)

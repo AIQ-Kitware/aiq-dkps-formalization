@@ -187,9 +187,11 @@ theorem realPlane_zeroResidual_model :
   let A0 : RealPlane →ₗ.[ℝ] RealPlane :=
     ((0 : RealPlane →L[ℝ] RealPlane).toLinearMap.toPMap ⊤)
   let U : Submodule ℝ RealPlane := ⊤
-  have hred : TauCeti.LinearPMap.ReducesSubspace A U := by
-    simp [A, U, TauCeti.LinearPMap.ReducesSubspace,
-      _root_.LinearPMap.isInvariant_iff]
+  have hred : _root_.LinearPMap.IsReducing A U := by
+    simpa [A, U] using
+      (_root_.LinearPMap.isReducing_toPMap_top_iff
+        (f := (0 : RealPlane →ₗ[ℝ] RealPlane)) (U := (⊤ : Submodule ℝ RealPlane))).2
+        (by simp [Submodule.isReducing_iff])
   have hA : IsSelfAdjoint A := by
     exact _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := (0 : RealPlane →L[ℝ] RealPlane))
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (by intro x y; simp))

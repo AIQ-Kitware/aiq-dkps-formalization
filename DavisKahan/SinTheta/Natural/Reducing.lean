@@ -84,7 +84,7 @@ def unboundedSinThetaDataOfReducingSubspace
     (A : E →ₗ.[𝕜] E)
     (_hAdense : Dense (A.domain : Set E)) (_hAclosed : A.IsClosed)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (A0 : F →ₗ.[𝕜] F)
     (_hA0dense : Dense (A0.domain : Set F)) (_hA0closed : A0.IsClosed)
     (X Rop : F →L[𝕜] E)
@@ -111,7 +111,7 @@ structure NaturalReducingIsometricSinThetaProblem
   A_dense : Dense (A.domain : Set E)
   A_closed : A.IsClosed
   ambient_selfAdjoint : _root_.IsSelfAdjoint A
-  reduces : TauCeti.LinearPMap.ReducesSubspace A U
+  reduces : _root_.LinearPMap.IsReducing A U
   A₀ : F →ₗ.[𝕜] F
   A₀_dense : Dense (A₀.domain : Set F)
   A₀_closed : A₀.IsClosed
@@ -152,7 +152,7 @@ structure NaturalReducingGeneralSinThetaProblem
   A_dense : Dense (A.domain : Set E)
   A_closed : A.IsClosed
   ambient_selfAdjoint : _root_.IsSelfAdjoint A
-  reduces : TauCeti.LinearPMap.ReducesSubspace A U
+  reduces : _root_.LinearPMap.IsReducing A U
   A₀ : F →ₗ.[𝕜] F
   A₀_dense : Dense (A₀.domain : Set F)
   A₀_closed : A₀.IsClosed
@@ -264,7 +264,7 @@ theorem sinTheta_unbounded_complex_reducingSubspace
     (hAdense : Dense (A.domain : Set EC)) (hAclosed : A.IsClosed)
     (hA : _root_.IsSelfAdjoint A)
     (U : Submodule ℂ EC) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (A0 : FC →ₗ.[ℂ] FC)
     (hA0dense : Dense (A0.domain : Set FC)) (hA0closed : A0.IsClosed)
     (hA0 : _root_.IsSelfAdjoint A0)
@@ -310,7 +310,7 @@ theorem generalizedSinTheta_unbounded_complex_reducingSubspace
     (hAdense : Dense (A.domain : Set EC)) (hAclosed : A.IsClosed)
     (hA : _root_.IsSelfAdjoint A)
     (U : Submodule ℂ EC) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (A0 : FC →ₗ.[ℂ] FC)
     (hA0dense : Dense (A0.domain : Set FC)) (hA0closed : A0.IsClosed)
     (hA0 : _root_.IsSelfAdjoint A0)
@@ -435,7 +435,7 @@ theorem sinTheta_unbounded_real_reducingSubspace
     (hAdense : Dense (A.domain : Set ER)) (hAclosed : A.IsClosed)
     (hA : _root_.IsSelfAdjoint A)
     (U : Submodule ℝ ER) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (A0 : FR →ₗ.[ℝ] FR)
     (hA0dense : Dense (A0.domain : Set FR)) (hA0closed : A0.IsClosed)
     (hA0 : _root_.IsSelfAdjoint A0)
@@ -481,7 +481,7 @@ theorem generalizedSinTheta_unbounded_real_reducingSubspace
     (hAdense : Dense (A.domain : Set ER)) (hAclosed : A.IsClosed)
     (hA : _root_.IsSelfAdjoint A)
     (U : Submodule ℝ ER) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (A0 : FR →ₗ.[ℝ] FR)
     (hA0dense : Dense (A0.domain : Set FR)) (hA0closed : A0.IsClosed)
     (hA0 : _root_.IsSelfAdjoint A0)

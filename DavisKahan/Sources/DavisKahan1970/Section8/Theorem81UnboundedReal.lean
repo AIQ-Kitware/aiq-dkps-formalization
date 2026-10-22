@@ -161,7 +161,7 @@ theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real
     {A : Er →ₗ.[ℝ] Er} {Hop : Er →L[ℝ] Er} {P : Submodule ℝ Er}
     [P.HasOrthogonalProjection] {alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hredPperp : _root_.LinearPMap.IsReducing A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : Er) ∈ P →
       ⟪A x, (x : Er)⟫_ℝ ≤ alpha * ‖(x : Er)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : Er) ∈ Pᗮ →
@@ -169,7 +169,7 @@ theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (M : Submodule ℝ Er) [M.HasOrthogonalProjection]
-    (hM : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) M) :
+    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M) :
     TauCeti.DavisKahanExt.maximalAngle P M ≤ Real.pi / 4 ↔
       ((∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Er) ∈ M →
           ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : Er)⟫_ℝ ≤ alpha * ‖(x : Er)‖ ^ 2) ∧
@@ -185,11 +185,11 @@ theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real
       (complexify Hop)
       = TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A Hop) :=
     (TauCeti.DavisKahan1970.complexifyReal_addBounded A Hop).symm
-  have hredPperpC : TauCeti.LinearPMap.ReducesSubspace
+  have hredPperpC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)ᗮ := by
     simpa only [complexifySubmodule_orthogonal] using
       TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hredPperp
-  have hMC : TauCeti.LinearPMap.ReducesSubspace
+  have hMC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
       (complexifySubmodule M) := by
     rw [hsum]
@@ -237,7 +237,7 @@ instance canonicalLowBranchUnboundedReal_hasOrthogonalProjection
 /-- The real branch reduces the perturbed operator. -/
 theorem canonicalLowBranchUnboundedReal_reduces
     {B : Er →ₗ.[ℝ] Er} (hB : IsSelfAdjoint B) (alpha : ℝ) :
-    TauCeti.LinearPMap.ReducesSubspace B (canonicalLowBranchUnboundedReal hB alpha) :=
+    _root_.LinearPMap.IsReducing B (canonicalLowBranchUnboundedReal hB alpha) :=
   TauCeti.LinearPMap.realSpecRange_reduces hB _ _
 
 /-- The complexified real branch is the complex branch. -/
@@ -268,14 +268,14 @@ theorem theorem8_1_canonicalBranchUnbounded_printed_real
     {A : Er →ₗ.[ℝ] Er} {Hop : Er →L[ℝ] Er} {P : Submodule ℝ Er}
     [P.HasOrthogonalProjection] {alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hredPperp : _root_.LinearPMap.IsReducing A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : Er) ∈ P →
       ⟪A x, (x : Er)⟫_ℝ ≤ alpha * ‖(x : Er)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : Er) ∈ Pᗮ →
       (alpha + delta) * ‖(x : Er)‖ ^ 2 ≤ ⟪A x, (x : Er)⟫_ℝ)
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
-    TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop)
+    _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop)
         (canonicalLowBranchUnboundedReal
           (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha) ∧
       (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain,
@@ -303,7 +303,7 @@ theorem theorem8_1_canonicalBranchUnbounded_printed_real
       (complexify Hop)
       = TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A Hop) :=
     (TauCeti.DavisKahan1970.complexifyReal_addBounded A Hop).symm
-  have hredPperpC : TauCeti.LinearPMap.ReducesSubspace
+  have hredPperpC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)ᗮ := by
     simpa only [complexifySubmodule_orthogonal] using
       TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hredPperp
@@ -338,7 +338,7 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real
     {A : Er →ₗ.[ℝ] Er} {Hop : Er →L[ℝ] Er} {P : Submodule ℝ Er}
     [P.HasOrthogonalProjection] {alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hredPperp : TauCeti.LinearPMap.ReducesSubspace A Pᗮ)
+    (hredPperp : _root_.LinearPMap.IsReducing A Pᗮ)
     (hPlow : ∀ x : A.domain, (x : Er) ∈ P →
       ⟪A x, (x : Er)⟫_ℝ ≤ alpha * ‖(x : Er)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : Er) ∈ Pᗮ →
@@ -346,7 +346,7 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (M : Submodule ℝ Er) [M.HasOrthogonalProjection]
-    (hM : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) M)
+    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M)
     (hMangle : TauCeti.DavisKahanExt.maximalAngle P M ≤ Real.pi / 4) :
     M = canonicalLowBranchUnboundedReal
       (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha := by
@@ -361,11 +361,11 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real
       (complexify Hop)
       = TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A Hop) :=
     (TauCeti.DavisKahan1970.complexifyReal_addBounded A Hop).symm
-  have hredPperpC : TauCeti.LinearPMap.ReducesSubspace
+  have hredPperpC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)ᗮ := by
     simpa only [complexifySubmodule_orthogonal] using
       TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hredPperp
-  have hMC : TauCeti.LinearPMap.ReducesSubspace
+  have hMC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
       (complexifySubmodule M) := by
     rw [hsum]
@@ -398,36 +398,36 @@ real endpoint is the same argument over `ℝ` rather than a transport. -/
 omit [CompleteSpace Er] in
 /-- **The energy splits along a reducing subspace**, over a real Hilbert space. -/
 theorem re_inner_split_of_reduces_real {B : Er →ₗ.[ℝ] Er} {Q : Submodule ℝ Er}
-    [Q.HasOrthogonalProjection] (hred : TauCeti.LinearPMap.ReducesSubspace B Q)
+    [Q.HasOrthogonalProjection] (hred : _root_.LinearPMap.IsReducing B Q)
     (x : B.domain) :
     ⟪B x, (x : Er)⟫_ℝ
-      = ⟪B ⟨Q.starProjection (x : Er), hred.projection_mem_domain x⟩,
+      = ⟪B ⟨Q.starProjection (x : Er), hred.starProjection_mem_domain x.property⟩,
           Q.starProjection (x : Er)⟫_ℝ
-        + ⟪B ⟨Qᗮ.starProjection (x : Er), hred.orthogonalProjection_mem_domain x⟩,
+        + ⟪B ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩,
             Qᗮ.starProjection (x : Er)⟫_ℝ := by
-  have hxeq : x = (⟨Q.starProjection (x : Er), hred.projection_mem_domain x⟩ : B.domain)
-      + ⟨Qᗮ.starProjection (x : Er), hred.orthogonalProjection_mem_domain x⟩ :=
+  have hxeq : x = (⟨Q.starProjection (x : Er), hred.starProjection_mem_domain x.property⟩ : B.domain)
+      + ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ :=
     Subtype.ext (by
       show (x : Er) = Q.starProjection (x : Er) + Qᗮ.starProjection (x : Er)
       rw [Submodule.starProjection_orthogonal_apply]
       abel)
-  have hcross1 : ⟪B (⟨Q.starProjection (x : Er), hred.projection_mem_domain x⟩ : B.domain),
+  have hcross1 : ⟪B (⟨Q.starProjection (x : Er), hred.starProjection_mem_domain x.property⟩ : B.domain),
       Qᗮ.starProjection (x : Er)⟫_ℝ = 0 :=
     (Submodule.mem_orthogonal Q _).mp (Qᗮ.starProjection_apply_mem _) _
-      (hred.invariant _ (Q.starProjection_apply_mem _))
+      (hred.isInvariant.apply_mem _ (Q.starProjection_apply_mem _))
   have hcross2 : ⟪B (⟨Qᗮ.starProjection (x : Er),
-      hred.orthogonalProjection_mem_domain x⟩ : B.domain),
+      TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ : B.domain),
       Q.starProjection (x : Er)⟫_ℝ = 0 := by
     refine (Submodule.mem_orthogonal Qᗮ _).mp ?_ _
-      (hred.orthogonal_invariant _ (Qᗮ.starProjection_apply_mem _))
+      (hred.isInvariant_orthogonal _ (Qᗮ.starProjection_apply_mem _))
     rw [Submodule.orthogonal_orthogonal]
     exact Q.starProjection_apply_mem _
   have hstep : ⟪B x, (x : Er)⟫_ℝ
-      = ⟪B ((⟨Q.starProjection (x : Er), hred.projection_mem_domain x⟩ : B.domain)
-            + ⟨Qᗮ.starProjection (x : Er), hred.orthogonalProjection_mem_domain x⟩),
-          (((⟨Q.starProjection (x : Er), hred.projection_mem_domain x⟩ : B.domain)
+      = ⟪B ((⟨Q.starProjection (x : Er), hred.starProjection_mem_domain x.property⟩ : B.domain)
+            + ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩),
+          (((⟨Q.starProjection (x : Er), hred.starProjection_mem_domain x.property⟩ : B.domain)
             + ⟨Qᗮ.starProjection (x : Er),
-                hred.orthogonalProjection_mem_domain x⟩ : B.domain) : Er)⟫_ℝ :=
+                TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ : B.domain) : Er)⟫_ℝ :=
     congrArg (fun z : B.domain => ⟪B z, (z : Er)⟫_ℝ) hxeq
   rw [hstep, _root_.LinearPMap.map_add]
   show ⟪_ + _, (Q.starProjection (x : Er) + Qᗮ.starProjection (x : Er))⟫_ℝ = _
@@ -439,19 +439,19 @@ omit [CompleteSpace Er] in
 over a real Hilbert space.** -/
 theorem theorem8_1_upperCompressionRepulsion_unbounded_real
     {B : Er →ₗ.[ℝ] Er} {Q : Submodule ℝ Er} [Q.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace B Q) {alpha : ℝ}
+    (hred : _root_.LinearPMap.IsReducing B Q) {alpha : ℝ}
     (hQlow : ∀ y : B.domain, (y : Er) ∈ Q →
       ⟪B y, (y : Er)⟫_ℝ ≤ alpha * ‖(y : Er)‖ ^ 2)
     (x : B.domain) :
     ⟪B x, (x : Er)⟫_ℝ - alpha * ‖(x : Er)‖ ^ 2 ≤
-      ⟪B ⟨Qᗮ.starProjection (x : Er), hred.orthogonalProjection_mem_domain x⟩,
+      ⟪B ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩,
         Qᗮ.starProjection (x : Er)⟫_ℝ
         - alpha * ‖Qᗮ.starProjection (x : Er)‖ ^ 2 := by
   have hsplit := re_inner_split_of_reduces_real hred x
   have hnorm : ‖(x : Er)‖ ^ 2
       = ‖Q.starProjection (x : Er)‖ ^ 2 + ‖Qᗮ.starProjection (x : Er)‖ ^ 2 :=
     Submodule.norm_sq_eq_add_norm_sq_starProjection (x : Er) Q
-  have hlow := hQlow ⟨Q.starProjection (x : Er), hred.projection_mem_domain x⟩
+  have hlow := hQlow ⟨Q.starProjection (x : Er), hred.starProjection_mem_domain x.property⟩
     (Q.starProjection_apply_mem _)
   rw [hsplit, hnorm]
   nlinarith [hlow]
@@ -461,20 +461,20 @@ omit [CompleteSpace Er] in
 space.** -/
 theorem theorem8_1_lowerCompressionRepulsion_unbounded_real
     {B : Er →ₗ.[ℝ] Er} {Q : Submodule ℝ Er} [Q.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace B Q) {c : ℝ}
+    (hred : _root_.LinearPMap.IsReducing B Q) {c : ℝ}
     (hQhigh : ∀ y : B.domain, (y : Er) ∈ Qᗮ →
       c * ‖(y : Er)‖ ^ 2 ≤ ⟪B y, (y : Er)⟫_ℝ)
     (x : B.domain) :
     c * ‖(x : Er)‖ ^ 2 - ⟪B x, (x : Er)⟫_ℝ ≤
       c * ‖Q.starProjection (x : Er)‖ ^ 2
-        - ⟪B ⟨Q.starProjection (x : Er), hred.projection_mem_domain x⟩,
+        - ⟪B ⟨Q.starProjection (x : Er), hred.starProjection_mem_domain x.property⟩,
             Q.starProjection (x : Er)⟫_ℝ := by
   have hsplit := re_inner_split_of_reduces_real hred x
   have hnorm : ‖(x : Er)‖ ^ 2
       = ‖Q.starProjection (x : Er)‖ ^ 2 + ‖Qᗮ.starProjection (x : Er)‖ ^ 2 :=
     Submodule.norm_sq_eq_add_norm_sq_starProjection (x : Er) Q
   have hhigh := hQhigh
-    ⟨Qᗮ.starProjection (x : Er), hred.orthogonalProjection_mem_domain x⟩
+    ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩
     (Qᗮ.starProjection_apply_mem _)
   rw [hsplit, hnorm]
   nlinarith [hhigh]

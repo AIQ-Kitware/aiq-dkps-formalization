@@ -23,17 +23,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
 namespace PartialMap
-namespace ReducesSubspace
-
-omit [CompleteSpace E] in
-/-- Orthogonal complementation preserves the reducing-subspace property. -/
-theorem orthogonal
-    {A : E →ₗ.[𝕜] E}
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (h : TauCeti.LinearPMap.ReducesSubspace A U) : TauCeti.LinearPMap.ReducesSubspace A Uᗮ :=
-  TauCeti.LinearPMap.ReducesSubspace.orthogonal h
-
-end ReducesSubspace
 
 omit [CompleteSpace E] in
 /-- A bounded reducing-subspace law induces the domain-aware law for the
@@ -41,16 +30,16 @@ full-domain closed operator. -/
 theorem ofBounded_reducesSubspace
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.Reduces U) :
-    TauCeti.LinearPMap.ReducesSubspace (A.toLinearMap.toPMap ⊤) U := by
-  refine ⟨?_, ?_, ?_, ?_⟩
-  · intro x
-    simp
-  · intro x
-    simp
+    _root_.LinearPMap.IsReducing (A.toLinearMap.toPMap ⊤) U := by
+  refine ⟨?_, ?_, ?_⟩
   · intro x hx
+    simp
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     show A (x : E) ∈ U
     exact hred.1 (x : E) hx
-  · intro x hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     show A (x : E) ∈ Uᗮ
     exact hred.2 (x : E) hx
 
@@ -64,7 +53,7 @@ noncomputable def boundedReducingBlock
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.Reduces U) : U →ₗ.[𝕜] U :=
   (A.toLinearMap.toPMap ⊤).restrict
-    (ofBounded_reducesSubspace A U hred).toIsReducing.isInvariant
+    (ofBounded_reducesSubspace A U hred).isInvariant
 
 /-- The block of a bounded operator on the orthogonal complement of a subspace
 it reduces.  A reducing subspace's complement is reducing, so this needs no
@@ -73,7 +62,7 @@ noncomputable def boundedReducingBlockCompl
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.Reduces U) : Uᗮ →ₗ.[𝕜] Uᗮ :=
   (A.toLinearMap.toPMap ⊤).restrict
-    ((ofBounded_reducesSubspace A U hred).orthogonal.toIsReducing.isInvariant)
+    ((ofBounded_reducesSubspace A U hred).orthogonal.isInvariant)
 
 end PartialMap
 end DavisKahanExt

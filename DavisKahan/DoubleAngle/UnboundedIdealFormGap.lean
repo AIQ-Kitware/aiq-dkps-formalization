@@ -345,7 +345,7 @@ the complement here *is* `Uᗮ`. -/
 theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]

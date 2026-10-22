@@ -377,7 +377,7 @@ The positive `|tan 2Θ|` operator remains only the proof representative, with it
 exact modulus relation to the literal tangent proved explicitly.  The theorem has ideal membership, for an unbounded self-adjoint `A`, a bounded
 self-adjoint perturbation `B` odd for the selected spectral subspace, and a
 subspace `V` whose reflection intertwines `A + B`
-(`DavisKahan.ReflectionIntertwines`, built from a `ReducesSubspace` by
+(`DavisKahan.ReflectionIntertwines`, built from a `_root_.LinearPMap.IsReducing` by
 `.ofReducesSubspace`).
 
 No pole certificate is asked for: the ordered gap forces the reflection's diagonal
@@ -447,7 +447,7 @@ theorem sinTwoTheta_bothConclusions_complex
                 (selfAdjointSpectralSubspace A hA B hB)) ≤ 2 * N.gauge R) ∧
       (∀ (Eop : Hc →L[ℂ] Hc) (_hEop : Eop.IsSymmetric)
         (W : Submodule ℂ Hc) [W.HasOrthogonalProjection]
-        (_hW : TauCeti.LinearPMap.ReducesSubspace
+        (_hW : _root_.LinearPMap.IsReducing
           (TauCeti.LinearPMap.addBounded A Eop) W), N.Mem Eop →
           N.Mem (sinTwoAngleOperatorC (selfAdjointSpectralSubspace A hA B hB) W) ∧
             δ * N.gauge (sinTwoAngleOperatorC
@@ -492,7 +492,7 @@ theorem sinTwoTheta_bothConclusions_real
               2 * N.gauge R) ∧
       (∀ (Eop : Er →L[ℝ] Er) (_hEop : Eop.IsSymmetric)
         (W : Submodule ℝ Er) [W.HasOrthogonalProjection]
-        (_hW : TauCeti.LinearPMap.ReducesSubspace
+        (_hW : _root_.LinearPMap.IsReducing
           (TauCeti.LinearPMap.addBounded A Eop) W), N.Mem Eop →
           N.Mem (sinTwoAngleOperatorR
               (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB) W) ∧

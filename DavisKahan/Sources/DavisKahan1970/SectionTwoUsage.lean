@@ -54,7 +54,7 @@ DavisKahan.ReducingComplement.ofReducesSubspace  -- from `V` reduces `A`
 DavisKahan.ReflectionIntertwines.ofReducesSubspace -- from `V` reduces `A + B`
 ```
 
-The last two start from `TauCeti.LinearPMap.ReducesSubspace`, the generic
+The last two start from `_root_.LinearPMap.IsReducing`, the generic
 reducing-subspace vocabulary, which is what a spectral subspace already gives you.
 
 No Sylvester witness, reflection block, secant, or capability instance appears
@@ -98,8 +98,8 @@ theorem sinTwoTheta_from_shared_reducing_setup
     {A T : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A) (hT : IsSelfAdjoint T)
     (hdom : T.domain = A.domain)
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace T Q)
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing T Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction T Q hQred)
@@ -207,7 +207,7 @@ theorem tanTheta_from_reducingSubspace
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
     (D : DavisKahan.UnboundedRitzPair A U)
-    (hVred : TauCeti.LinearPMap.ReducesSubspace A V)
+    (hVred : _root_.LinearPMap.IsReducing A V)
     (Hop : E →L[ℂ] E) (hH : IsSelfAdjoint Hop)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
@@ -232,7 +232,7 @@ theorem tanTheta_from_trialBlock
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
     (D : DavisKahan.TanTheta.BoundedCompressionTrialBlock A U)
-    (hVred : TauCeti.LinearPMap.ReducesSubspace A V)
+    (hVred : _root_.LinearPMap.IsReducing A V)
     (Hop : E →L[ℂ] E) (hH : IsSelfAdjoint Hop)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hupper : TauCeti.LinearPMap.SemiboundedAbove
@@ -266,7 +266,7 @@ theorem tanTheta_from_reducingSubspace_rclike
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
     (D : DavisKahan.UnboundedRitzPair A U)
-    (hVred : TauCeti.LinearPMap.ReducesSubspace A V)
+    (hVred : _root_.LinearPMap.IsReducing A V)
     (Hop : E →L[𝕜] E) (hH : IsSelfAdjoint Hop)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
@@ -391,7 +391,7 @@ theorem tanTwoTheta_from_reducingSubspace
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor
       (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
-    (hVred : TauCeti.LinearPMap.ReducesSubspace
+    (hVred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain,
       (x : E) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
@@ -435,10 +435,10 @@ theorem tanTwoTheta_from_reducingSubspaces_rclike
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A)
-    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hUred : _root_.LinearPMap.IsReducing A U)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor U B)
-    (hVred : TauCeti.LinearPMap.ReducesSubspace
+    (hVred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U →
       RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ a * ‖(x : E)‖ ^ 2)

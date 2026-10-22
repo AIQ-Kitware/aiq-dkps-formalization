@@ -162,7 +162,7 @@ theorem zeroUnboundedGraph_orthogonalProjection_apply
 coordinatewise. -/
 theorem mem_domain_iff_coordinateRestrictionDomains
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
     (z : DirectSumSpace (E0 := E0) (E1 := E1)) :
     z ∈ D.domain ↔
@@ -174,13 +174,14 @@ theorem mem_domain_iff_coordinateRestrictionDomains
     constructor
     · change blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1)
         (WithLp.fst z) ∈ D.domain
-      have hproj := hred.1 x
+      have hproj := hred.starProjection_mem_domain x.property
       change (unboundedBlockGraph (0 : E0 →L[ℂ] E1)).starProjection z ∈ D.domain at hproj
       rw [zeroUnboundedGraph_starProjection_apply] at hproj
       exact hproj
     · change blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1)
         (WithLp.snd z) ∈ D.domain
-      have hproj := hred.2.1 x
+      have hproj := TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain
+        hred x.property
       change (unboundedBlockGraph (0 : E0 →L[ℂ] E1))ᗮ.starProjection z ∈ D.domain at hproj
       rw [zeroUnboundedGraph_orthogonalProjection_apply] at hproj
       exact hproj
@@ -225,7 +226,7 @@ omit [CompleteSpace E0] [CompleteSpace E1] in
 operator domain. -/
 theorem coordinateRestriction0_action_snd_eq_zero
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
     (u : coordinateRestrictionDomain0 D) :
     WithLp.snd (D (coordinateRestrictionDomain0ToOriginal D u)) = 0 := by
@@ -237,7 +238,7 @@ theorem coordinateRestriction0_action_snd_eq_zero
       blockGraph (0 : E0 →L[ℂ] E1)
     exact blockCoordinate0_mem_zeroGraph
       (𝕜 := ℂ) (E0 := E0) (E1 := E1) (u : E0)
-  have hout := hred.2.2.1 (coordinateRestrictionDomain0ToOriginal D u) hmem0
+  have hout := hred.isInvariant.apply_mem _ hmem0
   change D (coordinateRestrictionDomain0ToOriginal D u) ∈
     blockGraph (0 : E0 →L[ℂ] E1) at hout
   exact (mem_blockGraph_zero_iff_snd_eq_zero
@@ -248,7 +249,7 @@ theorem coordinateRestriction0_action_snd_eq_zero
 operator domain. -/
 theorem coordinateRestriction1_action_fst_eq_zero
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
     (v : coordinateRestrictionDomain1 D) :
     WithLp.fst (D (coordinateRestrictionDomain1ToOriginal D v)) = 0 := by
@@ -260,7 +261,7 @@ theorem coordinateRestriction1_action_fst_eq_zero
       (blockGraph (0 : E0 →L[ℂ] E1))ᗮ
     exact blockCoordinate1_mem_zeroGraph_orthogonal
       (𝕜 := ℂ) (E0 := E0) (E1 := E1) (v : E1)
-  have hout := hred.2.2.2 (coordinateRestrictionDomain1ToOriginal D v) hmem1
+  have hout := hred.isInvariant_orthogonal _ hmem1
   change D (coordinateRestrictionDomain1ToOriginal D v) ∈
     (blockGraph (0 : E0 →L[ℂ] E1))ᗮ at hout
   exact fst_eq_zero_of_mem_zeroGraph_orthogonal
@@ -270,7 +271,7 @@ theorem coordinateRestriction1_action_fst_eq_zero
 coordinate compression embedded back into the direct sum. -/
 theorem coordinateRestriction0_action_eq
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
     (u : coordinateRestrictionDomain0 D) :
     D (coordinateRestrictionDomain0ToOriginal D u) =
@@ -285,7 +286,7 @@ theorem coordinateRestriction0_action_eq
 coordinate compression embedded back into the direct sum. -/
 theorem coordinateRestriction1_action_eq
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
     (v : coordinateRestrictionDomain1 D) :
     D (coordinateRestrictionDomain1ToOriginal D v) =

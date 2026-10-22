@@ -133,7 +133,7 @@ theorem sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming
     (N : SymmetricNormingFunction)
     {A B : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hUred : _root_.LinearPMap.IsReducing A U)
     (W : H ≃ₗᵢ[𝕜] H)
     (hBeq : B = _root_.LinearPMap.unitaryConj W A)
     (D : H →L[𝕜] H)
@@ -149,7 +149,7 @@ theorem sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming
       δ * N.gauge ((U.map (W.toLinearEquiv : H →ₗ[𝕜] H)).starProjection -
         U.starProjection) ≤ N.gauge D := by
   subst hBeq
-  have hUrred : TauCeti.LinearPMap.ReducesSubspace
+  have hUrred : _root_.LinearPMap.IsReducing
       (_root_.LinearPMap.unitaryConj W A)
       (U.map (W.toLinearEquiv : H →ₗ[𝕜] H)) :=
     TauCeti.LinearPMap.reducesSubspace_unitaryConj W A U hUred
@@ -228,7 +228,7 @@ theorem sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
     (Eop : H →L[𝕜] H) (hEop : Eop.IsSymmetric)
     {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hUred : _root_.LinearPMap.IsReducing A U)
     (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hint : ∀ x : A.domain,
       (TauCeti.LinearPMap.addBounded A (DavisKahan.reflectionPerturbation V Eop))
@@ -292,7 +292,7 @@ theorem sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
     (Eop : H →L[𝕜] H) (hEop : Eop.IsSymmetric)
     {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hUred : _root_.LinearPMap.IsReducing A U)
     (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hint : ∀ x : A.domain,
       (TauCeti.LinearPMap.addBounded A (DavisKahan.reflectionPerturbation V Eop))
@@ -353,8 +353,8 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
     (Eop : H →L[𝕜] H) (hEop : Eop.IsSymmetric)
     {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hVred : TauCeti.LinearPMap.ReducesSubspace
+    (hUred : _root_.LinearPMap.IsReducing A U)
+    (hVred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Eop) V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -379,8 +379,8 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
     (Eop : Hc →L[ℂ] Hc) (hEop : Eop.IsSymmetric)
     {U V : Submodule ℂ Hc} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hVred : TauCeti.LinearPMap.ReducesSubspace
+    (hUred : _root_.LinearPMap.IsReducing A U)
+    (hVred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Eop) V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -430,8 +430,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
     (Hop : H →L[𝕜] H) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -452,7 +452,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
   have hnegHop : (-Hop).IsSymmetric := by
     intro x y
     simpa using congrArg Neg.neg (hHop x y)
-  have hPred' : TauCeti.LinearPMap.ReducesSubspace
+  have hPred' : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A Hop) (-Hop)) P := by
     rw [hcancel]; exact hPred
   have hmemneg : N.Mem (-Hop) := SymmetricNormingFunction.mem_neg N |>.mpr hHmem
@@ -476,8 +476,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
     {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoint A)
     (Hop : H →L[𝕜] H) (hHop : Hop.IsSymmetric)
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -520,8 +520,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
     (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -544,8 +544,8 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
     (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
     {U V : Submodule ℝ Er} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hUred : TauCeti.LinearPMap.ReducesSubspace A U)
-    (hVred : TauCeti.LinearPMap.ReducesSubspace
+    (hUred : _root_.LinearPMap.IsReducing A U)
+    (hVred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Eop) V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -567,8 +567,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
     (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -598,8 +598,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
     (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -623,8 +623,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
     (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -660,8 +660,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex
     {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A)
     (Hop : Hc →L[ℂ] Hc) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -685,8 +685,8 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real
     {A : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A)
     (Hop : Er →L[ℝ] Er) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap

@@ -136,9 +136,9 @@ structure CommonDomainSymmetricSinThetaProblem
   /-- `B` is self-adjoint in the domain-aware sense. -/
   selfAdjoint_B : IsSelfAdjoint B
   /-- `U` reduces `A`. -/
-  reduces_A_U : TauCeti.LinearPMap.ReducesSubspace A U
+  reduces_A_U : _root_.LinearPMap.IsReducing A U
   /-- `V` reduces `B`. -/
-  reduces_B_V : TauCeti.LinearPMap.ReducesSubspace B V
+  reduces_B_V : _root_.LinearPMap.IsReducing B V
   /-- The paper's bounded perturbation `H`. -/
   perturbation : E →L[𝕜] E
   /-- The two operators share one domain. -/

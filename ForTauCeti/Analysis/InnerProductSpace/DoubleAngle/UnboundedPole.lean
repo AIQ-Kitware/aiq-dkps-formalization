@@ -382,7 +382,7 @@ section Estimate
 variable {U : Submodule ℂ H} [U.HasOrthogonalProjection] {A : H →ₗ.[ℂ] H}
   {B Z : H →L[ℂ] H} {a b τ : ℝ}
 
-variable (hred : LinearPMap.ReducesSubspace A U) (hB : IsOddFor U B)
+variable (hred : _root_.LinearPMap.IsReducing A U) (hB : IsOddFor U B)
   (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
   (hZdom : LinearPMap.MapsDomainTo A A Z)
   (hZcomm : ∀ x : A.domain,

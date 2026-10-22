@@ -67,7 +67,7 @@ that is what keeps `P x` and `P^⊥ x` inside the domain, so the two ordered for
 bounds can be applied to them at all. -/
 theorem reflected_centered_form_lower_pmap
     (A : E →ₗ.[ℂ] E) (U : Submodule ℂ E) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     {a b : ℝ}
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
@@ -79,9 +79,9 @@ theorem reflected_centered_form_lower_pmap
         (A x - (((a + b) / 2 : ℝ) : ℂ) • (x : E)), (x : E)⟫_ℂ := by
   set c : ℂ := (((a + b) / 2 : ℝ) : ℂ) with hcdef
   have hpm : U.starProjection (x : E) ∈ A.domain :=
-    hred.projection_mem_domain x
+    hred.starProjection_mem_domain x.property
   have hmm : Uᗮ.starProjection (x : E) ∈ A.domain :=
-    hred.orthogonalProjection_mem_domain x
+    TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property
   set p : A.domain := ⟨U.starProjection (x : E), hpm⟩ with hpdef
   set m : A.domain := ⟨Uᗮ.starProjection (x : E), hmm⟩ with hmdef
   have hpU : (p : E) ∈ U := U.starProjection_apply_mem _
@@ -90,8 +90,8 @@ theorem reflected_centered_form_lower_pmap
     U.starProjection_add_starProjection_orthogonal (x : E)
   have hxpm : p + m = x := Subtype.ext hsum
   have hAsum : A p + A m = A x := by rw [← A.map_add, hxpm]
-  have hApU : A p ∈ U := hred.invariant p hpU
-  have hAmU : A m ∈ Uᗮ := hred.orthogonal_invariant m hmU
+  have hApU : A p ∈ U := hred.isInvariant.apply_mem _ hpU
+  have hAmU : A m ∈ Uᗮ := hred.isInvariant_orthogonal m hmU
   have hu : A p - c • (p : E) ∈ U := U.sub_mem hApU (U.smul_mem _ hpU)
   have hv : A m - c • (m : E) ∈ Uᗮ := Uᗮ.sub_mem hAmU (Uᗮ.smul_mem _ hmU)
   have hsplit : A x - c • (x : E)
@@ -143,7 +143,7 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     {a b : ℝ}
     (hA : IsSelfAdjoint A)
     (hH : IsSelfAdjoint Hop)
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →

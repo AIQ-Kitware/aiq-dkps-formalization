@@ -100,7 +100,7 @@ omit [CompleteSpace E0] [CompleteSpace E1] in
 theorem coordinateRestriction0_dense
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (hdense : Dense (D.domain : Set (DirectSumSpace (E0 := E0) (E1 := E1))))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1))) :
     Dense ((coordinateRestriction0 D).domain : Set E0) := by
   rw [dense_iff_closure_eq]
@@ -118,7 +118,7 @@ theorem coordinateRestriction0_dense
     change blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1)
         (WithLp.fst (s n)) ∈ D.domain
     let x : D.domain := ⟨s n, hs n⟩
-    have hx := hred.1 x
+    have hx := hred.starProjection_mem_domain x.property
     change (unboundedBlockGraph (0 : E0 →L[ℂ] E1)).starProjection
         (s n) ∈ D.domain at hx
     rw [zeroUnboundedGraph_starProjection_apply] at hx
@@ -135,7 +135,7 @@ theorem coordinateRestriction0_dense
 theorem coordinateRestriction1_dense
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (hdense : Dense (D.domain : Set (DirectSumSpace (E0 := E0) (E1 := E1))))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1))) :
     Dense ((coordinateRestriction1 D).domain : Set E1) := by
   rw [dense_iff_closure_eq]
@@ -153,7 +153,8 @@ theorem coordinateRestriction1_dense
     change blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1)
         (WithLp.snd (s n)) ∈ D.domain
     let x : D.domain := ⟨s n, hs n⟩
-    have hx := hred.2.1 x
+    have hx := TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain
+      hred x.property
     change (unboundedBlockGraph (0 : E0 →L[ℂ] E1))ᗮ.starProjection
         (s n) ∈ D.domain at hx
     rw [zeroUnboundedGraph_orthogonalProjection_apply] at hx
@@ -171,7 +172,7 @@ theorem coordinateRestriction0_closedGraph
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (hclosed : IsClosed (Set.range fun x : D.domain =>
       ((x : DirectSumSpace (E0 := E0) (E1 := E1)), D x)))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1))) :
     IsClosed (Set.range fun u : (coordinateRestriction0 D).domain =>
       ((u : E0), coordinateRestriction0 D u)) := by
@@ -224,7 +225,7 @@ theorem coordinateRestriction1_closedGraph
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (hclosed : IsClosed (Set.range fun x : D.domain =>
       ((x : DirectSumSpace (E0 := E0) (E1 := E1)), D x)))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1))) :
     IsClosed (Set.range fun v : (coordinateRestriction1 D).domain =>
       ((v : E1), coordinateRestriction1 D v)) := by
@@ -281,7 +282,7 @@ noncomputable def reducedCoordinateDirectSum
 /-- Reassembling the two coordinate restrictions of a reducing operator recovers its domain. -/
 @[simp] theorem mem_reducedCoordinateDirectSum_domain_iff
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
     (z : DirectSumSpace (E0 := E0) (E1 := E1)) :
     z ∈ (reducedCoordinateDirectSum D).domain ↔ z ∈ D.domain := by
@@ -296,7 +297,7 @@ noncomputable def reducedCoordinateDirectSum
 original reduced map after transporting the common domain witness. -/
 theorem reducedCoordinateDirectSum_action
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)))
     (z : (reducedCoordinateDirectSum D).domain) :
     reducedCoordinateDirectSum D z =
@@ -345,7 +346,7 @@ theorem reducedCoordinateDirectSum_action
 through the identity, with both domain directions and actions explicit. -/
 theorem reducedCoordinateDirectSum_unitaryEquivalent
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
-    (hred : TauCeti.LinearPMap.ReducesSubspace D
+    (hred : _root_.LinearPMap.IsReducing D
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1))) :
     TauCeti.LinearPMap.UnitaryEquivalent
       (reducedCoordinateDirectSum D) D
@@ -402,7 +403,7 @@ restrictions. -/
 theorem unboundedBlockDiagonalCore_coordinateDirectSum
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1)
-    (hred : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing
       (unboundedBlockOperatorCore H) (unboundedBlockGraph X)) :
     TauCeti.LinearPMap.UnitaryEquivalent
       (TauCeti.LinearPMap.directSum

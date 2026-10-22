@@ -122,20 +122,20 @@ variable {A : H →ₗ.[𝕜] H} {V : Submodule 𝕜 H} [V.HasOrthogonalProjecti
 omit [CompleteSpace H] in
 /-- **A reducing subspace gives a reducing complement.**
 
-`TauCeti.LinearPMap.ReducesSubspace A V` is the repository's generic vocabulary
+`_root_.LinearPMap.IsReducing A V` is the repository's generic vocabulary
 for "`V` reduces `A`": both projections preserve the domain and both summands are
 invariant.  `ReducingComplement` is the single consequence the tangent theorems
 consume -- that the complementary projection commutes with `A` on the domain --
-and this is the bridge, so a caller who already holds a `ReducesSubspace`, for
+and this is the bridge, so a caller who already holds a `_root_.LinearPMap.IsReducing`, for
 instance from a spectral subspace, does not meet a competing reduction
 vocabulary. -/
-theorem ofReducesSubspace (h : TauCeti.LinearPMap.ReducesSubspace A V) :
+theorem ofReducesSubspace (h : _root_.LinearPMap.IsReducing A V) :
     ReducingComplement A V where
-  mapsDomain x := h.orthogonalProjection_mem_domain x
+  mapsDomain x := TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain h x.property
   commutes x := by
-    have hVdom : V.starProjection ((x : H)) ∈ A.domain := h.projection_mem_domain x
+    have hVdom : V.starProjection ((x : H)) ∈ A.domain := h.starProjection_mem_domain x.property
     have hVpdom : Vᗮ.starProjection ((x : H)) ∈ A.domain :=
-      h.orthogonalProjection_mem_domain x
+      TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain h x.property
     have hsplit :
         (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain)
             + ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ = x := by
@@ -149,9 +149,9 @@ theorem ofReducesSubspace (h : TauCeti.LinearPMap.ReducesSubspace A V) :
         ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩
       rwa [hsplit] at hadd
     have hinV : A (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain) ∈ V :=
-      h.invariant _ (V.starProjection_apply_mem _)
+      h.isInvariant.apply_mem _ (V.starProjection_apply_mem _)
     have hinVp : A (⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ : A.domain) ∈ Vᗮ :=
-      h.orthogonal_invariant _ (Vᗮ.starProjection_apply_mem _)
+      h.isInvariant_orthogonal _ (Vᗮ.starProjection_apply_mem _)
     rw [hmap, map_add]
     have h0 : Vᗮ.starProjection (A (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain)) = 0 := by
       rw [Submodule.starProjection_orthogonal_apply,
@@ -183,7 +183,7 @@ This is the generic principal-angle-layer fact behind
 perturbed operator or to Davis--Kahan. -/
 theorem reflection_commutes_of_reducesSubspace
     {T : H →ₗ.[𝕜] H} {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
-    (h : TauCeti.LinearPMap.ReducesSubspace T V) :
+    (h : _root_.LinearPMap.IsReducing T V) :
     ∃ hmaps : TauCeti.LinearPMap.MapsDomainTo T T (V.reflectionOperator),
       ∀ x : T.domain,
         T ⟨V.reflectionOperator ((x : H)), hmaps x⟩
@@ -206,12 +206,12 @@ theorem reflection_commutes_of_reducesSubspace
   have hmaps : TauCeti.LinearPMap.MapsDomainTo T T (V.reflectionOperator) := by
     intro x
     rw [hrefl]
-    exact T.domain.sub_mem (h.projection_mem_domain x)
-      (h.orthogonalProjection_mem_domain x)
+    exact T.domain.sub_mem (h.starProjection_mem_domain x.property)
+      (TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain h x.property)
   refine ⟨hmaps, fun x => ?_⟩
-  have hVdom : V.starProjection ((x : H)) ∈ T.domain := h.projection_mem_domain x
+  have hVdom : V.starProjection ((x : H)) ∈ T.domain := h.starProjection_mem_domain x.property
   have hVpdom : Vᗮ.starProjection ((x : H)) ∈ T.domain :=
-    h.orthogonalProjection_mem_domain x
+    TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain h x.property
   have hsum :
       (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain)
           + ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ = x := by
@@ -231,9 +231,9 @@ theorem reflection_commutes_of_reducesSubspace
       ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩
     rwa [hsum] at hadd
   have hinV : T (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain) ∈ V :=
-    h.invariant _ (V.starProjection_apply_mem _)
+    h.isInvariant.apply_mem _ (V.starProjection_apply_mem _)
   have hinVp : T (⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ : T.domain) ∈ Vᗮ :=
-    h.orthogonal_invariant _ (Vᗮ.starProjection_apply_mem _)
+    h.isInvariant_orthogonal _ (Vᗮ.starProjection_apply_mem _)
   have hproj : V.starProjection (T x)
       = T (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain) := by
     rw [hTx, map_add, Submodule.starProjection_eq_self_iff.mpr hinV,
@@ -271,17 +271,17 @@ omit [CompleteSpace H] in
 /-- **A subspace that reduces the perturbed operator gives a reflection
 intertwiner.**
 
-`TauCeti.LinearPMap.ReducesSubspace (A.addBounded B) V` is the generic vocabulary
+`_root_.LinearPMap.IsReducing (A.addBounded B) V` is the generic vocabulary
 for "`V` reduces `A + B`", and `A + B` has exactly `A`'s domain, so the reflection
 `2 P_V - 1` preserves that domain.  Commutation is
 `TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace` read through
 `addBounded_apply`.
 
 This is the bridge that keeps the source theorem free of a competing reduction
-vocabulary: a caller holding a `ReducesSubspace` -- from a spectral subspace of the
+vocabulary: a caller holding a `_root_.LinearPMap.IsReducing` -- from a spectral subspace of the
 perturbed operator, say -- constructs nothing by hand. -/
 theorem ofReducesSubspace
-    (h : TauCeti.LinearPMap.ReducesSubspace
+    (h : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A B) V) :
     ReflectionIntertwines A B V := by
   obtain ⟨hmaps, hcomm⟩ := reflection_commutes_of_reducesSubspace h

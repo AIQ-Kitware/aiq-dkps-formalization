@@ -56,7 +56,7 @@ omit [CompleteSpace E] in
 theorem reducingRestriction_inclusion_mem_domain
     (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (x : (TauCeti.LinearPMap.reducingRestriction A U hred).domain) :
     reducingSubspaceInclusion U (x : U) ∈ A.domain :=
   (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred (x : U)).mp
@@ -67,7 +67,7 @@ omit [CompleteSpace E] in
 theorem reducingRestriction_inclusion_intertwines
     (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (x : (TauCeti.LinearPMap.reducingRestriction A U hred).domain) :
     A ⟨reducingSubspaceInclusion U (x : U),
         reducingRestriction_inclusion_mem_domain A U hred x⟩ =
@@ -82,7 +82,7 @@ adjoint-domain membership for the included vector. -/
 theorem mem_reducingRestriction_adjoint_domain_iff
     (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (y : U) :
+    (hred : _root_.LinearPMap.IsReducing A U) (y : U) :
     y ∈ (TauCeti.LinearPMap.reducingRestriction A U hred).adjoint.domain ↔
       (y : E) ∈ A.adjoint.domain :=
   TauCeti.LinearPMap.mem_reducingRestriction_adjoint_domain_iff
@@ -93,7 +93,7 @@ omit [CompleteSpace E] in
 theorem reducingRestriction_isSymmetric
     (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hA : TauCeti.LinearPMap.IsSymmetric A) :
     TauCeti.LinearPMap.IsSymmetric
       (TauCeti.LinearPMap.reducingRestriction A U hred) :=
@@ -104,7 +104,7 @@ reducing subspace. -/
 theorem reducingRestriction_isSelfAdjoint
     (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hred : _root_.LinearPMap.IsReducing A U)
     (hA : _root_.IsSelfAdjoint A) :
     _root_.IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A U hred) :=
   TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred

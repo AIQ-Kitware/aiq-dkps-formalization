@@ -56,8 +56,8 @@ theorem ambient_sinTwoTheta_gap_is_on_the_perturbed_blocks
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     (Hop : H →L[ℂ] H) (hHop : Hop.IsSymmetric)
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
-    (hQred : TauCeti.LinearPMap.ReducesSubspace
+    (hPred : _root_.LinearPMap.IsReducing A P)
+    (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap

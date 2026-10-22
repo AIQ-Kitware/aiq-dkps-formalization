@@ -72,7 +72,7 @@ vector lying in the subspace, and the subspace carries the restricted inner
 product and norm. -/
 theorem semiboundedAbove_reducingRestriction_iff
     {B : H →ₗ.[𝕜] H} {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace B U) (c : ℝ) :
+    (hred : _root_.LinearPMap.IsReducing B U) (c : ℝ) :
     TauCeti.LinearPMap.SemiboundedAbove
         (TauCeti.LinearPMap.reducingRestriction B U hred) c ↔
       ∀ x : B.domain, (x : H) ∈ U →
@@ -84,7 +84,7 @@ theorem semiboundedAbove_reducingRestriction_iff
       (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff B U hred _).mpr x.2
     have := h ⟨⟨(x : H), hx⟩, hy⟩
     rwa [show (TauCeti.LinearPMap.reducingRestriction B U hred ⟨⟨(x : H), hx⟩, hy⟩ : U)
-        = ⟨B ⟨(x : H), x.2⟩, hred.invariant _ hx⟩ from
+        = ⟨B ⟨(x : H), x.2⟩, hred.isInvariant.apply_mem _ hx⟩ from
           Subtype.ext (TauCeti.LinearPMap.coe_reducingRestriction_apply B U hred _ x.2),
       Submodule.coe_inner] at this
   · intro h y
@@ -92,7 +92,7 @@ theorem semiboundedAbove_reducingRestriction_iff
       (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff B U hred _).mp y.2
     have := h ⟨((y : U) : H), hmem⟩ (y : U).2
     rwa [show (TauCeti.LinearPMap.reducingRestriction B U hred y : U)
-        = ⟨B ⟨((y : U) : H), hmem⟩, hred.invariant _ (y : U).2⟩ from
+        = ⟨B ⟨((y : U) : H), hmem⟩, hred.isInvariant.apply_mem _ (y : U).2⟩ from
           Subtype.ext (TauCeti.LinearPMap.coe_reducingRestriction_apply B U hred _ hmem),
       Submodule.coe_inner]
 
@@ -100,7 +100,7 @@ omit [CompleteSpace H] in
 /-- **`Λ ≥ c` on a reducing block is the ambient form bound on that block.** -/
 theorem semiboundedBelow_reducingRestriction_iff
     {B : H →ₗ.[𝕜] H} {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace B U) (c : ℝ) :
+    (hred : _root_.LinearPMap.IsReducing B U) (c : ℝ) :
     TauCeti.LinearPMap.SemiboundedBelow
         (TauCeti.LinearPMap.reducingRestriction B U hred) c ↔
       ∀ x : B.domain, (x : H) ∈ U →
@@ -112,7 +112,7 @@ theorem semiboundedBelow_reducingRestriction_iff
       (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff B U hred _).mpr x.2
     have := h ⟨⟨(x : H), hx⟩, hy⟩
     rwa [show (TauCeti.LinearPMap.reducingRestriction B U hred ⟨⟨(x : H), hx⟩, hy⟩ : U)
-        = ⟨B ⟨(x : H), x.2⟩, hred.invariant _ hx⟩ from
+        = ⟨B ⟨(x : H), x.2⟩, hred.isInvariant.apply_mem _ hx⟩ from
           Subtype.ext (TauCeti.LinearPMap.coe_reducingRestriction_apply B U hred _ x.2),
       Submodule.coe_inner] at this
   · intro h y
@@ -120,7 +120,7 @@ theorem semiboundedBelow_reducingRestriction_iff
       (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff B U hred _).mp y.2
     have := h ⟨((y : U) : H), hmem⟩ (y : U).2
     rwa [show (TauCeti.LinearPMap.reducingRestriction B U hred y : U)
-        = ⟨B ⟨((y : U) : H), hmem⟩, hred.invariant _ (y : U).2⟩ from
+        = ⟨B ⟨((y : U) : H), hmem⟩, hred.isInvariant.apply_mem _ (y : U).2⟩ from
           Subtype.ext (TauCeti.LinearPMap.coe_reducingRestriction_apply B U hred _ hmem),
       Submodule.coe_inner]
 
@@ -147,7 +147,7 @@ the blocks `A₀`, `A₁`. -/
 theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -155,7 +155,7 @@ theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (_hcross : DavisKahan.CrossedDefectsEquivalent P Q) :
     TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4 ↔
       (TauCeti.LinearPMap.SemiboundedAbove
@@ -178,7 +178,7 @@ This is the presentation-facing form of the scalar `maximalAngle` theorem above.
 theorem theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -186,7 +186,7 @@ theorem theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_complex
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q) :
     sourceFullAngleLeC P Q (Real.pi / 4) ↔
       (TauCeti.LinearPMap.SemiboundedAbove
@@ -209,7 +209,7 @@ properties."  The witness is the spectral projector of `A + H` on the side of
 theorem theorem8_1_exists_branch_blockPlacement_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -218,7 +218,7 @@ theorem theorem8_1_exists_branch_blockPlacement_unbounded_complex
     (hdelta : 0 < delta) :
     ∃ (Q : Submodule ℂ Hc) (hQinst : Q.HasOrthogonalProjection),
       haveI := hQinst
-      ∃ hQred : TauCeti.LinearPMap.ReducesSubspace
+      ∃ hQred : _root_.LinearPMap.IsReducing
           (TauCeti.LinearPMap.addBounded A Hop) Q,
         TauCeti.LinearPMap.SemiboundedAbove
             (TauCeti.LinearPMap.reducingRestriction
@@ -249,20 +249,20 @@ not of `A + H`, because `H` is fully off-diagonal and so has no form on `Pᗮ`. 
 theorem theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex
     (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Hc) ∈ Pᗮ) :
     RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ - alpha * ‖(x : Hc)‖ ^ 2 ≤
       RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
-          ⟨Qᗮ.starProjection (x : Hc), hQred.orthogonalProjection_mem_domain x⟩,
+          ⟨Qᗮ.starProjection (x : Hc), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hQred x.property⟩,
         Qᗮ.starProjection (x : Hc)⟫_ℂ
         - alpha * ‖Qᗮ.starProjection (x : Hc)‖ ^ 2 := by
   have hmain : RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : Hc)⟫_ℂ
       - alpha * ‖(x : Hc)‖ ^ 2 ≤
       RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
-          ⟨Qᗮ.starProjection (x : Hc), hQred.orthogonalProjection_mem_domain x⟩,
+          ⟨Qᗮ.starProjection (x : Hc), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hQred x.property⟩,
         Qᗮ.starProjection (x : Hc)⟫_ℂ
         - alpha * ‖Qᗮ.starProjection (x : Hc)‖ ^ 2 :=
     theorem8_1_upperCompressionRepulsion_unbounded hQred
@@ -285,7 +285,7 @@ The analogous lower-block inequality, read on `P` with the cosine block
 theorem theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ)
     (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
@@ -293,13 +293,13 @@ theorem theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex
     (alpha + delta) * ‖(x : Hc)‖ ^ 2 - RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ ≤
       (alpha + delta) * ‖Q.starProjection (x : Hc)‖ ^ 2
         - RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
-            ⟨Q.starProjection (x : Hc), hQred.projection_mem_domain x⟩,
+            ⟨Q.starProjection (x : Hc), hQred.starProjection_mem_domain x.property⟩,
           Q.starProjection (x : Hc)⟫_ℂ := by
   have hmain : (alpha + delta) * ‖(x : Hc)‖ ^ 2
       - RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : Hc)⟫_ℂ ≤
       (alpha + delta) * ‖Q.starProjection (x : Hc)‖ ^ 2
         - RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
-            ⟨Q.starProjection (x : Hc), hQred.projection_mem_domain x⟩,
+            ⟨Q.starProjection (x : Hc), hQred.starProjection_mem_domain x.property⟩,
           Q.starProjection (x : Hc)⟫_ℂ :=
     theorem8_1_lowerCompressionRepulsion_unbounded hQred
       ((semiboundedBelow_reducingRestriction_iff hQred.orthogonal (alpha + delta)).mp hQhigh) x
@@ -331,7 +331,7 @@ context is the source's. -/
 theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     (_hA : IsSelfAdjoint A) (_hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (_hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -339,7 +339,7 @@ theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex
     (_hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (_hdelta : 0 < delta)
     (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
@@ -351,7 +351,7 @@ theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Hc) ∈ Pᗮ) :
     RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ - alpha * ‖(x : Hc)‖ ^ 2 ≤
       RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
-          ⟨Qᗮ.starProjection (x : Hc), hQred.orthogonalProjection_mem_domain x⟩,
+          ⟨Qᗮ.starProjection (x : Hc), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hQred x.property⟩,
         Qᗮ.starProjection (x : Hc)⟫_ℂ
         - alpha * ‖Qᗮ.starProjection (x : Hc)‖ ^ 2 :=
   theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex hHPperp Q hQred
@@ -365,7 +365,7 @@ Lean context is the source's. -/
 theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     (_hA : IsSelfAdjoint A) (_hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (_hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -373,7 +373,7 @@ theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (_hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (_hdelta : 0 < delta)
     (Q : Submodule ℂ Hc) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (_hQlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
@@ -386,7 +386,7 @@ theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
     (alpha + delta) * ‖(x : Hc)‖ ^ 2 - RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ ≤
       (alpha + delta) * ‖Q.starProjection (x : Hc)‖ ^ 2
         - RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
-            ⟨Q.starProjection (x : Hc), hQred.projection_mem_domain x⟩,
+            ⟨Q.starProjection (x : Hc), hQred.starProjection_mem_domain x.property⟩,
           Q.starProjection (x : Hc)⟫_ℂ :=
   theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex hHP Q hQred
     hQhigh x hx
@@ -401,7 +401,7 @@ that "this `Q`" is the `Q` the clause just produced and nothing else. -/
 theorem theorem8_1_exists_branch_withCompression_unbounded_complex
     [TopologicalSpace.SeparableSpace Hc]
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -410,7 +410,7 @@ theorem theorem8_1_exists_branch_withCompression_unbounded_complex
     (hdelta : 0 < delta) :
     ∃ (Q : Submodule ℂ Hc) (hQinst : Q.HasOrthogonalProjection),
       haveI := hQinst
-      ∃ hQred : TauCeti.LinearPMap.ReducesSubspace
+      ∃ hQred : _root_.LinearPMap.IsReducing
           (TauCeti.LinearPMap.addBounded A Hop) Q,
         (TauCeti.LinearPMap.SemiboundedAbove
             (TauCeti.LinearPMap.reducingRestriction
@@ -423,14 +423,14 @@ theorem theorem8_1_exists_branch_withCompression_unbounded_complex
         (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Hc) ∈ Pᗮ →
           RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ - alpha * ‖(x : Hc)‖ ^ 2 ≤
             RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
-                ⟨Qᗮ.starProjection (x : Hc), hQred.orthogonalProjection_mem_domain x⟩,
+                ⟨Qᗮ.starProjection (x : Hc), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hQred x.property⟩,
               Qᗮ.starProjection (x : Hc)⟫_ℂ
               - alpha * ‖Qᗮ.starProjection (x : Hc)‖ ^ 2) ∧
         (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Hc) ∈ P →
           (alpha + delta) * ‖(x : Hc)‖ ^ 2 - RCLike.re ⟪A ⟨(x : Hc), x.2⟩, (x : Hc)⟫_ℂ ≤
             (alpha + delta) * ‖Q.starProjection (x : Hc)‖ ^ 2
               - RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop
-                  ⟨Q.starProjection (x : Hc), hQred.projection_mem_domain x⟩,
+                  ⟨Q.starProjection (x : Hc), hQred.starProjection_mem_domain x.property⟩,
                 Q.starProjection (x : Hc)⟫_ℂ) := by
   obtain ⟨hred, hlow, hhigh, hangle⟩ :=
     theorem8_1_canonicalBranchUnbounded_printed (A := A) (Hop := Hop) (P := P)
@@ -464,7 +464,7 @@ omit [CompleteSpace Er] [P.HasOrthogonalProjection] in
 its real part. -/
 theorem semiboundedAbove_reducingRestriction_real_iff
     {B : Er →ₗ.[ℝ] Er} {U : Submodule ℝ Er} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace B U) (c : ℝ) :
+    (hred : _root_.LinearPMap.IsReducing B U) (c : ℝ) :
     TauCeti.LinearPMap.SemiboundedAbove
         (TauCeti.LinearPMap.reducingRestriction B U hred) c ↔
       ∀ x : B.domain, (x : Er) ∈ U → ⟪B x, (x : Er)⟫_ℝ ≤ c * ‖(x : Er)‖ ^ 2 := by
@@ -475,7 +475,7 @@ omit [CompleteSpace Er] [P.HasOrthogonalProjection] in
 /-- The block/ambient bridge over `ℝ`, lower form. -/
 theorem semiboundedBelow_reducingRestriction_real_iff
     {B : Er →ₗ.[ℝ] Er} {U : Submodule ℝ Er} [U.HasOrthogonalProjection]
-    (hred : TauCeti.LinearPMap.ReducesSubspace B U) (c : ℝ) :
+    (hred : _root_.LinearPMap.IsReducing B U) (c : ℝ) :
     TauCeti.LinearPMap.SemiboundedBelow
         (TauCeti.LinearPMap.reducingRestriction B U hred) c ↔
       ∀ x : B.domain, (x : Er) ∈ U → c * ‖(x : Er)‖ ^ 2 ≤ ⟪B x, (x : Er)⟫_ℝ := by
@@ -488,7 +488,7 @@ uses the literal real source full-angle condition. -/
 theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -496,7 +496,7 @@ theorem theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (_hcross : DavisKahan.CrossedDefectsEquivalent P Q) :
     TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4 ↔
       (TauCeti.LinearPMap.SemiboundedAbove
@@ -518,7 +518,7 @@ characterization.**  The scalar `maximalAngle` theorem above remains the proof b
 theorem theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -526,7 +526,7 @@ theorem theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_real
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q) :
     sourceFullAngleLeR P Q (Real.pi / 4) ↔
       (TauCeti.LinearPMap.SemiboundedAbove
@@ -545,7 +545,7 @@ blocks, at unbounded ambient scope over `ℝ`.** -/
 theorem theorem8_1_exists_branch_blockPlacement_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -554,7 +554,7 @@ theorem theorem8_1_exists_branch_blockPlacement_unbounded_real
     (hdelta : 0 < delta) :
     ∃ (Q : Submodule ℝ Er) (hQinst : Q.HasOrthogonalProjection),
       haveI := hQinst
-      ∃ hQred : TauCeti.LinearPMap.ReducesSubspace
+      ∃ hQred : _root_.LinearPMap.IsReducing
           (TauCeti.LinearPMap.addBounded A Hop) Q,
         TauCeti.LinearPMap.SemiboundedAbove
             (TauCeti.LinearPMap.reducingRestriction
@@ -584,20 +584,20 @@ objects, at unbounded ambient scope over `ℝ`.** -/
 theorem theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real
     (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Er) ∈ Pᗮ) :
     ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ - alpha * ‖(x : Er)‖ ^ 2 ≤
       ⟪TauCeti.LinearPMap.addBounded A Hop
-          ⟨Qᗮ.starProjection (x : Er), hQred.orthogonalProjection_mem_domain x⟩,
+          ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hQred x.property⟩,
         Qᗮ.starProjection (x : Er)⟫_ℝ
         - alpha * ‖Qᗮ.starProjection (x : Er)‖ ^ 2 := by
   have hmain : ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : Er)⟫_ℝ
       - alpha * ‖(x : Er)‖ ^ 2 ≤
       ⟪TauCeti.LinearPMap.addBounded A Hop
-          ⟨Qᗮ.starProjection (x : Er), hQred.orthogonalProjection_mem_domain x⟩,
+          ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hQred x.property⟩,
         Qᗮ.starProjection (x : Er)⟫_ℝ
         - alpha * ‖Qᗮ.starProjection (x : Er)‖ ^ 2 :=
     theorem8_1_upperCompressionRepulsion_unbounded_real hQred
@@ -617,7 +617,7 @@ objects, at unbounded ambient scope over `ℝ`.** -/
 theorem theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ)
     (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQhigh : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (alpha + delta))
@@ -625,13 +625,13 @@ theorem theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real
     (alpha + delta) * ‖(x : Er)‖ ^ 2 - ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ ≤
       (alpha + delta) * ‖Q.starProjection (x : Er)‖ ^ 2
         - ⟪TauCeti.LinearPMap.addBounded A Hop
-            ⟨Q.starProjection (x : Er), hQred.projection_mem_domain x⟩,
+            ⟨Q.starProjection (x : Er), hQred.starProjection_mem_domain x.property⟩,
           Q.starProjection (x : Er)⟫_ℝ := by
   have hmain : (alpha + delta) * ‖(x : Er)‖ ^ 2
       - ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : Er)⟫_ℝ ≤
       (alpha + delta) * ‖Q.starProjection (x : Er)‖ ^ 2
         - ⟪TauCeti.LinearPMap.addBounded A Hop
-            ⟨Q.starProjection (x : Er), hQred.projection_mem_domain x⟩,
+            ⟨Q.starProjection (x : Er), hQred.starProjection_mem_domain x.property⟩,
           Q.starProjection (x : Er)⟫_ℝ :=
     theorem8_1_lowerCompressionRepulsion_unbounded_real hQred
       ((semiboundedBelow_reducingRestriction_real_iff hQred.orthogonal (alpha + delta)).mp
@@ -656,7 +656,7 @@ and Kahan print and this particular inequality does not consume. -/
 theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
     (_hA : IsSelfAdjoint A) (_hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (_hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -664,7 +664,7 @@ theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real
     (_hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (_hdelta : 0 < delta)
     (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
@@ -676,7 +676,7 @@ theorem theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real
     (x : (TauCeti.LinearPMap.addBounded A Hop).domain) (hx : (x : Er) ∈ Pᗮ) :
     ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ - alpha * ‖(x : Er)‖ ^ 2 ≤
       ⟪TauCeti.LinearPMap.addBounded A Hop
-          ⟨Qᗮ.starProjection (x : Er), hQred.orthogonalProjection_mem_domain x⟩,
+          ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hQred x.property⟩,
         Qᗮ.starProjection (x : Er)⟫_ℝ
         - alpha * ‖Qᗮ.starProjection (x : Er)‖ ^ 2 :=
   theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real hHPperp Q hQred
@@ -688,7 +688,7 @@ cosine block `P_Q`. -/
 theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
     (_hA : IsSelfAdjoint A) (_hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (_hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (_hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -696,7 +696,7 @@ theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (_hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (_hdelta : 0 < delta)
     (Q : Submodule ℝ Er) [Q.HasOrthogonalProjection]
-    (hQred : TauCeti.LinearPMap.ReducesSubspace (TauCeti.LinearPMap.addBounded A Hop) Q)
+    (hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Q)
     (_hQlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction
         (TauCeti.LinearPMap.addBounded A Hop) Q hQred) alpha)
@@ -709,7 +709,7 @@ theorem theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
     (alpha + delta) * ‖(x : Er)‖ ^ 2 - ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ ≤
       (alpha + delta) * ‖Q.starProjection (x : Er)‖ ^ 2
         - ⟪TauCeti.LinearPMap.addBounded A Hop
-            ⟨Q.starProjection (x : Er), hQred.projection_mem_domain x⟩,
+            ⟨Q.starProjection (x : Er), hQred.starProjection_mem_domain x.property⟩,
           Q.starProjection (x : Er)⟫_ℝ :=
   theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real hHP Q hQred
     hQhigh x hx
@@ -720,7 +720,7 @@ the acute angle, and both compression inequalities for the `Q` it produces. -/
 theorem theorem8_1_exists_branch_withCompression_unbounded_real
     [TopologicalSpace.SeparableSpace Er]
     (hA : IsSelfAdjoint A) (hH : Hop.IsSymmetric)
-    (hPred : TauCeti.LinearPMap.ReducesSubspace A P)
+    (hPred : _root_.LinearPMap.IsReducing A P)
     (hPlow : TauCeti.LinearPMap.SemiboundedAbove
       (TauCeti.LinearPMap.reducingRestriction A P hPred) alpha)
     (hPhigh : TauCeti.LinearPMap.SemiboundedBelow
@@ -729,7 +729,7 @@ theorem theorem8_1_exists_branch_withCompression_unbounded_real
     (hdelta : 0 < delta) :
     ∃ (Q : Submodule ℝ Er) (hQinst : Q.HasOrthogonalProjection),
       haveI := hQinst
-      ∃ hQred : TauCeti.LinearPMap.ReducesSubspace
+      ∃ hQred : _root_.LinearPMap.IsReducing
           (TauCeti.LinearPMap.addBounded A Hop) Q,
         (TauCeti.LinearPMap.SemiboundedAbove
             (TauCeti.LinearPMap.reducingRestriction
@@ -742,14 +742,14 @@ theorem theorem8_1_exists_branch_withCompression_unbounded_real
         (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Er) ∈ Pᗮ →
           ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ - alpha * ‖(x : Er)‖ ^ 2 ≤
             ⟪TauCeti.LinearPMap.addBounded A Hop
-                ⟨Qᗮ.starProjection (x : Er), hQred.orthogonalProjection_mem_domain x⟩,
+                ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hQred x.property⟩,
               Qᗮ.starProjection (x : Er)⟫_ℝ
               - alpha * ‖Qᗮ.starProjection (x : Er)‖ ^ 2) ∧
         (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Er) ∈ P →
           (alpha + delta) * ‖(x : Er)‖ ^ 2 - ⟪A ⟨(x : Er), x.2⟩, (x : Er)⟫_ℝ ≤
             (alpha + delta) * ‖Q.starProjection (x : Er)‖ ^ 2
               - ⟪TauCeti.LinearPMap.addBounded A Hop
-                  ⟨Q.starProjection (x : Er), hQred.projection_mem_domain x⟩,
+                  ⟨Q.starProjection (x : Er), hQred.starProjection_mem_domain x.property⟩,
                 Q.starProjection (x : Er)⟫_ℝ) := by
   obtain ⟨hred, hlow, hhigh, hangle⟩ :=
     theorem8_1_canonicalBranchUnbounded_printed_real (A := A) (Hop := Hop) (P := P)

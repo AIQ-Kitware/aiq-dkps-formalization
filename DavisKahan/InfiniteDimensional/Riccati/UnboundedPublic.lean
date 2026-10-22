@@ -59,7 +59,7 @@ theorem constructedStrongRiccatiSolution_of_selectedGraph
     (hselection : Nonempty (ContractiveReducingGraphSelection H)) :
     ∃ X : E0 →L[𝕜] E1,
       StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
-      TauCeti.LinearPMap.ReducesSubspace
+      _root_.LinearPMap.IsReducing
         (constructedUnboundedBlockOperator H)
         (unboundedBlockGraph X) := by
   exact exists_strongRiccati_solution_of_selected_reducing_graph H hselection
@@ -80,7 +80,7 @@ restrictions. -/
 theorem complex_unbounded_blockDiagonalization
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := F0) (E1 := F1))
     (X : F0 →L[ℂ] F1)
-    (hred : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing
       (unboundedBlockOperatorCore H) (unboundedBlockGraph X)) :
     ∃ W Winv : WithLp 2 (F0 × F1) →L[ℂ] WithLp 2 (F0 × F1),
       TauCeti.LinearPMap.UnitaryEquivalent
@@ -88,7 +88,7 @@ theorem complex_unbounded_blockDiagonalization
         (unboundedBlockOperatorCore H) W Winv ∧
       W ∘L Submodule.starProjection (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) =
         Submodule.starProjection (unboundedBlockGraph X) ∘L W ∧
-      TauCeti.LinearPMap.ReducesSubspace
+      _root_.LinearPMap.IsReducing
         (unboundedBlockDiagonalCore H X)
         (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) ∧
       TauCeti.LinearPMap.UnitaryEquivalent
@@ -112,7 +112,7 @@ supply the orthogonal-complement domain decomposition. -/
 theorem complex_unbounded_blockDiagonalization_of_strongSolution
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := F0) (E1 := F1))
     {X : F0 →L[ℂ] F1} (_hX : StrongSolvesRiccati H X)
-    (hred : TauCeti.LinearPMap.ReducesSubspace
+    (hred : _root_.LinearPMap.IsReducing
       (unboundedBlockOperatorCore H) (unboundedBlockGraph X)) :
     ∃ W Winv : WithLp 2 (F0 × F1) →L[ℂ] WithLp 2 (F0 × F1),
       TauCeti.LinearPMap.UnitaryEquivalent
@@ -120,7 +120,7 @@ theorem complex_unbounded_blockDiagonalization_of_strongSolution
         (unboundedBlockOperatorCore H) W Winv ∧
       W ∘L Submodule.starProjection (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) =
         Submodule.starProjection (unboundedBlockGraph X) ∘L W ∧
-      TauCeti.LinearPMap.ReducesSubspace
+      _root_.LinearPMap.IsReducing
         (unboundedBlockDiagonalCore H X)
         (unboundedBlockGraph (0 : F0 →L[ℂ] F1)) ∧
       TauCeti.LinearPMap.UnitaryEquivalent

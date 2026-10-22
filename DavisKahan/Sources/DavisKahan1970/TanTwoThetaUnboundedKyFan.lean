@@ -117,7 +117,7 @@ pairs the unbounded Davis--Kahan block equation with `S x` and uses the
 eigenvector relation once, to replace `S (S x)` by `q² x`, which is what turns
 the second unbounded term into the trial-side form bound. -/
 theorem gap_mul_sq_le_paired_of_doubleAngleEigenvector
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -210,7 +210,7 @@ theorem norm_sq_diagonalPart_of_doubleAngleEigenvector
 cutoff, no limit and no explicit constant are needed: if `q` were `1` then both
 even blocks would vanish and equation (7.6) would force `δ ≤ 0`. -/
 theorem doubleAngleEigenvalue_lt_one
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -352,7 +352,7 @@ Scope, stated honestly.  At `n = 1` this is *weaker* than
 here is `n ≥ 2`, which that theorem does not reach at all; the price is the
 eigenfamily hypothesis, and removing it is the remaining work. -/
 theorem gap_mul_sum_tangent_le_kyFan_of_doubleAngleEigenfamily
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -498,7 +498,7 @@ def IsDoubleAngleEigenbasis (A : H →ₗ.[ℂ] H) (U : Submodule ℂ H)
 prefix length `k`, whenever `T` is a tangent operator whose prefixes are
 realised by exact `sin² 2Θ` eigenfamilies of the trial subspace. -/
 theorem gap_mul_kyFan_le_two_mul_kyFan_of_doubleAngleEigenbasis
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -526,7 +526,7 @@ residual `B` itself, so no gauge of a scalar multiple of `B` is needed.  Ideal
 membership of the scaled tangent is concluded, not assumed. -/
 theorem mem_and_gauge_le_of_doubleAngleEigenbasis
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -619,7 +619,7 @@ with the eigenvector relation replaced by the compressed defect bound
 **No norm of `A` occurs**, and no uncompressed residual is ever paired with
 `A`. -/
 theorem gap_mul_sq_le_paired_of_approximateDoubleAngleEigenvector
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -882,7 +882,7 @@ with the global relation `S² x = q² x` replaced by the two compressed facts
 estimated, it is annihilated by the sign condition.  When `x` is an exact
 eigenvector the leakage vanishes and both hypotheses are trivial. -/
 theorem gap_mul_sq_le_paired_of_compressedDoubleAngleEigenvector
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -977,7 +977,7 @@ free.**  `q < 1`, exactly as in the exact-eigenvector case: if `q` were `1`
 then `‖C x‖² = 0` and `‖C S x‖² ≤ 0`, and equation (7.6) would force
 `δ ≤ 0`. -/
 theorem compressedDoubleAngleEigenvalue_lt_one
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1266,7 +1266,7 @@ contraction system with constant `1`, and
 `sum_le_kyFanApproximationGauge_of_contraction` charges `1 * 1` for it.  Nothing
 anywhere is multiplied by `1 + ε`. -/
 theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1442,7 +1442,7 @@ theorem isCompressedDoubleAngleEigenbasis_of_isDoubleAngleEigenbasis
 compressed eigenbasis.**  `δ · kyFanApproximationGauge k T ≤
 2 · kyFanApproximationGauge k B` for every prefix length `k`. -/
 theorem gap_mul_kyFan_le_two_mul_kyFan_of_compressedDoubleAngleEigenbasis
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1470,7 +1470,7 @@ same conclusion, same constant `2` — and the proof uses nothing but the
 compressed endpoint.  This is the machine-checked demonstration that removing
 the exact eigenvector relation lost no strength. -/
 theorem gap_mul_kyFan_le_two_mul_kyFan_of_doubleAngleEigenbasis_via_compressed
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1494,7 +1494,7 @@ unitarily invariant ideal gauge, on a compressed eigenbasis.**
 the scaled tangent is concluded, not assumed. -/
 theorem mem_and_gauge_le_of_compressedDoubleAngleEigenbasis
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1696,7 +1696,7 @@ allowed: they are dropped from the family before
 which shortens the Ky Fan prefix from `k` to the number of positive eigenvalues
 and is absorbed by monotonicity of the gauge in the prefix length. -/
 theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1841,7 +1841,7 @@ invariant filtration.**  `δ · kyFanApproximationGauge k T ≤
 2 · kyFanApproximationGauge k B`, with the sharp constant `2`, and with no
 hypothesis about the point spectrum of `sin² 2Θ`. -/
 theorem gap_mul_kyFan_le_two_mul_kyFan_of_invariantDoubleAngleFiltration
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -1867,7 +1867,7 @@ of the scaled tangent concluded rather than assumed, and with the eigenbasis
 hypothesis replaced throughout by finite-dimensional `A`-invariance. -/
 theorem mem_and_gauge_le_of_invariantDoubleAngleFiltration
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -2232,7 +2232,7 @@ reverse.  The two together force equality, i.e. Ky Fan extremality of the
 compression of `sin² 2Θ` to `W`, and finite-dimensional `A`-invariance of `W`
 carries no information about that. -/
 theorem sum_tangent_le_kyFan_of_invariantSubspace
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -2334,7 +2334,7 @@ hypothesis says exactly that the compression of `sin² 2Θ` to the family's span
 **attains** the Ky Fan prefix — a Ky Fan extremality property of the family, not
 a property that any subspace construction supplies. -/
 theorem kyFan_eq_sum_tangent_of_isCompressedDoubleAngleEigenbasis
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -2376,7 +2376,7 @@ statement that some compressed eigenfamily *attains* the prefix.  The gain over
 conclusion is now about a constructed operator; the two statements are otherwise
 the same theorem, and this one is its specialisation at `T = tan 2Θ₀`. -/
 theorem gap_mul_kyFan_le_two_mul_kyFan_unboundedReflectionTangent
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -2400,7 +2400,7 @@ tangent.  The same honest caveat as for the Ky Fan form applies: the surviving
 hypothesis is the attainment clause, not a hypothesis about `A` alone. -/
 theorem mem_and_gauge_le_unboundedReflectionTangent
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (hB : TauCeti.IsOddFor U B)
+    (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
@@ -2710,8 +2710,8 @@ theorem perturbed_comm_reflectionZ (w : Model) :
 
 /-- **The trial subspace reduces the unperturbed operator.** -/
 theorem reducesSubspace_unperturbed :
-    TauCeti.LinearPMap.ReducesSubspace unperturbed trial := by
-  refine ⟨fun _ => Submodule.mem_top, fun _ => Submodule.mem_top, ?_, ?_⟩
+    _root_.LinearPMap.IsReducing unperturbed trial := by
+  refine ⟨(by intro _ _; exact Submodule.mem_top), ?_, ?_⟩
   · intro x hx
     rw [unperturbed_apply, unperturbedMap_apply, (mem_trial_iff _).mp hx,
       zero_smul]
