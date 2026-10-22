@@ -440,3 +440,17 @@ This is a **manually curated, non-exhaustive starting point**. Revisit the statu
 classification when a PR changes or a new historical proof comparison is
 performed; do not silently convert a hypothesis of influence into an accepted
 attribution claim. There is no need for a new polling script or checker.
+
+**Canonical finite-dimensional Sylvester API follow-up (2026-10-22):** the
+local `ForTauCeti` `LinearMap`-valued `sylvesterOperator`, its positive-gap
+injectivity proof, and the total `solveSylvester` wrapper have been removed.
+Pinned Tau Ceti `dded4e1133eb74742ae658ebd8de8d66f8d2b470` provides the
+canonical `ContinuousLinearMap.sylvester`, `sylvester_injective`,
+`sylvester_sum_eigenvectorBasis`, `sylvester_bijective`, and
+`sylvester_apply_eq_iff` APIs. These upstream results use disjoint point spectra
+and a continuous-linear-map carrier, so they subsume the local positive-gap
+finite-dimensional solver. Repository search found no maintained consumer of
+the removed local declarations. The local ordered and interval/exterior gap
+predicates remain: they are consumed by source-facing finite-dimensional and
+unbounded Sylvester estimates and are not replaced by the upstream equation API.
+The `ForTauCeti` and `DavisKahan.All` targets compile after the retirement.
