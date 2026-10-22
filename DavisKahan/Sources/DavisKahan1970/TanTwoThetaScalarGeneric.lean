@@ -90,15 +90,18 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     let A' := ScalarTransport.pmap (e := e) A
     let B' := ScalarTransport.clm (e := e) B
     have hA' : IsSelfAdjoint A' := (ScalarTransport.isSelfAdjoint_pmap_iff e).2 hA
-    have hred' : TauCeti.LinearPMap.ReducesSubspace A' U' :=
-      (ScalarTransport.reducesSubspace_pmap_iff (e := e) U).2 hred
+    have hred' : _root_.LinearPMap.IsReducing A' U' :=
+      (ScalarTransport.isReducing_pmap_iff (e := e) U).2
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mp hred)
     have hB' : TauCeti.IsOddFor U' B' :=
       (ScalarTransport.isOddFor_clm_iff (e := e) U B).2 hB
-    have hVred' : TauCeti.LinearPMap.ReducesSubspace
+    have hVred' : _root_.LinearPMap.IsReducing
         (TauCeti.LinearPMap.addBounded A' B') V' :=
-      (ScalarTransport.reducesSubspace_addBounded_pmap_iff (e := e) B V).2 hV
+      (ScalarTransport.isReducing_addBounded_pmap_iff (e := e) B V).2
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mp hV)
     let hV' : DavisKahan.ReflectionIntertwines A' B' V' :=
-      DavisKahan.ReflectionIntertwines.ofReducesSubspace hVred'
+      DavisKahan.ReflectionIntertwines.ofReducesSubspace
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mpr hVred')
     have hUa' := ScalarTransport.formUpperOnSubspace_pmap (e := e) hUa
     have hUb' := ScalarTransport.formLowerOnOrthogonal_pmap (e := e) hUb
     have hRmem' : N.Mem (blockCompression U'ᗮ U' B') := by
@@ -108,7 +111,8 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     obtain ⟨hlt', hseq', hmem', hbound'⟩ :=
       tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNorming_real
         (E := ScalarTransport e E) (U := U') (A := A') (B := B') (a := a) (b := b)
-        N V' hA' hred' hB' hV' hUa' hUb' hab hRmem'
+        N V' hA' (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mpr hred')
+        hB' hV' hUa' hUb' hab hRmem'
     let T' : U' →L[ℝ] U'ᗮ := reflectionTangentCorner U' V'.reflectionOperator
     let T : U →L[𝕜] Uᗮ :=
       DavisKahan.TanTheta.scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) U T'
@@ -159,15 +163,18 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     let A' := ScalarTransport.pmap (e := e) A
     let B' := ScalarTransport.clm (e := e) B
     have hA' : IsSelfAdjoint A' := (ScalarTransport.isSelfAdjoint_pmap_iff e).2 hA
-    have hred' : TauCeti.LinearPMap.ReducesSubspace A' U' :=
-      (ScalarTransport.reducesSubspace_pmap_iff (e := e) U).2 hred
+    have hred' : _root_.LinearPMap.IsReducing A' U' :=
+      (ScalarTransport.isReducing_pmap_iff (e := e) U).2
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mp hred)
     have hB' : TauCeti.IsOddFor U' B' :=
       (ScalarTransport.isOddFor_clm_iff (e := e) U B).2 hB
-    have hVred' : TauCeti.LinearPMap.ReducesSubspace
+    have hVred' : _root_.LinearPMap.IsReducing
         (TauCeti.LinearPMap.addBounded A' B') V' :=
-      (ScalarTransport.reducesSubspace_addBounded_pmap_iff (e := e) B V).2 hV
+      (ScalarTransport.isReducing_addBounded_pmap_iff (e := e) B V).2
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mp hV)
     let hV' : DavisKahan.ReflectionIntertwines A' B' V' :=
-      DavisKahan.ReflectionIntertwines.ofReducesSubspace hVred'
+      DavisKahan.ReflectionIntertwines.ofReducesSubspace
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mpr hVred')
     have hUa' := ScalarTransport.formUpperOnSubspace_pmap (e := e) hUa
     have hUb' := ScalarTransport.formLowerOnOrthogonal_pmap (e := e) hUb
     have hRmem' : N.Mem (blockCompression U'ᗮ U' B') := by
@@ -177,7 +184,8 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     obtain ⟨hlt', hseq', hmem', hbound'⟩ :=
       tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex
         (G := ScalarTransport e E) (U := U') (A := A') (B := B') (a := a) (b := b)
-        N V' hA' hred' hB' hV' hUa' hUb' hab hRmem'
+        N V' hA' (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mpr hred')
+        hB' hV' hUa' hUb' hab hRmem'
     let T' : U' →L[ℂ] U'ᗮ := reflectionTangentCorner U' V'.reflectionOperator
     let T : U →L[𝕜] Uᗮ :=
       DavisKahan.TanTheta.scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) U T'
@@ -254,16 +262,19 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     let A' := ScalarTransport.pmap (e := e) A
     let B' := ScalarTransport.clm (e := e) B
     have hA' : IsSelfAdjoint A' := (ScalarTransport.isSelfAdjoint_pmap_iff e).2 hA
-    have hred' : TauCeti.LinearPMap.ReducesSubspace A' U' :=
-      (ScalarTransport.reducesSubspace_pmap_iff (e := e) U).2 hred
+    have hred' : _root_.LinearPMap.IsReducing A' U' :=
+      (ScalarTransport.isReducing_pmap_iff (e := e) U).2
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mp hred)
     have hBsa' : IsSelfAdjoint B' := (ScalarTransport.isSelfAdjoint_clm_iff (e := e)).2 hBsa
     have hB' : TauCeti.IsOddFor U' B' :=
       (ScalarTransport.isOddFor_clm_iff (e := e) U B).2 hB
-    have hVred' : TauCeti.LinearPMap.ReducesSubspace
+    have hVred' : _root_.LinearPMap.IsReducing
         (TauCeti.LinearPMap.addBounded A' B') V' :=
-      (ScalarTransport.reducesSubspace_addBounded_pmap_iff (e := e) B V).2 hV
+      (ScalarTransport.isReducing_addBounded_pmap_iff (e := e) B V).2
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mp hV)
     let hV' : DavisKahan.ReflectionIntertwines A' B' V' :=
-      DavisKahan.ReflectionIntertwines.ofReducesSubspace hVred'
+      DavisKahan.ReflectionIntertwines.ofReducesSubspace
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mpr hVred')
     have hUa' := ScalarTransport.formUpperOnSubspace_pmap (e := e) hUa
     have hUb' := ScalarTransport.formLowerOnOrthogonal_pmap (e := e) hUb
     have hBmem' : N.Mem B' :=
@@ -271,7 +282,8 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     obtain ⟨hlt', _hseq', hmem', hbound'⟩ :=
       tanTwoTheta_ambient_unbounded_reducing_sineSequence_symmetricNorming_real
         (E := ScalarTransport e E) (U := U') (A := A') (B := B') (a := a) (b := b)
-        hA' hred' hB' hUa' hUb' hab N V' hBsa' hV' hBmem'
+        hA' (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mpr hred')
+        hB' hUa' hUb' hab N V' hBsa' hV' hBmem'
     have hsinApprox : ∀ n : ℕ,
         (Angle.sinTwoAngleOperator U' V').approximationNumber n < 1 := by
       intro n
@@ -303,23 +315,27 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     let A' := ScalarTransport.pmap (e := e) A
     let B' := ScalarTransport.clm (e := e) B
     have hA' : IsSelfAdjoint A' := (ScalarTransport.isSelfAdjoint_pmap_iff e).2 hA
-    have hred' : TauCeti.LinearPMap.ReducesSubspace A' U' :=
-      (ScalarTransport.reducesSubspace_pmap_iff (e := e) U).2 hred
+    have hred' : _root_.LinearPMap.IsReducing A' U' :=
+      (ScalarTransport.isReducing_pmap_iff (e := e) U).2
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mp hred)
     have hBsa' : IsSelfAdjoint B' := (ScalarTransport.isSelfAdjoint_clm_iff (e := e)).2 hBsa
     have hB' : TauCeti.IsOddFor U' B' :=
       (ScalarTransport.isOddFor_clm_iff (e := e) U B).2 hB
-    have hVred' : TauCeti.LinearPMap.ReducesSubspace
+    have hVred' : _root_.LinearPMap.IsReducing
         (TauCeti.LinearPMap.addBounded A' B') V' :=
-      (ScalarTransport.reducesSubspace_addBounded_pmap_iff (e := e) B V).2 hV
+      (ScalarTransport.isReducing_addBounded_pmap_iff (e := e) B V).2
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mp hV)
     let hV' : DavisKahan.ReflectionIntertwines A' B' V' :=
-      DavisKahan.ReflectionIntertwines.ofReducesSubspace hVred'
+      DavisKahan.ReflectionIntertwines.ofReducesSubspace
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mpr hVred')
     have hUa' := ScalarTransport.formUpperOnSubspace_pmap (e := e) hUa
     have hUb' := ScalarTransport.formLowerOnOrthogonal_pmap (e := e) hUb
     have hBmem' : N.Mem B' :=
       (SymmetricNormingFunction.mem_clm_iff N B).2 hBmem
     obtain ⟨hdefined', hmem', hbound'⟩ :=
       tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
-        (G := ScalarTransport e E) N V' hA' hred' hBsa' hB' hV'
+        (G := ScalarTransport e E) N V' hA'
+        (TauCeti.LinearPMap.reducesSubspace_iff_isReducing.mpr hred') hBsa' hB' hV'
         hUa' hUb' hab hBmem'
     have hdefinedGeneric' : Angle.HasDefinedDoubleTangent U' V' := by
       simpa only [Angle.HasDefinedDoubleTangent, Angle.angleOperator_complex] using hdefined'
