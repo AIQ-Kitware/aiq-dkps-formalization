@@ -317,6 +317,23 @@ remains; the aggregate `Challenge` target also has an unrelated missing
 `TauCeti.abs_eigenvalues_sub_le_opNorm` reference in its Mathlib-candidate
 leaderboard.
 
+**Canonical Hermitian-dilation follow-up (2026-10-21):**
+`YuWangSamworth2015.Core.SingularSubspace` now consumes the accepted
+`LinearMap.hermitianDilation` and its symmetry theorem from
+`TauCeti.Analysis.InnerProductSpace.HermitianDilation.Basic`, replacing the
+local product-coordinate dilation, Gram block diagonalization, and their
+coordinate, symmetry, and squaring proofs. The source-facing YWS dilation
+corollary keeps its spectral-gap hypotheses and angle conclusion, while its
+right-hand side is expressed directly as the rectangular perturbation norm via
+`LinearMap.norm_toContinuousLinearMap_hermitianDilation_sub` from `.Norm`.
+The dilation itself and its square identity are accepted in
+[#18946](https://github.com/TauCetiProject/TauCeti/pull/18946) as
+`LinearMap.hermitianDilation` and `LinearMap.hermitianDilation_comp_self`;
+the exact perturbation-norm equality comes from
+[#19010](https://github.com/TauCetiProject/TauCeti/pull/19010), TauCeti commit
+`74d007dcb`. The YWS core, Frobenius-Gram, and Theorem 4 consumers compile at
+the pinned TauCeti revision.
+
 **Retirement acceptance criterion:** for each replaced local theorem, record
 (1) exact upstream declaration and accepted commit; (2) original statement
 and hypothesis comparison, including rank, scalar field, spectra/gap

@@ -8,6 +8,8 @@ module
 public import YuWangSamworth2015.Core.Statistics
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
+public import TauCeti.Analysis.InnerProductSpace.HermitianDilation.Basic
+public import TauCeti.Analysis.InnerProductSpace.HermitianDilation.Norm
 public import TauCeti.Analysis.InnerProductSpace.SingularSubspace.Perturbation
 public import YuWangSamworth2015.Core.Residual
 
@@ -51,64 +53,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
-
-/-- The product-coordinate block map underlying the Hermitian dilation. -/
-noncomputable def hermitianDilationProd (A : E →ₗ[𝕜] F) :
-    (E × F) →ₗ[𝕜] (E × F) where
-  toFun x := (A.adjoint x.2, A x.1)
-  map_add' x y := by ext <;> simp
-  map_smul' c x := by ext <;> simp
-
-/-- Hermitian dilation `[[0,A⋆],[A,0]]`. -/
-noncomputable def hermitianDilation (A : E →ₗ[𝕜] F) :
-    WithLp 2 (E × F) →ₗ[𝕜] WithLp 2 (E × F) :=
-  (WithLp.linearEquiv 2 𝕜 (E × F)).symm.toLinearMap ∘ₗ
-    hermitianDilationProd A ∘ₗ
-      (WithLp.linearEquiv 2 𝕜 (E × F)).toLinearMap
-
-/-- The product-coordinate block map `diag(A⋆A, AA⋆)`. -/
-noncomputable def gramBlockDiagonalProd (A : E →ₗ[𝕜] F) :
-    (E × F) →ₗ[𝕜] (E × F) where
-  toFun x := (rightGram A x.1, leftGram A x.2)
-  map_add' x y := by ext <;> simp
-  map_smul' c x := by ext <;> simp
-
-/-- Block diagonal operator `diag(A⋆A, AA⋆)`. -/
-noncomputable def gramBlockDiagonal (A : E →ₗ[𝕜] F) :
-    WithLp 2 (E × F) →ₗ[𝕜] WithLp 2 (E × F) :=
-  (WithLp.linearEquiv 2 𝕜 (E × F)).symm.toLinearMap ∘ₗ
-    gramBlockDiagonalProd A ∘ₗ
-      (WithLp.linearEquiv 2 𝕜 (E × F)).toLinearMap
-
-/-- The Hermitian dilation `[[0, A⋆], [A, 0]]`, unfolded to its two coordinates. -/
-@[simp] theorem hermitianDilation_apply (A : E →ₗ[𝕜] F)
-    (x : WithLp 2 (E × F)) :
-    hermitianDilation A x =
-      WithLp.toLp 2 (A.adjoint (WithLp.ofLp x).2, A (WithLp.ofLp x).1) := by
-  rfl
-
-/-- The block-diagonal Gram operator `[[A⋆A, 0], [0, AA⋆]]`, unfolded. -/
-@[simp] theorem gramBlockDiagonal_apply (A : E →ₗ[𝕜] F)
-    (x : WithLp 2 (E × F)) :
-    gramBlockDiagonal A x =
-      WithLp.toLp 2 (rightGram A (WithLp.ofLp x).1, leftGram A (WithLp.ofLp x).2) := by
-  rfl
-
-/-- The dilation is symmetric.
--/
-theorem isSymmetric_hermitianDilation (A : E →ₗ[𝕜] F) :
-    (hermitianDilation A).IsSymmetric := fun x y => by
-  simp only [hermitianDilation_apply, WithLp.prod_inner_apply]
-  rw [LinearMap.adjoint_inner_left, LinearMap.adjoint_inner_right, add_comm]
-
-/-- Squaring the dilation gives the two Gram operators on the diagonal.
--/
-theorem hermitianDilation_sq (A : E →ₗ[𝕜] F) :
-    hermitianDilation A ∘ₗ hermitianDilation A =
-      gramBlockDiagonal A := by
-  ext x
-  apply WithLp.ofLp_injective 2
-  ext <;> simp [rightGram, leftGram]
 
 /-! ### Canonical singular-subspace perturbation interface
 
@@ -162,20 +106,41 @@ arbitrary `HybridGap`; constant one requires a stronger gap predicate.
 -/
 theorem singularSubspace_dilation_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {Ω : Set ℝ} {δ : ℝ} (hδ : 0 < δ)
-    (hgap : HybridGap (hermitianDilation A) (hermitianDilation Â)
-      (Module.End.pointSpectralSubspace (hermitianDilation A) Ω)
-      (Module.End.pointSpectralSubspace (hermitianDilation Â) Ω) δ) :
-    δ * ‖(sinThetaMap (Module.End.pointSpectralSubspace (hermitianDilation A) Ω)
-        (Module.End.pointSpectralSubspace (hermitianDilation Â) Ω)).toContinuousLinearMap‖ ≤
-      (Real.pi / 2) *
-        ‖(hermitianDilation Â - hermitianDilation A).toContinuousLinearMap‖ := by
+    (hgap : HybridGap (LinearMap.hermitianDilation A) (LinearMap.hermitianDilation Â)
+      (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
+      (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω) δ) :
+    δ * ‖(sinThetaMap
+        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
+        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω)).toContinuousLinearMap‖
+      ≤
+      (Real.pi / 2) * ‖(Â - A).toContinuousLinearMap‖ := by
   have h := sinTheta_perturbation_le_of_spectralDistance
     (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := (WithLp 2 (E × F))) (F := (WithLp 2 (E × F))))
-    (isSymmetric_hermitianDilation A) (isSymmetric_hermitianDilation Â)
-    (isInvariant_pointSpectralSubspace (hermitianDilation A) Ω)
-    (isInvariant_pointSpectralSubspace (hermitianDilation Â) Ω) hδ hgap
+    (LinearMap.isSymmetric_hermitianDilation A) (LinearMap.isSymmetric_hermitianDilation Â)
+    (isInvariant_pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
+    (isInvariant_pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω) hδ hgap
   simp only [UnitarilyInvariantSeminorm.opNorm_apply] at h
-  exact h
+  have hsub : (Â - A).toContinuousLinearMap =
+      Â.toContinuousLinearMap - A.toContinuousLinearMap := by
+    ext x
+    rfl
+  have hdilsub : (LinearMap.hermitianDilation Â -
+      LinearMap.hermitianDilation A).toContinuousLinearMap =
+      (LinearMap.hermitianDilation Â).toContinuousLinearMap -
+        (LinearMap.hermitianDilation A).toContinuousLinearMap := by
+    ext x
+    rfl
+  calc
+    δ * ‖(sinThetaMap
+        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
+        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω)).toContinuousLinearMap‖
+        ≤ (Real.pi / 2) *
+          ‖(LinearMap.hermitianDilation Â -
+            LinearMap.hermitianDilation A).toContinuousLinearMap‖ := h
+    _ = (Real.pi / 2) *
+          ‖Â.toContinuousLinearMap - A.toContinuousLinearMap‖ := by
+        rw [hdilsub, LinearMap.norm_toContinuousLinearMap_hermitianDilation_sub]
+    _ = (Real.pi / 2) * ‖(Â - A).toContinuousLinearMap‖ := by rw [← hsub]
 
 /-- Equal-dimensional right singular subspaces admit an isometric
 identification; the aligned-frame theorem in `Statistics.lean` chooses the
