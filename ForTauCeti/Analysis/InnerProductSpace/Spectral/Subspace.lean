@@ -41,21 +41,9 @@ reader meeting `IsInvariant A U` in a docstring could not tell which.  For a
 symmetric operator the two coincide, and `isInvariant_orthogonal_of_isSymmetric`
 is what supplies that; but the implication is one-directional in general, which
 is exactly why the names had to be separated. -/
-@[expose]
+@[expose, reducible]
 def IsInvariant (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   ∀ x ∈ U, A x ∈ U
-
-omit [FiniteDimensional 𝕜 E] in
-/-- `LinearMap.coe_restrict_apply`, restated for a hypothesis in `IsInvariant` form.
-
-Mathlib's lemma is stated for `LinearMap.restrict`'s own hypothesis shape, and `IsInvariant A U`
-is only *definitionally* that shape.  `simp` and `rw` match at `instances` transparency, so
-neither will bridge the gap and the Mathlib lemma silently never fires on an `IsInvariant`
-restriction.  Every `A.restrict hU` in this development carries an `IsInvariant`, so this is
-the spelling that actually gets used. -/
-@[simp] theorem coe_restrict_apply_of_isInvariant {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
-    (hU : IsInvariant A U) (x : U) :
-    ((A.restrict hU x : U) : E) = A (x : E) := rfl
 
 /-- The orthogonal projector onto a finite-dimensional subspace, as a linear
 map. -/
@@ -136,9 +124,7 @@ theorem restrictedPointSpectrum_restrict (A : E →ₗ[𝕜] E)
   · intro hlam
     obtain ⟨x, -, hx0, hxEig⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
     refine Module.End.mem_restrictedPointSpectrum x.2 (fun hx => hx0 (Subtype.ext hx)) ?_
-    -- `LinearMap.coe_restrict_apply` and `Submodule.coe_smul` are both `rfl`, but `rw`
-    -- cannot match them here: `hU : IsInvariant A U` is only definitionally the hypothesis
-    -- `LinearMap.restrict` is stated with.  `exact` checks up to defeq.
+    -- The restriction equality is pointwise after taking the subtype coercion.
     exact congrArg (Subtype.val) hxEig
   · intro hlam
     obtain ⟨x, hxU, hx0, hxEig⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam

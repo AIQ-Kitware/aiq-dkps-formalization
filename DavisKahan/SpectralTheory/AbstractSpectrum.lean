@@ -68,8 +68,8 @@ def IsOffDiagonalRelativeToProjection (P H : E →L[𝕜] E) : Prop :=
 Mathlib's lemma is stated for `ContinuousLinearMap.restrict`'s own hypothesis shape, and
 `InvariantFor A U` is only definitionally that shape.  `simp` and `rw` match at `instances`
 transparency and will not bridge the two, so the Mathlib lemma never fires on the `InvariantFor`
-restrictions this development actually builds.  Compare
-`TauCeti.coe_restrict_apply_of_isInvariant` for the `LinearMap` counterpart. -/
+restrictions this development actually builds. The corresponding `LinearMap` invariant predicate
+is reducible and uses the generic theorem directly. -/
 @[simp] theorem coe_restrict_apply_of_invariantFor {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
     (hU : InvariantFor A U) (x : U) :
     ((A.restrict hU x : U) : E) = A (x : E) := rfl
