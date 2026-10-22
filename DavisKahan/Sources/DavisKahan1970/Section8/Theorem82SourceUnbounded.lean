@@ -120,7 +120,8 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_complex
     ∃ (hPdom : ∀ v : P, (v : Hc) ∈ A.domain) (M : P →L[ℂ] P),
       ∀ v : P, ((M v : P) : Hc) = A ⟨(v : Hc), hPdom v⟩ := by
   have hblock : IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A P hPred) :=
-    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A P hPred hA.dense_domain hA
+    by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      hPred.isSelfAdjoint_restrict hA
   -- The canonical real spectrum is definitionally the real preimage of the
   -- canonical complex spectrum. No extra compatibility theorem is needed.
   obtain ⟨Rz, -⟩ := DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
@@ -155,7 +156,8 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_real
     ∃ (hPdom : ∀ v : P, (v : Er) ∈ A.domain) (M : P →L[ℝ] P),
       ∀ v : P, ((M v : P) : Er) = A ⟨(v : Er), hPdom v⟩ := by
   have hblock : IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A P hPred) :=
-    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A P hPred hA.dense_domain hA
+    by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      hPred.isSelfAdjoint_restrict hA
   have hBC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal
       (TauCeti.LinearPMap.reducingRestriction A P hPred)) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hblock

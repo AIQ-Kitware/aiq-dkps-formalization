@@ -206,9 +206,11 @@ theorem result_complex
           ((ContinuousLinearMap.id ℂ EC - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X)
         ≤ N.gauge P.residual := by
   let D := P.toData N
-  have hcomp : _root_.IsSelfAdjoint D.Λ₁ :=
-    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint
-      P.A Uᗮ P.reduces.orthogonal P.A_dense P.ambient_selfAdjoint
+  have hcomp : _root_.IsSelfAdjoint D.Λ₁ := by
+    simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
+      unboundedSinThetaDataOfReducingSubspace,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      P.reduces.orthogonal.isSelfAdjoint_restrict P.ambient_selfAdjoint
   have hdecomp : OrthogonalExactDecomposition U.subtypeL D.F₁ := by
     simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
       unboundedSinThetaDataOfReducingSubspace] using
@@ -239,9 +241,11 @@ theorem result_complex
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.gauge P.residual := by
   let D := P.toData N
-  have hcomp : _root_.IsSelfAdjoint D.Λ₁ :=
-    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint
-      P.A Uᗮ P.reduces.orthogonal P.A_dense P.ambient_selfAdjoint
+  have hcomp : _root_.IsSelfAdjoint D.Λ₁ := by
+    simpa only [D, NaturalReducingGeneralSinThetaProblem.toData,
+      unboundedSinThetaDataOfReducingSubspace,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      P.reduces.orthogonal.isSelfAdjoint_restrict P.ambient_selfAdjoint
   have hdecomp : OrthogonalExactDecomposition U.subtypeL D.F₁ := by
     simpa only [D, NaturalReducingGeneralSinThetaProblem.toData,
       unboundedSinThetaDataOfReducingSubspace] using
@@ -374,9 +378,11 @@ theorem result_real
           ((ContinuousLinearMap.id ℝ ER - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X)
         ≤ N.gauge P.residual := by
   let D := P.toData N
-  have hcomp : _root_.IsSelfAdjoint D.Λ₁ :=
-    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint
-      P.A Uᗮ P.reduces.orthogonal P.A_dense P.ambient_selfAdjoint
+  have hcomp : _root_.IsSelfAdjoint D.Λ₁ := by
+    simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
+      unboundedSinThetaDataOfReducingSubspace,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      P.reduces.orthogonal.isSelfAdjoint_restrict P.ambient_selfAdjoint
   have hdecomp : OrthogonalExactDecomposition U.subtypeL D.F₁ := by
     simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
       unboundedSinThetaDataOfReducingSubspace] using
@@ -409,9 +415,11 @@ theorem result_real
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.gauge P.residual := by
   let D := P.toData N
-  have hcomp : _root_.IsSelfAdjoint D.Λ₁ :=
-    TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint
-      P.A Uᗮ P.reduces.orthogonal P.A_dense P.ambient_selfAdjoint
+  have hcomp : _root_.IsSelfAdjoint D.Λ₁ := by
+    simpa only [D, NaturalReducingGeneralSinThetaProblem.toData,
+      unboundedSinThetaDataOfReducingSubspace,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      P.reduces.orthogonal.isSelfAdjoint_restrict P.ambient_selfAdjoint
   have hdecomp : OrthogonalExactDecomposition U.subtypeL D.F₁ := by
     simpa only [D, NaturalReducingGeneralSinThetaProblem.toData,
       unboundedSinThetaDataOfReducingSubspace] using

@@ -448,10 +448,12 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
   have hF₁iso : IsometricEmbedding F₁ :=
     isometricEmbedding_reflection_comp V (fun _ => rfl)
   have hraw := sinTheta_addBounded_gauge_real_block N A hA R hR
-    A₀ (TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred
-      hA.dense_domain hA)
-    Λ (TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A Uᗮ hred.orthogonal
-      hA.dense_domain hA)
+    A₀ (by simpa only [hA₀def,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      hred.isSelfAdjoint_restrict hA)
+    Λ (by simpa only [hΛdef,
+      TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      hred.orthogonal.isSelfAdjoint_restrict hA)
     X F₁ hXdom hXint hF₁dom hF₁int hF₁iso hδ hgap hRmem
   -- the reflected complementary projection, read through the ambient reflection
   have hFproj : F₁ ∘L F₁.adjoint =

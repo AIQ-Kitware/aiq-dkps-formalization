@@ -119,10 +119,10 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     isometricEmbedding_reflection_comp W (fun _ => rfl)
   have hraw := sinTheta_addBounded_gauge_block_of_formGap_rclike
     N A hA D hD
-    A₀ (TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred
-      hA.dense_domain hA)
-    Λ (TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A Uᗮ hred.orthogonal
-      hA.dense_domain hA)
+    A₀ (by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      hred.isSelfAdjoint_restrict hA)
+    Λ (by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+      hred.orthogonal.isSelfAdjoint_restrict hA)
     X F₁ hXdom hXint hF₁dom hF₁int hF₁iso hδ hgap hDmem
   have hFproj : F₁ ∘L F₁.adjoint =
       (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection := by

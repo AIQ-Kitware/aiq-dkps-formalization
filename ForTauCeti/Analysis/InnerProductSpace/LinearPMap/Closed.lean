@@ -744,17 +744,6 @@ theorem isSymmetric_of_isSelfAdjoint [CompleteSpace E] {A : E →ₗ.[𝕜] E}
   intro x y
   exact hformal x y
 
-/-- A self-adjoint partial map restricts to a self-adjoint partial map on every
-reducing subspace. -/
-theorem reducingRestriction_isSelfAdjoint
-    (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [CompleteSpace E] [CompleteSpace U]
-    (hred : _root_.LinearPMap.IsReducing A U) (_hDense : Dense (A.domain : Set E))
-    (hA : _root_.IsSelfAdjoint A) :
-    _root_.IsSelfAdjoint (reducingRestriction A U hred) := by
-  rw [reducingRestriction_eq_restrict A U hred]
-  exact hred.isSelfAdjoint_restrict hA
-
 /-- Graph norm associated with a partial linear map. -/
 noncomputable def graphNorm (A : E →ₗ.[𝕜] E) (x : A.domain) : ℝ :=
   Real.sqrt (‖(x : E)‖ ^ 2 + ‖A x‖ ^ 2)

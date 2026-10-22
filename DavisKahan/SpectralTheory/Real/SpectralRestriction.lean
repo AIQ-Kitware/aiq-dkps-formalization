@@ -667,9 +667,9 @@ theorem realSelfAdjointSpectralRestriction_isSelfAdjoint
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
     _root_.IsSelfAdjoint (realSelfAdjointSpectralRestriction A hA S hS) := by
-  exact TauCeti.DavisKahanExt.PartialMap.reducingRestriction_isSelfAdjoint
-    A (realSelfAdjointSpectralSubspace A hA S hS)
-    (realSelfAdjointSpectralSubspace_reducing A hA S hS) hA
+  simpa only [realSelfAdjointSpectralRestriction,
+    TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
+    (realSelfAdjointSpectralSubspace_reducing A hA S hS).isSelfAdjoint_restrict hA
 
 /-- The real spectral inclusion maps the restricted domain into the ambient
 operator domain. -/
