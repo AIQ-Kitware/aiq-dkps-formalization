@@ -57,12 +57,6 @@ the spelling that actually gets used. -/
     (hU : IsInvariant A U) (x : U) :
     ((A.restrict hU x : U) : E) = A (x : E) := rfl
 
-/-- Canonical orthogonal spectral projector. -/
-@[expose]
-noncomputable def spectralProjection (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    E →ₗ[𝕜] E :=
-  ((Module.End.pointSpectralSubspace A Ω).starProjection : E →L[𝕜] E)
-
 /-- The orthogonal projector onto a finite-dimensional subspace, as a linear
 map. -/
 @[expose]
@@ -291,11 +285,5 @@ theorem lowerFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymme
   exact SpectralOrder.le_re_inner_of_spectrum_subset_Ici _ hsym hspec ⟨x, hx⟩
 
 end SpectralOrder
-
-/-- The canonical projector has the expected range.
--/
-theorem range_spectralProjection (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    LinearMap.range (spectralProjection A Ω) = Module.End.pointSpectralSubspace A Ω := by
-  exact Submodule.range_starProjection (Module.End.pointSpectralSubspace A Ω)
 
 end TauCeti
