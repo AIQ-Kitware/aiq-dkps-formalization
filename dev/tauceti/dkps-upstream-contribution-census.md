@@ -274,6 +274,10 @@ theorem added only a redundant dense-domain premise (already implied by
 self-adjointness) and forwarded to that exact upstream theorem. The local
 `reducingRestriction` construction remains for its domain-aware consumers; this
 change does not claim that the broader restriction bridge has been retired.
+The unbounded Section 8 Theorem 8.2 source module now states its spectral
+hypotheses and derives its Ritz blocks directly with `A.restrict hred.isInvariant`
+and Tau Ceti's public restriction-domain and coercion lemmas; its hypotheses and
+conclusions are unchanged.
 The upstream result is in the canonical reducing API associated with
 [#13980](https://github.com/TauCetiProject/TauCeti/pull/13980); that PR remains
 classified as related API refinement, not a direct DKPS proof port.
