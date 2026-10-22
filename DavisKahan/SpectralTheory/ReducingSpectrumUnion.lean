@@ -177,8 +177,8 @@ theorem invariantSubspace_orthogonal_of_isSelfAdjoint
     {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection]
     (hproj : ∀ x : A.domain, U.starProjection (x : E) ∈ A.domain)
-    (hinv : TauCeti.LinearPMap.InvariantSubspace A U) :
-    TauCeti.LinearPMap.InvariantSubspace A Uᗮ := by
+    (hinv : A.IsInvariant U) :
+    A.IsInvariant Uᗮ := by
   have hsym : A.IsFormalAdjoint A := by
     have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
     rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
@@ -214,7 +214,7 @@ theorem reducesSubspace_of_isSelfAdjoint_of_invariant
     {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection]
     (hproj : ∀ x : A.domain, U.starProjection (x : E) ∈ A.domain)
-    (hinv : TauCeti.LinearPMap.InvariantSubspace A U) :
+    (hinv : A.IsInvariant U) :
     TauCeti.LinearPMap.ReducesSubspace A U := by
   have hperp : ∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain := by
     intro x

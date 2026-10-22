@@ -189,7 +189,7 @@ theorem realPlane_zeroResidual_model :
   let U : Submodule ℝ RealPlane := ⊤
   have hred : TauCeti.LinearPMap.ReducesSubspace A U := by
     simp [A, U, TauCeti.LinearPMap.ReducesSubspace,
-      TauCeti.LinearPMap.InvariantSubspace]
+      _root_.LinearPMap.isInvariant_iff]
   have hA : IsSelfAdjoint A := by
     exact _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := (0 : RealPlane →L[ℝ] RealPlane))
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (by intro x y; simp))

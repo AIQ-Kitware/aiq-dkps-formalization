@@ -216,7 +216,8 @@ theorem reducesSubspace_unitaryConj (hred : ReducesSubspace A U) :
       _root_.LinearPMap.mem_unitaryConj_domain_iff, W.symm_apply_apply]
     exact hred.orthogonalProjection_mem_domain ⟨W.symm (x : H'),
       (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩
-  · intro x hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     have hpre : W.symm (x : H') ∈ U := by
       obtain ⟨z, hz, hzx⟩ := Submodule.mem_map.mp hx
       have hzz : W.symm (x : H') = z := by rw [← hzx]; exact W.symm_apply_apply z
@@ -225,9 +226,10 @@ theorem reducesSubspace_unitaryConj (hred : ReducesSubspace A U) :
     exact Submodule.mem_map.mpr
       ⟨A ⟨W.symm (x : H'),
           (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩,
-        hred.invariant ⟨W.symm (x : H'),
+        hred.invariant.apply_mem ⟨W.symm (x : H'),
           (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩ hpre, rfl⟩
-  · intro x hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     rw [hperp] at hx ⊢
     have hpre : W.symm (x : H') ∈ Uᗮ := by
       obtain ⟨z, hz, hzx⟩ := Submodule.mem_map.mp hx
@@ -237,7 +239,7 @@ theorem reducesSubspace_unitaryConj (hred : ReducesSubspace A U) :
     exact Submodule.mem_map.mpr
       ⟨A ⟨W.symm (x : H'),
           (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩,
-        hred.orthogonal_invariant ⟨W.symm (x : H'),
+        hred.orthogonal_invariant.apply_mem ⟨W.symm (x : H'),
           (_root_.LinearPMap.mem_unitaryConj_domain_iff).mp x.2⟩ hpre, rfl⟩
 
 /-- The restriction of a unitary equivalence to a subspace and its image. -/
