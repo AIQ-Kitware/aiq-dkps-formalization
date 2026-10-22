@@ -77,7 +77,7 @@ representations are retired by the follow-on overlay, as described below.
 
 ## Next implementation queue, in dependency order
 
-### 1. SSP-D01 eigenfamily/eigenframe consumption — submitted for compilation
+### 1. SSP-D01 eigenfamily/eigenframe consumption — compiled
 
 The next overlay migrates the maintained callers of the formerly local
 `TauCeti.IsEigenFamily` and `TauCeti.IsOrderedEigenframe` to the accepted
@@ -127,7 +127,7 @@ representation-retirement pass, including its corrected lint/import changes.
 The module-system warnings in legacy Davis--Kahan files remain nonblocking;
 do not turn individual files into `module` without migrating their imports.
 
-### 1a. Corresponding-eigenblock comparison — next consumption pass
+### 1a. Corresponding-eigenblock comparison — completed consumption pass
 
 The YWS `CorrespondingEigenblock` is a **strict specialization**, not a
 redundant spelling of accepted TauCeti `CorrespondingEigenblocks`:
@@ -155,14 +155,13 @@ uses the same accepted invariance result. The now-unused local
 `reduces_spanIndices` induction proof is deleted. No paper-facing inequality,
 eigenframe theorem, or definition changes its statement.
 
-**Still to do after compilation:** evaluate consumers of
-`CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` for direct
-canonical hypotheses one declaration at a time; some deliberately require the
-chosen-basis datum. Do not delete the local `CorrespondingEigenblock` before
-removing or genuinely migrating its concrete constructors in
-`Core/TopEigenblock.lean` and the sharpness examples. A proof of *equivalence*
-with TauCeti's predicate must not be asserted: it is false without extra
-uniqueness/separation hypotheses.
+**Follow-on work:** the maintainer accepted the compiled corresponding-block
+comparison. The next pass, recorded below, retires the definitionally redundant
+ordered right/left singular-frame wrappers. `CorrespondingRightSingularBlock` /
+`CorrespondingLeftSingularBlock` and their fixed-eigenbasis datum remain
+intentional: do not delete `CorrespondingEigenblock` or its constructors in
+`Core/TopEigenblock.lean` and the sharpness examples. An inverse to the one-way
+TauCeti comparison is false without further uniqueness/separation hypotheses.
 
 Focused build for this pass:
 
@@ -176,9 +175,55 @@ lake build \
   YuWangSamworth2015.Symmetric.MiddleBlockSharpness
 ```
 
-Then run the normal aggregate `lake build`. The previous compiled migration
-is established by the maintainer's report; this new comparison and its proof
-refactor are the only newly introduced Lean changes to verify.
+The maintainer subsequently compiled this comparison pass as well. The
+section below records the next rectangular source cleanup; it should be
+compiled independently before running the usual aggregate `lake build`.
+
+### 1b. Canonical rectangular ordered frames and singular-value normalization
+
+This next overlay removes the *definitionally equivalent* local aliases
+`DavisKahanTheory.IsOrderedRightSingularFrame` and
+`DavisKahanTheory.IsOrderedLeftSingularFrame`, and their reflexive `_iff` lemmas.
+Maintained consumers in `Rectangular/{Theorem4,SingularBlock,SourceTheorem3}.lean`
+now use the **accepted** `LinearMap.IsSymmetric.IsOrderedEigenframe` directly,
+at `isSymmetric_rightGram A` or `isSymmetric_leftGram A` respectively. The source
+block predicates `IsRightSingularBlock` and `IsLeftSingularBlock` still model
+arbitrary chosen singular vectors, including multiplicities; their
+`toOrderedFrame` results keep the same Gram action and sorted indices.
+
+In `Rectangular/Theorem4.lean`, two private compatibility theorems for
+corresponding-block invariance and dimension are retired: both Gram transport
+proofs now apply `CorrespondingEigenblock.toCorrespondingEigenblocks` and use
+TauCeti's `CorrespondingEigenblocks.apply_mem_right`, `.finrank_left`, and
+`.finrank_right` directly. The additional singular-value norm wrapper
+`DavisKahanTheory.opNorm_eq_topSingularValue` is also retired; its twelve actual
+maintained consumers (including `Rectangular/RankOne.lean`) use the accepted
+`TauCeti.opNorm_eq_singularValues_zero` with `Module.finrank_pos`.
+
+All mathematical hypotheses, bounds, selected source/target Gram operators,
+index choices, and paper-facing theorem names are preserved. Only the
+hypothesis *presentation* changes from the local frame alias to its
+**definitionally identical** canonical predicate. This overlay changes no
+TauCeti dependency revision, and does not attempt to replace the narrower
+fixed-basis corresponding-block predicate with the broader upstream one.
+
+Focused build for the new rectangular pass:
+
+```bash
+lake exe cache get
+lake build \
+  YuWangSamworth2015.Rectangular.Theorem4 \
+  YuWangSamworth2015.Rectangular.SingularBlock \
+  YuWangSamworth2015.Rectangular.RankOne \
+  YuWangSamworth2015.Rectangular.SourceTheorem3 \
+  YuWangSamworth2015.Rectangular
+```
+
+**Next unblocked migration:** compare the fixed-basis
+`CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` consumers
+in `Rectangular/RankOne.lean` against the existing arbitrary-frame rank-one
+statements; eliminate a duplicate only when its source interface is subsumed.
+The source-specific population-gap and rank-boundary mathematics must remain.
 
 ### 2. Finish genuinely redundant restriction presentation, selectively
 

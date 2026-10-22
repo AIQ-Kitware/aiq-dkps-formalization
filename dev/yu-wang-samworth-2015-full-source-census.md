@@ -576,7 +576,7 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 
 - `LinearMap.rightSingularSubspace` (canonical TauCeti)
 - `YuWangSamworth2015.rightSingularSubspace_sinTheta_le`
-- `YuWangSamworth2015.DavisKahanTheory.IsOrderedRightSingularFrame`
+- `LinearMap.IsSymmetric.IsOrderedEigenframe`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_frame_le`
 - `YuWangSamworth2015.DavisKahanTheory.CorrespondingRightSingularBlock`
 - `YuWangSamworth2015.DavisKahanTheory.RightSingularInternalGap`
@@ -609,6 +609,13 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 
 **Upstream-consumption update (2026-10-21).** The former local `YuWangSamworth2015.rightSingularSubspace` declaration is retired. `YuWangSamworth2015.rightSingularSubspace_sinTheta_le` now uses `LinearMap.rightSingularSubspace`, `Module.End.PointIntervalExteriorGap` and `Submodule.sinThetaMap`, specializing accepted TauCeti PR #19229. This is an API/proof-source migration; it does not change the source correction or the paper-facing Theorem 3 capstone.
 
+**Canonical-frame consumption (2026-10-22).** The YWS-local
+`IsOrderedRightSingularFrame` wrapper was definitionally identical to the
+accepted `LinearMap.IsSymmetric.IsOrderedEigenframe` at `isSymmetric_rightGram A`.
+The right-frame, consecutive-block, and source-facing consumers now
+use that canonical predicate directly, without changing the source hypothesis
+or the corrected singular-value gap.
+
 **Next action.** None.
 
 **Gap refs:** `preprint-numbering-aliases`, `theorem3-rank-boundary`
@@ -623,7 +630,7 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 
 - `LinearMap.leftSingularSubspace` (canonical TauCeti)
 - `YuWangSamworth2015.leftSingularSubspace_sinTheta_le`
-- `YuWangSamworth2015.DavisKahanTheory.IsOrderedLeftSingularFrame`
+- `LinearMap.IsSymmetric.IsOrderedEigenframe`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_frame_le`
 - `YuWangSamworth2015.DavisKahanTheory.CorrespondingLeftSingularBlock`
 - `YuWangSamworth2015.DavisKahanTheory.LeftSingularInternalGap`
@@ -648,6 +655,13 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 **Source-facing surface registered 2026-09-05.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean` landed on 2026-08-29 and was invisible to this census, to `dev/policy/yu-wang-samworth-grounding.yaml`, and to the distilled source, while the standalone submission repository already cited it. That is the inverse of the rule that this repository is authoritative and the standalone is a mechanical extraction. The capstones are now the row's review witnesses. They carry the printed hypothesis: `IsRightSingularBlock` / `IsLeftSingularBlock` ask only that the frame be an orthonormal block of singular vectors at the consecutive indices, with no separation assumed among the singular values of `Ahat`, and `hrank : s < finrank (range A)` is the printed `1 <= r <= s <= rank(A)` in zero-based form. The superseded `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` forms remain cited as supporting declarations and must not be used as the row's review surface: they pin both blocks to Mathlib's chosen Gram eigenbases, which assumes away the sample degeneracy the paper's contribution is about.
 
 **Upstream-consumption update (2026-10-21).** The former local `YuWangSamworth2015.leftSingularSubspace` declaration is retired. `YuWangSamworth2015.leftSingularSubspace_sinTheta_le` now uses `LinearMap.leftSingularSubspace`, `Module.End.PointIntervalExteriorGap` and `Submodule.sinThetaMap`, specializing accepted TauCeti PR #19229. This is an API/proof-source migration; it does not change the source correction or the paper-facing Theorem 3 capstone.
+
+**Canonical-frame consumption (2026-10-22).** The YWS-local
+`IsOrderedLeftSingularFrame` wrapper was definitionally identical to the
+accepted `LinearMap.IsSymmetric.IsOrderedEigenframe` at `isSymmetric_leftGram A`.
+The left-frame, consecutive-block, and source-facing consumers now
+use that canonical predicate directly, without changing the source hypothesis
+or the corrected singular-value gap.
 
 **Next action.** None.
 
