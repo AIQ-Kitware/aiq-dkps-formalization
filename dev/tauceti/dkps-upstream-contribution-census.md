@@ -397,6 +397,17 @@ was authored by Claude, and no DKPS ancestry is inferred for the Tau Ceti
 declaration. The change is verified against the pinned TauCeti tree
 `dded4e1133eb74742ae658ebd8de8d66f8d2b470`.
 
+**Invariant restriction-coercion retirement (2026-10-22):**
+`ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace` no longer exports
+`coe_restrict_apply_of_isInvariant` as a simp bridge. Its `IsInvariant` predicate
+is exposed and reducible, so `LinearMap.coe_restrict_apply` from Mathlib's
+`Mathlib.Algebra.Module.Submodule.LinearMap` applies directly to
+`A.restrict hU`. The predicate and all restriction hypotheses retain the same
+proposition; only the redundant lemma is removed. `DavisKahan.All`, every direct
+importer of the donor module, YWS singular-subspace consumers, and
+`RoadmapBridge.Integration` compile with the bridge deleted, at Mathlib
+`2cabef97b63d3275776b8b060d802de6a6fa1055`.
+
 **Retirement acceptance criterion:** for each replaced local theorem, record
 (1) exact upstream declaration and accepted commit; (2) original statement
 and hypothesis comparison, including rank, scalar field, spectra/gap
