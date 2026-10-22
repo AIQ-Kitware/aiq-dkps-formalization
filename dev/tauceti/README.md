@@ -10,25 +10,33 @@ second permanent library implementation.
 
 ## Start here
 
-1. [**DKPS-to-TauCeti contribution and mathematical-lineage census**](dkps-upstream-contribution-census.md)
+1. [**Current upstream-consumption review and next work (2026-10-22)**](upstream-consumption-review-2026-10-22.md)
+   — reviewed changes since the Luna overnight instructions, concrete
+   corrections, the next accepted SSP-D01 eigenframe migration, and blocked
+   boundaries. This is the current *action queue*.
+2. [**DKPS-to-TauCeti contribution and mathematical-lineage census**](dkps-upstream-contribution-census.md)
    — initial, incomplete PR/result provenance ledger. Separates direct
    adaptation, broader campaign activity, independent overlapping results,
    and future Hilbert-space-operator-theory provenance work. Do not equate a
    shared roadmap item, a Bors title, or a closed PR with proof descent.
-2. [**Upstream-consumption and reducing-restriction handoff**](upstream_consumption_reducing_2026-10-21.md)
-   — the current canonical restriction implementation, consumer migration,
-   obsolete bridge cleanup, and compile checkpoints.
-3. [**Canonical-spectrum migration proof lineage**](proof-lineage/2026-10-20-canonical-spectrum-migration.md)
+3. [**Historical reducing-restriction handoff (2026-10-21)**](upstream_consumption_reducing_2026-10-21.md)
+   — checkpoint evidence from an earlier migration. Its old "next slices"
+   are superseded by the current review; much of that work has since landed.
+4. [**Canonical-spectrum migration proof lineage**](proof-lineage/2026-10-20-canonical-spectrum-migration.md)
    — exact original proof anchors, source scope, and the boundary between
    canonical and legacy spectral/resolvent concepts.
-4. [`extraction-manifest.json`](extraction-manifest.json),
+5. [`extraction-manifest.json`](extraction-manifest.json),
    [`roadmap-topic-map.md`](roadmap-topic-map.md), and
    [`spectra-provenance-map.md`](spectra-provenance-map.md)
    — maintained donor inventory, roadmap topic grouping, and layered Spectra
    ancestry. A topic grouping is not a statement of accepted upstream status.
-5. [`submission-ladder.md`](submission-ladder.md)
+6. [`submission-ladder.md`](submission-ladder.md)
    — regenerate/check with its maintained derivation tool rather than trusting
    hard-coded counts in prose.
+
+The [overnight instruction sheet](overnight-accepted-upstream-consumption-2026-10-21.md)
+records the completed October 21--22 campaign and is **not** a live todo list;
+the review above supersedes it as a new starting point.
 
 The former `canonical-port-completion.md` pointer was stale and is not a
 current entry point. Do not reconstruct an obsolete completion gate from old

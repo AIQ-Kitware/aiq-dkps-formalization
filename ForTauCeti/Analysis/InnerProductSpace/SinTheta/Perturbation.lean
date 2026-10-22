@@ -19,7 +19,6 @@ public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds
-public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Spectral
 
 /-!
 # The complete finite-dimensional `sin Θ` theorem family

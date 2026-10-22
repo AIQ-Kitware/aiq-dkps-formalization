@@ -1,5 +1,14 @@
 # Luna: overnight DKPS consumption of accepted TauCeti mathematics
 
+**Historical execution handoff — superseded 2026-10-22.** The overnight
+migrations have since been committed, and the queue below now names several
+already-retired declarations. Before further DKPS work, use the [October 22
+source review and next-action queue](upstream-consumption-review-2026-10-22.md)
+instead. In particular SSP-D01 [#18942](https://github.com/TauCetiProject/TauCeti/pull/18942)
+is now accepted and present at the DKPS pinned TauCeti revision, despite its
+former "not accepted" classification below. Preserve this file for the
+original run's context; it is not an instruction to repeat the campaign.
+
 **Execution assignment, 2026-10-21.** Continue work autonomously in the user's
 **`~/code/aiq-dkps-formalization`** checkout for as much of the available run as
 is productive. Implement, compile, and commit concrete dependency-closed

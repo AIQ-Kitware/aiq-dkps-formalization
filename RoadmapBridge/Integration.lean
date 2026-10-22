@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 import Mathlib
 import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Spectral
 import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
 
 /-!
