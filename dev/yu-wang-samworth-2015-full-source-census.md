@@ -574,7 +574,7 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 
 **Lean declarations:**
 
-- `YuWangSamworth2015.rightSingularSubspace`
+- `LinearMap.rightSingularSubspace` (canonical TauCeti)
 - `YuWangSamworth2015.rightSingularSubspace_sinTheta_le`
 - `YuWangSamworth2015.DavisKahanTheory.IsOrderedRightSingularFrame`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_frame_le`
@@ -607,6 +607,8 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 
 **Source-facing surface registered 2026-09-05.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean` landed on 2026-08-29 and was invisible to this census, to `dev/policy/yu-wang-samworth-grounding.yaml`, and to the distilled source, while the standalone submission repository already cited it. That is the inverse of the rule that this repository is authoritative and the standalone is a mechanical extraction. The capstones are now the row's review witnesses. They carry the printed hypothesis: `IsRightSingularBlock` / `IsLeftSingularBlock` ask only that the frame be an orthonormal block of singular vectors at the consecutive indices, with no separation assumed among the singular values of `Ahat`, and `hrank : s < finrank (range A)` is the printed `1 <= r <= s <= rank(A)` in zero-based form. The superseded `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` forms remain cited as supporting declarations and must not be used as the row's review surface: they pin both blocks to Mathlib's chosen Gram eigenbases, which assumes away the sample degeneracy the paper's contribution is about.
 
+**Upstream-consumption update (2026-10-21).** The former local `YuWangSamworth2015.rightSingularSubspace` declaration is retired. `YuWangSamworth2015.rightSingularSubspace_sinTheta_le` now uses `LinearMap.rightSingularSubspace`, `Module.End.PointIntervalExteriorGap` and `Submodule.sinThetaMap`, specializing accepted TauCeti PR #19229. This is an API/proof-source migration; it does not change the source correction or the paper-facing Theorem 3 capstone.
+
 **Next action.** None.
 
 **Gap refs:** `preprint-numbering-aliases`, `theorem3-rank-boundary`
@@ -619,7 +621,7 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 
 **Lean declarations:**
 
-- `YuWangSamworth2015.leftSingularSubspace`
+- `LinearMap.leftSingularSubspace` (canonical TauCeti)
 - `YuWangSamworth2015.leftSingularSubspace_sinTheta_le`
 - `YuWangSamworth2015.DavisKahanTheory.IsOrderedLeftSingularFrame`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_frame_le`
@@ -644,6 +646,8 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 **Singular-value notation added 2026-08-13, and the row stays `compiled_corrected`.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SingularBlock.lean` restates the theorem with consecutive singular indices `r, ..., s` and the squared boundary gap `Delta_sv <= min(sigma_{r-1}^2 - sigma_r^2, sigma_s^2 - sigma_{s+1}^2)`, so a reader can compare it to the printed statement term by term. The bridge is `sq_singularValues_eq_eigenvalues_rightGram`, and it is exactly where the correction lives: `LinearMap.singularValues` is zero past the rank by construction, so squared singular values and the sorted spectrum of `A*A` agree at EVERY ambient index, zeros included -- the corrected convention `sigma_{q+1}^2 = -inf` with `sigma_j = 0` for `j` past the rank, not the printed `sigma_{rank(A)+1}^2 = -inf`. `singularBoundaryGap_of_rank_le` makes the difference concrete: when the block ends at or past `rank(A)` the correct lower boundary gap is `sigma_s^2 - 0`, a finite positive number the caller must supply, where the printed convention offered a vacuous one. The singular-value statements use the same `r`, `s`, `r + d = s + 1` variables.
 
 **Source-facing surface registered 2026-09-05.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean` landed on 2026-08-29 and was invisible to this census, to `dev/policy/yu-wang-samworth-grounding.yaml`, and to the distilled source, while the standalone submission repository already cited it. That is the inverse of the rule that this repository is authoritative and the standalone is a mechanical extraction. The capstones are now the row's review witnesses. They carry the printed hypothesis: `IsRightSingularBlock` / `IsLeftSingularBlock` ask only that the frame be an orthonormal block of singular vectors at the consecutive indices, with no separation assumed among the singular values of `Ahat`, and `hrank : s < finrank (range A)` is the printed `1 <= r <= s <= rank(A)` in zero-based form. The superseded `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` forms remain cited as supporting declarations and must not be used as the row's review surface: they pin both blocks to Mathlib's chosen Gram eigenbases, which assumes away the sample degeneracy the paper's contribution is about.
+
+**Upstream-consumption update (2026-10-21).** The former local `YuWangSamworth2015.leftSingularSubspace` declaration is retired. `YuWangSamworth2015.leftSingularSubspace_sinTheta_le` now uses `LinearMap.leftSingularSubspace`, `Module.End.PointIntervalExteriorGap` and `Submodule.sinThetaMap`, specializing accepted TauCeti PR #19229. This is an API/proof-source migration; it does not change the source correction or the paper-facing Theorem 3 capstone.
 
 **Next action.** None.
 
