@@ -119,38 +119,46 @@ theorem yuWangSamworth_equation1_opNorm_le
   set U : Submodule 𝕜 E := Submodule.span 𝕜 {v} with hU
   set V : Submodule 𝕜 E := Submodule.span 𝕜 {bhat j} with hV
   -- `U` is spanned by a one-element eigenfamily.
-  have hfamU : TauCeti.IsEigenFamily Sig (fun _ : Fin 1 => lam) (fun _ : Fin 1 => v) :=
+  have hfamU : Module.End.IsEigenfamily Sig (fun _ : Fin 1 => lam) (fun _ : Fin 1 => v) :=
     ⟨orthonormal_singleton_of_norm_eq_one hv, fun _ => hSigv⟩
   have hUeq : U = Submodule.span 𝕜 (Set.range fun _ : Fin 1 => v) := by
     rw [hU, Set.range_const]
-  have hUinv : IsInvariant Sig U := by rw [hUeq]; exact hfamU.isInvariant_span
+  have hUinv : IsInvariant Sig U := by
+    rw [hUeq]
+    intro x hx
+    exact hfamU.map_span_le (Submodule.mem_map_of_mem hx)
   have hUspec : Module.End.PointSpectrumIn Sig U (Set.Icc lam lam) := by
     rw [hUeq]
-    refine (hfamU.restrictedPointSpectrum_span_subset hSig).trans ?_
+    apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
+    refine (hfamU.restrictedPointSpectrum_span_subset).trans ?_
     rintro x ⟨i, rfl⟩
     exact ⟨le_rfl, le_rfl⟩
   -- `V` likewise, and `Vᗮ` is the span of the remaining basis vectors.
   have hbhatj : ‖bhat j‖ = 1 := bhat.orthonormal.1 j
-  have hfamV1 : TauCeti.IsEigenFamily Sighat
+  have hfamV1 : Module.End.IsEigenfamily Sighat
       (fun _ : Fin 1 => lamhat j) (fun _ : Fin 1 => bhat j) :=
     ⟨orthonormal_singleton_of_norm_eq_one hbhatj, fun _ => hbhat j⟩
   have hVeq1 : V = Submodule.span 𝕜 (Set.range fun _ : Fin 1 => bhat j) := by
     rw [hV, Set.range_const]
-  have hVinv : IsInvariant Sighat V := by rw [hVeq1]; exact hfamV1.isInvariant_span
+  have hVinv : IsInvariant Sighat V := by
+    rw [hVeq1]
+    intro x hx
+    exact hfamV1.map_span_le (Submodule.mem_map_of_mem hx)
   have hVeq : V = bhat.spanIndices ({j} : Set (Fin p)) := by
     rw [hV, OrthonormalBasis.spanIndices_eq_span, Set.image_singleton]
   have hVperpEq : Vᗮ = Submodule.span 𝕜
       (Set.range fun k : ({j}ᶜ : Set (Fin p)) => bhat (k : Fin p)) := by
     rw [hVeq, bhat.orthogonal_spanIndices, OrthonormalBasis.spanIndices_eq_span,
       Set.image_eq_range]
-  have hfamV : TauCeti.IsEigenFamily Sighat
+  have hfamV : Module.End.IsEigenfamily Sighat
       (fun k : ({j}ᶜ : Set (Fin p)) => lamhat (k : Fin p))
       (fun k : ({j}ᶜ : Set (Fin p)) => bhat (k : Fin p)) :=
     ⟨bhat.orthonormal.comp _ Subtype.val_injective, fun k => hbhat _⟩
   have hVperpSpec : Module.End.PointSpectrumIn Sighat Vᗮ
       {mu | mu ∉ Set.Ioo (lam - δ) (lam + δ)} := by
     rw [hVperpEq]
-    refine (hfamV.restrictedPointSpectrum_span_subset hSighat).trans ?_
+    apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
+    refine (hfamV.restrictedPointSpectrum_span_subset).trans ?_
     rintro x ⟨k, rfl⟩
     have hk : (k : Fin p) ≠ j := fun h => k.2 (Set.mem_singleton_iff.mpr h)
     have hd := hgap _ hk

@@ -67,6 +67,7 @@ public section
 
 namespace YuWangSamworth2015
 open TauCeti
+open LinearMap.IsSymmetric (IsOrderedEigenframe isOrderedEigenframe_iff)
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -134,7 +135,7 @@ The declarations above fix the perturbed block to be `S`'s *chosen* eigenbasis a
 the indices `s`.  Yu, Wang and Samworth do not: their `V̂ = (v̂_r,…,v̂_s)` is any
 orthonormal family with `Σ̂ v̂ⱼ = λ̂ⱼ v̂ⱼ`, and they deliberately assume no gap in
 `λ̂`, so at a repeated sample eigenvalue the family is genuinely not determined.
-`TauCeti.IsOrderedEigenframe` is that hypothesis, and the estimates below are the
+`LinearMap.IsSymmetric.IsOrderedEigenframe` is that hypothesis, and the estimates below are the
 upper half of the residual sandwich for it.
 
 The ordering is used *only* on the eigenvalues: Weyl and Hoffman--Wielandt
@@ -187,7 +188,7 @@ theorem frameResidual_eq (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     (hT.eigenvalues hn (e i) : 𝕜) • w i - T (w i)
       = (S - T) (w i)
         - ((hS.eigenvalues hn (e i) - hT.eigenvalues hn (e i) : ℝ) : 𝕜) • w i := by
-  rw [LinearMap.sub_apply, hw.apply_eq i]
+  rw [LinearMap.sub_apply, (isOrderedEigenframe_iff.mp hw).apply_eq i]
   push_cast
   module
 
@@ -204,7 +205,8 @@ theorem sum_sq_norm_frameResidual_le (hT : T.IsSymmetric) (hS : S.IsSymmetric)
   have hST : (S - T).IsSymmetric := hS.sub hT
   -- The two halves, each bounded by the Frobenius norm.
   have hcols : ∑ i, ‖(S - T) (w i)‖ ^ 2 ≤ frob :=
-    sum_sq_norm_apply_orthonormal_le hST (hT.eigenvectorBasis hn) hw.orthonormal
+    sum_sq_norm_apply_orthonormal_le hST (hT.eigenvectorBasis hn)
+      (isOrderedEigenframe_iff.mp hw).orthonormal
   have hHW : ∑ i, (hS.eigenvalues hn (e i) - hT.eigenvalues hn (e i)) ^ 2 ≤ frob := by
     refine (sum_comp_embedding_le
       (fun j => (hS.eigenvalues hn j - hT.eigenvalues hn j) ^ 2)
@@ -227,7 +229,8 @@ theorem sum_sq_norm_frameResidual_le (hT : T.IsSymmetric) (hS : S.IsSymmetric)
         ≤ ‖(S - T) (w i)‖ + |hS.eigenvalues hn (e i) - hT.eigenvalues hn (e i)| := by
       rw [frameResidual_eq hT hS hn hw i]
       refine (norm_sub_le _ _).trans_eq ?_
-      rw [norm_smul, RCLike.norm_ofReal, hw.orthonormal.norm_eq_one i, mul_one]
+      rw [norm_smul, RCLike.norm_ofReal,
+        (isOrderedEigenframe_iff.mp hw).orthonormal.norm_eq_one i, mul_one]
     have h1 : ‖(hT.eigenvalues hn (e i) : 𝕜) • w i - T (w i)‖ ^ 2
         ≤ (‖(S - T) (w i)‖
             + |hS.eigenvalues hn (e i) - hT.eigenvalues hn (e i)|) ^ 2 :=
@@ -256,13 +259,14 @@ theorem sum_sq_norm_frameResidual_le_of_opNorm (hT : T.IsSymmetric) (hS : S.IsSy
     intro i
     have hEwi : ‖(S - T) (w i)‖ ≤ ε := by
       have := hε (w i)
-      rwa [hw.orthonormal.norm_eq_one i, mul_one] at this
+      rwa [(isOrderedEigenframe_iff.mp hw).orthonormal.norm_eq_one i, mul_one] at this
     have hδ : |hS.eigenvalues hn (e i) - hT.eigenvalues hn (e i)| ≤ ε :=
       LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le hS hT hn hε (e i)
     have htri : ‖(hT.eigenvalues hn (e i) : 𝕜) • w i - T (w i)‖ ≤ 2 * ε := by
       rw [frameResidual_eq hT hS hn hw i]
       refine (norm_sub_le _ _).trans ?_
-      rw [norm_smul, RCLike.norm_ofReal, hw.orthonormal.norm_eq_one i, mul_one]
+      rw [norm_smul, RCLike.norm_ofReal,
+        (isOrderedEigenframe_iff.mp hw).orthonormal.norm_eq_one i, mul_one]
       linarith
     calc ‖(hT.eigenvalues hn (e i) : 𝕜) • w i - T (w i)‖ ^ 2 ≤ (2 * ε) ^ 2 :=
           pow_le_pow_left₀ (norm_nonneg _) htri 2

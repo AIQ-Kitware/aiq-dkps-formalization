@@ -21,6 +21,7 @@ public section
 namespace YuWangSamworth2015
 open TauCeti
 
+open LinearMap.IsSymmetric (IsOrderedEigenframe isOrderedEigenframe_iff)
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -70,7 +71,7 @@ theorem yuWangSamworth_alignedFrame_block_le
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
-        Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2) ≤
+        Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff.mp hv).orthonormal O i - u i‖ ^ 2) ≤
           2 * Real.sqrt 2 *
             min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
               (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ :=
@@ -104,7 +105,7 @@ theorem yuWangSamworth_alignedFrame_block_le_residual
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
-        Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2) ≤
+        Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff.mp hv).orthonormal O i - u i‖ ^ 2) ≤
           Real.sqrt 2 *
             Real.sqrt (∑ i,
               ‖(hA.eigenvalues hn (consecutiveEmb (hd.trans_le hsn) i) : 𝕜) • v i

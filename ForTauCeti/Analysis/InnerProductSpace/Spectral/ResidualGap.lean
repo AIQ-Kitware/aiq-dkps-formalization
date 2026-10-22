@@ -28,7 +28,7 @@ least `Δ` because `lam i` and `μₖ` sit on opposite sides of the gap.
 
 Because the trial values are only required to lie in `Module.End.restrictedPointSpectrum T U`,
 the statement is insensitive to which eigenvectors were chosen inside a repeated
-eigenspace — the point of `TauCeti.IsEigenFamily`.
+eigenspace — the point of `Module.End.IsEigenfamily`.
 
 ## Main results
 
@@ -72,7 +72,7 @@ Diagonalize the restriction `T|W` and push its eigenbasis back into `E`. -/
 theorem exists_isEigenFamily_span_eq (hT : T.IsSymmetric) {W : Submodule 𝕜 E}
     (hW : IsInvariant T W) :
     ∃ (m : ℕ) (y : Fin m → E) (c : Fin m → ℝ),
-      IsEigenFamily T c y ∧ Submodule.span 𝕜 (Set.range y) = W := by
+      Module.End.IsEigenfamily T c y ∧ Submodule.span 𝕜 (Set.range y) = W := by
   classical
   have hsym : (T.restrict hW).IsSymmetric := hT.restrict_invariant hW
   have hm : finrank 𝕜 W = finrank 𝕜 W := rfl

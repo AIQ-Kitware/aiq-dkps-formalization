@@ -1345,8 +1345,10 @@ theorem exists_isometry_configFrobError_spectralConfig_le
       exact (hWsharp x).trans (by nlinarith)
     · have hδge : 1 ≤ δ := le_of_not_gt hδlt
       let e : Fin d ↪ Fin n := Fin.castLEEmb hd
-      have hu := TauCeti.isOrderedEigenframe_eigenvectorBasis hT hn_eq e
-      have hv := TauCeti.isOrderedEigenframe_eigenvectorBasis hS hn_eq e
+      have hu := LinearMap.IsSymmetric.isOrderedEigenframe_eigenvectorBasis hT hn_eq e
+      have hv := LinearMap.IsSymmetric.isOrderedEigenframe_eigenvectorBasis hS hn_eq e
+      have hu_orthonormal := (LinearMap.IsSymmetric.isOrderedEigenframe_iff.mp hu).orthonormal
+      have hv_orthonormal := (LinearMap.IsSymmetric.isOrderedEigenframe_iff.mp hv).orthonormal
       have hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
           α ≤ |hT.eigenvalues hn_eq (e i) - hT.eigenvalues hn_eq k| := by
         intro i k hk
@@ -1367,7 +1369,7 @@ theorem exists_isometry_configFrobError_spectralConfig_le
         YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le
           hu hv hα_pos hgap
       have hM_overlap :
-          M = TauCeti.overlapOp hu.orthonormal hv.orthonormal := by
+          M = TauCeti.overlapOp hu_orthonormal hv_orthonormal := by
         apply LinearMap.ext
         intro x
         ext l
@@ -1381,7 +1383,7 @@ theorem exists_isometry_configFrobError_spectralConfig_le
       refine ⟨W, hWiso, fun x => ?_⟩
       have hMnorm : ‖M x‖ ≤ ‖x‖ := by
         rw [hM_overlap]
-        exact TauCeti.overlapOp_contraction hu.orthonormal hv.orthonormal x
+        exact TauCeti.overlapOp_contraction hu_orthonormal hv_orthonormal x
       have hWnorm : ‖W x‖ = ‖x‖ := by
         have hsq : ‖W x‖ ^ 2 = ‖x‖ ^ 2 := by
           rw [← real_inner_self_eq_norm_sq, ← real_inner_self_eq_norm_sq,

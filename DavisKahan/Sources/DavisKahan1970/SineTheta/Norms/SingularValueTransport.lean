@@ -148,9 +148,7 @@ private theorem approximationNumber_comp_isometricEquiv_le
       ContinuousLinearMap.approximationNumber_comp_comp_le _ _ _ n
     _ ≤ 1 * A.approximationNumber n * 1 := by
       gcongr <;>
-        first
-          | assumption
-          | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
+        simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
     _ = A.approximationNumber n := by rw [one_mul, mul_one]
 
 /-- Two-sided composition with isometric equivalences preserves every

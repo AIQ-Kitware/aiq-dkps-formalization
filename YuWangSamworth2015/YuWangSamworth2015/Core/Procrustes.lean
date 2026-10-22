@@ -48,6 +48,7 @@ public section
 namespace YuWangSamworth2015
 open TauCeti
 
+open LinearMap.IsSymmetric (IsOrderedEigenframe isOrderedEigenframe_iff)
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -241,12 +242,14 @@ theorem yuWangSamworth_alignedFrame_le
       Δ ≤ |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|) :
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
-        Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2) ≤
+        Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff.mp hv).orthonormal O i - u i‖ ^ 2) ≤
           2 * Real.sqrt 2 *
             min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
               (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   obtain ⟨O, hO, hsum⟩ :=
-    exists_unitary_sum_sq_norm_frameComp_sub_le hu.orthonormal hv.orthonormal
+    exists_unitary_sum_sq_norm_frameComp_sub_le
+      (isOrderedEigenframe_iff.mp hu).orthonormal
+      (isOrderedEigenframe_iff.mp hv).orthonormal
   refine ⟨O, hO, ?_⟩
   have hsine := yuWangSamworth_sinTheta_frame_le hu hv hΔ hgap
   have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
@@ -254,7 +257,7 @@ theorem yuWangSamworth_alignedFrame_le
     by
       rw [sinThetaFrobenius_eq]
       exact apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _
-  calc Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2)
+  calc Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff.mp hv).orthonormal O i - u i‖ ^ 2)
       ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
     _ = Real.sqrt 2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
@@ -284,7 +287,8 @@ theorem yuWangSamworth_alignmentMap_sub_overlapOp_apply_le
       Δ ≤ |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|) :
     ∃ W : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪W x, W y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
-      ∀ x, ‖(W - overlapOp hu.orthonormal hv.orthonormal) x‖ ≤
+      ∀ x, ‖(W - overlapOp (isOrderedEigenframe_iff.mp hu).orthonormal
+        (isOrderedEigenframe_iff.mp hv).orthonormal) x‖ ≤
         (2 * Real.sqrt 2 *
           min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ) *
@@ -293,7 +297,8 @@ theorem yuWangSamworth_alignmentMap_sub_overlapOp_apply_le
   refine ⟨O.symm.toLinearEquiv.toLinearMap,
     fun x y => O.symm.inner_map_map x y, fun x => ?_⟩
   exact (norm_symm_sub_overlapOp_apply_le_frameError
-    hu.orthonormal hv.orthonormal O x).trans
+    (isOrderedEigenframe_iff.mp hu).orthonormal
+    (isOrderedEigenframe_iff.mp hv).orthonormal O x).trans
       (mul_le_mul_of_nonneg_right hframe (norm_nonneg x))
 
 /-- **The residual form of the aligned conclusion, with an explicit `Ô`.**
@@ -308,11 +313,13 @@ theorem yuWangSamworth_alignedFrame_le_residual
       Δ ≤ |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|) :
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
-        Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2) ≤
+        Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff.mp hv).orthonormal O i - u i‖ ^ 2) ≤
           Real.sqrt 2 *
             Real.sqrt (∑ i, ‖(hA.eigenvalues hn (e i) : 𝕜) • v i - A (v i)‖ ^ 2) / Δ := by
   obtain ⟨O, hO, hsum⟩ :=
-    exists_unitary_sum_sq_norm_frameComp_sub_le hu.orthonormal hv.orthonormal
+    exists_unitary_sum_sq_norm_frameComp_sub_le
+      (isOrderedEigenframe_iff.mp hu).orthonormal
+      (isOrderedEigenframe_iff.mp hv).orthonormal
   refine ⟨O, hO, ?_⟩
   have hsine := yuWangSamworth_sinTheta_le_residual hu hv hΔ hgap
   have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
@@ -320,7 +327,7 @@ theorem yuWangSamworth_alignedFrame_le_residual
     by
       rw [sinThetaFrobenius_eq]
       exact apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _
-  calc Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2)
+  calc Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff.mp hv).orthonormal O i - u i‖ ^ 2)
       ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
     _ = Real.sqrt 2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
@@ -421,8 +428,10 @@ theorem yuWangSamworth_alignedFrame_real_le
             (UnitarilyInvariantSeminorm.frobenius (𝕜 := ℝ) (E := F) (F := F) (B - A)) / Δ := by
   obtain ⟨O, -, hbound⟩ := yuWangSamworth_alignedFrame_le hu hv hΔ hgap
   refine ⟨frameAlignMatrix O, frameAlignMatrix_mem_orthogonalGroup O, ?_⟩
-  have hcols : ∀ i, (∑ j, frameAlignMatrix O j i • v j) = frameComp hv.orthonormal O i :=
-    fun i => (frameComp_eq_sum_frameAlignMatrix hv.orthonormal O i).symm
+  have hcols : ∀ i, (∑ j, frameAlignMatrix O j i • v j) =
+      frameComp (isOrderedEigenframe_iff.mp hv).orthonormal O i :=
+    fun i =>
+      (frameComp_eq_sum_frameAlignMatrix (isOrderedEigenframe_iff.mp hv).orthonormal O i).symm
   simpa only [hcols] using hbound
 
 end Real

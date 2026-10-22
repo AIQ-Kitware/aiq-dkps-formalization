@@ -239,10 +239,10 @@ The illustration is motivation rather than a step in any proof, and nothing down
 
 **Lean declarations:**
 
-- `TauCeti.IsEigenFamily`
-- `TauCeti.IsOrderedEigenframe`
-- `TauCeti.IsOrderedEigenframe.span_eq_spanIndices`
-- `TauCeti.IsOrderedEigenframe.internalGap_span`
+- `Module.End.IsEigenfamily` (accepted TauCeti API, #18942)
+- `LinearMap.IsSymmetric.IsOrderedEigenframe` (accepted TauCeti API, #18942)
+- `LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices` (local gap theorem)
+- `LinearMap.IsSymmetric.IsOrderedEigenframe.pointInternalGap_span` (local gap theorem)
 - `TauCeti.sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le`
 - `YuWangSamworth2015.sum_sq_norm_frameResidual_le`
 - `YuWangSamworth2015.sum_sq_norm_frameResidual_le_of_opNorm`
