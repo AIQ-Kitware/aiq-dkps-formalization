@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
 public import DavisKahan.Geometry.Polar.DirectRotationReal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

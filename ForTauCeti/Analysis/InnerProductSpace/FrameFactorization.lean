@@ -29,7 +29,7 @@ This module is independent of Davis--Kahan spectral-gap assumptions.
   `ForTauCeti` staging modules.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

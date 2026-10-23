@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Core
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Spectral projection continuation and branch selection

@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
 
-@[expose] public section
+public section
 
 /-!
 # The paper library's spelling of the approximation-number foundation

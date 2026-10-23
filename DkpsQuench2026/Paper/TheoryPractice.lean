@@ -38,7 +38,7 @@ public import DkpsQuench2026.Paper.OLSQueryEfficiency
 public import Mathlib.Analysis.Convex.Integral
 public import Mathlib.Analysis.Convex.Mul
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

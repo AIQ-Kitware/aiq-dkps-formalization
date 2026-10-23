@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

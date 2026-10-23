@@ -5,6 +5,6 @@ module
 
 public import ForTauCeti.MeasureTheory.CfcMeasurable
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.measurable_of_iUnion_restrict

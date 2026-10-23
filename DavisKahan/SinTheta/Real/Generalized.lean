@@ -8,7 +8,7 @@ module
 public import DavisKahan.SinTheta.Real.Unbounded
 public import DavisKahan.SinTheta.Real.FrameFactorization
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

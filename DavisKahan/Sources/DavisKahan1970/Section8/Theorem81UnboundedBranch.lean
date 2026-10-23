@@ -9,7 +9,7 @@ public import DavisKahan.SpectralTheory.UnboundedCentralBand
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 8.1's canonical branch at unbounded scope

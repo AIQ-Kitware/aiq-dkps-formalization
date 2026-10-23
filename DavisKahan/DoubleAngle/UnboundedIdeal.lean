@@ -11,7 +11,7 @@ public import DavisKahan.DoubleAngle.Unbounded
 public import DavisKahan.SinTheta.BoundedPerturbationIdeal
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

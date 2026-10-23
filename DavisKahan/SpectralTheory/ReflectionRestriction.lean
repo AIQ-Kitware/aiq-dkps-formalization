@@ -10,7 +10,7 @@ public import DavisKahan.SinTheta.SpectralProjection
 public import DavisKahan.Geometry.Angle.OperatorAngleComplex
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

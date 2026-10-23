@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonCore
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

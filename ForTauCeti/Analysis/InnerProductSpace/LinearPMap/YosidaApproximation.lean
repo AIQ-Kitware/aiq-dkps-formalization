@@ -51,7 +51,7 @@ self-adjoint operator (Stone's theorem):
   `Resolvent/Range.lean` entirely.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap

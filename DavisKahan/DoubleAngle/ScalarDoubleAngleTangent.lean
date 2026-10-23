@@ -7,7 +7,7 @@ module
 
 public import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
-@[expose] public section
+public section
 
 /-!
 # The scalar double-angle tangent

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
 public import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise
 
-@[expose] public section
+public section
 
 /-!
 # Audit surface for the literal square-norm Sylvester theorem

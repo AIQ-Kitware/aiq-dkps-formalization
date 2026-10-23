@@ -19,7 +19,7 @@ public import Mathlib.Tactic.NormNum
 public import Mathlib.Tactic.Positivity
 public import Mathlib.Tactic.Ring
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Section 9: domain limitation example

@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalEstim
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -11,7 +11,7 @@ public import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

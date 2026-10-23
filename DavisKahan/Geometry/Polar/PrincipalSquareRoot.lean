@@ -13,7 +13,7 @@ public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 -- module proves.  It lives in `TauCeti.DavisKahan`.
 public import DavisKahan.Geometry.Polar.DirectRotation
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 -- supplies `spectraReflectionProduct`, `spectraCanonicalIntertwiner`, the operator absolute

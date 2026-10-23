@@ -80,7 +80,7 @@ calculus.  It is rectangular as well: for `A : E →ₗ[𝕜] F`, `operatorAbs A
   `ForTauCeti` scalar-transport functional calculus.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 

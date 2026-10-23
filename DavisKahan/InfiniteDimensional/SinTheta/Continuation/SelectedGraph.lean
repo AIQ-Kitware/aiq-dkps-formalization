@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.QuarterAcute
 public import DavisKahan.SpectralTheory.GraphSubspace
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

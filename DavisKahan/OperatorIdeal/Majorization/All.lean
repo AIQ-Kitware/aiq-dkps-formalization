@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/OperatorIdeal/Majorization` -/

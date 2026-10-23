@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpRadius
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

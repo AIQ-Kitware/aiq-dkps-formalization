@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section4
 public import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
 
-@[expose] public section
+public section
 
 /-!
 # Small-angle strengthening of the Proposition 4.4 refutation

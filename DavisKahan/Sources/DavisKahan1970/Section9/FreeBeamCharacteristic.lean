@@ -12,7 +12,7 @@ public import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Characteristic equation for the free--free beam

@@ -9,7 +9,7 @@ public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import DavisKahan.TanTwoTheta.BoundedOffDiagonal
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

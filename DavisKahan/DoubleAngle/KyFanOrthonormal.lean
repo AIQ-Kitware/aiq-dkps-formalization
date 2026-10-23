@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 
-@[expose] public section
+public section
 
 /-!
 # The Ky Fan variational bound for approximation-number prefixes

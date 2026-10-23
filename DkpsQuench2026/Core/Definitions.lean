@@ -15,7 +15,7 @@ module
 
 public import Mathlib
 
-@[expose] public section
+public section
 set_option linter.mathlibStandardSet false
 
 open scoped BigOperators Real Nat Classical Pointwise Topology

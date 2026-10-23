@@ -31,7 +31,7 @@ The scalar field is an arbitrary `RCLike` `𝕜`.
   `[0,1]` for continuous `w`.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

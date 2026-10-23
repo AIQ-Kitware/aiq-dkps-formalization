@@ -30,7 +30,7 @@ module
 public import Acharyya2024.Common
 public import ForTauCeti.Topology.ApproxMinimizer
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology RealInnerProductSpace InnerProductSpace
 open Filter
@@ -200,7 +200,7 @@ theorem mds_rigidMotion (Δ : DisMat n) (z : Config n d) (hz : z ∈ MDS n d Δ)
 /-- Each squared residual term is bounded by the whole raw-stress sum.
 Internal helper / step toward the existence-of-minimizers proof (used to bound
 pairwise distances on sublevel sets). -/
-private theorem term_le_rawStress (Δ : DisMat n) (z : Config n d) (i j : Fin n) :
+ theorem term_le_rawStress (Δ : DisMat n) (z : Config n d) (i j : Fin n) :
     -- Conclusion: a single pair's squared residual is ≤ the total raw stress.
     (‖z i - z j‖ - Δ i j)^2 ≤ rawStress n d Δ z := by
   unfold rawStress
@@ -274,12 +274,12 @@ Internal helper / construction: this is an explicit, computable radius used to
 confine the search for a minimizer to a compact box (coercivity). It plays the
 role of the bounded set `Yₙ` from Remark 2 / Theorem 2 of [23], here phrased
 directly in terms of configurations rather than distance matrices. -/
-private noncomputable def coRadius (Δ : DisMat n) : ℝ :=
+ noncomputable def coRadius (Δ : DisMat n) : ℝ :=
   Real.sqrt (rawStress n d Δ (fun _ : Fin n => (0 : Rvec d)))
     + ∑ i : Fin n, ∑ j : Fin n, |Δ i j|
 
 /-- The coercivity radius is nonnegative. Internal helper / bookkeeping. -/
-private theorem coRadius_nonneg (Δ : DisMat n) :
+ theorem coRadius_nonneg (Δ : DisMat n) :
     -- Conclusion: the coercivity radius is `≥ 0`.
     0 ≤ coRadius (d := d) Δ := by
   unfold coRadius
@@ -295,7 +295,7 @@ pairwise distance is bounded by `√s + ∑ᵢⱼ |Δ i j|`.
 Internal helper / step of the proof: this is the coercivity estimate — small
 stress forces bounded pairwise distances — used both for minimizer existence and
 for compactness in the stability arguments. -/
-private theorem pairDist_le_of_rawStress_le (Δ : DisMat n) (z : Config n d)
+ theorem pairDist_le_of_rawStress_le (Δ : DisMat n) (z : Config n d)
     {s : ℝ} (hz : rawStress n d Δ z ≤ s) (i j : Fin n) :  -- hz : `z` lies in the sublevel set {stress ≤ s}
     -- Conclusion: each pairwise distance is bounded by `√s` plus the total of `|Δ|` entries.
     ‖z i - z j‖ ≤ Real.sqrt s + ∑ i' : Fin n, ∑ j' : Fin n, |Δ i' j'| := by
@@ -316,7 +316,7 @@ private theorem pairDist_le_of_rawStress_le (Δ : DisMat n) (z : Config n d)
 /-- On the sublevel set, every pairwise distance is bounded by `coRadius`.
 Internal helper / specialization of `pairDist_le_of_rawStress_le` to the level of
 the zero configuration. -/
-private theorem pairDist_le_coRadius (Δ : DisMat n) (z : Config n d)
+ theorem pairDist_le_coRadius (Δ : DisMat n) (z : Config n d)
     -- hz : `z` does no worse than the all-zero configuration
     (hz : rawStress n d Δ z
         ≤ rawStress n d Δ (fun _ : Fin n => (0 : Rvec d)))
@@ -328,19 +328,19 @@ private theorem pairDist_le_coRadius (Δ : DisMat n) (z : Config n d)
 /-- Centering map: subtract the mean (translate so that the configuration's
 centroid is at the origin). Internal helper / normalization: a particular
 translation, used to fix the translation freedom of Remark 1. -/
-private noncomputable def center (z : Config n d) : Config n d :=
+ noncomputable def center (z : Config n d) : Config n d :=
   fun i => z i - (n : ℝ)⁻¹ • ∑ j : Fin n, z j
 
 /-- Centering does not change raw stress (it is a translation, see
 `rawStress_translate`). Internal helper / step of the proof. -/
-private theorem rawStress_center (Δ : DisMat n) (z : Config n d) :
+ theorem rawStress_center (Δ : DisMat n) (z : Config n d) :
     -- Conclusion: centering `z` leaves its raw stress unchanged.
     rawStress n d Δ (center z) = rawStress n d Δ z :=
   rawStress_translate Δ z _
 
 /-- The centered configuration has zero coordinate sum (for `n ≠ 0`), i.e. its
 centroid is the origin. Internal helper / normalization step. -/
-private theorem sum_center_eq_zero (hn : n ≠ 0) (z : Config n d) :  -- hn : at least one object
+ theorem sum_center_eq_zero (hn : n ≠ 0) (z : Config n d) :  -- hn : at least one object
     -- Conclusion: the centered configuration sums to the zero vector.
     ∑ i : Fin n, center z i = 0 := by
   unfold center
@@ -354,7 +354,7 @@ point bounded by `R` (for `n ≠ 0`).
 Internal helper / step of the proof: converts a bound on pairwise distances into
 a bound on individual points, which is what compactness (a box `‖w i‖ ≤ R`)
 requires. Centering is exactly what makes this passage possible. -/
-private theorem norm_le_of_centered (hn : n ≠ 0) (w : Config n d) {R : ℝ}
+ theorem norm_le_of_centered (hn : n ≠ 0) (w : Config n d) {R : ℝ}
     (hcent : ∑ i : Fin n, w i = 0)        -- hcent : `w` is centered at the origin
     (hpair : ∀ i j, ‖w i - w j‖ ≤ R) (i : Fin n) :  -- hpair : all pairwise distances ≤ R
     -- Conclusion: each point of a centered configuration has norm ≤ R.
@@ -468,7 +468,7 @@ Internal helper / step of the proof: the one-sided (directed) form of
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
-private theorem sqrt_rawStress_le_add (Δ Δ' : DisMat n) (z : Config n d) :
+ theorem sqrt_rawStress_le_add (Δ Δ' : DisMat n) (z : Config n d) :
     -- Conclusion: √(stress at Δ) ≤ √(stress at Δ') + Frobenius distance ‖Δ − Δ'‖_F.
     Real.sqrt (rawStress n d Δ z)
       ≤ Real.sqrt (rawStress n d Δ' z) + frobSub Δ Δ' := by

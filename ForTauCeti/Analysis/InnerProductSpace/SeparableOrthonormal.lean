@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.LpIndexCongr
 public import Mathlib.Analysis.Normed.Lp.LpEquiv
 public import Mathlib.Topology.Bases
 
-@[expose] public section
+public section
 
 /-!
 # Separability bounds the size of an orthonormal set

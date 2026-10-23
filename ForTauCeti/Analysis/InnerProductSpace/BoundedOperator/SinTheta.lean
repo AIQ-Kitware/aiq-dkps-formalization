@@ -37,7 +37,7 @@ step now applies Tau Ceti's stronger
 Consumers use `ContinuousLinearMap.sylvester` for the equation representation.
 -/
 
-@[expose] public section
+public section
 
 namespace Submodule
 

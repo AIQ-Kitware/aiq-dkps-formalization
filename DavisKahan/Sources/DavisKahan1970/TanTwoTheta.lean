@@ -11,7 +11,7 @@ public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 public import DavisKahan.TanTwoTheta.UnboundedIdeal
 public import DavisKahan.TanTwoTheta.Unbounded
 
-@[expose] public section
+public section
 
 /-!
 # Literal Davis--Kahan 1970 Section 7 tangent-double-angle surface

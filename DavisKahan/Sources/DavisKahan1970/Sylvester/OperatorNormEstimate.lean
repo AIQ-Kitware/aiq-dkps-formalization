@@ -11,7 +11,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 -- source's own `2 × 2` witness at the end of this file
 public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -41,7 +41,7 @@ Spectra derives it from Stieltjes inversion of the Herglotz representation,
 which this construction does not have and does not need.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 open MeasureTheory

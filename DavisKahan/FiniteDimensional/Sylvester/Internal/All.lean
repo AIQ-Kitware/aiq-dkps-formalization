@@ -8,6 +8,6 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional/Sylvester/Internal` -/

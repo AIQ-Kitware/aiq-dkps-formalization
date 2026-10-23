@@ -11,7 +11,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
 public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Kernel and eigenfunctions of the free-beam operator

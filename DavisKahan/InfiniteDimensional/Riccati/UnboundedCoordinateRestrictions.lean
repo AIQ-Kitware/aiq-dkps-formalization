@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.Riccati.UnboundedReductionTransport
 
-@[expose] public section
+public section
 
 /-!
 # Coordinate domains of a reduced unbounded direct-sum operator

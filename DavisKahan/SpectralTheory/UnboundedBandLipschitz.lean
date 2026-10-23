@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.UnboundedCentralBand
 public import DavisKahan.SpectralTheory.UnboundedDirectedGapBound
 
-@[expose] public section
+public section
 
 /-!
 # The moving band is Lipschitz in the perturbation, with no Riesz projector

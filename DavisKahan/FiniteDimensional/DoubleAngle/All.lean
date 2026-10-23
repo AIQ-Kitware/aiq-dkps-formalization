@@ -9,6 +9,6 @@ public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 public import DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual
 public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional/DoubleAngle` -/

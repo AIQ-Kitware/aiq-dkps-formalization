@@ -12,7 +12,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
 public import DavisKahan.SpectralTheory.BoundedFromSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 8.2 as one source-facing theorem, at unbounded ambient scope

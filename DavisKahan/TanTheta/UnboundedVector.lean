@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.SpectralRestriction
 public import DavisKahan.SpectralTheory.BoundedFromSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 
-@[expose] public section
+public section
 
 /-!
 # The unbounded Davis--Kahan tangent theorem, per-vector form

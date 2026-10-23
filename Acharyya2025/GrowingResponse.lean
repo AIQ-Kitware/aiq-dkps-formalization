@@ -17,7 +17,7 @@ module
 public import Acharyya2024.SecondMoment
 public import Acharyya2025.RateChain
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory ProbabilityTheory

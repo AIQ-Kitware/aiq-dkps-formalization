@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/InfiniteDimensional/TanTheta` -/

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
 public import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

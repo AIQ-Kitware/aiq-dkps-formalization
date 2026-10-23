@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 
-@[expose] public section
+public section
 
 /-!
 # Restrictions of closed operators to reducing subspaces

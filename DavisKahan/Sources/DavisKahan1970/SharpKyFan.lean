@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
 public import DavisKahan.DoubleAngle.KyFanOrthonormal
 
-@[expose] public section
+public section
 
 /-!
 # Unrestricted sharp Ky Fan `tan 2Theta`

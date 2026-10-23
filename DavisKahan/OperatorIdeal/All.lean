@@ -13,6 +13,6 @@ public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 public import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/OperatorIdeal` -/

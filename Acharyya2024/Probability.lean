@@ -28,7 +28,7 @@ public import Acharyya2024.SecondMoment
 public import ForTauCeti.Probability.Moments.Variance
 public import ForTauCeti.Probability.ProductConvergence
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology ProbabilityTheory
 open Filter MeasureTheory

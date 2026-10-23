@@ -9,7 +9,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Converse characteristic construction for the free--free beam

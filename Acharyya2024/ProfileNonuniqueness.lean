@@ -25,7 +25,7 @@ public import Acharyya2024.Common
 public import Acharyya2024.RawStress
 public import Acharyya2024.Consistency
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

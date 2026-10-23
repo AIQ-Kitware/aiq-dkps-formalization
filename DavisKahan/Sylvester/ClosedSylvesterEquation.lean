@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
 public import Mathlib.MeasureTheory.Measure.MeasureSpaceDef
 
-@[expose] public section
+public section
 
 /-!
 # Closed Sylvester equations and everywhere-bounded inverses

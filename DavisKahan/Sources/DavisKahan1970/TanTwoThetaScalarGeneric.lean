@@ -14,7 +14,7 @@ public import DavisKahan.DoubleAngle.ScalarTransport
 public import DavisKahan.TanTheta.ScalarTransport
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 
-@[expose] public section
+public section
 
 /-!
 # Scalar-generic unbounded `tan 2Θ`

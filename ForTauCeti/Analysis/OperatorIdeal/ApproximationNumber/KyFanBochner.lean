@@ -74,7 +74,7 @@ gauge of the operator being conjugated.
 * Spectra influence: none.
 -/
 
-@[expose] public section
+public section
 
 open MeasureTheory
 

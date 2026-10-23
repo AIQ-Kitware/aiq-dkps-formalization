@@ -33,6 +33,6 @@ public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82UnboundedBranchBound
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82UnboundedPath
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Section8` -/

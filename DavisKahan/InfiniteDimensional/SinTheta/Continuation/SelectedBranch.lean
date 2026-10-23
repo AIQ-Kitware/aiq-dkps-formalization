@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedSubspace
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

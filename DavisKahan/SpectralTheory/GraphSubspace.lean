@@ -12,7 +12,7 @@ public import Mathlib.Analysis.Normed.Ring.Units
 public import Mathlib.Topology.Algebra.Module.LinearPMap
 public import Mathlib.Topology.MetricSpace.Antilipschitz
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

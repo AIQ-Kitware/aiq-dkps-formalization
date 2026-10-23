@@ -8,7 +8,7 @@ module
 public import DavisKahan.TanTwoTheta.Unbounded
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

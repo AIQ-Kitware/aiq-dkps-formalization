@@ -50,7 +50,7 @@ The construction is rectangular (`E → F`) even though the first spectral consu
 are square.  That avoids repeating the same migration later for Sylvester-type maps.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap

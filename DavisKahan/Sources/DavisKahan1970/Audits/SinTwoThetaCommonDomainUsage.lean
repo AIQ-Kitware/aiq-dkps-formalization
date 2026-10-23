@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
 
-@[expose] public section
+public section
 
 /-!
 # Common-domain double-angle usage and signature audit

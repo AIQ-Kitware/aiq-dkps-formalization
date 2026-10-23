@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 
-@[expose] public section
+public section
 
 /-!
 # The unrestricted, branch-free `tan 2Θ` theorem

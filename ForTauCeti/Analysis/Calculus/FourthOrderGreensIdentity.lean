@@ -65,7 +65,7 @@ theory, which the pinned Mathlib does not have for an interval.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

@@ -14,7 +14,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.Complexification
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 public import DavisKahan.Geometry.Polar.DirectRotationReal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -62,7 +62,7 @@ to this file is the continuous high-energy spectral cutoff, which is `private`.
 * Spectra influence: **none**.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ComplexConjugate Topology
 

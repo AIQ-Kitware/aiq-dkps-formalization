@@ -30,7 +30,7 @@ public import Mathlib
 public import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
 public import Acharyya2025.Weyl
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace
 open Module (finrank)

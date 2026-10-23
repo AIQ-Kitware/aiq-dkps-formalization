@@ -19,6 +19,6 @@ public import DavisKahan.Sources.DavisKahan1970.Audits.SylvesterHilbertSchmidt
 public import DavisKahan.Sources.DavisKahan1970.Audits.Theorem63Distillation
 public import DavisKahan.Sources.DavisKahan1970.Audits.Unbounded
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Audits` -/

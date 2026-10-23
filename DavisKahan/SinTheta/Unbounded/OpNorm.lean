@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sylvester.ShiftedInverse
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

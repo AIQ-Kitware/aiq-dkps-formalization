@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
-@[expose] public section
+public section
 
 /-!
 # Source-norm transport across different coordinate spaces

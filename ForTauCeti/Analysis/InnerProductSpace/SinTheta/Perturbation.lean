@@ -74,7 +74,7 @@ attribute or declaration name changed**, and a consumer's
 resolves to the whole development.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

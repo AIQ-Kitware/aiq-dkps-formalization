@@ -11,7 +11,7 @@ public import DavisKahan.SinTheta.Natural.Reducing
 public import DavisKahan.SinTheta.Natural.GapConvenience
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

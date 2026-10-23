@@ -9,7 +9,7 @@ public import DavisKahan.SpectralTheory.ResolventOperator
 public import Mathlib.MeasureTheory.Integral.CurveIntegral.Basic
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -7,7 +7,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 
-@[expose] public section
+public section
 
 /-!
 # Davis 1963 double-angle facade

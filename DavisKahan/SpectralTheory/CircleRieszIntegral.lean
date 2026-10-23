@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.CayleySelectorBridge
 public import Mathlib.MeasureTheory.Integral.CircleIntegral
 public import Mathlib.Analysis.Complex.CauchyIntegral
 
-@[expose] public section
+public section
 
 /-!
 # Circle Riesz projections for the Section 8 continuation argument

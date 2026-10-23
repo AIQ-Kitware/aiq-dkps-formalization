@@ -16,7 +16,7 @@ public import DavisKahan.Geometry.Polar.DirectRotation
 public import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
 public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

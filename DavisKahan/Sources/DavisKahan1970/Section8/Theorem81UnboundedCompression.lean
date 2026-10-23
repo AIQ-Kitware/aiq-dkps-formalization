@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedBranch
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 8.1 part (i) at unbounded scope

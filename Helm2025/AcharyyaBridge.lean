@@ -17,7 +17,7 @@ public import Acharyya2025.RateChain
 public import Helm2025.Basic
 public import ForTauCeti.Probability.RigidAlignment
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

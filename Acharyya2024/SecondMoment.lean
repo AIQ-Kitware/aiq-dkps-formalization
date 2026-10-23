@@ -32,7 +32,7 @@ module
 public import Mathlib
 public import ForTauCeti.Probability.Moments.SampleMean
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory ProbabilityTheory

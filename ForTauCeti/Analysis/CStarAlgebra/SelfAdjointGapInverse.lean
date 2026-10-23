@@ -44,7 +44,7 @@ Proposed Mathlib destination: the norm result belongs beside `norm_cfc_le_iff` i
 * Spectra influence: **none** (imports only Mathlib).
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

@@ -9,7 +9,7 @@ public import DavisKahan.SinTheta.Unbounded.IntervalExterior
 public import DavisKahan.SinTheta.Unbounded.AllGap
 public import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

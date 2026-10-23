@@ -9,7 +9,7 @@ public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 public import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 
-@[expose] public section
+public section
 
 /-!
 # Experimental residual `sin (2 Theta)` interface

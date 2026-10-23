@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedCompr
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 public import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 8.1 at unbounded scope over a real Hilbert space

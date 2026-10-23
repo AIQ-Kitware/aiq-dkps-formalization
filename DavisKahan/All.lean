@@ -24,6 +24,6 @@ public import DavisKahan.Sylvester.All
 public import DavisKahan.TanTheta.All
 public import DavisKahan.TanTwoTheta.All
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan` -/

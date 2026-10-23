@@ -9,7 +9,7 @@ public import DavisKahan.Sylvester.ShiftedInverseGauge
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.SinTheta.Unbounded.OpNorm
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

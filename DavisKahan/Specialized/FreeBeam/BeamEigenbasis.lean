@@ -9,7 +9,7 @@ module
 public import DavisKahan.Specialized.FreeBeam.BeamWeinberger
 public import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

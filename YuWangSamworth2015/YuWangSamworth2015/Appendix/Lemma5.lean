@@ -7,7 +7,7 @@ module
 
 public import YuWangSamworth2015.Rectangular.FrobeniusGram
 
-@[expose] public section
+public section
 
 /-!
 # Yu--Wang--Samworth Appendix Lemma A1

@@ -20,7 +20,7 @@ These arguments are extracted from `LinearPMap.SelfAdjointResolvent` and general
 in place; no second shifted-map or resolvent representation is introduced.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti.LinearPMap
 

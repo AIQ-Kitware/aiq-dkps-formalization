@@ -3,4 +3,4 @@ module
 public import DkpsQuench2026.Probability.Coverage
 public import DkpsQuench2026.Probability.UniformConcentration
 
-@[expose] public section
+public section

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

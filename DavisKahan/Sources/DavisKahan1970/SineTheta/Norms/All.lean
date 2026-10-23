@@ -12,6 +12,6 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingular
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms` -/

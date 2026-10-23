@@ -12,7 +12,7 @@ public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 public import DavisKahan.FiniteDimensional.TanTheta.Vector
 public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 
-@[expose] public section
+public section
 
 /-!
 # Prose-like wrappers for the finite Davis--Kahan classical API

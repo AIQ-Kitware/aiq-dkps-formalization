@@ -28,7 +28,7 @@ module
 public import Acharyya2024.Common
 public import ForTauCeti.LinearAlgebra.Matrix.PosDef
 
-@[expose] public section
+public section
 
 open scoped BigOperators
 open Matrix

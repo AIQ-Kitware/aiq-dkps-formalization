@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.SpectralRestriction
 public import DavisKahan.Sylvester.Spectrum
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 
-@[expose] public section
+public section
 
 /-!
 # Grounded generic direct-rotation predicates for Davis--Kahan 1970

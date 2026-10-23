@@ -33,7 +33,7 @@ them; they are not bundled into a parallel operator structure.
   accepted TauCeti spectral separation supplies the canonical spectrum.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap

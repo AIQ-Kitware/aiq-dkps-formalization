@@ -8,7 +8,7 @@ module
 public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

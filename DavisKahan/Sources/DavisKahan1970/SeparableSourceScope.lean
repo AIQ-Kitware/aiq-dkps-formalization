@@ -15,7 +15,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
 public import DavisKahan.Sources.DavisKahan1970.Section4
 public import DavisKahan.Sources.DavisKahan1970.Section4Real
 
-@[expose] public section
+public section
 
 /-!
 # Section 3 and Proposition 4.2 at the paper's separable ambient scope

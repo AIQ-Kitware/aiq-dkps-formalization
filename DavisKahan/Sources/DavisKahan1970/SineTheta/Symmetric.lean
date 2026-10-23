@@ -12,7 +12,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingular
 public import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 public import DavisKahan.Sylvester.Unbounded.FormBoundedGap
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

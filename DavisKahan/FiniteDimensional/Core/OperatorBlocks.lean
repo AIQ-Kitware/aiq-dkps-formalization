@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 
-@[expose] public section
+public section
 
 /-!
 # Operator blocks relative to an orthogonal decomposition

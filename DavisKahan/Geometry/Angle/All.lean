@@ -20,6 +20,6 @@ public import DavisKahan.Geometry.Angle.SinAngle
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 public import DavisKahan.Geometry.Angle.TangentOperatorGeneric
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Geometry/Angle` -/

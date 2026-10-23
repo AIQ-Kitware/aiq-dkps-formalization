@@ -34,7 +34,7 @@ public import TauCeti.Probability.StrongLaw
 public import ForTauCeti.Probability.AverageError
 public import ForTauCeti.Probability.VStatistic
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open MeasureTheory Filter

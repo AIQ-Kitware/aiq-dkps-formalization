@@ -11,7 +11,7 @@ public import DavisKahan.Geometry.Polar.Section3Nonacute
 public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

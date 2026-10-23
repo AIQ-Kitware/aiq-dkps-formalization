@@ -78,7 +78,7 @@ carries the rearrangement content.
   SIAM J. Numer. Anal. 7 (1970), Theorem 8.1(iii).
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

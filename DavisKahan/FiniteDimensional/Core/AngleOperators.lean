@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 
-@[expose] public section
+public section
 
 /-!
 # Compatibility surface for unfinished finite angle constructions

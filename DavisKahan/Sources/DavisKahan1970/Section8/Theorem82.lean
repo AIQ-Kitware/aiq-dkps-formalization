@@ -13,7 +13,7 @@ public import DavisKahan.DoubleAngle.DirectedAngleGeneric
 public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

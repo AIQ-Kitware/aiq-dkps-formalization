@@ -8,7 +8,7 @@ module
 public import DavisKahan.Geometry.Angle.Proposition35Infinite
 public import DavisKahan.Geometry.Polar.Section3Nonacute
 
-@[expose] public section
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal

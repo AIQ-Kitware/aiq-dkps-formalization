@@ -11,7 +11,7 @@ public import Mathlib.Analysis.InnerProductSpace.ProdL2
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal

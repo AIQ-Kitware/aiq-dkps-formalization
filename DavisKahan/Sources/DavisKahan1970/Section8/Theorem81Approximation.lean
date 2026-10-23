@@ -9,7 +9,7 @@ public import DavisKahan.BoundedOperator.BlockShift
 public import DavisKahan.Sources.DavisKahan1970.Section8.CompressionApproximation
 public import DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

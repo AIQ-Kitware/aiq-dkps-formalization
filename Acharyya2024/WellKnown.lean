@@ -11,7 +11,7 @@ module
 public import Mathlib
 public import TauCeti.MeasureTheory.Function.ConvergenceInMeasure
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

@@ -62,7 +62,7 @@ Hilbert-space inequalities forward to TauCeti.
 * Spectra influence: **none**, as of the replacement of the min--max bridge on 2026-07-28.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 

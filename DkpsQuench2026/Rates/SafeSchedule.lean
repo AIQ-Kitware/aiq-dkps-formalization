@@ -12,7 +12,7 @@ module
 
 public import DkpsQuench2026.Probability.UniformConcentration
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

@@ -13,7 +13,7 @@ public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRever
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

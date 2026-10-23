@@ -9,7 +9,7 @@ module
 public import DavisKahan.TanTheta.Theorem63InfiniteTrial
 public import DavisKahan.TanTheta.Theorem63Unbounded
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
 public import Mathlib.Analysis.Normed.Ring.Units
 
-@[expose] public section
+public section
 
 /-!
 # Schur-complement inversion for the sharp continuation argument

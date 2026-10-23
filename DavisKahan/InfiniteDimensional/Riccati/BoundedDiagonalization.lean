@@ -9,7 +9,7 @@ public import DavisKahan.Riccati.BoundedReduction
 public import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Bounded Riccati block diagonalization

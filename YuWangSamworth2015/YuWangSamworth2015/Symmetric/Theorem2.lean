@@ -16,7 +16,7 @@ population-gap residual argument, source indexing, and alignment statement are
 owned by the application package.
 -/
 
-@[expose] public section
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

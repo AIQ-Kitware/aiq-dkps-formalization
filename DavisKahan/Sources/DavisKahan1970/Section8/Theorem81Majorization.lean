@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Approximation
 public import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Theorem 8.1(iii), both blocks

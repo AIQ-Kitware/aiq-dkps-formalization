@@ -14,7 +14,7 @@ public import DavisKahan.Geometry.Polar.DirectRotationBlocks
 -- It is a `Geometry` module.
 public import DavisKahan.Geometry.Polar.DirectRotationReal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

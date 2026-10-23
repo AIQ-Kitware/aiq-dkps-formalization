@@ -9,7 +9,7 @@ public import DavisKahan.TanTheta.Theorem63UnboundedCompression
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import DavisKahan.TanTheta.UnboundedSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

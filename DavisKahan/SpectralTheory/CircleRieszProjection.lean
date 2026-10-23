@@ -9,7 +9,7 @@ module
 public import DavisKahan.SpectralTheory.SpectralRestriction
 public import Mathlib.MeasureTheory.Integral.CircleIntegral
 
-@[expose] public section
+public section
 
 /-!
 # Circle Riesz projection and spectral separation by a circle

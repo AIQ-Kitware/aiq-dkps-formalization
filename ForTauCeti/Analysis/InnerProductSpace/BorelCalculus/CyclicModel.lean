@@ -64,7 +64,7 @@ plan and the cost of each.
 * Spectra influence: **none** — this module imports only Mathlib and `ForTauCeti`.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 open MeasureTheory

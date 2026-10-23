@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 
-@[expose] public section
+public section
 
 /-!
 # The paper-exact finite Davis--Kahan `tan Θ` theorem

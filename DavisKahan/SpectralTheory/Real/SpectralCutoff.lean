@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.Real.SpectralRestriction
 public import DavisKahan.SpectralTheory.SpectralCutoff
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

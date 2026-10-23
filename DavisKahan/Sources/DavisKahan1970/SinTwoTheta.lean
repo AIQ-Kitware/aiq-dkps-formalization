@@ -16,7 +16,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTra
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

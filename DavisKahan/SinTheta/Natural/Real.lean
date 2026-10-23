@@ -8,7 +8,7 @@ module
 public import DavisKahan.SinTheta.Real.Generalized
 public import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

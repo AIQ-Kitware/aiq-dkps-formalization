@@ -13,7 +13,7 @@ public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
 public import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
 
-@[expose] public section
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal

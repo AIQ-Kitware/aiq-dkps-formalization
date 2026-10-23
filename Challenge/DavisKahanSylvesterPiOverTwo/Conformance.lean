@@ -17,7 +17,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 -- which only the paired leaderboard imports.
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 
-@[expose] public section
+public section
 
 /-!
 ## Comparator maintenance rule

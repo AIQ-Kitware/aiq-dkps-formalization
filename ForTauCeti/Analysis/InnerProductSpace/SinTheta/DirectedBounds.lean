@@ -52,7 +52,7 @@ That file in turn was `DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean`
 before the sin-Θ closure moved into the staging layer.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

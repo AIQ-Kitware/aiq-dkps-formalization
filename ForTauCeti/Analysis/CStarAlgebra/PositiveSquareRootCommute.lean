@@ -50,7 +50,7 @@ intertwiner is needed.
 * Spectra influence: **none** — imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

@@ -11,7 +11,7 @@ public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import Mathlib.Analysis.SpecialFunctions.Pow.Real
 public import Mathlib.Basic.ENNReal.Inv
 
-@[expose] public section
+public section
 
 /-!
 # The source square or Hilbert--Schmidt norm

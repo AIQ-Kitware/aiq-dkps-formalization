@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.TanTheta.UnboundedSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Graph-angle form of the unbounded tangent theorem

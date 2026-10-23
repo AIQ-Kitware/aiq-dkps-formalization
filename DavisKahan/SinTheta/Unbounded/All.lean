@@ -13,6 +13,6 @@ public import DavisKahan.SinTheta.Unbounded.IntervalExterior
 public import DavisKahan.SinTheta.Unbounded.OpNorm
 public import DavisKahan.SinTheta.Unbounded.SpectrumGap
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SinTheta/Unbounded` -/

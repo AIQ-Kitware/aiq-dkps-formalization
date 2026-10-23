@@ -33,7 +33,7 @@ real, complex, and abstract `RCLike` scalars.
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace SpectralOrder

@@ -15,7 +15,7 @@ module
 public import DkpsQuench2026.Geometry.Population
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

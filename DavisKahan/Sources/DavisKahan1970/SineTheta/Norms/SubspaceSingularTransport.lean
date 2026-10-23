@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 
-@[expose] public section
+public section
 
 /-!
 # Singular-value transport across canonical subspace coordinates

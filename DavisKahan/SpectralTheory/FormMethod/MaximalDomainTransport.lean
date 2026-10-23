@@ -9,7 +9,7 @@ module
 public import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Transport of the maximal fourth-order graph space into the ambient Hilbert space

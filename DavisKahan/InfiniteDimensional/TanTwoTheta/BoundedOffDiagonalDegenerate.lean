@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalReverseGap
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Degenerate coordinate blocks in the bounded off-diagonal estimate

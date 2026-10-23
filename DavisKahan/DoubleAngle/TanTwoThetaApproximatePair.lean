@@ -8,7 +8,7 @@ module
 public import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
 public import DavisKahan.DoubleAngle.KyFanOrthonormal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.ExactSinTheta
 

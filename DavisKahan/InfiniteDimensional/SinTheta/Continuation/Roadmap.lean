@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Theorem
 
-@[expose] public section
+public section
 
 /-!
 # Spectral-continuation implementation index

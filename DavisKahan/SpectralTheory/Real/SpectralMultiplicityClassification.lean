@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.Real.RealMultiplicityModel
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
 
-@[expose] public section
+public section
 
 /-!
 # Spectral multiplicity data classify self-adjoint operators over `ℝ`

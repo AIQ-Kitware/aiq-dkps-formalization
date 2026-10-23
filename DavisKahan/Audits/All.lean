@@ -9,7 +9,7 @@ module
 public import DavisKahan.Audits.Section8
 public import DavisKahan.Sources.DavisKahan1970.Audits.All
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan diagnostic audits

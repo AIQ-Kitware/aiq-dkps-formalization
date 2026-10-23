@@ -21,7 +21,7 @@ public import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
 public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal

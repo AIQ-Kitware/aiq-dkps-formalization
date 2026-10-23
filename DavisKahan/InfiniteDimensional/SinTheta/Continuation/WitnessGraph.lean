@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Theorem
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

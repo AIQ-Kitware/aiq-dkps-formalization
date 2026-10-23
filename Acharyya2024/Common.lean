@@ -13,7 +13,7 @@ module
 public import Mathlib
 public import Acharyya2024.WellKnown
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

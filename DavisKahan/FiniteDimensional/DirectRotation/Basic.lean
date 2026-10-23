@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 
-@[expose] public section
+public section
 
 /-!
 # Canonical finite direct rotation

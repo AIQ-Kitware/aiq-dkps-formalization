@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Finite composition of local direct rotations

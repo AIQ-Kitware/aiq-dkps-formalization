@@ -7,7 +7,7 @@ module
 
 public import YuWangSamworth2015.GroundedImports
 
-@[expose] public section
+public section
 
 /-!
 # Yu--Wang--Samworth Theorem 1

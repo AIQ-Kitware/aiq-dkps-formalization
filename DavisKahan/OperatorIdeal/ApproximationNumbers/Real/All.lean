@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.KyFanGauge
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/OperatorIdeal/ApproximationNumbers/Real` -/

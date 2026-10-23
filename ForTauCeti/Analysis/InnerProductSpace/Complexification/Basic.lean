@@ -54,7 +54,7 @@ The construction includes:
 No unbounded-operator, spectral-cutoff, or Ky Fan file depends on this module.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

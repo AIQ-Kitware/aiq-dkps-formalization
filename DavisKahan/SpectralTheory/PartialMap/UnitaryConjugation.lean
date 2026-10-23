@@ -13,7 +13,7 @@ public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 /-!
 # Unitary conjugation for unbounded operators

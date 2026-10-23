@@ -7,6 +7,6 @@ module
 
 public import YuWangSamworth2015.Appendix.Lemma5
 
-@[expose] public section
+public section
 
 /-! # Yu--Wang--Samworth appendix surface -/

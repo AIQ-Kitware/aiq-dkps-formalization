@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimens
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.SinTheta.Unbounded.Core
 
-@[expose] public section
+public section
 
 /-!
 # Shifted-inverse bounds for closed operators

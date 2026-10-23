@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.Complexification.Subspace
 public import DavisKahan.Sylvester.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

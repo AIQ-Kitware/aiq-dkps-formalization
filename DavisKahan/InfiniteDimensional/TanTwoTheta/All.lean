@@ -23,6 +23,6 @@ public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.SelectedBranchSymmetricNorming
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.SelectedBranchSymmetricNormingReal
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/InfiniteDimensional/TanTwoTheta` -/

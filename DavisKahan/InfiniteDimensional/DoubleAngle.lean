@@ -10,7 +10,7 @@ public import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
 public import DavisKahan.InfiniteDimensional.SinTheta.General
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

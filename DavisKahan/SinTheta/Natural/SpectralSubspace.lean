@@ -8,7 +8,7 @@ module
 public import DavisKahan.SinTheta.Unbounded.AllGap
 public import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

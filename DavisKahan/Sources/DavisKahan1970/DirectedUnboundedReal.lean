@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.DirectedReal
 public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 public import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

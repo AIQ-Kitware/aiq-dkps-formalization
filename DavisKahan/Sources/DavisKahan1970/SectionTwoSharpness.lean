@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.FiniteMultiplicity
 public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.ArctanDeriv
 
-@[expose] public section
+public section
 
 /-!
 # The Section 2 sharpness paragraph, proved

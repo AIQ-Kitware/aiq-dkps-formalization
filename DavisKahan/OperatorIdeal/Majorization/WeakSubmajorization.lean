@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.Normed.FiniteLpGauge
 
-@[expose] public section
+public section
 
 /-!
 # Infinite weak submajorization

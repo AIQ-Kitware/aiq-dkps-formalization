@@ -9,7 +9,7 @@ public import DavisKahan.DoubleAngle.TanTwoThetaApproximatePair
 public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.ExactSinTheta
 

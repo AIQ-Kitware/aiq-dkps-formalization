@@ -16,6 +16,6 @@ public import DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion
 public import DavisKahan.SpectralTheory.FormMethod.ShiftedBeamRealization
 public import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SpectralTheory/FormMethod` -/

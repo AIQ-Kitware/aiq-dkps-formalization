@@ -11,7 +11,7 @@ public import YuWangSamworth2015.Rectangular.RankBoundary
 public import YuWangSamworth2015.Rectangular.SingularBlock
 public import YuWangSamworth2015.Rectangular.SourceTheorem3
 
-@[expose] public section
+public section
 
 /-!
 # Rectangular Yu--Wang--Samworth surface

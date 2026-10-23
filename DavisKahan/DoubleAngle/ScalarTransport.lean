@@ -13,7 +13,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ScalarTransport
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedReflection
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 
-@[expose] public section
+public section
 
 /-!
 # Scalar transport for the unbounded double-angle hypotheses

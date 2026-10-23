@@ -24,7 +24,7 @@ public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 public import TauCeti.Analysis.Matrix.Eigenvalues
 public import Acharyya2025.GramRealization
 
-@[expose] public section
+public section
 
 open scoped BigOperators Matrix
 open Acharyya2024 Acharyya2025.Deterministic Acharyya2025.MathlibBridge

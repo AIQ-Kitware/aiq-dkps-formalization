@@ -8,7 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
-@[expose] public section
+public section
 
 /-!
 # Finite coordinate tangent perturbation bounds

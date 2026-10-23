@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
 
-@[expose] public section
+public section
 
 /-!
 # Double-angle residual bounds on a common dense domain

@@ -20,7 +20,7 @@ This is paper-independent operator geometry.  Davis--Kahan sharpness uses it to 
 model equalities into equalities for an actual pair of direct-sum subspaces.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

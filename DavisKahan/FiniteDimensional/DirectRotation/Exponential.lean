@@ -9,7 +9,7 @@ public import DavisKahan.FiniteDimensional.DirectRotation
 public import Mathlib.Analysis.Normed.Algebra.Exponential
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Series
 
-@[expose] public section
+public section
 
 /-!
 # The direct rotation as an exponential: `U = exp (J Θ)`

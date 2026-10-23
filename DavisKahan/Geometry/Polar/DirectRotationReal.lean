@@ -9,7 +9,7 @@ public import DavisKahan.Geometry.Polar.DirectRotationSquare
 public import DavisKahan.SpectralTheory.Complexification.FormTransport
 public import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
 
-@[expose] public section
+public section
 
 /-!
 # The direct rotation of two **real** closed subspaces

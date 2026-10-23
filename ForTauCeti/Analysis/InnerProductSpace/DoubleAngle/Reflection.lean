@@ -50,7 +50,7 @@ invariant norm.
   III*, SIAM J. Numer. Anal. 7 (1970), 1--46, Section 7, equations (7.1)--(7.5).
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

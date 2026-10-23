@@ -58,7 +58,7 @@ vanishes almost everywhere.
 * Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
 -/
 
-@[expose] public section
+public section
 
 open MeasureTheory
 

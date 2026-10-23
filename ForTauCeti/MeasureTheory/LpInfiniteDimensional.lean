@@ -38,7 +38,7 @@ needed, and nothing here depends on the measure being on `ℝ` except in the fin
 * Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

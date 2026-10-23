@@ -11,7 +11,7 @@ public import DavisKahan.TanTwoTheta.UnboundedIdeal
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Section 7, at arbitrary rectangular ideal-gauge scope

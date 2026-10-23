@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
 
-@[expose] public section
+public section
 
 /-!
 # Generalized finite-dimensional Davis--Kahan theorems

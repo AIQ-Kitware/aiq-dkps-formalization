@@ -8,7 +8,7 @@ module
 public import DavisKahan.Geometry.Halmos.Assembly
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
-@[expose] public section
+public section
 
 /-!
 # The generic Halmos summand is in generic position

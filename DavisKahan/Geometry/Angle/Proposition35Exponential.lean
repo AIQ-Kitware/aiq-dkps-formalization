@@ -8,7 +8,7 @@ module
 public import DavisKahan.Geometry.Angle.Proposition35Nonacute
 public import ForTauCeti.Analysis.CStarAlgebra.TrigonometricSeries
 
-@[expose] public section
+public section
 
 /-!
 # Dimension-free exponential form of the Section 3 direct rotation

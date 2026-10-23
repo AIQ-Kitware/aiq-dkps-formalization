@@ -12,7 +12,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 
-@[expose] public section
+public section
 
 /-!
 # Analytic foundation boundary for the Section 9 free beam

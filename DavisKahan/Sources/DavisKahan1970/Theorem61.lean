@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

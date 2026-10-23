@@ -106,6 +106,6 @@ public import DavisKahan.Sources.DavisKahan1970.TangentSingularValuesReal
 public import DavisKahan.Sources.DavisKahan1970.Theorem61
 public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources/DavisKahan1970` -/

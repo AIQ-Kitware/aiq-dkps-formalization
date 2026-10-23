@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

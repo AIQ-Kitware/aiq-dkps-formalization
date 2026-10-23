@@ -10,7 +10,7 @@ public import DavisKahan.FiniteDimensional.Core.AngleOperators
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 public import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 
-@[expose] public section
+public section
 
 /-!
 # Finite direct rotation: trigonometric and extremal formulas

@@ -9,7 +9,7 @@ public import DavisKahan.FiniteDimensional.SinTheta.TrialMap
 public import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 public import DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual
 
-@[expose] public section
+public section
 
 /-!
 # Generalized finite-dimensional residual theorems

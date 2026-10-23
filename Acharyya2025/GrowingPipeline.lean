@@ -13,7 +13,7 @@ module
 
 public import Acharyya2025.AlignedPipeline
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix Topology
 open Filter

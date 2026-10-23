@@ -46,7 +46,7 @@ separate, mechanical work.  A third copy, in `DavisKahan/Experimental/MathAhead/
 2026-08-27.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace RealComplexification

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 
-@[expose] public section
+public section
 
 /-!
 # Rank-one normalization for the source norm class

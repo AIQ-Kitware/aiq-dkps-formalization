@@ -32,6 +32,6 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources/DavisKahan1970/SineTheta` -/

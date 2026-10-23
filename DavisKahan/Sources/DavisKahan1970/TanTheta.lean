@@ -8,7 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 public import DavisKahan.TanTheta.All
 
-@[expose] public section
+public section
 
 /-!
 # Literal Davis--Kahan 1970 Theorem 6.3 surface

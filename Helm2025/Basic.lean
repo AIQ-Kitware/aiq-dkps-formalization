@@ -37,7 +37,7 @@ module
 
 public import Mathlib
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

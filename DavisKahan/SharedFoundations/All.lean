@@ -9,6 +9,6 @@ public import DavisKahan.SharedFoundations.Ideal.All
 public import DavisKahan.SharedFoundations.Residual.All
 public import DavisKahan.SharedFoundations.Spectral.All
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SharedFoundations` -/

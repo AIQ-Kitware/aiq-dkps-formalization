@@ -7,7 +7,7 @@ module
 public import DkpsQuench2026.QueryEfficiency.Finite
 public import DkpsQuench2026.QueryEfficiency.Infinite
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

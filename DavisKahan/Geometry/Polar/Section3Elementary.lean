@@ -9,7 +9,7 @@ module
 public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 public import DavisKahan.Geometry.Polar.DirectRotationSquare
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

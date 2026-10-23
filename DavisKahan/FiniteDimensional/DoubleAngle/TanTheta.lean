@@ -23,8 +23,9 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+public import Mathlib.Analysis.InnerProductSpace.Semisimple
 
-@[expose] public section
+public section
 
 /-! # The subspace tan 2Θ theorem: block identities and the gated statement
 

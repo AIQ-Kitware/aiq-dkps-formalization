@@ -13,7 +13,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
 public import DavisKahan.SpectralTheory.OperatorAngle
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

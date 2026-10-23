@@ -5,4 +5,4 @@ public import Helm2025.Internal
 public import Helm2025.Inference
 public import Helm2025.AcharyyaBridge
 
-@[expose] public section
+public section

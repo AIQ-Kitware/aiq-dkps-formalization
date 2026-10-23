@@ -12,7 +12,7 @@ public import Mathlib.Topology.Algebra.Module.Equiv.Submodule
 
 /-! # Norm and spectrum of restricted operators -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 

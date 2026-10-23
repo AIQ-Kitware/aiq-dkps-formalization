@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.Unbounded.AllGap
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Form-bounded gap hypotheses discharge the spectral ones

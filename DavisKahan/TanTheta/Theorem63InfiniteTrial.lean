@@ -11,7 +11,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvarian
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 public import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

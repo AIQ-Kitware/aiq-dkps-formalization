@@ -9,7 +9,7 @@ module
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import DavisKahan.Sylvester.Spectrum
 
-@[expose] public section
+public section
 
 /-!
 # Shifted diagonal blocks and cosine blocks of a subspace pair

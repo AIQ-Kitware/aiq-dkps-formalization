@@ -11,7 +11,7 @@ public import TauCeti.Analysis.InnerProductSpace.Spectrum
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 
-@[expose] public section
+public section
 
 /-!
 # Elementary eigenbasis and Frobenius Davis--Kahan bounds

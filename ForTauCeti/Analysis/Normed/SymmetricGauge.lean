@@ -17,7 +17,7 @@ finite weak-majorization theorem act on a `TauCeti.SymmetricGauge` without dupli
 sequence or extension theory.
 -/
 
-@[expose] public section
+public section
 
 open scoped NNReal ENNReal
 

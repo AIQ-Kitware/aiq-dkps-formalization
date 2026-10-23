@@ -10,7 +10,7 @@ public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import DavisKahan.SpectralTheory.BoundedTruncation
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

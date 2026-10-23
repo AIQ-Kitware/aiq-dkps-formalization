@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.CircleRieszIntegral
 public import DavisKahan.SpectralTheory.ContinuationContour
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Transport
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

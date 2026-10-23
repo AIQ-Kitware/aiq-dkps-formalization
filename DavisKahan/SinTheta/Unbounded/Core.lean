@@ -9,7 +9,7 @@ public import DavisKahan.SinTheta.Bounded.Core
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.Sylvester.Gap
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

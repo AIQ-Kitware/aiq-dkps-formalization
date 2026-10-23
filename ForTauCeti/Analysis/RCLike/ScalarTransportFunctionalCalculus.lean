@@ -68,7 +68,7 @@ it is available for every `RCLike` scalar field.
 * Spectra influence: **none**.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 

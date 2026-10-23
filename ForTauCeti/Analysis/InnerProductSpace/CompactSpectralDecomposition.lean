@@ -37,7 +37,7 @@ Together with `TauCeti.finrank_eigenspace_eq_card_approximationNumber_eq`, the l
 that approximation numbers enumerate the positive eigenvalues with their full multiplicities.
 -/
 
-@[expose] public section
+public section
 
 open Module (finrank)
 open Module.End (eigenspace)
@@ -57,7 +57,7 @@ section SelfAdjoint
 variable {A : E →L[𝕜] E}
 
 /-- Eigenspaces of bounded operators are closed, hence complete in a complete source space. -/
-private theorem completeSpace_eigenspace (A : E →L[𝕜] E) (μ : 𝕜) :
+ theorem completeSpace_eigenspace (A : E →L[𝕜] E) (μ : 𝕜) :
     CompleteSpace (eigenspace A.toLinearMap μ) := by
   let B : E →L[𝕜] E := A - μ • ContinuousLinearMap.id 𝕜 E
   have heq : eigenspace A.toLinearMap μ = LinearMap.ker B.toLinearMap := by
@@ -202,7 +202,7 @@ theorem hasEigenvalue_ofReal_pos_iff_exists_approximationNumber_eq
 
 /-- A fixed orthonormal basis of a positive eigenspace.  Naming this choice separately makes
 repeated occurrences of the same eigenvalue use definitionally the same basis. -/
-private noncomputable def positiveEigenspaceBasis
+ noncomputable def positiveEigenspaceBasis
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (μ : ℝ) (hμ : 0 < μ) :
     OrthonormalBasis (Fin (finrank 𝕜 (eigenspace A.toLinearMap ((μ : ℝ) : 𝕜)))) 𝕜
@@ -216,7 +216,7 @@ private noncomputable def positiveEigenspaceBasis
 
 /-- The `j`th vector of the fixed positive eigenspace basis, coerced to the ambient space.
 It is defined as zero beyond the finite multiplicity so its result type does not depend on `μ`. -/
-private noncomputable def positiveEigenspaceVector
+ noncomputable def positiveEigenspaceVector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (μ : ℝ) (hμ : 0 < μ) (j : ℕ) : E :=
   if hj : j < finrank 𝕜 (eigenspace A.toLinearMap ((μ : ℝ) : 𝕜)) then
@@ -224,7 +224,7 @@ private noncomputable def positiveEigenspaceVector
       eigenspace A.toLinearMap ((μ : ℝ) : 𝕜)) : E)
   else 0
 
-private theorem inner_positiveEigenspaceVector
+ theorem inner_positiveEigenspaceVector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (μ : ℝ) (hμ : 0 < μ) {i j : ℕ}
     (hi : i < finrank 𝕜 (eigenspace A.toLinearMap ((μ : ℝ) : 𝕜)))
@@ -239,7 +239,7 @@ private theorem inner_positiveEigenspaceVector
   simpa only [Fin.mk.injEq] using orthonormal_iff_ite.mp
     (positiveEigenspaceBasis hAc hAs μ hμ).orthonormal ⟨i, hi⟩ ⟨j, hj⟩
 
-private theorem positiveEigenspaceVector_mem
+ theorem positiveEigenspaceVector_mem
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (μ : ℝ) (hμ : 0 < μ) (j : ℕ)
     (hj : j < finrank 𝕜 (eigenspace A.toLinearMap ((μ : ℝ) : 𝕜))) :
@@ -250,7 +250,7 @@ private theorem positiveEigenspaceVector_mem
   rw [dite_eq_left hj]
   exact Subtype.property _
 
-private theorem norm_positiveEigenspaceVector
+ theorem norm_positiveEigenspaceVector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (μ : ℝ) (hμ : 0 < μ) (j : ℕ)
     (hj : j < finrank 𝕜 (eigenspace A.toLinearMap ((μ : ℝ) : 𝕜))) :
@@ -260,7 +260,7 @@ private theorem norm_positiveEigenspaceVector
   rw [dite_eq_left hj]
   exact (positiveEigenspaceBasis hAc hAs μ hμ).orthonormal.1 _
 
-private theorem positiveApproximation_index_lt
+ theorem positiveApproximation_index_lt
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
     (n : ℕ) (hn : 0 < A.approximationNumber n) :

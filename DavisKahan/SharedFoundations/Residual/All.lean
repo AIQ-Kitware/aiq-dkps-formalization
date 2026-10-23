@@ -8,6 +8,6 @@ module
 public import DavisKahan.SharedFoundations.Residual.ReflectionDefect
 public import DavisKahan.SharedFoundations.Residual.ReflectionDefectIdeal
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SharedFoundations/Residual` -/

@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
 
-@[expose] public section
+public section
 
 /-!
 # Fan dominance for the finite direct rotation

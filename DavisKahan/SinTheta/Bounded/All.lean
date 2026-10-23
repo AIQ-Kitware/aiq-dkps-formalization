@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.SinTheta.Bounded.Core
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SinTheta/Bounded` -/

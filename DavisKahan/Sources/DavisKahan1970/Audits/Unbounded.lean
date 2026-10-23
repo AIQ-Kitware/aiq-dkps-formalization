@@ -13,7 +13,7 @@ public import DavisKahan.SinTheta.Real.Specializations
 public import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 public import DavisKahan.Sources.DavisKahan1970.PartIIIPresentation
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.PartialMap.Complexification
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SpectralTheory/PartialMap`
 

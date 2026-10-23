@@ -85,7 +85,7 @@ for.
   `SpectrumRestricts.starAlgHom`, of which it is the domain-only analogue.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

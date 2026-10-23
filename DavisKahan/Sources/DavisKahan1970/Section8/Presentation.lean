@@ -11,7 +11,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Real
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

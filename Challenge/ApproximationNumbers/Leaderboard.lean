@@ -31,7 +31,7 @@ module
 
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto_complex
 #print axioms TauCeti.ApproximationNumber.approximationNumber_isLUB_finiteRestrictions_real

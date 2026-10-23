@@ -9,7 +9,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

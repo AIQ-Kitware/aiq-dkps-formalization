@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.ClosedSylvesterEquation
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
 
-@[expose] public section
+public section
 
 /-!
 # Form-bounded gap configurations for the unbounded Sylvester equation

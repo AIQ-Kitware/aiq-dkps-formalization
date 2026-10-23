@@ -50,7 +50,7 @@ intertwine `A`.
   spectral cutoffs `1_{[-τ, α]}(A₀)` and the limiting argument.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

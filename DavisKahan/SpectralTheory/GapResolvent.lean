@@ -13,7 +13,7 @@ public import DavisKahan.Sylvester.ShiftedInverseGauge
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGap
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

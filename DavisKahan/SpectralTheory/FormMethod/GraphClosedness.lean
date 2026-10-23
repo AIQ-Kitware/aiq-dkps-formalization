@@ -9,7 +9,7 @@ module
 public import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Closedness of the transported fourth-order graph

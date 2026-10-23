@@ -10,7 +10,7 @@ public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.Sylvester.Unbounded.Neumann
 public import Mathlib.Analysis.Normed.Operator.Extend
 
-@[expose] public section
+public section
 
 /-!
 # Ideal-gauge shifted-inverse estimates

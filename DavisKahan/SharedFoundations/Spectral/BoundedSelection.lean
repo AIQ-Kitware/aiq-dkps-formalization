@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
 
-@[expose] public section
+public section
 
 /-!
 # Audited bounded spectral selections

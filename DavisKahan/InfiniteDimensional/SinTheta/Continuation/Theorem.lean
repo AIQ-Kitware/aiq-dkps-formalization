@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Endpoints
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.RotationChain
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

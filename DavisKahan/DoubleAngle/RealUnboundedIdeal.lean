@@ -9,7 +9,7 @@ public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import DavisKahan.SinTheta.Real.Unbounded
 public import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

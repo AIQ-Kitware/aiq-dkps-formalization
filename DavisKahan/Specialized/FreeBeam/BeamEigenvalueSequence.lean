@@ -9,7 +9,7 @@ public import DavisKahan.Specialized.FreeBeam.BeamSection9
 public import ForTauCeti.MeasureTheory.LpInfiniteDimensional
 public import ForTauCeti.Order.DiscreteEnumeration
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

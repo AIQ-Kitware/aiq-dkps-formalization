@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

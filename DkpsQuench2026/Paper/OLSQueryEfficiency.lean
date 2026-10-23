@@ -31,7 +31,7 @@ module
 
 public import DkpsQuench2026.Paper.Theorem2
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

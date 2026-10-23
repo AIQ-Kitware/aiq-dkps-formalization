@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralB
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 
-@[expose] public section
+public section
 
 /-!
 # Coordinate tangent and double-angle embeddings

@@ -10,6 +10,6 @@ public import DavisKahan.FiniteDimensional.TanTheta.GraphOperator
 public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 public import DavisKahan.FiniteDimensional.TanTheta.Vector
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional/TanTheta` -/

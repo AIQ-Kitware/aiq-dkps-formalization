@@ -10,7 +10,7 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 
-@[expose] public section
+public section
 
 /-!
 # The full operator angle printed in Davis--Kahan 1970

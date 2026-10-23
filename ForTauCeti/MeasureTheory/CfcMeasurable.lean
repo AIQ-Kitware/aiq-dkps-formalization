@@ -60,7 +60,7 @@ sample matrix — is, and the events one cares about depend only on that Gram.
   `ForTauCeti` staging modules.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

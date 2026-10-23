@@ -8,7 +8,7 @@ module
 public import DavisKahan.BoundedOperator.TrialResidual
 public import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Reflection defect controlled by an isometric trial residual

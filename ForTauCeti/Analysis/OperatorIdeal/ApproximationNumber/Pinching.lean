@@ -57,7 +57,7 @@ available there (`kyFanApproximationGauge_add_le_complex`); over a general
   `ForTauCeti`.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

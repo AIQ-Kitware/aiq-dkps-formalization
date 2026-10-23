@@ -19,7 +19,7 @@ public import ForTauCeti.Probability.Moments.SampleMean
 public import ForTauCeti.Probability.Moments.Variance
 public import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

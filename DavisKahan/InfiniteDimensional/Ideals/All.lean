@@ -8,6 +8,6 @@ module
 public import DavisKahan.InfiniteDimensional.Ideals.CompactIntegral
 public import DavisKahan.InfiniteDimensional.Ideals.Symmetric
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/InfiniteDimensional/Ideals` -/

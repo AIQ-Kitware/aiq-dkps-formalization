@@ -9,7 +9,7 @@ module
 public import DavisKahan.Geometry.Halmos.TwoProjections
 public import Mathlib.Analysis.InnerProductSpace.ProdL2
 
-@[expose] public section
+public section
 
 /-!
 # Orthogonal-summand coordinates

@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

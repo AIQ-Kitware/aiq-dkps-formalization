@@ -9,7 +9,7 @@ public import DavisKahan.DoubleAngle.RealUnboundedIdeal
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 public import DavisKahan.Geometry.Polar.DirectRotationReal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

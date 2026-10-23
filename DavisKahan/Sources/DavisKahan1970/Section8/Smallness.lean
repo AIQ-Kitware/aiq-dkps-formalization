@@ -8,7 +8,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Section8.SelectedBranch
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

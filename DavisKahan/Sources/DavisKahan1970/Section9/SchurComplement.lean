@@ -12,7 +12,7 @@ public import Mathlib.Tactic.Ext
 public import Mathlib.Tactic.Linarith
 public import Mathlib.Tactic.Ring
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Section 9: Schur-complement reduction

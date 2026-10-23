@@ -11,7 +11,7 @@ public import DavisKahan.SpectralTheory.Complexification.FormTransport
 public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 public import DavisKahan.SpectralTheory.FormSpectrumBounds
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

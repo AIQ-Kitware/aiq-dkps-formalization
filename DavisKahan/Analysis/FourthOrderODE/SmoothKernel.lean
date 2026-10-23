@@ -11,7 +11,7 @@ public import DavisKahan.Analysis.FourthOrderODE.ComplexGreenIdentity
 public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # The smooth kernel of the free--free fourth derivative

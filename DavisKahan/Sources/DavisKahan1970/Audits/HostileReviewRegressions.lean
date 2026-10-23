@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.All
 
-@[expose] public section
+public section
 
 /-!
 # Regression invariants for the hostile-review repairs

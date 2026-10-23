@@ -11,7 +11,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvarian
 public import DavisKahan.DoubleAngle.RealAngleIdentification
 public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 8.2's acute branch at unbounded scope

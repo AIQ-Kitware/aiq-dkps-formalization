@@ -14,7 +14,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.GapProjection
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalSineSequence
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

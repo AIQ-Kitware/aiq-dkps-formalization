@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedDiagonalization
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Bounded graphs are acute

@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.BoundedOperator.TrialResidual
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

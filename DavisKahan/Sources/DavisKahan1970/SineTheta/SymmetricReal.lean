@@ -13,7 +13,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingular
 public import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 public import DavisKahan.Sylvester.RealUnbounded
 
-@[expose] public section
+public section
 
 
 open TauCeti.DavisKahan.Sylvester

@@ -10,7 +10,7 @@ public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

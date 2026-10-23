@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970: explicit-separation sine-theta statement

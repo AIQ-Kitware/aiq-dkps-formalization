@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.SinTheta.Natural.SpectralSubspace
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

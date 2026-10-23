@@ -15,6 +15,6 @@ public import DavisKahan.InfiniteDimensional.TanTwoTheta.All
 public import DavisKahan.InfiniteDimensional.DoubleAngle
 public import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/InfiniteDimensional` -/

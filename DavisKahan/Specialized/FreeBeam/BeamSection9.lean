@@ -19,7 +19,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
 public import ForTauCeti.MeasureTheory.MulLpAlgebra
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

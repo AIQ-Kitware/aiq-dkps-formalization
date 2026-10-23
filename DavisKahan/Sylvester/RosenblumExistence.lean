@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.CircleRieszEndpoints
 public import TauCeti.Analysis.InnerProductSpace.Sylvester
 
-@[expose] public section
+public section
 
 /-!
 # Rosenblum's theorem: solving the Sylvester equation

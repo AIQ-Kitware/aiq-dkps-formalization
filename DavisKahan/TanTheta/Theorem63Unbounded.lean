@@ -11,7 +11,7 @@ public import DavisKahan.TanTheta.UnboundedSpectrum
 public import DavisKahan.SpectralTheory.ReflectionRestriction
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

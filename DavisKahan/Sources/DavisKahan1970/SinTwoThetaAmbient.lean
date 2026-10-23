@@ -14,7 +14,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoublin
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

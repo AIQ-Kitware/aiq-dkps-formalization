@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.RotationChain
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Selected spectral subspaces along a fixed contour

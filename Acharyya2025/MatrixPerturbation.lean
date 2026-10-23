@@ -46,7 +46,7 @@ public import Acharyya2025.GramRealization
 public import TauCeti.Analysis.Matrix.Eigenvalues
 public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)

@@ -9,6 +9,6 @@ public import DavisKahan.Sources.Davis1963.DoubleAngle
 public import DavisKahan.Sources.Davis1963.RotationBound
 public import DavisKahan.Sources.Davis1963.RotationEnergy
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources/Davis1963` -/

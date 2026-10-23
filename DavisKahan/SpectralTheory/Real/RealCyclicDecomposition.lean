@@ -9,7 +9,7 @@ public import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SeparableCyclic
 public import ForTauCeti.MeasureTheory.LpStar
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

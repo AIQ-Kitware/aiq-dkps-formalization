@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
-@[expose] public section
+public section
 
 /-!
 # Banach spaces carried by rectangular symmetric ideals

@@ -18,7 +18,7 @@ module
 public import Mathlib
 public import Helm2025.Internal
 
-@[expose] public section
+public section
 set_option linter.mathlibStandardSet false
 
 open scoped BigOperators Real Nat Classical Pointwise

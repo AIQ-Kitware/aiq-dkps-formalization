@@ -10,6 +10,6 @@ public import DavisKahan.TanTwoTheta.Unbounded
 public import DavisKahan.TanTwoTheta.UnboundedIdeal
 public import DavisKahan.TanTwoTheta.UnboundedVector
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/TanTwoTheta` -/

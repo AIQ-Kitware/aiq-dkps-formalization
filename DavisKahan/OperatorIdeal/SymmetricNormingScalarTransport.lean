@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
-@[expose] public section
+public section
 
 /-!
 # Symmetric norming functions under `RCLike` scalar transport

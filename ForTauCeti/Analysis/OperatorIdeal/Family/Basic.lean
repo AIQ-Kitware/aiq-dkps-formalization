@@ -15,7 +15,7 @@ completeness API. This module contains compatibility names used while downstream
 consumers migrate to those declarations. The block-sum estimate is a DKPS result.
 -/
 
-@[expose] public section
+public section
 
 open scoped ENNReal
 

@@ -10,7 +10,7 @@ public import DavisKahan.Geometry.Halmos.Realization
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

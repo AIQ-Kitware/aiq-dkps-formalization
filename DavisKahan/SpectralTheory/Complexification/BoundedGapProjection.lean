@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.Complexification.Subspace
 public import DavisKahan.SpectralTheory.SpectralGapFormBounds
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification.SpectralDescent
 
-@[expose] public section
+public section
 
 
 /-!

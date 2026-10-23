@@ -19,7 +19,7 @@ public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 
-@[expose] public section
+public section
 
 
 open TauCeti.DavisKahan.Sylvester

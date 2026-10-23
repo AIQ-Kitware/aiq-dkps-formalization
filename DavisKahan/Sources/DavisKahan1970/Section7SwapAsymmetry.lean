@@ -9,7 +9,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Sharpness
 public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -14,7 +14,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalizatio
 public import Mathlib.Analysis.Real.Pi.Bounds
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

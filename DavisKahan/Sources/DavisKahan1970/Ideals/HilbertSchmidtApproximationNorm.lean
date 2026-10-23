@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 
-@[expose] public section
+public section
 
 /-!
 # The Hilbert--Schmidt norm, read from the approximation-number sequence

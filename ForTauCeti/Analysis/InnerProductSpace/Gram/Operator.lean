@@ -46,7 +46,7 @@ perturbation identities and bounds.
 * Spectra influence: none.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

@@ -19,6 +19,6 @@ public import DavisKahan.Geometry.Halmos.Realization
 public import DavisKahan.Geometry.Halmos.TwoProjections
 public import DavisKahan.Geometry.Halmos.UnitaryEquivalence
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Geometry/Halmos` -/

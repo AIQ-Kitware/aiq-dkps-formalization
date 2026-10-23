@@ -9,7 +9,7 @@ public import DavisKahan.SinTheta.Canonical
 public import DavisKahan.SinTheta.Real.Canonical
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 
-@[expose] public section
+public section
 
 /-!
 # Literal Davis--Kahan Theorem 6.1 surface

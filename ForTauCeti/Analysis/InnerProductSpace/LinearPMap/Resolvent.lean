@@ -16,7 +16,7 @@ API. These two helpers convert inclusions into the real scalar copy of a set
 to pointwise real statements used by downstream spectral-gap arguments.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap

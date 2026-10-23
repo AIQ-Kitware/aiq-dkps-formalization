@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sylvester.FiniteStepCalculus
 
-@[expose] public section
+public section
 
 
 /-!

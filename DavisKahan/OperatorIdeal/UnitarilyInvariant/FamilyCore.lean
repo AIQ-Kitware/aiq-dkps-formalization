@@ -11,7 +11,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 public import Mathlib.Topology.Basic
 
-@[expose] public section
+public section
 
 /-!
 # Constructor data for a symmetric operator ideal family

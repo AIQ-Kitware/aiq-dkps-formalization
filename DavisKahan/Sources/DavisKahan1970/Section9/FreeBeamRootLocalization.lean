@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
 public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootExclusion
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Reduction of free-beam root localization to scalar certificates

@@ -9,7 +9,7 @@ public import DavisKahan.SinTheta.SpectralBridge
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.SinTheta.FrameFactorization
 
-@[expose] public section
+public section
 
 /-!
 # Bounded `sin Θ` problem data and angle identification

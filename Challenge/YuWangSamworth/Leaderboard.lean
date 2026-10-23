@@ -7,6 +7,6 @@ module
 
 public import YuWangSamworth2015.Core.Residual
 
-@[expose] public section
+public section
 
 #print axioms YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap

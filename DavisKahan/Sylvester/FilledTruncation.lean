@@ -9,7 +9,7 @@ public import DavisKahan.SpectralTheory.BoundedTruncation
 public import DavisKahan.Sylvester.Bounded
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 
-@[expose] public section
+public section
 
 /-!
 # Interface-parametric filled spectral truncations

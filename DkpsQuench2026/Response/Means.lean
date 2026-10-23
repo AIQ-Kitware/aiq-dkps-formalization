@@ -12,7 +12,7 @@ module
 public import Acharyya2025.GrowingResponse
 public import DkpsQuench2026.Geometry.AugmentedCMDS
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

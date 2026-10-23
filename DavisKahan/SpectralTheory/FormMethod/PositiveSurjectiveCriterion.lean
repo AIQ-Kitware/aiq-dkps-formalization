@@ -18,7 +18,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # A positive-surjective self-adjointness criterion

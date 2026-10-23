@@ -22,7 +22,7 @@ public import DkpsQuench2026.Core.Certificates
 public import ForTauCeti.Analysis.InnerProductSpace.FiniteFrame
 public import ForTauCeti.Probability.Moments.CenteredScatter
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

@@ -54,7 +54,7 @@ is exactly the duplication this module exists to avoid.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 

@@ -36,7 +36,7 @@ totalized tangent functions used by finite-dimensional operator-angle theory.
   `ForTauCeti` staging modules.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

@@ -35,7 +35,7 @@ Both statements are ordinary facts about product measures and are stated for the
 neither is currently consumed by a paper-facing theorem in this repository.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

@@ -11,7 +11,7 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.SinTheta.SpectralBridge
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

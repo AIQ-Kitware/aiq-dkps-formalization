@@ -9,7 +9,7 @@ public import DavisKahan.SinTheta.Natural.Reducing
 public import DavisKahan.SinTheta.BoundedPerturbation
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
-@[expose] public section
+public section
 
 /-!
 # The unbounded `sin Θ` estimate at the operator norm

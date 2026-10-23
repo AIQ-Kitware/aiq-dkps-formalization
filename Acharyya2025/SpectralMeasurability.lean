@@ -27,7 +27,7 @@ module
 public import Acharyya2025.MatrixPerturbation
 public import Acharyya2025.AlignedPipeline
 
-@[expose] public section
+public section
 
 open scoped BigOperators Matrix
 open MeasureTheory

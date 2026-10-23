@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.FiniteDimensional.SinTheta.TrialMap
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional/SinTheta` -/

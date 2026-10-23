@@ -9,4 +9,4 @@ public import DkpsQuench2026.Paper.OLSPerturbation
 public import DkpsQuench2026.Paper.EvaluationBridges
 public import DkpsQuench2026.Paper.EvaluationConcentration
 
-@[expose] public section
+public section

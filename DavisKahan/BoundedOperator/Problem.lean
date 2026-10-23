@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
-@[expose] public section
+public section
 
 /-!
 # Bounded invariant-pair problems

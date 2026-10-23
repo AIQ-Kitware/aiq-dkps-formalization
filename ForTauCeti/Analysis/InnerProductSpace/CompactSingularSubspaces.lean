@@ -39,7 +39,7 @@ chosen independently inside each finite-dimensional nonzero block.
   the same nonzero eigenvalues.
 -/
 
-@[expose] public section
+public section
 
 open Module (finrank)
 open Module.End (eigenspace)

@@ -9,7 +9,7 @@ public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 /-!
 # Tangent angle operators over an arbitrary `RCLike` field

@@ -8,7 +8,7 @@ module
 public import DavisKahan.DoubleAngle.KyFanOrthonormal
 public import Mathlib.Analysis.InnerProductSpace.ProdL2
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Section 1: the Rayleigh--Ritz principle for the `ν`-norms

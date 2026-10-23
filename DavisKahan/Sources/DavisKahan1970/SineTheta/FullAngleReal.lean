@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngle
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngleReal
 
-@[expose] public section
+public section
 
 /-!
 # Literal full angle for real subspaces

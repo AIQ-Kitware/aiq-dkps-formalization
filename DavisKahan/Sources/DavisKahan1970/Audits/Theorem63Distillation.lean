@@ -9,7 +9,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import DavisKahan.TanTheta.Theorem63FiniteSource
 
-@[expose] public section
+public section
 
 /-!
 # Audit: the Theorem 6.3 dimension hypothesis does not imply acuteness

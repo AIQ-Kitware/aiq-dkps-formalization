@@ -9,4 +9,4 @@ public import DkpsQuench2026.Probability
 public import DkpsQuench2026.Rates
 public import DkpsQuench2026.QueryEfficiency
 
-@[expose] public section
+public section

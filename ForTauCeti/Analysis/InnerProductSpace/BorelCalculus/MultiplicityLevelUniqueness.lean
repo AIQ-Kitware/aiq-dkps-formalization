@@ -62,7 +62,7 @@ constant in the slice index -- the reason a slice contributes exactly one genera
 * Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ENNReal
 

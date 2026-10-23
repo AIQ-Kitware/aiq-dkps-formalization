@@ -7,7 +7,7 @@ module
 
 public import YuWangSamworth2015.Rectangular.FrobeniusGram
 
-@[expose] public section
+public section
 
 /-!
 # The Yu--Wang--Samworth singular-subspace theorem

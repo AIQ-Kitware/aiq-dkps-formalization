@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.GraphSubspace
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

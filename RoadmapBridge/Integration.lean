@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Spectral
 public import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
 
-@[expose] public section
+public section
 
 /-!
 # Roadmap bridge: cross-module integration seams

@@ -6,6 +6,6 @@ module
 
 public import TauCeti.Probability.Moments.MatrixConcentration
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.one_sub_le_measure_forall_eigenvalues₀_sub_le

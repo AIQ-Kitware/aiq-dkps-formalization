@@ -10,7 +10,7 @@ public import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
 public import DavisKahan.SpectralTheory.GraphSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation
 
-@[expose] public section
+public section
 
 /-!
 # Infinite-dimensional mathematics pass

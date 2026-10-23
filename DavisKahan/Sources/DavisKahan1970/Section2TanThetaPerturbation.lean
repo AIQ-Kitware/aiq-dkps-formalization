@@ -9,7 +9,7 @@ module
 public import DavisKahan.TanTheta.Theorem63FiniteSource
 public import DavisKahan.TanTheta.Theorem63InfiniteTrial
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -6,7 +6,7 @@ module
 
 public import Mathlib
 
-@[expose] public section
+public section
 
 /-!
 ## Comparator maintenance rule

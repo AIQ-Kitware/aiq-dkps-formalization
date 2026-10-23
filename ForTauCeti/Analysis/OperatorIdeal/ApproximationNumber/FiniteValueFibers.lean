@@ -36,7 +36,7 @@ counting step that bounds a band by the index interval it occupies.
 * Spectra influence: **none.**
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

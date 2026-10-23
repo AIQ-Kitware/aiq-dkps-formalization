@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.SpectralRestriction
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
 
-@[expose] public section
+public section
 
 /-!
 # Self-adjoint operators on spectral ranges

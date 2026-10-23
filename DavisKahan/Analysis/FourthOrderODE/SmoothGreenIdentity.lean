@@ -10,7 +10,7 @@ public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 public import Mathlib.Analysis.Calculus.Deriv.Mul
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Smooth-core Green identities for the free--free beam

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.CutoffInterface
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 /-!
 # Replaceable ordered two-unbounded Sylvester engine

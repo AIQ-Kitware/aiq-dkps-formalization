@@ -9,7 +9,7 @@ module
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.KyFanGauge
 
-@[expose] public section
+public section
 
 /-!
 # Real Hilbert-space localization of approximation numbers

@@ -94,7 +94,7 @@ and the list of pins updated to match is recorded once, in
 
 -/
 
-@[expose] public section
+public section
 
 /-!
 ### Provenance

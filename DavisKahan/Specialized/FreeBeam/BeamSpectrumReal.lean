@@ -11,7 +11,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassifica
 public import TauCeti.Analysis.Normed.Operator.RealAlgebra
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Spectrum of the real free-beam realization

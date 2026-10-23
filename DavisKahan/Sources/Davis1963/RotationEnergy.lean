@@ -10,7 +10,7 @@ public import DavisKahan.Sources.Davis1963.DoubleAngle
 public import DavisKahan.FiniteDimensional.Core.OperatorBlocks
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
-@[expose] public section
+public section
 
 /-!
 # Davis's 1963 finite-dimensional rotation theory

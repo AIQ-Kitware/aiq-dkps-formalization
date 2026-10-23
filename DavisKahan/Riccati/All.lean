@@ -20,6 +20,6 @@ public import DavisKahan.Riccati.UnboundedCore
 public import DavisKahan.Riccati.UnboundedExistence
 public import DavisKahan.Riccati.UnboundedReduction
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Riccati` -/

@@ -63,7 +63,7 @@ mapping is stated accordingly: the relevant point of `A` attached to a nonzero
   and the two share no lemma.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap

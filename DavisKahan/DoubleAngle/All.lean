@@ -24,6 +24,6 @@ public import DavisKahan.DoubleAngle.Unbounded
 public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import DavisKahan.DoubleAngle.UnboundedIdealFormGap
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/DoubleAngle` -/

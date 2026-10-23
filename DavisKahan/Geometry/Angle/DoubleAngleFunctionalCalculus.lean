@@ -9,7 +9,7 @@ public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Reflection
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Gram
 
-@[expose] public section
+public section
 
 /-!
 # The literal ambient `sin 2Θ` of Davis--Kahan, and the reflection identity

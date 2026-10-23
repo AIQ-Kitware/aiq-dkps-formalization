@@ -11,7 +11,7 @@ public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # The real resolvent of a partial map, and the ambient spectrum

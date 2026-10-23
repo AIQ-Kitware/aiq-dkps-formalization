@@ -14,7 +14,7 @@ public import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

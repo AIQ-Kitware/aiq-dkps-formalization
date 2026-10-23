@@ -13,7 +13,7 @@ public import DavisKahan.Sylvester.ScalarGeneric
 public import DavisKahan.Sylvester.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

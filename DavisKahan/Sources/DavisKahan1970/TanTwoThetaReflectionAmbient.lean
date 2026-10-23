@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

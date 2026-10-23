@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.Specialized.FreeBeam.All
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Specialized` -/

@@ -27,7 +27,7 @@ public import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 -- frontier alongside Proposition 3.3.
 public import DavisKahan.Geometry.Halmos.FixedCosineSubspace
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

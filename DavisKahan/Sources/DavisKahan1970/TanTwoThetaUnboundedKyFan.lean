@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
 public import DavisKahan.DoubleAngle.KyFanOrthonormal
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 /-!
 # The unbounded, residual-form `tan 2Θ` theorem at every Ky Fan prefix

@@ -16,7 +16,7 @@ public import Acharyya2025.GramRealization
 public import DkpsQuench2026.Geometry.Radial
 public import Acharyya2025.SpectralMeasurability
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

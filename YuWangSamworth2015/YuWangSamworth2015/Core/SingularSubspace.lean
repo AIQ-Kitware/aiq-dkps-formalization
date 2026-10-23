@@ -40,7 +40,7 @@ YWS corollaries.
 
 -/
 
-@[expose] public section
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

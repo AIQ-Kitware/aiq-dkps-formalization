@@ -8,6 +8,6 @@ module
 public import DavisKahan.Alternative.FiniteDimensional.API.ClassicalProseLike
 public import DavisKahan.Alternative.FiniteDimensional.API.ProseLike
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Alternative/FiniteDimensional/API` -/

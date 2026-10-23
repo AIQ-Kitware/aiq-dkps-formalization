@@ -113,7 +113,7 @@ coordinate.
   Mathlib, `TauCeti` and `ForTauCeti`.
 -/
 
-@[expose] public section
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower

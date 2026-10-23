@@ -8,7 +8,7 @@ module
 public import DavisKahan.SinTheta.Bounded.Core
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 
-@[expose] public section
+public section
 
 /-!
 # Scalar-generic lower-frame transport from explicit polar data

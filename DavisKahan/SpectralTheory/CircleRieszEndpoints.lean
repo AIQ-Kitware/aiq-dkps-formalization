@@ -10,7 +10,7 @@ public import Mathlib.Analysis.Complex.CauchyIntegral
 public import Mathlib.Analysis.Calculus.FDeriv.Mul
 public import Mathlib.Analysis.Normed.Algebra.Spectrum
 
-@[expose] public section
+public section
 
 /-!
 # The two endpoints of the circle Riesz projection

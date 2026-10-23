@@ -16,7 +16,7 @@ module
 
 public import DkpsQuench2026.Core.Certificates
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

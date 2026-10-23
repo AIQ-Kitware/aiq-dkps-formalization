@@ -15,7 +15,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 
-@[expose] public section
+public section
 
 /-!
 # The complex rectangular Hilbert--Schmidt ideal family

@@ -9,6 +9,6 @@ public import DavisKahan.FiniteDimensional.Core.AngleOperatorBlockSum
 public import DavisKahan.FiniteDimensional.Core.AngleOperators
 public import DavisKahan.FiniteDimensional.Core.OperatorBlocks
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional/Core` -/

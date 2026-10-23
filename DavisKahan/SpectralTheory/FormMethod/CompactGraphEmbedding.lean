@@ -9,7 +9,7 @@ module
 public import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Compact resolvents and compact graph embeddings

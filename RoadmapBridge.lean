@@ -5,4 +5,4 @@ public import RoadmapBridge.MatrixSpectralStatistics
 public import RoadmapBridge.OperatorTheory
 public import RoadmapBridge.CanonicalConsumers
 
-@[expose] public section
+public section

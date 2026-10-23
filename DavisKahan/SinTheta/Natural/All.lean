@@ -13,6 +13,6 @@ public import DavisKahan.SinTheta.Natural.Real
 public import DavisKahan.SinTheta.Natural.Reducing
 public import DavisKahan.SinTheta.Natural.SpectralSubspace
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SinTheta/Natural` -/

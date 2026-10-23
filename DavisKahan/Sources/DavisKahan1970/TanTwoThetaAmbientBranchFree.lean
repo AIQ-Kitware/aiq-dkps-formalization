@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
 public import DavisKahan.DoubleAngle.TanTwoThetaApproximatePair
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

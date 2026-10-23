@@ -8,7 +8,7 @@ module
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
-@[expose] public section
+public section
 
 /-!
 # The literal ambient `tan Θ` of Davis--Kahan

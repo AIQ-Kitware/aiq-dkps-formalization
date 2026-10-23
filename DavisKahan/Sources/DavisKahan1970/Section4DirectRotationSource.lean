@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section4Real
 public import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 public import DavisKahan.Geometry.Polar.SourceDirectRotation
 
-@[expose] public section
+public section
 
 /-!
 # Section 4 on the source's own object: the direct rotation

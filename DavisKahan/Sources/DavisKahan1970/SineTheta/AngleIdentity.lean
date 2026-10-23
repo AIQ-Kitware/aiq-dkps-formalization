@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngleReal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

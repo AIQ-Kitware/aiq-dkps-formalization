@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.Riccati.UnboundedRotationTransport
 
-@[expose] public section
+public section
 
 /-!
 # Transport of reducing subspaces through an unbounded graph rotation

@@ -9,7 +9,7 @@ public import DavisKahan.SharedFoundations.Ideal.TwoWayFactorization
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.InfiniteDimensional.DoubleAngle
 
-@[expose] public section
+public section
 
 /-!
 # Ideal transport through subspace reflections

@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/InfiniteDimensional/SpectraBridge` -/

@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Riccati.BoundedCanonicalSolution
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

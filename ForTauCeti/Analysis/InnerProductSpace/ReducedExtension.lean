@@ -17,7 +17,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
-@[expose] public section
+public section
 
 /-!
 # Quadratic forms of reduced extensions

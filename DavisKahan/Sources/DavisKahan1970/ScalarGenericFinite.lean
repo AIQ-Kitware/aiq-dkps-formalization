@@ -11,7 +11,7 @@ public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 public import DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
 
-@[expose] public section
+public section
 
 /-!
 # Scalar-generic headline review surfaces

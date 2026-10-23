@@ -10,7 +10,7 @@ public import DavisKahan.SinTheta.Specializations
 public import DavisKahan.SinTheta.Real.Specializations
 public import DavisKahan.SinTheta.Natural.Real
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970 general sine-theta manuscript surface

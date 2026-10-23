@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
 public import DavisKahan.SpectralTheory.Complexification.FormTransport
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 
-@[expose] public section
+public section
 
 /-!
 # The branch-free `tan 2Θ` theorem over a real Hilbert space, arbitrary dimension

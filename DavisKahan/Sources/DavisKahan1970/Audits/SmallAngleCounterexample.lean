@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 
-@[expose] public section
+public section
 
 /-!
 # Axiom and public-interface audit for the small-angle extension

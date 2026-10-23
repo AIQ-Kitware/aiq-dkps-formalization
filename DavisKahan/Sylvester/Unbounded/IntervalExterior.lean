@@ -10,7 +10,7 @@ public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.SpectralTheory.GapResolvent
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

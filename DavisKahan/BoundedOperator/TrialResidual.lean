@@ -10,7 +10,7 @@ public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.Sylvester.Spectrum
 public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

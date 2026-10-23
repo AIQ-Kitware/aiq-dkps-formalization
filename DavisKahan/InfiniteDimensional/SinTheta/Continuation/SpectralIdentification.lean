@@ -11,7 +11,7 @@ public import DavisKahan.SpectralTheory.CayleySelectorBridge
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 
-@[expose] public section
+public section
 
 /-!
 # Spectral-projection target for contour continuation

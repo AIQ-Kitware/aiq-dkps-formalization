@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.SequenceGauge
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 public import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
 
-@[expose] public section
+public section
 
 /-!
 # Fan dominance for standard symmetric ideals

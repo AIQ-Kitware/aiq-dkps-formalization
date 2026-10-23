@@ -9,7 +9,7 @@ module
 public import DavisKahan.FiniteDimensional.DirectRotation
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 
-@[expose] public section
+public section
 
 /-!
 # Finite-dimensional Section 4 source surface

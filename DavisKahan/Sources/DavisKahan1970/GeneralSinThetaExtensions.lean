@@ -12,7 +12,7 @@ public import DavisKahan.SinTheta.Natural.Bounded
 public import DavisKahan.SinTheta.Natural.GapConvenience
 public import DavisKahan.SinTheta.NaturalTwoSubspace
 
-@[expose] public section
+public section
 
 /-!
 # Optional natural-input extensions to the general sine-theta surface

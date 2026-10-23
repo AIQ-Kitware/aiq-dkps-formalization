@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # The spectrum survives complexification

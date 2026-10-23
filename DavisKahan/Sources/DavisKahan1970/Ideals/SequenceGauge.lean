@@ -11,7 +11,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInsta
 public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 public import Mathlib.Topology.Compactness.Compact
 
-@[expose] public section
+public section
 
 /-!
 # The sequence gauge of a coherent symmetric norm, and its Riesz splitting

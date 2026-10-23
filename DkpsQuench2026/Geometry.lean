@@ -8,4 +8,4 @@ public import DkpsQuench2026.Geometry.Covariance
 public import DkpsQuench2026.Geometry.CenteredCovariance
 public import DkpsQuench2026.Geometry.OLSAligned
 
-@[expose] public section
+public section

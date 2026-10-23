@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
 
-@[expose] public section
+public section
 
 /-!
 # Concrete witnesses for the Davis--Kahan source norm class

@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
 public import DavisKahan.Sources.DavisKahan1970.Theorem61
 public import DavisKahan.Sources.DavisKahan1970.Proposition61
 
-@[expose] public section
+public section
 
 /-!
 # Trusted-dependency audit for the literal paper sine-theta surface

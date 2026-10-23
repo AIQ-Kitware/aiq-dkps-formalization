@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 /-!
 # Normalized symmetric operator ideal families

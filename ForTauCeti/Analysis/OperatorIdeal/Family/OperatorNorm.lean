@@ -28,7 +28,7 @@ specialization. It does not define a new rectangular family or a new carrier.
 * Copyright and license remain those of Kitware, Inc., Apache 2.0.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

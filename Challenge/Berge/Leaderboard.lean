@@ -5,7 +5,7 @@ module
 
 public import ForTauCeti.Topology.Berge
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.upperHemicontinuousAt_isMinOn
 #print axioms TauCeti.continuous_iInf_of_isCompact

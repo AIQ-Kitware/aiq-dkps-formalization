@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.Bounded
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

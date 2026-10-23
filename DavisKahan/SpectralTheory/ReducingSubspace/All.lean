@@ -8,6 +8,6 @@ module
 public import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 public import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SpectralTheory/ReducingSubspace` -/

@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicC
 public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Reduction of positive free-beam eigenvalues to the characteristic equation

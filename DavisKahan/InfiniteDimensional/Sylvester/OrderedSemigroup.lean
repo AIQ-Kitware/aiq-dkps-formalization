@@ -11,7 +11,7 @@ public import Mathlib.MeasureTheory.Integral.ExpDecay
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 
-@[expose] public section
+public section
 
 
 /-!

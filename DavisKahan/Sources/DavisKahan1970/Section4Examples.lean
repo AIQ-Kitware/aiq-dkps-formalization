@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Examples 4.1 and 4.2

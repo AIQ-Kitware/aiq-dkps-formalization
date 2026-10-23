@@ -5,6 +5,6 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.gram_eq_iff_exists_linearIsometryEquiv

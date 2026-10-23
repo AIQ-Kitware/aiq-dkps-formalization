@@ -11,7 +11,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Pinching
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSquare
 public import DavisKahan.Geometry.Polar.DirectRotationSquare
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

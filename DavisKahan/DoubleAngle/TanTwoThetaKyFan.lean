@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
-@[expose] public section
+public section
 
 /-!
 # The `tan 2Θ` theorem for every unitarily invariant norm

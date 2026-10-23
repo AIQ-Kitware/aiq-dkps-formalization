@@ -9,7 +9,7 @@ public import DavisKahan.BoundedOperator.All
 public import DavisKahan.FiniteDimensional.All
 public import DavisKahan.Sources.All
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan perturbation theory

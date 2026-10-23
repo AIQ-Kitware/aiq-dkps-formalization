@@ -16,7 +16,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTrans
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 /-!
 # Literal directed trigonometric presentation objects

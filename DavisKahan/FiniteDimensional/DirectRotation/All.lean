@@ -15,6 +15,6 @@ public import DavisKahan.FiniteDimensional.DirectRotation.QNorm
 public import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
 public import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

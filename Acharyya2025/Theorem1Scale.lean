@@ -29,7 +29,7 @@ module
 public import Acharyya2024.Consistency
 public import Acharyya2025.Deterministic
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open MeasureTheory

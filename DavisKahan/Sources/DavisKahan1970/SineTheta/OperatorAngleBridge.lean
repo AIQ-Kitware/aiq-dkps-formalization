@@ -9,7 +9,7 @@ public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

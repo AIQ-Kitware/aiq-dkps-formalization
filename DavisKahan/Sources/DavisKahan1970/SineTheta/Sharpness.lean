@@ -12,7 +12,7 @@ public import DavisKahan.Geometry.Angle.OperatorAngleReal
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

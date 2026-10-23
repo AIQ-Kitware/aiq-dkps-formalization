@@ -27,7 +27,7 @@ second move to undo.  Statements and proofs are unchanged; the namespace moved f
 imports.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

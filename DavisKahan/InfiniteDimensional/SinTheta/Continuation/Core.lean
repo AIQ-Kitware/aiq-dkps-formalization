@@ -10,7 +10,7 @@ public import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 public import DavisKahan.SpectralTheory.ResolventOperator
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -45,7 +45,7 @@ this file read `in progress`.  Path change and repointing of imports only — no
 statement, signature, proof, attribute, declaration name or namespace changed.
 -/
 
-@[expose] public section
+public section
 
 open scoped ENNReal NNReal
 open Filter Topology

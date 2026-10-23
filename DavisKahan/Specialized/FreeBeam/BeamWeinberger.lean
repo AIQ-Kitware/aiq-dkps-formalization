@@ -8,7 +8,7 @@ module
 
 public import DavisKahan.Specialized.FreeBeam.BeamTangent
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

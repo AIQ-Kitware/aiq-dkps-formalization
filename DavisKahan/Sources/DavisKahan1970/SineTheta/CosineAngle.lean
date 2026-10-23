@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

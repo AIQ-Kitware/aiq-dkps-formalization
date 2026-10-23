@@ -42,7 +42,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 public import DavisKahan.Sources.DavisKahan1970.Section8.All
 public import DavisKahan.Sources.DavisKahan1970.Section9.All
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

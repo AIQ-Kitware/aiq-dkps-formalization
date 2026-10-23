@@ -72,7 +72,7 @@ Both `v` and `Q v` lie in the band, and there
   SIAM J. Numer. Anal. 7 (1970), 1--46, Section 7: the ambient `tan Θ` estimate.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 

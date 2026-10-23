@@ -12,7 +12,7 @@ public import Mathlib.Analysis.Calculus.Deriv.Star
 public import Mathlib.Analysis.Complex.Basic
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Complex smooth-core Green identities for the free--free beam

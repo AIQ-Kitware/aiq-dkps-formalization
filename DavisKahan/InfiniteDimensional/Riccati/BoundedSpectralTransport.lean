@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.Riccati.BoundedGraphAcute
 public import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Spectrum transport for bounded Riccati diagonalization

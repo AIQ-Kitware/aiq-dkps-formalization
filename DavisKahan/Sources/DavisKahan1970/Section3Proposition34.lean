@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Presentation
 public import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

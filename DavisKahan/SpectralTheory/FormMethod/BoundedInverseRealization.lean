@@ -17,7 +17,7 @@ public import DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Unbounded inverse of a bounded positive resolvent

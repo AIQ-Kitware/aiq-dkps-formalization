@@ -14,7 +14,7 @@ public import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
 public import TauCeti.Analysis.OperatorIdeal.Family.Schatten
 public import TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
 
-@[expose] public section
+public section
 
 /-! # Operator-theory signature regressions
 

@@ -9,7 +9,7 @@ public import DavisKahan.SinTheta.BoundedPerturbation
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

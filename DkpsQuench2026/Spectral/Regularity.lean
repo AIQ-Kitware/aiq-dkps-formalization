@@ -21,7 +21,7 @@ public import DkpsQuench2026.Geometry.CenteredCovariance
 public import DkpsQuench2026.Spectral.GramSpectrum
 public import TauCeti.Analysis.Matrix.Eigenvalues
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

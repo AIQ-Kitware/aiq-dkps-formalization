@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.All
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

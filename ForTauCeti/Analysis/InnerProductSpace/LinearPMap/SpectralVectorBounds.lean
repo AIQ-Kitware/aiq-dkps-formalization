@@ -30,7 +30,7 @@ Statements and proofs are unchanged; the namespace moved from
 `TauCeti.ApproximationNumber.LinearPMap` to `TauCeti.LinearPMap`.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap

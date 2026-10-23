@@ -13,7 +13,7 @@ public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instanc
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

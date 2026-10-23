@@ -48,7 +48,7 @@ public import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
 public import Acharyya2024.Probability
 public import Acharyya2025.AlignedPipeline
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

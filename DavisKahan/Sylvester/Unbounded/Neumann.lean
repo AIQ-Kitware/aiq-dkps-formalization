@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.Unbounded.Equation
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 
-@[expose] public section
+public section
 
 /-!
 # Neumann-series Sylvester estimates with one unbounded block

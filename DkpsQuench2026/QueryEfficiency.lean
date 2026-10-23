@@ -6,4 +6,4 @@ public import DkpsQuench2026.QueryEfficiency.Finite
 public import DkpsQuench2026.QueryEfficiency.Infinite
 public import DkpsQuench2026.QueryEfficiency.AllQueries
 
-@[expose] public section
+public section

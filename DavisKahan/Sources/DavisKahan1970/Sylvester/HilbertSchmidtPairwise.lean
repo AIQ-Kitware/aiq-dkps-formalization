@@ -11,7 +11,7 @@ public import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFi
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

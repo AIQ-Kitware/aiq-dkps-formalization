@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModelReal
 
-@[expose] public section
+public section
 
 /-!
 # Real Hahn--Hellinger: the existence of a real multiplicity model

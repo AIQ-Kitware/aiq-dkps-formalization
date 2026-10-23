@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 public import DavisKahan.Geometry.Polar.DirectRotation
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Polar factors and reducing projections

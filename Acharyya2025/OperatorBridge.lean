@@ -26,7 +26,7 @@ public import Acharyya2025.MathlibBridge
 public import Acharyya2025.Weyl
 public import TauCeti.Analysis.Matrix.EntrywiseOpNorm
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace
 open Module (finrank)

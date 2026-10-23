@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 
-@[expose] public section
+public section
 
 /-!
 # Boundedness from a bounded spectrum

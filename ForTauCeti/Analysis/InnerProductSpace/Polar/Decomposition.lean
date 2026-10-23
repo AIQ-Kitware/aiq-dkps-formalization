@@ -57,7 +57,7 @@ partial isometry; adding invertibility of the modulus buys it back as an
 isometry. That is the whole hierarchy.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

@@ -8,7 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 public import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 
-@[expose] public section
+public section
 
 /-!
 # Compatibility surface for the unfinished canonical tangent-map corollary

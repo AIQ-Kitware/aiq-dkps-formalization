@@ -10,7 +10,7 @@ public import DavisKahan.Analysis.FourthOrderODE.SmoothKernel
 public import Mathlib.Analysis.Complex.RealDeriv
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Explicit affine zero modes of the free--free beam

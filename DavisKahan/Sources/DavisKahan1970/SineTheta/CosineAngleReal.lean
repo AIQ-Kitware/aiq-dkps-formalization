@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 
-@[expose] public section
+public section
 
 /-!
 # Literal directed angle for real subspaces

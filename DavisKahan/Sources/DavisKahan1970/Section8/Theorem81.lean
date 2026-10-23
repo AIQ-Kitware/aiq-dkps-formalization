@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.OperatorAngle
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

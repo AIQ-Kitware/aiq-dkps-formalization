@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
 public import ForTauCeti.Analysis.Normed.FiniteLpGauge
 
-@[expose] public section
+public section
 
 /-!
 # Standard coherent norming-function instances

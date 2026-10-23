@@ -7,7 +7,7 @@ module
 public import DkpsQuench2026.Geometry.AlignedCMDS
 public import DkpsQuench2026.Paper.OLSPerturbation
 
-@[expose] public section
+public section
 
 open scoped BigOperators Real Nat Classical Pointwise Topology
   RealInnerProductSpace InnerProductSpace

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedBranch
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionNaturality
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 8.1's printed characterization, both directions, at unbounded scope

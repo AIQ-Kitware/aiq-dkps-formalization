@@ -9,7 +9,7 @@ public import DavisKahan.TanTheta.Vector
 public import DavisKahan.Sylvester.Spectrum
 public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

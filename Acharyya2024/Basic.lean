@@ -20,4 +20,4 @@ public import Acharyya2024.Probability
 public import Acharyya2024.SecondMoment
 public import Acharyya2024.RawStress
 
-@[expose] public section
+public section

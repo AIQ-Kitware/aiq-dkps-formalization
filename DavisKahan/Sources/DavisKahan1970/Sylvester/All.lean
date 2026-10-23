@@ -10,6 +10,6 @@ public import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtEstimate
 public import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise
 public import DavisKahan.Sources.DavisKahan1970.Sylvester.OperatorNormEstimate
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Sylvester` -/

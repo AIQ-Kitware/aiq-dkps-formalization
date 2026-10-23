@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.SinTheta.Bounded.Core
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

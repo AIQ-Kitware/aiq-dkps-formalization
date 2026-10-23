@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Riccati.UnboundedBasic
 
-@[expose] public section
+public section
 
 /-!
 # Product-domain core for unbounded block operators

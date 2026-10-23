@@ -11,7 +11,7 @@ public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
-@[expose] public section
+public section
 
 /-!
 # Spectral-subspace domain and intertwining adapters

@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.Alternative.FiniteDimensional.All
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Alternative` -/

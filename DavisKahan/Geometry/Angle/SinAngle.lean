@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 
-@[expose] public section
+public section
 
 /-!
 # Sine of the operator angle

@@ -8,7 +8,7 @@ module
 
 public import DavisKahan.Geometry.Halmos.TwoProjections
 
-@[expose] public section
+public section
 
 /-!
 # Unitary equivalence of subspace pairs and bounded operators

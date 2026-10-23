@@ -46,7 +46,7 @@ hypothesis, which is a splitting of the spectrum, not a choice of half-line.
   III*, SIAM J. Numer. Anal. 7 (1970), 1--46, Appendix to Section 6.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

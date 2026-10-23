@@ -16,6 +16,6 @@ public import DavisKahan.FiniteDimensional.DirectRotation
 public import DavisKahan.FiniteDimensional.Generalized
 public import DavisKahan.FiniteDimensional.Sharpness
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional` -/

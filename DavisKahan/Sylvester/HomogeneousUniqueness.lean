@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.Unbounded.FormBoundedGap
 public import DavisKahan.Sylvester.RealUnbounded
 
-@[expose] public section
+public section
 
 /-!
 # Bounded homogeneous Sylvester uniqueness

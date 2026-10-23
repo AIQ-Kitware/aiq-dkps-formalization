@@ -9,7 +9,7 @@ module
 public import DavisKahan.Geometry.Polar.Section3Elementary
 public import DavisKahan.InfiniteDimensional.SinTheta.General
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Corollary 3.2

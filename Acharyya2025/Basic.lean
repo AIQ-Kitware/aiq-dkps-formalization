@@ -28,4 +28,4 @@ public import Acharyya2025.SpectralMeasurability
 public import Acharyya2025.RateChain
 public import Acharyya2025.GrowingPipeline
 
-@[expose] public section
+public section

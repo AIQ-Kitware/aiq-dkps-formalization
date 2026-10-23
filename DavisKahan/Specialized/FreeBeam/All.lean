@@ -22,6 +22,6 @@ public import DavisKahan.Specialized.FreeBeam.BeamTangent
 public import DavisKahan.Specialized.FreeBeam.BeamTrialReal
 public import DavisKahan.Specialized.FreeBeam.BeamWeinberger
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Specialized/FreeBeam` -/

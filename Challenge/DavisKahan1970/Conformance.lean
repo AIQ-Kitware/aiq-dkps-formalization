@@ -45,7 +45,7 @@ public import DavisKahan.TanTheta.Theorem63InfiniteTrial
 public import DavisKahan.FiniteDimensional.DirectRotation.Basic
 public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

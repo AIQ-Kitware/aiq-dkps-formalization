@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Riccati.UnboundedReduction
 
-@[expose] public section
+public section
 
 /-!
 # Strong unbounded Riccati solutions from selected reducing graphs

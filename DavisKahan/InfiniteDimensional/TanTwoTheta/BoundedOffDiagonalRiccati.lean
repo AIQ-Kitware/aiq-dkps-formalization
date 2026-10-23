@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedRiccatiShift
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

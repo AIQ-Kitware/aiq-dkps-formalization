@@ -9,7 +9,7 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSquare
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 
-@[expose] public section
+public section
 
 /-!
 # The compression sandwich bound behind Theorem 8.1(ii)

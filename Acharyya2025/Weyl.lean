@@ -28,7 +28,7 @@ module
 public import Mathlib
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace
 open Module (finrank)

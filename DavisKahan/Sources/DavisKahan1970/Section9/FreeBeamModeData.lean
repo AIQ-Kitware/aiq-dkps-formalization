@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicC
 public import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Classical characteristic modes as fourth-order derivative data

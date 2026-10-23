@@ -12,6 +12,6 @@ public import DavisKahan.SpectralTheory.Real.SpectralCutoff
 public import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
 public import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SpectralTheory/Real` -/

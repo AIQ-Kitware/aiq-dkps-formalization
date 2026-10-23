@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransp
 public import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

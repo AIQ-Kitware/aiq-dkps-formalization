@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariant
 public import DavisKahan.Sylvester.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
-@[expose] public section
+public section
 
 /-!
 # Operator laws for the source-defined unitarily invariant norms

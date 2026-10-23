@@ -10,7 +10,7 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import DavisKahan.Sylvester.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
-@[expose] public section
+public section
 
 /-!
 # Approximation-number dominance for restricted displacements

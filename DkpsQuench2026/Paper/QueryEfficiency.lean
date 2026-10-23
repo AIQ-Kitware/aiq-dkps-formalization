@@ -12,7 +12,7 @@ module
 public import DkpsQuench2026.Paper.Theorem2
 public import DkpsQuench2026.Probability.Coverage
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

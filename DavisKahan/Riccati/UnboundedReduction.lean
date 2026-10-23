@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Riccati.UnboundedCore
 
-@[expose] public section
+public section
 
 /-!
 # Strong unbounded Riccati graph reduction

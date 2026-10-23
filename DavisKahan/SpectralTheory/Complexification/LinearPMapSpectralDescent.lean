@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification.SpectralDescent
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 
-@[expose] public section
+public section
 
 /-!
 # Complexification of real `LinearPMap` spectral ranges

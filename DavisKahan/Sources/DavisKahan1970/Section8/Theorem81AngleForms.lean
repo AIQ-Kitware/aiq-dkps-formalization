@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationRe
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

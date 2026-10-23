@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
-@[expose] public section
+public section
 
 /-!
 # The reducing restriction commutes with complexification

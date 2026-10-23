@@ -10,6 +10,6 @@ public import DavisKahan.Analysis.FourthOrderODE.ComplexGreenIdentity
 public import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
 public import DavisKahan.Analysis.FourthOrderODE.SmoothKernel
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Analysis/FourthOrderODE` -/

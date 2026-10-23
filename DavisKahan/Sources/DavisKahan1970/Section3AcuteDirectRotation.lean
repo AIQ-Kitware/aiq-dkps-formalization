@@ -13,7 +13,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

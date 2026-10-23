@@ -8,7 +8,7 @@ module
 public import DavisKahan.Geometry.Halmos.Classification
 public import ForTauCeti.Analysis.InnerProductSpace.OrthogonalGluing
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

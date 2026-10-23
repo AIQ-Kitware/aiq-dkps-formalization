@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import DavisKahan.Geometry.Polar.DirectRotation
 public import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
 
-@[expose] public section
+public section
 
 /-!
 # Halmos two-projection decomposition

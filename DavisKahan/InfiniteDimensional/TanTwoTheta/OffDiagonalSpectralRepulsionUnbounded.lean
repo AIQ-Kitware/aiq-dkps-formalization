@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepu
 public import DavisKahan.SpectralTheory.GapResolvent
 public import DavisKahan.SinTheta.BoundedPerturbation
 
-@[expose] public section
+public section
 
 /-!
 # Off-diagonal spectral repulsion for an unbounded ambient operator

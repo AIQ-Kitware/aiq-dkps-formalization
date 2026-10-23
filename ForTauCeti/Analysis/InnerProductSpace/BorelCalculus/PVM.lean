@@ -37,7 +37,7 @@ The target structure is the upstream, measurable-space-general
 here remains local.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ENNReal CompactlySupported
 open MeasureTheory

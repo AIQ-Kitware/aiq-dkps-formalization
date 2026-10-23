@@ -49,7 +49,7 @@ block of interest is not the leading one.
   `spanIndices` block is the corresponding eigenspace.
 -/
 
-@[expose] public section
+public section
 
 open Module (finrank)
 open Module.End (eigenspace)

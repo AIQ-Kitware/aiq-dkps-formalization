@@ -60,7 +60,7 @@ is short: for disjoint closed spectra pick a Borel `B ⊇ σ(A)` missing `σ(B)`
 * Spectra influence: none.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap

@@ -67,7 +67,7 @@ ambiguous, so this file routes through `complexifyStarAlgHom` and `map_mul` / `m
 separate, mechanical piece of work.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 

@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification
 
-@[expose] public section
+public section
 
 /-!
 # Endpoint identification for spectral continuation

@@ -9,6 +9,6 @@ public import DavisKahan.SharedFoundations.Ideal.ModulusTransport
 public import DavisKahan.SharedFoundations.Ideal.ReflectionTransport
 public import DavisKahan.SharedFoundations.Ideal.TwoWayFactorization
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SharedFoundations/Ideal` -/

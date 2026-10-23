@@ -8,7 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.DirectRotation.Exponential
 public import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 
-@[expose] public section
+public section
 
 /-!
 # Proposition 3.5, the eigenvector clause: `∠(x, U x) = θ`

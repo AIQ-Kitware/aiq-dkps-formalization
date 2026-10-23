@@ -13,7 +13,7 @@ public import DavisKahan.Geometry.Halmos.CompactClassification
 public import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

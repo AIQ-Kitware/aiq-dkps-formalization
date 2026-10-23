@@ -7,7 +7,7 @@ module
 
 public import YuWangSamworth2015.Rectangular.SingularBlock
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 3 at the printed scope: the source rank condition and the exact gap

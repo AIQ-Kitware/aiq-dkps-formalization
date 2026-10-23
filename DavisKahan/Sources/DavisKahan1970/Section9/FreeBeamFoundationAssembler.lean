@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
 public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Assembly of the paper-facing free-beam analytic foundation

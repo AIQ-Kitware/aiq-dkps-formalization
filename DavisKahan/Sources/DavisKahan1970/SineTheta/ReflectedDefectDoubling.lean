@@ -13,7 +13,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 public import DavisKahan.Sylvester.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

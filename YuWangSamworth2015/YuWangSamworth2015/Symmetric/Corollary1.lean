@@ -8,7 +8,7 @@ module
 public import YuWangSamworth2015.GroundedImports
 public import YuWangSamworth2015.Symmetric.Theorem2
 
-@[expose] public section
+public section
 
 /-!
 # Corollary 1 with the source's neighbouring-eigenvalue gap

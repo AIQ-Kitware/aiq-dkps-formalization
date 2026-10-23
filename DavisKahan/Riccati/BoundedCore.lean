@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Riccati.BoundedBasic
 
-@[expose] public section
+public section
 
 /-!
 # Bounded graph invariance and the operator Riccati equation

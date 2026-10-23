@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 public import ForTauCeti.Analysis.Normed.Operator.Restriction
 
-@[expose] public section
+public section
 
 /-!
 # Restricted-operator spectra and provisional embedding interfaces

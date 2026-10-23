@@ -88,7 +88,7 @@ finite-dimensional space has finitely many eigenvalues.
   classification.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

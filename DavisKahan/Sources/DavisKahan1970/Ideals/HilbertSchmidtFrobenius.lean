@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
-@[expose] public section
+public section
 
 /-!
 # Finite-dimensional Frobenius realization of the paper square norm

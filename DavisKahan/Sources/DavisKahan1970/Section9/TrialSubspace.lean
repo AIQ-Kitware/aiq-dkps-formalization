@@ -8,7 +8,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Section 9: affine trial subspace

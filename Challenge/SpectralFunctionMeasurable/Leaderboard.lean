@@ -16,6 +16,6 @@ module
 
 public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.Matrix.measurable_cfc_of_hermitian

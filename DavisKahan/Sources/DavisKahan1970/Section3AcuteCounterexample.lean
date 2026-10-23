@@ -10,7 +10,7 @@ public import DavisKahan.Geometry.Halmos.TwoProjections
 public import Mathlib.Analysis.InnerProductSpace.l2Space
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
-@[expose] public section
+public section
 
 /-!
 # Printed acuteness is weaker than a uniform projection gap

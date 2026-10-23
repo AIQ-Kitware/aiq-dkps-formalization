@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.ReducingSpectrumUnion
 public import DavisKahan.SpectralTheory.Complexification.ReducingRestrictionDescent
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
-@[expose] public section
+public section
 
 /-!
 # The homotopy path for Theorem 8.2 at unbounded scope

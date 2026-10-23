@@ -8,7 +8,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Section8.All
 
-@[expose] public section
+public section
 
 /-!
 # Dependency audit for Davis--Kahan 1970 Section 8: internal infrastructure

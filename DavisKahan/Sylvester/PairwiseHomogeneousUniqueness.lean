@@ -11,7 +11,7 @@ public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import ForTauCeti.Analysis.InnerProductSpace.Rosenblum
 
-@[expose] public section
+public section
 
 /-!
 # Homogeneous Sylvester uniqueness at arbitrary spectral separation

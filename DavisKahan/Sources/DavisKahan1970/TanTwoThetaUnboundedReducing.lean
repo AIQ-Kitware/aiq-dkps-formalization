@@ -11,7 +11,7 @@ public import DavisKahan.InfiniteDimensional.DoubleAngle
 public import DavisKahan.Geometry.Polar.DirectRotation
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

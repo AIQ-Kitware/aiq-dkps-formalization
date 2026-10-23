@@ -87,7 +87,7 @@ to what the approximation-number API needs.
 * Spectra influence: **none** — imports only Mathlib and sibling staging modules.
 -/
 
-@[expose] public section
+public section
 
 noncomputable section
 

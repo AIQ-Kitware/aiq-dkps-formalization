@@ -9,7 +9,7 @@ public import DavisKahan.SinTheta.Natural.Generalized
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import DavisKahan.SinTheta.Natural.Real
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

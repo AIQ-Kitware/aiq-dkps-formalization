@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles.Equisingular
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -14,7 +14,7 @@ public import DavisKahan.DoubleAngle.TangentTransport
 public import DavisKahan.TanTheta.RitzPair
 public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

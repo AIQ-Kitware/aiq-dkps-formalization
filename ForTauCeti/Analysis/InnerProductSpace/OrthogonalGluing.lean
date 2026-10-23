@@ -40,7 +40,7 @@ orthogonal `A, B`.  Iterating it handles any finite orthogonal family, and
   `A' ⊔ B'`.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 

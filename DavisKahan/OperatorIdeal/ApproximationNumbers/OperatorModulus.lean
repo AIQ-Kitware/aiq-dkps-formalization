@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 
-@[expose] public section
+public section
 
 /-!
 # Approximation singular values of the rectangular operator modulus

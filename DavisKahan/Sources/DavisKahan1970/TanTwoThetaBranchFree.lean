@@ -9,7 +9,7 @@ public import DavisKahan.DoubleAngle.TanTwoThetaKyFanFiniteCarrier
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
-@[expose] public section
+public section
 
 /-!
 # The unrestricted Section 2 `tan 2Θ` theorem at the source norm scope

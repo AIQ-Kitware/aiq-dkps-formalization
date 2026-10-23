@@ -7,7 +7,7 @@ module
 public import Mathlib
 public import ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded
 
-@[expose] public section
+public section
 
 noncomputable section
 

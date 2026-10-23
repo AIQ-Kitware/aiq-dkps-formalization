@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
 public import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Compact form embeddings give compact resolvents

@@ -14,7 +14,7 @@ public import YuWangSamworth2015.Symmetric.OrthogonalSharpness
 public import YuWangSamworth2015.Symmetric.MiddleBlockSharpness
 public import YuWangSamworth2015.Symmetric.PlanarSharpness
 
-@[expose] public section
+public section
 
 /-!
 # Symmetric Yu--Wang--Samworth surface

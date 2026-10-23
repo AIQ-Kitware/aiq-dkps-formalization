@@ -16,7 +16,7 @@ public import Acharyya2025.RateChain
 public import DkpsQuench2026.Paper.Theorem2
 public import Acharyya2025.SpectralMeasurability
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

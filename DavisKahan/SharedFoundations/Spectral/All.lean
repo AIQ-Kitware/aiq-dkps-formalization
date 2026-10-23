@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.SharedFoundations.Spectral.BoundedSelection
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SharedFoundations/Spectral` -/

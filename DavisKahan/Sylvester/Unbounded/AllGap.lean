@@ -12,7 +12,7 @@ public import DavisKahan.Sylvester.CutoffInterface
 public import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 /-!
 # Spectral all-gap unbounded Sylvester theorem

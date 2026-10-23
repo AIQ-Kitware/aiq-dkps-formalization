@@ -17,7 +17,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
-@[expose] public section
+public section
 
 /-!
 # Grounded imports for the Yu--Wang--Samworth 2015 paper package

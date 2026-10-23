@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Riccati.BoundedSharpEstimates
 
-@[expose] public section
+public section
 
 /-!
 # BoundedRiccatiShift (promoted)

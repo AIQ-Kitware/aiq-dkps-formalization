@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 /-!
 # Complete singular-value transport for the paper-facing sine operators

@@ -22,7 +22,7 @@ public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

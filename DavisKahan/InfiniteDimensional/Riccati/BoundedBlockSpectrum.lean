@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
 public import Mathlib.Analysis.Normed.Operator.Banach
 
-@[expose] public section
+public section
 
 /-!
 # Spectrum of a bounded block-diagonal operator

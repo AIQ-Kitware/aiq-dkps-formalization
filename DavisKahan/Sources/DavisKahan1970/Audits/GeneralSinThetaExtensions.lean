@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 
-@[expose] public section
+public section
 
 /-!
 # Trusted-dependency audit for optional natural-input extensions

@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.BoundedBorelProjectionComp
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

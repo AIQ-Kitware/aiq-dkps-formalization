@@ -11,7 +11,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.UnitarilyInvariantSeminorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
 #print axioms TauCeti.UnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le

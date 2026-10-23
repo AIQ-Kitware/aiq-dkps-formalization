@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Bounded realizations of closed operators

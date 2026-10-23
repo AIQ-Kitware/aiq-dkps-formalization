@@ -21,7 +21,7 @@ The point-spectrum predicates name eigenvalue data explicitly; the quadratic-for
 reduce to the generic bounded spectral-order API after restricting to an invariant subspace.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

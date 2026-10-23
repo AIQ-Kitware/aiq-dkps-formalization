@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Riccati.BoundedExistence
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

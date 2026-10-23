@@ -50,7 +50,7 @@ an eigenvalue inequality (there need be no eigenvalues).
 *New.*
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ENNReal
 open MeasureTheory

@@ -23,7 +23,7 @@ all scalar fields covered by `RCLike`.
 
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

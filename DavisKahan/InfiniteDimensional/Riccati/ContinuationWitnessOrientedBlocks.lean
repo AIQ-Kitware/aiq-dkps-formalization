@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessEffectiveBlocks
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -30,7 +30,7 @@ which contains the span of the summands, whose closure is everything.
 * Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

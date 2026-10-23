@@ -8,7 +8,7 @@ public import Mathlib
 public import ForTauCeti.Topology.Berge
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
 
-@[expose] public section
+public section
 
 /-!
 # Roadmap bridge: `MatrixSpectralStatistics`

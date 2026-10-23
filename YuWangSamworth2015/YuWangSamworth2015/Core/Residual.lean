@@ -63,7 +63,7 @@ and namespace, not the mathematical statement.
 
 -/
 
-@[expose] public section
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 
-@[expose] public section
+public section
 
 /-!
 # Convenience laws for reducing restrictions

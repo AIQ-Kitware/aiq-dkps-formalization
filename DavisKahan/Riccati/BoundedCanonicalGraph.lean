@@ -8,7 +8,7 @@ module
 public import DavisKahan.Riccati.BoundedCanonicalSolution
 public import DavisKahan.Riccati.BoundedReduction
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

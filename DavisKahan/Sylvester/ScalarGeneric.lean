@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sylvester.RealUnbounded
 
-@[expose] public section
+public section
 
 /-!
 # The unbounded Sylvester Ky Fan estimate as a property of the scalar field

@@ -11,6 +11,6 @@ public import DavisKahan.SinTheta.Real.Generalized
 public import DavisKahan.SinTheta.Real.Specializations
 public import DavisKahan.SinTheta.Real.Unbounded
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SinTheta/Real` -/

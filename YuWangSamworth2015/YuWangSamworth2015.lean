@@ -7,7 +7,7 @@ module
 
 public import YuWangSamworth2015.CitationSurface
 
-@[expose] public section
+public section
 
 /-!
 # YuWangSamworth2015

@@ -12,7 +12,7 @@ public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 public import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
 
-@[expose] public section
+public section
 
 /-!
 # Principal-square-root completion of the Spectra direct rotation

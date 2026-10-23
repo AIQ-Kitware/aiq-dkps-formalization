@@ -46,7 +46,7 @@ unitary `U ≃ₗᵢ U.map W` is.
 * Spectra influence: none.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace LinearPMap

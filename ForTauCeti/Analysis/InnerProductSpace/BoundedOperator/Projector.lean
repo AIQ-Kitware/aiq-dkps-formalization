@@ -31,7 +31,7 @@ The gap geometry used here is owned by Tau Ceti's
 of the source-facing projector norm below.
 -/
 
-@[expose] public section
+public section
 
 namespace Submodule
 

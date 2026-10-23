@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

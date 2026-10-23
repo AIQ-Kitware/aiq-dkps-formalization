@@ -6,7 +6,7 @@ module
 public import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
 public import ForTauCeti.Probability.Moments.Variance
 
-@[expose] public section
+public section
 
 #print axioms MeasureTheory.Measure.one_sub_measure_compl_le
 #print axioms TauCeti.meas_gt_le_ofReal_integral_sq_div_sq

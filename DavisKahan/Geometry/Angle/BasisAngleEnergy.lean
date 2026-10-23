@@ -12,7 +12,7 @@ public import DavisKahan.Geometry.Polar.DirectRotationSquare
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngleSequence
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Proposition 4.2: displacement-angle energy over a basis

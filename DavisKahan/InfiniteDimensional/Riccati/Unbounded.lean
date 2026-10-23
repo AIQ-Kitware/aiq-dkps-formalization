@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.Riccati.UnboundedPublic
 
-@[expose] public section
+public section
 
 /-!
 # Public strong unbounded Riccati API

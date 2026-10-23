@@ -5,7 +5,7 @@ module
 
 public import ForTauCeti.Probability.Moments.SampleMean
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.integral_norm_sq_average_sub_of_iid
 #print axioms TauCeti.integral_norm_sq_average_sub_le_of_bound

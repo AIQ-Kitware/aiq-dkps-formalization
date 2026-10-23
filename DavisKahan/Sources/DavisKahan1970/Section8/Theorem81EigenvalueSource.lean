@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81AngleForms
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 8.1 (ii) and (iii) on the printed eigenvalue sequences

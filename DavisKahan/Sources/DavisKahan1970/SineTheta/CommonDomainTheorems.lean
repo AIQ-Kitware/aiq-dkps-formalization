@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomain
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

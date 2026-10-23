@@ -29,7 +29,7 @@ Statements and proofs are unchanged; the namespace moved from `TauCeti.FinishTan
 to `TauCeti.ApproximationNumber`, matching its siblings.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

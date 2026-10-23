@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 
-@[expose] public section
+public section
 
 /-!
 # The complex operator angle calculus: honest first rungs

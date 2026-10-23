@@ -8,7 +8,7 @@ module
 
 public import DavisKahan.TanTheta.Theorem63FiniteSource
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -11,7 +11,7 @@ public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.Sylvester.CutoffInterface
 public import DavisKahan.SpectralTheory.SpectralRestriction
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

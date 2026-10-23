@@ -38,7 +38,7 @@ The proof uses a locally uniform spectral bound, not a measurable choice of eige
 The coordinate and eigenvalue lemmas below also serve the CMDS statistics consumers.
 -/
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix Topology
 open MeasureTheory Filter Set

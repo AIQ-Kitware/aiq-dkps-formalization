@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSourceSp
 public import DavisKahan.SpectralTheory.ResolventOperator
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.Riccati.UnboundedCoordinateRestrictions
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Coordinate restrictions of a reduced unbounded direct-sum operator

@@ -11,7 +11,7 @@ public import Mathlib.Analysis.ODE.ExistUnique
 public import Mathlib.Analysis.Calculus.Deriv.Prod
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Every solution of the free-beam ODE is a classical mode

@@ -8,7 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.Core.AngleOperators
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum
 
-@[expose] public section
+public section
 
 /-!
 # Finite angle operators on orthogonal block sums

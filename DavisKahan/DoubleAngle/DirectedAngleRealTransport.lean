@@ -9,7 +9,7 @@ public import DavisKahan.DoubleAngle.AngleTransport
 public import DavisKahan.DoubleAngle.RealAngleIdentification
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 
-@[expose] public section
+public section
 
 /-!
 # The real directed `sin 2Θ` and the ideal block

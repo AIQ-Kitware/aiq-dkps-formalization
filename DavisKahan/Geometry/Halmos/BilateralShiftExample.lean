@@ -9,7 +9,7 @@ module
 public import DavisKahan.Geometry.Halmos.CrossedDefectGap
 public import Mathlib.Analysis.InnerProductSpace.l2Space
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -10,7 +10,7 @@ public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.Sylvester.Bounded
 public import DavisKahan.InfiniteDimensional.SinTheta.RCLikeSpectralBridge
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

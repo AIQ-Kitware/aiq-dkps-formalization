@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.FilledTruncation
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 /-!
 

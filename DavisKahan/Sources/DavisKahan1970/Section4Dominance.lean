@@ -8,7 +8,7 @@ module
 
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 
-@[expose] public section
+public section
 
 /-!
 Compatibility import for the former Section 4 staging location.

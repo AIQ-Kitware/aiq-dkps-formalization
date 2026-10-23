@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.GapResolvent
 public import DavisKahan.SpectralTheory.CentralBand
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
 
-@[expose] public section
+public section
 
 /-!
 # The central band of an unbounded self-adjoint operator

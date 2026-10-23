@@ -19,6 +19,6 @@ public import DavisKahan.SinTheta.Specializations
 public import DavisKahan.SinTheta.SpectralBridge
 public import DavisKahan.SinTheta.SpectralProjection
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SinTheta` -/

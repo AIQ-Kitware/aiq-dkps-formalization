@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormDefinite
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
-@[expose] public section
+public section
 
 /-!
 # Exact correspondence with the norm class of Davis--Kahan 1970

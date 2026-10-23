@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.BoundedTruncation
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 /-!
 # Interface-level cutoff mechanics for the ordered unbounded Sylvester proof

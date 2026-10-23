@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

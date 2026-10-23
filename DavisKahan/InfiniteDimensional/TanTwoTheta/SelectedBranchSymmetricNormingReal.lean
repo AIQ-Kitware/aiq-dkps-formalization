@@ -10,7 +10,7 @@ public import DavisKahan.Geometry.Angle.OperatorAngleReal
 public import DavisKahan.SpectralTheory.Complexification.FormTransport
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 
-@[expose] public section
+public section
 
 /-!
 # The selected-branch `tan 2Θ` theorem over a real Hilbert space

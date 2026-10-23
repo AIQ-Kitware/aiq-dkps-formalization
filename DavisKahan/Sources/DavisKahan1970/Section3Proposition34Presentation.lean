@@ -11,7 +11,7 @@ public import DavisKahan.Geometry.Polar.DirectRotationBlocks
 -- square, and `reflectionOperator_reflectedSubspace`.
 public import DavisKahan.Geometry.Polar.Section3Nonacute
 
-@[expose] public section
+public section
 -- supplies the completed nonacute direct-rotation construction the acute forms specialise.
 
 /-!

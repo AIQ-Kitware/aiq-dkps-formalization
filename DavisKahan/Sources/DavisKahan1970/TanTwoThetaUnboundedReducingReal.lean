@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 public import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

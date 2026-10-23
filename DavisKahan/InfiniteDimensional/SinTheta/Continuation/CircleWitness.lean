@@ -13,7 +13,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonal
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
 public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

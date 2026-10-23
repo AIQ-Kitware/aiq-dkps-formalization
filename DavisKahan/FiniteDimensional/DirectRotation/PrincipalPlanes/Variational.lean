@@ -9,7 +9,7 @@ public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectr
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
-@[expose] public section
+public section
 
 /-!
 # Davis's variational theorem for the restricted displacement

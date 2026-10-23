@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.Unbounded.OrderedEngine
 public import DavisKahan.Sylvester.Unbounded.OrderedCutoff
 
-@[expose] public section
+public section
 
 /-!
 # Direct genuine ordered Sylvester engine

@@ -63,7 +63,7 @@ a concrete operator the roadmap names.
   modules.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

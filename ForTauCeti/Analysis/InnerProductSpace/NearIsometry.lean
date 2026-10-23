@@ -110,7 +110,7 @@ statements are convention-free and only the proofs move.
   module).
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

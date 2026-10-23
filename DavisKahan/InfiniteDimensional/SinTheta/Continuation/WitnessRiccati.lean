@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
 public import DavisKahan.Riccati.BoundedReduction
 public import DavisKahan.Sylvester.Spectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

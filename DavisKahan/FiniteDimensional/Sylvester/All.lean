@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.FiniteDimensional.Sylvester.Internal.All
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional/Sylvester` -/

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Geometry.Angle.Proposition35Exponential
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

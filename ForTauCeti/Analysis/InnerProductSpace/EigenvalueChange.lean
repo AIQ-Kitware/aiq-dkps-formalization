@@ -61,7 +61,7 @@ no vector-majorization API is needed.
   6 (1963), 159–173, Theorem 4.1.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 public import ForTauCeti.Analysis.OperatorIdeal.Family.Modulus
 
-@[expose] public section
+public section
 
 /-!
 # Real-valued view of a canonical symmetric ideal family

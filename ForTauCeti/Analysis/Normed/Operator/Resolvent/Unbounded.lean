@@ -110,7 +110,7 @@ Theorem II.3.5; Pazy, *Semigroups of Linear Operators and Applications to Partia
 Equations*, Chapter 1.
 -/
 
-@[expose] public section
+public section
 
 noncomputable section
 
@@ -189,7 +189,7 @@ theorem IsResolventAt.mem_resolventSet (h : IsResolventAt A lambda R) :
 /-- An inverse of `lambda • I - A` exists conditionally on `lambda` lying in the resolvent set;
 this is what lets `TauCeti.LinearPMap.resolvent` be defined by `Classical.choose`
 without a decidability side-condition. -/
-private theorem exists_isResolventAt_of_mem (A : E →ₗ.[𝕜] E) (lambda : 𝕜) :
+ theorem exists_isResolventAt_of_mem (A : E →ₗ.[𝕜] E) (lambda : 𝕜) :
     ∃ R : E →L[𝕜] E, lambda ∈ resolventSet A → IsResolventAt A lambda R := by
   by_cases h : lambda ∈ resolventSet A
   · exact ⟨h.choose, fun _ => h.choose_spec⟩
@@ -341,7 +341,7 @@ Nothing here needs `lambda` to be in the resolvent set: the statement is about t
 
 Over `ℝ` the hypothesis `‖mu - lambda‖ * ‖R(lambda)‖ < 1` is the familiar
 `|mu - lambda| * ‖R(lambda)‖ < 1`, since the norm of a real number is its absolute value. -/
-private theorem exists_inverse_one_sub_smul_resolvent
+ theorem exists_inverse_one_sub_smul_resolvent
     (hmu : ‖mu - lambda‖ * ‖resolvent A lambda‖ < 1) :
     ∃ U : E →L[𝕜] E,
       (∀ y : E, U y - (lambda - mu) • resolvent A lambda (U y) = y) ∧
@@ -423,7 +423,7 @@ section Bounded
 variable {T : E →L[𝕜] E}
 
 /-- `lambda • I - T`, formed in the algebra `E →L[𝕜] E`, applied to a vector. -/
-private theorem algebraMap_sub_apply (T : E →L[𝕜] E) (lambda : 𝕜) (y : E) :
+ theorem algebraMap_sub_apply (T : E →L[𝕜] E) (lambda : 𝕜) (y : E) :
     (algebraMap 𝕜 (E →L[𝕜] E) lambda - T) y = lambda • y - T y := by
   simp [Algebra.algebraMap_eq_smul_one]
 

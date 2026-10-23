@@ -15,6 +15,6 @@ public import DavisKahan.Sylvester.Unbounded.OrderedEngine
 public import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 public import DavisKahan.Sylvester.Unbounded.OrderedFromCutoffs
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sylvester/Unbounded` -/

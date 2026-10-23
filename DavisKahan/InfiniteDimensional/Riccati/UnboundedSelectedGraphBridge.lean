@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.Riccati.UnboundedPublic
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedGraphAcute
 
-@[expose] public section
+public section
 
 /-!
 # Rectangular extraction from an ambient selected graph

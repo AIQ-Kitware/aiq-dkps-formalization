@@ -9,7 +9,7 @@ public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 public import DavisKahan.DoubleAngle.AngleTransport
 public import DavisKahan.DoubleAngle.DirectedAngleRealTransport
 
-@[expose] public section
+public section
 /-! ## The block representation, at every field
 
 `sinTwoThetaIdealBlock U V = P_U ∘ P_{J_V Uᗮ}` is the object the unbounded directed `sin 2Θ`

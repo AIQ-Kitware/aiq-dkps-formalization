@@ -68,7 +68,7 @@ one family now has one convention.  Path change and import repoint only — no s
 signature, proof, attribute, declaration name or namespace changed.
 -/
 
-@[expose] public section
+public section
 
 open scoped ENNReal NNReal
 open Filter Topology Complex

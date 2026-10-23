@@ -18,7 +18,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

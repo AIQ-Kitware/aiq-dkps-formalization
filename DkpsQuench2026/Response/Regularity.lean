@@ -13,7 +13,7 @@ module
 public import DkpsQuench2026.Response.RawSampling
 public import DkpsQuench2026.Rates.PolynomialCover
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

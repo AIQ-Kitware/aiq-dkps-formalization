@@ -27,7 +27,7 @@ without a summability hypothesis.
 
 open scoped ENNReal InnerProductSpace
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

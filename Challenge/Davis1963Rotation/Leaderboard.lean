@@ -6,6 +6,6 @@ module
 
 public import DavisKahan.Sources.Davis1963.RotationBound
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.rotation_add_displacement_le_hilbertSchmidt

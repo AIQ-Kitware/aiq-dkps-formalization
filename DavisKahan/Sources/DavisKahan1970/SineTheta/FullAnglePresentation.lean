@@ -12,7 +12,7 @@ public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 public import DavisKahan.SpectralTheory.OperatorAngle
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 
-@[expose] public section
+public section
 
 /-!
 # Presentation bridges for the full Davis--Kahan operator angle

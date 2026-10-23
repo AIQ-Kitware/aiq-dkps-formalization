@@ -7,7 +7,7 @@ module
 
 public import YuWangSamworth2015.Rectangular.RankBoundary
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 3 in singular-value notation, with the corrected boundary convention

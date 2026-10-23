@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 
-@[expose] public section
+public section
 
 /-!
 # Transporting Davis--Kahan hypotheses across real complexification

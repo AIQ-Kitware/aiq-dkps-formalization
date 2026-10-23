@@ -5,6 +5,6 @@ module
 
 public import TauCeti.MeasureTheory.Function.ConvergenceInMeasure
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.tendstoInMeasure_of_tendsto_measure_dist_le_rate

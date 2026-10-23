@@ -11,7 +11,7 @@ public import DavisKahan.Sylvester.RealUnbounded
 -- the section's two displayed inequalities, (5.1) and (5.2)
 public import DavisKahan.Sources.DavisKahan1970.Sylvester.OperatorNormEstimate
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Section 5: the cutoff lemma and the ordered Sylvester theorem

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

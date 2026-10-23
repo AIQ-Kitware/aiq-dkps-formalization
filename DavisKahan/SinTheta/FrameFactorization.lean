@@ -15,7 +15,7 @@ public import Mathlib.Analysis.InnerProductSpace.StarOrder
 public import Mathlib.Analysis.Normed.Group.Uniform
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

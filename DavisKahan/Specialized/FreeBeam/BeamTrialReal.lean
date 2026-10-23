@@ -13,7 +13,7 @@ public import DavisKahan.SinTheta.BoundedPerturbation
 public import ForTauCeti.MeasureTheory.RadonNikodymL2
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

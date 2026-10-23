@@ -14,7 +14,7 @@ public import DavisKahan.BoundedOperator.Problem
 -- rather than load-bearing.
 public import DavisKahan.Geometry.Halmos.TwoProjections
 
-@[expose] public section
+public section
 -- supplies `halmosCosineSq` and the two-projection calculus this module extends.
 
 /-!

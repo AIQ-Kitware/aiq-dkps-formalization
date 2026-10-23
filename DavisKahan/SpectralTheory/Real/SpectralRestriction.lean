@@ -11,7 +11,7 @@ public import DavisKahan.SpectralTheory.Complexification.Subspace
 public import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 public import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

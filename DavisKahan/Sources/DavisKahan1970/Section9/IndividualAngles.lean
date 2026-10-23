@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
 public import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
 public import ForTauCeti.Analysis.InnerProductSpace.SphericalPythagoras
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Section 9: individual eigenvectors inside a cluster

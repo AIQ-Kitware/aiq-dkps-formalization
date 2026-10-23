@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81EigenvalueSource
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 
-@[expose] public section
+public section
 
 /-!
 # Theorem 8.1 (ii) and (iii) on the blocks themselves

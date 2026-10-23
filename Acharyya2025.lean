@@ -7,4 +7,4 @@ public import Acharyya2025.Theorem1Scale
 public import Acharyya2025.GrowingResponse
 public import Acharyya2025.PaperRate
 
-@[expose] public section
+public section

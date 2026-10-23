@@ -14,7 +14,7 @@ public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
-@[expose] public section
+public section
 
 /-!
 # Absolute-value transport for square symmetric ideals

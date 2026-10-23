@@ -47,7 +47,7 @@ their hypotheses are definitionally equal.  It is only the symbol that matters, 
 * Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
 -/
 
-@[expose] public section
+public section
 
 open MeasureTheory
 

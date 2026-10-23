@@ -44,7 +44,7 @@ a discreteness theorem for eigenvalues below a bound comes out.
 * Spectra influence: **none** -- this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

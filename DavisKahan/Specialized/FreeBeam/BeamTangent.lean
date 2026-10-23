@@ -10,7 +10,7 @@ public import DavisKahan.TanTheta.Theorem63Unbounded
 public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

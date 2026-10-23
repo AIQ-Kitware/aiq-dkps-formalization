@@ -11,7 +11,7 @@ public import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 public import TauCeti.Analysis.Normed.Lp.PiLp
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

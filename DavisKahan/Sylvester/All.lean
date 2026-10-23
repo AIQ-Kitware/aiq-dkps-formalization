@@ -25,6 +25,6 @@ public import DavisKahan.Sylvester.ShiftedInverse
 public import DavisKahan.Sylvester.ShiftedInverseGauge
 public import DavisKahan.Sylvester.Spectrum
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sylvester` -/

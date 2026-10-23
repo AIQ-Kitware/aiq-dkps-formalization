@@ -10,7 +10,7 @@ public import DavisKahan.Riccati.BoundedStability
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

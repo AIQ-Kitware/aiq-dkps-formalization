@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
 public import ForTauCeti.Analysis.Calculus.FourthOrderGreensIdentity
 
-@[expose] public section
+public section
 
 /-!
 # Free-beam eigenmodes at distinct frequencies are `L²`-orthogonal

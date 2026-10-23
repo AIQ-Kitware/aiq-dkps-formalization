@@ -14,6 +14,6 @@ public import DavisKahan.InfiniteDimensional.SinTheta.RCLikeSpectralBridge
 public import DavisKahan.InfiniteDimensional.SinTheta.Restriction
 public import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/InfiniteDimensional/SinTheta` -/

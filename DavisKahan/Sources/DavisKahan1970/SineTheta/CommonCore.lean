@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomain
 
-@[expose] public section
+public section
 
 /-!
 # Graph-core form of the unbounded residual hypothesis

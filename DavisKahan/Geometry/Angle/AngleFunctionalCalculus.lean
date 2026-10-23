@@ -11,7 +11,7 @@ public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 
-@[expose] public section
+public section
 
 /-!
 # The literal operator angle of Davis--Kahan

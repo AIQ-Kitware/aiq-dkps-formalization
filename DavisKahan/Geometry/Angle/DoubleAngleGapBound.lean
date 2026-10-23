@@ -9,7 +9,7 @@ module
 public import DavisKahan.Geometry.Angle.OperatorAngleComplex
 public import DavisKahan.InfiniteDimensional.DoubleAngle
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahanExt
 

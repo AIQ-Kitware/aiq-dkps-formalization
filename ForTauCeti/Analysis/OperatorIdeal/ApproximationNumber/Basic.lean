@@ -105,7 +105,7 @@ not define a second approximation sequence.
   did; it imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 noncomputable section
 

@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessRiccati
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

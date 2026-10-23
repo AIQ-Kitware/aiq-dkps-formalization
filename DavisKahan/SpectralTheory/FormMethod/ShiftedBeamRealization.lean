@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
 public import DavisKahan.SinTheta.BoundedPerturbation
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

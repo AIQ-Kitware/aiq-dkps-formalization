@@ -54,7 +54,7 @@ principal angles between `span u` and `span v`.
   `ForTauCeti` staging modules.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

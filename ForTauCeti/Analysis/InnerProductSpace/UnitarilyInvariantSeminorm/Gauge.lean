@@ -17,7 +17,7 @@ Diagonal evaluation and operator absolute value use endomorphisms. They speciali
 the rectangular seminorm to identical domain and codomain; there is no square structure.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

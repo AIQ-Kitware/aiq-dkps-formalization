@@ -16,7 +16,7 @@ public import DavisKahan.Sources.DavisKahan1970.AmbientReal
 public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 public import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

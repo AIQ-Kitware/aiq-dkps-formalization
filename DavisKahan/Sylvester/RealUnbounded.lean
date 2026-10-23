@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.Unbounded.FormBoundedGap
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 
-@[expose] public section
+public section
 
 /-!
 # Real unbounded Sylvester theorem by complexification

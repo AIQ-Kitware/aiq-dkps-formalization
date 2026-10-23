@@ -8,7 +8,7 @@ module
 public import DavisKahan.Riccati.BoundedSharpEstimates
 public import Mathlib.Topology.MetricSpace.Contracting
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

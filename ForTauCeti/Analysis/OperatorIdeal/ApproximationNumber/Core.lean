@@ -37,7 +37,7 @@ which is a different library and is not what a reader of this module wants.
 * Spectra influence: **none** — imports are `ForTauCeti` leaves and Mathlib.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

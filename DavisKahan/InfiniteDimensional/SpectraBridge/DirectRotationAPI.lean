@@ -11,7 +11,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.Geometry.Polar.DirectRotationSquare
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Complex direct rotation, the attribution-preserving bridge

@@ -47,7 +47,7 @@ group, this runs it through the native Cayley-transform Borel calculus, so no
 Stone theorem is involved.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 open MeasureTheory

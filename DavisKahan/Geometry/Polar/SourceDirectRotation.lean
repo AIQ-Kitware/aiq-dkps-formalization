@@ -11,7 +11,7 @@ public import DavisKahan.Geometry.Angle.Proposition35Infinite
 public import TauCeti.Analysis.Normed.Operator.RealAlgebra
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan's Definition 3.1, and why every direct rotation displaces alike

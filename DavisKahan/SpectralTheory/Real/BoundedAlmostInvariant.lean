@@ -9,7 +9,7 @@ public import DavisKahan.SpectralTheory.Real.SpectralRestriction
 public import DavisKahan.SpectralTheory.Complexification.Spectrum
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

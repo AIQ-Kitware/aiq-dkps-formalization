@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
 
-@[expose] public section
+public section
 
 /-!
 # The unbounded, residual-form, branch-free `tan 2Θ` theorem, at the operator norm

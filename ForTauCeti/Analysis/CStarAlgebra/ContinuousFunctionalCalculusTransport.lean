@@ -51,7 +51,7 @@ that composite has to be continuous.  Everything `Φ` itself contributes is alge
 `AlgEquiv.spectrum_eq` identifies the spectra, and `hpq` identifies the predicates.
 -/
 
-@[expose] public section
+public section
 
 namespace ContinuousFunctionalCalculus
 

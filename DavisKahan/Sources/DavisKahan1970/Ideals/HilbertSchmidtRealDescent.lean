@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFami
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 public import DavisKahan.SpectralTheory.PartialMap.Complexification
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

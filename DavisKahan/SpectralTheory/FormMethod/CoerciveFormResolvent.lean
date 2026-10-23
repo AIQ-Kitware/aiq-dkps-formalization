@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Bounded resolvent produced by a coercive form operator

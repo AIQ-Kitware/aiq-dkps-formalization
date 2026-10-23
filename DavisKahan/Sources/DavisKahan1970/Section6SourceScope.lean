@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section6SourceNormClass
 public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
 
-@[expose] public section
+public section
 
 /-!
 # Section 6 at the paper's own scope

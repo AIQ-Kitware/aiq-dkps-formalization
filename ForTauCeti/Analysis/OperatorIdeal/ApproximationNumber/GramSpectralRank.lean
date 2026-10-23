@@ -50,7 +50,7 @@ approximation-number material at all — it imports `LinearPMap.Constructions` a
 spectral measure, not with the `a`-numbers its name suggests.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

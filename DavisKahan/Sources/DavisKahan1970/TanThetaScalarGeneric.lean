@@ -11,7 +11,7 @@ public import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 public import DavisKahan.Geometry.Angle.TangentOperatorGeneric
 public import DavisKahan.TanTheta.ScalarTransport
 
-@[expose] public section
+public section
 
 /-!
 # Scalar-generic unbounded `tan Θ`

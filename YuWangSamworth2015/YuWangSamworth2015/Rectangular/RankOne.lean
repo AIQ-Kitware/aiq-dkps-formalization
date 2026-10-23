@@ -7,7 +7,7 @@ module
 
 public import YuWangSamworth2015.Rectangular.Theorem4
 
-@[expose] public section
+public section
 
 /-!
 # Rank-one singular-vector corollaries

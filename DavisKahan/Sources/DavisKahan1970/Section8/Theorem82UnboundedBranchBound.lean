@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
 public import DavisKahan.SpectralTheory.UnboundedDirectedGapBound
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
-@[expose] public section
+public section
 
 /-!
 # The static branch bound for Theorem 8.2 at unbounded scope

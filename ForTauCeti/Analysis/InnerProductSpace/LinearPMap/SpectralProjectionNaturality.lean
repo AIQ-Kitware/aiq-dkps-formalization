@@ -43,7 +43,7 @@ reducing subspace.
 `BorelCalculus.specProjC_apply_of_intertwines`.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 

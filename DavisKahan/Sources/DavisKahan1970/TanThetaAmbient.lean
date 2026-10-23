@@ -19,7 +19,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolven
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

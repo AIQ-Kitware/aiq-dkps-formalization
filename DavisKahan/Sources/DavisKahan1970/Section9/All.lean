@@ -29,6 +29,6 @@ public import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
 public import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerAngle
 public import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerComparison
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Section9` -/

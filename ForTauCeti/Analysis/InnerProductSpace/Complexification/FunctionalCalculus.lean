@@ -54,7 +54,7 @@ infinite-dimensional polar factorization.
 * Spectra influence: **none**.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace ComplexConjugate Topology
 

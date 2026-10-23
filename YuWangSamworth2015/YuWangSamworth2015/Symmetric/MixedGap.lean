@@ -7,7 +7,7 @@ module
 
 public import YuWangSamworth2015.GroundedImports
 
-@[expose] public section
+public section
 
 /-!
 # The mixed separation: Theorem 1's denominator, and why the paper replaces it

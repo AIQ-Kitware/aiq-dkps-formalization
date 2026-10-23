@@ -33,7 +33,7 @@ inner-product-space component into `ForTauCeti`: before that this file's import
 closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Geometry.Halmos.UnitaryEquivalence
 public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 
-@[expose] public section
+public section
 
 /-!
 # Operator-level Halmos two-projection classification

@@ -12,7 +12,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 public import DavisKahan.Riccati.BoundedCanonicalSolution
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

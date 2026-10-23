@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
 public import DavisKahan.Sources.DavisKahan1970.TanTheta
 public import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
 
-@[expose] public section
+public section
 
 /-!
 # Focused audit for the Section 7 and Theorem 6.3 source surfaces

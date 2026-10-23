@@ -5,6 +5,6 @@ module
 
 public import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
 
-@[expose] public section
+public section
 
 #print axioms TauCeti.Matrix.rank_le_iff_exists_eq_mul

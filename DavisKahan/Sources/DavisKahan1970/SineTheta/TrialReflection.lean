@@ -9,7 +9,7 @@ public import DavisKahan.BoundedOperator.Reflection
 public import DavisKahan.InfiniteDimensional.DoubleAngle
 public import DavisKahan.DoubleAngle.UnboundedIdeal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

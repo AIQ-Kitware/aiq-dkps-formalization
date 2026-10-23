@@ -8,7 +8,7 @@ module
 public import DavisKahan.Geometry.Halmos.GenericPosition
 public import ForTauCeti.Analysis.InnerProductSpace.ModulusConjugation
 
-@[expose] public section
+public section
 
 /-!
 # Brick (1): the generic part is reconstructed from its cosine block

@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
 
-@[expose] public section
+public section
 
 /-!
 # Failure of full-displacement minimality at arbitrarily small angles

@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sylvester.OrthogonalIdempotentExp
 public import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
-@[expose] public section
+public section
 
 
 /-!

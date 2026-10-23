@@ -8,7 +8,7 @@ module
 public import DavisKahan.SinTheta.Canonical
 public import DavisKahan.SinTheta.Real.Generalized
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

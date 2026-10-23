@@ -13,6 +13,6 @@ public import DavisKahan.SpectralTheory.Complexification.Spectrum
 public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/SpectralTheory/Complexification` -/

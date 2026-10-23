@@ -9,7 +9,7 @@ public import DavisKahan.SinTheta.SpectralBridge
 public import DavisKahan.InfiniteDimensional.SinTheta.Restriction
 public import Mathlib.Analysis.InnerProductSpace.Rayleigh
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -22,7 +22,7 @@ paper-facing perturbation packages.
 * `TauCeti.sinThetaFrobenius_nonneg`: the public nonnegativity interface.
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

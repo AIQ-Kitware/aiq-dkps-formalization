@@ -9,7 +9,7 @@ public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import ForTauCeti.Analysis.Normed.Operator.Restriction
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
 
-@[expose] public section
+public section
 
 /-! # Direct canonical consumers
 

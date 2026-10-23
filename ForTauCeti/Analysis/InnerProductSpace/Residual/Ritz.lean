@@ -36,7 +36,7 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 

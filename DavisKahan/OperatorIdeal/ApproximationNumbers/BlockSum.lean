@@ -14,7 +14,7 @@ public import Mathlib.Analysis.InnerProductSpace.ProdL2
 public import DavisKahan.Sylvester.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
-@[expose] public section
+public section
 
 /-!
 # Approximation numbers of orthogonal block sums

@@ -15,7 +15,7 @@ public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
 
-@[expose] public section
+public section
 
 /-!
 # A Lyapunov positivity criterion

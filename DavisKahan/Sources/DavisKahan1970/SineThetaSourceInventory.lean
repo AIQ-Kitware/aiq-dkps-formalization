@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.All
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.FiniteMultiplicity
 public import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

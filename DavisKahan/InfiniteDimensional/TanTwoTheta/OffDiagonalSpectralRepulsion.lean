@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Full spectral repulsion for a fully off-diagonal perturbation

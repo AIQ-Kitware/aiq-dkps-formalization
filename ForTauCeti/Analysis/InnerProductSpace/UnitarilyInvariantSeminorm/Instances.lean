@@ -25,7 +25,7 @@ Tau Ceti modules. The retained results extend those canonical constructions to i
 embeddings and connect the nuclear norm of a Gram operator to column energy.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)

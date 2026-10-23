@@ -9,6 +9,6 @@ public import DavisKahan.Geometry.Angle.All
 public import DavisKahan.Geometry.Halmos.All
 public import DavisKahan.Geometry.Polar.All
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Geometry` -/

@@ -29,6 +29,6 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessRiccati
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/InfiniteDimensional/SinTheta/Continuation` -/

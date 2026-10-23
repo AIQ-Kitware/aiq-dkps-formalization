@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 public import DavisKahan.Sources.DavisKahan1970.Proposition61
 public import DavisKahan.Sources.DavisKahan1970.Theorem61
 
-@[expose] public section
+public section
 
 /-!
 # Proposition 6.1 and Theorem 6.1 over the literal source norm class

@@ -9,7 +9,7 @@ public import YuWangSamworth2015.Symmetric
 public import YuWangSamworth2015.Rectangular
 public import YuWangSamworth2015.Appendix
 
-@[expose] public section
+public section
 
 /-!
 # Citation-priority Yu--Wang--Samworth API

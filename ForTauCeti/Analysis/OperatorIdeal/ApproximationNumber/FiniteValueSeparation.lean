@@ -35,7 +35,7 @@ halvings; no significance attaches to the constant beyond that.
 * Spectra influence: **none.**
 -/
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace ApproximationNumber

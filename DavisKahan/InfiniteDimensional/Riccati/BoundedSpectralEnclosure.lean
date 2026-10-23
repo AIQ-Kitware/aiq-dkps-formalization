@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedBlockSpectrum
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 
 /-!

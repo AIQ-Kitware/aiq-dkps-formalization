@@ -9,7 +9,7 @@ public import DavisKahan.SpectralTheory.ContinuationContour
 public import Mathlib.Analysis.Normed.Operator.NormedSpace
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Riesz integrals on proof-carrying continuation contours

@@ -9,7 +9,7 @@ public import DavisKahan.Geometry.Halmos.GenericReconstruction
 public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

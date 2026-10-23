@@ -8,7 +8,7 @@ module
 public import DavisKahan.Specialized.FreeBeam.BeamDoubleTangent
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
 
-@[expose] public section
+public section
 
 /-!
 # Section 9, the 2-norm sentence of equation (9.7)

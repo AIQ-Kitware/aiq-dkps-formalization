@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

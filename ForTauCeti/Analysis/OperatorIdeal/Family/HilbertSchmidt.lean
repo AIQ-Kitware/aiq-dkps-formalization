@@ -52,7 +52,7 @@ literature reaches for first.
 
 open scoped ENNReal NNReal InnerProductSpace
 
-@[expose] public section
+public section
 
 namespace ENNReal
 

@@ -11,7 +11,7 @@ public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import DavisKahan.SpectralTheory.Complexification.Spectrum
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFanBochner
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

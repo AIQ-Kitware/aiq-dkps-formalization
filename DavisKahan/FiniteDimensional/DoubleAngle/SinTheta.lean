@@ -32,7 +32,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 
-@[expose] public section
+public section
 
 /-! # The subspace Davis–Kahan sin 2Θ theorem, every unitarily invariant norm
 

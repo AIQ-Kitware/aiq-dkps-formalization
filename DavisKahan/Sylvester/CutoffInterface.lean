@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sylvester.ClosedSylvesterEquation
 
-@[expose] public section
+public section
 
 /-!
 # Interfaces for spectral cutoffs and bounded truncations

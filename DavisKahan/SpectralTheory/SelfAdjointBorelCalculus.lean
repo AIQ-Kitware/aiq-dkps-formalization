@@ -11,7 +11,7 @@ public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

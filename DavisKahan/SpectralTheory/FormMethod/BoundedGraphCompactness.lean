@@ -9,7 +9,7 @@ module
 public import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # Graph compactness under bounded perturbations

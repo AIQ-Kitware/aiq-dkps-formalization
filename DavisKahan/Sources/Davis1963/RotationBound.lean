@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary
 public import ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange
 public import TauCeti.Analysis.InnerProductSpace.Spectrum
 
-@[expose] public section
+public section
 
 /-! # Davis's sharper total-rotation estimate (Davis 1963, Theorem 3.2)
 

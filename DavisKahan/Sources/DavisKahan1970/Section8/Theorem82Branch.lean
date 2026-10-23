@@ -13,7 +13,7 @@ public import DavisKahan.SpectralTheory.CentralBand
 public import DavisKahan.BoundedOperator.TrialResidual
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

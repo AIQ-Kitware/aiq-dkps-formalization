@@ -10,7 +10,7 @@ public import DavisKahan.TanTheta.Theorem63InfiniteTrial
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

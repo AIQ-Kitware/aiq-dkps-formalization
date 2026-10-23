@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Riccati.BoundedCore
 
-@[expose] public section
+public section
 
 /-!
 # Bounded Riccati graph reduction

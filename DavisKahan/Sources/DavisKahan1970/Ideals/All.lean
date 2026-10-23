@@ -24,6 +24,6 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormDefinite
 public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources/DavisKahan1970/Ideals` -/

@@ -10,7 +10,7 @@ public import DavisKahan.BoundedOperator.BlockShift
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Real
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

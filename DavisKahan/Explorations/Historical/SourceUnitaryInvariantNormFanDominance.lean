@@ -101,7 +101,7 @@ public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
 public import DavisKahan.Sources.DavisKahan1970.SectionTwo
 
-@[expose] public section
+public section
 
 /-!
 # Exploration: Fan dominance at the Davis--Kahan source norm boundary

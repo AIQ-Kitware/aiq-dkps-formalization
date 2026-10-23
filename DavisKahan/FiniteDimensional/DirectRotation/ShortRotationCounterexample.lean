@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.QNorm
 
-@[expose] public section
+public section
 
 /-!
 # The short-rotation full-displacement claim is false

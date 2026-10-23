@@ -11,6 +11,6 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.BoundedOperator.Reflection
 public import DavisKahan.BoundedOperator.TrialResidual
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/BoundedOperator` -/

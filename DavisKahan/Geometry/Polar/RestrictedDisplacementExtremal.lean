@@ -16,7 +16,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTran
 -- about `Submodule.subtypeL` and approximation numbers, with nothing paper-specific in it.
 public import DavisKahan.Sylvester.Spectrum
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

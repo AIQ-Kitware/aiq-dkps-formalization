@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.SpectralTheory.GraphSubspace
 
-@[expose] public section
+public section
 
 /-!
 # Basic bounded block-operator and Riccati definitions

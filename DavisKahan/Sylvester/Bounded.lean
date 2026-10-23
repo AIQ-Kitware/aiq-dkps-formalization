@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import Mathlib.Topology.Algebra.InfiniteSum.Basic
 
-@[expose] public section
+public section
 
 /-!
 # Bound/inverse Sylvester estimates

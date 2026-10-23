@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 public import DavisKahan.Geometry.Angle.OperatorAngleComplex
 
-@[expose] public section
+public section
 
 /-!
 # Real operator angles through complexification

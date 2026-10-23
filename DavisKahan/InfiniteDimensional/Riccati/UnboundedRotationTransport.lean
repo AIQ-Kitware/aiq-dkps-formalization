@@ -9,7 +9,7 @@ public import DavisKahan.Riccati.UnboundedExistence
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedGraphAcute
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Canonical graph-rotation transport for unbounded block operators

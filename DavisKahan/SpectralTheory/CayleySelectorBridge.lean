@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 
-@[expose] public section
+public section
 
 /-!
 # Selector bridge for bounded spectral projections

@@ -8,6 +8,6 @@ module
 public import DavisKahan.Alternative.FiniteDimensional.API.All
 public import DavisKahan.Alternative.FiniteDimensional.EigenbasisFrobenius
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Alternative/FiniteDimensional` -/

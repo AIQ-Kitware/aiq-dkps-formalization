@@ -17,7 +17,7 @@ public import Mathlib.MeasureTheory.Integral.ExpDecay
 public import Mathlib.Topology.MetricSpace.ProperSpace.Real
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 
 open TauCeti.DavisKahan.Sylvester

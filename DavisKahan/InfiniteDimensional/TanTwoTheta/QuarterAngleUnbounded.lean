@@ -12,7 +12,7 @@ public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
 public import DavisKahan.Geometry.Halmos.CrossedDefectGap
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
 
-@[expose] public section
+public section
 
 /-!
 # The quarter angle for an unbounded ambient operator

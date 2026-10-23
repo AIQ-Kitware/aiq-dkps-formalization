@@ -14,7 +14,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.Sylvester.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

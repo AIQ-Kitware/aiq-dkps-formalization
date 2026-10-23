@@ -9,7 +9,7 @@ module
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
 
-@[expose] public section
+public section
 
 /-!
 # Strong cutoffs and finite Ky Fan gauges over real Hilbert spaces

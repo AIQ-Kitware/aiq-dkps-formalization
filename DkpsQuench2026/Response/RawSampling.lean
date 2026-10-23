@@ -13,7 +13,7 @@ module
 
 public import DkpsQuench2026.Spectral.Regularity
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

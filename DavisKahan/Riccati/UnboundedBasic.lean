@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 
-@[expose] public section
+public section
 
 /-!
 # Foundational definitions for strong unbounded Riccati theory

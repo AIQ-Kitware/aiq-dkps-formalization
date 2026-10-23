@@ -8,7 +8,7 @@ module
 public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 
-@[expose] public section
+public section
 
 /-!
 # The source norm class is inhabited

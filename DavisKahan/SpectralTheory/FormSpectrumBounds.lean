@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 
-@[expose] public section
+public section
 
 /-!
 # Spectral containments from Hilbert-space form bounds

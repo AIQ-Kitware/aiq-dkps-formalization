@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional/Residual` -/

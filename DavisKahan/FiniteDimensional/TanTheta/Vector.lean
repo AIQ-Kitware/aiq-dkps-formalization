@@ -52,7 +52,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 
-@[expose] public section
+public section
 
 /-! # The Davis–Kahan tan Θ theorem (gated statement)
 

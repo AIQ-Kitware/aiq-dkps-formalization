@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.PartialMap.Complexification
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 /-!
 # Approximation-number transport through real complexification

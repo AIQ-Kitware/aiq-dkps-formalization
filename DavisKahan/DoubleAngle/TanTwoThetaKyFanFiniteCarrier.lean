@@ -9,7 +9,7 @@ public import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
 public import DavisKahan.DoubleAngle.KyFanOrthonormal
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.ExactSinTheta
 

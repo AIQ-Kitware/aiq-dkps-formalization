@@ -15,7 +15,7 @@ public import DavisKahan.Sylvester.Spectrum
 -- supplies `compressOperator` and its self-adjointness.
 public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

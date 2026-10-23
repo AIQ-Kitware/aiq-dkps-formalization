@@ -8,6 +8,6 @@ module
 public import DavisKahan.OperatorIdeal.UnitarilyInvariant.FamilyCore
 public import DavisKahan.OperatorIdeal.UnitarilyInvariant.IdealBanach
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/OperatorIdeal/UnitarilyInvariant` -/

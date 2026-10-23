@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonCoreTheorems
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
 
-@[expose] public section
+public section
 
 /-!
 # Focused audit for the paper-correspondence mathematics-ahead layer

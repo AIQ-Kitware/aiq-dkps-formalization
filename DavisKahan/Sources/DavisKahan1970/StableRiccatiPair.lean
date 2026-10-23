@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 public import DavisKahan.Riccati.BoundedSharpEstimates
 
-@[expose] public section
+public section
 
 /-!
 # Stable paired-singular-vector Riccati estimate

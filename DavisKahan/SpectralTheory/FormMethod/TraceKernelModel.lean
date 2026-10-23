@@ -11,7 +11,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 /-!
 # A graph-Hilbert model for fourth-order endpoint traces

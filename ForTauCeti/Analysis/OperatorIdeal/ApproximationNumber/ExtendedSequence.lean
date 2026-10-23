@@ -19,7 +19,7 @@ of the diagonal realization: agreement of two extended gauges on all Hilbert-spa
 agreement on every antitone sequence.
 -/
 
-@[expose] public section
+public section
 
 open scoped ENNReal
 

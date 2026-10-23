@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 public import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 
-@[expose] public section
+public section
 
 /-!
 # Section 6's lemmas over the literal source norm class

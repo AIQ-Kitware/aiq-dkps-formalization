@@ -9,7 +9,7 @@ module
 public import DavisKahan.Specialized.FreeBeam.BeamEigenbasis
 public import DavisKahan.Sources.DavisKahan1970.Section9.IndividualAngles
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

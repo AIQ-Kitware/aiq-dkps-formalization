@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section4Examples
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
 
-@[expose] public section
+public section
 
 /-!
 # Low-dimensional Section 4 surface facts

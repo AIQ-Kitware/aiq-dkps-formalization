@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

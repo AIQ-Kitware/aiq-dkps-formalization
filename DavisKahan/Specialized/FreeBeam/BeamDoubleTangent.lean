@@ -8,7 +8,7 @@ module
 public import DavisKahan.Specialized.FreeBeam.BeamTangent
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

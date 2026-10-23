@@ -10,7 +10,7 @@ public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 public import DavisKahan.SpectralTheory.Complexification.FormTransport
 public import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
 
-@[expose] public section
+public section
 
 /-!
 # The paper's operator angle between two **real** subspaces

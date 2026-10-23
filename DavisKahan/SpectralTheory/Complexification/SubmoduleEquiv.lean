@@ -9,7 +9,7 @@ public import DavisKahan.SpectralTheory.Complexification.FormTransport
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 public import DavisKahan.SpectralTheory.Complexification.Spectrum
 
-@[expose] public section
+public section
 
 /-!
 # Complexifying a real subspace commutes with taking the subspace

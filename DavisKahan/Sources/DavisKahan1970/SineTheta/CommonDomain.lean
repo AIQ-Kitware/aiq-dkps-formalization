@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

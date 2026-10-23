@@ -34,7 +34,7 @@ module
 public import Acharyya2024.Common
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
-@[expose] public section
+public section
 
 open scoped RealInnerProductSpace BigOperators
 

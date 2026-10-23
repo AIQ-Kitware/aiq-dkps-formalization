@@ -12,7 +12,7 @@ public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

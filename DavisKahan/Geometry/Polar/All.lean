@@ -20,6 +20,6 @@ public import DavisKahan.Geometry.Polar.Section3Nonacute
 public import DavisKahan.Geometry.Polar.SourceDirectRotation
 public import DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Geometry/Polar` -/

@@ -11,7 +11,7 @@ module
 
 public import DkpsQuench2026.Geometry.Covariance
 
-@[expose] public section
+public section
 
 set_option linter.mathlibStandardSet false
 

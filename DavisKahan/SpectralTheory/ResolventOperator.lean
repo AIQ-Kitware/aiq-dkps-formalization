@@ -11,7 +11,7 @@ public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Topology.MetricSpace.Lipschitz
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Resolvents, Riesz projections, and spectral continuation

@@ -15,7 +15,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 
-@[expose] public section
+public section
 
 /-!
 # Sharpness and two-dimensional extremizers

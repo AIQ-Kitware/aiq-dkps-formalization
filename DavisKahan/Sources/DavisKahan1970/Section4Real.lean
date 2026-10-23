@@ -12,7 +12,7 @@ public import DavisKahan.Geometry.Polar.DirectRotationReal
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

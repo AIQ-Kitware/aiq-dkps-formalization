@@ -9,7 +9,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space
 
-@[expose] public section
+public section
 
 /-!
 # The `ℓ²` model of the paper Hilbert--Schmidt ideal

@@ -24,7 +24,7 @@ and two. The sole family construction, including completeness, is obtained from
 
 open scoped ENNReal NNReal InnerProductSpace
 
-@[expose] public section
+public section
 
 namespace ContinuousLinearMap
 

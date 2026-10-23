@@ -9,7 +9,7 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 
-@[expose] public section
+public section
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families

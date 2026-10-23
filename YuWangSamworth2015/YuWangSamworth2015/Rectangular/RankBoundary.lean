@@ -7,7 +7,7 @@ module
 
 public import YuWangSamworth2015.Rectangular.Theorem4
 
-@[expose] public section
+public section
 
 /-!
 # The rank-boundary defect in the printed singular-subspace theorem

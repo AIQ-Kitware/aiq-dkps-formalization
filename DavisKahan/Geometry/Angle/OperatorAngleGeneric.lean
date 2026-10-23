@@ -10,7 +10,7 @@ public import DavisKahan.SpectralTheory.ReflectionRestriction
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 /-!
 # The operator angle at an arbitrary `RCLike` field

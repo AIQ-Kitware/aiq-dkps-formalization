@@ -11,6 +11,6 @@ public import DavisKahan.InfiniteDimensional.Sylvester.GeneralSeparationKyFan
 public import DavisKahan.InfiniteDimensional.Sylvester.MathPass
 public import DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/InfiniteDimensional/Sylvester` -/

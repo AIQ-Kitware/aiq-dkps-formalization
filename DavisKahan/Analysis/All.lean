@@ -7,6 +7,6 @@ module
 
 public import DavisKahan.Analysis.FourthOrderODE.All
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Analysis` -/

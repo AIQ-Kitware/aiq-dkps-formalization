@@ -14,7 +14,7 @@ public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 public import DavisKahan.SpectralTheory.Complexification.Spectrum
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

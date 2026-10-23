@@ -9,7 +9,7 @@ public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Basic
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
-@[expose] public section
+public section
 
 /-!
 # The spectrum of the direct displacement `I - R`

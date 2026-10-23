@@ -37,7 +37,7 @@ integrable positive function at all, and hence no maximal vector.
 * Spectra influence: **none** -- this module imports only Mathlib.
 -/
 
-@[expose] public section
+public section
 
 open MeasureTheory
 

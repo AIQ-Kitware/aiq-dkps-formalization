@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.Ideals.Symmetric
 public import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
-@[expose] public section
+public section
 
 /-!
 # Bochner integration of compact-operator-valued functions

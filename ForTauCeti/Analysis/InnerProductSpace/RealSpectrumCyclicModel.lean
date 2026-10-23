@@ -65,7 +65,7 @@ is what a real-spectrum `SameSpectralMultiplicity` needs first.
 * Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
 -/
 
-@[expose] public section
+public section
 
 open MeasureTheory
 

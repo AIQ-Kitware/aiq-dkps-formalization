@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpThreshold
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

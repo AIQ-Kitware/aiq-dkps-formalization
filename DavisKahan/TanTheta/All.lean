@@ -20,6 +20,6 @@ public import DavisKahan.TanTheta.UnboundedSpectrum
 public import DavisKahan.TanTheta.UnboundedVector
 public import DavisKahan.TanTheta.Vector
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/TanTheta` -/

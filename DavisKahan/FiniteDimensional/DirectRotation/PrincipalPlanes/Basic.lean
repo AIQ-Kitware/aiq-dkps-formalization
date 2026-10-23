@@ -8,7 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.DirectRotation.Basic
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 
-@[expose] public section
+public section
 
 /-!
 # Principal planes of an acute pair: definitions and rotation block

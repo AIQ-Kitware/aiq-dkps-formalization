@@ -15,7 +15,7 @@ module
 
 public import Acharyya2024.Common
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 

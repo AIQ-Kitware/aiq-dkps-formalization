@@ -14,6 +14,6 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/OperatorIdeal/ApproximationNumbers` -/

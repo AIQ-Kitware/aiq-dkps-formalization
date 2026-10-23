@@ -32,7 +32,7 @@ public import Acharyya2024.GrowingModels
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 public import ForTauCeti.Probability.RigidAlignment
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology ProbabilityTheory
 open Filter MeasureTheory

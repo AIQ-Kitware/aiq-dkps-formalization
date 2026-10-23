@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
 public import DavisKahan.Sources.DavisKahan1970.Section3AcuteCounterexample
 
-@[expose] public section
+public section
 
 /-!
 # Dependency audit for Davis--Kahan 1970, Proposition 3.5

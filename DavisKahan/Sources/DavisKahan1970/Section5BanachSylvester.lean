@@ -8,7 +8,7 @@ module
 
 public import ForTauCeti.Analysis.Normed.Operator.PartialSylvesterBoundedInverse
 
-@[expose] public section
+public section
 
 /-!
 # Davis--Kahan 1970, Theorem 5.1, on a Banach space

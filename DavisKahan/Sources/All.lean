@@ -8,6 +8,6 @@ module
 public import DavisKahan.Sources.Davis1963.All
 public import DavisKahan.Sources.DavisKahan1970.All
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/Sources` -/

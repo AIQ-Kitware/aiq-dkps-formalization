@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.Majorization
 
-@[expose] public section
+public section
 
 /-!
 # The `Q`-norm repair of the short-rotation full-displacement claim

@@ -12,7 +12,7 @@ public import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveDeriv
 public import Mathlib.Analysis.InnerProductSpace.ProdL2
 public import Mathlib.Tactic
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

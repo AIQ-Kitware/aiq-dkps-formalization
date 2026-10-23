@@ -41,7 +41,7 @@ public import Acharyya2025.MathlibBridge
 public import Acharyya2025.Bridge
 public import Acharyya2025.GramRealization
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

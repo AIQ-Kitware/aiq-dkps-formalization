@@ -42,7 +42,7 @@ public import Acharyya2025.GramRealization
 public import Acharyya2025.Bridge
 public import ForTauCeti.MeasureTheory.CompactExists
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix Topology
 open Filter MeasureTheory

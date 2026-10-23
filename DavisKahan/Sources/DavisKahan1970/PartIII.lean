@@ -15,7 +15,7 @@ public import DavisKahan.FiniteDimensional.TanTheta.Vector
 public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 
-@[expose] public section
+public section
 
 /-!
 # Finite Davis--Kahan Part III specialization surface

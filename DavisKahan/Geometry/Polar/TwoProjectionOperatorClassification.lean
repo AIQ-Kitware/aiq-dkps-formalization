@@ -8,7 +8,7 @@ module
 
 public import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 
-@[expose] public section
+public section
 
 /-!
 # Operator-level classification of two projections

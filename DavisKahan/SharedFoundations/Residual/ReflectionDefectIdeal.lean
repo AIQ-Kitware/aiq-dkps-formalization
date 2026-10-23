@@ -9,7 +9,7 @@ public import DavisKahan.BoundedOperator.TrialResidual
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Ideal-gauge residual control for reflection defects

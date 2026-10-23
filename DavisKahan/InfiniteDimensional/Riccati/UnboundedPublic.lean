@@ -8,7 +8,7 @@ module
 public import DavisKahan.Riccati.UnboundedExistence
 public import DavisKahan.InfiniteDimensional.Riccati.UnboundedDiagonalRestrictions
 
-@[expose] public section
+public section
 
 /-!
 # Proof-complete public surface for unbounded Riccati reduction

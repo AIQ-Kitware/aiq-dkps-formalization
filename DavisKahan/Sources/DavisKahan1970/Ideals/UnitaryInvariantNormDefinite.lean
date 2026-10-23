@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 
-@[expose] public section
+public section
 
 /-!
 # Definiteness of the source-defined norm

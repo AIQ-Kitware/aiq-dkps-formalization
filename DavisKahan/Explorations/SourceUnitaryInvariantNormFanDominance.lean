@@ -23,7 +23,7 @@ public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
 public import DavisKahan.Sources.DavisKahan1970.SectionTwo
 
-@[expose] public section
+public section
 
 namespace TauCeti
 namespace DavisKahan

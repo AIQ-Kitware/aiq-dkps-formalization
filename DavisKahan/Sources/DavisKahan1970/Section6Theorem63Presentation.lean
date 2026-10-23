@@ -15,7 +15,7 @@ public import DavisKahan.TanTheta.Theorem63Unbounded
 public import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

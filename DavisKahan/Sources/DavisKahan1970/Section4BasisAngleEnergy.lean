@@ -8,7 +8,7 @@ module
 
 public import DavisKahan.Geometry.Angle.BasisAngleEnergy
 
-@[expose] public section
+public section
 
 /-!
 Compatibility import for the former Section 4 source-helper location.

@@ -11,7 +11,7 @@ public import DavisKahan.SinTheta.FrameFactorization
 public import DavisKahan.SinTheta.Real.FrameFactorization
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

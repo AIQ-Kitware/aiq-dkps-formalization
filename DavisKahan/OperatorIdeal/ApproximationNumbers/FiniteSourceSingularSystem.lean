@@ -9,7 +9,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 
-@[expose] public section
+public section
 
 /-!
 # Singular systems with finite source and arbitrary Hilbert codomain

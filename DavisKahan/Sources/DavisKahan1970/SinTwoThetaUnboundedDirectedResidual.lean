@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
 public import DavisKahan.DoubleAngle.UnboundedIdealFormGap
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

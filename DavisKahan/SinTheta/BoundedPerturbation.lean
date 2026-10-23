@@ -10,7 +10,7 @@ public import DavisKahan.SinTheta.Unbounded.SpectrumGap
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

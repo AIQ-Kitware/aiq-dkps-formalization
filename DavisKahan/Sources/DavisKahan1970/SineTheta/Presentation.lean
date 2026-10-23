@@ -12,7 +12,7 @@ public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

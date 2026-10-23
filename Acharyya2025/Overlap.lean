@@ -44,7 +44,7 @@ public import Mathlib
 public import Acharyya2025.Weyl
 public import Acharyya2025.DavisKahan
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)

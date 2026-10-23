@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 public import DavisKahan.SpectralTheory.Real.SpectralRestriction
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-@[expose] public section
+public section
 
 /-!
 # Canonical spectral projections

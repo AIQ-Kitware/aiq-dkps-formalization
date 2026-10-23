@@ -17,7 +17,7 @@ public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.Sylvester.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
-@[expose] public section
+public section
 
 /-!
 # Symmetric norm ideals

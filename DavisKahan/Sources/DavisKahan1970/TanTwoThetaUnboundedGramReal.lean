@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 public import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

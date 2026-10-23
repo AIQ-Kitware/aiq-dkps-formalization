@@ -24,7 +24,7 @@ module
 public import Acharyya2025.DavisKahan
 public import DavisKahan.Alternative.FiniteDimensional.EigenbasisFrobenius
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace
 open Module (finrank)

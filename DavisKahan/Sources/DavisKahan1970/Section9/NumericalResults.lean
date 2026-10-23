@@ -10,7 +10,7 @@ public import DavisKahan.Specialized.FreeBeam.BeamWeinberger
 public import DavisKahan.Specialized.FreeBeam.BeamInPlaneAngle
 public import DavisKahan.Sources.DavisKahan1970.Section9.BeamDoubleTangentKyFan
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

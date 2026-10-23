@@ -26,7 +26,7 @@ public import Acharyya2025.SpectralPipeline
 public import Mathlib.Analysis.Asymptotics.Lemmas
 public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 
-@[expose] public section
+public section
 
 open scoped BigOperators Topology
 open Filter

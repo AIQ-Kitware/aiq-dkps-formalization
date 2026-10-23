@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.SpectralTheory.ReflectionRestriction
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -21,6 +21,6 @@ public import DavisKahan.InfiniteDimensional.Riccati.UnboundedReductionTransport
 public import DavisKahan.InfiniteDimensional.Riccati.UnboundedRotationTransport
 public import DavisKahan.InfiniteDimensional.Riccati.UnboundedSelectedGraphBridge
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/InfiniteDimensional/Riccati` -/

@@ -8,7 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.SinTheta.General
 public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 
-@[expose] public section
+public section
 
 /-!
 # The complex instance of the bounded Borel projection hypothesis

@@ -9,7 +9,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 
-@[expose] public section
+public section
 
 /-!
 # Prose-like wrappers for the finite Davis--Kahan `sin Θ` theorem

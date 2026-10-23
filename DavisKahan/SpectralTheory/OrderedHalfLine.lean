@@ -12,7 +12,7 @@ public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import DavisKahan.Sylvester.ClosedSylvesterEquation
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

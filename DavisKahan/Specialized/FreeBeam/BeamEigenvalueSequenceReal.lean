@@ -10,7 +10,7 @@ public import DavisKahan.Specialized.FreeBeam.BeamTrialReal
 public import ForTauCeti.MeasureTheory.LpInfiniteDimensional
 public import ForTauCeti.Order.DiscreteEnumeration
 
-@[expose] public section
+public section
 
 /-!
 # The real free beam's increasing eigenvalue sequence

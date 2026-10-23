@@ -53,7 +53,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
 public import YuWangSamworth2015.Core.Residual
 public import YuWangSamworth2015.Core.Procrustes
 
-@[expose] public section
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)

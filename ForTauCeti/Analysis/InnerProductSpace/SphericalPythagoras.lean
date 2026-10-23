@@ -85,7 +85,7 @@ out-of-plane tangent estimate exactly this way.
 *New.*  Statement and proof are ours.
 -/
 
-@[expose] public section
+public section
 
 open scoped InnerProductSpace
 

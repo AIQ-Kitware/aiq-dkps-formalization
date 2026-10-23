@@ -9,6 +9,6 @@ public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Basic
 public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum
 public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Variational
 
-@[expose] public section
+public section
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation/PrincipalPlanes` -/

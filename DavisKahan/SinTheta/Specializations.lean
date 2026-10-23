@@ -8,7 +8,7 @@ module
 public import DavisKahan.SinTheta.Canonical
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 
-@[expose] public section
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

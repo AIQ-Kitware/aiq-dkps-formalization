@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 
-@[expose] public section
+public section
 
 /-!
 # Ambient block vocabulary for the Davis--Kahan 1970 whole-space estimates

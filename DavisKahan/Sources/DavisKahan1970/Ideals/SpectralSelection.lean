@@ -14,7 +14,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPola
 public import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 public import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 
-@[expose] public section
+public section
 
 /-!
 # Approximate leading singular families

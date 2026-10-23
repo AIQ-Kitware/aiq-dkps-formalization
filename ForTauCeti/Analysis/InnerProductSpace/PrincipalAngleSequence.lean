@@ -24,7 +24,7 @@ provide a decreasing sequence for every bounded directed sine operator.
 
 open scoped ENNReal InnerProductSpace
 
-@[expose] public section
+public section
 
 namespace TauCeti
 
