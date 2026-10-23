@@ -18,7 +18,7 @@ closure fact needed by the Fourier Sylvester inverse.
 namespace TauCeti
 namespace DavisKahanExt
 
-open MeasureTheory Filter
+open _root_.MeasureTheory Filter
 
 noncomputable section
 

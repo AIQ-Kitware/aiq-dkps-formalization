@@ -32,7 +32,7 @@ namespace DavisKahanExt
 open DavisKahan
 
 open Set
-open MeasureTheory
+open _root_.MeasureTheory
 open scoped InnerProductSpace
 open DavisKahan.Foundation
 
