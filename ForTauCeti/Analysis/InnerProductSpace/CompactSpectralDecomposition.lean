@@ -224,6 +224,7 @@ It is defined as zero beyond the finite multiplicity so its result type does not
       eigenspace A.toLinearMap ((μ : ℝ) : 𝕜)) : E)
   else 0
 
+/-- The basis vectors of the positive eigenspace at one eigenvalue are orthonormal. -/
  theorem inner_positiveEigenspaceVector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (μ : ℝ) (hμ : 0 < μ) {i j : ℕ}
@@ -239,6 +240,7 @@ It is defined as zero beyond the finite multiplicity so its result type does not
   simpa only [Fin.mk.injEq] using orthonormal_iff_ite.mp
     (positiveEigenspaceBasis hAc hAs μ hμ).orthonormal ⟨i, hi⟩ ⟨j, hj⟩
 
+/-- The selected positive eigenspace vector lies in the eigenspace of its eigenvalue. -/
  theorem positiveEigenspaceVector_mem
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (μ : ℝ) (hμ : 0 < μ) (j : ℕ)
@@ -250,6 +252,7 @@ It is defined as zero beyond the finite multiplicity so its result type does not
   rw [dite_eq_left hj]
   exact Subtype.property _
 
+/-- The selected positive eigenspace vector has unit norm. -/
  theorem norm_positiveEigenspaceVector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (μ : ℝ) (hμ : 0 < μ) (j : ℕ)
@@ -260,6 +263,7 @@ It is defined as zero beyond the finite multiplicity so its result type does not
   rw [dite_eq_left hj]
   exact (positiveEigenspaceBasis hAc hAs μ hμ).orthonormal.1 _
 
+/-- The approximation-number index lies below the finite rank of the eigenspace span. -/
  theorem positiveApproximation_index_lt
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
