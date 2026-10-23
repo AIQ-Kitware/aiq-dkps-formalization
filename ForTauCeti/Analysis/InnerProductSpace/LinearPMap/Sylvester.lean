@@ -34,11 +34,13 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 /-- Lower semibound for a partial linear map. -/
+@[expose]
 def SemiboundedBelow (A : E →ₗ.[𝕜] E) (c : ℝ) : Prop :=
   ∀ x : A.domain,
     c * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_𝕜
 
 /-- Upper semibound for a partial linear map. -/
+@[expose]
 def SemiboundedAbove (A : E →ₗ.[𝕜] E) (c : ℝ) : Prop :=
   ∀ x : A.domain,
     RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ c * ‖(x : E)‖ ^ 2

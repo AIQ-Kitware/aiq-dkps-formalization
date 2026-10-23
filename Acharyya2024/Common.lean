@@ -72,6 +72,7 @@ noncomputable def rawStress (n d : Nat) (Δ : DisMat n) (z : Config n d) : Real 
 /-- Set of raw-stress minimizers, the paper's `MDS(∆)` / `mds(∆)`. The set form
 encodes the non-uniqueness of MDS noted in the paper's Remark 1 (solutions are
 only determined up to an affine transformation). -/
+@[expose]
 def MDS (n d : Nat) (Δ : DisMat n) : Set (Config n d) :=
   { z | ∀ z' : Config n d, rawStress n d Δ z ≤ rawStress n d Δ z' }
 
@@ -88,6 +89,7 @@ noncomputable def pairDistErr {n d : Nat} (z z' : Config n d) (i j : Fin n) : Re
 /-- Convergence in probability of a sequence of random elements `Xₙ` to a fixed
 target `x` (the paper's `→P`). Standard definition: for every `ε > 0`, the
 probability of exceeding `ε` tends to `0`. -/
+@[expose]
 def ConvergesInProbability {Ω α : Type} [MeasurableSpace Ω] [PseudoMetricSpace α]
     (P : Measure Ω) (X : Nat → Ω → α) (x : α) : Prop :=
   ∀ ε : Real, 0 < ε →

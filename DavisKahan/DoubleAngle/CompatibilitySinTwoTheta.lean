@@ -39,6 +39,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- One-sided double-angle sine operator for a trial embedding. -/
+@[expose]
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →L[𝕜] E)
     [(LinearMap.range X.toLinearMap).HasOrthogonalProjection] : E →L[𝕜] E :=

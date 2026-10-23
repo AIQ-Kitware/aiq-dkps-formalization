@@ -176,6 +176,7 @@ def boundaryB (beta : ℝ) : ℝ := Real.sinh beta - Real.sin beta
 def boundaryC (beta : ℝ) : ℝ := Real.sinh beta + Real.sin beta
 
 /-- Determinant of the reduced two by two boundary matrix. -/
+@[expose]
 def boundaryDet (beta : ℝ) : ℝ :=
   boundaryA beta ^ 2 - boundaryB beta * boundaryC beta
 

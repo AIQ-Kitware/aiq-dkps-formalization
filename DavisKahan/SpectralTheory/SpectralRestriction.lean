@@ -66,6 +66,7 @@ noncomputable def selfAdjointSpectralProjection
   TauCeti.LinearPMap.specProjection hA B hB
 
 /-- The range subspace of a canonical self-adjoint spectral projection. -/
+@[expose]
 noncomputable def selfAdjointSpectralSubspace
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) : Submodule ℂ H :=

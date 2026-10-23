@@ -100,6 +100,7 @@ theorem realAffineData_injective :
   rfl
 
 /-- Complex affine fourth-order derivative data. -/
+@[expose]
 noncomputable def complexAffineData (a b : ℂ) : ComplexFourthOrderData where
   f0 := fun x => a + (x : ℂ) * b
   f1 := fun _ => b

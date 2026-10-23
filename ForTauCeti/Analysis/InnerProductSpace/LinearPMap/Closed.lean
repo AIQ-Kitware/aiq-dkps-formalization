@@ -869,6 +869,7 @@ end RelativelyBounded
 /-- Real resolvent set of a partial linear map.  A parameter belongs to the set
 when the shifted map has a bounded two-sided inverse with explicit domain
 transport for the right-inverse leg. -/
+@[expose]
 def realResolventSet (A : E →ₗ.[𝕜] E) : Set ℝ :=
   {lam : ℝ | ∃ R : E →L[𝕜] E,
       (∀ x : A.domain, R (A x - (lam : 𝕜) • (x : E)) = (x : E)) ∧

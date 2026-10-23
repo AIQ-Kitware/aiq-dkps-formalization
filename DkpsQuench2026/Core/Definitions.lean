@@ -320,6 +320,7 @@ variable {d : ℕ}
 
 /-- `IsArgmin f i` states that index `i` minimizes the function `f` over
 `Fin n`. Used to characterize the nearest-neighbor index. -/
+@[expose]
 def IsArgmin {n : ℕ} (f : Fin n → ℝ) (i : Fin n) : Prop :=
   ∀ j : Fin n, f i ≤ f j
 
@@ -362,6 +363,7 @@ noncomputable def nnMinimizers {n : ℕ} (hn : n > 0)
 
 /-- Average the reference scores over every tied estimated nearest neighbor.
 This is the estimator described literally in the Quench paper. -/
+@[expose]
 noncomputable def hNNTieAverage {n : ℕ} (hn : n > 0)
     (ψHat_ref : Fin n → Vec d)
     (ψHat_target : Vec d)

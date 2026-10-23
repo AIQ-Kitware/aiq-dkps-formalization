@@ -49,6 +49,7 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- The linear subspace of members of a rectangular symmetric ideal. -/
+@[expose]
 noncomputable def idealSubmodule
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete] :
@@ -61,6 +62,7 @@ noncomputable def idealSubmodule
 /-- A member of a rectangular symmetric ideal, bundled with the ideal gauge as
 its norm.  This is a fresh type synonym so it does not inherit the ambient
 operator norm from the submodule subtype. -/
+@[expose]
 def IdealOperator
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete] : Type _ :=

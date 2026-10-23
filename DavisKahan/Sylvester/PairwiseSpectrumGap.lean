@@ -94,6 +94,7 @@ theorem disjoint
 end LinearPMap.PairwiseSpectrumGap
 
 /-- Every point of the two real spectra is separated by at least `delta`. -/
+@[expose]
 def PairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]

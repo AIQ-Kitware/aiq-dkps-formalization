@@ -65,6 +65,7 @@ structure FourthOrderTraceModel where
 namespace FourthOrderTraceModel
 
 /-- Joint kernel of the four free-end traces. -/
+@[expose]
 noncomputable def freeSubspace (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     Submodule 𝕜 V :=
   D.traceSecondLeft.ker ⊓ D.traceThirdLeft.ker ⊓
@@ -97,12 +98,14 @@ noncomputable instance freeSubspaceCompleteSpace
   D.isClosed_freeSubspace.completeSpace_coe
 
 /-- Ambient embedding restricted to the free trace kernel. -/
+@[expose]
 noncomputable def freeEmbed
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.freeSubspace →L[𝕜] H :=
   D.embed.comp (Submodule.subtypeL D.freeSubspace)
 
 /-- Fourth derivative restricted to the free trace kernel. -/
+@[expose]
 noncomputable def freeFourth
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.freeSubspace →L[𝕜] H :=
@@ -132,24 +135,28 @@ theorem freeEmbed_injective
   exact D.embed_injective hxy
 
 /-- Ambient operator domain obtained from the free graph space. -/
+@[expose]
 noncomputable def freeAmbientDomain
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     Submodule 𝕜 H :=
   LinearMap.range D.freeEmbed.toLinearMap
 
 /-- Linear equivalence from the free graph space onto its ambient image. -/
+@[expose]
 noncomputable def freeRangeEquiv
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.freeSubspace ≃ₗ[𝕜] D.freeAmbientDomain :=
   LinearEquiv.ofInjective D.freeEmbed.toLinearMap D.freeEmbed_injective
 
 /-- Recover the graph-space representative of an ambient domain vector. -/
+@[expose]
 noncomputable def freeAmbientInverse
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.freeAmbientDomain →ₗ[𝕜] D.freeSubspace :=
   D.freeRangeEquiv.symm.toLinearMap
 
 /-- Fourth derivative transported to the ambient domain. -/
+@[expose]
 noncomputable def freeFourthAmbient
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.freeAmbientDomain →ₗ[𝕜] H :=
@@ -207,6 +214,7 @@ theorem dense_freeAmbientDomain
 
 Density and graph closedness are properties of this map, proved separately; the
 model itself only has to supply the domain and the action. -/
+@[expose]
 noncomputable def toPartialMap
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) : H →ₗ.[𝕜] H where
   domain := D.freeAmbientDomain

@@ -88,9 +88,9 @@ theorem norm_spectraSinAngleOperator
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖spectraSinAngleOperator U V‖ = U.projectionGap V := by
-  change ‖ContinuousLinearMap.modulus
-      (U.starProjection - V.starProjection)‖ =
-    ‖U.starProjection - V.starProjection‖
+  -- The `projectionGap` on the right is a sealed upstream def, so it is not
+  -- definitionally the projector-difference norm; bridge it explicitly.
+  rw [Submodule.projectionGap_def]
   exact ContinuousLinearMap.norm_modulus
     (U.starProjection - V.starProjection)
 

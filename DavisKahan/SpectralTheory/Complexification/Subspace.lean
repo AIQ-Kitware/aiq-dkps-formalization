@@ -259,7 +259,9 @@ theorem projectionGap_complexifySubmodule
     [V.HasOrthogonalProjection] :
     (complexifySubmodule U).projectionGap (complexifySubmodule V) =
       U.projectionGap V := by
-  rw [Submodule.projectionGap_def]
+  -- Two passes: the first rewrite commits the (cU, cV) substitution, so the
+  -- second is needed to unfold the plain `U, V` occurrence on the right.
+  rw [Submodule.projectionGap_def, Submodule.projectionGap_def]
   rw [starProjection_complexifySubmodule,
     starProjection_complexifySubmodule, ← complexify_sub, norm_complexify]
 
@@ -270,7 +272,7 @@ theorem directedProjectionGap_complexifySubmodule
     [V.HasOrthogonalProjection] :
     (complexifySubmodule U).directedProjectionGap (complexifySubmodule V) =
       U.directedProjectionGap V := by
-  rw [Submodule.directedProjectionGap_def]
+  rw [Submodule.directedProjectionGap_def, Submodule.directedProjectionGap_def]
   rw [starProjection_complexifySubmodule_orthogonal,
     starProjection_complexifySubmodule, ← complexify_comp, norm_complexify]
 

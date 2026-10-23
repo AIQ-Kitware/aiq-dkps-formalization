@@ -139,6 +139,7 @@ bound under `r = ω(n³)`); this file only states the predicate, not the bound.
 
 Formalized by Codex 5.5 High, per user-observed model label.
 -/
+@[expose]
 def MatrixOperatorNormClose {n : Nat} (A B : SqMat n) (ε : Real) : Prop :=
   ∀ x : Rvec n, ‖(A - B).mulVec x‖ ≤ ε * ‖x‖
 

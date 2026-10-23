@@ -105,11 +105,13 @@ abbrev Y (d' : ℕ) := EuclideanSpace ℝ (Fin d')
 /-- A learning rule / decision function (paper: `h(·; T_n)`).
 Given a training set `T_n` of `n` labeled embeddings it returns a decision function
 `E d → Y d'` mapping a new embedding to a predicted label. -/
+@[expose]
 def LearningRule (n : ℕ) (d d' : ℕ) := (Fin n → E d × Y d') → E d → Y d'
 
 -- Loss ℓ : Y × Y → ℝ≥0.
 /-- A loss function (paper: `ℓ : 𝒴 × 𝒴 → ℝ`), measuring the discrepancy between a
 predicted label and a true label. -/
+@[expose]
 def LossFunction (d' : ℕ) := Y d' → Y d' → ℝ
 
 -- Risk (expected loss) under the distribution P_{ψY}:
@@ -125,6 +127,7 @@ We integrate over the product measure of `n+1` i.i.d. samples.
 The first `n` samples are the training set `T_n`, the `(n+1)`-th is the test point.
 This is the "true embedding" risk; `risk_est` below is the estimated-embedding analogue.
 -/
+@[expose]
 def risk (n : ℕ) (d d' : ℕ)
     (P : Measure (E d × Y d'))
     (learn : LearningRule n d d')
@@ -135,6 +138,7 @@ def risk (n : ℕ) (d d' : ℕ)
 /--
 Helper to transform the training set by applying an affine isometry to the embeddings.
 -/
+@[expose]
 def transform_training (e : E d ≃ᵃⁱ[ℝ] E d) (t : Fin n → E d × Y d') : Fin n → E d × Y d' :=
   fun i => (e (t i).1, (t i).2)
 
@@ -148,6 +152,7 @@ The risk of a learning rule `learn` using *estimated* embeddings `psi_hat`
 for all points.  The learning rule is trained on `(psi_hat_train, y_train)` and evaluated on
 the estimated test embedding `psi_hat_test`; the loss is computed against the true label `y_test`.
 -/
+@[expose]
 def risk_est (n : ℕ) (d d' : ℕ)
     (P : Measure (E d × Y d'))
     (learn : LearningRule n d d')
@@ -165,6 +170,7 @@ above integrates over the training sample as well and is therefore the *expected
 number.  The distinction is what separates the paper's consistency definition from
 `ConsistentExpected`; see `ConsistentInProbability`.
 -/
+@[expose]
 def riskGivenTraining (n : ℕ) (d d' : ℕ)
     (P : Measure (E d × Y d'))
     (learn : LearningRule n d d')
@@ -181,6 +187,7 @@ convergence of the expected risk, which is a different statement -- convergence 
 and convergence of expectations do not imply one another, as
 `Helm2025.DKPS.prob_convergence_not_enough_for_expectations` witnesses in one direction.
 -/
+@[expose]
 def ConsistentInProbability (d d' : ℕ)
     (P : Measure (E d × Y d'))
     (loss : LossFunction d')
@@ -241,6 +248,7 @@ does not change the prediction.  This is what lets the proof factor out the unkn
 alignment between estimated and true embeddings (which is only identified up to such an
 isometry).
 -/
+@[expose]
 def InvariantToAffineIsometries (n : ℕ) (d d' : ℕ) (learn : LearningRule n d d') : Prop :=
   ∀ (e : E d ≃ᵃⁱ[ℝ] E d) (t : Fin n → E d × Y d') (ψ : E d),
     learn (transform_training e t) (e ψ) = learn t ψ
@@ -256,6 +264,7 @@ NOTE: this is stronger than / an encoding of the paper's assumption — the pape
 continuity assumption (in the appendix) is naturally read pointwise/coordinatewise,
 whereas this asks for joint continuity in all arguments simultaneously.
 -/
+@[expose]
 def ContinuousLearningRule (n : ℕ) (d d' : ℕ) (learn : LearningRule n d d') : Prop :=
   Continuous (fun (p : (Fin n → E d × Y d') × E d) => learn p.1 p.2)
 
@@ -271,6 +280,7 @@ than the joint continuity `ContinuousLearningRule` asks for.
 This predicate is that reading, and it is all the convergence argument needs, because the step
 it feeds compares two configurations carrying identical labels.
 -/
+@[expose]
 def ContinuousLearningRuleInEmbeddings (n : ℕ) (d d' : ℕ) (learn : LearningRule n d d') : Prop :=
   ∀ ys : Fin n → Y d',
     Continuous (fun p : (Fin n → E d) × E d => learn (fun i => (p.1 i, ys i)) p.2)
@@ -290,6 +300,7 @@ theorem continuousLearningRuleInEmbeddings_of_continuousLearningRule (n d d' : �
 /-- Measurability of the learning rule in the labels, for each fixed pair of embeddings.  With
 the printed Assumption 2 this gives joint measurability by the Carathéodory argument, which is
 what the risk integrals need and all that joint continuity was supplying. -/
+@[expose]
 def MeasurableLearningRuleInLabels (n : ℕ) (d d' : ℕ) (learn : LearningRule n d d') : Prop :=
   ∀ p : (Fin n → E d) × E d,
     Measurable (fun ys : Fin n → Y d' => learn (fun i => (p.1 i, ys i)) p.2)
@@ -316,6 +327,7 @@ to requiring the range to be bounded (closed + bounded), but stating it as
 "contained in a compact `K`" is the form the proofs use (e.g. via tightness /
 uniform continuity on `K`).
 -/
+@[expose]
 def BoundedLearningRule (n : ℕ) (d d' : ℕ) (learn : LearningRule n d d') : Prop :=
   ∃ K : Set (Y d'), IsCompact K ∧ ∀ (t : Fin n → E d × Y d') (ψ : E d), learn t ψ ∈ K
 
@@ -327,6 +339,7 @@ pointwise/coordinatewise reading of the paper's continuity assumption.
 (The companion condition `BoundedLabelSupport`, in `Internal.lean`, captures the
 paper's accompanying "labels live in a compact set" side-condition.)
 -/
+@[expose]
 def ContinuousLoss (d' : ℕ) (loss : LossFunction d') : Prop :=
   Continuous (fun (p : Y d' × Y d') => loss p.1 p.2)
 
@@ -345,6 +358,7 @@ def ContinuousLossInPrediction (d' : ℕ) (loss : LossFunction d') : Prop :=
   ∀ y : Y d', Continuous (fun p : Y d' => loss p y)
 
 /-- Measurability of the loss in the label, for each fixed prediction. -/
+@[expose]
 def MeasurableLossInLabel (d' : ℕ) (loss : LossFunction d') : Prop :=
   ∀ p : Y d', Measurable (fun y : Y d' => loss p y)
 
@@ -383,6 +397,7 @@ Convergence in probability to zero for a sequence of real random variables `X_u`
 (standard probabilistic notion, used to phrase the paper's "`ψ̂ → ψ`" statements):
 `∀ ε > 0, P(|X_u| > ε) → 0` as `u → ∞`.
 -/
+@[expose]
 def ConvergesInProbabilityToZero {Ω : Type*} [MeasurableSpace Ω] (P : Measure Ω)
     (X : ℕ → Ω → ℝ) : Prop :=
   ∀ ε > 0, Tendsto (fun u => P {ω | |X u ω| > ε}) atTop (𝓝 0)
@@ -399,6 +414,7 @@ converge to `e_u(psi_true)` in probability, uniformly over the `n+1` training an
 The per-stage alignment `e_u` reflects that DKPS embeddings are only identified up to an
 affine isometry; A1 (`InvariantToAffineIsometries`) is what makes this harmless for the risk.
 -/
+@[expose]
 def DKPSAlignmentConsistency (n : ℕ) (d d' : ℕ)
     (P : Measure (E d × Y d'))
     (psi_hat : ℕ → (Fin (n + 1) → E d × Y d') → Fin (n + 1) → E d) : Prop :=

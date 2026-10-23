@@ -102,6 +102,7 @@ lemma initial_kyFanTwo_exact_lt_printed (ε : ℝ) (hε : 0 < ε) :
   nlinarith [residualTopRoot_lt_printed, residualBottomRoot_lt_printed]
 
 /-- Exact normalized tangent bound obtained from the recentered residual. -/
+@[expose]
 noncomputable def tangentThetaExactBound (ε : ℝ) : ℝ :=
   ((Real.sqrt 15 / 15) / 500 * ε) /
     (1 - (ritzHighCoefficient / 500) * ε)

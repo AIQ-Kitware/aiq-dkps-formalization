@@ -41,6 +41,7 @@ variable {H : Type u} {K : Type v}
 The self-adjointness hypothesis is not used by the construction -- `unitaryConj`
 transports any partial map -- but it is retained so that this name and
 `unitaryConjugate_isSelfAdjoint` take the same arguments at every call site. -/
+@[expose]
 noncomputable def unitaryConjugate
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (_hA : IsSelfAdjoint A) : K →ₗ.[ℂ] K :=
@@ -110,6 +111,7 @@ theorem unitaryConjugate_apply_map
     (Subtype.ext (W.symm_apply_apply (x : H)))
 
 /-- Transport a bounded operator through a unitary equivalence. -/
+@[expose]
 noncomputable def unitaryConjugateBounded
     (W : H ≃ₗᵢ[ℂ] K) (R : H →L[ℂ] H) : K →L[ℂ] K :=
   W.toLinearIsometry.toContinuousLinearMap ∘L R ∘L

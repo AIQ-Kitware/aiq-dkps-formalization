@@ -87,6 +87,7 @@ theorem projection_inner_left_eq_right (U : Submodule 𝕜 E)
   Submodule.inner_starProjection_left_eq_right U u v
 
 /-- The canonical two-projection intertwiner. -/
+@[expose]
 noncomputable def canonicalIntertwiner (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   projection V ∘ₗ projection U +

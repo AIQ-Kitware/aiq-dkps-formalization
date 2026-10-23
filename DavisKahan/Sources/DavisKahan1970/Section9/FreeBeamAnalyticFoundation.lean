@@ -132,6 +132,7 @@ structure SobolevTraceFoundation where
 namespace SobolevTraceFoundation
 
 /-- Closed free-beam fourth-derivative operator supplied by the foundation. -/
+@[expose]
 noncomputable def operator (D : SobolevTraceFoundation (H := H)) :
     H →ₗ.[ℂ] H :=
   { domain := D.freeDomain

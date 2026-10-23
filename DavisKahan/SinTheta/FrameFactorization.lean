@@ -442,6 +442,7 @@ theorem range_frameIsometry_eq_range
     (lowerFramePolarData X hX hε).range_normalized
 
 /-- Directed sine block used in the paper-facing generalized theorem. -/
+@[expose]
 noncomputable def sinThetaBlock
     (X : F →L[ℂ] E) (F₁ : G →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :

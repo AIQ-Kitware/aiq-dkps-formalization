@@ -44,6 +44,7 @@ variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
 namespace FourthOrderTraceModel
 
 /-- Ambient image of the maximal graph Hilbert space. -/
+@[expose]
 noncomputable def maximalAmbientDomain
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) : Submodule 𝕜 H :=
   LinearMap.range D.embed.toLinearMap

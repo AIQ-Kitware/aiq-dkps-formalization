@@ -86,6 +86,7 @@ The operator algebra is naturally an algebra over its native scalar field
 pull it back along the canonical embedding `ℝ → 𝕜`.  For self-adjoint
 operators this captures the full spectrum, while retaining continuous spectral
 components in infinite dimension. -/
+@[expose]
 def realSpectrum (A : E →L[𝕜] E) : Set ℝ :=
   {r | (r : 𝕜) ∈ spectrum 𝕜 A}
 

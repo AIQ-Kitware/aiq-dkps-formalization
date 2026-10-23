@@ -1270,6 +1270,7 @@ theorem configFrobBound_le_configFrobQuadraticMajorant
 /-- Compatibility bound for the older `ConfigError` API.  It is definitionally
 `√n` times `configFrobBound`; the expression is kept expanded so existing
 downstream proofs that unfold `configBound` keep their previous normal form. -/
+@[expose]
 noncomputable def configBound (n d : ℕ) (α Λ ε : ℝ) : ℝ :=
   Real.sqrt n *
     ( Real.sqrt ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2)))^2 * ((d : ℝ) * (Λ + ε)))
