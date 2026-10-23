@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.FiniteDimensional.DirectRotation
-import Mathlib.Analysis.Normed.Algebra.Exponential
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Series
+import ForTauCeti.Analysis.Normed.Algebra.TrigonometricSeries
 
 /-!
 # The direct rotation as an exponential: `U = exp (J Θ)`

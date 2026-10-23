@@ -455,6 +455,50 @@ theorem example4_2_competitor_singularValues
     (mul_nonneg (by norm_num) hminus0)
     (mul_le_mul_of_nonneg_left hordSin (by norm_num)) htr hdt
 
+
+/-- The endpoint phase `delta = theta` is a rank-one displacement. Its two
+singular values are `2 sin(theta)` and zero, including the right-angle case.
+Unlike the strict phase-perturbation example, the endpoint gives the exact
+trace-norm optimum of the complex principal plane. -/
+theorem example4_2_endpoint_singularValues
+    {theta : ℝ} (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
+    (LinearMap.id - example42Competitor theta theta).singularValues =
+      TauCeti.pairSingularValues (2 * Real.sin theta) 0 := by
+  rw [one_sub_example42Competitor]
+  have hs : 0 ≤ Real.sin theta :=
+    Real.sin_nonneg_of_nonneg_of_le_pi h0 (by linarith [Real.pi_pos])
+  have hplus : ‖(1 : ℂ) - example42Phase (theta + theta)‖ =
+      2 * Real.sin theta := by
+    rw [norm_one_sub_example42Phase]
+    have htheta : (theta + theta) / 2 = theta := by ring
+    rw [htheta, abs_of_nonneg hs]
+  have hminus : ‖(1 : ℂ) - example42Phase (theta - theta)‖ = 0 := by
+    simp
+  have htr : TauCeti.gramTraceFinTwo (example42Displacement theta theta) =
+      (2 * Real.sin theta) ^ 2 + 0 ^ 2 := by
+    rw [show example42Displacement theta theta = Matrix.toEuclideanLin
+      !![(1 : ℂ) - example42Phase (theta + theta), 0;
+         0, (1 : ℂ) - example42Phase (theta - theta)] from rfl,
+      complexDiagonal_gramTrace, hplus, hminus]
+  have hdt : TauCeti.gramDetFinTwo (example42Displacement theta theta) =
+      (2 * Real.sin theta) ^ 2 * 0 ^ 2 := by
+    rw [show example42Displacement theta theta = Matrix.toEuclideanLin
+      !![(1 : ℂ) - example42Phase (theta + theta), 0;
+         0, (1 : ℂ) - example42Phase (theta - theta)] from rfl,
+      complexDiagonal_gramDet, hplus, hminus]
+  exact TauCeti.singularValues_eq_pair_of_gram_trace_det_fin_two
+    (example42Displacement theta theta) (mul_nonneg (by norm_num) hs)
+    le_rfl (by positivity) htr hdt
+
+/-- Exact complex two-dimensional trace displacement at the optimal phase. -/
+theorem example4_2_endpoint_traceDisplacement
+    {theta : ℝ} (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
+    TauCeti.kyFanSum 2 (LinearMap.id - example42Competitor theta theta) =
+      2 * Real.sin theta := by
+  rw [TauCeti.kyFanSum_eq_sum_fin, Fin.sum_univ_two,
+    example4_2_endpoint_singularValues h0 hpi]
+  simp [TauCeti.pairSingularValues]
+
 /-- **Davis--Kahan 1970, Example 4.2, displayed norm formula.** -/
 theorem example4_2_competitor_kyFan_two
     {theta delta : ℝ} (h0 : 0 ≤ delta) (hlt : delta < theta)
