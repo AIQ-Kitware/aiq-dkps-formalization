@@ -33,7 +33,7 @@ namespace OperatorIdeal
 namespace UnitarilyInvariant
 
 open scoped InnerProductSpace
-open Filter Topology MeasureTheory
+open Filter Topology _root_.MeasureTheory
 
 noncomputable section
 

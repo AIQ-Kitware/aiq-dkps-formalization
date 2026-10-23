@@ -26,7 +26,7 @@ open TauCeti.DavisKahanExt
 
 open DavisKahan
 
-open MeasureTheory Set
+open _root_.MeasureTheory Set
 open scoped InnerProductSpace BigOperators
 
 noncomputable section
