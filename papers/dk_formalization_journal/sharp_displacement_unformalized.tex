@@ -1,23 +1,26 @@
-% WORKING MATHEMATICAL DRAFT ONLY.
-% The theorems in this file have conventional proofs below but are not yet Lean
-% formalized. The main paper explicitly includes this file only when
-% \includeUnformalizedDisplacementtrue. Do not count these as verified results.
+% WORKING MATHEMATICAL DRAFT: sharp factor, real minimizer, and complex
+% minimizer are not Lean-verified. The projection lower bound and exact
+% four-dimensional trace ratio are already Lean-verified. Keep the mixed-status
+% section behind \includeUnformalizedDisplacementtrue until the other proofs compile.
 \section{Quantitative bounds for full displacement (working draft)}
 \label{sec:unformalized-sharp-displacement}
 
 \begin{tcolorbox}[
   enhanced, breakable, colback=white, colframe=red!80!black,
   colbacktitle=red!6!white, coltitle=red!80!black,
-  title={UNFORMALIZED EXTENSION --- conventional mathematical proofs only},
+  title={WORKING EXTENSION --- sharp optimality theorems not yet Lean-verified},
   fonttitle=\bfseries, boxrule=1.05pt,
   left=9pt, right=9pt, top=9pt, bottom=9pt,
   before skip=12pt, after skip=12pt]
 
-The results in this frame have mathematical proofs but have not been compiled
-as Lean theorems. The verified Proposition~4.4 refutation is
-\cref{thm:small-angle,cor:no-threshold}. The following estimates address the
-optimal size of an admissible displacement rather than the existence of a
-competitor with smaller displacement.
+The projection-distance lower bound below is verified in Lean for every
+unitarily invariant seminorm over real or complex finite-dimensional spaces.
+The exact trace-ratio identity for the parameterized real counterexample is
+also verified. The universal sharp multiplicative bound, global trace
+optimality of the real competitor, and the complex-space trace optimum have
+mathematical proofs here but remain outside the compiled Lean development.
+The verified Proposition~4.4 refutation is
+\cref{thm:small-angle,cor:no-threshold}.
 
 Let $\mathbb F$ denote $\mathbb R$ or $\mathbb C$, and let $U,V$ be subspaces
 of equal dimension $k$ in an $n$-dimensional $\mathbb F$-Hilbert space.
@@ -69,6 +72,10 @@ shows that $P-Q$ has exactly the same singular values
 Unitary invariance therefore identifies the left side of the preceding
 pinching estimate with $N(P-Q)$, proving \cref{eq:draft-projection-lower}.
 \end{proof}
+
+This lower bound is independently verified in Lean as
+\texttt{projectionDifference\_uiNorm\_le\_displacement}, with the stronger
+seminorm hypothesis and without an acute-angle restriction.
 
 \begin{theorem}[Sharp multiplicative displacement estimate]
 \label{thm:draft-sharp-displacement}
@@ -122,6 +129,11 @@ The projection lower bound proves that $W_\alpha$ is a \emph{global}
 trace-norm minimizer for this pair. The ratio of the canonical displacement
 to that minimum equals $\sec(\alpha/2)$, giving equality in
 \cref{eq:draft-sharp-displacement} for every fixed $0<\alpha<\pi/2$.
+The exact identity $\cos(\alpha/2)\|I-R_\alpha\|_1
+=\|I-W_\alpha\|_1$ is separately Lean-verified as
+\texttt{SmallAngleCounterexample.cos\_half\_mul\_directTrace\_eq\_competitorTrace};
+the assertion that $W_\alpha$ attains the global minimum remains in the
+working mathematical draft.
 At $\alpha=\pi/3$ this ratio is $2/\sqrt3$, and as
 $\alpha\uparrow\pi/2$ it approaches $\sqrt2$.
 \end{proof}

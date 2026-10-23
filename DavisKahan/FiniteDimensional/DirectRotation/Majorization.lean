@@ -274,6 +274,7 @@ theorem eigenvalues_hermitianPart_le_singularValues
     _ = ‖C x‖ := by rw [hxnorm, mul_one, norm_operatorAbs_apply]
     _ ≤ A.singularValues (i : ℕ) := hCbound
 
+omit [FiniteDimensional 𝕜 E] in
 /-- Pinching relative to `U + U orthogonal` is a contraction for every
 unitarily invariant norm. -/
 theorem uiNorm_pinch_le

@@ -323,13 +323,13 @@ private theorem gram_displacement_W_coord (theta : Real) (x : E4) (i : Fin 4) :
   rw [hinv]
   have hcircle := circle theta
   fin_cases i
-  · simp [Wlin_apply, Wlin'_apply, Wmat, Fin.sum_univ_four] <;>
+  · simp [Wlin_apply, Wlin'_apply, Wmat, Fin.sum_univ_four];
       linear_combination (-2 * x 0) * hcircle
-  · simp [Wlin_apply, Wlin'_apply, Wmat, Fin.sum_univ_four] <;>
+  · simp [Wlin_apply, Wlin'_apply, Wmat, Fin.sum_univ_four];
       linear_combination (-2 * x 1) * hcircle
-  · simp [Wlin_apply, Wlin'_apply, Wmat, Fin.sum_univ_four] <;>
+  · simp [Wlin_apply, Wlin'_apply, Wmat, Fin.sum_univ_four];
       linear_combination (-2 * x 2) * hcircle
-  · simp [Wlin_apply, Wlin'_apply, Wmat, Fin.sum_univ_four] <;>
+  · simp [Wlin_apply, Wlin'_apply, Wmat, Fin.sum_univ_four];
       linear_combination (-2 * x 3) * hcircle
 
 private theorem gram_displacement_W_basis (theta : Real) (i : Fin 4) :

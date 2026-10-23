@@ -38,7 +38,10 @@ Qiu--Zhang--Li (2005), and Zhang--Qiu (2010).
 A separate `sharp_displacement_unformalized.tex` contains mathematical proofs
 for the universal projector lower bound, sharp `sec(alpha/2)` approximation
 factor, optimality of the real four-dimensional competitor, and exact complex
-trace-norm formula. These propositions have **not** been formalized in Lean.
+trace-norm formula. The projector lower bound is Lean-verified in
+`ProjectionDisplacement.lean`, and the counterexample's exact trace ratio is
+Lean-verified in `TraceRatio.lean`. The universal sharp factor and global
+minimization theorems are **not** yet Lean-verified.
 The file is included in a red, breakable frame when the working-draft switch
 `\includeUnformalizedDisplacementtrue` is selected in `paper.tex`; switch it
 to `\includeUnformalizedDisplacementfalse` to omit the proposed extension

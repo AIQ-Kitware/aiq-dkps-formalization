@@ -43,7 +43,11 @@ theorem cos_half_mul_directTrace_eq_competitorTrace
       Real.sqrt_mul (by positivity), Real.sqrt_sq (by norm_num)]
   have hdouble :
       Real.sin theta = 2 * Real.sin (theta / 2) * Real.cos (theta / 2) := by
-    convert Real.sin_two_mul (theta / 2) using 1 <;> ring
+    have harg : (2 : ℝ) * (theta / 2) = theta := by ring
+    calc
+      Real.sin theta = Real.sin (2 * (theta / 2)) := congrArg Real.sin harg.symm
+      _ = 2 * Real.sin (theta / 2) * Real.cos (theta / 2) :=
+        Real.sin_two_mul (theta / 2)
   rw [kyFanSum_displacement_R theta hc, kyFanSum_displacement_W theta hs,
     hchord, hdouble]
   ring

@@ -34,6 +34,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
+omit [FiniteDimensional 𝕜 E] in
 /-- If `W` carries `U` to `V`, the displacement of their projections is no
 larger in any unitarily invariant seminorm than the full displacement of `W`.
 No restriction on principal angles is necessary. -/

@@ -2,12 +2,14 @@
 
 ## Source baseline
 
-Manuscript update prepared from the user-provided archive
-`aiq-dkps-formalization-source-2026-10-23T113048-5-6d76992edd79.tar.gz`.
-The original 29 source-level targets remain 28 proved at source scope and one
-formally refuted as printed (Davis--Kahan Proposition 4.4). No Lean source,
-compiler pin, result inventory, or theorem statement is changed in the present
-manuscript overlay.
+This record retains the user-confirmed build evidence from the earlier
+23 October 2026 revision and incorporates the later repository snapshot
+`aiq-dkps-formalization-source-2026-10-23T123759-5-3f24ae49b431.tar.gz`
+(commit `3f24ae49b431`). The original 29 source-level targets remain 28
+proved at source scope and one formally refuted as printed (Proposition 4.4).
+Neither the compiler pin nor the source-result inventory was changed.
+A new, uncompiled Lean candidate in `TraceOptimality.lean` is excluded from
+all verification counts.
 
 ## Completed parameterized strengthening
 
@@ -34,28 +36,35 @@ The source-facing aliases are an *additional extension*, not a thirtieth
 historical result in the original paper's fixed inventory. The full default
 build was not rerun for this manuscript-only change.
 
-## Conventional but not Lean-formalized extensions
+## Additional displacement results and current verification boundary
 
-`sharp_displacement_unformalized.tex` proves, in ordinary mathematical prose:
+The 23 October 2026 user-confirmed compilation also covers:
 
-1. The universal projection-distance lower bound for admissible maps.
-2. The `sec(alpha/2)` multiplicative comparison for direct rotations, sharp
-   for the real four-dimensional trace-norm family.
-3. Global trace-norm optimality of the existing real competitor.
-4. The exact complex trace-norm optimum using principal-angle planes.
+- `DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement`, proving
+  `projectionDifference_uiNorm_le_displacement` and its Ky Fan formulation;
+- `DavisKahan.FiniteDimensional.DirectRotation.TraceRatio`, proving
+  `SmallAngleCounterexample.cos_half_mul_directTrace_eq_competitorTrace`.
 
-These proofs are **not** part of the verified Lean development. They appear
-only inside a red, breakable `tcolorbox` and are controlled by the switch
-`\includeUnformalizedDisplacementtrue` / `false` in `paper.tex`.
+These are established results; the additional working draft does not supersede
+or downgrade them.
 
-Prior to describing those statements as formalized, prove their analogues
-using the existing finite-dimensional UI-seminorm and majorization APIs and
-run their targeted Lean builds. The suggested dependency order is the
-projection lower bound, principal-angle singular values of `I - R`, universal
-comparison, equality for the existing `SmallAngleCounterexample`, then the
-complex blockwise optimum and realification bridge. Review the resulting
-mathematical statements against Bolotnikov--Li--Rodman (2001) and related
-minimization literature before claiming novelty.
+`sharp_displacement_unformalized.tex` contains conventional proofs of the
+remaining global claims: the universal `sec(alpha/2)` multiplier, the exact
+real trace-norm minimum, and the no-acuteness complex trace-norm minimum.
+Those three claims are still outside the confirmed Lean development. The
+working-draft frame remains red and can be omitted with the
+`\includeUnformalizedDisplacementfalse` switch.
+
+The candidate `DavisKahan/FiniteDimensional/DirectRotation/TraceOptimality.lean`
+contains source-level implementations for the real trace formula and attained
+minimum. This execution environment did not have `lake`, `lean`, or the pinned
+Mathlib/TauCeti dependencies, and its network could not resolve GitHub to
+install them. Its new declarations have not been compiled, are not imported
+by `DirectRotation/All.lean`, and are **not** counted as verified. No new Lean build was possible. A
+single-pass TeX syntax check (`pdflatex -draftmode -interaction=nonstopmode
+-halt-on-error -file-line-error paper.tex`) succeeded in this environment,
+with the expected first-pass unresolved references and citations; it is not a
+full bibliography or PDF-publishing build.
 
 ## Citation limits
 

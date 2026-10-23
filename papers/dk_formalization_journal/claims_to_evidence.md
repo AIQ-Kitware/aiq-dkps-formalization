@@ -51,18 +51,22 @@ its explicit separation of formal verification from source correspondence.
 | The 2005 Grassmann-space paper repeats the pi/3 extremal assertion. | Qiu--Zhang--Li, Section 5, item 3; `submission/LITERATURE_AUDIT.md`. | Particular item verified from author-uploaded text; no claim against the main metric theorems. |
 | General norm-class limitations and Q-norm minimization predate this work. | Bolotnikov--Li--Rodman (2001), Theorem 3.1 and Lemma 3.3. | Explicit prior art; no new Q-norm principle or first-discovery claim. |
 
-## Working-draft mathematical consequences (outside Lean verification)
+## Additional displacement estimates and working-draft consequences
 
-`sharp_displacement_unformalized.tex` is included only when
-`\includeUnformalizedDisplacementtrue` in `paper.tex`. Its red border and title
-mark mathematical propositions not yet checked in Lean. These are the projector
-lower bound, the sharp general `sec(alpha/2)` estimate, trace-optimality of the
-existing real four-dimensional competitor, and an exact complex trace-norm
-formula. The derivations use the cosine-sine decomposition and classical
-unitarily invariant norm theory. No declaration or build result is claimed for
-these propositions, and they do not enter the abstract, contributions, or
-conclusion. Set the switch false for a submission containing only formalized
-results.
+| Claim | Evidence | Status |
+|---|---|---|
+| For every admissible orthogonal/unitary `W`, `N(P_U-P_V) ≤ N(I-W)` in every finite-dimensional real/complex inner-product space, for every unitarily invariant seminorm `N`. | `DavisKahan/FiniteDimensional/DirectRotation/ProjectionDisplacement.lean`, theorem `projectionDifference_uiNorm_le_displacement` and Ky Fan corollary. | Compiled and confirmed by the user on 23 October 2026. No acute restriction. |
+| For every `0 < theta < pi/2`, the real witness satisfies `cos(theta/2) * ‖I-R_theta‖₁ = ‖I-W_theta‖₁`. | `DavisKahan/FiniteDimensional/DirectRotation/TraceRatio.lean`, theorem `SmallAngleCounterexample.cos_half_mul_directTrace_eq_competitorTrace`. | Compiled and confirmed by the user on 23 October 2026. This identity alone does not prove global optimality. |
+| The projector difference in the real four-dimensional example has trace norm `4 sin(theta)` and `Wequiv theta` globally minimizes trace displacement. | Mathematical argument in `sharp_displacement_unformalized.tex`; proposed definitions in `TraceOptimality.lean`. | Conventional proof; the new Lean source candidate has **not** been compiler-verified, and it is not imported by the aggregate. |
+| The universal sharp fixed-angle factor is `sec(alpha/2)` for every UI seminorm, with `2/sqrt(3)` under `alpha ≤ pi/3`. | Mathematical proof in `sharp_displacement_unformalized.tex`. | Not yet Lean-formalized. |
+| The complex trace-norm minimum equals projector trace distance and is attained without an acute hypothesis. | Mathematical proof in `sharp_displacement_unformalized.tex`. | Not yet Lean-formalized. |
+
+`sharp_displacement_unformalized.tex` is controlled by
+`\includeUnformalizedDisplacementtrue` in `paper.tex`. Its red frame is
+retained because the universal sharp factor and global optimality statements
+are not yet Lean-verified. Those statements do not enter the abstract,
+contributions, or conclusion. Set the switch false to exclude them from a
+checked-only submission.
 
 The axiom/interface audit is
 `DavisKahan/Sources/DavisKahan1970/Audits/SmallAngleCounterexample.lean`.
