@@ -155,6 +155,7 @@ def IsTransverse (U V : Submodule 𝕜 E) [V.HasOrthogonalProjection] : Prop :=
   ∀ x ∈ U, V.starProjection x = 0 → x = 0
 
 /-- The pair is acute in the Davis--Kahan sense. -/
+@[expose]
 def IsAcute (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   (∀ x ∈ U, V.starProjection x = 0 → x = 0) ∧

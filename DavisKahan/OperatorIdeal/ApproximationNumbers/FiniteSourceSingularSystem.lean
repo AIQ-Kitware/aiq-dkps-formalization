@@ -47,6 +47,9 @@ noncomputable local instance completeSpace_range (A : E →L[ℂ] F) :
     CompleteSpace A.range :=
   FiniteDimensional.complete ℂ A.range
 
+noncomputable local instance completeSpaceE : CompleteSpace E :=
+  FiniteDimensional.complete ℂ E
+
 /-- Singular values of a finite-source operator, computed after restricting the codomain to
 its finite-dimensional range. -/
 noncomputable def finiteSourceSingularValue (A : E →L[ℂ] F)

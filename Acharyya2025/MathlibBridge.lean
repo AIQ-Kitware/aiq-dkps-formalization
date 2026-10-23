@@ -24,6 +24,7 @@ open Acharyya2024
 abbrev SqMat (n : Nat) := Matrix (Fin n) (Fin n) Real
 
 /-- Convert a curried dissimilarity matrix into a Mathlib matrix. -/
+@[expose]
 def disMatToMatrix {n : Nat} (D : DisMat n) : SqMat n :=
   fun i j => D i j
 

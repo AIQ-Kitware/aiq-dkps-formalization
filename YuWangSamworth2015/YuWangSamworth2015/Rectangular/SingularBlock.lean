@@ -290,13 +290,13 @@ theorem yuWangSamworth_rightSingularAlignedFrame_block_le
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2) :
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
-        Real.sqrt (∑ i, ‖frameComp hvHat.orthonormal O i - v i‖ ^ 2) ≤
+        Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff).mp hvHat |>.orthonormal O i - v i‖ ^ 2) ≤
       2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
   obtain ⟨O, hO, hbound⟩ :=
-    exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le hv.orthonormal hvHat.orthonormal
+    exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le (isOrderedEigenframe_iff).mp hv |>.orthonormal (isOrderedEigenframe_iff).mp hvHat |>.orthonormal
       (yuWangSamworth_rightSingularSubspace_block_le hsn hd hv hvHat hΔ hlo hhi)
   exact ⟨O, hO, hbound.trans_eq (by ring)⟩
 
@@ -315,13 +315,13 @@ theorem yuWangSamworth_leftSingularAlignedFrame_block_le
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2) :
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
-        Real.sqrt (∑ i, ‖frameComp hû.orthonormal O i - u i‖ ^ 2) ≤
+        Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff).mp hû |>.orthonormal O i - u i‖ ^ 2) ≤
       2 * Real.sqrt 2 *
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
   obtain ⟨O, hO, hbound⟩ :=
-    exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le hu.orthonormal hû.orthonormal
+    exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le (isOrderedEigenframe_iff).mp hu |>.orthonormal (isOrderedEigenframe_iff).mp hû |>.orthonormal
       (yuWangSamworth_leftSingularSubspace_block_le hsm hd hu hû hΔ hlo hhi)
   exact ⟨O, hO, hbound.trans_eq (by ring)⟩
 

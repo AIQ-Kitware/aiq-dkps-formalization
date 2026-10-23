@@ -123,7 +123,7 @@ eigenvalue. -/
 def scalarSamplePopulationData : Fin 2 → ℝ := fun i => if (i : ℕ) = 0 then 1 else 0
 
 omit [FiniteDimensional 𝕜 E] in
-private theorem finrank_eq_two (bb : OrthonormalBasis (Fin 2) 𝕜 E) :
+theorem finrank_eq_two (bb : OrthonormalBasis (Fin 2) 𝕜 E) :
     finrank 𝕜 E = 2 := by
   rw [Module.finrank_eq_card_basis bb.toBasis, Fintype.card_fin]
 

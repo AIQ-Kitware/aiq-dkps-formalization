@@ -11,6 +11,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 public import ForTauCeti.Analysis.Normed.Operator.Restriction
+public import Mathlib.Data.Set.Defs
 
 public section
 

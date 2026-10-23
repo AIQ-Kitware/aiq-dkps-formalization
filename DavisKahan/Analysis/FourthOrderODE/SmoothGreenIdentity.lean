@@ -66,6 +66,7 @@ structure FourthOrderData where
 namespace FourthOrderData
 
 /-- Free--free endpoint conditions for the second and third derivatives. -/
+@[expose]
 def FreeBoundary (u : FourthOrderData) : Prop :=
   u.f2 0 = 0 ∧ u.f3 0 = 0 ∧ u.f2 1 = 0 ∧ u.f3 1 = 0
 

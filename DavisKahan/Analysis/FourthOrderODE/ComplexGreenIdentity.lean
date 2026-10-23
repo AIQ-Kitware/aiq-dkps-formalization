@@ -63,6 +63,7 @@ structure ComplexFourthOrderData where
 namespace ComplexFourthOrderData
 
 /-- Free--free endpoint conditions for a complex smooth function. -/
+@[expose]
 def FreeBoundary (u : ComplexFourthOrderData) : Prop :=
   u.f2 0 = 0 ∧ u.f3 0 = 0 ∧ u.f2 1 = 0 ∧ u.f3 1 = 0
 

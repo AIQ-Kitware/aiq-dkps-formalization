@@ -77,6 +77,7 @@ def PointInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : 
 The selected block `U` lies above `b`, while its orthogonal complement lies
 below `a`.  Together with `a < b`, this is the sharp constant-one hypothesis
 used by the finite-dimensional `sin (2 Θ)` theorem. -/
+@[expose]
 def TwoBlockFormGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     (a b : ℝ) : Prop :=
   (∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) ∧

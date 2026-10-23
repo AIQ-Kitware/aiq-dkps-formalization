@@ -59,6 +59,7 @@ def StronglyTendsto {ι : Type w} (T : ι → E →L[𝕜] E)
   ∀ x, Tendsto (fun i => T i x) l (𝓝 (S x))
 
 /-- Orthogonal projection predicate for bounded operators. -/
+@[expose]
 def IsOrthogonalProjectionMap (P : E →L[𝕜] E) : Prop :=
   P ∘L P = P ∧ P.IsSymmetric
 

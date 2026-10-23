@@ -72,6 +72,7 @@ Construction route: diagonalize the positive contraction `P_U P_V P_U` on
 canonical values on the common, orthogonal, and defect summands.  Prove basis
 independence through finite functional calculus (equivalently, apply
 `Real.arcsin` to `sinAngleOperator U V` through that calculus). -/
+@[expose]
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.selfAdjointFunctionalCalculus
@@ -86,6 +87,7 @@ Construction route: use the spectral decomposition of `angleOperator`, map
 finite angles by `safeTan`, and set the quarter-turn defect summand to zero
 only as a documented Moore--Penrose convention.  Theorems interpreting its
 norm as a principal tangent must assume transversality or acuteness. -/
+@[expose]
 noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.selfAdjointFunctionalCalculus
@@ -99,6 +101,7 @@ Construction route: apply `safeTanTwo` to the finite spectral decomposition
 of `angleOperator`, with a theorem hypothesis excluding quarter turns whenever
 the resulting operator is used analytically.  A future API may instead bundle
 that pole-avoidance proof into the constructor. -/
+@[expose]
 noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.selfAdjointFunctionalCalculus
