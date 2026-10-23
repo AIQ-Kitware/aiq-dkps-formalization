@@ -36,7 +36,7 @@ open DavisKahan.Foundation
 open DavisKahan
 
 open Set
-open MeasureTheory
+open _root_.MeasureTheory
 open scoped InnerProductSpace Interval unitInterval
 
 universe u v

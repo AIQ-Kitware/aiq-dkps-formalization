@@ -71,7 +71,7 @@ open DavisKahan.ExactSinTheta
 open DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.ApproximationNumber
 open TauCeti.RealComplexification
-open MeasureTheory Set Filter
+open _root_.MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators
 
 noncomputable section
