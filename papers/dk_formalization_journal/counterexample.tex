@@ -113,8 +113,9 @@ rank two, whereas the direct displacement has rank four. For this pair,
  \frac{\|I-W_\theta\|_1}{\|I-R_\theta\|_1}=\cos(\theta/2).
 \]
 The ratio tends to one as $\theta$ tends to zero, but the inequality is strict
-at every positive angle in the construction. The competitor is used only to
-refute minimality; no claim that it is a global trace-norm minimizer is needed.
+at every positive angle in the construction. The checked counterexample
+establishes strict improvement; the stronger question of global trace-norm
+minimality is separate from this Lean theorem.
 The operator norm exhibits the opposite comparison:
 $\|I-W_\theta\|_{\rm op}=2\sin\theta$
 exceeds $\|I-R_\theta\|_{\rm op}=2\sin(\theta/2)$.
@@ -136,8 +137,9 @@ The two trace norms are
 \]
 The construction, acuteness, principal-angle bound, singular-value
 calculations, and strict inequality for this witness are checked in Lean.
-Appendix~\ref{app:small-angle-artifact} identifies the corresponding files
-and the separate parameterized proof source.
+The parameterized trace formulas, exact principal angles, and arbitrary-threshold
+corollary are also proved in Lean. Appendix~\ref{app:small-angle-artifact}
+identifies the corresponding declarations and their build instructions.
 
 For $K=I-W_{\pi/4}$, let $\Omega_1$ and $\Omega_2$ be the projections onto
 $\operatorname{span}\{e_0,e_3\}$ and
@@ -196,6 +198,13 @@ result makes no identification of that predicate with additional named norm
 families unless the corresponding identity is proved.
 
 \subsection{Relationship to prior norm-minimization results}
+
+Davis and Kahan \citep[Example~4.2]{davis1970rotation} already show that
+multiplying a complex two-dimensional direct rotation by a scalar phase can
+reduce the trace norm of its full displacement, for arbitrarily small positive
+angles. Their subsequent Proposition~4.4 imposes a real-space hypothesis and
+a $\pi/3$ angle bound. The real family in \cref{thm:small-angle}
+shows that neither restriction excludes this obstruction.
 
 Bolotnikov, Li, and Rodman \citep[Theorem~3.1]{bolotnikov2001minimal}
 study unitary completion and prove a $Q$-norm minimization principle.

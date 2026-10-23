@@ -45,13 +45,25 @@ its explicit separation of formal verification from source correspondence.
 
 | Claim | Evidence | Status in this revision |
 |---|---|---|
-| For every 0 < theta < pi/2 the two principal angles equal theta. | `counterexample.tex`, target frame and projection calculation; `SmallAngleCounterexample.principalAngles_eq`. | Conventional proof supplied; new Lean proof source not yet compiler-checked. |
-| The canonical direct displacement has trace norm 8 sin(theta/2); the competitor has 4 sin(theta). | `counterexample.tex`, polar-factor identification and singular-value lists. Lean lemmas `kyFanSum_displacement_R`, `kyFanSum_displacement_W` use the equivalent square-root form for the former. | Conventional proof plus symbolic identity checks; new Lean source uncompiled here. |
+| For every 0 < theta < pi/2 the two principal angles equal theta. | `counterexample.tex`, target frame and projection calculation; `SmallAngleCounterexample.principalAngles_eq`. | Conventional proof and compiled Lean theorem; see submission/VALIDATION.md. |
+| The canonical direct displacement has trace norm 8 sin(theta/2); the competitor has 4 sin(theta). | `counterexample.tex`, polar-factor identification and singular-value lists. Lean lemmas `kyFanSum_displacement_R`, `kyFanSum_displacement_W` use the equivalent square-root form for the former. | Conventional proof, symbolic checks, and compiled Lean singular-value/trace lemmas. |
 | No positive largest-angle threshold repairs Proposition 4.4. | Mathematical corollary in `counterexample.tex`; `arbitrarilySmall_fullDisplacement_refuted`; source-facing alias in `Section4SmallAngle.lean`. | New result, separately tracked. Do not add a thirtieth historical source target. |
 | The 2005 Grassmann-space paper repeats the pi/3 extremal assertion. | Qiu--Zhang--Li, Section 5, item 3; `submission/LITERATURE_AUDIT.md`. | Particular item verified from author-uploaded text; no claim against the main metric theorems. |
 | General norm-class limitations and Q-norm minimization predate this work. | Bolotnikov--Li--Rodman (2001), Theorem 3.1 and Lemma 3.3. | Explicit prior art; no new Q-norm principle or first-discovery claim. |
 
+## Working-draft mathematical consequences (outside Lean verification)
+
+`sharp_displacement_unformalized.tex` is included only when
+`\includeUnformalizedDisplacementtrue` in `paper.tex`. Its red border and title
+mark mathematical propositions not yet checked in Lean. These are the projector
+lower bound, the sharp general `sec(alpha/2)` estimate, trace-optimality of the
+existing real four-dimensional competitor, and an exact complex trace-norm
+formula. The derivations use the cosine-sine decomposition and classical
+unitarily invariant norm theory. No declaration or build result is claimed for
+these propositions, and they do not enter the abstract, contributions, or
+conclusion. Set the switch false for a submission containing only formalized
+results.
+
 The axiom/interface audit is
 `DavisKahan/Sources/DavisKahan1970/Audits/SmallAngleCounterexample.lean`.
-The presence of a proof file or audit command is not a successful compiler run.
-`submission/VALIDATION.md` is the revision-specific validation record.
+The user-reported 23 October 2026 compilation of the three targeted modules is recorded in `submission/VALIDATION.md`.

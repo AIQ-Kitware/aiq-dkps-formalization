@@ -184,7 +184,9 @@ both displacement singular-value sequences, and identifies the canonical
 rotation through the modulus of its intertwiner. The main declarations are
 \texttt{principalAngles\_eq}, \texttt{kyFanSum\_lt}, and
 \path{arbitrarilySmall_fullDisplacement_refuted}, in the
-finite-dimensional Davis--Kahan namespaces.
+finite-dimensional Davis--Kahan namespaces. The parameterized proof and its
+source-facing aliases were compiled in the pinned Lean development; their
+reviewed audit reported only Lean's standard foundational axioms.
 
 Section~\ref{sec:prop44} proves the parameterized statement directly
 from the displayed $4\times4$ matrices. The 29-target source account includes
@@ -200,7 +202,8 @@ checks the claimed mathematical development:
 lake exe cache get
 lake build
 \end{verbatim}
-The added module and its source-facing alias can be checked in isolation:
+The compiled parameterized module, source-facing aliases, and audit can be
+rechecked in isolation:
 \begin{verbatim}
 lake exe cache get
 lake build \

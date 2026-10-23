@@ -9,7 +9,7 @@ mathematical audit of Davis--Kahan perturbation theory. The scope is now fixed:
   statistical specialization and an independent source-audit case;
 - **additional mathematical result:** an explicit family refuting full-displacement
   trace-norm minimality at every positive acute angle, with a conventional proof
-  and new Lean proof source whose local compiler check remains to be run; and
+  and a verified Lean proof of the parameterized strengthening; and
 - **out of scope for this manuscript:** downstream application projects and the
   workshop paper's empirical human--LLM/process study, practitioner corpus, and
   resource-accounting analysis.
@@ -20,28 +20,34 @@ verification and semantic/source correspondence, its treatment of representation
 mismatches, and its more precise language for source defects. It does not import
 the workshop paper's process-study contribution as a journal-paper contribution.
 
-## October 20 revision
+## October 23 mathematical and manuscript status
 
-The manuscript now leads with a conventional proof of the parameterized
-counterexample, including the exact polar factor and displacement spectra.
-The new result strengthens the existing fixed-angle refutation; it is separate
-from the original 29-source-target count. **The new Lean module has not yet
-been compiled in the overlay-author environment.** This does not alter the
-existing build verification of the source inventory. The precise checks and
-commands are in `submission/VALIDATION.md`.
+The parameterized counterexample compiles in the pinned Lean development. The
+user-reported targeted build on 23 October 2026 completed successfully (3,477
+jobs) for `SmallAngleCounterexample`, `Section4SmallAngle`, and the source-facing
+audit. The audit reported only `propext`, `Classical.choice`, and `Quot.sound`
+for its inspected declarations. The 29-result source inventory is unchanged.
 
-`counterexample.tex` contains the new mathematical section. The source-facing
-extension is `DavisKahan/Sources/DavisKahan1970/Section4SmallAngle.lean`, a
-separate import from the existing `Section4.lean`. The associated audit prints
-axiom dependencies. The current manuscript and inquiry drafts do not claim
-that this additional source has already passed Lean.
+The conventional and formalized parameterized counterexample is in
+`counterexample.tex`, `DavisKahan/FiniteDimensional/DirectRotation/
+SmallAngleCounterexample.lean`, and the source-facing Section 4 extension.
+The journal prose credits the complex phase mechanism in Davis--Kahan Example
+4.2 and the norm-minimization literature of Bolotnikov--Li--Rodman (2001),
+Qiu--Zhang--Li (2005), and Zhang--Qiu (2010).
 
-The shared manuscript targets Research in the Mathematical Sciences first and
-AFM as an alternative. `submission/` contains unsent inquiries, a focused
-literature note, and the author-confirmation items still needed before formal
-submission. The Q-norm repair is credited to established theory. The prior
-chat's precise attribution to Zhang--Qiu (2010) is excluded pending inspection
-of the actual passage.
+A separate `sharp_displacement_unformalized.tex` contains mathematical proofs
+for the universal projector lower bound, sharp `sec(alpha/2)` approximation
+factor, optimality of the real four-dimensional competitor, and exact complex
+trace-norm formula. These propositions have **not** been formalized in Lean.
+The file is included in a red, breakable frame when the working-draft switch
+`\includeUnformalizedDisplacementtrue` is selected in `paper.tex`; switch it
+to `\includeUnformalizedDisplacementfalse` to omit the proposed extension
+before preparing a checked-only submission. The unverified results are absent
+from the abstract, formalized contribution list, and conclusion.
+
+`submission/VALIDATION.md` gives the distinction between the user-confirmed
+Lean build and LaTeX checks, and lists the remaining proof-development tasks.
+`submission/LITERATURE_AUDIT.md` records the bounded prior-art comparison.
 
 ## Current mathematical status
 
@@ -80,7 +86,8 @@ state this bridge explicitly rather than identify the two representations.
 
 1. mathematical motivation and source scope;
 2. the parameterized Proposition 4.4 counterexample, proof diagnosis, Q-norm
-   consequence, and relationship to prior minimization theory;
+   consequence, and relationship to prior minimization theory, with a visibly
+   marked optional mathematical draft of sharp displacement bounds;
 3. the full-scope sine-theta theorem, explicit separation hypotheses, modulus
    identity, and Sylvester reduction;
 4. mathematical architecture and formal ancestry;
@@ -88,7 +95,7 @@ state this bridge explicitly rather than identify the two representations.
 6. related work, conclusion, AI-assistance disclosure, and artifact availability;
 7. references; then
 8. appendices with Lean-reading notation, result inventory, correspondence review,
-   artifact organization, and separate extension validation status.
+   artifact organization, and reproduction and extension verification evidence.
 
 `appendix_process.tex` now contains supporting review methodology and the
 complete Davis--Kahan inventory. It is not an empirical process-study appendix.

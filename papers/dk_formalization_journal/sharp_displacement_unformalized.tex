@@ -1,0 +1,185 @@
+% WORKING MATHEMATICAL DRAFT ONLY.
+% The theorems in this file have conventional proofs below but are not yet Lean
+% formalized. The main paper explicitly includes this file only when
+% \includeUnformalizedDisplacementtrue. Do not count these as verified results.
+\section{Quantitative bounds for full displacement (working draft)}
+\label{sec:unformalized-sharp-displacement}
+
+\begin{tcolorbox}[
+  enhanced, breakable, colback=white, colframe=red!80!black,
+  colbacktitle=red!6!white, coltitle=red!80!black,
+  title={UNFORMALIZED EXTENSION --- conventional mathematical proofs only},
+  fonttitle=\bfseries, boxrule=1.05pt,
+  left=9pt, right=9pt, top=9pt, bottom=9pt,
+  before skip=12pt, after skip=12pt]
+
+The results in this frame have mathematical proofs but have not been compiled
+as Lean theorems. The verified Proposition~4.4 refutation is
+\cref{thm:small-angle,cor:no-threshold}. The following estimates address the
+optimal size of an admissible displacement rather than the existence of a
+competitor with smaller displacement.
+
+Let $\mathbb F$ denote $\mathbb R$ or $\mathbb C$, and let $U,V$ be subspaces
+of equal dimension $k$ in an $n$-dimensional $\mathbb F$-Hilbert space.
+Write $P=P_U$ and $Q=P_V$ for their orthogonal projections and
+$0\leq\theta_1\leq\cdots\leq\theta_k\leq\pi/2$ for their
+principal angles, including any zero angles. A norm $N$ on square operators
+is \emph{unitarily invariant} when $N(AXB)=N(X)$ for orthogonal or unitary
+$A,B$. The notation $\|\cdot\|_1$ denotes the trace norm.
+
+\begin{proposition}[Projection-distance lower bound]
+\label{prop:draft-projection-lower}
+For every orthogonal or unitary map $W$ satisfying $WU=V$, and every
+unitarily invariant norm $N$,
+\begin{equation}
+  N(P-Q)\leq N(I-W).
+  \label{eq:draft-projection-lower}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Decompose $W$ with respect to $U\oplus U^\perp$:
+\[
+ W=\begin{pmatrix}A&B\\ C&D\end{pmatrix},
+ \qquad J=2P-I=\begin{pmatrix}I&0\\0&-I\end{pmatrix}.
+\]
+For $K=I-W$, its off-diagonal part is
+\begin{equation}
+ \frac{K-JKJ}{2}=-\begin{pmatrix}0&B\\C&0\end{pmatrix}.
+ \label{eq:draft-offdiag}
+\end{equation}
+By the triangle inequality and invariance under conjugation by $J$,
+\[
+ N\!\left(\frac{K-JKJ}{2}\right)
+ \leq\frac{N(K)+N(JKJ)}2=N(K).
+\]
+The singular values of $A=P W|_U$ are $\cos\theta_j$: indeed,
+$W|_U$ is an isometry onto $V$, so these are the singular values of
+$P|_V$ in an orthonormal frame. The identities from $W^*W=WW^*=I$ give
+\[
+ C^*C=I_U-A^*A,
+ \qquad BB^*=I_U-AA^*.
+\]
+Thus the nonzero singular values of each of $B$ and $C$ are the
+$\sin\theta_j$, with the appropriate zeros. The off-diagonal operator in
+\cref{eq:draft-offdiag} has singular values $\sin\theta_j$, each twice,
+together with zeros. The cosine-sine decomposition for a pair of projections
+shows that $P-Q$ has exactly the same singular values
+\citep{stewart1990matrix,bhatia1997matrix}.
+Unitary invariance therefore identifies the left side of the preceding
+pinching estimate with $N(P-Q)$, proving \cref{eq:draft-projection-lower}.
+\end{proof}
+
+\begin{theorem}[Sharp multiplicative displacement estimate]
+\label{thm:draft-sharp-displacement}
+Assume that $\alpha=\theta_k<\pi/2$, and let $R$ be the canonical direct
+rotation from $U$ to $V$. For every unitarily invariant norm $N$,
+\begin{equation}
+ N(I-R)\leq\sec(\alpha/2)
+ \min_{W:\,WU=V}N(I-W).
+ \label{eq:draft-sharp-displacement}
+\end{equation}
+For each fixed $0<\alpha<\pi/2$, the factor $\sec(\alpha/2)$ is
+attained by a real four-dimensional pair and the trace norm. In particular,
+under the angle hypothesis $\alpha\leq\pi/3$ the sharp common factor is
+$2/\sqrt3$; uniformly for acute pairs, $\sqrt2$ is a valid upper bound.
+\end{theorem}
+
+\begin{proof}
+In the principal-plane decomposition, the canonical direct rotation acts
+on the plane of angle $\theta_j$ as a rotation through that angle and is
+the identity on the remaining orthogonal complement. The nonzero singular
+values of $I-R$ are consequently
+\[
+ 2\sin(\theta_j/2),\quad 2\sin(\theta_j/2)
+ \qquad (j=1,\ldots,k),
+\]
+with zeros for the remaining dimensions. Similarly, the singular values of
+$P-Q$ are $\sin\theta_j$, each twice, with zeros. For every $j$,
+\[
+ 2\sin(\theta_j/2)
+ =\frac{\sin\theta_j}{\cos(\theta_j/2)}
+ \leq \sec(\alpha/2)\sin\theta_j.
+\]
+Symmetric-gauge monotonicity of unitarily invariant norms
+\citep{bhatia1997matrix} yields
+\[
+ N(I-R)\leq\sec(\alpha/2)N(P-Q).
+\]
+Combining this with \cref{eq:draft-projection-lower}, valid for every
+admissible $W$, proves \cref{eq:draft-sharp-displacement}. The minimum
+exists because the admissible orthogonal or unitary matrices form a closed
+subset of a compact group.
+
+For the real family in \cref{thm:small-angle}, the two principal angles are
+$\theta_1=\theta_2=\alpha$. Hence $\|P-Q\|_1=4\sin\alpha$, while the
+verified formulas give
+\[
+ \|I-W_\alpha\|_1=4\sin\alpha,
+ \qquad \|I-R_\alpha\|_1=8\sin(\alpha/2).
+\]
+The projection lower bound proves that $W_\alpha$ is a \emph{global}
+trace-norm minimizer for this pair. The ratio of the canonical displacement
+to that minimum equals $\sec(\alpha/2)$, giving equality in
+\cref{eq:draft-sharp-displacement} for every fixed $0<\alpha<\pi/2$.
+At $\alpha=\pi/3$ this ratio is $2/\sqrt3$, and as
+$\alpha\uparrow\pi/2$ it approaches $\sqrt2$.
+\end{proof}
+
+\begin{proposition}[Exact trace-norm optimum over complex spaces]
+\label{prop:draft-complex-trace-optimum}
+If $U,V$ are equal-dimensional subspaces of a finite-dimensional complex
+Hilbert space, then
+\begin{equation}
+  \min_{W:\,WU=V}\|I-W\|_1
+  =\|P-Q\|_1
+  =2\sum_{j=1}^k\sin\theta_j.
+  \label{eq:draft-complex-trace-optimum}
+\end{equation}
+No acuteness hypothesis is needed.
+\end{proposition}
+
+\begin{proof}
+The lower bound is \cref{prop:draft-projection-lower}. The principal-angle
+decomposition gives mutually orthogonal two-dimensional complex planes
+for the nonzero angles and a common fixed subspace for the zero angles
+and unused ambient dimensions. On one such plane use the unitary rotations
+\begin{equation}
+ R_\theta=\begin{pmatrix}
+   \cos\theta&i\sin\theta\\ i\sin\theta&\cos\theta
+ \end{pmatrix},
+ \qquad W_\theta=e^{i\theta}R_\theta.
+ \label{eq:draft-complex-phase}
+\end{equation}
+For the source line $\operatorname{span}_{\mathbb C}\{(1,0)\}$,
+these maps have the same target line, since multiplication by a scalar phase
+does not alter a complex subspace. The eigenvalues of $R_\theta$ are
+$e^{i\theta},e^{-i\theta}$, while those of $W_\theta$ are
+$1,e^{2i\theta}$. Since both are normal,
+\[
+  \|I-R_\theta\|_1=4\sin(\theta/2),
+  \qquad \|I-W_\theta\|_1=2\sin\theta.
+\]
+This construction is valid also for $\theta=\pi/2$, with the two-dimensional
+plane obtained by choosing orthonormal vectors in the orthogonal subspaces.
+Take the orthogonal direct sum of the maps $W_{\theta_j}$ over all nonzero
+principal angles and the identity on the remaining summand. The resulting
+unitary carries $U$ onto $V$ and has trace-norm displacement
+$2\sum_j\sin\theta_j=\|P-Q\|_1$, attaining the lower bound.
+\end{proof}
+
+\paragraph{The real four-dimensional realization.}
+Identifying $\mathbb C^2$ with $\mathbb R^4$ and complex multiplication by
+$i$ with $J=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$
+turns \cref{eq:draft-complex-phase} into the real block matrices in
+\cref{eq:wtheta}, including the canonical rotation $R_\theta$. Complex
+singular values are duplicated under realification, producing the trace
+norms in \cref{eq:competitor-trace,eq:direct-trace}. Davis and Kahan already
+used a complex scalar phase to exhibit trace-norm nonminimality
+\citep[Example~4.2]{davis1970rotation}; the realification explains why
+their subsequent restriction to real spaces does not restore the asserted
+minimality. Bolotnikov, Li, and Rodman later studied this norm-minimization
+problem and the role of $Q$-norms in detail
+\citep{bolotnikov2001minimal}.
+
+\end{tcolorbox}

@@ -14,6 +14,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{xcolor}
+\usepackage[most]{tcolorbox}
 \usepackage{listings}
 \usepackage{listingsutf8}
 \usepackage{authblk}
@@ -97,6 +98,11 @@
 \newcommand{\DKRefutedCount}{1}
 \newcommand{\DKSemanticAcceptedCount}{29}
 
+% Working-draft toggle: the red-frame mathematics has a conventional proof but
+% is not formalized in Lean. Set false for a submission without these proposals.
+\newif\ifincludeUnformalizedDisplacement
+\includeUnformalizedDisplacementtrue
+
 \title{Davis--Kahan (1970) in Lean:\\ Formalization, Counterexample, and Repair}
 % Additional authors are expected; keep the confirmed ordering below stable.
 
@@ -134,11 +140,9 @@ identity connecting the source's positive angle operator to the rectangular
 complementary block in the Sylvester estimate.
 
 Proposition~4.4 asserts full-displacement minimality of the direct rotation
-under a short-angle bound for every unitarily invariant norm. A machine-checked
-four-dimensional counterexample violates this claim within its stated
-$\pi/3$ range. A parameterized matrix construction gives trace-norm failure
-for every $0<\theta<\pi/2$, so no positive angle threshold repairs the
-assertion. We identify the invalid inequality in the printed argument and
+under a short-angle bound for every unitarily invariant norm. A machine-checked,
+parameterized construction in $\mathbb R^4$ violates this claim for every
+$0<\theta<\pi/2$, so no positive angle threshold repairs the assertion. We identify the invalid inequality in the printed argument and
 formalize a valid $Q$-norm consequence of Proposition~4.3, distinguishing
 these conclusions from earlier norm-minimization results.
 
@@ -204,12 +208,15 @@ spectral infrastructure were adapted or generalized from Spectra
 The source comparison also exposes a false assertion in Davis--Kahan
 Proposition~4.4, which claims minimal full displacement for every unitarily
 invariant norm under a real short-angle hypothesis. We give a checked example
-in $\mathbb R^4$ inside the stated $\pi/3$ range and an explicit one-parameter
-matrix construction showing failure at arbitrarily small positive angles.
+in $\mathbb R^4$ inside the stated $\pi/3$ range and a formally verified
+one-parameter family showing failure at arbitrarily small positive angles.
 The failed Ky Fan inequality in the published proof explains the defect;
 the valid neighboring squared-displacement result implies a $Q$-norm
-formulation. Bolotnikov, Li, and Rodman established related $Q$-norm results
-and failures for other norm classes \citep{bolotnikov2001minimal}.
+formulation. Davis and Kahan themselves showed trace-norm nonminimality for
+phase-modified complex rotations in Example~4.2 of their paper
+\citep{davis1970rotation}. Bolotnikov, Li, and Rodman established related
+$Q$-norm results and failures for other norm classes
+\citep{bolotnikov2001minimal}.
 Qiu, Zhang, and Li repeated the $\pi/3$ assertion
 \citep[Section~5]{qiu2006grassmann}, while Zhang and Qiu subsequently
 observed general failure of trace-norm displacement minimality
@@ -238,10 +245,11 @@ Section~\ref{sec:yws} and Appendix~\ref{app:yws-coverage}.
         symmetric operator ideals, spectral calculus, and Sylvester theory
         needed for the source results, with explicit attribution to the
         external formal libraries on which the development depends.
-  \item We refute the printed Proposition~4.4 by a checked four-dimensional
-        witness, prove a parameterized matrix counterexample for every
-        positive acute angle, identify the failed inequality, and formalize
-        the valid $Q$-norm consequence of Proposition~4.3.
+  \item We refute the printed Proposition~4.4 by a checked real
+        four-dimensional family for every positive acute angle, prove that no
+        positive angle threshold restores its trace-norm conclusion, identify
+        the failed inequality, and formalize the valid $Q$-norm consequence
+        of Proposition~4.3.
   \item We formalize the principal YWS statistical bounds and give checked
         corrections for two defects in their printed statements.
 \end{enumerate}
@@ -456,6 +464,10 @@ ordered gap geometry, rather than an arbitrary assertion that the two spectra
 are disjoint.
 
 \input{counterexample.tex}
+
+\ifincludeUnformalizedDisplacement
+\input{sharp_displacement_unformalized.tex}
+\fi
 
 \section{Mathematical architecture of the Davis--Kahan development}
 \label{sec:dk-rest}

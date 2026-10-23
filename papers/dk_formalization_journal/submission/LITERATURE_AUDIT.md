@@ -1,6 +1,6 @@
 # Proposition 4.4: bounded literature claims
 
-Date: 20 October 2026. This is a focused source comparison, not an exhaustive
+Date: 23 October 2026. This is a focused source comparison, not an exhaustive
 priority search. DOI references and source locations are provided so another
 reader can repeat the comparison.
 
@@ -16,6 +16,15 @@ norms. The existing source-facing formalization and fixed-angle counterexample
 are the basis for the new family. The failed inequality is source equation
 (4.3), not Proposition 4.3. Proposition 4.3's squared-displacement statement
 remains valid and yields the Q-norm consequence.
+
+Example 4.2 in Section 4 already notes complex two-dimensional trace-norm
+nonminimality: multiplying the direct rotation by a scalar phase gives a
+strictly better competitor for positive angles. The real four-dimensional
+family is its realification, with the phase acting as a two-dimensional real
+rotation in the multiplicity space. This connection supplies a direct
+mathematical explanation of why Proposition 4.4's real-space restriction
+still admits counterexamples. It does not establish novelty of the underlying
+phase mechanism.
 
 The new conventional proof constructs W = H diag(C(2 theta), I) H^T, computes
 the target projection, proves the canonical intertwiner is cos(theta) R,
@@ -89,3 +98,25 @@ It does not claim first discovery of general trace-norm failure, a new Q-norm
 principle, a global optimizer for the constructed trace-norm problem, failure
 for every Schatten exponent below two at arbitrarily small angles, or an
 exhaustive absence of earlier explicit corrections.
+
+## 5. Bhatia (1997): standard matrix-norm machinery
+
+R. Bhatia, *Matrix Analysis*, Graduate Texts in Mathematics 169,
+Springer, New York (1997). https://doi.org/10.1007/978-1-4612-0653-8
+
+The working-draft universal inequality uses the classical pinching bound,
+principal-angle/cosine-sine singular values, and the monotonicity of
+symmetric gauge norms. This is standard matrix-analysis infrastructure.
+The proposed synthesis and sharp constant remain unformalized; locating or
+failing to locate precisely the same inequality is not proof of priority.
+
+## 6. Further mathematical deductions in the red-frame draft
+
+The projection lower bound and principal-plane singular values imply a finite-
+dimensional upper bound `sec(alpha/2)` for every UI norm; the already verified
+real family attains equality in trace norm. The same lower bound establishes
+that the real competitor is a global trace minimizer. Complex phase adjustment
+on each principal plane yields the exact complex trace-norm optimum. The
+manuscript marks these deductions as conventional mathematics awaiting Lean
+formalization, not as results already checked by Lean. The literature review
+identified close antecedents rather than an exhaustive priority boundary.

@@ -1,59 +1,17 @@
-# Validation record: 20 October 2026
+# Validation record: 23 October 2026
 
-Base repository commit: `56274cb8cf10a632b62f394fa51391bc6e1b44e3`.
-Source archive: `aiq-dkps-formalization-source-2026-10-20T160615-5-56274cb8cf10.tar.gz`.
+## Source baseline
 
-## Established original results
+Manuscript update prepared from the user-provided archive
+`aiq-dkps-formalization-source-2026-10-23T113048-5-6d76992edd79.tar.gz`.
+The original 29 source-level targets remain 28 proved at source scope and one
+formally refuted as printed (Davis--Kahan Proposition 4.4). No Lean source,
+compiler pin, result inventory, or theorem statement is changed in the present
+manuscript overlay.
 
-The supplied development has 29 source-level targets: 28 source-scope proofs
-and the checked fixed-angle Proposition 4.4 refutation. Those verification
-claims are preserved. The source inventory, `lean-toolchain`,
-`lake-manifest.json`, and `lakefile.toml` are byte-for-byte unchanged from the
-base commit. Four existing coordinate/basis helper lemmas were made public
-without changing their statements or proofs, to avoid duplicating them.
+## Completed parameterized strengthening
 
-## Additional parameterized theorem
-
-**Lean compiler validation: not performed in the overlay-author environment.**
-No Lean/Lake installation or cached dependency build was available, and network
-access could not retrieve them. This limitation concerns the new extension,
-not the original verified development. The new proof source is a candidate
-implementation and may require elaboration/tactic repairs in the pinned build.
-
-The conventional proof is in `counterexample.tex`. The new source identifies
-acuteness and the exact principal angles, identifies the canonical rotation
-via its intertwiner's modulus, computes the displacement singular values,
-and derives the strict comparison and arbitrary-threshold existential theorem.
-Its main-file SHA-256 is `b761037a3fe471a28d60a8aa7d34b3f28c7a1a31dcbcc058e5b37a94f33733fc`.
-
-Static inspection found no proof admissions, new axioms, or opaque declarations
-in the three new Lean files. Their direct local imports resolve to source
-files. This inspection is not a kernel proof check. The separate axiom audit
-has been written but its commands have not been executed by Lean here.
-
-## Algebra and manuscript checks actually run
-
-- SymPy 1.14.0: all 13 exact identities in
-  `scripts/small_angle_symbolic.py` passed, including both orthogonality checks,
-  target projection and frame, canonical intertwiner, both Gram spectra,
-  recovery of the existing pi/4 matrix, and the trigonometric trace ratio.
-  The strict inequality follows in the mathematical proof from
-  `sin(theta/2) > 0` and `cos(theta/2) < 1` on the stated interval.
-- LaTeX/BibTeX: the revised manuscript builds to 18 pages. This environment
-  used `bibtex8` behind a local `bibtex` command shim. Final logs contain no
-  overfull boxes, undefined references, or undefined citations.
-- Abstract: approximately 219 words, treating each displayed inline
-  mathematical expression as one token; six keywords and MSC codes present.
-- Every page was rendered and visually inspected; the extended counterexample
-  section, gap hypotheses, signature, tables, and artifact instructions were
-  reviewed for page overflow and legibility.
-- `git diff --check` passed. The resource-accounting publish command reported
-  that there was nothing to publish; no usage data was invented.
-
-## Local compiler gate
-
-From the repository root, use the pinned environment and retrieve the cache
-before building:
+The user provided the output of the pinned Lean build on 23 October 2026:
 
 ```bash
 lake exe cache get
@@ -63,34 +21,58 @@ lake build \
   DavisKahan.Sources.DavisKahan1970.Audits.SmallAngleCounterexample
 ```
 
-The audit prints dependencies for the principal-angle identification, trace
-formulas, strict comparison, and arbitrary-threshold result. Inspect them for
-admissions or project-specific unproved axioms. A successful build must precede
-any claim that the new family is formally verified. Retain its actual output
-and compiler/dependency revisions. Re-run the normal project build only after
-this focused gate; use `lake exe cache get` first there as well.
+The command completed successfully (3,477 jobs). The audit output identified
+`TauCeti.DavisKahan1970.proposition4_4_parameterized_traceNorm_counterexample`,
+`proposition4_4_parameterized_principalAngles`, and
+`proposition4_4_arbitrarilySmall_refutingPair`. For the inspected declarations,
+axiom dependencies were exactly the standard `propext`, `Classical.choice`, and
+`Quot.sound`. Four cosmetic `linter.unnecessarySeqFocus` warnings appeared in
+`SmallAngleCounterexample.lean`, none blocking compilation. The proof is
+reported as verified, not pending, based on that observed user build.
 
-The extension is intentionally a separate source-facing import and is not added
-to the existing `DavisKahan.All` or source inventory. After validation, an
-explicit import can be added to the ordinary build in a follow-up change.
+The source-facing aliases are an *additional extension*, not a thirtieth
+historical result in the original paper's fixed inventory. The full default
+build was not rerun for this manuscript-only change.
 
-## Reproduce the mathematical calculation and PDF
+## Conventional but not Lean-formalized extensions
+
+`sharp_displacement_unformalized.tex` proves, in ordinary mathematical prose:
+
+1. The universal projection-distance lower bound for admissible maps.
+2. The `sec(alpha/2)` multiplicative comparison for direct rotations, sharp
+   for the real four-dimensional trace-norm family.
+3. Global trace-norm optimality of the existing real competitor.
+4. The exact complex trace-norm optimum using principal-angle planes.
+
+These proofs are **not** part of the verified Lean development. They appear
+only inside a red, breakable `tcolorbox` and are controlled by the switch
+`\includeUnformalizedDisplacementtrue` / `false` in `paper.tex`.
+
+Prior to describing those statements as formalized, prove their analogues
+using the existing finite-dimensional UI-seminorm and majorization APIs and
+run their targeted Lean builds. The suggested dependency order is the
+projection lower bound, principal-angle singular values of `I - R`, universal
+comparison, equality for the existing `SmallAngleCounterexample`, then the
+complex blockwise optimum and realification bridge. Review the resulting
+mathematical statements against Bolotnikov--Li--Rodman (2001) and related
+minimization literature before claiming novelty.
+
+## Citation limits
+
+The 1970 Example 4.2 exhibits complex phase improvement in trace norm;
+Bolotnikov--Li--Rodman (2001) treats Q-norm minima and Schatten counterexamples;
+Qiu--Zhang--Li (2005) repeats the short-angle assertion; Zhang--Qiu (2010)
+states general trace-norm nonminimality. The reviewed material does not
+establish first-publication priority for the exact real small-angle correction
+or the sharp ratio. The new draft does not claim such priority.
+
+## Reproduction
 
 ```bash
-python papers/dk_formalization_journal/scripts/small_angle_symbolic.py
+python3 papers/dk_formalization_journal/scripts/small_angle_symbolic.py
 make -C papers/dk_formalization_journal paper
 ```
 
-The algebra script is optional and needs SymPy. It is not a Lean substitute.
-On installations with only `bibtex8`, the equivalent manuscript command is:
-
-```bash
-cd papers/dk_formalization_journal
-latexmk -e '$bibtex = "bibtex8 %O %B";' -pdf paper.tex
-```
-
-After a successful Lean check, replace only the new-extension status paragraph
-in Appendix F.1 and this record with the observed build evidence; the inquiry
-letters may then explicitly call the new family formally verified. Do not
-change historical source-target counts. Author approval, conflicts declarations,
-AFM policy clarification, and final submission remain separate actions.
+On a minimal TeX installation without `bibtex`, use `bibtex8` through a PATH
+shim or via `latexmk -e '$bibtex = "bibtex8 %O %B";' -pdf paper.tex` from the
+manuscript directory.
