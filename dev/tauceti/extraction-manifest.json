@@ -25,7 +25,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
@@ -94,7 +93,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse",
         "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
         "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
@@ -163,7 +161,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange",
         "ForTauCeti.Analysis.InnerProductSpace.FiniteFrame",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
@@ -239,20 +236,11 @@
       "cluster": "fourier-haagerup-zsido",
       "roadmap_target": "The Haagerup--Zsido kernel, its Fourier transform and integrability, the Poisson/Cauchy lattice summation, and the two supporting definite integrals.",
       "roadmap_focus": "fourier-analysis",
-      "status": "staged-unreviewed",
+      "status": "retired-accepted-upstream",
       "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "tauceti_population": "No remaining DKPS donor modules: the maintained paper consumers use TauCeti.Analysis.Fourier.HaagerupZsido.{Basic,Mass,Fourier} at f99e274230de08a9a8189a97dbfc910536646449. Retired helper proofs are not claimed to have been ported verbatim.",
       "tauceti_target_marker": null,
-      "staging_modules": [
-        "ForTauCeti.Analysis.Fourier.ExponentialAbs",
-        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
-        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
-        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
-        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel",
-        "ForTauCeti.Analysis.Fourier.Poisson.CauchyLattice",
-        "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
-        "ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace"
-      ]
+      "staging_modules": []
     },
     {
       "cluster": "linear-pmap-sylvester",
@@ -375,7 +363,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
         "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
@@ -404,12 +391,6 @@
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
         "ForTauCeti.Analysis.Convex.Majorization",
-        "ForTauCeti.Analysis.Fourier.ExponentialAbs",
-        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
-        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
-        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
-        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel",
-        "ForTauCeti.Analysis.Fourier.Poisson.CauchyLattice",
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
@@ -423,7 +404,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
@@ -464,9 +444,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
-        "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
-        "ForTauCeti.Analysis.SpecialFunctions.Integral.RationalQuadratic",
-        "ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace"
+        "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus"
       ]
     },
     {
@@ -823,8 +801,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here."
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
@@ -840,8 +819,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here."
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
@@ -861,8 +841,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here."
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Integrability",
@@ -880,8 +861,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here."
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel",
@@ -904,8 +886,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here."
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.Poisson.CauchyLattice",
@@ -923,8 +906,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.AlignedBasis",
@@ -1780,8 +1764,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here."
     },
     {
       "source_module": "ForTauCeti.Analysis.SpecialFunctions.Integral.SineLaplace",
@@ -1798,8 +1783,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here."
     },
     {
       "source_module": "ForTauCeti.Analysis.SpecialFunctions.Sqrt",
@@ -4523,7 +4509,7 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel",
+        "TauCeti.Analysis.Fourier.HaagerupZsido.Fourier",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "Mathlib"
       ],

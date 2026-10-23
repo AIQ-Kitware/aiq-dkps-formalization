@@ -6,7 +6,11 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport
-public import ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra
+public import TauCeti.Analysis.Normed.Operator.RealAlgebra
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 public import ForTauCeti.Analysis.RCLike.ScalarTransport
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport
@@ -20,11 +24,9 @@ ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint
 
 for **every** `RCLike 𝕜` and every `𝕜`-Hilbert space `E`, at unrestricted dimension.
 
-Mathlib registers this at `𝕜 = ℂ`, through the `C⋆`-algebra structure of `E →L[ℂ] E`;
-`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean` registers it at
-`𝕜 = ℝ`, by descending the complex calculus along the complexification.  Every `RCLike` field
-is isomorphic to one of those two, so the general case is a transport — of the calculus
-itself, not of an existential witness.
+TauCeti now provides this instance directly by restricting scalars to `ℝ`, then
+using the continuous functional calculus on real Hilbert spaces. This file retains the
+existing scalar-transport naturality lemmas for downstream consumers.
 
 ## What this removes
 
@@ -47,20 +49,18 @@ mathematics, and nothing else.
 `e : RCLikeIso 𝕜 𝕂`, and `ScalarTransport.clm` carries operators across.  It is a bijection
 that preserves composition, the adjoint and the norm, so it is an isometric `ℝ`-`⋆`-algebra
 isomorphism `(E →L[𝕜] E) ≃⋆ₐ[ℝ] (ScalarTransport e E →L[𝕂] ScalarTransport e E)`, and
-`ContinuousFunctionalCalculus.of_starAlgEquiv` moves the calculus back along it.
+the induced isomorphism transports the functional calculus itself.
 
-`RCLike.I_eq_zero_or_im_I_eq_one` supplies the isomorphism, to `ℝ` or to `ℂ`.  This is the
-same two-case dispatch that `ContinuousLinearMap.hasMinMaxLowerBoundEverywhere` and
-`TauCeti.DavisKahan.Sylvester.hasUnboundedSylvesterKyFan` already use, and it lands in the same
-place: an instance, discharged once, invisible to every caller.
+The canonical instance no longer requires case splitting into `ℝ` and `ℂ`;
+it is available for every `RCLike` scalar field.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: none.  Written directly here, 2026-09-03.
 * Extraction class: **new**.  It depends on `RCLike/ScalarTransport.lean`,
-  `InnerProductSpace/RealContinuousFunctionalCalculus.lean` and
-  `CStarAlgebra/ContinuousFunctionalCalculusTransport.lean`, all of which are in `ForTauCeti`.
+  `InnerProductSpace/RealContinuousFunctionalCalculus.lean` and the accepted
+  `TauCeti.Analysis.InnerProductSpace.ContinuousFunctionalCalculus`.
 * Namespace: `TauCeti.ScalarTransport` for the isomorphism, `ContinuousLinearMap` for the
   instance, matching the objects they are about.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026 Kitware, Inc.;
@@ -171,32 +171,16 @@ namespace ContinuousLinearMap
 
 open TauCeti TauCeti.ScalarTransport
 
-/-- **The continuous functional calculus over `ℝ` for self-adjoint bounded operators on a
-Hilbert space over an arbitrary `RCLike` field, in unrestricted dimension.**
+/-- The continuous functional calculus over `ℝ` for bounded self-adjoint operators over
+an arbitrary `RCLike` field, supplied by the canonical TauCeti instance.
 
-Proved by transport: the field is isomorphic to `ℝ` or to `ℂ`, and the calculus is already
-registered at both.
-
-Not an instance, for the reason `ContinuousLinearMap.realAlgebra` is not: its statement mentions
-that real algebra structure, so it can only be activated together with it.  A consumer writes
-
-```lean
-attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
-```
-
-and a definition elaborated under those carries them in its body. -/
+The local theorem name is retained for downstream users that activate it explicitly;
+the instance itself and its proof now live upstream. -/
 theorem continuousFunctionalCalculusReal
     {𝕜 : Type u} [RCLike 𝕜] {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
     [CompleteSpace E] :
-    ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint := by
-  rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
-  · exact ContinuousFunctionalCalculus.of_starAlgEquiv
-      (clmStarAlgEquiv (RCLikeIso.real h) E) continuous_clmStarAlgEquiv_symm
-      fun _ => isSelfAdjoint_clm_iff.symm
-  · exact ContinuousFunctionalCalculus.of_starAlgEquiv
-      (clmStarAlgEquiv (RCLikeIso.complex h) E) continuous_clmStarAlgEquiv_symm
-      fun _ => isSelfAdjoint_clm_iff.symm
+    ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint :=
+  instContinuousFunctionalCalculusRCLikeIsSelfAdjoint
 
 end ContinuousLinearMap
 

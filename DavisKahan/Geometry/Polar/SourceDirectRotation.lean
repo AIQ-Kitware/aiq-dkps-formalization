@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 import DavisKahan.Geometry.Polar.Section3Nonacute
 import DavisKahan.Geometry.Angle.Proposition35Infinite
-import ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra
+import TauCeti.Analysis.Normed.Operator.RealAlgebra
 import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 /-!

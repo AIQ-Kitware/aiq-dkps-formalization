@@ -320,6 +320,55 @@ Hilbert--Schmidt bridge consumers against Tau Ceti's canonical Schatten
 inequalities; preserve genuinely stronger arbitrary-ideal or unbounded
 statements instead of treating a finite-dimensional result as equivalent.
 
+### 1e. Retire the duplicated Fourier kernel and operator real algebra (latest main)
+
+The latest DKPS source (`0ab9c7cafac4`) was compared with the supplied
+TauCeti `main` commit `f99e274230de08a9a8189a97dbfc910536646449`.
+The latter is a descendant of the former dependency pin
+`773bcb657352235c6348ff45be9b7f19f147c19e` and uses the same
+Mathlib revision (`2cabef97b63d3275776b8b060d802de6a6fa1055`)
+and Lean toolchain (`v4.36.0-rc1`). The manifest and `lakefile.toml` have
+been updated together; no Mathlib or toolchain upgrade is required.
+
+The maintained source consumers of the Haagerup--Zsido kernel now import
+`TauCeti.Analysis.Fourier.HaagerupZsido.Fourier` and `.Mass`, and call
+`HaagerupZsido.integral_exp_mul_I_mul_reciprocalKernel`,
+`measurable_reciprocalKernel`, `integrable_reciprocalKernel`, and
+`integral_norm_reciprocalKernel` from accepted upstream code. The two
+paper-supporting Fourier results retain their existing integrand convention
+(`k(t) * exp(i t x)`) by proving a pointwise order/cast equality against the
+canonical upstream integral (`exp(i x t) * k(t)`). The local
+`HasIntegrableReciprocalFourierKernel` predicate, gap normalization,
+Fourier/Sylvester theorems, and sharp `pi/2` constant remain unchanged.
+
+With those consumers migrated, eight local support/aggregate modules
+(`Fourier/ExponentialAbs`, `Fourier/Poisson/CauchyLattice`,
+`SpecialFunctions/Integral/{RationalQuadratic,SineLaplace}` and
+`Fourier/HaagerupZsido/{Defs,Integrability,Fourier,Kernel}`) have no
+maintained import or declaration consumer and are removed, totaling more
+than two thousand lines. Their generic integration and summation lemmas
+are retired because they no longer serve the paper; this does **not** assert
+that every such helper was ported verbatim to TauCeti.
+
+`TauCeti.Analysis.Normed.Operator.RealAlgebra` also provides
+`ContinuousLinearMap.realAlgebra` and `.realIsScalarTower`. The corresponding
+local `OperatorRealAlgebra` module is deleted, and its five direct
+importers now use the upstream module. The definitions are still activated
+*locally* by their consumers, preserving avoidance of global instance
+changes. No public theorem names or hypotheses were intentionally changed.
+
+The source files being removed carry Kitware copyright and DKPS provenance;
+that authorship remains visible in Git history and the extraction census.
+The accepted TauCeti proof implementations are used as provided, without a
+claim that each upstream source was ported from these local files.
+
+Focused compile gates: the two Fourier consumers, the five direct real-algebra
+importers, and then `lake build` after `lake exe cache get`. This authoring
+environment has no Lean toolchain; only the maintainer's build establishes
+compilation for this new batch. The next substantial remaining candidate is
+Hilbert--Schmidt energy/Pythagoras, which needs a coordinated migration of
+local norm APIs rather than a wholesale deletion.
+
 ### 2. Finish genuinely redundant restriction presentation, selectively
 
 The four-field `LinearPMap.ReducesSubspace` is already gone. Do **not** redo its

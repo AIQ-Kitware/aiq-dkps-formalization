@@ -10,7 +10,11 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-public import ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra
+public import TauCeti.Analysis.Normed.Operator.RealAlgebra
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
 public import Mathlib.Analysis.InnerProductSpace.ProdL2
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
