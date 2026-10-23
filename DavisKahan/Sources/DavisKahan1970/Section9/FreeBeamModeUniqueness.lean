@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
-import Mathlib.Analysis.ODE.ExistUnique
-import Mathlib.Analysis.Calculus.Deriv.Prod
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
+public import Mathlib.Analysis.ODE.ExistUnique
+public import Mathlib.Analysis.Calculus.Deriv.Prod
+public import Mathlib.Tactic
+
+@[expose] public section
 
 /-!
 # Every solution of the free-beam ODE is a classical mode

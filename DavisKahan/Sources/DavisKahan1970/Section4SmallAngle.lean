@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6 Astra Pro
 -/
-import DavisKahan.Sources.DavisKahan1970.Section4
-import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section4
+public import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
+
+@[expose] public section
 
 /-!
 # Small-angle strengthening of the Proposition 4.4 refutation

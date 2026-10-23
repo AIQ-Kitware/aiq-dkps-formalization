@@ -2,10 +2,14 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
-import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Spectral
-import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
+module
+
+public import Mathlib
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Spectral
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
+
+@[expose] public section
 
 /-!
 # Roadmap bridge: cross-module integration seams

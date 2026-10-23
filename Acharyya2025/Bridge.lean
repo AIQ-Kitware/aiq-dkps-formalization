@@ -20,7 +20,11 @@ consumes the entrywise CMDS-closeness events produced here.  No unproved
 statements remain in this file.
 -/
 
-import Acharyya2025.Deterministic
+module
+
+public import Acharyya2025.Deterministic
+
+@[expose] public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

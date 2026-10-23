@@ -33,7 +33,11 @@ Assumptions A1-A4 from the paper are formalized as:
 
 -/
 
-import Mathlib
+module
+
+public import Mathlib
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

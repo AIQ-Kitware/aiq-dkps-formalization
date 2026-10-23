@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Sources.Davis1963.RotationBound
-import DavisKahan.Sources.Davis1963.DoubleAngle
-import DavisKahan.FiniteDimensional.Core.OperatorBlocks
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+module
+
+public import DavisKahan.Sources.Davis1963.RotationBound
+public import DavisKahan.Sources.Davis1963.DoubleAngle
+public import DavisKahan.FiniteDimensional.Core.OperatorBlocks
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+
+@[expose] public section
 
 /-!
 # Davis's 1963 finite-dimensional rotation theory

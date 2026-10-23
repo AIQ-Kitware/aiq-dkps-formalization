@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
-import DavisKahan.DoubleAngle.AngleTransport
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.Geometry.Polar.DirectRotation
-import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
-import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
+public import DavisKahan.DoubleAngle.AngleTransport
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
+public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import DavisKahan.Sources.DavisKahan1970.Section4Real
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
-import DavisKahan.Geometry.Polar.SourceDirectRotation
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import DavisKahan.Sources.DavisKahan1970.Section4Real
+public import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
+public import DavisKahan.Geometry.Polar.SourceDirectRotation
+
+@[expose] public section
 
 /-!
 # Section 4 on the source's own object: the direct rotation

@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FiniteMultiplicity
-import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.ArctanDeriv
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FiniteMultiplicity
+public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.ArctanDeriv
+
+@[expose] public section
 
 /-!
 # The Section 2 sharpness paragraph, proved

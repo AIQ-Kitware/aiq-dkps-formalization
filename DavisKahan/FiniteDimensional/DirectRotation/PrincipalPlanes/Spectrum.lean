@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Basic
-import TauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.KyFan
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Basic
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+
+@[expose] public section
 
 /-!
 # The spectrum of the direct displacement `I - R`

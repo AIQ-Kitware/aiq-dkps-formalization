@@ -4,7 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Section 9: certified numerical bounds

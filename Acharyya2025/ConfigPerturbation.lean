@@ -43,13 +43,17 @@ corollary consumed by older downstream code.
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import Acharyya2024.Common
-import Acharyya2025.Weyl
-import Acharyya2025.Overlap
-import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
-import YuWangSamworth2015.Core.Residual
-import YuWangSamworth2015.Core.Procrustes
+module
+
+public import Mathlib
+public import Acharyya2024.Common
+public import Acharyya2025.Weyl
+public import Acharyya2025.Overlap
+public import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
+public import YuWangSamworth2015.Core.Residual
+public import YuWangSamworth2015.Core.Procrustes
+
+@[expose] public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)

@@ -15,8 +15,12 @@ relative to the subset baseline `ŷ_Q` (`yQ`), wrapping the abstract engine in
 The concentration event is *assumed* here; it is discharged from the Acharyya2025
 spectral chain in `DkpsQuench2026.Geometry.AlignedCMDS`.
 -/
-import DkpsQuench2026.Core.ProofEngine
-import Mathlib
+module
+
+public import DkpsQuench2026.Core.ProofEngine
+public import Mathlib
+
+@[expose] public section
 set_option linter.mathlibStandardSet false
 
 open scoped BigOperators Real Nat Classical Pointwise Topology

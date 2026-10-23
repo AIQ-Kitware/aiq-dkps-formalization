@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Anthropic Claude Opus 5
 -/
-import DavisKahan.Sylvester.RealUnbounded
+module
+
+public import DavisKahan.Sylvester.RealUnbounded
+
+@[expose] public section
 
 /-!
 # The unbounded Sylvester Ky Fan estimate as a property of the scalar field

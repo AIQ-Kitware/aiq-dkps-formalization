@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
-import DavisKahan.SpectralTheory.Complexification.FormTransport
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
+public import DavisKahan.SpectralTheory.Complexification.FormTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+
+@[expose] public section
 
 /-!
 # The branch-free `tan 2Θ` theorem over a real Hilbert space, arbitrary dimension

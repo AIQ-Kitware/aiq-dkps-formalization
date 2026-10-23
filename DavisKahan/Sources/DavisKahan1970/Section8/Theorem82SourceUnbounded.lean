@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82UnboundedPath
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
-import DavisKahan.SpectralTheory.BoundedFromSpectrum
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82UnboundedPath
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+public import DavisKahan.SpectralTheory.BoundedFromSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+
+@[expose] public section
 
 /-!
 # Theorem 8.2 as one source-facing theorem, at unbounded ambient scope

@@ -11,9 +11,13 @@ it is the exact bounded-to-unbounded bridge used by variational resolvents.
 The original and adapted files are Apache-2.0 licensed.
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Tactic
+
+@[expose] public section
 
 /-!
 # Unbounded inverse of a bounded positive resolvent

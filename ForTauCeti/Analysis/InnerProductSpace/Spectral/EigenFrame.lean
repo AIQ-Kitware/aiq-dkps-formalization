@@ -30,7 +30,7 @@ Neither gap result was included in SSP-D01. The corresponding-block,
 restricted-spectrum and dimension interfaces now come directly from TauCeti.
 -/
 
-public section
+@[expose] public section
 
 open Module (finrank)
 open Module.End (eigenspace)

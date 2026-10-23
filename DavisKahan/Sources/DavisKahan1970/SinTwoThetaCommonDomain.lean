@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI
 -/
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
+
+@[expose] public section
 
 /-!
 # Double-angle residual bounds on a common dense domain

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
-import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
-import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+module
+
+public import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
+public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+
+@[expose] public section
 
 /-!
 # The reducing restriction commutes with complexification

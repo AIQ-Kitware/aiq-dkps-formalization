@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
-import DavisKahan.DoubleAngle.TanTwoThetaKyFan
-import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
+public import DavisKahan.DoubleAngle.TanTwoThetaKyFan
+public import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
+
+@[expose] public section
 
 /-!
 # Approximate leading singular families

@@ -26,7 +26,7 @@ arguments have been removed in favor of
 `TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint`.
 -/
 
-public section
+@[expose] public section
 
 noncomputable section
 

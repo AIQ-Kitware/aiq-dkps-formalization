@@ -11,7 +11,11 @@ min-max characterization is the proof vehicle (developed in
 whole proof tree.
 -/
 
-import Mathlib
+module
+
+public import Mathlib
+
+@[expose] public section
 
 /-!
 ## Comparator maintenance rule

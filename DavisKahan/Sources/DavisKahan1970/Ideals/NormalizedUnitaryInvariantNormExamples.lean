@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
-import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+module
+
+public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
+public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+
+@[expose] public section
 
 /-!
 # The source norm class is inhabited

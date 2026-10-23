@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.TanTheta.UnboundedSpectrum
+module
+
+public import DavisKahan.TanTheta.UnboundedSpectrum
+
+@[expose] public section
 
 /-!
 # Graph-angle form of the unbounded tangent theorem

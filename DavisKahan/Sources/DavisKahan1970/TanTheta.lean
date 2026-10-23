@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
-import DavisKahan.TanTheta.All
+module
+
+public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
+public import DavisKahan.TanTheta.All
+
+@[expose] public section
 
 /-!
 # Literal Davis--Kahan 1970 Theorem 6.3 surface

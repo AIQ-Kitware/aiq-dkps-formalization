@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
-import DavisKahan.TanTheta.RitzPair
-import ForTauCeti.Analysis.InnerProductSpace.LyapunovPositivity
-import DavisKahan.Geometry.Angle.DoubleAngleGapBound
-import DavisKahan.Geometry.Halmos.CrossedDefectGap
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
+module
+
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
+public import DavisKahan.TanTheta.RitzPair
+public import ForTauCeti.Analysis.InnerProductSpace.LyapunovPositivity
+public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+public import DavisKahan.Geometry.Halmos.CrossedDefectGap
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
+
+@[expose] public section
 
 /-!
 # The quarter angle for an unbounded ambient operator

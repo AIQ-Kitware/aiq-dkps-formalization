@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+
+@[expose] public section
 
 /-!
 # Strong cutoffs and finite Ky Fan gauges over real Hilbert spaces

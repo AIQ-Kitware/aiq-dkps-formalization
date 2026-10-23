@@ -45,7 +45,7 @@ lives in `ForTauCeti.Analysis.Convex.Majorization`.
   `ForTauCeti` staging modules.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

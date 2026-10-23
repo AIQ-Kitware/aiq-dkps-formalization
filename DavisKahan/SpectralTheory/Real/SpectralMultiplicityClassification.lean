@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Real.RealMultiplicityModel
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
+module
+
+public import DavisKahan.SpectralTheory.Real.RealMultiplicityModel
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
+
+@[expose] public section
 
 /-!
 # Spectral multiplicity data classify self-adjoint operators over `ℝ`

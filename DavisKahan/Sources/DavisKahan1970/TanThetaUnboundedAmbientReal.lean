@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
-import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
-import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
+public import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
+public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

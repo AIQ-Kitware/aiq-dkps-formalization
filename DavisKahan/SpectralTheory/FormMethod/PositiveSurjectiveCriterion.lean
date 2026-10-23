@@ -11,10 +11,14 @@ modular operator to an arbitrary densely recoverable positive symmetric
 partial operator.  The original and adapted files are Apache-2.0 licensed.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import Mathlib.Tactic
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import Mathlib.Tactic
+
+@[expose] public section
 
 /-!
 # A positive-surjective self-adjointness criterion

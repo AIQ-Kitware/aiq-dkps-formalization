@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.Unbounded
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+module
+
+public import DavisKahan.DoubleAngle.Unbounded
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.5 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+
+@[expose] public section
 
 /-!
 # Prose-like wrappers for the finite Davis--Kahan `sin Θ` theorem

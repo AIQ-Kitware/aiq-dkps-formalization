@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
-import DavisKahan.InfiniteDimensional.SinTheta.General
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.BoundedOperator.Reflection
+public import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
+public import DavisKahan.InfiniteDimensional.SinTheta.General
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

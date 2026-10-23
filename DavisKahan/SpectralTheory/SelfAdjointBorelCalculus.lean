@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
-import DavisKahan.SpectralTheory.BoundedFromSpectrum
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+public import DavisKahan.SpectralTheory.BoundedFromSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

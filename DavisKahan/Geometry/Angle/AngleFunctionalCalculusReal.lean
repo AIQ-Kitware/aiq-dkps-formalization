@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
-import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
-import DavisKahan.SpectralTheory.Complexification.FormTransport
-import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
+module
+
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
+public import DavisKahan.SpectralTheory.Complexification.FormTransport
+public import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
+
+@[expose] public section
 
 /-!
 # The paper's operator angle between two **real** subspaces

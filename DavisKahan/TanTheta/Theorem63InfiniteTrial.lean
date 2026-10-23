@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.TanTheta.Theorem63FiniteSource
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
-import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
+module
+
+public import DavisKahan.TanTheta.Theorem63FiniteSource
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+public import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

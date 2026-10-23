@@ -4,18 +4,22 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerAngle
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.DiagonalMultiplication
-import Mathlib.Analysis.Normed.Lp.lpSpace
-import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Topology.Algebra.Module.LinearPMap
-import Mathlib.Tactic.FieldSimp
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.NormNum
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerAngle
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.DiagonalMultiplication
+public import Mathlib.Analysis.Normed.Lp.lpSpace
+public import Mathlib.Analysis.SpecificLimits.Basic
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+public import Mathlib.Topology.Algebra.Module.LinearPMap
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.NormNum
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Section 9: domain limitation example

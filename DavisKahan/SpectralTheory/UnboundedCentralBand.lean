@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
-import DavisKahan.SpectralTheory.GapResolvent
-import DavisKahan.SpectralTheory.CentralBand
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
+module
+
+public import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
+public import DavisKahan.SpectralTheory.GapResolvent
+public import DavisKahan.SpectralTheory.CentralBand
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
+
+@[expose] public section
 
 /-!
 # The central band of an unbounded self-adjoint operator

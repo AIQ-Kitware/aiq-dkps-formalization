@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+@[expose] public section
 
 /-!
 # Unitary conjugation for unbounded operators

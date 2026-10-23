@@ -43,7 +43,7 @@ spells that out as `Ôᵀ Ô = I`.
   columns of `V̂Ô` written as the matrix products `∑ⱼ Ôⱼᵢ v̂ⱼ`.
 -/
 
-public section
+@[expose] public section
 
 namespace YuWangSamworth2015
 open TauCeti

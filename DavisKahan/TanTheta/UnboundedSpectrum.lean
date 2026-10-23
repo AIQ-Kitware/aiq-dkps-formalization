@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.TanTheta.UnboundedVector
-import DavisKahan.TanTheta.Spectrum
-import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+module
+
+public import DavisKahan.TanTheta.UnboundedVector
+public import DavisKahan.TanTheta.Spectrum
+public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+
+@[expose] public section
 
 /-!
 # The unbounded tangent theorem with a genuine trial spectrum

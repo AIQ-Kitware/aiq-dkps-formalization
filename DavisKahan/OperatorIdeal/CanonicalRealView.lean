@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
-import ForTauCeti.Analysis.OperatorIdeal.Family.Modulus
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Modulus
+
+@[expose] public section
 
 /-!
 # Real-valued view of a canonical symmetric ideal family

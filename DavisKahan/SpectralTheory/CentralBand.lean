@@ -3,15 +3,19 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.SpectralGapFormBounds
+module
+
+public import DavisKahan.SpectralTheory.SpectralGapFormBounds
 -- supplies the one-sided `spectralGapCutoff`, `reCoord_mem_realSpectrum`, and the
 -- bounded self-adjoint spectral projection this module makes two-sided.
-import DavisKahan.SpectralTheory.ResolventOperator
+public import DavisKahan.SpectralTheory.ResolventOperator
 -- supplies `resolventOperator` and the sharp self-adjoint
 -- distance-to-spectrum resolvent bound used by the exterior lower bound.
-import DavisKahan.Sylvester.Spectrum
+public import DavisKahan.Sylvester.Spectrum
 -- supplies `compressOperator` and its self-adjointness.
-import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

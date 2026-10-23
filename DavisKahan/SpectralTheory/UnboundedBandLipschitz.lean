@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.UnboundedCentralBand
-import DavisKahan.SpectralTheory.UnboundedDirectedGapBound
+module
+
+public import DavisKahan.SpectralTheory.UnboundedCentralBand
+public import DavisKahan.SpectralTheory.UnboundedDirectedGapBound
+
+@[expose] public section
 
 /-!
 # The moving band is Lipschitz in the perturbation, with no Riesz projector

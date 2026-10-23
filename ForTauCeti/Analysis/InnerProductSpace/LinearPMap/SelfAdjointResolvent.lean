@@ -46,7 +46,7 @@ The argument is the classical one, in three steps:
   implementation.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 namespace LinearPMap

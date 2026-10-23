@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
+
+@[expose] public section
 
 /-!
 # The unbounded, residual-form, branch-free `tan 2Θ` theorem, at the operator norm

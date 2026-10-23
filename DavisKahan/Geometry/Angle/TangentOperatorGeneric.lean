@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.OperatorAngleGeneric
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+@[expose] public section
 
 /-!
 # Tangent angle operators over an arbitrary `RCLike` field

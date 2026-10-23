@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.AngleTransport
-import DavisKahan.DoubleAngle.DirectedAngleRealTransport
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
-import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
-import DavisKahan.Geometry.Polar.DirectRotationReal
+module
+
+public import DavisKahan.DoubleAngle.AngleTransport
+public import DavisKahan.DoubleAngle.DirectedAngleRealTransport
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
+public import DavisKahan.DoubleAngle.RealAngleIdentification
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
+public import DavisKahan.Geometry.Polar.DirectRotationReal
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
-import DavisKahan.SpectralTheory.Real.SpectralRestriction
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
+public import DavisKahan.SpectralTheory.Real.SpectralRestriction
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+@[expose] public section
 
 /-!
 # Canonical spectral projections

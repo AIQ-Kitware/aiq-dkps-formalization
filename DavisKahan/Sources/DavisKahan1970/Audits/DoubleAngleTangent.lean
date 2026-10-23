@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
-import DavisKahan.Sources.DavisKahan1970.TanTheta
-import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+public import DavisKahan.Sources.DavisKahan1970.TanTheta
+public import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
+
+@[expose] public section
 
 /-!
 # Focused audit for the Section 7 and Theorem 6.3 source surfaces

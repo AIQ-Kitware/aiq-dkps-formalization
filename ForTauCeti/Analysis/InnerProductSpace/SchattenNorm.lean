@@ -23,7 +23,7 @@ The removed Schatten construction and its endpoint proofs duplicated
 combines the local Hilbert–Schmidt energy with Tau Ceti's Frobenius norm.
 -/
 
-public section
+@[expose] public section
 
 open scoped InnerProductSpace BigOperators
 

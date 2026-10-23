@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Halmos.GenericRotationPredicates
-import DavisKahan.Geometry.Polar.DirectRotationSquare
+module
+
+public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

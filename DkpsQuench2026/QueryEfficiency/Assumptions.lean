@@ -7,7 +7,11 @@ public interfaces; proof assembly lives in `Finite`, `Infinite`, and
 `AllQueries`.
 -/
 
-import DkpsQuench2026.QueryEfficiency.Spectral
+module
+
+public import DkpsQuench2026.QueryEfficiency.Spectral
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

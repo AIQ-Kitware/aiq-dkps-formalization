@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation
-import DavisKahan.SinTheta.SpectralProjection
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+module
+
+public import DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation
+public import DavisKahan.SinTheta.SpectralProjection
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

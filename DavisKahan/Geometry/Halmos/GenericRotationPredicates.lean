@@ -4,11 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Halmos.TwoProjections
-import DavisKahan.SpectralTheory.SpectralRestriction
+module
+
+public import DavisKahan.Geometry.Halmos.TwoProjections
+public import DavisKahan.SpectralTheory.SpectralRestriction
 -- supplies `compressOperator`
-import DavisKahan.Sylvester.Spectrum
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import DavisKahan.Sylvester.Spectrum
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+
+@[expose] public section
 
 /-!
 # Grounded generic direct-rotation predicates for Davis--Kahan 1970

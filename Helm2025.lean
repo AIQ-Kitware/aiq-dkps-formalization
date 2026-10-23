@@ -1,4 +1,8 @@
-import Helm2025.Basic
-import Helm2025.Internal
-import Helm2025.Inference
-import Helm2025.AcharyyaBridge
+module
+
+public import Helm2025.Basic
+public import Helm2025.Internal
+public import Helm2025.Inference
+public import Helm2025.AcharyyaBridge
+
+@[expose] public section

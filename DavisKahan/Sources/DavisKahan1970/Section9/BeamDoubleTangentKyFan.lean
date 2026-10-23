@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Specialized.FreeBeam.BeamDoubleTangent
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamDoubleTangent
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
+
+@[expose] public section
 
 /-!
 # Section 9, the 2-norm sentence of equation (9.7)

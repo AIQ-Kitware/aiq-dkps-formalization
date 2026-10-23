@@ -25,12 +25,16 @@ finite one the rest of the package uses, not a parallel notion.
 
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
-import Acharyya2024.Common
-import Acharyya2024.RawStress
-import TauCeti.Probability.Process.EmpiricalMeasure
-import TauCeti.Probability.StrongLaw
-import ForTauCeti.Probability.AverageError
-import ForTauCeti.Probability.VStatistic
+module
+
+public import Acharyya2024.Common
+public import Acharyya2024.RawStress
+public import TauCeti.Probability.Process.EmpiricalMeasure
+public import TauCeti.Probability.StrongLaw
+public import ForTauCeti.Probability.AverageError
+public import ForTauCeti.Probability.VStatistic
+
+@[expose] public section
 
 open scoped BigOperators Topology
 open MeasureTheory Filter

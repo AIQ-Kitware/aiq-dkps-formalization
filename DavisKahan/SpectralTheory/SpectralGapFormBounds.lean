@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.BoundedBorelProjectionComplex
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.BoundedBorelProjectionComplex
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

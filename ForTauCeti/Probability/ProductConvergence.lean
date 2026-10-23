@@ -50,7 +50,7 @@ product form is the special case `κ = const ν`.
 
 open Filter MeasureTheory ProbabilityTheory Topology
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

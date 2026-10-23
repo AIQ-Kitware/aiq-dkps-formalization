@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
-import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
-import DavisKahan.DoubleAngle.TangentTransport
-import DavisKahan.Sources.DavisKahan1970.AmbientReal
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
+public import DavisKahan.DoubleAngle.RealAngleIdentification
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+public import DavisKahan.DoubleAngle.TangentTransport
+public import DavisKahan.Sources.DavisKahan1970.AmbientReal
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

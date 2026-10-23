@@ -11,7 +11,11 @@ The file proves the exact margin arithmetic needed to pass between the layers
 once concentration/deviation premises are available, and records explicit
 counterexamples to invalid converse implications.
 -/
-import DkpsQuench2026.Paper.OLSPerturbation
+module
+
+public import DkpsQuench2026.Paper.OLSPerturbation
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

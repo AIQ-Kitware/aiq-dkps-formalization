@@ -48,7 +48,7 @@ core behind the Gram-rigidity development in
   `ForTauCeti` staging modules.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

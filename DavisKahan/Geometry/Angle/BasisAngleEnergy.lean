@@ -4,11 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.Geometry.Polar.DirectRotationSquare
+module
+
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
 -- the principal-angle sequence and its basis-sum dictionary, used below to
 -- identify the right-hand side with the printed `∑ₖ sin² θₖ`
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngleSequence
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngleSequence
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Proposition 4.2: displacement-angle energy over a basis

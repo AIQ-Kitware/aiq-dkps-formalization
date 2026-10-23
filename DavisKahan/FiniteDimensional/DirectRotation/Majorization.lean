@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes
-import DavisKahan.FiniteDimensional.Core.OperatorBlocks
-import TauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.KyFan
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes
+public import DavisKahan.FiniteDimensional.Core.OperatorBlocks
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
+
+@[expose] public section
 
 /-!
 # Fan dominance for the finite direct rotation

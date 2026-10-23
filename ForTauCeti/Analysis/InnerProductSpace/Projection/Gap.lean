@@ -15,7 +15,7 @@ public import TauCeti.Analysis.InnerProductSpace.Projection.Gap
 The symmetric and directed projection gaps over arbitrary `RCLike` scalars.
 -/
 
-public section
+@[expose] public section
 
 
 open scoped InnerProductSpace

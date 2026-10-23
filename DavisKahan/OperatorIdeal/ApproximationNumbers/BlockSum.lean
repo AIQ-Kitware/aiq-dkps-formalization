@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+@[expose] public section
 
 /-!
 # Approximation numbers of orthogonal block sums

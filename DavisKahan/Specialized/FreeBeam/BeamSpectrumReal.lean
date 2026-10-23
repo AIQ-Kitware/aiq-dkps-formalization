@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamClassicalReal
-import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
-import TauCeti.Analysis.Normed.Operator.RealAlgebra
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamClassicalReal
+public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
+public import TauCeti.Analysis.Normed.Operator.RealAlgebra
+public import Mathlib.Tactic
+
+@[expose] public section
 
 /-!
 # Spectrum of the real free-beam realization

@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.Proposition35Infinite
-import DavisKahan.Geometry.Polar.Section3Nonacute
+module
+
+public import DavisKahan.Geometry.Angle.Proposition35Infinite
+public import DavisKahan.Geometry.Polar.Section3Nonacute
+
+@[expose] public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal

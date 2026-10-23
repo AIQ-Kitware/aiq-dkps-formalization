@@ -1,3 +1,7 @@
-import DkpsQuench2026.Core.Definitions
-import DkpsQuench2026.Core.ProofEngine
-import DkpsQuench2026.Core.Certificates
+module
+
+public import DkpsQuench2026.Core.Definitions
+public import DkpsQuench2026.Core.ProofEngine
+public import DkpsQuench2026.Core.Certificates
+
+@[expose] public section

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

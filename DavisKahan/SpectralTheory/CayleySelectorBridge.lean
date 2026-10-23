@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.SpectralTheory.ResolventOperator
-import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
+module
+
+public import DavisKahan.SpectralTheory.ResolventOperator
+public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
+
+@[expose] public section
 
 /-!
 # Selector bridge for bounded spectral projections

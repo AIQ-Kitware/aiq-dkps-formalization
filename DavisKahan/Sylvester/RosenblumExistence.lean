@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.CircleRieszEndpoints
-import TauCeti.Analysis.InnerProductSpace.Sylvester
+module
+
+public import DavisKahan.SpectralTheory.CircleRieszEndpoints
+public import TauCeti.Analysis.InnerProductSpace.Sylvester
+
+@[expose] public section
 
 /-!
 # Rosenblum's theorem: solving the Sylvester equation

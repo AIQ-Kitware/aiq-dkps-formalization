@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
-import DavisKahan.Geometry.Polar.DirectRotation
-import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
-import DavisKahan.SinTheta.FrameFactorization
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
-import DavisKahan.SpectralTheory.OperatorAngle
+module
+
+public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
+public import DavisKahan.SinTheta.FrameFactorization
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+public import DavisKahan.SpectralTheory.OperatorAngle
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

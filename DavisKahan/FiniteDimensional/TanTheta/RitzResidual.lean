@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
-import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+
+@[expose] public section
 
 /-!
 # The paper-exact finite Davis--Kahan `tan Θ` theorem

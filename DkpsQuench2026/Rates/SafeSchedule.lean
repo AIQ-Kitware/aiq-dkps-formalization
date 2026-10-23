@@ -8,7 +8,11 @@ is a theorem whose users choose a response budget, not a collection of
 asymptotic side proofs.
 -/
 
-import DkpsQuench2026.Probability.UniformConcentration
+module
+
+public import DkpsQuench2026.Probability.UniformConcentration
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

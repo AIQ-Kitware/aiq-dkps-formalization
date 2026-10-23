@@ -4,12 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.Geometry.Halmos.Realization
-import DavisKahan.Geometry.Halmos.UnitaryEquivalence
-import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
-import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
+module
+
+public import DavisKahan.Geometry.Halmos.Realization
+public import DavisKahan.Geometry.Halmos.UnitaryEquivalence
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
+public import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
+
+@[expose] public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal

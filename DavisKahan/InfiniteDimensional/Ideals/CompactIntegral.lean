@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Ideals.Symmetric
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
+module
+
+public import DavisKahan.InfiniteDimensional.Ideals.Symmetric
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+
+@[expose] public section
 
 /-!
 # Bochner integration of compact-operator-valued functions

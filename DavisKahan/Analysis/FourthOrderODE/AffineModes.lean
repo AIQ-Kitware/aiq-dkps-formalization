@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Analysis.FourthOrderODE.SmoothKernel
-import Mathlib.Analysis.Complex.RealDeriv
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Analysis.FourthOrderODE.SmoothKernel
+public import Mathlib.Analysis.Complex.RealDeriv
+public import Mathlib.Tactic
+
+@[expose] public section
 
 /-!
 # Explicit affine zero modes of the free--free beam

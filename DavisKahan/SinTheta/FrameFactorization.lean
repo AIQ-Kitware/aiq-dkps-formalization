@@ -3,15 +3,19 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.Sylvester.Bounded
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.Analysis.InnerProductSpace.StarOrder
-import Mathlib.Analysis.Normed.Group.Uniform
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.Sylvester.Bounded
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Analysis.InnerProductSpace.StarOrder
+public import Mathlib.Analysis.Normed.Group.Uniform
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

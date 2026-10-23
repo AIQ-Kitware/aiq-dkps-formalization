@@ -3,19 +3,23 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
-import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
-import DavisKahan.Geometry.Halmos.CrossedDefectGap
+module
+
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
+public import DavisKahan.Geometry.Halmos.CrossedDefectGap
 -- supplies the standing assumption (3.5) and the gap identity it buys, which is what
 -- turns this file's directed sine estimate into the ambient uniform transversality the
 -- tangent theorem consumes.  That module imports only `BoundedOperator/Compat` and
 -- `Geometry/Halmos/GenericRotationPredicates`, so the dependency is acyclic.
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
-import DavisKahan.TanTheta.Theorem63InfiniteTrial
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+public import DavisKahan.TanTheta.Theorem63InfiniteTrial
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

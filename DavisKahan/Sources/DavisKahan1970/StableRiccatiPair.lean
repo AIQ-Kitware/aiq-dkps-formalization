@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
-import DavisKahan.Riccati.BoundedSharpEstimates
+module
+
+public import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
+public import DavisKahan.Riccati.BoundedSharpEstimates
+
+@[expose] public section
 
 /-!
 # Stable paired-singular-vector Riccati estimate

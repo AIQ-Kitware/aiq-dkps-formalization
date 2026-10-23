@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space
+
+@[expose] public section
 
 /-!
 # The `ℓ²` model of the paper Hilbert--Schmidt ideal

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Approximation
-import DavisKahan.BoundedOperator.BlockShift
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Real
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Approximation
+public import DavisKahan.BoundedOperator.BlockShift
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Real
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

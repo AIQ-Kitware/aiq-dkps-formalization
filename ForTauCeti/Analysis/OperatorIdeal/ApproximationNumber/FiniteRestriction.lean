@@ -57,7 +57,7 @@ linearly dependent ones are harmless, contributing restrictions to smaller subsp
   nothing here touched Spectra and the module belonged in the staging layer.
 -/
 
-public section
+@[expose] public section
 
 namespace ContinuousLinearMap
 

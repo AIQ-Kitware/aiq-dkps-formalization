@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
-import DavisKahan.SinTheta.BoundedPerturbation
-import DavisKahan.Sylvester.Unbounded.IntervalExterior
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
+public import DavisKahan.SinTheta.BoundedPerturbation
+public import DavisKahan.Sylvester.Unbounded.IntervalExterior
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

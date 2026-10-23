@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.Exponential
-import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.Exponential
+public import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
+
+@[expose] public section
 
 /-!
 # Proposition 3.5, the eigenvector clause: `∠(x, U x) = θ`

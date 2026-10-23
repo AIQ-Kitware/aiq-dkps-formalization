@@ -4,11 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.ShiftedBeamRealization
-import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveCompact
-import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveDeriv
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.ShiftedBeamRealization
+public import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveCompact
+public import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveDeriv
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import Mathlib.Tactic
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

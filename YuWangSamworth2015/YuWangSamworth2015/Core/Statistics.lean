@@ -34,7 +34,7 @@ clients do not depend on this application package.
 
 -/
 
-public section
+@[expose] public section
 
 namespace YuWangSamworth2015
 open TauCeti

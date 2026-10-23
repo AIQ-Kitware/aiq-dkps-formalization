@@ -35,9 +35,13 @@ stage records), the proved norm-comparison bridge
 realization (`exists_config_gramRealizesCMDS_of_spectralAssumptions`).
 -/
 
-import Acharyya2025.MathlibBridge
-import Acharyya2025.Bridge
-import Acharyya2025.GramRealization
+module
+
+public import Acharyya2025.MathlibBridge
+public import Acharyya2025.Bridge
+public import Acharyya2025.GramRealization
+
+@[expose] public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

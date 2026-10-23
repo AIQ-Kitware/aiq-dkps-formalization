@@ -20,9 +20,13 @@ provides the conversion layer:
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Acharyya2025.MathlibBridge
-import Acharyya2025.Weyl
-import TauCeti.Analysis.Matrix.EntrywiseOpNorm
+module
+
+public import Acharyya2025.MathlibBridge
+public import Acharyya2025.Weyl
+public import TauCeti.Analysis.Matrix.EntrywiseOpNorm
+
+@[expose] public section
 
 open scoped BigOperators RealInnerProductSpace
 open Module (finrank)

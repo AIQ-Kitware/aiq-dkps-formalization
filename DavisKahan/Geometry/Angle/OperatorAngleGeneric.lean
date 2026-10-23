@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
-import DavisKahan.SpectralTheory.ReflectionRestriction
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
+public import DavisKahan.SpectralTheory.ReflectionRestriction
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+@[expose] public section
 
 /-!
 # The operator angle at an arbitrary `RCLike` field

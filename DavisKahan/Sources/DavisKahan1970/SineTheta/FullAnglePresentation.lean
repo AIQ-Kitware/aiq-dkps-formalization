@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.Geometry.Angle.OperatorAngleGeneric
-import DavisKahan.SpectralTheory.OperatorAngle
-import DavisKahan.SpectralTheory.Complexification.Subspace
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
+public import DavisKahan.SpectralTheory.OperatorAngle
+public import DavisKahan.SpectralTheory.Complexification.Subspace
+
+@[expose] public section
 
 /-!
 # Presentation bridges for the full Davis--Kahan operator angle

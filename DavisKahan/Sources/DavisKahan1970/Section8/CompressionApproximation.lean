@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSquare
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSquare
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+
+@[expose] public section
 
 /-!
 # The compression sandwich bound behind Theorem 8.1(ii)

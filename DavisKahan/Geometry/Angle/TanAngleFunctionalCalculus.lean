@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+module
+
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+
+@[expose] public section
 
 /-!
 # The literal ambient `tan Θ` of Davis--Kahan

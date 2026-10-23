@@ -7,7 +7,11 @@ module removes one group of caller-visible hypotheses and records the exact
 bridge theorem that is still open.
 -/
 
-import DkpsQuench2026.Response.Means
+module
+
+public import DkpsQuench2026.Response.Means
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

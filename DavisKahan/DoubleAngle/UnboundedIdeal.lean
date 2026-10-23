@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.DoubleAngle.Unbounded
-import DavisKahan.SinTheta.BoundedPerturbationIdeal
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.DoubleAngle.Unbounded
+public import DavisKahan.SinTheta.BoundedPerturbationIdeal
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

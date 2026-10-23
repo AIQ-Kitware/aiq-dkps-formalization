@@ -24,8 +24,12 @@ counterexample shows it cannot be dropped.
 
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
-import Acharyya2024.Consistency
-import Acharyya2025.Deterministic
+module
+
+public import Acharyya2024.Consistency
+public import Acharyya2025.Deterministic
+
+@[expose] public section
 
 open scoped BigOperators Topology
 open MeasureTheory

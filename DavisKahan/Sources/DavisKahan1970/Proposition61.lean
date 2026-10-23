@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
-import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
-import DavisKahan.Geometry.Angle.OperatorAngleGeneric
-import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

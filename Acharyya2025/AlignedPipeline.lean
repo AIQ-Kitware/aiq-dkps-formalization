@@ -29,16 +29,20 @@ Contents:
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import Acharyya2024.Common
-import Acharyya2025.Deterministic
-import Acharyya2025.MathlibBridge
-import Acharyya2025.OperatorBridge
-import Acharyya2025.ConfigPerturbation
-import Acharyya2025.MatrixPerturbation
-import Acharyya2025.GramRealization
-import Acharyya2025.Bridge
-import ForTauCeti.MeasureTheory.CompactExists
+module
+
+public import Mathlib
+public import Acharyya2024.Common
+public import Acharyya2025.Deterministic
+public import Acharyya2025.MathlibBridge
+public import Acharyya2025.OperatorBridge
+public import Acharyya2025.ConfigPerturbation
+public import Acharyya2025.MatrixPerturbation
+public import Acharyya2025.GramRealization
+public import Acharyya2025.Bridge
+public import ForTauCeti.MeasureTheory.CompactExists
+
+@[expose] public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix Topology
 open Filter MeasureTheory

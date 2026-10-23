@@ -4,11 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.5 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
-import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
-import DavisKahan.FiniteDimensional.TanTheta.Vector
-import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
+public import DavisKahan.FiniteDimensional.TanTheta.Vector
+public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
+
+@[expose] public section
 
 /-!
 # Prose-like wrappers for the finite Davis--Kahan classical API

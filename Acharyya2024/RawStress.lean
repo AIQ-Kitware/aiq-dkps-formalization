@@ -25,8 +25,12 @@ Mathematical sources / citations:
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Acharyya2024.Common
-import ForTauCeti.Topology.ApproxMinimizer
+module
+
+public import Acharyya2024.Common
+public import ForTauCeti.Topology.ApproxMinimizer
+
+@[expose] public section
 
 open scoped BigOperators Topology RealInnerProductSpace InnerProductSpace
 open Filter

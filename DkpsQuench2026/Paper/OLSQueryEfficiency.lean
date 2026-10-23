@@ -27,7 +27,11 @@ affine witness and that this affine risk is strictly below the selected
 sample-score baseline.  The second theorem specializes this to exact affine
 realizability and a positive baseline risk.
 -/
-import DkpsQuench2026.Paper.Theorem2
+module
+
+public import DkpsQuench2026.Paper.Theorem2
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

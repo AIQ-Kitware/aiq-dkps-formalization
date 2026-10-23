@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+
+@[expose] public section
 
 /-!
 # The Ky Fan variational bound for approximation-number prefixes

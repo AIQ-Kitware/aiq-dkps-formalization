@@ -7,7 +7,11 @@ eventual cleanup into Mathlib-facing lemmas, while the paper-specific CMDS and
 spectral perturbation statements live in `Acharyya2025.SpectralPipeline`.
 -/
 
-import Acharyya2025.Deterministic
+module
+
+public import Acharyya2025.Deterministic
+
+@[expose] public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

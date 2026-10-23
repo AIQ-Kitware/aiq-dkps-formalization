@@ -3,22 +3,26 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
-import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
-import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
+public import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
+public import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

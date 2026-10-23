@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.TanTwoThetaKyFanFiniteCarrier
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+module
+
+public import DavisKahan.DoubleAngle.TanTwoThetaKyFanFiniteCarrier
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+
+@[expose] public section
 
 /-!
 # The unrestricted Section 2 `tan 2Θ` theorem at the source norm scope

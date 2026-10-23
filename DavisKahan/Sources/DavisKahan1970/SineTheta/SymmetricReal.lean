@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Anthropic Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
-import DavisKahan.Sylvester.RealUnbounded
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
+public import DavisKahan.Sylvester.RealUnbounded
+
+@[expose] public section
 
 
 open TauCeti.DavisKahan.Sylvester

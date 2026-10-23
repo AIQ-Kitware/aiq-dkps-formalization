@@ -7,8 +7,12 @@ mean matrices.  Thus applications now expose response-level second moments or
 replicate averages rather than assuming the matrix concentration conclusion.
 -/
 
-import Acharyya2025.GrowingResponse
-import DkpsQuench2026.Geometry.AugmentedCMDS
+module
+
+public import Acharyya2025.GrowingResponse
+public import DkpsQuench2026.Geometry.AugmentedCMDS
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

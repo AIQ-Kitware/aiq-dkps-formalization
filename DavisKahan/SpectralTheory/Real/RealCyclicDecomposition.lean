@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SeparableCyclic
-import ForTauCeti.MeasureTheory.LpStar
+module
+
+public import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SeparableCyclic
+public import ForTauCeti.MeasureTheory.LpStar
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

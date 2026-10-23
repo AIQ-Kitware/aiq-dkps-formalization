@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
-import DavisKahan.SpectralTheory.Complexification.FormTransport
-import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
-import DavisKahan.SpectralTheory.Complexification.Spectrum
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+module
+
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
+public import DavisKahan.SpectralTheory.Complexification.FormTransport
+public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

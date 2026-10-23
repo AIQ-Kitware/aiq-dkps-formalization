@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Sylvester.Spectrum
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import DavisKahan.InfiniteDimensional.DoubleAngle
+module
+
+public import DavisKahan.Sylvester.Spectrum
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
-import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
+module
+
+public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
+public import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
+
+@[expose] public section
 
 /-!
 # Compatibility surface for the unfinished canonical tangent-map corollary

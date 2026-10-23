@@ -4,7 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.TanTheta.Theorem63FiniteSource
+module
+
+public import DavisKahan.TanTheta.Theorem63FiniteSource
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

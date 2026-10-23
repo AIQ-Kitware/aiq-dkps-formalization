@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.SinTheta.Real.Unbounded
-import DavisKahan.SpectralTheory.Real.SpectralRestriction
+module
+
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.SinTheta.Real.Unbounded
+public import DavisKahan.SpectralTheory.Real.SpectralRestriction
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

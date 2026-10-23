@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Riccati.UnboundedRotationTransport
+module
+
+public import DavisKahan.InfiniteDimensional.Riccati.UnboundedRotationTransport
+
+@[expose] public section
 
 /-!
 # Transport of reducing subspaces through an unbounded graph rotation

@@ -110,7 +110,7 @@ Theorem II.3.5; Pazy, *Semigroups of Linear Operators and Applications to Partia
 Equations*, Chapter 1.
 -/
 
-public section
+@[expose] public section
 
 noncomputable section
 

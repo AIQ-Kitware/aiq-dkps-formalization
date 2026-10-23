@@ -9,10 +9,14 @@ sample target-to-reference distances.  The choice-free pairwise-distance theorem
 in `Acharyya2025.GrowingPipeline` controls those distances directly.
 -/
 
-import Acharyya2025.GrowingPipeline
-import Acharyya2025.GramRealization
-import DkpsQuench2026.Geometry.Radial
-import Acharyya2025.SpectralMeasurability
+module
+
+public import Acharyya2025.GrowingPipeline
+public import Acharyya2025.GramRealization
+public import DkpsQuench2026.Geometry.Radial
+public import Acharyya2025.SpectralMeasurability
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

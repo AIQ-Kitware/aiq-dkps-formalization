@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.Sylvester.ScalarTransport
-import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
-import ForTauCeti.Analysis.RCLike.ScalarTransportIsometry
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ScalarTransport
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+module
+
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.Sylvester.ScalarTransport
+public import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
+public import ForTauCeti.Analysis.RCLike.ScalarTransportIsometry
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ScalarTransport
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+
+@[expose] public section
 
 /-!
 # Scalar transport for unbounded Ritz-compression data

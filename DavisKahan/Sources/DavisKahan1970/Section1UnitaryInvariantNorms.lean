@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.KyFanOrthonormal
-import Mathlib.Analysis.InnerProductSpace.ProdL2
+module
+
+public import DavisKahan.DoubleAngle.KyFanOrthonormal
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Section 1: the Rayleigh--Ritz principle for the `ν`-norms

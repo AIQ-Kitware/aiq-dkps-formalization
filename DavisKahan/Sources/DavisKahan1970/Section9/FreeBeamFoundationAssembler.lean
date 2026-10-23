@@ -4,11 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.MaximalDomainTransport
-import DavisKahan.SpectralTheory.FormMethod.GraphClosedness
-import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.MaximalDomainTransport
+public import DavisKahan.SpectralTheory.FormMethod.GraphClosedness
+public import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
+public import Mathlib.Tactic
+
+@[expose] public section
 
 /-!
 # Assembly of the paper-facing free-beam analytic foundation

@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
-import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
-import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
-import DavisKahan.InfiniteDimensional.TanTwoTheta.SelectedBranchSymmetricNorming
-import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
-import DavisKahan.Sources.DavisKahan1970.SharpIdeal
-import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+module
+
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.SelectedBranchSymmetricNorming
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
+public import DavisKahan.Sources.DavisKahan1970.SharpIdeal
+public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

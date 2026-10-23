@@ -61,7 +61,7 @@ forms, and the real orthogonal-group form `yuWangSamworth_alignedFrame_block_rea
 in `YuWangSamworth2015/Symmetric/Theorem2.lean`.
 -/
 
-public section
+@[expose] public section
 
 namespace YuWangSamworth2015
 

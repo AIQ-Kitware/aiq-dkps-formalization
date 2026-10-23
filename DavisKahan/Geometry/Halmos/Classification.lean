@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 -/
-import DavisKahan.Geometry.Halmos.UnitaryEquivalence
-import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+module
+
+public import DavisKahan.Geometry.Halmos.UnitaryEquivalence
+public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+
+@[expose] public section
 
 /-!
 # Operator-level Halmos two-projection classification

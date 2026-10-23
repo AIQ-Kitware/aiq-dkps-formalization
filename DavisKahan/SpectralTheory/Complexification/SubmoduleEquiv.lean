@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Complexification.FormTransport
-import DavisKahan.SpectralTheory.Complexification.Subspace
-import DavisKahan.SpectralTheory.Complexification.Spectrum
+module
+
+public import DavisKahan.SpectralTheory.Complexification.FormTransport
+public import DavisKahan.SpectralTheory.Complexification.Subspace
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
+
+@[expose] public section
 
 /-!
 # Complexifying a real subspace commutes with taking the subspace

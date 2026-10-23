@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: OpenAI GPT-5.6 Sol, Jon Crall
 -/
-import DavisKahan.Sources.DavisKahan1970.Section4Examples
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section4Examples
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
+
+@[expose] public section
 
 /-!
 # Low-dimensional Section 4 surface facts

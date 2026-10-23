@@ -40,7 +40,7 @@ eigenspace — the point of `Module.End.IsEigenfamily`.
   lower bound.
 -/
 
-public section
+@[expose] public section
 
 open Module (finrank)
 open scoped InnerProductSpace BigOperators

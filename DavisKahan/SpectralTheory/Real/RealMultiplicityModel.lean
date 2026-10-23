@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModelReal
+module
+
+public import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModelReal
+
+@[expose] public section
 
 /-!
 # Real Hahn--Hellinger: the existence of a real multiplicity model

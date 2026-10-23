@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import DavisKahan.InfiniteDimensional.DoubleAngle
+module
+
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+
+@[expose] public section
 
 open TauCeti.DavisKahanExt
 

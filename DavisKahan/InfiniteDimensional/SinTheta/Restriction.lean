@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Sylvester.Basic
-import ForTauCeti.Analysis.Normed.Operator.Restriction
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.SinTheta.SpectralBridge
+module
+
+public import DavisKahan.InfiniteDimensional.Sylvester.Basic
+public import ForTauCeti.Analysis.Normed.Operator.Restriction
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.SinTheta.SpectralBridge
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

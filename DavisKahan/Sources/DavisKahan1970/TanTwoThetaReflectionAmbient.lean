@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Sol
 -/
-import DavisKahan.DoubleAngle.ReflectionTangentKyFan
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+module
+
+public import DavisKahan.DoubleAngle.ReflectionTangentKyFan
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

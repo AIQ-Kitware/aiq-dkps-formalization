@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.Proposition35Nonacute
-import ForTauCeti.Analysis.CStarAlgebra.TrigonometricSeries
+module
+
+public import DavisKahan.Geometry.Angle.Proposition35Nonacute
+public import ForTauCeti.Analysis.CStarAlgebra.TrigonometricSeries
+
+@[expose] public section
 
 /-!
 # Dimension-free exponential form of the Section 3 direct rotation

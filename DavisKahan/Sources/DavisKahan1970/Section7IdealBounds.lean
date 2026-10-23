@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.TanTwoTheta.UnboundedIdeal
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+module
+
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.TanTwoTheta.UnboundedIdeal
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Section 7, at arbitrary rectangular ideal-gauge scope

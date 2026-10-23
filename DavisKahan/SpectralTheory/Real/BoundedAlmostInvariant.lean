@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Real.SpectralRestriction
-import DavisKahan.SpectralTheory.Complexification.Spectrum
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
+module
+
+public import DavisKahan.SpectralTheory.Real.SpectralRestriction
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

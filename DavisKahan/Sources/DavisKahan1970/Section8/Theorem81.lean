@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.SpectralGapFormBounds
-import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
-import DavisKahan.Geometry.Polar.DirectRotation
-import DavisKahan.SpectralTheory.OperatorAngle
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+module
+
+public import DavisKahan.SpectralTheory.SpectralGapFormBounds
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import DavisKahan.SpectralTheory.OperatorAngle
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

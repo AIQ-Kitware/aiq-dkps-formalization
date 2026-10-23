@@ -4,12 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
-import DavisKahan.Geometry.Angle.DoubleAngleGapBound
-import DavisKahan.SpectralTheory.CentralBand
-import DavisKahan.BoundedOperator.TrialResidual
-import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
+public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+public import DavisKahan.SpectralTheory.CentralBand
+public import DavisKahan.BoundedOperator.TrialResidual
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

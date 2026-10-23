@@ -3,19 +3,23 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.Specialized.FreeBeam.BeamSpectrum
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.SinTheta.BoundedPerturbation
-import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
-import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
-import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
-import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
-import ForTauCeti.MeasureTheory.MulLpAlgebra
+module
+
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.Specialized.FreeBeam.BeamSpectrum
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.SinTheta.BoundedPerturbation
+public import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
+public import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
+public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
+public import ForTauCeti.MeasureTheory.MulLpAlgebra
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

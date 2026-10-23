@@ -53,7 +53,7 @@ operator-norm family does not:
   `ForTauCeti` staging modules.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

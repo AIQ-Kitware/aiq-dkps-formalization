@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.TanTheta.Vector
-import DavisKahan.SpectralTheory.SpectralRestriction
-import DavisKahan.SpectralTheory.BoundedFromSpectrum
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+module
+
+public import DavisKahan.TanTheta.Vector
+public import DavisKahan.SpectralTheory.SpectralRestriction
+public import DavisKahan.SpectralTheory.BoundedFromSpectrum
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+
+@[expose] public section
 
 /-!
 # The unbounded Davis--Kahan tangent theorem, per-vector form

@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.UnboundedBandLipschitz
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
-import DavisKahan.Geometry.Angle.DoubleAngleGapBound
-import DavisKahan.SpectralTheory.ReducingSpectrumUnion
-import DavisKahan.SpectralTheory.Complexification.ReducingRestrictionDescent
-import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+module
+
+public import DavisKahan.SpectralTheory.UnboundedBandLipschitz
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
+public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+public import DavisKahan.SpectralTheory.ReducingSpectrumUnion
+public import DavisKahan.SpectralTheory.Complexification.ReducingRestrictionDescent
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+
+@[expose] public section
 
 /-!
 # The homotopy path for Theorem 8.2 at unbounded scope

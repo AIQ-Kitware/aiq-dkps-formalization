@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.TanTwoTheta.SelectedBranchSymmetricNorming
-import DavisKahan.Geometry.Angle.OperatorAngleReal
-import DavisKahan.SpectralTheory.Complexification.FormTransport
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+module
+
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.SelectedBranchSymmetricNorming
+public import DavisKahan.Geometry.Angle.OperatorAngleReal
+public import DavisKahan.SpectralTheory.Complexification.FormTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+
+@[expose] public section
 
 /-!
 # The selected-branch `tan 2Θ` theorem over a real Hilbert space

@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Ideals.Symmetric
-import DavisKahan.InfiniteDimensional.Ideals.CompactIntegral
-import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
-import DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup
-import TauCeti.Analysis.InnerProductSpace.Sylvester
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.Ideals.Symmetric
+public import DavisKahan.InfiniteDimensional.Ideals.CompactIntegral
+public import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
+public import DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup
+public import TauCeti.Analysis.InnerProductSpace.Sylvester
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

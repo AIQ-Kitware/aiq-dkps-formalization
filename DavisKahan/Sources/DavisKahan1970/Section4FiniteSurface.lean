@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.FiniteDimensional.DirectRotation
-import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
+
+@[expose] public section
 
 /-!
 # Finite-dimensional Section 4 source surface

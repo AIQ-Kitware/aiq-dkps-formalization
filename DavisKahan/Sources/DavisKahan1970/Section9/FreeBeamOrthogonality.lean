@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
-import ForTauCeti.Analysis.Calculus.FourthOrderGreensIdentity
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
+public import ForTauCeti.Analysis.Calculus.FourthOrderGreensIdentity
+
+@[expose] public section
 
 /-!
 # Free-beam eigenmodes at distinct frequencies are `L²`-orthogonal

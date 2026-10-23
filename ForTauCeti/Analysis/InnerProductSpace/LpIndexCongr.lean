@@ -7,6 +7,8 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.l2Space
 
+@[expose] public section
+
 /-!
 # Reindexing an `ℓ²` space along an equivalence of index sets
 

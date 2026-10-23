@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import YuWangSamworth2015.Rectangular.RankBoundary
+module
+
+public import YuWangSamworth2015.Rectangular.RankBoundary
+
+@[expose] public section
 
 /-!
 # Theorem 3 in singular-value notation, with the corrected boundary convention

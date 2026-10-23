@@ -8,8 +8,12 @@ trusted Lean/Mathlib basis plus any completed dependencies, while dependency
 scanning shows the open work directly.
 -/
 
-import Mathlib
-import Acharyya2024.WellKnown
+module
+
+public import Mathlib
+public import Acharyya2024.WellKnown
+
+@[expose] public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

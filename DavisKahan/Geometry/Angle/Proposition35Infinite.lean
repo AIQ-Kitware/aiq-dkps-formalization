@@ -3,21 +3,25 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Polar.DirectRotationAcute
-import DavisKahan.Geometry.Halmos.TwoProjections
-import DavisKahan.Geometry.Halmos.FixedCosineSubspace
+module
+
+public import DavisKahan.Geometry.Polar.DirectRotationAcute
+public import DavisKahan.Geometry.Halmos.TwoProjections
+public import DavisKahan.Geometry.Halmos.FixedCosineSubspace
 -- supplies the fixed-cosine eigenspace this file identifies with `Ω({θ})H`, together
 -- with the `halmosCosineSq` commutation lemmas underneath it.
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 -- supplies `TauCeti.IsAcute` and `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, which this
 -- file used to receive indirectly through the former `DavisKahan.Section3`.
-import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
-import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
-import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
-import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
-import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
-import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
+public import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
+public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
+public import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
+public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+@[expose] public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal

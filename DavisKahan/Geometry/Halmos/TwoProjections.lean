@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-import DavisKahan.Geometry.Polar.DirectRotation
-import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
+
+@[expose] public section
 
 /-!
 # Halmos two-projection decomposition

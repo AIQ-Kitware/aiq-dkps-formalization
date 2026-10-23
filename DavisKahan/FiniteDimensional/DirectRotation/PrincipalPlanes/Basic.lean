@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.Basic
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+
+@[expose] public section
 
 /-!
 # Principal planes of an acute pair: definitions and rotation block

@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.Geometry.Polar.DirectRotation
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

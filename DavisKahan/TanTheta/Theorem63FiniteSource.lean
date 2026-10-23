@@ -4,17 +4,21 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.Sylvester.Spectrum
-import DavisKahan.DoubleAngle.KyFanOrthonormal
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
-import ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.Sylvester.Spectrum
+public import DavisKahan.DoubleAngle.KyFanOrthonormal
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
+public import ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

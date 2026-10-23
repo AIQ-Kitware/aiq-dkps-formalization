@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.SpectralTheory.ReflectionRestriction
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.BoundedOperator.Reflection
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.SpectralTheory.ReflectionRestriction
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

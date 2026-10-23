@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.AmbientReal
-import DavisKahan.TanTheta.Theorem63InfiniteTrial
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.AmbientReal
+public import DavisKahan.TanTheta.Theorem63InfiniteTrial
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

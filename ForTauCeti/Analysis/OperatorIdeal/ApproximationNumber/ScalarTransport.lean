@@ -19,7 +19,7 @@ public import ForTauCeti.Analysis.RCLike.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
 
-public section
+@[expose] public section
 
 /-! # Approximation numbers under a scalar transport
 

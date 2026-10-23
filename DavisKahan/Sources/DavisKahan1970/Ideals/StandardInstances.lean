@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
-import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
-import ForTauCeti.Analysis.Normed.FiniteLpGauge
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
+public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
+public import ForTauCeti.Analysis.Normed.FiniteLpGauge
+
+@[expose] public section
 
 /-!
 # Standard coherent norming-function instances

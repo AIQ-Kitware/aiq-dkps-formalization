@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.SpectralTheory.BoundedFromSpectrum
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.SpectralTheory.GapResolvent
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.SpectralTheory.BoundedFromSpectrum
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.SpectralTheory.GapResolvent
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

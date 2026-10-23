@@ -38,9 +38,13 @@ cross-term identity of `Acharyya2025.DavisKahan`
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import Acharyya2025.Weyl
-import Acharyya2025.DavisKahan
+module
+
+public import Mathlib
+public import Acharyya2025.Weyl
+public import Acharyya2025.DavisKahan
+
+@[expose] public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)

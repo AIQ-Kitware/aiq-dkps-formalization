@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.UnboundedCentralBand
-import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
-import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
+module
+
+public import DavisKahan.SpectralTheory.UnboundedCentralBand
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
+
+@[expose] public section
 
 /-!
 # Theorem 8.1's canonical branch at unbounded scope

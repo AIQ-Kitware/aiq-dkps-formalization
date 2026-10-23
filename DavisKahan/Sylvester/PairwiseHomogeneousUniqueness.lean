@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.PairwiseSpectrumGap
-import DavisKahan.Sylvester.ClosedSylvesterEquation
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import ForTauCeti.Analysis.InnerProductSpace.Rosenblum
+module
+
+public import DavisKahan.Sylvester.PairwiseSpectrumGap
+public import DavisKahan.Sylvester.ClosedSylvesterEquation
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import ForTauCeti.Analysis.InnerProductSpace.Rosenblum
+
+@[expose] public section
 
 /-!
 # Homogeneous Sylvester uniqueness at arbitrary spectral separation

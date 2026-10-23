@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.SpectralTheory.OperatorAngle
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.Analysis.Normed.Operator.Banach
-import Mathlib.Analysis.Normed.Ring.Units
-import Mathlib.Topology.Algebra.Module.LinearPMap
-import Mathlib.Topology.MetricSpace.Antilipschitz
+module
+
+public import DavisKahan.SpectralTheory.OperatorAngle
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Analysis.Normed.Operator.Banach
+public import Mathlib.Analysis.Normed.Ring.Units
+public import Mathlib.Topology.Algebra.Module.LinearPMap
+public import Mathlib.Topology.MetricSpace.Antilipschitz
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

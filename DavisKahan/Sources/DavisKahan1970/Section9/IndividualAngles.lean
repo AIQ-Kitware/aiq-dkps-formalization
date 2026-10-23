@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
-import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
-import ForTauCeti.Analysis.InnerProductSpace.SphericalPythagoras
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
+public import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
+public import ForTauCeti.Analysis.InnerProductSpace.SphericalPythagoras
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Section 9: individual eigenvectors inside a cluster

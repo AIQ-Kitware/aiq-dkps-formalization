@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.ContinuationContour
-import Mathlib.Analysis.Normed.Operator.NormedSpace
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.SpectralTheory.ContinuationContour
+public import Mathlib.Analysis.Normed.Operator.NormedSpace
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+@[expose] public section
 
 /-!
 # Riesz integrals on proof-carrying continuation contours

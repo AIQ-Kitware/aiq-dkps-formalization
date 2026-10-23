@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.FiniteDimensional.SinTheta.TrialMap
-import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
-import DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual
+module
+
+public import DavisKahan.FiniteDimensional.SinTheta.TrialMap
+public import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
+public import DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual
+
+@[expose] public section
 
 /-!
 # Generalized finite-dimensional residual theorems

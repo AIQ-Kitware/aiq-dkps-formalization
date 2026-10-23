@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Specialized.FreeBeam.BeamSection9
-import DavisKahan.TanTheta.Theorem63Unbounded
-import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamSection9
+public import DavisKahan.TanTheta.Theorem63Unbounded
+public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

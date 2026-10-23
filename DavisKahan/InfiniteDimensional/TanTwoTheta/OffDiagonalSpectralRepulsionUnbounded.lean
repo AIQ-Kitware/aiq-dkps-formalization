@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
-import DavisKahan.SpectralTheory.GapResolvent
-import DavisKahan.SinTheta.BoundedPerturbation
+module
+
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
+public import DavisKahan.SpectralTheory.GapResolvent
+public import DavisKahan.SinTheta.BoundedPerturbation
+
+@[expose] public section
 
 /-!
 # Off-diagonal spectral repulsion for an unbounded ambient operator

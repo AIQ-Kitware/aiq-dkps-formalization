@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import DavisKahan.Sources.DavisKahan1970.Proposition61
-import DavisKahan.Sources.DavisKahan1970.Theorem61
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import DavisKahan.Sources.DavisKahan1970.Proposition61
+public import DavisKahan.Sources.DavisKahan1970.Theorem61
+
+@[expose] public section
 
 /-!
 # Proposition 6.1 and Theorem 6.1 over the literal source norm class

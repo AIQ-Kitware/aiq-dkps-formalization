@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import Mathlib.Analysis.InnerProductSpace.Spectrum
-import ForTauCeti.Analysis.Normed.Operator.Restriction
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import ForTauCeti.Analysis.Normed.Operator.Restriction
+
+@[expose] public section
 
 /-!
 # Restricted-operator spectra and provisional embedding interfaces

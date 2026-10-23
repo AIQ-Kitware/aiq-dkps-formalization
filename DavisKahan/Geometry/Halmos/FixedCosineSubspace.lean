@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
 -- supplies `IsUniformlyAcute`, carried only by the archival
 -- `proposition3_5_fixedAngle_maximal_uniformlyAcute_form` below.  It is a leaf module
 -- over `ForTauCeti`, and `TwoProjections` already reaches it, so the import is explicit
 -- rather than load-bearing.
-import DavisKahan.Geometry.Halmos.TwoProjections
+public import DavisKahan.Geometry.Halmos.TwoProjections
+
+@[expose] public section
 -- supplies `halmosCosineSq` and the two-projection calculus this module extends.
 
 /-!

@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Riccati.UnboundedReductionTransport
+module
+
+public import DavisKahan.InfiniteDimensional.Riccati.UnboundedReductionTransport
+
+@[expose] public section
 
 /-!
 # Coordinate domains of a reduced unbounded direct-sum operator

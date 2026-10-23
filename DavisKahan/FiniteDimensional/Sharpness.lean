@@ -3,15 +3,19 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Sources.Davis1963.RotationEnergy
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import DavisKahan.FiniteDimensional.Core.AngleOperatorBlockSum
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
-import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+module
+
+public import DavisKahan.Sources.Davis1963.RotationEnergy
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import DavisKahan.FiniteDimensional.Core.AngleOperatorBlockSum
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+
+@[expose] public section
 
 /-!
 # Sharpness and two-dimensional extremizers

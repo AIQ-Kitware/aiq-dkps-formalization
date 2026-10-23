@@ -25,7 +25,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 
 /-! # The unitarily-invariant-norm Davis–Kahan sin-Θ theorem
 
@@ -60,7 +60,7 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 open scoped InnerProductSpace

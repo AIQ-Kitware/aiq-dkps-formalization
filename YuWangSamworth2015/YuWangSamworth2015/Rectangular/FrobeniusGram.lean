@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import YuWangSamworth2015.GroundedImports
-import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
-import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
+module
+
+public import YuWangSamworth2015.GroundedImports
+public import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
+
+@[expose] public section
 
 /-!
 # Frobenius perturbation bounds for rectangular Gram operators

@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
-import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
-import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
-import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
-import Mathlib.Topology.Compactness.Compact
+module
+
+public import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
+public import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
+public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
+public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+public import Mathlib.Topology.Compactness.Compact
+
+@[expose] public section
 
 /-!
 # The sequence gauge of a coherent symmetric norm, and its Riesz splitting

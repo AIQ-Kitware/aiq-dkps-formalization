@@ -83,7 +83,7 @@ kernel pair and needs this one.
   that the continuous functional calculus already in Mathlib suffices.
 -/
 
-public section
+@[expose] public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower

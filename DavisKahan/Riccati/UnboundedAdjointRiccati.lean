@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall
 -/
-import DavisKahan.Riccati.UnboundedReduction
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.GraphCore
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
+module
+
+public import DavisKahan.Riccati.UnboundedReduction
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.GraphCore
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+
+@[expose] public section
 
 /-!
 # The complementary graph of a reducing Riccati selection

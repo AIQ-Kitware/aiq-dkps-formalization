@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Approximation
-import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Approximation
+public import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Theorem 8.1(iii), both blocks

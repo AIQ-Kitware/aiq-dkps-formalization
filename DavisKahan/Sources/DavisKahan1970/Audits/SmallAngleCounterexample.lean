@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6 Astra Pro
 -/
-import DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
+
+@[expose] public section
 
 /-!
 # Axiom and public-interface audit for the small-angle extension

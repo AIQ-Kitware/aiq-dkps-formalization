@@ -77,7 +77,7 @@ one convexity application and one closure property.
 * Spectra influence: **none** — this module imports only Mathlib.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

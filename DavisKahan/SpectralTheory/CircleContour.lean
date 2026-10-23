@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.SpectralTheory.CircleRieszIntegral
-import DavisKahan.SpectralTheory.ContinuationContour
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Transport
+module
+
+public import DavisKahan.SpectralTheory.CircleRieszIntegral
+public import DavisKahan.SpectralTheory.ContinuationContour
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Transport
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

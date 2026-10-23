@@ -17,7 +17,7 @@ measurably. This finite-spectrum argument must not be transferred to arbitrary b
 operators whose spectra can accumulate at `c`.
 -/
 
-public section
+@[expose] public section
 
 open MeasureTheory Filter Set
 open scoped Topology Matrix

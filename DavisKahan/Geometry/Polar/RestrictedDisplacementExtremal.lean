@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-import DavisKahan.Geometry.Polar.DirectRotationSquare
-import DavisKahan.Geometry.Polar.Section3Nonacute
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
+public import DavisKahan.Geometry.Polar.Section3Nonacute
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 -- supplies `hasSameApproximationNumbers_extendDomainByZero`, promoted out of
 -- `Sources/DavisKahan1970/SineTheta/Norms/SubspaceSingularTransport.lean`: it is a statement
 -- about `Submodule.subtypeL` and approximation numbers, with nothing paper-specific in it.
-import DavisKahan.Sylvester.Spectrum
+public import DavisKahan.Sylvester.Spectrum
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

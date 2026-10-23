@@ -13,8 +13,12 @@ The statistical proofs of those high-probability premises may later be supplied
 by concentration, conditioning, and the existing DKPS alignment results.  The
 logic from those premises to query efficiency is fully discharged here.
 -/
-import DkpsQuench2026.Paper.TheoryPractice
-import DkpsQuench2026.Paper.OLSInvariance
+module
+
+public import DkpsQuench2026.Paper.TheoryPractice
+public import DkpsQuench2026.Paper.OLSInvariance
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Sol
 -/
-import DavisKahan.SpectralTheory.Complexification.Spectrum
-import DavisKahan.SpectralTheory.Complexification.Subspace
-import DavisKahan.SpectralTheory.SpectralGapFormBounds
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification.SpectralDescent
+module
+
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
+public import DavisKahan.SpectralTheory.Complexification.Subspace
+public import DavisKahan.SpectralTheory.SpectralGapFormBounds
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification.SpectralDescent
+
+@[expose] public section
 
 
 /-!

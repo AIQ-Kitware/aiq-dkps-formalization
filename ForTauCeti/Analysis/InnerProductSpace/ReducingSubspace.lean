@@ -28,7 +28,7 @@ Davis--Kahan theory.
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
-public section
+@[expose] public section
 
 
 open scoped InnerProductSpace

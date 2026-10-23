@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.FiniteDimensional.DirectRotation
-import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
-import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
-import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
-import DavisKahan.Geometry.Angle.BasisAngleEnergy
-import ForTauCeti.Analysis.InnerProductSpace.CompactSpectralDecomposition
-import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
-import ForTauCeti.Analysis.OperatorIdeal.Family.GramGauge
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation
+public import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
+public import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
+public import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
+public import DavisKahan.Geometry.Angle.BasisAngleEnergy
+public import ForTauCeti.Analysis.InnerProductSpace.CompactSpectralDecomposition
+public import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
+public import ForTauCeti.Analysis.OperatorIdeal.Family.GramGauge
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

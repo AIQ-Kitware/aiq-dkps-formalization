@@ -40,7 +40,7 @@ convergent subsequence whose limit carries the spectral measure.
   preamble.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

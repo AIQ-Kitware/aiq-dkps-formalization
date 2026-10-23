@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Halmos.TwoProjections
-import Mathlib.Analysis.InnerProductSpace.ProdL2
+module
+
+public import DavisKahan.Geometry.Halmos.TwoProjections
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+
+@[expose] public section
 
 /-!
 # Orthogonal-summand coordinates

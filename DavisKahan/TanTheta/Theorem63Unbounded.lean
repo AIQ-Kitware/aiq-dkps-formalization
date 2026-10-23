@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.TanTheta.Theorem63TrialData
-import DavisKahan.TanTheta.UnboundedSpectrum
-import DavisKahan.SpectralTheory.ReflectionRestriction
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+module
+
+public import DavisKahan.TanTheta.Theorem63TrialData
+public import DavisKahan.TanTheta.UnboundedSpectrum
+public import DavisKahan.SpectralTheory.ReflectionRestriction
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

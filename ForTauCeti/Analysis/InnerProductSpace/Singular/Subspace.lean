@@ -56,7 +56,7 @@ terms of `Â − A`.
   for statisticians*, Biometrika 102 (2015), §"singular-vector extension".
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

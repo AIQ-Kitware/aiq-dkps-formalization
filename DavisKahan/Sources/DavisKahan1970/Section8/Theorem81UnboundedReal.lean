@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedConverse
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedCompression
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
-import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedConverse
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedCompression
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
+public import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
+
+@[expose] public section
 
 /-!
 # Theorem 8.1 at unbounded scope over a real Hilbert space

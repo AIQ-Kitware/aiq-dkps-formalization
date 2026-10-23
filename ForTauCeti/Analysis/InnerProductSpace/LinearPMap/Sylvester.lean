@@ -21,7 +21,7 @@ Tau Ceti API in `LinearPMap.Sylvester` and is used there directly.
 * Extraction class: reusable semibound predicates not yet provided upstream.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 namespace LinearPMap

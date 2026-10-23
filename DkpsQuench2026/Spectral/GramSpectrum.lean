@@ -16,9 +16,13 @@ The two directions are the deterministic engine behind the reference-Gram spectr
 the target-augmentation floor in `SpectralRegularity.lean`.
 -/
 
-import DkpsQuench2026.Core.Certificates
-import ForTauCeti.Analysis.InnerProductSpace.FiniteFrame
-import ForTauCeti.Probability.Moments.CenteredScatter
+module
+
+public import DkpsQuench2026.Core.Certificates
+public import ForTauCeti.Analysis.InnerProductSpace.FiniteFrame
+public import ForTauCeti.Probability.Moments.CenteredScatter
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

@@ -4,13 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamFormSpaceReal
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamOrthogonality
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
-import Mathlib.Analysis.Real.Pi.Bounds
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamFormSpaceReal
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamOrthogonality
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
+public import Mathlib.Analysis.Real.Pi.Bounds
+public import Mathlib.Tactic
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

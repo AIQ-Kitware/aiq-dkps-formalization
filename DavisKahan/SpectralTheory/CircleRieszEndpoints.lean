@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.CircleRieszProjection
-import Mathlib.Analysis.Complex.CauchyIntegral
-import Mathlib.Analysis.Calculus.FDeriv.Mul
-import Mathlib.Analysis.Normed.Algebra.Spectrum
+module
+
+public import DavisKahan.SpectralTheory.CircleRieszProjection
+public import Mathlib.Analysis.Complex.CauchyIntegral
+public import Mathlib.Analysis.Calculus.FDeriv.Mul
+public import Mathlib.Analysis.Normed.Algebra.Spectrum
+
+@[expose] public section
 
 /-!
 # The two endpoints of the circle Riesz projection

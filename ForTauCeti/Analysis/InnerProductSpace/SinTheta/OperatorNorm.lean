@@ -18,7 +18,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
 public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 public import TauCeti.Analysis.InnerProductSpace.Sylvester
-import Mathlib.Analysis.InnerProductSpace.Semisimple
+public import Mathlib.Analysis.InnerProductSpace.Semisimple
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
@@ -67,7 +67,7 @@ closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
 
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

@@ -14,7 +14,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculu
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 4.8, Jon Crall
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.Majorization
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.Majorization
+
+@[expose] public section
 
 /-!
 # The `Q`-norm repair of the short-rotation full-displacement claim

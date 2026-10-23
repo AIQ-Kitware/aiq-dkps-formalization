@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Riccati.BoundedReduction
-import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.Riccati.BoundedReduction
+public import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+@[expose] public section
 
 /-!
 # Bounded Riccati block diagonalization

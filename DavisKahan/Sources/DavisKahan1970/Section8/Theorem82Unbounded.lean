@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
-import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples
-import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
+public import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples
+public import DavisKahan.DoubleAngle.RealAngleIdentification
+public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+
+@[expose] public section
 
 /-!
 # Theorem 8.2's acute branch at unbounded scope

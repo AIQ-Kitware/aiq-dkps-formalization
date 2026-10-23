@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section6SourceNormClass
-import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
-import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section6SourceNormClass
+public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
+public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
+
+@[expose] public section
 
 /-!
 # Section 6 at the paper's own scope

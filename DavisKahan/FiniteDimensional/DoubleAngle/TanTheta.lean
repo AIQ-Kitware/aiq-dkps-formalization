@@ -19,8 +19,12 @@ unitaries, uniform over `ℝ` and `ℂ`).
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import TauCeti.Analysis.InnerProductSpace.CourantFischer
-import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+module
+
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
+public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+
+@[expose] public section
 
 /-! # The subspace tan 2Θ theorem: block identities and the gated statement
 

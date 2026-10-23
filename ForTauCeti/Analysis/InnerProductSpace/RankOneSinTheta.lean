@@ -32,7 +32,7 @@ singular-value theory.
   `TauCeti.sinThetaFrobenius_span_singleton`: both norms equal `‖P_{Wᗮ} v‖`.
 -/
 
-public section
+@[expose] public section
 
 open Module (finrank)
 open scoped InnerProductSpace BigOperators

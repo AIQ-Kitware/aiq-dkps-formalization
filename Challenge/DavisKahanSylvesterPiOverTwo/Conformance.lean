@@ -9,11 +9,15 @@ Two advertising-level leaves of the completed generic theory:
   separated Sylvester solution.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 -- `PointSpectraSeparated` is the *hypothesis* predicate of the challenge, not part of what is to
 -- be proved; the challenged theorems live in `DavisKahan.FiniteDimensional.Sylvester.All`,
 -- which only the paired leaderboard imports.
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+
+@[expose] public section
 
 /-!
 ## Comparator maintenance rule

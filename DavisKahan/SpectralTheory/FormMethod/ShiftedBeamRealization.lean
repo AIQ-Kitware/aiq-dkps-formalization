@@ -4,11 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
-import DavisKahan.SpectralTheory.FormMethod.FormCompactness
-import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
-import DavisKahan.SinTheta.BoundedPerturbation
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
+public import DavisKahan.SpectralTheory.FormMethod.FormCompactness
+public import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
+public import DavisKahan.SinTheta.BoundedPerturbation
+public import Mathlib.Tactic
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Tactic
+
+@[expose] public section
 
 /-!
 # Bounded resolvent produced by a coercive form operator

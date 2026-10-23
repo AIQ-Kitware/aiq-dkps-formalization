@@ -50,7 +50,7 @@ Davis--Kahan spectral flow needs.
   reformulation.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

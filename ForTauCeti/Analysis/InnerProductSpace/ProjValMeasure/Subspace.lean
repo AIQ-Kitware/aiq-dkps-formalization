@@ -39,7 +39,7 @@ retains only the genuinely additional range-subspace results.
   `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
 
-public section
+@[expose] public section
 
 open scoped InnerProductSpace
 

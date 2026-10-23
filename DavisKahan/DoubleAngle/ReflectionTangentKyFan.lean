@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Sol
 -/
-import DavisKahan.DoubleAngle.KyFanOrthonormal
-import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
-import DavisKahan.Sources.DavisKahan1970.SharpKyFan
-import ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
+module
+
+public import DavisKahan.DoubleAngle.KyFanOrthonormal
+public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
+public import DavisKahan.Sources.DavisKahan1970.SharpKyFan
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

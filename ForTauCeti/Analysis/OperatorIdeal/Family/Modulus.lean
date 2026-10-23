@@ -24,7 +24,7 @@ statement is rectangular and scalar-generic over `RCLike`; no unitary extension
 of `W` and no approximation-number argument is needed.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 namespace SymmetricOperatorIdealFamily

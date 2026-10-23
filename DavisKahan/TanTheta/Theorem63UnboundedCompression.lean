@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.SpectralTheory.BoundedTruncation
+module
+
+public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.SpectralTheory.BoundedTruncation
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

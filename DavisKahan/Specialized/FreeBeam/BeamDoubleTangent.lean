@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Specialized.FreeBeam.BeamTangent
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamTangent
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

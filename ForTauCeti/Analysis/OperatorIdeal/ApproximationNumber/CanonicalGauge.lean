@@ -10,7 +10,7 @@ public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 
 /-! # Real view of the canonical Ky Fan gauge -/
 
-public section
+@[expose] public section
 
 namespace ContinuousLinearMap
 

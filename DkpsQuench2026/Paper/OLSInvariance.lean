@@ -7,7 +7,11 @@ intercept is insensitive to this ambiguity: rotating every feature vector and
 rotating the slope by the same linear isometry leaves every fitted prediction
 and every least-squares objective value unchanged.
 -/
-import DkpsQuench2026.Paper.OLSQueryEfficiency
+module
+
+public import DkpsQuench2026.Paper.OLSQueryEfficiency
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

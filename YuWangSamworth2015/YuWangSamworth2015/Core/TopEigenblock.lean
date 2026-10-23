@@ -45,7 +45,7 @@ published Yu--Wang--Samworth sharpness example needs.
   the data.
 -/
 
-public section
+@[expose] public section
 
 open Module (finrank)
 open Module.End (eigenspace)

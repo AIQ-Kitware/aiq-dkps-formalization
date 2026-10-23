@@ -12,8 +12,12 @@ reference populations can use the more general second-moment interface below,
 which allows the population mean itself to depend on the sampling outcome.
 -/
 
-import Acharyya2024.SecondMoment
-import Acharyya2025.RateChain
+module
+
+public import Acharyya2024.SecondMoment
+public import Acharyya2025.RateChain
+
+@[expose] public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory ProbabilityTheory

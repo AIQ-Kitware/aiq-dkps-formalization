@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.KyFanGauge
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.KyFanGauge
+
+@[expose] public section
 
 /-!
 # Real Hilbert-space localization of approximation numbers

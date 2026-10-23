@@ -2,8 +2,12 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib
-import ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded
+module
+
+public import Mathlib
+public import ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded
+
+@[expose] public section
 
 noncomputable section
 

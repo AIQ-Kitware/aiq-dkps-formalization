@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+
+@[expose] public section
 
 /-!
 # Singular systems with finite source and arbitrary Hilbert codomain

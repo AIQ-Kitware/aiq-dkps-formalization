@@ -2,9 +2,13 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib
-import ForTauCeti.Topology.Berge
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
+module
+
+public import Mathlib
+public import ForTauCeti.Topology.Berge
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
+
+@[expose] public section
 
 /-!
 # Roadmap bridge: `MatrixSpectralStatistics`

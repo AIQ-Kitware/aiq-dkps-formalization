@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
-import Mathlib.Topology.Basic
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import Mathlib.Topology.Basic
+
+@[expose] public section
 
 /-!
 # Constructor data for a symmetric operator ideal family

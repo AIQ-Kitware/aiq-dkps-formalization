@@ -77,7 +77,7 @@ no scalars — it renames the field.
 * Spectra influence: **none**.
 -/
 
-public section
+@[expose] public section
 
 open scoped InnerProductSpace
 

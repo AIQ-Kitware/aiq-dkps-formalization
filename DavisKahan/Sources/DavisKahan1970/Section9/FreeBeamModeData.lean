@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
-import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
+public import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
+public import Mathlib.Tactic
+
+@[expose] public section
 
 /-!
 # Classical characteristic modes as fourth-order derivative data

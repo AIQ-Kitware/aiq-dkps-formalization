@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.General
-import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.General
+public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+
+@[expose] public section
 
 /-!
 # The complex instance of the bounded Borel projection hypothesis

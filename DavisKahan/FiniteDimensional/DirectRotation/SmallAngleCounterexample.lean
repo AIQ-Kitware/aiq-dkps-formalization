@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6 Astra Pro
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
+
+@[expose] public section
 
 /-!
 # Failure of full-displacement minimality at arbitrarily small angles

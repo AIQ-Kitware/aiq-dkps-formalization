@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
-import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import DavisKahan.SpectralTheory.GraphSubspace
-import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import DavisKahan.SpectralTheory.GraphSubspace
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

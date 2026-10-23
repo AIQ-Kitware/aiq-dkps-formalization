@@ -44,11 +44,15 @@ named the other.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
+public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+
+@[expose] public section
 
 /-! # The Davis–Kahan tan Θ theorem (gated statement)
 

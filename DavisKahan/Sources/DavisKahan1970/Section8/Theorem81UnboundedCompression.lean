@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedBranch
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedBranch
+
+@[expose] public section
 
 /-!
 # Theorem 8.1 part (i) at unbounded scope

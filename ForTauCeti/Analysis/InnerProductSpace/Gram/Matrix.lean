@@ -35,7 +35,7 @@ rigid-motion result.
   frames are unitarily equivalent iff their Gram matrices coincide.
 -/
 
-public section
+@[expose] public section
 
 namespace TauCeti
 

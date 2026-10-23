@@ -65,7 +65,7 @@ proofs.
 
 open scoped ENNReal InnerProductSpace
 
-public section
+@[expose] public section
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E F G : Type*}

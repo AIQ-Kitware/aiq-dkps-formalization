@@ -2,15 +2,19 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
-import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
-import ForTauCeti.Analysis.Matrix.SpectralProjection
-import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
-import TauCeti.Analysis.OperatorIdeal.Family.Schatten
-import TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
+public import ForTauCeti.Analysis.Matrix.SpectralProjection
+public import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
+public import TauCeti.Analysis.OperatorIdeal.Family.Schatten
+public import TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
+
+@[expose] public section
 
 /-! # Operator-theory signature regressions
 

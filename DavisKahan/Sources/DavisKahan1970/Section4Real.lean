@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section4
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.Geometry.Angle.BasisAngleEnergy
-import DavisKahan.Geometry.Polar.DirectRotationReal
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section4
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Geometry.Angle.BasisAngleEnergy
+public import DavisKahan.Geometry.Polar.DirectRotationReal
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

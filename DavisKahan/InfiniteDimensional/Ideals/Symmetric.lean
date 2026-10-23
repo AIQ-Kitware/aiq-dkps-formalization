@@ -3,17 +3,21 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.SpectralTheory.OperatorAngle
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
-import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
-import TauCeti.Analysis.OperatorIdeal.Family.Schatten
-import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.SpectralTheory.OperatorAngle
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
+public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
+public import TauCeti.Analysis.OperatorIdeal.Family.Schatten
+public import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+@[expose] public section
 
 /-!
 # Symmetric norm ideals

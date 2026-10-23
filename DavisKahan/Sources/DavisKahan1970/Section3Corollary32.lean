@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.Geometry.Polar.Section3Elementary
-import DavisKahan.InfiniteDimensional.SinTheta.General
+module
+
+public import DavisKahan.Geometry.Polar.Section3Elementary
+public import DavisKahan.InfiniteDimensional.SinTheta.General
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Corollary 3.2

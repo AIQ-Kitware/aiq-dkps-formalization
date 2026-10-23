@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamWeinberger
-import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamWeinberger
+public import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

@@ -14,7 +14,7 @@ the additional pointwise eigenspace fact needed by local polar-angle consumers:
 if a positive operator squares to `μ²` on a vector and `μ ≥ 0`, then the
 operator acts there by `μ`. -/
 
-public section
+@[expose] public section
 
 open scoped InnerProductSpace
 

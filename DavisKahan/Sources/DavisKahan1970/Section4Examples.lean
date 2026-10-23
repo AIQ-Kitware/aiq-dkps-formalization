@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: OpenAI GPT-5.6 Sol, Jon Crall
 -/
-import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Examples 4.1 and 4.2

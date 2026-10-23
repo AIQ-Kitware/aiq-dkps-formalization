@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Polar.Section3Elementary
-import DavisKahan.Geometry.Polar.PolarIntertwining
-import Mathlib.Analysis.Normed.Operator.LinearIsometry
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Polar.Section3Elementary
+public import DavisKahan.Geometry.Polar.PolarIntertwining
+public import Mathlib.Analysis.Normed.Operator.LinearIsometry
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+@[expose] public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal

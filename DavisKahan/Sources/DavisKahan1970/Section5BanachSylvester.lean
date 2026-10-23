@@ -4,7 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.Normed.Operator.PartialSylvesterBoundedInverse
+module
+
+public import ForTauCeti.Analysis.Normed.Operator.PartialSylvesterBoundedInverse
+
+@[expose] public section
 
 /-!
 # Davis--Kahan 1970, Theorem 5.1, on a Banach space

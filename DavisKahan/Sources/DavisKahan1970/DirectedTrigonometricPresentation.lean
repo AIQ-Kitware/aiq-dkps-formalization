@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+@[expose] public section
 
 /-!
 # Literal directed trigonometric presentation objects

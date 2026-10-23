@@ -31,10 +31,14 @@ Stable symbolic anchors exposed here include:
 * `DkpsQuench2026.Paper.TheoryPractice.populationMAE_sq_le_populationMSE`
 * `DkpsQuench2026.Paper.TheoryPractice.highProbMAE_queryEfficient_crossBudget_of_affineRiskGap`
 -/
-import DkpsQuench2026.Paper.QueryEfficiency
-import DkpsQuench2026.Paper.OLSQueryEfficiency
-import Mathlib.Analysis.Convex.Integral
-import Mathlib.Analysis.Convex.Mul
+module
+
+public import DkpsQuench2026.Paper.QueryEfficiency
+public import DkpsQuench2026.Paper.OLSQueryEfficiency
+public import Mathlib.Analysis.Convex.Integral
+public import Mathlib.Analysis.Convex.Mul
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

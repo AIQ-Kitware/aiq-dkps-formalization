@@ -15,7 +15,7 @@ their diagonal matrix elements. This is the continuous-linear-map form used by
 the spectral calculus.
 -/
 
-public section
+@[expose] public section
 
 open scoped InnerProductSpace
 

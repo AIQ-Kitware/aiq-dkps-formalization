@@ -9,7 +9,11 @@ selection bias.  The product construction makes the required independence
 structural.
 -/
 
-import DkpsQuench2026.Spectral.Regularity
+module
+
+public import DkpsQuench2026.Spectral.Regularity
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

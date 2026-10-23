@@ -15,14 +15,18 @@ is selected by the result inventory. The declarations in this module remain usef
 bounded-trial specializations and implementation support.
 
 -/
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.DoubleAngle.DirectedAngleGeneric
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.DoubleAngle.DirectedAngleGeneric
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Sylvester
 

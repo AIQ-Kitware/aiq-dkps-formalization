@@ -8,8 +8,12 @@ finite reference sample has the iid joint law.  A positive-mass ball is then
 missed with geometrically decaying probability; a finite net upgrades those
 pointwise hit events to uniform coverage.
 -/
-import DkpsQuench2026.Core.ProofEngine
-import Mathlib
+module
+
+public import DkpsQuench2026.Core.ProofEngine
+public import Mathlib
+
+@[expose] public section
 set_option linter.mathlibStandardSet false
 
 open scoped BigOperators Real Nat Classical Pointwise Topology

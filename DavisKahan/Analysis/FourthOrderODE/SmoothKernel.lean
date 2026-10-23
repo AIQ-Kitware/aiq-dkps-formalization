@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
-import DavisKahan.Analysis.FourthOrderODE.ComplexGreenIdentity
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
+public import DavisKahan.Analysis.FourthOrderODE.ComplexGreenIdentity
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.Tactic
+
+@[expose] public section
 
 /-!
 # The smooth kernel of the free--free fourth derivative

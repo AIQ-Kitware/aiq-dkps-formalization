@@ -14,7 +14,7 @@ Tau Ceti supplies the canonical unitarily-invariant seminorm and transport along
 equivalences. These two constructions extend that API to isometric embeddings by using zero-padded
 composition on the codomain or the adjoint embedding on the domain. -/
 
-public section
+@[expose] public section
 
 namespace TauCeti.UnitarilyInvariantSeminorm
 

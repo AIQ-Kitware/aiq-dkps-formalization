@@ -7,7 +7,11 @@ configuration.  It is independent of reference-sampling probability and can be
 compiled before the larger spectral-regularity module.
 -/
 
-import DkpsQuench2026.Geometry.Covariance
+module
+
+public import DkpsQuench2026.Geometry.Covariance
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

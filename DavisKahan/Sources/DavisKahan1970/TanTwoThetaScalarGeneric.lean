@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
-import DavisKahan.Geometry.Angle.TangentOperatorGeneric
-import DavisKahan.DoubleAngle.DirectedAngleGeneric
-import DavisKahan.DoubleAngle.ScalarTransport
-import DavisKahan.TanTheta.ScalarTransport
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
+public import DavisKahan.Geometry.Angle.TangentOperatorGeneric
+public import DavisKahan.DoubleAngle.DirectedAngleGeneric
+public import DavisKahan.DoubleAngle.ScalarTransport
+public import DavisKahan.TanTheta.ScalarTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+
+@[expose] public section
 
 /-!
 # Scalar-generic unbounded `tan 2Θ`

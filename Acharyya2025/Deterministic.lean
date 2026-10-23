@@ -11,7 +11,11 @@ sample/mean response errors
   → spectral/MDS perturbation hypotheses.
 -/
 
-import Acharyya2024.Common
+module
+
+public import Acharyya2024.Common
+
+@[expose] public section
 
 open scoped BigOperators Topology
 

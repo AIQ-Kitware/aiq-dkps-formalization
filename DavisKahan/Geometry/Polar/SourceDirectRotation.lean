@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Polar.PrincipalSquareRoot
-import DavisKahan.Geometry.Polar.Section3Nonacute
-import DavisKahan.Geometry.Angle.Proposition35Infinite
-import TauCeti.Analysis.Normed.Operator.RealAlgebra
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Polar.PrincipalSquareRoot
+public import DavisKahan.Geometry.Polar.Section3Nonacute
+public import DavisKahan.Geometry.Angle.Proposition35Infinite
+public import TauCeti.Analysis.Normed.Operator.RealAlgebra
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+@[expose] public section
 
 /-!
 # Davis--Kahan's Definition 3.1, and why every direct rotation displaces alike

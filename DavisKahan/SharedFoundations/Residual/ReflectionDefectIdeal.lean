@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.BoundedOperator.TrialResidual
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
+module
+
+public import DavisKahan.BoundedOperator.TrialResidual
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
+
+@[expose] public section
 
 /-!
 # Ideal-gauge residual control for reflection defects

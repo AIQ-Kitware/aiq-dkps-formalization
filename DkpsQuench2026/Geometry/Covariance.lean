@@ -10,8 +10,12 @@ nonzero coefficient vector, and polarization supplies the coordinate-product
 integrability needed to expand the covariance matrix.
 -/
 
-import DkpsQuench2026.Geometry.Population
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import DkpsQuench2026.Geometry.Population
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+
+@[expose] public section
 
 set_option linter.mathlibStandardSet false
 

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
-import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
-import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
+public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
+public import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

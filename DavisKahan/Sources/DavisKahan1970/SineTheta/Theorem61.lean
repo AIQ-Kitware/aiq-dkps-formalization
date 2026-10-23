@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Canonical
-import DavisKahan.SinTheta.Real.Canonical
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+module
+
+public import DavisKahan.SinTheta.Canonical
+public import DavisKahan.SinTheta.Real.Canonical
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+
+@[expose] public section
 
 /-!
 # Literal Davis--Kahan Theorem 6.1 surface

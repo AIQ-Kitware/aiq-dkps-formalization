@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.Geometry.Polar.DirectRotation
-import DavisKahan.DoubleAngle.TangentTransport
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import DavisKahan.DoubleAngle.TangentTransport
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

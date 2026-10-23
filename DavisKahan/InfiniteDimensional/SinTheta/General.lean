@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Restriction
-import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
-import DavisKahan.SpectralTheory.Complexification.Spectrum
-import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
-import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Restriction
+public import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
+public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

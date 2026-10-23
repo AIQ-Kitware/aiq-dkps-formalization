@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Branch
-import DavisKahan.Geometry.Halmos.CrossedDefectGap
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import DavisKahan.DoubleAngle.DirectedAngleGeneric
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Branch
+public import DavisKahan.Geometry.Halmos.CrossedDefectGap
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import DavisKahan.DoubleAngle.DirectedAngleGeneric
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

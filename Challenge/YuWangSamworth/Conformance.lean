@@ -3,7 +3,11 @@
   (pending comparator challenge)
 -/
 
-import Mathlib
+module
+
+public import Mathlib
+
+@[expose] public section
 
 /-!
 ## Comparator maintenance rule

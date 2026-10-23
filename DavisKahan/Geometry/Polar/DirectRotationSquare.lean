@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Geometry.Polar.DirectRotation
-import DavisKahan.Geometry.Halmos.TwoProjections
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
+module
+
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import DavisKahan.Geometry.Halmos.TwoProjections
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
+
+@[expose] public section
 
 /-!
 # Principal-square-root completion of the Spectra direct rotation

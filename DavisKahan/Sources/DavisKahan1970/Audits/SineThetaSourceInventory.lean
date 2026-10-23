@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
-import DavisKahan.Sources.DavisKahan1970.Theorem61
-import DavisKahan.Sources.DavisKahan1970.Proposition61
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
+public import DavisKahan.Sources.DavisKahan1970.Theorem61
+public import DavisKahan.Sources.DavisKahan1970.Proposition61
+
+@[expose] public section
 
 /-!
 # Trusted-dependency audit for the literal paper sine-theta surface

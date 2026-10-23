@@ -4,12 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.CircleRieszIntegral
-import DavisKahan.SpectralTheory.CircleContour
-import DavisKahan.SpectralTheory.CentralBand
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
-import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+module
+
+public import DavisKahan.SpectralTheory.CircleRieszIntegral
+public import DavisKahan.SpectralTheory.CircleContour
+public import DavisKahan.SpectralTheory.CentralBand
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
+public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+
+@[expose] public section
 
 open TauCeti.DavisKahan.Angle
 

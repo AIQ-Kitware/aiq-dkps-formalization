@@ -37,7 +37,7 @@ Together with `TauCeti.finrank_eigenspace_eq_card_approximationNumber_eq`, the l
 that approximation numbers enumerate the positive eigenvalues with their full multiplicities.
 -/
 
-public section
+@[expose] public section
 
 open Module (finrank)
 open Module.End (eigenspace)
