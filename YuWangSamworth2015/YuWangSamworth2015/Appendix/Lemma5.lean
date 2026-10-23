@@ -38,7 +38,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
-abbrev frob {𝕜 : Type*} [RCLike 𝕜]
+noncomputable abbrev frob {𝕜 : Type*} [RCLike 𝕜]
     {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
     [FiniteDimensional 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
     [FiniteDimensional 𝕜 F] (A : E →ₗ[𝕜] F) : ℝ :=

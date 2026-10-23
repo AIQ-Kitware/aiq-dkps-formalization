@@ -41,6 +41,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- Sine of the operator angle between two subspaces at complex scalars:
 the absolute value of the projector difference. -/
+@[expose]
 noncomputable def sinAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   ContinuousLinearMap.modulus (U.starProjection - V.starProjection)

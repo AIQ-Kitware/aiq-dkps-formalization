@@ -159,9 +159,7 @@ theorem norm_spectraCanonicalIntertwiner_sub_one_le_gap
       mul_le_mul_of_nonneg_left (Submodule.norm_reflectionOperator_le_one U)
         (norm_nonneg (V.starProjection - U.starProjection))
     _ = U.projectionGap V := by
-      rw [mul_one]
-      change ‖V.starProjection - U.starProjection‖ =
-        ‖U.starProjection - V.starProjection‖
+      rw [mul_one, Submodule.projectionGap_def]
       rw [show V.starProjection - U.starProjection =
         -(U.starProjection - V.starProjection) by abel, norm_neg]
 
@@ -351,6 +349,7 @@ theorem coe_spectraCanonicalPolarFactorUnit
 
 /-- The acute canonical polar factor is a unitary element of the bounded
 operator algebra. -/
+@[expose]
 noncomputable def spectraCanonicalPolarFactorUnitary
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

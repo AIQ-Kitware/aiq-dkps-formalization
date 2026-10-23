@@ -340,6 +340,7 @@ strictly weaker separate continuity in the first argument.  `ContinuousLoss` abo
 headline reading, which is what the convergence argument uses.  This predicate records the
 displayed reading so the difference is visible and can be quantified rather than assumed away.
 -/
+@[expose]
 def ContinuousLossInPrediction (d' : ℕ) (loss : LossFunction d') : Prop :=
   ∀ y : Y d', Continuous (fun p : Y d' => loss p y)
 

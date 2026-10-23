@@ -65,6 +65,7 @@ def IsOrthogonalProjectionMap (P : E →L[𝕜] E) : Prop :=
 
 /-- Zero-based approximation singular value, defined as the operator-norm
  distance to maps of rank at most `n`. -/
+@[expose]
 noncomputable def approximationSingularValue
     (n : ℕ) (K : E →L[𝕜] F) : ℝ :=
   K.approximationNumber n

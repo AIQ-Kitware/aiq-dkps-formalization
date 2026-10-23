@@ -80,6 +80,7 @@ instance instModule : Module 𝕜 (IdealOperator (E := E) (F := F) N) :=
   inferInstanceAs (Module 𝕜 ↥(idealSubmodule (E := E) (F := F) N))
 
 /-- Forget the ideal membership witness. -/
+@[expose]
 def toOp (A : IdealOperator (E := E) (F := F) N) : E →L[𝕜] F :=
   (A : ↥(idealSubmodule (E := E) (F := F) N)).1
 
@@ -88,6 +89,7 @@ theorem mem (A : IdealOperator (E := E) (F := F) N) : N.Mem A.toOp :=
   (A : ↥(idealSubmodule (E := E) (F := F) N)).2
 
 /-- Bundle a member of the ideal. -/
+@[expose]
 def ofMem (A : E →L[𝕜] F) (hA : N.Mem A) :
     IdealOperator (E := E) (F := F) N := ⟨A, hA⟩
 

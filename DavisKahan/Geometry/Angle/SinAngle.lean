@@ -31,6 +31,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The Spectra-backed sine-angle operator, defined as the modulus of the
 orthogonal-projector difference. -/
+@[expose]
 noncomputable def spectraSinAngleOperator
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[ℂ] H :=

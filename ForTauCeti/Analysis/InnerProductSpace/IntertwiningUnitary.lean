@@ -187,6 +187,7 @@ namespace OrthoProjFamily
 
 /-- **Non-degeneracy** (Davis's hypothesis): no nonzero vector in `range (P j)` is annihilated by
 `P' j`. Equivalently `P'ⱼ Pⱼ` is injective on `range Pⱼ`. -/
+@[expose]
 def NonDegenerate (P P' : OrthoProjFamily 𝕜 E m) : Prop :=
   ∀ j, ∀ x, P.proj j x = x → x ≠ 0 → P'.proj j x ≠ 0
 

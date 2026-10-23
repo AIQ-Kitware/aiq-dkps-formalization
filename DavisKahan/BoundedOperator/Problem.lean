@@ -41,6 +41,7 @@ def IsQuarterAcute (U V : Submodule 𝕜 E)
   U.projectionGap V < Real.sqrt 2 / 2
 
 /-- An isometric bounded embedding. -/
+@[expose]
 def IsometricEmbedding (X : F →L[𝕜] E) : Prop := ∀ x, ‖X x‖ = ‖x‖
 
 /-- Residual of an approximate invariant pair. -/

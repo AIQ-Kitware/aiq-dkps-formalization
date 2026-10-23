@@ -46,6 +46,7 @@ quantifies how close the sample CMDS matrix is to the population one.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
+@[expose]
 def MatrixL2OperatorClose {n : Nat} (A B : SqMat n) (ε : Real) : Prop :=
   ∀ x : EuclideanSpace Real (Fin n),
     ‖Matrix.toEuclideanLin (A - B) x‖ ≤ ε * ‖x‖

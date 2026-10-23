@@ -159,6 +159,7 @@ measures `μ n` and events `E n`, it asserts: for every tolerance `δ > 0` there
 is an `N` such that for all `n > N` the event `E n` has probability at least
 `1 - δ`. This is the formal meaning of the paper's recurring phrase "with high
 probability". -/
+@[expose]
 def HighProbAtTop {Ω : Type*} [MeasurableSpace Ω]
     (μ : ℕ → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n)) (E : ℕ → Set Ω) : Prop :=
   ∀ δ : ENNReal, 0 < δ → ∃ N : ℕ, ∀ n > N, (μ n) (E n) ≥ 1 - δ
@@ -231,6 +232,7 @@ def HighProb {Ω : Type*} [MeasurableSpace Ω]
 assumption (Assumption 1): the benchmark score `y` is `γ`-Lipschitz with respect
 to the perspective embedding `Psi`, i.e. score differences are bounded by `γ`
 times the embedding (perspective-space) distance. -/
+@[expose]
 def LipschitzScore {d : ℕ} (γ : ℝ)
     (Psi : Finset Q → Model Q X → Vec d)
     (y : Model Q X → ℝ) : Prop :=

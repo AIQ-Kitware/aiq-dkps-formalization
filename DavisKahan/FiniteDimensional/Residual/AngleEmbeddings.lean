@@ -75,6 +75,7 @@ theorem cosThetaMagnitude_injective_of_isTransverse
 
 On a simultaneous principal-angle basis this has singular values
 `2 sin θᵢ cos θᵢ = sin (2 θᵢ)`. -/
+@[expose]
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   (2 : 𝕜) • (sinThetaEmbedding U X ∘ₗ cosThetaMagnitude U X)

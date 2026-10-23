@@ -74,6 +74,7 @@ theorem isTransverse_of_tanThetaIntervalGap
     intro z _
     exact Submodule.mem_top
   have hMspec : Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Iic α) := by
+    rw [Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset]
     intro lam hlam
     exact (hgap.1 hlam).2
   have hMupper :

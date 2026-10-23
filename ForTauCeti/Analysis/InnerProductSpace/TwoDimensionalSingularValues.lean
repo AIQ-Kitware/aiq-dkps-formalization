@@ -221,6 +221,7 @@ theorem singularValues_lowerLeft_two_by_two (r : ℝ) :
 /-- The trace of the Gram operator, written in the standard planar basis.
 This is the squared Frobenius norm and is independent of the chosen
 orthonormal basis. -/
+@[expose]
 noncomputable def gramTraceFinTwo
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
     (A : EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] F) : ℝ :=

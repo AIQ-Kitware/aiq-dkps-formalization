@@ -296,6 +296,7 @@ what gauge they assign to non-members give the same family, because the family
 assigns `∞` to all of them.  What is preserved is the whole of the ideal --
 membership (`gauge_ofCore_ne_top_iff`) and the gauge on it
 (`toReal_gauge_ofCore`). -/
+@[expose]
 noncomputable def ofCore (N : Core.{u, v} 𝕜) :
     SymmetricOperatorIdealFamily.{u, v} 𝕜 where
   gauge := Core.extendedGauge N

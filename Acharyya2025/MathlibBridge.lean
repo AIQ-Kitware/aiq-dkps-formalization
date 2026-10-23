@@ -52,6 +52,7 @@ Entrywise closeness in Mathlib matrix notation.
 
 Formalized by Codex 5.5 High, per user-observed model label.
 -/
+@[expose]
 def MatrixEntrywiseClose {n : Nat} (A B : SqMat n) (ε : Real) : Prop :=
   ∀ i j : Fin n, |A i j - B i j| ≤ ε
 
@@ -72,6 +73,7 @@ Formalized by Codex 5.5 High, per user-observed model label.
 -/
 -- Note: an encoding of matrix symmetry for the curried representation; it is not
 -- itself a paper assumption but is used to match Mathlib's `Matrix.IsSymm`.
+@[expose]
 def SymmetricDisMat {n : Nat} (D : DisMat n) : Prop :=
   ∀ i j : Fin n, D j i = D i j
 

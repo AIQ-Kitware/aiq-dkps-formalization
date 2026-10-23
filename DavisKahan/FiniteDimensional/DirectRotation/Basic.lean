@@ -93,6 +93,7 @@ noncomputable def canonicalIntertwiner (U V : Submodule 𝕜 E)
     complementaryProjection V ∘ₗ complementaryProjection U
 
 /-- The ordered product of the target and source reflections. -/
+@[expose]
 noncomputable def reflectionProduct (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E ≃ₗᵢ[𝕜] E :=
   U.reflection.trans V.reflection
@@ -350,6 +351,7 @@ theorem abs_canonicalIntertwiner_apply_eq_self_of_projection_eq
 
 /-- The canonical direct rotation from `U` to `V`, defined as the unitary polar
 factor of the canonical intertwiner. -/
+@[expose]
 noncomputable def directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) : E ≃ₗᵢ[𝕜] E :=

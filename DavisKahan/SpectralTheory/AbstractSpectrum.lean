@@ -65,7 +65,7 @@ def IsOffDiagonalRelativeToProjection (P H : E →L[𝕜] E) : Prop :=
 -- `ContinuousLinearMap.restrict` already asks for, and unifiers matching at `instances`
 -- transparency have to be able to see that.
 /-- A subspace is invariant under a bounded operator. -/
-@[reducible] def InvariantFor (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
+@[reducible, expose] def InvariantFor (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   ∀ x ∈ U, A x ∈ U
 
 /-- `ContinuousLinearMap.coe_restrict_apply`, restated for a hypothesis in `InvariantFor` form.
@@ -106,7 +106,8 @@ part of the Banach-algebra spectrum of that restriction. -/
 theorem restrictedSpectrum_eq_restrictionSpectrum
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (hU : InvariantFor A U) :
     restrictedSpectrum A U = {r : ℝ | (r : 𝕜) ∈ spectrum 𝕜 (A.restrict hU)} := by
-  ext r
+  apply Set.ext
+  intro r
   constructor
   · rintro ⟨hU', hr⟩
     simpa using hr

@@ -41,6 +41,7 @@ structure BlockOperatorData where
   offDiagonalAdjoint : ∀ x y, ⟪B01 y, x⟫_𝕜 = ⟪y, B10 x⟫_𝕜
 
 /-- Bounded block operator on the Hilbert direct sum. -/
+@[expose]
 noncomputable def blockOperator
     (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=

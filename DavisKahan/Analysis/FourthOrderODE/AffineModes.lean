@@ -28,6 +28,7 @@ namespace Classical
 noncomputable section
 
 /-- Real affine fourth-order derivative data. -/
+@[expose]
 noncomputable def realAffineData (a b : ℝ) : FourthOrderData where
   f0 := fun x => a + b * x
   f1 := fun _ => b

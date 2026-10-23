@@ -103,14 +103,17 @@ def orthogonalResidualGram (ε : ℝ) : SymmetricTwoByTwo where
   a₁₁ := ε ^ 2 / 30
 
 /-- Exact largest singular value of the initial residual. -/
+@[expose]
 def residualTopSingularValue (ε : ℝ) : ℝ :=
   |ε| * Real.sqrt ((11 + Real.sqrt 76) / 30)
 
 /-- Exact smaller singular value of the initial residual. -/
+@[expose]
 def residualBottomSingularValue (ε : ℝ) : ℝ :=
   |ε| * Real.sqrt ((11 - Real.sqrt 76) / 30)
 
 /-- Sum of the two singular values of the initial residual. -/
+@[expose]
 def residualKyFanTwo (ε : ℝ) : ℝ :=
   residualTopSingularValue ε + residualBottomSingularValue ε
 

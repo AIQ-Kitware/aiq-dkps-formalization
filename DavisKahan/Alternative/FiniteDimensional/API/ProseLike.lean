@@ -50,6 +50,7 @@ singular values measure how much `U` leaks into the forbidden/complementary
 subspace `V`.  In the Part III `sin Θ` theorem, this is the formal object behind
 `sin Θ`; the direction matters because `V` is usually the opposite spectral
 subspace rather than the matching one. -/
+@[expose]
 noncomputable def directedSinThetaOperatorProseLike
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     E →L[𝕜] E :=

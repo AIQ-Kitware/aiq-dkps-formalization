@@ -94,6 +94,7 @@ def ConvergesInProbability {Ω α : Type} [MeasurableSpace Ω] [PseudoMetricSpac
     Tendsto (fun n => P {ω | dist (X n ω) x > ε}) atTop (𝓝 0)
 
 /-- Convergence in probability to `0`, e.g. the paper's `‖D - ∆(∞)‖ →P 0`. -/
+@[expose]
 def ConvergesInProbabilityZero {Ω α : Type} [MeasurableSpace Ω] [PseudoMetricSpace α]
     [Zero α] (P : Measure Ω) (X : Nat → Ω → α) : Prop :=
   ConvergesInProbability P X 0
@@ -293,6 +294,7 @@ theorem tendsto_frobSub_zero_of_entrywise {n : Nat}
   simpa [frobSub, frob, frobSq] using hsum.sqrt
 
 /-- A configuration exactly realizes a target dissimilarity matrix. -/
+@[expose]
 def RealizesDissimilarity {n d : Nat} (z : Config n d) (Δ : DisMat n) : Prop :=
   ∀ i j : Fin n, pairDist z i j = Δ i j
 

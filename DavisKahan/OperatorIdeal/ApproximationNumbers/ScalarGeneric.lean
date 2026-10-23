@@ -189,6 +189,7 @@ gauge is identically `0`, which satisfies the other three but is not a norm.
 both `kyFanApproximationGauge` and the capability class supplying its triangle
 inequality are defined in this library; it moves when the approximation-number
 layer is extracted. -/
+@[expose]
 noncomputable def kyFanSymmetricIdealFamily
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where

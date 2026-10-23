@@ -172,6 +172,7 @@ theorem IsResolventAt.smul_sub_bijective (h : IsResolventAt A lambda R) :
 
 /-- The **resolvent set** of an unbounded operator `A : E →ₗ.[𝕜] E`: those `lambda : 𝕜` for which
 `lambda • I - A : D(A) → E` is a bijection with bounded inverse. -/
+@[expose]
 def resolventSet (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
   {lambda | ∃ R : E →L[𝕜] E, IsResolventAt A lambda R}
 
