@@ -15,6 +15,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
+public import Mathlib.Analysis.InnerProductSpace.Semisimple
 
 public section
 

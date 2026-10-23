@@ -38,26 +38,31 @@ namespace FreeBeam
 noncomputable section
 
 /-- Classical four-parameter solution of `u'''' = beta^4 u`. -/
+@[expose]
 def mode (beta a b c d x : ℝ) : ℝ :=
   a * Real.cos (beta * x) + b * Real.sin (beta * x) +
     c * Real.cosh (beta * x) + d * Real.sinh (beta * x)
 
 /-- Closed form of the first derivative. -/
+@[expose]
 def modeD1 (beta a b c d x : ℝ) : ℝ :=
   beta * (-a * Real.sin (beta * x) + b * Real.cos (beta * x) +
     c * Real.sinh (beta * x) + d * Real.cosh (beta * x))
 
 /-- Closed form of the second derivative. -/
+@[expose]
 def modeD2 (beta a b c d x : ℝ) : ℝ :=
   beta ^ 2 * (-a * Real.cos (beta * x) - b * Real.sin (beta * x) +
     c * Real.cosh (beta * x) + d * Real.sinh (beta * x))
 
 /-- Closed form of the third derivative. -/
+@[expose]
 def modeD3 (beta a b c d x : ℝ) : ℝ :=
   beta ^ 3 * (a * Real.sin (beta * x) - b * Real.cos (beta * x) +
     c * Real.sinh (beta * x) + d * Real.cosh (beta * x))
 
 /-- Closed form of the fourth derivative. -/
+@[expose]
 def modeD4 (beta a b c d x : ℝ) : ℝ := beta ^ 4 * mode beta a b c d x
 
 -- `(try rfl) <;> ring` cannot become `(try rfl); ring`, which is what the
@@ -134,6 +139,7 @@ theorem mode_fourth_derivative (beta a b c d x : ℝ) :
   exact (hasDerivAt_modeD3 beta a b c d x).deriv
 
 /-- Free-end boundary conditions for a classical mode. -/
+@[expose]
 def FreeBoundary (beta a b c d : ℝ) : Prop :=
   modeD2 beta a b c d 0 = 0 ∧
   modeD3 beta a b c d 0 = 0 ∧
@@ -158,12 +164,15 @@ theorem left_boundary_coefficients
   constructor <;> linarith
 
 /-- First row of the reduced right-end boundary matrix. -/
+@[expose]
 def boundaryA (beta : ℝ) : ℝ := Real.cosh beta - Real.cos beta
 
 /-- Upper-right entry of the reduced right-end boundary matrix. -/
+@[expose]
 def boundaryB (beta : ℝ) : ℝ := Real.sinh beta - Real.sin beta
 
 /-- Lower-left entry of the reduced right-end boundary matrix. -/
+@[expose]
 def boundaryC (beta : ℝ) : ℝ := Real.sinh beta + Real.sin beta
 
 /-- Determinant of the reduced two by two boundary matrix. -/
@@ -219,6 +228,7 @@ theorem two_by_two_det_eq_zero_of_nontrivial_kernel
   · exact (mul_eq_zero.mp hb).resolve_right hb0
 
 /-- Characteristic function for positive free-beam frequencies. -/
+@[expose]
 def characteristic (beta : ℝ) : ℝ :=
   Real.cos beta * Real.cosh beta - 1
 

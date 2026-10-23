@@ -49,6 +49,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 /-- Compression of `A` to the isometric coordinate space of `X`. -/
+@[expose]
 noncomputable def compression (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E) :
     F →ₗ[𝕜] F :=
   X.toLinearMap.adjoint ∘ₗ A ∘ₗ X.toLinearMap
@@ -62,6 +63,7 @@ noncomputable def residual (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E)
 
 
 /-- Galerkin/Ritz residual. -/
+@[expose]
 noncomputable def ritzResidual (A : E →ₗ[𝕜] E) (X : F →ₗᵢ[𝕜] E) :
     F →ₗ[𝕜] E :=
   residual A X (compression A X)

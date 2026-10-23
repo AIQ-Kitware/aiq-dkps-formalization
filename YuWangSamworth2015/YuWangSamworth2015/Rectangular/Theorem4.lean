@@ -66,12 +66,14 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- Ordered-index correspondence for right singular blocks, expressed through
 squared singular values of the right Gram operators. -/
+@[expose]
 def CorrespondingRightSingularBlock (A Â : E →ₗ[𝕜] F)
     (U V : Submodule 𝕜 E) : Prop :=
   CorrespondingEigenblock (isSymmetric_rightGram A)
     (isSymmetric_rightGram Â) U V
 
 /-- Ordered-index correspondence for left singular blocks. -/
+@[expose]
 def CorrespondingLeftSingularBlock (A Â : E →ₗ[𝕜] F)
     (U V : Submodule 𝕜 F) : Prop :=
   CorrespondingEigenblock (isSymmetric_leftGram A)

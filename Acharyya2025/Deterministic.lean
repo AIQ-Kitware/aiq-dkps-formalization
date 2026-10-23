@@ -58,6 +58,7 @@ matrix `Hₙ (·) Hₙ`, the entry squaring plays the role of `(·)∘²`, and t
 `-½` factor matches. The eigendecomposition step that turns this into
 embeddings is *not* taken here; this is only the matrix `B`/`B̂` itself.
 -/
+@[expose]
 noncomputable def classicalMDSMatrix {n : Nat} (D : DisMat n) : DisMat n :=
   fun i j => -(1 / 2 : Real) * doubleCenter (fun i j => (D i j)^2) i j
 

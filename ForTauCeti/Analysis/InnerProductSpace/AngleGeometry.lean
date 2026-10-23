@@ -117,6 +117,7 @@ noncomputable def principalSines (U V : Submodule 𝕜 E)
 
 /-- Principal angles as a sorted finitely supported sequence: `arcsin` applied to
 the principal sines.  `arcsin 0 = 0` keeps the support finite. -/
+@[expose]
 noncomputable def principalAngles (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
   (principalSines U V).mapRange Real.arcsin Real.arcsin_zero
@@ -124,6 +125,7 @@ noncomputable def principalAngles (U V : Submodule 𝕜 E)
 /-- Principal-angle tangents: `tan` applied to the principal angles.  `tan 0 = 0`
 keeps the support finite (poles at `π/2` are only reached in the non-acute
 configuration, excluded by the tangent theorems' hypotheses). -/
+@[expose]
 noncomputable def principalTangents (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
   (principalAngles U V).mapRange Real.tan Real.tan_zero

@@ -29,6 +29,7 @@ namespace DavisKahan.TanTwoTheta
 
 /-- The double-angle tangent of a single-angle tangent value:
 `tan 2θ = 2 tan θ / (1 - tan² θ)`. -/
+@[expose]
 noncomputable def doubleAngleTangent (t : ℝ) : ℝ := 2 * t / (1 - t ^ 2)
 
 /-- The double-angle tangent vanishes at zero. -/

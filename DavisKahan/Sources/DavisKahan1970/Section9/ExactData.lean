@@ -64,19 +64,24 @@ noncomputable section
 
 /-- The exact coefficient of the lower Ritz value.  We write `sqrt 3 / 3`
 instead of `1 / sqrt 3`; the equality is proved below. -/
+@[expose]
 def ritzLowCoefficient : ℝ := (1 - Real.sqrt 3 / 3) / 2
 
 /-- The exact coefficient of the upper Ritz value. -/
+@[expose]
 def ritzHighCoefficient : ℝ := (1 + Real.sqrt 3 / 3) / 2
 
 /-- The two Ritz values in equation (9.5). -/
+@[expose]
 def ritzLow (ε : ℝ) : ℝ := ε * ritzLowCoefficient
 
 /-- The upper Ritz value of equation (9.5).  Stated separately from `ritzLow` so that
 each declaration carries its own documentation. -/
+@[expose]
 def ritzHigh (ε : ℝ) : ℝ := ε * ritzHighCoefficient
 
 /-- The residual Gram matrix before Rayleigh--Ritz recentering. -/
+@[expose]
 def residualGram (ε : ℝ) : SymmetricTwoByTwo where
   a₀₀ := ε ^ 2 / 30 * (11 - Real.sqrt 75)
   a₀₁ := -(ε ^ 2 / 30)
@@ -91,6 +96,7 @@ def residualGramEigenvalueHigh (ε : ℝ) : ℝ :=
   ε ^ 2 / 30 * (11 + Real.sqrt 76)
 
 /-- The residual Gram matrix after Rayleigh--Ritz recentering. -/
+@[expose]
 def orthogonalResidualGram (ε : ℝ) : SymmetricTwoByTwo where
   a₀₀ := ε ^ 2 / 30
   a₀₁ := -(ε ^ 2 / 30)

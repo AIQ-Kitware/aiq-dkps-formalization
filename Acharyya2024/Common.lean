@@ -47,21 +47,25 @@ theorem norm_sub_one_dim (x y : Rvec 1) : ‖x - y‖ = |x 0 - y 0| := by
   simp [Real.sqrt_sq_eq_abs]
 
 /-- Squared Frobenius norm of a dissimilarity matrix: `∑ᵢⱼ (Aᵢⱼ)²`. -/
+@[expose]
 noncomputable def frobSq {n : Nat} (A : DisMat n) : Real :=
   ∑ i : Fin n, ∑ j : Fin n, (A i j)^2
 
 /-- Frobenius norm of a dissimilarity matrix, `‖A‖_F = sqrt(∑ᵢⱼ (Aᵢⱼ)²)`. -/
+@[expose]
 noncomputable def frob {n : Nat} (A : DisMat n) : Real :=
   Real.sqrt (frobSq A)
 
 /-- Frobenius norm of the entrywise difference of two dissimilarity matrices,
 `‖A - B‖_F`. This is how the paper measures `‖D - ∆(∞)‖`. -/
+@[expose]
 noncomputable def frobSub {n : Nat} (A B : DisMat n) : Real :=
   frob (fun i j => A i j - B i j)
 
 /-- Raw-stress objective for metric multidimensional scaling: the paper's
 criterion `σ(z) = ∑ᵢⱼ (‖zᵢ - zⱼ‖ - ∆ᵢⱼ)²`, measuring how well configuration `z`
 in `R^d` reproduces the target dissimilarities `∆`. -/
+@[expose]
 noncomputable def rawStress (n d : Nat) (Δ : DisMat n) (z : Config n d) : Real :=
   ∑ i : Fin n, ∑ j : Fin n, (‖z i - z j‖ - Δ i j)^2
 
@@ -72,10 +76,12 @@ def MDS (n d : Nat) (Δ : DisMat n) : Set (Config n d) :=
   { z | ∀ z' : Config n d, rawStress n d Δ z ≤ rawStress n d Δ z' }
 
 /-- Pairwise Euclidean distance `‖zᵢ - zⱼ‖` induced by a configuration `z`. -/
+@[expose]
 noncomputable def pairDist {n d : Nat} (z : Config n d) (i j : Fin n) : Real :=
   ‖z i - z j‖
 
 /-- Absolute error between two configurations in a single pairwise distance. -/
+@[expose]
 noncomputable def pairDistErr {n d : Nat} (z z' : Config n d) (i j : Fin n) : Real :=
   |pairDist z i j - pairDist z' i j|
 
@@ -104,6 +110,7 @@ def HighProbAtTop {Ω : Type*} [MeasurableSpace Ω]
 transformation* (Remark 1, Theorems 1/3); this definition is the simpler direct
 (non-affine-quotiented) error, so it is a stronger/encoded notion of closeness
 than the paper's statements use. -/
+@[expose]
 noncomputable def ConfigError {n d : Nat} (ψhat ψ : Config n d) : Real :=
   ∑ i : Fin n, ‖ψhat i - ψ i‖
 
@@ -298,6 +305,7 @@ The paper writes this as `(1 / m) ‖Xbar_i - Xbar_i'‖_F`; Lean's
 `EuclideanSpace` norm is the corresponding finite Frobenius/Euclidean norm on
 the row-stacked matrix representation.
 -/
+@[expose]
 noncomputable def responseDistEntry {n m p : Nat} (Xbar : Fin n → Mat m p)
     (i j : Fin n) : Real :=
   ((m : Real)⁻¹) * ‖Xbar i - Xbar j‖
@@ -305,6 +313,7 @@ noncomputable def responseDistEntry {n m p : Nat} (Xbar : Fin n → Mat m p)
 /-- Curried dissimilarity matrix built from the `n` response matrices `Xbar`.
 This is the paper's empirical dissimilarity matrix `D` (entries
 `(1/m)‖Xbar_i - Xbar_j‖_F`). -/
+@[expose]
 noncomputable def responseDist {n m p : Nat} (Xbar : Fin n → Mat m p) : DisMat n :=
   fun i j => responseDistEntry Xbar i j
 

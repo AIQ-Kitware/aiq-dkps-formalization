@@ -248,11 +248,13 @@ noncomputable def applyIso {n d : ℕ} (W : (Vec d) ≃ₗᵢ[ℝ] (Vec d)) (x :
   fun i => W (x i)
 
 /-- The squared-error loss `(a - b)²`. -/
+@[expose]
 def sqLoss (a b : ℝ) : ℝ := (a - b) ^ (2 : ℕ)
 
 /-- The *mean squared error* of an estimator `yHat` for the target `y`: the
 expected squared loss over models `f ∼ Pf`. This is the `MSE(·)` of the paper's
 query-efficiency theorem. -/
+@[expose]
 noncomputable def MSE {Q : Type u} {X : Type v} [MeasurableSpace X]
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
     (y yHat : Model Q X → ℝ) : ℝ :=
@@ -324,6 +326,7 @@ the reference embeddings `ψHat_ref`, i.e. an index minimizing the distance
 `‖ψHat_ref i - ψHat_target‖`. This is the nearest-neighbor selection in
 perspective space underlying the paper's estimator `ŷ_NN`. (The body also
 discharges existence of a minimizer; that argument is internal plumbing.) -/
+@[expose]
 noncomputable def nnIndex {n : ℕ} (hn : n > 0)
     (ψHat_ref : Fin n → Vec d)
     (ψHat_target : Vec d) : Fin n :=
@@ -348,6 +351,7 @@ noncomputable def hNN_estimator {n : ℕ} (hn : n > 0)
 /-- The finite set of all reference indices minimizing estimated distance to
 `ψHat_target`.  This exposes ties rather than resolving them by an arbitrary
 choice. -/
+@[expose]
 noncomputable def nnMinimizers {n : ℕ} (hn : n > 0)
     (ψHat_ref : Fin n → Vec d)
     (ψHat_target : Vec d) : Finset (Fin n) :=

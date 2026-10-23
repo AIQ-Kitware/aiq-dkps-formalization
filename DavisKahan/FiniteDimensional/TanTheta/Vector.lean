@@ -51,6 +51,7 @@ public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+public import Mathlib.Analysis.InnerProductSpace.Semisimple
 
 public section
 

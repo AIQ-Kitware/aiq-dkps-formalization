@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import YuWangSamworth2015.Rectangular.RankBoundary
+public import TauCeti.Analysis.InnerProductSpace.Spectral.Eigenframe
 
 public section
 

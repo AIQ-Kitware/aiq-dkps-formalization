@@ -259,7 +259,7 @@ theorem projectionGap_complexifySubmodule
     [V.HasOrthogonalProjection] :
     (complexifySubmodule U).projectionGap (complexifySubmodule V) =
       U.projectionGap V := by
-  unfold Submodule.projectionGap
+  rw [Submodule.projectionGap_def]
   rw [starProjection_complexifySubmodule,
     starProjection_complexifySubmodule, ← complexify_sub, norm_complexify]
 
@@ -270,7 +270,7 @@ theorem directedProjectionGap_complexifySubmodule
     [V.HasOrthogonalProjection] :
     (complexifySubmodule U).directedProjectionGap (complexifySubmodule V) =
       U.directedProjectionGap V := by
-  unfold Submodule.directedProjectionGap
+  rw [Submodule.directedProjectionGap_def]
   rw [starProjection_complexifySubmodule_orthogonal,
     starProjection_complexifySubmodule, ← complexify_comp, norm_complexify]
 

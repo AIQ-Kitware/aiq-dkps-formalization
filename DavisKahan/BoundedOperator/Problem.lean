@@ -29,11 +29,13 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 /-- Uniform acuteness bounds the projection gap strictly below one. In infinite
  dimension it is stronger than vanishing crossed intersections, which permits
  angles tending to a right angle. -/
+@[expose]
 def IsUniformlyAcute (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   U.projectionGap V < 1
 
 /-- The projection gap lies below the quarter-angle threshold. -/
+@[expose]
 def IsQuarterAcute (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   U.projectionGap V < Real.sqrt 2 / 2
