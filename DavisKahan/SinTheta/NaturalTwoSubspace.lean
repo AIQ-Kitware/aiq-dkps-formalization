@@ -27,6 +27,7 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
+omit [CompleteSpace E] in
 /-- Two directed bounds with the same right-hand side imply the sharp symmetric
 projection-gap bound. -/
 theorem mul_subspaceGap_le_of_two_directedGap_le
@@ -42,6 +43,7 @@ theorem mul_subspaceGap_le_of_two_directedGap_le
   rw [hmax, mul_max_of_nonneg _ _ hδ]
   exact max_le hUV hVU
 
+omit [CompleteSpace E] in
 /-- A pair of directed bounds with possibly different right-hand sides gives
 the maximum of those bounds. -/
 theorem mul_subspaceGap_le_max_of_two_directedGap_le

@@ -7,11 +7,12 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
+public import TauCeti.Analysis.InnerProductSpace.ContinuousFunctionalCalculus
 
 /-!
 # Continuous functional calculus over `ℝ` for a real Hilbert space
 
-`ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint` registers
+`TauCeti.Analysis.InnerProductSpace.ContinuousFunctionalCalculus` registers
 
 ```text
 ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint
@@ -26,15 +27,9 @@ Mathlib's only unital real calculus for operators,
 calculus over `ℂ` for star-normal elements, and `CStarAlgebra (E →L[𝕜] E)` is registered only
 at `𝕜 = ℂ`.  `Matrix n n 𝕜` escapes this through a separate spectral-theorem construction in
 `Analysis/Matrix/HermitianFunctionalCalculus.lean`, so a real matrix calculus exists while the
-operator one does not.  Mathlib records the gap in prose: `Analysis/InnerProductSpace/`
-`StarOrder.lean` proves `ContinuousLinearMap.instStarOrderedRingRCLike` for a general `RCLike`
-field and declines to register it, because it takes exactly this calculus as an argument and
-"for the moment we only have this for `𝕜 := ℂ`".  Registering the instance below supplies the
-missing input to `ContinuousLinearMap.instStarOrderedRingRCLike`.  The modulus and polar
-factorization consume it downstream rather than being dependencies of this foundational file.
-
-This real instance is the concrete-field base case used by the `RCLike`-generic continuous
-functional calculus in `ScalarTransportFunctionalCalculus.lean`.
+operator one does not. The canonical instance for real and general `RCLike` operator spaces
+is now supplied by `TauCeti.Analysis.InnerProductSpace.ContinuousFunctionalCalculus`.
+This file retains the descended calculus and naturality results used downstream.
 
 ## The construction
 
@@ -59,7 +54,7 @@ For `a : E →L[ℝ] E` self-adjoint:
 ## Main results
 
 * `TauCeti.RealComplexification.realCfcHom`: the descended calculus;
-* `ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint`: the real-field instance;
+* `ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint`: from TauCeti;
 * `TauCeti.RealComplexification.complexify_cfc`: naturality of the calculus under complexification.
 
 ## A duplication this file does not resolve
@@ -263,58 +258,22 @@ theorem isSelfAdjoint_realCfcHom {a : E →L[ℝ] E} (ha : IsSelfAdjoint a)
     rw [complexify_realCfcHom]
     exact isSelfAdjoint_complexifiedCfcHom ha f
 
-/-! ## Nontriviality -/
-
-omit [CompleteSpace E] in
-/-- A nontrivial bounded operator algebra forces a nontrivial space. -/
-theorem nontrivial_of_nontrivial_operator (h : Nontrivial (E →L[ℝ] E)) : Nontrivial E := by
-  by_contra hE
-  rw [not_nontrivial_iff_subsingleton] at hE
-  exact (not_subsingleton (E →L[ℝ] E))
-    ⟨fun S T => ContinuousLinearMap.ext fun x => Subsingleton.elim _ _⟩
-
 end
 
 end RealComplexification
 end TauCeti
 
-/-! ## The instance -/
+/-! ## Canonical real functional calculus
 
-namespace ContinuousLinearMap
-
-open TauCeti.RealComplexification
-open scoped TauCeti.RealComplexification
-
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-
-/-- **The continuous functional calculus over `ℝ` for self-adjoint bounded operators on a real
-Hilbert space, in unrestricted dimension.** -/
-instance instContinuousFunctionalCalculusRealIsSelfAdjoint :
-    ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint where
-  predicate_zero := IsSelfAdjoint.zero _
-  compactSpace_spectrum a := isCompact_iff_compactSpace.mp (spectrum.isCompact a)
-  spectrum_nonempty a ha := by
-    have hE : Nontrivial E := nontrivial_of_nontrivial_operator inferInstance
-    have hc : Nontrivial (TauCeti.RealComplexification E) :=
-      (ofReal (E := E)).injective.nontrivial
-    have : Nontrivial
-        (TauCeti.RealComplexification E →L[ℂ] TauCeti.RealComplexification E) :=
-      ⟨1, 0, one_ne_zero⟩
-    rw [← spectrum_complexify a]
-    exact ContinuousFunctionalCalculus.spectrum_nonempty (R := ℝ) (complexify a)
-      ((complexify_isSelfAdjoint_iff a).2 ha)
-  exists_cfc_of_predicate a ha :=
-    ⟨realCfcHom ha, continuous_realCfcHom ha, realCfcHom_injective ha, realCfcHom_id ha,
-      realCfcHom_map_spectrum ha, isSelfAdjoint_realCfcHom ha⟩
-
-
-end ContinuousLinearMap
+TauCeti now provides `ContinuousLinearMap.instContinuousFunctionalCalculusRealIsSelfAdjoint`.
+Keep the real-complexification descent and its naturality results below, but consume the
+accepted instance rather than defining another one with the same name. -/
 
 /-! ## Naturality of the calculus along the complexification
 
-The instance above makes `cfc f a` meaningful for a real self-adjoint `a`, but leaves it
-opaque: `cfcHom` is a `choose` against `exists_cfc_of_predicate`, so nothing yet connects it
-to `realCfcHom`, which is the map the instance actually supplied.  Uniqueness closes that gap
+The imported TauCeti instance makes `cfc f a` meaningful for a real self-adjoint `a`,
+but leaves it opaque: `cfcHom` is a `choose` against `exists_cfc_of_predicate`,
+so nothing yet connects it to `realCfcHom`, the local descent. Uniqueness closes that gap
 (`ContinuousMap.UniqueHom ℝ` holds for every T2 real topological `⋆`-algebra), and with it the
 calculus commutes with `complexify`.
 
@@ -339,8 +298,8 @@ theorem cfcHom_eq_realCfcHom {a : E →L[ℝ] E} (ha : IsSelfAdjoint a) :
 /-- **The continuous functional calculus commutes with complexification.**
 
 The complexification is an injective isometric unital `⋆`-algebra map that preserves spectra,
-so this is the naturality one expects; the content is that the *real* calculus on `E →L[ℝ] E`
-that this file registers is the one descended from the complex side, which is
+so this is the naturality one expects. The real calculus registered by TauCeti agrees with
+the descended construction, as established by
 `cfcHom_eq_realCfcHom`.
 
 The hypotheses are the ones `cfc` itself requires: without them both sides are `0` by

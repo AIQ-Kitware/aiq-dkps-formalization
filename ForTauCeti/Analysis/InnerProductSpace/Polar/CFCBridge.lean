@@ -9,6 +9,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
@@ -206,9 +207,15 @@ theorem selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc {T : H →ₗ
 /-- Over `ℂ`, the common modulus is Mathlib's C⋆-algebra absolute value. -/
 theorem operatorAbs_toContinuousLinearMap_eq_cfcAbs (A : H →ₗ[ℂ] H) :
     (operatorAbs A).toContinuousLinearMap = CFC.abs A.toContinuousLinearMap := by
-  rw [operatorAbs_toContinuousLinearMap_eq_modulus]
-  simpa [CFC.abs] using
-    ContinuousLinearMap.modulus_eq_sqrt_star_mul_self A.toContinuousLinearMap
+  have heq : TauCeti.operatorAbs A = LinearMap.operatorAbs A :=
+    LinearMap.IsPositive.eq_operatorAbs
+      (TauCeti.isPositive_operatorAbs A) (TauCeti.operatorAbs_mul_self A)
+  calc
+    (operatorAbs A).toContinuousLinearMap =
+        (LinearMap.operatorAbs A).toContinuousLinearMap :=
+      congrArg LinearMap.toContinuousLinearMap heq
+    _ = CFC.abs A.toContinuousLinearMap :=
+      LinearMap.toContinuousLinearMap_operatorAbs_eq_cfcAbs A
 
 /-- **Headline (via CFC):** every `A : H →L[ℂ] H` factors as `A = U ∘L CFC.abs A` with `U` a
 partial isometry. -/

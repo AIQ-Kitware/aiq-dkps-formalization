@@ -242,9 +242,15 @@ theorem norm_modulus_sub_one_le (M : E →L[ℂ] F) :
   -- Both sides are values of the continuous functional calculus at `a`.
   have hshift : cfc (fun s : ℝ => s - 1) a = a - 1 := by
     rw [cfc_sub (fun s : ℝ => s) (fun _ : ℝ => (1 : ℝ)) a, cfc_id' ℝ a, cfc_const_one ℝ a]
+  have hmodsqrt : CFC.sqrt a = M.modulus :=
+    CFC.sqrt_unique M.modulus_mul_self M.modulus_nonneg
   have hmod : cfc (fun s : ℝ => Real.sqrt s - 1) a = M.modulus - 1 := by
-    rw [cfc_sub Real.sqrt (fun _ : ℝ => (1 : ℝ)) a, cfc_const_one ℝ a, modulus_def,
-      CFC.sqrt_eq_real_sqrt a ha, cfcₙ_eq_cfc]
+    rw [cfc_sub Real.sqrt (fun _ : ℝ => (1 : ℝ)) a, cfc_const_one ℝ a]
+    congr 1
+    calc
+      cfc Real.sqrt a = CFC.sqrt a := by
+        rw [CFC.sqrt_eq_real_sqrt a ha, cfcₙ_eq_cfc]
+      _ = M.modulus := hmodsqrt
   rw [← hmod, ← hshift]
   refine norm_cfc_le (norm_nonneg _) fun t ht => ?_
   calc ‖Real.sqrt t - 1‖ = |Real.sqrt t - 1| := Real.norm_eq_abs _
