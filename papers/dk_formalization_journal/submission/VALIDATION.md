@@ -1,87 +1,80 @@
-# Validation record: 23 October 2026
+# Validation and reproduction — 23 October 2026
 
-## Source baseline
+## Snapshot and original result inventory
 
-This record retains the user-confirmed build evidence from the earlier
-23 October 2026 revision and incorporates the later repository snapshot
-`aiq-dkps-formalization-source-2026-10-23T123759-5-3f24ae49b431.tar.gz`
-(commit `3f24ae49b431`). The original 29 source-level targets remain 28
-proved at source scope and one formally refuted as printed (Proposition 4.4).
-Neither the compiler pin nor the source-result inventory was changed.
-A new, uncompiled Lean candidate in `TraceOptimality.lean` is excluded from
-all verification counts.
+This manuscript revision uses the source archive for commit
+`5b9c81c4739607f74547f3c55813ebbfc4f00696` (23 October 2026).
+The original 29 Davis--Kahan source targets remain 28 proved at reviewed scope
+and one refuted as printed (Proposition 4.4). This inventory is independent
+of subsequently added correction and optimization theorems.
 
-## Completed parameterized strengthening
+## Lean development
 
-The user provided the output of the pinned Lean build on 23 October 2026:
+The project owner previously reported successful compilation (3,477 jobs) of
+`SmallAngleCounterexample`, `Section4SmallAngle`, and the corresponding audit
+module on 23 October. That run also recorded the standard dependencies
+`propext`, `Classical.choice`, and `Quot.sound` for its inspected declarations.
+
+In the later source snapshot, the agent has completed the additional proof
+modules. The declarations themselves were inspected for this manuscript
+revision and the owner reports that the agent completed the Lean proofs.
+Their contents support the following scope:
+
+| Module | Proved mathematical content |
+|---|---|
+| `ProjectionDisplacement` | UI-seminorm projection lower bound, real/complex and without acuteness. |
+| `TraceRatio` | Exact direct/competitor trace ratio on the real family. |
+| `TraceOptimality` | Global real four-dimensional trace-norm minimum. |
+| `SharpDisplacement` | Sharp `cos(alpha/2)` direct-rotation bound, uniform optimality, `2/sqrt(3)` and `sqrt(2)` factors. |
+| `ComplexTraceOptimality` | Attained complex two-plane trace minimum, including right angles. |
+| `ComplexTraceAssembly` | Finite orthogonal sums of the complex phase-plane models. |
+| `ComplexTraceFiniteModel` | Finite specified principal-plane models, fixed summands, and ambient isometric transport. |
+
+The `ComplexTraceFiniteModel` results do **not** automatically produce a
+principal-plane decomposition for every arbitrary pair of complex subspaces.
+The all-pairs trace-minimum theorem is excluded from the checked-only paper;
+its conventional proof is retained solely in the optional red research box.
+
+To reproduce the quantitative extensions, from the repository root run:
 
 ```bash
 lake exe cache get
 lake build \
   DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample \
-  DavisKahan.Sources.DavisKahan1970.Section4SmallAngle \
-  DavisKahan.Sources.DavisKahan1970.Audits.SmallAngleCounterexample
+  DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement \
+  DavisKahan.FiniteDimensional.DirectRotation.TraceRatio \
+  DavisKahan.FiniteDimensional.DirectRotation.TraceOptimality \
+  DavisKahan.FiniteDimensional.DirectRotation.SharpDisplacement \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel \
+  DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 ```
 
-The command completed successfully (3,477 jobs). The audit output identified
-`TauCeti.DavisKahan1970.proposition4_4_parameterized_traceNorm_counterexample`,
-`proposition4_4_parameterized_principalAngles`, and
-`proposition4_4_arbitrarilySmall_refutingPair`. For the inspected declarations,
-axiom dependencies were exactly the standard `propext`, `Classical.choice`, and
-`Quot.sound`. Four cosmetic `linter.unnecessarySeqFocus` warnings appeared in
-`SmallAngleCounterexample.lean`, none blocking compilation. The proof is
-reported as verified, not pending, based on that observed user build.
+These additional modules are not necessarily imported by the ordinary
+`lake build` aggregate. The build command here explicitly names them;
+the printed-source 29-result inventory is unaffected. No extra
+`#print axioms` inventory or duplicate proof-checker is needed for routine
+proof development.
 
-The source-facing aliases are an *additional extension*, not a thirtieth
-historical result in the original paper's fixed inventory. The full default
-build was not rerun for this manuscript-only change.
+## Manuscript compilation
 
-## Additional displacement results and current verification boundary
+The default `paper.tex` omits the only unformalized all-pairs complex
+proposition. `\includeUnformalizedComplexTracetrue` includes it in an
+explicitly red, breakable working-draft frame; false is the default.
+Both variants should be generated for editorial review, but only the
+checked-only variant is intended as the manuscript itself.
 
-The 23 October 2026 user-confirmed compilation also covers:
+Build from the repository root with
+`make -C papers/dk_formalization_journal paper`.
+The sandbox manuscript build uses TeX Live and `bibtex8` in place of a
+missing `bibtex` executable; the LaTeX build tests do not rerun Lean.
 
-- `DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement`, proving
-  `projectionDifference_uiNorm_le_displacement` and its Ky Fan formulation;
-- `DavisKahan.FiniteDimensional.DirectRotation.TraceRatio`, proving
-  `SmallAngleCounterexample.cos_half_mul_directTrace_eq_competitorTrace`.
+## Scholarly priority
 
-These are established results; the additional working draft does not supersede
-or downgrade them.
-
-`sharp_displacement_unformalized.tex` contains conventional proofs of the
-remaining global claims: the universal `sec(alpha/2)` multiplier, the exact
-real trace-norm minimum, and the no-acuteness complex trace-norm minimum.
-Those three claims are still outside the confirmed Lean development. The
-working-draft frame remains red and can be omitted with the
-`\includeUnformalizedDisplacementfalse` switch.
-
-The candidate `DavisKahan/FiniteDimensional/DirectRotation/TraceOptimality.lean`
-contains source-level implementations for the real trace formula and attained
-minimum. This execution environment did not have `lake`, `lean`, or the pinned
-Mathlib/TauCeti dependencies, and its network could not resolve GitHub to
-install them. Its new declarations have not been compiled, are not imported
-by `DirectRotation/All.lean`, and are **not** counted as verified. No new Lean build was possible. A
-single-pass TeX syntax check (`pdflatex -draftmode -interaction=nonstopmode
--halt-on-error -file-line-error paper.tex`) succeeded in this environment,
-with the expected first-pass unresolved references and citations; it is not a
-full bibliography or PDF-publishing build.
-
-## Citation limits
-
-The 1970 Example 4.2 exhibits complex phase improvement in trace norm;
-Bolotnikov--Li--Rodman (2001) treats Q-norm minima and Schatten counterexamples;
-Qiu--Zhang--Li (2005) repeats the short-angle assertion; Zhang--Qiu (2010)
-states general trace-norm nonminimality. The reviewed material does not
-establish first-publication priority for the exact real small-angle correction
-or the sharp ratio. The new draft does not claim such priority.
-
-## Reproduction
-
-```bash
-python3 papers/dk_formalization_journal/scripts/small_angle_symbolic.py
-make -C papers/dk_formalization_journal paper
-```
-
-On a minimal TeX installation without `bibtex`, use `bibtex8` through a PATH
-shim or via `latexmk -e '$bibtex = "bibtex8 %O %B";' -pdf paper.tex` from the
-manuscript directory.
+The cited primary literature establishes the prior complex phase mechanism,
+Q-norm minimality and related Schatten failures, the later repetition of the
+short-angle claim, and recognition of general trace-norm nonminimality.
+It does not establish first-publication priority for the exact real short-angle
+correction or for the sharp uniform comparison; the paper claims neither.
+The page-keyed detail is in `PROPOSITION_4_4_LITERATURE_MAP.md`.

@@ -101,61 +101,24 @@ Several rows can share one correction.  The census has
 but the manuscript reports two printed YWS defects: the missing square in
 equation~(4) and the rank-boundary convention in Theorem~3.
 
-\section{Formalization procedure and AI assistance}
+\section{Formalization procedure}
 \label{app:formalization-process}
 
-The development combined ordinary Lean compilation with extensive LLM
-assistance.  Work on a source theorem typically began by reading the statement
-and surrounding proof, identifying standing assumptions, and locating the
-relevant Lean interfaces.  The target was then decomposed into intermediate
-mathematical obligations.  Existing Mathlib, Tau Ceti, local, and external Lean
-results were searched before introducing new foundations.  Candidate
-definitions and proofs were compiled with Lean and revised in response to
-elaboration or proof failures.  A separate pass compared the accepted theorem
-statement with the source, including its operator domains, scalar field,
-dimension, norm class, constants, gap hypotheses, and endpoint conventions.
+For each source theorem, we identified its standing assumptions, selected a
+mathematical representation in Lean, and proved the required intermediate
+results against the pinned Mathlib and Tau Ceti dependencies. Proof
+development used Lean's elaborator and kernel to resolve domain conditions,
+separation hypotheses, and norm-ideal membership. The source-correspondence
+review in Appendix~\ref{app:source-review} was performed separately from
+compilation; it compared the elaborated statement with the original theorem,
+including conventions inherited from surrounding text.
 
-LLMs participated at every stage of this cycle.  They transcribed and explained
-source material, proposed decompositions, searched code and literature,
-implemented Lean declarations, repaired proofs from compiler feedback, and
-performed adversarial source comparisons.  Human authors selected the target
-scope, decided which source interpretations to accept, evaluated proposed
-counterexamples and repairs, and reopened statements when later review exposed
-a mismatch.  The maintained source records distinguish kernel acceptance from an internal
-source-correspondence judgment. An accepted internal judgment does not denote
-independent external adjudication or a machine-checked certificate of semantic
-equivalence to the printed paper. The source hypotheses and the mathematical
-bridges are supplied so that a referee can inspect the correspondence.
-
-The systems used during the project are summarized in
-\Cref{tab:formalization-systems}.  Model assignments changed during the
-project.  The table therefore records observed uses without assigning a fixed
-role to any one model.
-
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.28\linewidth}X}
-\toprule
-System & Models used & Observed uses \\
-\midrule
-ChatGPT chat interface & GPT-5.6 Sol; GPT-6 Astra Pro & Mathematical discussion, proof planning, source comparison, review, literature search, and manuscript drafting and editing. \\
-Claude Code & Claude Opus 4.8; Claude Opus 5; Claude Fable 5 & Repository search, Lean implementation, compilation, proof repair, and long-running formalization tasks. \\
-Codex & GPT-5.6 Sol; GPT-5.6 Terra; GPT-5 Codex; GPT-5.6 Codex & Repository search, Lean implementation, compilation, repair, review, and proposed repository changes. \\
-\bottomrule
-\end{tabularx}
-\caption{AI systems and model families used during the formalization and
-manuscript preparation.  The prose of the paper was drafted and edited with AI
-assistance; human authors are responsible for the submitted text.}
-\label{tab:formalization-systems}
-\end{table}
-
-Lean's kernel checks the proof terms produced by this process.  It does not
-check that a theorem statement is the intended transcription of a paper.  The
-statement-review procedure in Appendix~\ref{app:source-review} addresses that
-second question.  Some early valid Lean statements covered narrower bounded,
-finite-dimensional, or spectral-gap cases than the corresponding
-Davis--Kahan theorem, so those statements were reopened after source review.
+ChatGPT, Claude Code, and Codex were used for literature and library search,
+proof design, implementation, debugging, and manuscript preparation. The
+human authors selected and reviewed the mathematical statements and are
+responsible for their interpretation and the submitted text. The main text
+and the source inventory identify the formal results; the project archive
+contains the corresponding proofs and pinned dependencies.
 
 \section{Artifact organization}
 \label{app:artifact}
@@ -171,45 +134,59 @@ source-audit records and paper-specific counterexamples to remain local to the
 paper package while reusable analysis is prepared for upstream integration.
 
 
-\subsection{The additional small-angle result}
+\subsection{Displacement theorems beyond the original inventory}
 \label{app:small-angle-artifact}
 
-The 29-target source account is unchanged by \cref{thm:small-angle}.
-The fixed witness and the failed equation~(4.3) are established in
+The 29-target count concerns results stated in the 1970 paper. The fixed
+counterexample and failure of the published Ky Fan inequality are in
 \path{DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean}.
-The parameterized source is
-\path{DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean}.
-It uses the same source subspace and orthonormal rotation basis, computes
-both displacement singular-value sequences, and identifies the canonical
-rotation through the modulus of its intertwiner. The main declarations are
-\texttt{principalAngles\_eq}, \texttt{kyFanSum\_lt}, and
-\path{arbitrarilySmall_fullDisplacement_refuted}, in the
-finite-dimensional Davis--Kahan namespaces. The parameterized proof and its
-source-facing aliases were compiled in the pinned Lean development; their
-reviewed audit reported only Lean's standard foundational axioms.
+The parameterized family is in
+\path{DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean},
+with source-facing aliases in \path{DavisKahan/Sources/DavisKahan1970/Section4SmallAngle.lean}.
+The Lean theorem
+\texttt{arbitrarilySmall\_fullDisplacement\_refuted} proves failure below
+every positive angle threshold.
 
-Section~\ref{sec:prop44} proves the parameterized statement directly
-from the displayed $4\times4$ matrices. The 29-target source account includes
-the fixed-angle refutation of the printed proposition; the parameterized
-family is a separate extension to that source result.
+The following additional modules contain the proved quantitative results:
+\path{ProjectionDisplacement.lean} proves the projection-distance lower
+bound Proposition~\ref{prop:projection-lower}; \path{TraceOptimality.lean} establishes
+the global real-family minimum Corollary~\ref{cor:real-trace-optimum}; and
+\path{SharpDisplacement.lean} proves the real/complex unitarily invariant
+seminorm inequality \cref{thm:sharp-displacement}, its fixed-angle
+sharpness, and the optimal common factor $2/\sqrt3$ for the $\pi/3$ range.
+These files are in \path{DavisKahan/FiniteDimensional/DirectRotation}.
+
+The same directory contains \path{ComplexTraceOptimality.lean},
+\path{ComplexTraceAssembly.lean}, and
+\path{ComplexTraceFiniteModel.lean}. These prove an attained trace-norm
+minimum for a complex principal plane, its finite orthogonal sums (including
+right angles), and ambient unitary images of a supplied plane decomposition,
+with an optional fixed summand. They do not yet give an all-pairs theorem
+without the decomposition hypothesis. The general mathematical consequence
+is displayed only in the optional red working-draft box.
 
 \subsection{Reproduction}
 
 The root \path{lean-toolchain} and \path{lake-manifest.json} pin the
 compiler and dependencies. From the repository root, the ordinary build
-checks the claimed mathematical development:
+checks the source-facing development:
 \begin{verbatim}
 lake exe cache get
 lake build
 \end{verbatim}
-The compiled parameterized module, source-facing aliases, and audit can be
-rechecked in isolation:
+The quantitative displacement extensions are separate targets, not
+necessarily imported by the ordinary aggregate. Build them explicitly:
 \begin{verbatim}
 lake exe cache get
 lake build \
   DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample \
-  DavisKahan.Sources.DavisKahan1970.Section4SmallAngle \
-  DavisKahan.Sources.DavisKahan1970.Audits.SmallAngleCounterexample
+  DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement \
+  DavisKahan.FiniteDimensional.DirectRotation.TraceOptimality \
+  DavisKahan.FiniteDimensional.DirectRotation.SharpDisplacement \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel \
+  DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}
 The mathematical manuscript builds independently of Lean:
 \begin{verbatim}

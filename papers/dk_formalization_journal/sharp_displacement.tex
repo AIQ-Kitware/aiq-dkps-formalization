@@ -1,0 +1,183 @@
+\section{Sharp bounds for full displacement}
+\label{sec:sharp-displacement}
+
+Let $U,V$ be subspaces of the same finite-dimensional real or complex
+Hilbert space, with orthogonal projections $P,Q$. An admissible orthogonal
+or unitary operator $W$ satisfies $WU=V$. We write $N$ for a unitarily
+invariant norm, or more generally a unitarily invariant seminorm. The
+principal angles of $U$ and $V$ are $\theta_j\in[0,\pi/2]$; for an acute
+pair let $\alpha=\max_j\theta_j<\pi/2$, with $\alpha=0$ when
+$U=V=\{0\}$.
+
+\begin{proposition}[Projection-distance lower bound]
+\label{prop:projection-lower}
+For every admissible $W$ and every unitarily invariant seminorm $N$,
+\begin{equation}
+  N(P-Q)\leq N(I-W).
+  \label{eq:projection-lower}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Relative to $U\oplus U^\perp$, write
+$W=\left(\begin{smallmatrix}A&B\\C&D\end{smallmatrix}\right)$ and
+$J=2P-I$. The off-diagonal part of $I-W$ is
+\[
+ \frac{(I-W)-J(I-W)J}{2}
+ =-\begin{pmatrix}0&B\\C&0\end{pmatrix}.
+\]
+By the triangle inequality and unitary invariance, its $N$-seminorm is
+at most $N(I-W)$. Because $W(U)=V$, the singular values of $A$ are the
+principal cosines $\cos\theta_j$. Unitarity gives
+$C^*C=I-A^*A$ and $BB^*=I-AA^*$, so the nonzero singular values of both
+$B$ and $C$ are the principal sines. The off-diagonal matrix therefore
+has singular values $\sin\theta_j$ twice, with zeros for the remaining
+dimensions. The difference $P-Q$ has the same singular-value list
+\citep{zhang2007angular,bhatia1997matrix}. Unitary invariance proves
+\cref{eq:projection-lower}.
+\end{proof}
+
+\begin{theorem}[Sharp full-displacement comparison]
+\label{thm:sharp-displacement}
+Let $U,V$ be an acute pair with largest principal angle $\alpha$ and
+canonical direct rotation $R$. For every unitarily invariant seminorm $N$
+and every admissible $W$,
+\begin{equation}
+ \boxed{\quad N(I-R)\leq\sec(\alpha/2)\,N(P-Q)
+                \leq\sec(\alpha/2)\,N(I-W).\quad}
+ \label{eq:sharp-displacement}
+\end{equation}
+For every fixed $0<\alpha<\pi/2$, the coefficient $\sec(\alpha/2)$
+is best possible among coefficients valid for all dimensions, scalar
+fields, and unitarily invariant norms. Consequently, the best common
+coefficient under the hypothesis $\alpha\leq\pi/3$ is $2/\sqrt3$;
+$\sqrt2$ is a uniform bound for all acute pairs.
+\end{theorem}
+
+\begin{lstlisting}[style=leanpaper,
+ caption={Lean signature for the sharp displacement bound, over real and
+ complex finite-dimensional spaces for every unitarily invariant seminorm.
+ The scalar-field and ambient-space context is omitted, and the linear
+ isometry equivalence type is written without its Unicode notation.},
+ label={lst:sharp-displacement}]
+theorem cos_half_arcsin_projectionGap_mul_uiNorm_directRotation_le_displacement
+    (N : UnitarilyInvariantSeminorm K E E)
+    (U V : Submodule K E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (W : LinearIsometryEquiv K E E)
+    (hmap : U.map W.toLinearMap = V) :
+    Real.cos (Real.arcsin (U.projectionGap V) / 2) *
+      N (LinearMap.id - (directRotation U V hacute).toLinearMap) <=
+        N (LinearMap.id - W.toLinearMap)
+\end{lstlisting}
+
+\begin{proof}
+On a principal plane with angle $\theta_j$, the singular values of
+$I-R$ are $2\sin(\theta_j/2)$, twice, whereas those of $P-Q$ are
+$\sin\theta_j$, twice. Both operators vanish on the remaining fixed
+summand. As $0\leq\theta_j\leq\alpha<\pi/2$,
+\[
+ 2\sin(\theta_j/2)
+ =\frac{\sin\theta_j}{\cos(\theta_j/2)}
+ \leq\sec(\alpha/2)\sin\theta_j.
+\]
+Monotonicity of symmetric gauge functions gives the first inequality in
+\cref{eq:sharp-displacement}; the second is
+Proposition~\ref{prop:projection-lower}. For the family in
+\cref{thm:small-angle}, both principal angles equal $\alpha$ and
+\[
+ \|P-Q\|_1=4\sin\alpha
+ =\|I-W_\alpha\|_1,
+ \qquad \|I-R_\alpha\|_1=8\sin(\alpha/2).
+\]
+Thus the ratio to the best admissible trace-norm displacement is exactly
+$\sec(\alpha/2)$. At $\alpha=\pi/3$ it is $2/\sqrt3$, and it tends
+to $\sqrt2$ as $\alpha\uparrow\pi/2$.
+\end{proof}
+
+\begin{corollary}[Exact trace minimum for the real family]
+\label{cor:real-trace-optimum}
+For the subspaces $U,V_\theta\subset\mathbb R^4$ of
+\cref{thm:small-angle}, $0<\theta<\pi/2$,
+\begin{equation}
+ \min_{W\in O(4):\,WU=V_\theta}\|I-W\|_1
+ =\|P-Q\|_1=4\sin\theta,
+ \label{eq:real-trace-minimum}
+\end{equation}
+with the minimum attained by the explicit $W_\theta$ in
+\cref{eq:wtheta}.
+\end{corollary}
+
+\begin{proof}
+The singular-value calculation in \cref{thm:small-angle} gives
+$\|P-Q\|_1=4\sin\theta=\|I-W_\theta\|_1$.
+Apply Proposition~\ref{prop:projection-lower} to any other admissible orthogonal
+map.
+\end{proof}
+
+The factor is optimal uniformly over unitarily invariant norms, not for
+an individual norm: $Q$-norms, for example, admit the stronger constant one.
+The projection bound, comparison theorem, fixed-angle sharpness, and real
+minimum are formalized in Lean; see Appendix~\ref{app:small-angle-artifact}.
+
+\subsection{Complex principal-plane minimizers}
+\label{sec:complex-trace-model}
+
+Davis and Kahan's complex phase construction
+\citep[Example~4.2]{davis1970rotation} gives an exact trace minimum on
+a principal plane. In suitable orthonormal coordinates, put
+\begin{equation}
+ R_\theta=\begin{pmatrix}\cos\theta&i\sin\theta\\
+                    i\sin\theta&\cos\theta\end{pmatrix},
+ \qquad W_\theta=e^{i\theta}R_\theta.
+ \label{eq:complex-phase}
+\end{equation}
+Both maps carry the first coordinate line to the same target line, while
+$W_\theta$ has eigenvalues $1,e^{2i\theta}$ and hence
+$\|I-W_\theta\|_1=2\sin\theta$ for $0\leq\theta\leq\pi/2$.
+The projector difference on that plane has the same trace norm.
+
+The formal development proves global trace-norm optimality for finite
+orthogonal sums of these complex principal-plane models, including zero
+and right angles, and with an unchanged orthogonal summand. The result is
+preserved under an explicitly supplied ambient unitary equivalence.
+For these models the minimum is $2\sum_j\sin\theta_j$. No acute-angle
+assumption is needed. The distinction between this model theorem and an
+all-pairs theorem is recorded in Appendix~\ref{app:small-angle-artifact}.
+
+\ifincludeUnformalizedComplexTrace
+\begin{tcolorbox}[
+ enhanced,breakable,colback=white,colframe=red!80!black,
+ colbacktitle=red!6!white,coltitle=red!80!black,
+ title={Working extension --- not yet formalized for arbitrary complex pairs},
+ fonttitle=\bfseries,boxrule=1pt,
+ left=9pt,right=9pt,top=9pt,bottom=9pt,
+ before skip=12pt,after skip=12pt]
+\begin{proposition}[Complex trace minimum: proposed all-pairs formulation]
+\label{prop:complex-trace-all-pairs}
+For any equal-dimensional subspaces $U,V$ of a finite-dimensional complex
+Hilbert space, with principal angles $\theta_1,\ldots,\theta_k$,
+\[
+ \min_{W\text{ unitary}:\,WU=V}\|I-W\|_1
+ =\|P-Q\|_1=2\sum_{j=1}^k\sin\theta_j.
+\]
+\end{proposition}
+\begin{proof}
+The lower bound is Proposition~\ref{prop:projection-lower}. The cosine--sine
+decomposition of $U,V$ splits the nonzero principal angles into mutually
+orthogonal complex two-planes, with a common fixed summand. On each plane
+use the phase-adjusted map $W_{\theta_j}$ from
+\cref{eq:complex-phase}; it transports the corresponding source line
+to its target line with trace displacement $2\sin\theta_j$. The identity
+on the fixed summand contributes zero. The orthogonal sum is an
+admissible unitary attaining $2\sum_j\sin\theta_j=\|P-Q\|_1$.
+\end{proof}
+
+The Lean development proves the phase-plane construction and its
+transport under a supplied coordinate equivalence. The general
+principal-plane decomposition needed to instantiate that model for every
+complex subspace pair remains to be formalized. This box is omitted from
+the checked-only manuscript.
+\end{tcolorbox}
+\fi

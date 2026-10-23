@@ -1,4 +1,4 @@
-\section{Proposition 4.4: failure at arbitrarily small angles}
+\section{Direct rotations and displacement norms}
 \label{sec:prop44}
 
 Write $P$ and $Q$ for the orthogonal projections onto two subspaces $U$ and
@@ -7,12 +7,11 @@ the orthogonal factor in the polar decomposition of
 \[
  T=QP+(I-Q)(I-P).
 \]
-A unitarily invariant norm depends only on singular values; in particular,
-the trace norm is $\|X\|_1=\sum_j s_j(X)$. Proposition~4.4 of
-\citet{davis1970rotation} asserts that, for real subspaces with largest
-principal angle at most $\pi/3$, the direct rotation minimizes $\|I-W\|$
-over orthogonal maps $W$ satisfying $WU=V$, for every such norm.
-A real finite-dimensional counterexample therefore refutes the printed claim.
+For the trace norm, $\|X\|_1=\sum_j s_j(X)$.
+Proposition~4.4 of \citet{davis1970rotation} asserts that, for real
+subspaces whose largest principal angle is at most $\pi/3$, the direct
+rotation minimizes $N(I-W)$ among orthogonal maps $W$ satisfying $WU=V$,
+for every unitarily invariant norm $N$.
 
 \subsection{An explicit one-parameter family}
 
@@ -105,23 +104,16 @@ Apply \cref{thm:small-angle} with
 $\theta=\min\{\varepsilon/2,\pi/4\}$.
 \end{proof}
 
-The direct rotation distributes its rotation over two principal planes;
-$W_\theta$ rotates the diagonal plane $\{(x,x):x\in\mathbb R^2\}$ by
-$2\theta$ and fixes its orthogonal complement. The latter displacement has
-rank two, whereas the direct displacement has rank four. For this pair,
-\[
- \frac{\|I-W_\theta\|_1}{\|I-R_\theta\|_1}=\cos(\theta/2).
-\]
-The ratio tends to one as $\theta$ tends to zero, but the inequality is strict
-at every positive angle in the construction. The checked counterexample
-establishes strict improvement; the stronger question of global trace-norm
-minimality is separate from this Lean theorem.
-The operator norm exhibits the opposite comparison:
-$\|I-W_\theta\|_{\rm op}=2\sin\theta$
-exceeds $\|I-R_\theta\|_{\rm op}=2\sin(\theta/2)$.
-The failure therefore depends on the norm class.
+The competitor rotates a diagonal real two-plane through $2\theta$ and
+fixes its orthogonal complement; its displacement has rank two, compared
+with rank four for $R_\theta$. The operator norm favors the canonical
+rotation instead:
+$\|I-R_\theta\|_{\mathrm{op}}=2\sin(\theta/2)
+ <2\sin\theta=\|I-W_\theta\|_{\mathrm{op}}$.
+The competitor is in fact a global trace-norm minimizer, as proved in
+Corollary~\ref{cor:real-trace-optimum}.
 
-\subsection{The checked short-angle witness and the failed proof step}
+\subsection{Failure of the published proof}
 
 At $\theta=\pi/4$, the family gives
 \[
@@ -135,11 +127,9 @@ The two trace norms are
  \|I-W_{\pi/4}\|_1=2\sqrt2
  <4\sqrt{2-\sqrt2}=\|I-R_{\pi/4}\|_1.
 \]
-The construction, acuteness, principal-angle bound, singular-value
-calculations, and strict inequality for this witness are checked in Lean.
-The parameterized trace formulas, exact principal angles, and arbitrary-threshold
-corollary are also proved in Lean. Appendix~\ref{app:small-angle-artifact}
-identifies the corresponding declarations and their build instructions.
+The fixed and parameterized counterexamples, including their principal
+angles and singular-value formulas, are formalized in Lean; the corresponding
+declarations are listed in Appendix~\ref{app:small-angle-artifact}.
 
 For $K=I-W_{\pi/4}$, let $\Omega_1$ and $\Omega_2$ be the projections onto
 $\operatorname{span}\{e_0,e_3\}$ and
@@ -161,7 +151,7 @@ The domain planes are orthogonal, but their images under $K$ need not be;
 the singular-value sums of these restrictions cannot be added in the
 asserted direction.
 
-\subsection{What the squared-displacement theorem does imply}
+\subsection{The Q-norm statement}
 
 Call a unitarily invariant norm $N$ a $Q$-norm when there is a unitarily
 invariant norm $M$ satisfying
@@ -197,43 +187,32 @@ space is also formally shown to fail the $Q$-norm predicate. The formal
 result makes no identification of that predicate with additional named norm
 families unless the corresponding identity is proved.
 
-\subsection{Relationship to prior norm-minimization results}
+\subsection{Historical context}
 
-Davis and Kahan \citep[Example~4.2]{davis1970rotation} already show that
-multiplying a complex two-dimensional direct rotation by a scalar phase can
-reduce the trace norm of its full displacement, for arbitrarily small positive
-angles. Their subsequent Proposition~4.4 imposes a real-space hypothesis and
-a $\pi/3$ angle bound. The real family in \cref{thm:small-angle}
-shows that neither restriction excludes this obstruction.
+Davis and Kahan already exhibited a complex two-dimensional phase
+modification that decreases the trace norm of full displacement
+\citep[Example~4.2]{davis1970rotation}. Our real family is its
+realification. Indeed, under the identification $\mathbb C^2\simeq
+\mathbb R^2\oplus\mathbb R^2$ in which multiplication by $i$ is
+represented by $J$ from \cref{eq:wtheta}, the matrices
+\[
+ R_\theta^{\mathbb C}=
+ \begin{pmatrix}c&is\\is&c\end{pmatrix},\qquad
+ W_\theta^{\mathbb C}=e^{i\theta}R_\theta^{\mathbb C}
+\]
+become precisely $R_\theta$ and $W_\theta$ above. Realification doubles
+the complex singular-value multiplicities. Thus the real short-angle
+restriction in Proposition~4.4 does not eliminate the mechanism of the
+authors' preceding example.
 
-Bolotnikov, Li, and Rodman \citep[Theorem~3.1]{bolotnikov2001minimal}
-study unitary completion and prove a $Q$-norm minimization principle.
-Their Lemma~3.3 gives a $2\times2$ example with a right-angle rotation and
-complex diagonal competitors showing failure for Schatten $p$-norms with
-$1\leq p<2$. These results already establish the need to distinguish
-norm classes. The $Q$-norm principle therefore precedes the present
-formalization. The right-angle example with complex diagonal competitors
-does not itself contradict the real short-angle restriction.
-
-Qiu, Zhang, and Li \citep[Section~5]{qiu2006grassmann} list three extremal
-properties attributed to Davis and Kahan. Their third item asserts
-full-displacement minimality under the $\pi/3$ bound for every unitarily
-invariant norm. The real family in \cref{thm:small-angle} contradicts that
-item as well as the original proposition. Its conclusion concerns this
-specific extremal assertion; it does not refute the sine-theta bounds or
-assert a failure of the main Grassmann-metric results in that article.
-
-Zhang and Qiu \citep[Section~4, p.~1615]{zhang2010canonicalangles}
-state that direct rotations minimize Frobenius-norm displacement among
-unitary transformations mapping one subspace onto another. They explicitly
-note that direct rotations need not minimize trace-norm displacement and
-that spectral-norm displacement can have additional minimizers. Their
-statement about trace-norm failure is general and does not address the
-specific real short-angle hypothesis of Davis--Kahan Proposition~4.4.
-
-The real family in \cref{thm:small-angle} satisfies every positive
-angle threshold, and \cref{eq:dk43-false} identifies the failed inequality
-in the original argument. The $Q$-norm consequence
-\cref{prop:qnorm-repair} follows from Davis and Kahan's valid
-squared-displacement theorem and is consistent with the earlier norm-class
-results of \citet{bolotnikov2001minimal}.
+\citet{bolotnikov2001minimal} studied related unitary completion and
+subspace-mapping problems. Their Theorem~3.1 proves a $Q$-norm
+minimization result, and Lemma~3.3 exhibits failure for Schatten
+$p$-norms with $1\leq p<2$. Those results establish the earlier norm-class
+distinction. \citet[Section~5]{qiu2006grassmann} subsequently repeated
+the $\pi/3$ assertion, whereas
+\citet[Section~4, p.~1615]{zhang2010canonicalangles} explicitly noted
+general trace-norm nonminimality without addressing that particular
+real-space restriction. The present refutation identifies the invalid
+inequality in Proposition~4.4 and, in \cref{sec:sharp-displacement}, gives
+a quantitative conclusion valid for every unitarily invariant norm.

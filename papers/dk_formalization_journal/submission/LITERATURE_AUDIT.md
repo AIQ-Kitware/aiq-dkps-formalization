@@ -1,122 +1,50 @@
-# Proposition 4.4: bounded literature claims
+# Proposition 4.4 — scholarly attribution summary
 
-Date: 23 October 2026. This is a focused source comparison, not an exhaustive
-priority search. DOI references and source locations are provided so another
-reader can repeat the comparison.
+23 October 2026. This is the editorial summary of the source-level study in
+`../PROPOSITION_4_4_LITERATURE_MAP.md`, which gives original page locations,
+verification levels, and mathematical comparisons. The work establishes
+important antecedents, not a proof of first-publication priority.
 
-## 1. Davis and Kahan (1970)
+## Primary mathematical sources
 
-C. Davis and W. M. Kahan, The Rotation of Eigenvectors by a Perturbation. III,
-SIAM Journal on Numerical Analysis 7(1), 1--46.
-https://doi.org/10.1137/0707001
+| Source | Verified relevance | Manuscript use |
+|---|---|---|
+| Davis--Kahan, *The Rotation of Eigenvectors by a Perturbation. III*, SIAM J. Numer. Anal. **7** (1970), 1–46, doi:10.1137/0707001. | §4, Example 4.2 exhibits complex phase improvement of trace displacement. Proposition 4.3 supports squared displacement; Proposition 4.4 wrongly asserts universal full-displacement minimization for real angles `<= pi/3`. The invalid sum step occurs in equation (4.3). | Credit the original phase mechanism; identify precisely which printed proposition fails and which preceding theorem survives. |
+| Bolotnikov--Li--Rodman, *Minimal distortion problems for classes of unitary matrices*, ELA **8** (2001), 26–46, doi:10.13001/1081-3810.1058. | Theorem 3.1: related Q-norm minimization; Lemma 3.3: failure for Schatten `1 <= p < 2`; Theorem 4.2: Frobenius minimizers. | Do not call general nonminimality or Q-norm optimality newly discovered. Do not mistake Frobenius for trace-minimum classifications. |
+| Qiu--Zhang--Li, *Unitarily invariant metrics on the Grassmann space*, SIAM J. Matrix Anal. Appl. **27** (2005), 507–531, doi:10.1137/040607605. | §5, item 3 repeats the `pi/3` full-displacement assertion; its logarithmic/minimal-metric results have a different objective. | Identify the repeated assertion without suggesting that the paper's Grassmann metric theorems are false. |
+| Zhang--Qiu, *On the angular metrics between linear subspaces*, Linear Algebra Appl. **421** (2007), 163–170, doi:10.1016/j.laa.2006.08.015. | Principal-angle singular values of `P-Q` (printed p. 165), including the doubled sine list. | Cite the classical singular-value ingredient for projection lower bounds and sharp displacement. |
+| Zhang--Qiu, *From subadditive inequalities of singular values to triangle inequalities of canonical angles*, SIAM J. Matrix Anal. Appl. **31** (2010), 1606–1620, doi:10.1137/09074841X. | §4 (p. 1615) acknowledges trace-norm nonminimality in general, but does not specifically refute the real short-angle proposition. | Explicitly recognize preexisting awareness of nonminimality, not claim novelty for it. |
 
-Proposition 4.4's real short-angle condition is largest principal angle at most
-pi/3; its conclusion quantifies over unitarily invariant full-displacement
-norms. The existing source-facing formalization and fixed-angle counterexample
-are the basis for the new family. The failed inequality is source equation
-(4.3), not Proposition 4.3. Proposition 4.3's squared-displacement statement
-remains valid and yields the Q-norm consequence.
+Bhatia, *Matrix Analysis* (Springer, 1997), supplies standard pinching and
+symmetric-gauge machinery; see the full map for other adjacent results,
+including operator-norm extremal theorems.
 
-Example 4.2 in Section 4 already notes complex two-dimensional trace-norm
-nonminimality: multiplying the direct rotation by a scalar phase gives a
-strictly better competitor for positive angles. The real four-dimensional
-family is its realification, with the phase acting as a two-dimensional real
-rotation in the multiplicity space. This connection supplies a direct
-mathematical explanation of why Proposition 4.4's real-space restriction
-still admits counterexamples. It does not establish novelty of the underlying
-phase mechanism.
+## Consequences now formalized
 
-The new conventional proof constructs W = H diag(C(2 theta), I) H^T, computes
-the target projection, proves the canonical intertwiner is cos(theta) R,
-and obtains the two singular-value lists. This directly addresses the real
-short-angle hypotheses. It does not dispute the sine-theta theorems.
+For finite-dimensional real/complex spaces, any UI seminorm `N`, and any
+admissible map `W`, the projection-distance lower bound is
+`N(P-Q) <= N(I-W)`. For acute pairs with maximum angle `alpha`, the
+canonical direct rotation satisfies
 
-## 2. Bolotnikov, Li, and Rodman (2001)
+`N(I-R) <= sec(alpha/2) N(P-Q) <= sec(alpha/2) N(I-W)`.
 
-V. Bolotnikov, C.-K. Li, and L. Rodman, Minimal distortion problems for classes
-of unitary matrices, Electronic Journal of Linear Algebra 8, 26--46.
-https://doi.org/10.13001/1081-3810.1058
-Primary PDF: https://journals.uwyo.edu/index.php/ela/article/download/117/117/117
+The constant is sharp across all UI norms and dimensions at each positive
+acute angle, attained by the real four-dimensional trace example; it is
+not the best constant separately for Q-norms. That real example globally
+minimizes trace displacement with value `4 sin(theta)`. These are proven
+in Lean in `ProjectionDisplacement.lean`, `SharpDisplacement.lean`, and
+`TraceOptimality.lean` in the October 23 source snapshot. The complex
+exact-minimum theorem is verified for supplied principal-plane models and
+their coordinate transports, not for arbitrary complex pairs.
 
-Theorem 3.1 (printed p. 33) develops Q-norm minimization in a unitary-completion
-problem. Lemma 3.3 (printed p. 36) analyzes a 2-by-2 example with complex unit
-scalars and Schatten p-norms for 1 <= p < 2. The article cites Davis--Kahan
-Section 4. These are direct antecedents for norm-class limitations and the
-Q-norm repair. The particular right-angle/complex-scalar example does not
-itself instantiate the real pi/3 condition in Proposition 4.4.
+## Priority boundary
 
-The primary PDF's extracted text was inspected. The web PDF screenshot service
-failed on repeated requests, so this revision does not claim a successful
-visual audit of those pages. The mathematical discussion uses the readable
-primary text and source citations, not an uninspected figure.
-
-## 3. Qiu, Zhang, and Li (2005; online 2006)
-
-L. Qiu, Y. Zhang, and C.-K. Li, Unitarily invariant metrics on the Grassmann
-space, SIAM Journal on Matrix Analysis and Applications 27(2), 507--531.
-https://doi.org/10.1137/040607605
-Author-uploaded article text:
-https://www.researchgate.net/publication/220656718_Unitarily_Invariant_Metrics_on_the_Grassmann_Space
-Author's publication list: https://myweb.cuhk.edu.cn/qiuli/Home/AcademicPublications
-
-Section 5 lists three direct-rotation extremal properties attributed to Davis
-and Kahan. Item 3 repeats full-displacement minimality for every unitarily
-invariant norm under theta_1 <= pi/3. The new real family contradicts that
-particular item. This is evidence that the assertion was repeated; it is not
-a claim that the paper's main Grassmann-metric theorems fail. The cited
-bibliographic year is 2005, with the online date recorded separately.
-
-## 4. Zhang and Qiu (2010): checked direct-rotation norm comparison
-
-Y. Zhang and L. Qiu, From subadditive inequalities of singular values to triangle
-inequalities of canonical angles, SIAM Journal on Matrix Analysis and
-Applications 31(4), 1606--1620.
-https://doi.org/10.1137/09074841X
-
-The published article was inspected directly (Section 4, printed p. 1615; PDF
-page 10). The authors state that direct rotations minimize Frobenius-norm
-displacement among unitary maps between two subspaces. They note explicitly
-that trace-norm displacement is not generally minimized by direct rotations;
-for spectral-norm displacement, additional minimizers may exist. The passage
-attributes the underlying direct-rotation theory to Davis and Kahan [5],
-but does not identify Proposition 4.4 as false or examine the specific real
-pi/3 angle restriction. The passage establishes that the general trace-norm
-limitation was known by 2010; it does not establish priority for the
-short-angle refutation.
-
-## Claims the manuscript makes
-
-- A real 4-dimensional example refutes the particular printed Proposition 4.4.
-- The parameterized construction fails for every 0 < theta < pi/2 and hence
-  below every positive proposed angle threshold.
-- The explicit singular-value calculation diagnoses why full-displacement
-  trace norm differs from squared-displacement majorization.
-- The Q-norm conclusion follows from established squared-displacement theory.
-- The 2005 Section 5 item repeats the assertion contradicted by the family.
-
-It does not claim first discovery of general trace-norm failure, a new Q-norm
-principle, a global optimizer for the constructed trace-norm problem, failure
-for every Schatten exponent below two at arbitrarily small angles, or an
-exhaustive absence of earlier explicit corrections.
-
-## 5. Bhatia (1997): standard matrix-norm machinery
-
-R. Bhatia, *Matrix Analysis*, Graduate Texts in Mathematics 169,
-Springer, New York (1997). https://doi.org/10.1007/978-1-4612-0653-8
-
-The working-draft universal inequality uses the classical pinching bound,
-principal-angle/cosine-sine singular values, and the monotonicity of
-symmetric gauge norms. This is standard matrix-analysis infrastructure.
-The proposed synthesis and sharp constant remain unformalized; locating or
-failing to locate precisely the same inequality is not proof of priority.
-
-## 6. Further mathematical deductions in the red-frame draft
-
-The projection lower bound and principal-plane singular values imply a finite-
-dimensional upper bound `sec(alpha/2)` for every UI norm; the already verified
-real family attains equality in trace norm. The same lower bound establishes
-that the real competitor is a global trace minimizer. Complex phase adjustment
-on each principal plane yields the exact complex trace-norm optimum. The
-manuscript marks these deductions as conventional mathematics awaiting Lean
-formalization, not as results already checked by Lean. The literature review
-identified close antecedents rather than an exhaustive priority boundary.
+The project provides a source-faithful formal refutation within the printed
+real short-angle hypotheses, an exact diagnosis of equation (4.3), and
+formal quantitative repairs. The real example is the realification of the
+1970 complex phase mechanism; the sharp factor follows from established
+singular-value and pinching ingredients. No original-source paper examined
+explicitly stated the precise real correction or the sharp all-norm ratio,
+but absence in the searched material is not proof of historical priority.
+Do not claim first discovery of trace-norm failure, the phase mechanism,
+Q-norm minimality, or the general complex trace formula.
