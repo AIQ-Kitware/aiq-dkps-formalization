@@ -484,6 +484,24 @@ orientation, domains and constants; (3) actual consumer rewrites and deleted
 proof LOC; and (4) successful local Lean build. Merely adding a forwarding
 bridge or an upstream import **does not** count as donor retirement.
 
+**Latest accepted-main retirement batch (2026-10-22):** DKPS
+`0ab9c7cafac4` is migrated to supplied TauCeti main
+`f99e274230de08a9a8189a97dbfc910536646449`. The Haagerup--Zsido
+exterior Fourier identity, kernel measurability/integrability, and sharp
+`pi/2` mass are now consumed directly through upstream
+`TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass}`. This retires
+eight maintained DKPS kernel/support modules; only two downstream
+source-facing integral proofs change, and both preserve their statements
+and normalization. Independently useful generic integral helpers in the
+retired support chain are **no longer maintained**, but their retirement
+does not prove verbatim upstream ancestry. The local
+`ContinuousLinearMap.realAlgebra` / `.realIsScalarTower` definitions also
+retire in favor of upstream `TauCeti.Analysis.Normed.Operator.RealAlgebra`,
+with consumers preserving opt-in local instances. All nine removed donor
+paths had Kitware source headers; this census and Git history preserve
+their provenance. The pin and Lake manifest now agree; compilation remains
+the maintainer's next gate.
+
 ## E. Incomplete Hilbert-space roadmap audit: remaining research
 
 The census is **not exhaustive**. The attached `tauceti-dkps-campaign`

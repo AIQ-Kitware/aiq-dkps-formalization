@@ -5,7 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 import DavisKahan.Sylvester.FiniteBlockReconstruction
-import ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel
+import TauCeti.Analysis.Fourier.HaagerupZsido.Fourier
+import TauCeti.Analysis.Fourier.HaagerupZsido.Mass
 import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
@@ -55,7 +56,7 @@ open DavisKahan.Foundation
 open DavisKahan
 
 open TauCeti
-open MeasureTheory Set Filter
+open _root_.MeasureTheory Set Filter
 open scoped InnerProductSpace BigOperators
 
 noncomputable section
@@ -89,7 +90,23 @@ theorem separatedSylvesterMultiplier_identity
   have hx : 1 ≤ |x| := by
     rw [hxdef, abs_div, abs_of_pos hd, le_div_iff₀ hd, one_mul]
     exact hab
-  have hfourier := HaagerupZsido.reciprocalKernel_fourier x hx
+  have hfourier :
+      (∫ t : ℝ, HaagerupZsido.reciprocalKernel t *
+        Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) = 1 / (x : ℂ) := by
+    calc
+      _ = ∫ t : ℝ, Complex.exp ((x : ℂ) * t * Complex.I) *
+            HaagerupZsido.reciprocalKernel t := by
+          apply MeasureTheory.integral_congr_ae
+          filter_upwards [] with t
+          have hphase : (((t * x : ℝ) : ℂ) * Complex.I) =
+              ((x : ℂ) * t * Complex.I) := by
+            push_cast
+            ring
+          rw [hphase]
+          ring
+      _ = 1 / (x : ℂ) := by
+          simpa only [one_div] using
+            (HaagerupZsido.integral_exp_mul_I_mul_reciprocalKernel (x := x) hx)
   set g : ℝ → ℂ := fun s =>
     HaagerupZsido.reciprocalKernel s *
       Complex.exp (((s * x : ℝ) : ℂ) * Complex.I) with hgdef

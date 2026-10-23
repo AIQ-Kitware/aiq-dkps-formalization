@@ -6,9 +6,11 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction
-public import ForTauCeti.Analysis.Fourier.HaagerupZsido.Kernel
+public import TauCeti.Analysis.Fourier.HaagerupZsido.Fourier
+public import TauCeti.Analysis.Fourier.HaagerupZsido.Mass
 public import Mathlib.Analysis.Convex.Integral
 public import Mathlib.Analysis.Real.Pi.Bounds
+public import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 public import Mathlib.MeasureTheory.SpecificCodomains.Pi
 public import Mathlib.LinearAlgebra.Lagrange
 
@@ -319,11 +321,28 @@ def HasIntegrableReciprocalFourierKernel (mass : ℝ) : Prop :=
 `α = 0` kernel is measurable and integrable, represents `1 / x` on the whole
 exterior region `1 ≤ |x|`, and has `L¹` mass exactly `π / 2`. -/
 theorem hasIntegrableReciprocalFourierKernel_pi_div_two :
-    HasIntegrableReciprocalFourierKernel (Real.pi / 2) :=
-  ⟨HaagerupZsido.reciprocalKernel,
+    HasIntegrableReciprocalFourierKernel (Real.pi / 2) := by
+  have hkernel (x : ℝ) (hx : 1 ≤ |x|) :
+      (∫ t : ℝ, HaagerupZsido.reciprocalKernel t *
+        Complex.exp ((((t * x : ℝ) : ℂ) * Complex.I))) = 1 / (x : ℂ) := by
+    calc
+      _ = ∫ t : ℝ, Complex.exp ((x : ℂ) * t * Complex.I) *
+            HaagerupZsido.reciprocalKernel t := by
+          apply MeasureTheory.integral_congr_ae
+          filter_upwards [] with t
+          have hphase : (((t * x : ℝ) : ℂ) * Complex.I) =
+              ((x : ℂ) * t * Complex.I) := by
+            push_cast
+            ring
+          rw [hphase]
+          ring
+      _ = 1 / (x : ℂ) := by
+          simpa only [one_div] using
+            (HaagerupZsido.integral_exp_mul_I_mul_reciprocalKernel (x := x) hx)
+  exact ⟨HaagerupZsido.reciprocalKernel,
     HaagerupZsido.measurable_reciprocalKernel,
     HaagerupZsido.integrable_reciprocalKernel,
-    fun x hx => HaagerupZsido.reciprocalKernel_fourier x hx,
+    fun x hx => hkernel x hx,
     HaagerupZsido.integral_norm_reciprocalKernel.le⟩
 
 /-- The pointwise phase of a complex-valued function: `f t / ‖f t‖` off the zero

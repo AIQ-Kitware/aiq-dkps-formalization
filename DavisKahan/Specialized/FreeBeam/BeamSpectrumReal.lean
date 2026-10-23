@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 import DavisKahan.Specialized.FreeBeam.BeamClassicalReal
 import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
-import ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra
+import TauCeti.Analysis.Normed.Operator.RealAlgebra
 import Mathlib.Tactic
 
 /-!

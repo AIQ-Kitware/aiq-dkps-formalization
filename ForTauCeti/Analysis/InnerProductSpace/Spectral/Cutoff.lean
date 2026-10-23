@@ -12,7 +12,7 @@ public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.InnerProductSpace.Positive
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
-public import ForTauCeti.Analysis.InnerProductSpace.OperatorRealAlgebra
+public import TauCeti.Analysis.Normed.Operator.RealAlgebra
 
 /-!
 # Spectral cutoffs of a positive operator
