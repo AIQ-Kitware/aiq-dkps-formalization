@@ -51,8 +51,9 @@ DECK_part7 := part7-glossary
 DECK_kitware       := kitware-talk
 DECK_comprehensive := comprehensive
 DECK_study         := study
+DECK_novelty       := novelty-tour
 PARTS             := part1 part2 part3 part4 part5 part6 part7
-WORKING           := kitware comprehensive study
+WORKING           := kitware comprehensive study novelty
 DECKS      := short full $(PARTS) $(WORKING)
 
 .DEFAULT_GOAL := help
@@ -70,7 +71,8 @@ help:
 	@echo '  kitware            completed short talk; also build a portable standalone HTML'
 	@echo '  comprehensive      all unique scenes, ordered by topic; also build standalone HTML'
 	@echo '  study              previous long-form self-study composition'
-	@echo '  working            build kitware, comprehensive, and study'
+	@echo '  novelty            standalone deck for the new optimization mathematics'
+	@echo '  working            build kitware, comprehensive, study, and novelty'
 	@echo '  part1 ... part7    one part of the full talk, rendered and converted on its own:'
 	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary, 7 notation'
 	@echo '  full               every part, then the full deck assembled from their renders'
@@ -108,6 +110,12 @@ draft:
 
 short study $(PARTS):
 	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS)
+
+# Render a modest number of LaTeX-heavy novelty scenes concurrently unless
+# JOBS is explicitly provided. The generic builder otherwise starts one job
+# per CPU, which can be excessive for a presentation full of MathTex labels.
+novelty:
+	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2)
 
 # Long and completed talk decks always produce portable, single-file HTML.
 # The comprehensive deck is large: default to a modest two render processes

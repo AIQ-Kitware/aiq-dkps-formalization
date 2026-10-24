@@ -327,6 +327,30 @@ The underlying commands:
 uv sync --extra vtk --extra slides --extra test   # needs LaTeX, and Pango/Cairo headers to build manimpango
 RUN="uv run --extra vtk --extra slides --extra test"   # always pass the extras: a bare `uv run` re-syncs them away
 $RUN python -m dkvis.build_slides sine-theta-short -q l          # quick draft (480p)
+$RUN python -m dkvis.build_slides novelty-tour --pdf --handout  # standalone deck for the new transport math
+
+The `novelty-tour` deck uses the established Manim roles: blue for `U`, amber for
+`V`, magenta for angles, violet for transition cutoffs, and the steel family for
+smoothed objectives. The transporters `W` and `R` remain neutral, as in the
+Proposition 4.4 slides; `R` is not the green residual of the sine-theta story.
+
+You can render and export the novelty deck in one command (no separate
+conversion attempt after a failed render):
+
+```bash
+uv run --extra vtk --extra slides --extra test python -m dkvis.build_slides \
+    novelty-tour --quality l --jobs 2 --one-file \
+    --html renders/novelty-tour.standalone.html
+```
+
+For a quick pre-render check of the novelty slide text, TeX commands, and
+example phase formulas:
+
+```bash
+uv run --extra vtk --extra slides --extra test python -m pytest -q \
+    tests/test_decks.py tests/test_novelty_latex.py
+```
+
 $RUN python -m dkvis.build_slides part3-family --pdf --handout   # one part, 1080p60
 $RUN python -m dkvis.build_slides sine-theta-full                # every part, then the assembled full deck
 $RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvis.build_slides sine-theta-short --list)
