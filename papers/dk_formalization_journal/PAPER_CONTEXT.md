@@ -302,6 +302,16 @@ with the actual displacement power on the orthogonal product. The spectral
 calculus also proves norm invariance under isometric changes of carrier types;
 these are classical assembly ingredients, not separate novelty claims.
 
+`SchattenFeasibleBlocks.lean` now proves the ambient extension step when
+paired reflection coordinates are supplied. A common right exponential on
+the paired blocks commutes with their swapping reflection. Extending it by
+the identity on an arbitrary complementary block gives a continuous feasible
+ambient curve. The actual ambient cost equals the paired cost plus the fixed
+complementary cost, so local minimality transfers and forces `AB = 0`.
+This theorem permits an isometric change of the ambient carrier. Constructing
+these coordinates from the stationary gradient eigenspaces remains separate;
+the unrestricted higher-rank minimum is still not Lean-certified.
+
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical
 rotation times `exp(i delta(theta) S)`, with `S` any self-adjoint unitary.
@@ -310,6 +320,28 @@ distinct positive angles there are exactly `2^k` minimizers when exactly
 `k` angles are supercritical. Uniqueness is equivalent to every angle being
 at most the cutoff. This characterization uses the unformalized higher-rank
 block argument and is not a new compiled result.
+
+The same conventional classification yields an acute real-versus-complex
+criterion: the real minimum equals the complex minimum exactly when every
+supercritical angle has even multiplicity. In a real cosine--sine chart,
+`exp(i delta S)` is real exactly when `S = iJ`, where `J` is a real
+orthogonal complex structure. Such a structure exists exactly in even
+dimension. An odd supercritical multiplicity gives a strict gap by compactness.
+This is a corollary of the unformalized optimizer classification, not a
+compiled real optimization theorem or an exact formula for the larger real
+minimum.
+
+A further primary-source check on 2026-10-24 visually verified Table 5.1
+on printed page 116 of Aubrun--Szarek's author-provided
+[Chapter 5 PDF](https://case.edu/artsci/math/szarek/ABMB/ABMBchapter5.pdf).
+Its caption specifies quotient metrics from extrinsic Schatten norms, while
+its Grassmann diameter entries use `sqrt(2) * (2k)^(1/p)` for the displayed
+full exponent range. This appears incompatible with the elementary real
+rank-one quotient calculation when `p < 2`: the cost is at most two for
+every pair, by a reflecting transporter. The raw Appendix B normalization
+and full exercise statements remain to be checked from a primary copy;
+the author's full PDF has been unavailable. Do not yet claim a book erratum
+or infer research priority from this discrepancy.
 
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.

@@ -37,5 +37,6 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenOverlapDirection
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenSecondVariation
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenNoMixing
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenFeasibleBlocks
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

@@ -460,6 +460,37 @@ $\coprod_{k=0}^{m}\operatorname{Gr}(k,m)$ of complex Grassmannians.
 For distinct positive principal angles, exactly $k$ of which are
 supercritical, there are exactly $2^k$ minimizing transporters.
 
+\begin{corollary}[When real transport attains the complex minimum]
+\label{cor:schatten-real-parity}
+Let $P,Q$ be equal-rank real orthogonal projections whose principal
+angles are all less than $\pi/2$. The minimum of $\|I-W\|_p$ over real
+orthogonal transporters equals the minimum over complex unitary
+transporters if and only if every principal angle greater than
+$\vartheta_p$ has even multiplicity. If one such multiplicity is odd,
+the real minimum is strictly larger.
+\end{corollary}
+
+\begin{proof}
+Choose a real cosine--sine decomposition. Complexification preserves the
+principal angles and the displacement singular values. By
+\cref{prop:schatten-all-acute-minimizers}, a complex minimizer on a
+supercritical angle space of multiplicity $m$ has multiplicity factor
+\[
+ \exp(i\delta S)=\cos\delta\,I+i\sin\delta\,S,
+ \qquad S=S^*=S^{-1},\qquad 0<\delta<\pi/2.
+\]
+This factor is real precisely when $S=iJ$ for a real matrix $J$.
+The conditions on $S$ then give $J^T=-J$ and $J^2=-I$.
+Such an orthogonal complex structure exists on $\mathbb R^m$ precisely
+when $m$ is even: necessity follows by taking determinants of $J^2=-I$,
+and sufficiency follows from a direct sum of quarter-turn matrices.
+Below and at the cutoff, the multiplicity factor is the identity.
+Thus a real complex-minimizing transporter exists exactly under the
+stated parity condition. Both feasible sets are compact and nonempty,
+so failure to attain the complex minimum forces a strict gap between
+the two minimum values.
+\end{proof}
+
 \begin{corollary}[The sharp exponent-dependent angle cutoff]
 \label{cor:schatten-canonical-cutoff}
 For an acute complex pair with largest principal angle $\alpha$ (taken
