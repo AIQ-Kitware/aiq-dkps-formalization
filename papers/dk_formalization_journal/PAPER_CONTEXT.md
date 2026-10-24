@@ -181,6 +181,34 @@ PDF has a `6 epsilon/Delta` bound that v3 replaced. The current relevance is
 an exact optimization formulation with a stronger global-unitarity constraint,
 not a claimed replacement of their ground-space result.
 
+A further local-minimum comparison was checked against the primary preprint
+of Massey--Rios--Stojanoff, *Local Lidskii's theorems for unitarily invariant
+norms*, Linear Algebra Appl. 557 (2018), 34--61,
+DOI 10.1016/j.laa.2018.07.022, <https://arxiv.org/html/1806.11436>.
+Their Theorems 3.5 and 3.12 prove that local minima are global for distance
+to a full fixed-eigenvalue Hermitian orbit or a full fixed-singular-value
+matrix orbit. Our domain is the coset of the stabilizer of a specified
+projection. It is a restricted part of the unitary group, and the local
+minimality hypothesis on that coset does not imply local minimality on the
+larger orbit. These results are relevant antecedents for the landscape
+claim, but the inspected statements do not supply our angle formula or
+the local-to-global conclusion on the transporter coset. No priority claim
+for the general principle that local minima can be global is warranted.
+
+The new two-module donor cluster `SpectralTrace.lean` and
+`SchattenSpectralCalculus.lean` supplies a compiled first variation for the
+actual accepted Schatten norm power along normal curves with spectra in a
+common compact set. It uses scalar supports, the accepted Schur weights,
+continuity of the continuous functional calculus, and the accepted normal
+spectral theorem. Eigenvalue collisions and zero displacement are allowed
+for every finite exponent greater than one. The planar consumer now uses
+its general eigenbasis norm formula instead of a separate two-entry sorting
+proof. These are classical foundations for the matrix reduction, not new
+research claims. They have no newly accepted Tau Ceti roadmap target in this
+campaign; no upstream submission scope or acceptance is inferred. The
+constrained stationarity condition and the higher-rank decomposition remain
+separate formal obligations.
+
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
 - Symbol colors: `math_symbol_colors.tex`; `\DKMathColorsfalse` after its input turns symbol colors off. Keep the readable Manim-derived shade map and `appendix_notation.tex` aligned.

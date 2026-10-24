@@ -7,6 +7,7 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransport
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
 import TauCeti.Analysis.InnerProductSpace.NormalOperator
 import TauCeti.Analysis.InnerProductSpace.SingularValues.Planar
+import ForTauCeti.Analysis.InnerProductSpace.SchattenSpectralCalculus
 import Mathlib.Analysis.SpecialFunctions.Complex.Arg
 
 /-!
@@ -157,31 +158,11 @@ private theorem schatten_planar_eigenbasis
     UnitarilyInvariantSeminorm.schatten ℂ E E p (LinearMap.id - W.toLinearMap) =
       (‖1 - mu 0‖ ^ p.toReal + ‖1 - mu 1‖ ^ p.toReal) ^ (1 / p.toReal) := by
   let A : E →ₗ[ℂ] E := LinearMap.id - W.toLinearMap
-  have hE : Module.finrank ℂ E = 2 := by
-    rw [Module.finrank_eq_card_basis b.toBasis, Fintype.card_fin]
-  have hdiag : A = Matrix.toLin b.toBasis b.toBasis
-      (Matrix.diagonal ![1 - mu 0, 1 - mu 1]) := by
-    apply b.toBasis.ext
-    intro i
-    simp only [Matrix.toLin_self, Matrix.diagonal_apply, Fin.sum_univ_two]
-    fin_cases i <;> simp [A, hmu, sub_smul]
-  rw [UnitarilyInvariantSeminorm.schatten_apply_of_ne_top p hp]
-  congr 1
-  change A.singularValues.sum (fun _ s => s ^ p.toReal) = _
-  have hp0 : 0 < p.toReal := ENNReal.toReal_pos (zero_lt_one.trans_le Fact.out).ne' hp
-  rw [← A.sum_fin_singularValues (fun s : ℝ => s ^ p.toReal)
-    (Real.zero_rpow hp0.ne'), hE, Fin.sum_univ_two]
-  rcases le_total ‖1 - mu 1‖ ‖1 - mu 0‖ with hle | hle
-  · rw [hdiag, Matrix.singularValues_toLin_diagonal_fin_two b hle]
-    simp
-  · have hswap : A = Matrix.toLin (b.reindex (Equiv.swap 0 1)).toBasis
-        (b.reindex (Equiv.swap 0 1)).toBasis (Matrix.diagonal ![1 - mu 1, 1 - mu 0]) := by
-      apply (b.reindex (Equiv.swap 0 1)).toBasis.ext
-      intro i
-      simp only [Matrix.toLin_self, Matrix.diagonal_apply, Fin.sum_univ_two]
-      fin_cases i <;> simp [A, hmu, sub_smul]
-    rw [hswap, Matrix.singularValues_toLin_diagonal_fin_two _ hle]
-    simp [add_comm]
+  have hA (i : Fin 2) : A (b i) = (1 - mu i) • b i := by
+    change b i - W (b i) = (1 - mu i) • b i
+    rw [hmu, sub_smul, one_smul]
+  simpa only [Fin.sum_univ_two] using
+    TauCeti.schatten_eq_sum_norm_eigenvalues b A (fun i => 1 - mu i) hA p hp
 
 private theorem norm_one_sub_phase_eq_chord_abs (a : ℝ) (ha : |a| ≤ Real.pi) :
     ‖1 - Complex.exp ((a : ℂ) * Complex.I)‖ = phaseChord |a| := by
