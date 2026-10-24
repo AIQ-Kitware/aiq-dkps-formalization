@@ -44,6 +44,20 @@ theorem pairedInvolutionEmbedding_apply (K : Submodule 𝕜 E) (J : E ≃ₗᵢ[
     (horth : ∀ x y : K, ⟪(x : E), J y⟫_𝕜 = 0) (x : WithLp 2 (K × K)) :
     pairedInvolutionEmbedding K J horth x = (x.fst : E) + J x.snd := by rfl
 
+/-- The paired embedding has range equal to the sum of the original space
+and its image under the isometry. -/
+theorem pairedInvolutionEmbedding_range (K : Submodule 𝕜 E) (J : E ≃ₗᵢ[𝕜] E)
+    (horth : ∀ x y : K, ⟪(x : E), J y⟫_𝕜 = 0) :
+    (pairedInvolutionEmbedding K J horth).toLinearMap.range = K ⊔ K.map J.toLinearMap := by
+  apply le_antisymm
+  · rintro y ⟨x, rfl⟩
+    change pairedInvolutionEmbedding K J horth x ∈ K ⊔ K.map J.toLinearMap
+    rw [pairedInvolutionEmbedding_apply]
+    exact Submodule.add_mem_sup x.fst.property (Submodule.mem_map_of_mem x.snd.property)
+  · intro y hy
+    rcases Submodule.mem_sup.mp hy with ⟨x, hx, z, ⟨w, hw, rfl⟩, rfl⟩
+    exact ⟨WithLp.toLp 2 (⟨x, hx⟩, ⟨w, hw⟩), rfl⟩
+
 /-- The involution exchanges the two paired coordinates. -/
 theorem pairedInvolutionEmbedding_swap (K : Submodule 𝕜 E) (J : E ≃ₗᵢ[𝕜] E)
     (horth : ∀ x y : K, ⟪(x : E), J y⟫_𝕜 = 0) (hJ : Function.Involutive J)

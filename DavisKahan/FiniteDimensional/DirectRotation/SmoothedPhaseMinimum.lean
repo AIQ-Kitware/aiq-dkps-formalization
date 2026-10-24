@@ -205,6 +205,13 @@ def weightedPhaseMinimum (a b theta : ℝ) : ℝ :=
     2 * Real.sqrt (a ^ 2 + b ^ 2 - 2 * a * b * Real.cos theta)
   else 2 * a * Real.sin theta
 
+/-- A fixed direction pair contributes twice the radial distance. -/
+theorem weightedPhaseMinimum_zero (a b : ℝ) (hab : b ≤ a) :
+    weightedPhaseMinimum a b 0 = 2 * (a - b) := by
+  rw [weightedPhaseMinimum, Real.cos_zero, mul_one, ite_eq_left hab]
+  rw [show a ^ 2 + b ^ 2 - 2 * a * b * 1 = (a - b) ^ 2 by ring,
+    Real.sqrt_sq (sub_nonneg.mpr hab)]
+
 /-- The nonnegative attaining scalar phase. -/
 @[expose]
 def optimalWeightedPhase (a b theta : ℝ) : ℝ :=

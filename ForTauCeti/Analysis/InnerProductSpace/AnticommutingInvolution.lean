@@ -7,6 +7,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 public import TauCeti.Analysis.InnerProductSpace.Projection.Block
+public import TauCeti.Analysis.InnerProductSpace.PointSpectrum
 
 /-!
 # Eigenspace pairing by an anticommuting isometric involution
@@ -92,6 +93,35 @@ theorem finrank_eigenspace_eq_neg_of_involution [FiniteDimensional 𝕜 E]
     Module.finrank 𝕜 (Module.End.eigenspace G g) =
       Module.finrank 𝕜 (Module.End.eigenspace G (-g)) :=
   (eigenspaceNegEquivOfInvolution J hJ G hanti g).toLinearEquiv.finrank_eq
+
+/-- An anticommuting isometric involution reverses arbitrary real
+point-spectral selections. This includes the positive and negative spaces. -/
+theorem map_pointSpectralSubspace_involution_eq
+    (J : E ≃ₗᵢ[𝕜] E) (hJ : Function.Involutive J) (G : Module.End 𝕜 E)
+    (hanti : ∀ x, G (J x) = -J (G x)) (s : Set ℝ) :
+    (G.pointSpectralSubspace s).map J.toLinearMap =
+      G.pointSpectralSubspace {r : ℝ | -r ∈ s} := by
+  have hle (s : Set ℝ) : (G.pointSpectralSubspace s).map J.toLinearMap ≤
+      G.pointSpectralSubspace {r : ℝ | -r ∈ s} := by
+    rw [Module.End.pointSpectralSubspace_eq_iSup, Submodule.map_iSup]
+    apply iSup_le
+    intro r
+    rw [Submodule.map_iSup]
+    apply iSup_le
+    intro hr
+    rw [map_eigenspace_involution_eq J hJ G hanti]
+    have hcast : -(r : 𝕜) = ((-r : ℝ) : 𝕜) := (RCLike.ofReal_neg r).symm
+    rw [hcast]
+    exact Module.End.eigenspace_le_pointSpectralSubspace (by simpa using hr)
+  apply le_antisymm (hle s)
+  intro y hy
+  have hdouble : {r : ℝ | -r ∈ {r : ℝ | -r ∈ s}} = s := by ext r; simp
+  have hJy : J y ∈ G.pointSpectralSubspace s := by
+    have h := hle {r : ℝ | -r ∈ s} (Submodule.mem_map_of_mem hy)
+    rw [hdouble] at h
+    change J y ∈ G.pointSpectralSubspace s at h
+    exact h
+  exact ⟨J y, hJy, hJ y⟩
 
 /-- If reflection across a subspace negates an operator by conjugation,
 the square of that operator commutes with the orthogonal projection. -/

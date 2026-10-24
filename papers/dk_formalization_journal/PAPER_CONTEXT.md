@@ -387,11 +387,28 @@ unitary and proves its exact accepted nuclear cost.
 swapping source reflection implies the paired-diagonal condition, and returns
 an actual unitary minimizing over all commuting contractions. These results
 include arbitrary fixed directions and all mixing competitors. The remaining
-step toward the unconditional angle formula is to construct and identify the
-principal-rotation coordinates for an arbitrary pair. Do not yet call the
+step toward the unconditional subspace-pair angle formula is to instantiate
+the structural rotation data below for the canonical nonacute transport and
+identify its angle trace with the accepted principal angles. Do not yet call the
 full smoothed transport theorem Lean-certified. `NuclearTrace.lean` adds
 the classical trace support inequalities consumed from the accepted Ky Fan
 maximum principle and the normal-basis nuclear sum.
+
+`PairedSpectralDecomposition.lean` now derives an actual paired orthonormal
+eigenbasis for a symmetric operator reversed by an isometric involution,
+over real or complex scalars. It consumes accepted real point-spectral spaces,
+proves the involution exchanges their positive and negative parts, and identifies
+the remaining space with the kernel. `PairedRotationEigenbasis.lean` applies
+this to `R = C+iB`, with `C` positive, `B` symmetric, and `C^2+B^2=I`.
+It derives paired rotation eigenphases in `(0, pi/2]`, the corresponding
+cosine eigenvalues, and the fixed directions, with no supplied coordinate
+chart. `SmoothedRotationOptimization.lean` consumes this construction and
+proves the exact weighted nuclear minimum over commuting contractions is
+`weightedRotationMinimum`, an explicit spectral trace of the positive cosine
+operator, attained by an actual commuting unitary. Its hypotheses are the
+structural operator identities and involution anticommutation; it no longer
+assumes an orthonormal principal-plane chart. These basis constructions are
+classical assembly mathematics, not independent novelty claims.
 
 The 2026-10-24 primary-source search for this extension checked the statements
 of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.
