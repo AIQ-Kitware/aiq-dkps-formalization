@@ -73,3 +73,18 @@ longer provisional. The historical Davis--Kahan source-result inventory remains 
 The axiom/interface audit is
 `DavisKahan/Sources/DavisKahan1970/Audits/SmallAngleCounterexample.lean`.
 The user-reported 23 October 2026 compilation of the three targeted modules is recorded in `submission/VALIDATION.md`.
+
+## Schatten optimization research extension (24 October 2026)
+
+These results are additional research, outside the 29 historical source targets.
+The conventional extension draft `schatten_optimization.tex` is not included by
+`paper.tex`.
+
+| Claim | Evidence | Status and boundary |
+|---|---|---|
+| For `1 < p < 2` and an acute positive principal angle, the canonical phase is the unique global scalar-phase minimizer exactly when `p cos(theta) >= 2-p`, including equality. Above that threshold the unique minimizing phase is interior and satisfies the stationary-amplitude equation. | `SchattenPhaseTransition.lean`: `canonical_phase_unique_min_of_subcritical`, `exists_unique_phase_minimizer_of_supercritical`, `canonical_phase_isMinOn_iff`. | Compiled in the direct-rotation aggregate. This optimizes the closed scalar interval `[0, theta]`; it does not by itself exclude other unitary transports. |
+| The attained scalar minimum is nonnegative, equals `2^p` at a right angle, and bounds the canonical power sum by the factor `2^(1-p/2)`, with right-angle equality. | `SchattenPhaseMinimum.lean`: `exists_attains_phaseMinimum`, `phaseMinimum_right_angle`, `canonical_phase_power_le_factor_mul_minimum`, `canonical_phase_power_eq_factor_right_angle`. | Compiled for the stated exponent ranges. A global matrix comparison needs the unrestricted reduction separately. |
+| For finite Schatten exponents at least one, every physical planar angle has an admissible bundled complex unitary attaining the scalar minimum, whose actual Schatten norm is the corresponding `p`-th root. | `SchattenPhaseTransport.lean`: `scalarPhaseTransport_transports`, `scalarPhaseTransport_schatten`, `exists_scalarPhaseTransport_minimizer`. | Compiled using the accepted Tau Ceti Schatten seminorm. Minimality is within the scalar-phase family. |
+| For arbitrary equal-rank complex projections, the unrestricted minimum power sum is the sum of the independent scalar minima over their principal angles. | `schatten_optimization.tex`, Theorem `thm:schatten-independent-planes`, using the spectral first variation and the negative second variation in Proposition `prop:schatten-no-mixing`. | Conventional proof draft under review; not Lean-certified. Do not describe the matrix reduction or its global corollaries as formally proved. |
+| The optimizing phase has square-root onset, and the minimum value is continuously differentiable but not twice differentiable at the exponent-dependent acute transition. | `schatten_optimization.tex`, equation `eq:schatten-transition-asymptotics`. | Conventional asymptotic argument under review; not Lean-certified. |
+| The exact interior-angle classification and unrestricted reduction are plausible candidates for mathematical novelty. | Primary-source comparisons recorded in `PAPER_CONTEXT.md`; Bolotnikov--Li--Rodman (2001) is the closest identified prior work. | Provisional assessment. Failed searches do not establish priority; the phase mechanism, right-angle failure, Q-norm theory, spectral derivative, and projection decomposition are prior art. |

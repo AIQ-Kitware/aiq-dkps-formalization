@@ -24,5 +24,7 @@ import DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects
 import DavisKahan.FiniteDimensional.DirectRotation.ComplexPhaseTrace
 import DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransition
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseMinimum
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransport
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

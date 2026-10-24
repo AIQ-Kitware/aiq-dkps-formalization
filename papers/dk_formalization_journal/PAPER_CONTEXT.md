@@ -57,6 +57,59 @@ Start here when updating `paper.tex`. The fact that an assertion appears in an o
 
 ## Manuscript structure and constraints
 
+### Schatten optimization research extension, 24 October 2026
+
+The current research objective is mathematical novelty beyond formalization,
+with an exact angle-dependent Schatten optimization theorem as the primary
+candidate. This does not change the 29-result source denominator.
+
+`SchattenPhaseTransition.lean`, committed at `4173073c9`, now proves global
+scalar-phase optimization on `[0, theta]` for `1 < p < 2`: the canonical phase
+is uniquely minimizing exactly when `p cos(theta) >= 2-p`, including equality;
+above that threshold there is a unique interior minimizer, characterized by the
+stationary-amplitude equation. The entire direct-rotation aggregate compiled
+after the module was added to its imports. The new public declarations depend
+only on `propext`, `Classical.choice`, and `Quot.sound`.
+
+`SchattenPhaseMinimum.lean` defines the attained scalar value and proves its
+nonnegativity, right-angle value, and sharp comparison with the canonical
+power sum. `SchattenPhaseTransport.lean` realizes it by an admissible bundled
+complex unitary and identifies its actual Schatten norm using the accepted
+Tau Ceti API. The attaining-family theorem covers every finite exponent at
+least one and every angle in `[0, pi/2]`. Both modules and their aggregate
+compiled on 24 October. Their minimum statements still concern the scalar
+family; no unrestricted lower bound is inferred from attainment alone.
+
+`schatten_optimization.tex` is a mathematical extension draft that is **not
+included by `paper.tex`**. It gives a conventional proof candidate for the
+unrestricted finite-dimensional complex formula
+`min_W ||I-W||_p^p = sum_j m_p(theta_j)`, where `m_p` is the scalar minimum.
+The proposed reduction uses first variation, a decomposition by the squared
+spectral gradient, and an explicit negative second variation that excludes
+overlapping large-phase spaces. A zero-gradient block is treated by a rank
+bound. Its consequences include the sharp exponent-dependent canonical-angle
+cutoff, the uniform comparison constant `2^(1/p-1/2)`, and a square-root onset
+of the minimizing phase. **These unrestricted, second-variation, and asymptotic
+claims are undergoing proof review and have not been certified in Lean.**
+
+Primary-source comparisons verified in this research pass include
+Bolotnikov--Li--Rodman (2001), Lemmas 3.2--3.3 and Theorems 3.1/4.2; these
+cover the planar `p >= 2` case, the right-angle `p < 2` case, and related Q-norm
+and Frobenius problems. The indexed searches have not located the complete
+angle-dependent `1 < p < 2` classification or the proposed reduction for
+arbitrary complex rank. That is a provisional novelty assessment, not a
+first-publication proof. The underlying phase mechanism and trace
+nonminimality are established prior art. Lewis (1996), Theorem 1.1, was checked
+against the author's scanned paper, printed p.577, for the spectral
+differentiability step; the projection decomposition is classical Halmos
+theory. Do not attribute these standard ingredients to the present research.
+
+Numerical checks of arbitrary two- and three-plane complex transports did not
+improve on the independent scalar minima. Direct finite-difference checks of
+the proposed mixed-block descent curve agree with its second derivative
+`8 cos(gamma)^2 f_p''(b) < 0`. These are exploratory consistency checks; they
+do not establish either the unrestricted theorem or historical priority.
+
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
 - Symbol colors: `math_symbol_colors.tex`; `\DKMathColorsfalse` after its input turns symbol colors off. Keep the readable Manim-derived shade map and `appendix_notation.tex` aligned.
