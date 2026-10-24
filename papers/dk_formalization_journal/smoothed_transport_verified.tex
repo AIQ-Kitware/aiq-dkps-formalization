@@ -279,6 +279,47 @@ support certificate therefore supply an exact benchmark for constrained
 numerical optimization, including a distance guarantee in the strict
 subcritical regime.
 
+\begin{proposition}[Stability on a critical isoclinic family]
+\label{prop:smoothed-critical-stability}
+Let $J$ be a skew-adjoint unitary such that
+$(2P-I)J(2P-I)=-J$, and put
+\[
+ d_\tau=\sqrt{\eta^2-\eta^{-2}},\qquad
+ R=\eta^{-2}I+(d_\tau/\eta)J.
+\]
+Then $R$ rotates the source through the critical angle $c_\tau$ on
+every principal plane. For every unitary $W$ with $W(U)=R(U)$,
+write $D=\|W-R\|_F$ and $L=nd_\tau$. One has
+\[
+ \Psi_\tau(W)-\Psi_\tau(R)
+ \geq \sqrt{L^2+\frac{D^4}{4\eta^2}}-L.
+\]
+Consequently an objective error at most $\varepsilon\geq0$ implies
+\[
+ D^4\leq 4\eta^2\varepsilon(2nd_\tau+\varepsilon).
+\]
+In particular $R$ is the unique minimizer in this critical family.
+\end{proposition}
+
+\begin{proof}
+Put $Z=W^*R$; it is unitary and commutes with $P$. Conjugation by
+$2P-I$ negates both $J$ and $JZ$, so their traces vanish.
+Moreover $\|Z-I\|_F=D$ and
+$n-\operatorname{Re}\operatorname{tr}Z=D^2/2$.
+For every real $t$, the matrix
+$T_t=(\cos t)J+(\sin t)I$ is unitary. Its nuclear support pairing with
+$\eta R-\eta^{-1}Z=d_\tau J+\eta^{-1}(I-Z)$ is
+\[
+ \operatorname{Re}\operatorname{tr}
+   \bigl(T_t^*(\eta R-\eta^{-1}Z)\bigr)
+ =L\cos t+\frac{D^2}{2\eta}\sin t.
+\]
+The maximum over $t$ is
+$\sqrt{L^2+D^4/(4\eta^2)}$. The canonical weighted nuclear cost is
+$L$, proving the first inequality. Squaring after adding $L$ gives the
+error estimate, whose zero-error case proves uniqueness.
+\end{proof}
+
 As $\tau\downarrow0$, the angle cost tends to $2\sin\theta$, recovering
 \cref{thm:complex-trace-all-pairs}. As $\tau\to\infty$,
 $2\tau\mu_\tau(\theta)$ tends to $8\sin^2(\theta/2)$, the squared

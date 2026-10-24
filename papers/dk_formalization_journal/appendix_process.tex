@@ -169,10 +169,15 @@ explicit positive coefficient used in \cref{cor:smoothed-stability}.
 singular-value distance and its named nearest commuting correction;
 \path{optimalSmoothedCorrection_isMin_of_commute} proves the global
 minimality in \cref{cor:smoothed-commuting-correction}.
+\path{SmoothedCriticalStability.lean} proves the root growth inequality and
+fourth-power error certificate in \cref{prop:smoothed-critical-stability},
+with an explicitly constructed critical rotation. Its hypotheses specify
+the skew-adjoint unitary and its reversal by the actual source reflection.
 These endpoints include every admissible complex unitary; no supplied
 principal-plane coordinates or restriction on mixing occur in their
-hypotheses. They assert one explicit optimizer and stability strictly below
-the transition, without a classification of all supercritical optimizers.
+hypotheses. The general angle theorem supplies an optimizer and stability strictly below
+the transition; the critical-family theorem supplies its stated fourth-power
+estimate. These results do not classify all supercritical optimizers.
 
 \subsection{Reproduction}
 
@@ -203,6 +208,7 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedExplicitOptimizer \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutingCorrection \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}
 The mathematical manuscript builds independently of Lean:

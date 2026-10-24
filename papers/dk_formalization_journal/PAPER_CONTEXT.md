@@ -496,6 +496,24 @@ operator difference. `smoothed_transport_verified.tex` includes this
 corollary as the concrete use of the transport formula; it claims exact
 correction, without empirical application or algorithm-performance claims.
 
+`SmoothedCriticalStability.lean` now certifies a critical-family growth
+estimate beyond the earlier strict-subcritical theorem. Given any actual
+skew-adjoint unitary `J` reversed by the source reflection, it constructs
+`R=eta^(-2) I + sqrt(eta^2-eta^(-2))/eta * J` and proves the root bound
+`Psi(W)-Psi(R) >= sqrt((n*d)^2 + ||W-R||_F^4/(4*eta^2)) - n*d`
+against every admissible ambient transporter. The resulting fourth-power
+error certificate is `||W-R||_F^4 <= 4*eta^2*epsilon*(2*n*d+epsilon)`.
+This is an actual operator theorem, without a supplied principal-plane
+chart or no-mixing assumption. Its geometric scope is the isoclinic family
+with every angle critical and no fixed ambient directions. The sharper
+root certificate and explicit constructed critical rotation are compiled;
+the characterization of that normal form in terms of accepted principal
+angles is conventional geometry. It is included as
+`prop:smoothed-critical-stability`. No quartic theorem for arbitrary mixed
+angle lists is thereby claimed; the parameter-shift extension is being
+investigated separately. Priority for the exact critical estimate remains
+provisional; support-function rotation and finite trace identities are classical.
+
 The 2026-10-24 primary-source search for this extension checked the statements
 of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.
 Their block-unitary distance problem is unweighted and Theorem 3.1 assumes
