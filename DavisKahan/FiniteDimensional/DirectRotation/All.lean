@@ -41,5 +41,7 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenFeasibleBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientNoMixing
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectionBound
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPhaseMinimum
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNuclearCertificate
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

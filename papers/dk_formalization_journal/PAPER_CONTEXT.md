@@ -349,6 +349,52 @@ angle-dependent minimum. The signed maximal-gradient restriction is also
 compiled, completing the zero, submaximal, and maximal restriction cases used
 by the conventional proof.
 
+The independent fragment `smoothed_transport.tex` gives a further conventional
+theorem: exact complex transport for the Charbonnier spectral penalty
+`rho_tau(s) = sqrt(tau^2+s^2)-tau`. With
+`eta = (tau+sqrt(tau^2+4))/2`, its cutoff is `cos(theta)=eta^(-2)`;
+above it the optimal phase is explicitly `arccos(eta^2 cos(theta))` and
+the angle cost is `2 eta sin(theta)-2 tau`. Below it the canonical phase
+is optimal. The scalar proof is a two-focus distance problem on a circle.
+The unrestricted finite-dimensional proof uses an explicit unitary nuclear
+norm support functional in cosine--sine coordinates and does not depend on
+the unformalized Schatten higher-rank theorem. The same certificate proves
+that relaxation of the commuting unitary factor to a commuting contraction
+has exactly the same minimum, with an explicit diagonal optimal contraction
+and phase recovery. This also solves nearest commuting-unitary correction
+under the same smooth spectral penalty. These are conventional proofs under
+review. The fragment is excluded from `paper.tex`.
+
+The new `SmoothedPhaseMinimum.lean` now certifies the two-focus circle
+inequalities, the explicit weighted scalar-phase minimum, its attaining phase
+and uniqueness on the physical interval, and the algebraic specialization
+`a=eta`, `b=eta^(-1)` to the displayed smoothing parameter. Its current
+`smoothedPhaseCost` is defined through the weighted two-focus expression;
+the equality with the literal singular-value Charbonnier sum is not yet
+registered. `SmoothedNuclearCertificate.lean` certifies a global lower bound
+for the actual accepted nuclear norm of `A-b Z`, in an arbitrary supplied
+orthonormal rotation eigenbasis with fixed directions. The competitor may
+mix all planes; it suffices that it contracts every basis vector and that
+paired diagonal entries have equal imaginary parts. The next steps are the
+attaining diagonal unitary, the commuting-reflection implication, and the
+unconditional principal-angle coordinate construction. Do not yet call the
+full smoothed transport theorem Lean-certified. `NuclearTrace.lean` adds
+the classical trace support inequalities consumed from the accepted Ky Fan
+maximum principle and the normal-basis nuclear sum.
+
+The 2026-10-24 primary-source search for this extension checked the statements
+of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.
+Their block-unitary distance problem is unweighted and Theorem 3.1 assumes
+a Q-norm. The present smooth objective becomes
+`nuclear(eta R - eta^(-1) V)`, with unequal scalar coefficients. Queries for
+unitary Charbonnier/pseudo-Huber optimization, smoothed nuclear distance,
+and weighted nuclear block-unitary approximation found no matching exact
+formula. This is provisional negative evidence, not a priority certificate.
+The penalty, nuclear support inequality, cosine--sine decomposition, and
+convex-relaxation method are classical. Any novelty claim must concern the
+exact constrained minimum and its attaining phases, together with the exact
+relaxation. Further citation-chain review remains necessary.
+
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical
 rotation times `exp(i delta(theta) S)`, with `S` any self-adjoint unitary.
