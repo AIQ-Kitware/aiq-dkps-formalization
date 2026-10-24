@@ -134,6 +134,19 @@ proves \cref{eq:smoothed-global-minimum}; zero principal angles
 contribute zero.
 \end{proof}
 
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=\linewidth]{figures/smoothed_transport_diagram.pdf}
+ \caption{The smoothed transport transition. (a) At $\tau=1/4$ and
+ $\theta=60^\circ$, a minimizing circle point $x_*$ lies on the segment
+ between the two foci; the canonical point $b$ gives a longer broken path.
+ (b) The optimal nonnegative phase changes from zero to a positive value
+ as the angle crosses the cutoff. (c) The exact optimal phase for three
+ smoothing parameters. The global theorem proves that these independent
+ scalar choices attain the unrestricted unitary minimum.}
+ \label{fig:smoothed-transport}
+\end{figure}
+
 \begin{corollary}[Exact convex relaxation]
 \label{cor:smoothed-exact-relaxation}
 In the cosine--sine coordinates used above,
@@ -152,6 +165,119 @@ The preceding trace bound applies to every feasible contraction. The
 displayed diagonal contraction attains it: on a supercritical plane
 the residual is $\eta\sin\theta$ times the quarter-turn matrix.
 The scalar formula supplies the unitary attaining the same value.
+\end{proof}
+
+\begin{theorem}[All smoothed minimizers]
+\label{thm:smoothed-all-minimizers}
+Fix cosine--sine coordinates, group equal positive angles together, and
+write $W=RZ^*$ with $ZP=PZ$. Every minimizing $W$ preserves these angle
+summands and is the identity on the common fixed summands. On an acute
+angle $\theta$ of multiplicity $m$ its factor $Z$ is
+\[
+ Z_\theta=\begin{pmatrix}E_\theta&0\\0&E_\theta\end{pmatrix},
+ \qquad
+ E_\theta=
+ \begin{cases}
+  I_m,&\theta\leq c_\tau,\\
+  \cos\delta_\tau(\theta)I_m+
+    i\sin\delta_\tau(\theta)H_\theta,&\theta>c_\tau,
+ \end{cases}
+\]
+where $H_\theta=H_\theta^*=H_\theta^{-1}$ is arbitrary.
+On the right-angle summand, of multiplicity $m$, every minimizer has
+\[
+ W_{\pi/2}=\begin{pmatrix}0&A\\A^*&0\end{pmatrix},
+ \qquad A\in\mathrm U(m).
+\]
+Conversely, every displayed choice is minimizing. In particular, the
+canonical rotation is the unique minimizer exactly when all principal
+angles are at most $c_\tau$. If the supercritical angles are acute and
+simple, and there are no right angles, there are exactly $2^k$ minimizers,
+where $k$ is the number of supercritical angles.
+\end{theorem}
+
+\begin{proof}
+Use the dual unitary $T$ in the proof of
+\cref{thm:smoothed-transport}. Equality in its diagonal bound forces
+$\operatorname{Re}\langle e,Ze\rangle=1$ on each basis vector carrying
+a strictly positive diagonal weight. Since $Z$ is unitary, this implies
+$Ze=e$. Thus $Z$ is the identity on the fixed directions and on every
+strictly subcritical angle summand, with no coupling to their orthogonal
+complement.
+
+On the remaining summand, including the critical angles, write
+\[
+ R=\begin{pmatrix}C&-S\\S&C\end{pmatrix},\qquad
+ Z=\begin{pmatrix}X&0\\0&Y\end{pmatrix},\qquad
+ D=(a/b)C\leq I.
+\]
+Here $T$ is the quarter-turn matrix. For a unitary $T$, equality
+$\operatorname{Re}\operatorname{tr}(T^*B)=\|B\|_1$ is equivalent to
+$T^*B\geq0$, by equality in the trace-norm support inequality.
+In particular, $T^*(aR-bZ)$ must be Hermitian. Its off-diagonal blocks
+give
+\begin{equation}
+ X+Y^*=2D.
+ \label{eq:smoothed-unitary-average}
+\end{equation}
+
+We use an elementary fact about a positive average of two unitaries.
+If $U+V=2D\geq0$, then $U^*D=DV$, hence
+$U^*D^2U=D^2$. Therefore $U$ commutes with $D$, by uniqueness of the
+positive square root. The same holds for $V$. On $(\ker D)^\perp$,
+$U^*D=DV$ now implies $V=U^*$; on $\ker D$ the average identity gives
+$V=-U$. Apply this fact with $U=X$ and $V=Y^*$.
+
+It follows that $X,Y$ preserve the eigenspaces of $C$, so distinct
+remaining angles cannot mix. On each acute angle summand, $Y=X$ and
+$\operatorname{Re}X=(a/b)\cos\theta\,I$. At the critical angle this
+forces $X=I$. Above it, unitarity gives precisely the displayed
+$E_\theta$, with a self-adjoint unitary $H_\theta$. On $\ker C$,
+$Y=-X^*$; substituting into $W=RZ^*$ gives the stated right-angle block.
+
+These necessary forms also make $T^*(aR-bZ)$ positive. For an acute
+supercritical angle its diagonal blocks are $a\sin\theta\,I$, and
+its off-diagonal part has norm $b\sin\delta_\tau(\theta)$. The identity
+\[
+ a^2\sin^2\theta-b^2\sin^2\delta_\tau(\theta)=a^2-b^2>0
+\]
+proves positivity. On the right-angle block the eigenvalues are $a+b$
+and $a-b$. The earlier scalar computation handles the subcritical
+blocks. This proves sufficiency and the assertions about uniqueness.
+\end{proof}
+
+\begin{corollary}[A quantitative certificate below the transition]
+\label{cor:smoothed-stability}
+Suppose every principal angle is at most $\theta_*$, where
+$0\leq\theta_*<c_\tau$. For every
+unitary transporter $W$, the canonical rotation $R$ satisfies
+\[
+ \Psi_\tau(W)-\Psi_\tau(R)
+ \geq
+ \frac{\cos\theta_*-\eta^{-2}}
+      {2\sqrt{\tau^2+2-2\cos\theta_*}}\,\|W-R\|_F^2.
+\]
+Thus an objective error bounds the Frobenius distance from the unique
+minimizer, with a constant determined by the largest principal angle.
+\end{corollary}
+
+\begin{proof}
+Write $W=RZ^*$ as above. Retaining the slack in the dual certificate gives
+\[
+ \Psi_\tau(W)-\Psi_\tau(R)
+ \geq b\sum_\ell h_\ell
+       \bigl(1-\operatorname{Re}\langle e_\ell,Ze_\ell\rangle\bigr),
+ \qquad
+ h_\theta=\frac{a\cos\theta-b}
+                  {\sqrt{a^2+b^2-2ab\cos\theta}},
+\]
+with $h_\ell=1$ on fixed directions. Unitarity gives
+$1-\operatorname{Re}\langle e,Ze\rangle=\|(Z-I)e\|^2/2$.
+The function $(ac-b)/\sqrt{a^2+b^2-2abc}$ is increasing in $c$:
+its derivative is
+$a^2(a-bc)/(a^2+b^2-2abc)^{3/2}>0$ for $c\in[b/a,1]$.
+Consequently $h_\ell\geq h_{\theta_*}>0$. Sum over the basis, use
+$\|Z-I\|_F=\|W-R\|_F$, and substitute $ab=1$ and $b=\eta^{-1}$.
 \end{proof}
 
 The same formula gives an exact correction to a unitary that fails to

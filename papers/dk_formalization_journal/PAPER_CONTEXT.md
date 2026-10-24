@@ -392,9 +392,14 @@ the canonical nonacute rotation of every equal-rank complex subspace pair,
 including right angles, and proves an attaining global minimum of the literal
 Charbonnier singular-value cost against every unitary subspace transport.
 Its exact value is `smoothedTransportMinimum`, the explicit spectral trace of
-the canonical cosine operator. Identification with the displayed sum over the
-accepted principal angles remains unfinished; do not yet call that angle-sum
-identity Lean-certified. `NonacuteCompression.lean` proves the diagonal cosine
+the canonical cosine operator. `SmoothedPrincipalAngles.lean` now identifies
+that trace with the displayed sum over the accepted principal angles, and
+`exists_unitary_minimizing_smoothed_transport_principalAngles` proves the exact
+global formula with attainment and a lower bound for every admissible unitary.
+The bridge uses a generic directed spectral-trace identity for the accepted
+principal sines and a joint eigenbasis of commuting symmetric operators.
+Zero angles, right angles, and zero-dimensional spaces are included.
+`NonacuteCompression.lean` proves the diagonal cosine
 compressions and the source-reflection reversal needed for this instantiation.
 `NuclearTrace.lean` adds
 the classical trace support inequalities consumed from the accepted Ky Fan
@@ -416,6 +421,19 @@ structural operator identities and involution anticommutation; it no longer
 assumes an orthonormal principal-plane chart. These basis constructions are
 classical assembly mathematics, not independent novelty claims.
 
+The fragment now also contains conventional proofs of all smoothed minimizers
+and a quantitative stability bound below the transition. Distinct acute angle
+summands cannot mix in an optimizer; on a supercritical angle of multiplicity
+`m`, a self-adjoint unitary chooses the signs of the optimal phase. On the
+right-angle summand the minimizers are all reflecting transports with an
+arbitrary unitary matching of the two defect spaces. The canonical rotation is
+therefore the unique minimizer exactly when every angle is at most the cutoff.
+Below a strict maximum-angle cutoff, an explicit positive multiple of the
+squared Frobenius distance to the canonical rotation is bounded by the
+objective gap. These classification and stability assertions are conventional
+proofs under review, not yet Lean-certified. They do not imply a
+no-spurious-local-minimum theorem for the whole smoothed problem.
+
 The 2026-10-24 primary-source search for this extension checked the statements
 of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.
 Their block-unitary distance problem is unweighted and Theorem 3.1 assumes
@@ -424,6 +442,14 @@ a Q-norm. The present smooth objective becomes
 unitary Charbonnier/pseudo-Huber optimization, smoothed nuclear distance,
 and weighted nuclear block-unitary approximation found no matching exact
 formula. This is provisional negative evidence, not a priority certificate.
+The statements reviewed in Bottazzi (2021), *Best approximation by diagonal
+operators in Schatten ideals*, DOI `10.1016/j.laa.2021.02.025`, concern
+Hermitian approximation by a linear space of diagonal operators. They provide
+related classical duality criteria, rather than the present constrained
+unitary problem or its explicit smoothed angle formula. Searches for scaled
+unitary, weighted nuclear, and block diagonal unitary approximation likewise
+found no matching formula; the absence of an indexed match is not proof of
+priority.
 The penalty, nuclear support inequality, cosine--sine decomposition, and
 convex-relaxation method are classical. Any novelty claim must concern the
 exact constrained minimum and its attaining phases, together with the exact

@@ -379,7 +379,9 @@ private theorem inverse_radius_le_radius (tau : ℝ) (hτ : 0 < tau) :
   have ha := one_lt_smoothingRadius tau hτ
   exact (inv_le_one_of_one_le₀ ha.le).trans ha.le
 
-private theorem smoothedPhaseMinimum_eq_weighted (tau theta : ℝ) (hτ : 0 < tau) :
+/-- The displayed smoothing formula is exactly the weighted circle minimum
+after removing the two scalar baseline contributions. -/
+theorem smoothedPhaseMinimum_eq_weighted (tau theta : ℝ) (hτ : 0 < tau) :
     smoothedPhaseMinimum tau theta =
       weightedPhaseMinimum (smoothingRadius tau) (smoothingRadius tau)⁻¹ theta - 2 * tau := by
   have ha : 0 < smoothingRadius tau := lt_trans zero_lt_one (one_lt_smoothingRadius tau hτ)
