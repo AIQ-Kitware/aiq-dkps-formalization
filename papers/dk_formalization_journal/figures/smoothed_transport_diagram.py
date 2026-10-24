@@ -64,11 +64,16 @@ ax.spines[["left", "bottom"]].set_visible(False)
 
 ax = axes[1]
 fractions = np.linspace(0, 1, 501)
-for degrees, color, style in [(25, blue, "-"), (60, orange, "--")]:
+critical_degrees = np.degrees(np.arccos(radius(tau) ** -2))
+for degrees, color, style, label in [
+    (25, blue, "-", r"$\theta=25^\circ$"),
+    (critical_degrees, purple, ":", r"$\theta=c_\tau$"),
+    (60, orange, "--", r"$\theta=60^\circ$"),
+]:
     angle = np.radians(degrees)
     values = cost(tau, angle, fractions * angle) / cost(tau, angle, 0)
     ax.plot(fractions, values, color=color, linestyle=style,
-            label=rf"$\theta={degrees}^\circ$")
+            label=label)
     delta = phase(tau, angle)
     ax.plot(delta / angle, cost(tau, angle, delta) / cost(tau, angle, 0),
             "o", color=color, markersize=4)

@@ -167,8 +167,8 @@ transport problem over all complex unitary transporters. For every
 $\tau>0$, the penalty
 $\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$ admits an exact principal-angle
 formula with a phase-transition cutoff. We construct a minimizing unitary
-by functional calculus and prove a dimension-independent quadratic-growth
-bound below the cutoff. A nuclear-norm support certificate proves the
+by functional calculus and prove stability bounds: dimension-independent quadratic growth
+below the cutoff and explicit quartic growth through equality. A nuclear-norm support certificate proves the
 global minimum, including competitors that mix principal planes.
 \end{abstract}
 
@@ -227,8 +227,8 @@ source statements. We replace each displacement singular value $s$ by
 $\sqrt{\tau^2+s^2}-\tau$, a smooth penalty connecting trace and quadratic
 costs. For arbitrary equal-rank complex subspaces we compute the global
 minimum, construct an optimizer by continuous functional calculus, and
-bound every feasible unitary's distance from the canonical rotation below
-a strict angle cutoff. The supporting nuclear-norm certificate excludes
+bound every feasible unitary's distance from the canonical rotation, with
+quadratic growth below the cutoff and quartic growth through equality. The supporting nuclear-norm certificate excludes
 improvements by mixing principal planes. These results, proved in Lean,
 are developed in \cref{sec:smoothed-transport}.
 
@@ -264,7 +264,8 @@ Appendix~\ref{app:source-review}.
     $\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$. We prove its exact
     principal-angle formula and transition cutoff, construct a globally
     minimizing unitary by functional calculus, and establish an explicit
-    quadratic-growth bound for every admissible competitor below the cutoff.
+    quadratic-growth bound below the cutoff and a quartic bound through
+    equality, proving canonical uniqueness throughout its optimal regime.
 \end{enumerate}
 
 \section{Source coverage and the sine-theta theorem}
@@ -637,7 +638,7 @@ $Q$-norms and exhibit Schatten-$p$ failure for $1\leq p<2$.
 The scalar phase mechanism is already present in Davis and Kahan's
 Example~4.2. Our smoothed theorem uses the same transport constraint and a
 nonhomogeneous spectral penalty; it gives the exact all-pairs value, a
-constructive optimizer, and a quantitative growth estimate. Smooth
+constructive optimizer, and quantitative growth estimates through the phase-transition cutoff. Smooth
 hyperbolic singular-value penalties are established in low-rank
 regularization \citep{lobos2026smooth}. The optimization domain here is
 the ambient unitary transporter set; intrinsic Grassmannian path lengths
@@ -688,7 +689,8 @@ trace-norm minimum $2\sum_j\sin\like{theta}{\theta_j}$ for every equal-rank pair
 These results do not require an acute-angle hypothesis. For the smooth spectral penalty $\rho_\tau$, the unrestricted complex
 minimum has an explicit principal-angle formula. A clipped functional
 calculus supplies an optimizer, and the same nuclear support certificate
-proves a dimension-independent stability bound below the phase cutoff.
+proves a dimension-independent quadratic bound below the cutoff; a shifted
+certificate gives quartic growth through equality.
 This determines when the canonical rotation is optimal and gives a
 quantitative guarantee for near-minimizers. The supporting spectral and
 operator-ideal developments are reusable.

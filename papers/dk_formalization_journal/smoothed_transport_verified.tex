@@ -173,8 +173,8 @@ contribute zero.
  \caption{The smoothed transport transition. (a) At $\tau=1/4$ and
  $\theta=60^\circ$, a minimizing circle point $x_*$ lies on the segment
  between the two foci; the canonical point $b$ gives a longer broken path.
- (b) The optimal nonnegative phase changes from zero to a positive value
- as the angle crosses the cutoff. (c) The exact optimal phase for three
+ (b) The phase cost is shown below, at, and above the cutoff; the dotted
+ curve is evaluated at $c_\tau$. (c) The exact optimal phase for three
  smoothing parameters. The global theorem proves that these independent
  scalar choices attain the unrestricted unitary minimum.}
  \label{fig:smoothed-transport}
@@ -278,6 +278,61 @@ independent of the ambient dimension. The explicit construction and
 support certificate therefore supply an exact benchmark for constrained
 numerical optimization, including a distance guarantee in the strict
 subcritical regime.
+
+\begin{theorem}[Quartic stability through the transition]
+\label{thm:smoothed-quartic-stability}
+Suppose every principal angle is at most $c_\tau$ and $n\geq1$.
+For every unitary transporter $W$, the canonical rotation satisfies
+\[
+ \Psi_\tau(W)-\Psi_\tau(R)
+ \geq \frac{3\tau}{32\eta^4n}\,\|W-R\|_F^4.
+\]
+Thus $R$ is the unique minimizer, including when critical and smaller
+angles occur together. An objective error at most $\varepsilon\geq0$
+implies
+\[
+ \|W-R\|_F\leq
+ \left(\frac{32\eta^4n}{3\tau}\,\varepsilon\right)^{1/4}.
+\]
+\end{theorem}
+
+\begin{proof}
+Write $a=\eta$, $b=\eta^{-1}$, so $a-b=\tau$, and set
+$W=RZ^*$ with $ZP=PZ$. Choose $0\leq\delta\leq b$ and use the
+nuclear support unitary selected at $\beta=b-\delta$ in place of $b$.
+On a principal plane its diagonal weight is
+\[
+ h_\beta(\theta)=
+ \frac{a\cos\theta-\beta}
+      {\sqrt{(a\cos\theta-\beta)^2+a^2\sin^2\theta}}
+ \geq \frac{\delta}{a}.
+\]
+Indeed $a\cos\theta\geq b$, while the denominator is at most $a$.
+The fixed directions retain weight one.
+
+The change of support introduces a second-order error. For complex
+$u\ne0$ and $v$, the identity $(|v|-|u|)^2\geq0$ gives
+\[
+ |v|-\operatorname{Re}\left(\frac{\bar u}{|u|}v\right)
+ \leq \frac{|v-u|^2}{2|u|}.
+\]
+Apply this with $u=ae^{i\theta}-\beta$ and $v=ae^{i\theta}-b$.
+Since $|u|\geq a-\beta\geq\tau$, the total support loss is at most
+$n\delta^2/(2\tau)$. Keeping the diagonal defect as in
+\cref{cor:smoothed-stability}, and putting $D=\|W-R\|_F$, yields
+\[
+ \Psi_\tau(W)-\Psi_\tau(R)
+ \geq \frac{b\delta}{2a}D^2-\frac{n\delta^2}{2\tau}.
+\]
+Unitarity gives $D^2\leq4n$. The choice
+$\delta=b\tau D^2/(4an)$ therefore lies in $[0,b]$ and makes the
+right-hand side $3b^2\tau D^4/(32a^2n)$. Substitute $ab=1$.
+\end{proof}
+
+The quadratic estimate gives the stronger local rate when the angle bound
+stays strictly below the cutoff. The quartic estimate supplies a nonzero
+certificate at equality. The following family admits a sharper constant
+and a root bound valid for every objective error.
 
 \begin{proposition}[Stability on a critical isoclinic family]
 \label{prop:smoothed-critical-stability}

@@ -173,11 +173,18 @@ minimality in \cref{cor:smoothed-commuting-correction}.
 fourth-power error certificate in \cref{prop:smoothed-critical-stability},
 with an explicitly constructed critical rotation. Its hypotheses specify
 the skew-adjoint unitary and its reversal by the actual source reflection.
+\path{SmoothedQuarticStability.lean} proves
+\path{smoothed_transport_quartic_growth} and
+\path{smoothed_transport_quartic_error_bound} for all angles at or below
+the cutoff, and \path{smoothed_canonical_unique_minimizer} proves feasibility,
+global minimality, and uniqueness there. These are the endpoints for
+\cref{thm:smoothed-quartic-stability}; arbitrary mixtures of critical and
+smaller angles are permitted.
 These endpoints include every admissible complex unitary; no supplied
 principal-plane coordinates or restriction on mixing occur in their
-hypotheses. The general angle theorem supplies an optimizer and stability strictly below
-the transition; the critical-family theorem supplies its stated fourth-power
-estimate. These results do not classify all supercritical optimizers.
+hypotheses. The general angle theorem supplies an optimizer; the stability theorems
+supply quadratic growth below the cutoff and quartic growth through equality.
+The critical-family theorem gives its sharper root estimate. These results do not classify all supercritical optimizers.
 
 \subsection{Reproduction}
 
@@ -209,6 +216,7 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutingCorrection \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}
 The mathematical manuscript builds independently of Lean:

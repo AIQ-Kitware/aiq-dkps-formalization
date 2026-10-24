@@ -17,8 +17,8 @@ insight must ship with this journal article. This overrides the separate-paper
 recommendation in `MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md` while retaining
 that review's proof-status and priority distinctions. `paper.tex` now includes
 `smoothed_transport_verified.tex`: the fully Lean-certified unrestricted
-complex smoothed minimum, explicit optimizer, and strict-subcritical
-quadratic-growth theorem. These results are motivated by the formal
+complex smoothed minimum, explicit optimizer, exact commuting correction,
+strict-subcritical quadratic growth, and quartic growth through the cutoff. These results are motivated by the formal
 refutation of Proposition 4.4 and form the article's mathematical extension.
 The broader all-minimizers, general Schatten, and real matching/gap drafts
 remain excluded. Mathematical priority for the exact smoothed theorem and
@@ -509,10 +509,34 @@ with every angle critical and no fixed ambient directions. The sharper
 root certificate and explicit constructed critical rotation are compiled;
 the characterization of that normal form in terms of accepted principal
 angles is conventional geometry. It is included as
-`prop:smoothed-critical-stability`. No quartic theorem for arbitrary mixed
-angle lists is thereby claimed; the parameter-shift extension is being
-investigated separately. Priority for the exact critical estimate remains
+`prop:smoothed-critical-stability`. That root certificate has the stated isoclinic scope; the separate
+parameter-shift theorem below now covers arbitrary mixed angle lists with
+a different quartic coefficient. Priority for the exact critical estimate remains
 provisional; support-function rotation and finite trace identities are classical.
+
+`SmoothedQuarticStability.lean` now extends stability to every equal-rank
+complex subspace pair with all accepted principal angles at most the exact
+cutoff, including arbitrary mixed critical/subcritical angles and fixed
+summands. Its fully compiled inequality is
+`3*tau*||T-R||_F^4 <= 32*eta^4*n*(Psi(T)-Psi(R))`.
+The explicit objective-error bound and feasibility, global minimality, and
+uniqueness of the canonical rotation are separate compiled endpoints:
+`smoothed_transport_quartic_error_bound` and
+`smoothed_canonical_unique_minimizer`. Zero-dimensional spaces are included
+by the scaled statement; the paper divides by `n` only when `n>=1`.
+The proof selects the nuclear support at `beta=b-delta`, separately from
+the objective parameter `b`. Dual weights are at least `delta/a`; the support
+loss is at most `n*delta^2/(2*(a-b))`. Optimizing the admissible shift with
+the unitary diameter bound gives the explicit coefficient. The old exact
+certificate API is retained as the self-parameter specialization of the new
+`weightedNuclear_support_with_diagonal_defect` in
+`SmoothedNuclearCertificate.lean`; its proof was generalized rather than
+copied. This is included as `thm:smoothed-quartic-stability`, with the
+sharper critical isoclinic root bound retained separately. The broader
+mixed-angle investigation noted above is therefore resolved for this
+quartic bound and canonical uniqueness. No classification of supercritical
+minimizers is inferred. The coefficient is not claimed optimal, and priority
+for these exact growth estimates remains provisional.
 
 The 2026-10-24 primary-source search for this extension checked the statements
 of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.

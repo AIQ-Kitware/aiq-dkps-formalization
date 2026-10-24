@@ -174,11 +174,22 @@ def weightedDiagonalDefect (a b : ℝ) (theta : ι → ℝ)
       (⟪e (.inl (1, i)), Z (e (.inl (1, i)))⟫_ℂ).re)) +
     ∑ j, (1 - (⟪e (.inr j), Z (e (.inr j))⟫_ℂ).re)
 
-/-- The nuclear certificate retains an exact diagonal defect term, even
-without a contraction assumption on the competitor. Arbitrary mixing of
-principal planes is permitted. -/
-theorem weightedNuclear_lowerBound_with_diagonal_defect
-    (a b : ℝ) (hb : 0 ≤ b) (hab : b < a) (theta : ι → ℝ)
+/-- The trace support value for objective parameter `b`, using the dual
+phase selected at the possibly different parameter `beta`. -/
+def weightedSupportValue (a b beta theta : ℝ) : ℝ :=
+  2 * (dualReal a beta theta * (a * Real.cos theta - b) +
+    dualImag a beta theta * (a * Real.sin theta))
+
+/-- At the original parameter the support is the exact scalar minimum. -/
+theorem weightedSupportValue_self (a b theta : ℝ) (hb : 0 ≤ b) (hab : b < a) :
+    weightedSupportValue a b b theta = weightedPhaseMinimum a b theta :=
+  (weightedPhaseMinimum_eq_dual a b theta hb hab).symm
+
+/-- A certificate selected at `beta` supports the objective with parameter
+`b`. The diagonal slack retains coefficient `b`, allowing the certificate
+parameter to move independently of the objective. -/
+theorem weightedNuclear_support_with_diagonal_defect
+    (a b beta : ℝ) (hbeta : 0 ≤ beta) (habeta : beta < a) (theta : ι → ℝ)
     (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A Z : E →ₗ[ℂ] E)
     (hA0 : ∀ i, A (e (.inl (0, i))) =
       (((a * Real.cos (theta i) : ℝ) : ℂ) + (a * Real.sin (theta i)) * Complex.I) •
@@ -189,17 +200,17 @@ theorem weightedNuclear_lowerBound_with_diagonal_defect
     (hAf : ∀ j, A (e (.inr j)) = (a : ℂ) • e (.inr j))
     (hdiag : ∀ i, (⟪e (.inl (0, i)), Z (e (.inl (0, i)))⟫_ℂ).im =
       (⟪e (.inl (1, i)), Z (e (.inl (1, i)))⟫_ℂ).im) :
-    (∑ i, weightedPhaseMinimum a b (theta i)) + Fintype.card κ * (a - b) +
-      b * weightedDiagonalDefect a b theta e Z ≤
+    (∑ i, weightedSupportValue a b beta (theta i)) + Fintype.card κ * (a - b) +
+      b * weightedDiagonalDefect a beta theta e Z ≤
       UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • Z) := by
   classical
   let t : ((Fin 2 × ι) ⊕ κ) → ℂ := Sum.elim
-    (fun j => if j.1 = 0 then dualPhase a b (theta j.2) else conj (dualPhase a b (theta j.2)))
+    (fun j => if j.1 = 0 then dualPhase a beta (theta j.2) else conj (dualPhase a beta (theta j.2)))
     (fun _ => 1)
   have ht (j) : ‖t j‖ = 1 := by
     rcases j with ⟨r, i⟩ | j
     · dsimp only [t, Sum.elim_inl]
-      split_ifs <;> simpa only [Complex.norm_conj] using norm_dualPhase a b (theta i) hb hab
+      split_ifs <;> simpa only [Complex.norm_conj] using norm_dualPhase a beta (theta i) hbeta habeta
     · simp [t]
   let u (j) := t j • e j
   have hu : Orthonormal ℂ u := by
@@ -219,20 +230,20 @@ theorem weightedNuclear_lowerBound_with_diagonal_defect
     dsimp only [u, D, z]
     rw [LinearMap.sub_apply, LinearMap.smul_apply, hAj, inner_smul_left,
       inner_sub_right, inner_smul_right, inner_smul_right, e.inner_eq_one, mul_one]
-  have hpair (i : ι) : weightedPhaseMinimum a b (theta i) +
-      b * dualReal a b (theta i) * (2 - (z (.inl (0, i))).re - (z (.inl (1, i))).re) =
+  have hpair (i : ι) : weightedSupportValue a b beta (theta i) +
+      b * dualReal a beta (theta i) * (2 - (z (.inl (0, i))).re - (z (.inl (1, i))).re) =
       (⟪u (.inl (0, i)), D (e (.inl (0, i)))⟫_ℂ).re +
       (⟪u (.inl (1, i)), D (e (.inl (1, i)))⟫_ℂ).re := by
-    rw [weightedPhaseMinimum_eq_dual a b (theta i) hb hab]
-    have h := paired_scalar_support_eq (dualReal a b (theta i)) (dualImag a b (theta i))
+    simp only [weightedSupportValue]
+    have h := paired_scalar_support_eq (dualReal a beta (theta i)) (dualImag a beta (theta i))
       (a * Real.cos (theta i)) (a * Real.sin (theta i)) b
       (z (.inl (0, i))) (z (.inl (1, i))) (hdiag i)
     rw [hentry _ _ (hA0 i), hentry _ _ (hA1 i)]
-    have ht0 : t (.inl (0, i)) = dualPhase a b (theta i) := by simp [t]
-    have ht1 : t (.inl (1, i)) = conj (dualPhase a b (theta i)) := by simp [t]
+    have ht0 : t (.inl (0, i)) = dualPhase a beta (theta i) := by simp [t]
+    have ht1 : t (.inl (1, i)) = conj (dualPhase a beta (theta i)) := by simp [t]
     rw [ht0, ht1, conj_dualPhase]
-    have hconj := conj_dualPhase a b (theta i)
-    change conj ((dualReal a b (theta i) : ℂ) + dualImag a b (theta i) * Complex.I) = _ at hconj
+    have hconj := conj_dualPhase a beta (theta i)
+    change conj ((dualReal a beta (theta i) : ℂ) + dualImag a beta (theta i) * Complex.I) = _ at hconj
     rw [hconj] at h
     simpa only [dualPhase, Complex.ofReal_mul] using h
   have hfixed (j : κ) : a - b + b * (1 - (z (.inr j)).re) =
@@ -244,8 +255,8 @@ theorem weightedNuclear_lowerBound_with_diagonal_defect
     change a - b + b * (1 - (z (.inr j)).re) = a - b * (z (.inr j)).re
     ring
   calc
-    _ = (∑ i, (weightedPhaseMinimum a b (theta i) +
-        b * dualReal a b (theta i) *
+    _ = (∑ i, (weightedSupportValue a b beta (theta i) +
+        b * dualReal a beta (theta i) *
           (2 - (z (.inl (0, i))).re - (z (.inl (1, i))).re))) +
         ∑ j : κ, (a - b + b * (1 - (z (.inr j)).re)) := by
       simp only [weightedDiagonalDefect, z, Finset.sum_add_distrib, mul_add, Finset.mul_sum,
@@ -258,6 +269,28 @@ theorem weightedNuclear_lowerBound_with_diagonal_defect
     _ = ∑ j, (⟪u j, D (e j)⟫_ℂ).re := by
       rw [Fintype.sum_sum_type, Fintype.sum_prod_type, Fin.sum_univ_two, ← Finset.sum_add_distrib]
     _ ≤ _ := re_sum_inner_le_nuclear e D u hu
+
+/-- The nuclear certificate retains an exact diagonal defect term, even
+without a contraction assumption on the competitor. Arbitrary mixing of
+principal planes is permitted. -/
+theorem weightedNuclear_lowerBound_with_diagonal_defect
+    (a b : ℝ) (hb : 0 ≤ b) (hab : b < a) (theta : ι → ℝ)
+    (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A Z : E →ₗ[ℂ] E)
+    (hA0 : ∀ i, A (e (.inl (0, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) + (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (0, i)))
+    (hA1 : ∀ i, A (e (.inl (1, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) - (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (1, i)))
+    (hAf : ∀ j, A (e (.inr j)) = (a : ℂ) • e (.inr j))
+    (hdiag : ∀ i, (⟪e (.inl (0, i)), Z (e (.inl (0, i)))⟫_ℂ).im =
+      (⟪e (.inl (1, i)), Z (e (.inl (1, i)))⟫_ℂ).im) :
+    (∑ i, weightedPhaseMinimum a b (theta i)) + Fintype.card κ * (a - b) +
+      b * weightedDiagonalDefect a b theta e Z ≤
+      UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • Z) := by
+  simpa only [weightedSupportValue_self a b _ hb hab] using
+    weightedNuclear_support_with_diagonal_defect a b b hb hab theta e A Z
+      hA0 hA1 hAf hdiag
 
 omit [FiniteDimensional ℂ E] in
 /-- The diagonal defect is nonnegative for every competitor that contracts
