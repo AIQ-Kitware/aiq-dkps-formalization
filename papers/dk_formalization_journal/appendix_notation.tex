@@ -1,0 +1,89 @@
+% Adapted from visualizations/dkvis/slides_glossary.py (G01--G03) and
+% visualizations/dkvis/notation.py. The slide notation is not identical to
+% the notation of the journal article; the crosswalk below is deliberate.
+\section{Symbols and conventions}
+\label{app:notation}
+
+The sine-theta theorem is expressed using coordinate maps for trial and
+exact subspaces; the displacement results instead name the subspaces
+$U,V$ and their projections $P,Q$.  The same letter can have different
+local meanings in those two settings.  This table gives both the formal
+meaning and a short description of what the object measures.  It also
+provides the notation used in the accompanying geometric illustrations.
+
+In the general sine-theta statement, $A$ denotes the ambient operator
+being studied.  In examples starting with an original operator and adding
+$H$, the illustrations distinguish the original $A$ from
+$\widehat A=A+H$.  Thus the operator called $\widehat A$ in those examples
+corresponds to the ambient $A$ in \cref{sec:sine-theta}.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}p{0.71\textwidth}@{}}
+\toprule
+\textbf{Symbol} & \textbf{Definition or interpretation}\\
+\midrule
+\endfirsthead
+\multicolumn{2}{@{}l}{\textit{Symbols and conventions (continued)}}\\[2pt]
+\toprule
+\textbf{Symbol} & \textbf{Definition or interpretation}\\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\multicolumn{2}{@{}l}{\textbf{Trial and exact spectral data}}\\[2pt]
+$A$ (general theorem) & Self-adjoint ambient operator under study. The slide notation for it is $\widehat A$ in perturbation examples.\\
+$\widehat A$ & Operator after perturbation, $\widehat A=A+H$; used to distinguish it from the original $A$ in the illustrations.\\
+$E_0:F\to E$ & Isometric \emph{trial frame}: its range is the subspace whose accuracy is being assessed.\\
+$A_0$ & Self-adjoint operator on trial coordinates; the approximate action of the ambient operator, tested by the residual. In Rayleigh--Ritz examples, $A_0=E_0^*\widehat A E_0$.\\
+$F_0:H\to E$ & Isometric \emph{exact wanted frame}: its range is the target spectral subspace.\\
+$F_1:G\to E$ & Isometric \emph{exact unwanted frame}: its range is the orthogonal complement of the target.\\
+$\Lambda_0,\Lambda_1$ & Exact spectral blocks on the wanted and unwanted coordinate spaces; in particular $AF_1=F_1\Lambda_1$ on the appropriate domain.\\
+$P=F_0F_0^*$ & Orthogonal projection onto the exact wanted subspace in the sine-theta section.\\
+$E_1$ & Additional complementary frame used in some perturbation decompositions in the illustrations.\\
+\addlinespace[4pt]
+\multicolumn{2}{@{}l}{\textbf{Angle, error, and residual}}\\[2pt]
+$\theta$ & A single principal angle, between zero and $\pi/2$; it describes the separation of two lines in the elementary pictures.\\
+$\Theta_0(E_0,F_0)$ & Positive principal-angle operator on the trial-coordinate space, determined by the ranges of $E_0$ and $F_0$.\\
+$\sin\Theta_0$ & Positive \emph{directed sine} on trial coordinates: $\bigl(I-E_0^*F_0F_0^*E_0\bigr)^{1/2}$. It measures the part of a trial vector outside the exact target.\\
+$S=(I-F_0F_0^*)E_0$ & Rectangular complementary block in the proof, with $|S|=\sin\Theta_0$. Unlike $\sin\Theta_0$, $S$ maps trial coordinates into the ambient space.\\
+$\Theta$ & Ambient angle operator in the direct-rotation construction. In finite-dimensional principal-plane coordinates each positive principal angle contributes twice to its spectrum.\\
+$X=F_1^*E_0$ & Trial-coordinate overlap with the exact unwanted block; $S=F_1X$ and the corresponding unitarily invariant gauges agree where defined.\\
+$R=AE_0-E_0A_0$ & \emph{Residual} in the sine-theta section; it measures failure of the trial pair to intertwine with $A$. Later, $R$ instead denotes a \emph{direct rotation}.\\
+$v,\rho,r$ & In one-vector examples: trial unit vector $v$, trial scalar $\rho$, and residual $r=\widehat A v-\rho v$. For a Rayleigh--Ritz choice, $\rho=v^*\widehat A v$; the sharp equality picture uses a different trial scalar. These are one-column analogues of $E_0,A_0,R$.\\
+$f_0,f_1$ & Individual exact wanted and unwanted eigenvectors in the two-dimensional illustrations.\\
+\addlinespace[4pt]
+\multicolumn{2}{@{}l}{\textbf{Spectra, separation, and perturbation examples}}\\[2pt]
+$\sigma(A_0),\sigma(\Lambda_1)$ & Trial-coordinate spectrum and exact unwanted spectrum; separation of these is an input to the sine-theta estimate.\\
+$[\beta,\alpha]$ & Spectral interval used in the interval/exterior separation hypothesis. Here $\alpha$ is an interval endpoint; in \cref{sec:sharp-displacement} it denotes the \emph{largest principal angle}.\\
+$\delta>0$ & Certified separation between the trial and unwanted spectra, entering $\delta N(\sin\Theta_0)\leq N(R)$.\\
+$A,H,\widehat A$ (perturbation example) & Original operator, additive perturbation, and perturbed operator $\widehat A=A+H$. This is the explanatory setup, rather than an additional input to the general sine-theta theorem.\\
+$g$ & Original wanted/unwanted eigengap of $A$ in perturbation examples. It need not be the certified separation $\delta$ for $A_0$ and $\Lambda_1$.\\
+$\varepsilon$ & Size of $H$ in fixed-size-perturbation illustrations (often $\|H\|_{\mathrm{op}}=\varepsilon$); elsewhere a generic positive error threshold.\\
+$a_0,a_1,\lambda_j$ & Original two-by-two eigenvalues $a_0,a_1$ and exact perturbed eigenvalues $\lambda_j$ in illustrative finite matrices.\\
+$b;\ H_0,B,H_1$ & Off-diagonal coupling $b$ and perturbation blocks $H_0,B,H_1$ in the original spectral basis of a two-block example.\\
+$A_1$ & Original operator's complementary block in a perturbation decomposition; not the exact unwanted block $\Lambda_1$ of $\widehat A$.\\
+\addlinespace[4pt]
+\multicolumn{2}{@{}l}{\textbf{Subspace transport and norms}}\\[2pt]
+$U,V;\ P_U,P_V$ & Source and target subspaces; their orthogonal projections. In the displacement sections, $P=P_U$ and $Q=P_V$.\\
+$R,\mathcal R$ & Canonical direct rotation transporting $U$ to $V$. The figures and slides use $\mathcal R$ where that avoids confusion with the sine-theta residual $R$.\\
+$W$ & Any admissible orthogonal or unitary competitor satisfying $W(U)=V$.\\
+$J$ & Locally a planar quarter-turn $\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$ in the real counterexample; elsewhere $J=2P-I$ denotes a reflection used in the projection-distance proof.\\
+$\Sigma=P-P^\perp$ & Reflection $2P-I$ in a local sine-$2\Theta$ proof; the relevant $P$ in that context projects onto $V$.\\
+$C_0,C_1,J_0$ & Cosine blocks and a partial isometry appearing in the direct-rotation factorization.\\
+$x_j,y_j$ & Principal vectors on the two sides of a principal plane.\\
+$N(T)$ & Unitarily invariant norm or seminorm of $T$. For infinite-dimensional operator-ideal norms it is used only where the gauge is defined and finite.\\
+$\|T\|_{\mathrm{op}}$ & Operator (spectral) norm, the largest singular value. The slide figures sometimes abbreviate this as $\|T\|_2$; the paper uses the explicit subscript.\\
+$\|T\|_F$ & Frobenius/Schatten-two norm, $\bigl(\sum_j s_j(T)^2\bigr)^{1/2}$ in finite dimension.\\
+$\|T\|_1$ & Trace/Schatten-one norm, $\sum_j s_j(T)$ in finite dimension.\\
+$\|T\|_{(\nu)}$ & Ky Fan $\nu$-norm, the sum of the $\nu$ largest singular values. The slides also write $\|T\|_\nu$.\\
+$Q\text{-norm}$ & A norm satisfying $N(T)^2=M(T^*T)$ for a unitarily invariant norm $M$; it has an exact direct-rotation minimality property.\\
+\addlinespace[4pt]
+\multicolumn{2}{@{}l}{\textbf{Other symbols local to the slide examples}}\\*
+$t=\|R\|/\delta$ & A residual-to-gap bound plotted in the perturbation discussion; here $R$ is the \emph{residual}.\\
+$\varphi$ & Local turning angle of a perturbation, basis, or spatial hinge in an illustrative construction.\\
+$\alpha_k,\lambda_k$ & Ordered eigenvalues of the original complement $A_1$ and the perturbed complement $\Lambda_1$ in the Theorem~8.1 illustrations.\\
+\end{longtable}
+\endgroup

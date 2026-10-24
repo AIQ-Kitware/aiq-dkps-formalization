@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="326" viewBox="0 0 1060 326">
+<desc>Adaptation of Manim S10Sharp scene: sharp rank-one sine-theta model. The left vertical component is sin(theta), the residual vector on the right has length delta sin(theta).</desc>
+<rect width="1060" height="326" fill="white"/>
+<g font-family="DejaVu Sans, Arial, sans-serif">
+<text x="22.00" y="32.00" fill="#23364b" font-size="21" font-weight="600" text-anchor="start" >Projected and unwanted components</text>
+<text x="555.00" y="32.00" fill="#23364b" font-size="21" font-weight="600" text-anchor="start" >Residual from spectral separation</text>
+<line x1="520.00" y1="49.00" x2="520.00" y2="290.00" stroke="#d3dde5" stroke-width="2"  />
+<line x1="56.00" y1="259.00" x2="423.00" y2="259.00" stroke="#1F6FD1" stroke-width="4"  />
+<line x1="172.00" y1="70.00" x2="172.00" y2="276.00" stroke="#d3dde5" stroke-width="2" stroke-dasharray="5,6" />
+<text x="62.00" y="287.00" fill="#1F6FD1" font-size="17" font-weight="400" text-anchor="start" >exact target line  range(F₀)</text>
+<line x1="330.92" y1="259.00" x2="330.92" y2="147.73" stroke="#D12A7B" stroke-width="8"  />
+<line x1="172.00" y1="147.73" x2="330.92" y2="147.73" stroke="#d3dde5" stroke-width="1.5" stroke-dasharray="5,5" />
+<line x1="172.00" y1="259.00" x2="330.92" y2="147.73" stroke="#C77C00" stroke-width="5"  stroke-linecap="round"/><polygon fill="#C77C00" points="330.92,147.73 324.11,158.93 318.06,150.28"/>
+<text x="317.92" y="130.73" fill="#C77C00" font-size="20" font-weight="400" text-anchor="middle" >vθ = (cos θ, sin θ)</text>
+<text x="345.92" y="205.36" fill="#D12A7B" font-size="20" font-weight="400" text-anchor="start" >sin θ</text>
+<text x="344.92" y="285.00" fill="#1F6FD1" font-size="17" font-weight="400" text-anchor="start" >P vθ</text>
+<path d="M 215.00 259.00 L 214.94 256.75 L 214.76 254.51 L 214.47 252.27 L 214.06 250.06 L 213.53 247.87 L 212.90 245.71 L 212.14 243.59 L 211.28 241.51 L 210.31 239.48 L 209.24 237.50 L 208.06 235.58" fill="none" stroke="#23364b" stroke-width="1.8"/>
+<text x="222.00" y="244.00" fill="#23364b" font-size="22" font-weight="400" text-anchor="start" >θ</text>
+<line x1="622.00" y1="255.00" x2="926.00" y2="255.00" stroke="#657789" stroke-width="2"  />
+<line x1="750.00" y1="70.00" x2="750.00" y2="277.00" stroke="#d3dde5" stroke-width="1.5" stroke-dasharray="5,6" />
+<line x1="750.00" y1="255.00" x2="750.00" y2="110.34" stroke="#138A4B" stroke-width="6"  stroke-linecap="round"/><polygon fill="#138A4B" points="750.00,110.34 755.72,123.34 744.28,123.34"/>
+<text x="773.00" y="182.67" fill="#138A4B" font-size="20" font-weight="400" text-anchor="start" >R(1) = (0, δ sin θ)</text>
+<text x="605.00" y="291.00" fill="#657789" font-size="18" font-weight="400" text-anchor="start" >A = diag(0, δ)    A₀ = 0</text>
+<text x="718.00" y="67.00" fill="#23364b" font-size="22" font-weight="400" text-anchor="start" >‖R‖ = δ sin θ</text>
+<text x="544.00" y="316.00" fill="#657789" font-size="15" font-weight="400" text-anchor="start" >θ = 35°, δ = 1.3 shown; identity holds at every angle.</text>
+</g></svg>
