@@ -51,31 +51,25 @@ its explicit separation of formal verification from source correspondence.
 | The 2005 Grassmann-space paper repeats the pi/3 extremal assertion. | Qiu--Zhang--Li, Section 5, item 3; `submission/LITERATURE_AUDIT.md`. | Particular item verified from author-uploaded text; no claim against the main metric theorems. |
 | General norm-class limitations and Q-norm minimization predate this work. | Bolotnikov--Li--Rodman (2001), Theorem 3.1 and Lemma 3.3. | Explicit prior art; no new Q-norm principle or first-discovery claim. |
 
-## Quantitative displacement theorems (beyond the 29 printed results)
+## Additional displacement estimates and working-draft consequences
 
-| Mathematical result | Lean evidence | Scope |
+| Claim | Evidence | Status |
 |---|---|---|
-| Universal projection-distance bound `N(P_U-P_V) <= N(I-W)`. | `DavisKahan/FiniteDimensional/DirectRotation/ProjectionDisplacement.lean`, `projectionDifference_uiNorm_le_displacement`. | Finite-dimensional real/complex, arbitrary UI seminorm; no acuteness needed. |
-| Sharp bound `cos(alpha/2) N(I-R) <= N(P_U-P_V) <= N(I-W)` (and its `sec(alpha/2)` formulation). | `SharpDisplacement.lean`, `cos_half_arcsin_projectionGap_mul_uiNorm_directRotation_le_projection`, `cos_half_arcsin_projectionGap_mul_uiNorm_directRotation_le_displacement`, `cos_half_maxPrincipalAngle_mul_uiNorm_directRotation_le_displacement`. | Acute real/complex pairs; full UI seminorm interface. The sharp factor is uniform across norm classes, not individually sharp for every norm. |
-| Sharpness for every fixed positive acute maximum angle, and constants `2/sqrt(3)` at `pi/3` and `sqrt(2)` on the acute range. | `SharpDisplacement.lean`, real-family sharpness and uniform estimates; `TraceRatio.lean`. | Sharpness achieved by the real four-dimensional trace-norm example, not by every individual UI norm. |
-| Global real-family minimum `min_{WU=V_theta} ||I-W||_1 = 4 sin(theta)`. | `TraceOptimality.lean`, exact projection distance and attained minimum using `W_theta`. | Real four-dimensional parameterized family, all `0<theta<pi/2`. |
-| Global complex trace minimizers of explicit phase-plane models (including zero/right angles), their finite direct sums, and supplied ambient unitary models. | `ComplexTraceOptimality.lean`, `ComplexTraceAssembly.lean`, `ComplexTraceFiniteModel.lean`. | Requires a specified principal-plane model/ambient equivalence; not a general arbitrary-subspace-pair theorem. |
-| Every equal-dimensional complex pair has minimum `2 sum sin(theta_j)`. | Conventional proof in `sharp_displacement.tex`, optional red box only. | The Lean proof of a decomposition for an arbitrary pair remains to be supplied; excluded from checked-only version. |
+| For every admissible orthogonal/unitary `W`, `N(P_U-P_V) ≤ N(I-W)` in every finite-dimensional real/complex inner-product space, for every unitarily invariant seminorm `N`. | `DavisKahan/FiniteDimensional/DirectRotation/ProjectionDisplacement.lean`, theorem `projectionDifference_uiNorm_le_displacement` and Ky Fan corollary. | Compiled and confirmed by the user on 23 October 2026. No acute restriction. |
+| For every `0 < theta < pi/2`, the real witness satisfies `cos(theta/2) * ‖I-R_theta‖₁ = ‖I-W_theta‖₁`. | `DavisKahan/FiniteDimensional/DirectRotation/TraceRatio.lean`, theorem `SmallAngleCounterexample.cos_half_mul_directTrace_eq_competitorTrace`. | Compiled and confirmed by the user on 23 October 2026. This identity alone does not prove global optimality. |
+| The real four-dimensional projection difference has trace norm `4 sin(theta)`; `Wequiv theta` attains the global minimum. | `DavisKahan/FiniteDimensional/DirectRotation/TraceOptimality.lean`: `SmallAngleCounterexample.kyFanSum_projectionDifference` and `SmallAngleCounterexample.exists_traceMinimizer`. | Compiled and confirmed by the user, 23 October 2026. |
+| For all finite-dimensional real/complex acute pairs, all UI seminorms and all admissible competitors, `cos(alpha/2) N(I-R) ≤ N(I-W)`. | `DavisKahan/FiniteDimensional/DirectRotation/SharpDisplacement.lean`: `cos_half_mul_uiNorm_directRotation_le_projection`, `cos_half_maxPrincipalAngle_mul_uiNorm_directRotation_le_displacement`. | Compiled and confirmed. |
+| At every positive acute angle the multiplicative factor `sec(alpha/2)` is necessary; the common factor on `alpha ≤ pi/3` is `2/sqrt(3)`. | `SharpDisplacement.lean`: `SmallAngleCounterexample.fixedAngle_sharpFactor_attained`, `factor_necessary_at_fixedAngle`, `pi_div_three_common_factor_necessary`, `uiNorm_directRotation_le_two_div_sqrt_three_mul_displacement`. | Compiled and confirmed. |
+| For every acute pair, `sqrt(2)` is a valid UI-seminorm displacement factor. No smaller uniform constant suffices by approaching the right-angle endpoint. | `SharpDisplacement.lean`: `uiNorm_directRotation_le_sqrt_two_mul_displacement` and fixed-angle necessity; analytic limit in `sharp_displacement_verified.tex`; new focused declaration `SmallAngleCounterexample.sqrt_two_common_factor_necessary` in `SharpDisplacementLimit.lean`. | Uniform bound compiled and confirmed. The limit theorem is an additional source implementation awaiting a focused build. |
+| The phase-modified complex two-dimensional unitary attains trace displacement equal to projector distance, including right angles. | `ComplexTraceOptimality.lean`: `phaseUnitary_global_trace_minimizer`. | Compiled and confirmed. |
+| Full trace is additive under orthogonal operator block sums; every finite principal-plane model with unchanged summand admits an attained global trace minimum; unitary coordinate transport preserves this equality. | `ForTauCeti/.../BlockTrace.lean`, `ComplexTraceAssembly.lean`, `ComplexTraceFiniteModel.lean`: `phasePlaneModel_global_trace_minimizer`, `phasePlaneModel_with_fixed_global_trace_minimizer`, `AttainsProjectionTraceBound.conjugate`. | Compiled and confirmed. |
+| Every equal-rank complex subspace pair, without any acuteness hypothesis, admits a global trace minimizer of value `N₁(P_U-P_V)=2 sum sin(theta_j)`. | Conventional Halmos/CS argument in red-framed `sharp_displacement_unformalized.tex`. The verified finite-plane and transport lemmas require an ambient coordinate equivalence not yet produced for arbitrary pairs. | **Unconditional Lean theorem still outstanding.** |
 
-The October 23 source archive at commit `5b9c81c4739607f74547f3c55813ebbfc4f00696`
-contains the additional Lean declarations. They are separate targeted build
-modules; their presence does not alter the original 29-result source census.
-`submission/VALIDATION.md` gives the compilation/reproduction boundary.
+`paper.tex` always includes `sharp_displacement_verified.tex`. Only the global
+complex theorem in `sharp_displacement_unformalized.tex` is controlled by
+`\includeUnformalizedDisplacementtrue`; set it false for a verified-only
+submission. The historical Davis--Kahan source-result inventory remains 29.
 
-## Prior-art boundaries
-
-Davis--Kahan Example 4.2 already contains the complex phase mechanism.
-Bolotnikov--Li--Rodman (2001) establishes Q-norm optimality in related
-settings and counterexamples for Schatten `1 <= p < 2`.
-Qiu--Zhang--Li (2005) repeats the short-angle assertion in Section 5;
-Zhang--Qiu (2007) analyzes projection-difference principal sines;
-Zhang--Qiu (2010) explicitly notes general trace-norm nonminimality.
-The exact real short-angle contradiction and uniform sharp package are
-presented as formalized deductions, not as claimed first discoveries.
-See `PROPOSITION_4_4_LITERATURE_MAP.md` and
-`submission/LITERATURE_AUDIT.md`.
+The axiom/interface audit is
+`DavisKahan/Sources/DavisKahan1970/Audits/SmallAngleCounterexample.lean`.
+The user-reported 23 October 2026 compilation of the three targeted modules is recorded in `submission/VALIDATION.md`.

@@ -14,5 +14,11 @@ import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
 import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
 import DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement
 import DavisKahan.FiniteDimensional.DirectRotation.TraceRatio
+import DavisKahan.FiniteDimensional.DirectRotation.TraceOptimality
+import DavisKahan.FiniteDimensional.DirectRotation.SharpDisplacement
+import DavisKahan.FiniteDimensional.DirectRotation.SharpDisplacementLimit
+import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality
+import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly
+import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/
