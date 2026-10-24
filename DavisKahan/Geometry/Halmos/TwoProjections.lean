@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 import DavisKahan.Geometry.Polar.DirectRotation
-import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
 
 /-!
 # Halmos two-projection decomposition
