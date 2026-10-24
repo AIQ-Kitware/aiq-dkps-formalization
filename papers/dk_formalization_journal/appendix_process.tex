@@ -165,6 +165,10 @@ the attained global principal-angle formula.
 and global optimality. \path{SmoothedSubspaceStability.lean} proves
 \path{smoothed_transport_growth_of_principalAngles_le}, with the
 explicit positive coefficient used in \cref{cor:smoothed-stability}.
+\path{SmoothedCommutingCorrection.lean} defines the literal operator
+singular-value distance and its named nearest commuting correction;
+\path{optimalSmoothedCorrection_isMin_of_commute} proves the global
+minimality in \cref{cor:smoothed-commuting-correction}.
 These endpoints include every admissible complex unitary; no supplied
 principal-plane coordinates or restriction on mixing occur in their
 hypotheses. They assert one explicit optimizer and stability strictly below
@@ -197,6 +201,7 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedExplicitOptimizer \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutingCorrection \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}

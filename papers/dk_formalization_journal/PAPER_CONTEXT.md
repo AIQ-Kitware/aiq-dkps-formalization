@@ -485,6 +485,17 @@ exact contraction relaxation as a conventional corollary of the same
 certificate, and attributes formal verification to the global minimum,
 unitary optimizer, and stability endpoints.
 
+`SmoothedCommutingCorrection.lean` now formally transfers the exact
+minimum to nearest commuting-unitary correction. Its cost is the literal
+Charbonnier sum of singular values of `A-C`. The named
+`optimalSmoothedCorrection` preserves the prescribed subspace, commutes
+with its orthogonal projection, attains the principal-angle sum for the
+subspace and its actual image, and is globally closest among all
+commuting unitaries. No commutator surrogate is substituted for the actual
+operator difference. `smoothed_transport_verified.tex` includes this
+corollary as the concrete use of the transport formula; it claims exact
+correction, without empirical application or algorithm-performance claims.
+
 The 2026-10-24 primary-source search for this extension checked the statements
 of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.
 Their block-unitary distance problem is unweighted and Theorem 3.1 assumes

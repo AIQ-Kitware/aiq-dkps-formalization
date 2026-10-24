@@ -285,3 +285,30 @@ $2\tau\mu_\tau(\theta)$ tends to $8\sin^2(\theta/2)$, the squared
 Frobenius displacement of the canonical planar rotation. Thus this family
 connects the trace optimum with the classical quadratic minimum while
 locating exactly where the optimizing phase changes.
+
+\begin{corollary}[Exact correction to a commuting unitary]
+\label{cor:smoothed-commuting-correction}
+Let $A$ be unitary and let $P$ project onto $U$. Put $V=A(U)$ and
+let $W_*$ be the optimizer in \cref{cor:smoothed-spectral-optimizer}
+for $U,V$. Then $C_*=W_*^*A$ commutes with $P$ and minimizes
+\[
+ \sum_{j=1}^n \rho_\tau(\sigma_j(A-C))
+ \quad\text{over unitary }C\text{ with }CP=PC.
+\]
+Its exact minimum is $\sum_{j=1}^r\mu_\tau(\theta_j)$, where
+$\theta_j$ are the principal angles between $U$ and $A(U)$.
+\end{corollary}
+
+\begin{proof}
+The maps $W\mapsto W^*A$ and $C\mapsto AC^*$ give inverse
+bijections between unitary transporters from $U$ to $A(U)$ and
+unitaries preserving $U$. A unitary preserves $U$ exactly when it
+commutes with $P$. Since $A-C=(W-I)C$ when $W=AC^*$, unitary
+invariance identifies the two singular-value costs. Apply
+\cref{thm:smoothed-transport,cor:smoothed-spectral-optimizer}.
+\end{proof}
+
+This gives an exact correction that preserves both a specified subspace
+and its orthogonal complement. The construction requires spectral
+functions of the two projections; it provides the value and an optimizer
+without an iterative search over the unitary group.
