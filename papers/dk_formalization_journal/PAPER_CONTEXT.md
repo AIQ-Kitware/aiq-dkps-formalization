@@ -17,9 +17,13 @@ insight must ship with this journal article. This overrides the separate-paper
 recommendation in `MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md` while retaining
 that review's proof-status and priority distinctions. `paper.tex` now includes
 `smoothed_transport_verified.tex`: the fully Lean-certified unrestricted
-complex smoothed minimum, explicit optimizer, exact commuting correction,
-strict-subcritical quadratic growth, and quartic growth through the cutoff. These results are motivated by the formal
-refutation of Proposition 4.4 and form the article's mathematical extension.
+complex smoothed minimum, explicit optimizers, exact canonical and global
+uniqueness cutoffs, exact commuting correction, strict-subcritical quadratic
+growth, and quartic growth through the cutoff. The critical quartic
+coefficient, failure of quadratic growth, sharp angle sensitivity, and exact
+commutator test for a unique closest correction are also compiled and included.
+These results are motivated by the formal refutation of Proposition 4.4 and
+form the article's mathematical extension.
 The broader all-minimizers, general Schatten, and real matching/gap drafts
 remain excluded. Mathematical priority for the exact smoothed theorem and
 its stability estimate is plausible but provisional; negative searches are
@@ -1013,6 +1017,26 @@ final theorem. The shared literal nuclear computation is now
 duplicating the positive optimizer's proof. Included in
 `cor:smoothed-canonical-cutoff`. The classification of every supercritical
 minimizer remains conventional and excluded from the article.
+
+The correction endpoint
+`smoothed_correction_unique_minimizer_iff_commutator` now proves that the
+same commutator inequality is also necessary and sufficient for uniqueness
+of the closest feasible correction. The proof uses an explicit equivalence
+of ambient unitary groups, transfers both feasibility and global minimizing
+properties, and consumes `smoothed_transport_unique_minimizer_iff`.
+This is stated in the included application, with equality included.
+
+The direct primary check of Lobos et al. (2026), Section 2.1, equation (2.2),
+<https://pmc.ncbi.nlm.nih.gov/articles/PMC13138729/>, confirms the normalization:
+its hyperbola is `psi_delta(s)=delta^2 sqrt(1+(s/delta)^2)`, equal to
+`delta*rho_delta(s)+delta^2` for positive `delta`. The fixed-dimension
+singular-value sum therefore differs by a positive scale and an additive
+constant. Their low-rank inverse-problem optimization supplies precedent
+for the penalty, not for this unitary transport constraint or its exact
+minimum. The manuscript now states the normalization qualification.
+The Chubb--Flammia sentence refers to nearby commuting operators, preserving
+the distinction between the published ground-space-unitarity condition
+and the older author version's ambient unitary construction recorded above.
 
 The integrated journal text typesets successfully with `pdflatex`, `bibtex`,
 and two further LaTeX passes. This VM lacks `latexmk`; its default T1 Computer

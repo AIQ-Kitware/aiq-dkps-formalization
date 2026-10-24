@@ -21,9 +21,9 @@ For $\tau>0$, define the smooth spectral displacement cost
 \]
 Each displacement singular value $s$ contributes
 $\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$. This penalty is quadratic near
-zero and asymptotically linear. Smooth functions of singular values,
-including this hyperbolic penalty, are used in low-rank inverse-problem
-regularization \citep{lobos2026smooth}. Put
+zero and asymptotically linear. Hyperbolic singular-value penalties of
+this form, up to a positive scale and an additive constant, are used in
+low-rank inverse-problem regularization \citep{lobos2026smooth}. Put
 \[
  \eta=\frac{\tau+\sqrt{\tau^2+4}}2>1,
  \qquad c_\tau=\arccos(\eta^{-2}).
@@ -548,7 +548,9 @@ Canonical optimality has a direct test in terms of the commutation defect:
 where $\|\cdot\|$ is the operator norm. To see this, use
 $\|AP-PA\|=\|P-APA^*\|=\max_j\sin\theta_j$, with value zero for an
 empty angle list, and apply \cref{cor:smoothed-canonical-cutoff}.
-At equality the canonical correction remains unique.
+The closest feasible correction is unique exactly when this inequality
+holds, including equality. Above it, the opposite phase choices give
+distinct minimizing corrections.
 
 This gives an exact correction that preserves both a specified subspace
 and its orthogonal complement. The construction requires spectral
@@ -557,6 +559,6 @@ without an iterative search over the unitary group.
 
 For spectral projections, the correction preserves a selected spectral
 subspace and its orthogonal complement while retaining global unitarity.
-Nearby commuting-unitary constructions are established in approximate
-symmetry theory \citep{chubb2017approximate}; the formula above gives the
+Constructions of nearby operators commuting with a spectral projection
+are established in approximate symmetry theory \citep{chubb2017approximate}; the formula above gives the
 exact minimum and an explicit correction for this spectral penalty.

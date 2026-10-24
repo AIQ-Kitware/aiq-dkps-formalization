@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCorrectionStability
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerUniqueness
 
 /-!
 # The exact commutator cutoff for canonical unitary correction
@@ -137,5 +138,54 @@ theorem canonical_correction_isMin_iff_commutator
     (A.toLinearEquiv.finrank_map_eq K).symm
   dsimp only at h
   rwa [projectionGap_unitary_image_eq_commutator, sin_smoothedCriticalAngle] at h
+
+
+/-- The exact commutator threshold characterizes uniqueness of the nearest
+subspace-preserving unitary, including all noncanonical competitors. -/
+theorem smoothed_correction_unique_minimizer_iff_commutator
+    (tau : ℝ) (htau : 0 < tau) (K : Submodule ℂ E) (A : E ≃ₗᵢ[ℂ] E) :
+    (∃! C : E ≃ₗᵢ[ℂ] E, K.map C.toLinearMap = K ∧
+      ∀ D : E ≃ₗᵢ[ℂ] E, K.map D.toLinearMap = K →
+        smoothedOperatorDistance tau A.toLinearMap C.toLinearMap ≤
+          smoothedOperatorDistance tau A.toLinearMap D.toLinearMap) ↔
+      ‖(A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)‖ ≤
+        Real.sqrt (1 - ((smoothingRadius tau)⁻¹) ^ 4) := by
+  let L := K.map A.toLinearMap
+  let hKL := (A.toLinearEquiv.finrank_map_eq K).symm
+  let e : (E ≃ₗᵢ[ℂ] E) ≃ (E ≃ₗᵢ[ℂ] E) :=
+    { toFun := fun C => C.symm.trans A
+      invFun := fun W => A.trans W.symm
+      left_inv := by intro C; ext x; simp
+      right_inv := by intro W; ext x; simp }
+  let CorrMin (C : E ≃ₗᵢ[ℂ] E) : Prop := K.map C.toLinearMap = K ∧
+    ∀ D : E ≃ₗᵢ[ℂ] E, K.map D.toLinearMap = K →
+      smoothedOperatorDistance tau A.toLinearMap C.toLinearMap ≤
+        smoothedOperatorDistance tau A.toLinearMap D.toLinearMap
+  let TransMin (W : E ≃ₗᵢ[ℂ] E) : Prop := K.map W.toLinearMap = L ∧
+    ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      smoothedDisplacementCost tau W.toLinearMap ≤ smoothedDisplacementCost tau T.toLinearMap
+  have hpred (C : E ≃ₗᵢ[ℂ] E) : CorrMin C ↔ TransMin (e C) := by
+    have hback : A.trans (C.symm.trans A).symm = C := by ext x; simp
+    have hm := correction_isMin_iff_transport_isMin tau K A (C.symm.trans A)
+    rw [hback] at hm
+    constructor
+    · intro h
+      exact ⟨transporter_of_correction_preserves_subspace K A C h.1, hm.mp h.2⟩
+    · intro h
+      have hc := correction_preserves_subspace K A (C.symm.trans A) h.1
+      rw [hback] at hc
+      exact ⟨hc, hm.mpr h.2⟩
+  have hu : (∃! C, CorrMin C) ↔ ∃! W, TransMin W := e.existsUnique_congr hpred
+  have hcut : (∀ i : Fin (Module.finrank ℂ K), K.principalAngles L i ≤ smoothedCriticalAngle tau) ↔
+      K.projectionGap L ≤ Real.sin (smoothedCriticalAngle tau) := by
+    rw [finite_angle_bound_iff_directedGap K L _ (smoothedCriticalAngle_mem_Icc tau),
+      K.projectionGap_eq_directedProjectionGap_of_finrank_eq L hKL]
+  change (∃! C, CorrMin C) ↔ _
+  rw [hu]
+  change (∃! W : E ≃ₗᵢ[ℂ] E, K.map W.toLinearMap = L ∧
+    ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      smoothedDisplacementCost tau W.toLinearMap ≤ smoothedDisplacementCost tau T.toLinearMap) ↔ _
+  rw [smoothed_transport_unique_minimizer_iff tau htau K L hKL, hcut]
+  rw [projectionGap_unitary_image_eq_commutator, sin_smoothedCriticalAngle]
 
 end TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
