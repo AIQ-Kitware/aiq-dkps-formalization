@@ -14,10 +14,21 @@ The scope is now fixed:
   at every positive acute angle, an all-norm projection-displacement lower bound,
   the sharp secant approximation factor, an attained real trace-norm optimum,
   the directed-sine trace decomposition, and the all-pairs exact complex
-  trace-norm minimum; and
+  trace-norm minimum, the unrestricted finite complex Schatten-`p` minimum
+  for `1 < p < 2` with its exact canonical cutoff, and the smoothed transport
+  minimum and growth estimates; and
 - **out of scope for this manuscript:** downstream application projects and the
   workshop paper's empirical human--LLM/process study, practitioner corpus, and
   resource-accounting analysis.
+
+The finite complex Schatten theorem is included in
+`schatten_transport_verified.tex`. Its Lean endpoint is
+`SchattenGlobalAttainment.exists_unitary_minimizing_schatten_transport_principalAngles`
+(module-qualified shorthand), with canonical optimality in
+`SchattenCanonicalOptimality.nonacuteDirectRotation_schatten_minimal_iff`.
+The exact value and cutoff cover all admissible complex unitary transports;
+the real matching formula, classification of every minimizer, and
+infinite-dimensional Schatten extension remain separate research drafts.
 
 The workshop paper in `../dk_formalization_workshop/` remains useful editorially. In
 particular, this journal draft adopts its sharper separation between kernel

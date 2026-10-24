@@ -99,7 +99,7 @@ private theorem orthogonal_two_phase_basis
     · simp [beta, hn, hnu]
     · simp [beta, hn, hnu, sub_smul]
 
-private theorem norm_one_sub_exp_eq_phaseChord (t : ℝ) (ht : t ∈ Icc 0 Real.pi) :
+theorem norm_one_sub_exp_eq_phaseChord (t : ℝ) (ht : t ∈ Icc 0 Real.pi) :
     ‖1 - Complex.exp ((t : ℂ) * Complex.I)‖ = phaseChord t := by
   rw [norm_sub_rev, mul_comm (t : ℂ) Complex.I,
     Complex.norm_exp_I_mul_ofReal_sub_one, Real.norm_eq_abs]
@@ -107,7 +107,7 @@ private theorem norm_one_sub_exp_eq_phaseChord (t : ℝ) (ht : t ∈ Icc 0 Real.
     (Real.sin_nonneg_of_nonneg_of_le_pi (by linarith [ht.1])
       (by linarith [ht.2, Real.pi_pos])))
 
-private theorem norm_one_sub_exp_neg_eq_phaseChord (t : ℝ) (ht : t ∈ Icc 0 Real.pi) :
+theorem norm_one_sub_exp_neg_eq_phaseChord (t : ℝ) (ht : t ∈ Icc 0 Real.pi) :
     ‖1 - Complex.exp (((-t : ℝ) : ℂ) * Complex.I)‖ = phaseChord t := by
   have hc : 1 - Complex.exp (((-t : ℝ) : ℂ) * Complex.I) =
       star (1 - Complex.exp ((t : ℂ) * Complex.I)) := by
@@ -435,5 +435,80 @@ theorem critical_gradient_block_scalar_minimum_of_isLocalMinOn_transports
   simp only [norm_one_sub_exp_eq_phaseChord _ hcπ, norm_one_sub_exp_neg_eq_phaseChord _ hcπ,
     Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
   ring
+
+set_option maxHeartbeats 600000 in
+/-- Every positive spectral level of an actual local transport minimum has
+a complete phase eigenbasis paired by source reflection. This uniform form
+includes the critical level and exposes ambient eigenvector equations for
+assembling different levels into one orthogonal decomposition. -/
+theorem gradient_eigenspace_phase_basis_of_isLocalMinOn_transports
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K : Submodule ℂ E) [K.HasOrthogonalProjection]
+    (Q : E →L[ℂ] E) (U : unitary (E →L[ℂ] E))
+    (htrans : (U : E →L[ℂ] E) * K.starProjection * star (U : E →L[ℂ] E) = Q)
+    (hmin : IsLocalMinOn
+      (fun W : E →L[ℂ] E => UnitarilyInvariantSeminorm.schatten ℂ E E p
+        (LinearMap.id - W.toLinearMap) ^ p.toReal)
+      {W | W ∈ unitary (E →L[ℂ] E) ∧ W * K.starProjection * star W = Q}
+      (U : E →L[ℂ] E))
+    (g : ℝ) (hg0 : 0 < g)
+    (hg : (g : ℂ) ∈ spectrum ℂ (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E))) :
+    let L := Module.End.eigenspace
+      (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)).toLinearMap (g : ℂ)
+    ∃ (e : OrthonormalBasis (Fin (Module.finrank ℂ L)) ℂ L)
+      (alpha beta : Fin (Module.finrank ℂ L) → ℝ),
+      (∀ i, (U : E →L[ℂ] E) (e i : E) =
+        Complex.exp ((alpha i : ℂ) * Complex.I) • (e i : E)) ∧
+      (∀ i, (U : E →L[ℂ] E) (K.reflection (e i)) =
+        Complex.exp (((-beta i : ℝ) : ℂ) * Complex.I) • K.reflection (e i)) ∧
+      (∀ i, (alpha i + beta i) / 2 ∈ Ioo 0 (Real.pi / 2)) ∧
+      (∀ i, ‖1 - Complex.exp ((alpha i : ℂ) * Complex.I)‖ ^ p.toReal +
+        ‖1 - Complex.exp (((-beta i : ℝ) : ℂ) * Complex.I)‖ ^ p.toReal =
+          phaseMinimum p.toReal ((alpha i + beta i) / 2)) := by
+  let L := Module.End.eigenspace
+    (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)).toLinearMap (g : ℂ)
+  have hgm := positive_gradient_spectrum_le_max p.toReal g hp1 hp2 hg0 U hg
+  rcases lt_or_eq_of_le hgm with hgm | hgm
+  · obtain ⟨V, W, e, alpha, beta, hVact, hWact, hVe, hWe, hmean, hcost, _, _⟩ :=
+      gradient_block_scalar_minima_of_isLocalMinOn_transports p hp hp1 hp2 K Q U htrans hmin
+        g hg0 hgm
+    refine ⟨e, alpha, beta, ?_, ?_, hmean, hcost⟩
+    · intro i
+      exact (hVact (e i)).symm.trans (congrArg (fun x : L => (x : E)) (hVe i))
+    · intro i
+      rw [← hWact, hWe]
+      exact K.reflection.map_smul _ _
+  · subst g
+    obtain ⟨V, W, hVact, hWact, hV, hW, _⟩ :=
+      critical_gradient_block_scalar_minimum_of_isLocalMinOn_transports
+        p hp hp1 hp2 K Q U htrans hmin
+    let e := stdOrthonormalBasis ℂ L
+    let c := criticalAngle p.toReal
+    have hc : c ∈ Ioo 0 (Real.pi / 2) := criticalAngle_mem p.toReal hp1 hp2
+    have hcπ : c ∈ Icc 0 Real.pi := ⟨hc.1.le, by linarith [hc.2, Real.pi_pos]⟩
+    have hcanon : phaseMinimum p.toReal c = 2 * phaseChord c ^ p.toReal :=
+      phaseMinimum_eq_canonical_of_subcritical p.toReal c hp1 hp2 hc.1 hc.2
+        ((critical_inequality_iff p.toReal c hp1 hp2 hcπ).2 le_rfl)
+    refine ⟨e, fun _ => c, fun _ => c, ?_, ?_, ?_, ?_⟩
+    · intro i
+      have h := congrArg (fun T : L →L[ℂ] L => (T (e i) : E)) hV
+      exact (hVact (e i)).symm.trans h
+    · intro i
+      have h := congrArg (fun T : L →L[ℂ] L => (T (e i) : E)) hW
+      calc
+        _ = K.reflection (W (e i)) := (hWact (e i)).symm
+        _ = K.reflection (Complex.exp (((-c : ℝ) : ℂ) * Complex.I) • (e i : E)) :=
+          congrArg K.reflection h
+        _ = _ := K.reflection.map_smul _ _
+    · intro i
+      convert hc using 1; ring
+    · intro i
+      change ‖1 - Complex.exp ((c : ℂ) * Complex.I)‖ ^ p.toReal +
+        ‖1 - Complex.exp (((-c : ℝ) : ℂ) * Complex.I)‖ ^ p.toReal =
+          phaseMinimum p.toReal ((c + c) / 2)
+      rw [show (c + c) / 2 = c by ring,
+        norm_one_sub_exp_eq_phaseChord c hcπ, norm_one_sub_exp_neg_eq_phaseChord c hcπ,
+        hcanon, two_mul]
 
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

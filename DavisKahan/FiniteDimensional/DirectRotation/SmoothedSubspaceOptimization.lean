@@ -75,6 +75,38 @@ private theorem canonical_rotation_model
 /-- Every equal-rank complex subspace pair has a paired eigenbasis of its
 completed canonical rotation, with matching cosine eigenvalues and source
 reflection exchanging each positive-negative eigenphase pair. -/
+theorem exists_subspace_paired_rotation_reflection_basis
+    (U V : Submodule ℂ E) (hUV : Module.finrank ℂ U = Module.finrank ℂ V) :
+    let R := nonacuteDirectRotation U V (finiteCrossedDefectEquiv U V hUV)
+    ∃ n m : ℕ, ∃ (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
+      (theta : Fin n → ℝ) (eps : Fin m → ℝ),
+      (∀ i, theta i ∈ Set.Ioc 0 (Real.pi / 2)) ∧
+      (∀ i, Proposition35.section3CosAngleOperator U V (e (.inl (0, i))) =
+        (Real.cos (theta i) : ℂ) • e (.inl (0, i))) ∧
+      (∀ i, Proposition35.section3CosAngleOperator U V (e (.inl (1, i))) =
+        (Real.cos (theta i) : ℂ) • e (.inl (1, i))) ∧
+      (∀ j, Proposition35.section3CosAngleOperator U V (e (.inr j)) = e (.inr j)) ∧
+      (∀ i, R (e (.inl (0, i))) =
+        Complex.exp ((theta i : ℂ) * Complex.I) • e (.inl (0, i))) ∧
+      (∀ i, R (e (.inl (1, i))) =
+        Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i))) ∧
+      (∀ j, R (e (.inr j)) = e (.inr j)) ∧
+      (∀ i, U.reflection (e (.inl (0, i))) = e (.inl (1, i))) ∧
+      (∀ j, U.reflection (e (.inr j)) = (eps j : ℂ) • e (.inr j)) := by
+  let D := finiteCrossedDefectEquiv U V hUV
+  let R := nonacuteDirectRotation U V D
+  let C := Proposition35.section3CosAngleOperator U V
+  let B := -Complex.I • (R - C)
+  let R' := Unitary.linearIsometryEquiv (⟨R, nonacuteDirectRotation_mem_unitary U V D⟩ :
+    unitary (E →L[ℂ] E))
+  obtain ⟨hC, hB, hR, hpy, hanti⟩ := canonical_rotation_model U V D
+  obtain ⟨n, m, e, theta, eps, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, hJf⟩ :=
+    exists_paired_rotation_eigenbasis R' U.reflection C.toLinearMap B.toLinearMap
+      hC hB hR hpy U.reflection_involutive hanti
+  exact ⟨n, m, e, theta, eps, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, hJf⟩
+
+/-- The completed canonical rotation admits paired eigenphases and
+matching cosine eigenvalues, including its right-angle planes. -/
 theorem exists_subspace_paired_rotation_basis
     (U V : Submodule ℂ E) (hUV : Module.finrank ℂ U = Module.finrank ℂ V) :
     let R := nonacuteDirectRotation U V (finiteCrossedDefectEquiv U V hUV)
@@ -92,16 +124,8 @@ theorem exists_subspace_paired_rotation_basis
         Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i))) ∧
       (∀ j, R (e (.inr j)) = e (.inr j)) ∧
       (∀ i, U.reflection (e (.inl (0, i))) = e (.inl (1, i))) := by
-  let D := finiteCrossedDefectEquiv U V hUV
-  let R := nonacuteDirectRotation U V D
-  let C := Proposition35.section3CosAngleOperator U V
-  let B := -Complex.I • (R - C)
-  let R' := Unitary.linearIsometryEquiv (⟨R, nonacuteDirectRotation_mem_unitary U V D⟩ :
-    unitary (E →L[ℂ] E))
-  obtain ⟨hC, hB, hR, hpy, hanti⟩ := canonical_rotation_model U V D
   obtain ⟨n, m, e, theta, _, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, _⟩ :=
-    exists_paired_rotation_eigenbasis R' U.reflection C.toLinearMap B.toLinearMap
-      hC hB hR hpy U.reflection_involutive hanti
+    exists_subspace_paired_rotation_reflection_basis U V hUV
   exact ⟨n, m, e, theta, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0⟩
 
 /-- Every equal-rank complex subspace pair has a paired cosine eigenbasis

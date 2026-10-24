@@ -79,6 +79,7 @@
     {∃}{{$\exists$}}1
     {∧}{{$\land$}}1
     {∀}{{$\forall$}}1
+    {⊤}{{$\top$}}1
 }
 \crefname{lstlisting}{formalization}{formalizations}
 \Crefname{lstlisting}{Formalization}{Formalizations}
@@ -86,6 +87,7 @@
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{corollary}[theorem]{Corollary}
 
@@ -228,8 +230,13 @@ norm-minimization work of \citet{bolotnikov2001minimal} and subsequent
 Grassmann-angle results \citep{qiu2006grassmann,zhang2007angular,zhang2010canonicalangles}
 provide the appropriate context for these deductions.
 
-The failure also motivates an exact optimization problem beyond the
-source statements. We replace each displacement singular value $s$ by
+The failure also motivates exact optimization beyond the source
+statements. For $1<p<2$ we compute the unrestricted complex Schatten-$p$
+minimum as a sum of scalar minima over the principal angles. We prove
+that independent principal-plane phases attain this value and that the
+canonical rotation minimizes exactly when every angle is at most
+$\arccos((2-p)/p)$; see \cref{sec:schatten-optimization}.
+We also replace each displacement singular value $s$ by
 $\sqrt{\tau^2+s^2}-\tau$, a smooth penalty connecting trace and quadratic
 costs. For arbitrary equal-rank complex subspaces we compute the global
 minimum, construct an optimizer by continuous functional calculus, and
@@ -268,7 +275,11 @@ Appendix~\ref{app:source-review}.
     right-angle configurations. The optimum equals twice the sum of the
     sines of the principal angles, with no acute-angle hypothesis.
   \item We solve the unrestricted finite-dimensional complex transport
-    problem for the smoothed spectral penalty
+    problem for Schatten exponents $1<p<2$, with an attained
+    principal-angle formula and the exact canonical cutoff
+    $\arccos((2-p)/p)$. Independent scalar phases attain the minimum,
+    including zero and right principal angles.
+    We also solve it for the smoothed spectral penalty
     $\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$. We prove its exact
     principal-angle formula and transition cutoff, construct a globally
     minimizing unitary by functional calculus, and establish an explicit
@@ -510,6 +521,7 @@ adapted from the geometric sine-theta visualization.}
 
 \input{counterexample.tex}
 \input{sharp_displacement.tex}
+\input{schatten_transport_verified.tex}
 \input{smoothed_transport_verified.tex}
 
 \section{Mathematical architecture of the Davis--Kahan development}
@@ -646,7 +658,9 @@ The ambient unitary transport optimization itself was studied by
 \citet{bolotnikov2001minimal}, who establish canonical minimality for
 $Q$-norms and exhibit Schatten-$p$ failure for $1\leq p<2$.
 The scalar phase mechanism is already present in Davis and Kahan's
-Example~4.2. Our smoothed theorem uses the same transport constraint and a
+Example~4.2. Our Schatten theorem gives the angle-dependent minimum
+throughout $1<p<2$ and proves independent-plane optimality at arbitrary
+finite complex rank. Our smoothed theorem uses the same transport constraint and a
 nonhomogeneous spectral penalty; it gives the exact all-pairs value, a
 constructive optimizer, and quantitative growth estimates through the phase-transition cutoff. Smooth
 hyperbolic singular-value penalties are established in low-rank

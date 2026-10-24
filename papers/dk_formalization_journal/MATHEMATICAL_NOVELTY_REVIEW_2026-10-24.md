@@ -14,6 +14,18 @@ and matrix geometry?
 
 ## 1. Executive assessment
 
+**Subsequent verification update, 24 October 2026.** SP-3 is now compiled:
+`SchattenGlobalAttainment.lean` proves the attained principal-angle sum and
+the lower bound for every admissible finite complex unitary, including
+mixing competitors, zero and right angles, and empty spaces.
+`SchattenCanonicalOptimality.lean` proves canonical optimality exactly when
+every angle is at most `arccos((2-p)/p)`, including equality. The full
+`DavisKahan.All ForTauCeti` build passes, and the endpoint and assembly axiom
+audits contain only `propext`, `Classical.choice`, and `Quot.sound`.
+This supersedes the earlier compilation-gap descriptions of SP-3 below.
+It does not establish priority, classify all minimizers, or prove the real,
+no-nonglobal-local-minima, or infinite-dimensional extensions.
+
 There are **three distinct publishable stories** and they should not be
 confused.
 
@@ -40,20 +52,22 @@ confused.
 3. **Schatten and real-field optimization.** The planar complex
    `1 < p < 2` transition, including the necessary-and-sufficient critical
    angle for all admissible planar unitary competitors, **is formalized**.
-   The general complex higher-rank angle-sum formula, classification of all
-   minimizers, exact real arbitrary-rank matching formula, sorted two-sum
+   The general complex higher-rank angle-sum formula and exact canonical
+   cutoff are now **Lean-certified**, with attainment and unrestricted
+   competitors. Classification of all minimizers, the real arbitrary-rank
+   matching formula, sorted two-sum
    reduction, and sharp dimension-free real-minus-complex field gaps have
    substantive **conventional proof drafts and many verified ingredients**.
    Their final global statements are **not yet Lean-certified** in this
    snapshot and require independent mathematical review before prominence
    or publication.
 
-**Recommendation:** Do **not** turn the formalization article into a survey
-of all the newer optimization proposals. Maintain a Davis--Kahan formalization
-paper, develop a separate mathematical optimization paper around the completed
-smoothed theorem (and add higher-rank Schatten/real matching when proved),
-and treat the additional textbook-metric discrepancy described below as a
-separate edition-verification and possible scholarly-correction task.
+**Publication decision:** The user requires new mathematical insight to ship
+with the DK journal article. The proved finite complex Schatten and smoothed
+results are included there, with their connection to Proposition 4.4 and
+their prior-art boundaries. Broader unverified optimization proposals remain
+separate. The textbook-metric discrepancy remains a separate
+edition-verification and possible scholarly-correction task.
 
 The word **novel** here means a defensible mathematical first-publication
 claim; it does *not* mean the statement was recently formalized, that a proof
@@ -104,7 +118,7 @@ rows of the original 29-result Davis--Kahan source inventory.
 | DK-7 | Real/complex finite-dimensional projector trace decomposition into two directed sine-map trace norms, with possibly unequal ranks | Formalized: `ForTauCeti/.../Projection/TraceSine.lean` | Classical block principal-angle identities; **likely known/easy consequence**, no first-publication claim |
 | SP-1 | **Unrestricted complex planar** Schatten-`p` `1<p<2` minimum over *all* unitary line transporters and canonical threshold `acos((2-p)/p)` | Formalized: `SchattenPlanarOptimization.lean`, `SchattenPhaseTransition.lean` | BLR (2001) knew failure below `p=2`, incl. right angle, but the complete threshold/phase law was not located. **Credible distinct exact classification; priority unresolved** |
 | SP-2 | For `p=3/2`, critical angle `acos(1/3)` and explicit symmetry-breaking phase | Formalized scalar/planar: `SchattenThreeHalves.lean` and SP-1 | Specialization of SP-1, **not an independent substantial novelty claim** |
-| SP-3 | Complex arbitrary-rank `D_{s^p}(U,V)=sum_i m_p(theta_i)` for `1<p<2` | Complete conventional proof candidate in `schatten_optimization.tex`, with compiled gradient/variation/realization sublemmas | **Highest-potential analytic extension** if final global no-mixing reduction survives independent review; not yet a compiled global theorem |
+| SP-3 | Complex arbitrary-rank `D_{s^p}(U,V)=sum_i m_p(theta_i)` for `1<p<2`, with attainment and exact canonical cutoff | **Formalized**: `SchattenGlobalLowerBound.lean`, `SchattenGlobalAttainment.lean`, `SchattenCanonicalOptimality.lean`; included proof in `schatten_transport_verified.tex` | **Completed analytic originality candidate**. Unrestricted mixing and the exceptional kernel assembly are compiled; first-publication priority remains unresolved. |
 | SP-4 | Every local minimum of unrestricted complex Schatten-`p` transport is global; infinite-dimensional Schatten-ideal extension | Conventional arguments in `schatten_optimization.tex` | Potentially interesting but **separate unverified generalizations**; ideal-class hypotheses and zero singular values especially need review |
 | SM-1 | Exact **all-pairs complex** finite-dimensional Charbonnier spectral-penalty minimum, attained, explicit phase transition | **Formalized**: `SmoothedPrincipalAngles.lean`, `SmoothedSubspaceOptimization.lean`, `SmoothedPhaseMinimum.lean` | Penalty and constraint each classical; **best completed mathematical originality candidate**, with no identical source located yet |
 | SM-2 | Explicit globally minimizing complex unitary via clipped functional calculus of positive cosine operator | **Formalized**: `SmoothedExplicitOptimizer.lean` | A concrete constructive strengthening of SM-1; may be an elementary companion to SM-1, but substantial for applications |
@@ -233,29 +247,27 @@ contrast the old complex phase mechanism: nonminimality can occur at
 arbitrarily small angles. At `p>=2`, BLR's Q-norm result supplies the
 old optimality mechanism.
 
-The **proposed higher-rank formula**
+The **proved higher-rank formula**
 
 ```
 min_{W:WU=V} ||I-W||_p^p = sum_i m_p(theta_i)
 ```
 
-is **not a formal theorem in the snapshot**. The gap is a universal
-**no-cross-plane-mixing** reduction over the full stabilizer fiber. The
-repository proves many first- and second-variation lemmas, two-phase
-spectral restrictions, feasibility of blocks, and positive-gradient real
-block structure, but these are not equivalent to final global
-subadditivity or independent plane optimality. Particular care is needed
-when eigenvalue `1` makes second derivatives of the `p`-power singular.
-The draft explicitly treats the null part differently; that treatment
-needs independent inspection.
+now has a compiled lower bound over the full stabilizer fiber and a matching
+attaining transport. The proof collects the paired positive-gradient bases,
+identifies their mean phases with the original accepted principal angles,
+and treats the zero-gradient reflection by its nuclear comparison. Thus the
+kernel estimate avoids twice differentiating at zero displacement singular
+values. The canonical cutoff follows by summing the scalar cost deficits.
 
-If finished and reviewed, SP-3 would plausibly support a new contribution:
-all-principal-angle exact formula, necessity of the cutoff for arbitrary
-rank, classification of symmetry-breaking minimizers, and a nearest
-commuting-unitary interpretation. Its existence cannot be inferred
-simply by taking direct sums of the already-proved planar minimizers:
-that produces an **upper** bound, not a matching lower bound for mixing
-transporters.
+This establishes SP-3's correctness and permits computation by a cosine--sine
+decomposition and independent scalar roots. Classification of all
+symmetry-breaking minimizers and nearest commuting-unitary corollaries
+remain separate claims. The completed proof does not establish originality:
+the closest identified prior art remains BLR's transport problem, Q-norm
+canonical theorem, and right-angle example. A fresh targeted search again
+located those primary statements without identifying the complete
+angle-dependent `1<p<2` formula; negative search does not prove priority.
 
 ## 6. Real transport: matching structure and a dimension-free penalty gap
 
@@ -442,7 +454,7 @@ Sources:
 | --- | --- | --- | --- |
 | 1 | Independent **mathematical** review of SM-1/SM-2/SM-3 and the exact Lean statements | Verify every optimizer is feasible; the nuclear support certificate applies to **all** commuting competitors and transports; stability constant is as stated | A defensible core of a standalone optimization paper now |
 | 2 | Broaden the exact-prior-art chain for weighted nuclear / constrained unitary cosets | Read general matrix-nearness/weighted Procrustes theorems, not just titles; write an implication or non-implication proof for each | Establish whether SM-1 is mathematical novelty or a special case |
-| 3 | Close SP-3 for **arbitrary** complex rank | Full formalized/global theorem or independently referee-checked conventional proof that prohibits cross-plane mixing including zero phases | Exact all-rank Schatten `1<p<2` optimization, likely the strongest next theorem |
+| 3 | SP-3 for **arbitrary** complex rank: completed | Compiled unrestricted lower bound, attaining transport, principal-angle formula and canonical cutoff | Correctness established in Lean; independent novelty review remains necessary |
 | 4 | Close R-2 real matching lower bound, especially **zero and maximal gradient** blocks | Block decomposition covers every optimizer in all determinant components and every boundary configuration; matching attainment proof | Structural real optimization theorem |
 | 5 | Verify R-3 submodularity and sorted reduction | Precise crossing/uncrossing inequalities and two configurations for odd/even lists, independently checked | Fast exact real solver |
 | 6 | Review R-4/R-5 globally, not just sharp examples | Independent compactness, boundary, tie-Hessian and induction proof; equality cases checked with degenerate angles | Sharp dimension-free field-penalty gap with equality classification |

@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNuclearCertificate
 public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import ForTauCeti.Analysis.InnerProductSpace.DiagonalUnitary
 
 /-!
 # Attainment of the smoothed nuclear certificate in principal coordinates
@@ -31,21 +32,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 private theorem exists_diagonal_phase_isometry {ι : Type*} [Fintype ι]
     (e : OrthonormalBasis ι ℂ E) (delta : ι → ℝ) :
     ∃ V : E ≃ₗᵢ[ℂ] E, ∀ j, V (e j) = circlePhase 1 (delta j) • e j := by
-  classical
-  let f := e.toBasis.constr ℂ (fun j => circlePhase 1 (delta j) • e j)
-  have hf (j) : f (e j) = circlePhase 1 (delta j) • e j := e.toBasis.constr_basis ℂ _ j
-  have horth : Orthonormal ℂ (f ∘ e.toBasis) := by
-    rw [orthonormal_iff_ite]
-    intro j k
-    change ⟪f (e j), f (e k)⟫_ℂ = _
-    rw [hf, hf, inner_smul_left, inner_smul_right, e.inner_eq_ite]
-    by_cases hjk : j = k
-    · subst k
-      rw [ite_eq_left rfl, mul_one, RCLike.conj_mul, norm_circlePhase 1 _ zero_le_one]
-      norm_num
-    · rw [ite_eq_right hjk, mul_zero, mul_zero]
-  let L := f.isometryOfOrthonormal e.orthonormal horth
-  exact ⟨L.toLinearIsometryEquiv rfl, hf⟩
+  exact e.exists_linearIsometryEquiv_apply_eq_smul (fun j => circlePhase 1 (delta j))
+    (fun j => norm_circlePhase 1 (delta j) zero_le_one)
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ]
 
