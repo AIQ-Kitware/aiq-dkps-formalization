@@ -928,6 +928,20 @@ located but returned HTTP 403; exact theorem-level comparison beyond the
 publisher's exposed text remains incomplete. No priority claim is inferred
 from this access limitation.
 
+The older primary source Bouldin, *Best approximation of a normal operator
+in the trace norm*, Acta Sci. Math. (Szeged) 51 (1987), 467--474,
+<https://acta.bibl.u-szeged.hu/15159/1/math_051_fasc_003_004_467-474.pdf>,
+was checked at Theorems 3 and 11. It minimizes over the full cone of positive
+operators and classifies uniqueness in that cone. On one strict-subcritical
+rotation plane, Theorem 3's positive approximant is `a cos(theta) I`.
+Its norm exceeds `b`, so it is outside our bounded contraction set, and its
+nuclear error `2a sin(theta)` is strictly smaller than our
+`2 sqrt((a cos(theta)-b)^2+a^2 sin(theta)^2)`. Thus the stated positive-cone
+minimum is not our constrained value. This comparison also reinforces that
+spectral clipping and nuclear approximation have classical antecedents;
+possible reductions through bounded-spectrum refinements remain a priority
+question, not excluded by the difference of feasible sets alone.
+
 The 2026 follow-up by Bottazzi--Varela,
 <https://arxiv.org/pdf/2604.16041>, was checked at Section 1 and Theorem 1.
 It treats Hermitian additive approximation by a full C*-subalgebra in the
