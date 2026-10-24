@@ -35,5 +35,6 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientSpectrum
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientPairing
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenOverlapDirection
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenSecondVariation
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

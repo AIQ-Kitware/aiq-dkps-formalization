@@ -241,8 +241,37 @@ theorem re_trace_schattenUnitaryGradient_mul
     sub_zero, hphase]
 
 /-- Right multiplication by the exponential of a skew-adjoint direction
-is a differentiable unitary curve. The formula uses the actual Schatten
-displacement power, and permits a zero displacement singular value. -/
+has the spectral first variation at every real time. -/
+theorem hasDerivAt_schatten_displacement_rpow_mul_exp_at
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
+    (U : unitary (E →L[ℂ] E)) (H : E →L[ℂ] E) (hH : IsSelfAdjoint H) (t : ℝ) :
+    HasDerivAt
+      (fun s : ℝ => UnitarilyInvariantSeminorm.schatten ℂ E E p
+        (LinearMap.id - ((U : E →L[ℂ] E) *
+          NormedSpace.exp (s • (Complex.I • H))).toLinearMap) ^ p.toReal)
+      (LinearMap.trace ℂ E
+        ((cfc (fun z => ((p.toReal * ‖z - 1‖ ^ (p.toReal - 2) : ℝ) : ℂ) * (z - 1))
+          ((U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H)))).adjoint *
+            (((U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H))) *
+              (Complex.I • H))).toLinearMap).re t := by
+  let +nondep : NormedAlgebra ℚ (E →L[ℂ] E) := .restrictScalars ℚ ℂ (E →L[ℂ] E)
+  let a : ℝ → E →L[ℂ] E := fun s =>
+    (U : E →L[ℂ] E) * NormedSpace.exp (s • (Complex.I • H))
+  have hunit (s : ℝ) : a s ∈ unitary (E →L[ℂ] E) := by
+    apply mul_mem U.2
+    apply NormedSpace.exp_mem_unitary_of_mem_skewAdjoint
+    rw [skewAdjoint.mem_iff]
+    simp [star_smul, hH.star_eq]
+  have ha : HasDerivAt a (a t * (Complex.I • H)) t := by
+    simpa only [a, mul_assoc] using (hasDerivAt_exp_smul_const
+      (𝕂 := ℝ) (Complex.I • H) t).const_mul (U : E →L[ℂ] E)
+  exact hasDerivAt_schatten_displacement_rpow p hp hp1 (Metric.sphere (0 : ℂ) 1)
+    (isCompact_sphere 0 1) a t (a t * (Complex.I • H)) ha
+    (fun s => isStarNormal_of_mem_unitary (hunit s))
+    (fun s => spectrum.subset_circle_of_unitary (hunit s))
+
+/-- The spectral first variation at the initial unitary, including at
+zero displacement singular values. -/
 theorem hasDerivAt_schatten_displacement_rpow_mul_exp
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
     (U : unitary (E →L[ℂ] E)) (H : E →L[ℂ] E) (hH : IsSelfAdjoint H) :
@@ -253,26 +282,34 @@ theorem hasDerivAt_schatten_displacement_rpow_mul_exp
       (LinearMap.trace ℂ E
         ((cfc (fun z => ((p.toReal * ‖z - 1‖ ^ (p.toReal - 2) : ℝ) : ℂ) * (z - 1))
           (U : E →L[ℂ] E)).adjoint * ((U : E →L[ℂ] E) * (Complex.I • H))).toLinearMap).re 0 := by
+  simpa only [zero_smul, NormedSpace.exp_zero, mul_one] using
+    hasDerivAt_schatten_displacement_rpow_mul_exp_at p hp hp1 U H hH 0
+
+/-- At every real time, the self-adjoint unitary gradient pairs with the
+Hermitian right direction to give the actual Schatten first variation. -/
+theorem hasDerivAt_schatten_unitary_right_variation_at
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
+    (U : unitary (E →L[ℂ] E)) (H : E →L[ℂ] E) (hH : IsSelfAdjoint H) (t : ℝ) :
+    HasDerivAt
+      (fun s : ℝ => UnitarilyInvariantSeminorm.schatten ℂ E E p
+        (LinearMap.id - ((U : E →L[ℂ] E) *
+          NormedSpace.exp (s • (Complex.I • H))).toLinearMap) ^ p.toReal)
+      (LinearMap.trace ℂ E
+        (schattenUnitaryGradient p.toReal
+          ((U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H))) * H).toLinearMap).re t := by
   let +nondep : NormedAlgebra ℚ (E →L[ℂ] E) := .restrictScalars ℚ ℂ (E →L[ℂ] E)
-  let a : ℝ → E →L[ℂ] E := fun t =>
-    (U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H))
-  have hunit (t : ℝ) : a t ∈ unitary (E →L[ℂ] E) := by
+  let V := (U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H))
+  have hunit : V ∈ unitary (E →L[ℂ] E) := by
     apply mul_mem U.2
     apply NormedSpace.exp_mem_unitary_of_mem_skewAdjoint
     rw [skewAdjoint.mem_iff]
     simp [star_smul, hH.star_eq]
-  have ha : HasDerivAt a ((U : E →L[ℂ] E) * (Complex.I • H)) 0 := by
-    have h := (hasDerivAt_exp_smul_const
-      (𝕂 := ℝ) (Complex.I • H) (0 : ℝ)).const_mul (U : E →L[ℂ] E)
-    simpa only [zero_smul, NormedSpace.exp_zero, one_mul] using h
-  have hd := hasDerivAt_schatten_displacement_rpow p hp hp1 (Metric.sphere (0 : ℂ) 1)
-    (isCompact_sphere 0 1) a 0 ((U : E →L[ℂ] E) * (Complex.I • H)) ha
-    (fun t => isStarNormal_of_mem_unitary (hunit t))
-    (fun t => spectrum.subset_circle_of_unitary (hunit t))
-  simpa only [a, zero_smul, NormedSpace.exp_zero, mul_one] using hd
+  let := isStarNormal_of_mem_unitary hunit
+  exact (hasDerivAt_schatten_displacement_rpow_mul_exp_at p hp hp1 U H hH t).congr_deriv
+    (re_trace_schattenUnitaryGradient_mul p.toReal V H hH).symm
 
 /-- The self-adjoint unitary gradient pairs with a Hermitian right
-direction to give the first variation of Schatten displacement. -/
+direction to give the first variation at the initial unitary. -/
 theorem hasDerivAt_schatten_unitary_right_variation
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
     (U : unitary (E →L[ℂ] E)) (H : E →L[ℂ] E) (hH : IsSelfAdjoint H) :
@@ -281,9 +318,9 @@ theorem hasDerivAt_schatten_unitary_right_variation
         (LinearMap.id - ((U : E →L[ℂ] E) *
           NormedSpace.exp (t • (Complex.I • H))).toLinearMap) ^ p.toReal)
       (LinearMap.trace ℂ E
-        (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E) * H).toLinearMap).re 0 :=
-  (hasDerivAt_schatten_displacement_rpow_mul_exp p hp hp1 U H hH).congr_deriv
-    (re_trace_schattenUnitaryGradient_mul p.toReal (U : E →L[ℂ] E) H hH).symm
+        (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E) * H).toLinearMap).re 0 := by
+  simpa only [zero_smul, NormedSpace.exp_zero, mul_one] using
+    hasDerivAt_schatten_unitary_right_variation_at p hp hp1 U H hH 0
 
 /-- At a local minimum along a Hermitian unitary variation, its gradient
 trace pairing vanishes. Feasibility of a particular constrained variation is

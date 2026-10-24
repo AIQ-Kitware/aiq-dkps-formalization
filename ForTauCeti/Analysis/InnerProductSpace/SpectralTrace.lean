@@ -331,6 +331,32 @@ theorem re_trace_adjoint_mul_self_pos_iff (A : E →L[ℂ] E) :
     exact lt_of_le_of_ne (re_trace_adjoint_mul_self_nonneg A)
       (fun h => hA (eq_zero_of_re_trace_adjoint_mul_self_eq_zero A h.symm))
 
+omit [FiniteDimensional ℂ E] in
+/-- Under the trace, pairing a Hermitian projection compression with the
+original Hermitian operator is its Frobenius square. -/
+theorem trace_compression_mul_eq_trace_adjoint_square
+    (H P : E →L[ℂ] E) (hH : IsSelfAdjoint H) (hP : IsStarProjection P) :
+    LinearMap.trace ℂ E ((P * H * P) * H).toLinearMap =
+      LinearMap.trace ℂ E ((P * H * P).adjoint * (P * H * P)).toLinearMap := by
+  let T := P * H * P
+  have hT : IsSelfAdjoint T := hH.conjugate_self hP.isSelfAdjoint
+  have hPT : P * T = T := by
+    change P * (P * H * P) = P * H * P
+    simp only [mul_assoc, hP.isIdempotentElem.mul_self_mul]
+  have hprod : T.adjoint * T = (T * H) * P := by
+    rw [← _root_.ContinuousLinearMap.star_eq_adjoint, hT.star_eq]
+    change (P * H * P) * (P * H * P) = ((P * H * P) * H) * P
+    simp only [mul_assoc, hP.isIdempotentElem.mul_self_mul]
+  symm
+  calc
+    LinearMap.trace ℂ E (T.adjoint * T).toLinearMap =
+        LinearMap.trace ℂ E ((T * H) * P).toLinearMap := by rw [hprod]
+    _ = LinearMap.trace ℂ E (P * (T * H)).toLinearMap := by
+      change LinearMap.trace ℂ E ((T.toLinearMap * H.toLinearMap) * P.toLinearMap) =
+        LinearMap.trace ℂ E (P.toLinearMap * (T.toLinearMap * H.toLinearMap))
+      exact LinearMap.trace_mul_comm ℂ _ _
+    _ = LinearMap.trace ℂ E (T * H).toLinearMap := by rw [← mul_assoc, hPT]
+
 /-- Orthogonality in the trace pairing to every Hermitian element of a
 projection's commutant forces its diagonal compression to vanish. Testing
 against `P G P` reduces the assertion to faithfulness of the trace square. -/

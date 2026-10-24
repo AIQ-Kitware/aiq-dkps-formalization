@@ -46,6 +46,16 @@ theorem schattenPhaseDerivative_exp_eq_amplitude (p t : ℝ)
     _ = p * Real.cos (t / 2) * (phaseChord t ^ (p - 2) * phaseChord t) := by ring
     _ = _ := by rw [hpow]; ring
 
+/-- The phase-gradient derivative on the positive principal range is
+the scalar curvature used in the two-phase operator variation. -/
+theorem schattenPhaseDerivative_exp_hasDerivAt (p t : ℝ) (ht : t ∈ Ioo 0 Real.pi) :
+    HasDerivAt (fun u : ℝ => schattenPhaseDerivative p (Complex.exp ((u : ℂ) * Complex.I)))
+      (p * amplitudeDerivative p t) t := by
+  have hd := (phaseAmplitude_hasDerivAt p t (phaseChord_pos ht.1 ht.2)).const_mul p
+  apply hd.congr_of_eventuallyEq
+  filter_upwards [isOpen_Ioo.mem_nhds ht] with u hu
+  exact schattenPhaseDerivative_exp_eq_amplitude p u hu
+
 /-- A positive gradient level can only come from a positive interior
 principal phase. The endpoint phases `0` and `pi` have zero symbol. -/
 theorem principal_phase_pos_of_schattenPhaseDerivative_pos

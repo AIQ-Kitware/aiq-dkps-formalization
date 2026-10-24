@@ -249,8 +249,9 @@ two-phase second-variation lemma explicitly and derives it from the
 classical spectral Hessian of Lewis--Sendov (2001, Theorem 3.3). Their
 printed theorem is for real symmetric matrices; the draft explains the
 Hermitian extension by realification. Formal identification with the
-actual second derivative, and the resulting overlap exclusion, remain
-unfinished. No novelty is claimed for the spectral Hessian theorem.
+actual second derivative is now registered below for two-phase blocks.
+Its ambient paired-block assembly and the resulting overlap exclusion
+remain unfinished. No novelty is claimed for the spectral Hessian theorem.
 
 `TwoPointDerivative.lean` supplies a more focused compiled route to the
 needed Hessian. If a symbol takes the same value at two distinct spectral
@@ -260,9 +261,29 @@ The polynomial vanishes at the base operator, so only its derivative and
 continuity of the remaining functional calculus are needed. The resulting
 derivative is the sum of the two diagonal compressions, weighted by the
 scalar complex derivatives. This is classical mathematics with no
-finite-dimensional hypothesis. Applying it to a complex extension of the
-actual Schatten phase symbol is the next formal step; no completed
-Schatten second-variation claim follows from this generic API alone.
+finite-dimensional hypothesis. Its application to the actual phase symbol
+is registered next; no ambient overlap-exclusion claim follows from this
+generic API alone.
+
+`SchattenPhaseSymbol.lean` now supplies the required complex extension,
+its agreement with the actual phase gradient on the entire unit circle,
+its continuity there for exponents greater than one, and its complex
+differentiability away from the identity. The derivative bridge matches
+its complex tangential derivative to the real phase curvature.
+`SchattenTwoPhaseVariation.lean` then proves the gradient derivative and
+the second variation of the actual accepted Schatten displacement power.
+The latter is stated with explicit scalar derivative data and Frobenius
+squares represented by their finite traces. Its proof uses the first
+variation at every real time, so it differentiates the actual cost's
+derivative. The axiom audit uses only the standard three logical axioms.
+This closes the analytic two-phase step. The feasible pairing, extension
+by the identity on the remaining blocks, and the ambient cost decomposition
+still need formal assembly before the no-mixing proposition is certified.
+The downstream `balanced_phase_second_variation` in
+`SchattenSecondVariation.lean` supplies the scalar derivative data from
+the amplitude calculus for distinct positive balanced roots, giving the
+explicit coefficients `p * amplitudeDerivative p a` and
+`p * amplitudeDerivative p b` in the actual-norm second variation.
 
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical
