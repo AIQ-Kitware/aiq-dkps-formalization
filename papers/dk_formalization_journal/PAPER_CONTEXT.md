@@ -529,6 +529,23 @@ and full exercise statements remain to be checked from a primary copy;
 the author's full PDF has been unavailable. Do not yet claim a book erratum
 or infer research priority from this discrepancy.
 
+The independent fragment `real_four_dimensional_transport.tex` now supplies
+an exact conventional solution for real rank-two transport in `R^4`.
+For any continuous nondecreasing spectral penalty, the minimum is the smaller
+of a restricted scalar-phase cost and a reflection on the larger-angle plane.
+Its proof treats all four components of the real stabilizer by the actual
+four-dimensional characteristic polynomial. The Schatten corollary clips the
+scalar optimum to `[d,h]`, where `h` and `d` are half the angle sum and
+difference. The nuclear cost has the closed formula
+`min(4 sin(h), 2+4 sin(theta2/2))`, with `theta1 >= theta2`. The Charbonnier
+cost has explicit coupled-rotation and reflection branches and an exact
+two-inequality canonical region. These real optimization results are
+conventional proofs under review, not Lean-certified. They are excluded from
+`paper.tex`. Numerical unrestricted searches in all four stabilizer components
+agreed with the four-dimensional formula; these checks are not proof evidence.
+No matching formula was found in the inspected primary literature, including
+Bolotnikov--Li--Rodman (2001). That is provisional negative evidence.
+
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
 - Symbol colors: `math_symbol_colors.tex`; `\DKMathColorsfalse` after its input turns symbol colors off. Keep the readable Manim-derived shade map and `appendix_notation.tex` aligned.

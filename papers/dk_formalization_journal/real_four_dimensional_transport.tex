@@ -1,0 +1,223 @@
+% Independent conventional research fragment; excluded from paper.tex.
+% Not Lean-certified. Evidence and priority boundaries: PAPER_CONTEXT.md.
+\section{Exact real transport of two planes in four dimensions}
+\label{sec:real-four-dimensional-transport}
+
+Over the real field, rotations within the source and its orthogonal
+complement can couple distinct principal planes. The first such case is
+the transport of a two-dimensional subspace of $\mathbb R^4$. It admits
+an exact reduction for every continuous increasing spectral penalty.
+
+Let $\rho:[0,2]\to\mathbb R$ be continuous and nondecreasing, with
+$\rho(0)=0$, and put
+\[
+ \phi(t)=\rho\bigl(2\sin(t/2)\bigr),\qquad 0\leq t\leq\pi,
+ \qquad
+ \mathcal F_\rho(W)=\sum_{j=1}^4\rho(\sigma_j(I-W)).
+\]
+
+\begin{theorem}[The real four-dimensional minimum]
+\label{thm:real-four-dimensional-minimum}
+Let $P,Q$ be rank-two orthogonal projections on $\mathbb R^4$, with
+principal angles $0\leq\theta_2\leq\theta_1\leq\pi/2$. Set
+\[
+ h=\frac{\theta_1+\theta_2}{2},\qquad
+ d=\frac{\theta_1-\theta_2}{2}.
+\]
+Then the minimum over real orthogonal transporters is
+\begin{equation}
+ \min_{WPW^T=Q}\mathcal F_\rho(W)
+ =\min\left\{
+    2\min_{d\leq\delta\leq h}
+       \bigl[\phi(h+\delta)+\phi(h-\delta)\bigr],\quad
+    \rho(2)+2\phi(\theta_2)
+   \right\}.
+ \label{eq:real-four-dimensional-minimum}
+\end{equation}
+The first term is attained by a common rotation within the source and
+its orthogonal complement, followed by the canonical rotation. The second
+is attained by a reflection on the larger-angle principal plane and the
+canonical rotation on the smaller-angle plane.
+\end{theorem}
+
+\begin{proof}
+Choose cosine--sine coordinates, with
+\[
+ P=\begin{pmatrix}I_2&0\\0&0\end{pmatrix},\qquad
+ R=\begin{pmatrix}C&-S\\S&C\end{pmatrix},\qquad
+ C=\operatorname{diag}(\cos\theta_1,\cos\theta_2),\quad
+ S=\operatorname{diag}(\sin\theta_1,\sin\theta_2).
+\]
+Every transporter is $R\operatorname{diag}(A,B)$ with $A,B\in O(2)$.
+Write $R_t$ for the planar rotation through $t$, and
+$F=\operatorname{diag}(1,-1)$. Thus each of $A,B$ is either $R_t$
+or $R_tF$.
+
+First take $A=R_\alpha$ and $B=R_\beta$, and put
+$r=(\alpha+\beta)/2$, $s=(\alpha-\beta)/2$. Define $x,y\in[0,\pi]$
+by
+\[
+ \cos x=\cos h\cos s,\qquad \cos y=\cos d\cos r.
+\]
+The characteristic polynomial of the transporter is
+\begin{equation}
+ z^4-4uvz^3+(4u^2+4v^2-2)z^2-4uvz+1,
+ \qquad u=\cos x,\quad v=\cos y.
+ \label{eq:real-four-characteristic}
+\end{equation}
+Indeed, its trace is $(\cos\theta_1+\cos\theta_2)
+(\cos\alpha+\cos\beta)=4uv$, and its second characteristic
+coefficient is
+\[
+ 2\cos\theta_1\cos\theta_2
+ +2(1+\cos\theta_1\cos\theta_2)\cos\alpha\cos\beta
+ -2\sin\theta_1\sin\theta_2\sin\alpha\sin\beta
+ =4u^2+4v^2-2.
+\]
+Orthogonality and determinant one give the remaining coefficients.
+The roots of \cref{eq:real-four-characteristic} are
+$e^{\pm i(x+y)}$ and $e^{\pm i(x-y)}$.
+
+The parameters $r,s$ vary independently, so the possible pairs are exactly
+\[
+ x\in[h,\pi-h],\qquad y\in[d,\pi-d].
+\]
+Replacing $(x,y)$ by $(\pi-x,\pi-y)$ preserves the displacement
+singular values. We may therefore suppose $x+y\leq\pi$, in which case
+the cost is $2[\phi(x+y)+\phi(|x-y|)]$.
+If $x>h$ and $y>d$, reduce both by
+$\min\{x-h,y-d\}$. Their difference stays fixed and their sum decreases,
+so the cost cannot increase. On the edge $y=d$, decreasing $x$ to $h$
+decreases both nonnegative phase arguments. On the edge $x=h$, any
+$y>h$ is dominated by $y=h$. The minimum in this component is therefore
+the first term of \cref{eq:real-four-dimensional-minimum}.
+
+If $A=R_\alpha F$ and $B=R_\beta F$, the same characteristic polynomial
+holds with
+\[
+ u=\sin h\cos s,\qquad v=-\sin d\cos r.
+\]
+After exchanging $x$ and $y$, the possible pairs have lower endpoints
+$\pi/2-d$ and $\pi/2-h$. These are at least $h$ and $d$, respectively,
+because $h+d=\theta_1\leq\pi/2$. Their upper endpoints are the
+corresponding reflections about $\pi/2$. This parameter rectangle is a
+subset of the previous rectangle, so this component cannot lower its
+minimum.
+
+If $A,B$ have opposite determinants, the transporter has eigenvalues
+$1,-1,e^{it},e^{-it}$ for some $t\in[0,\pi]$. Its trace satisfies
+\[
+ 2\cos t\leq
+   (\cos\theta_1+\cos\theta_2)+|\cos\theta_1-\cos\theta_2|
+ =2\cos\theta_2.
+\]
+For example, when $A=R_\alpha$ and $B=R_\beta F$, the trace is
+$(\cos\theta_1+\cos\theta_2)\cos\alpha+
+ (\cos\theta_1-\cos\theta_2)\cos\beta$.
+Hence $t\geq\theta_2$, and monotonicity gives cost at least
+$\rho(2)+2\phi(\theta_2)$. A reflection on the larger-angle plane
+and the canonical rotation on the other plane attain this value.
+
+Finally, let $\delta\in[d,h]$ minimize the first term and choose
+\[
+ \gamma=\arccos\frac{\cos\delta}{\cos d}.
+\]
+Here $d\leq\pi/4$, so the denominator is positive and the ratio lies
+in $[0,1]$. Taking $A=B=R_\gamma$ gives $x=h$ and $y=\delta$ and
+therefore attains that term. This proves the formula and attainment.
+\end{proof}
+
+\begin{corollary}[Real Schatten costs]
+\label{cor:real-four-schatten}
+For $1<p<2$, let $f_p$ and $\delta_p$ be the scalar power cost and its
+minimizing phase from \cref{prop:schatten-scalar-diagram}, with
+$\delta_p(0)=0$ and $\delta_p(\pi/2)=\pi/2$. Put
+$\delta_* =\max\{d,\delta_p(h)\}$. Then
+\[
+ \min_{WPW^T=Q}\|I-W\|_p^p
+ =\min\left\{
+  2\bigl[f_p(h+\delta_*)+f_p(h-\delta_*)\bigr],\quad
+  2^p+2f_p(\theta_2)\right\}.
+\]
+For the nuclear norm the formula simplifies to
+\begin{equation}
+ \min_{WPW^T=Q}\|I-W\|_1
+   =\min\{4\sin h,\ 2+4\sin(\theta_2/2)\}.
+ \label{eq:real-four-nuclear}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+The scalar power cost decreases to its unique minimizer and increases
+afterward. Restricting its phase interval to $[d,h]$ therefore moves the
+minimizer to $\delta_*$ when necessary. For $p=1$, the phase cost is
+$4\sin(h/2)\cos(\delta/2)$ and is minimized at $\delta=h$.
+Apply \cref{thm:real-four-dimensional-minimum}.
+\end{proof}
+
+\begin{corollary}[The real smoothed phase diagram]
+\label{cor:real-four-smoothed}
+For the Charbonnier penalty, retain $\eta$ from
+\cref{sec:smoothed-transport}, and put
+\[
+ \mathcal C_\tau=2\phi(\theta_1)+2\phi(\theta_2),\qquad
+ \mathcal R_\tau=2\eta^{-1}+2\phi(\theta_2),
+\]
+\[
+ \mathcal E_\tau=
+ \begin{cases}
+  \mathcal C_\tau,&\cos h\geq\eta^{-2}\cos d,\\
+  4\eta\sin h-4\tau,&\cos h\leq\eta^{-2}\cos d.
+ \end{cases}
+\]
+The exact real minimum is $\min\{\mathcal E_\tau,\mathcal R_\tau\}$.
+An attaining common rotation for the first branch has angle
+\[
+ \gamma=\arccos\min\left\{1,\frac{\eta^2\cos h}{\cos d}\right\}.
+\]
+In particular, the canonical rotation is optimal exactly when
+\begin{equation}
+ \cos h\geq\eta^{-2}\cos d
+ \quad\hbox{and}\quad
+ \cos\theta_1\geq\tfrac12\eta^{-2}.
+ \label{eq:real-four-canonical-region}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+For $0<h<\pi/2$, a positive interior stationary scalar phase satisfies
+$\cos\delta=\eta^2\cos h$. To check this directly, put
+$u=h+\delta$, $v=h-\delta$, and use
+$\phi'(t)=\sin t/\sqrt{\tau^2+2-2\cos t}$.
+Squaring the positive derivative balance and factoring gives
+\[
+ 2(1+\cos u\cos v)=(\tau^2+2)(\cos u+\cos v).
+\]
+Since $\cos\delta/\cos h>1$, the resulting quadratic selects the root
+$\eta^2$. There are no other positive stationary phases in $(0,h)$;
+the endpoint derivative is positive. Together with the scalar minimum
+already proved, this shows that the scalar cost increases after its
+minimizer. Its minimum on $[d,h]$ is therefore canonical when
+$\cos h\geq\eta^{-2}\cos d$, and otherwise is the unrestricted
+scalar minimum at $h$. The cases $h=0,\pi/2$ follow from the endpoint
+formulas. This proves the expressions for $\mathcal E_\tau$ and
+$\gamma$.
+
+Also $\rho_\tau(2)=2\eta^{-1}$, giving $\mathcal R_\tau$.
+The reflection branch is no cheaper than the canonical cost exactly when
+$\phi(\theta_1)\leq\eta^{-1}$, which, using
+$\tau=\eta-\eta^{-1}$, is equivalent to
+$\cos\theta_1\geq\eta^{-2}/2$. The paired branch is strictly cheaper
+than canonical precisely when the first inequality in
+\cref{eq:real-four-canonical-region} fails. This proves the criterion.
+\end{proof}
+
+The formula exhibits a failure of independent real principal-plane
+optimization. At $p=3/2$ and $(\theta_1,\theta_2)=(80^\circ,75^\circ)$,
+the canonical cost is approximately $5.60212$, while the best transport
+preserving each principal plane has cost $5.51529$. A common real
+rotation of approximately $67.5418^\circ$ lowers the cost to $5.41426$,
+the exact global minimum given by the theorem. The same phenomenon holds
+on an open set of unequal angle pairs: at any equal supercritical acute
+angle, the paired optimum is strictly below both one-plane real choices,
+and this strict inequality persists under small changes of the two angles.
