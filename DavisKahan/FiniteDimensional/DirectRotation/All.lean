@@ -54,6 +54,7 @@ import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedFunctionalPhase
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedExplicitOptimizer
 import DavisKahan.FiniteDimensional.DirectRotation.RealTwoPhaseBlocks
+import DavisKahan.FiniteDimensional.DirectRotation.RealBlockDescent
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealStationarity
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealGradientBlocks
 

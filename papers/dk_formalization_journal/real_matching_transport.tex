@@ -495,6 +495,44 @@ For a single positive angle, the one-plane canonical choice is optimal
 exactly when $4\sin(\theta/2)\leq2$, or $\theta\leq\pi/3$.
 \end{proof}
 
+\begin{corollary}[All maximizers of the nuclear field gap]
+\label{cor:real-complex-nuclear-gap-equality}
+Equality in the upper bound of
+\cref{eq:real-complex-nuclear-additive-gap} holds exactly when the
+positive principal angles are all $\pi/3$ and their multiplicity is odd.
+Zero angles and unchanged ambient directions are unrestricted.
+\end{corollary}
+
+\begin{proof}
+Write $r=\pi/3$. An odd list of $r$'s has the stated gap by the two
+sorted sums: pair all but one angle, then use either a canonical rotation
+or a reflection of cost two on the last plane.
+
+For necessity, use induction on the length of the compact angle list in
+the proof of \cref{thm:real-complex-nuclear-additive-gap}. An attaining
+list of length at least two cannot lie in the strictly ordered interior.
+Removing a boundary zero, right angle, or equal pair cannot lower its
+upper gap bound. The remaining list must therefore also attain the sharp
+constant, and by induction its positive angles are an odd number of $r$'s.
+A removed zero has no effect.
+
+A removed right angle is impossible: couple it with the unmatched $r$
+instead of reflecting both. The new cost is
+$4\sin((\pi/2+r)/2)<4$, whereas the two reflections cost four.
+If a removed equal pair has angle $a>r$, reflect one $a$ and couple the
+other with the unmatched $r$. Its cost
+$2+4\sin((a+r)/2)$ is strictly less than $2+4\sin a$.
+If $0<a<r$, the strict submodular inequality gives
+\[
+ e_1(r,a)+e_1(0,a)<e_1(r,0)+e_1(a,a).
+\]
+Indeed, $\partial_x\partial_y e_1(x,y)=-\sin((x+y)/2)<0$
+on the interior of $[a,r]\times[0,a]$.
+Thus coupling $r$ with one $a$ and rotating the other $a$ canonically
+strictly improves the previous construction. Only a removed equal pair
+at $a=r$ can remain, preserving the asserted odd multiplicity.
+\end{proof}
+
 \begin{corollary}[The two largest angles determine canonical optimality]
 \label{cor:real-smoothed-canonical-top-two}
 For the Charbonnier cost, let $\theta_{(1)}\geq\theta_{(2)}$ be the
@@ -623,6 +661,59 @@ $2\eta(1-\sin\theta)$ decreases. They agree when
 $\cos\theta=\eta^{-2}/2$, giving exactly $\Delta_\tau$.
 The real rank-one formula proves sharpness; the scalar phase formula
 $\cos\delta=\eta^2\cos\theta$ gives $\delta=\pi/3$.
+\end{proof}
+
+\begin{corollary}[All maximizers of the smoothed field gap]
+\label{cor:real-complex-smoothed-gap-equality}
+Put
+\[
+ r_\tau=\arccos(\eta^{-2}/2),\qquad
+ a_\tau=2\arctan\left(
+   \frac{\tau}{\sqrt{\tau^2+4}\tan(r_\tau/2)}\right).
+\]
+Then $0<a_\tau<c<r_\tau<\pi/2$, where $c=\arccos\eta^{-2}$.
+The real-minus-complex gap equals $\Delta_\tau$ exactly when there
+are an odd number of principal angles equal to $r_\tau$ and every
+other principal angle is at most $a_\tau$.
+\end{corollary}
+
+\begin{proof}
+The restricted excess $E_k$ in the preceding proof is itself bounded by
+$\Delta_\tau$. Its attaining lists consist exactly of an odd number
+of $r_\tau$'s. To verify necessity, repeat the compact induction with
+equality. A boundary angle $c$ can be coupled with the unmatched
+$r_\tau$, strictly improving the sum of their canonical costs.
+A boundary right angle can be coupled with it at cost strictly less
+than two reflections. If a removed equal pair has angle $a>r_\tau$,
+reflect one $a$ and couple the other with $r_\tau$; strict monotonicity
+of the active sine cost lowers the cost. If $c\leq a<r_\tau$, use
+\[
+ e_\tau(r_\tau,a)+e_\tau(0,a)
+   <e_\tau(r_\tau,0)+e_\tau(a,a).
+\]
+This is the submodular inequality from
+\cref{lem:real-pair-cost-submodular}, made strict by the nonempty open
+active region in $[a,r_\tau]\times[0,a]$: there
+$\partial_x\partial_y e_\tau=-\eta\sin((x+y)/2)<0$.
+Thus only equal pairs at $r_\tau$ may be removed. The one-angle
+base case has its unique maximum at $r_\tau$.
+
+If the full field gap attains $\Delta_\tau$, then so does this
+restricted upper bound. All angles above $c$ are consequently an odd
+number of $r_\tau$'s. For an additional angle $t\leq c$, coupling it
+with the unmatched $r_\tau$ strictly improves the construction exactly
+when
+\[
+ \tan(t/2)\tan(r_\tau/2)>\frac{\tau}{\sqrt{\tau^2+4}},
+\]
+or $t>a_\tau$. Such an angle is therefore impossible.
+Conversely, if every additional angle is at most $a_\tau$, all pairs
+involving such an angle have additive canonical cost; reflections there
+cannot improve it. Equal pairs of $r_\tau$ attain their complex
+minimum, and odd parity leaves exactly one singleton with excess
+$\Delta_\tau$. The exact matching formula proves sufficiency.
+Finally, $\tan^2(c/2)=\tau/\sqrt{\tau^2+4}$ and $r_\tau>c$
+give $0<a_\tau<c$.
 \end{proof}
 
 The field gap tends to $2-\sqrt3$ as $\tau\downarrow0$ and is

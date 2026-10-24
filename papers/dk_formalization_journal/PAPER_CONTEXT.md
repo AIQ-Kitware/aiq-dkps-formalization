@@ -185,11 +185,17 @@ Hamiltonians*, J. Math. Phys. 58, 082202 (2017), DOI 10.1063/1.4998921.
 The final arXiv v3 was checked at
 <https://arxiv.org/html/1608.02600>, Definition 2 and Lemma 2.3. Their ground
 symmetry is required to be unitary on the ground space, while our rounding
-problem requires a globally unitary operator. Do not claim an improvement of
-their final theorem by comparing against the older author's PDF: the 2016
-PDF has a `6 epsilon/Delta` bound that v3 replaced. The current relevance is
-an exact optimization formulation with a stronger global-unitarity constraint,
-not a claimed replacement of their ground-space result.
+problem requires a globally unitary operator. The older 2016 author PDF
+<https://christopherchubb.com/Approximate_Symmetries/Paper.pdf>,
+Definition 2 and Lemma 2.2 (printed pp. 2, 4--5), already constructs a
+full ambient unitary commuting with the ground-space projector. Thus
+neither global unitarity alone nor existence of a nearby commuting unitary
+is novel. Its `6 epsilon/Delta` bound was replaced in v3; do not compare
+our formula with that obsolete constant to claim an improvement of the
+final theorem. The present candidate contribution is exact angle-dependent
+Schatten optimization and sharp constants for the two-level problem,
+not a claimed replacement of their ground-space result. The research
+fragment now avoids an ambiguous contrast between the two versions.
 
 A further local-minimum comparison was checked against the primary preprint
 of Massey--Rios--Stojanoff, *Local Lidskii's theorems for unitarily invariant
@@ -651,10 +657,18 @@ the source-induced isometric conjugation there. It applies the compiled
 projection decomposition to obtain a complete common orthogonal invariant
 family with complex dimensions at most two. This uses the accepted
 submodule-map isometry through `AnticommutingConjugation.lean`, rather than
-assuming a real basis or phase projection. The final lift to real ambient
-blocks, exceptional gradient levels, and exact matching minimum remain
-unformalized. The conventional general-penalty matching and nuclear
-consequences are not promoted to compiled results by this partial assembly.
+assuming a real basis or phase projection. `RealBlockDescent.lean` now
+certifies the lift to the original real ambient space: doubling each
+positive-level block by source reflection gives a conjugation-stable block,
+whose real preimage has dimension at most four. The actual real transporter
+and source reflection preserve these blocks. The lifted family is pairwise
+orthogonal and its complexification covers the entire positive level and
+its reflected negative level. Nontriviality, dimensions, orthogonality,
+invariance, and coverage are compiled. The exceptional gradient levels and
+exact matching minimum remain unformalized. The conventional general-penalty
+matching and nuclear consequences are not promoted to compiled results by
+this partial assembly. The focused modules, `DavisKahan.All`, and `ForTauCeti`
+build; the new endpoint axiom checks use only the three standard axioms.
 
 The matching reduction has been strengthened for all Schatten powers
 `1 < p < 2` and for Charbonnier penalties. Their two-angle cost is symmetric,
@@ -701,6 +715,31 @@ is asymptotic to `1/(4 tau^3)` for large smoothing. This is a conventional
 proof under review, not a compiled real rounding theorem. It supplies a
 dimension-independent error bound for enforcing real transports after
 the exact complex relaxation; no empirical application benefit is claimed.
+
+The sharp field-gap drafts now also classify all equality cases. For the
+nuclear cost, the maximum gap `2 - sqrt(3)` occurs exactly when every
+positive principal angle is `pi/3` and the number of such angles is odd.
+For Charbonnier, put `r_tau = acos(eta^(-2)/2)` and
+`a_tau = 2 atan(tau/(sqrt(tau^2+4) tan(r_tau/2)))`.
+The maximum gap occurs exactly for an odd number of angles `r_tau`, with
+all remaining angles at most `a_tau`. These follow by equality in the
+compact induction: deleting a right angle or an unequal repeated pair
+permits a strict improvement by coupling with the remaining exceptional
+angle. Subcritical smoothed angles are harmless precisely when their pair
+cost with `r_tau` is inactive. Both equality classifications are conventional
+proofs under review, not Lean-certified, and priority remains provisional.
+
+A further primary-source comparison on 2026-10-24 checked Antonini--Cavalletti,
+*Geometry of Grassmannians and optimal transport of quantum states*,
+Annali SNS Pisa 27 (2026), 201--254,
+<https://journals.sns.it/index.php/annaliscienze/article/download/6312/2877/5943>.
+Printed pp. 204, 210 and Definition 4.2 on p. 228 use the intrinsic
+Hilbert--Schmidt geodesic distance on the Grassmannian as the base cost
+for Wasserstein transport of spectral measures. This is a different
+optimization domain and objective from minimizing a chordal spectral
+penalty of an ambient transporter. No extrinsic real two-sum formula or
+sharp real-versus-complex field-gap result was found there. This comparison
+is source-level negative evidence, not a priority certificate.
 
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.

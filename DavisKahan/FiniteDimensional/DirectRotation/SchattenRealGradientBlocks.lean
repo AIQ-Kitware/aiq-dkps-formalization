@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealStationarity
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.RealTwoPhaseBlocks
+import DavisKahan.FiniteDimensional.DirectRotation.RealBlockDescent
 import ForTauCeti.Analysis.InnerProductSpace.AnticommutingConjugation
 
 /-!
@@ -15,6 +16,8 @@ On a positive gradient eigenspace, source reflection followed by ambient
 conjugation is an isometric conjugation. The actual two-phase restriction
 of a real stationary transporter consequently has complete small invariant
 blocks for this conjugation, without supplied phase projections or bases.
+Doubling by source reflection descends their complete orthogonal family to
+the original real space, with real block dimensions at most four.
 -/
 
 noncomputable section
@@ -22,6 +25,7 @@ noncomputable section
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
 
 open TauCeti.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 open scoped ENNReal
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
@@ -31,7 +35,9 @@ local notation "𝓔" => RealComplexification E
 
 /-- At a real constrained local minimum, each positive submaximal gradient
 level has a complete small invariant decomposition for the actual unitary
-restriction and the source-induced conjugation. -/
+restriction and the source-induced conjugation. Doubling these blocks gives
+a complete orthogonal real invariant decomposition of the level together
+with its reflected negative level. -/
 theorem gradient_eigenspace_small_blocks_of_isLocalMinOn_real_transports
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
@@ -55,8 +61,15 @@ theorem gradient_eigenspace_small_blocks_of_isLocalMinOn_real_transports
       (∀ x : L, (J x : 𝓔) = K.reflection (conjugation x)) ∧
       (∀ S ∈ F, S ≠ ⊥ ∧ Module.finrank ℂ S ≤ 2 ∧
         (∀ x ∈ S, V x ∈ S) ∧ (∀ x ∈ S, J x ∈ S)) ∧
-      (F : Set (Submodule ℂ L)).Pairwise Submodule.IsOrtho ∧ F.sup id = ⊤ := by
+      (F : Set (Submodule ℂ L)).Pairwise Submodule.IsOrtho ∧ F.sup id = ⊤ ∧
+      (∃ H : Finset (Submodule ℝ E),
+        (∀ N ∈ H, N ≠ ⊥ ∧ Module.finrank ℝ N ≤ 4 ∧
+          (∀ x ∈ N, realify (U : 𝓔 →L[ℂ] 𝓔) x ∈ N) ∧
+          (∀ x ∈ N, realify (K.reflection : 𝓔 →L[ℂ] 𝓔) x ∈ N)) ∧
+        (H : Set (Submodule ℝ E)).Pairwise Submodule.IsOrtho ∧
+        complexifySubmodule (H.sup id) = L ⊔ L.map K.reflection.toLinearMap) := by
   let G := schattenUnitaryGradient p.toReal (U : 𝓔 →L[ℂ] 𝓔)
+  let L := Module.End.eigenspace G.toLinearMap (g : ℂ)
   have hP : IsStarProjection K.starProjection :=
     ⟨K.isIdempotentElem_starProjection, isSelfAdjoint_starProjection K⟩
   have hconj := gradient_reflection_conjugate_eq_neg_of_isLocalMinOn_real_transports
@@ -95,11 +108,68 @@ theorem gradient_eigenspace_small_blocks_of_isLocalMinOn_real_transports
       J.toLinearEquiv.toLinearMap J.isometry hJ A (V : _ →L[ℂ] _) hA
       (Complex.exp ((a : ℂ) * Complex.I))
       (Complex.exp ((b : ℂ) * Complex.I) - Complex.exp ((a : ℂ) * Complex.I)) hrepr
-  refine ⟨V, J, F, hV, hJ, hJx, ?_, hpair, hspan⟩
-  intro S hS
-  obtain ⟨hS0, hdim, _, hVS, hJS⟩ := hF S hS
-  refine ⟨hS0, hdim, ?_, ?_⟩
-  · exact hVS
-  · exact hJS
+  refine ⟨V, J, F, hV, hJ, hJx, ?_, hpair, hspan, ?_⟩
+  · intro S hS
+    obtain ⟨hS0, hdim, _, hVS, hJS⟩ := hF S hS
+    exact ⟨hS0, hdim, hVS, hJS⟩
+  · classical
+    let f := fun S : Submodule ℂ L => S.map L.subtype
+    let F' := F.image f
+    have hF' : ∀ T ∈ F', T ≠ ⊥ ∧ Module.finrank ℂ T ≤ 2 ∧
+        (∀ z ∈ T, K.reflection (conjugation z) ∈ T) ∧
+        (∀ z ∈ T, (U : 𝓔 →L[ℂ] 𝓔) z ∈ T) := by
+      intro T hT
+      obtain ⟨S, hS, rfl⟩ := Finset.mem_image.mp hT
+      obtain ⟨hS0, hdim, _, hVS, hJS⟩ := hF S hS
+      refine ⟨?_, ?_, ?_, ?_⟩
+      · intro hz
+        apply hS0
+        apply bot_unique
+        intro x hx
+        have hmem : (x : 𝓔) ∈ f S := ⟨x, hx, rfl⟩
+        rw [hz, Submodule.mem_bot] at hmem
+        exact Subtype.ext hmem
+      · exact (Submodule.finrank_map_subtype_eq L S).le.trans hdim
+      · rintro z ⟨x, hx, rfl⟩
+        exact ⟨J x, hJS x hx, hJx x⟩
+      · rintro z ⟨x, hx, rfl⟩
+        exact ⟨V x, hVS x hx, hV x⟩
+    have hpair' : (F' : Set (Submodule ℂ 𝓔)).Pairwise Submodule.IsOrtho := by
+      intro S hS T hT hST
+      obtain ⟨S', hS', rfl⟩ := Finset.mem_image.mp hS
+      obtain ⟨T', hT', rfl⟩ := Finset.mem_image.mp hT
+      exact (hpair hS' hT' (fun h => hST (congrArg f h))).map L.subtypeₗᵢ
+    have hspan' : F'.sup id = L := by
+      apply le_antisymm
+      · apply Finset.sup_le
+        intro S hS
+        obtain ⟨S', _, rfl⟩ := Finset.mem_image.mp hS
+        rintro z ⟨x, _, rfl⟩
+        exact x.property
+      · have hle : F.sup id ≤ (F'.sup id).comap L.subtype := by
+          apply Finset.sup_le
+          intro S hS x hx
+          have hSf : f S ∈ F' := Finset.mem_image.mpr ⟨S, hS, rfl⟩
+          exact (Finset.le_sup (f := id) hSf) ⟨x, hx, rfl⟩
+        rw [hspan] at hle
+        intro x hx
+        exact hle (show (⟨x, hx⟩ : L) ∈ ⊤ from Submodule.mem_top)
+    have hL : L.IsOrtho (L.map K.reflection.toLinearMap) := by
+      rw [Submodule.isOrtho_iff_inner_eq]
+      rintro x hx z ⟨y, hy, rfl⟩
+      have hyneg : K.reflection y ∈ Module.End.eigenspace G.toLinearMap (-g : ℂ) := by
+        have hy' : G y = (g : ℂ) • y := Module.End.mem_eigenspace_iff.mp hy
+        rw [Module.End.mem_eigenspace_iff]
+        change G (K.reflection y) = _
+        rw [hGR, hy', map_smul]
+        simp only [neg_smul]
+      have hne : (g : ℂ) ≠ -g := by
+        intro heq
+        have hre := congrArg Complex.re heq
+        simp only [Complex.ofReal_re, Complex.neg_re] at hre
+        linarith
+      exact ((isSelfAdjoint_schattenUnitaryGradient p.toReal (U : 𝓔 →L[ℂ] 𝓔)).isSymmetric.orthogonalFamily_eigenspaces) hne ⟨x, hx⟩ ⟨K.reflection y, hyneg⟩
+    exact RealTransport.exists_orthogonal_real_doubled_blocks K.reflection
+      K.reflection_involutive hRC (U : 𝓔 →L[ℂ] 𝓔) hUC L hL F' hF' hpair' hspan'
 
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
