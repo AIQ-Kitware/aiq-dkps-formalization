@@ -219,7 +219,7 @@ theorem weightedSupportValue_self (a b theta : ℝ) (hb : 0 ≤ b) (hab : b < a)
 omit [FiniteDimensional ℂ E] in
 /-- The nuclear certificate has an exact trace identity, retaining the
 full diagonal defect. This also identifies its equality case. -/
-theorem weightedNuclear_support_eq_re_trace
+theorem weightedNuclear_support_eq_re_trace_complex
     (a b beta : ℝ) (theta : ι → ℝ)
     (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A Z : E →ₗ[ℂ] E)
     (hA0 : ∀ i, A (e (.inl (0, i))) =
@@ -311,7 +311,7 @@ theorem weightedNuclear_support_with_diagonal_defect
       UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • Z) := by
   obtain ⟨V, hV⟩ := e.exists_linearIsometryEquiv_apply_eq_smul
     (pairedDualPhase a beta theta) (norm_pairedDualPhase a beta hbeta habeta theta)
-  rw [weightedNuclear_support_eq_re_trace a b beta theta e A Z hA0 hA1 hAf hdiag V hV]
+  rw [weightedNuclear_support_eq_re_trace_complex a b beta theta e A Z hA0 hA1 hAf hdiag V hV]
   exact re_trace_isometry_comp_le_nuclear V.symm _
 
 /-- The nuclear certificate retains an exact diagonal defect term, even

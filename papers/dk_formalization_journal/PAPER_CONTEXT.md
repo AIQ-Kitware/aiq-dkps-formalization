@@ -74,13 +74,13 @@ The equality extraction has now advanced beyond the prescribed-block algebra:
 - `NuclearTrace.re_trace_eq_nuclear_iff_isPositive` and
   `re_trace_isometry_comp_eq_nuclear_iff_isPositive` prove the exact equality
   case of nuclear support over either field, including singular operators.
-- `SmoothedNuclearCertificate.weightedNuclear_support_eq_re_trace` exposes
+- `SmoothedNuclearCertificate.weightedNuclear_support_eq_re_trace_complex` exposes
   the exact trace identity that previously appeared only inside the lower-bound
   proof. The old lower-bound API is preserved and consumes this identity.
-- `SmoothedOptimizerCertificate.weightedNuclear_eq_minimum_iff_certificate`
+- `SmoothedOptimizerCertificate.weightedNuclear_eq_minimum_iff_certificate_complex`
   characterizes all attaining contractions with paired imaginary diagonal
   entries: vanishing diagonal defect and positive dual displacement are
-  necessary and sufficient. `weightedDiagonalDefect_eq_zero_iff_fixed`
+  necessary and sufficient. `weightedDiagonalDefect_eq_zero_iff_fixed_complex`
   characterizes vanishing defect by pointwise fixation of positive-weight
   and fixed basis directions.
 - `apply_eq_self_of_critical_certificate_complex` handles zero dual weights
@@ -120,6 +120,17 @@ was typeset in a fresh output directory with BibTeX and resolved references;
 the local TeX installation required disabling microtype font expansion at
 the command line. No production TeX configuration was changed for that
 environment workaround.
+
+The final fixed-field API polish adds `_complex` to the three new operator
+certificate declarations. The required broader compatibility check exposed
+an existing failure in `Challenge/MathlibCandidate/CourantFischerWeyl/Leaderboard.lean:6`:
+`TauCeti.abs_eigenvalues_sub_le_opNorm` no longer resolves. The declaration-name
+drift utility also reported 25 existing migration/census/leaderboard findings,
+none referencing the new transport declarations. These validation surfaces
+are unchanged from the starting `84822b0ba` snapshot. They were left untouched;
+do not describe the repository-wide compatibility gate as passing. The
+mathematical `DavisKahan.All` / `ForTauCeti` build remains the separate evidence
+for the new results.
 
 ### Independent checks and exact next proof obligations
 

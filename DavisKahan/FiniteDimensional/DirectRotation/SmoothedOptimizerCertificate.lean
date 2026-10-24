@@ -31,7 +31,7 @@ variable {E ι κ : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 /-- Every contraction attaining the weighted nuclear lower bound is
 characterized by a zero diagonal defect and a positive dual displacement.
 The criterion also applies at the transition and at right angles. -/
-theorem weightedNuclear_eq_minimum_iff_certificate
+theorem weightedNuclear_eq_minimum_iff_certificate_complex
     (a b : ℝ) (hb : 0 < b) (hab : b < a) (theta : ι → ℝ)
     (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A Z : E →ₗ[ℂ] E)
     (hA0 : ∀ i, A (e (.inl (0, i))) =
@@ -49,7 +49,7 @@ theorem weightedNuclear_eq_minimum_iff_certificate
         (∑ i, weightedPhaseMinimum a b (theta i)) + Fintype.card κ * (a - b) ↔
       weightedDiagonalDefect a b theta e Z = 0 ∧
         (V.symm.toLinearMap ∘ₗ (A - (b : ℂ) • Z)).IsPositive := by
-  have hid := weightedNuclear_support_eq_re_trace a b b theta e A Z hA0 hA1 hAf hdiag V hV
+  have hid := weightedNuclear_support_eq_re_trace_complex a b b theta e A Z hA0 hA1 hAf hdiag V hV
   simp only [weightedSupportValue_self a b _ hb.le hab] at hid
   have hnon := weightedDiagonalDefect_nonneg a b theta e Z hZ
   have hbound := weightedNuclear_lowerBound_with_diagonal_defect
@@ -71,7 +71,7 @@ omit [FiniteDimensional ℂ E] in
 /-- Vanishing diagonal defect is exactly pointwise fixation of all
 positive-weight directions and all fixed directions. Even the competitor
 need only contract the basis vectors. -/
-theorem weightedDiagonalDefect_eq_zero_iff_fixed
+theorem weightedDiagonalDefect_eq_zero_iff_fixed_complex
     (a b : ℝ) (theta : ι → ℝ)
     (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (Z : E →ₗ[ℂ] E)
     (hZ : ∀ j, ‖Z (e j)‖ ≤ 1) :

@@ -125,13 +125,13 @@ theorem exists_paired_certificate_for_weighted_transport_complex
     exact (UnitarilyInvariantSeminorm.nuclear ℂ E E).map_comp_linearIsometryEquiv Z _
   obtain ⟨V, hV⟩ := e.exists_linearIsometryEquiv_apply_eq_smul
     (pairedDualPhase a b theta) (norm_pairedDualPhase a b hb.le hab theta)
-  have hcert := weightedNuclear_eq_minimum_iff_certificate a b hb hab theta e A Z.toLinearMap
+  have hcert := weightedNuclear_eq_minimum_iff_certificate_complex a b hb hab theta e A Z.toLinearMap
     hA0 hA1 hAf hZ hdiag V hV
   rw [hN, Fintype.card_fin, ← hvalue] at hcert
   refine ⟨n, m, e, theta, V, hθ, hR0, hR1, hRf, hJ0, hV, hcert, ?_⟩
   intro hatt
   have hattcert := hcert.mp hatt
-  have hfixed := (weightedDiagonalDefect_eq_zero_iff_fixed a b theta e Z.toLinearMap hZ).mp
+  have hfixed := (weightedDiagonalDefect_eq_zero_iff_fixed_complex a b theta e Z.toLinearMap hZ).mp
     hattcert.1
   have hfix (j) (hj : Z.toLinearMap (e j) = e j) : T (e j) = R (e j) := by
     have h := congrArg T hj
