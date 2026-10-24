@@ -931,6 +931,26 @@ term of the root lower bound at dimension two. This last comparison is
 algebra in the manuscript; the general quartic bound's global coefficient
 is not claimed optimal. No new general error-bound principle is claimed.
 
+`SmoothedCalibration.lean` inverts the canonical cutoff as an explicit
+smoothing-scale test. For every accepted acute angle, canonical global
+optimality is equivalent to `tau >= (1-cos(theta))/sqrt(cos(theta))`.
+The scalar threshold and preservation under increasing smoothing are compiled,
+as is the unrestricted all-pairs complex equivalence. The manuscript gives
+the short algebra after `cor:smoothed-canonical-cutoff`. This is a useful
+parameter-selection consequence, not a separate novelty claim.
+
+`SmoothedCorrectionStability.lean` transfers both growth certificates to
+the literal operator-difference correction objective. The Frobenius distance
+between a feasible correction and `R* A` equals the distance between its
+associated transporter and `R`. The compiled endpoints are
+`smoothed_correction_quadratic_growth`, `smoothed_correction_quartic_growth`,
+and `optimalSmoothedCorrection_eq_canonical_of_angles_le`. The final endpoint
+identifies the previously named spectral correction with the canonical
+correction in the closed regime. The manuscript gives its fourth-root
+objective-error bound and cites the transferred strict quadratic estimate.
+These are utility consequences of the transport theorem, with no empirical
+performance or separate priority claim.
+
 The integrated journal text typesets successfully with `pdflatex`, `bibtex`,
 and two further LaTeX passes. This VM lacks `latexmk`; its default T1 Computer
 Modern fonts also need microtype expansion disabled for the local build.

@@ -346,6 +346,20 @@ that plane is positive; replacing its zero phase strictly decreases the
 sum. The unrestricted global optimizer attains at most this improved cost.
 \end{proof}
 
+For acute principal angles the cutoff can also be used to choose the
+smoothing parameter. The canonical rotation is optimal exactly when
+\[
+ \tau\geq\frac{1-\cos\theta_j}{\sqrt{\cos\theta_j}}
+ \qquad\text{for every }j.
+\]
+Indeed, writing $x=\sqrt{\cos\theta_j}$ and $b=\eta^{-1}$,
+\[
+ \tau x-(1-x^2)=(\eta x-1)(1+bx).
+\]
+The second factor is positive. Thus the smoothing test is equivalent to
+$\eta x\geq1$, or $\cos\theta_j\geq\eta^{-2}$.
+Increasing the smoothing parameter preserves this condition.
+
 The quadratic estimate gives the stronger local rate when the angle bound
 stays strictly below the cutoff. The quartic estimate supplies a nonzero
 certificate at equality. The following family admits a sharper constant
@@ -476,6 +490,19 @@ commutes with $P$. Since $A-C=(W-I)C$ when $W=AC^*$, unitary
 invariance identifies the two singular-value costs. Apply
 \cref{thm:smoothed-transport,cor:smoothed-spectral-optimizer}.
 \end{proof}
+
+When every angle is at most $c_\tau$, this correction is $C_*=R^*A$
+and is unique. If a feasible correction $C$ has objective error at most
+$\varepsilon\geq0$, then
+\[
+ \|C-C_*\|_F\leq
+ \left(\frac{32\eta^4n}{3\tau}\,\varepsilon\right)^{1/4}.
+\]
+The quadratic estimate of \cref{cor:smoothed-stability} transfers as well
+when the angles stay strictly below the cutoff. Indeed,
+$W=AC^*$ satisfies
+$\|W-R\|_F=\|C-R^*A\|_F$, and the preceding proof identifies their
+objective errors.
 
 This gives an exact correction that preserves both a specified subspace
 and its orthogonal complement. The construction requires spectral

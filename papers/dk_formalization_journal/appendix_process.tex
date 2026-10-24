@@ -169,6 +169,9 @@ explicit positive coefficient used in \cref{cor:smoothed-stability}.
 singular-value distance and its named nearest commuting correction;
 \path{optimalSmoothedCorrection_isMin_of_commute} proves the global
 minimality in \cref{cor:smoothed-commuting-correction}.
+\path{SmoothedCorrectionStability.lean} transfers the quadratic and quartic
+growth certificates to feasible corrections and identifies the named
+optimizer with the canonical correction through the cutoff.
 \path{SmoothedCriticalStability.lean} proves the root growth inequality and
 fourth-power error certificate in \cref{prop:smoothed-critical-stability},
 with an explicitly constructed critical rotation. Its hypotheses specify
@@ -185,6 +188,8 @@ smaller angles are permitted.
 \path{optimalSmoothedTransport_lt_canonical_of_supercritical}, giving the
 necessary-and-sufficient accepted-principal-angle criterion and the strict
 improvement by the explicit optimizer in \cref{cor:smoothed-canonical-cutoff}.
+\path{SmoothedCalibration.lean} inverts the cutoff into the explicit
+smoothing-parameter criterion given after that corollary.
 \path{SmoothedCriticalFlatness.lean} proves the quartic scalar upper bound
 and failure of every local positive quadratic modulus. Its endpoint
 \path{tendsto_critical_phase_quartic_ratio} gives the exact leading
@@ -231,7 +236,9 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCorrectionStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCalibration \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalTransportFlatness \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}
