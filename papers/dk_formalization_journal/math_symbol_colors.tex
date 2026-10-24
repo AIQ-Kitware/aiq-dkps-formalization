@@ -1,0 +1,108 @@
+% Role-colored mathematics. Palette mirrors visualizations/dkvis/palette.py
+% LIGHT and symbol roles in visualizations/dkvis/notation.py (2026-10-23).
+% Single switch: \DKMathColorsfalse turns *every* \sym, \like and \dkrole
+% invocation into ordinary black mathematics, without altering source equations.
+% The manuscript enables color by default. It can also be disabled *without
+% editing files* by defining \DKMonochromeMath before inputting paper.tex.
+% Both checked and working manuscripts inherit this one switch from paper.tex.
+% The slides use U=wanted, V=trial in their local notation; this paper uses
+% U=source and V=target in the transport sections, so use Usource/Vtarget here.
+% Similarly, R denotes a residual in sine-theta and a rotation in Prop. 4.4;
+% use R (residual) versus Rrotation (direct rotation) deliberately.
+\newif\ifDKMathColors
+\DKMathColorstrue
+\ifdefined\DKMonochromeMath
+  \DKMathColorsfalse
+\fi
+
+\definecolor{dkfg}{HTML}{1B1F24}
+\definecolor{dkmuted}{HTML}{6B7280}
+\definecolor{dkwanted}{HTML}{1F6FD1}
+\definecolor{dkunwanted}{HTML}{007C91}
+\definecolor{dktrial}{HTML}{C77C00}
+\definecolor{dksine}{HTML}{D12A7B}
+\definecolor{dkresid}{HTML}{138A4B}
+\definecolor{dkgap}{HTML}{6E4BD8}
+\definecolor{dkold}{HTML}{705519}
+\definecolor{dkcurrent}{HTML}{054669}
+\definecolor{dkperturb}{HTML}{D9541E}
+\definecolor{dkrefuted}{HTML}{C62828}
+
+\newcommand{\dkrole}[2]{\ifDKMathColors\textcolor{dk#1}{#2}\else#2\fi}
+\newcommand{\dkDeclareSymbol}[3]{%
+  \expandafter\def\csname dkrole@#1\endcsname{#3}%
+  \expandafter\def\csname dksym@#1\endcsname{\dkrole{#3}{#2}}%
+}
+\newcommand{\sym}[1]{%
+  \ifcsname dksym@#1\endcsname
+    \csname dksym@#1\endcsname
+  \else
+    \PackageError{dk-math-colors}{Unknown symbol key #1}{See math_symbol_colors.tex}
+  \fi
+}
+\newcommand{\like}[2]{%
+  \ifcsname dkrole@#1\endcsname
+    \dkrole{\csname dkrole@#1\endcsname}{#2}%
+  \else
+    \PackageError{dk-math-colors}{Unknown role key #1}{See math_symbol_colors.tex}
+  \fi
+}
+
+% Keys from dkvis.notation.SYMBOLS (role and spelling retained):
+\dkDeclareSymbol{A}{A}{old}
+\dkDeclareSymbol{A1}{A_1}{old}
+\dkDeclareSymbol{a1}{a_1}{old}
+\dkDeclareSymbol{Ahat}{\widehat A}{current}
+\dkDeclareSymbol{H}{H}{perturb}
+\dkDeclareSymbol{H0}{H_0}{perturb}
+\dkDeclareSymbol{H1}{H_1}{perturb}
+\dkDeclareSymbol{B}{B}{perturb}
+\dkDeclareSymbol{b}{b}{perturb}
+\dkDeclareSymbol{P}{P}{fg}
+\dkDeclareSymbol{Q}{Q}{fg}
+\dkDeclareSymbol{E1}{E_1}{fg}
+\dkDeclareSymbol{Vperp}{V^{\perp}}{fg}
+\dkDeclareSymbol{U}{U}{wanted}
+\dkDeclareSymbol{F0}{F_0}{wanted}
+\dkDeclareSymbol{Lambda0}{\Lambda_0}{wanted}
+\dkDeclareSymbol{u}{u}{wanted}
+\dkDeclareSymbol{f0}{f_0}{wanted}
+\dkDeclareSymbol{lambda0}{\lambda_0}{wanted}
+\dkDeclareSymbol{lambdau}{\lambda_u}{wanted}
+\dkDeclareSymbol{Uperp}{U^{\perp}}{unwanted}
+\dkDeclareSymbol{F1}{F_1}{unwanted}
+\dkDeclareSymbol{Lambda1}{\Lambda_1}{unwanted}
+\dkDeclareSymbol{w}{w}{unwanted}
+\dkDeclareSymbol{f1}{f_1}{unwanted}
+\dkDeclareSymbol{lambda1}{\lambda_1}{unwanted}
+\dkDeclareSymbol{lambdaw}{\lambda_w}{unwanted}
+\dkDeclareSymbol{V}{V}{trial}
+\dkDeclareSymbol{v}{v}{trial}
+\dkDeclareSymbol{E0}{E_0}{trial}
+\dkDeclareSymbol{A0}{A_0}{trial}
+\dkDeclareSymbol{rho}{\rho}{trial}
+\dkDeclareSymbol{mu}{\mu}{trial}
+\dkDeclareSymbol{a0}{a_0}{trial}
+\dkDeclareSymbol{theta}{\theta}{sine}
+\dkDeclareSymbol{Theta}{\Theta}{sine}
+\dkDeclareSymbol{Theta0}{\Theta_0}{sine}
+\dkDeclareSymbol{sintheta}{\sin\theta}{sine}
+\dkDeclareSymbol{sinTheta0}{\sin\Theta_0}{sine}
+\dkDeclareSymbol{X}{X}{sine}
+\dkDeclareSymbol{S}{S}{sine}
+\dkDeclareSymbol{r}{r}{resid}
+\dkDeclareSymbol{R}{R}{resid}
+\dkDeclareSymbol{delta}{\delta}{gap}
+\dkDeclareSymbol{g}{g}{gap}
+% Paper-only semantic keys (do not reinterpret Manim U, V, or R globally):
+\dkDeclareSymbol{Acurrent}{A}{current}
+\dkDeclareSymbol{Usource}{U}{trial}
+\dkDeclareSymbol{Vtarget}{V}{wanted}
+\dkDeclareSymbol{Rrotation}{R}{wanted}
+\dkDeclareSymbol{Wcompetitor}{W}{trial}
+\dkDeclareSymbol{alphaAngle}{\alpha}{sine}
+\dkDeclareSymbol{Sigma}{\Sigma}{old}
+\dkDeclareSymbol{SigmaHat}{\widehat\Sigma}{current}
+\dkDeclareSymbol{YWSV}{V}{wanted}
+\dkDeclareSymbol{YWSVhat}{\widehat V}{trial}
+\dkDeclareSymbol{Delta}{\Delta}{gap}

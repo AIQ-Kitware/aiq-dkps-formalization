@@ -1,8 +1,8 @@
 \section{Direct rotations and displacement norms}
 \label{sec:prop44}
 
-Write $P$ and $Q$ for the orthogonal projections onto two subspaces $U$ and
-$V$. In the finite-dimensional acute case the canonical direct rotation is
+Write $P$ and $Q$ for the orthogonal projections onto two subspaces $\sym{Usource}$ and
+$\sym{Vtarget}$. In the finite-dimensional acute case the canonical direct rotation is
 the orthogonal factor in the polar decomposition of
 \[
  T=QP+(I-Q)(I-P).
@@ -10,50 +10,50 @@ the orthogonal factor in the polar decomposition of
 For the trace norm, $\|X\|_1=\sum_j s_j(X)$.
 Proposition~4.4 of \citet{davis1970rotation} asserts that, for real
 subspaces whose largest principal angle is at most $\pi/3$, the direct
-rotation minimizes $N(I-W)$ among orthogonal maps $W$ satisfying $WU=V$,
+rotation minimizes $N(I-\sym{Wcompetitor})$ among orthogonal maps $\sym{Wcompetitor}$ satisfying $WU=\sym{Vtarget}$,
 for every unitarily invariant norm $N$.
 
 \subsection{An explicit one-parameter family}
 
 \begin{theorem}[Trace-norm failure throughout the acute angle range]
 \label{thm:small-angle}
-For every $0<\theta<\pi/2$, there are two-dimensional subspaces
-$U,V_\theta\subset\mathbb R^4$ and an orthogonal map $W_\theta$ with
-$W_\theta U=V_\theta$, such that both principal angles equal $\theta$ and
-the canonical direct rotation $R_\theta$ satisfies
+For every $0<\sym{theta}<\pi/2$, there are two-dimensional subspaces
+$\sym{Usource},\like{Vtarget}{V_\theta}\subset\mathbb R^4$ and an orthogonal map $\like{Wcompetitor}{W_\theta}$ with
+$\like{Wcompetitor}{W_\theta} \sym{Usource}=\like{Vtarget}{V_\theta}$, such that both principal angles equal $\sym{theta}$ and
+the canonical direct rotation $\like{Rrotation}{R_\theta}$ satisfies
 \begin{align}
- \|I-W_\theta\|_1&=4\sin\theta,\label{eq:competitor-trace}\\
- \|I-R_\theta\|_1&=8\sin(\theta/2)>4\sin\theta.
+ \|I-\like{Wcompetitor}{W_\theta}\|_1&=4\sin\sym{theta},\label{eq:competitor-trace}\\
+ \|I-\like{Rrotation}{R_\theta}\|_1&=8\sin(\sym{theta}/2)>4\sin\sym{theta}.
  \label{eq:direct-trace}
 \end{align}
 \end{theorem}
 
 \begin{proof}
-Put $c=\cos\theta$, $s=\sin\theta$, and let
+Put $c=\cos\sym{theta}$, $s=\sin\sym{theta}$, and let
 \[
  J=\begin{pmatrix}0&-1\\1&0\end{pmatrix},\quad
- C=\cos(2\theta)I_2+\sin(2\theta)J,\quad
+ C=\cos(2\sym{theta})I_2+\sin(2\sym{theta})J,\quad
  H=\frac{1}{\sqrt2}\begin{pmatrix}I_2&I_2\\I_2&-I_2\end{pmatrix}.
 \]
 Define
 \begin{equation}
- W_\theta=H\begin{pmatrix}C&0\\0&I_2\end{pmatrix}H^T
+ \like{Wcompetitor}{W_\theta}=H\begin{pmatrix}C&0\\0&I_2\end{pmatrix}H^T
  =\begin{pmatrix}c^2I_2+scJ&-s^2I_2+scJ\\
                   -s^2I_2+scJ&c^2I_2+scJ\end{pmatrix}.
  \label{eq:wtheta}
 \end{equation}
-Both $H$ and $C$ are orthogonal, so $W_\theta$ is orthogonal. Let
-$U=\mathbb R^2\oplus\{0\}$ and $V_\theta=W_\theta U$.
-The first two columns of $W_\theta$ factor as
+Both $H$ and $C$ are orthogonal, so $\like{Wcompetitor}{W_\theta}$ is orthogonal. Let
+$\sym{Usource}=\mathbb R^2\oplus\{0\}$ and $\like{Vtarget}{V_\theta}=\like{Wcompetitor}{W_\theta} \sym{Usource}$.
+The first two columns of $\like{Wcompetitor}{W_\theta}$ factor as
 \[
  \begin{pmatrix}c^2I_2+scJ\\-s^2I_2+scJ\end{pmatrix}
  =\begin{pmatrix}cI_2\\sJ\end{pmatrix}(cI_2+sJ).
 \]
 Since $cI_2+sJ$ is orthogonal, the columns of
-$Y=\binom{cI_2}{sJ}$ form an orthonormal basis of $V_\theta$.
+$Y=\binom{cI_2}{sJ}$ form an orthonormal basis of $\like{Vtarget}{V_\theta}$.
 With $X=\binom{I_2}{0}$, one has $X^TY=cI_2$.
 Thus both principal cosines are $c>0$, and both principal angles are
-$\theta$.
+$\sym{theta}$.
 
 The corresponding projections and canonical intertwiner are
 \[
@@ -68,27 +68,27 @@ The corresponding projections and canonical intertwiner are
 The last block matrix is orthogonal and $c>0$, so $|T|=cI_4$ and
 its polar factor is exactly
 \[
- R_\theta=\begin{pmatrix}cI_2&sJ\\sJ&cI_2\end{pmatrix}.
+ \like{Rrotation}{R_\theta}=\begin{pmatrix}cI_2&sJ\\sJ&cI_2\end{pmatrix}.
 \]
 In particular, this calculation identifies the canonical direct rotation
-of the constructed pair. Since $R_\theta+R_\theta^T=2cI_4$,
+of the constructed pair. Since $\like{Rrotation}{R_\theta}+\like{Rrotation}{R_\theta}^T=2cI_4$,
 \[
- (I-R_\theta)^T(I-R_\theta)=(2-2c)I_4.
+ (I-\like{Rrotation}{R_\theta})^T(I-\like{Rrotation}{R_\theta})=(2-2c)I_4.
 \]
 Consequently all four displacement singular values equal
-$\sqrt{2-2c}=2\sin(\theta/2)$.
+$\sqrt{2-2c}=2\sin(\sym{theta}/2)$.
 
 On the other hand, \cref{eq:wtheta} shows that the singular values of
-$I-W_\theta$ are those of $(I_2-C)\oplus0_2$.
+$I-\like{Wcompetitor}{W_\theta}$ are those of $(I_2-C)\oplus0_2$.
 The identity
 $(I_2-C)^T(I_2-C)=4s^2I_2$ gives the list
 $(2s,2s,0,0)$. The two trace formulas follow. Finally,
 \[
- 4\sin\theta
- =8\sin(\theta/2)\cos(\theta/2)
- <8\sin(\theta/2),
+ 4\sin\sym{theta}
+ =8\sin(\sym{theta}/2)\cos(\sym{theta}/2)
+ <8\sin(\sym{theta}/2),
 \]
-because $0<\theta/2<\pi/4$.
+because $0<\sym{theta}/2<\pi/4$.
 \end{proof}
 
 \begin{corollary}[No positive short-angle threshold]
@@ -101,30 +101,30 @@ having strictly smaller trace-norm displacement than the direct rotation.
 
 \begin{proof}
 Apply \cref{thm:small-angle} with
-$\theta=\min\{\varepsilon/2,\pi/4\}$.
+$\sym{theta}=\min\{\varepsilon/2,\pi/4\}$.
 \end{proof}
 
-The competitor rotates a diagonal real two-plane through $2\theta$ and
+The competitor rotates a diagonal real two-plane through $2\sym{theta}$ and
 fixes its orthogonal complement; its displacement has rank two, compared
-with rank four for $R_\theta$. The operator norm favors the canonical
+with rank four for $\like{Rrotation}{R_\theta}$. The operator norm favors the canonical
 rotation instead:
-$\|I-R_\theta\|_{\mathrm{op}}=2\sin(\theta/2)
- <2\sin\theta=\|I-W_\theta\|_{\mathrm{op}}$.
+$\|I-\like{Rrotation}{R_\theta}\|_{\mathrm{op}}=2\sin(\sym{theta}/2)
+ <2\sin\sym{theta}=\|I-\like{Wcompetitor}{W_\theta}\|_{\mathrm{op}}$.
 The competitor is in fact a global trace-norm minimizer, as proved in
 Corollary~\ref{cor:real-trace-optimum}.
 
 
 \Cref{fig:prop44-displacement-planes} shows the two invariant-plane
-rotation patterns at $\theta=\pi/4$ and how their displacement singular
+rotation patterns at $\sym{theta}=\pi/4$ and how their displacement singular
 values add in trace norm. The displayed invariant planes are specific to
 each map; they need not be the same pair of planes.
 
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.98\linewidth]{figures/prop44_displacement_planes.pdf}
-\caption{The real four-dimensional counterexample at $\theta=\pi/4$.
+\caption{The real four-dimensional counterexample at $\sym{theta}=\pi/4$.
 The direct rotation turns two principal planes by $\pm45^\circ$;
-$W_{\pi/4}$ turns one of its own invariant planes by $90^\circ$ and
+$\like{Wcompetitor}{W_{\pi/4}}$ turns one of its own invariant planes by $90^\circ$ and
 fixes the other. Each rotating real two-plane contributes two copies
 of the chord length $2\sin(|\varphi|/2)$ to the singular values of
 $I-T$. Consequently the trace-norm sums are
@@ -135,23 +135,23 @@ are different decompositions of $\mathbb R^4$.}
 
 \subsection{Failure of the published proof}
 
-At $\theta=\pi/4$, the family gives
+At $\sym{theta}=\pi/4$, the family gives
 \[
- W_{\pi/4}=\frac12
+ \like{Wcompetitor}{W_{\pi/4}}=\frac12
  \begin{pmatrix}
  1&-1&-1&-1\\1&1&1&-1\\-1&-1&1&-1\\1&-1&1&1
  \end{pmatrix}.
 \]
 The two trace norms are
 \[
- \|I-W_{\pi/4}\|_1=2\sqrt2
- <4\sqrt{2-\sqrt2}=\|I-R_{\pi/4}\|_1.
+ \|I-\like{Wcompetitor}{W_{\pi/4}}\|_1=2\sqrt2
+ <4\sqrt{2-\sqrt2}=\|I-\like{Rrotation}{R_{\pi/4}}\|_1.
 \]
 The fixed and parameterized counterexamples, including their principal
 angles and singular-value formulas, are formalized in Lean; the corresponding
 declarations are listed in Appendix~\ref{app:small-angle-artifact}.
 
-For $K=I-W_{\pi/4}$, let $\Omega_1$ and $\Omega_2$ be the projections onto
+For $K=I-\like{Wcompetitor}{W_{\pi/4}}$, let $\Omega_1$ and $\Omega_2$ be the projections onto
 $\operatorname{span}\{e_0,e_3\}$ and
 $\operatorname{span}\{e_1,e_2\}$. These are principal planes for the pair.
 Davis and Kahan's equation~(4.3), applied to this configuration, requires
@@ -182,11 +182,11 @@ invariant norm $M$ satisfying
 
 \begin{proposition}[$Q$-norm consequence of Davis--Kahan Proposition~4.3]
 \label{prop:qnorm-repair}
-Let $U,V$ be an acute pair of subspaces of a finite-dimensional real or
-complex Hilbert space, and let $R$ be their canonical direct rotation.
-For every $Q$-norm $N$ and every orthogonal or unitary map $W$ with $WU=V$,
+Let $\sym{Usource},\sym{Vtarget}$ be an acute pair of subspaces of a finite-dimensional real or
+complex Hilbert space, and let $\sym{Rrotation}$ be their canonical direct rotation.
+For every $Q$-norm $N$ and every orthogonal or unitary map $\sym{Wcompetitor}$ with $WU=\sym{Vtarget}$,
 \begin{equation}
- N(I-R)\leq N(I-W).
+ N(I-\sym{Rrotation})\leq N(I-\sym{Wcompetitor}).
  \label{eq:qnorm-repair}
 \end{equation}
 No $\pi/3$ restriction is required.
@@ -195,9 +195,9 @@ No $\pi/3$ restriction is required.
 \begin{proof}
 The valid squared-displacement theorem gives
 \[
- M((I-R)^*(I-R))\leq M((I-W)^*(I-W)).
+ M((I-\sym{Rrotation})^*(I-\sym{Rrotation}))\leq M((I-\sym{Wcompetitor})^*(I-\sym{Wcompetitor})).
 \]
-By \cref{eq:qnorm-def}, these quantities are $N(I-R)^2$ and $N(I-W)^2$.
+By \cref{eq:qnorm-def}, these quantities are $N(I-\sym{Rrotation})^2$ and $N(I-\sym{Wcompetitor})^2$.
 Both norm values are nonnegative, so taking square roots proves the claim.
 \end{proof}
 
@@ -216,11 +216,11 @@ realification. Indeed, under the identification $\mathbb C^2\simeq
 \mathbb R^2\oplus\mathbb R^2$ in which multiplication by $i$ is
 represented by $J$ from \cref{eq:wtheta}, the matrices
 \[
- R_\theta^{\mathbb C}=
+ \like{Rrotation}{R_\theta}^{\mathbb C}=
  \begin{pmatrix}c&is\\is&c\end{pmatrix},\qquad
- W_\theta^{\mathbb C}=e^{i\theta}R_\theta^{\mathbb C}
+ \like{Wcompetitor}{W_\theta}^{\mathbb C}=e^{i\sym{theta}}\like{Rrotation}{R_\theta}^{\mathbb C}
 \]
-become precisely $R_\theta$ and $W_\theta$ above. Realification doubles
+become precisely $\like{Rrotation}{R_\theta}$ and $\like{Wcompetitor}{W_\theta}$ above. Realification doubles
 the complex singular-value multiplicities. Thus the real short-angle
 restriction in Proposition~4.4 does not eliminate the mechanism of the
 authors' preceding example.
