@@ -601,6 +601,32 @@ of the real matching proof is certified without supplied component data or
 a principal basis. The real stationary-gradient reduction and final matching
 optimization are still conventional proofs.
 
+The real matching fragment now gives a canonical-optimality criterion for
+every Schatten exponent `1 < p < 2` using only the two largest principal
+angles and the small root of the scalar amplitude equation. At `p = 3/2`
+this becomes the elementary pair of inequalities
+`x1 <= 2^(-2/3)` and `x1^2 + x1*x2 + x2^2 <= 1`, where
+`xi = sin(theta_(i)/2)`. All three-halves edge weights and their attaining
+common rotations are explicit. The same fragment derives the sharp real
+rounding constant `(1 - 2^(-2/p))^(-1/2)` for `1 <= p <= 2`.
+These are conventional consequences under review, not Lean-certified.
+`figures/real_transport_matching.pdf` illustrates the two-angle phase
+diagram and a six-angle matching whose optimum does not pair adjacent
+largest angles. It evaluates the derived formulas, not an independent proof.
+
+The two-phase algebraic reduction is now compiled beyond the projection
+components. `Complexification/RealPoints.lean` consumes the accepted
+`TauCeti.realPoints` and its real/imaginary decomposition, supplying the
+isometric comparison to the established concrete Hilbert complexification.
+`Complexification/FiniteDimensional.lean` supplies its finite-dimensional
+instances and exact dimensions. `RealTwoPhaseBlocks.lean` proves that an
+actual operator affine in a Hermitian projection has a complete orthogonal
+invariant decomposition into complex blocks of dimension at most two,
+simultaneously invariant under a specified isometric conjugation. Their
+real dimensions are at most four. No supplied real basis is required.
+The deduction of the two-phase hypotheses from real stationary transport,
+and the final exact matching minimum, remain unformalized.
+
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
 - Symbol colors: `math_symbol_colors.tex`; `\DKMathColorsfalse` after its input turns symbol colors off. Keep the readable Manim-derived shade map and `appendix_notation.tex` aligned.

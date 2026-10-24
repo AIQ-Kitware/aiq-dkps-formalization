@@ -281,3 +281,169 @@ All $u_i$ are nonnegative and increase with the angle, so the two largest
 angles give the strongest pair condition. The largest angle also gives
 the strongest reflection condition.
 \end{proof}
+
+\begin{corollary}[Canonical real Schatten transport from the two largest angles]
+\label{cor:real-schatten-canonical-top-two}
+Let $1<p<2$, and let $\theta_{(1)}\geq\theta_{(2)}$ be the two largest
+principal angles, inserting zeros when necessary. Put
+\[
+ c_p=\arccos\frac{2-p}{p},\qquad
+ r_p=2\arcsin(2^{-1/p}).
+\]
+For $c_p<t\leq\pi/2$, let $a_p(t)\in(0,c_p)$ be the unique smaller
+root of
+\[
+ (2\sin(a_p(t)/2))^{p-1}\cos(a_p(t)/2)
+       =(2\sin(t/2))^{p-1}\cos(t/2).
+\]
+The canonical real transport minimizes the Schatten $p$-cost exactly when
+\[
+ \theta_{(1)}\leq r_p
+ \quad\hbox{and}\quad
+ \left[\theta_{(1)}\leq c_p
+       \ \hbox{or}\ \theta_{(2)}\leq a_p(\theta_{(1)})\right].
+\]
+\end{corollary}
+
+\begin{proof}
+The amplitude $g_p(t)=(2\sin(t/2))^{p-1}\cos(t/2)$ strictly
+increases from zero to its maximum at $c_p$, then strictly decreases
+to zero at $\pi$. This proves existence and uniqueness of $a_p(t)$.
+A single reflection cannot improve the canonical cost exactly when
+$2(2\sin(\theta/2))^p\leq2^p$, or $\theta\leq r_p$.
+
+For two distinct positive angles $\theta>\psi$, put
+$h=(\theta+\psi)/2$ and $d=(\theta-\psi)/2$.
+The restricted scalar cost has its canonical endpoint at $d$, where
+its derivative is $p[g_p(\theta)-g_p(\psi)]$.
+The scalar cost strictly decreases to its unique minimizer and strictly
+increases afterward. Thus a pair improves the canonical cost exactly
+when $g_p(\theta)<g_p(\psi)$.
+Equal angles improve it exactly when they exceed $c_p$.
+Pairs involving zero cannot improve it.
+
+If $\theta_{(1)}\leq c_p$, every pair is subcritical and canonical.
+If $\theta_{(1)}>c_p$, the pairs containing $\theta_{(1)}$ are all
+canonical exactly when every other angle is at most
+$a_p(\theta_{(1)})$. In that case the remaining angles are below
+$c_p$, so their mutual pairs are canonical as well. Conversely, if
+$\theta_{(2)}>a_p(\theta_{(1)})$, the largest pair strictly improves
+the cost, including the case of equal largest angles. The matching
+formula now proves the criterion.
+\end{proof}
+
+\begin{corollary}[Sharp real Schatten rounding constant]
+\label{cor:real-schatten-rounding-constant}
+For $1\leq p\leq2$, every real orthogonal matrix $U$ and real
+orthogonal projection $P$ admit a real orthogonal $V$ commuting with
+$P$ such that
+\begin{equation}
+ \|U-V\|_p\leq
+    \frac{\|[P,U]\|_p}{\sqrt{1-2^{-2/p}}}.
+ \label{eq:real-schatten-rounding-constant}
+\end{equation}
+The constant is optimal in every ambient dimension at least two.
+\end{corollary}
+
+\begin{proof}
+Put $u=\sin(\theta/2)$ for a principal angle, so
+$0\leq u\leq1/\sqrt2$. The best one-plane real transporter has
+Schatten power $\min\{2(2u)^p,2^p\}$, while the corresponding
+commutator block has power $2(2u\sqrt{1-u^2})^p$.
+For $u>0$ their ratio of norms is
+\[
+ \begin{cases}
+  (1-u^2)^{-1/2},&u\leq2^{-1/p},\\[2pt]
+  \bigl(2^{1/p}u\sqrt{1-u^2}\bigr)^{-1},&u\geq2^{-1/p}.
+ \end{cases}
+\]
+The first branch increases in $u$; the second decreases on
+$[2^{-1/p},1/\sqrt2]$, since $u\sqrt{1-u^2}$ increases there.
+Their common maximum is $(1-2^{-2/p})^{-1/2}$.
+At $u=0$ both block costs vanish. Choosing the cheaper one-plane
+transporter independently and summing the $p$th powers gives
+\cref{eq:real-schatten-rounding-constant} through the transporter--rounding
+bijection.
+
+For sharpness, take a single principal plane with
+$\theta=2\arcsin(2^{-1/p})$. Every real line transporter on this
+plane is a canonical or long rotation or a reflection, and the
+canonical and reflection choices have the same cost. Their ratio to
+the commutator cost is the displayed constant. Adding fixed common
+directions preserves this rank-one minimum, by the matching formula
+(or its nuclear endpoint). Hence every ambient dimension at least two
+has the same optimal constant.
+\end{proof}
+
+\begin{corollary}[Explicit matching costs at exponent three halves]
+\label{cor:real-three-halves-matching}
+For $\rho(s)=s^{3/2}$, put $f(t)=(2\sin(t/2))^{3/2}$.
+For a pair $\theta\geq\psi$, set
+$h=(\theta+\psi)/2$, $d=(\theta-\psi)/2$, and $c=\cos h$.
+The matching weights are
+\[
+ s_{3/2}(\theta)=\min\{2f(\theta),2^{3/2}\},
+\]
+\[
+ e_{3/2}(\theta,\psi)=
+ \begin{cases}
+  2f(\theta)+2f(\psi),&
+       c\geq\dfrac{\cos d}{1+2\cos d},\\[3pt]
+  2\sqrt{8(1+c)\sqrt{1-2c}},&
+       c<\dfrac{\cos d}{1+2\cos d}.
+ \end{cases}
+\]
+On the second branch an attaining common rotation has angle
+\[
+ \gamma=\arccos\frac{c}{(1-2c)\cos d}.
+\]
+Write $x_i=\sin(\theta_{(i)}/2)$ for the two largest angles, inserting
+zeros when necessary. The real canonical rotation is globally optimal
+exactly when
+\begin{equation}
+ x_1\leq2^{-2/3},\qquad x_1^2+x_1x_2+x_2^2\leq1.
+ \label{eq:real-three-halves-canonical-top-two}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Above its scalar transition, the optimal phase satisfies
+$\cos\delta_{3/2}(h)=c/(1-2c)$, and the squared scalar minimum is
+$8(1+c)\sqrt{1-2c}$, by
+\cref{eq:schatten-three-halves-phase,eq:schatten-three-halves-value}.
+The restricted optimum is canonical exactly when
+$\delta_{3/2}(h)\leq d$, which is equivalent to
+$c\geq\cos d/(1+2\cos d)$. This inequality also includes every
+subcritical $h$, since then $c\geq1/3$. Substituting the scalar minimum
+gives the second branch and the attaining rotation. On that branch
+$c<1/3$, so its denominator is positive.
+
+A single reflection improves canonical transport exactly when
+$2(2\sin(\theta/2))^{3/2}>2^{3/2}$.
+Its exclusion for every angle is the first inequality in
+\cref{eq:real-three-halves-canonical-top-two}.
+For $x=\sin(\theta/2)$ and $y=\sin(\psi/2)$, direct expansion gives
+\[
+ \cos h\,(1+2\cos d)-\cos d
+       =2(1-x^2-xy-y^2).
+\]
+Thus no pair lowers the canonical cost exactly when
+$x^2+xy+y^2\leq1$ for every pair. The expression increases with either
+nonnegative argument, so the two largest angles suffice. Apply
+\cref{thm:real-matching-minimum}.
+\end{proof}
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=\linewidth]{figures/real_transport_matching.pdf}
+ \caption{Real Schatten transport at $p=3/2$.
+ (a) The minimizing transporter in four dimensions is canonical, a
+ reflection on the larger-angle plane, or a coupled rotation.
+ The solid green curve is $x_1^2+x_1x_2+x_2^2=1$;
+ the dotted orange line is $x_1=2^{-2/3}$.
+ The dashed blue line is the complex canonical cutoff.
+ (b) Positive edge weights are improvements over the best independent
+ one-plane choices. The maximizing matching pairs $80^\circ$ with
+ $75^\circ$, leaving the remaining four angles unmatched.}
+ \label{fig:real-transport-matching}
+\end{figure}
