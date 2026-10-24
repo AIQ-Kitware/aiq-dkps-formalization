@@ -909,6 +909,30 @@ text was not obtained; its exact implication is still unresolved. These
 comparisons exclude direct applications of the inspected statements, not
 all equivalent prior results or broader reductions.
 
+A further primary comparison checked Bottazzi, *Best approximation by
+diagonal operators in Schatten ideals*, Linear Algebra and its Applications
+620 (2021), 1--26, DOI <https://doi.org/10.1016/j.laa.2021.02.025>.
+The publisher's text formulates additive best approximation of Hermitian
+operators by the full linear space of diagonal operators and develops
+support-functional and Birkhoff--James characterizations. Those are
+classical antecedents for a support-certificate method. The stated domain
+has neither the commuting-unitary restriction nor the bounded commuting
+contraction constraint used in our weighted problem. This rules out a
+verbatim identification of the problems, not a possible reduction through
+a stronger general approximation result. The author-repository PDF was
+located but returned HTTP 403; exact theorem-level comparison beyond the
+publisher's exposed text remains incomplete. No priority claim is inferred
+from this access limitation.
+
+The 2026 follow-up by Bottazzi--Varela,
+<https://arxiv.org/pdf/2604.16041>, was checked at Section 1 and Theorem 1.
+It treats Hermitian additive approximation by a full C*-subalgebra in the
+spectral norm, with trace-annihilator support witnesses. That theorem
+supports the classical ancestry of the certificate method and has a
+different objective and feasible set from our commuting-unitary weighted
+nuclear minimum. This is a comparison of the inspected statement, not an
+exhaustive exclusion of all consequences of that paper.
+
 `SmoothedCriticalFlatness.lean` adds a compiled scalar sharpness certificate
 for the cutoff. For `b,d>0` and a unit phase `z` with
 `|b Im(z)| <= d/2`, the tangent two-focus excess is between zero and
@@ -950,6 +974,29 @@ correction in the closed regime. The manuscript gives its fourth-root
 objective-error bound and cites the transferred strict quadratic estimate.
 These are utility consequences of the transport theorem, with no empirical
 performance or separate priority claim.
+
+`SmoothedValueSensitivity.lean` proves a sharp value-sensitivity certificate.
+The least Lipschitz constant of the exact scalar minimum on `[0,pi/2]` is
+`2/eta`. Both branches join differentiably at the cutoff, and the derivative
+there is `2/eta`, proving necessity. The finite-sum endpoint bounds the
+error in the exact global value by `2/eta` times the sum of the angle errors.
+The main endpoints are `smoothedPhaseMinimum_lipschitz`,
+`sum_smoothedPhaseMinimum_lipschitz`,
+`smoothedPhaseMinimum_hasDerivAt_critical`, and
+`lipschitzOnWith_smoothedPhaseMinimum_iff`. Included as
+`cor:smoothed-value-sensitivity`; this is a quantitative consequence of the
+minimum formula, with no separate first-publication claim.
+
+`SmoothedCommutatorCutoff.lean` gives the directly computable operator-norm
+criterion for the canonical correction: `||AP-PA|| <= sqrt(1-eta^(-4))`
+is necessary and sufficient for its global minimality. The actual unitary
+input and source subspace are used, with no supplied principal coordinates
+or maximum-angle witness. It covers the boundary and dimension zero.
+The main endpoint is `canonical_correction_isMin_iff_commutator`, with
+`projectionGap_unitary_image_eq_commutator` and
+`smoothed_canonical_isMin_iff_projectionGap` as bridges. The manuscript
+states the criterion in the correction application. The projection norm
+identity is classical; no separate priority claim is made for it.
 
 The integrated journal text typesets successfully with `pdflatex`, `bibtex`,
 and two further LaTeX passes. This VM lacks `latexmk`; its default T1 Computer

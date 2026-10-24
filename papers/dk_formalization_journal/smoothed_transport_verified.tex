@@ -462,6 +462,36 @@ coefficient of the root lower bound in
 \cref{prop:smoothed-critical-stability} at $n=2$.
 \end{proof}
 
+\begin{corollary}[Sharp sensitivity to angle errors]
+\label{cor:smoothed-value-sensitivity}
+For $\theta,\varphi\in[0,\pi/2]$,
+\[
+ |\mu_\tau(\theta)-\mu_\tau(\varphi)|
+ \leq\frac2\eta|\theta-\varphi|.
+\]
+The coefficient $2/\eta$ is the least constant valid on this interval.
+For two angle lists of the same length, the error in the exact minimum
+therefore satisfies
+\[
+ \left|\sum_j\mu_\tau(\theta_j)-\sum_j\mu_\tau(\varphi_j)\right|
+ \leq\frac2\eta\sum_j|\theta_j-\varphi_j|.
+\]
+\end{corollary}
+
+\begin{proof}
+Below the cutoff, put $d(\theta)=\sqrt{\tau^2+2-2\cos\theta}$.
+The derivative is $2\sin\theta/d(\theta)$. With $b=\eta^{-1}$,
+\[
+ b^2d(\theta)^2-\sin^2\theta=(\cos\theta-b^2)^2\geq0,
+\]
+so its absolute value is at most $2b$. Above the cutoff, the derivative
+is $2\eta\cos\theta\leq2b$. The two branches have the same value
+and derivative at $c_\tau$; the common derivative there is $2b$.
+The mean value theorem gives the bound, and this derivative proves that
+the coefficient cannot be decreased. The list estimate follows by the
+triangle inequality.
+\end{proof}
+
 As $\tau\downarrow0$, the angle cost tends to $2\sin\theta$, recovering
 \cref{thm:complex-trace-all-pairs}. As $\tau\to\infty$,
 $2\tau\mu_\tau(\theta)$ tends to $8\sin^2(\theta/2)$, the squared
@@ -503,6 +533,17 @@ when the angles stay strictly below the cutoff. Indeed,
 $W=AC^*$ satisfies
 $\|W-R\|_F=\|C-R^*A\|_F$, and the preceding proof identifies their
 objective errors.
+
+Canonical optimality has a direct test in terms of the commutation defect:
+\[
+ R^*A\text{ is globally optimal}
+ \quad\Longleftrightarrow\quad
+ \|AP-PA\|\leq\sqrt{1-\eta^{-4}},
+\]
+where $\|\cdot\|$ is the operator norm. To see this, use
+$\|AP-PA\|=\|P-APA^*\|=\max_j\sin\theta_j$, with value zero for an
+empty angle list, and apply \cref{cor:smoothed-canonical-cutoff}.
+At equality the canonical correction remains unique.
 
 This gives an exact correction that preserves both a specified subspace
 and its orthogonal complement. The construction requires spectral

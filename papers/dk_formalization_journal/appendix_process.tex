@@ -172,6 +172,8 @@ minimality in \cref{cor:smoothed-commuting-correction}.
 \path{SmoothedCorrectionStability.lean} transfers the quadratic and quartic
 growth certificates to feasible corrections and identifies the named
 optimizer with the canonical correction through the cutoff.
+\path{SmoothedCommutatorCutoff.lean} gives the necessary-and-sufficient
+operator-norm commutator test for canonical correction optimality.
 \path{SmoothedCriticalStability.lean} proves the root growth inequality and
 fourth-power error certificate in \cref{prop:smoothed-critical-stability},
 with an explicitly constructed critical rotation. Its hypotheses specify
@@ -199,6 +201,9 @@ actual planar unitary transporters at the exact cutoff, with the literal
 singular-value cost and Frobenius distance. Its endpoint
 \path{smoothed_critical_planar_no_quadratic_growth} certifies the final
 assertion of \cref{prop:smoothed-critical-flatness}.
+\path{SmoothedValueSensitivity.lean} proves the optimal scalar Lipschitz
+constant, the derivative at the cutoff, and the angle-list error bound in
+\cref{cor:smoothed-value-sensitivity}.
 The global lower-bound endpoints quantify over every admissible complex
 unitary; they require no supplied principal-plane coordinates or restriction
 on mixing. The general angle theorem supplies an optimizer; the stability theorems
@@ -236,7 +241,9 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedValueSensitivity \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCorrectionStability \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutatorCutoff \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCalibration \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalTransportFlatness \
