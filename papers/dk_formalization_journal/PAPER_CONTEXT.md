@@ -591,6 +591,16 @@ satisfying the projection identities. These are classical foundations for
 the matching proof; the actual real transport optimization endpoints are
 still conventional assertions awaiting formal assembly.
 
+`Complexification/Parts.lean` now proves the general operator decomposition
+into real and imaginary components, including noncommuting product formulas,
+using the established concrete complexification and real-part operator.
+`Projection/ComplexRealBlocks.lean` derives the component symmetries and
+projection identities from an actual Hermitian projection and instantiates
+the complete orthogonal line/plane decomposition. Thus this algebraic step
+of the real matching proof is certified without supplied component data or
+a principal basis. The real stationary-gradient reduction and final matching
+optimization are still conventional proofs.
+
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
 - Symbol colors: `math_symbol_colors.tex`; `\DKMathColorsfalse` after its input turns symbol colors off. Keep the readable Manim-derived shade map and `appendix_notation.tex` aligned.
