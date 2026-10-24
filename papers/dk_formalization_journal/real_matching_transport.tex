@@ -1,0 +1,283 @@
+% Independent conventional research fragment; excluded from paper.tex.
+% Not Lean-certified. Evidence and priority boundaries: PAPER_CONTEXT.md.
+\section{Real transport as a weighted matching problem}
+\label{sec:real-matching-transport}
+
+The real four-dimensional formula determines the global minimum in every
+finite real dimension for a class of spectral penalties. The reduction
+uses the stationary operator's spectral blocks and a real orthogonal
+normal form for a complex Hermitian projection.
+
+Let $\rho:[0,2]\to\mathbb R$ be continuously differentiable, with
+$\rho(0)=\rho'(0)=0$ and $\rho'(s)>0$ for $s>0$. Set
+\[
+ \phi(t)=\rho\bigl(2\sin(t/2)\bigr),\qquad 0\leq t\leq\pi.
+\]
+In dimension $n$, write
+$\mathcal F_\rho(W)=\sum_{j=1}^n\rho(\sigma_j(I-W))$.
+Assume that for some $c\in(0,\pi)$ the derivative $\phi'$ is strictly
+increasing on $[0,c]$ and strictly decreasing on $[c,\pi]$.
+These hypotheses include the Schatten powers $\rho(s)=s^p$, $p>1$,
+and the Charbonnier penalty. Define the one-angle and two-angle costs
+\[
+ s_\rho(\theta)=\min\{2\phi(\theta),\rho(2)\},
+\]
+\[
+ e_\rho(\theta,\psi)=
+   2\min_{|\theta-\psi|/2\leq\delta\leq(\theta+\psi)/2}
+    \left[\phi\left(\frac{\theta+\psi}{2}+\delta\right)
+          +\phi\left(\frac{\theta+\psi}{2}-\delta\right)\right].
+\]
+A matching $M$ on $\{1,\ldots,k\}$ is a set of disjoint unordered
+pairs; its unmatched vertices are denoted by $U(M)$.
+
+\begin{theorem}[The exact real matching formula]
+\label{thm:real-matching-minimum}
+Let $P,Q$ be equal-rank real orthogonal projections on $\mathbb R^n$,
+and let $\theta_1,\ldots,\theta_k$ be their positive principal angles,
+including multiplicities and right angles. Then
+\begin{equation}
+ \min_{\substack{W\in O(n)\\WPW^T=Q}}
+   \sum_{j=1}^n\rho(\sigma_j(I-W))
+ =\min_M\left\{
+    \sum_{\{i,j\}\in M}e_\rho(\theta_i,\theta_j)
+     +\sum_{i\in U(M)}s_\rho(\theta_i)\right\}.
+ \label{eq:real-matching-minimum}
+\end{equation}
+An attaining transport acts on one principal plane for each unmatched
+angle and couples the two principal planes of each matched pair.
+It fixes the remaining common summands.
+\end{theorem}
+
+We first give the algebraic decomposition used in the proof.
+
+\begin{lemma}[A Hermitian projection under real orthogonal coordinates]
+\label{lem:hermitian-projection-real-blocks}
+Every complex Hermitian projection is conjugate by a real orthogonal
+matrix to a direct sum of scalar blocks $0,1$ and blocks
+\[
+ \begin{pmatrix}
+   \lambda&-i\sqrt{\lambda(1-\lambda)}\\
+   i\sqrt{\lambda(1-\lambda)}&1-\lambda
+ \end{pmatrix},\qquad 0<\lambda\leq\tfrac12.
+\]
+\end{lemma}
+
+\begin{proof}
+Write the projection as $A=X+iY$, where $X$ is real symmetric and
+$Y$ is real skew-symmetric. The identities $A^2=A$ give
+\[
+ X^2-Y^2=X,\qquad XY+YX=Y.
+\]
+For real $v$, positivity and contractivity of $A$ give
+$0\leq v^TXv\leq\|v\|^2$, so the eigenvalues of $X$ lie in $[0,1]$.
+The second identity makes $Y$ map the $\lambda$-eigenspace of $X$
+to the $(1-\lambda)$-eigenspace. On the former space,
+\[
+ -Y^2=\lambda(1-\lambda)I.
+\]
+For $0<\lambda<1/2$, an orthonormal basis $v_j$ of the first space
+is therefore matched with the orthonormal basis
+$Yv_j/\sqrt{\lambda(1-\lambda)}$ of the second. Each pair gives
+the displayed block. On the $1/2$-eigenspace, $2Y$ is an orthogonal
+complex structure; choose successive orthonormal pairs $v,2Yv$.
+On the zero and one eigenspaces, skew-symmetry and $Y^2=0$ force
+$Y=0$, giving the scalar blocks.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:real-matching-minimum}]
+The feasible set is nonempty and compact. Choose a global minimizer $W$.
+Extend $\phi$ evenly and periodically to the real line. Its extension is
+continuously differentiable, including at zero and $\pi$.
+Let $K$ be the real skew-symmetric spectral gradient of $W$: on a real
+rotation block through $t$, its value is $\phi'(t)$ times the quarter-turn
+matrix, and on the eigenvalues $1,-1$ it is zero.
+It commutes with $W$.
+
+For every real skew-symmetric $H$, the spectral first-variation formula
+\citep{lewis1996derivatives} gives
+\[
+ \left.\frac{d}{dt}\mathcal F_\rho(W\exp(tH))\right|_{t=0}
+       =-\operatorname{tr}(KH).
+\]
+As in the proof of \cref{eq:schatten-first-variation}, one may use a local
+logarithm whose cut avoids the finite spectrum and apply the Hermitian
+spectral derivative theorem. The periodic extension's continuous
+differentiability covers the eigenvalues $1,-1$.
+When $H$ commutes with $P$, the curve is feasible. Take $H$ to be the
+block diagonal compression of $K$ to $P\oplus P^\perp$.
+Then $-\operatorname{tr}(KH)=\|H\|_F^2$, so stationarity forces
+both diagonal compressions to vanish. For $J=2P-I$ this says
+\[
+ JKJ=-K.
+\]
+Consequently $-K^2$ commutes with $P,W$, and $Q=WPW^T$.
+
+Consider a positive spectral level $-K^2=g^2I$. The operator
+$\mathcal I=K/g$ is an orthogonal complex structure, and $J$ is an
+antilinear isometric involution for this complex structure. Its fixed
+space is the range of $P$. Choosing a real orthonormal basis of that
+fixed space identifies the whole level with its complexification,
+with $J$ acting as conjugation. The restriction of $W$ is then a
+complex unitary matrix $V$.
+
+Every eigenphase of $V$ solves $\phi'(t)=g$ in $(0,\pi)$.
+The single-peak hypothesis gives at most two roots, say $a,b$.
+If there are two roots, write
+\[
+ V=e^{ia}I+(e^{ib}-e^{ia})A
+\]
+with a complex Hermitian projection $A$; if the roots coalesce,
+$V$ is scalar. Apply \cref{lem:hermitian-projection-real-blocks}.
+Its real change of coordinates preserves $J$ and therefore $P$.
+It decomposes the real level into orthogonal $P,W,Q$-invariant
+blocks of dimension two or four, with source ranks one or two.
+The scalar-root case gives two-dimensional blocks directly.
+
+On $\ker K$, the only eigenvalues of $W$ are $1,-1$, so $W$ is a
+reflection. The real decomposition of two projections, applied to
+$P$ and $(I-W)/2$, gives common invariant blocks of dimension at most
+two. A one-dimensional block with $W=-1$ cannot occur at a global
+minimum: replacing it by $+1$ preserves transport and lowers the cost.
+The other one-dimensional blocks have zero cost and zero angle.
+
+On a two-dimensional rank-one block, the cost is at least
+$s_\rho(\theta)$. Indeed, its four orthogonal line transporters have
+costs $2\phi(\theta)$, $2\phi(\pi-\theta)$, and $\rho(2)$ for
+each of the two reflections; the second is no smaller than the first.
+On a four-dimensional rank-two block, \cref{thm:real-four-dimensional-minimum}
+gives the lower bound
+\[
+ \min\{e_\rho(\theta,\psi),
+                 s_\rho(\theta)+s_\rho(\psi)\}.
+\]
+To see the equivalence with that theorem's formula, note that
+$e_\rho\leq2\phi(\theta)+2\phi(\psi)$ and
+$e_\rho\leq2\rho(2)$, the latter by choosing the endpoint phase.
+For $\theta\geq\psi$, the remaining choice is exactly
+$\rho(2)+2\phi(\psi)$.
+
+Principal-angle multisets add across common reducing blocks of $P,Q$.
+Selecting a pair or two singletons in each four-dimensional block
+therefore gives a matching whose value is no larger than the cost of
+$W$. Zero angles can be discarded: $s_\rho(0)=0$ and
+$e_\rho(\theta,0)=2\phi(\theta)\geq s_\rho(\theta)$.
+This proves the lower bound in \cref{eq:real-matching-minimum}.
+
+Conversely, choose a cosine--sine decomposition of $P,Q$ and any matching.
+Use an attaining common rotation from
+\cref{thm:real-four-dimensional-minimum} on each matched pair of principal
+planes. On each unmatched plane choose the cheaper canonical rotation
+or reflection. Fix every remaining common direction. The resulting
+orthogonal sum is feasible and has exactly the matching's value,
+proving the reverse inequality and attainment.
+\end{proof}
+
+Put $g_{ij}=s_\rho(\theta_i)+s_\rho(\theta_j)-e_\rho(\theta_i,\theta_j)$.
+Then \cref{eq:real-matching-minimum} is equivalently
+\[
+ \sum_i s_\rho(\theta_i)-\max_M\sum_{\{i,j\}\in M}g_{ij}.
+\]
+Edges of nonpositive weight may be omitted. Thus evaluation of the scalar
+costs followed by a maximum-weight matching gives an exact global
+optimization procedure. At $p=3/2$ and for the Charbonnier penalty the
+edge costs are explicit; other Schatten exponents require only the
+one-dimensional scalar balance equation.
+
+The same matching solves nearest commuting-orthogonal correction. Given
+$U\in O(n)$ and a prescribed projection $P$, put $Q=UPU^T$. The map
+$W\mapsto V=W^TU$ is a bijection from transporters of $P$ onto $Q$
+to orthogonal matrices commuting with $P$. Since
+$U-V=(I-W^T)U$, its displacement has the same singular values as
+$I-W$. Thus the formula computes an orthogonal correction that preserves
+the prescribed subspace and has the least spectral penalty among all
+such corrections.
+
+\begin{corollary}[The exact real nuclear minimum]
+\label{cor:real-nuclear-matching}
+The matching formula also holds for $\rho(s)=s$, with
+\[
+ s_1(\theta)=\min\{4\sin(\theta/2),2\},\qquad
+ e_1(\theta,\psi)=4\sin\frac{\theta+\psi}{2}.
+\]
+\end{corollary}
+
+\begin{proof}
+For $s\in[0,2]$ the Charbonnier penalties satisfy
+$|\rho_\tau(s)-s|\leq\tau$. Their objectives converge uniformly on
+$O(n)$, so their constrained minima converge to the nuclear minimum.
+The one-angle and two-angle costs converge uniformly as well.
+There are finitely many matchings, so the minimum of their costs
+converges to the minimum of the limiting costs. The limits are exactly
+the two displayed expressions, by \cref{eq:real-four-nuclear} and its
+one-angle counterpart.
+\end{proof}
+
+\begin{corollary}[When the real nuclear minimum equals the complex one]
+\label{cor:real-nuclear-parity}
+The real nuclear transport minimum equals $2\sum_i\sin\theta_i$
+exactly when each positive acute principal angle has even multiplicity.
+Right-angle multiplicities are unrestricted.
+The real canonical rotation minimizes the nuclear cost exactly when
+there is at most one positive principal angle and that angle is at most
+$\pi/3$.
+\end{corollary}
+
+\begin{proof}
+For $0<\theta<\pi/2$, both choices in
+$s_1(\theta)=\min\{4\sin(\theta/2),2\}$ strictly exceed
+$2\sin\theta$. At a right angle the reflection attains equality.
+Also
+\[
+ e_1(\theta,\psi)
+ =4\sin\frac{\theta+\psi}{2}
+ \geq2\sin\theta+2\sin\psi,
+\]
+with equality for positive angles exactly when $\theta=\psi$.
+Equality in the finite matching sum therefore requires and permits
+pairing each positive acute angle with an equal angle. The complex
+minimum is the displayed sine sum.
+
+If there are two positive angles, their paired cost is strictly less
+than the sum of their canonical costs, since
+\[
+ 4\sin\frac{\theta+\psi}{2}
+ <4\sin\frac\theta2+4\sin\frac\psi2.
+\]
+For a single positive angle, the one-plane canonical choice is optimal
+exactly when $4\sin(\theta/2)\leq2$, or $\theta\leq\pi/3$.
+\end{proof}
+
+\begin{corollary}[The two largest angles determine canonical optimality]
+\label{cor:real-smoothed-canonical-top-two}
+For the Charbonnier cost, let $\theta_{(1)}\geq\theta_{(2)}$ be the
+two largest principal angles, inserting zeros when necessary.
+The canonical rotation is globally optimal over the real field exactly
+when
+\[
+ \cos\theta_{(1)}\geq\tfrac12\eta^{-2},\qquad
+ \tan\frac{\theta_{(1)}}2\tan\frac{\theta_{(2)}}2
+       \leq\frac{\tau}{\sqrt{\tau^2+4}}.
+\]
+\end{corollary}
+
+\begin{proof}
+The matching formula shows that canonical transport is optimal exactly
+when neither a single reflection nor a paired rotation lowers its cost.
+By \cref{cor:real-four-smoothed}, these conditions are
+\[
+ \cos\theta_i\geq\tfrac12\eta^{-2},\qquad
+ \frac{\cos((\theta_i+\theta_j)/2)}
+      {\cos((\theta_i-\theta_j)/2)}\geq\eta^{-2}
+ \quad(i\ne j).
+\]
+Writing $u_i=\tan(\theta_i/2)$ makes the ratio
+$(1-u_iu_j)/(1+u_iu_j)$. Its inequality becomes
+\[
+ u_iu_j\leq\frac{1-\eta^{-2}}{1+\eta^{-2}}
+           =\frac{\tau}{\sqrt{\tau^2+4}}.
+\]
+All $u_i$ are nonnegative and increase with the angle, so the two largest
+angles give the strongest pair condition. The largest angle also gives
+the strongest reflection condition.
+\end{proof}

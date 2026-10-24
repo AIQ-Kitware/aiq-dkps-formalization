@@ -529,6 +529,17 @@ and full exercise statements remain to be checked from a primary copy;
 the author's full PDF has been unavailable. Do not yet claim a book erratum
 or infer research priority from this discrepancy.
 
+A subsequent indexed-primary-PDF search recovered Appendix B's equation
+(B.13), which defines precisely the unrestricted orthogonal/unitary
+transport quotient used here, and Exercise B.12, which gives the canonical
+principal-angle expression across the displayed Schatten range. Thus the
+metric normalization can now be compared at the formula level. The actual
+Appendix PDF remains unavailable for visual verification. The authors'
+[posted errata](https://case.edu/artsci/math/szarek/ABMB/errata.pdf), last
+updated 7 September 2023, contain no entry for these pages. This does not
+establish an unreported error or priority; retain the visual-verification
+and independent-review requirement before making a source-correction claim.
+
 The independent fragment `real_four_dimensional_transport.tex` now supplies
 an exact conventional solution for real rank-two transport in `R^4`.
 For any continuous nondecreasing spectral penalty, the minimum is the smaller
@@ -545,6 +556,30 @@ conventional proofs under review, not Lean-certified. They are excluded from
 agreed with the four-dimensional formula; these checks are not proof evidence.
 No matching formula was found in the inspected primary literature, including
 Bolotnikov--Li--Rodman (2001). That is provisional negative evidence.
+
+`real_matching_transport.tex` develops the higher-rank real problem as a
+finite maximum-weight matching problem. At a real stationary transport, the
+skew spectral gradient has zero source-diagonal compressions. On a positive
+gradient-square level it defines a complex structure, while source reflection
+acts as conjugation. The unitary has at most two complex phase roots, and its
+Hermitian spectral projection has a real orthogonal normal form with blocks
+of size at most two. Thus the original real space splits into blocks of size
+at most four, each carrying at most two principal angles. The exact
+four-dimensional formula then gives the matching lower bound; independent
+one-plane and paired-plane constructions attain it. Convexity of the penalty
+and negative second variation are not required for this real reduction.
+
+The fragment also proves the real nuclear matching formula by a uniform
+Charbonnier limit, the even-multiplicity equality criterion including right
+angles, and the exact real smoothed canonical region determined by the two
+largest angles. It explains the equivalent nearest commuting-orthogonal
+correction problem. These are conventional proofs under review, not
+Lean-certified, and remain excluded from `paper.tex`. Unrestricted numerical
+multistart searches in real dimensions six and eight agreed with the matching
+value for Schatten `3/2` and Charbonnier costs; they do not establish the
+theorem. The stationary-block proof and literature priority need independent
+review before submission. The classical real orthogonal normal form for a
+Hermitian projection is an ingredient, not an independent novelty claim.
 
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
