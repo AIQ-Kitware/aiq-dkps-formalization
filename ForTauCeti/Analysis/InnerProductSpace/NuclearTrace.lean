@@ -140,4 +140,66 @@ theorem re_trace_isometry_comp_eq_nuclear_iff_isPositive
   rw [← (UnitarilyInvariantSeminorm.nuclear 𝕜 E E).map_linearIsometryEquiv_comp U A]
   exact re_trace_eq_nuclear_iff_isPositive _
 
+omit [FiniteDimensional 𝕜 E] in
+/-- The trace of an operator reversed by an involution vanishes. This
+algebraic symmetry requires no spectral decomposition. -/
+theorem trace_eq_zero_of_anticommute_involution
+    (A : E →ₗ[𝕜] E) (J : E ≃ₗᵢ[𝕜] E) (hJ : Function.Involutive J)
+    (hanti : ∀ x, A (J x) = -J (A x)) : LinearMap.trace 𝕜 E A = 0 := by
+  have hJJ : J.toLinearMap * J.toLinearMap = 1 := by ext x; exact hJ x
+  have hconj : J.toLinearMap * A * J.toLinearMap = -A := by
+    ext x
+    change J (A (J x)) = -A x
+    rw [hanti, map_neg, hJ]
+  have h := LinearMap.trace_mul_cycle 𝕜 J.toLinearMap A J.toLinearMap
+  rw [hconj, hJJ, one_mul, map_neg] at h
+  exact CharZero.neg_eq_self_iff.mp h
+
+/-- The weighted nuclear displacement of a self-adjoint unitary is an
+affine function of its trace, for `0 ≤ b ≤ a`. -/
+theorem nuclear_weighted_selfAdjoint_unitary [CompleteSpace E]
+    (a b : ℝ) (hb : 0 ≤ b) (hab : b ≤ a)
+    (U : unitary (E →L[𝕜] E)) (hU : IsSelfAdjoint (U : E →L[𝕜] E)) :
+    UnitarilyInvariantSeminorm.nuclear 𝕜 E E
+        ((a : 𝕜) • (U : E →L[𝕜] E).toLinearMap - (b : 𝕜) • LinearMap.id) =
+      a * Module.finrank 𝕜 E - b * RCLike.re (LinearMap.trace 𝕜 E (U : E →L[𝕜] E).toLinearMap) := by
+  let e := hU.isSymmetric.eigenvectorBasis rfl
+  let mu := hU.isSymmetric.eigenvalues rfl
+  have he (i : Fin (Module.finrank 𝕜 E)) :
+      (U : E →L[𝕜] E) (e i) = (mu i : 𝕜) • e i :=
+    hU.isSymmetric.apply_eigenvectorBasis rfl i
+  have hnorm (i : Fin (Module.finrank 𝕜 E)) : |mu i| = 1 := by
+    have h := ContinuousLinearMap.norm_map_of_mem_unitary U.property (e i)
+    rw [he, norm_smul, e.norm_eq_one, mul_one] at h
+    simpa only [RCLike.norm_ofReal] using h
+  let lam (i : Fin (Module.finrank 𝕜 E)) : 𝕜 := (a : 𝕜) * (mu i : 𝕜) - (b : 𝕜)
+  have hcost (i : Fin (Module.finrank 𝕜 E)) : ‖lam i‖ = a - b * mu i := by
+    rcases (abs_eq zero_le_one).mp (hnorm i) with hi | hi
+    · simp only [lam, hi, RCLike.ofReal_one, mul_one]
+      rw [← RCLike.ofReal_sub, RCLike.norm_ofReal, abs_of_nonneg (sub_nonneg.mpr hab)]
+    · have hlam : lam i = -((a + b : ℝ) : 𝕜) := by
+        simp only [lam, hi, RCLike.ofReal_neg, RCLike.ofReal_one, mul_neg, mul_one,
+          RCLike.ofReal_add]
+        ring
+      rw [hlam, norm_neg, RCLike.norm_ofReal,
+        abs_of_nonneg (add_nonneg (hb.trans hab) hb), hi]
+      ring
+  have hAe (i : Fin (Module.finrank 𝕜 E)) :
+      ((a : 𝕜) • (U : E →L[𝕜] E).toLinearMap -
+        (b : 𝕜) • (LinearMap.id : E →ₗ[𝕜] E)) (e i) =
+        lam i • e i := by
+    change (a : 𝕜) • (U : E →L[𝕜] E) (e i) - (b : 𝕜) • e i = _
+    rw [he, smul_smul, ← sub_smul]
+  have htrace : RCLike.re (LinearMap.trace 𝕜 E (U : E →L[𝕜] E).toLinearMap) = ∑ i, mu i := by
+    rw [LinearMap.trace_eq_sum_inner _ e, map_sum]
+    apply Finset.sum_congr rfl
+    intro i _
+    change RCLike.re ⟪e i, (U : E →L[𝕜] E) (e i)⟫_𝕜 = mu i
+    rw [he, inner_smul_right, e.inner_eq_one, mul_one, RCLike.ofReal_re]
+  rw [nuclear_eq_sum_norm_eigenvalues e _ lam hAe, htrace]
+  simp_rw [hcost]
+  rw [Finset.sum_sub_distrib, Finset.sum_const, Finset.mul_sum]
+  simp only [Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+  ring
+
 end TauCeti

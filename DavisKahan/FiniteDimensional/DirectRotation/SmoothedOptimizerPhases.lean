@@ -80,33 +80,14 @@ theorem minimizing_weighted_transport_eigenspace_phase_projection_complex
     change Z (C x) = C (Z x) at h
     rw [hx, map_smul] at h
     exact h.symm
-  let v : N →ₗᵢ[ℂ] N :=
-    { Z.toLinearMap.restrict hinv with norm_map' := fun x => Z.norm_map x }
-  let V : N ≃ₗᵢ[ℂ] N := v.toLinearIsometryEquiv rfl
-  have hV (x : N) : (V x : E) = Z x := rfl
-  have hVs (x : N) : (V.symm x : E) = star (Z : E →L[ℂ] E) x := by
-    apply Z.injective
-    rw [show star (Z : E →L[ℂ] E) = (Z.symm : E →L[ℂ] E) from Z.adjoint_eq_symm]
-    change Z (V.symm x : E) = Z (Z.symm (x : E))
-    calc
-      _ = (V (V.symm x) : E) := (hV (V.symm x)).symm
-      _ = (x : E) := by rw [V.apply_symm_apply]
-      _ = _ := (Z.apply_symm_apply x).symm
-  have hreal : (V : N →L[ℂ] N) + star (V : N →L[ℂ] N) = (2 * (beta : ℂ)) • 1 := by
-    ext x
-    change (V x : E) + (star (V : N →L[ℂ] N) x : E) = (2 * (beta : ℂ)) • (x : E)
-    rw [show star (V : N →L[ℂ] N) = (V.symm : N →L[ℂ] N) from V.adjoint_eq_symm]
-    change (V x : E) + (V.symm x : E) = (2 * (beta : ℂ)) • (x : E)
-    rw [hV, hVs]
-    have hx : C (x : E) = (c : ℂ) • (x : E) :=
-      Module.End.mem_eigenspace_iff.mp x.property
-    have h := minimizing_weighted_transport_relative_real_part_complex a b hb hab
-      K L hKL T hT hatt c hc x hx
-    change Z (x : E) + star (Z : E →L[ℂ] E) (x : E) =
-      (2 * ((min 1 beta : ℝ) : ℂ)) • (x : E) at h
-    rwa [min_eq_right hbeta1.le] at h
-  refine ⟨V, hV, ?_⟩
-  exact (unitary_add_star_eq_scalar_iff_unique_projection_complex
-    (Unitary.linearIsometryEquiv.symm V) beta s hcircle hs).mp hreal
+  apply exists_restriction_unique_phase_projection_complex Z N hinv beta s hcircle hs
+  intro x
+  have hx : C (x : E) = (c : ℂ) • (x : E) :=
+    Module.End.mem_eigenspace_iff.mp x.property
+  have h := minimizing_weighted_transport_relative_real_part_complex a b hb hab
+    K L hKL T hT hatt c hc x hx
+  change Z (x : E) + star (Z : E →L[ℂ] E) (x : E) =
+    (2 * ((min 1 beta : ℝ) : ℂ)) • (x : E) at h
+  rwa [min_eq_right hbeta1.le] at h
 
 end TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

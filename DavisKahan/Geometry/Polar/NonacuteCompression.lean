@@ -158,6 +158,44 @@ theorem nonacuteDirectRotation_skew_reflection
   rw [Submodule.reflection_reflection] at h
   exact eq_neg_of_add_eq_zero_left h.symm
 
+/-- The Hermitian part of the completed canonical rotation is the cosine
+operator, including on the right-angle defects. -/
+theorem nonacuteDirectRotation_add_star_eq_two_cosine
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (D : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    nonacuteDirectRotation U V D + star (nonacuteDirectRotation U V D) =
+      Proposition35.section3CosAngleOperator U V + Proposition35.section3CosAngleOperator U V := by
+  have hC := ((ContinuousLinearMap.nonneg_iff_isPositive).mp
+    (Proposition35.section3CosAngleOperator_nonneg U V)).isSelfAdjoint
+  have h := Proposition35.star_nonacuteDirectRotation_sub_cosine U V D
+  rw [star_sub, hC.star_eq, neg_sub] at h
+  exact (add_comm _ _).trans (sub_eq_sub_iff_add_eq_add.mp h)
+
+/-- Source reflection reverses the completed canonical rotation to its
+adjoint. This applies to real and complex Hilbert spaces. -/
+theorem nonacuteDirectRotation_reflection_eq_reflection_star
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (D : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) (x : H) :
+    nonacuteDirectRotation U V D (U.reflection x) =
+      U.reflection (star (nonacuteDirectRotation U V D) x) := by
+  let R := nonacuteDirectRotation U V D
+  let C := Proposition35.section3CosAngleOperator U V
+  have hCP : Commute C U.starProjection :=
+    Commute.cfc_real (Proposition35.section3AngleOperator_comm_projection U V) Real.cos
+  have hCJ (y : H) : C (U.reflection y) = U.reflection (C y) := by
+    rw [Submodule.reflection_apply, Submodule.reflection_apply, map_sub, map_nsmul,
+      show C (U.starProjection y) = U.starProjection (C y) from DFunLike.congr_fun hCP.eq y]
+  have h := nonacuteDirectRotation_skew_reflection U V D x
+  change R (U.reflection x) - C (U.reflection x) = -U.reflection (R x - C x) at h
+  rw [hCJ, map_sub, neg_sub] at h
+  have hsum := congrArg (fun A : H →L[𝕜] H => A x)
+    (nonacuteDirectRotation_add_star_eq_two_cosine U V D)
+  change R x + star R x = C x + C x at hsum
+  have hstar : star R x = C x + C x - R x := eq_sub_of_add_eq' hsum
+  change R (U.reflection x) = U.reflection (star R x)
+  rw [hstar, map_sub, map_add]
+  exact (sub_eq_iff_eq_add.mp h).trans (by abel)
+
 /-- The real and skew parts of the canonical rotation satisfy its
 Pythagorean identity in the operator algebra. -/
 theorem nonacuteDirectRotation_cosine_sq_sub_skew_sq

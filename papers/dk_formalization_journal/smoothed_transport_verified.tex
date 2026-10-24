@@ -320,6 +320,57 @@ with $R$ there. Finally, on $\ker C$ one has $R=iS$ and
 $ZS+SZ^*=0$. Thus $W=iSZ^*=-iZS=W^*$ on that space.
 \end{proof}
 
+\begin{proposition}[Matching multiplicity phases]
+\label{prop:smoothed-matching-phases}
+Let $W$ be a global minimizer and $Z=W^*R$. For an acute angle
+$\theta>c_\tau$, put $\beta=\eta^2\cos\theta$,
+$s=\sqrt{1-\beta^2}$, and
+$N_\pm=\ker(R-e^{\pm i\theta}I)$. Source reflection
+$J=2P-I$ restricts to a unitary $j:N_+\to N_-$.
+There is a unique orthogonal projection $E_\theta$ on $N_+$ such that
+\[
+ Z|_{N_+}=(\beta-is)I+2isE_\theta,\qquad
+ Z|_{N_-}=(\beta-is)I+2is\,jE_\theta j^*.
+\]
+In a paired rotation eigenbasis, either sign of each optimal scalar
+phase can be chosen independently to produce a global minimizer.
+\end{proposition}
+
+\begin{proof}
+The identity $R+R^*=2C$ places $N_\pm$ in the cosine eigenspace
+$C=\cos\theta\,I$. The preceding proposition makes them invariant
+under $Z$ and gives its scalar real part $\beta I$. Unitarity then
+forces its eigenvalues to be $\beta\pm is$, giving the unique
+orthogonal spectral projection because $s>0$.
+Source reflection reverses $R$ to $R^*$, hence exchanges $N_+$ and
+$N_-$. Both $W$ and $R$ transport $P$ to $Q$, so $Z$ commutes with
+$J$. Consequently its two restrictions are intertwined by $j$,
+which gives the displayed formula on $N_-$.
+For the independent sign choices, diagonalize $Z$ in paired rotation
+coordinates, using the same scalar phase on both members of each pair
+and one on every fixed direction. The resulting unitary commutes with
+$J$ and gives a feasible transporter. The scalar cost is even in phase;
+each pair therefore attains its minimum. The global lower bound proves
+optimality over all ambient transporters.
+\end{proof}
+
+\begin{corollary}[Complementary right-angle pairs]
+\label{cor:smoothed-complementary-right}
+Suppose $Q=I-P$ and $n=2r$. A unitary transporter $W$ is globally
+minimizing if and only if $W=W^*$. Its minimum cost is
+\[
+ \frac n2\bigl(\sqrt{\tau^2+4}-\tau\bigr).
+\]
+\end{corollary}
+
+\begin{proof}
+Here $C=0$, so necessity follows from spectral separation. Conversely,
+transport onto the orthogonal complement gives $WJ=-JW$, and therefore
+$\operatorname{tr}W=0$. A self-adjoint unitary has eigenvalues $1$ and
+$-1$, so their multiplicities are both $n/2$. This gives the displayed
+cost, which equals the global angle formula at $r$ right angles.
+\end{proof}
+
 \begin{corollary}[A quantitative certificate below the transition]
 \label{cor:smoothed-stability}
 Suppose every principal angle is at most $\theta_*$, where

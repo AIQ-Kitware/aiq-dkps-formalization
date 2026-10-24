@@ -12,6 +12,37 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Paired-phase and complementary-right update after `51f21951d`
+
+Every finite complex weighted optimizer now has a unique projection parameter
+on each **one-sided rotation multiplicity space**, and source reflection forces
+the reflected parameter on the opposite rotation space. This is compiled in
+`SmoothedOptimizerPairedPhases.lean` for `0<b<a`; the literal Charbonnier
+endpoint assumes `tau>0` and global optimality over all ambient transports.
+There is no distinct-angle mixing or free second multiplicity parameter.
+
+`SmoothedSignedOptimizers.lean` constructs attaining ambient transports for
+all independent phase-sign choices in a frame derived from the pair. In the
+complementary right-angle problem, `SmoothedRightDefect.lean` proves the full
+ambient iff criterion: a feasible transporter is minimizing exactly when
+self-adjoint. The weighted value is `a*dim(E)` and the Charbonnier value is
+`dim(E)*(sqrt(tau^2+4)-tau)/2`. These results are included in
+`prop:smoothed-matching-phases` and `cor:smoothed-complementary-right`.
+
+The mixed-angle arbitrary-projection converse, arbitrary right-defect product
+assembly, and the topology/dimension assertions still need Lean proofs.
+The complete optimizer family is therefore not yet claimed formally.
+The classical eigenvector pairing and affine trace computation receive no
+separate originality claim. A fresh search again located BLR Theorem 4.2
+(all Frobenius minimizers), with its different objective; it did not supply a
+weighted or Charbonnier classification. This is no exhaustive priority claim.
+The [author's BLR PDF](https://cklixx.people.wm.edu/vlad.pdf) supports this
+objective-level comparison; see the exact precedents below.
+
+The numerical repeated-angle and arbitrary-right-isometry checks recorded in
+`PAPER_CONTEXT.md` agree with the candidate converse families. They supply
+no independent proof of sufficiency or topology.
+
 ## Spectral-separation update after `15ae65745` (24 October 2026)
 
 The ambient equality certificate now proves that **every** finite complex
@@ -286,7 +317,7 @@ rows of the original 29-result Davis--Kahan source inventory.
 | SM-2 | Explicit globally minimizing complex unitary via clipped functional calculus of positive cosine operator | **Formalized**: `SmoothedExplicitOptimizer.lean` | A concrete constructive strengthening of SM-1; may be an elementary companion to SM-1, but substantial for applications |
 | SM-3 | Quadratic growth from optimum below strict angle cutoff, with explicit constant and Frobenius distance for **every admissible complex transporter** | **Formalized**: `SmoothedSubspaceStability.lean` | **Distinct and credible mathematical addition** if not implied by older error-bound/strong-convexity theorem |
 | SM-4 | Global convex-relaxation tightness when commuting unitary factor is relaxed to commuting contraction (weighted nuclear cost) | **Formalized for the stated supplied structural class**: `SmoothedCommutantOptimization.lean`; instantiated in all-pairs argument | Strong proof mechanism; present as supporting theorem, not a generic statement for all convex relaxations |
-| SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Conventional drafts in `smoothed_transport.tex`, `spectral_penalty_transport.tex` | **Not yet formalized**. For classification distinguish strict subcritical, threshold, supercritical multiplicities, and right-angle defects |
+| SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Partial compiled classification in `SmoothedOptimizerRigidity`, `SmoothedOptimizerNoMixing`, `SmoothedOptimizerPairedPhases`, `SmoothedSignedOptimizers`, `SmoothedRightDefect`; full conventional drafts in `smoothed_transport.tex`, `spectral_penalty_transport.tex` | Necessary matching phase projections, independent signed attainment, and the complete complementary-right iff criterion are compiled. Arbitrary-projection converse and mixed-defect assembly remain; broad-penalty/topology claims are conventional |
 | R-1 | Exact real R4 rank-two minimum for *every continuous nondecreasing spectral penalty*, including separate determinant classes | Conventional proof draft in `real_four_dimensional_transport.tex` | Strong exact finite-dimensional problem; old matrix optimization warns against presenting mere nonminimality as new. **Not certified** |
 | R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | Conventional proof draft `real_matching_transport.tex`, with compiled positive-gradient block decomposition in `RealBlockDescent.lean` and related modules | **Potentially strongest structural new theorem**, but exceptional-gradient assembly and global matching bound are **not compiled** |
 | R-3 | For Schatten `1<p<2`, Charbonnier, and nuclear limits, matching reduces to minimum of **two sorted adjacent-pair sums** | Conventional derivation in `real_matching_transport.tex`; numerical checks corroborate but are not proofs | Would yield efficient exact algorithms and optimality thresholds; **submodularity and final reduction need independent proof review** |

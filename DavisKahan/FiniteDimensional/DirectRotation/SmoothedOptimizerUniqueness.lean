@@ -29,30 +29,6 @@ private theorem circlePhase_neg_mul (t : ℝ) : circlePhase 1 (-t) * circlePhase
   rw [show ((-t : ℝ) : ℂ) * Complex.I + (t : ℂ) * Complex.I = 0 by push_cast; ring]
   exact Complex.exp_zero
 
-private theorem weightedPhaseCost_neg (a b theta delta : ℝ) :
-    weightedPhaseCost a b theta (-delta) = weightedPhaseCost a b theta delta := by
-  have hphase : circlePhase b (-delta) = conj (circlePhase b delta) := by
-    have hexp : ((-delta : ℝ) : ℂ) * Complex.I = conj ((delta : ℂ) * Complex.I) := by
-      simp only [map_mul, Complex.conj_ofReal, Complex.conj_I, Complex.ofReal_neg]
-      ring
-    unfold circlePhase
-    rw [map_mul, Complex.conj_ofReal, ← Complex.exp_conj, hexp]
-  have hp : (a * Real.cos theta : ℂ) + (a * Real.sin theta) * Complex.I -
-      circlePhase b (-delta) =
-      conj ((a * Real.cos theta : ℂ) - (a * Real.sin theta) * Complex.I - circlePhase b delta) := by
-    rw [hphase]
-    simp only [map_sub, map_mul, Complex.conj_ofReal, Complex.conj_I]
-    ring
-  have hm : (a * Real.cos theta : ℂ) - (a * Real.sin theta) * Complex.I -
-      circlePhase b (-delta) =
-      conj ((a * Real.cos theta : ℂ) + (a * Real.sin theta) * Complex.I - circlePhase b delta) := by
-    rw [hphase]
-    simp only [map_add, map_sub, map_mul, Complex.conj_ofReal, Complex.conj_I]
-    ring
-  unfold weightedPhaseCost twoFocusCost
-  simp only [Complex.ofReal_mul]
-  rw [hp, hm, Complex.norm_conj, Complex.norm_conj, add_comm]
-
 /-- The optimizer with the opposite sign of every nonnegative scalar phase. -/
 def oppositeOptimalSmoothedTransport (tau : ℝ) (U V : Submodule ℂ E)
     (hUV : Module.finrank ℂ U = Module.finrank ℂ V) : E ≃ₗᵢ[ℂ] E :=

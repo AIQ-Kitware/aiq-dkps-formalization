@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import TauCeti.Analysis.InnerProductSpace.Projection.Block
 public import TauCeti.Analysis.InnerProductSpace.PointSpectrum
 
@@ -138,5 +139,87 @@ theorem commute_square_of_reflection_conjugate_eq_neg
   have hcomm := commute_square_of_anticommute_isometry K.reflection G.toLinearMap hanti
   ext x
   exact congrArg (fun A : E →ₗ[𝕜] E => A x) hcomm.eq
+
+section Unitary
+
+variable [CompleteSpace E]
+
+/-- The adjoint of a unitary acts on a unit-circle eigenvector by the
+conjugate scalar. This does not require a spectral basis or finite dimension. -/
+theorem unitary_star_apply_of_apply_eq_smul
+    (U : unitary (E →L[𝕜] E)) (mu : 𝕜) (hmu : ‖mu‖ = 1)
+    (x : E) (hx : (U : E →L[𝕜] E) x = mu • x) :
+    star (U : E →L[𝕜] E) x = star mu • x := by
+  have hmod : star mu * mu = 1 := by
+    rw [RCLike.star_def, RCLike.conj_mul, hmu]
+    norm_num
+  apply (Unitary.linearIsometryEquiv U).injective
+  change (U : E →L[𝕜] E) (star (U : E →L[𝕜] E) x) =
+    (U : E →L[𝕜] E) (star mu • x)
+  rw [map_smul, hx, smul_smul, hmod, one_smul]
+  exact congrArg (fun T : E →L[𝕜] E => T x) (Unitary.mul_star_self_of_mem U.property)
+
+/-- The real part of a unitary acts on a unit-circle eigenvector by the
+real part of its eigenvalue, without a finite-dimensional hypothesis. -/
+theorem unitary_real_part_apply_of_apply_eq_smul
+    (U : unitary (E →L[𝕜] E)) (C : E →L[𝕜] E)
+    (hsum : (U : E →L[𝕜] E) + star (U : E →L[𝕜] E) = C + C)
+    (mu : 𝕜) (hmu : ‖mu‖ = 1) (x : E)
+    (hx : (U : E →L[𝕜] E) x = mu • x) :
+    C x = (RCLike.re mu : 𝕜) • x := by
+  apply smul_right_injective E (by norm_num : (2 : 𝕜) ≠ 0)
+  change (2 : 𝕜) • C x = (2 : 𝕜) • ((RCLike.re mu : 𝕜) • x)
+  calc
+    _ = C x + C x := two_smul 𝕜 (C x)
+    _ = (U : E →L[𝕜] E) x + star (U : E →L[𝕜] E) x :=
+      (congrArg (fun A : E →L[𝕜] E => A x) hsum).symm
+    _ = (mu + star mu) • x := by
+      rw [hx, unitary_star_apply_of_apply_eq_smul U mu hmu x hx, add_smul]
+    _ = _ := by rw [RCLike.star_def, RCLike.add_conj, smul_smul]
+
+/-- An isometric involution reversing a unitary exchanges its conjugate
+eigenspaces. -/
+theorem map_unitary_eigenspace_involution_eq
+    (U : unitary (E →L[𝕜] E)) (J : E ≃ₗᵢ[𝕜] E) (hJ : Function.Involutive J)
+    (hrev : ∀ x, (U : E →L[𝕜] E) (J x) = J (star (U : E →L[𝕜] E) x))
+    (mu : 𝕜) (hmu : ‖mu‖ = 1) :
+    (Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap mu).map J.toLinearMap =
+      Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap (star mu) := by
+  have hmap (lam : 𝕜) (hlam : ‖lam‖ = 1) (x : E)
+      (hx : x ∈ Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap lam) :
+      J x ∈ Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap (star lam) := by
+    rw [Module.End.mem_eigenspace_iff] at hx ⊢
+    change (U : E →L[𝕜] E) (J x) = star lam • J x
+    rw [hrev, unitary_star_apply_of_apply_eq_smul U lam hlam x hx, map_smul]
+  ext y
+  constructor
+  · rintro ⟨x, hx, rfl⟩
+    exact hmap mu hmu x hx
+  · intro hy
+    refine ⟨J y, ?_, hJ y⟩
+    change J y ∈ Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap mu
+    simpa only [star_star] using hmap (star mu) (by simpa only [norm_star] using hmu) y hy
+
+/-- The actual pairing of conjugate unitary eigenspaces is the restriction
+of the reversing involution. -/
+def unitaryEigenspaceStarEquivOfInvolution
+    (U : unitary (E →L[𝕜] E)) (J : E ≃ₗᵢ[𝕜] E) (hJ : Function.Involutive J)
+    (hrev : ∀ x, (U : E →L[𝕜] E) (J x) = J (star (U : E →L[𝕜] E) x))
+    (mu : 𝕜) (hmu : ‖mu‖ = 1) :
+    Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap mu ≃ₗᵢ[𝕜]
+      Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap (star mu) :=
+  (LinearIsometryEquiv.submoduleMap
+    (Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap mu) J).trans
+      (LinearIsometryEquiv.ofEq _ _ (map_unitary_eigenspace_involution_eq U J hJ hrev mu hmu))
+
+@[simp]
+theorem unitaryEigenspaceStarEquivOfInvolution_apply
+    (U : unitary (E →L[𝕜] E)) (J : E ≃ₗᵢ[𝕜] E) (hJ : Function.Involutive J)
+    (hrev : ∀ x, (U : E →L[𝕜] E) (J x) = J (star (U : E →L[𝕜] E) x))
+    (mu : 𝕜) (hmu : ‖mu‖ = 1)
+    (x : Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap mu) :
+    (unitaryEigenspaceStarEquivOfInvolution U J hJ hrev mu hmu x : E) = J x := by rfl
+
+end Unitary
 
 end TauCeti

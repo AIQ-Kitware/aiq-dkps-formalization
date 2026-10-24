@@ -47,4 +47,18 @@ theorem map_eq_iff_intertwines_reflection
       apply W.injective
       rw [h, W.apply_symm_apply, reflection_mem_subspace_eq_self hy]
 
+/-- The relative unitary of two transports of the same subspaces commutes
+with the source reflection. No dimension or completeness assumption is needed. -/
+theorem relative_transport_commutes_reflection
+    (U : Submodule 𝕜 E) (V : Submodule 𝕜 F)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (R T : E ≃ₗᵢ[𝕜] F) (hR : U.map R.toLinearMap = V) (hT : U.map T.toLinearMap = V)
+    (x : E) :
+    (R.trans T.symm) (U.reflection x) = U.reflection ((R.trans T.symm) x) := by
+  have hRref := (U.map_eq_iff_intertwines_reflection V R).mp hR
+  have hTref := (U.map_eq_iff_intertwines_reflection V T).mp hT
+  apply T.injective
+  change T (T.symm (R (U.reflection x))) = T (U.reflection (T.symm (R x)))
+  rw [T.apply_symm_apply, hTref, T.apply_symm_apply, hRref]
+
 end Submodule

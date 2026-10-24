@@ -119,6 +119,41 @@ theorem unitary_add_star_eq_scalar_iff_unique_projection_complex
   · rintro ⟨P, hP, _⟩
     exact (unitary_add_star_eq_scalar_iff_projection_complex U c s hcircle).mpr ⟨P, hP⟩
 
+/-- A finite invariant subspace with prescribed scalar real part has a
+unique two-phase orthogonal projection. The restricted unitary acts by the
+original ambient unitary, including on a zero-dimensional subspace. -/
+theorem exists_restriction_unique_phase_projection_complex
+    (U : E ≃ₗᵢ[ℂ] E) (N : Submodule ℂ E)
+    (hinv : ∀ x ∈ N, U x ∈ N) (c s : ℝ)
+    (hcircle : c ^ 2 + s ^ 2 = 1) (hs : s ≠ 0)
+    (hreal : ∀ x : N, U (x : E) + star (U : E →L[ℂ] E) (x : E) =
+      (2 * (c : ℂ)) • (x : E)) :
+    ∃ V : N ≃ₗᵢ[ℂ] N, (∀ x : N, (V x : E) = U x) ∧
+      ∃! P : N →L[ℂ] N, IsStarProjection P ∧
+        (V : N →L[ℂ] N) = ((c : ℂ) - (s : ℂ) * Complex.I) • 1 +
+          (2 * (s : ℂ) * Complex.I) • P := by
+  let v : N →ₗᵢ[ℂ] N :=
+    { U.toLinearMap.restrict hinv with norm_map' := fun x => U.norm_map x }
+  let V : N ≃ₗᵢ[ℂ] N := v.toLinearIsometryEquiv rfl
+  have hV (x : N) : (V x : E) = U x := rfl
+  have hVs (x : N) : (V.symm x : E) = star (U : E →L[ℂ] E) x := by
+    apply U.injective
+    rw [show star (U : E →L[ℂ] E) = (U.symm : E →L[ℂ] E) from U.adjoint_eq_symm]
+    change U (V.symm x : E) = U (U.symm (x : E))
+    calc
+      _ = (V (V.symm x) : E) := (hV (V.symm x)).symm
+      _ = (x : E) := by rw [V.apply_symm_apply]
+      _ = _ := (U.apply_symm_apply x).symm
+  have hsum : (V : N →L[ℂ] N) + star (V : N →L[ℂ] N) = (2 * (c : ℂ)) • 1 := by
+    ext x
+    change (V x : E) + (star (V : N →L[ℂ] N) x : E) = (2 * (c : ℂ)) • (x : E)
+    rw [show star (V : N →L[ℂ] N) = (V.symm : N →L[ℂ] N) from V.adjoint_eq_symm]
+    change (V x : E) + (V.symm x : E) = (2 * (c : ℂ)) • (x : E)
+    rw [hV, hVs]
+    exact hreal x
+  exact ⟨V, hV, (unitary_add_star_eq_scalar_iff_unique_projection_complex
+    (Unitary.linearIsometryEquiv.symm V) c s hcircle hs).mp hsum⟩
+
 /-- Equivalently, the choices are self-adjoint unitary phase factors.
 At a vanishing sine the representation collapses to a single scalar
 operator; no uniqueness of the unused involution parameter is asserted. -/

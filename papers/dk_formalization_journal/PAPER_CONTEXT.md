@@ -1,8 +1,8 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** the smoothed spectral-separation extension based on `15ae65745`,
-registered in the first section below.
+**Current research source:** the paired-phase and complementary-right classification extension
+based on `51f21951d`, registered in the first section below.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -16,6 +16,91 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Paired phases and complementary right-angle classification after `51f21951d`
+
+The new finite complex results use the same actual transport constraint and
+weighted nuclear cost, with `0<b<a`. They advance the classification of
+**every** optimizer, rather than adding a selected block hypothesis.
+
+- `SmoothedOptimizerPairedPhases.minimizing_weighted_transport_paired_phase_projection_complex`
+  takes an arbitrary ambient attaining transporter `T`. For a unit-circle
+  rotation eigenvalue `mu` with `0<Re(mu)<b/a`, it constructs the actual
+  restrictions of `Z=T*R` to `N=ker(R-mu I)` and `M=ker(R-conj(mu) I)`.
+  Source reflection restricts to `j:N≃M`. With `beta=a*Re(mu)/b` and
+  `s=sqrt(1-beta^2)>0`, there is a **unique** orthogonal projection `E` on
+  `N` such that the restrictions are `(beta-i*s)I+2i*s E` and
+  `(beta-i*s)I+2i*s j E j*`. Thus the two multiplicity parameters agree.
+  `smoothed_minimizer_paired_phase_projection_complex` supplies the literal
+  Charbonnier endpoint for `tau>0` and every globally minimizing ambient
+  transporter. Proposition `prop:smoothed-matching-phases` states this result.
+- `SmoothedSignedOptimizers.exists_independent_signed_weighted_transport_minimizers_complex`
+  derives one paired rotation frame from **arbitrary** equal-rank subspaces.
+  For **every** independent Boolean choice of optimal phase signs it constructs
+  an attaining ambient transporter and proves the lower bound against all
+  ambient competitors. Repeated and right angles are allowed, and fixed
+  directions are fixed. This proves an attaining signed family; a fixed frame
+  does not exhaust the possible mixing within equal-angle multiplicities.
+- `SmoothedRightDefect.minimizing_weighted_transport_orthogonalComplement_iff_selfAdjoint_complex`
+  proves a complete criterion when the target is the orthogonal complement:
+  a feasible ambient transporter attains the weighted minimum **iff** it is
+  self-adjoint. `smoothed_transport_orthogonalComplement_isMin_iff_selfAdjoint_complex`
+  expresses the literal Charbonnier criterion with a quantifier over all
+  competitors. It includes dimension zero and arbitrary multiplicity, with
+  equal complementary ranks as the feasibility hypothesis. The weighted value
+  is `a*dim(E)`; the smoothed value is
+  `dim(E)*(sqrt(tau^2+4)-tau)/2`. This is Corollary
+  `cor:smoothed-complementary-right`. It does not yet assemble arbitrary right
+  defect choices with other angles in a mixed ambient pair.
+
+The donor lemmas express classical unitary geometry and trace algebra:
+`AnticommutingInvolution` now pairs conjugate unitary eigenspaces under an
+actual reversing involution, without finite dimension. `Projection/UnitaryTransport`
+proves that relative transports commute with source reflection.
+`UnitaryScalarRealPart.exists_restriction_unique_phase_projection_complex`
+constructs a finite invariant restriction and its unique phase projection;
+the earlier full-cosine restriction consumes it. `NuclearTrace` computes
+weighted self-adjoint-unitary costs from their traces. No separate priority
+claim is made for these ingredients.
+
+### Remaining theorem and a direct route
+
+The necessity on each acute supercritical multiplicity space is now compiled.
+The next classification theorem is the **arbitrary-projection converse**:
+for any orthogonal projection on each positive rotation multiplicity space,
+construct its reflected copy and an ambient attaining transporter. The signed
+construction proves this in a diagonal frame. Its proof should be made
+available for any admissible paired frame and applied to frames adapted to
+the chosen projections, or replaced by direct positivity of the dual residual.
+On an active angle this residual has diagonal part `a*sin(theta) I` and an
+off-diagonal part of norm `b*sqrt(1-(a*cos(theta)/b)^2)`; the squared difference
+is `a^2-b^2>0`. Both routes still need the global assembly, including fixed
+and right summands. The complementary-right iff theorem handles the full
+right-only ambient problem; lifting it to an arbitrary reducing `ker C` and
+proving the product assembly remain. No Grassmannian topology or dimension
+theorem is registered as Lean-certified.
+
+Numerical diagnostics (NumPy, seed 342, `tau=1/4`, multiplicity three) checked
+a random rank-two phase projection at 80 degrees and an arbitrary unitary
+right-defect identification. Their Charbonnier costs were respectively
+`5.193436267739522` and `5.296693311223912`, agreeing with the exact scalar
+formulas within `2e-15`; unitary/transport residuals were below `3e-15`.
+These are diagnostics, not proof evidence. The earlier opposite-source-phase
+counterexample remains valid and explains the need for matching parameters.
+
+Validation: after `lake exe cache get`, the focused signed-family and right-defect
+modules compiled, followed by `lake build DavisKahan.All ForTauCeti`
+(`/tmp/smoothed-paired-full-build.log`, 10,303 jobs). The journal typeset with
+BibTeX and resolved references in `/tmp/dk-paired-classification-paper/`;
+font expansion was disabled only at the command line for the local TeX
+installation. No dependency, source-result denominator, Challenge endpoint,
+or unrelated untracked file was changed.
+
+The Schatten all-minimizer, reflecting-kernel local-to-global, unrestricted
+real matching, and ideal-theoretic frontiers remain as recorded below. Fresh
+primary-source search again identified BLR Theorem 4.2 (Frobenius minimizers),
+not a theorem establishing this weighted classification. Historical priority
+is provisional; verification of these new statements is independent of it.
 
 ## Smoothed spectral separation after `15ae65745` (24 October 2026)
 
@@ -64,9 +149,11 @@ with the grading. It assumes neither finite dimension nor closed range.
 `BasisDiagonal.lean` supplies generic positivity and adjoint eigenbasis lemmas;
 these classical foundations carry no independent priority claim.
 
-### Exact remaining classification step and a failed shortcut
+### Previous classification boundary and a failed shortcut
 
-On an actual positive **rotation** phase space
+The paired-phase update above closes the matching-halves step below; the
+arbitrary-projection and mixed-defect converses remain open. At this earlier
+frontier, on an actual positive **rotation** phase space
 `N_plus=ker(C-cI) ∩ ker(R-exp(i*acos(c))I)`, the new commutation theorem
 makes `Z` invariant. Transfer the unique-projection description to this
 multiplicity space. Source reflection identifies it with the opposite
