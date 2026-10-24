@@ -252,6 +252,18 @@ Hermitian extension by realification. Formal identification with the
 actual second derivative, and the resulting overlap exclusion, remain
 unfinished. No novelty is claimed for the spectral Hessian theorem.
 
+`TwoPointDerivative.lean` supplies a more focused compiled route to the
+needed Hessian. If a symbol takes the same value at two distinct spectral
+points, two applications of the accepted `dslope` factor its difference
+from that value into a quadratic polynomial and a continuous remainder.
+The polynomial vanishes at the base operator, so only its derivative and
+continuity of the remaining functional calculus are needed. The resulting
+derivative is the sum of the two diagonal compressions, weighted by the
+scalar complex derivatives. This is classical mathematics with no
+finite-dimensional hypothesis. Applying it to a complex extension of the
+actual Schatten phase symbol is the next formal step; no completed
+Schatten second-variation claim follows from this generic API alone.
+
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical
 rotation times `exp(i delta(theta) S)`, with `S` any self-adjoint unitary.
