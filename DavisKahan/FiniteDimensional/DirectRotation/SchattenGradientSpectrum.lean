@@ -135,6 +135,68 @@ theorem phaseAmplitude_le_criticalAngle (p t : ℝ) (hp1 : 1 < p) (hp2 : p < 2)
   · exact (phaseAmplitude_strictAntiOn p hp1 hp2).antitoneOn
       ⟨le_rfl, by linarith [hcrit.2, Real.pi_pos]⟩ ⟨hle, ht.2⟩ hle
 
+/-- The amplitude has a unique maximizer on the full positive phase range. -/
+theorem phaseAmplitude_eq_criticalAngle_iff (p t : ℝ) (hp1 : 1 < p) (hp2 : p < 2)
+    (ht : t ∈ Icc 0 Real.pi) :
+    phaseAmplitude p t = phaseAmplitude p (criticalAngle p) ↔ t = criticalAngle p := by
+  have hc := criticalAngle_mem p hp1 hp2
+  constructor
+  · intro heq
+    by_contra hne
+    rcases lt_or_gt_of_ne hne with hlt | hgt
+    · have h := phaseAmplitude_strictMonoOn p hp1 hp2
+        ⟨ht.1, hlt.le⟩ ⟨hc.1.le, le_rfl⟩ hlt
+      exact h.ne heq
+    · have h := phaseAmplitude_strictAntiOn p hp1 hp2
+        ⟨le_rfl, by linarith [hc.2, Real.pi_pos]⟩ ⟨hgt.le, ht.2⟩ hgt
+      exact h.ne heq
+  · rintro rfl
+    rfl
+
+/-- At the maximal positive gradient level the two branches coincide
+at the critical angle; there is no second allowed principal phase. -/
+theorem schattenPhaseDerivative_max_level_set (p t : ℝ)
+    (hp1 : 1 < p) (hp2 : p < 2) (ht : |t| ≤ Real.pi) :
+    schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I)) =
+        p * phaseAmplitude p (criticalAngle p) ↔ t = criticalAngle p := by
+  have hc := criticalAngle_mem p hp1 hp2
+  have hp0 : 0 < p := by linarith
+  have hmax : 0 < phaseAmplitude p (criticalAngle p) := by
+    have h := phaseAmplitude_strictMonoOn p hp1 hp2
+      ⟨le_rfl, hc.1.le⟩ ⟨hc.1.le, le_rfl⟩ hc.1
+    rwa [phaseAmplitude_zero p hp1] at h
+  constructor
+  · intro hlevel
+    have htpos := principal_phase_pos_of_schattenPhaseDerivative_pos p t hp0 ht
+      (by rw [hlevel]; exact mul_pos hp0 hmax)
+    rw [schattenPhaseDerivative_exp_eq_amplitude p t htpos] at hlevel
+    exact (phaseAmplitude_eq_criticalAngle_iff p t hp1 hp2
+      ⟨htpos.1.le, htpos.2.le⟩).1 (mul_left_cancel₀ hp0.ne' hlevel)
+  · rintro rfl
+    exact schattenPhaseDerivative_exp_eq_amplitude p (criticalAngle p)
+      ⟨hc.1, by linarith [hc.2, Real.pi_pos]⟩
+
+/-- The same two positive roots determine the negative gradient level by
+changing their signs. This gives a common pair of roots for opposite blocks. -/
+theorem schattenPhaseDerivative_signed_level_sets (p g : ℝ)
+    (hp1 : 1 < p) (hp2 : p < 2) (hg0 : 0 < g)
+    (hgm : g < p * phaseAmplitude p (criticalAngle p)) :
+    ∃ a ∈ Ioo 0 (criticalAngle p), ∃ b ∈ Ioo (criticalAngle p) Real.pi,
+      (∀ t : ℝ, |t| ≤ Real.pi →
+        (schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I)) = g ↔
+          t = a ∨ t = b)) ∧
+      (∀ t : ℝ, |t| ≤ Real.pi →
+        (schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I)) = -g ↔
+          t = -a ∨ t = -b)) := by
+  obtain ⟨a, ha, b, hb, hlevel⟩ := schattenPhaseDerivative_level_set p g hp1 hp2 hg0 hgm
+  refine ⟨a, ha, b, hb, hlevel, ?_⟩
+  intro t ht
+  calc
+    _ ↔ schattenPhaseDerivative p (Complex.exp (((-t : ℝ) : ℂ) * Complex.I)) = g := by
+      rw [schattenPhaseDerivative_exp_neg, neg_eq_iff_eq_neg]
+    _ ↔ -t = a ∨ -t = b := hlevel (-t) (by simpa only [abs_neg] using ht)
+    _ ↔ t = -a ∨ t = -b := by simp only [neg_eq_iff_eq_neg]
+
 /-- On a positive submaximal gradient eigenspace, all principal eigenphases
 of the unitary lie in the same pair of scalar roots. The unitary is arbitrary;
 the stationarity identity will subsequently pair its opposite gradient levels. -/

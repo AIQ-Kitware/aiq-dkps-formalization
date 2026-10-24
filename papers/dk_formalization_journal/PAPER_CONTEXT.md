@@ -220,9 +220,8 @@ in the full principal-phase range, and that unitary eigenvectors at that
 gradient level have one of these two phases. The donor variation module also
 proves that the zero symbol on the unit circle occurs precisely at `1,-1`,
 and a unitary with identically zero phase gradient is self-adjoint. These
-compiled results supply the spectral ingredients; restriction to the paired
-gradient eigenspaces and the exclusion of mixed large-phase spaces remain
-separate steps.
+compiled results supply the scalar spectral ingredients. Their operator
+restrictions and the current overlap-exclusion boundary are registered below.
 
 `SchattenGradientPairing.lean` now constructs the isometric equivalence
 between opposite gradient eigenspaces by restricting the source reflection.
@@ -231,8 +230,27 @@ equality of their finite multiplicities. These classical symmetry facts
 require no diagonalization of the original transport constraint. The
 direct-rotation aggregate builds the new modules, and their axiom audit
 uses only the standard `propext`, `Classical.choice`, and `Quot.sound`.
-Restriction of the unitary to the paired spaces and exclusion of mixed
-large-phase spaces are not yet formalized.
+The exclusion of mixed large-phase spaces is not yet formalized.
+
+The restrictions are now constructed in `SchattenGradientBlocks.lean`:
+on opposite positive submaximal levels they have a common pair of opposite
+phase roots and are affine in star projections. `TwoPointSpectrum.lean`
+supplies the classical C-star-algebra projection representation without a
+finite-dimensional hypothesis. The gradient square is also proved to
+commute with both source and target projections. The maximal positive
+scalar level has only the critical phase; its operator restriction is not
+yet packaged with the submaximal cases.
+
+The no-mixing argument has been simplified to the basis-independent
+direction `X=AB+BA`. The projection-compression identities and the strict
+sign of the trace coefficient compile in `ProjectionOverlap.lean` and
+`SchattenOverlapDirection.lean`. The conventional draft now states the
+two-phase second-variation lemma explicitly and derives it from the
+classical spectral Hessian of Lewis--Sendov (2001, Theorem 3.3). Their
+printed theorem is for real symmetric matrices; the draft explains the
+Hermitian extension by realification. Formal identification with the
+actual second derivative, and the resulting overlap exclusion, remain
+unfinished. No novelty is claimed for the spectral Hessian theorem.
 
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical

@@ -218,6 +218,49 @@ coincide. The signs of $\phi_p'$ distinguish the positive and negative
 phase spaces and give \cref{eq:schatten-critical-two-roots}.
 \end{proof}
 
+\begin{lemma}[Second variation on a two-phase block]
+\label{lem:schatten-two-phase-hessian}
+Let $\alpha,\beta\in(-\pi,\pi)\setminus\{0\}$ be distinct and satisfy
+$\phi_p'(\alpha)=\phi_p'(\beta)$. For an orthogonal projection $A$, put
+$V=e^{i\alpha}(I-A)+e^{i\beta}A$. If $X=X^*$, then
+\begin{align}
+ \left.\frac{d^2}{dt^2}\|I-V\exp(itX)\|_p^p\right|_{t=0}
+  &=\phi_p''(\alpha)\|(I-A)X(I-A)\|_2^2
+    +\phi_p''(\beta)\|AXA\|_2^2.
+ \label{eq:schatten-two-phase-hessian}
+\end{align}
+Here $\|\cdot\|_2$ is the Frobenius norm.
+\end{lemma}
+
+\begin{proof}
+Choose a smooth Hermitian logarithm $L(t)$ of $V\exp(itX)$ near zero,
+with $L(0)=\alpha(I-A)+\beta A$. The spectral trace Hessian formula
+\citep[Theorem~3.3]{lewis2001twice} applies to the sum of the scalar
+function $\phi_p$ near these two nonzero phases. Its Hermitian version
+follows from the real symmetric version by realification, which doubles
+both spectral traces. Since the two scalar first derivatives agree, the
+cross terms between distinct eigenspaces vanish. The second derivative
+along $L(t)$ is therefore
+\[
+ \phi_p''(\alpha)\|(I-A)L'(0)(I-A)\|_2^2
+ +\phi_p''(\beta)\|AL'(0)A\|_2^2
+ +\phi_p'(\alpha)\operatorname{tr}L''(0).
+\]
+Differentiate $\exp(iL(t))=V\exp(itX)$ and compress to its initial
+eigenspaces. The exponential power series gives
+\[
+ AL'(0)A=AXA,\qquad
+ (I-A)L'(0)(I-A)=(I-A)X(I-A).
+\]
+Finally,
+\[
+ \exp(i\operatorname{tr}L(t))=\det(V)\exp(it\operatorname{tr}X).
+\]
+Continuity fixes the integer ambiguity, so $\operatorname{tr}L(t)$ is
+affine near zero and its second derivative vanishes. This proves the
+formula.
+\end{proof}
+
 \begin{proposition}[Exclusion of overlapping large-phase spaces]
 \label{prop:schatten-no-mixing}
 At a local minimum, the two large-phase projections in
@@ -225,55 +268,34 @@ At a local minimum, the two large-phase projections in
 \end{proposition}
 
 \begin{proof}
-Suppose $AB\ne0$. The decomposition of a pair of orthogonal projections
-\citep{halmos1969two} gives either a common range vector, or a common
-two-dimensional reducing space on which
-\[
- A=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
- B=\begin{pmatrix}c^2&cs\\cs&s^2\end{pmatrix},
- \qquad c=\cos\gamma>0,\quad s=\sin\gamma>0,
- \quad 0<\gamma<\pi/2.
-\]
-On that space set
+Suppose $AB\ne0$ and set
 \begin{equation}
- X=\begin{pmatrix}2c&s\\s&0\end{pmatrix}.
+ X=AB+BA.
  \label{eq:schatten-mixing-direction}
 \end{equation}
-The compressions of $X$ to both small-phase spaces vanish:
+This operator is Hermitian, and idempotence gives
 \[
- (I-A)X(I-A)=(I-B)X(I-B)=0,
- \qquad AXA=2cA,\quad BXB=2cB.
+ (I-A)X(I-A)=(I-B)X(I-B)=0,\qquad
+ AXA=2ABA,\quad BXB=2BAB.
 \]
-Extend $X$ by zero and use the same $X$ on $H_g$ and $H_{-g}$. The
-resulting Hermitian $H=\operatorname{diag}(X,X)$ commutes with $J$, so
-$W\exp(itH)$ is a feasible curve.
+Use the same $X$ on $H_g$ and $H_{-g}$ and zero on the remaining
+blocks. The resulting Hermitian $H=\operatorname{diag}(X,X)$ commutes
+with $J$, so $W\exp(itH)$ is feasible.
 
-The second variation on this four-dimensional block can be computed from
-simple eigenphases. For a two-dimensional unitary with distinct phases
-$\alpha,\beta$, the phase derivatives under right multiplication by
-$\exp(itX)$ are the diagonal entries of $X$ in the eigenbasis. The sum
-of the phases is affine in $t$, because its exponential is the
-determinant. If $\phi_p'(\alpha)=\phi_p'(\beta)$, their second-derivative
-terms in the cost therefore cancel. The remaining terms are
-\[
- \phi_p''(\alpha)X_{\alpha\alpha}^2+
- \phi_p''(\beta)X_{\beta\beta}^2.
-\]
-Apply this to $W_+$ and $W_-$ separately. The small-phase diagonal
-entries are zero and the large-phase entries are $2c$. Hence
+Apply \cref{lem:schatten-two-phase-hessian} to $W_+$ and $W_-$.
+Their phase derivatives are constant on each block, and $\phi_p''$ is
+even. The complementary compressions vanish, leaving
 \begin{equation}
  \left.\frac{d^2}{dt^2}\|I-W\exp(itH)\|_p^p\right|_{t=0}
-                    =8c^2 f_p''(b)<0,
+     =4f_p''(b)\bigl(\|ABA\|_2^2+\|BAB\|_2^2\bigr)<0.
  \label{eq:schatten-mixing-negative-curvature}
 \end{equation}
-where strict negativity follows from $b>\vartheta_p$ and
-\cref{eq:schatten-amplitude-derivative}. This contradicts minimality.
-All other spectral blocks stay fixed along the curve, so their possible
-zero displacement singular values do not enter this second derivative.
-
-If $A$ and $B$ instead have a common range vector, take $X$ to be its
-rank-one projection. The same calculation gives $2f_p''(b)<0$.
-Both possibilities are excluded, proving $AB=0$.
+Indeed, $f_p''(b)=p a_p'(b)<0$ because $b>\vartheta_p$.
+Also $ABA=(BA)^*(BA)$, so $AB\ne0$ implies $ABA\ne0$.
+Thus the displayed squared-norm sum is positive. All other spectral
+blocks stay fixed along the curve, so zero displacement singular values
+there do not affect this second derivative. The negative second variation
+contradicts local minimality, proving $AB=0$.
 \end{proof}
 
 \begin{proof}[Proof of \cref{thm:schatten-independent-planes}]

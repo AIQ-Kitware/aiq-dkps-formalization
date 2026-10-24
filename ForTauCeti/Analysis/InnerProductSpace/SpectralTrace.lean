@@ -277,6 +277,20 @@ namespace ContinuousLinearMap
 
 variable [CompleteSpace E]
 
+/-- The real trace of an adjoint square is nonnegative. -/
+theorem re_trace_adjoint_mul_self_nonneg (A : E →L[ℂ] E) :
+    0 ≤ (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re := by
+  classical
+  let b := stdOrthonormalBasis ℂ E
+  have htrace : (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re =
+      ∑ i, ‖A (b i)‖ ^ 2 := by
+    rw [_root_.ContinuousLinearMap.toLinearMap_mul,
+      ← _root_.ContinuousLinearMap.adjoint_toLinearMap, Module.End.mul_eq_comp,
+      A.toLinearMap.trace_adjoint_comp_self_eq_sum_norm_apply_sq b]
+    exact RCLike.ofReal_re (K := ℂ) _
+  rw [htrace]
+  exact Finset.sum_nonneg (fun i _ => sq_nonneg ‖A (b i)‖)
+
 /-- The finite complex trace is faithful on positive squares. The accepted
 Frobenius trace identity turns the hypothesis into a sum of squared column
 norms, each of which must vanish. -/
@@ -304,6 +318,18 @@ theorem eq_zero_of_re_trace_adjoint_mul_self_eq_zero
   change A.toLinearMap x = 0
   rw [hA]
   rfl
+
+/-- The real trace of an adjoint square is strictly positive exactly
+when the operator is nonzero. -/
+theorem re_trace_adjoint_mul_self_pos_iff (A : E →L[ℂ] E) :
+    0 < (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re ↔ A ≠ 0 := by
+  constructor
+  · intro h hzero
+    simp only [hzero, map_zero, zero_mul, _root_.ContinuousLinearMap.toLinearMap_zero,
+      Complex.zero_re, lt_self_iff_false] at h
+  · intro hA
+    exact lt_of_le_of_ne (re_trace_adjoint_mul_self_nonneg A)
+      (fun h => hA (eq_zero_of_re_trace_adjoint_mul_self_eq_zero A h.symm))
 
 /-- Orthogonality in the trace pairing to every Hermitian element of a
 projection's commutant forces its diagonal compression to vanish. Testing

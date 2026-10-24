@@ -71,6 +71,21 @@ theorem schattenPhaseDerivative_exp (p t : ℝ) :
       Real.norm_eq_abs, abs_mul, abs_of_pos (by norm_num : (0 : ℝ) < 2)]
   rw [schattenPhaseDerivative_eq, hnorm, him]
 
+/-- Conjugation reverses the scalar phase gradient. -/
+theorem schattenPhaseDerivative_conj (p : ℝ) (z : ℂ) :
+    schattenPhaseDerivative p (conj z) = -schattenPhaseDerivative p z := by
+  have hnorm : ‖conj z - 1‖ = ‖z - 1‖ := by
+    rw [show conj z - 1 = conj (z - 1) by simp, Complex.norm_conj]
+  rw [schattenPhaseDerivative_eq, schattenPhaseDerivative_eq, hnorm, Complex.conj_im]
+  ring
+
+/-- The phase-gradient symbol is odd in the phase. -/
+theorem schattenPhaseDerivative_exp_neg (p t : ℝ) :
+    schattenPhaseDerivative p (Complex.exp (((-t : ℝ) : ℂ) * Complex.I)) =
+      -schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I)) := by
+  rw [schattenPhaseDerivative_exp, schattenPhaseDerivative_exp]
+  simp only [neg_div, Real.sin_neg, abs_neg, mul_neg]
+
 /-- On the unit circle the zero phase-gradient levels are precisely the
 two real unitary eigenvalues. This is the scalar description of the kernel
 block in constrained stationarity. -/

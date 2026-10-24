@@ -64,4 +64,40 @@ theorem gradient_eigenspace_pairing_of_isLocalMinOn_transports
   intro x
   exact eigenspaceNegEquivOfInvolution_apply _ _ _ _ _ x
 
+/-- The square of the Schatten gradient commutes with both transported
+projections at every constrained local minimum. Its spectral blocks
+therefore reduce the source and target simultaneously. -/
+theorem gradient_square_reduces_projections_of_isLocalMinOn_transports
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
+    (K : Submodule ℂ E) [K.HasOrthogonalProjection]
+    (Q : E →L[ℂ] E) (U : unitary (E →L[ℂ] E))
+    (htrans : (U : E →L[ℂ] E) * K.starProjection * star (U : E →L[ℂ] E) = Q)
+    (hmin : IsLocalMinOn
+      (fun W : E →L[ℂ] E => UnitarilyInvariantSeminorm.schatten ℂ E E p
+        (LinearMap.id - W.toLinearMap) ^ p.toReal)
+      {W | W ∈ unitary (E →L[ℂ] E) ∧ W * K.starProjection * star W = Q}
+      (U : E →L[ℂ] E)) :
+    let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
+    Commute K.starProjection (G * G) ∧ Commute Q (G * G) := by
+  let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
+  have hP : IsStarProjection K.starProjection :=
+    ⟨K.isIdempotentElem_starProjection, isSelfAdjoint_starProjection K⟩
+  have hconj := gradient_reflection_conjugate_eq_neg_of_isLocalMinOn_transports
+    p hp hp1 K.starProjection Q hP U htrans hmin
+  have hreflection : (K.reflection : E →L[ℂ] E) =
+      (2 : ℂ) • K.starProjection - 1 := by
+    simpa only [ofNat_smul_eq_nsmul] using Submodule.coe_reflection K
+  rw [← hreflection] at hconj
+  have hsource : Commute K.starProjection (G * G) :=
+    commute_square_of_reflection_conjugate_eq_neg G K hconj
+  refine ⟨hsource, ?_⟩
+  have hGU : Commute G (U : E →L[ℂ] E) :=
+    commute_schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
+  have hG : IsSelfAdjoint G := isSelfAdjoint_schattenUnitaryGradient _ _
+  have hGUstar : Commute G (star (U : E →L[ℂ] E)) := by
+    simpa only [hG.star_eq] using hGU.star_star
+  rw [← htrans]
+  exact ((hGU.mul_left hGU).symm.mul_left hsource).mul_left
+    (hGUstar.mul_left hGUstar).symm
+
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import TauCeti.Analysis.InnerProductSpace.Projection.Block
 
 /-!
 # Eigenspace pairing by an anticommuting isometric involution
@@ -91,5 +92,21 @@ theorem finrank_eigenspace_eq_neg_of_involution [FiniteDimensional 𝕜 E]
     Module.finrank 𝕜 (Module.End.eigenspace G g) =
       Module.finrank 𝕜 (Module.End.eigenspace G (-g)) :=
   (eigenspaceNegEquivOfInvolution J hJ G hanti g).toLinearEquiv.finrank_eq
+
+/-- If reflection across a subspace negates an operator by conjugation,
+the square of that operator commutes with the orthogonal projection. -/
+theorem commute_square_of_reflection_conjugate_eq_neg
+    (G : E →L[𝕜] E) (K : Submodule 𝕜 E) [K.HasOrthogonalProjection]
+    (hconj : (K.reflection : E →L[𝕜] E) * G * (K.reflection : E →L[𝕜] E) = -G) :
+    Commute K.starProjection (G * G) := by
+  have hanti (x : E) : G (K.reflection x) = -K.reflection (G x) := by
+    have h := congrArg (fun A : E →L[𝕜] E => A (K.reflection x)) hconj
+    change K.reflection (G (K.reflection (K.reflection x))) = -G (K.reflection x) at h
+    rw [K.reflection_reflection] at h
+    simpa only [neg_neg] using congrArg Neg.neg h.symm
+  apply K.commute_reflection_iff.1
+  have hcomm := commute_square_of_anticommute_isometry K.reflection G.toLinearMap hanti
+  ext x
+  exact congrArg (fun A : E →ₗ[𝕜] E => A x) hcomm.eq
 
 end TauCeti
