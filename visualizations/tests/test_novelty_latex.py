@@ -199,3 +199,24 @@ def test_transport_roles_match_manuscript_without_changing_legacy_keys():
     assert SYMBOLS["V"][1] == "trial"
     assert r"\sym{U}" not in SOURCE.read_text()
     assert r"\sym{V}" not in SOURCE.read_text()
+
+
+def test_unrestricted_schatten_two_angle_example_matches_verified_formula():
+    from dkvis.novelty_math import (
+        schatten_two_angle_example_three_halves,
+        schatten_phase_power_three_halves,
+    )
+    z = schatten_two_angle_example_three_halves()
+    assert math.isclose(z["cutoff_deg"], 70.52877936550931, abs_tol=1e-8)
+    assert z["low_phase_deg"] == 0.0
+    assert math.isclose(z["high_phase_deg"], 74.57097698955464, abs_tol=1e-8)
+    assert math.isclose(z["canonical_sum"], 4.254419090242005, abs_tol=1e-8)
+    assert math.isclose(z["global_sum"], 4.093350305605767, abs_tol=1e-8)
+    assert z["global_sum"] < z["canonical_sum"]
+    theta = math.radians(80)
+    attained = schatten_phase_power_three_halves(theta, math.radians(z["high_phase_deg"]))
+    for k in range(501):
+        assert attained <= schatten_phase_power_three_halves(theta, theta * k / 500) + 1e-9
+    for theta, delta in [(-1, 0), (math.pi, 0), (0.5, -0.1), (0.5, 0.6)]:
+        with pytest.raises(ValueError):
+            schatten_phase_power_three_halves(theta, delta)

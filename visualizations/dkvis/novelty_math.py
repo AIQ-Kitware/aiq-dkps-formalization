@@ -83,3 +83,33 @@ def critical_phase_excess(tau: float, phase: float) -> float:
     z = complex(math.cos(phase), math.sin(phase))
     gap = abs(complex(b, d) - b * z) + abs(complex(b, -d) - b * z) - 2.0 * d
     return max(0.0, gap)
+
+
+def schatten_phase_power_three_halves(theta: float, delta: float) -> float:
+    """Literal planar Schatten-3/2 displacement power for a scalar phase.
+
+    Both angles must be physical and 0 <= delta <= theta.  This helper
+    evaluates the scalar model; the Lean global theorem rules out mixing.
+    """
+    _checked_principal_angle(theta)
+    if not math.isfinite(delta) or not 0 <= delta <= theta:
+        raise ValueError("phase must satisfy 0 <= delta <= theta")
+    return ((2.0 * math.sin((theta + delta) / 2.0)) ** 1.5
+            + (2.0 * math.sin((theta - delta) / 2.0)) ** 1.5)
+
+
+def schatten_two_angle_example_three_halves() -> dict[str, float]:
+    """Two-plane C^4 witness for the formalized unrestricted sum formula."""
+    low, high = math.radians(45), math.radians(80)
+    delta = optimal_phase_three_halves(high)
+    return {
+        "cutoff_deg": math.degrees(math.acos(1 / 3)),
+        "low_phase_deg": math.degrees(optimal_phase_three_halves(low)),
+        "high_phase_deg": math.degrees(delta),
+        "low_minimum": schatten_phase_power_three_halves(low, 0.0),
+        "high_minimum": schatten_phase_power_three_halves(high, delta),
+        "canonical_sum": (schatten_phase_power_three_halves(low, 0.0)
+                          + schatten_phase_power_three_halves(high, 0.0)),
+        "global_sum": (schatten_phase_power_three_halves(low, 0.0)
+                       + schatten_phase_power_three_halves(high, delta)),
+    }

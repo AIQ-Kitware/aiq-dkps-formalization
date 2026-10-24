@@ -2,17 +2,85 @@
 
 **As of:** 24 October 2026
 **Latest source snapshot used for manuscript and visualization updates:**
-`642de34df29a` (24 October 2026, 14:23 source archive). The earlier
-source-facing audit is anchored to `b00c5c8c35e1aab826064285c530260fd558da9b`;
-later smoothed/Schatten developments and their Lean endpoints are separately
-recorded below.
-**Paper:** *Formalizing the Davis--Kahan Perturbation Theorems in Lean*  
+`521572a2500c` (24 October 2026, 15:48 incremental source patch,
+reconstructed and verified against base `642de34df29a`). The original
+source-result audit remains anchored to its reviewed Lean declarations.
+Earlier chronological status entries below are dated historical records;
+current proof scope is summarized first.
+**Paper:** *Formalizing Davis--Kahan Perturbation Theory and Exact Spectral Subspace Transport*
 **Scope of this record:** working context for authors and future manuscript agents. This is deliberately **not** an appendix or a source of text to paste into the paper.
 
 The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Latest completed complex Schatten theorem (24 October 2026, `521572a2`)
+
+**Completed, not proposed:** The Lean development now proves, for *every*
+finite-dimensional complex inner-product space and equal-dimensional pair
+`U,V`, and for every exponent `1<p<2`, the attained **global** minimum
+
+```
+min_{W unitary, W(U)=V} ||I-W||_p^p
+    = sum_{j=1}^k m_p(theta_j),
+m_p(theta) = min_{0 <= delta <= theta}
+    (2 sin((theta+delta)/2))^p + (2 sin((theta-delta)/2))^p.
+```
+
+This includes zero, repeated and right principal angles and competitors
+which mix principal planes arbitrarily. It is not merely an upper bound
+obtained by a block-diagonal construction. The global lower bound and
+attainment are compiled separately. The completed cutoff also states
+that the canonical *nonacute* direct rotation minimizes the full
+Schatten power **if and only if** every angle is at most
+`acos((2-p)/p)`, with equality included. The scope is finite-dimensional
+**complex**, not arbitrary real rank nor infinite-dimensional Schatten
+ideals. This does not classify every minimizing ambient unitary.
+
+**Primary Lean evidence (target `521572a2`):**
+
+- `DavisKahan/FiniteDimensional/DirectRotation/SchattenGlobalLowerBound.lean`:
+  `sum_phaseMinimum_le_schatten_transport_complex`, for every admissible
+  unitary (the no-cross-plane-improvement direction).
+- `DavisKahan/FiniteDimensional/DirectRotation/SchattenGlobalAttainment.lean`:
+  `exists_unitary_attaining_schatten_principalAngles_complex` and
+  `exists_unitary_minimizing_schatten_transport_principalAngles_complex`,
+  constructing and certifying the unrestricted minimizer.
+- `DavisKahan/FiniteDimensional/DirectRotation/SchattenCanonicalOptimality.lean`:
+  `nonacuteDirectRotation_schatten_minimal_iff_complex`, equivalence of
+  canonical optimality and the angle cutoff for every admissible transporter.
+
+**Checked manuscript:** `paper.tex` now includes
+`schatten_transport_verified.tex` between sharp displacement and smoothed
+transport. That source includes the scalar classification, complete
+unrestricted lower-bound argument, actual Lean signature, cutoff and a
+rank-two numerical example. The Manim `novelty-tour` teaches the difference
+between scalar phase minimization and full ambient no-mixing optimality.
+
+**Novelty boundary:** The problem of constrained ambient unitary transport
+and failure of Schatten minimality for `1<=p<2` are established prior art
+(Bolotnikov--Li--Rodman 2001; Davis--Kahan 1970 Example 4.2). The global
+principal-angle formula and exact all-rank cutoff are now complete, credible
+candidates for original mathematical results. First-publication priority
+is **not established** merely by completion of a Lean proof or an unsuccessful
+literature search. Compare possible matrix-nearness, unitary completion,
+Procrustes and quotient-distance theorems at equivalent hypotheses.
+
+**Not yet completed at full generality:** classification of *all* optimal
+Schatten transports; infinite-dimensional Schatten ideals; general real
+arbitrary-rank matching; sorted-pair reduction; sharp real/complex field
+gaps. Retain them in unverified research notes rather than the checked paper.
+The YWS paper stub and the original 29-source-result inventory are unchanged.
+
+### Research/applications boundary
+
+The exact finite-dimensional formula is directly useful as a global lower
+certificate for any numerically produced feasible complex unitary, and the
+principal-plane construction attains that bound. The cutoff identifies when
+canonical rotation itself is optimal. This does not yet provide a complexity
+bound for computing the angles, a noisy-data estimation theorem, a physical
+quantum-gate synthesis procedure, or a higher-rank real algorithm.
 
 ## Current article and visualization update (24 October 2026, `642de34d`)
 
@@ -38,13 +106,14 @@ older research history. The `novelty-tour` Manim deck adds focused teaching
 scenes on critical quartic growth, the exact commutator test, and the same
 2x2 numerical example. Reusable palette and color definitions are unchanged.
 
-Remaining priority questions: Do general weighted unitary Procrustes/nuclear
+Remaining priority questions at the earlier `642de34d` snapshot: Do general weighted unitary Procrustes/nuclear
 matrix-nearness theorems imply this combined exact minimum and cutoff? Are the
 critical order-four growth and full uniqueness boundary already expressed
 for this precise transporter feasible set? No negative web search constitutes
-proof of novelty. Real arbitrary-rank matching, global higher-rank Schatten
-optimization, all supercritical minimizer classification, and field-gap
-conjectures remain outside the checked manuscript.
+proof of novelty. At that earlier snapshot, real arbitrary-rank matching and global higher-rank
+complex Schatten optimization were both open. The latter was completed at
+`521572a2` and is now in the checked manuscript; all supercritical minimizer
+classification and real field-gap conjectures remain outside it.
 
 ## Publication scope: mathematical extension ships with the DK paper
 
@@ -60,8 +129,9 @@ coefficient, failure of quadratic growth, sharp angle sensitivity, and exact
 commutator test for a unique closest correction are also compiled and included.
 These results are motivated by the formal refutation of Proposition 4.4 and
 form the article's mathematical extension.
-The broader all-minimizers, general Schatten, and real matching/gap drafts
-remain excluded. Mathematical priority for the exact smoothed theorem and
+This `642de34d` record preceded the all-rank complex Schatten theorem.
+The broader all-minimizers, real matching/gap, and infinite-dimensional
+Schatten drafts remain excluded. Mathematical priority for the exact smoothed theorem and
 its stability estimate is plausible but provisional; negative searches are
 not proof of first publication. The original 29-result denominator is unchanged.
 
@@ -93,7 +163,8 @@ not proof of first publication. The original 29-result denominator is unchanged.
 - **Complex equality-case classification:** an attaining transporter and the
   exact minimum are fully formalized. **All** minimizing unitary transporters
   have not been classified. No general Schatten-`p` optimality statement is
-  inferred from trace optimality.
+  inferred from *trace optimality alone*; the separate all-rank complex
+  `1<p<2` optimum is now proved at `521572a2` (see the latest section).
 - **Infinite-dimensional trace-ideal extension:** the new projector trace
   identity and complex minimum are finite-dimensional; ideal-membership and
   trace-class hypotheses need a separate analysis in infinite dimensions.
@@ -429,7 +500,8 @@ the angle cost is `2 eta sin(theta)-2 tau`. Below it the canonical phase
 is optimal. The scalar proof is a two-focus distance problem on a circle.
 The unrestricted finite-dimensional proof uses an explicit unitary nuclear
 norm support functional in cosine--sine coordinates and does not depend on
-the unformalized Schatten higher-rank theorem. The same certificate proves
+the Schatten higher-rank theorem, which was unformalized at this earlier
+research stage but is now verified at `521572a2`. The same certificate proves
 that relaxation of the commuting unitary factor to a commuting contraction
 has exactly the same minimum, with an explicit diagonal optimal contraction
 and phase recovery. This also solves nearest commuting-unitary correction

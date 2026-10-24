@@ -79,6 +79,8 @@
     {∃}{{$\exists$}}1
     {∧}{{$\land$}}1
     {∀}{{$\forall$}}1
+    {≠}{{$\neq$}}1
+    {⊤}{{$\top$}}1
 }
 \crefname{lstlisting}{formalization}{formalizations}
 \Crefname{lstlisting}{Formalization}{Formalizations}
@@ -86,6 +88,7 @@
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{corollary}[theorem]{Corollary}
 
@@ -133,56 +136,43 @@
 \maketitle
 
 \begin{abstract}
-We formalize the spectral-subspace perturbation theory of Davis and Kahan
-(1970) in Lean~4, accounting for all 29 reviewed source-level results:
-28 are proved at their stated scope, and Proposition~4.4 is refuted by a
-machine-checked counterexample. The development retains real and complex
-Hilbert spaces, unbounded self-adjoint operators, finite-interval and
-ordered half-infinite spectral separation, and the required membership
-conditions for unitarily invariant operator-ideal norms. In the sine-theta
-theorem, the source's positive angle operator is identified with the modulus
-of the rectangular Sylvester block used to derive the estimate.
+We formalize 29 reviewed result-level statements of Davis and Kahan
+(1970) in Lean~4: 28 are proved at their reviewed source scope and the
+printed Proposition~4.4 is refuted. The formalization retains real and
+complex Hilbert spaces, unbounded self-adjoint operators, finite and
+ordered half-infinite spectral gaps, and where-defined operator-ideal
+norms. For the sine-theta theorem, we identify the source's positive
+angle operator with the modulus of its rectangular Sylvester representative.
 
-The printed Proposition~4.4 asserts full-displacement minimality of the
-canonical direct rotation under a real short-angle hypothesis. We prove
-that a family in $\mathbb R^4$ violates this assertion at every positive acute
-principal angle, and identify the failed step in the original proof.
-For finite-dimensional real or complex acute subspace pairs we formalize
-its sharp quantitative replacement: every admissible transporter
-$\sym{Wcompetitor}$ satisfies
-$\sym{NormN}(I-\sym{Rrotation})\leq
-\sec(\sym{alphaAngle}/2)\,\sym{NormN}(I-\sym{Wcompetitor})$,
-where $\sym{alphaAngle}$ is the largest principal angle and $\sym{NormN}$
-is any unitarily invariant norm. The factor is attained for every fixed
-positive acute angle by the real trace-norm family; its competitor
-attains the exact global trace-norm minimum. For arbitrary equal-dimensional
-subspaces of a finite-dimensional complex Hilbert space, including nonacute
-pairs, we also prove an attained global minimum over unitary transporters
-$\min_{\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}}\|I-\sym{Wcompetitor}\|_1=
-\|\sym{Psource}-\sym{Qtarget}\|_1=2\sum_j\sin\like{theta}{\theta_j}$.
+We formalize a real four-dimensional counterexample to Proposition~4.4
+at every positive acute angle, a sharp uniform direct-rotation approximation
+factor $\sec(\sym{alphaAngle}/2)$ for unitarily invariant norms, and
+exact real and complex trace-norm transport minima. For equal-dimensional
+subspaces of any finite-dimensional complex Hilbert space, including
+right-angle configurations, the global trace minimum equals
+$2\sum_j\sin\like{theta}{\theta_j}$.
 
+For every Schatten exponent $1<p<2$, we now prove the exact
+\emph{unrestricted} complex transport minimum
+$\min_{W(\sym{Usource})=\sym{Vtarget}}\|I-W\|_p^p
+ =\sum_j m_p(\like{theta}{\theta_j})$, where $m_p$ is an explicit
+one-variable principal-plane minimum. An attaining unitary is constructed,
+and a global lower bound excludes every cost improvement from mixing
+principal planes. The canonical rotation is globally optimal exactly when
+all principal angles are at most
+$\vartheta_p=\arccos((2-p)/p)$.
 
-Motivated by this failure of minimality, we solve a smooth spectral
-transport problem over all unitary transporters in finite-dimensional
-complex spaces. For every
-$\tau>0$, the penalty
-$\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$ admits an exact principal-angle
-formula with a phase-transition cutoff. We construct a minimizing unitary
-by functional calculus. The canonical rotation is the unique minimizer
-exactly when every principal angle is at most the cutoff. We prove
-dimension-independent quadratic growth strictly below the cutoff and
-quartic growth through equality. A critical planar example proves that no
-positive quadratic-growth constant persists at equality and identifies the
-leading quartic coefficient. A nuclear-norm certificate rules out improvements
-from mixing principal planes. For a unitary $A$ and a projection $P$, the
-same theory gives an exact nearest commuting-unitary correction, with
-canonical optimality and uniqueness equivalent to
-$\|AP-PA\|_{\mathrm{op}}\leq\sqrt{1-\eta^{-4}}$,
-where $\eta=(\tau+\sqrt{\tau^2+4})/2$.
+For the smooth spectral penalty
+$\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$, $\tau>0$, we also formalize an exact
+complex all-pairs minimum, a functional-calculus optimizer, uniqueness
+through its sharp phase cutoff, quadratic stability strictly below that
+cutoff, and quartic growth at equality. The same theory solves nearest
+commuting-unitary correction and gives a computable commutator criterion
+for canonical optimality and uniqueness.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
-direct rotations; spectral optimization; unitarily invariant norms; Lean.
+direct rotations; Schatten norms; spectral optimization; unitarily invariant norms; Lean.
 
 \smallskip
 \noindent\textbf{Mathematics Subject Classification (2020):}
@@ -231,8 +221,22 @@ norm-minimization work of \citet{bolotnikov2001minimal} and subsequent
 Grassmann-angle results \citep{qiu2006grassmann,zhang2007angular,zhang2010canonicalangles}
 provide the appropriate context for these deductions.
 
-The failure also motivates an exact optimization problem beyond the
-source statements. We replace each displacement singular value $s$ by
+The failure also motivates minimization of the full Schatten
+$1<p<2$ displacement, where convexity of the scalar power does not imply
+minimality of the canonical direct rotation. We prove that arbitrary
+unitary mixing between principal planes cannot improve the minimum:
+for every equal-rank complex subspace pair, the cost is the sum of
+independently optimized principal-plane costs. The explicit cutoff
+$\vartheta_p=\arccos((2-p)/p)$ characterizes global minimality of the
+canonical rotation at every rank, including critical, zero, and right
+angles. Our proof analyzes constrained spectral gradients, excludes
+mixing by second variation at a minimizing transporter, and controls
+zero-gradient blocks separately. The verified theorem, a matching Lean
+signature, and an illustrative two-angle calculation appear in
+\cref{sec:schatten-optimization}.
+
+We also solve an exact optimization problem for a smooth spectral penalty.
+We replace each displacement singular value $s$ by
 $\sqrt{\tau^2+s^2}-\tau$, a smooth penalty connecting trace and quadratic
 costs. For arbitrary equal-rank complex subspaces we compute the global
 minimum, construct an optimizer by continuous functional calculus, and
@@ -276,6 +280,13 @@ Appendix~\ref{app:source-review}.
     trace-norm minimum for every equal-rank complex subspace pair, including
     right-angle configurations. The optimum equals twice the sum of the
     sines of the principal angles, with no acute-angle hypothesis.
+  \item For every $1<p<2$, we prove an attained global minimum of
+    $\|I-W\|_p^p$ over \emph{all} ambient complex unitaries transporting
+    two equal-rank subspaces. Its exact value is the sum of scalar
+    principal-plane phase minima. We prove that mixing principal planes
+    cannot improve the cost and that the canonical rotation minimizes
+    it if and only if every principal angle is at most
+    $\arccos((2-p)/p)$, including the critical boundary.
   \item We solve the unrestricted finite-dimensional complex transport
     problem for the smoothed spectral penalty
     $\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$. We prove its exact
@@ -521,6 +532,7 @@ adapted from the geometric sine-theta visualization.}
 
 \input{counterexample.tex}
 \input{sharp_displacement.tex}
+\input{schatten_transport_verified.tex}
 \input{smoothed_transport_verified.tex}
 
 \section{Mathematical architecture of the Davis--Kahan development}
@@ -657,7 +669,15 @@ The ambient unitary transport optimization itself was studied by
 \citet{bolotnikov2001minimal}, who establish canonical minimality for
 $Q$-norms and exhibit Schatten-$p$ failure for $1\leq p<2$.
 The scalar phase mechanism is already present in Davis and Kahan's
-Example~4.2. Our smoothed theorem uses the same transport constraint and a
+Example~4.2. For $1<p<2$, our unrestricted complex result goes beyond the
+planar and special-configuration comparisons in the cited work: it
+computes the all-rank minimum and proves that cross-plane mixing cannot
+improve it (\cref{sec:schatten-optimization}). The exact angle-dependent
+cutoff distinguishes canonical from phase-corrected minimizers; this
+claim does not assert priority for the underlying constrained transport
+problem or for Schatten norms themselves.
+
+Our smoothed theorem uses the same transport constraint and a
 nonhomogeneous spectral penalty; it gives the exact all-pairs value, a
 constructive optimizer, and quantitative growth estimates through the phase-transition cutoff. Smooth
 hyperbolic singular-value penalties are established in low-rank
@@ -707,7 +727,16 @@ optimality, and the exact real trace-norm minimum are formalized. In addition,
 the finite-dimensional development proves a directed-sine trace decomposition
 for any two real or complex projections and the attained global complex
 trace-norm minimum $2\sum_j\sin\like{theta}{\theta_j}$ for every equal-rank pair.
-These results do not require an acute-angle hypothesis. For the smooth spectral penalty $\rho_\tau$, the unrestricted complex
+These results do not require an acute-angle hypothesis.
+
+For every $1<p<2$, an unrestricted finite-dimensional complex Schatten
+transport minimum is attained and equals the sum of the independent
+principal-plane minima. The global lower bound rules out improvements by
+mixing planes, and the cutoff $\arccos((2-p)/p)$ is necessary and sufficient
+for canonical optimality at arbitrary rank. This is an additional checked
+optimization theorem, distinct from the original 29 Davis--Kahan targets.
+
+For the smooth spectral penalty $\rho_\tau$, the unrestricted complex
 minimum has an explicit principal-angle formula. A clipped functional
 calculus supplies an optimizer, and the same nuclear support certificate
 proves a dimension-independent quadratic bound below the cutoff; a shifted

@@ -12,6 +12,44 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Late-afternoon reassessment: source `521572a2500c` (15:48, 24 October 2026)
+
+The **unrestricted higher-rank complex Schatten theorem has been completed
+in Lean** since the 08:51 and 14:23 audits below. All older passages
+stating that `SP-3` is only drafted should be read as **historical
+snapshot descriptions**, not current claims about proof status. The
+publication decision remains to include these verified results in the
+Davis--Kahan journal paper, with YWS separate.
+
+| Current theorem/claim | Lean evidence in `521572a2` | Scope and priority boundary |
+| --- | --- | --- |
+| Exact all-rank complex Schatten `1<p<2` minimum `sum_j m_p(theta_j)` | `SchattenGlobalLowerBound.sum_phaseMinimum_le_schatten_transport_complex`; `SchattenGlobalAttainment.exists_unitary_minimizing_schatten_transport_principalAngles_complex` | **Compiled global theorem** over every complex unitary transporter, including mixing, repeated, zero and right angles; not a real-field or infinite-dimensional theorem |
+| Existence of an attaining all-rank unitary | `SchattenGlobalAttainment.exists_unitary_attaining_schatten_principalAngles_complex` | Independent minimizing phase on principal planes produces a feasible witness; no-mixing lower bound supplies the nontrivial global certification |
+| Canonical optimality `iff` every angle `<= acos((2-p)/p)` | `SchattenCanonicalOptimality.nonacuteDirectRotation_schatten_minimal_iff_complex` | **Compiled all-rank cutoff**, equality included; not a complete classification of every minimizing transporter |
+| Smoothed minimum, uniqueness, quartic transition, commuting correction | `SmoothedPrincipalAngles`, `SmoothedExplicitOptimizer`, `SmoothedOptimizerUniqueness`, `SmoothedQuarticStability`, `SmoothedCommutatorCutoff` | Previously completed; still the strongest application-oriented family |
+| Real matching, sorted-pair formula and sharp field gaps | `real_matching_transport.tex`, formalized building blocks | **Not yet completed** as unrestricted global theorems in this snapshot |
+
+**Novelty assessment.** The global Schatten principal-angle formula and
+sharp all-rank cutoff now join the exact smoothed-penalty theory as the
+leading *completed* candidates for original mathematical theorems.
+Davis--Kahan (1970) and Bolotnikov--Li--Rodman (2001) already established
+the phase/transport setting, partial norm optimality, and failures for
+`p<2`. We may state exactly what we have formalized and prove, but
+should not claim historical priority for the all-rank formula until an
+independent search for equivalent quotient-metric and matrix-completion
+statements has been resolved. A modern use case is an **exact optimum
+certificate** for arbitrary complex unitary subspace alignment; efficiency,
+noise robustness, and quantum implementation require further work.
+
+The included paper section is `schatten_transport_verified.tex`, with
+numerical two-angle example at `p=3/2`, and Manim's `novelty-tour` adds
+an all-rank theorem slide and a no-mixing proof-intuition slide. The
+only main-text unformalized transport formula remains the optional
+real line/hyperplane working-draft box. **The historical source inventory
+stays 28 proved plus one refuted, not 30 or 31 source results.**
+
+---
+
 ## Afternoon reassessment: source `642de34df29a` (14:23, 24 October 2026)
 
 This section is the **current assessment** for the journal article. The
@@ -118,8 +156,8 @@ confused.
 **Historical recommendation (08:51; superseded for publication scope):**
 The earlier review favored a separate optimization article. The authors
 subsequently decided to include the verified smoothed mathematical extension
-in this journal paper. The unverified real-matching and unrestricted
-higher-rank Schatten conclusions remain outside the checked main text;
+in this journal paper. The real-matching conclusion remains outside the checked main text;
+the higher-rank complex Schatten result was subsequently completed in `521572a2`;
 the textbook-metric discrepancy remains a separate edition-verification issue.
 
 The word **novel** here means a defensible mathematical first-publication

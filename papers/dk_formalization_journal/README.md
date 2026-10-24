@@ -11,6 +11,14 @@ minimum, an explicit optimal phase, a sharp closed cutoff for canonical
 optimality and uniqueness, and quadratic or quartic error bounds. The nearest
 commuting-unitary application is stated with a computable commutator cutoff
 and a $2\times2$ worked example in `smoothed_transport_verified.tex`.
+As of source snapshot `521572a2`, the checked journal manuscript also
+includes `schatten_transport_verified.tex`: the attained **unrestricted
+finite-dimensional complex Schatten** minimum for every `1<p<2`, its
+principal-angle sum formula, and the sharp all-rank necessary-and-sufficient
+canonical rotation cutoff. This completes a target previously described as
+only a conventional proof. It does not complete the arbitrary-rank real
+matching problem or classify all minimizers.
+
 The mathematical novelty/priority investigation remains in
 [`MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md`](MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md)
 and is separate from the journal exposition.

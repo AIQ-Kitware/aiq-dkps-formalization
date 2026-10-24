@@ -1,3 +1,32 @@
+# Current manuscript integration: 24 October 2026, `521572a2`
+
+The user-provided incremental git-well source patch was applied to the
+verified base `642de34df29a` to reconstruct snapshot `521572a2`.
+That snapshot contains compiled unrestricted higher-rank **complex**
+Schatten `1<p<2` global optimality and the all-rank canonical cutoff in
+`SchattenGlobalLowerBound`, `SchattenGlobalAttainment` and
+`SchattenCanonicalOptimality`. The checked journal manuscript now inputs
+`schatten_transport_verified.tex`, rather than treating that section as a
+working conjecture. These are mathematical extensions, outside the
+original 29 Davis--Kahan target inventory.
+
+For a focused local build (not a request for a new routine axiom audit):
+
+```bash
+lake exe cache get
+lake build \
+  DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalLowerBound \
+  DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalAttainment \
+  DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalOptimality
+```
+
+Manuscript builds are typesetting checks, not re-verification of Lean.
+The exact complex theorem covers arbitrary ambient mixing, all physical
+principal angles and `1<p<2`. Classification of all minimizers, unrestricted
+real matching and infinite-dimensional Schatten versions are not claimed.
+
+---
+
 # Validation record: 23 October 2026
 
 ## Current all-pairs complex theorem (source snapshot `b00c5c8c35e1`)

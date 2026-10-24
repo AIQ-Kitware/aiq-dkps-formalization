@@ -231,8 +231,8 @@ class N01ThreeStories(DeckSlide):
                 r"3. Schatten and real-field program",
                 TRIAL,
                 [
-                    r"planar complex $1<p<2$ phase transition formalized",
-                    r"higher-rank complex formula: drafted, not yet a compiled global theorem",
+                    r"complex $1<p<2$ all-rank minimum and cutoff formalized",
+                    r"no-mixing lower bound now compiled; arbitrary-rank real problem remains open",
                     r"real matching and sharp field-gap theorems: drafted, with many verified ingredients",
                     r"these may become the next research paper, but not all are certified yet",
                 ],
@@ -256,11 +256,10 @@ class N01ThreeStories(DeckSlide):
         place(self, "takeaway", summary)
 
         self.say(
-            "This novelty review separates three stories. First, the formalized"
-            " Davis-Kahan paper. Second, the completed smoothed transport theorem," 
-            " which is the strongest current new-math candidate. Third, the larger"
-            " Schatten and real-field program, where some important results are still"
-            " conventional drafts rather than Lean-certified global theorems."
+            "This review separates source formalization, the completed complex"
+            " smoothed theory, and the Schatten and real-field program. The new"
+            " all-rank complex Schatten minimum and cutoff are now formalized."
+            " Real matching and field-gap claims remain working mathematical drafts."
         )
         self.play(*[FadeIn(card) for card in cols], FadeIn(summary), run_time=1.0)
 
@@ -569,6 +568,129 @@ class N07SchattenTransition(DeckSlide):
         self.play(FadeIn(theorem_box), FadeIn(left_plot), FadeIn(right_plot), FadeIn(left_caption), FadeIn(right_caption), run_time=1.2)
 
 
+class N07GlobalSchatten(DeckSlide):
+    """All-rank complex theorem: the genuinely new lower-bound statement."""
+
+    title = "From one plane to every complex subspace"
+    kicker = r"The missing step is now proved: mixing principal planes cannot reduce the Schatten minimum"
+    section = SECTION
+
+    def body(self) -> None:
+        top = VGroup(
+            tex(r"Formalized global result: equal-rank complex subspaces, $1<p<2$", size=23, color=MUTED),
+            math(
+                r"\min_{\sym{Wcompetitor}:\,\sym{Wcompetitor}(\sym{Usource})=\sym{Vtarget}}"
+                r"\norm{I-\sym{Wcompetitor}}_p^p"
+                r"=\sum_{j=1}^{k}m_p(\theta_j)", size=34,
+            ),
+            math(r"\sym{Rrotation}\text{ is optimal}\iff"
+                 r"\max_j\theta_j\le\arccos\!\left(\frac{2-p}{p}\right)", size=29, color=GAP),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        theorem = place(self, "theorem", boxed(top, color=CURRENT, pad=0.20))
+
+        model = VGroup(
+            VGroup(
+                principal_plane(theta=np.deg2rad(45), show_caption=False),
+                tex(r"$\theta_1=45^\circ$", size=25, color=SINE),
+            ).arrange(DOWN, buff=0.11),
+            VGroup(
+                principal_plane(theta=np.deg2rad(80), show_caption=False),
+                tex(r"$\theta_2=80^\circ$", size=25, color=SINE),
+            ).arrange(DOWN, buff=0.11),
+        ).arrange(RIGHT, buff=0.27, aligned_edge=DOWN)
+        diagram = place(self, "planes", model)
+
+        from dkvis.novelty_math import schatten_two_angle_example_three_halves
+        v = schatten_two_angle_example_three_halves()
+        facts = VGroup(
+            tex(r"Example: $p=3/2$ on two planes", size=25, color=MUTED),
+            math(r"\theta_c=\arccos(1/3)\approx 70.53^\circ", size=26, color=GAP),
+            math(r"m_{3/2}(45^\circ)\approx1.33917", size=27, color=WANTED),
+            math(r"m_{3/2}(80^\circ)\approx2.75418", size=27, color=CURRENT),
+            math(r"\min\norm{I-W}_{3/2}^{3/2}\approx4.09335", size=27, color=CURRENT),
+            math(r"\norm{I-\mathcal R}_{3/2}^{3/2}\approx4.25442", size=25, color=TRIAL),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        assert np.isclose(v["global_sum"], 4.093350305605767, atol=2e-6)
+        assert np.isclose(v["canonical_sum"], 4.254419090242005, atol=2e-6)
+        numbers = place(self, "numbers", facts)
+
+        conclusion = place(self, "takeaway", para(
+            r"Optimizing each plane constructs an upper bound; the new Lean theorem"
+            r" proves the matching lower bound against \emph{every} unitary transporter.",
+            width=12.2, size=23, color=MUTED,
+        ))
+        self.say(
+            "Previously we only had the solution in one principal plane."
+            " We now have the exact minimum for any equal-rank complex subspaces,"
+            " even if a candidate ambient unitary mixes planes. The right side is"
+            " a sum of independently optimized scalar costs, and the theorem"
+            " proves no other admissible unitary can beat it. In the two-angle"
+            " example with p three halves, the canonical rotation is strictly"
+            " more expensive than the global optimum."
+        )
+        self.play(FadeIn(theorem), FadeIn(diagram), FadeIn(numbers), FadeIn(conclusion), run_time=1.1)
+
+
+class N07NoMixingProof(DeckSlide):
+    """Proof intuition: stationarity, spectral blocks, negative curvature."""
+
+    title = "Why arbitrary mixing cannot beat the sum"
+    kicker = r"The global lower bound comes from a constrained-gradient and second-variation argument"
+    section = SECTION
+
+    def body(self) -> None:
+        header = VGroup(
+            tex(r"At a cost-minimizing feasible transporter:", size=25, color=MUTED),
+            math(r"J G_p(W) J = - G_p(W),\qquad J=2P-I", size=34, color=GAP),
+            math(r"\norm{I-W}_p^p\ \ge\ \sum_j m_p(\theta_j)", size=32, color=CURRENT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.13)
+        theorem = place(self, "theorem", boxed(header, color=CURRENT, pad=0.20))
+
+        stages = VGroup(
+            boxed(VGroup(
+                math(r"G_p(W)", size=28, color=GAP),
+                tex(r"spectral gradient", size=20, color=MUTED),
+            ).arrange(DOWN, buff=0.10), color=GAP, pad=0.18),
+            tex(r"$\Downarrow$", size=28, color=MUTED),
+            boxed(VGroup(
+                math(r"H_g\oplus H_{-g}", size=26, color=SINE),
+                tex(r"paired phase blocks", size=20, color=MUTED),
+            ).arrange(DOWN, buff=0.10), color=SINE, pad=0.18),
+            tex(r"$\Downarrow$", size=28, color=MUTED),
+            boxed(VGroup(
+                math(r"AB=0", size=27, color=CURRENT),
+                tex(r"no overlapping large-phase blocks", size=20, color=MUTED),
+            ).arrange(DOWN, buff=0.10), color=CURRENT, pad=0.18),
+        ).arrange(DOWN, buff=0.09)
+        diagram = place(self, "flow", stages)
+
+        reasoning = wrapped_bullets(
+            r"First variation forces the gradient to exchange the source and complementary blocks.",
+            r"At positive gradient levels, phases occur in paired small/large roots.",
+            r"Overlapping large-phase projections give a feasible direction of \emph{negative second variation}; that contradicts minimality.",
+            r"Zero-gradient blocks receive a separate projection-distance lower bound.",
+            r"Each remaining invariant plane pays at least its own scalar minimum.",
+            width=5.75, size=21, buff=0.13,
+        )
+        steps = place(self, "argument", reasoning)
+
+        footer = place(self, "takeaway", para(
+            r"This certifies a global result, not an assumption that the optimizer"
+            r" happens to preserve chosen coordinates. The proof covers repeated,"
+            r" zero and right principal angles.",
+            width=12.1, size=23, color=MUTED,
+        ))
+        self.say(
+            "The proof does not merely test the block diagonal candidates."
+            " It starts with an arbitrary minimizer, uses first variation to"
+            " expose paired gradient subspaces, and then negative second variation"
+            " rules out overlapping large-phase blocks. The zero-gradient part"
+            " has its own lower bound. That forces a sum of the scalar plane"
+            " costs even if the original candidate could mix planes."
+        )
+        self.play(FadeIn(theorem), FadeIn(diagram), FadeIn(steps), FadeIn(footer), run_time=1.1)
+
+
 class N08ComplexVsReal(DeckSlide):
     title = "Why complex and real transport diverge"
     kicker = r"Complex phases decouple plane-by-plane; real transport introduces matching constraints"
@@ -581,7 +703,7 @@ class N08ComplexVsReal(DeckSlide):
                 wrapped_bullets(
                     r"A continuous phase correction is available on each principal plane",
                     r"Exact complex trace and smoothed formulas have been formalized",
-                    r"The planar Schatten $1<p<2$ threshold is also formalized",
+                    r"The all-rank complex Schatten $1<p<2$ optimum and cutoff are formalized",
                     width=5.7,
                     size=21,
                 ),
@@ -639,12 +761,11 @@ class N09StatusBoard(DeckSlide):
             VGroup(
                 para(r"\textbf{Safe strong claims}", width=3.78, size=23, color=CURRENT),
                 wrapped_bullets(
-                    r"Exact smoothed complex equal-rank minimum",
-                    r"Explicit smoothed optimizer",
-                    r"Canonical/global uniqueness at the exact cutoff",
-                    r"Quadratic and quartic objective-error bounds",
+                    r"Smoothed exact minimum and explicit optimizer",
+                    r"Uniqueness and quartic critical growth",
                     r"Exact commuting-unitary correction criterion",
-                    r"Planar complex Schatten $1<p<2$ transition",
+                    r"All-rank complex Schatten $1<p<2$ minimum",
+                    r"Sharp all-rank cutoff; global no-mixing bound",
                     width=3.78,
                     size=21,
                 ),
@@ -670,7 +791,7 @@ class N09StatusBoard(DeckSlide):
             VGroup(
                 para(r"\textbf{Do not oversell yet}", width=3.78, size=23, color=TRIAL),
                 wrapped_bullets(
-                    r"Higher-rank complex Schatten formula",
+                    r"Classification of every supercritical Schatten minimizer",
                     r"Global real matching and sorted-pair reductions",
                     r"Sharp trace and smoothed real-complex gaps",
                     width=3.78,

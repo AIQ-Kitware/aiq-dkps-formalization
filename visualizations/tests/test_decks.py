@@ -26,6 +26,8 @@ NOVELTY_TOUR_ORDER = [
     "N06SmoothedStability",
     "N06CriticalFlatness",
     "N07SchattenTransition",
+    "N07GlobalSchatten",
+    "N07NoMixingProof",
     "N08ComplexVsReal",
     "N08CommutingCorrection",
     "N08NumericalCorrection",

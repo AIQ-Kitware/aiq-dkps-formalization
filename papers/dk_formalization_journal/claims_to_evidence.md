@@ -19,6 +19,19 @@ Davis--Kahan.
 | The formalization required reusable operator-theoretic foundations beyond the paper-specific statements. | `ForTauCeti/` and Davis--Kahan foundation layers, including partial/unbounded operators, spectral/form-gap machinery, symmetric operator ideals, principal-angle/direct-rotation geometry, and Sylvester results. | Discuss mathematical capabilities, not raw module counts, unless a fresh reproducible census is provided. |
 | AI assisted the formalization and prose preparation. | Repository/model provenance and the explicit disclosure in `paper.tex` and `appendix_process.tex`. | No learning-effectiveness or workflow-effectiveness claim is made. |
 
+## Verified unrestricted complex Schatten extension (24 October 2026)
+
+| Journal theorem | Lean evidence in snapshot `521572a2` | Qualification |
+| --- | --- | --- |
+| For `1<p<2`, every equal-rank pair of finite-dimensional complex subspaces has the exact global minimum `min_{W:WU=V} ||I-W||_p^p = sum_j m_p(theta_j)`. | `DavisKahan/FiniteDimensional/DirectRotation/SchattenGlobalLowerBound.lean`: `sum_phaseMinimum_le_schatten_transport_complex`; `SchattenGlobalAttainment.lean`: `exists_unitary_minimizing_schatten_transport_principalAngles_complex`; included `schatten_transport_verified.tex`. | **All** ambient unitary transports, including cross-plane mixing; zero, repeated and right principal angles. Exponent strictly `1<p<2`; not a real/ideal-class extension. |
+| An explicit finite-dimensional complex transporter attains the sum of scalar phase minima. | `SchattenGlobalAttainment.exists_unitary_attaining_schatten_principalAngles_complex`. | Attainment alone gives the upper bound. The independent global lower bound is required for optimality. |
+| The completed nonacute canonical rotation is Schatten optimal globally if and only if every principal angle is at most `acos((2-p)/p)`. | `SchattenCanonicalOptimality.nonacuteDirectRotation_schatten_minimal_iff_complex`. | Equality included. This does **not** classify all possible minimizing transports in the supercritical regime. |
+| At `p=3/2`, rank-two angles `45` and `80` degrees give canonical power `4.25442` and optimum `4.09335`. | `schatten_transport_verified.tex`, `visualizations/dkvis/novelty_math.py`, numerical tests in `visualizations/tests/test_novelty_latex.py`. | Numerical illustration of already formalized formula, not separate performance experiment. |
+
+These are mathematical **extensions**, not additions to the maintained
+29-item Davis--Kahan source-result denominator. First-publication
+priority remains unresolved; the unitary-completion setting is classical.
+
 ## Claims deliberately removed from the journal manuscript
 
 The following evidence may remain in the repository for other papers or

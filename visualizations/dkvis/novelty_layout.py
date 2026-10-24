@@ -99,6 +99,18 @@ LAYOUTS: dict[str, dict[str, Region]] = {
         "left_caption": Region(L, -0.24, BOTTOM, -2.68),
         "right_caption": Region(0.24, R, BOTTOM, -2.68),
     },
+    "N07GlobalSchatten": {
+        "theorem": Region(L, R, 0.44, BODY_TOP),
+        "planes": Region(L, -0.28, -2.29, 0.20),
+        "numbers": Region(0.25, R, -2.29, 0.20),
+        "takeaway": Region(L, R, BOTTOM, -2.51),
+    },
+    "N07NoMixingProof": {
+        "theorem": Region(L, R, 0.43, BODY_TOP),
+        "flow": Region(L, -0.34, -2.40, 0.20),
+        "argument": Region(0.24, R, -2.40, 0.20),
+        "takeaway": Region(L, R, BOTTOM, -2.60),
+    },
     "N08ComplexVsReal": {
         "complex": Region(L, -0.23, -1.52, BODY_TOP),
         "real": Region(0.23, R, -1.52, BODY_TOP),

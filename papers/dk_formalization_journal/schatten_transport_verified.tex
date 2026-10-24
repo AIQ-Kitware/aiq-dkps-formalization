@@ -92,8 +92,13 @@ values are $2$ and $0$. The case $\theta=0$ has only one admissible phase.
 \end{figure}
 
 The scalar minimization determines the unrestricted complex problem as well.
-Write $\mathcal U(P,Q)=\{W\in U(n):WPW^*=Q\}$ for the transporters of
-two orthogonal projections of equal rank.
+Write $\mathcal U(\sym{Psource},\sym{Qtarget})
+=\{\sym{Wcompetitor}\in U(n):\sym{Wcompetitor}\sym{Psource}
+\sym{Wcompetitor}^{*}=\sym{Qtarget}\}$ for the transporters of
+two orthogonal projections of equal rank. Here the amber projection
+$\sym{Psource}$ denotes the source subspace and the blue projection
+$\sym{Qtarget}$ the target, consistently with the notation of
+\cref{sec:sharp-displacement}.
 
 \begin{proposition}[The unrestricted planar minimum]
 \label{prop:schatten-planar-minimum}
@@ -133,8 +138,8 @@ Let $P,Q$ be orthogonal projections of rank $r$ on $\mathbb C^n$, and let
 $\theta_1,\ldots,\theta_r\in[0,\pi/2]$ be their principal angles, with
 multiplicity. Then
 \begin{equation}
- \boxed{\min_{W\in\mathcal U(P,Q)}\|I-W\|_p^p
-                 =\sum_{j=1}^r m_p(\theta_j).}
+ \boxed{\min_{\sym{Wcompetitor}\in\mathcal U(P,Q)}\|I-\sym{Wcompetitor}\|_p^p
+                 =\sum_{j=1}^r m_p(\like{theta}{\theta_j}).}
  \label{eq:schatten-unrestricted-minimum}
 \end{equation}
 An attaining transporter is the identity on the fixed summands of a
@@ -143,6 +148,14 @@ phase of the direct rotation with phase $\delta_p(\theta_j)$ or its
 negative. In particular, allowing transports that mix principal planes
 cannot lower the minimum.
 \end{theorem}
+
+This is an optimum over the \emph{entire} unitary transport fiber, not just
+over transports chosen to preserve a prescribed set of principal planes.
+Independent plane optimization immediately constructs a feasible unitary
+and hence gives an upper bound. The content of the theorem is the matching
+lower bound for every other feasible unitary. For the formal Lean signature,
+\texttt{phaseMinimum} is the scalar function $m_p$, and the extended
+nonnegative exponent is required to have finite real value in $(1,2)$.
 
 
 \begin{lstlisting}[style=leanpaper,
@@ -396,6 +409,30 @@ for $\theta_j\leq\vartheta_p$ by the scalar classification, including
 zero and right angles. Apply \cref{thm:schatten-independent-planes} and
 sum these nonnegative differences.
 \end{proof}
+
+The exact cutoff has a separate Lean proof with quantification over
+every admissible unitary, in the same finite-dimensional complex setting
+as \cref{thm:schatten-independent-planes}. In particular, the cutoff is
+not merely necessary or sufficient for a selected planar phase family.
+
+\paragraph{A two-angle example.}
+Take two complex rank-two subspaces in $\mathbb C^4$ with principal
+angles $45^\circ$ and $80^\circ$, and choose $p=3/2$. The critical angle is
+$\vartheta_{3/2}=\arccos(1/3)\approx70.53^\circ$. The first plane is
+already optimal at phase zero, while the second has an improving phase
+$\delta_{3/2}(80^\circ)\approx74.57^\circ$. For the sum of both planes,
+\[
+\begin{aligned}
+\text{canonical displacement power}
+  &\approx 1.33917+2.91525=4.25442,\\
+\text{global minimum}
+  &\approx 1.33917+2.75418=4.09335.
+\end{aligned}
+\]
+The direct-sum construction realizes the second value, and
+\cref{thm:schatten-independent-planes} proves that no transporter mixing
+these planes can do better. This result makes the contrast with the
+classical $p\geq2$ squared-displacement minimality concrete.
 
 The proof turns the failure of universal direct-rotation minimality into
 an exact decision and construction. A cosine--sine decomposition supplies

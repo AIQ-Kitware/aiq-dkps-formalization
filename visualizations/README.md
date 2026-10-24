@@ -144,6 +144,13 @@ Current presentations (in addition to the preserved reference decks):
   the full-frame VTK finale. The content runs through the sine-theta theorem,
   3D subspaces, the other three angle bounds, Proposition 4.4, source-fidelity
   review and the notation reference. See `briefs/comprehensive.md`.
+- **`novelty-tour`**: a self-contained mathematical presentation of the
+  now-verified higher-rank complex Schatten `1<p<2` transport minimum, its
+  global no-mixing argument and all-rank cutoff, the exact smoothed
+  transport/critical stability theorem, and the commuting-unitary
+  application. New scenes `N07GlobalSchatten` and `N07NoMixingProof` follow the
+  planar phase-curve slide. Mathematical roles retain source-amber,
+  target-blue, phase-magenta, cutoff-violet and smoothed-steel colors.
 - **`study`**: the earlier long-form curriculum, kept as an independent
   composition. See `briefs/deep-study.md`.
 - **`novelty-tour`**: thirteen independent Manim scenes teaching the new
