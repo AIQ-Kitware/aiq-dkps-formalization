@@ -1,5 +1,40 @@
 # Validation record: 23 October 2026
 
+## Current all-pairs complex theorem (source snapshot `b00c5c8c35e1`)
+
+The later source archive includes the unconditional Lean theorem
+`exists_global_complex_trace_minimizer` in
+`DavisKahan/FiniteDimensional/DirectRotation/ComplexPhaseTrace.lean` and its
+explicit principal-angle specialization
+`exists_global_complex_trace_minimizer_with_principalAngles` in
+`ComplexTracePrincipalAngles.lean`. The former proves attainment and global
+optimality for **arbitrary equal-rank finite-dimensional complex subspaces**;
+it requires neither acuteness nor a supplied CS coordinate equivalence.
+`ComplexCrossedDefects.lean` supplies equal-dimensional right-angle crossed
+defects. `ForTauCeti/.../Projection/TraceSine.lean` proves the positive
+projector-difference modulus decomposition and the full Ky Fan trace identity
+in finite-dimensional **real or complex** spaces, without equal ranks.
+`DirectRotation/All.lean` imports all these modules. These theorems are
+included in the author's updated formalization. This manuscript-only edit
+changes no Lean modules; the historical user-confirmed builds remain
+established. None of these extension theorems changes the original 29 source
+results (28 proved, Proposition 4.4 refuted).
+
+The `paper.tex` checked variant now includes the full complex optimum and
+its trace decomposition, with the only optional red-framed working theorem
+being the **real** line/hyperplane transport formula.
+
+For targeted local verification, in this order:
+
+```bash
+lake exe cache get
+lake build \
+  ForTauCeti.Analysis.InnerProductSpace.Projection.TraceSine \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexPhaseTrace \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles
+```
+
 ## Source baseline
 
 This record retains the user-confirmed build evidence from the earlier
@@ -64,21 +99,21 @@ successful compilation of the following added result modules and repairs:
   principal planes, fixed orthogonal summands, and transport under an
   explicitly supplied ambient unitary equivalence.
 
-**Remaining verification boundary.** The unconditional complex theorem for
-*every* equal-dimensional subspace pair is not a theorem in these modules.
-It requires construction of the finite Halmos/CS principal-plane equivalence,
-including matched right-angle defect subspaces. A conventional proof appears
-in the red-framed `sharp_displacement_unformalized.tex`. The mathematical
-limit proof that `sqrt(2)` is the least uniform acute-pair constant is included
-in `sharp_displacement_verified.tex`; `SharpDisplacementLimit.lean` now adds a
-focused declaration for it, outside the previously confirmed build set.
+**Historical boundary of this earlier build set.** The finite-model
+modules listed above did not themselves prove the unconditional complex
+all-pairs result. That gap has now been **closed by different modules**:
+`ComplexCrossedDefects.lean`, `ComplexPhaseTrace.lean`, `TraceSine.lean`,
+and `ComplexTracePrincipalAngles.lean`, as recorded at the top of this file.
+The formal proof uses a paired-phase/nonacute-completion argument and does not
+require the previously proposed Halmos/CS coordinate-existence theorem.
+The `sqrt(2)` limiting-necessity endpoint remains recorded separately in
+`SharpDisplacementLimit.lean`.
 
-`paper.tex` unconditionally includes `sharp_displacement_verified.tex` and
-conditionally includes only the remaining complex global extension via
-`\includeUnformalizedDisplacementtrue`; switch this off for a manuscript
-containing exclusively fully verified statements. Aggregate imports of the
-verified modules and the new limiting corollary are maintained in
-`DirectRotation/All.lean`; the aggregate itself requires a fresh build.
+`paper.tex` includes `sharp_displacement.tex` unconditionally. The former
+`sharp_displacement_verified.tex` and `sharp_displacement_unformalized.tex`
+are retained older records and are not inputs to either build. The sole
+unformalized theorem in the working manuscript is the **real**
+line/hyperplane transport formula.
 
 ## Citation limits
 
@@ -102,12 +137,11 @@ manuscript directory.
 
 ## Later manuscript switch and source-edition update (23 October 2026)
 
-The main manuscript now includes `sharp_displacement.tex`; `paper_working.tex`
-enables **two** independent provisional flags,
-`\includeUnformalizedComplexTrace` and `\includeUnformalizedRealTransport`.
-This supersedes the obsolete switch name in the older reproducibility text
-above. The verified-only version leaves both false. No new Lean proof was
-claimed or built by this manuscript edit.
+The main manuscript includes `sharp_displacement.tex`. With the newer
+`b00c5c8` theorem development, the provisional complex flag has been
+removed, and `paper_working.tex` enables only
+`\includeUnformalizedRealTransport`. The historical text in this validation
+record documents earlier checkpoints but does not set the current scope.
 
 `../PAPER_CONTEXT.md` is the entry point for Davis--Kahan publication claim
 boundaries. The separate YWS record is now under

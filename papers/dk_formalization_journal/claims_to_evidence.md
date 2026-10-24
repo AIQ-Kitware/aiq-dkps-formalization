@@ -60,15 +60,15 @@ its explicit separation of formal verification from source correspondence.
 | For every acute pair, `sqrt(2)` is a valid UI-seminorm displacement factor. No smaller uniform constant suffices by approaching the right-angle endpoint. | `SharpDisplacement.lean`: `uiNorm_directRotation_le_sqrt_two_mul_displacement` and fixed-angle necessity; analytic limit in `sharp_displacement_verified.tex`; new focused declaration `SmallAngleCounterexample.sqrt_two_common_factor_necessary` in `SharpDisplacementLimit.lean`. | Uniform bound compiled and confirmed. The limit theorem is an additional source implementation awaiting a focused build. |
 | The phase-modified complex two-dimensional unitary attains trace displacement equal to projector distance, including right angles. | `ComplexTraceOptimality.lean`: `phaseUnitary_global_trace_minimizer`. | Compiled and confirmed. |
 | Full trace is additive under orthogonal operator block sums; every finite principal-plane model with unchanged summand admits an attained global trace minimum; unitary coordinate transport preserves this equality. | `ForTauCeti/.../BlockTrace.lean`, `ComplexTraceAssembly.lean`, `ComplexTraceFiniteModel.lean`: `phasePlaneModel_global_trace_minimizer`, `phasePlaneModel_with_fixed_global_trace_minimizer`, `AttainsProjectionTraceBound.conjugate`. | Compiled and confirmed. |
-| Every equal-rank complex subspace pair, without any acuteness hypothesis, admits a global trace minimizer of value `N₁(P_U-P_V)=2 sum sin(theta_j)`. | Conventional Halmos/CS argument in red-framed `sharp_displacement_unformalized.tex`. The verified finite-plane and transport lemmas require an ambient coordinate equivalence not yet produced for arbitrary pairs. | **Unconditional Lean theorem still outstanding.** |
+| For **any** two finite-dimensional real/complex projections, without equal-rank or acute-angle assumptions, `‖P_U-P_V‖₁=‖P_(Vperp) P_U‖₁+‖P_(Uperp) P_V‖₁`; furthermore their positive moduli split on orthogonal supports. | `ForTauCeti/Analysis/InnerProductSpace/Projection/TraceSine.lean`: `projectionDifference_sq_eq_directed_gram_sum`, `operatorAbs_projectionDifference_eq_directed_sine_sum`, `kyFanSum_projectionDifference_eq_directed_sines`. | Lean theorem present in the `b00c5c8` source snapshot; the author's updated formalization includes this theorem. Applies to the ambient full Ky Fan sum, not arbitrary infinite-dimensional operators. |
+| Every finite-dimensional equal-rank **complex** subspace pair, without any acuteness or supplied-coordinate hypothesis, has a global trace minimizer with `‖I-W‖₁=‖P_U-P_V‖₁=2 sum sin(theta_j)`; every admissible competitor has at least this displacement. | `DavisKahan/FiniteDimensional/DirectRotation/ComplexPhaseTrace.lean`: `exists_global_complex_trace_minimizer`; `ComplexCrossedDefects.lean`: `crossedDefectsEquivalent_of_finrank_eq`; `ComplexTracePrincipalAngles.lean`: `kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles`, `exists_global_complex_trace_minimizer_with_principalAngles`. The all-pairs phase proof is independent of any supplied principal-plane model. | **Formalized unconditionally in the current source snapshot**. All-minimizers classification, real all-pairs optimum, and infinite-dimensional trace-ideal variants remain separate questions. |
 
-`paper.tex` includes `sharp_displacement.tex`, which retains the verified
-sharp-displacement results in the checked manuscript. It disables two
-independent provisional switches: `\includeUnformalizedComplexTracefalse`
-and `\includeUnformalizedRealTransportfalse`.
-`paper_working.tex` enables both red-framed extensions. The arbitrary-pair
-complex optimum and real rank-one theorem remain conventional arguments
-without unconditional Lean proofs. The historical Davis--Kahan source-result inventory remains 29.
+`paper.tex` includes `sharp_displacement.tex`, which now states and proves
+the exact complex all-pairs trace optimum and directed-sine decomposition
+in the checked manuscript. The only provisional switch is
+`\includeUnformalizedRealTransportfalse`; `paper_working.tex` enables the
+red-framed real rank-one/hyperplane theorem. The full complex theorem is no
+longer provisional. The historical Davis--Kahan source-result inventory remains 29.
 
 The axiom/interface audit is
 `DavisKahan/Sources/DavisKahan1970/Audits/SmallAngleCounterexample.lean`.

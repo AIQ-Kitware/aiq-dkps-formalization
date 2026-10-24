@@ -1,6 +1,6 @@
 # Understanding the Davis–Kahan formalization and its displacement correction
 
-*A mathematical companion for the lead author, 23 October 2026.* This is separate from the journal manuscript. A reader needs linear algebra and comfort with complex numbers, but no Lean syntax or operator theory. Theorems identified as **Lean-verified** occur in the uploaded source snapshot at Git commit `2b6aa58dcd30`. The new real rank-one and paired-angle statements in [the research note](REAL_TRANSPORT_MINIMIZATION_NOTES.md) have complete conventional arguments but no separately compiled Lean statements in this pass. The all-pairs complex trace formula is proved by a conventional CS-decomposition argument; current Lean theorems establish it on explicit finite principal-plane models and on instances given a suitable unitary coordinate equivalence.
+*A mathematical companion for the lead author, 23 October 2026.* This is separate from the journal manuscript. A reader needs linear algebra and comfort with complex numbers, but no Lean syntax or operator theory. Theorems identified as **Lean-verified** occur in the uploaded source history, including the later source snapshot at Git commit `b00c5c8c35e1`. The new real rank-one and paired-angle statements in [the research note](REAL_TRANSPORT_MINIMIZATION_NOTES.md) have complete conventional arguments but no corresponding general Lean statements. The all-pairs complex trace formula now has a complete finite-dimensional Lean theorem for arbitrary equal-rank subspaces, using paired nonacute phase transporters rather than an assumed principal-plane coordinate equivalence.
 
 ## 1. The basic question: what does a spectral gap protect?
 
@@ -237,18 +237,61 @@ Fan dominance proves the formula for *every* unitarily invariant norm. In the tr
 
 The note also proves a sufficient condition for **real** trace-norm equality with the projector lower bound: if each positive principal angle occurs with even multiplicity, pair equal-angle principal planes and realify the complex phase correction on every pair. The trace displacement then equals `2sum sin(theta_j)`. Even multiplicity is not a necessary condition once right angles are permitted, so this is a sufficient condition rather than a characterization.
 
-## 8. The complex exact trace minimum—and the remaining formalization boundary
+## 8. The complex exact trace minimum—now proved for arbitrary pairs
 
-Over a complex space each nonzero principal angle can be corrected by its own complex phase, without doubling the number of real coordinates. In an orthogonal direct sum of principal planes the trace displacement becomes `2sum sin(theta_j)`, exactly the projection lower bound. Conventional finite-dimensional CS decomposition then proves
+Over a complex space each positive principal angle can be corrected by its own
+complex phase, without doubling the number of real coordinates. The completed
+formalization establishes, for **every** pair of equal-dimensional subspaces
+of a finite-dimensional complex Hilbert space,
 
 \[
 \min_{W\in U(n):\,WU=V}\|I-W\|_1
- =\|P-Q\|_1=2\sum_j\sin\theta_j
+ =\|P-Q\|_1=2\sum_j\sin\theta_j.
 \]
 
-for equal-dimensional complex subspaces, including right-angle pairs. The existing Lean files prove the planar phase unitary, finite orthogonal sums, prescribed finite principal-plane models, and transport under a *supplied* unitary coordinate equivalence. A theorem that automatically produces the required coordinates for *every arbitrary pair* is the missing formal step. Do not describe the entire complex all-pairs formula as kernel-checked until that link is compiled.
+The minimizer exists even when some principal angles equal `pi/2`: neither
+acuteness nor a supplied principal-plane coordinate system is assumed. The
+conventional geometric picture splits the subspaces into principal planes. On
+one plane, multiplying the direct rotation by the phase `exp(i theta)` changes
+its two eigenvalues from `exp(±i theta)` to `1, exp(2i theta)`. This replaces
+two displacement chords of size `2sin(theta/2)` with one zero chord and one
+chord of size `2sin(theta)`. Trace norm adds these chord lengths, so the phase
+transporter has precisely the projector-difference cost.
 
-Nor has this analysis characterized *all* minimizers: writing down one optimal phase on each plane proves existence and the minimum value, while characterizing every minimizer requires equality analysis in a trace-norm contraction.
+**What the general Lean proof does instead.** Right angles create crossed
+defect spaces `U ∩ V-perp` and `V ∩ U-perp`. Equal ranks imply those spaces
+have equal dimensions, allowing a unitary nonacute completion. From that
+rotation `R`, and commuting ambient cosine/sine operators `C,S`, form the two
+transporters `W_± = R(C ± iS)`. Writing `K = R-C` and `B=iK`, the proof derives
+positivity of `S±B` and proves
+
+\[
+  \|I-W_+\|_1=\operatorname{tr}(S-B),\qquad
+  \|I-W_-\|_1=\operatorname{tr}(S+B).
+\]
+
+Each cost is at least `||P-Q||_1` by the universal projection bound, while
+the two costs add to `2||P-Q||_1`. Therefore **both** phase transporters
+attain the global minimum. No principal-plane chart has to be handed to the
+theorem. Separately, the formalized directed-sine identity gives
+
+\[
+ \|P-Q\|_1
+ =\|P_{V^\perp}P_U\|_1+\|P_{U^\perp}P_V\|_1,
+\]
+
+valid for *unequal ranks too*, in finite real or complex spaces. For equal
+ranks the directed terms have the same principal singular values, so their
+sum is `2sum sin(theta_j)`.
+
+The relevant Lean results are `exists_global_complex_trace_minimizer` in
+`ComplexPhaseTrace.lean`, `operatorAbs_projectionDifference_eq_directed_sine_sum`
+in `TraceSine.lean`, and
+`exists_global_complex_trace_minimizer_with_principalAngles` in
+`ComplexTracePrincipalAngles.lean`. **Remaining mathematics:** this work does
+not characterize *all* optimal unitary transporters or solve the general real
+transport problem. Infinite-dimensional trace-class versions also require
+separate hypotheses and proof.
 
 ## 9. A full-scope sine-theta proof: where the operators live
 

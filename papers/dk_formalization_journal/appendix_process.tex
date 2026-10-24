@@ -138,13 +138,21 @@ sharpness, and the optimal common factor $2/\sqrt3$ for the $\pi/3$ range.
 These files are in \path{DavisKahan/FiniteDimensional/DirectRotation}.
 
 The same directory contains \path{ComplexTraceOptimality.lean},
-\path{ComplexTraceAssembly.lean}, and
-\path{ComplexTraceFiniteModel.lean}. These prove an attained trace-norm
-minimum for a complex principal plane, its finite orthogonal sums (including
-right angles), and ambient unitary images of a supplied plane decomposition,
-with an optional fixed summand. They do not yet give an all-pairs theorem
-without the decomposition hypothesis. The general mathematical consequence
-is displayed only in the optional red working-draft box.
+\path{ComplexTraceAssembly.lean}, and \path{ComplexTraceFiniteModel.lean},
+which establish planar and finite block-model trace optima. The general
+finite-dimensional complex theorem, with no supplied coordinate model or
+acute-angle assumption, is in \path{ComplexPhaseTrace.lean}
+(\texttt{exists\_global\_complex\_trace\_minimizer}). The matched crossed-defect
+isometry needed at right angles is in \path{ComplexCrossedDefects.lean}.
+\path{ComplexTracePrincipalAngles.lean} proves the explicit
+$2\sum_j\sin\theta_j$ formula and the attained all-pairs optimum
+\cref{thm:complex-trace-all-pairs}.
+The reusable real/complex identity \cref{prop:projection-trace-sine},
+including unequal ranks, is in
+\path{ForTauCeti/Analysis/InnerProductSpace/Projection/TraceSine.lean}.
+These are additional theorems beyond the fixed 29-result source inventory.
+The real line/hyperplane norm formula in the optional working draft remains
+a conventional argument without a corresponding general Lean theorem.
 
 \subsection{Reproduction}
 
@@ -167,6 +175,10 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality \
   DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly \
   DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexPhaseTrace \
+  ForTauCeti.Analysis.InnerProductSpace.Projection.TraceSine \
+  DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}
 The mathematical manuscript builds independently of Lean:

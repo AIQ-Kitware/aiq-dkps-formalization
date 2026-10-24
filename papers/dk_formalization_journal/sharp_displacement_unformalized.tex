@@ -1,13 +1,15 @@
-% The unconditional arbitrary-dimensional complex trace optimum has a
-% mathematical proof but is not yet a compiled Lean theorem. Its finite-plane,
-% orthogonal-summand, and unitary-conjugation cases ARE already compiled.
-\section{Complex trace-norm optimality: unformalized global extension}
+% Historical conventional CS-decomposition derivation. The all-pairs complex
+% trace theorem IS NOW FORMALIZED in ComplexPhaseTrace.lean and
+% ComplexTracePrincipalAngles.lean, independently of a supplied chart.
+% This archival file is NOT input by either paper.tex or paper_working.tex;
+% its mathematics is incorporated in sharp_displacement.tex instead.
+\section{Complex trace-norm optimality: archived conventional derivation}
 \label{sec:unformalized-sharp-displacement}
 
 \begin{tcolorbox}[
   enhanced, breakable, colback=white, colframe=red!80!black,
   colbacktitle=red!6!white, coltitle=red!80!black,
-  title={WORKING EXTENSION --- unconditional complex optimum not yet Lean-verified},
+  title={ARCHIVED CONVENTIONAL DERIVATION --- full theorem now Lean-verified},
   fonttitle=\bfseries, boxrule=1.05pt,
   left=9pt, right=9pt, top=9pt, bottom=9pt,
   before skip=12pt, after skip=12pt]
@@ -18,10 +20,10 @@ orthogonal blocks, arbitrary finite-plane assembly, an unchanged summand,
 and transport under a supplied ambient unitary coordinate equivalence
 are formalized in \texttt{BlockTrace.lean},
 \texttt{ComplexTraceAssembly.lean} and
-\texttt{ComplexTraceFiniteModel.lean}. The missing Lean theorem is that
-\emph{every} equal-rank complex pair admits such a coordinate
-representation. The following conclusion and its CS-decomposition argument
-are mathematical, not yet the unconditional Lean conclusion.
+\texttt{ComplexTraceFiniteModel.lean}. The newer `ComplexPhaseTrace.lean` proves an unconditional optimum via
+paired phases and nonacute completions; `ComplexTracePrincipalAngles.lean`
+proves its exact principal-angle formula. The following CS-decomposition
+argument is retained for comparison with that formal proof.
 
 \begin{proposition}[Exact trace-norm optimum over complex spaces]
 \label{prop:draft-complex-trace-optimum}

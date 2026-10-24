@@ -136,66 +136,146 @@ comes from the real four-dimensional family. Bolotnikov, Li, and Rodman
 \citep[Problem~1.1]{bolotnikov2001minimal} had already formulated the
 corresponding ambient unitary-constrained norm optimization problem.
 
-\subsection{Complex principal-plane minimizers}
+\subsection{Exact complex trace-norm minimization}
 \label{sec:complex-trace-model}
 
-Davis and Kahan's complex phase construction
-\citep[Example~4.2]{davis1970rotation} gives an exact trace minimum on
-a principal plane. In suitable orthonormal coordinates, put
+The projector-distance lower bound is attained for \emph{every} pair of
+finite-dimensional complex subspaces of the same rank, even when a principal
+angle is $\pi/2$. A trace identity underlying this fact is valid over both
+real and complex fields and does not require equal ranks.
+
+\begin{proposition}[Directed-sine trace decomposition]
+\label{prop:projection-trace-sine}
+Let $\sym{Usource},\sym{Vtarget}$ be subspaces of a finite-dimensional real or complex
+Hilbert space, with orthogonal projections $\sym{Psource},\sym{Qtarget}$. Then
 \begin{equation}
- \like{Rrotation}{R_\theta}=\begin{pmatrix}\cos\sym{theta}&i\sin\sym{theta}\\
-                    i\sin\sym{theta}&\cos\sym{theta}\end{pmatrix},
- \qquad \like{Wcompetitor}{W_\theta}=e^{i\sym{theta}}\like{Rrotation}{R_\theta}.
- \label{eq:complex-phase}
+ \|\sym{Psource}-\sym{Qtarget}\|_1
+ =\|P_{V^\perp}P_U\|_1+\|P_{U^\perp}P_V\|_1.
+ \label{eq:projection-directed-sines}
 \end{equation}
-Both maps carry the first coordinate line to the same target line, while
-$\like{Wcompetitor}{W_\theta}$ has eigenvalues $1,e^{2i\sym{theta}}$ and hence
-$\|I-\like{Wcompetitor}{W_\theta}\|_1=2\sin\sym{theta}$ for $0\leq\sym{theta}\leq\pi/2$.
-The projector difference on that plane has the same trace norm.
-
-The formal development proves global trace-norm optimality for finite
-orthogonal sums of these complex principal-plane models, including zero
-and right angles, and with an unchanged orthogonal summand. The result is
-preserved under an explicitly supplied ambient unitary equivalence.
-For these models the minimum is $2\sum_j\sin\like{theta}{\theta_j}$. No acute-angle
-assumption is needed. The distinction between this model theorem and an
-all-pairs theorem is recorded in Appendix~\ref{app:small-angle-artifact}.
-
-\ifincludeUnformalizedComplexTrace
-\begin{tcolorbox}[
- enhanced,breakable,colback=white,colframe=red!80!black,
- colbacktitle=red!6!white,coltitle=red!80!black,
- title={Working extension --- not yet formalized for arbitrary complex pairs},
- fonttitle=\bfseries,boxrule=1pt,
- left=9pt,right=9pt,top=9pt,bottom=9pt,
- before skip=12pt,after skip=12pt]
-\begin{proposition}[Complex trace minimum: proposed all-pairs formulation]
-\label{prop:complex-trace-all-pairs}
-For any equal-dimensional subspaces $\sym{Usource},\sym{Vtarget}$ of a finite-dimensional complex
-Hilbert space, with principal angles $\like{theta}{\theta_1},\ldots,\like{theta}{\theta_k}$,
-\[
- \min_{\sym{Wcompetitor}\text{ unitary}:\,\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}}\|I-\sym{Wcompetitor}\|_1
- =\|\sym{Psource}-\sym{Qtarget}\|_1=2\sum_{j=1}^k\sin\like{theta}{\theta_j}.
-\]
 \end{proposition}
+
+\begin{lstlisting}[style=leanpaper,
+ caption={Lean signature of the directed-sine trace identity, over real or
+ complex finite-dimensional inner-product spaces. The surrounding
+ scalar-field and ambient-space context is omitted.},
+ label={lst:projection-trace-sine}]
+theorem kyFanSum_projectionDifference_eq_directed_sines
+    (U V : Submodule K E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    kyFanSum (finrank K E) (projection U - projection V) =
+      kyFanSum (finrank K E) (sinThetaMap U V) +
+        kyFanSum (finrank K E) (sinThetaMap V U)
+\end{lstlisting}
+
 \begin{proof}
-The lower bound is Proposition~\ref{prop:projection-lower}. The cosine--sine
-decomposition of $\sym{Usource},\sym{Vtarget}$ splits the nonzero principal angles into mutually
-orthogonal complex two-planes, with a common fixed summand. On each plane
-use the phase-adjusted map $\like{Wcompetitor}{W_{\theta_j}}$ from
-\cref{eq:complex-phase}; it transports the corresponding source line
-to its target line with trace displacement $2\sin\like{theta}{\theta_j}$. The identity
-on the fixed summand contributes zero. The orthogonal sum is an
-admissible unitary attaining $2\sum_j\sin\like{theta}{\theta_j}=\|\sym{Psource}-\sym{Qtarget}\|_1$.
+Put $A=P_{V^\perp}P_U$ and $B=P_{U^\perp}P_V$. The Gram identity
+\[
+ (\sym{Psource}-\sym{Qtarget})^2=A^*A+BB^*
+\]
+splits into operators supported on $U$ and $U^\perp$, respectively.
+Their positive square roots have orthogonal supports, so uniqueness of the
+positive square root gives
+\begin{equation}
+ |\sym{Psource}-\sym{Qtarget}|=|A|+|B^*|.
+ \label{eq:projection-modulus-split}
+\end{equation}
+Taking the finite-dimensional trace yields
+\cref{eq:projection-directed-sines}, since $A$ and $A^*$ (likewise $B$
+and $B^*$) have the same singular values.
 \end{proof}
 
-The Lean development proves the phase-plane construction and its
-transport under a supplied coordinate equivalence. The general
-principal-plane decomposition needed to instantiate that model for every
-complex subspace pair remains to be formalized. This box is omitted from
-the checked-only manuscript.
-\end{tcolorbox}
-\fi
+\begin{theorem}[Global complex trace-norm optimum]
+\label{thm:complex-trace-all-pairs}
+Let $\sym{Usource},\sym{Vtarget}$ be equal-dimensional subspaces of a finite-dimensional
+complex Hilbert space, with $k=\dim\sym{Usource}=\dim\sym{Vtarget}$ and
+principal angles $\like{theta}{\theta_1},\ldots,\like{theta}{\theta_k}\in[0,\pi/2]$,
+counted with multiplicity. Then a unitary transporter attains
+\begin{equation}
+ \boxed{\displaystyle
+ \min_{\substack{\sym{Wcompetitor}\ \mathrm{unitary}\\
+                 \sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}}}\|I-\sym{Wcompetitor}\|_1
+ =\|\sym{Psource}-\sym{Qtarget}\|_1
+ =2\sum_{j=1}^{k}\sin\like{theta}{\theta_j}.}
+ \label{eq:complex-trace-optimum}
+\end{equation}
+There is no acuteness hypothesis; zero and right angles are included.
+\end{theorem}
+
+\begin{lstlisting}[style=leanpaper,
+ caption={The principal-angle theorem's selected Lean declaration. The scalar
+ field is written as \texttt{Complex}, and the unitary type as
+ \texttt{LinearIsometryEquiv}; the displayed mathematical theorem gives the
+ complete conclusion, including attainment and comparison with every competitor.},
+ label={lst:complex-trace-optimum}]
+theorem exists_global_complex_trace_minimizer_with_principalAngles
+    (U V : Submodule Complex H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hUV : finrank Complex U = finrank Complex V) :
+    Exists fun (W : LinearIsometryEquiv Complex H H) =>
+      U.map W.toLinearMap = V /\
+      kyFanSum (finrank Complex H) (LinearMap.id - W.toLinearMap) =
+        kyFanSum (finrank Complex H) (projection U - projection V) /\
+      kyFanSum (finrank Complex H) (LinearMap.id - W.toLinearMap) =
+        2 * Finset.univ.sum (fun j : Fin (finrank Complex U) =>
+          Real.sin (principalAngles U V (j : Nat))) /\
+      forall Z : LinearIsometryEquiv Complex H H,
+        U.map Z.toLinearMap = V ->
+          kyFanSum (finrank Complex H) (LinearMap.id - W.toLinearMap) <=
+            kyFanSum (finrank Complex H) (LinearMap.id - Z.toLinearMap)
+\end{lstlisting}
+
+\begin{proof}
+For any transporter $\sym{Wcompetitor}$, Proposition~\ref{prop:projection-lower}
+gives the first lower bound in \cref{eq:complex-trace-optimum}.
+Equal source and target ranks imply that the two directed sine maps
+$P_{V^\perp}P_U$ and $P_{U^\perp}P_V$ have the same principal singular
+values $\sin\like{theta}{\theta_j}$, including zeros. By
+\cref{prop:projection-trace-sine},
+$\|\sym{Psource}-\sym{Qtarget}\|_1=2\sum_j\sin\like{theta}{\theta_j}$.
+
+To attain the lower bound, one may choose orthogonal complex principal
+planes. Choose orthonormal vectors $u,e$ on one plane so that the target
+line is spanned by $\cos\sym{theta}\,u+\sin\sym{theta}\,e$. In the basis
+$(u,-ie)$, the unitary
+\begin{equation}
+ \like{Rrotation}{R_\theta}=
+ \begin{pmatrix}\cos\sym{theta}&i\sin\sym{theta}\\
+                 i\sin\sym{theta}&\cos\sym{theta}\end{pmatrix},\qquad
+ \like{Wcompetitor}{W_\theta}=e^{i\sym{theta}}\like{Rrotation}{R_\theta}
+ \label{eq:complex-phase}
+\end{equation}
+transports the source line to its target line. Its eigenvalues are
+$1,e^{2i\sym{theta}}$, so $\|I-\like{Wcompetitor}{W_\theta}\|_1=2\sin\sym{theta}$.
+The orthogonal direct sum of these unitary maps, together with the identity
+on the common and unused summands, attains the stated value. This
+construction also applies to angles $\sym{theta}=\pi/2$.
+\end{proof}
+
+The Lean proof does not assume a supplied principal-plane coordinate
+system. Equal ranks first give an isometric equivalence between the
+crossed defect subspaces $U\cap V^\perp$ and $V\cap U^\perp$, from which
+a nonacute completed direct rotation $\like{Rrotation}{R_0}$ is constructed.
+Writing $C$ and $\sym{S}$ for the commuting ambient cosine and sine
+operators, put $\sym{Kdisplacement}=\like{Rrotation}{R_0}-C$ and
+$B=i\sym{Kdisplacement}$. The operators $\sym{S}\pm B$ are positive, and
+both phase corrections
+$\like{Wcompetitor}{W_\pm}=\like{Rrotation}{R_0}(C\pm i\sym{S})$
+transport $\sym{Usource}$ onto $\sym{Vtarget}$. The operator factorization of their
+displacements yields
+\[
+ \|I-\like{Wcompetitor}{W_+}\|_1=\operatorname{tr}(\sym{S}-B),\qquad
+ \|I-\like{Wcompetitor}{W_-}\|_1=\operatorname{tr}(\sym{S}+B).
+\]
+Their sum is $2\operatorname{tr}(\sym{S})=2\|\sym{Psource}-\sym{Qtarget}\|_1$.
+Both terms are individually bounded below by
+$\|\sym{Psource}-\sym{Qtarget}\|_1$, hence each attains the lower bound.
+This argument handles crossed right-angle defects without first producing a
+principal-plane basis. The verified principal-angle formula then identifies
+the common value in \cref{eq:complex-trace-optimum}. The planar phase
+mechanism already appears in Davis and Kahan's
+\citep[Example~4.2]{davis1970rotation}; the general constrained-unitary
+minimization problem is studied by \citet{bolotnikov2001minimal}.
 
 \ifincludeUnformalizedRealTransport
 \begin{tcolorbox}[

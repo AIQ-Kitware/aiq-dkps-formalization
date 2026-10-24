@@ -31,6 +31,10 @@ generated/
 *.xdv
 *.pdf
 
+# Stable print figure assets used by paper.tex. SVG sources remain editable.
+!/figures/sine_theta_rank_one.pdf
+!/figures/prop44_displacement_planes.pdf
+
 # Editor / OS noise
 *~
 .DS_Store

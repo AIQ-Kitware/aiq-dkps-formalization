@@ -95,16 +95,12 @@
 \newcommand{\DKRefutedCount}{1}
 \newcommand{\DKSemanticAcceptedCount}{29}
 
-% Optional research draft: the all-pairs complex trace optimum has a
-% conventional proof, but its Lean realization currently assumes a supplied
-% principal-plane model. The submission text omits this draft by default.
-\newif\ifincludeUnformalizedComplexTrace
+% The complex all-pairs trace formula is now in the checked manuscript.
+% Only the real line/hyperplane minimization remains a working extension.
 \newif\ifincludeUnformalizedRealTransport
 \ifdefined\DKWorkingDraft
-  \includeUnformalizedComplexTracetrue
   \includeUnformalizedRealTransporttrue
 \else
-  \includeUnformalizedComplexTracefalse
   \includeUnformalizedRealTransportfalse
 \fi
 
@@ -156,7 +152,11 @@ $\sym{NormN}(I-\sym{Rrotation})\leq
 where $\sym{alphaAngle}$ is the largest principal angle and $\sym{NormN}$
 is any unitarily invariant norm. The factor is attained for every fixed
 positive acute angle by the real trace-norm family; its competitor
-attains the exact global trace-norm minimum.
+attains the exact global trace-norm minimum. For arbitrary equal-dimensional
+subspaces of a finite-dimensional complex Hilbert space, including nonacute
+pairs, we also prove an attained global minimum over unitary transporters
+$\min_{\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}}\|I-\sym{Wcompetitor}\|_1=
+\|\sym{Psource}-\sym{Qtarget}\|_1=2\sum_j\sin\like{theta}{\theta_j}$.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
@@ -231,6 +231,11 @@ Appendix~\ref{app:source-review}.
     include fixed-angle sharpness, the optimal common factor $2/\sqrt3$
     within the printed angle range, and an attained global trace-norm
     minimum for the real counterexample family.
+  \item We formalize an exact trace-norm decomposition for arbitrary pairs
+    of finite-dimensional real or complex projections, and an attained global
+    trace-norm minimum for every equal-rank complex subspace pair, including
+    right-angle configurations. The optimum equals twice the sum of the
+    sines of the principal angles, with no acute-angle hypothesis.
 \end{enumerate}
 
 \section{Source coverage and the sine-theta theorem}
@@ -526,7 +531,7 @@ $\sym{NormQ}$-norm assertion and quantitative bound in
 Section~\ref{sec:sharp-displacement} give two valid conclusions.
 
 The same operator-ideal machinery is used in the perturbation inequalities.
-For the sine theorem, the statement $\delta \sym{NormN}(S)\leq \sym{NormN}(\sym{Rrotation})$ is meaningful for
+For the sine theorem, the statement $\sym{delta}\,\sym{NormN}(\sym{S})\leq \sym{NormN}(\sym{R})$ is meaningful for
 any supported symmetric operator ideal once both $S$ and the residual belong to
 that ideal.  The formal theorem therefore keeps the source's ``where-defined''
 convention and does not build an accidental finite-dimensional compactness
@@ -623,9 +628,13 @@ the positive angle operator and a rectangular Sylvester block.
 The real four-dimensional counterexamples to Proposition~4.4 exist at
 arbitrarily small angles. The valid squared-displacement theorem yields
 $\sym{NormQ}$-norm minimality, while the general sharp comparison gives a factor
-$\sec(\alpha/2)$ for unitarily invariant norms. Both the bound and its
-uniform optimality, together with the exact real trace-norm minimum, are
-formalized. The supporting spectral and operator-ideal developments are reusable.
+$\sec(\alpha/2)$ for unitarily invariant norms. The factor, its uniform
+optimality, and the exact real trace-norm minimum are formalized. In addition,
+the finite-dimensional development proves a directed-sine trace decomposition
+for any two real or complex projections and the attained global complex
+trace-norm minimum $2\sum_j\sin\like{theta}{\theta_j}$ for every equal-rank pair.
+These results do not require an acute-angle hypothesis. The supporting
+spectral and operator-ideal developments are reusable.
 
 \section*{AI assistance disclosure}
 ChatGPT, Claude Code, and Codex were used for mathematical and library search,

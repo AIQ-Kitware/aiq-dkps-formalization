@@ -12,7 +12,9 @@ The scope is now fixed:
   operator-theoretic infrastructure required to formalize it;
 - **additional verified mathematical results:** a real four-dimensional refutation
   at every positive acute angle, an all-norm projection-displacement lower bound,
-  the sharp secant approximation factor, and an attained real trace-norm optimum; and
+  the sharp secant approximation factor, an attained real trace-norm optimum,
+  the directed-sine trace decomposition, and the all-pairs exact complex
+  trace-norm minimum; and
 - **out of scope for this manuscript:** downstream application projects and the
   workshop paper's empirical human--LLM/process study, practitioner corpus, and
   resource-accounting analysis.
@@ -39,10 +41,11 @@ The journal prose credits the complex phase mechanism in Davis--Kahan Example
 Qiu--Zhang--Li (2005), and Zhang--Qiu (2010).
 
 The additional sharp-displacement results have been separated by verification
-status. `sharp_displacement_verified.tex` is always included in `paper.tex`. It
-contains the projector-distance lower bound, real four-dimensional global trace
-minimum, sharp universal UI-seminorm displacement estimate, fixed-angle
-necessity and the original $2/\sqrt{3}$ and uniform $\sqrt{2}$ constants.
+status. `sharp_displacement.tex` is always included in `paper.tex`, and the
+older `sharp_displacement_verified.tex` remains a reference file. The included
+section contains the projector-distance lower bound, real four-dimensional
+global trace minimum, sharp universal UI-seminorm displacement estimate,
+fixed-angle necessity and the original $2/\sqrt{3}$ and uniform $\sqrt{2}$ constants.
 The corresponding Lean modules `ProjectionDisplacement`, `TraceRatio`,
 `TraceOptimality`, and `SharpDisplacement` compiled in user-confirmed builds
 on 23 October 2026. These are additional results beyond the fixed 29 source
@@ -52,18 +55,21 @@ A separate `SharpDisplacementLimit.lean` provides a focused one-sided-limit
 corollary stating the necessity of the uniform `sqrt(2)` constant; it has
 not yet been included in the user-confirmed build set.
 
-The complex two-dimensional phase minimizer and its generalization to any
-finite collection of principal planes, plus an unchanged orthogonal summand
-and unitary transport, also compiled in the user's build. Their modules are
-`ComplexTraceOptimality`, `ComplexTraceAssembly`, `ComplexTraceFiniteModel`,
-and reusable `ForTauCeti/.../UnitarilyInvariantSeminorm/BlockTrace`.
-**What remains formally open** is the unconditional theorem identifying every
-equal-rank complex subspace pair with a finite principal-plane model. The
-standard mathematical proof is isolated in the red-framed file
-`sharp_displacement_unformalized.tex`. The checked-only paper disables
-`\includeUnformalizedComplexTrace` and `\includeUnformalizedRealTransport`;
-`paper_working.tex` enables those two separately red-framed mathematical
-extensions. Neither provisional theorem is promoted to a checked Lean claim.
+The complex exact trace optimum is now proved in Lean for **every** equal-rank
+pair in finite-dimensional complex Hilbert space, with no acuteness or
+principal-plane-coordinate assumption. `ComplexCrossedDefects.lean` constructs
+the matched right-angle defect equivalence, `ComplexPhaseTrace.lean` gives the
+unconditional optimal transporter, `TraceSine.lean` splits the positive
+projector-difference modulus and its trace into two directed sines over both
+real and complex scalars, and `ComplexTracePrincipalAngles.lean` proves
+$\min_W\|I-W\|_1=\|P_U-P_V\|_1=2\sum_j\sin\theta_j$.
+`ComplexTraceFiniteModel.lean` and the previous block-assembly files remain
+proved special cases. These additions do not change the original 29 source
+results. `paper.tex` states the complex theorem without a red frame; the only
+provisional red-framed theorem in `paper_working.tex` is the real rank-one /
+hyperplane formula behind `\includeUnformalizedRealTransport`. The former
+`sharp_displacement_unformalized.tex` is a superseded conventional derivation,
+not included in either build.
 
 `submission/VALIDATION.md` gives the distinction between the user-confirmed
 Lean build and LaTeX checks, and lists the remaining proof-development tasks.
