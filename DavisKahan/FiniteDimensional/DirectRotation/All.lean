@@ -49,5 +49,7 @@ import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralCost
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedRotationOptimization
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceOptimization
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedStability
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

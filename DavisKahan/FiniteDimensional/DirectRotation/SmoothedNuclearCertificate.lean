@@ -65,6 +65,43 @@ theorem dualReal_sq_add_dualImag_sq (a b theta : ℝ) (hb : 0 ≤ b) (hab : b < 
     exact (div_eq_one_iff_eq (pow_ne_zero _ hd.ne')).mpr hsq.symm
   · norm_num
 
+/-- The real dual weight is bounded by one. -/
+theorem dualReal_le_one (a b theta : ℝ) (hb : 0 ≤ b) (hab : b < a) :
+    dualReal a b theta ≤ 1 := by
+  have hs := dualReal_sq_add_dualImag_sq a b theta hb hab
+  nlinarith [dualReal_nonneg a b theta, sq_nonneg (dualImag a b theta)]
+
+/-- The dual weight is strictly positive below the angle transition. -/
+theorem dualReal_pos_of_lt (a b theta : ℝ) (hb : 0 ≤ b) (hab : b < a)
+    (hθ : b < a * Real.cos theta) : 0 < dualReal a b theta := by
+  rw [dualReal, ite_eq_left hθ.le]
+  exact div_pos (sub_pos.mpr hθ) (dual_denominator_pos a b theta hb hab)
+
+/-- The real dual weight increases with the principal cosine throughout
+the canonical regime. -/
+theorem dualReal_mono_of_cos_le (a b theta phi : ℝ) (hb : 0 ≤ b) (hab : b < a)
+    (hφ : b ≤ a * Real.cos phi) (hcos : Real.cos phi ≤ Real.cos theta) :
+    dualReal a b phi ≤ dualReal a b theta := by
+  have ha : 0 ≤ a := hb.trans hab.le
+  have hnum : a * Real.cos phi - b ≤ a * Real.cos theta - b := by
+    exact sub_le_sub_right (mul_le_mul_of_nonneg_left hcos ha) b
+  have hθ : b ≤ a * Real.cos theta := by linarith
+  have hdθ := dual_denominator_pos a b theta hb hab
+  have hdφ := dual_denominator_pos a b phi hb hab
+  have hden :
+      Real.sqrt ((a * Real.cos theta - b) ^ 2 + (a * Real.sin theta) ^ 2) ≤
+        Real.sqrt ((a * Real.cos phi - b) ^ 2 + (a * Real.sin phi) ^ 2) := by
+    apply Real.sqrt_le_sqrt
+    have ht := congrArg (fun t : ℝ => a ^ 2 * t) (Real.sin_sq_add_cos_sq theta)
+    have hp := congrArg (fun t : ℝ => a ^ 2 * t) (Real.sin_sq_add_cos_sq phi)
+    nlinarith [mul_nonneg (mul_nonneg ha hb) (sub_nonneg.mpr hcos)]
+  rw [dualReal, dualReal, ite_eq_left hφ, ite_eq_left hθ]
+  calc
+    _ ≤ (a * Real.cos theta - b) /
+        Real.sqrt ((a * Real.cos phi - b) ^ 2 + (a * Real.sin phi) ^ 2) :=
+      div_le_div_of_nonneg_right hnum hdφ.le
+    _ ≤ _ := div_le_div_of_nonneg_left (sub_nonneg.mpr hθ) hdθ hden
+
 /-- The dual trace value is exactly the explicit scalar minimum. -/
 theorem weightedPhaseMinimum_eq_dual (a b theta : ℝ) (hb : 0 ≤ b) (hab : b < a) :
     weightedPhaseMinimum a b theta =
@@ -95,9 +132,9 @@ theorem weightedPhaseMinimum_eq_dual (a b theta : ℝ) (hb : 0 ≤ b) (hab : b <
     rw [hv]
   · ring
 
-private theorem paired_scalar_support (h k u v b : ℝ) (hh : 0 ≤ h) (hb : 0 ≤ b)
-    (z w : ℂ) (hz : z.re ≤ 1) (hw : w.re ≤ 1) (hzw : z.im = w.im) :
-    2 * (h * (u - b) + k * v) ≤
+private theorem paired_scalar_support_eq (h k u v b : ℝ)
+    (z w : ℂ) (hzw : z.im = w.im) :
+    2 * (h * (u - b) + k * v) + b * h * (2 - z.re - w.re) =
       (conj ((h : ℂ) + k * Complex.I) * ((u : ℂ) + v * Complex.I - b * z)).re +
       (conj ((h : ℂ) - k * Complex.I) * ((u : ℂ) - v * Complex.I - b * w)).re := by
   simp only [Complex.mul_re, Complex.mul_im, Complex.add_re, Complex.add_im,
@@ -105,7 +142,7 @@ private theorem paired_scalar_support (h k u v b : ℝ) (hh : 0 ≤ h) (hb : 0 �
     Complex.ofReal_re, Complex.ofReal_im, Complex.I_re, Complex.I_im,
     mul_zero, zero_mul, mul_one, zero_add, add_zero, sub_zero, zero_sub]
   rw [hzw]
-  nlinarith [mul_nonneg (mul_nonneg hb hh) (show 0 ≤ 2 - z.re - w.re by linarith)]
+  ring
 
 /-- The positive-eigenphase entry of the diagonal nuclear dual unitary. -/
 @[expose]
@@ -126,11 +163,21 @@ private theorem conj_dualPhase (a b theta : ℝ) :
 variable {E ι κ : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [Fintype ι] [Fintype κ]
 
-/-- A global weighted nuclear lower bound allowing arbitrary mixing between
-principal planes and fixed directions. Only the imaginary parts of paired
-diagonal entries must agree; an operator-norm contraction commuting with
-the swapping source reflection satisfies these hypotheses. -/
-theorem weightedNuclear_lowerBound_of_paired_diagonals
+/-- The weighted diagonal departure from the identity seen by the nuclear
+dual certificate. It is nonnegative for contractions, and controls squared
+distance on the unitary group. -/
+@[expose]
+def weightedDiagonalDefect (a b : ℝ) (theta : ι → ℝ)
+    (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (Z : E →ₗ[ℂ] E) : ℝ :=
+  (∑ i, dualReal a b (theta i) *
+    (2 - (⟪e (.inl (0, i)), Z (e (.inl (0, i)))⟫_ℂ).re -
+      (⟪e (.inl (1, i)), Z (e (.inl (1, i)))⟫_ℂ).re)) +
+    ∑ j, (1 - (⟪e (.inr j), Z (e (.inr j))⟫_ℂ).re)
+
+/-- The nuclear certificate retains an exact diagonal defect term, even
+without a contraction assumption on the competitor. Arbitrary mixing of
+principal planes is permitted. -/
+theorem weightedNuclear_lowerBound_with_diagonal_defect
     (a b : ℝ) (hb : 0 ≤ b) (hab : b < a) (theta : ι → ℝ)
     (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A Z : E →ₗ[ℂ] E)
     (hA0 : ∀ i, A (e (.inl (0, i))) =
@@ -140,10 +187,10 @@ theorem weightedNuclear_lowerBound_of_paired_diagonals
       (((a * Real.cos (theta i) : ℝ) : ℂ) - (a * Real.sin (theta i)) * Complex.I) •
         e (.inl (1, i)))
     (hAf : ∀ j, A (e (.inr j)) = (a : ℂ) • e (.inr j))
-    (hZ : ∀ j, ‖Z (e j)‖ ≤ 1)
     (hdiag : ∀ i, (⟪e (.inl (0, i)), Z (e (.inl (0, i)))⟫_ℂ).im =
       (⟪e (.inl (1, i)), Z (e (.inl (1, i)))⟫_ℂ).im) :
-    (∑ i, weightedPhaseMinimum a b (theta i)) + Fintype.card κ * (a - b) ≤
+    (∑ i, weightedPhaseMinimum a b (theta i)) + Fintype.card κ * (a - b) +
+      b * weightedDiagonalDefect a b theta e Z ≤
       UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • Z) := by
   classical
   let t : ((Fin 2 × ι) ⊕ κ) → ℂ := Sum.elim
@@ -167,24 +214,19 @@ theorem weightedNuclear_lowerBound_of_paired_diagonals
     · rw [ite_eq_right hjk, mul_zero, mul_zero]
   let D := A - (b : ℂ) • Z
   let z (j) : ℂ := ⟪e j, Z (e j)⟫_ℂ
-  have hz (j) : (z j).re ≤ 1 := by
-    calc
-      _ ≤ ‖z j‖ := Complex.re_le_norm _
-      _ ≤ ‖e j‖ * ‖Z (e j)‖ := norm_inner_le_norm _ _
-      _ = ‖Z (e j)‖ := by rw [e.orthonormal.1 j, one_mul]
-      _ ≤ 1 := hZ j
   have hentry (j) (lam : ℂ) (hAj : A (e j) = lam • e j) :
       ⟪u j, D (e j)⟫_ℂ = conj (t j) * (lam - b * z j) := by
     dsimp only [u, D, z]
     rw [LinearMap.sub_apply, LinearMap.smul_apply, hAj, inner_smul_left,
       inner_sub_right, inner_smul_right, inner_smul_right, e.inner_eq_one, mul_one]
-  have hpair (i : ι) : weightedPhaseMinimum a b (theta i) ≤
+  have hpair (i : ι) : weightedPhaseMinimum a b (theta i) +
+      b * dualReal a b (theta i) * (2 - (z (.inl (0, i))).re - (z (.inl (1, i))).re) =
       (⟪u (.inl (0, i)), D (e (.inl (0, i)))⟫_ℂ).re +
       (⟪u (.inl (1, i)), D (e (.inl (1, i)))⟫_ℂ).re := by
     rw [weightedPhaseMinimum_eq_dual a b (theta i) hb hab]
-    have h := paired_scalar_support (dualReal a b (theta i)) (dualImag a b (theta i))
-      (a * Real.cos (theta i)) (a * Real.sin (theta i)) b (dualReal_nonneg _ _ _) hb
-      (z (.inl (0, i))) (z (.inl (1, i))) (hz _) (hz _) (hdiag i)
+    have h := paired_scalar_support_eq (dualReal a b (theta i)) (dualImag a b (theta i))
+      (a * Real.cos (theta i)) (a * Real.sin (theta i)) b
+      (z (.inl (0, i))) (z (.inl (1, i))) (hdiag i)
     rw [hentry _ _ (hA0 i), hentry _ _ (hA1 i)]
     have ht0 : t (.inl (0, i)) = dualPhase a b (theta i) := by simp [t]
     have ht1 : t (.inl (1, i)) = conj (dualPhase a b (theta i)) := by simp [t]
@@ -193,25 +235,73 @@ theorem weightedNuclear_lowerBound_of_paired_diagonals
     change conj ((dualReal a b (theta i) : ℂ) + dualImag a b (theta i) * Complex.I) = _ at hconj
     rw [hconj] at h
     simpa only [dualPhase, Complex.ofReal_mul] using h
-  have hfixed (j : κ) : a - b ≤ (⟪u (.inr j), D (e (.inr j))⟫_ℂ).re := by
-    have hj := hz (.inr j)
+  have hfixed (j : κ) : a - b + b * (1 - (z (.inr j)).re) =
+      (⟪u (.inr j), D (e (.inr j))⟫_ℂ).re := by
     simp only [u, t, Sum.elim_inr, one_smul, D, LinearMap.sub_apply,
       LinearMap.smul_apply, hAf, inner_sub_right, inner_smul_right,
       e.inner_eq_one, mul_one, Complex.sub_re, Complex.ofReal_re,
       Complex.mul_re, Complex.ofReal_im, zero_mul, sub_zero]
-    change a - b ≤ a - b * (z (.inr j)).re
-    nlinarith [mul_nonneg hb (show 0 ≤ 1 - (z (.inr j)).re by linarith)]
+    change a - b + b * (1 - (z (.inr j)).re) = a - b * (z (.inr j)).re
+    ring
   calc
-    _ ≤ (∑ i, ((⟪u (.inl (0, i)), D (e (.inl (0, i)))⟫_ℂ).re +
+    _ = (∑ i, (weightedPhaseMinimum a b (theta i) +
+        b * dualReal a b (theta i) *
+          (2 - (z (.inl (0, i))).re - (z (.inl (1, i))).re))) +
+        ∑ j : κ, (a - b + b * (1 - (z (.inr j)).re)) := by
+      simp only [weightedDiagonalDefect, z, Finset.sum_add_distrib, mul_add, Finset.mul_sum,
+        Finset.sum_const, Finset.card_univ, nsmul_eq_mul, ← mul_assoc]
+      ring
+    _ = (∑ i, ((⟪u (.inl (0, i)), D (e (.inl (0, i)))⟫_ℂ).re +
         (⟪u (.inl (1, i)), D (e (.inl (1, i)))⟫_ℂ).re)) +
         ∑ j : κ, (⟪u (.inr j), D (e (.inr j))⟫_ℂ).re := by
-      apply add_le_add (Finset.sum_le_sum (fun i _ => hpair i))
-      have hf : (∑ j : κ, (a - b)) ≤
-          ∑ j : κ, (⟪u (.inr j), D (e (.inr j))⟫_ℂ).re :=
-        Finset.sum_le_sum (fun j _ => hfixed j)
-      simpa only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul] using hf
+      simp only [hpair, hfixed]
     _ = ∑ j, (⟪u j, D (e j)⟫_ℂ).re := by
       rw [Fintype.sum_sum_type, Fintype.sum_prod_type, Fin.sum_univ_two, ← Finset.sum_add_distrib]
     _ ≤ _ := re_sum_inner_le_nuclear e D u hu
+
+omit [FiniteDimensional ℂ E] in
+/-- The diagonal defect is nonnegative for every competitor that contracts
+the given basis vectors. -/
+theorem weightedDiagonalDefect_nonneg
+    (a b : ℝ) (theta : ι → ℝ)
+    (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (Z : E →ₗ[ℂ] E)
+    (hZ : ∀ j, ‖Z (e j)‖ ≤ 1) : 0 ≤ weightedDiagonalDefect a b theta e Z := by
+  have hz (j) : (⟪e j, Z (e j)⟫_ℂ).re ≤ 1 := by
+    calc
+      _ ≤ ‖⟪e j, Z (e j)⟫_ℂ‖ := Complex.re_le_norm _
+      _ ≤ ‖e j‖ * ‖Z (e j)‖ := norm_inner_le_norm _ _
+      _ = ‖Z (e j)‖ := by rw [e.norm_eq_one, one_mul]
+      _ ≤ 1 := hZ j
+  unfold weightedDiagonalDefect
+  apply add_nonneg
+  · apply Finset.sum_nonneg
+    intro i _
+    exact mul_nonneg (dualReal_nonneg _ _ _)
+      (by linarith [hz (.inl (0, i)), hz (.inl (1, i))])
+  · exact Finset.sum_nonneg (fun j _ => sub_nonneg.mpr (hz (.inr j)))
+
+/-- A global weighted nuclear lower bound allowing arbitrary mixing between
+principal planes and fixed directions. Only the imaginary parts of paired
+diagonal entries must agree; an operator-norm contraction commuting with
+the swapping source reflection satisfies these hypotheses. -/
+theorem weightedNuclear_lowerBound_of_paired_diagonals
+    (a b : ℝ) (hb : 0 ≤ b) (hab : b < a) (theta : ι → ℝ)
+    (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A Z : E →ₗ[ℂ] E)
+    (hA0 : ∀ i, A (e (.inl (0, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) + (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (0, i)))
+    (hA1 : ∀ i, A (e (.inl (1, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) - (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (1, i)))
+    (hAf : ∀ j, A (e (.inr j)) = (a : ℂ) • e (.inr j))
+    (hZ : ∀ j, ‖Z (e j)‖ ≤ 1)
+    (hdiag : ∀ i, (⟪e (.inl (0, i)), Z (e (.inl (0, i)))⟫_ℂ).im =
+      (⟪e (.inl (1, i)), Z (e (.inl (1, i)))⟫_ℂ).im) :
+    (∑ i, weightedPhaseMinimum a b (theta i)) + Fintype.card κ * (a - b) ≤
+      UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • Z) := by
+  have h := weightedNuclear_lowerBound_with_diagonal_defect
+    a b hb hab theta e A Z hA0 hA1 hAf hdiag
+  exact (le_add_of_nonneg_right
+    (mul_nonneg hb (weightedDiagonalDefect_nonneg a b theta e Z hZ))).trans h
 
 end TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

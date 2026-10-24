@@ -110,4 +110,35 @@ theorem exists_unitary_attaining_weightedNuclear
     simp only [lam, Sum.elim_inr, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg hab0, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
 
+/-- The identity factor attains the exact nuclear minimum when all supplied
+rotation angles lie in the canonical regime, including its boundary. -/
+theorem weightedNuclear_identity_attains_of_subcritical
+    (a b : ℝ) (hb : 0 < b) (hab : b < a) (theta : ι → ℝ)
+    (hθ : ∀ i, theta i ∈ Set.Icc 0 (Real.pi / 2))
+    (hsub : ∀ i, b ≤ a * Real.cos (theta i))
+    (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A : E →ₗ[ℂ] E)
+    (hA0 : ∀ i, A (e (.inl (0, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) + (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (0, i)))
+    (hA1 : ∀ i, A (e (.inl (1, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) - (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (1, i)))
+    (hAf : ∀ j, A (e (.inr j)) = (a : ℂ) • e (.inr j)) :
+    UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • LinearMap.id) =
+      (∑ i, weightedPhaseMinimum a b (theta i)) + Fintype.card κ * (a - b) := by
+  obtain ⟨Z, hZp, hZf, hcost⟩ :=
+    exists_unitary_attaining_weightedNuclear a b hb hab theta hθ e A hA0 hA1 hAf
+  have hphase (i) : optimalWeightedPhase a b (theta i) = 0 := by
+    rw [optimalWeightedPhase, ite_eq_left (hsub i)]
+  have hZid : Z.toLinearMap = LinearMap.id := by
+    apply e.toBasis.ext
+    intro j
+    change Z (e j) = e j
+    rcases j with ⟨r, i⟩ | j
+    · rw [hZp, hphase]
+      simp [circlePhase]
+    · exact hZf j
+  rw [hZid] at hcost
+  exact hcost
+
 end TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

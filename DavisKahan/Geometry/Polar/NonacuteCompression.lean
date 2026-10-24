@@ -51,6 +51,18 @@ private theorem compression_eq_of_transport_gram
         _ = C * (P * C) * P := by rw [hCP.eq]
         _ = _ := by noncomm_ring
 
+/-- The completed nonacute rotation intertwines the source and target
+reflections, as it intertwines their orthogonal projections. -/
+theorem nonacuteDirectRotation_reflection_intertwines
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (D : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) (x : H) :
+    nonacuteDirectRotation U V D (U.reflection x) =
+      V.reflection (nonacuteDirectRotation U V D x) := by
+  rw [Submodule.reflection_apply, Submodule.reflection_apply, map_sub, map_nsmul]
+  rw [show nonacuteDirectRotation U V D (U.starProjection x) =
+      V.starProjection (nonacuteDirectRotation U V D x) from
+    DFunLike.congr_fun (nonacuteDirectRotation_intertwines U V D) x]
+
 /-- The two diagonal compressions of the completed nonacute rotation are
 the corresponding positive cosine compressions. -/
 theorem nonacuteDirectRotation_compressions_eq_cosine

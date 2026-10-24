@@ -430,8 +430,13 @@ arbitrary unitary matching of the two defect spaces. The canonical rotation is
 therefore the unique minimizer exactly when every angle is at most the cutoff.
 Below a strict maximum-angle cutoff, an explicit positive multiple of the
 squared Frobenius distance to the canonical rotation is bounded by the
-objective gap. These classification and stability assertions are conventional
-proofs under review, not yet Lean-certified. They do not imply a
+objective gap. The stability inequality is now Lean-certified as
+`smoothed_transport_growth_of_principalAngles_le` in
+`SmoothedSubspaceStability.lean`, with the explicit coefficient and its
+positivity proved separately. It consumes accepted principal angles and the
+literal singular-value cost and covers all admissible complex unitaries.
+The classification assertion remains a conventional proof under review.
+These results do not imply a
 no-spurious-local-minimum theorem for the whole smoothed problem.
 
 The 2026-10-24 primary-source search for this extension checked the statements

@@ -72,9 +72,40 @@ private theorem canonical_rotation_model
       nonacuteDirectRotation_skew_reflection U V D x, map_smul]
     simp
 
+/-- Every equal-rank complex subspace pair has a paired eigenbasis of its
+completed canonical rotation, with matching cosine eigenvalues and source
+reflection exchanging each positive-negative eigenphase pair. -/
+theorem exists_subspace_paired_rotation_basis
+    (U V : Submodule ℂ E) (hUV : Module.finrank ℂ U = Module.finrank ℂ V) :
+    let R := nonacuteDirectRotation U V (finiteCrossedDefectEquiv U V hUV)
+    ∃ n m : ℕ, ∃ (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
+      (theta : Fin n → ℝ),
+      (∀ i, theta i ∈ Set.Ioc 0 (Real.pi / 2)) ∧
+      (∀ i, Proposition35.section3CosAngleOperator U V (e (.inl (0, i))) =
+        (Real.cos (theta i) : ℂ) • e (.inl (0, i))) ∧
+      (∀ i, Proposition35.section3CosAngleOperator U V (e (.inl (1, i))) =
+        (Real.cos (theta i) : ℂ) • e (.inl (1, i))) ∧
+      (∀ j, Proposition35.section3CosAngleOperator U V (e (.inr j)) = e (.inr j)) ∧
+      (∀ i, R (e (.inl (0, i))) =
+        Complex.exp ((theta i : ℂ) * Complex.I) • e (.inl (0, i))) ∧
+      (∀ i, R (e (.inl (1, i))) =
+        Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i))) ∧
+      (∀ j, R (e (.inr j)) = e (.inr j)) ∧
+      (∀ i, U.reflection (e (.inl (0, i))) = e (.inl (1, i))) := by
+  let D := finiteCrossedDefectEquiv U V hUV
+  let R := nonacuteDirectRotation U V D
+  let C := Proposition35.section3CosAngleOperator U V
+  let B := -Complex.I • (R - C)
+  let R' := Unitary.linearIsometryEquiv (⟨R, nonacuteDirectRotation_mem_unitary U V D⟩ :
+    unitary (E →L[ℂ] E))
+  obtain ⟨hC, hB, hR, hpy, hanti⟩ := canonical_rotation_model U V D
+  obtain ⟨n, m, e, theta, _, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, _⟩ :=
+    exists_paired_rotation_eigenbasis R' U.reflection C.toLinearMap B.toLinearMap
+      hC hB hR hpy U.reflection_involutive hanti
+  exact ⟨n, m, e, theta, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0⟩
+
 /-- Every equal-rank complex subspace pair has a paired cosine eigenbasis
-whose pairs are exchanged by reflection in the source. Zero-angle directions
-are precisely the remaining fixed cosine directions. -/
+whose pairs are exchanged by reflection in the source. -/
 theorem exists_subspace_paired_cosine_basis
     (U V : Submodule ℂ E) (hUV : Module.finrank ℂ U = Module.finrank ℂ V) :
     ∃ n m : ℕ, ∃ (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
@@ -86,16 +117,8 @@ theorem exists_subspace_paired_cosine_basis
         (Real.cos (theta i) : ℂ) • e (.inl (1, i))) ∧
       (∀ j, Proposition35.section3CosAngleOperator U V (e (.inr j)) = e (.inr j)) ∧
       (∀ i, U.reflection (e (.inl (0, i))) = e (.inl (1, i))) := by
-  let D := finiteCrossedDefectEquiv U V hUV
-  let R := nonacuteDirectRotation U V D
-  let C := Proposition35.section3CosAngleOperator U V
-  let B := -Complex.I • (R - C)
-  let R' := Unitary.linearIsometryEquiv (⟨R, nonacuteDirectRotation_mem_unitary U V D⟩ :
-    unitary (E →L[ℂ] E))
-  obtain ⟨hC, hB, hR, hpy, hanti⟩ := canonical_rotation_model U V D
-  obtain ⟨n, m, e, theta, _, hθ, hC0, hC1, hCf, _, _, _, hJ0, _⟩ :=
-    exists_paired_rotation_eigenbasis R' U.reflection C.toLinearMap B.toLinearMap
-      hC hB hR hpy U.reflection_involutive hanti
+  obtain ⟨n, m, e, theta, hθ, hC0, hC1, hCf, _, _, _, hJ0⟩ :=
+    exists_subspace_paired_rotation_basis U V hUV
   exact ⟨n, m, e, theta, hθ, hC0, hC1, hCf, hJ0⟩
 
 /-- The canonical rotation of any equal-rank pair admits an exact weighted
@@ -164,10 +187,7 @@ theorem exists_unitary_minimizing_weighted_transport
   let R := Unitary.linearIsometryEquiv
     (⟨Rop, nonacuteDirectRotation_mem_unitary U V D⟩ : unitary (E →L[ℂ] E))
   have hRref (x : E) : R (U.reflection x) = V.reflection (R x) := by
-    change Rop (U.reflection x) = V.reflection (Rop x)
-    rw [Submodule.reflection_apply, Submodule.reflection_apply, map_sub, map_nsmul]
-    rw [show Rop (U.starProjection x) = V.starProjection (Rop x) from
-      DFunLike.congr_fun (nonacuteDirectRotation_intertwines U V D) x]
+    exact nonacuteDirectRotation_reflection_intertwines U V D x
   obtain ⟨Z, hZcomm, hcost, hmin⟩ :=
     exists_unitary_minimizing_subspace_commutant a b hb hab U V hUV
   have hZinv (x : E) : Z.symm (U.reflection x) = U.reflection (Z.symm x) := by
