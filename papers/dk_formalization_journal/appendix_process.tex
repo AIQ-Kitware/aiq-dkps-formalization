@@ -185,9 +185,16 @@ smaller angles are permitted.
 \path{optimalSmoothedTransport_lt_canonical_of_supercritical}, giving the
 necessary-and-sufficient accepted-principal-angle criterion and the strict
 improvement by the explicit optimizer in \cref{cor:smoothed-canonical-cutoff}.
-These endpoints include every admissible complex unitary; no supplied
-principal-plane coordinates or restriction on mixing occur in their
-hypotheses. The general angle theorem supplies an optimizer; the stability theorems
+\path{SmoothedCriticalFlatness.lean} proves the quartic scalar upper bound
+and failure of every local positive quadratic modulus.
+\path{SmoothedCriticalTransportFlatness.lean} realizes that failure for
+actual planar unitary transporters at the exact cutoff, with the literal
+singular-value cost and Frobenius distance. Its endpoint
+\path{smoothed_critical_planar_no_quadratic_growth} certifies the final
+assertion of \cref{prop:smoothed-critical-flatness}.
+The global lower-bound endpoints quantify over every admissible complex
+unitary; they require no supplied principal-plane coordinates or restriction
+on mixing. The general angle theorem supplies an optimizer; the stability theorems
 supply quadratic growth below the cutoff and quartic growth through equality.
 The critical-family theorem gives its sharper root estimate. These results do not classify all supercritical optimizers.
 
@@ -223,6 +230,7 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalTransportFlatness \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}
 The mathematical manuscript builds independently of Lean:

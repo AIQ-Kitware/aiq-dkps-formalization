@@ -392,6 +392,47 @@ $L$, proving the first inequality. Squaring after adding $L$ gives the
 error estimate, whose zero-error case proves uniqueness.
 \end{proof}
 
+\begin{proposition}[Quartic flatness at the cutoff]
+\label{prop:smoothed-critical-flatness}
+Put $b=\eta^{-1}$ and $d=d_\tau$. For $|z|=1$, define
+\[
+ G(z)=|b+id-bz|+|b-id-bz|-2d.
+\]
+If $|b\operatorname{Im}z|\leq d/2$, then
+\[
+ 0\leq G(z)\leq\frac{b^2}{2d}|z-1|^4.
+\]
+For every $c>0$ and $r>0$ there is a unit phase $z$ with
+$0<|z-1|<r$ and $G(z)<c|z-1|^2$.
+Consequently, on a critical principal plane no positive quadratic growth
+constant holds in any neighborhood of the canonical rotation.
+\end{proposition}
+
+\begin{proof}
+Write $bz=x+iy$, $h=b-x$, $s_-=d-y$ and $s_+=d+y$.
+The imaginary-part condition gives $s_\pm\geq d/2$. Since
+$\sqrt{h^2+s^2}-s=h^2/(\sqrt{h^2+s^2}+s)$, each focal-distance
+excess is at most $h^2/d$. The circle identity gives
+$|bz-b|^2=2bh$, so their sum is at most
+$2h^2/d=b^2|z-1|^4/(2d)$. Nonnegativity follows from the triangle
+inequality between the foci.
+
+The rational circle points
+\[
+ z(t)=\frac{1-t^2+2it}{1+t^2},\qquad t>0,
+ \qquad |z(t)-1|^2=\frac{4t^2}{1+t^2},
+\]
+approach one through distinct unit phases. The quartic upper bound makes
+$G(z(t))/|z(t)-1|^2$ tend to zero, proving the assertion for every
+$c,r>0$.
+On a critical principal plane, $\eta R$ has eigenvalues $b\pm id$.
+Unitary invariance and \cref{eq:smoothed-weighted-nuclear} identify
+$G(z)$ with $\Psi_\tau(\bar z R)-\Psi_\tau(R)$, while
+$\|\bar z R-R\|_F^2=2|z-1|^2$. These scalar phases remain feasible
+transporters, so a quadratic estimate would contradict the preceding
+assertion.
+\end{proof}
+
 As $\tau\downarrow0$, the angle cost tends to $2\sin\theta$, recovering
 \cref{thm:complex-trace-all-pairs}. As $\tau\to\infty$,
 $2\tau\mu_\tau(\theta)$ tends to $8\sin^2(\theta/2)$, the squared

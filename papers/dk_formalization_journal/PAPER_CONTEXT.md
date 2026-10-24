@@ -909,6 +909,22 @@ text was not obtained; its exact implication is still unresolved. These
 comparisons exclude direct applications of the inspected statements, not
 all equivalent prior results or broader reductions.
 
+`SmoothedCriticalFlatness.lean` adds a compiled scalar sharpness certificate
+for the cutoff. For `b,d>0` and a unit phase `z` with
+`|b Im(z)| <= d/2`, the tangent two-focus excess is between zero and
+`b^2 |z-1|^4/(2d)`. The endpoint
+`critical_phase_no_quadratic_modulus` constructs arbitrarily close nonzero
+unit phases violating every positive quadratic modulus. This is included as
+`prop:smoothed-critical-flatness`. `SmoothedCriticalTransportFlatness.lean` now closes the operator interpretation:
+`smoothed_critical_planar_no_quadratic_growth` uses actual unitary
+transporters between the established model lines at the exact cutoff,
+the literal singular-value cost, and Frobenius distance. Its final signature
+requires no supplied eigenbasis or normal-form hypothesis. The internal
+spectral calculation and its general two-dimensional endpoint are separate
+from this concrete model instantiation. Together with the unrestricted quartic lower bound, it
+explains why the quadratic certificate cannot persist at the cutoff.
+No optimal quartic coefficient or new general error-bound principle is claimed.
+
 The integrated journal text typesets successfully with `pdflatex`, `bibtex`,
 and two further LaTeX passes. This VM lacks `latexmk`; its default T1 Computer
 Modern fonts also need microtype expansion disabled for the local build.
