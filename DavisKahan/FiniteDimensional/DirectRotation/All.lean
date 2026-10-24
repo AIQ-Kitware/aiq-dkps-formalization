@@ -28,5 +28,6 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseMinimum
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransport
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenThreeHalves
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenPlanarOptimization
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

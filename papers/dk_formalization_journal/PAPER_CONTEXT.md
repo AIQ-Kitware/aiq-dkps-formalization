@@ -91,6 +91,18 @@ The expanded direct-rotation aggregate compiled, and the new public endpoint,
 critical-angle, two-root, and three-halves declarations have only the three
 standard axioms listed above.
 
+`SchattenPlanarOptimization.lean` proves that the attained scalar cost is the
+unrestricted minimum over all complex planar unitaries transporting the model
+source line to its target, for every finite exponent at least one. Its generic
+lower bound applies on any two-dimensional complex inner-product space with
+a unit-vector angle witness. The proof consumes Tau Ceti's accepted normal
+spectral theorem and planar singular-value API: the absolute eigenphases have
+total budget at least `2 theta`, and scaling them down reduces to the scalar
+minimum. The canonical model transport is globally optimal exactly below the
+explicit critical angle, including equality. This closes the unrestricted
+two-dimensional reduction; independence across several principal planes is
+still the separate, unformalized higher-rank step.
+
 `schatten_optimization.tex` is a mathematical extension draft that is **not
 included by `paper.tex`**. It gives a conventional proof candidate for the
 unrestricted finite-dimensional complex formula

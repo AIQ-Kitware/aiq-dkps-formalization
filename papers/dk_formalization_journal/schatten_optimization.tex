@@ -97,6 +97,38 @@ The scalar minimization determines the unrestricted complex problem as well.
 Write $\mathcal U(P,Q)=\{W\in U(n):WPW^*=Q\}$ for the transporters of
 two orthogonal projections of equal rank.
 
+\begin{proposition}[The unrestricted planar minimum]
+\label{prop:schatten-planar-minimum}
+For two complex lines of principal angle $\theta$ in $\mathbb C^2$,
+the minimum displacement power over all unitary transporters is
+$m_p(\theta)$.
+\end{proposition}
+
+\begin{proof}
+Let $x$ be a unit vector in the source line. For an admissible $W$,
+$|\langle x,Wx\rangle|=\cos\theta$. Write its eigenphases in
+$[-\pi,\pi]$ as $\alpha,\beta$. In an orthonormal eigenbasis,
+\[
+ \langle x,Wx\rangle=s e^{i\alpha}+(1-s)e^{i\beta},\qquad 0\leq s\leq1.
+\]
+Multiplying this average by $e^{-i(\alpha+\beta)/2}$ gives real part
+$\cos((\alpha-\beta)/2)$. If $|\alpha|+|\beta|<2\theta$, its modulus
+would consequently be at least
+$\cos((|\alpha|+|\beta|)/2)>\cos\theta$, a contradiction. Thus
+$|\alpha|+|\beta|\geq2\theta$.
+
+Scale the two nonnegative absolute eigenphases down, if necessary, until
+their sum is $2\theta$. Both remain in $[0,\pi]$, where $f_p$ increases.
+Reordering the resulting angles gives $\theta+\delta,\theta-\delta$
+for some $0\leq\delta\leq\theta$. Hence
+\[
+ \|I-W\|_p^p=f_p(|\alpha|)+f_p(|\beta|)
+       \geq f_p(\theta+\delta)+f_p(\theta-\delta)\geq m_p(\theta).
+\]
+The zero total-angle case has $\theta=0$ and the same conclusion.
+An optimizing scalar phase attains the bound.
+\end{proof}
+
 \begin{theorem}[Independent principal-plane minimization]
 \label{thm:schatten-independent-planes}
 Let $P,Q$ be orthogonal projections of rank $r$ on $\mathbb C^n$, and let
