@@ -581,6 +581,16 @@ theorem. The stationary-block proof and literature priority need independent
 review before submission. The classical real orthogonal normal form for a
 Hermitian projection is an ingredient, not an independent novelty claim.
 
+The first formal foundations for this real reduction now compile.
+`OrthogonalComplexStructure.lean` consumes accepted almost-complex modules
+and compatible Hermitian cores, proves compatibility with the original real
+Hilbert norm, and constructs a real orthonormal basis in quarter-turn pairs.
+`Projection/RealBlocks.lean` proves the explicit invariant line/plane step
+and the complete orthogonal decomposition for real symmetric/skew components
+satisfying the projection identities. These are classical foundations for
+the matching proof; the actual real transport optimization endpoints are
+still conventional assertions awaiting formal assembly.
+
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
 - Symbol colors: `math_symbol_colors.tex`; `\DKMathColorsfalse` after its input turns symbol colors off. Keep the readable Manim-derived shade map and `appendix_notation.tex` aligned.
