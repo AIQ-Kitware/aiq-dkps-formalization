@@ -402,6 +402,11 @@ If $|b\operatorname{Im}z|\leq d/2$, then
 \[
  0\leq G(z)\leq\frac{b^2}{2d}|z-1|^4.
 \]
+The exact leading coefficient is
+\[
+ \lim_{\substack{z\to1,\ |z|=1\\z\ne1}}
+   \frac{G(z)}{|z-1|^4}=\frac{b^2}{4d}.
+\]
 For every $c>0$ and $r>0$ there is a unit phase $z$ with
 $0<|z-1|<r$ and $G(z)<c|z-1|^2$.
 Consequently, on a critical principal plane no positive quadratic growth
@@ -424,13 +429,23 @@ The rational circle points
 \]
 approach one through distinct unit phases. The quartic upper bound makes
 $G(z(t))/|z(t)-1|^2$ tend to zero, proving the assertion for every
-$c,r>0$.
+$c,r>0$. For the leading coefficient, rationalize both focal terms:
+\[
+ G(z)=h^2\left(
+ \frac1{\sqrt{h^2+s_-^2}+s_-}
+ +\frac1{\sqrt{h^2+s_+^2}+s_+}\right).
+\]
+Since $h^2=b^2|z-1|^4/4$ and both denominators tend to $2d$,
+the displayed limit follows.
 On a critical principal plane, $\eta R$ has eigenvalues $b\pm id$.
 Unitary invariance and \cref{eq:smoothed-weighted-nuclear} identify
 $G(z)$ with $\Psi_\tau(\bar z R)-\Psi_\tau(R)$, while
 $\|\bar z R-R\|_F^2=2|z-1|^2$. These scalar phases remain feasible
 transporters, so a quadratic estimate would contradict the preceding
-assertion.
+assertion. In particular, along these phases the cost excess divided by
+$\|\bar z R-R\|_F^4$ tends to $b^2/(16d)$. This is also the leading
+coefficient of the root lower bound in
+\cref{prop:smoothed-critical-stability} at $n=2$.
 \end{proof}
 
 As $\tau\downarrow0$, the angle cost tends to $2\sin\theta$, recovering

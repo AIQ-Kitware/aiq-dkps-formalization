@@ -923,7 +923,13 @@ requires no supplied eigenbasis or normal-form hypothesis. The internal
 spectral calculation and its general two-dimensional endpoint are separate
 from this concrete model instantiation. Together with the unrestricted quartic lower bound, it
 explains why the quadratic certificate cannot persist at the cutoff.
-No optimal quartic coefficient or new general error-bound principle is claimed.
+The exact factorization `critical_phase_quartic_factorization` and limit
+`tendsto_critical_phase_quartic_ratio` now certify the leading scalar
+coefficient `b^2/(4d)`. On the actual critical plane the corresponding
+Frobenius fourth-power coefficient is `b^2/(16d)`, matching the leading
+term of the root lower bound at dimension two. This last comparison is
+algebra in the manuscript; the general quartic bound's global coefficient
+is not claimed optimal. No new general error-bound principle is claimed.
 
 The integrated journal text typesets successfully with `pdflatex`, `bibtex`,
 and two further LaTeX passes. This VM lacks `latexmk`; its default T1 Computer

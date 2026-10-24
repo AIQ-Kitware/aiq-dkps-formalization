@@ -16,13 +16,15 @@ every proposed positive quadratic growth constant. This explains why the
 strict-subcritical quadratic stability certificate cannot extend to the cutoff.
 
 These scalar estimates support the critical-flatness proposition in the
-Davis--Kahan journal paper. The unrestricted quartic lower bound is proved
+Davis--Kahan journal paper. An exact factorization also gives the leading
+fourth-order coefficient. The unrestricted quartic lower bound is proved
 separately in `SmoothedQuarticStability`.
 -/
 
 public section
 
 noncomputable section
+open Filter Topology
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
 
 /-- At tangency, focal-distance excess is bounded by the fourth power
@@ -160,5 +162,95 @@ theorem critical_phase_no_quadratic_modulus
   · have hu := critical_unit_phase_quartic_upper b d hb hd z hz him
     have hs := mul_lt_mul_of_pos_right hquad (sq_pos_of_pos hchordpos)
     nlinarith only [hu, hs]
+
+/-- Continuous coefficient of the fourth-power phase chord at critical tangency. -/
+@[expose]
+def criticalPhaseQuarticCoefficient (b d : ℝ) (z : ℂ) : ℝ :=
+  b ^ 2 / 4 *
+    ((‖(b : ℂ) + d * Complex.I - (b : ℂ) * z‖ + (d - ((b : ℂ) * z).im))⁻¹ +
+     (‖(b : ℂ) - d * Complex.I - (b : ℂ) * z‖ + (d + ((b : ℂ) * z).im))⁻¹)
+
+set_option maxHeartbeats 600000 in
+/-- Exact quartic factorization on the critical phase circle near one. -/
+theorem critical_phase_quartic_factorization (b d : ℝ) (hb : 0 < b) (hd : 0 < d)
+    (z : ℂ) (hz : ‖z‖ = 1) (him : |((b : ℂ) * z).im| ≤ d / 2) :
+    twoFocusCost b d ((b : ℂ) * z) - 2 * d =
+      criticalPhaseQuarticCoefficient b d z * ‖z - 1‖ ^ 4 := by
+  let w := (b : ℂ) * z
+  let p := ‖(b : ℂ) + d * Complex.I - w‖
+  let m := ‖(b : ℂ) - d * Complex.I - w‖
+  let h := b - w.re
+  let r := d - w.im
+  let s := d + w.im
+  have hp0 : 0 ≤ p := norm_nonneg _
+  have hm0 : 0 ≤ m := norm_nonneg _
+  have hyr := abs_le.mp him
+  have hr : d / 2 ≤ r := by dsimp only [r, w]; linarith [hyr.2]
+  have hs : d / 2 ≤ s := by dsimp only [s, w]; linarith [hyr.1]
+  have hpp : p ^ 2 = h ^ 2 + r ^ 2 := by
+    dsimp only [p, h, r]
+    simp [Complex.sq_norm, Complex.normSq_apply]
+    ring
+  have hmm : m ^ 2 = h ^ 2 + s ^ 2 := by
+    dsimp only [m, h, s]
+    simp [Complex.sq_norm, Complex.normSq_apply]
+    ring
+  have hpr : p + r ≠ 0 := ne_of_gt (by linarith : 0 < p + r)
+  have hms : m + s ≠ 0 := ne_of_gt (by linarith : 0 < m + s)
+  have hp : p - r = h ^ 2 / (p + r) := (eq_div_iff hpr).mpr (by nlinarith only [hpp])
+  have hm : m - s = h ^ 2 / (m + s) := (eq_div_iff hms).mpr (by nlinarith only [hmm])
+  have hrs : r + s = 2 * d := by dsimp only [r, s]; ring
+  have hw : ‖w‖ = b := by simp [w, hz, abs_of_pos hb]
+  have hwsq : w.re ^ 2 + w.im ^ 2 = b ^ 2 := by
+    have hh := congrArg (fun t : ℝ => t ^ 2) hw
+    simpa only [Complex.sq_norm, Complex.normSq_apply, ← pow_two] using hh
+  have hchord : b ^ 2 * ‖z - 1‖ ^ 2 = 2 * b * h := by
+    have hf : w - (b : ℂ) = (b : ℂ) * (z - 1) := by dsimp only [w]; ring
+    have hn : ‖w - (b : ℂ)‖ ^ 2 = 2 * b * h := by
+      dsimp only [h]
+      simp only [Complex.sq_norm, Complex.normSq_apply, Complex.sub_re,
+        Complex.sub_im, Complex.ofReal_re, Complex.ofReal_im, sub_zero]
+      nlinarith only [hwsq]
+    rw [hf, norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hb, mul_pow] at hn
+    exact hn
+  have hchord4 : b ^ 2 * ‖z - 1‖ ^ 4 = 4 * h ^ 2 := by
+    have hh := congrArg (fun t : ℝ => t ^ 2) hchord
+    nlinarith [sq_pos_of_pos hb]
+  change p + m - 2 * d = b ^ 2 / 4 * ((p + r)⁻¹ + (m + s)⁻¹) * ‖z - 1‖ ^ 4
+  calc
+    _ = (p - r) + (m - s) := by linarith only [hrs]
+    _ = h ^ 2 / (p + r) + h ^ 2 / (m + s) := by rw [hp, hm]
+    _ = (b ^ 2 * ‖z - 1‖ ^ 4) / 4 * ((p + r)⁻¹ + (m + s)⁻¹) := by
+      rw [hchord4]
+      ring
+    _ = _ := by ring
+
+private theorem criticalPhaseQuarticCoefficient_one (b d : ℝ) (hd : 0 < d) :
+    criticalPhaseQuarticCoefficient b d 1 = b ^ 2 / (4 * d) := by
+  have hp : (b : ℂ) + d * Complex.I - (b : ℂ) * 1 = d * Complex.I := by ring
+  have hm : (b : ℂ) - d * Complex.I - (b : ℂ) * 1 = -(d * Complex.I) := by ring
+  unfold criticalPhaseQuarticCoefficient
+  rw [hp, hm]
+  simp only [norm_neg, norm_mul, Complex.norm_real, Real.norm_eq_abs,
+    abs_of_pos hd, Complex.norm_I, mul_one, Complex.ofReal_im, sub_zero, add_zero]
+  field_simp
+
+/-- The critical scalar phase excess has the exact fourth-order chord coefficient. -/
+theorem tendsto_critical_phase_quartic_ratio (b d : ℝ) (hb : 0 < b) (hd : 0 < d) :
+    Tendsto (fun z : ℂ => (twoFocusCost b d ((b : ℂ) * z) - 2 * d) / ‖z - 1‖ ^ 4)
+      (𝓝[{z : ℂ | ‖z‖ = 1 ∧ z ≠ 1}] 1) (𝓝 (b ^ 2 / (4 * d))) := by
+  have hcoef : ContinuousAt (criticalPhaseQuarticCoefficient b d) 1 := by
+    unfold criticalPhaseQuarticCoefficient
+    fun_prop (disch := simp [abs_of_pos hd, ne_of_gt hd])
+  have hnear : ∀ᶠ z : ℂ in 𝓝 (1 : ℂ), |((b : ℂ) * z).im| < d / 2 := by
+    have hcont : Continuous (fun z : ℂ => |((b : ℂ) * z).im|) := by fun_prop
+    exact (isOpen_lt hcont continuous_const).mem_nhds (by simpa using half_pos hd)
+  have heq : (fun z : ℂ => (twoFocusCost b d ((b : ℂ) * z) - 2 * d) / ‖z - 1‖ ^ 4) =ᶠ[
+      𝓝[{z : ℂ | ‖z‖ = 1 ∧ z ≠ 1}] 1] criticalPhaseQuarticCoefficient b d := by
+    filter_upwards [self_mem_nhdsWithin, hnear.filter_mono nhdsWithin_le_nhds] with z hz him
+    rw [critical_phase_quartic_factorization b d hb hd z hz.1 him.le]
+    exact mul_div_cancel_right₀ _ (pow_ne_zero 4 (norm_ne_zero_iff.mpr (sub_ne_zero.mpr hz.2)))
+  rw [← criticalPhaseQuarticCoefficient_one b d hd]
+  exact (hcoef.tendsto.mono_left nhdsWithin_le_nhds).congr' heq.symm
 
 end TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
