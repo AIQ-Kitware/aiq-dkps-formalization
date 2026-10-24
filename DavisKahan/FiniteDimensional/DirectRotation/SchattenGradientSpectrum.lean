@@ -207,6 +207,37 @@ theorem schattenPhaseDerivative_signed_level_sets (p g : ℝ)
     _ ↔ -t = a ∨ -t = b := hlevel (-t) (by simpa only [abs_neg] using ht)
     _ ↔ t = -a ∨ t = -b := by simp only [neg_eq_iff_eq_neg]
 
+/-- Every positive spectral level of an actual unitary gradient is bounded
+by the maximal scalar amplitude. Spectral mapping supplies a unit-circle
+phase realizing the level, so there are no additional positive blocks
+beyond the submaximal and coalescing-root cases. -/
+theorem positive_gradient_spectrum_le_max
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [FiniteDimensional ℂ E] [CompleteSpace E]
+    (p g : ℝ) (hp1 : 1 < p) (hp2 : p < 2) (hg0 : 0 < g)
+    (U : unitary (E →L[ℂ] E))
+    (hg : (g : ℂ) ∈ spectrum ℂ (schattenUnitaryGradient p (U : E →L[ℂ] E))) :
+    g ≤ p * phaseAmplitude p (criticalAngle p) := by
+  have hf : ContinuousOn (fun z : ℂ => (schattenPhaseDerivative p z : ℂ))
+      (spectrum ℂ (U : E →L[ℂ] E)) :=
+    ((U : E →L[ℂ] E).finite_spectrum ℂ).continuousOn _
+  rw [schattenUnitaryGradient_def] at hg
+  have hs := cfc_map_spectrum (R := ℂ) (a := (U : E →L[ℂ] E))
+    (f := fun z : ℂ => (schattenPhaseDerivative p z : ℂ)) (by infer_instance) hf
+  rw [hs] at hg
+  obtain ⟨z, hz, hzg⟩ := hg
+  have hn : ‖z‖ = 1 := spectrum.norm_eq_one_of_unitary U.2 hz
+  have hphase : Complex.exp (((z.arg : ℝ) : ℂ) * Complex.I) = z := by
+    simpa only [hn, Complex.ofReal_one, one_mul] using Complex.norm_mul_exp_arg_mul_I z
+  have hreal : schattenPhaseDerivative p z = g := Complex.ofReal_injective hzg
+  have harg := principal_phase_pos_of_schattenPhaseDerivative_pos p z.arg
+    (by linarith) (Complex.abs_arg_le_pi z) (by rw [hphase, hreal]; exact hg0)
+  calc
+    g = p * phaseAmplitude p z.arg := by
+      rw [← schattenPhaseDerivative_exp_eq_amplitude p z.arg harg, hphase, hreal]
+    _ ≤ _ := mul_le_mul_of_nonneg_left
+      (phaseAmplitude_le_criticalAngle p z.arg hp1 hp2 ⟨harg.1.le, harg.2.le⟩) (by linarith)
+
 /-- On a positive submaximal gradient eigenspace, all principal eigenphases
 of the unitary lie in the same pair of scalar roots. The unitary is arbitrary;
 the stationarity identity will subsequently pair its opposite gradient levels. -/

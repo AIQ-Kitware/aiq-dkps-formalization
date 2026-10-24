@@ -355,9 +355,30 @@ balanced phase representations. `PairedInvolutionDecomposition.lean` supplies
 the reusable orthogonal coordinate construction, including both the swapping
 reflection and the restricted complementary unitary. The strengthened gradient
 block theorem also retains the scalar balance equation in its conclusion.
-The axiom audit lists only the three standard logical axioms. The full
-principal-angle cost sum and zero-gradient contribution remain to be assembled;
-the unrestricted higher-rank minimum is not yet Lean-certified.
+The axiom audit lists only the three standard logical axioms. The unrestricted
+higher-rank minimum is not yet Lean-certified; the subsequent block-cost
+results below do not assert the complete ambient angle-sum lower bound.
+
+`SchattenGradientPlanes.lean` now constructs a common orthonormal eigenbasis
+of the actual paired restrictions on every positive submaximal gradient level
+at a constrained local minimum. Orthogonality of the large-phase projections
+leaves only `(a,a)`, `(b,a)`, and `(a,b)`. Every pair attains `m_p` at its mean
+angle, and the sum is the actual Schatten displacement power of the two
+restrictions. A unit source vector in each reflection-paired plane witnesses
+that mean angle through `|<x,Ux>| = cos(theta)`. The maximal-gradient case is
+also compiled: its restrictions are opposite critical scalar phases and its
+cost is the critical scalar minimum times the multiplicity. These statements
+permit empty eigenspaces. `positive_gradient_spectrum_le_max` in
+`SchattenGradientSpectrum.lean` proves by spectral mapping that every positive
+gradient spectral level is at most the scalar amplitude maximum. Thus the
+submaximal and critical estimates exhaust the positive spectral cases.
+A complete orthogonal decomposition over all levels
+and identification of its angle sums with the ambient accepted principal-angle
+sum remain necessary for the unrestricted theorem. These are block-cost steps
+in `schatten_optimization.tex`, Theorem `thm:schatten-independent-planes`;
+they remain outside the included smoothed journal section. The new spectral
+bound, submaximal cost, critical cost, and kernel bound have axiom audits
+containing only `propext`, `Classical.choice`, and `Quot.sound`.
 
 The zero-gradient restriction is now represented as an actual reflection in
 `SchattenGradientBlocks.lean`: `gradient_kernel_reflection_representation`
@@ -369,9 +390,14 @@ unitary's finite Schatten displacement power is `2^(p-1)` times its nuclear
 displacement, over either scalar field. `SchattenReflectionBound.lean` combines
 this with the existing projection-distance inequality to bound the sum of
 scalar minima over the accepted principal angles for every reflecting
-transporter. The conventional proof now uses this trace argument. Applying
-the bound to the restricted source and target, then assembling the complete
-spectral cost sum, remains part of the unfinished global theorem.
+transporter. The conventional proof now uses this trace argument.
+`SchattenGradientKernel.lean` applies the bound on the actual gradient kernel:
+its unitary restriction maps the source-kernel intersection to the
+target-kernel intersection, is self-adjoint, and dominates the sum over the
+accepted principal angles of that restricted pair. This holds for any unitary
+transporter and every finite exponent at least one, without local minimality.
+Assembly of the complete ambient spectral and principal-angle sums remains
+part of the unfinished global theorem.
 
 `SchattenTransportExistence.lean` proves attainment on every nonempty finite
 unitary transport fiber over real or complex scalars for finite Schatten
