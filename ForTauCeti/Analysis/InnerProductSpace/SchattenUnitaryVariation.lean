@@ -57,6 +57,43 @@ theorem schattenPhaseDerivative_eq (p : ℝ) (z : ℂ) :
     Complex.one_re, Complex.one_im, Complex.I_re, Complex.I_im]
   ring
 
+/-- On the unit circle, the phase symbol is the derivative of the chordal
+power cost. No choice of a principal argument enters this identity. -/
+theorem schattenPhaseDerivative_exp (p t : ℝ) :
+    schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I)) =
+      p * (2 * |Real.sin (t / 2)|) ^ (p - 2) * Real.sin t := by
+  have him : (Complex.exp ((t : ℂ) * Complex.I)).im = Real.sin t := by
+    rw [Complex.exp_mul_I]
+    simp [Complex.cos_ofReal_im, Complex.sin_ofReal_re]
+  have hnorm : ‖Complex.exp ((t : ℂ) * Complex.I) - 1‖ =
+      2 * |Real.sin (t / 2)| := by
+    rw [mul_comm (t : ℂ) Complex.I, Complex.norm_exp_I_mul_ofReal_sub_one,
+      Real.norm_eq_abs, abs_mul, abs_of_pos (by norm_num : (0 : ℝ) < 2)]
+  rw [schattenPhaseDerivative_eq, hnorm, him]
+
+/-- On the unit circle the zero phase-gradient levels are precisely the
+two real unitary eigenvalues. This is the scalar description of the kernel
+block in constrained stationarity. -/
+theorem schattenPhaseDerivative_eq_zero_iff_of_norm_eq_one
+    (p : ℝ) (hp : 0 < p) (z : ℂ) (hz : ‖z‖ = 1) :
+    schattenPhaseDerivative p z = 0 ↔ z = 1 ∨ z = -1 := by
+  constructor
+  · intro hzero
+    by_cases hzone : z = 1
+    · exact Or.inl hzone
+    have hcoef : 0 < p * ‖z - 1‖ ^ (p - 2) :=
+      mul_pos hp (Real.rpow_pos_of_pos (norm_pos_iff.mpr (sub_ne_zero.mpr hzone)) _)
+    rw [schattenPhaseDerivative_eq] at hzero
+    have him : z.im = 0 := (mul_eq_zero.mp hzero).resolve_left hcoef.ne'
+    have hsquare : z.re ^ 2 = 1 := by
+      have h := Complex.normSq_eq_norm_sq z
+      rw [hz, one_pow, Complex.normSq_apply, him] at h
+      nlinarith
+    rcases sq_eq_one_iff.mp hsquare with hre | hre
+    · exact Or.inl (Complex.ext hre him)
+    · exact Or.inr (Complex.ext (by simpa using hre) (by simpa using him))
+  · rintro (rfl | rfl) <;> simp [schattenPhaseDerivative_eq]
+
 /-- The self-adjoint gradient for variations within the unitary group. -/
 def schattenUnitaryGradient (p : ℝ) (U : E →L[ℂ] E) : E →L[ℂ] E :=
   cfc (fun z => (schattenPhaseDerivative p z : ℂ)) U
@@ -81,6 +118,52 @@ theorem commute_schattenUnitaryGradient (p : ℝ) (U : E →L[ℂ] E) [IsStarNor
   exact (Commute.refl U).cfc (star_comm_self : Commute (star U) U) _
 
 variable [FiniteDimensional ℂ E]
+
+/-- The unitary gradient acts on an eigenvector by the phase-derivative
+symbol of its eigenvalue. -/
+theorem schattenUnitaryGradient_apply_of_apply_eq_smul
+    (p : ℝ) (U : E →L[ℂ] E) [IsStarNormal U] (x : E) (mu : ℂ)
+    (hx : U x = mu • x) :
+    schattenUnitaryGradient p U x = (schattenPhaseDerivative p mu : ℂ) • x := by
+  rw [schattenUnitaryGradient_def]
+  exact ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal _ hx
+
+/-- A unitary with zero Schatten phase gradient is self-adjoint, hence
+has only the eigenvalues `1` and `-1`. This identifies the exceptional
+zero-gradient block without differentiating the cost twice at zero. -/
+theorem isSelfAdjoint_of_schattenUnitaryGradient_eq_zero
+    (p : ℝ) (hp : 0 < p) (U : unitary (E →L[ℂ] E))
+    (hG : schattenUnitaryGradient p (U : E →L[ℂ] E) = 0) :
+    IsSelfAdjoint (U : E →L[ℂ] E) := by
+  let := ContinuousLinearMap.isStarNormal_toLinearMap (U : E →L[ℂ] E)
+  obtain ⟨b, mu, hmu⟩ :=
+    LinearMap.exists_orthonormalBasis_apply_eq_smul_of_isStarNormal
+      (U : E →L[ℂ] E).toLinearMap (ι := Fin (Module.finrank ℂ E)) (by simp)
+  have hU (i) : (U : E →L[ℂ] E) (b i) = mu i • b i := hmu i
+  have hreal (i) : mu i = 1 ∨ mu i = -1 := by
+    have hnorm : ‖mu i‖ = 1 := by
+      simpa only [hU, norm_smul, b.orthonormal.1 i, mul_one] using
+        _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.2 (b i)
+    have heq := schattenUnitaryGradient_apply_of_apply_eq_smul p
+      (U : E →L[ℂ] E) (b i) (mu i) (hU i)
+    rw [hG, zero_apply] at heq
+    have hscalar : schattenPhaseDerivative p (mu i) = 0 := by
+      have hsmul : (schattenPhaseDerivative p (mu i) : ℂ) • b i = (0 : ℂ) • b i := by
+        simpa only [zero_smul] using heq.symm
+      exact_mod_cast smul_left_injective ℂ (b.orthonormal.ne_zero i) hsmul
+    exact (schattenPhaseDerivative_eq_zero_iff_of_norm_eq_one p hp (mu i) hnorm).1 hscalar
+  have hstar (i) : star (U : E →L[ℂ] E) (b i) = conj (mu i) • b i := by
+    rw [← cfc_star_id (R := ℂ) (a := (U : E →L[ℂ] E))]
+    exact ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal _ (hU i)
+  have hmaps : (star (U : E →L[ℂ] E)).toLinearMap = (U : E →L[ℂ] E).toLinearMap := by
+    apply b.toBasis.ext
+    intro i
+    change star (U : E →L[ℂ] E) (b i) = (U : E →L[ℂ] E) (b i)
+    rw [hstar, hU]
+    rcases hreal i with heq | heq <;> rw [heq] <;> simp
+  change star (U : E →L[ℂ] E) = (U : E →L[ℂ] E)
+  ext x
+  exact DFunLike.congr_fun hmaps x
 
 omit [CompleteSpace E] [FiniteDimensional ℂ E] in
 private theorem re_trace_mul_of_eigenbasis {n : ℕ}
@@ -114,8 +197,7 @@ theorem re_trace_schattenUnitaryGradient_mul
   have hU (i) : U (b i) = mu i • b i := hmu i
   have hG (i) : schattenUnitaryGradient p U (b i) =
       (schattenPhaseDerivative p (mu i) : ℂ) • b i := by
-    rw [schattenUnitaryGradient_def]
-    exact ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal _ (hU i)
+    exact schattenUnitaryGradient_apply_of_apply_eq_smul p U _ _ (hU i)
   have hA (i) : A.adjoint (b i) = conj (g (mu i)) • b i := by
     change (cfc g U).adjoint (b i) = _
     rw [← _root_.ContinuousLinearMap.star_eq_adjoint, ← cfc_star]

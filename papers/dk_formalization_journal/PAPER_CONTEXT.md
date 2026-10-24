@@ -213,6 +213,27 @@ aggregate builds these results. The spectral block classification, exclusion
 of mixed large-phase spaces, and higher-rank minimum remain separate formal
 obligations.
 
+`SchattenGradientSpectrum.lean` connects the operator gradient symbol on
+`exp(i t)` to `p * phaseAmplitude p t` for positive principal phases. It
+proves that each positive submaximal gradient level has exactly two roots
+in the full principal-phase range, and that unitary eigenvectors at that
+gradient level have one of these two phases. The donor variation module also
+proves that the zero symbol on the unit circle occurs precisely at `1,-1`,
+and a unitary with identically zero phase gradient is self-adjoint. These
+compiled results supply the spectral ingredients; restriction to the paired
+gradient eigenspaces and the exclusion of mixed large-phase spaces remain
+separate steps.
+
+`SchattenGradientPairing.lean` now constructs the isometric equivalence
+between opposite gradient eigenspaces by restricting the source reflection.
+The generic construction in `AnticommutingInvolution.lean` also proves
+equality of their finite multiplicities. These classical symmetry facts
+require no diagonalization of the original transport constraint. The
+direct-rotation aggregate builds the new modules, and their axiom audit
+uses only the standard `propext`, `Classical.choice`, and `Quot.sound`.
+Restriction of the unitary to the paired spaces and exclusion of mixed
+large-phase spaces are not yet formalized.
+
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical
 rotation times `exp(i delta(theta) S)`, with `S` any self-adjoint unitary.
