@@ -627,6 +627,28 @@ real dimensions are at most four. No supplied real basis is required.
 The deduction of the two-phase hypotheses from real stationary transport,
 and the final exact matching minimum, remain unformalized.
 
+Two additional nuclear consequences now have complete conventional proof
+drafts in `real_matching_transport.tex`. First, the real minimum is the
+smaller of two sorted sums: pair adjacent angles, appending zero if needed;
+or reflect the largest angle and pair the remaining sorted angles the same
+way. The proof reduces optimal matchings to at most one canonical singleton
+and one reflection singleton, places these at the two extremes, and uses
+the four-angle sine exchange inequality to prove adjacent pairing.
+
+Second, the real nuclear minimum exceeds the complex one by at most
+`2 - sqrt(3)`, independently of dimension and rank; one angle `pi/3`
+attains the constant. The proof maximizes the gap on the compact ordered
+angle simplex. Boundary lists reduce to fewer angles. At an interior
+maximum the two sorted costs must tie; their stationary convex combination
+has positive definite Hessian by strict concavity of `sqrt(1-q^2)` applied
+to the cosine balance equations. A nonzero tangent direction on the tie
+hypersurface rules out such a maximum when there are at least two angles.
+These theorems are conventional proofs under review, not Lean-certified,
+and their mathematical priority remains provisional. Differential-evolution
+experiments up to eight angles agreed with the gap bound, and random
+matching comparisons up to nine angles agreed with the sorted-sum formula;
+neither experiment is part of the proof.
+
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
 - Symbol colors: `math_symbol_colors.tex`; `\DKMathColorsfalse` after its input turns symbol colors off. Keep the readable Manim-derived shade map and `appendix_notation.tex` aligned.

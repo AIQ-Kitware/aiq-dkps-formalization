@@ -213,6 +213,174 @@ the two displayed expressions, by \cref{eq:real-four-nuclear} and its
 one-angle counterpart.
 \end{proof}
 
+\begin{theorem}[Two sorted sums for real nuclear transport]
+\label{thm:real-nuclear-two-sums}
+Sort the positive principal angles as
+$\theta_1\geq\cdots\geq\theta_k>0$.
+For a descending list $t=(t_1,\ldots,t_m)$, append one zero if $m$ is
+odd, and define
+\[
+ B(t)=4\sum_{j=1}^{\lceil m/2\rceil}
+           \sin\frac{t_{2j-1}+t_{2j}}2,
+ \qquad B(\varnothing)=0.
+\]
+For $k\geq1$, the exact real nuclear transport minimum is
+\begin{equation}
+ \min_{WPW^T=Q}\|I-W\|_1
+  =\min\left\{B(\theta_1,\ldots,\theta_k),\quad
+               2+B(\theta_2,\ldots,\theta_k)\right\}.
+ \label{eq:real-nuclear-two-sums}
+\end{equation}
+The first choice uses adjacent coupled principal planes and, when $k$ is
+odd, a canonical rotation on the smallest-angle plane. The second first
+reflects the largest-angle plane, then applies the same rule to the rest.
+If $k=0$, the minimum is zero.
+\end{theorem}
+
+\begin{proof}
+By \cref{cor:real-nuclear-matching}, a singleton angle $t$ can use a
+canonical rotation of cost $4\sin(t/2)$ or a reflection of cost two;
+a paired choice has cost $4\sin((t+u)/2)$.
+There is an optimal matching with at most one singleton of each type.
+Indeed, coupling two canonical singletons strictly lowers their cost,
+and coupling two reflection singletons costs at most four.
+Repeatedly making these replacements proves the assertion.
+
+If a reflection singleton is present, it may be assigned to the largest
+angle. If that angle is paired, exchange it with the reflection
+singleton; the paired cost decreases because the smaller angle enters
+the pair. If the largest angle is a canonical singleton, exchange the
+two singleton types, which decreases the canonical cost.
+Thus there is an optimum whose reflection singleton, if present, is
+$\theta_1$.
+
+A canonical singleton may be assigned to the smallest angle left.
+For a fixed partner $a\geq0$, the function
+\[
+ u\longmapsto
+ \sin\frac{a+u}{2}-\sin\frac u2
+\]
+is nonincreasing, since its derivative is
+$[\cos((a+u)/2)-\cos(u/2)]/2\leq0$.
+Hence exchanging a canonical singleton $u$ with a smaller paired angle
+cannot increase the total cost. Repeating gives the asserted position.
+Equivalently, represent this canonical singleton as a pair with a
+single zero appended to the remaining angle list.
+
+Finally, adjacent pairing minimizes the total paired cost in a sorted
+even list. For $a\geq b\geq c\geq d\geq0$, put
+$s=(a+b+c+d)/4$. Then
+\[
+ \sin\frac{a+b}{2}+\sin\frac{c+d}{2}
+   =2\sin s\cos\frac{a+b-c-d}{4}.
+\]
+The two alternative pairings have the same factor $2\sin s\geq0$
+and smaller absolute cosine arguments. Since all these arguments lie in
+$[-\pi/2,\pi/2]$, neither alternative has smaller cost. If the two
+largest entries are paired with different partners, this exchange pairs
+them together without increasing cost. Induction proves adjacent pairing
+for the full list, including its appended zero.
+
+The only remaining choice is whether to use the reflection singleton.
+Without it the cost is $B(\theta_1,\ldots,\theta_k)$; with it the
+cost is $2+B(\theta_2,\ldots,\theta_k)$. Both constructions are
+feasible, proving \cref{eq:real-nuclear-two-sums}.
+\end{proof}
+
+\begin{theorem}[The sharp additive gap between real and complex nuclear transport]
+\label{thm:real-complex-nuclear-additive-gap}
+Let $d_{\mathbb R,1}(P,Q)$ be the real nuclear transport minimum, and
+let $d_{\mathbb C,1}(P,Q)$ be the minimum after complexifying the same
+real subspaces. In every finite dimension,
+\begin{equation}
+ 0\leq d_{\mathbb R,1}(P,Q)-d_{\mathbb C,1}(P,Q)
+       \leq2-\sqrt3.
+ \label{eq:real-complex-nuclear-additive-gap}
+\end{equation}
+The upper constant is attained by a single principal angle $\pi/3$.
+\end{theorem}
+
+\begin{proof}
+The complex minimum is $2\sum_i\sin\theta_i$ and is a lower bound
+for the real one. For an angle list $\theta$, write their difference
+as $D_k(\theta)$. The matching formula makes $D_k$ continuous on the
+compact ordered simplex
+$\pi/2\geq\theta_1\geq\cdots\geq\theta_k\geq0$.
+Its maximum on the boundary is bounded by a maximum with fewer angles:
+a zero angle can be discarded, a right angle can use a reflection of
+cost two, and two equal adjacent angles can be coupled at cost
+$4\sin\theta_i$. Each removed block attains its complex minimum, so
+removing it cannot decrease the largest possible gap.
+
+We show that when $k\geq2$ there is no interior local maximum.
+Let $C_0=B(\theta_1,\ldots,\theta_k)$ and
+$C_1=2+B(\theta_2,\ldots,\theta_k)$ be the two costs in
+\cref{eq:real-nuclear-two-sums}, and put
+\[
+ A=C_0-2\sum_i\sin\theta_i,\qquad
+ B=C_1-2\sum_i\sin\theta_i.
+\]
+Thus $D_k=\min\{A,B\}$. At a strictly ordered interior point,
+\[
+ \partial_1A=2\cos\frac{\theta_1+\theta_2}{2}
+                    -2\cos\theta_1>0,
+ \qquad \partial_1B=-2\cos\theta_1<0.
+\]
+A local maximum must therefore satisfy $A=B$.
+The tie set is a smooth hypersurface, since
+$\partial_1(A-B)=2\cos((\theta_1+\theta_2)/2)>0$.
+The Lagrange multiplier condition on this hypersurface gives
+$\lambda\in(0,1)$ such that
+\[
+ \nabla F=0,\qquad F=\lambda A+(1-\lambda)B.
+\]
+The interval for $\lambda$ follows from the two opposite first
+derivatives just displayed.
+
+For each coordinate $i$, let $q_i^0$ and $q_i^1$ be the cosine of its
+paired half-sum in $C_0$ and $C_1$. A canonical singleton has half-sum
+$\theta_i/2$, and the reflection singleton in $C_1$ has $q_1^1=0$.
+The stationary equations are
+\[
+ \cos\theta_i=\lambda q_i^0+(1-\lambda)q_i^1.
+\]
+The two cosines differ at every coordinate: the two pairings use the
+opposite adjacent neighbors, with the zero and reflection conventions
+at the ends. Strict concavity of $q\mapsto\sqrt{1-q^2}$ on $[0,1]$
+therefore gives
+\[
+ s_i:=\lambda\sqrt{1-(q_i^0)^2}
+        +(1-\lambda)\sqrt{1-(q_i^1)^2}
+       <\sin\theta_i.
+\]
+
+The Hessian of $F$ is positive definite. Indeed, a paired cost contributes
+$-\sin((\theta_i+\theta_j)/2)(v_i+v_j)^2$ to its second variation;
+a canonical singleton contributes $-\sin(\theta_i/2)v_i^2$;
+and a reflection contributes zero. The subtracted complex minimum
+contributes $2\sum_i\sin\theta_i v_i^2$.
+Using $(v_i+v_j)^2\leq2(v_i^2+v_j^2)$, and weakening the singleton
+terms to the same bound, yields
+\[
+ v^T\nabla^2F\,v
+       \geq2\sum_i(\sin\theta_i-s_i)v_i^2>0
+       \quad(v\ne0).
+\]
+Since $k\geq2$, the tie hypersurface has a nonzero tangent vector.
+Along a smooth curve in that direction its second variation is positive:
+on the tie set $D_k=F$, and $\nabla F=0$ removes the curve's
+acceleration term. This contradicts a local maximum.
+
+Compactness and induction now reduce the maximal gap to one angle.
+There it equals
+\[
+ \min\{4\sin(\theta/2)-2\sin\theta,\ 2-2\sin\theta\}.
+\]
+The first expression increases on $[0,\pi/2]$, the second decreases,
+and they agree at $\theta=\pi/3$. Their common value is
+$2-\sqrt3$, which proves both the bound and sharpness.
+\end{proof}
+
 \begin{corollary}[When the real nuclear minimum equals the complex one]
 \label{cor:real-nuclear-parity}
 The real nuclear transport minimum equals $2\sum_i\sin\theta_i$
