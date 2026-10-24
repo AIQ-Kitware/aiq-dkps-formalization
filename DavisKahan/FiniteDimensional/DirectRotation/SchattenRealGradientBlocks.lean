@@ -33,7 +33,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 local notation "𝓔" => RealComplexification E
 
-/-- At a real constrained local minimum, each positive submaximal gradient
+/-- At a real constrained local minimum, each positive gradient
 level has a complete small invariant decomposition for the actual unitary
 restriction and the source-induced conjugation. Doubling these blocks gives
 a complete orthogonal real invariant decomposition of the level together
@@ -52,7 +52,7 @@ theorem gradient_eigenspace_small_blocks_of_isLocalMinOn_real_transports
       {W | W ∈ unitary (𝓔 →L[ℂ] 𝓔) ∧ W * K.starProjection * star W = Q ∧
         conjugateOperator W = W} (U : 𝓔 →L[ℂ] 𝓔))
     (g : ℝ) (hg : 0 < g)
-    (hgm : g < p.toReal * phaseAmplitude p.toReal (criticalAngle p.toReal)) :
+    (hgm : g ≤ p.toReal * phaseAmplitude p.toReal (criticalAngle p.toReal)) :
     let L := Module.End.eigenspace
       (schattenUnitaryGradient p.toReal (U : 𝓔 →L[ℂ] 𝓔)).toLinearMap (g : ℂ)
     ∃ (V : L ≃ₗᵢ[ℂ] L) (J : L ≃ₗᵢ⋆[ℂ] L) (F : Finset (Submodule ℂ L)),
@@ -101,8 +101,26 @@ theorem gradient_eigenspace_small_blocks_of_isLocalMinOn_real_transports
   obtain ⟨J, hJ, hJx⟩ := exists_eigenspace_conjugation_of_anticommuting_symmetries
     G.toLinearMap K.reflection K.reflection_involutive (canonicalConjugation (E := E))
     (fun x => conjugation_involutive x) hRC hGR hGC g
-  obtain ⟨a, _, b, _, V, A, hA, hV, hrepr⟩ :=
-    gradient_eigenspace_two_phase_representation p.toReal g hp1 hp2 hg hgm U
+  obtain ⟨a, b, V, A, hA, hV, hrepr⟩ :
+      ∃ (a b : ℝ) (V : L ≃ₗᵢ[ℂ] L) (A : L →L[ℂ] L),
+        IsStarProjection A ∧
+        (∀ x : L, (V x : 𝓔) = (U : 𝓔 →L[ℂ] 𝓔) x) ∧
+        (V : L →L[ℂ] L) = Complex.exp ((a : ℂ) * Complex.I) • 1 +
+          (Complex.exp ((b : ℂ) * Complex.I) - Complex.exp ((a : ℂ) * Complex.I)) • A := by
+    rcases lt_or_eq_of_le hgm with hlt | heq
+    · obtain ⟨a, _, b, _, V, A, hA, hV, hrepr⟩ :=
+        gradient_eigenspace_two_phase_representation p.toReal g hp1 hp2 hg hlt U
+      exact ⟨a, b, V, A, hA, hV, hrepr⟩
+    · subst g
+      have hcritical := signed_critical_gradient_eigenspace_representation
+        p.toReal 1 hp1 hp2 (Or.inl rfl) U
+      dsimp only at hcritical
+      rw [one_mul] at hcritical
+      obtain ⟨V, hV, hrepr⟩ := hcritical
+      refine ⟨criticalAngle p.toReal, criticalAngle p.toReal, V, 0, ?_, hV, ?_⟩
+      · exact IsStarProjection.zero (L →L[ℂ] L)
+      · rw [sub_self, zero_smul ℂ (0 : L →L[ℂ] L), add_zero]
+        simpa only [one_mul] using hrepr
   obtain ⟨F, hF, hpair, hspan⟩ :=
     RealTransport.exists_orthogonal_blocks_of_two_phase_and_conjugation
       J.toLinearEquiv.toLinearMap J.isometry hJ A (V : _ →L[ℂ] _) hA
