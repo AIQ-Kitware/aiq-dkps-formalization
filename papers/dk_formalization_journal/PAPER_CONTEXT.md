@@ -294,8 +294,13 @@ second derivative, and every local minimum therefore has `AB = 0`.
 The necessary second-derivative test is consumed from the accepted Tau
 Ceti calculus API. This is a result about the explicit paired objective,
 not yet a proof that an arbitrary ambient transporter induces that
-local-minimum hypothesis. The orthogonal-block power additivity, common
-coordinate identification, and feasible extension remain to be assembled.
+local-minimum hypothesis. The common coordinate identification and feasible extension remain to be
+assembled. The new donor `BlockSchatten.lean` proves additivity of the actual
+finite Schatten power for arbitrary real or complex orthogonal square blocks,
+using the accepted polar decomposition. The paired objective is now identified
+with the actual displacement power on the orthogonal product. The spectral
+calculus also proves norm invariance under isometric changes of carrier types;
+these are classical assembly ingredients, not separate novelty claims.
 
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical

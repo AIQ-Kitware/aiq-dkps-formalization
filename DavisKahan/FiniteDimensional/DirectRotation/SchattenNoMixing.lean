@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenSecondVariation
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenOverlapDirection
 import TauCeti.Analysis.Calculus.DerivativeTest
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
 
 /-!
 # Overlap exclusion for paired Schatten-gradient blocks
@@ -40,6 +41,18 @@ def pairedSchattenCost (p : ℝ≥0∞) [Fact (1 ≤ p)]
   UnitarilyInvariantSeminorm.schatten ℂ E E p
     (LinearMap.id - ((V : E →L[ℂ] E) *
       NormedSpace.exp (t • (Complex.I • H))).toLinearMap) ^ p.toReal
+
+/-- The coupled cost is the actual Schatten displacement power of the
+orthogonal product curve. -/
+theorem pairedSchattenCost_eq_block_displacement
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (U V : unitary (E →L[ℂ] E)) (H : E →L[ℂ] E) (t : ℝ) :
+    pairedSchattenCost p U V H t =
+      UnitarilyInvariantSeminorm.schatten ℂ (WithLp 2 (E × E)) (WithLp 2 (E × E)) p
+        (LinearMap.id -
+          ((((U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H))).withLpProdMap 2
+            ((V : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H)))).toLinearMap)) ^ p.toReal := by
+  exact (schatten_displacement_rpow_withLpProdMap _ _ p hp).symm
 
 /-- Overlapping large-phase projections force a strictly negative
 second derivative of the actual coupled Schatten cost. -/

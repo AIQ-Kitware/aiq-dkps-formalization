@@ -34,6 +34,42 @@ open scoped ENNReal
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
+/-- Finite Schatten norms are preserved by isometric changes of source
+and target coordinates, including changes of the underlying carrier types. -/
+theorem schatten_congr_linearIsometryEquiv
+    {F G H : Type*}
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [FiniteDimensional 𝕜 G]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [FiniteDimensional 𝕜 H]
+    (U : F ≃ₗᵢ[𝕜] H) (V : G ≃ₗᵢ[𝕜] E) (A : E →ₗ[𝕜] F)
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
+    UnitarilyInvariantSeminorm.schatten 𝕜 G H p
+        ((U : F →ₗ[𝕜] H) ∘ₗ A ∘ₗ (V : G →ₗ[𝕜] E)) =
+      UnitarilyInvariantSeminorm.schatten 𝕜 E F p A := by
+  rw [UnitarilyInvariantSeminorm.schatten_apply_of_ne_top p hp,
+    UnitarilyInvariantSeminorm.schatten_apply_of_ne_top p hp,
+    LinearMap.singularValues_linearIsometryEquiv_comp,
+    LinearMap.singularValues_comp_linearIsometryEquiv]
+
+/-- The displacement Schatten norm is independent of orthonormal
+coordinates on the ambient finite-dimensional Hilbert space. -/
+theorem schatten_displacement_conj_linearIsometryEquiv
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    [FiniteDimensional 𝕜 F] [CompleteSpace E] [CompleteSpace F]
+    (e : E ≃ₗᵢ[𝕜] F) (A : E →L[𝕜] E)
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
+    UnitarilyInvariantSeminorm.schatten 𝕜 F F p
+        (LinearMap.id - (e.conjStarAlgEquiv A).toLinearMap) =
+      UnitarilyInvariantSeminorm.schatten 𝕜 E E p (LinearMap.id - A.toLinearMap) := by
+  have hconj : LinearMap.id - (e.conjStarAlgEquiv A).toLinearMap =
+      (e : E →ₗ[𝕜] F) ∘ₗ (LinearMap.id - A.toLinearMap) ∘ₗ
+        (e.symm : F →ₗ[𝕜] E) := by
+    ext x
+    change x - e (A (e.symm x)) = e (e.symm x - A (e.symm x))
+    rw [map_sub, e.apply_symm_apply]
+  rw [hconj]
+  exact schatten_congr_linearIsometryEquiv e e.symm _ p hp
+
 /-- A normal operator's Schatten norm is the power sum of the norms of its
 eigenvalues. The orthonormal eigenbasis is supplied explicitly, so the result
 also applies to real operators admitting such a basis and to dimension zero. -/
@@ -66,6 +102,27 @@ theorem schatten_eq_sum_norm_eigenvalues {n : ℕ}
       rw [hdiag, Matrix.singularValues_toLin_diagonal b mu pi hpi i]
     _ = _ := Equiv.sum_comp pi (fun i => ‖mu i‖ ^ p.toReal)
 
+/-- The finite Schatten power sum in an orthonormal eigenbasis indexed
+by any finite type. This avoids sorting or index conventions when assembling
+orthogonal spectral blocks. -/
+theorem schatten_rpow_eq_sum_norm_eigenvalues
+    {ι : Type*} [Fintype ι] (b : OrthonormalBasis ι 𝕜 E) (A : E →ₗ[𝕜] E)
+    (mu : ι → 𝕜) (hA : ∀ i, A (b i) = mu i • b i)
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
+    UnitarilyInvariantSeminorm.schatten 𝕜 E E p A ^ p.toReal =
+      ∑ i, ‖mu i‖ ^ p.toReal := by
+  classical
+  let e := Fintype.equivFin ι
+  have heigen (i : Fin (Fintype.card ι)) :
+      A ((b.reindex e) i) = mu (e.symm i) • (b.reindex e) i := by
+    simpa only [OrthonormalBasis.reindex_apply] using hA (e.symm i)
+  have hp0 : 0 < p.toReal :=
+    ENNReal.toReal_pos (zero_lt_one.trans_le Fact.out).ne' hp
+  rw [schatten_eq_sum_norm_eigenvalues (b.reindex e) A (fun i => mu (e.symm i)) heigen p hp,
+    ← Real.rpow_mul (Finset.sum_nonneg (fun i _ => Real.rpow_nonneg (norm_nonneg _) _)),
+    one_div_mul_cancel hp0.ne', Real.rpow_one]
+  exact Equiv.sum_comp e.symm (fun i => ‖mu i‖ ^ p.toReal)
+
 section Complex
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
@@ -88,12 +145,8 @@ theorem schatten_displacement_rpow_eq_re_trace_cfc
   have hA (i : Fin (Module.finrank ℂ H)) :
       ((LinearMap.id : H →ₗ[ℂ] H) - T.toLinearMap) (b i) = (1 - mu i) • b i := by
     simp only [LinearMap.sub_apply, LinearMap.id_apply, hmu, sub_smul, one_smul]
-  rw [schatten_eq_sum_norm_eigenvalues b _ _ hA p hp,
-    ContinuousLinearMap.re_trace_cfc_eq_sum (fun z => ‖z - 1‖ ^ p.toReal) T b mu hmu,
-    ← Real.rpow_mul (Finset.sum_nonneg (fun i _ => Real.rpow_nonneg (norm_nonneg _) _))]
-  have hp0 : 0 < p.toReal :=
-    ENNReal.toReal_pos (zero_lt_one.trans_le Fact.out).ne' hp
-  rw [one_div_mul_cancel hp0.ne', Real.rpow_one]
+  rw [schatten_rpow_eq_sum_norm_eigenvalues b _ _ hA p hp,
+    ContinuousLinearMap.re_trace_cfc_eq_sum (fun z => ‖z - 1‖ ^ p.toReal) T b mu hmu]
   apply Finset.sum_congr rfl
   intro i _
   rw [norm_sub_rev]
