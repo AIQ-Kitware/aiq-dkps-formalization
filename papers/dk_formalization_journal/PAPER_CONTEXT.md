@@ -10,6 +10,21 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
 
+## Publication scope: mathematical extension ships with the DK paper
+
+The author explicitly directed on 24 October 2026 that the new mathematical
+insight must ship with this journal article. This overrides the separate-paper
+recommendation in `MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md` while retaining
+that review's proof-status and priority distinctions. `paper.tex` now includes
+`smoothed_transport_verified.tex`: the fully Lean-certified unrestricted
+complex smoothed minimum, explicit optimizer, and strict-subcritical
+quadratic-growth theorem. These results are motivated by the formal
+refutation of Proposition 4.4 and form the article's mathematical extension.
+The broader all-minimizers, general Schatten, and real matching/gap drafts
+remain excluded. Mathematical priority for the exact smoothed theorem and
+its stability estimate is plausible but provisional; negative searches are
+not proof of first publication. The original 29-result denominator is unchanged.
+
 ## What the article can claim now
 
 | Claim for the journal article | Evidence in this repository | Boundary / wording |
@@ -365,8 +380,8 @@ angle-dependent minimum. The signed maximal-gradient restriction is also
 compiled, completing the zero, submaximal, and maximal restriction cases used
 by the conventional proof.
 
-The independent fragment `smoothed_transport.tex` gives a further conventional
-theorem: exact complex transport for the Charbonnier spectral penalty
+The broader companion `smoothed_transport.tex` records the derivation of
+exact complex transport for the Charbonnier spectral penalty
 `rho_tau(s) = sqrt(tau^2+s^2)-tau`. With
 `eta = (tau+sqrt(tau^2+4))/2`, its cutoff is `cos(theta)=eta^(-2)`;
 above it the optimal phase is explicitly `arccos(eta^2 cos(theta))` and
@@ -378,8 +393,10 @@ the unformalized Schatten higher-rank theorem. The same certificate proves
 that relaxation of the commuting unitary factor to a commuting contraction
 has exactly the same minimum, with an explicit diagonal optimal contraction
 and phase recovery. This also solves nearest commuting-unitary correction
-under the same smooth spectral penalty. These are conventional proofs under
-review. The fragment is excluded from `paper.tex`.
+under the same smooth spectral penalty. Its all-minimizers and rounding extensions remain conventional proofs under
+review. The proved minimum, explicit spectral optimizer, and stability result
+are included through the focused `smoothed_transport_verified.tex`; the
+broader companion is excluded from `paper.tex`.
 
 The new `SmoothedPhaseMinimum.lean` now certifies the two-focus circle
 inequalities, the explicit weighted scalar-phase minimum, its attaining phase
@@ -463,7 +480,10 @@ unit circle. Compose the canonical rotation with the adjoint of that phase
 factor. Admissibility, the exact accepted-principal-angle sum, and global
 optimality against every admissible complex unitary are compiled. The scalar
 clipping identity is compiled; the separately displayed clipped nonunitary
-contraction remains a conventional construction.
+contraction remains a conventional construction. The paper includes the
+exact contraction relaxation as a conventional corollary of the same
+certificate, and attributes formal verification to the global minimum,
+unitary optimizer, and stability endpoints.
 
 The 2026-10-24 primary-source search for this extension checked the statements
 of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.
@@ -796,8 +816,40 @@ penalty of an ambient transporter. No extrinsic real two-sum formula or
 sharp real-versus-complex field-gap result was found there. This comparison
 is source-level negative evidence, not a priority certificate.
 
+The additional weighted-Procrustes comparison checked three primary sources
+on 24 October. Contino--Giribet--Maestripieri (2017),
+<https://arxiv.org/pdf/1610.00558>, equation (1.4) and Theorem 4.5,
+minimize `||W^(1/2)(AX-B)||_p` over every bounded `X`, without a
+unitary or commutation constraint. Taking `A=bI`, `B=aR` gives zero
+at `X=(a/b)R`, which violates our contraction condition when `a>b`.
+Their result therefore does not determine our constrained optimum.
+Corach--Massey--Ruiz (2014),
+<https://arxiv.org/pdf/1309.7914>, equation (4) and Theorem 7,
+optimize `||FX*-I||` over Parseval coisometries. At square size, with
+`F=(a/b)R`, the free unitary factor removes `R`; after rescaling the
+minimum is `n(a-b)`. Our commuting restriction prevents that removal:
+at a single right angle in dimension two its minimum is `2a`.
+Thus the Parseval theorem does not directly imply our value either.
+Fulova--Trnovska (2023), <https://arxiv.org/pdf/2304.14961>, Table 1
+and Section 1, give conic formulations and numerical methods for constrained
+real Procrustes problems, with Frobenius, spectral, and induced row/column
+norms. These statements do not give a closed smoothed/nuclear angle formula.
+Watson (1994)'s publisher abstract remains accessible, but the full theorem
+text was not obtained; its exact implication is still unresolved. These
+comparisons exclude direct applications of the inspected statements, not
+all equivalent prior results or broader reductions.
+
+The integrated journal text typesets successfully with `pdflatex`, `bibtex`,
+and two further LaTeX passes. This VM lacks `latexmk`; its default T1 Computer
+Modern fonts also need microtype expansion disabled for the local build.
+The source was compiled with the command-line option
+`\PassOptionsToPackage{expansion=false}{microtype}` and output under
+`build/journal-smoothed/`, without changing mathematical statements or
+committed font settings. The displayed smoothed Lean signature also
+elaborates independently against the production theorem.
+
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
-- Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
+- Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`, `smoothed_transport_verified.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
 - Symbol colors: `math_symbol_colors.tex`; `\DKMathColorsfalse` after its input turns symbol colors off. Keep the readable Manim-derived shade map and `appendix_notation.tex` aligned.
 - Primary manuscript reference metadata: `references.bib`; historical detail: `PROPOSITION_4_4_LITERATURE_MAP.md` and `submission/LITERATURE_AUDIT.md`.
 - Source and statement evidence: `claims_to_evidence.md`, `submission/VALIDATION.md`, source inventories under `dev/`.

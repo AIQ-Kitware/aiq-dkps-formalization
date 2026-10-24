@@ -1,0 +1,287 @@
+% Lean-certified smoothed optimization core for the DK journal paper.
+\section{Exact smoothed spectral transport}
+\label{sec:smoothed-transport}
+
+The counterexample to Proposition~4.4 leaves a norm-dependent question:
+which displacement penalties favor the direct rotation, and what replaces
+it when they do not? We answer this question exactly for a smooth
+singular-value penalty on finite-dimensional complex spaces. The answer
+includes a transition angle, a globally minimizing unitary, and a bound on
+the distance of every near-minimizer from the canonical rotation below
+the transition.
+
+Throughout this section $U,V\subseteq\mathbb C^n$ have equal dimension
+$r$, with orthogonal projections $P,Q$ and principal angles
+$\theta_1,\ldots,\theta_r\in[0,\pi/2]$.
+
+For $\tau>0$, define the smooth spectral displacement cost
+\[
+ \Psi_\tau(W)=\operatorname{tr}
+  \sqrt{\tau^2I+(I-W)^*(I-W)}-n\tau.
+\]
+Each displacement singular value $s$ contributes
+$\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$. This penalty is quadratic near
+zero and asymptotically linear. Smooth functions of singular values,
+including this hyperbolic penalty, are used in low-rank inverse-problem
+regularization \citep{lobos2026smooth}. Put
+\[
+ \eta=\frac{\tau+\sqrt{\tau^2+4}}2>1,
+ \qquad c_\tau=\arccos(\eta^{-2}).
+\]
+The identity $\tau=\eta-\eta^{-1}$ gives, for every unitary $W$,
+\begin{equation}
+ \Psi_\tau(W)=\|\eta W-\eta^{-1}I\|_1-n\tau.
+ \label{eq:smoothed-weighted-nuclear}
+\end{equation}
+Indeed, both positive square roots are applied to the same matrix,
+namely $(\tau^2+2)I-W-W^*$.
+
+\begin{theorem}[Exact smoothed transport]
+\label{thm:smoothed-transport}
+For the subspaces and smoothing parameter above,
+\begin{equation}
+ \min_{WPW^*=Q}\Psi_\tau(W)=\sum_{j=1}^r \mu_\tau(\theta_j),
+ \label{eq:smoothed-global-minimum}
+\end{equation}
+where the minimum is over unitary $W$ and
+\[
+ \mu_\tau(\theta)=
+ \begin{cases}
+  2\bigl(\sqrt{\tau^2+2-2\cos\theta}-\tau\bigr),
+        &0\leq\theta\leq c_\tau,\\
+  2\eta\sin\theta-2\tau,
+        &c_\tau\leq\theta\leq\pi/2.
+ \end{cases}
+\]
+An attaining transporter is the identity on the fixed summands of a
+cosine--sine decomposition and $e^{i\delta_\tau(\theta)}R_\theta$ on
+each nonzero principal plane, where
+\[
+ R_\theta=\begin{pmatrix}\cos\theta&-\sin\theta\\
+                              \sin\theta&\cos\theta\end{pmatrix},
+ \qquad
+ \delta_\tau(\theta)=
+ \begin{cases}
+   0,&\theta\leq c_\tau,\\
+   \arccos(\eta^2\cos\theta),&\theta\geq c_\tau.
+ \end{cases}
+\]
+Either sign of the displayed phase gives an attaining transporter.
+The nonnegative choice uniquely minimizes the scalar-phase cost over
+$[0,\theta]$.
+\end{theorem}
+
+\begin{lstlisting}[style=leanpaper,
+ caption={Lean signature for the unrestricted minimum. The surrounding
+ finite-dimensional complex Hilbert-space context is omitted.
+ \texttt{smoothedDisplacementCost} is $\Psi_\tau$ and
+ \texttt{smoothedPhaseMinimum} is $\mu_\tau$.
+ The conclusion gives an attaining unitary and the lower bound for
+ every admissible competitor.},
+ label={lst:smoothed-global}]
+theorem exists_unitary_minimizing_smoothed_transport_principalAngles
+    (tau : Real) (htau : 0 < tau) (U V : Submodule Complex E)
+    (hUV : Module.finrank Complex U = Module.finrank Complex V) :
+    ∃ W : LinearIsometryEquiv (RingHom.id Complex) E E,
+      U.map W.toLinearMap = V ∧
+      smoothedDisplacementCost tau W.toLinearMap =
+        (Finset.univ.sum (fun i : Fin (Module.finrank Complex U) =>
+          smoothedPhaseMinimum tau (U.principalAngles V i))) ∧
+      ∀ T : LinearIsometryEquiv (RingHom.id Complex) E E,
+        U.map T.toLinearMap = V ->
+        (Finset.univ.sum (fun i : Fin (Module.finrank Complex U) =>
+          smoothedPhaseMinimum tau (U.principalAngles V i))) <=
+            smoothedDisplacementCost tau T.toLinearMap
+\end{lstlisting}
+
+\begin{proof}
+We first prove the scalar claim. Write $a=\eta$, $b=\eta^{-1}$, and
+use an auxiliary complex plane. The scalar cost plus
+$2\tau$ is the sum of the distances from $x=be^{i\delta}$ to the two
+points $u=ae^{i\theta}$ and $v=ae^{-i\theta}$:
+\begin{equation}
+ \rho_\tau\bigl(2\sin((\theta+\delta)/2)\bigr)
+ +\rho_\tau\bigl(2\sin((\theta-\delta)/2)\bigr)+2\tau
+ =|u-x|+|v-x|.
+ \label{eq:smoothed-ellipse}
+\end{equation}
+If $a\cos\theta\leq b$, the segment $[u,v]$ meets the circle
+$|x|=b$. Equality in the triangle inequality gives the minimum
+$|u-v|=2a\sin\theta$. The intersection in the upper half-plane has
+$\cos\delta=(a/b)\cos\theta$; it lies on the segment because $a>b$.
+It also satisfies $0\leq\delta\leq\theta$. This intersection is unique
+in the upper half-plane, including the point of tangency.
+
+If $a\cos\theta\geq b$, let $g(x)=|u-x|+|v-x|$. Convexity and
+reflection symmetry give $g(\operatorname{Re}x)\leq g(x)$. On the real
+axis to the left of $a\cos\theta$, the function $g$ decreases strictly
+as the coordinate increases. Since $\operatorname{Re}x\leq b$, the
+unique circle minimum is $x=b$, or $\delta=0$. Its value is
+$2\sqrt{a^2+b^2-2ab\cos\theta}$. Subtracting $2\tau$ proves the
+scalar formula.
+
+For the global lower bound, choose a cosine--sine decomposition and let
+$R$ be the direct sum of the rotations $R_{\theta_j}$ and identities
+on the remaining fixed directions. Every transporter has the form
+$W=RV$ with $V$ unitary and commuting with $P$. Unitary invariance gives
+\[
+ \|aW-bI\|_1=\|aR-bV^*\|_1.
+\]
+We shall prove the bound for every contraction $Z$ commuting with $P$,
+which includes $Z=V^*$. Define a unitary $T$ separately on each principal
+plane. When $a\cos\theta\geq b$, put
+\[
+ d=\sqrt{a^2+b^2-2ab\cos\theta},\qquad
+ T_\theta=\frac{aR_\theta-bI}{d}.
+\]
+Its two diagonal entries equal $h=(a\cos\theta-b)/d\geq0$.
+When $a\cos\theta\leq b$, put
+\[
+ T_\theta=\begin{pmatrix}0&-1\\1&0\end{pmatrix},
+ \qquad h=0.
+\]
+Use $T=I$ on the fixed directions. The off-diagonal part of $T$ maps
+$P\mathbb C^n$ to $(I-P)\mathbb C^n$ and conversely. Consequently it
+has zero trace pairing with $Z$. Every diagonal entry of a contraction
+has real part at most one, so
+\[
+ \operatorname{Re}\operatorname{tr}(T^*Z)
+ \leq \operatorname{tr}(\text{diagonal part of }T).
+\]
+The nuclear norm support inequality therefore yields
+\begin{align*}
+ \|aR-bZ\|_1
+ &\geq \operatorname{Re}\operatorname{tr}\bigl(T^*(aR-bZ)\bigr)\\
+ &\geq (n-2k)(a-b)
+   +\sum_{j=1}^{k}
+    \begin{cases}
+       2\sqrt{a^2+b^2-2ab\cos\theta_j},
+                            &a\cos\theta_j\geq b,\\
+       2a\sin\theta_j,      &a\cos\theta_j\leq b.
+    \end{cases}
+\end{align*}
+Here the $k$ displayed planes correspond to the positive principal
+angles. The scalar construction attains this bound with a unitary $Z$,
+independently on every plane. Since $a-b=\tau$, subtracting $n\tau$
+proves \cref{eq:smoothed-global-minimum}; zero principal angles
+contribute zero.
+\end{proof}
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=\linewidth]{figures/smoothed_transport_diagram.pdf}
+ \caption{The smoothed transport transition. (a) At $\tau=1/4$ and
+ $\theta=60^\circ$, a minimizing circle point $x_*$ lies on the segment
+ between the two foci; the canonical point $b$ gives a longer broken path.
+ (b) The optimal nonnegative phase changes from zero to a positive value
+ as the angle crosses the cutoff. (c) The exact optimal phase for three
+ smoothing parameters. The global theorem proves that these independent
+ scalar choices attain the unrestricted unitary minimum.}
+ \label{fig:smoothed-transport}
+\end{figure}
+
+\begin{corollary}[Exact convex relaxation]
+\label{cor:smoothed-exact-relaxation}
+In the cosine--sine coordinates used above,
+\[
+ \min_{\substack{Z^*Z\leq I\\ZP=PZ}}\|\eta R-\eta^{-1}Z\|_1
+ =\min_{\substack{Z^*Z=I\\ZP=PZ}}\|\eta R-\eta^{-1}Z\|_1.
+\]
+A minimizing contraction is diagonal: on both directions of a principal
+plane use $\min\{1,\eta^2\cos\theta\}$, and use one on the fixed
+directions. A minimizing unitary is obtained by replacing the two entries
+on each supercritical plane by $e^{i\delta_\tau(\theta)}$.
+\end{corollary}
+
+\begin{proof}
+The preceding trace bound applies to every feasible contraction. The
+displayed diagonal contraction attains it: on a supercritical plane
+the residual is $\eta\sin\theta$ times the quarter-turn matrix.
+The scalar formula supplies the unitary attaining the same value.
+\end{proof}
+
+\begin{corollary}[An explicit spectral optimizer]
+\label{cor:smoothed-spectral-optimizer}
+Let $C=\sqrt{I-(P-Q)^2}$, let $R$ be a completed canonical rotation,
+and apply the scalar function $c\mapsto\min\{1,\eta^2c\}$ to $C$:
+\[
+ B=\min\{I,\eta^2C\},\qquad
+ Z=B+i\sqrt{I-B^2},\qquad W=RZ^*.
+\]
+Then $B$ attains the convex relaxation, $Z$ is unitary and commutes
+with $P$, and $W$ attains \cref{eq:smoothed-global-minimum}.
+All square roots are positive square roots; the minimum defining $B$
+is spectral.
+\end{corollary}
+
+\begin{proof}
+On a cosine eigenspace of eigenvalue $c=\cos\theta$, the factor $Z$
+is the scalar
+\[
+ \min\{1,\eta^2c\}
+   +i\sqrt{1-\min\{1,\eta^2c\}^2}
+ =e^{i\delta_\tau(\theta)}.
+\]
+Thus $Z$ is the attaining phase factor from the preceding proof.
+The real part $B$ is the attaining contraction from
+\cref{cor:smoothed-exact-relaxation}. Since $C$ commutes with $P$,
+so do both spectral factors. The formula for $W$ now gives the
+required transport and exact cost.
+\end{proof}
+
+\begin{corollary}[A quantitative certificate below the transition]
+\label{cor:smoothed-stability}
+Suppose every principal angle is at most $\theta_*$, where
+$0\leq\theta_*<c_\tau$. For every
+unitary transporter $W$, the canonical rotation $R$ satisfies
+\[
+ \Psi_\tau(W)-\Psi_\tau(R)
+ \geq
+ \frac{\cos\theta_*-\eta^{-2}}
+      {2\sqrt{\tau^2+2-2\cos\theta_*}}\,\|W-R\|_F^2.
+\]
+Thus an objective error bounds the Frobenius distance from the unique
+minimizer, with a constant determined by the largest principal angle.
+\end{corollary}
+
+\begin{proof}
+Write $W=RZ^*$ as above. Retaining the slack in the dual certificate gives
+\[
+ \Psi_\tau(W)-\Psi_\tau(R)
+ \geq b\sum_\ell h_\ell
+       \bigl(1-\operatorname{Re}\langle e_\ell,Ze_\ell\rangle\bigr),
+ \qquad
+ h_\theta=\frac{a\cos\theta-b}
+                  {\sqrt{a^2+b^2-2ab\cos\theta}},
+\]
+with $h_\ell=1$ on fixed directions. Unitarity gives
+$1-\operatorname{Re}\langle e,Ze\rangle=\|(Z-I)e\|^2/2$.
+The function $(ac-b)/\sqrt{a^2+b^2-2abc}$ is increasing in $c$:
+its derivative is
+$a^2(a-bc)/(a^2+b^2-2abc)^{3/2}>0$ for $c\in[b/a,1]$.
+Consequently $h_\ell\geq h_{\theta_*}>0$. Sum over the basis, use
+$\|Z-I\|_F=\|W-R\|_F$, and substitute $ab=1$ and $b=\eta^{-1}$.
+\end{proof}
+
+
+For a feasible numerical candidate whose objective is at most $\varepsilon$
+above the minimum, \cref{cor:smoothed-stability} yields
+\[
+ \|W-R\|_F\leq
+ \left(
+ \frac{2\sqrt{\tau^2+2-2\cos\theta_*}}
+      {\cos\theta_*-\eta^{-2}}\,\varepsilon
+ \right)^{1/2}.
+\]
+The constant depends on the angle bound and smoothing parameter and is
+independent of the ambient dimension. The explicit construction and
+support certificate therefore supply an exact benchmark for constrained
+numerical optimization, including a distance guarantee in the strict
+subcritical regime.
+
+As $\tau\downarrow0$, the angle cost tends to $2\sin\theta$, recovering
+\cref{thm:complex-trace-all-pairs}. As $\tau\to\infty$,
+$2\tau\mu_\tau(\theta)$ tends to $8\sin^2(\theta/2)$, the squared
+Frobenius displacement of the canonical planar rotation. Thus this family
+connects the trace optimum with the classical quadratic minimum while
+locating exactly where the optimizing phase changes.

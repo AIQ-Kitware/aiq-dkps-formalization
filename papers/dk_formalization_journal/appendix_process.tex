@@ -154,6 +154,22 @@ These are additional theorems beyond the fixed 29-result source inventory.
 The real line/hyperplane norm formula in the optional working draft remains
 a conventional argument without a corresponding general Lean theorem.
 
+The smoothed optimization results in \cref{sec:smoothed-transport} are
+also in the direct-rotation directory. \path{SmoothedSpectralCost.lean}
+identifies the literal singular-value penalty with its weighted nuclear
+norm. \path{SmoothedPrincipalAngles.lean} proves
+\path{exists_unitary_minimizing_smoothed_transport_principalAngles},
+the attained global principal-angle formula.
+\path{SmoothedExplicitOptimizer.lean} defines
+\texttt{optimalSmoothedTransport} and proves its admissibility, exact cost,
+and global optimality. \path{SmoothedSubspaceStability.lean} proves
+\path{smoothed_transport_growth_of_principalAngles_le}, with the
+explicit positive coefficient used in \cref{cor:smoothed-stability}.
+These endpoints include every admissible complex unitary; no supplied
+principal-plane coordinates or restriction on mixing occur in their
+hypotheses. They assert one explicit optimizer and stability strictly below
+the transition, without a classification of all supercritical optimizers.
+
 \subsection{Reproduction}
 
 The root \path{lean-toolchain} and \path{lake-manifest.json} pin the
@@ -163,8 +179,8 @@ checks the source-facing development:
 lake exe cache get
 lake build
 \end{verbatim}
-The quantitative displacement extensions are separate targets, not
-necessarily imported by the ordinary aggregate. Build them explicitly:
+The mathematical aggregate imports the quantitative displacement and
+smoothed optimization extensions. They may also be built explicitly:
 \begin{verbatim}
 lake exe cache get
 lake build \
@@ -179,6 +195,9 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.ComplexPhaseTrace \
   ForTauCeti.Analysis.InnerProductSpace.Projection.TraceSine \
   DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedExplicitOptimizer \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}
 The mathematical manuscript builds independently of Lean:

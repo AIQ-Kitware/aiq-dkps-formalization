@@ -74,6 +74,21 @@ The axiom/interface audit is
 `DavisKahan/Sources/DavisKahan1970/Audits/SmallAngleCounterexample.lean`.
 The user-reported 23 October 2026 compilation of the three targeted modules is recorded in `submission/VALIDATION.md`.
 
+## Smoothed optimization included in the journal manuscript
+
+The article includes `smoothed_transport_verified.tex`, motivated by the
+failure of Proposition 4.4. These additional results do not alter the historical
+29-result inventory. The 24 October author instruction selects this integrated
+publication scope over the review's separate-paper recommendation.
+
+| Manuscript claim | Evidence | Qualification |
+|---|---|---|
+| The unrestricted complex equal-rank smoothed transport minimum is the explicit sum over all principal angles, with an attaining unitary and a lower bound for every competitor. | `SmoothedPrincipalAngles.lean`: `exists_unitary_minimizing_smoothed_transport_principalAngles`; `SmoothedSpectralCost.lean`: `smoothedDisplacementCost_eq_weightedNuclear`. | Lean-certified for finite-dimensional complex Hilbert spaces and every positive smoothing parameter, including zero and right angles. The displayed ASCII Lean signature is independently elaborated against the actual endpoint. |
+| Clipped functional calculus of the positive cosine operator gives a globally optimal unitary. | `SmoothedExplicitOptimizer.lean`: `optimalSmoothedTransport_maps`, `smoothedDisplacementCost_optimalSmoothedTransport`, `optimalSmoothedTransport_isMin`. | Lean-certified, including right-angle defects. Constructs an optimizer; does not classify every optimizer. |
+| Strictly below the phase cutoff, every admissible unitary satisfies the stated quadratic-growth bound, with a positive explicit coefficient. | `SmoothedSubspaceStability.lean`: `smoothed_transport_growth_of_principalAngles_le`, `smoothedStabilityCoefficient_pos`. | Lean-certified with accepted principal angles and the literal singular-value cost. The numerical-candidate error bound and uniqueness are direct consequences. No empirical performance claim. |
+| The commuting-contraction relaxation has the same optimal weighted nuclear cost, with the displayed clipped real contraction. | `SmoothedCommutantOptimization.lean` and `SmoothedRotationOptimization.lean` certify tightness and unitary attainment; conventional proof in the included section verifies the clipped contraction. | Distinguish the formally certified optimal value and unitary from the separately displayed conventional nonunitary attainer. No general-purpose relaxation theorem is claimed. |
+| The exact angle formula and growth bound are the article's mathematical novelty candidates. | `MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md`; primary-source comparisons in `PAPER_CONTEXT.md`. | Priority remains provisional. The transport problem, penalty, scalar phase mechanism, duality and functional calculus have prior owners. |
+
 ## Schatten optimization research extension (24 October 2026)
 
 These results are additional research, outside the 29 historical source targets.
