@@ -407,7 +407,7 @@ theorem polarInitial_canonicalIntertwiner_eq_regular :
     ← Submodule.orthogonal_orthogonal_eq_closure,
     ContinuousLinearMap.orthogonal_range,
     ← ContinuousLinearMap.star_eq_adjoint,
-    (ContinuousLinearMap.modulus_isSelfAdjoint
+    (ContinuousLinearMap.isSelfAdjoint_modulus
       (spectraCanonicalIntertwiner U V)).star_eq,
     hker]
 
@@ -558,10 +558,10 @@ theorem polarFactor_add_star_eq_two_absoluteValue :
   set C := spectraCanonicalIntertwiner U V with hCdef
   set A := ContinuousLinearMap.modulus C with hAdef
   set W := spectraCanonicalPolarFactor U V with hWdef
-  have hAsa : IsSelfAdjoint A := ContinuousLinearMap.modulus_isSelfAdjoint C
+  have hAsa : IsSelfAdjoint A := ContinuousLinearMap.isSelfAdjoint_modulus C
   have hWA : W * A = C := by
     rw [ContinuousLinearMap.mul_def]; exact spectraCanonicalPolarFactor_decomposition U V
-  have hAA : A * A = star C * C := ContinuousLinearMap.modulus_mul_self_eq_star_mul_self C
+  have hAA : A * A = star C * C := ContinuousLinearMap.modulus_comp_modulus C
   have hAsW : A * star W = star C := by
     have h : star (W * A) = star C := by rw [hWA]
     rwa [star_mul, hAsa.star_eq] at h
@@ -593,7 +593,7 @@ theorem polarFactor_add_star_eq_two_absoluteValue :
       _ = W * (A * A) := by rw [mul_assoc]
       _ = W * (star C * C) := by rw [hAA]
   have hcommAW : Commute A W :=
-    ContinuousLinearMap.commute_modulus_of_commute_star_mul_self C W hcomm
+    (ContinuousLinearMap.commute_modulus_of_commute hcomm.symm).symm
   have hAW : A * W = C := hcommAW.eq.trans hWA
   have hsum1 : C + star C = A * (W + star W) := by rw [mul_add, hAW, hAsW]
   have hsum2 : star C * C + star C * C = A * (A + A) := by rw [mul_add, hAA]
@@ -703,8 +703,8 @@ theorem canonicalPolarFactor_crossed_blocks_general :
   set W := spectraCanonicalPolarFactor U V with hWdef
   set A := ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) with hAdef
   have hcommAP : Commute A (U.starProjection) :=
-    ContinuousLinearMap.commute_modulus_of_commute_star_mul_self _ _
-      (commute_projection_spectraCanonicalIntertwiner_star_mul_self U V).symm
+    (ContinuousLinearMap.commute_modulus_of_commute
+      (commute_projection_spectraCanonicalIntertwiner_star_mul_self U V)).symm
   have hP'P : (Uᗮ).starProjection * U.starProjection = 0 := by
     rw [show (Uᗮ).starProjection = 1 - U.starProjection from
         Submodule.starProjection_orthogonal' U, sub_mul, one_mul,

@@ -128,7 +128,7 @@ theorem norm_absoluteValue_apply_eq_norm_projection
   let Q : H →L[ℂ] H := V.starProjection
   have hxP : P x = x := Submodule.starProjection_eq_self_iff.mpr hx
   have hCsa : star C = C :=
-    (ContinuousLinearMap.modulus_isSelfAdjoint
+    (ContinuousLinearMap.isSelfAdjoint_modulus
       (spectraCanonicalIntertwiner U V)).star_eq
   have hC2 : C * C = halmosCosineSq U V :=
     spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq U V

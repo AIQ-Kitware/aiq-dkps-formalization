@@ -523,10 +523,12 @@ theorem absTanTwoAngleOperatorC_eq_modulus_directedTanTwoAngleOperatorC
   have hcontAbs : ContinuousOn (fun t : ℝ => |Real.tan (2 * t)|)
       (spectrum ℝ (angleOperatorC U V)) :=
     ContinuousOn.abs hcontTan
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    (absTanTwoAngleOperatorC_nonneg U V) ?_
+  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨
+    ContinuousLinearMap.nonneg_iff_isPositive.mp (absTanTwoAngleOperatorC_nonneg U V), ?_⟩
   have hself := isSelfAdjoint_tanTwoAngleOperatorC U V
-  rw [comp_eq_mul', hself.adjoint_eq, absTanTwoAngleOperatorC,
+  rw [hself.adjoint_eq]
+  simp only [← ContinuousLinearMap.mul_def]
+  rw [absTanTwoAngleOperatorC,
     tanTwoAngleOperatorC,
     ← cfc_mul (fun t : ℝ => |Real.tan (2 * t)|)
       (fun t : ℝ => |Real.tan (2 * t)|) (angleOperatorC U V)
@@ -821,8 +823,8 @@ theorem absTanTwoAngleOperatorC_eq_modulus_blockRepresentative :
       (tanTwoBlockRepresentative U V).modulus := by
   have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero
     hcos
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    (absTanTwoAngleOperatorC_nonneg U V) ?_
+  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨
+    ContinuousLinearMap.nonneg_iff_isPositive.mp (absTanTwoAngleOperatorC_nonneg U V), ?_⟩
   have hself := isSelfAdjoint_tanTwoBlockRepresentative hinv
   have hadj : (tanTwoBlockRepresentative U V).adjoint ∘L
       tanTwoBlockRepresentative U V =

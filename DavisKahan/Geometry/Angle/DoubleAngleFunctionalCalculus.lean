@@ -124,9 +124,10 @@ theorem directedSinTwoAngleOperatorC_eq_modulus_reflect :
     (isSelfAdjoint_starProjection U).sub (isSelfAdjoint_starProjection V)
   -- `S² = D²` because `D` is self-adjoint and `S` is its modulus.
   have hSS : S * S = (P - Q) * (P - Q) := by
-    rw [hS, sinAngleOperatorC, ContinuousLinearMap.modulus_mul_self,
-      hDsa.adjoint_eq]
-    rfl
+    have hsq : (P - Q).modulus * (P - Q).modulus = star (P - Q) * (P - Q) :=
+      (P - Q).modulus_comp_modulus
+    change (P - Q).modulus * (P - Q).modulus = _
+    rw [hsq, hDsa.star_eq]
   -- The right-hand Gram operator.
   have hgram :
       ((V.reflectionOperator * P * V.reflectionOperator - P).adjoint ∘L
@@ -185,8 +186,9 @@ theorem directedSinTwoAngleOperatorC_eq_modulus_reflect :
       cfc_add (a := S) (fun s : ℝ => s ^ 2 - s ^ 4) (fun s : ℝ => s ^ 2 - s ^ 4)
         hc2 hc2, hW]
     module
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    (sinTwoAngleOperatorC_nonneg U V) ?_
+  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨
+    ContinuousLinearMap.nonneg_iff_isPositive.mp (sinTwoAngleOperatorC_nonneg U V), ?_⟩
+  change sinTwoAngleOperatorC U V * sinTwoAngleOperatorC U V = _
   rw [hsquare, hgram]
 
 /-- **The reflection double-angle identity, in subspace form.**  `sin 2Θ` is the

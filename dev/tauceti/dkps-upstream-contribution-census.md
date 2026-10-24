@@ -591,3 +591,23 @@ accepted quadratic-form bound directly. The local operator-norm specialization
 The remaining local Sylvester bounds in `Bound.lean` support unitarily invariant
 gauges and other estimates not supplied by the accepted operator-norm theorem.
 The `ForTauCeti` and `DavisKahan.All` targets compile after the retirement.
+
+**Accepted modulus and Gram-factor consumption (2026-10-24):** the exact
+principal-angle formula for the new smoothed transport problem required loading
+the accepted `Projection/AngleOperator.lean` alongside the canonical nonacute
+rotation. This exposed duplicate declarations in the local operator-modulus
+and Gram-contraction donors. The accepted inputs were inspected at pinned Tau
+Ceti `f99e274230de08a9a8189a97dbfc910536646449`; the local pre-migration sources
+are preserved at DKPS `fd801aceb`.
+
+| Local mathematics retired or retained | Accepted replacement and actual scope | Provenance disposition |
+| --- | --- | --- |
+| `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean`: the rectangular modulus construction and its defining, positivity, norm, kernel, and single-operator commutation laws | `TauCeti/Analysis/InnerProductSpace/Modulus.lean`: `ContinuousLinearMap.modulus`, `modulus_comp_modulus`, `eq_modulus_iff`, `isSelfAdjoint_modulus`, `ker_modulus`, and `commute_modulus_of_commute`; real/complex Hilbert spaces of unrestricted dimension | Same mathematical API on the same carrier; local construction and forwarding aliases removed. The old donor headers credit Jon Crall, Claude Fable 5, and OpenAI GPT-5.6 Thinking and identify their DKPS ancestry. This consumption records accepted overlap, not an independently verified claim that the upstream proofs descend from those donors. |
+| `ForTauCeti/Analysis/InnerProductSpace/Polar/GramContraction.lean`: equality-based construction, extension, norm, and two-sided factorization laws | `TauCeti/Analysis/InnerProductSpace/Gram/Factor.lean`: the stronger rectangular `factorThru` construction and `exists_contraction_of_gram_eq`, which needs equality of Gram operators and no supplied self-adjoint square root | Local equality construction retired. Its Jon Crall / Claude Opus 5 provenance remains in Git history; no upstream proof-adaptation claim is inferred from the shared theorem name. |
+| Two-operator commutation of rectangular moduli | Retained in `ForTauCeti/Analysis/InnerProductSpace/ModulusCommutation.lean`, using the accepted single-operator commutation theorem twice | Genuinely missing consequence; no parallel modulus definition or compatibility aliases. |
+| One-sided factorization under Gram domination | Retained and generalized to rectangular `A : E →L[𝕜] G` in `ForTauCeti/Analysis/InnerProductSpace/Gram/Domination.lean`, consuming accepted `factorThru` | The previous square-root-specific consequence is replaced by its natural Gram-inequality form. The accepted construction supplies the factor; the local donor proves the norm-domination implication. Classical mathematics, with no independent novelty claim. |
+
+The maintained historical namespace map is updated to the accepted declaration
+names. Source-facing theorem names and the 29-result completion denominator are
+unchanged; their proofs consume the accepted foundations directly.
+The `ForTauCeti` and `DavisKahan.All` builds passed after this retirement.

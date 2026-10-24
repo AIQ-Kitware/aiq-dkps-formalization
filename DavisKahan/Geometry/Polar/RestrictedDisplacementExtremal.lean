@@ -714,7 +714,7 @@ theorem sourceCosine_selfAdjoint : (sourceCosine U V).IsSymmetric := by
       (x : H), (y : H)⟫_ℂ =
     ⟪(x : H), ContinuousLinearMap.modulus
       (spectraCanonicalIntertwiner U V) (y : H)⟫_ℂ
-  exact (ContinuousLinearMap.modulus_isSelfAdjoint
+  exact (ContinuousLinearMap.isSelfAdjoint_modulus
     (spectraCanonicalIntertwiner U V)).isSymmetric (x : H) (y : H)
 
 /-- The source cosine has nonnegative quadratic form. -/
@@ -736,7 +736,7 @@ theorem norm_sourceCosine_eq_norm_targetProjection (x : U) :
   let Q : H →L[ℂ] H := V.starProjection
   have hxP : P (x : H) = (x : H) := Submodule.starProjection_eq_self_iff.mpr x.property
   have hCsa : star C = C :=
-    (ContinuousLinearMap.modulus_isSelfAdjoint
+    (ContinuousLinearMap.isSelfAdjoint_modulus
       (spectraCanonicalIntertwiner U V)).star_eq
   have hC2 : C * C = halmosCosineSq U V :=
     spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq U V

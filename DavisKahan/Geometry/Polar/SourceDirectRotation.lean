@@ -248,7 +248,7 @@ theorem norm_one_sub_apply_eq_of_isSourceDirectRotation {D : H →L[𝕜] H}
       star_one_sub_mul_one_sub_of_unitary (nonacuteDirectRotation_mem_unitary U V J),
       IsSourceDirectRotation.add_star_eq_nonacuteDirectRotation U V h J]
   have hmod : (1 - D).modulus = (1 - nonacuteDirectRotation U V J).modulus := by
-    rw [ContinuousLinearMap.modulus_def, ContinuousLinearMap.modulus_def]
+    rw [ContinuousLinearMap.modulus_eq_sqrt, ContinuousLinearMap.modulus_eq_sqrt]
     exact congrArg CFC.sqrt hgram
   rw [← ContinuousLinearMap.norm_modulus_apply (1 - D) x,
     ← ContinuousLinearMap.norm_modulus_apply (1 - nonacuteDirectRotation U V J) x, hmod]

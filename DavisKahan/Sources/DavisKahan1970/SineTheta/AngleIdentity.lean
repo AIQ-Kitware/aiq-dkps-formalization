@@ -54,7 +54,7 @@ theorem spectrum_directedAngleBlockC_subset_Icc
     spectrum ℝ (directedAngleBlockC U V) ⊆
       Set.Icc 0 (Real.pi / 2) := by
   have hsa : IsSelfAdjoint (cosineBlockModulusC U V) :=
-    ContinuousLinearMap.modulus_isSelfAdjoint _
+    ContinuousLinearMap.isSelfAdjoint_modulus _
   intro y hy
   rw [directedAngleBlockC,
     cfc_map_spectrum (R := ℝ) Real.arccos (cosineBlockModulusC U V)

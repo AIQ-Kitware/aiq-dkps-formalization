@@ -251,7 +251,7 @@ theorem isUnit_spectraCanonicalAbsoluteValue
     (hacute : IsUniformlyAcute U V) :
     IsUnit (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) := by
   rw [← isUnit_mul_self_iff]
-  rw [ContinuousLinearMap.modulus_mul_self_eq_star_mul_self]
+  rw [ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_comp_modulus]
   have hS : IsUnit (spectraCanonicalIntertwiner U V) := by
     rw [← coe_spectraCanonicalIntertwinerUnit U V hacute]
     exact (spectraCanonicalIntertwinerUnit U V hacute).isUnit
@@ -284,7 +284,7 @@ theorem star_spectraCanonicalAbsoluteValueUnit
   apply Units.ext
   simp only [Units.coe_star]
   rw [coe_spectraCanonicalAbsoluteValueUnit]
-  exact (ContinuousLinearMap.modulus_isSelfAdjoint
+  exact (ContinuousLinearMap.isSelfAdjoint_modulus
     (spectraCanonicalIntertwiner U V)).star_eq
 
 /-- The Gram units of the canonical intertwiner and its absolute value agree. -/
@@ -300,7 +300,7 @@ theorem star_intertwinerUnit_mul_self_eq_absoluteValueUnit_mul_self
   simp only [Units.val_mul, Units.coe_star]
   rw [coe_spectraCanonicalIntertwinerUnit,
     coe_spectraCanonicalAbsoluteValueUnit]
-  exact (ContinuousLinearMap.modulus_mul_self_eq_star_mul_self
+  exact (ContinuousLinearMap.modulus_comp_modulus
     (spectraCanonicalIntertwiner U V)).symm
 
 /-- The Spectra polar factor bundled as a unit, using the invertible polar

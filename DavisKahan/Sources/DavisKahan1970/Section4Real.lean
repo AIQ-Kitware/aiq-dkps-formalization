@@ -312,13 +312,12 @@ theorem spectraAbsoluteValue_canonicalIntertwinerR_eq :
       TauCeti.DavisKahan.complexify_star,
       TauCeti.DavisKahan.complexify_canonicalAbsoluteValueR,
       TauCeti.DavisKahan.complexify_canonicalIntertwinerR]
-    exact ContinuousLinearMap.modulus_mul_self_eq_star_mul_self _
-  have h := ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    (T := TauCeti.DavisKahan.canonicalIntertwinerR U V)
-    ((ContinuousLinearMap.nonneg_iff_isPositive).mpr
-      (TauCeti.DavisKahan.isPositive_canonicalAbsoluteValueR U V))
-    (by simpa only [ContinuousLinearMap.mul_def,
-      ContinuousLinearMap.star_eq_adjoint] using hsquare)
+    exact ContinuousLinearMap.modulus_comp_modulus _
+  have h := (ContinuousLinearMap.eq_modulus_iff
+    (T := TauCeti.DavisKahan.canonicalIntertwinerR U V)).mpr
+    ⟨TauCeti.DavisKahan.isPositive_canonicalAbsoluteValueR U V,
+      by simpa only [ContinuousLinearMap.mul_def,
+        ContinuousLinearMap.star_eq_adjoint] using hsquare⟩
   exact h.symm
 
 /-- The real source cosine has the length of the target projection. -/

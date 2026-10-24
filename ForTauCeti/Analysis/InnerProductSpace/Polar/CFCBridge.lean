@@ -8,7 +8,7 @@ CFC bridge for the finite-dimensional operator polar decomposition.
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
-public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import TauCeti.Analysis.InnerProductSpace.Modulus
 public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
@@ -38,10 +38,9 @@ local instance : CompleteSpace F := FiniteDimensional.complete 𝕜 F
 the same operator. -/
 theorem operatorAbs_toContinuousLinearMap_eq_modulus (A : E →ₗ[𝕜] F) :
     (operatorAbs A).toContinuousLinearMap = A.toContinuousLinearMap.modulus := by
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
-  · exact (ContinuousLinearMap.nonneg_iff_isPositive).mpr
-      ((LinearMap.isPositive_toContinuousLinearMap_iff (operatorAbs A)).mpr
-        (isPositive_operatorAbs A))
+  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨?_, ?_⟩
+  · exact (LinearMap.isPositive_toContinuousLinearMap_iff (operatorAbs A)).mpr
+      (isPositive_operatorAbs A)
   · ext x
     exact congrArg (fun f : E →ₗ[𝕜] E => f x) (operatorAbs_mul_self A)
 

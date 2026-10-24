@@ -260,7 +260,7 @@ theorem sinAngleOperatorR_mul_self :
   have hsa : IsSelfAdjoint ((complexifySubmodule U).starProjection -
       (complexifySubmodule V).starProjection) :=
     (isSelfAdjoint_starProjection _).sub (isSelfAdjoint_starProjection _)
-  have h := ContinuousLinearMap.modulus_mul_self
+  have h := ContinuousLinearMap.modulus_comp_modulus
     ((complexifySubmodule U).starProjection -
       (complexifySubmodule V).starProjection)
   rw [hsa.adjoint_eq] at h

@@ -151,9 +151,8 @@ theorem modulus_comp_left_of_adjoint_comp_self_comp
     {J : F →L[ℂ] G} {T : E →L[ℂ] F}
     (h : J.adjoint ∘L J ∘L T = T) :
     (J ∘L T).modulus = T.modulus := by
-  refine (ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    T.modulus_nonneg ?_).symm
-  rw [ContinuousLinearMap.modulus_mul_self,
+  refine (ContinuousLinearMap.eq_modulus_iff.mpr ⟨T.isPositive_modulus, ?_⟩).symm
+  rw [ContinuousLinearMap.modulus_comp_modulus,
     gram_comp_left_of_adjoint_comp_self_comp h]
 
 end Modulus
@@ -269,7 +268,7 @@ theorem modulus_polarPartial_comp_cfc_modulus (M : E →L[ℂ] F) (f g : ℝ →
     (hfg : ∀ t ∈ spectrum ℝ M.modulus, f t = t * g t)
     (hg : ContinuousOn g (spectrum ℝ M.modulus)) :
     (M.polarPartial ∘L cfc f M.modulus).modulus = (cfc f M.modulus).modulus :=
-  modulus_comp_left_cfc M.modulus_isSelfAdjoint
+  modulus_comp_left_cfc M.isSelfAdjoint_modulus
     (adjoint_comp_self_comp_modulus M) f g hfg hg
 
 end Polar

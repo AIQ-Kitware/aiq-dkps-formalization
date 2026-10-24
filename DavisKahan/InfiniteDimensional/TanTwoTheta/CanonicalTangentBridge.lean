@@ -481,9 +481,7 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     exact hidentity
   let Cang : E →L[ℂ] E := directedCosAngleOperatorC U V
   let Sang : E →L[ℂ] E := directedSinAngleOperatorC U V
-  -- `modulus_mul_self` is stated with `*`; these goals carry `∘SL`, which is
-  -- defeq but not syntactically equal, so `← mul_def` has to bridge it first.
-  -- Then `|Q P|² = (QP)⋆(QP) = P Q Q P = P Q P` by self-adjointness and
+  -- `|Q P|² = (QP)⋆(QP) = P Q Q P = P Q P` by self-adjointness and
   -- idempotence of the two star-projections, which is exactly `hPQP`.
   have hQQ : V.starProjection ∘L V.starProjection = V.starProjection :=
     V.isIdempotentElem_starProjection
@@ -492,7 +490,7 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     Vᗮ.isIdempotentElem_starProjection
   have hCangSq : Cang ∘L Cang = R ∘L P := by
     dsimp [Cang, directedCosAngleOperatorC]
-    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self,
+    rw [ContinuousLinearMap.modulus_comp_modulus,
       ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_starProjection U).adjoint_eq,
       (isSelfAdjoint_starProjection V).adjoint_eq,
@@ -502,7 +500,7 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     exact hPQP
   have hSangSq : Sang ∘L Sang = G ∘L R ∘L P := by
     dsimp [Sang, directedSinAngleOperatorC]
-    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self,
+    rw [ContinuousLinearMap.modulus_comp_modulus,
       ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_starProjection U).adjoint_eq,
       (isSelfAdjoint_starProjection Vᗮ).adjoint_eq,
@@ -589,8 +587,8 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
   have hcomm : Commute (ContinuousLinearMap.modulus Y) (Ring.inverse D) := by
     have hmodG : Commute (ContinuousLinearMap.modulus Y) G := by
       show Commute (ContinuousLinearMap.modulus Y) (Y.adjoint ∘L Y)
-      rw [← ContinuousLinearMap.modulus_mul_self Y]
-      exact (Commute.refl _).mul_right (Commute.refl _)
+      exact (ContinuousLinearMap.commute_modulus_of_commute (T := Y)
+        (Commute.refl (Y.adjoint ∘L Y))).symm
     have hmodD : Commute (ContinuousLinearMap.modulus Y) D := by
       show Commute (ContinuousLinearMap.modulus Y)
         (ContinuousLinearMap.id ℂ E - G)
@@ -606,16 +604,16 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     -- `|T|² = T⋆ T` with `T = 2 • (Y D⁻¹)`, hence
     --   T⋆ T = 4 • (D⁻¹ Y⋆ Y D⁻¹) = 4 • (D⁻¹ |Y| |Y| D⁻¹) = 4 • (|Y| D⁻¹ |Y| D⁻¹),
     -- the last step by `[|Y|, D⁻¹] = 0`.  The old script called `star_smul` and
-    -- `star_mul` *after* `modulus_mul_self` had already put the goal in `adjoint`
+    -- `star_mul` *after* `modulus_comp_modulus` had already put the goal in `adjoint`
     -- form, so neither could ever fire.
     have hDinvAdj :
         ContinuousLinearMap.adjoint (Ring.inverse D) = Ring.inverse D := by
       simpa only [ContinuousLinearMap.star_eq_adjoint] using hDinvSA.star_eq
     have hYsq : ContinuousLinearMap.adjoint Y * Y
         = ContinuousLinearMap.modulus Y * ContinuousLinearMap.modulus Y :=
-      (ContinuousLinearMap.modulus_mul_self Y).symm
+      (ContinuousLinearMap.modulus_comp_modulus Y).symm
     dsimp [M]
-    rw [← ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_mul_self,
+    rw [ContinuousLinearMap.modulus_comp_modulus,
       hTformula]
     -- `adjoint` is a *conjugate*-linear isometry equiv (`≃ₗᵢ⋆`), so the scalar
     -- comes out through `map_smulₛₗ` as `star 2`, not as `2`.
@@ -657,9 +655,11 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
   have hMformula :
       M = (2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D) := by
     -- the lemma concludes `b = |T|`, the goal is `|T| = b`, hence `.symm`
-    refine (ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-      hCandidateNonneg ?_).symm
-    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.modulus_mul_self]
+    refine (ContinuousLinearMap.eq_modulus_iff.mpr
+      ⟨ContinuousLinearMap.nonneg_iff_isPositive.mp hCandidateNonneg, ?_⟩).symm
+    rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.modulus_comp_modulus]
+    change ((2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D)) *
+      ((2 : ℂ) • (ContinuousLinearMap.modulus Y ∘L Ring.inverse D)) = M * M
     -- `hMsq` is stated with `∘SL`; restate it with `*` so it matches here.
     rw [show M * M = (4 : ℂ) • (ContinuousLinearMap.modulus Y ∘L
           Ring.inverse D ∘L ContinuousLinearMap.modulus Y ∘L Ring.inverse D)
@@ -716,7 +716,7 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       rw [hL, hR, show Sang * Sang = G * (R * P) from hSangSq,
         show Cang * Cang = R * P from hCangSq,
         show ContinuousLinearMap.modulus Y * ContinuousLinearMap.modulus Y = G
-          from ContinuousLinearMap.modulus_mul_self Y]
+          from ContinuousLinearMap.modulus_comp_modulus Y]
       noncomm_ring
     have h1 : CFC.sqrt ((Sang * Cang) * (Sang * Cang)) = Sang * Cang :=
       CFC.sqrt_unique rfl hleftNonneg
@@ -732,10 +732,8 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     have hMperp : ContinuousLinearMap.modulus Y ∘L Uᗮ.starProjection = 0 := by
       apply ContinuousLinearMap.ext
       intro x
-      -- `zero_apply` is needed: after `comp_apply` the right-hand side is still
-      -- `(0 : E →L[ℂ] E) x`, so `modulus_apply_eq_zero_iff` has nothing to match.
-      rw [ContinuousLinearMap.comp_apply, zero_apply,
-        ContinuousLinearMap.modulus_apply_eq_zero_iff]
+      rw [ContinuousLinearMap.comp_apply, zero_apply]
+      apply (SetLike.ext_iff.mp Y.ker_modulus (Uᗮ.starProjection x)).mpr
       have hzero : Y (Uᗮ.starProjection x) = 0 := by
         have h := DFunLike.congr_fun hYP (Uᗮ.starProjection x)
         rw [ContinuousLinearMap.comp_apply,

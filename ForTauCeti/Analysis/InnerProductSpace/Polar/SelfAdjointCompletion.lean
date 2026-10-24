@@ -7,7 +7,7 @@ Staged for Tau Ceti: the normalised self-adjoint Krein/Julia column completion.
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Domination
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import TauCeti.Analysis.Normed.Operator.RealAlgebra
@@ -59,7 +59,7 @@ Mathlib registers the continuous functional calculus on `E →L[ℂ] E`).  Then
 * `A` commutes with `G`, hence with `D`, by `Commute.cfcₙ_nnreal`;
 * `B⋆B ≤ D²`, so `ContinuousLinearMap.exists_contraction_of_gram_le` — the
   specialised Douglas factorisation proved in
-  `ForTauCeti/Analysis/InnerProductSpace/Polar/GramContraction.lean` — produces
+  `ForTauCeti/Analysis/InnerProductSpace/Gram/Domination.lean` — produces
   a contraction `Γ : E →L[ℂ] F` with `Γ D = B`.
 
 The **Julia operator** of `A` is the block operator on `E ⊕₂ E`
@@ -456,7 +456,8 @@ theorem exists_selfAdjoint_contraction_extension_of_column_gram_le
     rw [← ContinuousLinearMap.star_eq_adjoint]; exact hDself.star_eq
   -- Step 4: the Douglas factor of `B` through the defect.
   obtain ⟨Γ, hΓnorm, hΓD⟩ : ∃ W : E →L[ℂ] F, ‖W‖ ≤ 1 ∧ W ∘L D = B := by
-    refine ContinuousLinearMap.exists_contraction_of_gram_le hDself ?_
+    refine ContinuousLinearMap.exists_contraction_of_gram_le ?_
+    rw [hDadj]
     rw [← ContinuousLinearMap.mul_def, hDsq]
     exact hBG
   -- Steps 5 to 8: the Julia operator of `A`.

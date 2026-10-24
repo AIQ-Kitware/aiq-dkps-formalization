@@ -222,7 +222,7 @@ theorem commute_sinAngleOperatorC_starProjection (U V : Submodule ℂ E)
     rw [hp, hq] at key
     simp only [sub_self, zero_mul, mul_zero, add_zero] at key
     exact sub_eq_zero.mp key
-  rw [sinAngleOperatorC, ContinuousLinearMap.modulus_def]
+  rw [sinAngleOperatorC, ContinuousLinearMap.modulus_eq_sqrt]
   exact Commute.cfcₙ_nnreal hgram _
 
 /-- **`sin Θ` commutes with `Q`.**  The mirror of
@@ -245,7 +245,7 @@ theorem commute_sinAngleOperatorC_starProjection_right (U V : Submodule ℂ E)
     rw [hp, hq] at key
     simp only [sub_self, zero_mul, mul_zero, add_zero] at key
     exact sub_eq_zero.mp key
-  rw [sinAngleOperatorC, ContinuousLinearMap.modulus_def]
+  rw [sinAngleOperatorC, ContinuousLinearMap.modulus_eq_sqrt]
   exact Commute.cfcₙ_nnreal hgram _
 
 /-- **Davis--Kahan Proposition 3.5: `Θ` commutes with `P`**, for the bounded

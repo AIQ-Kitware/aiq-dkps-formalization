@@ -897,14 +897,14 @@ theorem genericHalvesEquiv_modulus (m : genericLeftHalf Uc Vc) :
   ContinuousLinearMap.polarPartial_apply_modulus _ m
 
 /-- **The modulus of the cross block squares to `A - A²`.**  With
-`ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq` — uniqueness of the
+`ContinuousLinearMap.eq_modulus_iff` — uniqueness of the
 nonnegative square root — this is what will let a unitary intertwining `A`
 intertwine `|B|`. -/
 theorem modulus_genericCrossBlock_mul_self :
     (genericCrossBlock Uc Vc).modulus * (genericCrossBlock Uc Vc).modulus =
       genericCosineBlock Uc Vc -
         genericCosineBlock Uc Vc ∘L genericCosineBlock Uc Vc := by
-  rw [ContinuousLinearMap.modulus_mul_self]
+  rw [ContinuousLinearMap.mul_def, ContinuousLinearMap.modulus_comp_modulus]
   exact adjoint_comp_genericCrossBlock Uc Vc
 
 

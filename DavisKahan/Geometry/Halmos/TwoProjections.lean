@@ -755,8 +755,11 @@ theorem spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq
     ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) *
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       halmosCosineSq U V := by
-  rw [ContinuousLinearMap.modulus_mul_self_eq_star_mul_self,
-    star_spectraCanonicalIntertwiner]
+  have hsq :
+      (spectraCanonicalIntertwiner U V).modulus * (spectraCanonicalIntertwiner U V).modulus =
+        star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V :=
+    ContinuousLinearMap.modulus_comp_modulus _
+  rw [hsq, star_spectraCanonicalIntertwiner]
   let P : H →L[ℂ] H := U.starProjection
   let Pc : H →L[ℂ] H := (Uᗮ).starProjection
   let Q : H →L[ℂ] H := V.starProjection

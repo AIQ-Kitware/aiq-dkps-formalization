@@ -381,7 +381,12 @@ theorem isSelfAdjoint_projectorDifference :
 theorem projectorDifference_sq :
     projectorDifference U V * projectorDifference U V =
       sinAngleOperatorC U V * sinAngleOperatorC U V := by
-  rw [sinAngleOperatorC, ContinuousLinearMap.modulus_mul_self,
+  have hsq :
+      (U.starProjection - V.starProjection).modulus *
+          (U.starProjection - V.starProjection).modulus =
+        (U.starProjection - V.starProjection).adjoint ∘L (U.starProjection - V.starProjection) :=
+    ContinuousLinearMap.modulus_comp_modulus _
+  rw [sinAngleOperatorC, hsq,
     ((isSelfAdjoint_starProjection U).sub
       (isSelfAdjoint_starProjection V)).adjoint_eq, comp_eq_mul,
     projectorDifference]
@@ -715,8 +720,8 @@ singular-value lists, but equality of the two moduli, so the substitution is
 legitimate inside every unitarily invariant norm. -/
 theorem directedTanAngleOperatorC_eq_modulus_blockRepresentative :
     tanAngleOperatorC U V = (tanBlockRepresentative U V).modulus := by
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    (directedTanAngleOperatorC_nonneg U V) ?_
+  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨
+    ContinuousLinearMap.nonneg_iff_isPositive.mp (directedTanAngleOperatorC_nonneg U V), ?_⟩
   have hself := isSelfAdjoint_tanBlockRepresentative htr
   have hadj : (tanBlockRepresentative U V).adjoint ∘L
       tanBlockRepresentative U V =

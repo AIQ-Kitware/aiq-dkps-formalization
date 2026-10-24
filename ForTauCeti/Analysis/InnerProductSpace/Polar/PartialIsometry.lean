@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import TauCeti.Analysis.InnerProductSpace.Modulus
 public import TauCeti.Analysis.InnerProductSpace.PartialIsometry
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.Analysis.Normed.Operator.Extend
@@ -116,7 +116,8 @@ modulus is invertible:
 Read down the list: dropping finite dimension costs the unitary and leaves a
 partial isometry; adding invertibility of the modulus gives an isometry.
 
-`Polar/GramContraction.lean` is lower-level machinery for this construction rather than a
+The accepted `TauCeti/Analysis/InnerProductSpace/Gram/Factor.lean` supplies lower-level
+factorization machinery for this construction rather than a
 fourth modulus or polar-factor API.  It starts from a self-adjoint `A` satisfying the Gram
 identity `A ∘L A = T⋆ ∘L T` and constructs the contraction needed here.  This module applies
 that machinery to the canonical `A = T.modulus` and carries the full partial-isometry API
@@ -283,10 +284,10 @@ theorem polarInitial_orthogonal_eq_ker (M : E →L[𝕜] F) :
       have h := hy (M.modulus x) (M.modulus_apply_mem_polarInitial x)
       rwa [M.inner_modulus_left] at h
     have hzero : M.modulus y = 0 := inner_self_eq_zero.mp (hall _)
-    exact (M.modulus_apply_eq_zero_iff y).mp hzero
+    exact (SetLike.ext_iff.mp M.ker_modulus y).mp hzero
   · intro hy
     have hMy : M y = 0 := hy
-    have hmod : M.modulus y = 0 := (M.modulus_apply_eq_zero_iff y).mpr hMy
+    have hmod : M.modulus y = 0 := (SetLike.ext_iff.mp M.ker_modulus y).mpr hMy
     have hle : M.polarInitial ≤ (𝕜 ∙ y)ᗮ := by
       refine Submodule.topologicalClosure_minimal _ ?_ (Submodule.isClosed_orthogonal _)
       rintro _ ⟨x, rfl⟩
@@ -566,7 +567,7 @@ theorem modulus_comp_starProjection (M : E →L[𝕜] F) :
   have hqker : M.modulus q = 0 := by
     have hq' : q ∈ LinearMap.ker M.toLinearMap := by
       rw [← M.polarInitial_orthogonal_eq_ker]; exact hq
-    exact (M.modulus_apply_eq_zero_iff q).mpr hq'
+    exact (SetLike.ext_iff.mp M.ker_modulus q).mpr hq'
   have hqz : M.polarInitial.starProjection q = 0 := by
     have hmem : q ∈ (M.polarInitial.starProjection).ker := by
       rw [Submodule.ker_starProjection]; exact hq
@@ -578,7 +579,7 @@ theorem modulus_comp_starProjection (M : E →L[𝕜] F) :
 theorem adjoint_eq_modulus_comp_adjoint_polarPartial (M : E →L[𝕜] F) :
     M.adjoint = M.modulus ∘L M.polarPartial.adjoint := by
   have h := congrArg ContinuousLinearMap.adjoint M.polarPartial_comp_modulus
-  rw [ContinuousLinearMap.adjoint_comp, M.modulus_isSelfAdjoint.adjoint_eq] at h
+  rw [ContinuousLinearMap.adjoint_comp, M.isSelfAdjoint_modulus.adjoint_eq] at h
   exact h.symm
 
 /-- **The modulus of the adjoint**: `|M⋆| = W |M| W⋆`.
@@ -589,9 +590,8 @@ is uniqueness of the positive square root: `W |M| W⋆` is positive, and both it
 `M M⋆` reduce to `W (M⋆ M) W⋆`. -/
 theorem modulus_adjoint (M : E →L[𝕜] F) :
     M.adjoint.modulus = M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint := by
-  refine (eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_).symm
-  · rw [ContinuousLinearMap.nonneg_iff_isPositive]
-    exact ((ContinuousLinearMap.nonneg_iff_isPositive).mp M.modulus_nonneg).conj_adjoint
+  refine (eq_modulus_iff.mpr ⟨?_, ?_⟩).symm
+  · exact M.isPositive_modulus.conj_adjoint
       M.polarPartial
   · have hP : ∀ y : E, M.polarPartial.adjoint (M.polarPartial y)
         = M.polarInitial.starProjection y := by
@@ -709,7 +709,7 @@ theorem polarPartial_adjoint (M : E →L[𝕜] F) :
         ContinuousLinearMap.comp_apply] at this
     have hperp : M.polarPartial.adjoint y ∈ M.polarInitialᗮ := by
       rw [M.polarInitial_orthogonal_eq_ker]
-      exact (M.modulus_apply_eq_zero_iff _).mp hmod
+      exact (SetLike.ext_iff.mp M.ker_modulus _).mp hmod
     have hmem : M.polarPartial.adjoint y ∈ M.polarInitial := by
       have h := congrArg (fun T => T y) M.starProjection_comp_adjoint_polarPartial
       simp only [ContinuousLinearMap.comp_apply] at h
@@ -824,7 +824,7 @@ theorem polarPartial_eq_comp_ringInverse_modulus (M : E →L[𝕜] F)
   · intro y hy
     rw [M.polarInitial_orthogonal_eq_ker] at hy
     have hMy : M y = 0 := hy
-    have hmod : M.modulus y = 0 := (M.modulus_apply_eq_zero_iff y).mpr hMy
+    have hmod : M.modulus y = 0 := (SetLike.ext_iff.mp M.ker_modulus y).mpr hMy
     have hy0 : y = 0 := by
       have h1 : (Ring.inverse M.modulus * M.modulus) y = y := by
         rw [Ring.inverse_mul_cancel _ hM]

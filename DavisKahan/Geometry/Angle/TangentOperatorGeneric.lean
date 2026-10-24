@@ -199,8 +199,8 @@ theorem absTanTwoAngleOperator_eq_modulus_tanTwoAngleOperator
     absTanTwoAngleOperator U V = (tanTwoAngleOperator U V).modulus := by
   have htan := continuousOn_tanTwo_spectrum U V h
   have habs := continuousOn_absTanTwo_spectrum U V h
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    (absTanTwoAngleOperator_nonneg U V) ?_
+  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨
+    ContinuousLinearMap.nonneg_iff_isPositive.mp (absTanTwoAngleOperator_nonneg U V), ?_⟩
   have hadj : (tanTwoAngleOperator U V).adjoint = tanTwoAngleOperator U V := by
     simpa only [ContinuousLinearMap.star_eq_adjoint] using
       (isSelfAdjoint_tanTwoAngleOperator U V).star_eq

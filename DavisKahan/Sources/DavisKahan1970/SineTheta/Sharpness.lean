@@ -8,7 +8,7 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 import DavisKahan.Geometry.Angle.OperatorAngleReal
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+import TauCeti.Analysis.InnerProductSpace.Modulus
 
 open TauCeti.DavisKahan.Angle
 

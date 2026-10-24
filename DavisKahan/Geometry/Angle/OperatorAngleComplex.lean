@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+import ForTauCeti.Analysis.InnerProductSpace.ModulusCommutation
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 import DavisKahan.BoundedOperator.Problem
@@ -51,7 +51,7 @@ theorem sinAngleOperatorC_nonneg (U V : Submodule ℂ E)
 theorem isSelfAdjoint_sinAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (sinAngleOperatorC U V) :=
-  ContinuousLinearMap.modulus_isSelfAdjoint _
+  ContinuousLinearMap.isSelfAdjoint_modulus _
 
 /-- **The norm of the sine operator is the subspace gap.** -/
 theorem norm_sinAngleOperatorC (U V : Submodule ℂ E)
@@ -84,7 +84,7 @@ theorem directedCosAngleOperatorC_nonneg (U V : Submodule ℂ E)
 theorem isSelfAdjoint_directedCosAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (directedCosAngleOperatorC U V) :=
-  ContinuousLinearMap.modulus_isSelfAdjoint _
+  ContinuousLinearMap.isSelfAdjoint_modulus _
 
 /-- The norm of the cosine operator is the norm of the directed projection
 composition — the largest principal cosine. -/
@@ -123,7 +123,7 @@ theorem directedSinAngleOperatorC_nonneg (U V : Submodule ℂ E)
 theorem isSelfAdjoint_directedSinAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (directedSinAngleOperatorC U V) :=
-  ContinuousLinearMap.modulus_isSelfAdjoint _
+  ContinuousLinearMap.isSelfAdjoint_modulus _
 
 /-- **The norm of the directed sine operator is the directed gap.** -/
 theorem norm_directedSinAngleOperatorC (U V : Submodule ℂ E)
@@ -162,8 +162,11 @@ theorem directedSinAngleOperatorC_sq_add_directedCosAngleOperatorC_sq
     directedSinAngleOperatorC U V * directedSinAngleOperatorC U V +
       directedCosAngleOperatorC U V * directedCosAngleOperatorC U V = U.starProjection := by
   rw [directedSinAngleOperatorC, directedCosAngleOperatorC,
-    ContinuousLinearMap.modulus_mul_self_eq_star_mul_self, ContinuousLinearMap.modulus_mul_self_eq_star_mul_self,
-    adjoint_cross_mul_cross, adjoint_cross_mul_cross]
+    ContinuousLinearMap.mul_def, ContinuousLinearMap.mul_def,
+    ContinuousLinearMap.modulus_comp_modulus, ContinuousLinearMap.modulus_comp_modulus]
+  change star (Vᗮ.starProjection ∘L U.starProjection) * (Vᗮ.starProjection ∘L U.starProjection) +
+    star (V.starProjection ∘L U.starProjection) * (V.starProjection ∘L U.starProjection) = _
+  rw [adjoint_cross_mul_cross, adjoint_cross_mul_cross]
   calc U.starProjection ∘L Vᗮ.starProjection ∘L U.starProjection +
         U.starProjection ∘L V.starProjection ∘L U.starProjection
       = U.starProjection ∘L (Vᗮ.starProjection + V.starProjection) ∘L
@@ -371,7 +374,8 @@ theorem directedCosAngleOperatorC_apply_eq_zero_of_mem_orthogonal
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {y : E} (hy : y ∈ Uᗮ) : directedCosAngleOperatorC U V y = 0 := by
-  rw [directedCosAngleOperatorC, ContinuousLinearMap.modulus_apply_eq_zero_iff]
+  rw [directedCosAngleOperatorC]
+  apply (SetLike.ext_iff.mp (V.starProjection ∘L U.starProjection).ker_modulus y).mpr
   have hPU : U.starProjection y = 0 := by
     rw [Submodule.starProjection_apply, Submodule.coe_eq_zero,
       Submodule.orthogonalProjectionOnto_eq_zero_iff]
@@ -790,7 +794,8 @@ theorem directedSinAngleOperatorC_apply_eq_zero_of_mem_orthogonal
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {y : E} (hy : y ∈ Uᗮ) : directedSinAngleOperatorC U V y = 0 := by
-  rw [directedSinAngleOperatorC, ContinuousLinearMap.modulus_apply_eq_zero_iff]
+  rw [directedSinAngleOperatorC]
+  apply (SetLike.ext_iff.mp (Vᗮ.starProjection ∘L U.starProjection).ker_modulus y).mpr
   have hPU : U.starProjection y = 0 := by
     rw [Submodule.starProjection_apply, Submodule.coe_eq_zero,
       Submodule.orthogonalProjectionOnto_eq_zero_iff]

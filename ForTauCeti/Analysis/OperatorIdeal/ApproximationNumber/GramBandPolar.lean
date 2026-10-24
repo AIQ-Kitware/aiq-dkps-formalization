@@ -202,7 +202,7 @@ theorem modulus_residual_le_of_gram_residual
         gramOperator X x - ((lam ^ 2 : ℝ) : ℂ) • x := by
     have hsquare : X.modulus (X.modulus x) = X.adjoint (X x) := by
       change (X.modulus * X.modulus) x = (X.adjoint ∘L X) x
-      rw [X.modulus_mul_self]
+      rw [ContinuousLinearMap.mul_def, X.modulus_comp_modulus]
     have hlamSq : ((lam ^ 2 : ℝ) : ℂ) = (lam : ℂ) * (lam : ℂ) := by
       norm_num [pow_two]
     calc

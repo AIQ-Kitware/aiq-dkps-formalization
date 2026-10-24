@@ -146,7 +146,7 @@ theorem sourceDirectedCosC_eq
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     directedCosAngleBlockC U V = cosineBlockModulusC U V := by
   have hsa : IsSelfAdjoint (cosineBlockModulusC U V) :=
-    ContinuousLinearMap.modulus_isSelfAdjoint _
+    ContinuousLinearMap.isSelfAdjoint_modulus _
   rw [directedCosAngleBlockC, directedAngleBlockC,
     ← cfc_comp Real.cos Real.arccos (cosineBlockModulusC U V)
       hsa Real.continuous_cos.continuousOn
@@ -168,8 +168,9 @@ theorem sineBlockModulus_sq_add_cosineBlockModulus_sq
       cosineBlockModulusC U V * cosineBlockModulusC U V =
         ContinuousLinearMap.id ℂ U := by
   rw [sineBlockModulusC, cosineBlockModulusC,
-    ContinuousLinearMap.modulus_mul_self,
-    ContinuousLinearMap.modulus_mul_self]
+    ContinuousLinearMap.mul_def, ContinuousLinearMap.mul_def,
+    ContinuousLinearMap.modulus_comp_modulus,
+    ContinuousLinearMap.modulus_comp_modulus]
   ext x
   -- The adjoint of a projection onto the subtype is the inclusion.
   have hadjPerp : (Vᗮ.orthogonalProjectionOnto).adjoint = Vᗮ.subtypeL := by
@@ -197,7 +198,7 @@ theorem directedSinAngleBlockC_eq_sineBlockModulusC
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     directedSinAngleBlockC U V = sineBlockModulusC U V := by
   have hsaCos : IsSelfAdjoint (cosineBlockModulusC U V) :=
-    ContinuousLinearMap.modulus_isSelfAdjoint _
+    ContinuousLinearMap.isSelfAdjoint_modulus _
   -- The spectrum of the angle is the arccosine image of the modulus spectrum,
   -- by the spectral mapping theorem.
   have hspec : spectrum ℝ (directedAngleBlockC U V) =
@@ -256,7 +257,7 @@ theorem directedSinAngleBlockC_eq_sineBlockModulusC
       nlinarith [Real.sin_sq_add_cos_sq x]
     rw [htrig]
     have hp := sineBlockModulus_sq_add_cosineBlockModulus_sq U V
-    have hs := ContinuousLinearMap.modulus_mul_self (sineBlockC U V)
+    have hs := ContinuousLinearMap.modulus_comp_modulus (sineBlockC U V)
     rw [← hs]
     exact (eq_sub_of_add_eq hp).symm
   show directedSinAngleBlockC U V =

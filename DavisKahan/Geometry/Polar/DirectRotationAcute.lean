@@ -214,7 +214,7 @@ theorem projection_mul_spectraCanonicalPolarFactor_mul_projection
         = V.starProjection * (U.starProjection * U.starProjection) +
             Vᗮ.starProjection * (Uᗮ.starProjection * U.starProjection) := by noncomm_ring
       _ = V.starProjection * U.starProjection := by rw [hP, hPcP, mul_zero, add_zero]
-  have hAA : A * A = star S * S := ContinuousLinearMap.modulus_mul_self_eq_star_mul_self S
+  have hAA : A * A = star S * S := ContinuousLinearMap.modulus_comp_modulus S
   have hGram : star S * S * P = P * Q * P := by
     rw [mul_assoc, hSP, star_spectraCanonicalIntertwiner]
     show (U.starProjection * V.starProjection +
@@ -229,7 +229,7 @@ theorem projection_mul_spectraCanonicalPolarFactor_mul_projection
       _ = U.starProjection * V.starProjection * U.starProjection := by
             rw [hQi, hQcQ, mul_zero, zero_mul, add_zero]
   refine eq_of_mul_right_cancel_of_ker_eq_bot
-    (ContinuousLinearMap.modulus_isSelfAdjoint S)
+    (ContinuousLinearMap.isSelfAdjoint_modulus S)
     (ker_spectraCanonicalAbsoluteValue_eq_bot U V hUV hVU) ?_
   calc P * W * P * A = P * W * (A * P) := by rw [hAP.eq, mul_assoc, mul_assoc]
     _ = P * (W * A) * P := by noncomm_ring
@@ -418,7 +418,8 @@ theorem eq_spectraCanonicalPolarFactor_of_diagonalBlocks_isPositive
     calc T * star W * (W * T) = T * (star W * W) * T := by noncomm_ring
       _ = T * T := by rw [hWsW, mul_one]
   have hAeqT : S.modulus = T := by
-    rw [ContinuousLinearMap.modulus_eq_sqrt_star_mul_self, hGram]
+    have hGramComp : S.adjoint ∘L S = T * T := hGram
+    rw [ContinuousLinearMap.modulus_eq_sqrt, hGramComp]
     exact CFC.sqrt_mul_self T hTpos
   have hcomp : W ∘L S.modulus = S := by
     rw [hAeqT, ← ContinuousLinearMap.mul_def]

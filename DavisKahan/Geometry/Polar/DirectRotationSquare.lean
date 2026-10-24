@@ -383,7 +383,7 @@ theorem modulus_intertwiner_eq_cfc
   have habs0 : (0 : H →L[ℂ] H) ≤
       ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) :=
     ContinuousLinearMap.modulus_nonneg _
-  have habssq := ContinuousLinearMap.modulus_mul_self_eq_star_mul_self
+  have habssq := ContinuousLinearMap.modulus_comp_modulus
     (spectraCanonicalIntertwiner U V)
   calc ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
       = CFC.sqrt (star (spectraCanonicalIntertwiner U V) *
@@ -636,7 +636,7 @@ theorem spectraCanonicalAbsoluteValue_inner_pos
   have hBform : ∀ z : H, 0 ≤ RCLike.re ⟪B z, z⟫_ℂ := fun z =>
     hBpositive.re_inner_nonneg_left z
   have hBsym : (B : H →ₗ[ℂ] H).IsSymmetric :=
-    (ContinuousLinearMap.modulus_isSelfAdjoint _).isSymmetric
+    (ContinuousLinearMap.isSelfAdjoint_modulus _).isSymmetric
   have hBinj : Function.Injective B :=
     (ContinuousLinearMap.isUnit_iff_bijective.mp
       (isUnit_spectraCanonicalAbsoluteValue U V hacute)).1
@@ -1898,7 +1898,7 @@ theorem spectraDirectRotation_minimal
     have hstarRC : star R * C = 1 := by
       have h := congrArg star hCR
       have hCsa : star C = C :=
-        (ContinuousLinearMap.modulus_isSelfAdjoint
+        (ContinuousLinearMap.isSelfAdjoint_modulus
           (spectraCanonicalIntertwiner U V)).star_eq
       simpa only [star_mul, star_one, hCsa] using h
     show star R = R

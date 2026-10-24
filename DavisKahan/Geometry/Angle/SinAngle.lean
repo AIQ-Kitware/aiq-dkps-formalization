@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 import DavisKahan.BoundedOperator.Problem
-import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+import TauCeti.Analysis.InnerProductSpace.Modulus
 
 /-!
 # Sine of the operator angle
@@ -56,7 +56,7 @@ theorem spectraSinAngleOperator_isSelfAdjoint
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (spectraSinAngleOperator U V) := by
   simpa [spectraSinAngleOperator] using
-    ContinuousLinearMap.modulus_isSelfAdjoint (U.starProjection - V.starProjection)
+    ContinuousLinearMap.isSelfAdjoint_modulus (U.starProjection - V.starProjection)
 
 /-- Squaring the Spectra-backed sine-angle operator gives the positive product
 of the projector difference with its adjoint. -/
@@ -66,8 +66,7 @@ theorem spectraSinAngleOperator_mul_self
     spectraSinAngleOperator U V * spectraSinAngleOperator U V =
       star (U.starProjection - V.starProjection) *
         (U.starProjection - V.starProjection) := by
-  simpa [spectraSinAngleOperator] using
-    ContinuousLinearMap.modulus_mul_self_eq_star_mul_self (U.starProjection - V.starProjection)
+  exact ContinuousLinearMap.modulus_comp_modulus (U.starProjection - V.starProjection)
 
 /-- Pointwise norms of the sine-angle operator and projector difference agree. -/
 theorem norm_spectraSinAngleOperator_apply

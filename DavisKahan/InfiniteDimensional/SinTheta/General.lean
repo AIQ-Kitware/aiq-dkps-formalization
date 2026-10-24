@@ -6,8 +6,8 @@ Authors: Jon Crall, GPT 5.6 High
 import DavisKahan.InfiniteDimensional.SinTheta.Restriction
 import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
 import DavisKahan.SpectralTheory.Complexification.Spectrum
-import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
-import ForTauCeti.Analysis.InnerProductSpace.Polar.GramContraction
+import TauCeti.Analysis.InnerProductSpace.Modulus
+import TauCeti.Analysis.InnerProductSpace.Gram.Factor
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
 open TauCeti.DavisKahan.Angle
@@ -659,9 +659,11 @@ theorem SymmetricNormIdeal.modulus_mem_and_gauge_eq
     (hT : I.mem T) :
     I.mem T.modulus ∧ I.gauge T.modulus = I.gauge T := by
   have hgram : T.modulus ∘L T.modulus = ContinuousLinearMap.adjoint T ∘L T := by
-    simpa only [ContinuousLinearMap.mul_def] using T.modulus_mul_self
+    simpa only [ContinuousLinearMap.mul_def] using T.modulus_comp_modulus
   obtain ⟨W, hWnorm, hWadjnorm, hWT, hWadj⟩ :=
-    ContinuousLinearMap.exists_contraction_of_gram_eq T.modulus_isSelfAdjoint hgram
+    ContinuousLinearMap.exists_contraction_of_gram_eq (T := T) (A := T.modulus) (by
+      rw [ContinuousLinearMap.adjoint_modulus]
+      exact hgram)
   exact I.modulus_mem_and_gauge_eq_of_polar hT hWT hWadj hWnorm hWadjnorm
 
 /-! ### Reduction of the ideal-valued projector-difference estimate

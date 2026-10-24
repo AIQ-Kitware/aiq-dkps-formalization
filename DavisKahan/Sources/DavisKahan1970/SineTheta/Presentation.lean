@@ -322,7 +322,7 @@ theorem sourceDirectedSinThetaOperator_eq_modulus
     sourceDirectedSinThetaOperator E₀ F₀ =
       ContinuousLinearMap.modulus (sourceDirectedSineBlock E₀ F₀) := by
   have hsa : IsSelfAdjoint (sourceDirectedSineModulus E₀ F₀) :=
-    ContinuousLinearMap.modulus_isSelfAdjoint _
+    ContinuousLinearMap.isSelfAdjoint_modulus _
   rw [sourceDirectedSinThetaOperator, sourceDirectedThetaOperator,
     ← cfc_comp Real.sin Real.arcsin (sourceDirectedSineModulus E₀ F₀)
       hsa Real.continuous_sin.continuousOn

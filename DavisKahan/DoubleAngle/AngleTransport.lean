@@ -120,7 +120,8 @@ theorem directedSinAngleOperatorC_mul_self (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     directedSinAngleOperatorC U V * directedSinAngleOperatorC U V
       = U.starProjection * Vᗮ.starProjection * U.starProjection := by
-  rw [directedSinAngleOperatorC, ContinuousLinearMap.modulus_mul_self]
+  rw [directedSinAngleOperatorC, ContinuousLinearMap.mul_def,
+    ContinuousLinearMap.modulus_comp_modulus]
   exact gram_cross U Vᗮ
 
 /-- The square of the cosine operator is `P_U P_V P_U`. -/
@@ -128,7 +129,8 @@ theorem directedCosAngleOperatorC_mul_self (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     directedCosAngleOperatorC U V * directedCosAngleOperatorC U V
       = U.starProjection * V.starProjection * U.starProjection := by
-  rw [directedCosAngleOperatorC, ContinuousLinearMap.modulus_mul_self]
+  rw [directedCosAngleOperatorC, ContinuousLinearMap.mul_def,
+    ContinuousLinearMap.modulus_comp_modulus]
   exact gram_cross U V
 
 omit [CompleteSpace E] in

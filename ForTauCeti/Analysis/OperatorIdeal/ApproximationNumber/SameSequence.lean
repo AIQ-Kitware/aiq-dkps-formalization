@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import TauCeti.Analysis.InnerProductSpace.Modulus
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport

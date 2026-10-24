@@ -41,9 +41,9 @@ operator norm and the one-sided composition bounds, none of which knows the
 field.
 
 The Weyl step `approximationNumber_mono_of_form_le` is stated over `ℂ` only, and
-the obstruction is *not* `CFC.sqrt` — that is available over any `RCLike` field
-once the three functional-calculus hypotheses of
-`ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` are carried.  It is
+the obstruction is *not* `CFC.sqrt`, which is available over any `RCLike` field
+through the accepted real functional calculus consumed by
+`TauCeti/Analysis/InnerProductSpace/Modulus.lean`. It is
 the squaring step `TauCeti.ApproximationNumber.approximationNumber_gramOperator_complex`
 (`aₙ(X⋆X) = aₙ(X)²`), whose whole layer — `gramOperator`, `gramLinearPMap`,
 `gramSpectralPVM` — is defined only for `InnerProductSpace ℂ`, because it runs

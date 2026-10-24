@@ -5,7 +5,7 @@ Authors: Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import TauCeti.Analysis.InnerProductSpace.Modulus
 public import TauCeti.Analysis.SpecialFunctions.Sqrt
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 public import Mathlib.Analysis.Normed.Ring.Units
@@ -151,10 +151,11 @@ theorem polarIsometryOfIsUnitModulus_apply (M : E →L[ℂ] F) (x : E) :
 /-- The modulus of `M` is invertible exactly when the Gram operator `M⋆ M` is.
 
 Both directions are the elementary fact that a self-commuting square is a unit
-iff its root is: `|M| * |M| = M⋆ M` by `ContinuousLinearMap.modulus_mul_self`. -/
+iff its root is: `|M| * |M| = M⋆ M` by `ContinuousLinearMap.modulus_comp_modulus`. -/
 theorem isUnit_modulus_iff (M : E →L[ℂ] F) :
     IsUnit M.modulus ↔ IsUnit (M.adjoint ∘L M) := by
-  rw [← M.modulus_mul_self, (Commute.refl M.modulus).isUnit_mul_iff, and_self]
+  rw [← M.modulus_comp_modulus, ← ContinuousLinearMap.mul_def,
+    (Commute.refl M.modulus).isUnit_mul_iff, and_self]
 
 /-- A Gram operator within distance `< 1` of the identity is invertible, hence so
 is the modulus: an operator that is a near-isometry is bounded below. -/
@@ -237,13 +238,14 @@ to `|√t - 1| ≤ |t - 1|` on the (nonnegative) spectrum of `a`. -/
 theorem norm_modulus_sub_one_le (M : E →L[ℂ] F) :
     ‖M.modulus - 1‖ ≤ ‖M.adjoint ∘L M - 1‖ := by
   set a : E →L[ℂ] E := M.adjoint ∘L M with ha_def
-  have ha : 0 ≤ a := M.adjoint_comp_self_nonneg
+  have ha : 0 ≤ a := ContinuousLinearMap.nonneg_iff_isPositive.mpr
+    (ContinuousLinearMap.isPositive_adjoint_comp_self M)
   have hsa : IsSelfAdjoint a := .of_nonneg ha
   -- Both sides are values of the continuous functional calculus at `a`.
   have hshift : cfc (fun s : ℝ => s - 1) a = a - 1 := by
     rw [cfc_sub (fun s : ℝ => s) (fun _ : ℝ => (1 : ℝ)) a, cfc_id' ℝ a, cfc_const_one ℝ a]
   have hmodsqrt : CFC.sqrt a = M.modulus :=
-    CFC.sqrt_unique M.modulus_mul_self M.modulus_nonneg
+    CFC.sqrt_unique M.modulus_comp_modulus M.modulus_nonneg
   have hmod : cfc (fun s : ℝ => Real.sqrt s - 1) a = M.modulus - 1 := by
     rw [cfc_sub Real.sqrt (fun _ : ℝ => (1 : ℝ)) a, cfc_const_one ℝ a]
     congr 1

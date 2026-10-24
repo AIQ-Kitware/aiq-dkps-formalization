@@ -66,7 +66,7 @@ theorem section3AngleOperator_apply_mem_skewPolarInitial
       LinearMap.ker (section3SinAngleOperator U V).toLinearMap := by
     ext z
     rw [LinearMap.mem_ker, LinearMap.mem_ker]
-    have hz := D.modulus_apply_eq_zero_iff z
+    have hz := SetLike.ext_iff.mp D.ker_modulus z
     simpa [D, hmod] using hz.symm
   have hkerDtheta : LinearMap.ker D.toLinearMap =
       LinearMap.ker (section3AngleOperator U V).toLinearMap :=

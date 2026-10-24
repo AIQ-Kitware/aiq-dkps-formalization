@@ -126,7 +126,8 @@ theorem modulus_nonacuteDirectRotation_sub_cosine
       _ = S * S := (eq_sub_of_add_eq hpy').symm
   have hS0 : 0 ≤ S := section3SinAngleOperator_nonneg U V
   have hmod : S = D.modulus := by
-    refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hS0 ?_
+    refine ContinuousLinearMap.eq_modulus_iff.mpr
+      ⟨ContinuousLinearMap.nonneg_iff_isPositive.mp hS0, ?_⟩
     have hgram' : S * S = star D * D := hgram.symm
     rw [ContinuousLinearMap.star_eq_adjoint] at hgram'
     simpa only [ContinuousLinearMap.mul_def] using hgram'
@@ -164,7 +165,7 @@ theorem section3AngleOperator_apply_mem_nonacuteSkewPolarInitial
       LinearMap.ker (section3SinAngleOperator U V).toLinearMap := by
     ext z
     rw [LinearMap.mem_ker, LinearMap.mem_ker]
-    have hz := D.modulus_apply_eq_zero_iff z
+    have hz := SetLike.ext_iff.mp D.ker_modulus z
     simpa [D, hmod] using hz.symm
   have hkerDtheta : LinearMap.ker D.toLinearMap =
       LinearMap.ker (section3AngleOperator U V).toLinearMap :=

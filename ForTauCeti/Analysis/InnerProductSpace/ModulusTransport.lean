@@ -5,15 +5,16 @@ Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import TauCeti.Analysis.InnerProductSpace.Modulus
 public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 /-!
 # Naturality of the operator modulus
 
-The bounded source modulus is defined in `OperatorModulus.lean` from the real self-adjoint
-continuous functional calculus.  This module records its naturality under the two scalar
+The accepted bounded source modulus is defined in
+`TauCeti/Analysis/InnerProductSpace/Modulus.lean` from the real self-adjoint
+continuous functional calculus. This module records its naturality under the two scalar
 transports used elsewhere in the Hilbert-space development:
 
 * real complexification;
@@ -21,7 +22,7 @@ transports used elsewhere in the Hilbert-space development:
 
 These theorems live downstream of both the functional-calculus construction and the modulus.
 Keeping them here prevents the foundational functional-calculus modules from depending back on
-`OperatorModulus.lean`.
+the accepted modulus module.
 -/
 
 public section
@@ -37,9 +38,11 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteS
 theorem conjugateOperator_modulus
     (A : RealComplexification E →L[ℂ] RealComplexification E) :
     conjugateOperator A.modulus = (conjugateOperator A).modulus := by
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-    (conjugateOperator_nonneg A.modulus_nonneg) ?_
-  rw [← conjugateOperator_mul, A.modulus_mul_self]
+  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨
+    ContinuousLinearMap.nonneg_iff_isPositive.mp (conjugateOperator_nonneg A.modulus_nonneg), ?_⟩
+  change conjugateOperator A.modulus * conjugateOperator A.modulus = _
+  have hsq : A.modulus * A.modulus = A.adjoint ∘L A := A.modulus_comp_modulus
+  rw [← conjugateOperator_mul, hsq]
   rw [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.mul_def,
     conjugateOperator_mul, conjugateOperator_adjoint]
 
@@ -53,11 +56,14 @@ theorem conjugateOperator_modulus_of_fixed
 /-- Complexification commutes with the operator modulus. -/
 @[simp] theorem complexify_modulus (T : E →L[ℝ] E) :
     complexify T.modulus = (complexify T).modulus := by
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
-  · exact complexify_nonneg_iff.2 T.modulus_nonneg
+  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨?_, ?_⟩
+  · exact ContinuousLinearMap.nonneg_iff_isPositive.mp
+      (complexify_nonneg_iff.2 T.modulus_nonneg)
   · have hmul : complexify T.modulus * complexify T.modulus =
         complexify (T.modulus * T.modulus) := (complexify_comp _ _).symm
-    rw [hmul, ContinuousLinearMap.modulus_mul_self, complexify_comp, complexify_adjoint]
+    change complexify T.modulus * complexify T.modulus = _
+    have hsq : T.modulus * T.modulus = T.adjoint ∘L T := T.modulus_comp_modulus
+    rw [hmul, hsq, complexify_comp, complexify_adjoint]
 
 end RealComplexification
 
@@ -71,9 +77,11 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [Complet
 /-- Transport along an `RCLike` isomorphism commutes with the operator modulus. -/
 @[simp] theorem clm_modulus (T : E →L[𝕜] E) :
     clm (e := e) T.modulus = (clm (e := e) T).modulus := by
-  refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
-  · exact nonneg_clm_iff.2 T.modulus_nonneg
-  · rw [← clm_mul, ContinuousLinearMap.modulus_mul_self]
+  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨?_, ?_⟩
+  · exact ContinuousLinearMap.nonneg_iff_isPositive.mp (nonneg_clm_iff.2 T.modulus_nonneg)
+  · change clm (e := e) T.modulus * clm (e := e) T.modulus = _
+    have hsq : T.modulus * T.modulus = T.adjoint ∘L T := T.modulus_comp_modulus
+    rw [← clm_mul, hsq]
     change clm (e := e) (ContinuousLinearMap.adjoint T ∘L T) =
       ContinuousLinearMap.adjoint (clm (e := e) T) ∘L clm (e := e) T
     rw [adjoint_clm]

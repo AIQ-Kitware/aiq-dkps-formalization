@@ -94,7 +94,7 @@ theorem section3SinAngleOperator_nonneg :
 /-- The sine operator is self-adjoint. -/
 theorem section3SinAngleOperator_isSelfAdjoint :
     IsSelfAdjoint (section3SinAngleOperator U V) :=
-  (U.starProjection - V.starProjection).modulus_isSelfAdjoint
+  (U.starProjection - V.starProjection).isSelfAdjoint_modulus
 
 /-- The sine operator is a contraction. -/
 theorem norm_section3SinAngleOperator_le_one :
@@ -277,7 +277,8 @@ theorem section3CosAngleOperator_nonneg :
 theorem section3SinAngleOperator_mul_self_eq_halmosSineSq :
     section3SinAngleOperator U V * section3SinAngleOperator U V =
       halmosSineSq U V := by
-  rw [section3SinAngleOperator, ContinuousLinearMap.modulus_mul_self]
+  rw [section3SinAngleOperator, ContinuousLinearMap.mul_def,
+    ContinuousLinearMap.modulus_comp_modulus]
   have hadj : (U.starProjection - V.starProjection : H →L[𝕜] H).adjoint =
       U.starProjection - V.starProjection := by
     rw [← ContinuousLinearMap.star_eq_adjoint, star_sub,
@@ -293,7 +294,11 @@ theorem section3CanonicalAbsoluteValue_mul_self_eq_halmosCosineSq :
     ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) *
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       halmosCosineSq U V := by
-  rw [ContinuousLinearMap.modulus_mul_self_eq_star_mul_self, star_spectraCanonicalIntertwiner]
+  have hsq :
+      (spectraCanonicalIntertwiner U V).modulus * (spectraCanonicalIntertwiner U V).modulus =
+        star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V :=
+    ContinuousLinearMap.modulus_comp_modulus _
+  rw [hsq, star_spectraCanonicalIntertwiner]
   let P : H →L[𝕜] H := U.starProjection
   let Pc : H →L[𝕜] H := (Uᗮ).starProjection
   let Q : H →L[𝕜] H := V.starProjection
@@ -537,7 +542,8 @@ theorem modulus_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V)
       _ = S * S := (eq_sub_of_add_eq hpy').symm
   have hS0 : 0 ≤ S := section3SinAngleOperator_nonneg U V
   have hmod : S = D.modulus := by
-    refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hS0 ?_
+    refine ContinuousLinearMap.eq_modulus_iff.mpr
+      ⟨ContinuousLinearMap.nonneg_iff_isPositive.mp hS0, ?_⟩
     have hgram' : S * S = star D * D := hgram.symm
     rw [ContinuousLinearMap.star_eq_adjoint] at hgram'
     simpa only [ContinuousLinearMap.mul_def] using hgram'

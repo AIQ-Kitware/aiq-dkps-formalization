@@ -128,7 +128,7 @@ theorem norm_sinAngleOperator : ‖sinAngleOperator U V‖ = U.projectionGap V :
 
 /-- `sin Θ` is self-adjoint. -/
 theorem isSelfAdjoint_sinAngleOperator : IsSelfAdjoint (sinAngleOperator U V) :=
-  ContinuousLinearMap.modulus_isSelfAdjoint _
+  ContinuousLinearMap.isSelfAdjoint_modulus _
 
 /-- The ambient sine operator is a contraction. -/
 theorem norm_sinAngleOperator_le_one : ‖sinAngleOperator U V‖ ≤ 1 := by
@@ -384,12 +384,12 @@ theorem directedCosAngleOperator_nonneg : 0 ≤ directedCosAngleOperator U V :=
 /-- The directed sine is self-adjoint: it is a modulus. -/
 theorem isSelfAdjoint_directedSinAngleOperator :
     IsSelfAdjoint (directedSinAngleOperator U V) :=
-  ContinuousLinearMap.modulus_isSelfAdjoint _
+  ContinuousLinearMap.isSelfAdjoint_modulus _
 
 /-- The directed cosine is self-adjoint: it is a modulus. -/
 theorem isSelfAdjoint_directedCosAngleOperator :
     IsSelfAdjoint (directedCosAngleOperator U V) :=
-  ContinuousLinearMap.modulus_isSelfAdjoint _
+  ContinuousLinearMap.isSelfAdjoint_modulus _
 
 section DirectedComplex
 
@@ -765,14 +765,16 @@ private theorem gram_cross_generic (U W : Submodule 𝕜 E)
 theorem directedSinAngleOperator_mul_self :
     directedSinAngleOperator U V * directedSinAngleOperator U V
       = U.starProjection * Vᗮ.starProjection * U.starProjection := by
-  rw [directedSinAngleOperator, ContinuousLinearMap.modulus_mul_self]
+  rw [directedSinAngleOperator, ContinuousLinearMap.mul_def,
+    ContinuousLinearMap.modulus_comp_modulus]
   exact gram_cross_generic U Vᗮ
 
 /-- The square of the directed cosine is the compressed cross block `P_U P_V P_U`. -/
 theorem directedCosAngleOperator_mul_self :
     directedCosAngleOperator U V * directedCosAngleOperator U V
       = U.starProjection * V.starProjection * U.starProjection := by
-  rw [directedCosAngleOperator, ContinuousLinearMap.modulus_mul_self]
+  rw [directedCosAngleOperator, ContinuousLinearMap.mul_def,
+    ContinuousLinearMap.modulus_comp_modulus]
   exact gram_cross_generic U V
 
 /-- **The directed `sin 2Θ₀` squares to `4(t - t²)`**, where `t = P_U P_V P_U` is the
@@ -887,15 +889,17 @@ theorem directedSinTwoAngleOperator_hasSameApproximationNumbers_swap :
     norm_num
   have hUV : directedSinTwoAngleOperator U V
       = ContinuousLinearMap.modulus ((2 : ℝ) • star W) := by
-    refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-      (directedSinTwoAngleOperator_nonneg U V) ?_
-    show _ = star ((2 : ℝ) • star W) * ((2 : ℝ) • star W)
+    refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨
+      ContinuousLinearMap.nonneg_iff_isPositive.mp (directedSinTwoAngleOperator_nonneg U V), ?_⟩
+    change directedSinTwoAngleOperator U V * directedSinTwoAngleOperator U V =
+      star ((2 : ℝ) • star W) * ((2 : ℝ) • star W)
     rw [hstar2, star_star, hfour, hWW, directedSinTwoAngleOperator_mul_self, ← htdef]
   have hVU : directedSinTwoAngleOperator V U
       = ContinuousLinearMap.modulus ((2 : ℝ) • W) := by
-    refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq
-      (directedSinTwoAngleOperator_nonneg V U) ?_
-    show _ = star ((2 : ℝ) • W) * ((2 : ℝ) • W)
+    refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨
+      ContinuousLinearMap.nonneg_iff_isPositive.mp (directedSinTwoAngleOperator_nonneg V U), ?_⟩
+    change directedSinTwoAngleOperator V U * directedSinTwoAngleOperator V U =
+      star ((2 : ℝ) • W) * ((2 : ℝ) • W)
     rw [hstar2, hfour, hW'W, directedSinTwoAngleOperator_mul_self, ← hsdef]
   intro n
   rw [hUV, hVU, modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • star W) n,

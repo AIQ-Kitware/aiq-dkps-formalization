@@ -7,7 +7,7 @@ Staged for Tau Ceti: additions to the operator modulus API.
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.OperatorModulus
+public import TauCeti.Analysis.InnerProductSpace.Modulus
 
 /-!
 # Conjugating the modulus by a unitary
@@ -55,13 +55,15 @@ by `e`, and only through `T⋆ T` and `S⋆ S`. -/
 theorem conjStarAlgEquiv_modulus (e : E ≃ₗᵢ[𝕜] F) {T : E →L[𝕜] G} {S : F →L[𝕜] K}
     (h : e.conjStarAlgEquiv (T.adjoint ∘L T) = S.adjoint ∘L S) :
     e.conjStarAlgEquiv T.modulus = S.modulus := by
-  refine eq_modulus_of_nonneg_of_mul_self_eq ?_ ?_
+  refine eq_modulus_iff.mpr ⟨?_, ?_⟩
   · -- Conjugation by a unitary preserves nonnegativity.
-    rw [nonneg_iff_isPositive, LinearIsometryEquiv.conjStarAlgEquiv_apply,
+    rw [LinearIsometryEquiv.conjStarAlgEquiv_apply,
       ← e.adjoint_eq_symm]
-    exact ((nonneg_iff_isPositive).mp T.modulus_nonneg).conj_adjoint _
+    exact T.isPositive_modulus.conj_adjoint _
   · -- Multiplicativity turns `|T|² = T⋆T` into `(e|T|e⁻¹)² = S⋆S`.
-    rw [← map_mul, modulus_mul_self, h]
+    change e.conjStarAlgEquiv T.modulus * e.conjStarAlgEquiv T.modulus = _
+    have hsq : T.modulus * T.modulus = T.adjoint ∘L T := T.modulus_comp_modulus
+    rw [← map_mul, hsq, h]
 
 /-- The pointwise form of `ContinuousLinearMap.conjStarAlgEquiv_modulus`. -/
 theorem modulus_conj_apply (e : E ≃ₗᵢ[𝕜] F) {T : E →L[𝕜] G} {S : F →L[𝕜] K}

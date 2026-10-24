@@ -63,7 +63,8 @@ private theorem selfAdjoint_polar_then_apply_eq_modulus
   let hM : IsUnit C.modulus := isUnit_modulus_of_isUnit_selfAdjoint C hCsa hCunit
   have hsq : C * C = C.modulus * C.modulus := by
     symm
-    rw [C.modulus_mul_self, hCsa.adjoint_eq, ← ContinuousLinearMap.mul_def]
+    rw [ContinuousLinearMap.mul_def, C.modulus_comp_modulus,
+      hCsa.adjoint_eq, ← ContinuousLinearMap.mul_def]
   have hunitM : C.modulus * Ring.inverse C.modulus = 1 :=
     Ring.mul_inverse_cancel _ hM
   rw [ContinuousLinearMap.polarIsometryOfIsUnitModulus_apply]

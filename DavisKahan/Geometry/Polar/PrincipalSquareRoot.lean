@@ -288,7 +288,7 @@ theorem proposition3_3_principalSquareRoot_converse
         rw [← star_mul, hroot.square_eq]
       have expandR : (A + A) * (A + A) = A * A + A * A + A * A + A * A := by noncomm_ring
       have hAA : A * A = star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V :=
-        ContinuousLinearMap.modulus_mul_self_eq_star_mul_self _
+        ContinuousLinearMap.modulus_comp_modulus _
       rw [expand, hroot.square_eq, hTsT, hsTT, hstarTT, expandR, hAA]
       have hG : spectraReflectionProduct U V + 1 =
           spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V := by
@@ -447,7 +447,7 @@ theorem proposition3_3_principalSquareRoot_converse
       simpa [mul_apply_eq_comp] using this
     have hself : ContinuousLinearMap.adjoint A = A := by
       rw [← ContinuousLinearMap.star_eq_adjoint]
-      exact (ContinuousLinearMap.modulus_isSelfAdjoint _).star_eq
+      exact (ContinuousLinearMap.isSelfAdjoint_modulus _).star_eq
     have horthEq : A.kerᗮ = A.range.topologicalClosure := by
       have h1 : A.rangeᗮ = A.ker := by rw [A.orthogonal_range, hself]
       calc A.kerᗮ = A.rangeᗮᗮ := by rw [h1]

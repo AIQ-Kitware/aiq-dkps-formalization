@@ -206,8 +206,8 @@ private theorem coordinateSineModulus_apply_rightSingularBasis
   have hM_sq :
       M (M (b i)) =
         (((sigma : ℝ) : ℂ) * ((sigma : ℝ) : ℂ)) • b i := by
-    have hmod := ContinuousLinearMap.modulus_mul_self B
-    change (M * M) (b i) = _
+    have hmod := ContinuousLinearMap.modulus_comp_modulus B
+    change (M ∘L M) (b i) = _
     rw [show M = ContinuousLinearMap.modulus B by rfl, hmod]
     exact hBgram
   have hMnonneg : (0 : Z →L[ℂ] Z) ≤ M := by
@@ -230,7 +230,7 @@ private theorem sourceDirectedAngle_apply_rightSingularBasis
   let M := coordinateSineModulus Z V
   let b := finiteSourceRightSingularBasis (directedSine Z V)
   let sigma := finiteSourceSingularValue (directedSine Z V) i
-  have hMsa : IsSelfAdjoint M := ContinuousLinearMap.modulus_isSelfAdjoint _
+  have hMsa : IsSelfAdjoint M := ContinuousLinearMap.isSelfAdjoint_modulus _
   have hMeig : M (b i) = ((sigma : ℝ) : ℂ) • b i := by
     simpa [M, b, sigma] using
       coordinateSineModulus_apply_rightSingularBasis Z V i
@@ -299,7 +299,7 @@ private theorem spectrum_sourceDirectedAngle_lt_pi_div_two
     {t : ℝ} (ht : t ∈ spectrum ℝ (directedAngleBlockC Z V)) :
     0 ≤ t ∧ t < Real.pi / 2 := by
   let M := coordinateSineModulus Z V
-  have hMsa : IsSelfAdjoint M := ContinuousLinearMap.modulus_isSelfAdjoint _
+  have hMsa : IsSelfAdjoint M := ContinuousLinearMap.isSelfAdjoint_modulus _
   have hMnorm : ‖M‖ < 1 := by
     simpa [M] using
       norm_coordinateSineModulus_lt_one_of_all_singular_lt_one Z V hlt

@@ -110,7 +110,7 @@ theorem modulus_commutes_of_projection_intertwining
       exact hgram
     exact hmul
   simpa [ContinuousLinearMap.mul_def] using
-    (ContinuousLinearMap.commute_modulus_of_commute_star_mul_self T P hcomm).eq
+    ((ContinuousLinearMap.commute_modulus_of_commute hcomm.symm).symm).eq
 
 /-- The polar partial isometry intertwines the same two projections as the
 original operator. -/

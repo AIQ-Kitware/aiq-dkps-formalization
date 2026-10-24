@@ -273,7 +273,7 @@ private theorem imaginary_skew_modulus
     rw [star_mul, hskew, hzstar]
     noncomm_ring [hzK]
   have hKgram : -(K * K) = S * S := by
-    have h := K.modulus_mul_self_eq_star_mul_self
+    have h : K.modulus * K.modulus = star K * K := K.modulus_comp_modulus
     rw [hmod, hskew] at h
     simpa only [neg_mul] using h.symm
   have hBsq : B * B = S * S := by

@@ -453,8 +453,11 @@ theorem re_inner_intertwiner_eq_cosineSq (x : H) :
   have hSstar : spectraCanonicalIntertwiner U V
         + star (spectraCanonicalIntertwiner U V)
       = halmosCosineSq U V + halmosCosineSq U V := by
-    rw [spectraCanonicalIntertwiner_add_star U V,
-      ← ContinuousLinearMap.modulus_mul_self_eq_star_mul_self,
+    have hsq :
+        (spectraCanonicalIntertwiner U V).modulus * (spectraCanonicalIntertwiner U V).modulus =
+          star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V :=
+      ContinuousLinearMap.modulus_comp_modulus _
+    rw [spectraCanonicalIntertwiner_add_star U V, ← hsq,
       spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq]
   have h := congrArg (fun T : H →L[ℂ] H => RCLike.re ⟪T x, x⟫_ℂ) hSstar
   have hstar : RCLike.re ⟪star (spectraCanonicalIntertwiner U V) x, x⟫_ℂ
