@@ -151,8 +151,8 @@ cannot lower the minimum.
  \texttt{p} is an extended nonnegative real; the hypotheses require its finite
  real value to lie in $(1,2)$. The scalar minimum is \texttt{phaseMinimum}.},
  label={lst:schatten-global}]
-theorem exists_unitary_minimizing_schatten_transport_principalAngles
-    (p : ENNReal) [Fact (1 <= p)] (hp : p != ⊤)
+theorem exists_unitary_minimizing_schatten_transport_principalAngles_complex
+    (p : ENNReal) [Fact (1 <= p)] (hp : p ≠ ⊤)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule Complex E)
     (hKL : Module.finrank Complex K = Module.finrank Complex L) :

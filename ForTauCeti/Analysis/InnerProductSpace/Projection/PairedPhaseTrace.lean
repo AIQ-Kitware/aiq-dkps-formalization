@@ -43,7 +43,7 @@ set_option maxHeartbeats 800000 in
 -- require more elaboration than the default heartbeat allowance.
 /-- A complete paired phase decomposition computes every zero-preserving
 principal-angle sum, with the actual restricted pair on the remainder. -/
-theorem sum_principalAngles_eq_paired_phases_add_comap
+theorem sum_principalAngles_eq_paired_phases_add_comap_complex
     (K L H Z : Submodule ℂ E) (U : E ≃ₗᵢ[ℂ] E)
     (hmap : K.map U.toLinearMap = L)
     {n : ℕ} (b : OrthonormalBasis (Fin n) ℂ H) (alpha beta : Fin n → ℝ)
@@ -100,12 +100,12 @@ theorem sum_principalAngles_eq_paired_phases_add_comap
   have hS0 (i) : S (e (.inl (0, i))) =
       (Real.sin ((alpha i + beta i) / 2) : ℂ) • e (.inl (0, i)) := by
     rw [he0]
-    exact (sinAngleOperator_apply_of_paired_phase_eigenvectors K L U hmap
+    exact (sinAngleOperator_apply_of_paired_phase_eigenvectors_complex K L U hmap
       (b i) (alpha i) (beta i) (hu i) (hw i) (hmean i)).1
   have hS1 (i) : S (e (.inl (1, i))) =
       (Real.sin ((alpha i + beta i) / 2) : ℂ) • e (.inl (1, i)) := by
     rw [he1]
-    exact (sinAngleOperator_apply_of_paired_phase_eigenvectors K L U hmap
+    exact (sinAngleOperator_apply_of_paired_phase_eigenvectors_complex K L U hmap
       (b i) (alpha i) (beta i) (hu i) (hw i) (hmean i)).2
   have hSf (j) : S (e (.inr j)) = (mu j : ℂ) • e (.inr j) := by
     rw [hef]

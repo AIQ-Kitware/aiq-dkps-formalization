@@ -45,7 +45,7 @@ private theorem ker_invariant_of_commute_square
 
 /-- The subspace and projection formulations of a complex unitary
 transport agree. -/
-theorem map_eq_iff_conjugate_starProjection
+theorem map_eq_iff_conjugate_starProjection_complex
     (K L : Submodule ℂ E) (U : unitary (E →L[ℂ] E)) :
     K.map (Unitary.linearIsometryEquiv U).toLinearMap = L ↔
       (U : E →L[ℂ] E) * K.starProjection * star (U : E →L[ℂ] E) = L.starProjection := by
@@ -69,7 +69,7 @@ set_option maxHeartbeats 800000 in
 -- larger elaboration allowance already used by the normal-form theorem.
 /-- Every local constrained minimum dominates the exact scalar cost sum
 of the original source and target principal angles. -/
-theorem sum_phaseMinimum_le_of_isLocalMinOn_transports
+theorem sum_phaseMinimum_le_of_isLocalMinOn_transports_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) (U : unitary (E →L[ℂ] E))
@@ -86,9 +86,9 @@ theorem sum_phaseMinimum_le_of_isLocalMinOn_transports
   let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
   let H := Module.End.pointSpectralSubspace G.toLinearMap (Ioi 0)
   let Z := G.toLinearMap.ker
-  have ht := (map_eq_iff_conjugate_starProjection K L U).mp hmap
+  have ht := (map_eq_iff_conjugate_starProjection_complex K L U).mp hmap
   obtain ⟨n, e, alpha, beta, V, W, R, d, hV, hW, hR, _, hd, _, hVe, hWe,
-      hmean, hcost⟩ := schatten_transport_spectral_decomposition_of_isLocalMinOn
+      hmean, hcost⟩ := schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
         p hp hp1 hp2 K L.starProjection U ht hmin
   have hG : IsSelfAdjoint G := isSelfAdjoint_schattenUnitaryGradient _ _
   obtain ⟨hPK, hPL⟩ := gradient_square_reduces_projections_of_isLocalMinOn_transports
@@ -106,7 +106,7 @@ theorem sum_phaseMinimum_le_of_isLocalMinOn_transports
       Complex.exp (((-beta i : ℝ) : ℂ) * Complex.I) • K.reflection (e i) := by
     change (U : E →L[ℂ] E) (K.reflection (e i)) = _
     rw [← hW, hWe, Submodule.coe_smul, map_smul]
-  have hangles := Submodule.sum_principalAngles_eq_paired_phases_add_comap
+  have hangles := Submodule.sum_principalAngles_eq_paired_phases_add_comap_complex
     K L H Z (Unitary.linearIsometryEquiv U) hmap e alpha beta hu hw
     (fun i => ⟨(hmean i).1.le, (hmean i).2.le⟩) d hd hK hL
     (phaseMinimum p.toReal) (phaseMinimum_zero_angle p.toReal hp1.le)
@@ -120,7 +120,7 @@ theorem sum_phaseMinimum_le_of_isLocalMinOn_transports
 
 /-- The exact scalar principal-angle sum is a lower bound for every
 complex unitary transport, without a restriction to principal planes. -/
-theorem sum_phaseMinimum_le_schatten_transport
+theorem sum_phaseMinimum_le_schatten_transport_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) (U : unitary (E →L[ℂ] E))
@@ -128,10 +128,10 @@ theorem sum_phaseMinimum_le_schatten_transport
     (∑ i : Fin (Module.finrank ℂ K), phaseMinimum p.toReal (K.principalAngles L i)) ≤
       UnitarilyInvariantSeminorm.schatten ℂ E E p
         (LinearMap.id - (U : E →L[ℂ] E).toLinearMap) ^ p.toReal := by
-  have ht := (map_eq_iff_conjugate_starProjection K L U).mp hmap
+  have ht := (map_eq_iff_conjugate_starProjection_complex K L U).mp hmap
   obtain ⟨V, hV, hmin⟩ := exists_schatten_transport_minimizer p hp K.starProjection L.starProjection U ht
-  have hmapV := (map_eq_iff_conjugate_starProjection K L V).mpr hV
-  exact (sum_phaseMinimum_le_of_isLocalMinOn_transports p hp hp1 hp2 K L V hmapV
+  have hmapV := (map_eq_iff_conjugate_starProjection_complex K L V).mpr hV
+  exact (sum_phaseMinimum_le_of_isLocalMinOn_transports_complex p hp hp1 hp2 K L V hmapV
     hmin.isLocalMinOn).trans (hmin ⟨U.property, ht⟩)
 
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

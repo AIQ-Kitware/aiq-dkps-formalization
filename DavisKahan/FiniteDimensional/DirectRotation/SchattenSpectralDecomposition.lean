@@ -54,7 +54,7 @@ set_option maxHeartbeats 800000 in
 /-- A local constrained minimum is an actual orthogonal sum of paired
 scalar optimizers and a self-adjoint gradient-kernel restriction. The
 ambient Schatten power splits exactly into their costs. -/
-theorem schatten_transport_spectral_decomposition_of_isLocalMinOn
+theorem schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K : Submodule ℂ E) [K.HasOrthogonalProjection]
@@ -108,7 +108,7 @@ theorem schatten_transport_spectral_decomposition_of_isLocalMinOn
     change G (J x) = -J (G x)
     simpa only [neg_neg] using congrArg Neg.neg h.symm
   obtain ⟨n, e, g, alpha, beta, _, _, hu, hw, hmean, hscalar⟩ :=
-    positive_gradient_phase_basis_of_isLocalMinOn_transports p hp hp1 hp2 K Q U htrans hmin
+    positive_gradient_phase_basis_of_isLocalMinOn_transports_complex p hp hp1 hp2 K Q U htrans hmin
   have hUH : ∀ x ∈ H, (U : E →L[ℂ] E) x ∈ H :=
     invariant_of_eigenbasis H e (U : E →L[ℂ] E)
       (fun i => Complex.exp ((alpha i : ℂ) * Complex.I)) hu

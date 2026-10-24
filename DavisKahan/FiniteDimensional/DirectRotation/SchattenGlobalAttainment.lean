@@ -67,7 +67,7 @@ private theorem exists_paired_phase_correction
 omit [CompleteSpace E] in
 /-- The Schatten displacement of a phase-modified principal rotation is
 the sum of its scalar phase power sums. -/
-theorem schatten_paired_phase_transport_eq_sum
+theorem schatten_paired_phase_transport_eq_sum_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     {n m : ℕ} (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
     (theta delta : Fin n → ℝ)
@@ -130,7 +130,7 @@ theorem schatten_paired_phase_transport_eq_sum
 
 /-- Independently minimizing the principal-plane phases attains the exact
 principal-angle cost for any equal-rank complex subspace pair. -/
-theorem exists_unitary_attaining_schatten_principalAngles
+theorem exists_unitary_attaining_schatten_principalAngles_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L) :
     ∃ W : E ≃ₗᵢ[ℂ] E, K.map W.toLinearMap = L ∧
@@ -145,7 +145,7 @@ theorem exists_unitary_attaining_schatten_principalAngles
     (⟨nonacuteDirectRotation K L D, nonacuteDirectRotation_mem_unitary K L D⟩ :
       unitary (E →L[ℂ] E))
   obtain ⟨n, m, e, theta, eps, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, hJf⟩ :=
-    SmoothedPhaseTransition.exists_subspace_paired_rotation_reflection_basis K L hKL
+    SmoothedPhaseTransition.exists_subspace_paired_rotation_reflection_basis_complex K L hKL
   choose delta hδ hopt hmin using
     fun i => exists_attains_phaseMinimum p.toReal (theta i) hp1 (hθ i).1.le
   obtain ⟨Z, hZp, hZf, hZcomm⟩ := exists_paired_phase_correction e delta K.reflection
@@ -157,7 +157,7 @@ theorem exists_unitary_attaining_schatten_principalAngles
     change R (Z (K.reflection x)) = L.reflection (R (Z x))
     rw [hZcomm]
     exact nonacuteDirectRotation_reflection_intertwines K L D (Z x)
-  have hcost := schatten_paired_phase_transport_eq_sum p hp e theta delta
+  have hcost := schatten_paired_phase_transport_eq_sum_complex p hp e theta delta
     (fun i => ⟨(hθ i).1.le, (hθ i).2⟩) hδ R Z hR0 hR1 hRf hZp hZf
   have hsum := SmoothedPhaseTransition.sum_principalAngles_eq_paired_sum K L e theta hθ
     hC0 hC1 hCf hJ0 (phaseMinimum p.toReal) (phaseMinimum_zero_angle p.toReal hp1)
@@ -168,7 +168,7 @@ theorem exists_unitary_attaining_schatten_principalAngles
 /-- **Exact unrestricted higher-rank Schatten minimum.** Some complex
 unitary transport attains the scalar principal-angle sum, and every
 admissible ambient unitary has at least that cost. -/
-theorem exists_unitary_minimizing_schatten_transport_principalAngles
+theorem exists_unitary_minimizing_schatten_transport_principalAngles_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L) :
@@ -180,10 +180,10 @@ theorem exists_unitary_minimizing_schatten_transport_principalAngles
         (∑ i : Fin (Module.finrank ℂ K), phaseMinimum p.toReal (K.principalAngles L i)) ≤
           UnitarilyInvariantSeminorm.schatten ℂ E E p
             (LinearMap.id - T.toLinearMap) ^ p.toReal := by
-  obtain ⟨W, hW, hcost⟩ := exists_unitary_attaining_schatten_principalAngles p hp K L hKL
+  obtain ⟨W, hW, hcost⟩ := exists_unitary_attaining_schatten_principalAngles_complex p hp K L hKL
   refine ⟨W, hW, hcost, ?_⟩
   intro T hT
-  have h := sum_phaseMinimum_le_schatten_transport p hp hp1 hp2 K L
+  have h := sum_phaseMinimum_le_schatten_transport_complex p hp hp1 hp2 K L
     (Unitary.linearIsometryEquiv.symm T)
     (by simpa only [MulEquiv.apply_symm_apply] using hT)
   exact h

@@ -60,7 +60,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- The displacement power of the completed canonical rotation is the
 sum of the canonical scalar costs over the accepted principal angles. -/
-theorem nonacuteDirectRotation_schatten_rpow_eq_sum
+theorem nonacuteDirectRotation_schatten_rpow_eq_sum_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L) :
     UnitarilyInvariantSeminorm.schatten ℂ E E p
@@ -75,7 +75,7 @@ theorem nonacuteDirectRotation_schatten_rpow_eq_sum
       unitary (E →L[ℂ] E))
   obtain ⟨n, m, e, theta, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0⟩ :=
     SmoothedPhaseTransition.exists_subspace_paired_rotation_basis K L hKL
-  have hcost := schatten_paired_phase_transport_eq_sum p hp e theta (fun _ => 0)
+  have hcost := schatten_paired_phase_transport_eq_sum_complex p hp e theta (fun _ => 0)
     (fun i => ⟨(hθ i).1.le, (hθ i).2⟩) (fun i => ⟨le_rfl, (hθ i).1.le⟩)
     R (LinearIsometryEquiv.refl ℂ E) hR0 hR1 hRf (by simp) (by simp)
   have hsum := SmoothedPhaseTransition.sum_principalAngles_eq_paired_sum K L e theta hθ
@@ -86,7 +86,7 @@ theorem nonacuteDirectRotation_schatten_rpow_eq_sum
 /-- **The exact canonical cutoff at arbitrary rank.** The completed
 canonical rotation is globally Schatten-optimal if and only if every
 principal angle lies below or at the scalar critical angle. -/
-theorem nonacuteDirectRotation_schatten_minimal_iff
+theorem nonacuteDirectRotation_schatten_minimal_iff_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L) :
@@ -105,17 +105,17 @@ theorem nonacuteDirectRotation_schatten_minimal_iff
         phasePower p.toReal (K.principalAngles L i) 0 :=
     phaseMinimum_le_phasePower p.toReal _ hp1.le (hθ i).1 ⟨le_rfl, (hθ i).1⟩
   obtain ⟨W, hW, hcost, hbound⟩ :=
-    exists_unitary_minimizing_schatten_transport_principalAngles p hp hp1 hp2 K L hKL
+    exists_unitary_minimizing_schatten_transport_principalAngles_complex p hp hp1 hp2 K L hKL
   constructor
   · intro hmin
     have hc := hmin W hW
-    rw [hcost, nonacuteDirectRotation_schatten_rpow_eq_sum p hp K L hKL] at hc
+    rw [hcost, nonacuteDirectRotation_schatten_rpow_eq_sum_complex p hp K L hKL] at hc
     have heq := le_antisymm (Finset.sum_le_sum (fun i _ => hle i)) hc
     intro i
     have hi := (Finset.sum_eq_sum_iff_of_le (fun i _ => hle i)).mp heq i (Finset.mem_univ i)
     exact (phaseMinimum_eq_canonical_iff_le_criticalAngle p.toReal _ hp1 hp2 (hθ i)).mp hi
   · intro hcrit T hT
-    rw [nonacuteDirectRotation_schatten_rpow_eq_sum p hp K L hKL]
+    rw [nonacuteDirectRotation_schatten_rpow_eq_sum_complex p hp K L hKL]
     have heq (i : Fin (Module.finrank ℂ K)) :
         phasePower p.toReal (K.principalAngles L i) 0 =
           phaseMinimum p.toReal (K.principalAngles L i) :=

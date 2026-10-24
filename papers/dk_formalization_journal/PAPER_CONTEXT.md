@@ -145,14 +145,14 @@ These are scalar value-function theorems, not a certificate that an arbitrary
 matrix competitor has already been reduced to such blocks.
 
 `SchattenGlobalAttainment.lean` now proves
-`exists_unitary_minimizing_schatten_transport_principalAngles`: for arbitrary
+`exists_unitary_minimizing_schatten_transport_principalAngles_complex`: for arbitrary
 equal-rank subspaces of a finite-dimensional complex Hilbert space and every
 finite `1 < p < 2`, an actual unitary transport attains
 `sum_i phaseMinimum p (K.principalAngles L i)`, and every admissible ambient
 unitary has at least that Schatten displacement power. The statement includes
 zero, repeated, and right principal angles, the zero-dimensional space, and
 competitors mixing principal planes. `SchattenCanonicalOptimality.lean` proves
-`nonacuteDirectRotation_schatten_minimal_iff`: the completed canonical rotation
+`nonacuteDirectRotation_schatten_minimal_iff_complex`: the completed canonical rotation
 is globally optimal exactly when every accepted principal angle is at most
 `arccos ((2-p)/p)`, including equality. Consequently a supercritical angle
 implies a strict improvement by the independently attaining phase construction.
@@ -191,6 +191,15 @@ full spectral decomposition, and angle-sum theorem axioms and checked the
 unrestricted endpoint signatures. The manuscript was typeset with pdfLaTeX
 and BibTeX in a fresh temporary output directory; font expansion was disabled
 for the installed TeX font set. The 29 historical source targets are unchanged.
+
+The new fixed-field operator endpoints use the repository's `_complex` suffix;
+the evidence rows and displayed signature use those final names. The required
+rename scan reports existing stale upstream/migration references unrelated to
+these declarations. `lake build Challenge` also exposes the unchanged
+`Challenge/MathlibCandidate/CourantFischerWeyl/Leaderboard.lean` reference to
+the absent `TauCeti.abs_eigenvalues_sub_le_opNorm`. The production
+`DavisKahan.All ForTauCeti` build and the new endpoint axiom audits pass
+independently; no new result depends on the Challenge aggregate.
 
 The draft also gives conventional proofs that every local minimum of the
 finite complex transport problem is global, and that the same exact value

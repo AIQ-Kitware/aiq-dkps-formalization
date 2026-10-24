@@ -74,7 +74,7 @@ private theorem projectionDifference_apply_paired_eigenvector
 /-- The mean of two reflection-paired transporter eigenphases is a physical
 principal angle: the sine angle operator acts on both paired vectors by its
 sine. This includes zero and right angles. -/
-theorem sinAngleOperator_apply_of_paired_phase_eigenvectors
+theorem sinAngleOperator_apply_of_paired_phase_eigenvectors_complex
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (v : E) (alpha beta : ℝ)

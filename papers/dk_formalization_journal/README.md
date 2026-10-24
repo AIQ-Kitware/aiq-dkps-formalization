@@ -23,9 +23,9 @@ The scope is now fixed:
 
 The finite complex Schatten theorem is included in
 `schatten_transport_verified.tex`. Its Lean endpoint is
-`SchattenGlobalAttainment.exists_unitary_minimizing_schatten_transport_principalAngles`
+`SchattenGlobalAttainment.exists_unitary_minimizing_schatten_transport_principalAngles_complex`
 (module-qualified shorthand), with canonical optimality in
-`SchattenCanonicalOptimality.nonacuteDirectRotation_schatten_minimal_iff`.
+`SchattenCanonicalOptimality.nonacuteDirectRotation_schatten_minimal_iff_complex`.
 The exact value and cutoff cover all admissible complex unitary transports;
 the real matching formula, classification of every minimizer, and
 infinite-dimensional Schatten extension remain separate research drafts.

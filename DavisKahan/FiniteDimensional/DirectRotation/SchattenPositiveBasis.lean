@@ -35,7 +35,7 @@ set_option maxHeartbeats 800000 in
 /-- The entire positive gradient space at a constrained local minimum has
 an orthonormal phase basis. Source reflection pairs every vector with an
 opposite-gradient eigenvector, and every pair attains its exact scalar cost. -/
-theorem positive_gradient_phase_basis_of_isLocalMinOn_transports
+theorem positive_gradient_phase_basis_of_isLocalMinOn_transports_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K : Submodule ℂ E) [K.HasOrthogonalProjection]
@@ -123,7 +123,7 @@ theorem positive_gradient_phase_basis_of_isLocalMinOn_transports
             map_smul' := by intro c y; rfl }
         norm_map' := by intro y; rfl }
     obtain ⟨b, alpha, beta, hu, hw, hmean, hcost⟩ :=
-      gradient_eigenspace_phase_basis_of_isLocalMinOn_transports p hp hp1 hp2
+      gradient_eigenspace_phase_basis_of_isLocalMinOn_transports_complex p hp hp1 hp2
         K Q U htrans hmin mu.val.re hpos hspec
     refine ⟨hpos, b.map d, alpha, beta, ?_, ?_, hmean, hcost⟩
     · intro i

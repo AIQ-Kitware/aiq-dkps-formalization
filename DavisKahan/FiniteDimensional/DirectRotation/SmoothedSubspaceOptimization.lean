@@ -75,7 +75,7 @@ private theorem canonical_rotation_model
 /-- Every equal-rank complex subspace pair has a paired eigenbasis of its
 completed canonical rotation, with matching cosine eigenvalues and source
 reflection exchanging each positive-negative eigenphase pair. -/
-theorem exists_subspace_paired_rotation_reflection_basis
+theorem exists_subspace_paired_rotation_reflection_basis_complex
     (U V : Submodule ℂ E) (hUV : Module.finrank ℂ U = Module.finrank ℂ V) :
     let R := nonacuteDirectRotation U V (finiteCrossedDefectEquiv U V hUV)
     ∃ n m : ℕ, ∃ (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
@@ -125,7 +125,7 @@ theorem exists_subspace_paired_rotation_basis
       (∀ j, R (e (.inr j)) = e (.inr j)) ∧
       (∀ i, U.reflection (e (.inl (0, i))) = e (.inl (1, i))) := by
   obtain ⟨n, m, e, theta, _, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, _⟩ :=
-    exists_subspace_paired_rotation_reflection_basis U V hUV
+    exists_subspace_paired_rotation_reflection_basis_complex U V hUV
   exact ⟨n, m, e, theta, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0⟩
 
 /-- Every equal-rank complex subspace pair has a paired cosine eigenbasis

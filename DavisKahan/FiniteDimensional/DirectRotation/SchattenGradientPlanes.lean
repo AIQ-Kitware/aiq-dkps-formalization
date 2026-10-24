@@ -441,7 +441,7 @@ set_option maxHeartbeats 600000 in
 a complete phase eigenbasis paired by source reflection. This uniform form
 includes the critical level and exposes ambient eigenvector equations for
 assembling different levels into one orthogonal decomposition. -/
-theorem gradient_eigenspace_phase_basis_of_isLocalMinOn_transports
+theorem gradient_eigenspace_phase_basis_of_isLocalMinOn_transports_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K : Submodule ℂ E) [K.HasOrthogonalProjection]
