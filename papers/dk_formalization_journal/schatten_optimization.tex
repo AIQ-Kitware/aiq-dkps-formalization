@@ -82,6 +82,17 @@ decreases strictly up to its endpoint, where its two displacement singular
 values are $2$ and $0$. The case $\theta=0$ has only one admissible phase.
 \end{proof}
 
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=\linewidth]{figures/schatten_phase_diagram.pdf}
+ \caption{The scalar phase transition. The cutoff is
+ $\vartheta_p=\arccos((2-p)/p)$. At $p=3/2$, the canonical phase minimizes
+ the cost at $60^\circ$, while an interior phase gives a smaller cost at
+ $80^\circ$. The optimizing phase starts at zero and approaches the
+ principal angle at the right-angle boundary.}
+ \label{fig:schatten-phase-diagram}
+\end{figure}
+
 The scalar minimization determines the unrestricted complex problem as well.
 Write $\mathcal U(P,Q)=\{W\in U(n):WPW^*=Q\}$ for the transporters of
 two orthogonal projections of equal rank.
@@ -118,7 +129,7 @@ self-adjoint operator commutes with $W$.
 
 \begin{proposition}[First variation and two spectral roots]
 \label{prop:schatten-critical-blocks}
-If $W$ minimizes the displacement power on $\mathcal U(P,Q)$ and
+If $W$ is a local minimum of the displacement power on $\mathcal U(P,Q)$ and
 $J=2P-I$, then
 \begin{equation}
  JG_p(W)J=-G_p(W).
@@ -177,7 +188,7 @@ phase spaces and give \cref{eq:schatten-critical-two-roots}.
 
 \begin{proposition}[Exclusion of overlapping large-phase spaces]
 \label{prop:schatten-no-mixing}
-At a minimum, the two large-phase projections in
+At a local minimum, the two large-phase projections in
 \cref{eq:schatten-critical-two-roots} satisfy $AB=0$.
 \end{proposition}
 
@@ -290,6 +301,49 @@ power sums add across these blocks, giving exactly the right-hand side
 of \cref{eq:schatten-unrestricted-minimum}.
 \end{proof}
 
+\begin{proposition}[No nonglobal local minima]
+\label{prop:schatten-local-is-global}
+Every local minimum of $W\mapsto\|I-W\|_p^p$ on $\mathcal U(P,Q)$
+is a global minimum.
+\end{proposition}
+
+\begin{proof}
+The first-variation decomposition and the exclusion of overlapping
+large-phase spaces use only local minimality. As in the theorem's proof,
+each nonzero block of $G_p(W)^2$ therefore attains the sum of its scalar
+principal-plane minima. It remains to consider $\ker G_p(W)$, where
+$W=I-2S$ for an orthogonal projection $S$.
+
+Apply the decomposition of two projections to $P,S$ on this space. A
+common one-dimensional reducing space on which $S=1$ cannot occur at a
+local minimum: changing the phase $\pi$ toward a smaller angle, while
+fixing every other direction, preserves transport and decreases the
+cost. On a nontrivial two-dimensional reducing space write
+\[
+ P=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ S=\begin{pmatrix}c^2&cs\\cs&s^2\end{pmatrix},\qquad
+ c=\cos\gamma,\quad s=\sin\gamma,\quad 0<\gamma<\pi/2.
+\]
+Set $H=\operatorname{diag}(c^2,-s^2)$ on this block and zero elsewhere.
+It commutes with $P$, so $W\exp(itH)$ is feasible. The eigenphases
+near $\pi$ and zero are smooth, since these eigenvalues are distinct.
+Their first derivatives are, respectively, $c^2-s^2$ and zero. If
+$\gamma\ne\pi/4$, the large phase contributes
+\[
+ 2^p-\tfrac12p\,2^{p-2}\cos^2(2\gamma)t^2+o(t^2).
+\]
+The small phase is $O(t^2)$, so its cost is $O(|t|^{2p})=o(t^2)$.
+Thus the total cost decreases for small nonzero $t$, contradicting
+local minimality. This argument does not require twice differentiability
+of the full objective at a zero displacement singular value.
+
+Every remaining nontrivial block has $\gamma=\pi/4$. There $W$ transports
+the line of $P$ to its orthogonal complement, with cost $2^p=m_p(\pi/2)$.
+On all remaining fixed directions $W=I$. Consequently the zero-gradient
+block also attains exactly its scalar principal-plane cost. Summing the
+blocks proves that $W$ attains \cref{eq:schatten-unrestricted-minimum}.
+\end{proof}
+
 \begin{corollary}[The sharp exponent-dependent angle cutoff]
 \label{cor:schatten-canonical-cutoff}
 For an acute complex pair with largest principal angle $\alpha$ (taken
@@ -359,6 +413,41 @@ global plane optimizer with a certified choice of branch. Together with
 to a cosine--sine decomposition and one scalar root for each supercritical
 principal angle.
 
+At $p=3/2$ that root is explicit. Writing $c=\cos\theta$, one obtains
+\begin{equation}
+ \delta_{3/2}(\theta)=\arccos\frac{c}{1-2c},\qquad
+       \arccos(1/3)<\theta\leq\pi/2,
+ \label{eq:schatten-three-halves-phase}
+\end{equation}
+and
+\begin{equation}
+ m_{3/2}(\theta)^{2/3}=
+ \begin{cases}
+  2^{2/3}\,2\sin(\theta/2),&0\leq\theta\leq\arccos(1/3),\\
+  2(1+c)^{1/3}(1-2c)^{1/6},&\arccos(1/3)\leq\theta\leq\pi/2.
+ \end{cases}
+ \label{eq:schatten-three-halves-value}
+\end{equation}
+To verify these formulas above the transition, put
+$x=2\sin((\theta+\delta)/2)$ and
+$y=2\sin((\theta-\delta)/2)$. Squaring the positive stationary
+amplitudes gives $x-x^3/4=y-y^3/4$. Since $x>y$, this is equivalent to
+$x^2+xy+y^2=4$. The identities
+\[
+ x^2+y^2=4-4c\cos\delta,\qquad
+ xy=2(\cos\delta-c)
+\]
+give $(1-2c)\cos\delta=c$ and hence
+\cref{eq:schatten-three-halves-phase}. Moreover,
+\[
+ x+y=\frac{2(1-c)}{\sqrt{1-2c}},\qquad
+ \sqrt{xy}=\frac{2c}{\sqrt{1-2c}}.
+\]
+Using $x^{3/2}+y^{3/2}
+=\sqrt{x+y+2\sqrt{xy}}\,(x+y-\sqrt{xy})$ proves
+\cref{eq:schatten-three-halves-value}. Continuity includes the two
+displayed boundary angles.
+
 The transition also determines the smoothness of the minimum value.
 Fix $p$ and write $c_p=2\sin(\vartheta_p/2)$ and
 $\varepsilon=2-p-p\cos\theta$. Expanding the logarithmic ratio at
@@ -390,3 +479,84 @@ its one-sided second derivatives are
 \]
 Thus the quotient displacement cost loses twice differentiability at an
 acute angle determined by $p$, before the geometric right-angle boundary.
+
+\subsection{Schatten-class perturbations in a Hilbert space}
+
+The finite-dimensional formula also gives an attained minimum in the
+Schatten ideal. Let $\mathcal S_p$ denote the Schatten class on a separable
+complex Hilbert space $\mathcal H$.
+
+\begin{theorem}[An optimum differing by finite rank from direct rotation]
+\label{thm:schatten-ideal-minimum}
+Let $P,Q$ be orthogonal projections with $P-Q\in\mathcal S_p$ and
+\[
+ \dim(\operatorname{ran}P\cap\ker Q)
+   =\dim(\ker P\cap\operatorname{ran}Q).
+\]
+List their positive principal angles with multiplicity as
+$(\theta_j)_{j\geq1}$, using a finite list when appropriate. Then
+\begin{equation}
+ \min_{\substack{W\text{ unitary},\ WPW^*=Q\\ I-W\in\mathcal S_p}}
+       \|I-W\|_p^p=\sum_j m_p(\theta_j).
+ \label{eq:schatten-ideal-minimum}
+\end{equation}
+For any principal-plane direct rotation $R$, including a choice of pairing
+on the right-angle defect spaces, an attaining $W_*$ can be chosen with
+\begin{equation}
+ \operatorname{rank}(W_*-R)
+       \leq 2\,\#\{j:\theta_j>\vartheta_p\}<\infty.
+ \label{eq:schatten-finite-correction}
+\end{equation}
+In particular, $R$ is optimal if and only if all principal angles are at
+most $\vartheta_p$.
+\end{theorem}
+
+\begin{proof}
+The decomposition of two projections \citep{halmos1969two}, together with
+compactness of $P-Q$, gives orthogonal principal planes for all nonzero
+angles and a fixed complement. The defect-space hypothesis allows the
+right-angle spaces to be paired. Since the nonzero singular values of
+$P-Q$ are $\sin\theta_j$, each twice, we have
+$\sum_j\sin^p\theta_j<\infty$ and $\theta_j\to0$ if the list is infinite.
+The direct rotation $R$ is the identity on the fixed complement and has
+two displacement singular values $2\sin(\theta_j/2)$ on each plane.
+The inequality $2\sin(\theta/2)\leq\sqrt2\sin\theta$ on
+$[0,\pi/2]$ implies $I-R\in\mathcal S_p$.
+
+First suppose the angle list is infinite, and let $R_N$ be $R$ on its
+first $N$ principal planes and the identity elsewhere. Then
+$R_N-R\to0$ in $\mathcal S_p$. For any feasible $W$, put $Z=R^*W$.
+It commutes with $P$ and satisfies $Z-I\in\mathcal S_p$. The compact
+normal operator $Z-I$ has an orthonormal eigenbasis off its kernel.
+Because $Z$ commutes with $P$, its finite-dimensional nontrivial
+eigenspaces admit bases in $\operatorname{ran}P$ or $\ker P$.
+Truncating these eigenspaces gives unitaries $Z_N$ commuting with $P$,
+with $Z_N-I$ of finite rank and $Z_N-Z\to0$ in $\mathcal S_p$.
+
+Set $W_N=R_N Z_N$ and $Q_N=R_N P R_N^*$. The ranges of $R_N-I$ and
+$Z_N-I$ lie in a common finite-dimensional $P$-invariant space $M_N$.
+Both unitaries preserve $M_N$ and equal the identity on its orthogonal
+complement. Their product transports $P|_{M_N}$ to $Q_N|_{M_N}$.
+The latter pair has the first $N$ positive principal angles of $P,Q$,
+with any remaining angles zero. Thus
+\cref{thm:schatten-independent-planes} gives
+\[
+ \|I-W_N\|_p^p\geq\sum_{j=1}^N m_p(\theta_j).
+\]
+Unitary invariance and the ideal norm inequality yield
+\[
+ \|W_N-W\|_p
+  \leq\|R_N-R\|_p+\|Z_N-Z\|_p\longrightarrow0.
+\]
+Passing to the limit proves the lower bound. For a finite angle list,
+keep $R_N=R$ and use the same approximation of $Z$.
+
+Choose $W_*$ by the independently minimizing phases on the principal
+planes and the identity on the fixed complement. Its cost is the sum
+in \cref{eq:schatten-ideal-minimum}, bounded above by the finite cost of
+$R$. Only finitely many angles exceed the positive number
+$\vartheta_p$. Every other plane uses phase zero, proving
+\cref{eq:schatten-finite-correction}. The optimality criterion follows
+from the scalar classification and its strict improvement above the
+transition.
+\end{proof}

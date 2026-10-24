@@ -116,20 +116,23 @@ private theorem minus_hasDerivAt (theta delta : Real) :
   · rfl
   · ring
 
-private theorem phaseChord_hasDerivAt (t : Real) :
+/-- The chord parametrization has the half-angle cosine as its derivative. -/
+theorem phaseChord_hasDerivAt (t : Real) :
     HasDerivAt phaseChord (Real.cos (t / 2)) t := by
   have h := (half_hasDerivAt t).sin.const_mul (2 : Real)
   change HasDerivAt phaseChord (2 * (Real.cos (t / 2) * (1 / 2))) t at h
   convert h using 1
   ring
 
-private theorem chord_rpow_hasDerivAt (p t : Real)
+/-- Derivative of the chord power away from its zero endpoints. -/
+theorem chord_rpow_hasDerivAt (p t : Real)
     (ht : 0 < phaseChord t) :
     HasDerivAt (fun s => (phaseChord s) ^ p)
       (Real.cos (t / 2) * p * (phaseChord t) ^ (p - 1)) t :=
   (phaseChord_hasDerivAt t).rpow_const (Or.inl ht.ne')
 
-private theorem phaseAmplitude_hasDerivAt (p t : Real)
+/-- Derivative of the amplitude at a positive chord. -/
+theorem phaseAmplitude_hasDerivAt (p t : Real)
     (ht : 0 < phaseChord t) :
     HasDerivAt (phaseAmplitude p) (amplitudeDerivative p t) t := by
   have hc : HasDerivAt (fun s : Real => Real.cos (s / 2))
@@ -239,6 +242,20 @@ private theorem curvature_bracket_identity (p theta : Real) :
         ring
   rw [hcos]
   linear_combination ((p - 2) / 2) * (Real.sin_sq_add_cos_sq (theta / 2))
+
+/-- The amplitude derivative has a single sign-controlling cosine factor. -/
+theorem amplitudeDerivative_eq_critical (p t : ℝ) (hp : p ≠ 0)
+    (ht : 0 < phaseChord t) :
+    amplitudeDerivative p t =
+      (phaseChord t) ^ (p - 2) * (p * Real.cos t - (2 - p)) / 2 := by
+  have h := phaseCurvature_eq_factored p t ht
+  rw [curvature_bracket_identity] at h
+  dsimp only [phaseCurvature] at h
+  apply (mul_left_cancel₀ (mul_ne_zero (by norm_num : (2 : ℝ) ≠ 0) hp))
+  calc
+    2 * p * amplitudeDerivative p t = _ := h
+    _ = 2 * p * ((phaseChord t) ^ (p - 2) *
+        (p * Real.cos t - (2 - p)) / 2) := by ring
 
 /-- The exact bifurcation criterion.  For `1 < p < 2`, the direct rotation
 changes from positive to negative curvature at `cos theta = (2-p)/p`.

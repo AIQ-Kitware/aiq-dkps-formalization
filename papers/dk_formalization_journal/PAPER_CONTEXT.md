@@ -1,7 +1,7 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
-**As of:** 23 October 2026  
-**Inspected source snapshot:** `b00c5c8c35e1aab826064285c530260fd558da9b` (following `1c5805c`, `439c910`)
+**As of:** 24 October 2026
+**Inspected source snapshot:** `b00c5c8c35e1aab826064285c530260fd558da9b` for the source-facing claims below; subsequent Schatten research is recorded separately in this file.
 **Paper:** *Formalizing the Davis--Kahan Perturbation Theorems in Lean*  
 **Scope of this record:** working context for authors and future manuscript agents. This is deliberately **not** an appendix or a source of text to paste into the paper.
 
@@ -24,7 +24,7 @@ Start here when updating `paper.tex`. The fact that an assertion appears in an o
 | Any two projections in a finite-dimensional real or complex Hilbert space have a trace norm equal to the sum of their two directed sine-map trace norms; the positive modulus splits even when the ranks differ. | `ForTauCeti/Analysis/InnerProductSpace/Projection/TraceSine.lean`: `operatorAbs_projectionDifference_eq_directed_sine_sum`, `kyFanSum_projectionDifference_eq_directed_sines`. | No equal-rank, acuteness, or complex-only assumption. This is a finite-dimensional trace statement; its full infinite-dimensional trace-class analogue is not claimed. |
 | Every equal-rank pair of finite-dimensional **complex** subspaces admits a unitary transporter minimizing the full trace displacement globally: `min_W ‖I-W‖₁ = ‖P_U-P_V‖₁ = 2∑ sin θ_j`. | `DavisKahan/FiniteDimensional/DirectRotation/ComplexCrossedDefects.lean`, `ComplexPhaseTrace.lean`: `exists_global_complex_trace_minimizer`; `ComplexTracePrincipalAngles.lean`: `exists_global_complex_trace_minimizer_with_principalAngles`. | No acute-angle or supplied-coordinate assumption, including zero and right angles. Applies to the full trace norm (Ky Fan sum at ambient dimension), not a claim of optimality for every unitarily invariant norm. Earlier finite-model theorems remain valid special cases. |
 
-**Verification basis.** The user reported successful Lean builds for the source-level results, the small-angle family, the projection-distance bound, fixed-angle sharpness, real global optimality, and complex finite-model theorems on 23 October 2026. The subsequently updated source revision `b00c5c8` adds the unconditional complex and directed-sine trace theorems, imported by `DirectRotation/All.lean`; see `submission/VALIDATION.md` and `claims_to_evidence.md`. This manuscript revision changes no Lean modules. Its PDF builds verify typesetting only.
+**Verification basis.** The user reported successful Lean builds for the source-level results, the small-angle family, the projection-distance bound, fixed-angle sharpness, real global optimality, and complex finite-model theorems on 23 October 2026. The subsequently updated source revision `b00c5c8` adds the unconditional complex and directed-sine trace theorems, imported by `DirectRotation/All.lean`; see `submission/VALIDATION.md` and `claims_to_evidence.md`. The added Schatten research modules and direct-rotation aggregate were built on 24 October as recorded below. Manuscript PDF builds verify typesetting only.
 
 ## Mathematical claims still outside this formalization
 
@@ -80,6 +80,17 @@ least one and every angle in `[0, pi/2]`. Both modules and their aggregate
 compiled on 24 October. Their minimum statements still concern the scalar
 family; no unrestricted lower bound is inferred from attainment alone.
 
+`SchattenPhaseCriticalAngle.lean` now proves the explicit inverse-cosine
+cutoff, strict increase and decrease of the amplitude on its two branches,
+and existence and uniqueness of both roots below its maximum.
+`SchattenThreeHalves.lean` proves the explicit supercritical optimizer
+`arccos(cos(theta)/(1-2 cos(theta)))` and the closed value identity
+`m_(3/2)(theta)^2 = 8 (1+cos(theta)) sqrt(1-2 cos(theta))`.
+The right-angle minimizing phase is also proved unique for `1 <= p < 2`.
+The expanded direct-rotation aggregate compiled, and the new public endpoint,
+critical-angle, two-root, and three-halves declarations have only the three
+standard axioms listed above.
+
 `schatten_optimization.tex` is a mathematical extension draft that is **not
 included by `paper.tex`**. It gives a conventional proof candidate for the
 unrestricted finite-dimensional complex formula
@@ -91,6 +102,23 @@ bound. Its consequences include the sharp exponent-dependent canonical-angle
 cutoff, the uniform comparison constant `2^(1/p-1/2)`, and a square-root onset
 of the minimizing phase. **These unrestricted, second-variation, and asymptotic
 claims are undergoing proof review and have not been certified in Lean.**
+
+The draft also gives conventional proofs that every local minimum of the
+finite complex transport problem is global, and that the same exact value
+formula holds for `P-Q` in the Schatten ideal on a separable complex Hilbert
+space with balanced finite defect spaces. The proposed infinite-dimensional
+optimizer differs by finite rank from a principal-plane direct rotation:
+only angles above the positive critical angle need phase correction. These
+two extensions are also **under review and not Lean-certified**. The local
+minimum argument uses a separate reflection-block descent and controls the
+vanishing displacement cost by `O(|t|^(2p))`; it does not assume the full
+objective is twice differentiable at zero singular values.
+
+`figures/schatten_phase_diagram.py` generates a vector PDF and SVG illustrating
+the proved scalar cutoff and optimizer. The plot uses the increasing branch
+of the logarithmic ratio for numerical roots and the explicit formula at
+`p=3/2`; it is exposition, not proof evidence. The standalone proof-review
+PDF is generated under `build/schatten-research/`, outside the main manuscript.
 
 Primary-source comparisons verified in this research pass include
 Bolotnikov--Li--Rodman (2001), Lemmas 3.2--3.3 and Theorems 3.1/4.2; these

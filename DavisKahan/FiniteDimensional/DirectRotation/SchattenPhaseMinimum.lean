@@ -169,11 +169,29 @@ theorem phaseMinimum_le_chord_sum (p theta a b : ℝ) (hp : 1 ≤ p)
   · simpa only [add_comm] using phaseMinimum_le_chord_sum_ordered p theta b a hp hθ
       hb.1 hb.2 ha.1 ha.2 hab (by linarith)
 
-private theorem phaseChord_sq (t : ℝ) : phaseChord t ^ 2 = 2 - 2 * Real.cos t := by
+/-- Squared chord length in terms of the full angle. -/
+theorem phaseChord_sq (t : ℝ) : phaseChord t ^ 2 = 2 - 2 * Real.cos t := by
   have hcos := Real.cos_two_mul (t / 2)
   rw [show 2 * (t / 2) = t by ring] at hcos
   unfold phaseChord
   nlinarith [Real.sin_sq_add_cos_sq (t / 2)]
+
+/-- The two squared planar displacement chords have this exact sum. -/
+theorem phaseChord_add_sq (theta delta : ℝ) :
+    phaseChord (theta + delta) ^ 2 + phaseChord (theta - delta) ^ 2 =
+      4 - 4 * Real.cos theta * Real.cos delta := by
+  rw [phaseChord_sq, phaseChord_sq, Real.cos_add, Real.cos_sub]
+  ring
+
+/-- The product of the two planar displacement chords. -/
+theorem phaseChord_mul (theta delta : ℝ) :
+    phaseChord (theta + delta) * phaseChord (theta - delta) =
+      2 * (Real.cos delta - Real.cos theta) := by
+  have h := Real.two_mul_sin_mul_sin ((theta + delta) / 2) ((theta - delta) / 2)
+  rw [show (theta + delta) / 2 - (theta - delta) / 2 = delta by ring,
+    show (theta + delta) / 2 + (theta - delta) / 2 = theta by ring] at h
+  unfold phaseChord
+  nlinarith
 
 private theorem sq_rpow_half {x : ℝ} (hx : 0 ≤ x) (p : ℝ) :
     (x ^ 2) ^ (p / 2) = x ^ p := by
@@ -298,6 +316,55 @@ theorem canonical_phase_power_eq_factor_right_angle (p : ℝ)
       rw [Real.rpow_add (by norm_num), Real.rpow_one]
     _ = (2 : ℝ) ^ (1 - p / 2 + p) := by congr 1; ring
     _ = (2 : ℝ) ^ (1 - p / 2) * 2 ^ p := Real.rpow_add (by norm_num) _ _
+
+/-- Before the endpoint, a right-angle phase has strictly larger cost than
+`2^p` for every exponent below two. -/
+theorem phasePower_right_angle_gt_endpoint (p delta : ℝ) (hp2 : p < 2)
+    (hδ : delta ∈ Set.Ico 0 (Real.pi / 2)) :
+    (2 : ℝ) ^ p < phasePower p (Real.pi / 2) delta := by
+  let u := (Real.pi / 2 + delta) / 2
+  let v := (Real.pi / 2 - delta) / 2
+  have hu0 : 0 < u := by dsimp [u]; linarith [hδ.1, Real.pi_pos]
+  have hv0 : 0 < v := by dsimp [v]; linarith [hδ.2]
+  have hup : u < Real.pi / 2 := by dsimp [u]; linarith [hδ.2]
+  have hvp : v < Real.pi / 2 := by dsimp [v]; linarith [hδ.1, Real.pi_pos]
+  have hs0 : 0 < Real.sin u := Real.sin_pos_of_pos_of_lt_pi hu0 (by linarith [Real.pi_pos])
+  have ht0 : 0 < Real.sin v := Real.sin_pos_of_pos_of_lt_pi hv0 (by linarith [Real.pi_pos])
+  have hs1 : Real.sin u < 1 := by
+    simpa only [Real.sin_pi_div_two] using Real.strictMonoOn_sin
+      ⟨by linarith [Real.pi_pos], hup.le⟩
+      ⟨by linarith [Real.pi_pos], le_rfl⟩ hup
+  have ht1 : Real.sin v < 1 := by
+    simpa only [Real.sin_pi_div_two] using Real.strictMonoOn_sin
+      ⟨by linarith [Real.pi_pos], hvp.le⟩
+      ⟨by linarith [Real.pi_pos], le_rfl⟩ hvp
+  have hs := Real.rpow_lt_rpow_of_exponent_gt hs0 hs1 hp2
+  have ht := Real.rpow_lt_rpow_of_exponent_gt ht0 ht1 hp2
+  rw [Real.rpow_two] at hs ht
+  have hsum := phaseChord_add_sq (Real.pi / 2) delta
+  rw [Real.cos_pi_div_two] at hsum
+  change (2 * Real.sin u) ^ 2 + (2 * Real.sin v) ^ 2 = _ at hsum
+  have hsum' : 1 < Real.sin u ^ p + Real.sin v ^ p := by nlinarith
+  change (2 : ℝ) ^ p < (2 * Real.sin u) ^ p + (2 * Real.sin v) ^ p
+  rw [Real.mul_rpow (by norm_num) hs0.le, Real.mul_rpow (by norm_num) ht0.le]
+  nlinarith [Real.rpow_pos_of_pos (by norm_num : (0 : ℝ) < 2) p]
+
+/-- At a right angle the endpoint is the unique scalar-phase minimizer. -/
+theorem phasePower_right_angle_eq_minimum_iff (p delta : ℝ)
+    (hp1 : 1 ≤ p) (hp2 : p < 2) (hδ : delta ∈ Set.Icc 0 (Real.pi / 2)) :
+    phasePower p (Real.pi / 2) delta = phaseMinimum p (Real.pi / 2) ↔
+      delta = Real.pi / 2 := by
+  rw [phaseMinimum_right_angle p hp1 hp2.le]
+  constructor
+  · intro heq
+    by_contra hne
+    have hlt : delta < Real.pi / 2 := lt_of_le_of_ne hδ.2 hne
+    exact (phasePower_right_angle_gt_endpoint p delta hp2 ⟨hδ.1, hlt⟩).ne' heq
+  · rintro rfl
+    have hhalf : (Real.pi / 2 + Real.pi / 2) / 2 = Real.pi / 2 := by ring
+    simp only [phasePower, phaseChord, hhalf, Real.sin_pi_div_two, mul_one,
+      sub_self, zero_div, Real.sin_zero, mul_zero,
+      Real.zero_rpow (show p ≠ 0 by linarith), add_zero]
 
 end
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
