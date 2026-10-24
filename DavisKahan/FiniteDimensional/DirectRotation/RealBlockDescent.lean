@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 import ForTauCeti.Analysis.InnerProductSpace.Complexification.FiniteDimensional
+import ForTauCeti.Analysis.InnerProductSpace.Complexification.RealPoints
 
 /-!
 # Descending conjugation-invariant spectral blocks to the real space
@@ -52,6 +53,74 @@ private theorem ofReal_re_eq_half_add_conjugation (z : RealComplexification E) :
     ofReal (re z) = (1 / 2 : ℂ) • (z + conjugation z) := by
   apply RealComplexification.ext <;> simp
   module
+
+/-- A vector fixed by coordinate conjugation is its actual real copy. -/
+theorem ofReal_re_of_conjugation_fixed (z : RealComplexification E)
+    (hz : conjugation z = z) : ofReal (re z) = z := by
+  rw [ofReal_re_eq_half_add_conjugation, hz]
+  module
+
+section RealPointsDescent
+
+variable (M : Submodule ℂ (RealComplexification E))
+
+local instance : InnerProductSpace ℝ M := InnerProductSpace.rclikeToReal ℂ M
+
+/-- Fixed vectors of an actual restricted coordinate conjugation identify
+isometrically with the original ambient real preimage. -/
+def realPointsDescentEquiv (C : M ≃ₗᵢ⋆[ℂ] M)
+    (hC : ∀ z : M, (C z : RealComplexification E) = conjugation z) :
+    realPoints C.toLinearEquiv.toLinearMap ≃ₗᵢ[ℝ] realSubmodule M := by
+  have hreal (z : realPoints C.toLinearEquiv.toLinearMap) :
+      ofReal (re ((z : M) : RealComplexification E)) = (z : M) := by
+    apply ofReal_re_of_conjugation_fixed
+    have h := congrArg (fun w : M => (w : RealComplexification E))
+      (mem_realPoints.mp z.property)
+    exact (hC z).symm.trans h
+  exact
+    { toFun := fun z => ⟨re ((z : M) : RealComplexification E), by
+        rw [mem_realSubmodule, hreal]
+        exact (z : M).property⟩
+      invFun := fun x => ⟨⟨ofReal (x : E), (mem_realSubmodule M x).mp x.property⟩, by
+        rw [mem_realPoints]
+        apply Subtype.ext
+        exact (hC ⟨ofReal (x : E), (mem_realSubmodule M x).mp x.property⟩).trans
+          (conjugation_ofReal (x : E))⟩
+      left_inv := by
+        intro z
+        apply Subtype.ext
+        apply Subtype.ext
+        exact hreal z
+      right_inv := by
+        intro x
+        apply Subtype.ext
+        exact re_ofReal (x : E)
+      map_add' := by
+        intro x y
+        apply Subtype.ext
+        exact re_add _ _
+      map_smul' := by
+        intro r z
+        apply Subtype.ext
+        change re ((r : ℂ) • ((z : M) : RealComplexification E)) =
+          r • re ((z : M) : RealComplexification E)
+        simp only [re_complex_smul, Complex.ofReal_re, Complex.ofReal_im, zero_smul, sub_zero]
+      norm_map' := by
+        intro z
+        change ‖re ((z : M) : RealComplexification E)‖ = ‖z‖
+        have h := congrArg norm (hreal z)
+        simpa only [ofReal.norm_map, Submodule.norm_coe] using h }
+
+/-- The real descent equivalence reads the actual ambient real coordinate. -/
+@[simp]
+theorem realPointsDescentEquiv_apply (C : M ≃ₗᵢ⋆[ℂ] M)
+    (hC : ∀ z : M, (C z : RealComplexification E) = conjugation z)
+    (z : realPoints C.toLinearEquiv.toLinearMap) :
+    (realPointsDescentEquiv M C hC z : E) = re ((z : M) : RealComplexification E) := by
+  unfold realPointsDescentEquiv
+  rfl
+
+end RealPointsDescent
 
 /-- A conjugation-stable submodule contains the real and imaginary
 coordinate copies of each of its vectors. -/

@@ -57,5 +57,6 @@ import DavisKahan.FiniteDimensional.DirectRotation.RealTwoPhaseBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.RealBlockDescent
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealStationarity
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealGradientBlocks
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealKernelBlocks
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

@@ -65,4 +65,31 @@ theorem exists_eigenspace_conjugation_of_anticommuting_symmetries
   apply Subtype.ext
   rw [hJ, hJ, hS]
 
+/-- A conjugation reversing an operator preserves its kernel and induces
+an actual isometric conjugation on that zero spectral level. -/
+theorem exists_kernel_conjugation_of_anticommute
+    (G : E →ₗ[ℂ] E) (C : E ≃ₗᵢ⋆[ℂ] E) (hC : Function.Involutive C)
+    (hGC : ∀ x, G (C x) = -C (G x)) :
+    ∃ J : G.ker ≃ₗᵢ⋆[ℂ] G.ker, Function.Involutive J ∧
+      ∀ x : G.ker, (J x : E) = C x := by
+  let L := G.ker
+  have hinv : ∀ x ∈ L, C x ∈ L := by
+    intro x hx
+    rw [LinearMap.mem_ker] at hx ⊢
+    rw [hGC, hx, map_zero, neg_zero]
+  have hmap : L.map C.toLinearMap = L := by
+    ext x
+    constructor
+    · rintro ⟨y, hy, rfl⟩
+      exact hinv y hy
+    · intro hx
+      exact ⟨C x, hinv x hx, hC x⟩
+  let J : L ≃ₗᵢ⋆[ℂ] L := (LinearIsometryEquiv.submoduleMap L C).trans
+    (LinearIsometryEquiv.ofEq _ _ hmap)
+  have hJ (x : L) : (J x : E) = C x := rfl
+  refine ⟨J, ?_, fun _ => rfl⟩
+  intro x
+  apply Subtype.ext
+  rw [hJ, hJ, hC]
+
 end TauCeti

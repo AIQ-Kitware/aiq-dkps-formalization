@@ -666,8 +666,8 @@ orthogonal and its complexification covers the entire positive level and
 its reflected negative level. Nontriviality, dimensions, orthogonality,
 invariance, and coverage are compiled. At the maximum the two branches
 coalesce, and the compiled scalar critical-phase representation supplies the
-same real-block construction. The zero-gradient real assembly and exact
-matching minimum remain unformalized. The conventional general-penalty
+same real-block construction. The zero-gradient real assembly is now compiled
+as described below; the exact matching minimum remains unformalized. The conventional general-penalty
 matching and nuclear consequences are not promoted to compiled results by
 this partial assembly. The focused modules, `DavisKahan.All`, and `ForTauCeti`
 build; the new endpoint axiom checks use only the three standard axioms.
@@ -682,7 +682,22 @@ the existing joint eigenbasis API. This is the foundation needed for the
 real zero-gradient reflection block, not an independently novel theorem.
 Both the donor and the critical-level extension pass the full mathematical
 build and standard-axiom audit; their final use in the real optimizer
-endpoint remains to be assembled.
+endpoint is supplied by the zero-level construction below.
+
+`SchattenRealKernelBlocks.lean` now completes the actual zero-gradient
+real decomposition. The restricted transporter is a reflection, and both
+its negative-phase projection and the source projection commute with the
+restricted ambient conjugation. `Projection/ConjugationBlocks.lean`
+restricts the two projections to the accepted fixed real subspace and
+consumes the classical two-projection block theorem. The fixed real space
+is carried isometrically to the original real preimage through
+`RealBlockDescent.realPointsDescentEquiv`. The resulting nonzero real
+lines and planes are pairwise orthogonal, invariant under the actual
+source projection and transporter, and their complexification covers the
+entire gradient kernel. This closes the exceptional zero-level block
+construction; the global assembly over all levels, identification with
+principal-angle blocks, and matching lower bound remain separate obligations.
+No unrestricted real matching minimum is thereby claimed.
 
 The matching reduction has been strengthened for all Schatten powers
 `1 < p < 2` and for Charbonnier penalties. Their two-angle cost is symmetric,
