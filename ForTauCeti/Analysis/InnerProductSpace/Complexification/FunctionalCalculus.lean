@@ -341,6 +341,14 @@ noncomputable def conjugateOperatorHom :
     simpa only [ContinuousLinearMap.star_eq_adjoint] using
       conjugateOperator_adjoint A
 
+/-- Evaluate the bundled conjugation map. -/
+@[simp]
+theorem conjugateOperatorHom_apply
+    (A : RealComplexification E →L[ℂ] RealComplexification E) :
+    conjugateOperatorHom A = conjugateOperator A := by
+  unfold conjugateOperatorHom
+  rfl
+
 /-- The conjugation star-algebra map is continuous, being an isometry. -/
 theorem continuous_conjugateOperatorHom :
     Continuous (conjugateOperatorHom :

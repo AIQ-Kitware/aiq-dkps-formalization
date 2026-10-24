@@ -598,8 +598,9 @@ using the established concrete complexification and real-part operator.
 projection identities from an actual Hermitian projection and instantiates
 the complete orthogonal line/plane decomposition. Thus this algebraic step
 of the real matching proof is certified without supplied component data or
-a principal basis. The real stationary-gradient reduction and final matching
-optimization are still conventional proofs.
+a principal basis. The complete stationary-block assembly and final matching
+optimization are still partly conventional; the compiled real stationarity
+and positive-level results are registered below.
 
 The real matching fragment now gives a canonical-optimality criterion for
 every Schatten exponent `1 < p < 2` using only the two largest principal
@@ -624,8 +625,24 @@ actual operator affine in a Hermitian projection has a complete orthogonal
 invariant decomposition into complex blocks of dimension at most two,
 simultaneously invariant under a specified isometric conjugation. Their
 real dimensions are at most four. No supplied real basis is required.
-The deduction of the two-phase hypotheses from real stationary transport,
-and the final exact matching minimum, remain unformalized.
+`SchattenRealStationarity.lean` now proves the source-reflection stationarity
+identity under only real feasible unitary variations. Real operators are
+represented as fixed points of canonical operator conjugation on the
+established complexification. `SchattenConjugation.lean` proves that a
+conjugate-linear symmetry of a normal operator reverses its Schatten phase
+gradient. The complexification specialization also certifies that the
+Hermitian directions reversed by conjugation generate real unitary curves.
+
+`SchattenRealGradientBlocks.lean` derives the two-phase data on every positive
+submaximal gradient level of an actual real local minimum and constructs
+the source-induced isometric conjugation there. It applies the compiled
+projection decomposition to obtain a complete common orthogonal invariant
+family with complex dimensions at most two. This uses the accepted
+submodule-map isometry through `AnticommutingConjugation.lean`, rather than
+assuming a real basis or phase projection. The final lift to real ambient
+blocks, exceptional gradient levels, and exact matching minimum remain
+unformalized. The conventional general-penalty matching and nuclear
+consequences are not promoted to compiled results by this partial assembly.
 
 Two additional nuclear consequences now have complete conventional proof
 drafts in `real_matching_transport.tex`. First, the real minimum is the
