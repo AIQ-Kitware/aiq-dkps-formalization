@@ -334,18 +334,19 @@ The cost on every nonzero spectral block is consequently the sum of
 the corresponding $m_p$ costs.
 
 On $\ker G_p(W)$ the unitary has only eigenvalues $1$ and $-1$.
-Write $q=\operatorname{rank}(I-W)$ on this block. Its displacement
-power sum is $2^p q$. Also
+Its displacement singular values are consequently zero or two. The
+projection-distance inequality gives
 \[
- P-Q=(I-W)P+WP(I-W^*)
- \quad\Longrightarrow\quad
- \operatorname{rank}(P-Q)\leq2q.
+ \|I-W\|_p^p
+   =2^{p-1}\|I-W\|_1
+   \geq2^{p-1}\|P-Q\|_1
+   =2^p\sum_j\sin\theta_j.
 \]
-The number of positive principal angles on this block is
-$\operatorname{rank}(P-Q)/2$, and each has
-$m_p(\theta)\leq f_p(2\theta)\leq2^p$. The block's cost is therefore
-at least the sum of its principal-plane costs. Combining the blocks
-gives the lower inequality in \cref{eq:schatten-unrestricted-minimum}.
+For every physical angle,
+$m_p(\theta)\leq(2\sin\theta)^p\leq2^p\sin\theta$, using
+$p>1$ and $0\leq\sin\theta\leq1$. This block therefore also costs at
+least the sum of its principal-plane minima. Combining the blocks gives
+the lower inequality in \cref{eq:schatten-unrestricted-minimum}.
 
 For the reverse inequality, use a cosine--sine decomposition of $P,Q$.
 On each nonzero principal plane choose the scalar phase from

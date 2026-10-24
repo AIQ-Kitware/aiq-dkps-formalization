@@ -32,7 +32,9 @@ private theorem two_phase_representation_on_invariant_subspace
     (hinv : ∀ x ∈ K, (U : E →L[ℂ] E) x ∈ K)
     (hG : ∀ x ∈ K, schattenUnitaryGradient p (U : E →L[ℂ] E) x = (g : ℂ) • x)
     (hlevel : ∀ t : ℝ, |t| ≤ Real.pi →
-      schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I)) = g → t = a ∨ t = b) :
+      schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I)) = g →
+        Complex.exp ((t : ℂ) * Complex.I) = Complex.exp ((a : ℂ) * Complex.I) ∨
+          Complex.exp ((t : ℂ) * Complex.I) = Complex.exp ((b : ℂ) * Complex.I)) :
     ∃ (V : K ≃ₗᵢ[ℂ] K) (P : K →L[ℂ] K),
       IsStarProjection P ∧
       (∀ x : K, (V x : E) = (U : E →L[ℂ] E) x) ∧
@@ -75,12 +77,8 @@ private theorem two_phase_representation_on_invariant_subspace
     rw [hxG] at hsymbol
     have hreal : schattenPhaseDerivative p mu = g := by
       exact_mod_cast (smul_left_injective ℂ hx0 hsymbol).symm
-    have harg : mu.arg = a ∨ mu.arg = b :=
-      hlevel mu.arg (Complex.abs_arg_le_pi mu) (by rwa [hphase])
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff]
-    rcases harg with heq | heq
-    · exact Or.inl (by rw [← hphase, heq])
-    · exact Or.inr (by rw [← hphase, heq])
+    have hroot := hlevel mu.arg (Complex.abs_arg_le_pi mu) (by rwa [hphase])
+    simpa only [hphase, Set.mem_insert_iff, Set.mem_singleton_iff] using hroot
   obtain ⟨P, hP, hrepr⟩ := exists_isStarProjection_eq_affine_of_spectrum_subset_pair
     (V : K →L[ℂ] K) (Complex.exp ((a : ℂ) * Complex.I))
       (Complex.exp ((b : ℂ) * Complex.I)) hs
@@ -115,7 +113,7 @@ theorem gradient_eigenspace_two_phase_representation
   obtain ⟨a, ha, b, hb, hlevel⟩ := schattenPhaseDerivative_level_set p g hp1 hp2 hg0 hgm
   obtain ⟨V, P, hP, hV, hrepr⟩ := two_phase_representation_on_invariant_subspace
     p g a b U K hinv (fun x hx => Module.End.mem_eigenspace_iff.1 hx)
-      (fun t ht hg => (hlevel t ht).1 hg)
+      (fun t ht hg => by rcases (hlevel t ht).1 hg with rfl | rfl <;> simp)
   exact ⟨a, ha, b, hb, V, P, hP, hV, hrepr⟩
 
 /-- Opposite positive and negative gradient levels use a common pair of
@@ -161,9 +159,50 @@ theorem opposite_gradient_eigenspaces_two_phase_representation
       ((hpos b (by rw [abs_of_pos hbp.1]; exact hbp.2.le)).2 (Or.inr rfl)).symm
   · exact two_phase_representation_on_invariant_subspace p g a b U
       (Module.End.eigenspace G.toLinearMap (g : ℂ)) (hinv g)
-      (fun x hx => Module.End.mem_eigenspace_iff.1 hx) (fun t ht hg => (hpos t ht).1 hg)
+      (fun x hx => Module.End.mem_eigenspace_iff.1 hx)
+      (fun t ht hg => by rcases (hpos t ht).1 hg with rfl | rfl <;> simp)
   · exact two_phase_representation_on_invariant_subspace p (-g) (-a) (-b) U
       (Module.End.eigenspace G.toLinearMap ((-g : ℝ) : ℂ)) (hinv (-g))
-      (fun x hx => Module.End.mem_eigenspace_iff.1 hx) (fun t ht hg => (hneg t ht).1 hg)
+      (fun x hx => Module.End.mem_eigenspace_iff.1 hx)
+      (fun t ht hg => by rcases (hneg t ht).1 hg with rfl | rfl <;> simp)
+
+/-- The unitary restriction to the zero-gradient space is an actual
+orthogonal reflection, represented by its negative-phase projection. -/
+theorem gradient_kernel_reflection_representation
+    (p : ℝ) (hp : 0 < p) (U : unitary (E →L[ℂ] E)) :
+    let L := (schattenUnitaryGradient p (U : E →L[ℂ] E)).toLinearMap.ker
+    ∃ (V : L ≃ₗᵢ[ℂ] L) (S : L →L[ℂ] L),
+      IsStarProjection S ∧
+      (∀ x : L, (V x : E) = (U : E →L[ℂ] E) x) ∧
+      (V : L →L[ℂ] L) = 1 - (2 : ℂ) • S := by
+  let G := schattenUnitaryGradient p (U : E →L[ℂ] E)
+  let L := G.toLinearMap.ker
+  have hinv : ∀ x ∈ L, (U : E →L[ℂ] E) x ∈ L := by
+    intro x hx
+    rw [LinearMap.mem_ker] at hx ⊢
+    change G x = 0 at hx
+    have hcomm := congrArg (fun A : E →L[ℂ] E => A x)
+      (commute_schattenUnitaryGradient p (U : E →L[ℂ] E)).eq
+    change G ((U : E →L[ℂ] E) x) = (U : E →L[ℂ] E) (G x) at hcomm
+    change G ((U : E →L[ℂ] E) x) = 0
+    rw [hcomm, hx, map_zero]
+  obtain ⟨V, S, hS, hV, hrepr⟩ := two_phase_representation_on_invariant_subspace
+    p 0 0 Real.pi U L hinv
+      (fun x hx => by
+        have hx' := LinearMap.mem_ker.1 hx
+        change G x = 0 at hx'
+        simpa only [Complex.ofReal_zero, zero_smul] using hx')
+      (fun t _ hg => by
+        have hnorm : ‖Complex.exp ((t : ℂ) * Complex.I)‖ = 1 := by
+          simp [Complex.norm_exp]
+        have hzero := (schattenPhaseDerivative_eq_zero_iff_of_norm_eq_one p hp _ hnorm).1 hg
+        simpa only [Complex.ofReal_zero, zero_mul, Complex.exp_zero, Complex.exp_pi_mul_I]
+          using hzero)
+  refine ⟨V, S, hS, hV, ?_⟩
+  calc
+    (V : L →L[ℂ] L) = 1 + ((-1 : ℂ) - 1) • S := by
+      simpa only [Complex.ofReal_zero, zero_mul, Complex.exp_zero, Complex.exp_pi_mul_I,
+        one_smul] using hrepr
+    _ = 1 - (2 : ℂ) • S := by module
 
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

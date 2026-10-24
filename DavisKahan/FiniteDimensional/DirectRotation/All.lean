@@ -39,5 +39,6 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenSecondVariation
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenNoMixing
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenFeasibleBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientNoMixing
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectionBound
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

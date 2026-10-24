@@ -323,6 +323,20 @@ The axiom audit lists only the three standard logical axioms. The full
 principal-angle cost sum and zero-gradient contribution remain to be assembled;
 the unrestricted higher-rank minimum is not yet Lean-certified.
 
+The zero-gradient restriction is now represented as an actual reflection in
+`SchattenGradientBlocks.lean`: `gradient_kernel_reflection_representation`
+constructs its unitary restriction and a star projection `S` with `V = I-2S`.
+The generic two-point restriction proof works with allowed eigenvalues, so it
+handles both endpoint phases without an artificial choice between `pi` and
+`-pi`. The reusable `SchattenInvolution.lean` proves that a self-adjoint
+unitary's finite Schatten displacement power is `2^(p-1)` times its nuclear
+displacement, over either scalar field. `SchattenReflectionBound.lean` combines
+this with the existing projection-distance inequality to bound the sum of
+scalar minima over the accepted principal angles for every reflecting
+transporter. The conventional proof now uses this trace argument. Applying
+the bound to the restricted source and target, then assembling the complete
+spectral cost sum, remains part of the unfinished global theorem.
+
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical
 rotation times `exp(i delta(theta) S)`, with `S` any self-adjoint unitary.
