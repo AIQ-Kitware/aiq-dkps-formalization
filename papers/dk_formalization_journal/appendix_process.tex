@@ -180,6 +180,11 @@ the cutoff, and \path{smoothed_canonical_unique_minimizer} proves feasibility,
 global minimality, and uniqueness there. These are the endpoints for
 \cref{thm:smoothed-quartic-stability}; arbitrary mixtures of critical and
 smaller angles are permitted.
+\path{SmoothedCanonicalOptimality.lean} proves
+\path{smoothed_canonical_isMin_iff} and
+\path{optimalSmoothedTransport_lt_canonical_of_supercritical}, giving the
+necessary-and-sufficient accepted-principal-angle criterion and the strict
+improvement by the explicit optimizer in \cref{cor:smoothed-canonical-cutoff}.
 These endpoints include every admissible complex unitary; no supplied
 principal-plane coordinates or restriction on mixing occur in their
 hypotheses. The general angle theorem supplies an optimizer; the stability theorems
@@ -217,6 +222,7 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}
 The mathematical manuscript builds independently of Lean:

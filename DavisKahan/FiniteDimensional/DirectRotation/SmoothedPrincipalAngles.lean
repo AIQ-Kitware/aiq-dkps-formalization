@@ -89,6 +89,35 @@ theorem sum_principalAngles_eq_paired_sum
     Real.arcsin_sin (by linarith [(hθ i).1, Real.pi_pos]) (hθ i).2
   simpa only [← Submodule.principalAngles_apply, hasin] using htrace
 
+/-- A bound on every nonzero paired cosine angle also bounds every accepted
+principal angle, including the additional zero angles. -/
+theorem principalAngles_le_of_paired_angles_le
+    (U V : Submodule ℂ E) {n m : ℕ}
+    (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
+    (theta : Fin n → ℝ) (hθ : ∀ i, theta i ∈ Set.Ioc 0 (Real.pi / 2))
+    (hC0 : ∀ i, Proposition35.section3CosAngleOperator U V (e (.inl (0, i))) =
+      (Real.cos (theta i) : ℂ) • e (.inl (0, i)))
+    (hC1 : ∀ i, Proposition35.section3CosAngleOperator U V (e (.inl (1, i))) =
+      (Real.cos (theta i) : ℂ) • e (.inl (1, i)))
+    (hCf : ∀ j, Proposition35.section3CosAngleOperator U V (e (.inr j)) = e (.inr j))
+    (hJ0 : ∀ i, U.reflection (e (.inl (0, i))) = e (.inl (1, i)))
+    (bound : ℝ) (hbound : 0 ≤ bound) (hmax : ∀ i, theta i ≤ bound) :
+    ∀ i : Fin (Module.finrank ℂ U), U.principalAngles V i ≤ bound := by
+  have hsum := sum_principalAngles_eq_paired_sum U V e theta hθ hC0 hC1 hCf hJ0
+    (fun t => max 0 (t - bound)) (max_eq_left (by linarith))
+  have hz : (∑ i, max 0 (theta i - bound)) = 0 := by
+    apply Finset.sum_eq_zero
+    intro i _
+    exact max_eq_left (sub_nonpos.mpr (hmax i))
+  rw [hz] at hsum
+  intro i
+  have hterm : max 0 (U.principalAngles V i - bound) ≤ 0 := by
+    calc
+      _ ≤ ∑ j : Fin (Module.finrank ℂ U), max 0 (U.principalAngles V j - bound) :=
+        Finset.single_le_sum (fun j _ => le_max_left _ _) (Finset.mem_univ i)
+      _ = 0 := hsum
+  exact sub_nonpos.mp ((le_max_right _ _).trans hterm)
+
 /-- An upper bound on the accepted principal angles also bounds every
 nonzero angle in a paired canonical cosine basis. -/
 theorem paired_angles_le_of_principalAngles_le

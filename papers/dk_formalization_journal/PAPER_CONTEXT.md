@@ -538,6 +538,23 @@ quartic bound and canonical uniqueness. No classification of supercritical
 minimizers is inferred. The coefficient is not claimed optimal, and priority
 for these exact growth estimates remains provisional.
 
+`SmoothedCanonicalOptimality.lean` now closes the necessary half of the
+canonical cutoff at unrestricted finite complex rank. Its main endpoint
+`smoothed_canonical_isMin_iff` states that the actual completed canonical
+rotation is globally optimal exactly when every accepted principal angle
+is at most `smoothedCriticalAngle tau`. The endpoint
+`optimalSmoothedTransport_lt_canonical_of_supercritical` proves that the
+named spectral-phase optimizer strictly improves the canonical cost whenever
+one accepted angle exceeds the cutoff, including right angles. Together
+with quartic uniqueness, this gives the full canonical-optimality decision,
+not a classification of every supercritical minimizer. Included as
+`cor:smoothed-canonical-cutoff`. The proof generalizes the existing diagonal
+nuclear-cost computation in `SmoothedNuclearAttainment.lean` to all supplied
+phases, rather than copying it, and adds the reverse paired-to-accepted
+angle bound in `SmoothedPrincipalAngles.lean`. All former endpoints remain
+consumers. Original Schatten-p arbitrary-rank and real matching minimum
+claims remain outside this formalization.
+
 The 2026-10-24 primary-source search for this extension checked the statements
 of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.
 Their block-unitary distance problem is unweighted and Theorem 3.1 assumes

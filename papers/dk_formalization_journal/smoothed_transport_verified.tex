@@ -329,6 +329,23 @@ $\delta=b\tau D^2/(4an)$ therefore lies in $[0,b]$ and makes the
 right-hand side $3b^2\tau D^4/(32a^2n)$. Substitute $ab=1$.
 \end{proof}
 
+\begin{corollary}[The exact canonical cutoff]
+\label{cor:smoothed-canonical-cutoff}
+The completed canonical rotation minimizes $\Psi_\tau$ exactly when
+$\theta_j\leq c_\tau$ for every principal angle. In that regime it is
+the unique minimizer. If any principal angle exceeds $c_\tau$, the
+spectral-phase optimizer in \cref{cor:smoothed-spectral-optimizer} has
+strictly lower cost than the canonical rotation.
+\end{corollary}
+
+\begin{proof}
+When all angles are at most the cutoff, the scalar formula selects zero
+phase, and \cref{thm:smoothed-quartic-stability} gives uniqueness.
+If an angle exceeds the cutoff, the unique scalar minimizing phase on
+that plane is positive; replacing its zero phase strictly decreases the
+sum. The unrestricted global optimizer attains at most this improved cost.
+\end{proof}
+
 The quadratic estimate gives the stronger local rate when the angle bound
 stays strictly below the cutoff. The quartic estimate supplies a nonzero
 certificate at equality. The following family admits a sharper constant
@@ -408,3 +425,9 @@ This gives an exact correction that preserves both a specified subspace
 and its orthogonal complement. The construction requires spectral
 functions of the two projections; it provides the value and an optimizer
 without an iterative search over the unitary group.
+
+For spectral projections, the correction preserves a selected spectral
+subspace and its orthogonal complement while retaining global unitarity.
+Nearby commuting-unitary constructions are established in approximate
+symmetry theory \citep{chubb2017approximate}; the formula above gives the
+exact minimum and an explicit correction for this spectral penalty.

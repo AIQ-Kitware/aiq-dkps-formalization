@@ -49,6 +49,53 @@ private theorem exists_diagonal_phase_isometry {ι : Type*} [Fintype ι]
 
 variable {ι κ : Type*} [Fintype ι] [Fintype κ]
 
+/-- The literal nuclear displacement of any diagonal phase factor is the
+sum of the scalar two-focus costs and the fixed-direction baseline. -/
+theorem nuclear_diagonalPhase_eq_sum_weightedPhaseCost
+    (a b : ℝ) (hab : b ≤ a) (theta delta : ι → ℝ)
+    (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A : E →ₗ[ℂ] E) (V : E ≃ₗᵢ[ℂ] E)
+    (hA0 : ∀ i, A (e (.inl (0, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) + (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (0, i)))
+    (hA1 : ∀ i, A (e (.inl (1, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) - (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (1, i)))
+    (hAf : ∀ j, A (e (.inr j)) = (a : ℂ) • e (.inr j))
+    (hVp : ∀ r i, V (e (.inl (r, i))) = circlePhase 1 (delta i) • e (.inl (r, i)))
+    (hVf : ∀ j, V (e (.inr j)) = e (.inr j)) :
+    UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • V.toLinearMap) =
+      (∑ i, weightedPhaseCost a b (theta i) (delta i)) + Fintype.card κ * (a - b) := by
+  let lam : ((Fin 2 × ι) ⊕ κ) → ℂ := Sum.elim
+    (fun j =>
+      (if j.1 = 0 then
+        ((a * Real.cos (theta j.2) : ℝ) : ℂ) + (a * Real.sin (theta j.2)) * Complex.I
+      else ((a * Real.cos (theta j.2) : ℝ) : ℂ) - (a * Real.sin (theta j.2)) * Complex.I) -
+        circlePhase b (delta j.2))
+    (fun _ => ((a - b : ℝ) : ℂ))
+  have heigen (j) : (A - (b : ℂ) • V.toLinearMap) (e j) = lam j • e j := by
+    change A (e j) - (b : ℂ) • V (e j) = lam j • e j
+    rcases j with ⟨r, i⟩ | j
+    · by_cases hr : r = 0
+      · subst r
+        rw [hA0, hVp, smul_smul, ← sub_smul]
+        simp [lam, circlePhase]
+      · have hr1 : r = 1 := by omega
+        subst r
+        rw [hA1, hVp, smul_smul, ← sub_smul]
+        simp [lam, circlePhase]
+    · rw [hAf, hVf, ← sub_smul]
+      simp [lam]
+  rw [nuclear_eq_sum_norm_eigenvalues e _ lam heigen, Fintype.sum_sum_type,
+    Fintype.sum_prod_type, Fin.sum_univ_two, ← Finset.sum_add_distrib]
+  apply congrArg₂ (· + ·)
+  · apply Finset.sum_congr rfl
+    intro i _
+    simp [weightedPhaseCost, twoFocusCost, lam]
+  · have hab0 : 0 ≤ a - b := sub_nonneg.mpr hab
+    simp only [lam, Sum.elim_inr, Complex.norm_real, Real.norm_eq_abs,
+      abs_of_nonneg hab0, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+
+
 /-- The supplied principal-rotation eigenbasis admits an actual unitary
 attaining the weighted nuclear lower bound. The same phase is used on both
 members of each pair, and every fixed direction is fixed pointwise. -/
@@ -79,36 +126,16 @@ theorem exists_unitary_attaining_weightedNuclear
   have hVf (j : κ) : V (e (.inr j)) = e (.inr j) := by
     simpa [delta, circlePhase] using hV (.inr j)
   refine ⟨V, hVp, hVf, ?_⟩
-  let lam : ((Fin 2 × ι) ⊕ κ) → ℂ := Sum.elim
-    (fun j =>
-      (if j.1 = 0 then
-        ((a * Real.cos (theta j.2) : ℝ) : ℂ) + (a * Real.sin (theta j.2)) * Complex.I
-      else ((a * Real.cos (theta j.2) : ℝ) : ℂ) - (a * Real.sin (theta j.2)) * Complex.I) -
-        circlePhase b (optimalWeightedPhase a b (theta j.2)))
-    (fun _ => ((a - b : ℝ) : ℂ))
-  have heigen (j) : (A - (b : ℂ) • V.toLinearMap) (e j) = lam j • e j := by
-    change A (e j) - (b : ℂ) • V (e j) = lam j • e j
-    rcases j with ⟨r, i⟩ | j
-    · by_cases hr : r = 0
-      · subst r
-        rw [hA0, hVp, smul_smul, ← sub_smul]
-        simp [lam, circlePhase]
-      · have hr1 : r = 1 := by omega
-        subst r
-        rw [hA1, hVp, smul_smul, ← sub_smul]
-        simp [lam, circlePhase]
-    · rw [hAf, hVf, ← sub_smul]
-      simp [lam]
-  rw [nuclear_eq_sum_norm_eigenvalues e _ lam heigen, Fintype.sum_sum_type,
-    Fintype.sum_prod_type, Fin.sum_univ_two, ← Finset.sum_add_distrib]
-  apply congrArg₂ (· + ·)
-  · apply Finset.sum_congr rfl
-    intro i _
-    have hcost := weightedPhaseCost_optimal a b (theta i) hb hab.le (hθ i)
-    simpa [weightedPhaseCost, twoFocusCost, lam] using hcost
-  · have hab0 : 0 ≤ a - b := sub_nonneg.mpr hab.le
-    simp only [lam, Sum.elim_inr, Complex.norm_real, Real.norm_eq_abs,
-      abs_of_nonneg hab0, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  calc
+    _ = (∑ i, weightedPhaseCost a b (theta i) (optimalWeightedPhase a b (theta i))) +
+        Fintype.card κ * (a - b) :=
+      nuclear_diagonalPhase_eq_sum_weightedPhaseCost a b hab.le theta
+        (fun i => optimalWeightedPhase a b (theta i)) e A V hA0 hA1 hAf hVp hVf
+    _ = _ := by
+      congr 1
+      apply Finset.sum_congr rfl
+      intro i _
+      exact weightedPhaseCost_optimal a b (theta i) hb hab.le (hθ i)
 
 /-- The identity factor attains the exact nuclear minimum when all supplied
 rotation angles lie in the canonical regime, including its boundary. -/
