@@ -17,6 +17,8 @@ public import TauCeti.Analysis.Convex.StrictConvexSpace
 public import TauCeti.Analysis.Normed.Module.Trace
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
 public import Mathlib.Analysis.Normed.Operator.Mul
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
+public import Mathlib.Algebra.Star.StarProjection
 
 /-!
 # Supporting inequalities and first variations of normal spectral traces
@@ -274,6 +276,72 @@ theorem spectral_sum_support
 namespace ContinuousLinearMap
 
 variable [CompleteSpace E]
+
+/-- The finite complex trace is faithful on positive squares. The accepted
+Frobenius trace identity turns the hypothesis into a sum of squared column
+norms, each of which must vanish. -/
+theorem eq_zero_of_re_trace_adjoint_mul_self_eq_zero
+    (A : E →L[ℂ] E)
+    (h : (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re = 0) : A = 0 := by
+  classical
+  let b := stdOrthonormalBasis ℂ E
+  have htrace : (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re =
+      ∑ i, ‖A (b i)‖ ^ 2 := by
+    rw [_root_.ContinuousLinearMap.toLinearMap_mul,
+      ← _root_.ContinuousLinearMap.adjoint_toLinearMap, Module.End.mul_eq_comp,
+      A.toLinearMap.trace_adjoint_comp_self_eq_sum_norm_apply_sq b]
+    exact RCLike.ofReal_re (K := ℂ) _
+  rw [htrace] at h
+  have hA : A.toLinearMap = 0 := by
+    apply b.toBasis.ext
+    intro i
+    change A (b i) = 0
+    apply norm_eq_zero.mp
+    exact sq_eq_zero_iff.mp
+      ((Finset.sum_eq_zero_iff_of_nonneg (fun j _ => sq_nonneg ‖A (b j)‖)).mp h i
+        (Finset.mem_univ i))
+  ext x
+  change A.toLinearMap x = 0
+  rw [hA]
+  rfl
+
+/-- Orthogonality in the trace pairing to every Hermitian element of a
+projection's commutant forces its diagonal compression to vanish. Testing
+against `P G P` reduces the assertion to faithfulness of the trace square. -/
+theorem projection_compression_eq_zero_of_trace_pairing_eq_zero
+    (G P : E →L[ℂ] E) (hG : IsSelfAdjoint G) (hP : IsStarProjection P)
+    (hzero : ∀ H : E →L[ℂ] E, IsSelfAdjoint H → Commute H P →
+      (LinearMap.trace ℂ E (G * H).toLinearMap).re = 0) : P * G * P = 0 := by
+  let H := P * G * P
+  have hHs : IsSelfAdjoint H := hG.conjugate_self hP.isSelfAdjoint
+  have hPP : P * P = P := hP.isIdempotentElem
+  have hHP : H * P = H := by
+    dsimp [H]
+    rw [mul_assoc (P * G) P P, hPP]
+  have hPH : P * H = H := by
+    dsimp [H]
+    calc
+      P * (P * G * P) = (P * P) * G * P := by simp only [mul_assoc]
+      _ = _ := by rw [hPP]
+  have hcomm : Commute H P := hHP.trans hPH.symm
+  apply eq_zero_of_re_trace_adjoint_mul_self_eq_zero H
+  have htrace : LinearMap.trace ℂ E (H.adjoint * H).toLinearMap =
+      LinearMap.trace ℂ E (G * H).toLinearMap := by
+    calc
+      _ = LinearMap.trace ℂ E (H * H).toLinearMap := by
+        rw [← _root_.ContinuousLinearMap.star_eq_adjoint, hHs.star_eq]
+      _ = LinearMap.trace ℂ E (P * (G * H)).toLinearMap := by
+        have heq : H * H = P * (G * H) := by
+          change (P * G * P) * H = P * (G * H)
+          rw [mul_assoc, mul_assoc, hPH]
+        rw [heq]
+      _ = LinearMap.trace ℂ E ((G * H) * P).toLinearMap := by
+        simp only [_root_.ContinuousLinearMap.toLinearMap_mul]
+        exact LinearMap.trace_mul_comm ℂ P.toLinearMap (G.toLinearMap * H.toLinearMap)
+      _ = LinearMap.trace ℂ E (G * H).toLinearMap := by
+        rw [mul_assoc, hHP]
+  rw [htrace]
+  exact hzero H hHs hcomm
 
 /-- Forgetting continuity preserves normality of a finite-dimensional
 operator. This representation bridge uses the accepted adjoint comparison. -/

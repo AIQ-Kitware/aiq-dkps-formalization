@@ -333,6 +333,11 @@ power sums add across these blocks, giving exactly the right-hand side
 of \cref{eq:schatten-unrestricted-minimum}.
 \end{proof}
 
+Local-to-global principles for matrix nearness are established for
+Hermitian eigenvalue orbits and fixed-singular-value orbits
+\citep{massey2018local}. Here the feasible set is a coset of the
+stabilizer of $P$.
+
 \begin{proposition}[No nonglobal local minima]
 \label{prop:schatten-local-is-global}
 Every local minimum of $W\mapsto\|I-W\|_p^p$ on $\mathcal U(P,Q)$
@@ -375,6 +380,63 @@ On all remaining fixed directions $W=I$. Consequently the zero-gradient
 block also attains exactly its scalar principal-plane cost. Summing the
 blocks proves that $W$ attains \cref{eq:schatten-unrestricted-minimum}.
 \end{proof}
+
+\begin{proposition}[All minimizers for an acute pair]
+\label{prop:schatten-all-acute-minimizers}
+Suppose that every principal angle of $P,Q$ is less than $\pi/2$, and let
+$R$ be their canonical direct rotation. In a cosine--sine decomposition,
+group equal positive principal angles into summands
+$M_\theta\otimes\mathbb C^2$, with
+$R=I_{M_\theta}\otimes R_\theta$ on each such summand. Set
+$\delta_p(\theta)=0$ for $\theta\leq\vartheta_p$.
+Then all minimizing transporters are the identity on the fixed summands and
+have the form
+\begin{equation}
+ W\big|_{M_\theta\otimes\mathbb C^2}
+       =\exp\bigl(i\delta_p(\theta)S_\theta\bigr)\otimes R_\theta,
+ \qquad S_\theta=S_\theta^*=S_\theta^{-1},
+ \label{eq:schatten-all-acute-minimizers}
+\end{equation}
+where the self-adjoint unitaries $S_\theta$ may be chosen independently.
+In particular, the minimizing transporter is unique if and only if all
+principal angles are at most $\vartheta_p$.
+\end{proposition}
+
+\begin{proof}
+A global minimum is a local minimum. The nonzero-gradient blocks in the
+proof of \cref{thm:schatten-independent-planes} split into canonical
+planes of angle $a<\vartheta_p$ and balanced planes of angle
+$\sigma>\vartheta_p$. On a balanced plane the eigenphases are $(b,-a)$
+or $(a,-b)$, so the transporter is $e^{i\delta}R_\sigma$ or
+$e^{-i\delta}R_\sigma$, with $\delta=(b-a)/2$. The scalar uniqueness
+in \cref{prop:schatten-scalar-diagram} fixes
+$\delta=\delta_p(\sigma)$ as a function of the geometric angle.
+The coincident-root blocks give $R_{\vartheta_p}$.
+
+These decompositions reduce $P,Q$, and their planes are therefore
+subordinate to the equal-angle summands of the cosine--sine decomposition.
+The zero-gradient analysis in \cref{prop:schatten-local-is-global} leaves
+only the identity on fixed directions and right-angle blocks. Acuteness
+excludes the latter. Thus a minimizer has only the two stated scalar
+phases on each supercritical equal-angle summand. Their orthogonal
+multiplicity subspaces are the $+1$ and $-1$ eigenspaces of a
+self-adjoint unitary $S_\theta$, giving
+\cref{eq:schatten-all-acute-minimizers}.
+
+Conversely, diagonalize each $S_\theta$. The displayed operator becomes
+an orthogonal sum of scalar-phase minimizers, so it attains
+\cref{eq:schatten-unrestricted-minimum}. Below and at the transition
+the phase is zero. At any supercritical angle, the choices
+$S_\theta=I$ and $S_\theta=-I$ give distinct minimizers, proving the
+uniqueness criterion.
+\end{proof}
+
+If a supercritical angle has multiplicity $m$, its minimizing choices are
+parametrized by the orthogonal projections $E$ on $\mathbb C^m$, through
+$S=2E-I$. The parameter space is consequently the disjoint union
+$\coprod_{k=0}^{m}\operatorname{Gr}(k,m)$ of complex Grassmannians.
+For distinct positive principal angles, exactly $k$ of which are
+supercritical, there are exactly $2^k$ minimizing transporters.
 
 \begin{corollary}[The sharp exponent-dependent angle cutoff]
 \label{cor:schatten-canonical-cutoff}

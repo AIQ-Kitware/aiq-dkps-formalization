@@ -195,8 +195,8 @@ claim, but the inspected statements do not supply our angle formula or
 the local-to-global conclusion on the transporter coset. No priority claim
 for the general principle that local minima can be global is warranted.
 
-The new two-module donor cluster `SpectralTrace.lean` and
-`SchattenSpectralCalculus.lean` supplies a compiled first variation for the
+The donor cluster `SpectralTrace.lean`, `SchattenSpectralCalculus.lean`, and
+`SchattenUnitaryVariation.lean` supplies a compiled first variation for the
 actual accepted Schatten norm power along normal curves with spectra in a
 common compact set. It uses scalar supports, the accepted Schur weights,
 continuity of the continuous functional calculus, and the accepted normal
@@ -205,9 +205,22 @@ for every finite exponent greater than one. The planar consumer now uses
 its general eigenbasis norm formula instead of a separate two-entry sorting
 proof. These are classical foundations for the matrix reduction, not new
 research claims. They have no newly accepted Tau Ceti roadmap target in this
-campaign; no upstream submission scope or acceptance is inferred. The
-constrained stationarity condition and the higher-rank decomposition remain
-separate formal obligations.
+campaign; no upstream submission scope or acceptance is inferred.
+`SchattenStationarity.lean` now proves the constrained trace annihilation and
+reflection-anticommutation identity at a local minimum, using feasible
+exponential variations and trace-square faithfulness. The direct-rotation
+aggregate builds these results. The spectral block classification, exclusion
+of mixed large-phase spaces, and higher-rank minimum remain separate formal
+obligations.
+
+The conventional draft also describes all acute minimizing transporters:
+on the multiplicity space of each supercritical angle they are the canonical
+rotation times `exp(i delta(theta) S)`, with `S` any self-adjoint unitary.
+The resulting families are disjoint unions of complex Grassmannians; for
+distinct positive angles there are exactly `2^k` minimizers when exactly
+`k` angles are supercritical. Uniqueness is equivalent to every angle being
+at most the cutoff. This characterization uses the unformalized higher-rank
+block argument and is not a new compiled result.
 
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
