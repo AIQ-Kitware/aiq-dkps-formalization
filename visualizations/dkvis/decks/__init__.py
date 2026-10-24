@@ -5,6 +5,7 @@ from __future__ import annotations
 from dkvis.deck_spec import DeckSpec
 from dkvis.decks.comprehensive import COMPREHENSIVE
 from dkvis.decks.kitware_talk import KITWARE_TALK
+from dkvis.decks.novelty import NOVELTY_TOUR
 from dkvis.decks.reference import REFERENCE_DECKS
 from dkvis.decks.study import STUDY
 
@@ -12,6 +13,7 @@ DECKS: dict[str, DeckSpec] = {
     **REFERENCE_DECKS,
     KITWARE_TALK.name: KITWARE_TALK,
     COMPREHENSIVE.name: COMPREHENSIVE,
+    NOVELTY_TOUR.name: NOVELTY_TOUR,
     STUDY.name: STUDY,
 }
 

@@ -14,6 +14,21 @@ EXPECTED_SHORT = [
 ]
 
 # Freeze the 21-scene presentation's ordering; its content remains free to edit.
+
+
+NOVELTY_TOUR_ORDER = [
+    "N00Title",
+    "N01ThreeStories",
+    "N02OptimizationProblem",
+    "N03LowerBound",
+    "N04ComplexTrace",
+    "N05SmoothedTransport",
+    "N06SmoothedStability",
+    "N07SchattenTransition",
+    "N08ComplexVsReal",
+    "N09StatusBoard",
+]
+
 COMPLETED_TALK_ORDER = [
     "S00TitleShort", "W00Overview", "W01Workflow", "S01Ellipse", "S02Perturb",
     "S03NoGap", "S03cUnstable", "S04Angle", "S05Residual", "S06Gap",
@@ -31,6 +46,10 @@ def test_reference_full_is_exact_part_concatenation():
     expected = [scene for scenes in PART_SCENES.values() for scene in scenes]
     assert get_deck("sine-theta-full").scene_names == expected
     assert list(get_deck("sine-theta-full").composite_parts) == list(PART_SCENES)
+
+
+def test_novelty_tour_order_is_preserved():
+    assert get_deck("novelty-tour").scene_names == NOVELTY_TOUR_ORDER
 
 
 def test_decks_have_unique_scene_names_and_real_source_modules():
