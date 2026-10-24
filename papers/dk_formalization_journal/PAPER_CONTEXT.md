@@ -63,6 +63,16 @@ The current research objective is mathematical novelty beyond formalization,
 with an exact angle-dependent Schatten optimization theorem as the primary
 candidate. This does not change the 29-result source denominator.
 
+The strongest current conventional candidates are the exact real
+Schatten/Charbonnier minimum as two sorted sums, its more general spectral
+penalty reduction to weighted matching, and the sharp dimension-independent
+additive gaps between real and complex nuclear/smoothed transport.
+These full real optimization statements are not yet Lean-certified.
+The unrestricted complex Charbonnier minimum, its explicit spectral optimizer,
+and its strict-subcritical stability estimate are fully compiled; real
+stationarity and positive submaximal spectral blocks are compiled separately.
+Priority of the optimization contributions remains provisional.
+
 `SchattenPhaseTransition.lean`, committed at `4173073c9`, now proves global
 scalar-phase optimization on `[0, theta]` for `1 < p < 2`: the canonical phase
 is uniquely minimizing exactly when `p cos(theta) >= 2-p`, including equality;
@@ -612,8 +622,10 @@ common rotations are explicit. The same fragment derives the sharp real
 rounding constant `(1 - 2^(-2/p))^(-1/2)` for `1 <= p <= 2`.
 These are conventional consequences under review, not Lean-certified.
 `figures/real_transport_matching.pdf` illustrates the two-angle phase
-diagram and a six-angle matching whose optimum does not pair adjacent
-largest angles. It evaluates the derived formulas, not an independent proof.
+diagram and a six-angle matching selecting a largest-angle reflection
+before pairing $80$ with $75$ degrees. This is the shifted adjacent-pairing
+choice in the stronger sorted-sum result below. The figure evaluates the
+derived formulas, not an independent proof.
 
 The two-phase algebraic reduction is now compiled beyond the projection
 components. `Complexification/RealPoints.lean` consumes the accepted
@@ -644,13 +656,23 @@ blocks, exceptional gradient levels, and exact matching minimum remain
 unformalized. The conventional general-penalty matching and nuclear
 consequences are not promoted to compiled results by this partial assembly.
 
-Two additional nuclear consequences now have complete conventional proof
-drafts in `real_matching_transport.tex`. First, the real minimum is the
-smaller of two sorted sums: pair adjacent angles, appending zero if needed;
-or reflect the largest angle and pair the remaining sorted angles the same
-way. The proof reduces optimal matchings to at most one canonical singleton
-and one reflection singleton, places these at the two extremes, and uses
-the four-angle sine exchange inequality to prove adjacent pairing.
+The matching reduction has been strengthened for all Schatten powers
+`1 < p < 2` and for Charbonnier penalties. Their two-angle cost is symmetric,
+nondecreasing, and submodular. On the active region it depends on the mean
+angle through a concave scalar minimum; on the inactive region it is
+additive, and the first derivatives agree at the junction. Submodularity
+puts a canonical singleton at the smallest angle and proves adjacent
+pairing, while monotonicity puts a reflection at the largest angle.
+Thus the exact real minimum is the smaller of two sorted sums, with or
+without the largest-angle reflection. Only linearly many scalar pair costs
+are evaluated after sorting. For Schatten `3/2` and Charbonnier all these
+costs are explicit. The broader single-peak-penalty theorem remains a
+matching result; submodularity has not been claimed for that entire class.
+These ordering and exact-minimum statements are conventional proofs under
+review, not Lean-certified.
+
+The nuclear sorted-sum formula now follows by a uniform Charbonnier limit.
+Its paired cost is `4 sin((theta+psi)/2)` and reflection cost is two.
 
 Second, the real nuclear minimum exceeds the complex one by at most
 `2 - sqrt(3)`, independently of dimension and rank; one angle `pi/3`
@@ -665,6 +687,20 @@ and their mathematical priority remains provisional. Differential-evolution
 experiments up to eight angles agreed with the gap bound, and random
 matching comparisons up to nine angles agreed with the sorted-sum formula;
 neither experiment is part of the proof.
+
+The smoothed analogue has the sharp additive field gap
+`Delta_tau = 2 eta (1 - sqrt(1 - 1/(4 eta^4)))`, attained by one
+angle with `cos(theta) = eta^(-2)/2` and complex scalar phase `pi/3`.
+Its proof fixes subcritical planes canonically, applies the sorted matching
+construction to supercritical angles, and extends the same tie-Hessian
+maximum argument. The canonical singleton derivative
+`q = sin(theta)/(eta sqrt(tau^2+2-2cos(theta)))` satisfies
+`q >= cos(theta)` and `q' >= -sqrt(1-q^2)`, supplying the endpoint
+Hessian bound. The gap approaches `2 - sqrt(3)` as smoothing vanishes and
+is asymptotic to `1/(4 tau^3)` for large smoothing. This is a conventional
+proof under review, not a compiled real rounding theorem. It supplies a
+dimension-independent error bound for enforcing real transports after
+the exact complex relaxation; no empirical application benefit is claimed.
 
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.

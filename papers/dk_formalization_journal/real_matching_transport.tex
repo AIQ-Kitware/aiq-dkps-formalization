@@ -193,6 +193,126 @@ $I-W$. Thus the formula computes an orthogonal correction that preserves
 the prescribed subspace and has the least spectral penalty among all
 such corrections.
 
+\begin{lemma}[Ordering of the Schatten and smoothed pair costs]
+\label{lem:real-pair-cost-submodular}
+For a Schatten power with $1<p<2$, or for the Charbonnier penalty,
+$e_\rho$ is symmetric, nondecreasing in each argument, and submodular:
+for $x\geq x'$ and $y\geq y'$ in $[0,\pi/2]$,
+\begin{equation}
+ e_\rho(x,y)+e_\rho(x',y')
+       \leq e_\rho(x,y')+e_\rho(x',y).
+ \label{eq:real-pair-cost-submodular}
+\end{equation}
+Also $e_\rho(0,t)=2\phi(t)$.
+\end{lemma}
+
+\begin{proof}
+Write $m(h)$ for the unrestricted scalar-phase minimum and $c$ for its
+critical angle. The real four-dimensional formula gives two branches:
+\[
+ e_\rho(\theta,\psi)=
+ \begin{cases}
+  2\phi(\theta)+2\phi(\psi),&\delta_*(h)\leq d,\\
+  2m(h),&\delta_*(h)>d,
+ \end{cases}
+ \quad h=\frac{\theta+\psi}{2},\quad d=\frac{|\theta-\psi|}{2},
+\]
+where $\delta_*$ is the unique scalar minimizer. On the second branch
+$h>c$ and $m$ is continuously differentiable, increasing, and strictly
+concave. For the Schatten cost, concavity was proved in
+\cref{prop:schatten-value-convexity}; its derivative is obtained by
+differentiating at the unique scalar minimizer. For the smoothed cost
+$m(h)=2\eta\sin h-2\tau$ on this branch.
+
+For a fixed $\theta$, the second branch occurs on an upper interval of
+$\psi$. For Schatten powers its lower endpoint is the other root of
+$\phi'(\psi)=\phi'(\theta)$, when that root lies in $[0,\pi/2]$;
+the amplitude is increasing before $c$ and decreasing afterward.
+The equal-root case is $\theta=\psi=c$.
+For the smoothed cost the same assertion follows directly from
+\[
+ \tan\frac\theta2\tan\frac\psi2
+       >\frac{\tau}{\sqrt{\tau^2+4}}.
+\]
+
+On the first branch $\partial_\theta e_\rho=2\phi'(\theta)$.
+On the second it is $m'(h)$, which is nonnegative and decreases as
+$\psi$ increases. At the junction the scalar minimizer is $d$, so
+the stationary balance gives
+$m'(h)=2\phi'(\theta)=2\phi'(\psi)$.
+Thus the two derivatives join continuously, including the critical
+diagonal, and $\partial_\theta e_\rho$ is nonincreasing in $\psi$.
+Integrating this derivative over $[x',x]$ proves
+\cref{eq:real-pair-cost-submodular}. The same formulas give monotonicity;
+symmetry and the value at zero follow from the definition.
+\end{proof}
+
+\begin{theorem}[Two sorted sums for real Schatten and smoothed transport]
+\label{thm:real-sorted-spectral-minimum}
+For either penalty in \cref{lem:real-pair-cost-submodular}, sort the positive
+principal angles as $\theta_1\geq\cdots\geq\theta_k>0$.
+For a descending list $t=(t_1,\ldots,t_m)$, append a zero if $m$ is
+odd and set
+\[
+ B_\rho(t)=\sum_{j=1}^{\lceil m/2\rceil}
+                 e_\rho(t_{2j-1},t_{2j}),\qquad
+ B_\rho(\varnothing)=0.
+\]
+If $k\geq1$, the exact real transport minimum is
+\begin{equation}
+ \min_{WPW^T=Q}\mathcal F_\rho(W)
+  =\min\{B_\rho(\theta_1,\ldots,\theta_k),\quad
+          \rho(2)+B_\rho(\theta_2,\ldots,\theta_k)\}.
+ \label{eq:real-sorted-spectral-minimum}
+\end{equation}
+The minimum is zero for an empty angle list.
+\end{theorem}
+
+\begin{proof}
+Start from the exact matching formula. Each singleton uses either a
+canonical rotation of cost $e_\rho(0,t)=2\phi(t)$ or a reflection of
+cost $\rho(2)$. Since
+\[
+ e_\rho(t,u)\leq2\phi(t)+2\phi(u),\qquad
+ e_\rho(t,u)\leq2\rho(2),
+\]
+pairing two singleton choices of the same type cannot increase cost.
+Hence there is an optimum with at most one singleton of each type.
+Monotonicity puts a reflection singleton at the largest angle, by
+exchanging it with the largest angle's current assignment.
+
+Submodularity puts a canonical singleton at the smallest remaining angle:
+for $u\geq v$ and any partner $a\geq0$,
+\[
+ e_\rho(a,u)+e_\rho(0,v)
+       \leq e_\rho(a,v)+e_\rho(0,u).
+\]
+Thus exchanging the singleton $u$ with a smaller paired angle $v$ cannot
+increase cost. Represent the resulting canonical singleton by an appended
+zero.
+
+For any four sorted angles $a\geq b\geq c\geq d$, submodularity and
+symmetry give
+\[
+ e_\rho(a,b)+e_\rho(c,d)
+   \leq\min\{e_\rho(a,c)+e_\rho(b,d),\quad
+             e_\rho(a,d)+e_\rho(b,c)\}.
+\]
+Exchanging the partners of the two largest angles therefore pairs those
+angles together without increasing cost. Induction proves adjacent
+pairing of the full remaining list, including its possible zero.
+The sole remaining choice is whether the largest angle is a reflection
+singleton. These are exactly the two costs in
+\cref{eq:real-sorted-spectral-minimum}, and both are attained by the
+block constructions already given.
+\end{proof}
+
+Thus after sorting, only the pair costs in two adjacent pairing sequences
+must be evaluated. At exponent $3/2$ and for the Charbonnier penalty,
+\cref{cor:real-three-halves-matching,cor:real-four-smoothed} make these
+costs explicit. Other Schatten exponents require the scalar balance
+equation only for those pairs.
+
 \begin{corollary}[The exact real nuclear minimum]
 \label{cor:real-nuclear-matching}
 The matching formula also holds for $\rho(s)=s$, with
@@ -238,53 +358,12 @@ If $k=0$, the minimum is zero.
 \end{theorem}
 
 \begin{proof}
-By \cref{cor:real-nuclear-matching}, a singleton angle $t$ can use a
-canonical rotation of cost $4\sin(t/2)$ or a reflection of cost two;
-a paired choice has cost $4\sin((t+u)/2)$.
-There is an optimal matching with at most one singleton of each type.
-Indeed, coupling two canonical singletons strictly lowers their cost,
-and coupling two reflection singletons costs at most four.
-Repeatedly making these replacements proves the assertion.
-
-If a reflection singleton is present, it may be assigned to the largest
-angle. If that angle is paired, exchange it with the reflection
-singleton; the paired cost decreases because the smaller angle enters
-the pair. If the largest angle is a canonical singleton, exchange the
-two singleton types, which decreases the canonical cost.
-Thus there is an optimum whose reflection singleton, if present, is
-$\theta_1$.
-
-A canonical singleton may be assigned to the smallest angle left.
-For a fixed partner $a\geq0$, the function
-\[
- u\longmapsto
- \sin\frac{a+u}{2}-\sin\frac u2
-\]
-is nonincreasing, since its derivative is
-$[\cos((a+u)/2)-\cos(u/2)]/2\leq0$.
-Hence exchanging a canonical singleton $u$ with a smaller paired angle
-cannot increase the total cost. Repeating gives the asserted position.
-Equivalently, represent this canonical singleton as a pair with a
-single zero appended to the remaining angle list.
-
-Finally, adjacent pairing minimizes the total paired cost in a sorted
-even list. For $a\geq b\geq c\geq d\geq0$, put
-$s=(a+b+c+d)/4$. Then
-\[
- \sin\frac{a+b}{2}+\sin\frac{c+d}{2}
-   =2\sin s\cos\frac{a+b-c-d}{4}.
-\]
-The two alternative pairings have the same factor $2\sin s\geq0$
-and smaller absolute cosine arguments. Since all these arguments lie in
-$[-\pi/2,\pi/2]$, neither alternative has smaller cost. If the two
-largest entries are paired with different partners, this exchange pairs
-them together without increasing cost. Induction proves adjacent pairing
-for the full list, including its appended zero.
-
-The only remaining choice is whether to use the reflection singleton.
-Without it the cost is $B(\theta_1,\ldots,\theta_k)$; with it the
-cost is $2+B(\theta_2,\ldots,\theta_k)$. Both constructions are
-feasible, proving \cref{eq:real-nuclear-two-sums}.
+Apply \cref{thm:real-sorted-spectral-minimum} to the Charbonnier penalty
+and let $\tau\downarrow0$. The objectives converge uniformly on $O(n)$,
+so their constrained minima converge. Each of the finitely many paired
+costs converges to $4\sin((t+u)/2)$, including a pair with zero; the
+reflection cost converges to two. Passing to the limit in the two finite
+sums proves \cref{eq:real-nuclear-two-sums} and the stated constructions.
 \end{proof}
 
 \begin{theorem}[The sharp additive gap between real and complex nuclear transport]
@@ -449,6 +528,107 @@ All $u_i$ are nonnegative and increase with the angle, so the two largest
 angles give the strongest pair condition. The largest angle also gives
 the strongest reflection condition.
 \end{proof}
+
+\begin{theorem}[The sharp additive field gap for smoothed transport]
+\label{thm:real-complex-smoothed-additive-gap}
+For the Charbonnier penalty, let $d_{\mathbb R,\tau}$ and
+$d_{\mathbb C,\tau}$ be the optimal costs for a real subspace pair
+and its complexification. Then
+\begin{equation}
+ 0\leq d_{\mathbb R,\tau}-d_{\mathbb C,\tau}
+    \leq\Delta_\tau,
+ \qquad
+ \Delta_\tau=2\eta\left(1-\sqrt{1-\frac{1}{4\eta^4}}\right).
+ \label{eq:real-complex-smoothed-additive-gap}
+\end{equation}
+The constant is sharp and independent of dimension and rank.
+A single angle with $\cos\theta=\eta^{-2}/2$ attains it; its complex
+optimal scalar phase is $\pi/3$.
+\end{theorem}
+
+\begin{proof}
+Put $c=\arccos\eta^{-2}$. Fix every angle at most $c$ by its canonical
+rotation, which attains the complex minimum on those planes. For the
+remaining angles, consider real matchings using only their planes.
+Every pair is on the coupled branch, of cost
+$4\eta\sin((\theta+\psi)/2)-4\tau$; a singleton can use its
+canonical rotation or a reflection. By the ordering argument in
+\cref{thm:real-sorted-spectral-minimum}, the minimum among these
+constructions is given by two sorted sums.
+Subtract $\sum_i(2\eta\sin\theta_i-2\tau)$ and call the resulting
+excess $E_k(\theta)$. It bounds the full real-minus-complex gap from
+above.
+
+Maximize $E_k$ on the compact ordered simplex with angles in
+$[c,\pi/2]$. Its boundary reduces to fewer angles: an angle $c$ has
+a canonical zero-excess choice, a right angle has a reflecting
+zero-excess choice, and an equal pair has a coupled zero-excess choice.
+These choices are permitted matchings, so removing such a block cannot
+decrease the maximal excess. We repeat the interior maximum argument of
+\cref{thm:real-complex-nuclear-additive-gap}.
+
+The two sorted excesses $A,B$ have opposite first derivatives in the
+largest angle. An interior local maximum must lie on their smooth tie
+hypersurface and satisfy
+$\nabla[\lambda A+(1-\lambda)B]=0$ for some $0<\lambda<1$.
+For paired coordinates put $q=\cos((\theta_i+\theta_j)/2)$; a
+reflection contributes $q=0$. A canonical singleton contributes
+\[
+ q(\theta)=\frac{\sin\theta}{\eta D(\theta)},\qquad
+ D(\theta)=\sqrt{\tau^2+2-2\cos\theta}.
+\]
+The stationary equations again read
+$\cos\theta_i=\lambda q_i^0+(1-\lambda)q_i^1$.
+
+On $[c,\pi/2]$, $q(\theta)\geq\cos\theta$, strictly above $c$.
+Indeed, for $u=\cos\theta\leq\eta^{-2}$,
+\[
+ \sin^2\theta-\eta^2u^2D(\theta)^2
+    =(1-\eta^2u)(1+\eta^2u-2u^2)\geq0.
+\]
+The two $q$ values therefore differ at every coordinate, including a
+canonical singleton at the smaller endpoint.
+
+Its second derivative obeys the bound needed for the same positive
+Hessian certificate. Since $|D'|\leq1$,
+\[
+ D''=-\frac{1-\cos\theta}{D}
+              +\frac{1-(D')^2}{D}
+       \geq-\frac{1-\cos\theta}{D}.
+\]
+For $r=(1-\cos\theta)/(\eta D)$ we have
+\[
+ q^2+r^2=\frac{2-2\cos\theta}{\eta^2D^2}\leq1,
+ \qquad q'\geq-r\geq-\sqrt{1-q^2}.
+\]
+Thus the second variation of a canonical singleton is at least
+$-2\eta\sqrt{1-q^2}\,v_i^2$. A paired cost contributes
+$-\eta\sin((\theta_i+\theta_j)/2)(v_i+v_j)^2$, and a reflection
+contributes zero. Strict concavity of $\sqrt{1-q^2}$ and the stationary
+equations now give
+\[
+ v^T\nabla^2[\lambda A+(1-\lambda)B]v
+ \geq2\eta\sum_i\left[\sin\theta_i
+    -\lambda\sqrt{1-(q_i^0)^2}
+    -(1-\lambda)\sqrt{1-(q_i^1)^2}\right]v_i^2>0
+ \quad(v\ne0).
+\]
+For $k\geq2$ a nonzero tangent direction on the tie hypersurface
+contradicts an interior maximum. Compact induction reduces the bound to
+one supercritical angle.
+
+There the canonical excess increases, because its derivative is
+$2\eta(q(\theta)-\cos\theta)>0$, and the reflecting excess
+$2\eta(1-\sin\theta)$ decreases. They agree when
+$\cos\theta=\eta^{-2}/2$, giving exactly $\Delta_\tau$.
+The real rank-one formula proves sharpness; the scalar phase formula
+$\cos\delta=\eta^2\cos\theta$ gives $\delta=\pi/3$.
+\end{proof}
+
+The field gap tends to $2-\sqrt3$ as $\tau\downarrow0$ and is
+asymptotic to $1/(4\tau^3)$ as $\tau\to\infty$. Thus the sharp
+additive cost of enforcing real transport decreases to zero as the
+smoothed objective approaches its quadratic regime.
 
 \begin{corollary}[Canonical real Schatten transport from the two largest angles]
 \label{cor:real-schatten-canonical-top-two}
