@@ -94,7 +94,8 @@ theorem phasePower_eq_singularValues_rpow
   simp only [TauCeti.pairSingularValues_zero, TauCeti.pairSingularValues_one]
   rfl
 
-private theorem phaseChord_pos {t : Real} (h0 : 0 < t)
+/-- The displacement chord is positive at an interior angle. -/
+theorem phaseChord_pos {t : Real} (h0 : 0 < t)
     (hpi : t < Real.pi) : 0 < phaseChord t := by
   unfold phaseChord
   apply mul_pos (by norm_num)
@@ -519,7 +520,9 @@ private theorem phaseLogRatio_pos_of_subcritical
   have h := hmono (by simp [hδ.le]) (by simp [hδ.le]) hδ
   simpa [phaseLogRatio] using h
 
-private theorem phasePower_deriv_pos_of_subcritical
+/-- The phase derivative is strictly positive at every positive interior
+phase below or at the canonical-optimality threshold. -/
+theorem phasePower_deriv_pos_of_subcritical
     (p theta delta : ℝ) (hp0 : 0 < p) (hp2 : p < 2)
     (hθ : 0 < theta) (hπ : theta < Real.pi / 2)
     (hcrit : 2 - p ≤ p * Real.cos theta)

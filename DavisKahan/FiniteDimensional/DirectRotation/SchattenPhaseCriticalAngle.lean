@@ -169,5 +169,150 @@ theorem phaseAmplitude_two_roots (p g : ℝ) (hp1 : 1 < p) (hp2 : p < 2)
     exact (phaseAmplitude_strictAntiOn p hp1 hp2).injOn
       ⟨hx.1.1.le, hx.1.2.le⟩ ⟨hb.1.le, hb.2.le⟩ (hx.2.trans hbg.symm)
 
+/-- Reflecting a small phase about `pi/2` strictly lowers its amplitude
+when the exponent is below two. -/
+theorem phaseAmplitude_pi_sub_lt (p a : ℝ) (hp2 : p < 2)
+    (ha0 : 0 < a) (haπ : a < Real.pi / 2) :
+    phaseAmplitude p (Real.pi - a) < phaseAmplitude p a := by
+  let u := a / 2
+  have hs : 0 < Real.sin u :=
+    Real.sin_pos_of_pos_of_lt_pi (by dsimp [u]; linarith)
+      (by dsimp [u]; linarith [Real.pi_pos])
+  have hc : 0 < Real.cos u :=
+    Real.cos_pos_of_mem_Ioo ⟨by dsimp [u]; linarith [Real.pi_pos],
+      by dsimp [u]; linarith [Real.pi_pos]⟩
+  have hsc : Real.sin u < Real.cos u := by
+    rw [← Real.sin_pi_div_two_sub]
+    apply Real.strictMonoOn_sin
+      ⟨by dsimp [u]; linarith [Real.pi_pos], by dsimp [u]; linarith [Real.pi_pos]⟩
+      ⟨by dsimp [u]; linarith [Real.pi_pos], by dsimp [u]; linarith⟩
+    dsimp [u]
+    linarith
+  have hfactor (x : ℝ) (hx : 0 < x) : x ^ (p - 1) * x ^ (2 - p) = x := by
+    rw [← Real.rpow_add hx, show p - 1 + (2 - p) = 1 by ring, Real.rpow_one]
+  have hcmp : Real.sin u * Real.cos u ^ (p - 1) <
+      Real.cos u * Real.sin u ^ (p - 1) := by
+    calc
+      Real.sin u * Real.cos u ^ (p - 1) =
+          (Real.sin u ^ (p - 1) * Real.sin u ^ (2 - p)) * Real.cos u ^ (p - 1) := by
+        rw [hfactor (Real.sin u) hs]
+      _ = (Real.sin u ^ (p - 1) * Real.cos u ^ (p - 1)) * Real.sin u ^ (2 - p) := by ring
+      _ < (Real.sin u ^ (p - 1) * Real.cos u ^ (p - 1)) * Real.cos u ^ (2 - p) :=
+        mul_lt_mul_of_pos_left (Real.rpow_lt_rpow hs.le hsc (by linarith))
+          (mul_pos (Real.rpow_pos_of_pos hs _) (Real.rpow_pos_of_pos hc _))
+      _ = Real.cos u * Real.sin u ^ (p - 1) := by
+        calc
+          _ = (Real.cos u ^ (p - 1) * Real.cos u ^ (2 - p)) * Real.sin u ^ (p - 1) := by ring
+          _ = _ := by rw [hfactor (Real.cos u) hc]
+  unfold phaseAmplitude phaseChord
+  rw [show (Real.pi - a) / 2 = Real.pi / 2 - u by dsimp [u]; ring,
+    Real.cos_pi_div_two_sub, Real.sin_pi_div_two_sub]
+  change Real.sin u * (2 * Real.cos u) ^ (p - 1) <
+    Real.cos u * (2 * Real.sin u) ^ (p - 1)
+  rw [Real.mul_rpow (by norm_num) hc.le, Real.mul_rpow (by norm_num) hs.le]
+  nlinarith [mul_pos (Real.rpow_pos_of_pos (by norm_num : (0 : ℝ) < 2) (p - 1))
+    (sub_pos.2 hcmp)]
+
+/-- Equal amplitudes on the two branches have total angle strictly below
+`pi`. Thus their associated geometric principal angle is acute. -/
+theorem balanced_roots_sum_lt_pi (p a b : ℝ) (hp1 : 1 < p) (hp2 : p < 2)
+    (ha : a ∈ Ioo 0 (criticalAngle p)) (hb : b ∈ Ioo (criticalAngle p) Real.pi)
+    (hab : phaseAmplitude p a = phaseAmplitude p b) : a + b < Real.pi := by
+  have hcrit := criticalAngle_mem p hp1 hp2
+  have hcomp := phaseAmplitude_pi_sub_lt p a hp2 ha.1 (ha.2.trans hcrit.2)
+  by_contra hsum
+  have hπa : Real.pi - a ∈ Icc (criticalAngle p) Real.pi :=
+    ⟨by linarith [ha.2, hcrit.2], by linarith [ha.1]⟩
+  have hle := (phaseAmplitude_strictAntiOn p hp1 hp2).antitoneOn hπa
+    ⟨hb.1.le, hb.2.le⟩ (by linarith)
+  rw [← hab] at hle
+  exact (not_lt_of_ge hle) hcomp
+
+/-- Every positive interior stationary phase is the global scalar
+minimizer, and its principal angle lies strictly above the transition. -/
+theorem stationary_phase_isMinOn (p theta delta : ℝ) (hp1 : 1 < p) (hp2 : p < 2)
+    (h0 : 0 < theta) (hπ : theta < Real.pi / 2) (hδ : delta ∈ Ioo 0 theta)
+    (hstat : deriv (phasePower p theta) delta = 0) :
+    IsMinOn (phasePower p theta) (Icc 0 theta) delta ∧ criticalAngle p < theta := by
+  have hcrit : p * Real.cos theta < 2 - p := by
+    by_contra h
+    have hpos := phasePower_deriv_pos_of_subcritical p theta delta (by linarith) hp2 h0 hπ
+      (le_of_not_gt h) hδ.1 hδ.2
+    rw [hstat] at hpos
+    exact (lt_irrefl 0) hpos
+  have hcθ : criticalAngle p < theta := by
+    by_contra h
+    have hle := (critical_inequality_iff p theta hp1 hp2
+      ⟨h0.le, by linarith [Real.pi_pos]⟩).2 (le_of_not_gt h)
+    exact (not_lt_of_ge hle) hcrit
+  obtain ⟨eta, hη, hstatη, hmin⟩ :=
+    exists_unique_phase_minimizer_of_supercritical p theta hp1 hp2 h0 hπ hcrit
+  have heq := phasePower_stationary_unique p theta (by linarith) hp2 h0 hπ hδ hη hstat hstatη
+  subst eta
+  exact ⟨fun x hx => (hmin x hx).1, hcθ⟩
+
+/-- A pair of distinct balanced amplitude roots determines an acute
+supercritical principal angle and attains exactly its scalar minimum. -/
+theorem balanced_roots_phase_minimum (p a b : ℝ) (hp1 : 1 < p) (hp2 : p < 2)
+    (ha : a ∈ Ioo 0 (criticalAngle p)) (hb : b ∈ Ioo (criticalAngle p) Real.pi)
+    (hab : phaseAmplitude p a = phaseAmplitude p b) :
+    criticalAngle p < (a + b) / 2 ∧ (a + b) / 2 < Real.pi / 2 ∧
+      phaseMinimum p ((a + b) / 2) = phaseChord a ^ p + phaseChord b ^ p := by
+  let theta := (a + b) / 2
+  let delta := (b - a) / 2
+  have hsum := balanced_roots_sum_lt_pi p a b hp1 hp2 ha hb hab
+  have hcrit := criticalAngle_mem p hp1 hp2
+  have hθ0 : 0 < theta := by dsimp [theta]; linarith [ha.1, hb.1, hcrit.1]
+  have hθπ : theta < Real.pi / 2 := by dsimp [theta]; linarith
+  have hδ : delta ∈ Ioo 0 theta := by dsimp [delta, theta]; constructor <;> linarith [ha.1, ha.2, hb.1]
+  have hplus : theta + delta = b := by dsimp [theta, delta]; ring
+  have hminus : theta - delta = a := by dsimp [theta, delta]; ring
+  have hstat : deriv (phasePower p theta) delta = 0 := by
+    apply (phasePower_stationary_iff p theta delta (by linarith)
+      (by rw [hplus]; exact chord_pos_on_angle ⟨hcrit.1.trans hb.1, hb.2⟩)
+      (by rw [hminus]; exact chord_pos_on_angle ⟨ha.1, by linarith [ha.2, hcrit.2, Real.pi_pos]⟩)).2
+    rw [hplus, hminus]
+    exact hab.symm
+  obtain ⟨hmin, hc⟩ := stationary_phase_isMinOn p theta delta hp1 hp2 hθ0 hθπ hδ hstat
+  refine ⟨hc, hθπ, ?_⟩
+  rw [phaseMinimum_eq_of_isMinOn p theta delta ⟨hδ.1.le, hδ.2.le⟩ hmin,
+    phasePower, hplus, hminus, add_comm]
+
+/-- Every acute supercritical angle comes from a balanced pair with one
+phase on each amplitude branch. -/
+theorem exists_balanced_roots_of_supercritical_angle (p theta : ℝ)
+    (hp1 : 1 < p) (hp2 : p < 2) (hcrit : criticalAngle p < theta)
+    (hπ : theta < Real.pi / 2) :
+    ∃ a ∈ Ioo 0 (criticalAngle p), ∃ b ∈ Ioo (criticalAngle p) Real.pi,
+      theta = (a + b) / 2 ∧ phaseAmplitude p a = phaseAmplitude p b := by
+  have hc := criticalAngle_mem p hp1 hp2
+  have h0 : 0 < theta := hc.1.trans hcrit
+  have hcrit' : p * Real.cos theta < 2 - p := by
+    by_contra h
+    have hle := (critical_inequality_iff p theta hp1 hp2
+      ⟨h0.le, by linarith [Real.pi_pos]⟩).1 (le_of_not_gt h)
+    exact (not_le_of_gt hcrit) hle
+  obtain ⟨delta, hδ, hstat, _⟩ :=
+    exists_unique_phase_minimizer_of_supercritical p theta hp1 hp2 h0 hπ hcrit'
+  have ha0 : 0 < theta - delta := by linarith [hδ.2]
+  have hbπ : theta + delta < Real.pi := by linarith [hδ.2]
+  have hbal := (phasePower_stationary_iff p theta delta (by linarith)
+    (phaseChord_pos (by linarith [hδ.1]) hbπ)
+    (phaseChord_pos ha0 (by linarith [hδ.1, Real.pi_pos]))).1 hstat
+  have hac : theta - delta < criticalAngle p := by
+    by_contra h
+    have hlt := phaseAmplitude_strictAntiOn p hp1 hp2
+      ⟨le_of_not_gt h, by linarith [hδ.1, Real.pi_pos]⟩
+      ⟨by linarith [hδ.1], hbπ.le⟩ (by linarith [hδ.1])
+    exact hlt.ne hbal
+  have hcb : criticalAngle p < theta + delta := by
+    by_contra h
+    have hlt := phaseAmplitude_strictMonoOn p hp1 hp2
+      ⟨ha0.le, by linarith [hδ.1]⟩
+      ⟨by linarith [hδ.1], le_of_not_gt h⟩ (by linarith [hδ.1])
+    exact hlt.ne hbal.symm
+  refine ⟨theta - delta, ⟨ha0, hac⟩, theta + delta, ⟨hcb, hbπ⟩, ?_, hbal.symm⟩
+  ring
+
 end
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

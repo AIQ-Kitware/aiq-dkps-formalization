@@ -430,6 +430,69 @@ reflections on planes with angles tending to $\pi/2$ show that the same
 constant is necessary for acute pairs.
 \end{proof}
 
+\subsection{The nearest subspace-preserving unitary}
+
+For a specified orthogonal projection $P$, let
+$\mathcal C(P)=\{V\in U(n):VP=PV\}$. Given a unitary $U$, finding its
+nearest element of $\mathcal C(P)$ enforces exact subspace preservation
+with the smallest possible change to the full unitary.
+This is the block-diagonal approximation formulation of the unitary
+distortion problem in \citet[Section~3]{bolotnikov2001minimal}.
+
+\begin{corollary}[Exact unitary rounding]
+\label{cor:schatten-unitary-rounding}
+Let $\theta_j$ be the principal angles between $\operatorname{ran}P$
+and $U\operatorname{ran}P$, and let $\alpha$ be their largest value,
+taken to be zero for an empty list. Then
+\begin{equation}
+ \min_{V\in\mathcal C(P)}\|U-V\|_p^p=\sum_j m_p(\theta_j),\qquad
+ \min_{V\in\mathcal C(P)}\|U-V\|_p
+          \leq2^{1-1/p}\|[P,U]\|_p.
+ \label{eq:schatten-unitary-rounding}
+\end{equation}
+The constant in the second inequality is optimal. If the pair is acute,
+the blockwise unitary polar factor of
+$PUP+(I-P)U(I-P)$ is nearest precisely when
+\begin{equation}
+ \|[P,U]\|_\infty\leq\frac{2\sqrt{p-1}}{p}.
+ \label{eq:schatten-polar-rounding-cutoff}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Set $Q=UPU^*$. The correspondence $W=UV^*$, with inverse $V=W^*U$,
+identifies $\mathcal C(P)$ with $\mathcal U(P,Q)$ and satisfies
+$\|U-V\|_p=\|I-W\|_p$. This proves the exact formula.
+The singular values of $P-Q$ are $\sin\theta_j$, each twice, and
+$(P-Q)U=[P,U]$. The endpoint phase gives
+$m_p(\theta)\leq(2\sin\theta)^p$. Summing yields
+\[
+ \sum_j m_p(\theta_j)\leq2^{p-1}\|[P,U]\|_p^p.
+\]
+At a right angle in dimension two, the minimum distance is $2$ and
+the commutator norm is $2^{1/p}$, so the constant is necessary.
+
+In an acute cosine--sine decomposition, write $U=L R_\Theta M$ with
+$L,M$ block diagonal relative to $P$. The diagonal cosine blocks are
+positive definite, so their blockwise unitary polar factor is $LM$.
+The direct rotation from $P$ to $Q$ is $L R_\Theta L^*$, and hence its
+associated rounded unitary is $LM$. The optimality criterion follows
+from \cref{cor:schatten-canonical-cutoff}, because
+$\|[P,U]\|_\infty=\sin\alpha$ and
+$\sin\vartheta_p=2\sqrt{p-1}/p$.
+\end{proof}
+
+This is also a rounding problem for a two-level Hamiltonian. If
+$H=E_0I+\Delta(I-P)$ with $\Delta>0$, the sharp estimate becomes
+\[
+ \min_{\substack{V\in U(n)\\VH=HV}}\|U-V\|_p
+       \leq\frac{2^{1-1/p}}{\Delta}\|[H,U]\|_p.
+\]
+Rounding approximate symmetries to ground-space-preserving operators is
+studied by \citet{chubb2017approximate}. Their ground symmetry is required
+to act unitarily on the ground space; here the rounded operator is unitary
+on the full ambient space and its Schatten displacement is optimized exactly.
+
 \subsection{Computing the optimizer and resolving the transition}
 
 In the supercritical regime define
@@ -479,6 +542,36 @@ Using $x^{3/2}+y^{3/2}
 =\sqrt{x+y+2\sqrt{xy}}\,(x+y-\sqrt{xy})$ proves
 \cref{eq:schatten-three-halves-value}. Continuity includes the two
 displayed boundary angles.
+
+\begin{proposition}[Shape of the minimum value]
+\label{prop:schatten-value-convexity}
+The function $m_p$ is strictly convex on $[0,\vartheta_p]$ and strictly
+concave on $[\vartheta_p,\pi/2]$.
+\end{proposition}
+
+\begin{proof}
+Below the transition $m_p=2f_p$, and
+\cref{eq:schatten-amplitude-derivative} gives the strict convexity.
+For $\vartheta_p<\sigma<\pi/2$, let $a<b$ be its two optimizing
+eigenphase magnitudes. Thus $a<\vartheta_p<b$, $a+b=2\sigma$, and
+$f_p'(a)=f_p'(b)=s>0$. The derivative of $f_p(t)-st$ is positive on
+$(a,b)$ and negative on $(b,\pi)$. Consequently
+\[
+ f_p(t)\leq f_p(b)+s(t-b),\qquad a\leq t\leq\pi,
+\]
+with equality only at $t=b$. For $a\leq\theta\leq\pi/2$, choose the
+admissible phase $\delta=\theta-a$. This gives
+\begin{equation}
+ m_p(\theta)\leq f_p(a)+f_p(2\theta-a)
+       \leq m_p(\sigma)+2s(\theta-\sigma),
+ \label{eq:schatten-balanced-support}
+\end{equation}
+where the second inequality is strict unless $\theta=\sigma$.
+In particular, every interior point $\sigma$ of the supercritical
+interval has a strict affine upper support over that whole interval.
+Taking $\sigma$ to be a strict convex combination of two distinct
+angles proves strict concavity, including the endpoints.
+\end{proof}
 
 The transition also determines the smoothness of the minimum value.
 Fix $p$ and write $c_p=2\sin(\vartheta_p/2)$ and

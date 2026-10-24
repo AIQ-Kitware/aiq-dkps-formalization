@@ -103,6 +103,17 @@ explicit critical angle, including equality. This closes the unrestricted
 two-dimensional reduction; independence across several principal planes is
 still the separate, unformalized higher-rank step.
 
+The balanced-root geometry is now proved in `SchattenPhaseCriticalAngle.lean`:
+the roots have sum below `pi`, their mean is an acute supercritical angle,
+and their chord powers give its exact minimum. Conversely every acute
+supercritical angle arises this way. `SchattenPhaseSupportingLine.lean`
+proves the strict affine upper support for the angle minimum and the strict
+cost decrease when a balanced block is split into distinct physical angles
+of no greater total angle. It also proves that `m_p` is strictly convex below
+the transition and strictly concave from the transition to the right angle.
+These are scalar value-function theorems, not a certificate that an arbitrary
+matrix competitor has already been reduced to such blocks.
+
 `schatten_optimization.tex` is a mathematical extension draft that is **not
 included by `paper.tex`**. It gives a conventional proof candidate for the
 unrestricted finite-dimensional complex formula
@@ -149,6 +160,26 @@ improve on the independent scalar minima. Direct finite-difference checks of
 the proposed mixed-block descent curve agree with its second derivative
 `8 cos(gamma)^2 f_p''(b) < 0`. These are exploratory consistency checks; they
 do not establish either the unrestricted theorem or historical priority.
+
+A concrete application is exact unitary rounding into the commutant of an
+orthogonal projection. For a unitary `U`, set `Q=UPU*`. The correspondence
+`V=W*U` identifies unitaries `V` commuting with `P` with transporters `W` from
+`P` to `Q`, preserving the displacement norm. Thus the proposed full angle
+formula also solves the nearest block-diagonal unitary problem. Its endpoint
+bound would give the sharp uniform estimate
+`dist_p(U, {V unitary : VP=PV}) <= 2^(1-1/p) ||[P,U]||_p` for `1<p<2`.
+This deduction is conventional and not yet Lean-certified.
+
+The application is related to Chubb--Flammia, *Approximate symmetries of
+Hamiltonians*, J. Math. Phys. 58, 082202 (2017), DOI 10.1063/1.4998921.
+The final arXiv v3 was checked at
+<https://arxiv.org/html/1608.02600>, Definition 2 and Lemma 2.3. Their ground
+symmetry is required to be unitary on the ground space, while our rounding
+problem requires a globally unitary operator. Do not claim an improvement of
+their final theorem by comparing against the older author's PDF: the 2016
+PDF has a `6 epsilon/Delta` bound that v3 replaced. The current relevance is
+an exact optimization formulation with a stronger global-unitarity constraint,
+not a claimed replacement of their ground-space result.
 
 - Main file: `paper.tex`; optional red-framed working variant: `paper_working.tex` (sets `DKWorkingDraft`).
 - Mathematical text built by the manuscript: `counterexample.tex`, `sharp_displacement.tex`. The all-pairs complex theorem is now in the checked manuscript. The only red-framed provisional theorem is the **real** line/hyperplane result, gated by `includeUnformalizedRealTransport` in `paper_working.tex`. The old `sharp_displacement_unformalized.tex` is a retired conventional proof note, not included in either manuscript. `sharp_displacement_verified.tex` is also an older detailed record.
