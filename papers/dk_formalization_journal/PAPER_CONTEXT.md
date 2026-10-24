@@ -250,8 +250,8 @@ classical spectral Hessian of Lewis--Sendov (2001, Theorem 3.3). Their
 printed theorem is for real symmetric matrices; the draft explains the
 Hermitian extension by realification. Formal identification with the
 actual second derivative is now registered below for two-phase blocks.
-Its ambient paired-block assembly and the resulting overlap exclusion
-remain unfinished. No novelty is claimed for the spectral Hessian theorem.
+Its ambient paired-block assembly and the resulting spectral-block overlap
+exclusion are now compiled below. The full angle-sum minimum remains unfinished. No novelty is claimed for the spectral Hessian theorem.
 
 `TwoPointDerivative.lean` supplies a more focused compiled route to the
 needed Hessian. If a symbol takes the same value at two distinct spectral
@@ -276,9 +276,8 @@ The latter is stated with explicit scalar derivative data and Frobenius
 squares represented by their finite traces. Its proof uses the first
 variation at every real time, so it differentiates the actual cost's
 derivative. The axiom audit uses only the standard three logical axioms.
-This closes the analytic two-phase step. The feasible pairing, extension
-by the identity on the remaining blocks, and the ambient cost decomposition
-still need formal assembly before the no-mixing proposition is certified.
+This supplies the analytic two-phase input for the ambient spectral-block
+overlap exclusion registered below.
 The downstream `balanced_phase_second_variation` in
 `SchattenSecondVariation.lean` supplies the scalar derivative data from
 the amplitude calculus for distinct positive balanced roots, giving the
@@ -292,10 +291,9 @@ paired block model. For the sum of the two actual Schatten displacement
 powers under their common variation, `AB != 0` gives a strictly negative
 second derivative, and every local minimum therefore has `AB = 0`.
 The necessary second-derivative test is consumed from the accepted Tau
-Ceti calculus API. This is a result about the explicit paired objective,
-not yet a proof that an arbitrary ambient transporter induces that
-local-minimum hypothesis. The common coordinate identification and feasible extension remain to be
-assembled. The new donor `BlockSchatten.lean` proves additivity of the actual
+Ceti calculus API. This theorem concerns the explicit paired objective;
+its ambient transfer and the coordinate construction are proved in the next
+two modules. The new donor `BlockSchatten.lean` proves additivity of the actual
 finite Schatten power for arbitrary real or complex orthogonal square blocks,
 using the accepted polar decomposition. The paired objective is now identified
 with the actual displacement power on the orthogonal product. The spectral
@@ -308,9 +306,22 @@ the paired blocks commutes with their swapping reflection. Extending it by
 the identity on an arbitrary complementary block gives a continuous feasible
 ambient curve. The actual ambient cost equals the paired cost plus the fixed
 complementary cost, so local minimality transfers and forces `AB = 0`.
-This theorem permits an isometric change of the ambient carrier. Constructing
-these coordinates from the stationary gradient eigenspaces remains separate;
-the unrestricted higher-rank minimum is still not Lean-certified.
+This theorem permits an isometric change of the ambient carrier. The next
+module constructs the required coordinates from stationarity.
+
+`SchattenGradientNoMixing.lean` closes the supplied-coordinate hypothesis.
+At an arbitrary finite complex constrained local minimum, it identifies the
+opposite submaximal nonzero gradient eigenspaces using the actual source
+reflection, constructs their common orthogonal coordinates and fixed
+complement, and proves that the two large-phase projections satisfy `AB = 0`.
+The restrictions retain their actual action on ambient vectors and their
+balanced phase representations. `PairedInvolutionDecomposition.lean` supplies
+the reusable orthogonal coordinate construction, including both the swapping
+reflection and the restricted complementary unitary. The strengthened gradient
+block theorem also retains the scalar balance equation in its conclusion.
+The axiom audit lists only the three standard logical axioms. The full
+principal-angle cost sum and zero-gradient contribution remain to be assembled;
+the unrestricted higher-rank minimum is not yet Lean-certified.
 
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical

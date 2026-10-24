@@ -128,6 +128,7 @@ theorem opposite_gradient_eigenspaces_two_phase_representation
     let Kplus := Module.End.eigenspace G.toLinearMap (g : ℂ)
     let Kminus := Module.End.eigenspace G.toLinearMap ((-g : ℝ) : ℂ)
     ∃ a ∈ Ioo 0 (criticalAngle p), ∃ b ∈ Ioo (criticalAngle p) Real.pi,
+      phaseAmplitude p a = phaseAmplitude p b ∧
       (∃ (V : Kplus ≃ₗᵢ[ℂ] Kplus) (A : Kplus →L[ℂ] Kplus),
         IsStarProjection A ∧
         (∀ x : Kplus, (V x : E) = (U : E →L[ℂ] E) x) ∧
@@ -149,7 +150,15 @@ theorem opposite_gradient_eigenspaces_two_phase_representation
     exact Module.End.mapsTo_genEigenspace_of_comm hcomm (c : ℂ) 1
   obtain ⟨a, ha, b, hb, hpos, hneg⟩ :=
     schattenPhaseDerivative_signed_level_sets p g hp1 hp2 hg0 hgm
-  refine ⟨a, ha, b, hb, ?_, ?_⟩
+  refine ⟨a, ha, b, hb, ?_, ?_, ?_⟩
+  · have hc := criticalAngle_mem p hp1 hp2
+    have hap : a ∈ Ioo 0 Real.pi := ⟨ha.1, by linarith [ha.2, hc.2, Real.pi_pos]⟩
+    have hbp : b ∈ Ioo 0 Real.pi := ⟨by linarith [hb.1, hc.1], hb.2⟩
+    apply mul_left_cancel₀ (by linarith : p ≠ 0)
+    rw [← schattenPhaseDerivative_exp_eq_amplitude p a hap,
+      ← schattenPhaseDerivative_exp_eq_amplitude p b hbp]
+    exact ((hpos a (by rw [abs_of_pos hap.1]; exact hap.2.le)).2 (Or.inl rfl)).trans
+      ((hpos b (by rw [abs_of_pos hbp.1]; exact hbp.2.le)).2 (Or.inr rfl)).symm
   · exact two_phase_representation_on_invariant_subspace p g a b U
       (Module.End.eigenspace G.toLinearMap (g : ℂ)) (hinv g)
       (fun x hx => Module.End.mem_eigenspace_iff.1 hx) (fun t ht hg => (hpos t ht).1 hg)
