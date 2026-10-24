@@ -1,17 +1,17 @@
 \section{Direct rotations and displacement norms}
 \label{sec:prop44}
 
-Write $P$ and $Q$ for the orthogonal projections onto two subspaces $\sym{Usource}$ and
+Write $\sym{Psource}$ and $\sym{Qtarget}$ for the orthogonal projections onto two subspaces $\sym{Usource}$ and
 $\sym{Vtarget}$. In the finite-dimensional acute case the canonical direct rotation is
 the orthogonal factor in the polar decomposition of
 \[
- T=QP+(I-Q)(I-P).
+ \sym{IntertwinerT}=\sym{Qtarget}\sym{Psource}+(I-\sym{Qtarget})(I-\sym{Psource}).
 \]
 For the trace norm, $\|X\|_1=\sum_j s_j(X)$.
 Proposition~4.4 of \citet{davis1970rotation} asserts that, for real
 subspaces whose largest principal angle is at most $\pi/3$, the direct
-rotation minimizes $N(I-\sym{Wcompetitor})$ among orthogonal maps $\sym{Wcompetitor}$ satisfying $WU=\sym{Vtarget}$,
-for every unitarily invariant norm $N$.
+rotation minimizes $\sym{NormN}(I-\sym{Wcompetitor})$ among orthogonal maps $\sym{Wcompetitor}$ satisfying $\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}$,
+for every unitarily invariant norm $\sym{NormN}$.
 
 \subsection{An explicit one-parameter family}
 
@@ -31,44 +31,44 @@ the canonical direct rotation $\like{Rrotation}{R_\theta}$ satisfies
 \begin{proof}
 Put $c=\cos\sym{theta}$, $s=\sin\sym{theta}$, and let
 \[
- J=\begin{pmatrix}0&-1\\1&0\end{pmatrix},\quad
- C=\cos(2\sym{theta})I_2+\sin(2\sym{theta})J,\quad
- H=\frac{1}{\sqrt2}\begin{pmatrix}I_2&I_2\\I_2&-I_2\end{pmatrix}.
+ \sym{Jturn}=\begin{pmatrix}0&-1\\1&0\end{pmatrix},\quad
+ \sym{Cturn}=\cos(2\sym{theta})I_2+\sin(2\sym{theta})\sym{Jturn},\quad
+ \sym{Hmix}=\frac{1}{\sqrt2}\begin{pmatrix}I_2&I_2\\I_2&-I_2\end{pmatrix}.
 \]
 Define
 \begin{equation}
- \like{Wcompetitor}{W_\theta}=H\begin{pmatrix}C&0\\0&I_2\end{pmatrix}H^T
- =\begin{pmatrix}c^2I_2+scJ&-s^2I_2+scJ\\
-                  -s^2I_2+scJ&c^2I_2+scJ\end{pmatrix}.
+ \like{Wcompetitor}{W_\theta}=\sym{Hmix}\begin{pmatrix}\sym{Cturn}&0\\0&I_2\end{pmatrix}\sym{Hmix}^T
+ =\begin{pmatrix}c^2I_2+sc\sym{Jturn}&-s^2I_2+sc\sym{Jturn}\\
+                  -s^2I_2+sc\sym{Jturn}&c^2I_2+sc\sym{Jturn}\end{pmatrix}.
  \label{eq:wtheta}
 \end{equation}
-Both $H$ and $C$ are orthogonal, so $\like{Wcompetitor}{W_\theta}$ is orthogonal. Let
+Both $\sym{Hmix}$ and $\sym{Cturn}$ are orthogonal, so $\like{Wcompetitor}{W_\theta}$ is orthogonal. Let
 $\sym{Usource}=\mathbb R^2\oplus\{0\}$ and $\like{Vtarget}{V_\theta}=\like{Wcompetitor}{W_\theta} \sym{Usource}$.
 The first two columns of $\like{Wcompetitor}{W_\theta}$ factor as
 \[
- \begin{pmatrix}c^2I_2+scJ\\-s^2I_2+scJ\end{pmatrix}
- =\begin{pmatrix}cI_2\\sJ\end{pmatrix}(cI_2+sJ).
+ \begin{pmatrix}c^2I_2+sc\sym{Jturn}\\-s^2I_2+sc\sym{Jturn}\end{pmatrix}
+ =\begin{pmatrix}cI_2\\s\sym{Jturn}\end{pmatrix}(cI_2+s\sym{Jturn}).
 \]
-Since $cI_2+sJ$ is orthogonal, the columns of
-$Y=\binom{cI_2}{sJ}$ form an orthonormal basis of $\like{Vtarget}{V_\theta}$.
-With $X=\binom{I_2}{0}$, one has $X^TY=cI_2$.
+Since $cI_2+s\sym{Jturn}$ is orthogonal, the columns of
+$\sym{Yframe}=\binom{cI_2}{s\sym{Jturn}}$ form an orthonormal basis of $\like{Vtarget}{V_\theta}$.
+With $\sym{Xframe}=\binom{I_2}{0}$, one has $\sym{Xframe}^T\sym{Yframe}=cI_2$.
 Thus both principal cosines are $c>0$, and both principal angles are
 $\sym{theta}$.
 
 The corresponding projections and canonical intertwiner are
 \[
- P=\begin{pmatrix}I_2&0\\0&0\end{pmatrix},\qquad
- Q=YY^T=\begin{pmatrix}c^2I_2&-scJ\\scJ&s^2I_2\end{pmatrix},
+ \sym{Psource}=\begin{pmatrix}I_2&0\\0&0\end{pmatrix},\qquad
+ \sym{Qtarget}=\sym{Yframe}\sym{Yframe}^T=\begin{pmatrix}c^2I_2&-sc\sym{Jturn}\\sc\sym{Jturn}&s^2I_2\end{pmatrix},
 \]
 \begin{equation}
- T=QP+(I-Q)(I-P)
-   =c\begin{pmatrix}cI_2&sJ\\sJ&cI_2\end{pmatrix}.
+ \sym{IntertwinerT}=\sym{Qtarget}\sym{Psource}+(I-\sym{Qtarget})(I-\sym{Psource})
+   =c\begin{pmatrix}cI_2&s\sym{Jturn}\\s\sym{Jturn}&cI_2\end{pmatrix}.
  \label{eq:intertwiner-theta}
 \end{equation}
-The last block matrix is orthogonal and $c>0$, so $|T|=cI_4$ and
+The last block matrix is orthogonal and $c>0$, so $|\sym{IntertwinerT}|=cI_4$ and
 its polar factor is exactly
 \[
- \like{Rrotation}{R_\theta}=\begin{pmatrix}cI_2&sJ\\sJ&cI_2\end{pmatrix}.
+ \like{Rrotation}{R_\theta}=\begin{pmatrix}cI_2&s\sym{Jturn}\\s\sym{Jturn}&cI_2\end{pmatrix}.
 \]
 In particular, this calculation identifies the canonical direct rotation
 of the constructed pair. Since $\like{Rrotation}{R_\theta}+\like{Rrotation}{R_\theta}^T=2cI_4$,
@@ -79,9 +79,9 @@ Consequently all four displacement singular values equal
 $\sqrt{2-2c}=2\sin(\sym{theta}/2)$.
 
 On the other hand, \cref{eq:wtheta} shows that the singular values of
-$I-\like{Wcompetitor}{W_\theta}$ are those of $(I_2-C)\oplus0_2$.
+$I-\like{Wcompetitor}{W_\theta}$ are those of $(I_2-\sym{Cturn})\oplus0_2$.
 The identity
-$(I_2-C)^T(I_2-C)=4s^2I_2$ gives the list
+$(I_2-\sym{Cturn})^T(I_2-\sym{Cturn})=4s^2I_2$ gives the list
 $(2s,2s,0,0)$. The two trace formulas follow. Finally,
 \[
  4\sin\sym{theta}
@@ -93,15 +93,15 @@ because $0<\sym{theta}/2<\pi/4$.
 
 \begin{corollary}[No positive short-angle threshold]
 \label{cor:no-threshold}
-For every $\varepsilon>0$, there are real two-dimensional subspaces of
+For every $\sym{EpsilonAngle}>0$, there are real two-dimensional subspaces of
 $\mathbb R^4$ whose largest principal angle is strictly between zero and
-$\varepsilon$ and is at most $\pi/3$, together with an orthogonal competitor
+$\sym{EpsilonAngle}$ and is at most $\pi/3$, together with an orthogonal competitor
 having strictly smaller trace-norm displacement than the direct rotation.
 \end{corollary}
 
 \begin{proof}
 Apply \cref{thm:small-angle} with
-$\sym{theta}=\min\{\varepsilon/2,\pi/4\}$.
+$\sym{theta}=\min\{\sym{EpsilonAngle}/2,\pi/4\}$.
 \end{proof}
 
 The competitor rotates a diagonal real two-plane through $2\sym{theta}$ and
@@ -151,42 +151,42 @@ The fixed and parameterized counterexamples, including their principal
 angles and singular-value formulas, are formalized in Lean; the corresponding
 declarations are listed in Appendix~\ref{app:small-angle-artifact}.
 
-For $K=I-\like{Wcompetitor}{W_{\pi/4}}$, let $\Omega_1$ and $\Omega_2$ be the projections onto
+For $\sym{Kdisplacement}=I-\like{Wcompetitor}{W_{\pi/4}}$, let $\sym{OmegaOne}$ and $\sym{OmegaTwo}$ be the projections onto
 $\operatorname{span}\{e_0,e_3\}$ and
 $\operatorname{span}\{e_1,e_2\}$. These are principal planes for the pair.
 Davis and Kahan's equation~(4.3), applied to this configuration, requires
 \begin{equation}
- \|K\|_{(4)}\geq
- \|K\Omega_1\|_{(2)}+\|K\Omega_2\|_{(2)},
+ \|\sym{Kdisplacement}\|_{(4)}\geq
+ \|\sym{Kdisplacement}\sym{OmegaOne}\|_{(2)}+\|\sym{Kdisplacement}\sym{OmegaTwo}\|_{(2)},
  \label{eq:dk43-false}
 \end{equation}
 where $\|\cdot\|_{(j)}$ denotes the Ky Fan $j$-norm.
 The checked calculations give
 \[
- \|K\|_{(4)}=2\sqrt2,\qquad
- \|K\Omega_1\|_{(2)}=\|K\Omega_2\|_{(2)}=2.
+ \|\sym{Kdisplacement}\|_{(4)}=2\sqrt2,\qquad
+ \|\sym{Kdisplacement}\sym{OmegaOne}\|_{(2)}=\|\sym{Kdisplacement}\sym{OmegaTwo}\|_{(2)}=2.
 \]
 Thus \cref{eq:dk43-false} would imply $2\sqrt2\geq4$.
-The domain planes are orthogonal, but their images under $K$ need not be;
+The domain planes are orthogonal, but their images under $\sym{Kdisplacement}$ need not be;
 the singular-value sums of these restrictions cannot be added in the
 asserted direction.
 
 \subsection{The Q-norm statement}
 
-Call a unitarily invariant norm $N$ a $Q$-norm when there is a unitarily
-invariant norm $M$ satisfying
+Call a unitarily invariant norm $\sym{NormN}$ a $\sym{NormQ}$-norm when there is a unitarily
+invariant norm $\sym{NormM}$ satisfying
 \begin{equation}
- N(Z)^2=M(Z^*Z)\qquad\text{for every }Z.
+ \sym{NormN}(Z)^2=\sym{NormM}(Z^*Z)\qquad\text{for every }Z.
  \label{eq:qnorm-def}
 \end{equation}
 
-\begin{proposition}[$Q$-norm consequence of Davis--Kahan Proposition~4.3]
+\begin{proposition}[$\sym{NormQ}$-norm consequence of Davis--Kahan Proposition~4.3]
 \label{prop:qnorm-repair}
 Let $\sym{Usource},\sym{Vtarget}$ be an acute pair of subspaces of a finite-dimensional real or
 complex Hilbert space, and let $\sym{Rrotation}$ be their canonical direct rotation.
-For every $Q$-norm $N$ and every orthogonal or unitary map $\sym{Wcompetitor}$ with $WU=\sym{Vtarget}$,
+For every $\sym{NormQ}$-norm $\sym{NormN}$ and every orthogonal or unitary map $\sym{Wcompetitor}$ with $\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}$,
 \begin{equation}
- N(I-\sym{Rrotation})\leq N(I-\sym{Wcompetitor}).
+ \sym{NormN}(I-\sym{Rrotation})\leq \sym{NormN}(I-\sym{Wcompetitor}).
  \label{eq:qnorm-repair}
 \end{equation}
 No $\pi/3$ restriction is required.
@@ -195,15 +195,15 @@ No $\pi/3$ restriction is required.
 \begin{proof}
 The valid squared-displacement theorem gives
 \[
- M((I-\sym{Rrotation})^*(I-\sym{Rrotation}))\leq M((I-\sym{Wcompetitor})^*(I-\sym{Wcompetitor})).
+ \sym{NormM}((I-\sym{Rrotation})^*(I-\sym{Rrotation}))\leq \sym{NormM}((I-\sym{Wcompetitor})^*(I-\sym{Wcompetitor})).
 \]
-By \cref{eq:qnorm-def}, these quantities are $N(I-\sym{Rrotation})^2$ and $N(I-\sym{Wcompetitor})^2$.
+By \cref{eq:qnorm-def}, these quantities are $\sym{NormN}(I-\sym{Rrotation})^2$ and $\sym{NormN}(I-\sym{Wcompetitor})^2$.
 Both norm values are nonnegative, so taking square roots proves the claim.
 \end{proof}
 
 This implication is formalized for the finite-dimensional real/complex
 unitarily invariant seminorm interface. The trace norm on the counterexample
-space is also formally shown to fail the $Q$-norm predicate. The formal
+space is also formally shown to fail the $\sym{NormQ}$-norm predicate. The formal
 result makes no identification of that predicate with additional named norm
 families unless the corresponding identity is proved.
 
@@ -214,7 +214,7 @@ modification that decreases the trace norm of full displacement
 \citep[Example~4.2]{davis1970rotation}. Our real family is its
 realification. Indeed, under the identification $\mathbb C^2\simeq
 \mathbb R^2\oplus\mathbb R^2$ in which multiplication by $i$ is
-represented by $J$ from \cref{eq:wtheta}, the matrices
+represented by $\sym{Jturn}$ from \cref{eq:wtheta}, the matrices
 \[
  \like{Rrotation}{R_\theta}^{\mathbb C}=
  \begin{pmatrix}c&is\\is&c\end{pmatrix},\qquad
@@ -226,7 +226,7 @@ restriction in Proposition~4.4 does not eliminate the mechanism of the
 authors' preceding example.
 
 \citet{bolotnikov2001minimal} studied related unitary completion and
-subspace-mapping problems. Their Theorem~3.1 proves a $Q$-norm
+subspace-mapping problems. Their Theorem~3.1 proves a $\sym{NormQ}$-norm
 minimization result, and Lemma~3.3 exhibits failure for Schatten
 $p$-norms with $1\leq p<2$. Those results establish the earlier norm-class
 distinction. \citet[Section~5]{qiu2006grassmann} subsequently repeated

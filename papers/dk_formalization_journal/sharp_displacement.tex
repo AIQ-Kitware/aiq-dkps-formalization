@@ -2,8 +2,8 @@
 \label{sec:sharp-displacement}
 
 Let $\sym{Usource},\sym{Vtarget}$ be subspaces of the same finite-dimensional real or complex
-Hilbert space, with orthogonal projections $P,Q$. An admissible orthogonal
-or unitary operator $\sym{Wcompetitor}$ satisfies $\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}$. We write $N$ for a unitarily
+Hilbert space, with orthogonal projections $\sym{Psource},\sym{Qtarget}$. An admissible orthogonal
+or unitary operator $\sym{Wcompetitor}$ satisfies $\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}$. We write $\sym{NormN}$ for a unitarily
 invariant norm, or more generally a unitarily invariant seminorm. The
 principal angles of $\sym{Usource}$ and $\sym{Vtarget}$ are $\like{theta}{\theta_j}\in[0,\pi/2]$; for an acute
 pair let $\sym{alphaAngle}=\max_j\like{theta}{\theta_j}<\pi/2$, with $\sym{alphaAngle}=0$ when
@@ -11,28 +11,28 @@ $\sym{Usource}=\sym{Vtarget}=\{0\}$.
 
 \begin{proposition}[Projection-distance lower bound]
 \label{prop:projection-lower}
-For every admissible $\sym{Wcompetitor}$ and every unitarily invariant seminorm $N$,
+For every admissible $\sym{Wcompetitor}$ and every unitarily invariant seminorm $\sym{NormN}$,
 \begin{equation}
-  N(P-Q)\leq N(I-\sym{Wcompetitor}).
+  \sym{NormN}(\sym{Psource}-\sym{Qtarget})\leq \sym{NormN}(I-\sym{Wcompetitor}).
   \label{eq:projection-lower}
 \end{equation}
 \end{proposition}
 
 \begin{proof}
 Relative to $\sym{Usource}\oplus \like{Usource}{U^\perp}$, write
-$\sym{Wcompetitor}=\left(\begin{smallmatrix}A&B\\C&D\end{smallmatrix}\right)$ and
-$J=2P-I$. The off-diagonal part of $I-\sym{Wcompetitor}$ is
+$\sym{Wcompetitor}=\left(\begin{smallmatrix}\sym{Ablock}&\sym{Bblock}\\\sym{Cblock}&\sym{Dblock}\end{smallmatrix}\right)$ and
+$\sym{Jreflect}=2\sym{Psource}-I$. The off-diagonal part of $I-\sym{Wcompetitor}$ is
 \[
- \frac{(I-\sym{Wcompetitor})-J(I-\sym{Wcompetitor})J}{2}
- =-\begin{pmatrix}0&B\\C&0\end{pmatrix}.
+ \frac{(I-\sym{Wcompetitor})-\sym{Jreflect}(I-\sym{Wcompetitor})\sym{Jreflect}}{2}
+ =-\begin{pmatrix}0&\sym{Bblock}\\\sym{Cblock}&0\end{pmatrix}.
 \]
-By the triangle inequality and unitary invariance, its $N$-seminorm is
-at most $N(I-\sym{Wcompetitor})$. Because $\sym{Wcompetitor}(\sym{Usource})=\sym{Vtarget}$, the singular values of $A$ are the
+By the triangle inequality and unitary invariance, its $\sym{NormN}$-seminorm is
+at most $\sym{NormN}(I-\sym{Wcompetitor})$. Because $\sym{Wcompetitor}(\sym{Usource})=\sym{Vtarget}$, the singular values of $\sym{Ablock}$ are the
 principal cosines $\cos\like{theta}{\theta_j}$. Unitarity gives
-$C^*C=I-A^*A$ and $BB^*=I-AA^*$, so the nonzero singular values of both
-$B$ and $C$ are the principal sines. The off-diagonal matrix therefore
+$\sym{Cblock}^*\sym{Cblock}=I-\sym{Ablock}^*\sym{Ablock}$ and $\sym{Bblock}\sym{Bblock}^*=I-\sym{Ablock}\sym{Ablock}^*$, so the nonzero singular values of both
+$\sym{Bblock}$ and $\sym{Cblock}$ are the principal sines. The off-diagonal matrix therefore
 has singular values $\sin\like{theta}{\theta_j}$ twice, with zeros for the remaining
-dimensions. The difference $P-Q$ has the same singular-value list
+dimensions. The difference $\sym{Psource}-\sym{Qtarget}$ has the same singular-value list
 \citep{zhang2007angular,bhatia1997matrix}. Unitary invariance proves
 \cref{eq:projection-lower}.
 \end{proof}
@@ -40,11 +40,11 @@ dimensions. The difference $P-Q$ has the same singular-value list
 \begin{theorem}[Sharp full-displacement comparison]
 \label{thm:sharp-displacement}
 Let $\sym{Usource},\sym{Vtarget}$ be an acute pair with largest principal angle $\sym{alphaAngle}$ and
-canonical direct rotation $\sym{Rrotation}$. For every unitarily invariant seminorm $N$
+canonical direct rotation $\sym{Rrotation}$. For every unitarily invariant seminorm $\sym{NormN}$
 and every admissible $\sym{Wcompetitor}$,
 \begin{equation}
- \boxed{\quad N(I-\sym{Rrotation})\leq\sec(\sym{alphaAngle}/2)\,N(P-Q)
-                \leq\sec(\sym{alphaAngle}/2)\,N(I-\sym{Wcompetitor}).\quad}
+ \boxed{\quad \sym{NormN}(I-\sym{Rrotation})\leq\sec(\sym{alphaAngle}/2)\,\sym{NormN}(\sym{Psource}-\sym{Qtarget})
+                \leq\sec(\sym{alphaAngle}/2)\,\sym{NormN}(I-\sym{Wcompetitor}).\quad}
  \label{eq:sharp-displacement}
 \end{equation}
 For every fixed $0<\sym{alphaAngle}<\pi/2$, the coefficient $\sec(\sym{alphaAngle}/2)$
@@ -74,7 +74,7 @@ theorem cos_half_arcsin_projectionGap_mul_uiNorm_directRotation_le_displacement
 
 \begin{proof}
 On a principal plane with angle $\like{theta}{\theta_j}$, the singular values of
-$I-\sym{Rrotation}$ are $2\sin(\like{theta}{\theta_j}/2)$, twice, whereas those of $P-Q$ are
+$I-\sym{Rrotation}$ are $2\sin(\like{theta}{\theta_j}/2)$, twice, whereas those of $\sym{Psource}-\sym{Qtarget}$ are
 $\sin\like{theta}{\theta_j}$, twice. Both operators vanish on the remaining fixed
 summand. As $0\leq\like{theta}{\theta_j}\leq\sym{alphaAngle}<\pi/2$,
 \[
@@ -87,7 +87,7 @@ Monotonicity of symmetric gauge functions gives the first inequality in
 Proposition~\ref{prop:projection-lower}. For the family in
 \cref{thm:small-angle}, both principal angles equal $\sym{alphaAngle}$ and
 \[
- \|P-Q\|_1=4\sin\sym{alphaAngle}
+ \|\sym{Psource}-\sym{Qtarget}\|_1=4\sin\sym{alphaAngle}
  =\|I-\like{Wcompetitor}{W_\alpha}\|_1,
  \qquad \|I-\like{Rrotation}{R_\alpha}\|_1=8\sin(\sym{alphaAngle}/2).
 \]
@@ -102,7 +102,7 @@ For the subspaces $\sym{Usource},\like{Vtarget}{V_\theta}\subset\mathbb R^4$ of
 \cref{thm:small-angle}, $0<\sym{theta}<\pi/2$,
 \begin{equation}
  \min_{\sym{Wcompetitor}\in O(4):\,\sym{Wcompetitor}\sym{Usource}=\like{Vtarget}{V_\theta}}\|I-\sym{Wcompetitor}\|_1
- =\|P-Q\|_1=4\sin\sym{theta},
+ =\|\sym{Psource}-\sym{Qtarget}\|_1=4\sin\sym{theta},
  \label{eq:real-trace-minimum}
 \end{equation}
 with the minimum attained by the explicit $\like{Wcompetitor}{W_\theta}$ in
@@ -111,13 +111,13 @@ with the minimum attained by the explicit $\like{Wcompetitor}{W_\theta}$ in
 
 \begin{proof}
 The singular-value calculation in \cref{thm:small-angle} gives
-$\|P-Q\|_1=4\sin\sym{theta}=\|I-\like{Wcompetitor}{W_\theta}\|_1$.
+$\|\sym{Psource}-\sym{Qtarget}\|_1=4\sin\sym{theta}=\|I-\like{Wcompetitor}{W_\theta}\|_1$.
 Apply Proposition~\ref{prop:projection-lower} to any other admissible orthogonal
 map.
 \end{proof}
 
 The factor is optimal uniformly over unitarily invariant norms, not for
-an individual norm: $Q$-norms, for example, admit the stronger constant one.
+an individual norm: $\sym{NormQ}$-norms, for example, admit the stronger constant one.
 The projection bound, comparison theorem, fixed-angle sharpness, and real
 minimum are formalized in Lean; see Appendix~\ref{app:small-angle-artifact}.
 
@@ -126,7 +126,7 @@ The intertwining polar unitary itself is classical. Kato
 constructed it from the two projections, with earlier work by
 Sz.-Nagy cited there. In the notation above the formula is
 \[
- \sym{Rrotation}=\bigl(QP+(I-Q)(I-P)\bigr)\bigl(I-(P-Q)^2\bigr)^{-1/2}.
+ \sym{Rrotation}=\bigl(QP+(I-\sym{Qtarget})(I-\sym{Psource})\bigr)\bigl(I-(\sym{Psource}-\sym{Qtarget})^2\bigr)^{-1/2}.
 \]
 Murphy \citep[Lemma~6.2.1, p.~178]{murphy1990operator} established an
 operator-norm comparison from the same polar factor. The estimate
@@ -175,7 +175,7 @@ For any equal-dimensional subspaces $\sym{Usource},\sym{Vtarget}$ of a finite-di
 Hilbert space, with principal angles $\like{theta}{\theta_1},\ldots,\like{theta}{\theta_k}$,
 \[
  \min_{\sym{Wcompetitor}\text{ unitary}:\,\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}}\|I-\sym{Wcompetitor}\|_1
- =\|P-Q\|_1=2\sum_{j=1}^k\sin\like{theta}{\theta_j}.
+ =\|\sym{Psource}-\sym{Qtarget}\|_1=2\sum_{j=1}^k\sin\like{theta}{\theta_j}.
 \]
 \end{proposition}
 \begin{proof}
@@ -186,7 +186,7 @@ use the phase-adjusted map $\like{Wcompetitor}{W_{\theta_j}}$ from
 \cref{eq:complex-phase}; it transports the corresponding source line
 to its target line with trace displacement $2\sin\like{theta}{\theta_j}$. The identity
 on the fixed summand contributes zero. The orthogonal sum is an
-admissible unitary attaining $2\sum_j\sin\like{theta}{\theta_j}=\|P-Q\|_1$.
+admissible unitary attaining $2\sum_j\sin\like{theta}{\theta_j}=\|\sym{Psource}-\sym{Qtarget}\|_1$.
 \end{proof}
 
 The Lean development proves the phase-plane construction and its
@@ -209,12 +209,12 @@ the checked-only manuscript.
 Let $n\geq2$ and let $\sym{Usource},\sym{Vtarget}\subset\mathbb R^n$ be lines or hyperplanes
 at principal angle $\sym{theta}\in[0,\pi/2]$. Put
 $a=2\sin(\sym{theta}/2)$ and, with trailing zero entries to size $n$, let
-$D=\operatorname{diag}(a,a,0,\ldots,0)$ and
-$H=\operatorname{diag}(2,0,\ldots,0)$. For every unitarily invariant
-norm $N$,
+$\sym{Dplanar}=\operatorname{diag}(a,a,0,\ldots,0)$ and
+$\sym{Hreflection}=\operatorname{diag}(2,0,\ldots,0)$. For every unitarily invariant
+norm $\sym{NormN}$,
 \[
-  \min_{\sym{Wcompetitor}\in O(n):\,\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}} N(I-\sym{Wcompetitor})
-    =\min\{N(D),N(H)\}.
+  \min_{\sym{Wcompetitor}\in O(n):\,\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}} \sym{NormN}(I-\sym{Wcompetitor})
+    =\min\{\sym{NormN}(\sym{Dplanar}),\sym{NormN}(\sym{Hreflection})\}.
 \]
 Both candidates are attained, respectively by a direct planar rotation
 of determinant $+1$ and by a Householder reflection of determinant $-1$.
@@ -224,20 +224,20 @@ $\mathbb R^4$ counterexample shows that four is the minimum ambient
 real dimension for failure of that short-angle assertion.
 \end{proposition}
 \begin{proof}
-Select unit vectors $x,y$ representing the source and target lines,
-or unit normals for hyperplanes, so $\langle x,y\rangle=\cos\sym{theta}$.
-An admissible $\sym{Wcompetitor}$ has $Wx=\pm y$, whence
+Select unit vectors $\sym{SourceVector},\sym{TargetVector}$ representing the source and target lines,
+or unit normals for hyperplanes, so $\langle \sym{SourceVector},\sym{TargetVector}\rangle=\cos\sym{theta}$.
+An admissible $\sym{Wcompetitor}$ has $\sym{Wcompetitor}\sym{SourceVector}=\pm \sym{TargetVector}$, whence
 $\|I-\sym{Wcompetitor}\|_{\rm op}\geq 2\sin(\sym{theta}/2)=a$.
 If $\det \sym{Wcompetitor}=1$, the nonreal eigenvalues of the real orthogonal matrix
 occur in conjugate pairs and the multiplicity of $-1$ is even.
 Thus the two largest singular values of $I-\sym{Wcompetitor}$ coincide, and both are
-at least $a$. Fan dominance gives $N(I-\sym{Wcompetitor})\geq N(D)$, with equality
+at least $a$. Fan dominance gives $\sym{NormN}(I-\sym{Wcompetitor})\geq \sym{NormN}(\sym{Dplanar})$, with equality
 for the direct planar rotation. If $\det \sym{Wcompetitor}=-1$, $-1$ occurs as an
 eigenvalue, and $I-\sym{Wcompetitor}$ has singular value $2$; hence
-$N(I-\sym{Wcompetitor})\geq N(H)$. A single Householder reflection mapping $x$
-to $y$ attains this bound (if $x=y$, choose a reflection fixing $x$).
+$\sym{NormN}(I-\sym{Wcompetitor})\geq \sym{NormN}(\sym{Hreflection})$. A single Householder reflection mapping $\sym{SourceVector}$
+to $\sym{TargetVector}$ attains this bound (if $\sym{SourceVector}=\sym{TargetVector}$, choose a reflection fixing $\sym{SourceVector}$).
 The minimum is therefore the smaller of the two values.
-Finally, $D$ is weakly majorized by $H$ exactly when $2a\leq2$,
+Finally, $\sym{Dplanar}$ is weakly majorized by $\sym{Hreflection}$ exactly when $2a\leq2$,
 equivalently $\sym{theta}\leq\pi/3$. Every pair of nonzero proper
 subspaces of the same rank in $\mathbb R^2$ or $\mathbb R^3$
 is a line/hyperplane pair. The fixed-angle $\mathbb R^4$ family

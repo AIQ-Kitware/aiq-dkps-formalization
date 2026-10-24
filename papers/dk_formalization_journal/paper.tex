@@ -152,9 +152,9 @@ displacement for every unitarily invariant norm under a real short-angle
 condition. A formalized family in $\mathbb R^4$ gives counterexamples at
 arbitrarily small positive angles. We identify the invalid inequality in the
 original proof and establish a sharp quantitative replacement: for an acute
-pair with maximal principal angle $\alpha$, the canonical rotation $R$ and
-any admissible orthogonal or unitary map $W$ satisfy
-$N(I-R)\leq\sec(\alpha/2)N(I-W)$, with the factor optimal uniformly over
+pair with maximal principal angle $\sym{alphaAngle}$, the canonical rotation $\sym{Rrotation}$ and
+any admissible orthogonal or unitary map $\sym{Wcompetitor}$ satisfy
+$\sym{NormN}(I-\sym{Rrotation})\leq\sec(\alpha/2)\sym{NormN}(I-\sym{Wcompetitor})$, with the factor optimal uniformly over
 unitarily invariant norms. We also formalize the exact trace-norm minimum
 for the real counterexample family. The development supplies reusable
 operator-theoretic foundations and formalizes the principal
@@ -202,13 +202,13 @@ signature is displayed beside the mathematical theorem.
 A review of the source statements also found an incorrect extremal
 claim in Section~4. Proposition~4.4 asserts that, for real subspaces with
 largest principal angle at most $\pi/3$, the canonical direct rotation
-minimizes $N(I-W)$ over all orthogonal maps carrying one subspace onto
-the other, for every unitarily invariant norm $N$. We give a real
+minimizes $\sym{NormN}(I-\sym{Wcompetitor})$ over all orthogonal maps carrying one subspace onto
+the other, for every unitarily invariant norm $\sym{NormN}$. We give a real
 four-dimensional counterexample for every positive acute angle. It is the
 realification of the phase mechanism already exhibited over $\mathbb C$
 by Davis and Kahan themselves \citep[Example~4.2]{davis1970rotation}.
 The formalization pinpoints the invalid Ky Fan inequality in their proof,
-recovers the valid $Q$-norm assertion, and establishes the sharp factor
+recovers the valid $\sym{NormQ}$-norm assertion, and establishes the sharp factor
 $\sec(\alpha/2)$ for arbitrary unitarily invariant norms. The historical
 norm-minimization work of \citet{bolotnikov2001minimal} and subsequent
 Grassmann-angle results \citep{qiu2006grassmann,zhang2007angular,zhang2010canonicalangles}
@@ -231,7 +231,7 @@ Appendix~\ref{app:source-review}.
     for these statements.
   \item We refute Proposition~4.4 within its real short-angle hypotheses,
     prove failure at arbitrarily small angles, and formalize both its
-    $Q$-norm consequence and the sharp universal multiplicative bound for
+    $\sym{NormQ}$-norm consequence and the sharp universal multiplicative bound for
     full displacement. The real counterexample also yields an exact,
     formally verified trace-norm minimum.
   \item We formalize the principal YWS bounds and correct two errors in
@@ -270,10 +270,10 @@ Davis and Kahan distinguish a reference operator $\sym{A}$ from a perturbed oper
 $\sym{A}+\sym{H}$.  For the formal statement we write $\sym{Acurrent}$ for the perturbed full-space
 operator, corresponding to the source's $\sym{A}+\sym{H}$.
 
-Let $E$ be the ambient Hilbert space.  Let $\sym{A0}$ be a self-adjoint operator on a
-trial-coordinate space $F$, and let
+Let $\sym{Eambient}$ be the ambient Hilbert space.  Let $\sym{A0}$ be a self-adjoint operator on a
+trial-coordinate space $\sym{Ftrial}$, and let
 \[
-  \sym{E0}:F\to E
+  \sym{E0}:\sym{Ftrial}\to \sym{Eambient}
 \]
 be an isometric coordinate map for the trial subspace.  The residual compares
 applying the ambient operator after embedding with applying the trial operator
@@ -287,9 +287,9 @@ $\operatorname{dom}(\sym{A0})$ and $\sym{R}$ is the bounded residual that agrees
 The Lean predicate \texttt{IsTrialResidual} packages the isometry, the required
 domain inclusion, and this residual identity.
 
-Let $\sym{F0}:H\to E$ be isometric coordinates for the desired exact spectral
-subspace and let $\sym{F1}:G\to E$ be isometric coordinates for its orthogonal
-complement.  A self-adjoint operator $\sym{Lambda1}$ on $G$ describes the
+Let $\sym{F0}:\sym{Hexact}\to \sym{Eambient}$ be isometric coordinates for the desired exact spectral
+subspace and let $\sym{F1}:\sym{Gunwanted}\to \sym{Eambient}$ be isometric coordinates for its orthogonal
+complement.  A self-adjoint operator $\sym{Lambda1}$ on $\sym{Gunwanted}$ describes the
 complementary spectral block through
 \[
   \sym{Acurrent}\sym{F1} = \sym{F1}\sym{Lambda1}
@@ -300,24 +300,24 @@ orthogonality and completeness of the two coordinate ranges.
 \subsubsection{The sine operator and its rectangular representative}
 
 The source angle operator acts on the trial-coordinate space.  If
-$P=\sym{F0}\like{F0}{F_0^*}$ is the orthogonal projection onto the desired exact subspace, then
+$\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ is the orthogonal projection onto the desired exact subspace, then
 \[
-  \cos\sym{Theta0} = (\like{E0}{E_0^*}P\sym{E0})^{1/2},
+  \cos\sym{Theta0} = (\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2},
   \qquad
-  \sym{sinTheta0} = (I-\like{E0}{E_0^*}P\sym{E0})^{1/2}.
+  \sym{sinTheta0} = (I-\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2}.
 \]
 The analytic proof uses the rectangular complementary block
 \begin{equation}
-  \sym{S}=(I-P)\sym{E0}.
+  \sym{S}=(I-\sym{Pexact})\sym{E0}.
   \label{eq:rectangular-sine}
 \end{equation}
 The source-facing Lean theorem is stated on a positive operator on the
-trial-coordinate space.  The rectangular block has codomain $E$, while the
-positive sine has codomain $F$.  Their relationship is
+trial-coordinate space.  The rectangular block has codomain $\sym{Eambient}$, while the
+positive sine has codomain $\sym{Ftrial}$.  Their relationship is
 \[
   \sym{S}^*\sym{S}
-  = \like{E0}{E_0^*}(I-P)\sym{E0}
-  = I-\like{E0}{E_0^*}P\sym{E0},
+  = \like{E0}{E_0^*}(I-\sym{Pexact})\sym{E0}
+  = I-\like{E0}{E_0^*}\sym{Pexact}\sym{E0},
 \]
 so
 \begin{equation}
@@ -327,10 +327,10 @@ so
 The Lean API constructs the directed angle on trial coordinates by functional
 calculus and defines its sine by applying $\sin$ through the same calculus.
 Under the isometry hypotheses, Lean proves that this operator is exactly the
-modulus $|\sym{S}|$ in \cref{eq:modulus-sine}.  A polar decomposition $\sym{S}=U|\sym{S}|$ and
+modulus $|\sym{S}|$ in \cref{eq:modulus-sine}.  A polar decomposition $\sym{S}=\sym{PolarU}|\sym{S}|$ and
 the ideal laws then imply
 \[
-  N(\sym{S})=N(\sym{sinTheta0})
+  \sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0})
 \]
 whenever the norm is defined.  The rectangular theorem is the analytic proof
 engine; the selected source-facing theorem transports its conclusion to the
@@ -339,11 +339,11 @@ positive sine operator.
 \subsubsection{Gap geometry and the inequality}
 
 Fix $\sym{delta}>0$. The separation hypothesis has the following alternatives.
-For some $\beta\leq\alpha$, one of the two spectra
-$\sigma(\sym{A0})$ and $\sigma(\sym{Lambda1})$ lies in $[\beta,\alpha]$ and the other
+For some $\sym{betaEndpoint}\leq\sym{alphaEndpoint}$, one of the two spectra
+$\sigma(\sym{A0})$ and $\sigma(\sym{Lambda1})$ lies in $[\sym{betaEndpoint},\sym{alphaEndpoint}]$ and the other
 lies in
 \[
- (-\infty,\beta-\sym{delta}]\;\cup\;[\alpha+\sym{delta},\infty).
+ (-\infty,\sym{betaEndpoint}-\sym{delta}]\;\cup\;[\sym{alphaEndpoint}+\sym{delta},\infty).
 \]
 Alternatively, for some real $b$, the operator forms satisfy either
 \[
@@ -361,7 +361,7 @@ alternative, in either spectral order, and these two ordered form alternatives.
 
 Both blocks may be unbounded in an ordered configuration. For instance,
 on $\ell^2(\mathbb N_{\geq1})$, take diagonal operators
-$\sym{A0}e_n=(n+\sym{delta})e_n$ and $\Lambda_1e_n=-ne_n$, on the domains where their
+$\sym{A0}e_n=(n+\sym{delta})e_n$ and $\sym{Lambda1}e_n=-ne_n$, on the domains where their
 images are square summable. They satisfy the first ordered configuration
 with $b=0$, while neither spectrum lies in a finite interval. This example
 explains why retaining the half-infinite alternatives changes the theorem's
@@ -378,14 +378,14 @@ defined above.
 
 \begin{theorem}[Sine-theta estimate]
 \label{thm:sine-theta}
-Let the scalar field be $\mathbb R$ or $\mathbb C$, let $E$ be separable,
+Let the scalar field be $\mathbb R$ or $\mathbb C$, let $\sym{Eambient}$ be separable,
 and let $\sym{Acurrent}$, $\sym{A0}$, and $\sym{Lambda1}$ be self-adjoint operators on the
 Hilbert spaces above. Suppose the isometries, domain inclusions, residual
 identity, exact complementary decomposition, and one of the three gap
-configurations hold. Let $N$ be a supported normalized symmetric
+configurations hold. Let $\sym{NormN}$ be a supported normalized symmetric
 operator-ideal norm. Whenever $\sym{sinTheta0}$ and $\sym{R}$ belong to its domain,
 \begin{equation}
- \sym{delta}\,N(\sym{sinTheta0})\leq N(\sym{R}).
+ \sym{delta}\,\sym{NormN}(\sym{sinTheta0})\leq \sym{NormN}(\sym{R}).
  \label{eq:dk-sine}
 \end{equation}
 \end{theorem}
@@ -441,9 +441,9 @@ residual identity yield the Sylvester relation
 on $\operatorname{dom}(\sym{A0})$, with the left side represented by the bounded
 right side. The separated Sylvester estimate gives
 \[
- \sym{delta} N(\sym{X})\leq N(\like{F1}{F_1^*}\sym{R})\leq N(\sym{R}).
+ \sym{delta} \sym{NormN}(\sym{X})\leq \sym{NormN}(\like{F1}{F_1^*}\sym{R})\leq \sym{NormN}(\sym{R}).
 \]
-Combining this with $N(\sym{X})=N(\sym{S})=N(\sym{sinTheta0})$ proves the conclusion.
+Combining this with $\sym{NormN}(\sym{X})=\sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0})$ proves the conclusion.
 For unbounded operators, deriving the domain compatibility for $\sym{X}$ is part of
 the argument; the displayed relation is not an everywhere-defined composition
 of unbounded maps. The constant-one estimate uses the specified interval or
@@ -483,10 +483,10 @@ estimates for spectrally separated operators.
 
 \subsection{Direct rotations and the geometry of two subspaces}
 
-Let $P$ and $Q$ be the orthogonal projections onto closed subspaces $\sym{Usource}$ and
+Let $\sym{Psource}$ and $\sym{Qtarget}$ be the orthogonal projections onto closed subspaces $\sym{Usource}$ and
 $\sym{Vtarget}$.  Davis and Kahan organize their geometry through the operators obtained
-from $P$, $Q$, and their complements.  In the acute case, the compression
-$PQP$ has no kernel on $\sym{Usource}$ and determines the cosine of the angle operator;
+from $\sym{Psource}$, $\sym{Qtarget}$, and their complements.  In the acute case, the compression
+$\sym{Psource}\sym{Qtarget}\sym{Psource}$ has no kernel on $\sym{Usource}$ and determines the cosine of the angle operator;
 the complementary compression determines its sine.  Polar decomposition then
 supplies the partial isometries that pair the corresponding principal
 subspaces.  Combining these pieces gives the direct rotation, an orthogonal or
@@ -520,21 +520,21 @@ value sequence of a compact operator and symmetric norming functions to encode
 the gauge.  Ky Fan partial sums then provide the bridge from pointwise or
 majorization statements to norm inequalities.
 
-This layer is essential in Section~4.  If $R$ is the direct rotation and $W$
-is any unitary carrying $U$ onto $V$, the restricted displacement has
+This layer is essential in Section~4.  If $\sym{Rrotation}$ is the direct rotation and $\sym{Wcompetitor}$
+is any unitary carrying $\sym{Usource}$ onto $\sym{Vtarget}$, the restricted displacement has
 singular-value extremality strong enough to imply
 unitarily invariant norm minimality.  Davis and Kahan also prove a
 majorization theorem for the squared full displacement
-$(I-W)^*(I-W)$.  Squaring changes the relevant singular values from
-$s_j(I-W)$ to $s_j(I-W)^2$, so a majorization statement at the squared level
+$(I-\sym{Wcompetitor})^*(I-\sym{Wcompetitor})$.  Squaring changes the relevant singular values from
+$s_j(I-\sym{Wcompetitor})$ to $s_j(I-\sym{Wcompetitor})^2$, so a majorization statement at the squared level
 does not automatically imply the corresponding statement for the unsquared
 trace norm.  Proposition~4.4 attempts precisely that stronger passage. The
 counterexample in Section~\ref{sec:prop44} shows where it fails; the
-$Q$-norm assertion and quantitative bound in
+$\sym{NormQ}$-norm assertion and quantitative bound in
 Section~\ref{sec:sharp-displacement} give two valid conclusions.
 
 The same operator-ideal machinery is used in the perturbation inequalities.
-For the sine theorem, the statement $\delta N(S)\leq N(R)$ is meaningful for
+For the sine theorem, the statement $\delta \sym{NormN}(S)\leq \sym{NormN}(\sym{Rrotation})$ is meaningful for
 any supported symmetric operator ideal once both $S$ and the residual belong to
 that ideal.  The formal theorem therefore keeps the source's ``where-defined''
 convention and does not build an accidental finite-dimensional compactness
@@ -544,15 +544,15 @@ assumption into the statement.
 
 The analytic engine behind the sine and tangent estimates is the Sylvester map
 \[
-  X \longmapsto AX-XB.
+  \sym{X} \longmapsto AX-XB.
 \]
 Under the interval/exterior or ordered spectral-gap configurations used above,
 Davis and Kahan obtain lower bounds of the form
 \[
-  \delta\,N(X) \leq N(AX-XB).
+  \delta\,\sym{NormN}(\sym{X}) \leq \sym{NormN}(AX-XB).
 \]
 The perturbation theorems result by identifying the appropriate off-diagonal or
-trial-subspace operator $X$ and rewriting its Sylvester residual in terms of the
+trial-subspace operator $\sym{X}$ and rewriting its Sylvester residual in terms of the
 original perturbation.
 
 The unbounded case forces domain information into this argument.  Expressions
@@ -683,7 +683,7 @@ the positive angle operator and a rectangular Sylvester block.
 
 The real four-dimensional counterexamples to Proposition~4.4 exist at
 arbitrarily small angles. The valid squared-displacement theorem yields
-$Q$-norm minimality, while the general sharp comparison gives a factor
+$\sym{NormQ}$-norm minimality, while the general sharp comparison gives a factor
 $\sec(\alpha/2)$ for unitarily invariant norms. Both the bound and its
 uniform optimality, together with the exact real trace-norm minimum, are
 formalized. The accompanying operator-theoretic foundations are reusable,
@@ -742,7 +742,7 @@ covering $\mathbb{R}$ and $\mathbb{C}$.  A type
 \texttt{ContinuousLinearMap K F E} is a continuous linear map.  A type
 \texttt{LinearPMap K E E} is a linear partial map whose
 domain is a submodule; this is the representation used for possibly unbounded
-operators.  \texttt{N.Mem T} states that the ideal gauge associated with $N$ is
+operators.  \texttt{N.Mem T} states that the ideal gauge associated with $\sym{NormN}$ is
 finite on $T$, and \texttt{N.gaugeReal T} is the corresponding real value.  The
 suffix \texttt{Real} refers to the codomain of the gauge and not to the scalar
 field.
