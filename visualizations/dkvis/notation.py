@@ -62,6 +62,17 @@ SYMBOLS: dict[str, tuple[str, str]] = {
     "Vperp": (r"V^{\perp}", "fg"),
     # Local named-subspace notation (not used in the core sine-theta exposition).
     "U": (r"U", "wanted"),
+    # Transport optimization: U is the source, V the target. These use the
+    # paper's amber-to-blue direction without changing the historical sine-
+    # theta slides, where U is the exact wanted subspace and V is trial.
+    "Usource": (r"U", "trial"),
+    "Vtarget": (r"V", "wanted"),
+    "ProjSource": (r"P_U", "trial"),
+    "ProjTarget": (r"P_V", "wanted"),
+    "Psource": (r"P", "trial"),
+    "Qtarget": (r"Q", "wanted"),
+    "Rrotation": (r"R", "wanted"),
+    "Wcompetitor": (r"W", "trial"),
     # Exact wanted frame / spectrum.
 
     "F0": (r"F_0", "wanted"),

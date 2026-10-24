@@ -45,6 +45,26 @@ For future visual work, use short incremental passes:
 Do not write brittle tests asserting text labels, slide captions, or paragraphs.
 Tests should cover numerical model behavior, deck integrity, and actual helper
 behavior. Inspect rendered outputs for visual correctness.
+## New spectral transport deck: semantic color crosswalk
+
+`novelty-tour` is a separate presentation using the manuscript's transport
+notation: `U` is the **source**, colored amber (`TRIAL`), and `V` is the
+**target**, colored blue (`WANTED`). Its LaTeX uses `\sym{Usource}` and
+`\sym{Vtarget}`, and its projection symbols use `ProjSource`/`ProjTarget`.
+Do not replace these with historical `\sym{U}`/`\sym{V}`: in the older
+sine-theta slides those keys deliberately mean exact wanted `U` (blue) and
+trial `V` (amber). Keep both semantic namespaces and the global palette.
+Principal angles and optimal phases are magenta (`SINE`), thresholds violet
+(`GAP`), and the smoothed objective/optimal cost steel (`CURRENT`).
+
+`novelty-tour` is anchored to the Lean-completed exact finite complex
+Charbonnier optimizer, closed uniqueness cutoff, mixed-angle quartic growth,
+critical-planar failure of quadratic growth, and commuting-unitary correction.
+The scalar worked examples come from `dkvis/novelty_math.py` and have numeric
+regression tests. Higher-rank Schatten and real matching remain conventional
+research drafts and should not become certified conclusion slides until their
+corresponding global Lean endpoints are available.
+
 ## Canonical sine-theta notation
 
 Do not reintroduce `U`/`V` as aliases for the ranges of the sine-theta frames.

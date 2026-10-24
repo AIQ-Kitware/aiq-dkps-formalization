@@ -146,7 +146,7 @@ Current presentations (in addition to the preserved reference decks):
   review and the notation reference. See `briefs/comprehensive.md`.
 - **`study`**: the earlier long-form curriculum, kept as an independent
   composition. See `briefs/deep-study.md`.
-- **`novelty-tour`**: ten independent Manim scenes teaching the new
+- **`novelty-tour`**: thirteen independent Manim scenes teaching the new
   spectral-penalty transport mathematics and distinguishing proved statements
   from active higher-rank and real-field research.
 
@@ -337,15 +337,23 @@ $RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvi
 
 ### Standalone mathematical novelty tour
 
-The `novelty-tour` is a ten-scene presentation about the newer
+The `novelty-tour` is a thirteen-scene presentation about the newer
 spectral-transport optimization mathematics. It uses **exactly** the existing
-Manim role palette: blue for source/wanted `U`, amber for target/trial `V`,
-magenta for principal angles, violet for cutoffs, and steel for the smoothed
-objective. It does not change the older reference or Kitware decks.
+Manim role palette: amber for the *source* `U`, blue for the *target* `V`,
+magenta for principal angles and phase, violet for cutoffs, and steel for the
+smoothed objective. These transport roles agree with the journal's
+`math_symbol_colors.tex`; the existing sine-theta slides keep their historical
+exact-wanted/trial subspace roles. It does not change the older reference or Kitware decks.
 
-Its non-overlapping content regions are maintained in
-`dkvis/novelty_layout.py`; `slides_novelty.py` fits complete Manim groups to
-those regions *after LaTeX typesetting*. The regression checks cover geometry,
+Three additional scenes explain the formalized quartic critical transition,
+the nearest unitary commuting with a prescribed projection, and an exact
+$2\times2$ numerical example showing how the optimal phase changes. The
+numerical curves evaluate the scalar formulas in `dkvis/novelty_math.py`;
+the real matching and higher-rank Schatten formulas remain identified as
+research drafts rather than certified global endpoints.
+
+The content regions are maintained in `dkvis/novelty_layout.py`, and
+`slides_novelty.py` fits complete Manim groups to those regions *after LaTeX typesetting*. The regression checks cover geometry,
 TeX markup, phase-optimum sample values, and deck registration. Render the deck
 and export a **standalone HTML** and PDF handout in one command:
 

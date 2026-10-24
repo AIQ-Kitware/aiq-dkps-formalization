@@ -1,7 +1,11 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Inspected source snapshot:** `b00c5c8c35e1aab826064285c530260fd558da9b` for the source-facing claims below; subsequent Schatten research is recorded separately in this file.
+**Latest source snapshot used for manuscript and visualization updates:**
+`642de34df29a` (24 October 2026, 14:23 source archive). The earlier
+source-facing audit is anchored to `b00c5c8c35e1aab826064285c530260fd558da9b`;
+later smoothed/Schatten developments and their Lean endpoints are separately
+recorded below.
 **Paper:** *Formalizing the Davis--Kahan Perturbation Theorems in Lean*  
 **Scope of this record:** working context for authors and future manuscript agents. This is deliberately **not** an appendix or a source of text to paste into the paper.
 
@@ -9,6 +13,38 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Current article and visualization update (24 October 2026, `642de34d`)
+
+The mathematical claims already included in `smoothed_transport_verified.tex`
+were **not awaiting Lean proof** in this snapshot: the exact complex minimum,
+explicit optimizer, necessity-and-sufficiency of the canonical/global
+uniqueness cutoff, strict quadratic growth, mixed-angle quartic growth,
+critical planar flatness, sharp angle-value sensitivity, and nearest commuting
+unitary with the exact operator-norm commutator criterion all have corresponding
+formalized endpoints. The 29 reviewed Davis--Kahan source targets are unchanged.
+
+The manuscript now gives the commuting application a self-contained numerical
+illustration, anchored in the verified formulas: `tau=1`, source projection
+`diag(1,0)`, and unitary planar rotations at `45` and `80` degrees. It explicitly
+distinguishes the mathematically certified unitary correction from speculative
+physical constraints. The new title reflects both the source formalization and
+mathematical transport extension; it does not claim proof of mathematical
+first-publication priority.
+
+The original novelty review is retained with a new **afternoon reassessment**
+at its top (`MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md`) rather than deleting
+older research history. The `novelty-tour` Manim deck adds focused teaching
+scenes on critical quartic growth, the exact commutator test, and the same
+2x2 numerical example. Reusable palette and color definitions are unchanged.
+
+Remaining priority questions: Do general weighted unitary Procrustes/nuclear
+matrix-nearness theorems imply this combined exact minimum and cutoff? Are the
+critical order-four growth and full uniqueness boundary already expressed
+for this precise transporter feasible set? No negative web search constitutes
+proof of novelty. Real arbitrary-rank matching, global higher-rank Schatten
+optimization, all supercritical minimizer classification, and field-gap
+conjectures remain outside the checked manuscript.
 
 ## Publication scope: mathematical extension ships with the DK paper
 
@@ -87,9 +123,8 @@ Schatten/Charbonnier minimum as two sorted sums, its more general spectral
 penalty reduction to weighted matching, and the sharp dimension-independent
 additive gaps between real and complex nuclear/smoothed transport.
 These full real optimization statements are not yet Lean-certified.
-The unrestricted finite-dimensional complex Schatten minimum for `1 < p < 2`,
-its exact canonical cutoff, the complex Charbonnier minimum, its explicit
-spectral optimizer, and its strict-subcritical stability estimate are fully compiled; real
+The unrestricted complex Charbonnier minimum, its explicit spectral optimizer,
+and its strict-subcritical stability estimate are fully compiled; real
 stationarity and positive submaximal spectral blocks are compiled separately.
 Priority of the optimization contributions remains provisional.
 
@@ -130,8 +165,8 @@ spectral theorem and planar singular-value API: the absolute eigenphases have
 total budget at least `2 theta`, and scaling them down reduces to the scalar
 minimum. The canonical model transport is globally optimal exactly below the
 explicit critical angle, including equality. This closes the unrestricted
-two-dimensional reduction. Independence across principal planes is now proved
-by the unrestricted higher-rank endpoint recorded below.
+two-dimensional reduction; independence across several principal planes is
+still the separate, unformalized higher-rank step.
 
 The balanced-root geometry is now proved in `SchattenPhaseCriticalAngle.lean`:
 the roots have sum below `pi`, their mean is an acute supercritical angle,
@@ -144,62 +179,17 @@ the transition and strictly concave from the transition to the right angle.
 These are scalar value-function theorems, not a certificate that an arbitrary
 matrix competitor has already been reduced to such blocks.
 
-`SchattenGlobalAttainment.lean` now proves
-`exists_unitary_minimizing_schatten_transport_principalAngles_complex`: for arbitrary
-equal-rank subspaces of a finite-dimensional complex Hilbert space and every
-finite `1 < p < 2`, an actual unitary transport attains
-`sum_i phaseMinimum p (K.principalAngles L i)`, and every admissible ambient
-unitary has at least that Schatten displacement power. The statement includes
-zero, repeated, and right principal angles, the zero-dimensional space, and
-competitors mixing principal planes. `SchattenCanonicalOptimality.lean` proves
-`nonacuteDirectRotation_schatten_minimal_iff_complex`: the completed canonical rotation
-is globally optimal exactly when every accepted principal angle is at most
-`arccos ((2-p)/p)`, including equality. Consequently a supercritical angle
-implies a strict improvement by the independently attaining phase construction.
-These are finite-dimensional complex results; no real matching, infinite-ideal,
-all-minimizer, or no-nonglobal-local-minima theorem is inferred.
-
-The proof follows the obstruction exposed by the formalized Proposition 4.4:
-the norm class controls the optimal phase. `SchattenPositiveBasis.lean` collects
-the actual positive-gradient eigenspace bases, including critical levels.
-`SchattenSpectralDecomposition.lean` gives the complete ambient orthogonal sum
-of the paired scalar costs and the self-adjoint gradient-kernel restriction.
-The reusable `Projection/PairedPhase.lean`, `Projection/InvariantSubspace.lean`,
-and `Projection/PairedPhaseTrace.lean` identify its angle sum with the accepted
-principal-angle sequence. `SchattenGlobalLowerBound.lean` combines that identity
-with the kernel reflection inequality and compact attainment to cover every
-admissible unitary. The upper bound constructs independent diagonal phases in
-the canonical paired basis; its shared diagonal-isometry lemma now lives in
-`ForTauCeti/Analysis/InnerProductSpace/DiagonalUnitary.lean`, and the earlier
-smoothed construction consumes it. Both constructions share a strengthened
-canonical basis theorem retaining the reflection action on fixed directions.
-
-The finite complex theorem, conventional proof, scalar phase diagram, displayed
-Lean signature, and canonical cutoff are included by `paper.tex` through
-`schatten_transport_verified.tex`, under Theorem
-`thm:schatten-independent-planes` and Corollary `cor:schatten-canonical-cutoff`.
-The broader `schatten_optimization.tex` consumes this proved core and retains
-the separate unverified extensions below. Mathematical priority remains
-provisional: a completed Lean proof establishes correctness, not first publication.
-The final endpoint and assembly axiom audits contain only `propext`,
-`Classical.choice`, and `Quot.sound`.
-
-Verification on 24 October: `lake build DavisKahan.All ForTauCeti` passed
-(10,279 jobs), including all new donor modules and the paper-facing aggregate.
-A separate `lake env lean` audit printed the final minimum, canonical cutoff,
-full spectral decomposition, and angle-sum theorem axioms and checked the
-unrestricted endpoint signatures. The manuscript was typeset with pdfLaTeX
-and BibTeX in a fresh temporary output directory; font expansion was disabled
-for the installed TeX font set. The 29 historical source targets are unchanged.
-
-The new fixed-field operator endpoints use the repository's `_complex` suffix;
-the evidence rows and displayed signature use those final names. The required
-rename scan reports existing stale upstream/migration references unrelated to
-these declarations. `lake build Challenge` also exposes the unchanged
-`Challenge/MathlibCandidate/CourantFischerWeyl/Leaderboard.lean` reference to
-the absent `TauCeti.abs_eigenvalues_sub_le_opNorm`. The production
-`DavisKahan.All ForTauCeti` build and the new endpoint axiom audits pass
-independently; no new result depends on the Challenge aggregate.
+`schatten_optimization.tex` is a mathematical extension draft that is **not
+included by `paper.tex`**. It gives a conventional proof candidate for the
+unrestricted finite-dimensional complex formula
+`min_W ||I-W||_p^p = sum_j m_p(theta_j)`, where `m_p` is the scalar minimum.
+The proposed reduction uses first variation, a decomposition by the squared
+spectral gradient, and an explicit negative second variation that excludes
+overlapping large-phase spaces. A zero-gradient block is treated by a rank
+bound. Its consequences include the sharp exponent-dependent canonical-angle
+cutoff, the uniform comparison constant `2^(1/p-1/2)`, and a square-root onset
+of the minimizing phase. **These unrestricted, second-variation, and asymptotic
+claims are undergoing proof review and have not been certified in Lean.**
 
 The draft also gives conventional proofs that every local minimum of the
 finite complex transport problem is global, and that the same exact value
@@ -333,8 +323,7 @@ printed theorem is for real symmetric matrices; the draft explains the
 Hermitian extension by realification. Formal identification with the
 actual second derivative is now registered below for two-phase blocks.
 Its ambient paired-block assembly and the resulting spectral-block overlap
-exclusion are now compiled below. The full complex angle-sum minimum is now
-compiled in the global endpoint above. No novelty is claimed for the spectral Hessian theorem.
+exclusion are now compiled below. The full angle-sum minimum remains unfinished. No novelty is claimed for the spectral Hessian theorem.
 
 `TwoPointDerivative.lean` supplies a more focused compiled route to the
 needed Hessian. If a symbol takes the same value at two distinct spectral
@@ -402,28 +391,9 @@ balanced phase representations. `PairedInvolutionDecomposition.lean` supplies
 the reusable orthogonal coordinate construction, including both the swapping
 reflection and the restricted complementary unitary. The strengthened gradient
 block theorem also retains the scalar balance equation in its conclusion.
-The axiom audit lists only the three standard logical axioms. These block arguments are consumed by the now-compiled unrestricted
-higher-rank minimum; they do not individually assert the ambient angle sum.
-
-`SchattenGradientPlanes.lean` now constructs a common orthonormal eigenbasis
-of the actual paired restrictions on every positive submaximal gradient level
-at a constrained local minimum. Orthogonality of the large-phase projections
-leaves only `(a,a)`, `(b,a)`, and `(a,b)`. Every pair attains `m_p` at its mean
-angle, and the sum is the actual Schatten displacement power of the two
-restrictions. A unit source vector in each reflection-paired plane witnesses
-that mean angle through `|<x,Ux>| = cos(theta)`. The maximal-gradient case is
-also compiled: its restrictions are opposite critical scalar phases and its
-cost is the critical scalar minimum times the multiplicity. These statements
-permit empty eigenspaces. `positive_gradient_spectrum_le_max` in
-`SchattenGradientSpectrum.lean` proves by spectral mapping that every positive
-gradient spectral level is at most the scalar amplitude maximum. Thus the
-submaximal and critical estimates exhaust the positive spectral cases.
-The complete decomposition and identification with the ambient accepted
-principal-angle sum are now supplied by `SchattenSpectralDecomposition.lean`
-and `Projection/PairedPhaseTrace.lean`. These block costs support the included
-Theorem `thm:schatten-independent-planes`. The new spectral
-bound, submaximal cost, critical cost, and kernel bound have axiom audits
-containing only `propext`, `Classical.choice`, and `Quot.sound`.
+The axiom audit lists only the three standard logical axioms. The full
+principal-angle cost sum and zero-gradient contribution remain to be assembled;
+the unrestricted higher-rank minimum is not yet Lean-certified.
 
 The zero-gradient restriction is now represented as an actual reflection in
 `SchattenGradientBlocks.lean`: `gradient_kernel_reflection_representation`
@@ -435,14 +405,9 @@ unitary's finite Schatten displacement power is `2^(p-1)` times its nuclear
 displacement, over either scalar field. `SchattenReflectionBound.lean` combines
 this with the existing projection-distance inequality to bound the sum of
 scalar minima over the accepted principal angles for every reflecting
-transporter. The conventional proof now uses this trace argument.
-`SchattenGradientKernel.lean` applies the bound on the actual gradient kernel:
-its unitary restriction maps the source-kernel intersection to the
-target-kernel intersection, is self-adjoint, and dominates the sum over the
-accepted principal angles of that restricted pair. This holds for any unitary
-transporter and every finite exponent at least one, without local minimality.
-The complete ambient spectral and principal-angle assembly is now compiled
-in the global lower-bound theorem recorded above.
+transporter. The conventional proof now uses this trace argument. Applying
+the bound to the restricted source and target, then assembling the complete
+spectral cost sum, remains part of the unfinished global theorem.
 
 `SchattenTransportExistence.lean` proves attainment on every nonempty finite
 unitary transport fiber over real or complex scalars for finite Schatten
@@ -464,7 +429,7 @@ the angle cost is `2 eta sin(theta)-2 tau`. Below it the canonical phase
 is optimal. The scalar proof is a two-focus distance problem on a circle.
 The unrestricted finite-dimensional proof uses an explicit unitary nuclear
 norm support functional in cosine--sine coordinates and does not depend on
-the independently compiled Schatten higher-rank theorem. The same certificate proves
+the unformalized Schatten higher-rank theorem. The same certificate proves
 that relaxation of the commuting unitary factor to a commuting contraction
 has exactly the same minimum, with an explicit diagonal optimal contraction
 and phase recovery. This also solves nearest commuting-unitary correction
@@ -627,8 +592,8 @@ not a classification of every supercritical minimizer. Included as
 nuclear-cost computation in `SmoothedNuclearAttainment.lean` to all supplied
 phases, rather than copying it, and adds the reverse paired-to-accepted
 angle bound in `SmoothedPrincipalAngles.lean`. All former endpoints remain
-consumers. The complex Schatten-p arbitrary-rank minimum is now compiled
-separately; the real matching minimum remains outside this formalization.
+consumers. Original Schatten-p arbitrary-rank and real matching minimum
+claims remain outside this formalization.
 
 The 2026-10-24 primary-source search for this extension checked the statements
 of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.

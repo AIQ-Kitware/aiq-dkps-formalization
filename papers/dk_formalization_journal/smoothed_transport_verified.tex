@@ -504,6 +504,15 @@ Frobenius displacement of the canonical planar rotation. Thus this family
 connects the trace optimum with the classical quadratic minimum while
 locating exactly where the optimizing phase changes.
 
+For unitaries $A,C$ we write
+\[
+ \mathcal E_\tau(A,C)
+  :=\sum_{j=1}^n\rho_\tau(\sigma_j(A-C))
+  =\Psi_\tau(AC^*).
+\]
+The last identity follows from $A-C=(AC^*-I)C$ and unitary
+invariance of singular values.
+
 \begin{corollary}[Exact correction to a commuting unitary]
 \label{cor:smoothed-commuting-correction}
 Let $A$ be unitary and let $P$ project onto $U$. Put $V=A(U)$ and
@@ -559,3 +568,55 @@ For spectral projections this is a correction preserving a selected
 spectral subspace. Nearby commuting-unitary constructions are established
 in approximate symmetry theory \citep{chubb2017approximate}; the result
 above supplies the exact minimum for this spectral penalty.
+
+\subsection{An explicit two-dimensional commuting correction}
+\label{sec:smoothed-worked-example}
+
+Fix $\tau=1$, put $\eta=(1+\sqrt5)/2$, and let
+\[
+ P=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ A_\theta=\begin{pmatrix}\cos\theta&-\sin\theta\\
+                              \sin\theta&\cos\theta\end{pmatrix}
+ \quad (0\leq\theta\leq\pi/2).
+\]
+We regard $A_\theta$ as a complex unitary, and ask for a unitary $C$
+commuting with $P$ that minimizes the spectral cost of $A_\theta-C$.
+The one nonzero principal angle between $\operatorname{ran}P$ and
+$A_\theta(\operatorname{ran}P)$ is $\theta$, while
+$\|A_\theta P-PA_\theta\|_{\mathrm{op}}=\sin\theta$.
+The cutoff is
+\[
+ c_1=\arccos(\eta^{-2})\simeq67.54^\circ,
+ \qquad \sqrt{1-\eta^{-4}}\simeq0.92418.
+\]
+For $\theta\leq c_1$, the unique minimizing correction is $C_*=I$.
+For $\theta>c_1$, the two distinct commuting unitaries
+\[
+ C_\pm=e^{\pm i\delta_*(\theta)}I,
+ \qquad\delta_*(\theta)=\arccos(\eta^2\cos\theta),
+\]
+attain the global minimum; the canonical correction $I$ has strictly
+larger cost. The correction therefore changes from a zero phase to a
+nonzero phase at the same threshold detected by the commutator norm.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+$\theta$ & $\|A_\theta P-PA_\theta\|_{\mathrm{op}}$
+ & minimizing phase $|\delta_*|$
+ & $\min_C\mathcal E_1(A_\theta,C)$ & $\mathcal E_1(A_\theta,I)$ \\
+\midrule
+$45^\circ$ & $0.70711$ & $0^\circ$ & $0.51856$ & $0.51856$ \\
+$80^\circ$ & $0.98481$ & $62.96^\circ$ & $1.18690$ & $1.25742$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The numbers are evaluations of the exact formulas in
+\cref{thm:smoothed-transport,cor:smoothed-commuting-correction}.
+They illustrate a symmetry-preserving matrix correction and provide a
+small reproducible benchmark for a unitary-constrained numerical solver.
+The theorem assumes a finite-dimensional complex unitary and a projection;
+additional hardware, locality, or noise constraints would require a
+different feasible set.

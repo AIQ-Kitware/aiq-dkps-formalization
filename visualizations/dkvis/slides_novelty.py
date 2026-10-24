@@ -81,32 +81,34 @@ def place(slide: DeckSlide, slot: str, mob, *, align_top: bool = False):
 
 def principal_plane(theta: float = 0.9, *, show_caption: bool = True) -> VGroup:
     """A simple 2D principal-plane picture with the same role colors as the
-    main decks: source subspace blue, target subspace amber, turning angle pink.
+    Manim role palette: source subspace amber, target subspace blue,
+    turning angle magenta.  This matches the paper's transport notation;
+    older sine-theta slides retain their own exact-wanted/trial meanings.
     """
 
     origin = np.array([0.0, 0.0, 0.0])
     radius = 2.15
     x_axis = axis_line(origin + LEFT * 2.5, origin + RIGHT * 2.6)
     y_axis = axis_line(origin + DOWN * 2.0, origin + UP * 2.15)
-    u = Line(origin, origin + np.array([radius, 0.0, 0.0]), color=WANTED, stroke_width=5)
+    u = Line(origin, origin + np.array([radius, 0.0, 0.0]), color=TRIAL, stroke_width=5)
     v = Line(
         origin,
         origin + np.array([radius * np.cos(theta), radius * np.sin(theta), 0.0]),
-        color=TRIAL,
+        color=WANTED,
         stroke_width=5,
     )
-    u_back = Line(origin, origin + np.array([-0.55 * radius, 0.0, 0.0]), color=WANTED, stroke_width=3, stroke_opacity=0.45)
+    u_back = Line(origin, origin + np.array([-0.55 * radius, 0.0, 0.0]), color=TRIAL, stroke_width=3, stroke_opacity=0.45)
     v_back = Line(
         origin,
         origin + np.array([-0.55 * radius * np.cos(theta), -0.55 * radius * np.sin(theta), 0.0]),
-        color=TRIAL,
+        color=WANTED,
         stroke_width=3,
         stroke_opacity=0.45,
     )
     dot = Dot(origin, radius=0.04, color=FG)
     ang = Arc(radius=0.72, start_angle=0.0, angle=theta, color=SINE, stroke_width=4)
-    u_lab = math(r"\sym{U}", size=30, color=WANTED).move_to(origin + np.array([2.45, -0.25, 0.0]))
-    v_lab = math(r"\sym{V}", size=30, color=TRIAL).move_to(origin + np.array([2.05 * np.cos(theta) + 0.42, 2.05 * np.sin(theta) + 0.15, 0.0]))
+    u_lab = math(r"\sym{Usource}", size=30, color=TRIAL).move_to(origin + np.array([2.45, -0.25, 0.0]))
+    v_lab = math(r"\sym{Vtarget}", size=30, color=WANTED).move_to(origin + np.array([2.05 * np.cos(theta) + 0.42, 2.05 * np.sin(theta) + 0.15, 0.0]))
     t_lab = math(r"\sym{theta}", size=28, color=SINE).move_to(
         np.array([0.94 * np.cos(theta / 2), 0.94 * np.sin(theta / 2) + 0.12, 0.0])
     )
@@ -175,8 +177,8 @@ class N00Title(DeckSlide):
             para(
                 r"We already know the classical $\,\sin\Theta\,$ bounds and the"
                 r" Proposition 4.4 refutation. The newer program asks a different"
-                r" question: among all feasible ambient transports taking $\sym{U}$ to"
-                r" $\sym{V}$, which one minimizes a chosen spectral penalty of"
+                r" question: among all feasible ambient transports taking $\sym{Usource}$ to"
+                r" $\sym{Vtarget}$, which one minimizes a chosen spectral penalty of"
                 r" $I-W$?",
                 width=6.2,
                 size=27,
@@ -221,8 +223,8 @@ class N01ThreeStories(DeckSlide):
                 [
                     r"complex equal-rank Charbonnier minimum formalized",
                     r"explicit optimizer via a spectral phase correction",
-                    r"quantitative stability below a phase-transition angle",
-                    r"currently the strongest completed candidate for genuinely new mathematics",
+                    r"quadratic growth below and quartic growth through the cutoff",
+                    r"exact uniqueness test and closest commuting-unitary correction",
                 ],
             ),
             (
@@ -273,8 +275,8 @@ class N02OptimizationProblem(DeckSlide):
         place(self, "diagram", pic)
 
         defs = VGroup(
-            math(r"W(\sym{U}) = \sym{V}", size=34),
-            math(r"D_{\rho}(\sym{U},\sym{V}) = \min_{W:\,W\sym{U}=\sym{V}} \sum_j \rho\!\left(\sigma_j(I-W)\right)", size=29),
+            math(r"W(\sym{Usource}) = \sym{Vtarget}", size=34),
+            math(r"D_{\rho}(\sym{Usource},\sym{Vtarget}) = \min_{W:\,W\sym{Usource}=\sym{Vtarget}} \sum_j \rho\!\left(\sigma_j(I-W)\right)", size=29),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         place(self, "definitions", defs)
 
@@ -314,8 +316,8 @@ class N03LowerBound(DeckSlide):
         left = place(self, "diagram", principal_plane(theta=0.78))
         floor = VGroup(
             tex(r"For every unitarily invariant seminorm $N$ and every feasible $W$:", size=25, color=MUTED),
-            math(r"N(P_{\sym{U}}-P_{\sym{V}}) \le N(I-W)", size=38),
-            math(r"N\!\left(\left|P_{\sym{U}}-P_{\sym{V}}\right|\right) \le N(I-W)", size=34, color=SINE),
+            math(r"N(\sym{ProjSource}-\sym{ProjTarget}) \le N(I-W)", size=38),
+            math(r"N\!\left(\left|\sym{ProjSource}-\sym{ProjTarget}\right|\right) \le N(I-W)", size=34, color=SINE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         floor_box = place(self, "theorem", boxed(floor, color=SINE, pad=0.25))
 
@@ -356,14 +358,14 @@ class N04ComplexTrace(DeckSlide):
     def body(self) -> None:
         theorem = VGroup(
             tex(r"Finite-dimensional complex equal-rank theorem:", size=26, color=MUTED),
-            math(r"\min_{W:\,W\sym{U}=\sym{V}} \norm{I-W}_{1} = \operatorname{tr}\left|P_{\sym{U}}-P_{\sym{V}}\right| = 2\sum_{i=1}^{k} \sin\theta_i", size=33),
+            math(r"\min_{W:\,W\sym{Usource}=\sym{Vtarget}} \norm{I-W}_{1} = \operatorname{tr}\left|\sym{ProjSource}-\sym{ProjTarget}\right| = 2\sum_{i=1}^{k} \sin\theta_i", size=33),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         theorem_box = place(self, "theorem", boxed(theorem, color=WANTED, pad=0.24))
 
         phase = VGroup(
             tex(r"Optimal transporter (one explicit form):", size=25, color=MUTED),
             math(r"T_{\star}=R(C-iS)\quad\text{or}\quad R(C+iS)", size=34, color=CURRENT),
-            math(r"C=\cos\Theta,\qquad S=\left|P_{\sym{U}}-P_{\sym{V}}\right|", size=31, color=SINE),
+            math(r"C=\cos\Theta,\qquad S=\left|\sym{ProjSource}-\sym{ProjTarget}\right|", size=31, color=SINE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         place(self, "construction", phase)
 
@@ -414,9 +416,9 @@ class N05SmoothedTransport(DeckSlide):
 
         right = VGroup(
             tex(r"Global complex equal-rank minimum:", size=24, color=MUTED),
-            math(r"\min_{W:\,W\sym{U}=\sym{V}} \Psi_{\tau}(W)=\sum_{i=1}^{k} \mu_{\tau}(\theta_i)", size=30),
+            math(r"\min_{W:\,W\sym{Usource}=\sym{Vtarget}} \Psi_{\tau}(W)=\sum_{i=1}^{k} \mu_{\tau}(\theta_i)", size=30),
             tex(r"Above the threshold, a nonzero phase correction appears:", size=24, color=MUTED),
-            math(r"\delta_{\star}(\theta)=\arccos\!\left(\eta^{2}\cos\theta\right)\qquad (\theta\ge \theta_c(\tau))", size=29, color=TRIAL),
+            math(r"\delta_{\star}(\theta)=\arccos\!\left(\eta^{2}\cos\theta\right)\qquad (\theta\ge \theta_c(\tau))", size=29, color=SINE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
         place(self, "minimum", right)
 
@@ -628,8 +630,8 @@ class N08ComplexVsReal(DeckSlide):
 
 
 class N09StatusBoard(DeckSlide):
-    title = "What you can say today"
-    kicker = r"Use the strongest completed theorem aggressively; separate it from drafted extensions"
+    title = "What the current formalization proves"
+    kicker = r"Exact optimization and critical stability are certified; global real matching remains research"
     section = SECTION
 
     def body(self) -> None:
@@ -639,7 +641,9 @@ class N09StatusBoard(DeckSlide):
                 wrapped_bullets(
                     r"Exact smoothed complex equal-rank minimum",
                     r"Explicit smoothed optimizer",
-                    r"Subcritical quadratic growth inequality",
+                    r"Canonical/global uniqueness at the exact cutoff",
+                    r"Quadratic and quartic objective-error bounds",
+                    r"Exact commuting-unitary correction criterion",
                     r"Planar complex Schatten $1<p<2$ transition",
                     width=3.78,
                     size=21,
@@ -681,11 +685,10 @@ class N09StatusBoard(DeckSlide):
         place(self, "working", right, align_top=True)
 
         finish = para(
-            r"If you want one headline: \emph{the repository already contains a"
-            r" formalized exact theory of complex smoothed spectral transport, including"
-            r" an explicit optimizer and a quantitative stability inequality.} That is"
-            r" the anchor. The broader Schatten and real-field theories are the next"
-            r" frontier.",
+            r"The Lean development proves an \emph{exact complex smoothed-transport"
+            r" theory}, including uniqueness through the cutoff, quartic critical"
+            r" growth, and an exact symmetry-preserving correction."
+            r" Mathematical first-publication priority is still being investigated.",
             width=12.15,
             size=24,
             color=MUTED,
@@ -699,3 +702,227 @@ class N09StatusBoard(DeckSlide):
             " theorem."
         )
         self.play(FadeIn(left), FadeIn(mid), FadeIn(right), FadeIn(finish), run_time=1.0)
+
+
+class N06CriticalFlatness(DeckSlide):
+    """The formalized order-four transition, distinguished from quadratic growth."""
+
+    title = "At the cutoff, stability becomes quartic"
+    kicker = r"The canonical rotation remains uniquely optimal at equality, but quadratic growth fails there"
+    section = SECTION
+
+    def body(self) -> None:
+        formulas = VGroup(
+            tex(r"For $n\ge1$ and all principal angles $\theta_j\le\theta_c(\tau)$:", size=25, color=MUTED),
+            math(
+                r"\Psi_{\tau}(W)-\Psi_{\tau}(R)"
+                r"\ \ge\ \frac{3\tau}{32\eta^4n}\,\norm{W-R}_F^4",
+                size=34, color=CURRENT,
+            ),
+            tex(r"At equality a critical principal plane has genuinely fourth-order cost growth.", size=23, color=MUTED),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        theorem = place(self, "theorem", boxed(formulas, color=CURRENT, pad=0.20))
+
+        # Literal scalar-phase cost excess G(e^{it}), from SmoothedCriticalFlatness.
+        # The quadratic guide agrees at t=0.8; it is not a lower bound.
+        from dkvis.novelty_math import critical_phase_excess
+
+        tau = 1.0
+        stop = 0.8
+        xmax = 0.9
+        y_top = 0.035
+        axes = Axes(
+            x_range=[0, xmax, 0.2], y_range=[0, y_top, 0.01],
+            x_length=5.0, y_length=2.5,
+            axis_config={"color": FAINT, "stroke_width": 2}, tips=False,
+        )
+        actual = axes.plot(
+            lambda t: critical_phase_excess(tau, t), x_range=[0, stop],
+            color=CURRENT, stroke_width=4,
+        )
+        endpoint = critical_phase_excess(tau, stop)
+        quadratic = axes.plot(
+            lambda t: endpoint * (t / stop) ** 2, x_range=[0, stop],
+            color=MUTED, stroke_width=2,
+        )
+        xlab = math(r"t", size=23).next_to(axes.get_x_axis(), DOWN, buff=0.12)
+        axis_title = tex(r"critical phase path, $\tau=1$", size=23, color=MUTED).next_to(axes, UP, buff=0.12)
+        leg = VGroup(
+            tex(r"solid: actual objective gap", size=19, color=CURRENT),
+            tex(r"gray: matched quadratic guide", size=19, color=MUTED),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(xlab, DOWN, buff=0.10)
+        chart = VGroup(axes, actual, quadratic, xlab, axis_title, leg)
+        place(self, "plot", chart)
+
+        lessons = wrapped_bullets(
+            r"At $\theta_j<\theta_c$, every near-minimizer obeys a quadratic bound.",
+            r"At $\theta_j=\theta_c$, uniqueness persists and a quartic bound holds globally.",
+            r"The planar phase excess is asymptotic to a positive multiple of $|z-1|^4$.",
+            r"No positive quadratic-growth coefficient works locally on the critical plane.",
+            width=5.75, size=22, buff=0.17,
+        )
+        place(self, "explanation", lessons)
+
+        takeaway = para(
+            r"The fourth-order exponent is optimal at the transition."
+            r" The displayed global constant is explicit, but no claim of its"
+            r" sharpness is made.",
+            width=12.2, size=24, color=GAP,
+        )
+        place(self, "takeaway", takeaway)
+        self.say(
+            "The new formalized result goes beyond subcritical quadratic stability."
+            " At the exact phase cutoff, the canonical rotation remains unique,"
+            " but the objective grows to fourth rather than second order along a"
+            " real feasible phase path. The chart shows the literal critical cost"
+            " compared with a quadratic guide chosen to agree at the right endpoint."
+        )
+        self.play(FadeIn(theorem), FadeIn(chart), FadeIn(lessons), FadeIn(takeaway), run_time=1.1)
+
+
+class N08CommutingCorrection(DeckSlide):
+    """An exact application: correcting a unitary to preserve one projection."""
+
+    title = "An exact symmetry-preserving unitary correction"
+    kicker = r"A commutator norm decides whether the canonical correction is uniquely optimal"
+    section = SECTION
+
+    def body(self) -> None:
+        picture = VGroup(
+            principal_plane(theta=0.90, show_caption=False),
+            math(r"A(\sym{Usource})=\sym{Vtarget}", size=28),
+        ).arrange(DOWN, buff=0.17)
+        place(self, "diagram", picture)
+
+        statement = VGroup(
+            tex(r"Given a unitary $A$ and an orthogonal projection $P$:", size=24, color=MUTED),
+            math(r"\mathcal E_\tau(A,C)=\sum_j\rho_\tau(\sigma_j(A-C))", size=28, color=CURRENT),
+            math(
+                r"\min_{\substack{C^*C=I\\CP=PC}}\ \mathcal E_\tau(A,C)"
+                r"=\sum_j\mu_\tau(\theta_j)",
+                size=29, color=CURRENT,
+            ),
+            math(r"C_{\mathrm{can}}=R^*A", size=29, color=WANTED),
+            math(
+                r"C_{\mathrm{can}}\text{ uniquely optimal}"
+                r"\iff \norm{AP-PA}_{\mathrm{op}}\le\sqrt{1-\eta^{-4}}",
+                size=30,
+            ),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        theorem = place(self, "theorem", boxed(statement, color=CURRENT, pad=0.22))
+
+        notes = wrapped_bullets(
+            r"$C_*$ is an actual unitary preserving $\operatorname{ran}P$ and its complement.",
+            r"$\norm{AP-PA}_{\mathrm{op}}$ can be computed without identifying every principal angle.",
+            r"The inequality includes equality; above it, phase-adjusted minimizers are distinct.",
+            r"The formal theorem covers arbitrary finite-dimensional complex unitary inputs.",
+            width=6.20, size=21,
+        )
+        place(self, "bullets", notes)
+        takeaway = para(
+            r"The commuting condition is an exact mathematical constraint."
+            r" Circuit locality, gate synthesis, and noise channels would impose"
+            r" additional restrictions on the feasible correction.",
+            width=12.1, size=23, color=MUTED,
+        )
+        place(self, "takeaway", takeaway)
+
+        self.say(
+            "Here is an application that follows exactly from the new theorem."
+            " We start with a unitary A and an important subspace represented by"
+            " projection P. We seek the closest unitary correction commuting with P."
+            " The cutoff is a directly computable operator norm of the commutator."
+            " Below and at the cutoff the canonical correction is uniquely optimal."
+        )
+        self.play(FadeIn(picture), FadeIn(theorem), FadeIn(notes), FadeIn(takeaway), run_time=1.1)
+
+
+class N08NumericalCorrection(DeckSlide):
+    """Two-angle computed example: spectral optimum versus canonical correction."""
+
+    title = "A two-dimensional example"
+    kicker = r"The same threshold separates a unique zero-phase correction from phase-adjusted optima"
+    section = SECTION
+
+    def body(self) -> None:
+        from dkvis.novelty_math import (
+            smoothing_radius, smoothed_cutoff, canonical_smoothed_cost,
+            optimal_smoothed_cost, optimal_smoothed_phase,
+        )
+
+        tau = 1.0
+        cutoff = np.rad2deg(smoothed_cutoff(tau))
+        axes = Axes(
+            x_range=[0, 90, 20], y_range=[0, 1.5, 0.5],
+            x_length=6.0, y_length=3.5,
+            axis_config={"color": FAINT, "stroke_width": 2}, tips=False,
+        )
+        canonical = axes.plot(
+            lambda deg: canonical_smoothed_cost(tau, np.deg2rad(deg)),
+            x_range=[0, 90], color=WANTED, stroke_width=3,
+        )
+        optimal = axes.plot(
+            lambda deg: optimal_smoothed_cost(tau, np.deg2rad(deg)),
+            x_range=[0, 90], color=CURRENT, stroke_width=4,
+        )
+        limit = DashedLine(
+            axes.c2p(cutoff, 0), axes.c2p(cutoff, 1.40),
+            color=GAP, stroke_width=2, dash_length=0.08,
+        )
+        marker = Dot(
+            axes.c2p(cutoff, optimal_smoothed_cost(tau, np.deg2rad(cutoff))),
+            radius=0.045, color=GAP,
+        )
+        xlabel = math(r"\sym{theta}\ (\text{degrees})", size=22).next_to(axes, DOWN, buff=0.12)
+        legend = VGroup(
+            tex(r"blue: canonical correction", size=20, color=WANTED),
+            tex(r"steel: global minimum", size=20, color=CURRENT),
+            math(r"\theta_c\approx 67.54^\circ", size=21, color=GAP),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(axes, UP, buff=0.12)
+        graph = VGroup(axes, canonical, optimal, limit, marker, xlabel, legend)
+        place(self, "plot", graph)
+
+        alpha = np.deg2rad(45)
+        high = np.deg2rad(80)
+        low_card = boxed(
+            VGroup(
+                math(r"\sym{theta}=45^\circ", size=30, color=SINE),
+                tex(r"commutator norm $0.70711$", size=22, color=MUTED),
+                math(r"C_*=I\quad\text{(unique)}", size=28),
+                math(r"\mathcal E_{\min}=0.51856", size=26, color=CURRENT),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.13),
+            color=WANTED, pad=0.23,
+        )
+        high_card = boxed(
+            VGroup(
+                math(r"\sym{theta}=80^\circ", size=30, color=SINE),
+                tex(r"commutator norm $0.98481$", size=22, color=MUTED),
+                math(r"C_\pm=e^{\pm i62.96^\circ}I", size=28, color=CURRENT),
+                math(r"\mathcal E_{\min}=1.18690", size=26, color=CURRENT),
+                math(r"\mathcal E(A,I)=1.25742", size=25, color=WANTED),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.13),
+            color=TRIAL, pad=0.23,
+        )
+        # Non-renderer checks: the labels above must evaluate the exact model.
+        assert np.isclose(optimal_smoothed_phase(tau, alpha), 0.0)
+        assert np.isclose(np.rad2deg(optimal_smoothed_phase(tau, high)), 62.95971681332988, atol=1e-6)
+        assert np.isclose(optimal_smoothed_cost(tau, high), 1.1869048335163286, atol=1e-6)
+        assert np.isclose(smoothing_radius(tau), (1 + np.sqrt(5)) / 2)
+        cards = VGroup(low_card, high_card).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
+        place(self, "examples", cards)
+
+        final = para(
+            r"For $P=\operatorname{diag}(1,0)$ and $A_\theta$ a real planar"
+            r" rotation viewed as a complex unitary, both curves are exact."
+            r" Above the cutoff the canonical correction $I$ costs more.",
+            width=12.0, size=23, color=MUTED,
+        )
+        place(self, "takeaway", final)
+        self.say(
+            "For tau one, the critical angle is approximately 67.54 degrees."
+            " At 45 degrees, the identity is the unique closest commuting correction."
+            " At 80 degrees, a pair of nonzero scalar phases are globally optimal."
+            " The gap between the blue canonical and steel optimal curves appears"
+            " precisely above the violet cutoff."
+        )
+        self.play(FadeIn(graph), FadeIn(cards), FadeIn(final), run_time=1.1)

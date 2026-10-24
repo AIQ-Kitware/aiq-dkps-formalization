@@ -24,8 +24,11 @@ NOVELTY_TOUR_ORDER = [
     "N04ComplexTrace",
     "N05SmoothedTransport",
     "N06SmoothedStability",
+    "N06CriticalFlatness",
     "N07SchattenTransition",
     "N08ComplexVsReal",
+    "N08CommutingCorrection",
+    "N08NumericalCorrection",
     "N09StatusBoard",
 ]
 

@@ -86,6 +86,12 @@ LAYOUTS: dict[str, dict[str, Region]] = {
         "bullets": Region(L, -0.22, BOTTOM, 0.17),
         "interpretation": Region(0.22, R, BOTTOM, 0.17),
     },
+    "N06CriticalFlatness": {
+        "theorem": Region(L, R, 0.48, BODY_TOP),
+        "plot": Region(L, -0.20, -2.41, 0.28),
+        "explanation": Region(0.24, R, -2.41, 0.28),
+        "takeaway": Region(L, R, BOTTOM, -2.59),
+    },
     "N07SchattenTransition": {
         "theorem": Region(L, R, 0.41, BODY_TOP),
         "left_plot": Region(L, -0.24, -2.49, 0.20),
@@ -97,6 +103,17 @@ LAYOUTS: dict[str, dict[str, Region]] = {
         "complex": Region(L, -0.23, -1.52, BODY_TOP),
         "real": Region(0.23, R, -1.52, BODY_TOP),
         "takeaway": Region(L, R, BOTTOM, -1.76),
+    },
+    "N08CommutingCorrection": {
+        "diagram": Region(L, -0.66, -2.34, BODY_TOP),
+        "theorem": Region(-0.29, R, -0.34, BODY_TOP),
+        "bullets": Region(-0.29, R, -2.34, -0.50),
+        "takeaway": Region(L, R, BOTTOM, -2.54),
+    },
+    "N08NumericalCorrection": {
+        "plot": Region(L, 0.37, -2.43, BODY_TOP),
+        "examples": Region(0.69, R, -2.43, BODY_TOP),
+        "takeaway": Region(L, R, BOTTOM, -2.61),
     },
     "N09StatusBoard": {
         "strong": Region(L, -2.23, -2.14, BODY_TOP),
