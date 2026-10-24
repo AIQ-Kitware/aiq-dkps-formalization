@@ -59,6 +59,22 @@ theorem weightedPhaseSymbol_eq_clip (a b c : ℝ) (hb : 0 < b) (ha : 0 ≤ a)
 def weightedPhaseFactor (a b : ℝ) (C : E →L[ℂ] E) : E →L[ℂ] E :=
   cfc (weightedPhaseSymbol a b) C
 
+/-- The real part prescribed for every optimal phase factor: the
+amplified principal cosine, clipped at one. -/
+@[expose]
+def clippedWeightedCosine (a b : ℝ) (C : E →L[ℂ] E) : E →L[ℂ] E :=
+  cfc (fun z : ℂ => ((min 1 (a * z.re / b) : ℝ) : ℂ)) C
+
+/-- The clipped cosine acts by the clipped scalar on every real cosine
+eigenvector. Finite spectral calculus permits arbitrary multiplicities. -/
+theorem clippedWeightedCosine_apply_of_apply_eq_smul_complex
+    (a b c : ℝ) (C : E →L[ℂ] E) [IsStarNormal C] (x : E)
+    (hx : C x = (c : ℂ) • x) :
+    clippedWeightedCosine a b C x = ((min 1 (a * c / b) : ℝ) : ℂ) • x := by
+  rw [clippedWeightedCosine,
+    ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal _ hx]
+  simp only [Complex.ofReal_re]
+
 /-- The spectral phase factor is unitary for every finite normal operator;
 the symbol has modulus one even away from the principal-cosine interval. -/
 theorem weightedPhaseFactor_mem_unitary (a b : ℝ) (C : E →L[ℂ] E)

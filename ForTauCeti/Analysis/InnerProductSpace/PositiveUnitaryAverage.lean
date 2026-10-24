@@ -141,4 +141,56 @@ theorem eq_star_of_unitary_sum_eq_two_smul_of_injective
     _ = star (U : E →L[𝕜] E) (D x) := hrange x
     _ = _ := congrArg (fun T : E →L[𝕜] E => T x) hstar
 
+/-- On every nonzero eigenspace of a positive twisted average, the
+unitary has the prescribed real part and commutes with the self-adjoint
+unitary grading. No finite-dimensional or closed-range assumption is used. -/
+theorem rigidity_of_unitary_twisted_average_on_eigenvector
+    (U S : unitary (E →L[𝕜] E)) (hS : IsSelfAdjoint (S : E →L[𝕜] E))
+    (D : E →L[𝕜] E) (hD : D.IsPositive)
+    (havg : (U : E →L[𝕜] E) + (S : E →L[𝕜] E) * star (U : E →L[𝕜] E) *
+      (S : E →L[𝕜] E) = (2 : 𝕜) • D)
+    (mu : 𝕜) (hmu : mu ≠ 0) (x : E) (hx : D x = mu • x) :
+    (U : E →L[𝕜] E) x + star (U : E →L[𝕜] E) x = (2 * mu) • x ∧
+      (U : E →L[𝕜] E) ((S : E →L[𝕜] E) x) =
+        (S : E →L[𝕜] E) ((U : E →L[𝕜] E) x) := by
+  let V := S * star U * S
+  have havg' : (U : E →L[𝕜] E) + (V : E →L[𝕜] E) = (2 : 𝕜) • D := havg
+  have hcomm := (commute_of_unitary_sum_eq_two_smul U V D hD havg').1
+  have hrange := (unitary_sum_eq_two_smul_range_kernel U V D hD havg').1
+  have hSS (y : E) : (S : E →L[𝕜] E) ((S : E →L[𝕜] E) y) = y := by
+    have h := congrArg (fun T : E →L[𝕜] E => T y) (Unitary.star_mul_self_of_mem S.property)
+    rwa [hS.star_eq] at h
+  have hleft (y : E) : star (U : E →L[𝕜] E) ((U : E →L[𝕜] E) y) = y :=
+    congrArg (fun T : E →L[𝕜] E => T y) (Unitary.star_mul_self_of_mem U.property)
+  have hright (y : E) : (U : E →L[𝕜] E) (star (U : E →L[𝕜] E) y) = y :=
+    congrArg (fun T : E →L[𝕜] E => T y) (Unitary.mul_star_self_of_mem U.property)
+  have hadj (y : E) (hy : D y = mu • y) :
+      (S : E →L[𝕜] E) (star (U : E →L[𝕜] E) ((S : E →L[𝕜] E) y)) =
+        star (U : E →L[𝕜] E) y := by
+    have h := hrange y
+    rw [hy, map_smul, map_smul] at h
+    exact smul_right_injective E hmu h
+  have hstarcomm (y : E) (hy : D y = mu • y) :
+      star (U : E →L[𝕜] E) ((S : E →L[𝕜] E) y) =
+        (S : E →L[𝕜] E) (star (U : E →L[𝕜] E) y) := by
+    apply (Unitary.linearIsometryEquiv S).injective
+    change (S : E →L[𝕜] E) (star (U : E →L[𝕜] E) ((S : E →L[𝕜] E) y)) =
+      (S : E →L[𝕜] E) ((S : E →L[𝕜] E) (star (U : E →L[𝕜] E) y))
+    rw [hadj y hy, hSS]
+  refine ⟨?_, ?_⟩
+  · have h := congrArg (fun T : E →L[𝕜] E => T x) havg
+    change (U : E →L[𝕜] E) x +
+      (S : E →L[𝕜] E) (star (U : E →L[𝕜] E) ((S : E →L[𝕜] E) x)) =
+        (2 : 𝕜) • D x at h
+    simpa only [hadj x hx, hx, smul_smul] using h
+  · have heig : D ((U : E →L[𝕜] E) x) = mu • (U : E →L[𝕜] E) x := by
+      have h := congrArg (fun T : E →L[𝕜] E => T x) hcomm.eq
+      change (U : E →L[𝕜] E) (D x) = D ((U : E →L[𝕜] E) x) at h
+      rw [hx, map_smul] at h
+      exact h.symm
+    have h := congrArg (fun y => (U : E →L[𝕜] E) y)
+      (hstarcomm ((U : E →L[𝕜] E) x) heig)
+    rw [hleft, hright] at h
+    exact h.symm
+
 end ContinuousLinearMap

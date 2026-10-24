@@ -274,6 +274,52 @@ $\operatorname{Re}\langle e_j^\pm,Ze_j^\pm\rangle
 Since $Z=W^*R$, fixation by $Z$ means agreement of $W$ with $R$.
 \end{proof}
 
+\begin{proposition}[Spectral separation of every optimizer]
+\label{prop:smoothed-optimizer-separation}
+Let $W$ be any global minimizer, let $C=\sqrt{I-(P-Q)^2}$, and put
+$Z=W^*R$. Then $W$ and $Z$ commute with $C$. On every eigenspace
+$Cx=cx$ with $c>0$,
+\[
+ (Z+Z^*)x=2\min\{1,\eta^2c\}\,x,
+ \qquad ZRx=RZx.
+\]
+On the right-angle defect space $\ker C$, one has $Wx=W^*x$.
+Thus unequal principal angles cannot be mixed by a global optimizer;
+within each positive-cosine space its two opposite rotation phases
+are preserved separately.
+\end{proposition}
+
+\begin{proof}
+In a rotation eigenbasis define the self-adjoint unitary $S$ by
+$Se_j^\pm=\pm e_j^\pm$ and $Sf_\ell=f_\ell$. Put
+$B=\min\{I,(a/b)C\}$ and $F=\sqrt{I-C^2}$, so that
+$R=C+iSF$. The preceding proposition fixes every direction with
+$a\cos\theta\geq b$, as well as the fixed directions. Their orthogonal
+complement is invariant under $Z$. On that complement the dual unitary
+is $iS$, and self-adjointness of its displacement reads
+\[
+ aF-iaSC+ibSZ=aF+iaSC-ibZ^*S.
+\]
+Multiplication by $S$ gives $Z+SZ^*S=2(a/b)C$. On the fixed part
+the same identity holds with right side $2I$. Consequently, throughout
+the ambient space,
+\[
+ Z+SZ^*S=2B\geq0.
+\]
+
+If two unitaries $U,V$ satisfy $U+V=2B\geq0$, then
+$UB=BV^*$ and $V^*B=BU$. Hence $U$ commutes with $B^2$ and therefore
+with its positive square root $B$. The same equations give $V=U^*$
+on $\operatorname{ran}B$. Apply this to $U=Z$, $V=SZ^*S$.
+Since $C-(b/a)B$ is supported on directions fixed by $Z$, it also
+commutes with $Z$, proving commutation with $C$ and then with $W=RZ^*$.
+On each positive-cosine eigenspace $B$ has nonzero scalar value
+$\min\{1,(a/b)c\}$, so the average gives the stated real part and
+commutation with $S$. The reconstruction $R=C+iSF$ gives commutation
+with $R$ there. Finally, on $\ker C$ one has $R=iS$ and
+$ZS+SZ^*=0$. Thus $W=iSZ^*=-iZS=W^*$ on that space.
+\end{proof}
+
 \begin{corollary}[A quantitative certificate below the transition]
 \label{cor:smoothed-stability}
 Suppose every principal angle is at most $\theta_*$, where

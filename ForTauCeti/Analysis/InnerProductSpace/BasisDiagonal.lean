@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, Claude Opus 5
+Authors: Jon Crall, Claude Opus 5, GPT-6
 
 Staged for Tau Ceti: additions to `Mathlib/Analysis/InnerProductSpace/Spectrum.lean`,
 or a new file next to `OrthonormalBasis` in `PiL2`.
@@ -12,6 +12,7 @@ public import TauCeti.Analysis.InnerProductSpace.BasisSpan
 public import ForTauCeti.Analysis.InnerProductSpace.EigenblockSpan
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import Mathlib.Analysis.InnerProductSpace.Positive
 
 /-! # Operators diagonal in a given orthonormal basis
 
@@ -122,6 +123,41 @@ theorem isSymmetric_basisDiagonal (b : OrthonormalBasis ι 𝕜 E) (c : ι → �
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [map_mul, RCLike.conj_ofReal]
   ring
+
+/-- Nonnegative real diagonal entries give a positive operator. -/
+theorem isPositive_basisDiagonal (b : OrthonormalBasis ι 𝕜 E) (c : ι → ℝ)
+    (hc : ∀ i, 0 ≤ c i) : (basisDiagonal b c).IsPositive := by
+  refine ⟨isSymmetric_basisDiagonal b c, fun x => ?_⟩
+  have hinner : ⟪basisDiagonal b c x, x⟫_𝕜 =
+      ∑ i, (c i : 𝕜) * (star (b.repr x i) * b.repr x i) := by
+    rw [← b.repr.inner_map_map (basisDiagonal b c x) x]
+    simp only [PiLp.inner_apply, RCLike.inner_apply, repr_basisDiagonal]
+    apply Finset.sum_congr rfl
+    intro i _
+    rw [map_mul, RCLike.conj_ofReal, RCLike.star_def]
+    ring
+  rw [hinner, map_sum]
+  apply Finset.sum_nonneg
+  intro i _
+  rw [RCLike.star_def, RCLike.conj_mul, ← RCLike.ofReal_pow,
+    ← RCLike.ofReal_mul, RCLike.ofReal_re]
+  exact mul_nonneg (hc i) (sq_nonneg _)
+
+/-- The adjoint of an operator diagonal in an orthonormal basis has the
+conjugate eigenvalues in that same basis. -/
+theorem adjoint_apply_of_orthonormal_eigenbasis [CompleteSpace E]
+    (b : OrthonormalBasis ι 𝕜 E) (A : E →L[𝕜] E) (lam : ι → 𝕜)
+    (hA : ∀ i, A (b i) = lam i • b i) (i : ι) :
+    A.adjoint (b i) = star (lam i) • b i := by
+  classical
+  apply b.repr.injective
+  ext j
+  rw [b.repr_apply_apply, b.repr_apply_apply, A.adjoint_inner_right,
+    hA, inner_smul_left, inner_smul_right, b.inner_eq_ite]
+  by_cases hji : j = i
+  · subst j
+    simp
+  · simp [hji]
 
 /-- **The eigenspaces of a diagonal operator are level sets of its data.**  This
 is the lemma that makes concrete spectral examples computable: it turns a

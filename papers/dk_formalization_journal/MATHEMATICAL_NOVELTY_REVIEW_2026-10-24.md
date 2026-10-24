@@ -1,6 +1,6 @@
 # Mathematical novelty review: Davis--Kahan and spectral-penalty transport
 
-**Research record, not manuscript prose.** 24 October 2026. Repository snapshot:
+**Research record, not manuscript prose.** 24 October 2026. Original review snapshot:
 `b251994524e7f4a5145f3a045b757cad30c6dbf9` (source archive dated
 2026-10-24 08:51). Scope: the Davis--Kahan formalization and subsequent
 finite-dimensional subspace-transport optimization program. **YWS is excluded**;
@@ -11,6 +11,35 @@ its source investigation and conference stub live in
 mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
+
+## Spectral-separation update after `15ae65745` (24 October 2026)
+
+The ambient equality certificate now proves that **every** finite complex
+Charbonnier global minimizer preserves the principal-cosine eigenspaces.
+Its relative unitary has scalar real part `min(1,eta^2*c)` on each positive
+cosine eigenspace, preserves the two opposite canonical rotation phases
+there, and the original transporter is self-adjoint on the right-angle
+defect space. These are compiled in `SmoothedOptimizerNoMixing.lean` and
+included as Proposition `prop:smoothed-optimizer-separation`.
+
+`SmoothedOptimizerPhases.lean` also constructs the actual restriction and
+its unique two-phase orthogonal projection on every positive supercritical
+cosine block. This is a necessary normal form. The full optimizer-family
+theorem still needs the source-reflection identification of the two rotation
+halves, the arbitrary-projection attaining converse on one half, and the
+arbitrary defect-isometry converse. The full cosine block is too large for
+an unrestricted projection parameter: the explicit feasible opposite-source-
+phase construction in `PAPER_CONTEXT.md` has the correct real part but
+strictly exceeds the minimum. No maintained theorem is being refuted here;
+this rules out an insufficient shortcut to the proposed classification.
+
+No separate novelty claim is made for positive unitary averages or the
+classical spectral-projection algebra. Bottazzi (2021), *Best approximation
+by diagonal operators in Schatten ideals*, LAA 620, 1--26,
+[DOI](https://doi.org/10.1016/j.laa.2021.02.025), supplies a further comparison
+for additive Hermitian approximation by diagonal linear subspaces. Its
+feasible set differs from the unitary transport fiber. Full theorem-formula
+retrieval remains incomplete; this comparison does not certify priority.
 
 ## Optimizer-rigidity update after `84822b0ba` (24 October 2026)
 
@@ -30,11 +59,11 @@ self-adjoint unitaries. This is a prescribed-block result. In addition,
 exact ambient equality criterion: vanishing diagonal defect and positive dual
 displacement. Every global Charbonnier minimizer agrees with direct rotation
 on all planes at or below the cutoff and fixes the canonical fixed directions,
-even with supercritical angles elsewhere. The missing geometric step is to
-convert the remaining positive-displacement equation to the positive-average
-equation and identify every supercritical multiplicity factor. These results
-are compiled partial classification, not the full Grassmannian/unitary family
-theorem. No independent mathematical novelty is claimed for the classical
+even with supercritical angles elsewhere. The spectral-separation update
+above now derives the positive-average equation and identifies the allowed
+phases on positive-cosine blocks. Matching the two multiplicity halves and
+proving the attaining converse remain. These results are compiled partial
+classification; the full Grassmannian/unitary family theorem is incomplete. No independent mathematical novelty is claimed for the classical
 trace-support equality or the unitary-average algebra.
 
 Fresh primary-source comparison checked BLR (2001), Theorems 4.2 and 4.5,

@@ -1,7 +1,7 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** the optimizer-rigidity changes based on `84822b0ba`,
+**Current research source:** the smoothed spectral-separation extension based on `15ae65745`,
 registered in the first section below.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
@@ -16,6 +16,106 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Smoothed spectral separation after `15ae65745` (24 October 2026)
+
+New compiled statements concern **every** finite complex global optimizer,
+including repeated, zero and right principal angles. For weights `0<b<a`,
+let `R` be the completed canonical rotation, `Z=T*R`,
+`C=sqrt(I-(P-Q)^2)`, and `B=min(I,(a/b)C)` by spectral calculus.
+
+- `SmoothedCertificateAverage.lean` extracts `Z+S Z* S=2B` from the
+  self-adjoint dual displacement and the already fixed subcritical/critical
+  directions. `S` is a self-adjoint unitary grading of the canonical rotation.
+  Its clipping-recovery lemma accounts for mixed subcritical and supercritical
+  lists; the argument does not assume block invariance of the competitor.
+- `SmoothedOptimizerNoMixing.minimizing_weighted_transport_twisted_average_complex`
+  proves this equation for an actual ambient minimizing transporter, with
+  `R=C+i S sqrt(I-C^2)`, and proves `Z` commutes with `C`. On every
+  positive-cosine space it also commutes with `S`.
+- `minimizing_weighted_transport_commutes_cosine_complex` proves that the
+  original transporter `T` commutes with `C` as well. Distinct principal
+  angles, the right defect space, and the common fixed space cannot mix.
+- `minimizing_weighted_transport_relative_real_part_complex` proves, on
+  `Cx=cx` with `c>0`, `(Z+Z*)x=2 min(1,a*c/b)x`.
+  `minimizing_weighted_transport_relative_commutes_rotation_on_positive_cosine_complex`
+  proves `Z R x=R Z x` there. Thus the two opposite rotation phases are
+  preserved separately even within an equal-angle block.
+- `minimizing_weighted_transport_selfAdjoint_on_right_defect_complex` proves
+  `T x=T* x` for every `x` in `ker C`. Cosine commutation makes this a
+  reducing self-adjoint unitary restriction.
+- The literal Charbonnier endpoints, for `tau>0` and every ambient global
+  minimizer, are `smoothed_minimizer_commutes_cosine_complex`,
+  `smoothed_minimizer_relative_real_part_complex` (scalar `min(1,eta^2*c)`),
+  and `smoothed_minimizer_selfAdjoint_on_right_defect_complex`.
+  Proposition `prop:smoothed-optimizer-separation` states the consequences.
+- `SmoothedOptimizerPhases.minimizing_weighted_transport_eigenspace_phase_projection_complex`
+  constructs the restriction of the actual relative unitary to
+  `N=ker(C-cI)`. If `0<c<b/a`, write `beta=a*c/b` and
+  `s=sqrt(1-beta^2)>0`. There is a **unique** orthogonal projection `E` on
+  `N` for which `Z|N=(beta-i*s)I+2i*s E`. This is a necessary spectral
+  normal form of every optimizer, not a claim that every projection on
+  the full cosine space is admissible or attaining.
+
+The reusable `PositiveUnitaryAverage.rigidity_of_unitary_twisted_average_on_eigenvector`
+works over either field on arbitrary Hilbert spaces: at every nonzero
+average eigenvalue it gives the prescribed unitary real part and commutation
+with the grading. It assumes neither finite dimension nor closed range.
+`BasisDiagonal.lean` supplies generic positivity and adjoint eigenbasis lemmas;
+these classical foundations carry no independent priority claim.
+
+### Exact remaining classification step and a failed shortcut
+
+On an actual positive **rotation** phase space
+`N_plus=ker(C-cI) ∩ ker(R-exp(i*acos(c))I)`, the new commutation theorem
+makes `Z` invariant. Transfer the unique-projection description to this
+multiplicity space. Source reflection identifies it with the opposite
+rotation phase space; prove that the two restrictions have the same
+projection parameter under that identification. Then construct an attaining
+ambient transport for every choice of these multiplicity projections.
+This is the remaining converse needed before asserting the product of
+Grassmannian families. On `ker C`, identify the now-proved self-adjoint
+restriction with `[[0,A],[A*,0]]` on the intrinsic crossed defects and prove
+attainment for every unitary `A`. Topology and dimensions remain unregistered.
+
+The real-part equation alone is **insufficient**, even with admissibility
+and cosine commutation. On one supercritical acute plane put `c=cos(theta)`,
+`beta=a*c/b<1`, `s=sqrt(1-beta^2)`, and
+`Z=diag(beta+i*s,beta-i*s)` in the source-projection coordinates.
+Then `T=R_theta Z*` is feasible and `Re Z=beta I`. Direct multiplication
+gives `T+T*=2*c*beta I`, so its weighted nuclear cost is `2 sqrt(a^2+b^2-2*a^2*c^2)`, strictly exceeding `2*a*sin(theta)`:
+the squared radicands differ by `b^2-a^2*c^2>0`. This conventional calculation
+explains why an arbitrary projection on the full two-sided cosine space
+cannot be used as a sufficient optimizer parametrization. It is not yet
+registered as a Lean operator counterexample. A NumPy check at `tau=1/4`,
+`theta=80 degrees` gives Charbonnier cost `2.3178813595` versus optimum
+`1.7311454226`, with transport/unitarity residuals below `1.2e-16` and the
+scalar cost formula agreeing within `4.5e-16`.
+
+Validation: the focused `SmoothedOptimizerPhases` target and the aggregate
+`lake build DavisKahan.All ForTauCeti` succeeded after `lake exe cache get`.
+The journal manuscript also typesets with BibTeX and resolved references.
+The stronger certificate theorem retains the cosine eigenvector equations
+in its conclusion; its existing consumer was updated in the same change.
+No Challenge or comparator endpoint references that theorem. The pre-existing
+Challenge/name-drift failures recorded in the earlier update remain outside
+this mathematical build claim.
+
+The unrestricted real matching and infinite-ideal optimization frontiers
+have not changed in this proof wave. The full complex Schatten classification
+and the reflecting-kernel local-to-global descent also remain open as
+specified in the earlier update.
+
+A further primary-source comparison identified Tamara Bottazzi,
+*Best approximation by diagonal operators in Schatten ideals*, LAA 620
+(2021), 1--26, DOI `10.1016/j.laa.2021.02.025`. Its problem is additive
+Hermitian approximation by a fixed diagonal linear subspace, with
+Birkhoff--James/duality characterizations. This supports treating the norm
+support machinery as classical. It is a different feasible set from the
+unitary transport fiber; no theorem implying the present phase classification
+has been established. Full formula retrieval was incomplete, so this is
+not an exhaustive theorem-level priority clearance. Source:
+<https://www.sciencedirect.com/science/article/pii/S0024379521000847>.
 
 ## Optimizer classification frontier after `84822b0ba` (24 October 2026)
 
@@ -65,9 +165,9 @@ The reusable algebra for the smoothed optimizer families also advances:
   when `s!=0`. It also proves the paired equation
   `X+Y*=2cI`, `c>0`, is equivalent to this form with `Y=X`. At `c=0`, the
   exact condition is `Y=-X*`, leaving an arbitrary unitary choice.
-  These classify **prescribed unitary-average blocks**. Converting the
-  now-compiled ambient equality certificate into this average equation
-  remains a separate obligation.
+  These classify **prescribed unitary-average blocks**. The newer spectral-
+  separation update above derives the average equation from every ambient
+  optimizer; matching the multiplicity halves and proving the converse remain.
 
 The equality extraction has now advanced beyond the prescribed-block algebra:
 
@@ -98,16 +198,11 @@ The equality extraction has now advanced beyond the prescribed-block algebra:
   fixed directions, even if the remaining angles are supercritical.
   Proposition `prop:smoothed-optimizer-certificate` states these consequences.
 
-This is an exact equality certificate and partial rigidity classification,
-not yet the Grassmannian/unitary parametrization of every supercritical
-optimizer. The precise next smoothed step is to extract the positive-average
-operator equation from the remaining self-adjoint dual-displacement equation,
-after the subcritical and critical summands have been removed. Then apply
-`PositiveUnitaryAverage` to exclude unequal-cosine mixing and
-`UnitaryScalarRealPart` on each positive scalar cosine block. The zero cosine
-block remains the arbitrary-unitary defect case. No ideal-theoretic norm,
-feasibility, or attainment result follows from the infinite-dimensional
-algebra alone.
+The equality certificate now yields the positive-average equation and
+spectral separation, as recorded in the newer update above. The full
+Grassmannian/unitary parametrization still needs the compatibility and
+converse statements described there. No ideal-theoretic norm, feasibility,
+or attainment theorem follows from the infinite-dimensional algebra alone.
 
 No first-publication claim is made for the classical unitary-average,
 projection-parameter, kernel-invariance, or directed-gap lemmas. The

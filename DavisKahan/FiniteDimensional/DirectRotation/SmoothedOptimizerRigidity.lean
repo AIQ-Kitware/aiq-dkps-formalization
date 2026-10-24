@@ -52,6 +52,11 @@ theorem exists_paired_certificate_for_weighted_transport_complex
       (∀ j, R (e (.inr j)) = e (.inr j)) ∧
       (∀ i, K.reflection (e (.inl (0, i))) = e (.inl (1, i))) ∧
       (∀ j, V (e j) = pairedDualPhase a b theta j • e j) ∧
+      (∀ i, Proposition35.section3CosAngleOperator K L (e (.inl (0, i))) =
+        (Real.cos (theta i) : ℂ) • e (.inl (0, i))) ∧
+      (∀ i, Proposition35.section3CosAngleOperator K L (e (.inl (1, i))) =
+        (Real.cos (theta i) : ℂ) • e (.inl (1, i))) ∧
+      (∀ j, Proposition35.section3CosAngleOperator K L (e (.inr j)) = e (.inr j)) ∧
       (UnitarilyInvariantSeminorm.nuclear ℂ E E
           ((a : ℂ) • T.toLinearMap - (b : ℂ) • LinearMap.id) =
             weightedRotationMinimum a b (Proposition35.section3CosAngleOperator K L) ↔
@@ -128,7 +133,7 @@ theorem exists_paired_certificate_for_weighted_transport_complex
   have hcert := weightedNuclear_eq_minimum_iff_certificate_complex a b hb hab theta e A Z.toLinearMap
     hA0 hA1 hAf hZ hdiag V hV
   rw [hN, Fintype.card_fin, ← hvalue] at hcert
-  refine ⟨n, m, e, theta, V, hθ, hR0, hR1, hRf, hJ0, hV, hcert, ?_⟩
+  refine ⟨n, m, e, theta, V, hθ, hR0, hR1, hRf, hJ0, hV, hC0, hC1, hCf, hcert, ?_⟩
   intro hatt
   have hattcert := hcert.mp hatt
   have hfixed := (weightedDiagonalDefect_eq_zero_iff_fixed_complex a b theta e Z.toLinearMap hZ).mp
@@ -147,6 +152,32 @@ theorem exists_paired_certificate_for_weighted_transport_complex
         hA0 hA1 hZ V hV hattcert.2 i heq r
   intro j
   exact (hfix _ (hfixed.2 j)).trans (hRf j)
+
+/-- Every global minimizer of the literal Charbonnier cost attains the
+known weighted nuclear value, with the ambient constant removed exactly. -/
+theorem smoothed_minimizer_weighted_cost_eq_complex
+    (tau : ℝ) (htau : 0 < tau)
+    (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L)
+    (T : E ≃ₗᵢ[ℂ] E) (hT : K.map T.toLinearMap = L)
+    (hmin : ∀ S : E ≃ₗᵢ[ℂ] E, K.map S.toLinearMap = L →
+      smoothedDisplacementCost tau T.toLinearMap ≤ smoothedDisplacementCost tau S.toLinearMap) :
+    UnitarilyInvariantSeminorm.nuclear ℂ E E
+      ((smoothingRadius tau : ℂ) • T.toLinearMap -
+        (((smoothingRadius tau)⁻¹ : ℝ) : ℂ) • LinearMap.id) =
+      weightedRotationMinimum (smoothingRadius tau) (smoothingRadius tau)⁻¹
+        (Proposition35.section3CosAngleOperator K L) := by
+  obtain ⟨W, hWmap, hWcost, hWmin⟩ :=
+    exists_unitary_minimizing_smoothed_transport tau htau K L hKL
+  have hatt := (le_antisymm (hmin W hWmap) (hWmin T hT)).trans hWcost
+  have hcost := smoothedDisplacementCost_eq_weightedNuclear tau htau
+    (Unitary.linearIsometryEquiv.symm T)
+  change smoothedDisplacementCost tau T.toLinearMap =
+    UnitarilyInvariantSeminorm.nuclear ℂ E E
+      ((smoothingRadius tau : ℂ) • T.toLinearMap -
+        (((smoothingRadius tau)⁻¹ : ℝ) : ℂ) • LinearMap.id) -
+      Module.finrank ℂ E * tau at hcost
+  rw [hcost, smoothedTransportMinimum] at hatt
+  linarith only [hatt]
 
 /-- Every global minimizer of the literal Charbonnier displacement cost
 agrees with direct rotation on all planes at or below the cutoff, even
@@ -188,7 +219,7 @@ theorem smoothed_minimizer_agrees_with_canonical_on_subcritical_planes_complex
       ((a : ℂ) • T.toLinearMap - ((a⁻¹ : ℝ) : ℂ) • LinearMap.id) =
       weightedRotationMinimum a a⁻¹ (Proposition35.section3CosAngleOperator K L) := by
     linarith only [hatt]
-  obtain ⟨n, m, e, theta, V, hθ, hR0, hR1, hRf, _, _, _, hfixed⟩ :=
+  obtain ⟨n, m, e, theta, V, hθ, hR0, hR1, hRf, _, _, _, _, _, _, hfixed⟩ :=
     exists_paired_certificate_for_weighted_transport_complex a a⁻¹
       (inv_pos.mpr ha0) hab K L hKL T hT
   have hfix := hfixed hweighted
