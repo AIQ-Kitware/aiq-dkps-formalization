@@ -26,6 +26,7 @@ from manim import (
     VGroup,
 )
 
+from dkvis.novelty_layout import resolved_region
 from dkvis.novelty_math import optimal_phase_three_halves
 from dkvis.slide_style import (
     CURRENT,
@@ -45,6 +46,37 @@ from dkvis.slide_style import (
 )
 
 SECTION = r"New mathematics: spectral-penalty transport between subspaces"
+
+
+def place(slide: DeckSlide, slot: str, mob, *, align_top: bool = False):
+    """Place a completely rendered Manim group inside a reserved region.
+
+    This is important for dynamic LaTeX dimensions: an object is fit by both
+    width *and* height, and never laid across another region or the footer.
+    `align_top` keeps neighboring cards aligned when their heights differ.
+    """
+    header_bottom = None if isinstance(slide, N00Title) else slide.content_top
+    rect = resolved_region(type(slide).__name__, slot, header_bottom)
+    if rect.width <= 0 or rect.height <= 0:
+        raise ValueError(f"invalid novelty layout cell: {type(slide).__name__}/{slot}: {rect}")
+    inset = 0.045
+    available_w = rect.width - 2 * inset
+    available_h = rect.height - 2 * inset
+    if mob.width <= 0 or mob.height <= 0:
+        raise ValueError(f"empty Manim object: {type(slide).__name__}/{slot}")
+    factor = min(1, available_w / mob.width, available_h / mob.height)
+    if factor < 1:
+        mob.scale(factor)
+    x = (rect.left + rect.right) / 2
+    y = (rect.top - inset - mob.height / 2 if align_top
+         else (rect.bottom + rect.top) / 2)
+    mob.move_to([x, y, 0])
+    eps = 0.001
+    if (mob.get_left()[0] < rect.left - eps or mob.get_right()[0] > rect.right + eps
+            or mob.get_bottom()[1] < rect.bottom - eps or mob.get_top()[1] > rect.top + eps):
+        raise RuntimeError(f"object exceeded novelty layout cell: {type(slide).__name__}/{slot}")
+    return mob
+
 
 
 def principal_plane(theta: float = 0.9, *, show_caption: bool = True) -> VGroup:
@@ -88,9 +120,19 @@ def principal_plane(theta: float = 0.9, *, show_caption: bool = True) -> VGroup:
 def threshold_strip(left: str, right: str, *, tag: str) -> VGroup:
     axis = Line(LEFT * 2.6, RIGHT * 2.6, color=FAINT, stroke_width=2)
     tick = Line(UP * 0.18, DOWN * 0.18, color=GAP, stroke_width=3).move_to([0.0, 0.0, 0.0])
-    left_lab = tex(left, size=21, color=MUTED).next_to(axis, DOWN, aligned_edge=LEFT, buff=0.12)
-    right_lab = tex(right, size=21, color=MUTED).next_to(axis, DOWN, aligned_edge=RIGHT, buff=0.12)
+    # Each label belongs to its own half of the axis.  In the first handout,
+    # longer text overlapped across the midpoint even though the entire strip
+    # fit inside the slide.  Internal geometry needs a bound too.
+    left_lab = tex(left, size=21, color=MUTED)
+    right_lab = tex(right, size=21, color=MUTED)
+    for label in (left_lab, right_lab):
+        if label.width > 2.42:
+            label.scale_to_fit_width(2.42)
+    left_lab.next_to(axis, DOWN, aligned_edge=LEFT, buff=0.16)
+    right_lab.next_to(axis, DOWN, aligned_edge=RIGHT, buff=0.16)
     top = math(tag, size=28, color=GAP).next_to(tick, UP, buff=0.12)
+    if left_lab.get_right()[0] + 0.2 > right_lab.get_left()[0]:
+        raise RuntimeError("threshold-strip labels collide")
     return VGroup(axis, tick, left_lab, right_lab, top)
 
 
@@ -111,13 +153,6 @@ def wrapped_bullets(*lines: str, width: float, size: float = 22, buff: float = 0
     ]).arrange(DOWN, aligned_edge=LEFT, buff=buff)
 
 
-def fit_width(mobject: VGroup, width: float) -> VGroup:
-    """Shrink a formula/card only when it exceeds its assigned column."""
-    if mobject.width > width:
-        mobject.scale_to_fit_width(width)
-    return mobject
-
-
 class N00Title(DeckSlide):
     section = ""
 
@@ -128,13 +163,14 @@ class N00Title(DeckSlide):
             " transport penalties between subspaces, separating what is already"
             " formalized from what is still conjectural or only drafted."
         )
-        title = tex(r"What is the new math we are building?", size=58).move_to(UP * 2.05)
-        sub = tex(r"A standalone tour of spectral-penalty transport between subspaces", size=32, color=MUTED)
-        sub.next_to(title, DOWN, buff=0.28)
-        link = tex(r"Repository: AIQ-Kitware/aiq-dkps-formalization", size=18, color=MUTED).next_to(sub, DOWN, buff=0.18)
+        title = place(self, "title", tex(r"What is the new math we are building?", size=56))
+        sub = place(self, "subtitle", tex(
+            r"A standalone tour of spectral-penalty transport between subspaces",
+            size=30, color=MUTED))
+        link = place(self, "link", tex(
+            r"Repository: AIQ-Kitware/aiq-dkps-formalization", size=18, color=MUTED))
 
-        pic = principal_plane(theta=0.94, show_caption=False).scale(1.08)
-        pic.move_to(LEFT * 3.2 + DOWN * 0.25)
+        pic = place(self, "diagram", principal_plane(theta=0.94, show_caption=False))
         thesis = VGroup(
             para(
                 r"We already know the classical $\,\sin\Theta\,$ bounds and the"
@@ -155,7 +191,7 @@ class N00Title(DeckSlide):
                 color=MUTED,
             ),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32)
-        thesis.move_to(RIGHT * 2.8 + DOWN * 0.05)
+        place(self, "prose", thesis)
 
         self.play(FadeIn(title), FadeIn(sub), FadeIn(link))
         self.play(Create(pic), FadeIn(thesis), run_time=1.2)
@@ -205,9 +241,8 @@ class N01ThreeStories(DeckSlide):
             body = wrapped_bullets(*items, width=3.65, size=20, buff=0.13)
             card = VGroup(head, body).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
             cols.append(boxed(card, color=color, pad=0.22))
-        row = VGroup(*cols).arrange(RIGHT, buff=0.25, aligned_edge=UP)
-        row.scale_to_fit_width(12.75)
-        row.move_to([0.0, self.content_top - 1.9, 0.0])
+        for slot, card in zip(("a", "b", "c"), cols):
+            place(self, slot, card, align_top=True)
 
         summary = para(
             r"The key novelty question is therefore not a yes/no label on the whole"
@@ -215,7 +250,8 @@ class N01ThreeStories(DeckSlide):
             r" field, for which cost, is completed and plausibly first-publication?}",
             width=12.3,
             size=25,
-        ).move_to([0.0, -3.02, 0.0])
+        )
+        place(self, "takeaway", summary)
 
         self.say(
             "This novelty review separates three stories. First, the formalized"
@@ -224,7 +260,7 @@ class N01ThreeStories(DeckSlide):
             " Schatten and real-field program, where some important results are still"
             " conventional drafts rather than Lean-certified global theorems."
         )
-        self.play(FadeIn(row), FadeIn(summary), run_time=1.0)
+        self.play(*[FadeIn(card) for card in cols], FadeIn(summary), run_time=1.0)
 
 
 class N02OptimizationProblem(DeckSlide):
@@ -234,22 +270,20 @@ class N02OptimizationProblem(DeckSlide):
 
     def body(self) -> None:
         pic = principal_plane(theta=0.88).scale(1.05)
-        pic.move_to(LEFT * 3.9 + DOWN * 0.25)
+        place(self, "diagram", pic)
 
         defs = VGroup(
             math(r"W(\sym{U}) = \sym{V}", size=34),
             math(r"D_{\rho}(\sym{U},\sym{V}) = \min_{W:\,W\sym{U}=\sym{V}} \sum_j \rho\!\left(\sigma_j(I-W)\right)", size=29),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-        fit_width(defs, 6.2)
-        defs.move_to([0.12, self.content_top - 0.12, 0.0], aligned_edge=LEFT + UP)
+        place(self, "definitions", defs)
 
         costs = VGroup(
             piece_box(r"\rho(s)=s", r"\text{trace / nuclear displacement}", size=25, role=WANTED),
             piece_box(r"\rho(s)=s^p", r"\text{Schatten-}p\text{ power}", size=25, role=TRIAL),
             piece_box(r"\rho_{\tau}(s)=\sqrt{\tau^2+s^2}-\tau", r"\text{smoothed / Charbonnier penalty}", size=25, role=CURRENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        fit_width(costs, 6.25)
-        costs.move_to(RIGHT * 3.15 + DOWN * 1.02)
+        place(self, "costs", costs)
 
         note = para(
             r"This is an \emph{extrinsic} optimization problem in the ambient space."
@@ -258,7 +292,8 @@ class N02OptimizationProblem(DeckSlide):
             width=6.2,
             size=23,
             color=MUTED,
-        ).next_to(costs, DOWN, aligned_edge=LEFT, buff=0.2)
+        )
+        place(self, "note", note)
 
         self.say(
             "Here is the common optimization template. We only consider transporters"
@@ -276,14 +311,13 @@ class N03LowerBound(DeckSlide):
     section = SECTION
 
     def body(self) -> None:
-        left = principal_plane(theta=0.78).scale(0.92).move_to(LEFT * 4.15 + UP * 0.1)
+        left = place(self, "diagram", principal_plane(theta=0.78))
         floor = VGroup(
             tex(r"For every unitarily invariant seminorm $N$ and every feasible $W$:", size=25, color=MUTED),
             math(r"N(P_{\sym{U}}-P_{\sym{V}}) \le N(I-W)", size=38),
             math(r"N\!\left(\left|P_{\sym{U}}-P_{\sym{V}}\right|\right) \le N(I-W)", size=34, color=SINE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-        floor_box = fit_width(boxed(floor, color=SINE, pad=0.25), 7.0)
-        floor_box.move_to(RIGHT * 2.55 + UP * 0.95)
+        floor_box = place(self, "theorem", boxed(floor, color=SINE, pad=0.25))
 
         points = wrapped_bullets(
             r"No acute-angle assumption is needed",
@@ -292,7 +326,8 @@ class N03LowerBound(DeckSlide):
             r"Likely classical mathematics, but essential to our exact transport results",
             width=5.75,
             size=22,
-        ).move_to(RIGHT * 2.55 + DOWN * 1.25)
+        )
+        place(self, "bullets", points)
 
         tag = para(
             r"Interpretation: the projections already tell you how much turning must"
@@ -300,7 +335,8 @@ class N03LowerBound(DeckSlide):
             width=6.1,
             size=24,
             color=MUTED,
-        ).next_to(points, DOWN, aligned_edge=LEFT, buff=0.2)
+        )
+        place(self, "note", tag)
 
         self.say(
             "This lower bound is the workhorse. Whatever unitary transporter you"
@@ -322,16 +358,14 @@ class N04ComplexTrace(DeckSlide):
             tex(r"Finite-dimensional complex equal-rank theorem:", size=26, color=MUTED),
             math(r"\min_{W:\,W\sym{U}=\sym{V}} \norm{I-W}_{1} = \operatorname{tr}\left|P_{\sym{U}}-P_{\sym{V}}\right| = 2\sum_{i=1}^{k} \sin\theta_i", size=33),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-        theorem_box = fit_width(boxed(theorem, color=WANTED, pad=0.24), 12.5)
-        theorem_box.move_to([0.0, self.content_top - 1.0, 0.0])
+        theorem_box = place(self, "theorem", boxed(theorem, color=WANTED, pad=0.24))
 
         phase = VGroup(
             tex(r"Optimal transporter (one explicit form):", size=25, color=MUTED),
             math(r"T_{\star}=R(C-iS)\quad\text{or}\quad R(C+iS)", size=34, color=CURRENT),
             math(r"C=\cos\Theta,\qquad S=\left|P_{\sym{U}}-P_{\sym{V}}\right|", size=31, color=SINE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
-        fit_width(phase, 5.95)
-        phase.move_to(LEFT * 3.25 + DOWN * 1.25)
+        place(self, "construction", phase)
 
         explain = wrapped_bullets(
             r"The direct rotation $R$ is \textbf{not} always trace-optimal",
@@ -340,10 +374,12 @@ class N04ComplexTrace(DeckSlide):
             r"Exact global formula formalized; mathematical priority still under review",
             width=5.6,
             size=21,
-        ).move_to(RIGHT * 3.35 + DOWN * 1.25)
+        )
+        place(self, "bullets", explain)
 
-        strip = threshold_strip(r"projection floor", r"trace-optimal complex transporter", tag=r"\text{exact equality}")
-        strip.move_to([0.0, -3.0, 0.0])
+        conclusion = place(self, "takeaway", tex(
+            r"\textbf{The lower bound is attained exactly by a complex phase-corrected transporter.}",
+            size=23, color=MUTED))
 
         self.say(
             "For the complex trace problem the lower bound becomes the exact answer."
@@ -352,7 +388,7 @@ class N04ComplexTrace(DeckSlide):
             " direct rotation itself may fail to minimize trace cost, but a phase-"
             " corrected version does."
         )
-        self.play(FadeIn(theorem_box), FadeIn(phase), FadeIn(explain), FadeIn(strip), run_time=1.1)
+        self.play(FadeIn(theorem_box), FadeIn(phase), FadeIn(explain), FadeIn(conclusion), run_time=1.1)
 
 
 class N05SmoothedTransport(DeckSlide):
@@ -366,8 +402,7 @@ class N05SmoothedTransport(DeckSlide):
             math(r"\eta=\frac{\tau+\sqrt{\tau^2+4}}{2},\qquad \theta_c(\tau)=\arccos(\eta^{-2})", size=31, color=GAP),
             math(r"\Psi_{\tau}(W)=\norm{\eta W-\eta^{-1}I}_{1}-n\tau", size=33, color=CURRENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        top_box = fit_width(boxed(top, color=CURRENT, pad=0.22), 12.5)
-        top_box.move_to([0.0, self.content_top - 0.10, 0.0], aligned_edge=UP)
+        top_box = place(self, "identities", boxed(top, color=CURRENT, pad=0.22))
 
         left = piece_box(
             r"\mu_{\tau}(\theta)=2\left(\sqrt{\tau^2+2-2\cos\theta}-\tau\right),\quad \theta\le \theta_c(\tau)",
@@ -375,8 +410,7 @@ class N05SmoothedTransport(DeckSlide):
             size=23,
             role=WANTED,
         )
-        fit_width(left, 6.05)
-        left.move_to(LEFT * 3.25 + DOWN * 1.1)
+        place(self, "cost", left)
 
         right = VGroup(
             tex(r"Global complex equal-rank minimum:", size=24, color=MUTED),
@@ -384,11 +418,12 @@ class N05SmoothedTransport(DeckSlide):
             tex(r"Above the threshold, a nonzero phase correction appears:", size=24, color=MUTED),
             math(r"\delta_{\star}(\theta)=\arccos\!\left(\eta^{2}\cos\theta\right)\qquad (\theta\ge \theta_c(\tau))", size=29, color=TRIAL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-        fit_width(right, 6.0)
-        right.move_to(RIGHT * 3.2 + DOWN * 1.0)
+        place(self, "minimum", right)
 
-        strip = threshold_strip(r"canonical phase correction $=0$", r"nonzero optimal phase correction", tag=r"\theta_c(\tau)")
-        strip.move_to([0.0, -3.0, 0.0])
+        strip = place(self, "threshold", threshold_strip(
+            r"$\theta<\theta_c$: no phase correction",
+            r"$\theta>\theta_c$: nonzero phase",
+            tag=r"\theta_c(\tau)"))
 
         self.say(
             "This is the strongest completed new-math story in the repository. The"
@@ -418,8 +453,7 @@ class N06SmoothedStability(DeckSlide):
                 color=GAP,
             ),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        statement_box = fit_width(boxed(statement, color=CURRENT, pad=0.24), 12.5)
-        statement_box.move_to([0.0, self.content_top - 0.10, 0.0], aligned_edge=UP)
+        statement_box = place(self, "theorem", boxed(statement, color=CURRENT, pad=0.24))
 
         left = wrapped_bullets(
             r"This is an \emph{error bound}, not only existence of a minimizer",
@@ -428,7 +462,8 @@ class N06SmoothedStability(DeckSlide):
             r"This quantifies \emph{robustness}: small cost error forces small rotation error",
             width=5.7,
             size=21,
-        ).move_to(LEFT * 3.25 + DOWN * 1.3)
+        )
+        place(self, "bullets", left)
 
         right = VGroup(
             threshold_strip(r"stability regime", r"phase-transition regime", tag=r"\beta < \theta_c(\tau)"),
@@ -442,7 +477,7 @@ class N06SmoothedStability(DeckSlide):
                 color=MUTED,
             ),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
-        right.move_to(RIGHT * 3.2 + DOWN * 1.3)
+        place(self, "interpretation", right)
 
         self.say(
             "The stability theorem says that below the cutoff angle, the objective has"
@@ -506,21 +541,22 @@ class N07SchattenTransition(DeckSlide):
             math(r"m_p(\theta)=\min_{0\le \delta\le \theta} \bigl[2\sin\tfrac{\theta+\delta}{2}\bigr]^p + \bigl[2\sin\tfrac{\theta-\delta}{2}\bigr]^p", size=27),
             math(r"\delta=0\text{ is optimal} \iff \theta\le \theta_c(p):=\arccos\!\left(\frac{2-p}{p}\right)", size=31, color=GAP),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        theorem_box = fit_width(boxed(theorem, color=TRIAL, pad=0.22), 12.5)
-        theorem_box.move_to([0.0, self.content_top - 0.10, 0.0], aligned_edge=UP)
+        theorem_box = place(self, "theorem", boxed(theorem, color=TRIAL, pad=0.22))
 
         left_plot, _ = self._phase_curve(theta=np.deg2rad(45), p=1.5, height=2.0, width=4.2)
         right_plot, delta_star = self._phase_curve(theta=np.deg2rad(80), p=1.5, height=2.0, width=4.2)
-        left_plot.move_to(LEFT * 3.3 + DOWN * 1.48)
-        right_plot.move_to(RIGHT * 3.3 + DOWN * 1.48)
+        place(self, "left_plot", left_plot)
+        place(self, "right_plot", right_plot)
         left_caption = para(
             r"Below the cutoff: the minimum stays at $\delta=0$.",
             width=5.2, size=21, color=MUTED,
-        ).next_to(left_plot, DOWN, buff=0.14)
+        )
+        place(self, "left_caption", left_caption)
         right_caption = para(
             rf"Above the cutoff: the optimal phase is $\delta_\star\approx {delta_star * 180 / np.pi:.1f}^\circ$.",
             width=5.2, size=21, color=MUTED,
-        ).next_to(right_plot, DOWN, buff=0.14)
+        )
+        place(self, "right_caption", right_caption)
 
         self.say(
             "For Schatten powers between one and two, there is a real symmetry-"
@@ -565,9 +601,8 @@ class N08ComplexVsReal(DeckSlide):
             color=TRIAL,
             pad=0.24,
         )
-        pair = VGroup(complex_box, real_box).arrange(RIGHT, buff=0.38, aligned_edge=UP)
-        pair.scale_to_fit_width(12.5)
-        pair.move_to([0.0, self.content_top - 1.6, 0.0])
+        place(self, "complex", complex_box, align_top=True)
+        place(self, "real", real_box, align_top=True)
 
         bottom = VGroup(
             tex(r"Takeaway", size=26, color=MUTED),
@@ -579,7 +614,8 @@ class N08ComplexVsReal(DeckSlide):
                 width=12.0,
                 size=24,
             ),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([0.0, -2.75, 0.0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        place(self, "takeaway", bottom)
 
         self.say(
             "This is the conceptual split to keep in mind. Over the complex field, the"
@@ -588,7 +624,7 @@ class N08ComplexVsReal(DeckSlide):
             " matching. So the real problem is structurally different, not just a"
             " weaker copy of the complex one."
         )
-        self.play(FadeIn(pair), FadeIn(bottom), run_time=1.0)
+        self.play(FadeIn(complex_box), FadeIn(real_box), FadeIn(bottom), run_time=1.0)
 
 
 class N09StatusBoard(DeckSlide):
@@ -640,9 +676,9 @@ class N09StatusBoard(DeckSlide):
             color=TRIAL,
             pad=0.22,
         )
-        row = VGroup(left, mid, right).arrange(RIGHT, buff=0.26, aligned_edge=UP)
-        row.scale_to_fit_width(12.7)
-        row.move_to([0.0, self.content_top - 1.85, 0.0])
+        place(self, "strong", left, align_top=True)
+        place(self, "classical", mid, align_top=True)
+        place(self, "working", right, align_top=True)
 
         finish = para(
             r"If you want one headline: \emph{the repository already contains a"
@@ -653,7 +689,8 @@ class N09StatusBoard(DeckSlide):
             width=12.15,
             size=24,
             color=MUTED,
-        ).move_to([0.0, -3.0, 0.0])
+        )
+        place(self, "takeaway", finish)
 
         self.say(
             "This final slide is the practical summary. It tells you what to claim as"
@@ -661,4 +698,4 @@ class N09StatusBoard(DeckSlide):
             " and what to keep clearly marked as active research rather than a finished"
             " theorem."
         )
-        self.play(FadeIn(row), FadeIn(finish), run_time=1.0)
+        self.play(FadeIn(left), FadeIn(mid), FadeIn(right), FadeIn(finish), run_time=1.0)

@@ -146,6 +146,9 @@ Current presentations (in addition to the preserved reference decks):
   review and the notation reference. See `briefs/comprehensive.md`.
 - **`study`**: the earlier long-form curriculum, kept as an independent
   composition. See `briefs/deep-study.md`.
+- **`novelty-tour`**: ten independent Manim scenes teaching the new
+  spectral-penalty transport mathematics and distinguishing proved statements
+  from active higher-rank and real-field research.
 
 To build the complete collection at 1080p/30 FPS and generate a **single HTML
 file with embedded videos**, run from this directory:
@@ -324,37 +327,40 @@ make present-short                 # present live with manim-slides
 The underlying commands:
 
 ```bash
-uv sync --extra vtk --extra slides --extra test   # needs LaTeX, and Pango/Cairo headers to build manimpango
-RUN="uv run --extra vtk --extra slides --extra test"   # always pass the extras: a bare `uv run` re-syncs them away
-$RUN python -m dkvis.build_slides sine-theta-short -q l          # quick draft (480p)
-$RUN python -m dkvis.build_slides novelty-tour --pdf --handout  # standalone deck for the new transport math
+uv sync --extra vtk --extra slides --extra test   # needs LaTeX and Pango/Cairo headers
+RUN="uv run --extra vtk --extra slides --extra test" # always pass the extras
+$RUN python -m dkvis.build_slides sine-theta-short -q l
+$RUN python -m dkvis.build_slides part3-family --pdf --handout
+$RUN python -m dkvis.build_slides sine-theta-full
+$RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvis.build_slides sine-theta-short --list)
+```
 
-The `novelty-tour` deck uses the established Manim roles: blue for `U`, amber for
-`V`, magenta for angles, violet for transition cutoffs, and the steel family for
-smoothed objectives. The transporters `W` and `R` remain neutral, as in the
-Proposition 4.4 slides; `R` is not the green residual of the sine-theta story.
+### Standalone mathematical novelty tour
 
-You can render and export the novelty deck in one command (no separate
-conversion attempt after a failed render):
+The `novelty-tour` is a ten-scene presentation about the newer
+spectral-transport optimization mathematics. It uses **exactly** the existing
+Manim role palette: blue for source/wanted `U`, amber for target/trial `V`,
+magenta for principal angles, violet for cutoffs, and steel for the smoothed
+objective. It does not change the older reference or Kitware decks.
+
+Its non-overlapping content regions are maintained in
+`dkvis/novelty_layout.py`; `slides_novelty.py` fits complete Manim groups to
+those regions *after LaTeX typesetting*. The regression checks cover geometry,
+TeX markup, phase-optimum sample values, and deck registration. Render the deck
+and export a **standalone HTML** and PDF handout in one command:
 
 ```bash
+cd ~/code/aiq-dkps-formalization/visualizations
+uv run --extra vtk --extra slides --extra test python -m pytest -q \
+    tests/test_decks.py tests/test_novelty_latex.py tests/test_novelty_layout.py
 uv run --extra vtk --extra slides --extra test python -m dkvis.build_slides \
-    novelty-tour --quality l --jobs 2 --one-file \
+    novelty-tour --quality l --jobs 2 --pdf --handout --one-file \
     --html renders/novelty-tour.standalone.html
 ```
 
-For a quick pre-render check of the novelty slide text, TeX commands, and
-example phase formulas:
-
-```bash
-uv run --extra vtk --extra slides --extra test python -m pytest -q \
-    tests/test_decks.py tests/test_novelty_latex.py
-```
-
-$RUN python -m dkvis.build_slides part3-family --pdf --handout   # one part, 1080p60
-$RUN python -m dkvis.build_slides sine-theta-full                # every part, then the assembled full deck
-$RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvis.build_slides sine-theta-short --list)
-```
+This produces `renders/novelty-tour.standalone.html` and
+`renders/novelty-tour.handout.pdf`. The same color roles are available in
+light mode via `DKVIS_THEME=light`.
 
 - Every slide shows its number bottom-right: its position in the short deck, or
   in its part ("7 / 16"). The number is the same on all of a slide's builds, so
