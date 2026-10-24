@@ -43,5 +43,8 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectionBound
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPhaseMinimum
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNuclearCertificate
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNuclearAttainment
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutantOptimization
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralCost
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

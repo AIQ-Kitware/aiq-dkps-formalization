@@ -369,15 +369,26 @@ The new `SmoothedPhaseMinimum.lean` now certifies the two-focus circle
 inequalities, the explicit weighted scalar-phase minimum, its attaining phase
 and uniqueness on the physical interval, and the algebraic specialization
 `a=eta`, `b=eta^(-1)` to the displayed smoothing parameter. Its current
-`smoothedPhaseCost` is defined through the weighted two-focus expression;
-the equality with the literal singular-value Charbonnier sum is not yet
-registered. `SmoothedNuclearCertificate.lean` certifies a global lower bound
+`smoothedPhaseCost` is defined through the weighted two-focus expression.
+`SmoothedSpectralCost.lean` now proves the literal full displacement
+singular-value Charbonnier sum equals the weighted nuclear norm, for every
+finite complex unitary, including zero displacement. This uses the generalized
+normal spectral-sum identity in `SchattenSpectralCalculus.lean`, which computes
+arbitrary functions of all ambient-dimension singular values from the absolute
+eigenvalues. The existing Schatten norm proof consumes that identity.
+`SmoothedNuclearCertificate.lean` certifies a global lower bound
 for the actual accepted nuclear norm of `A-b Z`, in an arbitrary supplied
 orthonormal rotation eigenbasis with fixed directions. The competitor may
 mix all planes; it suffices that it contracts every basis vector and that
-paired diagonal entries have equal imaginary parts. The next steps are the
-attaining diagonal unitary, the commuting-reflection implication, and the
-unconditional principal-angle coordinate construction. Do not yet call the
+paired diagonal entries have equal imaginary parts.
+`SmoothedNuclearAttainment.lean` constructs an actual attaining diagonal
+unitary and proves its exact accepted nuclear cost.
+`SmoothedCommutantOptimization.lean` proves commutation with the actual
+swapping source reflection implies the paired-diagonal condition, and returns
+an actual unitary minimizing over all commuting contractions. These results
+include arbitrary fixed directions and all mixing competitors. The remaining
+step toward the unconditional angle formula is to construct and identify the
+principal-rotation coordinates for an arbitrary pair. Do not yet call the
 full smoothed transport theorem Lean-certified. `NuclearTrace.lean` adds
 the classical trace support inequalities consumed from the accepted Ky Fan
 maximum principle and the normal-basis nuclear sum.
@@ -394,6 +405,34 @@ The penalty, nuclear support inequality, cosine--sine decomposition, and
 convex-relaxation method are classical. Any novelty claim must concern the
 exact constrained minimum and its attaining phases, together with the exact
 relaxation. Further citation-chain review remains necessary.
+
+The primary paper Lobos--Salazar Cavazos--Nadakuditi--Fessler (2026),
+*SIAM Journal on Imaging Sciences* 19(2), 839--878,
+DOI [10.1137/25M175891X](https://doi.org/10.1137/25M175891X), explicitly studies
+smooth singular-value regularizers, including the hyperbola penalty. Its
+indexed primary text and metadata were checked through
+[PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC13138729/) and
+[PubMed](https://pubmed.ncbi.nlm.nih.gov/42089089/).
+This supports the penalty's established optimization relevance; their inverse
+problem constraint differs from the unitary transport constraint. No empirical
+improvement in their applications is claimed.
+
+The additional excluded fragment `spectral_penalty_transport.tex` gives a
+conventional general decoupling criterion. A convex, increasing, radial penalty
+with zero derivative at zero has independent principal-plane minimization if
+its circular phase derivative has exactly one increasing and one decreasing
+branch, with strictly negative curvature on the latter. The Schatten proof's
+large-phase overlap variation then works verbatim; zero-gradient reflections
+are bounded using convexity and the nuclear projection-distance inequality.
+Nonincreasing positive logarithmic elasticity `s rho''(s)/rho'(s)` suffices.
+The family `(tau^2+s^2)^(p/2)-tau^p`, `1 <= p <= 2`, `tau > 0`, satisfies
+this criterion and has the explicit local curvature cutoff stated there.
+This general theorem is a conventional proof draft, not Lean-certified;
+its novelty is provisional. It asserts global value decoupling, without
+claiming a unique scalar optimizer or absence of nonglobal local minima for
+the entire penalty class. The real-line smoothed cutoff in the separate
+fragment follows from the existing real rank-one spectral pairing argument;
+it is not registered as an independent novelty claim.
 
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical

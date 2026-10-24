@@ -70,6 +70,38 @@ theorem schatten_displacement_conj_linearIsometryEquiv
   rw [hconj]
   exact schatten_congr_linearIsometryEquiv e e.symm _ p hp
 
+/-- A spectral sum over all singular values of a normal map can be
+computed from the absolute eigenvalues in any finite orthonormal eigenbasis.
+The ambient-dimension sum includes zero singular values, so `f 0 = 0` is
+not required. -/
+theorem sum_singularValues_eq_sum_norm_eigenvalues
+    {ι M : Type*} [Fintype ι] [AddCommMonoid M]
+    (b : OrthonormalBasis ι 𝕜 E) (A : E →ₗ[𝕜] E)
+    (mu : ι → 𝕜) (hA : ∀ i, A (b i) = mu i • b i) (f : ℝ → M) :
+    (∑ i : Fin (Module.finrank 𝕜 E), f (A.singularValues i)) = ∑ i, f ‖mu i‖ := by
+  classical
+  let e := Fintype.equivFin ι
+  let b' := b.reindex e
+  let nu (i : Fin (Fintype.card ι)) := mu (e.symm i)
+  have heigen (i) : A (b' i) = nu i • b' i := by
+    simpa only [b', nu, OrthonormalBasis.reindex_apply] using hA (e.symm i)
+  have hE : Module.finrank 𝕜 E = Fintype.card ι := Module.finrank_eq_card_basis b.toBasis
+  have hdiag : A = Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal nu) := by
+    apply b'.toBasis.ext
+    intro i
+    simpa [Matrix.toLin_self, Matrix.diagonal_apply] using heigen i
+  let pi := Tuple.sortDesc (fun i => ‖nu i‖)
+  have hpi : Antitone (fun i => ‖nu (pi i)‖) := by
+    simpa only [pi, Function.comp_def] using Tuple.antitone_sortDesc (fun i => ‖nu i‖)
+  rw [hE]
+  calc
+    _ = ∑ i, f ‖nu (pi i)‖ := by
+      apply Finset.sum_congr rfl
+      intro i _
+      rw [hdiag, Matrix.singularValues_toLin_diagonal b' nu pi hpi i]
+    _ = ∑ i, f ‖nu i‖ := Equiv.sum_comp pi (fun i => f ‖nu i‖)
+    _ = _ := Equiv.sum_comp e.symm (fun i => f ‖mu i‖)
+
 /-- A normal operator's Schatten norm is the power sum of the norms of its
 eigenvalues. The orthonormal eigenbasis is supplied explicitly, so the result
 also applies to real operators admitting such a basis and to dimension zero. -/
@@ -79,28 +111,13 @@ theorem schatten_eq_sum_norm_eigenvalues {n : ℕ}
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
     UnitarilyInvariantSeminorm.schatten 𝕜 E E p A =
       (∑ i, ‖mu i‖ ^ p.toReal) ^ (1 / p.toReal) := by
-  classical
-  have hE : Module.finrank 𝕜 E = n := by
-    rw [Module.finrank_eq_card_basis b.toBasis, Fintype.card_fin]
-  have hdiag : A = Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal mu) := by
-    apply b.toBasis.ext
-    intro i
-    simpa [Matrix.toLin_self, Matrix.diagonal_apply] using hA i
-  let pi := Tuple.sortDesc (fun i => ‖mu i‖)
-  have hpi : Antitone (fun i => ‖mu (pi i)‖) := by
-    simpa only [pi, Function.comp_def] using Tuple.antitone_sortDesc (fun i => ‖mu i‖)
   have hp0 : 0 < p.toReal :=
     ENNReal.toReal_pos (zero_lt_one.trans_le Fact.out).ne' hp
   rw [UnitarilyInvariantSeminorm.schatten_apply_of_ne_top p hp]
   congr 1
   rw [← A.sum_fin_singularValues (fun s : ℝ => s ^ p.toReal)
-    (Real.zero_rpow hp0.ne'), hE]
-  calc
-    _ = ∑ i, ‖mu (pi i)‖ ^ p.toReal := by
-      apply Finset.sum_congr rfl
-      intro i _
-      rw [hdiag, Matrix.singularValues_toLin_diagonal b mu pi hpi i]
-    _ = _ := Equiv.sum_comp pi (fun i => ‖mu i‖ ^ p.toReal)
+    (Real.zero_rpow hp0.ne')]
+  exact sum_singularValues_eq_sum_norm_eigenvalues b A mu hA (fun s : ℝ => s ^ p.toReal)
 
 /-- The finite Schatten power sum in an orthonormal eigenbasis indexed
 by any finite type. This avoids sorting or index conventions when assembling

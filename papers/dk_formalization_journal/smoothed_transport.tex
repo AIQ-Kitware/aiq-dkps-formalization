@@ -10,7 +10,9 @@ For $\tau>0$, define the smooth spectral displacement cost
 \]
 Each displacement singular value $s$ contributes
 $\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$. This penalty is quadratic near
-zero and asymptotically linear. Put
+zero and asymptotically linear. Smooth functions of singular values,
+including this hyperbolic penalty, are used in low-rank inverse-problem
+regularization \citep{lobos2026smooth}. Put
 \[
  \eta=\frac{\tau+\sqrt{\tau^2+4}}2>1,
  \qquad c_\tau=\arccos(\eta^{-2}).
@@ -167,3 +169,33 @@ certificate that can be checked without solving a nonconvex optimization
 problem. As $\tau\downarrow0$ the angle cost tends to $2\sin\theta$;
 as $\tau\to\infty$, $2\tau\mu_\tau(\theta)$ tends to
 $8\sin^2(\theta/2)$, the canonical squared Frobenius displacement.
+
+\begin{corollary}[The real line transition]
+\label{cor:smoothed-real-line}
+For two real lines of angle $\theta$ in $\mathbb R^n$, $n\geq2$,
+the minimum over orthogonal transporters is
+\[
+ \min\left\{
+  2\bigl(\sqrt{\tau^2+2-2\cos\theta}-\tau\bigr),\,
+  \sqrt{\tau^2+4}-\tau\right\}.
+\]
+The canonical rotation is optimal exactly when
+$\cos\theta\geq\eta^{-2}/2$. The other term is attained by a single
+Householder reflection transporting the source line to the target line.
+\end{corollary}
+
+\begin{proof}
+If an orthogonal transporter has negative determinant, it has an eigenvalue
+$-1$ and hence a displacement singular value $2$. Its cost is at least
+$\rho_\tau(2)$, attained by a transporting Householder reflection.
+If it has positive determinant, the two largest displacement singular
+values agree: nonreal eigenvalues occur in conjugate pairs and the
+multiplicity of $-1$ is even. For a source unit vector $x$ its image is
+one of the two target unit vectors, so $\|(I-W)x\|\geq2\sin(\theta/2)$.
+Both largest singular values are at least this number. Their cost is
+therefore at least $2\rho_\tau(2\sin(\theta/2))$, attained by the
+canonical planar rotation. Finally,
+$\sqrt{\tau^2+4}=\eta+\eta^{-1}$ and
+$\tau=\eta-\eta^{-1}$ show that equality of the two costs is equivalent
+to $\cos\theta=\eta^{-2}/2$.
+\end{proof}
