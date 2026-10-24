@@ -439,6 +439,16 @@ The classification assertion remains a conventional proof under review.
 These results do not imply a
 no-spurious-local-minimum theorem for the whole smoothed problem.
 
+`SmoothedFunctionalPhase.lean` and `SmoothedExplicitOptimizer.lean` now
+provide a named optimizer rather than only an existence theorem. The formula
+uses functional calculus of the positive cosine operator: amplify each
+principal cosine by `eta^2`, clip at one, and complete it on the positive
+unit circle. Compose the canonical rotation with the adjoint of that phase
+factor. Admissibility, the exact accepted-principal-angle sum, and global
+optimality against every admissible complex unitary are compiled. The scalar
+clipping identity is compiled; the separately displayed clipped nonunitary
+contraction remains a conventional construction.
+
 The 2026-10-24 primary-source search for this extension checked the statements
 of Bolotnikov--Li--Rodman (2001), especially Theorem 3.1 and Lemmas 3.2--3.3.
 Their block-unitary distance problem is unweighted and Theorem 3.1 assumes

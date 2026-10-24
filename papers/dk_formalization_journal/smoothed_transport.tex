@@ -167,6 +167,35 @@ the residual is $\eta\sin\theta$ times the quarter-turn matrix.
 The scalar formula supplies the unitary attaining the same value.
 \end{proof}
 
+\begin{corollary}[An explicit spectral optimizer]
+\label{cor:smoothed-spectral-optimizer}
+Let $C=\sqrt{I-(P-Q)^2}$, let $R$ be a completed canonical rotation,
+and apply the scalar function $c\mapsto\min\{1,\eta^2c\}$ to $C$:
+\[
+ B=\min\{I,\eta^2C\},\qquad
+ Z=B+i\sqrt{I-B^2},\qquad W=RZ^*.
+\]
+Then $B$ attains the convex relaxation, $Z$ is unitary and commutes
+with $P$, and $W$ attains \cref{eq:smoothed-global-minimum}.
+All square roots are positive square roots; the minimum defining $B$
+is spectral.
+\end{corollary}
+
+\begin{proof}
+On a cosine eigenspace of eigenvalue $c=\cos\theta$, the factor $Z$
+is the scalar
+\[
+ \min\{1,\eta^2c\}
+   +i\sqrt{1-\min\{1,\eta^2c\}^2}
+ =e^{i\delta_\tau(\theta)}.
+\]
+Thus $Z$ is the attaining phase factor from the preceding proof.
+The real part $B$ is the attaining contraction from
+\cref{cor:smoothed-exact-relaxation}. Since $C$ commutes with $P$,
+so do both spectral factors. The formula for $W$ now gives the
+required transport and exact cost.
+\end{proof}
+
 \begin{theorem}[All smoothed minimizers]
 \label{thm:smoothed-all-minimizers}
 Fix cosine--sine coordinates, group equal positive angles together, and
