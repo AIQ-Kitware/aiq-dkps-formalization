@@ -121,6 +121,21 @@ an individual norm: $Q$-norms, for example, admit the stronger constant one.
 The projection bound, comparison theorem, fixed-angle sharpness, and real
 minimum are formalized in Lean; see Appendix~\ref{app:small-angle-artifact}.
 
+The intertwining polar unitary itself is classical. Kato
+\citep[Chapter~I, \S4.6, equations~(4.33)--(4.42)]{kato1966perturbation}
+constructed it from the two projections, with earlier work by
+Sz.-Nagy cited there. In the notation above the formula is
+\[
+ R=\bigl(QP+(I-Q)(I-P)\bigr)\bigl(I-(P-Q)^2\bigr)^{-1/2}.
+\]
+Murphy \citep[Lemma~6.2.1, p.~178]{murphy1990operator} established an
+operator-norm comparison from the same polar factor. The estimate
+\cref{eq:sharp-displacement} uses the projection singular values and
+applies to every unitarily invariant seminorm; its global sharpness
+comes from the real four-dimensional family. Bolotnikov, Li, and Rodman
+\citep[Problem~1.1]{bolotnikov2001minimal} had already formulated the
+corresponding ambient unitary-constrained norm optimization problem.
+
 \subsection{Complex principal-plane minimizers}
 \label{sec:complex-trace-model}
 
@@ -179,5 +194,59 @@ transport under a supplied coordinate equivalence. The general
 principal-plane decomposition needed to instantiate that model for every
 complex subspace pair remains to be formalized. This box is omitted from
 the checked-only manuscript.
+\end{tcolorbox}
+\fi
+
+\ifincludeUnformalizedRealTransport
+\begin{tcolorbox}[
+ enhanced,breakable,colback=white,colframe=red!80!black,
+ colbacktitle=red!6!white,coltitle=red!80!black,
+ title={Working extension --- real rank-one and codimension-one transport},
+ fonttitle=\bfseries,boxrule=1pt,
+ left=9pt,right=9pt,top=9pt,bottom=9pt,
+ before skip=12pt,after skip=12pt]
+\begin{proposition}[Exact real line/hyperplane norm minimization]
+Let $n\geq2$ and let $U,V\subset\mathbb R^n$ be lines or hyperplanes
+at principal angle $\theta\in[0,\pi/2]$. Put
+$a=2\sin(\theta/2)$ and, with trailing zero entries to size $n$, let
+$D=\operatorname{diag}(a,a,0,\ldots,0)$ and
+$H=\operatorname{diag}(2,0,\ldots,0)$. For every unitarily invariant
+norm $N$,
+\[
+  \min_{W\in O(n):\,WU=V} N(I-W)
+    =\min\{N(D),N(H)\}.
+\]
+Both candidates are attained, respectively by a direct planar rotation
+of determinant $+1$ and by a Householder reflection of determinant $-1$.
+Consequently, Davis--Kahan's $\pi/3$ minimality claim holds for all
+real subspace pairs in ambient dimension at most three. The verified
+$\mathbb R^4$ counterexample shows that four is the minimum ambient
+real dimension for failure of that short-angle assertion.
+\end{proposition}
+\begin{proof}
+Select unit vectors $x,y$ representing the source and target lines,
+or unit normals for hyperplanes, so $\langle x,y\rangle=\cos\theta$.
+An admissible $W$ has $Wx=\pm y$, whence
+$\|I-W\|_{\rm op}\geq 2\sin(\theta/2)=a$.
+If $\det W=1$, the nonreal eigenvalues of the real orthogonal matrix
+occur in conjugate pairs and the multiplicity of $-1$ is even.
+Thus the two largest singular values of $I-W$ coincide, and both are
+at least $a$. Fan dominance gives $N(I-W)\geq N(D)$, with equality
+for the direct planar rotation. If $\det W=-1$, $-1$ occurs as an
+eigenvalue, and $I-W$ has singular value $2$; hence
+$N(I-W)\geq N(H)$. A single Householder reflection mapping $x$
+to $y$ attains this bound (if $x=y$, choose a reflection fixing $x$).
+The minimum is therefore the smaller of the two values.
+Finally, $D$ is weakly majorized by $H$ exactly when $2a\leq2$,
+equivalently $\theta\leq\pi/3$. Every pair of nonzero proper
+subspaces of the same rank in $\mathbb R^2$ or $\mathbb R^3$
+is a line/hyperplane pair. The fixed-angle $\mathbb R^4$ family
+from \cref{thm:small-angle} violates the asserted minimality at
+arbitrarily small positive angles.
+\end{proof}
+The proof is conventional mathematics and has not been compiled as a
+new Lean theorem. Its source-level novelty remains under investigation;
+see the separate research note. This box is excluded from the
+checked-only manuscript.
 \end{tcolorbox}
 \fi
