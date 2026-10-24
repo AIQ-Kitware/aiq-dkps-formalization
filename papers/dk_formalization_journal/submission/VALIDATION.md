@@ -99,3 +99,16 @@ make -C papers/dk_formalization_journal paper
 On a minimal TeX installation without `bibtex`, use `bibtex8` through a PATH
 shim or via `latexmk -e '$bibtex = "bibtex8 %O %B";' -pdf paper.tex` from the
 manuscript directory.
+
+## Later manuscript switch and source-edition update (23 October 2026)
+
+The main manuscript now includes `sharp_displacement.tex`; `paper_working.tex`
+enables **two** independent provisional flags,
+`\includeUnformalizedComplexTrace` and `\includeUnformalizedRealTransport`.
+This supersedes the obsolete switch name in the older reproducibility text
+above. The verified-only version leaves both false. No new Lean proof was
+claimed or built by this manuscript edit.
+
+`../PAPER_CONTEXT.md` is the entry point for Davis--Kahan publication claim
+boundaries. The separate YWS record is now under
+`../../yws_formalization_conference/YWS_VERSION_RECORD.md`.

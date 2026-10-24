@@ -84,23 +84,6 @@ has no proof: the completed formal treatment consists of the transcribed claim
 as a proposition, a checked counterexample/refutation, a diagnosis of the
 source proof, and repaired theorems.
 
-\section{YWS source-audit scope}
-\label{app:yws-coverage}
-
-The YWS audit uses a different denominator because the journal paper does not
-claim a line-by-line formalization of every mathematical statement in that
-article.  The maintained census has \YWSCensusEntryCount{} rows:
-\YWSCensusPaperSourceCount{} rows associated with printed source material and
-\YWSCensusExplicitAdditionCount{} explicitly marked additions.  All
-\YWSCensusVerifiedCount{} rows resolve to declarations in the normal build.
-
-The source rows include the conclusions of Theorems~1--3 and the equations,
-lemmas, examples, and boundary conventions needed to check those conclusions.
-Several rows can share one correction.  The census has
-\YWSCensusCorrectedCount{} rows whose implementation is classified as corrected,
-but the manuscript reports two printed YWS defects: the missing square in
-equation~(4) and the rank-boundary convention in Theorem~3.
-
 \section{Formalization procedure}
 \label{app:formalization-process}
 
@@ -127,9 +110,7 @@ The paper-facing Davis--Kahan declarations are under
 \path{DavisKahan/Sources/DavisKahan1970}.  Reusable mathematical infrastructure
 is primarily under \path{ForTauCeti}; its declarations already use final
 \texttt{TauCeti.*} namespaces.  The maintained Davis--Kahan result inventory is
-\path{dev/davis-kahan-1970-formalization-result-inventory.json}.  The YWS source
-census is maintained separately under the YWS package and is summarized for
-this manuscript by the generated census snapshot.  This organization permits
+\path{dev/davis-kahan-1970-formalization-result-inventory.json}.  This organization permits
 source-audit records and paper-specific counterexamples to remain local to the
 paper package while reusable analysis is prepared for upstream integration.
 

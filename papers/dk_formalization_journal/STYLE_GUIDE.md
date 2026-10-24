@@ -13,9 +13,9 @@ Keep the main text focused on the scientific claims. Put exact file paths, Lean 
 
 ## Structure the opening around motivation, Lean, and results
 
-Use the Introduction to establish the mathematical importance of Davis--Kahan and YWS, give concise dated citation counts, and explain why the population-gap formulation is useful. Introduce Lean 4 and Mathlib before explaining what formalization means in this project. Then motivate the source audit, reusable foundational development, and resource study, followed by the contribution list.
+Use the Introduction to establish the mathematical importance of Davis--Kahan and its perturbation bounds. Introduce Lean 4 and Mathlib before explaining what formalization means in this project. Then motivate the source audit, reusable foundational development, and resource study, followed by the contribution list.
 
-Use the next section to state the formalization coverage prominently and exhibit the central source theorems beside their Lean signatures. State the complete Davis--Kahan coverage and the narrower YWS coverage directly; put the detailed counting rule and full source correspondence in the referenced appendix.
+Use the next section to state the formalization coverage prominently and exhibit the central source theorems beside their Lean signatures. State the complete Davis--Kahan coverage directly; put the detailed counting rule and full source correspondence in the referenced appendix.
 
 ## Organize around mathematical claims
 
@@ -33,7 +33,7 @@ Define each mathematical symbol once, at its first mathematical occurrence. Trea
 
 Keep the short general guide to Lean syntax in the appendix. Refer readers there before the first displayed Lean signature. Around each theorem, explain only the mathematical meaning specific to that theorem.
 
-The Davis--Kahan and YWS coverage claims should be stated at the strongest scope supported by the source audit. Define detailed denominators and correspondence rules in the appendix.
+The Davis--Kahan coverage claims should be stated at the strongest scope supported by the source audit. Define detailed denominators and correspondence rules in the appendix.
 
 ## Explain Lean in mathematical language
 
@@ -45,13 +45,13 @@ The main body should contain only Lean names needed for the displayed theorem si
 
 ## Present formalization coverage as a contribution
 
-State the complete Davis--Kahan result coverage and the narrower YWS coverage explicitly. Explain what full generality means where needed: real or complex Hilbert spaces, infinite-dimensional settings, unbounded self-adjoint operators, or arbitrary unitarily invariant norms when those are part of the source statement.
+State the complete Davis--Kahan result coverage explicitly. Explain what full generality means where needed: real or complex Hilbert spaces, infinite-dimensional settings, unbounded self-adjoint operators, or arbitrary unitarily invariant norms when those are part of the source statement.
 
 Treat formalization as a source audit by explaining the mechanism briefly: each hypothesis, boundary convention, and intermediate identity must support a checked derivation, which can expose algebraic errors, boundary failures, and false extremal claims. Then discuss the actual defects found.
 
 ## Describe foundational work through the mathematics
 
-When motivating the project, note that formalizing DK and YWS required substantial mathematical infrastructure that was absent from the available Lean library and can support later formalizations.
+When motivating the project, note that formalizing Davis--Kahan required substantial mathematical infrastructure that was absent from the available Lean library and can support later formalizations.
 
 In the foundations section, begin with the gap between the source statements and the available formal library. Name the basic theory areas that were developed and describe their scope in mathematical terms. Use declaration graphs and module classifications as supporting evidence in the appendix.
 

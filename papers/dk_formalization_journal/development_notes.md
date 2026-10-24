@@ -1,5 +1,9 @@
 # Development notes
 
+> Historical record. The current Davis--Kahan journal scope excludes YWS;
+> source-edition and transferred YWS manuscript material are in
+> `../yws_formalization_conference/`. See `PAPER_CONTEXT.md` for current decisions.
+
 > **Journal-scope reset, 2026-09-29.** The current `dk_formalization_journal`
 > manuscript is focused on Davis--Kahan, with YWS only as a secondary
 > specialization/audit case. The journal paper retains a concise discussion of

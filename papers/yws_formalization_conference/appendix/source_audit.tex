@@ -1,0 +1,43 @@
+\section{YWS source-audit scope}
+\label{app:yws-coverage}
+
+The YWS audit uses a separate denominator, because this article does not
+claim a line-by-line formalization of every statement in
+\citet{yu2015davis}. The maintained census has \YWSCensusEntryCount{} entries:
+\YWSCensusPaperSourceCount{} associated with the printed article and
+\YWSCensusExplicitAdditionCount{} explicit additions. All
+\YWSCensusVerifiedCount{} entries have verified Lean evidence. The
+source entries include Theorems~1--3, their main consequences, and
+supporting identities and examples. The
+\YWSCensusCorrectedCount{} entries classified as corrected include multiple
+formal results affected by the same source convention; they do not count
+independent defects.
+
+The archive of the 2015 \emph{Biometrika} advance-access article (printed
+p.~4, equation~(4)) gives a double-angle identity without one required
+square. For real unit vectors $u,v$, the identity proved in Lean is
+\begin{equation}
+  (2\langle v,u\rangle)^2(1-\langle v,u\rangle^2)
+  =\frac14\|v-u\|^2(2-\|v-u\|^2)^2(4-\|v-u\|^2).
+  \label{eq:yws-equation4-corrected}
+\end{equation}
+A checked counterexample refutes the displayed 2015 version, and a
+separate theorem proves the corrected identity for unit vectors.
+
+The same article (printed p.~6, Theorem~3) places the terminal convention
+$\sigma^2_{\operatorname{rank}(A)+1}:=-\infty$ immediately after the rank.
+For a rectangular or rank-deficient matrix, the Gram spectrum has zeros
+between the rank and its ambient dimension. At the rank boundary the
+printed convention can produce an infinite denominator and a false zero
+bound on the distance between singular subspaces. The formalization
+includes a counterexample in dimension two and proves the bound with the
+terminal convention at the ambient spectral index.
+
+The source review also records other edition and hypothesis differences,
+including corrected indices between the 2014 preprint and the 2015 article,
+endpoint conventions in the latter's Theorem~1, and omitted unit-vector
+normalization in the standalone Corollary~1. The corresponding Lean
+statements make the intended mathematical conditions explicit. The claims
+above concern the inspected 2015 advance-access and author-accepted texts;
+they do not assert that every subsequent printing contains the same
+formulas.

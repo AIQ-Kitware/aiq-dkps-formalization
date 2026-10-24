@@ -1,5 +1,9 @@
 # Journal consolidation notes
 
+> Historical record of an earlier scope. The YWS material now belongs to
+> `../yws_formalization_conference/`. The current journal scope is maintained
+> in `PAPER_CONTEXT.md`.
+
 ## Accepted scope (2026-09-29)
 
 The journal paper is a Davis--Kahan paper. YWS is optional/secondary and should

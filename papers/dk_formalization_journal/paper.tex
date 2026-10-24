@@ -49,7 +49,7 @@
   morekeywords=[3]{Prop,Type,Nat,Int,Real,Fin,Set,Submodule,Matrix,EuclideanSpace,
     LinearMap,ContinuousLinearMap,LinearPMap,RCLike,IsTrialResidual,
     IsExactSpectralDecomposition,FormBoundedSylvesterGap,
-    NormalizedSymmetricOperatorIdealFamily,SourcePopulationGap},
+    NormalizedSymmetricOperatorIdealFamily},
 }
 \lstdefinestyle{leanpaper}{%
   language=lean,
@@ -86,11 +86,8 @@
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{corollary}[theorem]{Corollary}
 
-\input{snapshots/census_macros.tex}
-
 
 \newcommand{\Lean}{\textsc{Lean}}
-\newcommand{\YWS}{Yu--Wang--Samworth}
 \newcommand{\DK}{Davis--Kahan}
 \newcommand{\TauCeti}{Tau Ceti}
 \newcommand{\DKResultCount}{29}
@@ -137,29 +134,29 @@
 \maketitle
 
 \begin{abstract}
-We formalize the spectral subspace perturbation theory of Davis and Kahan
-(1970) in Lean~4. Of 29 results identified in the original paper, 28 are
-proved at their reviewed scope and one, Proposition~4.4, is refuted. The
-development covers real and complex Hilbert spaces, unbounded self-adjoint
-operators, interval/exterior and ordered half-infinite spectral gaps, and
-unitarily invariant operator-ideal norms wherever defined. In particular, a
-formalization of the sine-theta estimate identifies the source's positive
-angle operator with the modulus of the rectangular block in its Sylvester
-proof.
+We formalize the spectral-subspace perturbation theory of Davis and Kahan
+(1970) in Lean~4, accounting for all 29 reviewed source-level results:
+28 are proved at their stated scope, and Proposition~4.4 is refuted by a
+machine-checked counterexample. The development retains real and complex
+Hilbert spaces, unbounded self-adjoint operators, finite-interval and
+ordered half-infinite spectral separation, and the required membership
+conditions for unitarily invariant operator-ideal norms. In the sine-theta
+theorem, the source's positive angle operator is identified with the modulus
+of the rectangular Sylvester block used to derive the estimate.
 
-Proposition~4.4 claims that the canonical direct rotation minimizes full
-displacement for every unitarily invariant norm under a real short-angle
-condition. A formalized family in $\mathbb R^4$ gives counterexamples at
-arbitrarily small positive angles. We identify the invalid inequality in the
-original proof and establish a sharp quantitative replacement: for an acute
-pair with maximal principal angle $\sym{alphaAngle}$, the canonical rotation $\sym{Rrotation}$ and
-any admissible orthogonal or unitary map $\sym{Wcompetitor}$ satisfy
-$\sym{NormN}(I-\sym{Rrotation})\leq\sec(\alpha/2)\sym{NormN}(I-\sym{Wcompetitor})$, with the factor optimal uniformly over
-unitarily invariant norms. We also formalize the exact trace-norm minimum
-for the real counterexample family. The development supplies reusable
-operator-theoretic foundations and formalizes the principal
-Yu--Wang--Samworth perturbation bounds, exposing two errors in their printed
-formulas.
+The printed Proposition~4.4 asserts full-displacement minimality of the
+canonical direct rotation under a real short-angle hypothesis. We prove
+that a family in $\mathbb R^4$ violates this assertion at every positive acute
+principal angle, and identify the failed step in the original proof.
+For finite-dimensional real or complex acute subspace pairs we formalize
+its sharp quantitative replacement: every admissible transporter
+$\sym{Wcompetitor}$ satisfies
+$\sym{NormN}(I-\sym{Rrotation})\leq
+\sec(\sym{alphaAngle}/2)\,\sym{NormN}(I-\sym{Wcompetitor})$,
+where $\sym{alphaAngle}$ is the largest principal angle and $\sym{NormN}$
+is any unitarily invariant norm. The factor is attained for every fixed
+positive acute angle by the real trace-norm family; its competitor
+attains the exact global trace-norm minimum.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
@@ -182,9 +179,7 @@ separation of spectra \citep{davis1970rotation,kato1976perturbation}.
 Their 1970 treatment includes direct rotations of subspaces, inequalities
 for unitarily invariant norms, and sine and tangent estimates for unbounded
 operators. The finite-dimensional theory underlies many spectral algorithms
-\citep{stewart1990matrix,wedin1972perturbation}. In statistics, the
-population-gap bounds of Yu, Wang, and Samworth \citep{yu2015davis} make
-these estimates useful when the empirical spectrum is itself random.
+\citep{stewart1990matrix,wedin1972perturbation}.
 
 We have formalized the original Davis--Kahan results in Lean~4
 \citep{demoura2021lean4}, using Mathlib \citep{mathlib2020}. The central
@@ -214,28 +209,28 @@ norm-minimization work of \citet{bolotnikov2001minimal} and subsequent
 Grassmann-angle results \citep{qiu2006grassmann,zhang2007angular,zhang2010canonicalangles}
 provide the appropriate context for these deductions.
 
-We separately formalize the principal Yu--Wang--Samworth (YWS)
-perturbation inequalities and correct a missing square and a rank-boundary
-convention in their printed statements. Across the Davis--Kahan
-source, 28 of 29 reviewed results are proved at their stated scope; the
-remaining claim is refuted as printed. The exact result correspondence is
-recorded in Appendix~\ref{app:dk-inventory}, with the review method in
+The complete Davis--Kahan result correspondence appears in
+Appendix~\ref{app:dk-inventory}, with the review method in
 Appendix~\ref{app:source-review}.
 
 \paragraph{Contributions.}
 \begin{enumerate}
-  \item We formalize the 1970 Davis--Kahan results, including the full
-    real/complex, unbounded, operator-ideal sine-theta theorem and its
-    interval/exterior and ordered half-infinite gap alternatives. We
-    develop the spectral, geometric, and operator-ideal foundations needed
-    for these statements.
-  \item We refute Proposition~4.4 within its real short-angle hypotheses,
-    prove failure at arbitrarily small angles, and formalize both its
-    $\sym{NormQ}$-norm consequence and the sharp universal multiplicative bound for
-    full displacement. The real counterexample also yields an exact,
-    formally verified trace-norm minimum.
-  \item We formalize the principal YWS bounds and correct two errors in
-    their printed formulations.
+  \item We prove 28 of the 29 reviewed results of Davis and Kahan (1970)
+    at their source scope and formally refute the remaining proposition.
+    The formalization includes real and complex, infinite-dimensional and
+    unbounded-operator results, with the original spectral-separation and
+    operator-ideal hypotheses. We construct the spectral, Sylvester, and
+    operator-ideal theory needed for these proofs.
+  \item We formalize a real four-dimensional refutation of the original
+    Proposition~4.4 at every positive acute angle, including the claimed
+    $\pi/3$ range and arbitrarily small angles. We diagnose the failed
+    inequality and derive the valid $\sym{NormQ}$-norm consequence.
+  \item We prove the projection-distance lower bound for every unitarily
+    invariant seminorm and the sharp approximation factor
+    $\sec(\sym{alphaAngle}/2)$ for the direct rotation. The Lean results
+    include fixed-angle sharpness, the optimal common factor $2/\sqrt3$
+    within the printed angle range, and an attained global trace-norm
+    minimum for the real counterexample family.
 \end{enumerate}
 
 \section{Source coverage and the sine-theta theorem}
@@ -256,10 +251,7 @@ and direct-rotation arguments.
 
 These results depend on spectral and operator-ideal constructions that cannot
 be reduced to finite matrices without changing the assumptions of the source
-statements. The finite-dimensional YWS specialization covers Theorems~1--3 and
-their supporting identities and boundary conventions. Its smaller source
-account, including the two printed defects, appears in
-Appendix~\ref{app:yws-coverage}.
+statements.
 
 \subsection{The full-scope sine-theta theorem}
 \label{sec:sine-theta}
@@ -593,56 +585,6 @@ Davis--Kahan package contains the source statements, examples, and the
 Proposition~4.4 counterexample; Appendix~\ref{app:source-review} records the
 statement-level review procedure.
 
-\section{Yu--Wang--Samworth as a statistical specialization}
-\label{sec:yws}
-
-YWS \citep{yu2015davis} gives a finite-dimensional population-gap version of
-subspace perturbation theory.  Let
-$\sym{Sigma},\sym{SigmaHat}\in\mathbb{R}^{p\times p}$ be symmetric, with population
-eigenvalues $\lambda_1\ge\cdots\ge\lambda_p$.  For
-$1\le r\le s\le p$, write $d=s-r+1$ and let $\sym{YWSV},\sym{YWSVhat}$ contain orthonormal
-eigenvectors at indices $r,\ldots,s$.  With population gap
-\[
-  \sym{Delta}=
-  \min\{\lambda_{r-1}-\lambda_r,\lambda_s-\lambda_{s+1}\}>0,
-\]
-YWS Theorem~2 gives
-\begin{equation}
-  \|\sin\sym{Theta}(\sym{YWSVhat},\sym{YWSV})\|_{\mathrm F}
-  \le
-  \frac{2\min\{\sqrt d\,\|\sym{SigmaHat}-\sym{Sigma}\|_{\mathrm{op}},
-                    \|\sym{SigmaHat}-\sym{Sigma}\|_{\mathrm F}\}}
-       {\sym{Delta}}.
-  \label{eq:yws-sintheta}
-\end{equation}
-An aligned-frame bound follows with an additional factor $\sqrt2$.
-Here $\lambda_0=+\infty$ and $\lambda_{p+1}=-\infty$ are the usual
-boundary conventions. Theorem~3 applies the same population-gap principle to left and right singular
-subspaces through the corresponding Gram matrices.  The formalization checks
-Theorems~1--3 and the supporting identities and conventions needed for those
-claims; Appendix~\ref{app:yws-coverage} gives the exact scope.
-
-Two printed defects appear in this comparison.  Equation~(4) omits a square.
-For real unit vectors $u,v$, the corrected identity is
-\begin{equation}
-(2\langle v,u\rangle)^2(1-\langle v,u\rangle^2)
-=
-\frac14\|v-u\|^2(2-\|v-u\|^2)^2(4-\|v-u\|^2).
-\label{eq:yws-equation4-corrected}
-\end{equation}
-Lean verifies both a numerical counterexample to the printed equation and the
-corrected identity in general.
-
-The second defect is the boundary convention in Theorem~3.  The assignment
-$\sigma^2_{\operatorname{rank}(A)+1}:=-\infty$ can make the denominator
-infinite when the selected block reaches the rank boundary, giving a zero upper
-bound even when the compared singular subspaces differ.  The Gram-matrix proof
-uses the ambient spectrum, where singular values after the rank and before the
-ambient dimension are zero.  The corrected theorem extends the singular values
-by zero through the ambient dimension and places the terminal convention after
-that dimension.  A checked $2\times2$ rank-one example witnesses the failure
-of the printed convention.
-
 \section{Related work}
 \label{sec:related}
 
@@ -652,10 +594,7 @@ operator treatments
 \citep{davis1970rotation,wedin1972perturbation,stewart1990matrix}.
 Sylvester-equation methods provide closely related estimates for operator
 angles and unbounded self-adjoint operators
-\citep{grubisic2005sylvester,grubisic2010tan}.  YWS packages a
-finite-dimensional version around a population eigengap for statistical use
-\citep{yu2015davis}; related spectral perturbation bounds are now standard in
-high-dimensional statistics \citep{cape2019two,chen2021spectral}.
+\citep{grubisic2005sylvester,grubisic2010tan}.
 
 The formal development builds on Lean~4 and Mathlib
 \citep{demoura2021lean4,mathlib2020}.  Large source-driven formalizations such
@@ -686,9 +625,7 @@ arbitrarily small angles. The valid squared-displacement theorem yields
 $\sym{NormQ}$-norm minimality, while the general sharp comparison gives a factor
 $\sec(\alpha/2)$ for unitarily invariant norms. Both the bound and its
 uniform optimality, together with the exact real trace-norm minimum, are
-formalized. The accompanying operator-theoretic foundations are reusable,
-and the YWS development provides a further instance of source-level
-verification and correction.
+formalized. The supporting spectral and operator-ideal developments are reusable.
 
 \section*{AI assistance disclosure}
 ChatGPT, Claude Code, and Codex were used for mathematical and library search,

@@ -4,15 +4,24 @@ This directory contains the manuscript and its generated analysis snapshots.
 
 Before editing manuscript prose, read:
 
+- [PAPER_CONTEXT.md](PAPER_CONTEXT.md), which keeps accepted results, mathematical
+  and verification boundaries, publication decisions, and unresolved questions;
 - [STYLE_GUIDE.md](STYLE_GUIDE.md), which describes the writing style and manuscript structure we want;
 - [../BANNED_WORDS_AND_PHRASES.md](../BANNED_WORDS_AND_PHRASES.md), which lists prohibited vocabulary and recurring LLM writing patterns.
 - [../SPECIFIC_NEGATIVE_PROMPTS.md](../SPECIFIC_NEGATIVE_PROMPTS.md), which records recurring manuscript-specific failure modes.
+
+The YWS material previously in this article was moved to
+`../yws_formalization_conference/`. Keep the Davis--Kahan paper scoped to the
+1970 source and its mathematical extensions.
 
 These rules apply to the main text, appendices, captions, and generated prose intended for the paper.
 
 ## Manuscript operating rules
 
 - Keep the main text centered on the mathematics, formalization results, source-audit findings, foundational theory, and reported resource measurements.
+- Maintain evidence and uncertainty that does not warrant publication in
+  `PAPER_CONTEXT.md` and `claims_to_evidence.md`; do not insert
+  editorial decisions, agent handoffs, or negative-evidence logs into the rendered paper.
 - Put source-coverage bookkeeping, declaration graphs, provenance tables, exact Lean names beyond the displayed signatures, file paths, registry mechanics, and regeneration details in the appendices.
 - When comparing a source theorem with Lean, state the theorem first and place its Lean signature immediately afterward. Keep shared notation above theorem-specific subsections.
 - Keep the general Lean-reader guide in the appendix and refer to it before the first displayed signature.

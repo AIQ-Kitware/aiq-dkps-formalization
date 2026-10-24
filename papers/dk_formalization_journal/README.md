@@ -1,15 +1,18 @@
 # Davis--Kahan (1970) in Lean: Formalization, Counterexample, and Repair
 
 This directory contains the journal manuscript on the Lean formalization and
-mathematical audit of Davis--Kahan perturbation theory. The scope is now fixed:
+mathematical audit of Davis--Kahan perturbation theory. **Start with
+[`PAPER_CONTEXT.md`](PAPER_CONTEXT.md)** for established results, verification
+status, unresolved publication questions, and current editorial decisions.
+The YWS source audit and old manuscript sections now live in the separate
+[`yws_formalization_conference`](../yws_formalization_conference/) stub.
+The scope is now fixed:
 
 - **primary subject:** Davis and Kahan's 1970 perturbation paper and the reusable
   operator-theoretic infrastructure required to formalize it;
-- **secondary application:** Yu--Wang--Samworth (YWS), where it gives a compact
-  statistical specialization and an independent source-audit case;
-- **additional mathematical result:** an explicit family refuting full-displacement
-  trace-norm minimality at every positive acute angle, with a conventional proof
-  and a verified Lean proof of the parameterized strengthening; and
+- **additional verified mathematical results:** a real four-dimensional refutation
+  at every positive acute angle, an all-norm projection-displacement lower bound,
+  the sharp secant approximation factor, and an attained real trace-norm optimum; and
 - **out of scope for this manuscript:** downstream application projects and the
   workshop paper's empirical human--LLM/process study, practitioner corpus, and
   resource-accounting analysis.
@@ -57,9 +60,10 @@ and reusable `ForTauCeti/.../UnitarilyInvariantSeminorm/BlockTrace`.
 **What remains formally open** is the unconditional theorem identifying every
 equal-rank complex subspace pair with a finite principal-plane model. The
 standard mathematical proof is isolated in the red-framed file
-`sharp_displacement_unformalized.tex`. Only that file is governed by
-`\includeUnformalizedDisplacementtrue` in `paper.tex`; set the switch false
-to omit the unresolved global claim from a verified-only submission.
+`sharp_displacement_unformalized.tex`. The checked-only paper disables
+`\includeUnformalizedComplexTrace` and `\includeUnformalizedRealTransport`;
+`paper_working.tex` enables those two separately red-framed mathematical
+extensions. Neither provisional theorem is promoted to a checked Lean claim.
 
 `submission/VALIDATION.md` gives the distinction between the user-confirmed
 Lean build and LaTeX checks, and lists the remaining proof-development tasks.
@@ -101,17 +105,13 @@ state this bridge explicitly rather than identify the two representations.
 `paper.tex` is the journal manuscript. Its structure is:
 
 1. mathematical motivation and source scope;
-2. the parameterized Proposition 4.4 counterexample, proof diagnosis, Q-norm
-   consequence, and relationship to prior minimization theory, with the Lean-verified sharp real/universal bounds and a visibly
-   marked optional complex global extension;
-3. the full-scope sine-theta theorem, explicit separation hypotheses, modulus
-   identity, and Sylvester reduction;
+2. the full-scope sine-theta theorem and Sylvester reduction;
+3. the parameterized Proposition 4.4 counterexample, proof diagnosis,
+   Q-norm consequence, and verified sharp displacement estimates;
 4. mathematical architecture and formal ancestry;
-5. YWS as a shorter statistical specialization and source-audit case;
-6. related work, conclusion, AI-assistance disclosure, and artifact availability;
-7. references; then
-8. appendices with Lean-reading notation, result inventory, correspondence review,
-   artifact organization, and reproduction and extension verification evidence.
+5. related work, conclusion, AI-assistance disclosure, and artifact availability;
+6. references and appendices with the notation guide, Davis--Kahan result
+   inventory, source review, and reproduction information.
 
 `appendix_process.tex` now contains supporting review methodology and the
 complete Davis--Kahan inventory. It is not an empirical process-study appendix.
@@ -143,28 +143,10 @@ truth. The main evidence locations are:
   theorem;
 - `ForTauCeti/`: reusable mathematical foundations, with final declarations in
   the `TauCeti.*` namespace;
-- `YuWangSamworth2015/`: YWS formalization and source-audit material; and
-- `snapshots/census_macros.tex`: manuscript-facing YWS census counts.
+- `../yws_formalization_conference/`: the separate YWS conference-paper stub.
 
 `claims_to_evidence.md` records the claims that are safe to make in the current
 journal manuscript and their supporting artifacts.
-
-## YWS terminology
-
-Use **two printed source defects in YWS**, not “two false YWS theorems.” The two
-printed defects are:
-
-1. equation (4) is missing a square; and
-2. Theorem 3's printed rank-boundary convention uses `rank(A)+1` where the
-   argument requires the ambient singular/eigenvalue index together with the
-   ordinary zero continuation of singular values.
-
-Several theorem-facing census rows depend on these corrections, so the number
-of rows marked corrected is larger than two. That row count is not a defect
-count.
-
-Reserve “false proposition” for Davis--Kahan Proposition 4.4, where the
-repository contains an explicit formal counterexample to the printed claim.
 
 ## Build
 
@@ -187,8 +169,8 @@ tooling/submodules that are absent from a lightweight source archive.
 
 ## Editing rules for this draft
 
-- Keep Davis--Kahan dominant. YWS may clarify impact, conventions, or statistical
-  specialization, but should not become a co-equal second paper.
+- Keep the manuscript on Davis--Kahan; YWS material belongs in the separate
+  conference-paper stub.
 - State the mathematical theorem before discussing its Lean representation.
 - Distinguish proof/kernel verification from semantic/source correspondence.
 - For non-literal representation matches, state the mathematical equivalence

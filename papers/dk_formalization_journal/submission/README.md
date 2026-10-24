@@ -60,8 +60,8 @@ journal.
 ## Files to submit eventually
 
 The manuscript uses paper.tex, counterexample.tex, sharp_displacement.tex,
-appendix_process.tex, references.bib, and snapshots/census_macros.tex. Keep the exact Lean artifact
-and validation evidence separately accessible. A buildable manuscript-source
+appendix_process.tex, appendix_notation.tex, and references.bib. Keep the exact
+Lean artifact and validation evidence separately accessible. A buildable manuscript-source
 bundle is supplied alongside the overlay; it contains no proof-library copy.
 The supplement files in this directory are preparation records, not automatic
 journal attachments.

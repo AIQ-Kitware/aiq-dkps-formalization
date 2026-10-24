@@ -1,0 +1,7 @@
+## Source-edition facts and editorial decision on YWS
+
+The 2014 arXiv text and the 2015 *Biometrika* text are different. The 2015 text fixes some indexing and changes examples, but the two inspected 2015 copies **still contain** a missing square in equation (4) and the terminal `sigma^2_{rank(A)+1} = -infinity` convention in Theorem 3. We have **not** verified a still-later corrected printing. See `YWS_VERSION_RECORD.md` for exact PDF URLs, printed pages, theorem identifiers, checked Lean counterexamples, other edition/hypothesis discrepancies, and outstanding questions.
+
+**Manuscript decision:** the abstract and contributions describe the **YWS formalization itself**. The mathematical details of two examined 2015 source discrepancies live in the appendix (`appendix_process.tex`, § `app:yws-coverage`). The journal article does not advertise first discovery of YWS corrections or assume the discrepancies persist in every later printing. The full editorial/edition uncertainty stays in the paper-directory record.
+
+Do not summarize the YWS census as exactly two problems. It also records published Theorem 1 endpoint conventions, a standalone Corollary 1 normalization omission, and differences between the preprint and journal. `7` corrected tracking rows (from the current snapshot) are **not** seven independent errors. See `dev/yu-wang-samworth-2015-full-source-census.json` for classifications and examples.

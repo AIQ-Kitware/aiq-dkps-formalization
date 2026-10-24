@@ -1,9 +1,9 @@
 # Journal claims to evidence
 
 This file maps the principal claims in `paper.tex` to current repository
-evidence. It is deliberately narrower than the historical draft2 accounting
-notes: this journal manuscript is about Davis--Kahan, with YWS as a secondary
-application/audit case.
+evidence. Read `PAPER_CONTEXT.md` for the publication boundaries. The YWS source audit
+is in `../yws_formalization_conference/`. This journal manuscript concerns
+Davis--Kahan.
 
 | Manuscript claim | Evidence | Qualification |
 |---|---|---|
@@ -13,13 +13,10 @@ application/audit case.
 | 28 Davis--Kahan targets are proved at reviewed source scope and Proposition 4.4 is refuted as printed. | Same inventory: 28 `disposition = proved_exact`; `DK-4.4-prop` has `disposition = refuted_as_transcribed`. | Do not summarize this as “29 theorems proved.” |
 | The selected sine-theta theorem covers the real/complex, unbounded, unitarily invariant norm formulation with finite and ordered half-infinite form-gap alternatives. | `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean`, theorem `sinTheta_unbounded_formGap_whereDefinedUIN_rclike`; related definitions in the same source layer. | Describe only the hypotheses actually encoded. In particular, do not claim extra domain generality from the forward-inclusion formulation alone. |
 | The selected Lean sine-theta theorem is stated on a positive trial-coordinate `sin Theta0` operator, and its rectangular Sylvester representative has exactly that operator as its modulus. | `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean`: `sourceDirectedSinThetaOperator`, `sourceDirectedSinThetaOperator_eq_modulus`, and `sinTheta_unbounded_formGap_whereDefinedUIN_rclike`; supporting review in `papers/dk_formalization_workshop/notes/SINE_THETA_NORM_SOURCE_REVIEW.md`. | Keep the operator types distinct: the rectangular block maps trial coordinates into the ambient space, while the positive sine is an endomorphism of trial coordinates. |
-| Davis--Kahan Proposition 4.4 is false as printed. | `DavisKahan/Sources/DavisKahan1970/Section4.lean`; `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean`. | The formal witness is four-dimensional and uses principal angle `pi/4`. |
+| Davis--Kahan Proposition 4.4 is false for every positive acute principal angle; every proposed positive angle cutoff is contradicted by an explicit real 4D pair. | `ShortRotationCounterexample.lean`; `SmallAngleCounterexample.lean`; `Section4SmallAngle.lean`, `arbitrarilySmall_fullDisplacement_refuted`. | The fixed `pi/4` example is a special case; the parameterized family is user-confirmed compiled. Phase adjustment itself occurs in Davis--Kahan Example 4.2. |
 | The printed proof of Proposition 4.4 uses an invalid full-displacement norm step. | `ShortRotationCounterexample.lean` and the source-review material surrounding Section 4. | State the failed inequality concretely rather than merely saying the proof has a gap. |
 | A Q-norm version of the Proposition 4.4 conclusion is valid. | `DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean`, including `IsQNorm` and `directRotation_fullDisplacement_qnorm`. | Do not automatically identify this formal class with every commonly named norm family unless separately proved/cited. |
 | The formalization required reusable operator-theoretic foundations beyond the paper-specific statements. | `ForTauCeti/` and Davis--Kahan foundation layers, including partial/unbounded operators, spectral/form-gap machinery, symmetric operator ideals, principal-angle/direct-rotation geometry, and Sylvester results. | Discuss mathematical capabilities, not raw module counts, unless a fresh reproducible census is provided. |
-| YWS is a downstream statistical specialization supported by its own Lean layer. | `YuWangSamworth2015/YuWangSamworth2015/CitationSurface.lean`, theorem modules under `Symmetric/` and `Rectangular/`. | YWS is secondary in this journal manuscript. |
-| The YWS source audit found two printed defects. | `YuWangSamworth2015/` audit/grounding files and machine-checked correction/refutation declarations. | The defects are equation (4)'s missing square and Theorem 3's rank-boundary convention. |
-| The current YWS census has 24 tracking entries: 22 printed-source entries and 2 explicit additions; all 24 are verified and 7 rows use corrected statements. | `snapshots/census_macros.tex` and the underlying YWS census generator/source. | “7 corrected rows” does not mean seven independent source defects. |
 | AI assisted the formalization and prose preparation. | Repository/model provenance and the explicit disclosure in `paper.tex` and `appendix_process.tex`. | No learning-effectiveness or workflow-effectiveness claim is made. |
 
 ## Claims deliberately removed from the journal manuscript
@@ -65,10 +62,13 @@ its explicit separation of formal verification from source correspondence.
 | Full trace is additive under orthogonal operator block sums; every finite principal-plane model with unchanged summand admits an attained global trace minimum; unitary coordinate transport preserves this equality. | `ForTauCeti/.../BlockTrace.lean`, `ComplexTraceAssembly.lean`, `ComplexTraceFiniteModel.lean`: `phasePlaneModel_global_trace_minimizer`, `phasePlaneModel_with_fixed_global_trace_minimizer`, `AttainsProjectionTraceBound.conjugate`. | Compiled and confirmed. |
 | Every equal-rank complex subspace pair, without any acuteness hypothesis, admits a global trace minimizer of value `N₁(P_U-P_V)=2 sum sin(theta_j)`. | Conventional Halmos/CS argument in red-framed `sharp_displacement_unformalized.tex`. The verified finite-plane and transport lemmas require an ambient coordinate equivalence not yet produced for arbitrary pairs. | **Unconditional Lean theorem still outstanding.** |
 
-`paper.tex` always includes `sharp_displacement_verified.tex`. Only the global
-complex theorem in `sharp_displacement_unformalized.tex` is controlled by
-`\includeUnformalizedDisplacementtrue`; set it false for a verified-only
-submission. The historical Davis--Kahan source-result inventory remains 29.
+`paper.tex` includes `sharp_displacement.tex`, which retains the verified
+sharp-displacement results in the checked manuscript. It disables two
+independent provisional switches: `\includeUnformalizedComplexTracefalse`
+and `\includeUnformalizedRealTransportfalse`.
+`paper_working.tex` enables both red-framed extensions. The arbitrary-pair
+complex optimum and real rank-one theorem remain conventional arguments
+without unconditional Lean proofs. The historical Davis--Kahan source-result inventory remains 29.
 
 The axiom/interface audit is
 `DavisKahan/Sources/DavisKahan1970/Audits/SmallAngleCounterexample.lean`.
