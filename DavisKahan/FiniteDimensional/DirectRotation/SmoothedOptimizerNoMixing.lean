@@ -314,6 +314,49 @@ theorem minimizing_weighted_transport_relative_commutes_rotation_on_positive_cos
   rw [hx, hCZx, hF x hx, hF (Z x) hCZx, map_add, map_smul, map_smul,
     map_smul, map_smul, map_smul, hgrade c hc x hx]
 
+/-- If the principal cosine is injective, every minimizing relative phase
+commutes with the whole canonical rotation. The fixed directions and
+arbitrary repeated positive cosines are included. -/
+theorem minimizing_weighted_transport_relative_commutes_rotation_of_injective_cosine_complex
+    (a b : ℝ) (hb : 0 < b) (hab : b < a)
+    (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L)
+    (T : E ≃ₗᵢ[ℂ] E) (hT : K.map T.toLinearMap = L)
+    (hatt : UnitarilyInvariantSeminorm.nuclear ℂ E E
+      ((a : ℂ) • T.toLinearMap - (b : ℂ) • LinearMap.id) =
+        weightedRotationMinimum a b (Proposition35.section3CosAngleOperator K L))
+    (hinj : Function.Injective (Proposition35.section3CosAngleOperator K L)) :
+    let R := Unitary.linearIsometryEquiv
+      (⟨nonacuteDirectRotation K L (finiteCrossedDefectEquiv K L hKL),
+        nonacuteDirectRotation_mem_unitary K L (finiteCrossedDefectEquiv K L hKL)⟩ :
+          unitary (E →L[ℂ] E))
+    Commute (R.trans T.symm : E →L[ℂ] E) (R : E →L[ℂ] E) := by
+  let R := Unitary.linearIsometryEquiv
+    (⟨nonacuteDirectRotation K L (finiteCrossedDefectEquiv K L hKL),
+      nonacuteDirectRotation_mem_unitary K L (finiteCrossedDefectEquiv K L hKL)⟩ :
+        unitary (E →L[ℂ] E))
+  let C := Proposition35.section3CosAngleOperator K L
+  have hC := ((ContinuousLinearMap.nonneg_iff_isPositive).mp
+    (Proposition35.section3CosAngleOperator_nonneg K L)).toLinearMap
+  let e := hC.isSymmetric.eigenvectorBasis rfl
+  let c := hC.isSymmetric.eigenvalues rfl
+  have he (i) : C (e i) = (c i : ℂ) • e i := hC.isSymmetric.apply_eigenvectorBasis rfl i
+  have hc (i) : 0 < c i := by
+    have hnonneg : 0 ≤ c i := hC.nonneg_eigenvalues rfl i
+    have hne : c i ≠ 0 := by
+      intro hz
+      have hx : e i = 0 := by
+        apply hinj
+        change C (e i) = C 0
+        rw [he, hz, Complex.ofReal_zero, zero_smul, map_zero]
+      exact e.orthonormal.ne_zero i hx
+    exact lt_of_le_of_ne hnonneg hne.symm
+  apply ContinuousLinearMap.coe_injective
+  apply e.toBasis.ext
+  intro i
+  change (R.trans T.symm) (R (e i)) = R ((R.trans T.symm) (e i))
+  exact minimizing_weighted_transport_relative_commutes_rotation_on_positive_cosine_complex
+    a b hb hab K L hKL T hT hatt (c i) (hc i) (e i) (he i)
+
 /-- Every minimizing transporter is self-adjoint on the actual right-angle
 defect space. The preceding cosine commutation theorem makes this a
 reducing restriction, with no coupling to positive angles or fixed space. -/

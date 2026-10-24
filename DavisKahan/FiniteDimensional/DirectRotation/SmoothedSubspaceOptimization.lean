@@ -105,6 +105,74 @@ theorem exists_subspace_paired_rotation_reflection_basis_complex
       hC hB hR hpy U.reflection_involutive hanti
   exact ⟨n, m, e, theta, eps, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, hJf⟩
 
+/-- Every orthogonal projection commuting with the canonical rotation and
+source reflection admits a common paired rotation frame. Its eigenvalue is
+zero or one on each pair, with the same value on its two reflected halves. -/
+theorem exists_subspace_paired_rotation_projection_basis_complex
+    (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L)
+    (P : E →L[ℂ] E) (hP : IsStarProjection P)
+    (hPR : Commute P (nonacuteDirectRotation K L (finiteCrossedDefectEquiv K L hKL)))
+    (hPJ : ∀ x, P (K.reflection x) = K.reflection (P x)) :
+    let R := nonacuteDirectRotation K L (finiteCrossedDefectEquiv K L hKL)
+    Commute P (Proposition35.section3CosAngleOperator K L) ∧
+    ∃ n m : ℕ, ∃ (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
+      (theta : Fin n → ℝ) (eps : Fin m → ℝ) (sign : Fin n → Bool),
+      (∀ i, theta i ∈ Set.Ioc 0 (Real.pi / 2)) ∧
+      (∀ i, Proposition35.section3CosAngleOperator K L (e (.inl (0, i))) =
+        (Real.cos (theta i) : ℂ) • e (.inl (0, i))) ∧
+      (∀ i, Proposition35.section3CosAngleOperator K L (e (.inl (1, i))) =
+        (Real.cos (theta i) : ℂ) • e (.inl (1, i))) ∧
+      (∀ j, Proposition35.section3CosAngleOperator K L (e (.inr j)) = e (.inr j)) ∧
+      (∀ i, R (e (.inl (0, i))) =
+        Complex.exp ((theta i : ℂ) * Complex.I) • e (.inl (0, i))) ∧
+      (∀ i, R (e (.inl (1, i))) =
+        Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i))) ∧
+      (∀ j, R (e (.inr j)) = e (.inr j)) ∧
+      (∀ i, K.reflection (e (.inl (0, i))) = e (.inl (1, i))) ∧
+      (∀ j, K.reflection (e (.inr j)) = (eps j : ℂ) • e (.inr j)) ∧
+      ∀ r i, P (e (.inl (r, i))) = (if sign i then (1 : ℂ) else 0) • e (.inl (r, i)) := by
+  classical
+  let D := finiteCrossedDefectEquiv K L hKL
+  let R := nonacuteDirectRotation K L D
+  let C := Proposition35.section3CosAngleOperator K L
+  let B := -Complex.I • (R - C)
+  have hPRs : Commute P (star R) := by
+    change P * star R = star R * P
+    simpa only [star_mul, hP.isSelfAdjoint.star_eq] using (congrArg star hPR.eq).symm
+  have hPC : Commute P C := by
+    have h := (hPR.add_right hPRs).eq
+    change P * (R + star R) = (R + star R) * P at h
+    rw [nonacuteDirectRotation_add_star_eq_two_cosine K L D] at h
+    apply smul_right_injective (E →L[ℂ] E) (by norm_num : (2 : ℂ) ≠ 0)
+    change (2 : ℂ) • (P * C) = (2 : ℂ) • (C * P)
+    simpa only [two_smul, mul_add, add_mul] using h
+  have hPB : Commute B P := ((hPR.sub_right hPC).smul_right (-Complex.I)).symm
+  let R' := Unitary.linearIsometryEquiv (⟨R, nonacuteDirectRotation_mem_unitary K L D⟩ :
+    unitary (E →L[ℂ] E))
+  obtain ⟨hC, hB, hR, hpy, hanti⟩ := canonical_rotation_model K L D
+  obtain ⟨n, m, e, theta, eps, nu, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, hJf, hPe⟩ :=
+    exists_paired_rotation_joint_eigenbasis R' K.reflection C.toLinearMap B.toLinearMap
+      P.toLinearMap hC hB hR hpy K.reflection_involutive hanti hP.isSelfAdjoint.isSymmetric
+      (show Commute B.toLinearMap P.toLinearMap from
+        congrArg ContinuousLinearMap.toLinearMap hPB.eq) hPJ
+  have hnu (i : Fin n) : nu i = 0 ∨ nu i = 1 := by
+    have h := congrArg (fun A : E →L[ℂ] E => A (e (.inl (0, i)))) hP.isIdempotentElem.eq
+    change P (P (e (.inl (0, i)))) = P (e (.inl (0, i))) at h
+    rw [show P (e (.inl (0, i))) = _ from hPe 0 i, map_smul,
+      show P (e (.inl (0, i))) = _ from hPe 0 i, smul_smul] at h
+    have heq := smul_left_injective ℂ (e.orthonormal.ne_zero (.inl (0, i))) h
+    have hfac : nu i * (nu i - 1) = 0 := by calc
+      _ = nu i * nu i - nu i := by ring
+      _ = 0 := sub_eq_zero.mpr heq
+    exact (mul_eq_zero.mp hfac).imp id sub_eq_zero.mp
+  refine ⟨hPC, n, m, e, theta, eps, fun i => decide (nu i = 1), hθ,
+    hC0, hC1, hCf, hR0, hR1, hRf, hJ0, hJf, ?_⟩
+  intro r i
+  have hp : P (e (.inl (r, i))) = nu i • e (.inl (r, i)) := hPe r i
+  rcases hnu i with hi | hi
+  · simpa [hi] using hp
+  · simpa [hi] using hp
+
 /-- The completed canonical rotation admits paired eigenphases and
 matching cosine eigenvalues, including its right-angle planes. -/
 theorem exists_subspace_paired_rotation_basis

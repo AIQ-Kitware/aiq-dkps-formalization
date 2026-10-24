@@ -22,52 +22,48 @@ namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
-/-- An arbitrary finite complex subspace pair admits a common paired
-rotation frame in which every independent choice of optimal phase sign
-is realized by a global optimizer over all ambient transporters.
-No supplied block decomposition or simple-angle hypothesis is required. -/
-theorem exists_independent_signed_weighted_transport_minimizers_complex
+/-- In any paired rotation frame of the actual subspace pair, every
+independent choice of optimal phase sign gives an ambient global minimizer.
+The basis may be adapted to additional commuting spectral data. -/
+theorem exists_signed_weighted_transport_in_frame_complex
     (a b : ℝ) (hb : 0 < b) (hab : b < a)
-    (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L) :
-    let R := Unitary.linearIsometryEquiv
-      (⟨nonacuteDirectRotation K L (finiteCrossedDefectEquiv K L hKL),
-        nonacuteDirectRotation_mem_unitary K L (finiteCrossedDefectEquiv K L hKL)⟩ :
-          unitary (E →L[ℂ] E))
-    ∃ n m : ℕ, ∃ (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
-      (theta : Fin n → ℝ),
-      (∀ i, theta i ∈ Set.Ioc 0 (Real.pi / 2)) ∧
-      (∀ i, R (e (.inl (0, i))) =
-        Complex.exp ((theta i : ℂ) * Complex.I) • e (.inl (0, i))) ∧
-      (∀ i, R (e (.inl (1, i))) =
-        Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i))) ∧
-      (∀ j, R (e (.inr j)) = e (.inr j)) ∧
-      ∀ sign : Fin n → Bool, ∃ T : E ≃ₗᵢ[ℂ] E,
-        K.map T.toLinearMap = L ∧
-        (∀ r i, (R.trans T.symm) (e (.inl (r, i))) =
-          circlePhase 1 (if sign i then optimalWeightedPhase a b (theta i)
-            else -optimalWeightedPhase a b (theta i)) • e (.inl (r, i))) ∧
-        (∀ j, T (e (.inr j)) = e (.inr j)) ∧
+    (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L)
+    (R : E ≃ₗᵢ[ℂ] E) (hRmap : K.map R.toLinearMap = L)
+    {n m : ℕ} (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
+    (theta : Fin n → ℝ) (eps : Fin m → ℝ)
+    (hθ : ∀ i, theta i ∈ Set.Ioc 0 (Real.pi / 2))
+    (hC0 : ∀ i, Proposition35.section3CosAngleOperator K L (e (.inl (0, i))) =
+      (Real.cos (theta i) : ℂ) • e (.inl (0, i)))
+    (hC1 : ∀ i, Proposition35.section3CosAngleOperator K L (e (.inl (1, i))) =
+      (Real.cos (theta i) : ℂ) • e (.inl (1, i)))
+    (hCf : ∀ j, Proposition35.section3CosAngleOperator K L (e (.inr j)) = e (.inr j))
+    (hR0 : ∀ i, R (e (.inl (0, i))) =
+      Complex.exp ((theta i : ℂ) * Complex.I) • e (.inl (0, i)))
+    (hR1 : ∀ i, R (e (.inl (1, i))) =
+      Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i)))
+    (hRf : ∀ j, R (e (.inr j)) = e (.inr j))
+    (hJ0 : ∀ i, K.reflection (e (.inl (0, i))) = e (.inl (1, i)))
+    (hJf : ∀ j, K.reflection (e (.inr j)) = (eps j : ℂ) • e (.inr j)) :
+    ∀ sign : Fin n → Bool, ∃ T : E ≃ₗᵢ[ℂ] E,
+      K.map T.toLinearMap = L ∧
+      (∀ r i, (R.trans T.symm) (e (.inl (r, i))) =
+        circlePhase 1 (if sign i then optimalWeightedPhase a b (theta i)
+          else -optimalWeightedPhase a b (theta i)) • e (.inl (r, i))) ∧
+      (∀ j, T (e (.inr j)) = e (.inr j)) ∧
+      UnitarilyInvariantSeminorm.nuclear ℂ E E
+        ((a : ℂ) • T.toLinearMap - (b : ℂ) • LinearMap.id) =
+          weightedRotationMinimum a b (Proposition35.section3CosAngleOperator K L) ∧
+      ∀ S : E ≃ₗᵢ[ℂ] E, K.map S.toLinearMap = L →
         UnitarilyInvariantSeminorm.nuclear ℂ E E
-          ((a : ℂ) • T.toLinearMap - (b : ℂ) • LinearMap.id) =
-            weightedRotationMinimum a b (Proposition35.section3CosAngleOperator K L) ∧
-        ∀ S : E ≃ₗᵢ[ℂ] E, K.map S.toLinearMap = L →
+            ((a : ℂ) • T.toLinearMap - (b : ℂ) • LinearMap.id) ≤
           UnitarilyInvariantSeminorm.nuclear ℂ E E
-              ((a : ℂ) • T.toLinearMap - (b : ℂ) • LinearMap.id) ≤
-            UnitarilyInvariantSeminorm.nuclear ℂ E E
-              ((a : ℂ) • S.toLinearMap - (b : ℂ) • LinearMap.id) := by
+            ((a : ℂ) • S.toLinearMap - (b : ℂ) • LinearMap.id) := by
   classical
-  let R := Unitary.linearIsometryEquiv
-    (⟨nonacuteDirectRotation K L (finiteCrossedDefectEquiv K L hKL),
-      nonacuteDirectRotation_mem_unitary K L (finiteCrossedDefectEquiv K L hKL)⟩ :
-        unitary (E →L[ℂ] E))
   let C := Proposition35.section3CosAngleOperator K L
   have hC : IsSelfAdjoint C :=
     ((ContinuousLinearMap.nonneg_iff_isPositive).mp
       (Proposition35.section3CosAngleOperator_nonneg K L)).isSelfAdjoint
   let : IsStarNormal C := hC.isStarNormal
-  obtain ⟨n, m, e, theta, eps, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, hJf⟩ :=
-    exists_subspace_paired_rotation_reflection_basis_complex K L hKL
-  refine ⟨n, m, e, theta, hθ, hR0, hR1, hRf, ?_⟩
   intro sign
   let delta (i : Fin n) := if sign i then optimalWeightedPhase a b (theta i)
     else -optimalWeightedPhase a b (theta i)
@@ -108,8 +104,7 @@ theorem exists_independent_signed_weighted_transport_minimizers_complex
     intro x
     change R (Z.symm (K.reflection x)) = L.reflection (R (Z.symm x))
     rw [hinv]
-    exact nonacuteDirectRotation_reflection_intertwines K L
-      (finiteCrossedDefectEquiv K L hKL) (Z.symm x)
+    exact (K.map_eq_iff_intertwines_reflection L R).mp hRmap (Z.symm x)
   have hrel : R.trans T.symm = Z := by
     ext x
     change Z (R.symm (R x)) = Z x
@@ -146,5 +141,51 @@ theorem exists_independent_signed_weighted_transport_minimizers_complex
       exists_unitary_minimizing_weighted_transport a b hb hab K L hKL
     rw [hatt, ← hW]
     exact hmin S hS
+
+/-- An arbitrary finite complex subspace pair admits a common paired
+rotation frame in which every independent choice of optimal phase sign
+is realized by a global optimizer over all ambient transporters.
+No supplied block decomposition or simple-angle hypothesis is required. -/
+theorem exists_independent_signed_weighted_transport_minimizers_complex
+    (a b : ℝ) (hb : 0 < b) (hab : b < a)
+    (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L) :
+    let R := Unitary.linearIsometryEquiv
+      (⟨nonacuteDirectRotation K L (finiteCrossedDefectEquiv K L hKL),
+        nonacuteDirectRotation_mem_unitary K L (finiteCrossedDefectEquiv K L hKL)⟩ :
+          unitary (E →L[ℂ] E))
+    ∃ n m : ℕ, ∃ (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
+      (theta : Fin n → ℝ),
+      (∀ i, theta i ∈ Set.Ioc 0 (Real.pi / 2)) ∧
+      (∀ i, R (e (.inl (0, i))) =
+        Complex.exp ((theta i : ℂ) * Complex.I) • e (.inl (0, i))) ∧
+      (∀ i, R (e (.inl (1, i))) =
+        Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i))) ∧
+      (∀ j, R (e (.inr j)) = e (.inr j)) ∧
+      ∀ sign : Fin n → Bool, ∃ T : E ≃ₗᵢ[ℂ] E,
+        K.map T.toLinearMap = L ∧
+        (∀ r i, (R.trans T.symm) (e (.inl (r, i))) =
+          circlePhase 1 (if sign i then optimalWeightedPhase a b (theta i)
+            else -optimalWeightedPhase a b (theta i)) • e (.inl (r, i))) ∧
+        (∀ j, T (e (.inr j)) = e (.inr j)) ∧
+        UnitarilyInvariantSeminorm.nuclear ℂ E E
+          ((a : ℂ) • T.toLinearMap - (b : ℂ) • LinearMap.id) =
+            weightedRotationMinimum a b (Proposition35.section3CosAngleOperator K L) ∧
+        ∀ S : E ≃ₗᵢ[ℂ] E, K.map S.toLinearMap = L →
+          UnitarilyInvariantSeminorm.nuclear ℂ E E
+              ((a : ℂ) • T.toLinearMap - (b : ℂ) • LinearMap.id) ≤
+            UnitarilyInvariantSeminorm.nuclear ℂ E E
+              ((a : ℂ) • S.toLinearMap - (b : ℂ) • LinearMap.id) := by
+  classical
+  let R := Unitary.linearIsometryEquiv
+    (⟨nonacuteDirectRotation K L (finiteCrossedDefectEquiv K L hKL),
+      nonacuteDirectRotation_mem_unitary K L (finiteCrossedDefectEquiv K L hKL)⟩ :
+        unitary (E →L[ℂ] E))
+  obtain ⟨n, m, e, theta, eps, hθ, hC0, hC1, hCf, hR0, hR1, hRf, hJ0, hJf⟩ :=
+    exists_subspace_paired_rotation_reflection_basis_complex K L hKL
+  refine ⟨n, m, e, theta, hθ, hR0, hR1, hRf, ?_⟩
+  exact exists_signed_weighted_transport_in_frame_complex a b hb hab K L hKL R
+    ((K.map_eq_iff_intertwines_reflection L R).mpr
+      (nonacuteDirectRotation_reflection_intertwines K L (finiteCrossedDefectEquiv K L hKL)))
+    e theta eps hθ hC0 hC1 hCf hR0 hR1 hRf hJ0 hJf
 
 end TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

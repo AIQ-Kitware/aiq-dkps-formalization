@@ -354,6 +354,48 @@ each pair therefore attains its minimum. The global lower bound proves
 optimality over all ambient transporters.
 \end{proof}
 
+\begin{proposition}[Arbitrary projection choices]
+\label{prop:smoothed-projection-attainment}
+Let $U_+$ be the spectral function of $C$ whose value at $c\in[0,1]$
+is $e^{i\delta_\tau(\arccos c)}$. For every orthogonal projection $E$
+commuting with $R$ and $J$, the operators
+\[
+ Z=U_+E+U_+^*(I-E),\qquad W=RZ^*
+\]
+are unitary and $W$ is a globally minimizing transporter.
+For any fixed acute supercritical angle $\theta$, every orthogonal
+projection $E_\theta$ on $N_+$ in the preceding proposition occurs
+as the parameter of some global minimizer, with its reflected parameter
+on $N_-$. There is an injective assignment of these projections to
+global minimizers. For minimizers $W_1,W_2$ with parameters $E_1,E_2$
+on this multiplicity space,
+\[
+ 2s\,\|E_1-E_2\|_{\mathrm{op}}
+ \leq \|W_1-W_2\|_{\mathrm{op}}.
+\]
+\end{proposition}
+
+\begin{proof}
+The projection $E$ commutes with the symmetric sine part of $R$ and
+with $J$. A common orthonormal eigenbasis on the positive sine space,
+paired by $J$, diagonalizes $E$ on each pair with the same eigenvalue
+zero or one. The resulting $Z$ selects the negative or positive optimal
+phase respectively. On the fixed space $U_+=I$, so $Z=I$. Hence $Z$
+is unitary, commutes with $J$, and attains the sum of scalar minima.
+The ambient lower bound proves global optimality of $W$.
+
+For a prescribed $E_\theta$, let $M$ be its range in $N_+$ and take
+the ambient orthogonal projection onto $M\oplus JM$. It commutes with
+$R$ and $J$, and restricts to $E_\theta$ on $N_+$. The construction
+above therefore gives the prescribed phase parameter and its reflected
+copy. Distinct parameters give distinct transporters since $2is\ne0$.
+
+For the norm estimate put $Z_j=W_j^*R$. On $N_+$,
+$(Z_1-Z_2)x=2is(E_1-E_2)x$. Unitary invariance of the operator norm
+gives $\|Z_1-Z_2\|_{\mathrm{op}}=\|W_1-W_2\|_{\mathrm{op}}$.
+Restricting to unit vectors in $N_+$ proves the bound.
+\end{proof}
+
 \begin{corollary}[Complementary right-angle pairs]
 \label{cor:smoothed-complementary-right}
 Suppose $Q=I-P$ and $n=2r$. A unitary transporter $W$ is globally

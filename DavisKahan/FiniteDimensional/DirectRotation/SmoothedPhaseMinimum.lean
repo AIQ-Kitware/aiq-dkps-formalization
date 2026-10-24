@@ -289,15 +289,21 @@ theorem optimalWeightedPhase_isMinOn (a b theta : ℝ) (hb : 0 < b) (hab : b ≤
   rw [weightedPhaseCost_optimal a b theta hb hab hθ]
   exact weightedPhaseMinimum_le_cost a b theta (hb.le.trans hab) hb.le hθ delta
 
+/-- Negating the angle conjugates the scalar circle phase. -/
+theorem circlePhase_neg_eq_star (b delta : ℝ) :
+    circlePhase b (-delta) = star (circlePhase b delta) := by
+  change circlePhase b (-delta) = conj (circlePhase b delta)
+  have hexp : ((-delta : ℝ) : ℂ) * Complex.I = conj ((delta : ℂ) * Complex.I) := by
+    simp only [map_mul, Complex.conj_ofReal, Complex.conj_I, Complex.ofReal_neg]
+    ring
+  unfold circlePhase
+  rw [map_mul, Complex.conj_ofReal, ← Complex.exp_conj, hexp]
+
 /-- Reversing a scalar phase preserves the weighted two-focus cost. -/
 theorem weightedPhaseCost_neg (a b theta delta : ℝ) :
     weightedPhaseCost a b theta (-delta) = weightedPhaseCost a b theta delta := by
-  have hphase : circlePhase b (-delta) = conj (circlePhase b delta) := by
-    have hexp : ((-delta : ℝ) : ℂ) * Complex.I = conj ((delta : ℂ) * Complex.I) := by
-      simp only [map_mul, Complex.conj_ofReal, Complex.conj_I, Complex.ofReal_neg]
-      ring
-    unfold circlePhase
-    rw [map_mul, Complex.conj_ofReal, ← Complex.exp_conj, hexp]
+  have hphase : circlePhase b (-delta) = conj (circlePhase b delta) :=
+    circlePhase_neg_eq_star b delta
   have hp : (a * Real.cos theta : ℂ) + (a * Real.sin theta) * Complex.I -
       circlePhase b (-delta) =
       conj ((a * Real.cos theta : ℂ) - (a * Real.sin theta) * Complex.I - circlePhase b delta) := by

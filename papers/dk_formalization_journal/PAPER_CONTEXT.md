@@ -1,8 +1,8 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** the paired-phase and complementary-right classification extension
-based on `51f21951d`, registered in the first section below.
+**Current research source:** arbitrary projection attainment and quantitative multiplicity separation
+based on `2524482e5`, registered in the first section below.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -16,6 +16,108 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Arbitrary multiplicity projections after `2524482e5`
+
+The acute projection converse now has compiled ambient endpoints. All spaces
+in the optimization statements are finite-dimensional complex Hilbert spaces;
+weights satisfy `0<b<a`, or `tau>0` for the literal Charbonnier objective.
+
+- `SmoothedProjectionOptimizers.exists_weighted_transport_from_projection_complex`
+  takes **any ambient orthogonal projection** `P` commuting with the actual
+  completed canonical rotation `R` and source reflection `J`. With
+  `U=weightedPhaseFactor a b C`, it constructs a transporter `T` with
+  `T*R=U P+U* (I-P)`, exact optimal value, and a lower bound against **every**
+  ambient transporter. `exists_smoothed_transport_from_projection_complex`
+  states the literal Charbonnier result. No diagonal frame is supplied, and
+  repeated, subcritical, critical, fixed, and right angles are allowed.
+  The right-angle choices covered by this formula are a subfamily of the
+  arbitrary-unitary defect family.
+- `SmoothedMultiplicityAttainment.exists_weighted_transport_with_multiplicity_projection_complex`
+  takes an **arbitrary orthogonal projection** `Q` on the actual space
+  `N=ker(R-mu I)`, with `|mu|=1`, `Re(mu)>0`, and `a*Re(mu)<b`. It constructs
+  its reflected ambient extension and an ambient global optimizer whose
+  relative phase on `N` is `(beta-i*s)I+2i*s Q`, and whose phase on `J N`
+  is the reflected copy. Here `beta=a*Re(mu)/b`, `s=sqrt(1-beta^2)>0`.
+  Other principal angles are unrestricted. No projection-extension or
+  invariant-block hypothesis is supplied. The literal endpoint is
+  `exists_smoothed_transport_with_multiplicity_projection_complex`.
+- `exists_injective_smoothed_multiplicity_family_complex` strengthens this
+  to an injective assignment from **all** orthogonal projections on `N` to
+  global Charbonnier minimizers. It proves the pairwise bound
+  `2*s*||Q-Q'||_op <= ||T(Q)-T(Q')||_op`. The generic
+  `Submodule.relative_phase_projection_separation` proves the same estimate
+  whenever two relative unitaries have common affine phase coefficients,
+  even without optimality, finite dimension, or completeness. Thus it also
+  compares parameters of arbitrary actual optimizers from the earlier
+  necessary classification. No forward continuity, homeomorphism, dimension,
+  or sharpness of the separation coefficient has been registered in Lean.
+
+Proposition `prop:smoothed-projection-attainment` includes these consequences.
+The parameter-recovery bound has inverse coefficient `1/(2*s)` at a fixed
+supercritical angle. A claim about uniform conditioning through the transition
+would require more: `s` vanishes at the threshold.
+
+The proof reuses the accepted joint symmetric-eigenspace decomposition:
+`PairedSpectralDecomposition.exists_paired_spectral_joint_eigenbasis` and
+`PairedRotationEigenbasis.exists_paired_rotation_joint_eigenbasis` diagonalize
+an additional symmetric commuting map on the paired nonzero spaces. The old
+paired basis APIs now consume these stronger results. The source pair gives
+`exists_subspace_paired_rotation_projection_basis_complex`, and the signed
+attainment proof now works in any such frame via
+`exists_signed_weighted_transport_in_frame_complex`. The new donor
+`PairedProjectionExtension.exists_paired_projection_extension` extends a
+projection by projecting onto its range plus its reflected range. These are
+classical foundations, with no separate historical originality claim.
+
+### Exact remaining classification and next proof
+
+Necessary matching projections and the arbitrary **one-factor** converse are
+compiled. The global compatible-projection construction also proves sufficiency
+for all acute choices once assembled as one ambient projection. The missing
+acute iff theorem is **necessity of that single ambient projection** for every
+optimizer. `SmoothedOptimizerNoMixing.minimizing_weighted_transport_relative_commutes_rotation_of_injective_cosine_complex`
+now proves global relative commutation with `R` when the actual `C` is injective,
+including fixed and repeated-angle directions. A direct next proof is to use
+`Im(T*R)` as the extra symmetric map in the new paired joint basis, recover the
+two scalar phase signs from its common eigenvectors, and assemble their zero/one
+spectral projection. This should also identify the product of independent
+acute multiplicity choices. The natural injective-cosine/acute-pair bridge
+should be stated with the actual projection-gap hypothesis.
+
+On `ker C`, every optimizer is already a self-adjoint unitary restriction.
+The complementary-pair iff criterion is proved, but the **mixed ambient**
+arbitrary-defect-isometry family still needs its restriction/extension and
+cost-additivity proof. These obligations, followed by topology and dimensions,
+remain before asserting the complete product of Grassmannians and unitary
+families. The set-theoretic injection above is not a topological embedding
+claim. One useful next metric step is to retain the explicit zero extension
+outside `N+J N` and prove equality in the norm estimate for that particular
+family; an existential choice alone does not establish forward continuity.
+
+Validation: `lake exe cache get` followed by the focused multiplicity target
+and `lake build DavisKahan.All ForTauCeti` passed
+(`/tmp/smoothed-projection-full-build.log`, 10,309 jobs). The manuscript typesets
+with BibTeX and resolved references in `/tmp/dk-multiplicity-attainment-paper/`;
+local font expansion is disabled at the command line only. Existing paired-basis
+and signed-family theorem types were preserved while their proofs now consume
+the stronger APIs. No Challenge endpoint, dependency pin, source denominator,
+or unrelated untracked file was changed.
+
+A diagnostic with NumPy seed 1381, `tau=1/4`, multiplicity three, and two
+random rank-one projections at 80 degrees gave parameter distance
+`0.8835569300247879`. The proved separation lower bound was
+`1.7226860721970945` and the explicit pure-block ambient distance was
+`1.7226860721970951`. Both costs agreed with `5.193436267739524` within
+`1e-15`. Equality for this explicit family is consistent with the candidate
+sharpness calculation; this numerical observation is not its Lean proof.
+
+The Schatten all-minimizer/local-to-global, real matching, and infinite-ideal
+frontiers are unchanged. In particular the generic Hilbert-space separation
+lemma does not establish Schatten-ideal feasibility, convergence, or attainment.
+A targeted search for block-diagonal unitary/trace-norm and Charbonnier transport
+minimizers supplied no theorem-level precedent that closes the present
+classification. This is limited search evidence, not a priority clearance.
 
 ## Paired phases and complementary right-angle classification after `51f21951d`
 
@@ -63,9 +165,11 @@ the earlier full-cosine restriction consumes it. `NuclearTrace` computes
 weighted self-adjoint-unitary costs from their traces. No separate priority
 claim is made for these ingredients.
 
-### Remaining theorem and a direct route
+### Previous remaining theorem and a direct route
 
-The necessity on each acute supercritical multiplicity space is now compiled.
+The new projection-attainment update above closes the one-factor converse
+and compatible ambient-projection construction described here. At this earlier
+frontier, the necessity on each acute supercritical multiplicity space is now compiled.
 The next classification theorem is the **arbitrary-projection converse**:
 for any orthogonal projection on each positive rotation multiplicity space,
 construct its reflected copy and an ambient attaining transporter. The signed

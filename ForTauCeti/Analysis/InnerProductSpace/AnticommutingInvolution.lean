@@ -159,6 +159,20 @@ theorem unitary_star_apply_of_apply_eq_smul
   rw [map_smul, hx, smul_smul, hmod, one_smul]
   exact congrArg (fun T : E →L[𝕜] E => T x) (Unitary.mul_star_self_of_mem U.property)
 
+/-- Eigenvectors of a unitary at distinct unit-circle eigenvalues are
+orthogonal. No finite-dimensional spectral theorem is needed. -/
+theorem unitary_eigenvectors_inner_eq_zero_of_ne
+    (U : unitary (E →L[𝕜] E)) (mu nu : 𝕜) (hmu : ‖mu‖ = 1) (hne : mu ≠ nu)
+    (x y : E) (hx : (U : E →L[𝕜] E) x = mu • x)
+    (hy : (U : E →L[𝕜] E) y = nu • y) : inner 𝕜 x y = 0 := by
+  have hs := unitary_star_apply_of_apply_eq_smul U mu hmu x hx
+  have h := (U : E →L[𝕜] E).adjoint_inner_left y x
+  change inner 𝕜 (star (U : E →L[𝕜] E) x) y = inner 𝕜 x ((U : E →L[𝕜] E) y) at h
+  rw [hs, hy, inner_smul_left, inner_smul_right] at h
+  simp only [RCLike.star_def, RCLike.conj_conj] at h
+  by_contra hn
+  exact hne (mul_right_cancel₀ hn h)
+
 /-- The real part of a unitary acts on a unit-circle eigenvector by the
 real part of its eigenvalue, without a finite-dimensional hypothesis. -/
 theorem unitary_real_part_apply_of_apply_eq_smul

@@ -61,4 +61,38 @@ theorem relative_transport_commutes_reflection
   change T (T.symm (R (U.reflection x))) = T (U.reflection (T.symm (R x)))
   rw [T.apply_symm_apply, hTref, T.apply_symm_apply, hRref]
 
+/-- Affine phase parameters of relative unitaries cannot change faster
+than the ambient unitaries. This estimate is valid over either field,
+without finite dimension or completeness. -/
+theorem relative_phase_projection_separation
+    (N : Submodule 𝕜 E) (R T₁ T₂ : E ≃ₗᵢ[𝕜] E)
+    (Q₁ Q₂ : N →L[𝕜] N) (alpha kappa : 𝕜)
+    (h₁ : ∀ x : N, (R.trans T₁.symm) x = alpha • (x : E) + kappa • (Q₁ x : E))
+    (h₂ : ∀ x : N, (R.trans T₂.symm) x = alpha • (x : E) + kappa • (Q₂ x : E)) :
+    ‖kappa‖ * ‖Q₁ - Q₂‖ ≤ ‖(T₁ : E →L[𝕜] E) - (T₂ : E →L[𝕜] E)‖ := by
+  have hbound : ‖kappa • (Q₁ - Q₂)‖ ≤ ‖(T₁ : E →L[𝕜] E) - (T₂ : E →L[𝕜] E)‖ := by
+    apply ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _)
+    intro x
+    let Z₁ := R.trans T₁.symm
+    let Z₂ := R.trans T₂.symm
+    have hvec : ((kappa • (Q₁ - Q₂)) x : E) = Z₁ x - Z₂ x := by
+      change kappa • ((Q₁ x : E) - (Q₂ x : E)) = _
+      rw [show Z₁ x = _ from h₁ x, show Z₂ x = _ from h₂ x]
+      simp only [smul_sub]
+      rw [add_sub_add_left_eq_sub]
+    calc
+      ‖(kappa • (Q₁ - Q₂)) x‖ = ‖Z₁ x - Z₂ x‖ := by rw [← hvec]; rfl
+      _ = ‖T₁ (Z₁ x - Z₂ x)‖ := (T₁.norm_map _).symm
+      _ = ‖((T₂ : E →L[𝕜] E) - (T₁ : E →L[𝕜] E)) (Z₂ x)‖ := by
+        congr 1
+        change T₁ (T₁.symm (R x) - T₂.symm (R x)) =
+          T₂ (T₂.symm (R x)) - T₁ (T₂.symm (R x))
+        rw [map_sub, T₁.apply_symm_apply, T₂.apply_symm_apply]
+      _ ≤ ‖(T₂ : E →L[𝕜] E) - (T₁ : E →L[𝕜] E)‖ * ‖Z₂ x‖ :=
+        ContinuousLinearMap.le_opNorm _ _
+      _ = ‖(T₁ : E →L[𝕜] E) - (T₂ : E →L[𝕜] E)‖ * ‖x‖ := by
+        rw [Z₂.norm_map, norm_sub_rev]
+        rfl
+  simpa only [norm_smul] using hbound
+
 end Submodule

@@ -41,15 +41,18 @@ private theorem positive_apply_of_square_apply
 
 /-- The supplied positive real part and reversing reflection determine an
 actual orthonormal basis of paired rotation eigenphases and fixed vectors.
+An additional symmetric map commuting with the sine operator and reflection
+is diagonalized on the nonzero phase pairs, with matching coefficients.
 No principal-coordinate hypothesis is supplied. -/
-theorem exists_paired_rotation_eigenbasis
-    (R J : E ≃ₗᵢ[ℂ] E) (C B : Module.End ℂ E)
+theorem exists_paired_rotation_joint_eigenbasis
+    (R J : E ≃ₗᵢ[ℂ] E) (C B A : Module.End ℂ E)
     (hC : C.IsPositive) (hB : B.IsSymmetric)
     (hR : ∀ x, R x = C x + Complex.I • B x)
     (hpy : C * C + B * B = 1) (hJ : Function.Involutive J)
-    (hanti : ∀ x, B (J x) = -J (B x)) :
+    (hanti : ∀ x, B (J x) = -J (B x))
+    (hA : A.IsSymmetric) (hBA : Commute B A) (hAJ : ∀ x, A (J x) = J (A x)) :
     ∃ n m : ℕ, ∃ (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
-      (theta : Fin n → ℝ) (eps : Fin m → ℝ),
+      (theta : Fin n → ℝ) (eps : Fin m → ℝ) (nu : Fin n → ℂ),
       (∀ i, theta i ∈ Set.Ioc 0 (Real.pi / 2)) ∧
       (∀ i, C (e (.inl (0, i))) = (Real.cos (theta i) : ℂ) • e (.inl (0, i))) ∧
       (∀ i, C (e (.inl (1, i))) = (Real.cos (theta i) : ℂ) • e (.inl (1, i))) ∧
@@ -60,9 +63,10 @@ theorem exists_paired_rotation_eigenbasis
         Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i))) ∧
       (∀ j, R (e (.inr j)) = e (.inr j)) ∧
       (∀ i, J (e (.inl (0, i))) = e (.inl (1, i))) ∧
-      (∀ j, J (e (.inr j)) = (eps j : ℂ) • e (.inr j)) := by
-  obtain ⟨n, m, e, mu, eps, hmu, hB0, hB1, hBf, hJ0, hJf⟩ :=
-    exists_paired_spectral_eigenbasis B hB J hJ hanti
+      (∀ j, J (e (.inr j)) = (eps j : ℂ) • e (.inr j)) ∧
+      ∀ r i, A (e (.inl (r, i))) = nu i • e (.inl (r, i)) := by
+  obtain ⟨n, m, e, mu, eps, nu, hmu, hB0, hB1, hBf, hJ0, hJf, hAe⟩ :=
+    exists_paired_spectral_joint_eigenbasis B A hB hA hBA J hJ hanti hAJ
   have hC_eigen (x : E) (r : ℝ) (hBx : B x = (r : ℂ) • x) :
       C x = (Real.sqrt (1 - r ^ 2) : ℂ) • x := by
     have hsq : C (C x) = ((1 - r ^ 2 : ℝ) : ℂ) • x := by
@@ -88,7 +92,7 @@ theorem exists_paired_rotation_eigenbasis
       zero_add, add_zero, one_pow] at hs
     nlinarith [sq_nonneg (Real.sqrt (1 - mu i ^ 2)), hmu i]
   let theta (i : Fin n) := Real.arcsin (mu i)
-  refine ⟨n, m, e, theta, eps, ?_, ?_, ?_, ?_, ?_, ?_, ?_, hJ0, hJf⟩
+  refine ⟨n, m, e, theta, eps, nu, ?_, ?_, ?_, ?_, ?_, ?_, ?_, hJ0, hJf, hAe⟩
   · intro i
     exact ⟨Real.arcsin_pos.mpr (hmu i), Real.arcsin_le_pi_div_two _⟩
   · intro i
@@ -123,5 +127,31 @@ theorem exists_paired_rotation_eigenbasis
       simpa using hBf j
     rw [hR_eigen _ _ hBzero]
     simp
+
+/-- The positive real part and reversing reflection determine a paired
+rotation eigenbasis, including the fixed directions. -/
+theorem exists_paired_rotation_eigenbasis
+    (R J : E ≃ₗᵢ[ℂ] E) (C B : Module.End ℂ E)
+    (hC : C.IsPositive) (hB : B.IsSymmetric)
+    (hR : ∀ x, R x = C x + Complex.I • B x)
+    (hpy : C * C + B * B = 1) (hJ : Function.Involutive J)
+    (hanti : ∀ x, B (J x) = -J (B x)) :
+    ∃ n m : ℕ, ∃ (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) ℂ E)
+      (theta : Fin n → ℝ) (eps : Fin m → ℝ),
+      (∀ i, theta i ∈ Set.Ioc 0 (Real.pi / 2)) ∧
+      (∀ i, C (e (.inl (0, i))) = (Real.cos (theta i) : ℂ) • e (.inl (0, i))) ∧
+      (∀ i, C (e (.inl (1, i))) = (Real.cos (theta i) : ℂ) • e (.inl (1, i))) ∧
+      (∀ j, C (e (.inr j)) = e (.inr j)) ∧
+      (∀ i, R (e (.inl (0, i))) =
+        Complex.exp ((theta i : ℂ) * Complex.I) • e (.inl (0, i))) ∧
+      (∀ i, R (e (.inl (1, i))) =
+        Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i))) ∧
+      (∀ j, R (e (.inr j)) = e (.inr j)) ∧
+      (∀ i, J (e (.inl (0, i))) = e (.inl (1, i))) ∧
+      (∀ j, J (e (.inr j)) = (eps j : ℂ) • e (.inr j)) := by
+  obtain ⟨n, m, e, theta, eps, _, htheta, h0, h1, hf, hR0, hR1, hRf, hJ0, hJf, _⟩ :=
+    exists_paired_rotation_joint_eigenbasis R J C B 0 hC hB hR hpy hJ hanti
+      (by intro x y; simp) (Commute.zero_right _) (by intro x; simp)
+  exact ⟨n, m, e, theta, eps, htheta, h0, h1, hf, hR0, hR1, hRf, hJ0, hJf⟩
 
 end TauCeti

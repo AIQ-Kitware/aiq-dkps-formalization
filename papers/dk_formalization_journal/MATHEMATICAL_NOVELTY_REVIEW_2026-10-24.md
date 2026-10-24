@@ -12,6 +12,38 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Arbitrary projection attainment after `2524482e5`
+
+The new compiled converse permits an arbitrary orthogonal projection on one
+actual acute supercritical rotation multiplicity space. Its reflected ambient
+extension yields a global optimizer over all ambient complex transporters,
+with other angles unrestricted. `SmoothedMultiplicityAttainment.lean` supplies
+weighted nuclear and literal Charbonnier endpoints. The set of all these
+projections injects into the ambient Charbonnier minimizers, with quantitative
+separation `2*sin(delta)*||Q-Q'||_op <= ||T(Q)-T(Q')||_op`.
+
+`SmoothedProjectionOptimizers.lean` also proves the global formula
+`T*R=U P+U* (I-P)` is attaining for **any** ambient orthogonal `P` commuting
+with the canonical rotation and source reflection. This is sufficient
+without a supplied diagonal frame. The earlier necessary matching phase
+projections and this converse establish exactly which projections can occur
+on any one acute multiplicity space.
+
+The full acute iff theorem still needs to assemble the necessary projections
+of every optimizer into one compatible ambient projection. Global commutation
+with `R` is now compiled under injectivity of the actual cosine, providing
+the next reduction. Mixed right-defect assembly, topology, and dimensions
+remain incomplete. No continuity of the chosen projection-to-minimizer
+assignment is claimed from a set-theoretic injection or a lower norm bound.
+Proposition `prop:smoothed-projection-attainment` includes the proved results.
+
+Joint eigenbases, reflected projection extension, and the affine separation
+lemma are classical ingredients. The possible originality remains attached
+to the constrained transport classification and its penalty-dependent
+consequences. Targeted searches for the block-diagonal-unitary trace-norm
+problem and Charbonnier transport returned no implication proving this
+classification; negative search evidence does not certify priority.
+
 ## Paired-phase and complementary-right update after `51f21951d`
 
 Every finite complex weighted optimizer now has a unique projection parameter
@@ -317,7 +349,7 @@ rows of the original 29-result Davis--Kahan source inventory.
 | SM-2 | Explicit globally minimizing complex unitary via clipped functional calculus of positive cosine operator | **Formalized**: `SmoothedExplicitOptimizer.lean` | A concrete constructive strengthening of SM-1; may be an elementary companion to SM-1, but substantial for applications |
 | SM-3 | Quadratic growth from optimum below strict angle cutoff, with explicit constant and Frobenius distance for **every admissible complex transporter** | **Formalized**: `SmoothedSubspaceStability.lean` | **Distinct and credible mathematical addition** if not implied by older error-bound/strong-convexity theorem |
 | SM-4 | Global convex-relaxation tightness when commuting unitary factor is relaxed to commuting contraction (weighted nuclear cost) | **Formalized for the stated supplied structural class**: `SmoothedCommutantOptimization.lean`; instantiated in all-pairs argument | Strong proof mechanism; present as supporting theorem, not a generic statement for all convex relaxations |
-| SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Partial compiled classification in `SmoothedOptimizerRigidity`, `SmoothedOptimizerNoMixing`, `SmoothedOptimizerPairedPhases`, `SmoothedSignedOptimizers`, `SmoothedRightDefect`; full conventional drafts in `smoothed_transport.tex`, `spectral_penalty_transport.tex` | Necessary matching phase projections, independent signed attainment, and the complete complementary-right iff criterion are compiled. Arbitrary-projection converse and mixed-defect assembly remain; broad-penalty/topology claims are conventional |
+| SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Partial compiled classification in `SmoothedOptimizerRigidity`, `SmoothedOptimizerNoMixing`, `SmoothedOptimizerPairedPhases`, `SmoothedSignedOptimizers`, `SmoothedRightDefect`, `SmoothedProjectionOptimizers`, `SmoothedMultiplicityAttainment`; full conventional drafts in `smoothed_transport.tex`, `spectral_penalty_transport.tex` | Necessary matching phase projections, arbitrary one-factor projection attainment, compatible ambient-projection attainment, quantitative injective families, and the complementary-right iff criterion are compiled. Global acute necessity and mixed-defect assembly remain; broad-penalty/topology claims are conventional |
 | R-1 | Exact real R4 rank-two minimum for *every continuous nondecreasing spectral penalty*, including separate determinant classes | Conventional proof draft in `real_four_dimensional_transport.tex` | Strong exact finite-dimensional problem; old matrix optimization warns against presenting mere nonminimality as new. **Not certified** |
 | R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | Conventional proof draft `real_matching_transport.tex`, with compiled positive-gradient block decomposition in `RealBlockDescent.lean` and related modules | **Potentially strongest structural new theorem**, but exceptional-gradient assembly and global matching bound are **not compiled** |
 | R-3 | For Schatten `1<p<2`, Charbonnier, and nuclear limits, matching reduces to minimum of **two sorted adjacent-pair sums** | Conventional derivation in `real_matching_transport.tex`; numerical checks corroborate but are not proofs | Would yield efficient exact algorithms and optimality thresholds; **submodularity and final reduction need independent proof review** |
