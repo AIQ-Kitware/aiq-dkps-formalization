@@ -143,6 +143,23 @@ theorem schattenPhaseExtension_deriv_mul_I_exp
   rw [heq] at hcomp
   exact hcomp.unique hphase.ofReal_comp
 
+/-- The derivative of the odd phase-gradient symbol is unchanged when
+the phase changes sign. -/
+theorem hasDerivAt_schattenPhaseDerivative_exp_neg
+    (p theta d : ℝ)
+    (hphase : HasDerivAt
+      (fun t : ℝ => schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I))) d theta) :
+    HasDerivAt
+      (fun t : ℝ => schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I))) d (-theta) := by
+  have h := (hphase.comp_of_eq (-theta) ((hasDerivAt_id' (-theta)).neg) (by simp)).neg
+  have h' : HasDerivAt
+      (fun t : ℝ => -schattenPhaseDerivative p
+        (Complex.exp (((-t : ℝ) : ℂ) * Complex.I))) d (-theta) := by
+    simpa only [Function.comp_def, Pi.neg_apply, mul_neg, mul_one, neg_neg] using! h
+  convert h' using 1
+  funext t
+  rw [schattenPhaseDerivative_exp_neg, neg_neg]
+
 /-- For a unitary operator, the complex extension gives exactly the
 same functional calculus as the actual self-adjoint phase gradient. -/
 theorem schattenUnitaryGradient_eq_cfc_phaseExtension

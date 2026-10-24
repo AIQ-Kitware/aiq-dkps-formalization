@@ -45,6 +45,11 @@ private theorem exp_phase_injective_positive
   rw [re_exp_phase, re_exp_phase] at hre
   exact hab (Real.strictAntiOn_cos.injOn ⟨ha.1.le, ha.2.le⟩ ⟨hb.1.le, hb.2.le⟩ hre)
 
+private theorem exp_neg_phase (t : ℝ) :
+    Complex.exp (((-t : ℝ) : ℂ) * Complex.I) =
+      (Complex.exp ((t : ℂ) * Complex.I))⁻¹ := by
+  rw [Complex.ofReal_neg, neg_mul, Complex.exp_neg]
+
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
@@ -77,5 +82,51 @@ theorem balanced_phase_second_variation
     (exp_phase_injective_positive a b ha hb hab) hlevel
     (schattenPhaseDerivative_exp_hasDerivAt p.toReal a ha)
     (schattenPhaseDerivative_exp_hasDerivAt p.toReal b hb) U H P hH hP hrepr
+
+/-- The opposite negative phase roots have the same scalar curvatures
+and the same two-compression second-variation formula. -/
+theorem balanced_negative_phase_second_variation
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
+    (a b : ℝ) (ha : a ∈ Ioo 0 Real.pi) (hb : b ∈ Ioo 0 Real.pi) (hab : a ≠ b)
+    (hbalance : phaseAmplitude p.toReal a = phaseAmplitude p.toReal b)
+    (U : unitary (E →L[ℂ] E)) (H P : E →L[ℂ] E)
+    (hH : IsSelfAdjoint H) (hP : IsStarProjection P)
+    (hrepr : (U : E →L[ℂ] E) = Complex.exp (((-a : ℝ) : ℂ) * Complex.I) • 1 +
+      (Complex.exp (((-b : ℝ) : ℂ) * Complex.I) -
+        Complex.exp (((-a : ℝ) : ℂ) * Complex.I)) • P) :
+    let C := fun t : ℝ => UnitarilyInvariantSeminorm.schatten ℂ E E p
+      (LinearMap.id - ((U : E →L[ℂ] E) *
+        NormedSpace.exp (t • (Complex.I • H))).toLinearMap) ^ p.toReal
+    HasDerivAt (deriv C)
+      ((p.toReal * amplitudeDerivative p.toReal a) * (LinearMap.trace ℂ E
+        (((1 - P) * H * (1 - P)).adjoint * ((1 - P) * H * (1 - P))).toLinearMap).re +
+       (p.toReal * amplitudeDerivative p.toReal b) *
+        (LinearMap.trace ℂ E ((P * H * P).adjoint * (P * H * P)).toLinearMap).re) 0 := by
+  have hne_a : Complex.exp (((-a : ℝ) : ℂ) * Complex.I) ≠ 1 := by
+    rw [exp_neg_phase]
+    intro h
+    apply exp_phase_ne_one a ha
+    simpa only [inv_inv, inv_one] using congrArg (Inv.inv : ℂ → ℂ) h
+  have hne_b : Complex.exp (((-b : ℝ) : ℂ) * Complex.I) ≠ 1 := by
+    rw [exp_neg_phase]
+    intro h
+    apply exp_phase_ne_one b hb
+    simpa only [inv_inv, inv_one] using congrArg (Inv.inv : ℂ → ℂ) h
+  have hne : Complex.exp (((-a : ℝ) : ℂ) * Complex.I) ≠
+      Complex.exp (((-b : ℝ) : ℂ) * Complex.I) := by
+    rw [exp_neg_phase, exp_neg_phase]
+    exact fun h => exp_phase_injective_positive a b ha hb hab (inv_injective h)
+  have hlevel : schattenPhaseDerivative p.toReal (Complex.exp (((-a : ℝ) : ℂ) * Complex.I)) =
+      schattenPhaseDerivative p.toReal (Complex.exp (((-b : ℝ) : ℂ) * Complex.I)) := by
+    rw [schattenPhaseDerivative_exp_neg, schattenPhaseDerivative_exp_neg,
+      schattenPhaseDerivative_exp_eq_amplitude p.toReal a ha,
+      schattenPhaseDerivative_exp_eq_amplitude p.toReal b hb, hbalance]
+  exact hasDerivAt_deriv_schatten_unitary_two_phase p hp hp1 (-a) (-b)
+    (p.toReal * amplitudeDerivative p.toReal a) (p.toReal * amplitudeDerivative p.toReal b)
+    hne_a hne_b hne hlevel
+    (hasDerivAt_schattenPhaseDerivative_exp_neg p.toReal a _
+      (schattenPhaseDerivative_exp_hasDerivAt p.toReal a ha))
+    (hasDerivAt_schattenPhaseDerivative_exp_neg p.toReal b _
+      (schattenPhaseDerivative_exp_hasDerivAt p.toReal b hb)) U H P hH hP hrepr
 
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

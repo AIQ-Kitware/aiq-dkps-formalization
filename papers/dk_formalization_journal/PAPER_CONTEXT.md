@@ -284,6 +284,18 @@ The downstream `balanced_phase_second_variation` in
 the amplitude calculus for distinct positive balanced roots, giving the
 explicit coefficients `p * amplitudeDerivative p a` and
 `p * amplitudeDerivative p b` in the actual-norm second variation.
+The corresponding negative-root formula is also compiled. The donor
+symbol calculus proves the evenness of the phase-gradient derivative.
+
+`SchattenNoMixing.lean` now proves the core overlap exclusion on the
+paired block model. For the sum of the two actual Schatten displacement
+powers under their common variation, `AB != 0` gives a strictly negative
+second derivative, and every local minimum therefore has `AB = 0`.
+The necessary second-derivative test is consumed from the accepted Tau
+Ceti calculus API. This is a result about the explicit paired objective,
+not yet a proof that an arbitrary ambient transporter induces that
+local-minimum hypothesis. The orthogonal-block power additivity, common
+coordinate identification, and feasible extension remain to be assembled.
 
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical
