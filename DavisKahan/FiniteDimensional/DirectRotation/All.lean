@@ -20,5 +20,8 @@ import DavisKahan.FiniteDimensional.DirectRotation.SharpDisplacementLimit
 import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality
 import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly
 import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel
+import DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects
+import DavisKahan.FiniteDimensional.DirectRotation.ComplexPhaseTrace
+import DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/
