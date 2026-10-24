@@ -167,9 +167,14 @@ transport problem over all complex unitary transporters. For every
 $\tau>0$, the penalty
 $\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$ admits an exact principal-angle
 formula with a phase-transition cutoff. We construct a minimizing unitary
-by functional calculus and prove stability bounds: dimension-independent quadratic growth
-below the cutoff and explicit quartic growth through equality. A nuclear-norm support certificate proves the
-global minimum, including competitors that mix principal planes.
+by functional calculus. The canonical rotation is the unique minimizer
+exactly when every principal angle is at most the cutoff. We prove
+dimension-independent quadratic growth below it and explicit quartic
+growth through equality; a critical planar family shows that quadratic
+growth fails there. A nuclear-norm support certificate proves the global
+minimum, including competitors that mix principal planes. The same formula
+gives an exact nearest unitary commuting with a specified projection,
+with an optimality and uniqueness test in terms of the commutator norm.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
@@ -228,9 +233,11 @@ $\sqrt{\tau^2+s^2}-\tau$, a smooth penalty connecting trace and quadratic
 costs. For arbitrary equal-rank complex subspaces we compute the global
 minimum, construct an optimizer by continuous functional calculus, and
 bound every feasible unitary's distance from the canonical rotation, with
-quadratic growth below the cutoff and quartic growth through equality. The supporting nuclear-norm certificate excludes
-improvements by mixing principal planes. These results, proved in Lean,
-are developed in \cref{sec:smoothed-transport}.
+quadratic growth below the cutoff and quartic growth through equality.
+The supporting nuclear-norm certificate excludes improvements by mixing
+principal planes. The result also solves exact nearest-unitary correction
+subject to commuting with a specified projection. These results, proved in
+Lean, are developed in \cref{sec:smoothed-transport}.
 
 The complete Davis--Kahan result correspondence appears in
 Appendix~\ref{app:dk-inventory}, with the review method in
@@ -266,6 +273,8 @@ Appendix~\ref{app:source-review}.
     minimizing unitary by functional calculus, and establish an explicit
     quadratic-growth bound below the cutoff and a quartic bound through
     equality. The same cutoff characterizes uniqueness of the global minimum.
+    We derive an exact nearest commuting-unitary correction and its
+    commutator-norm optimality and uniqueness criterion.
 \end{enumerate}
 
 \section{Source coverage and the sine-theta theorem}

@@ -223,35 +223,12 @@ checks the source-facing development:
 lake exe cache get
 lake build
 \end{verbatim}
-The mathematical aggregate imports the quantitative displacement and
-smoothed optimization extensions. They may also be built explicitly:
+The direct-rotation aggregate includes the quantitative displacement and
+smoothed optimization extensions. A narrower build checks these together
+with the source-facing counterexample wrapper:
 \begin{verbatim}
-lake exe cache get
 lake build \
-  DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample \
-  DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement \
-  DavisKahan.FiniteDimensional.DirectRotation.TraceOptimality \
-  DavisKahan.FiniteDimensional.DirectRotation.SharpDisplacement \
-  DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality \
-  DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly \
-  DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel \
-  DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects \
-  DavisKahan.FiniteDimensional.DirectRotation.ComplexPhaseTrace \
-  ForTauCeti.Analysis.InnerProductSpace.Projection.TraceSine \
-  DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedExplicitOptimizer \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutingCorrection \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedValueSensitivity \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCorrectionStability \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutatorCutoff \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerUniqueness \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCalibration \
-  DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalTransportFlatness \
+  DavisKahan.FiniteDimensional.DirectRotation.All \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 \end{verbatim}
 The mathematical manuscript builds independently of Lean:
