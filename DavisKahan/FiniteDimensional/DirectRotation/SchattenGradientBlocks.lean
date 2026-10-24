@@ -205,4 +205,47 @@ theorem gradient_kernel_reflection_representation
         one_smul] using hrepr
     _ = 1 - (2 : ℂ) • S := by module
 
+/-- At either signed maximal gradient level, the restricted unitary is
+the scalar critical phase. The two submaximal branches have coalesced. -/
+theorem signed_critical_gradient_eigenspace_representation
+    (p s : ℝ) (hp1 : 1 < p) (hp2 : p < 2) (hs : s = 1 ∨ s = -1)
+    (U : unitary (E →L[ℂ] E)) :
+    let g := s * (p * phaseAmplitude p (criticalAngle p))
+    let L := Module.End.eigenspace
+      (schattenUnitaryGradient p (U : E →L[ℂ] E)).toLinearMap (g : ℂ)
+    ∃ V : L ≃ₗᵢ[ℂ] L,
+      (∀ x : L, (V x : E) = (U : E →L[ℂ] E) x) ∧
+      (V : L →L[ℂ] L) = Complex.exp (((s * criticalAngle p : ℝ) : ℂ) * Complex.I) • 1 := by
+  let G := schattenUnitaryGradient p (U : E →L[ℂ] E)
+  let g := s * (p * phaseAmplitude p (criticalAngle p))
+  let L := Module.End.eigenspace G.toLinearMap (g : ℂ)
+  have hinv : ∀ x ∈ L, (U : E →L[ℂ] E) x ∈ L := by
+    have hcomm : Commute G.toLinearMap (U : E →L[ℂ] E).toLinearMap :=
+      congrArg _root_.ContinuousLinearMap.toLinearMap
+        (commute_schattenUnitaryGradient p (U : E →L[ℂ] E)).eq
+    exact Module.End.mapsTo_genEigenspace_of_comm hcomm (g : ℂ) 1
+  have hlevel (t : ℝ) (ht : |t| ≤ Real.pi)
+      (hg : schattenPhaseDerivative p (Complex.exp ((t : ℂ) * Complex.I)) = g) :
+      t = s * criticalAngle p := by
+    rcases hs with rfl | rfl
+    · simpa only [one_mul] using
+        (schattenPhaseDerivative_max_level_set p t hp1 hp2 ht).1 (by simpa [g] using hg)
+    · have hneg : schattenPhaseDerivative p (Complex.exp (((-t : ℝ) : ℂ) * Complex.I)) =
+          p * phaseAmplitude p (criticalAngle p) := by
+        rw [schattenPhaseDerivative_exp_neg, hg]
+        simp [g]
+      have ht' := (schattenPhaseDerivative_max_level_set p (-t) hp1 hp2
+        (by simpa only [abs_neg] using ht)).1 hneg
+      simpa only [neg_one_mul] using (neg_eq_iff_eq_neg.1 ht')
+  obtain ⟨V, A, _, hV, hrepr⟩ := two_phase_representation_on_invariant_subspace
+    p g (s * criticalAngle p) (s * criticalAngle p) U L hinv
+      (fun x hx => Module.End.mem_eigenspace_iff.1 hx)
+      (fun t ht hg => Or.inl (congrArg (fun r : ℝ => Complex.exp ((r : ℂ) * Complex.I))
+        (hlevel t ht hg)))
+  refine ⟨V, hV, ?_⟩
+  rw [hrepr, sub_self]
+  change Complex.exp (((s * criticalAngle p : ℝ) : ℂ) * Complex.I) •
+    (1 : L →L[ℂ] L) + (0 : ℂ) • A = _
+  rw [zero_smul ℂ A, add_zero]
+
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

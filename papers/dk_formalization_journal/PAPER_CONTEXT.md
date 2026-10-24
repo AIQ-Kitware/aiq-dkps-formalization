@@ -237,9 +237,10 @@ on opposite positive submaximal levels they have a common pair of opposite
 phase roots and are affine in star projections. `TwoPointSpectrum.lean`
 supplies the classical C-star-algebra projection representation without a
 finite-dimensional hypothesis. The gradient square is also proved to
-commute with both source and target projections. The maximal positive
-scalar level has only the critical phase; its operator restriction is not
-yet packaged with the submaximal cases.
+commute with both source and target projections. The maximal signed gradient levels have scalar critical-phase unitary
+restrictions, now packaged as
+`signed_critical_gradient_eigenspace_representation` in
+`SchattenGradientBlocks.lean`.
 
 The no-mixing argument has been simplified to the basis-independent
 direction `X=AB+BA`. The projection-compression identities and the strict
@@ -336,6 +337,17 @@ scalar minima over the accepted principal angles for every reflecting
 transporter. The conventional proof now uses this trace argument. Applying
 the bound to the restricted source and target, then assembling the complete
 spectral cost sum, remains part of the unfinished global theorem.
+
+`SchattenTransportExistence.lean` proves attainment on every nonempty finite
+unitary transport fiber over real or complex scalars for finite Schatten
+exponents at least one. It takes one feasible unitary as its nonemptiness
+witness and returns an actual global minimizer. The proof uses operator-norm
+compactness and `SchattenContinuity.lean`, which identifies the finite power
+with the sum of the accepted approximation-number powers and proves its
+continuity through rank changes. This is classical existence, not the exact
+angle-dependent minimum. The signed maximal-gradient restriction is also
+compiled, completing the zero, submaximal, and maximal restriction cases used
+by the conventional proof.
 
 The conventional draft also describes all acute minimizing transporters:
 on the multiplicity space of each supercritical angle they are the canonical

@@ -40,5 +40,6 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenNoMixing
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenFeasibleBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientNoMixing
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectionBound
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/
