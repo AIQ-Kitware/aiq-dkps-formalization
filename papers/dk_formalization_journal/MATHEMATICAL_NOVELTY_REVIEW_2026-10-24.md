@@ -12,6 +12,48 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Optimizer-rigidity update after `84822b0ba` (24 October 2026)
+
+The value theorem is now used to prove constraints on **every** finite
+complex Schatten optimizer. `SchattenOptimizerKernel.lean` proves its actual
+gradient kernel is an attaining reflection with only zero and right angles,
+and is fixed pointwise for acute pairs. It also proves local-to-global
+optimality when eigenvalue `-1` is absent; eigenvalue `1` is allowed. The
+full all-minimizer and no-nonglobal-local-minima claims remain incomplete.
+
+The classical algebra behind the smoothed multiplicity families is now
+compiled: `PositiveUnitaryAverage.lean` handles positive averages in arbitrary
+Hilbert dimension, including nonclosed range; `UnitaryScalarRealPart.lean`
+classifies the finite scalar phase fibers by orthogonal projections or
+self-adjoint unitaries. This is a prescribed-block result. In addition,
+`SmoothedOptimizerCertificate` and `SmoothedOptimizerRigidity` now extract the
+exact ambient equality criterion: vanishing diagonal defect and positive dual
+displacement. Every global Charbonnier minimizer agrees with direct rotation
+on all planes at or below the cutoff and fixes the canonical fixed directions,
+even with supercritical angles elsewhere. The missing geometric step is to
+convert the remaining positive-displacement equation to the positive-average
+equation and identify every supercritical multiplicity factor. These results
+are compiled partial classification, not the full Grassmannian/unitary family
+theorem. No independent mathematical novelty is claimed for the classical
+trace-support equality or the unitary-average algebra.
+
+Fresh primary-source comparison checked BLR (2001), Theorems 4.2 and 4.5,
+and Massey--Rios--Stojanoff (2018), Theorems 3.5 and 3.12. BLR's 4.2 concerns
+Frobenius minimizers; 4.5 requires a Q-norm and additional block structure.
+Local Lidskii's two theorems concern conjugacy and fixed-singular-value
+orbits. Those domains differ from the constrained stabilizer fiber here;
+no implication giving our exact optimizer classification has been established.
+Sources: [BLR journal PDF](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117),
+[Local Lidskii](https://arxiv.org/html/1806.11436). Priority remains provisional.
+
+The real matching and field-gap assertions remain conventional. Independent
+numerical diagnostics found no discrepancy for 4,800 nuclear matching lists
+or six full real 6D Schatten-`3/2` multistart optimizations covering all
+stabilizer determinant components. Their scopes, seeds and tolerances are
+recorded in `PAPER_CONTEXT.md`; these checks do not certify a global theorem.
+The infinite-dimensional positive-average result supplies algebra only, not
+Schatten ideal convergence, index balance, or infinite-dimensional attainment.
+
 ## Late-afternoon reassessment: source `521572a2500c` (15:48, 24 October 2026)
 
 The **unrestricted higher-rank complex Schatten theorem has been completed

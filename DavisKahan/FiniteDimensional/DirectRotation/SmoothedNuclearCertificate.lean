@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPhaseMinimum
 public import ForTauCeti.Analysis.InnerProductSpace.NuclearTrace
+public import ForTauCeti.Analysis.InnerProductSpace.DiagonalUnitary
 
 /-!
 # An explicit nuclear trace certificate for smoothed transport
@@ -155,6 +156,21 @@ theorem norm_dualPhase (a b theta : ℝ) (hb : 0 ≤ b) (hab : b < a) :
   rw [← sq_eq_sq₀ (norm_nonneg _) (by norm_num : (0 : ℝ) ≤ 1), Complex.sq_norm]
   simpa [dualPhase, Complex.normSq_apply, pow_two] using hsq
 
+/-- On and above the transition, the supporting phase is the quarter turn. -/
+theorem dualPhase_eq_I_of_supercritical (a b theta : ℝ) (hb : 0 ≤ b) (hab : b < a)
+    (hθ : theta ∈ Set.Ioc 0 (Real.pi / 2)) (hcut : a * Real.cos theta ≤ b) :
+    dualPhase a b theta = Complex.I := by
+  have ha : 0 < a := lt_of_le_of_lt hb hab
+  have hs : 0 < a * Real.sin theta := mul_pos ha
+    (Real.sin_pos_of_pos_of_lt_pi hθ.1 (by linarith [hθ.2, Real.pi_pos]))
+  simp only [dualPhase, dualReal, dualImag]
+  split_ifs with hc
+  · have heq := le_antisymm hc hcut
+    rw [heq, sub_self, zero_pow (by norm_num : (2 : ℕ) ≠ 0), zero_add,
+      Real.sqrt_sq (le_of_lt hs)]
+    simp [hs.ne']
+  · norm_num
+
 private theorem conj_dualPhase (a b theta : ℝ) :
     conj (dualPhase a b theta) =
       (dualReal a b theta : ℂ) - dualImag a b theta * Complex.I := by
@@ -162,6 +178,21 @@ private theorem conj_dualPhase (a b theta : ℝ) :
 
 variable {E ι κ : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [Fintype ι] [Fintype κ]
+
+/-- The diagonal entries of the unitary nuclear certificate. -/
+@[expose]
+def pairedDualPhase (a b : ℝ) (theta : ι → ℝ) : ((Fin 2 × ι) ⊕ κ) → ℂ :=
+  Sum.elim
+    (fun j => if j.1 = 0 then dualPhase a b (theta j.2) else conj (dualPhase a b (theta j.2)))
+    (fun _ => 1)
+
+omit [Fintype ι] [Fintype κ] in
+theorem norm_pairedDualPhase (a b : ℝ) (hb : 0 ≤ b) (hab : b < a)
+    (theta : ι → ℝ) (j : (Fin 2 × ι) ⊕ κ) : ‖pairedDualPhase a b theta j‖ = 1 := by
+  rcases j with ⟨r, i⟩ | j
+  · dsimp only [pairedDualPhase, Sum.elim_inl]
+    split_ifs <;> simpa only [Complex.norm_conj] using norm_dualPhase a b (theta i) hb hab
+  · simp [pairedDualPhase]
 
 /-- The weighted diagonal departure from the identity seen by the nuclear
 dual certificate. It is nonnegative for contractions, and controls squared
@@ -185,11 +216,11 @@ theorem weightedSupportValue_self (a b theta : ℝ) (hb : 0 ≤ b) (hab : b < a)
     weightedSupportValue a b b theta = weightedPhaseMinimum a b theta :=
   (weightedPhaseMinimum_eq_dual a b theta hb hab).symm
 
-/-- A certificate selected at `beta` supports the objective with parameter
-`b`. The diagonal slack retains coefficient `b`, allowing the certificate
-parameter to move independently of the objective. -/
-theorem weightedNuclear_support_with_diagonal_defect
-    (a b beta : ℝ) (hbeta : 0 ≤ beta) (habeta : beta < a) (theta : ι → ℝ)
+omit [FiniteDimensional ℂ E] in
+/-- The nuclear certificate has an exact trace identity, retaining the
+full diagonal defect. This also identifies its equality case. -/
+theorem weightedNuclear_support_eq_re_trace
+    (a b beta : ℝ) (theta : ι → ℝ)
     (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A Z : E →ₗ[ℂ] E)
     (hA0 : ∀ i, A (e (.inl (0, i))) =
       (((a * Real.cos (theta i) : ℝ) : ℂ) + (a * Real.sin (theta i)) * Complex.I) •
@@ -199,30 +230,14 @@ theorem weightedNuclear_support_with_diagonal_defect
         e (.inl (1, i)))
     (hAf : ∀ j, A (e (.inr j)) = (a : ℂ) • e (.inr j))
     (hdiag : ∀ i, (⟪e (.inl (0, i)), Z (e (.inl (0, i)))⟫_ℂ).im =
-      (⟪e (.inl (1, i)), Z (e (.inl (1, i)))⟫_ℂ).im) :
+      (⟪e (.inl (1, i)), Z (e (.inl (1, i)))⟫_ℂ).im)
+    (V : E ≃ₗᵢ[ℂ] E) (hV : ∀ j, V (e j) = pairedDualPhase a beta theta j • e j) :
     (∑ i, weightedSupportValue a b beta (theta i)) + Fintype.card κ * (a - b) +
-      b * weightedDiagonalDefect a beta theta e Z ≤
-      UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • Z) := by
+      b * weightedDiagonalDefect a beta theta e Z =
+      (LinearMap.trace ℂ E (V.symm.toLinearMap ∘ₗ (A - (b : ℂ) • Z))).re := by
   classical
-  let t : ((Fin 2 × ι) ⊕ κ) → ℂ := Sum.elim
-    (fun j => if j.1 = 0 then dualPhase a beta (theta j.2) else conj (dualPhase a beta (theta j.2)))
-    (fun _ => 1)
-  have ht (j) : ‖t j‖ = 1 := by
-    rcases j with ⟨r, i⟩ | j
-    · dsimp only [t, Sum.elim_inl]
-      split_ifs <;> simpa only [Complex.norm_conj] using norm_dualPhase a beta (theta i) hbeta habeta
-    · simp [t]
+  let t : ((Fin 2 × ι) ⊕ κ) → ℂ := pairedDualPhase a beta theta
   let u (j) := t j • e j
-  have hu : Orthonormal ℂ u := by
-    rw [orthonormal_iff_ite]
-    intro j k
-    dsimp only [u]
-    rw [inner_smul_left, inner_smul_right, (orthonormal_iff_ite.mp e.orthonormal) j k]
-    by_cases hjk : j = k
-    · subst k
-      rw [ite_eq_left rfl, mul_one, RCLike.conj_mul, ht j]
-      norm_num
-    · rw [ite_eq_right hjk, mul_zero, mul_zero]
   let D := A - (b : ℂ) • Z
   let z (j) : ℂ := ⟪e j, Z (e j)⟫_ℂ
   have hentry (j) (lam : ℂ) (hAj : A (e j) = lam • e j) :
@@ -239,8 +254,8 @@ theorem weightedNuclear_support_with_diagonal_defect
       (a * Real.cos (theta i)) (a * Real.sin (theta i)) b
       (z (.inl (0, i))) (z (.inl (1, i))) (hdiag i)
     rw [hentry _ _ (hA0 i), hentry _ _ (hA1 i)]
-    have ht0 : t (.inl (0, i)) = dualPhase a beta (theta i) := by simp [t]
-    have ht1 : t (.inl (1, i)) = conj (dualPhase a beta (theta i)) := by simp [t]
+    have ht0 : t (.inl (0, i)) = dualPhase a beta (theta i) := by simp [t, pairedDualPhase]
+    have ht1 : t (.inl (1, i)) = conj (dualPhase a beta (theta i)) := by simp [t, pairedDualPhase]
     rw [ht0, ht1, conj_dualPhase]
     have hconj := conj_dualPhase a beta (theta i)
     change conj ((dualReal a beta (theta i) : ℂ) + dualImag a beta (theta i) * Complex.I) = _ at hconj
@@ -248,7 +263,7 @@ theorem weightedNuclear_support_with_diagonal_defect
     simpa only [dualPhase, Complex.ofReal_mul] using h
   have hfixed (j : κ) : a - b + b * (1 - (z (.inr j)).re) =
       (⟪u (.inr j), D (e (.inr j))⟫_ℂ).re := by
-    simp only [u, t, Sum.elim_inr, one_smul, D, LinearMap.sub_apply,
+    simp only [u, t, pairedDualPhase, Sum.elim_inr, one_smul, D, LinearMap.sub_apply,
       LinearMap.smul_apply, hAf, inner_sub_right, inner_smul_right,
       e.inner_eq_one, mul_one, Complex.sub_re, Complex.ofReal_re,
       Complex.mul_re, Complex.ofReal_im, zero_mul, sub_zero]
@@ -268,7 +283,36 @@ theorem weightedNuclear_support_with_diagonal_defect
       simp only [hpair, hfixed]
     _ = ∑ j, (⟪u j, D (e j)⟫_ℂ).re := by
       rw [Fintype.sum_sum_type, Fintype.sum_prod_type, Fin.sum_univ_two, ← Finset.sum_add_distrib]
-    _ ≤ _ := re_sum_inner_le_nuclear e D u hu
+    _ = _ := by
+      rw [LinearMap.trace_eq_sum_inner _ e, Complex.re_sum]
+      apply Finset.sum_congr rfl
+      intro j _
+      have h := V.inner_map_map (e j) (V.symm (D (e j)))
+      rw [V.apply_symm_apply, hV] at h
+      exact congrArg Complex.re h
+
+/-- A certificate selected at `beta` supports the objective with parameter
+`b`. The diagonal slack retains coefficient `b`, allowing the certificate
+parameter to move independently of the objective. -/
+theorem weightedNuclear_support_with_diagonal_defect
+    (a b beta : ℝ) (hbeta : 0 ≤ beta) (habeta : beta < a) (theta : ι → ℝ)
+    (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (A Z : E →ₗ[ℂ] E)
+    (hA0 : ∀ i, A (e (.inl (0, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) + (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (0, i)))
+    (hA1 : ∀ i, A (e (.inl (1, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) - (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (1, i)))
+    (hAf : ∀ j, A (e (.inr j)) = (a : ℂ) • e (.inr j))
+    (hdiag : ∀ i, (⟪e (.inl (0, i)), Z (e (.inl (0, i)))⟫_ℂ).im =
+      (⟪e (.inl (1, i)), Z (e (.inl (1, i)))⟫_ℂ).im) :
+    (∑ i, weightedSupportValue a b beta (theta i)) + Fintype.card κ * (a - b) +
+      b * weightedDiagonalDefect a beta theta e Z ≤
+      UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • Z) := by
+  obtain ⟨V, hV⟩ := e.exists_linearIsometryEquiv_apply_eq_smul
+    (pairedDualPhase a beta theta) (norm_pairedDualPhase a beta hbeta habeta theta)
+  rw [weightedNuclear_support_eq_re_trace a b beta theta e A Z hA0 hA1 hAf hdiag V hV]
+  exact re_trace_isometry_comp_le_nuclear V.symm _
 
 /-- The nuclear certificate retains an exact diagonal defect term, even
 without a contraction assumption on the competitor. Arbitrary mixing of

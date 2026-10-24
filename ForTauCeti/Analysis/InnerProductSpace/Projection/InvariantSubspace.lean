@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+public import TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle
 public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 
 /-!
@@ -48,6 +49,39 @@ theorem starProjection_comap_subtype_apply_of_invariant
       change inner 𝕜 ((x : E) - K.starProjection x) (y : E) = 0
       exact K.starProjection_inner_eq_zero x y hy
   exact congrArg (fun y : Z => (y : E)) hproj
+
+/-- Restriction to a subspace invariant under the target projection cannot
+increase the directed gap. The source projection need not preserve it. -/
+theorem directedProjectionGap_comap_subtype_le_of_invariant
+    (K L Z : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [(K.comap Z.subtype).HasOrthogonalProjection] [(L.comap Z.subtype).HasOrthogonalProjection]
+    (hL : ∀ x ∈ Z, L.starProjection x ∈ Z) :
+    (K.comap Z.subtype).directedProjectionGap (L.comap Z.subtype) ≤
+      K.directedProjectionGap L := by
+  let K₀ := K.comap Z.subtype
+  let L₀ := L.comap Z.subtype
+  apply (K₀.directedProjectionGap_le_iff L₀ (K.directedProjectionGap_nonneg L)).mpr
+  intro x hx
+  have hproj := starProjection_comap_subtype_apply_of_invariant L Z hL x
+  have hnorm : ‖L₀ᗮ.starProjection x‖ = ‖Lᗮ.starProjection (x : E)‖ := by
+    rw [Submodule.starProjection_orthogonal, Submodule.starProjection_orthogonal]
+    change ‖(x : E) - (L₀.starProjection x : E)‖ = ‖(x : E) - L.starProjection x‖
+    rw [hproj]
+  rw [hnorm]
+  exact (K.directedProjectionGap_le_iff L (K.directedProjectionGap_nonneg L)).mp
+    le_rfl x hx
+
+/-- Acuteness survives restriction to a subspace invariant under the
+target orthogonal projection. -/
+theorem principalAngles_comap_lt_pi_div_two_of_invariant [FiniteDimensional 𝕜 E]
+    (K L Z : Submodule 𝕜 E)
+    (hL : ∀ x ∈ Z, L.starProjection x ∈ Z)
+    (hacute : ∀ i : ℕ, K.principalAngles L i < Real.pi / 2) :
+    ∀ i : ℕ, (K.comap Z.subtype).principalAngles (L.comap Z.subtype) i < Real.pi / 2 := by
+  apply ((K.comap Z.subtype).forall_principalAngles_lt_pi_div_two_iff_directedProjectionGap_lt_one
+    (L.comap Z.subtype)).mpr
+  exact (directedProjectionGap_comap_subtype_le_of_invariant K L Z hL).trans_lt
+    ((K.forall_principalAngles_lt_pi_div_two_iff_directedProjectionGap_lt_one L).mp hacute)
 
 /-- A nonnegative principal-sine eigenvalue of an invariant subspace pair
 is also a sine eigenvalue for the ambient pair. -/

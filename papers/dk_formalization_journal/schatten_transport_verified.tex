@@ -415,6 +415,55 @@ every admissible unitary, in the same finite-dimensional complex setting
 as \cref{thm:schatten-independent-planes}. In particular, the cutoff is
 not merely necessary or sufficient for a selected planar phase family.
 
+\begin{proposition}[The exceptional part of every optimizer]
+\label{prop:schatten-optimal-kernel}
+Let $W$ be any global minimizer and put $Z=\ker G_p(W)$.
+Its restriction to $Z$ is a self-adjoint unitary transporting
+$\operatorname{ran}P\cap Z$ onto $\operatorname{ran}Q\cap Z$.
+Every principal angle of this restricted pair is zero or $\pi/2$.
+If the original pair is acute, $W$ fixes $Z$ pointwise.
+\end{proposition}
+
+\begin{proof}
+The spectral decomposition above splits the cost into attained scalar
+minima on the nonzero gradient blocks and the cost $F_Z$ on $Z$.
+It splits the principal-angle sum into the same nonzero-block sum and
+$M_Z$, the sum of scalar minima for the restricted pair. Thus
+\[
+ \|I-W\|_p^p-\sum_j m_p(\theta_j)=F_Z-M_Z.
+\]
+Global optimality forces $F_Z=M_Z$. The restriction to $Z$ is a
+reflection, so the projection-distance bound gives
+\[
+ F_Z\geq2^p\sum_j\sin\xi_j\geq\sum_jm_p(\xi_j)=M_Z,
+\]
+where $\xi_j$ are the restricted principal angles. For
+$0<\xi<\pi/2$, the scalar endpoint competitor satisfies
+\[
+ m_p(\xi)\leq(2\sin\xi)^p<2^p\sin\xi.
+\]
+Equality of the sums therefore excludes every interior angle.
+Restriction to a subspace invariant under the target projection cannot
+increase the directed projection gap. An acute ambient pair consequently
+has an acute restricted pair. In that case all $\xi_j$ vanish, hence
+$F_Z=0$ and the restriction is the identity.
+\end{proof}
+
+\begin{proposition}[Local minima without the opposite eigenvalue]
+\label{prop:schatten-local-global-no-minus-one}
+Every constrained local minimum with no eigenvalue $-1$ is a global
+minimum. Eigenvalue $1$ is permitted.
+\end{proposition}
+
+\begin{proof}
+On the gradient kernel the transporter restricts to a self-adjoint
+unitary $R$. Since $R^2=I$, the vector $x-Rx$ satisfies
+$R(x-Rx)=-(x-Rx)$. The spectral assumption forces $R=I$.
+The restricted source and target therefore coincide and both $F_Z$
+and $M_Z$ vanish. The cost-deficit identity in the preceding proof
+gives the global minimum.
+\end{proof}
+
 \paragraph{A two-angle example.}
 Take two complex rank-two subspaces in $\mathbb C^4$ with principal
 angles $45^\circ$ and $80^\circ$, and choose $p=3/2$. The critical angle is

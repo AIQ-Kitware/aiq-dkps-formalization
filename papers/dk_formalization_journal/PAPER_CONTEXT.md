@@ -1,7 +1,9 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Latest source snapshot used for manuscript and visualization updates:**
+**Current research source:** the optimizer-rigidity changes based on `84822b0ba`,
+registered in the first section below.
+**Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
 source-result audit remains anchored to its reviewed Lean declarations.
@@ -14,6 +16,156 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Optimizer classification frontier after `84822b0ba` (24 October 2026)
+
+The unrestricted finite complex value and cutoff remain the foundation. New
+compiled results constrain **every** global optimizer, rather than just a
+selected direct-sum witness:
+
+- `SchattenGlobalLowerBound.lean: gradient_kernel_cost_defect_of_isLocalMinOn_transports_complex`
+  proves that at any local constrained minimum the ambient excess over the
+  exact principal-angle value equals the excess on the actual gradient
+  kernel. Its nonzero gradient blocks already attain their scalar minima.
+  The original global lower bound now consumes this stronger identity.
+- `SchattenOptimizerKernel.lean: gradient_kernel_optimal_of_isMinOn_transports_complex`
+  proves that any global optimizer restricts to an attaining self-adjoint
+  unitary on that kernel, with every restricted principal angle zero or right.
+- `apply_eq_self_on_gradient_kernel_of_isMinOn_acute_transports_complex`
+  proves that for an acute pair **every** global optimizer fixes the whole
+  gradient kernel. This includes all common ambient directions lying there;
+  no assertion that the whole common fixed subspace has already been
+  identified with that kernel is inferred.
+- `isMinOn_of_isLocalMinOn_transports_of_no_neg_one_complex` proves that a
+  constrained local minimum with no eigenvalue `-1` is global. Eigenvalue `1`
+  and zero displacement singular values are allowed. The more general
+  `isMinOn_of_isLocalMinOn_transports_of_gradient_kernel_fixed_complex` gives
+  the exact sufficient kernel condition. The full local-to-global statement,
+  including nontrivial reflecting kernels, remains unproved in Lean.
+
+These are finite complex `1<p<2` assertions with the original ambient
+transport constraint. They are included as Propositions
+`prop:schatten-optimal-kernel` and `prop:schatten-local-global-no-minus-one`.
+The standalone reflection equality lemma in `SchattenReflectionBound.lean`
+only needs a finite exponent greater than one and attainment of the scalar
+value. Its sine comparison is strict at every interior angle. It cannot be
+applied to an arbitrary **real** global minimizer: a real reflection may
+minimize the real problem while costing more than the complex scalar value.
+
+The reusable algebra for the smoothed optimizer families also advances:
+
+- `ForTauCeti/.../PositiveUnitaryAverage.lean` proves that `U+V=2D`, `D>=0`,
+  forces both unitaries to commute with `D`, gives `V=U*` on its range and
+  `V=-U` on its kernel. If `D` is injective, `V=U*` on the whole space.
+  These theorems allow arbitrary real/complex Hilbert spaces, with no
+  finite-dimensional or closed-range assumption.
+- `UnitaryScalarRealPart.lean` characterizes all finite complex unitaries with
+  `X+X*=2cI`, `c^2+s^2=1`, as `X=cI+i s H` with self-adjoint unitary `H`.
+  Equivalently `X=(c-i s)I+2i s E` with an orthogonal projection `E`, unique
+  when `s!=0`. It also proves the paired equation
+  `X+Y*=2cI`, `c>0`, is equivalent to this form with `Y=X`. At `c=0`, the
+  exact condition is `Y=-X*`, leaving an arbitrary unitary choice.
+  These classify **prescribed unitary-average blocks**. Converting the
+  now-compiled ambient equality certificate into this average equation
+  remains a separate obligation.
+
+The equality extraction has now advanced beyond the prescribed-block algebra:
+
+- `NuclearTrace.re_trace_eq_nuclear_iff_isPositive` and
+  `re_trace_isometry_comp_eq_nuclear_iff_isPositive` prove the exact equality
+  case of nuclear support over either field, including singular operators.
+- `SmoothedNuclearCertificate.weightedNuclear_support_eq_re_trace` exposes
+  the exact trace identity that previously appeared only inside the lower-bound
+  proof. The old lower-bound API is preserved and consumes this identity.
+- `SmoothedOptimizerCertificate.weightedNuclear_eq_minimum_iff_certificate`
+  characterizes all attaining contractions with paired imaginary diagonal
+  entries: vanishing diagonal defect and positive dual displacement are
+  necessary and sufficient. `weightedDiagonalDefect_eq_zero_iff_fixed`
+  characterizes vanishing defect by pointwise fixation of positive-weight
+  and fixed basis directions.
+- `apply_eq_self_of_critical_certificate_complex` handles zero dual weights
+  at the transition. Self-adjointness of the positive dual displacement
+  forces real diagonal entry one there, hence pointwise fixation. This
+  argument does not impose a uniform subcritical bound on other angles.
+- `SmoothedOptimizerRigidity.exists_paired_certificate_for_weighted_transport_complex`
+  derives the certificate basis from arbitrary equal-rank complex subspaces
+  and gives necessary and sufficient equality conditions for every ambient
+  weighted transporter, with weights `0<b<a`.
+- `smoothed_minimizer_agrees_with_canonical_on_subcritical_planes_complex`
+  applies to the literal Charbonnier cost for `tau>0` and every ambient
+  globally minimizing transporter. It agrees with direct rotation on all
+  principal planes **at or below** the cutoff, and fixes all canonical
+  fixed directions, even if the remaining angles are supercritical.
+  Proposition `prop:smoothed-optimizer-certificate` states these consequences.
+
+This is an exact equality certificate and partial rigidity classification,
+not yet the Grassmannian/unitary parametrization of every supercritical
+optimizer. The precise next smoothed step is to extract the positive-average
+operator equation from the remaining self-adjoint dual-displacement equation,
+after the subcritical and critical summands have been removed. Then apply
+`PositiveUnitaryAverage` to exclude unequal-cosine mixing and
+`UnitaryScalarRealPart` on each positive scalar cosine block. The zero cosine
+block remains the arbitrary-unitary defect case. No ideal-theoretic norm,
+feasibility, or attainment result follows from the infinite-dimensional
+algebra alone.
+
+No first-publication claim is made for the classical unitary-average,
+projection-parameter, kernel-invariance, or directed-gap lemmas. The
+classification consequences are registered against the ongoing complex
+optimizer target, not added to the 29 historical source results.
+
+Validation for this extension: `lake exe cache get` followed by
+`lake build DavisKahan.All ForTauCeti` succeeded. The journal manuscript
+was typeset in a fresh output directory with BibTeX and resolved references;
+the local TeX installation required disabling microtype font expansion at
+the command line. No production TeX configuration was changed for that
+environment workaround.
+
+### Independent checks and exact next proof obligations
+
+The conventional all-acute classification is still under review, with its
+kernel obstruction now discharged for global minimizers. The next step is to
+identify the paired gradient planes with the canonical equal-angle summands,
+retain their principal phase bounds, and apply scalar uniqueness to obtain
+all signed phase choices. The general right-angle case still needs the
+intrinsic statement that its free factor is `[[0,A],[A*,0]]`, with no coupling
+to fixed or acute summands. Topology and dimension assertions about the final
+minimizer set are not yet registered as Lean theorems.
+
+For the full local-to-global theorem, the exact missing analytic statement
+is feasible descent on a non-right reflecting two-dimensional block. An
+independent calculation confirms the draft's coefficient and gives an
+explicit route: with `kappa=cos(2 gamma)`,
+`u(t)=arcsin(kappa*sin(t/2))`, the eigenvalues of the draft's feasible curve
+are `exp(i(kappa*t/2-u(t)))` and
+`-exp(i(kappa*t/2+u(t)))`. The first phase has derivative zero at the origin
+and is in fact cubic to leading order. The large phase contributes
+`-(p/2)*2^(p-2)*kappa^2*t^2`. Prove a second-order remainder bound for the
+small phase and transfer this actual cost descent through the existing
+orthogonal block extension. The case `kappa=0` is exactly the right-angle
+block and must remain exceptional.
+
+Real-field diagnostics, using NumPy/SciPy as exploration only:
+4,800 random nuclear matching instances (lengths 1 through 8, seed
+`20261024`) agreed with the two-sorted-sum evaluation. The largest sampled
+gap was `0.2666109925`, below `2-sqrt(3)`. Six real 6D Schatten-`3/2`
+instances, including zero, right, repeated critical, and unequal angles,
+were optimized in all four stabilizer determinant components with two
+starts each (seed `2718`); the best costs agreed with the matching formula
+to at worst `4.5e-10`. This does not prove the matching formula, the sorted
+reduction, or the field-gap bound. Their full real four-dimensional
+all-competitor endpoint remains the first missing optimization theorem.
+
+Primary-source comparison was refreshed against Bolotnikov--Li--Rodman
+(2001), Theorem 4.2 (Frobenius minimizers) and Theorem 4.5 (Q-norms under
+additional block hypotheses), and Massey--Rios--Stojanoff (2018), Theorems
+3.5 and 3.12. The latter treat Hermitian conjugacy orbits and full
+fixed-singular-value orbits, respectively; the transporter stabilizer fiber
+here is different. No reduction of the new constrained statements to those
+results has been established. This is a comparison of hypotheses, not proof
+of historical novelty. The original 2001 paper is available at
+<https://journals.uwyo.edu/index.php/ela/article/download/117/117/117> and
+Local Lidskii at <https://arxiv.org/html/1806.11436>.
 
 ## Latest completed complex Schatten theorem (24 October 2026, `521572a2`)
 

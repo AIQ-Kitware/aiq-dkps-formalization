@@ -69,17 +69,16 @@ private theorem fullKyFanSum_eq_nuclear (A : E →ₗ[ℂ] E) :
   rw [TauCeti.kyFanSum_eq_kyFan, UnitarilyInvariantSeminorm.kyFan_apply]
   exact A.kyFanSum_eq_nuclear (LinearMap.finrank_range_le A)
 
-/-- Every self-adjoint unitary transporter dominates the exact scalar
-minimum summed over the accepted principal angles of the subspace pair. -/
-theorem sum_phaseMinimum_le_selfAdjoint_transport
+/-- The displacement of a reflecting transporter dominates the endpoint
+sine cost of its actual principal angles. -/
+theorem two_rpow_mul_sum_sin_le_selfAdjoint_transport_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (W : E ≃ₗᵢ[ℂ] E) (hW : IsSelfAdjoint (W : E →L[ℂ] E))
     (hmap : P.map W.toLinearMap = Q) :
-    (∑ i : Fin (Module.finrank ℂ P), phaseMinimum p.toReal (P.principalAngles Q i)) ≤
+    (2 : ℝ) ^ p.toReal *
+        (∑ i : Fin (Module.finrank ℂ P), Real.sin (P.principalAngles Q i)) ≤
       UnitarilyInvariantSeminorm.schatten ℂ E E p (LinearMap.id - W.toLinearMap) ^ p.toReal := by
-  have hp1 : 1 ≤ p.toReal := by
-    simpa only [ENNReal.toReal_one] using ENNReal.toReal_mono hp (show 1 ≤ p from Fact.out)
   have hPQ : Module.finrank ℂ P = Module.finrank ℂ Q := by
     rw [← hmap]
     exact (W.toLinearEquiv.finrank_map_eq P).symm
@@ -104,13 +103,6 @@ theorem sum_phaseMinimum_le_selfAdjoint_transport
     congr 1
     ring
   calc
-    _ ≤ (2 : ℝ) ^ p.toReal *
-        ∑ i : Fin (Module.finrank ℂ P), Real.sin (P.principalAngles Q i) := by
-      rw [Finset.mul_sum]
-      apply Finset.sum_le_sum
-      intro i _
-      exact phaseMinimum_le_two_rpow_mul_sin p.toReal _ hp1
-        ⟨P.principalAngles_nonneg Q i, P.principalAngles_le_pi_div_two Q i⟩
     _ = (2 : ℝ) ^ (p.toReal - 1) *
         UnitarilyInvariantSeminorm.nuclear ℂ E E (projection P - projection Q) := by
       rw [htrace, hpow]
@@ -119,5 +111,84 @@ theorem sum_phaseMinimum_le_selfAdjoint_transport
         (LinearMap.id - W.toLinearMap) :=
       mul_le_mul_of_nonneg_left hbound (Real.rpow_nonneg (by norm_num) _)
     _ = _ := hcost.symm
+
+/-- Every self-adjoint unitary transporter dominates the exact scalar
+minimum summed over the accepted principal angles of the subspace pair. -/
+theorem sum_phaseMinimum_le_selfAdjoint_transport
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (W : E ≃ₗᵢ[ℂ] E) (hW : IsSelfAdjoint (W : E →L[ℂ] E))
+    (hmap : P.map W.toLinearMap = Q) :
+    (∑ i : Fin (Module.finrank ℂ P), phaseMinimum p.toReal (P.principalAngles Q i)) ≤
+      UnitarilyInvariantSeminorm.schatten ℂ E E p (LinearMap.id - W.toLinearMap) ^ p.toReal := by
+  have hp1 : 1 ≤ p.toReal := by
+    simpa only [ENNReal.toReal_one] using ENNReal.toReal_mono hp (show 1 ≤ p from Fact.out)
+  calc
+    _ ≤ (2 : ℝ) ^ p.toReal *
+        ∑ i : Fin (Module.finrank ℂ P), Real.sin (P.principalAngles Q i) := by
+      rw [Finset.mul_sum]
+      exact Finset.sum_le_sum (fun i _ => phaseMinimum_le_two_rpow_mul_sin p.toReal _ hp1
+        ⟨P.principalAngles_nonneg Q i, P.principalAngles_le_pi_div_two Q i⟩)
+    _ ≤ _ := two_rpow_mul_sum_sin_le_selfAdjoint_transport_complex p hp P Q W hW hmap
+
+/-- A reflecting transport attaining the scalar minimum has only zero
+and right principal angles. Interior angles force a strict cost deficit. -/
+theorem principalAngles_eq_zero_or_right_of_selfAdjoint_attains_complex
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
+    (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (W : E ≃ₗᵢ[ℂ] E) (hW : IsSelfAdjoint (W : E →L[ℂ] E))
+    (hmap : P.map W.toLinearMap = Q)
+    (hatt : UnitarilyInvariantSeminorm.schatten ℂ E E p
+      (LinearMap.id - W.toLinearMap) ^ p.toReal =
+        ∑ i : Fin (Module.finrank ℂ P), phaseMinimum p.toReal (P.principalAngles Q i)) :
+    ∀ i : Fin (Module.finrank ℂ P),
+      P.principalAngles Q i = 0 ∨ P.principalAngles Q i = Real.pi / 2 := by
+  classical
+  have hle (i : Fin (Module.finrank ℂ P)) :
+      phaseMinimum p.toReal (P.principalAngles Q i) ≤
+        (2 : ℝ) ^ p.toReal * Real.sin (P.principalAngles Q i) :=
+    phaseMinimum_le_two_rpow_mul_sin p.toReal _ hp1.le
+      ⟨P.principalAngles_nonneg Q i, P.principalAngles_le_pi_div_two Q i⟩
+  have hbound := two_rpow_mul_sum_sin_le_selfAdjoint_transport_complex p hp P Q W hW hmap
+  rw [hatt, Finset.mul_sum] at hbound
+  have heq := le_antisymm (Finset.sum_le_sum (fun i _ => hle i)) hbound
+  intro i
+  by_cases hz : P.principalAngles Q i = 0
+  · exact Or.inl hz
+  by_cases hr : P.principalAngles Q i = Real.pi / 2
+  · exact Or.inr hr
+  have hstrict := phaseMinimum_lt_two_rpow_mul_sin p.toReal _ hp1
+    ⟨lt_of_le_of_ne (P.principalAngles_nonneg Q i) (Ne.symm hz),
+      lt_of_le_of_ne (P.principalAngles_le_pi_div_two Q i) hr⟩
+  exact False.elim (hstrict.ne
+    ((Finset.sum_eq_sum_iff_of_le (fun i _ => hle i)).mp heq i (Finset.mem_univ i)))
+
+/-- For an acute pair, a reflecting transport attaining the scalar
+minimum is the identity, including on all common ambient directions. -/
+theorem selfAdjoint_attaining_eq_refl_of_acute_complex
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
+    (P Q : Submodule ℂ E) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
+    (W : E ≃ₗᵢ[ℂ] E) (hW : IsSelfAdjoint (W : E →L[ℂ] E))
+    (hmap : P.map W.toLinearMap = Q)
+    (hatt : UnitarilyInvariantSeminorm.schatten ℂ E E p
+      (LinearMap.id - W.toLinearMap) ^ p.toReal =
+        ∑ i : Fin (Module.finrank ℂ P), phaseMinimum p.toReal (P.principalAngles Q i))
+    (hacute : ∀ i : Fin (Module.finrank ℂ P), P.principalAngles Q i < Real.pi / 2) :
+    W = LinearIsometryEquiv.refl ℂ E := by
+  have hzero (i : Fin (Module.finrank ℂ P)) : P.principalAngles Q i = 0 := by
+    rcases principalAngles_eq_zero_or_right_of_selfAdjoint_attains_complex
+      p hp hp1 P Q W hW hmap hatt i with hz | hr
+    · exact hz
+    · exact False.elim ((hacute i).ne hr)
+  have hcost : UnitarilyInvariantSeminorm.schatten ℂ E E p
+      (LinearMap.id - W.toLinearMap) ^ p.toReal = 0 := by
+    rw [hatt]
+    simp only [hzero, phaseMinimum_zero_angle p.toReal hp1.le, Finset.sum_const_zero]
+  have hn := (Real.rpow_eq_zero
+    (apply_nonneg _ _) (by linarith : p.toReal ≠ 0)).mp hcost
+  have hdisp := (UnitarilyInvariantSeminorm.schatten_apply_eq_zero_iff p).mp hn
+  have hid := sub_eq_zero.mp hdisp
+  ext x
+  exact (congrArg (fun T : E →ₗ[ℂ] E => T x) hid).symm
 
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

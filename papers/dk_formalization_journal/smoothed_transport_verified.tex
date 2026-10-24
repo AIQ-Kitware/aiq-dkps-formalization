@@ -229,6 +229,51 @@ so do both spectral factors. The formula for $W$ now gives the
 required transport and exact cost.
 \end{proof}
 
+\begin{proposition}[Equality in the transport certificate]
+\label{prop:smoothed-optimizer-certificate}
+Use the canonical rotation $R$ and supporting unitary $T$ from the proof
+of \cref{thm:smoothed-transport}, with $a=\eta$, $b=\eta^{-1}$.
+For any unitary transporter $W$, put $Z=W^*R$ and
+$D=T^*(aR-bZ)$. In an orthonormal rotation eigenbasis, write $e_j^\pm$
+for the two directions of each positive-angle plane, and $f_\ell$
+for the fixed directions. Define
+\[
+ \Delta(Z)=\sum_j h_j\left(2-\operatorname{Re}
+   \langle e_j^+,Ze_j^+\rangle-\operatorname{Re}
+   \langle e_j^-,Ze_j^-\rangle\right)
+ +\sum_\ell\left(1-\operatorname{Re}\langle f_\ell,Zf_\ell\rangle\right),
+\]
+where $h_j$ is the nonnegative real dual weight defined above.
+Then $W$ is globally minimizing if and only if $\Delta(Z)=0$ and
+$D$ is positive semidefinite. Every global minimizer agrees with $R$
+on every principal plane with $\theta_j\leq c_\tau$ and fixes all the
+fixed directions, even when other angles exceed $c_\tau$.
+\end{proposition}
+
+\begin{proof}
+Let $M$ be the weighted nuclear minimum before subtraction of $n\tau$.
+The certificate computation gives the exact identity
+\[
+ \operatorname{Re}\operatorname{tr}D=M+b\Delta(Z),\qquad \Delta(Z)\geq0.
+\]
+For any matrix $A$, equality
+$\operatorname{Re}\operatorname{tr}A=\|A\|_1$ holds precisely when $A$
+is positive semidefinite. To see necessity, diagonalize $|A|$ with
+eigenvectors $v_i$ and nonnegative eigenvalues $\sigma_i$.
+Each $\operatorname{Re}\langle v_i,Av_i\rangle\leq\|Av_i\|=\sigma_i$;
+equality of their sums forces $Av_i=\sigma_i v_i$. Sufficiency follows
+by diagonalizing a positive matrix. Unitary invariance now proves the
+stated equality criterion.
+
+If $h_j>0$, vanishing defect forces each paired diagonal entry of $Z$
+to have real part one, so unitarity gives $Ze_j^\pm=e_j^\pm$.
+The same argument fixes every $f_\ell$. At a critical angle $h_j=0$,
+the dual phases are $\pm i$. Self-adjointness of $D$ forces
+$\operatorname{Re}\langle e_j^\pm,Ze_j^\pm\rangle
+ =a\cos\theta_j/b=1$, so these directions are fixed as well.
+Since $Z=W^*R$, fixation by $Z$ means agreement of $W$ with $R$.
+\end{proof}
+
 \begin{corollary}[A quantitative certificate below the transition]
 \label{cor:smoothed-stability}
 Suppose every principal angle is at most $\theta_*$, where
