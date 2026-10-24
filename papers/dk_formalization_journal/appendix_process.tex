@@ -190,6 +190,9 @@ smaller angles are permitted.
 \path{optimalSmoothedTransport_lt_canonical_of_supercritical}, giving the
 necessary-and-sufficient accepted-principal-angle criterion and the strict
 improvement by the explicit optimizer in \cref{cor:smoothed-canonical-cutoff}.
+\path{SmoothedOptimizerUniqueness.lean} constructs the opposite-phase
+optimizer, proves its distinctness above the cutoff, and characterizes
+uniqueness of the global minimum by the same principal-angle criterion.
 \path{SmoothedCalibration.lean} inverts the cutoff into the explicit
 smoothing-parameter criterion given after that corollary.
 \path{SmoothedCriticalFlatness.lean} proves the quartic scalar upper bound
@@ -245,6 +248,7 @@ lake build \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCorrectionStability \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutatorCutoff \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality \
+  DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerUniqueness \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCalibration \
   DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalTransportFlatness \
   DavisKahan.Sources.DavisKahan1970.Section4SmallAngle

@@ -108,50 +108,28 @@ theorem nuclear_optimalWeightedTransport (a b : ℝ) (hb : 0 < b) (hab : b < a)
   let : IsStarNormal C := hC.isStarNormal
   obtain ⟨n, m, e, theta, hθ, hC0, hC1, hCf, hR0, hR1, hRf, _⟩ :=
     exists_subspace_paired_rotation_basis U V hUV
-  let A := (a : ℂ) • R.toLinearMap
-  have hA0 (i) : A (e (.inl (0, i))) =
-      (((a * Real.cos (theta i) : ℝ) : ℂ) + (a * Real.sin (theta i)) * Complex.I) •
-        e (.inl (0, i)) := by
-    change (a : ℂ) • R (e (.inl (0, i))) = _
-    have hr : R (e (.inl (0, i))) =
-        Complex.exp ((theta i : ℂ) * Complex.I) • e (.inl (0, i)) := hR0 i
-    rw [hr, smul_smul, Complex.exp_ofReal_mul_I]
-    congr 1
-    push_cast
-    ring
-  have hA1 (i) : A (e (.inl (1, i))) =
-      (((a * Real.cos (theta i) : ℝ) : ℂ) - (a * Real.sin (theta i)) * Complex.I) •
-        e (.inl (1, i)) := by
-    change (a : ℂ) • R (e (.inl (1, i))) = _
-    have hr : R (e (.inl (1, i))) =
-        Complex.exp ((-theta i : ℝ) * Complex.I) • e (.inl (1, i)) := hR1 i
-    rw [hr, smul_smul, Complex.exp_ofReal_mul_I, Real.cos_neg, Real.sin_neg]
-    congr 1
-    push_cast
-    ring
-  have hAf (j) : A (e (.inr j)) = (a : ℂ) • e (.inr j) := by
-    change (a : ℂ) • R (e (.inr j)) = _
-    rw [show R (e (.inr j)) = e (.inr j) from hRf j]
   have hCp (r : Fin 2) (i : Fin n) : C (e (.inl (r, i))) =
       (Real.cos (theta i) : ℂ) • e (.inl (r, i)) := by
     fin_cases r
     · exact hC0 i
     · exact hC1 i
-  have hc := weightedPhaseFactor_attains_weightedNuclear a b hb hab theta
-    (fun i => ⟨(hθ i).1.le, (hθ i).2⟩) e C hCp hCf A hA0 hA1 hAf
-  have hv := weightedRotationMinimum_eq_paired_sum a b hab.le C theta hθ e hC0 hC1 hCf
+  have hZp (r : Fin 2) (i : Fin n) : Z (e (.inl (r, i))) =
+      circlePhase 1 (optimalWeightedPhase a b (theta i)) • e (.inl (r, i)) :=
+    weightedPhaseFactor_apply_cos a b _ C _
+      ⟨(hθ i).1.le, by linarith [(hθ i).2, Real.pi_pos]⟩ (hCp r i)
+  have hZf (j : Fin m) : Z (e (.inr j)) = e (.inr j) :=
+    weightedPhaseFactor_apply_one a b hab.le C _ (hCf j)
+  have hc := nuclear_phaseTransport_eq_sum_weightedPhaseCost a b hab.le theta
+    (fun i => optimalWeightedPhase a b (theta i)) e R Z hR0 hR1 hRf hZp hZf
+  have hsum : (∑ i : Fin n, weightedPhaseCost a b (theta i) (optimalWeightedPhase a b (theta i))) =
+      ∑ i : Fin n, weightedPhaseMinimum a b (theta i) := by
+    apply Finset.sum_congr rfl
+    intro i _
+    exact weightedPhaseCost_optimal a b (theta i) hb hab.le ⟨(hθ i).1.le, (hθ i).2⟩
+  rw [hsum] at hc
   simp only [Fintype.card_fin] at hc
-  have hfactor :
-      (a : ℂ) • (optimalWeightedTransport a b U V hUV).toLinearMap -
-          (b : ℂ) • LinearMap.id =
-        (A - (b : ℂ) • Z.toLinearMap) ∘ₗ Z.symm.toLinearMap := by
-    ext x
-    simp [optimalWeightedTransport, A, R, Z]
-  rw [hfactor]
-  calc
-    _ = UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • Z.toLinearMap) :=
-      (UnitarilyInvariantSeminorm.nuclear ℂ E E).map_comp_linearIsometryEquiv Z.symm _
-    _ = _ := hc.trans hv.symm
+  have hv := weightedRotationMinimum_eq_paired_sum a b hab.le C theta hθ e hC0 hC1 hCf
+  exact hc.trans hv.symm
 
 /-- The explicit optimal transport for the Charbonnier smoothing scale. -/
 def optimalSmoothedTransport (tau : ℝ) (U V : Submodule ℂ E)

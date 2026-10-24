@@ -333,9 +333,10 @@ right-hand side $3b^2\tau D^4/(32a^2n)$. Substitute $ab=1$.
 \label{cor:smoothed-canonical-cutoff}
 The completed canonical rotation minimizes $\Psi_\tau$ exactly when
 $\theta_j\leq c_\tau$ for every principal angle. In that regime it is
-the unique minimizer. If any principal angle exceeds $c_\tau$, the
-spectral-phase optimizer in \cref{cor:smoothed-spectral-optimizer} has
-strictly lower cost than the canonical rotation.
+the unique minimizer. The global minimum is unique exactly in this regime.
+If any principal angle exceeds $c_\tau$, the spectral-phase optimizer in \cref{cor:smoothed-spectral-optimizer} has
+strictly lower cost than the canonical rotation. Reversing all its scalar
+phases gives a second, distinct global minimizer.
 \end{corollary}
 
 \begin{proof}
@@ -344,6 +345,10 @@ phase, and \cref{thm:smoothed-quartic-stability} gives uniqueness.
 If an angle exceeds the cutoff, the unique scalar minimizing phase on
 that plane is positive; replacing its zero phase strictly decreases the
 sum. The unrestricted global optimizer attains at most this improved cost.
+The scalar cost is even in the phase, so reversing every optimal phase
+preserves the attained global value. On a supercritical plane the phase is
+in $(0,\pi/2]$, so its two signs give distinct
+unitaries. Hence the global minimum is not unique above the cutoff.
 \end{proof}
 
 For acute principal angles the cutoff can also be used to choose the

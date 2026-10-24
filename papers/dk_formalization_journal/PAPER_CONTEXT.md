@@ -998,6 +998,22 @@ The main endpoint is `canonical_correction_isMin_iff_commutator`, with
 states the criterion in the correction application. The projection norm
 identity is classical; no separate priority claim is made for it.
 
+`SmoothedOptimizerUniqueness.lean` now classifies uniqueness of the actual
+global minimum at every finite complex rank. The endpoint
+`smoothed_transport_unique_minimizer_iff` states that a unique feasible
+global minimizer exists exactly when all accepted principal angles are at
+or below the cutoff. Above it, the named
+`oppositeOptimalSmoothedTransport` is feasible, attains the same exact angle
+sum, is globally minimizing, and is distinct from the earlier optimizer.
+The proof uses the opposite signs of the spectral phases and the accepted
+paired-angle bridge; no chart or no-mixing condition is supplied to the
+final theorem. The shared literal nuclear computation is now
+`nuclear_phaseTransport_eq_sum_weightedPhaseCost` in
+`SmoothedNuclearAttainment.lean`, consumed by both phase signs rather than
+duplicating the positive optimizer's proof. Included in
+`cor:smoothed-canonical-cutoff`. The classification of every supercritical
+minimizer remains conventional and excluded from the article.
+
 The integrated journal text typesets successfully with `pdflatex`, `bibtex`,
 and two further LaTeX passes. This VM lacks `latexmk`; its default T1 Computer
 Modern fonts also need microtype expansion disabled for the local build.

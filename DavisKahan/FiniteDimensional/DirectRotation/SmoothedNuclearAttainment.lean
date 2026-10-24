@@ -96,6 +96,47 @@ theorem nuclear_diagonalPhase_eq_sum_weightedPhaseCost
       abs_of_nonneg hab0, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
 
 
+/-- In paired rotation coordinates, the literal cost of any diagonal phase
+transport is the sum of its scalar two-focus costs and fixed baseline. -/
+theorem nuclear_phaseTransport_eq_sum_weightedPhaseCost
+    (a b : ℝ) (hab : b ≤ a) (theta delta : ι → ℝ)
+    (e : OrthonormalBasis ((Fin 2 × ι) ⊕ κ) ℂ E) (R Z : E ≃ₗᵢ[ℂ] E)
+    (hR0 : ∀ i, R (e (.inl (0, i))) = Complex.exp ((theta i : ℂ) * Complex.I) • e (.inl (0, i)))
+    (hR1 : ∀ i, R (e (.inl (1, i))) = Complex.exp (((-theta i : ℝ) : ℂ) * Complex.I) • e (.inl (1, i)))
+    (hRf : ∀ j, R (e (.inr j)) = e (.inr j))
+    (hZp : ∀ r i, Z (e (.inl (r, i))) = circlePhase 1 (delta i) • e (.inl (r, i)))
+    (hZf : ∀ j, Z (e (.inr j)) = e (.inr j)) :
+    UnitarilyInvariantSeminorm.nuclear ℂ E E
+      ((a : ℂ) • (Z.symm.trans R).toLinearMap - (b : ℂ) • LinearMap.id) =
+        (∑ i, weightedPhaseCost a b (theta i) (delta i)) + Fintype.card κ * (a - b) := by
+  let A := (a : ℂ) • R.toLinearMap
+  have hA0 (i) : A (e (.inl (0, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) + (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (0, i)) := by
+    change (a : ℂ) • R (e (.inl (0, i))) = _
+    rw [hR0, smul_smul, Complex.exp_ofReal_mul_I]
+    congr 1
+    push_cast
+    ring
+  have hA1 (i) : A (e (.inl (1, i))) =
+      (((a * Real.cos (theta i) : ℝ) : ℂ) - (a * Real.sin (theta i)) * Complex.I) •
+        e (.inl (1, i)) := by
+    change (a : ℂ) • R (e (.inl (1, i))) = _
+    rw [hR1, smul_smul, Complex.exp_ofReal_mul_I, Real.cos_neg, Real.sin_neg]
+    congr 1
+    push_cast
+    ring
+  have hAf (j) : A (e (.inr j)) = (a : ℂ) • e (.inr j) := by
+    change (a : ℂ) • R (e (.inr j)) = _
+    rw [hRf]
+  have hfactor : (a : ℂ) • (Z.symm.trans R).toLinearMap - (b : ℂ) • LinearMap.id =
+      (A - (b : ℂ) • Z.toLinearMap) ∘ₗ Z.symm.toLinearMap := by ext x; simp [A]
+  rw [hfactor]
+  calc
+    _ = UnitarilyInvariantSeminorm.nuclear ℂ E E (A - (b : ℂ) • Z.toLinearMap) :=
+      (UnitarilyInvariantSeminorm.nuclear ℂ E E).map_comp_linearIsometryEquiv Z.symm _
+    _ = _ := nuclear_diagonalPhase_eq_sum_weightedPhaseCost a b hab theta delta e A Z hA0 hA1 hAf hZp hZf
+
 /-- The supplied principal-rotation eigenbasis admits an actual unitary
 attaining the weighted nuclear lower bound. The same phase is used on both
 members of each pair, and every fixed direction is fixed pointwise. -/
