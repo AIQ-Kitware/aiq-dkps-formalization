@@ -743,6 +743,32 @@ angle. Subcritical smoothed angles are harmless precisely when their pair
 cost with `r_tau` is inactive. Both equality classifications are conventional
 proofs under review, not Lean-certified, and priority remains provisional.
 
+The scalar Schatten draft now gives a hyperbolic parametrization. With
+`beta=(2-p)/p`, the supercritical acute optimum is determined by the unique
+`u>0` satisfying `cos(theta)=sinh(beta*u)/sinh(u)`, and its phase obeys
+`cos(delta)=cosh(beta*u)/cosh(u)`. The ratio is strictly decreasing from
+`beta` to zero. For `p=2n/(n+1)`, this becomes the single Chebyshev polynomial
+equation `U_(n-1)(z)=sec(theta)` with unique root `z>1`.
+At `p=4/3`, this yields the explicit phase
+`cos(delta)=cos(theta)/(1-2cos(theta)^2)` and scalar minimum power sum
+`2^(4/3)*(1-2cos(theta)^2)^(1/3)` above the cutoff `pi/3`.
+The real matching costs and their attaining rotations are consequently
+explicit at this additional exponent. For all `p=1+1/m`, `m>=2`, the real
+canonical pair test is the polynomial inequality
+`sum_(j=0)^m u1^(m-j)*u2^j <= 1`, where
+`ui=sin(theta_(i)/2)^(2/m)`, together with
+`u1 <= 2^(-2/(m+1))`. These derivations are conventional proofs under
+review, not Lean-certified; no separate historical priority is claimed for
+the hyperbolic or Chebyshev identities. Numerical checks against scalar
+minimization agreed at several exponents and angles; they are not proof.
+
+A proposed extension of the sharp field-gap bound to arbitrary Schatten
+powers is not established. Numerical maximizations at `p=3/2` through
+twelve angles agree with the rank-one candidate, but the strict
+curvature-concavity certificate used for nuclear and Charbonnier costs
+does not carry over directly. No general-power sharp additive gap theorem
+is claimed in the drafts.
+
 A further primary-source comparison on 2026-10-24 checked Antonini--Cavalletti,
 *Geometry of Grassmannians and optimal transport of quantum states*,
 Annali SNS Pisa 27 (2026), 201--254,

@@ -660,6 +660,95 @@ Using $x^{3/2}+y^{3/2}
 \cref{eq:schatten-three-halves-value}. Continuity includes the two
 displayed boundary angles.
 
+\begin{proposition}[A hyperbolic parametrization of the optimal phase]
+\label{prop:schatten-hyperbolic-phase}
+Let $1<p<2$, put $\beta=(2-p)/p$, and suppose
+$\vartheta_p<\theta<\pi/2$. There is a unique $u>0$ satisfying
+\begin{equation}
+ \cos\theta=\frac{\sinh(\beta u)}{\sinh u}.
+ \label{eq:schatten-hyperbolic-angle}
+\end{equation}
+The optimal phase and minimum power sum are
+\begin{equation}
+ \cos\delta_p(\theta)=\frac{\cosh(\beta u)}{\cosh u},\qquad
+ m_p(\theta)=2^{p+1}\cosh u
+     \left(\frac{\sinh(2(p-1)u/p)}{\sinh(2u)}\right)^{p/2}.
+ \label{eq:schatten-hyperbolic-value}
+\end{equation}
+The ratio in \cref{eq:schatten-hyperbolic-angle} strictly decreases
+from $\beta$ to zero, giving a monotone equation for every supercritical
+acute angle.
+\end{proposition}
+
+\begin{proof}
+Put $a=\theta-\delta_p(\theta)$, $b=\theta+\delta_p(\theta)$,
+$x=\sin(a/2)$, $y=\sin(b/2)$, and $q=p-1$.
+Then $0<x<y<1$ and the stationary balance reads
+$x^q\sqrt{1-x^2}=y^q\sqrt{1-y^2}$.
+With $r=x/y=e^{-t}$, $t>0$, it gives
+\[
+ y^2=\frac{1-r^{2q}}{1-r^{2p}}
+      =e^t\frac{\sinh(qt)}{\sinh(pt)},\qquad
+ x^2=e^{-t}\frac{\sinh(qt)}{\sinh(pt)}.
+\]
+The cosine addition identities yield
+\[
+ \cos\theta=\frac{\sinh t-\sinh(qt)}{\sinh(pt)}
+           =\frac{\sinh((2-p)t/2)}{\sinh(pt/2)},
+ \qquad
+ \cos\delta_p(\theta)=\frac{\sinh t+\sinh(qt)}{\sinh(pt)}
+           =\frac{\cosh((2-p)t/2)}{\cosh(pt/2)}.
+\]
+Set $u=pt/2$ and sum $2^p(x^p+y^p)$ to obtain the formulas.
+For uniqueness, $v\coth v$ strictly increases on $(0,\infty)$:
+its derivative has numerator $\sinh v\cosh v-v>0$, since that
+numerator vanishes at zero and has derivative $2\sinh^2v>0$.
+Consequently
+\[
+ \frac{d}{du}\log\frac{\sinh(\beta u)}{\sinh u}
+      =\beta\coth(\beta u)-\coth u<0.
+\]
+The endpoint limits are $\beta$ and zero.
+\end{proof}
+
+For $p=2n/(n+1)$, $n\geq2$, this scalar equation is polynomial.
+Let $T_n,U_{n-1}$ be the Chebyshev polynomials characterized by
+$T_n(\cosh v)=\cosh(nv)$ and
+$U_{n-1}(\cosh v)=\sinh(nv)/\sinh v$ for $v>0$.
+Putting $z=\cosh(u/n)>1$ gives
+\[
+ U_{n-1}(z)=\frac1{\cos\theta},\qquad
+ \cos\delta_p(\theta)=\frac{z}{T_n(z)}.
+\]
+There is exactly one root $z>1$ when $\cos\theta<1/n$.
+In particular, $n=2$ gives another elementary closed form.
+
+\begin{corollary}[The explicit four-thirds minimum]
+\label{cor:schatten-four-thirds}
+For $p=4/3$ the scalar critical angle is $\pi/3$. Above it,
+\begin{equation}
+ \delta_{4/3}(\theta)=\arccos\frac{\cos\theta}{1-2\cos^2\theta},
+ \qquad
+ m_{4/3}(\theta)=2^{4/3}(1-2\cos^2\theta)^{1/3}.
+ \label{eq:schatten-four-thirds-value}
+\end{equation}
+Below it, $\delta_{4/3}=0$ and
+$m_{4/3}(\theta)=2(2\sin(\theta/2))^{4/3}$.
+The formulas agree at $\pi/3$ and extend continuously to $\pi/2$.
+\end{corollary}
+
+\begin{proof}
+Here $\beta=1/2$. Write $c=\cos\theta$ and $z=\cosh(u/2)$.
+Then $c=1/(2z)$ and
+$\cos\delta=z/(2z^2-1)=c/(1-2c^2)$.
+Since $\sinh(2u)=4\sinh(u/2)z\cosh u$, the minimum becomes
+\[
+ m_{4/3}(\theta)=2\left(\frac{\cosh u}{z^2}\right)^{1/3}
+               =2^{4/3}(1-2c^2)^{1/3}.
+\]
+The remaining assertions follow from the scalar classification and continuity.
+\end{proof}
+
 \begin{proposition}[Shape of the minimum value]
 \label{prop:schatten-value-convexity}
 The function $m_p$ is strictly convex on $[0,\vartheta_p]$ and strictly

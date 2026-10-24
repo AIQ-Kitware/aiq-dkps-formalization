@@ -180,7 +180,7 @@ Then \cref{eq:real-matching-minimum} is equivalently
 \]
 Edges of nonpositive weight may be omitted. Thus evaluation of the scalar
 costs followed by a maximum-weight matching gives an exact global
-optimization procedure. At $p=3/2$ and for the Charbonnier penalty the
+optimization procedure. At $p=4/3$, $p=3/2$, and for the Charbonnier penalty the
 edge costs are explicit; other Schatten exponents require only the
 one-dimensional scalar balance equation.
 
@@ -308,8 +308,8 @@ block constructions already given.
 \end{proof}
 
 Thus after sorting, only the pair costs in two adjacent pairing sequences
-must be evaluated. At exponent $3/2$ and for the Charbonnier penalty,
-\cref{cor:real-three-halves-matching,cor:real-four-smoothed} make these
+must be evaluated. At exponents $4/3$, $3/2$, and for the Charbonnier penalty,
+\cref{cor:real-four-thirds-matching,cor:real-three-halves-matching,cor:real-four-smoothed} make these
 costs explicit. Other Schatten exponents require the scalar balance
 equation only for those pairs.
 
@@ -870,6 +870,63 @@ Thus no pair lowers the canonical cost exactly when
 $x^2+xy+y^2\leq1$ for every pair. The expression increases with either
 nonnegative argument, so the two largest angles suffice. Apply
 \cref{thm:real-matching-minimum}.
+\end{proof}
+
+\begin{corollary}[Explicit real four-thirds costs]
+\label{cor:real-four-thirds-matching}
+For $\rho(s)=s^{4/3}$, put $f(t)=(2\sin(t/2))^{4/3}$.
+For $\theta\geq\psi$, set $h=(\theta+\psi)/2$,
+$d=(\theta-\psi)/2$, $c=\cos h$, and $q=\cos d$.
+Then
+\[
+ s_{4/3}(\theta)=\min\{2f(\theta),2^{4/3}\},\qquad
+ e_{4/3}(\theta,\psi)=
+ \begin{cases}
+  2f(\theta)+2f(\psi),&q(1-2c^2)\leq c,\\
+  2^{7/3}(1-2c^2)^{1/3},&q(1-2c^2)>c.
+ \end{cases}
+\]
+On the coupled branch an attaining common rotation has
+$\cos\gamma=c/((1-2c^2)q)$. These costs, inserted in the two
+sorted sums, give the unrestricted real minimum in every finite dimension.
+\end{corollary}
+
+\begin{proof}
+Use \cref{eq:schatten-four-thirds-value} and clip the optimal scalar
+phase to $[d,h]$. Coupling occurs exactly when its cosine is less
+than $\cos d$, or $q(1-2c^2)>c$. This implies $c<1/2$, automatically
+selecting a supercritical mean angle and a positive denominator.
+The attaining rotation is the one from the four-dimensional formula.
+Apply \cref{thm:real-sorted-spectral-minimum}.
+\end{proof}
+
+\begin{corollary}[Polynomial canonical tests at reciprocal-integer exponents]
+\label{cor:real-reciprocal-integer-canonical}
+Let $m\geq2$ be an integer, $p=1+1/m$, and set
+$u_i=\sin^{2/m}(\theta_{(i)}/2)$ for the two largest angles,
+inserting zeros when necessary. The real canonical transport is globally
+optimal exactly when
+\begin{equation}
+ u_1\leq2^{-2/(m+1)},\qquad
+ \sum_{j=0}^{m}u_1^{m-j}u_2^j\leq1.
+ \label{eq:real-reciprocal-integer-canonical}
+\end{equation}
+At $p=4/3$ the second condition is
+$u_1^3+u_1^2u_2+u_1u_2^2+u_2^3\leq1$.
+\end{corollary}
+
+\begin{proof}
+Apart from a positive constant, the squared phase amplitude at angle $t$
+is $u-u^{m+1}$, where $u=\sin^{2/m}(t/2)$. For $u>v$,
+\[
+ (u-u^{m+1})-(v-v^{m+1})
+    =(u-v)\left(1-\sum_{j=0}^{m}u^{m-j}v^j\right).
+\]
+Thus the pair test in \cref{cor:real-schatten-canonical-top-two} is exactly
+the second inequality. When $u=v$, it reduces to
+$(m+1)\sin^2(t/2)\leq1$, the scalar critical-angle condition.
+The reflection test $\sin(\theta_{(1)}/2)\leq2^{-1/p}$ becomes the
+first inequality after taking the power $2/m$.
 \end{proof}
 
 \begin{figure}[t]
