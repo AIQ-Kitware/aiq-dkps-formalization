@@ -47,5 +47,6 @@ import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNuclearAttainment
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutantOptimization
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralCost
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedRotationOptimization
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceOptimization
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

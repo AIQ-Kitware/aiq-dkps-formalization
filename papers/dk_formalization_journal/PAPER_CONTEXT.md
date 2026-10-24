@@ -386,11 +386,17 @@ unitary and proves its exact accepted nuclear cost.
 `SmoothedCommutantOptimization.lean` proves commutation with the actual
 swapping source reflection implies the paired-diagonal condition, and returns
 an actual unitary minimizing over all commuting contractions. These results
-include arbitrary fixed directions and all mixing competitors. The remaining
-step toward the unconditional subspace-pair angle formula is to instantiate
-the structural rotation data below for the canonical nonacute transport and
-identify its angle trace with the accepted principal angles. Do not yet call the
-full smoothed transport theorem Lean-certified. `NuclearTrace.lean` adds
+include arbitrary fixed directions and all mixing competitors.
+`SmoothedSubspaceOptimization.lean` now instantiates the structural data for
+the canonical nonacute rotation of every equal-rank complex subspace pair,
+including right angles, and proves an attaining global minimum of the literal
+Charbonnier singular-value cost against every unitary subspace transport.
+Its exact value is `smoothedTransportMinimum`, the explicit spectral trace of
+the canonical cosine operator. Identification with the displayed sum over the
+accepted principal angles remains unfinished; do not yet call that angle-sum
+identity Lean-certified. `NonacuteCompression.lean` proves the diagonal cosine
+compressions and the source-reflection reversal needed for this instantiation.
+`NuclearTrace.lean` adds
 the classical trace support inequalities consumed from the accepted Ky Fan
 maximum principle and the normal-basis nuclear sum.
 
