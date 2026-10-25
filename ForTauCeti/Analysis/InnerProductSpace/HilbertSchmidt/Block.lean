@@ -30,8 +30,8 @@ turn: `‖P ∘ Z ∘ Q‖ ≤ ‖P‖ ‖Q‖ ‖Z‖`.
 
 The two-sided block decomposition of a Hilbert--Schmidt operator is the
 operator-matrix view of the `ℓ²`-of-columns presentation
-(`ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`, with the standard
-references there).  Its use as the carrier of a Sylvester estimate follows
+(`TauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Columns.lean`, with the
+standard references there).  Its use as the carrier of a Sylvester estimate follows
 Bhatia--Davis--McIntosh; see
 `prose/distilled_literature/BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex`.
 
@@ -59,35 +59,37 @@ variable (b : HilbertBasis ι 𝕜 F) (P : E →L[𝕜] E) (Q : F →L[𝕜] F)
 /-- Sandwiching a Hilbert--Schmidt operator between two bounded operators keeps its energy finite,
 so the block map lands back in the Hilbert--Schmidt class. -/
 theorem energy_block_ne_top (f : lp (fun _ : ι => E) 2) :
-    (((P.comp (ofLp b f)).comp Q)).hilbertSchmidtEnergy b ≠ ⊤ := by
-  have h1 : ((P.comp (ofLp b f)).comp Q).hilbertSchmidtEnergy b
-      ≤ ‖Q‖ₑ ^ 2 * (P.comp (ofLp b f)).hilbertSchmidtEnergy b :=
+    (((P.comp (b.columnOperator f)).comp Q)).hilbertSchmidtEnergy b ≠ ⊤ := by
+  have h1 : ((P.comp (b.columnOperator f)).comp Q).hilbertSchmidtEnergy b
+      ≤ ‖Q‖ₑ ^ 2 * (P.comp (b.columnOperator f)).hilbertSchmidtEnergy b :=
     by simpa only [mul_comm] using
-      ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_right (P.comp (ofLp b f)) Q b b
-  have h2 : (P.comp (ofLp b f)).hilbertSchmidtEnergy b
-      ≤ ‖P‖ₑ ^ 2 * (ofLp b f).hilbertSchmidtEnergy b :=
+      ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_right (P.comp (b.columnOperator f)) Q b b
+  have h2 : (P.comp (b.columnOperator f)).hilbertSchmidtEnergy b
+      ≤ ‖P‖ₑ ^ 2 * (b.columnOperator f).hilbertSchmidtEnergy b :=
     ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_left _ _ b
-  have hfin : (ofLp b f).hilbertSchmidtEnergy b ≠ ⊤ := by
-    rw [energy_ofLp]; exact ENNReal.ofReal_ne_top
-  have hchain : ((P.comp (ofLp b f)).comp Q).hilbertSchmidtEnergy b
-      ≤ ‖Q‖ₑ ^ 2 * (‖P‖ₑ ^ 2 * (ofLp b f).hilbertSchmidtEnergy b) := h1.trans (by gcongr)
+  have hfin : (b.columnOperator f).hilbertSchmidtEnergy b ≠ ⊤ := by
+    rw [HilbertBasis.hilbertSchmidtEnergy_columnOperator]; simp
+  have hchain : ((P.comp (b.columnOperator f)).comp Q).hilbertSchmidtEnergy b
+      ≤ ‖Q‖ₑ ^ 2 * (‖P‖ₑ ^ 2 * (b.columnOperator f).hilbertSchmidtEnergy b) := h1.trans (by gcongr)
   exact ne_top_of_le_ne_top
     (ENNReal.mul_ne_top (by simp) (ENNReal.mul_ne_top (by simp) hfin)) hchain
 
 /-- The two-sided block `Z ↦ P ∘ Z ∘ Q`, in the `ℓ²` model. -/
 noncomputable def blockFun (f : lp (fun _ : ι => E) 2) : lp (fun _ : ι => E) 2 :=
-  ofOperator b ((P.comp (ofLp b f)).comp Q) (energy_block_ne_top b P Q f)
+  ⟨fun i => ((P.comp (b.columnOperator f)).comp Q) (b i),
+    (((P.comp (b.columnOperator f)).comp Q).hilbertSchmidtEnergy_ne_top_iff_memℓp b).mp
+      (energy_block_ne_top b P Q f)⟩
 
 /-- The block map, seen through the operator model. -/
-@[simp] theorem ofLp_blockFun (f : lp (fun _ : ι => E) 2) :
-    ofLp b (blockFun b P Q f) = (P.comp (ofLp b f)).comp Q :=
-  ofLp_ofOperator _ _ _
+@[simp] theorem columnOperator_blockFun (f : lp (fun _ : ι => E) 2) :
+    b.columnOperator (blockFun b P Q f) = (P.comp (b.columnOperator f)).comp Q :=
+  b.columnOperator_mk _ _
 
 /-- The two-sided block map is additive. -/
 theorem blockFun_add (f g : lp (fun _ : ι => E) 2) :
     blockFun b P Q (f + g) = blockFun b P Q f + blockFun b P Q g := by
-  refine ofLp_injective b ?_
-  rw [ofLp_add, ofLp_blockFun, ofLp_blockFun, ofLp_blockFun, ofLp_add]
+  refine b.columnOperator_injective ?_
+  rw [map_add, columnOperator_blockFun, columnOperator_blockFun, columnOperator_blockFun, map_add]
   ext x
   simp
 
@@ -95,8 +97,8 @@ theorem blockFun_add (f g : lp (fun _ : ι => E) 2) :
 model, which is what lets it be bundled as a continuous linear map. -/
 theorem blockFun_smul (c : 𝕜) (f : lp (fun _ : ι => E) 2) :
     blockFun b P Q (c • f) = c • blockFun b P Q f := by
-  refine ofLp_injective b ?_
-  rw [ofLp_smul, ofLp_blockFun, ofLp_blockFun, ofLp_smul]
+  refine b.columnOperator_injective ?_
+  rw [map_smul, columnOperator_blockFun, columnOperator_blockFun, map_smul]
   ext x
   simp
 
@@ -104,30 +106,15 @@ theorem blockFun_smul (c : 𝕜) (f : lp (fun _ : ι => E) 2) :
 it continuously. -/
 theorem norm_blockFun_le (f : lp (fun _ : ι => E) 2) :
     ‖blockFun b P Q f‖ ≤ ‖P‖ * ‖Q‖ * ‖f‖ := by
-  have hE : ENNReal.ofReal (‖blockFun b P Q f‖ ^ 2)
-      ≤ ‖Q‖ₑ ^ 2 * (‖P‖ₑ ^ 2 * ENNReal.ofReal (‖f‖ ^ 2)) := by
-    rw [← energy_ofLp b (blockFun b P Q f), ofLp_blockFun, ← energy_ofLp b f]
-    calc
-      _ ≤ (P.comp (ofLp b f)).hilbertSchmidtEnergy b * ‖Q‖ₑ ^ 2 :=
-        ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_right _ _ b b
-      _ ≤ (‖P‖ₑ ^ 2 * (ofLp b f).hilbertSchmidtEnergy b) * ‖Q‖ₑ ^ 2 := by
-        gcongr
-        exact ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_left _ _ b
-      _ = _ := by ac_rfl
-  have hPe : ‖P‖ₑ = ENNReal.ofReal ‖P‖ := by
-    rw [enorm_eq_nnnorm, ← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
-  have hQe : ‖Q‖ₑ = ENNReal.ofReal ‖Q‖ := by
-    rw [enorm_eq_nnnorm, ← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
-  have hrw : ‖Q‖ₑ ^ 2 * (‖P‖ₑ ^ 2 * ENNReal.ofReal (‖f‖ ^ 2))
-      = ENNReal.ofReal ((‖P‖ * ‖Q‖ * ‖f‖) ^ 2) := by
-    rw [hPe, hQe, ← ENNReal.ofReal_pow (norm_nonneg Q), ← ENNReal.ofReal_pow (norm_nonneg P),
-      ← ENNReal.ofReal_mul (by positivity), ← ENNReal.ofReal_mul (by positivity)]
-    congr 1
-    ring
-  rw [hrw, ENNReal.ofReal_le_ofReal_iff (by positivity)] at hE
-  have hc : (0 : ℝ) ≤ ‖P‖ * ‖Q‖ * ‖f‖ := by positivity
-  have hsq := Real.sqrt_le_sqrt hE
-  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq hc] at hsq
+  calc
+    ‖blockFun b P Q f‖ = (b.columnOperator (blockFun b P Q f)).hilbertSchmidtNorm :=
+      (b.hilbertSchmidtNorm_columnOperator _).symm
+    _ = ((P.comp (b.columnOperator f)).comp Q).hilbertSchmidtNorm := by
+      rw [columnOperator_blockFun]
+    _ ≤ ‖P‖ * (b.columnOperator f).hilbertSchmidtNorm * ‖Q‖ := by
+      simpa only [ContinuousLinearMap.comp_assoc] using
+        ContinuousLinearMap.hilbertSchmidtNorm_comp_comp_le P (b.columnOperator f) Q b (by simp)
+    _ = ‖P‖ * ‖Q‖ * ‖f‖ := by rw [b.hilbertSchmidtNorm_columnOperator]; ring
 
 /-- The two-sided block as a bounded operator. -/
 noncomputable def blockCLM :
@@ -148,26 +135,20 @@ end Defs
 
 /-- An idempotent left factor fixes the block it cuts.  This is one of the two
 hypotheses the per-block Sylvester estimate takes. -/
-theorem comp_ofLp_blockFun_left (b : HilbertBasis ι 𝕜 F) {P : E →L[𝕜] E}
+theorem comp_columnOperator_blockFun_left (b : HilbertBasis ι 𝕜 F) {P : E →L[𝕜] E}
     (hP : P.comp P = P) (Q : F →L[𝕜] F) (f : lp (fun _ : ι => E) 2) :
-    P.comp (ofLp b (blockFun b P Q f)) = ofLp b (blockFun b P Q f) := by
-  rw [ofLp_blockFun, ← ContinuousLinearMap.comp_assoc, ← ContinuousLinearMap.comp_assoc, hP]
+    P.comp (b.columnOperator (blockFun b P Q f)) = b.columnOperator (blockFun b P Q f) := by
+  rw [columnOperator_blockFun, ← ContinuousLinearMap.comp_assoc,
+    ← ContinuousLinearMap.comp_assoc, hP]
 
 /-- An idempotent right factor fixes the block it cuts. -/
-theorem comp_ofLp_blockFun_right (b : HilbertBasis ι 𝕜 F) (P : E →L[𝕜] E)
+theorem comp_columnOperator_blockFun_right (b : HilbertBasis ι 𝕜 F) (P : E →L[𝕜] E)
     {Q : F →L[𝕜] F} (hQ : Q.comp Q = Q) (f : lp (fun _ : ι => E) 2) :
-    (ofLp b (blockFun b P Q f)).comp Q = ofLp b (blockFun b P Q f) := by
-  rw [ofLp_blockFun, ContinuousLinearMap.comp_assoc, hQ]
+    (b.columnOperator (blockFun b P Q f)).comp Q = b.columnOperator (blockFun b P Q f) := by
+  rw [columnOperator_blockFun, ContinuousLinearMap.comp_assoc, hQ]
 
 
 /-! ### Blocks split the norm -/
-
-omit [CompleteSpace F] in
-/-- The `ℓ²` norm squared is the Hilbert–Schmidt energy, in `ℝ≥0∞`. -/
-theorem enorm_sq_eq_energy (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2) :
-    ‖f‖ₑ ^ 2 = (ofLp b f).hilbertSchmidtEnergy b := by
-  rw [energy_ofLp, enorm_eq_nnnorm, ← ENNReal.ofReal_coe_nnreal, coe_nnnorm,
-    ← ENNReal.ofReal_pow (norm_nonneg _)]
 
 /-- **Two-sided blocks split the `ℓ²` norm.**  This is the hypothesis
 `TauCeti.enorm_ge_of_blocks` takes, for the block family of a pair of
@@ -179,12 +160,14 @@ theorem tsum_enorm_sq_blockFun {ι' : Type*} (b : HilbertBasis ι 𝕜 F)
     (f : lp (fun _ : ι => E) 2) :
     ∑' p : ι' × ι', ‖blockFun b (P p.1) (Q p.2) f‖ₑ ^ 2 = ‖f‖ₑ ^ 2 := by
   have hterm : ∀ p : ι' × ι', ‖blockFun b (P p.1) (Q p.2) f‖ₑ ^ 2
-      = (((P p.1).comp (ofLp b f)).comp (Q p.2)).hilbertSchmidtEnergy b := by
+      = (((P p.1).comp (b.columnOperator f)).comp (Q p.2)).hilbertSchmidtEnergy b := by
     intro p
-    rw [enorm_sq_eq_energy b, ofLp_blockFun]
-  rw [tsum_congr hterm, ENNReal.tsum_prod', ENNReal.tsum_comm, enorm_sq_eq_energy b f]
+    rw [← b.hilbertSchmidtEnergy_columnOperator (blockFun b (P p.1) (Q p.2) f),
+      columnOperator_blockFun]
+  rw [tsum_congr hterm, ENNReal.tsum_prod', ENNReal.tsum_comm,
+    ← b.hilbertSchmidtEnergy_columnOperator f]
   simpa only [ContinuousLinearMap.comp_assoc] using
-    ContinuousLinearMap.tsum_tsum_hilbertSchmidtEnergy_comp (ofLp b f) b b P Q hP hQ
+    ContinuousLinearMap.tsum_tsum_hilbertSchmidtEnergy_comp (b.columnOperator f) b b P Q hP hQ
 
 
 /-- **A block commutes with the Sylvester flow** when each side commutes with
@@ -198,8 +181,8 @@ theorem blockCLM_comm_sylvesterGroup {ι : Type*} {E F : Type*}
     (hQ : ∀ t : ℝ, ∀ y : F, Q (V.U t y) = V.U t (Q y))
     (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     blockCLM b P Q (sylvesterFun U V b t f) = sylvesterFun U V b t (blockCLM b P Q f) := by
-  refine ofLp_injective b ?_
-  simp only [blockCLM_apply, ofLp_sylvesterFun, conjOp, ofLp_blockFun]
+  refine b.columnOperator_injective ?_
+  simp only [blockCLM_apply, columnOperator_sylvesterFun, conjOp, columnOperator_blockFun]
   ext x
   simp only [ContinuousLinearMap.comp_apply]
   rw [hQ (-t) x, hP t]

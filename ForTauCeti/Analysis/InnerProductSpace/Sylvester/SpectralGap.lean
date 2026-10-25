@@ -63,16 +63,16 @@ variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 /-- A block with a zero factor is the zero block. -/
 theorem blockFun_eq_zero_left (b : HilbertBasis ι ℂ F) (Q : F →L[ℂ] F)
     (f : lp (fun _ : ι => E) 2) : blockFun b (0 : E →L[ℂ] E) Q f = 0 := by
-  refine ofLp_injective b ?_
-  rw [ofLp_blockFun, ofLp_zero]
+  refine b.columnOperator_injective ?_
+  rw [columnOperator_blockFun, map_zero]
   ext x
   simp
 
 /-- A block with a zero right factor vanishes. -/
 theorem blockFun_eq_zero_right (b : HilbertBasis ι ℂ F) (P : E →L[ℂ] E)
     (f : lp (fun _ : ι => E) 2) : blockFun b P (0 : F →L[ℂ] F) f = 0 := by
-  refine ofLp_injective b ?_
-  rw [ofLp_blockFun, ofLp_zero]
+  refine b.columnOperator_injective ?_
+  rw [columnOperator_blockFun, map_zero]
   ext x
   simp
 
@@ -166,18 +166,19 @@ theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
       change (TauCeti.LinearPMap.specProjection hA (TauCeti.LinearPMap.gridCell ε k)
-        (TauCeti.LinearPMap.measurableSet_gridCell ε k)).comp (ofLp b W) = ofLp b W
+        (TauCeti.LinearPMap.measurableSet_gridCell ε k)).comp (b.columnOperator W) =
+        b.columnOperator W
       rw [hW, blockCLM_apply]
-      exact comp_ofLp_blockFun_left b
+      exact comp_columnOperator_blockFun_left b
         (TauCeti.LinearPMap.specProjection_comp_self hA _ _) _ _)
     (by
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
-      change (ofLp b W).comp (TauCeti.LinearPMap.specProjection hB
+      change (b.columnOperator W).comp (TauCeti.LinearPMap.specProjection hB
         (TauCeti.LinearPMap.gridCell ε l) (TauCeti.LinearPMap.measurableSet_gridCell ε l))
-        = ofLp b W
+        = b.columnOperator W
       rw [hW, blockCLM_apply]
-      exact comp_ofLp_blockFun_right b _
+      exact comp_columnOperator_blockFun_right b _
         (TauCeti.LinearPMap.specProjection_comp_self hB _ _) _)
   have hcast : ((((k : ℝ) * ε : ℝ) : ℂ) - (((l : ℝ) * ε : ℝ) : ℂ) - (s : ℂ))
       = (((k : ℝ) * ε - (l : ℝ) * ε - s : ℝ) : ℂ) := by push_cast; ring

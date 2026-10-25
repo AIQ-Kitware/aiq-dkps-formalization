@@ -93,14 +93,15 @@ theorem norm_sylvester_block_sub_smul_le
     (hcrB : ∀ s ∈ SB, |s - alp| ≤ rB)
     (z : (generator (sylvesterGroup U V b)).domain)
     (hZP : (TauCeti.LinearPMap.specProjection hA SA hSA).comp
-        (ofLp b (z : lp (fun _ : ι => E) 2)) = ofLp b (z : lp (fun _ : ι => E) 2))
-    (hZQ : (ofLp b (z : lp (fun _ : ι => E) 2)).comp
+        (b.columnOperator (z : lp (fun _ : ι => E) 2)) =
+        b.columnOperator (z : lp (fun _ : ι => E) 2))
+    (hZQ : (b.columnOperator (z : lp (fun _ : ι => E) 2)).comp
         (TauCeti.LinearPMap.specProjection hB SB hSB)
-        = ofLp b (z : lp (fun _ : ι => E) 2)) :
+        = b.columnOperator (z : lp (fun _ : ι => E) 2)) :
     ‖generator (sylvesterGroup U V b) z
         - ((lam : ℂ) - (alp : ℂ)) • (z : lp (fun _ : ι => E) 2)‖
       ≤ (rA + rB) * ‖(z : lp (fun _ : ι => E) 2)‖ := by
-  set Z := ofLp b (z : lp (fun _ : ι => E) 2) with hZdef
+  set Z := b.columnOperator (z : lp (fun _ : ι => E) 2) with hZdef
   set cutA := TauCeti.LinearPMap.specCutOp hA SA hSA hrA hcrA with hcutA
   set cutB := TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB with hcutB
   -- the difference is the difference of two one-sided blocks
@@ -108,8 +109,8 @@ theorem norm_sylvester_block_sub_smul_le
       - ((lam : ℂ) - (alp : ℂ)) • (z : lp (fun _ : ι => E) 2)
       = blockFun b cutA (1 : F →L[ℂ] F) (z : lp (fun _ : ι => E) 2)
         - blockFun b (1 : E →L[ℂ] E) cutB (z : lp (fun _ : ι => E) 2) := by
-    refine ofLp_injective b ?_
-    rw [ofLp_sub, ofLp_sub, ofLp_smul, ofLp_blockFun, ofLp_blockFun]
+    refine b.columnOperator_injective ?_
+    rw [map_sub, map_sub, map_smul, columnOperator_blockFun, columnOperator_blockFun]
     have hid := sylvester_block_identity U V b hA hB hUA hVB hSA hSB hbndA hrA hcrA
       hbndB hrB hcrB z hZP hZQ
     rw [← hZdef, ← hcutA, ← hcutB] at hid

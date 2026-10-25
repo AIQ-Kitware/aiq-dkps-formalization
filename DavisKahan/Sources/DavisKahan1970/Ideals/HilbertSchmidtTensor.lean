@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 module
 
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
-public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space
+public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns
 
 /-!
 # The `ℓ²` model of the paper Hilbert--Schmidt ideal
@@ -25,9 +25,10 @@ bridge between that model and the paper square norm of
 The model used to be `vendor/Spectra`'s Hilbert tensor product
 `Spectra.HilbertSchmidtTensor.Space E F`.  Mathlib supplies `lp`'s inner product and
 completeness outright, so the donor closure the tensor product carried — measured at
-21,581 lines — is gone; what is left is the column bijection, which is
-`ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidtLp.lean`.  The declarations keep
-their names and statements, so consumers are unaffected.
+21,581 lines — is gone. The column representation is now the accepted
+`HilbertBasis.columnOperator` in `TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns`.
+The paper-facing declarations retain their mathematical statements while naming
+that canonical operator directly.
 
 ## The one design decision
 
@@ -47,7 +48,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace ENNReal
-open TauCeti.HilbertSchmidt
 
 noncomputable section
 
@@ -71,51 +71,50 @@ abbrev hSBasis (F : Type vF) [NormedAddCommGroup F] [InnerProductSpace ℂ F]
 element of the `ℓ²` model. -/
 theorem approximationNumberEnergy_ne_top_iff_existsUnique_tensor (A : F →L[ℂ] E) :
     approximationNumberEnergy A ≠ ⊤ ↔
-      ∃! f : lp (fun _ : HSIndex F => E) 2, ofLp (hSBasis F) f = A := by
-  rw [approximationNumberEnergy_ne_top_iff_summable_basis (hSBasis F) A]
-  exact (existsUnique_ofLp_iff_summable (hSBasis F) A).symm
+      ∃! f : lp (fun _ : HSIndex F => E) 2, (hSBasis F).columnOperator f = A := by
+  rw [approximationNumberEnergy_eq_basisEnergy (hSBasis F) A,
+    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+  constructor
+  · exact (hSBasis F).existsUnique_columnOperator_eq
+  · rintro ⟨f, hf, -⟩
+    rw [← hf]
+    simp
 
 /-- The canonical model element representing a paper Hilbert--Schmidt operator:
 its column family. -/
 noncomputable def hilbertSchmidtTensor (A : F →L[ℂ] E)
     (hA : approximationNumberEnergy A ≠ ⊤) : lp (fun _ : HSIndex F => E) 2 :=
-  ⟨columns (hSBasis F) A,
-    (memLp_columns_iff_summable (hSBasis F) A).mpr
-      ((approximationNumberEnergy_ne_top_iff_summable_basis (hSBasis F) A).1 hA)⟩
+  ⟨fun i => A (hSBasis F i),
+    (A.hilbertSchmidtEnergy_ne_top_iff_memℓp (hSBasis F)).mp (by
+      simpa only [approximationNumberEnergy_eq_basisEnergy (hSBasis F) A,
+        hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hA)⟩
 
 /-- The tensor model's operator, unfolded.  This is the bridge between the tensor presentation of a
 Hilbert--Schmidt map and its operator form. -/
 @[simp]
 theorem toOperator_hilbertSchmidtTensor (A : F →L[ℂ] E)
     (hA : approximationNumberEnergy A ≠ ⊤) :
-    ofLp (hSBasis F) (hilbertSchmidtTensor A hA) = A :=
-  ofLp_columns (hSBasis F) A _
+    (hSBasis F).columnOperator (hilbertSchmidtTensor A hA) = A :=
+  (hSBasis F).columnOperator_mk A _
 
 /-- The model norm is exactly the paper square norm. -/
 theorem norm_hilbertSchmidtTensor (A : F →L[ℂ] E)
     (hA : approximationNumberEnergy A ≠ ⊤) :
     ‖hilbertSchmidtTensor A hA‖ = ContinuousLinearMap.hilbertSchmidtNorm A := by
-  have hsq := norm_sq_eq_tsum_norm_column_sq (hSBasis F) (hilbertSchmidtTensor A hA)
-  rw [toOperator_hilbertSchmidtTensor] at hsq
-  rw [hilbertSchmidtNorm_eq_sqrt_tsum_basis (hSBasis F) A hA, ← hsq,
-    Real.sqrt_sq (norm_nonneg _)]
+  rw [← (hSBasis F).hilbertSchmidtNorm_columnOperator (hilbertSchmidtTensor A hA),
+    toOperator_hilbertSchmidtTensor]
 
 /-- Every element of the model represents a paper Hilbert--Schmidt operator. -/
 theorem approximationNumberEnergy_ne_top_toOperator (f : lp (fun _ : HSIndex F => E) 2) :
-    approximationNumberEnergy (ofLp (hSBasis F) f) ≠ ⊤ := by
-  rw [approximationNumberEnergy_ne_top_iff_summable_basis (hSBasis F), ←
-    memLp_columns_iff_summable (hSBasis F), columns_ofLp]
-  exact lp.memℓp f
+    approximationNumberEnergy ((hSBasis F).columnOperator f) ≠ ⊤ := by
+  rw [approximationNumberEnergy_eq_basisEnergy (hSBasis F),
+    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+  simp
 
 /-- The paper square norm of the represented operator is exactly the model norm. -/
 theorem hilbertSchmidtNorm_toOperator (f : lp (fun _ : HSIndex F => E) 2) :
-    ContinuousLinearMap.hilbertSchmidtNorm (ofLp (hSBasis F) f) = ‖f‖ := by
-  have hZ := approximationNumberEnergy_ne_top_toOperator f
-  have hcanon := norm_hilbertSchmidtTensor (ofLp (hSBasis F) f) hZ
-  have heq : hilbertSchmidtTensor (ofLp (hSBasis F) f) hZ = f :=
-    ofLp_injective (hSBasis F) (by rw [toOperator_hilbertSchmidtTensor])
-  rw [heq] at hcanon
-  exact hcanon.symm
+    ContinuousLinearMap.hilbertSchmidtNorm ((hSBasis F).columnOperator f) = ‖f‖ := by
+  exact (hSBasis F).hilbertSchmidtNorm_columnOperator f
 
 end
 

@@ -5,15 +5,16 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
+public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns
+public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Isometry
 public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
 
 /-!
 # Strong continuity of a conjugation flow on the Hilbert–Schmidt space
 
 The Sylvester flow `W t Z = U_A t ∘ Z ∘ (U_B t)⋆` is a one-parameter unitary
-group on the Hilbert–Schmidt operators.  Unitarity is
-`HilbertSchmidtConjugation`; this module supplies the analytic half, strong
+group on the Hilbert–Schmidt operators. Unitarity follows from the accepted
+column-operator and isometric-invariance APIs; this module supplies strong
 continuity, whose whole content is the estimate proved here:
 
 `tendsto_energy_sub_comp` — for a Hilbert–Schmidt `S` and a strongly continuous
@@ -131,30 +132,20 @@ theorem tendsto_energy_sub_comp (b : HilbertBasis ι 𝕜 F) (S : F →L[𝕜] E
 /-! ### Representing a Hilbert–Schmidt operator in `ℓ²` -/
 
 omit [CompleteSpace F] in
-/-- The `ℓ²` column family of an operator of finite Hilbert–Schmidt energy. -/
-noncomputable def ofOperator (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E)
-    (hT : T.hilbertSchmidtEnergy b ≠ ⊤) : lp (fun _ : ι => E) 2 :=
-  ⟨columns b T, (memLp_columns_iff b T).mpr hT⟩
-
-omit [CompleteSpace F] in
-/-- Rebuilding an operator from its columns is the identity. -/
-@[simp] theorem ofLp_ofOperator (b : HilbertBasis ι 𝕜 F) (T : F →L[𝕜] E)
-    (hT : T.hilbertSchmidtEnergy b ≠ ⊤) : ofLp b (ofOperator b T hT) = T :=
-  ofLp_columns b T _
-
-omit [CompleteSpace F] in
 /-- **From energy convergence to norm convergence.**  The `ℓ²` norm is the square
 root of the real part of the energy, so a family of column vectors whose
 energies vanish has vanishing norms. -/
 theorem tendsto_norm_of_tendsto_energy {α : Type*} {l : Filter α} (b : HilbertBasis ι 𝕜 F)
     (g : α → lp (fun _ : ι => E) 2)
-    (h : Tendsto (fun a => (ofLp b (g a)).hilbertSchmidtEnergy b) l (𝓝 0)) :
+    (h : Tendsto (fun a => (b.columnOperator (g a)).hilbertSchmidtEnergy b) l (𝓝 0)) :
     Tendsto (fun a => ‖g a‖) l (𝓝 0) := by
-  have hsq : ∀ a, ‖g a‖ = Real.sqrt (((ofLp b (g a)).hilbertSchmidtEnergy b).toReal) := by
+  have hsq : ∀ a, ‖g a‖ = Real.sqrt (((b.columnOperator (g a)).hilbertSchmidtEnergy b).toReal) := by
     intro a
-    rw [energy_ofLp, ENNReal.toReal_ofReal (by positivity), Real.sqrt_sq (norm_nonneg _)]
+    rw [HilbertBasis.hilbertSchmidtEnergy_columnOperator, ENNReal.toReal_pow,
+      toReal_enorm, Real.sqrt_sq (norm_nonneg _)]
   simp_rw [hsq]
-  have h1 : Tendsto (fun a => ((ofLp b (g a)).hilbertSchmidtEnergy b).toReal) l (𝓝 0) := by
+  have h1 : Tendsto (fun a => ((b.columnOperator (g a)).hilbertSchmidtEnergy b).toReal)
+      l (𝓝 0) := by
     simpa [Function.comp_def] using (ENNReal.tendsto_toReal (by simp)).comp h
   simpa [Function.comp_def] using (Real.continuous_sqrt.tendsto (0 : ℝ)).comp h1
 
@@ -199,45 +190,52 @@ theorem adjoint_U_neg (t : ℝ) : (V.U (-t)).adjoint = V.U t := by
 /-- The Sylvester flow on operators: `Z ↦ U t ∘ Z ∘ (V t)⋆`. -/
 @[expose]
 noncomputable def conjOp (t : ℝ) (f : lp (fun _ : ι => E) 2) : F →L[ℂ] E :=
-  ((U.U t).comp (ofLp b f)).comp (V.U (-t))
+  ((U.U t).comp (b.columnOperator f)).comp (V.U (-t))
 
 /-- **The Sylvester flow preserves Hilbert--Schmidt energy.**  Both conjugating factors are
 isometries, and the energy is invariant under composition with an isometry on either side.  This
 is what makes the flow a group of *unitaries* on `HS(F, E)`. -/
 theorem energy_conjOp (t : ℝ) (f : lp (fun _ : ι => E) 2) :
-    (conjOp U V b t f).hilbertSchmidtEnergy b = (ofLp b f).hilbertSchmidtEnergy b := by
+    (conjOp U V b t f).hilbertSchmidtEnergy b = (b.columnOperator f).hilbertSchmidtEnergy b := by
   rw [conjOp]
   exact ContinuousLinearMap.hilbertSchmidtEnergy_isometry_comp_coisometry
-    (U.U t) (norm_preserving U t) (ofLp b f) (V.U (-t))
+    (U.U t) (norm_preserving U t) (b.columnOperator f) (V.U (-t))
     (fun x => by rw [adjoint_U_neg]; exact norm_preserving V t x) b b
 
 /-- The flow keeps the energy finite, so its image stays inside the Hilbert--Schmidt class. -/
 theorem energy_conjOp_ne_top (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     (conjOp U V b t f).hilbertSchmidtEnergy b ≠ ⊤ := by
-  rw [energy_conjOp, energy_ofLp]; exact ENNReal.ofReal_ne_top
+  rw [energy_conjOp, HilbertBasis.hilbertSchmidtEnergy_columnOperator]; simp
 
 /-- The Sylvester flow, transported to the `ℓ²` model. -/
 noncomputable def sylvesterFun (t : ℝ) (f : lp (fun _ : ι => E) 2) : lp (fun _ : ι => E) 2 :=
-  ofOperator b (conjOp U V b t f) (energy_conjOp_ne_top U V b t f)
+  ⟨fun i => conjOp U V b t f (b i),
+    ((conjOp U V b t f).hilbertSchmidtEnergy_ne_top_iff_memℓp b).mp
+      (energy_conjOp_ne_top U V b t f)⟩
 
 /-- The Sylvester flow, seen through the operator model. -/
-@[simp] theorem ofLp_sylvesterFun (t : ℝ) (f : lp (fun _ : ι => E) 2) :
-    ofLp b (sylvesterFun U V b t f) = conjOp U V b t f :=
-  ofLp_ofOperator _ _ _
+@[simp] theorem columnOperator_sylvesterFun (t : ℝ) (f : lp (fun _ : ι => E) 2) :
+    b.columnOperator (sylvesterFun U V b t f) = conjOp U V b t f :=
+  b.columnOperator_mk _ _
 
 /-- The Sylvester flow is norm-preserving on the `lp` model. -/
 theorem norm_sylvesterFun (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     ‖sylvesterFun U V b t f‖ = ‖f‖ :=
-  norm_conj_eq b f (U.U t) (norm_preserving U t) (V.U (-t))
-    (fun x => by rw [adjoint_U_neg]; exact norm_preserving V t x)
-    _ (ofLp_sylvesterFun U V b t f)
+  by
+    rw [← b.hilbertSchmidtNorm_columnOperator (sylvesterFun U V b t f),
+      columnOperator_sylvesterFun, conjOp]
+    rw [ContinuousLinearMap.hilbertSchmidtNorm_comp_coisometry _ (V.U (-t))
+      (fun x => by rw [adjoint_U_neg]; exact norm_preserving V t x),
+      ContinuousLinearMap.hilbertSchmidtNorm_isometry_comp (U.U t) (norm_preserving U t),
+      b.hilbertSchmidtNorm_columnOperator]
 
 /-- The Sylvester flow is additive. -/
 theorem sylvesterFun_add (t : ℝ) (f g : lp (fun _ : ι => E) 2) :
     sylvesterFun U V b t (f + g) = sylvesterFun U V b t f + sylvesterFun U V b t g := by
-  refine ofLp_injective b ?_
-  rw [ofLp_add, ofLp_sylvesterFun, ofLp_sylvesterFun, ofLp_sylvesterFun]
-  simp only [conjOp, ofLp_add]
+  refine b.columnOperator_injective ?_
+  rw [map_add, columnOperator_sylvesterFun, columnOperator_sylvesterFun,
+    columnOperator_sylvesterFun]
+  simp only [conjOp, map_add]
   ext x
   simp
 
@@ -245,16 +243,16 @@ theorem sylvesterFun_add (t : ℝ) (f g : lp (fun _ : ι => E) 2) :
 the right factor is an adjoint: the scalar passes through `Z ↦ U t ∘ Z ∘ (V t)⋆` untouched. -/
 theorem sylvesterFun_smul (t : ℝ) (c : ℂ) (f : lp (fun _ : ι => E) 2) :
     sylvesterFun U V b t (c • f) = c • sylvesterFun U V b t f := by
-  refine ofLp_injective b ?_
-  rw [ofLp_smul, ofLp_sylvesterFun, ofLp_sylvesterFun]
-  simp only [conjOp, ofLp_smul]
+  refine b.columnOperator_injective ?_
+  rw [map_smul, columnOperator_sylvesterFun, columnOperator_sylvesterFun]
+  simp only [conjOp, map_smul]
   ext x
   simp
 
 /-- At time zero the flow is the identity -- the group identity law. -/
 theorem sylvesterFun_zero (f : lp (fun _ : ι => E) 2) : sylvesterFun U V b 0 f = f := by
-  refine ofLp_injective b ?_
-  rw [ofLp_sylvesterFun]
+  refine b.columnOperator_injective ?_
+  rw [columnOperator_sylvesterFun]
   simp only [conjOp, neg_zero, U.identity, V.identity]
   ext x
   simp
@@ -263,9 +261,9 @@ theorem sylvesterFun_zero (f : lp (fun _ : ι => E) 2) : sylvesterFun U V b 0 f 
 group law. -/
 theorem sylvesterFun_add_time (s t : ℝ) (f : lp (fun _ : ι => E) 2) :
     sylvesterFun U V b (s + t) f = sylvesterFun U V b s (sylvesterFun U V b t f) := by
-  refine ofLp_injective b ?_
-  rw [ofLp_sylvesterFun, ofLp_sylvesterFun]
-  simp only [conjOp, ofLp_sylvesterFun]
+  refine b.columnOperator_injective ?_
+  rw [columnOperator_sylvesterFun, columnOperator_sylvesterFun]
+  simp only [conjOp, columnOperator_sylvesterFun]
   rw [U.group_law s t, show -(s + t) = -t + -s by ring, V.group_law (-t) (-s)]
   ext x
   simp
@@ -292,8 +290,10 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
     Tendsto (fun r : ℝ => ‖sylvesterFun U V b r f - f‖) (𝓝 0) (𝓝 0) := by
   classical
   obtain ⟨w, c, -⟩ := exists_hilbertBasis ℂ E
-  set T := ofLp b f with hT
-  have hTtop : T.hilbertSchmidtEnergy b ≠ ⊤ := by rw [hT, energy_ofLp]; exact ENNReal.ofReal_ne_top
+  set T := b.columnOperator f with hT
+  have hTtop : T.hilbertSchmidtEnergy b ≠ ⊤ := by
+    rw [hT, HilbertBasis.hilbertSchmidtEnergy_columnOperator]
+    simp
   have hTadjtop : T.adjoint.hilbertSchmidtEnergy c ≠ ⊤ := by
     rw [ContinuousLinearMap.hilbertSchmidtEnergy_adjoint T b c]; exact hTtop
   -- the two pieces of the displacement
@@ -309,22 +309,27 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
       ContinuousLinearMap.adjoint_comp, adjoint_U_neg]
     exact energy_sub_comp_ne_top c T.adjoint (V.U r) (norm_preserving V r) hTadjtop
   set g₁ : ℝ → lp (fun _ : ι => E) 2 :=
-    fun r => ofOperator b (((U.U r).comp T - T).comp (V.U (-r))) (h1top r) with hg₁
+    fun r => ⟨fun i => (((U.U r).comp T - T).comp (V.U (-r))) (b i),
+      (((((U.U r).comp T - T).comp (V.U (-r))).hilbertSchmidtEnergy_ne_top_iff_memℓp b).mp
+        (h1top r))⟩ with hg₁
   set g₂ : ℝ → lp (fun _ : ι => E) 2 :=
-    fun r => ofOperator b (T.comp (V.U (-r)) - T) (h2top r) with hg₂
+    fun r => ⟨fun i => (T.comp (V.U (-r)) - T) (b i),
+      ((T.comp (V.U (-r)) - T).hilbertSchmidtEnergy_ne_top_iff_memℓp b).mp
+        (h2top r)⟩ with hg₂
   have hsplit : ∀ r : ℝ, sylvesterFun U V b r f - f = g₁ r + g₂ r := by
     intro r
-    refine ofLp_injective b ?_
-    simp only [ofLp_sub, ofLp_sylvesterFun, ofLp_add, hg₁, hg₂, ofLp_ofOperator, conjOp]
+    refine b.columnOperator_injective ?_
+    simp only [map_sub, columnOperator_sylvesterFun, map_add, hg₁, hg₂,
+      HilbertBasis.columnOperator_mk, conjOp]
     ext x
     simp [hT]
   -- each piece tends to zero
   have h1 : Tendsto (fun r : ℝ => ‖g₁ r‖) (𝓝 0) (𝓝 0) := by
     refine tendsto_norm_of_tendsto_energy b g₁ ?_
-    have hrw : ∀ r : ℝ, (ofLp b (g₁ r)).hilbertSchmidtEnergy b
+    have hrw : ∀ r : ℝ, (b.columnOperator (g₁ r)).hilbertSchmidtEnergy b
         = ∑' i, ‖U.U r (T (b i)) - T (b i)‖ₑ ^ 2 := by
       intro r
-      rw [hg₁, ofLp_ofOperator,
+      rw [hg₁, HilbertBasis.columnOperator_mk,
         ContinuousLinearMap.hilbertSchmidtEnergy_comp_coisometry _ (V.U (-r))
         (fun x => by rw [adjoint_U_neg]; exact norm_preserving V r x) b b, energy_sub_comp_eq]
     simp_rw [hrw]
@@ -332,10 +337,10 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
       (fun x => U.strong_continuous x) (fun x => by rw [U.identity]; rfl)
   have h2 : Tendsto (fun r : ℝ => ‖g₂ r‖) (𝓝 0) (𝓝 0) := by
     refine tendsto_norm_of_tendsto_energy b g₂ ?_
-    have hrw : ∀ r : ℝ, (ofLp b (g₂ r)).hilbertSchmidtEnergy b
+    have hrw : ∀ r : ℝ, (b.columnOperator (g₂ r)).hilbertSchmidtEnergy b
         = ∑' j, ‖V.U r (T.adjoint (c j)) - T.adjoint (c j)‖ₑ ^ 2 := by
       intro r
-      rw [hg₂, ofLp_ofOperator,
+      rw [hg₂, HilbertBasis.columnOperator_mk,
         ← ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c]
       simp only [map_sub, ContinuousLinearMap.adjoint_comp, adjoint_U_neg]
       exact energy_sub_comp_eq _ _ _

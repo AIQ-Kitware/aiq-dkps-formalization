@@ -41,7 +41,7 @@ Split the difference quotient of the flow at a vector `x`:
 
 The left-hand side converges to `C x`, because `z` is in the generator domain
 and `ℓ²` convergence dominates pointwise convergence — the operator norm of
-`ofLp b h` is at most `‖h‖`.  The first right-hand term converges to `-Z (B x)`,
+`b.columnOperator h` is at most `‖h‖`.  The first right-hand term converges to `-Z (B x)`,
 because `Z` is bounded and `U t → 1` strongly.  So the *second* term converges,
 and that is precisely the assertion that `Z x` lies in the domain of `A`, with
 the value `C x + Z (B x)`.
@@ -82,21 +82,6 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {ι : Type*} {E F : Type*}
 variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
-omit [CompleteSpace F] in
-/-- **`ℓ²` convergence dominates pointwise convergence.** -/
-@[simp]
-theorem tendsto_ofLp_apply {α : Type*} {l : Filter α} (b : HilbertBasis ι 𝕜 F)
-    (g : α → lp (fun _ : ι => E) 2) (g₀ : lp (fun _ : ι => E) 2)
-    (h : Tendsto g l (𝓝 g₀)) (x : F) :
-    Tendsto (fun a => ofLp b (g a) x) l (𝓝 (ofLp b g₀ x)) := by
-  rw [tendsto_iff_norm_sub_tendsto_zero]
-  refine squeeze_zero (fun a => norm_nonneg _) (fun a => ?_)
-    (by simpa using (tendsto_iff_norm_sub_tendsto_zero.mp h).mul_const ‖x‖)
-  calc ‖ofLp b (g a) x - ofLp b g₀ x‖
-      = ‖ofLp b (g a - g₀) x‖ := by rw [ofLp_sub]; rfl
-    _ ≤ ‖ofLp b (g a - g₀)‖ * ‖x‖ := ContinuousLinearMap.le_opNorm _ _
-    _ ≤ ‖g a - g₀‖ * ‖x‖ := by gcongr; exact norm_ofLp_le b _
 
 section Sylvester
 
@@ -152,27 +137,30 @@ to `z`.  The domain membership is a *conclusion*, not a hypothesis. -/
 @[simp]
 theorem generator_sylvesterGroup_apply
     (z : (generator (sylvesterGroup U V b)).domain) (x : (generator V).domain) :
-    ∃ hmem : ofLp b (z : lp (fun _ : ι => E) 2) (x : F) ∈ (generator U).domain,
-      generator U ⟨ofLp b (z : lp (fun _ : ι => E) 2) (x : F), hmem⟩
-          - ofLp b (z : lp (fun _ : ι => E) 2) (generator V x)
-        = ofLp b (generator (sylvesterGroup U V b) z) (x : F) := by
-  set Z := ofLp b (z : lp (fun _ : ι => E) 2) with hZ
-  set C := ofLp b (generator (sylvesterGroup U V b) z) with hC
+    ∃ hmem : b.columnOperator (z : lp (fun _ : ι => E) 2) (x : F) ∈ (generator U).domain,
+      generator U ⟨b.columnOperator (z : lp (fun _ : ι => E) 2) (x : F), hmem⟩
+          - b.columnOperator (z : lp (fun _ : ι => E) 2) (generator V x)
+        = b.columnOperator (generator (sylvesterGroup U V b) z) (x : F) := by
+  set Z := b.columnOperator (z : lp (fun _ : ι => E) 2) with hZ
+  set C := b.columnOperator (generator (sylvesterGroup U V b) z) with hC
   -- (1) the flow's difference quotient, evaluated at `x`, converges to `C x`
   have hquot : Tendsto
       (fun t : ℝ =>
-        ofLp b (genDiffQuot (sylvesterGroup U V b) (z : lp (fun _ : ι => E) 2) t) (x : F))
-      (𝓝[≠] (0 : ℝ)) (𝓝 (C (x : F))) :=
-    tendsto_ofLp_apply b _ _ (generator_tendsto (sylvesterGroup U V b) z) (x : F)
+        b.columnOperator (genDiffQuot (sylvesterGroup U V b) (z : lp (fun _ : ι => E) 2) t) (x : F))
+      (𝓝[≠] (0 : ℝ)) (𝓝 (C (x : F))) := by
+    have hc : Continuous (fun f : lp (fun _ : ι => E) 2 =>
+        b.columnOperator f (x : F)) :=
+      b.columnOperator.continuous.clm_apply continuous_const
+    exact (hc.tendsto _).comp (generator_tendsto (sylvesterGroup U V b) z)
   -- (2) that quotient splits into the two pieces of the Sylvester expression
   have hsplit : ∀ t : ℝ,
-      ofLp b (genDiffQuot (sylvesterGroup U V b) (z : lp (fun _ : ι => E) 2) t) (x : F)
+      b.columnOperator (genDiffQuot (sylvesterGroup U V b) (z : lp (fun _ : ι => E) 2) t) (x : F)
         = U.U t (Z (((I * (t : ℂ))⁻¹) • (V.U (-t) (x : F) - (x : F))))
           + genDiffQuot U (Z (x : F)) t := by
     intro t
-    simp only [genDiffQuot_apply, ofLp_smul, ofLp_sub, sylvesterGroup_apply, sylvesterOp_apply,
-      ofLp_sylvesterFun, conjOp, genDiffQuot_apply]
-    simp only [smul_apply, sub_apply, ContinuousLinearMap.comp_apply, map_smul, map_sub, ← hZ]
+    simp only [genDiffQuot_apply, map_smul, map_sub, sylvesterGroup_apply, sylvesterOp_apply,
+      columnOperator_sylvesterFun, conjOp, genDiffQuot_apply]
+    simp only [smul_apply, sub_apply, ContinuousLinearMap.comp_apply, ← hZ]
     rw [← smul_add]
     congr 1
     abel
@@ -188,7 +176,7 @@ theorem generator_sylvesterGroup_apply
   have hsecond : Tendsto (fun t : ℝ => genDiffQuot U (Z (x : F)) t) (𝓝[≠] (0 : ℝ))
       (𝓝 (C (x : F) + Z (generator V x))) := by
     have hdiff : Tendsto (fun t : ℝ =>
-        ofLp b (genDiffQuot (sylvesterGroup U V b) (z : lp (fun _ : ι => E) 2) t) (x : F)
+        b.columnOperator (genDiffQuot (sylvesterGroup U V b) (z : lp (fun _ : ι => E) 2) t) (x : F)
           - U.U t (Z (((I * (t : ℂ))⁻¹) • (V.U (-t) (x : F) - (x : F)))))
         (𝓝[≠] (0 : ℝ)) (𝓝 (C (x : F) + Z (generator V x))) := by
       simpa [sub_neg_eq_add] using hquot.sub hfirst

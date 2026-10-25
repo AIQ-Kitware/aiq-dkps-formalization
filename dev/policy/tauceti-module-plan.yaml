@@ -146,9 +146,6 @@ topics:
 - id: T11
   title: Hilbert-Schmidt operators
   modules:
-  - Analysis.InnerProductSpace.HilbertSchmidt.Lp
-  - Analysis.InnerProductSpace.HilbertSchmidt.Space
-  - Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
 - id: T12
   title: The Haagerup-Zsido kernel and its Fourier transform
   modules:
@@ -497,9 +494,6 @@ rungs:
 - id: H
   title: Hilbert-Schmidt operators (T11)
   seeds:
-  - Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
-  - Analysis.InnerProductSpace.HilbertSchmidt.Lp
-  - Analysis.InnerProductSpace.HilbertSchmidt.Space
 - id: I
   title: The Haagerup-Zsido kernel and its Fourier transform (T12)
   seeds:

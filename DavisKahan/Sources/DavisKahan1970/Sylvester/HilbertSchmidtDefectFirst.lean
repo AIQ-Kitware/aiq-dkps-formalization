@@ -34,7 +34,7 @@ The mathematics is unchanged; only the model is.  The Hilbert--Schmidt space
 used to be `vendor/Spectra`'s Hilbert tensor product, and the four spectral
 inputs came from Spectra's Born-rule stack.  Both are now native:
 
-* the space is `lp` of columns (`ForTauCeti/…/HilbertSchmidtLp.lean`);
+* the space is Mathlib `lp`, with the accepted `HilbertBasis.columnOperator`;
 * the flow is `TauCeti.HilbertSchmidt.sylvesterGroup`, whose generator is
   self-adjoint by Stone's theorem (`…/OneParameterUnitaryGroup/Stone.lean`) and
   satisfies the Sylvester equation by `generator_sylvesterGroup_apply`;
@@ -66,8 +66,8 @@ private theorem hasClosedSylvesterEquation_of_generator
     (z : (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
       (TauCeti.LinearPMap.genToGroup hB) (hSBasis F))).domain) :
     _root_.LinearPMap.SylvesterEquation A B
-      (ofLp (hSBasis F) (z : lp (fun _ : HSIndex F => E) 2))
-      (ofLp (hSBasis F) (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+      ((hSBasis F).columnOperator (z : lp (fun _ : HSIndex F => E) 2))
+      ((hSBasis F).columnOperator (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
         (TauCeti.LinearPMap.genToGroup hB) (hSBasis F)) z)) := by
   have hAU : generator (TauCeti.LinearPMap.genToGroup hA) = A :=
     TauCeti.LinearPMap.generator_genToGroup hA
@@ -90,7 +90,7 @@ private theorem hasClosedSylvesterEquation_of_generator
         (TauCeti.LinearPMap.genToGroup hB) (hSBasis F) z
         ⟨(x : F), (le_of_eq hdomB.symm) x.property⟩
     have hAapply := (LinearPMap.ext_iff.mp hAU).2
-      (x := ofLp (hSBasis F) (z : lp (fun _ : HSIndex F => E) 2) (x : F))
+      (x := (hSBasis F).columnOperator (z : lp (fun _ : HSIndex F => E) 2) (x : F))
       (hf := hmem) (hg := (le_of_eq hdomA) hmem)
     have hBapply := (LinearPMap.ext_iff.mp hBV).2
       (x := (x : F))
@@ -121,9 +121,9 @@ theorem hilbertSchmidt_sylvester_defectFirst
   set c := hilbertSchmidtTensor C hC with hc
   obtain ⟨hz0, hgen⟩ := TauCeti.LinearPMap.apply_gapInverse hS hδ hCgap
   set z0 := TauCeti.LinearPMap.gapInverse hS hδ c with hz0def
-  set X0 := ofLp (hSBasis F) z0 with hX0
+  set X0 := (hSBasis F).columnOperator z0 with hX0
   have hEq0raw := hasClosedSylvesterEquation_of_generator hA hB ⟨z0, hz0⟩
-  have hcOp : ofLp (hSBasis F) c = C := toOperator_hilbertSchmidtTensor C hC
+  have hcOp : (hSBasis F).columnOperator c = C := toOperator_hilbertSchmidtTensor C hC
   have hEq0 : _root_.LinearPMap.SylvesterEquation A B X0 C := by
     have h := hEq0raw
     rw [hgen, hcOp] at h

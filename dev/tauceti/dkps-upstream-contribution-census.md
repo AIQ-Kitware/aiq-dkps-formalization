@@ -754,3 +754,41 @@ The committed checkpoint `1f2946e00` also passed explicit `Challenge` and
 `DavisKahan.Audits.All` builds (20,829 jobs), after the cache fetch.
 The full signature preflight matched all 42 implemented comparator targets;
 the three deliberately declared missing solutions remain skipped.
+
+
+### October 25: consume the canonical Hilbert–Schmidt column operator
+
+At unchanged accepted pin `efded067c28ffca3483fd731674eb13b42543fbb`,
+`TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns` supplies
+`HilbertBasis.columnOperator : ℓ²(ι, F) →L[𝕜] E →L[𝕜] F`. Its carrier is the
+same Mathlib `lp` used by the donor, and its defining inner-product series agrees
+with the old basis-coordinate series through `HilbertBasis.repr_apply_apply`.
+The pre-retirement donor is preserved at DKPS `ac1aa9379`.
+
+The three donor modules `HilbertSchmidt.Lp`, `.Space`, and `.Conjugation` are
+removed, together with `ofLp`, `columns`, their reconstruction, membership,
+injectivity, linearity and norm proofs, and the `ofOperator` wrapper in
+`Sylvester.Group`. No compatibility definitions or forwarding aliases replace them.
+Consumers use `columnOperator_mk`, `columnOperator_injective`, the native energy
+and norm identities, and the bundled map's `map_add` / `map_sub` / `map_smul`.
+The local pointwise-convergence wrapper is also removed: continuity of the native
+bundled operator and continuous evaluation supply the generator proof directly.
+
+Both the Sylvester flow and the block action are now constructed directly as
+Mathlib `lp` column families. Their real/complex scope, arbitrary basis index
+types, infinite-dimensional setting and unbounded generator-domain conclusions
+are retained. The block norm proof uses accepted Hilbert–Schmidt ideal laws;
+unitarity of the flow uses accepted isometry/coisometry norm invariance.
+The paper-owned fixed-basis model and its theorem names remain in the source
+layer, with their represented operators stated as the canonical `columnOperator`.
+
+Remaining analytic estimates for strong continuity, block reassembly, and the
+unbounded Sylvester generator have no corresponding declaration in the installed
+accepted tree under the inspected APIs and remain donor mathematics. This is
+verified accepted overlap, not an independently audited claim that the upstream
+column proofs were adapted from these Jon Crall / Claude Opus 5 donors. The older
+Spectra tensor presentation was already replaced independently by the Mathlib
+`lp` model; its attribution remains in Git history and the existing provenance.
+
+The column-model retirement passed the full default build (21,045 jobs), with
+warnings treated as errors, after `lake exe cache get`.

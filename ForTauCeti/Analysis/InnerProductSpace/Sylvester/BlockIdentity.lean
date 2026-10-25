@@ -90,17 +90,18 @@ theorem sylvester_block_identity
     (hcrB : ∀ s ∈ SB, |s - alp| ≤ rB)
     (z : (generator (sylvesterGroup U V b)).domain)
     (hZP : (TauCeti.LinearPMap.specProjection hA SA hSA).comp
-        (ofLp b (z : lp (fun _ : ι => E) 2)) = ofLp b (z : lp (fun _ : ι => E) 2))
-    (hZQ : (ofLp b (z : lp (fun _ : ι => E) 2)).comp
+        (b.columnOperator (z : lp (fun _ : ι => E) 2)) =
+        b.columnOperator (z : lp (fun _ : ι => E) 2))
+    (hZQ : (b.columnOperator (z : lp (fun _ : ι => E) 2)).comp
         (TauCeti.LinearPMap.specProjection hB SB hSB)
-        = ofLp b (z : lp (fun _ : ι => E) 2)) :
-    ofLp b (generator (sylvesterGroup U V b) z)
-        - ((lam : ℂ) - (alp : ℂ)) • ofLp b (z : lp (fun _ : ι => E) 2)
+        = b.columnOperator (z : lp (fun _ : ι => E) 2)) :
+    b.columnOperator (generator (sylvesterGroup U V b) z)
+        - ((lam : ℂ) - (alp : ℂ)) • b.columnOperator (z : lp (fun _ : ι => E) 2)
       = (TauCeti.LinearPMap.specCutOp hA SA hSA hrA hcrA).comp
-          (ofLp b (z : lp (fun _ : ι => E) 2))
-        - (ofLp b (z : lp (fun _ : ι => E) 2)).comp
+          (b.columnOperator (z : lp (fun _ : ι => E) 2))
+        - (b.columnOperator (z : lp (fun _ : ι => E) 2)).comp
           (TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB) := by
-  set Z := ofLp b (z : lp (fun _ : ι => E) 2) with hZ
+  set Z := b.columnOperator (z : lp (fun _ : ι => E) 2) with hZ
   set P := TauCeti.LinearPMap.specProjection hA SA hSA with hP
   set Q := TauCeti.LinearPMap.specProjection hB SB hSB with hQ
   have hdomV : (generator V).domain = Bop.domain := congrArg LinearPMap.domain hVB
@@ -137,7 +138,7 @@ theorem sylvester_block_identity
     have := congrArg (fun T : F →L[ℂ] E => T y) hZQ
     simpa [hQ] using this
   -- assemble
-  have heq' : (ofLp b (generator (sylvesterGroup U V b) z)) x
+  have heq' : (b.columnOperator (generator (sylvesterGroup U V b) z)) x
       = A ⟨Z x, hZxdom⟩ - Z (Bop ⟨x, hx'⟩) := by
     rw [← heq, hUval, hVval]
   have hcut : TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB x

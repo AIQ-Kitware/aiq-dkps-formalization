@@ -10,7 +10,7 @@ public import DavisKahan.OperatorIdeal.UnitarilyInvariant.FamilyCore
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
-public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
+public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
@@ -57,8 +57,8 @@ theorem approximationNumberEnergy_ne_top_add_complex
     approximationNumberEnergy (A + B) ≠ ⊤ := by
   let zA := hilbertSchmidtTensor A hA
   let zB := hilbertSchmidtTensor B hB
-  have hrepr : ofLp (hSBasis _) (zA + zB) = A + B := by
-    rw [ofLp_add]
+  have hrepr : (hSBasis _).columnOperator (zA + zB) = A + B := by
+    rw [map_add]
     rw [toOperator_hilbertSchmidtTensor,
       toOperator_hilbertSchmidtTensor]
   rw [← hrepr]
@@ -73,9 +73,9 @@ theorem hilbertSchmidtTensor_add
         (approximationNumberEnergy_ne_top_add_complex hA hB) =
       hilbertSchmidtTensor A hA +
         hilbertSchmidtTensor B hB := by
-  apply ofLp_injective (hSBasis _)
+  apply (hSBasis _).columnOperator_injective
   rw [toOperator_hilbertSchmidtTensor,
-    ofLp_add,
+    map_add,
     toOperator_hilbertSchmidtTensor,
     toOperator_hilbertSchmidtTensor]
 
@@ -104,7 +104,7 @@ theorem hilbertSchmidtNorm_eq_zero
     exact hzero
   have hz : hilbertSchmidtTensor A hA = 0 := norm_eq_zero.mp hzNorm
   have hrepr := toOperator_hilbertSchmidtTensor A hA
-  rw [hz, ofLp_zero] at hrepr
+  rw [hz, map_zero] at hrepr
   exact hrepr.symm
 
 /-- Subtraction preserves the paper Hilbert--Schmidt class. -/
@@ -124,9 +124,9 @@ theorem hilbertSchmidtTensor_sub
     hilbertSchmidtTensor (A - B) (approximationNumberEnergy_ne_top_sub hA hB) =
       hilbertSchmidtTensor A hA -
         hilbertSchmidtTensor B hB := by
-  apply ofLp_injective (hSBasis _)
+  apply (hSBasis _).columnOperator_injective
   rw [toOperator_hilbertSchmidtTensor,
-    ofLp_sub,
+    map_sub,
     toOperator_hilbertSchmidtTensor,
     toOperator_hilbertSchmidtTensor]
 
@@ -152,9 +152,9 @@ theorem hilbertSchmidt_complete_complex
     have hsub : approximationNumberEnergy (A m - A n) ≠ ⊤ :=
       approximationNumberEnergy_ne_top_sub (hA m) (hA n)
     have hcanon : hilbertSchmidtTensor (A m - A n) hsub = z m - z n := by
-      apply ofLp_injective (hSBasis _)
+      apply (hSBasis _).columnOperator_injective
       rw [toOperator_hilbertSchmidtTensor,
-        ofLp_sub,
+        map_sub,
         toOperator_hilbertSchmidtTensor,
         toOperator_hilbertSchmidtTensor]
     have hnorm : ‖z m - z n‖ =
@@ -162,7 +162,7 @@ theorem hilbertSchmidt_complete_complex
       rw [← hcanon, norm_hilbertSchmidtTensor]
     simpa only [dist_eq_norm, hnorm] using hN m n hm hn
   obtain ⟨zlim, hzlim⟩ := cauchySeq_tendsto_of_complete hzCauchy
-  let L : E →L[ℂ] F := ofLp (hSBasis _) zlim
+  let L : E →L[ℂ] F := (hSBasis _).columnOperator zlim
   have hL : approximationNumberEnergy L ≠ ⊤ :=
     approximationNumberEnergy_ne_top_toOperator zlim
   refine ⟨L, hL, ?_⟩
@@ -173,9 +173,9 @@ theorem hilbertSchmidt_complete_complex
   have hsub : approximationNumberEnergy (A n - L) ≠ ⊤ :=
     approximationNumberEnergy_ne_top_sub (hA n) hL
   have hcanon : hilbertSchmidtTensor (A n - L) hsub = z n - zlim := by
-    apply ofLp_injective (hSBasis _)
+    apply (hSBasis _).columnOperator_injective
     rw [toOperator_hilbertSchmidtTensor,
-      ofLp_sub,
+      map_sub,
       toOperator_hilbertSchmidtTensor]
   have hnorm : ContinuousLinearMap.hilbertSchmidtNorm (A n - L) = ‖z n - zlim‖ := by
     rw [← norm_hilbertSchmidtTensor (A n - L) hsub, hcanon]

@@ -338,10 +338,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Block",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
@@ -3355,12 +3352,11 @@
         "blockFun",
         "blockFun_add",
         "blockFun_smul",
-        "comp_ofLp_blockFun_left",
-        "comp_ofLp_blockFun_right",
+        "comp_columnOperator_blockFun_left",
+        "comp_columnOperator_blockFun_right",
         "energy_block_ne_top",
-        "enorm_sq_eq_energy",
         "norm_blockFun_le",
-        "ofLp_blockFun",
+        "columnOperator_blockFun",
         "tsum_enorm_sq_blockFun"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
@@ -3379,7 +3375,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate"
       ],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "2026-10-25: block reconstruction and algebra use the native bundled columnOperator. The norm bound uses accepted Hilbert-Schmidt ideal laws; the redundant energy/norm wrapper is removed."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3392,21 +3389,16 @@
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtConjugation",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space",
-        "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Isometry"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
-      ],
-      "status": "staged",
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
       "upstream_pr": null,
-      "migration_note": "2026-10-25: duplicate left/right energy-invariance proofs retired; ofLp and Sylvester-flow consumers use the accepted isometry/coisometry API."
+      "migration_note": "2026-10-25: the local column operator, column function, membership/reconstruction/injectivity/norm/linearity proofs are retired. Consumers use HilbertBasis.columnOperator and its accepted API directly on the same Mathlib l2 carrier. Conjugation norm preservation uses accepted Hilbert-Schmidt isometry laws. No ofLp/columns/ofOperator adapter remains. Source ancestry: Kitware DKPS, Jon Crall and Claude Opus 5; accepted overlap checked, upstream proof descent not claimed. Pre-retirement source: ac1aa9379."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3427,20 +3419,16 @@
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtLp",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
-        "Mathlib"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space"
-      ],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "2026-10-25: the local column operator, column function, membership/reconstruction/injectivity/norm/linearity proofs are retired. Consumers use HilbertBasis.columnOperator and its accepted API directly on the same Mathlib l2 carrier. Conjugation norm preservation uses accepted Hilbert-Schmidt isometry laws. No ofLp/columns/ofOperator adapter remains. Source ancestry: Kitware DKPS, Jon Crall and Claude Opus 5; accepted overlap checked, upstream proof descent not claimed. Pre-retirement source: ac1aa9379."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3466,26 +3454,22 @@
       "source_module": "new -- authored directly in ForTauCeti",
       "source_declarations": [
         "existsUnique_ofLp_iff_summable",
-        "intact.",
         "memLp_columns_iff_summable",
         "norm_sq_eq_tsum_norm_column_sq",
         "ofLp_injective"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtSpace",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation"
-      ],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "2026-10-25: the local column operator, column function, membership/reconstruction/injectivity/norm/linearity proofs are retired. Consumers use HilbertBasis.columnOperator and its accepted API directly on the same Mathlib l2 carrier. Conjugation norm preservation uses accepted Hilbert-Schmidt isometry laws. No ofLp/columns/ofOperator adapter remains. Source ancestry: Kitware DKPS, Jon Crall and Claude Opus 5; accepted overlap checked, upstream proof descent not claimed. Pre-retirement source: ac1aa9379."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3608,10 +3592,8 @@
       "source_module": "new -- authored directly in ForTauCeti",
       "source_declarations": [
         "generator_sylvesterGroup_apply",
-        "norm_ofLp_le",
         "tendsto_U_apply",
-        "tendsto_genDiffQuot_neg_time",
-        "tendsto_ofLp_apply"
+        "tendsto_genDiffQuot_neg_time"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator",
@@ -3627,7 +3609,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity"
       ],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "2026-10-25: the domain-aware generator theorem is stated directly using HilbertBasis.columnOperator. The local pointwise-convergence wrapper is retired in favor of continuity of the bundled map and continuous evaluation."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3641,10 +3624,7 @@
         "enorm_sub_sq_le",
         "isSelfAdjoint_generator_sylvesterGroup",
         "norm_sylvesterFun",
-        "ofLp_ofOperator",
-        "ofLp_sub",
-        "ofLp_sylvesterFun",
-        "ofOperator",
+        "columnOperator_sylvesterFun",
         "sylvesterFun",
         "sylvesterFun_add",
         "sylvesterFun_add_time",
@@ -3665,7 +3645,8 @@
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation",
+        "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns",
+        "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Isometry",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone"
       ],
       "blocked_dependencies": [],
@@ -3674,7 +3655,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator"
       ],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "2026-10-25: no parallel column constructor or inverse adapter. Flow vectors are native lp column families, reconstruction uses columnOperator_mk, and norm/linearity proofs use accepted Hilbert-Schmidt and bundled-map APIs. The analytic strong-continuity and generator results remain local."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3686,8 +3668,7 @@
         "gridProj_comm",
         "hasVectorSpectralGap_sylvesterGroup",
         "norm_block_ge",
-        "norm_sub_smul_ge_of_grid",
-        "ofLp_zero"
+        "norm_sub_smul_ge_of_grid"
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap",

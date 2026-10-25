@@ -154,6 +154,27 @@ comparison module have no remaining Lean references. The separate syntactic
 name-drift checker still reports accepted imported declarations as absent from
 its local-only index; actual Lean resolution and signature comparisons passed.
 
+## October 25 follow-up: canonical column model
+
+The local `ofLp`/`columns` representation and `ofOperator` inverse wrapper are
+removed. `HilbertSchmidt.Lp`, `.Space`, and `.Conjugation` are deleted, and all
+maintained consumers use accepted `HilbertBasis.columnOperator` directly on the
+same Mathlib `ℓ²` carrier. Source model, Sylvester flow, block action, spectral-gap
+reassembly and the unbounded generator-domain theorem now use that canonical
+operator. Norm preservation and block norm bounds consume the accepted
+Hilbert–Schmidt norm laws, and the native bundled map supplies linearity and
+continuity. No adapter declarations remain for the retired representation.
+
+Validation: the focused dependency build passed 7,238 jobs; after a fresh cache
+fetch, the full default build passed **21,045 jobs**, with warnings treated as
+errors. The separate audit name update remains for explicit audit validation.
+
+The analytic Sylvester estimates remain local. The next broad comparison is the
+Schatten power-sum presentation against the accepted family, with an explicit
+parameter-scope check: the donor defines all real exponents while the accepted
+normed family takes `1 ≤ p`. Paper and visualization files are unchanged.
+
+
 ## Scope and evidence
 
 This reviews the uploaded `aiq-dkps-formalization` source snapshot at DKPS
