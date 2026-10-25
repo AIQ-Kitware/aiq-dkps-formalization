@@ -9,6 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.SchattenSpectralCalculus
 public import TauCeti.Analysis.Normed.Lp.ProdLp
 public import Mathlib.Analysis.InnerProductSpace.ProdL2
 public import TauCeti.Analysis.InnerProductSpace.Polar.Unitary
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 
 /-!
 # Finite Schatten power sums of orthogonal blocks
@@ -117,5 +118,59 @@ theorem schatten_displacement_rpow_withLpProdMap
     rfl
   rw [hblock]
   exact schatten_rpow_prodMap_withLpMap _ _ p hp
+
+section Reducing
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [FiniteDimensional 𝕜 E]
+
+/-- A reducing subspace splits the actual Schatten power into the powers
+of the two restrictions. Neither normality nor invertibility is needed. -/
+theorem schatten_rpow_eq_add_restrict_of_isReducing
+    (A : E →ₗ[𝕜] E) (N : Submodule 𝕜 E) (hN : N.IsReducing A)
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
+    let h₁ := (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+      hN.mem_invtSubmodule
+    let h₂ := (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+      hN.orthogonal_mem_invtSubmodule
+    schatten 𝕜 E E p A ^ p.toReal =
+      schatten 𝕜 N N p (A.restrict h₁) ^ p.toReal +
+        schatten 𝕜 Nᗮ Nᗮ p (A.restrict h₂) ^ p.toReal := by
+  let h₁ := (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+    hN.mem_invtSubmodule
+  let h₂ := (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+    hN.orthogonal_mem_invtSubmodule
+  let d := N.orthogonalDecomposition
+  let B := ((A.restrict h₁).prodMap (A.restrict h₂)).withLpMap 2
+  have hinter (x : WithLp 2 (N × Nᗮ)) : d.symm (B x) = A (d.symm x) := by
+    simp only [d, Submodule.orthogonalDecomposition_symm_apply]
+    change A (x.fst : E) + A (x.snd : E) = A ((x.fst : E) + (x.snd : E))
+    exact (map_add A _ _).symm
+  have hblock : B = d.toLinearMap ∘ₗ A ∘ₗ d.symm.toLinearMap := by
+    ext x
+    apply d.symm.injective
+    change d.symm (B x) = d.symm (d (A (d.symm x)))
+    rw [hinter, d.symm_apply_apply]
+  calc
+    _ = schatten 𝕜 (WithLp 2 (N × Nᗮ)) (WithLp 2 (N × Nᗮ)) p B ^ p.toReal := by
+      rw [hblock]
+      exact congrArg (fun r : ℝ => r ^ p.toReal)
+        (schatten_congr_linearIsometryEquiv d d.symm A p hp).symm
+    _ = _ := schatten_rpow_prodMap_withLpMap _ _ p hp
+
+/-- Nuclear cost is additive on the actual restrictions of any reducing
+subspace, including either summand of dimension zero. -/
+theorem nuclear_eq_add_restrict_of_isReducing
+    (A : E →ₗ[𝕜] E) (N : Submodule 𝕜 E) (hN : N.IsReducing A) :
+    let h₁ := (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+      hN.mem_invtSubmodule
+    let h₂ := (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+      hN.orthogonal_mem_invtSubmodule
+    nuclear 𝕜 E E A = nuclear 𝕜 N N (A.restrict h₁) +
+      nuclear 𝕜 Nᗮ Nᗮ (A.restrict h₂) := by
+  simpa only [ENNReal.toReal_one, Real.rpow_one, schatten_one] using
+    schatten_rpow_eq_add_restrict_of_isReducing A N hN 1 ENNReal.one_ne_top
+
+end Reducing
 
 end TauCeti

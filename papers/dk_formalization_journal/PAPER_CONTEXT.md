@@ -1,9 +1,9 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** complete acute Charbonnier optimizer classification,
-exact isoclinic metric families, and all nearest acute commuting corrections,
-based on `9693e8946`, registered in the first section below.
+**Current research source:** exact mixed right-angle cost splitting, unique
+defect parameters, and independent arbitrary-defect attainment, based on
+`c16d48091`, registered in the first section below.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -17,6 +17,124 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Mixed right-angle family after `c16d48091`
+
+The arbitrary mixed-defect converse is now compiled. The optimization
+statements are finite-dimensional complex, with `0<b<a` for weighted
+nuclear cost or `tau>0` for the literal Charbonnier cost. Other principal
+angles, multiplicities, critical directions, and fixed space are unrestricted.
+
+- `SmoothedDefectReplacement.minimizing_weighted_transport_unique_defect_equiv_complex`
+  and `smoothed_minimizer_unique_defect_equiv_complex` prove that **every**
+  ambient global optimizer has exactly one actual unitary identification
+  `D : halmosSourceDefect K L ≃ halmosTargetDefect K L`. Its action is `D`
+  on the source crossed defect and `D.symm` on the target crossed defect.
+- `exists_weighted_minimizer_prescribing_defects_complex` and
+  `exists_smoothed_minimizer_prescribing_defects_complex` take **any** such
+  `D` and **any given ambient optimizer**. They construct a global optimizer
+  with the prescribed actions, agreeing with the given optimizer everywhere
+  on `(ker C)^perp`. The comparison quantifier ranges over every ambient
+  transporter. No supplied extension, diagonal model, or prescribed pairing
+  relative to the canonical completion is assumed.
+- `KernelCostSplitting.weighted_transport_split_cosine_kernel` constructs
+  actual unitary restrictions and proves
+  `nuclear(a*T-b*I) = nuclear(a*T_pos-b*I_pos) + a*dim(ker C)`.
+  It is **real/complex**, assumes `0<=b<=a`, feasibility, commutation with
+  the actual cosine, and self-adjointness on its kernel; optimality is not
+  assumed. `weighted_transport_cost_eq_of_eq_on_cosine_kernel_orthogonal`
+  proves equality of costs for any two such transports agreeing off the kernel.
+- `SmoothedDefectReplacement.smoothed_transport_split_cosine_kernel_complex`
+  gives the literal identity
+  `Psi_tau(T) = Psi_tau(T_pos) + (eta-tau)*dim(ker C)`.
+  Here `eta-tau=(sqrt(tau^2+4)-tau)/2`; the same feasibility, commutation,
+  and kernel hypotheses suffice without optimality.
+- `KernelTransportReplacement.exists_transport_replacing_cosine_kernel`
+  constructs the ambient extension of any self-adjoint unitary on the actual
+  kernel exchanging the source reflection sectors. It derives feasibility
+  and global cosine commutation while preserving all complementary action.
+  This geometric statement is real/complex and finite-dimensional.
+- `SmoothedNonacutePhases.minimizing_weighted_transport_cosine_mul_relative_commutes_rotation_complex`
+  proves the all-angle global identity `[C*(T*R),R]=0` for **every** attaining
+  weighted transporter. The unweighted relative unitary need not commute
+  with the chosen rotation on the right-angle part.
+
+The underlying geometric necessity in
+`CosineKernel.exists_unique_defect_equiv_of_selfAdjoint_on_cosine_kernel`
+needs **neither finite dimension nor cosine commutation**. Feasibility and
+self-adjointness on the cosine kernel alone give a unique crossed-defect
+isometry and its inverse action. `CanonicalSymmetry.exists_selfAdjoint_transport_prescribing_defects`
+extends any defect isometry to a global self-adjoint transporter preserving
+`C` on an arbitrary real/complex Hilbert space. That extension's positive-angle
+action is not claimed optimal. These statements do not supply ideal-class
+feasibility, convergence, or attainment.
+
+The generic donor `FiniteUnitaryRestriction.lean` derives actual unitary
+restrictions and inverse actions from finite invariant subspaces, without
+assuming the ambient space finite or complete. Its orthogonal-sum assembly
+needs only an orthogonal projection and no finite-dimensional hypothesis.
+`BlockSchatten.lean` now splits finite Schatten powers and nuclear costs on
+actual reducing restrictions, consuming the accepted `IsReducing` API and
+the existing orthogonal-block theorem. These are classical foundations.
+
+The checked manuscript includes Proposition `prop:smoothed-arbitrary-defects`
+and the weighted-relative commutation identity in spectral separation.
+The **right-angle parameter necessity and arbitrary-parameter attainment**
+are closed, also when positive angles are present. A single full ambient
+phase-plus-defect iff and a typed product/topological classification still
+need the positive-phase assembly described next.
+
+### Exact next global phase lemma
+
+For an attaining `T`, put `Z=T*R` and
+`H=Im(C*Z)=C*Im Z`. The compiled cosine commutation and `[C*Z,R]=0`,
+together with unitarity of `R`, make `H` commute with `R,J,C`.
+The proposed intrinsic projection is `E=1_(0,infinity)(H)`; it vanishes
+on `ker C`. In a joint eigenbasis of `C,Im Z`, the corresponding eigenvalues
+are `c>=0,g`, so `H` acts by `c*g`. For `c>0`, its sign is the sign of `g`,
+and the existing scalar reconstruction gives the optimal phases. At `c=0`,
+cosine multiplication kills both sides. The exact next Lean target is
+`C*Z = C*(U E+U* (I-E))` with `E` orthogonal, commuting with `R,J`, and
+zero on the kernel. Most of the acute positive-imaginary proof can be reused.
+
+The expected full criterion for a feasible `T` is: `T` commutes with `C`,
+is self-adjoint on `ker C`, and admits such a compatible phase projection
+modulo the kernel. For sufficiency compare with the compiled optimizer
+from `E`; cancel `C` on its kernel's orthogonal complement to identify
+positive restrictions, then apply the new cost-equality theorem. Combined
+with the unique `D` theorem and its arbitrary replacement, this would close
+the complete finite Charbonnier family. It is **not yet a compiled iff**.
+The pure Schatten zero-gradient local descent, unrestricted real matching,
+and ideal extensions retain their earlier exact obstructions.
+
+Independent numerical diagnostics (NumPy, seed 61273, `tau=0.4`) used
+angles `0,0.35,c_tau,1.3,1.3,pi/2,pi/2`, two extra fixed directions, and
+six arbitrary complex two-dimensional defect unitaries. The maximum cost
+error was below `2.7e-15`; a transport residual was below `4.7e-16` and
+positive-action change was exactly zero. The relative-rotation commutator
+norm was `1.4231456447910595`, while its cosine-weighted version was below
+`9.7e-17`. These are diagnostics, not proof evidence. The exact two-dimensional
+prototype is `R=[[0,-1],[1,0]]`, `W=[[0,1],[1,0]]`, with `Z=diag(1,-1)`:
+the pure complementary criterion proves optimality, but `[Z,R]` is nonzero.
+
+The BLR primary PDF was checked again at Lemma 3.3 (printed p. 36) and
+Theorem 4.2 (pp. 39--40). The lemma already gives the right-angle scalar
+Schatten minimum and all attaining scalar pairs; Theorem 4.2 classifies
+Frobenius minimizers. Do not claim a new rank-one reflection mechanism.
+The present advance is the compiled arbitrary-rank mixed Charbonnier
+identification and independent extension. Historical priority remains
+provisional; the right-angle geometry and orthogonal-cost algebra are
+classical. Earlier entries below are dated proof-frontier records.
+
+Validation for the mixed-defect update: `lake exe cache get` preceded
+all focused builds. The final `lake build DavisKahan.All ForTauCeti`
+passed (10,333 jobs; `/tmp/mixed-defect-full-build.log`), including the
+literal splitting identity and every new module through the aggregate.
+The manuscript was rebuilt with BibTeX and repeated pdfLaTeX passes,
+with no unresolved references/citations, multiply defined labels, or
+overfull boxes (`/tmp/dk-mixed-defect-paper/dk-mixed-defect.pdf`). The
+source, declarations, and claim mapping are durable; these build logs
+are local reproduction evidence.
 
 ## Complete acute classification and isoclinic metric after `9693e8946`
 

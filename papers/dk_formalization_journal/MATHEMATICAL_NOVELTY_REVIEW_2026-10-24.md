@@ -12,6 +12,42 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Arbitrary mixed right-angle families after `c16d48091`
+
+The previously missing mixed right-angle converse now compiles in
+`SmoothedDefectReplacement.lean`. Every finite complex weighted/Charbonnier
+optimizer determines one unique unitary identification of the actual
+crossed defects, acting by its inverse on the other defect. Every such
+identification can replace that of any given global optimizer while
+preserving all its positive-cosine action. The resulting ambient transporter
+is constructed and compared with every admissible unitary. Thus no positive
+angle, multiplicity, or preselected defect-pairing restriction is introduced.
+
+`KernelCostSplitting.lean` proves the actual weighted cost split for real
+or complex cosine-preserving feasible transporters self-adjoint on the
+cosine kernel, without assuming optimality. The literal Charbonnier split
+and the independent replacement are included as Proposition
+`prop:smoothed-arbitrary-defects`. `SmoothedNonacutePhases.lean` proves
+`[C*(T*R),R]=0` globally for every optimizer. Replacing this by unweighted
+relative commutation would exclude actual right-angle minimizers.
+
+The full ambient phase-plus-defect iff still needs the intrinsic
+positive-phase projection modulo the kernel. The precise candidate and
+remaining sufficiency argument are in `PAPER_CONTEXT.md`. General product
+topology, pure Schatten all-minimizer classification, real matching, and
+operator-ideal optimization remain outside the new compiled scope.
+
+The primary [BLR paper](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117)
+was rechecked at Lemma 3.3, printed p. 36: it gives the exact right-angle
+scalar Schatten minimum `2^p` and all attaining scalar pairs for
+`1<=p<2`. Theorem 4.2, pp. 39--40, gives the complete Frobenius optimizer
+family. These are direct precedents for the scalar mechanism and
+optimizer-family question. The new finite Charbonnier theorem concerns
+arbitrary multiplicity mixed with other angles and independent replacement
+under its own objective. Classical defect geometry, self-adjoint extension,
+and orthogonal-block cost additivity receive no separate originality claim.
+No exhaustive historical-priority clearance is asserted.
+
 ## Complete acute Charbonnier classification after `9693e8946`
 
 The acute all-optimizer theorem is now compiled, including arbitrary

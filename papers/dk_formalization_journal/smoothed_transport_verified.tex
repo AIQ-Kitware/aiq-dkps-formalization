@@ -287,7 +287,7 @@ On the right-angle defect space $\ker C$, one has
 $Wx=W^*x$ and $WJx=-JWx$.
 Thus unequal principal angles cannot be mixed by a global optimizer;
 within each positive-cosine space its two opposite rotation phases
-are preserved separately.
+are preserved separately. Throughout the ambient space one has $[CZ,R]=0$.
 \end{proposition}
 
 \begin{proof}
@@ -321,7 +321,9 @@ with $R$ there. Finally, on $\ker C$ one has $R=iS$ and
 $ZS+SZ^*=0$. Thus $W=iSZ^*=-iZS=W^*$ on that space.
 The kernel is the sum of the two crossed defects, where the source
 and target reflections are opposite. Since $W$ preserves the kernel,
-reflection intertwining gives $WJx=-JWx$ there.
+reflection intertwining gives $WJx=-JWx$ there. On positive-cosine
+eigenspaces $Z$ commutes with $R$; on the kernel, multiplication by $C$
+annihilates both sides of the commutator. Thus $[CZ,R]=0$.
 \end{proof}
 
 \begin{proposition}[Matching multiplicity phases]
@@ -452,6 +454,64 @@ surjectivity. Since $s>0$, distinct projections give distinct relative
 unitaries. Unitary invariance gives
 $\|W_E-W_F\|_{\mathrm{op}}=\|Z_E-Z_F\|_{\mathrm{op}}$; subtracting the
 affine formulas proves the identity and both Lipschitz estimates.
+\end{proof}
+
+\begin{proposition}[Every right-angle identification]
+\label{prop:smoothed-arbitrary-defects}
+Put $H_0=\ker C$ and
+\[
+ D_+=\operatorname{ran}P\cap\ker Q,\qquad
+ D_-=\ker P\cap\operatorname{ran}Q.
+\]
+Every global minimizer has a unique unitary $D:D_+\to D_-$ such that
+\[
+ W|_{D_+}=D,\qquad W|_{D_-}=D^*,
+ \qquad
+ W|_{H_0}=\begin{pmatrix}0&D^*\\D&0\end{pmatrix}
+ \quad\text{on }H_0=D_+\oplus D_-.
+\]
+Conversely, for every such $D$ and every global minimizer $W$, there
+is a global minimizer $W_D$ with these defect actions and
+$W_D|_{H_0^\perp}=W|_{H_0^\perp}$.
+Thus the right-angle identification can be chosen independently of all
+positive-angle optimizer choices.
+
+More generally, any feasible cosine-preserving transporter self-adjoint
+on $H_0$ satisfies, with $W_+=W|_{H_0^\perp}$,
+\[
+ \|aW-bI\|_1=\|aW_+-bI_{H_0^\perp}\|_1+a\dim H_0
+ \qquad(0\leq b\leq a).
+\]
+For the literal Charbonnier cost this becomes
+\[
+ \Psi_\tau(W)=\Psi_\tau(W_+)
+   +\frac{\sqrt{\tau^2+4}-\tau}{2}\dim H_0.
+\]
+\end{proposition}
+
+\begin{proof}
+The cosine kernel is the crossed-defect sum. A minimizing $W$ preserves
+it and is self-adjoint there. A vector in $D_+$ is carried by $W$ into
+$\operatorname{ran}Q$ and by $W^*$ into $\ker P$. Hence $W(D_+)\subseteq
+D_-$. The reverse inclusion follows similarly, and $W^2=I$ on $H_0$.
+Thus the two restrictions are mutually inverse isometries, with the first
+one determining $D$ uniquely.
+
+On $H_0$, feasibility gives anticommutation with source reflection.
+Conjugation by that reflection negates the restricted transporter, so
+its trace is zero. The weighted nuclear cost of a self-adjoint unitary
+$S$ is $a\dim H_0-b\operatorname{Re}\operatorname{tr}S=a\dim H_0$.
+Orthogonal-block additivity proves the weighted splitting identity.
+Subtracting $\tau\dim H$ and using $a=\eta$, $b=\eta^{-1}$ gives
+the Charbonnier identity.
+
+For a prescribed $D$, the canonical rotation completed using $D$,
+composed on the source with its reflection, is a self-adjoint unitary
+transporter. Its defect actions are $D,D^*$. Restrict it to $H_0$ and
+combine it orthogonally with $W_+$; reflection intertwining proves
+feasibility of this ambient unitary. It preserves $C$, agrees with $W$
+on $H_0^\perp$, and has the same kernel cost by the splitting identity.
+Its total cost therefore equals the global minimum.
 \end{proof}
 
 \begin{corollary}[Complementary right-angle pairs]
