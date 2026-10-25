@@ -1053,6 +1053,70 @@ Subtracting the two weighted phase formulas gives
 Hence the recovery estimate holds with $L=k\|C\|$.
 \end{proof}
 
+\begin{theorem}[Multiplicity-space optimizer coordinates]
+\label{thm:schatten-multiplicity-parameters}
+Let $\mathcal M_p(P,Q)$ be the set of global minimizers, and put
+\[
+ \mathcal A_p=\{\theta\in(0,\pi/2):\theta>\vartheta_p,
+             \ \ker(R-e^{i\theta}I)\ne\{0\}\},\qquad
+ E_\theta^+=\ker(R-e^{i\theta}I).
+\]
+The set $\mathcal A_p$ is finite. Write $m_\theta=\dim_{\mathbb C}E_\theta^+$.
+There is a bijection of sets
+\begin{equation}
+ \mathcal M_p(P,Q)\simeq
+ \left(\prod_{\theta\in\mathcal A_p}
+    \coprod_{r=0}^{m_\theta}\operatorname{Gr}_{\mathbb C}(r,E_\theta^+)\right)
+       \times\operatorname{Iso}_{\mathrm u}(H_{10},H_{01}),
+ \label{eq:schatten-multiplicity-product}
+\end{equation}
+where $\operatorname{Gr}_{\mathbb C}(r,E)$ denotes the set of
+$r$-dimensional complex subspaces of $E$, and
+$\operatorname{Iso}_{\mathrm u}$ denotes unitary identifications.
+Every factor may be chosen independently. The empty product is a point.
+\end{theorem}
+
+\begin{proof}
+The map $\theta\mapsto e^{i\theta}$ is injective on $(0,\pi/2)$.
+The canonical rotation has finitely many eigenvalues, proving finiteness.
+Distinct positive eigenphases are neither equal nor complex conjugate,
+so their eigenspaces and reflected copies are mutually orthogonal.
+Source reflection maps $E_\theta^+$ onto
+$\ker(R-e^{-i\theta}I)$.
+
+A normalized compatible projection preserves every $E_\theta^+$.
+Its restriction there is an arbitrary orthogonal projection, and
+commutation with source reflection determines the restriction on the
+conjugate eigenspace. Conversely, prescribe such a projection on each
+$E_\theta^+$. Project onto the sum of their ranges and their reflected
+ranges. The resulting ambient projection commutes with $R$ and $J$ and
+has the prescribed restrictions. Its range lies in $E_p$ from
+\cref{thm:schatten-normalized-parameters}. It is unique: two such
+projections agree on the selected eigenspace pairs and vanish on their
+orthogonal complement.
+
+Apply \cref{thm:schatten-normalized-parameters}, keeping the defect
+identification independent. Finally, each orthogonal projection is
+determined by its range, whose dimension is one of
+$0,\ldots,m_\theta$. This gives \cref{eq:schatten-multiplicity-product}.
+\end{proof}
+
+\begin{corollary}[Exact count for simple active angles]
+\label{cor:schatten-simple-active-count}
+Suppose $H_{10}=H_{01}=\{0\}$ and $m_\theta=1$ for every
+$\theta\in\mathcal A_p$. Then
+\[
+ \#\mathcal M_p(P,Q)=2^{\#\mathcal A_p}.
+\]
+The multiplicities of inactive angles are unrestricted.
+\end{corollary}
+
+\begin{proof}
+A one-dimensional space has exactly two orthogonal projections, zero and
+identity. The defect identification is unique. Count the independent
+factors in \cref{eq:schatten-multiplicity-product}.
+\end{proof}
+
 \begin{corollary}[Distance between phase parameters]
 \label{cor:schatten-phase-parameter-distance}
 For two full relative-phase representations

@@ -16,6 +16,49 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Complete finite multiplicity coordinates and exact counts (25 October)
+
+The finite complex `1<p<2` optimizer classification now has its full
+algebraic multiplicity-space factorization. The compiled theorem
+`exists_schatten_multiplicity_parameter_equiv` gives independent arbitrary
+orthogonal projections on the **actual** positive canonical eigenspace at
+each distinct supercritical interior angle, together with an independent
+arbitrary unitary between right defects. The actual active angle set is
+proved finite. Its paired eigenspace sum is proved equal to the phase-weight
+kernel complement, so no prescribed-frame or simple-spectrum restriction
+is imposed on ambient competitors.
+
+`nonempty_schatten_rank_stratified_parameter_equiv` replaces every projection
+factor by all subspaces stratified by their exact dimension. This is the
+finite product of disjoint unions of complex Grassmannian **sets** predicted
+by the draft. The new statement does not assert a homeomorphism, connected
+components or smooth/manifold dimensions. The checked manuscript includes
+`thm:schatten-multiplicity-parameters`.
+
+The exact count
+`natCard_schattenTransportMinimizers_of_simple_active_angles` is also compiled:
+if there is no right defect and every active multiplicity is one, there
+are exactly `2^s` global optimizers, where `s` counts distinct active angles.
+Inactive multiplicities are unrestricted. Included as
+`cor:schatten-simple-active-count`. This is completeness of the sign choices,
+not merely an exhibited family. Projection/range correspondence, rank
+stratification and the paired commutant construction are classical ingredients
+with no independent novelty claim.
+
+The focused search of Schatten/Grassmannian minimizers, ambient unitary
+transport, nearest block-diagonal unitaries and the critical cosine formula
+returned neighboring operator-geometry work. Primary statements checked:
+
+- Andruchow (2015), [*Parametrizing projections with selfadjoint operators*](https://www.sciencedirect.com/science/article/pii/S0024379514006983), Proposition 2.1 and Proposition 3.1: existence/uniqueness for a Grassmannian exponential and injectivity of Davis' projection map with a left inverse; the paper also minimizes projection distance in an off-diagonal completion problem. These are explicit precedents for projection geometry and completion, with different variables and objective from full Schatten displacement minimization over transporters.
+- Andruchow--Chiumiento--Di Iorio y Lucero (2012 preprint), [*The compatible Grassmannian*](https://arxiv.org/html/1208.6571v1), Theorem 6.3 and Corollary 7.3: Fredholm-index connected components and minimal-length local geodesics for restricted compatible Grassmannians. The curve-length functional differs from the ambient chordal objective `||I-W||_p`.
+- Tahiri--Tumpach (2026 preprint), [*The Restricted Schatten-class Grassmannian as affine coadjoint orbit*](https://arxiv.org/html/2605.22512v1), Theorems 18--20: coadjoint-orbit and symplectic structures at `1<=p<=2`. These provide operator-ideal geometric precedents; those theorem statements do not state the angle-dependent ambient minimizer classification.
+
+These comparisons do not establish first-publication priority. BLR's
+theorems and the broader matrix-nearness comparison below remain relevant.
+Historical priority of the complete nonlinear transport classification
+stays **provisional**. Generic Grassmannian geometry and projection
+parametrizations cannot themselves support a novelty claim.
+
 ## Nonredundant optimizer parameters and stability (25 October)
 
 `SchattenParameterNormalization.lean` now proves the unique normalized
@@ -35,8 +78,9 @@ constant or uniformity through a phase transition is claimed. The
 manuscript includes `thm:schatten-normalized-parameters`.
 
 This closes redundancy and injectivity in the operator parameters. The
-multiplicity-space factorization, Grassmannian homeomorphism, connected
-components and dimensions remain unverified. The normalization and norm
+multiplicity-space and rank-stratum factorization is now compiled above;
+Grassmannian homeomorphism, connected components and dimensions remain
+unverified. The normalization and norm
 recovery are classical consequences of the new complete classification;
 they carry no separate historical-priority claim. The historical priority
 of the full nonlinear Schatten classification remains provisional under
@@ -72,8 +116,8 @@ phase factor has the actual optimal scalar phases and actions `F(1)=1`,
 `thm:schatten-all-phase-defect-minimizers`. The earlier necessary-only and
 arbitrary-projection-attainment boundaries are now closed.
 
-The remaining Grassmannian product/bijection, component dimensions and
-topological assertions are **not** separate Lean endpoints. Inactive and
+The algebraic Grassmannian-set product/bijection is now compiled above;
+component dimensions and topological assertions are **not** separate Lean endpoints. Inactive and
 right-angle projection parameters may be redundant. The exact generic
 operator-distance identity is compiled for full relative-phase
 representations and included as `cor:schatten-phase-parameter-distance`;

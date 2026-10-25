@@ -6,11 +6,15 @@ complex Schatten `1<p<2` optimizer **iff**, including compatible phase
 projections, arbitrary independent right-defect identifications, joint
 attainment and uniqueness for each prescribed parameter pair. Every
 multiplicity, zero/right angle, fixed direction and critical threshold is
-included. A nonredundant algebraic parameter bijection and uniform
-Lipschitz recovery of its phase projection are also proved. The earlier exact value, local-to-global, sharp uniqueness and
+included. Every optimizer is now in algebraic bijection with a finite
+product of actual multiplicity-space projections, equivalently subspaces
+stratified by dimension, and an independent defect unitary. Simple active
+multiplicities with zero right defect give exactly `2^s` optimizers.
+Uniform Lipschitz recovery of the normalized phase projection is proved.
+The earlier exact value, local-to-global, sharp uniqueness and
 commutator criteria remain proved. The all-angle Charbonnier global
-optimizer classification also remains proved. Grassmannian coordinate
-bijections/topology, unrestricted real matching, smoothed local-to-global
+optimizer classification also remains proved. Grassmannian topology and
+manifold dimensions, unrestricted real matching, smoothed local-to-global
 and the ideal extensions remain open.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
@@ -25,6 +29,98 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Finite multiplicity-space coordinates and exact optimizer counts (25 October)
+
+`SchattenMultiplicityParameters.lean` proves
+`exists_schatten_multiplicity_parameter_equiv`: every finite complex
+`1<p<2` optimizer corresponds bijectively to **independent arbitrary
+orthogonal projections on every actual active multiplicity space**, plus
+an arbitrary independent crossed-defect unitary. An active angle satisfies
+`0<theta<pi/2`, `criticalAngle(p)<theta`, and has a nonzero actual canonical
+rotation eigenspace at `exp(i*theta)`. Equal angles are grouped into that
+one whole eigenspace. The theorem retains the actual phase restrictions,
+both defect actions and cosine-weighted formula. It compares against all
+ambient unitary transports, with no prescribed competitor frame.
+
+`finite_schattenActiveRotationAngles` proves that there are finitely many
+nontrivial factors. The support identification
+`schattenPhaseWeight_orthogonal_ker_eq_paired_eigenspace_sum` proves that
+the kernel complement of `C*(F-F.adjoint)` is **exactly** the sum of those
+positive canonical eigenspaces and their reflected copies. The proof uses
+the accepted complete canonical frame only to prove this intrinsic
+subspace equality, not as a restriction on optimizer parameters. Zero,
+critical, right and fixed directions are excluded from this effective
+phase space by exact vanishing of the phase weight.
+
+`nonempty_schatten_rank_stratified_parameter_equiv` replaces each projection
+factor by the disjoint union, over `r=0,...,dim(N_theta)`, of all subspaces
+of `N_theta` with dimension `r`. This is the **algebraic** finite product
+of complex Grassmannian sets predicted by the research draft. The rank
+strata are implemented by `Submodule` plus exact `Module.finrank`, with no
+manifold or topological structure asserted. Mathlib's existing
+`Module.Grassmannian` uses finite-projective quotient rank; it is a
+different representation and was not duplicated or relabeled here.
+
+`nonempty_schatten_boolean_parameter_equiv` proves that one Boolean per
+active angle suffices when every active eigenspace has dimension one;
+the defect unitary remains independent. The exact endpoint
+`natCard_schattenTransportMinimizers_of_simple_active_angles` proves that
+there are **exactly `2^s` ambient global optimizers** when those active
+multiplicities are one and the source right defect has finrank zero.
+Equal subspace ranks make the target right defect zero as well. Inactive
+multiplicities are unrestricted. This is an exact count of the complete
+optimizer set, beyond an independently constructed sign-family lower bound.
+
+The donor `PairedProjectionFamily.lean` proves joint supported extension
+and an actual projection-space `Equiv` for arbitrary distinct,
+nonconjugate unit-circle eigenvalues of a unitary reversed by an
+involution. The prescribed spaces are its actual eigenspaces. It also
+proves `IsStarProjection.restrict_invariant`, for complete invariant
+subspaces without finite ambient dimension. `Projection/FiniteParameters.lean`
+supplies the projection/range and rank-stratification equivalences and the
+two-element one-dimensional projection space. These are classical linear
+algebra, with no separate historical novelty claim.
+
+The manuscript includes Theorem `thm:schatten-multiplicity-parameters`
+and Corollary `cor:schatten-simple-active-count`. Independent diagnostics
+at `p=1.5` produced four distinct transports for two simple supercritical
+angles (minimum pairwise distance `1.74034`) and checked four complex
+rank-one choices in a repeated active angle space (largest cost/commutation
+residual `3.55e-15`). These are diagnostics, not proofs. The exclusion of
+conjugate coincidences is necessary in the donor: indexing both members
+of one pair would permit inconsistent zero/identity prescriptions that
+cannot commute with the reversing involution.
+
+### Exact next proof obligations
+
+The algebraic multiplicity and rank-stratum factorization is closed.
+The full family **homeomorphism**, connected components and manifold
+dimensions remain unproved in Lean. First settle the topology on the
+parameter and optimizer carriers as operator-norm operator spaces. For a
+finite set of actual eigenspaces, the supported extension is the finite
+sum of `inclusion * Q * inclusion.adjoint` and its reflected copy; prove
+that formula and its continuity. Combine it with continuity of the full
+phase/defect construction and the existing phase-recovery estimate.
+No formal manifold theorem follows solely from the compiled `Equiv`.
+
+The same donor should next be consumed by the Charbonnier multiplicity
+classification: its all-angle operator iff and joint defect attainment
+are already proved, but the full finite multiplicity product is not yet
+registered. Its relative-phase convention is opposite to the pure
+Schatten convention. Real matching, smoothed local-to-global and ideal
+optimization remain open under their previously recorded hypotheses.
+Historical priority of the nonlinear transport classification is still
+provisional; the Grassmannian and projection ingredients are classical.
+
+Validation: every Lean build was preceded by `lake exe cache get`.
+The paired-family, finite projection-parameter and full multiplicity targets
+passed, followed by `lake build DavisKahan.All ForTauCeti` (10,457 jobs;
+`/tmp/schatten-multiplicity-final-build.log`). The journal passed
+pdfLaTeX/BibTeX and two further pdfLaTeX passes, producing a 54-page PDF
+under `/tmp/dk-schatten-multiplicity-paper/`; its final log has no warnings,
+overfull boxes, unresolved references or duplicate labels.
+`git diff --check` passed. The original 29-result source inventory is unchanged.
 
 ## Nonredundant complex optimizer parameters and recovery (25 October)
 
@@ -76,11 +172,10 @@ unitaries for `p=1.2,1.5,1.9`. The largest algebraic residual was
 `1.55e-15`, with no recovery-bound violation. These diagnostics are not
 proofs; the named endpoints are Lean-verified.
 
-The remaining family theorem must identify the normalized commutant
-projection space with a product of projection spaces on single canonical
-rotation eigenspaces, and then with unions of complex Grassmannians.
-The `Equiv` above is algebraic. A homeomorphism, connected components and
-dimensions are not yet Lean endpoints. The phase coordinate has a compiled
+The multiplicity-space and rank-stratum identification is now compiled in
+`SchattenMultiplicityParameters.lean`. The `Equiv` above is algebraic.
+A homeomorphism, connected components and dimensions are not yet Lean
+endpoints. The phase coordinate has a compiled
 uniform Lipschitz inverse estimate; continuity of the full forward
 phase/defect construction and its Grassmannian coordinates remains to be proved.
 
@@ -92,10 +187,9 @@ to its reflected copy extends **uniquely** to a compatible ambient
 projection supported on `N + J(N)`. The ambient Hilbert space can be
 infinite dimensional. The former weaker existence theorem is removed,
 and the Charbonnier multiplicity consumer uses the stronger result.
-The remaining assembly must restrict ambient compatible projections to
-the actual positive canonical rotation eigenspaces and sum their unique
-supported extensions over the distinct active angles. This will identify
-the projection factor in the existing optimizer equivalence.
+`PairedProjectionFamily.lean` now supplies the joint assembly over all
+actual positive canonical rotation eigenspaces; the finite multiplicity
+equivalence above consumes it.
 
 Validation: `lake exe cache get` preceded each Lean build. Focused
 normalization, kernel-support recovery and unique paired-extension targets
@@ -358,21 +452,19 @@ nonacute ambient iff obligations are now closed. The exact relative phase
 orientation is `R.adjoint*T`; older smoothed formulas often use
 `T.adjoint*R`. The shared geometry distinguishes these conventions.
 
-The nonredundant parameter bijection is now compiled in
-`SchattenParameterNormalization.lean`. The next target is its
-**factorization into multiplicity-space projection parameters**.
-Use the unique compatible projection already proved on each supercritical
-interior angle space. Restrict it to one canonical rotation eigenspace at
-`exp(i*theta)`; source reflection determines its action on the conjugate
-space. Conversely use `exists_unique_paired_projection_extension`, then orthogonal
-sums across the finite set of distinct active angles, to extend every tuple
-of multiplicity-space projections. Keep inactive and right-angle projection
-parameters zero. The normalized parameter equivalence already supplies
-injectivity and surjectivity for the ambient compatible projection and
-independent defect map. It remains to identify the projection factor with
-the product of multiplicity-space projection spaces.
+The nonredundant parameter bijection and its multiplicity-space
+factorization are now compiled in `SchattenParameterNormalization.lean`
+and `SchattenMultiplicityParameters.lean`. A compatible projection restricts
+to each actual positive canonical rotation eigenspace at `exp(i*theta)`;
+source reflection determines its action on the conjugate space. The joint
+theorem `exists_unique_unitary_paired_projection_family` realizes every
+tuple by projecting onto the sum of its ranges and reflected ranges,
+with support on precisely the selected paired sectors. Inactive and
+right-angle projection parameters are zero. The complete finite product
+and its rank-stratum form are now proved. The exact next topological
+obligations are stated at the beginning of this record.
 
-The Grassmannian identification, component dimensions and homeomorphism
+The Grassmannian manifold identification, component dimensions and homeomorphism
 remain conventional until their exact coordinate/topology statements are
 proved. The generic exact operator-distance identity now supplies the
 single-angle metric comparison. Do not infer a formal manifold theorem from

@@ -40,6 +40,20 @@ theorem schattenPhaseWeight_commute
   rw [cfc_star] at hFs
   exact hCB.mul_left (hF.sub_left hFs)
 
+omit [FiniteDimensional ℂ E] in
+/-- The effective phase weight of a self-adjoint cosine is skew-adjoint. -/
+theorem star_schattenPhaseWeight (p : ℝ) (C : E →L[ℂ] E) (hC : IsSelfAdjoint C) :
+    star (schattenPhaseWeight p C) = -schattenPhaseWeight p C := by
+  have hF := hC.commute_cfc (Commute.refl C) (schattenPhaseSymbol p)
+  have hFs := hC.commute_cfc (Commute.refl C) (fun z => star (schattenPhaseSymbol p z))
+  rw [cfc_star] at hFs
+  change Commute (schattenPhaseFactor p C) C at hF
+  change Commute (star (schattenPhaseFactor p C)) C at hFs
+  rw [schattenPhaseWeight, star_mul, star_sub, star_star, hC.star_eq]
+  change (star (schattenPhaseFactor p C) - schattenPhaseFactor p C) * C = _
+  rw [(hFs.sub_left hF).eq]
+  noncomm_ring
+
 /-- On a physical angle space the effective coefficient is
 `2*i*cos(theta)*sin(optimalPhase(p,theta))`. -/
 theorem schattenPhaseWeight_apply_cos
