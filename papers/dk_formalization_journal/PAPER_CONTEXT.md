@@ -27,9 +27,15 @@ penalties. Every real global Schatten minimum for `1<p<2` now has a
 complete orthogonal decomposition into fixed blocks, rank-one problems in
 real dimension two, and rank-two problems in real dimension four. Every
 actual restriction is globally minimal among all orthogonal competitors,
-and the full cost is the exact sum of its restriction costs. The four-block
-values are the compiled clipped formulas. Original-angle multiset assembly
-and unrestricted real matching remain open.
+and the full cost is the exact sum of its restriction costs. Every two-block
+and four-block value is explicit, and their accepted
+principal-angle multisets recover the original pair with exact zero, repeated
+and right-angle multiplicities. The actual ambient minimum is the sum of
+these explicit angle costs. Unrestricted real matching encoding and attainment
+remain open. The exact one-angle real minimum now compiles for every finite
+Schatten exponent at least one. For `1<p<2`, its value exceeds the complex
+one-angle value exactly at supercritical acute angles; equality holds below
+and at the critical angle and at the right endpoint.
 The local Charbonnier analysis now supplies actual first variations,
 source-reflection stationarity, paired two-phase gradient blocks and the
 sharp gradient bound. Actual ambient no-overlap on every submaximal gradient
@@ -61,6 +67,77 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
 
+## Exact real angle costs and one-angle field gap (25 October)
+
+`SchattenRealAngleCosts.exists_real_schatten_angle_cost_decomposition` now
+proves an exact cost certificate for **every** real global Schatten minimum
+in every finite dimension and source rank, for `1<p<2`. The complete actual
+orthogonal family reduces both source and target projections and the actual
+transporter. Each member has source rank at most two, with source rank two
+on every four-dimensional member. Its accepted angle multiset partitions
+the original pair's source-indexed angle multiset, including all zero,
+repeated and right angles. The full cost is the sum of the explicit
+`realSchattenAngleBlockCost` values on these same members: the clipped
+four-dimensional formula, the exact one-angle cost on balanced planes,
+and zero on fixed blocks.
+
+`Projection/PrincipalAngleBlocks.lean` supplies the reusable assembly
+statement over `RCLike`, without equal-rank or acute hypotheses. It proves
+rank splitting, arbitrary additive-group angle-penalty splitting, and
+`Submodule.principalAngleMultiset_of_orthogonal_blocks`. The new
+source-indexed multiset retains zero multiplicities that the accepted
+finitely supported angle sequence cannot record by itself. These are
+classical finite spectral and projection facts; no separate priority claim.
+`Projection/InvariantSubspace.starProjection_map_mem_of_isometry_restriction`
+also works in infinite dimension when an actual surjective restricted
+isometry is supplied. This does not extend the optimization theorem to ideals.
+
+`RealTwoPrincipalAngles.exists_minimizing_real_two_transport_principalAngles`
+proves the minimum over **all** ambient orthogonal transports of arbitrary
+real lines in dimension two:
+`min(2*rho(2*sin(theta/2)), rho(2))` for every nondecreasing penalty on
+`[0,2]` vanishing at zero. There is no continuity hypothesis. Attainment,
+both determinant classes and both endpoints are included.
+`RealTwoOptimization.two_rotation_isMinOn_iff` gives the sharp canonical
+criterion. `RealTwoSchattenNorm.lean` supplies actual unitary attainment and
+the value of every global minimum for every finite Schatten exponent
+`p>=1`, including the nuclear endpoint. The strengthened restriction theorem
+now records both the two-dimensional and four-dimensional costs.
+
+`RealOneAngleFieldGap.phaseMinimum_lt_realSingleSchattenCost_iff` proves,
+for `1<p<2` and `0<=theta<=pi/2`, that the exact real one-angle optimum
+power exceeds the exact complex one-angle value iff
+`criticalAngle p < theta < pi/2`. The companion equality iff is
+`theta<=criticalAngle p` or `theta=pi/2`. These compare the two already
+identified optimum-value functions at the same angle; no new arbitrary
+complexification/principal-angle invariance theorem is claimed.
+`SchattenRealAngleCosts.realPairSchattenCost_zero` proves that a nonnegative
+angle paired with zero has exactly its one-angle cost (the algebraic
+identity holds for `p>=1`). This justifies removing zero partners from
+cost expressions. A numerical diagnostic at `p=1.5` tested zero, a
+subcritical angle, the critical angle, a supercritical acute angle and the
+right endpoint; the compiled proofs provide the mathematical evidence.
+
+**Validation:** focused builds passed for the angle assembly, planar
+optimization, accepted Schatten specializations, all-rank explicit cost
+decomposition and one-angle field gap. After `lake exe cache get`,
+`lake build DavisKahan.All ForTauCeti` passed (10,603 jobs). The new
+modules are included in the ordinary aggregate. The checked manuscript
+and its PDF are unchanged.
+
+**Exact next obligations for R-2:** encode the proved multiset partition as
+a matching on labelled positive principal angles, including multiplicities.
+The full two-class four-block weight must be reconciled with the draft's
+positive-class pair weight and unmatched one-angle weights. Construct an
+ambient transporter for every such matching from the actual cosine--sine
+basis, fixing common summands, and use compact attainment plus the proved
+reduction for the lower bound. `SchattenTransportExistence.exists_schatten_transport_minimizer`
+is already generic over `RCLike` and supplies real compact attainment;
+do not reprove it. Sorted exchange, all-rank real field-gap classifications,
+real local-to-global, nuclear/Charbonnier structural reduction, and ideal
+extensions remain separate mathematical obligations. No historical first
+publication claim follows from these compiler results.
+
 ## Complete real global-minimum block reduction (25 October)
 
 `SchattenRealRestrictions.exists_complete_globally_minimizing_blocks_real`
@@ -85,10 +162,11 @@ Each member is one of:
 The theorem also proves the ambient Schatten power is the sum of the costs
 of the actual compressions to this **same** family. On every four-dimensional
 member its accepted Schatten power equals the clipped two-branch formula
-in the actual restricted source/target principal angles. These are actual
-restrictions of an arbitrary ambient global minimum, rather than supplied
-block candidates. They do not yet identify those restricted angles as a
-partition of the original pair's angle list.
+in the actual restricted source/target principal angles. Every balanced
+two-dimensional member has the one-angle minimum. The strengthened theorem
+identifies those restricted angles as an exact multiset partition of the
+original pair's angle list. These are actual restrictions of an arbitrary
+ambient global minimum.
 
 `SchattenRealDecomposition.exists_complete_real_blocks_of_isLocalMinOn_real_transports`
 first assembles every positive gradient level, including the maximum,

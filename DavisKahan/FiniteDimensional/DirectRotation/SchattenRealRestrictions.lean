@@ -5,10 +5,12 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealDecomposition
 import DavisKahan.FiniteDimensional.DirectRotation.RealFourSchattenNorm
+import DavisKahan.FiniteDimensional.DirectRotation.RealTwoSchattenNorm
 import ForTauCeti.Analysis.InnerProductSpace.Complexification.UnitaryTransport
 import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.FiniteBlocks
 import ForTauCeti.Analysis.InnerProductSpace.Projection.InvariantSubspace
+import ForTauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngleBlocks
 
 /-!
 # Every real spectral block of a global minimum is an unrestricted minimum
@@ -143,7 +145,10 @@ theorem exists_complete_globally_minimizing_real_blocks
 real Hilbert space, decomposes completely into fixed blocks of dimension at
 most two, balanced two-dimensional rank-one problems, and four-dimensional
 rank-two problems. The restriction comparison includes all orthogonal competitors;
-no real-minimum hypothesis is replaced by complex unrestricted minimality. -/
+no real-minimum hypothesis is replaced by complex unrestricted minimality.
+The cost splits over the same actual blocks, and their accepted angle
+multisets assemble to the original pair's angles with exact multiplicities,
+including every zero and right angle. -/
 theorem exists_complete_globally_minimizing_blocks_real
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
@@ -176,14 +181,23 @@ theorem exists_complete_globally_minimizing_blocks_real
             UnitarilyInvariantSeminorm.schatten ℝ N N p
               (LinearMap.id - V.toLinearMap) ^ p.toReal =
               min (2*phasePower p.toReal h (max d (optimalPhase p.toReal h)))
-                ((2 : ℝ)^p.toReal + 2*phaseChord (A.principalAngles B 1)^p.toReal))) ∧
+                ((2 : ℝ)^p.toReal + 2*phaseChord (A.principalAngles B 1)^p.toReal)) ∧
+          (Module.finrank ℝ N = 2 → Module.finrank ℝ (K.comap N.subtype) = 1 →
+            UnitarilyInvariantSeminorm.schatten ℝ N N p
+              (LinearMap.id - V.toLinearMap) ^ p.toReal =
+              min (2 * phaseChord ((K.comap N.subtype).principalAngles
+                ((K.comap N.subtype).map V.toLinearMap) 0)^p.toReal) ((2 : ℝ)^p.toReal))) ∧
       (H : Set (Submodule ℝ E)).Pairwise Submodule.IsOrtho ∧ H.sup id = ⊤ ∧
       UnitarilyInvariantSeminorm.schatten ℝ E E p
         (LinearMap.id - T.toLinearMap) ^ p.toReal =
         ∑ N : {N : Submodule ℝ E // N ∈ H},
           UnitarilyInvariantSeminorm.schatten ℝ N.val N.val p
             (LinearMap.id - (N.val.orthogonalProjectionOnto.toLinearMap ∘ₗ
-              T.toLinearMap ∘ₗ N.val.subtype)) ^ p.toReal := by
+              T.toLinearMap ∘ₗ N.val.subtype)) ^ p.toReal ∧
+      K.principalAngleMultiset (K.map T.toLinearMap) =
+        ∑ N : {N : Submodule ℝ E // N ∈ H},
+          (K.comap N.val.subtype).principalAngleMultiset
+            ((K.map T.toLinearMap).comap N.val.subtype) := by
   have hTU : (T : E →L[ℝ] E) ∈ unitary (E →L[ℝ] E) := by
     simpa only [Unitary.coe_symm_linearIsometryEquiv_apply] using
       (Unitary.linearIsometryEquiv.symm T).property
@@ -209,7 +223,7 @@ theorem exists_complete_globally_minimizing_blocks_real
   refine ⟨H, ?_, horth, hspan, ?_⟩
   · intro N hN
     obtain ⟨hN0, hNdim, hPN, V, hV, hVmin, hclass⟩ := hH N hN
-    refine ⟨hN0, hNdim, hPN, V, ?_, hVmin, ?_, ?_⟩
+    refine ⟨hN0, hNdim, hPN, V, ?_, hVmin, ?_, ?_, ?_⟩
     · intro x
       exact hV x
     · rcases hclass with (h2 | h4) | hzero
@@ -253,6 +267,9 @@ theorem exists_complete_globally_minimizing_blocks_real
         · omega
       exact real_four_schatten_cost_eq_of_isMinOn_image
         p hp hp1 hp2 (K.comap N.subtype) hNfour hKtwo V hVmin
+    · intro hNtwo hKone
+      exact real_two_schatten_cost_eq_of_isMinOn_image
+        p hp (K.comap N.subtype) hNtwo hKone V hVmin
 
   · classical
     let I := {N : Submodule ℝ E // N ∈ H}
@@ -274,7 +291,18 @@ theorem exists_complete_globally_minimizing_blocks_real
       change T x ∈ W i
       rw [heq]
       exact (V ⟨x, hx⟩).property
-    exact schatten_displacement_rpow_of_orthogonal_blocks W horthI hspanI
-      (T : E →L[ℝ] E) hTN p hp
+    constructor
+    · exact schatten_displacement_rpow_of_orthogonal_blocks W horthI hspanI
+        (T : E →L[ℝ] E) hTN p hp
+    · have hKI : ∀ i : I, ∀ x ∈ W i, K.starProjection x ∈ W i := by
+        intro i
+        exact (hH i.val i.property).2.2.1
+      have hLI : ∀ i : I, ∀ x ∈ W i,
+          (K.map T.toLinearMap).starProjection x ∈ W i := by
+        intro i
+        obtain ⟨_, _, hPN, V, hV, _, _⟩ := hH i.val i.property
+        exact K.starProjection_map_mem_of_isometry_restriction i.val T V hV hPN
+      exact K.principalAngleMultiset_of_orthogonal_blocks
+        (K.map T.toLinearMap) W horthI hspanI hKI hLI
 
 end TauCeti.DavisKahan.FiniteDimensional.RealTransport

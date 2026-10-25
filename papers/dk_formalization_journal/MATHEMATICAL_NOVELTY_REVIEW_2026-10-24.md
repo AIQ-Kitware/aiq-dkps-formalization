@@ -26,8 +26,12 @@ itself globally minimal among all orthogonal transporters of its actual
 restricted source. Members are fixed blocks of dimension at most two,
 rank-one blocks of dimension two, or rank-two blocks of dimension four.
 The exact ambient Schatten power is the sum of these same restriction
-costs. Each four-block has the compiled clipped two-branch value in its
-actual restricted principal angles. No acuteness, multiplicity, determinant
+costs. Each four-block has the compiled clipped two-branch value, and each
+balanced two-block has the exact one-angle value. Their accepted angle
+multisets recover the original pair with all zero, right and repeated
+multiplicities. `SchattenRealAngleCosts.exists_real_schatten_angle_cost_decomposition`
+sums the explicit angle costs on this same complete actual family. No
+acuteness, multiplicity, determinant
 or prescribed principal-plane competitor assumption is made.
 
 `SchattenRealDecomposition.lean` assembles the whole signed gradient spectrum
@@ -41,11 +45,16 @@ costs. `FiniteBlocks.lean` proves finite orthogonal spectral additivity for
 arbitrary penalties, including zero slots. `RealFourSchattenNorm.lean`
 connects every actual four-block minimum to the accepted Schatten formula.
 
-**Remaining R-2 claim:** the block angles must still be identified as an
-exact partition of the original pair's angle multiset, with its zero/right
-multiplicities and source-rank indexing. The abstract planar optimum,
-matching encoding and attainment, sorted-sum exchange inequalities and
-field-gap claims remain uncompiled. A small-block decomposition and additive
+**Remaining R-2 claim:** matching encoding and attainment, sorted-sum
+exchange inequalities and all-rank field-gap claims remain uncompiled.
+Original-angle multiset assembly and the abstract planar optimum are now
+compiled. `RealOneAngleFieldGap.lean` proves that the real one-angle value
+exceeds the complex value exactly on `criticalAngle p < theta < pi/2`,
+with a complete endpoint equality classification. This compares the two
+proved value functions, without an additional abstract complexification
+angle-invariance theorem. The elementary real planar calculation and the
+classical angle assembly carry no separate historical priority claim. A
+small-block decomposition and additive
 cost identity alone do not prove the advertised angle-dependent matching
 formula. The real nuclear endpoint and Charbonnier reduction require
 separate arguments. No real local-to-global theorem is asserted.
@@ -66,7 +75,9 @@ and this limited source comparison do not establish first publication.
 The scalar-extension and finite spectral-additivity foundations carry no
 separate novelty claim.
 
-Focused and aggregate builds passed (10,591 production jobs). The complete
+Focused builds passed, followed by `lake exe cache get` and
+`lake build DavisKahan.All ForTauCeti` (10,603 jobs). The angle-cost and
+one-angle field-gap modules are included in the ordinary aggregate. The complete
 real reduction is registered as mathematical evidence; the full real matching
 formula is still a conventional research theorem, excluded from `paper.tex`.
 
@@ -118,7 +129,8 @@ invariance. The algebraic donor parametrizes both signed spaces by
 `x -> x+e*R(x)` and proves exact injectivity and range. These are classical
 rank certificates, without a separate historical priority claim. The subsequent complete reduction above now assembles the actual global
 minimum's family and cost. Identification with the original principal-angle
-multiset and its matching data remains open.
+multiset now compiles in `PrincipalAngleBlocks.lean`; matching encoding and
+attainment remain open.
 Focused builds and the full production build passed (10,579 jobs).
 
 The determinant-negative part of R-1 is now **Lean-verified in explicit
@@ -1486,7 +1498,7 @@ rows of the original 29-result Davis--Kahan source inventory.
 | SM-4 | Global convex-relaxation tightness when commuting unitary factor is relaxed to commuting contraction (weighted nuclear cost) | **Formalized for the stated supplied structural class**: `SmoothedCommutantOptimization.lean`; instantiated in all-pairs argument | Strong proof mechanism; present as supporting theorem, not a generic statement for all convex relaxations |
 | SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Complete finite complex iff in `SmoothedNonacuteClassification`; joint attainment in `SmoothedPhaseDefectAttainment`; unique normalized parameters, full multiplicity product and topology in `SmoothedParameterNormalization`, `SmoothedMultiplicityParameters`, `SmoothedParameterTopology` | All-angle global classification and independent projection/defect homeomorphism compiled for `tau>0`, including compactness, rank-sector separation and exact simple-active count. Local-to-global is now compiled for all `tau>0`; broad-penalty extension, component counts, manifold dimensions and ideal optimization remain open |
 | R-1 | Exact real R4 rank-two minimum for *every continuous nondecreasing spectral penalty*, including separate determinant classes | **Full abstract accepted-angle minimum compiled** in `RealFourPrincipalAngles.lean`, with general continuous-monotone penalties and a closed nuclear corollary. `RealFourSchatten.lean` adds exact scalar clipping and sharp model canonical criteria; `RealFourNuclear.lean` proves the sharp nuclear model criterion. Complete negative-class optimizer sets compile in `RealFourNegative.lean`. | Every ambient orthogonal competitor and every endpoint are covered. Explicit Charbonnier piecewise corollaries remain open. Full model theorem priority unresolved; no separate priority claim for the elementary negative-class deduction. |
-| R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | Full real global-minimum block decomposition, unrestricted restriction minima, exact source ranks, fixed-source exceptions, accepted four-block values and cost assembly now compile in `SchattenRealRestrictions.lean` for `1<p<2`. Draft `real_matching_transport.tex` states the full formula. | **Original-angle multiset and matching encoding/attainment remain uncompiled.** The compiled structural reduction is at all real finite dimensions and source ranks; it is not yet the advertised angle-dependent matching theorem. General-penalty, nuclear and Charbonnier extensions need separate proofs. Historical priority unresolved. |
+| R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | Full real global-minimum block decomposition, unrestricted restriction minima, exact source ranks, fixed-source exceptions, accepted four-block values and cost assembly now compile in `SchattenRealRestrictions.lean` for `1<p<2`. Draft `real_matching_transport.tex` states the full formula. | **Original-angle multiset assembly and all actual small-block values now compile** in `PrincipalAngleBlocks.lean`, `RealTwoSchattenNorm.lean` and `SchattenRealAngleCosts.lean`. **Matching encoding/attainment remain uncompiled.** The compiled structural reduction is at all real finite dimensions and source ranks; it is not yet the advertised angle-dependent matching theorem. General-penalty, nuclear and Charbonnier extensions need separate proofs. Historical priority unresolved. |
 | R-3 | For Schatten `1<p<2`, Charbonnier, and nuclear limits, matching reduces to minimum of **two sorted adjacent-pair sums** | Conventional derivation in `real_matching_transport.tex`; numerical checks corroborate but are not proofs | Would yield efficient exact algorithms and optimality thresholds; **submodularity and final reduction need independent proof review** |
 | R-4 | Real-minus-complex optimal nuclear penalty is at most `2-sqrt(3)` regardless of dimension, with sharp equality cases | Conventional proof draft only; low-dimensional example realizes constant | **High-value sharp field-gap theorem** if globally true; proof of exclusion of higher-dimensional maxima must be scrutinized |
 | R-5 | Charbonnier real-minus-complex gap at most `2eta(1-sqrt(1-1/(4eta^4)))`, explicit equality class | Conventional proof draft only; `eta=(tau+sqrt(tau^2+4))/2` | Another high-value result, **not yet verified**, depends on R-2/R-3 and tie-surface Hessian analysis |

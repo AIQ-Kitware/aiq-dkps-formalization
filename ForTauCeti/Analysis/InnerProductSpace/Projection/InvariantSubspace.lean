@@ -56,6 +56,28 @@ theorem map_comap_subtype_of_isometry_restriction
       rwa [heq]
     exact ⟨R.symm y, hpre, R.apply_symm_apply y⟩
 
+/-- If an isometry restricts surjectively to an invariant carrier, source
+projection invariance implies invariance under the transported projection.
+The inverse on the carrier is supplied by the actual restricted isometry,
+so this also applies in infinite dimension without an invariance-to-reduction
+assumption for an arbitrary infinite-dimensional invariant subspace. -/
+theorem starProjection_map_mem_of_isometry_restriction
+    (K Z : Submodule 𝕜 E) [K.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[𝕜] E) (R : Z ≃ₗᵢ[𝕜] Z)
+    (hR : ∀ z : Z, (R z : E) = U z)
+    (hK : ∀ x ∈ Z, K.starProjection x ∈ Z) :
+    ∀ x ∈ Z, (K.map U.toLinearMap).starProjection x ∈ Z := by
+  intro x hx
+  have hpre : U.symm x = (R.symm ⟨x, hx⟩ : E) := by
+    apply U.injective
+    rw [U.apply_symm_apply, ← hR, R.apply_symm_apply]
+  rw [starProjection_map_apply, hpre]
+  let y : Z := ⟨K.starProjection (R.symm ⟨x, hx⟩ : E),
+    hK _ (R.symm ⟨x, hx⟩).property⟩
+  change U (y : E) ∈ Z
+  rw [← hR]
+  exact (R y).property
+
 /-- An invariant ambient orthogonal projection restricts to the projection
 onto the intersection, expressed on the subspace carrier. -/
 theorem starProjection_comap_subtype_apply_of_invariant

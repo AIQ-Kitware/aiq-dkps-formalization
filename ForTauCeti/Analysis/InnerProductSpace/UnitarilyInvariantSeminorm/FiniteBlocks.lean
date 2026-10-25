@@ -138,3 +138,45 @@ theorem schatten_displacement_rpow_of_orthogonal_blocks
   rw [(W i).starProjection_eq_self_iff.mpr (hinv i x x.property)]
 
 end TauCeti
+
+namespace LinearMap
+
+variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [FiniteDimensional 𝕜 E]
+
+/-- Counting the nonzero entries of the full singular-value list gives
+the rank, including the zero-dimensional case. -/
+theorem count_nonzero_singularValues_eq_finrank_range (A : E →ₗ[𝕜] E) :
+    (∑ j : Fin (Module.finrank 𝕜 E), if A.singularValues j = 0 then 0 else 1) =
+      Module.finrank 𝕜 A.range := by
+  classical
+  rw [A.sum_fin_singularValues (fun s => if s = 0 then (0 : ℕ) else 1) (by simp)]
+  change (∑ j ∈ A.singularValues.support, if A.singularValues j = 0 then 0 else 1) = _
+  rw [Finset.sum_congr rfl (fun j hj =>
+    ite_eq_right (Finsupp.mem_support_iff.mp hj))]
+  simp only [Finset.sum_const, smul_eq_mul, mul_one, A.support_singularValues,
+    Finset.card_range]
+
+end LinearMap
+
+namespace TauCeti
+
+variable {𝕜 E ι : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [FiniteDimensional 𝕜 E] [Fintype ι]
+
+/-- Rank is additive on a complete orthogonal invariant block family. -/
+theorem finrank_range_of_orthogonal_blocks
+    (W : ι → Submodule 𝕜 E)
+    (horth : OrthogonalFamily 𝕜 (fun i => W i) (fun i => (W i).subtypeₗᵢ))
+    (hspan : (⨆ i, W i) = ⊤) (A : E →ₗ[𝕜] E)
+    (hinv : ∀ i, ∀ x ∈ W i, A x ∈ W i) :
+    Module.finrank 𝕜 A.range =
+      ∑ i, Module.finrank 𝕜 (A.restrict (hinv i)).range := by
+  rw [← LinearMap.count_nonzero_singularValues_eq_finrank_range,
+    sum_singularValues_of_orthogonal_blocks W horth hspan A hinv
+      (fun s => if s = 0 then (0 : ℕ) else 1)]
+  apply Finset.sum_congr rfl
+  intro i _
+  exact LinearMap.count_nonzero_singularValues_eq_finrank_range _
+
+end TauCeti
