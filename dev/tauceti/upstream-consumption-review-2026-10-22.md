@@ -739,3 +739,26 @@ attribution and the Kitware license remain preserved in history and this ledger.
 The isometric-transport retirement passed its focused build (6,744 jobs) and
 full default build (21,037 jobs), with warnings treated as errors, after the
 respective cache fetches.
+
+
+The three retirement checkpoints (`a824d8090`, `42f55fbe8`, `b82f80b42`) also
+passed explicit `Challenge` and `DavisKahan.Audits.All` builds (20,813 jobs),
+after `lake exe cache get`. Their combined maintained Lean diff removes a net
+557 lines and five donor modules. Paper and visualization files were untouched;
+the three original untracked files remain outside the builds and commits.
+
+The broader consumption goal remains open. One precise next comparison is local
+`le_approximationNumber_of_lt_rank` in `ApproximationNumber.MinMax` against
+accepted `le_singularValue_of_lt_rank` in Tau Ceti's module of the same name.
+Both conclude the coercivity lower bound from `(n : Cardinal) < rank V`; the
+local input quantifies over subtype vectors, whereas the accepted input uses
+`∀ x ∈ V`. The accepted result permits a seminormed target and only a
+nontrivially normed field. Migrate its consumers to the native sequence before
+removing the real-valued wrapper, and compare the other min–max declarations
+individually rather than treating the whole donor as redundant.
+
+The full comparator signature preflight matched all 42 implemented targets
+on raw universe signatures and full types. Three explicitly declared missing
+solutions remain skipped; no external comparator run or source-completeness
+claim is inferred. The auxiliary local-only name parser still has its recorded
+imported-declaration limitations; it is not a substitute for these compiler checks.
