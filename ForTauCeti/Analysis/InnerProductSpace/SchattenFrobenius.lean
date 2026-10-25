@@ -56,20 +56,6 @@ variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
-/-- The actual finite Schatten power is the finite singular-value power
-sum, including zero singular values and a zero-dimensional source. -/
-theorem schatten_rpow_eq_sum_singularValues
-    (A : E →ₗ[𝕜] F) (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
-    schatten 𝕜 E F p A ^ p.toReal =
-      ∑ i : Fin (Module.finrank 𝕜 E), A.singularValues i ^ p.toReal := by
-  have hp0 : 0 < p.toReal := ENNReal.toReal_pos (zero_lt_one.trans_le Fact.out).ne' hp
-  have hsum : 0 ≤ ∑ i : Fin (Module.finrank 𝕜 E), A.singularValues i ^ p.toReal :=
-    Finset.sum_nonneg (fun i _ => Real.rpow_nonneg (A.singularValues_nonneg i) _)
-  rw [schatten_apply_of_ne_top p hp,
-    ← A.sum_fin_singularValues (fun s : ℝ => s ^ p.toReal) (Real.zero_rpow hp0.ne'),
-    ← Real.rpow_mul hsum,
-    one_div_mul_cancel hp0.ne', Real.rpow_one]
-
 /-- A uniform singular-value bound gives a dimension-free Frobenius
 lower certificate for every finite Schatten exponent at most two. -/
 theorem mul_sq_frobenius_le_schatten_rpow_of_norm_apply_le

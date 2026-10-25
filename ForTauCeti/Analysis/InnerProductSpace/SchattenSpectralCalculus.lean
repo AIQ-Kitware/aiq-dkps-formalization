@@ -140,6 +140,19 @@ theorem schatten_rpow_eq_sum_norm_eigenvalues
     one_div_mul_cancel hp0.ne', Real.rpow_one]
   exact Equiv.sum_comp e.symm (fun i => ‖mu i‖ ^ p.toReal)
 
+/-- The finite Schatten power is its literal singular-value power sum. -/
+theorem schatten_rpow_eq_sum_singularValues
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+    (A : E →ₗ[𝕜] F) (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
+    UnitarilyInvariantSeminorm.schatten 𝕜 E F p A ^ p.toReal =
+      ∑ i : Fin (Module.finrank 𝕜 E), (A.singularValues i) ^ p.toReal := by
+  have hp0 : 0 < p.toReal :=
+    ENNReal.toReal_pos (zero_lt_one.trans_le Fact.out).ne' hp
+  rw [UnitarilyInvariantSeminorm.schatten_apply_of_ne_top p hp,
+    ← A.sum_fin_singularValues (fun s : ℝ => s ^ p.toReal) (Real.zero_rpow hp0.ne'),
+    ← Real.rpow_mul (Finset.sum_nonneg (fun (i : Fin (Module.finrank 𝕜 E)) _ => Real.rpow_nonneg
+      (A.singularValues_nonneg i) _)), one_div_mul_cancel hp0.ne', Real.rpow_one]
+
 section Complex
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]

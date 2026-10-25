@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability
+import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalAngle
 
 /-!
 # Quartic stability throughout the closed canonical regime
@@ -25,24 +26,6 @@ has a sharper root certificate in `SmoothedCriticalStability`.
 noncomputable section
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
 open scoped InnerProductSpace
-
-/-- The exact Charbonnier critical principal angle. -/
-def smoothedCriticalAngle (tau : ℝ) : ℝ :=
-  Real.arccos (((smoothingRadius tau)⁻¹) ^ 2)
-
-theorem smoothedCriticalAngle_mem_Icc (tau : ℝ) :
-    smoothedCriticalAngle tau ∈ Set.Icc 0 (Real.pi / 2) :=
-  ⟨Real.arccos_nonneg _, Real.arccos_le_pi_div_two.mpr (sq_nonneg _)⟩
-
-theorem cos_smoothedCriticalAngle (tau : ℝ) (hτ : 0 < tau) :
-    Real.cos (smoothedCriticalAngle tau) = ((smoothingRadius tau)⁻¹) ^ 2 := by
-  have ha := one_lt_smoothingRadius tau hτ
-  have ha0 : 0 < smoothingRadius tau := lt_trans zero_lt_one ha
-  have hb : (smoothingRadius tau)⁻¹ ≤ 1 := (inv_le_one₀ ha0).mpr ha.le
-  have hb0 : 0 ≤ (smoothingRadius tau)⁻¹ := (inv_pos.mpr ha0).le
-  apply Real.cos_arccos (by nlinarith [sq_nonneg ((smoothingRadius tau)⁻¹)])
-  nlinarith
-
 
 private theorem shifted_denominator_bounds
     (a b t theta : ℝ) (hb : 0 < b) (hab : b < a)

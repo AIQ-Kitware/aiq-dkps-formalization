@@ -17,9 +17,12 @@ component counts, manifold dimensions, smoothed local-to-global,
 unrestricted real matching and operator-ideal optimization remain open.
 The local Charbonnier analysis now supplies actual first variations,
 source-reflection stationarity, paired two-phase gradient blocks and the
-sharp gradient bound. Its actual two-phase Hessian, paired overlap exclusion,
-ambient reflection compression test and coalesced-phase Hessian are now
-compiled; extracting and assembling all actual local blocks remains open.
+sharp gradient bound. Actual ambient no-overlap on every submaximal gradient
+level, the signed maximal scalar restrictions, and local minimality on the
+actual zero-gradient reflection kernel are now compiled. That kernel obeys
+the exact balance identity `2*S*P0*S=S`. An explicit feasible reflection
+direction has negative curvature whenever this balance fails. Scalar block
+optimality and assembly of all local block costs remain open.
 **Manuscript and teaching-deck update source:** `427169ce38b5` (25 October
 2026), incorporating the completed full complex optimizer classification,
 local-to-global theorem, normalized parameter bijection and exact counts.
@@ -36,6 +39,137 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Ambient Charbonnier blocks and the balanced zero-gradient kernel (25 October)
+
+`SmoothedGradientNoMixing.lean` proves
+`gradient_block_no_overlap_of_isLocalMinOn_transports_complex`. For every
+`tau>0`, finite complex constrained local minimum, and `0<g<eta^-1`, it
+constructs the **actual** opposite gradient restrictions and identifies them
+by source reflection. There are unique phases `0<a<c_tau<b<pi` with scalar
+gradient `g`; the two actual negative-curvature projections on the common
+positive-gradient carrier satisfy `A*B=0`. No competitor frame, nonzero-
+displacement hypothesis or restriction on the other gradient levels is
+supplied. Empty eigenspaces and arbitrary multiplicity are allowed.
+This closes the ambient no-overlap obligation recorded in the preceding
+research layer.
+
+`SmoothedGradientBranches.lean` proves strict monotonicity on both closed
+angular branches, unique positive roots below the maximum, their full
+principal-phase level sets, signed opposite level sets, and the unique
+maximal phase. `SmoothedGradientBlocks.lean` gives the actual angular
+restrictions and
+`signed_critical_gradient_eigenspace_representation_complex`: at either
+signed maximal level, the actual restriction is `exp(i*s*c_tau)*I`.
+This requires **no** local-minimum hypothesis.
+
+`SmoothedTransportRestriction.lean` proves
+`exists_isLocalMinOn_restriction_of_invariant_complex` for every actual
+common invariant subspace of the unitary and a self-adjoint source. It
+constructs both unitary restrictions and the orthogonal coordinates, then
+transfers local minimality against **all** feasible unitary competitors on
+the restricted carrier. `SmoothedGradientKernel.lean` specializes this to
+`gradient_kernel_local_reflection_restriction_complex`: the actual zero-
+gradient kernel carries an actual source projection `P0` and actual
+reflection `V=I-2*S`, retains both ambient actions, is locally minimizing
+on that carrier, and satisfies `2*S*P0*S=S`. No `-1` eigenphase or right-angle
+direction is excluded in advance.
+
+The balance identity is a proof simplification obtained from the formal
+reflection Hessian. For an orthogonal source projection `P` and an actual
+reflection `I-2*A`, set `H=P*A+A*P-A`. Then `H` is Hermitian, commutes with
+`P`, has zero positive-space compression and has negative-space compression
+`D=2*A*P*A-A`. The theorem
+`reflection_balancing_direction_has_negative_second_variation_complex`
+returns the **exact** second derivative `-||D||_HS^2/sqrt(tau^2+4)` and its
+strict negativity when `D!=0`. The theorem
+`reflection_balance_of_isLocalMinOn_transports_complex` therefore proves
+`2*A*P*A=A`, equivalently `A*(2*P-I)*A=0`, at every reflecting local minimum.
+This also applies to the actual kernel after the restriction theorem.
+It replaces the planned separate descent argument on each nonoptimal
+reflecting plane. These statements require `P` an orthogonal projection;
+the older compression-bound theorem allowed arbitrary conjugacy operators.
+The balance/curvature route is a formalization-led proof insight within this
+campaign; no independent historical priority claim is made for it.
+
+`SmoothedBlockCost.lean` supplies coordinate invariance and orthogonal-block
+additivity of the **literal** singular-value objective, for every real `tau`
+and arbitrary operators. The donor
+`sum_singularValues_prodMap_withLpMap` allows any scalar penalty into an
+additive commutative monoid, includes zero singular values, and does not
+require `f(0)=0`, normality or invertibility. The existing Schatten block
+power theorem now consumes it. The existing scalar cutoff definition and cosine/bound lemmas were also
+moved from `SmoothedQuarticStability.lean` to the shared low-dependency
+`SmoothedCriticalAngle.lean`; the quartic and gradient branches consume
+the same declarations, with no aliases or parallel definitions.
+The existing finite Schatten power-sum
+declaration was moved from `SchattenFrobenius.lean` to the common
+`SchattenSpectralCalculus.lean` dependency; its former copy is removed,
+its public name/hypotheses are preserved, and the evidence row is updated.
+`PairedTransportVariation.lean` supplies the
+shared feasible paired-curve transfer; the common cost/block transfer in
+`SchattenTransportRestriction.lean` is used by both theories. These geometric
+transfers allow complete infinite-dimensional Hilbert spaces with supplied
+real-valued costs and splitting identities; the spectral objectives and
+optimizer results in this entry remain finite-dimensional.
+
+The classical swap-commutation helper was moved from the Davis--Kahan
+Schatten namespace to `TauCeti.paired_block_commute_swap` and generalized to
+`RCLike`; a repository-wide search found no registered reference to its
+former name. The established Schatten transport endpoint statements are
+unchanged. The mandatory static name-drift check reports 25 findings in
+unchanged migration, census and Challenge records, none involving this
+helper. Those findings were not repaired as part of this mathematics.
+The separate Challenge build is recorded with validation below.
+
+Independent six-dimensional diagnostics included repeated phases, a right-
+angle complementary block and arbitrary ambient unitary coordinates. A
+stationary overlapping pair had anticommutation/feasibility residuals below
+`5.57e-16` and Hessian `-2.3771590011434527`, agreeing with a central
+difference to `1.84e-9`. For an arbitrary rank-two reflection, the explicit
+balancing direction commuted exactly with the source, its positive-space
+compression had norm `3.54e-16`, and its negative-curvature formula agreed
+with central differences to `6.00e-8` for `tau=0.01,0.7,10`. These are
+diagnostics only. The manuscript includes
+`prop:smoothed-ambient-gradient-blocks` and extends
+`prop:smoothed-two-phase-hessian` with the balance identity and certificate.
+
+Validation of this ambient-block layer: `lake exe cache get`, followed by
+`lake build DavisKahan.All ForTauCeti`, succeeded (10,515 jobs). The paper
+compiled to 60 pages after pdfLaTeX, BibTeX and two further pdfLaTeX passes,
+with no final unresolved references or overfull boxes. The required
+`lake build Challenge` failed in the unchanged
+`Challenge/MathlibCandidate/CourantFischerWeyl/Leaderboard.lean:6` on the
+unresolved constant `TauCeti.abs_eigenvalues_sub_le_opNorm`. The static
+name-drift check separately reports the 25 unchanged findings described
+above. Neither result is presented as a successful Challenge audit.
+
+### Exact remaining local-to-global obligations
+
+The next useful theorem is **scalar optimality of every disjoint paired
+block**, adapting `SchattenGradientPlanes.lean`. A joint eigenbasis of the
+disjoint projections permits only `(a,a)`, `(b,a)` and `(a,b)`. The equal
+small-phase pair is canonical below the cutoff. For the mixed pair, set
+`theta=(a+b)/2`, `delta=(b-a)/2`, `x=cos(a)`, `y=cos(b)`. A conventional
+algebraic derivation, still requiring Lean implementation, uses the already
+proved level quadratic and `x!=y` to obtain
+`x+y=2*g^2` and `x*y=(tau^2+2)*g^2-1`. Hence
+`g^2=cos(theta)*cos(delta)>0`, which places `theta` in `(0,pi/2)`, and
+`(cos(delta)-eta^2*cos(theta))*(cos(delta)-eta^-2*cos(theta))=0`.
+Since `0<delta<theta`, the second factor cannot vanish. Thus
+`cos(delta)=eta^2*cos(theta)`, giving exactly the known optimal smoothed
+phase. This route avoids inferring global optimality from stationarity.
+
+On the zero-gradient kernel, the actual local reflection is now balanced.
+Use `S*(2*P0-I)*S=0` to pair its negative space with its orthogonal image
+under source reflection; its remaining orthogonal complement is fixed.
+This should construct only fixed and right-angle transport blocks and
+compute their exact attained costs. The signed maximal restrictions are
+already scalar critical phases; their paired cost needs its direct scalar
+identification. Then assemble all actual reducing squared-gradient blocks
+and the accepted principal-angle sums, and compare with the proved global
+minimum. Full smoothed local-to-global, real matching, component dimensions
+and operator-ideal optimization remain open.
 
 ## Actual Charbonnier second variation and reflection tests (25 October)
 
@@ -128,33 +262,11 @@ warnings, overfull boxes, unresolved references or duplicate labels in the
 final log. `git diff --check` passed. The 29-result source inventory,
 unrelated submodules and existing untracked files were left untouched.
 
-### Exact remaining local-to-global obligations
-
-The second-variation identity itself is closed for distinct balanced phases.
-The next useful endpoint is the **actual ambient no-overlap theorem**:
-construct opposite unitary restrictions on each positive submaximal gradient
-level using source reflection, put their scalar candidates in the required
-opposite angular form, and extend the common direction orthogonally while
-preserving the source. Follow `SchattenGradientNoMixing.lean` and
-`SchattenFeasibleBlocks.lean`, consuming the already compiled
-`PairedInvolutionDecomposition` geometry rather than introducing a new frame
-hypothesis. This needs Charbonnier orthogonal-block additivity and isometric
-coordinate invariance of the literal cost, obtainable from its spectral
-trace or weighted nuclear identity. Do not substitute a prescribed-block
-result for the actual ambient endpoint.
-
-At the maximal level the scalar candidates coalesce. Its analytic Hessian
-is now proved, but the actual scalar/unitary restriction and its cost must
-be identified in the gradient decomposition. The actual zero-gradient kernel
-is already a reflection restriction, but local minimality must first be
-transferred to it and its actual two-projection decomposition. Use the new
-reflection compression inequality to exclude nonoptimal negative/folded
-blocks, retaining all right-angle blocks. Then assemble actual local block
-costs and compare with the proved global angle sum. None of this follows
-from applying the global optimizer iff to a stationary point.
-
-The full smoothed local-to-global theorem, unrestricted real matching,
-component dimensions and operator-ideal optimization remain open.
+The block-extraction obligations recorded with this Hessian layer are
+superseded by the preceding entry: actual ambient no-overlap, maximal scalar
+restrictions, actual kernel local minimality and reflection balance now
+compile. The remaining obligations are scalar block optimality, balanced
+kernel geometry/cost and spectral value assembly.
 
 ## Actual Charbonnier stationarity and two-phase gradient blocks (25 October)
 

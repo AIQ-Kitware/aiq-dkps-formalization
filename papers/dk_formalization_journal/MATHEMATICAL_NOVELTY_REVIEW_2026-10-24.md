@@ -16,6 +16,40 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Ambient Charbonnier no-overlap and balanced kernel restrictions (25 October)
+
+The ambient block-construction step is now compiled.
+`gradient_block_no_overlap_of_isLocalMinOn_transports_complex` constructs
+the actual opposite eigenspace restrictions at every positive submaximal
+gradient level of **any** finite complex local transport minimum, uses the
+actual source reflection, extends its feasible variation, and proves
+disjointness of the two negative-curvature projections. No prescribed frame
+or exception excluding identity/right-angle directions is supplied.
+`signed_critical_gradient_eigenspace_representation_complex` separately
+identifies every actual signed maximal restriction with its scalar critical
+phase, without a minimizing hypothesis.
+
+`gradient_kernel_local_reflection_restriction_complex` transfers actual
+local minimality to the actual zero-gradient kernel, retains its unitary
+and source actions, and gives a reflection `I-2*S` with `2*S*P0*S=S`.
+The formal Hessian exposed a shorter exceptional-block argument: the
+source-preserving Hermitian direction `H=P*A+A*P-A` has zero positive-space
+compression and negative-space compression `D=2*A*P*A-A`. The actual
+curvature is exactly `-||D||_HS^2/sqrt(tau^2+4)`. Every unbalanced reflection
+therefore has a certified negative-curvature direction. This proves the
+balance identity in all ranks, replacing the planned separate two-plane
+descent for this step.
+
+This is a proof insight produced while consuming the formal Hessian, and a
+concrete correction certificate. Historical priority is not asserted for
+this elementary balance argument. The classical projection geometry,
+Lewis--Sendov Hessian precedent and local-Lidskii scope comparisons below
+remain applicable. The **full Charbonnier local-to-global theorem is still
+open**: disjoint paired scalar costs, balanced kernel geometry/cost and
+assembly into the global principal-angle value remain to be formalized.
+The scalar Vieta route for the next cost identity is recorded explicitly in
+`PAPER_CONTEXT.md`; it is a conventional derivation pending Lean.
+
 ## Charbonnier two-phase Hessian and ambient reflection restrictions (25 October)
 
 The actual Charbonnier two-phase Hessian is now compiled for `tau>0`,
@@ -36,10 +70,9 @@ negative-curvature projections and disjointness at a local minimum of the
 **ambient** Hessian necessity for actual two-phase local transport minima,
 the explicit reflection compression inequality, and exclusion of negative
 spectral subprojections commuting with the source. The latter conclusion
-requires the actual transporter itself to be a reflection. Transferring
-these tests to every actual reducing block of a general transporter,
-identifying the actual maximal scalar restrictions and assembling the
-global value remain open.
+requires the actual transporter itself to be a reflection. The preceding entry closes actual ambient no-overlap, maximal scalar
+restrictions, transfer to the actual kernel and reflection balance. Scalar
+block costs and global value assembly remain open.
 There is still no compiled Charbonnier local-to-global theorem.
 
 The primary author-hosted [Lewis--Sendov paper (2001), Theorem 3.3](https://people.orie.cornell.edu/aslewis/publications/01-twice.pdf)

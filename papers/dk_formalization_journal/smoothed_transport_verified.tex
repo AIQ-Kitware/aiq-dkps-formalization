@@ -772,6 +772,17 @@ Thus an actual reflection transporter $W=I-2A$ at a local minimum obeys
  \sqrt{\tau^2+4}\,\|(I-A)H(I-A)\|_{\mathrm{HS}}^2.
 \]
 Every orthogonal projection $B$ with $AB=B$ and $[B,P]=0$ must then vanish.
+For the explicit feasible direction and its balance defect
+\[
+ H_A=PA+AP-A,\qquad D_A=2APA-A,
+\]
+the second variation equals
+\[
+ \left.\frac{d^2}{dt^2}\Psi_\tau(We^{itH_A})\right|_{t=0}
+       =-\frac{\|D_A\|_{\mathrm{HS}}^2}{\sqrt{\tau^2+4}}.
+\]
+Thus every reflecting local minimum satisfies $2APA=A$, or equivalently
+$A(2P-I)A=0$.
 
 For the same distinct balanced phases, let
 $V=e^{-i\alpha}(I-B)+e^{-i\beta}B$, where $B$ is an orthogonal projection,
@@ -819,6 +830,10 @@ If $[H,P]=0$, the curve $We^{itH}$ remains in the full transport fiber.
 The second-derivative test proves nonnegativity and, at a reflection,
 the compression inequality. For $H=B$ with $AB=B$ and $[B,P]=0$,
 the positive-space compression vanishes while $ABA=B$. Hence $B=0$.
+For $H_A$, direct algebra gives
+$[H_A,P]=0$, $(I-A)H_A(I-A)=0$ and $AH_AA=D_A$.
+The exact reflection curvature therefore gives the displayed negative
+square, which vanishes at a local minimum. This proves the balance identity.
 
 Finally, $X$ is Hermitian and
 $(I-A)X(I-A)=(I-B)X(I-B)=0$.
@@ -828,6 +843,79 @@ $AB$ with its adjoint. The two curvature coefficients equal
 $\kappa_\tau(\beta)<0$, because curvature is even. The sum of the
 two nonnegative compression squares is positive, proving the strict
 negative second variation and the local-minimum exclusion.
+\end{proof}
+
+\begin{proposition}[Actual paired blocks and a balanced gradient kernel]
+\label{prop:smoothed-ambient-gradient-blocks}
+Let $W$ be a local minimum among all unitary transports from $P$ to $Q$.
+For $0<g<\eta^{-1}$, put
+\[
+ N_\pm=\ker(G_\tau(W)\mp gI),\qquad j=J|_{N_+}:N_+\to N_-.
+\]
+There are unique phases $a\in(0,c_\tau)$ and $b\in(c_\tau,\pi)$
+with $h_\tau(e^{ia})=h_\tau(e^{ib})=g$. The actual restrictions
+\[
+ V=W|_{N_+},\qquad T=j^*(W|_{N_-})j
+\]
+have orthogonal projections $A,B$ on $N_+$ such that
+\[
+ \begin{aligned}
+ V&=e^{ia}(I-A)+e^{ib}A,\\
+ T&=e^{-ia}(I-B)+e^{-ib}B,\qquad AB=0.
+ \end{aligned}
+\]
+All these spaces and identifications are determined from the actual
+gradient and source reflection. At the maximal signed levels, every
+unitary $W$ has the scalar restrictions
+\[
+ W|_{\ker(G_\tau(W)-s\eta^{-1}I)}=e^{is c_\tau}I
+ \qquad(s=1,-1).
+\]
+
+On $N_0=\ker G_\tau(W)$, the source projection restricts to an
+orthogonal projection $P_0$. The actual unitary restriction $W_0$ is
+a local minimum for its own transport constraint among all unitary
+operators on $N_0$, with the same spectral penalty computed there.
+For an orthogonal projection $S$ on $N_0$ one has
+\[
+ W_0=I-2S,\qquad 2SP_0S=S.
+\]
+Empty spaces and arbitrary multiplicities are allowed throughout.
+\end{proposition}
+
+\begin{proof}
+The curvature sign in \cref{prop:smoothed-two-phase-hessian} makes
+$h_\tau(e^{it})$ strictly increasing on $[0,c_\tau]$ and strictly
+decreasing on $[c_\tau,\pi]$. Its endpoint values are zero and its
+critical value is $\eta^{-1}$. The intermediate value theorem gives
+the two unique roots. Positivity of the symbol excludes nonpositive
+principal phases and the endpoints. Oddness gives the corresponding
+negative roots. The two-point spectral calculus on the actual gradient
+eigenspaces therefore gives the two displayed projection representations.
+
+Source reflection interchanges the opposite gradient spaces, which are
+orthogonal by self-adjointness of the gradient. On their sum, these
+coordinates make source reflection the swapping involution. The common
+right exponential $e^{it(AB+BA)}$ on the two copies commutes with this
+involution. Extending it by the identity on the orthogonal complement
+gives a continuous feasible ambient variation. The literal spectral
+cost is unchanged by unitary coordinates and additive on orthogonal
+blocks. Ambient local minimality consequently passes to the paired
+curve in \cref{prop:smoothed-two-phase-hessian}. Its negative second
+variation excludes $AB\ne0$.
+
+At $|g|=\eta^{-1}$, the sharp gradient equality forces
+$\operatorname{Re}z=\eta^{-2}$. The sign of the imaginary part selects
+the single principal phase $s c_\tau$. The actual unitary restriction
+is therefore scalar, including repeated phases.
+
+The kernel $N_0$ is preserved by $W$, by $J$ and hence by $P=(I+J)/2$.
+Their orthogonal complements are invariant as well. Fixing the
+complementary unitary and using the same coordinate invariance and cost
+additivity transfers local minimality to $W_0$. Its spectrum is contained
+in $\{1,-1\}$ by \cref{prop:smoothed-local-spectral-structure}, so
+$W_0=I-2S$. Applying the reflection balance identity to this actual
+restriction proves $2SP_0S=S$.
 \end{proof}
 
 \begin{corollary}[Complementary right-angle pairs]

@@ -12,12 +12,12 @@ public import TauCeti.Analysis.InnerProductSpace.Polar.Unitary
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 
 /-!
-# Finite Schatten power sums of orthogonal blocks
+# Finite singular-value penalties on orthogonal blocks
 
-The `p`-th power of a finite Schatten norm is additive under orthogonal
-block sums. The proof uses the accepted unitary polar decomposition and
-orthonormal eigenbases of the two positive moduli. Their product basis
-combines the power sums without sorting another singular-value list.
+Every finite sum of an arbitrary singular-value penalty is additive under
+orthogonal block sums. The accepted unitary polar decomposition and
+eigenbases of the two positive moduli combine the sums without sorting
+another singular-value list. Finite Schatten powers are a specialization.
 -/
 
 public section
@@ -33,16 +33,17 @@ variable {𝕜 E₁ E₂ : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
   [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
 
-private theorem schatten_rpow_prodMap_withLpMap_of_eigenbases
+private theorem sum_singularValues_prodMap_withLpMap_of_eigenbases
     {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂]
     (b₁ : OrthonormalBasis ι₁ 𝕜 E₁) (b₂ : OrthonormalBasis ι₂ 𝕜 E₂)
     (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂)
     (mu₁ : ι₁ → 𝕜) (mu₂ : ι₂ → 𝕜)
     (hA : ∀ i, A (b₁ i) = mu₁ i • b₁ i) (hB : ∀ i, B (b₂ i) = mu₂ i • b₂ i)
-    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
-    schatten 𝕜 (WithLp 2 (E₁ × E₂)) (WithLp 2 (E₁ × E₂)) p
-        ((A.prodMap B).withLpMap 2) ^ p.toReal =
-      schatten 𝕜 E₁ E₁ p A ^ p.toReal + schatten 𝕜 E₂ E₂ p B ^ p.toReal := by
+    {M : Type*} [AddCommMonoid M] (f : ℝ → M) :
+    (∑ i : Fin (Module.finrank 𝕜 (WithLp 2 (E₁ × E₂))),
+      f (((A.prodMap B).withLpMap 2).singularValues i)) =
+      (∑ i : Fin (Module.finrank 𝕜 E₁), f (A.singularValues i)) +
+        ∑ i : Fin (Module.finrank 𝕜 E₂), f (B.singularValues i) := by
   classical
   let mu : ι₁ ⊕ ι₂ → 𝕜 := Sum.elim mu₁ mu₂
   have heigen (i : ι₁ ⊕ ι₂) :
@@ -54,20 +55,22 @@ private theorem schatten_rpow_prodMap_withLpMap_of_eigenbases
     | inr i =>
       apply WithLp.ofLp_injective 2
       apply Prod.ext <;> simp [LinearMap.coe_withLpMap, WithLp.map, hB, mu]
-  rw [schatten_rpow_eq_sum_norm_eigenvalues (b₁.prod b₂) _ mu heigen p hp,
-    schatten_rpow_eq_sum_norm_eigenvalues b₁ A mu₁ hA p hp,
-    schatten_rpow_eq_sum_norm_eigenvalues b₂ B mu₂ hB p hp,
+  rw [sum_singularValues_eq_sum_norm_eigenvalues (b₁.prod b₂) _ mu heigen f,
+    sum_singularValues_eq_sum_norm_eigenvalues b₁ A mu₁ hA f,
+    sum_singularValues_eq_sum_norm_eigenvalues b₂ B mu₂ hB f,
     Fintype.sum_sum_type]
   rfl
 
-/-- The actual finite Schatten power is additive on orthogonal block
-sums of endomorphisms over either real or complex scalars. -/
-theorem schatten_rpow_prodMap_withLpMap
+/-- Every finite singular-value penalty is additive on orthogonal block
+sums, including zero singular values and penalties that do not vanish at zero.
+No normality or invertibility hypothesis is needed. -/
+theorem sum_singularValues_prodMap_withLpMap
     (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂)
-    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
-    schatten 𝕜 (WithLp 2 (E₁ × E₂)) (WithLp 2 (E₁ × E₂)) p
-        ((A.prodMap B).withLpMap 2) ^ p.toReal =
-      schatten 𝕜 E₁ E₁ p A ^ p.toReal + schatten 𝕜 E₂ E₂ p B ^ p.toReal := by
+    {M : Type*} [AddCommMonoid M] (f : ℝ → M) :
+    (∑ i : Fin (Module.finrank 𝕜 (WithLp 2 (E₁ × E₂))),
+      f (((A.prodMap B).withLpMap 2).singularValues i)) =
+      (∑ i : Fin (Module.finrank 𝕜 E₁), f (A.singularValues i)) +
+        ∑ i : Fin (Module.finrank 𝕜 E₂), f (B.singularValues i) := by
   let b₁ := A.isSymmetric_operatorAbs.eigenvectorBasis rfl
   let b₂ := B.isSymmetric_operatorAbs.eigenvectorBasis rfl
   let mu₁ (i : Fin (Module.finrank 𝕜 E₁)) : 𝕜 :=
@@ -87,19 +90,32 @@ theorem schatten_rpow_prodMap_withLpMap
     · exact (LinearMap.congr_fun hUA x.fst).symm
     · exact (LinearMap.congr_fun hUB x.snd).symm
   calc
-    _ = schatten 𝕜 (WithLp 2 (E₁ × E₂)) (WithLp 2 (E₁ × E₂)) p
-        ((A.operatorAbs.prodMap B.operatorAbs).withLpMap 2) ^ p.toReal := by
+    _ = ∑ i : Fin (Module.finrank 𝕜 (WithLp 2 (E₁ × E₂))),
+        f (((A.operatorAbs.prodMap B.operatorAbs).withLpMap 2).singularValues i) := by
       rw [hblock]
-      exact congrArg (fun r : ℝ => r ^ p.toReal)
-        ((schatten 𝕜 (WithLp 2 (E₁ × E₂)) (WithLp 2 (E₁ × E₂)) p).map_linearIsometryEquiv_comp
+      exact congrArg (fun sigma : ℕ →₀ ℝ =>
+        ∑ i : Fin (Module.finrank 𝕜 (WithLp 2 (E₁ × E₂))), f (sigma i))
+        (LinearMap.singularValues_linearIsometryEquiv_comp
           (LinearIsometryEquiv.withLpProdCongr 2 UA UB)
           ((A.operatorAbs.prodMap B.operatorAbs).withLpMap 2))
-    _ = schatten 𝕜 E₁ E₁ p A.operatorAbs ^ p.toReal +
-        schatten 𝕜 E₂ E₂ p B.operatorAbs ^ p.toReal :=
-      schatten_rpow_prodMap_withLpMap_of_eigenbases b₁ b₂ A.operatorAbs B.operatorAbs
+    _ = (∑ i : Fin (Module.finrank 𝕜 E₁), f (A.operatorAbs.singularValues i)) +
+        ∑ i : Fin (Module.finrank 𝕜 E₂), f (B.operatorAbs.singularValues i) :=
+      sum_singularValues_prodMap_withLpMap_of_eigenbases b₁ b₂ A.operatorAbs B.operatorAbs
         mu₁ mu₂ (A.isSymmetric_operatorAbs.apply_eigenvectorBasis rfl)
-        (B.isSymmetric_operatorAbs.apply_eigenvectorBasis rfl) p hp
-    _ = _ := by rw [map_operatorAbs, map_operatorAbs]
+        (B.isSymmetric_operatorAbs.apply_eigenvectorBasis rfl) f
+    _ = _ := by rw [LinearMap.singularValues_operatorAbs, LinearMap.singularValues_operatorAbs]
+
+/-- The actual finite Schatten power is additive on orthogonal block
+sums of endomorphisms over either real or complex scalars. -/
+theorem schatten_rpow_prodMap_withLpMap
+    (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂)
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) :
+    schatten 𝕜 (WithLp 2 (E₁ × E₂)) (WithLp 2 (E₁ × E₂)) p
+        ((A.prodMap B).withLpMap 2) ^ p.toReal =
+      schatten 𝕜 E₁ E₁ p A ^ p.toReal + schatten 𝕜 E₂ E₂ p B ^ p.toReal := by
+  rw [schatten_rpow_eq_sum_singularValues _ p hp,
+    schatten_rpow_eq_sum_singularValues A p hp, schatten_rpow_eq_sum_singularValues B p hp]
+  exact sum_singularValues_prodMap_withLpMap A B (fun s : ℝ => s ^ p.toReal)
 
 /-- Orthogonal unitary blocks contribute additively to the displacement
 power. No unitarity hypothesis is needed for the identity itself. -/

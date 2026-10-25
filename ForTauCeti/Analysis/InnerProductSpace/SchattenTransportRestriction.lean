@@ -108,24 +108,25 @@ theorem isLocalMinOn_transport_of_conj_linearIsometryEquiv
   simpa only [Function.comp_apply,
     schatten_displacement_conj_linearIsometryEquiv e _ p hp] using hA
 
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] [FiniteDimensional 𝕜 H] in
 /-- An ambient local transport minimum is a local minimum on each
 orthogonal unitary block when the complementary block is fixed.
 The block competitors range over all unitaries carrying its source
 operator to the same target; no parametrized variation is assumed. -/
-theorem isLocalMinOn_block_transport_of_orthogonal_sum
-    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+theorem isLocalMinOn_block_transport_of_cost_orthogonal_sum
+    (cost : (H →L[𝕜] H) → ℝ) (blockCost : (E →L[𝕜] E) → ℝ) (k : ℝ)
     (e : WithLp 2 (E × F) ≃ₗᵢ[𝕜] H)
     (U : E →L[𝕜] E) (hU : U ∈ unitary (E →L[𝕜] E)) (V : unitary (F →L[𝕜] F))
-    (P₀ : E →L[𝕜] E) (P₁ : F →L[𝕜] F) :
+    (P₀ : E →L[𝕜] E) (P₁ : F →L[𝕜] F)
+    (hcost : ∀ A : E →L[𝕜] E,
+      cost (e.conjStarAlgEquiv (A.withLpProdMap 2 (V : F →L[𝕜] F))) = blockCost A + k) :
     let W := e.conjStarAlgEquiv (U.withLpProdMap 2 (V : F →L[𝕜] F))
     let P := e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁)
     IsLocalMinOn
-      (fun T : H →L[𝕜] H => UnitarilyInvariantSeminorm.schatten 𝕜 H H p
-        (LinearMap.id - T.toLinearMap) ^ p.toReal)
+      cost
       {T | T ∈ unitary (H →L[𝕜] H) ∧ T * P * star T = W * P * star W} W →
     IsLocalMinOn
-      (fun T : E →L[𝕜] E => UnitarilyInvariantSeminorm.schatten 𝕜 E E p
-        (LinearMap.id - T.toLinearMap) ^ p.toReal)
+      blockCost
       {T | T ∈ unitary (E →L[𝕜] E) ∧ T * P₀ * star T = U * P₀ * star U} U := by
   dsimp only
   let lift := fun A : E →L[𝕜] E => e.conjStarAlgEquiv (A.withLpProdMap 2 (V : F →L[𝕜] F))
@@ -151,14 +152,7 @@ theorem isLocalMinOn_block_transport_of_orthogonal_sum
       continuous_id.withLpProdMap continuous_const
     exact (hblock.clm_comp_const
       (e.symm : H →L[𝕜] _)).const_clm_comp (e : _ →L[𝕜] H)
-  have hcost (A : E →L[𝕜] E) : UnitarilyInvariantSeminorm.schatten 𝕜 H H p
-      (LinearMap.id - (lift A).toLinearMap) ^ p.toReal =
-      UnitarilyInvariantSeminorm.schatten 𝕜 E E p (LinearMap.id - A.toLinearMap) ^ p.toReal +
-        UnitarilyInvariantSeminorm.schatten 𝕜 F F p
-          (LinearMap.id - (V : F →L[𝕜] F).toLinearMap) ^ p.toReal := by
-    dsimp only [lift]
-    rw [schatten_displacement_conj_linearIsometryEquiv e _ p hp,
-      schatten_displacement_rpow_withLpProdMap _ _ p hp]
+  have hcostLift (A : E →L[𝕜] E) : cost (lift A) = blockCost A + k := hcost A
   intro hmin
   have h := hmin.comp_continuousOn (g := lift)
     (s := {T | T ∈ unitary (E →L[𝕜] E) ∧ T * P₀ * star T = U * P₀ * star U})
@@ -168,7 +162,38 @@ theorem isLocalMinOn_block_transport_of_orthogonal_sum
   change ∀ᶠ A in 𝓝[{T | T ∈ unitary (E →L[𝕜] E) ∧
     T * P₀ * star T = U * P₀ * star U}] U, _ ≤ _ at h ⊢
   filter_upwards [h] with A hA
-  simpa only [Function.comp_apply, hcost, add_le_add_iff_right] using hA
+  simpa only [Function.comp_apply, hcostLift, add_le_add_iff_right] using hA
+
+/-- An ambient local transport minimum is a local minimum on each
+orthogonal unitary block when the complementary block is fixed.
+The block competitors range over all unitaries carrying its source
+operator to the same target; no parametrized variation is assumed. -/
+theorem isLocalMinOn_block_transport_of_orthogonal_sum
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (e : WithLp 2 (E × F) ≃ₗᵢ[𝕜] H)
+    (U : E →L[𝕜] E) (hU : U ∈ unitary (E →L[𝕜] E)) (V : unitary (F →L[𝕜] F))
+    (P₀ : E →L[𝕜] E) (P₁ : F →L[𝕜] F) :
+    let W := e.conjStarAlgEquiv (U.withLpProdMap 2 (V : F →L[𝕜] F))
+    let P := e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁)
+    IsLocalMinOn
+      (fun T : H →L[𝕜] H => UnitarilyInvariantSeminorm.schatten 𝕜 H H p
+        (LinearMap.id - T.toLinearMap) ^ p.toReal)
+      {T | T ∈ unitary (H →L[𝕜] H) ∧ T * P * star T = W * P * star W} W →
+    IsLocalMinOn
+      (fun T : E →L[𝕜] E => UnitarilyInvariantSeminorm.schatten 𝕜 E E p
+        (LinearMap.id - T.toLinearMap) ^ p.toReal)
+      {T | T ∈ unitary (E →L[𝕜] E) ∧ T * P₀ * star T = U * P₀ * star U} U := by
+  apply isLocalMinOn_block_transport_of_cost_orthogonal_sum
+    (fun T : H →L[𝕜] H => UnitarilyInvariantSeminorm.schatten 𝕜 H H p
+      (LinearMap.id - T.toLinearMap) ^ p.toReal)
+    (fun T : E →L[𝕜] E => UnitarilyInvariantSeminorm.schatten 𝕜 E E p
+      (LinearMap.id - T.toLinearMap) ^ p.toReal)
+    (UnitarilyInvariantSeminorm.schatten 𝕜 F F p
+      (LinearMap.id - (V : F →L[𝕜] F).toLinearMap) ^ p.toReal)
+    e U hU V P₀ P₁
+  intro A
+  rw [schatten_displacement_conj_linearIsometryEquiv e _ p hp,
+    schatten_displacement_rpow_withLpProdMap _ _ p hp]
 
 /-- Local minimality descends to an actual common invariant subspace
 of a unitary transporter and a self-adjoint source operator. Its unitary

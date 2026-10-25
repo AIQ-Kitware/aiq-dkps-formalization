@@ -157,4 +157,111 @@ theorem negative_subprojection_eq_zero_of_isLocalMinOn_reflection_transports
     P Q U htrans hmin A hA hrepr B hB.isSelfAdjoint hBP hzero
   rwa [hhigh] at h
 
+omit [FiniteDimensional ℂ E] in
+private theorem reflection_balancing_direction
+    (P A : E →L[ℂ] E) (hP : IsStarProjection P) (hA : IsStarProjection A) :
+    let H := P * A + A * P - A
+    IsSelfAdjoint H ∧ Commute H P ∧ (1 - A) * H * (1 - A) = 0 ∧
+      A * H * A = (2 : ℂ) • (A * P * A) - A := by
+  let H := P * A + A * P - A
+  have hH : IsSelfAdjoint H := by
+    change star (P * A + A * P - A) = P * A + A * P - A
+    simp only [star_sub, star_add, star_mul, hP.isSelfAdjoint.star_eq,
+      hA.isSelfAdjoint.star_eq, add_comm]
+  have hHP : Commute H P := by
+    have hleft : P * H = P * A * P := by
+      dsimp only [H]
+      rw [mul_sub, mul_add, ← mul_assoc P P A, hP.isIdempotentElem.eq,
+        ← mul_assoc P A P]
+      abel
+    have hright : H * P = P * A * P := by
+      dsimp only [H]
+      rw [sub_mul, add_mul, mul_assoc A P P, hP.isIdempotentElem.eq]
+      abel
+    exact hright.trans hleft.symm
+  have hlow : (1 - A) * H * (1 - A) = 0 := by
+    calc
+      _ = (1 - A) * P * (A * (1 - A)) +
+          ((1 - A) * A) * P * (1 - A) - ((1 - A) * A) * (1 - A) := by
+        dsimp only [H]
+        noncomm_ring
+      _ = 0 := by
+        rw [hA.isIdempotentElem.mul_one_sub_self, hA.isIdempotentElem.one_sub_mul_self]
+        simp
+  have hhigh : A * H * A = (2 : ℂ) • (A * P * A) - A := by
+    calc
+      _ = A * P * (A * A) + (A * A) * P * A - (A * A) * A := by
+        dsimp only [H]
+        noncomm_ring
+      _ = _ := by simp only [hA.isIdempotentElem.eq, two_smul]
+  exact ⟨hH, hHP, hlow, hhigh⟩
+
+/-- At every actual reflecting local minimum, the negative eigenspace is
+balanced across the source projection. The explicit feasible direction
+`P*A+A*P-A` has zero positive-space compression, so the second-order test
+forces `2*A*P*A=A` without choosing principal planes. -/
+theorem reflection_balance_of_isLocalMinOn_transports_complex
+    (tau : ℝ) (htau : 0 < tau)
+    (P Q : E →L[ℂ] E) (hP : IsStarProjection P) (U : unitary (E →L[ℂ] E))
+    (htrans : (U : E →L[ℂ] E) * P * star (U : E →L[ℂ] E) = Q)
+    (hmin : IsLocalMinOn
+      (fun W : E →L[ℂ] E => smoothedDisplacementCost tau W.toLinearMap)
+      {W | W ∈ unitary (E →L[ℂ] E) ∧ W * P * star W = Q}
+      (U : E →L[ℂ] E))
+    (A : E →L[ℂ] E) (hA : IsStarProjection A)
+    (hrepr : (U : E →L[ℂ] E) = 1 - (2 : ℂ) • A) :
+    (2 : ℂ) • (A * P * A) = A := by
+  obtain ⟨hH, hHP, hlow, hhigh⟩ := reflection_balancing_direction P A hP hA
+  let H := P * A + A * P - A
+  have hz := reflection_compression_eq_zero_of_isLocalMinOn_transports tau htau
+    P Q U htrans hmin A hA hrepr H hH hHP hlow
+  rw [hhigh] at hz
+  exact sub_eq_zero.mp hz
+
+/-- Every unbalanced reflection has an explicit source-preserving
+Hermitian direction with strictly negative actual second variation.
+Thus it cannot be a constrained local minimum. -/
+theorem reflection_balancing_direction_has_negative_second_variation_complex
+    (tau : ℝ) (htau : 0 < tau)
+    (P : E →L[ℂ] E) (hP : IsStarProjection P)
+    (U : unitary (E →L[ℂ] E)) (A : E →L[ℂ] E) (hA : IsStarProjection A)
+    (hrepr : (U : E →L[ℂ] E) = 1 - (2 : ℂ) • A)
+    (hunbalanced : (2 : ℂ) • (A * P * A) ≠ A) :
+    let H := P * A + A * P - A
+    let D := (2 : ℂ) • (A * P * A) - A
+    let d := -(Real.sqrt (tau ^ 2 + 4))⁻¹ *
+      (LinearMap.trace ℂ E (D.adjoint * D).toLinearMap).re
+    IsSelfAdjoint H ∧ Commute H P ∧ d < 0 ∧ HasDerivAt
+        (deriv (fun t : ℝ => smoothedDisplacementCost tau
+          ((U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H))).toLinearMap)) d 0 := by
+  let H := P * A + A * P - A
+  let D := (2 : ℂ) • (A * P * A) - A
+  obtain ⟨hH, hHP, hlow, hhigh⟩ := reflection_balancing_direction P A hP hA
+  have hne : D ≠ 0 := sub_ne_zero.mpr hunbalanced
+  have hpos := (ContinuousLinearMap.re_trace_adjoint_mul_self_pos_iff D).mpr hne
+  have hcurv : -(Real.sqrt (tau ^ 2 + 4))⁻¹ < 0 := by
+    apply neg_neg_of_pos
+    exact inv_pos.mpr (Real.sqrt_pos.mpr (by positivity))
+  have hz : Complex.exp (((0 : ℝ) : ℂ) * Complex.I) = 1 := by simp
+  have hpi : Complex.exp ((Real.pi : ℂ) * Complex.I) = -1 := Complex.exp_pi_mul_I
+  have hab : Complex.exp (((0 : ℝ) : ℂ) * Complex.I) ≠
+      Complex.exp ((Real.pi : ℂ) * Complex.I) := by rw [hz, hpi]; norm_num
+  have hlevel : smoothedPhaseDerivative tau (Complex.exp (((0 : ℝ) : ℂ) * Complex.I)) =
+      smoothedPhaseDerivative tau (Complex.exp ((Real.pi : ℂ) * Complex.I)) := by
+    rw [smoothedPhaseDerivative_exp, smoothedPhaseDerivative_exp]
+    simp
+  have hrepr' : (U : E →L[ℂ] E) = Complex.exp (((0 : ℝ) : ℂ) * Complex.I) • 1 +
+      (Complex.exp ((Real.pi : ℂ) * Complex.I) -
+        Complex.exp (((0 : ℝ) : ℂ) * Complex.I)) • A := by
+    rw [hz, hpi, one_smul, show (-1 : ℂ) - 1 = -2 by norm_num, neg_smul]
+    simpa only [sub_eq_add_neg] using hrepr
+  have hd := hasDerivAt_deriv_smoothed_unitary_two_phase tau 0 Real.pi htau hab hlevel
+    U H A hH hA hrepr'
+  change (1 - A) * H * (1 - A) = 0 at hlow
+  change A * H * A = D at hhigh
+  rw [hlow, hhigh] at hd
+  refine ⟨hH, hHP, mul_neg_of_neg_of_pos hcurv hpos, ?_⟩
+  simpa only [smoothedPhaseCurvature_pi, map_zero,
+    _root_.ContinuousLinearMap.toLinearMap_zero, Complex.zero_re, mul_zero, zero_add] using hd
+
 end TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
