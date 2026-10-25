@@ -18,10 +18,14 @@ manuscript includes `schatten_transport_verified.tex` and its complete
 optimizer, no nonglobal constrained local minima, exact uniqueness and
 commutator cutoffs, independent multiplicity-space projection coordinates,
 and exact `2^s` counts for simple active angles with zero right defect.
-The classified optimizer sets are in **algebraic** bijection with products of
-Grassmannian sets and an independent right-angle defect unitary. Their
-homeomorphism/manifold structure is not yet a Lean endpoint. Unrestricted real
-matching and infinite-dimensional ideal optimization remain open.
+The optimizer sets for both this Schatten regime and Charbonnier `tau>0`
+are homeomorphic in operator norm to products of multiplicity-space
+orthogonal projections and independent right-angle defect unitaries.
+Rank labels are locally constant and distinct rank sectors have positive
+separation for fixed subspaces and parameters. The equivalent rank-stratified
+Grassmannian sets remain an algebraic description; connected-component
+counts and manifold dimensions are unproved. Smoothed local-to-global,
+unrestricted real matching and infinite-dimensional ideal optimization remain open.
 
 The mathematical novelty/priority investigation remains in
 [`MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md`](MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md)

@@ -16,6 +16,96 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Complete effective Charbonnier multiplicity families (25 October)
+
+For `tau>0`, every finite complex equal-rank pair now has a complete
+nonredundant multiplicity-product classification of **all ambient** global
+Charbonnier optimizers. The new endpoints are
+`smoothed_transport_isMin_iff_unique_normalized_phase_and_defect_complex`,
+`exists_smoothed_multiplicity_parameter_equiv` and
+`exists_smoothed_multiplicity_parameter_homeomorph`. They retain the actual
+phase restrictions, both independent defect actions and the weighted
+left-relative equation `C*T.adjoint*R`. The product consists of arbitrary
+independent orthogonal projections on actual active canonical eigenspaces
+and an independent arbitrary crossed-defect unitary. Zero, exactly critical,
+repeated, fixed and right angles are included.
+
+The optimizer set is compact. Each inverse rank coordinate is locally
+constant; different rank sectors have fixed-pair positive operator-norm
+separation, with no sharp or transition-uniform constant claimed. Simple
+active multiplicities with zero right defect give exactly `2^s` isolated
+optimizers, irrespective of inactive multiplicities. The manuscript states
+`thm:smoothed-effective-coordinates`. Normalization and the inverse phase
+Lipschitz estimate are in `SmoothedParameterNormalization`; the full product
+and algebraic rank-stratification are in `SmoothedMultiplicityParameters`;
+topology and rank separation are in `SmoothedParameterTopology`.
+
+The effective support is proved for general `0<b<a`, from the exact phase
+coefficient `2*i*c*sqrt(1-min(1,a*c/b)^2)`: only positive cosines below `b/a`
+contribute. Charbonnier specializes to `a=eta`, `b=eta^-1`. The shared
+normalization and recovery ingredients are classical. Their finite-effective-
+space Hilbert generality is not an infinite-dimensional optimum theorem.
+Projection carriers carry the topology; the subspace rank-stratification
+is algebraic. Component counts, manifold dimensions, smoothed local-to-global,
+real matching, ideal optimization and the nuclear limit `tau=0` remain outside
+this compiled endpoint.
+
+The [BLR primary paper](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117)
+was rechecked at Problem 1.1, Theorem 3.1 and Theorems 4.2/4.5. Problem 1.1
+asks for all minimizers. Theorem 3.1 gives Q-norm optimality and an equality
+criterion under its associate-norm hypothesis. Theorem 4.2 classifies
+Frobenius minimizers; Theorem 4.5 adds a compatibility condition for a Q-norm
+value theorem. These are exact precedents. Charbonnier's nonhomogeneous
+objective is not a direct instance of those theorem statements. This
+comparison does not establish first-publication priority. Historical novelty
+of the complete nonlinear classification remains **provisional**, with no
+independent novelty claim for projection products, rank stability or compactness.
+
+## Operator norm homeomorphism and separated rank sectors (25 October)
+
+The finite complex `1<p<2` classification now includes its actual
+**operator norm topology**. In `SchattenParameterTopology.lean`,
+`exists_schatten_normalized_parameter_homeomorph` upgrades the normalized
+phase/defect equivalence, and
+`exists_schatten_multiplicity_parameter_homeomorph` gives a homeomorphism
+from independent projections on the actual active multiplicity spaces,
+times arbitrary independent crossed-defect unitaries, onto **all** ambient
+global optimizers. Equal subspace ranks and finite `1<p<2` are the
+optimization hypotheses; there is no angle simplicity, acuteness or
+preselected competitor frame. Actual phase restrictions and both defect
+actions are retained. Zero, critical, repeated and right angles are included.
+
+The latter theorem proves local constancy of every multiplicity-projection
+rank and a fixed-pair `k>0` such that a different rank on any one factor
+implies `1 <= k*||T-S||`. Hence the rank sectors are clopen and uniformly
+separated for the fixed pair and exponent, and ranks are constant along
+continuous connected families. The constant is not claimed sharp or
+uniform near phase transitions. `isCompact_schattenTransportMinimizers`
+proves compactness; the discrete-topology endpoint proves isolation in
+the simple-active/no-right-defect case, where the exact count is `2^s`.
+The manuscript includes `thm:schatten-optimizer-topology`.
+
+The proof consumes the accepted Tau Ceti operator-norm topology on linear
+isometry equivalences. New donor lemmas prove compactness of projection
+and finite-dimensional isometric-identification spaces (including empty
+and trivial cases), rectangular inversion continuity, the paired
+restriction/extension homeomorphism, rank stability of idempotents at
+norm distance less than one, and contraction under invariant restriction.
+These are classical facts. The closed graph proof also uses the previously
+compiled geometric uniqueness theorem without a feasibility hypothesis.
+No additional historical-priority claim is made for these topological
+consequences. The historical novelty of the nonlinear full optimizer
+classification remains provisional under the theorem-level comparisons below.
+
+**Remaining boundary:** the old rank-stratified subspace equivalence is
+algebraic. The current homeomorphism uses orthogonal-projection carriers,
+without defining a new topology on Mathlib's `Module.Grassmannian`.
+Path connectedness of each rank sector, exact component counts and
+manifold dimensions remain unproved in Lean. The anticipated components
+and dimensions in the conventional draft are not promoted by this result.
+Charbonnier's full multiplicity product, real matching and ideal
+optimization retain their earlier proof obligations.
+
 ## Manuscript integration assessment: source `427169ce` (25 October)
 
 The global finite complex Schatten `1<p<2` research story now comprises four
@@ -1057,7 +1147,7 @@ rows of the original 29-result Davis--Kahan source inventory.
 | SM-2 | Explicit globally minimizing complex unitary via clipped functional calculus of positive cosine operator | **Formalized**: `SmoothedExplicitOptimizer.lean` | A concrete constructive strengthening of SM-1; may be an elementary companion to SM-1, but substantial for applications |
 | SM-3 | Quadratic growth from optimum below strict angle cutoff, with explicit constant and Frobenius distance for **every admissible complex transporter** | **Formalized**: `SmoothedSubspaceStability.lean` | **Distinct and credible mathematical addition** if not implied by older error-bound/strong-convexity theorem |
 | SM-4 | Global convex-relaxation tightness when commuting unitary factor is relaxed to commuting contraction (weighted nuclear cost) | **Formalized for the stated supplied structural class**: `SmoothedCommutantOptimization.lean`; instantiated in all-pairs argument | Strong proof mechanism; present as supporting theorem, not a generic statement for all convex relaxations |
-| SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Partial compiled classification in `SmoothedOptimizerRigidity`, `SmoothedOptimizerNoMixing`, `SmoothedOptimizerPairedPhases`, `SmoothedSignedOptimizers`, `SmoothedRightDefect`, `SmoothedProjectionOptimizers`, `SmoothedMultiplicityAttainment`; full conventional drafts in `smoothed_transport.tex`, `spectral_penalty_transport.tex` | Necessary matching phase projections, arbitrary one-factor projection attainment, compatible ambient-projection attainment, quantitative injective families, and the complementary-right iff criterion are compiled. Global acute necessity and mixed-defect assembly remain; broad-penalty/topology claims are conventional |
+| SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Complete finite complex iff in `SmoothedNonacuteClassification`; joint attainment in `SmoothedPhaseDefectAttainment`; unique normalized parameters, full multiplicity product and topology in `SmoothedParameterNormalization`, `SmoothedMultiplicityParameters`, `SmoothedParameterTopology` | All-angle global classification and independent projection/defect homeomorphism compiled for `tau>0`, including compactness, rank-sector separation and exact simple-active count. Broad-penalty extension, local-to-global, component counts, manifold dimensions and ideal optimization remain open |
 | R-1 | Exact real R4 rank-two minimum for *every continuous nondecreasing spectral penalty*, including separate determinant classes | Conventional proof draft in `real_four_dimensional_transport.tex` | Strong exact finite-dimensional problem; old matrix optimization warns against presenting mere nonminimality as new. **Not certified** |
 | R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | Conventional proof draft `real_matching_transport.tex`, with compiled positive-gradient block decomposition in `RealBlockDescent.lean` and related modules | **Potentially strongest structural new theorem**, but exceptional-gradient assembly and global matching bound are **not compiled** |
 | R-3 | For Schatten `1<p<2`, Charbonnier, and nuclear limits, matching reduces to minimum of **two sorted adjacent-pair sums** | Conventional derivation in `real_matching_transport.tex`; numerical checks corroborate but are not proofs | Would yield efficient exact algorithms and optimality thresholds; **submodularity and final reduction need independent proof review** |

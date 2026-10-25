@@ -219,4 +219,36 @@ theorem exists_pos_normalized_split_parameter_recovery
     _ = (k * ‖C‖) * ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ := by
       rw [norm_sub_right_relative, mul_assoc]
 
+/-- Normalized split parameters admit uniform operator-norm recovery from
+the unitaries whenever the effective phase-weight space is finite
+dimensional. This is the left relative-phase convention. The coefficients
+and reference unitary are fixed; the bound is uniform over all parameters
+and unitary pairs satisfying the formulas. -/
+theorem exists_pos_normalized_left_split_parameter_recovery
+    (R : E ≃ₗᵢ[𝕜] E) (C F G : E →L[𝕜] E)
+    [FiniteDimensional 𝕜 (C * (F - G)).kerᗮ] :
+    ∃ k : ℝ, 0 < k ∧ ∀ (T S : E ≃ₗᵢ[𝕜] E) (P Q : E →L[𝕜] E),
+      (∀ x, P x ∈ (C * (F - G)).kerᗮ) →
+      (∀ x, Q x ∈ (C * (F - G)).kerᗮ) →
+      C * (R.trans T.symm : E →L[𝕜] E) = C * (F * P + G * (1 - P)) →
+      C * (R.trans S.symm : E →L[𝕜] E) = C * (F * Q + G * (1 - Q)) →
+      ‖P - Q‖ ≤ (k * ‖C‖) * ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ := by
+  obtain ⟨k, hk, hbound⟩ :=
+    ContinuousLinearMap.exists_pos_norm_le_mul_norm_mul_on_orthogonal_ker (C * (F - G))
+  refine ⟨k, hk, fun T S P Q hP hQ hT hS => ?_⟩
+  have hdiff : C * (F - G) * (P - Q) =
+      C * ((R.trans T.symm : E →L[𝕜] E) - (R.trans S.symm : E →L[𝕜] E)) := by
+    rw [mul_sub C (R.trans T.symm : E →L[𝕜] E) (R.trans S.symm : E →L[𝕜] E), hT, hS]
+    noncomm_ring
+  calc
+    ‖P - Q‖ ≤ k * ‖C * (F - G) * (P - Q)‖ :=
+      hbound (P - Q) (fun x => (C * (F - G)).kerᗮ.sub_mem (hP x) (hQ x))
+    _ = k * ‖C * ((R.trans T.symm : E →L[𝕜] E) -
+        (R.trans S.symm : E →L[𝕜] E))‖ := by rw [hdiff]
+    _ ≤ k * (‖C‖ * ‖(R.trans T.symm : E →L[𝕜] E) -
+        (R.trans S.symm : E →L[𝕜] E)‖) :=
+      mul_le_mul_of_nonneg_left (norm_mul_le _ _) hk.le
+    _ = (k * ‖C‖) * ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ := by
+      rw [norm_sub_relative, mul_assoc]
+
 end LinearIsometryEquiv

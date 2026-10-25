@@ -89,6 +89,18 @@ theorem commute_starProjection_orthogonal_ker_of_unitary
   change W.kerᗮ.starProjection (V x) = V (W.kerᗮ.starProjection x)
   simpa only [horthmap, V.symm_apply_apply] using h
 
+/-- A commuting orthogonal projection has a normalized representative
+supported away from the multiplier's kernel, with the same weighted
+action. No finite-dimensional or normality hypothesis is required. -/
+theorem normalized_starProjection
+    (W P : E →L[𝕜] E) (hP : IsStarProjection P) (hPW : Commute P W) :
+    let Q := W.kerᗮ.starProjection * P
+    IsStarProjection Q ∧ (∀ x, Q x ∈ W.kerᗮ) ∧ W * Q = W * P := by
+  have hAP := commute_starProjection_orthogonal_ker_of_isSelfAdjoint W P hP.isSelfAdjoint hPW
+  refine ⟨IsStarProjection.mul isStarProjection_starProjection hP hAP,
+    fun x => W.kerᗮ.starProjection_apply_mem (P x), ?_⟩
+  rw [← mul_assoc, mul_starProjection_orthogonal_ker]
+
 omit [CompleteSpace E] in
 /-- Multiplication by `W` is injective on maps whose ranges lie in the
 orthogonal complement of its kernel. -/
@@ -103,6 +115,14 @@ theorem eq_of_mul_eq_of_range_orthogonal_ker
     exact sub_eq_zero.mpr (congrArg (fun A : E →L[𝕜] E => A x) hPQ)
   have horth := W.kerᗮ.sub_mem (hP x) (hQ x)
   exact inner_self_eq_zero.mp ((Submodule.mem_orthogonal _ _).mp horth _ hker)
+
+/-- A self-adjoint map supported away from `W`'s kernel annihilates that
+kernel. The map need not be an orthogonal projection. -/
+theorem apply_eq_zero_of_range_orthogonal_ker
+    (W P : E →L[𝕜] E) (hP : IsSelfAdjoint P)
+    (hsupp : ∀ x, P x ∈ W.kerᗮ) (x : E) (hx : W x = 0) : P x = 0 := by
+  apply (inner_self_eq_zero (𝕜 := 𝕜)).mp
+  exact (hP.isSymmetric x (P x)).trans (hsupp (P x) x hx)
 
 omit [CompleteSpace E] in
 /-- A finite-dimensional effective input space gives uniform operator-norm

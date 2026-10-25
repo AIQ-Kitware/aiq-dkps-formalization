@@ -556,6 +556,96 @@ therefore gives the global optimizer in
 also prove uniqueness for the prescribed pair of parameters.
 \end{proof}
 
+\begin{theorem}[Independent effective optimizer coordinates]
+\label{thm:smoothed-effective-coordinates}
+Put
+\[
+ B_\tau=C(U_+-U_+^*),\qquad H_\tau=(\ker B_\tau)^\perp,
+\]
+where $U_+$ is the phase factor in
+\cref{thm:smoothed-all-projections-defects}.
+Every global optimizer has a unique phase and defect pair $(E_W,D_W)$
+from that theorem satisfying $\operatorname{ran}E_W\subseteq H_\tau$.
+For the fixed pair of subspaces and $\tau>0$, there is an $L\geq0$ with
+\[
+ \|E_W-E_V\|\leq L\|W-V\|
+\]
+for every two global optimizers.
+
+Define the finite set of active angles and their actual multiplicity spaces by
+\[
+ \mathcal A_\tau=\{\theta\in(0,\pi/2):
+       \eta\cos\theta<\eta^{-1},\ \ker(R-e^{i\theta}I)\ne\{0\}\},
+ \qquad E_\theta^+=\ker(R-e^{i\theta}I).
+\]
+Writing $\mathcal P(F)$ for the space of orthogonal projections on $F$,
+the actual phase restrictions and defect actions give a homeomorphism
+\[
+ \mathcal M_\tau(P,Q)\cong
+ \left(\prod_{\theta\in\mathcal A_\tau}\mathcal P(E_\theta^+)\right)
+       \times\operatorname{Iso}_{\mathrm u}(D_+,D_-),
+\]
+where $\mathcal M_\tau(P,Q)$ is the complete global optimizer set and
+all operator spaces carry their operator norm topologies. Every factor
+is independent. Empty products and zero-dimensional defect spaces are allowed.
+
+The optimizer set is compact. Each rank
+$\operatorname{rank}(E_W|_{E_\theta^+})$ is locally constant, and different
+rank sectors have uniformly positive operator norm separation for the
+fixed subspaces and $\tau$. If $D_+=D_-=\{0\}$ and every active
+multiplicity is one, there are exactly $2^{\#\mathcal A_\tau}$ optimizers,
+each isolated within the optimizer set. Inactive multiplicities are unrestricted.
+\end{theorem}
+
+\begin{proof}
+For the more general weighted phase factor with $0<b<a$, its action on
+a principal cosine eigenvector $Cx=cx$, $0\leq c\leq1$, gives
+\[
+ C(U_+-U_+^*)x=
+  2ic\sqrt{1-\min\{1,ac/b\}^2}\,x.
+\]
+At $a=\eta$, $b=\eta^{-1}$ this coefficient is nonzero precisely on
+the positive supercritical cosine spaces. It vanishes on right-angle,
+critical, subcritical and fixed directions. Consequently $H_\tau$ is
+exactly the sum of the active canonical eigenspaces and their reflected copies.
+
+Given a compatible phase projection $E$, let $A$ be the orthogonal
+projection onto $H_\tau$. Kernel invariance gives commutation of $A$
+with $E,R,J$. Thus $AE$ is a compatible orthogonal projection supported
+on $H_\tau$, and $B_\tau AE=B_\tau E$. The weighted phase formula is
+unchanged. Conversely, multiplication by $B_\tau$ is injective on maps
+with range in $H_\tau$, proving uniqueness of the normalized projection.
+The defect parameter is already unique. Subtracting the weighted formulas yields
+\[
+ B_\tau(E_W-E_V)=C(W^*-V^*)R.
+\]
+The finite-dimensional injective restriction of $B_\tau$ to $H_\tau$
+has a bounded inverse on its range, proving the recovery estimate.
+
+Distinct positive eigenphases in $(0,\pi/2)$ are neither equal nor
+conjugate. Their eigenspaces and reflected copies are therefore mutually
+orthogonal. Arbitrary projections on the positive spaces extend uniquely
+to a compatible projection supported on their paired sum. This gives the
+independent product, including its converse attainment, from
+\cref{thm:smoothed-all-projections-defects}.
+
+Projection spaces and finite-dimensional unitary identification spaces
+are compact. The equations prescribing restrictions, the two defect
+actions and the weighted phase formula are closed. Their unique solutions
+give closed graphs into compact operator spaces; hence both coordinate
+constructions are continuous. Compactness of the parameter space and
+the Hausdorff optimizer topology give continuity of the inverse.
+
+Idempotents at distance less than one have equal rank, since restriction
+of either to the other's range is injective. Rank is therefore locally
+constant. Different ranks on one factor force the normalized ambient
+projections to be at distance at least one; the recovery estimate gives
+positive separation of the corresponding optimizers. Finally, each
+one-dimensional active space has exactly two projections, and a
+zero-dimensional defect has a unique identification. The resulting finite
+Hausdorff optimizer set is discrete.
+\end{proof}
+
 \begin{corollary}[Complementary right-angle pairs]
 \label{cor:smoothed-complementary-right}
 Suppose $Q=I-P$ and $n=2r$. A unitary transporter $W$ is globally
