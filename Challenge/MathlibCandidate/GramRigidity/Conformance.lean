@@ -158,21 +158,17 @@ theorem exists_linearIsometryEquiv_map_eq_of_inner_eq [FiniteDimensional 𝕜 E]
 
 end GramSupport
 
--- The unused `F` (with its instances) mirrors the ForMathlib source's
--- `variable {𝕜 E F ι}` so the exported universe parameters match the solution
--- (the comparator compares universe signatures without alpha-normalizing).
-variable {𝕜 E F ι : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 E]
+-- Unused source and target types retain the accepted API's raw universe slots.
+variable {𝕜 M E F ι : Type*} [RCLike 𝕜]
+  [AddCommGroup M] [Module 𝕜 M]
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
-open _root_.Matrix
-
-/--
-**Gram rigidity, `Matrix.gram` form.** Two families of vectors in a
-finite-dimensional inner product space have equal Gram matrices if and only if
-a linear isometry equivalence of the ambient space maps one family to the other.
--/
-theorem gram_eq_iff_exists_linearIsometryEquiv {φ ψ : ι → E} :
-    gram 𝕜 φ = gram 𝕜 ψ ↔ ∃ W : E ≃ₗᵢ[𝕜] E, ∀ i, W (φ i) = ψ i := by
+/-- Equal Gram matrices characterize ambient isometric equivalence of families in a
+finite-dimensional real or complex inner-product space. The index type may be infinite. -/
+theorem gram_eq_iff_exists_linearIsometryEquiv [FiniteDimensional 𝕜 E]
+    {v w : ι → E} : Matrix.gram 𝕜 v = Matrix.gram 𝕜 w ↔
+      ∃ e : E ≃ₗᵢ[𝕜] E, ∀ i, e (v i) = w i := by
   constructor
   · intro hg
     exact exists_linearIsometryEquiv_map_eq_of_inner_eq fun i j => by

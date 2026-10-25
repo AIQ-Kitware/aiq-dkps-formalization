@@ -28,6 +28,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 public import DavisKahan.Geometry.Halmos.CrossedDefectGap
@@ -277,8 +278,8 @@ theorem sinTheta_wholeSpace_symmetricNorming
       (TauCeti.DavisKahanExt.PartialMap.boundedReducingBlock B V hV)
       (TauCeti.DavisKahanExt.PartialMap.boundedReducingBlockCompl A U hU) δ)
     (hMem : N.Mem (B - A)) :
-    N.Mem (sinAngleOperatorC U V) ∧
-      δ * N.gauge (sinAngleOperatorC U V) ≤ N.gauge (B - A) := by
+    N.Mem (cfc Real.sin (Angle.angleOperator U V)) ∧
+      δ * N.gauge (cfc Real.sin (Angle.angleOperator U V)) ≤ N.gauge (B - A) := by
   sorry
 
 /-- Theorem 6.3 directed `tan Theta` theorem on arbitrary complete complex
@@ -301,6 +302,11 @@ theorem tanTheta_directed_bounded_symmetricNorming_complex
         N.Mem tanTheta0 ∧
         delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
   sorry
+
+section SpectralGapComparator
+
+attribute [local instance] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower
 
 /-- The directed `tan Theta` conclusion in the printed spectral orientation:
 the trial/Ritz compression lies in `[beta, alpha]` and the unwanted exact
@@ -326,6 +332,8 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
         N.Mem tanTheta0 ∧
         delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
   sorry
+
+end SpectralGapComparator
 
 section AmbientWholeSpace
 

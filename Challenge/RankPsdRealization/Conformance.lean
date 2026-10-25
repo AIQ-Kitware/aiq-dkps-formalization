@@ -29,17 +29,17 @@ namespace TauCeti.Matrix
 open scoped BigOperators ComplexOrder
 open _root_.TauCeti.Matrix
 
-variable {𝕜 n : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n]
+variable {𝕜 ι : Type*} [RCLike 𝕜] [Fintype ι] [DecidableEq ι]
 
 /-- **Vanishing tail of the sorted eigenvalues** of a PSD matrix of rank `≤ d`. -/
-theorem _root_.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le {A : Matrix n n 𝕜}
+theorem _root_.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le {A : Matrix ι ι 𝕜}
     (hA : A.PosSemidef) {d : ℕ} (hrank : A.rank ≤ d)
-    (i : Fin (Fintype.card n)) (hi : d ≤ (i : ℕ)) :
+    (i : Fin (Fintype.card ι)) (hi : d ≤ (i : ℕ)) :
     hA.isHermitian.eigenvalues₀ i = 0 := by
   set hH := hA.isHermitian
   -- The index equivalence `eigenvalues₀ = eigenvalues ∘ e` from the definition.
-  set e : Fin (Fintype.card n) ≃ n :=
-    Fintype.equivOfCardEq (Fintype.card_fin (Fintype.card n)) with he
+  set e : Fin (Fintype.card ι) ≃ ι :=
+    Fintype.equivOfCardEq (Fintype.card_fin (Fintype.card ι)) with he
   have heq0 : ∀ k, hH.eigenvalues₀ k = hH.eigenvalues (e k) := by
     intro k
     rw [Matrix.IsHermitian.eigenvalues, he, Equiv.symm_apply_apply]
