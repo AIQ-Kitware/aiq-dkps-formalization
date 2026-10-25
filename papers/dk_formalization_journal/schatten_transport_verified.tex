@@ -574,25 +574,87 @@ line. The same proposition gives the fixed-or-exchanged alternative
 on each plane. This constructs the stated complete family.
 \end{proof}
 
-\begin{proposition}[Local minima with invariant negative eigenspace]
-\label{prop:schatten-local-global-no-minus-one}
-Every constrained local minimum whose $-1$ eigenspace is invariant under
-the source projection is a global minimum. In particular, this holds
-when $-1$ is absent. Eigenvalue $1$ is permitted.
-\end{proposition}
+\begin{lemma}[A reflecting transport certificate]
+\label{lem:schatten-reflecting-certificate}
+Let $P$ be an orthogonal projection on a finite real or complex Hilbert
+space, and let $R$ be a self-adjoint unitary. If
+\[
+ H=PRP+(I-P)R(I-P)\geq0,
+\]
+then $R$ minimizes $\|I-W\|_q^q$ among all unitaries satisfying
+$WPW^*=RPR$, for every $1\leq q\leq2$.
+\end{lemma}
 
 \begin{proof}
-If the negative eigenspace is nonzero and source-invariant, it is a
-common reducing subspace: the transporter is unitary and the source
-projection is self-adjoint. Proposition~\ref{prop:schatten-reflecting-descent}
-excludes this case. Thus $-1$ is absent.
+Write $W=RD$. Feasibility implies $DP=PD$, and cyclicity of trace gives
+\[
+ \operatorname{Re}\operatorname{tr}W
+   =\operatorname{Re}\operatorname{tr}(HD)
+   \leq\|H\|_1=\operatorname{tr}H=\operatorname{tr}R.
+\]
+Thus $R$ minimizes Frobenius displacement, since
+$\|I-W\|_F^2=2(\dim E-\operatorname{Re}\operatorname{tr}W)$.
+Every displacement singular value lies in $[0,2]$, so
+\[
+ 2^{q-2}\|I-W\|_F^2\leq\|I-W\|_q^q.
+\]
+Equality holds for $R$, whose displacement singular values are zero
+or two. Combining the two inequalities proves the claim. The trace
+argument is the usual block Procrustes certificate; compare
+\citet[Theorems~3.4 and~4.2]{bolotnikov2001minimal}.
+\end{proof}
 
-On the gradient kernel the transporter restricts to a self-adjoint
-unitary $R$. Since $R^2=I$, the vector $x-Rx$ satisfies
-$R(x-Rx)=-(x-Rx)$. The spectral assumption forces $R=I$.
-The restricted source and target therefore coincide and both $F_Z$
-and $M_Z$ vanish. The cost-deficit identity in the preceding proof
-gives the global minimum.
+\begin{theorem}[Every local minimum is global]
+\label{prop:schatten-local-is-global}
+\label{prop:schatten-local-global-no-minus-one}
+Every local minimum of $W\mapsto\|I-W\|_p^p$ on $\mathcal U(P,Q)$
+attains $\sum_jm_p(\theta_j)$ and is a global minimum. The same holds
+for $W\mapsto\|I-W\|_p$. Zero and right principal angles, repeated
+angles, eigenvalues $1$ and $-1$, and fixed ambient directions are
+included.
+\end{theorem}
+
+\begin{proof}
+At a local minimum let $R$ be the actual unitary restriction to
+$Z=\ker G_p(W)$ and let $P_Z$ be its source projection.
+Corollary~\ref{cor:schatten-kernel-fixed-right} supplies a complete
+orthogonal family of fixed blocks and source/complement exchanges.
+The compression
+\[
+ P_ZRP_Z+(I_Z-P_Z)R(I_Z-P_Z)
+\]
+is the identity on the fixed blocks and zero on the exchanged blocks.
+It is therefore an orthogonal projection. Lemma~\ref{lem:schatten-reflecting-certificate}
+proves that $R$ is globally optimal for the restricted pair.
+
+The attained global value for that pair is $M_Z$, by
+\cref{thm:schatten-independent-planes}. Consequently $F_Z=M_Z$.
+The cost-deficit identity in the proof of
+Proposition~\ref{prop:schatten-optimal-kernel} now gives
+$\|I-W\|_p^p=\sum_jm_p(\theta_j)$. Taking a positive power preserves
+both local and global minima of a nonnegative function, proving the
+norm statement as well.
+\end{proof}
+
+Local-to-global results for strictly convex unitarily invariant
+matrix distances also hold on Hermitian eigenvalue orbits and
+fixed-singular-value orbits \citep[Theorems~3.5 and~3.12]{massey2018local}.
+The feasible set here is the prescribed-projection transport fiber.
+
+\begin{corollary}[Local minima for unitary correction]
+\label{cor:schatten-correction-local-global}
+Let $A$ be a unitary and let $P$ be an orthogonal projection on a finite
+complex Hilbert space. Every local minimum of $V\mapsto\|A-V\|_p$
+over unitaries satisfying $VP=PV$ is globally nearest. The same holds
+for the $p$th power of the distance.
+\end{corollary}
+
+\begin{proof}
+The continuous bijection $V\mapsto T=VA^*$ identifies the feasible
+set with $\mathcal U(APA^*,P)$, with continuous inverse $T\mapsto TA$.
+Unitary invariance gives $\|A-V\|_p=\|I-VA^*\|_p$.
+Apply the preceding theorem. This conclusion concerns the full feasible
+set and does not assert convergence of a numerical algorithm.
 \end{proof}
 
 \paragraph{A two-angle example.}

@@ -12,6 +12,84 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Full finite complex Schatten local-to-global theorem
+
+The unrestricted finite complex landscape theorem is now **Lean-verified**
+for `1<p<2`: every local minimum over all unitaries transporting `K` to
+`L` attains the exact scalar principal-angle sum and is globally optimal.
+The norm and its `p`th power both have this property. This includes zero,
+right, critical and repeated principal angles, eigenvalues `1,-1`, fixed
+ambient directions and empty gradient kernels, at arbitrary finite rank.
+The exact endpoints are
+`schatten_transport_cost_eq_sum_of_isLocalMinOn_complex`,
+`isMinOn_of_isLocalMinOn_transports_complex` and
+`isMinOn_schatten_of_isLocalMinOn_transports_complex`, in
+`SchattenLocalGlobal.lean`. The checked manuscript includes Theorem
+`prop:schatten-local-is-global`.
+
+The final obstruction was numerical kernel optimality. The complete
+fixed/right family makes the kernel reflection's source-diagonal
+compression an orthogonal projection. A classical positive-compression
+trace certificate proves Frobenius optimality over the full transport
+fiber. The bounded-singular-value inequality
+`2^(p-2)*||I-W||_F^2 <= ||I-W||_p^p`, with equality for reflections,
+then proves kernel Schatten optimality. The existing attained global
+value and cost-deficit identity yield the ambient theorem. These
+ingredients now compile in `SchattenFrobenius.lean`,
+`Projection/FixedRightCompression.lean` and
+`UnitaryTransportFrobenius.lean`. No independent originality is claimed
+for the pointwise power inequality, projection algebra or Procrustes
+trace certificate.
+
+The continuous cost-preserving bijection `V -> V*A^*` also gives a
+compiled consequence: **every local Schatten-nearest unitary preserving
+a specified subspace is globally nearest**, with arbitrary input unitary
+`A`, in finite complex dimension and `1<p<2`.
+`SchattenCorrectionLocalGlobal.lean` proves the norm and power versions;
+Corollary `cor:schatten-correction-local-global` is included. This
+mathematical landscape result supplies no algorithmic convergence or
+experimental-performance guarantee.
+
+### Theorem-level historical comparison
+
+Primary sources rechecked for this step:
+
+- Bolotnikov--Li--Rodman (2001),
+  [official journal PDF](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117):
+  Problem 1.1 includes this transport feasible set; Lemma 3.3 treats the
+  right-angle Schatten case `1<=p<2`, including its attaining phases;
+  Theorems 3.4 and 4.2 treat Frobenius optimization and its full optimizer
+  family; Theorem 4.5 treats a Q-norm under additional block structure.
+  The statements inspected do not assert the present `1<p<2` constrained
+  local-to-global theorem.
+- Massey--Rios--Stojanoff (2018),
+  [Local Lidskii, Theorems 3.5 and 3.12](https://arxiv.org/html/1806.11436):
+  local minima are global for strictly convex unitary-invariant norm
+  distances on a fixed-eigenvalue Hermitian orbit or fixed-singular-value
+  matrix orbit, with joint spectral or singular-value structure. Those
+  orbits differ from the prescribed-projection transport fiber. An
+  implication for our result requires a further reduction; none is
+  justified by the theorem statements alone.
+
+Targeted searches combining Schatten, subspace transport, local minima,
+minimal distortion and block-diagonal unitary approximation found no
+additional theorem-level precedent that settles this priority question.
+This is limited negative search evidence. **Historical originality remains
+provisional.** The mathematically stronger result and its formal proof
+can be stated without a priority claim.
+
+### Scope retained for the next theorem
+
+The full pure Schatten operator parameterization is still conventional:
+assemble the actual paired-gradient basis into geometric equal-angle
+spaces, prove unequal-angle reduction, identify the two supercritical
+phases with an orthogonal-projection parameter, and classify the full
+right-defect intertwiner. The current theorem also supplies no real
+matching formula, smoothed local-to-global result, or operator-ideal
+feasibility/convergence/attainment theorem. Earlier dated snapshots below
+retain their original frontiers; the current result supersedes their
+local-to-global obstruction.
+
 ## Complete reflecting-kernel geometry after `276828432`
 
 The normal-form obstruction recorded in the preceding iteration is now
@@ -49,9 +127,10 @@ is assumed. Corollary `cor:schatten-kernel-fixed-right` is included.
 
 This is a necessary local-minimum classification for reflecting planes.
 It is not a sufficiency assertion for all `p>1`; for `p>2` the right-angle
-reflection can have larger cost than canonical rotation. The unrestricted
-`1<p<2` no-spurious-local-minima theorem still needs the numerical
-angle/cost assembly on that complete family. `PAPER_CONTEXT.md`
+reflection can have larger cost than canonical rotation. At that snapshot the unrestricted
+`1<p<2` no-spurious-local-minima theorem still needed the numerical
+angle/cost assembly. The current entry above closes that obstruction
+through the Frobenius certificate. `PAPER_CONTEXT.md`
 records the precise remaining declarations. No pure Schatten all-optimizer,
 real matching or operator-ideal claim has been promoted by this step.
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutingCorrection
-import ForTauCeti.Analysis.InnerProductSpace.NuclearTrace
+import ForTauCeti.Analysis.InnerProductSpace.UnitaryTransportFrobenius
 
 /-!
 # Quartic stability at the smoothed transport transition
@@ -131,24 +131,14 @@ theorem trace_defect_eq_sq_frobenius_div_two (Z : E ≃ₗᵢ[ℂ] E) :
     (Module.finrank ℂ E : ℝ) - (LinearMap.trace ℂ E Z.toLinearMap).re =
       UnitarilyInvariantSeminorm.frobenius ℂ E E
         (Z.toLinearMap - LinearMap.id) ^ 2 / 2 := by
-  let e := stdOrthonormalBasis ℂ E
-  have hdelta (i) : ‖(Z.toLinearMap - (LinearMap.id : E →ₗ[ℂ] E)) (e i)‖ ^ 2 =
-      2 * (1 - (⟪e i, Z (e i)⟫_ℂ).re) := by
-    have h := norm_sub_sq (𝕜 := ℂ) (e i) (Z (e i))
-    rw [e.norm_eq_one, Z.norm_map, e.norm_eq_one] at h
-    change ‖e i - Z (e i)‖ ^ 2 = 1 ^ 2 - 2 * (⟪e i, Z (e i)⟫_ℂ).re + 1 ^ 2 at h
-    change ‖Z (e i) - e i‖ ^ 2 = _
-    rw [norm_sub_rev]
-    linarith
-  rw [UnitarilyInvariantSeminorm.sq_frobenius_apply e,
-    LinearMap.trace_eq_sum_inner _ e]
-  rw [show (∑ i, ⟪e i, Z.toLinearMap (e i)⟫_ℂ).re =
-    ∑ i, (⟪e i, Z (e i)⟫_ℂ).re from map_sum Complex.reAddGroupHom _ _]
-  simp only [hdelta, mul_sub, mul_one, Finset.sum_sub_distrib,
-    Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul,
-    mul_one]
-  rw [← Finset.mul_sum]
-  ring
+  have hsign : Z.toLinearMap - (LinearMap.id : E →ₗ[ℂ] E) =
+      -(LinearMap.id - Z.toLinearMap) := by abel
+  rw [hsign, map_neg_eq_map]
+  have h := frobenius_displacement_sq_eq_trace Z
+  change UnitarilyInvariantSeminorm.frobenius ℂ E E
+    (LinearMap.id - Z.toLinearMap) ^ 2 =
+      2 * ((Module.finrank ℂ E : ℝ) - (LinearMap.trace ℂ E Z.toLinearMap).re) at h
+  linarith
 
 omit [FiniteDimensional ℂ E] [CompleteSpace E] in
 private theorem trace_eq_zero_of_involution_conj_neg

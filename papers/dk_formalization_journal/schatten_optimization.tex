@@ -1,53 +1,8 @@
 % Broader research draft; only its finite complex core is included by paper.tex.
 \input{schatten_transport_verified.tex}
 
-Local-to-global principles for matrix nearness are established for
-Hermitian eigenvalue orbits and fixed-singular-value orbits
-\citep{massey2018local}. Here the feasible set is a coset of the
-stabilizer of $P$.
-
-\begin{proposition}[No nonglobal local minima]
-\label{prop:schatten-local-is-global}
-Every local minimum of $W\mapsto\|I-W\|_p^p$ on $\mathcal U(P,Q)$
-is a global minimum.
-\end{proposition}
-
-\begin{proof}
-The first-variation decomposition and the exclusion of overlapping
-large-phase spaces use only local minimality. As in the theorem's proof,
-each nonzero block of $G_p(W)^2$ therefore attains the sum of its scalar
-principal-plane minima. It remains to consider $\ker G_p(W)$, where
-$W=I-2S$ for an orthogonal projection $S$.
-
-Apply the decomposition of two projections to $P,S$ on this space. A
-common one-dimensional reducing space on which $S=1$ cannot occur at a
-local minimum: changing the phase $\pi$ toward a smaller angle, while
-fixing every other direction, preserves transport and decreases the
-cost. On a nontrivial two-dimensional reducing space write
-\[
- P=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
- S=\begin{pmatrix}c^2&cs\\cs&s^2\end{pmatrix},\qquad
- c=\cos\gamma,\quad s=\sin\gamma,\quad 0<\gamma<\pi/2.
-\]
-Set $H=\operatorname{diag}(c^2,-s^2)$ on this block and zero elsewhere.
-It commutes with $P$, so $W\exp(itH)$ is feasible. The eigenphases
-near $\pi$ and zero are smooth, since these eigenvalues are distinct.
-Their first derivatives are, respectively, $c^2-s^2$ and zero. If
-$\gamma\ne\pi/4$, the large phase contributes
-\[
- 2^p-\tfrac12p\,2^{p-2}\cos^2(2\gamma)t^2+o(t^2).
-\]
-The small phase is $O(t^2)$, so its cost is $O(|t|^{2p})=o(t^2)$.
-Thus the total cost decreases for small nonzero $t$, contradicting
-local minimality. This argument does not require twice differentiability
-of the full objective at a zero displacement singular value.
-
-Every remaining nontrivial block has $\gamma=\pi/4$. There $W$ transports
-the line of $P$ to its orthogonal complement, with cost $2^p=m_p(\pi/2)$.
-On all remaining fixed directions $W=I$. Consequently the zero-gradient
-block also attains exactly its scalar principal-plane cost. Summing the
-blocks proves that $W$ attains \cref{eq:schatten-unrestricted-minimum}.
-\end{proof}
+% The full local-to-global theorem and correction corollary are included
+% in the Lean-certified fragment above.
 
 \begin{proposition}[All minimizers for an acute pair]
 \label{prop:schatten-all-acute-minimizers}

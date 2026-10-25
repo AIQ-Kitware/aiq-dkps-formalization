@@ -98,5 +98,7 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealGradientBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealKernelBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectingDescent
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectingPlanes
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenLocalGlobal
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenCorrectionLocalGlobal
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/
