@@ -98,7 +98,9 @@ source consumers use accepted `SymmetricOperatorIdealFamily.hilbertSchmidt`
 directly. The two paper triangle proofs now use the accepted energy-based law.
 The full default build after its cache fetch passed **21,051 jobs**, with warnings
 treated as errors. Across the two Hilbert–Schmidt retirements, maintained Lean
-source shrinks by a net **508 lines**.
+source shrinks by a net **508 lines**. The family checkpoint `e1b3f88d9` also
+passed explicit `Challenge` and `DavisKahan.Audits.All` builds (**20,831 jobs**),
+after its cache fetch.
 
 The next remaining representation comparison is the local extended norm and
 membership presentation against the accepted family's gauge and finite-gauge

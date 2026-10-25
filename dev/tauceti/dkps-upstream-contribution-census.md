@@ -689,3 +689,5 @@ cluster. This is accepted-API consumption, not an upstream proof-origin claim.
 
 The family follow-up passed the full default build (21,051 jobs) with warnings
 treated as errors, after `lake exe cache get`.
+The committed follow-up `e1b3f88d9` also passed explicit `Challenge` and
+`DavisKahan.Audits.All` builds (20,831 jobs), after the cache fetch.
