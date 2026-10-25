@@ -163,4 +163,25 @@ theorem norm_sub_eq_of_relative_affine
     ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ = ‖kappa‖ * ‖P - Q‖ := by
   rw [← norm_sub_relative R T S, hT, hS, add_sub_add_left_eq_sub, ← smul_sub, norm_smul]
 
+/-- A split formula for right relative phases gives an exact operator
+distance formula. The two coefficient maps need not be scalar, and the
+parameter maps need not be projections. No completeness or finite
+dimension is required. -/
+theorem norm_sub_eq_of_right_relative_split
+    (R T S : E ≃ₗᵢ[𝕜] E) (F G P Q : E →L[𝕜] E)
+    (hT : (T.trans R.symm : E →L[𝕜] E) = F * P + G * (1 - P))
+    (hS : (S.trans R.symm : E →L[𝕜] E) = F * Q + G * (1 - Q)) :
+    ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ = ‖(F - G) * (P - Q)‖ := by
+  have hfac : (T.trans R.symm : E →L[𝕜] E) - (S.trans R.symm : E →L[𝕜] E) =
+      (R.symm : E →L[𝕜] E).comp ((T : E →L[𝕜] E) - (S : E →L[𝕜] E)) := by
+    ext x
+    exact (R.symm.map_sub (T x) (S x)).symm
+  have hn : ‖(T.trans R.symm : E →L[𝕜] E) - (S.trans R.symm : E →L[𝕜] E)‖ =
+      ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ := by
+    rw [hfac, ContinuousLinearMap.opNorm_linearIsometryEquiv_comp]
+  rw [← hn, hT, hS]
+  congr 1
+  simp only [mul_sub, sub_mul, mul_one]
+  abel
+
 end LinearIsometryEquiv

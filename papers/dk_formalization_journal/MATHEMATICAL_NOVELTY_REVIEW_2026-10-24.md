@@ -12,6 +12,66 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+**Current verification frontier:** the 25 October entry supersedes earlier
+pending phase-parameter assessments. The original source snapshots and
+literature comparisons below remain historical research records.
+
+## Complete all-angle complex Schatten optimizer classification (25 October)
+
+The full unrestricted finite complex `1<p<2` optimizer **iff** is now
+compiled as
+`SchattenNonacuteClassification.schatten_transport_isMin_iff_phase_and_defect_complex`.
+Every global optimizer has compatible phase-projection and arbitrary
+reflecting crossed-defect data, and every compatible projection/defect pair
+occurs jointly in a unique global optimizer with those prescribed actions.
+Zero, repeated, critical and right angles and fixed ambient directions are
+included. No prescribed-block or cosine-preserving competitor hypothesis
+is imposed. The named canonical completion is fixed; the optimizing defect
+unitary is independent and arbitrary.
+
+The necessary intrinsic witness is the positive spectral projection of
+`Im(C*R.adjoint*T)`. `SchattenPhaseDefectAttainment.lean` supplies joint
+attainment and uniqueness; `SchattenProjectionAttainment.lean` first realizes
+any compatible projection in its own derived paired frame. The spectral
+phase factor has the actual optimal scalar phases and actions `F(1)=1`,
+`F(0)=i`. The manuscript includes
+`thm:schatten-all-phase-defect-minimizers`. The earlier necessary-only and
+arbitrary-projection-attainment boundaries are now closed.
+
+The remaining Grassmannian product/bijection, component dimensions and
+topological assertions are **not** separate Lean endpoints. Inactive and
+right-angle projection parameters may be redundant. The exact generic
+operator-distance identity is compiled for full relative-phase
+representations and included as `cor:schatten-phase-parameter-distance`;
+it is classical norm invariance plus affine algebra, with no separate
+historical novelty claim. Real matching and ideal-theoretic optimality
+remain open.
+
+The complete classification also transfers to **every** Schatten-nearest
+unitary preserving a prescribed subspace, via the compiled
+`schatten_correction_isMin_iff_phase_and_defect_complex`. For prescribed
+unitary `A`, the bijection `V -> V*A.adjoint` identifies corrections
+preserving `K` with transport from `A(K)` to `K`, preserving literal
+Schatten distance. The manuscript includes
+`cor:schatten-all-nearest-commuting`. This supplies a concrete matrix
+nearness consequence of the new classification. The reduction itself is
+classical; its utility does not establish historical priority for the
+underlying classification or any experimental performance claim.
+
+The new priority-search pass queried the critical cosine formula,
+Schatten principal-angle minimizer classification, Grassmannian phase
+parameters, minimal-distortion citation terms, nearest block-diagonal
+unitaries and Schatten Procrustes. It returned the BLR
+paper and unrelated Schatten problems, with no theorem-level matching full
+`1<p<2` classification. This is limited negative-search evidence. BLR's
+[official journal paper](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117)
+already poses the exact general transport problem; its planar right-angle
+`p<2` result (Lemma 3.3), Frobenius minimizer classifications
+(Theorems 3.4 and 4.2) and Q-norm theorem (Theorem 3.1) remain explicit
+precedents, rechecked in the journal PDF. The all-angle nonlinear phase classification is the
+current candidate contribution, but first-publication priority remains
+**provisional** pending the wider matrix-nearness/quotient-metric comparison.
+
 ## Intrinsic angle-space parameters, including nonacute ambient pairs
 
 The necessary phase parameter is now compiled in intrinsic coordinates:

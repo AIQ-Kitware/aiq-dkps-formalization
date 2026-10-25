@@ -42,6 +42,12 @@ theorem optimalPhase_spec (p theta : ℝ) (hp : 1 ≤ p) (hθ : 0 ≤ theta) :
 @[simp] theorem optimalPhase_zero (p : ℝ) (hp : 1 ≤ p) : optimalPhase p 0 = 0 :=
   le_antisymm (optimalPhase_spec p 0 hp le_rfl).1.2 (optimalPhase_spec p 0 hp le_rfl).1.1
 
+/-- At a right angle, the named phase is the endpoint for `1≤p<2`. -/
+theorem optimalPhase_right_angle (p : ℝ) (hp1 : 1 ≤ p) (hp2 : p < 2) :
+    optimalPhase p (Real.pi / 2) = Real.pi / 2 := by
+  have h := optimalPhase_spec p (Real.pi / 2) hp1 (by linarith [Real.pi_pos])
+  exact (phasePower_right_angle_eq_minimum_iff p _ hp1 hp2 h.1).mp h.2.1
+
 /-- The named phase is the unique nonnegative attaining phase on every
 positive acute angle, including the critical zero-curvature case. -/
 theorem phasePower_eq_phaseMinimum_iff_eq_optimalPhase

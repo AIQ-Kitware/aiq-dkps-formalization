@@ -94,6 +94,32 @@ theorem cosine_apply_of_sinAngleOperator_eigenvector
     (by simpa only [ContinuousLinearMap.coe_coe] using hCC)
   simpa only [ContinuousLinearMap.coe_coe] using h
 
+/-- A physical cosine eigenvector has the corresponding nonnegative
+sine eigenvalue. No finite-dimensional assumption is needed. -/
+theorem sine_apply_of_cosine_apply
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (x : H) (theta : ℝ) (hθ : theta ∈ Set.Icc 0 (Real.pi / 2))
+    (hx : section3CosAngleOperator K L x = (Real.cos theta : 𝕜) • x) :
+    K.sinAngleOperator L x = (Real.sin theta : 𝕜) • x := by
+  let S := K.sinAngleOperator L
+  let C := section3CosAngleOperator K L
+  have hpy := congrArg (fun A : H →L[𝕜] H => A x)
+    (section3CosAngleOperator_sq_add_sinAngleOperator_sq K L)
+  change C (C x) + S (S x) = x at hpy
+  rw [hx, map_smul, hx, smul_smul] at hpy
+  have htrig : (Real.cos theta : 𝕜) * Real.cos theta +
+      (Real.sin theta : 𝕜) * Real.sin theta = 1 := by
+    exact_mod_cast (show Real.cos theta * Real.cos theta + Real.sin theta * Real.sin theta = 1 by
+      nlinarith [Real.sin_sq_add_cos_sq theta])
+  have hSS : S (S x) = ((Real.sin theta : 𝕜) * Real.sin theta) • x := by
+    apply add_left_cancel (a := ((Real.cos theta : 𝕜) * Real.cos theta) • x)
+    rw [hpy, ← add_smul, htrig, one_smul]
+  have hs : 0 ≤ Real.sin theta :=
+    Real.sin_nonneg_of_nonneg_of_le_pi hθ.1 (by linarith [hθ.2, Real.pi_pos])
+  have h := (K.isPositive_sinAngleOperator L).toLinearMap.apply_eq_smul_of_apply_apply_eq_smul
+    (v := x) hs (by simpa only [ContinuousLinearMap.coe_coe] using hSS)
+  simpa only [ContinuousLinearMap.coe_coe] using h
+
 /-- Preserving the intrinsic sine operator also preserves the intrinsic
 cosine. No unitarity or finite-dimensional hypothesis is needed. -/
 theorem commute_section3CosAngleOperator_of_commute_sinAngleOperator

@@ -12,6 +12,7 @@ import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
 import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 import DavisKahan.Geometry.Polar.PolarIntertwining
 import DavisKahan.Geometry.Polar.PairedPhase
+import DavisKahan.Geometry.Polar.TransportUniqueness
 import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
 import DavisKahan.Geometry.Polar.Section3Elementary

@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNonacuteClassification
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedDefectReplacement
+import DavisKahan.Geometry.Polar.TransportUniqueness
 
 /-!
 # Independent phase and defect parameters
@@ -47,37 +48,6 @@ private theorem weighted_relative_eq_of_agree_off_kernel
   change C * (star (T : E →L[ℂ] E) * (R : E →L[ℂ] E)) =
     C * (star (S : E →L[ℂ] E) * (R : E →L[ℂ] E))
   rw [← mul_assoc, ← mul_assoc, hstar]
-
-omit [FiniteDimensional ℂ E] in
-/-- The phase formula modulo the cosine kernel and the two defect
-actions determine the entire ambient transporter. This is a uniqueness
-statement on arbitrary complex Hilbert spaces, without any optimality
-or feasibility assumption. -/
-theorem transport_eq_of_phase_and_defect_actions_complex
-    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
-    (R T S : E ≃ₗᵢ[ℂ] E)
-    (D : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
-    (hTsrc : ∀ x : halmosSourceDefect K L, T x = (D x : E))
-    (hTtgt : ∀ y : halmosTargetDefect K L, T y = (D.symm y : E))
-    (hSsrc : ∀ x : halmosSourceDefect K L, S x = (D x : E))
-    (hStgt : ∀ y : halmosTargetDefect K L, S y = (D.symm y : E))
-    (hphase : Proposition35.section3CosAngleOperator K L * (R.trans T.symm : E →L[ℂ] E) =
-      Proposition35.section3CosAngleOperator K L * (R.trans S.symm : E →L[ℂ] E)) : T = S := by
-  let C := Proposition35.section3CosAngleOperator K L
-  let N := C.ker
-  letI : CompleteSpace N := C.isClosed_ker.completeSpace_coe
-  have hagree := LinearIsometryEquiv.eq_on_orthogonal_ker_of_relative_left_mul_eq
-    C R T S hphase
-  have hker (x : E) (hx : x ∈ N) : T x = S x := by
-    change x ∈ (Proposition35.section3CosAngleOperator K L).ker at hx
-    rw [Proposition35.ker_section3CosAngleOperator_eq_crossedDefectSum] at hx
-    obtain ⟨u, hu, v, hv, rfl⟩ := Submodule.mem_sup.mp hx
-    rw [map_add, map_add, hTsrc ⟨u, hu⟩, hSsrc ⟨u, hu⟩,
-      hTtgt ⟨v, hv⟩, hStgt ⟨v, hv⟩]
-  ext x
-  rw [← N.starProjection_add_starProjection_orthogonal x, map_add, map_add,
-    hker _ (Submodule.starProjection_apply_mem _ _),
-    hagree _ (Submodule.starProjection_apply_mem _ _)]
 
 /-- Every pair consisting of a compatible phase projection and an
 arbitrary crossed-defect isometry admits a globally optimal weighted

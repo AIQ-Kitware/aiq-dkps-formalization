@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalUniqueness
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalOptimality
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenFrameAttainment
 
 /-!
 # Independent signed phases and the exact uniqueness criterion
@@ -73,50 +74,13 @@ theorem exists_schatten_minimizers_with_independent_phases_complex
   change ∀ j, R (e (.inr j)) = e (.inr j) at hRf
   refine ⟨n, m, e, theta, hθ, hC0, hC1, hCf, hJ0, ?_⟩
   intro delta hδ hscalar
-  obtain ⟨Z, hZp, hZf, hZcomm⟩ := e.exists_paired_diagonal_commuting_involution
-    (fun i => Complex.exp ((delta i : ℂ) * Complex.I))
-    (fun i => Complex.norm_exp_ofReal_mul_I (delta i)) K.reflection
-    K.reflection_involutive hJ0 (fun j => (eps j : ℂ)) hJf
-  let W := Z.trans R
-  have hmap : K.map W.toLinearMap = L := by
-    apply (Submodule.map_eq_iff_intertwines_reflection K L W).mpr
-    intro x
-    change R (Z (K.reflection x)) = L.reflection (R (Z x))
-    rw [hZcomm]
-    exact nonacuteDirectRotation_reflection_intertwines K L D (Z x)
-  have hcost := schatten_signed_paired_phase_transport_eq_sum_complex p hp e theta delta
-    (fun i => ⟨(hθ i).1.le, (hθ i).2⟩) hδ R Z hR0 hR1 hRf hZp hZf
-  have hsum := SmoothedPhaseTransition.sum_principalAngles_eq_paired_sum K L e theta hθ
-    hC0 hC1 hCf hJ0 (phaseMinimum p.toReal) (phaseMinimum_zero_angle p.toReal hp1.le)
-  have hatt : UnitarilyInvariantSeminorm.schatten ℂ E E p
-      (LinearMap.id - W.toLinearMap) ^ p.toReal =
-        ∑ i : Fin (Module.finrank ℂ K), phaseMinimum p.toReal (K.principalAngles L i) := by
-    rw [hcost, hsum]
-    exact Finset.sum_congr rfl (fun i _ => hscalar i)
-  refine ⟨W, hmap, ?_, ?_, ?_, hatt, ?_⟩
-  · intro i
-    change R (Z (e (.inl (0, i)))) = _
-    rw [hZp, map_smul, hR0, smul_smul, ← Complex.exp_add]
-    congr 2
-    push_cast
-    ring
-  · intro i
-    change R (Z (e (.inl (1, i)))) = _
-    rw [hZp, map_smul, hR1, smul_smul, ← Complex.exp_add]
-    congr 2
-    push_cast
-    ring
-  · intro j
-    change R (Z (e (.inr j))) = _
-    rw [hZf, hRf]
-  · intro V hV
-    change UnitarilyInvariantSeminorm.schatten ℂ E E p
-      (LinearMap.id - W.toLinearMap) ^ p.toReal ≤
-        UnitarilyInvariantSeminorm.schatten ℂ E E p (LinearMap.id - V.toLinearMap) ^ p.toReal
-    rw [hatt]
-    let V' : unitary (E →L[ℂ] E) := ⟨V, hV.1⟩
-    exact sum_phaseMinimum_le_schatten_transport_complex p hp hp1 hp2 K L V'
-      ((map_eq_iff_conjugate_starProjection_complex K L V').mpr hV.2)
+  have hRmap : K.map R.toLinearMap = L := by
+    apply (Submodule.map_eq_iff_intertwines_reflection K L R).mpr
+    exact nonacuteDirectRotation_reflection_intertwines K L D
+  obtain ⟨W, hW, hW0, hW1, hWf, _, _, hcost, hmin⟩ :=
+    exists_schatten_transport_attaining_phases_in_frame_complex p hp hp1 hp2 K L R hRmap
+      e theta eps hθ hC0 hC1 hCf hR0 hR1 hRf hJ0 hJf delta hδ hscalar
+  exact ⟨W, hW, hW0, hW1, hWf, hcost, hmin⟩
 
 omit [FiniteDimensional ℂ E] [CompleteSpace E] in
 private theorem phase_eq_zero_of_exp_eq_negative (delta : ℝ)

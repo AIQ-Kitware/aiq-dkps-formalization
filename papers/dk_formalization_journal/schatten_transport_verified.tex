@@ -926,6 +926,119 @@ This proves existence, uniqueness and commutation with both geometric
 restrictions. The final representation follows by substitution.
 \end{proof}
 
+Extend $\delta_p$ to the endpoints by
+$\delta_p(0)=0$ and $\delta_p(\pi/2)=\pi/2$. For the intrinsic cosine
+$C$, define the unitary spectral phase factor
+\[
+ F_p(C)=\exp\bigl(i\delta_p(\arccos C)\bigr).
+\]
+This finite-dimensional functional calculus fixes cosine-one vectors and
+acts by $i$ on the cosine kernel.
+
+\begin{theorem}[All complex Schatten minimizers]
+\label{thm:schatten-all-phase-defect-minimizers}
+Use the fixed completed canonical rotation $R$ and put $J=2P-I$.
+A feasible unitary $T$ is globally minimizing if and only if there are
+an orthogonal projection $\Pi$ and a unitary
+$D:H_{10}\to H_{01}$ satisfying
+\[
+ [\Pi,R]=[\Pi,J]=0,\qquad
+ C R^*T=C\bigl(F_p(C)\Pi+F_p(C)^*(I-\Pi)\bigr),
+\]
+and
+\[
+ Tx=Dx\quad(x\in H_{10}),\qquad
+ Ty=D^*y\quad(y\in H_{01}).
+\]
+Every compatible projection and every such defect unitary occur jointly
+in exactly one globally minimizing transporter. All angle multiplicities,
+zero and right angles, and the critical threshold are included.
+The projection parameter can be redundant on inactive and right-angle
+directions.
+\end{theorem}
+
+\begin{proof}
+For necessity, write $Z=R^*T$. The preceding proposition gives commutation
+of $Z$ with $R$ on every interior angle space. Both rotations fix the
+zero-angle space, and the cosine annihilates the right-angle space.
+Consequently $CZ$ commutes with $R$ on the whole space. Feasibility gives
+$ZJ=JZ$, and $C$ commutes with both $Z$ and $J$.
+Thus the positive spectral projection
+\[
+ \Pi=\mathbf1_{(0,\infty)}\bigl(\operatorname{Im}(CZ)\bigr)
+\]
+commutes with $R$ and $J$.
+
+Jointly diagonalize $C$ and $\operatorname{Im}(CZ)$.
+On a vector with positive cosine eigenvalue $c=\cos\theta$, the
+scalar real-part identity and unitarity give the relative phase
+$\cos\delta_p(\theta)\pm i\sin\delta_p(\theta)$.
+Multiplication by $c>0$ preserves the sign of its imaginary part, so
+$\Pi$ selects the positive phase. The zero-phase case gives identity.
+At $c=0$ both sides of the weighted formula vanish.
+Proposition~\ref{prop:schatten-all-right-defects} supplies the unique
+defect identification.
+
+Conversely, diagonalize a prescribed compatible $\Pi$ in a paired
+canonical frame. Its eigenvalue is zero or one on both vectors of each
+reflected pair. Choose the negative or positive attaining phase accordingly.
+The resulting feasible unitary has cost $\sum_j m_p(\theta_j)$,
+which is minimal against all ambient competitors. Replace its right-angle
+action by the prescribed $D,D^*$; this preserves its cost and the
+cosine-weighted phase formula.
+
+Finally, the weighted formula and both defect actions determine the
+transporter uniquely. Since $R$ preserves $C$, equality of weighted
+relative phases implies $CT=CS$ for any two candidates. Their inverses
+then agree on the orthogonal complement of $\ker C$; the reflecting
+defect actions make their inverses agree on $\ker C$ as well.
+The candidates are therefore equal.
+\end{proof}
+
+\begin{corollary}[Distance between phase parameters]
+\label{cor:schatten-phase-parameter-distance}
+For two full relative-phase representations
+\[
+ R^*T=F\Pi+F^*(I-\Pi),\qquad
+ R^*S=F\Sigma+F^*(I-\Sigma),
+\]
+their operator distance is exactly
+\[
+ \|T-S\|=\|(F-F^*)(\Pi-\Sigma)\|.
+\]
+On a fixed supercritical interior angle space this reduces to
+$2\sin\delta_p(\theta)\,\|\Pi-\Sigma\|$ for the restricted transporters
+and phase projections.
+\end{corollary}
+
+\begin{proof}
+Left multiplication by $R^*$ preserves operator norm. Subtract the two
+representations and factor the difference. On the stated angle space,
+$F-F^*=2i\sin\delta_p(\theta)I$.
+\end{proof}
+
+\begin{corollary}[All nearest commuting unitaries]
+\label{cor:schatten-all-nearest-commuting}
+Let $A$ be a unitary on a finite complex Hilbert space, and let $P$ be an
+orthogonal projection. Put $Q=APA^*$. For $1<p<2$, a unitary $V$
+commuting with $P$ is Schatten-nearest to $A$ among all such unitaries
+if and only if $T=VA^*$ has the phase and defect data of
+\cref{thm:schatten-all-phase-defect-minimizers} for the pair $(Q,P)$.
+Every compatible choice of these data determines exactly one nearest $V$.
+\end{corollary}
+
+\begin{proof}
+The maps $V\mapsto VA^*$ and $T\mapsto TA$ are inverse bijections
+between the commuting unitaries and $\mathcal U(Q,P)$. Right unitary
+invariance gives
+\[
+ \|A-V\|_p=\|(A-V)A^*\|_p=\|I-VA^*\|_p.
+\]
+Minimizing this norm is equivalent to minimizing its $p$th power.
+Apply \cref{thm:schatten-all-phase-defect-minimizers}, including its
+joint attainment and uniqueness statement.
+\end{proof}
+
 \begin{corollary}[Local minima for unitary correction]
 \label{cor:schatten-correction-local-global}
 Let $A$ be a unitary and let $P$ be an orthogonal projection on a finite
@@ -938,7 +1051,7 @@ for the $p$th power of the distance.
 The continuous bijection $V\mapsto T=VA^*$ identifies the feasible
 set with $\mathcal U(APA^*,P)$, with continuous inverse $T\mapsto TA$.
 Unitary invariance gives $\|A-V\|_p=\|I-VA^*\|_p$.
-Apply the preceding theorem. This conclusion concerns the full feasible
+Apply \cref{prop:schatten-local-is-global}. This conclusion concerns the full feasible
 set and does not assert convergence of a numerical algorithm.
 \end{proof}
 

@@ -5,7 +5,8 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceOptimization
 import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteSpectralTrace
-import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
+
+import DavisKahan.Geometry.Angle.CosineKernel
 
 /-!
 # The principal-angle formula for exact smoothed transport
@@ -28,30 +29,6 @@ attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
-private theorem sine_apply_of_cosine_apply
-    (U V : Submodule ℂ E) (x : E) (theta : ℝ)
-    (hθ : theta ∈ Set.Icc 0 (Real.pi / 2))
-    (hx : Proposition35.section3CosAngleOperator U V x = (Real.cos theta : ℂ) • x) :
-    Proposition35.section3SinAngleOperator U V x = (Real.sin theta : ℂ) • x := by
-  let S := Proposition35.section3SinAngleOperator U V
-  let C := Proposition35.section3CosAngleOperator U V
-  have hS : S.toLinearMap.IsPositive :=
-    ((ContinuousLinearMap.nonneg_iff_isPositive).mp
-      (Proposition35.section3SinAngleOperator_nonneg U V)).toLinearMap
-  apply hS.apply_eq_smul_of_apply_apply_eq_smul
-    (Real.sin_nonneg_of_nonneg_of_le_pi hθ.1 (by linarith [hθ.2, Real.pi_pos]))
-  have hpy := DFunLike.congr_fun (Proposition35.section3Sin_sq_add_cos_sq U V) x
-  change S (S x) + C (C x) = x at hpy
-  have hCx : C x = (Real.cos theta : ℂ) • x := hx
-  rw [hCx, map_smul, hCx, smul_smul] at hpy
-  have htrig :
-      (Real.sin theta : ℂ) * Real.sin theta + (Real.cos theta : ℂ) * Real.cos theta = 1 := by
-    exact_mod_cast (by simpa only [pow_two] using Real.sin_sq_add_cos_sq theta)
-  apply (add_right_cancel (b := ((Real.cos theta : ℂ) * Real.cos theta) • x))
-  change S (S x) + ((Real.cos theta : ℂ) * Real.cos theta) • x = _
-  rw [hpy, ← add_smul]
-  exact ((congrArg (fun z : ℂ => z • x) htrig).trans (one_smul ℂ x)).symm
-
 /-- A paired canonical cosine basis computes every zero-preserving sum
 of the accepted principal-angle sequence, without a sorting convention. -/
 theorem sum_principalAngles_eq_paired_sum
@@ -69,13 +46,13 @@ theorem sum_principalAngles_eq_paired_sum
       ∑ i, f (theta i) := by
   let S := U.sinAngleOperator V
   have hS0 (i) : S (e (.inl (0, i))) = (Real.sin (theta i) : ℂ) • e (.inl (0, i)) := by
-    exact sine_apply_of_cosine_apply U V _ _ ⟨(hθ i).1.le, (hθ i).2⟩ (hC0 i)
+    exact Proposition35.sine_apply_of_cosine_apply U V _ _ ⟨(hθ i).1.le, (hθ i).2⟩ (hC0 i)
   have hS1 (i) : S (e (.inl (1, i))) = (Real.sin (theta i) : ℂ) • e (.inl (1, i)) := by
-    exact sine_apply_of_cosine_apply U V _ _ ⟨(hθ i).1.le, (hθ i).2⟩ (hC1 i)
+    exact Proposition35.sine_apply_of_cosine_apply U V _ _ ⟨(hθ i).1.le, (hθ i).2⟩ (hC1 i)
   have hSf (j) : S (e (.inr j)) = 0 := by
     have hc : Proposition35.section3CosAngleOperator U V (e (.inr j)) =
         (Real.cos 0 : ℂ) • e (.inr j) := by simpa using hCf j
-    have hs := sine_apply_of_cosine_apply U V (e (.inr j)) 0
+    have hs := Proposition35.sine_apply_of_cosine_apply U V (e (.inr j)) 0
       ⟨le_rfl, by positivity⟩ hc
     change S (e (.inr j)) = (Real.sin 0 : ℂ) • e (.inr j) at hs
     simpa only [Real.sin_zero, Complex.ofReal_zero, zero_smul] using hs
