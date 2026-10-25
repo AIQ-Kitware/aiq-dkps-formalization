@@ -16,6 +16,10 @@ rank-stratification equivalences are algebraic. Sector connectedness,
 component counts, manifold dimensions, unrestricted real matching and
 operator-ideal optimization remain open. The full finite complex
 Charbonnier local-to-global theorem is now compiled for every `tau>0`.
+The real four-dimensional cosine--sine model now has a compiled exact
+minimum and complete optimizer classification in the **negative determinant
+class**, for general monotone spectral penalties. The positive determinant
+cost assembly and unrestricted real matching remain open.
 The local Charbonnier analysis now supplies actual first variations,
 source-reflection stationarity, paired two-phase gradient blocks and the
 sharp gradient bound. Actual ambient no-overlap on every submaximal gradient
@@ -46,6 +50,101 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Real four-dimensional negative class: exact value and every optimizer (25 October)
+
+For `0 <= u <= t <= pi/2`, write `R` for the real cosine--sine rotation
+with coordinate angles `(t,u)` and `P=diag(I_2,0)`. The new declarations
+compare with **every ambient real orthogonal** `W` satisfying
+`W*P*W.transpose=R*P*R.transpose` and `det W=-1`. They require no
+principal-plane-preserving competitor assumption.
+
+`RealFourNegative.lean` proves
+`exists_minimizing_four_negative_transport`: for any real-valued `rho`
+nondecreasing on `[0,2]`, with `rho(0)=0`, the exact minimum is
+`rho(2)+2*rho(sqrt(2-2*cos u))`. An actual attaining transporter reflects
+the larger-angle plane and rotates the smaller plane canonically.
+Continuity, differentiability and convexity are unnecessary for this class.
+The literal objective sums penalties of all four displacement singular
+values. This includes nuclear, Schatten and positive-smoothing costs when
+their penalty hypotheses are instantiated; no new norm is defined.
+
+For a penalty **strictly increasing** on `[0,2]`, the same module classifies
+all negative-class optimizers, including the exceptional angle pairs:
+
+- `four_negative_transport_minimizers_of_lt` proves that `u<t` leaves
+  exactly the two concrete reflections on the larger-angle plane. The
+  source and complement sign choices are both retained;
+  `four_negative_reflections_ne` proves the actual matrices distinct.
+- `four_negative_transport_minimizers_of_eq` proves that `u=t<pi/2`
+  leaves exactly the union of two displayed one-parameter rotation families,
+  one in each negative source/complement sign component. This includes
+  `t=0`. The theorem parametrizes the actual matrices; no homeomorphism or
+  manifold-dimension theorem is asserted here.
+- `four_negative_transport_cost_at_right_angles` proves that at
+  `t=u=pi/2` every negative-class competitor has the same cost,
+  `rho(2)+2*rho(sqrt 2)`. This identity needs only `rho(0)=0`, without
+  monotonicity. These remain minima within the negative class; the
+  positive class may be cheaper.
+
+`fourTransport_opposite_cost_eq_minimum_iff` gives the common exact
+criterion: the trace equals `2*cos u`. The proof handles repeated complex
+roots at trace `+2` and `-2` with their full algebraic multiplicities.
+
+`RealFourCoordinates.lean` proves full fiber exhaustion by two planar
+angles and two independent signs, plus feasibility of every signed choice.
+`RealFourSpectrum.lean` proves the actual coordinate quartic, its determinant,
+the reciprocal factorization in both negative components, and the two
+positive-component formulas with phase cosines `cos h*cos s, cos d*cos r`
+or `sin h*cos s, -sin d*cos r`. Its coordinate permutation is proved.
+`RealFourPhaseRectangle.lean` proves pointwise domination by a single edge
+for **every** nondecreasing phase function on `[0,pi]`: after simultaneous
+reflection when `x+y>pi`, choose `delta=max(d,h-abs(x-y))`. No strict
+monotonicity, convexity or differentiability enters this scalar reduction.
+This theorem alone does not identify an actual positive-class cost.
+
+The donor `NormalCharpolyCost.lean` computes normal complex displacement
+costs from characteristic root multisets, proves that scalar extension of
+any rectangular real matrix preserves every singular value, and derives
+the literal real orthogonal cost formula. `SingularCharpoly.lean` compares
+Gram polynomials, including real-to-complex scalar extension and zero
+padding. `RealOrthogonalTwo.lean` parametrizes both real planar components
+without division by a coordinate. `OrthogonalProjectionFiber.lean` proves
+the full block stabilizer reduction over commutative rings, including empty
+blocks. These are classical algebra and spectral theory with no independent
+historical novelty claim.
+
+**Exact remaining R-1 obligations:** factor the positive quartic into its
+two reciprocal quadratics, identify their literal singular-value costs,
+prove the `arccos` phase-rectangle bounds in both positive components,
+and construct the edge transporter using
+`gamma=arccos(cos(delta)/cos(d))`. Then combine the two determinant classes.
+The current endpoints are in the explicit real cosine--sine model; an
+abstract rank-two real subspace theorem also needs an actual isometric
+coordinate reduction and identification with the accepted principal angles.
+The broader real gradient blocks, matching lower bound/attainment,
+exchange inequalities, sorted sums and field-gap equality assertions are
+still open. The complex strict-saddle and ideal-theoretic questions below
+are unaffected.
+
+Independent numerical diagnostics used 2,400 negative-class matrices,
+including zero, equal and right pairs, and four penalties: nuclear,
+`p=3/2`, Charbonnier `tau=0.7`, and the flat monotone penalty
+`min(s,0.7)`. The largest literal-cost identity error was `1.91e-14`,
+the lowest value-minus-bound was `-3.56e-15`, and the largest feasibility
+residual was `5.13e-16`. Another 10,000 phase-rectangle points with the
+same penalties showed no domination violation. These floating-point
+checks are diagnostics, separate from the compiled proofs.
+
+Validation: `lake exe cache get` followed by the focused modules and
+`lake build DavisKahan.All ForTauCeti` succeeded (10,557 aggregate jobs).
+The research fragment remains excluded from `paper.tex`; no whole real
+four-dimensional or matching theorem is promoted to the checked manuscript.
+The 2001 BLR paper's real-scope remark, CS reduction (Theorem 4.1),
+completion parametrization (Lemma 4.3), Frobenius optimizer theorem
+(Theorem 4.2), and Q-norm theorem (Theorem 4.5) remain prior art. The new
+negative-class formula is a short four-dimensional consequence of classical
+spectral and trace geometry; no separate first-publication claim is made.
 
 ## Charbonnier correction local-to-global consequence (25 October)
 
@@ -98,11 +197,13 @@ tests to actual restrictions and extend the overlap/balance Hessian tests
 to the ambient space. No such second-order-sufficiency or strict-saddle
 theorem is currently claimed.
 
-For the unrestricted real problem, the most direct next target remains
-**both determinant classes of the exact four-dimensional two-angle
-minimum** in `real_four_dimensional_transport.tex`. The actual real
+For the unrestricted real problem, the most direct next target is now
+**the positive determinant class and the combination of both classes**
+in the exact four-dimensional two-angle minimum from
+`real_four_dimensional_transport.tex`. The negative class and all its
+strict-penalty optimizers are proved above. The actual real
 nonzero-gradient and zero-gradient small-block decompositions already
-compile; their four-dimensional cost bounds, angle-multiset assembly,
+compile; the remaining positive four-dimensional cost bound, angle-multiset assembly,
 matching attainment, sorted-sum exchange bounds and field-gap equalities
 remain conventional. Orthogonal determinant/parity restrictions must remain
 explicit. The new complex local-to-global theorem does not supply a real
