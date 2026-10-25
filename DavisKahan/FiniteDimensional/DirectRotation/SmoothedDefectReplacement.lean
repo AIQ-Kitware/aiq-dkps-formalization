@@ -5,7 +5,6 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedRightDefect
 import DavisKahan.FiniteDimensional.DirectRotation.KernelTransportReplacement
-import DavisKahan.Geometry.Polar.CanonicalSymmetry
 
 /-!
 # Arbitrary right-angle defect identifications attain the global minimum
@@ -130,48 +129,14 @@ theorem exists_weighted_minimizer_prescribing_defects_complex
     a b hb hab K L hKL T hT hatt
   have hTself := minimizing_weighted_transport_selfAdjoint_on_right_defect_complex
     a b hb hab K L hKL T hT hatt
-  obtain ⟨V, hV, hVself, hVC, hVsource, hVtarget⟩ :=
-    exists_selfAdjoint_transport_prescribing_defects K L D
-  have hVinv : ∀ x ∈ N, V x ∈ N := by
-    intro x hx
-    change C (V x) = 0
-    have h := DFunLike.congr_fun hVC.eq x
-    change V (C x) = C (V x) at h
-    rw [show C x = 0 from hx, map_zero] at h
-    exact h.symm
-  obtain ⟨S, hS, _, _⟩ := V.exists_restriction_of_finite_invariant N hVinv
-  have hSself : IsSelfAdjoint (S : N →L[ℂ] N) := by
-    apply ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-    intro x y
-    change inner ℂ (S x : E) (y : E) = inner ℂ (x : E) (S y : E)
-    rw [hS, hS]
-    exact hVself.isSymmetric x y
-  have hanti (x : N) : (S ⟨K.reflection x,
-      Proposition35.reflection_mem_cosine_kernel K L x x.property⟩ : E) =
-        -K.reflection (S x) := by
-    rw [hS, hS]
-    exact Proposition35.transport_anticommutes_reflection_on_cosine_kernel K L V hV hVC x
-      x.property
-  obtain ⟨W, hW, hWC, hWself, hWS, hagree⟩ :=
-    exists_transport_replacing_cosine_kernel K L T hT hTC S hSself hanti
+  obtain ⟨W, hW, hWC, hWself, hWsource, hWtarget, hagree⟩ :=
+    exists_transport_prescribing_defects K L T hT hTC D
   have hWcost : UnitarilyInvariantSeminorm.nuclear ℂ E E
       ((a : ℂ) • W.toLinearMap - (b : ℂ) • LinearMap.id) =
         weightedRotationMinimum a b C :=
     (weighted_transport_cost_eq_of_eq_on_cosine_kernel_orthogonal a b hb.le hab.le
       K L W T hW hT hWC hTC hWself hTself hagree).trans hatt
-  have hsource (x : halmosSourceDefect K L) : (x : E) ∈ N := by
-    rw [show N = C.ker from rfl,
-      Proposition35.ker_section3CosAngleOperator_eq_crossedDefectSum]
-    exact Submodule.mem_sup_left x.property
-  have htarget (x : halmosTargetDefect K L) : (x : E) ∈ N := by
-    rw [show N = C.ker from rfl,
-      Proposition35.ker_section3CosAngleOperator_eq_crossedDefectSum]
-    exact Submodule.mem_sup_right x.property
-  refine ⟨W, hW, ?_, ?_, hagree, hWcost, ?_⟩
-  · intro x
-    exact (hWS ⟨x, hsource x⟩).trans ((hS _).trans (hVsource x))
-  · intro x
-    exact (hWS ⟨x, htarget x⟩).trans ((hS _).trans (hVtarget x))
+  refine ⟨W, hW, hWsource, hWtarget, hagree, hWcost, ?_⟩
   · intro A hA
     obtain ⟨B, _, hBcost, hBmin⟩ :=
       exists_unitary_minimizing_weighted_transport a b hb hab K L hKL

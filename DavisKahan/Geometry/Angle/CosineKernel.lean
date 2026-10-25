@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.Geometry.Angle.Proposition35Nonacute
 import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
+import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
+import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 
 /-!
 # Geometry of the right-angle cosine kernel
@@ -22,6 +24,66 @@ namespace TauCeti.DavisKahan.Proposition35
 
 variable {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
+
+/-- The intrinsic cosine and the accepted sine operator resolve the
+identity through their squares on the whole ambient Hilbert space. -/
+theorem section3CosAngleOperator_sq_add_sinAngleOperator_sq
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection] :
+    section3CosAngleOperator K L * section3CosAngleOperator K L +
+      K.sinAngleOperator L * K.sinAngleOperator L = 1 := by
+  have hS : K.sinAngleOperator L * K.sinAngleOperator L = halmosSineSq K L := by
+    rw [halmosSineSq_eq_projection_sub_sq]
+    simpa only [sq] using K.sinAngleOperator_sq L
+  rw [section3CosAngleOperator_mul_self_eq_halmosCosineSq, hS,
+    halmosCosineSq_add_sineSq]
+
+/-- Right-angle vectors are exactly the eigenvectors with sine one.
+This identification needs neither finite dimension nor defect balance. -/
+theorem sinAngleOperator_apply_eq_self_iff_cosine_eq_zero
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (x : H) : K.sinAngleOperator L x = x ↔ section3CosAngleOperator K L x = 0 := by
+  let C := section3CosAngleOperator K L
+  let S := K.sinAngleOperator L
+  have hpy := congrArg (fun A : H →L[𝕜] H => A x)
+    (section3CosAngleOperator_sq_add_sinAngleOperator_sq K L)
+  change C (C x) + S (S x) = x at hpy
+  have hC : C.IsPositive := ContinuousLinearMap.nonneg_iff_isPositive.mp
+    (section3CosAngleOperator_nonneg K L)
+  constructor
+  · intro hx
+    change S x = x at hx
+    rw [hx, hx] at hpy
+    have hCC : C (C x) = 0 := add_right_cancel (hpy.trans (zero_add x).symm)
+    have hi := hC.isSelfAdjoint.isSymmetric x (C x)
+    change inner 𝕜 (C x) (C x) = inner 𝕜 x (C (C x)) at hi
+    rw [hCC, inner_zero_right] at hi
+    exact inner_self_eq_zero.mp hi
+  · intro hx
+    change C x = 0 at hx
+    rw [hx, map_zero, zero_add] at hpy
+    have hs := (K.isPositive_sinAngleOperator L).toLinearMap
+    have h := hs.apply_eq_smul_of_apply_apply_eq_smul (μ := 1) (by norm_num)
+      (v := x) (by simpa only [S, ContinuousLinearMap.coe_coe,
+        RCLike.ofReal_one, one_mul, one_smul] using hpy)
+    simpa only [ContinuousLinearMap.coe_coe, RCLike.ofReal_one, one_smul] using h
+
+/-- Preserving the intrinsic sine operator also preserves the intrinsic
+cosine. No unitarity or finite-dimensional hypothesis is needed. -/
+theorem commute_section3CosAngleOperator_of_commute_sinAngleOperator
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (T : H →L[𝕜] H) (hT : Commute T (K.sinAngleOperator L)) :
+    Commute T (section3CosAngleOperator K L) := by
+  let C := section3CosAngleOperator K L
+  have hC : C.IsPositive := ContinuousLinearMap.nonneg_iff_isPositive.mp
+    (section3CosAngleOperator_nonneg K L)
+  have hsq : Commute T (C * C) := by
+    have heq : C * C = 1 - K.sinAngleOperator L * K.sinAngleOperator L :=
+      eq_sub_of_add_eq (section3CosAngleOperator_sq_add_sinAngleOperator_sq K L)
+    rw [heq]
+    exact (Commute.one_right T).sub_right (hT.mul_right hT)
+  have hgram : Commute T (C.adjoint ∘L C) := by
+    simpa only [hC.isSelfAdjoint.adjoint_eq, ← ContinuousLinearMap.mul_def] using hsq
+  simpa only [hC.modulus_eq] using ContinuousLinearMap.commute_modulus_of_commute hgram
 
 /-- The principal cosine commutes with the source orthogonal projection. -/
 theorem section3CosAngleOperator_comm_projection

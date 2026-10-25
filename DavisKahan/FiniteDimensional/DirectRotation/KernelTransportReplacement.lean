@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.KernelCostSplitting
+import DavisKahan.Geometry.Polar.CanonicalSymmetry
 
 /-!
 # Replacing the actual right-angle action of a transporter
@@ -124,5 +125,60 @@ theorem exists_transport_replacing_cosine_kernel
       _ = (S.symm ⟨x, hx⟩ : E) := by rw [hSsymm]
       _ = W.symm x := (hWinv ⟨x, hx⟩).symm
   exact ⟨W, hWmap, hWC, hWself, hW₀, fun x hx => hWpos ⟨x, hx⟩⟩
+
+/-- Any unitary identification of the actual crossed defects can replace
+the right-angle action of a cosine-preserving transporter. The entire
+positive-cosine action is preserved. This is geometric and applies over
+either scalar field, without an optimality or reflection assumption on
+the input transporter. -/
+theorem exists_transport_prescribing_defects
+    (K L : Submodule 𝕜 E) (T : E ≃ₗᵢ[𝕜] E) (hT : K.map T.toLinearMap = L)
+    (hTC : Commute (T : E →L[𝕜] E) (Proposition35.section3CosAngleOperator K L))
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    ∃ W : E ≃ₗᵢ[𝕜] E, K.map W.toLinearMap = L ∧
+      Commute (W : E →L[𝕜] E) (Proposition35.section3CosAngleOperator K L) ∧
+      (∀ x : E, Proposition35.section3CosAngleOperator K L x = 0 →
+        W x = star (W : E →L[𝕜] E) x) ∧
+      (∀ x : halmosSourceDefect K L, W x = (D x : E)) ∧
+      (∀ y : halmosTargetDefect K L, W y = (D.symm y : E)) ∧
+      (∀ x ∈ (Proposition35.section3CosAngleOperator K L).kerᗮ, W x = T x) := by
+  let N := (Proposition35.section3CosAngleOperator K L).ker
+  obtain ⟨V, hV, hVself, hVC, hVsource, hVtarget⟩ :=
+    exists_selfAdjoint_transport_prescribing_defects K L D
+  have hVinv : ∀ x ∈ N, V x ∈ N := by
+    intro x hx
+    have h := DFunLike.congr_fun hVC.eq x
+    change V (Proposition35.section3CosAngleOperator K L x) =
+      Proposition35.section3CosAngleOperator K L (V x) at h
+    rw [show Proposition35.section3CosAngleOperator K L x = 0 from hx, map_zero] at h
+    exact h.symm
+  obtain ⟨S, hS, _, _⟩ := V.exists_restriction_of_finite_invariant N hVinv
+  have hSself : IsSelfAdjoint (S : N →L[𝕜] N) := by
+    apply ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+    intro x y
+    change inner 𝕜 (S x : E) (y : E) = inner 𝕜 (x : E) (S y : E)
+    rw [hS, hS]
+    exact hVself.isSymmetric x y
+  have hanti (x : N) : (S ⟨K.reflection x,
+      Proposition35.reflection_mem_cosine_kernel K L x x.property⟩ : E) =
+        -K.reflection (S x) := by
+    rw [hS, hS]
+    exact Proposition35.transport_anticommutes_reflection_on_cosine_kernel K L V hV hVC x
+      x.property
+  obtain ⟨W, hW, hWC, hWself, hWS, hagree⟩ :=
+    exists_transport_replacing_cosine_kernel K L T hT hTC S hSself hanti
+  have hsource (x : halmosSourceDefect K L) : (x : E) ∈ N := by
+    rw [show N = (Proposition35.section3CosAngleOperator K L).ker from rfl,
+      Proposition35.ker_section3CosAngleOperator_eq_crossedDefectSum]
+    exact Submodule.mem_sup_left x.property
+  have htarget (x : halmosTargetDefect K L) : (x : E) ∈ N := by
+    rw [show N = (Proposition35.section3CosAngleOperator K L).ker from rfl,
+      Proposition35.ker_section3CosAngleOperator_eq_crossedDefectSum]
+    exact Submodule.mem_sup_right x.property
+  refine ⟨W, hW, hWC, hWself, ?_, ?_, hagree⟩
+  · intro x
+    exact (hWS ⟨x, hsource x⟩).trans ((hS _).trans (hVsource x))
+  · intro x
+    exact (hWS ⟨x, htarget x⟩).trans ((hS _).trans (hVtarget x))
 
 end TauCeti.DavisKahan.FiniteDimensional

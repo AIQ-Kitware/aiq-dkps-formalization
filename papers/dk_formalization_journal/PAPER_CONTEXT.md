@@ -2,10 +2,11 @@
 
 **As of:** 24 October 2026
 **Current research source:** unrestricted finite complex Schatten
-local-to-global optimality, preservation of every intrinsic angle space,
-and pointwise fixation of every zero-angle direction, for `1<p<2`. The
-new optimizer geometry builds on local-to-global commit `d8a31360b`. The complete all-angle Charbonnier
-global optimizer classification remains proved.
+local-to-global optimality, angle preservation, zero-angle fixation, and
+complete right-defect necessity and arbitrary attaining replacement for
+`1<p<2`. The right-defect classification builds on `d713c9fd3`.
+The complete all-angle Charbonnier global optimizer classification remains
+proved and consumes the shared geometric defect-replacement construction.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -19,6 +20,88 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Complete pure Schatten right-angle defect parameters
+
+For every finite complex ambient local minimum at `1<p<2`, the whole
+intrinsic sine-one space lies in the **actual gradient kernel**. Therefore
+the transporter is self-adjoint on the entire crossed-defect sum and
+acts by exactly one unitary identification `D` of the source and target
+defects, with `D.symm` on the other defect. No acuteness, multiplicity,
+supplied block, or complementary-spectrum restriction is imposed.
+
+Compiled in `SchattenRightDefect.lean`:
+
+- `gradient_eq_zero_of_sinAngleOperator_eq_self_of_isLocalMinOn_complex`;
+- `selfAdjoint_on_right_defect_of_isLocalMinOn_transports_complex`;
+- `exists_unique_defect_equiv_of_isLocalMinOn_transports_complex`.
+
+The converse and independence are now compiled in
+`SchattenDefectReplacement.lean`:
+`exists_unique_schatten_minimizer_prescribing_defects_complex`.
+For **any** such local optimizer and **any** unitary `D` between the
+actual defects, it constructs exactly one global optimizer with those
+defect actions and the original optimizer's entire action on the
+orthogonal complement of the right-angle space. The conclusion includes
+the exact scalar principal-angle sum and comparison with **all ambient
+unitary competitors**. Zero defects and empty ambient spaces are included.
+This classifies the right-defect parameter; it does not parameterize the
+remaining positive acute equal-angle action.
+
+Shared compiled ingredients:
+
+- `LinearMap.IsSymmetric.apply_eq_zero_of_eigenvector_of_basis`, in
+  `InvariantKernel.lean`, is a finite orthonormal-basis orthogonality
+  criterion. It needs neither ambient completeness nor a separate finite
+  dimension instance, and its annihilating map need not be symmetric.
+- `CosineKernel.lean` identifies sine-one vectors with the kernel of the
+  intrinsic cosine, and proves that sine commutation implies cosine
+  commutation. Both results hold on arbitrary real/complex complete
+  Hilbert spaces with projected subspaces; no ideal conclusion follows.
+- `KernelCostSplitting.schatten_transport_split_cosine_kernel` proves the
+  actual cost split `cost(T)=cost(Tpos)+2^(p-1)*dim(ker C)` over either
+  scalar field, for **every finite `p>=1`**, given feasibility, cosine
+  commutation and reflection on that kernel. Its cost-invariance theorem
+  handles two transports agreeing on the complement.
+- `KernelTransportReplacement.exists_transport_prescribing_defects`
+  constructs the actual ambient extension over either scalar field,
+  without optimality of the input. The existing Charbonnier replacement
+  theorem now consumes this shared geometry; its public statement is
+  unchanged.
+
+The checked manuscript includes Proposition
+`prop:schatten-all-right-defects`. The scalar right-angle mechanism and
+unitary defect geometry are classical: BLR (2001), Lemma 3.3, already
+classifies the planar right-angle choices. No independent historical
+novelty is claimed for these ingredients. Priority of the complete
+angle-dependent transport theory remains provisional.
+
+### Remaining positive-angle parameter theorem
+
+The sole remaining operator-classification sector in the finite complex
+pure Schatten problem is the positive acute equal-angle action and its
+converse parameter construction, including critical angles and arbitrary
+multiplicities. The paired-gradient phases constructed in
+`SchattenGradientPlanes.lean` lie strictly in `(0,pi)`, but their current
+public assembled statements retain only the mean-angle and cost equations.
+Retain the individual phase bounds through the level basis, whole positive
+basis, and spectral decomposition. Those bounds are needed to apply
+scalar uniqueness to `abs((alpha-beta)/2)` without introducing spurious
+phase windings. Then identify the mean with the geometric angle and
+assemble the relative-phase projection equation described below.
+The right-angle extraction, its arbitrary attaining replacement and
+zero-angle fixation are now closed; their earlier resumption notes below
+are historical.
+
+Validation: `lake exe cache get` preceded the focused builds and final
+`lake build DavisKahan.All ForTauCeti`, which passed (10,407 jobs;
+`/tmp/schatten-right-defect-final-build.log`). The new donor passes strict
+ForTauCeti warnings, and the new Schatten modules have no new warnings.
+The aggregate also validates the migrated Charbonnier consumers. BibTeX
+and repeated pdfLaTeX passes produced
+`/tmp/dk-schatten-right-defect-paper/dk-schatten-right-defect.pdf`, with no
+unresolved references/citations, multiply defined labels or overfull boxes.
+`git diff --check` passed.
 
 ## Every pure Schatten optimizer preserves angles and fixes zero angles
 
@@ -63,9 +146,10 @@ Reusable ingredients:
 The checked manuscript includes Proposition
 `prop:schatten-angle-preservation`. These theorems close unequal-angle
 mixing and zero-angle rigidity in the full pure Schatten classification.
-The remaining parameter theorem must classify the phases on each
-positive acute equal-angle space and the right-angle defect intertwiner,
-and prove attainment of every parameter choice. No Grassmannian topology,
+The newer entry above closes the right-angle defect intertwiner and its
+arbitrary attaining replacement. The remaining parameter theorem must
+classify phases on each positive acute equal-angle space and prove
+attainment of every such phase parameter. No Grassmannian topology,
 real matching or ideal-theoretic optimizer claim is promoted by this step.
 Historical priority remains provisional; the reflection and restriction
 lemmas are classical geometry without a separate novelty claim.
@@ -93,13 +177,14 @@ supplies the unique projection parameter when `delta>0`, while `delta=0`
 forces identity. This step must retain multiplicities and the critical
 case rather than assuming simple angles.
 
-At `s=1`, first prove that the whole right-angle eigenspace lies in the
-actual gradient kernel: every positive-gradient paired mean is strictly
+At that snapshot the `s=1` task was to prove that the whole right-angle
+eigenspace lies in the actual gradient kernel: every positive-gradient paired mean is strictly
 acute. The actual restriction is therefore self-adjoint. In source/target
 coordinates it should have off-diagonal factors `A,A^*`, with arbitrary
 unitary `A` between the defect spaces. Prove the converse attainment
-for every such factor, and combine it with the positive-angle projection
-parameters and the already fixed `s=0` sector. The parameter topology and
+for every such factor. The newer right-defect entry above closes this task.
+Combine it with the positive-angle projection parameters and the already
+fixed `s=0` sector. The parameter topology and
 dimension statements remain beyond these operator identities.
 
 ## Full finite complex Schatten local-to-global theorem

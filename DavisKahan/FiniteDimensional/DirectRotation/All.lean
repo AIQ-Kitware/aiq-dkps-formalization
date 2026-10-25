@@ -101,6 +101,8 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectingPlanes
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenLocalGlobal
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerAngles
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenFixedDirections
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenRightDefect
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenDefectReplacement
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenCorrectionLocalGlobal
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

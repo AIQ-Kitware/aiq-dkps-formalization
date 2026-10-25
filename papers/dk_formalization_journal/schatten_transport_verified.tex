@@ -677,6 +677,58 @@ makes that restriction globally minimizing. The identity is feasible
 and has cost zero there, so the restriction must be the identity.
 \end{proof}
 
+\begin{proposition}[All right-angle defect choices]
+\label{prop:schatten-all-right-defects}
+Put
+\[
+ H_{10}=\operatorname{ran}P\cap\ker Q,\qquad
+ H_{01}=\ker P\cap\operatorname{ran}Q,\qquad
+ N=H_{10}\oplus H_{01}.
+\]
+Every local minimizing transporter $W$ has exactly one unitary
+$D:H_{10}\to H_{01}$ such that
+\[
+ Wu=Du\quad(u\in H_{10}),\qquad
+ Wv=D^*v\quad(v\in H_{01}).
+\]
+Conversely, given any local minimizing transporter $W_0$ and any such
+unitary $D$, there is exactly one globally minimizing transporter with
+these two defect actions and with $W=W_0$ on $N^\perp$. Its cost splits as
+\[
+ \|I-W\|_p^p
+   =\|I_{N^\perp}-W|_{N^\perp}\|_p^p
+       +2^{p-1}\dim N.
+\]
+The other principal angles and their multiplicities are unrestricted.
+\end{proposition}
+
+\begin{proof}
+The intrinsic sine operator is identity on $N$.
+Every nonzero-gradient pair has sine eigenvalue
+$\sin((\alpha+\beta)/2)<1$. Orthogonality of eigenspaces and
+completeness of the paired-gradient decomposition imply
+$N\subseteq\ker G_p(W)$. The actual restriction of $W$ to $N$ is
+therefore a self-adjoint unitary. Feasibility exchanges $H_{10}$ and
+$H_{01}$; self-adjointness makes the two restrictions adjoints of each other,
+giving the unique $D$.
+
+For the converse, use $D$ and $D^*$ on the two defect sectors and
+$W_0$ on their orthogonal complement. These are reducing source and
+target summands, so their orthogonal sum is a feasible ambient unitary.
+Its defect restriction is a reflection anticommuting with source
+reflection, hence has trace zero. Its displacement singular values
+are zero and two with equal multiplicities. Thus its defect cost is
+$2^{p-1}\dim N$, independently of $D$. Additivity of Schatten powers
+preserves the full cost of $W_0$, which is globally minimal by
+Theorem~\ref{prop:schatten-local-is-global}. The prescribed actions
+on complementary summands determine $W$ uniquely.
+\end{proof}
+
+The planar right-angle optimizer relation is already treated by
+\citet[Lemma~3.3]{bolotnikov2001minimal}. Proposition~\ref{prop:schatten-all-right-defects}
+identifies the full defect action within an arbitrary subspace pair
+and proves its independence from all complementary optimizer choices.
+
 \begin{corollary}[Local minima for unitary correction]
 \label{cor:schatten-correction-local-global}
 Let $A$ be a unitary and let $P$ be an orthogonal projection on a finite

@@ -12,6 +12,42 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Complete pure Schatten right-defect parameter and independence
+
+The right-angle part of the **every-optimizer** theorem is now compiled
+for finite complex `1<p<2`, including arbitrary positive/zero angles and
+multiplicities elsewhere. `SchattenRightDefect.lean` proves that the whole
+sine-one space lies in the actual gradient kernel, hence is a reflecting
+restriction. Each ambient local minimum therefore determines exactly one
+unitary identification `D` between the actual crossed defects and acts by
+`D.symm` on the other defect.
+
+`SchattenDefectReplacement.lean` proves the converse independently of
+all complementary optimizer choices: every prescribed `D` gives exactly
+one globally optimal ambient transporter with any given local optimizer's
+whole complementary action. Its exact principal-angle value and comparison
+with all ambient competitors are conclusions. This proves necessity,
+attainment and independence of the right-defect parameter. The positive
+acute equal-angle phase parameter and its converse assembly remain open.
+Proposition `prop:schatten-all-right-defects` is in the checked manuscript.
+
+The supporting cost split is real/complex and holds for every finite
+`p>=1` under explicit feasibility, cosine commutation and reflecting-kernel
+hypotheses. The right-angle power is `2^(p-1)*dim(N)`; it does not depend
+on `D`. A shared geometric extension now supplies both the pure Schatten
+and the existing Charbonnier attainment theorem.
+
+The primary comparison rechecked for this step is BLR (2001),
+[official journal PDF, Lemma 3.3, printed p. 36](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117).
+It already identifies the planar right-angle Schatten optimizer relation
+for `1<=p<2`. Their Theorem 4.2 classifies all Frobenius optimizers.
+No separate historical novelty is claimed for the right-angle mechanism,
+block reflection geometry, orthogonality argument or cost additivity.
+The present compiled statement applies the exact defect parameter inside
+every ambient constrained optimizer and constructs arbitrary replacements.
+Historical priority of the full angle-dependent transport theory remains
+**provisional**; this comparison provides no general historical clearance.
+
 ## Pure Schatten unequal-angle separation and fixed directions
 
 Two further every-optimizer conclusions are now Lean-verified, including
@@ -43,9 +79,9 @@ makes the zero-angle space reducing; its inherited local minimum has
 coincident source/target and exact cost zero, forcing identity there.
 
 These are compiled components of a complete pure Schatten optimizer
-classification. The acute equal-angle phase equation, arbitrary
-right-defect intertwiner, their converse attainment, and the topology of
-the parameter family remain separate obligations. The classical algebra
+classification. The newer entry above closes the right-defect intertwiner
+and its arbitrary attaining replacement. The acute equal-angle phase
+equation, its converse attainment and parameter topology remain open. The classical algebra
 and restriction lemmas carry no originality claim. The closest identified
 BLR and Local Lidskii comparisons below still leave historical priority
 of the constrained Schatten classification **provisional**.

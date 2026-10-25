@@ -7,6 +7,7 @@ import DavisKahan.Geometry.Angle.CosineKernel
 import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
 import ForTauCeti.Analysis.InnerProductSpace.NuclearTrace
+import ForTauCeti.Analysis.InnerProductSpace.SchattenInvolution
 
 /-!
 # Exact cost splitting across the actual right-angle defect
@@ -21,6 +22,8 @@ remove their trace term. Real and complex scalars and zero summands are allowed.
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional
+
+open scoped ENNReal
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E] [CompleteSpace E]
@@ -147,6 +150,105 @@ theorem weighted_transport_cost_eq_of_eq_on_cosine_kernel_orthogonal
     weighted_transport_split_cosine_kernel a b hb hab K L T hT hTC hselfT
   obtain ⟨_, Spos, _, hSpos, _, hcostS⟩ :=
     weighted_transport_split_cosine_kernel a b hb hab K L S hS hSC hselfS
+  have heq : Tpos = Spos := by
+    ext x
+    exact (hTpos x).trans ((hagree x x.property).trans (hSpos x).symm)
+  rw [hcostT, hcostS, heq]
+
+/-- The actual right-angle restriction of a reflecting, cosine-preserving
+transporter contributes exactly `2^(p-1)` per ambient defect dimension to
+its Schatten power. Both actual restrictions are constructed. This holds
+for every finite Schatten exponent at least one and either scalar field. -/
+theorem schatten_transport_split_cosine_kernel
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (K L : Submodule 𝕜 E) (T : E ≃ₗᵢ[𝕜] E) (hT : K.map T.toLinearMap = L)
+    (hTC : Commute (T : E →L[𝕜] E) (Proposition35.section3CosAngleOperator K L))
+    (hself : ∀ x : E, Proposition35.section3CosAngleOperator K L x = 0 →
+      T x = star (T : E →L[𝕜] E) x) :
+    let N := (Proposition35.section3CosAngleOperator K L).ker
+    ∃ (T₀ : N ≃ₗᵢ[𝕜] N) (Tpos : Nᗮ ≃ₗᵢ[𝕜] Nᗮ),
+      (∀ x : N, (T₀ x : E) = T x) ∧
+      (∀ x : Nᗮ, (Tpos x : E) = T x) ∧
+      IsSelfAdjoint (T₀ : N →L[𝕜] N) ∧
+      UnitarilyInvariantSeminorm.schatten 𝕜 E E p
+          (LinearMap.id - T.toLinearMap) ^ p.toReal =
+        UnitarilyInvariantSeminorm.schatten 𝕜 Nᗮ Nᗮ p
+            (LinearMap.id - Tpos.toLinearMap) ^ p.toReal +
+          (2 : ℝ) ^ (p.toReal - 1) * Module.finrank 𝕜 N := by
+  let N := (Proposition35.section3CosAngleOperator K L).ker
+  obtain ⟨T₀, Tpos, hT₀, hTpos, hself₀, hweighted⟩ :=
+    weighted_transport_split_cosine_kernel 1 1 (by norm_num) le_rfl K L T hT hTC hself
+  have hinv : ∀ x ∈ N, T x ∈ N := by
+    intro x hx
+    rw [← hT₀ ⟨x, hx⟩]
+    exact (T₀ ⟨x, hx⟩).property
+  have hinvp : ∀ x ∈ Nᗮ, T x ∈ Nᗮ := by
+    intro x hx
+    rw [← hTpos ⟨x, hx⟩]
+    exact (Tpos ⟨x, hx⟩).property
+  let A := (LinearMap.id : E →ₗ[𝕜] E) - T.toLinearMap
+  have hAinv : ∀ x ∈ N, A x ∈ N := fun x hx => N.sub_mem hx (hinv x hx)
+  have hAinvp : ∀ x ∈ Nᗮ, A x ∈ Nᗮ := fun x hx => Nᗮ.sub_mem hx (hinvp x hx)
+  have hAred : N.IsReducing A := (N.isReducing_iff A).mpr
+    ⟨(Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mpr hAinv,
+      (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mpr hAinvp⟩
+  have hA₀ : A.restrict hAinv = LinearMap.id - T₀.toLinearMap := by
+    apply LinearMap.ext
+    intro x
+    apply Subtype.ext
+    change (x : E) - T x = (x : E) - (T₀ x : E)
+    rw [hT₀]
+  have hApos : A.restrict hAinvp = LinearMap.id - Tpos.toLinearMap := by
+    apply LinearMap.ext
+    intro x
+    apply Subtype.ext
+    change (x : E) - T x = (x : E) - (Tpos x : E)
+    rw [hTpos]
+  have hnuc := nuclear_eq_add_restrict_of_isReducing A N hAred
+  change UnitarilyInvariantSeminorm.nuclear 𝕜 E E A =
+    UnitarilyInvariantSeminorm.nuclear 𝕜 N N (A.restrict hAinv) +
+      UnitarilyInvariantSeminorm.nuclear 𝕜 Nᗮ Nᗮ (A.restrict hAinvp) at hnuc
+  rw [hA₀, hApos] at hnuc
+  norm_num only [RCLike.ofReal_one, one_smul, one_mul] at hweighted
+  have hnegT : T.toLinearMap - LinearMap.id = -(LinearMap.id - T.toLinearMap) := by abel
+  have hnegpos : Tpos.toLinearMap - LinearMap.id = -(LinearMap.id - Tpos.toLinearMap) := by abel
+  rw [hnegT, hnegpos, map_neg_eq_map, map_neg_eq_map] at hweighted
+  have hnuc₀ : UnitarilyInvariantSeminorm.nuclear 𝕜 N N
+      (LinearMap.id - T₀.toLinearMap) = Module.finrank 𝕜 N := by linarith
+  have hcost₀ := schatten_displacement_rpow_of_isSelfAdjoint
+    (Unitary.linearIsometryEquiv.symm T₀) hself₀ p hp
+  change UnitarilyInvariantSeminorm.schatten 𝕜 N N p
+      (LinearMap.id - T₀.toLinearMap) ^ p.toReal =
+    (2 : ℝ) ^ (p.toReal - 1) *
+      UnitarilyInvariantSeminorm.nuclear 𝕜 N N (LinearMap.id - T₀.toLinearMap) at hcost₀
+  rw [hnuc₀] at hcost₀
+  have hsplit := schatten_rpow_eq_add_restrict_of_isReducing A N hAred p hp
+  change UnitarilyInvariantSeminorm.schatten 𝕜 E E p A ^ p.toReal =
+    UnitarilyInvariantSeminorm.schatten 𝕜 N N p (A.restrict hAinv) ^ p.toReal +
+      UnitarilyInvariantSeminorm.schatten 𝕜 Nᗮ Nᗮ p (A.restrict hAinvp) ^ p.toReal at hsplit
+  rw [hA₀, hApos, hcost₀, add_comm] at hsplit
+  exact ⟨T₀, Tpos, hT₀, hTpos, hself₀, hsplit⟩
+
+/-- Arbitrary reflecting right-angle choices leave the actual Schatten
+cost unchanged when two feasible cosine-preserving transports agree on
+the entire positive-cosine complement. -/
+theorem schatten_transport_cost_eq_of_eq_on_cosine_kernel_orthogonal
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (K L : Submodule 𝕜 E) (T S : E ≃ₗᵢ[𝕜] E)
+    (hT : K.map T.toLinearMap = L) (hS : K.map S.toLinearMap = L)
+    (hTC : Commute (T : E →L[𝕜] E) (Proposition35.section3CosAngleOperator K L))
+    (hSC : Commute (S : E →L[𝕜] E) (Proposition35.section3CosAngleOperator K L))
+    (hselfT : ∀ x : E, Proposition35.section3CosAngleOperator K L x = 0 →
+      T x = star (T : E →L[𝕜] E) x)
+    (hselfS : ∀ x : E, Proposition35.section3CosAngleOperator K L x = 0 →
+      S x = star (S : E →L[𝕜] E) x)
+    (hagree : ∀ x ∈ (Proposition35.section3CosAngleOperator K L).kerᗮ, T x = S x) :
+    UnitarilyInvariantSeminorm.schatten 𝕜 E E p (LinearMap.id - T.toLinearMap) ^ p.toReal =
+      UnitarilyInvariantSeminorm.schatten 𝕜 E E p (LinearMap.id - S.toLinearMap) ^ p.toReal := by
+  obtain ⟨_, Tpos, _, hTpos, _, hcostT⟩ :=
+    schatten_transport_split_cosine_kernel p hp K L T hT hTC hselfT
+  obtain ⟨_, Spos, _, hSpos, _, hcostS⟩ :=
+    schatten_transport_split_cosine_kernel p hp K L S hS hSC hselfS
   have heq : Tpos = Spos := by
     ext x
     exact (hTpos x).trans ((hagree x x.property).trans (hSpos x).symm)
