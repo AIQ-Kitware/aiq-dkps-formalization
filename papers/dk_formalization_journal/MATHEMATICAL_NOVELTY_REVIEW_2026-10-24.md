@@ -45,8 +45,9 @@ concrete correction certificate. Historical priority is not asserted for
 this elementary balance argument. The classical projection geometry,
 Lewis--Sendov Hessian precedent and local-Lidskii scope comparisons below
 remain applicable. The **full Charbonnier local-to-global theorem is still
-open**: balanced kernel geometry/cost, principal-angle identification
-and assembly into the global value remain to be formalized.
+open**: principal-angle identification and assembly into the global
+value remain to be formalized. The actual zero-gradient geometry and cost
+are now compiled, as described next.
 
 The next scalar layer is now compiled. For any distinct
 `0<a<b<pi` with equal positive Charbonnier gradient, Vieta identities
@@ -58,6 +59,20 @@ Its uniform positive spectral-level theorem includes the critical level.
 No branch-frame or simple-spectrum assumption is supplied. This closes
 the scalar-cost obligation; no separate historical priority is asserted
 for these identities.
+
+`SmoothedKernelPlanes.lean` now constructs the actual kernel's
+orthogonal fixed/right decomposition and its exact literal cost. The
+negative reflection space `M` is orthogonal to its image under source
+reflection; the transporter acts by `(-I,I)` on that pair and fixes the
+remaining space. Its cost is
+`dim(M)*(sqrt(tau^2+4)-tau)`. All hypotheses are constructed from the
+ambient local minimum. The shared balance-to-orthogonality identity is
+valid over real and complex complete Hilbert spaces without a dimension
+assumption; the completed coordinates and literal trace cost are finite.
+These classical projection facts have no separate historical novelty
+claim. Together with the exact nonzero-level costs they close the
+individual-block obligations for smoothed local-to-global. The full
+principal-angle assembly remains unproved.
 
 The primary [Bolotnikov--Li--Rodman paper (2001)](https://www.maths.tcd.ie/EMIS/journals/ELA/ela-articles/articles/vol8_pp26-46.pdf)
 was reread at theorem level: Theorem 2.3 classifies nearest unitaries to
@@ -91,7 +106,8 @@ the explicit reflection compression inequality, and exclusion of negative
 spectral subprojections commuting with the source. The latter conclusion
 requires the actual transporter itself to be a reflection. The preceding entry closes actual ambient no-overlap, maximal scalar
 restrictions, transfer to the actual kernel, reflection balance and exact
-scalar block costs. Kernel geometry and global value assembly remain open.
+scalar block costs and actual fixed/right kernel geometry. Global value
+assembly remains open.
 There is still no compiled Charbonnier local-to-global theorem.
 
 The primary author-hosted [Lewis--Sendov paper (2001), Theorem 3.3](https://people.orie.cornell.edu/aslewis/publications/01-twice.pdf)

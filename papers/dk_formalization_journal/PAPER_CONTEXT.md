@@ -25,8 +25,9 @@ direction has negative curvature whenever this balance fails. Every
 positive gradient level, including the critical level, now has a
 source-reflection-paired phase eigenbasis whose individual costs attain
 the exact scalar minima. Submaximal paired restriction costs equal the
-sum of those minima. Balanced zero-kernel geometry/cost, principal-angle
-identification and assembly remain open.
+sum of those minima. The actual zero-gradient kernel now has constructed
+fixed/right paired coordinates and its exact dimension-weighted cost.
+Principal-angle identification and assembly remain open.
 **Manuscript and teaching-deck update source:** `427169ce38b5` (25 October
 2026), incorporating the completed full complex optimizer classification,
 local-to-global theorem, normalized parameter bijection and exact counts.
@@ -43,6 +44,51 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Actual zero-gradient fixed/right geometry and exact cost (25 October)
+
+`SmoothedKernelPlanes.lean` proves
+`gradient_kernel_paired_planes_of_isLocalMinOn_transports_complex`.
+For every actual finite complex ambient local transport minimum and
+`tau>0`, it constructs on the **actual** gradient kernel `L` its unitary
+restriction `V`, its negative reflection projection `A`, and its source
+submodule `K0`. Both ambient actions are retained. Put
+`M=range(A)` and `J0=K0.reflection`. The theorem gives
+`M` orthogonal to `J0 M`, the actual remaining space
+`Z=(M+J0 M)^orthogonal`, and an isometric coordinate map
+`d(x,y,z)=x+J0(y)+z`. In those coordinates `V` acts as
+`(-x,y,z)`, while source reflection acts as `(y,x,Jz)` for an actual
+isometric involution on `Z`. Thus the kernel has only fixed and paired
+right-angle transport blocks. Its **literal** cost is
+`dim(M)*(sqrt(tau^2+4)-tau)`. Empty negative spaces, empty kernels and
+arbitrary multiplicities are included; no kernel coordinates are assumed.
+
+The donor `BalancedReflection.lean` proves the shared geometry over
+`RCLike`. The compression and orthogonality identities
+`balanced_projection_source_reflection_mul_eq_zero` and
+`balanced_projection_orthogonal_source_reflection` need no dimension
+assumption. `balanced_reflection_paired_decomposition` completes the
+coordinates in finite dimension. The separate prescribed-reflection
+endpoint `balanced_reflection_smoothed_paired_planes_complex` combines
+this geometry and its literal cost; the ambient kernel endpoint constructs
+all its hypotheses from the original local minimum. The scalar and paired
+cost helpers in `SmoothedBlockCost.lean` allow zero-dimensional carriers.
+The scalar formula holds for every real `tau`; identity has zero cost and
+the paired fixed-remainder formula require `tau>=0`.
+
+This closes the balanced-kernel geometry and cost obligations. The
+manuscript strengthens `prop:smoothed-ambient-gradient-blocks` with the
+actual decomposition and exact cost. These projection identities are
+classical; no independent historical priority is asserted, and they do
+not by themselves establish an infinite-dimensional ideal optimum.
+
+Validation: `lake exe cache get` followed by
+`lake build DavisKahan.All ForTauCeti` succeeded (10,525 jobs), including
+the actual kernel endpoint and all consumers of the scalar-cost additions.
+The paper compiled to 61 pages with no final unresolved references,
+duplicate labels or overfull boxes. No Challenge declaration was renamed
+in this kernel layer; the previously recorded unchanged Challenge failure
+and static findings remain outstanding.
 
 ## Exact scalar minima on every positive Charbonnier gradient level (25 October)
 
@@ -210,16 +256,32 @@ Scalar optimality on every positive gradient level is now compiled in
 recorded above. The Vieta derivation formerly recorded here as pending
 has been implemented and accepted, including the coalesced critical case.
 
-On the zero-gradient kernel, the actual local reflection is now balanced.
-Use `S*(2*P0-I)*S=0` to pair its negative space with its orthogonal image
-under source reflection; its remaining orthogonal complement is fixed.
-This should construct only fixed and right-angle transport blocks and
-compute their exact attained costs. The signed maximal restrictions and their paired scalar minima are now
-proved. Identify the mean phases with actual principal-plane angles and
-then assemble all actual reducing squared-gradient blocks
-and the accepted principal-angle sums, and compare with the proved global
-minimum. Full smoothed local-to-global, real matching, component dimensions
-and operator-ideal optimization remain open.
+The balanced zero-gradient geometry and exact cost are now compiled in
+`SmoothedKernelPlanes.lean`, as recorded above. The strongest next target
+is the unrestricted **smoothed local-to-global theorem**:
+
+1. Assemble the uniform positive-level bases into a basis of the full
+   positive point-spectral space of the actual gradient. Adapt the
+   collected-basis proof in `SchattenPositiveBasis.lean`; consume
+   `gradient_eigenspace_phase_basis_of_isLocalMinOn_transports_complex`.
+2. Use the accepted paired spectral decomposition to construct
+   `H + J(H) + ker(G)` and split the literal cost with the established
+   orthogonal-block identity. `SchattenSpectralDecomposition.lean` is the
+   exact mathematical analogue, not a theorem to copy as an assumption.
+3. Identify its mean phases with actual principal angles using
+   `Submodule.sum_principalAngles_eq_paired_phases_add_comap_complex`,
+   specialized to `smoothedPhaseMinimum tau`; supply its zero-angle value.
+4. On the actual kernel identify `K0` with `K.comap L.subtype` using the
+   retained projection action, and likewise the restricted target.
+   Derive the fixed/right principal-angle sum from the constructed
+   coordinates and equate it to the proved kernel cost. Combine with
+   the established unrestricted global minimum.
+
+No nonzero or zero gradient block is now left without a compiled
+phase/geometry and scalar-cost description. The complete principal-angle
+assembly and its comparison with every ambient competitor are still open.
+Real matching, component dimensions and operator-ideal optimization
+remain open.
 
 ## Actual Charbonnier second variation and reflection tests (25 October)
 

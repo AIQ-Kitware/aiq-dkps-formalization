@@ -929,6 +929,20 @@ For an orthogonal projection $S$ on $N_0$ one has
 \[
  W_0=I-2S,\qquad 2SP_0S=S.
 \]
+Put $J_0=2P_0-I$, $M=\operatorname{ran}S$ and
+$Z=(M\oplus J_0M)^\perp$. Then $M\perp J_0M$, and the actual
+orthogonal decomposition of $N_0$ is
+\[
+ \begin{aligned}
+ N_0&=M\oplus J_0M\oplus Z,\\
+ W_0&=(-I_M)\oplus I_{J_0M}\oplus I_Z.
+ \end{aligned}
+\]
+Source reflection swaps the first two copies and restricts to an
+isometric involution on $Z$. In particular,
+\[
+ \Psi_\tau(W_0)=\dim M\,\bigl(\sqrt{\tau^2+4}-\tau\bigr).
+\]
 Empty spaces and arbitrary multiplicities are allowed throughout.
 \end{proposition}
 
@@ -973,6 +987,14 @@ additivity transfers local minimality to $W_0$. Its spectrum is contained
 in $\{1,-1\}$ by \cref{prop:smoothed-local-spectral-structure}, so
 $W_0=I-2S$. Applying the reflection balance identity to this actual
 restriction proves $2SP_0S=S$.
+
+Balance gives $SJ_0S=0$. For $x,y\in M$, self-adjointness of $S$
+then gives $\langle x,J_0y\rangle=0$. Source reflection is an
+isometric involution, so it swaps $M,J_0M$ and preserves their
+orthogonal complement $Z$. The reflection $W_0=I-2S$ acts as $-I$
+on $M$ and as $I$ on $M^\perp$, giving the displayed block actions.
+Its displacement has singular value $2$ on $M$ and zero on the
+remaining space. Summing the scalar penalty proves the cost formula.
 \end{proof}
 
 \begin{corollary}[Complementary right-angle pairs]
