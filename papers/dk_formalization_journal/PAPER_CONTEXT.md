@@ -16,12 +16,15 @@ rank-stratification equivalences are algebraic. Sector connectedness,
 component counts, manifold dimensions, unrestricted real matching and
 operator-ideal optimization remain open. The full finite complex
 Charbonnier local-to-global theorem is now compiled for every `tau>0`.
-The real four-dimensional cosine--sine model now has a compiled exact
-minimum over **both determinant classes**, for every continuous nondecreasing
-spectral penalty vanishing at zero, plus a closed nuclear-cost formula.
-Every negative-class optimizer is classified for strictly increasing
-penalties. The abstract accepted-angle coordinate wrapper and unrestricted
-real matching remain open.
+The unrestricted real four-dimensional minimum now compiles for arbitrary
+rank-two subspaces, in terms of their accepted principal angles, over
+**both determinant classes**, for every continuous nondecreasing spectral
+penalty vanishing at zero. Closed nuclear and clipped Schatten `1<p<2`
+formulas include attainment and comparison with every ambient orthogonal
+transporter. Sharp canonical criteria compile in the full cosine--sine
+model. Every negative-class optimizer is classified for strictly increasing
+penalties. Positive-level real blocks now also have exact balanced source
+ranks. Unrestricted real matching remains open.
 The local Charbonnier analysis now supplies actual first variations,
 source-reflection stationarity, paired two-phase gradient blocks and the
 sharp gradient bound. Actual ambient no-overlap on every submaximal gradient
@@ -53,7 +56,65 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
 
-## Exact real four-dimensional model and negative-class optimizers (25 October)
+## Exact unrestricted real four-dimensional minimum (25 October)
+
+`RealFourPrincipalAngles.lean` closes the abstract accepted-angle part of
+R-1. `exists_minimizing_real_four_transport_principalAngles` applies to any
+real finite inner-product space of dimension four and any pair `K,L` of
+rank two. It constructs an actual orthogonal endomorphism `A`, proves
+`A.adjoint ∘ A = id` and `A ∘ K.starProjection ∘ A.adjoint = L.starProjection`,
+and compares its literal full spectral displacement sum with **every**
+endomorphism satisfying these conditions. In finite equal dimensions these
+are exactly the ambient orthogonal transports. Its parameters are
+`h=(K.principalAngles L 0+K.principalAngles L 1)/2` and
+`d=(K.principalAngles L 0-K.principalAngles L 1)/2`; they are not supplied
+coordinate angles. `exists_minimizing_real_four_nuclear_transport_principalAngles`
+gives the closed nuclear value below at this same abstract scope.
+
+The new reusable `Projection/CosineSineBasis.lean` proves cosine--sine
+bases over `RCLike` for **every balanced rank**, with equal source and
+target ranks and ambient dimension twice that rank. It uses the accepted
+right singular basis of the sine embedding and preserves the accepted
+principal-angle ordering. A diagonal Gram-family extension completes
+zero-scale slots with their original labels. Thus zero, right and repeated
+angles, and the empty pair, are included without division by zero.
+`exists_cosineSine_projection_matrices` identifies the actual source and
+target projection matrices. `OrthonormalMatrix.lean` transfers the entire
+singular-value sequence, including zero padding, through the same
+orthonormal chart. These are classical foundations, with no separate
+historical novelty claim.
+
+`SchattenPhaseClipping.lean` proves `phasePower_isMinOn_truncated_iff`:
+for `1<p<2`, `0<=d<=h<=pi/2`, a phase in `[d,h]` minimizes exactly when
+it equals `max(d,optimalPhase p h)`. The proof uses compactness, positivity
+of the acute endpoint derivative, and the existing classification of
+interior stationary phases. It does not assume unimodality from uniqueness
+alone. Both geometric endpoints and the critical case are covered.
+`RealFourSchatten.exists_minimizing_real_four_schatten_transport_principalAngles`
+then proves the unrestricted actual-angle Schatten power minimum
+
+```
+min { 2*phasePower p h (max(d,optimalPhase p h)),
+      2^p+2*(2*sin(theta_2/2))^p },
+```
+
+with an attaining orthogonal transporter. The same module gives the model
+endpoint `exists_minimizing_four_schatten_transport` for subsequent block
+assembly. The objective is the literal sum of all four singular-value
+powers; this endpoint uses a real exponent rather than an ENNReal norm
+parameter.
+
+`RealFourOptimization.fourCSRotation_isMinOn_iff` gives a general penalty
+criterion: canonical rotation is optimal exactly when `d` minimizes its
+scalar edge and `2*phi(h+d)<=rho(2)`. The full-model Schatten specialization
+`fourCSRotation_schatten_isMinOn_iff` is exactly
+`optimalPhase p h<=d` and `2*(2*sin((h+d)/2))^p<=2^p`.
+`RealFourNuclear.fourCSRotation_nuclear_isMinOn_iff` reduces the nuclear
+criterion to `h-d=0` and `h+d<=pi/3`: the smaller angle must vanish and the
+larger angle must not exceed `pi/3`. These criterion declarations concern
+the explicitly constructed cosine--sine rotation; the abstract minimum
+above does not require identification with a separately named direct-rotation
+implementation.
 
 `RealFourOptimization.exists_minimizing_four_transport` now proves the
 full two-class minimum in the real cosine--sine model. For
@@ -153,31 +214,44 @@ the full block stabilizer reduction over commutative rings, including empty
 blocks. These are classical algebra and spectral theory with no independent
 historical novelty claim.
 
-**Exact remaining R-1 obligation:** the abstract rank-two real subspace
-wrapper needs an actual isometric cosine--sine coordinate reduction and
-identification with the accepted principal angles. The model minimum,
-both determinant classes, actual cost assembly, sharp phase rectangles
-and attainment are now proved. Explicit Schatten scalar clipping and the
-piecewise Charbonnier canonical-region corollaries in the draft still
-require their own formal scalar arguments.
+**Remaining scalar extension:** the explicit piecewise Charbonnier formula
+and canonical-region inequalities in the draft still require their formal
+scalar arguments. The general continuous-monotone theorem already applies
+to that penalty once its elementary hypotheses are instantiated; the explicit
+phase diagram is not inferred from that fact.
 
-The next reusable theorem should construct a real cosine--sine chart for
-equal-rank finite subspaces in dimension twice their rank, including common,
-exterior and crossed-defect directions. Its rank-two instance must map the
-actual source projection to `diag(I_2,0)` and the actual target to the
-cosine--sine projection with angles `K.principalAngles L 0,1`. The existing
-`PrincipalPlanes/Basic.lean` is acute and omits the required right/fixed
-cases; `NonacuteCompression.lean` is `RCLike` and supplies the completed
-rotation's cosine and reflection identities. A promising construction uses
-an ordered source sine eigenbasis, normalized skew partners on positive
-sines, and a dimension-balanced common/exterior pairing at zero sine.
-The angle identification and coordinate transfer of the literal cost must
-be proved explicitly. A supplied chart must never be mistaken for a
-restriction on the competing transporter.
-The broader real gradient blocks, matching lower bound/attainment,
-exchange inequalities, sorted sums and field-gap equality assertions are
-still open. The complex strict-saddle and ideal-theoretic questions below
-are unaffected.
+`RealBlockRank.lean` now certifies the missing individual positive-block
+rank data. `finrank_real_doubled_block` proves that if a complex half `S`
+is disjoint from its involutive reflection, and is invariant under reflection
+followed by conjugation, its actual real descent has dimension
+`2*finrank_C(S)`. Each signed real reflection eigenspace on that descent
+has dimension `finrank_C(S)`. `finrank_real_source_doubled_block` identifies
+the positive signed space with the actual source intersection.
+`exists_small_real_source_balanced_block` combines these exact ranks with
+the existing nontriviality, dimension-at-most-four, actual transporter
+invariance and source-reflection invariance. In particular original
+half-dimensions one and two give source ranks one and two in real
+dimensions two and four. These are conditional block certificates with
+explicit disjointness and conjugation hypotheses, not a complete matching
+reduction.
+
+The donor `InvolutionDoubledBlock.lean` proves the exact signed spaces
+by the explicit injective map `x -> x+e*R(x)`, for `e^2=1`, and proves
+its range is the doubled block intersected with that eigenspace. This is
+classical linear algebra over any field; no separate novelty claim.
+
+**Next R-2 obligation:** upgrade the complete positive-level block families
+at an actual real global minimum to carry these exact source ranks, then
+assemble all levels and the zero-gradient blocks. For each restriction,
+identify the actual orthogonal transporter and source/target projections,
+prove that replacing it by a cheaper block transporter would contradict
+ambient global minimality, and apply the one- or two-angle minimum.
+Zero-gradient fixed-source blocks require a separate identity-replacement
+argument; positive-level balance must not be imposed on them. The exact
+principal-angle multiset union must then yield the matching lower bound.
+Attaining direct sums, exchange inequalities, sorted sums and all-rank
+field-gap equality statements still need their own proofs. The complex
+strict-saddle and ideal-theoretic questions below are unaffected.
 
 Independent numerical diagnostics used 2,400 negative-class matrices,
 including zero, equal and right pairs, and four penalties: nuclear,
@@ -195,9 +269,12 @@ The numerical minima minus the formula ranged from `-2.23e-16` to
 optimization, without a numerical convergence or performance claim.
 
 Validation: `lake exe cache get` followed by the focused modules and
-`lake build DavisKahan.All ForTauCeti` succeeded (10,561 aggregate jobs).
-The research fragment remains excluded from `paper.tex`; no whole real
-abstract-angle or matching theorem is promoted to the checked manuscript.
+`lake build DavisKahan.All ForTauCeti` succeeded (10,579 aggregate jobs),
+including the new abstract-angle, scalar-clipping, sharp canonical and
+real-block rank declarations.
+The research fragment remains excluded from `paper.tex`. The abstract
+real four-dimensional theorem is now compiled; an arbitrary-rank real
+matching theorem is not claimed.
 The 2001 BLR paper's real-scope remark, CS reduction (Theorem 4.1),
 completion parametrization (Lemma 4.3), Frobenius optimizer theorem
 (Theorem 4.2), and Q-norm theorem (Theorem 4.5) remain prior art. The new
@@ -255,15 +332,13 @@ tests to actual restrictions and extend the overlap/balance Hessian tests
 to the ambient space. No such second-order-sufficiency or strict-saddle
 theorem is currently claimed.
 
-For the unrestricted real problem, the most direct next target is now
-**the abstract accepted-angle coordinate wrapper** for the exact
-four-dimensional two-angle minimum from `real_four_dimensional_transport.tex`.
-Both model determinant classes and all negative-class strict-penalty
-optimizers are proved above. The actual real
-nonzero-gradient and zero-gradient small-block decompositions already
-compile; the abstract angle identification, angle-multiset assembly,
-matching attainment, sorted-sum exchange bounds and field-gap equalities
-remain conventional. Orthogonal determinant/parity restrictions must remain
+For the unrestricted real problem, the accepted-angle four-dimensional
+minimum and Schatten clipping are now compiled above. The next target is
+full real small-block assembly carrying the individual source-rank
+certificates now proved in `RealBlockRank.lean`, followed by
+principal-angle multiset assembly and the matching lower bound. Matching
+attainment, sorted-sum exchange bounds and field-gap equalities remain
+conventional. Orthogonal determinant/parity restrictions must remain
 explicit. The new complex local-to-global theorem does not supply a real
 local landscape theorem.
 

@@ -1,8 +1,9 @@
 % Independent conventional research fragment; excluded from paper.tex.
-% The full two-class minimum and nuclear corollary are Lean-verified in the
-% cosine--sine model, including all ambient mixing competitors and attainment.
-% Full negative-class optimizer families also compile. The abstract accepted-angle
-% wrapper and explicit Schatten/Charbonnier scalar-clipping corollaries remain open.
+% The full two-class theorem, nuclear corollary and clipped Schatten corollary
+% compile for arbitrary real rank-two subspaces with accepted principal angles.
+% All ambient mixing competitors, both determinant classes and endpoints are included.
+% Full negative-class families and sharp Schatten/nuclear model canonical criteria compile.
+% The explicit Charbonnier piecewise phase diagram remains a conventional proof.
 % Evidence and priority boundaries: PAPER_CONTEXT.md.
 \section{Exact real transport of two planes in four dimensions}
 \label{sec:real-four-dimensional-transport}
@@ -152,11 +153,36 @@ For the nuclear norm the formula simplifies to
 \end{corollary}
 
 \begin{proof}
-The scalar power cost decreases to its unique minimizer and increases
-afterward. Restricting its phase interval to $[d,h]$ therefore moves the
-minimizer to $\delta_*$ when necessary. For $p=1$, the phase cost is
+If $\delta_p(h)\geq d$, its unique unrestricted minimizer remains feasible.
+Otherwise a minimizer on $[d,h]$ exists by compactness. For $0<h<\pi/2$,
+the endpoint derivative at $h$ is positive, so that endpoint cannot
+minimize when $d<h$. Every interior stationary phase is the unrestricted
+minimizer, which lies below $d$ in this case. The restricted minimizer
+must therefore be $d$. The cases $h=0,\pi/2$ follow from the endpoint
+formulas. This proves the clipping rule. For $p=1$, the phase cost is
 $4\sin(h/2)\cos(\delta/2)$ and is minimized at $\delta=h$.
 Apply \cref{thm:real-four-dimensional-minimum}.
+\end{proof}
+
+\begin{corollary}[Real canonical optimality in four dimensions]
+\label{cor:real-four-canonical-schatten}
+For $1<p<2$, the canonical rotation is globally Schatten optimal exactly when
+\[
+ \delta_p(h)\leq d,
+ \qquad 2\bigl(2\sin(\theta_1/2)\bigr)^p\leq 2^p.
+\]
+For the nuclear norm it is optimal exactly when
+$\theta_2=0$ and $\theta_1\leq\pi/3$.
+\end{corollary}
+
+\begin{proof}
+The canonical cost is the scalar edge cost at $\delta=d$. It minimizes
+that edge exactly when $\delta_p(h)\leq d$. Comparing it with the
+negative-determinant minimum cancels the smaller-angle contribution and
+gives the second inequality. For nuclear cost, the edge function is
+$8\sin(h/2)\cos(\delta/2)$. Its left endpoint is minimizing exactly
+when $d=h$. The remaining reflection comparison is
+$4\sin(\theta_1/2)\leq2$, equivalent to $\theta_1\leq\pi/3$.
 \end{proof}
 
 \begin{corollary}[The real smoothed phase diagram]

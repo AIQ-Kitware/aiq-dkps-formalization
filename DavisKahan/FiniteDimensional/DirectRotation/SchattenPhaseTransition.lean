@@ -670,7 +670,9 @@ theorem exists_phase_strict_improvement_of_supercritical
   exact ⟨delta, ⟨hdelta0, hdeltatheta⟩,
     hanti ⟨le_rfl, hdelta0.le⟩ ⟨hdelta0.le, le_rfl⟩ hdelta0⟩
 
-private theorem phasePower_deriv_endpoint_pos (p theta : ℝ) (hp : 1 < p)
+/-- At a positive acute angle the endpoint phase has positive derivative;
+it cannot minimize on any nontrivial interval immediately to its left. -/
+theorem phasePower_deriv_endpoint_pos (p theta : ℝ) (hp : 1 < p)
     (hθ : 0 < theta) (hπ : theta < Real.pi / 2) :
     0 < deriv (phasePower p theta) theta := by
   rw [(phasePower_hasDerivAt_of_one_le p theta theta hp.le).deriv]

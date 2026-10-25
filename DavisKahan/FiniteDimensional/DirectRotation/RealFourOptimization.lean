@@ -256,6 +256,75 @@ theorem exists_minimizing_four_transport
     rw [hvalue]
     exact hlower X hX
 
+/-- The canonical cosine--sine rotation has the scalar edge cost at `delta=d`. -/
+theorem fourCSRotation_displacementCost (rho : ℝ → ℝ) (h d : ℝ) :
+    fourDisplacementCost rho (fourCSRotation ![h+d, h-d]) = fourEdgeCost rho h d := by
+  have hplane : TauCeti.Matrix.planeOrthogonal 0 1 = 1 := by
+    ext i j
+    fin_cases i <;> fin_cases j <;> simp [TauCeti.Matrix.planeOrthogonal]
+  have hzero : fourTransport ![h+d, h-d] 0 0 1 1 = fourCSRotation ![h+d, h-d] := by
+    simp only [fourTransport, hplane, fromBlocks_one, mul_one]
+  have hcost := fourTransport_rotations_cost_of_phase_cosines h d 0 0 h d
+    (by simp) (by simp) rho
+  simp only [zero_add, sub_zero, hzero] at hcost
+  rw [hcost]
+  simp only [fourEdgeCost, fourPhasePenalty]
+  ring
+
+/-- Sharp canonical-optimality criterion for any admissible penalty: its
+scalar edge must minimize at the left endpoint and reflection of the
+larger-angle plane must give no improvement. Both conditions are necessary. -/
+theorem fourCSRotation_isMinOn_iff
+    (h d : ℝ) (hd : 0 ≤ d) (hdh : d ≤ h) (hhd : h+d ≤ Real.pi / 2)
+    (rho : ℝ → ℝ) (hrho : MonotoneOn rho (Set.Icc 0 2))
+    (hcont : ContinuousOn rho (Set.Icc 0 2)) (hzero : rho 0 = 0) :
+    IsMinOn (fourDisplacementCost rho)
+      {X | X.transpose * X = 1 ∧
+        X * fourSourceProjection * X.transpose =
+          fourCSRotation ![h+d, h-d] * fourSourceProjection *
+            (fourCSRotation ![h+d, h-d]).transpose}
+      (fourCSRotation ![h+d, h-d]) ↔
+      IsMinOn (fourEdgeCost rho h) (Set.Icc d h) d ∧
+        2*fourPhasePenalty rho (h+d) ≤ rho 2 := by
+  obtain ⟨delta, hdelta, hscalar, W, hW, htrans, hcost, hmin⟩ :=
+    exists_minimizing_four_transport h d hd hdh hhd rho hrho hcont hzero
+  have hcan := fourCSRotation_displacementCost rho h d
+  constructor
+  · intro hcanonical
+    have hle := hcanonical ⟨hW, htrans⟩
+    change fourDisplacementCost rho (fourCSRotation ![h+d, h-d]) ≤
+      fourDisplacementCost rho W at hle
+    rw [hcan, hcost] at hle
+    refine ⟨fun eta heta => (hle.trans (min_le_left _ _)).trans (hscalar heta), ?_⟩
+    have hneg := hle.trans (min_le_right _ _)
+    dsimp only [fourEdgeCost] at hneg
+    linarith
+  · rintro ⟨hedge, hreflect⟩ X hX
+    change fourDisplacementCost rho (fourCSRotation ![h+d, h-d]) ≤
+      fourDisplacementCost rho X
+    rw [hcan]
+    have hneg : fourEdgeCost rho h d ≤ rho 2 + 2*fourPhasePenalty rho (h-d) := by
+      dsimp only [fourEdgeCost]
+      linarith
+    calc
+      _ ≤ min (fourEdgeCost rho h delta) (rho 2 + 2*fourPhasePenalty rho (h-d)) :=
+        le_min (hedge hdelta) hneg
+      _ = fourDisplacementCost rho W := hcost.symm
+      _ ≤ fourDisplacementCost rho X := hmin hX
+
+/-- Exact nuclear edge cost throughout its geometric phase interval. -/
+theorem four_nuclear_edgeCost (h delta : ℝ) (hh : h ≤ Real.pi / 2)
+    (hdelta : delta ∈ Set.Icc 0 h) :
+    fourEdgeCost id h delta = 8*Real.sin (h/2)*Real.cos (delta/2) := by
+  rw [fourEdgeCost, fourPhasePenalty, fourPhasePenalty, id_eq, id_eq,
+    sqrt_displacement_chord_eq_two_sin_half _
+      ⟨by linarith [hdelta.1, hdelta.2], by linarith [hdelta.2]⟩,
+    sqrt_displacement_chord_eq_two_sin_half _
+      ⟨by linarith [hdelta.2], by linarith [hdelta.1, Real.pi_pos]⟩]
+  rw [show (h+delta)/2 = h/2+delta/2 by ring,
+    show (h-delta)/2 = h/2-delta/2 by ring, Real.sin_add, Real.sin_sub]
+  ring
+
 /-- The nuclear edge minimum is at the endpoint `delta=h`, including
 zero and right angles. -/
 theorem four_nuclear_edge_minimum
@@ -264,12 +333,7 @@ theorem four_nuclear_edge_minimum
       IsMinOn (fourEdgeCost id h) (Set.Icc d h) h := by
   have hformula (delta : ℝ) (hdelta : delta ∈ Set.Icc d h) :
       fourEdgeCost id h delta = 8*Real.sin (h/2)*Real.cos (delta/2) := by
-    rw [fourEdgeCost, fourPhasePenalty, fourPhasePenalty, id_eq, id_eq,
-      sqrt_displacement_chord_eq_two_sin_half _ ⟨by linarith [hdelta.1], by linarith [hdelta.2]⟩,
-      sqrt_displacement_chord_eq_two_sin_half _ ⟨by linarith [hdelta.2], by linarith [hdelta.1]⟩]
-    rw [show (h+delta)/2 = h/2+delta/2 by ring,
-      show (h-delta)/2 = h/2-delta/2 by ring, Real.sin_add, Real.sin_sub]
-    ring
+    exact four_nuclear_edgeCost h delta (by linarith) ⟨hd.trans hdelta.1, hdelta.2⟩
   have hvalue : fourEdgeCost id h h = 4*Real.sin h := by
     rw [hformula h ⟨hdh, le_rfl⟩]
     have hh : Real.sin h = 2*Real.sin (h/2)*Real.cos (h/2) := by

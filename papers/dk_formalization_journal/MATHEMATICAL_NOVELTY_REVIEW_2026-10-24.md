@@ -16,7 +16,7 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
-## Exact real four-dimensional model minimum and negative-class classification (25 October)
+## Exact unrestricted real four-dimensional minimum and canonical criteria (25 October)
 
 The **full two-class minimum** is now Lean-verified in the real
 cosine--sine model. `RealFourOptimization.exists_minimizing_four_transport`
@@ -34,13 +34,38 @@ represented by an actual `IsMinOn` witness. The nuclear corollary
 `RealFourPositive.lean` derives the literal positive-component costs from
 the characteristic roots and constructs their actual phase rectangles.
 `RealFourOptimization.lean` proves pointwise domination and constructs
-every attaining edge cost using the common rotation. Thus the outstanding
-R-1 formal step is now the abstract real cosine--sine chart and its accepted
-principal-angle identification. The explicit Schatten clipping and
-Charbonnier piecewise corollaries are also still uncompiled. The full
-model theorem is a candidate analytic contribution whose historical
-priority remains unresolved; completing these proofs is not evidence of
-first publication. The final production build succeeded (10,561 jobs).
+every attaining edge cost using the common rotation.
+`RealFourPrincipalAngles.lean` now constructs the abstract chart and closes
+R-1 for arbitrary real rank-two subspaces in dimension four. Its general
+penalty and closed nuclear endpoints use the actual accepted principal
+angles, construct attaining orthogonal operators, and compare with every
+ambient orthogonal transport. The donor cosine--sine basis theorem is
+`RCLike`, valid for all balanced ranks, and includes zero, right, repeated
+and empty cases. The entire singular-value sequence is preserved by the
+orthonormal coordinate transfer. These classical coordinate foundations
+carry no separate novelty claim.
+
+`SchattenPhaseClipping.phasePower_isMinOn_truncated_iff` proves the exact
+unique scalar minimizer `max(d,optimalPhase p h)` for `1<p<2`, including
+both geometric endpoints. `RealFourSchatten` proves the resulting closed
+minimum and attainment at the full abstract accepted-angle scope.
+The sharp full-model canonical criterion is `optimalPhase p h<=d` together
+with `2*(2*sin((h+d)/2))^p<=2^p`. The nuclear criterion is exactly
+`h-d=0` and `h+d<=pi/3` (`RealFourNuclear`). The explicit Charbonnier
+piecewise corollaries remain uncompiled. Historical priority for the
+full R-1 analytic theorem and these consequences remains unresolved;
+compilation does not establish first publication.
+
+`RealBlockRank.lean` now proves exact source balance for each real
+positive-level doubled block: original complex half-dimension `k` gives
+real dimension `2*k` and source-intersection rank `k`. The actual block
+also carries the established nontriviality and transporter/reflection
+invariance. The algebraic donor parametrizes both signed spaces by
+`x -> x+e*R(x)` and proves exact injectivity and range. These are classical
+rank certificates, without a separate historical priority claim. They
+advance R-2 but do not yet assemble an actual global minimizer's full
+family, its cost, or its principal-angle multiset into matching data.
+Focused builds and the full production build passed (10,579 jobs).
 
 The determinant-negative part of R-1 is now **Lean-verified in explicit
 real cosine--sine coordinates**. For `0<=u<=t<=pi/2`, every nondecreasing
@@ -66,8 +91,9 @@ quartics, and the reciprocal factorization of both negative components.
 `RealFourPhaseRectangle.exists_edge_dominating_phase_rectangle` proves the
 penalty-independent pointwise scalar domination step for the positive
 rectangle. The downstream positive cost assembly and edge attainment are
-now proved as above. The abstract principal-angle coordinate wrapper,
-the real matching theorem and all-rank field-gap claims remain unverified.
+now proved as above, together with the abstract principal-angle wrapper
+and the clipped Schatten specialization. The real matching theorem and
+all-rank field-gap claims remain unverified.
 
 **Historical assessment:** the negative-class formula and family changes
 are short consequences of classical real orthogonal spectral structure
@@ -79,7 +105,7 @@ CS coordinates in Theorem 4.1, and the full orthogonal-completion mechanism
 of Lemma 4.3. Theorem 4.2 gives Frobenius optima and optimizer families;
 Theorem 4.5 assumes a Q-norm and an additional block condition. This
 inspection has not established historical priority for the general
-monotone negative-class statement or for the still-open full R-1/R-2
+monotone negative-class statement or for the full R-1 theorem and the still-open R-2
 claims. The donor Gram/scalar-extension and normal-root formulas are
 classical foundations with no independent novelty claim.
 
@@ -1405,7 +1431,7 @@ rows of the original 29-result Davis--Kahan source inventory.
 | SM-3 | Quadratic growth from optimum below strict angle cutoff, with explicit constant and Frobenius distance for **every admissible complex transporter** | **Formalized**: `SmoothedSubspaceStability.lean` | **Distinct and credible mathematical addition** if not implied by older error-bound/strong-convexity theorem |
 | SM-4 | Global convex-relaxation tightness when commuting unitary factor is relaxed to commuting contraction (weighted nuclear cost) | **Formalized for the stated supplied structural class**: `SmoothedCommutantOptimization.lean`; instantiated in all-pairs argument | Strong proof mechanism; present as supporting theorem, not a generic statement for all convex relaxations |
 | SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Complete finite complex iff in `SmoothedNonacuteClassification`; joint attainment in `SmoothedPhaseDefectAttainment`; unique normalized parameters, full multiplicity product and topology in `SmoothedParameterNormalization`, `SmoothedMultiplicityParameters`, `SmoothedParameterTopology` | All-angle global classification and independent projection/defect homeomorphism compiled for `tau>0`, including compactness, rank-sector separation and exact simple-active count. Local-to-global is now compiled for all `tau>0`; broad-penalty extension, component counts, manifold dimensions and ideal optimization remain open |
-| R-1 | Exact real R4 rank-two minimum for *every continuous nondecreasing spectral penalty*, including separate determinant classes | **Full cosine--sine model minimum compiled** in `RealFourOptimization.lean`, including actual ambient costs and attaining matrices, with a closed nuclear corollary. Complete negative-class optimizer sets compile in `RealFourNegative.lean`. | All ambient model competitors and every endpoint are covered. The abstract accepted-angle coordinate wrapper and explicit Schatten/Charbonnier clipping corollaries remain open. Full model theorem priority unresolved; no separate priority claim for the elementary negative-class deduction. |
+| R-1 | Exact real R4 rank-two minimum for *every continuous nondecreasing spectral penalty*, including separate determinant classes | **Full abstract accepted-angle minimum compiled** in `RealFourPrincipalAngles.lean`, with general continuous-monotone penalties and a closed nuclear corollary. `RealFourSchatten.lean` adds exact scalar clipping and sharp model canonical criteria; `RealFourNuclear.lean` proves the sharp nuclear model criterion. Complete negative-class optimizer sets compile in `RealFourNegative.lean`. | Every ambient orthogonal competitor and every endpoint are covered. Explicit Charbonnier piecewise corollaries remain open. Full model theorem priority unresolved; no separate priority claim for the elementary negative-class deduction. |
 | R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | Conventional proof draft `real_matching_transport.tex`, with compiled positive-gradient block decomposition in `RealBlockDescent.lean` and related modules | **Potentially strongest structural new theorem**, but exceptional-gradient assembly and global matching bound are **not compiled** |
 | R-3 | For Schatten `1<p<2`, Charbonnier, and nuclear limits, matching reduces to minimum of **two sorted adjacent-pair sums** | Conventional derivation in `real_matching_transport.tex`; numerical checks corroborate but are not proofs | Would yield efficient exact algorithms and optimality thresholds; **submodularity and final reduction need independent proof review** |
 | R-4 | Real-minus-complex optimal nuclear penalty is at most `2-sqrt(3)` regardless of dimension, with sharp equality cases | Conventional proof draft only; low-dimensional example realizes constant | **High-value sharp field-gap theorem** if globally true; proof of exclusion of higher-dimensional maxima must be scrutinized |
