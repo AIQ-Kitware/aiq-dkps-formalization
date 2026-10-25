@@ -138,6 +138,7 @@ theorem lpGauge_add_le {p : ℝ} (hp : 1 ≤ p) (x y : Fin n → ℝ) :
   simpa [lpGauge] using Real.Lp_add_le Finset.univ x y hp
 
 /-- The `ℓᵖ` gauge as a finite symmetric gauge. -/
+@[expose]
 noncomputable def lpSymmetricGauge (p : ℝ) (hp : 1 ≤ p) :
     FiniteSymmetricGauge n where
   toFun := lpGauge p
@@ -169,6 +170,7 @@ theorem lpGauge_zeroPadRight (p : ℝ) (x : Fin n → ℝ) :
     simp [Real.zero_rpow hp]
 
 /-- The finite `ℓ∞` gauge. -/
+@[expose]
 noncomputable def linftyGauge (x : Fin n → ℝ) : ℝ :=
   ⨆ i, |x i|
 
@@ -235,6 +237,7 @@ theorem linftyGauge_neg_single (x : Fin n → ℝ) (j : Fin n) :
   · simp [Function.update_of_ne hij]
 
 /-- The `ℓ∞` gauge as a finite symmetric gauge. -/
+@[expose]
 noncomputable def linftySymmetricGauge : FiniteSymmetricGauge n where
   toFun := linftyGauge
   add_le' := linftyGauge_add_le

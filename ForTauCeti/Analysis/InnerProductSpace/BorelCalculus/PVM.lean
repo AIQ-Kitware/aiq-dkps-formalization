@@ -212,6 +212,14 @@ omit [CompleteSpace H] in
 several existing proofs match on `reCoord` syntactically. -/
 theorem reCoord_apply (w : spectrum ℂ T) : reCoord w = (w : ℂ).re := (rfl)
 
+omit [CompleteSpace H] in
+/-- Relabelling the spectrum by real part is continuous. -/
+theorem continuous_reCoord : Continuous (reCoord (T := T)) := by
+  have hcoord : reCoord (T := T) = fun w : spectrum ℂ T => (w : ℂ).re :=
+    funext reCoord_apply
+  rw [hcoord]
+  exact Complex.continuous_re.comp continuous_subtype_val
+
 /-- The projections of `boundedPVM` are the Borel calculus of band indicators.  Rewrite
 form for consumers outside this module, where the definition bodies are not exposed. -/
 theorem boundedPVM_proj (B : Set ℝ) (hB : MeasurableSet B) :

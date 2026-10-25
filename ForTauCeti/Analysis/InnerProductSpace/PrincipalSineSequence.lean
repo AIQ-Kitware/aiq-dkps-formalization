@@ -52,6 +52,7 @@ theorem principalSineOperator_apply (U V : Submodule 𝕜 H)
 
 /-- Principal sines in arbitrary Hilbert dimension, ordered decreasingly and
 padded by zero when the directed sine operator has finite rank. -/
+@[expose]
 noncomputable def principalSineSequence (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (n : ℕ) : ℝ :=
   (principalSineOperator U V).approximationNumber n

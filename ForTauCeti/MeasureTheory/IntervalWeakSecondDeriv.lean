@@ -95,6 +95,7 @@ theorem ae_mem_unitIocMeasure : ∀ᵐ t ∂unitIocMeasure, t ∈ Set.Ioc (0 : �
 /-! ## The polynomial test family -/
 
 /-- Polynomial test bump: vanishes to order `k+2` at `0` and to second order at `1`. -/
+@[expose]
 def intervalBump (k : ℕ) (t : ℝ) : ℝ := t ^ (k + 2) * (1 - t) ^ 2
 
 /-- Closed form of the first derivative of `intervalBump`. -/

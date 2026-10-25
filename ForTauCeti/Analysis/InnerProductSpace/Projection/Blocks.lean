@@ -68,6 +68,11 @@ noncomputable def reflectionOperator (U : Submodule 𝕜 E)
 def IsOffDiagonal (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) : Prop := U.diagBlock A = 0
 
+/-- Off-diagonality means the diagonal block vanishes. -/
+theorem isOffDiagonal_iff (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (A : E →L[𝕜] E) : U.IsOffDiagonal A ↔ U.diagBlock A = 0 := by
+  rfl
+
 /-- The off-diagonal part as the diagonal-part defect. -/
 theorem offDiagBlock_eq_sub_diagBlock (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) : U.offDiagBlock A = A - U.diagBlock A := by

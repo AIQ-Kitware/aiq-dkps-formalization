@@ -44,6 +44,7 @@ namespace ApproximationNumber
 noncomputable section
 
 /-- The finite set of values occurring in `a`. -/
+@[expose]
 noncomputable def finiteValueSet {n : ℕ} (a : Fin n → ℝ) : Finset ℝ :=
   Finset.univ.image a
 
@@ -52,6 +53,7 @@ abbrev FiniteValueLabel {n : ℕ} (a : Fin n → ℝ) :=
   {value : ℝ // value ∈ finiteValueSet a}
 
 /-- The label of a particular index. -/
+@[expose]
 noncomputable def finiteValueLabel {n : ℕ} (a : Fin n → ℝ) (i : Fin n) :
     FiniteValueLabel a := by
   refine ⟨a i, Finset.mem_image.mpr ?_⟩

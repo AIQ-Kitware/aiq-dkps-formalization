@@ -171,6 +171,28 @@ namespace ContinuousLinearMap
 
 open TauCeti TauCeti.ScalarTransport
 
+/-- Compatible real algebra structures agree by the scalar-tower identity. -/
+theorem realAlgebra_eq_of_isScalarTower
+    {𝕜 E : Type*} [RCLike 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+    (a : Algebra ℝ (E →L[𝕜] E))
+    (h : letI := a; IsScalarTower ℝ 𝕜 (E →L[𝕜] E)) :
+    ContinuousLinearMap.realAlgebra (𝕜 := 𝕜) (E := E) = a := by
+  apply Algebra.algebra_ext
+  intro r
+  have hl : (ContinuousLinearMap.realAlgebra (𝕜 := 𝕜) (E := E)).algebraMap r =
+      algebraMap 𝕜 (E →L[𝕜] E) (algebraMap ℝ 𝕜 r) := by
+    let _ := ContinuousLinearMap.realAlgebra (𝕜 := 𝕜) (E := E)
+    let _ := ContinuousLinearMap.realIsScalarTower (𝕜 := 𝕜) (E := E)
+    exact IsScalarTower.algebraMap_apply ℝ 𝕜 (E →L[𝕜] E) r
+  have hr : a.algebraMap r =
+      algebraMap 𝕜 (E →L[𝕜] E) (algebraMap ℝ 𝕜 r) := by
+    let _ := a
+    let _ := h
+    exact IsScalarTower.algebraMap_apply ℝ 𝕜 (E →L[𝕜] E) r
+  exact hl.trans hr.symm
+
+
+
 /-- The continuous functional calculus over `ℝ` for bounded self-adjoint operators over
 an arbitrary `RCLike` field, supplied by the canonical TauCeti instance.
 

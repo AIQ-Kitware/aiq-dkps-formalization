@@ -109,6 +109,7 @@ The bundle `cfcHom_eq_of_continuous_of_map_id` consumes. A symbol on the spectru
 by zero; `selfAdjointFunctionalCalculus_indicator` together with the eigenvalue containment
 makes that extension invisible, so each field is the corresponding algebraic lemma about the
 calculus. -/
+@[expose]
 noncomputable def calculusStarAlgHom {T : H →ₗ[ℂ] H} (hT : T.IsSymmetric) :
     C(spectrum ℝ T.toContinuousLinearMap, ℝ) →⋆ₐ[ℝ] (H →L[ℂ] H) where
   toFun g := (selfAdjointFunctionalCalculus hT (extendSymbol g)).toContinuousLinearMap

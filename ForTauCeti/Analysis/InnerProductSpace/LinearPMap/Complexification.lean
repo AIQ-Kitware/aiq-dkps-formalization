@@ -110,11 +110,13 @@ membership in the real domain. -/
   rfl
 
 /-- The real coordinate of a vector in the complexified domain. -/
+@[expose]
 def complexificationDomainRe
     (A : E →ₗ.[ℝ] F) (z : complexificationDomain A) : A.domain :=
   ⟨re (z : Eℂ), (mem_complexificationDomain_iff A z).mp z.property |>.1⟩
 
 /-- The imaginary coordinate of a vector in the complexified domain. -/
+@[expose]
 def complexificationDomainIm
     (A : E →ₗ.[ℝ] F) (z : complexificationDomain A) : A.domain :=
   ⟨im (z : Eℂ), (mem_complexificationDomain_iff A z).mp z.property |>.2⟩

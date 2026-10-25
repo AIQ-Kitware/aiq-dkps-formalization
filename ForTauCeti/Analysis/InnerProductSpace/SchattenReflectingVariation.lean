@@ -50,6 +50,7 @@ private theorem phase_mem_unitary (t : ℝ) : phase t ∈ unitary ℂ := by
   exact Unitary.mem_iff.mpr ⟨hs, by rwa [mul_comm]⟩
 
 /-- A real planar reflection, with `d²+k²=1` as its geometric hypothesis. -/
+@[expose]
 def reflectionMatrix (d k : ℝ) : Matrix (Fin 2) (Fin 2) ℂ :=
   !![-(d : ℂ), -(k : ℂ); -(k : ℂ), (d : ℂ)]
 
@@ -198,6 +199,7 @@ theorem schatten_displacement_variation (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : 
   rfl
 
 /-- The source projection onto the first coordinate line. -/
+@[expose]
 def sourceProjection : Plane →L[ℂ] Plane :=
   Matrix.toEuclideanCLM (n := Fin 2) (𝕜 := ℂ) (Matrix.diagonal ![1, 0])
 
