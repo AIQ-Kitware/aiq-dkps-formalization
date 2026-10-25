@@ -153,4 +153,56 @@ theorem exists_small_real_source_balanced_block [FiniteDimensional ℝ E]
   rw [← hreal] at hrank
   exact ⟨N, hN, hN0, hNdim, hUN, hRN, hrank⟩
 
+/-- A complete reflection-paired level descends to a complete orthogonal
+family of actual real blocks with exact source ranks. Every member is
+either a two-dimensional rank-one problem or a four-dimensional rank-two
+problem, including degenerate restricted principal angles. -/
+theorem exists_orthogonal_real_source_balanced_blocks [FiniteDimensional ℝ E]
+    (K : Submodule ℂ (RealComplexification E))
+    (hRC : ∀ z, K.reflection (conjugation z) = conjugation (K.reflection z))
+    (U : RealComplexification E →L[ℂ] RealComplexification E)
+    (hUC : ∀ z, U (conjugation z) = conjugation (U z))
+    (L : Submodule ℂ (RealComplexification E))
+    (hL : L.IsOrtho (L.map K.reflection.toLinearMap))
+    (F : Finset (Submodule ℂ (RealComplexification E)))
+    (hF : ∀ S ∈ F, S ≠ ⊥ ∧ Module.finrank ℂ S ≤ 2 ∧
+      (∀ z ∈ S, K.reflection (conjugation z) ∈ S) ∧ (∀ z ∈ S, U z ∈ S))
+    (hpair : (F : Set (Submodule ℂ (RealComplexification E))).Pairwise Submodule.IsOrtho)
+    (hspan : F.sup id = L) :
+    ∃ H : Finset (Submodule ℝ E),
+      (∀ N ∈ H, N ≠ ⊥ ∧ Module.finrank ℝ N ≤ 4 ∧
+        (∀ x ∈ N, realify U x ∈ N) ∧
+        (∀ x ∈ N, realify
+          (K.reflection : RealComplexification E →L[ℂ] RealComplexification E) x ∈ N) ∧
+        ((Module.finrank ℝ N = 2 ∧ Module.finrank ℝ ↥(N ⊓ realSubmodule K) = 1) ∨
+          (Module.finrank ℝ N = 4 ∧ Module.finrank ℝ ↥(N ⊓ realSubmodule K) = 2))) ∧
+      (H : Set (Submodule ℝ E)).Pairwise Submodule.IsOrtho ∧
+      complexifySubmodule (H.sup id) = L ⊔ L.map K.reflection.toLinearMap := by
+  obtain ⟨H, hH, horth, hcover, horigin⟩ := exists_orthogonal_real_doubled_blocks
+    K.reflection K.reflection_involutive hRC U hUC L hL F hF hpair hspan
+  refine ⟨H, ?_, horth, hcover⟩
+  intro N hN
+  obtain ⟨hN0, hNdim, hUN, hRN⟩ := hH N hN
+  obtain ⟨S, hS, hNS⟩ := horigin N hN
+  have hSL : S ≤ L := by
+    rw [← hspan]
+    exact Finset.le_sup (f := id) hS
+  have hSS : S.IsOrtho (S.map K.reflection.toLinearMap) :=
+    hL.mono hSL (Submodule.map_mono hSL)
+  have hreal : N = realSubmodule (S ⊔ S.map K.reflection.toLinearMap) := by
+    have h := congrArg realSubmodule hNS
+    simpa only [realSubmodule_complexifySubmodule] using h
+  have hrank := finrank_real_source_doubled_block K S hRC hSS (hF S hS).2.2.1
+  rw [← hreal] at hrank
+  have hpos : 0 < Module.finrank ℂ S := by
+    have hn : Nontrivial S := Submodule.nontrivial_iff_ne_bot.mpr (hF S hS).1
+    exact Module.finrank_pos
+  have hsmall := (hF S hS).2.1
+  refine ⟨hN0, hNdim, hUN, hRN, ?_⟩
+  rcases (by omega : Module.finrank ℂ S = 1 ∨ Module.finrank ℂ S = 2) with h1 | h2
+  · left
+    constructor <;> omega
+  · right
+    constructor <;> omega
+
 end TauCeti.DavisKahan.FiniteDimensional.RealTransport

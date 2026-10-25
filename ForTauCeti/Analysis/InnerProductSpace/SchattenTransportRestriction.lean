@@ -11,12 +11,13 @@ public import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
 public import Mathlib.Topology.Order.LocalExtr
 
 /-!
-# Local transport minima restrict to orthogonal blocks
+# Global and local transport minima restrict to orthogonal blocks
 
 Varying one unitary summand and fixing its orthogonal complement is a
 continuous feasible variation of the ambient transporter. Additivity of
-finite Schatten powers therefore transfers local minimality to that
-summand. The coordinate isometry and the remaining block are arbitrary.
+finite Schatten powers transfers both global and local minimality to that
+summand. The coordinate isometry and remaining block are arbitrary. For
+global minima, a zero or identity source operator forces identity action.
 -/
 
 public section
@@ -109,6 +110,45 @@ theorem isLocalMinOn_transport_of_conj_linearIsometryEquiv
     schatten_displacement_conj_linearIsometryEquiv e _ p hp] using hA
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] [FiniteDimensional 𝕜 H] in
+/-- Global minimality transfers to one orthogonal block for any additive
+cost. The competing block transporter is arbitrary and its complement is
+kept fixed. No continuity or finite-dimensional assumption is needed. -/
+theorem isMinOn_block_transport_of_cost_orthogonal_sum
+    (cost : (H →L[𝕜] H) → ℝ) (blockCost : (E →L[𝕜] E) → ℝ) (k : ℝ)
+    (e : WithLp 2 (E × F) ≃ₗᵢ[𝕜] H)
+    (U : E →L[𝕜] E) (V : unitary (F →L[𝕜] F))
+    (P₀ : E →L[𝕜] E) (P₁ : F →L[𝕜] F)
+    (hcost : ∀ A : E →L[𝕜] E,
+      cost (e.conjStarAlgEquiv (A.withLpProdMap 2 (V : F →L[𝕜] F))) = blockCost A + k) :
+    let W := e.conjStarAlgEquiv (U.withLpProdMap 2 (V : F →L[𝕜] F))
+    let P := e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁)
+    IsMinOn cost
+      {T | T ∈ unitary (H →L[𝕜] H) ∧ T * P * star T = W * P * star W} W →
+    IsMinOn blockCost
+      {T | T ∈ unitary (E →L[𝕜] E) ∧ T * P₀ * star T = U * P₀ * star U} U := by
+  dsimp only
+  let lift (A : E →L[𝕜] E) :=
+    e.conjStarAlgEquiv (A.withLpProdMap 2 (V : F →L[𝕜] F))
+  have htrans (A : E →L[𝕜] E) :
+      lift A * e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁) * star (lift A) =
+        e.conjStarAlgEquiv ((A * P₀ * star A).withLpProdMap 2
+          ((V : F →L[𝕜] F) * P₁ * star (V : F →L[𝕜] F))) := by
+    dsimp only [lift]
+    rw [← map_star, ← map_mul, ← map_mul, ContinuousLinearMap.star_withLpProdMap,
+      ContinuousLinearMap.mul_withLpProdMap, ContinuousLinearMap.mul_withLpProdMap]
+  intro hmin A hA
+  have hfeasible : lift A ∈ unitary (H →L[𝕜] H) ∧
+      lift A * e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁) * star (lift A) =
+        lift U * e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁) * star (lift U) := by
+    refine ⟨Unitary.map_mem e.conjStarAlgEquiv
+      (ContinuousLinearMap.withLpProdMap_mem_unitary hA.1 V.property), ?_⟩
+    rw [htrans, htrans, hA.2]
+  have hle := hmin hfeasible
+  change cost (lift U) ≤ cost (lift A) at hle
+  rw [hcost, hcost] at hle
+  exact (add_le_add_iff_right k).mp hle
+
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] [FiniteDimensional 𝕜 H] in
 /-- An ambient local transport minimum is a local minimum on each
 orthogonal unitary block when the complementary block is fixed.
 The block competitors range over all unitaries carrying its source
@@ -195,6 +235,33 @@ theorem isLocalMinOn_block_transport_of_orthogonal_sum
   rw [schatten_displacement_conj_linearIsometryEquiv e _ p hp,
     schatten_displacement_rpow_withLpProdMap _ _ p hp]
 
+/-- Global Schatten minimality transfers to either orthogonal unitary block. -/
+theorem isMinOn_block_transport_of_orthogonal_sum
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (e : WithLp 2 (E × F) ≃ₗᵢ[𝕜] H)
+    (U : E →L[𝕜] E) (V : unitary (F →L[𝕜] F))
+    (P₀ : E →L[𝕜] E) (P₁ : F →L[𝕜] F) :
+    let W := e.conjStarAlgEquiv (U.withLpProdMap 2 (V : F →L[𝕜] F))
+    let P := e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁)
+    IsMinOn
+      (fun T : H →L[𝕜] H => UnitarilyInvariantSeminorm.schatten 𝕜 H H p
+        (LinearMap.id - T.toLinearMap) ^ p.toReal)
+      {T | T ∈ unitary (H →L[𝕜] H) ∧ T * P * star T = W * P * star W} W →
+    IsMinOn
+      (fun T : E →L[𝕜] E => UnitarilyInvariantSeminorm.schatten 𝕜 E E p
+        (LinearMap.id - T.toLinearMap) ^ p.toReal)
+      {T | T ∈ unitary (E →L[𝕜] E) ∧ T * P₀ * star T = U * P₀ * star U} U := by
+  apply isMinOn_block_transport_of_cost_orthogonal_sum
+    (fun T : H →L[𝕜] H => UnitarilyInvariantSeminorm.schatten 𝕜 H H p
+      (LinearMap.id - T.toLinearMap) ^ p.toReal)
+    (fun T : E →L[𝕜] E => UnitarilyInvariantSeminorm.schatten 𝕜 E E p
+      (LinearMap.id - T.toLinearMap) ^ p.toReal)
+    (UnitarilyInvariantSeminorm.schatten 𝕜 F F p
+      (LinearMap.id - (V : F →L[𝕜] F).toLinearMap) ^ p.toReal) e U V P₀ P₁
+  intro A
+  rw [schatten_displacement_conj_linearIsometryEquiv e _ p hp,
+    schatten_displacement_rpow_withLpProdMap _ _ p hp]
+
 /-- Local minimality descends to an actual common invariant subspace
 of a unitary transporter and a self-adjoint source operator. Its unitary
 restriction, complementary unitary and orthogonal coordinates are all
@@ -249,5 +316,93 @@ theorem exists_isLocalMinOn_restriction_of_invariant
     (V : N →L[𝕜] N) (Unitary.linearIsometryEquiv.symm V).property
     (Unitary.linearIsometryEquiv.symm V₁) P₀ P₁
   simpa only [Unitary.coe_symm_linearIsometryEquiv_apply, hTblock, hPblock] using hmin
+
+/-- The restriction of an actual global minimum is globally minimal among
+all unitary transporters of the restricted source operator. Both restricted
+unitary actions and the ambient orthogonal coordinates are constructed. -/
+theorem exists_isMinOn_restriction_of_invariant
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (T : E ≃ₗᵢ[𝕜] E) (P : E →L[𝕜] E) (hP : IsSelfAdjoint P)
+    (N : Submodule 𝕜 E) (hTN : ∀ x ∈ N, T x ∈ N) (hPN : ∀ x ∈ N, P x ∈ N)
+    (hmin : IsMinOn
+      (fun W : E →L[𝕜] E => UnitarilyInvariantSeminorm.schatten 𝕜 E E p
+        (LinearMap.id - W.toLinearMap) ^ p.toReal)
+      {W | W ∈ unitary (E →L[𝕜] E) ∧
+        W * P * star W = (T : E →L[𝕜] E) * P * star (T : E →L[𝕜] E)}
+      (T : E →L[𝕜] E)) :
+    let P₀ := (P.toLinearMap.restrict hPN).toContinuousLinearMap
+    ∃ V : N ≃ₗᵢ[𝕜] N, (∀ x : N, (V x : E) = T x) ∧
+      IsMinOn
+        (fun W : N →L[𝕜] N => UnitarilyInvariantSeminorm.schatten 𝕜 N N p
+          (LinearMap.id - W.toLinearMap) ^ p.toReal)
+        {W | W ∈ unitary (N →L[𝕜] N) ∧
+          W * P₀ * star W = (V : N →L[𝕜] N) * P₀ * star (V : N →L[𝕜] N)}
+        (V : N →L[𝕜] N) := by
+  obtain ⟨V, hV, _, hred⟩ := T.exists_restriction_of_finite_invariant N hTN
+  have hTorth : ∀ x ∈ Nᗮ, T x ∈ Nᗮ :=
+    (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem T.toLinearMap).mp
+      hred.orthogonal_mem_invtSubmodule
+  obtain ⟨V₁, hV₁, _, _⟩ := T.exists_restriction_of_finite_invariant Nᗮ hTorth
+  have hPorth : ∀ x ∈ Nᗮ, P x ∈ Nᗮ := by
+    intro x hx y hy
+    exact (hP.isSymmetric y x).symm.trans (hx (P y) (hPN y hy))
+  let P₀ : N →L[𝕜] N := (P.toLinearMap.restrict hPN).toContinuousLinearMap
+  let P₁ : Nᗮ →L[𝕜] Nᗮ := (P.toLinearMap.restrict hPorth).toContinuousLinearMap
+  let e := N.orthogonalDecomposition.symm
+  have hTblock : e.conjStarAlgEquiv
+      ((V : N →L[𝕜] N).withLpProdMap 2 (V₁ : Nᗮ →L[𝕜] Nᗮ)) =
+        (T : E →L[𝕜] E) := by
+    ext x
+    obtain ⟨y, rfl⟩ := e.surjective x
+    rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply, e.symm_apply_apply,
+      ContinuousLinearMap.withLpProdMap_apply]
+    change (V y.fst : E) + (V₁ y.snd : E) = T ((y.fst : E) + (y.snd : E))
+    rw [map_add, hV, hV₁]
+  have hPblock : e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁) = P := by
+    ext x
+    obtain ⟨y, rfl⟩ := e.surjective x
+    rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply, e.symm_apply_apply,
+      ContinuousLinearMap.withLpProdMap_apply]
+    change P (y.fst : E) + P (y.snd : E) = P ((y.fst : E) + (y.snd : E))
+    exact (map_add P _ _).symm
+  refine ⟨V, hV, ?_⟩
+  apply isMinOn_block_transport_of_orthogonal_sum p hp e
+    (V : N →L[𝕜] N) (Unitary.linearIsometryEquiv.symm V₁) P₀ P₁
+  simpa only [Unitary.coe_symm_linearIsometryEquiv_apply, hTblock, hPblock] using hmin
+
+/-- If the restricted source is zero or the identity, a global finite
+Schatten displacement minimum is the identity. This excludes spurious
+reflection cost on fixed source directions, including one-dimensional
+and source-trivial two-dimensional blocks. -/
+theorem eq_one_of_isMinOn_transport_zero_or_one
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (P : E →L[𝕜] E) (hP : P = 0 ∨ P = 1) (U : unitary (E →L[𝕜] E))
+    (hmin : IsMinOn
+      (fun W : E →L[𝕜] E => UnitarilyInvariantSeminorm.schatten 𝕜 E E p
+        (LinearMap.id - W.toLinearMap) ^ p.toReal)
+      {W | W ∈ unitary (E →L[𝕜] E) ∧ W * P * star W =
+        (U : E →L[𝕜] E) * P * star (U : E →L[𝕜] E)} (U : E →L[𝕜] E)) :
+    (U : E →L[𝕜] E) = 1 := by
+  have hp0 : 0 < p.toReal :=
+    ENNReal.toReal_pos (zero_lt_one.trans_le Fact.out).ne' hp
+  have hidentity : (1 : E →L[𝕜] E) * P * star 1 =
+      (U : E →L[𝕜] E) * P * star (U : E →L[𝕜] E) := by
+    rcases hP with rfl | rfl
+    · simp only [mul_zero, zero_mul]
+    · simpa only [mul_one, one_mul, star_one] using
+        (Unitary.mul_star_self_of_mem U.property).symm
+  have hbound := hmin ⟨by simp, hidentity⟩
+  change UnitarilyInvariantSeminorm.schatten 𝕜 E E p
+      (LinearMap.id - (U : E →L[𝕜] E).toLinearMap) ^ p.toReal ≤
+    UnitarilyInvariantSeminorm.schatten 𝕜 E E p (LinearMap.id - LinearMap.id) ^ p.toReal at hbound
+  rw [sub_self, map_zero, Real.zero_rpow hp0.ne'] at hbound
+  have hzero := le_antisymm hbound
+    (Real.rpow_nonneg (apply_nonneg (UnitarilyInvariantSeminorm.schatten 𝕜 E E p) _) _)
+  have hnorm := (Real.rpow_eq_zero_iff_of_nonneg
+    (apply_nonneg (UnitarilyInvariantSeminorm.schatten 𝕜 E E p) _)).mp hzero |>.1
+  have hdiff := (UnitarilyInvariantSeminorm.schatten_apply_eq_zero_iff p).mp hnorm
+  have hmap : (U : E →L[𝕜] E).toLinearMap = LinearMap.id := (sub_eq_zero.mp hdiff).symm
+  ext x
+  exact congrArg (fun A : E →ₗ[𝕜] E => A x) hmap
 
 end TauCeti

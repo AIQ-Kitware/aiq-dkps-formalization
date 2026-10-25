@@ -307,7 +307,9 @@ theorem exists_small_real_doubled_block [FiniteDimensional ℝ E]
     exact hRM
 
 /-- A complete orthogonal family on one half of a reflection-paired spectral
-level descends to a complete family of actual real invariant blocks. -/
+level descends to a complete family of actual real invariant blocks. Every
+descended member retains its original complex half, so subsequent exact
+rank certificates refer to the same actual block family. -/
 theorem exists_orthogonal_real_doubled_blocks [FiniteDimensional ℝ E]
     (R : RealComplexification E ≃ₗᵢ[ℂ] RealComplexification E)
     (hR : Function.Involutive R)
@@ -326,7 +328,9 @@ theorem exists_orthogonal_real_doubled_blocks [FiniteDimensional ℝ E]
         (∀ x ∈ N, realify U x ∈ N) ∧
         (∀ x ∈ N, realify (R : RealComplexification E →L[ℂ] RealComplexification E) x ∈ N)) ∧
       (G : Set (Submodule ℝ E)).Pairwise Submodule.IsOrtho ∧
-      complexifySubmodule (G.sup id) = L ⊔ L.map R.toLinearMap := by
+      complexifySubmodule (G.sup id) = L ⊔ L.map R.toLinearMap ∧
+      (∀ N ∈ G, ∃ S ∈ F,
+        complexifySubmodule N = S ⊔ S.map R.toLinearMap) := by
   classical
   let f := fun S : Submodule ℂ (RealComplexification E) =>
     realSubmodule (S ⊔ S.map R.toLinearMap)
@@ -339,7 +343,7 @@ theorem exists_orthogonal_real_doubled_blocks [FiniteDimensional ℝ E]
     rw [← hspan]
     exact Finset.le_sup (f := id) hS
   have hf (S) (hS : S ∈ F) : f S ∈ G := Finset.mem_image.mpr ⟨S, hS, rfl⟩
-  refine ⟨G, ?_, ?_, ?_⟩
+  refine ⟨G, ?_, ?_, ?_, ?_⟩
   · intro N hN
     obtain ⟨S, hS, rfl⟩ := Finset.mem_image.mp hN
     obtain ⟨hS0, hdim, hSJ, hUS⟩ := hF S hS
@@ -385,5 +389,8 @@ theorem exists_orthogonal_real_doubled_blocks [FiniteDimensional ℝ E]
       exact (L ⊔ L.map R.toLinearMap).add_mem (hT hp.1)
         ((L ⊔ L.map R.toLinearMap).smul_mem _ (hT hp.2))
     · exact sup_le hLT hRLT
+  · intro N hN
+    obtain ⟨S, hS, rfl⟩ := Finset.mem_image.mp hN
+    exact ⟨S, hS, hCS S hS⟩
 
 end TauCeti.DavisKahan.FiniteDimensional.RealTransport

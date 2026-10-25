@@ -23,8 +23,13 @@ penalty vanishing at zero. Closed nuclear and clipped Schatten `1<p<2`
 formulas include attainment and comparison with every ambient orthogonal
 transporter. Sharp canonical criteria compile in the full cosine--sine
 model. Every negative-class optimizer is classified for strictly increasing
-penalties. Positive-level real blocks now also have exact balanced source
-ranks. Unrestricted real matching remains open.
+penalties. Every real global Schatten minimum for `1<p<2` now has a
+complete orthogonal decomposition into fixed blocks, rank-one problems in
+real dimension two, and rank-two problems in real dimension four. Every
+actual restriction is globally minimal among all orthogonal competitors,
+and the full cost is the exact sum of its restriction costs. The four-block
+values are the compiled clipped formulas. Original-angle multiset assembly
+and unrestricted real matching remain open.
 The local Charbonnier analysis now supplies actual first variations,
 source-reflection stationarity, paired two-phase gradient blocks and the
 sharp gradient bound. Actual ambient no-overlap on every submaximal gradient
@@ -55,6 +60,97 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Complete real global-minimum block reduction (25 October)
+
+`SchattenRealRestrictions.exists_complete_globally_minimizing_blocks_real`
+is now compiled on the **original real space**, at arbitrary finite dimension
+and source rank. Its hypotheses are `1<p.toReal<2`, finite `p`, a real
+subspace `K`, a real orthogonal equivalence `T`, and actual global minimality
+of the accepted Schatten power on the full fiber transporting `K` to `T(K)`.
+There is no acute-angle, determinant, multiplicity or principal-plane
+preservation assumption.
+
+It constructs a finite orthogonal family `H` spanning the whole ambient
+space. Every member is nonzero, invariant under the source projection,
+and carries the actual restricted orthogonal equivalence `V`. That
+restriction is globally minimizing among **all** orthogonal transporters
+of the actual source intersection `K.comap N.subtype` to its image.
+Each member is one of:
+
+- dimension at most two, with `V=I`;
+- dimension two, with restricted source rank one;
+- dimension four, with restricted source rank two.
+
+The theorem also proves the ambient Schatten power is the sum of the costs
+of the actual compressions to this **same** family. On every four-dimensional
+member its accepted Schatten power equals the clipped two-branch formula
+in the actual restricted source/target principal angles. These are actual
+restrictions of an arbitrary ambient global minimum, rather than supplied
+block candidates. They do not yet identify those restricted angles as a
+partition of the original pair's angle list.
+
+`SchattenRealDecomposition.exists_complete_real_blocks_of_isLocalMinOn_real_transports`
+first assembles every positive gradient level, including the maximum,
+and the actual zero-gradient kernel. The indexed positive level families
+now retain exact source rank one or two. Distinct signed levels are proved
+orthogonal. Zero-gradient real lines and planes are included explicitly.
+This local decomposition is stated in the conjugation-fixed complex
+representation of real transport; it does not claim that real local
+minima are global.
+
+The passage to the original real space preserves every finite singular
+value, including zero padding (`Complexification/SingularValues.lean`).
+It preserves arbitrary full spectral sums and accepted finite Schatten
+seminorms, with no field-extension factor. The abstract scalar-extension
+result is currently for finite **endomorphisms**; the earlier rectangular
+matrix scalar-extension result remains separate.
+`Complexification/UnitaryTransport.lean` preserves and reflects unitarity
+in any complete real Hilbert space and transfers finite Schatten global
+minimality in both directions between real transport and conjugation-fixed
+complex transport. It supplies no infinite-dimensional ideal optimum.
+
+`SchattenTransportRestriction.lean` now proves global block restriction
+minimality over `RCLike`, using actual orthogonal-sum competitors and
+accepted Schatten additivity. A zero or identity restricted source operator
+forces identity action at a global minimum. This discharges the fixed-source
+one-dimensional and exceptional source-trivial two-dimensional blocks;
+no positive-gradient balance is imposed on the zero-gradient kernel.
+
+`UnitarilyInvariantSeminorm/FiniteBlocks.lean` proves full finite orthogonal
+block additivity for arbitrary endomorphisms and arbitrary singular-value
+penalties into an additive commutative monoid. The penalty need not vanish
+at zero. It collects the actual right and left singular bases, using the
+accepted unitary polar decomposition at zero scales. Its displacement
+corollary is consumed by the same real global-minimum family above.
+These scalar-extension, rank and finite-additivity lemmas are classical
+foundations, without separate historical novelty claims.
+
+`RealFourSchattenNorm.lean` bridges the literal power sum to the accepted
+real Schatten seminorm and supplies an actual unitary minimizer.
+`real_four_schatten_cost_eq_of_isMinOn_image` computes the exact value of
+any global four-dimensional restriction minimum, with the target defined
+as the actual source image. The main real block theorem consumes it.
+
+**Next exact obligation:** apply the finite block singular-value identity
+to the directed sine map of the original source/target pair and prove
+that its actual restrictions are the directed sine maps of the restricted
+pairs. This must identify their complete principal-angle multisets,
+including zero and right multiplicities and the source-rank indexing.
+Then supply the abstract two-dimensional rank-one value
+`min(2*(2*sin(theta/2))^p,2^p)`, translate the assembled one- and two-angle
+blocks into an actual matching on the original positive-angle indices,
+and prove matching attainment. The general finite cost-additivity step
+is now proved; the original-angle multiset and matching steps are not.
+The nuclear endpoint and the real Charbonnier structural reduction are
+separate extension obligations.
+
+Validation: focused builds passed, followed by
+`lake build DavisKahan.All ForTauCeti` (10,591 jobs), each preceded by
+`lake exe cache get`. The real matching research fragment remains excluded
+from `paper.tex`. The general matching formula, sorted-sum exchange
+inequalities, field-gap claims and ideal-theoretic minima remain conventional
+or open at their recorded scopes.
 
 ## Exact unrestricted real four-dimensional minimum (25 October)
 
@@ -240,18 +336,12 @@ by the explicit injective map `x -> x+e*R(x)`, for `e^2=1`, and proves
 its range is the doubled block intersected with that eigenspace. This is
 classical linear algebra over any field; no separate novelty claim.
 
-**Next R-2 obligation:** upgrade the complete positive-level block families
-at an actual real global minimum to carry these exact source ranks, then
-assemble all levels and the zero-gradient blocks. For each restriction,
-identify the actual orthogonal transporter and source/target projections,
-prove that replacing it by a cheaper block transporter would contradict
-ambient global minimality, and apply the one- or two-angle minimum.
-Zero-gradient fixed-source blocks require a separate identity-replacement
-argument; positive-level balance must not be imposed on them. The exact
-principal-angle multiset union must then yield the matching lower bound.
-Attaining direct sums, exchange inequalities, sorted sums and all-rank
-field-gap equality statements still need their own proofs. The complex
-strict-saddle and ideal-theoretic questions below are unaffected.
+**Current R-2 obligation:** the new complete real block theorem above
+now includes exact ranks, unrestricted restriction minima, fixed-source
+exceptions and full cost additivity. The remaining original-angle multiset,
+planar value, matching lower-bound/attainment and exchange steps are stated
+above. Those obligations supersede the earlier individual-block frontier.
+The complex strict-saddle and ideal-theoretic questions below are unaffected.
 
 Independent numerical diagnostics used 2,400 negative-class matrices,
 including zero, equal and right pairs, and four penalties: nuclear,
@@ -333,10 +423,9 @@ to the ambient space. No such second-order-sufficiency or strict-saddle
 theorem is currently claimed.
 
 For the unrestricted real problem, the accepted-angle four-dimensional
-minimum and Schatten clipping are now compiled above. The next target is
-full real small-block assembly carrying the individual source-rank
-certificates now proved in `RealBlockRank.lean`, followed by
-principal-angle multiset assembly and the matching lower bound. Matching
+minimum and Schatten clipping are now compiled above. The complete small-block reduction, original-space restriction minima
+and cost additivity now compile above. The next target is the principal-angle
+multiset union, the abstract planar value and the matching lower bound. Matching
 attainment, sorted-sum exchange bounds and field-gap equalities remain
 conventional. Orthogonal determinant/parity restrictions must remain
 explicit. The new complex local-to-global theorem does not supply a real

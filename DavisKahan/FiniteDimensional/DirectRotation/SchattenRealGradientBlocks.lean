@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT-6
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealStationarity
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.RealTwoPhaseBlocks
-import DavisKahan.FiniteDimensional.DirectRotation.RealBlockDescent
+import DavisKahan.FiniteDimensional.DirectRotation.RealBlockRank
 import ForTauCeti.Analysis.InnerProductSpace.AnticommutingConjugation
 
 /-!
@@ -65,7 +65,11 @@ theorem gradient_eigenspace_small_blocks_of_isLocalMinOn_real_transports
       (∃ H : Finset (Submodule ℝ E),
         (∀ N ∈ H, N ≠ ⊥ ∧ Module.finrank ℝ N ≤ 4 ∧
           (∀ x ∈ N, realify (U : 𝓔 →L[ℂ] 𝓔) x ∈ N) ∧
-          (∀ x ∈ N, realify (K.reflection : 𝓔 →L[ℂ] 𝓔) x ∈ N)) ∧
+          (∀ x ∈ N, realify (K.reflection : 𝓔 →L[ℂ] 𝓔) x ∈ N) ∧
+          ((Module.finrank ℝ N = 2 ∧
+              Module.finrank ℝ ↥(N ⊓ RealTransport.realSubmodule K) = 1) ∨
+            (Module.finrank ℝ N = 4 ∧
+              Module.finrank ℝ ↥(N ⊓ RealTransport.realSubmodule K) = 2))) ∧
         (H : Set (Submodule ℝ E)).Pairwise Submodule.IsOrtho ∧
         complexifySubmodule (H.sup id) = L ⊔ L.map K.reflection.toLinearMap) := by
   let G := schattenUnitaryGradient p.toReal (U : 𝓔 →L[ℂ] 𝓔)
@@ -187,7 +191,7 @@ theorem gradient_eigenspace_small_blocks_of_isLocalMinOn_real_transports
         simp only [Complex.ofReal_re, Complex.neg_re] at hre
         linarith
       exact ((isSelfAdjoint_schattenUnitaryGradient p.toReal (U : 𝓔 →L[ℂ] 𝓔)).isSymmetric.orthogonalFamily_eigenspaces) hne ⟨x, hx⟩ ⟨K.reflection y, hyneg⟩
-    exact RealTransport.exists_orthogonal_real_doubled_blocks K.reflection
-      K.reflection_involutive hRC (U : 𝓔 →L[ℂ] 𝓔) hUC L hL F' hF' hpair' hspan'
+    exact RealTransport.exists_orthogonal_real_source_balanced_blocks K
+      hRC (U : 𝓔 →L[ℂ] 𝓔) hUC L hL F' hF' hpair' hspan'
 
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
