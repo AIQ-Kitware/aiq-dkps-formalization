@@ -1,6 +1,6 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-**Status: expanded, intentionally incomplete audit (2026-10-21 baseline; 2026-10-22 consumption and SSP-D01 update).** This is a
+**Status: expanded, intentionally incomplete audit (2026-10-21 baseline; 2026-10-25 accepted Gram update).** This is a
 maintained *provenance and results* record, not a PR action queue, a theorem
 census, or a claim of exclusive mathematical authorship. Its purpose is to make
 it possible to say exactly which results in TauCeti benefited from the Kitware
@@ -43,6 +43,7 @@ explicitly not adapted from DKPS. `M13` = the main-file integration was checked
 in the October 13 campaign audit; `M21` = the named accepted declaration
 was located on TauCeti `main` on October 21 (not a final-diff/commit audit);
 `M22` = the named declaration was checked in the pinned 2026-10-22 TauCeti tree;
+`M25` = the accepted commit and donor statements were compared on October 25;
 `B` = presently Bors-marked closed, but the
 accepted diff has not yet been compared declaration-by-declaration in this
 census. Evidence is as of 2026-10-21 unless a dated source is given; see the current [consumption review](upstream-consumption-review-2026-10-22.md).
@@ -124,8 +125,9 @@ byte-identical.
 | [#19252](https://github.com/TauCetiProject/TauCeti/pull/19252) | SSP-C20: equal-rank spectral projector bound | Based on maintained DKPS projection/perturbation proof | D, M21 |
 | [#19268](https://github.com/TauCetiProject/TauCeti/pull/19268) | SSP-C19: canonical spectral-subspace residual sine bound | Adapted from `ForTauCeti/.../SinTheta/DirectedBounds.lean` and `.../Spectral/Subspace.lean`; the accepted module names both donor sources | D, M21 |
 | [#18942](https://github.com/TauCetiProject/TauCeti/pull/18942) | SSP-D01: eigenfamilies, ordered eigenframes and corresponding eigenblocks | Adapted from `ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean`; gap-separated span/canonical-block results were **not** part of the accepted PR | D, M22 |
+| [#19299](https://github.com/TauCetiProject/TauCeti/pull/19299) | SSP-C27 rectangular Gram prerequisites and scalar double-angle identities | Adapted from DKPS `DoubleAngle/Gram.lean` and the isometry-adjoint helper in `RectangularSingularValues.lean`; not the full perturbation inequality | D, M25 |
 
-*This table is not a claim that all 31 PRs merged through GitHub's native merge
+*This table is not a claim that all these PRs merged through GitHub's native merge
 API or that all their final declarations have been rechecked on current main.*
 The October 13 source audit independently established the six `M13` cases;
 other rows rely on the PR provenance text and Bors integration label unless
@@ -137,6 +139,38 @@ proof descent remains subject to a declaration-level diff audit. The `M22`
 row #18942 was checked in the pinned `773bcb657352235c6348ff45be9b7f19f147c19e`
 tree after Bors closed the PR on October 22; its final proof descent has not
 been audited line by line.
+
+### October 25: accepted rectangular Gram prerequisites
+
+PR #19299 is present on accepted main as
+`69cd1ab4dcfbb6676e344f3f193e63473eab5a3d`, included in the new dependency
+revision `efded067c28ffca3483fd731674eb13b42543fbb`. The accepted source
+preserves the Kitware/DKPS provenance and generalizes several isometry-block
+hypotheses. This establishes an explicit proof adaptation, not ownership of
+all of SSP-C27.
+
+The local retirement patch removes these ten donor declarations without aliases:
+
+- `TauCeti.sin_two_mul_arcsin`, `TauCeti.sin_two_mul_arcsin_sq`;
+- `TauCeti.gram_comp_of_gram_eq_id_sub`, `TauCeti.gram_two_smul_comp`,
+  `TauCeti.gram_two_smul_comp_apply_of_eigenvector`;
+- `TauCeti.gram_isometryBlock_eq_id_sub`,
+  `TauCeti.adjoint_comp_isometryBlock_eq_zero`,
+  `TauCeti.adjoint_reflection_comp_isometryBlock`,
+  `TauCeti.gram_adjoint_reflection_comp_isometryBlock`;
+- `TauCeti.LinearIsometry.adjoint_apply_apply`.
+
+Their accepted owners are `Real`, `LinearMap`, and `LinearIsometry`, in
+`TauCeti/Analysis/SpecialFunctions/Trigonometric/Arcsin.lean`,
+`TauCeti/Analysis/InnerProductSpace/Adjoint.lean`,
+`TauCeti/Analysis/InnerProductSpace/PartialIsometry.lean`, and
+`TauCeti/Analysis/InnerProductSpace/DoubleAngle/Gram.lean`.
+The two maintained scalar consumers use `Real.sin_two_mul_arcsin_sq`
+directly. The ambient projector theorem `TauCeti.gram_sinTwoAngleOperator`
+remains an unmerged donor result; it is not discarded with the accepted
+rectangular prerequisites. The retirement and its consumers passed the full
+default build together with the module migration on October 25, with
+warnings treated as errors (21,039 jobs).
 
 ## B. DKPS-origin submissions without established upstream integration
 
@@ -165,7 +199,7 @@ attempt, not an accepted TauCeti theorem.
 | [#19009](https://github.com/TauCetiProject/TauCeti/pull/19009) | SA-B42 older variation attempt; explicitly replaced by #19145 | Closed, no Bors label |
 | [#18927](https://github.com/TauCetiProject/TauCeti/pull/18927) | SA-E32–E34 measurable spectral grid cells | Open |
 | [#19242](https://github.com/TauCetiProject/TauCeti/pull/19242), [#19277](https://github.com/TauCetiProject/TauCeti/pull/19277) | SSP-C23 pairwise pi/2; SSP-C09/C10 reduced extensions | Open |
-| [#19299](https://github.com/TauCetiProject/TauCeti/pull/19299), [#19329](https://github.com/TauCetiProject/TauCeti/pull/19329), [#19338](https://github.com/TauCetiProject/TauCeti/pull/19338) | SSP-C27 Gram transfer; SSP-C28/C29 sine-to-tangent; SSP-D19 right singular-vector gap | Open |
+| [#19329](https://github.com/TauCetiProject/TauCeti/pull/19329), [#19338](https://github.com/TauCetiProject/TauCeti/pull/19338) | SSP-C28/C29 sine-to-tangent; SSP-D19 right singular-vector gap | Open |
 
 The first-wave campaign's `manifest.json` and `roadmap_port_index.json`
 record additional target-node detail. An old prepared branch, an unmerged PR,

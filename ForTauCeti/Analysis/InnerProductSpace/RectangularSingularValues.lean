@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 High, Claude Fable 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.InnerProductSpace.SingularValues
 public import Mathlib.Analysis.InnerProductSpace.Positive
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
@@ -436,16 +437,6 @@ theorem singularValues_linearIsometry_comp
   intro y
   simp only [LinearMap.comp_apply, LinearMap.adjoint_inner_left]
   exact ι.inner_map_map (X x) (X y)
-
-/-- **The adjoint of a linear isometry is a left inverse.**  `ι⋆ (ι x) = x`,
-because `⟪ι⋆ (ι x), y⟫ = ⟪ι x, ι y⟫ = ⟪x, y⟫` for every `y`. -/
-theorem LinearIsometry.adjoint_apply_apply {D : Type*}
-    [NormedAddCommGroup D] [InnerProductSpace 𝕜 D] [FiniteDimensional 𝕜 D]
-    (ι : D →ₗᵢ[𝕜] E) (x : D) :
-    LinearMap.adjoint ι.toLinearMap (ι x) = x :=
-  ext_inner_right 𝕜 fun y => by
-    rw [LinearMap.adjoint_inner_left]
-    exact ι.inner_map_map x y
 
 /-- **The adjoint of a linear isometry annihilates the orthogonal complement of
 its range.**  Together with `LinearIsometry.adjoint_apply_apply` this says `ι⋆`

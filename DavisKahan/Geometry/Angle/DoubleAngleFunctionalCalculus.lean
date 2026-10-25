@@ -169,7 +169,7 @@ theorem directedSinTwoAngleOperatorC_eq_modulus_reflect :
             ((s ^ 2 - s ^ 4) + (s ^ 2 - s ^ 4))) S := by
       refine cfc_congr fun s hs => ?_
       have hsi := spectrum_sinAngleOperatorC_subset_Icc U V hs
-      have hsq := TauCeti.sin_two_mul_arcsin_sq (s := s)
+      have hsq := Real.sin_two_mul_arcsin_sq (s := s)
         (by linarith [hsi.1]) hsi.2
       have : Real.sin (2 * Real.arcsin s) * Real.sin (2 * Real.arcsin s) =
           4 * s ^ 2 * (1 - s ^ 2) := by

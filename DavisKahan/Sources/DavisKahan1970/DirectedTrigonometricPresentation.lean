@@ -255,7 +255,7 @@ theorem sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator
       refine cfc_congr fun s hs => ?_
       have hsi : s ∈ Set.Icc (0 : Real) 1 := by
         simpa [S] using spectrum_directedSinAngleOperator_subset_Icc U V hs
-      have hsq := TauCeti.sin_two_mul_arcsin_sq (s := s)
+      have hsq := Real.sin_two_mul_arcsin_sq (s := s)
         (by linarith [hsi.1]) hsi.2
       have hsquare : Real.sin (2 * Real.arcsin s) * Real.sin (2 * Real.arcsin s) =
           4 * s ^ 2 * (1 - s ^ 2) := by

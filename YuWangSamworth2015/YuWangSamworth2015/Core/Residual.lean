@@ -11,7 +11,7 @@ that are not in the upstream API.
 module
 
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
-public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth
+public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Basic
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.ResidualGap
 
 /-! # The Yu–Wang–Samworth Davis–Kahan variant (Frobenius, population gap)
