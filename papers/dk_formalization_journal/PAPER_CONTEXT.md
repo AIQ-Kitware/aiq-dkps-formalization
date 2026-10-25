@@ -15,6 +15,9 @@ with zero right defect give exactly `2^s` isolated optimizers. The subspace
 rank-stratification equivalences are algebraic. Sector connectedness,
 component counts, manifold dimensions, smoothed local-to-global,
 unrestricted real matching and operator-ideal optimization remain open.
+The local Charbonnier analysis now supplies actual first variations,
+source-reflection stationarity, paired two-phase gradient blocks and the
+sharp gradient bound; second-variation exclusions remain to be proved.
 **Manuscript and teaching-deck update source:** `427169ce38b5` (25 October
 2026), incorporating the completed full complex optimizer classification,
 local-to-global theorem, normalized parameter bijection and exact counts.
@@ -31,6 +34,105 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Actual Charbonnier stationarity and two-phase gradient blocks (25 October)
+
+`SmoothedUnitaryVariation.lean` proves
+`smoothedDisplacementCost_eq_re_trace_cfc` for every finite complex normal
+operator and `hasDerivAt_smoothed_unitary_right_variation_at` for the literal
+singular-value Charbonnier objective, at every time along every Hermitian
+unitary exponential variation. The differentiability hypothesis is only
+`tau>0`; there is no nonzero-displacement, simple-spectrum or invertibility
+assumption on `I-U`. The phase symbol is
+`smoothedPhaseDerivative tau z = z.im/sqrt(tau^2+||z-1||^2)` and the actual
+self-adjoint gradient is its normal functional calculus.
+
+`SmoothedStationarity.lean` proves
+`re_trace_gradient_mul_eq_zero_of_isLocalMinOn_transports` and
+`gradient_reflection_conjugate_eq_neg_of_isLocalMinOn_transports`: at every
+actual constrained local minimum, source reflection negates the gradient.
+The trace-annihilation theorem allows general supplied conjugacy data
+`P,Q`; the reflection theorem requires `P` an orthogonal projection.
+`SmoothedGradientPairing.lean` derives the actual source-reflection isometry
+between opposite gradient eigenspaces and commutation of `G^2` with **both**
+transported projections. No prescribed blocks are supplied by the caller.
+
+`SmoothedGradientSpectrum.lean` proves the exact scalar deficit
+`eta^-2-g_tau(z)^2 = (Re(z)-eta^-2)^2/(tau^2+||z-1||^2)` on the unit circle.
+Consequences include `abs_smoothedPhaseDerivative_le`, its exact equality
+criterion, an actual scalar attaining phase, `norm_smoothedUnitaryGradient_le`
+and norm equality in the presence of an actual critical-phase eigenvector.
+The operator norm bound itself allows arbitrary complete complex Hilbert
+spaces; no infinite-dimensional trace or ideal optimum follows.
+
+The same module proves the quadratic relation on **every** gradient level,
+its two explicit complex candidates, and
+`smoothed_gradient_eigenspace_two_phase_representation`: the actual unitary
+restriction on each actual gradient eigenspace is affine in an actual
+orthogonal projection. It includes zero levels, coalescing candidates,
+repeated phases and empty eigenspaces, without any minimizing hypothesis.
+`smoothed_gradient_kernel_reflection_representation` specializes to the
+actual reflection `I-2*S` on the actual gradient kernel. It does **not** yet
+show that local optimality permits only fixed/right blocks there.
+
+For any real `g`, the Lean candidates use total `Real.sqrt`; the formal
+scalar theorem asserts containment of every genuine unit-circle solution,
+not admissibility of both candidates for arbitrary `g`. The manuscript
+restricts their displayed radical formulas to `|g|<=eta^-1`, where all
+radicands are nonnegative. Every actual gradient eigenvalue satisfies that
+bound. No false converse or unproved root multiplicity claim is introduced.
+
+The donor `CharbonnierSpectralTrace.lean` supplies the global scalar tangent
+support and its continuous field, plus normal spectral-trace differentiation.
+`UnitarySpectralVariation.lean` gives a common first-variation theorem for
+scalar supporting fields continuous on the unit circle. Both the new
+Charbonnier result and the existing Schatten trace-pairing theorem consume
+it; the displaced private Schatten eigenbasis proof is removed. The common
+theorem does not include the nuclear endpoint's singularity at identity.
+These are classical variational ingredients, with no independent historical
+novelty claim. The manuscript includes
+`prop:smoothed-local-spectral-structure` as a proved necessary-structure result.
+
+An independent six-dimensional test included repeated eigenvalue `1`,
+eigenvalue `-1`, both critical phases and another phase. The trace-pairing
+first variation agreed with a central finite difference to `1.57e-10`;
+the scalar deficit residual was `6.66e-16`, and the gradient norm attained
+`eta^-1=0.7094810050208546` to numerical precision. Separately, 36 projected
+unitary-descent starts over three pairs at `tau=0.1,0.7,2` produced final
+cost gaps at most `2.49e-9`. The `tau=0.1` run hit the iteration cap with
+nonzero gradient, so neither convergence nor local-to-global follows.
+These are diagnostics, not proofs or statistical guarantees.
+
+Validation: the focused first-variation, stationarity, gradient-spectrum
+and pairing modules passed, including the migrated Schatten stationarity
+consumer. Then `lake build DavisKahan.All ForTauCeti` passed (10,485 jobs;
+`/tmp/smoothed-stationarity-final-build.log`). Each build was preceded by
+`lake exe cache get`. The journal passed pdfLaTeX, BibTeX and two further
+pdfLaTeX passes to a 58-page PDF at
+`/tmp/dk-smoothed-stationarity-paper/dk-smoothed-stationarity.pdf`, with no
+warnings, overfull boxes, unresolved references or duplicate labels in the
+final log. `git diff --check` passed. The 29-result source inventory and
+unrelated submodules are unchanged.
+
+### Exact remaining local-to-global obligations
+
+The ambient first variation, actual stationarity, paired reducing squared-
+gradient spaces, two-phase restrictions and zero-kernel reflection are now
+compiled. The next useful lemma is the **actual two-phase second variation**:
+use the analytic extension
+`(tau^2+2-z-z^-1)^(-1/2)*(z-z^-1)/(2*i)` of the phase symbol, then consume
+`hasDerivAt_cfc_of_affine_projection` as in
+`ForTauCeti/Analysis/InnerProductSpace/SchattenTwoPhaseVariation.lean`.
+For `tau>0` its unit-circle radicand is at least `tau^2>0`, including at
+`z=1`, so no displacement endpoint should be assumed away.
+
+Use that derivative to prove the paired-projection overlap exclusion on
+submaximal levels, treat the maximal/coalesced level, and prove descent
+for every nonoptimal zero-gradient reflection block. Then assemble the
+actual local block costs and the exact global value. The existing global
+optimizer iff cannot be applied to a merely stationary transporter.
+Smoothed local-to-global, real matching, component dimensions and ideal
+optimization remain open; the scope of the active research goal is unchanged.
 
 ## Complete effective Charbonnier coordinates and topology (25 October)
 
@@ -116,15 +218,12 @@ complex projection space and of each balanced defect identification space,
 then combine with the homeomorphisms and compiled clopen rank labels to
 identify connected components. Manifold dimensions remain separate.
 
-For smoothed local-to-global, a concrete route uses the scalar spectral
-gradient `g_tau(t)=sin(t)/sqrt(tau^2+2-2*cos(t))`. Its derivative has numerator
-`(tau^2+2)*cos(t)-cos(t)^2-1` and changes sign at `cos(t)=eta^-2`. Derive the
-**actual ambient** gradient/stationarity reduction, handle zero-gradient
-and reflecting blocks, then exclude nonglobal local minima. The scalar
-computation and route are research obligations, not new compiled endpoints.
-The global optimizer iff cannot be applied to a merely stationary point.
-Real matching and the Schatten/Charbonnier ideal extensions retain their
-previously recorded obligations.
+The actual smoothed gradient/stationarity reduction and two-phase spectral
+blocks are now compiled in the newer entry above. The remaining analytic
+step is a two-phase second variation, followed by overlap exclusion and
+classification of the local zero-gradient reflection blocks. Smoothed
+local-to-global is still open. Real matching and the Schatten/Charbonnier
+ideal extensions retain their previously recorded obligations.
 
 ## Operator norm optimizer topology and separated rank sectors (25 October)
 

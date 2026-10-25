@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.SchattenSpectralCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarySpectralVariation
 public import TauCeti.Analysis.InnerProductSpace.Trace.Free
 public import Mathlib.Analysis.SpecialFunctions.Exponential
 public import Mathlib.Analysis.CStarAlgebra.Exponential
@@ -180,19 +181,6 @@ theorem isSelfAdjoint_of_schattenUnitaryGradient_eq_zero
   ext x
   exact DFunLike.congr_fun hmaps x
 
-omit [CompleteSpace E] [FiniteDimensional ℂ E] in
-private theorem re_trace_mul_of_eigenbasis {n : ℕ}
-    (b : OrthonormalBasis (Fin n) ℂ E) (A B : E →L[ℂ] E)
-    (mu : Fin n → ℂ) (hA : ∀ i, A (b i) = mu i • b i) :
-    (LinearMap.trace ℂ E (A * B).toLinearMap).re =
-      ∑ i, (mu i * inner ℂ (b i) (B (b i))).re := by
-  rw [_root_.ContinuousLinearMap.toLinearMap_mul, LinearMap.trace_mul_comm,
-    LinearMap.trace_eq_sum_inner _ b, Complex.re_sum]
-  apply Finset.sum_congr rfl
-  intro i _
-  change (inner ℂ (b i) (B (A (b i)))).re = _
-  rw [hA, map_smul, inner_smul_right]
-
 /-- The phase-gradient trace pairing is the real trace coefficient of the
 ambient displacement gradient on a unitary tangent. Normality suffices for
 this identity; self-adjointness of the direction makes its diagonal real. -/
@@ -203,42 +191,9 @@ theorem re_trace_schattenUnitaryGradient_mul
       (LinearMap.trace ℂ E
         ((cfc (fun z => ((p * ‖z - 1‖ ^ (p - 2) : ℝ) : ℂ) * (z - 1)) U).adjoint *
           (U * (Complex.I • H))).toLinearMap).re := by
-  let g : ℂ → ℂ := fun z => ((p * ‖z - 1‖ ^ (p - 2) : ℝ) : ℂ) * (z - 1)
-  let A : E →L[ℂ] E := cfc g U
-  let := ContinuousLinearMap.isStarNormal_toLinearMap U
-  obtain ⟨b, mu, hmu⟩ :=
-    LinearMap.exists_orthonormalBasis_apply_eq_smul_of_isStarNormal U.toLinearMap
-      (ι := Fin (Module.finrank ℂ E)) (by simp)
-  have hU (i) : U (b i) = mu i • b i := hmu i
-  have hG (i) : schattenUnitaryGradient p U (b i) =
-      (schattenPhaseDerivative p (mu i) : ℂ) • b i := by
-    exact schattenUnitaryGradient_apply_of_apply_eq_smul p U _ _ (hU i)
-  have hA (i) : A.adjoint (b i) = conj (g (mu i)) • b i := by
-    change (cfc g U).adjoint (b i) = _
-    rw [← _root_.ContinuousLinearMap.star_eq_adjoint, ← cfc_star]
-    exact ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal _ (hU i)
-  have hfactor : A.adjoint * (U * (Complex.I • H)) =
-      (Complex.I • (A.adjoint * U)) * H := by
-    simp only [mul_smul_comm, smul_mul_assoc, mul_assoc]
-  have hB (i) : (Complex.I • (A.adjoint * U)) (b i) =
-      (Complex.I * (mu i * conj (g (mu i)))) • b i := by
-    simp only [smul_apply, mul_apply_eq_comp, hU, map_smul, hA,
-      smul_smul]
-  change _ = (LinearMap.trace ℂ E (A.adjoint * (U * (Complex.I • H))).toLinearMap).re
-  rw [hfactor, re_trace_mul_of_eigenbasis b _ H _ hG,
-    re_trace_mul_of_eigenbasis b _ H _ hB]
-  apply Finset.sum_congr rfl
-  intro i _
-  have hHi : (inner ℂ (b i) (H (b i))).im = 0 :=
-    (_root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH).im_inner_self_apply _
-  have hphase : schattenPhaseDerivative p (mu i) =
-      (Complex.I * (mu i * conj (g (mu i)))).re := by
-    rw [schattenPhaseDerivative_def]
-    congr 1
-    change conj (g (mu i)) * (Complex.I * mu i) = _
-    ring
-  simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, hHi, mul_zero,
-    sub_zero, hphase]
+  simpa only [schattenUnitaryGradient_def, schattenPhaseDerivative_def,
+    unitaryPhaseGradient] using re_trace_unitaryPhaseGradient_mul
+      (fun z => ((p * ‖z - 1‖ ^ (p - 2) : ℝ) : ℂ) * (z - 1)) U H hH
 
 /-- Right multiplication by the exponential of a skew-adjoint direction
 has the spectral first variation at every real time. -/

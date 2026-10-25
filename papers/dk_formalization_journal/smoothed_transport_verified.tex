@@ -646,6 +646,93 @@ zero-dimensional defect has a unique identification. The resulting finite
 Hausdorff optimizer set is discrete.
 \end{proof}
 
+\begin{proposition}[First variation and local spectral structure]
+\label{prop:smoothed-local-spectral-structure}
+For $|z|=1$, put
+\[
+ r_\tau(z)=\sqrt{\tau^2+|z-1|^2},\qquad
+ h_\tau(z)=\frac{\operatorname{Im}z}{r_\tau(z)},\qquad
+ G_\tau(W)=h_\tau(W).
+\]
+Here $G_\tau(W)$ denotes the normal functional calculus of the real
+symbol $h_\tau$. For every Hermitian $H$ and unitary $W$,
+\[
+ \left.\frac{d}{dt}\Psi_\tau(We^{itH})\right|_{t=0}
+       =\operatorname{Re}\operatorname{tr}(G_\tau(W)H).
+\]
+The gradient is self-adjoint, commutes with $W$, and obeys the sharp bound
+$\|G_\tau(W)\|\leq\eta^{-1}$. The bound is attained whenever $W$ has
+an eigenvalue with real part $\eta^{-2}$.
+
+Suppose $W$ is a local minimum among all unitary transports from $P$ to
+$Q$, and write $J=2P-I$. Then
+\[
+ JG_\tau(W)J=-G_\tau(W),\qquad
+ [P,G_\tau(W)^2]=[Q,G_\tau(W)^2]=0.
+\]
+Source reflection $J$ gives an isometric identification between the
+actual eigenspaces at $g$ and $-g$.
+
+For $|g|\leq\eta^{-1}$, define
+\[
+ \begin{split}
+ d_\tau(g)&=g^4-(\tau^2+2)g^2+1,\\
+ c_\pm(g)&=g^2\pm\sqrt{d_\tau(g)},\\
+ z_\pm(g)&=c_\pm(g)+ig\sqrt{\tau^2+2-2c_\pm(g)}.
+ \end{split}
+\]
+On the actual eigenspace $N_g=\ker(G_\tau(W)-gI)$, the unitary has the form
+\[
+ W|_{N_g}=z_+(g)I+(z_-(g)-z_+(g))S_g
+\]
+for an orthogonal projection $S_g$ on $N_g$. This representation holds
+for every unitary $W$, independently of local minimality, and allows
+coincident candidates and empty eigenspaces. At $g=0$ it becomes
+$W|_{N_0}=I-2S_0$.
+\end{proposition}
+
+\begin{proof}
+The scalar function $f_\tau(z)=r_\tau(z)-\tau$ has the global supporting
+field $(z-1)/r_\tau(z)$. Indeed, Cauchy--Schwarz on the augmented vectors
+$(\tau,z-1)$ and $(\tau,w-1)$ gives
+\[
+ f_\tau(w)\geq f_\tau(z)+
+ \operatorname{Re}\!\left(
+    \overline{\frac{z-1}{r_\tau(z)}}(w-z)\right).
+\]
+The field is continuous because $\tau>0$. Applying the normal
+spectral-trace supporting inequality in both directions gives its
+derivative along the unitary curve, including repeated eigenvalues and
+zero displacement. Evaluation on a unitary tangent gives $h_\tau$.
+At a local transport minimum, the trace pairing vanishes for every
+Hermitian $H$ commuting with $P$. Testing the two diagonal compressions
+of $G_\tau(W)$ makes them zero, proving the reflection identity.
+Anticommutation gives the eigenspace pairing and commutation of the
+square with $P$. Commutation with $W$ and $Q=WPW^*$ gives the assertion
+for $Q$.
+
+On the unit circle, direct algebra gives
+\[
+ \eta^{-2}-h_\tau(z)^2
+       =\frac{(\operatorname{Re}z-\eta^{-2})^2}
+                    {\tau^2+|z-1|^2}.
+\]
+This proves the norm bound and its equality criterion. The scalar phase
+$\exp(i\arccos(\eta^{-2}))$ attains equality.
+If $h_\tau(z)=g$, the unit-circle identity also gives
+\[
+ (\operatorname{Re}z-g^2)^2=d_\tau(g),\qquad
+ \operatorname{Im}z=g\sqrt{\tau^2+2-2\operatorname{Re}z}.
+\]
+For the displayed range of $g$,
+$0\leq d_\tau(g)=(g^2-\eta^2)(g^2-\eta^{-2})\leq(1-g^2)^2$.
+Hence $-1\leq c_\pm(g)\leq1$, and all displayed square roots are real.
+Thus every scalar eigenvalue on that gradient level is one of the two
+displayed candidates. Restrict $W$ to the actual invariant eigenspace
+$N_g$ and apply the two-point normal spectral calculus. At zero level
+the candidates are $1$ and $-1$, proving the reflection representation.
+\end{proof}
+
 \begin{corollary}[Complementary right-angle pairs]
 \label{cor:smoothed-complementary-right}
 Suppose $Q=I-P$ and $n=2r$. A unitary transporter $W$ is globally

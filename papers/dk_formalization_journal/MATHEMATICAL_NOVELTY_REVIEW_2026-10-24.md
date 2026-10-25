@@ -16,6 +16,45 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Charbonnier local stationarity and actual gradient spectra (25 October)
+
+The local-to-global campaign now has its actual analytic first layer:
+`SmoothedUnitaryVariation` differentiates the **literal** singular-value
+Charbonnier objective along Hermitian unitary curves at every time, and
+`SmoothedStationarity` derives trace annihilation and source-reflection
+anticommutation from actual constrained local minimality. Every finite
+complex transporter and `tau>0` is allowed; repeated eigenvalues, identity
+eigenvalues and right angles require no exclusions.
+
+`SmoothedGradientSpectrum` proves an exact nonnegative-square gradient
+deficit, the sharp `eta^-1` scalar and operator bounds, equality at an actual
+critical-phase eigenvector, an algebraic two-candidate description of every
+gradient level, and the **actual** affine projection representation of the
+unitary on each gradient eigenspace. Its actual zero-gradient restriction
+is `I-2*S`, with no minimizing assumption. `SmoothedGradientPairing` proves
+actual reflection pairing of opposite levels and reduction of both source
+and target by the squared gradient. The included manuscript endpoint is
+`prop:smoothed-local-spectral-structure`.
+
+These are proved necessary local structure, **not** the Charbonnier
+local-to-global theorem. The remaining proof must use an actual second
+variation to exclude incompatible branch overlap and nonoptimal reflection
+blocks, including the coalesced maximal level, then assemble the value.
+The general first-variation theorem in `UnitarySpectralVariation` is consumed
+by both penalties. Its continuous supporting-field hypothesis does not cover
+the nuclear singularity at identity. No independent priority claim is made
+for scalar calculus, spectral-trace differentiation or anticommuting eigenspaces.
+
+The primary [Massey--Rios--Stojanoff paper](https://arxiv.org/html/1806.11436)
+was rechecked at Theorems 3.5 and 3.12. They prove local-to-global results
+for strictly convex unitarily invariant norm distances on Hermitian
+conjugacy or fixed-singular-value orbits, respectively. The prescribed-
+projection transport fiber is a different domain; no reduction identifying
+those feasible sets has been justified. Charbonnier itself is a nonhomogeneous
+spectral penalty. This is a domain/hypothesis comparison, not proof of novelty
+and not a shortcut to the missing local-to-global argument. The existing BLR
+comparisons remain relevant, and historical originality remains provisional.
+
 ## Complete effective Charbonnier multiplicity families (25 October)
 
 For `tau>0`, every finite complex equal-rank pair now has a complete
