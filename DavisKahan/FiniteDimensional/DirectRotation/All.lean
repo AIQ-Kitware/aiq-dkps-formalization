@@ -121,6 +121,7 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenNonacuteClassificatio
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenCorrectionClassification
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenParameterNormalization
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenMultiplicityParameters
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenParameterTopology
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenCorrectionLocalGlobal
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

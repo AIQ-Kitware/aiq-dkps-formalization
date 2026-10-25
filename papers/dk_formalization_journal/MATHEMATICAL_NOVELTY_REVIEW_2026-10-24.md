@@ -16,6 +16,51 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Operator norm homeomorphism and separated rank sectors (25 October)
+
+The finite complex `1<p<2` classification now includes its actual
+**operator norm topology**. In `SchattenParameterTopology.lean`,
+`exists_schatten_normalized_parameter_homeomorph` upgrades the normalized
+phase/defect equivalence, and
+`exists_schatten_multiplicity_parameter_homeomorph` gives a homeomorphism
+from independent projections on the actual active multiplicity spaces,
+times arbitrary independent crossed-defect unitaries, onto **all** ambient
+global optimizers. Equal subspace ranks and finite `1<p<2` are the
+optimization hypotheses; there is no angle simplicity, acuteness or
+preselected competitor frame. Actual phase restrictions and both defect
+actions are retained. Zero, critical, repeated and right angles are included.
+
+The latter theorem proves local constancy of every multiplicity-projection
+rank and a fixed-pair `k>0` such that a different rank on any one factor
+implies `1 <= k*||T-S||`. Hence the rank sectors are clopen and uniformly
+separated for the fixed pair and exponent, and ranks are constant along
+continuous connected families. The constant is not claimed sharp or
+uniform near phase transitions. `isCompact_schattenTransportMinimizers`
+proves compactness; the discrete-topology endpoint proves isolation in
+the simple-active/no-right-defect case, where the exact count is `2^s`.
+The manuscript includes `thm:schatten-optimizer-topology`.
+
+The proof consumes the accepted Tau Ceti operator-norm topology on linear
+isometry equivalences. New donor lemmas prove compactness of projection
+and finite-dimensional isometric-identification spaces (including empty
+and trivial cases), rectangular inversion continuity, the paired
+restriction/extension homeomorphism, rank stability of idempotents at
+norm distance less than one, and contraction under invariant restriction.
+These are classical facts. The closed graph proof also uses the previously
+compiled geometric uniqueness theorem without a feasibility hypothesis.
+No additional historical-priority claim is made for these topological
+consequences. The historical novelty of the nonlinear full optimizer
+classification remains provisional under the theorem-level comparisons below.
+
+**Remaining boundary:** the old rank-stratified subspace equivalence is
+algebraic. The current homeomorphism uses orthogonal-projection carriers,
+without defining a new topology on Mathlib's `Module.Grassmannian`.
+Path connectedness of each rank sector, exact component counts and
+manifold dimensions remain unproved in Lean. The anticipated components
+and dimensions in the conventional draft are not promoted by this result.
+Charbonnier's full multiplicity product, real matching and ideal
+optimization retain their earlier proof obligations.
+
 ## Complete finite multiplicity coordinates and exact counts (25 October)
 
 The finite complex `1<p<2` optimizer classification now has its full
@@ -31,8 +76,9 @@ is imposed on ambient competitors.
 `nonempty_schatten_rank_stratified_parameter_equiv` replaces every projection
 factor by all subspaces stratified by their exact dimension. This is the
 finite product of disjoint unions of complex Grassmannian **sets** predicted
-by the draft. The new statement does not assert a homeomorphism, connected
-components or smooth/manifold dimensions. The checked manuscript includes
+by the draft. That algebraic endpoint has now been strengthened to the
+projection-product homeomorphism above. Connected components and
+smooth/manifold dimensions remain unproved. The checked manuscript includes
 `thm:schatten-multiplicity-parameters`.
 
 The exact count
@@ -79,9 +125,9 @@ manuscript includes `thm:schatten-normalized-parameters`.
 
 This closes redundancy and injectivity in the operator parameters. The
 multiplicity-space and rank-stratum factorization is now compiled above;
-Grassmannian homeomorphism, connected components and dimensions remain
-unverified. The normalization and norm
-recovery are classical consequences of the new complete classification;
+the projection-product homeomorphism is compiled in the preceding entry.
+Connected components and manifold dimensions remain unverified. The
+normalization and norm recovery are classical consequences of the new complete classification;
 they carry no separate historical-priority claim. The historical priority
 of the full nonlinear Schatten classification remains provisional under
 the theorem-level comparisons below.

@@ -43,7 +43,7 @@ theorem _root_.IsStarProjection.restrict_invariant
 
 /-- Compatible orthogonal projections supported on selected conjugate
 unitary eigenspace pairs. -/
-def unitaryPairedProjectionSpace
+@[expose] def unitaryPairedProjectionSpace
     (U : unitary (E →L[𝕜] E)) (J : E ≃ₗᵢ[𝕜] E) (mu : ι → 𝕜) : Set (E →L[𝕜] E) :=
   let N := fun i => Module.End.eigenspace (U : E →L[𝕜] E).toLinearMap (mu i)
   {P | IsStarProjection P ∧ Commute P (U : E →L[𝕜] E) ∧
