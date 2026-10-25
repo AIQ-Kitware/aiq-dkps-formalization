@@ -818,6 +818,7 @@ proposition about the three spaces.
 
 For Hilbert spaces, equality of Hilbert dimensions is equivalent to the existence
 of a linear isometric equivalence, and this is the form the realization consumes. -/
+@[expose]
 def SameHilbertDimensionSum (𝕜 : Type*) [RCLike 𝕜]
     (A₀ : Type u) [NormedAddCommGroup A₀] [InnerProductSpace 𝕜 A₀]
     (A₁ : Type v) [NormedAddCommGroup A₁] [InnerProductSpace 𝕜 A₁]
