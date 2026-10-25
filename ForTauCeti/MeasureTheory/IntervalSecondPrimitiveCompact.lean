@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import ForTauCeti.MeasureTheory.IntervalWeakSecondDeriv
-public import ForTauCeti.Analysis.Normed.Operator.FiniteRankCompact
+public import TauCeti.Analysis.Normed.Operator.Compact.FiniteRank
 public import Mathlib.MeasureTheory.Function.LpSeminorm.CompareExp
 public import Mathlib.MeasureTheory.Function.LpSpace.Indicator
 public import Mathlib.Analysis.Normed.Operator.Compact.Basic
@@ -247,7 +247,7 @@ theorem isCompactOperator_smulRight {E F : Type*}
   have : FiniteDimensional 𝕜
       (LinearMap.range ((φ.smulRight v : E →L[𝕜] F) : E →ₗ[𝕜] F)) :=
     Submodule.finiteDimensional_of_le hle
-  exact ContinuousLinearMap.isCompactOperator_of_finiteDimensional_range _
+  exact LinearMap.HasFiniteRange.isCompactOperator (Module.Finite.iff_fg.mp inferInstance)
 
 /-- Finite sums of compact operators are compact. -/
 theorem isCompactOperator_finsetSum {ι E F : Type*}

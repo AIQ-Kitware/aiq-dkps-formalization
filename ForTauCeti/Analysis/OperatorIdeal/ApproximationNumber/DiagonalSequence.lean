@@ -11,7 +11,8 @@ module
 public import Mathlib.Analysis.Normed.Lp.lpHolder
 public import Mathlib.Analysis.InnerProductSpace.l2Space
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 
 /-!
@@ -29,7 +30,7 @@ approximation numbers, hence is compact.
 ## Which route this takes, and why
 
 The roadmap offers two.  One builds the operator, proves it compact, and cites
-`tendsto_approximationNumber_atTop_nhds_zero_of_isCompactOperator`.  The other
+`IsCompactOperator.tendsto_singularValue`.  The other
 truncates the diagonal directly: the `N`-th truncation has rank at most `N`, and
 `‖T - Tₙ‖` is controlled by the tail of the coefficient sequence.
 
@@ -38,7 +39,8 @@ is for.  The approximation numbers of a diagonal operator *are* its tail
 suprema, so a proof that goes through compactness proves the statement without
 ever touching the reason it is true.  Taking the truncation route also inverts
 the dependency: compactness becomes a corollary
-(`isCompactOperator_diagOpLp`, by `isCompactOperator_of_tendsto_approximationNumber`)
+(`isCompactOperator_diagOpLp`, by
+`ContinuousLinearMap.isCompactOperator_of_tendsto_singularValue`)
 rather than a hypothesis, so the example exercises the finite-rank side of the
 API rather than Mathlib's closure argument.
 
@@ -215,16 +217,19 @@ theorem tendsto_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 
 
 /-- **The same operator is compact**, and on this route that is a corollary
 rather than an input: vanishing approximation numbers give compactness through
-`isCompactOperator_of_tendsto_approximationNumber`, with no closure argument and
+`ContinuousLinearMap.isCompactOperator_of_tendsto_singularValue`, with no closure argument and
 no spectral theory.
 
-`[ProperSpace 𝕜]` is inherited from that theorem, where it is what the finite-rank
-lemma needs; `ℝ` and `ℂ` both satisfy it, so it costs the example nothing. -/
+`[ProperSpace 𝕜]` supplies the local compactness required by the accepted theorem.
+The existing scalar scope is retained; `ℝ` and `ℂ` both satisfy it. -/
 theorem isCompactOperator_diagOpLp [ProperSpace 𝕜] (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
     (hc : ∀ i, ‖c i‖ ≤ K) (hc0 : Tendsto c atTop (𝓝 0)) :
-    IsCompactOperator (diagOpLp c hK hc) :=
-  (diagOpLp c hK hc).isCompactOperator_of_tendsto_approximationNumber
-    (tendsto_approximationNumber_diagOpLp c hK hc hc0)
+    IsCompactOperator (diagOpLp c hK hc) := by
+  apply ContinuousLinearMap.isCompactOperator_of_tendsto_singularValue
+  apply NNReal.tendsto_coe.mp
+  simpa only [NNReal.coe_zero,
+    ← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using
+    tendsto_approximationNumber_diagOpLp c hK hc hc0
 
 /-- **The approximation numbers of a diagonal operator are bounded by its
 coefficients**, when those are antitone in norm.

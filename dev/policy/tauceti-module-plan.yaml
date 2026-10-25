@@ -104,12 +104,9 @@ topics:
   modules:
   - SetTheory.Cardinal.Lift
   - LinearAlgebra.Dimension.RankComp
-  - Analysis.Normed.Operator.FiniteRankCompact
   - Analysis.InnerProductSpace.Spectral.Cutoff
   - Analysis.OperatorIdeal.ApproximationNumber.Basic
   - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
-  - Analysis.OperatorIdeal.ApproximationNumber.Compact
-  - Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert
   - Analysis.OperatorIdeal.ApproximationNumber.Core
   - Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample
   - Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
@@ -422,7 +419,6 @@ rungs:
   seeds:
   - Analysis.CStarAlgebra.RealSpectrumFunctionalCalculus
   - Analysis.Convex.Majorization
-  - Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert
   - Analysis.OperatorIdeal.ApproximationNumber.Core
   - Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
   - Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample
@@ -469,7 +465,6 @@ rungs:
   - Analysis.Normed.Operator.Restriction
   - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
   - Analysis.OperatorIdeal.ApproximationNumber.Basic
-  - Analysis.OperatorIdeal.ApproximationNumber.Compact
   - Analysis.OperatorIdeal.ApproximationNumber.Examples
   - Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
   - Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction

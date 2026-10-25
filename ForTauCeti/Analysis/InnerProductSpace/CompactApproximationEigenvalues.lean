@@ -13,7 +13,8 @@ public import Mathlib.Analysis.Normed.Operator.Compact.FredholmAlternative
 public import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 public import Mathlib.LinearAlgebra.DFinsupp
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
 
 /-!
@@ -258,7 +259,9 @@ theorem finiteDimensional_eigenSpan (hAc : IsCompactOperator A) (hAs : IsSelfAdj
     {S : Set ℝ} {t : ℝ} (ht : 0 < t) (hS : ∀ s ∈ S, t ≤ s) :
     FiniteDimensional 𝕜 (eigenSpan A S) := by
   obtain ⟨n, hn⟩ : ∃ n : ℕ, A.approximationNumber n < t := by
-    have h := A.tendsto_approximationNumber_atTop_nhds_zero_of_isCompactOperator hAc
+    have h := NNReal.tendsto_coe.mpr hAc.tendsto_singularValue
+    simp only [NNReal.coe_zero,
+      ← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] at h
     obtain ⟨N, hN⟩ := (Metric.tendsto_atTop.mp h) t ht
     refine ⟨N, ?_⟩
     have hd := hN N le_rfl

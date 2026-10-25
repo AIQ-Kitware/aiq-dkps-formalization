@@ -848,3 +848,43 @@ adapters and the genuinely unmerged compact ideal family are separate obligation
 The operator-norm retirement passed the focused build (7,390 jobs) and full
 default build (21,043 jobs), with warnings treated as errors, after their
 respective cache fetches.
+
+
+### October 25: retire duplicate compactness and finite-rank approximation proofs
+
+At the unchanged accepted pin, `ApproximationNumber.Compact` provides
+`tendsto_singularValue_nhds_zero_iff`,
+`isCompactOperator_of_tendsto_singularValue`,
+`IsCompactOperator.tendsto_singularValue`, and
+`isCompactOperator_iff_tendsto_singularValue`. These cover the donor sequence
+criterion, approximable-implies-compact implication, and Hilbert-target converse.
+The forward Hilbert-target result still requires no target completeness, and the
+accepted arbitrary-domain version permits a seminormed source. The compactness
+implication only needs a locally compact field, covering the donor's proper-field
+hypothesis. The native sequence formulation uses operator-norm convergence of the
+approximants, equivalent to convergence of their norm differences to zero.
+
+The donor `ApproximationNumber.Compact` and `.CompactHilbert` modules are removed.
+Their unused quantitative finite-net helper is retired with its proof, without
+claiming a separate accepted API for that exact helper. The compact eigenspace
+and diagonal consumers apply native convergence results, using the existing real
+view only where their unmerged conclusions still mention real approximation
+numbers. The remaining compact-adjoint theorem and equivalence use native
+singular values exclusively; their real/complex and arbitrary-universe scope
+is preserved. No compatibility theorem or alias replaces a retired declaration.
+
+Accepted `Normed.Operator.Compact.FiniteRank` also subsumes both proofs in donor
+`Normed.Operator.FiniteRankCompact`. The accepted theorem
+`LinearMap.HasFiniteRange.isCompactOperator` permits topological vector-space
+targets over locally compact fields, so it covers the donor's normed-space scope.
+Both live consumers (the second-primitive snapshots and free-beam affine part)
+apply it directly. That donor module is deleted as well.
+
+Pre-retirement source, original Jon Crall / Claude Opus 5 authorship and license
+remain at DKPS `a824d8090`; accepted source was checked at Tau Ceti
+`efded067c28ffca3483fd731674eb13b42543fbb`. This records accepted mathematical
+overlap and direct consumption, without inferring historical proof descent.
+
+The compactness retirement passed the focused five-module build (7,788 jobs)
+and full default build (21,037 jobs), with warnings treated as errors, after
+the respective cache fetches.

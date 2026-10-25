@@ -708,7 +708,7 @@ theorem isCompactOperator_beamEmbed : IsCompactOperator (beamEmbed (𝕜 := 𝕜
         (LinearMap.range (affinePart :
           (BeamV (𝕜 := 𝕜)) →ₗ[𝕜] (BeamL2 (𝕜 := 𝕜)))) :=
       Submodule.finiteDimensional_of_le hle
-    exact ContinuousLinearMap.isCompactOperator_of_finiteDimensional_range affinePart
+    exact LinearMap.HasFiniteRange.isCompactOperator (Module.Finite.iff_fg.mp inferInstance)
   have hKcompact : IsCompactOperator
       ((secondPrimitiveCLM (𝕜 := 𝕜)).comp (beamSnd (𝕜 := 𝕜))) :=
     (isCompactOperator_secondPrimitiveCLM (𝕜 := 𝕜)).comp_clm (beamSnd (𝕜 := 𝕜))

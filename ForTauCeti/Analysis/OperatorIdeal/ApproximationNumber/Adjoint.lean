@@ -5,25 +5,23 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kans
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 
 /-!
-# Adjoint invariance of approximation numbers
+# Compactness of the adjoint on Hilbert spaces
 
-Tau Ceti proves adjoint invariance for its canonical `ℝ≥0` approximation numbers. The redundant
-real-valued adjoint theorem has been removed; consumers now use that canonical result through the
-real-view equation where needed. The compact-adjoint result remains local because it follows from
-the maintained compactness/approximation-number criterion, for which Tau Ceti has no equivalent.
+The remaining Schauder consequences use Tau Ceti's canonical singular values:
+compactness is equivalent to their convergence to zero, and taking the adjoint
+preserves them. No real-valued approximation-number layer is imported.
 
 ## Provenance
 
-The original local adjoint proof was adapted from
-`ForMathlib/Analysis/Normed/Operator/ApproximationNumberAdjoint.lean`. Its rank and approximation
-arguments have been removed in favor of
-`TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint`.
+The original DKPS adjoint-invariance proof was adapted from
+`ForMathlib/Analysis/Normed/Operator/ApproximationNumberAdjoint.lean`. Its rank and
+approximation arguments were replaced by accepted Tau Ceti APIs. The compactness
+consequence remains local; the duplicate compactness/approximability proofs have
+also been retired in favor of accepted `ApproximationNumber.Compact`.
 -/
 
 public section
@@ -41,18 +39,14 @@ variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- **Schauder's theorem for Hilbert spaces:** the adjoint of a compact operator is compact.
 
-Compactness on a complete Hilbert target is equivalent to the vanishing of the approximation
-numbers. Tau Ceti now supplies adjoint invariance of those numbers, so this local consequence is
-an equality rewrite. -/
+Compactness on a complete Hilbert target is equivalent to vanishing singular values.
+Taking the adjoint preserves those values. -/
 theorem isCompactOperator_adjoint {T : E →L[𝕜] F} (hT : IsCompactOperator T) :
     IsCompactOperator T.adjoint := by
-  rw [isCompactOperator_iff_tendsto_approximationNumber]
-  have hadj : T.adjoint.approximationNumber = T.approximationNumber := by
-    funext n
-    rw [approximationNumber_eq_singularValue_toReal,
-      approximationNumber_eq_singularValue_toReal, singularValue_adjoint]
-  rw [hadj]
-  exact (isCompactOperator_iff_tendsto_approximationNumber T).1 hT
+  apply isCompactOperator_of_tendsto_singularValue
+  have h : T.adjoint.singularValue = T.singularValue := funext T.singularValue_adjoint
+  rw [h]
+  exact hT.tendsto_singularValue
 
 /-- Schauder's theorem in both directions. -/
 @[simp]
