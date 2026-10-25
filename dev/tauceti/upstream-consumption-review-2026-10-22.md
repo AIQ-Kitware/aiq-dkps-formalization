@@ -126,9 +126,9 @@ on energy without completeness assumptions; the last uses native finite energy.
 Validation: `lake exe cache get` followed by the full default `lake build` passed
 **21,051 jobs**, with warnings treated as errors.
 
-No compatibility aliases replace retired APIs. The next substantial comparison
-is the remaining approximation-number energy/truncation proofs with accepted
-`ApproximationNumber.HilbertSchmidt`, followed by the Schatten gauge presentation.
+No compatibility aliases replace retired APIs. The comparison identified at this
+checkpoint was the approximation-number energy/truncation proofs against accepted
+`ApproximationNumber.HilbertSchmidt`; the follow-up below closes that retirement.
 Paper and visualization files remain unchanged.
 
 The reconciliation follow-up deletes `ApproximationNumber.EnergyComparison`
@@ -137,12 +137,22 @@ entirely. Its two live consumers and the paper energy identity use accepted
 module `HilbertSchmidt.Columns` also compiled explicitly. Unused support for the
 retired proofs is removed without asserting that every auxiliary lemma was ported.
 The source ideal consumers import the accepted family, and Theorem 6.2 explicitly
-imports the genuinely remaining donor contraction estimate. The next comparison
-is the remaining Schatten gauge presentation, followed by the Hilbert–Schmidt
-column-model APIs against accepted `HilbertBasis.columnOperator`.
+imports the genuinely remaining donor contraction estimate. The next direct
+migration is the Hilbert–Schmidt column model: `ofLp b` and accepted
+`HilbertBasis.columnOperator b` act on the same Mathlib `ℓ²` carrier. The remaining
+Schatten comparison needs a parameter-scope check: the donor defines its power-sum
+functional for every real `p`, whereas the accepted normed family takes `1 ≤ p`.
 The follow-up passed the full default build (**21,049 jobs**), with warnings
 treated as errors, after the cache fetch. Together with `57447d82a`, it removes
 a net **992 lines** of maintained Lean source.
+The committed reconciliation checkpoint `1f2946e00` also passed explicit
+`Challenge` and `DavisKahan.Audits.All` builds (**20,829 jobs**), after the cache fetch.
+The full comparator signature preflight then matched all **42 implemented targets**;
+the three explicitly declared missing solutions remain `SKIP`. A tracked-source
+search confirms that the retired extended norm, predicate, basis helpers and
+comparison module have no remaining Lean references. The separate syntactic
+name-drift checker still reports accepted imported declarations as absent from
+its local-only index; actual Lean resolution and signature comparisons passed.
 
 ## Scope and evidence
 

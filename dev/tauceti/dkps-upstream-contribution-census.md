@@ -750,3 +750,7 @@ rather than exposing the obsolete representation transitively.
 
 The reconciliation retirement passed the full default build (21,049 jobs),
 with warnings treated as errors, after `lake exe cache get`.
+The committed checkpoint `1f2946e00` also passed explicit `Challenge` and
+`DavisKahan.Audits.All` builds (20,829 jobs), after the cache fetch.
+The full signature preflight matched all 42 implemented comparator targets;
+the three deliberately declared missing solutions remain skipped.
