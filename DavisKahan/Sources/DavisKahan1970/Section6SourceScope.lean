@@ -283,13 +283,13 @@ variable {E₀' F₀' : Type v} {E F G H : Type v}
 
 /-- Finiteness of the Hilbert--Schmidt energy and of the Hilbert--Schmidt
 `ℝ≥0∞`-norm are the same condition. -/
-private theorem energy_ne_top_iff_hilbertSchmidtENorm_ne_top
+private theorem energy_ne_top_iff_hilbertSchmidtGauge_ne_top
     {𝕜 : Type} [RCLike 𝕜] {X Y : Type v}
     [NormedAddCommGroup X] [InnerProductSpace 𝕜 X] [CompleteSpace X]
     [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y] [CompleteSpace Y]
     (T : X →L[𝕜] Y) :
-    approximationNumberEnergy T ≠ ⊤ ↔ T.hilbertSchmidtENorm ≠ ⊤ := by
-  rw [approximationNumberEnergy_eq_hilbertSchmidtENorm_sq]
+    approximationNumberEnergy T ≠ ⊤ ↔ ((OperatorIdealFamily.hilbertSchmidt _).gauge T) ≠ ⊤ := by
+  rw [approximationNumberEnergy_eq_hilbertSchmidtGauge_sq]
   constructor
   · intro h hT
     exact h (by rw [hT, ENNReal.top_rpow_of_pos (by norm_num : (0:ℝ) < 2)])
@@ -304,13 +304,13 @@ private theorem enorm_le_of_hilbertSchmidtNorm_le
     [NormedAddCommGroup X'] [InnerProductSpace 𝕜 X'] [CompleteSpace X']
     [NormedAddCommGroup Y'] [InnerProductSpace 𝕜 Y'] [CompleteSpace Y']
     {S : X →L[𝕜] Y} {R : X' →L[𝕜] Y'} {c : ℝ} (hc : 0 ≤ c)
-    (hS : S.hilbertSchmidtENorm ≠ ⊤) (hR : R.hilbertSchmidtENorm ≠ ⊤)
+    (hS : ((OperatorIdealFamily.hilbertSchmidt _).gauge S) ≠ ⊤) (hR : ((OperatorIdealFamily.hilbertSchmidt _).gauge R) ≠ ⊤)
     (h : c * S.hilbertSchmidtNorm ≤ R.hilbertSchmidtNorm) :
-    ENNReal.ofReal c * S.hilbertSchmidtENorm ≤ R.hilbertSchmidtENorm := by
+    ENNReal.ofReal c * ((OperatorIdealFamily.hilbertSchmidt _).gauge S) ≤ ((OperatorIdealFamily.hilbertSchmidt _).gauge R) := by
   rw [← ENNReal.ofReal_toReal hS, ← ENNReal.ofReal_toReal hR,
     ← ENNReal.ofReal_mul hc]
   exact ENNReal.ofReal_le_ofReal
-    (by simpa [ContinuousLinearMap.hilbertSchmidtNorm_eq_toReal] using h)
+    (by simpa [OperatorIdealFamily.toReal_gauge_hilbertSchmidt] using h)
 
 /-- **Davis--Kahan 1970, Theorem 6.2 under the source's definedness convention,
 over `ℂ`.**
@@ -338,13 +338,13 @@ theorem theorem6_2_vacuity_sourceExact_complex
     {δ : ℝ} (hδ : 0 < δ) (hdist : PairwiseSpectrumGap A₀ Λ₁ δ)
     (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (sectionSixSinThetaBlock E₀ F₁ hframe hε)) :
-    ENNReal.ofReal (δ * ε) * S.operator.hilbertSchmidtENorm ≤ R.hilbertSchmidtENorm := by
-  rcases eq_or_ne R.hilbertSchmidtENorm ⊤ with hRtop | hRne
+    ENNReal.ofReal (δ * ε) * ((OperatorIdealFamily.hilbertSchmidt _).gauge S.operator) ≤ ((OperatorIdealFamily.hilbertSchmidt _).gauge R) := by
+  rcases eq_or_ne ((OperatorIdealFamily.hilbertSchmidt _).gauge R) ⊤ with hRtop | hRne
   · rw [hRtop]; exact le_top
   obtain ⟨hSne, hle⟩ := theorem6_2_complex A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact
-    hε hframe hδ hdist S ((energy_ne_top_iff_hilbertSchmidtENorm_ne_top R).mpr hRne)
+    hε hframe hδ hdist S ((energy_ne_top_iff_hilbertSchmidtGauge_ne_top R).mpr hRne)
   exact enorm_le_of_hilbertSchmidtNorm_le (by positivity)
-    ((energy_ne_top_iff_hilbertSchmidtENorm_ne_top S.operator).mp hSne) hRne hle
+    ((energy_ne_top_iff_hilbertSchmidtGauge_ne_top S.operator).mp hSne) hRne hle
 
 /-- **Davis--Kahan 1970, Theorem 6.2 under the source's definedness convention,
 over `ℝ`.** -/
@@ -367,13 +367,13 @@ theorem theorem6_2_vacuity_sourceExact_real
       ∀ α ∈ _root_.LinearPMap.realSpectrum Λ₁, δ ≤ |lam - α|)
     (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (sectionSixSinThetaBlockReal E₀ F₁ hframe hε)) :
-    ENNReal.ofReal (δ * ε) * S.operator.hilbertSchmidtENorm ≤ R.hilbertSchmidtENorm := by
-  rcases eq_or_ne R.hilbertSchmidtENorm ⊤ with hRtop | hRne
+    ENNReal.ofReal (δ * ε) * ((OperatorIdealFamily.hilbertSchmidt _).gauge S.operator) ≤ ((OperatorIdealFamily.hilbertSchmidt _).gauge R) := by
+  rcases eq_or_ne ((OperatorIdealFamily.hilbertSchmidt _).gauge R) ⊤ with hRtop | hRne
   · rw [hRtop]; exact le_top
   obtain ⟨hSne, hle⟩ := theorem6_2_real A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact
-    hε hframe hδ hdist S ((energy_ne_top_iff_hilbertSchmidtENorm_ne_top R).mpr hRne)
+    hε hframe hδ hdist S ((energy_ne_top_iff_hilbertSchmidtGauge_ne_top R).mpr hRne)
   exact enorm_le_of_hilbertSchmidtNorm_le (by positivity)
-    ((energy_ne_top_iff_hilbertSchmidtENorm_ne_top S.operator).mp hSne) hRne hle
+    ((energy_ne_top_iff_hilbertSchmidtGauge_ne_top S.operator).mp hSne) hRne hle
 
 end Theorem62Vacuity
 

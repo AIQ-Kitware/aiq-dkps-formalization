@@ -110,6 +110,28 @@ the accepted theorem requires a complete target, so it is not deleted as an exac
 duplicate in this pass.
 
 
+## October 25 follow-up: remove the extended-norm representation
+
+The remaining parallel Hilbert–Schmidt norm, membership predicate, chosen-basis
+helpers and closure/gauge APIs are removed. The source full-displacement and
+vacuity theorems state their extended norms directly through accepted
+`OperatorIdealFamily.hilbertSchmidt.gauge`. The source finite-norm comparisons
+and both scalar branches use native energy formulas, with no finiteness
+restriction added to the extended-norm conclusions. The column model chooses
+its own Mathlib basis without a donor foundation.
+
+The residual donor module contains only pointwise-basis Fatou, real-norm
+negation, and a contraction-norm consequence. The first is now stated directly
+on energy without completeness assumptions; the last uses native finite energy.
+Validation: `lake exe cache get` followed by the full default `lake build` passed
+**21,051 jobs**, with warnings treated as errors.
+
+No compatibility aliases replace retired APIs. The next substantial comparison
+is the remaining approximation-number energy/truncation proofs with accepted
+`ApproximationNumber.HilbertSchmidt`, followed by the Schatten gauge presentation.
+Paper and visualization files remain unchanged.
+
+
 ## Scope and evidence
 
 This reviews the uploaded `aiq-dkps-formalization` source snapshot at DKPS

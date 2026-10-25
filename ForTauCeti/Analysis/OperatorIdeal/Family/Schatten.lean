@@ -26,6 +26,8 @@ open scoped ENNReal NNReal InnerProductSpace
 
 public section
 
+open TauCeti
+
 namespace ContinuousLinearMap
 
 universe u v w
@@ -314,10 +316,10 @@ variable {E : Type v} {F : Type w}
 /-- **The Schatten-2 norm is the Hilbert--Schmidt norm.**  Both are the square root of the
 same `ℝ≥0∞` quantity, by the identity above. -/
 theorem schattenENorm_two (T : E →L[𝕜] F) :
-    T.schattenENorm 2 = T.hilbertSchmidtENorm := by
+    T.schattenENorm 2 = (OperatorIdealFamily.hilbertSchmidt 𝕜).gauge T := by
   classical
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 E
-  rw [schattenENorm, T.hilbertSchmidtENorm_eq b,
+  rw [schattenENorm, OperatorIdealFamily.gauge_hilbertSchmidt T b,
     ← tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy T b]
   norm_num
 

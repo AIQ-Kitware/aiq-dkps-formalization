@@ -1429,7 +1429,7 @@ private theorem nuclearENorm_gramOperatorR {X Y : Type v}
     [NormedAddCommGroup X] [InnerProductSpace ℝ X] [CompleteSpace X]
     [NormedAddCommGroup Y] [InnerProductSpace ℝ Y] [CompleteSpace Y]
     (A : X →L[ℝ] Y) :
-    (gramOperatorR A).nuclearENorm = A.hilbertSchmidtENorm ^ 2 := by
+    (gramOperatorR A).nuclearENorm = ((OperatorIdealFamily.hilbertSchmidt ℝ).gauge A) ^ 2 := by
   have hnuclear (T : X →L[ℝ] X) :
       T.nuclearENorm = ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) := by
     rw [ContinuousLinearMap.nuclearENorm_def]
@@ -1475,8 +1475,8 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_hilbertSchmidt
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W) :
-    (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J).hilbertSchmidtENorm ≤
-      (1 - W).hilbertSchmidtENorm := by
+    ((OperatorIdealFamily.hilbertSchmidt ℝ).gauge (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) ≤
+      ((OperatorIdealFamily.hilbertSchmidt ℝ).gauge (1 - W)) := by
   have hnuc :
       (gramOperatorR (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).nuclearENorm ≤
         (gramOperatorR (1 - W)).nuclearENorm := by

@@ -691,3 +691,34 @@ The family follow-up passed the full default build (21,051 jobs) with warnings
 treated as errors, after `lake exe cache get`.
 The committed follow-up `e1b3f88d9` also passed explicit `Challenge` and
 `DavisKahan.Audits.All` builds (20,831 jobs), after the cache fetch.
+
+
+### October 25: retire the remaining Hilbert–Schmidt representation
+
+The next consumption pass removes `ContinuousLinearMap.hilbertSchmidtENorm`,
+`ContinuousLinearMap.IsHilbertSchmidt`, their closure and gauge laws, and
+`TauCeti.chosenHilbertBasisSet` / `.chosenHilbertBasis`. Their pre-retirement
+source is preserved at DKPS `51454da84`. No compatibility definitions or aliases
+replace them. Extended norm expressions use the accepted rectangular
+`OperatorIdealFamily.hilbertSchmidt` gauge directly; finiteness proofs use the
+accepted Hilbert–Schmidt energy. The complex column model owns its fixed basis
+locally through Mathlib's existing `exists_hilbertBasis`.
+
+The paper-facing full-displacement optimality and vacuity theorems retain their
+hypotheses and infinite-energy cases. Their extended-norm expressions now name
+the accepted gauge, including both real and complex scalar branches. The source
+energy/gauge comparison and finite-norm reading are proved from the accepted
+`gauge_hilbertSchmidt` formula. The corresponding supporting declaration names
+are `approximationNumberEnergy_eq_hilbertSchmidtGauge_sq` and
+`hilbertSchmidtGauge_eq_ofReal_hilbertSchmidtNorm`; no old-name wrappers remain.
+
+Three genuinely remaining consequences stay in the donor: pointwise-on-a-basis
+Fatou for the canonical energy (`hilbertSchmidtEnergy_le_liminf`, now without
+completeness hypotheses), negation of the real norm, and the real-norm contraction
+estimate with native finite-energy hypotheses. The duplicated norm reading,
+chosen-basis API and membership predicate are completely removed from maintained
+Lean sources. This records accepted overlap, not an independently established
+upstream proof-adaptation claim.
+
+The representation retirement passed the full default build (21,051 jobs),
+with warnings treated as errors, after the cache fetch.

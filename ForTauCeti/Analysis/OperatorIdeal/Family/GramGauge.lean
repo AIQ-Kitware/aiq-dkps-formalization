@@ -82,7 +82,8 @@ The proof is the singular-value computation.  Both sides are the sum `∑ₙ a�
 because `aₙ(X⋆X) = aₙ(X)²` and the nuclear norm sums the approximation numbers, the right
 because the Hilbert--Schmidt norm is the Schatten-2 gauge of the same sequence. -/
 theorem nuclearENorm_gramOperator (X : E0 →L[ℂ] E1) :
-    (gramOperator X).nuclearENorm = X.hilbertSchmidtENorm ^ 2 := by
+    (gramOperator X).nuclearENorm =
+      (OperatorIdealFamily.hilbertSchmidt ℂ).gauge X ^ 2 := by
   have hsum : (gramOperator X).nuclearENorm =
       ∑' n : ℕ, ENNReal.ofReal (X.approximationNumber n) ^ (2 : ℝ) := by
     rw [nuclearENorm_eq_tsum_approximationNumber]

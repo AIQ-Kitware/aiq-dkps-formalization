@@ -2158,7 +2158,11 @@
     },
     {
       "source_module": "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
-      "source_declarations": [],
+      "source_declarations": [
+        "hilbertSchmidtEnergy_le_liminf",
+        "hilbertSchmidtNorm_neg",
+        "hilbertSchmidtNorm_comp_isometries_le"
+      ],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
@@ -2166,16 +2170,14 @@
       "roadmap_target": "symmetric-operator-ideals",
       "provenance_class": "authored in place 2026-07-28: the Hilbert-Schmidt norm and the resulting TauCeti.SymmetricOperatorIdealFamily, the second instance of that structure after the Ky Fan families",
       "direct_dependencies": [
-        "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
         "TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
+      "status": "staged-partial",
       "upstream_pr": null,
-      "migration_note": "2026-10-25: canonical energy, real norm, symmetric Hilbert-Schmidt family and its completeness consumed from Tau Ceti. Duplicate family constructor, 90-line completeness proof and unused carrier/gauge aliases removed. The donor retains the extended-gauge presentation, its membership/limit consequences, and a contraction-norm consequence; no old family alias remains."
+      "migration_note": "2026-10-25: removed the parallel extended norm, chosen-basis helpers, IsHilbertSchmidt predicate, closure/gauge laws and norm-reading adapters. All norm consumers use OperatorIdealFamily.hilbertSchmidt.gauge, and source finiteness proofs use the canonical energy. Only pointwise-basis Fatou, real-norm negation and the contraction-norm consequence remain. Fatou no longer assumes completeness; the contraction consequence takes native energy finiteness."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",

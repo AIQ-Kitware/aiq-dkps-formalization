@@ -118,11 +118,13 @@ theorem projectedResidual_norm_le
     _ = ContinuousLinearMap.hilbertSchmidtNorm
           (ContinuousLinearMap.id ℂ F ∘L P.data.residual.adjoint ∘L
             P.data.F₁) := by simp
-    _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint :=
-      ContinuousLinearMap.hilbertSchmidtNorm_comp_isometries_le
-        (ContinuousLinearMap.id ℂ F)
-        ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).2 hRadj) P.data.F₁
-        ContinuousLinearMap.norm_id_le hF₁
+    _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint := by
+      obtain ⟨_, b, -⟩ := exists_hilbertBasis ℂ E
+      exact ContinuousLinearMap.hilbertSchmidtNorm_comp_isometries_le
+        (ContinuousLinearMap.id ℂ F) b
+        (by simpa only [approximationNumberEnergy_eq_basisEnergy b P.data.residual.adjoint,
+          hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hRadj)
+        P.data.F₁ ContinuousLinearMap.norm_id_le hF₁
     _ = ContinuousLinearMap.hilbertSchmidtNorm P.data.residual :=
       ContinuousLinearMap.hilbertSchmidtNorm_adjoint P.data.residual
 
@@ -163,8 +165,8 @@ theorem canonicalSinTheta_frame_bound
     obtain ⟨_, b, -⟩ := exists_hilbertBasis ℂ G
     have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_comp_le
       Q.invSqrt.adjoint P.sylvesterOverlap (ContinuousLinearMap.id ℂ G) b
-      ((P.sylvesterOverlap.isHilbertSchmidt_iff_energy_ne_top b).mp
-        ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).mpr hraw))
+      (by simpa only [approximationNumberEnergy_eq_basisEnergy b P.sylvesterOverlap,
+        hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hraw)
     rw [ContinuousLinearMap.comp_id] at h
     rw [hblock]
     exact h.trans (mul_le_of_le_one_right
@@ -350,8 +352,8 @@ theorem canonicalSinTheta_frame_bound
     obtain ⟨_, b, -⟩ := exists_hilbertBasis ℝ G
     have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_comp_le
       Q.invSqrt.adjoint P.sylvesterOverlap (ContinuousLinearMap.id ℝ G) b
-      ((P.sylvesterOverlap.isHilbertSchmidt_iff_energy_ne_top b).mp
-        ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).mpr hraw))
+      (by simpa only [approximationNumberEnergy_eq_basisEnergy b P.sylvesterOverlap,
+        hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hraw)
     rw [ContinuousLinearMap.comp_id] at h
     rw [hcanonical]
     exact h.trans (mul_le_of_le_one_right
@@ -406,11 +408,13 @@ theorem result
       _ = ContinuousLinearMap.hilbertSchmidtNorm
             (ContinuousLinearMap.id ℝ F ∘L P.data.residual.adjoint ∘L
               P.data.F₁) := by simp
-      _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint :=
-        ContinuousLinearMap.hilbertSchmidtNorm_comp_isometries_le
-          (ContinuousLinearMap.id ℝ F)
-          ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).2 hRadj) P.data.F₁
-          ContinuousLinearMap.norm_id_le hF₁
+      _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint := by
+        obtain ⟨_, b, -⟩ := exists_hilbertBasis ℝ E
+        exact ContinuousLinearMap.hilbertSchmidtNorm_comp_isometries_le
+          (ContinuousLinearMap.id ℝ F) b
+          (by simpa only [approximationNumberEnergy_eq_basisEnergy b P.data.residual.adjoint,
+            hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hRadj)
+          P.data.F₁ ContinuousLinearMap.norm_id_le hF₁
       _ = ContinuousLinearMap.hilbertSchmidtNorm P.data.residual :=
         ContinuousLinearMap.hilbertSchmidtNorm_adjoint P.data.residual
   have hS : approximationNumberEnergy S.operator ≠ ⊤ :=

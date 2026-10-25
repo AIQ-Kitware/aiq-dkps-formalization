@@ -217,9 +217,9 @@ theorem approximationNumberEnergy_comp_le
   exact ENNReal.ofReal_le_ofReal hbound
 
 /-- **The two-sided ideal property**, at the level of finite approximation-number
-energy.  `ContinuousLinearMap.IsHilbertSchmidt.comp` is the same fact about the
+energy. The accepted Hilbert–Schmidt family supplies the same ideal property for its
 canonical predicate; the two are identified by
-`isHilbertSchmidt_iff_approximationNumberEnergy_ne_top`
+`approximationNumberEnergy_eq_basisEnergy`
 once the coordinate bridge is in scope. -/
 theorem approximationNumberEnergy_ne_top_comp
     {𝕜 : Type u} [RCLike 𝕜]

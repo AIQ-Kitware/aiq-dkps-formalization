@@ -334,12 +334,8 @@ theorem enorm_comp_one_sub_basisTruncation_sq_le {ι : Type*} [DecidableEq ι]
     (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) (s : Finset ι) :
     ‖T ∘L (1 - basisTruncation b s)‖ₑ ^ 2 ≤
       ∑' i, if i ∈ s then 0 else ‖T (b i)‖ₑ ^ 2 := by
-  calc ‖T ∘L (1 - basisTruncation b s)‖ₑ ^ 2
-      ≤ (T ∘L (1 - basisTruncation b s)).hilbertSchmidtENorm ^ 2 :=
-        pow_le_pow_left' (enorm_le_hilbertSchmidtENorm _) 2
-    _ = (T ∘L (1 - basisTruncation b s)).hilbertSchmidtEnergy b :=
-        hilbertSchmidtENorm_sq _ b
-    _ = _ := hilbertSchmidtEnergy_comp_one_sub_basisTruncation T b s
+  rw [← hilbertSchmidtEnergy_comp_one_sub_basisTruncation T b s]
+  exact enorm_sq_le_hilbertSchmidtEnergy _ b
 
 
 /-- The coordinate map dual to `finiteBasisInclusion`: a vector goes to its coefficients

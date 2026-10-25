@@ -33,8 +33,7 @@ their names and statements, so consumers are unaffected.
 
 `Space E F` mentions no basis; `lp (fun _ : ι => E) 2` must.  Rather than give every
 declaration here a basis parameter — which every downstream consumer would inherit — the
-basis is fixed internally to `TauCeti.chosenHilbertBasis ℂ F`, the same choice
-`ContinuousLinearMap.hilbertSchmidtENorm` already makes.  Nothing depends on *which*
+basis is fixed internally to `hSBasis F`.  Nothing depends on *which*
 basis it is, because `hilbertSchmidtEnergy_indep` says the energy does not.
 
 `hilbertSchmidtTensor` also stops being a `Classical.choose`: the column family is
@@ -61,12 +60,12 @@ variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 /-- The index type of the fixed Hilbert basis of `F`. -/
 abbrev HSIndex (F : Type vF) [NormedAddCommGroup F] [InnerProductSpace ℂ F]
     [CompleteSpace F] : Type vF :=
-  ↥(TauCeti.chosenHilbertBasisSet ℂ F)
+  ↥(exists_hilbertBasis ℂ F).choose
 
 /-- The fixed Hilbert basis of `F` in which the model is expressed. -/
 abbrev hSBasis (F : Type vF) [NormedAddCommGroup F] [InnerProductSpace ℂ F]
-    [CompleteSpace F] : HilbertBasis (TauCeti.chosenHilbertBasisSet ℂ F) ℂ F :=
-  TauCeti.chosenHilbertBasis ℂ F
+    [CompleteSpace F] : HilbertBasis (HSIndex F) ℂ F :=
+  (exists_hilbertBasis ℂ F).choose_spec.choose
 
 /-- Finite paper square energy is equivalent to representation by a unique
 element of the `ℓ²` model. -/

@@ -22,7 +22,7 @@ uses:
 
 ## Why `lp` is the space, and not a new type
 
-The obvious alternative is a subtype `{T : F →L[𝕜] E // IsHilbertSchmidt T}`.
+The alternative is the finite-gauge carrier of the canonical Hilbert–Schmidt family.
 It is the wrong choice: as a subtype of a normed space it inherits the
 *operator* norm from Mathlib, and every Hilbert–Schmidt statement then has to
 fight that instance.  Carrying `lp` instead means `InnerProductSpace` and

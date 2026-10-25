@@ -664,8 +664,8 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_hilbertSchm
       DavisKahan.halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * U.starProjection = V.starProjection * W) :
-    (1 - DavisKahan.nonacuteDirectRotation U V J).hilbertSchmidtENorm ≤
-      (1 - W).hilbertSchmidtENorm := by
+    ((OperatorIdealFamily.hilbertSchmidt ℂ).gauge (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
+      ((OperatorIdealFamily.hilbertSchmidt ℂ).gauge (1 - W)) := by
   have hnuc : (gramOperator (1 - DavisKahan.nonacuteDirectRotation U V J)).nuclearENorm ≤
       (gramOperator (1 - W)).nuclearENorm := by
     rw [ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,

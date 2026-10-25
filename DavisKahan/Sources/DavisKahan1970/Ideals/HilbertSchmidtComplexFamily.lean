@@ -88,10 +88,10 @@ theorem hilbertSchmidtNorm_add_le_complex
       ContinuousLinearMap.hilbertSchmidtNorm A + ContinuousLinearMap.hilbertSchmidtNorm B := by
   obtain ⟨_, b, -⟩ := exists_hilbertBasis ℂ E
   exact ContinuousLinearMap.hilbertSchmidtNorm_add_le A B b
-    ((A.isHilbertSchmidt_iff_energy_ne_top b).mp
-      ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top A).mpr hA))
-    ((B.isHilbertSchmidt_iff_energy_ne_top b).mp
-      ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top B).mpr hB))
+    (by simpa only [approximationNumberEnergy_eq_basisEnergy b A,
+      hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hA)
+    (by simpa only [approximationNumberEnergy_eq_basisEnergy b B,
+      hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hB)
 
 /-- A zero paper Hilbert--Schmidt norm forces the represented operator to
 vanish. -/
@@ -228,8 +228,8 @@ noncomputable def hilbertSchmidtComplex :
         intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
         obtain ⟨_, b, -⟩ := exists_hilbertBasis ℂ E
         exact ContinuousLinearMap.hilbertSchmidtNorm_comp_comp_le L A R b
-          ((A.isHilbertSchmidt_iff_energy_ne_top b).mp
-            ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top A).mpr hA))
+          (by simpa only [approximationNumberEnergy_eq_basisEnergy b A,
+            hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hA)
       opNorm_le_gauge := by
         intro E F _ _ _ _ _ _ A hA
         exact opNorm_le_hilbertSchmidtNorm hA

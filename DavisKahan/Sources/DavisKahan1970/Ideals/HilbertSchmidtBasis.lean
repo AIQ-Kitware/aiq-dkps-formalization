@@ -453,11 +453,13 @@ theorem approximationNumberEnergy_eq_basisEnergy {ι : Type*}
 
 /-- The paper square energy is the canonical extended norm, squared: the two
 energy interfaces agree without any finiteness hypothesis at all. -/
-theorem approximationNumberEnergy_eq_hilbertSchmidtENorm_sq
+theorem approximationNumberEnergy_eq_hilbertSchmidtGauge_sq
     (A : F →L[𝕜] E) :
-    approximationNumberEnergy A = A.hilbertSchmidtENorm ^ (2 : ℝ) := by
+    approximationNumberEnergy A = ((OperatorIdealFamily.hilbertSchmidt 𝕜).gauge A) ^ (2 : ℝ) := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
-  rw [A.hilbertSchmidtENorm_rpow_two b, approximationNumberEnergy_eq_basisEnergy b A,
+  rw [OperatorIdealFamily.gauge_hilbertSchmidt A b,
+    ← ENNReal.rpow_mul, one_div, inv_mul_cancel₀ (by norm_num : (2 : ℝ) ≠ 0),
+    ENNReal.rpow_one, approximationNumberEnergy_eq_basisEnergy b A,
     hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
 
 /-- **The canonical real norm is the paper's square-root-of-energy formula**, with no
@@ -523,26 +525,17 @@ theorem approximationNumberEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
   rw [← hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy b A]
   exact approximationNumberEnergy_eq_basisEnergy b A
 
-/-- The staged Hilbert--Schmidt predicate is the paper one. -/
-theorem isHilbertSchmidt_iff_approximationNumberEnergy_ne_top
-    (A : F →L[𝕜] E) :
-    A.IsHilbertSchmidt ↔ approximationNumberEnergy A ≠ ⊤ := by
-  obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
-  rw [A.isHilbertSchmidt_iff_energy_ne_top b,
-    approximationNumberEnergy_eq_basisEnergy b A,
-    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
-
 /-- The staged Hilbert--Schmidt norm is the paper square norm. -/
-theorem hilbertSchmidtENorm_eq_ofReal_hilbertSchmidtNorm
+theorem hilbertSchmidtGauge_eq_ofReal_hilbertSchmidtNorm
     (A : F →L[𝕜] E)
     (hA : approximationNumberEnergy A ≠ ⊤) :
-    A.hilbertSchmidtENorm = ENNReal.ofReal (ContinuousLinearMap.hilbertSchmidtNorm A) := by
+    ((OperatorIdealFamily.hilbertSchmidt 𝕜).gauge A) = ENNReal.ofReal (ContinuousLinearMap.hilbertSchmidtNorm A) := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
   have henergy : A.hilbertSchmidtEnergy b = approximationNumberEnergy A := by
     rw [← hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy b A]
     exact (approximationNumberEnergy_eq_basisEnergy b A).symm
   have hne : approximationNumberEnergy A ≠ ⊤ := hA
-  rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy, A.hilbertSchmidtENorm_eq b,
+  rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy, OperatorIdealFamily.gauge_hilbertSchmidt A b,
     henergy, Real.sqrt_eq_rpow,
     ← ENNReal.ofReal_rpow_of_nonneg ENNReal.toReal_nonneg (by norm_num),
     ENNReal.ofReal_toReal hne, one_div]
@@ -558,11 +551,8 @@ theorem hilbertSchmidtIdealFamily_gauge_eq_hilbertSchmidtNorm {G K : Type vE}
     (A : G →L[𝕜] K) (hA : approximationNumberEnergy A ≠ ⊤) :
     (TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt 𝕜).toOperatorIdealFamily.gauge A =
       ENNReal.ofReal (ContinuousLinearMap.hilbertSchmidtNorm A) := by
-  obtain ⟨_, b, -⟩ := exists_hilbertBasis 𝕜 G
-  rw [TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt_toOperatorIdealFamily,
-    TauCeti.OperatorIdealFamily.gauge_hilbertSchmidt A b]
-  rw [one_div, ← A.hilbertSchmidtENorm_eq b]
-  exact hilbertSchmidtENorm_eq_ofReal_hilbertSchmidtNorm A hA
+  rw [TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt_toOperatorIdealFamily]
+  exact hilbertSchmidtGauge_eq_ofReal_hilbertSchmidtNorm A hA
 
 /-! ### The bridge at the two scalar fields
 
