@@ -138,7 +138,6 @@ topics:
   - Analysis.OperatorIdeal.Family.OperatorNorm
   - Analysis.OperatorIdeal.Family.Schatten
   - Analysis.OperatorIdeal.Family.TraceClass
-  - Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
   - Analysis.InnerProductSpace.SchattenNorm
   - Analysis.InnerProductSpace.HilbertSchmidt.Energy
   - Analysis.Normed.FiniteLpGauge
@@ -490,7 +489,6 @@ rungs:
   - Analysis.OperatorIdeal.Family.HilbertSchmidt
   - Analysis.OperatorIdeal.Family.KyFan.Dominance
   - Analysis.OperatorIdeal.Family.OperatorNorm
-  - Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
   - Analysis.OperatorIdeal.Family.Schatten
   - Topology.ENNRealLiminf
   - Analysis.OperatorIdeal.Family.TraceClass

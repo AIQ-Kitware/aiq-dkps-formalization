@@ -10,6 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 public import DavisKahan.SinTheta.FrameFactorization
 public import DavisKahan.SinTheta.Real.FrameFactorization
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
+public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 
 public section
 

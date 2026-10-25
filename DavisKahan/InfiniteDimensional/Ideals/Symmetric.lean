@@ -9,7 +9,7 @@ public import DavisKahan.SpectralTheory.OperatorAngle
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
-public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 public import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
 public import TauCeti.Analysis.OperatorIdeal.Family.Schatten
 public import TauCeti.Analysis.OperatorIdeal.Family.TraceClass

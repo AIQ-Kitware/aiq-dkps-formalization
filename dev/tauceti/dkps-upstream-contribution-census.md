@@ -722,3 +722,31 @@ upstream proof-adaptation claim.
 
 The representation retirement passed the full default build (21,051 jobs),
 with warnings treated as errors, after the cache fetch.
+
+
+**Reconciliation follow-up:** the complete donor
+`ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison` is removed.
+The two live consumers, the Schatten-2 endpoint and principal-sine energy identity,
+apply accepted `ContinuousLinearMap.tsum_singularValue_sq_eq_hilbertSchmidtEnergy`
+directly, converting the already-stated real approximation numbers termwise.
+The paper-owned `approximationNumberEnergy_eq_basisEnergy` likewise uses that
+accepted unrestricted-dimensional identity; its statement is unchanged.
+
+The removed one-sided bounds are subsumed by accepted
+`hilbertSchmidtEnergy_le_tsum_singularValue_sq` (no completeness) and
+`tsum_singularValue_sq_le_hilbertSchmidtEnergy` (complete source).
+The removed compactness endpoint is available as
+`ContinuousLinearMap.isCompactOperator_of_hilbertSchmidtEnergy_ne_top` in accepted
+`HilbertSchmidt.Columns`, whose module was explicitly compiled. Obsolete finite-basis
+truncation/compression helpers had no remaining consumers outside the deleted
+module; their retirement does not claim that each helper was independently ported.
+Original Kitware/Jon Crall/Claude Opus 5 authorship remains in Git history at
+`57447d82a`. Accepted overlap is verified at the unchanged Tau Ceti pin; proof
+descent is not inferred from matching statements.
+
+Ideal consumers now import the accepted family directly. The remaining donor
+contraction-norm theorem is imported explicitly by its actual Theorem 6.2 consumer,
+rather than exposing the obsolete representation transitively.
+
+The reconciliation retirement passed the full default build (21,049 jobs),
+with warnings treated as errors, after `lake exe cache get`.

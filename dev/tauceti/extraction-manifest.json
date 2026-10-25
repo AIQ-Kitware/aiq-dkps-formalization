@@ -54,7 +54,6 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
@@ -660,7 +659,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "RoadmapBridge.OperatorTheory"
@@ -5197,6 +5195,27 @@
       ],
       "status": "staged",
       "upstream_pr": null
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison",
+      "source_declarations": [
+        "hilbertSchmidtEnergy_le_tsum_approximationNumber_sq",
+        "tsum_approximationNumber_sq_le_hilbertSchmidtEnergy",
+        "tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy",
+        "isCompactOperator_of_hilbertSchmidtEnergy_ne_top"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.HilbertSchmidt",
+      "ownership_class": "tauceti",
+      "roadmap_target": "symmetric-operator-ideals",
+      "provenance_class": "DKPS donor authored in place by Jon Crall and Claude Opus 5; accepted overlap verified, proof adaptation not claimed",
+      "direct_dependencies": [],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "2026-10-25: deleted the duplicate reconciliation/compactness module and its unused finite-basis proof support. Both live endpoint consumers use ContinuousLinearMap.tsum_singularValue_sq_eq_hilbertSchmidtEnergy. Compactness is accepted in TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns; that module was explicitly compiled. Pre-retirement source: DKPS 57447d82a."
     }
   ]
 }

@@ -55,13 +55,14 @@ they agree for two quite different reasons that look identical from outside:
   `T.toLinearMap.singularValues` and so is `ForTauCeti`'s -- both thin wrappers on Mathlib's
   `LinearMap.singularValues` -- so the entry below is discharged by the delivered lemma and
   is faithful to the roadmap's statement.
-* **Not at all, until someone proves it.**  The roadmap defines its own
+* **Historically, not until their definitions were related.** The original roadmap defined its own
   `hilbertSchmidtEnergy` (`OperatorIdeals/Suggested.lean:165`).  `ForTauCeti` has a
-  `hilbertSchmidtEnergy` too.  Nothing relates them, so
-  `tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy` cannot be bridged by supplying the
-  delivered theorem -- the two statements are about different functions that happen to share
-  a name.  Attempting it directly does not fail cleanly either: the unifier runs to a
-  `isDefEq` heartbeat timeout, still there at 2,000,000 heartbeats.
+  `hilbertSchmidtEnergy` too. At that checkpoint the definitions were unrelated, so a
+  same-named energy theorem did not discharge the roadmap statement; naive unification
+  exhausted its heartbeat budget. Current production consumers instead use the accepted
+  `ContinuousLinearMap.hilbertSchmidtEnergy` and
+  `.tsum_singularValue_sq_eq_hilbertSchmidtEnergy` directly. The duplicate energy and
+  comparison modules have been retired.
 
 **Consequence, and the reason to build the bridge definition-first**: the unit of roadmap
 delivery is not the theorem, it is the *definition plus the theorems about it*.  A bridge

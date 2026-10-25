@@ -131,6 +131,18 @@ is the remaining approximation-number energy/truncation proofs with accepted
 `ApproximationNumber.HilbertSchmidt`, followed by the Schatten gauge presentation.
 Paper and visualization files remain unchanged.
 
+The reconciliation follow-up deletes `ApproximationNumber.EnergyComparison`
+entirely. Its two live consumers and the paper energy identity use accepted
+`tsum_singularValue_sq_eq_hilbertSchmidtEnergy` directly. The accepted compactness
+module `HilbertSchmidt.Columns` also compiled explicitly. Unused support for the
+retired proofs is removed without asserting that every auxiliary lemma was ported.
+The source ideal consumers import the accepted family, and Theorem 6.2 explicitly
+imports the genuinely remaining donor contraction estimate. The next comparison
+is the remaining Schatten gauge presentation, followed by the Hilbert–Schmidt
+column-model APIs against accepted `HilbertBasis.columnOperator`.
+The follow-up passed the full default build (**21,049 jobs**), with warnings
+treated as errors, after the cache fetch. Together with `57447d82a`, it removes
+a net **992 lines** of maintained Lean source.
 
 ## Scope and evidence
 

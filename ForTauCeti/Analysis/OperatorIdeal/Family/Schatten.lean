@@ -8,9 +8,8 @@ module
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 public import ForTauCeti.Analysis.Normed.FiniteLpGauge
 public import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
-public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
-public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
+public import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import ForTauCeti.Topology.ENNRealLiminf
 
 /-!
 # Schatten norms from approximation numbers
@@ -299,7 +298,7 @@ sequence and the exponents are `1` and `1⁻¹`, so this is arithmetic in `ℝ�
 theorem about operators.
 
 The exponent-two counterpart uses the basis-independent energy identity proved
-in `ApproximationNumber.EnergyComparison`. -/
+in accepted `TauCeti.Analysis.OperatorIdeal.ApproximationNumber.HilbertSchmidt`. -/
 theorem schattenENorm_one (T : E →L[𝕜] F) : T.schattenENorm 1 = T.nuclearENorm := by
   simp [schattenENorm, ContinuousLinearMap.nuclearENorm_def,
     approximationNumber_eq_singularValue_toReal]
@@ -320,8 +319,8 @@ theorem schattenENorm_two (T : E →L[𝕜] F) :
   classical
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 E
   rw [schattenENorm, OperatorIdealFamily.gauge_hilbertSchmidt T b,
-    ← tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy T b]
-  norm_num
+    ← T.tsum_singularValue_sq_eq_hilbertSchmidtEnergy b]
+  simp [approximationNumber_eq_singularValue_toReal, one_div]
 
 
 end AgreementAtTwo

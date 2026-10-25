@@ -5,7 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.HilbertSchmidt
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 /-!
@@ -91,9 +92,10 @@ theorem tsum_sq_principalSineSequence_eq_hilbertSchmidtEnergy
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {ι : Type v} (b : HilbertBasis ι 𝕜 U) :
     (∑' n : ℕ, ENNReal.ofReal (principalSineSequence U V n) ^ 2) =
-      (principalSineOperator U V).hilbertSchmidtEnergy b :=
-  ContinuousLinearMap.tsum_approximationNumber_sq_eq_hilbertSchmidtEnergy
-    (principalSineOperator U V) b
+      (principalSineOperator U V).hilbertSchmidtEnergy b := by
+  simpa [principalSineSequence,
+    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using
+    (principalSineOperator U V).tsum_singularValue_sq_eq_hilbertSchmidtEnergy b
 
 /-- Basis form of the principal-sine energy identity. -/
 theorem tsum_sq_principalSineSequence_eq_tsum_enorm_projection

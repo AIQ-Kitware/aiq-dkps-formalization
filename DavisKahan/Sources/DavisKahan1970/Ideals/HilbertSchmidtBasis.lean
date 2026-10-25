@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 public section
@@ -446,10 +446,11 @@ Hilbert--Schmidt energy agree exactly. -/
 theorem approximationNumberEnergy_eq_basisEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     approximationNumberEnergy A = hilbertSchmidtBasisEnergy b A := by
-  rw [approximationNumberEnergy_eq_iSup_cutoff b A,
-    hilbertSchmidtBasisEnergy_eq_iSup_finset b A]
-  exact iSup_congr fun s =>
-    approximationNumberEnergy_comp_basisProjection b s A
+  rw [hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+  simpa only [approximationNumberEnergy, approximationSingularValue,
+    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ENNReal.ofReal_pow NNReal.zero_le_coe, ENNReal.ofReal_coe_nnreal] using
+    A.tsum_singularValue_sq_eq_hilbertSchmidtEnergy b
 
 /-- The paper square energy is the canonical extended norm, squared: the two
 energy interfaces agree without any finiteness hypothesis at all. -/
@@ -506,15 +507,11 @@ theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
   rw [NNReal.coe_tsum]
   simp only [NNReal.coe_pow, coe_nnnorm]
 
-/-! ## Reconciliation with the staged Hilbert--Schmidt ideal
+/-! ## Reconciliation with the accepted Hilbert–Schmidt ideal
 
-`ForTauCeti/Analysis/OperatorIdeal/Family/HilbertSchmidt.lean` builds the Hilbert--Schmidt
-ideal from orthonormal expansions alone, deliberately never mentioning approximation
-numbers, so that it needs no spectral theory.  The identity that reconciles the two
-definitions is exactly `approximationNumberEnergy_eq_basisEnergy` above, and the four
-statements below record what it buys: the staged ideal, its membership predicate and its
-gauge agree with the paper ones, so the paper development may be reread through the staged
-API without reproving anything. -/
+Tau Ceti owns the energy, norm and complete ideal family. The statements below
+identify the paper's approximation-number presentation with those accepted objects.
+-/
 
 /-- **The singular-value energy is the column energy.**  This is the obligation recorded
 against Milestone B3 of `TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md`. -/
@@ -525,7 +522,7 @@ theorem approximationNumberEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
   rw [← hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy b A]
   exact approximationNumberEnergy_eq_basisEnergy b A
 
-/-- The staged Hilbert--Schmidt norm is the paper square norm. -/
+/-- On the paper ideal, the accepted Hilbert–Schmidt gauge is the real norm. -/
 theorem hilbertSchmidtGauge_eq_ofReal_hilbertSchmidtNorm
     (A : F →L[𝕜] E)
     (hA : approximationNumberEnergy A ≠ ⊤) :
@@ -540,7 +537,7 @@ theorem hilbertSchmidtGauge_eq_ofReal_hilbertSchmidtNorm
     ← ENNReal.ofReal_rpow_of_nonneg ENNReal.toReal_nonneg (by norm_num),
     ENNReal.ofReal_toReal hne, one_div]
 
-/-- Consequently the gauge of the staged symmetric ideal family, read on the paper ideal,
+/-- Consequently the gauge of the accepted symmetric ideal family, read on the paper ideal,
 is the paper square norm.
 
 `TauCeti.SymmetricOperatorIdealFamily` is the diagonal layer, so it constrains the source
