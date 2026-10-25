@@ -16,6 +16,40 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Nonredundant optimizer parameters and stability (25 October)
+
+`SchattenParameterNormalization.lean` now proves the unique normalized
+phase/defect classification and an algebraic parameter bijection for every
+finite complex pair at `1<p<2`. The phase projection is supported on the
+orthogonal complement of `ker(C*(F-F.adjoint))`; its actual angle coefficient
+is `2*i*cos(theta)*sin(optimalPhase(p,theta))`. The coefficient vanishes
+precisely on inactive interior, fixed and right-angle directions. Right
+defects are still parametrized independently by an arbitrary unitary.
+
+The endpoints are
+`schatten_transport_isMin_iff_unique_normalized_phase_and_defect_complex`
+and `exists_schatten_normalized_parameter_equiv`. The latter includes a
+uniform operator-norm Lipschitz estimate recovering the phase projection
+from the optimizer for a fixed pair and exponent. No sharp recovery
+constant or uniformity through a phase transition is claimed. The
+manuscript includes `thm:schatten-normalized-parameters`.
+
+This closes redundancy and injectivity in the operator parameters. The
+multiplicity-space factorization, Grassmannian homeomorphism, connected
+components and dimensions remain unverified. The normalization and norm
+recovery are classical consequences of the new complete classification;
+they carry no separate historical-priority claim. The historical priority
+of the full nonlinear Schatten classification remains provisional under
+the theorem-level comparisons below.
+
+The local extension ingredient has also been strengthened to
+`exists_unique_paired_projection_extension`: arbitrary projection data on a
+finite-dimensional subspace orthogonal to its reflection determine a unique
+compatible projection supported on the paired sum, even in an infinite
+ambient Hilbert space. This replaces the weaker existence-only declaration.
+It advances multiplicity-space coordinate assembly and carries no separate
+historical novelty or ideal-optimization claim.
+
 ## Complete all-angle complex Schatten optimizer classification (25 October)
 
 The full unrestricted finite complex `1<p<2` optimizer **iff** is now

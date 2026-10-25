@@ -136,16 +136,8 @@ theorem exists_subspace_paired_rotation_projection_basis_complex
   let R := nonacuteDirectRotation K L D
   let C := Proposition35.section3CosAngleOperator K L
   let B := -Complex.I • (R - C)
-  have hPRs : Commute P (star R) := by
-    change P * star R = star R * P
-    simpa only [star_mul, hP.isSelfAdjoint.star_eq] using (congrArg star hPR.eq).symm
-  have hPC : Commute P C := by
-    have h := (hPR.add_right hPRs).eq
-    change P * (R + star R) = (R + star R) * P at h
-    rw [nonacuteDirectRotation_add_star_eq_two_cosine K L D] at h
-    apply smul_right_injective (E →L[ℂ] E) (by norm_num : (2 : ℂ) ≠ 0)
-    change (2 : ℂ) • (P * C) = (2 : ℂ) • (C * P)
-    simpa only [two_smul, mul_add, add_mul] using h
+  have hPC : Commute P C :=
+    commute_cosine_of_commute_nonacuteDirectRotation K L D P hP.isSelfAdjoint hPR
   have hPB : Commute B P := ((hPR.sub_right hPC).smul_right (-Complex.I)).symm
   let R' := Unitary.linearIsometryEquiv (⟨R, nonacuteDirectRotation_mem_unitary K L D⟩ :
     unitary (E →L[ℂ] E))

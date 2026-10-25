@@ -12,9 +12,11 @@ public import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
 # Extend an orthogonal projection to a reflected pair
 
 If an involution sends a subspace to an orthogonal subspace, every orthogonal
-projection on that subspace extends to a projection on their paired sum,
+projection on that subspace extends uniquely to a projection on their paired sum,
 using its reflected copy on the other half and zero on the remainder.
 A unitary scalar on each half commutes with this extension.
+Only the prescribed subspace must be finite dimensional; the ambient
+Hilbert space may be infinite dimensional.
 -/
 
 public section
@@ -26,22 +28,27 @@ namespace TauCeti
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-  [FiniteDimensional 𝕜 E] [CompleteSpace E]
+  [CompleteSpace E]
 
 /-- An arbitrary orthogonal projection on one of two orthogonal reflected
-spaces extends to an ambient orthogonal projection commuting with the
-reflection and with any unitary scalar on the two spaces. -/
-theorem exists_paired_projection_extension
-    (N : Submodule 𝕜 E) (J R : E ≃ₗᵢ[𝕜] E) (hJ : Function.Involutive J)
+spaces extends uniquely to an ambient orthogonal projection supported on
+their paired sum and commuting with the reflection and with any unitary
+scalar on the two spaces. -/
+theorem exists_unique_paired_projection_extension
+    (N : Submodule 𝕜 E) [FiniteDimensional 𝕜 N]
+    (J R : E ≃ₗᵢ[𝕜] E) (hJ : Function.Involutive J)
     (horth : ∀ x y : N, ⟪(x : E), J y⟫_𝕜 = 0)
     (mu nu : 𝕜) (hR : ∀ x : N, R x = mu • (x : E))
     (hRJ : ∀ x : N, R (J x) = nu • J x)
     (Q : N →L[𝕜] N) (hQ : IsStarProjection Q) :
-    ∃ P : E →L[𝕜] E, IsStarProjection P ∧ Commute P (R : E →L[𝕜] E) ∧
-      (∀ x, P (J x) = J (P x)) ∧ ∀ x : N, P x = (Q x : E) := by
+    ∃! P : E →L[𝕜] E, IsStarProjection P ∧ Commute P (R : E →L[𝕜] E) ∧
+      (∀ x, P (J x) = J (P x)) ∧ (∀ x : N, P x = (Q x : E)) ∧
+      ∀ x, P x ∈ N ⊔ N.map J.toLinearMap := by
   let M₀ := Q.range
   let M := M₀.map N.subtype
   let S := M ⊔ M.map J.toLinearMap
+  let : FiniteDimensional 𝕜 M := by dsimp only [M]; infer_instance
+  let : FiniteDimensional 𝕜 S := by dsimp only [S]; infer_instance
   have hMN : M ≤ N := by
     rintro x ⟨y, _, rfl⟩
     exact y.property
@@ -71,10 +78,7 @@ theorem exists_paired_projection_extension
     have h := U.toLinearIsometry.map_starProjection S x
     change U (S.starProjection x) = (S.map U.toLinearMap).starProjection (U x) at h
     simpa only [hU] using h.symm
-  refine ⟨S.starProjection, isStarProjection_starProjection, ?_, hcomm J hJmap, ?_⟩
-  · ext x
-    exact hcomm R hRmap x
-  · intro x
+  have hPN (x : N) : S.starProjection x = (Q x : E) := by
     apply S.eq_starProjection_of_mem_of_inner_eq_zero
     · apply Submodule.mem_sup_left
       exact Submodule.mem_map_of_mem (show Q x ∈ M₀ from ⟨x, rfl⟩)
@@ -91,5 +95,30 @@ theorem exists_paired_projection_extension
       change ⟪(x : E) - (Q x : E), (u₀ : E)⟫_𝕜 +
         ⟪(x : E) - (Q x : E), J (z₀ : E)⟫_𝕜 = 0
       rw [hM, hJM, add_zero]
+  have hSle : S ≤ N ⊔ N.map J.toLinearMap :=
+    sup_le_sup hMN (Submodule.map_mono hMN)
+  refine ⟨S.starProjection, ⟨isStarProjection_starProjection, ?_, hcomm J hJmap,
+    hPN, fun x => hSle (S.starProjection_apply_mem x)⟩, ?_⟩
+  · ext x
+    exact hcomm R hRmap x
+  · rintro P ⟨hP, _, hPJ, hPx, hPsupp⟩
+    have hagree (x : E) (hx : x ∈ N ⊔ N.map J.toLinearMap) : P x = S.starProjection x := by
+      rcases Submodule.mem_sup.mp hx with ⟨u, hu, v, ⟨z, hz, rfl⟩, rfl⟩
+      change P (u + J z) = S.starProjection (u + J z)
+      rw [map_add, map_add, hPJ, hcomm J hJmap,
+        hPx ⟨u, hu⟩, hPN ⟨u, hu⟩, hPx ⟨z, hz⟩, hPN ⟨z, hz⟩]
+    have hsym : IsSelfAdjoint (P - S.starProjection) :=
+      hP.isSelfAdjoint.sub isStarProjection_starProjection.isSelfAdjoint
+    ext x
+    apply sub_eq_zero.mp
+    have hmem : (P - S.starProjection) x ∈ N ⊔ N.map J.toLinearMap :=
+      Submodule.sub_mem _ (hPsupp x) (hSle (S.starProjection_apply_mem x))
+    have hzero : (P - S.starProjection) ((P - S.starProjection) x) = 0 :=
+      sub_eq_zero.mpr (hagree _ hmem)
+    have hinner := hsym.isSymmetric ((P - S.starProjection) x) x
+    change inner 𝕜 ((P - S.starProjection) ((P - S.starProjection) x)) x =
+      inner 𝕜 ((P - S.starProjection) x) ((P - S.starProjection) x) at hinner
+    rw [hzero, inner_zero_left] at hinner
+    exact inner_self_eq_zero.mp hinner.symm
 
 end TauCeti

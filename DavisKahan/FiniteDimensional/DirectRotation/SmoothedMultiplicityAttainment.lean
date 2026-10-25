@@ -83,7 +83,7 @@ theorem exists_weighted_transport_with_multiplicity_projection_complex
       x (K.reflection y) (hR x) (hRJ y)
   dsimp only
   intro Q hQ
-  obtain ⟨P, hP, hPR, hPJ, hPx⟩ := exists_paired_projection_extension N K.reflection R
+  obtain ⟨P, ⟨hP, hPR, hPJ, hPx, _⟩, _⟩ := exists_unique_paired_projection_extension N K.reflection R
     K.reflection_involutive horth mu (star mu) hR hRJ Q hQ
   obtain ⟨T, hT, hphase, hatt, hmin⟩ :=
     exists_weighted_transport_from_projection_complex a b hb hab K L hKL P hP hPR hPJ

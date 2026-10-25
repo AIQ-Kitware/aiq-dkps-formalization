@@ -7,6 +7,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
 public import Mathlib.Analysis.Normed.Operator.NormedSpace
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.KernelSupport
 
 /-!
 # Subspace transport as reflection intertwining
@@ -163,6 +164,16 @@ theorem norm_sub_eq_of_relative_affine
     ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ = ‖kappa‖ * ‖P - Q‖ := by
   rw [← norm_sub_relative R T S, hT, hS, add_sub_add_left_eq_sub, ← smul_sub, norm_smul]
 
+/-- Passing to right relative unitaries preserves operator distance. -/
+theorem norm_sub_right_relative (R T S : E ≃ₗᵢ[𝕜] E) :
+    ‖(T.trans R.symm : E →L[𝕜] E) - (S.trans R.symm : E →L[𝕜] E)‖ =
+      ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ := by
+  have hfac : (T.trans R.symm : E →L[𝕜] E) - (S.trans R.symm : E →L[𝕜] E) =
+      (R.symm : E →L[𝕜] E).comp ((T : E →L[𝕜] E) - (S : E →L[𝕜] E)) := by
+    ext x
+    exact (R.symm.map_sub (T x) (S x)).symm
+  rw [hfac, ContinuousLinearMap.opNorm_linearIsometryEquiv_comp]
+
 /-- A split formula for right relative phases gives an exact operator
 distance formula. The two coefficient maps need not be scalar, and the
 parameter maps need not be projections. No completeness or finite
@@ -172,16 +183,40 @@ theorem norm_sub_eq_of_right_relative_split
     (hT : (T.trans R.symm : E →L[𝕜] E) = F * P + G * (1 - P))
     (hS : (S.trans R.symm : E →L[𝕜] E) = F * Q + G * (1 - Q)) :
     ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ = ‖(F - G) * (P - Q)‖ := by
-  have hfac : (T.trans R.symm : E →L[𝕜] E) - (S.trans R.symm : E →L[𝕜] E) =
-      (R.symm : E →L[𝕜] E).comp ((T : E →L[𝕜] E) - (S : E →L[𝕜] E)) := by
-    ext x
-    exact (R.symm.map_sub (T x) (S x)).symm
-  have hn : ‖(T.trans R.symm : E →L[𝕜] E) - (S.trans R.symm : E →L[𝕜] E)‖ =
-      ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ := by
-    rw [hfac, ContinuousLinearMap.opNorm_linearIsometryEquiv_comp]
-  rw [← hn, hT, hS]
+  rw [← norm_sub_right_relative R T S, hT, hS]
   congr 1
   simp only [mul_sub, sub_mul, mul_one]
   abel
+
+/-- Normalized split parameters admit uniform operator-norm recovery from
+the unitaries whenever the effective phase-weight space is finite
+dimensional. The coefficients and reference unitary are fixed; the bound
+is uniform over all parameters and unitary pairs satisfying the formulas. -/
+theorem exists_pos_normalized_split_parameter_recovery
+    (R : E ≃ₗᵢ[𝕜] E) (C F G : E →L[𝕜] E)
+    [FiniteDimensional 𝕜 (C * (F - G)).kerᗮ] :
+    ∃ k : ℝ, 0 < k ∧ ∀ (T S : E ≃ₗᵢ[𝕜] E) (P Q : E →L[𝕜] E),
+      (∀ x, P x ∈ (C * (F - G)).kerᗮ) →
+      (∀ x, Q x ∈ (C * (F - G)).kerᗮ) →
+      C * (T.trans R.symm : E →L[𝕜] E) = C * (F * P + G * (1 - P)) →
+      C * (S.trans R.symm : E →L[𝕜] E) = C * (F * Q + G * (1 - Q)) →
+      ‖P - Q‖ ≤ (k * ‖C‖) * ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ := by
+  obtain ⟨k, hk, hbound⟩ :=
+    ContinuousLinearMap.exists_pos_norm_le_mul_norm_mul_on_orthogonal_ker (C * (F - G))
+  refine ⟨k, hk, fun T S P Q hP hQ hT hS => ?_⟩
+  have hdiff : C * (F - G) * (P - Q) =
+      C * ((T.trans R.symm : E →L[𝕜] E) - (S.trans R.symm : E →L[𝕜] E)) := by
+    rw [mul_sub C (T.trans R.symm : E →L[𝕜] E) (S.trans R.symm : E →L[𝕜] E), hT, hS]
+    noncomm_ring
+  calc
+    ‖P - Q‖ ≤ k * ‖C * (F - G) * (P - Q)‖ :=
+      hbound (P - Q) (fun x => (C * (F - G)).kerᗮ.sub_mem (hP x) (hQ x))
+    _ = k * ‖C * ((T.trans R.symm : E →L[𝕜] E) -
+        (S.trans R.symm : E →L[𝕜] E))‖ := by rw [hdiff]
+    _ ≤ k * (‖C‖ * ‖(T.trans R.symm : E →L[𝕜] E) -
+        (S.trans R.symm : E →L[𝕜] E)‖) :=
+      mul_le_mul_of_nonneg_left (norm_mul_le _ _) hk.le
+    _ = (k * ‖C‖) * ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ := by
+      rw [norm_sub_right_relative, mul_assoc]
 
 end LinearIsometryEquiv

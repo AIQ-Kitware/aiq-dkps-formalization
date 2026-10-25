@@ -6,7 +6,8 @@ complex Schatten `1<p<2` optimizer **iff**, including compatible phase
 projections, arbitrary independent right-defect identifications, joint
 attainment and uniqueness for each prescribed parameter pair. Every
 multiplicity, zero/right angle, fixed direction and critical threshold is
-included. The earlier exact value, local-to-global, sharp uniqueness and
+included. A nonredundant algebraic parameter bijection and uniform
+Lipschitz recovery of its phase projection are also proved. The earlier exact value, local-to-global, sharp uniqueness and
 commutator criteria remain proved. The all-angle Charbonnier global
 optimizer classification also remains proved. Grassmannian coordinate
 bijections/topology, unrestricted real matching, smoothed local-to-global
@@ -25,6 +26,87 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
 
+## Nonredundant complex optimizer parameters and recovery (25 October)
+
+`SchattenParameterNormalization.lean` removes the ineffective freedom in
+the complete operator classification. Define `B=C*(F-F.adjoint)`, where
+`C` is the intrinsic cosine and `F=schattenPhaseFactor(p,C)`. The set
+`schattenNormalizedPhaseProjections` consists of the compatible orthogonal
+projections whose ranges lie in `(ker B).orthogonal`.
+
+`schatten_transport_isMin_iff_unique_normalized_phase_and_defect_complex`
+proves that **every** feasible finite complex transporter is globally
+minimizing iff it has **exactly one** normalized phase/defect pair. All
+angle degeneracies remain included. Every raw compatible projection is
+normalized by multiplying it with orthogonal projection onto `(ker B).orthogonal`;
+`exists_normalized_schatten_phase_projection` proves that this preserves
+compatibility and its weighted phase formula.
+
+`exists_schatten_normalized_parameter_equiv` proves an actual Lean `Equiv`
+between the normalized projection space times the arbitrary crossed-defect
+unitary space and `schattenTransportMinimizers`. It retains both actual
+defect actions and the phase formula, and proves a finite constant `L>=0`
+with `||P_T-P_S|| <= L*||T-S||` for every pair of optimizers. The pair and
+exponent are fixed; no sharp or uniform-in-angle constant is asserted.
+
+The coefficient is compiled exactly in `schattenPhaseWeight_apply_cos`:
+on a physical cosine eigenvector it is
+`2*i*cos(theta)*sin(optimalPhase(p,theta))`. The zero and one cosine
+actions vanish. At each interior angle, the coefficient vanishes iff
+`theta<=criticalAngle(p)`, including critical equality, as proved by
+`schattenPhaseWeight_apply_eq_zero_iff_le_critical`. Thus the effective
+phase space is precisely the supercritical interior part; all right-angle
+freedom remains in the independent defect identification.
+
+The supporting donor `Projection/KernelSupport.lean` works over real or
+complex Hilbert spaces. Its uniform recovery bound assumes only that the
+orthogonal complement of the multiplier's kernel is finite dimensional,
+allowing an infinite ambient space. The downstream geometric recovery
+theorem is `LinearIsometryEquiv.exists_pos_normalized_split_parameter_recovery`.
+These are classical projection and finite-dimensional norm facts, with no
+independent historical novelty claim or infinite-dimensional optimum claim.
+`commute_cosine_of_commute_nonacuteDirectRotation` now shares the
+dimension-free self-adjoint commutation argument; the previous coordinate
+frame proof consumes it instead of keeping a duplicate.
+
+The manuscript includes Theorem `thm:schatten-normalized-parameters`.
+Six independent numerical mixed-angle diagnostics included zero, repeated
+critical and supercritical angles and arbitrary complex right-defect
+unitaries for `p=1.2,1.5,1.9`. The largest algebraic residual was
+`1.55e-15`, with no recovery-bound violation. These diagnostics are not
+proofs; the named endpoints are Lean-verified.
+
+The remaining family theorem must identify the normalized commutant
+projection space with a product of projection spaces on single canonical
+rotation eigenspaces, and then with unions of complex Grassmannians.
+The `Equiv` above is algebraic. A homeomorphism, connected components and
+dimensions are not yet Lean endpoints. The phase coordinate has a compiled
+uniform Lipschitz inverse estimate; continuity of the full forward
+phase/defect construction and its Grassmannian coordinates remains to be proved.
+
+The next local extension ingredient is also compiled:
+`exists_unique_paired_projection_extension` in
+`ForTauCeti/Analysis/InnerProductSpace/PairedProjectionExtension.lean`.
+Every orthogonal projection on a finite-dimensional subspace `N` orthogonal
+to its reflected copy extends **uniquely** to a compatible ambient
+projection supported on `N + J(N)`. The ambient Hilbert space can be
+infinite dimensional. The former weaker existence theorem is removed,
+and the Charbonnier multiplicity consumer uses the stronger result.
+The remaining assembly must restrict ambient compatible projections to
+the actual positive canonical rotation eigenspaces and sum their unique
+supported extensions over the distinct active angles. This will identify
+the projection factor in the existing optimizer equivalence.
+
+Validation: `lake exe cache get` preceded each Lean build. Focused
+normalization, kernel-support recovery and unique paired-extension targets
+passed, followed by `lake build DavisKahan.All ForTauCeti` (10,449 jobs;
+`/tmp/schatten-normalization-final-build.log`). This includes the migrated
+Charbonnier consumers. The journal PDF built through pdfLaTeX/BibTeX and
+subsequent pdfLaTeX passes, with 53 pages and no warnings, overfull boxes,
+unresolved references or duplicate labels in its final log under
+`/tmp/dk-schatten-normalized-parameters-paper/`. `git diff --check` passed.
+The original 29-result source inventory is unchanged.
+
 ## Complete finite complex Schatten optimizer classification (25 October)
 
 `SchattenNonacuteClassification.lean` now proves
@@ -42,8 +124,9 @@ This is an unrestricted ambient **iff**, with no prescribed-block, acute,
 simple-spectrum or cosine-preservation hypothesis on the competing `T`.
 The reference completion in the endpoint is the existing named
 `finiteCrossedDefectEquiv`; the independent optimizer defect `D` is arbitrary.
-The projection may be redundant on inactive and right-angle sectors. This
-classifies all optimizers without asserting an injective parameter tuple.
+The projection in this earlier operator iff may be redundant on inactive
+and right-angle sectors. The normalized extension above removes that
+redundancy and proves a bijection.
 
 `SchattenPhaseDefectAttainment.lean` proves
 `exists_unique_schatten_transport_from_phase_and_defect_complex`: **every**
@@ -275,16 +358,19 @@ nonacute ambient iff obligations are now closed. The exact relative phase
 orientation is `R.adjoint*T`; older smoothed formulas often use
 `T.adjoint*R`. The shared geometry distinguishes these conventions.
 
-The next mathematical target is the **nonredundant parameter bijection**.
+The nonredundant parameter bijection is now compiled in
+`SchattenParameterNormalization.lean`. The next target is its
+**factorization into multiplicity-space projection parameters**.
 Use the unique compatible projection already proved on each supercritical
 interior angle space. Restrict it to one canonical rotation eigenspace at
 `exp(i*theta)`; source reflection determines its action on the conjugate
-space. Conversely use `exists_paired_projection_extension`, then orthogonal
+space. Conversely use `exists_unique_paired_projection_extension`, then orthogonal
 sums across the finite set of distinct active angles, to extend every tuple
 of multiplicity-space projections. Keep inactive and right-angle projection
-parameters zero. Combine with the independent defect unitary and the new
-full iff to prove injectivity and surjectivity. The algebraic parameter is
-then a product of projection spaces and a defect unitary group.
+parameters zero. The normalized parameter equivalence already supplies
+injectivity and surjectivity for the ambient compatible projection and
+independent defect map. It remains to identify the projection factor with
+the product of multiplicity-space projection spaces.
 
 The Grassmannian identification, component dimensions and homeomorphism
 remain conventional until their exact coordinate/topology statements are
@@ -1208,8 +1294,11 @@ paired basis APIs now consume these stronger results. The source pair gives
 `exists_subspace_paired_rotation_projection_basis_complex`, and the signed
 attainment proof now works in any such frame via
 `exists_signed_weighted_transport_in_frame_complex`. The new donor
-`PairedProjectionExtension.exists_paired_projection_extension` extends a
-projection by projecting onto its range plus its reflected range. These are
+`exists_unique_paired_projection_extension` now extends a
+projection by projecting onto its range plus its reflected range, with
+uniqueness under support on the paired sum. It only requires this prescribed
+subspace to be finite dimensional; the ambient Hilbert space may be infinite.
+These are
 classical foundations, with no separate historical originality claim.
 
 ### Exact remaining classification and next proof

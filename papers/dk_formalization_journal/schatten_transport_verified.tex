@@ -995,6 +995,64 @@ defect actions make their inverses agree on $\ker C$ as well.
 The candidates are therefore equal.
 \end{proof}
 
+\begin{theorem}[Nonredundant optimizer parameters]
+\label{thm:schatten-normalized-parameters}
+Put
+\[
+ B_p=C\bigl(F_p(C)-F_p(C)^*\bigr),\qquad E_p=(\ker B_p)^\perp.
+\]
+Each global optimizer in
+\cref{thm:schatten-all-phase-defect-minimizers} has exactly one pair
+$(\Pi,D)$ satisfying its formulas and $\operatorname{ran}\Pi\subseteq E_p$.
+Conversely, every compatible orthogonal projection with this range
+condition and every defect unitary determine a unique global optimizer.
+These correspondences give a bijection between the normalized
+phase/defect parameters and all global optimizers.
+
+The space $E_p$ is the orthogonal sum of the interior angle spaces with
+$\vartheta_p<\theta<\pi/2$. For the fixed pair and exponent, there is a
+finite constant $L\geq0$ such that the normalized projections of any two
+optimizers satisfy, in operator norm,
+\[
+ \|\Pi_T-\Pi_S\|\leq L\|T-S\|.
+\]
+\end{theorem}
+
+\begin{proof}
+Let $A_p$ be orthogonal projection onto $E_p$.
+A compatible projection $\Pi$ commutes with $C$, hence with $B_p$.
+It preserves $\ker B_p$ and its orthogonal complement, so $A_p\Pi$ is
+an orthogonal projection. The same kernel argument shows that $A_p$
+commutes with $R$ and $J$. Thus $A_p\Pi$ remains compatible. Since
+$B_pA_p=B_p$, it has the same weighted phase formula:
+\[
+ C\bigl(F_p(C)\Pi+F_p(C)^*(I-\Pi)\bigr)
+       =CF_p(C)^*+B_p\Pi.
+\]
+Apply \cref{thm:schatten-all-phase-defect-minimizers} to obtain existence
+in both directions. If two normalized phase projections give the same
+optimizer, their difference has range in $E_p$ and is annihilated by
+$B_p$. Its range is therefore zero. The optimizer's action on $H_{10}$
+determines $D$ uniquely.
+
+On a cosine eigenvector with physical angle $\theta$,
+\[
+ B_px=2i\cos\theta\sin\delta_p(\theta)\,x.
+\]
+This coefficient vanishes on fixed and right-angle directions. For
+$0<\theta<\pi/2$, it vanishes exactly when
+$\theta\leq\vartheta_p$, proving the stated description of $E_p$.
+
+The restriction of $B_p$ to $E_p$ is injective and $E_p$ is finite
+dimensional. Consequently there is a finite $k>0$ with
+$\|X\|\leq k\|B_pX\|$ whenever $\operatorname{ran}X\subseteq E_p$.
+Subtracting the two weighted phase formulas gives
+\[
+ B_p(\Pi_T-\Pi_S)=CR^*(T-S).
+\]
+Hence the recovery estimate holds with $L=k\|C\|$.
+\end{proof}
+
 \begin{corollary}[Distance between phase parameters]
 \label{cor:schatten-phase-parameter-distance}
 For two full relative-phase representations

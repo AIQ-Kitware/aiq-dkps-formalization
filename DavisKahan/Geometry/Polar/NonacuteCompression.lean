@@ -211,6 +211,25 @@ theorem nonacuteDirectRotation_add_star_eq_two_cosine
   rw [star_sub, hC.star_eq, neg_sub] at h
   exact (add_comm _ _).trans (sub_eq_sub_iff_add_eq_add.mp h)
 
+/-- A self-adjoint operator commuting with a completed canonical rotation
+commutes with the intrinsic cosine, in either scalar field and without a
+finite-dimensional hypothesis. -/
+theorem commute_cosine_of_commute_nonacuteDirectRotation
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (D : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V)
+    (P : H →L[𝕜] H) (hP : IsSelfAdjoint P)
+    (hPR : Commute P (nonacuteDirectRotation U V D)) :
+    Commute P (Proposition35.section3CosAngleOperator U V) := by
+  have hPRs : Commute P (star (nonacuteDirectRotation U V D)) := by
+    rw [commute_iff_eq]
+    simpa only [star_mul, hP.star_eq] using (congrArg star hPR.eq).symm
+  have h := (hPR.add_right hPRs).eq
+  rw [nonacuteDirectRotation_add_star_eq_two_cosine U V D] at h
+  apply smul_right_injective (H →L[𝕜] H) (by norm_num : (2 : 𝕜) ≠ 0)
+  change (2 : 𝕜) • (P * Proposition35.section3CosAngleOperator U V) =
+    (2 : 𝕜) • (Proposition35.section3CosAngleOperator U V * P)
+  simpa only [two_smul, mul_add, add_mul] using h
+
 /-- Source reflection reverses the completed canonical rotation to its
 adjoint. This applies to real and complex Hilbert spaces. -/
 theorem nonacuteDirectRotation_reflection_eq_reflection_star
