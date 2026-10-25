@@ -71,6 +71,7 @@ noncomputable def rightSingularBasis (A : E →ₗ[𝕜] F) :
 
 At a zero singular value this definition evaluates to zero because division in a field is
 total. Orthonormality is asserted only on the subtype of nonzero singular values. -/
+@[expose]
 noncomputable def leftSingularVector (A : E →ₗ[𝕜] F)
     (i : Fin (finrank 𝕜 E)) : F :=
   (((A.singularValues i : ℝ) : 𝕜)⁻¹) • A (rightSingularBasis A i)

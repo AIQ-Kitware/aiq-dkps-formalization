@@ -401,6 +401,14 @@ noncomputable def pullback (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : E →�
 @[simp] theorem pullback_domain
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
     (pullback A e).domain = pullbackDomain A e := (rfl)
+/-- The pulled-back action, with its domain hypothesis carried explicitly. -/
+@[simp] theorem pullback_apply
+    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
+    (x : E) (hx : x ∈ (pullback A e).domain) :
+    (pullback A e) ⟨x, hx⟩ = e.symm (A ⟨e x, by
+      rwa [pullback_domain, mem_pullbackDomain_iff] at hx⟩) := by
+  rfl
+
 /-- Pullback through a continuous linear equivalence preserves a dense domain. -/
 theorem pullback_dense
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
@@ -469,12 +477,12 @@ theorem pullback_closedGraph
   exact hA.preimage hcoords
 
 /-- A bounded operator is unitary when it is norm preserving and surjective. -/
-def IsUnitaryOperator (W : E →L[𝕜] E) : Prop :=
+@[expose] def IsUnitaryOperator (W : E →L[𝕜] E) : Prop :=
   (∀ x, ‖W x‖ = ‖x‖) ∧ Function.Surjective W
 
 /-- Two partial maps are unitarily equivalent when mutually inverse unitary
 maps transport both domains and both actions. -/
-def UnitaryEquivalent (A B : E →ₗ.[𝕜] E)
+@[expose] def UnitaryEquivalent (A B : E →ₗ.[𝕜] E)
     (W Winv : E →L[𝕜] E) : Prop :=
   IsUnitaryOperator W ∧ IsUnitaryOperator Winv ∧
   Winv ∘L W = ContinuousLinearMap.id 𝕜 E ∧
@@ -552,6 +560,7 @@ theorem pullback_unitaryEquivalent
 
 /-- The explicit product domain of two partial maps, transported to the
 `L²` Hilbert direct sum. -/
+@[expose]
 noncomputable def directSumDomain
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
     Submodule 𝕜 (WithLp 2 (E × F)) :=
@@ -568,32 +577,35 @@ changes nothing about membership. -/
   Iff.rfl
 
 /-- First coordinate of a direct-sum domain vector. -/
+@[expose]
 def directSumDomainFst (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
     (z : directSumDomain A B) : A.domain :=
   ⟨WithLp.fst (z : WithLp 2 (E × F)),
     (mem_directSumDomain_iff A B z).mp z.property |>.1⟩
 
 /-- Second coordinate of a direct-sum domain vector. -/
+@[expose]
 def directSumDomainSnd (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F)
     (z : directSumDomain A B) : B.domain :=
   ⟨WithLp.snd (z : WithLp 2 (E × F)),
     (mem_directSumDomain_iff A B z).mp z.property |>.2⟩
 
 /-- First-coordinate extraction as a linear map on a direct-sum domain. -/
-def directSumDomainFstLinearMap (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+@[expose] def directSumDomainFstLinearMap (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
     directSumDomain A B →ₗ[𝕜] A.domain where
   toFun := directSumDomainFst A B
   map_add' _ _ := Subtype.ext rfl
   map_smul' _ _ := Subtype.ext rfl
 
 /-- Second-coordinate extraction as a linear map on a direct-sum domain. -/
-def directSumDomainSndLinearMap (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
+@[expose] def directSumDomainSndLinearMap (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
     directSumDomain A B →ₗ[𝕜] B.domain where
   toFun := directSumDomainSnd A B
   map_add' _ _ := Subtype.ext rfl
   map_smul' _ _ := Subtype.ext rfl
 
 /-- Componentwise partial-map action on a direct-sum domain. -/
+@[expose]
 noncomputable def directSumLinearMap
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
     directSumDomain A B →ₗ[𝕜] WithLp 2 (E × F) :=
@@ -605,6 +617,7 @@ noncomputable def directSumLinearMap
 
 /-- The direct sum of two partial maps.  Density and closedness remain
 separate properties. -/
+@[expose]
 noncomputable def directSum
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) :
     WithLp 2 (E × F) →ₗ.[𝕜] WithLp 2 (E × F) where
@@ -768,6 +781,7 @@ any domain bookkeeping. -/
   simp
 
 /-- A bounded left inverse for the real shift of a partial map. -/
+@[expose]
 def LeftShiftedInverseBound (A : E →ₗ.[𝕜] E) (c s : ℝ) : Prop :=
   ∃ J : E →L[𝕜] E,
     (∀ x : A.domain,
@@ -776,6 +790,7 @@ def LeftShiftedInverseBound (A : E →ₗ.[𝕜] E) (c s : ℝ) : Prop :=
 
 /-- A bounded two-sided inverse for the real shift of a partial map, with the
 domain transport required by the right-inverse leg. -/
+@[expose]
 def TwoSidedShiftedInverseBound (A : E →ₗ.[𝕜] E) (c s : ℝ) : Prop :=
   ∃ J : E →L[𝕜] E, ∃ hdom : ∀ z : E, J z ∈ A.domain,
     (∀ x : A.domain,

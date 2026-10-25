@@ -187,6 +187,7 @@ namespace OrthoProjFamily
 
 /-- **Non-degeneracy** (Davis's hypothesis): no nonzero vector in `range (P j)` is annihilated by
 `P' j`. Equivalently `P'ⱼ Pⱼ` is injective on `range Pⱼ`. -/
+@[expose]
 def NonDegenerate (P P' : OrthoProjFamily 𝕜 E m) : Prop :=
   ∀ j, ∀ x, P.proj j x = x → x ≠ 0 → P'.proj j x ≠ 0
 
@@ -455,6 +456,7 @@ in Milestone 3). Davis §2, lines 265–312.
 -/
 
 /-- The squared sine of the `i`-th rotation angle, `sin²θᵢ = 1 - ‖⟨U xᵢ, xᵢ⟩‖²`. -/
+@[expose]
 noncomputable def sqSinAngle (hnd : P.NonDegenerate P') (b : OrthonormalBasis (Fin n) 𝕜 E)
     (i : Fin n) : ℝ :=
   1 - ‖⟪b i, intertwiningUnitary hnd (b i)⟫_𝕜‖ ^ 2

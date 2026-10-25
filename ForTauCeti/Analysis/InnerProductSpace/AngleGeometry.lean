@@ -94,6 +94,7 @@ theorem sinAngleOperator_eq_operatorAbs (U V : Submodule 𝕜 E)
 This normalization matches the classic Davis--Kahan UI-norm theorem:
 `2 P_{Uᗮ} P_V P_U`.  A separate full positive angle operator would duplicate
 nonzero singular values and should not be conflated with this map. -/
+@[expose]
 noncomputable def sinTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   (2 : 𝕜) • (complementaryProjection U ∘ₗ projection V ∘ₗ projection U)
@@ -117,6 +118,7 @@ noncomputable def principalSines (U V : Submodule 𝕜 E)
 
 /-- Principal angles as a sorted finitely supported sequence: `arcsin` applied to
 the principal sines.  `arcsin 0 = 0` keeps the support finite. -/
+@[expose]
 noncomputable def principalAngles (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
   (principalSines U V).mapRange Real.arcsin Real.arcsin_zero
@@ -124,6 +126,7 @@ noncomputable def principalAngles (U V : Submodule 𝕜 E)
 /-- Principal-angle tangents: `tan` applied to the principal angles.  `tan 0 = 0`
 keeps the support finite (poles at `π/2` are only reached in the non-acute
 configuration, excluded by the tangent theorems' hypotheses). -/
+@[expose]
 noncomputable def principalTangents (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
   (principalAngles U V).mapRange Real.tan Real.tan_zero
@@ -153,6 +156,7 @@ def IsTransverse (U V : Submodule 𝕜 E) [V.HasOrthogonalProjection] : Prop :=
   ∀ x ∈ U, V.starProjection x = 0 → x = 0
 
 /-- The pair is acute in the Davis--Kahan sense. -/
+@[expose]
 def IsAcute (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
   (∀ x ∈ U, V.starProjection x = 0 → x = 0) ∧

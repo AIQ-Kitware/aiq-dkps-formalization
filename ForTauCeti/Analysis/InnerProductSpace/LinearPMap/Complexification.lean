@@ -119,6 +119,16 @@ def complexificationDomainIm
     (A : E →ₗ.[ℝ] F) (z : complexificationDomain A) : A.domain :=
   ⟨im (z : Eℂ), (mem_complexificationDomain_iff A z).mp z.property |>.2⟩
 
+/-- The real domain coordinate has the expected ambient value. -/
+@[simp] theorem coe_complexificationDomainRe (A : E →ₗ.[ℝ] F)
+    (z : complexificationDomain A) :
+    (complexificationDomainRe A z : E) = re (z : Eℂ) := (rfl)
+
+/-- The imaginary domain coordinate has the expected ambient value. -/
+@[simp] theorem coe_complexificationDomainIm (A : E →ₗ.[ℝ] F)
+    (z : complexificationDomain A) :
+    (complexificationDomainIm A z : E) = im (z : Eℂ) := (rfl)
+
 /-- Coordinatewise complex-linear action of a real partial map on its
 complexified domain. -/
 @[expose]

@@ -75,6 +75,7 @@ variable {B Z : H →L[𝕜] H}
 
 /-- **`B` exchanges the two summands.**  This is the Davis--Kahan hypothesis
 `H₀ = H₁ = 0`: the perturbation is fully off-diagonal. -/
+@[expose]
 def IsOddFor (U : Submodule 𝕜 H) (B : H →L[𝕜] H) : Prop :=
   (∀ x ∈ U, B x ∈ Uᗮ) ∧ ∀ x ∈ Uᗮ, B x ∈ U
 

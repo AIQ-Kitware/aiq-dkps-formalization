@@ -116,6 +116,7 @@ noncomputable def cosThetaGram (U : Submodule 𝕜 E)
   LinearMap.adjoint (cosThetaEmbedding U X) ∘ₗ cosThetaEmbedding U X
 
 /-- Source-side sine Gram block `S⋆S`, where `S = P_{Uᗮ} X`. -/
+@[expose]
 noncomputable def sinThetaGram (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] F :=
   LinearMap.adjoint (sinThetaEmbedding U X) ∘ₗ sinThetaEmbedding U X
@@ -125,6 +126,7 @@ noncomputable def sinThetaGram (U : Submodule 𝕜 E)
 Unlike the rectangular block `C : F → E`, this is an endomorphism of the
 trial-coordinate space.  Its eigenvalues are the principal-angle cosines, so
 it is the denominator used by the coordinate tangent map. -/
+@[expose]
 noncomputable def cosThetaMagnitude (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] F :=
   trialGramSqrt (cosThetaEmbedding U X)

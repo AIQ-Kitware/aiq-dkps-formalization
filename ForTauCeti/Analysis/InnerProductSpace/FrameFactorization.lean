@@ -43,6 +43,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- A quantitative lower frame bound for a not-necessarily-isometric trial
 map.  Davis--Kahan's parameter `e` is this lower singular-value bound. -/
+@[expose]
 def LowerFrameBound (X : F →ₗ[𝕜] E) (ε : ℝ) : Prop :=
   ∀ y, ε * ‖y‖ ≤ ‖X y‖
 

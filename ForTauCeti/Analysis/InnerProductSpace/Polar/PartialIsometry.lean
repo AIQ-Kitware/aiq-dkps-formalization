@@ -148,6 +148,10 @@ and it is exactly `(ker M)ᗮ` (`polarInitial_orthogonal_eq_ker`). -/
 noncomputable def polarInitial (M : E →L[𝕜] F) : Submodule 𝕜 E :=
   (LinearMap.range M.modulus.toLinearMap).topologicalClosure
 
+/-- The initial space is the closed range of the modulus. -/
+theorem polarInitial_def (M : E →L[𝕜] F) :
+    M.polarInitial = (LinearMap.range M.modulus.toLinearMap).topologicalClosure := (rfl)
+
 /-- Every value of the modulus lies in the initial space, which is the closure
 of its range. -/
 theorem modulus_apply_mem_polarInitial (M : E →L[𝕜] F) (x : E) :
@@ -754,6 +758,11 @@ theorem polarPartial_apply_polarPartial_apply_of_mem_of_adjoint_eq_neg
 equivalently the range of `W` (`range_polarPartial`). -/
 noncomputable def polarFinal (M : E →L[𝕜] F) : Submodule 𝕜 F :=
   (LinearMap.range M.toLinearMap).topologicalClosure
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The final space is the closed range of the operator. -/
+theorem polarFinal_def (M : E →L[𝕜] F) :
+    M.polarFinal = (LinearMap.range M.toLinearMap).topologicalClosure := (rfl)
 
 /-- The final space is complete, being a topological closure. -/
 instance (M : E →L[𝕜] F) : CompleteSpace M.polarFinal :=

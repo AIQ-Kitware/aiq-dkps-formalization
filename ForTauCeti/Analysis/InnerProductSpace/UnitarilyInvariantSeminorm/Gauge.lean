@@ -40,9 +40,16 @@ orthonormal basis `b`: the norm of the diagonal operator with diagonal `x`.
 Defined on *all* real vectors, not only sorted nonnegative ones — the
 T-transform descent exploits its subadditivity, homogeneity, permutation
 invariance, and single-coordinate sign invariance on arbitrary vectors. -/
+@[expose]
 noncomputable def basisGauge (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : ℝ :=
   N (diagOp b x)
+
+omit [FiniteDimensional 𝕜 E] in
+/-- A basis gauge is nonnegative, as it is the norm of a diagonal operator. -/
+theorem basisGauge_nonneg (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) :
+    0 ≤ N.basisGauge b x :=
+  apply_nonneg N _
 
 /- The induced vector gauge is subadditive, inherited from the norm through `diagOp_add`. -/
 omit [FiniteDimensional 𝕜 E] in

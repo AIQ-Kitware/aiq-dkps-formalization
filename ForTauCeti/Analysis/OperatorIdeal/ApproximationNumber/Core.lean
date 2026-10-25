@@ -54,17 +54,19 @@ variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Strong operator convergence expressed pointwise. -/
+@[expose]
 def StronglyTendsto {ι : Type w} (T : ι → E →L[𝕜] E)
     (l : Filter ι) (S : E →L[𝕜] E) : Prop :=
   ∀ x, Tendsto (fun i => T i x) l (𝓝 (S x))
 
 /-- Orthogonal projection predicate for bounded operators. -/
+@[expose]
 def IsOrthogonalProjectionMap (P : E →L[𝕜] E) : Prop :=
   P ∘L P = P ∧ P.IsSymmetric
 
 /-- Zero-based approximation singular value, defined as the operator-norm
  distance to maps of rank at most `n`. -/
-noncomputable def approximationSingularValue
+@[expose] noncomputable def approximationSingularValue
     (n : ℕ) (K : E →L[𝕜] F) : ℝ :=
   K.approximationNumber n
 

@@ -86,6 +86,10 @@ this zero. -/
 noncomputable def finiteMean {n : ℕ} (z : Fin n → E) : E :=
   ((n : 𝕜)⁻¹) • ∑ i, z i
 
+/-- Evaluation of the finite arithmetic mean, including the empty family. -/
+theorem finiteMean_def {n : ℕ} (z : Fin n → E) :
+    finiteMean 𝕜 z = ((n : 𝕜)⁻¹) • ∑ i, z i := (rfl)
+
 /-- Unnormalized centered scatter operator `∑ i, (zᵢ - mean z) ⊗ (zᵢ - mean z)`.
 
 The rank-one convention is chosen so its quadratic form is

@@ -4,3 +4,4 @@
 -- for what gets built, so every `ForTauCeti/` module is compiled directly and no
 -- code needs to import this root. The staging layer's terminal state is empty or
 -- deleted; see ForTauCeti/README.md.
+module
