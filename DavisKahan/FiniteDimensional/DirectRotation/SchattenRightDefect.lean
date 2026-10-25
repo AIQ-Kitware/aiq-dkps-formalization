@@ -43,7 +43,7 @@ theorem gradient_eq_zero_of_sinAngleOperator_eq_self_of_isLocalMinOn_complex
   let Z := G.toLinearMap.ker
   have ht := (map_eq_iff_conjugate_starProjection_complex K L U).mp hmap
   obtain ⟨n, e, alpha, beta, V, W, R, d, hV, hW, _, _, hd, _, hVe, hWe,
-      hmean, _⟩ := schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
+      hmean, _, _⟩ := schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
         p hp hp1 hp2 K L.starProjection U ht hmin
   let bf := stdOrthonormalBasis ℂ Z
   let b := ((e.prod e).prod bf).map d

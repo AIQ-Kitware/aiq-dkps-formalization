@@ -86,7 +86,8 @@ theorem schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
           (LinearMap.id - (U : E →L[ℂ] E).toLinearMap) ^ p.toReal =
         (∑ i, phaseMinimum p.toReal ((alpha i + beta i) / 2)) +
           UnitarilyInvariantSeminorm.schatten ℂ Z Z p
-            (LinearMap.id - R.toLinearMap) ^ p.toReal := by
+            (LinearMap.id - R.toLinearMap) ^ p.toReal ∧
+      (∀ i, alpha i ∈ Ioo 0 Real.pi ∧ beta i ∈ Ioo 0 Real.pi) := by
   classical
   let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
   let H := Module.End.pointSpectralSubspace G.toLinearMap (Ioi 0)
@@ -107,7 +108,7 @@ theorem schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
     rw [K.reflection_reflection] at h
     change G (J x) = -J (G x)
     simpa only [neg_neg] using congrArg Neg.neg h.symm
-  obtain ⟨n, e, g, alpha, beta, _, _, hu, hw, hmean, hscalar⟩ :=
+  obtain ⟨n, e, g, alpha, beta, _, _, hu, hw, hmean, hscalar, hbounds⟩ :=
     positive_gradient_phase_basis_of_isLocalMinOn_transports_complex p hp hp1 hp2 K Q U htrans hmin
   have hUH : ∀ x ∈ H, (U : E →L[ℂ] E) x ∈ H :=
     invariant_of_eigenbasis H e (U : E →L[ℂ] E)
@@ -178,7 +179,7 @@ theorem schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
       schatten_rpow_eq_sum_norm_eigenvalues e _ _ hWdisp p hp, ← Finset.sum_add_distrib]
     exact Finset.sum_congr rfl (fun i _ => hscalar i)
   refine ⟨n, e, alpha, beta, V, W, R, d, hV, hW, hR, hRself, hd,
-    hUblock, hVe, hWe, hmean, ?_⟩
+    hUblock, hVe, hWe, hmean, ?_, hbounds⟩
   calc
     _ = UnitarilyInvariantSeminorm.schatten ℂ E E p
         (LinearMap.id - (d.conjStarAlgEquiv

@@ -1,12 +1,13 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** unrestricted finite complex Schatten
-local-to-global optimality, angle preservation, zero-angle fixation, and
-complete right-defect necessity and arbitrary attaining replacement for
-`1<p<2`. The right-defect classification builds on `d713c9fd3`.
+**Current research source:** the actual signed optimal-phase basis of every
+finite complex Schatten local minimum for `1<p<2`, including critical
+angles and multiplicities, built on right-defect classification commit
+`e448f45a3`. Local-to-global, angle preservation, zero-angle fixation and
+arbitrary independent attaining right-defect replacements remain proved.
 The complete all-angle Charbonnier global optimizer classification remains
-proved and consumes the shared geometric defect-replacement construction.
+proved.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -20,6 +21,83 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Actual signed optimal phases of every pure Schatten optimizer
+
+`SchattenOptimalPhase.lean` now supplies the named scalar function
+`optimalPhase p theta`, an attaining phase for `p>=1,theta>=0`, with zero
+as its explicitly defined value outside those hypotheses. For positive
+acute angles at `1<p<2`, it is the **unique** nonnegative attaining phase.
+The compiled API includes:
+
+- `optimalPhase_spec` and `phasePower_eq_phaseMinimum_iff_eq_optimalPhase`;
+- `optimalPhase_eq_zero_iff_le_criticalAngle`, including equality;
+- `optimalPhase_mem_Ioo_of_supercritical`;
+- `chord_pair_eq_minimum_iff_optimalPhase_signs`, a two-way classification
+  of every nonnegative attaining phase pair with prescribed acute mean.
+
+The individual bounds `0<alpha_i,beta_i<pi` are now retained in the actual
+level basis, the whole positive-gradient basis and the ambient spectral
+decomposition. Their public names are unchanged; their conclusions are
+stronger, and all registered consumers have been migrated. No principal
+phase branch is inferred merely from an exponential eigenvalue.
+
+`SchattenOptimizerPhases.lean` now proves
+`positive_gradient_optimal_phase_basis_of_isLocalMinOn_complex`.
+For **every ambient finite complex local minimum**, it constructs a
+complete orthonormal basis `v_i` of the actual positive-gradient space,
+actual acute angles `theta_i` and signs `eps_i=+1` or `-1` satisfying
+
+- `U v_i = exp(i*(theta_i+eps_i*optimalPhase(p,theta_i))) v_i`;
+- `U J v_i = exp(i*(-theta_i+eps_i*optimalPhase(p,theta_i))) J v_i`;
+- the actual intrinsic sine operator has eigenvalue `sin(theta_i)` on
+  both vectors.
+
+Here `J` is the original source reflection. Its image supplies the complete
+negative-gradient space through the already compiled spectral decomposition.
+The statement includes empty positive spaces, repeated angles/levels,
+critical angles and arbitrary zero/right-angle blocks elsewhere. At and
+below the threshold the two signed expressions coincide, as the named
+phase is zero. The checked manuscript includes Proposition
+`prop:schatten-all-signed-phases`.
+
+### Exact remaining intrinsic parameter bridge
+
+The signed basis and scalar uniqueness are now proved. To obtain the
+intrinsic equal-angle projection parameter, prove that the actual canonical
+rotation has eigenvalues `exp(+/- i*theta_i)` on these same two vectors.
+A reusable geometric proof should compute the canonical intertwiner on a
+reflection-paired phase eigenvector as `cos(theta)*exp(i*theta)` and use
+`R*C = intertwiner` with `cos(theta)>0`. The sine equation and the intrinsic
+Pythagorean identity already give `C v=cos(theta) v`.
+
+Then `Z=R^*U` has the same eigenvalue `exp(i*eps_i*optimalPhase(p,theta_i))`
+on both paired vectors. Assemble commutation with `R` and source reflection
+on the positive-cosine space, and the scalar-real-part equation on each
+intrinsic equal-angle space. `UnitaryScalarRealPart.lean` then gives its
+unique projection parameter whenever the phase is nonzero. Construct and
+prove attainment for every compatible projection parameter, retaining the
+already proved arbitrary defect parameter. The existing smoothed
+`exists_subspace_paired_rotation_projection_basis_complex` and signed
+projection constructions supply a model for that converse, but its pure
+Schatten cost theorem must still be proved.
+
+This signed-basis theorem is **necessary structure for every optimizer**.
+It does not yet certify the intrinsic phase-projection iff theorem,
+Grassmannian topology, the real parity/matching formulas or ideal extensions.
+The scalar facts are existing mathematics packaged for the operator
+classification; historical priority of the complete transport theorem
+remains provisional.
+
+Validation: `lake exe cache get` preceded the focused builds and final
+`lake build DavisKahan.All ForTauCeti`, which passed (10,411 jobs;
+`/tmp/schatten-signed-phases-final-build.log`). The new named-phase and
+optimizer-phase modules have no new warnings. All consumers of the
+strengthened decomposition statements pass the aggregate. BibTeX and
+repeated pdfLaTeX passes produced
+`/tmp/dk-schatten-signed-phases-paper/dk-schatten-signed-phases.pdf`, with no
+unresolved references/citations, multiply defined labels or overfull boxes.
+`git diff --check` passed.
 
 ## Complete pure Schatten right-angle defect parameters
 
@@ -78,20 +156,13 @@ angle-dependent transport theory remains provisional.
 
 ### Remaining positive-angle parameter theorem
 
-The sole remaining operator-classification sector in the finite complex
-pure Schatten problem is the positive acute equal-angle action and its
-converse parameter construction, including critical angles and arbitrary
-multiplicities. The paired-gradient phases constructed in
-`SchattenGradientPlanes.lean` lie strictly in `(0,pi)`, but their current
-public assembled statements retain only the mean-angle and cost equations.
-Retain the individual phase bounds through the level basis, whole positive
-basis, and spectral decomposition. Those bounds are needed to apply
-scalar uniqueness to `abs((alpha-beta)/2)` without introducing spurious
-phase windings. Then identify the mean with the geometric angle and
-assemble the relative-phase projection equation described below.
-The right-angle extraction, its arbitrary attaining replacement and
-zero-angle fixation are now closed; their earlier resumption notes below
-are historical.
+At this snapshot the remaining operator-classification sector was the
+positive acute equal-angle action and its converse parameter construction.
+The newer entry above now retains the individual phase bounds and proves
+the actual signed optimal-phase basis. The intrinsic relative-phase
+operator assembly and converse projection-parameter attainment remain.
+The right-angle extraction, arbitrary attaining replacement and zero-angle
+fixation are closed.
 
 Validation: `lake exe cache get` preceded the focused builds and final
 `lake build DavisKahan.All ForTauCeti`, which passed (10,407 jobs;

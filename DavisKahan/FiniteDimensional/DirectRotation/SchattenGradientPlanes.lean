@@ -273,7 +273,8 @@ theorem gradient_block_scalar_minima_of_isLocalMinOn_transports
         x ∈ Submodule.span ℂ ({(e i : E), K.reflection (e i)} : Set E)) ∧
       UnitarilyInvariantSeminorm.schatten ℂ L L p (LinearMap.id - V.toLinearMap) ^ p.toReal +
         UnitarilyInvariantSeminorm.schatten ℂ L L p (LinearMap.id - W.toLinearMap) ^ p.toReal =
-        ∑ i, phaseMinimum p.toReal ((alpha i + beta i) / 2) := by
+        ∑ i, phaseMinimum p.toReal ((alpha i + beta i) / 2) ∧
+      (∀ i, alpha i ∈ Ioo 0 Real.pi ∧ beta i ∈ Ioo 0 Real.pi) := by
   let L := Module.End.eigenspace
     (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)).toLinearMap (g : ℂ)
   obtain ⟨a, ha, b, hb, hbalance, V, W, A, B, hA, hB, hAB,
@@ -284,8 +285,19 @@ theorem gradient_block_scalar_minima_of_isLocalMinOn_transports
     orthogonal_two_phase_basis a b V W A B hA hB hAB hV hW
   have hscalar (i) := scalar_cost_of_phase_pair p.toReal a b (alpha i) (beta i)
     hp1 hp2 ha hb hbalance (hpair i)
+  have hc := criticalAngle_mem p.toReal hp1 hp2
+  have haπ : a ∈ Ioo 0 Real.pi := ⟨ha.1, by linarith [ha.2, hc.2, Real.pi_pos]⟩
+  have hbπ : b ∈ Ioo 0 Real.pi := ⟨by linarith [hb.1, hc.1], hb.2⟩
+  have hbounds (i) : alpha i ∈ Ioo 0 Real.pi ∧ beta i ∈ Ioo 0 Real.pi := by
+    rcases hpair i with h | h | h
+    · rw [h.1, h.2]
+      exact ⟨haπ, haπ⟩
+    · rw [h.1, h.2]
+      exact ⟨hbπ, haπ⟩
+    · rw [h.1, h.2]
+      exact ⟨haπ, hbπ⟩
   refine ⟨V, W, e, alpha, beta, hVact, hWact, hVe, hWe,
-    fun i => (hscalar i).1, fun i => (hscalar i).2, ?_, ?_⟩
+    fun i => (hscalar i).1, fun i => (hscalar i).2, ?_, ?_, hbounds⟩
   · intro i
     obtain ⟨j, hj⟩ := gradient_eigenspace_pairing_of_isLocalMinOn_transports
       p hp hp1 K Q U htrans hmin (g : ℂ)
@@ -465,15 +477,16 @@ theorem gradient_eigenspace_phase_basis_of_isLocalMinOn_transports_complex
       (∀ i, (alpha i + beta i) / 2 ∈ Ioo 0 (Real.pi / 2)) ∧
       (∀ i, ‖1 - Complex.exp ((alpha i : ℂ) * Complex.I)‖ ^ p.toReal +
         ‖1 - Complex.exp (((-beta i : ℝ) : ℂ) * Complex.I)‖ ^ p.toReal =
-          phaseMinimum p.toReal ((alpha i + beta i) / 2)) := by
+          phaseMinimum p.toReal ((alpha i + beta i) / 2)) ∧
+      (∀ i, alpha i ∈ Ioo 0 Real.pi ∧ beta i ∈ Ioo 0 Real.pi) := by
   let L := Module.End.eigenspace
     (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)).toLinearMap (g : ℂ)
   have hgm := positive_gradient_spectrum_le_max p.toReal g hp1 hp2 hg0 U hg
   rcases lt_or_eq_of_le hgm with hgm | hgm
-  · obtain ⟨V, W, e, alpha, beta, hVact, hWact, hVe, hWe, hmean, hcost, _, _⟩ :=
+  · obtain ⟨V, W, e, alpha, beta, hVact, hWact, hVe, hWe, hmean, hcost, _, _, hbounds⟩ :=
       gradient_block_scalar_minima_of_isLocalMinOn_transports p hp hp1 hp2 K Q U htrans hmin
         g hg0 hgm
-    refine ⟨e, alpha, beta, ?_, ?_, hmean, hcost⟩
+    refine ⟨e, alpha, beta, ?_, ?_, hmean, hcost, hbounds⟩
     · intro i
       exact (hVact (e i)).symm.trans (congrArg (fun x : L => (x : E)) (hVe i))
     · intro i
@@ -490,7 +503,7 @@ theorem gradient_eigenspace_phase_basis_of_isLocalMinOn_transports_complex
     have hcanon : phaseMinimum p.toReal c = 2 * phaseChord c ^ p.toReal :=
       phaseMinimum_eq_canonical_of_subcritical p.toReal c hp1 hp2 hc.1 hc.2
         ((critical_inequality_iff p.toReal c hp1 hp2 hcπ).2 le_rfl)
-    refine ⟨e, fun _ => c, fun _ => c, ?_, ?_, ?_, ?_⟩
+    refine ⟨e, fun _ => c, fun _ => c, ?_, ?_, ?_, ?_, ?_⟩
     · intro i
       have h := congrArg (fun T : L →L[ℂ] L => (T (e i) : E)) hV
       exact (hVact (e i)).symm.trans h
@@ -510,5 +523,8 @@ theorem gradient_eigenspace_phase_basis_of_isLocalMinOn_transports_complex
       rw [show (c + c) / 2 = c by ring,
         norm_one_sub_exp_eq_phaseChord c hcπ, norm_one_sub_exp_neg_eq_phaseChord c hcπ,
         hcanon, two_mul]
+    · intro i
+      exact ⟨⟨hc.1, by linarith [hc.2, Real.pi_pos]⟩,
+        ⟨hc.1, by linarith [hc.2, Real.pi_pos]⟩⟩
 
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

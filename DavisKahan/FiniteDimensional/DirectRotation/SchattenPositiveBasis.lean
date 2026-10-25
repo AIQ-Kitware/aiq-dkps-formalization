@@ -58,7 +58,8 @@ theorem positive_gradient_phase_basis_of_isLocalMinOn_transports_complex
       (∀ i, (alpha i + beta i) / 2 ∈ Ioo 0 (Real.pi / 2)) ∧
       (∀ i, ‖1 - Complex.exp ((alpha i : ℂ) * Complex.I)‖ ^ p.toReal +
         ‖1 - Complex.exp (((-beta i : ℝ) : ℂ) * Complex.I)‖ ^ p.toReal =
-          phaseMinimum p.toReal ((alpha i + beta i) / 2)) := by
+          phaseMinimum p.toReal ((alpha i + beta i) / 2)) ∧
+      (∀ i, alpha i ∈ Ioo 0 Real.pi ∧ beta i ∈ Ioo 0 Real.pi) := by
   classical
   let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
   let H := Module.End.pointSpectralSubspace G.toLinearMap (Ioi 0)
@@ -83,7 +84,8 @@ theorem positive_gradient_phase_basis_of_isLocalMinOn_transports_complex
         (∀ i, (alpha i + beta i) / 2 ∈ Ioo 0 (Real.pi / 2)) ∧
         (∀ i, ‖1 - Complex.exp ((alpha i : ℂ) * Complex.I)‖ ^ p.toReal +
           ‖1 - Complex.exp (((-beta i : ℝ) : ℂ) * Complex.I)‖ ^ p.toReal =
-            phaseMinimum p.toReal ((alpha i + beta i) / 2)) := by
+            phaseMinimum p.toReal ((alpha i + beta i) / 2)) ∧
+        (∀ i, alpha i ∈ Ioo 0 Real.pi ∧ beta i ∈ Ioo 0 Real.pi) := by
     have hreal : (mu.val.re : ℂ) = mu.val :=
       RCLike.conj_eq_iff_re.mp (hT.conj_eigenvalue_eq_self mu.property)
     obtain ⟨x, hx⟩ := Module.End.HasEigenvalue.exists_hasEigenvector
@@ -122,17 +124,17 @@ theorem positive_gradient_phase_basis_of_isLocalMinOn_transports_complex
             map_add' := by intro y z; rfl
             map_smul' := by intro c y; rfl }
         norm_map' := by intro y; rfl }
-    obtain ⟨b, alpha, beta, hu, hw, hmean, hcost⟩ :=
+    obtain ⟨b, alpha, beta, hu, hw, hmean, hcost, hbounds⟩ :=
       gradient_eigenspace_phase_basis_of_isLocalMinOn_transports_complex p hp hp1 hp2
         K Q U htrans hmin mu.val.re hpos hspec
-    refine ⟨hpos, b.map d, alpha, beta, ?_, ?_, hmean, hcost⟩
+    refine ⟨hpos, b.map d, alpha, beta, ?_, ?_, hmean, hcost, hbounds⟩
     · intro i
       change (U : E →L[ℂ] E) (b i : E) = _
       exact hu i
     · intro i
       change (U : E →L[ℂ] E) (K.reflection (b i)) = _
       exact hw i
-  choose hpos b alpha beta hu hw hmean hcost using hlevel
+  choose hpos b alpha beta hu hw hmean hcost hbounds using hlevel
   let I := (mu : Module.End.Eigenvalues T) × Fin (Module.finrank ℂ (L mu))
   let bp : OrthonormalBasis I ℂ H :=
     hT.direct_sum_isInternal.collectedOrthonormalBasis hT.orthogonalFamily_eigenspaces' b
@@ -149,7 +151,7 @@ theorem positive_gradient_phase_basis_of_isLocalMinOn_transports_complex
   have he (i) : e i = (b (q.symm i).1 (q.symm i).2 : H) := by
     rw [OrthonormalBasis.reindex_apply]
     exact hbp _
-  refine ⟨Fintype.card I, e, g, alpha', beta', ?_, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨Fintype.card I, e, g, alpha', beta', ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
   · intro i
     exact hpos _
   · intro i
@@ -173,5 +175,7 @@ theorem positive_gradient_phase_basis_of_isLocalMinOn_transports_complex
     exact hmean _ _
   · intro i
     exact hcost _ _
+  · intro i
+    exact hbounds _ _
 
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

@@ -12,6 +12,37 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Signed optimal phases on every actual positive-gradient space
+
+The positive acute phase structure is now a compiled **every-optimizer**
+statement. `positive_gradient_optimal_phase_basis_of_isLocalMinOn_complex`,
+in `SchattenOptimizerPhases.lean`, constructs a complete basis of the actual
+positive-gradient space, physical angles `theta_i` and signs `eps_i=+/-1`
+with transporter eigenphases
+`theta_i+eps_i*optimalPhase(p,theta_i)` and
+`-theta_i+eps_i*optimalPhase(p,theta_i)` on the source-reflection-paired
+vectors. The actual sine eigenvalue of both vectors is `sin(theta_i)`.
+This holds for every finite complex ambient local minimum at `1<p<2`,
+including critical and repeated angles, empty positive spaces and arbitrary
+zero/right-angle sectors elsewhere. Proposition
+`prop:schatten-all-signed-phases` is included in the checked manuscript.
+
+The phase decomposition now retains `alpha_i,beta_i in (0,pi)`, needed
+before applying the scalar uniqueness theorem to half the absolute phase
+difference. `SchattenOptimalPhase.lean` supplies the named optimal phase,
+its exact cutoff and the two-way scalar phase-pair classification. These
+are packaging and consequences of the already proved scalar diagram;
+no separate historical novelty is claimed for naming the phase or
+retaining the branch bounds.
+
+The intrinsic operator parameter theorem is still pending: identify the
+canonical rotation on these same paired eigenvectors, assemble the
+relative phase on each geometric equal-angle multiplicity space, and prove
+attainment of every compatible projection parameter. The right-defect
+parameter and arbitrary attaining replacements are already compiled.
+Historical priority of the complete angle-dependent optimizer
+classification remains **provisional**.
+
 ## Complete pure Schatten right-defect parameter and independence
 
 The right-angle part of the **every-optimizer** theorem is now compiled

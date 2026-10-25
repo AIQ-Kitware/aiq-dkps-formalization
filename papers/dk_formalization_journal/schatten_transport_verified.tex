@@ -677,6 +677,43 @@ makes that restriction globally minimizing. The identity is feasible
 and has cost zero there, so the restriction must be the identity.
 \end{proof}
 
+\begin{proposition}[The signed phases of every optimizer]
+\label{prop:schatten-all-signed-phases}
+For acute angles, extend $\delta_p(\theta)$ by zero at and below
+$\vartheta_p$. Let $W$ be any constrained local minimum and let
+$H$ be the positive spectral space of its actual gradient $G_p(W)$.
+There are an orthonormal basis $(v_i)$ of $H$, angles
+$0<\theta_i<\pi/2$, and signs $\varepsilon_i\in\{1,-1\}$ such that,
+writing $J=2P-I$,
+\[
+\begin{aligned}
+ Wv_i&=e^{i(\theta_i+\varepsilon_i\delta_p(\theta_i))}v_i,\\
+ WJv_i&=e^{i(-\theta_i+\varepsilon_i\delta_p(\theta_i))}Jv_i,\\
+ |P-Q|v_i&=\sin\theta_i\,v_i,\qquad
+ |P-Q|Jv_i=\sin\theta_i\,Jv_i.
+\end{aligned}
+\]
+The vectors $Jv_i$ form the paired negative-gradient basis.
+Thus each pair has a common signed optimal phase shift of the phases
+$(\theta_i,-\theta_i)$. At and below the transition both choices agree.
+\end{proposition}
+
+\begin{proof}
+The positive-gradient basis construction gives phases
+$0<\alpha_i,\beta_i<\pi$ with strictly acute mean
+$\theta_i=(\alpha_i+\beta_i)/2$ and attained scalar cost
+\[
+ f_p(\alpha_i)+f_p(\beta_i)=m_p(\theta_i).
+\]
+Set $d_i=|\alpha_i-\beta_i|/2$. Nonnegativity of the phases gives
+$0\leq d_i\leq\theta_i$. The left-hand side is the scalar objective
+at $d_i$, so its unique minimizing phase gives
+$d_i=\delta_p(\theta_i)$. Ordering $\alpha_i,\beta_i$ therefore gives
+one of the two sign choices in the statement. The sine equations follow
+from the actual reflection-paired eigenvector equations. The gradient
+anticommutes with $J$, which identifies the negative spectral space.
+\end{proof}
+
 \begin{proposition}[All right-angle defect choices]
 \label{prop:schatten-all-right-defects}
 Put

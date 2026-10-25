@@ -56,7 +56,7 @@ theorem commute_sinAngleOperator_of_isLocalMinOn_transports_complex
   let S₀ := (K.comap Z.subtype).sinAngleOperator (L.comap Z.subtype)
   have ht := (map_eq_iff_conjugate_starProjection_complex K L U).mp hmap
   obtain ⟨n, e, alpha, beta, V, W, R, d, hV, hW, hR, hself, hd, _, hVe, hWe,
-      hmean, _⟩ := schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
+      hmean, _, _⟩ := schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
         p hp hp1 hp2 K L.starProjection U ht hmin
   have hG : IsSelfAdjoint G := isSelfAdjoint_schattenUnitaryGradient _ _
   obtain ⟨hPK, hPL⟩ := gradient_square_reduces_projections_of_isLocalMinOn_transports
