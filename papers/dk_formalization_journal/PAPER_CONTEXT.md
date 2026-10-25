@@ -31,8 +31,10 @@ and the full cost is the exact sum of its restriction costs. Every two-block
 and four-block value is explicit, and their accepted
 principal-angle multisets recover the original pair with exact zero, repeated
 and right-angle multiplicities. The actual ambient minimum is the sum of
-these explicit angle costs. Unrestricted real matching encoding and attainment
-remain open. The exact one-angle real minimum now compiles for every finite
+these explicit angle costs. Labelled matching extraction, exact removal of
+zero-angle partners, conversion between determinant classes and the draft
+weights, and the unrestricted matching lower bound now compile. Constructive
+ambient matching attainment remains open. The exact one-angle real minimum now compiles for every finite
 Schatten exponent at least one. For `1<p<2`, its value exceeds the complex
 one-angle value exactly at supercritical acute angles; equality holds below
 and at the critical angle and at the right endpoint.
@@ -66,6 +68,86 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Unrestricted real matching lower bound (25 October)
+
+The **lower-bound direction** of the real Schatten matching formula now
+compiles for every finite real ambient dimension and source rank,
+`1<p.toReal<2`, finite `p`, and every real orthogonal competitor. There is
+no acute, multiplicity, determinant or prescribed-plane hypothesis.
+`SchattenRealMatchingWeights.realPositiveSchattenMatchingMinimum_le_of_map_eq`
+states it for actual source/target subspaces `K,L` and every orthogonal
+`T` with `K.map T.toLinearMap = L`. The matching vertices are the original
+accepted angle indices with strictly positive angles, including separate
+labels for repeated and right angles. Its edge weights are exactly the
+positive-class clipped costs in `real_matching_transport.tex`, and its
+unmatched weights are the unrestricted real one-angle minima.
+
+`SchattenRealMatchingWeights.exists_positive_matching_cost_eq_of_isMinOn_real_transport`
+also proves that **every** ambient real global minimum has exactly the
+cost of an actual matching on those original positive indices. This is
+an extraction theorem. It does not show that every matching can be
+attained by an ambient transporter or that the extracted matching is a
+minimum of the combinatorial problem.
+
+The proof is now split into compiled mathematical steps:
+
+- `Submodule.exists_equiv_principalAngleIndices_of_orthogonal_blocks`
+  constructs a value-preserving bijection from the original angle labels
+  to the block labels, using exact fiber cardinalities. It works over
+  `RCLike` and only requires the indexing type to be finite. Zero and
+  repeated angles remain distinct occurrences.
+- `SchattenRealMatching.exists_matching_cost_eq_of_isMinOn_real_transport`
+  swaps the two source labels in each actual four-dimensional block and
+  fixes all other labels. Its full pair weight includes both determinant
+  classes. `realSchattenMatchingMinimum_le_transport` applies to every
+  competitor by the existing generic compact-attainment theorem.
+- `SchattenRealMatchingZeros.realSchattenMatchingCost_zeroStripped` removes
+  every edge incident to zero simultaneously and preserves cost.
+  `exists_positive_matching_cost_eq` then restricts to the strictly
+  positive labels. This includes any number of common fixed directions.
+- `SchattenRealMatchingWeights.realPairSchattenCost_eq_min_positive_singletons`
+  proves that a full two-class pair weight is the minimum of its positive
+  pair weight and its two unmatched one-angle weights, including all
+  endpoints. `exists_positive_weight_matching_cost_eq` removes an edge
+  whenever the two singletons are cheaper. Both endpoint decisions agree,
+  so the new partner map is still involutive.
+- `realSchattenMatchingMinimum_eq_positive` identifies the full-weight and
+  positive-edge combinatorial minima on the same finite angle list.
+  Both finite minima have an actual attaining involution. This is
+  combinatorial attainment, with no ambient orthogonal attainer yet.
+
+**Validation:** focused builds passed for all three matching modules and
+all their new declarations. After `lake exe cache get`,
+`lake build DavisKahan.All ForTauCeti` passed (10,609 jobs). These modules
+are included in the ordinary aggregate. A multistart numerical diagnostic
+at `p=1.5` used the full `O(3) x O(3)` transport-fiber parametrization in
+all four determinant components for angle triples `(0,1.3,1.5)`,
+`(1.45,1.45,1.45)` and `(pi/2,0.8,0.2)`. The best observed costs agreed
+with the computed matching minima to less than `1e-10`. These numerical
+checks test the proposed converse in small dimension; they do not prove
+it. The checked manuscript and its PDF remain unchanged.
+
+**Remaining converse:** construct an ambient orthogonal transporter for
+an arbitrary matching of the original strictly positive angle labels, or
+at least for an attaining matching, with exactly the stated cost. Group
+actual principal planes along its one- and two-element orbits, verify the
+restricted accepted angles and source ranks, use the proved two- and
+four-dimensional attainers, and glue them while fixing common summands.
+The current `Projection/CosineSineBasis.lean` gives a complete basis in
+balanced ambient dimension `2*rank(K)`; the arbitrary ambient/rank case
+must retain common summands and balanced right-angle defects explicitly.
+Mathlib already supplies
+`DirectSum.IsInternal.isometryL2OfOrthogonalFamily` and
+`LinearIsometryEquiv.piLpCongrRight` for finite orthogonal gluing; inspect
+those before adding a new assembly construction.
+
+After this converse, the lower bound will give equality and ambient
+attainment of the exact matching minimum. Sorted exchange inequalities,
+all-rank equality/field-gap classifications, real local-to-global,
+Charbonnier/nuclear structural extensions and Schatten-ideal lifts remain
+separate obligations. The matching claim is still excluded from
+`paper.tex`. This verification advance does not settle historical priority.
 
 ## Exact real angle costs and one-angle field gap (25 October)
 
@@ -125,13 +207,10 @@ decomposition and one-angle field gap. After `lake exe cache get`,
 modules are included in the ordinary aggregate. The checked manuscript
 and its PDF are unchanged.
 
-**Exact next obligations for R-2:** encode the proved multiset partition as
-a matching on labelled positive principal angles, including multiplicities.
-The full two-class four-block weight must be reconciled with the draft's
-positive-class pair weight and unmatched one-angle weights. Construct an
-ambient transporter for every such matching from the actual cosine--sine
-basis, fixing common summands, and use compact attainment plus the proved
-reduction for the lower bound. `SchattenTransportExistence.exists_schatten_transport_minimizer`
+**R-2 continuation:** labelled matching extraction, zero removal, weight
+conversion and the global lower bound have since compiled, as recorded
+above. Constructing an ambient transporter for an attaining matching,
+fixing common summands, is the next open direction. `SchattenTransportExistence.exists_schatten_transport_minimizer`
 is already generic over `RCLike` and supplies real compact attainment;
 do not reprove it. Sorted exchange, all-rank real field-gap classifications,
 real local-to-global, nuclear/Charbonnier structural reduction, and ideal

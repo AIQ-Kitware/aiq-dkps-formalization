@@ -192,4 +192,33 @@ theorem principalAngleMultiset_of_orthogonal_blocks
     (fun s => if t = s then (1 : ℤ) else 0)
   exact_mod_cast h
 
+/-- A complete reducing decomposition labels the original accepted
+principal-angle indices bijectively by the actual block indices. Equal
+angles remain separate labels, including all zero slots. Construct the
+bijection on each angle fiber using its exact multiplicity; this avoids
+choosing distinct representatives for repeated spectral values. -/
+theorem exists_equiv_principalAngleIndices_of_orthogonal_blocks
+    {ι : Type*} [Finite ι] (K L : Submodule 𝕜 E) (W : ι → Submodule 𝕜 E)
+    (horth : OrthogonalFamily 𝕜 (fun i => W i) (fun i => (W i).subtypeₗᵢ))
+    (hspan : (⨆ i, W i) = ⊤)
+    (hK : ∀ i, ∀ x ∈ W i, K.starProjection x ∈ W i)
+    (hL : ∀ i, ∀ x ∈ W i, L.starProjection x ∈ W i) :
+    ∃ e : Fin (Module.finrank 𝕜 K) ≃
+        Σ i, Fin (Module.finrank 𝕜 (K.comap (W i).subtype)),
+      ∀ j, (K.comap (W (e j).1).subtype).principalAngles
+        (L.comap (W (e j).1).subtype) (e j).2 = K.principalAngles L j := by
+  classical
+  let := Fintype.ofFinite ι
+  let f (j : Fin (Module.finrank 𝕜 K)) := K.principalAngles L j
+  let g (x : Σ i, Fin (Module.finrank 𝕜 (K.comap (W i).subtype))) :=
+    (K.comap (W x.1).subtype).principalAngles (L.comap (W x.1).subtype) x.2
+  have hcard (t : ℝ) : Fintype.card {j // f j = t} = Fintype.card {x // g x = t} := by
+    simp only [Fintype.card_subtype, Finset.card_eq_sum_ones, Finset.sum_filter]
+    rw [Fintype.sum_sigma]
+    have h := sum_principalAngles_of_orthogonal_blocks_group K L W horth hspan hK hL
+      (fun s => if s = t then (1 : ℤ) else 0)
+    exact_mod_cast h
+  let e (t : ℝ) := Fintype.equivOfCardEq (hcard t)
+  exact ⟨Equiv.ofFiberEquiv e, Equiv.ofFiberEquiv_map e⟩
+
 end Submodule

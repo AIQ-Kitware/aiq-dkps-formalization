@@ -16,6 +16,42 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Unrestricted real matching lower bound (25 October)
+
+**Lean-verified:** `SchattenRealMatchingWeights.realPositiveSchattenMatchingMinimum_le_of_map_eq`
+proves the lower-bound direction of the draft's matching formula for
+`1<p<2`, arbitrary finite real ambient dimension and source rank, and
+**every** orthogonal transporter of the actual pair. The vertices are
+labelled strictly positive accepted principal angles, with repetitions
+and right angles retained. Its positive-edge and unmatched weights agree
+with the draft. Every ambient real global minimum also has exactly the
+cost of such a matching
+(`exists_positive_matching_cost_eq_of_isMinOn_real_transport`).
+
+The new `PrincipalAngleBlocks` index-equivalence theorem handles repeated
+and zero multiplicities by angle-fiber cardinalities. `SchattenRealMatching`
+extracts involutions from the actual complete real blocks, and invokes
+existing compact attainment for unrestricted competitors.
+`SchattenRealMatchingZeros` strips zero edges and restricts to positive
+vertices without changing cost. `SchattenRealMatchingWeights` proves the
+full pair weight equals the minimum of a positive-class pair and two
+unmatched one-angle weights, and constructs an equal-cost positive-edge
+matching. Both finite matching problems attain their combinatorial minima.
+
+**Still unproved:** constructing an ambient transporter attaining an
+arbitrary, or combinatorially minimizing, matching. Thus the reverse
+inequality, full matching equality and ambient matching attainment remain
+outside the verified claim. No sorted-exchange, all-rank field-gap or
+ideal theorem follows from this lower bound alone. No first-publication
+claim is made; the classical spectral, compactness and matching
+bookkeeping steps carry no separate priority claim. The earlier exact
+BLR/Lewis precedents remain the source comparison, with full historical
+priority unresolved. Focused builds and the full production build
+passed (10,609 jobs). Small dimension-six multistart checks at `p=1.5`
+covered zero, repeated and right angles and found agreement with the
+matching values within `1e-10`; they supply diagnostics for the still-open
+ambient-attainment converse, not proof.
+
 ## Complete real Schatten block reduction and exact cost assembly (25 October)
 
 **Lean-verified:** `SchattenRealRestrictions.exists_complete_globally_minimizing_blocks_real`
@@ -45,8 +81,10 @@ costs. `FiniteBlocks.lean` proves finite orthogonal spectral additivity for
 arbitrary penalties, including zero slots. `RealFourSchattenNorm.lean`
 connects every actual four-block minimum to the accepted Schatten formula.
 
-**Remaining R-2 claim:** matching encoding and attainment, sorted-sum
-exchange inequalities and all-rank field-gap claims remain uncompiled.
+**Remaining R-2 claim:** ambient matching attainment, sorted-sum exchange
+inequalities and all-rank field-gap claims remain uncompiled. Labelled
+matching encoding and the unrestricted lower bound now compile, as recorded
+above.
 Original-angle multiset assembly and the abstract planar optimum are now
 compiled. `RealOneAngleFieldGap.lean` proves that the real one-angle value
 exceeds the complex value exactly on `criticalAngle p < theta < pi/2`,
@@ -1498,7 +1536,7 @@ rows of the original 29-result Davis--Kahan source inventory.
 | SM-4 | Global convex-relaxation tightness when commuting unitary factor is relaxed to commuting contraction (weighted nuclear cost) | **Formalized for the stated supplied structural class**: `SmoothedCommutantOptimization.lean`; instantiated in all-pairs argument | Strong proof mechanism; present as supporting theorem, not a generic statement for all convex relaxations |
 | SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Complete finite complex iff in `SmoothedNonacuteClassification`; joint attainment in `SmoothedPhaseDefectAttainment`; unique normalized parameters, full multiplicity product and topology in `SmoothedParameterNormalization`, `SmoothedMultiplicityParameters`, `SmoothedParameterTopology` | All-angle global classification and independent projection/defect homeomorphism compiled for `tau>0`, including compactness, rank-sector separation and exact simple-active count. Local-to-global is now compiled for all `tau>0`; broad-penalty extension, component counts, manifold dimensions and ideal optimization remain open |
 | R-1 | Exact real R4 rank-two minimum for *every continuous nondecreasing spectral penalty*, including separate determinant classes | **Full abstract accepted-angle minimum compiled** in `RealFourPrincipalAngles.lean`, with general continuous-monotone penalties and a closed nuclear corollary. `RealFourSchatten.lean` adds exact scalar clipping and sharp model canonical criteria; `RealFourNuclear.lean` proves the sharp nuclear model criterion. Complete negative-class optimizer sets compile in `RealFourNegative.lean`. | Every ambient orthogonal competitor and every endpoint are covered. Explicit Charbonnier piecewise corollaries remain open. Full model theorem priority unresolved; no separate priority claim for the elementary negative-class deduction. |
-| R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | Full real global-minimum block decomposition, unrestricted restriction minima, exact source ranks, fixed-source exceptions, accepted four-block values and cost assembly now compile in `SchattenRealRestrictions.lean` for `1<p<2`. Draft `real_matching_transport.tex` states the full formula. | **Original-angle multiset assembly and all actual small-block values now compile** in `PrincipalAngleBlocks.lean`, `RealTwoSchattenNorm.lean` and `SchattenRealAngleCosts.lean`. **Matching encoding/attainment remain uncompiled.** The compiled structural reduction is at all real finite dimensions and source ranks; it is not yet the advertised angle-dependent matching theorem. General-penalty, nuclear and Charbonnier extensions need separate proofs. Historical priority unresolved. |
+| R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | Full real global-minimum block decomposition, unrestricted restriction minima, exact source ranks, fixed-source exceptions, accepted four-block values and cost assembly now compile in `SchattenRealRestrictions.lean` for `1<p<2`. Draft `real_matching_transport.tex` states the full formula. | **Original-angle multiset assembly and all actual small-block values now compile** in `PrincipalAngleBlocks.lean`, `RealTwoSchattenNorm.lean` and `SchattenRealAngleCosts.lean`. **Labelled matching extraction and the unrestricted positive-edge matching lower bound now compile** in `SchattenRealMatching*.lean`. **Ambient matching attainment and the reverse inequality remain uncompiled.** The compiled structural reduction is at all real finite dimensions and source ranks; it is not yet the advertised angle-dependent matching theorem. General-penalty, nuclear and Charbonnier extensions need separate proofs. Historical priority unresolved. |
 | R-3 | For Schatten `1<p<2`, Charbonnier, and nuclear limits, matching reduces to minimum of **two sorted adjacent-pair sums** | Conventional derivation in `real_matching_transport.tex`; numerical checks corroborate but are not proofs | Would yield efficient exact algorithms and optimality thresholds; **submodularity and final reduction need independent proof review** |
 | R-4 | Real-minus-complex optimal nuclear penalty is at most `2-sqrt(3)` regardless of dimension, with sharp equality cases | Conventional proof draft only; low-dimensional example realizes constant | **High-value sharp field-gap theorem** if globally true; proof of exclusion of higher-dimensional maxima must be scrutinized |
 | R-5 | Charbonnier real-minus-complex gap at most `2eta(1-sqrt(1-1/(4eta^4)))`, explicit equality class | Conventional proof draft only; `eta=(tau+sqrt(tau^2+4))/2` | Another high-value result, **not yet verified**, depends on R-2/R-3 and tie-surface Hessian analysis |
