@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import YuWangSamworth2015.GroundedImports
+module
+
+public import YuWangSamworth2015.GroundedImports
 
 /-!
 # Yu--Wang--Samworth Section 2: the orthogonal-blocks sharpness example
@@ -31,6 +33,8 @@ finite-dimensional `RCLike` inner product space rather than for `ℝ^p`, which
 costs nothing and covers the paper's real matrices by taking
 `EuclideanSpace ℝ (Fin p)` with its standard basis.
 -/
+
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

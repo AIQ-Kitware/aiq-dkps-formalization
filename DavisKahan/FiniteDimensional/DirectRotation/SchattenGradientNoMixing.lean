@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientPairing
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenFeasibleBlocks
-import ForTauCeti.Analysis.InnerProductSpace.PairedInvolutionDecomposition
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientPairing
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenFeasibleBlocks
+public import ForTauCeti.Analysis.InnerProductSpace.PairedInvolutionDecomposition
 
 /-!
 # No mixing on actual paired Schatten-gradient eigenspaces
@@ -17,6 +19,8 @@ space using the source reflection. At a local minimum their large-phase
 projections are orthogonal.
 -/
 
+public section
+
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
@@ -26,6 +30,21 @@ open scoped ENNReal InnerProductSpace
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
+
+-- Normalize the eigenvalue in the proposition, avoiding casts of bundled isometries.
+omit [FiniteDimensional ℂ E] [CompleteSpace E] in
+private theorem exists_opposite_pairing
+    (G : E →L[ℂ] E) (J : E ≃ₗᵢ[ℂ] E) (hJ : Function.Involutive J)
+    (hanti : ∀ x, G (J x) = -J (G x)) (g : ℝ) :
+    ∃ j : Module.End.eigenspace G.toLinearMap (g : ℂ) ≃ₗᵢ[ℂ]
+        Module.End.eigenspace G.toLinearMap ((-g : ℝ) : ℂ),
+      ∀ x, (j x : E) = J x := by
+  have hpair : ∃ j : Module.End.eigenspace G.toLinearMap (g : ℂ) ≃ₗᵢ[ℂ]
+      Module.End.eigenspace G.toLinearMap (-(g : ℂ)), ∀ x, (j x : E) = J x :=
+    ⟨eigenspaceNegEquivOfInvolution J hJ G.toLinearMap hanti (g : ℂ),
+      eigenspaceNegEquivOfInvolution_apply J hJ G.toLinearMap hanti (g : ℂ)⟩
+  rw [Complex.ofReal_neg]
+  exact hpair
 
 set_option maxHeartbeats 600000 in
 /-- On every positive submaximal gradient level of a local transport
@@ -72,10 +91,7 @@ theorem gradient_block_no_overlap_of_isLocalMinOn_transports
     change J (G (J (J x))) = -G (J x) at h
     rw [K.reflection_reflection] at h
     simpa only [neg_neg] using congrArg Neg.neg h.symm
-  let j : L ≃ₗᵢ[ℂ] Module.End.eigenspace G.toLinearMap ((-g : ℝ) : ℂ) :=
-    (eigenspaceNegEquivOfInvolution J K.reflection_involutive G.toLinearMap hanti (g : ℂ)).trans
-      (LinearIsometryEquiv.ofEq _ _ (by rw [Complex.ofReal_neg]))
-  have hj (x : L) : (j x : E) = J x := by rfl
+  obtain ⟨j, hj⟩ := exists_opposite_pairing G J K.reflection_involutive hanti g
   have hne : (g : ℂ) ≠ ((-g : ℝ) : ℂ) := by
     intro h
     have hr := congrArg Complex.re h
@@ -119,7 +135,11 @@ theorem gradient_block_no_overlap_of_isLocalMinOn_transports
     ext x
     obtain ⟨y, rfl⟩ := e.surjective x
     rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply, e.symm_apply_apply]
-    exact hUcoords y
+    have h := hUcoords y
+    change (Unitary.linearIsometryEquiv U : E →L[ℂ] E) (e y) = _ at h
+    rw [Unitary.coe_linearIsometryEquiv_apply] at h
+    simpa only [ContinuousLinearMap.withLpProdMap_apply,
+      LinearIsometryEquiv.coe_coe''] using h
   let P₀ : Sᗮ →L[ℂ] Sᗮ := (1 / 2 : ℂ) • (1 + (J₀ : Sᗮ →L[ℂ] Sᗮ))
   have hPexpr : K.starProjection = (1 / 2 : ℂ) • (1 + (J : E →L[ℂ] E)) := by
     rw [hJ, smul_add, smul_sub, smul_smul]
@@ -135,13 +155,18 @@ theorem gradient_block_no_overlap_of_isLocalMinOn_transports
     rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply, e.symm_apply_apply,
       hJcoords y, ← map_add, ← map_smul]
     apply congrArg e
+    simp only [ContinuousLinearMap.withLpProdMap_apply]
     apply WithLp.ofLp_injective 2
     rfl
   have hAB : A * B = 0 := overlap_eq_zero_of_isLocalMinOn_block_transports
     p hp hp1 hp2 a b ha hb hbalance
     (Unitary.linearIsometryEquiv.symm V) (Unitary.linearIsometryEquiv.symm W)
-    A B hA hB hVrepr hWrepr' (Unitary.linearIsometryEquiv.symm Z)
-    e K.starProjection Q P₀ U hPblock hUblock htrans hmin
+    A B hA hB
+    (by simpa only [Unitary.coe_symm_linearIsometryEquiv_apply] using hVrepr)
+    (by simpa only [Unitary.coe_symm_linearIsometryEquiv_apply] using hWrepr')
+    (Unitary.linearIsometryEquiv.symm Z)
+    e K.starProjection Q P₀ U hPblock
+    (by simpa only [Unitary.coe_symm_linearIsometryEquiv_apply] using hUblock) htrans hmin
   exact ⟨a, ha, b, hb, hbalance, V, W, A, B, hA, hB, hAB, hV,
     (fun x => (hWact x).symm), hVrepr, hWrepr'⟩
 

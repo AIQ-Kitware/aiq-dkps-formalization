@@ -4,18 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerAngle
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.DiagonalMultiplication
-import Mathlib.Analysis.Normed.Lp.lpSpace
-import Mathlib.Analysis.SpecificLimits.Basic
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
-import Mathlib.Topology.Algebra.Module.LinearPMap
-import Mathlib.Tactic.FieldSimp
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.NormNum
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerAngle
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.DiagonalMultiplication
+public import Mathlib.Analysis.Normed.Lp.lpSpace
+public import Mathlib.Analysis.SpecificLimits.Basic
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Geometry.Euclidean.Angle.Unoriented.Basic
+public import Mathlib.Topology.Algebra.Module.LinearPMap
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.NormNum
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
 
 /-!
 # Davis--Kahan 1970, Section 9: domain limitation example
@@ -43,12 +45,14 @@ of the paper is silent here because the residual does not exist, while the
 form/Rayleigh lower-bound method still gives a bound.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
 /-- The geometric trial sequence. -/
-def geometricTrialSequence (μ : ℝ) (n : ℕ) : ℝ := μ ^ n
+@[expose] def geometricTrialSequence (μ : ℝ) (n : ℕ) : ℝ := μ ^ n
 
 /-- The diagonal multiplier used in the source example. -/
 noncomputable def diagonalMultiplier (μ : ℝ) (n : ℕ) : ℝ := (μ ^ n)⁻¹
@@ -74,6 +78,7 @@ theorem geometricDiagonalImage_partial_energy
 
 /-- Finite truncation gives a concrete nearby sequence in the diagonal
 operator's domain. -/
+@[expose]
 def truncatedTrialSequence (μ : ℝ) (N n : ℕ) : ℝ :=
   if n < N then μ ^ n else 0
 
@@ -164,6 +169,7 @@ vectors whose scaled sequence is still square summable.
 This is the reusable `TauCeti.LinearPMap.lpDiagonalDomain` at `𝕜 = ℝ`, `ι = ℕ`;
 the paper-facing name is kept so the Section 9 statements read as the source
 writes them. -/
+@[expose]
 noncomputable def diagonalDomain (d : ℕ → ℝ) : Submodule ℝ DomainLimitationSpace :=
   TauCeti.LinearPMap.lpDiagonalDomain d
 
@@ -176,6 +182,7 @@ theorem mem_diagonalDomain_iff (d : ℕ → ℝ) (x : DomainLimitationSpace) :
 /-- **The unbounded diagonal operator**, on its maximal domain.
 
 This is the reusable `TauCeti.LinearPMap.lpDiagonal` at `𝕜 = ℝ`, `ι = ℕ`. -/
+@[expose]
 noncomputable def diagonalOperator (d : ℕ → ℝ) :
     DomainLimitationSpace →ₗ.[ℝ] DomainLimitationSpace :=
   TauCeti.LinearPMap.lpDiagonal d
@@ -238,6 +245,7 @@ theorem summable_sq_of_memℓp_two {f : ℕ → ℝ} (hf : Memℓp f 2) :
   rwa [heq] at h
 
 /-- The geometric trial vector of the source example. -/
+@[expose]
 noncomputable def geometricTrial {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1) :
     DomainLimitationSpace :=
   ⟨fun n => geometricTrialSequence μ n, by
@@ -292,6 +300,7 @@ theorem geometricTrial_form_summable {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : μ < 1) 
   exact summable_geometric_of_lt_one hμ0.le hμ1
 
 /-- The finite truncation, as a vector of the space. -/
+@[expose]
 noncomputable def truncatedTrial (μ : ℝ) (N : ℕ) : DomainLimitationSpace :=
   ⟨fun n => truncatedTrialSequence μ N n, by
     refine memℓp_two_of_summable_sq ?_
@@ -537,6 +546,7 @@ theorem geometricTrial_normalizedForm_split {μ : ℝ} (hμ0 : 0 < μ) (hμ1 : �
 /-! ## The angle to the first eigenvector, and Weinberger's bound -/
 
 /-- The first eigenvector `(1,0,0,…)` of `diag(1, μ⁻¹, μ⁻², …)`. -/
+@[expose]
 noncomputable def firstEigenvector : DomainLimitationSpace := lp.single 2 0 (1 : ℝ)
 
 /-- Unfolding interface for `firstEigenvector`. -/

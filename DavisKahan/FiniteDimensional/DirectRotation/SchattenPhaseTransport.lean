@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseMinimum
-import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality
-import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
-import Mathlib.Analysis.SpecialFunctions.Complex.Circle
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseMinimum
+public import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
+public import Mathlib.Analysis.SpecialFunctions.Complex.Circle
 
 /-!
 # Attained Schatten costs for complex scalar-phase transports
@@ -16,6 +18,8 @@ complex lines. Its actual Schatten norm is the `p`-th root of the scalar
 power sum. These are attaining candidates for the unrestricted unitary
 problem; the unrestricted lower bound is a separate theorem.
 -/
+
+public section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
 

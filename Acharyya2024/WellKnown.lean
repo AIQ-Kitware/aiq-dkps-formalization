@@ -6,8 +6,12 @@ belong here first, so they can later be moved toward Mathlib if they are not
 already present there in a comparable form.
 -/
 
-import Mathlib
-import TauCeti.MeasureTheory.Function.ConvergenceInMeasure
+module
+
+public import Mathlib
+public import TauCeti.MeasureTheory.Function.ConvergenceInMeasure
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

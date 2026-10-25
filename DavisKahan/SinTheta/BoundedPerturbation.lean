@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
-import DavisKahan.SinTheta.Unbounded.SpectrumGap
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+module
+
+public import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
+public import DavisKahan.SinTheta.Unbounded.SpectrumGap
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -64,6 +68,7 @@ theorem addBounded_isSelfAdjoint
 /-- Package a bounded perturbation and two invariant block embeddings as the
 paper-shaped unbounded residual data.  The residual identity is automatic and
 has residual `V ∘ X`. -/
+@[expose]
 noncomputable def boundedPerturbationSinThetaData
     (A : H →ₗ.[𝕜] H) (V : H →L[𝕜] H)
     (A₀ : F →ₗ.[𝕜] F)

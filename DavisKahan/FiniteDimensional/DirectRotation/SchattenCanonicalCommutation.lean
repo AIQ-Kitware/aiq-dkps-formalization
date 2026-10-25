@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerPhases
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenLocalGlobal
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerPhases
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenLocalGlobal
 
 /-!
 # Every acute Schatten optimizer commutes with canonical rotation
@@ -15,6 +17,8 @@ optimizer to be identity. Source invariance makes the projections agree
 there, so canonical rotation is identity as well. Completeness gives
 commutation on the whole ambient space, with arbitrary multiplicities.
 -/
+
+public section
 
 noncomputable section
 

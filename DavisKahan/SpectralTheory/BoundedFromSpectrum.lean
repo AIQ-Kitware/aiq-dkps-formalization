@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 
 /-!
 # Boundedness from a bounded spectrum
@@ -37,6 +39,8 @@ This is the missing seam for the fully unbounded interval/exterior orientation
 of Davis--Kahan Theorem 5.2: the interval block of the configuration is
 secretly a bounded operator.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -82,10 +86,10 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
         = ContinuousLinearMap.id ℂ H := by
     have hc := (TauCeti.LinearPMap.spectralPVM hA).proj_compl (Set.Icc β α) hBm
     rw [show (TauCeti.LinearPMap.spectralPVM hA).proj (Set.Icc β α)ᶜ hBm.compl
-        = TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl from rfl,
+        = TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl from (TauCeti.LinearPMap.specProjection_def hA _ _).symm,
       hprojc] at hc
     rw [show TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm
-        = (TauCeti.LinearPMap.spectralPVM hA).proj (Set.Icc β α) hBm from rfl]
+        = (TauCeti.LinearPMap.spectralPVM hA).proj (Set.Icc β α) hBm from TauCeti.LinearPMap.specProjection_def hA _ _]
     linear_combination (norm := module) hc
   have hfix : ∀ φ : H,
       TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm φ = φ := by

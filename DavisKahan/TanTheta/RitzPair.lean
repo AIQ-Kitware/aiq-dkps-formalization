@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.TanTheta.Theorem63UnboundedCompression
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.TanTheta.UnboundedSpectrum
+module
+
+public import DavisKahan.TanTheta.Theorem63UnboundedCompression
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.TanTheta.UnboundedSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -92,6 +96,7 @@ The common case: the caller holds an `BoundedCompressionTrialBlock`, whose compr
 a bounded self-adjoint operator on the trial subspace and whose residual is the
 ambient action's orthogonal part.  Nothing is assumed beyond what that bundle
 already carries. -/
+@[expose]
 noncomputable def ofTrialBlock (D : BoundedCompressionTrialBlock A Z) :
     UnboundedRitzPair A Z where
   trial :=
@@ -151,7 +156,7 @@ theorem ofReducesSubspace (h : _root_.LinearPMap.IsReducing A V) :
     have hinV : A (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain) ∈ V :=
       h.isInvariant.apply_mem _ (V.starProjection_apply_mem _)
     have hinVp : A (⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ : A.domain) ∈ Vᗮ :=
-      h.isInvariant_orthogonal _ (Vᗮ.starProjection_apply_mem _)
+      h.isInvariant_orthogonal.apply_mem _ (Vᗮ.starProjection_apply_mem _)
     rw [hmap, map_add]
     have h0 : Vᗮ.starProjection (A (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain)) = 0 := by
       rw [Submodule.starProjection_orthogonal_apply,
@@ -233,7 +238,7 @@ theorem reflection_commutes_of_reducesSubspace
   have hinV : T (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain) ∈ V :=
     h.isInvariant.apply_mem _ (V.starProjection_apply_mem _)
   have hinVp : T (⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ : T.domain) ∈ Vᗮ :=
-    h.isInvariant_orthogonal _ (Vᗮ.starProjection_apply_mem _)
+    h.isInvariant_orthogonal.apply_mem _ (Vᗮ.starProjection_apply_mem _)
   have hproj : V.starProjection (T x)
       = T (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain) := by
     rw [hTx, map_add, Submodule.starProjection_eq_self_iff.mpr hinV,

@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealAngleCosts
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealAngleCosts
 
 /-!
 # Exact one-angle real versus complex equality and strict field gap
@@ -18,6 +20,8 @@ The comparison uses actual attained optimum values, rather than a cost
 comparison of a prescribed pair of competitors. It is a one-angle result;
 different real principal planes can interact in higher rank.
 -/
+
+public section
 
 noncomputable section
 

@@ -7,8 +7,12 @@ estimator, derives reference coverage from compactness/full support/iid
 sampling, and packages the fixed-subset result into the paper's `m`-query and
 all-strict-budgets predicates.
 -/
-import DkpsQuench2026.Paper.Theorem2
-import DkpsQuench2026.Probability.Coverage
+module
+
+public import DkpsQuench2026.Paper.Theorem2
+public import DkpsQuench2026.Probability.Coverage
+
+public section
 
 set_option linter.mathlibStandardSet false
 

@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 Thinking
 -/
-import DavisKahan.Riccati.BoundedReduction
-import DavisKahan.Sylvester.Spectrum
+module
+
+public import DavisKahan.Riccati.BoundedReduction
+public import DavisKahan.Sylvester.Spectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

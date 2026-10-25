@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.Sylvester.Basic
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import DavisKahan.SpectralTheory.Complexification.Spectrum
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFanBochner
+module
+
+public import DavisKahan.InfiniteDimensional.Sylvester.Basic
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFanBochner
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -155,7 +159,7 @@ private theorem complexify_sylvesterOperator
     (A : Fr →L[ℝ] Fr) (B : Er →L[ℝ] Er) (X : Er →L[ℝ] Fr) :
     complexify (ContinuousLinearMap.sylvester A B X) =
       ContinuousLinearMap.sylvester (complexify A) (complexify B) (complexify X) := by
-  simp [ContinuousLinearMap.sylvester, complexify_comp, complexify_sub]
+  simp [ContinuousLinearMap.sylvester_apply, complexify_comp, complexify_sub]
 
 omit [CompleteSpace Er] [CompleteSpace Fr] in
 /-- A bounded real Sylvester equation complexifies exactly. -/

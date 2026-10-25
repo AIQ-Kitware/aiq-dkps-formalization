@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.TraceRatio
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.TraceRatio
 
 /-!
 # Trace-norm optimality of the real four-dimensional competitor
@@ -15,6 +17,8 @@ The projection-displacement lower bound then proves that the explicit
 orthogonal competitor globally minimizes the trace norm, not merely that
 it beats the canonical direct rotation.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

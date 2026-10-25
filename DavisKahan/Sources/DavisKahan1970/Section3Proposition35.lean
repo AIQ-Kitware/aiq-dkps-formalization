@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.Proposition35Exponential
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Angle.Proposition35Exponential
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

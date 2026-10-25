@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.Unbounded.AllGap
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+module
+
+public import DavisKahan.Sylvester.Unbounded.AllGap
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 
 /-!
 # Form-bounded gap hypotheses discharge the spectral ones
@@ -33,6 +35,8 @@ holds an unqualified name: they are the same mathematics stated two ways, and
 each name says which way.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace Sylvester
@@ -57,17 +61,19 @@ theorem sylvesterIntervalExteriorGap_of_realSpectrum
   rcases hgap with hgap | hgap
   · left
     constructor
-    · exact hgap.1
+    · intro r hr
+      exact hgap.1 (_root_.LinearPMap.mem_realSpectrum_iff.mpr hr)
     · intro lam hlam hlamSpec
-      have hreal : lam ∈ _root_.LinearPMap.realSpectrum B := hlamSpec
+      have hreal : lam ∈ _root_.LinearPMap.realSpectrum B := _root_.LinearPMap.mem_realSpectrum_iff.mpr hlamSpec
       rcases hgap.2 hreal with hleft | hright
       · exact (not_lt_of_ge hleft) hlam.1
       · exact (not_lt_of_ge hright) hlam.2
   · right
     constructor
-    · exact hgap.1
+    · intro r hr
+      exact hgap.1 (_root_.LinearPMap.mem_realSpectrum_iff.mpr hr)
     · intro lam hlam hlamSpec
-      have hreal : lam ∈ _root_.LinearPMap.realSpectrum A := hlamSpec
+      have hreal : lam ∈ _root_.LinearPMap.realSpectrum A := _root_.LinearPMap.mem_realSpectrum_iff.mpr hlamSpec
       rcases hgap.2 hreal with hleft | hright
       · exact (not_lt_of_ge hleft) hlam.1
       · exact (not_lt_of_ge hright) hlam.2
@@ -126,24 +132,24 @@ theorem realSpectrumIntervalExteriorGap_of_spectral
     RealSpectrumIntervalExteriorGap A B β α δ := by
   rcases hgap with hgap | hgap
   · left
-    refine ⟨hgap.1, ?_⟩
+    refine ⟨(fun r hr => hgap.1 (_root_.LinearPMap.mem_realSpectrum_iff.mp hr)), ?_⟩
     intro lam hlam
     rcases le_or_gt lam (β - δ) with h | h
     · exact Or.inl h
     rcases le_or_gt (α + δ) lam with h' | h'
     · exact Or.inr h'
     exact absurd
-      hlam
+      (_root_.LinearPMap.mem_realSpectrum_iff.mp hlam)
       (hgap.2 lam ⟨h, h'⟩)
   · right
-    refine ⟨hgap.1, ?_⟩
+    refine ⟨(fun r hr => hgap.1 (_root_.LinearPMap.mem_realSpectrum_iff.mp hr)), ?_⟩
     intro lam hlam
     rcases le_or_gt lam (β - δ) with h | h
     · exact Or.inl h
     rcases le_or_gt (α + δ) lam with h' | h'
     · exact Or.inr h'
     exact absurd
-      hlam
+      (_root_.LinearPMap.mem_realSpectrum_iff.mp hlam)
       (hgap.2 lam ⟨h, h'⟩)
 
 /-- **The spectral gap implies the form-bounded gap, in every configuration.**

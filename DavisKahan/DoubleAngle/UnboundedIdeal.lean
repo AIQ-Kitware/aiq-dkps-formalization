@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.DoubleAngle.Unbounded
-import DavisKahan.SinTheta.BoundedPerturbationIdeal
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.DoubleAngle.Unbounded
+public import DavisKahan.SinTheta.BoundedPerturbationIdeal
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -50,6 +54,7 @@ singular-value sequence with that of `Angle.directedSinTwoAngleOperator U V`, an
 `Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide` with that of the
 other ordering `Angle.directedSinTwoAngleOperator V U`, which is the one Davis and
 Kahan's `Θ₀` names when `U` carries the gap and `V` is the trial subspace. -/
+@[expose]
 noncomputable def sinTwoThetaIdealBlock
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
@@ -185,7 +190,7 @@ theorem isometricEmbedding_reflection_comp
     {Y : G →L[𝕜] H} (hY : IsometricEmbedding Y) :
     IsometricEmbedding (V.reflectionOperator ∘L Y) := by
   intro y
-  change ‖V.reflection (Y y)‖ = ‖y‖
+  rw [ContinuousLinearMap.comp_apply, Submodule.reflectionOperator_apply_eq_reflection]
   rw [V.reflection.norm_map]
   exact hY y
 
@@ -294,7 +299,9 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
         A hA Bᶜ hB.compl z
     let za : A.domain := ⟨((z : Uc) : H), hzdom⟩
     have hy : (y : H) = V.reflectionOperator (za : H) :=
-      (congrArg Subtype.val (e.apply_symm_apply (y : Wc))).symm
+      by
+        rw [Submodule.reflectionOperator_apply_eq_reflection]
+        exact (congrArg Subtype.val (e.apply_symm_apply (y : Wc))).symm
     change (y : H) ∈ A.domain
     rw [hy]
     exact hJdom za
@@ -308,7 +315,9 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
         A hA Bᶜ hB.compl z
     let za : A.domain := ⟨((z : Uc) : H), hzdom⟩
     have hy : (y : H) = V.reflectionOperator (za : H) :=
-      (congrArg Subtype.val (e.apply_symm_apply (y : Wc))).symm
+      by
+        rw [Submodule.reflectionOperator_apply_eq_reflection]
+        exact (congrArg Subtype.val (e.apply_symm_apply (y : Wc))).symm
     have hsub :
         (⟨F₁ (y : Wc), hFdom y⟩ : (TauCeti.LinearPMap.addBounded A R).domain) =
           ⟨V.reflectionOperator (za : H), hJdom za⟩ :=
@@ -325,7 +334,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
             V.reflectionOperator (((Λ z : Uc) : H)) :=
           congrArg V.reflectionOperator hAint
         _ = ((e (Λ z) : Wc) : H) := by
-          rfl
+          rw [Submodule.reflectionOperator_apply_eq_reflection]
+          exact (unitarySubmoduleMapIsometry_coe_apply V.reflection Uc (Λ z)).symm
         _ = ((ΛJ y : Wc) : H) := by
           exact congrArg Subtype.val
             (unitaryConjugate_apply e Λ hΛ y).symm

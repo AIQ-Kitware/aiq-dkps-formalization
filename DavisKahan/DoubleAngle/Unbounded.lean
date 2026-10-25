@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.ReflectionRestriction
+module
+
+public import DavisKahan.SpectralTheory.ReflectionRestriction
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -77,7 +81,7 @@ theorem norm_starProjection_reflectedComplementary_eq_sinTwoAngle
         ← ContinuousLinearMap.star_eq_adjoint,
         (isSelfAdjoint_starProjection Wᗮ).star_eq,
         (isSelfAdjoint_starProjection U).star_eq]
-    _ = U.directedProjectionGap W := rfl
+    _ = U.directedProjectionGap W := (Submodule.directedProjectionGap_def U W).symm
     _ = U.projectionGap W :=
       (subspaceGap_eq_directedGap_reflection U V).symm
     _ = ‖directedSinTwoAngleOperatorC U V‖ :=

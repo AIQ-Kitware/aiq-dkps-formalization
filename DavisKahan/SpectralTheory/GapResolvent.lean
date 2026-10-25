@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import DavisKahan.Sylvester.ShiftedInverseGauge
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGap
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import DavisKahan.Sylvester.ShiftedInverseGauge
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGap
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -172,6 +176,8 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
       rfl
     rw [hV, ← hu]
     exact this
+  apply (TauCeti.DavisKahan.mem_local_resolventSet_iff_root _ _).mp
+  apply TauCeti.LinearPMap.mem_resolventSet_iff.mpr
   refine ⟨R ∘L V, fun y => ?_, fun y => ?_, fun x => ?_⟩
   · exact (hright (V y)).choose
   · obtain ⟨hmem, hsolve⟩ := hright (V y)
@@ -340,8 +346,8 @@ theorem twoSidedShiftedInverseBound_of_coercive_comp
       _ ≤ ‖A x - ((lam : ℝ) : ℂ) • (x : H)‖ := htri
   have hres := (TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound hA
     hpos hnorm).1
-  simpa [_root_.LinearPMap.spectrum, TauCeti.DavisKahan.mem_local_resolventSet_iff_root]
-    using hres
+  rw [_root_.LinearPMap.mem_spectrum_iff, not_not]
+  exact (TauCeti.DavisKahan.mem_local_resolventSet_iff_root _ _).mp hres
 
 end DavisKahan
 end TauCeti

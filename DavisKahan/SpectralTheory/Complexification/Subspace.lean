@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
 
 /-!
 # Complexification of real closed subspaces
@@ -29,6 +31,8 @@ real and imaginary coordinates both lie in `U`.  The main results prove that:
 * reducing-subspace data transports through operator complexification.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace Foundation
@@ -46,6 +50,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- Complexification of a real subspace: both coordinates belong to the real
 subspace. -/
+@[expose]
 def complexifySubmodule (U : Submodule ℝ E) :
     Submodule ℂ (RealComplexification E) where
   carrier := {z | re z ∈ U ∧ im z ∈ U}
@@ -255,7 +260,7 @@ theorem projectionGap_complexifySubmodule
     [V.HasOrthogonalProjection] :
     (complexifySubmodule U).projectionGap (complexifySubmodule V) =
       U.projectionGap V := by
-  unfold Submodule.projectionGap
+  rw [Submodule.projectionGap_def, Submodule.projectionGap_def]
   rw [starProjection_complexifySubmodule,
     starProjection_complexifySubmodule, ← complexify_sub, norm_complexify]
 
@@ -266,7 +271,7 @@ theorem directedProjectionGap_complexifySubmodule
     [V.HasOrthogonalProjection] :
     (complexifySubmodule U).directedProjectionGap (complexifySubmodule V) =
       U.directedProjectionGap V := by
-  unfold Submodule.directedProjectionGap
+  rw [Submodule.directedProjectionGap_def, Submodule.directedProjectionGap_def]
   rw [starProjection_complexifySubmodule_orthogonal,
     starProjection_complexifySubmodule, ← complexify_comp, norm_complexify]
 

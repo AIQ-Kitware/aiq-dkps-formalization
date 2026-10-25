@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
-import Mathlib.Analysis.Convex.Strict
-import Mathlib.Analysis.Convex.Deriv
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
+public import Mathlib.Analysis.Convex.Strict
+public import Mathlib.Analysis.Convex.Deriv
 
 /-!
 # Supporting lines associated with balanced amplitude roots
@@ -15,6 +17,8 @@ to the chord power at `b` lies strictly above the power on `[a, pi]` away
 from `b`. The corresponding strict upper support for the angle minimum
 compares a mixed spectral block with independently optimized planes.
 -/
+
+public section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
 

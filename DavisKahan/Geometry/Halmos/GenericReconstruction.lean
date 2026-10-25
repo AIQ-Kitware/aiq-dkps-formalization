@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Halmos.GenericPosition
-import ForTauCeti.Analysis.InnerProductSpace.ModulusConjugation
+module
+
+public import DavisKahan.Geometry.Halmos.GenericPosition
+public import ForTauCeti.Analysis.InnerProductSpace.ModulusConjugation
 
 /-!
 # Brick (1): the generic part is reconstructed from its cosine block
@@ -56,6 +58,8 @@ Kahan state Theorem 3.1 for, and multiplicity theory left the critical path.
   equivalence, assembled with the four elementary summand isometries through
   `Assembly.lean`.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -165,6 +169,7 @@ theorem modulus_intertwine_of_cosineBlock (m : genericLeftHalf U₁ V₁) :
 
 /-- **Step 2.**  The forced companion of `W` on the `Uᗮ`-halves: conjugate by the
 two polar equivalences `Φᵢ : Mᵢ ≃ₗᵢ Nᵢ`. -/
+@[expose]
 noncomputable def genericRightTransport :
     genericRightHalf U₁ V₁ ≃ₗᵢ[𝕜] genericRightHalf U₂ V₂ :=
   ((genericHalvesEquiv U₁ V₁).symm.trans W).trans (genericHalvesEquiv U₂ V₂)

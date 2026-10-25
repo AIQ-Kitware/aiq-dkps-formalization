@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Unbounded.Core
+module
+
+public import DavisKahan.SinTheta.Unbounded.Core
 
 /-!
 # Shifted-inverse bounds for closed operators
@@ -12,6 +14,8 @@ The one- and two-sided shifted-inverse predicates, the form-bound estimate for a
 shifted closed operator, and the resulting operator-norm bounds on the solution
 of a closed Sylvester equation in both interval/exterior orientations.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -78,7 +82,7 @@ theorem norm_shift_apply_le_of_form_bounds
     intro v w
     simp only [hS, inner_sub_left, inner_sub_right, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
-    rw [hsym v w]
+    rw [(LinearPMap.isSymmetric_iff _).mp hsym v w]
   -- the quadratic form of the shift lies in `[-r, r]`
   have hform : ∀ w : B.domain,
       |RCLike.re ⟪S w, (w : F)⟫_𝕜| ≤ r * ‖(w : F)‖ ^ 2 := by
@@ -90,8 +94,8 @@ theorem norm_shift_apply_le_of_form_bounds
     have hre : RCLike.re ⟪S w, (w : F)⟫_𝕜 =
         RCLike.re ⟪B w, (w : F)⟫_𝕜 - c * ‖(w : F)‖ ^ 2 := by
       rw [hval, map_sub, RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-    have h1 := hlow w
-    have h2 := hhigh w
+    have h1 := (LinearPMap.semiboundedBelow_iff _ _).mp hlow w
+    have h2 := (LinearPMap.semiboundedAbove_iff _ _).mp hhigh w
     rw [hre, abs_le]
     constructor
     · rw [hc, hr] at *

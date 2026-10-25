@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 # Normalized symmetric operator ideal families
@@ -53,6 +55,8 @@ not establish a representation theorem for every norm satisfying only bare
 unitary invariance. Davis--Kahan Section 1 cites Fan comparison as mathematical
 background; source audits must record that choice explicitly.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -356,6 +360,7 @@ theorem hasFanDominanceWhereDefined (N : NormalizedSymmetricOperatorIdealFamily.
 /-- A scaled norm comparison with Davis--Kahan's partial-norm convention: when
 both displayed norms exist, `c ‖A‖ ≤ ‖B‖`; if either norm does not exist, there
 is no numerical obligation. -/
+@[expose]
 def ScaledGaugeLEWhereDefined
     (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
     {E F E' F' : Type v}

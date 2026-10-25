@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Polar.PrincipalSquareRoot
-import DavisKahan.Geometry.Polar.Section3Nonacute
-import DavisKahan.Geometry.Angle.Proposition35Infinite
-import TauCeti.Analysis.Normed.Operator.RealAlgebra
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Polar.PrincipalSquareRoot
+public import DavisKahan.Geometry.Polar.Section3Nonacute
+public import DavisKahan.Geometry.Angle.Proposition35Infinite
+public import TauCeti.Analysis.Normed.Operator.RealAlgebra
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 /-!
 # Davis--Kahan's Definition 3.1, and why every direct rotation displaces alike
@@ -43,6 +45,8 @@ gives `D² = J_V J_U` for every Definition 3.1 rotation.  So `(D + D⋆)²` is t
 same nonnegative operator `J_V J_U + J_U J_V + 2` for all of them, and a
 nonnegative operator has one nonnegative square root.
 -/
+
+public section
 
 open scoped InnerProductSpace
 

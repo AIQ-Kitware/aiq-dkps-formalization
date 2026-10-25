@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.TanTheta.Theorem63TrialData
-import DavisKahan.TanTheta.UnboundedSpectrum
-import DavisKahan.SpectralTheory.ReflectionRestriction
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+module
+
+public import DavisKahan.TanTheta.Theorem63TrialData
+public import DavisKahan.TanTheta.UnboundedSpectrum
+public import DavisKahan.SpectralTheory.ReflectionRestriction
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -71,6 +75,7 @@ ambient operator is not.
 
 Both the source bundle and the target bundle are bounded data, so this construction is
 scalar-generic. -/
+@[expose]
 noncomputable def Theorem63TrialData.ofUnbounded
     {A : H →ₗ.[𝕜] H} {Z : Submodule 𝕜 H}
     [Z.HasOrthogonalProjection] [CompleteSpace Z]
@@ -219,8 +224,7 @@ theorem starProjection_orthogonal_selfAdjointSpectralSubspace
   show _ = TauCeti.LinearPMap.specProjection hA Bᶜ hB.compl
   rw [Submodule.starProjection_orthogonal',
     ← selfAdjointSpectralProjection_eq_starProjection A hA B hB,
-    TauCeti.LinearPMap.specProjection_def,
-    (TauCeti.LinearPMap.spectralPVM hA).proj_compl B hB]
+    TauCeti.LinearPMap.specProjection_compl hA B hB]
   rfl
 
 /-- **A spectral subspace reduces its operator, domain half.**  The projection onto the

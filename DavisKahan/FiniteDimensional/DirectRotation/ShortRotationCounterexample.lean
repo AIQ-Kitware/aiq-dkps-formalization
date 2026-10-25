@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Fable 5, Jon Crall
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.QNorm
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.QNorm
 
 /-!
 # The short-rotation full-displacement claim is false
@@ -40,6 +42,8 @@ the displacement-square majorization
 (`directRotation_displacementSquare_uiNorm`).
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 namespace ShortRotationCounterexample
@@ -56,7 +60,7 @@ abbrev E4 := EuclideanSpace ℝ (Fin 4)
 abbrev sv (i : Fin 4) : E4 := EuclideanSpace.single i 1
 
 /-- The competitor matrix `½·H` with `H` a sign matrix of Hadamard type. -/
-def Wmat : Matrix (Fin 4) (Fin 4) ℝ :=
+@[expose] def Wmat : Matrix (Fin 4) (Fin 4) ℝ :=
   (2⁻¹ : ℝ) • !![1, -1, -1, -1; 1, 1, 1, -1; -1, -1, 1, -1; 1, -1, 1, 1]
 
 /-- The competitor as a linear map. -/
@@ -116,6 +120,7 @@ private theorem Wlin_adjoint : LinearMap.adjoint Wlin = Wlin' :=
   Wequiv.adjoint_toLinearMap_eq_symm
 
 /-- The source subspace `span{e₀, e₁}`. -/
+@[expose]
 def U4 : Submodule ℝ E4 := Submodule.span ℝ {sv 0, sv 1}
 
 /-- The target subspace `W(U)`. -/
@@ -337,6 +342,7 @@ theorem kyFanSum_displacement_R :
 /-! ### The competitor side: `σ(I-W) = (√2, √2, 0, 0)` -/
 
 /-- The rotation-plane orthonormal family `(m₀, m₁, m₀', m₁')`. -/
+@[expose]
 def mv : Fin 4 → E4 :=
   ![(Real.sqrt 2)⁻¹ • (sv 0 + sv 2), (Real.sqrt 2)⁻¹ • (sv 1 + sv 3),
     (Real.sqrt 2)⁻¹ • (sv 0 - sv 2), (Real.sqrt 2)⁻¹ • (sv 1 - sv 3)]

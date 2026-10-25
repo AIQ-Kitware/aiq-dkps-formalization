@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Geometry.Halmos.TwoProjections
-import Mathlib.Analysis.InnerProductSpace.l2Space
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+module
+
+public import DavisKahan.Geometry.Halmos.TwoProjections
+public import Mathlib.Analysis.InnerProductSpace.l2Space
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
 /-!
 # Printed acuteness is weaker than a uniform projection gap
@@ -22,6 +24,8 @@ Consequently the projection gap is exactly one.
 This proves, inside Lean, that the finite-dimensional hypothesis in
 `projectionGap_lt_one_of_isAcute` cannot be removed.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open scoped lp

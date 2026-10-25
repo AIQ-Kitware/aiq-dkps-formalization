@@ -20,9 +20,13 @@ provides the conversion layer:
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Acharyya2025.MathlibBridge
-import Acharyya2025.Weyl
-import TauCeti.Analysis.Matrix.EntrywiseOpNorm
+module
+
+public import Acharyya2025.MathlibBridge
+public import Acharyya2025.Weyl
+public import TauCeti.Analysis.Matrix.EntrywiseOpNorm
+
+public section
 
 open scoped BigOperators RealInnerProductSpace
 open Module (finrank)
@@ -42,6 +46,7 @@ quantifies how close the sample CMDS matrix is to the population one.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
+@[expose]
 def MatrixL2OperatorClose {n : Nat} (A B : SqMat n) (ε : Real) : Prop :=
   ∀ x : EuclideanSpace Real (Fin n),
     ‖Matrix.toEuclideanLin (A - B) x‖ ≤ ε * ‖x‖

@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.SpectralTheory.BoundedTruncation
+module
+
+public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.SpectralTheory.BoundedTruncation
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -118,6 +122,7 @@ variable {Z : Submodule 𝕜 H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
 
 /-- The ambient action of a trial vector lying in the compression domain:
 `A₀ z + R z`. -/
+@[expose]
 noncomputable def action (D : UnboundedCompressionTrialData Z)
     (z : D.compression.domain) : H :=
   ((D.compression z : Z) : H) + D.residual ((z : Z))
@@ -126,6 +131,7 @@ noncomputable def action (D : UnboundedCompressionTrialData Z)
 
 /-- **Every bounded trial-block bundle is unbounded-compression data.**  No hypothesis is
 added to anything already proved over `Theorem63TrialData`. -/
+@[expose]
 noncomputable def ofBounded {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
     (data : Theorem63TrialData Z V) : UnboundedCompressionTrialData Z where
   compression := (data.compression.toLinearMap.toPMap ⊤)
@@ -228,10 +234,12 @@ variable {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
 variable (D : UnboundedCompressionTrialData Z)
 
 /-- The spectral cutoff `Ω(τ) = E_{A₀}([-τ, τ])` of the Ritz compression. -/
+@[expose]
 noncomputable def cutoff (τ : ℝ) : Z →L[ℂ] Z :=
   spectraSpectralCutoff D.compression D.compression_isSelfAdjoint τ
 
 /-- The bounded truncation `A₀ Ω(τ)` of the Ritz compression. -/
+@[expose]
 noncomputable def trunc (τ : ℝ) : Z →L[ℂ] Z :=
   spectraBoundedTruncation D.compression D.compression_isSelfAdjoint τ
 
@@ -295,6 +303,7 @@ theorem trunc_cutoff (τ : ℝ) (z : Z) : D.trunc τ (D.cutoff τ z) = D.trunc �
 
 /-- **The truncated trial subspace**: the ambient copy of the spectral subspace `Ω(τ)Z` of
 the Ritz compression. -/
+@[expose]
 noncomputable def truncSpace (τ : ℝ) : Submodule ℂ H :=
   (Z.subtypeL ∘L D.cutoff τ ∘L Z.orthogonalProjectionOnto -
     ContinuousLinearMap.id ℂ H).ker
@@ -348,6 +357,7 @@ theorem cutoff_apply_of_mem_truncSpace (τ : ℝ) (f : D.truncSpace τ) :
   exact hx
 
 /-- The inclusion of the truncated trial subspace into the trial subspace. -/
+@[expose]
 noncomputable def truncIncl (τ : ℝ) : D.truncSpace τ →L[ℂ] Z :=
   Theorem63TrialData.inclCLM (D.truncSpace_le τ)
 
@@ -357,6 +367,7 @@ theorem truncIncl_coe (τ : ℝ) (f : D.truncSpace τ) :
     ((D.truncIncl τ f : Z) : H) = (f : H) := rfl
 
 /-- The cutoff-corestriction of the trial subspace onto its truncation. -/
+@[expose]
 noncomputable def truncProj (τ : ℝ) : Z →L[ℂ] D.truncSpace τ :=
   (Z.subtypeL ∘L D.cutoff τ).codRestrict (D.truncSpace τ) (D.coe_cutoff_mem_truncSpace τ)
 
@@ -394,6 +405,7 @@ theorem norm_truncIncl_le (τ : ℝ) : ‖D.truncIncl τ‖ ≤ 1 := by
 /-! ### The bounded trial-block data on the truncated trial subspace -/
 
 /-- The bounded action carried by the truncated trial space: `A₀ Ω(τ) + R`. -/
+@[expose]
 noncomputable def truncAction (τ : ℝ) : Z →L[ℂ] H :=
   Z.subtypeL ∘L D.trunc τ + D.residual
 
@@ -420,6 +432,7 @@ theorem truncAction_symm (τ : ℝ) (z z' : Z) :
 /-- **The bounded trial-block data on the truncated trial subspace.**  Because the
 truncated subspace reduces the Ritz compression, this data's ambient action is the genuine
 ambient action `A₀ z + R z` at every one of its vectors. -/
+@[expose]
 noncomputable def truncData (V : Submodule ℂ H) [V.HasOrthogonalProjection] (τ : ℝ) :
     Theorem63TrialData (D.truncSpace τ) V :=
   Theorem63TrialData.ofAction (D.truncSpace τ) V
@@ -500,7 +513,8 @@ theorem truncData_compression_upper {α : ℝ}
     ∀ f : D.truncSpace τ,
       RCLike.re ⟪(D.truncData V τ).compression f, f⟫_ℂ ≤ α * ‖f‖ ^ 2 := by
   intro f
-  have hform := hupper ⟨(D.truncIncl τ f : Z), D.truncIncl_mem_domain τ f⟩
+  have hform := (TauCeti.LinearPMap.semiboundedAbove_iff _ _).mp hupper
+    ⟨(D.truncIncl τ f : Z), D.truncIncl_mem_domain τ f⟩
   rw [(D.truncData V τ).inner_compression_eq f, D.truncData_action V τ f,
     D.truncAction_apply τ (D.truncIncl τ f), inner_add_left]
   have hres : ⟪D.residual (D.truncIncl τ f), ((f : D.truncSpace τ) : H)⟫_ℂ = 0 :=

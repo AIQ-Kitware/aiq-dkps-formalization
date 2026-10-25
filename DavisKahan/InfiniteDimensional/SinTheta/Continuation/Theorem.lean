@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Endpoints
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.RotationChain
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Endpoints
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.RotationChain
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -114,6 +118,7 @@ noncomputable def targetSeparatingContour
     exact Γ.winding_complement lam (by simpa only [operatorPath_one] using hlam) hls
 
 /-- The selected spectral subspace at the source endpoint. -/
+@[expose]
 noncomputable def sourceSelectedSpectralSubspace
     (C : SpectralContinuationWitness A V s) : Submodule ℂ H :=
   boundedSelfAdjointSpectralSubspace A
@@ -121,6 +126,7 @@ noncomputable def sourceSelectedSpectralSubspace
     C.sourceSeparatingContour.measurable_selected
 
 /-- The selected spectral subspace at the target endpoint. -/
+@[expose]
 noncomputable def targetSelectedSpectralSubspace
     (C : SpectralContinuationWitness A V s) : Submodule ℂ H :=
   boundedSelfAdjointSpectralSubspace (A + V)

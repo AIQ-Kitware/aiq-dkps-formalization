@@ -31,10 +31,14 @@ Stable symbolic anchors exposed here include:
 * `DkpsQuench2026.Paper.TheoryPractice.populationMAE_sq_le_populationMSE`
 * `DkpsQuench2026.Paper.TheoryPractice.highProbMAE_queryEfficient_crossBudget_of_affineRiskGap`
 -/
-import DkpsQuench2026.Paper.QueryEfficiency
-import DkpsQuench2026.Paper.OLSQueryEfficiency
-import Mathlib.Analysis.Convex.Integral
-import Mathlib.Analysis.Convex.Mul
+module
+
+public import DkpsQuench2026.Paper.QueryEfficiency
+public import DkpsQuench2026.Paper.OLSQueryEfficiency
+public import Mathlib.Analysis.Convex.Integral
+public import Mathlib.Analysis.Convex.Mul
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -116,33 +120,39 @@ def PopulationMSEQueryEfficiency
     μ hμ Pf sqLoss truth candidate baseline
 
 /-- Absolute-error loss used by the empirical MAE evaluation. -/
+@[expose]
 def absLoss (prediction truth : ℝ) : ℝ :=
   |prediction - truth|
 
 /-- Arithmetic mean of a finite family of real values.
 
 At `n = 0` this is defined to be zero through the convention `0⁻¹ = 0`. -/
+@[expose]
 def empiricalMean {n : ℕ} (value : Fin n → ℝ) : ℝ :=
   (n : ℝ)⁻¹ * ∑ i, value i
 
 /-- Finite empirical mean absolute error. -/
+@[expose]
 def empiricalMAE {n : ℕ}
     (truth prediction : Fin n → ℝ) : ℝ :=
   empiricalMean fun i => absLoss (prediction i) (truth i)
 
 /-- Finite empirical mean squared error. -/
+@[expose]
 def empiricalMSE {n : ℕ}
     (truth prediction : Fin n → ℝ) : ℝ :=
   empiricalMean fun i => sqLoss (prediction i) (truth i)
 
 /-- Indicator that the candidate has strictly smaller absolute error than the
 baseline on one finite evaluation unit. -/
+@[expose]
 def strictAbsoluteErrorWin
     (truth candidate baseline : ℝ) : ℝ :=
   if absLoss candidate truth < absLoss baseline truth then 1 else 0
 
 /-- Fraction of finite evaluation units on which the candidate has strictly
 smaller absolute error than the baseline. -/
+@[expose]
 def empiricalWinFraction {n : ℕ}
     (truth candidate baseline : Fin n → ℝ) : ℝ :=
   empiricalMean fun i =>
@@ -152,12 +162,14 @@ def empiricalWinFraction {n : ℕ}
 arguments: they belong to the construction of `candidate` and `baseline`.
 Keeping this proposition purely numerical makes explicit that it is not the
 same proposition as `PopulationMSEQueryEfficiency`. -/
+@[expose]
 def EmpiricalCrossBudgetMAEClaim {n : ℕ}
     (truth candidate baseline : Fin n → ℝ) : Prop :=
   empiricalMAE truth candidate ≤ empiricalMAE truth baseline
 
 /-- Finite strict-win-rate comparison, such as the practical claim that the
 candidate wins on at least 65 percent of replicates. -/
+@[expose]
 def EmpiricalWinRateClaim {n : ℕ}
     (threshold : ℝ)
     (truth candidate baseline : Fin n → ℝ) : Prop :=
@@ -174,6 +186,7 @@ structure CrossBudgetQuerySets (Q : Type u) [DecidableEq Q] where
 /-! ## Clipping bridge -/
 
 /-- Clip a real prediction to the benchmark-score interval `[0,1]`. -/
+@[expose]
 def clipUnit (x : ℝ) : ℝ :=
   min 1 (max 0 x)
 

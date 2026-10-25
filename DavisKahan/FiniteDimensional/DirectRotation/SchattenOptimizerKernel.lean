@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalAttainment
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalAttainment
 
 /-!
 # Rigidity of the exceptional block of every Schatten optimizer
@@ -16,6 +18,8 @@ angles. For an acute ambient pair its entire kernel restriction is the
 identity. These assertions concern the actual ambient optimizer; no model
 or supplied block decomposition is assumed.
 -/
+
+public section
 
 noncomputable section
 

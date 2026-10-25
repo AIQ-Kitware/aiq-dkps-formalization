@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedParameterNormalization
-import ForTauCeti.Analysis.InnerProductSpace.PairedProjectionFamily
-import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteParameters
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedParameterNormalization
+public import ForTauCeti.Analysis.InnerProductSpace.PairedProjectionFamily
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteParameters
 
 /-!
 # Independent effective multiplicity parameters for Charbonnier transport
@@ -14,6 +16,8 @@ The weighted phase support is the sum of actual canonical eigenspace pairs
 with positive cosine below `b/a`. The normalized parameters are independent
 orthogonal projections on one whole multiplicity space from each pair.
 -/
+
+public section
 
 noncomputable section
 
@@ -26,6 +30,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- Physical supercritical interior angles. Only finitely many have
 nonzero eigenspace for a fixed finite-dimensional canonical rotation. -/
+@[expose]
 def weightedSupercriticalAngles (a b : ℝ) : Set ℝ :=
   {theta | theta ∈ Ioo 0 (Real.pi / 2) ∧ a * Real.cos theta < b}
 
@@ -43,12 +48,14 @@ theorem weightedSupercriticalAngles_exp_injective (a b : ℝ) :
 
 /-- The actual supercritical interior eigenangles of a unitary. Empty
 eigenspaces are excluded, so these indices retain multiplicities as spaces. -/
+@[expose]
 def weightedActiveRotationAngles (a b : ℝ) (U : unitary (E →L[ℂ] E)) : Set ℝ :=
   {theta | theta ∈ weightedSupercriticalAngles a b ∧
     Module.End.HasEigenvalue (U : E →L[ℂ] E).toLinearMap
       (Complex.exp ((theta : ℂ) * Complex.I))}
 
 /-- The actual positive canonical rotation eigenspace at an active angle. -/
+@[expose]
 def weightedRotationMultiplicitySpace
     (a b : ℝ) (U : unitary (E →L[ℂ] E)) (theta : weightedActiveRotationAngles a b U) :
     Submodule ℂ E :=

@@ -36,10 +36,14 @@ References:
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import TauCeti.Analysis.InnerProductSpace.Spectrum
-import DavisKahan.Alternative.FiniteDimensional.EigenbasisFrobenius
-import Acharyya2025.Weyl
+module
+
+public import Mathlib
+public import TauCeti.Analysis.InnerProductSpace.Spectrum
+public import DavisKahan.Alternative.FiniteDimensional.EigenbasisFrobenius
+public import Acharyya2025.Weyl
+
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace
 open Module (finrank)

@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamWeinberger
-import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamWeinberger
+public import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -188,6 +192,7 @@ theorem beamLowFiveHundred_le_domain' (ε : ℝ) (hε : 0 ≤ ε) :
 /-- **The perturbed beam restricted to its low spectral subspace.**  The subspace
 lies in the operator domain and is invariant, so the restriction is an honest
 linear endomorphism of a two-dimensional space. -/
+@[expose]
 def beamLowOperator (ε : ℝ) (hε : 0 ≤ ε) :
     (beamLowFiveHundred ε) →ₗ[ℂ] (beamLowFiveHundred ε) :=
   LinearMap.codRestrict (beamLowFiveHundred ε)
@@ -207,7 +212,8 @@ def beamLowOperator (ε : ℝ) (hε : 0 ≤ ε) :
 theorem beamLowOperator_isSymmetric (ε : ℝ) (hε : 0 ≤ ε) :
     (beamLowOperator ε hε).IsSymmetric := by
   intro x y
-  exact (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint
+  exact (TauCeti.LinearPMap.isSymmetric_iff _).mp
+    (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint
       (beamPerturbed_isSelfAdjoint ε))
     ⟨(x : BeamL2), beamLowFiveHundred_le_domain ε hε x.2⟩
     ⟨(y : BeamL2), beamLowFiveHundred_le_domain ε hε y.2⟩
@@ -221,6 +227,7 @@ def beamLowEigenbasis (ε : ℝ) (hε : 0 ≤ ε) (hε100 : ε < 100) :
     (finrank_beamLowFiveHundred ε hε hε100)
 
 /-- The `k`-th exact eigenvector of the perturbed beam below `500`. -/
+@[expose]
 def beamLowEigenvector (ε : ℝ) (hε : 0 ≤ ε) (hε100 : ε < 100) (k : Fin 2) : BeamL2 :=
   ((beamLowEigenbasis ε hε hε100 k : beamLowFiveHundred ε) : BeamL2)
 

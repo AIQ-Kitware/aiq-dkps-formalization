@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Real.SpectralRestriction
-import DavisKahan.SpectralTheory.SpectralCutoff
+module
+
+public import DavisKahan.SpectralTheory.Real.SpectralRestriction
+public import DavisKahan.SpectralTheory.SpectralCutoff
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -67,6 +71,7 @@ variable {E : Type v}
 
 /-- The real spectral cutoff `E_A([-τ, τ])`, descended from the complexified
 operator's canonical spectral projection. -/
+@[expose]
 noncomputable def realSpectralCutoff
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (τ : ℝ) : E →L[ℝ] E :=
   realSelfAdjointSpectralProjection A hA (Set.Icc (-τ) τ) measurableSet_Icc
@@ -146,6 +151,7 @@ theorem realSpectralCutoff_tendsto_identity
     LinearIsometry.norm_map]
 
 /-- **The real implementation of the coherent spectral cutoff interface.** -/
+@[expose]
 noncomputable def realSpectraSpectralCutoffInterface
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) :
     SpectralCutoffInterface A hA where

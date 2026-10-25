@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
-import DavisKahan.TanTheta.RitzPair
-import ForTauCeti.Analysis.InnerProductSpace.LyapunovPositivity
-import DavisKahan.Geometry.Angle.DoubleAngleGapBound
-import DavisKahan.Geometry.Halmos.CrossedDefectGap
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
+module
+
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
+public import DavisKahan.TanTheta.RitzPair
+public import ForTauCeti.Analysis.InnerProductSpace.LyapunovPositivity
+public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+public import DavisKahan.Geometry.Halmos.CrossedDefectGap
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
 
 /-!
 # The quarter angle for an unbounded ambient operator
@@ -46,6 +48,8 @@ inverse `G = C⁻¹` that Section 6.2 supplies.  Writing `S = A + H − c`,
   conjugating by the unitary `W` gives `G W + W* G ≥ 0`;
 * adding them is `X G + G X ≥ 0` for `X = W + W*`, and `X = 2 − 4 (P_U − P_V)²`.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -175,7 +179,8 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
       _ = ⟪K (G y), Aop ⟨G z, hGdom z⟩ - ((c : ℝ) : ℂ) • G z⟫_ℂ := (hKadj _ _).symm
       _ = ⟪Aop ⟨K (G y), hKdom ⟨G y, hGdom y⟩⟩ - ((c : ℝ) : ℂ) • K (G y), G z⟫_ℂ := by
           rw [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
-            hsym ⟨K (G y), hKdom ⟨G y, hGdom y⟩⟩ ⟨G z, hGdom z⟩]
+            (TauCeti.LinearPMap.isSymmetric_iff Aop).mp hsym
+              ⟨K (G y), hKdom ⟨G y, hGdom y⟩⟩ ⟨G z, hGdom z⟩]
           simp
       _ = ⟪K (Aop ⟨G y, hGdom y⟩ - ((c : ℝ) : ℂ) • G y), G z⟫_ℂ := by
           rw [hKcomm ⟨G y, hGdom y⟩, map_sub, map_smul]
@@ -662,11 +667,8 @@ theorem subspaceGap_lt_of_le_of_norm_sinTwoAngle_lt_one
     (hle : U.projectionGap V ≤ Real.sqrt 2 / 2)
     (hsin : ‖DavisKahanExt.sinTwoAngleOperator U V‖ < 1) :
     U.projectionGap V < Real.sqrt 2 / 2 := by
-  have hsym : U.projectionGap V = V.projectionGap U := by
-    change ‖U.starProjection - V.starProjection‖ = ‖V.starProjection - U.starProjection‖
-    rw [← norm_neg]
-    congr 1
-    abel
+  have hsym : U.projectionGap V = V.projectionGap U :=
+    Submodule.projectionGap_comm U V
   have hdir : V.projectionGap U = V.directedProjectionGap U :=
     TauCeti.DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent V U hcross
   have hclose : V.directedProjectionGap U ≤ Real.sqrt 2 / 2 := by

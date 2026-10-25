@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality
 
 /-!
 # Opposite phase optimizers and the exact uniqueness criterion
@@ -16,6 +18,8 @@ uniqueness for every finite-dimensional complex subspace pair.
 The journal paper's canonical-cutoff corollary includes this uniqueness
 classification. This does not classify every supercritical optimizer.
 -/
+
+public section
 
 noncomputable section
 open scoped InnerProductSpace ComplexConjugate

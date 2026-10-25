@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import Mathlib.Analysis.InnerProductSpace.Spectrum
-import ForTauCeti.Analysis.Normed.Operator.Restriction
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
+public import ForTauCeti.Analysis.Normed.Operator.Restriction
 
 /-!
 # Restricted-operator spectra and provisional embedding interfaces
@@ -36,6 +38,8 @@ and should eventually be built from the closed range of an isometric embedding.
   transport it by unitary invariance.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace Foundation
@@ -47,7 +51,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- A bounded operator represented as an orthogonal projection. -/
-def IsOrthogonalProjection (P : E →L[𝕜] E) : Prop :=
+@[expose] def IsOrthogonalProjection (P : E →L[𝕜] E) : Prop :=
   P ∘L P = P ∧ P.IsSymmetric
 
 /-- Off-diagonal relative to an explicitly supplied projection. -/
@@ -60,7 +64,7 @@ def IsOffDiagonalRelativeToProjection (P H : E →L[𝕜] E) : Prop :=
 -- `ContinuousLinearMap.restrict` already asks for, and unifiers matching at `instances`
 -- transparency have to be able to see that.
 /-- A subspace is invariant under a bounded operator. -/
-@[reducible] def InvariantFor (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
+@[expose, reducible] def InvariantFor (A : E →L[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
   ∀ x ∈ U, A x ∈ U
 
 /-- `ContinuousLinearMap.coe_restrict_apply`, restated for a hypothesis in `InvariantFor` form.
@@ -81,6 +85,7 @@ The operator algebra is naturally an algebra over its native scalar field
 pull it back along the canonical embedding `ℝ → 𝕜`.  For self-adjoint
 operators this captures the full spectrum, while retaining continuous spectral
 components in infinite dimension. -/
+@[expose]
 def realSpectrum (A : E →L[𝕜] E) : Set ℝ :=
   {r | (r : 𝕜) ∈ spectrum 𝕜 A}
 
@@ -95,6 +100,12 @@ def restrictedSpectrum (A : E →L[𝕜] E)
     (U : Submodule 𝕜 E) : Set ℝ :=
   {r | ∃ hU : InvariantFor A U,
     (r : 𝕜) ∈ spectrum 𝕜 (A.restrict hU)}
+
+/-- Membership supplies an invariant restriction whose spectrum contains the scalar. -/
+theorem mem_restrictedSpectrum_iff (A : E →L[𝕜] E) (U : Submodule 𝕜 E) (r : ℝ) :
+    r ∈ restrictedSpectrum A U ↔
+      ∃ hU : InvariantFor A U, (r : 𝕜) ∈ spectrum 𝕜 (A.restrict hU) := by
+  rfl
 
 /-- With a fixed invariance proof, `restrictedSpectrum` is exactly the real
 part of the Banach-algebra spectrum of that restriction. -/
@@ -120,6 +131,7 @@ theorem restrictedSpectrum_top (A : E →L[𝕜] E) :
 
 Invariance is part of the predicate, preventing a containment hypothesis from
 being discharged merely because no restricted operator was available. -/
+@[expose]
 def SpectrumIn (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (s : Set ℝ) : Prop :=
   InvariantFor A U ∧ restrictedSpectrum A U ⊆ s
@@ -140,6 +152,7 @@ theorem SpectrumIn.mono {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
 
 /-- A scalar function is uniformly bounded on the real Banach-algebra
 spectrum. -/
+@[expose]
 def BoundedOnSpectrum (A : E →L[𝕜] E) (f : ℝ → ℝ) : Prop :=
   ∃ C : ℝ, 0 ≤ C ∧ ∀ x ∈ realSpectrum A, |f x| ≤ C
 
@@ -148,6 +161,7 @@ noncomputable def spectralDistance (s t : Set ℝ) : ℝ :=
   sInf {r | ∃ x ∈ s, ∃ y ∈ t, r = |x - y|}
 
 /-- Two actual restricted spectra are separated by at least `d`. -/
+@[expose]
 def SpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →L[𝕜] F) (V : Submodule 𝕜 F) (d : ℝ) : Prop :=
   InvariantFor A U ∧ InvariantFor B V ∧
@@ -192,21 +206,38 @@ theorem SpectraSeparated.mono_gap {A : E →L[𝕜] E} {U : Submodule 𝕜 E}
 
 /-- The selected block of `A` is separated from the complementary block of
 `B`. -/
+@[expose]
 def HybridGap (A B : E →L[𝕜] E) (U V : Submodule 𝕜 E)
     (d : ℝ) : Prop := SpectraSeparated A U B Vᗮ d
 
 /-- Internal spectral gap of an invariant subspace and its invariant
 orthogonal complement. -/
+@[expose]
 def InternalGap (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (d : ℝ) : Prop := SpectraSeparated A U A Uᗮ d
 
 /-- Ordered separation of actual restricted spectra, giving a constant-one
 Sylvester estimate. -/
+@[expose]
 def OrderedSpectraSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →L[𝕜] F) (V : Submodule 𝕜 F) (d : ℝ) : Prop :=
   InvariantFor A U ∧ InvariantFor B V ∧
     ∀ a ∈ restrictedSpectrum A U, ∀ b ∈ restrictedSpectrum B V,
       a + d ≤ b
+
+/-- On the full spaces, ordered separation is exactly an inequality on the real spectra. -/
+theorem orderedSpectraSeparated_top_iff (A : E →L[𝕜] E) (B : F →L[𝕜] F) (d : ℝ) :
+    OrderedSpectraSeparated A ⊤ B ⊤ d ↔
+      ∀ a ∈ realSpectrum A, ∀ b ∈ realSpectrum B, a + d ≤ b := by
+  constructor
+  · rintro ⟨_, _, h⟩ a ha b hb
+    exact h a (by rw [restrictedSpectrum_top]; exact ha)
+      b (by rw [restrictedSpectrum_top]; exact hb)
+  · intro h
+    refine ⟨fun _ _ => Submodule.mem_top, fun _ _ => Submodule.mem_top, ?_⟩
+    intro a ha b hb
+    rw [restrictedSpectrum_top] at ha hb
+    exact h a ha b hb
 
 /-- Weakening an ordered gap preserves ordered spectral separation. -/
 theorem OrderedSpectraSeparated.mono_gap
@@ -241,6 +272,7 @@ theorem OrderedSpectraSeparated.toSpectraSeparated_swapped
   (h.toSpectraSeparated hd).symm
 
 /-- Interval/exterior separation from the classical `sin Θ` theorem. -/
+@[expose]
 def IntervalExteriorSeparated (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (B : F →L[𝕜] F) (V : Submodule 𝕜 F)
     (left right d : ℝ) : Prop :=
@@ -269,6 +301,7 @@ theorem IntervalExteriorSeparated.toSpectraSeparated
       _ = |a - b| := abs_sub_comm b a
 
 /-- One spectral component lies in a finite gap of the other. -/
+@[expose]
 def FiniteGapConfiguration (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (d : ℝ) : Prop :=
   ∃ left right, left ≤ right ∧
@@ -297,6 +330,7 @@ theorem FiniteGapConfiguration.toInternalGap
   exact (show IntervalExteriorSeparated A U A Uᗮ left right d from ⟨hU, hUc⟩).toSpectraSeparated
 
 /-- Ordered internal gap, in either orientation. -/
+@[expose]
 def OrderedInternalGap (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
     (d : ℝ) : Prop :=
   OrderedSpectraSeparated A U A Uᗮ d ∨

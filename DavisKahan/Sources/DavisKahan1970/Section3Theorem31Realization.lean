@@ -4,14 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.Geometry.Halmos.Realization
-import DavisKahan.Geometry.Halmos.UnitaryEquivalence
-import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
-import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
+module
 
-attribute [local instance 100] ContinuousLinearMap.realAlgebra
+public import DavisKahan.Geometry.Halmos.Realization
+public import DavisKahan.Geometry.Halmos.UnitaryEquivalence
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
+public import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
+
+public section
+
+attribute [local instance] ContinuousLinearMap.realAlgebra ContinuousLinearMap.realIsScalarTower
+
+attribute [local instance] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
   ContinuousLinearMap.instStarOrderedRingRCLike
 
@@ -293,14 +299,14 @@ theorem theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex
     ∃ J : E₂ →L[ℂ] F₂, J ∘L Θ₀ = Θ₁ ∘L J ∧
       ContinuousLinearMap.adjoint J ∘L J = 1 ∧
       J ∘L ContinuousLinearMap.adjoint J = 1 := by
-  obtain ⟨e, he⟩ := TauCeti.operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex Θ₀ Θ₁ hmult
+  obtain ⟨e, he⟩ := (TauCeti.operatorUnitaryEquiv_of_sameSpectralMultiplicity_complex Θ₀ Θ₁ hmult).exists_intertwiner
   refine ⟨(e : E₂ →L[ℂ] F₂), ContinuousLinearMap.ext fun x => he x, ?_, ?_⟩
   · exact (ContinuousLinearMap.norm_map_iff_adjoint_comp_self _).mp e.norm_map
   · rw [e.adjoint_eq_symm]
     exact ContinuousLinearMap.ext fun y => by simp
 
 
-attribute [local instance 100] ContinuousLinearMap.realAlgebra
+attribute [local instance] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
 
 /-- **Davis--Kahan 1970, Theorem 3.1, converse sentence, from the printed angle data alone.**
@@ -458,7 +464,7 @@ theorem theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv
   classical
   set K₀ : Submodule 𝕜' G₀ := nonzeroPart Θ₀ with hK₀
   set K₁ : Submodule 𝕜' G₁ := nonzeroPart Θ₁ with hK₁
-  obtain ⟨e, he⟩ := hmult
+  obtain ⟨e, he⟩ := hmult.exists_intertwiner
   set J : G₀ →L[𝕜'] G₁ := K₁.subtypeL ∘L (e : K₀ →L[𝕜'] K₁) ∘L K₀.orthogonalProjectionOnto with hJ
   -- the adjoint, computed once
   have hadjJ : ContinuousLinearMap.adjoint J =

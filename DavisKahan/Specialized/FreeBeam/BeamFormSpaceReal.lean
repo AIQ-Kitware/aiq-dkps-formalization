@@ -4,7 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Sol
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamFormSpaceScalar
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamFormSpaceScalar
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -67,8 +71,9 @@ theorem mem_beamFormSubmodule_iff (p : BeamPairSpace) :
     p ∈ beamFormSubmodule ↔
       ∀ k : ℕ,
         ∫ t, (pairFst p : ℝ → ℝ) t * intervalBumpD2 k t ∂unitIocMeasure =
-          ∫ t, (pairSnd p : ℝ → ℝ) t * intervalBump k t ∂unitIocMeasure :=
-  Scalar.mem_beamFormSubmodule_iff (𝕜 := ℝ) p
+          ∫ t, (pairSnd p : ℝ → ℝ) t * intervalBump k t ∂unitIocMeasure := by
+  simpa only [Scalar.bumpD2Scalar, Scalar.bumpScalar, RCLike.ofReal_real_eq_id, id_eq] using
+    Scalar.mem_beamFormSubmodule_iff (𝕜 := ℝ) p
 
 /-- Every form-domain element is affine plus the second primitive of its
 second derivative. -/

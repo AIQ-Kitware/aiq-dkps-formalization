@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
-import DavisKahan.SpectralTheory.Complexification.FormTransport
-import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
-import DavisKahan.SpectralTheory.Complexification.Spectrum
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+module
+
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
+public import DavisKahan.SpectralTheory.Complexification.FormTransport
+public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -107,6 +111,7 @@ this one, so `compressOperatorReal Z A = compressOperator Z A` holds by `rfl` an
 spellings such as `theorem63Compression` are a separate matter; it is Mathlib's
 functional calculus, not the compression, that forces those.)  The two names
 should eventually be one; until then, do not restate a compression fact for both. -/
+@[expose]
 def compressOperatorReal (A : E →L[ℝ] E) : Z →L[ℝ] Z :=
   Z.orthogonalProjectionOnto ∘L A ∘L Z.subtypeL
 
@@ -170,6 +175,7 @@ its canonical complexification.  This loses no source information: every
 preserves those values exactly.  Keeping the representative here avoids
 introducing a second real functional-calculus implementation solely for an
 operator whose only source use is through a unitarily invariant norm. -/
+@[expose]
 noncomputable def tanTwoDirectedCornerR
     (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :

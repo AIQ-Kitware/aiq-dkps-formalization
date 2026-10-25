@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
-import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
+public import DavisKahan.Analysis.FourthOrderODE.SmoothGreenIdentity
+public import Mathlib.Tactic
 
 /-!
 # Classical characteristic modes as fourth-order derivative data
@@ -16,6 +18,8 @@ kernel infrastructure.  A characteristic root now produces a concrete
 `FourthOrderData` object satisfying the free conditions and the fourth-order
 eigen-equation.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -28,6 +32,7 @@ open FreeBeam
 
 /-- The real closed-form beam mode bundled with all four derivative
 relations. -/
+@[expose]
 noncomputable def modeData (beta a b c d : ℝ) : FourthOrderData where
   f0 := FreeBeam.mode beta a b c d
   f1 := FreeBeam.modeD1 beta a b c d

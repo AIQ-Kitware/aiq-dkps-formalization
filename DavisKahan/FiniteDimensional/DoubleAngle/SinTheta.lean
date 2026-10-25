@@ -24,11 +24,15 @@ commutes with `S`.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+module
+
+import Mathlib.Analysis.InnerProductSpace.Semisimple
+
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 
 /-! # The subspace Davis–Kahan sin 2Θ theorem, every unitarily invariant norm
 
@@ -81,6 +85,8 @@ at all, only the reflection.
   Appl. 6 (1963), 159–173 (the per-vector case, formalized in
   `RotationSharp.lean`).
 -/
+
+public section
 
 namespace TauCeti
 open scoped InnerProductSpace
@@ -602,6 +608,7 @@ theorem sinTwoTheta_reflectionDefect_le
   rw [hscale]
   simpa [mul_assoc, mul_left_comm, mul_comm] using hmirror
 
+omit [FiniteDimensional 𝕜 E] in
 /-- The reflection defect is at most twice the perturbation when `V` reduces
 the second symmetric operator. -/
 theorem reflectionDefect_le_two_mul_perturbation
@@ -695,7 +702,8 @@ theorem opNorm_sinTwoTheta_le
     {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) :
     (b - a) * ‖(sinTwoAngleOperator U V).toContinuousLinearMap‖ ≤
       2 * ‖(B - A).toContinuousLinearMap‖ := by
-  exact sinTwoTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := E) (F := E))
+  simpa only [UnitarilyInvariantSeminorm.opNorm_apply] using
+    sinTwoTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := E) (F := E))
     hA hB hU hV hab hgap
 
 /-- Frobenius specialization of `sinTwoTheta_perturbation_le`. -/

@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6.1 Sol
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealMatchingExponent
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealMatchingExponent
 
 /-!
 # Unrestricted real nuclear transport matching
@@ -15,6 +17,8 @@ positive pair is itself a compact scalar minimum. This passage includes
 zero singular values, right angles and every multiplicity. Compact
 attainment supplies an actual ambient nuclear minimizer.
 -/
+
+public section
 
 noncomputable section
 

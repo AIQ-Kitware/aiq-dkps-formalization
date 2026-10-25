@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.ShiftedInverse
+module
+
+public import DavisKahan.Sylvester.ShiftedInverse
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -56,8 +60,7 @@ theorem isSymmetric_A₀_of_isSelfAdjoint
     TauCeti.LinearPMap.IsSymmetric D.A₀ := by
   have hformal := LinearPMap.adjoint_isFormalAdjoint hA₀.dense_domain
   rw [LinearPMap.isSelfAdjoint_def.mp hA₀] at hformal
-  intro x y
-  exact hformal x y
+  exact (LinearPMap.isSymmetric_iff _).mpr hformal
 
 end ExactSinTheta
 end DavisKahan

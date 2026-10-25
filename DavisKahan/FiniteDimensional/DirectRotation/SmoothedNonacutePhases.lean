@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerNoMixing
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerNoMixing
 
 /-!
 # Rotation commutation after removing the exceptional kernel
@@ -13,6 +15,8 @@ chosen defect completion. Multiplication by the principal cosine removes
 that freedom and restores global rotation commutation. This is the
 reduction for an intrinsic phase projection on the positive-cosine part.
 -/
+
+public section
 
 noncomputable section
 

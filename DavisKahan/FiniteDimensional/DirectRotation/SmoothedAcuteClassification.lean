@@ -3,13 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedProjectionOptimizers
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerNoMixing
-import ForTauCeti.Analysis.InnerProductSpace.JointEigenbasis
-import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Projection
-import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
-import Mathlib.LinearAlgebra.Complex.Module
-import DavisKahan.Geometry.Angle.AcuteCosine
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedProjectionOptimizers
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerNoMixing
+public import ForTauCeti.Analysis.InnerProductSpace.JointEigenbasis
+public import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Projection
+public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
+public import Mathlib.LinearAlgebra.Complex.Module
+public import DavisKahan.Geometry.Angle.AcuteCosine
 
 /-!
 # Complete projection classification of acute smoothed optimizers
@@ -20,6 +22,8 @@ compatible projection attainment, this classifies every optimizer when
 the principal cosine is injective. Zero and critical angles are included;
 right-angle defect spaces are excluded by the injectivity hypothesis.
 -/
+
+public section
 
 noncomputable section
 

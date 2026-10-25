@@ -9,10 +9,14 @@ factorization of the Quench embedding maps through a finite Acharyya
 configuration.
 -/
 
-import Acharyya2025.AlignedPipeline
-import Acharyya2025.RateChain
-import DkpsQuench2026.Paper.Theorem2
-import Acharyya2025.SpectralMeasurability
+module
+
+public import Acharyya2025.AlignedPipeline
+public import Acharyya2025.RateChain
+public import DkpsQuench2026.Paper.Theorem2
+public import Acharyya2025.SpectralMeasurability
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

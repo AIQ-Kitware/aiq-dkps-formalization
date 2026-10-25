@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedBranch
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedBranch
 
 /-!
 # Theorem 8.1 part (i) at unbounded scope
@@ -21,6 +23,8 @@ part nonpositive, and what is left is the claim.  Nothing about `P` is used: the
 inequality holds for every domain vector, and the paper's `Pᗮ` is only where it
 is read.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -61,7 +65,7 @@ theorem re_inner_split_of_reduces {B : H →ₗ.[ℂ] H} {Q : Submodule ℂ H}
       TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ : B.domain),
       Q.starProjection (x : H)⟫_ℂ) = 0 := by
     refine (Submodule.mem_orthogonal Qᗮ _).mp ?_ _
-      (hred.isInvariant_orthogonal _ (Qᗮ.starProjection_apply_mem _))
+      (hred.isInvariant_orthogonal.apply_mem _ (Qᗮ.starProjection_apply_mem _))
     rw [Submodule.orthogonal_orthogonal]
     exact Q.starProjection_apply_mem _
   have hexpand : (⟪B x, (x : H)⟫_ℂ)

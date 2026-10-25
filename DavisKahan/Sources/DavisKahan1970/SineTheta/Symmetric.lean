@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
-import DavisKahan.Sylvester.Unbounded.FormBoundedGap
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
+public import DavisKahan.Sylvester.Unbounded.FormBoundedGap
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -80,6 +84,7 @@ attribute [instance] SymmetricSinThetaProblem.proj_V
 namespace SymmetricSinThetaProblem
 
 /-- The perturbation `H` of the paper. -/
+@[expose]
 def perturbation (P : SymmetricSinThetaProblem (E := E)) : E →L[ℂ] E :=
   P.B - P.A
 
@@ -99,11 +104,20 @@ noncomputable def forwardData
   F₁_maps_domain := by intro x; simp
   residual_eq := by
     intro x
-    rfl
-  intertwines :=
-    PartialMap.reducingRestriction_inclusion_intertwines
-      ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
-      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
+    have h := TauCeti.LinearPMap.coe_reducingRestriction_apply
+      ((P.A.toLinearMap.toPMap ⊤)) P.U
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
+      (x : P.U) (by trivial)
+    change P.B ((x : P.U) : E) -
+      ((TauCeti.LinearPMap.reducingRestriction ((P.A.toLinearMap.toPMap ⊤)) P.U
+        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U
+          P.reduces_A_U) x : P.U) : E) = P.perturbation ((x : P.U) : E)
+    rw [h]
+    simp [perturbation]
+  intertwines := fun x =>
+    (TauCeti.LinearPMap.coe_reducingRestriction_apply ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V
+        P.reduces_B_V).orthogonal (x : P.Vᗮ) (by trivial)).symm
 
 /-- Internal data for the reversed application. -/
 noncomputable def reverseData
@@ -121,12 +135,20 @@ noncomputable def reverseData
   F₁_maps_domain := by intro x; simp
   residual_eq := by
     intro x
+    have h := TauCeti.LinearPMap.coe_reducingRestriction_apply
+      ((P.B.toLinearMap.toPMap ⊤)) P.V
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
+      (x : P.V) (by trivial)
+    change P.A ((x : P.V) : E) -
+      ((TauCeti.LinearPMap.reducingRestriction ((P.B.toLinearMap.toPMap ⊤)) P.V
+        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V
+          P.reduces_B_V) x : P.V) : E) = (-P.perturbation) ((x : P.V) : E)
+    rw [h]
     simp [perturbation]
-    rfl
-  intertwines :=
-    PartialMap.reducingRestriction_inclusion_intertwines
-      ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
-      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
+  intertwines := fun x =>
+    (TauCeti.LinearPMap.coe_reducingRestriction_apply ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U
+        P.reduces_A_U).orthogonal (x : P.Uᗮ) (by trivial)).symm
 
 /-- The first exact cross-projection block. -/
 def forwardSineBlock (P : SymmetricSinThetaProblem (E := E)) :

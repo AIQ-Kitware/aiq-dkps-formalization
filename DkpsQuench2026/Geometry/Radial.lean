@@ -8,7 +8,11 @@ version of the Quench engine, including the literal tie average and the
 compact/full-support/iid coverage composition.
 -/
 
-import DkpsQuench2026.Paper.QueryEfficiency
+module
+
+public import DkpsQuench2026.Paper.QueryEfficiency
+
+public section
 
 set_option linter.mathlibStandardSet false
 

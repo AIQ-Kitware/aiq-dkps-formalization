@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -64,18 +68,21 @@ noncomputable def cosineBlockC
 
 /-- The complementary overlap block whose singular values are the directed
 principal sines. -/
+@[expose]
 noncomputable def sineBlockC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[ℂ] Vᗮ :=
   Vᗮ.subtypeL.adjoint ∘L U.subtypeL
 
 /-- The positive cosine operator on the trial coordinate space. -/
+@[expose]
 noncomputable def cosineBlockModulusC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[ℂ] U :=
   ContinuousLinearMap.modulus (cosineBlockC U V)
 
 /-- The positive directed sine modulus on the trial coordinate space. -/
+@[expose]
 noncomputable def sineBlockModulusC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[ℂ] U :=
@@ -123,6 +130,7 @@ theorem spectrum_cosineBlockModulusC_subset_Icc
     _ = 1 := by ring
 
 /-- The literal directed angle of Section 1 and Section 6 of the paper. -/
+@[expose]
 noncomputable def directedAngleBlockC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[ℂ] U :=
@@ -135,6 +143,7 @@ noncomputable def directedCosAngleBlockC
   cfc Real.cos (directedAngleBlockC U V)
 
 /-- The paper's literal `sin Theta_0`. -/
+@[expose]
 noncomputable def directedSinAngleBlockC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[ℂ] U :=
@@ -260,8 +269,7 @@ theorem directedSinAngleBlockC_eq_sineBlockModulusC
     have hs := ContinuousLinearMap.modulus_comp_modulus (sineBlockC U V)
     rw [← hs]
     exact (eq_sub_of_add_eq hp).symm
-  show directedSinAngleBlockC U V =
-    CFC.sqrt ((sineBlockC U V).adjoint ∘L sineBlockC U V)
+  rw [sineBlockModulusC, ContinuousLinearMap.modulus_eq_sqrt]
   exact (CFC.sqrt_unique hsquare hnonneg).symm
 
 /-- The literal source `sin Theta_0` has exactly the singular values of the

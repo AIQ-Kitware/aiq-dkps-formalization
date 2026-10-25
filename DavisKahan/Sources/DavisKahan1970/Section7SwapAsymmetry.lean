@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Sharpness
-import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Sharpness
+public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

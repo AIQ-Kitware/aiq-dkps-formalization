@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6 Astra Pro
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
 
 /-!
 # Failure of full-displacement minimality at arbitrarily small angles
@@ -31,6 +33,8 @@ merely a comparison between two arbitrarily chosen orthogonal maps.
   Q-norm minimality and related failures outside that norm class precede this
   explicit short-angle refutation; no priority claim for that phenomenon is made.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -145,6 +149,7 @@ private theorem Wlin_adjoint (theta : Real) :
   (Wequiv theta).adjoint_toLinearMap_eq_symm
 
 /-- The target subspace. -/
+@[expose]
 def V4 (theta : Real) : Submodule Real E4 := U4.map (Wequiv theta).toLinearMap
 
 private theorem projection_V4_apply (theta : Real) (x : E4) :

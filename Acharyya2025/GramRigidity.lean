@@ -29,8 +29,12 @@ References:
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Acharyya2024.Common
-import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
+module
+
+public import Acharyya2024.Common
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
+
+public section
 
 open scoped RealInnerProductSpace BigOperators
 

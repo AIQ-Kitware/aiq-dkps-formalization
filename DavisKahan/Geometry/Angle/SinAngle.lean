@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import TauCeti.Analysis.InnerProductSpace.Modulus
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import TauCeti.Analysis.InnerProductSpace.Modulus
 
 /-!
 # Sine of the operator angle
@@ -16,6 +18,8 @@ Davis--Kahan geometry: the modulus of the difference of two orthogonal
 projections.  It is defined directly through the canonical `ContinuousLinearMap.modulus`
 implementation in `ForTauCeti`.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -27,6 +31,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The Spectra-backed sine-angle operator, defined as the modulus of the
 orthogonal-projector difference. -/
+@[expose]
 noncomputable def spectraSinAngleOperator
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[ℂ] H :=
@@ -82,6 +87,7 @@ theorem norm_spectraSinAngleOperator
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖spectraSinAngleOperator U V‖ = U.projectionGap V := by
+  rw [Submodule.projectionGap_def]
   change ‖ContinuousLinearMap.modulus
       (U.starProjection - V.starProjection)‖ =
     ‖U.starProjection - V.starProjection‖

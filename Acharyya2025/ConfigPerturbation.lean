@@ -43,13 +43,17 @@ corollary consumed by older downstream code.
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import Acharyya2024.Common
-import Acharyya2025.Weyl
-import Acharyya2025.Overlap
-import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
-import YuWangSamworth2015.Core.Residual
-import YuWangSamworth2015.Core.Procrustes
+module
+
+public import Mathlib
+public import Acharyya2024.Common
+public import Acharyya2025.Weyl
+public import Acharyya2025.Overlap
+public import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
+public import YuWangSamworth2015.Core.Residual
+public import YuWangSamworth2015.Core.Procrustes
+
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)
@@ -68,6 +72,7 @@ the square-root and sample-energy arguments explicitly accommodate clamping.
 Paper correspondence: this is the classical-MDS embedding `ψ̂` (when `S` is the
 sample Gram operator) or `ψ` (when `S` is the population Gram operator) appearing
 in Theorem 2. It is a plain definition, not a claim. -/
+@[expose]
 noncomputable def spectralConfig {n d : ℕ}
     (S : EuclideanSpace ℝ (Fin n) →ₗ[ℝ] EuclideanSpace ℝ (Fin n))
     (hS : S.IsSymmetric) (hd : d ≤ n) : Acharyya2024.Config n d :=
@@ -1111,6 +1116,7 @@ private theorem sum_norm_sq_spectralConfig_le (hd : d ≤ n) (hT : T.IsSymmetric
 /-- Frobenius error between two finite configurations, viewing the `n` points in
 `ℝ^d` as an `n × d` matrix.  This is the matrix Frobenius norm used by the
 perturbation proof before the legacy `ConfigError` conversion. -/
+@[expose]
 noncomputable def ConfigFrobError {n d : ℕ}
     (ψhat ψ : Acharyya2024.Config n d) : ℝ :=
   Real.sqrt (∑ i : Fin n, ‖ψhat i - ψ i‖^2)
@@ -1152,6 +1158,7 @@ theorem configError_le_sqrt_mul_ConfigFrobError {n d : ℕ}
 selected-block Davis--Kahan and residual/Parseval sharpenings, this expression
 has no direct ambient-`n` factor; ambient size enters only through whatever
 operator perturbation `ε` is supplied by the statistical/matrix layer. -/
+@[expose]
 noncomputable def configFrobBound (d : ℕ) (α Λ ε : ℝ) : ℝ :=
   Real.sqrt ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2)))^2 * ((d : ℝ) * (Λ + ε)))
     + Real.sqrt ((d : ℝ) * (ε / Real.sqrt α)^2)
@@ -1161,6 +1168,7 @@ noncomputable def configFrobBound (d : ℕ) (α Λ ε : ℝ) : ℝ :=
 /-- Linear coefficient in the local polynomial majorant for `configFrobBound`.
 The two linear pieces are the square-root commutator term and the
 Davis--Kahan reconstruction term. -/
+@[expose]
 noncomputable def configFrobLinearCoeff (d : ℕ) (α Λ : ℝ) : ℝ :=
   Real.sqrt ((d : ℝ) * (1 / Real.sqrt α)^2)
     + Real.sqrt (Λ * (4 * (d : ℝ) / α^2))
@@ -1168,6 +1176,7 @@ noncomputable def configFrobLinearCoeff (d : ℕ) (α Λ : ℝ) : ℝ :=
 /-- Quadratic coefficient in the local polynomial majorant for
 `configFrobBound`.  The bound `ε ≤ 1` replaces the sample-energy factor
 `Λ + ε` by the fixed ceiling `Λ + 1`. -/
+@[expose]
 noncomputable def configFrobQuadraticCoeff (d : ℕ) (α Λ : ℝ) : ℝ :=
   Real.sqrt
     ((2 * ((d : ℝ) * (4 * (d : ℝ) / α^2)))^2 * ((d : ℝ) * (Λ + 1)))
@@ -1176,6 +1185,7 @@ noncomputable def configFrobQuadraticCoeff (d : ℕ) (α Λ : ℝ) : ℝ :=
 spectral perturbation bound.  It is written as a degree-three-compatible
 polynomial (zero constant and cubic coefficients) because this is the local
 spectral object that is compared with the paper's `Poly₃` rate. -/
+@[expose]
 noncomputable def configFrobQuadraticMajorant (d : ℕ) (α Λ ε : ℝ) : ℝ :=
   configFrobLinearCoeff d α Λ * ε + configFrobQuadraticCoeff d α Λ * ε^2
 
@@ -1266,6 +1276,7 @@ theorem configFrobBound_le_configFrobQuadraticMajorant
 /-- Compatibility bound for the older `ConfigError` API.  It is definitionally
 `√n` times `configFrobBound`; the expression is kept expanded so existing
 downstream proofs that unfold `configBound` keep their previous normal form. -/
+@[expose]
 noncomputable def configBound (n d : ℕ) (α Λ ε : ℝ) : ℝ :=
   Real.sqrt n *
     ( Real.sqrt ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2)))^2 * ((d : ℝ) * (Λ + ε)))

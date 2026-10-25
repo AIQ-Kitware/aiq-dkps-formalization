@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.PartialMap.Complexification
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
-import DavisKahan.SpectralTheory.Complexification.Subspace
-import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
-import DavisKahan.SpectralTheory.SpectralRestrictionOperator
+module
+
+public import DavisKahan.SpectralTheory.PartialMap.Complexification
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
+public import DavisKahan.SpectralTheory.Complexification.Subspace
+public import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
+public import DavisKahan.SpectralTheory.SpectralRestrictionOperator
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -53,6 +57,7 @@ argument in several PVM declarations. -/
 local notation "Eℂ" => RealComplexification E
 /-- Conjugate a projection-valued measure by the canonical real-structure
 conjugation. -/
+@[expose]
 noncomputable def conjugatePVM (P : TauCeti.ProjValMeasure ℝ Eℂ) :
     TauCeti.ProjValMeasure ℝ Eℂ where
   proj B hB := conjugateOperator (P.proj B hB)
@@ -87,6 +92,7 @@ theorem conjugatePVM_diag (P : TauCeti.ProjValMeasure ℝ Eℂ) (z : Eℂ) :
   rfl
 
 /-- Conjugation preserves the coordinatewise complexified operator domain. -/
+@[expose]
 def conjugationDomain (A : E →ₗ.[ℝ] E)
     (z : (PartialMapComplexification.complexify A).domain) :
     (PartialMapComplexification.complexify A).domain :=
@@ -158,6 +164,7 @@ theorem conjugateOperator_tauCetiResolvent
     rw [h1, hsolve, conjugation_involutive]
   have hleft := TauCeti.LinearPMap.resolvent_smul_sub_apply hzbr jr
   rw [hjsolve] at hleft
+  rw [conjugateOperator_apply]
   change conjugation (TauCeti.LinearPMap.resolvent Aℂ z (conjugation ξ)) = _
   exact hleft.symm
 
@@ -181,13 +188,8 @@ theorem conjugateOperator_cayley (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) :
           (PartialMapComplexification.complexify A) (-Complex.I)) := by
     rw [conjugateOperator_tauCetiResolvent A hA (by simp) hni hconjI,
       TauCeti.LinearPMap.adjoint_resolvent hAℂ hni hconjI]
-  have hkeyRoot := hkey
-  rw [TauCeti.LinearPMap.local_resolvent_eq_root
-    (_root_.IsSelfAdjoint.mem_resolventSet_of_im_ne_zero hAℂ (by simp))] at hkeyRoot
-  change conjugateOperator (_root_.LinearPMap.cayley (PartialMapComplexification.complexify A))
-      = star (_root_.LinearPMap.cayley (PartialMapComplexification.complexify A))
-  simp only [_root_.LinearPMap.cayley, conjugateOperator_add, conjugateOperator_one,
-    conjugateOperator_complex_smul, hkeyRoot, star_add, star_one, star_smul,
+  simp only [TauCeti.LinearPMap.cayley_def, conjugateOperator_add, conjugateOperator_one,
+    conjugateOperator_complex_smul, hkey, star_add, star_one, star_smul,
     ContinuousLinearMap.star_eq_adjoint]
   rfl
 
@@ -229,8 +231,11 @@ theorem conjugateOperator_cfcHom {U : Eℂ →L[ℂ] Eℂ} (hU : IsStarNormal U)
   have hstarcont : Continuous (star : C(spectrum ℂ U, ℂ) → C(spectrum ℂ U, ℂ)) := by
     refine (Isometry.of_dist_eq fun g h => le_antisymm (hdist g h) ?_).continuous
     simpa only [star_star] using hdist (star g) (star h)
-  have hcont : Continuous Ψ :=
-    continuous_conjugateOperatorHom.comp ((cfcHom_continuous hU).comp hstarcont)
+  have hcont : Continuous Ψ := by
+    have h := continuous_conjugateOperatorHom.comp ((cfcHom_continuous hU).comp hstarcont)
+    convert h using 1
+    funext g
+    exact (conjugateOperatorHom_apply _).symm
   have hid : Ψ ((ContinuousMap.id ℂ).restrict (spectrum ℂ U)) = U := by
     change conjugateOperator (cfcHom hU (star ((ContinuousMap.id ℂ).restrict _))) = U
     rw [map_star, cfcHom_id hU, ← hUc, conjugateOperator_involutive]
@@ -249,6 +254,7 @@ theorem diagMeasure_conjugation (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (�
           (PartialMapComplexification.isSelfAdjoint_complexify hA)) η := by
   have hUc := conjugateOperator_cayley A hA
   refine TauCeti.BorelCalculus.diagMeasure_congr _ (DFunLike.ext _ _ fun g => ?_)
+  simp only [TauCeti.BorelCalculus.diagFunctional_apply]
   change (⟪conjugation η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap)
       (conjugation η)⟫_ℂ).re
     = (⟪η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap) η⟫_ℂ).re
@@ -311,7 +317,7 @@ theorem conjugateOperator_specProjection (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjo
     module
   -- The `rw` chain this replaced listed `pair` twice and `diagMeasure_conjugation` four
   -- times, once per occurrence; `simp only` reaches them all in one pass.
-  simp only [TauCeti.BorelCalculus.pair, h1, h2, h3, h4, diagMeasure_conjugation A hA]
+  simp only [TauCeti.BorelCalculus.pair_def, h1, h2, h3, h4, diagMeasure_conjugation A hA]
   have e1 := hIreal (ξ + ψ)
   have e2 := hIreal (ξ + Complex.I • ψ)
   have e3 := hIreal (ξ - ψ)
@@ -331,8 +337,13 @@ theorem conjugatePVM_spectralPVM
           (PartialMapComplexification.isSelfAdjoint_complexify hA)) =
       TauCeti.LinearPMap.spectralPVM
         (PartialMapComplexification.isSelfAdjoint_complexify hA) :=
-  TauCeti.ProjValMeasure.ext_of_diag fun ξ =>
-    congrArg (MeasureTheory.Measure.map (TauCeti.LinearPMap.cayleyInv
+  by
+    apply TauCeti.ProjValMeasure.ext_of_diag
+    intro ξ
+    rw [conjugatePVM_diag, TauCeti.LinearPMap.spectralPVM_def,
+      TauCeti.BorelCalculus.toProjValMeasure_diag, TauCeti.BorelCalculus.specDiag_def]
+    rw [TauCeti.BorelCalculus.toProjValMeasure_diag, TauCeti.BorelCalculus.specDiag_def]
+    exact congrArg (MeasureTheory.Measure.map (TauCeti.LinearPMap.cayleyInv
       (PartialMapComplexification.isSelfAdjoint_complexify hA)))
       (diagMeasure_conjugation A hA ξ)
 
@@ -352,6 +363,7 @@ theorem conjugateOperator_selfAdjointSpectralProjection
 
 /-- The canonical real spectral projection, obtained by descending the complex
 spectral projection of the complexified operator. -/
+@[expose]
 noncomputable def realSelfAdjointSpectralProjection
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) : E →L[ℝ] E :=
@@ -405,6 +417,7 @@ theorem realSelfAdjointSpectralProjection_idem
     selfAdjointSpectralProjection
       (PartialMapComplexification.complexify A)
       (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS = _
+  simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
   exact (TauCeti.LinearPMap.spectralPVM
     (PartialMapComplexification.isSelfAdjoint_complexify hA)).proj_idem S hS
 
@@ -417,11 +430,13 @@ theorem realSelfAdjointSpectralProjection_isSelfAdjoint
   apply RealComplexification.complexify_injective
   rw [TauCeti.RealComplexification.complexify_adjoint,
     complexify_realSelfAdjointSpectralProjection]
+  simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
   exact (TauCeti.LinearPMap.spectralPVM
     (PartialMapComplexification.isSelfAdjoint_complexify hA)).isSelfAdjoint_proj S hS
     |>.adjoint_eq
 
 /-- The real spectral range. -/
+@[expose]
 noncomputable def realSelfAdjointSpectralSubspace
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) : Submodule ℝ E :=
@@ -533,6 +548,7 @@ theorem realSelfAdjointSpectralProjection_compl
     RealComplexification.complexify_sub,
     RealComplexification.complexify_id,
     complexify_realSelfAdjointSpectralProjection]
+  simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
   exact (TauCeti.LinearPMap.spectralPVM
     (PartialMapComplexification.isSelfAdjoint_complexify hA)).proj_compl S hS
 
@@ -557,8 +573,8 @@ omit [CompleteSpace E] in
 private theorem coe_ofRealDomain (A : E →ₗ.[ℝ] E) (x : A.domain) :
     ((PartialMapComplexification.ofRealDomain A x :
       (PartialMapComplexification.complexify A).domain) : Eℂ) =
-      ofReal (x : E) :=
-  rfl
+      ofReal (x : E) := by
+  simp only [PartialMapComplexification.ofRealDomain]
 
 /-- The real spectral projection preserves the original real operator domain. -/
 theorem realSelfAdjointSpectralProjection_mem_domain
@@ -637,12 +653,12 @@ theorem realSelfAdjointSpectralSubspace_reducing
     simpa [hsub] using hcomm.symm
 
 /-- Canonical inclusion of a real spectral range. -/
+@[expose]
 noncomputable def realSelfAdjointSpectralSubspaceInclusion
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
     realSelfAdjointSpectralSubspace A hA S hS →L[ℝ] E :=
-  TauCeti.DavisKahanExt.PartialMap.reducingSubspaceInclusion
-    (realSelfAdjointSpectralSubspace A hA S hS)
+  (realSelfAdjointSpectralSubspace A hA S hS).subtypeL
 
 /-- The real spectral-range inclusion is isometric. -/
 theorem realSelfAdjointSpectralSubspaceInclusion_isometric
@@ -650,9 +666,10 @@ theorem realSelfAdjointSpectralSubspaceInclusion_isometric
     (S : Set ℝ) (hS : MeasurableSet S) :
     IsometricEmbedding
       (realSelfAdjointSpectralSubspaceInclusion A hA S hS) :=
-  TauCeti.DavisKahanExt.PartialMap.reducingSubspaceInclusion_isometric _
+  fun _ => rfl
 
 /-- Canonical real closed restriction to a measurable spectral range. -/
+@[expose]
 noncomputable def realSelfAdjointSpectralRestriction
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
@@ -679,9 +696,10 @@ theorem realSelfAdjointSpectralRestriction_inclusion_mem_domain
     (x : (realSelfAdjointSpectralRestriction A hA S hS).domain) :
     realSelfAdjointSpectralSubspaceInclusion A hA S hS
         (x : realSelfAdjointSpectralSubspace A hA S hS) ∈ A.domain := by
-  exact TauCeti.DavisKahanExt.PartialMap.reducingRestriction_inclusion_mem_domain
-    A (realSelfAdjointSpectralSubspace A hA S hS)
-    (realSelfAdjointSpectralSubspace_reducing A hA S hS) x
+  change ((x : realSelfAdjointSpectralSubspace A hA S hS) : E) ∈ A.domain
+  exact (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A
+    (realSelfAdjointSpectralSubspace A hA S hS)
+    (realSelfAdjointSpectralSubspace_reducing A hA S hS) _).mp x.property
 
 /-- The real spectral inclusion intertwines the restricted and ambient closed
 operators. -/
@@ -696,9 +714,11 @@ theorem realSelfAdjointSpectralRestriction_inclusion_intertwines
             A hA S hS x⟩ =
       realSelfAdjointSpectralSubspaceInclusion A hA S hS
         ((realSelfAdjointSpectralRestriction A hA S hS) x) := by
-  exact TauCeti.DavisKahanExt.PartialMap.reducingRestriction_inclusion_intertwines
-    A (realSelfAdjointSpectralSubspace A hA S hS)
-    (realSelfAdjointSpectralSubspace_reducing A hA S hS) x
+  exact (TauCeti.LinearPMap.coe_reducingRestriction_apply A
+    (realSelfAdjointSpectralSubspace A hA S hS)
+    (realSelfAdjointSpectralSubspace_reducing A hA S hS)
+    (x : realSelfAdjointSpectralSubspace A hA S hS)
+    (realSelfAdjointSpectralRestriction_inclusion_mem_domain A hA S hS x)).symm
 
 end
 end RealSpectralRestriction

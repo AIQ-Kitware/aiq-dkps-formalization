@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Operator laws for the source-defined unitarily invariant norms
@@ -20,6 +22,8 @@ Thus the universal theorem quantified over `SymmetricNormingFunction` does not
 hide an independently postulated operator ideal.  The ideal and its norm are
 constructed from the single source gauge exactly as in the paper.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

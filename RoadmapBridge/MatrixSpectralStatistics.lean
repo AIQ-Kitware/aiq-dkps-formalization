@@ -2,9 +2,11 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib
-import ForTauCeti.Topology.Berge
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
+module
+
+public import Mathlib
+public import ForTauCeti.Topology.Berge
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
 
 /-!
 # Roadmap bridge: `MatrixSpectralStatistics`
@@ -66,6 +68,8 @@ delivery is not the theorem, it is the *definition plus the theorems about it*. 
 that discharges theorems while leaving the definitions unrelated reproduces the defect it
 was built to remove, one level down.
 -/
+
+public section
 
 namespace RoadmapBridge.MatrixSpectralStatistics
 

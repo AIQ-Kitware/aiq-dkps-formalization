@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Real.SpectralRestriction
-import DavisKahan.SpectralTheory.Complexification.Spectrum
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
+module
+
+public import DavisKahan.SpectralTheory.Real.SpectralRestriction
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -85,6 +89,7 @@ theorem diagMeasure_conjugation_complexify (hT : IsSelfAdjoint T) (η : Eℂ) :
           (isSelfAdjoint_complexify_bounded hT).isStarNormal η := by
   have hUc := conjugateOperator_complexify_eq_star hT
   refine TauCeti.BorelCalculus.diagMeasure_congr _ (DFunLike.ext _ _ fun g => ?_)
+  simp only [TauCeti.BorelCalculus.diagFunctional_apply]
   change (⟪conjugation η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap)
       (conjugation η)⟫_ℂ).re
     = (⟪η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap) η⟫_ℂ).re
@@ -142,7 +147,7 @@ theorem conjugateOperator_boundedPVM_proj (hT : IsSelfAdjoint T)
       = conjugation (ξ + Complex.I • ψ) := by
     rw [map_add, conjugation_complex_smul, Complex.conj_I]
     module
-  simp only [TauCeti.BorelCalculus.pair, h1, h2, h3, h4,
+  simp only [TauCeti.BorelCalculus.pair_def, h1, h2, h3, h4,
     diagMeasure_conjugation_complexify hT]
   have e1 := hIreal (ξ + ψ)
   have e2 := hIreal (ξ + Complex.I • ψ)

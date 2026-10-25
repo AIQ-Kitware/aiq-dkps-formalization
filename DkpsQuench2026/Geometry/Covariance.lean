@@ -10,8 +10,12 @@ nonzero coefficient vector, and polarization supplies the coordinate-product
 integrability needed to expand the covariance matrix.
 -/
 
-import DkpsQuench2026.Geometry.Population
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import DkpsQuench2026.Geometry.Population
+public import Mathlib.Analysis.InnerProductSpace.PiL2
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -42,6 +46,7 @@ variable {Q : Type u} [DecidableEq Q]
 variable {X : Type v} [MeasurableSpace X]
 
 /-- Population covariance matrix around a supplied center. -/
+@[expose]
 noncomputable def perspectiveCovarianceMatrix
     {d : Nat}
     (Pf : Measure (Model Q X))
@@ -51,6 +56,7 @@ noncomputable def perspectiveCovarianceMatrix
 /-- A safe entrywise covariance tolerance.  The `d+1` denominator avoids a
 special zero-dimensional branch while leaving more than enough slack for the
 finite-dimensional `ℓ¹`--`ℓ²` estimate. -/
+@[expose]
 noncomputable def covarianceEntryTolerance (d : Nat) (κ : Real) : Real :=
   κ / (4 * (d + 1))
 

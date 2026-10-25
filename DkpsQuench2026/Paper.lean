@@ -1,8 +1,10 @@
-import DkpsQuench2026.Paper.Theorem2
-import DkpsQuench2026.Paper.QueryEfficiency
-import DkpsQuench2026.Paper.OLSQueryEfficiency
-import DkpsQuench2026.Paper.TheoryPractice
-import DkpsQuench2026.Paper.OLSInvariance
-import DkpsQuench2026.Paper.OLSPerturbation
-import DkpsQuench2026.Paper.EvaluationBridges
-import DkpsQuench2026.Paper.EvaluationConcentration
+module
+
+public import DkpsQuench2026.Paper.Theorem2
+public import DkpsQuench2026.Paper.QueryEfficiency
+public import DkpsQuench2026.Paper.OLSQueryEfficiency
+public import DkpsQuench2026.Paper.TheoryPractice
+public import DkpsQuench2026.Paper.OLSInvariance
+public import DkpsQuench2026.Paper.OLSPerturbation
+public import DkpsQuench2026.Paper.EvaluationBridges
+public import DkpsQuench2026.Paper.EvaluationConcentration

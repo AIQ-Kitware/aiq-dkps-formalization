@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.TanTheta.Vector
-import DavisKahan.SpectralTheory.SpectralRestriction
-import DavisKahan.SpectralTheory.BoundedFromSpectrum
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+module
+
+public import DavisKahan.TanTheta.Vector
+public import DavisKahan.SpectralTheory.SpectralRestriction
+public import DavisKahan.SpectralTheory.BoundedFromSpectrum
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 
 /-!
 # The unbounded Davis--Kahan tangent theorem, per-vector form
@@ -31,6 +33,8 @@ calculus supplies its full-domain inclusion, invariance, and sharp centered
 norm bound.  The resulting exact target is the orthogonal complement of that
 interval spectral range.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -82,7 +86,7 @@ theorem norm_starProjection_symmetricPMap_le_of_mem_orthogonal
       calc
         ⟪A ⟨w, hwdom⟩, z⟫_ℂ =
             ⟪w, A ⟨z, hzdom⟩⟫_ℂ :=
-          hA ⟨w, hwdom⟩ ⟨z, hzdom⟩
+          (LinearPMap.isSymmetric_iff _).mp hA ⟨w, hwdom⟩ ⟨z, hzdom⟩
         _ = ⟪w, A ⟨z, hzdom⟩ -
             Z.starProjection (A ⟨z, hzdom⟩)⟫_ℂ := by
           rw [inner_sub_right,

@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 Thinking
 -/
-import DavisKahan.Riccati.BoundedBasic
+module
+
+public import DavisKahan.Riccati.BoundedBasic
 
 /-!
 # Bounded graph invariance and the operator Riccati equation
@@ -14,6 +16,8 @@ the graph of an angular operator is equivalent to vanishing of its Riccati
 defect.  The later reduction, existence, uniqueness, and block-diagonalization
 steps can build on this result without repeating direct-sum coordinate algebra.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -28,6 +32,7 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
 
 /-- The standard graph vector with first coordinate `u` and second coordinate
 `X u`, represented in the Hilbert direct sum. -/
+@[expose]
 noncomputable def boundedBlockGraphVector (X : E0 →L[𝕜] E1) (u : E0) :
     WithLp 2 (E0 × E1) :=
   WithLp.toLp 2 (u, X u)
@@ -73,6 +78,7 @@ theorem toLp_mem_blockGraph_iff
     rw [hv]
 
 /-- Invariance of the bounded graph under the block operator. -/
+@[expose]
 def BoundedBlockGraphInvariant
     (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=

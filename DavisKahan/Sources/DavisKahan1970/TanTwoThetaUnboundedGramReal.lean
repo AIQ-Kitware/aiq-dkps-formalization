@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
-import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
-import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
+public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
+public import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -214,7 +218,7 @@ theorem approximationSingularValue_blockCompression_complexify
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp
     (complexifySubmoduleEquiv Ω) (complexifySubmoduleEquiv Γ)
     (blockCompression_complexify_equiv Ω Γ K)
-  exact (hsame n).symm.trans
+  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans
     (approximationSingularValue_complexify (blockCompression Ω Γ K) n)
 
 /-- The finite Ky Fan gauge of a directed corner is preserved on the nose by

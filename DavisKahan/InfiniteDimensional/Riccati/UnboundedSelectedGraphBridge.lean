@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Riccati.UnboundedPublic
-import DavisKahan.InfiniteDimensional.Riccati.BoundedGraphAcute
+module
+
+public import DavisKahan.InfiniteDimensional.Riccati.UnboundedPublic
+public import DavisKahan.InfiniteDimensional.Riccati.BoundedGraphAcute
 
 /-!
 # Rectangular extraction from an ambient selected graph
@@ -22,6 +24,8 @@ preservation and reduction of the closed block operator remain separate,
 genuinely unbounded obligations.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahanExt
 
@@ -32,11 +36,9 @@ variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
-private abbrev DirectSum (E0 E1 : Type*) := WithLp 2 (E0 × E1)
-
 /-- The rectangular first-to-second block of an ambient direct-sum operator. -/
 noncomputable def rectangularAngularPart
-    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1) : E0 →L[ℂ] E1 :=
+    (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1)) : E0 →L[ℂ] E1 :=
   WithLp.sndL 2 ℂ E0 E1 ∘L Y ∘L
     blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1)
 
@@ -44,11 +46,11 @@ omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The rectangular angular part reads off the second component of `Y` on the first block. -/
 @[simp]
 theorem rectangularAngularPart_apply
-    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1) (x : E0) :
+    (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1)) (x : E0) :
     rectangularAngularPart Y x =
       WithLp.snd
         (Y (blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1) x)) :=
-  rfl
+  by rfl
 
 omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The unbounded and bounded block-graph definitions use the same direct-sum
@@ -60,7 +62,7 @@ theorem unboundedBlockGraph_eq_blockGraph (X : E0 →L[ℂ] E1) :
 /-- An ambient angular operator over the zero coordinate graph is exactly the
 ambient block angular operator induced by its rectangular part. -/
 theorem ambientAngular_eq_blockAngularOperator
-    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
+    (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1))
     (hY : IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y) :
     Y = blockAngularOperator (rectangularAngularPart Y) := by
@@ -102,7 +104,7 @@ theorem ambientAngular_eq_blockAngularOperator
 /-- The ambient graph subspace of an angular operator over the zero graph is
 exactly the rectangular block graph extracted from that operator. -/
 theorem graphSubspace_eq_unboundedBlockGraph_rectangularAngularPart
-    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
+    (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1))
     (hY : IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y) :
     graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y =
@@ -121,7 +123,7 @@ the raw block core, so this endpoint does not reconstruct local closed-operator
 bundles. -/
 noncomputable def ContractiveReducingGraphSelection.ofAmbientAngularGraph
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
+    (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1))
     (hY : IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
     (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))
@@ -141,7 +143,7 @@ noncomputable def ContractiveReducingGraphSelection.ofAmbientAngularGraph
 its domain-aware partial-map reduction data. -/
 theorem exists_strongRiccati_solution_of_ambientAngularGraph
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
-    (Y : DirectSum E0 E1 →L[ℂ] DirectSum E0 E1)
+    (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1))
     (hY : IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
     (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))

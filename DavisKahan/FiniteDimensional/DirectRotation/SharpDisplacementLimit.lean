@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SharpDisplacement
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SharpDisplacement
 
 /-!
 # Limiting sharpness of the uniform acute-pair displacement constant
@@ -15,6 +17,8 @@ identifies the limiting coefficient.  This theorem is stated in terms of the
 witness's actual canonical rotation and globally optimal competitor; therefore
 it implies the optimality of the uniform constant for arbitrary UI norms.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.MaximalDomainTransport
-import DavisKahan.SpectralTheory.FormMethod.GraphClosedness
-import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.MaximalDomainTransport
+public import DavisKahan.SpectralTheory.FormMethod.GraphClosedness
+public import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
+public import Mathlib.Tactic
 
 /-!
 # Assembly of the paper-facing free-beam analytic foundation
@@ -23,6 +25,8 @@ After this reduction, the remaining genuinely analytic obligations are Green
 symmetry, self-adjointness, compactness, affine-kernel identification,
 root localization, and ODE-to-spectrum identification.
 -/
+
+public section
 
 open Set
 open scoped InnerProductSpace
@@ -109,7 +113,11 @@ noncomputable def toSobolevTraceFoundation
   free_le_maximal := D.traceModel.freeAmbientDomain_le_maximalAmbientDomain
   maximalFourth := D.traceModel.maximalFourthAmbient
   freeFourth := D.traceModel.freeFourthAmbient
-  freeFourth_agrees := D.traceModel.freeFourthAmbient_agrees
+  freeFourth_agrees := fun x => by
+    convert D.traceModel.freeFourthAmbient_agrees x using 1
+    congr 1
+    apply Subtype.ext
+    exact (D.traceModel.coe_freeToMaximal x).symm
   traceSecondLeft := D.traceModel.traceSecondLeftAmbient
   traceThirdLeft := D.traceModel.traceThirdLeftAmbient
   traceSecondRight := D.traceModel.traceSecondRightAmbient

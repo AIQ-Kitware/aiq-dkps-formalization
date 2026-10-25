@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.SpectralTheory.SelfAdjointBorelCalculus
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 
 /-!
@@ -30,6 +32,8 @@ lane row listed as promotable, this is the only one that passes: it imports
 six carry 1, 2, 3, 4, 8 and 24 Experimental modules in closure and stay where
 they are until those clear.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.Sylvester
@@ -309,6 +313,7 @@ theorem spectralProjection_select_right
 
 open Classical in
 /-- The choice-based real step symbol used by the original finite-step file. -/
+@[expose]
 noncomputable def chosenFiniteStepSymbol {n : ℕ}
     (cell : Fin n → Set ℝ) (rep : Fin n → ℝ) (x : ℝ) : ℝ :=
   if hx : ∃ i, x ∈ cell i then rep (Classical.choose hx) else x

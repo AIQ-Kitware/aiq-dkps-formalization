@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.SpectralGapFormBounds
-import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
-import DavisKahan.Geometry.Polar.DirectRotation
-import DavisKahan.SpectralTheory.OperatorAngle
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+module
+
+public import DavisKahan.SpectralTheory.SpectralGapFormBounds
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import DavisKahan.SpectralTheory.OperatorAngle
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -106,6 +110,7 @@ theorem maximalAngle_lt_pi_div_four_iff {𝕜 : Type*} [RCLike 𝕜] {E : Type*}
 
 /-- The canonical low branch of Theorem 8.1: the genuine spectral subspace of
 the perturbed operator for the closed half-line `Iic alpha`. -/
+@[expose]
 def canonicalLowBranch (B : E →L[ℂ] E) (hB : B.IsSymmetric)
     (alpha : ℝ) : Submodule ℂ E :=
   boundedSelfAdjointSpectralSubspace B hB (Set.Iic alpha) measurableSet_Iic
@@ -260,7 +265,7 @@ theorem sqrt_two_div_two_mul_norm_le_norm_starProjection
       _ = P.projectionGap M * ‖y‖ := by
           rw [show ‖M.starProjection - P.starProjection‖ =
             ‖P.starProjection - M.starProjection‖ from norm_sub_rev _ _]
-          rfl
+          rw [Submodule.projectionGap_def]
       _ ≤ Real.sqrt 2 / 2 * ‖y‖ :=
           mul_le_mul_of_nonneg_right hgap (norm_nonneg y)
   have hpyth : ‖y‖ ^ 2 = ‖P.starProjection y‖ ^ 2 + ‖Pᗮ.starProjection y‖ ^ 2 :=
@@ -284,7 +289,9 @@ theorem norm_starProjection_lt_of_mem_orthogonal
     simp only [sub_apply, hQy, sub_zero]
   rw [heq]
   calc ‖(P.starProjection - Q.starProjection) y‖
-      ≤ P.projectionGap Q * ‖y‖ := ContinuousLinearMap.le_opNorm _ _
+      ≤ P.projectionGap Q * ‖y‖ := by
+        simpa only [Submodule.projectionGap_def] using
+          (P.starProjection - Q.starProjection).le_opNorm y
     _ < Real.sqrt 2 / 2 * ‖y‖ :=
         mul_lt_mul_of_pos_right hq (norm_pos_iff.mpr hy0)
 
@@ -438,19 +445,13 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
     -- restricted spectra give the ordered form bounds
     have hformLow : ∀ x ∈ M, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2 := by
       intro x hx
-      refine re_inner_le_on_subspace_of_restriction_spectrum_subset_Iic
-        hAHsym hMreduces.1 ?_ hx
-      rw [← realSpectrum_eq_spectrum_real]
-      intro r hr
-      exact hMlow.2 ⟨hMreduces.1, hr⟩
+      rw [inner_re_symm (𝕜 := ℂ) ((A + H) x) x]
+      exact re_inner_le_of_spectrumIn_Iic hAHsym hMlow hx
     have hformHigh : ∀ x ∈ Mᗮ,
         (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪(A + H) x, x⟫_ℂ := by
       intro x hx
-      refine le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-        hAHsym hMreduces.2 ?_ hx
-      rw [← realSpectrum_eq_spectrum_real]
-      intro r hr
-      exact hMhigh.2 ⟨hMreduces.2, hr⟩
+      rw [inner_re_symm (𝕜 := ℂ) ((A + H) x) x]
+      exact le_re_inner_of_spectrumIn_Ici hAHsym hMhigh hx
     have hMperpperp : (Mᗮ)ᗮ = M := Submodule.orthogonal_orthogonal M
     have hquarterPerp : IsQuarterAcute Pᗮ Mᗮ := by
       refine isQuarterAcute_of_orderedFormGap A H Pᗮ Mᗮ hA hH hAPperp

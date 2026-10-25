@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import DavisKahan.InfiniteDimensional.DoubleAngle
+module
+
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+
+public section
 
 open TauCeti.DavisKahanExt
 
@@ -141,7 +145,7 @@ theorem sqrt_two_mul_directedGap_le_norm_sinTwoAngleOperator
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hclose : V.directedProjectionGap U ≤ Real.sqrt 2 / 2) :
     Real.sqrt 2 * V.directedProjectionGap U ≤ ‖sinTwoAngleOperator U V‖ := by
-  have hg0 : 0 ≤ V.directedProjectionGap U := norm_nonneg _
+  have hg0 : 0 ≤ V.directedProjectionGap U := V.directedProjectionGap_nonneg U
   have hcos := sqrt_two_div_two_le_sqrt_one_sub_sq hclose hg0
   calc Real.sqrt 2 * V.directedProjectionGap U
       = 2 * (Real.sqrt 2 / 2) * V.directedProjectionGap U := by ring

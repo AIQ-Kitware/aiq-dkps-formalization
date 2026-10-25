@@ -1,4 +1,6 @@
-import RoadmapBridge.Integration
-import RoadmapBridge.MatrixSpectralStatistics
-import RoadmapBridge.OperatorTheory
-import RoadmapBridge.CanonicalConsumers
+module
+
+public import RoadmapBridge.Integration
+public import RoadmapBridge.MatrixSpectralStatistics
+public import RoadmapBridge.OperatorTheory
+public import RoadmapBridge.CanonicalConsumers

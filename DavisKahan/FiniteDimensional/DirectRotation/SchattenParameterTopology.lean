@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenMultiplicityParameters
-import ForTauCeti.Analysis.InnerProductSpace.Projection.ParameterTopology
-import ForTauCeti.Analysis.InnerProductSpace.LinearIsometryEquivCompact
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenMultiplicityParameters
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.ParameterTopology
+public import ForTauCeti.Analysis.InnerProductSpace.LinearIsometryEquivCompact
 
 /-!
 # Operator norm topology of all complex Schatten optimizers
@@ -15,6 +17,8 @@ onto the full ambient optimizer set. Factoring the phase coordinates by
 the actual active canonical eigenspaces gives independent compact
 projection factors, with no choice of a competitor frame.
 -/
+
+public section
 
 noncomputable section
 

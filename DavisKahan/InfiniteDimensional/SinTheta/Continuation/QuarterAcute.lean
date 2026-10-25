@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedBranch
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedBranch
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -44,6 +48,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The explicit Lipschitz coefficient supplied by one fixed separating
 contour along an affine bounded perturbation path. -/
+@[expose]
 noncomputable def selectedBranchProjectionLipschitzConstant
     (Γ : PiecewiseC1ClosedContour) (K : H →L[ℂ] H) (delta : ℝ) : ℝ :=
   ‖rieszNormalization‖ *
@@ -96,9 +101,7 @@ theorem subspaceGap_selectedSpectralSubspacePath_le_of_identification
         (selectedSpectralSubspacePath A K s hs hself u) ≤
       selectedBranchProjectionLipschitzConstant Γ K delta *
         ‖(t : ℝ) - (u : ℝ)‖ := by
-  change
-    ‖(selectedSpectralSubspacePath A K s hs hself t).starProjection -
-        (selectedSpectralSubspacePath A K s hs hself u).starProjection‖ ≤ _
+  rw [Submodule.projectionGap_def]
   rw [← selectedSpectralProjectionPath_eq_starProjection A K s hs hself t,
     ← selectedSpectralProjectionPath_eq_starProjection A K s hs hself u]
   exact norm_selectedSpectralProjectionPath_sub_le_of_identification

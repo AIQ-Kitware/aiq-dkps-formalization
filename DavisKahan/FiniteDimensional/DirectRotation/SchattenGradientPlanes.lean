@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientNoMixing
-import ForTauCeti.Analysis.InnerProductSpace.OrthogonalProjectionPhases
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientNoMixing
+public import ForTauCeti.Analysis.InnerProductSpace.OrthogonalProjectionPhases
 
 /-!
 # Exact scalar costs on paired Schatten-gradient levels
@@ -21,6 +23,8 @@ An empty gradient eigenspace gives an empty sum. The separate zero-gradient
 reflection bound and assembly over all gradient levels are still needed for
 the unrestricted principal-angle theorem.
 -/
+
+public section
 
 noncomputable section
 

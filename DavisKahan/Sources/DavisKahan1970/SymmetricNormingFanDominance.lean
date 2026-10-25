@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Ideals.KyFanNorm
-import DavisKahan.Sources.DavisKahan1970.Section4Real
-import DavisKahan.Sources.DavisKahan1970.Section5
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
-import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.KyFanNorm
+public import DavisKahan.Sources.DavisKahan1970.Section4Real
+public import DavisKahan.Sources.DavisKahan1970.Section5
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

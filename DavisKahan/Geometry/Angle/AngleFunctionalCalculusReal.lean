@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
-import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
-import DavisKahan.SpectralTheory.Complexification.FormTransport
-import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
+module
+
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
+public import DavisKahan.SpectralTheory.Complexification.FormTransport
+public import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
 
 /-!
 # The paper's operator angle between two **real** subspaces
@@ -54,6 +56,8 @@ complexification:
   III*, SIAM J. Numer. Anal. 7 (1970), 1--46: standing assumption 1, and the
   angle operators of Sections 1 and 2.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.Angle
@@ -120,6 +124,7 @@ def angleOperatorR : E →L[ℝ] E :=
     (angleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 
 /-- The paper's ambient `sin 2Θ` for a pair of **real** closed subspaces. -/
+@[expose]
 def sinTwoAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
     (sinTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
@@ -142,6 +147,7 @@ double-angle tangent theorem concludes on: a unitarily invariant norm sees a
 self-adjoint operator through its singular values, so it cannot tell `tan 2Θ`
 from `|tan 2Θ|`, and only the latter is defined without a quarter-acute branch
 hypothesis. -/
+@[expose]
 def absTanTwoAngleOperatorR : E →L[ℝ] E :=
   realPartOperator
     (absTanTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))

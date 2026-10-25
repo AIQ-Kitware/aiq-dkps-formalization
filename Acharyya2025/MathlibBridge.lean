@@ -7,7 +7,11 @@ eventual cleanup into Mathlib-facing lemmas, while the paper-specific CMDS and
 spectral perturbation statements live in `Acharyya2025.SpectralPipeline`.
 -/
 
-import Acharyya2025.Deterministic
+module
+
+public import Acharyya2025.Deterministic
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory
@@ -20,6 +24,7 @@ open Acharyya2024
 abbrev SqMat (n : Nat) := Matrix (Fin n) (Fin n) Real
 
 /-- Convert a curried dissimilarity matrix into a Mathlib matrix. -/
+@[expose]
 def disMatToMatrix {n : Nat} (D : DisMat n) : SqMat n :=
   fun i j => D i j
 
@@ -47,6 +52,7 @@ Entrywise closeness in Mathlib matrix notation.
 
 Formalized by Codex 5.5 High, per user-observed model label.
 -/
+@[expose]
 def MatrixEntrywiseClose {n : Nat} (A B : SqMat n) (ε : Real) : Prop :=
   ∀ i j : Fin n, |A i j - B i j| ≤ ε
 
@@ -67,6 +73,7 @@ Formalized by Codex 5.5 High, per user-observed model label.
 -/
 -- Note: an encoding of matrix symmetry for the curried representation; it is not
 -- itself a paper assumption but is used to match Mathlib's `Matrix.IsSymm`.
+@[expose]
 def SymmetricDisMat {n : Nat} (D : DisMat n) : Prop :=
   ∀ i j : Fin n, D j i = D i j
 
@@ -132,6 +139,7 @@ bound under `r = ω(n³)`); this file only states the predicate, not the bound.
 
 Formalized by Codex 5.5 High, per user-observed model label.
 -/
+@[expose]
 def MatrixOperatorNormClose {n : Nat} (A B : SqMat n) (ε : Real) : Prop :=
   ∀ x : Rvec n, ‖(A - B).mulVec x‖ ≤ ε * ‖x‖
 

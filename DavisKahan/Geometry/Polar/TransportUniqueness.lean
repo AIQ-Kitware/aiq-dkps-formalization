@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.Geometry.Angle.CosineKernel
+module
+
+public import DavisKahan.Geometry.Angle.CosineKernel
 
 /-!
 # Uniqueness from relative phase and crossed-defect actions
@@ -13,6 +15,8 @@ right angles. Its two crossed-defect actions determine the remainder.
 These are Hilbert-space geometric uniqueness statements, independent of
 finite dimension, a particular spectral penalty or optimality.
 -/
+
+public section
 
 noncomputable section
 

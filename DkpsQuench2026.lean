@@ -1,8 +1,10 @@
-import DkpsQuench2026.Core
-import DkpsQuench2026.Paper
-import DkpsQuench2026.Geometry
-import DkpsQuench2026.Response
-import DkpsQuench2026.Spectral
-import DkpsQuench2026.Probability
-import DkpsQuench2026.Rates
-import DkpsQuench2026.QueryEfficiency
+module
+
+public import DkpsQuench2026.Core
+public import DkpsQuench2026.Paper
+public import DkpsQuench2026.Geometry
+public import DkpsQuench2026.Response
+public import DkpsQuench2026.Spectral
+public import DkpsQuench2026.Probability
+public import DkpsQuench2026.Rates
+public import DkpsQuench2026.QueryEfficiency

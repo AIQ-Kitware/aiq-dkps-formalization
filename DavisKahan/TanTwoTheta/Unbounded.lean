@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.TanTwoTheta.BoundedOffDiagonal
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.TanTwoTheta.BoundedOffDiagonal
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -52,8 +56,7 @@ theorem doubleCosineDenominator_pos
   have hglt : U.directedProjectionGap V < Real.sqrt 2 / 2 :=
     lt_of_le_of_lt (Submodule.directedProjectionGap_le_projectionGap U V) hquarter
   have hg0 : 0 ≤ U.directedProjectionGap V := by
-    rw [show U.directedProjectionGap V =
-      ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
+    rw [Submodule.directedProjectionGap_def]
     exact norm_nonneg _
   have h2 : (Real.sqrt 2) ^ 2 = 2 := Real.sq_sqrt (by norm_num)
   nlinarith

@@ -3,17 +3,19 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.SpectralTheory.OperatorAngle
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
-import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
-import TauCeti.Analysis.OperatorIdeal.Family.Schatten
-import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.SpectralTheory.OperatorAngle
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
+public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic
+public import TauCeti.Analysis.OperatorIdeal.Family.Schatten
+public import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Symmetric norm ideals
@@ -71,6 +73,8 @@ Before general symmetric ideals, finish Hilbert--Schmidt and trace class as
 test cases.  They expose missing summability and adjoint APIs without the full
 symmetric-gauge representation theorem.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -147,6 +151,7 @@ else here does.
 Only `unitary_invariant` takes any work: the family supplies a two-sided
 *bound*, and the equality comes from applying it in both directions with
 `‖U‖, ‖Uinv‖ ≤ 1`. -/
+@[expose]
 noncomputable def ofCanonical
     (N : TauCeti.SymmetricOperatorIdealFamily (𝕜 := 𝕜))
     [N.toOperatorIdealFamily.IsComplete] :

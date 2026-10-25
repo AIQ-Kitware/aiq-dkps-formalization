@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SectionTwo
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SectionTwo
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -411,6 +415,10 @@ theorem tanTwoTheta_from_reducingSubspace
         2 * N.gauge B := by
   have hUred := TauCeti.LinearPMap.reducesSubspace_specRange
     hA (Set.Iic c) measurableSet_Iic
+  have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := E) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (E →L[ℂ] E)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  rw [← hAlg]
   simpa [TauCeti.DavisKahan.Angle.HasDefinedDoubleTangent,
     TauCeti.DavisKahan.Angle.angleOperator_complex,
     TauCeti.DavisKahan.Angle.tanTwoAngleOperator_complex] using

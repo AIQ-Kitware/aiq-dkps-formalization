@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Theorem
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Theorem
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -41,6 +45,7 @@ universe v
 
 /-- Residual separation left by the standard finite-gap off-diagonal spectral
 enclosure with original gap `d` and perturbation size `r`. -/
+@[expose]
 noncomputable def offDiagonalContinuationMargin (d r : ℝ) : ℝ :=
   (3 * d - Real.sqrt (d ^ 2 + 4 * r ^ 2)) / 2
 

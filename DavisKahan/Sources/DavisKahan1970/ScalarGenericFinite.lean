@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
-import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
-import DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
+public import DavisKahan.FiniteDimensional.DoubleAngle.SinTwoThetaResidual
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
 
 /-!
 # Scalar-generic headline review surfaces
@@ -25,6 +27,8 @@ The single-angle sine theorem lives in `SineTheta/ScalarGeneric.lean` because
 its unbounded scalar-generic engine is substantial enough to merit its own
 module.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970
@@ -140,8 +144,10 @@ theorem sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
       ← kyFanSum_eq_kyFanApproximationGauge k (residual A X M)]
     have hOutside :
         Module.End.PointSpectrumIn A Uᗮ {lam : ℝ | lam ∉ Set.Ioo (β - δ) (α + δ)} := by
+      apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
       intro lam hlam
-      have hout := hUnwantedSpectrum hlam
+      have hout := Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mp
+        hUnwantedSpectrum hlam
       change lam ≤ β - δ ∨ α + δ ≤ lam at hout
       change ¬ (β - δ < lam ∧ lam < α + δ)
       rcases hout with hlow | hhigh

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientSpectrum
-import ForTauCeti.Analysis.InnerProductSpace.SchattenTwoPhaseVariation
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientSpectrum
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenTwoPhaseVariation
 
 /-!
 # The actual Schatten second variation at balanced phase roots
@@ -14,6 +16,8 @@ Hessian. This is the analytic identity used before choosing the projection
 overlap direction; it does not yet assemble the opposite blocks into an
 ambient feasible descent.
 -/
+
+public section
 
 noncomputable section
 

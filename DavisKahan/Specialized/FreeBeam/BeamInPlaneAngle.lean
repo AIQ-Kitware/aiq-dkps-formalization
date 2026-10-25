@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamEigenbasis
-import DavisKahan.Sources.DavisKahan1970.Section9.IndividualAngles
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamEigenbasis
+public import DavisKahan.Sources.DavisKahan1970.Section9.IndividualAngles
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -78,6 +82,7 @@ open DavisKahan1970.Section9
 noncomputable section
 /-- **The Rayleigh--Ritz residual column map.**  It sends a trial vector `v` to the
 part of `(A + ε t) v` orthogonal to the trial subspace. -/
+@[expose]
 def beamRitzColumnMap (ε : ℝ) : beamTrial →L[ℂ] BeamL2 :=
   (ContinuousLinearMap.id ℂ BeamL2 - beamTrial.starProjection) ∘L beamResidual ε
 
@@ -174,8 +179,9 @@ theorem beam_ritz_coordinate_identity (ε : ℝ) {f : BeamL2} {lam : ℝ}
     Submodule.sub_starProjection_mem_orthogonal f
   have hsym : ⟪(beamPerturbed ε) ⟨(v : BeamL2), hvdom⟩, f⟫_ℂ
       = ⟪(v : BeamL2), (beamPerturbed ε) ⟨f, hfdom⟩⟫_ℂ :=
-    (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint
-      (beamPerturbed_isSelfAdjoint ε)) ⟨(v : BeamL2), hvdom⟩ ⟨f, hfdom⟩
+    (TauCeti.LinearPMap.isSymmetric_iff _).mp
+      (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint
+        (beamPerturbed_isSelfAdjoint ε)) ⟨(v : BeamL2), hvdom⟩ ⟨f, hfdom⟩
   rw [beamPerturbed_apply_of_mem_beamTrial ε hvmem hvdom, hf, inner_smul_right] at hsym
   have hR : beamPerturbation ε (v : BeamL2) = beamResidual ε v := rfl
   rw [hR] at hsym

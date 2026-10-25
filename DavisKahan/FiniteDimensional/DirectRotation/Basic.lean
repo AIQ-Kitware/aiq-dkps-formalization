@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
-import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 
 /-!
 # Canonical finite direct rotation
@@ -19,6 +21,8 @@ This global polar definition is equivalent to the blockwise Davis
 intertwining-unitary construction, but exposes the identities needed in Part
 III without a fictional principal-plane API.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -83,12 +87,14 @@ theorem projection_inner_left_eq_right (U : Submodule 𝕜 E)
   Submodule.inner_starProjection_left_eq_right U u v
 
 /-- The canonical two-projection intertwiner. -/
+@[expose]
 noncomputable def canonicalIntertwiner (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   projection V ∘ₗ projection U +
     complementaryProjection V ∘ₗ complementaryProjection U
 
 /-- The ordered product of the target and source reflections. -/
+@[expose]
 noncomputable def reflectionProduct (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E ≃ₗᵢ[𝕜] E :=
   U.reflection.trans V.reflection
@@ -346,6 +352,7 @@ theorem abs_canonicalIntertwiner_apply_eq_self_of_projection_eq
 
 /-- The canonical direct rotation from `U` to `V`, defined as the unitary polar
 factor of the canonical intertwiner. -/
+@[expose]
 noncomputable def directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) : E ≃ₗᵢ[𝕜] E :=

@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Complexification.FormTransport
-import DavisKahan.SpectralTheory.Complexification.Subspace
-import DavisKahan.SpectralTheory.Complexification.Spectrum
+module
+
+public import DavisKahan.SpectralTheory.Complexification.FormTransport
+public import DavisKahan.SpectralTheory.Complexification.Subspace
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
 
 /-!
 # Complexifying a real subspace commutes with taking the subspace
@@ -45,6 +47,8 @@ It is the shared adapter for two separate open lifts:
   both live on the trial subspace.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace Foundation
@@ -57,6 +61,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- The underlying `ℂ`-linear equivalence between the complexification of a real
 subspace and the corresponding submodule of the complexification. -/
+@[expose]
 noncomputable def complexifySubmoduleLinearEquiv (Z : Submodule ℝ E) :
     RealComplexification Z ≃ₗ[ℂ] complexifySubmodule Z where
   toFun w :=
@@ -90,6 +95,7 @@ noncomputable def complexifySubmoduleLinearEquiv (Z : Submodule ℝ E) :
 /-- **Complexifying a real subspace commutes with taking the subspace.**  The
 complexification of `↥Z` is `ℂ`-linearly isometric to the submodule
 `complexifySubmodule Z` of the complexification, coordinatewise. -/
+@[expose]
 noncomputable def complexifySubmoduleEquiv (Z : Submodule ℝ E) :
     RealComplexification Z ≃ₗᵢ[ℂ] complexifySubmodule Z where
   toLinearEquiv := complexifySubmoduleLinearEquiv Z
@@ -171,6 +177,7 @@ variable {F G : Type*}
 existing `conjByIsometryEquiv` only covers the endomorphism case `E ≃ₗᵢ[ℂ] E`,
 which is not enough here: `complexifySubmoduleEquiv` relates two genuinely
 different types. -/
+@[expose]
 noncomputable def conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) : G →L[ℂ] G :=
   e.toContinuousLinearEquiv.toContinuousLinearMap ∘L T ∘L
     e.symm.toContinuousLinearEquiv.toContinuousLinearMap

@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
-import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
-import DavisKahan.TanTheta.Theorem63UnboundedCompression
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
+public import DavisKahan.TanTheta.Theorem63UnboundedCompression
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -326,7 +330,7 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
     rw [norm_sinAngleOperatorC U V,
       DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
         U V h35]
-    exact hambient
+    simpa only [Submodule.directedProjectionGap_def, directedSineAmbient] using hambient
   exact ⟨(hasDefinedAmbientTangent_iff_norm_sinAngleOperatorC_lt_one U V).2 htr,
     tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex_of_transversality N data H hH
       hdelta hCompression hcross htr hResidual hMem⟩
@@ -438,7 +442,7 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex
     rw [norm_sinAngleOperatorC U V,
       DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
         U V h35]
-    exact hambient
+    simpa only [Submodule.directedProjectionGap_def, directedSineAmbient] using hambient
   exact ⟨(hasDefinedAmbientTangent_iff_norm_sinAngleOperatorC_lt_one U V).2 htr,
     tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transversality
       N D H hH hdelta hupper hcross htr hResidual hMem⟩
@@ -559,7 +563,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_unboundedRitz
     exact lt_of_le_of_lt h hdirected
   rw [norm_sinAngleOperatorC U V,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
-  exact hambient
+  simpa only [Submodule.directedProjectionGap_def, directedSineAmbient] using hambient
 
 /-- **Davis--Kahan 1970, `tan Θ`, unbounded ambient form, taking the Ritz pair and
 the reducing complement as objects.**

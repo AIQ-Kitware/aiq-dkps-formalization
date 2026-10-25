@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealMatchingZeros
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealMatchingZeros
 
 /-!
 # The two-class real pair weight and the positive pair weight
@@ -15,6 +17,8 @@ positive-edge weights used in the matching draft. The proof keeps zero,
 equal and right angles and does not assume which determinant class wins.
 -/
 
+public section
+
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.RealTransport
@@ -23,6 +27,7 @@ open SchattenPhaseTransition
 open scoped ENNReal
 
 /-- Positive-determinant two-angle cost, on decreasing principal angles. -/
+@[expose]
 def realPositivePairSchattenCost (p theta psi : ℝ) : ℝ :=
   let h := (theta + psi)/2
   let d := (theta - psi)/2
@@ -107,7 +112,7 @@ theorem realPairSchattenCost_eq_min_positive_singletons
           (2 : ℝ)^p + 2 * phaseChord psi^p)]
 
 /-- Symmetric positive-determinant edge weight used by the matching draft. -/
-def realPositiveSchattenPairWeight (p theta psi : ℝ) : ℝ :=
+@[expose] def realPositiveSchattenPairWeight (p theta psi : ℝ) : ℝ :=
   realPositivePairSchattenCost p (max theta psi) (min theta psi)
 
 theorem realPositiveSchattenPairWeight_comm (p theta psi : ℝ) :
@@ -131,6 +136,7 @@ theorem realSchattenPairWeight_eq_min_positive_singletons
 
 /-- The draft's matching cost, with positive-class edges and unrestricted
 one-angle weights at unmatched vertices. -/
+@[expose]
 def realPositiveSchattenMatchingCost {ι : Type*} [Fintype ι]
     (p : ℝ) (theta : ι → ℝ) (s : Equiv.Perm ι) : ℝ := by
   classical
@@ -195,6 +201,7 @@ theorem exists_positive_weight_matching_cost_eq {ι : Type*} [Fintype ι]
 
 /-- Minimum of the draft's positive-edge matching costs. The identity
 matching makes the finite feasible set nonempty even at rank zero. -/
+@[expose]
 def realPositiveSchattenMatchingMinimum {ι : Type*} [Fintype ι]
     (p : ℝ) (theta : ι → ℝ) : ℝ :=
   (realSchattenMatchings ι).inf' (realSchattenMatchings_nonempty ι)

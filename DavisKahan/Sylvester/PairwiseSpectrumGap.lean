@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Pairwise spectral separation for two closed self-adjoint blocks
@@ -28,6 +30,8 @@ satisfied the old predicate.  For the self-adjoint blocks Davis--Kahan actually
 uses, nothing changes.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace Sylvester
@@ -40,7 +44,7 @@ universe v
 /-- Every point of the spectra of two partial maps is separated by at least
 `delta`.  This is the canonical pairwise-gap predicate; the bundled
 `PartialMap` form below remains only for existing source-facing data. -/
-def LinearPMap.PairwiseSpectrumGap
+@[expose] def LinearPMap.PairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -90,6 +94,7 @@ theorem disjoint
 end LinearPMap.PairwiseSpectrumGap
 
 /-- Every point of the two real spectra is separated by at least `delta`. -/
+@[expose]
 def PairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]

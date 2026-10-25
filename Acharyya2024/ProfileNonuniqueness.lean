@@ -19,9 +19,13 @@ satisfies every hypothesis of the printed theorem while no fixed profile serves 
 
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
-import Acharyya2024.Common
-import Acharyya2024.RawStress
-import Acharyya2024.Consistency
+module
+
+public import Acharyya2024.Common
+public import Acharyya2024.RawStress
+public import Acharyya2024.Consistency
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

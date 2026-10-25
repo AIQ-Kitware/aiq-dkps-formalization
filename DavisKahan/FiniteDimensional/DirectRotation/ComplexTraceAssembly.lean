@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality
-import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
-import ForTauCeti.Analysis.InnerProductSpace.OrthogonalGluing
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockTrace
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceOptimality
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.OrthogonalGluing
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockTrace
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum
 
 /-!
 # Ambient extensions of the complex planar trace minimizer
@@ -24,6 +26,8 @@ transporting unitary, without any acuteness hypothesis. This existence alone
 does not yet assert trace optimality: that requires a coordinated choice of
 the plane-wise transports and an orthogonal block trace-additivity theorem.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

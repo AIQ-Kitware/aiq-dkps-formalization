@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.Sylvester.CutoffInterface
-import DavisKahan.SpectralTheory.SpectralRestriction
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.Sylvester.CutoffInterface
+public import DavisKahan.SpectralTheory.SpectralRestriction
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -40,7 +44,7 @@ variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /-- The spectral cutoff `E_A([-τ,τ])`. -/
-noncomputable def spectraSpectralCutoff
+@[expose] noncomputable def spectraSpectralCutoff
     (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) (τ : ℝ) : H →L[ℂ] H :=
   selfAdjointSpectralProjection A hA (Set.Icc (-τ) τ) measurableSet_Icc
@@ -52,6 +56,8 @@ theorem spectraSpectralCutoff_isOrthogonalProjection
     spectraSpectralCutoff A hA τ ∘L spectraSpectralCutoff A hA τ =
         spectraSpectralCutoff A hA τ ∧
       (spectraSpectralCutoff A hA τ).IsSymmetric := by
+  rw [spectraSpectralCutoff, selfAdjointSpectralProjection,
+    LinearPMap.specProjection_def]
   constructor
   · exact (TauCeti.LinearPMap.spectralPVM hA).proj_idem (Set.Icc (-τ) τ) measurableSet_Icc
   · exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp
@@ -66,7 +72,7 @@ theorem spectraSpectralCutoff_range_le_domain
   rintro y ⟨x, rfl⟩
   exact TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc
     (M := max 0 τ) (fun s hs => le_trans (abs_le.mpr ⟨hs.1, hs.2⟩) (le_max_right 0 τ))
-    ⟨x, rfl⟩
+    (LinearPMap.specProjection_mem_specRange hA _ measurableSet_Icc x)
 
 /-- Spectral cutoffs preserve the domain and commute with the closed operator
 there. -/
@@ -88,7 +94,7 @@ theorem spectraSpectralCutoff_tendsto_identity
   TauCeti.LinearPMap.tendsto_specProjection_Icc hA x
 
 /-- The implementation of the coherent spectral cutoff interface. -/
-noncomputable def spectraSpectralCutoffInterface
+@[expose] noncomputable def spectraSpectralCutoffInterface
     (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) :
     SpectralCutoffInterface A hA where

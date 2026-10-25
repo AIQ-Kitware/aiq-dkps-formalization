@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Halmos.TwoProjections
-import DavisKahan.SpectralTheory.SpectralRestriction
+module
+
+public import DavisKahan.Geometry.Halmos.TwoProjections
+public import DavisKahan.SpectralTheory.SpectralRestriction
 -- supplies `compressOperator`
-import DavisKahan.Sylvester.Spectrum
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import DavisKahan.Sylvester.Spectrum
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 
 /-!
 # Grounded generic direct-rotation predicates for Davis--Kahan 1970
@@ -25,6 +27,8 @@ is retained verbatim so that the fully-qualified names are unchanged; only the
 module path has moved.  De-experimentalizing the namespace is a deliberately
 deferred later pass.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -61,7 +65,7 @@ structure IsDirectRotation
 /-- The source and target crossed intersections admit a unitary
 identification.  This is the constructive form of equality of their Hilbert
 space dimensions. -/
-def CrossedDefectsEquivalent
+@[expose] def CrossedDefectsEquivalent
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] : Prop :=
   Nonempty
@@ -86,6 +90,7 @@ theorem CrossedDefectsEquivalent.symm {U V : Submodule 𝕜 H}
 realized as the compression to the generic part.  The generic part reduces
 both projections, hence every word in them, so the compression is the honest
 restriction. -/
+@[expose]
 noncomputable def genericHalmosCosineSq
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.Complexification.Subspace
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
+module
+
+public import DavisKahan.SpectralTheory.Complexification.Subspace
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
 
 /-!
 # Real operator angles through complexification
@@ -20,6 +22,8 @@ operators preserve the canonical real copy and therefore bundle as real
 operators.  All norm-level and projection-geometric content is already exact
 here.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.Angle
@@ -41,24 +45,28 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- Symmetric sine-angle operator for real subspaces, evaluated in their
 canonical complexification. -/
+@[expose]
 noncomputable def sinAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     RealComplexification E →L[ℂ] RealComplexification E :=
   sinAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)
 
 /-- Directed sine-angle operator for real subspaces in the complexification. -/
+@[expose]
 noncomputable def directedSinAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     RealComplexification E →L[ℂ] RealComplexification E :=
   directedSinAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)
 
 /-- Cosine-angle operator for real subspaces in the complexification. -/
+@[expose]
 noncomputable def directedCosAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     RealComplexification E →L[ℂ] RealComplexification E :=
   directedCosAngleOperatorC (complexifySubmodule U) (complexifySubmodule V)
 
 /-- Sine of twice the real operator angle in the complexification. -/
+@[expose]
 noncomputable def directedSinTwoAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     RealComplexification E →L[ℂ] RealComplexification E :=
@@ -73,6 +81,7 @@ noncomputable def directedTanAngleOperatorRC (U V : Submodule ℝ E)
     ((isUniformlyAcute_complexifySubmodule_iff U V).2 hacute)
 
 /-- Tangent of twice the angle for quarter-acute real subspaces. -/
+@[expose]
 noncomputable def directedTanTwoAngleOperatorRC (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hquarter : TauCeti.DavisKahan.IsQuarterAcute U V) :

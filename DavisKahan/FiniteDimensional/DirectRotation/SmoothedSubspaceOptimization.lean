@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedRotationOptimization
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralCost
-import DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects
-import DavisKahan.Geometry.Polar.NonacuteCompression
-import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedRotationOptimization
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralCost
+public import DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects
+public import DavisKahan.Geometry.Polar.NonacuteCompression
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
 
 /-!
 # Exact smoothed transport for arbitrary equal-rank subspaces
@@ -15,6 +17,8 @@ import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
 The completed nonacute rotation supplies the operator hypotheses of the
 weighted nuclear optimizer. No principal-coordinate decomposition is assumed.
 -/
+
+public section
 
 noncomputable section
 
@@ -306,6 +310,7 @@ theorem exists_unitary_minimizing_weighted_transport
 
 /-- The exact smoothed transport value as a spectral function of `cos Θ`.
 The ambient zero-singular-value contribution is subtracted explicitly. -/
+@[expose]
 def smoothedTransportMinimum (tau : ℝ) (U V : Submodule ℂ E) : ℝ :=
   weightedRotationMinimum (smoothingRadius tau) (smoothingRadius tau)⁻¹
       (Proposition35.section3CosAngleOperator U V) - Module.finrank ℂ E * tau

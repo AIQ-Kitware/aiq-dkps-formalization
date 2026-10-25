@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Halmos.Assembly
-import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
+module
+
+public import DavisKahan.Geometry.Halmos.Assembly
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
 /-!
 # The generic Halmos summand is in generic position
@@ -23,6 +25,8 @@ That reconstruction is carried out in `GenericReconstruction.lean`, and with
 `Assembly.lean` supplying brick (2) it completes Davis--Kahan Theorem 3.1's
 constructive spine in both directions.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -188,6 +192,7 @@ theorem norm_sq_eq_starProjection_add_orthogonal (W : Submodule 𝕜 H)
 
 /-- **Halmos's `cos²Θ`** on the `U`-half of the generic part: the compression of
 `P_V`. -/
+@[expose]
 noncomputable def genericCosineBlock :
     genericLeftHalf U V →L[𝕜] genericLeftHalf U V :=
   DavisKahan.Sylvester.compressOperator (genericLeftHalf U V) V.starProjection

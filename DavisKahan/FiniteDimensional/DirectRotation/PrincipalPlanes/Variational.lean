@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum
-import TauCeti.Analysis.InnerProductSpace.CourantFischer
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 # Davis's variational theorem for the restricted displacement
@@ -23,6 +25,8 @@ exists, not a restriction on the conclusion.)  The main results are
 * `kyFanSum_restrictedDisplacement_le` and `uiNorm_restrictedDisplacement_le`
   (Davis--Kahan Corollary 4.1).
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

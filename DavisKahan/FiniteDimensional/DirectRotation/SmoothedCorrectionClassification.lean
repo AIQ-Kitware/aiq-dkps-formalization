@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedAcuteClassification
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNonacuteClassification
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutatorCutoff
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedAcuteClassification
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNonacuteClassification
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutatorCutoff
 
 /-!
 # Every nearest subspace-preserving unitary
@@ -16,6 +18,8 @@ describes every nearest preserving unitary, including nonunique families
 above the Charbonnier transition. The all-angle criterion also allows
 arbitrary right-angle defect exchanges, without a commutator cutoff.
 -/
+
+public section
 
 noncomputable section
 

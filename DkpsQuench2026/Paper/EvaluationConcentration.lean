@@ -12,10 +12,14 @@ returns an explicit upper bound on the probability that the finite card verdict
 fails.  An additional generic theorem converts vanishing failure bounds into the
 repository's `HighProbAtTop` interface when the replicate schedule grows.
 -/
-import DkpsQuench2026.Paper.EvaluationBridges
-import ForTauCeti.Probability.Moments.SampleMean
-import ForTauCeti.Probability.Moments.Variance
-import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
+module
+
+public import DkpsQuench2026.Paper.EvaluationBridges
+public import ForTauCeti.Probability.Moments.SampleMean
+public import ForTauCeti.Probability.Moments.Variance
+public import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
+
+public section
 
 set_option linter.mathlibStandardSet false
 

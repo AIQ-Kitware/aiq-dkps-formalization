@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.Riccati.UnboundedExistence
-import DavisKahan.InfiniteDimensional.Riccati.BoundedGraphAcute
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.Riccati.UnboundedExistence
+public import DavisKahan.InfiniteDimensional.Riccati.BoundedGraphAcute
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Canonical graph-rotation transport for unbounded block operators
@@ -16,6 +18,8 @@ It keeps the transported operator domain explicit and records the projection
 intertwining needed before the transformed operator can be identified with a
 block-diagonal direct sum.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -44,6 +48,7 @@ theorem zeroUnboundedGraph_isUniformlyAcute_unboundedBlockGraph
 
 /-- Canonical complex rotation from the first coordinate graph to the graph of
 `X`. -/
+@[expose]
 noncomputable def unboundedGraphRotation (X : E0 →L[ℂ] E1) :
     WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1) :=
   complexDirectRotation
@@ -85,6 +90,7 @@ theorem unboundedGraphRotation_ker_bot_range_top
     exact ⟨x, hx⟩
 
 /-- The canonical graph rotation bundled as a continuous linear equivalence. -/
+@[expose]
 noncomputable def unboundedGraphRotationEquiv (X : E0 →L[ℂ] E1) :
     WithLp 2 (E0 × E1) ≃L[ℂ] WithLp 2 (E0 × E1) :=
   ContinuousLinearEquiv.ofBijective (unboundedGraphRotation X)
@@ -134,7 +140,10 @@ noncomputable abbrev unboundedGraphRotationPullback
     (X : E0 →L[ℂ] E1) (z : WithLp 2 (E0 × E1)) :
     z ∈ (unboundedGraphRotationPullback H X).domain ↔
       unboundedGraphRotation X z ∈ (unboundedBlockOperatorCore H).domain :=
-  Iff.rfl
+  by
+    rw [unboundedGraphRotationPullback, TauCeti.LinearPMap.pullback_domain,
+      TauCeti.LinearPMap.mem_pullbackDomain_iff]
+    rfl
 
 /-- The raw graph-rotated block core is unitarily equivalent to the original
 raw block core. -/

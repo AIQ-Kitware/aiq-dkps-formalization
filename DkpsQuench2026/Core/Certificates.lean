@@ -7,7 +7,11 @@ module removes one group of caller-visible hypotheses and records the exact
 bridge theorem that is still open.
 -/
 
-import DkpsQuench2026.Response.Means
+module
+
+public import DkpsQuench2026.Response.Means
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -44,6 +48,7 @@ variable {X : Type v} [MeasurableSpace X]
 /-- The model occupying one coordinate of the target-augmented stage.  The
 first `n` coordinates are sampled references and the final coordinate is the
 current target. -/
+@[expose]
 def augmentedModelAt
     {Ωref : Type wr}
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
@@ -52,6 +57,7 @@ def augmentedModelAt
   Fin.lastCases f (f_ref n ωref)
 
 /-- The uncentered perspective configuration of the references and target. -/
+@[expose]
 def augmentedPerspectiveConfig
     {Ωref : Type wr} {d : Nat}
     (ψ : Model Q X → Vec d)
@@ -60,14 +66,17 @@ def augmentedPerspectiveConfig
   fun i => ψ (augmentedModelAt f_ref n ωref f i)
 
 /-- Arithmetic centroid of a finite Euclidean configuration. -/
+@[expose]
 noncomputable def configCentroid {n d : Nat} (z : Config n d) : Vec d :=
   (n : Real)⁻¹ • ∑ i, z i
 
 /-- Translation of a configuration to zero centroid. -/
+@[expose]
 noncomputable def centerConfig {n d : Nat} (z : Config n d) : Config n d :=
   fun i => z i - configCentroid z
 
 /-- Centered reference-plus-target perspective configuration. -/
+@[expose]
 noncomputable def centeredAugmentedPerspectiveConfig
     {Ωref : Type wr} {d : Nat}
     (ψ : Model Q X → Vec d)
@@ -78,7 +87,7 @@ noncomputable def centeredAugmentedPerspectiveConfig
 
 /-- Gram matrix of a finite Euclidean configuration, represented in the
 curried matrix format used by the Acharyya libraries. -/
-noncomputable def configGram {n d : Nat} (z : Config n d) : DisMat n :=
+@[expose] noncomputable def configGram {n d : Nat} (z : Config n d) : DisMat n :=
   fun i j => ∑ k, z i k * z j k
 
 /-- Positive semidefiniteness of a configuration Gram matrix. -/
@@ -94,6 +103,7 @@ space for every target-augmented batch.
 Completing the population-geometry module turns this single hypothesis into the
 configuration, Gram identity, positive-semidefinite/rank facts, and radial
 identity currently requested separately by the growing Quench bridge. -/
+@[expose]
 def PerspectiveResponseRealization
     {Ωref : Type wr} {d m p : Nat}
     (ψ : Model Q X → Vec d)
@@ -107,6 +117,7 @@ def PerspectiveResponseRealization
 /-- Model-level version of the population geometry assumption.  Raw-response
 capstones use one population response matrix per model; target-augmented
 realization is then a definitional consequence. -/
+@[expose]
 def ModelResponseRealization
     {d m p : Nat}
     (ψ : Model Q X → Vec d)

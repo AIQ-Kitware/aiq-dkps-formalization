@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import DavisKahan.Sylvester.Spectrum
+module
+
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import DavisKahan.Sylvester.Spectrum
 
 /-!
 # Shifted diagonal blocks and cosine blocks of a subspace pair
@@ -31,6 +33,8 @@ section records that each of the four blocks commutes with complexification,
 which is what lets a real statement descend from its complex companion.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 
@@ -50,12 +54,14 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-- The unperturbed upper compression `A₁ - α`, extended by zero off `Pᗮ`. -/
+@[expose]
 noncomputable def upperBlockShift (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] (alpha : ℝ) : H →L[𝕜] H :=
   Pᗮ.starProjection ∘L (A - (alpha : 𝕜) • ContinuousLinearMap.id 𝕜 H) ∘L
     Pᗮ.starProjection
 
 /-- The cosine block `C₁`, as an ambient operator: `P_{Qᗮ} P_{Pᗮ}`. -/
+@[expose]
 noncomputable def cosineBlock (P Q : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] : H →L[𝕜] H :=
   Qᗮ.starProjection ∘L Pᗮ.starProjection
@@ -65,12 +71,14 @@ noncomputable def cosineBlock (P Q : Submodule 𝕜 H)
 The shift constant is `α + δ`, not `α`: the lower clause is the image of the
 upper one under `A ↦ -A`, `α ↦ -(α + δ)`, which is the reflection exchanging the
 two sides of the printed gap. -/
+@[expose]
 noncomputable def lowerBlockShift (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] (alpha delta : ℝ) : H →L[𝕜] H :=
   P.starProjection ∘L
     (((alpha + delta : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H - A) ∘L P.starProjection
 
 /-- The lower cosine block `C₀`, as an ambient operator: `P_Q P_P`. -/
+@[expose]
 noncomputable def lowerCosineBlock (P Q : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] : H →L[𝕜] H :=
   Q.starProjection ∘L P.starProjection

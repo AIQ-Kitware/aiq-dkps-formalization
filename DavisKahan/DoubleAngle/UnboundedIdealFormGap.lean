@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.SinTheta.Unbounded.FormBoundedGap
+module
+
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.SinTheta.Unbounded.FormBoundedGap
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -215,7 +219,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap
     change J (Uc.starProjection (J x)) =
       V.reflection (Uc.starProjection (V.reflection.symm x))
     rw [hsymm]
-    rfl
+    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N.toSymmetricOperatorIdealFamily U
     (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)) F₁ hF₁iso hFproj hraw.1
@@ -426,7 +430,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
     change J (Uc.starProjection (J x)) =
       V.reflection (Uc.starProjection (V.reflection.symm x))
     rw [hsymm]
-    rfl
+    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N.toSymmetricOperatorIdealFamily U
     (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)) F₁ hF₁iso hFproj hraw.1

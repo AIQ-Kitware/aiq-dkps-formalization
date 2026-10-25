@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerAngles
-import DavisKahan.Geometry.Angle.CosineKernel
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerAngles
+public import DavisKahan.Geometry.Angle.CosineKernel
 
 /-!
 # Every Schatten optimizer on the actual right-angle defect
@@ -16,6 +18,8 @@ is exactly one unitary identification of the two crossed defects, paired
 with its inverse. The ambient pair and every competing unitary are
 unrestricted; no prescribed defect coordinates are assumed.
 -/
+
+public section
 
 noncomputable section
 

@@ -8,8 +8,12 @@ finite reference sample has the iid joint law.  A positive-mass ball is then
 missed with geometrically decaying probability; a finite net upgrades those
 pointwise hit events to uniform coverage.
 -/
-import DkpsQuench2026.Core.ProofEngine
-import Mathlib
+module
+
+public import DkpsQuench2026.Core.ProofEngine
+public import Mathlib
+public section
+
 set_option linter.mathlibStandardSet false
 
 open scoped BigOperators Real Nat Classical Pointwise Topology
@@ -41,7 +45,7 @@ def perspectiveBall (ψ : Model Q X → Vec d) (f : Model Q X) (ρ : ℝ) :
 
 /-- A finite collection of model centers whose perspective balls cover every
 model perspective. -/
-def PerspectiveFiniteCover (ψ : Model Q X → Vec d) (ρ : ℝ)
+@[expose] def PerspectiveFiniteCover (ψ : Model Q X → Vec d) (ρ : ℝ)
     (centers : Finset (Model Q X)) : Prop :=
   ∀ f, ∃ g ∈ centers, ‖ψ g - ψ f‖ < ρ
 

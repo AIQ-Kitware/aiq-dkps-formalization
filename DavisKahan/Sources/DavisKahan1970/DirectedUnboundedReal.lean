@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.DirectedReal
-import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
-import DavisKahan.SpectralTheory.Real.SpectralRestriction
+module
+
+public import DavisKahan.Sources.DavisKahan1970.DirectedReal
+public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
+public import DavisKahan.SpectralTheory.Real.SpectralRestriction
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -82,6 +86,7 @@ variable {Z V : Submodule ℝ E} [Z.HasOrthogonalProjection] [V.HasOrthogonalPro
 Every field is bounded, so each is complexified coordinatewise and then read through the
 canonical adapter `complexifySubmoduleEquiv` between `RealComplexification ↥Z` and
 `↥(complexifySubmodule Z)`.  No ambient operator, bounded or unbounded, enters. -/
+@[expose]
 def complexifyTrialData (data : Theorem63TrialData Z V) :
     Theorem63TrialData (complexifySubmodule Z) (complexifySubmodule V) where
   action := complexify data.action ∘L
@@ -167,7 +172,7 @@ theorem approximationSingularValue_complexifyTrialData_residual
     intro z
     rfl
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact (hsame n).symm.trans (approximationSingularValue_complexify data.residual n)
+  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans (approximationSingularValue_complexify data.residual n)
 
 /-- The finite Ky Fan gauge of the residual is exactly preserved by the complexification of
 trial-block data. -/

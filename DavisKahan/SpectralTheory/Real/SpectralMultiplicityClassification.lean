@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Real.RealMultiplicityModel
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
+module
+
+public import DavisKahan.SpectralTheory.Real.RealMultiplicityModel
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv
 
 /-!
 # Spectral multiplicity data classify self-adjoint operators over `ℝ`
@@ -44,6 +46,8 @@ changes at `ℝ` is the scalar field of the *model `L²` fibres*, which is what
 `TauCeti.MultiplicityDatum.retype` records, and the base measure and level sets -- the entire
 multiplicity content -- are literally unchanged.
 -/
+
+public section
 
 open scoped InnerProductSpace
 

@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
-import DavisKahan.Geometry.Angle.OperatorAngleReal
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import TauCeti.Analysis.InnerProductSpace.Modulus
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
+public import DavisKahan.Geometry.Angle.OperatorAngleReal
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import TauCeti.Analysis.InnerProductSpace.Modulus
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -49,29 +53,35 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 abbrev PlanarModelSpace (𝕜 : Type u) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 
 /-- First standard vector of the planar equality model. -/
+@[expose]
 def planarModelE0 : PlanarModelSpace 𝕜 :=
   EuclideanSpace.single (0 : Fin 2) 1
 
 /-- Second standard vector of the planar equality model. -/
+@[expose]
 def planarModelE1 : PlanarModelSpace 𝕜 :=
   EuclideanSpace.single (1 : Fin 2) 1
 
 /-- Scalar-to-vector map used for all one-dimensional model blocks. -/
+@[expose]
 noncomputable def scalarColumn (v : PlanarModelSpace 𝕜) :
     𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   (ContinuousLinearMap.id 𝕜 𝕜).smulRight v
 
 /-- Exact spectral inclusion. -/
+@[expose]
 noncomputable def planarExactMap :
     𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   scalarColumn planarModelE0
 
 /-- Complementary spectral inclusion. -/
+@[expose]
 noncomputable def planarComplementMap :
     𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   scalarColumn planarModelE1
 
 /-- Trial inclusion at angle `theta`. -/
+@[expose]
 noncomputable def planarTrialMap (theta : ℝ) :
     𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   scalarColumn
@@ -79,20 +89,24 @@ noncomputable def planarTrialMap (theta : ℝ) :
       (Real.sin theta : 𝕜) • planarModelE1)
 
 /-- Two-level self-adjoint operator with gap `delta`. -/
+@[expose]
 noncomputable def planarAmbient (delta : ℝ) :
     PlanarModelSpace 𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   (Matrix.toEuclideanLin
     !![(0 : 𝕜), 0; 0, (delta : 𝕜)]).toContinuousLinearMap
 
 /-- Zero trial operator. -/
+@[expose]
 noncomputable def planarTrialOperator : 𝕜 →L[𝕜] 𝕜 := 0
 
 /-- Literal directed sine block of the planar model. -/
+@[expose]
 noncomputable def planarSineBlock (theta : ℝ) :
     𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   ((Real.sin theta : 𝕜) • planarComplementMap)
 
 /-- Residual of the planar equality model. -/
+@[expose]
 noncomputable def planarResidual (delta theta : ℝ) :
     𝕜 →L[𝕜] PlanarModelSpace 𝕜 :=
   ((delta * Real.sin theta : ℝ) : 𝕜) • planarComplementMap

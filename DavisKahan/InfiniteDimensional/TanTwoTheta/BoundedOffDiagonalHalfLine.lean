@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalEstimate
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalEstimate
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -51,6 +55,10 @@ theorem compressOperator_upperFormBound_of_spectrum_subset_Iic
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   have hcompress : IsSelfAdjoint (compressOperator U A) :=
     isSelfAdjoint_compressOperator hAsa U
+  have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := U) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (U →L[ℂ] U)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  rw [← hAlg] at hspec
   intro z
   exact TauCeti.SpectralOrder.re_inner_le_of_spectrum_subset_Iic
     (compressOperator U A) hcompress hspec z
@@ -70,6 +78,10 @@ theorem compressOperator_lowerFormBound_of_spectrum_subset_Ici
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   have hcompress : IsSelfAdjoint (compressOperator U A) :=
     isSelfAdjoint_compressOperator hAsa U
+  have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := U) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (U →L[ℂ] U)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  rw [← hAlg] at hspec
   intro z
   exact TauCeti.SpectralOrder.le_re_inner_of_spectrum_subset_Ici
     (compressOperator U A) hcompress hspec z

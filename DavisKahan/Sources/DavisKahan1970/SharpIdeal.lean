@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SharpKyFan
-import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SharpKyFan
+public import DavisKahan.Sources.DavisKahan1970.Ideals.StandardFanDominance
 -- branch selection: the canonical contractive Riccati solution, and the
 -- spectrum-to-form-bound bridge that feeds it the paper's hypotheses
-import DavisKahan.Riccati.BoundedCanonicalSolution
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+public import DavisKahan.Riccati.BoundedCanonicalSolution
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -223,10 +227,22 @@ theorem sharp_symmetricNormingFunction_selectedBranch
   have hA0 : ∀ z : E0, RCLike.re ⟪B.A0 z, z⟫_ℂ ≤ 0 := by
     intro z
     have h := SpectralOrder.re_inner_le_of_spectrum_subset_Iic B.A0
-      hA0sa (c := 0) (fun r hr => (hA0spec hr).2) z
+      hA0sa (c := 0) (by
+        intro r hr
+        have hc : (r : ℂ) ∈ spectrum ℂ B.A0 := by
+          let _ := ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := E0)
+          let _ := ContinuousLinearMap.realIsScalarTower (𝕜 := ℂ) (E := E0)
+          exact spectrum.algebraMap_mem ℂ hr
+        exact (hA0spec (spectrum.of_algebraMap_mem ℂ hc)).2) z
     simpa using h
   have hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ :=
-    SpectralOrder.le_re_inner_of_spectrum_subset_Ici B.A1 hA1sa hA1spec
+    SpectralOrder.le_re_inner_of_spectrum_subset_Ici B.A1 hA1sa (by
+      intro r hr
+      have hc : (r : ℂ) ∈ spectrum ℂ B.A1 := by
+        let _ := ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := E1)
+        let _ := ContinuousLinearMap.realIsScalarTower (𝕜 := ℂ) (E := E1)
+        exact spectrum.algebraMap_mem ℂ hr
+      exact hA1spec (spectrum.of_algebraMap_mem ℂ hc))
   -- the interval/exterior shape the Riccati selection runs on
   have hA1spec' : ∀ x ∈ spectrum ℝ B.A1, x ≤ left - d ∨ 0 + d ≤ x := by
     intro x hx

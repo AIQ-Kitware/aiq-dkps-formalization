@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Sol
 -/
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+module
+
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
 # Spectral containments from Hilbert-space form bounds
@@ -20,6 +22,8 @@ making the real Section 8 development depend on a complex-only spectral
 calculus merely to convert sharp form bounds into the printed spectral
 orientation.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

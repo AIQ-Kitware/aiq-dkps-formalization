@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtEstimate
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtEstimate
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 -- the planar trace/determinant recovery of singular values, used for the
 -- source's own `2 × 2` witness at the end of this file
-import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -278,15 +282,12 @@ theorem sharp52_A_sq : sharpA52 ∘ₗ sharpA52 = LinearMap.id := by
   fin_cases i <;>
     simp [sharpA52, Matrix.toLpLin_apply, Matrix.vecHead, Matrix.vecTail]
 
--- `simp` closes one of the two `fin_cases` branches outright, so the trailing
--- `ring` must tolerate zero remaining goals; the seq-focus linter cannot see
--- that and misfires here.
-set_option linter.unnecessarySeqFocus false in
 /-- `B² = 2B`, so every eigenvalue of `B` is `0` or `2`. -/
 theorem sharp52_B_sq : sharpB52 ∘ₗ sharpB52 = (2 : ℝ) • sharpB52 := by
   ext x i
-  fin_cases i <;>
-    simp [sharpB52, Matrix.toLpLin_apply, Matrix.vecHead, Matrix.vecTail] <;>
+  fin_cases i
+  · simp [sharpB52, Matrix.toLpLin_apply, Matrix.vecHead, Matrix.vecTail]
+  · simp [sharpB52, Matrix.toLpLin_apply, Matrix.vecHead, Matrix.vecTail]
     ring
 
 /-- The eigenvalues of the source's `A` are `1` and `-1`. -/

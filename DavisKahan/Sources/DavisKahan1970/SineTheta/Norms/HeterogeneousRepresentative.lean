@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
 /-!
 # Source-norm transport across different coordinate spaces
@@ -13,6 +15,8 @@ coordinate spaces having the prescribed singular-value sequence.  This module
 sits above both the pure approximation-number relation and the paper norm, so
 that the lower singular-data layer remains independent of the norm package.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -39,7 +43,7 @@ theorem prefixGauge_eq
   unfold SymmetricNormingFunction.prefixGauge
   congr 1
   funext i
-  exact h i
+  exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h i
 
 /-- Equal complete singular data gives equal source extended values. -/
 theorem normingExtendedGauge_eq
@@ -73,7 +77,7 @@ theorem normingMem_iff_and_gauge_eq
     (N.Mem A ↔ N.Mem B) ∧ N.gauge A = N.gauge B := by
   have heq := h.normingExtendedGauge_eq N
   exact ⟨by simp [SymmetricNormingFunction.Mem, heq],
-    congrArg ENNReal.toReal heq⟩
+    by simpa only [SymmetricNormingFunction.gauge] using congrArg ENNReal.toReal heq⟩
 
 end SameApproximationSingularSequence
 

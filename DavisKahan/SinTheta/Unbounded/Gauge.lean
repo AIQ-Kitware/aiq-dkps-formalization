@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.ShiftedInverseGauge
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.SinTheta.Unbounded.OpNorm
+module
+
+public import DavisKahan.Sylvester.ShiftedInverseGauge
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.SinTheta.Unbounded.OpNorm
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

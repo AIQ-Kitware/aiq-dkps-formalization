@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import DavisKahan.SpectralTheory.PartialMap.Complexification
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+public import DavisKahan.SpectralTheory.PartialMap.Complexification
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

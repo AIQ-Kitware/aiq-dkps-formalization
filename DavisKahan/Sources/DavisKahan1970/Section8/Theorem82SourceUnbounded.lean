@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82UnboundedPath
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
-import DavisKahan.SpectralTheory.BoundedFromSpectrum
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82UnboundedPath
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+public import DavisKahan.SpectralTheory.BoundedFromSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 
 /-!
 # Theorem 8.2 as one source-facing theorem, at unbounded ambient scope
@@ -51,6 +53,8 @@ everywhere-defined bounded realization
 (`exists_boundedRealization_of_spectrum_subset_Icc`), which is precisely what
 `spec(A₀) ⊆ [β − δ/2, α + δ/2]` supplies.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open scoped TauCeti.CompleteSubspace
@@ -124,7 +128,7 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_complex
   -- The canonical real spectrum is definitionally the real preimage of the
   -- canonical complex spectrum. No extra compatibility theorem is needed.
   obtain ⟨Rz, -⟩ := DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
-    hblock hba hPspec
+    hblock hba (fun r hr => hPspec (_root_.LinearPMap.mem_realSpectrum_iff.mpr hr))
   have hdomP : ∀ v : P, v ∈ (A.restrict hPred.isInvariant).domain := by
     intro v
     rw [Rz.domain_eq_top]
@@ -167,7 +171,7 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_real
     rw [TauCeti.LinearPMap.realSpectrum_complexifyReal]
     exact hPspec
   obtain ⟨Rz, -⟩ := DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
-    hBC hba hspecBC
+    hBC hba (fun r hr => hspecBC (_root_.LinearPMap.mem_realSpectrum_iff.mpr hr))
   have hdomP : ∀ v : P, v ∈ (A.restrict hPred.isInvariant).domain := by
     intro v
     have h : (ofReal v : RealComplexification P) ∈

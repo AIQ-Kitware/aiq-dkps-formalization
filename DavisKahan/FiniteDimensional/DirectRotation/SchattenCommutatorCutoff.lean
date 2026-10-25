@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenSignedOptimizers
-import ForTauCeti.Analysis.InnerProductSpace.Projection.GapThreshold
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenSignedOptimizers
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.GapThreshold
 
 /-!
 # Sharp projection-gap and commutator tests for Schatten uniqueness
@@ -14,6 +16,8 @@ coordinates. For a unitary image, the gap is the commutator norm with the
 source projection. These tests require only one operator norm, including
 the critical equality case, rather than the entire angle list.
 -/
+
+public section
 
 noncomputable section
 

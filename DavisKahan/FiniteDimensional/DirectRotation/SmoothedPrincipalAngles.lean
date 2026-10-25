@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceOptimization
-import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteSpectralTrace
+module
 
-import DavisKahan.Geometry.Angle.CosineKernel
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceOptimization
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteSpectralTrace
+
+public import DavisKahan.Geometry.Angle.CosineKernel
 
 /-!
 # The principal-angle formula for exact smoothed transport
@@ -15,6 +17,8 @@ The canonical paired cosine basis computes the directed sine spectral trace.
 The accepted principal sines therefore identify its plane angles with the
 accepted principal angles for every zero-preserving spectral sum.
 -/
+
+public section
 
 noncomputable section
 

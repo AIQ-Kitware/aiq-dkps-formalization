@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.CutoffInterface
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+module
+
+public import DavisKahan.Sylvester.CutoffInterface
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 # Replaceable ordered two-unbounded Sylvester engine
@@ -15,6 +17,8 @@ implementation need not import the legacy unbounded Sylvester theorem.  The
 compatibility implementation remains isolated in
 `Experimental/InfiniteDimensional/Sylvester/OrderedEngineLegacy.lean`.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahan.ExactSinTheta

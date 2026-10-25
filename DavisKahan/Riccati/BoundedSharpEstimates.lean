@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 Thinking
 -/
-import DavisKahan.Riccati.BoundedEstimates
+module
+
+public import DavisKahan.Riccati.BoundedEstimates
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -446,6 +450,7 @@ theorem sharp_riccati_norm_bound
 
 /-- Shift both diagonal blocks by the same real scalar.  The off-diagonal
 couplings are unchanged. -/
+@[expose]
 noncomputable def shiftBlockOperatorData
     (H : BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1)) (c : ℝ) :
     BlockOperatorData (𝕜 := ℂ) (E0 := E0) (E1 := E1) where

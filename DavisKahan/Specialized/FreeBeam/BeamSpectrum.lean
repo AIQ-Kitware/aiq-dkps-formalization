@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamFormSpace
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
-import Mathlib.Tactic
+module
+
+import Mathlib.Analysis.Normed.Operator.Compact.FredholmAlternative
+
+public import DavisKahan.Specialized.FreeBeam.BeamFormSpace
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
+public import Mathlib.Tactic
 
 /-!
 # Kernel and eigenfunctions of the free-beam operator
@@ -21,6 +25,9 @@ With the operator in hand (`BeamFormSpace`), this file starts its spectral analy
 
 The eigenfunction bootstrap and the full spectrum characterization build on these.
 -/
+
+
+public section
 
 open scoped InnerProductSpace ENNReal
 open MeasureTheory TauCeti
@@ -174,6 +181,7 @@ theorem affinePair_mem (a b : ℂ) :
   ring
 
 /-- The affine element of the ambient space attached to a coefficient pair. -/
+@[expose]
 def affineLp (a b : ℂ) : BeamL2 := a • beamOneLp + b • beamIdLp
 
 /-- The form representative of an affine element. -/
@@ -363,12 +371,15 @@ theorem eigen_pairing_integral {lam : ℝ} {x : beamOperator.domain} {p : BeamV}
 /-! ## Cubic test functions -/
 
 /-- Cubic polynomial test function. -/
+@[expose]
 def cubic (c0 c1 c2 c3 t : ℝ) : ℝ := c0 + c1 * t + c2 * t ^ 2 + c3 * t ^ 3
 
 /-- First derivative of the cubic. -/
+@[expose]
 def cubicD1 (_c0 c1 c2 c3 t : ℝ) : ℝ := c1 + 2 * c2 * t + 3 * c3 * t ^ 2
 
 /-- Second derivative of the cubic. -/
+@[expose]
 def cubicD2 (_c0 _c1 c2 c3 t : ℝ) : ℝ := 2 * c2 + 6 * c3 * t
 
 /-- The model cubic is continuous. -/
@@ -863,8 +874,9 @@ theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
     exact inner_self_eq_norm_sq_to_K u
   have hsymm : ⟪beamOperator ⟨u, humem⟩, u⟫_ℂ
       = ⟪u, beamOperator ⟨u, humem⟩⟫_ℂ :=
-    (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint beamOperator_isSelfAdjoint)
-      ⟨u, humem⟩ ⟨u, humem⟩
+    ((TauCeti.LinearPMap.isSymmetric_iff _).mp
+      (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint beamOperator_isSelfAdjoint))
+        ⟨u, humem⟩ ⟨u, humem⟩
   have hreal : (starRingEnd ℂ) (mu⁻¹ - 1) = mu⁻¹ - 1 := by
     have hchain : (starRingEnd ℂ) (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2
         = (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2 := hL.symm.trans (hsymm.trans hRt)
@@ -980,7 +992,9 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
   have hcommS : Commute R S := hcommU.units_inv_right
   have hSU : S * ↑U = 1 := U.inv_mul
   have hUS : (↑U : BeamL2 →L[ℂ] BeamL2) * S = 1 := U.mul_inv
-  refine hlam ⟨R * S, ?_, ?_⟩
+  apply hlam
+  rw [TauCeti.LinearPMap.mem_realResolventSet_iff]
+  refine ⟨R * S, ?_, ?_⟩
   · -- left inverse on the domain
     intro x
     have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2

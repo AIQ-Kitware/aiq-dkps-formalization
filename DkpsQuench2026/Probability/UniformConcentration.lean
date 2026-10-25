@@ -7,7 +7,11 @@ regularity.  This module keeps the empirical-process argument elementary:
 finite-net concentration followed by deterministic Lipschitz extension.
 -/
 
-import DkpsQuench2026.Response.Regularity
+module
+
+public import DkpsQuench2026.Response.Regularity
+
+public section
 
 set_option linter.mathlibStandardSet false
 

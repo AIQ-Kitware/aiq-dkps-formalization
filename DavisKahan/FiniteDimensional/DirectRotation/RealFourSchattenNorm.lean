@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealFourSchatten
-import ForTauCeti.Analysis.InnerProductSpace.SchattenSpectralCalculus
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealFourSchatten
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenSpectralCalculus
 
 /-!
 # The real four-dimensional minimum for the accepted Schatten seminorm
@@ -14,6 +16,8 @@ minimizer for the accepted Schatten seminorm. Conversely every global
 unitary minimum has this exact angle-dependent value. The latter form
 applies directly to the actual restrictions of a real ambient minimum.
 -/
+
+public section
 
 noncomputable section
 

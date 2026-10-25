@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import YuWangSamworth2015.Rectangular.Theorem4
-import YuWangSamworth2015.Rectangular.RankOne
-import YuWangSamworth2015.Rectangular.RankBoundary
-import YuWangSamworth2015.Rectangular.SingularBlock
-import YuWangSamworth2015.Rectangular.SourceTheorem3
+module
+
+public import YuWangSamworth2015.Rectangular.Theorem4
+public import YuWangSamworth2015.Rectangular.RankOne
+public import YuWangSamworth2015.Rectangular.RankBoundary
+public import YuWangSamworth2015.Rectangular.SingularBlock
+public import YuWangSamworth2015.Rectangular.SourceTheorem3
 
 /-!
 # Rectangular Yu--Wang--Samworth surface

@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.SpectralTheory.CircleRieszIntegral
-import DavisKahan.SpectralTheory.ContinuationContour
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Transport
+module
+
+public import DavisKahan.SpectralTheory.CircleRieszIntegral
+public import DavisKahan.SpectralTheory.ContinuationContour
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Transport
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -43,6 +47,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The unit-interval parametrization of the circle of center `c` and radius
 `r`, one full positive turn. -/
+@[expose]
 noncomputable def circlePath (c : ℂ) (r : ℝ) :
     Path (circleMap c r 0) (circleMap c r 0) where
   toFun t := circleMap c r (2 * Real.pi * (t : ℝ))
@@ -60,6 +65,7 @@ noncomputable def circlePath (c : ℂ) (r : ℝ) :
     circlePath c r t = circleMap c r (2 * Real.pi * (t : ℝ)) := rfl
 
 /-- The circle as a single-piece `C¹` closed contour. -/
+@[expose]
 noncomputable def circleContour (c : ℂ) (r : ℝ) : PiecewiseC1ClosedContour where
   basePoint := circleMap c r 0
   path := circlePath c r
@@ -218,6 +224,7 @@ theorem norm_ofReal_sub_ofReal (lam c : ℝ) :
 
 /-- Upgrade a separating circle to the quantitative
 `SpectralSeparatingContour` consumed by the continuation stack. -/
+@[expose]
 noncomputable def circleSeparatingContour
     (A : H →L[ℂ] H) (hA : A.IsSymmetric)
     {B : Set ℝ} (hB : MeasurableSet B) {c r : ℝ}

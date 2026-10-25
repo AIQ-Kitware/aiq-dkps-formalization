@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+public import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -50,6 +54,7 @@ variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Extended column-square energy in a chosen Hilbert basis of the domain. -/
+@[expose]
 def hilbertSchmidtBasisEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) : ENNReal :=
   ∑' i, (‖A (b i)‖₊ : ENNReal) ^ 2
@@ -199,6 +204,7 @@ theorem approximationNumberEnergy_comp_starProjection
     exact_mod_cast L.orthogonalProjectionOnto_norm_le
   -- hence the cutoff and the compression have the same singular sequence
   have hsame : SameApproximationSingularSequence (A ∘L K.starProjection) T := by
+    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
     intro m
     have h1 : (A ∘L K.starProjection).approximationNumber m ≤
         T.approximationNumber m := by

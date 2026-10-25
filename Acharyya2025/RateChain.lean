@@ -41,10 +41,14 @@ the joint asymptotic result.
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
-import Acharyya2024.Probability
-import Acharyya2025.AlignedPipeline
+module
+
+public import Mathlib
+public import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
+public import Acharyya2024.Probability
+public import Acharyya2025.AlignedPipeline
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

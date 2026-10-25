@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalCommutation
-import ForTauCeti.Analysis.InnerProductSpace.Projection.PairedPhaseTrace
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalCommutation
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.PairedPhaseTrace
 
 /-!
 # Canonical uniqueness through the Schatten phase transition
@@ -16,6 +18,8 @@ phase therefore vanishes, including at equality. Both maps fix the
 gradient kernel. No simplicity, positive-angle or prescribed-block
 assumption is needed.
 -/
+
+public section
 
 noncomputable section
 

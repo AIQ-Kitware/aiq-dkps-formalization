@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerPhases
-import ForTauCeti.Analysis.InnerProductSpace.AnticommutingInvolution
-import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerPhases
+public import ForTauCeti.Analysis.InnerProductSpace.AnticommutingInvolution
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
 
 /-!
 # Matching phase parameters on the two rotation eigenspaces
@@ -18,6 +20,8 @@ of this parameter space is the angle multiplicity, rather than twice that
 multiplicity. This is a necessary classification; attainment of arbitrary
 independent parameter choices is a separate converse.
 -/
+
+public section
 
 noncomputable section
 

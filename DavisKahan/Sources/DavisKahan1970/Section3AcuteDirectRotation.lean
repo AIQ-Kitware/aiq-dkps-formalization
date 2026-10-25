@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Polar.DirectRotationAcute
-import DavisKahan.Geometry.Polar.DirectRotationReal
-import DavisKahan.Geometry.Polar.DirectRotationSquare
-import DavisKahan.Geometry.Polar.PrincipalSquareRoot
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Polar.DirectRotationAcute
+public import DavisKahan.Geometry.Polar.DirectRotationReal
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
+public import DavisKahan.Geometry.Polar.PrincipalSquareRoot
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

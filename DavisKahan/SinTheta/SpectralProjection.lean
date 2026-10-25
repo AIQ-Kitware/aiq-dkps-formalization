@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
-import DavisKahan.SinTheta.BoundedPerturbation
-import DavisKahan.Sylvester.Unbounded.IntervalExterior
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
+public import DavisKahan.SinTheta.BoundedPerturbation
+public import DavisKahan.Sylvester.Unbounded.IntervalExterior
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -91,6 +95,7 @@ theorem norm_spectralComplementaryOverlap_eq_directedGap
   let U := selfAdjointSpectralSubspace A hA B hB
   let W := selfAdjointSpectralSubspace C hC S hS
   let Wc := selfAdjointSpectralSubspace C hC Sᶜ hS.compl
+  rw [Submodule.directedProjectionGap_def]
   change ‖U.subtypeL.adjoint ∘L Wc.subtypeL‖ =
     ‖Wᗮ.starProjection ∘L U.starProjection‖
   rw [norm_adjoint_subtypeL_comp_subtypeL_eq U Wc]
@@ -99,7 +104,7 @@ theorem norm_spectralComplementaryOverlap_eq_directedGap
       show selfAdjointSpectralProjection C hC Sᶜ hS.compl
           = ContinuousLinearMap.id ℂ H -
             selfAdjointSpectralProjection C hC S hS from
-        (TauCeti.LinearPMap.spectralPVM hC).proj_compl S hS]
+        TauCeti.LinearPMap.specProjection_compl hC S hS]
     change ContinuousLinearMap.id ℂ H -
         selfAdjointSpectralProjection C hC S hS =
       Wᗮ.starProjection
@@ -273,18 +278,13 @@ theorem sinTheta_addBounded_spectralProjection_sub_opNorm_of_formBounds
     sinTheta_addBounded_reverseDirectedGap_of_spectrum_gap
       A hA V hV B S hB hS hβ'α' hδ hSlow hShigh hBcomplSpec
   have hmax : U.projectionGap W =
-      max (U.directedProjectionGap W) (W.directedProjectionGap U) := by
-    show ‖U.starProjection - W.starProjection‖ =
-      max ‖Wᗮ.starProjection ∘L U.starProjection‖
-        ‖Uᗮ.starProjection ∘L W.starProjection‖
-    rw [← Submodule.projectionGap_def U W,
-      Submodule.projectionGap_eq_max,
-      Submodule.directedProjectionGap_def,
-      Submodule.directedProjectionGap_def]
+      max (U.directedProjectionGap W) (W.directedProjectionGap U) :=
+    Submodule.projectionGap_eq_max U W
   rw [selfAdjointSpectralProjection_eq_starProjection A hA B hB,
     selfAdjointSpectralProjection_eq_starProjection (TauCeti.LinearPMap.addBounded A V)
       (addBounded_isSelfAdjoint A hA V hV) S hS]
-  change δ * U.projectionGap W ≤ ‖V‖
+  change δ * ‖U.starProjection - W.starProjection‖ ≤ ‖V‖
+  rw [← Submodule.projectionGap_def]
   rw [hmax, mul_max_of_nonneg _ _ hδ.le]
   exact max_le hforward hreverse
 

@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectionBound
-import ForTauCeti.Analysis.InnerProductSpace.Projection.InvariantSubspace
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectionBound
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.InvariantSubspace
 
 /-!
 # The angle-cost lower bound on the actual gradient kernel
@@ -21,6 +23,8 @@ lower bound. Reassembling the angle sums over all reducing spectral blocks
 is a separate step. The statement allows an empty kernel and needs no local
 minimality assumption: the zero-gradient representation holds for any unitary.
 -/
+
+public section
 
 noncomputable section
 

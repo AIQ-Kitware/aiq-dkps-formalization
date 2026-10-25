@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import YuWangSamworth2015.GroundedImports
-import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
-import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
+module
+
+public import YuWangSamworth2015.GroundedImports
+public import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
 
 /-!
 # Frobenius perturbation bounds for rectangular Gram operators
@@ -20,6 +22,8 @@ cross-dimensional Schatten ideal law at `p = 2` and its Frobenius endpoint.
 The left-Gram bound follows from the right-Gram bound for the adjoint, using
 Tau Ceti's Schatten adjoint invariance. Both results hold over `RCLike`.
 -/
+
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

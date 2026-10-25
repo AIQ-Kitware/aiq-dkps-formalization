@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectingPlanes
-import ForTauCeti.Analysis.InnerProductSpace.Projection.FixedRightCompression
-import ForTauCeti.Analysis.InnerProductSpace.InvariantKernel
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectingPlanes
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.FixedRightCompression
+public import ForTauCeti.Analysis.InnerProductSpace.InvariantKernel
 
 /-!
 # The actual gradient-kernel sine operator is a projection
@@ -15,6 +17,8 @@ operator a projection. Its eigenvalues are therefore zero or one. This
 excludes the gradient kernel from every interior geometric angle space,
 without an acuteness assumption on the ambient subspace pair.
 -/
+
+public section
 
 noncomputable section
 

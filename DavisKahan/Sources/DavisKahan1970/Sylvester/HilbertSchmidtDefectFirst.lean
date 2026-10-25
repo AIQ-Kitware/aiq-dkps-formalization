@@ -1,11 +1,15 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 license as described in the file LICENSE.Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
-import DavisKahan.Sylvester.HomogeneousUniqueness
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
+public import DavisKahan.Sylvester.HomogeneousUniqueness
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

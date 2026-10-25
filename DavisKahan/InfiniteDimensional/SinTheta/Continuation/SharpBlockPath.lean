@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpRadius
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpRadius
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -45,13 +49,12 @@ theorem isOffDiagonal_smul
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     (K : Hspace →L[ℂ] Hspace) (hK : Submodule.IsOffDiagonal U K) (c : ℂ) :
     Submodule.IsOffDiagonal U (c • K) := by
-  change U.diagBlock K = 0 at hK
-  change U.diagBlock (c • K) = 0
+  rw [Submodule.isOffDiagonal_iff] at hK ⊢
   apply ContinuousLinearMap.ext
   intro x
   have hx := congrArg (fun T : Hspace →L[ℂ] Hspace => T x) hK
   have hcx := congrArg (fun y : Hspace => c • y) hx
-  simpa [Submodule.diagBlock, ContinuousLinearMap.comp_apply] using hcx
+  simpa [Submodule.diagBlock_apply] using hcx
 
 /-- Compression between two orthogonal-coordinate spaces cannot increase the
 operator norm. -/

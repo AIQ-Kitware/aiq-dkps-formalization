@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import YuWangSamworth2015.GroundedImports
+module
+
+public import YuWangSamworth2015.GroundedImports
 
 /-!
 # Yu--Wang--Samworth Section 2: the small-angle sharpness scale
@@ -39,6 +41,8 @@ not affect any displayed quantity — all three depend on `v̂` only through
 `⟪v, v̂⟫ = √(1-ε²)` — so the model here fixes the overlap rather than a sign
 convention.
 -/
+
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

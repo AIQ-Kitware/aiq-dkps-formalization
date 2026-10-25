@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Sylvester.Basic
-import ForTauCeti.Analysis.Normed.Operator.Restriction
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.SinTheta.SpectralBridge
+module
+
+public import DavisKahan.InfiniteDimensional.Sylvester.Basic
+public import ForTauCeti.Analysis.Normed.Operator.Restriction
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.SinTheta.SpectralBridge
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -48,6 +52,7 @@ theorem mem_realResolventSet_ofBounded_iff (X : E →L[𝕜] E) (lam : ℝ) :
     lam ∈ TauCeti.LinearPMap.realResolventSet
         ((X.toLinearMap.toPMap ⊤)) ↔
       IsUnit (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) := by
+  rw [TauCeti.LinearPMap.mem_realResolventSet_iff]
   constructor
   · rintro ⟨R, hleft, hright⟩
     refine ⟨⟨X - (lam : 𝕜) • (1 : E →L[𝕜] E), R, ?_, ?_⟩, rfl⟩
@@ -89,10 +94,11 @@ theorem boundedRealSpectrum_eq_realSpectrum (X : E →L[𝕜] E) :
     TauCeti.DavisKahan.ExactSinTheta.boundedRealSpectrum X =
       TauCeti.DavisKahan.Foundation.realSpectrum X := by
   ext lam
-  change (lam : 𝕜) ∈ _root_.LinearPMap.spectrum
+  change lam ∈ _root_.LinearPMap.realSpectrum
       (X.toLinearMap.toPMap (⊤ : Submodule 𝕜 E)) ↔
     (lam : 𝕜) ∈ spectrum 𝕜 X
-  rw [_root_.LinearPMap.mem_spectrum_iff, spectrum.mem_iff,
+  rw [_root_.LinearPMap.mem_realSpectrum_iff,
+    _root_.LinearPMap.mem_spectrum_iff, spectrum.mem_iff,
     Algebra.algebraMap_eq_smul_one]
   apply not_congr
   have hbridge := TauCeti.LinearPMap.mem_realResolventSet_iff_mem_canonical_resolventSet
@@ -176,6 +182,7 @@ theorem directedGap_eq_restrictedBlock_norm
       _ ≤ ‖T‖ * ‖ux‖ := hTx
       _ ≤ ‖T‖ * ‖x‖ :=
         mul_le_mul_of_nonneg_left hproj (norm_nonneg T)
+  rw [Submodule.directedProjectionGap_def]
   change ‖T‖ = ‖Vᗮ.starProjection ∘L U.starProjection‖
   exact le_antisymm hle1 hle2
 
@@ -190,6 +197,7 @@ theorem directedResidual_sylvesterEquation
       (((Uᗮ.starProjection ∘L X)).codRestrict Uᗮ (fun _x => Uᗮ.starProjection_apply_mem _)) =
       ((Uᗮ.starProjection ∘L DavisKahan.residual A X M)).codRestrict Uᗮ
         (fun _x => Uᗮ.starProjection_apply_mem _) := by
+  rw [ContinuousLinearMap.sylvester_apply]
   apply ContinuousLinearMap.ext
   intro x
   apply Subtype.ext
@@ -217,7 +225,7 @@ theorem directedPerturbation_sylvesterEquation
   apply ContinuousLinearMap.ext
   intro x
   apply Subtype.ext
-  simp only [ContinuousLinearMap.sylvester, sub_apply]
+  simp only [ContinuousLinearMap.sylvester_apply, sub_apply]
   have hVperp : B.Reduces Vᗮ := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hB hV.2
   have hcomm := ContinuousLinearMap.starProjection_apply_comm_of_reduces B Vᗮ hVperp (x : E)
   change B (Vᗮ.starProjection (x : E)) - Vᗮ.starProjection (A (x : E)) =
@@ -268,13 +276,13 @@ theorem intervalExteriorSeparated_restrictions
       rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum A U hU.1]
       rw [boundedRealSpectrum_eq_realSpectrum] at ha
       exact ha
-    exact hgap.1.2 ha'
+    exact hgap.1.subset ha'
   · intro b hb
     have hb' : b ∈ restrictedSpectrum B Vᗮ := by
       rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum B Vᗮ hV.2]
       rw [boundedRealSpectrum_eq_realSpectrum] at hb
       exact hb
-    exact hgap.2.2 hb'
+    exact hgap.2.subset hb'
 
 end
 end DavisKahanExt

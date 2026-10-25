@@ -16,9 +16,13 @@ The two directions are the deterministic engine behind the reference-Gram spectr
 the target-augmentation floor in `SpectralRegularity.lean`.
 -/
 
-import DkpsQuench2026.Core.Certificates
-import ForTauCeti.Analysis.InnerProductSpace.FiniteFrame
-import ForTauCeti.Probability.Moments.CenteredScatter
+module
+
+public import DkpsQuench2026.Core.Certificates
+public import ForTauCeti.Analysis.InnerProductSpace.FiniteFrame
+public import ForTauCeti.Probability.Moments.CenteredScatter
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -117,7 +121,8 @@ theorem quadratic_floor_of_eigenvalues₀_configGram_lower
 
 /-- The repository centroid is the `ForMathlib` finite mean. -/
 theorem configCentroid_eq_finiteMean {n d : Nat} (z : Config n d) :
-    configCentroid z = TauCeti.finiteMean ℝ z :=
+    configCentroid z = TauCeti.finiteMean ℝ z := by
+  rw [TauCeti.finiteMean_def]
   rfl
 
 /-- Sorted eigenvalues depend only on the matrix, not on the Hermitian certificate. -/
@@ -139,7 +144,8 @@ theorem sum_sq_centered_le_augmented {n d : Nat}
         RCLike.re (inner ℝ (TauCeti.centeredScatter ℝ w x) x) := by
     intro m w
     rw [TauCeti.re_inner_centeredScatter_self]
-    exact sum_sq_linearForm_eq_sum_norm_inner (centerConfig w) x
+    simpa only [centerConfig, ← configCentroid_eq_finiteMean] using
+      sum_sq_linearForm_eq_sum_norm_inner (centerConfig w) x
   -- `Fin.lastCases` and `Fin.snoc` agree, but are not definitionally equal: `snoc`
   -- transports along `cast`, so the two must be compared index by index.
   have hsnoc : (Fin.lastCases target ψref : Fin (n + 1) → Vec d) = Fin.snoc ψref target :=

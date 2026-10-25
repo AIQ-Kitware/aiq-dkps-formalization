@@ -3,18 +3,22 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
-import DavisKahan.Sylvester.FiniteBlockReconstruction
-import TauCeti.Analysis.Fourier.HaagerupZsido.Fourier
-import TauCeti.Analysis.Fourier.HaagerupZsido.Mass
-import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
-import Mathlib.Analysis.SpecialFunctions.Exponential
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
-import Mathlib.MeasureTheory.Integral.DominatedConvergence
-import Mathlib.MeasureTheory.Integral.ExpDecay
-import Mathlib.Topology.MetricSpace.ProperSpace.Real
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
 
+public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+public import DavisKahan.Sylvester.FiniteBlockReconstruction
+public import TauCeti.Analysis.Fourier.HaagerupZsido.Fourier
+public import TauCeti.Analysis.Fourier.HaagerupZsido.Mass
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import Mathlib.Analysis.SpecialFunctions.Exponential
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import Mathlib.MeasureTheory.Integral.DominatedConvergence
+public import Mathlib.MeasureTheory.Integral.ExpDecay
+public import Mathlib.Topology.MetricSpace.ProperSpace.Real
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -176,6 +180,7 @@ noncomputable def unitaryGroup (A : H →L[ℂ] H) (t : ℝ) : H →L[ℂ] H :=
   NormedSpace.exp ((t : ℂ) • (Complex.I • A))
 
 /-- The real exponential semigroup `exp(t A)`. -/
+@[expose]
 noncomputable def semigroup (A : H →L[ℂ] H) (t : ℝ) : H →L[ℂ] H :=
   NormedSpace.exp ((t : ℂ) • A)
 
@@ -388,6 +393,7 @@ structure FiniteSpectralStep (A : H →L[ℂ] H)
     |x - representative i| ≤ diameter_le
 
 /-- Operator represented by a finite spectral step. -/
+@[expose]
 noncomputable def FiniteSpectralStep.operator
     {A : H →L[ℂ] H} {hA : A.IsSymmetric}
     (S : FiniteSpectralStep A hA) : H →L[ℂ] H :=
@@ -535,12 +541,8 @@ theorem finiteSpectralStep_representatives_separated
     (SA : FiniteSpectralStep A hA) (SB : FiniteSpectralStep B hB)
     (i : Fin SA.n) (j : Fin SB.n) :
     d ≤ |SA.representative i - SB.representative j| := by
-  obtain ⟨hInvA, hInvB, hgap⟩ := hsep
-  exact hgap _
-    ⟨hInvA, (ContinuousLinearMap.spectrum_restrict_top A hInvA).symm.subset (SA.representative_mem
-      i)⟩ _
-    ⟨hInvB, (ContinuousLinearMap.spectrum_restrict_top B hInvB).symm.subset (SB.representative_mem
-      j)⟩
+  exact (spectraSeparated_top_iff A B d).mp hsep _ (SA.representative_mem i)
+    _ (SB.representative_mem j)
 
 end SpectralStepApproximation
 

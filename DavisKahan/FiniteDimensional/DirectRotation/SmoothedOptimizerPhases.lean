@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerNoMixing
-import ForTauCeti.Analysis.InnerProductSpace.UnitaryScalarRealPart
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerNoMixing
+public import ForTauCeti.Analysis.InnerProductSpace.UnitaryScalarRealPart
 
 /-!
 # Spectral projection parameters of every smoothed optimizer
@@ -17,6 +19,8 @@ This is a necessary normal form for every optimizer. It does not assert that
 every projection on the full cosine eigenspace is admissible: its compatibility
 with the source reflection and the rotation grading remains to be imposed.
 -/
+
+public section
 
 noncomputable section
 

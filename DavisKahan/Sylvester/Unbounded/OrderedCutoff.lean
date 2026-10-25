@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.FilledTruncation
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+module
+
+public import DavisKahan.Sylvester.FilledTruncation
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 
@@ -14,6 +16,8 @@ This module carries the ordered two-unbounded Sylvester argument through the
 direct cutoff and bounded-truncation interfaces, including the two strong-limit
 passages and Fan dominance endpoint.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

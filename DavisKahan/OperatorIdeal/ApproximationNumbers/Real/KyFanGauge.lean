@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
 
 /-!
 # Strong cutoffs and finite Ky Fan gauges over real Hilbert spaces
@@ -31,6 +33,8 @@ different proof and stays.  It is now isolated as
 predicate, and this module is what remains: three instantiations at
 `TauCeti.ApproximationNumber.hasMinMaxLowerBound_real`.
 -/
+
+public section
 
 open scoped InnerProductSpace Topology
 

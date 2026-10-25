@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SeparableCyclic
-import ForTauCeti.MeasureTheory.LpStar
+module
+
+public import DavisKahan.SpectralTheory.Real.BoundedAlmostInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SeparableCyclic
+public import ForTauCeti.MeasureTheory.LpStar
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -124,7 +128,7 @@ theorem conjugateOperator_borelCalculus (hT : IsSelfAdjoint T)
       = conjugation (ξ + Complex.I • ψ) := by
     rw [map_add, conjugation_complex_smul, Complex.conj_I]
     module
-  simp only [TauCeti.BorelCalculus.pair, h1, h2, h3, h4,
+  simp only [TauCeti.BorelCalculus.pair_def, h1, h2, h3, h4,
     diagMeasure_conjugation_complexify hT]
   simp only [map_mul, map_sub, map_add, map_one, map_div₀, Complex.conj_I,
     Complex.conj_ofNat, integral_conj]
@@ -153,6 +157,7 @@ section ConjInvariantSubmodule
 Conjugation is only conjugate-linear, so `Submodule.comap` does not apply; but the preimage is
 still a `ℂ`-submodule, because a scalar comes back out starred and the starred scalar is again
 a scalar. -/
+@[expose]
 def conjComap (K : Submodule ℂ Eℂ) : Submodule ℂ Eℂ where
   carrier := conjugation ⁻¹' (K : Set Eℂ)
   add_mem' {z w} hz hw := by

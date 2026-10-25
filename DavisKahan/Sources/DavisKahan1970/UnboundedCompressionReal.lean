@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.TanTheta.Theorem63UnboundedCompression
-import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
+module
+
+public import DavisKahan.TanTheta.Theorem63UnboundedCompression
+public import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -84,17 +88,7 @@ theorem semiboundedAbove_unitaryConjugate {G K : Type v}
     (W : G ≃ₗᵢ[ℂ] K) (A : G →ₗ.[ℂ] G)
     (hA : IsSelfAdjoint A) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedAbove A c) :
     TauCeti.LinearPMap.SemiboundedAbove (TauCeti.DavisKahan.unitaryConjugate W A hA) c := by
-  intro x
-  have hx : W.symm (x : K) ∈ A.domain := x.property
-  have hbound := hc ⟨W.symm (x : K), hx⟩
-  have hinner : ⟪(TauCeti.DavisKahan.unitaryConjugate W A hA) x, (x : K)⟫_ℂ =
-      ⟪A ⟨W.symm (x : K), hx⟩, W.symm (x : K)⟫_ℂ := by
-    have hxx : (x : K) = W (W.symm (x : K)) := (W.apply_symm_apply (x : K)).symm
-    conv_lhs => rw [hxx]
-    exact W.inner_map_map _ _
-  have hnorm : ‖(x : K)‖ = ‖W.symm (x : K)‖ := (W.symm.norm_map (x : K)).symm
-  rw [hinner, hnorm]
-  exact hbound
+  exact TauCeti.LinearPMap.semiboundedAbove_unitaryConj_of W hc
 
 /-! ## Complexifying real unbounded-compression trial data -/
 
@@ -106,6 +100,7 @@ The compression is complexified coordinatewise as a closed operator and then rea
 the canonical adapter `complexifySubmoduleEquiv` between `RealComplexification ↥Z` and
 `↥(complexifySubmodule Z)`; the residual, being bounded, is complexified and read through
 the same adapter.  No ambient operator enters. -/
+@[expose]
 def complexifyUnboundedCompressionTrialData
     (D : UnboundedCompressionTrialData Z) :
     UnboundedCompressionTrialData (complexifySubmodule Z) where
@@ -144,27 +139,39 @@ trial-subspace adapter. -/
 
 /-- The real coordinate of a complexified-data domain vector, as a vector of the real
 compression's domain. -/
+@[expose]
 def complexifyDomainRe (D : UnboundedCompressionTrialData Z)
     (w : (complexifyUnboundedCompressionTrialData D).compression.domain) :
     D.compression.domain :=
   ⟨re ((complexifySubmoduleEquiv Z).symm (w : complexifySubmodule Z)),
     (((ExactSinTheta.PartialMapComplexification.mem_complexify_domain_iff
-      D.compression _).mp w.property).1)⟩
+      D.compression _).mp (_root_.LinearPMap.mem_unitaryConj_domain_iff.mp w.property)).1)⟩
 
 /-- The imaginary coordinate of a complexified-data domain vector. -/
+@[expose]
 def complexifyDomainIm (D : UnboundedCompressionTrialData Z)
     (w : (complexifyUnboundedCompressionTrialData D).compression.domain) :
     D.compression.domain :=
   ⟨im ((complexifySubmoduleEquiv Z).symm (w : complexifySubmodule Z)),
     (((ExactSinTheta.PartialMapComplexification.mem_complexify_domain_iff
-      D.compression _).mp w.property).2)⟩
+      D.compression _).mp (_root_.LinearPMap.mem_unitaryConj_domain_iff.mp w.property)).2)⟩
 
 /-- **The complexified ambient action is the real one, coordinatewise.**  Real part. -/
 theorem re_action_complexifyUnboundedCompressionTrialData
     (D : UnboundedCompressionTrialData Z)
     (w : (complexifyUnboundedCompressionTrialData D).compression.domain) :
     re ((complexifyUnboundedCompressionTrialData D).action w) =
-      D.action (complexifyDomainRe D w) := rfl
+      D.action (complexifyDomainRe D w) := by
+  let W := complexifySubmoduleEquiv Z
+  let w' : (_root_.LinearPMap.unitaryConj W
+      (ExactSinTheta.PartialMapComplexification.complexify D.compression)).domain :=
+    ⟨(w : complexifySubmodule Z), w.property⟩
+  change re (((_root_.LinearPMap.unitaryConj W
+      (ExactSinTheta.PartialMapComplexification.complexify D.compression)
+      w' : complexifySubmodule Z) : RealComplexification E) +
+      complexify D.residual (W.symm (w : complexifySubmodule Z))) = _
+  rw [_root_.LinearPMap.unitaryConj_apply]
+  rfl
 
 /-- **The complexified ambient action is the real one, coordinatewise.**  Imaginary
 part. -/
@@ -172,7 +179,17 @@ theorem im_action_complexifyUnboundedCompressionTrialData
     (D : UnboundedCompressionTrialData Z)
     (w : (complexifyUnboundedCompressionTrialData D).compression.domain) :
     im ((complexifyUnboundedCompressionTrialData D).action w) =
-      D.action (complexifyDomainIm D w) := rfl
+      D.action (complexifyDomainIm D w) := by
+  let W := complexifySubmoduleEquiv Z
+  let w' : (_root_.LinearPMap.unitaryConj W
+      (ExactSinTheta.PartialMapComplexification.complexify D.compression)).domain :=
+    ⟨(w : complexifySubmodule Z), w.property⟩
+  change im (((_root_.LinearPMap.unitaryConj W
+      (ExactSinTheta.PartialMapComplexification.complexify D.compression)
+      w' : complexifySubmodule Z) : RealComplexification E) +
+      complexify D.residual (W.symm (w : complexifySubmodule Z))) = _
+  rw [_root_.LinearPMap.unitaryConj_apply]
+  rfl
 
 /-! ## Exact transport of the finite Ky Fan data -/
 
@@ -193,7 +210,7 @@ theorem approximationSingularValue_complexifyUnboundedCompressionTrialData_resid
     intro z
     rfl
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact (hsame n).symm.trans (approximationSingularValue_complexify D.residual n)
+  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans (approximationSingularValue_complexify D.residual n)
 
 /-- The finite Ky Fan gauge of the residual is exactly preserved. -/
 theorem kyFanApproximationGauge_complexifyUnboundedCompressionTrialData_residual
@@ -245,7 +262,11 @@ theorem complexifyUnboundedCompressionTrialData_crossed_lower
       ⟪Vᗮ.starProjection (((complexifyDomainRe D w : Z) : E)),
           Vᗮ.starProjection (D.action (complexifyDomainRe D w))⟫_ℝ +
         ⟪Vᗮ.starProjection (((complexifyDomainIm D w : Z) : E)),
-          Vᗮ.starProjection (D.action (complexifyDomainIm D w))⟫_ℝ := rfl
+          Vᗮ.starProjection (D.action (complexifyDomainIm D w))⟫_ℝ := by
+    simp only [RealComplexification.inner_apply, re_complexify, im_complexify,
+      re_action_complexifyUnboundedCompressionTrialData,
+      im_action_complexifyUnboundedCompressionTrialData]
+    rfl
   have hnorm : ‖complexify (Vᗮ.starProjection ∘L Z.subtypeL) u‖ ^ 2 =
       ‖Vᗮ.starProjection (((complexifyDomainRe D w : Z) : E))‖ ^ 2 +
         ‖Vᗮ.starProjection (((complexifyDomainIm D w : Z) : E))‖ ^ 2 :=

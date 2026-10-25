@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -60,6 +64,7 @@ structure Theorem61Data where
 namespace Theorem61Data
 
 /-- Canonical directed sine block used to state the singular-value condition. -/
+@[expose]
 def canonicalSinTheta (P : Theorem61Data
     (E := E) (F := F) (G := G) (H := H)) : F →L[ℂ] E :=
   directedSinThetaOperator P.data.X P.exactMap
@@ -229,6 +234,7 @@ structure RealTheorem61Data where
 namespace RealTheorem61Data
 
 /-- Real canonical directed sine block. -/
+@[expose]
 def canonicalSinTheta (P : RealTheorem61Data
     (E := E) (F := F) (G := G) (H := H)) : F →L[ℝ] E :=
   directedSinThetaOperatorReal P.data.X P.exactMap

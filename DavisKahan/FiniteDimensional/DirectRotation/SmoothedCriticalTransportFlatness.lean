@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalFlatness
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransport
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralCost
-import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalFlatness
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransport
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralCost
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
 
 /-!
 # Failure of quadratic growth for actual critical planar transports
@@ -23,6 +25,8 @@ This supplies the operator interpretation in the journal paper's critical
 flatness proposition. It complements the unrestricted quartic lower bound;
 the flatness calculation does not assert an optimal quartic coefficient.
 -/
+
+public section
 
 noncomputable section
 open scoped InnerProductSpace ComplexConjugate

@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Geometry.Polar.DirectRotationBlocks
+module
+
+public import DavisKahan.Geometry.Polar.DirectRotationBlocks
 -- supplies the block estimates these three statements run on: diagonal-block self-adjointness,
 -- the `√2/2` norm bound on the source subspace, the half-angle inequality for the Halmos cosine
 -- square, and `reflectionOperator_reflectedSubspace`.
-import DavisKahan.Geometry.Polar.Section3Nonacute
+public import DavisKahan.Geometry.Polar.Section3Nonacute
 -- supplies the completed nonacute direct-rotation construction the acute forms specialise.
 
 /-!
@@ -35,6 +37,8 @@ what makes this a move rather than a restatement.
 * `proposition3_4`: the printed sentence, at `IsUniformlyAcute`.
 * `proposition3_4_eq_directRotation`: the acute form is the canonical direct rotation.
 -/
+
+public section
 
 open scoped InnerProductSpace
 

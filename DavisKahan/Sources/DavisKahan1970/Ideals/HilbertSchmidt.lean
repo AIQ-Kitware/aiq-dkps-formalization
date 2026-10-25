@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
-import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
-import Mathlib.Basic.ENNReal.Inv
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Basic.ENNReal.Inv
 
 /-!
 # The source square or Hilbert--Schmidt norm
@@ -23,6 +25,8 @@ finite, and the norm is its square root.  This is basis free and immediately
 compatible with every singular-value transport theorem in the repository.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
@@ -37,6 +41,7 @@ universe u vE vF vG vH vE1 vF1 vE2 vF2
 
 /-- Extended Hilbert--Schmidt energy, defined by the squared approximation
 singular-value sequence. -/
+@[expose]
 def approximationNumberEnergy
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
@@ -74,7 +79,7 @@ theorem SameApproximationSingularSequence.approximationNumberEnergy_eq
   unfold approximationNumberEnergy
   congr 1
   funext n
-  exact congrArg (fun x : ℝ => ENNReal.ofReal (x ^ 2)) (h n)
+  exact congrArg (fun x : ℝ => ENNReal.ofReal (x ^ 2)) ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h n)
 
 /-- Complete singular-value equality preserves Hilbert--Schmidt membership. -/
 theorem SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff
@@ -100,6 +105,7 @@ theorem approximationNumberEnergy_ne_top_adjoint_iff
     (A : E →L[𝕜] F) :
     approximationNumberEnergy A.adjoint ≠ ⊤ ↔ approximationNumberEnergy A ≠ ⊤ := by
   apply SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   exact approximationSingularValue_adjoint n A
 

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Majorization
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationReal
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Majorization
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationReal
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

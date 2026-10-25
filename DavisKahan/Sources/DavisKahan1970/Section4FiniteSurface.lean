@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.FiniteDimensional.DirectRotation
-import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 
 /-!
 # Finite-dimensional Section 4 source surface
@@ -19,6 +21,8 @@ The infinite-dimensional frontier must not be discharged merely by importing
 these finite results.  Its remaining task is to prove pointwise approximation
 number dominance for the restricted displacement in arbitrary Hilbert space.
 -/
+
+public section
 
 open scoped InnerProductSpace BigOperators
 

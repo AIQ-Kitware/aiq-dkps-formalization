@@ -17,12 +17,16 @@ here deliberately expose the algebra before introducing real-power asymptotic
 syntax, so the source rate is not conflated with a hand-picked schedule.
 -/
 
-import Acharyya2025.GrowingResponse
-import Acharyya2025.GrowingPipeline
-import Acharyya2025.RateChain
-import Acharyya2025.SpectralPipeline
-import Mathlib.Analysis.Asymptotics.Lemmas
-import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+module
+
+public import Acharyya2025.GrowingResponse
+public import Acharyya2025.GrowingPipeline
+public import Acharyya2025.RateChain
+public import Acharyya2025.SpectralPipeline
+public import Mathlib.Analysis.Asymptotics.Lemmas
+public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+
+public section
 
 open scoped BigOperators Topology
 open Filter

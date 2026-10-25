@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81AngleForms
-import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Real
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81AngleForms
+public import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Real
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SharpIdeal
-import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
-import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
-import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
-import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalReverseGap
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SharpIdeal
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
+public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalReverseGap
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -95,7 +99,7 @@ private theorem isOffDiagonal_of_maps_orthogonal
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ)
     (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
     Submodule.IsOffDiagonal U H := by
-  change U.diagBlock H = 0
+  rw [Submodule.isOffDiagonal_iff]
   apply ContinuousLinearMap.ext
   intro x
   have hPzero : U.starProjection (H (U.starProjection x)) = 0 :=
@@ -106,8 +110,7 @@ private theorem isOffDiagonal_of_maps_orthogonal
       Submodule.starProjection_eq_self_iff.mpr
         (hHUperp (Uᗮ.starProjection x) (Uᗮ.starProjection_apply_mem x)),
       sub_self]
-  simp only [Submodule.diagBlock, ContinuousLinearMap.comp_apply,
-    add_apply, hPzero, hQzero, add_zero, zero_apply]
+  simp only [Submodule.diagBlock_apply, hPzero, hQzero, add_zero, zero_apply]
 
 /-- The finite-dimensional sharp operator-norm theorem gives the strict
 quarter-turn branch from the source hypotheses. -/
@@ -171,7 +174,8 @@ private theorem isQuarterAcute_of_orderedFormGap_finiteDimensional
     (T := A.toLinearMap) (S := (A + H).toLinearMap)
     hAsym hAHsym hAU hAplusH_V hab (norm_nonneg H)
     hUhigh hUperpLow hVhigh hVperpLow hdiagU hdiagUperp hpert
-  change ‖U.starProjection - V.starProjection‖ < Real.sqrt 2 / 2
+  change U.projectionGap V < Real.sqrt 2 / 2
+  rw [Submodule.projectionGap_def]
   have hsq : ‖U.starProjection - V.starProjection‖ ^ 2 < (1 : ℝ) / 2 :=
     hbranch.1
   have hthresholdSq : (Real.sqrt 2 / 2) ^ 2 = (1 : ℝ) / 2 := by

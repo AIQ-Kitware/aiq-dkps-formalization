@@ -22,13 +22,17 @@ Status (2026-06-11): COMPLETE — no open obligations remain in this file.
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Acharyya2024.Common
-import Acharyya2024.RawStress
-import Acharyya2024.Probability
-import Acharyya2024.ContinuousMDS
-import Acharyya2024.GrowingModels
-import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
-import ForTauCeti.Probability.RigidAlignment
+module
+
+public import Acharyya2024.Common
+public import Acharyya2024.RawStress
+public import Acharyya2024.Probability
+public import Acharyya2024.ContinuousMDS
+public import Acharyya2024.GrowingModels
+public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
+public import ForTauCeti.Probability.RigidAlignment
+
+public section
 
 open scoped BigOperators Topology ProbabilityTheory
 open Filter MeasureTheory

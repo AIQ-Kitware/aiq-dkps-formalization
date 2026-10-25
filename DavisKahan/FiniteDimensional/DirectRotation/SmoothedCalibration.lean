@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality
 
 /-!
 # Choosing the smoothing scale from principal angles
@@ -15,6 +17,8 @@ to the accepted principal angles and all ambient complex unitary competitors.
 This is a parameter-selection consequence of the exact minimum theorem,
 not a separate priority claim.
 -/
+
+public section
 
 noncomputable section
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

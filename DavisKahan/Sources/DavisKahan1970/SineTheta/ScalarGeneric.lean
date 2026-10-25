@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.SinTheta.BoundedPerturbation
-import DavisKahan.Sylvester.ScalarGeneric
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
-import DavisKahan.SinTheta.Unbounded.FormBoundedGap
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+module
+
+public import DavisKahan.SinTheta.BoundedPerturbation
+public import DavisKahan.Sylvester.ScalarGeneric
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+public import DavisKahan.SinTheta.Unbounded.FormBoundedGap
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

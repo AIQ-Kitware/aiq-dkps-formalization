@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.CircleRieszEndpoints
-import TauCeti.Analysis.InnerProductSpace.Sylvester
+module
+
+public import DavisKahan.SpectralTheory.CircleRieszEndpoints
+public import TauCeti.Analysis.InnerProductSpace.Sylvester
 
 /-!
 # Rosenblum's theorem: solving the Sylvester equation
@@ -43,6 +45,8 @@ Both endpoints come from `DavisKahan.SpectralTheory.CircleRieszEndpoints` and
 need no self-adjointness, so the results here hold for arbitrary bounded
 operators.
 -/
+
+public section
 
 open Metric Set Filter Complex ContinuousLinearMap
 open scoped Topology
@@ -402,6 +406,7 @@ range and a bounded inverse are statements about an *operator*, and the
 consequence downstream users want — the reverse estimate
 `‖X‖ ≤ K * ‖A X - X B‖` of `norm_le_mul_norm_sylvesterOperator` — is not
 available from the pointwise `∃!` alone. -/
+@[expose]
 noncomputable def sylvesterEquiv (hr : 0 < radius)
     (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)
     (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B) :
@@ -418,7 +423,11 @@ noncomputable def sylvesterEquiv (hr : 0 < radius)
       exact h.symm)
     (LinearMap.range_eq_top.mpr fun C =>
       ⟨rosenblumSolution A B C center radius,
-        comp_rosenblumSolution_sub_comp_eq A B C hr hA hB⟩)
+        by
+          change ContinuousLinearMap.sylvester A B
+            (rosenblumSolution A B C center radius) = C
+          rw [ContinuousLinearMap.sylvester_apply]
+          exact comp_rosenblumSolution_sub_comp_eq A B C hr hA hB⟩)
 
 /-- The Sylvester equivalence, unfolded to its underlying map. -/
 @[simp]
@@ -426,8 +435,9 @@ theorem sylvesterEquiv_apply (hr : 0 < radius)
     (hA : spectrum ℂ A ⊆ ball ((center : ℂ)) radius)
     (hB : ∀ z : ℂ, z ∈ closedBall ((center : ℂ)) radius → z ∉ spectrum ℂ B)
     (X : F →L[ℂ] E) :
-    sylvesterEquiv A B hr hA hB X = A ∘L X - X ∘L B :=
-  rfl
+    sylvesterEquiv A B hr hA hB X = A ∘L X - X ∘L B := by
+  change ContinuousLinearMap.sylvester A B X = _
+  exact ContinuousLinearMap.sylvester_apply A B X
 
 /-- The inverse of the Sylvester operator *is* the Rosenblum contour integral. -/
 theorem sylvesterEquiv_symm_apply (hr : 0 < radius)
@@ -450,8 +460,9 @@ theorem norm_le_mul_norm_sylvesterOperator (hr : 0 < radius)
       ‖A ∘L X - X ∘L B‖ := by
   have h := ((sylvesterEquiv A B hr hA hB).symm :
     (F →L[ℂ] E) →L[ℂ] (F →L[ℂ] E)).le_opNorm (A ∘L X - X ∘L B)
-  rwa [ContinuousLinearEquiv.coe_coe, ← sylvesterEquiv_apply A B hr hA hB X,
+  rw [ContinuousLinearEquiv.coe_coe, ← sylvesterEquiv_apply A B hr hA hB X,
     ContinuousLinearEquiv.symm_apply_apply] at h
+  exact h.trans_eq (by rw [sylvesterEquiv_apply])
 
 /-- The uniform lower bound, packaged without naming the equivalence. -/
 theorem exists_norm_le_mul_norm_sylvesterOperator (hr : 0 < radius)

@@ -3,20 +3,24 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-import DavisKahan.Sylvester.ClosedSylvesterEquation
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
-import DavisKahan.Sylvester.Gap
-import DavisKahan.Sylvester.Unbounded.Neumann
-import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
-import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+module
 
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import DavisKahan.Sylvester.ClosedSylvesterEquation
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
+public import DavisKahan.Sylvester.Gap
+public import DavisKahan.Sylvester.Unbounded.Neumann
+public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -206,6 +210,7 @@ section Compression
 projection.  For a reducing subspace of a self-adjoint operator this is the
 honest restriction, and its Banach-algebra spectrum is the correct
 interpretation of "the spectrum of `A` on `U`". -/
+@[expose]
 noncomputable def compressOperator
     {𝕜 G : Type*} [RCLike 𝕜] [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
@@ -350,8 +355,7 @@ theorem sinTheta_spectrum
       _ ≤ ‖B - A‖ * ‖(x : E)‖ := (B - A).le_opNorm _
   calc d * U.directedProjectionGap V
       = d * ‖Vᗮ.orthogonalProjectionOnto ∘L U.subtypeL‖ := by
-        rw [norm_crossCompression_eq]
-        rfl
+        rw [norm_crossCompression_eq, Submodule.directedProjectionGap_def]
     _ ≤ ‖Vᗮ.orthogonalProjectionOnto ∘L (B - A) ∘L U.subtypeL‖ := hest
     _ ≤ ‖B - A‖ := hCnorm
 

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.BoundedOperator.IsometricRangeProjection
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.Sylvester.Spectrum
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+module
+
+public import DavisKahan.BoundedOperator.IsometricRangeProjection
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.Sylvester.Spectrum
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -44,7 +48,7 @@ variable {F : Type u} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
 
 /-- The canonical residual of a closed trial subspace, viewed as a map from
 that subspace into the ambient Hilbert space. -/
-noncomputable def trialResidualCore
+@[expose] noncomputable def trialResidualCore
     (T : H →L[ℂ] H) (Z : Submodule ℂ H)
     [Z.HasOrthogonalProjection] : Z →L[ℂ] H :=
   Zᗮ.starProjection ∘L T ∘L Z.subtypeL
@@ -108,6 +112,7 @@ noncomputable def isometricRangeProjection
 
 /-- The ambient complementary cross block of `A` relative to the range of an
 isometric trial map. -/
+@[expose]
 noncomputable def isometricRangeCrossBlock
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (hX : IsometricEmbedding X) :
     H →L[ℂ] H := by

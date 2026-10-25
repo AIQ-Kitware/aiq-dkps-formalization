@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.Sylvester.Spectrum
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import DavisKahan.InfiniteDimensional.DoubleAngle
+module
+
+public import DavisKahan.Sylvester.Spectrum
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -54,6 +58,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 section IsometryConjugation
 
 /-- Conjugation of a bounded operator by a linear isometry equivalence. -/
+@[expose]
 noncomputable def conjByIsometryEquiv (W : E ≃ₗᵢ[ℂ] E) (A : E →L[ℂ] E) :
     E →L[ℂ] E :=
   W.toLinearIsometry.toContinuousLinearMap ∘L A ∘L
@@ -105,6 +110,7 @@ theorem _root_.ContinuousLinearMap.Reduces.map_isometryEquiv {A : E →L[ℂ] E}
     exact h.symm
 
 /-- The isometric restriction of `W` from a subspace onto its image. -/
+@[expose]
 noncomputable def submoduleMapIsometry (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E) :
     U ≃ₗᵢ[ℂ] (U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) where
   toLinearEquiv := W.toLinearEquiv.submoduleMap U
@@ -490,8 +496,7 @@ theorem subspaceGap_map_reflection (U V : Submodule ℂ E)
     rw [starProjection_map_reflection,
       ← conjByReflection_sub_eq_reflectionDefect]
     abel
-  show ‖U.starProjection -
-      (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection‖ = _
+  rw [Submodule.projectionGap_def]
   rw [h, norm_neg]
 
 /-- **The double-angle identification.**  The gap to the reflected image

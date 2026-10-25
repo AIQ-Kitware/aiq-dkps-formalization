@@ -4,14 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.OperatorIdeal.UnitarilyInvariant.FamilyCore
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
-import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
+module
+
+public import DavisKahan.OperatorIdeal.UnitarilyInvariant.FamilyCore
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
+public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 
 /-!
 # The complex rectangular Hilbert--Schmidt ideal family
@@ -26,6 +28,8 @@ The construction is rectangular and basis-free.  Its only scalar restriction
 is complex scalars, inherited from the current Hilbert tensor implementation.
 The real family is intended to be obtained by exact complexification transport.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

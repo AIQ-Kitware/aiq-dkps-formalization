@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenNonacuteClassification
-import ForTauCeti.Analysis.InnerProductSpace.Projection.KernelSupport
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenNonacuteClassification
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.KernelSupport
 
 /-!
 # Nonredundant phase and defect parameters
@@ -15,6 +17,8 @@ Requiring the range of that projection to lie in the orthogonal complement
 of this kernel removes precisely this redundancy. Every global optimizer
 has exactly one resulting phase/defect pair.
 -/
+
+public section
 
 noncomputable section
 
@@ -117,6 +121,7 @@ theorem schattenPhaseWeight_apply_eq_zero_iff_le_critical
 
 /-- Compatible phase projections with all ineffective directions removed.
 The range condition is imposed on the actual phase-weight kernel. -/
+@[expose]
 def schattenNormalizedPhaseProjections
     (p : ℝ) (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L) :
     Set (E →L[ℂ] E) :=

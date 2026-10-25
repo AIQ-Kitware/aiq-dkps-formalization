@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPhaseWeight
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPhaseWeight
 
 /-!
 # Unique effective phase and defect coordinates for Charbonnier optimizers
@@ -13,6 +15,8 @@ weight's kernel. This removes the freedom on inactive, critical and right
 directions while keeping every independent crossed-defect unitary.
 -/
 
+public section
+
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
@@ -21,6 +25,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
 /-- Compatible projections supported on the effective weighted phase space. -/
+@[expose]
 def weightedNormalizedPhaseProjections
     (a b : ℝ) (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L) :
     Set (E →L[ℂ] E) :=

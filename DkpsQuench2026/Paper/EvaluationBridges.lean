@@ -11,7 +11,11 @@ The file proves the exact margin arithmetic needed to pass between the layers
 once concentration/deviation premises are available, and records explicit
 counterexamples to invalid converse implications.
 -/
-import DkpsQuench2026.Paper.OLSPerturbation
+module
+
+public import DkpsQuench2026.Paper.OLSPerturbation
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -40,6 +44,7 @@ variable {Ω : Type w} [MeasurableSpace Ω]
 /-! ## Population MAE to finite measured MAE -/
 
 /-- A measured finite MAE is within `ε` of a specified population value. -/
+@[expose]
 def EmpiricalMAEDeviation {r : ℕ}
     (truth prediction : Fin r → ℝ) (population ε : ℝ) : Prop :=
   |empiricalMAE truth prediction - population| ≤ ε
@@ -185,6 +190,7 @@ theorem empiricalWinRateClaim_65_iff_twentyOne_le_strictWinCount
 
 /-- A finite observed win fraction is within `ε` of a target population win
 probability. -/
+@[expose]
 def EmpiricalWinFractionDeviation {r : ℕ}
     (truth candidate baseline : Fin r → ℝ)
     (populationWinRate ε : ℝ) : Prop :=

@@ -4,16 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
-import DavisKahan.Sources.DavisKahan1970.Section8.SelectedBranch
-import DavisKahan.Sources.DavisKahan1970.Section8.Smallness
-import DavisKahan.Sources.DavisKahan1970.Section8.CompressionRepulsion
-import DavisKahan.Sources.DavisKahan1970.Section8.CompressionApproximation
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
-import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
+public import DavisKahan.Sources.DavisKahan1970.Section8.SelectedBranch
+public import DavisKahan.Sources.DavisKahan1970.Section8.Smallness
+public import DavisKahan.Sources.DavisKahan1970.Section8.CompressionRepulsion
+public import DavisKahan.Sources.DavisKahan1970.Section8.CompressionApproximation
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
+public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

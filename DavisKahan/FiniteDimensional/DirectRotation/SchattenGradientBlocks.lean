@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientSpectrum
-import ForTauCeti.Analysis.CStarAlgebra.TwoPointSpectrum
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientSpectrum
+public import ForTauCeti.Analysis.CStarAlgebra.TwoPointSpectrum
 
 /-!
 # Two-phase restrictions on positive Schatten-gradient levels
@@ -16,6 +18,8 @@ This constructs the operator blocks rather than only constraining individual
 eigenvectors. The relation between the projections on opposite levels is a
 separate optimization step.
 -/
+
+public section
 
 noncomputable section
 

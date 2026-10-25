@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly
 
 /-!
 # Exact complex trace minimizers on arbitrarily many principal planes
@@ -19,6 +21,8 @@ requires the finite CS/Halmos decomposition, including common and exterior
 summands. Those identifications are not hypotheses or conclusions here.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 namespace ComplexTraceOptimality
@@ -32,6 +36,7 @@ noncomputable section
 /-- A unitary transporting two complex subspaces attains the projection lower
 bound for the full trace norm.  Once this equality holds, global minimality
 follows from `projectionDifference_kyFanSum_le_displacement`. -/
+@[expose]
 def AttainsProjectionTraceBound {H : Type*}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [FiniteDimensional ℂ H]
     (U V : Submodule ℂ H) (W : H ≃ₗᵢ[ℂ] H) : Prop :=

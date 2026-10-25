@@ -23,8 +23,12 @@ We work in the operator world using Mathlib's sorted spectral API from
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import TauCeti.Analysis.InnerProductSpace.CourantFischer
+module
+
+public import Mathlib
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
+
+public section
 
 open scoped BigOperators RealInnerProductSpace
 open Module (finrank)

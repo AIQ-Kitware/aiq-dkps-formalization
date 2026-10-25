@@ -4,7 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5, GPT-5.6 Sol
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamFormSpaceScalar
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamFormSpaceScalar
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

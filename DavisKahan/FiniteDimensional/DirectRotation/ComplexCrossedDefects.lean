@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.Geometry.Halmos.CrossedDefectGap
+module
+
+public import DavisKahan.Geometry.Halmos.CrossedDefectGap
 
 /-!
 # Equal rank supplies the nonacute direct-rotation defect identification
@@ -15,6 +17,8 @@ hypothesis required by the general Halmos completed direct rotation.
 The proof uses the Grassmann formula and orthogonal-complement dimension,
 not an enumeration of principal angles.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -56,6 +60,7 @@ theorem crossedDefectsEquivalent_of_finrank_eq
 
 /-- An explicit isometric equivalence of the crossed defects, including
 right-angle sectors and zero-dimensional cases. -/
+@[expose]
 noncomputable def finiteCrossedDefectEquiv
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hUV : finrank ℂ U = finrank ℂ V) :

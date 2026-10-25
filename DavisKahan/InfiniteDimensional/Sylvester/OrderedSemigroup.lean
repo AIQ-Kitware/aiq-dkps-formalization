@@ -3,11 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
-import Mathlib.MeasureTheory.Integral.ExpDecay
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
+module
+
+import Mathlib.Analysis.Calculus.Deriv.Prod
+public import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+public import Mathlib.MeasureTheory.Integral.ExpDecay
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 
 
 /-!
@@ -24,6 +27,8 @@ exponential decay.  This is the constant-one branch of the Sylvester theory;
 it is logically different from the two-sided Fourier branch, whose universal
 constant is `pi/2`.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -57,11 +62,8 @@ theorem exists_common_cut_of_orderedSeparation
     ∃ c : ℝ,
       realSpectrum B ⊆ Set.Iic c ∧
       realSpectrum A ⊆ Set.Ici (c + d) := by
-  obtain ⟨hInvB, hInvA, hord⟩ := hsep
-  have hkey : ∀ b ∈ realSpectrum B, ∀ a ∈ realSpectrum A, b + d ≤ a := by
-    intro b hb a ha
-    exact hord b ⟨hInvB, (ContinuousLinearMap.spectrum_restrict_top B hInvB).symm.subset hb⟩
-      a ⟨hInvA, (ContinuousLinearMap.spectrum_restrict_top A hInvA).symm.subset ha⟩
+  have hkey : ∀ b ∈ realSpectrum B, ∀ a ∈ realSpectrum A, b + d ≤ a :=
+    (orderedSpectraSeparated_top_iff B A d).mp hsep
   rcases (realSpectrum B).eq_empty_or_nonempty with hB0 | hBne
   · rcases (realSpectrum A).eq_empty_or_nonempty with hA0 | hAne
     · exact ⟨0, by simp [hB0], by simp [hA0]⟩

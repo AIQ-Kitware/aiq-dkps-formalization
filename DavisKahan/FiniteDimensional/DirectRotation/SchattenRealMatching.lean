@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealAngleCosts
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealAngleCosts
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
 
 /-!
 # Labelled matchings extracted from unrestricted real transport minima
@@ -21,6 +23,8 @@ lower-bound direction of a matching formula; constructing an ambient
 transporter for every matching is a separate converse.
 -/
 
+public section
+
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.RealTransport
@@ -30,6 +34,7 @@ open scoped ENNReal
 
 /-- Symmetric pair weight, including both determinant classes of the
 unrestricted four-dimensional problem. -/
+@[expose]
 def realSchattenPairWeight (p theta psi : ℝ) : ℝ :=
   realPairSchattenCost p (max theta psi) (min theta psi)
 
@@ -39,6 +44,7 @@ theorem realSchattenPairWeight_comm (p theta psi : ℝ) :
 
 /-- Cost of a labelled matching. For an involutive permutation, every
 nonfixed edge is counted twice with half its full two-angle weight. -/
+@[expose]
 def realSchattenMatchingCost {ι : Type*} [Fintype ι]
     (p : ℝ) (theta : ι → ℝ) (s : Equiv.Perm ι) : ℝ := by
   classical

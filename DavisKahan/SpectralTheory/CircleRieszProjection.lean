@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.SpectralRestriction
-import Mathlib.MeasureTheory.Integral.CircleIntegral
+module
+
+public import DavisKahan.SpectralTheory.SpectralRestriction
+public import Mathlib.MeasureTheory.Integral.CircleIntegral
 
 /-!
 # Circle Riesz projection and spectral separation by a circle
@@ -16,6 +18,8 @@ a chosen measurable part of the real spectrum of a self-adjoint operator, while
 `circleRieszProjection` is the corresponding circle-integral Riesz projection
 `(2 π i)⁻¹ ∮_{|z-c|=r} (z - A)⁻¹ dz`.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -65,6 +69,7 @@ resolvent, the contour, and every theorem proved about this projection in
 `DavisKahan.Sylvester.RosenblumExistence` are Cauchy theory and never touch an
 inner product.  `CircleSeparatesRealSpectrum` above is the part that genuinely
 needs one, which is why the two no longer share a `variable` block. -/
+@[expose]
 noncomputable def circleRieszProjection
     (A : H →L[ℂ] H) (center radius : ℝ) : H →L[ℂ] H :=
   (2 * Real.pi * Complex.I)⁻¹ •

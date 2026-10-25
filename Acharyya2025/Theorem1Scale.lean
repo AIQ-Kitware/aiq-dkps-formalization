@@ -24,8 +24,12 @@ counterexample shows it cannot be dropped.
 
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
-import Acharyya2024.Consistency
-import Acharyya2025.Deterministic
+module
+
+public import Acharyya2024.Consistency
+public import Acharyya2025.Deterministic
+
+public section
 
 open scoped BigOperators Topology
 open MeasureTheory
@@ -43,6 +47,7 @@ theorem norm_mat_one_one (x : Mat 1 1) : ‖x‖ = |x (0, 0)| := by
 
 /-- The sample response means of the counterexample: model `0` answers `0`, model `1` answers
 `20` plus or minus `1` on a fair coin. -/
+@[expose]
 noncomputable def Xbar : Bool → Fin 2 → Mat 1 1 :=
   fun ω i => if i = 1 then EuclideanSpace.single (0, 0) (if ω then (21 : Real) else 19) else 0
 

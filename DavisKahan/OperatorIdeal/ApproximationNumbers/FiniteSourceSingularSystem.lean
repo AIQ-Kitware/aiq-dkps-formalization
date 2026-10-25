@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 
 /-!
 # Singular systems with finite source and arbitrary Hilbert codomain
@@ -21,6 +23,8 @@ instance on the ambient codomain and does not weaken the assumptions of the esta
 finite-dimensional singular-value files.
 -/
 
+public section
+
 namespace TauCeti
 open Module (finrank)
 open DavisKahan.ExactSinTheta
@@ -31,6 +35,8 @@ variable {E F : Type*}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 noncomputable section
+
+local instance : CompleteSpace E := FiniteDimensional.complete ℂ E
 
 noncomputable local instance finiteDimensional_range (A : E →L[ℂ] F) :
     FiniteDimensional ℂ A.range := by
@@ -45,11 +51,13 @@ noncomputable local instance completeSpace_range (A : E →L[ℂ] F) :
 
 /-- Singular values of a finite-source operator, computed after restricting the codomain to
 its finite-dimensional range. -/
+@[expose]
 noncomputable def finiteSourceSingularValue (A : E →L[ℂ] F)
     (i : Fin (finrank ℂ E)) : ℝ :=
   A.rangeRestrict.toLinearMap.singularValues i
 
 /-- The right singular basis of a finite-source operator. -/
+@[expose]
 noncomputable def finiteSourceRightSingularBasis (A : E →L[ℂ] F) :
     OrthonormalBasis (Fin (finrank ℂ E)) ℂ E :=
   rightSingularBasis A.rangeRestrict.toLinearMap

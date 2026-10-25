@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerAngles
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimalPhase
-import DavisKahan.Geometry.Polar.PairedPhase
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerAngles
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimalPhase
+public import DavisKahan.Geometry.Polar.PairedPhase
 
 /-!
 # Every optimizer's positive-angle signed phases
@@ -16,6 +18,8 @@ Each pair carries exactly the two optimal signed scalar phase choices.
 The individual phase bounds exclude phase windings before scalar
 uniqueness is applied. Critical angles and repeated levels are included.
 -/
+
+public section
 
 noncomputable section
 

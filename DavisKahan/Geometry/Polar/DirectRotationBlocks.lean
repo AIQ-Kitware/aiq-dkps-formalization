@@ -3,16 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Geometry.Halmos.TwoProjections
+module
+
+public import DavisKahan.Geometry.Halmos.TwoProjections
 -- supplies `halmosCosineSq`, `projection`, `complementaryProjection`, `projection_sq` and the
 -- two-projection calculus these block estimates run on.
-import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 -- supplies `IsDirectRotation`, the five-field predicate the norm bounds are read against.
 -- It lives in `TauCeti.DavisKahan`.
-import DavisKahan.Geometry.Polar.DirectRotationSquare
-import DavisKahan.Geometry.Polar.Section3Elementary
-import DavisKahan.Geometry.Polar.Section3Nonacute
-import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
+public import DavisKahan.Geometry.Polar.Section3Elementary
+public import DavisKahan.Geometry.Polar.Section3Nonacute
+public import DavisKahan.InfiniteDimensional.DoubleAngle
 -- supplies `reflectedSubspace` and `starProjection_reflectedSubspace`, the mirror image of
 -- one subspace in another.  That module imports only `SinTheta`/`SpectralTheory` material
 -- so the dependency is acyclic.
@@ -20,10 +22,12 @@ import DavisKahan.InfiniteDimensional.DoubleAngle
 -- intertwining identities a `IsDirectRotation` gives on the two projections.
 -- supplies `spectraDirectRotation_crossed_blocks`, the crossed-block identity of the
 -- canonical direct rotation.
-import DavisKahan.Geometry.Polar.PrincipalSquareRoot
+public import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 -- supplies the `U`-block calculus (`star_blocks_eq`, `eq_sum_blocks`) promoted out of the
 -- frontier alongside Proposition 3.3.
-import DavisKahan.Geometry.Halmos.FixedCosineSubspace
+public import DavisKahan.Geometry.Halmos.FixedCosineSubspace
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

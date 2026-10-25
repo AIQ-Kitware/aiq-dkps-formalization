@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Riccati.BoundedGraphAcute
-import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.Riccati.BoundedGraphAcute
+public import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Spectrum transport for bounded Riccati diagonalization
@@ -24,6 +26,8 @@ The later block-spectrum module can therefore focus only on proving that the
 spectrum of `blockDiagonalOperator D0 D1` is the union of the spectra of its
 two diagonal blocks.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt

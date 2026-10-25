@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
-import DavisKahan.Sources.DavisKahan1970.SharpKyFan
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
+public import DavisKahan.Sources.DavisKahan1970.SharpKyFan
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

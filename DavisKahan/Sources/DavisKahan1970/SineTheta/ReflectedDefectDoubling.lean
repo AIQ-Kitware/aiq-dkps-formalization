@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.SpectralTheory.ReflectionRestriction
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.BoundedOperator.Reflection
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.SpectralTheory.ReflectionRestriction
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -62,7 +66,9 @@ private theorem starProjection_map_reflectionOperator
   rw [starProjection_map_unitary U V.reflection]
   unfold boundedUnitaryConjugate
   rw [Submodule.reflection_symm]
-  rfl
+  ext x
+  simp only [ContinuousLinearMap.comp_apply, Submodule.reflectionOperator_apply_eq_reflection,
+      LinearIsometry.coe_toContinuousLinearMap, LinearIsometryEquiv.coe_toLinearIsometry]
 
 /-- The reflection defect of a self-adjoint operator is self-adjoint. -/
 private theorem isSelfAdjoint_reflectionDefect
@@ -123,6 +129,7 @@ private theorem reflectedDefectBlocks_same
     simp only [ContinuousLinearMap.comp_apply, neg_apply] at hanti_x
     rw [hanti_x]
     simp only [map_neg]
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   rw [hblock, ContinuousLinearMap.approximationNumber_neg]
   have hright := sameApproximationSingularValues_comp_reflection_right V
@@ -137,10 +144,10 @@ private theorem reflectedDefectBlocks_same
         ContinuousLinearMap.singularValue_adjoint]
     _ = (V.reflectionOperator ∘L
           (projectionBlock Wᗮ U D).adjoint).approximationNumber n :=
-      (hleft n).symm
+      ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hleft n).symm
     _ = (V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint ∘L
           V.reflectionOperator).approximationNumber n :=
-      (hright n).symm
+      ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hright n).symm
 
 /-- The two off-diagonal blocks of a self-adjoint operator have the same
 complete singular sequence. -/
@@ -163,6 +170,7 @@ private theorem offDiagonalBlocks_same
       Submodule.starProjection_congr (Submodule.orthogonal_orthogonal V)
     unfold projectionBlock
     rw [hp]
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   calc
     (projectionBlock Vᗮ V S).approximationNumber n =

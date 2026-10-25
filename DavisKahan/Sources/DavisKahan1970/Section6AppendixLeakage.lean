@@ -4,9 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

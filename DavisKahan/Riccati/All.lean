@@ -3,19 +3,21 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Riccati.BoundedBasic
-import DavisKahan.Riccati.BoundedCanonicalGraph
-import DavisKahan.Riccati.BoundedCanonicalSolution
-import DavisKahan.Riccati.BoundedCore
-import DavisKahan.Riccati.BoundedEstimates
-import DavisKahan.Riccati.BoundedExistence
-import DavisKahan.Riccati.BoundedReduction
-import DavisKahan.Riccati.BoundedSharpEstimates
-import DavisKahan.Riccati.BoundedStability
-import DavisKahan.Riccati.UnboundedAdjointRiccati
-import DavisKahan.Riccati.UnboundedBasic
-import DavisKahan.Riccati.UnboundedCore
-import DavisKahan.Riccati.UnboundedExistence
-import DavisKahan.Riccati.UnboundedReduction
+module
+
+public import DavisKahan.Riccati.BoundedBasic
+public import DavisKahan.Riccati.BoundedCanonicalGraph
+public import DavisKahan.Riccati.BoundedCanonicalSolution
+public import DavisKahan.Riccati.BoundedCore
+public import DavisKahan.Riccati.BoundedEstimates
+public import DavisKahan.Riccati.BoundedExistence
+public import DavisKahan.Riccati.BoundedReduction
+public import DavisKahan.Riccati.BoundedSharpEstimates
+public import DavisKahan.Riccati.BoundedStability
+public import DavisKahan.Riccati.UnboundedAdjointRiccati
+public import DavisKahan.Riccati.UnboundedBasic
+public import DavisKahan.Riccati.UnboundedCore
+public import DavisKahan.Riccati.UnboundedExistence
+public import DavisKahan.Riccati.UnboundedReduction
 
 /-! # `DavisKahan/Riccati` -/

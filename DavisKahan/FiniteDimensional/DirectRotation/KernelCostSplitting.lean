@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.Geometry.Angle.CosineKernel
-import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
-import ForTauCeti.Analysis.InnerProductSpace.NuclearTrace
-import ForTauCeti.Analysis.InnerProductSpace.SchattenInvolution
+module
+
+public import DavisKahan.Geometry.Angle.CosineKernel
+public import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
+public import ForTauCeti.Analysis.InnerProductSpace.NuclearTrace
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenInvolution
 
 /-!
 # Exact cost splitting across the actual right-angle defect
@@ -18,6 +20,8 @@ the kernel cost is exactly `a * dim(ker C)` for `0 ≤ b ≤ a`. The proof
 constructs the actual restrictions and uses reflection anticommutation to
 remove their trace term. Real and complex scalars and zero summands are allowed.
 -/
+
+public section
 
 noncomputable section
 

@@ -8,8 +8,12 @@ trusted Lean/Mathlib basis plus any completed dependencies, while dependency
 scanning shows the open work directly.
 -/
 
-import Mathlib
-import Acharyya2024.WellKnown
+module
+
+public import Mathlib
+public import Acharyya2024.WellKnown
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory
@@ -35,6 +39,7 @@ abbrev Config (n d : Nat) := Fin n → Rvec d
 
 /-- A subsequence of the naturals, encoded as a strictly monotone reindexing.
 Corresponds to the paper's subsequences `{r_u}` of `{r}`. -/
+@[expose]
 def Subseq (u : Nat → Nat) : Prop := StrictMono u
 
 /-- In one dimension the norm is the absolute difference of the single coordinate. -/
@@ -43,47 +48,56 @@ theorem norm_sub_one_dim (x y : Rvec 1) : ‖x - y‖ = |x 0 - y 0| := by
   simp [Real.sqrt_sq_eq_abs]
 
 /-- Squared Frobenius norm of a dissimilarity matrix: `∑ᵢⱼ (Aᵢⱼ)²`. -/
+@[expose]
 noncomputable def frobSq {n : Nat} (A : DisMat n) : Real :=
   ∑ i : Fin n, ∑ j : Fin n, (A i j)^2
 
 /-- Frobenius norm of a dissimilarity matrix, `‖A‖_F = sqrt(∑ᵢⱼ (Aᵢⱼ)²)`. -/
+@[expose]
 noncomputable def frob {n : Nat} (A : DisMat n) : Real :=
   Real.sqrt (frobSq A)
 
 /-- Frobenius norm of the entrywise difference of two dissimilarity matrices,
 `‖A - B‖_F`. This is how the paper measures `‖D - ∆(∞)‖`. -/
+@[expose]
 noncomputable def frobSub {n : Nat} (A B : DisMat n) : Real :=
   frob (fun i j => A i j - B i j)
 
 /-- Raw-stress objective for metric multidimensional scaling: the paper's
 criterion `σ(z) = ∑ᵢⱼ (‖zᵢ - zⱼ‖ - ∆ᵢⱼ)²`, measuring how well configuration `z`
 in `R^d` reproduces the target dissimilarities `∆`. -/
+@[expose]
 noncomputable def rawStress (n d : Nat) (Δ : DisMat n) (z : Config n d) : Real :=
   ∑ i : Fin n, ∑ j : Fin n, (‖z i - z j‖ - Δ i j)^2
 
 /-- Set of raw-stress minimizers, the paper's `MDS(∆)` / `mds(∆)`. The set form
 encodes the non-uniqueness of MDS noted in the paper's Remark 1 (solutions are
 only determined up to an affine transformation). -/
+@[expose]
 def MDS (n d : Nat) (Δ : DisMat n) : Set (Config n d) :=
   { z | ∀ z' : Config n d, rawStress n d Δ z ≤ rawStress n d Δ z' }
 
 /-- Pairwise Euclidean distance `‖zᵢ - zⱼ‖` induced by a configuration `z`. -/
+@[expose]
 noncomputable def pairDist {n d : Nat} (z : Config n d) (i j : Fin n) : Real :=
   ‖z i - z j‖
 
 /-- Absolute error between two configurations in a single pairwise distance. -/
+@[expose]
 noncomputable def pairDistErr {n d : Nat} (z z' : Config n d) (i j : Fin n) : Real :=
   |pairDist z i j - pairDist z' i j|
 
 /-- Convergence in probability of a sequence of random elements `Xₙ` to a fixed
 target `x` (the paper's `→P`). Standard definition: for every `ε > 0`, the
 probability of exceeding `ε` tends to `0`. -/
+@[expose]
 def ConvergesInProbability {Ω α : Type} [MeasurableSpace Ω] [PseudoMetricSpace α]
     (P : Measure Ω) (X : Nat → Ω → α) (x : α) : Prop :=
   ∀ ε : Real, 0 < ε →
     Tendsto (fun n => P {ω | dist (X n ω) x > ε}) atTop (𝓝 0)
 
 /-- Convergence in probability to `0`, e.g. the paper's `‖D - ∆(∞)‖ →P 0`. -/
+@[expose]
 def ConvergesInProbabilityZero {Ω α : Type} [MeasurableSpace Ω] [PseudoMetricSpace α]
     [Zero α] (P : Measure Ω) (X : Nat → Ω → α) : Prop :=
   ConvergesInProbability P X 0
@@ -91,6 +105,7 @@ def ConvergesInProbabilityZero {Ω α : Type} [MeasurableSpace Ω] [PseudoMetric
 /-- A family of events `Eₙ` that holds with high probability as `n → ∞`: for
 every `δ > 0`, eventually `P(Eₙ) ≥ 1 - δ`. (Here `P` may itself vary with `n`,
 modeling the paper's `r`- or `n`-indexed sampling distributions.) -/
+@[expose]
 def HighProbAtTop {Ω : Type*} [MeasurableSpace Ω]
     (P : Nat → Measure Ω) (E : Nat → Set Ω) : Prop :=
   ∀ δ : ENNReal, 0 < δ → ∃ N : Nat, ∀ n > N, P n (E n) ≥ 1 - δ
@@ -100,6 +115,7 @@ def HighProbAtTop {Ω : Type*} [MeasurableSpace Ω]
 transformation* (Remark 1, Theorems 1/3); this definition is the simpler direct
 (non-affine-quotiented) error, so it is a stronger/encoded notion of closeness
 than the paper's statements use. -/
+@[expose]
 noncomputable def ConfigError {n d : Nat} (ψhat ψ : Config n d) : Real :=
   ∑ i : Fin n, ‖ψhat i - ψ i‖
 
@@ -282,6 +298,7 @@ theorem tendsto_frobSub_zero_of_entrywise {n : Nat}
   simpa [frobSub, frob, frobSq] using hsum.sqrt
 
 /-- A configuration exactly realizes a target dissimilarity matrix. -/
+@[expose]
 def RealizesDissimilarity {n d : Nat} (z : Config n d) (Δ : DisMat n) : Prop :=
   ∀ i j : Fin n, pairDist z i j = Δ i j
 
@@ -294,6 +311,7 @@ The paper writes this as `(1 / m) ‖Xbar_i - Xbar_i'‖_F`; Lean's
 `EuclideanSpace` norm is the corresponding finite Frobenius/Euclidean norm on
 the row-stacked matrix representation.
 -/
+@[expose]
 noncomputable def responseDistEntry {n m p : Nat} (Xbar : Fin n → Mat m p)
     (i j : Fin n) : Real :=
   ((m : Real)⁻¹) * ‖Xbar i - Xbar j‖
@@ -301,6 +319,7 @@ noncomputable def responseDistEntry {n m p : Nat} (Xbar : Fin n → Mat m p)
 /-- Curried dissimilarity matrix built from the `n` response matrices `Xbar`.
 This is the paper's empirical dissimilarity matrix `D` (entries
 `(1/m)‖Xbar_i - Xbar_j‖_F`). -/
+@[expose]
 noncomputable def responseDist {n m p : Nat} (Xbar : Fin n → Mat m p) : DisMat n :=
   fun i j => responseDistEntry Xbar i j
 

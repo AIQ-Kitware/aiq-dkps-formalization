@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # The spectrum of a reduced partial map is covered by its blocks
@@ -18,6 +20,8 @@ The argument is the direct sum of the two block resolvents: if `lam` inverts bot
 blocks, the operator `ι_U R₁ P_U + ι_{Uᗮ} R₂ P_{Uᗮ}` inverts `A − lam`, because
 `A` acts blockwise on a reducing decomposition.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -50,7 +54,7 @@ theorem starProjection_apply_eq_of_reduces
       Submodule.starProjection_eq_self_iff.mpr (hred.isInvariant.apply_mem ⟨a, ha⟩ haU)
     have h2 : U.starProjection (A (⟨b, hb⟩ : A.domain)) = 0 := by
       rw [Submodule.starProjection_apply_eq_zero_iff]
-      exact hred.isInvariant_orthogonal ⟨b, hb⟩ hbU
+      exact hred.isInvariant_orthogonal.apply_mem ⟨b, hb⟩ hbU
     rw [h1, h2, add_zero]
   rw [hgoal]
   congr 1
@@ -84,9 +88,10 @@ theorem realSpectrum_subset_union_of_reduces
     Set.mem_compl_iff, not_not] at h1 h2
   rw [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
     Set.mem_compl_iff] at hlam
-  obtain ⟨R1, hL1, hRt1⟩ := h1
-  obtain ⟨R2, hL2, hRt2⟩ := h2
+  obtain ⟨R1, hL1, hRt1⟩ := TauCeti.LinearPMap.mem_realResolventSet_iff.mp h1
+  obtain ⟨R2, hL2, hRt2⟩ := TauCeti.LinearPMap.mem_realResolventSet_iff.mp h2
   refine hlam ?_
+  apply TauCeti.LinearPMap.mem_realResolventSet_iff.mpr
   refine ⟨U.subtypeL ∘L R1 ∘L U.orthogonalProjectionOnto
     + Uᗮ.subtypeL ∘L R2 ∘L Uᗮ.orthogonalProjectionOnto, ?_, ?_⟩
   · -- left inverse
@@ -98,7 +103,8 @@ theorem realSpectrum_subset_union_of_reduces
     have haU : a ∈ U := hadef ▸ U.starProjection_apply_mem _
     have hbU : b ∈ Uᗮ := hbdef ▸ Uᗮ.starProjection_apply_mem _
     -- the `U` leg
-    have hUdom : (⟨a, haU⟩ : U) ∈ (TauCeti.LinearPMap.reducingRestriction A U hred).domain := ha
+    have hUdom : (⟨a, haU⟩ : U) ∈ (TauCeti.LinearPMap.reducingRestriction A U hred).domain :=
+      (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred _).mpr ha
     have hUleg := hL1 ⟨⟨a, haU⟩, hUdom⟩
     have hUproj : U.orthogonalProjectionOnto (A x - (lam : 𝕜) • (x : E))
         = (TauCeti.LinearPMap.reducingRestriction A U hred) ⟨⟨a, haU⟩, hUdom⟩
@@ -107,6 +113,8 @@ theorem realSpectrum_subset_union_of_reduces
       have hcomm := starProjection_apply_eq_of_reduces hred x
       show U.starProjection (A x - (lam : 𝕜) • (x : E)) = _
       rw [map_sub, hcomm, map_smul]
+      simp only [Submodule.coe_sub, Submodule.coe_smul]
+      rw [TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred ⟨a, haU⟩ ha]
       show (A ⟨U.starProjection (x : E), hred.starProjection_mem_domain x.property⟩ : E)
         - (lam : 𝕜) • U.starProjection (x : E) = (A ⟨a, ha⟩ : E) - (lam : 𝕜) • a
       have hsub : (⟨U.starProjection (x : E), hred.starProjection_mem_domain x.property⟩ : A.domain)
@@ -114,7 +122,8 @@ theorem realSpectrum_subset_union_of_reduces
       rw [hsub, ← hadef]
     -- the `Uᗮ` leg
     have hVdom : (⟨b, hbU⟩ : Uᗮ) ∈
-        (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal).domain := hb
+        (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal).domain :=
+      (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A Uᗮ hred.orthogonal _).mpr hb
     have hVleg := hL2 ⟨⟨b, hbU⟩, hVdom⟩
     have hVproj : Uᗮ.orthogonalProjectionOnto (A x - (lam : 𝕜) • (x : E))
         = (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) ⟨⟨b, hbU⟩, hVdom⟩
@@ -123,6 +132,8 @@ theorem realSpectrum_subset_union_of_reduces
       have hcomm := starProjection_apply_eq_of_reduces hred.orthogonal x
       show Uᗮ.starProjection (A x - (lam : 𝕜) • (x : E)) = _
       rw [map_sub, hcomm, map_smul]
+      simp only [Submodule.coe_sub, Submodule.coe_smul]
+      rw [TauCeti.LinearPMap.coe_reducingRestriction_apply A Uᗮ hred.orthogonal ⟨b, hbU⟩ hb]
       show (A ⟨Uᗮ.starProjection (x : E), hred.orthogonal.starProjection_mem_domain x.property⟩ : E)
         - (lam : 𝕜) • Uᗮ.starProjection (x : E) = (A ⟨b, hb⟩ : E) - (lam : 𝕜) • b
       have hsub : (⟨Uᗮ.starProjection (x : E), hred.orthogonal.starProjection_mem_domain x.property⟩
@@ -139,8 +150,10 @@ theorem realSpectrum_subset_union_of_reduces
     intro y
     obtain ⟨hu, hueq⟩ := hRt1 (U.orthogonalProjectionOnto y)
     obtain ⟨hv, hveq⟩ := hRt2 (Uᗮ.orthogonalProjectionOnto y)
-    have hua : ((R1 (U.orthogonalProjectionOnto y) : U) : E) ∈ A.domain := hu
-    have hvb : ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E) ∈ A.domain := hv
+    have hua : ((R1 (U.orthogonalProjectionOnto y) : U) : E) ∈ A.domain :=
+      (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred _).mp hu
+    have hvb : ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E) ∈ A.domain :=
+      (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A Uᗮ hred.orthogonal _).mp hv
     have hmem : (U.subtypeL (R1 (U.orthogonalProjectionOnto y)) : E)
         + (Uᗮ.subtypeL (R2 (Uᗮ.orthogonalProjectionOnto y)) : E) ∈ A.domain :=
       A.domain.add_mem hua hvb
@@ -153,10 +166,16 @@ theorem realSpectrum_subset_union_of_reduces
       congr 1
     have hueq' : (A ⟨((R1 (U.orthogonalProjectionOnto y) : U) : E), hua⟩ : E)
         - (lam : 𝕜) • ((R1 (U.orthogonalProjectionOnto y) : U) : E)
-        = U.starProjection y := congrArg (fun z : U => (z : E)) hueq
+        = U.starProjection y := by
+      simpa only [Submodule.coe_sub, Submodule.coe_smul, Submodule.coe_orthogonalProjectionOnto_apply,
+        TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred _ hua] using
+        congrArg (fun z : U => (z : E)) hueq
     have hveq' : (A ⟨((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E), hvb⟩ : E)
         - (lam : 𝕜) • ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E)
-        = Uᗮ.starProjection y := congrArg (fun z : Uᗮ => (z : E)) hveq
+        = Uᗮ.starProjection y := by
+      simpa only [Submodule.coe_sub, Submodule.coe_smul, Submodule.coe_orthogonalProjectionOnto_apply,
+        TauCeti.LinearPMap.coe_reducingRestriction_apply A Uᗮ hred.orthogonal _ hvb] using
+        congrArg (fun z : Uᗮ => (z : E)) hveq
     show (A ⟨_, hmem⟩ : E) - (lam : 𝕜) •
       (((R1 (U.orthogonalProjectionOnto y) : U) : E)
         + ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E)) = y
@@ -182,6 +201,7 @@ theorem invariantSubspace_orthogonal_of_isSelfAdjoint
   have hsym : A.IsFormalAdjoint A := by
     have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
     rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
+  rw [_root_.LinearPMap.isInvariant_iff] at hinv ⊢
   intro x hx
   rw [Submodule.mem_orthogonal]
   intro u hu

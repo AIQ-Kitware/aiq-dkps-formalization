@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Unbounded.FormBoundedGap
-import DavisKahan.SinTheta.Real.Canonical
+module
+
+public import DavisKahan.SinTheta.Unbounded.FormBoundedGap
+public import DavisKahan.SinTheta.Real.Canonical
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -80,6 +84,7 @@ theorem reducingSubspace_orthogonalExactDecomposition
 subspace.  Density and graph closedness are carried as hypotheses rather than
 bundled into the operator, so the complementary restriction inherits both from
 the canonical `LinearPMap` reducing-restriction API. -/
+@[expose]
 def unboundedSinThetaDataOfReducingSubspace
     (A : E →ₗ.[𝕜] E)
     (_hAdense : Dense (A.domain : Set E)) (_hAclosed : A.IsClosed)
@@ -99,9 +104,15 @@ def unboundedSinThetaDataOfReducingSubspace
   F₁ := Uᗮ.subtypeL
   residual := Rop
   X_maps_domain := hXdom
-  F₁_maps_domain := fun y => y.property
+  F₁_maps_domain := fun y => by
+    change ((y : Uᗮ) : E) ∈ A.domain
+    exact (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A Uᗮ
+      hred.orthogonal _).mp y.property
   residual_eq := hReq
-  intertwines := fun _ => rfl
+  intertwines := fun x =>
+    (TauCeti.LinearPMap.coe_reducingRestriction_apply A Uᗮ hred.orthogonal (x : Uᗮ)
+      ((TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A Uᗮ
+        hred.orthogonal _).mp x.property)).symm
 
 /-- Scalar-generic natural isometric problem over a reducing exact subspace. -/
 structure NaturalReducingIsometricSinThetaProblem
@@ -131,6 +142,7 @@ structure NaturalReducingIsometricSinThetaProblem
 namespace NaturalReducingIsometricSinThetaProblem
 
 /-- Canonical internal data of a natural reducing-subspace problem. -/
+@[expose]
 noncomputable def toData
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
@@ -174,6 +186,7 @@ structure NaturalReducingGeneralSinThetaProblem
 namespace NaturalReducingGeneralSinThetaProblem
 
 /-- Canonical internal data of a natural reducing lower-frame problem. -/
+@[expose]
 noncomputable def toData
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]

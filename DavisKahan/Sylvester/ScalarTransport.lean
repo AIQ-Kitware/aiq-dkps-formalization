@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sylvester.ScalarGeneric
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.Sylvester.ScalarGeneric
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -69,6 +73,7 @@ omit [CompleteSpace E] in
 theorem semiboundedAbove_pmap_iff {A : E →ₗ.[𝕜] E} {c : ℝ} :
     TauCeti.LinearPMap.SemiboundedAbove (pmap (e := e) A) c ↔
       TauCeti.LinearPMap.SemiboundedAbove A c := by
+  rw [TauCeti.LinearPMap.semiboundedAbove_iff, TauCeti.LinearPMap.semiboundedAbove_iff]
   constructor
   · intro h x
     have h2 : RCLike.re (e (inner 𝕜 (A x) ((x : E)))) ≤ c * ‖(x : E)‖ ^ 2 :=
@@ -85,6 +90,7 @@ omit [CompleteSpace E] in
 theorem semiboundedBelow_pmap_iff {A : E →ₗ.[𝕜] E} {c : ℝ} :
     TauCeti.LinearPMap.SemiboundedBelow (pmap (e := e) A) c ↔
       TauCeti.LinearPMap.SemiboundedBelow A c := by
+  rw [TauCeti.LinearPMap.semiboundedBelow_iff, TauCeti.LinearPMap.semiboundedBelow_iff]
   constructor
   · intro h x
     have h2 : c * ‖(x : E)‖ ^ 2 ≤ RCLike.re (e (inner 𝕜 (A x) ((x : E)))) :=

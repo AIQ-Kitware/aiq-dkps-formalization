@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
-import Mathlib.Topology.Basic
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import Mathlib.Topology.Basic
 
 /-!
 # Constructor data for a symmetric operator ideal family
@@ -33,6 +35,8 @@ This module is the successor of `RectangularSymmetricIdealFamily`, which was the
 same free data used as a family in its own right, with its own gauge theory and
 its own concrete instances converted back and forth from the canonical ones.
 -/
+
+public section
 
 namespace TauCeti.SymmetricOperatorIdealFamily
 
@@ -158,6 +162,7 @@ concrete ideal has only to supply its conditional real laws. -/
 
 /-- The `ℝ≥0∞` gauge a `Core` determines: its real gauge on members, `∞` off the
 ideal. -/
+@[expose]
 noncomputable def Core.extendedGauge
     (N : Core.{u, v} 𝕜)
     {E F : Type v}
@@ -292,6 +297,7 @@ what gauge they assign to non-members give the same family, because the family
 assigns `∞` to all of them.  What is preserved is the whole of the ideal --
 membership (`gauge_ofCore_ne_top_iff`) and the gauge on it
 (`toReal_gauge_ofCore`). -/
+@[expose]
 noncomputable def ofCore (N : Core.{u, v} 𝕜) :
     SymmetricOperatorIdealFamily.{u, v} 𝕜 where
   gauge := Core.extendedGauge N
@@ -334,11 +340,13 @@ instance isComplete_ofCore (N : Core.{u, v} 𝕜) :
   completeSpace_carrier := by
     intro E F _ _ _ _ _ _
     have hnorm : ∀ x : (ofCore N).toOperatorIdealFamily.Elem E F,
-        ‖x‖ = N.gauge x.val := fun x =>
-      toReal_gauge_ofCore (gauge_ofCore_ne_top_iff.mp x.gauge_val_ne_top)
+        ‖x‖ = N.gauge x.val := fun x => by
+      rw [OperatorIdealFamily.Elem.norm_def]
+      exact toReal_gauge_ofCore (gauge_ofCore_ne_top_iff.mp
+        (OperatorIdealFamily.Elem.gauge_val_ne_top x))
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
     have hmem : ∀ n, N.Mem (a n).val := fun n =>
-      gauge_ofCore_ne_top_iff.mp (a n).gauge_val_ne_top
+      gauge_ofCore_ne_top_iff.mp (OperatorIdealFamily.Elem.gauge_val_ne_top (a n))
     have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
         N.gauge ((a m).val - (a n).val) < ε := by
       intro ε hε
@@ -357,6 +365,6 @@ instance isComplete_ofCore (N : Core.{u, v} 𝕜) :
     obtain ⟨M, hM⟩ := hL ε hε
     refine ⟨M, fun n hn => ?_⟩
     rw [dist_eq_norm, hnorm]
-    exact hM n hn
+    simpa only [OperatorIdealFamily.Elem.val_sub, OperatorIdealFamily.Elem.val_mk] using hM n hn
 
 end TauCeti.SymmetricOperatorIdealFamily

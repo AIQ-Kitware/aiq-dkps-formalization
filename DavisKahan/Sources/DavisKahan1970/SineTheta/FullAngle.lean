@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
-import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 
 /-!
 # The full operator angle printed in Davis--Kahan 1970
@@ -18,6 +20,8 @@ Its sine is the corresponding block sum.  A unitary coordinate change and the
 cross-block identity show that its complete singular-value sequence is exactly
 that of the projector difference.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -34,6 +38,7 @@ variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
 /-- `Theta = diag(Theta_0,Theta_1)` on the source orthogonal coordinates. -/
+@[expose]
 noncomputable def fullAngleBlockC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :

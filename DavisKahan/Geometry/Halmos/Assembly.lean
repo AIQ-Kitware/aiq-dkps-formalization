@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Halmos.Classification
-import ForTauCeti.Analysis.InnerProductSpace.OrthogonalGluing
+module
+
+public import DavisKahan.Geometry.Halmos.Classification
+public import ForTauCeti.Analysis.InnerProductSpace.OrthogonalGluing
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

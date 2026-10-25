@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseMinimum
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseMinimum
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 
 /-!
 # The critical angle and the two amplitude branches
@@ -14,6 +16,8 @@ For `1 < p < 2`, the auxiliary amplitude increases up to the critical angle
 stationary spectra in the unrestricted Schatten optimization problem.
 -/
 
+public section
+
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
 
 open Set
@@ -21,6 +25,7 @@ open Set
 noncomputable section
 
 /-- The sharp angle at which canonical scalar-phase optimality changes. -/
+@[expose]
 def criticalAngle (p : ℝ) : ℝ := Real.arccos ((2 - p) / p)
 
 private theorem critical_cos_mem (p : ℝ) (hp1 : 1 < p) (hp2 : p < 2) :

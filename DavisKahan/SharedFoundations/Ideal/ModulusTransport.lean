@@ -7,10 +7,12 @@ The proof route uses the bounded polar decomposition, taken from `ForTauCeti`,
 originally authored by Adam Bornemann.  The declaration-level mapping is
 recorded in the accompanying provenance ledger.
 -/
-import DavisKahan.SharedFoundations.Ideal.TwoWayFactorization
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
+module
+
+public import DavisKahan.SharedFoundations.Ideal.TwoWayFactorization
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
 /-!
 # Absolute-value transport for square symmetric ideals
@@ -23,6 +25,8 @@ the two-way principle of `TwoWayFactorization` applies directly.  No unitary
 argument work on an arbitrary Hilbert space rather than only where `U` extends
 to a unitary.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

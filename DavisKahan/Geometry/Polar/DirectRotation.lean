@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.BoundedOperator.Reflection
-import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
-import Mathlib.Analysis.Normed.Ring.Units
-import Mathlib.Algebra.Group.Commute.Units
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
-import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.BoundedOperator.Reflection
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
+public import Mathlib.Analysis.Normed.Ring.Units
+public import Mathlib.Algebra.Group.Commute.Units
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute
+public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
@@ -61,6 +65,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 
 
 /-- The canonical pre-polar intertwiner `Q P + Qᗮ Pᗮ`. -/
+@[expose]
 noncomputable def spectraCanonicalIntertwiner
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
@@ -155,9 +160,7 @@ theorem norm_spectraCanonicalIntertwiner_sub_one_le_gap
       mul_le_mul_of_nonneg_left (Submodule.norm_reflectionOperator_le_one U)
         (norm_nonneg (V.starProjection - U.starProjection))
     _ = U.projectionGap V := by
-      rw [mul_one]
-      change ‖V.starProjection - U.starProjection‖ =
-        ‖U.starProjection - V.starProjection‖
+      rw [mul_one, Submodule.projectionGap_def]
       rw [show V.starProjection - U.starProjection =
         -(U.starProjection - V.starProjection) by abel, norm_neg]
 
@@ -201,6 +204,7 @@ theorem coe_spectraCanonicalIntertwinerUnit
   simp [spectraCanonicalIntertwinerUnit]
 
 /-- The polar factor of the canonical intertwiner. -/
+@[expose]
 noncomputable def spectraCanonicalPolarFactor
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
@@ -209,6 +213,7 @@ noncomputable def spectraCanonicalPolarFactor
 /-- Spectra-backed direct-rotation candidate in the acute regime.  The acute
 witness records the intended branch; the underlying polar factor is defined
 for every pair. -/
+@[expose]
 noncomputable def spectraDirectRotation
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -347,10 +352,10 @@ theorem coe_spectraCanonicalPolarFactorUnit
 
 /-- The acute canonical polar factor is a unitary element of the bounded
 operator algebra. -/
-noncomputable def spectraCanonicalPolarFactorUnitary
+theorem spectraCanonicalPolarFactor_mem_unitary_of_uniformlyAcute
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsUniformlyAcute U V) : unitary (H →L[𝕜] H) := by
+    (hacute : IsUniformlyAcute U V) : spectraCanonicalPolarFactor U V ∈ unitary (H →L[𝕜] H) := by
   let SUnit := spectraCanonicalIntertwinerUnit U V hacute
   let AUnit := spectraCanonicalAbsoluteValueUnit U V hacute
   have hGram : star SUnit * SUnit = star AUnit * AUnit := by
@@ -359,9 +364,16 @@ noncomputable def spectraCanonicalPolarFactorUnitary
   have hmem : (((SUnit * AUnit⁻¹ : (H →L[𝕜] H)ˣ) : H →L[𝕜] H)) ∈
       unitary (H →L[𝕜] H) :=
     (Units.mul_inv_mem_unitary SUnit AUnit).2 hGram
-  refine ⟨spectraCanonicalPolarFactor U V, ?_⟩
   rw [← coe_spectraCanonicalPolarFactorUnit U V hacute]
-  exact hmem
+  simpa only [SUnit, AUnit, spectraCanonicalPolarFactorUnit] using hmem
+
+/-- The polar factor as a unitary, with its underlying operator exposed to coercions. -/
+@[expose]
+noncomputable def spectraCanonicalPolarFactorUnitary
+    (U V : Submodule 𝕜 H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsUniformlyAcute U V) : unitary (H →L[𝕜] H) :=
+  ⟨spectraCanonicalPolarFactor U V, spectraCanonicalPolarFactor_mem_unitary_of_uniformlyAcute U V hacute⟩
 
 /-- The unitary subtype has the intended underlying polar factor. -/
 @[simp]
@@ -471,6 +483,7 @@ theorem spectraCanonicalAbsoluteValue_commute_projection
           spectraCanonicalIntertwiner U V)
         (U.starProjection) :=
     star_spectraCanonicalIntertwiner_mul_self_commute_projection U V
+  rw [ContinuousLinearMap.modulus_eq_abs]
   change Commute
     (CFC.abs (spectraCanonicalIntertwiner U V))
     (U.starProjection)
@@ -676,6 +689,7 @@ omit [CompleteSpace H] in
 theorem subspaceGap_orthogonal (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Uᗮ.projectionGap Vᗮ = U.projectionGap V := by
+  rw [Submodule.projectionGap_def, Submodule.projectionGap_def]
   show ‖Uᗮ.starProjection - Vᗮ.starProjection‖ = ‖U.starProjection - V.starProjection‖
   rw [Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V,
     show (1 - U.starProjection) - (1 - V.starProjection)
@@ -1203,6 +1217,7 @@ theorem spectraCanonicalAbsoluteValue_commute_reflectionProduct
     Commute
       (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V))
       (spectraReflectionProduct U V) := by
+  rw [ContinuousLinearMap.modulus_eq_abs]
   change Commute (CFC.abs (spectraCanonicalIntertwiner U V))
     (spectraReflectionProduct U V)
   exact

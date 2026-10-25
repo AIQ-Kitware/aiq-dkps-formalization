@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import DavisKahan.SinTheta.FrameFactorization
-import DavisKahan.SinTheta.Real.FrameFactorization
-import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtPairwise
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+public import DavisKahan.SinTheta.FrameFactorization
+public import DavisKahan.SinTheta.Real.FrameFactorization
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -61,6 +65,7 @@ namespace Theorem62Data
 
 /-- The normalized complementary block whose singular values are the paper's
 `sin Theta_0`. -/
+@[expose]
 noncomputable def canonicalSinTheta
     (P : Theorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℂ] F :=
@@ -298,6 +303,7 @@ structure RealTheorem62Data where
 namespace RealTheorem62Data
 
 /-- The canonical sine-theta operator of a Theorem 6.2 configuration. -/
+@[expose]
 noncomputable def canonicalSinTheta
     (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℝ] F :=

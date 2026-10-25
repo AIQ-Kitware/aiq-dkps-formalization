@@ -13,8 +13,12 @@ The statistical proofs of those high-probability premises may later be supplied
 by concentration, conditioning, and the existing DKPS alignment results.  The
 logic from those premises to query efficiency is fully discharged here.
 -/
-import DkpsQuench2026.Paper.TheoryPractice
-import DkpsQuench2026.Paper.OLSInvariance
+module
+
+public import DkpsQuench2026.Paper.TheoryPractice
+public import DkpsQuench2026.Paper.OLSInvariance
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -218,6 +222,7 @@ theorem mse_affineModel_le_of_uniform_coordinate_error
       simp
 
 /-- High-probability uniform DKPS-coordinate approximation. -/
+@[expose]
 def HighProbUniformCoordinateError
     (μ : ℕ → Measure Ω) (hμ : ∀ k, IsProbabilityMeasure (μ k))
     (trueFeature : Model Q X → Vec d)
@@ -398,6 +403,7 @@ def HighProbAffineGeneralizationOn
       (affineGeneralizationEventOn Pf ψHat f_ref truth admissible ε)
 
 /-- Strong all-class specialization. -/
+@[expose]
 def HighProbUniformAffineGeneralization
     (μ : ℕ → Measure Ω) (hμ : ∀ k, IsProbabilityMeasure (μ k))
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]

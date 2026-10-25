@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenStationarity
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenStationarity
 
 /-!
 # The two spectral roots of the Schatten unitary gradient
@@ -14,6 +16,8 @@ on positive principal phases. Thus its positive spectral levels have two
 branches, separated by the scalar critical angle. This connects the compiled
 stationarity identity to the scalar optimization calculus.
 -/
+
+public section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
 

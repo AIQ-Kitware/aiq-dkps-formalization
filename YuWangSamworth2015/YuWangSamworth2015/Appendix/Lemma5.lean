@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import YuWangSamworth2015.Rectangular.FrobeniusGram
+module
+
+public import YuWangSamworth2015.Rectangular.FrobeniusGram
 
 /-!
 # Yu--Wang--Samworth Appendix Lemma A1
@@ -21,6 +23,8 @@ for the row case the displayed recovery identity gives the reverse inequality.
 This formulation is both source recognizable and reusable across dimensions.
 -/
 
+public section
+
 namespace YuWangSamworth2015
 open TauCeti
 namespace DavisKahanTheory
@@ -33,12 +37,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
-private noncomputable abbrev frob {𝕜 : Type*} [RCLike 𝕜]
-    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-    [FiniteDimensional 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-    [FiniteDimensional 𝕜 F] (A : E →ₗ[𝕜] F) : ℝ :=
-  UnitarilyInvariantSeminorm.frobenius 𝕜 E F A
-
 /-- Lemma A1, orthonormal-column/contraction form:
 `‖U⋆ A W‖_F ≤ ‖A‖_F`. -/
 theorem yuWangSamworth_lemma5_columns
@@ -49,9 +47,9 @@ theorem yuWangSamworth_lemma5_columns
     (A : E →ₗ[𝕜] F) (U : P →ₗ[𝕜] F) (W : Q →ₗ[𝕜] E)
     (hU : ‖U.toContinuousLinearMap‖ ≤ 1)
     (hW : ‖W.toContinuousLinearMap‖ ≤ 1) :
-    frob
+    UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
         (U.adjoint ∘ₗ A ∘ₗ W) ≤
-      frob A := by
+      UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A := by
   have hUadj : ∀ y : F, ‖U.adjoint y‖ ≤ (1 : ℝ) * ‖y‖ := by
     intro y
     calc
@@ -78,9 +76,9 @@ theorem yuWangSamworth_lemma5_isometricColumns
     (A : E →ₗ[𝕜] F) (U : P →ₗ[𝕜] F) (W : Q →ₗ[𝕜] E)
     (hU : ∀ x : P, ‖U x‖ = ‖x‖)
     (hW : ∀ x : Q, ‖W x‖ = ‖x‖) :
-    frob
+    UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
         (U.adjoint ∘ₗ A ∘ₗ W) ≤
-      frob A := by
+      UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A := by
   have hUnorm : ‖U.toContinuousLinearMap‖ ≤ 1 := by
     refine U.toContinuousLinearMap.opNorm_le_bound zero_le_one ?_
     intro x
@@ -118,9 +116,9 @@ theorem yuWangSamworth_lemma5_orthonormalColumns
     {Q : Type*} [NormedAddCommGroup Q] [InnerProductSpace 𝕜 Q]
       [FiniteDimensional 𝕜 Q]
     (A : E →ₗ[𝕜] F) (U : P →ₗᵢ[𝕜] F) (W : Q →ₗᵢ[𝕜] E) :
-    frob
+    UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
         (U.toLinearMap.adjoint ∘ₗ A ∘ₗ W.toLinearMap) ≤
-      frob A := by
+      UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A := by
   exact yuWangSamworth_lemma5_columns A U.toLinearMap W.toLinearMap
     (linearIsometry_opNorm_le_one U) (linearIsometry_opNorm_le_one W)
 
@@ -135,9 +133,9 @@ theorem yuWangSamworth_lemma5_rows
     (hU : ‖U.toContinuousLinearMap‖ ≤ 1)
     (hW : ‖W.toContinuousLinearMap‖ ≤ 1)
     (hrecover : U ∘ₗ (U.adjoint ∘ₗ A ∘ₗ W) ∘ₗ W.adjoint = A) :
-    frob
+    UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
         (U.adjoint ∘ₗ A ∘ₗ W) =
-      frob A := by
+      UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A := by
   let C : Q →ₗ[𝕜] P := U.adjoint ∘ₗ A ∘ₗ W
   have hCdef : C = U.adjoint ∘ₗ A ∘ₗ W := rfl
   have hrecoverC : U ∘ₗ C ∘ₗ W.adjoint = A := by
@@ -151,11 +149,12 @@ theorem yuWangSamworth_lemma5_rows
   apply le_antisymm
   · simpa only [hCdef] using yuWangSamworth_lemma5_columns A U W hU hW
   · calc
-      frob A = frob (U ∘ₗ C ∘ₗ W.adjoint) := by rw [hrecoverC]
-      _ ≤ frob C := by
+      UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A =
+        UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ (U ∘ₗ C ∘ₗ W.adjoint) := by rw [hrecoverC]
+      _ ≤ UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ C := by
         simpa only [LinearMap.adjoint_adjoint] using
           yuWangSamworth_lemma5_columns C U.adjoint W.adjoint hUadj hWadj
-      _ = frob (U.adjoint ∘ₗ A ∘ₗ W) := by rw [hCdef]
+      _ = UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ (U.adjoint ∘ₗ A ∘ₗ W) := by rw [hCdef]
 
 /-- Precomposition by the adjoint of a linear isometry preserves the
 rectangular Frobenius norm.  This is the row-side analogue of
@@ -164,25 +163,25 @@ private theorem rectangularFrobenius_comp_adjoint_linearIsometry
     {Q : Type*} [NormedAddCommGroup Q] [InnerProductSpace 𝕜 Q]
       [FiniteDimensional 𝕜 Q]
     (A : E →ₗ[𝕜] F) (W : E →ₗᵢ[𝕜] Q) :
-    frob
+    UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
         (A ∘ₗ W.toLinearMap.adjoint) =
-      frob A := by
+      UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A := by
   calc
-    frob
+    UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
         (A ∘ₗ W.toLinearMap.adjoint) =
-        frob
+        UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
           (A ∘ₗ W.toLinearMap.adjoint).adjoint :=
       (by
         simpa only [UnitarilyInvariantSeminorm.schatten_two] using
           (UnitarilyInvariantSeminorm.schatten_apply_adjoint
             2 (A ∘ₗ W.toLinearMap.adjoint)).symm)
-    _ = frob
+    _ = UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
           (W.toLinearMap ∘ₗ A.adjoint) := by
       rw [LinearMap.adjoint_comp, LinearMap.adjoint_adjoint]
-    _ = frob A.adjoint :=
+    _ = UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A.adjoint :=
       UnitarilyInvariantSeminorm.frobenius_linearIsometry_comp
         W A.adjoint
-    _ = frob A :=
+    _ = UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A :=
       (by
         simpa only [UnitarilyInvariantSeminorm.schatten_two] using
           (UnitarilyInvariantSeminorm.schatten_apply_adjoint 2 A))
@@ -199,17 +198,17 @@ theorem yuWangSamworth_lemma5_orthonormalRows
     {Q : Type*} [NormedAddCommGroup Q] [InnerProductSpace 𝕜 Q]
       [FiniteDimensional 𝕜 Q]
     (A : E →ₗ[𝕜] F) (U : F →ₗᵢ[𝕜] P) (W : E →ₗᵢ[𝕜] Q) :
-    frob
+    UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
         (U.toLinearMap ∘ₗ (A ∘ₗ W.toLinearMap.adjoint)) =
-      frob A := by
+      UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A := by
   calc
-    frob
+    UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
         (U.toLinearMap ∘ₗ (A ∘ₗ W.toLinearMap.adjoint)) =
-        frob
+        UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
           (A ∘ₗ W.toLinearMap.adjoint) :=
       UnitarilyInvariantSeminorm.frobenius_linearIsometry_comp
         U (A ∘ₗ W.toLinearMap.adjoint)
-    _ = frob A :=
+    _ = UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A :=
       rectangularFrobenius_comp_adjoint_linearIsometry A W
 
 end DavisKahanTheory

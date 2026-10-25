@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.FiniteDimensional
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.RealPoints
-import ForTauCeti.Analysis.InnerProductSpace.Projection.ComplexRealBlocks
+module
+
+public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FiniteDimensional
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.RealPoints
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.ComplexRealBlocks
 
 /-!
 # Real blocks of two-phase operators
@@ -21,6 +23,8 @@ This file certifies the two-phase algebraic reduction. The derivation of
 these hypotheses from real transport stationarity and the final matching
 minimum are separate steps.
 -/
+
+public section
 
 noncomputable section
 

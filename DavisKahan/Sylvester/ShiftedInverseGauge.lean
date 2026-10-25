@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.ShiftedInverse
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.Sylvester.Unbounded.Neumann
-import Mathlib.Analysis.Normed.Operator.Extend
+module
+
+public import DavisKahan.Sylvester.ShiftedInverse
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.Sylvester.Unbounded.Neumann
+public import Mathlib.Analysis.Normed.Operator.Extend
 
 /-!
 # Ideal-gauge shifted-inverse estimates
@@ -14,6 +16,8 @@ import Mathlib.Analysis.Normed.Operator.Extend
 The bounded shift extension and the exterior-left/interval-right ideal-gauge
 Sylvester estimate built from it.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

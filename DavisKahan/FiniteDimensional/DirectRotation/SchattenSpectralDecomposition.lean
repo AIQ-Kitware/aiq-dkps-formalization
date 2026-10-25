@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPositiveBasis
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientKernel
-import ForTauCeti.Analysis.InnerProductSpace.PairedSpectralDecomposition
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPositiveBasis
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientKernel
+public import ForTauCeti.Analysis.InnerProductSpace.PairedSpectralDecomposition
 
 /-!
 # Orthogonal spectral decomposition of a local Schatten transport minimum
@@ -23,6 +25,8 @@ angles of the original subspace pair. Empty positive or kernel spaces are
 included. The global principal-angle lower bound is downstream of this
 decomposition and the separate kernel inequality.
 -/
+
+public section
 
 noncomputable section
 
@@ -137,6 +141,7 @@ theorem schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
     ext x
     obtain ⟨y, rfl⟩ := d.surjective x
     rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply, d.symm_apply_apply, hd, hd]
+    simp only [ContinuousLinearMap.withLpProdMap_apply, LinearIsometryEquiv.coe_coe'']
     change (U : E →L[ℂ] E) ((y.fst.fst : E) + J y.fst.snd + (y.snd : E)) =
       (V y.fst.fst : E) + J (W y.fst.snd) + (R y.snd : E)
     rw [map_add, map_add, hV, hW, hR]

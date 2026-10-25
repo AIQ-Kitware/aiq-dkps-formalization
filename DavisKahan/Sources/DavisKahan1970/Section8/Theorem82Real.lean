@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
-import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.Sources.DavisKahan1970.AmbientReal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
-import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
+public import DavisKahan.DoubleAngle.RealAngleIdentification
+public import DavisKahan.Sources.DavisKahan1970.AmbientReal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -526,7 +530,7 @@ theorem spectrum_compressOperatorReal_subset_of_spectrumIn
     {s : Set ℝ} (h : Foundation.SpectrumIn T U s) :
     spectrum ℝ (DavisKahan1970.compressOperatorReal U T) ⊆ s := by
   intro r hr
-  refine h.subset ⟨h.invariant, ?_⟩
+  refine h.subset ((Foundation.mem_restrictedSpectrum_iff T U r).mpr ⟨h.invariant, ?_⟩)
   rw [show DavisKahan1970.compressOperatorReal U T = T.restrict h.invariant from
     compressOperator_eq_restrict_of_invariant T U h.invariant] at hr
   simpa using hr

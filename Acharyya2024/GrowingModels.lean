@@ -20,7 +20,11 @@ the cited continuous-MDS theory downstream, not for this step.  Both are recorde
 
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
-import Acharyya2024.Common
+module
+
+public import Acharyya2024.Common
+
+public section
 
 open scoped BigOperators Topology
 open Filter

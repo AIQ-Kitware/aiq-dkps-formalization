@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.SpectralTheory.OperatorAngle
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.Analysis.Normed.Operator.Banach
-import Mathlib.Analysis.Normed.Ring.Units
-import Mathlib.Topology.Algebra.Module.LinearPMap
-import Mathlib.Topology.MetricSpace.Antilipschitz
+module
+
+public import DavisKahan.SpectralTheory.OperatorAngle
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Analysis.Normed.Operator.Banach
+public import Mathlib.Analysis.Normed.Ring.Units
+public import Mathlib.Topology.Algebra.Module.LinearPMap
+public import Mathlib.Topology.MetricSpace.Antilipschitz
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -157,6 +161,7 @@ operator, the projection is `A N⁻¹ A⋆`.  The inverse is taken through
 is coercive, `Ring.inverse` is a genuine inverse, and the formula is the
 orthogonal projection onto the graph subspace
 (`projection_graphSubspace_formula`). -/
+@[expose]
 noncomputable def graphProjectionFormula
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) : E →L[𝕜] E :=
@@ -576,8 +581,9 @@ operator is `‖X‖ / √(1 + ‖X‖ ^ 2)`. -/
 theorem subspaceGap_graphSubspace
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : E →L[𝕜] E) (hX : IsAngularOperator U X) :
-    U.projectionGap (graphSubspace U X) = ‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2) :=
-  norm_projection_sub_projection_graphSubspace U X hX
+    U.projectionGap (graphSubspace U X) = ‖X‖ / Real.sqrt (1 + ‖X‖ ^ 2) := by
+  rw [Submodule.projectionGap_def]
+  exact norm_projection_sub_projection_graphSubspace U X hX
 
 
 omit [CompleteSpace E] in
@@ -591,7 +597,8 @@ private theorem acute_coordinate_injective
   intro v hv hPv
   have hQv : V.starProjection v = v :=
     Submodule.starProjection_eq_self_iff.mpr hv
-  have hgap : ‖U.starProjection - V.starProjection‖ < 1 := hacute
+  have hgap : ‖U.starProjection - V.starProjection‖ < 1 := by
+    simpa only [IsUniformlyAcute, Submodule.projectionGap_def] using hacute
   have hpoint : ‖v‖ ≤ ‖U.starProjection - V.starProjection‖ * ‖v‖ := by
     have heq : (U.starProjection - V.starProjection) v = -v := by
       rw [sub_apply, hPv, hQv, zero_sub]
@@ -627,7 +634,8 @@ private theorem acuteAngularOperator_spec
   have hP1P : P * (1 - P) = 0 := by rw [mul_one_sub, hPP, sub_self]
   have h1PP : (1 - P) * P = 0 := by rw [one_sub_mul, hPP, sub_self]
   -- the compression is a unit: it is within distance `< 1` of the identity
-  have hgap : ‖P - Q‖ < 1 := hacute
+  have hgap : ‖P - Q‖ < 1 := by
+    simpa only [IsUniformlyAcute, Submodule.projectionGap_def, P, Q] using hacute
   have hPnorm : ‖P‖ ≤ 1 := U.starProjection_norm_le
   have hfact : P * (P - Q) * P = P - P * Q * P := by
     rw [mul_sub, sub_mul, hPP, hPP]

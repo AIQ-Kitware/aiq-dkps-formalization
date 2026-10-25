@@ -8,12 +8,16 @@ assumptions: Acharyya-style finite configuration error controls Helm's finite
 sample `iSup` alignment error.
 -/
 
-import Acharyya2025.Bridge
-import Acharyya2025.AlignedPipeline
-import Acharyya2025.GramRealization
-import Acharyya2025.RateChain
-import Helm2025.Basic
-import ForTauCeti.Probability.RigidAlignment
+module
+
+public import Acharyya2025.Bridge
+public import Acharyya2025.AlignedPipeline
+public import Acharyya2025.GramRealization
+public import Acharyya2025.RateChain
+public import Helm2025.Basic
+public import ForTauCeti.Probability.RigidAlignment
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory

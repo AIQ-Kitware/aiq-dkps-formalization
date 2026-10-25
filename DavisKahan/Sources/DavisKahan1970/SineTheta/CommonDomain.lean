@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -39,6 +43,7 @@ variable {E F G : Type v}
 
 /-- Domain of the composition of a closed operator with a bounded map on the
 right. -/
+@[expose]
 def boundedPullbackDomain
     (A : E →ₗ.[𝕜] E)
     (X : F →L[𝕜] E) : Set F :=
@@ -54,6 +59,7 @@ theorem mem_boundedPullbackDomain
   Iff.rfl
 
 /-- Exact source-paper domain condition for the trial map. -/
+@[expose]
 def HasCommonDomain
     (A : E →ₗ.[𝕜] E)
     (A₀ : F →ₗ.[𝕜] F)
@@ -101,6 +107,7 @@ end HasCommonDomain
 /-- Construct the accepted bookkeeping package from the exact appendix
 hypotheses.  The residual identity is stated on the common domain, identified
 with `dom A₀` by `hcommon`. -/
+@[expose]
 noncomputable def unboundedSinThetaDataOfCommonDomain
     (A : E →ₗ.[𝕜] E)
     (A₀ : F →ₗ.[𝕜] F)

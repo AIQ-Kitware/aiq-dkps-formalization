@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Riccati.UnboundedCoordinateRestrictions
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.Riccati.UnboundedCoordinateRestrictions
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Coordinate restrictions of a reduced unbounded direct-sum operator
@@ -19,6 +21,8 @@ rather than fields, matching the canonical `LinearPMap` representation: the
 restriction itself is defined without either hypothesis, and each property is
 inherited from the corresponding property of the ambient map.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -36,12 +40,14 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
 /-- The first coordinate restriction of a partial map on the direct sum.  No
 reduction hypothesis is needed to *define* it; reduction is what makes it agree
 with the ambient action, which is the content of the theorems below. -/
+@[expose]
 noncomputable def coordinateRestriction0
     (D : DirectSumPMap (E0 := E0) (E1 := E1)) : E0 →ₗ.[ℂ] E0 where
   domain := coordinateRestrictionDomain0 D
   toFun := coordinateRestrictionMap0 D
 
 /-- The second coordinate restriction of a partial map on the direct sum. -/
+@[expose]
 noncomputable def coordinateRestriction1
     (D : DirectSumPMap (E0 := E0) (E1 := E1)) : E1 →ₗ.[ℂ] E1 where
   domain := coordinateRestrictionDomain1 D
@@ -78,7 +84,8 @@ one rewrite does the whole job. -/
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (u : (coordinateRestriction0 D).domain) :
     coordinateRestriction0 D u =
-      WithLp.fst (D (coordinateRestrictionDomain0ToOriginal D u)) := rfl
+      WithLp.fst (D (coordinateRestrictionDomain0ToOriginal D u)) :=
+  coordinateRestrictionMap0_apply D u
 
 omit [CompleteSpace E0] [CompleteSpace E1] in
 /-- The second coordinate restriction acts by `coordinateRestrictionMap1`. -/
@@ -94,7 +101,8 @@ omit [CompleteSpace E0] [CompleteSpace E1] in
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (v : (coordinateRestriction1 D).domain) :
     coordinateRestriction1 D v =
-      WithLp.snd (D (coordinateRestrictionDomain1ToOriginal D v)) := rfl
+      WithLp.snd (D (coordinateRestrictionDomain1ToOriginal D v)) :=
+  coordinateRestrictionMap1_apply D v
 
 /-- A reducing dense domain restricts to a dense first-coordinate domain. -/
 theorem coordinateRestriction0_dense

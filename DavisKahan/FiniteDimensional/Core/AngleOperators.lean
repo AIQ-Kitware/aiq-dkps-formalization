@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
-import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 
 /-!
 # Compatibility surface for unfinished finite angle constructions
@@ -27,6 +29,8 @@ missing:
   the `arcsin` image of that of `sinAngleOperator`.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
@@ -38,10 +42,12 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
 /-- Scalar tangent with the Moore--Penrose convention at poles. -/
+@[expose]
 noncomputable def safeTan (theta : ℝ) : ℝ :=
   if Real.cos theta = 0 then 0 else Real.sin theta / Real.cos theta
 
 /-- Scalar double tangent with the Moore--Penrose convention at quarter turns. -/
+@[expose]
 noncomputable def safeTanTwo (theta : ℝ) : ℝ :=
   if Real.cos (2*theta) = 0 then 0 else
     Real.sin (2*theta) / Real.cos (2*theta)
@@ -68,6 +74,7 @@ Construction route: diagonalize the positive contraction `P_U P_V P_U` on
 canonical values on the common, orthogonal, and defect summands.  Prove basis
 independence through finite functional calculus (equivalently, apply
 `Real.arcsin` to `sinAngleOperator U V` through that calculus). -/
+@[expose]
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.selfAdjointFunctionalCalculus
@@ -82,6 +89,7 @@ Construction route: use the spectral decomposition of `angleOperator`, map
 finite angles by `safeTan`, and set the quarter-turn defect summand to zero
 only as a documented Moore--Penrose convention.  Theorems interpreting its
 norm as a principal tangent must assume transversality or acuteness. -/
+@[expose]
 noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.selfAdjointFunctionalCalculus
@@ -95,6 +103,7 @@ Construction route: apply `safeTanTwo` to the finite spectral decomposition
 of `angleOperator`, with a theorem hypothesis excluding quarter turns whenever
 the resulting operator is used analytically.  A future API may instead bundle
 that pole-avoidance proof into the constructor. -/
+@[expose]
 noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.selfAdjointFunctionalCalculus

@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRightDefect
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenLocalGlobal
-import DavisKahan.FiniteDimensional.DirectRotation.KernelTransportReplacement
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRightDefect
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenLocalGlobal
+public import DavisKahan.FiniteDimensional.DirectRotation.KernelTransportReplacement
 
 /-!
 # Independent and arbitrary Schatten defect parameters
@@ -16,6 +18,8 @@ optimizer's entire positive-cosine action. The resulting ambient unitary
 is unique for those prescribed actions. No multiplicity, angle gap or
 prescribed block extension is assumed.
 -/
+
+public section
 
 noncomputable section
 

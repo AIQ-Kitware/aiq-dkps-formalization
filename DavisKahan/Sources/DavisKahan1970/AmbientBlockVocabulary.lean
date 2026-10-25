@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 
 /-!
 # Ambient block vocabulary for the Davis--Kahan 1970 whole-space estimates
@@ -24,6 +26,8 @@ The declarations keep their original `TauCeti.DavisKahan1970` names; only the
 module boundary moved.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan1970
 
@@ -43,18 +47,21 @@ variable (U V : Submodule ℂ E)
 
 /-- The projector difference `D = P_V − P_U`, the operator whose modulus is
 `sin Θ`. -/
+@[expose]
 def projectorDifference : E →L[ℂ] E :=
   V.starProjection - U.starProjection
 
 /-- The ambient `cos²Θ` as an inverse: `(1 − sin²Θ)⁻¹`.  Under uniform
 transversality this is the honest inverse; the `Ring.inverse` spelling keeps the
 definition total. -/
+@[expose]
 def secantSquared : E →L[ℂ] E :=
   Ring.inverse (1 - projectorDifference U V * projectorDifference U V)
 
 /-- The ambient `cos 2Θ` as an inverse: `(1 − 2 sin²Θ)⁻¹`.  Under uniform
 quarter transversality this is the honest inverse; the `Ring.inverse` spelling
 keeps the definition total. -/
+@[expose]
 def doubleSecant : E →L[ℂ] E :=
   Ring.inverse (1 - 2 * (projectorDifference U V * projectorDifference U V))
 

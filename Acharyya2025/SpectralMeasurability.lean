@@ -22,8 +22,12 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]) and Claude Opus 4.8
 (claude-opus-4-8[1m]).
 -/
 
-import Acharyya2025.MatrixPerturbation
-import Acharyya2025.AlignedPipeline
+module
+
+public import Acharyya2025.MatrixPerturbation
+public import Acharyya2025.AlignedPipeline
+
+public section
 
 open scoped BigOperators Matrix
 open MeasureTheory

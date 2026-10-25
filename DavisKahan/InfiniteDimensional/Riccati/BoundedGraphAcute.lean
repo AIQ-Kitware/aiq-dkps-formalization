@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Riccati.BoundedDiagonalization
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.Riccati.BoundedDiagonalization
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Bounded graphs are acute
@@ -19,6 +21,8 @@ places every bounded block graph in the acute case.
 The final theorem removes the acuteness hypothesis from the complex bounded
 Riccati block diagonalization result.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -36,6 +40,7 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
   [CompleteSpace E1]
 
 /-- The ambient angular operator associated with a bounded block graph. -/
+@[expose]
 noncomputable def blockAngularOperator (X : E0 →L[𝕜] E1) :
     WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
   blockCoordinate1 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) ∘L X ∘L

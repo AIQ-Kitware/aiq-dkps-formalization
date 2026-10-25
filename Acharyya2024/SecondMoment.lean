@@ -27,8 +27,12 @@ Mathlib's `ProbabilityTheory.IndepFun.variance_sum`; the work here is the
 coordinatewise reduction on `EuclideanSpace`.
 -/
 
-import Mathlib
-import ForTauCeti.Probability.Moments.SampleMean
+module
+
+public import Mathlib
+public import ForTauCeti.Probability.Moments.SampleMean
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory ProbabilityTheory

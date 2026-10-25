@@ -3,14 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealDecomposition
-import DavisKahan.FiniteDimensional.DirectRotation.RealFourSchattenNorm
-import DavisKahan.FiniteDimensional.DirectRotation.RealTwoSchattenNorm
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.UnitaryTransport
-import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.FiniteBlocks
-import ForTauCeti.Analysis.InnerProductSpace.Projection.InvariantSubspace
-import ForTauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngleBlocks
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealDecomposition
+public import DavisKahan.FiniteDimensional.DirectRotation.RealFourSchattenNorm
+public import DavisKahan.FiniteDimensional.DirectRotation.RealTwoSchattenNorm
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.UnitaryTransport
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.FiniteBlocks
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.InvariantSubspace
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngleBlocks
 
 /-!
 # Every real spectral block of a global minimum is an unrestricted minimum
@@ -22,6 +24,8 @@ subspace intersections, and compare with every real unitary competitor
 on each block. Thus the two- and four-dimensional optimizations apply to
 genuine unrestricted restriction problems of an ambient global minimum.
 -/
+
+public section
 
 noncomputable section
 

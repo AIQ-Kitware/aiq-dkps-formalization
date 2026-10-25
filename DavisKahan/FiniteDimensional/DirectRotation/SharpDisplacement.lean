@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement
-import DavisKahan.FiniteDimensional.DirectRotation.Exponential
-import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum
-import DavisKahan.FiniteDimensional.DirectRotation.TraceOptimality
-import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement
+public import DavisKahan.FiniteDimensional.DirectRotation.Exponential
+public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum
+public import DavisKahan.FiniteDimensional.DirectRotation.TraceOptimality
+public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
 /-!
 # Sharp comparison of canonical and projection displacements
@@ -23,6 +25,8 @@ and `s=1`. The operator Pythagorean theorem identifies the Gram operator
 of the resulting product with the direct-displacement Gram operator.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
@@ -33,7 +37,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
-private noncomputable def sharpTransferWeight (s : ℝ) : ℝ :=
+noncomputable def sharpTransferWeight (s : ℝ) : ℝ :=
   Real.sqrt (2 / (1 + Real.sqrt (1 - s ^ 2)))
 
 private theorem sharpTransferWeight_nonneg (s : ℝ) :

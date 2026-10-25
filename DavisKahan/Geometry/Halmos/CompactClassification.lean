@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Halmos.GenericReconstruction
-import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+module
+
+public import DavisKahan.Geometry.Halmos.GenericReconstruction
+public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -66,6 +70,7 @@ Note the definition is total: it is stated for every `A`, and only *means* the
 angle eigenvalue list under the compactness and positivity hypotheses that the
 consumers carry.  This mirrors `approximationNumber` itself, which is total in
 the same way. -/
+@[expose]
 noncomputable def compactAngleEigenvalueList
     {K : Type*} [NormedAddCommGroup K] [InnerProductSpace 𝕜 K]
     [CompleteSpace K] (A : K →L[𝕜] K) : ℕ → ℝ :=

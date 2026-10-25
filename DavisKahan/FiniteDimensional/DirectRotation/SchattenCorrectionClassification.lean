@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenNonacuteClassification
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenNonacuteClassification
 
 /-!
 # Every Schatten-nearest subspace-preserving unitary
@@ -13,6 +15,8 @@ distance. The full phase/defect classification therefore describes every
 nearest unitary preserving a prescribed subspace. Candidate corrections
 and all competing ambient unitaries are unrestricted within that constraint.
 -/
+
+public section
 
 noncomputable section
 

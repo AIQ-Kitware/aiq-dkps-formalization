@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.5 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
-import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
-import DavisKahan.FiniteDimensional.TanTheta.Vector
-import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
+public import DavisKahan.FiniteDimensional.TanTheta.Vector
+public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 
 /-!
 # Prose-like wrappers for the finite Davis--Kahan classical API
@@ -36,6 +38,8 @@ For the two sine theorems we name the actual projection products used by the
 proved theorems.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
@@ -54,6 +58,7 @@ subspace `V`.  In Davis--Kahan sine theorems, `V` is usually the opposite
 spectral subspace of the perturbed operator, so this is the formal object
 behind the prose notation `sin Θ`.
 -/
+@[expose]
 noncomputable def directedSinThetaOperatorClassicalProseLike
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     E →L[𝕜] E :=
@@ -78,6 +83,7 @@ Lean theorem controls the normalized cross block
 `sin 2Θ` singular values.  This name keeps that normalization explicit rather
 than hiding a factor of two.
 -/
+@[expose]
 noncomputable def directedHalfSinTwoThetaOperatorClassicalProseLike
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     E →L[𝕜] E :=
@@ -94,6 +100,7 @@ theorem directedHalfSinTwoThetaOperatorClassicalProseLike_apply
   rfl
 
 /-- Projector difference operator for the sharp finite projector theorem. -/
+@[expose]
 noncomputable def projectorDifferenceOperatorClassicalProseLike
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     E →L[𝕜] E :=

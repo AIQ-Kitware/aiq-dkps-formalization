@@ -2,10 +2,12 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import DavisKahan.All
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import ForTauCeti.Analysis.Normed.Operator.Restriction
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
+module
+
+public import DavisKahan.All
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import ForTauCeti.Analysis.Normed.Operator.Restriction
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
 
 /-! # Direct canonical consumers
 
@@ -14,6 +16,8 @@ The norm and spectrum restrictions do not require an inner product or completene
 the finite Sylvester estimate accepts independent rectangular carriers over `RCLike`.
 The imported production library must not reintroduce the removed compatibility names.
 -/
+
+public section
 
 namespace RoadmapBridge.CanonicalConsumers
 

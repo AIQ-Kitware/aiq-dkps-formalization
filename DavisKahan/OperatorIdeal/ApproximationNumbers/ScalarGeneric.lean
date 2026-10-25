@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
-import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
-import DavisKahan.OperatorIdeal.CanonicalRealView
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
+public import DavisKahan.OperatorIdeal.CanonicalRealView
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families
@@ -35,6 +37,8 @@ because the Davis--Kahan estimates subtract gauges and finish with `linarith`.
 The bridge is `TauCeti.SymmetricOperatorIdealFamily.gaugeReal`; see the
 "ideal interface" section below.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -185,6 +189,7 @@ gauge is identically `0`, which satisfies the other three but is not a norm.
 both `kyFanApproximationGauge` and the capability class supplying its triangle
 inequality are defined in this library; it moves when the approximation-number
 layer is extracted. -/
+@[expose]
 noncomputable def kyFanSymmetricIdealFamily
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
     TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
@@ -255,7 +260,9 @@ instance isComplete_kyFanSymmetricIdealFamily
     intro E F _ _ _ _ _ _
     have hnorm : ∀ x : (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.Elem E F,
         ‖x‖ = kyFanApproximationGauge k x.val :=
-      fun x => ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg k _)
+      fun x => by
+        rw [OperatorIdealFamily.Elem.norm_def, gauge_kyFanSymmetricIdealFamily]
+        exact ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg k _)
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
     have hop : CauchySeq fun n => (a n).val := by
       rw [Metric.cauchySeq_iff] at ha ⊢
@@ -275,6 +282,7 @@ instance isComplete_kyFanSymmetricIdealFamily
     obtain ⟨M, hM⟩ := hL (ε / k) (div_pos hε hkR)
     refine ⟨M, fun n hn => ?_⟩
     rw [dist_eq_norm, hnorm]
+    rw [OperatorIdealFamily.Elem.val_sub, OperatorIdealFamily.Elem.val_mk]
     calc kyFanApproximationGauge k ((a n).val - L)
         ≤ (k : ℝ) * ‖(a n).val - L‖ :=
           kyFanApproximationGauge_le_nat_mul_opNorm k _
@@ -436,6 +444,7 @@ namespace KyFanDominantIdealFamily
 variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
 
 /-- The ordinary operator norm with its finite-Ky-Fan dominance property. -/
+@[expose]
 noncomputable def operatorNorm :
     KyFanDominantIdealFamily.{u, v} 𝕜 where
   toSymmetricOperatorIdealFamily := TauCeti.operatorNormFamily 𝕜
@@ -450,6 +459,7 @@ noncomputable def operatorNorm :
 
 Dominance is immediate: the gauge *is* the `k`-th Ky Fan gauge, so majorization
 at index `k` is the conclusion. -/
+@[expose]
 noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (k : ℕ) (hk : 0 < k) :
     KyFanDominantIdealFamily.{u, v} 𝕜 where

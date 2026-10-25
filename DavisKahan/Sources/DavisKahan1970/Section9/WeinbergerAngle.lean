@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerComparison
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerComparison
 
 /-!
 # Davis--Kahan 1970, Section 9: the Weinberger angle half
@@ -31,6 +33,8 @@ The counterexample is deliberately stated as a theorem: Weinberger's coupled
 hypotheses may not be replaced by the weaker scalar statement simply because
 the latter has the desired type shape.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970

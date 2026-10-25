@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Bounded.Core
-import DavisKahan.OperatorIdeal.CanonicalRealView
+module
+
+public import DavisKahan.SinTheta.Bounded.Core
+public import DavisKahan.OperatorIdeal.CanonicalRealView
 
 /-!
 # Scalar-generic lower-frame transport from explicit polar data
@@ -35,6 +37,8 @@ rename would repoint imports for a wording problem this paragraph fixes.
 
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
@@ -53,6 +57,7 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 /-- The normalized trial isometry associated with an explicit polar package. -/
+@[expose]
 def frameIsometryOfPolarData
     {X : F →L[𝕜] E} {ε : ℝ}
     {hX : LowerFrameBound X ε} {hε : 0 < ε}
@@ -60,6 +65,7 @@ def frameIsometryOfPolarData
   X ∘L P.invSqrt
 
 /-- The complementary overlap block associated with explicit polar data. -/
+@[expose]
 def sinThetaBlockOfPolarData
     {X : F →L[𝕜] E} {ε : ℝ}
     {hX : LowerFrameBound X ε} {hε : 0 < ε}
@@ -68,6 +74,7 @@ def sinThetaBlockOfPolarData
   (frameIsometryOfPolarData P).adjoint ∘L F₁
 
 /-- The full directed sine operator associated with explicit polar data. -/
+@[expose]
 def directedSinThetaOperatorOfPolarData
     {X : F →L[𝕜] E} {ε : ℝ}
     {hX : LowerFrameBound X ε} {hε : 0 < ε}

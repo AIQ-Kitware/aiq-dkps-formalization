@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Unbounded.AllGap
-import DavisKahan.SpectralTheory.SpectralRestrictionOperator
+module
+
+public import DavisKahan.SinTheta.Unbounded.AllGap
+public import DavisKahan.SpectralTheory.SpectralRestrictionOperator
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -46,7 +50,9 @@ theorem spectralSubspace_orthogonalExactDecomposition
       show selfAdjointSpectralProjection A hA Sᶜ hS.compl
           = ContinuousLinearMap.id ℂ E -
             selfAdjointSpectralProjection A hA S hS from
-        (TauCeti.LinearPMap.spectralPVM hA).proj_compl S hS]
+        by
+          simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
+          exact (TauCeti.LinearPMap.spectralPVM hA).proj_compl S hS]
     change ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralProjection A hA S hS =
       ContinuousLinearMap.id ℂ E - U.starProjection
@@ -78,6 +84,7 @@ theorem spectralSubspace_orthogonalExactDecomposition
 
 /-- Construct the internal unbounded sine-theta bookkeeping directly from a
 measurable exact spectral set and a bounded residual extension. -/
+@[expose]
 noncomputable def unboundedSinThetaDataOfSpectralSubspace
     (A : E →ₗ.[ℂ] E)
     (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)

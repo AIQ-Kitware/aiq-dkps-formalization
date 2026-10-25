@@ -8,7 +8,11 @@ conditions are allowed to hold on a measurable high-probability subevent rather
 than for every random reference sample.
 -/
 
-import DkpsQuench2026.Rates.SafeSchedule
+module
+
+public import DkpsQuench2026.Rates.SafeSchedule
+
+public section
 
 set_option linter.mathlibStandardSet false
 

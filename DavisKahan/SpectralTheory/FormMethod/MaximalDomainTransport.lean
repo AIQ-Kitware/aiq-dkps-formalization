@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
+public import Mathlib.Tactic
 
 /-!
 # Transport of the maximal fourth-order graph space into the ambient Hilbert space
@@ -18,6 +20,8 @@ derivative, and all four traces across the injective embedding.
 The free ambient domain from `TraceKernelModel` is then proved to be exactly
 the joint kernel of the transported traces inside the maximal ambient domain.
 -/
+
+public section
 
 open Set
 open scoped InnerProductSpace
@@ -40,6 +44,7 @@ variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
 namespace FourthOrderTraceModel
 
 /-- Ambient image of the maximal graph Hilbert space. -/
+@[expose]
 noncomputable def maximalAmbientDomain
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) : Submodule 𝕜 H :=
   LinearMap.range D.embed.toLinearMap
@@ -52,6 +57,7 @@ noncomputable def maximalRangeEquiv
 
 /-- Recover the graph-space representative of a maximal ambient-domain
 vector. -/
+@[expose]
 noncomputable def maximalAmbientInverse
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.maximalAmbientDomain →ₗ[𝕜] V :=
@@ -77,6 +83,7 @@ maximal domain. -/
   exact congrArg Subtype.val h
 
 /-- Fourth derivative transported to the ambient maximal domain. -/
+@[expose]
 noncomputable def maximalFourthAmbient
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.maximalAmbientDomain →ₗ[𝕜] H :=
@@ -121,6 +128,13 @@ noncomputable def freeToMaximal
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.freeAmbientDomain →ₗ[𝕜] D.maximalAmbientDomain :=
   Submodule.inclusion D.freeAmbientDomain_le_maximalAmbientDomain
+
+omit [CompleteSpace H] [CompleteSpace V] in
+/-- The free-domain inclusion preserves the ambient vector. -/
+@[simp] theorem coe_freeToMaximal
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
+    (x : D.freeAmbientDomain) : (D.freeToMaximal x : H) = (x : H) := by
+  rfl
 
 omit [CompleteSpace H] [CompleteSpace V] in
 /-- The maximal inverse of a free vector is the underlying free graph-space

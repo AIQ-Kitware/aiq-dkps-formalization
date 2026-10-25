@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerAngles
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenLocalGlobal
-import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerAngles
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenLocalGlobal
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
 
 /-!
 # Every Schatten optimizer fixes the zero-angle space
@@ -16,6 +18,8 @@ local transport minimum is therefore global with value zero, forcing the
 restricted transporter to be identity. This includes common source vectors
 and common orthogonal ambient directions, even for a nonacute pair.
 -/
+
+public section
 
 noncomputable section
 

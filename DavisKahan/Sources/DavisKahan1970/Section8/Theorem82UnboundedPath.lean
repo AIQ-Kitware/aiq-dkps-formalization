@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.UnboundedBandLipschitz
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
-import DavisKahan.Geometry.Angle.DoubleAngleGapBound
-import DavisKahan.SpectralTheory.ReducingSpectrumUnion
-import DavisKahan.SpectralTheory.Complexification.ReducingRestrictionDescent
-import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+module
+
+public import DavisKahan.SpectralTheory.UnboundedBandLipschitz
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
+public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+public import DavisKahan.SpectralTheory.ReducingSpectrumUnion
+public import DavisKahan.SpectralTheory.Complexification.ReducingRestrictionDescent
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
 /-!
 # The homotopy path for Theorem 8.2 at unbounded scope
@@ -31,6 +33,8 @@ Along `B t = A + (1 − t) H` the moving branch is the band spectral range
 
 The two endpoints come from `le_of_band_exterior_spectra`.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -115,6 +119,7 @@ theorem pathOperator_zero (A : Hc →ₗ.[ℂ] Hc) (Hop : Hc →L[ℂ] Hc) :
   module
 
 /-- The band subspace along the path. -/
+@[expose]
 def pathBand {A : Hc →ₗ.[ℂ] Hc} (hA : IsSelfAdjoint A) {Hop : Hc →L[ℂ] Hc}
     (hHop : Hop.IsSymmetric) (l r : ℝ) (t : ℝ) : Submodule ℂ Hc :=
   DavisKahan.bandSubspace (isSelfAdjoint_pathOperator hA hHop t) l r
@@ -328,6 +333,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
         (DavisKahan.addBounded_zero _).symm (reducesSubspace_pathBand hA hHop l r 0)
         hQred' hlr hd hbandspec hQperp'
     rw [hfdef 0]
+    simp only [Submodule.directedProjectionGap_def]
     show ‖Qᗮ.starProjection ∘L (pathBand hA hHop l r 0).starProjection‖ = 0
     rw [norm_eq_zero]
     ext x
@@ -427,6 +433,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
     exact Submodule.starProjection_eq_self_iff.mpr (hR1 (P.starProjection_apply_mem x))
   have hle : P.directedProjectionGap Q ≤ f 1 := by
     rw [hfdef 1]
+    simp only [Submodule.directedProjectionGap_def]
     show ‖Qᗮ.starProjection ∘L P.starProjection‖ ≤
       ‖Qᗮ.starProjection ∘L (pathBand hA hHop l r 1).starProjection‖
     calc ‖Qᗮ.starProjection ∘L P.starProjection‖
@@ -548,6 +555,7 @@ theorem theorem8_2_residualHalfGap_unbounded_complex
   have hPred' : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A D) P := by
     refine DavisKahan.reducesSubspace_of_isSelfAdjoint_of_invariant hA'sa
       (fun x => hPred.starProjection_mem_domain x.property) ?_
+    rw [_root_.LinearPMap.isInvariant_iff]
     intro x hx
     show (A ⟨(x : Hc), x.2⟩ : Hc) + D (x : Hc) ∈ P
     rw [hDP _ hx, add_zero]
@@ -555,12 +563,22 @@ theorem theorem8_2_residualHalfGap_unbounded_complex
   have hrestr : TauCeti.LinearPMap.reducingRestriction A P hPred
       = TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A D) P
         hPred' := by
-    refine LinearPMap.ext rfl ?_
-    intro x y hxy
-    refine Subtype.ext ?_
-    show (A ⟨((x : P) : Hc), y⟩ : Hc)
-      = (A ⟨((x : P) : Hc), hxy⟩ : Hc) + D ((x : P) : Hc)
-    rw [hDP ((x : P) : Hc) x.2, add_zero]
+    refine LinearPMap.ext ?_ ?_
+    · ext x
+      rw [TauCeti.LinearPMap.mem_reducingRestriction_domain_iff,
+        TauCeti.LinearPMap.mem_reducingRestriction_domain_iff]
+      rfl
+    · intro x y hxy
+      refine Subtype.ext ?_
+      have hy := (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A P hPred x).mp y
+      have hy' := (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff
+        (TauCeti.LinearPMap.addBounded A D) P hPred' x).mp hxy
+      rw [TauCeti.LinearPMap.coe_reducingRestriction_apply A P hPred x hy,
+        TauCeti.LinearPMap.coe_reducingRestriction_apply
+          (TauCeti.LinearPMap.addBounded A D) P hPred' x hy']
+      change (A ⟨((x : P) : Hc), hy⟩ : Hc) =
+        A ⟨((x : P) : Hc), hy'⟩ + D ((x : P) : Hc)
+      rw [hDP ((x : P) : Hc) x.2, add_zero]
   have htotal : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A D) K'
       = TauCeti.LinearPMap.addBounded A Hop := by
     rw [addBounded_addBounded, hDdef]

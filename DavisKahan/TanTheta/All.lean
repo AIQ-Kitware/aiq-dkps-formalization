@@ -3,19 +3,21 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.TanTheta.ScalarTransport
-import DavisKahan.TanTheta.Spectrum
-import DavisKahan.TanTheta.Theorem63DirectedAngleBridge
-import DavisKahan.TanTheta.Theorem63FiniteSource
-import DavisKahan.TanTheta.Theorem63InfiniteTrial
-import DavisKahan.TanTheta.Theorem63TrialData
-import DavisKahan.TanTheta.Theorem63Unbounded
-import DavisKahan.TanTheta.Theorem63UnboundedCompression
-import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
-import DavisKahan.TanTheta.UnboundedGraphAngle
-import DavisKahan.TanTheta.UnboundedSpectrum
-import DavisKahan.TanTheta.UnboundedVector
-import DavisKahan.TanTheta.Vector
+module
+
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.TanTheta.ScalarTransport
+public import DavisKahan.TanTheta.Spectrum
+public import DavisKahan.TanTheta.Theorem63DirectedAngleBridge
+public import DavisKahan.TanTheta.Theorem63FiniteSource
+public import DavisKahan.TanTheta.Theorem63InfiniteTrial
+public import DavisKahan.TanTheta.Theorem63TrialData
+public import DavisKahan.TanTheta.Theorem63Unbounded
+public import DavisKahan.TanTheta.Theorem63UnboundedCompression
+public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
+public import DavisKahan.TanTheta.UnboundedGraphAngle
+public import DavisKahan.TanTheta.UnboundedSpectrum
+public import DavisKahan.TanTheta.UnboundedVector
+public import DavisKahan.TanTheta.Vector
 
 /-! # `DavisKahan/TanTheta` -/

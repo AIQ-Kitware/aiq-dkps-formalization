@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.Unbounded
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+module
+
+public import DavisKahan.DoubleAngle.Unbounded
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -161,7 +165,7 @@ private theorem starProjection_mul_crossT :
 /-- **The paper's `sin 2Θ` squares to `4(t - t²)`.** -/
 theorem directedSinTwoAngleOperatorC_mul_self :
     directedSinTwoAngleOperatorC U V * directedSinTwoAngleOperatorC U V
-      = (4 : ℝ) • (crossT U V - crossT U V * crossT U V) := by
+      = (4 : ℝ) • ((U.starProjection * V.starProjection * U.starProjection) - (U.starProjection * V.starProjection * U.starProjection) * (U.starProjection * V.starProjection * U.starProjection)) := by
   have hcomm := commute_directedSinAngleOperatorC_directedCosAngleOperatorC U V
   have hsin : directedSinAngleOperatorC U V * directedSinAngleOperatorC U V
       = U.starProjection - crossT U V := by
@@ -187,6 +191,7 @@ theorem directedSinTwoAngleOperatorC_mul_self :
             (directedCosAngleOperatorC U V * directedCosAngleOperatorC U V) := by noncomm_ring
   rw [hrearrange, hsin, hcos, sub_mul, starProjection_mul_crossT]
   norm_num
+  rfl
 
 /-- The paper's `sin 2Θ` operator is nonnegative: it is twice a product of two
 commuting nonnegative operators. -/
@@ -228,7 +233,7 @@ theorem starProjection_reflectedU :
 theorem directedSinAngleOperatorC_reflected_mul_self :
     directedSinAngleOperatorC U (reflectedU U V) *
         directedSinAngleOperatorC U (reflectedU U V)
-      = (4 : ℝ) • (crossT U V - crossT U V * crossT U V) := by
+      = (4 : ℝ) • ((U.starProjection * V.starProjection * U.starProjection) - (U.starProjection * V.starProjection * U.starProjection) * (U.starProjection * V.starProjection * U.starProjection)) := by
   have hfour : ∀ z : E →L[ℂ] E, (4 : ℝ) • z = 4 * z := by
     intro z; ext y; simp; module
   have hp : U.starProjection * U.starProjection = U.starProjection :=
@@ -248,7 +253,7 @@ theorem directedSinAngleOperatorC_reflected_mul_self :
                 ((2 * V.starProjection - 1) * U.starProjection)) := by
     rw [mul_sub, sub_mul, mul_one, hp]
     noncomm_ring
-  rw [hgoal, hsandwich, crossT, hfour]
+  rw [hgoal, hsandwich, hfour]
   noncomm_ring
 
 end Reflected
@@ -304,6 +309,7 @@ unitarily invariant norm, not only at the operator norm. -/
 theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers :
     (sinTwoThetaIdealBlock U V).HasSameApproximationNumbers
       (directedSinTwoAngleOperatorC U V) := by
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   have hblock : sinTwoThetaIdealBlock U V
       = U.starProjection ∘L (reflectedU U V)ᗮ.starProjection := by
@@ -314,8 +320,9 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers :
       ← ContinuousLinearMap.star_eq_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
       (isSelfAdjoint_starProjection U).star_eq,
       (isSelfAdjoint_starProjection (reflectedU U V)ᗮ).star_eq]
-  have hmod := ContinuousLinearMap.modulus_hasSameApproximationNumbers
-    ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection) n
+  have hmod := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+      ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection)) n
   rw [show ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection).modulus
       = directedSinTwoAngleOperatorC U V from by
         rw [← directedSinAngleOperatorC,

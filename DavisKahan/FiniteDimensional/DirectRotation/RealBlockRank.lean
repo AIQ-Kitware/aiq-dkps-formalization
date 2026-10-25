@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealBlockDescent
-import ForTauCeti.LinearAlgebra.InvolutionDoubledBlock
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealBlockDescent
+public import ForTauCeti.LinearAlgebra.InvolutionDoubledBlock
 
 /-!
 # Exact ranks of the real reflection-paired spectral blocks
@@ -15,6 +17,8 @@ exactly half the block. In particular source-reflection doubling gives
 the exact source ranks needed to apply the one- and two-angle transport
 minima. A dimension upper bound alone would not establish this balance.
 -/
+
+public section
 
 noncomputable section
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement
-import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement
+public import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
 
 /-!
 # Exact chord-to-sine displacement ratio for the real four-plane witness
@@ -14,6 +16,8 @@ trigonometric half-angle identity.  It supplies an exact equality witness for
 the proposed factor `sec (theta / 2)`.  By itself it does not assert that the
 competitor is a global minimizer, nor does it prove the universal upper bound.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

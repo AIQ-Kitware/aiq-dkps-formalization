@@ -38,9 +38,13 @@ cross-term identity of `Acharyya2025.DavisKahan`
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import Acharyya2025.Weyl
-import Acharyya2025.DavisKahan
+module
+
+public import Mathlib
+public import Acharyya2025.Weyl
+public import Acharyya2025.DavisKahan
+
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)
@@ -89,6 +93,7 @@ matrix nearest to `Q`.
 `hT`, `hS`: symmetry of the population (`T`) and sample (`S`) operators (so they
 have orthonormal eigenbases and real sorted eigenvalues).  `hn`, `hd`: the
 ambient dimension is `n` and the leading block size `d ≤ n`. -/
+@[expose]
 noncomputable def overlap (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     (hn : finrank ℝ E = n) (hd : d ≤ n) : Matrix (Fin d) (Fin d) ℝ :=
   fun k l => ⟪hS.eigenvectorBasis hn (Fin.castLE hd k),

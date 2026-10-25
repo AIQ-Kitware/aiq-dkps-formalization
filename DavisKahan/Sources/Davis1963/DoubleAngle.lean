@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+module
+
+public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 
 /-!
 # Davis 1963 double-angle facade

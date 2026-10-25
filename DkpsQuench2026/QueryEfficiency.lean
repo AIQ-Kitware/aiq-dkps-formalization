@@ -1,5 +1,7 @@
-import DkpsQuench2026.QueryEfficiency.Spectral
-import DkpsQuench2026.QueryEfficiency.Assumptions
-import DkpsQuench2026.QueryEfficiency.Finite
-import DkpsQuench2026.QueryEfficiency.Infinite
-import DkpsQuench2026.QueryEfficiency.AllQueries
+module
+
+public import DkpsQuench2026.QueryEfficiency.Spectral
+public import DkpsQuench2026.QueryEfficiency.Assumptions
+public import DkpsQuench2026.QueryEfficiency.Finite
+public import DkpsQuench2026.QueryEfficiency.Infinite
+public import DkpsQuench2026.QueryEfficiency.AllQueries

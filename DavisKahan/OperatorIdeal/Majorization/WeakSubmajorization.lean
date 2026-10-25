@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.Normed.FiniteLpGauge
+module
+
+public import ForTauCeti.Analysis.Normed.FiniteLpGauge
 
 /-!
 # Infinite weak submajorization
@@ -12,6 +14,8 @@ This file lifts the existing finite weak-majorization theory to decreasing
 nonnegative sequences.  The definition is intentionally prefix-based because
 approximation numbers already arrive in decreasing nonnegative order.
 -/
+
+public section
 
 namespace TauCeti
 namespace Majorization

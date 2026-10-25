@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 
 /-!
 # Foundational definitions for strong unbounded Riccati theory
@@ -18,6 +20,8 @@ self-adjointness are recorded as fields of the data rather than bundled into a
 local operator type.  Unitary transport of a partial map is the canonical
 `TauCeti.LinearPMap.UnitaryEquivalent`, and needs no local restatement.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -56,8 +60,7 @@ theorem isSymmetric0
     TauCeti.LinearPMap.IsSymmetric H.A0 := by
   have hformal := LinearPMap.adjoint_isFormalAdjoint (T := H.A0) H.dense0
   rw [LinearPMap.isSelfAdjoint_def.mp H.selfAdjoint0] at hformal
-  intro x y
-  exact hformal x y
+  exact (LinearPMap.isSymmetric_iff _).mpr hformal
 
 /-- The second diagonal block is symmetric on its operator domain. -/
 theorem isSymmetric1
@@ -65,19 +68,18 @@ theorem isSymmetric1
     TauCeti.LinearPMap.IsSymmetric H.A1 := by
   have hformal := LinearPMap.adjoint_isFormalAdjoint (T := H.A1) H.dense1
   rw [LinearPMap.isSelfAdjoint_def.mp H.selfAdjoint1] at hformal
-  intro x y
-  exact hformal x y
+  exact (LinearPMap.isSymmetric_iff _).mpr hformal
 
 end UnboundedBlockData
 
 /-- A bounded angular operator preserves the unbounded diagonal domains. -/
-def PreservesRiccatiDomains
+@[expose] def PreservesRiccatiDomains
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=
   ∀ x : H.A0.domain, X (x : E0) ∈ H.A1.domain
 
 /-- Strong Riccati solution, including the domain condition. -/
-def StrongSolvesRiccati
+@[expose] def StrongSolvesRiccati
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=
   ∃ hdom : PreservesRiccatiDomains H X,
@@ -87,7 +89,7 @@ def StrongSolvesRiccati
         X (H.B01 (X (x : E0))) + H.B10 (x : E0) = 0
 
 /-- Graph subspace of a bounded angular operator in the Hilbert direct sum. -/
-noncomputable def unboundedBlockGraph (X : E0 →L[𝕜] E1) :
+@[expose] noncomputable def unboundedBlockGraph (X : E0 →L[𝕜] E1) :
     Submodule 𝕜 (WithLp 2 (E0 × E1)) :=
   LinearMap.range ((WithLp.linearEquiv 2 𝕜 (E0 × E1)).symm.toLinearMap ∘ₗ
     LinearMap.id.prod X.toLinearMap)

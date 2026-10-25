@@ -3,19 +3,23 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.Specialized.FreeBeam.BeamSpectrum
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.SinTheta.BoundedPerturbation
-import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
-import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
-import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
-import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
-import ForTauCeti.MeasureTheory.MulLpAlgebra
+module
+
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.Specialized.FreeBeam.BeamSpectrum
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.SinTheta.BoundedPerturbation
+public import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
+public import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
+public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
+public import ForTauCeti.MeasureTheory.MulLpAlgebra
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -90,6 +94,7 @@ theorem integral_unitIocMeasure_pow (n : ℕ) :
 /-! ## The affine trial subspace -/
 
 /-- The two-dimensional affine trial subspace of the paper's numerical example. -/
+@[expose]
 def beamTrial : Submodule ℂ BeamL2 := Submodule.span ℂ {beamOneLp, beamIdLp}
 
 /-- Membership in the beam trial subspace. -/
@@ -130,6 +135,7 @@ theorem beamOperator_apply_trial {x : BeamL2} (hx : x ∈ beamTrial)
   exact (beamOperator_affine_mem_and_zero a b).choose_spec
 
 /-- The isometric inclusion of the trial subspace. -/
+@[expose]
 def beamTrialIncl : beamTrial →L[ℂ] BeamL2 := beamTrial.subtypeL
 
 /-- Evaluating the trial subspace's inclusion. -/
@@ -157,6 +163,7 @@ theorem beamClamp_eq_self {t : ℝ} (ht : t ∈ Set.Ioc (0 : ℝ) 1) : beamClamp
   rw [beamClamp, min_eq_left ht.2, max_eq_right ht.1.le]
 
 /-- The symbol of the paper's perturbation: `ε` times the clamped coordinate. -/
+@[expose]
 def beamSymbol (ε : ℝ) (t : ℝ) : ℂ := ((ε * beamClamp t : ℝ) : ℂ)
 
 /-- The beam symbol is measurable. -/
@@ -172,6 +179,7 @@ theorem norm_beamSymbol_le (ε : ℝ) (t : ℝ) : ‖beamSymbol ε t‖ ≤ |ε|
     _ = |ε| := mul_one _
 
 /-- **The Section 9 perturbation**: multiplication by `ε t` on `L²(0,1]`. -/
+@[expose]
 def beamPerturbation (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
   mulLp unitIocMeasure (measurable_beamSymbol ε) (norm_beamSymbol_le ε)
 
@@ -428,7 +436,7 @@ theorem exists_pos_eigenpair_beamOperator :
     TauCeti.exists_hasEigenvalue_eigenspace_not_le isCompactOperator_beamResolvent
       beamCoerciveFormData.resolvent_isSelfAdjoint
       beamQuadLp_mem_beamTrial_orthogonal beamQuadLp_ne_zero
-  obtain ⟨u, hu, hunot⟩ := SetLike.not_le_iff_exists.mp hnotle
+  obtain ⟨u, hu, hunot⟩ := IsConcreteLE.not_le_iff_exists.mp hnotle
   have hRu : beamCoerciveFormData.resolvent u = mu • u := Module.End.mem_eigenspace_iff.mp hu
   have hu0 : u ≠ 0 := fun h => hunot (h ▸ Submodule.zero_mem beamTrial)
   have hmu0 : mu ≠ 0 := by
@@ -635,6 +643,7 @@ theorem beamPerturbation_isSelfAdjoint (ε : ℝ) :
 
 /-- **The exact operator of the Section 9 example**: the free beam perturbed by
 multiplication by `ε t`. -/
+@[expose]
 def beamPerturbed (ε : ℝ) : BeamL2 →ₗ.[ℂ] BeamL2 :=
   TauCeti.LinearPMap.addBounded beamOperator (beamPerturbation ε)
 
@@ -694,11 +703,13 @@ theorem beamSinTheta_le (ε : ℝ) :
     rw [hz, map_zero]
     exact beamOperator_apply_trial (x : beamTrial).2 _
   have hlow : TauCeti.LinearPMap.SemiboundedBelow beamTrialZero 0 := by
+    rw [TauCeti.LinearPMap.semiboundedBelow_iff]
     intro x
     have hz : beamTrialZero x = 0 := rfl
     rw [hz, inner_zero_left]
     simp
   have hhigh : TauCeti.LinearPMap.SemiboundedAbove beamTrialZero 0 := by
+    rw [TauCeti.LinearPMap.semiboundedAbove_iff]
     intro x
     have hz : beamTrialZero x = 0 := rfl
     rw [hz, inner_zero_left]
@@ -790,8 +801,10 @@ theorem beamOperator_mem_resolventSet_of_mem_lowSet_diff {lam : ℝ}
   by_contra hcon
   -- The canonical real spectrum is the real preimage of the canonical complex
   -- spectrum, so its nonmembership witness is exactly the resolvent hypothesis.
-  have hmem : lam ∈ _root_.LinearPMap.realSpectrum beamOperator := fun hr =>
-    hcon ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root
+  have hmem : lam ∈ _root_.LinearPMap.realSpectrum beamOperator := by
+    rw [_root_.LinearPMap.mem_realSpectrum_iff, _root_.LinearPMap.mem_spectrum_iff]
+    intro hr
+    exact hcon ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root
       beamOperator (lam : ℂ)).mpr hr)
   rcases realSpectrum_beamOperator_subset_sharp hmem with h0 | hgt
   · exact hlam.2 h0
@@ -849,6 +862,7 @@ both form bounds are `0`. -/
 theorem beamLow_semiboundedBelow :
     TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction beamOperator
       beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
+  rw [TauCeti.LinearPMap.semiboundedBelow_iff]
   intro x
   exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
     beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
@@ -858,6 +872,7 @@ theorem beamLow_semiboundedBelow :
 theorem beamLow_semiboundedAbove :
     TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction beamOperator
       beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
+  rw [TauCeti.LinearPMap.semiboundedAbove_iff]
   intro x
   exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
     beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
@@ -986,6 +1001,7 @@ theorem inner_beamPerturbation_affineLp (ε : ℝ) (a b c d : ℂ) :
   ring
 
 /-- The `L²` realization of a centered-affine trial function `c + d (2t - 1)`. -/
+@[expose]
 def centeredAffineLp (p : DavisKahan1970.Section9.CenteredAffine) : BeamL2 :=
   affineLp ((p.constant - p.centered : ℝ) : ℂ) ((2 * p.centered : ℝ) : ℂ)
 
@@ -1209,16 +1225,19 @@ which is `(√75 + √76)(√75 - √76) = -1` in disguise.  No shortcut through
 open DavisKahan1970.Section9 in
 /-- The Section 9 residual as an operator: multiplication by `ε t` restricted to
 the affine trial subspace. -/
+@[expose]
 def beamResidual (ε : ℝ) : beamTrial →L[ℂ] BeamL2 :=
   beamPerturbation ε ∘L beamTrialIncl
 
 open DavisKahan1970.Section9 in
 /-- The first trial vector, as an element of the trial subspace. -/
+@[expose]
 def beamTrialVecOne : beamTrial :=
   ⟨centeredAffineLp trialOne, centeredAffineLp_mem_beamTrial _⟩
 
 open DavisKahan1970.Section9 in
 /-- The second trial vector, as an element of the trial subspace. -/
+@[expose]
 def beamTrialVecTwo : beamTrial :=
   ⟨centeredAffineLp trialTwo, centeredAffineLp_mem_beamTrial _⟩
 
@@ -1324,6 +1343,7 @@ theorem beamResidual_gram (ε : ℝ) :
 
 /-- The top eigendirection coefficient of the residual Gram matrix:
 `c = -(√75 + √76)`, so that `φ₁ + c φ₂` is a top eigenvector. -/
+@[expose]
 def beamGramTopCoefficient : ℝ := -(Real.sqrt 75 + Real.sqrt 76)
 
 open DavisKahan1970.Section9 in
@@ -1386,6 +1406,7 @@ theorem beamGramTopDenom_pos : (0 : ℝ) < 1 + beamGramTopCoefficient ^ 2 := by
 open DavisKahan1970.Section9 in
 /-- The top eigenvector of the residual Gram matrix, unnormalised:
 `φ₁ + c φ₂` with `c = -(√75 + √76)`. -/
+@[expose]
 def beamGramTopVector : beamTrial :=
   beamTrialVecOne + ((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecTwo
 
@@ -1393,6 +1414,7 @@ open DavisKahan1970.Section9 in
 /-- **The explicit rank-one approximant of the Section 9 residual**: the residual
 composed with the orthogonal projection onto the top eigendirection of the
 residual Gram matrix. -/
+@[expose]
 def beamResidualRankOne (ε : ℝ) : beamTrial →L[ℂ] BeamL2 :=
   (innerSL ℂ beamGramTopVector).smulRight
     ((((1 + beamGramTopCoefficient ^ 2 : ℝ) : ℂ)⁻¹) •
@@ -1648,11 +1670,13 @@ theorem beamSinThetaSum_le (ε : ℝ) :
     rw [hz, map_zero]
     exact beamOperator_apply_trial (x : beamTrial).2 _
   have hlow : TauCeti.LinearPMap.SemiboundedBelow beamTrialZero 0 := by
+    rw [TauCeti.LinearPMap.semiboundedBelow_iff]
     intro x
     have hz : beamTrialZero x = 0 := rfl
     rw [hz, inner_zero_left]
     simp
   have hhigh : TauCeti.LinearPMap.SemiboundedAbove beamTrialZero 0 := by
+    rw [TauCeti.LinearPMap.semiboundedAbove_iff]
     intro x
     have hz : beamTrialZero x = 0 := rfl
     rw [hz, inner_zero_left]

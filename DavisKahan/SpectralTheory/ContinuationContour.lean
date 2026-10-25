@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.ResolventOperator
-import Mathlib.MeasureTheory.Integral.CurveIntegral.Basic
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.SpectralTheory.ResolventOperator
+public import Mathlib.MeasureTheory.Integral.CurveIntegral.Basic
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -80,10 +84,12 @@ namespace PiecewiseC1ClosedContour
 
 /-- The underlying globally defined parameterization, constant outside the
 unit interval. -/
+@[expose]
 noncomputable def param (Γ : PiecewiseC1ClosedContour) : ℝ → ℂ :=
   Γ.path.extend
 
 /-- The geometric image of the contour. -/
+@[expose]
 def image (Γ : PiecewiseC1ClosedContour) : Set ℂ :=
   Set.range Γ.path
 
@@ -113,6 +119,7 @@ For a regular contour avoiding `z`, this is the usual winding number
 `(2 * pi * i)^{-1} integral (w - z)^{-1} dw`.  It is kept complex-valued because
 that is the form needed by continuous functional calculus.
 -/
+@[expose]
 noncomputable def normalizedWinding (Γ : PiecewiseC1ClosedContour)
     (z : ℂ) : ℂ :=
   (((2 : ℂ) * Real.pi * Complex.I)⁻¹) *
@@ -160,11 +167,13 @@ abbrev path {A : H →L[ℂ] H} {s : Set ℝ}
   Γ.geometric.path
 
 /-- The globally extended contour parameterization. -/
+@[expose]
 noncomputable def param {A : H →L[ℂ] H} {s : Set ℝ}
     (Γ : SpectralSeparatingContour A s) : ℝ → ℂ :=
   Γ.geometric.param
 
 /-- The geometric contour image. -/
+@[expose]
 def image {A : H →L[ℂ] H} {s : Set ℝ}
     (Γ : SpectralSeparatingContour A s) : Set ℂ :=
   Γ.geometric.image

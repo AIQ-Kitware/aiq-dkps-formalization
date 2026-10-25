@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerPhases
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenKernelAngles
-import ForTauCeti.Analysis.InnerProductSpace.UnitaryScalarRealPart
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerPhases
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenKernelAngles
+public import ForTauCeti.Analysis.InnerProductSpace.UnitaryScalarRealPart
 
 /-!
 # Intrinsic two-phase parameters of every Schatten optimizer
@@ -17,6 +19,8 @@ cannot contribute to this interior angle space. No acuteness assumption
 is imposed on other principal angles. Supercritical spaces therefore
 carry a unique orthogonal two-phase projection, with arbitrary multiplicity.
 -/
+
+public section
 
 noncomputable section
 

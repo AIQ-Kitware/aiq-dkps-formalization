@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedProjectionOptimizers
-import ForTauCeti.Analysis.InnerProductSpace.PairedProjectionExtension
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedProjectionOptimizers
+public import ForTauCeti.Analysis.InnerProductSpace.PairedProjectionExtension
 
 /-!
 # Every projection on an actual acute multiplicity space is attained
@@ -14,6 +16,8 @@ eigenspace. Its reflected extension is constructed in the original ambient
 space, and gives a globally minimizing transporter over all ambient competitors.
 No preselected diagonal basis or projection-extension hypothesis is supplied.
 -/
+
+public section
 
 noncomputable section
 

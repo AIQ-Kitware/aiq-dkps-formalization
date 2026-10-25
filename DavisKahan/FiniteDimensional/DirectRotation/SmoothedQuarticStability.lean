@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalAngle
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalStability
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceStability
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalAngle
 
 /-!
 # Quartic stability throughout the closed canonical regime
@@ -22,6 +24,8 @@ an explicit fourth-power objective-error certificate and uniqueness of the
 canonical minimizer through the transition. The critical isoclinic family
 has a sharper root certificate in `SmoothedCriticalStability`.
 -/
+
+public section
 
 noncomputable section
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

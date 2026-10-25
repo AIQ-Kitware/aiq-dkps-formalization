@@ -9,7 +9,11 @@ perturbation bound.  This file packages that reduction and the deterministic
 rate certificate needed when the matrix size varies with the asymptotic stage.
 -/
 
-import Acharyya2025.AlignedPipeline
+module
+
+public import Acharyya2025.AlignedPipeline
+
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix Topology
 open Filter

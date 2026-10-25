@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
-import DavisKahan.DoubleAngle.KyFanOrthonormal
+module
+
+public import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
+public import DavisKahan.DoubleAngle.KyFanOrthonormal
 
 /-!
 # Unrestricted sharp Ky Fan `tan 2Theta`
@@ -14,6 +16,8 @@ The only nonroutine input is the local spectral-selection theorem from
 `DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection`; all variational and
 approximation-number calls are existing declarations in the repository.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

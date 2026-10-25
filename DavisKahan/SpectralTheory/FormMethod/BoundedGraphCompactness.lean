@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
+public import Mathlib.Tactic
 
 /-!
 # Graph compactness under bounded perturbations
@@ -14,6 +16,8 @@ Adding a bounded operator does not change the domain of a closed operator and
 produces an equivalent graph norm.  Therefore sequential compactness of the
 ambient graph embedding is preserved in both directions.
 -/
+
+public section
 
 open Set Filter Topology
 open scoped InnerProductSpace

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealFourPrincipalAngles
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseClipping
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealFourPrincipalAngles
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseClipping
 
 /-!
 # Exact unrestricted real four-dimensional Schatten power minimum
@@ -14,6 +16,8 @@ principal-angle difference. The negative branch reflects the larger-angle
 plane. Both the literal power sum and an attaining orthogonal transporter
 are compared with the full ambient fiber, including all endpoint cases.
 -/
+
+public section
 
 noncomputable section
 

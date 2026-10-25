@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.Geometry.Polar.Section3Elementary
-import DavisKahan.InfiniteDimensional.SinTheta.General
+module
+
+public import DavisKahan.Geometry.Polar.Section3Elementary
+public import DavisKahan.InfiniteDimensional.SinTheta.General
 
 /-!
 # Davis--Kahan 1970, Corollary 3.2
@@ -21,6 +23,8 @@ half is two lines of projection algebra and is proved here: the two projections
 enter the angle operator only through their difference, and the absolute value
 is insensitive to its sign.
 -/
+
+public section
 
 open scoped InnerProductSpace ComplexOrder
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
-import DavisKahan.SpectralTheory.Complexification.Subspace
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
+public import DavisKahan.SpectralTheory.Complexification.Subspace
 
 /-!
 # Literal directed angle for real subspaces
@@ -14,6 +16,8 @@ complexification.  This loses no geometric information: the real orthogonal
 projections complexify exactly, and the complexified subspaces have the same
 principal-angle data as the original real subspaces.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -31,6 +35,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- Literal directed real angle, represented faithfully on the canonical
 complexification of the trial subspace. -/
+@[expose]
 noncomputable def sourceDirectedAngleR
     (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :=

@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: OpenAI GPT-5.6 Sol, Jon Crall
 -/
-import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
 /-!
 # Davis--Kahan 1970, Examples 4.1 and 4.2
@@ -19,6 +21,8 @@ rotation.  In that basis the direct rotation is `diag(e^{i theta},e^{-i theta})`
 multiplication by the global phase `e^{i delta}` gives the source competitor
 `V = e^{i delta} U` without changing its singular values.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970
@@ -272,6 +276,7 @@ theorem example4_1_reflection_beats_direct_iff
 /-! ## Example 4.2: a complex global phase -/
 
 /-- `e^{it}` written in real and imaginary coordinates. -/
+@[expose]
 def example42Phase (t : ℝ) : ℂ :=
   (Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I
 
@@ -306,6 +311,7 @@ theorem norm_one_sub_example42Phase (t : ℝ) :
   nlinarith [sq_abs (Real.sin (t / 2))]
 
 /-- The direct rotation in its complex eigenbasis. -/
+@[expose]
 def example42DirectRotation (theta : ℝ) : ComplexPlane →ₗ[ℂ] ComplexPlane :=
   Matrix.toEuclideanLin
     !![example42Phase theta, 0;
@@ -313,6 +319,7 @@ def example42DirectRotation (theta : ℝ) : ComplexPlane →ₗ[ℂ] ComplexPlan
 
 /-- The source competitor `V = e^{i delta} U`, written after multiplying the
 two diagonal phases. -/
+@[expose]
 def example42Competitor (theta delta : ℝ) : ComplexPlane →ₗ[ℂ] ComplexPlane :=
   Matrix.toEuclideanLin
     !![example42Phase (theta + delta), 0;

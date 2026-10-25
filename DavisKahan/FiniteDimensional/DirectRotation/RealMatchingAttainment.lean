@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealAngleBlockAttainment
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealMatchingWeights
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealAngleBlockAttainment
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealMatchingWeights
 
 /-!
 # Realizing labelled real transport matchings
@@ -13,6 +15,8 @@ A matching is partitioned into ordered singleton and two-cycle orbits.
 The actual principal-angle frame realizes those orbits as reducing planes
 and four-dimensional blocks, with identity on the common complement.
 -/
+
+public section
 
 noncomputable section
 

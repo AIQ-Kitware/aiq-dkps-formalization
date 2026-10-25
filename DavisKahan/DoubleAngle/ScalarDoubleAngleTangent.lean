@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import Mathlib.Analysis.SpecialFunctions.Pow.Real
+module
+
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 # The scalar double-angle tangent
@@ -20,11 +22,14 @@ order to name a quotient of two reals.  They belong to the `tan 2Θ` vocabulary,
 and the finite-dimensional theorems consume them from here.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.TanTwoTheta
 
 /-- The double-angle tangent of a single-angle tangent value:
 `tan 2θ = 2 tan θ / (1 - tan² θ)`. -/
+@[expose]
 noncomputable def doubleAngleTangent (t : ℝ) : ℝ := 2 * t / (1 - t ^ 2)
 
 /-- The double-angle tangent vanishes at zero. -/
@@ -43,6 +48,7 @@ theorem doubleAngleTangent_nonneg {t : ℝ} (h0 : 0 ≤ t) (h1 : t < 1) :
 Unlike `doubleAngleTangent` this is meaningful on both sides of `π/4`: it is
 the modulus of `tan 2θ`, which is what a unitarily invariant norm of `tan 2Θ`
 reads off.  In terms of `s = sin θ` it is `2 s √(1 - s²) / |1 - 2 s²|`. -/
+@[expose]
 noncomputable def absDoubleAngleTangent (t : ℝ) : ℝ := 2 * t / |1 - t ^ 2|
 
 /-- The branch-free double-angle tangent vanishes at zero. -/

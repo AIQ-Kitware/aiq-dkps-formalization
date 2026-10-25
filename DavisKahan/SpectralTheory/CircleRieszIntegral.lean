@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.CircleRieszProjection
-import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
-import DavisKahan.SpectralTheory.CayleySelectorBridge
-import Mathlib.MeasureTheory.Integral.CircleIntegral
-import Mathlib.Analysis.Complex.CauchyIntegral
+module
+
+public import DavisKahan.SpectralTheory.CircleRieszProjection
+public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+public import DavisKahan.SpectralTheory.CayleySelectorBridge
+public import Mathlib.MeasureTheory.Integral.CircleIntegral
+public import Mathlib.Analysis.Complex.CauchyIntegral
 
 /-!
 # Circle Riesz projections for the Section 8 continuation argument
@@ -18,6 +20,8 @@ is the minimum analytic surface required by the Davis--Kahan continuation
 stack and intentionally avoids an abstract contour, rectifiability, or winding
 number framework.
 -/
+
+public section
 
 open scoped InnerProductSpace Topology
 open Set Filter
@@ -37,12 +41,14 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- The circle resolvent integrand: the resolvent at the parametrized circle
 point, weighted by the derivative of the parametrization, exactly as in
 Mathlib's `circleIntegral`. -/
+@[expose]
 noncomputable def circleResolventIntegrand
     (A : H →L[ℂ] H) (center radius θ : ℝ) : H →L[ℂ] H :=
   deriv (circleMap (center : ℂ) radius) θ •
     Ring.inverse (circleMap (center : ℂ) radius θ • (1 : H →L[ℂ] H) - A)
 
 /-- The operator-valued circle integral defining the Riesz projection. -/
+@[expose]
 noncomputable def circleRieszProjectionIntegral
     (A : H →L[ℂ] H) (center radius : ℝ) : H →L[ℂ] H :=
   (2 * Real.pi * Complex.I)⁻¹ •

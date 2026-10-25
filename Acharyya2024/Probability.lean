@@ -21,10 +21,14 @@ The proof chains:
     `frobSub_responseDist_le_of_uniform_errors` from `Acharyya2024.Common`.
 -/
 
-import Acharyya2024.Common
-import Acharyya2024.SecondMoment
-import ForTauCeti.Probability.Moments.Variance
-import ForTauCeti.Probability.ProductConvergence
+module
+
+public import Acharyya2024.Common
+public import Acharyya2024.SecondMoment
+public import ForTauCeti.Probability.Moments.Variance
+public import ForTauCeti.Probability.ProductConvergence
+
+public section
 
 open scoped BigOperators Topology ProbabilityTheory
 open Filter MeasureTheory

@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.RealUnboundedIdeal
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
-import DavisKahan.Geometry.Polar.DirectRotationReal
+module
+
+public import DavisKahan.DoubleAngle.RealUnboundedIdeal
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
+public import DavisKahan.Geometry.Polar.DirectRotationReal
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -83,7 +87,8 @@ theorem norm_sinTwoAngleOperatorC_eq_norm_directedSinTwoAngleOperatorC
     ‖sinTwoAngleOperatorC U V‖ = ‖directedSinTwoAngleOperatorC U V‖ := by
   rw [directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub,
     ContinuousLinearMap.norm_modulus, norm_sub_rev]
-  exact DavisKahan.subspaceGap_map_reflection_eq_norm_sinTwoAngle U V
+  simpa only [Submodule.projectionGap_def] using
+    DavisKahan.subspaceGap_map_reflection_eq_norm_sinTwoAngle U V
 
 end
 
@@ -121,7 +126,7 @@ theorem sinTwoThetaIdealBlock_eq_comp
   change U.starProjection (V.reflection (Uᗮ.starProjection
       (V.reflection.symm x))) = _
   rw [V.reflection_symm]
-  rfl
+  simp only [ContinuousLinearMap.comp_apply, Submodule.reflectionOperator_apply_eq_reflection]
 
 end ScalarGeneric
 

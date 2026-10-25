@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation
+public import Mathlib.Tactic
 
 /-!
 # Reduction of positive free-beam eigenvalues to the characteristic equation
@@ -23,6 +25,8 @@ characteristic and numerical consequences.  It also records the exact
 hypothesis needed to turn these certificates into the
 `positive_spectrum_characterization` field of `SobolevTraceFoundation`.
 -/
+
+public section
 
 open Set
 open scoped InnerProductSpace

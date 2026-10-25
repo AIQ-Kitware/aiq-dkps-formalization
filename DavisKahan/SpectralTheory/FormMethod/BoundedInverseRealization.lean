@@ -11,9 +11,11 @@ it is the exact bounded-to-unbounded bridge used by variational resolvents.
 The original and adapted files are Apache-2.0 licensed.
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Tactic
 
 /-!
 # Unbounded inverse of a bounded positive resolvent
@@ -27,6 +29,8 @@ This file constructs the inverse as a genuine `DavisKahanExt.PartialMap`
 and proves the required properties.  It converts the form method into the
 operator model already used throughout the Davis--Kahan development.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open Set Filter Topology
@@ -63,6 +67,7 @@ theorem denseRange_of_adjoint_eq_self_injective
   simpa [DenseRange, LinearMap.coe_range] using hdense
 
 /-- Domain of the unbounded inverse of `R`. -/
+@[expose]
 noncomputable def inverseDomain (R : H →L[𝕜] H) : Submodule 𝕜 H :=
   LinearMap.range R.toLinearMap
 
@@ -73,6 +78,7 @@ noncomputable def rangeEquiv (R : H →L[𝕜] H)
   LinearEquiv.ofInjective R.toLinearMap hinj
 
 /-- Algebraic inverse of `R` on `range R`. -/
+@[expose]
 noncomputable def rangeInverse (R : H →L[𝕜] H)
     (hinj : Function.Injective R) :
     inverseDomain R →ₗ[𝕜] H :=
@@ -152,6 +158,7 @@ theorem isClosed_graph_rangeInverse
 
 /-- Unbounded inverse of a bounded injective self-adjoint operator, as a
 partial map.  Density and graph closedness are the two lemmas below. -/
+@[expose]
 noncomputable def inversePartialMap
     (R : H →L[𝕜] H)
     (_hR : IsSelfAdjoint R)
@@ -226,6 +233,7 @@ theorem inversePartialMap_isSymmetric
     (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R) :
     TauCeti.LinearPMap.IsSymmetric (inversePartialMap R hR hinj) := by
+  apply (LinearPMap.isSymmetric_iff _).mpr
   intro x y
   calc
     ⟪(inversePartialMap R hR hinj) x, (y : H)⟫_𝕜 =

@@ -3,19 +3,23 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
-import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
-import DavisKahan.Geometry.Halmos.CrossedDefectGap
+module
+
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
+public import DavisKahan.Geometry.Halmos.CrossedDefectGap
 -- supplies the standing assumption (3.5) and the gap identity it buys, which is what
 -- turns this file's directed sine estimate into the ambient uniform transversality the
 -- tangent theorem consumes.  That module imports only `BoundedOperator/Compat` and
 -- `Geometry/Halmos/GenericRotationPredicates`, so the dependency is acyclic.
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
-import DavisKahan.TanTheta.Theorem63InfiniteTrial
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+public import DavisKahan.TanTheta.Theorem63InfiniteTrial
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -349,6 +353,7 @@ variable (U V : Submodule ℂ E)
 /-- **The off-diagonal block representative of the ambient tangent.**  It is
 supported entirely on the two cross blocks of `U ⊕ U^⊥`, and under uniform
 transversality its modulus is exactly `tan Θ`. -/
+@[expose]
 def tanBlockRepresentative : E →L[ℂ] E :=
   diagonalPair Uᗮ U
     (projectorDifference U V * secantSquared U V)
@@ -751,6 +756,7 @@ variable (U V : Submodule ℂ E)
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 /-- The ambient form of the directed sine block, `P_{V^⊥} P_U`. -/
+@[expose]
 def directedSineAmbient : E →L[ℂ] E :=
   Vᗮ.starProjection ∘L U.starProjection
 
@@ -1226,7 +1232,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
     exact lt_of_le_of_lt h hdirected
   rw [norm_sinAngleOperatorC U V,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
-      U V h35]
+      U V h35, Submodule.directedProjectionGap_def]
   exact hambient
 
 /-- **The whole-space `tan Θ` theorem, Ky Fan form, with transversality derived.**

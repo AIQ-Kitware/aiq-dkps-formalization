@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.OrthogonalIdempotentExp
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
+module
+
+public import DavisKahan.Sylvester.OrthogonalIdempotentExp
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 
 /-!
@@ -18,6 +20,8 @@ identity, so it is independent of the particular Haagerup--Zsido construction.
 promotable only after the modules it imported were promoted earlier in this lane.  Nothing is
 restated; names and namespace are unchanged.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.Sylvester
@@ -39,6 +43,7 @@ variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
 /-- Finite diagonal operator with respect to a projection family. -/
+@[expose]
 noncomputable def finiteDiagonalOperator {H : Type*}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     {n : ℕ} (P : Fin n → H →L[ℂ] H) (a : Fin n → ℝ) : H →L[ℂ] H :=

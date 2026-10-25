@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
-import DavisKahan.SpectralTheory.ResolventOperator
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
+public import DavisKahan.SpectralTheory.ResolventOperator
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -55,6 +59,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
 /-- Linear perturbation path. -/
+@[expose]
 def operatorPath (A H : E →L[𝕜] E) (t : ℝ) : E →L[𝕜] E :=
   A + (t : 𝕜) • H
 
@@ -243,7 +248,8 @@ theorem range_equiv_of_projection_norm_lt_one
   have hQV : V.starProjection = Q := by
     simpa only [V] using projection_fixedSpace_eq Q hQ
   have hacute : IsUniformlyAcute U V := by
-    change ‖U.starProjection - V.starProjection‖ < 1
+    change U.projectionGap V < 1
+    rw [Submodule.projectionGap_def]
     rw [hPU, hQV]
     exact hclose
   let W : H →L[ℂ] H := complexDirectRotation U V hacute

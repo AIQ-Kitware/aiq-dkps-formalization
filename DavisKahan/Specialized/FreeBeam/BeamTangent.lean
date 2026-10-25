@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Specialized.FreeBeam.BeamSection9
-import DavisKahan.TanTheta.Theorem63Unbounded
-import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamSection9
+public import DavisKahan.TanTheta.Theorem63Unbounded
+public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -57,6 +61,7 @@ noncomputable section
 /-! ## The Ritz compression as a bounded self-adjoint block -/
 
 /-- The Rayleigh--Ritz compression of the perturbation to the trial subspace. -/
+@[expose]
 def beamRitzCompression (ε : ℝ) : beamTrial →L[ℂ] beamTrial :=
   beamTrial.orthogonalProjectionOnto ∘L beamResidual ε
 
@@ -93,6 +98,7 @@ theorem beamRitzCompression_isSelfAdjoint (ε : ℝ) :
 /-- **The Rayleigh--Ritz trial block of the Section 9 example.**  The trial subspace
 is the affine plane, the compression is `beamRitzCompression`, and the residual is
 the part of `(A + ε t)|_Z` orthogonal to `Z`. -/
+@[expose]
 def beamTrialBlock (ε : ℝ) : BoundedCompressionTrialBlock (beamPerturbed ε) beamTrial where
   domain_le := fun _ hy => beamTrial_le_domain hy
   operator := beamRitzCompression ε

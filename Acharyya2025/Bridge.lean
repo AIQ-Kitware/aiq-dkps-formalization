@@ -20,7 +20,11 @@ consumes the entrywise CMDS-closeness events produced here.  No unproved
 statements remain in this file.
 -/
 
-import Acharyya2025.Deterministic
+module
+
+public import Acharyya2025.Deterministic
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory
@@ -36,6 +40,7 @@ variable {Ω : Type} [MeasurableSpace Ω]
 is bounded in absolute value by `ε`. With `A = B̂`, `B = B`, `|A i j - B i j| ≤ ε`
 is the event `|B̂ᵢⱼ - Bᵢⱼ| ≤ ε for all i,j` of the paper's Theorem 1
 (entrywise CMDS closeness). -/
+@[expose]
 def EntrywiseClose {n : Nat} (A B : DisMat n) (ε : Real) : Prop :=
   ∀ i j : Fin n, |A i j - B i j| ≤ ε
 
@@ -43,6 +48,7 @@ def EntrywiseClose {n : Nat} (A B : DisMat n) (ε : Real) : Prop :=
 response mean `Xbar i` (the paper's `X̄ᵢ`) is within Frobenius distance `η` of its
 population mean `μ i` (the paper's `µᵢ`). This is the per-model input event from
 which the dissimilarity-matrix bounds are derived. -/
+@[expose]
 def UniformResponseMeanClose {n m p : Nat}
     (Xbar μ : Fin n → Mat m p) (η : Real) : Prop :=
   ∀ i : Fin n, ‖Xbar i - μ i‖ ≤ η
@@ -60,6 +66,7 @@ error.  For one pair `(i,j)`, the reverse triangle inequality gives
 `|Dhat i j - D i j| ≤ m⁻¹ (‖Xbar i - μ i‖ + ‖Xbar j - μ j‖) ≤ 2η/m`.
 
 Unlike `responseFrobRate`, this quantity carries no ambient population factor. -/
+@[expose]
 noncomputable def responseEntrywiseRate (m : Nat) (η : Real) : Real :=
   (m : Real)⁻¹ * (2 * η)
 
@@ -67,6 +74,7 @@ noncomputable def responseEntrywiseRate (m : Nat) (η : Real) : Real :=
 The argument `_n` is retained for API compatibility with the older Frobenius
 route, but the improved rate is independent of the population size before the
 subsequent entrywise-to-operator conversion. -/
+@[expose]
 noncomputable def cmdsEntrywiseRate (_n m : Nat) (R η : Real) : Real :=
   4 * ((2 * R) * responseEntrywiseRate m η)
 

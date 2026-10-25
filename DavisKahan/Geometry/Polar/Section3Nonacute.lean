@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Polar.Section3Elementary
-import DavisKahan.Geometry.Polar.PolarIntertwining
-import Mathlib.Analysis.Normed.Operator.LinearIsometry
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Polar.Section3Elementary
+public import DavisKahan.Geometry.Polar.PolarIntertwining
+public import Mathlib.Analysis.Normed.Operator.LinearIsometry
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
@@ -71,6 +75,7 @@ private theorem projection_mul_projection_eq_zero_of_ge_orthogonal
   exact projection_mul_projection_eq_zero_of_le_orthogonal L K hLK
 
 /-- Orthogonal sum of the two crossed defect spaces. -/
+@[expose]
 noncomputable def crossedDefectSum : Submodule 𝕜 H :=
   halmosSourceDefect U V ⊔ halmosTargetDefect U V
 
@@ -87,6 +92,7 @@ noncomputable def crossedDefectProjection : H →L[𝕜] H :=
   Submodule.starProjection (crossedDefectSum U V)
 
 /-- Projection onto the regular block complementary to the crossed defects. -/
+@[expose]
 noncomputable def regularProjection : H →L[𝕜] H :=
   Submodule.starProjection ((crossedDefectSum U V)ᗮ)
 
@@ -403,7 +409,7 @@ theorem polarInitial_canonicalIntertwiner_eq_regular :
         (spectraCanonicalIntertwiner U V) y
       rw [hy, norm_zero, norm_eq_zero] at hn
       exact hn
-  simp only [ContinuousLinearMap.polarInitial,
+  simp only [ContinuousLinearMap.polarInitial_def,
     ← Submodule.orthogonal_orthogonal_eq_closure,
     ContinuousLinearMap.orthogonal_range,
     ← ContinuousLinearMap.star_eq_adjoint,
@@ -425,7 +431,7 @@ theorem canonicalPolarFactor_apply_crossedDefect_eq_zero
 theorem polarFinal_canonicalIntertwiner_eq_regular :
     (spectraCanonicalIntertwiner U V).polarFinal =
       (crossedDefectSum U V)ᗮ := by
-  simp only [ContinuousLinearMap.polarFinal,
+  simp only [ContinuousLinearMap.polarFinal_def,
     ← Submodule.orthogonal_orthogonal_eq_closure,
     ContinuousLinearMap.orthogonal_range,
     ← ContinuousLinearMap.star_eq_adjoint,
@@ -743,6 +749,7 @@ theorem crossedDefectQuarterTurn_crossed_blocks
 
 /-- The nonacute direct-rotation candidate obtained by filling the two defect
 spaces with the chosen quarter-turn. -/
+@[expose]
 noncomputable def nonacuteDirectRotation
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     H →L[𝕜] H :=

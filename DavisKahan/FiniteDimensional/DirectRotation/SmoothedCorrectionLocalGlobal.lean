@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedLocalGlobal
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutingCorrection
-import ForTauCeti.Analysis.InnerProductSpace.UnitaryCorrectionLocalGlobal
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedLocalGlobal
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutingCorrection
+public import ForTauCeti.Analysis.InnerProductSpace.UnitaryCorrectionLocalGlobal
 
 /-!
 # Every local smoothed unitary correction is globally nearest
@@ -14,6 +16,8 @@ The literal singular-value cost of correcting an input unitary while
 preserving a prescribed subspace has no nonglobal local minima. Right
 unitary invariance identifies it with the solved transport problem.
 -/
+
+public section
 
 noncomputable section
 

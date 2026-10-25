@@ -4,10 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamClassicalReal
-import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
-import TauCeti.Analysis.Normed.Operator.RealAlgebra
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamClassicalReal
+public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
+import Mathlib.Analysis.Normed.Operator.Compact.FredholmAlternative
+public import Mathlib.Tactic
 
 /-!
 # Spectrum of the real free-beam realization
@@ -17,29 +19,11 @@ It proves that every real spectral point is an eigenvalue, classifies the positi
 the free-beam characteristic equation, and obtains the source gap `{0} ∪ (500, ∞)`.
 -/
 
+public section
+
 open scoped InnerProductSpace ENNReal
 open MeasureTheory TauCeti
 
-noncomputable local instance realOperatorAlgebra :
-    Algebra ℝ (TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ) →L[ℝ]
-      TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ)) :=
-  ContinuousLinearMap.realAlgebra (𝕜 := ℝ)
-    (E := TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ))
-
-local instance operatorScalarTower : IsScalarTower ℝ
-    (TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ) →L[ℝ]
-      TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ))
-    (TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ) →L[ℝ]
-      TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ)) where
-  smul_assoc r A B := by
-    change (algebraMap ℝ _ r * A) * B = algebraMap ℝ _ r * (A * B)
-    simp [mul_assoc]
-
-local instance realOperatorScalarTower : IsScalarTower ℝ ℝ
-    (TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ) →L[ℝ]
-      TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ)) :=
-  ContinuousLinearMap.realIsScalarTower (𝕜 := ℝ)
-    (E := TauCeti.DavisKahan.FreeBeam.Model.Scalar.BeamL2 (𝕜 := ℝ))
 
 namespace TauCeti
 namespace DavisKahan
@@ -193,10 +177,18 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
     rw [hU]
     show R * ((1 : BeamL2 →L[ℝ] BeamL2) - c • R) =
       ((1 : BeamL2 →L[ℝ] BeamL2) - c • R) * R
-    rw [mul_sub, sub_mul, mul_one, one_mul, mul_smul_comm, smul_mul_assoc]
+    rw [mul_sub, sub_mul, mul_one, one_mul, Algebra.smul_def]
+    congr 1
+    calc
+      R * (algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c * R) =
+          (R * algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c) * R := (mul_assoc _ _ _).symm
+      _ = (algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c * R) * R :=
+        congrArg (fun T => T * R) (Algebra.commutes c R).symm
   have hSU : S * ↑U = 1 := U.inv_mul
   have hUS : (↑U : BeamL2 →L[ℝ] BeamL2) * S = 1 := U.mul_inv
-  refine hlam ⟨R * S, ?_, ?_⟩
+  apply hlam
+  rw [TauCeti.LinearPMap.mem_realResolventSet_iff]
+  refine ⟨R * S, ?_, ?_⟩
   · intro x
     have hz := Abstract.R_inversePartialMap_apply R
       beamCoerciveFormData.resolvent_isSelfAdjoint

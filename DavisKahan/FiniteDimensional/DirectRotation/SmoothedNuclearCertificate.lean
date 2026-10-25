@@ -28,6 +28,7 @@ namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
 open scoped ComplexConjugate InnerProductSpace
 
 /-- The nonnegative real coordinate of the planar nuclear dual unitary. -/
+@[expose]
 def dualReal (a b theta : ℝ) : ℝ :=
   if b ≤ a * Real.cos theta then
     (a * Real.cos theta - b) /
@@ -35,6 +36,7 @@ def dualReal (a b theta : ℝ) : ℝ :=
   else 0
 
 /-- The imaginary coordinate of the planar nuclear dual unitary. -/
+@[expose]
 def dualImag (a b theta : ℝ) : ℝ :=
   if b ≤ a * Real.cos theta then
     (a * Real.sin theta) /
@@ -207,6 +209,7 @@ def weightedDiagonalDefect (a b : ℝ) (theta : ι → ℝ)
 
 /-- The trace support value for objective parameter `b`, using the dual
 phase selected at the possibly different parameter `beta`. -/
+@[expose]
 def weightedSupportValue (a b beta theta : ℝ) : ℝ :=
   2 * (dualReal a beta theta * (a * Real.cos theta - b) +
     dualImag a beta theta * (a * Real.sin theta))

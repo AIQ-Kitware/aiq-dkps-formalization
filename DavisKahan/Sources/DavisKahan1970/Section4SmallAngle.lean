@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6 Astra Pro
 -/
-import DavisKahan.Sources.DavisKahan1970.Section4
-import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section4
+public import DavisKahan.FiniteDimensional.DirectRotation.SmallAngleCounterexample
 
 /-!
 # Small-angle strengthening of the Proposition 4.4 refutation
@@ -14,6 +16,8 @@ The original 29-target inventory and fixed-angle refutation are unchanged.
 The declarations expose the parameterized real four-dimensional construction
 and its consequence that no positive angle threshold restores the printed claim.
 -/
+
+public section
 
 namespace TauCeti.DavisKahan1970
 

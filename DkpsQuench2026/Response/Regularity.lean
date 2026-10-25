@@ -8,8 +8,12 @@ from finite-dimensional compactness and one pathwise raw-response Lipschitz
 condition.
 -/
 
-import DkpsQuench2026.Response.RawSampling
-import DkpsQuench2026.Rates.PolynomialCover
+module
+
+public import DkpsQuench2026.Response.RawSampling
+public import DkpsQuench2026.Rates.PolynomialCover
+
+public section
 
 set_option linter.mathlibStandardSet false
 

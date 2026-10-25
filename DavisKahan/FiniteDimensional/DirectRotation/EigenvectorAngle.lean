@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.Exponential
-import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.Exponential
+public import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 
 /-!
 # Proposition 3.5, the eigenvector clause: `∠(x, U x) = θ`
@@ -49,6 +51,8 @@ of `arcsin (sin Θ)` on a nonzero vector really is an arcsine
 `[-π/2, π/2]`, and positivity of `sin Θ` removes the negative half.  This matters
 because `arccos (cos θ) = θ` is false outside `[0, π]`.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

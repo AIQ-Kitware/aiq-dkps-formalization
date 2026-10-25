@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Specialized.FreeBeam.BeamTangent
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamTangent
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -70,6 +74,7 @@ open DavisKahan1970.Section9
 noncomputable section
 
 /-- The block-diagonal part of the perturbation relative to the trial splitting. -/
+@[expose]
 def beamRitzDiagonal (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
   beamTrial.diagBlock (beamPerturbation ε)
 
@@ -92,7 +97,7 @@ theorem beamRitzDiagonal_isSelfAdjoint (ε : ℝ) :
   have hd : ∀ z : BeamL2, beamRitzDiagonal ε z
       = beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection z))
         + beamTrialᗮ.starProjection (beamPerturbation ε (beamTrialᗮ.starProjection z)) :=
-    fun z => rfl
+    fun z => Submodule.diagBlock_apply beamTrial (beamPerturbation ε) z
   have hsym : ∀ u v : BeamL2,
       ⟪beamPerturbation ε u, v⟫_ℂ = ⟪u, beamPerturbation ε v⟫_ℂ :=
     fun u v => beamPerturbation_isSelfAdjoint ε u v
@@ -251,6 +256,7 @@ theorem norm_beamRitzOffDiagonal_le (ε : ℝ) :
 
 /-- **The paper's comparison operator** `Â = Â₀ ⊕ Â₁`, obtained from `A + ε t` by
 deleting its off-diagonal blocks relative to the trial splitting. -/
+@[expose]
 def beamComparison (ε : ℝ) : BeamL2 →ₗ.[ℂ] BeamL2 :=
   TauCeti.LinearPMap.addBounded beamOperator (beamRitzDiagonal ε)
 
@@ -286,7 +292,8 @@ theorem beamOperator_apply_mem_orthogonal (x : beamOperator.domain) :
   have hudom : u ∈ beamOperator.domain := beamTrial_le_domain hu
   have hsym : ⟪beamOperator x, u⟫_ℂ
       = ⟪(x : BeamL2), beamOperator ⟨u, hudom⟩⟫_ℂ :=
-    (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint beamOperator_isSelfAdjoint)
+    (TauCeti.LinearPMap.isSymmetric_iff _).mp
+      (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint beamOperator_isSelfAdjoint)
       x ⟨u, hudom⟩
   have hzero : beamOperator ⟨u, hudom⟩ = 0 :=
     beamOperator_apply_trial hu hudom
@@ -316,7 +323,8 @@ theorem beamComparison_apply_of_mem_beamTrial (ε : ℝ) {x : BeamL2}
   have hd : beamRitzDiagonal ε x
       = beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection x))
         + beamTrialᗮ.starProjection
-            (beamPerturbation ε (beamTrialᗮ.starProjection x)) := rfl
+            (beamPerturbation ε (beamTrialᗮ.starProjection x)) :=
+    Submodule.diagBlock_apply beamTrial (beamPerturbation ε) x
   rw [beamComparison_apply, beamOperator_apply_trial hx hxd, zero_add, hd,
     Submodule.starProjection_eq_self_iff.2 hx,
     starProjection_orthogonal_eq_zero_of_mem_beamTrial hx, map_zero, map_zero,
@@ -332,7 +340,8 @@ theorem beamComparison_apply_of_mem_orthogonal (ε : ℝ) {x : BeamL2}
   have hd : beamRitzDiagonal ε x
       = beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection x))
         + beamTrialᗮ.starProjection
-            (beamPerturbation ε (beamTrialᗮ.starProjection x)) := rfl
+            (beamPerturbation ε (beamTrialᗮ.starProjection x)) :=
+    Submodule.diagBlock_apply beamTrial (beamPerturbation ε) x
   rw [beamComparison_apply, hd,
     Submodule.starProjection_eq_self_iff.2 hx,
     starProjection_eq_zero_of_mem_beamTrial_orthogonal hx, map_zero, map_zero,
@@ -420,6 +429,7 @@ theorem beamComparison_form_ge_of_mem_orthogonal (ε : ℝ) (hε : 0 ≤ ε)
 /-- **The bounded cutoff for the trial subspace.**  The trial subspace is
 finite-dimensional and inside the domain, so the orthogonal projection onto it is
 already a cutoff: no limiting family is needed. -/
+@[expose]
 def beamTrialCutoff (ε : ℝ) :
     TauCeti.BoundedCutoff (beamComparison ε) beamTrial
       ‖beamPerturbation ε‖ where
@@ -458,6 +468,7 @@ abbrev beamLowProjection (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
     (Set.Iic 500) measurableSet_Iic
 
 /-- The reducing reflection `Z = 2Q - 1` of the perturbed beam at the cut `500`. -/
+@[expose]
 def beamLowReflection (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
   (2 : ℂ) • beamLowProjection ε - 1
 

@@ -19,8 +19,12 @@ References:
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Acharyya2025.DavisKahan
-import DavisKahan.Alternative.FiniteDimensional.EigenbasisFrobenius
+module
+
+public import Acharyya2025.DavisKahan
+public import DavisKahan.Alternative.FiniteDimensional.EigenbasisFrobenius
+
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace
 open Module (finrank)

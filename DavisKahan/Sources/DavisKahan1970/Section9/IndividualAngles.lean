@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
-import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
-import ForTauCeti.Analysis.InnerProductSpace.SphericalPythagoras
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
+public import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
+public import ForTauCeti.Analysis.InnerProductSpace.SphericalPythagoras
 
 /-!
 # Davis--Kahan 1970, Section 9: individual eigenvectors inside a cluster
@@ -26,15 +28,19 @@ from the corresponding tangent bounds rather than assumed: on the branch
 `psi ≤ tan (2 psi) / 2`, and on `0 ≤ eta < pi / 2` one has `eta ≤ tan eta`.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
 
 /-- Coefficient multiplying the Schur-complement `tan(2 psi)` bound after the
 factor one half. -/
+@[expose]
 noncomputable def halfTanTwoPsiCoefficient : ℝ := Real.sqrt 3 / 30
 
 /-- Coefficient multiplying the complementary-coordinate tangent bound. -/
+@[expose]
 noncomputable def tanEtaCoefficient : ℝ := Real.sqrt 15 / 15
 
 /-- The squared combined coefficient of the individual-angle decomposition. -/

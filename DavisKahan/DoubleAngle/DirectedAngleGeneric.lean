@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.OperatorAngleGeneric
-import DavisKahan.DoubleAngle.AngleTransport
-import DavisKahan.DoubleAngle.DirectedAngleRealTransport
+module
+
+public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
+public import DavisKahan.DoubleAngle.AngleTransport
+public import DavisKahan.DoubleAngle.DirectedAngleRealTransport
 /-! ## The block representation, at every field
 
 `sinTwoThetaIdealBlock U V = P_U ∘ P_{J_V Uᗮ}` is the object the unbounded directed `sin 2Θ`
@@ -20,6 +22,8 @@ of an existing concept".  `directedSinTwoAngleOperator` is now that operator at 
 it is not a second spelling: it is the one definition, of which the `...C` and `...RC` objects
 are the instance and the complexification.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.Angle
@@ -87,7 +91,9 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike :
           (TauCeti.ScalarTransport.submodule (e := e) V)) →
       (sinTwoThetaIdealBlock U V).HasSameApproximationNumbers
         (directedSinTwoAngleOperator U V) := by
-    intro 𝕂 _ e h n
+    intro 𝕂 _ e h
+    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+    intro n
     have hb := TauCeti.ScalarTransport.approximationNumber_clm (e := e)
       (sinTwoThetaIdealBlock U V) n
     have ha := TauCeti.ScalarTransport.approximationNumber_clm (e := e)
@@ -95,17 +101,20 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike :
     rw [clm_sinTwoThetaIdealBlock] at hb
     rw [clm_directedSinTwoAngleOperator] at ha
     rw [← hb, ← ha]
-    exact h n
+    exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h n
   rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
-  · refine key (𝕂 := ℝ) (RCLikeIso.real h) fun n => ?_
+  · apply key (𝕂 := ℝ) (RCLikeIso.real h)
+    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+    intro n
     show ExactSinTheta.approximationSingularValue n _ =
       ExactSinTheta.approximationSingularValue n _
     rw [approximationSingularValue_sinTwoThetaIdealBlock_real,
       ← ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
         (directedSinTwoAngleOperator _ _) n,
       complexify_directedSinTwoAngleOperator]
-  · exact key (𝕂 := ℂ) (RCLikeIso.complex h)
-      (sinTwoThetaIdealBlock_hasSameApproximationNumbers _ _)
+  · apply key (𝕂 := ℂ) (RCLikeIso.complex h)
+    rw [directedSinTwoAngleOperator_complex]
+    exact sinTwoThetaIdealBlock_hasSameApproximationNumbers _ _
 
 end
 

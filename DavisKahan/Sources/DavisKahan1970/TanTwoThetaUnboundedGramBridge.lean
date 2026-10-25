@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
-import DavisKahan.DoubleAngle.AngleTransport
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.Geometry.Polar.DirectRotation
-import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
-import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
+public import DavisKahan.DoubleAngle.AngleTransport
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
+public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -552,13 +556,18 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
       DavisKahan.starProjection_map_unitary Uᗮ V.reflection]
     unfold DavisKahan.boundedUnitaryConjugate
     rw [Submodule.reflection_symm]
-    rfl
+    ext x
+    simp only [ContinuousLinearMap.comp_apply, hJdef,
+      Submodule.reflectionOperator_apply_eq_reflection,
+      LinearIsometry.coe_toContinuousLinearMap, LinearIsometryEquiv.coe_toLinearIsometry]
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   calc (reflectionSineCorner U J).approximationNumber n
       = (Uᗮ.subtypeL ∘L reflectionSineCorner U J ∘L
           U.subtypeL.adjoint).approximationNumber n :=
-        ((ContinuousLinearMap.hasSameApproximationNumbers_ambientSubspaceBlock U Uᗮ
-          (reflectionSineCorner U J)) n).symm
+        ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+          (ContinuousLinearMap.hasSameApproximationNumbers_ambientSubspaceBlock U Uᗮ
+            (reflectionSineCorner U J)) n).symm
     _ = (Uᗮ.starProjection ∘L J ∘L U.starProjection).approximationNumber n := by
         rw [hamb]
     _ = (U.starProjection ∘L J ∘L Uᗮ.starProjection).approximationNumber n := by
@@ -567,8 +576,8 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
           ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
           ContinuousLinearMap.singularValue_adjoint]
     _ = ((U.starProjection ∘L J ∘L Uᗮ.starProjection) ∘L J).approximationNumber n :=
-        (ContinuousLinearMap.hasSameApproximationNumbers_comp_right hJnorm hJnorm
-          hJJ n).symm
+        ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+          (ContinuousLinearMap.hasSameApproximationNumbers_comp_right hJnorm hJnorm hJJ) n).symm
     _ = (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by rw [hblock]
 
 end IdealBlockBridge
@@ -633,6 +642,7 @@ variable {A : G →ₗ.[𝕜] G} {τ : ℝ}
 
 /-- The bounded cutoff, compressed to the trial subspace `U`.  The cutoff's
 range already lies in `U`, so this loses nothing. -/
+@[expose]
 def cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) : U →L[𝕜] U :=
   blockCompression U U Ω.toProj
 

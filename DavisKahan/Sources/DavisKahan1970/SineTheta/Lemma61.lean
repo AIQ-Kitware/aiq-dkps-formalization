@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Davis--Kahan Lemma 6.1
@@ -23,6 +25,8 @@ compression `Γ → Ω` are operators between different Hilbert spaces, so the
 identifications are recorded with the heterogeneous relation
 `SameApproximationSingularSequence`.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -40,6 +44,7 @@ variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
 /-- A bounded operator occupying one prescribed projection block. -/
+@[expose]
 def projectionBlock
     (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
@@ -47,6 +52,7 @@ def projectionBlock
   Ω.starProjection ∘L K ∘L Γ.starProjection
 
 /-- The compression of `K` to the block coordinates `Γ → Ω`. -/
+@[expose]
 def blockCompression
     (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]

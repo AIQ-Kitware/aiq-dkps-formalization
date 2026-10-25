@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
-import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -95,8 +99,9 @@ theorem approximationNumber_sinAngleOperatorC (n : ℕ) :
     (sinAngleOperatorC U V).approximationNumber n =
       (V.starProjection - U.starProjection).approximationNumber n := by
   rw [sinAngleOperatorC,
-    ContinuousLinearMap.modulus_hasSameApproximationNumbers
-      (U.starProjection - V.starProjection) n]
+    (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+      (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+        (U.starProjection - V.starProjection)) n]
   have hneg : U.starProjection - V.starProjection =
       ((-1 : ℂ)) • (V.starProjection - U.starProjection) := by
     module
@@ -201,7 +206,8 @@ theorem approximationNumber_sinTwoAngleOperatorC (n : ℕ) :
       ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
         U.starProjection).approximationNumber n := by
   rw [directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
-  exact ContinuousLinearMap.modulus_hasSameApproximationNumbers _ n
+  exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (ContinuousLinearMap.modulus_hasSameApproximationNumbers _) n
 
 /-- **The ambient doubled tangent, read off the ambient double-angle sine.**
 

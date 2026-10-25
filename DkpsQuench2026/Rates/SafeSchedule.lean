@@ -8,7 +8,11 @@ is a theorem whose users choose a response budget, not a collection of
 asymptotic side proofs.
 -/
 
-import DkpsQuench2026.Probability.UniformConcentration
+module
+
+public import DkpsQuench2026.Probability.UniformConcentration
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -56,11 +60,13 @@ def safeEntropyReplicates (entropyPower n : Nat) : Nat :=
 /-- Canonical shrinking perspective-net radius for a common raw-response
 Lipschitz constant `L`.  The denominator reserves half of the response error
 budget for extension from net centers to arbitrary models. -/
+@[expose]
 noncomputable def safePerspectiveRadius (L : Real) (n : Nat) : Real :=
   safeResponseTolerance n / (4 * (L + 1))
 
 /-- Half of the final response tolerance is reserved for concentration on the
 finite net; the other half is reserved for deterministic net extension. -/
+@[expose]
 noncomputable def safeNetTolerance (n : Nat) : Real :=
   safeResponseTolerance n / 2
 
@@ -486,7 +492,6 @@ theorem safe_configFrobBound_zero
     filter_upwards [eventually_gt_atTop 0] with n hn
     have hn0 : ((n : ℝ)) ≠ 0 := by positivity
     field_simp
-    try ring
   have hratio4 : Tendsto (fun n : ℕ => (((n : ℝ) + 1) / (n : ℝ) ^ 4)) atTop (𝓝 0) := by
     have h : Tendsto (fun n : ℕ =>
         (((n : ℝ) + 1) / (n : ℝ) ^ 2) * (((n : ℝ))⁻¹ * ((n : ℝ))⁻¹)) atTop (𝓝 0) := by
@@ -495,7 +500,6 @@ theorem safe_configFrobBound_zero
     filter_upwards [eventually_gt_atTop 0] with n hn
     have hn0 : ((n : ℝ)) ≠ 0 := by positivity
     field_simp
-    try ring
   -- the three configFrobBound terms, each as a vanishing sequence times a convergent one
   have hT1 : Tendsto (fun n : ℕ =>
       (2 * ((d : ℝ) * (4 * (d : ℝ) * (en n) ^ 2 / ((n : ℝ) * (κ / 2)) ^ 2))) ^ 2 *
@@ -518,7 +522,6 @@ theorem safe_configFrobBound_zero
     have hk0 : (κ / 2) ≠ 0 := ne_of_gt hκ2
     push_cast
     field_simp
-    try ring
   have hT2 : Tendsto (fun n : ℕ =>
       (d : ℝ) * (en n / Real.sqrt ((n : ℝ) * (κ / 2))) ^ 2) atTop (𝓝 0) := by
     have hbase : Tendsto (fun n : ℕ =>
@@ -531,7 +534,6 @@ theorem safe_configFrobBound_zero
       Real.sq_sqrt (by positivity)
     rw [div_pow, hsq]
     field_simp
-    try ring
   have hT3 : Tendsto (fun n : ℕ =>
       (4 * (((n + 1 : ℕ)) : ℝ) * perspectiveBound ^ 2) *
         (4 * (d : ℝ) * (en n) ^ 2 / ((n : ℝ) * (κ / 2)) ^ 2)) atTop (𝓝 0) := by
@@ -546,7 +548,7 @@ theorem safe_configFrobBound_zero
     have hk0 : (κ / 2) ≠ 0 := ne_of_gt hκ2
     push_cast
     field_simp
-    try ring
+    ring
   have hsqrt : ∀ {f : ℕ → ℝ}, Tendsto f atTop (𝓝 0) →
       Tendsto (fun n => Real.sqrt (f n)) atTop (𝓝 0) := by
     intro f hf

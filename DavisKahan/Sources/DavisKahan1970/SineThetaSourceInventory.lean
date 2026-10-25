@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.Ideals.All
-import DavisKahan.Sources.DavisKahan1970.SineTheta.All
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FiniteMultiplicity
-import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.All
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.All
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FiniteMultiplicity
+public import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

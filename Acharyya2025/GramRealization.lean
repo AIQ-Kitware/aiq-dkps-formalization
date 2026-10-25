@@ -23,8 +23,12 @@ Mathematical source/citation:
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Acharyya2024.Common
-import ForTauCeti.LinearAlgebra.Matrix.PosDef
+module
+
+public import Acharyya2024.Common
+public import ForTauCeti.LinearAlgebra.Matrix.PosDef
+
+public section
 
 open scoped BigOperators
 open Matrix

@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralDecomposition
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedReflectionOptimality
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalLowerBound
-import ForTauCeti.Analysis.InnerProductSpace.InvariantKernel
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralDecomposition
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedReflectionOptimality
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalLowerBound
+public import ForTauCeti.Analysis.InnerProductSpace.InvariantKernel
 
 /-!
 # Every complex Charbonnier transport local minimum is global
@@ -16,6 +18,8 @@ kernel is a balanced reflection whose fixed/right principal-angle trace
 equals its literal cost. Adding the two traces gives the unrestricted
 angle sum and therefore compares the local minimum with every competitor.
 -/
+
+public section
 
 noncomputable section
 

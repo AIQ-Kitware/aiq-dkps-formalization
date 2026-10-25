@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.SpectralTheory.ResolventOperator
-import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
+module
+
+public import DavisKahan.SpectralTheory.ResolventOperator
+public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 
 /-!
 # Selector bridge for bounded spectral projections
@@ -31,6 +33,8 @@ group calculus of the selector could be recognised as `cfcL`.  The native
 directly, and no Cayley transform is needed for a bounded operator.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahanExt
 
@@ -51,6 +55,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-! ## Scalar contour selector -/
 
 /-- The complex-valued indicator symbol of the selected real spectral set. -/
+@[expose]
 noncomputable def spectralSelector (s : Set ℝ) : ℝ → ℂ :=
   Set.indicator s (fun _ => (1 : ℂ))
 

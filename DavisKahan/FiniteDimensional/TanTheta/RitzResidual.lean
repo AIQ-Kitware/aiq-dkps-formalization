@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
-import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 
 /-!
 # The paper-exact finite Davis--Kahan `tan Θ` theorem
@@ -24,6 +26,8 @@ Fan dominance then gives every rectangular unitarily invariant norm.  This is
 intentionally separate from the later relaxed spectral-norm theorem and from
 an ordered graph-Sylvester formulation.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -42,7 +46,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 The Ritz compression of `A` to the trial coordinates is contained in
 `[β, α]`, while the spectrum of `A` carried by the orthogonal complement of
 the exact subspace is contained in `[α + δ, ∞)`. -/
-def TanThetaIntervalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
+@[expose] def TanThetaIntervalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
     (β α δ : ℝ) : Prop :=
   Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Icc β α) ∧
@@ -70,8 +74,9 @@ theorem isTransverse_of_tanThetaIntervalGap
     intro z _
     exact Submodule.mem_top
   have hMspec : Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Iic α) := by
+    apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
     intro lam hlam
-    exact (hgap.1 hlam).2
+    exact (Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mp hgap.1 hlam).2
   have hMupper :
       RCLike.re ⟪compression A X y, y⟫_𝕜 ≤ α * ‖y‖ ^ 2 :=
     upperFormBound_of_pointSpectrumIn (isSymmetric_compression hA X)
@@ -461,8 +466,9 @@ theorem tanThetaResidualWitness_scalar
     have hMupper : RCLike.re ⟪M v, v⟫_𝕜 ≤ α := by
       have hTopRed : IsInvariant M ⊤ := fun z _ => Submodule.mem_top
       have hspec : Module.End.PointSpectrumIn M ⊤ (Set.Iic α) := by
+        apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
         intro lam hlam
-        exact (hgap.1 hlam).2
+        exact (Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mp hgap.1 hlam).2
       have hbound : RCLike.re ⟪M v, v⟫_𝕜 ≤ α * ‖v‖ ^ 2 :=
         upperFormBound_of_pointSpectrumIn (isSymmetric_compression hA X)
           hTopRed hspec v Submodule.mem_top

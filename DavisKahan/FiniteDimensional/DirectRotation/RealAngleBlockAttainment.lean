@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealAngleCosts
-import ForTauCeti.Analysis.InnerProductSpace.OrthogonalFamilyGluing
-import ForTauCeti.Analysis.InnerProductSpace.Projection.CosineSineBlocks
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealAngleCosts
+public import ForTauCeti.Analysis.InnerProductSpace.OrthogonalFamilyGluing
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.CosineSineBlocks
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 
 /-!
 # Attainment on prescribed geometric real angle blocks
@@ -20,6 +22,8 @@ The block family here is geometric input. Constructing such a family for
 an arbitrary matching of the original positive angle labels is the next
 step; this result alone makes no all-ambient optimality assertion.
 -/
+
+public section
 
 noncomputable section
 

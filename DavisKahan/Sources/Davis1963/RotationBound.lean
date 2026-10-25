@@ -6,9 +6,11 @@ Davis Result B: the sharper total-rotation estimate (Davis 1963, Theorem 3.2, eq
 corollary combining with Result A (Theorem 4.1). Tickets PD-18 + BL1/BL2/BL4/BL5/BL6.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary
-import ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange
-import TauCeti.Analysis.InnerProductSpace.Spectrum
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary
+public import ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange
+public import TauCeti.Analysis.InnerProductSpace.Spectrum
 
 /-! # Davis's sharper total-rotation estimate (Davis 1963, Theorem 3.2)
 
@@ -45,6 +47,8 @@ eigenvector rotation is controlled by the *off-diagonal* part of the perturbatio
 * Chandler Davis, *The rotation of eigenvectors by a perturbation*, J. Math. Anal. Appl.
   6 (1963), 159–173, Theorem 3.2 and §5.
 -/
+
+public section
 
 namespace TauCeti
 open scoped InnerProductSpace

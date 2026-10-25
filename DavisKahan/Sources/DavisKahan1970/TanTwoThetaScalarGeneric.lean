@@ -3,14 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
-import DavisKahan.Geometry.Angle.TangentOperatorGeneric
-import DavisKahan.DoubleAngle.DirectedAngleGeneric
-import DavisKahan.DoubleAngle.ScalarTransport
-import DavisKahan.TanTheta.ScalarTransport
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
+public import DavisKahan.Geometry.Angle.TangentOperatorGeneric
+public import DavisKahan.DoubleAngle.DirectedAngleGeneric
+public import DavisKahan.DoubleAngle.ScalarTransport
+public import DavisKahan.TanTheta.ScalarTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 
 /-!
 # Scalar-generic unbounded `tan 2Θ`
@@ -29,6 +31,8 @@ boundaries explicitly: the ambient theorem is transported to the signed literal
 functional-calculus `sourceDirectedTanTwoThetaOperator` in
 `DirectedTrigonometricPresentation`.
 -/
+
+public section
 
 open scoped InnerProductSpace TauCeti.CompleteSubspace
 
@@ -49,6 +53,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [Complet
 
 /-- A directed doubled-tangent representative has exactly the singular values
 obtained by applying `tan ∘ arcsin` to the directed doubled-sine sequence. -/
+@[expose]
 def HasDirectedDoubleTangentApproximationNumbers
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (T : U →L[𝕜] Uᗮ) : Prop :=
@@ -287,8 +292,8 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     have hsinApprox : ∀ n : ℕ,
         (Angle.sinTwoAngleOperator U' V').approximationNumber n < 1 := by
       intro n
-      have hs := Angle.sinTwoAngleOperator_hasSameApproximationNumbers
-        (U := U') (V := V') n
+      have hs := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+        (Angle.sinTwoAngleOperator_hasSameApproximationNumbers (U := U') (V := V')) n
       rw [hs]
       exact hlt' n
     have hnorm : ‖Angle.sinTwoAngleOperator U' V'‖ < 1 := by
@@ -338,6 +343,11 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
         hred' hBsa' hB' hV'
         hUa' hUb' hab hBmem'
     have hdefinedGeneric' : Angle.HasDefinedDoubleTangent U' V' := by
+      have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := ScalarTransport e E) =
+          (ContinuousLinearMap.algebra :
+            Algebra ℝ (ScalarTransport e E →L[ℂ] ScalarTransport e E)) :=
+        ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+      rw [← hAlg] at hdefined'
       simpa only [Angle.HasDefinedDoubleTangent, Angle.angleOperator_complex] using hdefined'
     have hmemGeneric' : N.Mem (Angle.absTanTwoAngleOperator U' V') := by
       simpa using hmem'

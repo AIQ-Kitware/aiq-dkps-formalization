@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
-import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
+public import DavisKahan.SpectralTheory.FormMethod.CompactGraphEmbedding
+public import Mathlib.Tactic
 
 /-!
 # Compact form embeddings give compact resolvents
@@ -17,6 +19,8 @@ Cauchy subsequences, then the variational resolvent `j A⁻¹ j*` is compact in
 the same sequential sense.  Consequently the associated unbounded operator
 has compact graph embedding.
 -/
+
+public section
 
 open Set Filter Topology
 open scoped InnerProductSpace
@@ -37,6 +41,7 @@ variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
   [CompleteSpace V]
 
 /-- Sequential compactness of a continuous embedding on bounded sequences. -/
+@[expose]
 def SequentiallyCompactEmbedding (j : V →L[𝕜] H) : Prop :=
   ∀ u : ℕ → V,
     (∃ C : ℝ, ∀ n, ‖u n‖ ≤ C) →

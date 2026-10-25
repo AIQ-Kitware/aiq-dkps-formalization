@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.DoubleAngle.TanTwoThetaKyFan
-import DavisKahan.DoubleAngle.TanTwoThetaKyFanFiniteCarrier
-import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
-import DavisKahan.TanTwoTheta.UnboundedIdeal
-import DavisKahan.TanTwoTheta.Unbounded
+module
+
+public import DavisKahan.DoubleAngle.TanTwoThetaKyFan
+public import DavisKahan.DoubleAngle.TanTwoThetaKyFanFiniteCarrier
+public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
+public import DavisKahan.TanTwoTheta.UnboundedIdeal
+public import DavisKahan.TanTwoTheta.Unbounded
 
 /-!
 # Literal Davis--Kahan 1970 Section 7 tangent-double-angle surface
@@ -113,6 +115,8 @@ every unitary-invariant norm.
    part of completing the surface correctly, not a weakening of anything
    proved above.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970

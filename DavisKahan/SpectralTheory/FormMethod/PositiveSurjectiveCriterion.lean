@@ -11,10 +11,12 @@ modular operator to an arbitrary densely recoverable positive symmetric
 partial operator.  The original and adapted files are Apache-2.0 licensed.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import Mathlib.Tactic
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import Mathlib.Tactic
 
 /-!
 # A positive-surjective self-adjointness criterion
@@ -31,6 +33,8 @@ This theorem is a central reusable target for the free-beam form realization.
 A Lax--Milgram construction only has to produce the positive symmetric partial
 operator and solve `(A + 1)x = h`; the theorem below supplies maximality.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open Set
@@ -147,7 +151,7 @@ theorem DavisKahanExt.PartialMap.isSelfAdjoint_of_nonnegative_one_add_surjective
     IsSelfAdjoint A := by
   apply isSelfAdjoint_of_isFormalAdjoint_nonnegative_one_add_surjective
   · intro x y
-    exact hsym x y
+    exact (LinearPMap.isSymmetric_iff _).mp hsym x y
   · exact hnonneg
   · exact hsurj
 

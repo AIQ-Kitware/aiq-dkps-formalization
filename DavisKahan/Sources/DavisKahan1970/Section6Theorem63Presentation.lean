@@ -4,14 +4,18 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.TanTheta.Spectrum
-import DavisKahan.TanTheta.UnboundedGraphAngle
-import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
-import DavisKahan.TanTheta.Theorem63FiniteSource
-import DavisKahan.TanTheta.Theorem63InfiniteTrial
-import DavisKahan.TanTheta.Theorem63Unbounded
-import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.TanTheta.Spectrum
+public import DavisKahan.TanTheta.UnboundedGraphAngle
+public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
+public import DavisKahan.TanTheta.Theorem63FiniteSource
+public import DavisKahan.TanTheta.Theorem63InfiniteTrial
+public import DavisKahan.TanTheta.Theorem63Unbounded
+public import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

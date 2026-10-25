@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
-import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
-import DavisKahan.Sylvester.ScalarGeneric
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
+public import DavisKahan.Sylvester.ScalarGeneric
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -194,7 +198,8 @@ theorem perturbation_isSymmetric (P : CommonDomainSymmetricSinThetaProblem U V) 
     have hyB : y ∈ P.B.domain := P.mem_domain_B hy
     rw [← P.perturbation_eq x hx hxB, ← P.perturbation_eq y hy hyB,
       inner_sub_left, inner_sub_right,
-      hBs ⟨x, hxB⟩ ⟨y, hyB⟩, hAs ⟨x, hx⟩ ⟨y, hy⟩]
+      (TauCeti.LinearPMap.isSymmetric_iff _).mp hBs ⟨x, hxB⟩ ⟨y, hyB⟩,
+      (TauCeti.LinearPMap.isSymmetric_iff _).mp hAs ⟨x, hx⟩ ⟨y, hy⟩]
   -- Freeze `x` in the domain and extend in `y`.
   have step : ∀ x ∈ ((P.A.domain : Submodule 𝕜 E) : Set E), ∀ y : E,
       ⟪P.perturbation x, y⟫_𝕜 = ⟪x, P.perturbation y⟫_𝕜 := by
@@ -226,24 +231,29 @@ noncomputable def forwardData
   residual := P.perturbation ∘L U.subtypeL
   X_maps_domain := fun x =>
     P.mem_domain_B
-      (PartialMap.reducingRestriction_inclusion_mem_domain P.A U P.reduces_A_U x)
+      ((TauCeti.LinearPMap.mem_reducingRestriction_domain_iff P.A U
+        P.reduces_A_U (x : U)).mp x.property)
   F₁_maps_domain := fun y =>
-    PartialMap.reducingRestriction_inclusion_mem_domain P.B Vᗮ
-      P.reduces_B_V.orthogonal y
+    (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff P.B Vᗮ
+      P.reduces_B_V.orthogonal (y : Vᗮ)).mp y.property
   residual_eq := by
     intro x
     have hmemA : ((x : U) : E) ∈ P.A.domain :=
-      PartialMap.reducingRestriction_inclusion_mem_domain P.A U P.reduces_A_U x
+      (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff P.A U
+        P.reduces_A_U (x : U)).mp x.property
     have hint :
         (U.subtypeL
             ((TauCeti.LinearPMap.reducingRestriction P.A U P.reduces_A_U) x) : E) =
           P.A ⟨((x : U) : E), hmemA⟩ :=
-      (PartialMap.reducingRestriction_inclusion_intertwines P.A U P.reduces_A_U x).symm
+      TauCeti.LinearPMap.coe_reducingRestriction_apply P.A U
+        P.reduces_A_U (x : U) hmemA
     rw [hint]
     exact P.perturbation_eq _ hmemA (P.mem_domain_B hmemA)
-  intertwines :=
-    PartialMap.reducingRestriction_inclusion_intertwines P.B Vᗮ
-      P.reduces_B_V.orthogonal
+  intertwines := fun y =>
+    (TauCeti.LinearPMap.coe_reducingRestriction_apply P.B Vᗮ
+      P.reduces_B_V.orthogonal (y : Vᗮ)
+      ((TauCeti.LinearPMap.mem_reducingRestriction_domain_iff P.B Vᗮ
+        P.reduces_B_V.orthogonal (y : Vᗮ)).mp y.property)).symm
 
 /-- Internal data for the reversed application, with `A` and `B` interchanged. -/
 noncomputable def reverseData
@@ -257,29 +267,34 @@ noncomputable def reverseData
   residual := (-P.perturbation) ∘L V.subtypeL
   X_maps_domain := fun x =>
     P.mem_domain_A
-      (PartialMap.reducingRestriction_inclusion_mem_domain P.B V P.reduces_B_V x)
+      ((TauCeti.LinearPMap.mem_reducingRestriction_domain_iff P.B V
+        P.reduces_B_V (x : V)).mp x.property)
   F₁_maps_domain := fun y =>
-    PartialMap.reducingRestriction_inclusion_mem_domain P.A Uᗮ
-      P.reduces_A_U.orthogonal y
+    (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff P.A Uᗮ
+      P.reduces_A_U.orthogonal (y : Uᗮ)).mp y.property
   residual_eq := by
     intro x
     have hmemB : ((x : V) : E) ∈ P.B.domain :=
-      PartialMap.reducingRestriction_inclusion_mem_domain P.B V P.reduces_B_V x
+      (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff P.B V
+        P.reduces_B_V (x : V)).mp x.property
     have hmemA : ((x : V) : E) ∈ P.A.domain := P.mem_domain_A hmemB
     have hint :
         (V.subtypeL
             ((TauCeti.LinearPMap.reducingRestriction P.B V P.reduces_B_V) x) : E) =
           P.B ⟨((x : V) : E), hmemB⟩ :=
-      (PartialMap.reducingRestriction_inclusion_intertwines P.B V P.reduces_B_V x).symm
+      TauCeti.LinearPMap.coe_reducingRestriction_apply P.B V
+        P.reduces_B_V (x : V) hmemB
     rw [hint]
     have hPE := P.perturbation_eq ((x : V) : E) hmemA hmemB
     have : P.A ⟨((x : V) : E), hmemA⟩ -
         P.B ⟨((x : V) : E), hmemB⟩ = -P.perturbation ((x : V) : E) := by
       rw [← hPE]; abel
     exact this
-  intertwines :=
-    PartialMap.reducingRestriction_inclusion_intertwines P.A Uᗮ
-      P.reduces_A_U.orthogonal
+  intertwines := fun y =>
+    (TauCeti.LinearPMap.coe_reducingRestriction_apply P.A Uᗮ
+      P.reduces_A_U.orthogonal (y : Uᗮ)
+      ((TauCeti.LinearPMap.mem_reducingRestriction_domain_iff P.A Uᗮ
+        P.reduces_A_U.orthogonal (y : Uᗮ)).mp y.property)).symm
 
 /-- The first exact cross-projection block.  It is determined by the two subspaces alone;
 the problem argument is carried only so that the estimates below can be stated with the
@@ -589,7 +604,7 @@ noncomputable def ofBounded (P : SymmetricSinThetaProblem (E := E)) :
   reduces_A_U := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
   reduces_B_V := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
   perturbation := P.perturbation
-  domain_eq := rfl
+  domain_eq := by rfl
   perturbation_eq := by intro x _ _; rfl
   gap := P.gap
   gap_pos := P.gap_pos
@@ -598,11 +613,11 @@ noncomputable def ofBounded (P : SymmetricSinThetaProblem (E := E)) :
 
 /-- The bounded instance keeps the paper's perturbation `H = B - A`. -/
 @[simp] theorem ofBounded_perturbation (P : SymmetricSinThetaProblem (E := E)) :
-    (ofBounded P).perturbation = P.perturbation := rfl
+    (ofBounded P).perturbation = P.perturbation := by rfl
 
 /-- The bounded instance keeps the paper's spectral separation. -/
 @[simp] theorem ofBounded_gap (P : SymmetricSinThetaProblem (E := E)) :
-    (ofBounded P).gap = P.gap := rfl
+    (ofBounded P).gap = P.gap := by rfl
 
 end CommonDomainSymmetricSinThetaProblem
 
@@ -661,7 +676,7 @@ noncomputable def ofBoundedReal (P : RealSymmetricSinThetaProblem (E := E)) :
   reduces_A_U := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
   reduces_B_V := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
   perturbation := P.perturbation
-  domain_eq := rfl
+  domain_eq := by rfl
   perturbation_eq := by intro x _ _; rfl
   gap := P.gap
   gap_pos := P.gap_pos
@@ -671,11 +686,11 @@ noncomputable def ofBoundedReal (P : RealSymmetricSinThetaProblem (E := E)) :
 /-- The real bounded instance keeps the paper's perturbation `H = B - A`. -/
 @[simp] theorem ofBoundedReal_perturbation
     (P : RealSymmetricSinThetaProblem (E := E)) :
-    (ofBoundedReal P).perturbation = P.perturbation := rfl
+    (ofBoundedReal P).perturbation = P.perturbation := by rfl
 
 /-- The real bounded instance keeps the paper's spectral separation. -/
 @[simp] theorem ofBoundedReal_gap (P : RealSymmetricSinThetaProblem (E := E)) :
-    (ofBoundedReal P).gap = P.gap := rfl
+    (ofBoundedReal P).gap = P.gap := by rfl
 
 end CommonDomainSymmetricSinThetaProblem
 

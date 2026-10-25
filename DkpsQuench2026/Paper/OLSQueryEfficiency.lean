@@ -27,7 +27,11 @@ affine witness and that this affine risk is strictly below the selected
 sample-score baseline.  The second theorem specializes this to exact affine
 realizability and a positive baseline risk.
 -/
-import DkpsQuench2026.Paper.Theorem2
+module
+
+public import DkpsQuench2026.Paper.Theorem2
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -64,10 +68,12 @@ structure AffineCoefficients (d : ℕ) where
   slope : Vec d
 
 /-- Evaluate an affine score predictor at one perspective vector. -/
+@[expose]
 def affinePredict (θ : AffineCoefficients d) (x : Vec d) : ℝ :=
   θ.intercept + ⟪θ.slope, x⟫_ℝ
 
 /-- The affine model-score predictor induced by a perspective map. -/
+@[expose]
 def affineModel
     (θ : AffineCoefficients d) (ψ : Model Q X → Vec d) : Model Q X → ℝ :=
   fun f => affinePredict θ (ψ f)
@@ -76,6 +82,7 @@ def affineModel
 
 The normalization by the sample count is intentionally omitted: it does not
 change the minimizers and avoids a special case at sample size zero. -/
+@[expose]
 def empiricalSquaredError {n : ℕ}
     (x : Fin n → Vec d) (target : Fin n → ℝ)
     (θ : AffineCoefficients d) : ℝ :=
@@ -83,6 +90,7 @@ def empiricalSquaredError {n : ℕ}
 
 /-- A coefficient vector is an ordinary-least-squares fit when it globally
 minimizes the finite-sample squared-error objective. -/
+@[expose]
 def IsOLSFit {n : ℕ}
     (x : Fin n → Vec d) (target : Fin n → ℝ)
     (θ : AffineCoefficients d) : Prop :=
@@ -105,7 +113,7 @@ points forces equality of the intercept and slope.
 
 For the augmented design matrix `[1, x]`, this is the coordinate-free content
 of full column rank. -/
-def AffineIdentifyingDesign {n : ℕ} (x : Fin n → Vec d) : Prop :=
+@[expose] def AffineIdentifyingDesign {n : ℕ} (x : Fin n → Vec d) : Prop :=
   ∀ θ θ' : AffineCoefficients d,
     (∀ i, affinePredict θ (x i) = affinePredict θ' (x i)) → θ = θ'
 
@@ -147,7 +155,7 @@ theorem OLSFit.eq_of_affineTargets {n : ℕ}
 
 /-- Predictor produced by fitting OLS to reference-model perspectives and
 known full-benchmark scores, then evaluating the fit at a target perspective. -/
-def fittedOLSPredictor
+@[expose] def fittedOLSPredictor
     (ψHat : ℕ → Ω → Model Q X → Vec d)
     (f_ref : ∀ n, Ω → Fin n → Model Q X)
     (y : Model Q X → ℝ)
@@ -189,7 +197,7 @@ theorem fittedOLSPredictor_eq_target_of_exactAffine
 
 /-- Paper-shaped OLS estimator: fit on the estimated perspective induced by
 `Qsub`, using reference models' full scores on `Qstar` as targets. -/
-def yOLS_paper
+@[expose] def yOLS_paper
     (ψHat : ℕ → Ω → Finset Q → Model Q X → Vec d)
     (f_ref : ∀ n, Ω → Fin n → Model Q X)
     (score : Model Q X → Finset Q → ℝ)
@@ -209,6 +217,7 @@ For a statistically consistent OLS procedure, the natural witness is a
 population-risk-minimizing affine predictor.  The definition is intentionally
 slightly weaker: any affine witness with a strict risk advantage over the
 baseline is sufficient. -/
+@[expose]
 def HighProbAffineRiskCompetitive
     (μ : ℕ → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
@@ -426,11 +435,11 @@ theorem highProb_queryEfficient_crossBudget_of_eventuallyExactAffine
 section NecessityBoundary
 
 /-- Three compactly supported one-dimensional perspectives. -/
-def threePointFeature (i : Fin 3) : ℝ :=
+@[expose] def threePointFeature (i : Fin 3) : ℝ :=
   if i.val = 0 then -1 else if i.val = 1 then 0 else 1
 
 /-- A Lipschitz but nonlinear target on `threePointFeature`. -/
-def threePointTarget : Fin 3 → ℝ := fun i => (threePointFeature i) ^ 2
+@[expose] def threePointTarget : Fin 3 → ℝ := fun i => (threePointFeature i) ^ 2
 
 /-- The quadratic target is `2`-Lipschitz on the three-point perspective set. -/
 theorem threePointTarget_lipschitz :

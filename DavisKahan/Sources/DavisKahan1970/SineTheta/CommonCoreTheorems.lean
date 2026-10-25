@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonCore
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonCore
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -64,6 +68,7 @@ namespace CommonCoreSinThetaData
 
 /-- The accepted full-domain bookkeeping obtained by the graph-core extension
 argument. -/
+@[expose]
 noncomputable def toUnboundedSinThetaData
     {𝕜 : Type u} [RCLike 𝕜]
     {E F G H : Type v}

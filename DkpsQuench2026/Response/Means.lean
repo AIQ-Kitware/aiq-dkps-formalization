@@ -7,8 +7,12 @@ mean matrices.  Thus applications now expose response-level second moments or
 replicate averages rather than assuming the matrix concentration conclusion.
 -/
 
-import Acharyya2025.GrowingResponse
-import DkpsQuench2026.Geometry.AugmentedCMDS
+module
+
+public import Acharyya2025.GrowingResponse
+public import DkpsQuench2026.Geometry.AugmentedCMDS
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -45,6 +49,7 @@ variable {Ω : Type w} [MeasurableSpace Ω]
 variable {d : Nat}
 
 /-- Sample dissimilarity matrix of the response-mean augmented batch. -/
+@[expose]
 noncomputable def augmentedSampleResponseDist
     {m p : Nat}
     (Xbar : ∀ n, Ω → Model Q X → Fin (n + 1) → Acharyya2024.Mat m p)
@@ -59,6 +64,7 @@ noncomputable def augmentedPopulationResponseDist
   responseDist (μbar n ω f)
 
 /-- Uniform target-wise response-mean event for the augmented batch. -/
+@[expose]
 def augmentedUniformResponseMeanEvent
     {m p : Nat}
     (Xbar μbar : ∀ n, Ω → Model Q X → Fin (n + 1) → Acharyya2024.Mat m p)

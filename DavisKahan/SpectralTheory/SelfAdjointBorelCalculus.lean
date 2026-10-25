@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
-import DavisKahan.SpectralTheory.BoundedFromSpectrum
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+public import DavisKahan.SpectralTheory.BoundedFromSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -124,8 +128,9 @@ theorem realSpectrum_eq_toPMap_top_spectrum
       Complex.ofReal ⁻¹'
         _root_.LinearPMap.spectrum ((A : H →ₗ[ℂ] H).toPMap ⊤) := by
   ext r
-  show (r : ℂ) ∈ spectrum ℂ A ↔
-    (r : ℂ) ∉ _root_.LinearPMap.resolventSet ((A : H →ₗ[ℂ] H).toPMap ⊤)
+  change (r : ℂ) ∈ spectrum ℂ A ↔
+    (r : ℂ) ∈ _root_.LinearPMap.spectrum ((A : H →ₗ[ℂ] H).toPMap ⊤)
+  rw [_root_.LinearPMap.mem_spectrum_iff]
   rw [spectrum.mem_iff, Algebra.algebraMap_eq_smul_one,
     ← IsUnit.neg_iff, neg_sub]
   exact not_congr ((mem_resolventSet_toPMap_top_iff A (r : ℂ)).symm.trans
@@ -147,6 +152,7 @@ theorem measurableSet_realSpectrum_boundedSelfAdjoint
   (isClosed_realSpectrum_boundedSelfAdjoint A hA).measurableSet
 
 /-- Restrict a real symbol to the actual spectrum and coerce it to `ℂ`. -/
+@[expose]
 noncomputable def spectrumRestrictedSymbol
     (A : H →L[ℂ] H) (f : ℝ → ℝ) : ℝ → ℂ :=
   Set.indicator (realSpectrum A) fun x => (f x : ℂ)
@@ -176,6 +182,7 @@ theorem bounded_spectrumRestrictedSymbol
 
 /-- Real-valued bounded-on-spectrum Borel calculus.  The explicit boundedness
 hypothesis is mathematically necessary. -/
+@[expose]
 noncomputable def boundedSelfAdjointBorelCalculus
     (A : H →L[ℂ] H) (hA : A.IsSymmetric)
     (f : ℝ → ℝ) (hf : Measurable f) (hfb : BoundedOnSpectrum A f) :
@@ -201,7 +208,12 @@ theorem boundedSelfAdjointBorelCalculusC_indicator
       (measurable_const.indicator hs)
       (indicator_one_bdd s) =
       boundedSelfAdjointSpectralProjection A hA s hs := by
-  rfl
+  rw [boundedSelfAdjointSpectralProjection, boundedSelfAdjointSpectralPVM,
+    TauCeti.BorelCalculus.boundedPVM_proj]
+  change TauCeti.BorelCalculus.borelCalculus _ _ = _
+  refine TauCeti.BorelCalculus.borelCalculus_congr_ae _ _ _ fun η =>
+    Filter.Eventually.of_forall fun w => ?_
+  by_cases hw : TauCeti.BorelCalculus.reCoord w ∈ s <;> simp [hw]
 
 /-- Symbols agreeing on the real spectrum have the same bounded calculus. -/
 theorem boundedSelfAdjointBorelCalculusC_congr_on_spectrum

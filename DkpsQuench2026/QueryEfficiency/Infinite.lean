@@ -2,7 +2,11 @@
 Compact infinite-model raw-response Quench theorem.
 -/
 
-import DkpsQuench2026.QueryEfficiency.Assumptions
+module
+
+public import DkpsQuench2026.QueryEfficiency.Assumptions
+
+public section
 
 set_option linter.mathlibStandardSet false
 

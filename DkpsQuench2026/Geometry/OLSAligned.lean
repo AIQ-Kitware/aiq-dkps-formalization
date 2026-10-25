@@ -2,8 +2,12 @@
 Composition of the existing aligned-CMDS concentration theorem with the Quench
 OLS witness-transfer theorem.
 -/
-import DkpsQuench2026.Geometry.AlignedCMDS
-import DkpsQuench2026.Paper.OLSPerturbation
+module
+
+public import DkpsQuench2026.Geometry.AlignedCMDS
+public import DkpsQuench2026.Paper.OLSPerturbation
+
+public section
 
 open scoped BigOperators Real Nat Classical Pointwise Topology
   RealInnerProductSpace InnerProductSpace

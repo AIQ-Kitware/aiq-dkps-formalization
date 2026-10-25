@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # The real resolvent of a partial map, and the ambient spectrum
@@ -17,6 +19,8 @@ spectral theory, so it remains available over every `RCLike` scalar field.  This
 file identifies its complex specialization with the ambient spectrum.  The
 bridge is intentionally kept above both foundations to avoid an import cycle.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

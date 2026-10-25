@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+module
+
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
 /-!
 # The literal ambient `tan Θ` of Davis--Kahan
@@ -59,6 +61,8 @@ forms of both, and the real counterparts of the operators defined here, are in
   and Theorem 6.3.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.Angle
 
@@ -73,6 +77,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- The paper's literal ambient `tan Θ`, obtained by applying `tan` to the
 Hermitian operator angle. -/
+@[expose]
 noncomputable def tanAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc Real.tan (angleOperatorC U V)
@@ -124,6 +129,7 @@ theorem spectrum_angleOperatorC_lt_pi_div_two
 to the Hermitian operator angle.  This is the object the second conclusion of
 the Section 2 `tan 2θ` theorem is about; it carries every principal angle
 *twice*, so it is not a relabelling of the directed `tan 2Θ₀`. -/
+@[expose]
 noncomputable def tanTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc (fun t : ℝ => Real.tan (2 * t)) (angleOperatorC U V)
@@ -185,6 +191,7 @@ norm sees an operator only through its singular values, so for the self-adjoint
 conclusion.  They differ exactly when some principal angle exceeds `π/4`, where
 `tan 2θ` turns negative — which is precisely the situation the quarter-acute
 branch excludes and the printed theorem does not. -/
+@[expose]
 noncomputable def absTanTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc (fun t : ℝ => |Real.tan (2 * t)|) (angleOperatorC U V)

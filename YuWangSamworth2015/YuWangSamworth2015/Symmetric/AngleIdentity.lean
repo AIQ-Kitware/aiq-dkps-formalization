@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import YuWangSamworth2015.GroundedImports
+module
+
+public import YuWangSamworth2015.GroundedImports
 
 /-!
 # Yu--Wang--Samworth equation (4)
@@ -13,6 +15,8 @@ The printed equation (4) omits a square on the factor
 The theorem below records the corrected rank-one algebraic identity; its left
 side is `sin²(2θ)` when `⟪v,u⟫_ℝ = cos θ`.
 -/
+
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

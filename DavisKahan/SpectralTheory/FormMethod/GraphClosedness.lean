@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.TraceKernelModel
+public import Mathlib.Tactic
 
 /-!
 # Closedness of the transported fourth-order graph
@@ -22,6 +24,8 @@ transported fourth derivative constructed in `TraceKernelModel`.
 The result turns a graph-norm estimate on the free trace kernel into the closed
 graph field required by `DavisKahanExt.PartialMap`.
 -/
+
+public section
 
 open Set
 open scoped InnerProductSpace NNReal
@@ -44,7 +48,7 @@ variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
 namespace FourthOrderTraceModel
 
 /-- Graph embedding of the free trace kernel into the product Hilbert space. -/
-noncomputable def freeGraphMap
+@[expose] noncomputable def freeGraphMap
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
     D.freeSubspace →L[𝕜] H × H :=
   D.freeEmbed.prod D.freeFourth
@@ -149,6 +153,7 @@ theorem isClosed_ambientGraph_of_normalized_graphNorm
 
 /-- Build the closed free-beam operator directly from dense range and a graph
 norm lower bound. -/
+@[expose]
 noncomputable def toPartialMapOfGraphNorm
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (_hdense : DenseRange D.freeEmbed)

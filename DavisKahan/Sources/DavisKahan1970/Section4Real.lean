@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section4
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.Geometry.Angle.BasisAngleEnergy
-import DavisKahan.Geometry.Polar.DirectRotationReal
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section4
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Geometry.Angle.BasisAngleEnergy
+public import DavisKahan.Geometry.Polar.DirectRotationReal
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -253,6 +257,7 @@ local instance sourceCompleteSpaceR : CompleteSpace U :=
 /-! ### Real source-coordinate model -/
 
 /-- The positive real Halmos cosine restricted to source coordinates. -/
+@[expose]
 noncomputable def sourceCosineR : U →L[ℝ] U := by
   let C := TauCeti.DavisKahan.canonicalAbsoluteValueR U V
   have hcomm : Commute C (U.starProjection) := by
@@ -442,10 +447,12 @@ theorem sourceRestrictedDisplacementR_extendDomainByZero (T : E →L[ℝ] E) :
 theorem sourceRestrictedDisplacementR_sameApproximationSingularSequence (T : E →L[ℝ] E) :
     SameApproximationSingularSequence
       ((1 - T) ∘L U.starProjection) (sourceRestrictedDisplacementR U T) := by
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   rw [← sourceRestrictedDisplacementR_extendDomainByZero U T]
-  exact sameApproximationSingularValues_extendDomainByZero U
-    (sourceRestrictedDisplacementR U T) n
+  exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sameApproximationSingularValues_extendDomainByZero U
+      (sourceRestrictedDisplacementR U T)) n
 
 /-- **Proposition 4.1 over `ℝ` at the exact matched-defect, nonacute scope.** -/
 theorem Proposition4_1_nonacute_real
@@ -458,9 +465,11 @@ theorem Proposition4_1_nonacute_real
       ContinuousLinearMap.approximationNumber
         ((1 - W) ∘L U.starProjection) n := by
   have hsource := proposition4_1_nonacute_real U V J W hWunitary hWmap n
-  have hD := sourceRestrictedDisplacementR_sameApproximationSingularSequence U
-    (TauCeti.DavisKahan.nonacuteDirectRotation U V J) n
-  have hW := sourceRestrictedDisplacementR_sameApproximationSingularSequence U W n
+  have hD := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sourceRestrictedDisplacementR_sameApproximationSingularSequence U
+      (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
+  have hW := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sourceRestrictedDisplacementR_sameApproximationSingularSequence U W) n
   change approximationSingularValue n
       ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
         U.starProjection) ≤
@@ -762,8 +771,9 @@ theorem tsum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_tsum_sq_principalSineSeq
       ∑' n : ℕ, ENNReal.ofReal (TauCeti.principalSineSequence U V n) ^ 2 := by
   rw [TauCeti.tsum_sq_principalSineSequence_eq_tsum_enorm_projection U V b]
   refine tsum_congr fun i => ?_
-  exact ofReal_one_sub_sq_norm_canonicalAbsoluteValueR_eq_enorm_principalSineOperator
-    U V (b i).property (b.orthonormal.1 i)
+  simpa only [TauCeti.principalSineOperator_apply] using
+    ofReal_one_sub_sq_norm_canonicalAbsoluteValueR_eq_enorm_principalSineOperator
+      U V (b i).property (b.orthonormal.1 i)
 
 /-- **Davis--Kahan 1970, Proposition 4.2 over a real Hilbert space, in arbitrary
 Hilbert dimension with the printed right-hand side.**
@@ -966,6 +976,11 @@ private theorem diagonalPart_nonacuteDirectRotation_displacementSquare_real
     congr 1
     rw [two_mul, mul_two]
   apply Submodule.diagBlock_eq_self_of_reflectionConjugate
+  have hJdef : (U.reflection : E →L[ℝ] E) = U.reflectionOperator := by
+    ext x
+    rw [Submodule.reflectionOperator_apply_eq_reflection]
+    rfl
+  rw [hJdef]
   have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
     rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
       smul_mul_assoc, mul_smul_comm, hcomm]
@@ -1234,15 +1249,18 @@ theorem proposition4_1_compact_nonacute_directRotationValues_real
     hAnorm (sourceRestrictedDisplacementR_nonacute_norm_sq U V J)
     (sourceRestrictedDisplacementR_competitor_norm_sq_lower U V W hWunitary hWmap)
     (principalSineOperator_norm_sq_eq_one_sub_sourceCosineR_norm_sq U V) n
-  have hDseq := sourceRestrictedDisplacementR_sameApproximationSingularSequence U
-    (TauCeti.DavisKahan.nonacuteDirectRotation U V J) n
+  have hDseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sourceRestrictedDisplacementR_sameApproximationSingularSequence U
+      (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
   let a : Real := (A.approximationNumber n : Real)
   let theta : Real := TauCeti.principalAngleSequence U V n
   let shalf : Real := Real.sin (theta / 2)
   have hcos : Real.cos theta =
       Real.sqrt (1 - (TauCeti.principalSineSequence U V n) ^ 2) := by
-    dsimp only [theta, TauCeti.principalAngleSequence]
-    rw [Real.cos_arcsin]
+    rw [← TauCeti.sin_principalAngleSequence U V n]
+    exact Real.cos_eq_sqrt_one_sub_sin_sq
+      (by dsimp only [theta]; linarith [TauCeti.principalAngleSequence_nonneg U V n,
+        Real.pi_pos]) (TauCeti.principalAngleSequence_le_pi_div_two U V n)
   have hcosApprox : Real.cos theta =
       Real.sqrt (1 - ((TauCeti.principalSineOperator U V).approximationNumber n : Real) ^ 2) := by
     simpa only [TauCeti.principalSineSequence] using hcos

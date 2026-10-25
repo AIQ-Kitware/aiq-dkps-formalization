@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.SinTheta.Real.Unbounded
-import DavisKahan.SpectralTheory.Real.SpectralRestriction
+module
+
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.SinTheta.Real.Unbounded
+public import DavisKahan.SpectralTheory.Real.SpectralRestriction
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -275,7 +279,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
     change J (Uc.starProjection (J x)) =
       V.reflection (Uc.starProjection (V.reflection.symm x))
     rw [hsymm]
-    rfl
+    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N.toSymmetricOperatorIdealFamily U
     (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)) F₁ hF₁iso hFproj hraw.1
@@ -476,7 +480,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
     change J (Uc.starProjection (J x)) =
       V.reflection (Uc.starProjection (V.reflection.symm x))
     rw [hsymm]
-    rfl
+    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N.toSymmetricOperatorIdealFamily U
     (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)) F₁ hF₁iso hFproj hraw.1
@@ -661,8 +665,11 @@ theorem real_add_reflectionPerturbation_intertwines
             ⟨J (x : E), realSpectralReflection_mem_domain C hC S hS xc⟩ := rfl
       _ = J (C xc) := hcommC
       _ = J (A x + Eop (x : E)) := rfl
-  have hJJ : J (J (x : E)) = (x : E) := V.reflection_reflection (x : E)
-  have hreflection (y : E) : V.reflection y = J y := rfl
+  have hJJ : J (J (x : E)) = (x : E) := by
+    simpa only [J, Submodule.reflectionOperator_apply_eq_reflection] using
+      V.reflection_reflection (x : E)
+  have hreflection (y : E) : V.reflection y = J y :=
+    (Submodule.reflectionOperator_apply_eq_reflection V y).symm
   have hDapply : D (J (x : E)) = Eop (J (x : E)) - J (Eop (x : E)) := by
     calc
       D (J (x : E)) =

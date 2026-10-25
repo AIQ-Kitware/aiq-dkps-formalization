@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.Geometry.Halmos.GenericRotationPredicates
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

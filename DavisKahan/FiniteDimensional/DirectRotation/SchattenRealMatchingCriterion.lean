@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealMatchingAttainment
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealMatchingAttainment
 
 /-!
 # When independent real principal planes suffice
@@ -13,6 +15,8 @@ if and only if no single edge improves its two unmatched endpoints.
 Together with unrestricted matching attainment, this gives an all-rank
 certificate for the global optimality of independent real plane choices.
 -/
+
+public section
 
 noncomputable section
 

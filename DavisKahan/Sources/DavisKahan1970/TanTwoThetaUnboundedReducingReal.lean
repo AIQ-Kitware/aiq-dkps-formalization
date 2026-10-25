@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
-import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
+public import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -99,7 +103,8 @@ private theorem approximationNumber_realAmbientDoubleSine_complexify
           RealComplexification E →ₗ[ℂ] RealComplexification E)).starProjection -
       (complexifySubmodule U).starProjection).approximationNumber n =
       (realAmbientDoubleSine U V).approximationNumber n := by
-  have hsame := sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference U V
+  have hsame := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference U V)
   have hleft : (sinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)).approximationNumber n =
       (complexify (sinTwoAngleOperatorR U V)).approximationNumber n := by

@@ -15,9 +15,13 @@ augmentation, and eigenvalue comparison steps so no single proof must solve the
 whole argument.
 -/
 
-import DkpsQuench2026.Geometry.CenteredCovariance
-import DkpsQuench2026.Spectral.GramSpectrum
-import TauCeti.Analysis.Matrix.Eigenvalues
+module
+
+public import DkpsQuench2026.Geometry.CenteredCovariance
+public import DkpsQuench2026.Spectral.GramSpectrum
+public import TauCeti.Analysis.Matrix.Eigenvalues
+
+public section
 
 set_option linter.mathlibStandardSet false
 

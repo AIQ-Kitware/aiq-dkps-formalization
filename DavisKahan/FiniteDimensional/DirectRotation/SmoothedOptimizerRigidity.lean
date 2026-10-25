@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerCertificate
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceOptimization
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerCertificate
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSubspaceOptimization
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
 
 /-!
 # An equality certificate for every weighted transport optimizer
@@ -19,6 +21,8 @@ subcritical and critical directions and fixes the canonical fixed directions.
 The remaining positive-displacement equation is not yet a parametrization
 of all supercritical solutions by spectral projections.
 -/
+
+public section
 
 noncomputable section
 

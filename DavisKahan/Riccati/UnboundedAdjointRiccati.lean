@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall
 -/
-import DavisKahan.Riccati.UnboundedReduction
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.GraphCore
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
+module
+
+public import DavisKahan.Riccati.UnboundedReduction
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.GraphCore
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
 
 /-!
 # The complementary graph of a reducing Riccati selection
@@ -37,6 +39,8 @@ the graph of `-X*` **taken in the other order**:
 (u, v) ⟂ {(w, X w)}  ↔  ∀ w, ⟪u, w⟫ + ⟪v, X w⟫ = 0  ↔  u = -X* v
 ```
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -105,6 +109,7 @@ attempt through `R₁ := (I + XX†)⁻¹` fails the same way: `R₁` preserves
 
 So this is carried as an explicit hypothesis throughout. It is not a hidden
 seam: it is the adjoint twin of a hypothesis the repository already assumes. -/
+@[expose]
 def PreservesAdjointRiccatiDomains
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=
@@ -151,7 +156,7 @@ theorem adjoint_riccati_of_invariant_orthogonal
       H.B01 (z : E1) + (ContinuousLinearMap.adjoint X) (H.A1 z) -
         (ContinuousLinearMap.adjoint X)
           (H.B10 ((ContinuousLinearMap.adjoint X) (z : E1))) := by
-  have hout := hinv (unboundedBlockGraphOrthogonalDomainVector H X hadj z)
+  have hout := (_root_.LinearPMap.isInvariant_iff.mp hinv) (unboundedBlockGraphOrthogonalDomainVector H X hadj z)
     (unboundedBlockGraphOrthogonalDomainVector_mem H X hadj z)
   rw [mem_unboundedBlockGraph_orthogonal_iff,
     unboundedBlockOperatorCore_apply_fst,

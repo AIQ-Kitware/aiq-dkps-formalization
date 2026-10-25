@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealStationarity
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
-import DavisKahan.FiniteDimensional.DirectRotation.RealBlockDescent
-import ForTauCeti.Analysis.InnerProductSpace.AnticommutingConjugation
-import ForTauCeti.Analysis.InnerProductSpace.Projection.ConjugationBlocks
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealStationarity
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
+public import DavisKahan.FiniteDimensional.DirectRotation.RealBlockDescent
+public import ForTauCeti.Analysis.InnerProductSpace.AnticommutingConjugation
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.ConjugationBlocks
 
 /-!
 # Real blocks on the zero Schatten gradient level
@@ -17,6 +19,8 @@ its negative-phase projection preserve the actual restricted conjugation.
 Their common real lines and planes give the zero-level blocks needed for
 the finite real transport matching theorem.
 -/
+
+public section
 
 noncomputable section
 

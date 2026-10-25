@@ -25,12 +25,16 @@ finite one the rest of the package uses, not a parallel notion.
 
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
-import Acharyya2024.Common
-import Acharyya2024.RawStress
-import TauCeti.Probability.Process.EmpiricalMeasure
-import TauCeti.Probability.StrongLaw
-import ForTauCeti.Probability.AverageError
-import ForTauCeti.Probability.VStatistic
+module
+
+public import Acharyya2024.Common
+public import Acharyya2024.RawStress
+public import TauCeti.Probability.Process.EmpiricalMeasure
+public import TauCeti.Probability.StrongLaw
+public import ForTauCeti.Probability.AverageError
+public import ForTauCeti.Probability.VStatistic
+
+public section
 
 open scoped BigOperators Topology
 open MeasureTheory Filter
@@ -288,6 +292,7 @@ those results need. -/
 sample `φ` and read its coordinate off the canonical raw-stress minimizer of the enlarged
 dissimilarity matrix.
 -/
+@[expose]
 noncomputable def estimatedEmbedding {M : Type*} (d n : Nat) (Δ : M → M → Real)
     (φ : Fin n → M) (x : M) : Rvec d :=
   RawStress.mdsConfig (n := n + 1) (d := d)
@@ -701,7 +706,7 @@ functional continuous and coercive. -/
 
 /-- **The population one-point stress**: the continuous analogue of `pointStress`, placing `v`
 against the whole model distribution rather than a finite sample. -/
-noncomputable def continuousPointStress {M : Type*} [MeasurableSpace M] (d : Nat)
+@[expose] noncomputable def continuousPointStress {M : Type*} [MeasurableSpace M] (d : Nat)
     (P : Measure M) (χ : M → Rvec d) (c : M → Real) (v : Rvec d) : Real :=
   ∫ m, (‖v - χ m‖ - c m) ^ 2 ∂P
 

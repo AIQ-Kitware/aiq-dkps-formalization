@@ -4,10 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.Geometry.Halmos.BilateralShiftExample
-import DavisKahan.Geometry.Polar.Section3Nonacute
-import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Halmos.BilateralShiftExample
+public import DavisKahan.Geometry.Polar.Section3Nonacute
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

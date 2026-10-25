@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
 
 /-!
 # Exact canonical optimality cutoff for complex smoothed transport
@@ -18,6 +20,8 @@ minimum. Every scalar gap is nonnegative, so equality forces each nonzero
 angle into the canonical regime; the paired-angle trace bridge then gives
 the statement for the accepted principal angles, including the extra zeros.
 -/
+
+public section
 
 noncomputable section
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

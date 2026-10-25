@@ -2,8 +2,12 @@
 All-proper-query-subset lifts for the finite and compact-infinite Quench theorems.
 -/
 
-import DkpsQuench2026.QueryEfficiency.Finite
-import DkpsQuench2026.QueryEfficiency.Infinite
+module
+
+public import DkpsQuench2026.QueryEfficiency.Finite
+public import DkpsQuench2026.QueryEfficiency.Infinite
+
+public section
 
 set_option linter.mathlibStandardSet false
 

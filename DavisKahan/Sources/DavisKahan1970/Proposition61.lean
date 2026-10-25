@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
-import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
-import DavisKahan.Geometry.Angle.OperatorAngleGeneric
-import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -151,7 +155,7 @@ theorem proposition6_1_complex
     (hMem : N.Mem (B - A)) :
     N.Mem (cfc Real.sin (Angle.angleOperator U V)) ∧
       δ * N.gauge (cfc Real.sin (Angle.angleOperator U V)) ≤ N.gauge (B - A) := by
-  rw [Angle.cfc_sin_angleOperator, Angle.sinAngleOperator_complex]
+  rw [Angle.angleOperator_complex, Angle.cfc_sin_angleOperatorC]
   exact proposition6_1_sinAngleOperator_complex
     N hA hB hU hV hδ hgapUV hgapVU hMem
 
@@ -379,7 +383,7 @@ theorem proposition6_1_commonDomain_complex
     (hMem : N.Mem Hop) :
     N.Mem (cfc Real.sin (Angle.angleOperator U V)) ∧
       δ * N.gauge (cfc Real.sin (Angle.angleOperator U V)) ≤ N.gauge Hop := by
-  rw [Angle.cfc_sin_angleOperator, Angle.sinAngleOperator_complex]
+  rw [Angle.angleOperator_complex, Angle.cfc_sin_angleOperatorC]
   exact proposition6_1_commonDomain_sinAngleOperator_complex
     N hA hB hU hV Hop hdomain hperturbation hδ hgapUV hgapVU hMem
 

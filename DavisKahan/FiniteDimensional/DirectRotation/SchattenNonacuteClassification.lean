@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenNonacuteCommutation
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseDefectAttainment
-import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Projection
-import ForTauCeti.Analysis.InnerProductSpace.JointEigenbasis
-import Mathlib.LinearAlgebra.Complex.Module
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenNonacuteCommutation
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseDefectAttainment
+public import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Projection
+public import ForTauCeti.Analysis.InnerProductSpace.JointEigenbasis
+public import Mathlib.LinearAlgebra.Complex.Module
 
 /-!
 # Intrinsic phase projection of every nonacute Schatten optimizer
@@ -17,6 +19,8 @@ cosine-weighted relative unitary supplies a compatible phase parameter.
 The cosine annihilates the right-angle sector. Fixed and critical
 directions are retained, including at vanishing phase sine.
 -/
+
+public section
 
 noncomputable section
 

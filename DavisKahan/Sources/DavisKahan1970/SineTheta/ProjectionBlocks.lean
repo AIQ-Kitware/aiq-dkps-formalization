@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Projection-block lemmas from Davis--Kahan section 6
@@ -26,6 +28,8 @@ The results are proved both for the existing ideal-family interface and for the
 literal paper norm represented by `SymmetricNormingFunction`.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
@@ -41,6 +45,7 @@ variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
 /-- The pair of diagonal projection blocks from Davis--Kahan Lemma 6.2. -/
+@[expose]
 def diagonalPair (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (K : E →L[𝕜] E) : E →L[𝕜] E :=
@@ -161,6 +166,7 @@ theorem sameApproximationSingularValues_comp_reflection_right
     (A : E →L[𝕜] E) :
     SameApproximationSingularValues
       (A ∘L U.reflectionOperator) A := by
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
     exact_mod_cast Submodule.norm_reflectionOperator_le_one U
@@ -172,10 +178,7 @@ theorem sameApproximationSingularValues_comp_reflection_right
             ‖(U.reflectionOperator : E →L[𝕜] E)‖ :=
           T.approximationNumber_comp_le_mul_norm _ n
       _ ≤ T.approximationNumber n * 1 := by
-        gcongr
-        first
-          | assumption
-          | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
+        exact mul_le_mul_of_nonneg_left hnn (T.approximationNumber_nonneg n)
       _ = T.approximationNumber n := mul_one _
   have hcomp :
       (A ∘L U.reflectionOperator) ∘L U.reflectionOperator = A := by
@@ -198,6 +201,7 @@ theorem sameApproximationSingularValues_comp_reflection_left
     (A : E →L[𝕜] E) :
     SameApproximationSingularValues
       (U.reflectionOperator ∘L A) A := by
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
     exact_mod_cast Submodule.norm_reflectionOperator_le_one U
@@ -209,10 +213,7 @@ theorem sameApproximationSingularValues_comp_reflection_left
             T.approximationNumber n :=
           ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ T n
       _ ≤ 1 * T.approximationNumber n := by
-        gcongr
-        first
-          | assumption
-          | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
+        exact mul_le_mul_of_nonneg_right hnn (T.approximationNumber_nonneg n)
       _ = T.approximationNumber n := one_mul _
   have hcomp :
       U.reflectionOperator ∘L (U.reflectionOperator ∘L A) = A := by
@@ -229,6 +230,7 @@ theorem sameApproximationSingularValues_comp_reflection_left
   exact key
 
 /-- Sum of the two cross-projection blocks appearing in Proposition 6.1. -/
+@[expose]
 def crossSineSum (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   Uᗮ.starProjection ∘L V.starProjection +

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealTwoPrincipalAngles
-import DavisKahan.FiniteDimensional.DirectRotation.RealFourSchattenNorm
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealTwoPrincipalAngles
+public import DavisKahan.FiniteDimensional.DirectRotation.RealFourSchattenNorm
 
 /-!
 # The unrestricted real one-angle Schatten minimum
@@ -15,6 +17,8 @@ It gives an actual unitary attainer and the exact value of every global
 minimum on the original two-dimensional space. Its image-target form
 computes the actual rank-one restrictions in the all-rank real reduction.
 -/
+
+public section
 
 noncomputable section
 

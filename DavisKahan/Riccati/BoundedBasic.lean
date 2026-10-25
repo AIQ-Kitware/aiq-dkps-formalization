@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.GraphSubspace
+module
+
+public import DavisKahan.SpectralTheory.GraphSubspace
 
 /-!
 # Basic bounded block-operator and Riccati definitions
@@ -12,6 +14,8 @@ This module contains the dependency-minimal definitions shared by the bounded
 Riccati leaf proofs.  The public facade is
 `DavisKahan.InfiniteDimensional.Riccati.Bounded`.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -37,6 +41,7 @@ structure BlockOperatorData where
   offDiagonalAdjoint : ∀ x y, ⟪B01 y, x⟫_𝕜 = ⟪y, B10 x⟫_𝕜
 
 /-- Bounded block operator on the Hilbert direct sum. -/
+@[expose]
 noncomputable def blockOperator
     (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
@@ -46,12 +51,14 @@ noncomputable def blockOperator
       (H.B10 ∘L WithLp.fstL 2 𝕜 E0 E1 + H.A1 ∘L WithLp.sndL 2 𝕜 E0 E1))
 
 /-- Graph of a bounded angular operator in the Hilbert direct sum. -/
+@[expose]
 noncomputable def blockGraph (X : E0 →L[𝕜] E1) :
     Submodule 𝕜 (WithLp 2 (E0 × E1)) :=
   LinearMap.range ((WithLp.linearEquiv 2 𝕜 (E0 × E1)).symm.toLinearMap ∘ₗ
     LinearMap.id.prod X.toLinearMap)
 
 /-- Block-diagonal operator on the Hilbert direct sum. -/
+@[expose]
 noncomputable def blockDiagonalOperator
     (D0 : E0 →L[𝕜] E0) (D1 : E1 →L[𝕜] E1) :
     WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=
@@ -61,11 +68,13 @@ noncomputable def blockDiagonalOperator
       WithLp 2 (E0 × E1) →L[𝕜] E0 × E1)
 
 /-- Riccati defect `A₁X - XA₀ - XB₀₁X + B₁₀`. -/
+@[expose]
 def riccatiDefect (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : E0 →L[𝕜] E1 :=
   H.A1 ∘L X - X ∘L H.A0 - X ∘L H.B01 ∘L X + H.B10
 
 /-- A bounded solution of the operator Riccati equation. -/
+@[expose]
 def SolvesRiccati (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) : Prop :=
   riccatiDefect H X = 0

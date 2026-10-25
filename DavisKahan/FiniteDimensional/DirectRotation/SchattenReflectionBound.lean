@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseMinimum
-import DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.SchattenInvolution
-import TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseMinimum
+public import DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenInvolution
+public import TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle
 
 /-!
 # The principal-angle lower bound for reflecting transporters
@@ -18,6 +20,8 @@ that its cost dominates the proposed principal-angle sum.
 
 The principal angles in the public statement are the accepted Tau Ceti API.
 -/
+
+public section
 
 noncomputable section
 
@@ -85,6 +89,8 @@ theorem two_rpow_mul_sum_sin_le_selfAdjoint_transport_complex
   have hsines : TauCeti.principalSines P Q = P.principalSines Q := by
     rw [TauCeti.principalSines, Submodule.principalSines_def]
     congr 1
+    rw [Submodule.sinThetaMap_def]
+    rfl
   have htrace := ComplexTraceOptimality.kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles
     P Q hPQ
   rw [fullKyFanSum_eq_nuclear] at htrace

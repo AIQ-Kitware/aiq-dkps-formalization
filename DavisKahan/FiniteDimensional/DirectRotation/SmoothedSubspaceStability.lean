@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedStability
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedStability
 
 /-!
 # Quantitative canonical transport from a principal-angle bound
@@ -13,6 +15,8 @@ A strict subcritical bound on every accepted principal angle gives a positive
 uniform dual weight. The unrestricted weighted transport objective then
 controls the squared Frobenius distance to the canonical rotation.
 -/
+
+public section
 
 noncomputable section
 

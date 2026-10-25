@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.ClosedSylvesterEquation
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
+module
+
+public import DavisKahan.Sylvester.ClosedSylvesterEquation
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
 
 /-!
 # Form-bounded gap configurations for the unbounded Sylvester equation
@@ -53,6 +55,8 @@ stated two ways, so a bare `SylvesterGap` would leave a reader asking which one
 it is; each name says how its ordered configurations are given.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace Sylvester
@@ -79,6 +83,7 @@ theorems that consume the gap.
 `ofReal ⁻¹' LinearPMap.spectrum`; both use the canonical spectral carrier,
 and `sylvesterIntervalExteriorGap_of_realSpectrum` transports
 this predicate to that one. -/
+@[expose]
 def RealSpectrumIntervalExteriorGap
     (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (β α δ : ℝ) : Prop :=
   (_root_.LinearPMap.realSpectrum A ⊆ Set.Icc β α ∧

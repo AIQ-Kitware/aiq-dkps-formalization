@@ -15,11 +15,15 @@ proofs were written against APIs retired during the Tau Ceti migrations.
 Compile with `lake env lean DavisKahan/Explorations/SourceUnitaryInvariantNormFanDominance.lean`.
 -/
 
-import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
-import DavisKahan.Sources.DavisKahan1970.SectionTwo
+module
+
+public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
+public import DavisKahan.Sources.DavisKahan1970.SectionTwo
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

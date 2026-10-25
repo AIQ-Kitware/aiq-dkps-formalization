@@ -4,12 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamSpectrumReal
-import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
-import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
-import DavisKahan.SinTheta.BoundedPerturbation
-import ForTauCeti.MeasureTheory.RadonNikodymL2
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamSpectrumReal
+public import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+public import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
+public import DavisKahan.SinTheta.BoundedPerturbation
+public import ForTauCeti.MeasureTheory.RadonNikodymL2
+public import Mathlib.Tactic
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -46,6 +50,7 @@ theorem integral_unitIocMeasure_pow (n : ℕ) :
 /-! ## The affine trial plane -/
 
 /-- The paper's two-dimensional affine trial subspace. -/
+@[expose]
 def beamTrial : Submodule ℝ BeamL2 := Submodule.span ℝ {beamOneLp, beamIdLp}
 
 /-- Membership in the beam trial subspace. -/
@@ -85,6 +90,7 @@ theorem beamOperator_apply_trial {x : BeamL2} (hx : x ∈ beamTrial)
   exact (beamOperator_affine_mem_and_zero a b).choose_spec
 
 /-- Isometric inclusion of the trial plane. -/
+@[expose]
 def beamTrialIncl : beamTrial →L[ℝ] BeamL2 := beamTrial.subtypeL
 
 /-- Evaluating the trial subspace's inclusion. -/
@@ -111,6 +117,7 @@ theorem beamClamp_eq_self {t : ℝ} (ht : t ∈ Set.Ioc (0 : ℝ) 1) : beamClamp
   rw [beamClamp, min_eq_left ht.2, max_eq_right ht.1.le]
 
 /-- Symbol of the real Section 9 perturbation. -/
+@[expose]
 def beamSymbol (ε : ℝ) (t : ℝ) : ℝ := ε * beamClamp t
 
 /-- The beam symbol is measurable. -/
@@ -171,6 +178,7 @@ theorem norm_toLp_beamSymbol_le (ε : ℝ) (F : BeamL2) :
     (norm_toLp_mul_real_le (measurable_beamSymbol ε) (norm_beamSymbol_le ε) F)
 
 /-- Multiplication by `epsilon t` on real `L²(0,1)`. -/
+@[expose]
 def beamPerturbation (ε : ℝ) : BeamL2 →L[ℝ] BeamL2 :=
   LinearMap.mkContinuous
     { toFun := fun F => MemLp.toLp (fun t => beamSymbol ε t * F t)
@@ -228,6 +236,7 @@ theorem beamPerturbation_isSelfAdjoint (ε : ℝ) :
   ring
 
 /-- The perturbed real free beam `A + H`. -/
+@[expose]
 def beamPerturbed (ε : ℝ) : BeamL2 →ₗ.[ℝ] BeamL2 :=
   TauCeti.LinearPMap.addBounded beamOperator (beamPerturbation ε)
 
@@ -398,6 +407,7 @@ theorem beamOneLp_ne_zero : beamOneLp ≠ 0 := by
 /-! ## Centered affine basis and matrices -/
 
 /-- Real `L²` realization of the source centered-affine coordinates. -/
+@[expose]
 def centeredAffineLp (p : DavisKahan1970.Section9.CenteredAffine) : BeamL2 :=
   affineLp (p.constant - p.centered) (2 * p.centered)
 
@@ -444,11 +454,13 @@ theorem beamTrial_orthonormal :
   · rw [inner_centeredAffineLp, trialOne_inner_trialTwo]
 
 /-- The first printed affine trial vector, regarded as a vector of the trial subspace. -/
+@[expose]
 def beamTrialVecOne : beamTrial :=
   ⟨centeredAffineLp DavisKahan1970.Section9.trialOne,
     centeredAffineLp_mem_beamTrial DavisKahan1970.Section9.trialOne⟩
 
 /-- The second printed affine trial vector, regarded as a vector of the trial subspace. -/
+@[expose]
 def beamTrialVecTwo : beamTrial :=
   ⟨centeredAffineLp DavisKahan1970.Section9.trialTwo,
     centeredAffineLp_mem_beamTrial DavisKahan1970.Section9.trialTwo⟩

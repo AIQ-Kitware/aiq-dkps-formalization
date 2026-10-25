@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import YuWangSamworth2015.GroundedImports
+module
+
+public import YuWangSamworth2015.GroundedImports
 
 /-!
 # Yu--Wang--Samworth Theorem 1
@@ -14,6 +16,8 @@ strictly more general unitarily invariant norm statement.  This module gives
 that result a source-facing name and then exposes the Frobenius and operator
 norm specializations appearing in the paper.
 -/
+
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

@@ -6,7 +6,11 @@ only on the core coverage definitions, so the polynomial-cover theorem can be
 compiled and reviewed independently of response and spectral regularity.
 -/
 
-import DkpsQuench2026.Probability.Coverage
+module
+
+public import DkpsQuench2026.Probability.Coverage
+
+public section
 
 set_option linter.mathlibStandardSet false
 

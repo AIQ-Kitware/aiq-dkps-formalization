@@ -35,9 +35,13 @@ stage records), the proved norm-comparison bridge
 realization (`exists_config_gramRealizesCMDS_of_spectralAssumptions`).
 -/
 
-import Acharyya2025.MathlibBridge
-import Acharyya2025.Bridge
-import Acharyya2025.GramRealization
+module
+
+public import Acharyya2025.MathlibBridge
+public import Acharyya2025.Bridge
+public import Acharyya2025.GramRealization
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory
@@ -56,6 +60,7 @@ variable {Ω : Type} [MeasurableSpace Ω]
 /-- Gram matrix of a finite Euclidean configuration: the `(i,j)` entry is the
 inner product `⟪ψ i, ψ j⟫ = ∑ k, ψ i k · ψ j k`.  This is the object that the
 classical-MDS embedding inverts (configuration ↦ Gram matrix). -/
+@[expose]
 noncomputable def configGram {n d : Nat} (ψ : Config n d) : DisMat n :=
   fun i j => ∑ k : Fin d, (ψ i k) * (ψ j k)
 

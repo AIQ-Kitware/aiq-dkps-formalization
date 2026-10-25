@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Halmos.TwoProjections
-import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Halmos.TwoProjections
+public import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
@@ -147,11 +151,13 @@ variable (E : Type u) [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [Complet
 variable (F : Type v) [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- The inclusion of the first factor into the `L²` direct sum. -/
+@[expose]
 noncomputable def modelInl : E →L[𝕜] WithLp 2 (E × F) :=
   (WithLp.prodContinuousLinearEquiv 2 𝕜 E F).symm.toContinuousLinearMap ∘L
     ContinuousLinearMap.inl 𝕜 E F
 
 /-- The inclusion of the second factor into the `L²` direct sum. -/
+@[expose]
 noncomputable def modelInr : F →L[𝕜] WithLp 2 (E × F) :=
   (WithLp.prodContinuousLinearEquiv 2 𝕜 E F).symm.toContinuousLinearMap ∘L
     ContinuousLinearMap.inr 𝕜 E F
@@ -315,6 +321,7 @@ theorem toLp_prod_add (a c : C) (b d : D) :
     WithLp.toLp 2 (a, b) + WithLp.toLp 2 (c, d) = WithLp.toLp 2 (a + c, b + d) := rfl
 
 /-- **The block-diagonal operator `f ⊕ g`** from `A ⊕₂ B` to `C ⊕₂ D`. -/
+@[expose]
 noncomputable def blockMap (f : A →L[𝕜] C) (g : B →L[𝕜] D) :
     WithLp 2 (A × B) →L[𝕜] WithLp 2 (C × D) :=
   modelInl 𝕜 C D ∘L f ∘L WithLp.fstL 2 𝕜 A B +
@@ -580,6 +587,7 @@ theorem sin₁_intertwiner_adjoint (y : F) :
 /-! ### The realizing isometry and the second subspace -/
 
 /-- **The direct rotation, applied to the first factor.**  `W₀ x = (C₀ x, J S₀ x)`. -/
+@[expose]
 noncomputable def realizingIsometry : E →L[𝕜] WithLp 2 (E × F) :=
   (WithLp.prodContinuousLinearEquiv 2 𝕜 E F).symm.toContinuousLinearMap ∘L
     (d.cos₀.prod (d.intertwiner ∘L d.sin₀))
@@ -590,6 +598,7 @@ theorem realizingIsometry_apply (x : E) :
     d.realizingIsometry x = WithLp.toLp 2 (d.cos₀ x, d.intertwiner (d.sin₀ x)) := rfl
 
 /-- The adjoint of the realizing isometry: `W₀⋆ (x, y) = C₀ x + S₀ J⋆ y`. -/
+@[expose]
 noncomputable def realizingCoisometry : WithLp 2 (E × F) →L[𝕜] E :=
   d.cos₀ ∘L WithLp.fstL 2 𝕜 E F +
     d.sin₀ ∘L ContinuousLinearMap.adjoint d.intertwiner ∘L WithLp.sndL 2 𝕜 E F
@@ -947,6 +956,7 @@ variable (F : Type v) [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [Complet
 intertwiner at all.  Its two `0`-eigenspaces are all of `E` and all of `F`, which
 are arbitrary and unrelated — the machine-checked witness that the multiplicity
 at angle `0` may differ between the two sides. -/
+@[expose]
 noncomputable def trivialHalmosAngleDatum : HalmosAngleDatum 𝕜 E F where
   cos₀ := 1
   sin₀ := 0
@@ -1021,6 +1031,7 @@ axiom of `HalmosAngleDatum` is verified blockwise by `blockMap_comp`,
 `blockMap_add` and `blockMap_one`.  In particular the intertwiner of the sum is
 the sum of the intertwiners, so the `π/2` multiplicities of the two summands are
 matched independently. -/
+@[expose]
 noncomputable def HalmosAngleDatum.prod (d : HalmosAngleDatum 𝕜 E F)
     (d' : HalmosAngleDatum 𝕜 E' F') :
     HalmosAngleDatum 𝕜 (WithLp 2 (E × E')) (WithLp 2 (F × F')) where
@@ -1112,6 +1123,7 @@ multiplicity statements that no functional calculus can supply.
 
 The real functional calculi on `E` and `F` are supplied by the local `RCLike` operator
 instances. -/
+@[expose]
 noncomputable def HalmosAngleDatum.ofIntertwinedAngles
     {Θ₀ : E →L[𝕜] E} {Θ₁ : F →L[𝕜] F}
     (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)

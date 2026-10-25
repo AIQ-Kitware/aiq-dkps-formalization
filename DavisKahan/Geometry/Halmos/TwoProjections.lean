@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-import DavisKahan.Geometry.Polar.DirectRotation
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import DavisKahan.Geometry.Polar.DirectRotation
 
 /-!
 # Halmos two-projection decomposition
@@ -28,6 +30,8 @@ spectral theorem to the positive cosine on the generic summand.  Keeping the
 geometric decomposition and the operator algebra separate avoids duplicating
 the two-projection argument.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -530,7 +534,8 @@ theorem halmosSourceDefect_eq_bot_of_isUniformlyAcute
   have hle := (U.starProjection - V.starProjection).le_opNorm x
   rw [happ] at hle
   have hpos : 0 < ‖x‖ := norm_pos_iff.mpr hx0
-  have hgap : ‖U.starProjection - V.starProjection‖ < 1 := hacute
+  have hgap : ‖U.starProjection - V.starProjection‖ < 1 := by
+    simpa only [IsUniformlyAcute, Submodule.projectionGap_def] using hacute
   nlinarith
 
 omit [CompleteSpace H] in
@@ -550,7 +555,8 @@ theorem halmosTargetDefect_eq_bot_of_isUniformlyAcute
   have hle := (U.starProjection - V.starProjection).le_opNorm x
   rw [happ, norm_neg] at hle
   have hpos : 0 < ‖x‖ := norm_pos_iff.mpr hx0
-  have hgap : ‖U.starProjection - V.starProjection‖ < 1 := hacute
+  have hgap : ‖U.starProjection - V.starProjection‖ < 1 := by
+    simpa only [IsUniformlyAcute, Submodule.projectionGap_def] using hacute
   nlinarith
 
 omit [CompleteSpace H] in
@@ -616,6 +622,7 @@ theorem complementaryProjection_sq
 /-! ## Halmos cosine and sine -/
 
 /-- Squared cosine operator of the two-projection model. -/
+@[expose]
 noncomputable def halmosCosineSq
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] : H →L[𝕜] H :=
@@ -624,6 +631,7 @@ noncomputable def halmosCosineSq
       (Uᗮ).starProjection
 
 /-- Squared sine operator of the two-projection model. -/
+@[expose]
 noncomputable def halmosSineSq
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] : H →L[𝕜] H :=

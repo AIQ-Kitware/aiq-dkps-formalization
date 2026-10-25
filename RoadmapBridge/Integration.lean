@@ -2,10 +2,12 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
-import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Spectral
-import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
+module
+
+public import Mathlib
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Spectral
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
 
 /-!
 # Roadmap bridge: cross-module integration seams
@@ -38,6 +40,8 @@ unbounded graph/Riccati existence, contractivity, bounds and uniqueness; and the
 spectral-cutoff approximation-number theorem naming the spectral projection, the compression,
 the finite-rank hypothesis and the conclusion in one statement.
 -/
+
+public section
 
 namespace RoadmapBridge.Integration
 
@@ -149,11 +153,11 @@ example (N : UnitarilyInvariantSeminorm 𝕜 E E) (A : E →ₗ[𝕜] E) :
 noncomputable example : UnitarilyInvariantSeminorm 𝕜 E E :=
   UnitarilyInvariantSeminorm.frobenius 𝕜 E E
 
-example {n : ℕ} (A : E →ₗ[𝕜] F) (hn : Module.finrank 𝕜 E = n)
+example {n : ℕ} (A : E →ₗ[𝕜] F)
     (b : OrthonormalBasis (Fin n) 𝕜 E) :
     UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := F) A =
       Real.sqrt (∑ i, ‖A (b i)‖ ^ 2) := by
-  simpa [hn] using UnitarilyInvariantSeminorm.frobenius_apply b A
+  exact UnitarilyInvariantSeminorm.frobenius_apply b A
 
 example (A : E →ₗ[𝕜] F) :
     UnitarilyInvariantSeminorm.kyFan (𝕜 := 𝕜) (E := E) (F := F) 0 A = 0 := by

@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
+module
+
+public import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 
 /-!
 # Convenience laws for reducing restrictions
@@ -12,6 +14,8 @@ This leaf keeps optional compatibility lemmas separate from the compiler-accepte
 core restriction construction.  In particular, it records orthogonal-complement
 closure and agreement with the ordinary bounded restriction.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -49,6 +53,7 @@ The Section 6 whole-space statements compare two such blocks through
 `FormBoundedSylvesterGap`.  Writing the composite out inline is what made those
 hypotheses unreadable, and is why callers were handed a record to fill in
 instead of a theorem to apply. -/
+@[expose]
 noncomputable def boundedReducingBlock
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.Reduces U) : U →ₗ.[𝕜] U :=
@@ -58,6 +63,7 @@ noncomputable def boundedReducingBlock
 /-- The block of a bounded operator on the orthogonal complement of a subspace
 it reduces.  A reducing subspace's complement is reducing, so this needs no
 hypothesis beyond `hred`. -/
+@[expose]
 noncomputable def boundedReducingBlockCompl
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : A.Reduces U) : Uᗮ →ₗ.[𝕜] Uᗮ :=

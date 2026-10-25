@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
+module
+
+public import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 
 /-!
 # Operator-level classification of two projections
@@ -16,6 +18,8 @@ projections on the generic part form a complete invariant.  This file proves
 that core statement by joining an equivalence on the trivial part with an
 equivalence on the generic part.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -34,6 +38,7 @@ variable {H' : Type v} [NormedAddCommGroup H'] [InnerProductSpace ℂ H']
 
 /-- Restriction of an ambient bounded operator to an invariant closed
 subspace. -/
+@[expose]
 noncomputable def restrictToInvariant
     (T : H →L[ℂ] H) (K : Submodule ℂ H)
     (hK : ∀ x ∈ K, T x ∈ K) : K →L[ℂ] K :=

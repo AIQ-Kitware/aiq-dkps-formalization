@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Riccati.UnboundedReductionTransport
+module
+
+public import DavisKahan.InfiniteDimensional.Riccati.UnboundedReductionTransport
 
 /-!
 # Coordinate domains of a reduced unbounded direct-sum operator
@@ -18,6 +20,8 @@ algebraic, so neither density nor closedness of the domain is a hypothesis.
 Those two properties enter one module downstream, where the coordinate
 restrictions are shown to inherit them.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -40,6 +44,7 @@ abbrev DirectSumPMap :=
   DirectSumSpace (E0 := E0) (E1 := E1) →ₗ.[ℂ] DirectSumSpace (E0 := E0) (E1 := E1)
 
 /-- The first-coordinate domain induced by a partial map on the direct sum. -/
+@[expose]
 noncomputable def coordinateRestrictionDomain0
     (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
     Submodule ℂ E0 :=
@@ -47,6 +52,7 @@ noncomputable def coordinateRestrictionDomain0
     (blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1)).toLinearMap
 
 /-- The second-coordinate domain induced by a partial map on the direct sum. -/
+@[expose]
 noncomputable def coordinateRestrictionDomain1
     (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
     Submodule ℂ E1 :=
@@ -73,6 +79,7 @@ omit [CompleteSpace E0] [CompleteSpace E1] in
 
 /-- Bundle a first-coordinate domain vector as an element of the ambient
 operator domain. -/
+@[expose]
 noncomputable def coordinateRestrictionDomain0ToOriginal
     (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
     coordinateRestrictionDomain0 D →ₗ[ℂ] D.domain where
@@ -94,6 +101,7 @@ noncomputable def coordinateRestrictionDomain0ToOriginal
 
 /-- Bundle a second-coordinate domain vector as an element of the ambient
 operator domain. -/
+@[expose]
 noncomputable def coordinateRestrictionDomain1ToOriginal
     (D : DirectSumPMap (E0 := E0) (E1 := E1)) :
     coordinateRestrictionDomain1 D →ₗ[ℂ] D.domain where
@@ -210,7 +218,7 @@ omit [CompleteSpace E0] [CompleteSpace E1] in
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (u : coordinateRestrictionDomain0 D) :
     coordinateRestrictionMap0 D u =
-      WithLp.fst (D (coordinateRestrictionDomain0ToOriginal D u)) :=
+      WithLp.fst (D (coordinateRestrictionDomain0ToOriginal D u)) := by
   rfl
 
 omit [CompleteSpace E0] [CompleteSpace E1] in
@@ -219,7 +227,7 @@ omit [CompleteSpace E0] [CompleteSpace E1] in
     (D : DirectSumPMap (E0 := E0) (E1 := E1))
     (v : coordinateRestrictionDomain1 D) :
     coordinateRestrictionMap1 D v =
-      WithLp.snd (D (coordinateRestrictionDomain1ToOriginal D v)) :=
+      WithLp.snd (D (coordinateRestrictionDomain1ToOriginal D v)) := by
   rfl
 
 /-- Reduction kills the second output coordinate on the first-coordinate
@@ -261,7 +269,7 @@ theorem coordinateRestriction1_action_fst_eq_zero
       (blockGraph (0 : E0 →L[ℂ] E1))ᗮ
     exact blockCoordinate1_mem_zeroGraph_orthogonal
       (𝕜 := ℂ) (E0 := E0) (E1 := E1) (v : E1)
-  have hout := hred.isInvariant_orthogonal _ hmem1
+  have hout := hred.isInvariant_orthogonal.apply_mem _ hmem1
   change D (coordinateRestrictionDomain1ToOriginal D v) ∈
     (blockGraph (0 : E0 →L[ℂ] E1))ᗮ at hout
   exact fst_eq_zero_of_mem_zeroGraph_orthogonal

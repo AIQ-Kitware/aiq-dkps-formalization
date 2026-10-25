@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
 
 /-!
 # Infinite-dimensional double-angle residual embedding
@@ -23,6 +25,8 @@ hypothesis is needed to define it.
 `DavisKahan/Experimental/InfiniteDimensional/Core/`.  Nothing is restated.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahanExt
 
@@ -35,6 +39,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- One-sided double-angle sine operator for a trial embedding. -/
+@[expose]
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →L[𝕜] E)
     [(LinearMap.range X.toLinearMap).HasOrthogonalProjection] : E →L[𝕜] E :=

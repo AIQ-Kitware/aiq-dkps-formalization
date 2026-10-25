@@ -3,14 +3,21 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import DavisKahan.Sylvester.Spectrum
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.GapProjection
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalSineSequence
+module
+
+public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import DavisKahan.Sylvester.Spectrum
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.GapProjection
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalSineSequence
+
+public section
+
+attribute [local instance] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower
 
 open TauCeti.DavisKahan.Angle
 
@@ -396,7 +403,7 @@ theorem Question10_4_ambient_norm_eq_sinTheta_real
       hA0spec hA1spec hL0spec hL1spec hHU hHUperp hf1 hf0], ?_⟩
   rw [TauCeti.DavisKahan.Angle.Real.norm_sinAngleOperatorRC U V]
   show ‖V.starProjection - U.starProjection‖ = U.projectionGap V
-  rw [Submodule.projectionGap,
+  rw [Submodule.projectionGap_def,
     show V.starProjection - U.starProjection = -(U.starProjection - V.starProjection) by abel,
     norm_neg]
 

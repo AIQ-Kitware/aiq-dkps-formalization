@@ -3,15 +3,19 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.SpectralGapFormBounds
+module
+
+public import DavisKahan.SpectralTheory.SpectralGapFormBounds
 -- supplies the one-sided `spectralGapCutoff`, `reCoord_mem_realSpectrum`, and the
 -- bounded self-adjoint spectral projection this module makes two-sided.
-import DavisKahan.SpectralTheory.ResolventOperator
+public import DavisKahan.SpectralTheory.ResolventOperator
 -- supplies `resolventOperator` and the sharp self-adjoint
 -- distance-to-spectrum resolvent bound used by the exterior lower bound.
-import DavisKahan.Sylvester.Spectrum
+public import DavisKahan.Sylvester.Spectrum
 -- supplies `compressOperator` and its self-adjointness.
-import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -121,9 +125,11 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
 /-- The exterior of a two-sided gap configuration. -/
+@[expose]
 def gapExterior (l r d : ℝ) : Set ℝ := {x : ℝ | x ≤ l - d ∨ r + d ≤ x}
 
 /-- The central band strictly inside the canonical gap circle. -/
+@[expose]
 def centralBand (l r d : ℝ) : Set ℝ := Set.Ioo (l - d / 2) (r + d / 2)
 
 /-- The central band is an open interval, hence measurable. -/
@@ -132,6 +138,7 @@ theorem measurableSet_centralBand (l r d : ℝ) :
 
 /-- The two-sided cutoff: the product of an upper and a lower one-sided
 cutoff, written as a minimum since both take values in `[0,1]`. -/
+@[expose]
 def bandCutoff (l r d t : ℝ) : ℝ :=
   min (spectralGapCutoff r d t) (1 - spectralGapCutoff (l - d) d t)
 
@@ -181,10 +188,11 @@ theorem bandCutoff_eq_zero {l r d t : ℝ} (hd : 0 < d) (ht : t ∈ gapExterior 
     exact min_eq_left (by linarith [spectralGapCutoff_le_one (l - d) d t])
 
 /-- The two-sided cutoff pulled back to the spectrum along the real part. -/
+@[expose]
 def bandSymbol (B : H →L[ℂ] H) (l r d : ℝ) : C(spectrum ℂ B, ℝ) :=
   ⟨fun w => bandCutoff l r d (TauCeti.BorelCalculus.reCoord w),
     (continuous_bandCutoff l r d).comp
-      (Complex.continuous_re.comp continuous_subtype_val)⟩
+      (TauCeti.BorelCalculus.continuous_reCoord (T := B))⟩
 
 omit [CompleteSpace H] in
 /-- Evaluating the band symbol is evaluating the cutoff at the real part. -/
@@ -268,9 +276,9 @@ theorem re_inner_le_of_mem_centralBandSubspace
     ⟨fun w => (r - TauCeti.BorelCalculus.reCoord w) *
         bandCutoff l r d (TauCeti.BorelCalculus.reCoord w),
       ((continuous_const.sub
-        (Complex.continuous_re.comp continuous_subtype_val)).mul
+        (TauCeti.BorelCalculus.continuous_reCoord (T := B))).mul
         ((continuous_bandCutoff l r d).comp
-          (Complex.continuous_re.comp continuous_subtype_val)))⟩ with hgdef
+          (TauCeti.BorelCalculus.continuous_reCoord (T := B))))⟩ with hgdef
   have hgnonneg : ∀ w : spectrum ℂ B, 0 ≤ g w := by
     intro w
     have hmem := hgap (reCoord_mem_realSpectrum B hB w)
@@ -334,10 +342,10 @@ theorem le_re_inner_of_mem_centralBandSubspace
   set g : C(spectrum ℂ B, ℝ) :=
     ⟨fun w => (TauCeti.BorelCalculus.reCoord w - l) *
         bandCutoff l r d (TauCeti.BorelCalculus.reCoord w),
-      (((Complex.continuous_re.comp continuous_subtype_val).sub
+      (((TauCeti.BorelCalculus.continuous_reCoord (T := B)).sub
         continuous_const).mul
         ((continuous_bandCutoff l r d).comp
-          (Complex.continuous_re.comp continuous_subtype_val)))⟩ with hgdef
+          (TauCeti.BorelCalculus.continuous_reCoord (T := B))))⟩ with hgdef
   have hgnonneg : ∀ w : spectrum ℂ B, 0 ≤ g w := by
     intro w
     have hmem := hgap (reCoord_mem_realSpectrum B hB w)
@@ -385,6 +393,7 @@ theorem le_re_inner_of_mem_centralBandSubspace
   linarith
 
 /-- The centre and the half-width of the configuration `[l, r]`. -/
+@[expose]
 def gapCenter (l r : ℝ) : ℝ := (l + r) / 2
 
 /-- The shifted operator `B - centre`. -/
@@ -429,11 +438,11 @@ theorem norm_shiftedOperator_ge_of_mem_centralBandSubspace_orthogonal
   set g : C(spectrum ℂ B, ℝ) :=
     ⟨fun w => ((TauCeti.BorelCalculus.reCoord w - c) ^ 2 - K ^ 2) *
         (1 - bandCutoff l r d (TauCeti.BorelCalculus.reCoord w)),
-      ((((Complex.continuous_re.comp continuous_subtype_val).sub
+      ((((TauCeti.BorelCalculus.continuous_reCoord (T := B)).sub
           continuous_const).pow 2).sub continuous_const).mul
         (continuous_const.sub
           ((continuous_bandCutoff l r d).comp
-            (Complex.continuous_re.comp continuous_subtype_val)))⟩ with hgdef
+            (TauCeti.BorelCalculus.continuous_reCoord (T := B))))⟩ with hgdef
   have hgnonneg : ∀ w : spectrum ℂ B, 0 ≤ g w := by
     intro w
     have hmem := hgap (reCoord_mem_realSpectrum B hB w)

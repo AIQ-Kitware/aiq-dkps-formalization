@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
+module
+
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -43,7 +47,7 @@ private theorem quarterAcute_doubleCosineConstant_pos
     lt_of_le_of_lt (Submodule.directedProjectionGap_le_projectionGap U V) hquarter
   have hg0 : 0 ≤ U.directedProjectionGap V := by
     rw [show U.directedProjectionGap V =
-      ‖Vᗮ.starProjection ∘L U.starProjection‖ from rfl]
+      ‖Vᗮ.starProjection ∘L U.starProjection‖ from Submodule.directedProjectionGap_def U V]
     exact norm_nonneg _
   have h2 : (Real.sqrt 2) ^ 2 = 2 := Real.sq_sqrt (by norm_num)
   nlinarith
@@ -113,7 +117,9 @@ theorem norm_directedTanTwoAngleOperatorC_le_sine_div_doubleCosine
     ‖directedTanTwoAngleOperatorC U V hquarter‖ ≤
         ‖directedSinTwoAngleOperatorC U V‖ *
           ‖(cosTwoAngleExtendedCEquiv U V hquarter).symm.toContinuousLinearMap‖ :=
-      ContinuousLinearMap.opNorm_comp_le _ _
+      by
+        rw [directedTanTwoAngleOperatorC]
+        exact ContinuousLinearMap.opNorm_comp_le _ _
     _ ≤ ‖directedSinTwoAngleOperatorC U V‖ *
         (1 - 2 * U.directedProjectionGap V ^ 2)⁻¹ :=
       mul_le_mul_of_nonneg_left hinv (norm_nonneg _)

@@ -3,13 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.Sylvester.ScalarTransport
-import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
-import ForTauCeti.Analysis.RCLike.ScalarTransportIsometry
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ScalarTransport
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+module
+
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.Sylvester.ScalarTransport
+public import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
+public import ForTauCeti.Analysis.RCLike.ScalarTransportIsometry
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ScalarTransport
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 
 /-!
 # Scalar transport for unbounded Ritz-compression data
@@ -26,6 +28,8 @@ subtype and the subtype of the transported subspace.  The bounded residual is
 transported in the same coordinates, so its complete approximation-number
 sequence and every symmetric-norming gauge are unchanged.
 -/
+
+public section
 
 open scoped InnerProductSpace TauCeti.CompleteSubspace
 
@@ -48,6 +52,7 @@ variable {Z V : Submodule 𝕜 H} [Z.HasOrthogonalProjection] [V.HasOrthogonalPr
 
 /-- Transport a bounded operator whose domain is a closed subspace into the
 canonical transported-subspace coordinates. -/
+@[expose]
 noncomputable def scalarTransportSubspaceCLM (Z : Submodule 𝕜 H)
     (T : Z →L[𝕜] H) :
     ScalarTransport.submodule (e := e) Z →L[𝕂] ScalarTransport e H :=
@@ -55,6 +60,7 @@ noncomputable def scalarTransportSubspaceCLM (Z : Submodule 𝕜 H)
     (ScalarTransport.submoduleSubtypeEquiv (e := e) Z).symm.toContinuousLinearEquiv.toContinuousLinearMap
 
 /-- Scalar transport is a bijection on bounded maps out of a closed subspace. -/
+@[expose]
 noncomputable def scalarTransportSubspaceCLMEquiv (Z : Submodule 𝕜 H) :
     (Z →L[𝕜] H) ≃
       (ScalarTransport.submodule (e := e) Z →L[𝕂] ScalarTransport e H) where
@@ -84,7 +90,7 @@ theorem approximationNumber_scalarTransportSubspaceCLM
     refine SameApproximationSingularValues.of_isometricEquiv_comp I W ?_
     ext z
     rfl
-  rw [← hsame n]
+  rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
 /-- Every finite source gauge is unchanged for a transported subspace-domain map. -/
@@ -168,7 +174,7 @@ theorem approximationNumber_scalarTransportSubspaceBlockCLM
         (scalarTransportSubspaceBlockCLM (e := e) Z W T) := by
     refine SameApproximationSingularValues.of_isometricEquiv_comp U V ?_
     rfl
-  rw [← hsame n]
+  rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
 /-- Transport a bounded operator from a closed subspace to its orthogonal complement.
@@ -215,7 +221,7 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLM
         (scalarTransportOrthogonalSubspaceBlockCLM (e := e) Z T) := by
     refine SameApproximationSingularValues.of_isometricEquiv_comp U V ?_
     rfl
-  rw [← hsame n]
+  rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
 /-- Inverse orthogonal-corner transport also preserves every approximation number. -/
@@ -246,7 +252,7 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
       (ScalarTransport.approximationNumber_clm (e := e)
         (scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T) n).symm
     _ = X.approximationNumber n := by rw [hclm]
-    _ = T.approximationNumber n := (hcoord n).symm
+    _ = T.approximationNumber n := ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hcoord n).symm
 
 /-- The extended symmetric-norming gauge is unchanged by orthogonal-corner
 transport.  This is proved directly from the cross-field approximation-number
@@ -396,7 +402,7 @@ noncomputable def scalarTransport (D : UnboundedCompressionTrialData Z) :
 up to the canonical isometry of the domain coordinates. -/
 theorem scalarTransport_residual_eq (D : UnboundedCompressionTrialData Z) :
     (D.scalarTransport (e := e)).residual =
-      scalarTransportSubspaceCLM (e := e) Z D.residual := rfl
+      scalarTransportSubspaceCLM (e := e) Z D.residual := by rfl
 
 /-- The transported residual has exactly the approximation singular values of
 the scalar-transported residual before the harmless domain-coordinate change. -/
@@ -465,19 +471,24 @@ private def compressionDomainOut (D : UnboundedCompressionTrialData Z)
   change ScalarTransport.out (e := e)
       (W.symm (z : ScalarTransport.submodule (e := e) Z)) ∈ D.compression.domain
   exact (ScalarTransport.mem_pmap_domain_iff (e := e)
-    (A := D.compression) (W.symm (z : ScalarTransport.submodule (e := e) Z))).mp z.2
+    (A := D.compression) (W.symm (z : ScalarTransport.submodule (e := e) Z))).mp
+    (_root_.LinearPMap.mem_unitaryConj_domain_iff.mp z.property)
 
 /-- The ambient action attached to transported trial data is exactly the
 transport of the original ambient action. -/
-theorem scalarTransport_action (D : UnboundedCompressionTrialData Z)
+private theorem scalarTransport_action (D : UnboundedCompressionTrialData Z)
     (z : (D.scalarTransport (e := e)).compression.domain) :
     (D.scalarTransport (e := e)).action z =
       ScalarTransport.of (e := e) (D.action (compressionDomainOut (e := e) D z)) := by
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
-  change W (ScalarTransport.pmap (e := e) D.compression
-        ⟨W.symm (z : ScalarTransport.submodule (e := e) Z), z.2⟩) +
-      ScalarTransport.clm (e := e) D.residual
-        (W.symm (z : ScalarTransport.submodule (e := e) Z)) = _
+  let z' : (_root_.LinearPMap.unitaryConj W
+      (ScalarTransport.pmap (e := e) D.compression)).domain :=
+    ⟨(z : ScalarTransport.submodule (e := e) Z), z.property⟩
+  change ((_root_.LinearPMap.unitaryConj W (ScalarTransport.pmap (e := e) D.compression)
+      z' : ScalarTransport.submodule (e := e) Z) : ScalarTransport e H) +
+      scalarTransportSubspaceCLM (e := e) Z D.residual
+        (z : ScalarTransport.submodule (e := e) Z) = _
+  rw [_root_.LinearPMap.unitaryConj_apply]
   rfl
 
 /-- **The crossed lower form bound used by the Appendix tangent argument is

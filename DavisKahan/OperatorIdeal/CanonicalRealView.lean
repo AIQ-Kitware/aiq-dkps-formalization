@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
-import ForTauCeti.Analysis.OperatorIdeal.Family.Modulus
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Modulus
 
 /-!
 # Real-valued view of a canonical symmetric ideal family
@@ -54,6 +56,8 @@ Completeness is the one law that genuinely needs `IsComplete`, so that instance 
 assumed on `gaugeReal_complete` alone rather than on the section; the other laws hold
 for any canonical symmetric family.
 -/
+
+public section
 
 open scoped ENNReal
 

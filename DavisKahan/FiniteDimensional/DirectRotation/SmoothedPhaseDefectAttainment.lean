@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNonacuteClassification
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedDefectReplacement
-import DavisKahan.Geometry.Polar.TransportUniqueness
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNonacuteClassification
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedDefectReplacement
+public import DavisKahan.Geometry.Polar.TransportUniqueness
 
 /-!
 # Independent phase and defect parameters
@@ -16,6 +18,8 @@ the global weighted nuclear and Charbonnier minimum. The phase parameter
 may have redundant choices on inactive directions; the transporter for
 each prescribed pair of parameters is unique.
 -/
+
+public section
 
 noncomputable section
 

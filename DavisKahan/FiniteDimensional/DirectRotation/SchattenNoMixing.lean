@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenSecondVariation
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOverlapDirection
-import TauCeti.Analysis.Calculus.DerivativeTest
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenSecondVariation
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOverlapDirection
+public import TauCeti.Analysis.Calculus.DerivativeTest
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
 
 /-!
 # Overlap exclusion for paired Schatten-gradient blocks
@@ -20,6 +22,8 @@ This is the coupled-block form of the no-mixing argument. Identifying its
 sum with the cost of an ambient transporter, while extending the feasible
 variation by zero on the remaining blocks, is a separate assembly step.
 -/
+
+public section
 
 noncomputable section
 

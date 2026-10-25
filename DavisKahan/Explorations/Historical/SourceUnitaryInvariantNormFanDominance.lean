@@ -73,31 +73,33 @@ layer and retarget the canonical Davis--Kahan façades to the vacuous conclusion
 Do not attempt to prove unconditional `HasFanDominance` from the base record;
 the countermodel proves that implication false.
 -/
-import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ExtendedSequence
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
-import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
-import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
-import DavisKahan.SharedFoundations.Ideal.ModulusTransport
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
-import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
-import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
-import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
-import DavisKahan.Sources.DavisKahan1970.Ideals.KyFanNorm
-import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
-import DavisKahan.Sources.DavisKahan1970.SectionTwo
+module
+
+public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ExtendedSequence
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
+public import DavisKahan.SharedFoundations.Ideal.ModulusTransport
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+public import DavisKahan.Sources.DavisKahan1970.Ideals.KyFanNorm
+public import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
+public import DavisKahan.Sources.DavisKahan1970.SectionTwo
 
 /-!
 # Exploration: Fan dominance at the Davis--Kahan source norm boundary
@@ -126,6 +128,8 @@ remain.
 
 No `sorry`, `axiom`, or replacement source structure is introduced here.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
-import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
-import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
-import DavisKahan.InfiniteDimensional.TanTwoTheta.SelectedBranchSymmetricNorming
-import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
-import DavisKahan.Sources.DavisKahan1970.SharpIdeal
-import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+module
+
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.SelectedBranchSymmetricNorming
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
+public import DavisKahan.Sources.DavisKahan1970.SharpIdeal
+public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -217,6 +221,7 @@ variable (U V : Submodule ℂ E)
 /-- **The off-diagonal block representative of the ambient double-angle
 tangent.**  It is supported entirely on the two cross blocks of `U ⊕ U^⊥`, and
 under uniform quarter transversality its modulus is exactly `tan 2Θ`. -/
+@[expose]
 def tanTwoBlockRepresentative : E →L[ℂ] E :=
   diagonalPair Uᗮ U
     (2 * (projectorDifference U V * doubleSecant U V))
@@ -1032,7 +1037,8 @@ theorem norm_sinAngleOperatorC_lt_of_isQuarterAcute (hq : IsQuarterAcute U V) :
   rw [← norm_projectorDifference, projectorDifference,
     show V.starProjection - U.starProjection =
       -(U.starProjection - V.starProjection) from by abel, norm_neg]
-  exact hq
+  change U.projectionGap V < Real.sqrt 2 / 2 at hq
+  rwa [Submodule.projectionGap_def] at hq
 
 omit [CompleteSpace E] in
 private theorem projectionBlock_lower' (K : E →L[ℂ] E) :
@@ -1187,7 +1193,7 @@ omit [CompleteSpace E] in
 private theorem isOffDiagonal_of_maps_orthogonal'
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
     Submodule.IsOffDiagonal U H := by
-  change U.diagBlock H = 0
+  rw [Submodule.isOffDiagonal_iff]
   apply ContinuousLinearMap.ext
   intro x
   have hPzero : U.starProjection (H (U.starProjection x)) = 0 :=
@@ -1198,8 +1204,7 @@ private theorem isOffDiagonal_of_maps_orthogonal'
       Submodule.starProjection_eq_self_iff.mpr
         (hHUperp (Uᗮ.starProjection x) (Uᗮ.starProjection_apply_mem x)),
       sub_self]
-  simp only [Submodule.diagBlock, ContinuousLinearMap.comp_apply,
-    add_apply, hPzero, hQzero, add_zero, zero_apply]
+  simp only [Submodule.diagBlock_apply, hPzero, hQzero, add_zero, zero_apply]
 
 private theorem kyFan_upperBlock_eq_compression (K : E →L[ℂ] E) (k : ℕ) :
     kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) =

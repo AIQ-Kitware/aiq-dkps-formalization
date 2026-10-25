@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.AmbientReal
-import DavisKahan.TanTheta.Theorem63InfiniteTrial
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.AmbientReal
+public import DavisKahan.TanTheta.Theorem63InfiniteTrial
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -51,6 +55,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 /-! ## Real trial blocks and complexification transport -/
 
 /-- Real directed sine block used by the Theorem 6.3 tangent estimate. -/
+@[expose]
 noncomputable def theorem63DirectedSineBlockReal
     (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] : Z →L[ℝ] E :=
@@ -140,7 +145,7 @@ theorem approximationSingularValue_theorem63DirectedSineBlock_complexify
       (theorem63DirectedSineBlock_complexify_equiv Z V)
     simpa [U, W, w, hw] using h.symm
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact (hsame n).symm.trans
+  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans
     (approximationSingularValue_complexify (theorem63DirectedSineBlockReal Z V) n)
 
 /-- Approximation singular values of the real Ritz residual are likewise
@@ -166,7 +171,7 @@ theorem approximationSingularValue_theorem63Residual_complexify
       (theorem63Residual_complexify_equiv T Z)
     simpa [U, W, w, hw] using h.symm
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact (hsame n).symm.trans
+  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans
     (approximationSingularValue_complexify (theorem63ResidualReal T Z) n)
 
 /-- The finite Ky Fan residual gauge is exactly preserved by the real-to-complex
@@ -245,6 +250,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
 
 /-- A real tangent representative has exactly the approximation numbers
 prescribed by the paper's directed angle. -/
+@[expose]
 def HasTheorem63DirectedTangentApproximationNumbersInfiniteReal
     (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (tanTheta0 : Z →L[ℝ] E) : Prop :=
@@ -507,14 +513,25 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_real
   have hTsym : T.IsSymmetric := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hT
   have hMsa : IsSelfAdjoint (compressOperatorReal Z T) :=
     isSelfAdjoint_compressOperator hT Z
+  have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℝ) (E := Z) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (Z →L[ℝ] Z)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  have hCompressionSpectrum' := hCompressionSpectrum
+  rw [← hAlg] at hCompressionSpectrum'
   have hCompressionUpper : ∀ z : Z,
-      ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2 := fun z =>
-    SpectralOrder.upperFormBoundOn_top_of_spectrum_subset_Iic
+      ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2 := by
+    intro z
+    exact SpectralOrder.re_inner_le_of_spectrum_subset_Iic
       (compressOperatorReal Z T) hMsa
-      (fun r hr => (hCompressionSpectrum hr).2) z Submodule.mem_top
-  have hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ :=
-    SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
-      hTsym hV.2 hUnwantedSpectrum
+      (fun r hr => (hCompressionSpectrum' hr).2) z
+  have hAlgV : ContinuousLinearMap.realAlgebra (𝕜 := ℝ) (E := Vᗮ) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (Vᗮ →L[ℝ] Vᗮ)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  rw [← hAlgV] at hUnwantedSpectrum
+  have hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ := by
+    exact (ContinuousLinearMap.lowerFormBoundOn_iff T Vᗮ (alpha + delta)).mp
+      (SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+        hTsym hV.2 hUnwantedSpectrum)
   exact tanTheta_directed_bounded_symmetricNorming_real N T hT V Z hV hdelta hCompressionUpper
     hUnwantedLower hResidual
 
@@ -679,7 +696,7 @@ theorem norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
   rw [norm_sinAngleOperatorR,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
       U V h35]
-  exact hnorm
+  simpa only [Submodule.directedProjectionGap_def] using hnorm
 
 /-- **The whole-space `tan Θ` theorem over a REAL Hilbert space, for every source unitarily
 invariant norm, under the printed standing assumptions only.**

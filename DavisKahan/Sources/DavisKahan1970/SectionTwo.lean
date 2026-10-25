@@ -3,22 +3,26 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
-import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
-import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
+public import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
+public import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -456,17 +460,19 @@ theorem sinTwoTheta_bothConclusions_complex
       rw [DavisKahan1970.sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator]
       exact sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
         N hA B hB hVdom hres hδ hgap hR,
-    fun Eop hEop W _ hW hEmem =>
-      sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex N hA Eop hEop
-        (selfAdjointSpectralSubspace_reducing A hA B hB) hW hδ
-        (by
-          rw [selfAdjointSpectralRestriction_eq_reducingRestriction A hA B hB,
-            selfAdjointSpectralRestriction_eq_reducingRestriction A hA Bᶜ hB.compl] at hgap
-          exact FormBoundedSylvesterGap.reducingRestriction_congr_right
-            (selfAdjointSpectralSubspace_compl_eq_orthogonal A hA B hB)
-            (selfAdjointSpectralSubspace_reducing A hA Bᶜ hB.compl)
-            (selfAdjointSpectralSubspace_reducing A hA B hB).orthogonal hgap)
-        hEmem⟩
+    fun Eop hEop W _ hW hEmem => by
+      have h :=
+        sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex N hA Eop hEop
+          (selfAdjointSpectralSubspace_reducing A hA B hB) hW hδ
+          (by
+            rw [selfAdjointSpectralRestriction_eq_reducingRestriction A hA B hB,
+              selfAdjointSpectralRestriction_eq_reducingRestriction A hA Bᶜ hB.compl] at hgap
+            exact FormBoundedSylvesterGap.reducingRestriction_congr_right
+              (selfAdjointSpectralSubspace_compl_eq_orthogonal A hA B hB)
+              (selfAdjointSpectralSubspace_reducing A hA Bᶜ hB.compl)
+              (selfAdjointSpectralSubspace_reducing A hA B hB).orthogonal hgap)
+          hEmem
+      simpa only [TauCeti.DavisKahan.Angle.sinTwoAngleOperator_complex] using h⟩
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem over `ℝ`, both printed
 conclusions.**  The real sibling of `sinTwoTheta_bothConclusions_complex`, at the same

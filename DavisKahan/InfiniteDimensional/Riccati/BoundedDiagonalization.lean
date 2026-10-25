@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Riccati.BoundedReduction
-import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.Riccati.BoundedReduction
+public import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Bounded Riccati block diagonalization
@@ -25,6 +27,8 @@ the zero graph.  It is intentionally left as an explicit hypothesis of the
 last theorem so that its proof can be isolated from the block algebra.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahanExt
 
@@ -41,12 +45,14 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
   [CompleteSpace E1]
 
 /-- Inclusion of the first coordinate into the Hilbert direct sum. -/
+@[expose]
 noncomputable def blockCoordinate0 : E0 →L[𝕜] WithLp 2 (E0 × E1) :=
   ((WithLp.prodContinuousLinearEquiv 2 𝕜 E0 E1).symm :
       (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) ∘L
     (ContinuousLinearMap.id 𝕜 E0).prod (0 : E0 →L[𝕜] E1)
 
 /-- Inclusion of the second coordinate into the Hilbert direct sum. -/
+@[expose]
 noncomputable def blockCoordinate1 : E1 →L[𝕜] WithLp 2 (E0 × E1) :=
   ((WithLp.prodContinuousLinearEquiv 2 𝕜 E0 E1).symm :
       (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1)) ∘L

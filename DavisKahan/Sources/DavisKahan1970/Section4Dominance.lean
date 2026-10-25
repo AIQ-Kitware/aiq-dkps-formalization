@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 
 /-!
 Compatibility import for the former Section 4 staging location.

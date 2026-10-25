@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPhaseDefectAttainment
-import ForTauCeti.Analysis.InnerProductSpace.Projection.KernelSupport
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPhaseDefectAttainment
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.KernelSupport
 
 /-!
 # Effective phase directions for weighted nuclear and Charbonnier transport
@@ -14,6 +16,8 @@ On positive principal cosines it vanishes exactly at and above `b/a`.
 Right-angle directions have zero weight and independent defect parameters.
 -/
 
+public section
+
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
@@ -22,6 +26,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
 /-- The coefficient of the projection parameter in the weighted phase formula. -/
+@[expose]
 def weightedPhaseWeight (a b : ℝ) (C : E →L[ℂ] E) : E →L[ℂ] E :=
   C * (weightedPhaseFactor a b C - star (weightedPhaseFactor a b C))
 

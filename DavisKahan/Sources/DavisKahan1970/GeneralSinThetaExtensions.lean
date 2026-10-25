@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
-import DavisKahan.SinTheta.Natural.Reducing
-import DavisKahan.SinTheta.Natural.Generalized
-import DavisKahan.SinTheta.Natural.Bounded
-import DavisKahan.SinTheta.Natural.GapConvenience
-import DavisKahan.SinTheta.NaturalTwoSubspace
+module
+
+public import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
+public import DavisKahan.SinTheta.Natural.Reducing
+public import DavisKahan.SinTheta.Natural.Generalized
+public import DavisKahan.SinTheta.Natural.Bounded
+public import DavisKahan.SinTheta.Natural.GapConvenience
+public import DavisKahan.SinTheta.NaturalTwoSubspace
 
 /-!
 # Optional natural-input extensions to the general sine-theta surface
@@ -19,6 +21,8 @@ spectral-subspace, gap-constructor, and symmetric two-direction conveniences.
 After this leaf is compiler-accepted, its aliases can be folded into the main
 source facade without changing the verified theorem chain.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970

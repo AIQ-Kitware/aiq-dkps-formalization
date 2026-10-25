@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Approximation-number dominance for restricted displacements
@@ -19,6 +21,8 @@ The final structure packages this comparison for restricted displacements, so
 Davis--Kahan Section 4 can consume the operator-ideal result without owning the
 majorization argument.
 -/
+
+public section
 
 open scoped InnerProductSpace BigOperators
 
@@ -43,8 +47,7 @@ theorem kyFanApproximationGauge_le_of_approximationSingularValue_le
     (h : ∀ n, approximationSingularValue n A ≤
       approximationSingularValue n B) (k : ℕ) :
     kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-    approximationSingularValue]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_le_sum fun n hn => h n
 
 /-- Correct infinite-dimensional ideal-dominance bridge for Corollary 4.1.

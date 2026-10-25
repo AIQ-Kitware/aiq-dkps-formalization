@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import Mathlib.Analysis.InnerProductSpace.Basic
-import Mathlib.Tactic.Abel
-import Mathlib.Tactic.Ext
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
+module
+
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Tactic.Abel
+public import Mathlib.Tactic.Ext
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
 
 /-!
 # Davis--Kahan 1970, Section 9: Schur-complement reduction
@@ -39,6 +41,8 @@ statements carry no domain hypothesis and apply verbatim to an unbounded lower
 block.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
@@ -55,6 +59,7 @@ variable (B : E →ₗ[𝕜] F) (Bstar : F →ₗ[𝕜] E)
 variable (C : F →ₗ[𝕜] F) (lam : 𝕜)
 
 /-- The block operator in equation (9.9). -/
+@[expose]
 def blockOperator : (E × F) →ₗ[𝕜] (E × F) where
   toFun z := (A₀ z.1 + Bstar z.2, B z.1 + A₁ z.2)
   -- `simp` normalizes both sides to sums in a different association order,

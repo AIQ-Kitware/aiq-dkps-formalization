@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSignedOptimizers
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSignedOptimizers
 
 /-!
 # Attainment for arbitrary compatible multiplicity projections
@@ -18,6 +20,8 @@ This includes arbitrary acute multiplicity splittings. At right angles the
 construction gives compatible reflected phases; the larger arbitrary-unitary
 defect family still requires a separate assembly theorem.
 -/
+
+public section
 
 noncomputable section
 

@@ -44,11 +44,15 @@ named the other.
 To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+module
+
+import Mathlib.Analysis.InnerProductSpace.Semisimple
+
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
+public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 
 /-! # The Davis–Kahan tan Θ theorem (gated statement)
 
@@ -119,6 +123,8 @@ Points the gate had to settle, and how the sources settle them:
 * A. K. Motovilov, *Comment on 'The tan θ theorem with relaxed conditions'*,
   arXiv:1204.4441.
 -/
+
+public section
 
 namespace TauCeti
 

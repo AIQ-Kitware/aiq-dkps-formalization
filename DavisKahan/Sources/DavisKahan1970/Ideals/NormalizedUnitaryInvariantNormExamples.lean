@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
-import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+module
+
+public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
+public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 
 /-!
 # The source norm class is inhabited
@@ -28,6 +30,8 @@ scaling both vectors to norm one.  It is discharged by
 singular values `1, 0, 0, …`, so the Ky Fan sum of the first `k ≥ 1` of them is
 `1`.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

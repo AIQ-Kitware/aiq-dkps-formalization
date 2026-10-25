@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
-import DavisKahan.DoubleAngle.DirectedAngleGeneric
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
+public import DavisKahan.DoubleAngle.DirectedAngleGeneric
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

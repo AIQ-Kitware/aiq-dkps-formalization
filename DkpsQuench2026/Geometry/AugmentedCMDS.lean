@@ -9,10 +9,14 @@ sample target-to-reference distances.  The choice-free pairwise-distance theorem
 in `Acharyya2025.GrowingPipeline` controls those distances directly.
 -/
 
-import Acharyya2025.GrowingPipeline
-import Acharyya2025.GramRealization
-import DkpsQuench2026.Geometry.Radial
-import Acharyya2025.SpectralMeasurability
+module
+
+public import Acharyya2025.GrowingPipeline
+public import Acharyya2025.GramRealization
+public import DkpsQuench2026.Geometry.Radial
+public import Acharyya2025.SpectralMeasurability
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -76,6 +80,7 @@ noncomputable def rawAugmentedSpectralConfig
 
 /-- Estimated distance from reference `i` to the adjoined target, measured in
 the raw sample CMDS configuration. -/
+@[expose]
 noncomputable def augmentedSpectralRadialDistance
     (Dhat : ∀ n, Ω → Model Q X → DisMat (n + 1))
     (hsym : ∀ n ω f,
@@ -87,6 +92,7 @@ noncomputable def augmentedSpectralRadialDistance
 /-- Literal tie-averaged Quench estimator using the raw target-augmented CMDS
 distances.  No global estimated perspective map and no model-to-finite-index
 factorization are present. -/
+@[expose]
 noncomputable def yNNTieAverage_augmentedCMDS
     (Dhat : ∀ n, Ω → Model Q X → DisMat (n + 1))
     (hsym : ∀ n ω f,

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedRightDefect
-import DavisKahan.FiniteDimensional.DirectRotation.KernelTransportReplacement
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedRightDefect
+public import DavisKahan.FiniteDimensional.DirectRotation.KernelTransportReplacement
 
 /-!
 # Arbitrary right-angle defect identifications attain the global minimum
@@ -14,6 +16,8 @@ action while replacing the right-angle action by an arbitrary unitary
 identification of the actual crossed defects, paired with its inverse.
 The ambient extension is constructed and compared with every competitor.
 -/
+
+public section
 
 noncomputable section
 

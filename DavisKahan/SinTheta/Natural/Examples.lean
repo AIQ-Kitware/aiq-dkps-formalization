@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Natural.Bounded
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.SinTheta.Natural.Reducing
-import DavisKahan.SinTheta.Natural.GapConvenience
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+module
+
+public import DavisKahan.SinTheta.Natural.Bounded
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.SinTheta.Natural.Reducing
+public import DavisKahan.SinTheta.Natural.GapConvenience
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -63,7 +67,9 @@ example
       A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
         rw [FanDominantIdealFamily.mem_iff]
         simp [KyFanDominantIdealFamily.operatorNorm])
-  exact hmain.2
+  simpa only [KyFanDominantIdealFamily.operatorNorm,
+    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    toReal_enorm] using hmain.2
 
 /-- The same natural theorem instantiated with the nontrivial two-term Ky Fan
 gauge rather than the operator norm. -/
@@ -120,7 +126,9 @@ example
       A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
         rw [FanDominantIdealFamily.mem_iff]
         simp [KyFanDominantIdealFamily.operatorNorm])
-  exact hmain.2
+  simpa only [KyFanDominantIdealFamily.operatorNorm,
+    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    toReal_enorm] using hmain.2
 
 end AbstractRealUse
 
@@ -156,7 +164,9 @@ example
       A hA S hS A0 hA0 X hX hδ hgap (by
         rw [FanDominantIdealFamily.mem_iff]
         simp [KyFanDominantIdealFamily.operatorNorm])
-  exact hmain.2
+  simpa only [KyFanDominantIdealFamily.operatorNorm,
+    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    toReal_enorm] using hmain.2
 
 end AbstractBoundedUse
 
@@ -199,12 +209,14 @@ theorem realPlane_zeroResidual_model :
     exact _root_.LinearPMap.isSelfAdjoint_toPMap_top (T := (0 : RealPlane →L[ℝ] RealPlane))
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (by intro x y; simp))
   have hA0upper : TauCeti.LinearPMap.SemiboundedAbove A0 0 := by
+    rw [TauCeti.LinearPMap.semiboundedAbove_iff]
     intro x
     show RCLike.re
       ⟪(0 : RealPlane →L[ℝ] RealPlane) (x : RealPlane), (x : RealPlane)⟫_ℝ ≤ _
     simp
   have hcompLower : TauCeti.LinearPMap.SemiboundedBelow
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) 1 := by
+    rw [TauCeti.LinearPMap.semiboundedBelow_iff]
     intro x
     have hzero : ((x.1 : RealPlane)) = 0 :=
       inner_self_eq_zero.mp

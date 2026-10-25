@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Geometry.Halmos.TwoProjections
+module
+
+public import DavisKahan.Geometry.Halmos.TwoProjections
 
 /-!
 # Unitary equivalence of subspace pairs and bounded operators
@@ -14,6 +16,8 @@ frontier.  They express unitary equivalence of ordered pairs of subspaces and of
 bounded operators acting on possibly different Hilbert spaces, stated as bare
 existential propositions so they carry no computational datum.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -36,7 +40,7 @@ variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
 Stated as existential quantification over the unitary rather than as a
 `Prop`-valued structure carrying it: the intended notion is a proposition, and
 a `Prop` structure cannot hold the datum `H₁ ≃ₗᵢ[𝕜] H₂`. -/
-def PairOfSubspacesUnitaryEquivalent
+@[expose] def PairOfSubspacesUnitaryEquivalent
     (U₁ V₁ : Submodule 𝕜 H₁) (U₂ V₂ : Submodule 𝕜 H₂) : Prop :=
   ∃ e : H₁ ≃ₗᵢ[𝕜] H₂,
     U₁.map e.toLinearMap = U₂ ∧ V₁.map e.toLinearMap = V₂
@@ -48,6 +52,7 @@ The intertwining is stated pointwise.  Writing it as a composition of
 continuous linear maps forces `e` through `LinearMap.toContinuousLinearMap`,
 which carries a `FiniteDimensional` hypothesis that the source statement does
 not have. -/
+@[expose]
 def BoundedOperatorsUnitaryEquivalent
     (A : H₁ →L[𝕜] H₁) (B : H₂ →L[𝕜] H₂) : Prop :=
   ∃ e : H₁ ≃ₗᵢ[𝕜] H₂, ∀ x : H₁, e (A x) = B (e x)

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedReal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedReal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
 
 /-!
 # Theorem 8.1 on the source's own objects, at unbounded ambient scope
@@ -46,6 +48,8 @@ vanishes on `P` and on `Pᗮ` and the ambient form of `A + H` there is the form 
 `A`.
 -/
 
+public section
+
 open scoped InnerProductSpace
 
 namespace TauCeti
@@ -77,6 +81,7 @@ theorem semiboundedAbove_reducingRestriction_iff
         (TauCeti.LinearPMap.reducingRestriction B U hred) c ↔
       ∀ x : B.domain, (x : H) ∈ U →
         RCLike.re ⟪B x, (x : H)⟫_𝕜 ≤ c * ‖(x : H)‖ ^ 2 := by
+  rw [TauCeti.LinearPMap.semiboundedAbove_iff]
   constructor
   · intro h x hx
     have hy : (⟨(x : H), hx⟩ : U) ∈
@@ -105,6 +110,7 @@ theorem semiboundedBelow_reducingRestriction_iff
         (TauCeti.LinearPMap.reducingRestriction B U hred) c ↔
       ∀ x : B.domain, (x : H) ∈ U →
         c * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪B x, (x : H)⟫_𝕜 := by
+  rw [TauCeti.LinearPMap.semiboundedBelow_iff]
   constructor
   · intro h x hx
     have hy : (⟨(x : H), hx⟩ : U) ∈

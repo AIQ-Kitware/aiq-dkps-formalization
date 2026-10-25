@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
-import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
-import DavisKahan.DoubleAngle.TangentTransport
-import DavisKahan.Sources.DavisKahan1970.AmbientReal
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
+public import DavisKahan.DoubleAngle.RealAngleIdentification
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+public import DavisKahan.DoubleAngle.TangentTransport
+public import DavisKahan.Sources.DavisKahan1970.AmbientReal
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -65,9 +69,11 @@ private theorem approximationSingularValue_directedCorner_complexify
         (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)) =
       approximationSingularValue n (blockCompression Uᗮ U K) := by
-  have hc := projectionBlock_same_compression (complexifySubmodule U)ᗮ
-    (complexifySubmodule U) (complexify K)
-  have hr := projectionBlock_same_compression Uᗮ U K
+  have hc := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (projectionBlock_same_compression (complexifySubmodule U)ᗮ
+      (complexifySubmodule U) (complexify K))
+  have hr := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (projectionBlock_same_compression Uᗮ U K)
   calc
     approximationSingularValue n
         (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
@@ -800,8 +806,9 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
       (complexifySubmodule V).reflectionOperator :=
     DavisKahan.complexify_reflectionOperator V
   -- the directed sine corner and the ideal block, over `ℂ`
-  have hsameC := hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock
-    (complexifySubmodule U) (complexifySubmodule V)
+  have hsameC := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock
+      (complexifySubmodule U) (complexifySubmodule V))
   -- the ideal block's approximation numbers are the real ones
   have hblock : ∀ n : ℕ,
       (DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)

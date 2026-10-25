@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.Unbounded.FormBoundedGap
-import DavisKahan.Sylvester.RealUnbounded
+module
+
+public import DavisKahan.Sylvester.Unbounded.FormBoundedGap
+public import DavisKahan.Sylvester.RealUnbounded
 
 /-!
 # Bounded homogeneous Sylvester uniqueness
@@ -19,6 +21,8 @@ This is the uniqueness seam needed by the defect-first Hilbert--Schmidt proof.
 It avoids first assuming that the unknown bounded solution belongs to the
 square ideal.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -54,7 +58,9 @@ theorem closedSylvester_homogeneous_eq_zero_complex
     simp [N]
   have hbound :=
     (davisKahan1970_sylvester_complex N hA hB hδ hgap hEq hzero).2
-  change δ * ‖X‖ ≤ ‖(0 : F →L[ℂ] E)‖ at hbound
+  simp only [N, KyFanDominantIdealFamily.operatorNorm,
+    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    toReal_enorm] at hbound
   have hle : ‖X‖ ≤ 0 := by
     -- The bound is against the norm of zero, which the arithmetic tactics do not
     -- reduce, and the product of the gap with the norm is nonlinear in any case.
@@ -107,7 +113,9 @@ theorem closedSylvester_homogeneous_eq_zero_real
     simp [N]
   have hbound :=
     (davisKahan1970_sylvester_real N hA hB hδ hgap hEq hzero).2
-  change δ * ‖X‖ ≤ ‖(0 : F →L[ℝ] E)‖ at hbound
+  simp only [N, KyFanDominantIdealFamily.operatorNorm,
+    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    toReal_enorm] at hbound
   have hle : ‖X‖ ≤ 0 := by
     -- The bound is against the norm of zero, which the arithmetic tactics do not
     -- reduce, and the product of the gap with the norm is nonlinear in any case.

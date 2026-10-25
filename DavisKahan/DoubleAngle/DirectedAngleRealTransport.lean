@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.AngleTransport
-import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+module
+
+public import DavisKahan.DoubleAngle.AngleTransport
+public import DavisKahan.DoubleAngle.RealAngleIdentification
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 
 /-!
 # The real directed `sin 2Θ` and the ideal block
@@ -20,6 +22,8 @@ about them is a tangent fact, and leaving them there made the scalar-generic dir
 layer (`DoubleAngle/DirectedAngleGeneric.lean`) import the whole source-facing `tan 2Θ` stack
 to reach one lemma about `sin 2Θ`.  `TangentTransport.lean` imports this module instead.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -72,8 +76,9 @@ theorem approximationSingularValue_sinTwoThetaIdealBlock_real
   rw [← ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
       (sinTwoThetaIdealBlock U V) n,
     complexify_sinTwoThetaIdealBlock U V]
-  exact sinTwoThetaIdealBlock_hasSameApproximationNumbers
-    (complexifySubmodule U) (complexifySubmodule V) n
+  exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sinTwoThetaIdealBlock_hasSameApproximationNumbers
+      (complexifySubmodule U) (complexifySubmodule V)) n
 
 /-- **The real `sin 2Θ` block and the real directed `sin 2Θ` have the same gauge
 in every source unitarily invariant norm**, and one lies in the norm's ideal

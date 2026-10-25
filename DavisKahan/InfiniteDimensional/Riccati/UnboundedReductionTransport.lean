@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Riccati.UnboundedRotationTransport
+module
+
+public import DavisKahan.InfiniteDimensional.Riccati.UnboundedRotationTransport
 
 /-!
 # Transport of reducing subspaces through an unbounded graph rotation
@@ -24,6 +26,8 @@ The three projection-intertwining lemmas below are pure orthogonal-projection
 facts: they mention no operator at all, and are stated here only because this
 is where the reduction transport first needs them.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -105,22 +109,23 @@ theorem pullback_reducesSubspace_of_intertwines_projection
     intertwines_orthogonal_projection_of_intertwines_projection e U V hproj
   refine ⟨?_, ?_, ?_⟩
   · intro x hx
-    change e (U.starProjection x) ∈ A.domain
+    rw [TauCeti.LinearPMap.pullback_domain, TauCeti.LinearPMap.mem_pullbackDomain_iff]
     have hintertwine := congrArg (fun T : E →L[𝕜] E => T x) hproj
     change e (U.starProjection (x : E)) =
       V.starProjection (e (x : E)) at hintertwine
     rw [hintertwine]
-    exact hred.starProjection_mem_domain
-      (TauCeti.LinearPMap.pullbackDomainToOriginal A e ⟨x, hx⟩).property
-  · intro x hx
-    -- Unfolded directly: `x : (pullback A e).domain` blocks a rewrite with
-    -- `pullbackLinearMap_apply`, but the `change` itself is definitional.
-    change e.symm (A (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)) ∈ U
+    exact hred.starProjection_mem_domain (by
+      rwa [TauCeti.LinearPMap.pullback_domain,
+        TauCeti.LinearPMap.mem_pullbackDomain_iff] at hx)
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
+    rw [TauCeti.LinearPMap.pullback_apply]
     apply symm_map_mem_of_intertwines_projection e U V hproj
     apply hred.isInvariant.apply_mem _
       (map_mem_of_intertwines_projection e U V hproj hx)
-  · intro x hx
-    change e.symm (A (TauCeti.LinearPMap.pullbackDomainToOriginal A e x)) ∈ Uᗮ
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
+    rw [TauCeti.LinearPMap.pullback_apply]
     apply symm_map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth
     apply hred.isInvariant_orthogonal.apply_mem _
     exact map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth hx

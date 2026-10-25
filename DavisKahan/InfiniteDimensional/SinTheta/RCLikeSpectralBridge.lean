@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 -/
-import DavisKahan.SinTheta.SpectralBridge
-import DavisKahan.InfiniteDimensional.SinTheta.Restriction
-import Mathlib.Analysis.InnerProductSpace.Rayleigh
+module
+
+public import DavisKahan.SinTheta.SpectralBridge
+public import DavisKahan.InfiniteDimensional.SinTheta.Restriction
+public import Mathlib.Analysis.InnerProductSpace.Rayleigh
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

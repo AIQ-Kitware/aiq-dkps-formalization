@@ -7,7 +7,11 @@ public interfaces; proof assembly lives in `Finite`, `Infinite`, and
 `AllQueries`.
 -/
 
-import DkpsQuench2026.QueryEfficiency.Spectral
+module
+
+public import DkpsQuench2026.QueryEfficiency.Spectral
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -82,6 +86,7 @@ structure FiniteSubsetAssumptions
   baseline_pos : 0 < MSE Pf (yFull score Qstar) (yQ score Qsub)
 
 /-- Literal finite-model raw-response Quench estimator for one query subset. -/
+@[expose]
 noncomputable def finiteEstimator
     {d m p : Nat}
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
@@ -150,6 +155,7 @@ structure InfiniteSubsetAssumptions
   baseline_pos : 0 < MSE Pf (yFull score Qstar) (yQ score Qsub)
 
 /-- Literal compact infinite-model raw-response Quench estimator. -/
+@[expose]
 noncomputable def infiniteEstimator
     {d m p : Nat}
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)

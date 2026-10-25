@@ -25,8 +25,12 @@ Mathematical sources / citations:
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Acharyya2024.Common
-import ForTauCeti.Topology.ApproxMinimizer
+module
+
+public import Acharyya2024.Common
+public import ForTauCeti.Topology.ApproxMinimizer
+
+public section
 
 open scoped BigOperators Topology RealInnerProductSpace InnerProductSpace
 open Filter
@@ -324,7 +328,7 @@ private theorem pairDist_le_coRadius (Δ : DisMat n) (z : Config n d)
 /-- Centering map: subtract the mean (translate so that the configuration's
 centroid is at the origin). Internal helper / normalization: a particular
 translation, used to fix the translation freedom of Remark 1. -/
-private noncomputable def center (z : Config n d) : Config n d :=
+@[expose] noncomputable def center (z : Config n d) : Config n d :=
   fun i => z i - (n : ℝ)⁻¹ • ∑ j : Fin n, z j
 
 /-- Centering does not change raw stress (it is a translation, see

@@ -4,11 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.ShiftedBeamRealization
-import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveCompact
-import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveDeriv
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.ShiftedBeamRealization
+public import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveCompact
+public import ForTauCeti.MeasureTheory.IntervalSecondPrimitiveDeriv
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+import Mathlib.Analysis.Calculus.Deriv.Polynomial
+public import Mathlib.Tactic
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -57,11 +62,13 @@ abbrev BeamL2 : Type _ := Lp 𝕜 2 unitIocMeasure
 abbrev BeamPairSpace : Type _ := WithLp 2 ((BeamL2 (𝕜 := 𝕜)) × (BeamL2 (𝕜 := 𝕜)))
 
 /-- First coordinate of a pair, as a continuous linear map. -/
+@[expose]
 def pairFst : (BeamPairSpace (𝕜 := 𝕜)) →L[𝕜] (BeamL2 (𝕜 := 𝕜)) :=
   (ContinuousLinearMap.fst 𝕜 (BeamL2 (𝕜 := 𝕜)) (BeamL2 (𝕜 := 𝕜))).comp
     (WithLp.prodContinuousLinearEquiv 2 𝕜 (BeamL2 (𝕜 := 𝕜)) (BeamL2 (𝕜 := 𝕜)) : (BeamPairSpace (𝕜 := 𝕜)) →L[𝕜] (BeamL2 (𝕜 := 𝕜)) × (BeamL2 (𝕜 := 𝕜)))
 
 /-- Second coordinate of a pair, as a continuous linear map. -/
+@[expose]
 def pairSnd : (BeamPairSpace (𝕜 := 𝕜)) →L[𝕜] (BeamL2 (𝕜 := 𝕜)) :=
   (ContinuousLinearMap.snd 𝕜 (BeamL2 (𝕜 := 𝕜)) (BeamL2 (𝕜 := 𝕜))).comp
     (WithLp.prodContinuousLinearEquiv 2 𝕜 (BeamL2 (𝕜 := 𝕜)) (BeamL2 (𝕜 := 𝕜)) : (BeamPairSpace (𝕜 := 𝕜)) →L[𝕜] (BeamL2 (𝕜 := 𝕜)) × (BeamL2 (𝕜 := 𝕜)))
@@ -136,12 +143,15 @@ def pairingCLM (g : ℝ → 𝕜) (hg : Continuous g) : (BeamL2 (𝕜 := 𝕜)) 
 
 /-- Evaluating the bump pairing functional. -/
 @[simp] theorem pairingCLM_apply (g : ℝ → 𝕜) (hg : Continuous g) (W : (BeamL2 (𝕜 := 𝕜))) :
-    pairingCLM g hg W = ∫ t, (W : ℝ → 𝕜) t * g t ∂unitIocMeasure := rfl
+    pairingCLM g hg W = ∫ t, (W : ℝ → 𝕜) t * g t ∂unitIocMeasure := by
+  rfl
 
 /-- The scalar lift of the second bump derivative. -/
+@[expose]
 def bumpD2Scalar (k : ℕ) (t : ℝ) : 𝕜 := (intervalBumpD2 k t : 𝕜)
 
 /-- The scalar lift of the bump. -/
+@[expose]
 def bumpScalar (k : ℕ) (t : ℝ) : 𝕜 := (intervalBump k t : 𝕜)
 
 /-- The second derivative of the interval bump is continuous. -/
@@ -195,9 +205,11 @@ instance : CompleteSpace (BeamV (𝕜 := 𝕜)) :=
   (isClosed_beamFormSubmodule (𝕜 := 𝕜)).completeSpace_coe
 
 /-- The form-space embedding into the ambient `L²`. -/
+@[expose]
 def beamEmbed : (BeamV (𝕜 := 𝕜)) →L[𝕜] (BeamL2 (𝕜 := 𝕜)) := pairFst.comp (beamFormSubmodule (𝕜 := 𝕜)).subtypeL
 
 /-- The bending-slot projection of the form space. -/
+@[expose]
 def beamSnd : (BeamV (𝕜 := 𝕜)) →L[𝕜] (BeamL2 (𝕜 := 𝕜)) := pairSnd.comp (beamFormSubmodule (𝕜 := 𝕜)).subtypeL
 
 /-- Evaluating the form-domain inclusion. -/
@@ -561,6 +573,7 @@ theorem beamEmbed_adjoint_injective :
 
 /-- The concrete coercive form data of the free beam: the form space carries the shifted
 bending form as its own inner product, so the represented operator is the identity. -/
+@[expose]
 def beamCoerciveFormData : Abstract.CoerciveFormData (𝕜 := 𝕜) (H := (BeamL2 (𝕜 := 𝕜))) (V := (BeamV (𝕜 := 𝕜))) where
   embed := beamEmbed (𝕜 := 𝕜)
   embed_injective := beamEmbed_injective (𝕜 := 𝕜)
@@ -594,6 +607,7 @@ theorem beamV_re_inner_self (u : (BeamV (𝕜 := 𝕜))) :
 
 /-- The concrete shifted beam form data: bending energy is the squared norm of the second
 slot. -/
+@[expose]
 def beamShiftedFormData :
     Analytic.ShiftedBeamFormData (𝕜 := 𝕜) (H := (BeamL2 (𝕜 := 𝕜))) (V := (BeamV (𝕜 := 𝕜))) where
   toCoerciveFormData := beamCoerciveFormData (𝕜 := 𝕜)
@@ -607,6 +621,7 @@ def beamShiftedFormData :
 
 /-- **The free-beam operator**: the self-adjoint nonnegative realization of the fourth
 derivative with free boundary conditions on `L²(0,1]`. -/
+@[expose]
 def beamOperator : BeamL2 (𝕜 := 𝕜) →ₗ.[𝕜] BeamL2 (𝕜 := 𝕜) :=
   (beamShiftedFormData (𝕜 := 𝕜)).beamOperator
 
@@ -622,9 +637,11 @@ theorem beamOperator_nonneg (x : (beamOperator (𝕜 := 𝕜)).domain) :
 /-! ## Compactness of the embedding -/
 
 /-- The constant-one element of the beam `L²` space. -/
+@[expose]
 def beamOneLp : (BeamL2 (𝕜 := 𝕜)) := contToLp (fun _ => (1 : 𝕜)) continuous_const
 
 /-- The coordinate element of the beam `L²` space. -/
+@[expose]
 def beamIdLp : (BeamL2 (𝕜 := 𝕜)) := contToLp (fun t => (t : 𝕜)) (by fun_prop)
 
 /-- `beamOneLp` is the constant `1` almost everywhere. -/

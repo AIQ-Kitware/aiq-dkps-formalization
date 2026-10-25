@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
-import DavisKahan.DoubleAngle.UnboundedIdealFormGap
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
+public import DavisKahan.DoubleAngle.UnboundedIdealFormGap
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

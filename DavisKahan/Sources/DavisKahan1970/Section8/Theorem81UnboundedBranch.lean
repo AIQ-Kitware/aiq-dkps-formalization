@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.UnboundedCentralBand
-import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
-import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
+module
+
+public import DavisKahan.SpectralTheory.UnboundedCentralBand
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
 
 /-!
 # Theorem 8.1's canonical branch at unbounded scope
@@ -30,6 +32,8 @@ The repulsion is `notMem_spectrum_addBounded_of_offDiagonal_form_gap`, which is
 the unbounded half already proved; nothing here re-derives it.
 -/
 
+public section
+
 open scoped InnerProductSpace
 
 namespace TauCeti
@@ -47,6 +51,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- **Theorem 8.1's canonical branch at unbounded scope**: the spectral subspace
 of the perturbed operator for the closed half-line `Iic α`. -/
+@[expose]
 def canonicalLowBranchUnbounded {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (alpha : ℝ) :
     Submodule ℂ H :=
   TauCeti.LinearPMap.specRange hB (Set.Iic alpha) measurableSet_Iic

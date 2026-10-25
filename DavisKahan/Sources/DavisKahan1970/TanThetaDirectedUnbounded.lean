@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
-import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
+public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

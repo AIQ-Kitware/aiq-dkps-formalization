@@ -7,8 +7,12 @@ mono_eventually}`), the per-model error-analysis steps (`step1`–`step6`,
 (`highProb_mse_le_of_concentration`, `highProb_queryEfficient_of_concentration`) over an arbitrary embedding estimator.
 The paper-facing theorems live in `DkpsQuench2026.Paper.Theorem2`.
 -/
-import DkpsQuench2026.Core.Definitions
-import Mathlib
+module
+
+public import DkpsQuench2026.Core.Definitions
+public import Mathlib
+public section
+
 set_option linter.mathlibStandardSet false
 
 open scoped BigOperators Real Nat Classical Pointwise Topology

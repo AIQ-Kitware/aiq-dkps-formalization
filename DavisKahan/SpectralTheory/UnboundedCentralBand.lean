@@ -3,10 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
-import DavisKahan.SpectralTheory.GapResolvent
-import DavisKahan.SpectralTheory.CentralBand
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
+module
+
+public import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
+public import DavisKahan.SpectralTheory.GapResolvent
+public import DavisKahan.SpectralTheory.ReflectionRestriction
+public import DavisKahan.SpectralTheory.CentralBand
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
 
 /-!
 # The central band of an unbounded self-adjoint operator
@@ -31,6 +34,8 @@ is the bookkeeping that combines the two sets; there is no general
 
 This is step (b) of the unbounded Theorem 8.2 path recorded in `GOAL.md` §10.4.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -90,12 +95,14 @@ theorem specProjection_gaps_eq_zero
       · rcases h with h | h
         · linarith [h'.1]
         · linarith [h'.2]
-  have hnotSpectrum : (lam : ℂ) ∉ _root_.LinearPMap.spectrum A := hnot
+  have hnotSpectrum : (lam : ℂ) ∉ _root_.LinearPMap.spectrum A := by
+    exact fun hm => hnot (_root_.LinearPMap.mem_realSpectrum_iff.mpr hm)
   have hresRoot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
     simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
   exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
 
 /-- The exterior of the band, as a set. -/
+@[expose]
 def bandExterior (l r d : ℝ) : Set ℝ := {x : ℝ | x ≤ l - d ∨ r + d ≤ x}
 
 /-- The exterior of the band is measurable, being a union of two closed rays. -/
@@ -154,8 +161,8 @@ theorem specRange_bandExterior_eq_orthogonal
   have hrange : TauCeti.LinearPMap.specRange hA ((Set.Icc l r)ᶜ) measurableSet_Icc.compl
       = TauCeti.LinearPMap.specRange hA (bandExterior l r d)
         (measurableSet_bandExterior l r d) := by
-    unfold TauCeti.LinearPMap.specRange
-    rw [hproj]
+    ext x
+    rw [TauCeti.LinearPMap.mem_specRange_iff, TauCeti.LinearPMap.mem_specRange_iff, hproj]
   rw [← hrange]
   exact TauCeti.LinearPMap.specRange_compl hA (Set.Icc l r) measurableSet_Icc
 
@@ -173,7 +180,7 @@ theorem realSpectrum_specRestrict_Icc_subset
     intro a b hdisj hmem
     have := selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
       A hA (Set.Icc l r) measurableSet_Icc hdisj lam hmem
-    exact this hlam
+    exact this (_root_.LinearPMap.mem_realSpectrum_iff.mp hlam)
   rcases lt_or_ge lam l with h | h
   · refine havoid (lam - 1) l ?_ ⟨by linarith, h⟩
     ext x
@@ -208,12 +215,13 @@ theorem realSpectrum_specRestrict_bandExterior_subset
   have := selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
     A hA (bandExterior l r d) (measurableSet_bandExterior l r d) hdisj lam
     ⟨hcon.1, hcon.2⟩
-  exact this hlam
+  exact this (_root_.LinearPMap.mem_realSpectrum_iff.mp hlam)
 
 /-! ## Transport to an arbitrary reducing subspace
 
 `selfAdjointSpectralRestriction A hA B hB` and
-`reducingRestriction A (specRange hA B hB) _` are definitionally equal, so the
+`reducingRestriction A (specRange hA B hB) _` agree by
+`selfAdjointSpectralRestriction_eq_reducingRestriction`, so the
 two containments above transfer to any subspace *presented* as a spectral range.
 Stating them this way is what lets a caller name the band subspace once and use
 its orthogonal complement without transporting a partial map along an equality of
@@ -228,6 +236,11 @@ theorem realSpectrum_reducingRestriction_band_subset
     _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
       ⊆ Set.Icc l r := by
   subst hW
+  have heq : selfAdjointSpectralRestriction A hA (Set.Icc l r) measurableSet_Icc =
+      TauCeti.LinearPMap.reducingRestriction A
+        (TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc) hred :=
+    selfAdjointSpectralRestriction_eq_reducingRestriction A hA (Set.Icc l r) measurableSet_Icc
+  rw [← heq]
   exact realSpectrum_specRestrict_Icc_subset hA
 
 /-- The exterior containment, for a subspace presented as the exterior spectral
@@ -241,6 +254,14 @@ theorem realSpectrum_reducingRestriction_bandExterior_subset
     _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
       ⊆ bandExterior l r d := by
   subst hW
+  have heq : selfAdjointSpectralRestriction A hA (bandExterior l r d)
+      (measurableSet_bandExterior l r d) =
+      TauCeti.LinearPMap.reducingRestriction A
+        (TauCeti.LinearPMap.specRange hA (bandExterior l r d)
+          (measurableSet_bandExterior l r d)) hred :=
+    selfAdjointSpectralRestriction_eq_reducingRestriction A hA (bandExterior l r d)
+      (measurableSet_bandExterior l r d)
+  rw [← heq]
   exact realSpectrum_specRestrict_bandExterior_subset hA
 
 /-- **The band configuration is a source separation.**
@@ -281,8 +302,8 @@ theorem realSpectrum_addBounded_subset_of_gap
   intro lam hlam
   refine spectrum_addBounded_subset_of_gap hA K hab hdelta hgam hgamlt ?_ lam ?_
   · intro mu hmu
-    exact hgap hmu
-  · exact hlam
+    exact hgap (_root_.LinearPMap.mem_realSpectrum_iff.mpr hmu)
+  · exact _root_.LinearPMap.mem_realSpectrum_iff.mp hlam
 
 /-! ## Half-line spectrum gives a form bound
 
@@ -302,7 +323,8 @@ theorem re_inner_le_of_realSpectrum_subset_Iic
   have hnot : lam ∉ _root_.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
     simp only [Set.mem_Iic, not_le]
     exact hlam)
-  have hnotSpectrum : (lam : ℂ) ∉ _root_.LinearPMap.spectrum A := hnot
+  have hnotSpectrum : (lam : ℂ) ∉ _root_.LinearPMap.spectrum A := by
+    exact fun hm => hnot (_root_.LinearPMap.mem_realSpectrum_iff.mpr hm)
   have hresRoot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
     simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
   exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
@@ -318,7 +340,8 @@ theorem le_re_inner_of_realSpectrum_subset_Ici
   have hnot : lam ∉ _root_.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
     simp only [Set.mem_Ici, not_le]
     exact hlam)
-  have hnotSpectrum : (lam : ℂ) ∉ _root_.LinearPMap.spectrum A := hnot
+  have hnotSpectrum : (lam : ℂ) ∉ _root_.LinearPMap.spectrum A := by
+    exact fun hm => hnot (_root_.LinearPMap.mem_realSpectrum_iff.mpr hm)
   have hresRoot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
     simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
   exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
@@ -341,11 +364,17 @@ theorem re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic
     by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
       hred.isSelfAdjoint_restrict hA
   have hxdom : (⟨(x : H), hx⟩ : U) ∈
-      (TauCeti.LinearPMap.reducingRestriction A U hred).domain := x.2
+      (TauCeti.LinearPMap.reducingRestriction A U hred).domain :=
+    (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred _).mpr x.2
   have hb := re_inner_le_of_realSpectrum_subset_Iic hres h
     (⟨⟨(x : H), hx⟩, hxdom⟩ :
       (TauCeti.LinearPMap.reducingRestriction A U hred).domain)
-  exact hb
+  have hval : ((TauCeti.LinearPMap.reducingRestriction A U hred
+      ⟨⟨(x : H), hx⟩, hxdom⟩ : U) : H) = A x :=
+    TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred ⟨(x : H), hx⟩ x.2
+  change (⟪((TauCeti.LinearPMap.reducingRestriction A U hred
+    ⟨⟨(x : H), hx⟩, hxdom⟩ : U) : H), (x : H)⟫_ℂ).re ≤ c * ‖(x : H)‖ ^ 2 at hb
+  rwa [hval] at hb
 
 /-- **A block placed in `Ici c` bounds the ambient form on that block from
 below.** -/
@@ -360,11 +389,17 @@ theorem le_re_inner_of_reducingRestriction_realSpectrum_subset_Ici
     by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
       hred.isSelfAdjoint_restrict hA
   have hxdom : (⟨(x : H), hx⟩ : U) ∈
-      (TauCeti.LinearPMap.reducingRestriction A U hred).domain := x.2
+      (TauCeti.LinearPMap.reducingRestriction A U hred).domain :=
+    (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred _).mpr x.2
   have hb := le_re_inner_of_realSpectrum_subset_Ici hres h
     (⟨⟨(x : H), hx⟩, hxdom⟩ :
       (TauCeti.LinearPMap.reducingRestriction A U hred).domain)
-  exact hb
+  have hval : ((TauCeti.LinearPMap.reducingRestriction A U hred
+      ⟨⟨(x : H), hx⟩, hxdom⟩ : U) : H) = A x :=
+    TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred ⟨(x : H), hx⟩ x.2
+  change c * ‖(x : H)‖ ^ 2 ≤ (⟪((TauCeti.LinearPMap.reducingRestriction A U hred
+    ⟨⟨(x : H), hx⟩, hxdom⟩ : U) : H), (x : H)⟫_ℂ).re at hb
+  rwa [hval] at hb
 
 end DavisKahan
 end TauCeti

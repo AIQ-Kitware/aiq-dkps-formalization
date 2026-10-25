@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
-import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
+public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

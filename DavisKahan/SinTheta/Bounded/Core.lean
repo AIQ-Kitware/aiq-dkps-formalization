@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.SpectralBridge
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.SinTheta.FrameFactorization
+module
+
+public import DavisKahan.SinTheta.SpectralBridge
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.SinTheta.FrameFactorization
 
 /-!
 # Bounded `sin Θ` problem data and angle identification
@@ -18,6 +20,8 @@ operator with its isometry and ideal-transport lemmas.
 Keeping them apart from the endpoint theorems makes this file independent of
 which engine supplies the Sylvester estimate.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -37,6 +41,7 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 /-- Residual of the trial map and trial block. -/
+@[expose]
 def generalResidual
     (A : E →L[𝕜] E) (X : F →L[𝕜] E)
     (A₀ : F →L[𝕜] F) : F →L[𝕜] E :=

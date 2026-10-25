@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerNoMixing
-import DavisKahan.Geometry.Angle.CosineKernel
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerNoMixing
+public import DavisKahan.Geometry.Angle.CosineKernel
 
 /-!
 # All optimizers for transport onto the orthogonal complement
@@ -16,6 +18,8 @@ identification of the complementary defect spaces, paired with its adjoint,
 attains the minimum. The result does not assemble this family with mixed
 positive-angle and fixed summands.
 -/
+
+public section
 
 noncomputable section
 

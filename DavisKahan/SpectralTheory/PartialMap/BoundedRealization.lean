@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Bounded realizations of closed operators
@@ -18,6 +20,8 @@ This file is deliberately independent of the spectral hypotheses that usually
 produce such a realization: the structure is pure bookkeeping, so it belongs
 with the closed-operator basics rather than with any particular criterion.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

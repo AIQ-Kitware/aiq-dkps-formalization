@@ -3,8 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.TanTheta.Theorem63InfiniteTrial
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+module
+
+public import DavisKahan.TanTheta.Theorem63InfiniteTrial
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+
+public section
+
+attribute [local instance] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower
 
 open TauCeti.DavisKahan.Sylvester
 

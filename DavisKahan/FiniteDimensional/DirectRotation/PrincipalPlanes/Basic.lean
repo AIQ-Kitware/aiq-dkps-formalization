@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.Basic
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 
 /-!
 # Principal planes of an acute pair: definitions and rotation block
@@ -23,6 +25,8 @@ directions and the spectrum of `I - R`) and `PrincipalPlanes.Variational`
 (Davis's variational theorem for the restricted displacement).
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
@@ -34,17 +38,19 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
 /-- The number of nonzero directed principal sines. -/
+@[expose]
 noncomputable def nontrivialAngleCount (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ :=
   finrank 𝕜 (sinThetaMap U V).range
 
 /-- Cast a nontrivial-angle index into the ambient right singular basis. -/
-noncomputable def nontrivialAngleIndex (U V : Submodule 𝕜 E)
+@[expose] noncomputable def nontrivialAngleIndex (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) : Fin (finrank 𝕜 E) :=
   Fin.castLE (LinearMap.finrank_range_le (sinThetaMap U V)) i
 
 /-- Source principal vector. -/
+@[expose]
 noncomputable def principalSourceVector (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) : E :=
@@ -57,7 +63,7 @@ noncomputable def principalPlaneSine (U V : Submodule 𝕜 E)
   (sinThetaMap U V).singularValues (nontrivialAngleIndex U V i)
 
 /-- Cosine attached to a nontrivial principal plane. -/
-noncomputable def principalPlaneCosine (U V : Submodule 𝕜 E)
+@[expose] noncomputable def principalPlaneCosine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) : ℝ :=
   Real.sqrt (1 - principalPlaneSine U V i ^ 2)

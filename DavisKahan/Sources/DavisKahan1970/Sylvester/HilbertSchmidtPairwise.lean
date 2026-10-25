@@ -1,13 +1,17 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 license as described in the file LICENSE.Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
-import DavisKahan.Sylvester.PairwiseSpectrumGap
-import DavisKahan.SpectralTheory.PartialMap.Complexification
-import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
-import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
+public import DavisKahan.Sylvester.PairwiseSpectrumGap
+public import DavisKahan.SpectralTheory.PartialMap.Complexification
+public import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
+public import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81EigenvalueSource
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81EigenvalueSource
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 
 /-!
 # Theorem 8.1 (ii) and (iii) on the blocks themselves
@@ -30,6 +32,8 @@ facts that put the printed statements on them.
   projection gap strictly inside the quarter turn, which is acuteness, which is
   injectivity of each projection on the other subspace in both directions.
 -/
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -259,7 +263,7 @@ open FiniteVector
 /-- Prefix sums of a restricted vector are prefix sums of the original, at the
 truncated cut. -/
 theorem prefixSum_comp_castLE {N n : ℕ} (h : n ≤ N) (x : Fin N → ℝ) (k : ℕ) :
-    prefixSum k (fun i : Fin n => x (Fin.castLE h i)) = prefixSum (min k n) x := by
+    FiniteVector.prefixSum k (fun i : Fin n => x (Fin.castLE h i)) = FiniteVector.prefixSum (min k n) x := by
   classical
   have hmap : (Finset.univ.filter (fun i : Fin n => (i : ℕ) < k)).map (Fin.castLEEmb h)
       = Finset.univ.filter (fun j : Fin N => (j : ℕ) < min k n) := by
@@ -271,7 +275,7 @@ theorem prefixSum_comp_castLE {N n : ℕ} (h : n ≤ N) (x : Fin N → ℝ) (k :
       exact ⟨hi, i.isLt⟩
     · rintro ⟨hk, hn⟩
       exact ⟨⟨(j : ℕ), hn⟩, hk, Fin.ext rfl⟩
-  rw [prefixSum, prefixSum, ← hmap, Finset.sum_map]
+  rw [FiniteVector.prefixSum, FiniteVector.prefixSum, ← hmap, Finset.sum_map]
   rfl
 
 /-- **A weak majorization restricts to an initial segment of the indices.** -/
@@ -285,10 +289,10 @@ theorem weaklyMajorized_comp_castLE {N n : ℕ} (h : n ≤ N) {x y : Fin N → �
   right_nonneg := fun i => hxy.right_nonneg _
   prefix_le := fun k => by
     calc
-      prefixSum k (fun i : Fin n => x (Fin.castLE h i)) = prefixSum (min k n) x :=
+      FiniteVector.prefixSum k (fun i : Fin n => x (Fin.castLE h i)) = FiniteVector.prefixSum (min k n) x :=
         prefixSum_comp_castLE h x k
-      _ ≤ prefixSum (min k n) y := hxy.prefix_le (min k n)
-      _ = prefixSum k (fun i : Fin n => y (Fin.castLE h i)) :=
+      _ ≤ FiniteVector.prefixSum (min k n) y := hxy.prefix_le (min k n)
+      _ = FiniteVector.prefixSum k (fun i : Fin n => y (Fin.castLE h i)) :=
         (prefixSum_comp_castLE h y k).symm
 
 end Restriction

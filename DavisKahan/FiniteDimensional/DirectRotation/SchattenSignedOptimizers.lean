@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalUniqueness
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalOptimality
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenFrameAttainment
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalUniqueness
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalOptimality
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenFrameAttainment
 
 /-!
 # Independent signed phases and the exact uniqueness criterion
@@ -16,6 +18,8 @@ globally minimizing against all ambient competitors. Opposite phases give
 distinct optimizers whenever any principal angle is supercritical. This
 includes right angles and all multiplicities.
 -/
+
+public section
 
 noncomputable section
 

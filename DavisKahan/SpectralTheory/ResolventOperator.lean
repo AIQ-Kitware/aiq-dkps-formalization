@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
-import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
-import Mathlib.Topology.MetricSpace.Lipschitz
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
+public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import Mathlib.Topology.MetricSpace.Lipschitz
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Resolvents, Riesz projections, and spectral continuation
@@ -71,6 +73,8 @@ continuation theorem separate: it may use a fixed finite contour and needs no
 general PVM construction.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahanExt
 
@@ -86,6 +90,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
 /-- Resolvent-set predicate. -/
+@[expose]
 def InResolventSet (A : E →L[𝕜] E) (z : 𝕜) : Prop :=
   ∃ R : E →L[𝕜] E,
     R ∘L (A - z • ContinuousLinearMap.id 𝕜 E) = ContinuousLinearMap.id 𝕜 E ∧

@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.Sources.DavisKahan1970.Section4Examples
-import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
-import Mathlib.Analysis.SpecialFunctions.Log.Deriv
-import Mathlib.Analysis.Calculus.DerivativeTest
-import Mathlib.Topology.Order.Compact
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section4Examples
+public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
+public import Mathlib.Analysis.SpecialFunctions.Log.Deriv
+public import Mathlib.Analysis.Calculus.DerivativeTest
+public import Mathlib.Topology.Order.Compact
 
 /-!
 # The Schatten-p phase bifurcation on a complex principal plane
@@ -37,6 +39,8 @@ Lemma 3.3).  The parameter-dependent threshold is the new target investigated
 here, not a claim of historical priority.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 namespace SchattenPhaseTransition
@@ -46,15 +50,18 @@ open TauCeti.DavisKahan1970.Section4Examples
 noncomputable section
 
 /-- Nonnegative chord length on the angle ranges used below. -/
+@[expose]
 def phaseChord (t : Real) : Real := 2 * Real.sin (t / 2)
 
 /-- The exact p-th power sum of the displacement singular values of a
 scalar-phase-modified complex planar direct rotation. -/
+@[expose]
 def phasePower (p theta delta : Real) : Real :=
   (phaseChord (theta + delta)) ^ p + (phaseChord (theta - delta)) ^ p
 
 /-- The auxiliary amplitude whose difference gives the first derivative after
 multiplication by `p`. -/
+@[expose]
 def phaseAmplitude (p t : Real) : Real :=
   Real.cos (t / 2) * (phaseChord t) ^ (p - 1)
 

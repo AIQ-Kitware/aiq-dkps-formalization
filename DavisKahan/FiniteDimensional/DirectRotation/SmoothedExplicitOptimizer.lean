@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedFunctionalPhase
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedFunctionalPhase
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles
 
 /-!
 # An explicit optimal smoothed transport
@@ -14,6 +16,8 @@ spectral phase factor of the positive cosine operator. Its definition
 uses neither a chosen principal basis nor an existential minimizer.
 -/
 
+public section
+
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
@@ -21,12 +25,13 @@ namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
-attribute [local instance 100] ContinuousLinearMap.realAlgebra
+attribute [local instance] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- The spectral optimal phase factor for a subspace pair, as an actual
 ambient unitary. The definition is meaningful for arbitrary real weights. -/
+@[expose]
 def subspaceWeightedPhase (a b : ℝ) (U V : Submodule ℂ E) : unitary (E →L[ℂ] E) :=
   ⟨weightedPhaseFactor a b (Proposition35.section3CosAngleOperator U V),
     weightedPhaseFactor_mem_unitary a b _
@@ -35,6 +40,7 @@ def subspaceWeightedPhase (a b : ℝ) (U V : Submodule ℂ E) : unitary (E →L[
 
 /-- The explicitly defined optimal transport: canonical rotation composed
 with the adjoint of its spectral phase correction. -/
+@[expose]
 def optimalWeightedTransport (a b : ℝ) (U V : Submodule ℂ E)
     (hUV : Module.finrank ℂ U = Module.finrank ℂ V) : E ≃ₗᵢ[ℂ] E :=
   (Unitary.linearIsometryEquiv (subspaceWeightedPhase a b U V)).symm.trans
@@ -132,6 +138,7 @@ theorem nuclear_optimalWeightedTransport (a b : ℝ) (hb : 0 < b) (hab : b < a)
   exact hc.trans hv.symm
 
 /-- The explicit optimal transport for the Charbonnier smoothing scale. -/
+@[expose]
 def optimalSmoothedTransport (tau : ℝ) (U V : Submodule ℂ E)
     (hUV : Module.finrank ℂ U = Module.finrank ℂ V) : E ≃ₗᵢ[ℂ] E :=
   optimalWeightedTransport (smoothingRadius tau) (smoothingRadius tau)⁻¹ U V hUV

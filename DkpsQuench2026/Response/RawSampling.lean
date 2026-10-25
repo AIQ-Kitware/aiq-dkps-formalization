@@ -9,7 +9,11 @@ selection bias.  The product construction makes the required independence
 structural.
 -/
 
-import DkpsQuench2026.Spectral.Regularity
+module
+
+public import DkpsQuench2026.Spectral.Regularity
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -41,6 +45,7 @@ variable {Ωresp : Type wy} [MeasurableSpace Ωresp]
 
 /-- Stagewise product measure carrying independent reference and response
 randomness. -/
+@[expose]
 noncomputable def jointStageMeasure
     (μref : Nat → Measure Ωref) (μresp : Nat → Measure Ωresp) :
     Nat → Measure (Ωref × Ωresp) :=
@@ -54,6 +59,7 @@ def liftedReferenceSampler
   fun n ω i => f_ref n ω.1 i
 
 /-- Per-model average of the raw cached response replicates. -/
+@[expose]
 noncomputable def modelReplicateMean
     {m p : Nat}
     (replicates : Nat → Nat)
@@ -62,6 +68,7 @@ noncomputable def modelReplicateMean
   replicateMean (Y n f) ωresp
 
 /-- Target-augmented sample response means on the product sample space. -/
+@[expose]
 noncomputable def augmentedRawSampleMean
     {m p : Nat}
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
@@ -74,6 +81,7 @@ noncomputable def augmentedRawSampleMean
 
 /-- Target-augmented population response means.  These depend on the reference
 sample through the selected reference models, but not on response noise. -/
+@[expose]
 def augmentedRawPopulationMean
     {m p : Nat}
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)

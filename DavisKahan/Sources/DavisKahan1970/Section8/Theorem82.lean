@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Branch
-import DavisKahan.Geometry.Halmos.CrossedDefectGap
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import DavisKahan.DoubleAngle.DirectedAngleGeneric
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Branch
+public import DavisKahan.Geometry.Halmos.CrossedDefectGap
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import DavisKahan.DoubleAngle.DirectedAngleGeneric
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -203,7 +207,7 @@ theorem subspaceGap_eq_directedGap_of_finrank_eq {𝕜 : Type*} [RCLike 𝕜]
     (P Q : Submodule 𝕜 G) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hrank : finrank 𝕜 P = finrank 𝕜 Q) :
     P.projectionGap Q = P.directedProjectionGap Q :=
-  TauCeti.opNorm_projection_sub_eq_opNorm_sinThetaMap P Q hrank
+  Submodule.projectionGap_eq_directedProjectionGap_of_finrank_eq P Q hrank
 
 /-- Under equation (1.5), a directed quarter-angle bound is the printed
 `Θ < π/4`.
@@ -417,7 +421,7 @@ theorem spectrum_compressOperator_subset_of_spectrumIn
     {s : Set ℝ} (h : Foundation.SpectrumIn T U s) :
     spectrum ℝ (compressOperator U T) ⊆ s := by
   intro r hr
-  refine h.subset ⟨h.invariant, ?_⟩
+  refine h.subset ((Foundation.mem_restrictedSpectrum_iff T U r).mpr ⟨h.invariant, ?_⟩)
   rw [compressOperator_eq_restrict_of_invariant T U h.invariant] at hr
   exact (realSpectrum_eq_spectrum_real
     (T.restrict h.invariant)).ge hr

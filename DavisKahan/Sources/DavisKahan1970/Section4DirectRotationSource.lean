@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import DavisKahan.Sources.DavisKahan1970.Section4Real
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
-import DavisKahan.Geometry.Polar.SourceDirectRotation
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import DavisKahan.Sources.DavisKahan1970.Section4Real
+public import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
+public import DavisKahan.Geometry.Polar.SourceDirectRotation
 
 /-!
 # Section 4 on the source's own object: the direct rotation
@@ -41,6 +43,8 @@ Proposition 4.2 needs no façade: its canonical statement already takes
 `CrossedDefectsEquivalent` and never names a rotation, because its conclusion is
 about the principal angles and an arbitrary competitor.
 -/
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -135,7 +139,8 @@ theorem proposition4_1_directRotation_sourceExact_complex
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_complex U V hcompact J W hWunitary hWmap
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
-  exact ⟨hv, fun n => (hsame n).trans (heq n), fun n => (hsame n).trans_le (hle n)⟩
+  have hsame' := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame
+  exact ⟨hv, fun n => (hsame' n).trans (heq n), fun n => (hsame' n).trans_le (hle n)⟩
 
 /-- **Davis--Kahan 1970, Corollary 4.1, on the source's own direct rotation.**
 
@@ -216,7 +221,8 @@ theorem proposition4_1_directRotation_sourceExact_real
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_real U V hcompact J W hWunitary hWmap
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
-  exact ⟨hv, fun n => (hsame n).trans (heq n), fun n => (hsame n).trans_le (hle n)⟩
+  have hsame' := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame
+  exact ⟨hv, fun n => (hsame' n).trans (heq n), fun n => (hsame' n).trans_le (hle n)⟩
 
 /-- **Davis--Kahan 1970, Corollary 4.1 over `ℝ`, on the source's own direct
 rotation.** -/

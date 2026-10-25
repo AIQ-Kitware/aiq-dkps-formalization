@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6.1 Sol
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
-import DavisKahan.FiniteDimensional.DirectRotation.RealTwoOptimization
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
+public import DavisKahan.FiniteDimensional.DirectRotation.RealTwoOptimization
 
 /-!
 # Unrestricted real local-to-global optimality is false
@@ -17,6 +19,8 @@ This holds for every accepted Schatten exponent at least one, including
 one and infinity. Thus the complex local-to-global theorem cannot be
 extended to the real field without additional component restrictions.
 -/
+
+public section
 
 noncomputable section
 

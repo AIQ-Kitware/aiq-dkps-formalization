@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRestrictionSpectrum
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRestrictionSpectrum
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -61,7 +65,7 @@ theorem realSpectrum_nonempty_of_selfAdjoint [Nontrivial E]
           · exact hz'
           · exact (hz0 (by simpa using hz')).elim
         rw [hempty] at hzspec
-        simpa using hzspec
+        exact False.elim hzspec
     have hTzero : T = 0 := by
       have hnormZero : ((‖T‖₊ : ENNReal)) = 0 := by
         rw [← hrad]

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
-import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
-import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
+public import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
+public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -132,7 +136,7 @@ theorem norm_sinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
       _ < 1 := by rwa [mul_one]
   rw [norm_sinAngleOperatorR,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
-  exact hnorm
+  simpa only [Submodule.directedProjectionGap_def] using hnorm
 
 /-! ## Transporting the Rayleigh--Ritz residual block -/
 
@@ -290,7 +294,7 @@ theorem norm_sinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEqui
       _ < 1 := by rwa [mul_one]
   rw [norm_sinAngleOperatorR,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
-  exact hnorm
+  simpa only [Submodule.directedProjectionGap_def] using hnorm
 
 /-- The Rayleigh--Ritz residual-block identity for real unbounded-compression data
 commutes with complexification. -/

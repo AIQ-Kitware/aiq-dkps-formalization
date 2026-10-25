@@ -4,11 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
-import DavisKahan.SpectralTheory.FormMethod.FormCompactness
-import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
-import DavisKahan.SinTheta.BoundedPerturbation
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
+public import DavisKahan.SpectralTheory.FormMethod.FormCompactness
+public import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
+public import DavisKahan.SinTheta.BoundedPerturbation
+public import Mathlib.Tactic
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -61,12 +65,14 @@ structure ShiftedBeamFormData extends
 namespace ShiftedBeamFormData
 
 /-- The positive self-adjoint operator associated to the shifted beam form. -/
+@[expose]
 noncomputable def shiftedOperator
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →ₗ.[𝕜] H :=
   D.toCoerciveFormData.associatedOperator
 
 /-- The free-beam operator is the shifted realization minus the identity. -/
+@[expose]
 noncomputable def beamOperator
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →ₗ.[𝕜] H :=
@@ -88,6 +94,7 @@ noncomputable def beamOperator
   rw [sub_eq_add_neg]
 
 /-- Form-space representative of a vector in the shifted operator domain. -/
+@[expose]
 noncomputable def formRepresentative
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.shiftedOperator.domain) : V :=

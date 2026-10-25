@@ -11,7 +11,11 @@ sample/mean response errors
   → spectral/MDS perturbation hypotheses.
 -/
 
-import Acharyya2024.Common
+module
+
+public import Acharyya2024.Common
+
+public section
 
 open scoped BigOperators Topology
 
@@ -22,14 +26,17 @@ open Acharyya2024
 /-! ## Classical-MDS double centering -/
 
 /-- Row mean of a finite real matrix represented as a curried dissimilarity matrix. -/
+@[expose]
 noncomputable def rowMean {n : Nat} (A : DisMat n) (i : Fin n) : Real :=
   ((n : Real)⁻¹) * ∑ j : Fin n, A i j
 
 /-- Column mean of a finite real matrix represented as a curried dissimilarity matrix. -/
+@[expose]
 noncomputable def colMean {n : Nat} (A : DisMat n) (j : Fin n) : Real :=
   ((n : Real)⁻¹) * ∑ i : Fin n, A i j
 
 /-- Grand mean of all entries of a finite real matrix. -/
+@[expose]
 noncomputable def grandMean {n : Nat} (A : DisMat n) : Real :=
   ((n : Real)⁻¹)^2 * ∑ i : Fin n, ∑ j : Fin n, A i j
 
@@ -40,6 +47,7 @@ Classical MDS applies this to squared dissimilarities and then multiplies by
 `-1/2`; keeping the centering operator separate makes the deterministic
 Lipschitz estimate reusable.
 -/
+@[expose]
 noncomputable def doubleCenter {n : Nat} (A : DisMat n) : DisMat n :=
   fun i j => A i j - rowMean A i - colMean A j + grandMean A
 
@@ -54,6 +62,7 @@ matrix `Hₙ (·) Hₙ`, the entry squaring plays the role of `(·)∘²`, and t
 `-½` factor matches. The eigendecomposition step that turns this into
 embeddings is *not* taken here; this is only the matrix `B`/`B̂` itself.
 -/
+@[expose]
 noncomputable def classicalMDSMatrix {n : Nat} (D : DisMat n) : DisMat n :=
   fun i j => -(1 / 2 : Real) * doubleCenter (fun i j => (D i j)^2) i j
 

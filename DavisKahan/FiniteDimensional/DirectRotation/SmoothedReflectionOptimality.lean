@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedKernelPlanes
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.Projection.BalancedReflectionTrace
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedKernelPlanes
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.BalancedReflectionTrace
 
 /-!
 # Balanced reflections attain the unrestricted smoothed minimum
@@ -14,6 +16,8 @@ The exact fixed/right principal-angle trace equals the literal cost of
 the balanced reflection. The already established global angle lower bound
 then compares it with every ambient unitary competitor.
 -/
+
+public section
 
 noncomputable section
 

@@ -1,8 +1,8 @@
 name = "aiq_dkps_formalization"
 version = "0.1.0"
 keywords = ["math", "formalization", "DKPS", "MDS", "spectral-perturbation"]
-# The ordinary build is the complete claimed-mathematics build.  Admission-
-# dependent API experiments are available explicitly as DavisKahan.Experimental.
+# The ordinary build is the complete claimed-mathematics build.
+# Comparator statements and diagnostic audits are separate explicit targets.
 defaultTargets = ["ForTauCeti", "RoadmapBridge", "DavisKahan.All", "YuWangSamworth2015", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
 
 # Standalone Lean workspace for Davis--Kahan and four DKPS paper developments.
@@ -14,6 +14,8 @@ defaultTargets = ["ForTauCeti", "RoadmapBridge", "DavisKahan.All", "YuWangSamwor
 pp.unicode.fun = true
 # Avoid accidental free variables in theorem statements.
 autoImplicit = false
+# Keep every maintained library free of compiler and linter warnings.
+warningAsError = true
 
 # BEGIN Tau Ceti dependency
 # Tau Ceti is authoritative for APIs accepted upstream. `ForTauCeti` is a

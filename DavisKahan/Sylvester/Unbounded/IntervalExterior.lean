@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.SpectralTheory.BoundedFromSpectrum
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.SpectralTheory.GapResolvent
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.SpectralTheory.BoundedFromSpectrum
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.SpectralTheory.GapResolvent
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -61,6 +65,7 @@ same configuration; both use TauCeti's canonical real/complex spectrum.
 definition (`SylvesterIntervalExteriorGap` and `SpectralIntervalExteriorGap`).  They are siblings
 — neither may import the other, since `SinTheta -> Sylvester` is the only permitted direction —
 so the single surviving definition has to live in the module they share. -/
+@[expose]
 def SpectralIntervalExteriorGap
     (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F)
     (β α δ : ℝ) : Prop :=
@@ -122,7 +127,8 @@ theorem semibounded_of_spectrum_subset_Icc
     rw [h1] at h2
     exact h2
   constructor
-  · intro x
+  · rw [TauCeti.LinearPMap.semiboundedBelow_iff]
+    intro x
     have h := (abs_le.mp (key x)).1
     have hring : (β + α) / 2 * ‖(x : F)‖ ^ 2 -
         (α - β) / 2 * ‖(x : F)‖ ^ 2 = β * ‖(x : F)‖ ^ 2 := by ring
@@ -130,7 +136,8 @@ theorem semibounded_of_spectrum_subset_Icc
         RCLike.re ⟪B x, (x : F)⟫_ℂ := by
       linarith
     exact hlegacy
-  · intro x
+  · rw [TauCeti.LinearPMap.semiboundedAbove_iff]
+    intro x
     have h := (abs_le.mp (key x)).2
     have hring : (β + α) / 2 * ‖(x : F)‖ ^ 2 +
         (α - β) / 2 * ‖(x : F)‖ ^ 2 = α * ‖(x : F)‖ ^ 2 := by ring

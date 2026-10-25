@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
-import Mathlib.Analysis.Calculus.MeanValue
-import Mathlib.Analysis.SpecialFunctions.Sqrt
+module
+
+import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
+public import Mathlib.Analysis.Calculus.MeanValue
+public import Mathlib.Analysis.SpecialFunctions.Sqrt
 
 /-!
 # Sharp sensitivity of the exact smoothed transport value
@@ -18,6 +22,9 @@ exact global value from errors in a list of principal angles.
 This is the value-sensitivity corollary in the Davis--Kahan journal paper,
 a quantitative consequence of the exact minimum formula.
 -/
+
+
+public section
 
 noncomputable section
 open scoped NNReal

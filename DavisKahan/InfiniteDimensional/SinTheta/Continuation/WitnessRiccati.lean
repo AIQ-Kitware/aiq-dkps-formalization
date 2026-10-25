@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
-import DavisKahan.Riccati.BoundedReduction
-import DavisKahan.Sylvester.Spectrum
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
+public import DavisKahan.Riccati.BoundedReduction
+public import DavisKahan.Sylvester.Spectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -44,6 +48,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The bounded self-adjoint block data of an ambient self-adjoint operator
 relative to `U ⊕ Uᗮ`. -/
+@[expose]
 noncomputable def subspaceBlockOperatorData
     (T : H →L[ℂ] H) (U : Submodule ℂ H) [U.HasOrthogonalProjection]
     (hT : T.IsSymmetric) :
@@ -83,6 +88,7 @@ noncomputable def subspaceBlockOperatorData
             Uᗮ.inner_starProjection_left_eq_right (y : H) (T (x : H)) }
 
 /-- Coordinate form `U → Uᗮ` of an ambient angular operator. -/
+@[expose]
 noncomputable def subspaceAngularCoordinate
     (U : Submodule ℂ H) [U.HasOrthogonalProjection]
     (X : H →L[ℂ] H) : U →L[ℂ] Uᗮ :=

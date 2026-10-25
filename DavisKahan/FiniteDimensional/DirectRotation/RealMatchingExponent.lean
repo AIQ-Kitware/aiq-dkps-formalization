@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6.1 Sol
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealMatchingAttainment
-import ForTauCeti.Analysis.InnerProductSpace.SchattenExponentContinuity
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealMatchingAttainment
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenExponentContinuity
 
 /-!
 # Continuous matching values and the real nuclear endpoint
@@ -15,6 +17,8 @@ therefore applies even at zero chords and changing phases. On `1<p<2`
 this equals the proved clipped pair formula; at one it equals the closed
 nuclear pair weight. Finite matching minima inherit exponent continuity.
 -/
+
+public section
 
 noncomputable section
 
@@ -119,6 +123,7 @@ def realVariationalMatchingMinimum (p : ℝ) (theta : ι → ℝ) : ℝ :=
     (realVariationalMatchingCost p theta)
 
 /-- Closed positive-class nuclear cost for a pair of principal angles. -/
+@[expose]
 def realNuclearPairWeight (theta psi : ℝ) : ℝ :=
   4 * Real.sin ((theta+psi)/2)
 

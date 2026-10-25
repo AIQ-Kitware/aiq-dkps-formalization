@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
 /-!
 # Banach spaces carried by rectangular symmetric ideals
@@ -27,6 +29,8 @@ trace, or Schatten family has been supplied, no additional completeness or
 integration argument is needed for that family.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace OperatorIdeal
@@ -45,6 +49,7 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- The linear subspace of members of a rectangular symmetric ideal. -/
+@[expose]
 noncomputable def idealSubmodule
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete] :
@@ -57,6 +62,7 @@ noncomputable def idealSubmodule
 /-- A member of a rectangular symmetric ideal, bundled with the ideal gauge as
 its norm.  This is a fresh type synonym so it does not inherit the ambient
 operator norm from the submodule subtype. -/
+@[expose]
 def IdealOperator
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete] : Type _ :=
@@ -76,6 +82,7 @@ instance instModule : Module 𝕜 (IdealOperator (E := E) (F := F) N) :=
   inferInstanceAs (Module 𝕜 ↥(idealSubmodule (E := E) (F := F) N))
 
 /-- Forget the ideal membership witness. -/
+@[expose]
 def toOp (A : IdealOperator (E := E) (F := F) N) : E →L[𝕜] F :=
   (A : ↥(idealSubmodule (E := E) (F := F) N)).1
 
@@ -84,6 +91,7 @@ theorem mem (A : IdealOperator (E := E) (F := F) N) : N.Mem A.toOp :=
   (A : ↥(idealSubmodule (E := E) (F := F) N)).2
 
 /-- Bundle a member of the ideal. -/
+@[expose]
 def ofMem (A : E →L[𝕜] F) (hA : N.Mem A) :
     IdealOperator (E := E) (F := F) N := ⟨A, hA⟩
 
@@ -174,6 +182,7 @@ theorem norm_toOp_le
   exact N.opNorm_le_gaugeReal A.mem
 
 /-- The forgetful linear map from the ideal Banach space to bounded operators. -/
+@[expose]
 noncomputable def toOpL :
     IdealOperator (E := E) (F := F) N →L[𝕜] (E →L[𝕜] F) :=
   LinearMap.mkContinuous
@@ -191,6 +200,7 @@ noncomputable def toOpL :
 
 /-- Left composition by a fixed bounded operator, acting continuously in the
 ideal norm. -/
+@[expose]
 noncomputable def compLeftL
     {G : Type v}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
@@ -222,6 +232,7 @@ noncomputable def compLeftL
 
 /-- Right composition by a fixed bounded operator, acting continuously in the
 ideal norm. -/
+@[expose]
 noncomputable def compRightL
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
@@ -254,6 +265,7 @@ noncomputable def compRightL
 
 /-- Two-sided bounded composition as a continuous linear map in the ideal
 norm. -/
+@[expose]
 noncomputable def compBothL
     {G H : Type v}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]

@@ -3,105 +3,107 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.Ideals.All
-import DavisKahan.Sources.DavisKahan1970.Section8.All
-import DavisKahan.Sources.DavisKahan1970.Section9.All
-import DavisKahan.Sources.DavisKahan1970.SineTheta.All
-import DavisKahan.Sources.DavisKahan1970.Sylvester.All
-import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
-import DavisKahan.Sources.DavisKahan1970.AmbientReal
-import DavisKahan.Sources.DavisKahan1970.Directed
-import DavisKahan.Sources.DavisKahan1970.DirectedReal
-import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
-import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
-import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ExplicitSeparationPresentation
-import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
-import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
-import DavisKahan.Sources.DavisKahan1970.PartIII
-import DavisKahan.Sources.DavisKahan1970.PartIIIPresentation
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
-import DavisKahan.Sources.DavisKahan1970.Proposition61
-import DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite
-import DavisKahan.Sources.DavisKahan1970.Section1
-import DavisKahan.Sources.DavisKahan1970.Section10FunctionalCalculus
-import DavisKahan.Sources.DavisKahan1970.Section1UnitaryInvariantNorms
-import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
-import DavisKahan.Sources.DavisKahan1970.Section3AcuteCounterexample
-import DavisKahan.Sources.DavisKahan1970.Section3AcuteDirectRotation
-import DavisKahan.Sources.DavisKahan1970.Section3Classification
-import DavisKahan.Sources.DavisKahan1970.Section3Corollary31
-import DavisKahan.Sources.DavisKahan1970.Section3Corollary32
-import DavisKahan.Sources.DavisKahan1970.Section3PrincipalSquareRoot
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Presentation
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Real
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
-import DavisKahan.Sources.DavisKahan1970.Section3Theorem31Realization
-import DavisKahan.Sources.DavisKahan1970.Section4
-import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
-import DavisKahan.Sources.DavisKahan1970.Section4DirectRotationSource
-import DavisKahan.Sources.DavisKahan1970.Section4Dominance
-import DavisKahan.Sources.DavisKahan1970.Section4Examples
-import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
-import DavisKahan.Sources.DavisKahan1970.Section4LowDimensional
-import DavisKahan.Sources.DavisKahan1970.Section4Real
-import DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
-import DavisKahan.Sources.DavisKahan1970.Section5
-import DavisKahan.Sources.DavisKahan1970.Section5BanachSylvester
-import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
-import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
-import DavisKahan.Sources.DavisKahan1970.Section6Example61
-import DavisKahan.Sources.DavisKahan1970.Section6SourceNormClass
-import DavisKahan.Sources.DavisKahan1970.Section6SourceScope
-import DavisKahan.Sources.DavisKahan1970.Section6Theorem63Presentation
-import DavisKahan.Sources.DavisKahan1970.Section7IdealBounds
-import DavisKahan.Sources.DavisKahan1970.Section7SwapAsymmetry
-import DavisKahan.Sources.DavisKahan1970.SectionTwo
-import DavisKahan.Sources.DavisKahan1970.SectionTwoSharpness
-import DavisKahan.Sources.DavisKahan1970.SectionTwoUsage
-import DavisKahan.Sources.DavisKahan1970.SeparableSourceScope
-import DavisKahan.Sources.DavisKahan1970.SharpIdeal
-import DavisKahan.Sources.DavisKahan1970.SharpKyFan
-import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
-import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
-import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import DavisKahan.Sources.DavisKahan1970.TanTheta
-import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
-import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbientBranchFree
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfiniteReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
-import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
-import DavisKahan.Sources.DavisKahan1970.TangentSingularValuesReal
-import DavisKahan.Sources.DavisKahan1970.Theorem61
-import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Ideals.All
+public import DavisKahan.Sources.DavisKahan1970.Section8.All
+public import DavisKahan.Sources.DavisKahan1970.Section9.All
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.All
+public import DavisKahan.Sources.DavisKahan1970.Sylvester.All
+public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
+public import DavisKahan.Sources.DavisKahan1970.AmbientReal
+public import DavisKahan.Sources.DavisKahan1970.Directed
+public import DavisKahan.Sources.DavisKahan1970.DirectedReal
+public import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
+public import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
+public import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ExplicitSeparationPresentation
+public import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
+public import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
+public import DavisKahan.Sources.DavisKahan1970.PartIII
+public import DavisKahan.Sources.DavisKahan1970.PartIIIPresentation
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
+public import DavisKahan.Sources.DavisKahan1970.Proposition61
+public import DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite
+public import DavisKahan.Sources.DavisKahan1970.Section1
+public import DavisKahan.Sources.DavisKahan1970.Section10FunctionalCalculus
+public import DavisKahan.Sources.DavisKahan1970.Section1UnitaryInvariantNorms
+public import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
+public import DavisKahan.Sources.DavisKahan1970.Section3AcuteCounterexample
+public import DavisKahan.Sources.DavisKahan1970.Section3AcuteDirectRotation
+public import DavisKahan.Sources.DavisKahan1970.Section3Classification
+public import DavisKahan.Sources.DavisKahan1970.Section3Corollary31
+public import DavisKahan.Sources.DavisKahan1970.Section3Corollary32
+public import DavisKahan.Sources.DavisKahan1970.Section3PrincipalSquareRoot
+public import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
+public import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
+public import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Presentation
+public import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Real
+public import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
+public import DavisKahan.Sources.DavisKahan1970.Section3Theorem31Realization
+public import DavisKahan.Sources.DavisKahan1970.Section4
+public import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
+public import DavisKahan.Sources.DavisKahan1970.Section4DirectRotationSource
+public import DavisKahan.Sources.DavisKahan1970.Section4Dominance
+public import DavisKahan.Sources.DavisKahan1970.Section4Examples
+public import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
+public import DavisKahan.Sources.DavisKahan1970.Section4LowDimensional
+public import DavisKahan.Sources.DavisKahan1970.Section4Real
+public import DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
+public import DavisKahan.Sources.DavisKahan1970.Section5
+public import DavisKahan.Sources.DavisKahan1970.Section5BanachSylvester
+public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
+public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
+public import DavisKahan.Sources.DavisKahan1970.Section6Example61
+public import DavisKahan.Sources.DavisKahan1970.Section6SourceNormClass
+public import DavisKahan.Sources.DavisKahan1970.Section6SourceScope
+public import DavisKahan.Sources.DavisKahan1970.Section6Theorem63Presentation
+public import DavisKahan.Sources.DavisKahan1970.Section7IdealBounds
+public import DavisKahan.Sources.DavisKahan1970.Section7SwapAsymmetry
+public import DavisKahan.Sources.DavisKahan1970.SectionTwo
+public import DavisKahan.Sources.DavisKahan1970.SectionTwoSharpness
+public import DavisKahan.Sources.DavisKahan1970.SectionTwoUsage
+public import DavisKahan.Sources.DavisKahan1970.SeparableSourceScope
+public import DavisKahan.Sources.DavisKahan1970.SharpIdeal
+public import DavisKahan.Sources.DavisKahan1970.SharpKyFan
+public import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
+public import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
+public import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import DavisKahan.Sources.DavisKahan1970.TanTheta
+public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
+public import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbientBranchFree
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfiniteReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
+public import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
+public import DavisKahan.Sources.DavisKahan1970.TangentSingularValuesReal
+public import DavisKahan.Sources.DavisKahan1970.Theorem61
+public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 
 /-! # `DavisKahan/Sources/DavisKahan1970` -/

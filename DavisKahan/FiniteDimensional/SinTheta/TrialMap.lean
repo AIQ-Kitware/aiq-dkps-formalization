@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
-import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
-import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
-import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
 
 /-!
 # Generalized finite-dimensional Davis--Kahan theorems
@@ -49,6 +51,8 @@ operators such as `M` in their original self-adjoint coordinates throughout.
 The final wrapper also accepts any `sin Θ₀` operator with the canonical complete
 singular-value sequence.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -97,7 +101,7 @@ theorem lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock
 If `X = Q G^{1/2}` is the polar/whitening factorization, this is `Q⋆ A Q`.
 The coordinate Rayleigh quotient `(X⋆X)⁻¹ X⋆ A X` is similar to this operator
 but is generally only self-adjoint for the Gram inner product. -/
-noncomputable def generalizedCompression (A : E →ₗ[𝕜] E)
+@[expose] noncomputable def generalizedCompression (A : E →ₗ[𝕜] E)
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X) : F →ₗ[𝕜] F :=
   compression A (orthonormalizedEmbedding X hX)
 

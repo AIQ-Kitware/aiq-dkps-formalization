@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects
-import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel
-import DavisKahan.Geometry.Angle.Proposition35Nonacute
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.PositiveTrace
-import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects
+public import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel
+public import DavisKahan.Geometry.Angle.Proposition35Nonacute
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.PositiveTrace
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
 
 /-!
 # Global complex trace-optimality via opposite phase corrections
@@ -30,6 +32,10 @@ Thus the trace norms of the two displacements sum to `2 trace(S)`.  The
 projection-distance lower bound forces each to equal `trace(S)` individually.
 This avoids a singular-value enumeration and a CS-coordinate equivalence.
 -/
+
+public section
+
+attribute [local instance] ContinuousLinearMap.realAlgebra ContinuousLinearMap.realIsScalarTower
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -463,6 +469,7 @@ private theorem kyFanSum_projector_eq_nonacute_sine
   have hS : S.toLinearMap = sinAngleOperator U V := by
     apply LinearMap.ext
     intro x
+    simp only [S, Proposition35.section3SinAngleOperator]
     change ((U.starProjection - V.starProjection : BEnd H).modulus) x =
       (operatorAbs (projection U - projection V)).toContinuousLinearMap x
     exact congrArg (fun T : BEnd H => T x) habs.symm

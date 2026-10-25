@@ -4,17 +4,24 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.Sylvester.Spectrum
-import DavisKahan.DoubleAngle.KyFanOrthonormal
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
-import ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
-import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.Sylvester.Spectrum
+public import DavisKahan.DoubleAngle.KyFanOrthonormal
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
+public import ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+
+public section
+
+attribute [local instance] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -61,12 +68,14 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The directed sine block from finite trial coordinates into the unwanted
 exact subspace. -/
+@[expose]
 noncomputable def theorem63DirectedSineBlock
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] : Z →L[ℂ] H :=
   Vᗮ.starProjection ∘L Z.subtypeL
 
 /-- The Rayleigh--Ritz compression to the finite trial subspace. -/
+@[expose]
 noncomputable def theorem63Compression
     (T : H →L[ℂ] H) (Z : Submodule ℂ H)
     [Z.HasOrthogonalProjection] : Z →L[ℂ] Z :=
@@ -503,6 +512,7 @@ theorem orthonormal_theorem63ResidualWitness
 /-- Approximation-number formulation of the paper's instruction that
 `tan Θ₀` have singular values `tan θ_j`, where the directed sine singular
 values are `sin θ_j`. -/
+@[expose]
 def HasTheorem63DirectedTangentApproximationNumbers
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
@@ -948,6 +958,7 @@ variable (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
 
 /-- The diagonal entries of the directed tangent: tangents of the directed
 angles, read off from the sine block's singular values. -/
+@[expose]
 noncomputable def theorem63DirectedTangentDiagonal
     (i : Fin (finrank ℂ Z)) : ℝ :=
   Real.tan (Real.arcsin
@@ -955,6 +966,7 @@ noncomputable def theorem63DirectedTangentDiagonal
 
 /-- **A directed tangent representative**, diagonal in the right singular basis
 of the sine block. -/
+@[expose]
 noncomputable def theorem63DirectedTangent : Z →L[ℂ] H :=
   Z.subtypeL ∘L
     (diagOp (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V))

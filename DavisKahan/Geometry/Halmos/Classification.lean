@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 4.8
 -/
-import DavisKahan.Geometry.Halmos.UnitaryEquivalence
-import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+module
+
+public import DavisKahan.Geometry.Halmos.UnitaryEquivalence
+public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 
 /-!
 # Operator-level Halmos two-projection classification
@@ -22,6 +24,8 @@ The results now live in the stable geometry API; the frontier statement
 `DavisKahan1970.twoProjection_operator_classification` is grounded by
 `:=` on top of these lemmas so there is a single source of truth.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -56,6 +60,7 @@ theorem isometryEquiv_intertwines_projection (e : H₁ ≃ₗᵢ[𝕜] H₂)
 
 /-- An isometric equivalence taking `K` onto `K'` restricts to an isometric
 equivalence `K ≃ₗᵢ K'`. -/
+@[expose]
 noncomputable def summandEquiv (e : H₁ ≃ₗᵢ[𝕜] H₂) (K : Submodule 𝕜 H₁)
     {K' : Submodule 𝕜 H₂} (hmap : K.map e.toLinearMap = K') : K ≃ₗᵢ[𝕜] K' :=
   (e.submoduleMap K).trans (LinearIsometryEquiv.ofEq _ _ hmap)

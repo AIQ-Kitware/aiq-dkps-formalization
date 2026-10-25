@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.BoundedOperator.TrialResidual
-import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+module
+
+public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.BoundedOperator.TrialResidual
+public import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

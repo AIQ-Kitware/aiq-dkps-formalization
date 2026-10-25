@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.UnboundedCentralBand
-import DavisKahan.SpectralTheory.UnboundedDirectedGapBound
+module
+
+public import DavisKahan.SpectralTheory.UnboundedCentralBand
+public import DavisKahan.SpectralTheory.UnboundedDirectedGapBound
 
 /-!
 # The moving band is Lipschitz in the perturbation, with no Riesz projector
@@ -22,6 +24,8 @@ This is what replaces the bounded proof's Riesz-projection continuity: no
 contour, no continuation API, and the constant depends only on the gap.
 -/
 
+public section
+
 open scoped InnerProductSpace
 
 namespace TauCeti
@@ -38,6 +42,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The band subspace of a self-adjoint partial map: the spectral range of the
 closed interval `[l, r]`. -/
+@[expose]
 def bandSubspace {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (l r : ℝ) :
     Submodule ℂ H :=
   TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc
@@ -183,6 +188,7 @@ theorem abs_directedGap_sub_directedGap_le
     rw [show V.starProjection - U.starProjection =
       -(U.starProjection - V.starProjection) by abel, norm_neg]
   rw [hsymm] at hsub'
+  simp only [Submodule.directedProjectionGap_def, Submodule.projectionGap_def]
   show |‖Wᗮ.starProjection ∘L U.starProjection‖ -
     ‖Wᗮ.starProjection ∘L V.starProjection‖| ≤ ‖U.starProjection - V.starProjection‖
   rw [abs_sub_le_iff]
@@ -220,7 +226,8 @@ theorem le_of_directedGap_eq_zero (U V : Submodule ℂ H)
     have hle : ‖(Vᗮ.starProjection ∘L U.starProjection) u‖ ≤
         ‖Vᗮ.starProjection ∘L U.starProjection‖ * ‖u‖ :=
       ContinuousLinearMap.le_opNorm _ _
-    have hz : ‖Vᗮ.starProjection ∘L U.starProjection‖ = 0 := h
+    have hz : ‖Vᗮ.starProjection ∘L U.starProjection‖ = 0 := by
+      simpa only [Submodule.directedProjectionGap_def] using h
     rw [hz, zero_mul] at hle
     simpa using norm_le_zero_iff.mp hle
   rw [Submodule.starProjection_eq_self_iff.mpr hu] at h0
@@ -262,7 +269,7 @@ theorem le_of_band_exterior_spectra
     hA (0 : H →L[ℂ] H) hzero hPred hWred hd hgap
   rw [norm_zero] at hle
   have hnn : (0 : ℝ) ≤ P.directedProjectionGap W :=
-    norm_nonneg (Wᗮ.starProjection ∘L P.starProjection)
+    Submodule.directedProjectionGap_nonneg P W
   refine le_of_directedGap_eq_zero P W (le_antisymm ?_ hnn)
   nlinarith [hle, hd, hnn]
 

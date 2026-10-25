@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
-import DavisKahan.SpectralTheory.Real.SpectralRestriction
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
+public import DavisKahan.SpectralTheory.Real.SpectralRestriction
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Canonical spectral projections
@@ -23,6 +25,8 @@ uniform `RCLike` PVM would require mathematical structure not present in the
 pinned dependencies.  Downstream contour theory should identify its Riesz
 operator with `boundedSelfAdjointSpectralProjection` instead.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -48,12 +52,14 @@ theorem coe_reCoord (A : H →L[ℂ] H) (hA : A.IsSymmetric)
   have hmem : z ∈ spectrum ℂ A := hz
   rw [← hAsa.spectrumRestricts.algebraMap_image] at hmem
   obtain ⟨lam, -, hlam⟩ := hmem
+  rw [TauCeti.BorelCalculus.reCoord_apply]
   show ((z.re : ℝ) : ℂ) = z
   rw [← hlam]
   simp
 
 /-- The genuine Spectra projection-valued measure of a bounded self-adjoint
 operator. -/
+@[expose]
 noncomputable def boundedSelfAdjointSpectralPVM
     (A : H →L[ℂ] H) (hA : A.IsSymmetric) :
     TauCeti.ProjValMeasure ℝ H :=
@@ -62,6 +68,7 @@ noncomputable def boundedSelfAdjointSpectralPVM
 
 /-- The genuine measurable spectral projection of a bounded self-adjoint
 operator. -/
+@[expose]
 noncomputable def boundedSelfAdjointSpectralProjection
     (A : H →L[ℂ] H) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) : H →L[ℂ] H :=
@@ -75,6 +82,7 @@ calculus, which the native Cayley construction does not yet supply.  The range
 API is therefore kept local here rather than shared with
 `DavisKahan.SpectralTheory.PVMSubspace`, which has moved to
 `TauCeti.ProjValMeasure`. -/
+@[expose]
 noncomputable def boundedSelfAdjointSpectralSubspace
     (A : H →L[ℂ] H) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) : Submodule ℂ H :=

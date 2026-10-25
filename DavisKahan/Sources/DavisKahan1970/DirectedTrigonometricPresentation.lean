@@ -3,16 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.OperatorIdeal.ComplexificationApproximation
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 /-!
 # Literal directed trigonometric presentation objects
@@ -41,6 +43,8 @@ existing positive `2 sin Theta_0 cos Theta_0` object.  That exact equality is
 important at the where-defined norm boundary, where matching singular values
 alone does not transfer ideal membership.
 -/
+
+public section
 
 open scoped InnerProductSpace BigOperators TauCeti.CompleteSubspace
 
@@ -153,7 +157,7 @@ theorem spectrum_directedSinAngleOperator_subset_Icc
         (directedSinAngleOperator_nonneg U V) x hx
   have hnormK : ‖((x : K))‖ ≤
       ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hx
+    spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem K hx)
   have hnorm : |x| ≤
       ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ := by
     rwa [RCLike.norm_ofReal] at hnormK
@@ -443,7 +447,7 @@ private theorem spectrum_directedSinAngleOperator_lt_one
   have habs : |t| ≤ ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ := by
     have hk : ‖((t : K))‖ ≤
         ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ :=
-      spectrum.norm_le_norm_mul_of_mem ht
+      spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem K ht)
     rwa [RCLike.norm_ofReal] at hk
   have hone : ‖(1 : E →L[K] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
   have hle : t ≤ ‖directedSinAngleOperator U V‖ := by
@@ -563,7 +567,7 @@ private theorem sourceDirectedHasDefinedDoubleTangent_of_norm_sinTwo_lt_one
   have hspec : |Real.sin (2 * t)| ≤ ‖sourceDirectedSinTwoThetaOperator U V‖ := by
     have hk : ‖((Real.sin (2 * t) : K))‖ ≤
         ‖sourceDirectedSinTwoThetaOperator U V‖ * ‖(1 : E →L[K] E)‖ :=
-      spectrum.norm_le_norm_mul_of_mem hs
+      spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem K hs)
     have hr : |Real.sin (2 * t)| ≤
         ‖sourceDirectedSinTwoThetaOperator U V‖ * ‖(1 : E →L[K] E)‖ := by
       rwa [RCLike.norm_ofReal] at hk
@@ -682,14 +686,16 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
     tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike
       N D hV hdelta hupper hUnwanted hResidual
   have hSseq := sourceDirectedSine_hasSameApproximationNumbers_directedSineBlock Z V
+  have hSseq_apply := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hSseq
   have htr : ‖directedSinAngleOperator Z V‖ < 1 := by
-    rw [← (directedSinAngleOperator Z V).approximationNumber_index_zero, hSseq 0]
+    rw [← (directedSinAngleOperator Z V).approximationNumber_index_zero, hSseq_apply 0]
     exact hlt 0
   have hTanSeq : SameApproximationSingularSequence
       (sourceDirectedTanThetaOperator Z V) T := by
+    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
     intro n
     rw [approximationNumber_sourceDirectedTanThetaOperator Z V htr n,
-      hSseq n, hTseq n]
+      hSseq_apply n, hTseq n]
   have htransport := hTanSeq.normingMem_iff_and_gauge_eq N
   refine ⟨hlt, htransport.1.mpr hTmem, ?_⟩
   rw [htransport.2]
@@ -730,15 +736,17 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
       (DavisKahan.sinTwoThetaIdealBlock U V) := by
     rw [sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator V U]
     exact (Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide U V).symm
+  have hSseq_apply := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hSseq
   have hSlt : ‖sourceDirectedSinTwoThetaOperator V U‖ < 1 := by
     rw [← (sourceDirectedSinTwoThetaOperator V U).approximationNumber_index_zero,
-      hSseq 0]
+      hSseq_apply 0]
     exact hlt 0
   have hTanSeq : SameApproximationSingularSequence
       (sourceDirectedTanTwoThetaOperator V U) T := by
+    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
     intro n
     rw [approximationNumber_sourceDirectedTanTwoThetaOperator V U hSlt n,
-      hSseq n, hTseq n]
+      hSseq_apply n, hTseq n]
   have htransport := hTanSeq.normingMem_iff_and_gauge_eq N
   refine ⟨hlt, htransport.1.mpr hTmem, ?_⟩
   rw [htransport.2]

@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
-import DavisKahan.SpectralTheory.UnboundedDirectedGapBound
-import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
+public import DavisKahan.SpectralTheory.UnboundedDirectedGapBound
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
 /-!
 # The static branch bound for Theorem 8.2 at unbounded scope
@@ -29,6 +31,8 @@ free whenever `2‖H‖/δ ≤ √2/2`, that is `‖H‖ ≤ (√2/4) δ`.
 The printed hypothesis is `‖H‖ < δ/2`, so this covers a strict sub-interval.
 The module docstring of `Theorem82Unbounded.lean` records what the rest costs.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970

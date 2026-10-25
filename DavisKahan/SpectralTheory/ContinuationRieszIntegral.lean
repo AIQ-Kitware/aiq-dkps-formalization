@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.ContinuationContour
-import Mathlib.Analysis.Normed.Operator.NormedSpace
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.SpectralTheory.ContinuationContour
+public import Mathlib.Analysis.Normed.Operator.NormedSpace
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Riesz integrals on proof-carrying continuation contours
@@ -25,6 +27,8 @@ the contour.
 promotable only after the modules it imported were promoted earlier in this lane.  Nothing is
 restated; names and namespace are unchanged.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -193,6 +197,7 @@ section ResolventRieszIntegral
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The operator-valued resolvent one-form `v ↦ v R_A(z)`. -/
+@[expose]
 noncomputable def resolventOneForm (A : H →L[ℂ] H) (z : ℂ) :
     ℂ →L[ℂ] (H →L[ℂ] H) :=
   (1 : ℂ →L[ℂ] ℂ).smulRight (resolventOperator A z)
@@ -204,6 +209,7 @@ noncomputable def resolventOneForm (A : H →L[ℂ] H) (z : ℂ) :
 
 /-- Normalization compatible with `resolventOperator A z = (A - z • 1)⁻¹`.
 The standard Riesz formula uses `(z • 1 - A)⁻¹`, hence the leading minus. -/
+@[expose]
 noncomputable def rieszNormalization : ℂ :=
   -(((2 : ℂ) * Real.pi * Complex.I)⁻¹)
 
@@ -248,12 +254,14 @@ theorem curveIntegrable_resolventOneForm
     (resolventOneForm A) Γ.continuousOn_resolventOneForm
 
 /-- The unnormalized operator-valued resolvent integral around the contour. -/
+@[expose]
 noncomputable def resolventCurveIntegral
     {A : H →L[ℂ] H} {s : Set ℝ}
     (Γ : SpectralSeparatingContour A s) : H →L[ℂ] H :=
   ∫ᶜ z in Γ.path, resolventOneForm A z
 
 /-- The normalized Riesz operator selected by the contour. -/
+@[expose]
 noncomputable def contourRieszProjection
     {A : H →L[ℂ] H} {s : Set ℝ}
     (Γ : SpectralSeparatingContour A s) : H →L[ℂ] H :=

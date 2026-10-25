@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import YuWangSamworth2015.Rectangular.Theorem4
+module
+
+public import YuWangSamworth2015.Rectangular.Theorem4
 
 /-!
 # Rank-one singular-vector corollaries
@@ -14,6 +16,8 @@ common forward-citation use of Theorem 3 (Theorem 4 in that preprint).  The
 proof reuses the existing rank-one symmetric theorem on the right and left Gram
 operators, then applies the exact Gram perturbation bound.
 -/
+
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

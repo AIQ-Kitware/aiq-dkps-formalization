@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Polar.DirectRotationSquare
-import DavisKahan.SpectralTheory.Complexification.FormTransport
-import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
+module
+
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
+public import DavisKahan.SpectralTheory.Complexification.FormTransport
+public import ForTauCeti.Analysis.InnerProductSpace.ModulusTransport
 
 /-!
 # The direct rotation of two **real** closed subspaces
@@ -56,6 +58,8 @@ concludes `U.map W = V` rather than taking it as a hypothesis.
   and 3.3, Corollary 3.2, and standing assumption 1.
 -/
 
+public section
+
 open scoped InnerProductSpace
 
 namespace TauCeti
@@ -93,6 +97,7 @@ theorem isUniformlyAcute_complexifySubmodule (h : IsUniformlyAcute U V) :
 
 /-- The canonical pre-polar intertwiner `P_V P_U + P_Vᗮ P_Uᗮ` of a **real**
 pair. -/
+@[expose]
 def canonicalIntertwinerR : E →L[ℝ] E :=
   V.starProjection * U.starProjection +
     (Vᗮ).starProjection * (Uᗮ).starProjection

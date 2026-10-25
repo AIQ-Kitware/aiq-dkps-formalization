@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Halmos.CompactClassification
-import DavisKahan.Geometry.Halmos.Realization
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+module
+
+public import DavisKahan.Geometry.Halmos.CompactClassification
+public import DavisKahan.Geometry.Halmos.Realization
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -114,11 +118,13 @@ theorem conj_angleSinSeq (n : ℕ) :
 /-! ### The diagonal angle operators -/
 
 /-- `cos Θ` for the prescribed sequence: multiplication by `cos θₙ` on `ℓ²`. -/
+@[expose]
 noncomputable def angleCosOp :
     AngleSequenceSpace 𝕜 →L[𝕜] AngleSequenceSpace 𝕜 :=
   diagOpLp (angleCosSeq 𝕜 θ) zero_le_one (norm_angleCosSeq_le 𝕜 θ)
 
 /-- `sin Θ` for the prescribed sequence: multiplication by `sin θₙ` on `ℓ²`. -/
+@[expose]
 noncomputable def angleSinOp :
     AngleSequenceSpace 𝕜 →L[𝕜] AngleSequenceSpace 𝕜 :=
   diagOpLp (angleSinSeq 𝕜 θ) zero_le_one (norm_angleSinSeq_le 𝕜 θ)
@@ -162,6 +168,7 @@ Both sides carry the same diagonal operators and the intertwiner is the
 identity, so this datum realizes a pair whose two angle operators agree
 exactly — including the multiplicity at `0`.  No hypothesis on `θ` is needed:
 the Pythagorean identity holds coefficientwise for every real number. -/
+@[expose]
 noncomputable def angleSequenceDatum :
     HalmosAngleDatum 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜) where
   cos₀ := angleCosOp 𝕜 θ
@@ -248,6 +255,7 @@ theorem angleSequenceDatum_cos₁ : (angleSequenceDatum 𝕜 θ).cos₁ = angleC
 
 /-- The realized pair's defect block, `P (1 - Q) P`, where `P` projects onto the
 `E`-factor and `Q` onto `(angleSequenceDatum 𝕜 θ).targetSubspace`. -/
+@[expose]
 noncomputable def angleSequenceDefectBlock :
     AngleSequenceAmbient 𝕜 →L[𝕜] AngleSequenceAmbient 𝕜 :=
   (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜)).starProjection ∘L
@@ -422,6 +430,7 @@ variable (Z₁ : Type*) [NormedAddCommGroup Z₁] [InnerProductSpace 𝕜 Z₁] 
 /-- **The datum realizing a prescribed angle sequence together with prescribed
 angle-`0` multiplicities.**  `Z₀` is the extra angle-`0` space on the `P`-side and
 `Z₁` the one on the `Pᗮ`-side; the two are arbitrary and unrelated. -/
+@[expose]
 noncomputable def angleSequenceZeroDatum :
     HalmosAngleDatum 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
       (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁)) :=

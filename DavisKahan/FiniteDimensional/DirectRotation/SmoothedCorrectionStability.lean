@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
 
 /-!
 # Stability of the exact commuting-unitary correction
@@ -14,6 +16,8 @@ subspace. The named spectral optimizer equals the canonical correction
 through the closed cutoff. These are the quantitative consequences of the
 journal paper's commuting-correction corollary.
 -/
+
+public section
 
 noncomputable section
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

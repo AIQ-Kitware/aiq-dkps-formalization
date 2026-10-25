@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
+public import Mathlib.Tactic
 
 /-!
 # Compact resolvents and compact graph embeddings
@@ -19,6 +21,8 @@ This file proves the exact bridge in both directions.  It deliberately uses a
 small sequential compactness predicate so the result does not depend on a
 particular bundled compact-operator API.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open Set Filter Topology
@@ -37,6 +41,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 
 /-- Sequential compactness on bounded sequences for a bounded operator. -/
+@[expose]
 def SequentiallyCompactOperator (R : H →L[𝕜] H) : Prop :=
   ∀ y : ℕ → H,
     (∃ C : ℝ, ∀ n, ‖y n‖ ≤ C) →
@@ -46,7 +51,7 @@ def SequentiallyCompactOperator (R : H →L[𝕜] H) : Prop :=
 /-- Sequential compactness of the ambient embedding of a closed-operator graph
  domain.  This matches the shape used by `SobolevTraceFoundation.graph_compact`.
 -/
-def SequentiallyCompactGraphEmbedding
+@[expose] def SequentiallyCompactGraphEmbedding
     (A : H →ₗ.[𝕜] H) : Prop :=
   ∀ x : ℕ → A.domain,
     (∃ C : ℝ, ∀ n,

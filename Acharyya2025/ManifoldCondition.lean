@@ -15,12 +15,16 @@ source states Proposition 1 without proof.
 
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
-import Acharyya2024.Common
-import Acharyya2025.Deterministic
-import Acharyya2025.MathlibBridge
-import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
-import TauCeti.Analysis.Matrix.Eigenvalues
-import Acharyya2025.GramRealization
+module
+
+public import Acharyya2024.Common
+public import Acharyya2025.Deterministic
+public import Acharyya2025.MathlibBridge
+public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
+public import TauCeti.Analysis.Matrix.Eigenvalues
+public import Acharyya2025.GramRealization
+
+public section
 
 open scoped BigOperators Matrix
 open Acharyya2024 Acharyya2025.Deterministic Acharyya2025.MathlibBridge

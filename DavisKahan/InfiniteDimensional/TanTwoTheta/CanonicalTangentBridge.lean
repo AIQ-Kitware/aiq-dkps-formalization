@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
-import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import DavisKahan.SpectralTheory.GraphSubspace
-import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import DavisKahan.SpectralTheory.GraphSubspace
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -682,8 +686,9 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
         _ = R * G := by rw [show G * P = G from hGP]
         _ = R * (P * G) := by rw [show P * G = G from hPG]
         _ = (R * P) * G := (mul_assoc _ _ _).symm
-    have hmodRP : Commute (ContinuousLinearMap.modulus Y) (R ∘L P) :=
-      Commute.cfcₙ_nnreal hGRP _
+    have hmodRP : Commute (ContinuousLinearMap.modulus Y) (R ∘L P) := by
+      rw [ContinuousLinearMap.modulus_eq_sqrt]
+      exact Commute.cfcₙ_nnreal hGRP _
     have hRPnonneg : (0 : E →L[ℂ] E) ≤ R ∘L P := by
       rw [show R ∘L P = Cang ∘L Cang from hCangSq.symm]
       exact (Commute.refl Cang).mul_nonneg (directedCosAngleOperatorC_nonneg U V)

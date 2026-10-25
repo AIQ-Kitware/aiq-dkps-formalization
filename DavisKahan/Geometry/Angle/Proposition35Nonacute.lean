@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.Proposition35Infinite
-import DavisKahan.Geometry.Polar.Section3Nonacute
+module
+
+public import DavisKahan.Geometry.Angle.Proposition35Infinite
+public import DavisKahan.Geometry.Polar.Section3Nonacute
+
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
@@ -51,6 +55,7 @@ variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
 
 /-- The paper quarter turn attached to a chosen completed nonacute direct rotation.  It is the
 polar partial isometry of the skew part `W - cos Θ`, hence vanishes on the zero-angle subspace. -/
+@[expose]
 noncomputable def section3NonacuteQuarterTurn
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     H →L[𝕜] H :=

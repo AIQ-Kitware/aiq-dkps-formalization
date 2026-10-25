@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.Geometry.Angle.Proposition35Nonacute
-import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
-import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
-import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+module
+
+public import DavisKahan.Geometry.Angle.Proposition35Nonacute
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
+public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 
 /-!
 # Geometry of the right-angle cosine kernel
@@ -17,6 +19,8 @@ transporter consequently anticommutes with source reflection on this
 kernel, also in infinite dimension. These are geometric reductions for
 assembling exceptional optimizer blocks; no ideal attainment is asserted.
 -/
+
+public section
 
 noncomputable section
 

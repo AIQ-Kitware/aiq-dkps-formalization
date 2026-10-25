@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
-import DavisKahan.InfiniteDimensional.SinTheta.General
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.BoundedOperator.Reflection
+public import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
+public import DavisKahan.InfiniteDimensional.SinTheta.General
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -52,11 +56,13 @@ obligations.
 
 /-- The ambient one-sided double-angle sine operator `2 P_{Uᗮ} P_V P_U`,
 matching the finite-dimensional normalization. -/
+@[expose]
 noncomputable def sinTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   (2 : 𝕜) • ((Uᗮ).starProjection ∘L V.starProjection ∘L U.starProjection)
 
 /-- The mirror image of a subspace under the reflection through another. -/
+@[expose]
 noncomputable def reflectedSubspace (V U : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] : Submodule 𝕜 E :=
   U.map (V.reflectionOperator : E →L[𝕜] E).toLinearMap
@@ -343,6 +349,7 @@ theorem restrictedSpectrum_reflection_conjugate
         (reflectedSubspace V U) =
       DavisKahan.Foundation.restrictedSpectrum A U := by
   ext r
+  simp only [mem_restrictedSpectrum_iff]
   constructor
   · rintro ⟨hU', hr⟩
     have hU : InvariantFor A U := invariantFor_of_reflection_conjugate V hU'
@@ -523,7 +530,8 @@ theorem doubleAngle_directedGap_identity
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinTwoAngleOperator U V‖ = U.directedProjectionGap (reflectedSubspace V U) := by
   have hgap : U.directedProjectionGap (reflectedSubspace V U) =
-      ‖((reflectedSubspace V U)ᗮ).starProjection ∘L U.starProjection‖ := rfl
+      ‖((reflectedSubspace V U)ᗮ).starProjection ∘L U.starProjection‖ :=
+    Submodule.directedProjectionGap_def U (reflectedSubspace V U)
   rw [hgap, starProjection_orthogonal_reflectedSubspace]
   have hassoc : (V.reflectionOperator ∘L Uᗮ.starProjection ∘L
       V.reflectionOperator) ∘L U.starProjection =
@@ -650,7 +658,7 @@ theorem norm_sinAngle_reflected_eq_norm_sinTwoAngle
   rw [show sinAngleOperator U (reflectedSubspace V U) =
       (U.starProjection - (reflectedSubspace V U).starProjection).modulus from rfl,
     ContinuousLinearMap.norm_modulus]
-  exact sinAngle_reflected_eq_sinTwoAngle U V
+  simpa only [Submodule.projectionGap_def] using sinAngle_reflected_eq_sinTwoAngle U V
 
 omit [CompleteSpace E] in
 /-- The reflection defect is `-2` times the sum of the two off-diagonal

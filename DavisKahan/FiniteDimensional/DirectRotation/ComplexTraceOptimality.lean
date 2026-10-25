@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.Sources.DavisKahan1970.Section4Examples
-import DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement
-import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section4Examples
+public import DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement
+public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
 /-!
 # The complex principal-plane trace minimizer
@@ -20,6 +22,8 @@ The many-principal-plane global optimum needs an additional orthogonal
 assembly argument; the planar endpoint alone does not assert that global
 statement.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -181,6 +185,13 @@ private theorem diagonalVector_one : diagonalVector 1 = 1 := by
 def sourceLine : Submodule ℂ E2 :=
   Submodule.span ℂ {diagonalVector}
 
+/-- The source line is the diagonal complex line in the standard plane. -/
+theorem sourceLine_def : sourceLine = Submodule.span ℂ
+    {((EuclideanSpace.basisFun (Fin 2) ℂ 0 : E2) +
+      EuclideanSpace.basisFun (Fin 2) ℂ 1)} := by
+  rfl
+
+@[expose]
 def targetLine (theta : ℝ) : Submodule ℂ E2 :=
   sourceLine.map (phaseUnitary theta).toLinearMap
 

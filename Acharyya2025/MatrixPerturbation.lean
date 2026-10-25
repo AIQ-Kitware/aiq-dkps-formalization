@@ -35,14 +35,18 @@ eigenvalue transport, the Gram identity, and Gram rigidity
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import Acharyya2024.Common
-import Acharyya2025.ConfigPerturbation
-import Acharyya2025.OperatorBridge
-import Acharyya2025.GramRigidity
-import Acharyya2025.GramRealization
-import TauCeti.Analysis.Matrix.Eigenvalues
-import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
+module
+
+public import Mathlib
+public import Acharyya2024.Common
+public import Acharyya2025.ConfigPerturbation
+public import Acharyya2025.OperatorBridge
+public import Acharyya2025.GramRigidity
+public import Acharyya2025.GramRealization
+public import TauCeti.Analysis.Matrix.Eigenvalues
+public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
+
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)

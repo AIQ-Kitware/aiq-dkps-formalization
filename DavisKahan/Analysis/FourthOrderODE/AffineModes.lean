@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Analysis.FourthOrderODE.SmoothKernel
-import Mathlib.Analysis.Complex.RealDeriv
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Analysis.FourthOrderODE.SmoothKernel
+public import Mathlib.Analysis.Complex.RealDeriv
+public import Mathlib.Tactic
 
 /-!
 # Explicit affine zero modes of the free--free beam
@@ -16,6 +18,8 @@ constructs the reverse inclusion and records injectivity of the two-parameter
 representation.  Together the two files identify the smooth kernel exactly.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace FreeBeam
@@ -24,6 +28,7 @@ namespace Classical
 noncomputable section
 
 /-- Real affine fourth-order derivative data. -/
+@[expose]
 noncomputable def realAffineData (a b : ℝ) : FourthOrderData where
   f0 := fun x => a + b * x
   f1 := fun _ => b
@@ -95,6 +100,7 @@ theorem realAffineData_injective :
   rfl
 
 /-- Complex affine fourth-order derivative data. -/
+@[expose]
 noncomputable def complexAffineData (a b : ℂ) : ComplexFourthOrderData where
   f0 := fun x => a + (x : ℂ) * b
   f1 := fun _ => b

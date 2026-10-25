@@ -12,8 +12,12 @@ reference populations can use the more general second-moment interface below,
 which allows the population mean itself to depend on the sampling outcome.
 -/
 
-import Acharyya2024.SecondMoment
-import Acharyya2025.RateChain
+module
+
+public import Acharyya2024.SecondMoment
+public import Acharyya2025.RateChain
+
+public section
 
 open scoped BigOperators Topology
 open Filter MeasureTheory ProbabilityTheory
@@ -49,6 +53,7 @@ theorem highProbAtTop_of_tendsto_compl_zero
 /-- Average a finite family of response vectors.  The zero-replicate branch is
 left at Lean's totalized scalar inverse; every statistical theorem below
 requires a positive replicate count. -/
+@[expose]
 noncomputable def replicateMean {m p r : Nat}
     (Y : Fin r → Ω → Mat m p) (ω : Ω) : Mat m p :=
   (r : Real)⁻¹ • ∑ k, Y k ω
@@ -259,6 +264,7 @@ theorem highProb_uniformResponseMeanClose_of_growing_iid_replicates
 The direct entrywise response bridge contributes one later factor of the
 population size when entrywise matrix error is converted to operator norm, so
 choosing `η = x / n` cancels that factor. -/
+@[expose]
 noncomputable def paperResponseTolerance (n : Nat) (x : Real) : Real :=
   x / (n : Real)
 
@@ -396,6 +402,7 @@ theorem highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale
 /-- A uniform response-matrix norm bound yields a uniform dissimilarity
 bound.  This packages the elementary triangle inequality used to discharge the
 bounded-dissimilarity side condition of the CMDS bridge. -/
+@[expose]
 noncomputable def responseDistBound (m : Nat) (B : Real) : Real :=
   (m : Real)⁻¹ * (2 * B)
 

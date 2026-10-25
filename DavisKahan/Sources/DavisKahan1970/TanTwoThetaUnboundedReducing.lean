@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.Geometry.Polar.DirectRotation
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -219,8 +223,8 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmet
     tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex hA hred hB
       hZsa hZ2 hV.mapsDomain hV.commutes hUa hUb hab N hRmem
   refine ⟨fun n => ?_, fun n => ?_, hmem, hle⟩
-  · rw [← hsame n]; exact hcorner n
-  · rw [← hsame n]
+  · rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]; exact hcorner n
+  · rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]
     exact approximationNumber_reflectionTangentCorner hZsa hZ2 hS1 n
 
 end DerivedReflection

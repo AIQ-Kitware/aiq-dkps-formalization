@@ -3,21 +3,25 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Polar.DirectRotationAcute
-import DavisKahan.Geometry.Halmos.TwoProjections
-import DavisKahan.Geometry.Halmos.FixedCosineSubspace
+module
+
+public import DavisKahan.Geometry.Polar.DirectRotationAcute
+public import DavisKahan.Geometry.Halmos.TwoProjections
+public import DavisKahan.Geometry.Halmos.FixedCosineSubspace
 -- supplies the fixed-cosine eigenspace this file identifies with `Ω({θ})H`, together
 -- with the `halmosCosineSq` commutation lemmas underneath it.
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 -- supplies `TauCeti.IsAcute` and `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, which this
 -- file used to receive indirectly through the former `DavisKahan.Section3`.
-import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
-import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
-import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
-import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
-import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
-import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
+public import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
+public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
+public import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
+public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
@@ -60,14 +64,17 @@ variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
 /-- The positive ambient sine `sin Θ = |P_U-P_V|`. -/
+@[expose]
 noncomputable def section3SinAngleOperator : H →L[𝕜] H :=
   (U.starProjection - V.starProjection).modulus
 
 /-- The literal bounded operator angle `Θ = arcsin |P_U-P_V|`. -/
+@[expose]
 noncomputable def section3AngleOperator : H →L[𝕜] H :=
   cfc Real.arcsin (section3SinAngleOperator U V)
 
 /-- The positive cosine `cos Θ`, defined from the literal angle. -/
+@[expose]
 noncomputable def section3CosAngleOperator : H →L[𝕜] H :=
   cfc Real.cos (section3AngleOperator U V)
 
@@ -77,6 +84,7 @@ noncomputable def section3DirectRotation : H →L[𝕜] H :=
 
 /-- The paper's quarter turn `J`.  It is the polar partial isometry in the
 resolution `W - cos Θ = J sin Θ`, hence is zero on the zero-angle space. -/
+@[expose]
 noncomputable def section3QuarterTurn : H →L[𝕜] H :=
   (section3DirectRotation U V - section3CosAngleOperator U V).polarPartial
 

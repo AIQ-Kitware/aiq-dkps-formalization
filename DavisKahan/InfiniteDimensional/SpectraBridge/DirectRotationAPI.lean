@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.Geometry.Polar.DirectRotationSquare
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Complex direct rotation, the attribution-preserving bridge
@@ -22,6 +24,8 @@ The scalar-generic declarations remain independent; these declarations provide
 the completed complex specialization without weakening or replacing the real
 and general `RCLike` program.
 -/
+
+public section
 
 open scoped InnerProductSpace
 

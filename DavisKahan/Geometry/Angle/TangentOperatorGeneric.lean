@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.OperatorAngleGeneric
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 /-!
 # Tangent angle operators over an arbitrary `RCLike` field
@@ -20,6 +22,8 @@ fixed-field objects do.  The theorems that identify and transport them require
 exactly the source-side pole exclusion that says the displayed tangent exists.
 Thus no scalar-specific proof capability leaks into a public theorem.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.Angle
@@ -42,22 +46,27 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [Complet
 variable (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 /-- The ambient `tan Θ` at an arbitrary `RCLike` field. -/
+@[expose]
 def tanAngleOperator : E →L[𝕜] E :=
   cfc Real.tan (angleOperator U V)
 
 /-- The ambient `tan 2Θ` at an arbitrary `RCLike` field. -/
+@[expose]
 def tanTwoAngleOperator : E →L[𝕜] E :=
   cfc (fun t : ℝ => Real.tan (2 * t)) (angleOperator U V)
 
 /-- The branch-free ambient `|tan 2Θ|` at an arbitrary `RCLike` field. -/
+@[expose]
 def absTanTwoAngleOperator : E →L[𝕜] E :=
   cfc (fun t : ℝ => |Real.tan (2 * t)|) (angleOperator U V)
 
 /-- The source's definedness condition for the single-angle tangent: no
 principal angle reaches `π/2`. -/
+@[expose]
 def HasDefinedTangent : Prop := U.projectionGap V < 1
 
 /-- The source's pole-exclusion condition for the double-angle tangent. -/
+@[expose]
 def HasDefinedDoubleTangent : Prop :=
   ∀ t ∈ spectrum ℝ (angleOperator U V), Real.cos (2 * t) ≠ 0
 
@@ -90,7 +99,7 @@ theorem spectrum_angleOperator_lt_pi_div_two
       (R := ℝ) _ (isSelfAdjoint_sinAngleOperator U V)).mp
         (sinAngleOperator_nonneg U V) s hs
     have hnormK : ‖((s : 𝕜))‖ ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ :=
-      spectrum.norm_le_norm_mul_of_mem hs
+      spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hs)
     have hnorm : |s| ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := by
       rwa [RCLike.norm_ofReal] at hnormK
     have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
@@ -107,7 +116,7 @@ theorem spectrum_angleOperator_lt_pi_div_two
       exact ((le_abs_self s).trans habs).trans (le_of_lt hsin)
     exact ⟨hsnonneg, hsle⟩
   have hnormK : ‖((s : 𝕜))‖ ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hs
+    spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hs)
   have hnorm : |s| ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := by
     rwa [RCLike.norm_ofReal] at hnormK
   have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
@@ -152,7 +161,7 @@ theorem hasDefinedDoubleTangent_of_norm_sinTwoAngleOperator_lt_one
   have hspec : |Real.sin (2 * t)| ≤ ‖sinTwoAngleOperator U V‖ := by
     have h0K : ‖((Real.sin (2 * t) : 𝕜))‖ ≤
         ‖sinTwoAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ :=
-      spectrum.norm_le_norm_mul_of_mem hs
+      spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hs)
     have h0 : |Real.sin (2 * t)| ≤
         ‖sinTwoAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := by
       rwa [RCLike.norm_ofReal] at h0K
@@ -219,10 +228,28 @@ section Complex
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 variable (U V : Submodule ℂ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
-@[simp] theorem tanAngleOperator_complex : tanAngleOperator U V = tanAngleOperatorC U V := rfl
-@[simp] theorem tanTwoAngleOperator_complex : tanTwoAngleOperator U V = tanTwoAngleOperatorC U V := rfl
+@[simp] theorem tanAngleOperator_complex : tanAngleOperator U V = tanAngleOperatorC U V  := by
+  have h : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℂ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  simp only [tanAngleOperator,tanAngleOperatorC, angleOperator_complex]
+  congr 1
+  exact proof_irrel_heq _ _
+@[simp] theorem tanTwoAngleOperator_complex : tanTwoAngleOperator U V = tanTwoAngleOperatorC U V  := by
+  have h : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℂ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  simp only [tanTwoAngleOperator,tanTwoAngleOperatorC, angleOperator_complex]
+  congr 1
+  exact proof_irrel_heq _ _
 @[simp] theorem absTanTwoAngleOperator_complex :
-    absTanTwoAngleOperator U V = absTanTwoAngleOperatorC U V := rfl
+    absTanTwoAngleOperator U V = absTanTwoAngleOperatorC U V  := by
+  have h : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℂ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  simp only [absTanTwoAngleOperator,absTanTwoAngleOperatorC, angleOperator_complex]
+  congr 1
+  exact proof_irrel_heq _ _
 end Complex
 
 section Real
@@ -234,9 +261,18 @@ theorem tanAngleOperator_real (h : HasDefinedTangent U V) :
     tanAngleOperator U V = tanAngleOperatorR U V := by
   refine complexify_injective ?_
   rw [complexify_tanAngleOperatorR]
-  change complexify (cfc Real.tan (angleOperator U V)) = _
+  have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℝ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℝ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  have hcalc : tanAngleOperator U V = cfc Real.tan (angleOperator U V) := by
+    unfold tanAngleOperator
+    congr 1
+    exact proof_irrel_heq _ _
+  rw [hcalc]
+  have hcont := continuousOn_tan_spectrum U V h
+  rw [hAlg] at hcont
   rw [complexify_cfc Real.tan (isSelfAdjoint_angleOperator U V)
-      (continuousOn_tan_spectrum U V h), angleOperator_real, complexify_angleOperatorR]
+      hcont, angleOperator_real, complexify_angleOperatorR]
   rfl
 
 /-- Under pole exclusion, the generic real branch-free double tangent is the existing one. -/
@@ -244,9 +280,18 @@ theorem absTanTwoAngleOperator_real (h : HasDefinedDoubleTangent U V) :
     absTanTwoAngleOperator U V = absTanTwoAngleOperatorR U V := by
   refine complexify_injective ?_
   rw [complexify_absTanTwoAngleOperatorR]
-  change complexify (cfc (fun t : ℝ => |Real.tan (2 * t)|) (angleOperator U V)) = _
+  have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℝ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℝ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  have hcalc : absTanTwoAngleOperator U V = cfc (fun t : ℝ => |Real.tan (2 * t)|) (angleOperator U V) := by
+    unfold absTanTwoAngleOperator
+    congr 1
+    exact proof_irrel_heq _ _
+  rw [hcalc]
+  have hcont := continuousOn_absTanTwo_spectrum U V h
+  rw [hAlg] at hcont
   rw [complexify_cfc _ (isSelfAdjoint_angleOperator U V)
-      (continuousOn_absTanTwo_spectrum U V h), angleOperator_real, complexify_angleOperatorR]
+      hcont, angleOperator_real, complexify_angleOperatorR]
   rfl
 end Real
 

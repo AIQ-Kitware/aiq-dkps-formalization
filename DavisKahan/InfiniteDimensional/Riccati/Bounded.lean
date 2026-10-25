@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Riccati.BoundedCanonicalGraph
-import DavisKahan.Riccati.BoundedStability
-import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.Riccati.BoundedCanonicalGraph
+public import DavisKahan.Riccati.BoundedStability
+public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

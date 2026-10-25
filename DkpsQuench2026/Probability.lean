@@ -1,2 +1,4 @@
-import DkpsQuench2026.Probability.Coverage
-import DkpsQuench2026.Probability.UniformConcentration
+module
+
+public import DkpsQuench2026.Probability.Coverage
+public import DkpsQuench2026.Probability.UniformConcentration

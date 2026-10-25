@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealRestrictions
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealRestrictions
 
 /-!
 # Exact angle costs on the actual blocks of every real global minimum
@@ -20,6 +22,8 @@ requires constructing a transporter for each allowed matching and removing
 the zero slots without changing the matching value.
 -/
 
+public section
+
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.RealTransport
@@ -31,11 +35,13 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E]
 
 /-- The unrestricted one-angle real Schatten power minimum. -/
+@[expose]
 def realSingleSchattenCost (p theta : ℝ) : ℝ :=
   min (2 * phaseChord theta^p) ((2 : ℝ)^p)
 
 /-- The unrestricted ordered two-angle real Schatten power minimum.
 Its use below is on the accepted decreasing principal angles. -/
+@[expose]
 def realPairSchattenCost (p theta psi : ℝ) : ℝ :=
   let h := (theta + psi)/2
   let d := (theta - psi)/2
@@ -61,6 +67,7 @@ theorem realPairSchattenCost_zero (p theta : ℝ) (hp : 1 ≤ p) (htheta : 0 ≤
 
 /-- Exact cost assigned to an actual small block. Fixed blocks of dimension
 at most two contribute the sum of their zero-angle one-angle costs. -/
+@[expose]
 def realSchattenAngleBlockCost (p : ℝ) (K L : Submodule ℝ E) : ℝ :=
   if Module.finrank ℝ E = 4 then
     realPairSchattenCost p (K.principalAngles L 0) (K.principalAngles L 1)

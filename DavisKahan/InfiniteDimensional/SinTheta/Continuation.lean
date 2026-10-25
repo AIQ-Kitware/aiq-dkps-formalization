@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Core
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Core
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SpectralIdentification
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Spectral projection continuation and branch selection
@@ -16,6 +18,8 @@ data, so the claimed spectral-identification theorem could not follow from its
 hypotheses.  This replacement uses the repository's proof-carrying
 `PiecewiseC1ClosedContour` and `SpectralSeparatingContour` objects.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt

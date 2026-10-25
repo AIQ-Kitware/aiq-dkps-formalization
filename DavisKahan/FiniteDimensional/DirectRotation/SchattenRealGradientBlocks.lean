@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealStationarity
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
-import DavisKahan.FiniteDimensional.DirectRotation.RealTwoPhaseBlocks
-import DavisKahan.FiniteDimensional.DirectRotation.RealBlockRank
-import ForTauCeti.Analysis.InnerProductSpace.AnticommutingConjugation
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealStationarity
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
+public import DavisKahan.FiniteDimensional.DirectRotation.RealTwoPhaseBlocks
+public import DavisKahan.FiniteDimensional.DirectRotation.RealBlockRank
+public import ForTauCeti.Analysis.InnerProductSpace.AnticommutingConjugation
 
 /-!
 # Small spectral blocks at real Schatten transport minima
@@ -19,6 +21,8 @@ blocks for this conjugation, without supplied phase projections or bases.
 Doubling by source reflection descends their complete orthogonal family to
 the original real space, with real block dimensions at most four.
 -/
+
+public section
 
 noncomputable section
 

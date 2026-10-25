@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.SpectralRestrictionOperator
-import DavisKahan.Sylvester.ClosedSylvesterEquation
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+module
+
+public import DavisKahan.SpectralTheory.SpectralRestrictionOperator
+public import DavisKahan.Sylvester.ClosedSylvesterEquation
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -65,10 +69,12 @@ theorem selfAdjointSpectralRestriction_semibounded_of_subset_Icc
     TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction A hA B hB) β ∧
       TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction A hA B hB) α := by
   constructor
-  · intro x
+  · apply (TauCeti.LinearPMap.semiboundedBelow_iff _ _).mpr
+    intro x
     exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc hA B hB hBsub
       x.1.2 x.2).1
-  · intro x
+  · apply (TauCeti.LinearPMap.semiboundedAbove_iff _ _).mpr
+    intro x
     exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc hA B hB hBsub
       x.1.2 x.2).2
 

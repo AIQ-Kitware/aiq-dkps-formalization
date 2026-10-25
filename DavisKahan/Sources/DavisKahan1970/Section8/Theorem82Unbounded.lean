@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
-import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples
-import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded
+public import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples
+public import DavisKahan.DoubleAngle.RealAngleIdentification
+public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
 
 /-!
 # Theorem 8.2's acute branch at unbounded scope
@@ -96,6 +98,8 @@ paper's connectedness step, not a missing translation.
 alone on `2‖H‖ ≤ (√2/2) δ`, using the first of the two static bounds above.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
@@ -180,8 +184,9 @@ theorem norm_sinTwoAngleOperator_eq_norm_block
   rw [TauCeti.DavisKahan.Angle.sinTwoAngleOperator_complex,
     TauCeti.DavisKahanExt.norm_sinTwoAngleOperatorC_eq_norm_directedSinTwoAngleOperatorC,
     TauCeti.DavisKahan.Angle.norm_sinTwoAngleOperator_eq_norm_directedSinTwoAngleOperatorC_swap]
-  exact (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap
-    U V).norm_eq
+  simpa only [TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_complex] using
+    (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap
+      U V).norm_eq
 
 /-- **The acute conclusion from the printed smallness hypothesis.**
 

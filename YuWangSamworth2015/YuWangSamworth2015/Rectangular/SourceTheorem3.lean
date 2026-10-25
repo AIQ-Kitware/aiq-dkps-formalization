@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import YuWangSamworth2015.Rectangular.SingularBlock
+module
+
+public import YuWangSamworth2015.Rectangular.SingularBlock
 
 /-!
 # Theorem 3 at the printed scope: the source rank condition and the exact gap
@@ -82,6 +84,8 @@ the choice of presentation is a notational one and is machine-checked.
   left twin.
 -/
 
+public section
+
 namespace YuWangSamworth2015
 
 open LinearMap.IsSymmetric (IsOrderedEigenframe isOrderedEigenframe_iff)
@@ -149,6 +153,7 @@ gap at a block ending at the rank is the finite `sigma_s^2 - 0` and not the
 printed `sigma_s^2 - (-infinity)`.
 
 Only the singular values of `A` occur.  There is no sample singular gap. -/
+@[expose]
 def SingularBoundaryGap {p q : ℕ} (n : ℕ)
     (A : EuclideanSpace ℝ (Fin q) →ₗ[ℝ] EuclideanSpace ℝ (Fin p))
     (r s : ℕ) (Delta : ℝ) : Prop :=
@@ -172,6 +177,7 @@ Under the source rank condition that case forces the selected frame to span the
 whole ambient space, so the sine distance is `0` and the conclusion holds for
 every positive finite `Delta`; the disjunct records that, and does not claim a
 finite `Delta` is infinite. -/
+@[expose]
 def SourceSingularGap {p q : ℕ} (n : ℕ)
     (A : EuclideanSpace ℝ (Fin q) →ₗ[ℝ] EuclideanSpace ℝ (Fin p))
     (r s : ℕ) (Delta : ℝ) : Prop :=

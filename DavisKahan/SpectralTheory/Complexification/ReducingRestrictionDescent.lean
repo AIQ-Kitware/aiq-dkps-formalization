@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
-import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
-import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+module
+
+public import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
+public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
 /-!
 # The reducing restriction commutes with complexification
@@ -21,6 +23,8 @@ the printed spectral placements are statements about `realSpectrum` of the two
 blocks, and `realSpectrum_reducingRestriction_complexifyReal` says the placement
 survives the passage unchanged.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open TauCeti.RealComplexification
@@ -49,15 +53,48 @@ theorem unitaryConj_complexifyReal_reducingRestriction
           (TauCeti.LinearPMap.reducingRestriction A P hred))
       = TauCeti.LinearPMap.reducingRestriction
           (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P) hredC := by
+  let e := complexifySubmoduleEquiv P
+  have hre (x : complexifySubmodule P) :
+      ((re (e.symm x) : P) : E) = re (x : RealComplexification E) := by
+    rw [← re_complexifySubmoduleEquiv P (e.symm x)]
+    rw [show complexifySubmoduleEquiv P (e.symm x) = x from e.apply_symm_apply x]
+  have him (x : complexifySubmodule P) :
+      ((im (e.symm x) : P) : E) = im (x : RealComplexification E) := by
+    rw [← im_complexifySubmoduleEquiv P (e.symm x)]
+    rw [show complexifySubmoduleEquiv P (e.symm x) = x from e.apply_symm_apply x]
+  have hrestrict (z : (TauCeti.LinearPMap.reducingRestriction A P hred).domain) :
+      ((TauCeti.LinearPMap.reducingRestriction A P hred z : P) : E) =
+        A ⟨(z.val : E),
+          (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A P hred _).mp z.property⟩ :=
+    TauCeti.LinearPMap.coe_reducingRestriction_apply A P hred z.val
+      ((TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A P hred _).mp z.property)
   refine LinearPMap.ext ?_ ?_
   · ext x
-    constructor
-    · intro hx
-      exact ⟨hx.1, hx.2⟩
-    · intro hx
-      exact ⟨hx.1, hx.2⟩
+    simp only [_root_.LinearPMap.mem_unitaryConj_domain_iff,
+      TauCeti.LinearPMap.mem_complexifyReal_domain_iff,
+      TauCeti.LinearPMap.mem_reducingRestriction_domain_iff]
+    simpa only [e] using and_congr
+      (Iff.of_eq (congrArg (fun z : E => z ∈ A.domain) (hre x)))
+      (Iff.of_eq (congrArg (fun z : E => z ∈ A.domain) (him x)))
   · intro x y hxy
-    rfl
+    rw [_root_.LinearPMap.unitaryConj_apply]
+    apply Subtype.ext
+    have hxdom := (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff
+      (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P) hredC x).mp hxy
+    rw [TauCeti.LinearPMap.coe_reducingRestriction_apply
+      (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P) hredC x hxdom,
+      coe_complexifySubmoduleEquiv]
+    apply RealComplexification.ext
+    · simp only [RealComplexification.re_mk,
+        TauCeti.LinearPMap.complexifyReal_apply_re]
+      rw [hrestrict]
+      congr 1
+
+    · simp only [RealComplexification.im_mk,
+        TauCeti.LinearPMap.complexifyReal_apply_im]
+      rw [hrestrict]
+      congr 1
+
 
 omit [CompleteSpace E] in
 /-- **The printed spectral placement survives complexification.** -/

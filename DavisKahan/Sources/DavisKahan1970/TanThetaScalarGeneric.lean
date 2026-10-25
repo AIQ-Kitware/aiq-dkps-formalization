@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
-import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
-import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
-import DavisKahan.Geometry.Angle.TangentOperatorGeneric
-import DavisKahan.TanTheta.ScalarTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
+public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
+public import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
+public import DavisKahan.Geometry.Angle.TangentOperatorGeneric
+public import DavisKahan.TanTheta.ScalarTransport
 
 /-!
 # Scalar-generic unbounded `tan Θ`
@@ -24,6 +26,8 @@ The strong symmetric-norming endpoints and the source-shaped Ritz wrappers are
 corollaries of that transport, just as the scalar-generic sine theorem is built
 on its Ky Fan majorization core.
 -/
+
+public section
 
 open scoped InnerProductSpace BigOperators TauCeti.CompleteSubspace
 
@@ -42,12 +46,14 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 /-- The directed sine block entering Theorem 6.3, at an arbitrary `RCLike` field. -/
+@[expose]
 noncomputable def directedSineBlock
     (Z V : Submodule 𝕜 H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Z →L[𝕜] H :=
   Vᗮ.starProjection ∘L Z.subtypeL
 
 /-- A directed tangent representative has exactly the singular values `tan θⱼ`. -/
+@[expose]
 def HasDirectedTangentApproximationNumbers
     (Z V : Submodule 𝕜 H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (tanTheta0 : Z →L[𝕜] H) : Prop :=

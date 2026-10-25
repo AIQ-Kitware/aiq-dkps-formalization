@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Sol
 -/
-import DavisKahan.FiniteDimensional.Core.AngleOperators
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum
+module
+
+public import DavisKahan.FiniteDimensional.Core.AngleOperators
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum
 
 /-!
 # Finite angle operators on orthogonal block sums
@@ -14,6 +16,8 @@ sums.  The sine-angle statement lives in `ForTauCeti`; this file lifts that pape
 operator geometry through the Davis--Kahan finite functional-calculus definitions of `Theta`,
 `tan Theta`, and `tan (2 Theta)`.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

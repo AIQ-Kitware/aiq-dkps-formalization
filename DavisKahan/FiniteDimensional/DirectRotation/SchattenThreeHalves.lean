@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
 
 /-!
 # An explicit optimal phase for the Schatten three-halves cost
@@ -12,6 +14,8 @@ At exponent `3/2`, the amplitude balance reduces to a polynomial identity.
 Above the transition, the unique optimal scalar phase is
 `arccos (cos theta / (1 - 2 * cos theta))`.
 -/
+
+public section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
 

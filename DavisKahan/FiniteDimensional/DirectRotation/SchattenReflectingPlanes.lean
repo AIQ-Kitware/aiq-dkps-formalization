@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectingDescent
-import ForTauCeti.Analysis.InnerProductSpace.PlanarReflection
-import ForTauCeti.Analysis.InnerProductSpace.Projection.TwoBlocks
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectingDescent
+public import ForTauCeti.Analysis.InnerProductSpace.PlanarReflection
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.TwoBlocks
 
 /-!
 # Reflecting blocks at complex Schatten local minima
@@ -17,6 +19,8 @@ and its orthogonal complement. No real matrix or basis is prescribed.
 The complete two-projection decomposition then gives fixed/right blocks
 on the actual zero-gradient kernel of every ambient local minimum.
 -/
+
+public section
 
 noncomputable section
 

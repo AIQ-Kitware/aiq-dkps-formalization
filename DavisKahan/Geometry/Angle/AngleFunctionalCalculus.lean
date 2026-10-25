@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Geometry.Angle.OperatorAngleComplex
-import DavisKahan.Geometry.Angle.OperatorAngleReal
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Angle.OperatorAngleComplex
+public import DavisKahan.Geometry.Angle.OperatorAngleReal
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 
 /-!
 # The literal operator angle of Davis--Kahan
@@ -24,6 +26,8 @@ sine operator.  For real Hilbert spaces the literal angle is the same object
 on the canonical complexification; this is the construction used elsewhere in
 the repository for real operator functional calculus.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.Angle
@@ -42,6 +46,7 @@ theorem norm_sinAngleOperatorC_le_one (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinAngleOperatorC U V‖ ≤ 1 := by
   rw [norm_sinAngleOperatorC]
+  rw [Submodule.projectionGap_def]
   show ‖(U.starProjection - V.starProjection : E →L[ℂ] E)‖ ≤ 1
   rw [← Submodule.projectionGap_def U V,
     Submodule.projectionGap_eq_max,
@@ -81,6 +86,7 @@ theorem spectrum_sinAngleOperatorC_subset_Icc (U V : Submodule ℂ E)
     _ = 1 := by ring
 
 /-- The literal Hermitian operator angle between two closed complex subspaces. -/
+@[expose]
 noncomputable def angleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc Real.arcsin (sinAngleOperatorC U V)
@@ -128,6 +134,7 @@ theorem cfc_sin_angleOperatorC (U V : Submodule ℂ E)
 /-- The ambient `cos Θ`, obtained by applying `cos` to the Hermitian operator
 angle.  Unlike the directed `directedCosAngleOperatorC`, which is the modulus of
 `P_V P_U`, this carries every principal angle of the pair. -/
+@[expose]
 noncomputable def cosAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc Real.cos (angleOperatorC U V)

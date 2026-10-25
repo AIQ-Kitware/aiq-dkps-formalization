@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.Geometry.Angle.Proposition35Nonacute
-import ForTauCeti.Analysis.InnerProductSpace.Projection.CompressionRealPart
-import TauCeti.Analysis.InnerProductSpace.Projection.Block
+module
+
+public import DavisKahan.Geometry.Angle.Proposition35Nonacute
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.CompressionRealPart
+public import TauCeti.Analysis.InnerProductSpace.Projection.Block
 
 /-!
 # The diagonal compressions of the canonical nonacute rotation
@@ -15,6 +17,8 @@ Its Gram operator already equals the square of that positive real part,
 forcing its skew part to vanish. Consequently reflection in the source
 subspace reverses the entire skew part of the nonacute rotation.
 -/
+
+public section
 
 noncomputable section
 

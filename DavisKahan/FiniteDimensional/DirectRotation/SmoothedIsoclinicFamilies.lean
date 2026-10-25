@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedAcuteClassification
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedAcuteClassification
 
 /-!
 # Exact metric parameterization of isoclinic optimizer families
@@ -15,6 +17,8 @@ optimal phase. In particular this is a continuous bijection with continuous
 inverse, rather than only a set-theoretic injection. A Grassmannian manifold
 identification is not needed for the metric statement.
 -/
+
+public section
 
 noncomputable section
 

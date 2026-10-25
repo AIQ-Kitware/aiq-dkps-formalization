@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
-import ForTauCeti.Algebra.Star.ProjectionOverlap
-import ForTauCeti.Analysis.InnerProductSpace.SpectralTrace
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
+public import ForTauCeti.Algebra.Star.ProjectionOverlap
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralTrace
 
 /-!
 # Strict sign of the projection-overlap curvature coefficient
@@ -19,6 +21,8 @@ This module proves the algebraic sign in the conventional second-variation
 argument. Identifying that coefficient with the second derivative of the
 actual constrained Schatten curve remains a separate analytic obligation.
 -/
+
+public section
 
 noncomputable section
 

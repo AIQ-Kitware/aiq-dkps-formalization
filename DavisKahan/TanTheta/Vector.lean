@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
-import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
-import Mathlib.Analysis.InnerProductSpace.Symmetric
-import Mathlib.Analysis.InnerProductSpace.Projection.Basic
-import Mathlib.Analysis.Normed.Operator.NNNorm
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
+module
+
+import Mathlib.Analysis.InnerProductSpace.Semisimple
+
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+public import Mathlib.Analysis.InnerProductSpace.Symmetric
+public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+public import Mathlib.Analysis.Normed.Operator.NNNorm
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
 
 /-!
 # The Davis--Kahan `tan Θ` theorem on infinite-dimensional Hilbert spaces
@@ -41,6 +45,8 @@ so too.  Both are kept — the finite proof is a different argument with its own
 `Alternative/` — and the primes on the names here are the only thing distinguishing the two
 sets of declarations, which is why a name-based duplicate check never saw the pair.
 -/
+
+public section
 
 namespace TauCeti
 

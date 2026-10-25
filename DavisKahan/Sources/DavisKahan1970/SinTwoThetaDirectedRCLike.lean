@@ -15,14 +15,18 @@ is selected by the result inventory. The declarations in this module remain usef
 bounded-trial specializations and implementation support.
 
 -/
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
-import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.DoubleAngle.DirectedAngleGeneric
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.DoubleAngle.DirectedAngleGeneric
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -138,7 +142,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     change J (Uc.starProjection (J x)) =
       W.reflection (Uc.starProjection (W.reflection.symm x))
     rw [hsymm]
-    rfl
+    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N.toSymmetricOperatorIdealFamily U
     (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)) F₁ hF₁iso hFproj hraw.1

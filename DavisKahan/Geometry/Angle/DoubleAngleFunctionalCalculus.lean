@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Reflection
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Gram
+module
+
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Reflection
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Gram
 
 /-!
 # The literal ambient `sin 2Θ` of Davis--Kahan, and the reflection identity
@@ -45,6 +47,8 @@ ordinary `sin Θ` theorem applied to the reflected pair.
   III*, SIAM J. Numer. Anal. 7 (1970), 1--46, Section 7, equations (7.1)--(7.5).
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.Angle
 
@@ -59,6 +63,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- The paper's literal ambient `sin 2Θ`, obtained by applying `t ↦ sin 2t` to
 the Hermitian operator angle. -/
+@[expose]
 noncomputable def sinTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   cfc (fun t : ℝ => Real.sin (2 * t)) (angleOperatorC U V)
@@ -98,7 +103,7 @@ theorem starProjection_map_reflection_eq (U V : Submodule ℂ E)
       V.reflectionOperator * U.starProjection * V.reflectionOperator := by
   refine ContinuousLinearMap.ext fun x => ?_
   rw [Submodule.starProjection_map_apply, Submodule.reflection_symm]
-  rfl
+  simp only [mul_apply_eq_comp, Submodule.reflectionOperator_apply_eq_reflection]
 
 section Identity
 

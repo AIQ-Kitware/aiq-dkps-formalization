@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
-import DavisKahan.DoubleAngle.KyFanOrthonormal
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+module
+
+public import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
+public import DavisKahan.DoubleAngle.KyFanOrthonormal
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+
+public section
 
 open TauCeti.DavisKahan.ExactSinTheta
 

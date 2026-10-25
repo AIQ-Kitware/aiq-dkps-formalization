@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
-import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+module
+
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -46,6 +50,7 @@ theorem norm_directedSinAngleOperatorC_le_one
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖TauCeti.DavisKahan.Angle.directedSinAngleOperatorC U V‖ ≤ 1 := by
   rw [TauCeti.DavisKahan.Angle.norm_directedSinAngleOperatorC]
+  rw [Submodule.directedProjectionGap_def]
   change ‖Vᗮ.starProjection ∘L U.starProjection‖ ≤ 1
   calc
     ‖Vᗮ.starProjection ∘L U.starProjection‖ ≤
@@ -164,6 +169,7 @@ theorem sin_same_projectionDiff
 /-- Negation changes no approximation singular value. -/
 theorem sameApproximationSingularValues_neg (A : E →L[ℂ] E) :
     SameApproximationSingularValues (-A) A := by
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   have h : ((-1 : ℂ) • A).approximationNumber n =
       ‖(-1 : ℂ)‖ * A.approximationNumber n :=

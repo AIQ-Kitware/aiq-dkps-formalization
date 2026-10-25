@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6, GPT-6.1 Sol
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealNuclearMatching
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealNuclearMatching
 
 /-!
 # Exact nearest real orthogonal operator commuting with a projection
@@ -13,6 +15,8 @@ orthogonal invariance preserves the literal Schatten distance, so the
 unrestricted real matching formula gives the nearest orthogonal member
 of the projection commutant, including attainment and all competitors.
 -/
+
+public section
 
 noncomputable section
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.Unbounded.Equation
-import DavisKahan.OperatorIdeal.CanonicalRealView
+module
+
+public import DavisKahan.Sylvester.Unbounded.Equation
+public import DavisKahan.OperatorIdeal.CanonicalRealView
 
 /-!
 # Neumann-series Sylvester estimates with one unbounded block
@@ -18,6 +20,8 @@ left, and the unbounded block on the right.
 
 The constant is one: the estimate is `δ * gauge X ≤ gauge C`, with no loss.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

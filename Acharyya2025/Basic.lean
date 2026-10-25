@@ -7,21 +7,23 @@ sample concentration. This file depends on `Acharyya2024.Common` for shared fini
 matrix/configuration definitions only.
 -/
 
-import Acharyya2025.Deterministic
-import Acharyya2025.MathlibBridge
-import Acharyya2025.Bridge
-import Acharyya2025.SpectralPipeline
-import Acharyya2025.GramRealization
-import Acharyya2025.GramRigidity
-import Acharyya2025.Weyl
-import Acharyya2025.OperatorBridge
-import Acharyya2025.DavisKahan
-import Acharyya2025.RankGap
-import Acharyya2025.Overlap
-import Acharyya2025.PolarFactor
-import Acharyya2025.ConfigPerturbation
-import Acharyya2025.MatrixPerturbation
-import Acharyya2025.AlignedPipeline
-import Acharyya2025.SpectralMeasurability
-import Acharyya2025.RateChain
-import Acharyya2025.GrowingPipeline
+module
+
+public import Acharyya2025.Deterministic
+public import Acharyya2025.MathlibBridge
+public import Acharyya2025.Bridge
+public import Acharyya2025.SpectralPipeline
+public import Acharyya2025.GramRealization
+public import Acharyya2025.GramRigidity
+public import Acharyya2025.Weyl
+public import Acharyya2025.OperatorBridge
+public import Acharyya2025.DavisKahan
+public import Acharyya2025.RankGap
+public import Acharyya2025.Overlap
+public import Acharyya2025.PolarFactor
+public import Acharyya2025.ConfigPerturbation
+public import Acharyya2025.MatrixPerturbation
+public import Acharyya2025.AlignedPipeline
+public import Acharyya2025.SpectralMeasurability
+public import Acharyya2025.RateChain
+public import Acharyya2025.GrowingPipeline

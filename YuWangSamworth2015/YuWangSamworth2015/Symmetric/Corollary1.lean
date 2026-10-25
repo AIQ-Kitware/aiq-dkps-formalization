@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import YuWangSamworth2015.GroundedImports
-import YuWangSamworth2015.Symmetric.Theorem2
+module
+
+public import YuWangSamworth2015.GroundedImports
+public import YuWangSamworth2015.Symmetric.Theorem2
 
 /-!
 # Corollary 1 with the source's neighbouring-eigenvalue gap
@@ -39,6 +41,8 @@ the plane is an admissible `v̂₁`, and the corollary bounds the angle for each
 them.  A formulation that pinned `v̂₁` to a chosen eigenbasis of `Σ̂` would say
 nothing about all but one of them.
 -/
+
+public section
 
 namespace YuWangSamworth2015
 open TauCeti
@@ -118,11 +122,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 eigenvalue. -/
 def scalarSamplePopulationData : Fin 2 → ℝ := fun i => if (i : ℕ) = 0 then 1 else 0
 
-omit [FiniteDimensional 𝕜 E] in
-private theorem finrank_eq_two (bb : OrthonormalBasis (Fin 2) 𝕜 E) :
-    finrank 𝕜 E = 2 := by
-  rw [Module.finrank_eq_card_basis bb.toBasis, Fintype.card_fin]
-
 variable (b : OrthonormalBasis (Fin 2) 𝕜 E)
 
 /-- The population operator of the degeneracy witness. -/
@@ -158,9 +157,11 @@ private theorem card_scalarSamplePopulation_level_one :
 /-- **The leading sorted eigenvalue of `diag(1, 0)` is `1`.** -/
 theorem eigenvalues_scalarSamplePopulation_zero :
     (isSymmetric_basisDiagonal b scalarSamplePopulationData).eigenvalues
-      (finrank_eq_two b) 0 = 1 := by
+      (show finrank 𝕜 E = 2 from by
+        simpa only [Fintype.card_fin] using Module.finrank_eq_card_basis b.toBasis) 0 = 1 := by
   classical
-  refine eigenvalues_basisDiagonal_eq_of_card b _ (finrank_eq_two b) 1 0 ?_ ?_
+  refine eigenvalues_basisDiagonal_eq_of_card b _ (show finrank 𝕜 E = 2 from by
+        simpa only [Fintype.card_fin] using Module.finrank_eq_card_basis b.toBasis) 1 0 ?_ ?_
   · rw [card_scalarSamplePopulation_gt_one]
     exact Nat.zero_le _
   · rw [card_scalarSamplePopulation_gt_one,
@@ -171,8 +172,10 @@ theorem eigenvalues_scalarSamplePopulation_zero :
 eigenvector at the sample index the corollary selects. -/
 theorem eigenvalues_scalarSampleSample (i : Fin 2) :
     (isSymmetric_basisDiagonal b fun _ : Fin 2 => (1 / 2 : ℝ)).eigenvalues
-      (finrank_eq_two b) i = 1 / 2 :=
-  eigenvalues_basisDiagonal_const b _ (finrank_eq_two b) i
+      (show finrank 𝕜 E = 2 from by
+        simpa only [Fintype.card_fin] using Module.finrank_eq_card_basis b.toBasis) i = 1 / 2 :=
+  eigenvalues_basisDiagonal_const b _ (show finrank 𝕜 E = 2 from by
+        simpa only [Fintype.card_fin] using Module.finrank_eq_card_basis b.toBasis) i
 
 /-- The perturbation `Σ̂ − Σ = diag(-1/2, 1/2)` has operator norm `1/2`. -/
 theorem opNorm_scalarSample_perturbation :
@@ -198,7 +201,8 @@ rather than `spanIndices` of a fixed basis. -/
 theorem yuWangSamworth_corollary1_scalarSample (w : E) (hw : ‖w‖ = 1) :
     sinThetaFrobenius (Submodule.span 𝕜 {b 0}) (Submodule.span 𝕜 {w}) ≤ 1 := by
   classical
-  have hn : finrank 𝕜 E = 2 := finrank_eq_two b
+  have hn : finrank 𝕜 E = 2 := by
+    simpa only [Fintype.card_fin] using Module.finrank_eq_card_basis b.toBasis
   have hb0 : ‖b 0‖ = 1 := b.orthonormal.norm_eq_one 0
   have hAu : scalarSamplePopulation b (b 0) =
       ((isSymmetric_basisDiagonal b scalarSamplePopulationData).eigenvalues hn 0 : 𝕜)

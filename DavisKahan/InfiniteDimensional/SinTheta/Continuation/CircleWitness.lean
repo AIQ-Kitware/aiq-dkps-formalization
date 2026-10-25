@@ -4,12 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.CircleRieszIntegral
-import DavisKahan.SpectralTheory.CircleContour
-import DavisKahan.SpectralTheory.CentralBand
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
-import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+module
+
+public import DavisKahan.SpectralTheory.CircleRieszIntegral
+public import DavisKahan.SpectralTheory.CircleContour
+public import DavisKahan.SpectralTheory.CentralBand
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
+public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -107,6 +111,7 @@ witness consumed by the Section 8 branch-selection stack.  The pathwise
 separating contours are the circle contours of `CircleContour`, and the
 uniform margin comes from the common resolvent bound through the
 Neumann-series estimate. -/
+@[expose]
 noncomputable def spectralContinuationWitness_of_circle
     (D : CircleContinuationData A E s) :
     SpectralContinuationWitness A E s where

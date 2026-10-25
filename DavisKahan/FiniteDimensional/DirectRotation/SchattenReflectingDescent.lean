@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import ForTauCeti.Analysis.InnerProductSpace.SchattenReflectingVariation
-import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
-import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerKernel
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenReflectingVariation
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
+public import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerKernel
 
 /-!
 # Reflecting blocks at an unrestricted ambient local minimum
@@ -18,6 +20,8 @@ diagonal parameter. This is the exceptional-block exclusion used in the
 proposed Schatten local-to-global theorem; extracting every such block
 from an arbitrary gradient kernel remains a separate geometric step.
 -/
+
+public section
 
 noncomputable section
 

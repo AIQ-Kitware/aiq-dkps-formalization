@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
 
 /-!
 # Davis--Kahan 1970, Section 9: affine trial subspace
@@ -19,6 +21,8 @@ source prose.  A later integration lemma may identify these forms with actual
 Lebesgue integrals on the unit interval.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section9
@@ -31,16 +35,19 @@ structure CenteredAffine where
 namespace CenteredAffine
 
 /-- Unit-interval `L2` inner product of two centered affine functions. -/
+@[expose]
 noncomputable def inner (p q : CenteredAffine) : ℝ :=
   p.constant * q.constant + p.centered * q.centered / 3
 
 /-- Inner product after multiplication of the second function by `t`. -/
+@[expose]
 noncomputable def tInner (p q : CenteredAffine) : ℝ :=
   p.constant * q.constant / 2
     + (p.constant * q.centered + p.centered * q.constant) / 6
     + p.centered * q.centered / 6
 
 /-- Inner product after multiplication of the second function by `t^2`. -/
+@[expose]
 noncomputable def tSqInner (p q : CenteredAffine) : ℝ :=
   p.constant * q.constant / 3
     + (p.constant * q.centered + p.centered * q.constant) / 6
@@ -64,11 +71,13 @@ noncomputable def tSqInner (p q : CenteredAffine) : ℝ :=
 end CenteredAffine
 
 /-- First normalized affine zero mode. -/
+@[expose]
 noncomputable def trialOne : CenteredAffine where
   constant := Real.sqrt 2 / 2
   centered := -(Real.sqrt 2 * Real.sqrt 3 / 2)
 
 /-- Second normalized affine zero mode. -/
+@[expose]
 noncomputable def trialTwo : CenteredAffine where
   constant := Real.sqrt 2 / 2
   centered := Real.sqrt 2 * Real.sqrt 3 / 2

@@ -3,13 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
 # Unitary conjugation for unbounded operators
@@ -19,6 +21,8 @@ when conjugating operators restricted to spectral subspaces.  The construction
 came from the vendored Spectra package, retired on 2026-07-29; it is now built
 on Mathlib's `LinearPMap`.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -37,7 +41,7 @@ variable {H : Type u} {K : Type v}
 The self-adjointness hypothesis is not used by the construction -- `unitaryConj`
 transports any partial map -- but it is retained so that this name and
 `unitaryConjugate_isSelfAdjoint` take the same arguments at every call site. -/
-noncomputable def unitaryConjugate
+@[expose] noncomputable def unitaryConjugate
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (_hA : IsSelfAdjoint A) : K →ₗ.[ℂ] K :=
   _root_.LinearPMap.unitaryConj W A
@@ -48,7 +52,9 @@ omit [CompleteSpace K] in
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) :
     (unitaryConjugate W A hA).domain =
-      A.domain.comap (W.symm.toLinearEquiv : K →ₗ[ℂ] H) := rfl
+      A.domain.comap (W.symm.toLinearEquiv : K →ₗ[ℂ] H) := by
+  ext x
+  exact _root_.LinearPMap.mem_unitaryConj_domain_iff
 
 omit [CompleteSpace K] in
 /-- Membership in the transported domain is the expected inverse-image
@@ -56,7 +62,8 @@ condition. -/
 theorem mem_unitaryConjugate_domain_iff
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) {x : K} :
-    x ∈ (unitaryConjugate W A hA).domain ↔ W.symm x ∈ A.domain := Iff.rfl
+    x ∈ (unitaryConjugate W A hA).domain ↔ W.symm x ∈ A.domain :=
+  _root_.LinearPMap.mem_unitaryConj_domain_iff
 
 omit [CompleteSpace K] in
 /-- The transported domain is also the direct image of the original domain. -/
@@ -68,9 +75,10 @@ theorem unitaryConjugate_domain_eq_map
   ext x
   constructor
   · intro hx
-    refine ⟨W.symm x, hx, ?_⟩
+    refine ⟨W.symm x, (mem_unitaryConjugate_domain_iff W A hA).mp hx, ?_⟩
     exact W.apply_symm_apply x
   · rintro ⟨z, hz, rfl⟩
+    rw [mem_unitaryConjugate_domain_iff]
     change W.symm (W z) ∈ A.domain
     simpa using hz
 
@@ -80,7 +88,9 @@ omit [CompleteSpace K] in
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) (x : (unitaryConjugate W A hA).domain) :
     (unitaryConjugate W A hA) x =
-      W (A ⟨W.symm (x : K), x.property⟩) := rfl
+      W (A ⟨W.symm (x : K),
+        (mem_unitaryConjugate_domain_iff W A hA).mp x.property⟩) :=
+  _root_.LinearPMap.unitaryConj_apply W A x
 
 omit [CompleteSpace K] in
 /-- The unitary sends every original-domain vector into the transported
@@ -106,6 +116,7 @@ theorem unitaryConjugate_apply_map
     (Subtype.ext (W.symm_apply_apply (x : H)))
 
 /-- Transport a bounded operator through a unitary equivalence. -/
+@[expose]
 noncomputable def unitaryConjugateBounded
     (W : H ≃ₗᵢ[ℂ] K) (R : H →L[ℂ] H) : K →L[ℂ] K :=
   W.toLinearIsometry.toContinuousLinearMap ∘L R ∘L
@@ -124,9 +135,10 @@ theorem mem_resolventSet_unitaryConj_of_mem
     (hz : z ∈ TauCeti.LinearPMap.resolventSet A) :
     z ∈ TauCeti.LinearPMap.resolventSet
       (_root_.LinearPMap.unitaryConj W A) := by
-  obtain ⟨R, hR⟩ := hz
+  obtain ⟨R, hR⟩ := TauCeti.LinearPMap.mem_resolventSet_iff.mp hz
   -- `IsResolventAt` has three fields: the domain condition, the right inverse, and the
   -- left inverse.  Each transports by conjugating with `W`.
+  apply TauCeti.LinearPMap.mem_resolventSet_iff.mpr
   refine ⟨unitaryConjugateBounded W R, fun φ => ?_, fun φ => ?_, fun ψ => ?_⟩
   · rw [unitaryConjugateBounded_apply,
       _root_.LinearPMap.mem_unitaryConj_domain_iff, W.symm_apply_apply]
@@ -135,7 +147,8 @@ theorem mem_resolventSet_unitaryConj_of_mem
     simpa only [_root_.LinearPMap.unitaryConj_apply,
       unitaryConjugateBounded_apply, map_sub, map_smul,
       W.symm_apply_apply, W.apply_symm_apply] using hφ
-  · let x : A.domain := ⟨W.symm (ψ : K), ψ.property⟩
+  · let x : A.domain := ⟨W.symm (ψ : K),
+      _root_.LinearPMap.mem_unitaryConj_domain_iff.mp ψ.property⟩
     have hx := congrArg W (hR.apply_smul_sub x)
     simpa only [x, unitaryConjugateBounded_apply,
       _root_.LinearPMap.unitaryConj_apply, map_sub, map_smul,
@@ -200,9 +213,7 @@ theorem unitaryConjugate_spectrum_eq
     _root_.LinearPMap.spectrum (unitaryConjugate W A hA) =
       _root_.LinearPMap.spectrum A := by
   ext lam
-  change lam ∉ _root_.LinearPMap.resolventSet
-      (unitaryConjugate W A hA) ↔
-    lam ∉ _root_.LinearPMap.resolventSet A
+  simp only [_root_.LinearPMap.mem_spectrum_iff]
   apply not_congr
   exact (mem_local_resolventSet_iff_root (unitaryConjugate W A hA) lam).symm.trans
     ((mem_resolventSet_unitaryConjugate_iff W A hA).trans
@@ -211,6 +222,7 @@ theorem unitaryConjugate_spectrum_eq
 /-- Restriction of an ambient unitary to a submodule and its transported
 image.  This same-ambient-space form is exactly what reflection transport
 needs; it does not impose completeness on an arbitrary submodule. -/
+@[expose]
 noncomputable def unitarySubmoduleMapIsometry
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E) :

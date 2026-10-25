@@ -24,9 +24,13 @@ spectral API for symmetric operators (no Mathlib CFC):
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
 
-import Mathlib
-import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
-import Acharyya2025.Weyl
+module
+
+public import Mathlib
+public import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
+public import Acharyya2025.Weyl
+
+public section
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace
 open Module (finrank)

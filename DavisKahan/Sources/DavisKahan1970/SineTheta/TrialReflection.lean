@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.DoubleAngle.UnboundedIdeal
+module
+
+public import DavisKahan.BoundedOperator.Reflection
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -67,10 +71,12 @@ def trialCompression : H →L[𝕜] H :=
   (R + V.subtypeL ∘L M) ∘L V.subtypeL.adjoint
 
 /-- The single off-diagonal block `P_{Vᗮ} A P_V` of the trial data. -/
+@[expose]
 def trialOffDiagonalBlock : H →L[𝕜] H :=
   Vᗮ.starProjection ∘L trialCompression V M R ∘L V.starProjection
 
 /-- The purely off-diagonal self-adjoint part of the trial data. -/
+@[expose]
 def trialOffDiagonalPart : H →L[𝕜] H :=
   trialOffDiagonalBlock V M R + (trialOffDiagonalBlock V M R).adjoint
 
@@ -197,7 +203,8 @@ theorem starProjection_apply_eq_trialCompression_adjoint
     V.starProjection (A x) =
       (trialCompression V M R).adjoint (x : H) := by
   refine ext_inner_left 𝕜 fun y => ?_
-  have hsym := (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hA)
+  have hsym := (TauCeti.LinearPMap.isSymmetric_iff _).mp
+    (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hA)
     (⟨V.starProjection y, starProjection_mem_domain hVdom y⟩ : A.domain) x
   calc ⟪y, V.starProjection (A x)⟫_𝕜
       = ⟪V.starProjection y, A x⟫_𝕜 := by

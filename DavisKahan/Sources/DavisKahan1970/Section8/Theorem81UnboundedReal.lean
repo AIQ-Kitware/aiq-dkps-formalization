@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedConverse
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedCompression
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
-import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedConverse
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedCompression
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
+public import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
 
 /-!
 # Theorem 8.1 at unbounded scope over a real Hilbert space
@@ -29,6 +31,8 @@ Every hypothesis transports up (`re_inner_complexifyReal_le_of_forall_mem`,
 bounds by evaluating on the real copy, the angle by `subspaceGap_complexifySubmodule`,
 the branch identification by `complexifySubmodule_injective`).
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -419,7 +423,7 @@ theorem re_inner_split_of_reduces_real {B : Er →ₗ.[ℝ] Er} {Q : Submodule �
       TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ : B.domain),
       Q.starProjection (x : Er)⟫_ℝ = 0 := by
     refine (Submodule.mem_orthogonal Qᗮ _).mp ?_ _
-      (hred.isInvariant_orthogonal _ (Qᗮ.starProjection_apply_mem _))
+      (hred.isInvariant_orthogonal.apply_mem _ (Qᗮ.starProjection_apply_mem _))
     rw [Submodule.orthogonal_orthogonal]
     exact Q.starProjection_apply_mem _
   have hstep : ⟪B x, (x : Er)⟫_ℝ

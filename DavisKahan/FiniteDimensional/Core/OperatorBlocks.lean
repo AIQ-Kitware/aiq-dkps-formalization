@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 
 /-!
 # Operator blocks relative to an orthogonal decomposition
@@ -11,6 +13,8 @@ import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 Pinching, off-diagonal parts, and zero-compression predicates used by the
 finite double-angle and tangent theories.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -22,6 +26,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 /-- The diagonal part (pinch) of an operator relative to `U ⊕ Uᗮ`. -/
+@[expose]
 noncomputable def pinch (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (H : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
   projection U ∘ₗ H ∘ₗ projection U +

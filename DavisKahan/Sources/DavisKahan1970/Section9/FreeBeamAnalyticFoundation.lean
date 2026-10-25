@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import Mathlib.Analysis.InnerProductSpace.PiL2
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Analytic foundation boundary for the Section 9 free beam
@@ -35,6 +37,8 @@ All downstream Section 9 facts are then short consequences of this data.  The
 point of the interface is to prevent the differential-operator campaign from
 being compressed into unrelated scalar fields.
 -/
+
+public section
 
 open scoped InnerProductSpace
 open Set
@@ -128,7 +132,7 @@ structure SobolevTraceFoundation where
 namespace SobolevTraceFoundation
 
 /-- Closed free-beam fourth-derivative operator supplied by the foundation. -/
-noncomputable def operator (D : SobolevTraceFoundation (H := H)) :
+@[expose] noncomputable def operator (D : SobolevTraceFoundation (H := H)) :
     H →ₗ.[ℂ] H :=
   { domain := D.freeDomain
     toFun := D.freeFourth }
@@ -147,6 +151,7 @@ foundation. -/
 /-- The free realization is symmetric directly from Green's identity. -/
 theorem operator_isSymmetric (D : SobolevTraceFoundation (H := H)) :
     TauCeti.LinearPMap.IsSymmetric D.operator := by
+  apply (LinearPMap.isSymmetric_iff _).mpr
   intro x y
   exact D.green_identity x y
 

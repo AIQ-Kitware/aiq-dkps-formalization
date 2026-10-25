@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6, GPT-6.1 Sol
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
 
 /-!
 # The named optimal Schatten phase and every minimizing phase pair
@@ -15,6 +17,8 @@ Every nonnegative phase pair attaining the scalar minimum consequently
 has precisely one of the two signed optimal-phase forms.
 -/
 
+public section
+
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
@@ -24,6 +28,7 @@ open Set
 /-- A named attaining nonnegative phase. The default outside `p≥1,theta≥0`
 is zero. On acute angles for `1<p<2` scalar uniqueness makes the choice
 independent of the existence proof. -/
+@[expose]
 def optimalPhase (p theta : ℝ) : ℝ :=
   if h : 1 ≤ p ∧ 0 ≤ theta then
     Classical.choose (exists_attains_phaseMinimum p theta h.1 h.2)

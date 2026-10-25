@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import Mathlib.Analysis.Calculus.IteratedDeriv.Defs
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
-import Mathlib.Tactic
+module
+
+public import Mathlib.Analysis.Calculus.IteratedDeriv.Defs
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
+public import Mathlib.Tactic
 
 /-!
 # Characteristic equation for the free--free beam
@@ -27,6 +29,8 @@ Consequently a nonzero positive-frequency mode satisfies
 Sobolev realization of the fourth-derivative operator.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace FreeBeam
@@ -34,32 +38,33 @@ namespace FreeBeam
 noncomputable section
 
 /-- Classical four-parameter solution of `u'''' = beta^4 u`. -/
+@[expose]
 def mode (beta a b c d x : ℝ) : ℝ :=
   a * Real.cos (beta * x) + b * Real.sin (beta * x) +
     c * Real.cosh (beta * x) + d * Real.sinh (beta * x)
 
 /-- Closed form of the first derivative. -/
+@[expose]
 def modeD1 (beta a b c d x : ℝ) : ℝ :=
   beta * (-a * Real.sin (beta * x) + b * Real.cos (beta * x) +
     c * Real.sinh (beta * x) + d * Real.cosh (beta * x))
 
 /-- Closed form of the second derivative. -/
+@[expose]
 def modeD2 (beta a b c d x : ℝ) : ℝ :=
   beta ^ 2 * (-a * Real.cos (beta * x) - b * Real.sin (beta * x) +
     c * Real.cosh (beta * x) + d * Real.sinh (beta * x))
 
 /-- Closed form of the third derivative. -/
+@[expose]
 def modeD3 (beta a b c d x : ℝ) : ℝ :=
   beta ^ 3 * (a * Real.sin (beta * x) - b * Real.cos (beta * x) +
     c * Real.sinh (beta * x) + d * Real.cosh (beta * x))
 
 /-- Closed form of the fourth derivative. -/
+@[expose]
 def modeD4 (beta a b c d x : ℝ) : ℝ := beta ^ 4 * mode beta a b c d x
 
--- `(try rfl) <;> ring` cannot become `(try rfl); ring`, which is what the
--- linter suggests: on the branches where `rfl` closes the goal, `<;>` over zero
--- goals is a no-op while `;` raises "No goals to be solved".  Verified by build.
-set_option linter.unnecessarySeqFocus false in
 /-- The displayed first derivative is correct. -/
 theorem hasDerivAt_mode (beta a b c d x : ℝ) :
     HasDerivAt (mode beta a b c d) (modeD1 beta a b c d x) x := by
@@ -73,12 +78,8 @@ theorem hasDerivAt_mode (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_sinh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)
-    using 1 <;> (try rfl) <;> ring
+    using 1 <;> first | rfl | ring
 
--- `(try rfl) <;> ring` cannot become `(try rfl); ring`, which is what the
--- linter suggests: on the branches where `rfl` closes the goal, `<;>` over zero
--- goals is a no-op while `;` raises "No goals to be solved".  Verified by build.
-set_option linter.unnecessarySeqFocus false in
 /-- The displayed second derivative is the derivative of `modeD1`. -/
 theorem hasDerivAt_modeD1 (beta a b c d x : ℝ) :
     HasDerivAt (modeD1 beta a b c d) (modeD2 beta a b c d x) x := by
@@ -92,7 +93,7 @@ theorem hasDerivAt_modeD1 (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_cosh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)).const_mul beta
-    using 1 <;> (try rfl) <;> ring
+    using 1 <;> first | rfl | ring
 
 /-- The displayed third derivative is the derivative of `modeD2`. -/
 theorem hasDerivAt_modeD2 (beta a b c d x : ℝ) :
@@ -107,7 +108,7 @@ theorem hasDerivAt_modeD2 (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_sinh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)).const_mul (beta ^ 2)
-    using 1 <;> (try rfl) <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
+    using 1 <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
 
 /-- The displayed fourth derivative is the derivative of `modeD3`. -/
 theorem hasDerivAt_modeD3 (beta a b c d x : ℝ) :
@@ -122,7 +123,7 @@ theorem hasDerivAt_modeD3 (beta a b c d x : ℝ) :
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul c)).add
       (((Real.hasDerivAt_cosh (beta * x)).comp x
           ((hasDerivAt_const x beta).mul (hasDerivAt_id x))).const_mul d)).const_mul (beta ^ 3)
-    using 1 <;> (try rfl) <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
+    using 1 <;> (try funext y) <;> (try simp only [Function.comp_apply, Pi.add_apply]) <;> ring
 
 /-- The mode solves the fourth-order eigenvalue equation. -/
 theorem mode_fourth_derivative (beta a b c d x : ℝ) :
@@ -130,6 +131,7 @@ theorem mode_fourth_derivative (beta a b c d x : ℝ) :
   exact (hasDerivAt_modeD3 beta a b c d x).deriv
 
 /-- Free-end boundary conditions for a classical mode. -/
+@[expose]
 def FreeBoundary (beta a b c d : ℝ) : Prop :=
   modeD2 beta a b c d 0 = 0 ∧
   modeD3 beta a b c d 0 = 0 ∧
@@ -154,15 +156,19 @@ theorem left_boundary_coefficients
   constructor <;> linarith
 
 /-- First row of the reduced right-end boundary matrix. -/
+@[expose]
 def boundaryA (beta : ℝ) : ℝ := Real.cosh beta - Real.cos beta
 
 /-- Upper-right entry of the reduced right-end boundary matrix. -/
+@[expose]
 def boundaryB (beta : ℝ) : ℝ := Real.sinh beta - Real.sin beta
 
 /-- Lower-left entry of the reduced right-end boundary matrix. -/
+@[expose]
 def boundaryC (beta : ℝ) : ℝ := Real.sinh beta + Real.sin beta
 
 /-- Determinant of the reduced two by two boundary matrix. -/
+@[expose]
 def boundaryDet (beta : ℝ) : ℝ :=
   boundaryA beta ^ 2 - boundaryB beta * boundaryC beta
 
@@ -215,6 +221,7 @@ theorem two_by_two_det_eq_zero_of_nontrivial_kernel
   · exact (mul_eq_zero.mp hb).resolve_right hb0
 
 /-- Characteristic function for positive free-beam frequencies. -/
+@[expose]
 def characteristic (beta : ℝ) : ℝ :=
   Real.cos beta * Real.cosh beta - 1
 

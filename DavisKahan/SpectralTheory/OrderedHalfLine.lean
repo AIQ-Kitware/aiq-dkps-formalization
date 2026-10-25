@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.SpectralTheory.AbstractSpectrum
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import DavisKahan.Sylvester.ClosedSylvesterEquation
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import DavisKahan.Sylvester.ClosedSylvesterEquation
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -51,6 +55,7 @@ theorem semiboundedBelow_of_spectrum_subset_Ici
     (hσ : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆
         Set.Ici c) :
     TauCeti.LinearPMap.SemiboundedBelow A c := by
+  apply (LinearPMap.semiboundedBelow_iff _ _).mpr
   intro x
   have hzero :
       TauCeti.LinearPMap.specProjection hA (Set.Iio c) measurableSet_Iio = 0 := by
@@ -72,6 +77,7 @@ theorem semiboundedAbove_of_spectrum_subset_Iic
     (hσ : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A ⊆
         Set.Iic c) :
     TauCeti.LinearPMap.SemiboundedAbove A c := by
+  apply (LinearPMap.semiboundedAbove_iff _ _).mpr
   intro x
   have hzero :
       TauCeti.LinearPMap.specProjection hA (Set.Ioi c) measurableSet_Ioi = 0 := by

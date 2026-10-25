@@ -13,8 +13,12 @@ paper form:
 
 These wrap the machinery in `Helm2025.Internal`.
 -/
-import Mathlib
-import Helm2025.Internal
+module
+
+public import Mathlib
+public import Helm2025.Internal
+public section
+
 set_option linter.mathlibStandardSet false
 
 open scoped BigOperators Real Nat Classical Pointwise

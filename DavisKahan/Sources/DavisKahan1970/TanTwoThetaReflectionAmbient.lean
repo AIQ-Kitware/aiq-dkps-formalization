@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Sol
 -/
-import DavisKahan.DoubleAngle.ReflectionTangentKyFan
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
-import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+module
+
+public import DavisKahan.DoubleAngle.ReflectionTangentKyFan
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
+public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalHalfLine
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -133,6 +137,7 @@ private theorem projectionBlock_diagonalPair_lower_reflection
 `TauCeti.ringInverse_semiconj` owns inverse commutation. -/
 
 /-- The signed doubled cosine `1 - 2(P_V-P_U)^2`. -/
+@[expose]
 def signedCosTwo (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   1 - 2 * (projectorDifference U V * projectorDifference U V)
@@ -544,14 +549,14 @@ private theorem reflection_block_data
     have hcoe : ((A0 x : U) : E) = A (x : E) := by
       dsimp [A0]
       exact coe_compressOperator_apply_of_maps A hAU x
-    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+    simpa [Submodule.norm_coe, Submodule.coe_inner, hcoe] using h
   have hA1low : ∀ x : Uᗮ, RCLike.re ⟪A1 x, x⟫_ℂ ≤ a * ‖x‖ ^ 2 := by
     intro x
     have h := hUperpLow (x : E) x.property
     have hcoe : ((A1 x : Uᗮ) : E) = A (x : E) := by
       dsimp [A1]
       exact coe_compressOperator_apply_of_maps A hAUperp x
-    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+    simpa [Submodule.norm_coe, Submodule.coe_inner, hcoe] using h
   have hLsa : IsSelfAdjoint L := by
     have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
     simpa only [L] using isSelfAdjoint_tanTwoBlockRepresentative hinv
@@ -1143,30 +1148,28 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_sym
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
     exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
   have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
-  have hA0sa : IsSelfAdjoint (compressOperator U A) :=
-    isSelfAdjoint_compressOperator hA U
-  have hA1sa : IsSelfAdjoint (compressOperator Uᗮ A) :=
-    isSelfAdjoint_compressOperator hA Uᗮ
   have hA0upper : spectrum ℝ (compressOperator U A) ⊆ Set.Iic α :=
     fun r hr => (hA0spec hr).2
   have hUlow : ∀ x ∈ U,
       RCLike.re ⟪A x, x⟫_ℂ ≤ α * ‖x‖ ^ 2 := by
     intro x hx
     let xu : U := ⟨x, hx⟩
-    have h := TauCeti.SpectralOrder.re_inner_le_of_spectrum_subset_Iic
-      (compressOperator U A) hA0sa hA0upper xu
+    have h := TauCeti.DavisKahanExt.compressOperator_upperFormBound_of_spectrum_subset_Iic
+      A (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) U hA0upper xu
     have hcoe : ((compressOperator U A xu : U) : E) = A (x : E) :=
       coe_compressOperator_apply_of_maps A hAU xu
-    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+    rw [Submodule.coe_inner, hcoe, show ‖xu‖ = ‖x‖ from rfl] at h
+    exact h
   have hUperpHigh : ∀ x ∈ Uᗮ,
       (α + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ := by
     intro x hx
     let xu : Uᗮ := ⟨x, hx⟩
-    have h := TauCeti.SpectralOrder.le_re_inner_of_spectrum_subset_Ici
-      (compressOperator Uᗮ A) hA1sa hA1spec xu
+    have h := TauCeti.DavisKahanExt.compressOperator_lowerFormBound_of_spectrum_subset_Ici
+      A (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) Uᗮ hA1spec xu
     have hcoe : ((compressOperator Uᗮ A xu : Uᗮ) : E) = A (x : E) :=
       coe_compressOperator_apply_of_maps A hAUperp xu
-    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+    rw [Submodule.coe_inner, hcoe, show ‖xu‖ = ‖x‖ from rfl] at h
+    exact h
   have hgap : α < α + δ := by linarith
   have hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V),
       Real.cos (2 * t) ≠ 0 :=
@@ -1275,30 +1278,28 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
     exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
   have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
-  have hA0sa : IsSelfAdjoint (compressOperator U A) :=
-    isSelfAdjoint_compressOperator hA U
-  have hA1sa : IsSelfAdjoint (compressOperator Uᗮ A) :=
-    isSelfAdjoint_compressOperator hA Uᗮ
   have hA0upper : spectrum ℝ (compressOperator U A) ⊆ Set.Iic α :=
     fun r hr => (hA0spec hr).2
   have hUlow : ∀ x ∈ U,
       RCLike.re ⟪A x, x⟫_ℂ ≤ α * ‖x‖ ^ 2 := by
     intro x hx
     let xu : U := ⟨x, hx⟩
-    have h := TauCeti.SpectralOrder.re_inner_le_of_spectrum_subset_Iic
-      (compressOperator U A) hA0sa hA0upper xu
+    have h := TauCeti.DavisKahanExt.compressOperator_upperFormBound_of_spectrum_subset_Iic
+      A (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) U hA0upper xu
     have hcoe : ((compressOperator U A xu : U) : E) = A (x : E) :=
       coe_compressOperator_apply_of_maps A hAU xu
-    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+    rw [Submodule.coe_inner, hcoe, show ‖xu‖ = ‖x‖ from rfl] at h
+    exact h
   have hUperpHigh : ∀ x ∈ Uᗮ,
       (α + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ := by
     intro x hx
     let xu : Uᗮ := ⟨x, hx⟩
-    have h := TauCeti.SpectralOrder.le_re_inner_of_spectrum_subset_Ici
-      (compressOperator Uᗮ A) hA1sa hA1spec xu
+    have h := TauCeti.DavisKahanExt.compressOperator_lowerFormBound_of_spectrum_subset_Ici
+      A (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) Uᗮ hA1spec xu
     have hcoe : ((compressOperator Uᗮ A xu : Uᗮ) : E) = A (x : E) :=
       coe_compressOperator_apply_of_maps A hAUperp xu
-    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+    rw [Submodule.coe_inner, hcoe, show ‖xu‖ = ‖x‖ from rfl] at h
+    exact h
   have hgap : α < α + δ := by linarith
   have hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V),
       Real.cos (2 * t) ≠ 0 :=

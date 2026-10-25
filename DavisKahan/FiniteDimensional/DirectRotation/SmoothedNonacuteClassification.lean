@@ -3,13 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNonacutePhases
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedProjectionOptimizers
-import DavisKahan.FiniteDimensional.DirectRotation.KernelCostSplitting
-import ForTauCeti.Analysis.InnerProductSpace.JointEigenbasis
-import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Projection
-import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
-import Mathlib.LinearAlgebra.Complex.Module
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNonacutePhases
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedProjectionOptimizers
+public import DavisKahan.FiniteDimensional.DirectRotation.KernelCostSplitting
+public import ForTauCeti.Analysis.InnerProductSpace.JointEigenbasis
+public import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Projection
+public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
+public import Mathlib.LinearAlgebra.Complex.Module
 
 /-!
 # Intrinsic phase selection including right-angle defects
@@ -18,6 +20,8 @@ The positive spectral projection of `Im(C * (T*R))` selects every
 optimizer's positive phase away from the cosine kernel, and vanishes on
 that kernel. The kernel's reflecting action remains independent.
 -/
+
+public section
 
 noncomputable section
 

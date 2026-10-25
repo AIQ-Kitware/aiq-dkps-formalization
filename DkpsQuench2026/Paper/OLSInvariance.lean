@@ -7,7 +7,11 @@ intercept is insensitive to this ambiguity: rotating every feature vector and
 rotating the slope by the same linear isometry leaves every fitted prediction
 and every least-squares objective value unchanged.
 -/
-import DkpsQuench2026.Paper.OLSQueryEfficiency
+module
+
+public import DkpsQuench2026.Paper.OLSQueryEfficiency
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -36,6 +40,7 @@ variable {d n : ℕ}
 
 /-- Rotate the slope of an affine predictor by a linear isometry, leaving its
 intercept unchanged. -/
+@[expose]
 def rotateCoefficients
     (W : Vec d ≃ₗᵢ[ℝ] Vec d) (θ : AffineCoefficients d) :
     AffineCoefficients d where
@@ -141,6 +146,7 @@ theorem mse_affineModel_rotate
 
 /-- Reparameterize an affine predictor after translating every feature by the
 same vector.  The slope is unchanged and the intercept absorbs the translation. -/
+@[expose]
 def translateCoefficients
     (c : Vec d) (θ : AffineCoefficients d) : AffineCoefficients d where
   intercept := θ.intercept - ⟪θ.slope, c⟫_ℝ

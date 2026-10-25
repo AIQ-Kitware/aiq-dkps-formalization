@@ -12,7 +12,11 @@ The final public theorem should ask for only the first line.  The current
 production bridge asks callers to provide all three lines separately.
 -/
 
-import DkpsQuench2026.Core.Certificates
+module
+
+public import DkpsQuench2026.Core.Certificates
+
+public section
 
 set_option linter.mathlibStandardSet false
 

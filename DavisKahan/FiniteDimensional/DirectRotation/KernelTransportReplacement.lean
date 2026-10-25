@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.KernelCostSplitting
-import DavisKahan.Geometry.Polar.CanonicalSymmetry
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.KernelCostSplitting
+public import DavisKahan.Geometry.Polar.CanonicalSymmetry
 
 /-!
 # Replacing the actual right-angle action of a transporter
@@ -14,6 +16,8 @@ reflection sectors extends to a feasible ambient transporter, while keeping
 any given cosine-preserving transporter on the positive-cosine complement.
 The extension and cosine commutation are conclusions, not hypotheses.
 -/
+
+public section
 
 noncomputable section
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.ComplexPhaseTrace
-import ForTauCeti.Analysis.InnerProductSpace.Projection.TraceSine
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.ComplexPhaseTrace
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.TraceSine
 
 /-!
 # The principal-angle formula for the global complex trace optimum
@@ -14,6 +16,8 @@ principal-sine traces.  For equal-dimensional subspaces those traces agree,
 so every principal angle contributes twice.  Composing this formula with the
 unconditional nonacute phase minimizer gives the complete explicit optimum.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

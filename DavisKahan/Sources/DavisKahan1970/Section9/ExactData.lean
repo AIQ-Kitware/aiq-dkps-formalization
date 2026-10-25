@@ -4,14 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import Mathlib.Analysis.Real.Sqrt
-import Mathlib.Tactic.Ext
-import Mathlib.Tactic.FieldSimp
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.LinearCombination
-import Mathlib.Tactic.NormNum
-import Mathlib.Tactic.Positivity
-import Mathlib.Tactic.Ring
+module
+
+public import Mathlib.Analysis.Real.Sqrt
+public import Mathlib.Tactic.Ext
+public import Mathlib.Tactic.FieldSimp
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.LinearCombination
+public import Mathlib.Tactic.NormNum
+public import Mathlib.Tactic.Positivity
+public import Mathlib.Tactic.Ring
 
 /-!
 # Davis--Kahan 1970, Section 9: exact finite data
@@ -26,6 +28,8 @@ exactly the data defined here.
 The primary quantities are kept in radical form.  Decimal values used in the
 paper are derived later as rational upper bounds.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970
@@ -60,55 +64,68 @@ noncomputable section
 
 /-- The exact coefficient of the lower Ritz value.  We write `sqrt 3 / 3`
 instead of `1 / sqrt 3`; the equality is proved below. -/
+@[expose]
 def ritzLowCoefficient : ℝ := (1 - Real.sqrt 3 / 3) / 2
 
 /-- The exact coefficient of the upper Ritz value. -/
+@[expose]
 def ritzHighCoefficient : ℝ := (1 + Real.sqrt 3 / 3) / 2
 
 /-- The two Ritz values in equation (9.5). -/
+@[expose]
 def ritzLow (ε : ℝ) : ℝ := ε * ritzLowCoefficient
 
 /-- The upper Ritz value of equation (9.5).  Stated separately from `ritzLow` so that
 each declaration carries its own documentation. -/
+@[expose]
 def ritzHigh (ε : ℝ) : ℝ := ε * ritzHighCoefficient
 
 /-- The residual Gram matrix before Rayleigh--Ritz recentering. -/
+@[expose]
 def residualGram (ε : ℝ) : SymmetricTwoByTwo where
   a₀₀ := ε ^ 2 / 30 * (11 - Real.sqrt 75)
   a₀₁ := -(ε ^ 2 / 30)
   a₁₁ := ε ^ 2 / 30 * (11 + Real.sqrt 75)
 
 /-- The two eigenvalues of the initial residual Gram matrix. -/
+@[expose]
 def residualGramEigenvalueLow (ε : ℝ) : ℝ :=
   ε ^ 2 / 30 * (11 - Real.sqrt 76)
 
 /-- The larger eigenvalue of the initial residual Gram matrix. -/
+@[expose]
 def residualGramEigenvalueHigh (ε : ℝ) : ℝ :=
   ε ^ 2 / 30 * (11 + Real.sqrt 76)
 
 /-- The residual Gram matrix after Rayleigh--Ritz recentering. -/
+@[expose]
 def orthogonalResidualGram (ε : ℝ) : SymmetricTwoByTwo where
   a₀₀ := ε ^ 2 / 30
   a₀₁ := -(ε ^ 2 / 30)
   a₁₁ := ε ^ 2 / 30
 
 /-- Exact largest singular value of the initial residual. -/
+@[expose]
 def residualTopSingularValue (ε : ℝ) : ℝ :=
   |ε| * Real.sqrt ((11 + Real.sqrt 76) / 30)
 
 /-- Exact smaller singular value of the initial residual. -/
+@[expose]
 def residualBottomSingularValue (ε : ℝ) : ℝ :=
   |ε| * Real.sqrt ((11 - Real.sqrt 76) / 30)
 
 /-- Sum of the two singular values of the initial residual. -/
+@[expose]
 def residualKyFanTwo (ε : ℝ) : ℝ :=
   residualTopSingularValue ε + residualBottomSingularValue ε
 
 /-- The unique nonzero singular value of the recentered residual. -/
+@[expose]
 def orthogonalResidualSingularValue (ε : ℝ) : ℝ :=
   |ε| * (Real.sqrt 15 / 15)
 
 /-- The norm of either recentered residual column. -/
+@[expose]
 def orthogonalResidualColumnNorm (ε : ℝ) : ℝ :=
   |ε| * (Real.sqrt 30 / 30)
 

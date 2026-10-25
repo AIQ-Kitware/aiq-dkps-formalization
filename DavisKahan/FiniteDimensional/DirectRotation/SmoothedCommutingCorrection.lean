@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedExplicitOptimizer
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedExplicitOptimizer
 
 /-!
 # Exact smoothed correction to a subspace-preserving unitary
@@ -13,6 +15,8 @@ subspace. The objective below is the literal singular-value cost of the
 operator difference, not a surrogate bound on a commutator.
 -/
 
+public section
+
 noncomputable section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
@@ -21,6 +25,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
 /-- The literal Charbonnier singular-value distance between two operators. -/
+@[expose]
 def smoothedOperatorDistance (tau : ℝ) (A B : E →ₗ[ℂ] E) : ℝ :=
   ∑ i : Fin (Module.finrank ℂ E),
     (Real.sqrt (tau ^ 2 + ((A - B).singularValues i) ^ 2) - tau)
@@ -74,6 +79,7 @@ theorem transporter_of_correction_preserves_subspace
 
 /-- The explicit closest subspace-preserving unitary, obtained from the
 spectral optimizer for the source and its actual image. -/
+@[expose]
 def optimalSmoothedCorrection (tau : ℝ) (K : Submodule ℂ E)
     (A : E ≃ₗᵢ[ℂ] E) : E ≃ₗᵢ[ℂ] E :=
   A.trans (optimalSmoothedTransport tau K (K.map A.toLinearMap)

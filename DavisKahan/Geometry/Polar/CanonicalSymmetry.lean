@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.Geometry.Polar.NonacuteCompression
-import DavisKahan.Geometry.Angle.CosineKernel
+module
+
+public import DavisKahan.Geometry.Polar.NonacuteCompression
+public import DavisKahan.Geometry.Angle.CosineKernel
 
 /-!
 # A self-adjoint transporter with any prescribed crossed-defect pairing
@@ -15,6 +17,8 @@ identification and its adjoint, with no minus sign. This supplies arbitrary
 reflecting kernel data for optimal transport assembly. No optimality claim
 is made for its positive-angle action.
 -/
+
+public section
 
 noncomputable section
 

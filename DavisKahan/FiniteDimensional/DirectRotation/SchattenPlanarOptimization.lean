@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransport
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
-import TauCeti.Analysis.InnerProductSpace.NormalOperator
-import TauCeti.Analysis.InnerProductSpace.SingularValues.Planar
-import ForTauCeti.Analysis.InnerProductSpace.SchattenSpectralCalculus
-import Mathlib.Analysis.SpecialFunctions.Complex.Arg
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransport
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
+public import TauCeti.Analysis.InnerProductSpace.NormalOperator
+public import TauCeti.Analysis.InnerProductSpace.SingularValues.Planar
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenSpectralCalculus
+public import Mathlib.Analysis.SpecialFunctions.Complex.Arg
 
 /-!
 # Eigenphase budgets for complex planar transport
@@ -17,6 +19,8 @@ A unitary transporting a line through angle `theta` must spend at least
 `2 * theta` in the sum of its absolute eigenphases. This relates arbitrary
 planar competitors to the attained scalar-phase minimum.
 -/
+
+public section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
 
@@ -222,7 +226,7 @@ private theorem sourceUnitVector_span : Submodule.span ℂ {sourceUnitVector} =
       ((EuclideanSpace.basisFun (Fin 2) ℂ 0) + EuclideanSpace.basisFun (Fin 2) ℂ 1)} = _
   rw [Submodule.span_singleton_smul_eq (isUnit_iff_ne_zero.2 (by
     exact inv_ne_zero (Complex.ofReal_ne_zero.mpr (by positivity : Real.sqrt 2 ≠ 0))))]
-  rfl
+  exact ComplexTraceOptimality.sourceLine_def.symm
 
 private theorem sourceUnitVector_inner_rotation (theta : ℝ) :
     inner ℂ sourceUnitVector ((scalarPhaseTransport theta 0) sourceUnitVector) =

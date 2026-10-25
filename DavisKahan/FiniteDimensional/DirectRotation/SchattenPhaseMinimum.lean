@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransition
-import Mathlib.Analysis.MeanInequalitiesPow
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransition
+public import Mathlib.Analysis.MeanInequalitiesPow
 
 /-!
 # The exact scalar-phase minimum as an angle cost
@@ -14,6 +16,8 @@ import Mathlib.Analysis.MeanInequalitiesPow
 rotation angles whose sum is at least `2 * theta`. This is the scalar reduction
 needed for spectral lower bounds on general unitary transports.
 -/
+
+public section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
 

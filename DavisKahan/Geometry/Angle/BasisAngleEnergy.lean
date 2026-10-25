@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.Geometry.Polar.DirectRotationSquare
+module
+
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
 -- the principal-angle sequence and its basis-sum dictionary, used below to
 -- identify the right-hand side with the printed `∑ₖ sin² θₖ`
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngleSequence
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngleSequence
 
 /-!
 # Davis--Kahan 1970, Proposition 4.2: displacement-angle energy over a basis
@@ -92,6 +94,8 @@ total energy, which no proper subfamily inherits.  Summing the same `ℂ⁴` exa
 over the full basis `{(e₁ ± e₂)/√2}` restores it: `1.025 < 1.125`.
 -/
 
+public section
+
 open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
@@ -107,6 +111,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 For unit `x` and unitary `W` the cosine of the angle between `x` and `W x` is
 `re ⟪x, W x⟫`, so this is the squared sine.  It is Proposition 4.2's summand. -/
+@[expose]
 noncomputable def displacementAngleSineSq (W : H →L[ℂ] H) (x : H) : ℝ :=
   1 - (RCLike.re ⟪x, W x⟫_ℂ) ^ 2
 
@@ -372,8 +377,9 @@ theorem tsum_one_sub_sq_norm_absoluteValue_eq_tsum_sq_principalSineSequence
       ∑' n : ℕ, ENNReal.ofReal (TauCeti.principalSineSequence U V n) ^ 2 := by
   rw [TauCeti.tsum_sq_principalSineSequence_eq_tsum_enorm_projection U V b]
   refine tsum_congr fun i => ?_
-  exact ofReal_one_sub_sq_norm_absoluteValue_eq_enorm_principalSineOperator
-    U V (b i).property (b.orthonormal.1 i)
+  simpa only [TauCeti.principalSineOperator_apply] using
+    ofReal_one_sub_sq_norm_absoluteValue_eq_enorm_principalSineOperator
+      U V (b i).property (b.orthonormal.1 i)
 
 /-- **Davis--Kahan 1970, Proposition 4.2, in arbitrary Hilbert dimension with
 its printed right-hand side.**

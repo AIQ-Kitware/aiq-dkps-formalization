@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
-import DavisKahan.Geometry.Polar.DirectRotation
-import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
-import DavisKahan.SinTheta.FrameFactorization
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
-import DavisKahan.SpectralTheory.OperatorAngle
+module
+
+public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
+public import DavisKahan.SinTheta.FrameFactorization
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+public import DavisKahan.SpectralTheory.OperatorAngle
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -667,7 +671,8 @@ theorem isQuarterAcute_of_orderedFormGap
     rw [htwo, hfour, halpha, hDsq] at hpositive
     linarith
   rcases subsingleton_or_nontrivial E with htriv | hnontriv
-  · change ‖U.starProjection - V.starProjection‖ < Real.sqrt 2 / 2
+  · change U.projectionGap V < Real.sqrt 2 / 2
+    rw [Submodule.projectionGap_def]
     have hzero : U.starProjection - V.starProjection = 0 :=
       ContinuousLinearMap.ext fun x => Subsingleton.elim _ _
     rw [hzero, norm_zero]
@@ -689,7 +694,8 @@ theorem isQuarterAcute_of_orderedFormGap
       rw [Real.sq_sqrt hc] at hsquare
       have hstrict : (1 - α) / 2 < (1 : ℝ) / 2 := by linarith
       exact hsquare.trans_lt hstrict
-    change ‖U.starProjection - V.starProjection‖ < Real.sqrt 2 / 2
+    change U.projectionGap V < Real.sqrt 2 / 2
+    rw [Submodule.projectionGap_def]
     have hthresholdSq : (Real.sqrt 2 / 2) ^ 2 = (1 : ℝ) / 2 := by
       rw [div_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
       norm_num
@@ -801,7 +807,7 @@ theorem subspaceGap_le_of_reflectionProduct_form_nonneg
   have hsqrt : Real.sqrt (1 / 2 : ℝ) = Real.sqrt 2 / 2 := by
     rw [show (1 / 2 : ℝ) = 2 / 2 ^ 2 by norm_num, Real.sqrt_div' 2 (by norm_num),
       Real.sqrt_sq (by norm_num : (0 : ℝ) ≤ 2)]
-  change ‖U.starProjection - V.starProjection‖ ≤ Real.sqrt 2 / 2
+  rw [Submodule.projectionGap_def]
   rw [← hDdef, ← hsqrt]
   exact hDnorm
 

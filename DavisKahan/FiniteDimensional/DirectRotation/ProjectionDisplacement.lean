@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.Majorization
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.Majorization
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
 /-!
 # Projection distance is a lower bound for unitary displacement
@@ -24,6 +26,8 @@ The statement is useful for the proposed quantitative repair of Davis--Kahan
 (1970), Proposition 4.4.  It is *not* the unproved upper bound for the direct
 rotation; that requires an additional principal-plane comparison.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

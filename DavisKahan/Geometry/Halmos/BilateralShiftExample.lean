@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.Geometry.Halmos.CrossedDefectGap
-import Mathlib.Analysis.InnerProductSpace.l2Space
+module
+
+public import DavisKahan.Geometry.Halmos.CrossedDefectGap
+public import Mathlib.Analysis.InnerProductSpace.l2Space
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -4,14 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
-import DavisKahan.FiniteDimensional.DirectRotation.Basic
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
-import DavisKahan.FiniteDimensional.SinTheta.TrialMap
-import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
-import DavisKahan.FiniteDimensional.TanTheta.Vector
-import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
-import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+public import DavisKahan.FiniteDimensional.DirectRotation.Basic
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import DavisKahan.FiniteDimensional.SinTheta.TrialMap
+public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
+public import DavisKahan.FiniteDimensional.TanTheta.Vector
+public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
+public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 
 /-!
 # Finite Davis--Kahan Part III specialization surface
@@ -49,6 +51,8 @@ canonical continuation and spectral-repulsion package, and the planar
 sharpness/numerical examples require separate source modules and proof audits.
 Those developments must not be inferred merely from the quartet aliases below.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

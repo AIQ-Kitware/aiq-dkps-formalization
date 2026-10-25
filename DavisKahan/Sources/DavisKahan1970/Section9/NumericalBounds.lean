@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
 
 /-!
 # Davis--Kahan 1970, Section 9: certified numerical bounds
@@ -16,6 +18,8 @@ sine, tangent, or double-angle estimate as a hypothesis; the general
 Davis--Kahan APIs can discharge those hypotheses in a separate integration
 module.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970
@@ -98,32 +102,38 @@ lemma initial_kyFanTwo_exact_lt_printed (ε : ℝ) (hε : 0 < ε) :
   nlinarith [residualTopRoot_lt_printed, residualBottomRoot_lt_printed]
 
 /-- Exact normalized tangent bound obtained from the recentered residual. -/
+@[expose]
 noncomputable def tangentThetaExactBound (ε : ℝ) : ℝ :=
   ((Real.sqrt 15 / 15) / 500 * ε) /
     (1 - (ritzHighCoefficient / 500) * ε)
 
 /-- Exact normalized tangent-double-angle bound. -/
+@[expose]
 noncomputable def tangentTwoThetaExactBound (ε : ℝ) : ℝ :=
   (2 * ((Real.sqrt 15 / 15) / 500) * ε) /
     (1 - (ritzHighCoefficient / 500) * ε)
 
 /-- Exact one-column tangent bound for the lower Ritz vector. -/
+@[expose]
 noncomputable def lowerIndividualTangentExactBound (ε : ℝ) : ℝ :=
   ((Real.sqrt 30 / 30) / 500 * ε) /
     (1 - (ritzLowCoefficient / 500) * ε)
 
 /-- Exact one-column tangent bound for the upper Ritz vector. -/
+@[expose]
 noncomputable def upperIndividualTangentExactBound (ε : ℝ) : ℝ :=
   ((Real.sqrt 30 / 30) / 500 * ε) /
     (1 - (ritzHighCoefficient / 500) * ε)
 
 /-- Exact scalar envelope obtained by combining the Schur-complement
 `tan(2 psi)` estimate and the complementary-coordinate `tan eta` estimate. -/
+@[expose]
 noncomputable def lowerIndividualAngleExactBound (ε : ℝ) : ℝ :=
   ((Real.sqrt 7 / 10) / 500 * ε) /
     (1 - (ritzLowCoefficient / 500) * ε)
 
 /-- Upper-Ritz-vector version of the combined individual-angle envelope. -/
+@[expose]
 noncomputable def upperIndividualAngleExactBound (ε : ℝ) : ℝ :=
   ((Real.sqrt 7 / 10) / 500 * ε) /
     (1 - (ritzHighCoefficient / 500) * ε)

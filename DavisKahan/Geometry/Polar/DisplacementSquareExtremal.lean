@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
-import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Pinching
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSquare
-import DavisKahan.Geometry.Polar.DirectRotationSquare
+module
+
+public import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Pinching
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSquare
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -185,6 +189,11 @@ theorem diagonalPart_directRotation_displacementSquare (U V : Submodule ℂ H)
     congr 1
     rw [two_mul, mul_two]
   apply Submodule.diagBlock_eq_self_of_reflectionConjugate
+  have hJdef : (U.reflection : H →L[ℂ] H) = U.reflectionOperator := by
+    ext x
+    rw [Submodule.reflectionOperator_apply_eq_reflection]
+    rfl
+  rw [hJdef]
   have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
     rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
       smul_mul_assoc, mul_smul_comm, hcomm]
@@ -234,6 +243,11 @@ theorem diagonalPart_nonacuteDirectRotation_displacementSquare_complex (U V : Su
     congr 1
     rw [two_mul, mul_two]
   apply Submodule.diagBlock_eq_self_of_reflectionConjugate
+  have hJdef : (U.reflection : H →L[ℂ] H) = U.reflectionOperator := by
+    ext x
+    rw [Submodule.reflectionOperator_apply_eq_reflection]
+    rfl
+  rw [hJdef]
   have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
     rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
       smul_mul_assoc, mul_smul_comm, hcomm]

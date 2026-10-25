@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.Riccati.UnboundedBasic
+module
+
+public import DavisKahan.Riccati.UnboundedBasic
 
 /-!
 # Product-domain core for unbounded block operators
@@ -16,6 +18,8 @@ Riccati reduction.
 The direct sum itself, together with its density and closed-graph facts, is
 the canonical `TauCeti.LinearPMap.directSum`; nothing is re-derived here.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -30,6 +34,7 @@ variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace 𝕜 E1]
   [CompleteSpace E1]
 
 /-- The bounded off-diagonal coupling on the Hilbert direct sum. -/
+@[expose]
 noncomputable def unboundedOffDiagonalCoupling
     (B01 : E1 →L[𝕜] E0) (B10 : E0 →L[𝕜] E1) :
     WithLp 2 (E0 × E1) →L[𝕜] WithLp 2 (E0 × E1) :=

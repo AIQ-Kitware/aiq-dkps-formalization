@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientPlanes
-import ForTauCeti.Analysis.InnerProductSpace.PositiveSpectralBasis
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientPlanes
+public import ForTauCeti.Analysis.InnerProductSpace.PositiveSpectralBasis
 
 /-!
 # Simultaneous phase coordinates on the whole positive gradient space
@@ -20,6 +22,8 @@ levels and the maximal level. Pairing this basis by source reflection and
 adjoining the gradient kernel gives the subsequent ambient decomposition.
 The construction also permits the positive space to be zero-dimensional.
 -/
+
+public section
 
 noncomputable section
 

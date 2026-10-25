@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.BoundedTruncation
-import DavisKahan.Sylvester.Bounded
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+module
+
+public import DavisKahan.SpectralTheory.BoundedTruncation
+public import DavisKahan.Sylvester.Bounded
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 
 /-!
 # Interface-parametric filled spectral truncations
@@ -14,6 +16,8 @@ This module rebuilds the filled bounded truncation used by the ordered
 two-unbounded Sylvester argument over `SpectralCutoffInterface` and
 `BoundedTruncationInterface`.
 -/
+
+public section
 
 namespace TauCeti
 
@@ -34,6 +38,7 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 /-- Fill the complement of an orthogonal spectral cutoff by a real scalar. -/
+@[expose]
 noncomputable def filledTruncation
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]

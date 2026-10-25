@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerRigidity
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCertificateAverage
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerRigidity
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCertificateAverage
 
 /-!
 # Spectral separation of every smoothed optimizer
@@ -14,6 +16,8 @@ subcritical directions, yields a positive unitary-average equation.
 This equation separates distinct principal cosines without presupposing
 that the competitor preserves the principal planes.
 -/
+
+public section
 
 noncomputable section
 

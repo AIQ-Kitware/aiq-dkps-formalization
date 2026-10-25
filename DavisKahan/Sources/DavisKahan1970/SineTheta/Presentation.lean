@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
-import DavisKahan.SinTheta.Canonical
-import DavisKahan.SinTheta.Real.Canonical
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
+public import DavisKahan.SinTheta.Canonical
+public import DavisKahan.SinTheta.Real.Canonical
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimalPhase
-import ForTauCeti.Analysis.InnerProductSpace.SpectralTrace
-import ForTauCeti.Analysis.InnerProductSpace.AnticommutingInvolution
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimalPhase
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralTrace
+public import ForTauCeti.Analysis.InnerProductSpace.AnticommutingInvolution
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
 
 /-!
 # The intrinsic optimal Schatten phase factor
@@ -16,6 +18,8 @@ of the actual principal cosine operator. The symbol has unit modulus on
 the entire complex plane; hence its finite normal functional calculus is
 unitary. No continuity or infinite-dimensional ideal assertion is needed.
 -/
+
+public section
 
 noncomputable section
 
@@ -31,6 +35,7 @@ def schattenPhaseSymbol (p : ℝ) (z : ℂ) : ℂ :=
   Complex.exp ((optimalPhase p (Real.arccos z.re) : ℂ) * Complex.I)
 
 /-- The positive spectral phase factor, defined without choosing a frame. -/
+@[expose]
 def schattenPhaseFactor (p : ℝ) (C : E →L[ℂ] E) : E →L[ℂ] E :=
   cfc (schattenPhaseSymbol p) C
 

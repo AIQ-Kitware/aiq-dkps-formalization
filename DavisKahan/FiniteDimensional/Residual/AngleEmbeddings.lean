@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
-import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
-import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
+public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
+public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 
 /-!
 # Coordinate tangent and double-angle embeddings
@@ -29,6 +31,8 @@ identifications still require a simultaneous CS decomposition and are not
 asserted here merely from these definitions.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
@@ -46,6 +50,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 Its nonzero singular values are intended to be the tangents of the principal
 angles.  That identification is a separate CS-decomposition theorem; this
 definition only fixes the canonical coordinate semantics. -/
+@[expose]
 noncomputable def tanThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinThetaEmbedding U X ∘ₗ
@@ -71,6 +76,7 @@ theorem cosThetaMagnitude_injective_of_isTransverse
 
 On a simultaneous principal-angle basis this has singular values
 `2 sin θᵢ cos θᵢ = sin (2 θᵢ)`. -/
+@[expose]
 noncomputable def sinTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   (2 : 𝕜) • (sinThetaEmbedding U X ∘ₗ cosThetaMagnitude U X)
@@ -344,6 +350,7 @@ private theorem exists_intervalGap_of_orderedGap
   have hβα : β ≤ α :=
     hlowerSpec α (eigenvalue_mem_restrictedPointSpectrum_top hM iTop)
   have hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc β α) := by
+    apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
     intro lam hlam
     rcases Module.End.mem_restrictedPointSpectrum_iff.mp hlam with ⟨x, hxTop, hx0, hxEig⟩
     have hxnorm : 0 < ‖x‖ ^ 2 := sq_pos_of_pos (norm_pos_iff.mpr hx0)
@@ -354,6 +361,7 @@ private theorem exists_intervalGap_of_orderedGap
     rw [hray] at hu
     exact ⟨hlowerSpec lam (Module.End.mem_restrictedPointSpectrum hxTop hx0 hxEig), by nlinarith⟩
   have hAspec : Module.End.PointSpectrumIn A Uᗮ (Set.Ici (α + δ)) := by
+    apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
     intro μ hμ
     exact hgap α μ
       (eigenvalue_mem_restrictedPointSpectrum_top hM iTop) hμ
@@ -409,6 +417,7 @@ theorem tanThetaEmbedding_residual_le_of_orderedGap
 
 /-- The graph operator from trial coordinates to the complementary exact
 subspace.  It is the totalized coordinate tangent `S |C|⁺`. -/
+@[expose]
 noncomputable def graphOperator (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   tanThetaEmbedding U X
@@ -498,8 +507,8 @@ theorem tanTheta_vector_le
       hA hU X hM hGalerkin hδ hgap
     have hTbound :
         δ * ‖(tanThetaEmbedding U X).toContinuousLinearMap‖ ≤ ρ := by
-      simpa [UnitarilyInvariantSeminorm.opNorm_apply] using
-        hTop.trans hRop
+      simp only [UnitarilyInvariantSeminorm.opNorm_apply] at hTop
+      exact hTop.trans hRop
     intro y
     have hSy := LinearMap.congr_fun hfactor y
     change tanThetaEmbedding U X (cosThetaMagnitude U X y) =

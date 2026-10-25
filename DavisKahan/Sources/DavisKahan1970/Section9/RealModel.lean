@@ -4,7 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamSection9Real
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamSection9Real
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

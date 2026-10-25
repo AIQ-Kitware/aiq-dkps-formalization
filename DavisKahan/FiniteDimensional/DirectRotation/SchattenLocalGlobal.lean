@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectingPlanes
-import ForTauCeti.Analysis.InnerProductSpace.UnitaryTransportFrobenius
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectingPlanes
+public import ForTauCeti.Analysis.InnerProductSpace.UnitaryTransportFrobenius
 
 /-!
 # Every complex Schatten transport local minimum is global
@@ -16,6 +18,8 @@ optimality of that kernel reflection without reindexing its angle list.
 The existing cost-deficit identity then closes unrestricted local-to-global
 optimality for `1<p<2`, including every exceptional spectral block.
 -/
+
+public section
 
 noncomputable section
 

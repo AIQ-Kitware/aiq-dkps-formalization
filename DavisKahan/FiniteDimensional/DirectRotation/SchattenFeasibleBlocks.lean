@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenNoMixing
-import ForTauCeti.Analysis.Normed.Lp.ProdLp
-import ForTauCeti.Analysis.InnerProductSpace.PairedTransportVariation
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenNoMixing
+public import ForTauCeti.Analysis.Normed.Lp.ProdLp
+public import ForTauCeti.Analysis.InnerProductSpace.PairedTransportVariation
 
 /-!
 # Feasible variations of paired gradient blocks
@@ -15,6 +17,8 @@ reflection. Its orthogonal extension therefore preserves the source projection,
 and a local minimum of the ambient transport cost induces a local minimum
 of the actual paired cost.
 -/
+
+public section
 
 noncomputable section
 

@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
-import DavisKahan.SpectralTheory.ReflectionRestriction
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
+public import DavisKahan.SpectralTheory.ReflectionRestriction
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 /-!
 # The operator angle at an arbitrary `RCLike` field
@@ -26,8 +28,8 @@ definitions below are the direct ones and carry no hypothesis beyond `[RCLike �
 
 ## The two identifications
 
-* over `ℂ` the generic definitions **are** `sinAngleOperatorC`, `angleOperatorC` and
-  `sinTwoAngleOperatorC`, definitionally;
+* over `ℂ` the generic operators agree with `sinAngleOperatorC`, `angleOperatorC` and
+  `sinTwoAngleOperatorC` by uniqueness of the compatible real algebra structure;
 * over `ℝ` they agree with `sinAngleOperatorR`, `angleOperatorR` and `sinTwoAngleOperatorR`,
   which are defined by descent.  That is a theorem, and its content is the naturality of the
   calculus along the complexification (`TauCeti.RealComplexification.complexify_cfc` and
@@ -38,6 +40,8 @@ arbitrary `RCLike` field to its real-like or complex-like case and reusing the f
 analytic proofs.  `clm_sinTwoAngleOperator` and its siblings carry the objects across the
 scalar transport that makes the dispatch possible.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.Angle
@@ -59,21 +63,25 @@ universe u w v
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
+
 /-! ## The definitions -/
 
 /-- **The paper's `sin Θ` between two closed subspaces**, at an arbitrary `RCLike` field: the
 modulus of the projector difference. -/
+@[expose]
 def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   ContinuousLinearMap.modulus (U.starProjection - V.starProjection)
 
 /-- **The paper's Hermitian operator angle `Θ = arcsin |P_U - P_V|`**, at an arbitrary `RCLike`
 field. -/
+@[expose]
 def angleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   cfc Real.arcsin (sinAngleOperator U V)
 
 /-- **The paper's ambient `sin 2Θ`**, at an arbitrary `RCLike` field. -/
+@[expose]
 def sinTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   cfc (fun t : ℝ => Real.sin (2 * t)) (angleOperator U V)
@@ -123,7 +131,8 @@ theorem sinAngleOperator_nonneg : 0 ≤ sinAngleOperator U V :=
 
 /-- The operator norm of the generic ambient sine is exactly the projection gap. -/
 theorem norm_sinAngleOperator : ‖sinAngleOperator U V‖ = U.projectionGap V := by
-  unfold sinAngleOperator Submodule.projectionGap
+  rw [Submodule.projectionGap_def]
+  unfold sinAngleOperator
   exact ContinuousLinearMap.norm_modulus _
 
 /-- `sin Θ` is self-adjoint. -/
@@ -165,7 +174,7 @@ theorem spectrum_sinAngleOperator_subset_Icc :
         (sinAngleOperator_nonneg U V) x hx
   have hnormK : ‖((x : 𝕜))‖ ≤
       ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hx
+    spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hx)
   have hnorm : |x| ≤
       ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := by
     rwa [RCLike.norm_ofReal] at hnormK
@@ -182,8 +191,12 @@ theorem spectrum_sinAngleOperator_subset_Icc :
 /-- Applying sine to the literal generic angle recovers exactly the positive
 ambient sine.  This is the semantic bridge between the paper expression
 `sin Θ` and the modulus representation used by many proofs. -/
-theorem cfc_sin_angleOperator :
+theorem cfc_sin_angleOperator
+    [a : Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+    [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] :
     cfc Real.sin (angleOperator U V) = sinAngleOperator U V := by
+  have hAlg := ContinuousLinearMap.realAlgebra_eq_of_isScalarTower a inferInstance
+  subst a
   have hsa : IsSelfAdjoint (sinAngleOperator U V) :=
     isSelfAdjoint_sinAngleOperator U V
   have harcsin : ContinuousOn Real.arcsin
@@ -220,9 +233,8 @@ theorem isSelfAdjoint_sinTwoAngleOperator : IsSelfAdjoint (sinTwoAngleOperator U
 
 /-! ## Over `ℂ`: the generic objects are the complex ones
 
-Definitionally so: `ContinuousFunctionalCalculus` is a `Prop`, and the real algebra structure
-the generic definition resolves is the restriction of scalars that `E →L[ℂ] E` already
-carries. -/
+The real algebra structures agree by the scalar-tower identity. Once they are identified,
+proof irrelevance identifies the functional-calculus instances. -/
 
 section Complex
 
@@ -230,13 +242,25 @@ variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [Complete
 variable (U V : Submodule ℂ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 /-- Over `ℂ` the generic ambient sine *is* `sinAngleOperatorC`. -/
-@[simp] theorem sinAngleOperator_complex : sinAngleOperator U V = sinAngleOperatorC U V := rfl
+@[simp] theorem sinAngleOperator_complex : sinAngleOperator U V = sinAngleOperatorC U V := by rfl
 
-@[simp] theorem angleOperator_complex : angleOperator U V = angleOperatorC U V := rfl
+@[simp] theorem angleOperator_complex : angleOperator U V = angleOperatorC U V := by
+  have h : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℂ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  simp only [angleOperator, angleOperatorC, sinAngleOperator_complex]
+  congr 1
+  exact proof_irrel_heq _ _
 
 /-- Over `ℂ` the generic ambient `sin 2Θ` *is* `sinTwoAngleOperatorC`. -/
 @[simp] theorem sinTwoAngleOperator_complex :
-    sinTwoAngleOperator U V = sinTwoAngleOperatorC U V := rfl
+    sinTwoAngleOperator U V = sinTwoAngleOperatorC U V := by
+  have h : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℂ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  simp only [sinTwoAngleOperator, sinTwoAngleOperatorC, angleOperator_complex]
+  congr 1
+  exact proof_irrel_heq _ _
 
 end Complex
 
@@ -266,7 +290,14 @@ variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalPro
 @[simp] theorem angleOperator_real : angleOperator U V = angleOperatorR U V := by
   refine complexify_injective ?_
   rw [complexify_angleOperatorR]
-  change complexify (cfc Real.arcsin (sinAngleOperator U V)) = _
+  have h : ContinuousLinearMap.realAlgebra (𝕜 := ℝ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℝ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  have hcalc : angleOperator U V = cfc Real.arcsin (sinAngleOperator U V) := by
+    unfold angleOperator
+    congr 1
+    exact proof_irrel_heq _ _
+  rw [hcalc]
   rw [complexify_cfc Real.arcsin (isSelfAdjoint_sinAngleOperator U V)
       Real.continuous_arcsin.continuousOn,
     sinAngleOperator_real, complexify_sinAngleOperatorR]
@@ -277,7 +308,15 @@ variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalPro
     sinTwoAngleOperator U V = sinTwoAngleOperatorR U V := by
   refine complexify_injective ?_
   rw [complexify_sinTwoAngleOperatorR]
-  change complexify (cfc (fun t : ℝ => Real.sin (2 * t)) (angleOperator U V)) = _
+  have h : ContinuousLinearMap.realAlgebra (𝕜 := ℝ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℝ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  have hcalc : sinTwoAngleOperator U V =
+      cfc (fun t : ℝ => Real.sin (2 * t)) (angleOperator U V) := by
+    unfold sinTwoAngleOperator
+    congr 1
+    exact proof_irrel_heq _ _
+  rw [hcalc]
   rw [complexify_cfc _ (isSelfAdjoint_angleOperator U V)
       (by fun_prop : ContinuousOn (fun t : ℝ => Real.sin (2 * t)) _),
     angleOperator_real, complexify_angleOperatorR]
@@ -349,17 +388,20 @@ section Directed
 
 /-- **The paper's directed `sin Θ₀`** between an ordered pair of closed subspaces, at an
 arbitrary `RCLike` field: the modulus of the cross-projection `U → Uᗮ` through `V`. -/
+@[expose]
 def directedSinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   ContinuousLinearMap.modulus (Vᗮ.starProjection ∘L U.starProjection)
 
 /-- **The paper's directed `cos Θ₀`**, at an arbitrary `RCLike` field. -/
+@[expose]
 def directedCosAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   ContinuousLinearMap.modulus (V.starProjection ∘L U.starProjection)
 
 /-- **The paper's directed `sin 2Θ₀`**, at an arbitrary `RCLike` field: `2 sin Θ₀ cos Θ₀`
 through the commuting directed sine and cosine. -/
+@[expose]
 def directedSinTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V)
@@ -398,15 +440,23 @@ variable (U V : Submodule ℂ F) [U.HasOrthogonalProjection] [V.HasOrthogonalPro
 
 /-- Over `ℂ` the generic directed sine *is* `directedSinAngleOperatorC`. -/
 @[simp] theorem directedSinAngleOperator_complex :
-    directedSinAngleOperator U V = directedSinAngleOperatorC U V := rfl
+    directedSinAngleOperator U V = directedSinAngleOperatorC U V := by rfl
 
 /-- Over `ℂ` the generic directed cosine *is* `directedCosAngleOperatorC`. -/
 @[simp] theorem directedCosAngleOperator_complex :
-    directedCosAngleOperator U V = directedCosAngleOperatorC U V := rfl
+    directedCosAngleOperator U V = directedCosAngleOperatorC U V := by rfl
 
 /-- Over `ℂ` the generic directed `sin 2Θ₀` *is* `directedSinTwoAngleOperatorC`. -/
 @[simp] theorem directedSinTwoAngleOperator_complex :
-    directedSinTwoAngleOperator U V = directedSinTwoAngleOperatorC U V := rfl
+    directedSinTwoAngleOperator U V = directedSinTwoAngleOperatorC U V := by
+  have h : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := F) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℂ] F)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  simp only [directedSinTwoAngleOperator, directedSinTwoAngleOperatorC,
+    directedSinAngleOperator_complex, directedCosAngleOperator_complex]
+  exact congrArg (fun a : Algebra ℝ (F →L[ℂ] F) =>
+    @SMul.smul ℝ (F →L[ℂ] F) a.toSMul 2
+      (directedSinAngleOperatorC U V * directedCosAngleOperatorC U V)) h
 
 end DirectedComplex
 
@@ -439,7 +489,14 @@ pair, which is where this development keeps the real directed angle. -/
 @[simp] theorem complexify_directedSinTwoAngleOperator :
     complexify (directedSinTwoAngleOperator U V) = Real.directedSinTwoAngleOperatorRC U V := by
   have hl : directedSinTwoAngleOperator U V =
-      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := rfl
+      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := by
+    have h : ContinuousLinearMap.realAlgebra (𝕜 := ℝ) (E := F) =
+        (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℝ] F)) :=
+      ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+    unfold directedSinTwoAngleOperator
+    exact congrArg (fun a : Algebra ℝ (F →L[ℝ] F) =>
+      @SMul.smul ℝ (F →L[ℝ] F) a.toSMul 2
+        (directedSinAngleOperator U V * directedCosAngleOperator U V)) h
   have hmul : complexify (directedSinAngleOperator U V * directedCosAngleOperator U V) =
       complexify (directedSinAngleOperator U V) * complexify (directedCosAngleOperator U V) :=
     complexify_comp _ _
@@ -487,7 +544,7 @@ open TauCeti.ScalarTransport
       directedSinTwoAngleOperator (ScalarTransport.submodule (e := e) U)
         (ScalarTransport.submodule (e := e) V) := by
   have hl : directedSinTwoAngleOperator U V =
-      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := rfl
+      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := by rfl
   rw [hl, clm_real_smul, ScalarTransport.clm_mul, clm_directedSinAngleOperator,
     clm_directedCosAngleOperator]
   rfl
@@ -506,7 +563,8 @@ theorem commute_directedSinAngleOperator_directedCosAngleOperator_real {F : Type
     complexify (directedCosAngleOperator U V ∘L directedSinAngleOperator U V)
   rw [complexify_comp, complexify_comp, complexify_directedSinAngleOperator,
     complexify_directedCosAngleOperator]
-  exact commute_directedSinAngleOperatorC_directedCosAngleOperatorC _ _
+  exact commute_directedSinAngleOperatorC_directedCosAngleOperatorC
+    (complexifySubmodule U) (complexifySubmodule V)
 
 /-- **The directed sine and cosine commute**, at an arbitrary `RCLike` field.  This is what
 makes `2 sin Θ₀ cos Θ₀` the ordinary double-angle formula rather than a choice of ordering. -/
@@ -542,7 +600,7 @@ theorem directedSinTwoAngleOperator_nonneg : 0 ≤ directedSinTwoAngleOperator U
       (directedCosAngleOperator_nonneg U V)).mp
       (commute_directedSinAngleOperator_directedCosAngleOperator U V)
   have hdef : directedSinTwoAngleOperator U V =
-      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := rfl
+      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := by rfl
   rw [hdef, two_smul]
   exact add_nonneg hprod hprod
 
@@ -550,7 +608,7 @@ theorem directedSinTwoAngleOperator_nonneg : 0 ≤ directedSinTwoAngleOperator U
 theorem isSelfAdjoint_directedSinTwoAngleOperator :
     IsSelfAdjoint (directedSinTwoAngleOperator U V) := by
   have hdef : directedSinTwoAngleOperator U V =
-      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := rfl
+      (2 : ℝ) • (directedSinAngleOperator U V * directedCosAngleOperator U V) := by rfl
   have hmul : IsSelfAdjoint
       (directedSinAngleOperator U V * directedCosAngleOperator U V) := by
     rw [IsSelfAdjoint, star_mul, (isSelfAdjoint_directedCosAngleOperator U V).star_eq,
@@ -592,12 +650,16 @@ theorem complexify_starProjection_map_reflection {F : Type v} [NormedAddCommGrou
   have hconj : ∀ T : F →L[ℝ] F,
       _root_.TauCeti.DavisKahan.boundedUnitaryConjugate V.reflection T =
         V.reflectionOperator ∘L T ∘L V.reflectionOperator :=
-    fun _ => ContinuousLinearMap.ext fun _ => rfl
+    fun _ => ContinuousLinearMap.ext fun _ => by
+      simp only [boundedUnitaryConjugate_apply, Submodule.reflectionOperator_apply_eq_reflection,
+        ContinuousLinearMap.comp_apply, Submodule.reflection_symm]
   have hconjC : ∀ T : RealComplexification F →L[ℂ] RealComplexification F,
       _root_.TauCeti.DavisKahan.boundedUnitaryConjugate (complexifySubmodule V).reflection T =
         (complexifySubmodule V).reflectionOperator ∘L T ∘L
           (complexifySubmodule V).reflectionOperator :=
-    fun _ => ContinuousLinearMap.ext fun _ => rfl
+    fun _ => ContinuousLinearMap.ext fun _ => by
+      simp only [boundedUnitaryConjugate_apply, Submodule.reflectionOperator_apply_eq_reflection,
+        ContinuousLinearMap.comp_apply, Submodule.reflection_symm]
   have hrefl : complexify V.reflectionOperator = (complexifySubmodule V).reflectionOperator := by
     rw [Submodule.reflectionOperator_eq_two_smul_sub_id,
       Submodule.reflectionOperator_eq_two_smul_sub_id, complexify_sub,
@@ -682,6 +744,7 @@ theorem sinAngleOperator_hasSameApproximationNumbers_projectorDifference :
     (U.starProjection - V.starProjection)).trans ?_
   have hneg : (V.starProjection - U.starProjection : E →L[𝕜] E) =
       -(U.starProjection - V.starProjection) := by abel
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   rw [hneg, ContinuousLinearMap.approximationNumber_neg]
 
@@ -901,9 +964,12 @@ theorem directedSinTwoAngleOperator_hasSameApproximationNumbers_swap :
     change directedSinTwoAngleOperator V U * directedSinTwoAngleOperator V U =
       star ((2 : ℝ) • W) * ((2 : ℝ) • W)
     rw [hstar2, hfour, hW'W, directedSinTwoAngleOperator_mul_self, ← hsdef]
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
-  rw [hUV, hVU, modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • star W) n,
-    modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • W) n,
+  rw [hUV, hVU, (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+      (modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • star W)) n,
+    (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+      (modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • W)) n,
     show ((2 : ℝ) • star W) = ((2 : ℝ) • W).adjoint by
       rw [← ContinuousLinearMap.star_eq_adjoint, hstar2],
     ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,

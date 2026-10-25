@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Assembly
-import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
-import DavisKahan.SpectralTheory.CayleySelectorBridge
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
-import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Assembly
+public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
+public import DavisKahan.SpectralTheory.CayleySelectorBridge
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Integral
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 
 /-!
 # Spectral-projection target for contour continuation
@@ -25,6 +27,8 @@ half transports the contour integral through Mathlib's continuous calculus and
 reads the identification straight off
 `boundedSelfAdjointSpectralProjection_eq_cfcL_of_selector`.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -275,7 +279,7 @@ theorem SpectralSeparatingContour.intervalIntegrable_contourResolventSymbol
           Integrable f μ :=
       LipschitzWith.integrable_comp_iff_of_antilipschitz
         (μ := μ) (f := f) (g := fun g : C(spectrum ℂ A, ℂ) => L g)
-        hIso.lipschitz hIso.antilipschitz (by simp)
+        hIso.lipschitzWith hIso.antilipschitzWith (by simp)
     exact hiff.mp (by simpa only [Function.comp_def] using hf)
   exact ⟨hpull hmapped.1, hpull hmapped.2⟩
 

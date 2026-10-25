@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalLowerBound
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles
-import ForTauCeti.Analysis.InnerProductSpace.DiagonalUnitary
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalLowerBound
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPrincipalAngles
+public import ForTauCeti.Analysis.InnerProductSpace.DiagonalUnitary
 
 /-!
 # Exact unrestricted complex Schatten transport minima
@@ -16,6 +18,8 @@ scalar minima over the accepted principal angles. Together with the
 unrestricted lower bound this proves the exact higher-rank minimum.
 Zero and right principal angles and empty subspaces are included.
 -/
+
+public section
 
 noncomputable section
 

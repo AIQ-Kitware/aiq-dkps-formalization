@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Full spectral repulsion for a fully off-diagonal perturbation
@@ -28,6 +30,8 @@ off-diagonality gives `J H = - H J`; with `J` and `H` self-adjoint that makes
 
 No compactness, no discreteness, no norm-attaining eigenvector.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan

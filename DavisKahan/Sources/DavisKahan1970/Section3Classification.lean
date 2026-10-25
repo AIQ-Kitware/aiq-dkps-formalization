@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import DavisKahan.Geometry.Halmos.GenericReconstruction
-import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
-import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
-import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+module
+
+public import DavisKahan.Geometry.Halmos.GenericReconstruction
+public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+public import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
+public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
+public section
+
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
   ContinuousLinearMap.instStarOrderedRingRCLike
@@ -82,8 +86,11 @@ variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
 
 private theorem operatorUnitaryEquiv_iff_boundedOperatorsUnitaryEquivalent
     (A : H₁ →L[𝕜] H₁) (B : H₂ →L[𝕜] H₂) :
-    OperatorUnitaryEquiv A B ↔ BoundedOperatorsUnitaryEquivalent A B :=
-  Iff.rfl
+    OperatorUnitaryEquiv A B ↔ BoundedOperatorsUnitaryEquivalent A B := by
+  constructor
+  · exact OperatorUnitaryEquiv.exists_intertwiner
+  · rintro ⟨e, he⟩
+    exact operatorUnitaryEquiv_of_intertwines e he
 
 end Bridge
 

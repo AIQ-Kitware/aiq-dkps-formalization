@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
 
 /-! # Reflection defects for bounded operators -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -18,6 +22,7 @@ variable {𝕜 E : Type*} [RCLike 𝕜]
 variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
 /-- Mirror defect used in the reflection proof of `sin 2Θ`. -/
+@[expose]
 noncomputable def reflectionDefect (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (A : E →L[𝕜] E) : E →L[𝕜] E :=
   U.reflectionOperator ∘L A ∘L U.reflectionOperator - A

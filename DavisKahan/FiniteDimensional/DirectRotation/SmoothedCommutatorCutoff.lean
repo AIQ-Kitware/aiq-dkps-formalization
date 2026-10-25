@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCorrectionStability
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerUniqueness
-import ForTauCeti.Analysis.InnerProductSpace.Projection.GapThreshold
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCorrectionStability
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerUniqueness
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.GapThreshold
 
 /-!
 # The exact commutator cutoff for canonical unitary correction
@@ -21,6 +23,8 @@ This is the commutator criterion in the journal paper's exact correction
 application. The projection-gap identity is classical; the norm-specific
 cutoff is a consequence of the exact smoothed minimum theorem.
 -/
+
+public section
 
 noncomputable section
 namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

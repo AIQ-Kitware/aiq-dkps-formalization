@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.DoubleAngle.ScalarDoubleAngleTangent
-import ForTauCeti.Analysis.InnerProductSpace.Singular.System
-import ForTauCeti.Analysis.InnerProductSpace.KyFan
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+module
+
+public import DavisKahan.DoubleAngle.ScalarDoubleAngleTangent
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
 # The `tan 2Θ` theorem for every unitarily invariant norm
@@ -58,6 +60,8 @@ the Ky Fan summation is essential, not a convenience.
 This module lives in the double-angle production directory; it is
 finite-dimensional because it consumes the intrinsic singular-system layer.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

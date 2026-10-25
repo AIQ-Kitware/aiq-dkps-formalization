@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerPairedPhases
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerPairedPhases
 
 /-!
 # Independent signed phase minimizers for arbitrary ambient pairs
@@ -14,6 +16,8 @@ actual global ambient transport minimizers, including repeated angles and
 right angles. The frame is derived from the subspaces. This construction
 does not assert that one fixed frame lists all equal-angle optimizers.
 -/
+
+public section
 
 noncomputable section
 

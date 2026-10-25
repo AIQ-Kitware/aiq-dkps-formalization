@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.Geometry.Polar.NonacuteCompression
-import DavisKahan.Geometry.Angle.CosineKernel
-import ForTauCeti.Analysis.InnerProductSpace.Projection.PairedPhase
-import ForTauCeti.Analysis.InnerProductSpace.AnticommutingInvolution
+module
+
+public import DavisKahan.Geometry.Polar.NonacuteCompression
+public import DavisKahan.Geometry.Angle.CosineKernel
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.PairedPhase
+public import ForTauCeti.Analysis.InnerProductSpace.AnticommutingInvolution
 
 /-!
 # The canonical rotation on reflection-paired phase eigenvectors
@@ -19,6 +21,8 @@ on these positive-cosine vectors. No finite dimension is required.
 The proof is classical polar geometry: the canonical intertwiner acts by
 `cos(theta)*exp(i*theta)`, while its modulus acts by `cos(theta)>0`.
 -/
+
+public section
 
 noncomputable section
 

@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
-import DavisKahan.DoubleAngle.KyFanOrthonormal
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
+public import DavisKahan.DoubleAngle.KyFanOrthonormal
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 # The unbounded, residual-form `tan 2Θ` theorem at every Ky Fan prefix
@@ -70,6 +72,8 @@ a consequence of the eigenvector relation together with `C² + S² = 1`.
   theorem and the reflection `Z = 2Q - 1`, equation (7.6) for the block system,
   and the Appendix to Section 6 for the unbounded passage.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970
@@ -1554,6 +1558,7 @@ Two honest limits of the passage, both visible in the statements below.
 
 /-- The compression of `S² = sin² 2Θ` to a subspace `W`, as a linear map of `W`:
 `w ↦ P_W (S (S w))` for the odd block `S = U.offDiagBlock Z`. -/
+@[expose]
 def offDiagonalSqCompression (U : Submodule ℂ H) [U.HasOrthogonalProjection]
     (Z : H →L[ℂ] H) (W : Submodule ℂ H) [W.HasOrthogonalProjection] :
     W →ₗ[ℂ] W :=
@@ -2051,6 +2056,7 @@ inverse is taken of `cos² 2Θ₀` through `Ring.inverse`, and the remaining
 The body is block algebra in the ring `H →L[𝕜] H`, so the definition is stated
 for an arbitrary `RCLike` scalar field; only the *theorems* about it below are
 complex. -/
+@[expose]
 def unboundedReflectionTangent {𝕜 : Type*} [RCLike 𝕜] {G : Type*}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
@@ -2447,6 +2453,7 @@ namespace CompressedStrictness
 abbrev Model : Type := EuclideanSpace ℂ (Fin 3)
 
 /-- The standard unit vectors of the model. -/
+@[expose]
 def unitVector (i : Fin 3) : Model := EuclideanSpace.single i (1 : ℂ)
 
 /-- The diagonal line the model's reflection fixes. -/
@@ -2645,11 +2652,13 @@ theorem not_doubleAngleEigenvector_unitVector_zero :
 
 /-- The unperturbed operator of the model, as a bounded map: the rank-one
 projection onto `ℂ e₂`. -/
+@[expose]
 def unperturbedMap : Model →L[ℂ] Model :=
   (innerSL ℂ (unitVector 2)).smulRight (unitVector 2)
 
 /-- The residual of the model: the off-diagonal completion that makes `A + B`
 commute with the reflection. -/
+@[expose]
 def residual : Model →L[ℂ] Model :=
   -(((innerSL ℂ (unitVector 0)).smulRight (unitVector 2)) +
       ((innerSL ℂ (unitVector 1)).smulRight (unitVector 2)) +
@@ -2658,10 +2667,12 @@ def residual : Model →L[ℂ] Model :=
 
 /-- The unperturbed operator of the model as a partial map, everywhere
 defined. -/
+@[expose]
 def unperturbed : Model →ₗ.[ℂ] Model :=
   (unperturbedMap : Model →ₗ[ℂ] Model).toPMap ⊤
 
 /-- The perturbed operator of the model. -/
+@[expose]
 def perturbed : Model →L[ℂ] Model := unperturbedMap + residual
 
 /-- Pointwise form of the unperturbed operator. -/
@@ -2712,11 +2723,13 @@ theorem perturbed_comm_reflectionZ (w : Model) :
 theorem reducesSubspace_unperturbed :
     _root_.LinearPMap.IsReducing unperturbed trial := by
   refine ⟨(by intro _ _; exact Submodule.mem_top), ?_, ?_⟩
-  · intro x hx
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x hx
     rw [unperturbed_apply, unperturbedMap_apply, (mem_trial_iff _).mp hx,
       zero_smul]
     exact Submodule.zero_mem _
-  · intro x _
+  · rw [_root_.LinearPMap.isInvariant_iff]
+    intro x _
     rw [unperturbed_apply, unperturbedMap_apply]
     exact Submodule.smul_mem _ _ unitVector_two_mem_trial_orthogonal
 

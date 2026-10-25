@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.Majorization
-import DavisKahan.FiniteDimensional.Core.AngleOperators
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.Majorization
+public import DavisKahan.FiniteDimensional.Core.AngleOperators
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
 
 /-!
 # Finite direct rotation: trigonometric and extremal formulas
@@ -23,6 +25,8 @@ real `pi / 3` claim for the full displacement is false when principal-angle
 multiplicity spaces are mixed by the competitor; it is not reintroduced.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
@@ -37,6 +41,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 `cosAngleOperator = |P_VP_U|`, this operator is the identity on the common
 orthogonal complement and therefore participates in the full-space formula
 `R = C + J S`. -/
+@[expose]
 noncomputable def directRotationCosine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   TauCeti.operatorAbs (canonicalIntertwiner U V)
@@ -52,6 +57,7 @@ instead from the skew part of the direct rotation, which
 `directRotation_sub_cosine_eq_half_smul_sub` identifies with `(U - U⁻¹)/2` and
 hence with that block; `directRotation_eq_cos_add_J_sin` is the paper's
 `U = cos Θ + J sin Θ`, and `angleComplexStructure_symm` is Corollary 3.2. -/
+@[expose]
 noncomputable def angleComplexStructure (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) : E →ₗ[𝕜] E :=
@@ -230,6 +236,7 @@ theorem directRotation_minimizes_max_displacement
         = -((LinearMap.id - X).toContinuousLinearMap) := by
       ext x
       simp
+    rw [UnitarilyInvariantSeminorm.opNorm_apply]
     show ‖(displacementSquare X).toContinuousLinearMap‖ = _
     rw [hD, hCLM, ContinuousLinearMap.norm_adjoint_comp_self, hneg, norm_neg, sq]
   rw [key, key] at h

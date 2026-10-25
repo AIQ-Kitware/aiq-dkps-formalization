@@ -3,10 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenSpectralDecomposition
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
-import ForTauCeti.Analysis.InnerProductSpace.Projection.PairedPhaseTrace
-import ForTauCeti.Analysis.InnerProductSpace.InvariantKernel
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenSpectralDecomposition
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.PairedPhaseTrace
+public import ForTauCeti.Analysis.InnerProductSpace.InvariantKernel
 
 /-!
 # The unrestricted complex Schatten transport lower bound
@@ -18,6 +20,8 @@ The kernel reflection bound then gives the principal-angle lower bound.
 Compact attainment transfers it to every admissible unitary transport.
 No block structure is assumed of the competing transporter.
 -/
+
+public section
 
 noncomputable section
 

@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedSubspace
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedSubspace
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -41,6 +45,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The genuine spectral projection selected at one point of an affine
 self-adjoint path. -/
+@[expose]
 noncomputable def selectedSpectralProjectionPath
     (A V : H →L[ℂ] H) (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,
@@ -51,6 +56,7 @@ noncomputable def selectedSpectralProjectionPath
 
 /-- The genuine selected spectral range at one point of an affine
 self-adjoint path. -/
+@[expose]
 noncomputable def selectedSpectralSubspacePath
     (A V : H →L[ℂ] H) (s : Set ℝ) (hs : MeasurableSet s)
     (hself : ∀ t ∈ Set.Icc (0 : ℝ) 1,

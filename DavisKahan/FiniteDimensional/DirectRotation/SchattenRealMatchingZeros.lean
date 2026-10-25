@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealMatching
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealMatching
 
 /-!
 # Removing zero-angle partners from real transport matchings
@@ -14,6 +16,8 @@ resulting permutation is still involutive, fixes every zero vertex, and
 has exactly the same cost. The sum proof pairs each vertex's contribution
 with its original partner; this retains every repeated zero label.
 -/
+
+public section
 
 noncomputable section
 
@@ -34,6 +38,7 @@ theorem realSchattenPairWeight_zero_left (p theta : ℝ) (hp : 1 ≤ p) (htheta 
 variable {ι : Type*}
 
 /-- Fix both endpoints of every edge incident to a zero angle. -/
+@[expose]
 def realZeroStrippedPartner (theta : ι → ℝ) (s : Equiv.Perm ι) (i : ι) : ι := by
   classical
   exact if theta i = 0 ∨ theta (s i) = 0 then i else s i
@@ -50,6 +55,7 @@ theorem realZeroStrippedPartner_involutive (theta : ι → ℝ) (s : Equiv.Perm 
     · simp [realZeroStrippedPartner, hi, hsi, hs i]
 
 /-- The zero-stripped matching as an actual permutation. -/
+@[expose]
 def realZeroStrippedMatching (theta : ι → ℝ) (s : Equiv.Perm ι)
     (hs : Function.Involutive s) : Equiv.Perm ι :=
   Function.Involutive.toPerm _ (realZeroStrippedPartner_involutive theta s hs)

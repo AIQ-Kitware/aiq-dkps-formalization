@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.FiniteDimensional.DirectRotation
-import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
-import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
-import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
-import DavisKahan.Geometry.Angle.BasisAngleEnergy
-import ForTauCeti.Analysis.InnerProductSpace.CompactSpectralDecomposition
-import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
-import ForTauCeti.Analysis.OperatorIdeal.Family.GramGauge
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation
+public import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
+public import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
+public import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
+public import DavisKahan.Geometry.Angle.BasisAngleEnergy
+public import ForTauCeti.Analysis.InnerProductSpace.CompactSpectralDecomposition
+public import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
+public import ForTauCeti.Analysis.OperatorIdeal.Family.GramGauge
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -269,15 +273,18 @@ theorem proposition4_1_compact_nonacute_directRotationValues_complex
       U V J W hWunitary hWmap).approximationNumber_direct_cosineCutoff_eq_sine
       (S := S)
       (principalSineOperator_norm_sq_eq_one_sub_sourceCosine_norm_sq U V) n
-  have hDseq := DavisKahan.Section4.sourceRestrictedDisplacement_sameApproximationSingularSequence
-    U (DavisKahan.nonacuteDirectRotation U V J) n
+  have hDseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (DavisKahan.Section4.sourceRestrictedDisplacement_sameApproximationSingularSequence
+      U (DavisKahan.nonacuteDirectRotation U V J)) n
   let a : Real := (A.approximationNumber n : Real)
   let theta : Real := TauCeti.principalAngleSequence U V n
   let shalf : Real := Real.sin (theta / 2)
   have hcos : Real.cos theta =
       Real.sqrt (1 - (TauCeti.principalSineSequence U V n) ^ 2) := by
-    dsimp only [theta, TauCeti.principalAngleSequence]
-    rw [Real.cos_arcsin]
+    rw [← TauCeti.sin_principalAngleSequence U V n]
+    exact Real.cos_eq_sqrt_one_sub_sin_sq
+      (by dsimp only [theta]; linarith [TauCeti.principalAngleSequence_nonneg U V n,
+        Real.pi_pos]) (TauCeti.principalAngleSequence_le_pi_div_two U V n)
   have hcosApprox : Real.cos theta =
       Real.sqrt (1 - ((TauCeti.principalSineOperator U V).approximationNumber n : Real) ^ 2) := by
     simpa only [TauCeti.principalSineSequence] using hcos

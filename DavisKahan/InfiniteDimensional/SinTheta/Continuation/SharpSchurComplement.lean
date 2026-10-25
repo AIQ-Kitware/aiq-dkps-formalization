@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
-import Mathlib.Analysis.Normed.Ring.Units
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
+public import Mathlib.Analysis.Normed.Ring.Units
 
 /-!
 # Schur-complement inversion for the sharp continuation argument
@@ -19,6 +21,8 @@ Multiplication notation is reserved for endomorphisms. This distinction keeps
 all intermediate expressions well typed when the two coordinate Hilbert spaces
 are different.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -35,6 +39,7 @@ variable {E1 : Type v} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
 /-- A general bounded rectangular `2 × 2` block map on the Hilbert direct sum. -/
+@[expose]
 noncomputable def rectangularBlockMap
     (a : E0 →L[ℂ] E0) (b : E1 →L[ℂ] E0)
     (c : E0 →L[ℂ] E1) (d : E1 →L[ℂ] E1) :

@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.FiniteDimensional
-import ForTauCeti.Analysis.InnerProductSpace.Complexification.RealPoints
+module
+
+public import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FiniteDimensional
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.RealPoints
 
 /-!
 # Descending conjugation-invariant spectral blocks to the real space
@@ -16,6 +18,8 @@ coordinate conjugation. Dimension, invariance and orthogonality descend.
 These are the representation bridges needed to turn the positive-gradient
 construction into actual real transport blocks.
 -/
+
+public section
 
 noncomputable section
 
@@ -28,6 +32,7 @@ open scoped InnerProductSpace
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 
 /-- The real preimage of a complex subspace under the established real inclusion. -/
+@[expose]
 def realSubmodule (M : Submodule ℂ (RealComplexification E)) : Submodule ℝ E :=
   (M.restrictScalars ℝ).comap ofReal.toLinearMap
 

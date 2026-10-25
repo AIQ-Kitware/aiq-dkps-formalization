@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
-import DavisKahan.Geometry.Polar.DirectRotation
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
 # Polar factors and reducing projections
@@ -18,6 +20,8 @@ its polar partial isometry.  The proof is carried out first on `range |T|`,
 then on its closure, and finally on the orthogonal complement, where the polar
 factor vanishes.
 -/
+
+public section
 
 open scoped InnerProductSpace InnerProduct
 
@@ -44,7 +48,7 @@ theorem polarInitial_invariant_of_commute_modulus
   let M : Submodule 𝕜 H := Submodule.comap (P : H →ₗ[𝕜] H) (T.polarInitial)
   have hMclosed : IsClosed (M : Set H) := by
     have hcl : IsClosed ((T.polarInitial : Set H)) := by
-      rw [ContinuousLinearMap.polarInitial]
+      rw [ContinuousLinearMap.polarInitial_def]
       exact Submodule.isClosed_topologicalClosure _
     exact hcl.preimage P.continuous
   have hrange : LinearMap.range (T.modulus).toLinearMap ≤ M := by
@@ -55,7 +59,7 @@ theorem polarInitial_invariant_of_commute_modulus
     rw [← hpoint]
     exact T.modulus_apply_mem_polarInitial (P z)
   have hclosure : T.polarInitial ≤ M := by
-    rw [ContinuousLinearMap.polarInitial]
+    rw [ContinuousLinearMap.polarInitial_def]
     exact Submodule.topologicalClosure_minimal _ hrange hMclosed
   exact hclosure hx
 
@@ -156,8 +160,9 @@ theorem polarPartial_intertwines_of_projection_intertwining
         f.continuous g.continuous
       funext z
       change T.polarInitialMap
-          ⟨P (T.modulus z), hpres _ (T.modulus_apply_mem_polarInitial z)⟩ =
+          ⟨P (T.modulusCorestrict z), hpres _ (T.modulusCorestrict z).property⟩ =
         Q (T.polarInitialMap (T.modulusCorestrict z))
+      simp only [ContinuousLinearMap.coe_modulusCorestrict_apply]
       have hpabs := DFunLike.congr_fun habs z
       rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply] at hpabs
       have hleft :

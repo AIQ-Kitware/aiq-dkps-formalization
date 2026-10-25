@@ -4,10 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.TanTheta.Theorem63FiniteSource
-import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
-import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
+module
+
+public import DavisKahan.TanTheta.Theorem63FiniteSource
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+public import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
+
+public section
+
+attribute [local instance] ContinuousLinearMap.realAlgebra
+  ContinuousLinearMap.realIsScalarTower
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -629,6 +636,7 @@ end CoreAssembly
 /-- The paper's instruction that `tan Θ₀` have singular values `tan θ_j`, at arbitrary
 trial dimension: the tangent representative's approximation numbers are the tangents of
 the arcsines of the directed sine block's approximation numbers. -/
+@[expose]
 def HasTheorem63DirectedTangentApproximationNumbersInfinite
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (tanTheta0 : Z →L[ℂ] H) : Prop :=

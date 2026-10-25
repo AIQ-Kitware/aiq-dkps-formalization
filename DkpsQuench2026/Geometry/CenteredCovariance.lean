@@ -7,7 +7,11 @@ configuration.  It is independent of reference-sampling probability and can be
 compiled before the larger spectral-regularity module.
 -/
 
-import DkpsQuench2026.Geometry.Covariance
+module
+
+public import DkpsQuench2026.Geometry.Covariance
+
+public section
 
 set_option linter.mathlibStandardSet false
 
@@ -38,6 +42,7 @@ variable {Q : Type u} [DecidableEq Q]
 variable {X : Type v} [MeasurableSpace X]
 
 /-- Feature-space empirical covariance of a centered finite configuration. -/
+@[expose]
 noncomputable def centeredEmpiricalCovariance
     {n d : Nat} (z : Config n d) : DisMat d :=
   fun a b => (n : Real)⁻¹ * ∑ i : Fin n,

@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import YuWangSamworth2015.Rectangular.FrobeniusGram
+module
+
+public import YuWangSamworth2015.Rectangular.FrobeniusGram
 
 /-!
 # The Yu--Wang--Samworth singular-subspace theorem
@@ -46,6 +48,8 @@ Two deliberate departures from the printed statement, both recorded in
   already hold that datum.
 -/
 
+public section
+
 namespace YuWangSamworth2015
 open TauCeti
 open LinearMap.IsSymmetric (IsOrderedEigenframe)
@@ -62,12 +66,14 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- Ordered-index correspondence for right singular blocks, expressed through
 squared singular values of the right Gram operators. -/
+@[expose]
 def CorrespondingRightSingularBlock (A Â : E →ₗ[𝕜] F)
     (U V : Submodule 𝕜 E) : Prop :=
   CorrespondingEigenblock (isSymmetric_rightGram A)
     (isSymmetric_rightGram Â) U V
 
 /-- Ordered-index correspondence for left singular blocks. -/
+@[expose]
 def CorrespondingLeftSingularBlock (A Â : E →ₗ[𝕜] F)
     (U V : Submodule 𝕜 F) : Prop :=
   CorrespondingEigenblock (isSymmetric_leftGram A)

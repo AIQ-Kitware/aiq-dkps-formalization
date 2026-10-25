@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-import DavisKahan.Geometry.Polar.DirectRotationSquare
-import DavisKahan.Geometry.Polar.Section3Nonacute
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+public import DavisKahan.Geometry.Polar.DirectRotationSquare
+public import DavisKahan.Geometry.Polar.Section3Nonacute
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 -- supplies `hasSameApproximationNumbers_extendDomainByZero`, promoted out of
 -- `Sources/DavisKahan1970/SineTheta/Norms/SubspaceSingularTransport.lean`: it is a statement
 -- about `Submodule.subtypeL` and approximation numbers, with nothing paper-specific in it.
-import DavisKahan.Sylvester.Spectrum
+public import DavisKahan.Sylvester.Spectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -683,6 +687,7 @@ local instance sourceCompleteSpace : CompleteSpace U :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
 /-- The positive cosine acting in source coordinates. -/
+@[expose]
 noncomputable def sourceCosine : U →L[ℂ] U := by
   let C : H →L[ℂ] H :=
     ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
@@ -697,6 +702,7 @@ noncomputable def sourceCosine : U →L[ℂ] U := by
   exact C.restrict hCU
 
 /-- Restricted displacement with source coordinates exposed. -/
+@[expose]
 noncomputable def sourceRestrictedDisplacement (T : H →L[ℂ] H) : U →L[ℂ] H :=
   (1 - T) ∘L U.subtypeL
 
@@ -974,10 +980,9 @@ theorem sourceRestrictedDisplacement_sameApproximationSingularSequence
     (T : H →L[ℂ] H) :
     ContinuousLinearMap.HasSameApproximationNumbers
       ((1 - T) ∘L U.starProjection) (sourceRestrictedDisplacement U T) := by
-  intro n
   rw [← sourceRestrictedDisplacement_extendDomainByZero U T]
   exact ContinuousLinearMap.hasSameApproximationNumbers_extendDomainByZero U
-    (sourceRestrictedDisplacement U T) n
+    (sourceRestrictedDisplacement U T)
 
 /-- Infinite-dimensional Davis--Kahan Proposition 4.1 in the ambient form used
 by the frontier. -/
@@ -991,10 +996,11 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
         ((1 - W) ∘L U.starProjection) n := by
   have hsource := proposition4_1_approximationNumbers
     U V hacute W hWunitary hWmap n
-  have hDseq := sourceRestrictedDisplacement_sameApproximationSingularSequence
-    U (spectraDirectRotation U V hacute) n
-  have hWseq := sourceRestrictedDisplacement_sameApproximationSingularSequence
-    U W n
+  have hDseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sourceRestrictedDisplacement_sameApproximationSingularSequence
+      U (spectraDirectRotation U V hacute)) n
+  have hWseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n
   change approximationSingularValue n
       ((1 - spectraDirectRotation U V hacute) ∘L U.starProjection) ≤
     approximationSingularValue n ((1 - W) ∘L U.starProjection)
@@ -1020,9 +1026,11 @@ theorem proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
       ContinuousLinearMap.approximationNumber ((1 - W) ∘L U.starProjection) n := by
   have hsource := proposition4_1_nonacute_approximationNumbers
     U V J W hWunitary hWmap n
-  have hDseq := sourceRestrictedDisplacement_sameApproximationSingularSequence
-    U (TauCeti.DavisKahan.nonacuteDirectRotation U V J) n
-  have hWseq := sourceRestrictedDisplacement_sameApproximationSingularSequence U W n
+  have hDseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sourceRestrictedDisplacement_sameApproximationSingularSequence
+      U (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
+  have hWseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n
   change approximationSingularValue n
       ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ≤
     approximationSingularValue n ((1 - W) ∘L U.starProjection)

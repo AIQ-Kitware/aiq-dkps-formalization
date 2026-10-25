@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.PartialMap.Complexification
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+module
+
+public import DavisKahan.SpectralTheory.PartialMap.Complexification
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 # Approximation-number transport through real complexification
@@ -20,6 +22,8 @@ scalar bridge needed to apply a complex Sylvester theorem at each finite Ky Fan
 gauge and descend the resulting majorization through an arbitrary real
 Ky-Fan-dominant unitarily invariant ideal family.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -263,6 +267,8 @@ theorem approximationNumber_complexify_le
     (RealComplexification.complexify T).approximationNumber n ≤
       T.approximationNumber n := by
   rw [T.approximationNumber_eq_iInf]
+  let : Nonempty {R : E →L[ℝ] F // R.rank ≤ (n : Cardinal)} :=
+    ⟨⟨0, by simp⟩⟩
   apply le_ciInf
   rintro ⟨R, hR⟩
   have hRc : (RealComplexification.complexify R).rank ≤ (n : Cardinal) := by

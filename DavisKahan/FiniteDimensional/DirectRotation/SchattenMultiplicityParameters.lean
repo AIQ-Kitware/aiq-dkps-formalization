@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenParameterNormalization
-import ForTauCeti.Analysis.InnerProductSpace.PairedProjectionFamily
-import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteParameters
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenParameterNormalization
+public import ForTauCeti.Analysis.InnerProductSpace.PairedProjectionFamily
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteParameters
 
 /-!
 # Multiplicity-space parameters of all complex Schatten optimizers
@@ -15,6 +17,8 @@ rotation eigenspaces above the scalar cutoff and their reflected copies.
 Compatible phase projections therefore have independent parameters on
 these multiplicity spaces. Empty eigenspaces contribute trivial factors.
 -/
+
+public section
 
 noncomputable section
 
@@ -28,6 +32,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- Physical supercritical interior angles. Only finitely many have
 nonzero eigenspace for a fixed finite-dimensional canonical rotation. -/
+@[expose]
 def schattenSupercriticalAngles (p : ℝ) : Set ℝ :=
   {theta | theta ∈ Ioo 0 (Real.pi / 2) ∧ criticalAngle p < theta}
 
@@ -45,12 +50,14 @@ theorem schattenSupercriticalAngles_exp_injective (p : ℝ) :
 
 /-- The actual supercritical interior eigenangles of a unitary. Empty
 eigenspaces are excluded, so these indices retain multiplicities as spaces. -/
+@[expose]
 def schattenActiveRotationAngles (p : ℝ) (U : unitary (E →L[ℂ] E)) : Set ℝ :=
   {theta | theta ∈ schattenSupercriticalAngles p ∧
     Module.End.HasEigenvalue (U : E →L[ℂ] E).toLinearMap
       (Complex.exp ((theta : ℂ) * Complex.I))}
 
 /-- The actual positive canonical rotation eigenspace at an active angle. -/
+@[expose]
 def schattenRotationMultiplicitySpace
     (p : ℝ) (U : unitary (E →L[ℂ] E)) (theta : schattenActiveRotationAngles p U) :
     Submodule ℂ E :=

@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
-import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-import Mathlib.Tactic
+module
+
+public import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
+public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Tactic
 
 /-!
 # Bounded resolvent produced by a coercive form operator
@@ -31,6 +33,8 @@ represent the shifted bending form.
 The scalar field is an arbitrary `RCLike` `𝕜`, so the whole form method is
 available over `ℝ` as well as over `ℂ`.
 -/
+
+public section
 
 open scoped InnerProductSpace
 
@@ -75,17 +79,20 @@ theorem formOperator_isUnit (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := 
   ContinuousLinearMap.isUnit_of_coercive D.coercivity_pos D.coercive
 
 /-- Bounded inverse of the represented form operator. -/
+@[expose]
 noncomputable def formInverse (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     V →L[𝕜] V :=
   Ring.inverse D.formOperator
 
 /-- Variational solution map from ambient forcing to the form space. -/
+@[expose]
 noncomputable def solutionOperator
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →L[𝕜] V :=
   D.formInverse ∘L D.embed.adjoint
 
 /-- Ambient bounded resolvent produced by the form method. -/
+@[expose]
 noncomputable def resolvent
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →L[𝕜] H :=
@@ -197,6 +204,7 @@ theorem resolvent_nonnegative
     (D.coercive (D.solutionOperator f))
 
 /-- Closed positive self-adjoint operator associated to the coercive form. -/
+@[expose]
 noncomputable def associatedOperator
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →ₗ.[𝕜] H :=

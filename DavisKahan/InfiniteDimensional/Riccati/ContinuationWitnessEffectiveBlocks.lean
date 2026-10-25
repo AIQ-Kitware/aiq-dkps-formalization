@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
-import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
+public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

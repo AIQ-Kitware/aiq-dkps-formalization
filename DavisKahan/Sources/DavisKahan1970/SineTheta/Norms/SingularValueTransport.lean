@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+module
+
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
 # Complete singular-value transport for the paper-facing sine operators
@@ -16,6 +18,8 @@ replacement for the finite singular-value list. This module proves that equal
 approximation-number sequences give exactly the same membership and gauge in
 every Ky-Fan-dominant unitarily invariant ideal family.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -58,7 +62,8 @@ theorem refl
     {E : Type vE} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) : SameApproximationSingularSequence A A := fun _ => rfl
+    (A : E →L[𝕜] F) : SameApproximationSingularSequence A A :=
+  ContinuousLinearMap.HasSameApproximationNumbers.refl A
 
 /-- Symmetry, swapping two independently-typed pairs of spaces. -/
 @[symm]
@@ -72,7 +77,8 @@ theorem symm
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
     (h : SameApproximationSingularSequence A B) :
-    SameApproximationSingularSequence B A := fun n => (h n).symm
+    SameApproximationSingularSequence B A :=
+  ContinuousLinearMap.HasSameApproximationNumbers.symm h
 
 /-- Transitivity, across three independently-typed pairs of spaces. -/
 @[trans]
@@ -90,7 +96,8 @@ theorem trans
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂} {C : E₃ →L[𝕜] F₃}
     (hAB : SameApproximationSingularSequence A B)
     (hBC : SameApproximationSingularSequence B C) :
-    SameApproximationSingularSequence A C := fun n => (hAB n).trans (hBC n)
+    SameApproximationSingularSequence A C :=
+  ContinuousLinearMap.HasSameApproximationNumbers.trans hAB hBC
 
 /-- Equal complete singular data gives equal operator norms. -/
 theorem opNorm_eq
@@ -182,6 +189,7 @@ private theorem approximationNumber_comp_isometricEquiv_eq
 
 /-- Two rectangular bounded operators have the same complete singular-value
 data when all of their approximation singular values agree. -/
+@[expose]
 def SameApproximationSingularValues (A B : E →L[𝕜] F) : Prop :=
   SameApproximationSingularSequence A B
 
@@ -195,6 +203,7 @@ theorem comp_isometricEquiv
     SameApproximationSingularValues
       (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
         V.toContinuousLinearEquiv.toContinuousLinearMap) A := by
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   exact approximationNumber_comp_isometricEquiv_eq U V A n
 
@@ -209,6 +218,7 @@ theorem of_isometricEquiv_comp
     (h : U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
       V.symm.toContinuousLinearEquiv.toContinuousLinearMap = B) :
     SameApproximationSingularSequence A B := by
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   have hkey := approximationNumber_comp_isometricEquiv_eq U V.symm A n
   rw [h] at hkey
@@ -218,14 +228,14 @@ theorem of_isometricEquiv_comp
 equivalence usable by `refl`/`symm`/`trans` via the attributes. -/
 @[refl]
 theorem refl (A : E →L[𝕜] F) : SameApproximationSingularValues A A :=
-  fun _ => rfl
+  ContinuousLinearMap.HasSameApproximationNumbers.refl A
 
 /-- Symmetry. -/
 @[symm]
 theorem symm {A B : E →L[𝕜] F}
     (h : SameApproximationSingularValues A B) :
     SameApproximationSingularValues B A :=
-  fun n => (h n).symm
+  ContinuousLinearMap.HasSameApproximationNumbers.symm h
 
 /-- Transitivity. -/
 @[trans]
@@ -233,16 +243,14 @@ theorem trans {A B C : E →L[𝕜] F}
     (hAB : SameApproximationSingularValues A B)
     (hBC : SameApproximationSingularValues B C) :
     SameApproximationSingularValues A C :=
-  fun n => (hAB n).trans (hBC n)
+  ContinuousLinearMap.HasSameApproximationNumbers.trans hAB hBC
 
 /-- Equal complete singular-value data gives equal finite Ky Fan gauges. -/
 theorem kyFanApproximationGauge_eq {A B : E →L[𝕜] F}
     (h : SameApproximationSingularValues A B) (k : ℕ) :
     kyFanApproximationGauge k A = kyFanApproximationGauge k B := by
   change A.kyFanGaugeReal k = B.kyFanGaugeReal k
-  rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-    ContinuousLinearMap.kyFanGaugeReal_eq_sum]
-  exact Finset.sum_congr rfl fun n _ => h n
+  exact ContinuousLinearMap.HasSameApproximationNumbers.kyFanGaugeReal_eq h k
 
 section IdealGauge
 
@@ -322,6 +330,7 @@ structure SinThetaRepresentativeAcross
 namespace SinThetaRepresentativeAcross
 
 /-- The canonical operator is an admissible representative. -/
+@[expose]
 noncomputable def canonical (A : E →L[𝕜] F) :
     SinThetaRepresentativeAcross (E₀ := E) (F₀ := F) A where
   operator := A
@@ -339,6 +348,7 @@ structure SinThetaRepresentative (canonical : E →L[𝕜] F) where
 namespace SinThetaRepresentative
 
 /-- The canonical block is itself an admissible paper representative. -/
+@[expose]
 noncomputable def canonical (A : E →L[𝕜] F) :
     SinThetaRepresentative A where
   operator := A

@@ -2,8 +2,12 @@
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 -/
-import Mathlib
-import ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded
+module
+
+public import Mathlib
+public import ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded
+
+public section
 
 noncomputable section
 
@@ -139,13 +143,14 @@ theorem isResolventAt_smul_sub_bijective {A : X →ₗ.[ℝ] X} {lambda : ℝ} {
 /-! ## 6–17. The resolvent set and the resolvent -/
 
 /-- Upstream declaration 6 of 30: `TauCeti.LinearPMap.resolventSet`.  A definition is pinned
-by its type and its defining equation; both are checked, the latter by `rfl`. -/
+by its type and its defining equation; both are checked via the public membership API. -/
 example : (X →ₗ.[ℝ] X) → Set ℝ := LinearPMap.resolventSet
 
 theorem resolventSet_def (A : X →ₗ.[ℝ] X) :
     LinearPMap.resolventSet A =
-      {lambda : ℝ | ∃ R : X →L[ℝ] X, LinearPMap.IsResolventAt A lambda R} :=
-  rfl
+      {lambda : ℝ | ∃ R : X →L[ℝ] X, LinearPMap.IsResolventAt A lambda R} := by
+  ext lambda
+  exact LinearPMap.mem_resolventSet_iff
 
 /-- Upstream declaration 7 of 30: `TauCeti.LinearPMap.mem_resolventSet_iff`. -/
 theorem mem_resolventSet_iff {A : X →ₗ.[ℝ] X} {lambda : ℝ} :

@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Sources.DavisKahan1970.Proposition61
-import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
-import DavisKahan.Sources.DavisKahan1970.AmbientReal
-import DavisKahan.SpectralTheory.ReflectionRestriction
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
-import DavisKahan.Geometry.Angle.OperatorAngleGeneric
-import DavisKahan.Sylvester.ScalarTransport
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Proposition61
+public import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+public import DavisKahan.Sources.DavisKahan1970.AmbientReal
+public import DavisKahan.SpectralTheory.ReflectionRestriction
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
+public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
+public import DavisKahan.Sylvester.ScalarTransport
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -829,12 +833,20 @@ theorem sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
     have hconj : ∀ T : Er →L[ℝ] Er,
         DavisKahan.boundedUnitaryConjugate V.reflection T =
           V.reflectionOperator ∘L T ∘L V.reflectionOperator :=
-      fun _ => ContinuousLinearMap.ext fun _ => rfl
+      fun T => by
+        apply ContinuousLinearMap.ext
+        intro x
+        simp only [DavisKahan.boundedUnitaryConjugate_apply, ContinuousLinearMap.comp_apply,
+          Submodule.reflectionOperator_apply_eq_reflection, Submodule.reflection_symm]
     have hconjC : ∀ T : RealComplexification Er →L[ℂ] RealComplexification Er,
         DavisKahan.boundedUnitaryConjugate (complexifySubmodule V).reflection T =
           (complexifySubmodule V).reflectionOperator ∘L T ∘L
             (complexifySubmodule V).reflectionOperator :=
-      fun _ => ContinuousLinearMap.ext fun _ => rfl
+      fun T => by
+        apply ContinuousLinearMap.ext
+        intro x
+        simp only [DavisKahan.boundedUnitaryConjugate_apply, ContinuousLinearMap.comp_apply,
+          Submodule.reflectionOperator_apply_eq_reflection, Submodule.reflection_symm]
     rw [DavisKahan.starProjection_map_unitary U V.reflection,
       DavisKahan.starProjection_map_unitary (complexifySubmodule U)
         (complexifySubmodule V).reflection,

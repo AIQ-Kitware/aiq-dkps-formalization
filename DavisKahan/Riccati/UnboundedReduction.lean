@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.Riccati.UnboundedCore
+module
+
+public import DavisKahan.Riccati.UnboundedCore
 
 /-!
 # Strong unbounded Riccati graph reduction
@@ -14,6 +16,8 @@ equation.  Operator-domain membership, graph membership, and coordinate action
 are kept as separate lemmas so later existence and diagonalization arguments
 can reuse the same core calculation.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahanExt
@@ -151,13 +155,14 @@ theorem unboundedBlockGraph_invariant_iff_strongRiccatiCore
   · rintro ⟨hdom, hinv⟩
     refine ⟨hdom, ?_⟩
     intro x
-    have hout := hinv (unboundedBlockGraphDomainVector H X hdom x)
+    have hout := (_root_.LinearPMap.isInvariant_iff.mp hinv) (unboundedBlockGraphDomainVector H X hdom x)
       (unboundedBlockGraphDomainVector_mem_graph H X hdom x)
     simpa only [unboundedBlockOperatorCore_graphVector_snd,
       unboundedBlockOperatorCore_graphVector_fst] using
         (mem_unboundedBlockGraph_iff X _).1 hout
   · rintro ⟨hdom, hpoint⟩
     refine ⟨hdom, ?_⟩
+    rw [_root_.LinearPMap.isInvariant_iff]
     intro z hz
     rw [mem_unboundedBlockGraph_iff] at hz ⊢
     rw [unboundedBlockOperatorCore_apply_snd,

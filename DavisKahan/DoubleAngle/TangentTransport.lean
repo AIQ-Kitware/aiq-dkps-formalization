@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.AngleTransport
-import DavisKahan.DoubleAngle.DirectedAngleRealTransport
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
-import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
-import DavisKahan.Geometry.Polar.DirectRotationReal
+module
+
+public import DavisKahan.DoubleAngle.AngleTransport
+public import DavisKahan.DoubleAngle.DirectedAngleRealTransport
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
+public import DavisKahan.DoubleAngle.RealAngleIdentification
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
+public import DavisKahan.Geometry.Polar.DirectRotationReal
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -601,7 +605,8 @@ theorem sameApproximationSingularValues_unboundedReflectionTangent
   have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
   have hrefl : U.reflectionOperator
       = U.reflection.toContinuousLinearEquiv.toContinuousLinearMap := by
-    ext x; rfl
+    ext x
+    exact Submodule.reflectionOperator_apply_eq_reflection U x
   have hcomp :
       (LinearIsometryEquiv.refl ℂ Ec).toContinuousLinearEquiv.toContinuousLinearMap ∘L
           tanTwoBlockRepresentative U V ∘L
@@ -615,10 +620,13 @@ theorem sameApproximationSingularValues_unboundedReflectionTangent
     rw [← hcomp]
     exact ExactSinTheta.SameApproximationSingularValues.comp_isometricEquiv
       (LinearIsometryEquiv.refl ℂ Ec) U.reflection
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
-  rw [h1 n, absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
-  exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
-    (tanTwoBlockRepresentative U V) n).symm
+  rw [(ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h1 n,
+    absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
+  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+      (tanTwoBlockRepresentative U V)) n).symm
 
 /-- **The reflection tangent and the paper's `|tan 2Θ|` have the same gauge in
 every source unitarily invariant norm**, and one lies in the norm's ideal exactly

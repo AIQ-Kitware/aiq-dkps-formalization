@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Restriction
-import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
-import DavisKahan.SpectralTheory.Complexification.Spectrum
-import TauCeti.Analysis.InnerProductSpace.Modulus
-import TauCeti.Analysis.InnerProductSpace.Gram.Factor
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Restriction
+public import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
+public import DavisKahan.SpectralTheory.Complexification.Spectrum
+public import TauCeti.Analysis.InnerProductSpace.Modulus
+public import TauCeti.Analysis.InnerProductSpace.Gram.Factor
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -149,9 +153,10 @@ theorem norm_sylvester_le_of_orderedSeparation_rclike
     · rw [boundedRealSpectrum_eq_realSpectrum] at hr
       exact Or.inr (hAc hr)
   have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
-    (TauCeti.operatorNormFamily.{u, v} 𝕜) hA hB hβc hd hgap hEq
+    (TauCeti.operatorNormFamily.{u, v} 𝕜) hA hB hβc hd hgap
+      (by simpa only [ContinuousLinearMap.sylvester_apply] using hEq)
     (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
-  exact hsolve.2
+  simpa only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily] using hsolve.2
 
 open TauCeti.RealComplexification in
 open scoped TauCeti.DavisKahan.Foundation.RealScalarRestriction in
@@ -170,10 +175,11 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
       - (X.restrictScalars ℝ) ∘L (B.restrictScalars ℝ) = C.restrictScalars ℝ := by
     ext x
     have := congrArg (fun T : E →L[𝕜] F => T x) hEq
-    simpa [ContinuousLinearMap.sylvester] using this
+    simpa [ContinuousLinearMap.sylvester_apply] using this
   have hEqc : ContinuousLinearMap.sylvester (complexify (A.restrictScalars ℝ))
       (complexify (B.restrictScalars ℝ)) (complexify (X.restrictScalars ℝ)) =
       complexify (C.restrictScalars ℝ) := by
+    rw [ContinuousLinearMap.sylvester_apply]
     show complexify (A.restrictScalars ℝ) ∘L complexify (X.restrictScalars ℝ)
       - complexify (X.restrictScalars ℝ) ∘L complexify (B.restrictScalars ℝ) = _
     rw [← complexify_comp, ← complexify_comp, ← complexify_sub, hEqr]
@@ -330,8 +336,10 @@ theorem sinTheta_perturbation
     (TauCeti.operatorNormFamily.{u, v} 𝕜)
     (LinearMap.IsSymmetric.restrict_invariant hB hV.2)
     (LinearMap.IsSymmetric.restrict_invariant hA hU.1)
-    hlr hd hgap' hEq
+    hlr hd hgap'
+      (by simpa only [ContinuousLinearMap.sylvester_apply] using hEq)
     (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
+  simp only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily] at hsolve
   have hC : ‖C‖ ≤ ‖B - A‖ :=
     restricted_projection_sandwich_norm_le _ _ _
   have h2 : d * ‖((Vᗮ.starProjection ∘L U.subtypeL)).codRestrict Vᗮ
@@ -372,14 +380,8 @@ theorem sinTheta_symmetric
   have h2 : d * V.directedProjectionGap U ≤ ‖A - B‖ :=
     sinTheta_perturbation hB hA hV hU hlr' hd hVU
   rw [show A - B = -(B - A) by abel, norm_neg] at h2
-  have hmax : U.projectionGap V = max (U.directedProjectionGap V) (V.directedProjectionGap U) := by
-    show ‖U.starProjection - V.starProjection‖ =
-      max ‖Vᗮ.starProjection ∘L U.starProjection‖
-        ‖Uᗮ.starProjection ∘L V.starProjection‖
-    rw [← Submodule.projectionGap_def U V,
-      Submodule.projectionGap_eq_max,
-      Submodule.directedProjectionGap_def,
-      Submodule.directedProjectionGap_def]
+  have hmax : U.projectionGap V = max (U.directedProjectionGap V) (V.directedProjectionGap U) :=
+    Submodule.projectionGap_eq_max U V
   rw [hmax, mul_max_of_nonneg _ _ hd.le]
   exact max_le h1 h2
 
@@ -493,6 +495,7 @@ spectral projection of `s`.
 
 Relative to the `BoundedBorelProjection` hypothesis this is a real definition
 rather than a leaf obligation, so the results below unfold it. -/
+@[expose]
 noncomputable def spectralSubspace (A : E →L[𝕜] E) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) :
     Submodule 𝕜 E :=
@@ -519,6 +522,7 @@ noncomputable instance spectralSubspace_hasOrthogonalProjection
 
 /-- The measurable spectral projection: the orthogonal projection onto the
 spectral subspace. -/
+@[expose]
 noncomputable def spectralProjection (A : E →L[𝕜] E) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) :
     E →L[𝕜] E :=
@@ -586,7 +590,9 @@ theorem spectralProjection_sinTheta
     ⟨hBs, hAt⟩
   have h := sinTheta_symmetric hA hB hredA hredB hlr hlr' hd hUV hVU
   have hgapeq : U.projectionGap V =
-      ‖spectralProjection A hA s hs - spectralProjection B hB t ht‖ := rfl
+      ‖spectralProjection A hA s hs - spectralProjection B hB t ht‖ := by
+    rw [Submodule.projectionGap_def]
+    rfl
   calc d * ‖spectralProjection A hA s hs - spectralProjection B hB t ht‖
       = d * U.projectionGap V := by rw [hgapeq]
     _ ≤ ‖B - A‖ := h
@@ -605,6 +611,7 @@ section OperatorModulus
 
 /-- The full ambient sine-angle operator of two subspaces: the modulus of the projector
 difference. -/
+@[expose]
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   (U.starProjection - V.starProjection).modulus

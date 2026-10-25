@@ -3,11 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
-import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
-import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
-import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
-import Mathlib.Topology.Compactness.Compact
+module
+
+public import DavisKahan.OperatorIdeal.Majorization.WeakSubmajorization
+public import DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence
+public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormInstances
+public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
+public import Mathlib.Topology.Compactness.Compact
 
 /-!
 # The sequence gauge of a coherent symmetric norm, and its Riesz splitting
@@ -26,6 +28,8 @@ The proof is not an assumption and does not use a separation theorem.  It
 applies the repository's constructive Hardy--Littlewood--Pólya descent to the
 Minkowski sum of two symmetric-convex gauge balls.
 -/
+
+public section
 
 namespace TauCeti
 namespace Majorization
@@ -55,6 +59,7 @@ def sequenceGauge (N : SymmetricNormingFunction) (x : ℕ → ℝ) : ℝ :=
 
 /-- The paper's finite gauge, packaged in the algebraic interface consumed by
 finite majorization. -/
+@[expose]
 noncomputable def normingFiniteSymmetricGauge
     (N : SymmetricNormingFunction) (n : ℕ) : FiniteSymmetricGauge n :=
   (N.finiteNorm n).finiteSymmetricGauge
@@ -64,7 +69,8 @@ noncomputable def normingFiniteSymmetricGauge
 into `FiniteSymmetricGauge` changes the interface, not the value. -/
 @[simp] theorem normingFiniteSymmetricGauge_apply
     (N : SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) :
-    normingFiniteSymmetricGauge N n x = N.finiteGauge n x :=
+    normingFiniteSymmetricGauge N n x = N.finiteGauge n x := by
+  rw [normingFiniteSymmetricGauge, UnitarilyInvariantSeminorm.finiteSymmetricGauge_apply]
   rfl
 
 /-- A Minkowski sum of two symmetric-gauge balls is symmetric-convex. -/
@@ -139,11 +145,9 @@ theorem exists_l1_normingGauge_decomposition_of_weaklyMajorized
       (normingFiniteSymmetricGauge nuclearNormingFunction n)
       (normingFiniteSymmetricGauge N n) h
   refine ⟨u, v, huv, ?_, ?_⟩
-  · change nuclearNormingFunction.finiteGauge n u ≤
-      nuclearNormingFunction.finiteGauge n y at hu
-    simpa only [nuclearNormingFunction_finiteGauge] using hu
-  · change N.finiteGauge n v ≤ N.finiteGauge n z at hv
-    exact hv
+  · simpa only [normingFiniteSymmetricGauge_apply,
+      nuclearNormingFunction_finiteGauge] using hu
+  · simpa only [normingFiniteSymmetricGauge_apply] using hv
 
 end
 

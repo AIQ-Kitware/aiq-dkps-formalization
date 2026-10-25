@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealGradientBlocks
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealKernelBlocks
-import ForTauCeti.Analysis.InnerProductSpace.AnticommutingInvolution
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealGradientBlocks
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealKernelBlocks
+public import ForTauCeti.Analysis.InnerProductSpace.AnticommutingInvolution
 
 /-!
 # The complete real small-block decomposition at Schatten transport minima
@@ -17,6 +19,8 @@ and spans the original real space. Each block preserves the actual real
 transporter and source projection; the exceptional zero blocks are retained
 explicitly rather than assigned an unwarranted source-rank balance.
 -/
+
+public section
 
 noncomputable section
 

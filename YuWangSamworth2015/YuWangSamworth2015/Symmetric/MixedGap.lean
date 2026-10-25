@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import YuWangSamworth2015.GroundedImports
+module
+
+public import YuWangSamworth2015.GroundedImports
 
 /-!
 # The mixed separation: Theorem 1's denominator, and why the paper replaces it
@@ -56,6 +58,8 @@ formalizable; their deterministic mathematical content is, and is proved here:
   counterpart has not, so the hidden interval-counting requirement fails there
   too.
 -/
+
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

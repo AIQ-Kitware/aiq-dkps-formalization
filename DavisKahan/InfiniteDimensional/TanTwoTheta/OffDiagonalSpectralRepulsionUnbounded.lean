@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
-import DavisKahan.SpectralTheory.GapResolvent
-import DavisKahan.SinTheta.BoundedPerturbation
+module
+
+public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
+public import DavisKahan.SpectralTheory.GapResolvent
+public import DavisKahan.SinTheta.BoundedPerturbation
 
 /-!
 # Off-diagonal spectral repulsion for an unbounded ambient operator
@@ -38,6 +40,8 @@ through `U`:
 No compactness, no discreteness, no norm-attaining eigenvector, and no
 boundedness of `A`.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -91,7 +95,7 @@ theorem reflected_centered_form_lower_pmap
   have hxpm : p + m = x := Subtype.ext hsum
   have hAsum : A p + A m = A x := by rw [← A.map_add, hxpm]
   have hApU : A p ∈ U := hred.isInvariant.apply_mem _ hpU
-  have hAmU : A m ∈ Uᗮ := hred.isInvariant_orthogonal m hmU
+  have hAmU : A m ∈ Uᗮ := hred.isInvariant_orthogonal.apply_mem m hmU
   have hu : A p - c • (p : E) ∈ U := U.sub_mem hApU (U.smul_mem _ hpU)
   have hv : A m - c • (m : E) ∈ Uᗮ := Uᗮ.sub_mem hAmU (Uᗮ.smul_mem _ hmU)
   have hsplit : A x - c • (x : E)
@@ -212,7 +216,7 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     (J := U.reflectionOperator) (Submodule.reflectionOperator_norm_map U) hε hcoer
   have hresRoot := (TauCeti.DavisKahan.mem_local_resolventSet_iff_root
     (TauCeti.LinearPMap.addBounded A Hop) (lam : ℂ)).mp hres
-  simpa [_root_.LinearPMap.spectrum] using hresRoot
+  simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hresRoot
 
 end
 

@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalLowerBound
-import ForTauCeti.Analysis.InnerProductSpace.Projection.ReflectionTransport
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalLowerBound
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.ReflectionTransport
 
 /-!
 # Every Schatten optimizer preserves the principal-sine spaces
@@ -17,6 +19,8 @@ hence every global, minimizer preserves each geometric angle space.
 Unequal principal angles cannot mix. The phase choices within each
 equal-angle space remain to be classified.
 -/
+
+public section
 
 noncomputable section
 

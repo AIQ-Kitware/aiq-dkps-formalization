@@ -4,11 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.TanTheta.Theorem63FiniteSource
-import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
-import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
-import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles.Equisingular
-import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+module
+
+public import DavisKahan.TanTheta.Theorem63FiniteSource
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
+public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles.Equisingular
+public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

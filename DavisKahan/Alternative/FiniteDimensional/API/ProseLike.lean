@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.5 Thinking
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 
 /-!
 # Prose-like wrappers for the finite Davis--Kahan `sin Θ` theorem
@@ -31,6 +33,8 @@ The suffix `ProseLike` is deliberate: these names are exploratory wrappers for
 readability while the final public API shape is still being refined.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
@@ -46,6 +50,7 @@ singular values measure how much `U` leaks into the forbidden/complementary
 subspace `V`.  In the Part III `sin Θ` theorem, this is the formal object behind
 `sin Θ`; the direction matters because `V` is usually the opposite spectral
 subspace rather than the matching one. -/
+@[expose]
 noncomputable def directedSinThetaOperatorProseLike
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     E →L[𝕜] E :=

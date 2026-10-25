@@ -3,15 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
-import DavisKahan.Sources.Davis1963.RotationEnergy
-import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-import DavisKahan.FiniteDimensional.Core.AngleOperatorBlockSum
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
-import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
-import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+module
+
+public import DavisKahan.Sources.Davis1963.RotationEnergy
+public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+public import DavisKahan.FiniteDimensional.Core.AngleOperatorBlockSum
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 
 /-!
 # Sharpness and two-dimensional extremizers
@@ -99,6 +101,8 @@ norm.  The scalar limit theorem should use existing `Real.tendsto_sin_div` and
 sharpness development.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
@@ -111,9 +115,11 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 abbrev Plane (𝕜 : Type*) [RCLike 𝕜] := EuclideanSpace 𝕜 (Fin 2)
 
 /-- First standard basis vector of the planar model. -/
+@[expose]
 noncomputable def e0 : Plane 𝕜 := EuclideanSpace.single 0 1
 
 /-- Second standard basis vector of the planar model. -/
+@[expose]
 noncomputable def e1 : Plane 𝕜 := EuclideanSpace.single 1 1
 
 /-- Unit vector at angle `θ` from the coordinate line. -/
@@ -465,7 +471,6 @@ private theorem projection_sub_model_sq (θ : ℝ) :
     (try simp only [RCLike.algebraMap_eq_ofReal, Matrix.vecHead,
       Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one]) <;>
     first
-      | ring1
       | linear_combination (((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 0) * hpy
       | linear_combination (((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 1) * hpy
 
@@ -492,7 +497,6 @@ private theorem modelSinThetaPerturbation_sq (a b θ : ℝ) :
     (try simp only [RCLike.algebraMap_eq_ofReal, Matrix.vecHead,
       Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one]) <;>
     first
-      | ring1
       | linear_combination ((((b : 𝕜) - (a : 𝕜)) ^ 2 *
           ((Real.sin θ : 𝕜)) ^ 2 * x.ofLp 0) * hpy)
       | linear_combination ((((b : 𝕜) - (a : 𝕜)) ^ 2 *
@@ -535,9 +539,7 @@ private theorem singularValues_sinThetaMap_model
     ext j <;> fin_cases j <;>
     simp [LinearMap.comp_apply, Matrix.toLpLin_apply,
       Matrix.vecHead, Matrix.vecTail, EuclideanSpace.basisFun_apply]
-  try push_cast
   first
-    | ring1
     | linear_combination (((Real.sin θ : 𝕜)) ^ 2) * hpy
 
 private theorem singularValues_projection_sub_model
@@ -904,14 +906,14 @@ theorem sinTwoTheta_model_equality_fails_beyond_operatorNorm
         (𝕜 := 𝕜) (E := Plane 𝕜) (F := Plane 𝕜) 2)
       (sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)) = Real.sin (2 * θ) := by
-    change TauCeti.kyFanSum 2 _ = _
+    rw [UnitarilyInvariantSeminorm.kyFan_apply, ← TauCeti.kyFanSum_eq_linearMap_kyFanSum]
     rw [TauCeti.kyFanSum,
       singularValues_sinTwoAngle_model hθ0.le hθ1]
     simp [Fin.sum_univ_two]
   have hR : (UnitarilyInvariantSeminorm.kyFan
         (𝕜 := 𝕜) (E := Plane 𝕜) (F := Plane 𝕜) 2)
       (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) = (b - a) * Real.sin (2 * θ) := by
-    change TauCeti.kyFanSum 2 _ = _
+    rw [UnitarilyInvariantSeminorm.kyFan_apply, ← TauCeti.kyFanSum_eq_linearMap_kyFanSum]
     rw [TauCeti.kyFanSum,
       singularValues_modelSinTwoThetaPerturbation hab hθ0.le hθ1]
     simp only [Fin.sum_univ_two, Fin.isValue, Fin.val_zero, Fin.val_one,
@@ -1068,7 +1070,8 @@ theorem sinTheta_constant_optimal :
   have hgoal : (1 - 0 : ℝ) * ‖(sinAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) (Real.pi/6))).toContinuousLinearMap‖
       = ‖(modelSinThetaPerturbation (𝕜 := 𝕜) 0 1
-        (Real.pi/6)).toContinuousLinearMap‖ := heq
+        (Real.pi/6)).toContinuousLinearMap‖ := by
+    simpa only [UnitarilyInvariantSeminorm.opNorm_apply] using heq
   rw [hgoal]
   exact mul_lt_of_lt_one_left hpos hc
 
@@ -1135,7 +1138,8 @@ theorem tanTheta_constant_optimal :
   have hgoal : (1 - 0 : ℝ) * ‖(tanAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) (Real.pi / 6))).toContinuousLinearMap‖
       = ‖(modelTanThetaPerturbation (𝕜 := 𝕜) 0 1
-        (Real.pi / 6)).toContinuousLinearMap‖ := heq
+        (Real.pi / 6)).toContinuousLinearMap‖ := by
+    simpa only [UnitarilyInvariantSeminorm.opNorm_apply] using heq
   rw [hgoal]
   exact mul_lt_of_lt_one_left hpos hc
 
@@ -1164,7 +1168,8 @@ theorem tanTwoTheta_constant_optimal :
   have hgoal : (1 - 0 : ℝ) * ‖(tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) (Real.pi / 8))).toContinuousLinearMap‖
       = 2 * ‖(modelTanTwoThetaPerturbation (𝕜 := 𝕜) 0 1
-        (Real.pi / 8)).toContinuousLinearMap‖ := heq
+        (Real.pi / 8)).toContinuousLinearMap‖ := by
+    simpa only [UnitarilyInvariantSeminorm.opNorm_apply] using heq
   rw [hgoal]
   nlinarith
 
@@ -1618,7 +1623,6 @@ theorem modelGappedOperator_apply_uθ (a b θ : ℝ) :
     simp [uθ, vθ, e0, e1, Matrix.toLpLin_apply] <;>
     (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
     first
-      | ring1
       | linear_combination ((a : 𝕜) * (Real.cos θ : 𝕜)) * hpy
       | linear_combination (-((a : 𝕜) * (Real.cos θ : 𝕜))) * hpy
       | linear_combination ((a : 𝕜) * (Real.sin θ : 𝕜)) * hpy
@@ -1659,7 +1663,6 @@ theorem modelRotatedOperator_apply_uθ (a b θ : ℝ) :
     simp [uθ, e0, e1, Matrix.toLpLin_apply] <;>
     (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
     first
-      | ring1
       | linear_combination ((a : 𝕜) * (Real.cos θ : 𝕜)) * hpy
       | linear_combination (-((a : 𝕜) * (Real.cos θ : 𝕜))) * hpy
       | linear_combination ((a : 𝕜) * (Real.sin θ : 𝕜)) * hpy
@@ -1674,7 +1677,6 @@ theorem modelRotatedOperator_apply_vθ (a b θ : ℝ) :
     simp [vθ, e0, e1, Matrix.toLpLin_apply] <;>
     (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
     first
-      | ring1
       | linear_combination ((a : 𝕜) * (Real.cos θ : 𝕜)) * hpy
       | linear_combination (-((a : 𝕜) * (Real.cos θ : 𝕜))) * hpy
       | linear_combination ((a : 𝕜) * (Real.sin θ : 𝕜)) * hpy
@@ -1698,7 +1700,6 @@ theorem modelRotatedOperator_sub_modelGappedOperator (a b θ : ℝ) :
     simp <;>
     (try simp only [RCLike.algebraMap_eq_ofReal]) <;>
     first
-      | ring1
       | linear_combination ((a : 𝕜) * (Real.cos θ : 𝕜)) * hpy
       | linear_combination (-((a : 𝕜) * (Real.cos θ : 𝕜))) * hpy
       | linear_combination ((a : 𝕜) * (Real.sin θ : 𝕜)) * hpy
@@ -1728,13 +1729,15 @@ theorem intervalExteriorGap_sinTheta_model {a b θ : ℝ} (hab : a < b) :
     PointIntervalExteriorGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜))
       (modelRotatedOperator (𝕜 := 𝕜) a b θ) (rotatedModelSubspace (𝕜 := 𝕜) θ)ᗮ a a (b - a) := by
   constructor
-  · intro lam hlam
+  · apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
+    intro lam hlam
     have h := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) e0_ne_zero
       (modelGappedOperator_apply_e0 (𝕜 := 𝕜) a b) hlam
     rw [Set.mem_singleton_iff] at h
     subst h
     simp
-  · intro lam hlam
+  · apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
+    intro lam hlam
     rw [orthogonal_rotatedModelSubspace] at hlam
     have h := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) (vθ_ne_zero θ)
       (modelRotatedOperator_apply_vθ (𝕜 := 𝕜) a b θ) hlam
@@ -1750,13 +1753,15 @@ theorem intervalExteriorGap_sinTheta_model_symm {a b θ : ℝ} (hab : a < b) :
     PointIntervalExteriorGap (modelRotatedOperator (𝕜 := 𝕜) a b θ) (rotatedModelSubspace (𝕜 := 𝕜) θ)
       (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜))ᗮ a a (b - a) := by
   constructor
-  · intro lam hlam
+  · apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
+    intro lam hlam
     have h := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) (uθ_ne_zero θ)
       (modelRotatedOperator_apply_uθ (𝕜 := 𝕜) a b θ) hlam
     rw [Set.mem_singleton_iff] at h
     subst h
     simp
-  · intro lam hlam
+  · apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
+    intro lam hlam
     rw [orthogonal_modelSubspace] at hlam
     have h := restrictedPointSpectrum_span_singleton_subset (𝕜 := 𝕜) e1_ne_zero
       (modelGappedOperator_apply_e1 (𝕜 := 𝕜) a b) hlam
@@ -1843,7 +1848,6 @@ theorem modelRotatedOffDiagonal_apply_uθ (r θ : ℝ) :
     (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
     (try push_cast) <;>
     first
-      | ring1
       | linear_combination ((r : 𝕜) * (Real.sin θ : 𝕜)) * hpy
       | linear_combination (-((r : 𝕜) * (Real.sin θ : 𝕜))) * hpy
       | linear_combination ((r : 𝕜) * (Real.cos θ : 𝕜)) * hpy
@@ -1861,7 +1865,6 @@ theorem modelRotatedOffDiagonal_apply_vθ (r θ : ℝ) :
     (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
     (try push_cast) <;>
     first
-      | ring1
       | linear_combination ((r : 𝕜) * (Real.sin θ : 𝕜)) * hpy
       | linear_combination (-((r : 𝕜) * (Real.sin θ : 𝕜))) * hpy
       | linear_combination ((r : 𝕜) * (Real.cos θ : 𝕜)) * hpy
@@ -1878,7 +1881,6 @@ private theorem modelRotatedOffDiagonal_sq (r θ : ℝ) :
     (try simp only [RCLike.algebraMap_eq_ofReal, Matrix.vecHead,
       Matrix.vecTail, Function.comp_apply, Fin.succ_zero_eq_one]) <;>
     first
-      | ring1
       | linear_combination ((r : 𝕜) ^ 2 * x.ofLp 0) * hpy
       | linear_combination (-((r : 𝕜) ^ 2 * x.ofLp 0)) * hpy
       | linear_combination ((r : 𝕜) ^ 2 * x.ofLp 1) * hpy
@@ -2289,7 +2291,6 @@ private theorem modelTanTwoThetaPerturbation_apply_uθ (a b θ : ℝ) :
     (try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]) <;>
     (try push_cast) <;>
     first
-      | ring1
       | linear_combination ((h : 𝕜) * (Real.sin θ : 𝕜)) * hpy
       | linear_combination (-((h : 𝕜) * (Real.sin θ : 𝕜))) * hpy
       | linear_combination ((h : 𝕜) * (Real.cos θ : 𝕜)) * hpy

@@ -3,11 +3,15 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
-import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
-import DavisKahan.DoubleAngle.TanTwoThetaKyFan
-import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
-import TauCeti.Analysis.Normed.Lp.PiLp
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
+public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
+public import DavisKahan.DoubleAngle.TanTwoThetaKyFan
+public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import TauCeti.Analysis.Normed.Lp.PiLp
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -162,6 +166,7 @@ theorem exists_gt_doubleAngleTangent_lt_add {a ε : ℝ}
     DavisKahan.TanTwoTheta.doubleAngleTangent a)).trans hkey]
 
 /-- Positive denominator in graph coordinates. -/
+@[expose]
 def doubleAngleDenominator (X : E0 →L[ℂ] E1) : E0 →L[ℂ] E0 :=
   ContinuousLinearMap.id ℂ E0 - X.adjoint ∘L X
 
@@ -223,7 +228,8 @@ theorem gramOperator_comm_gramSpectralPVM_proj (X : E0 →L[ℂ] E1)
   have hcomm := LinearPMap.specProjection_apply_domain
     (gramLinearPMap_isSelfAdjoint X) s hs
     (⟨y, hyDom⟩ : (gramLinearPMap X).domain)
-  exact hcomm
+  rw [← gramSpectralPVM_proj_eq_specProjection] at hcomm
+  simpa only [gramLinearPMap_apply] using hcomm
 
 /-- The graph denominator inherits the commutation, being `1` minus the Gram
 operator. -/
@@ -285,6 +291,7 @@ theorem mul_norm_le_norm_doubleAngleDenominator_apply
   exact le_of_mul_le_mul_right hmain hwnorm
 
 /-- Canonical tangent of twice the graph angle. -/
+@[expose]
 noncomputable def doubleAngleTangentOperator
     (X : E0 →L[ℂ] E1) (_hX : ‖X‖ < 1) : E0 →L[ℂ] E1 :=
   (2 : ℂ) • (X ∘L Ring.inverse (doubleAngleDenominator X))
@@ -571,7 +578,7 @@ theorem norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le
   have hhighZero' :
       LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X)
           (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
-    change (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici w = 0
+    rw [← gramSpectralPVM_proj_eq_specProjection]
     exact hhighZero
   have henergy := LinearPMap.re_inner_le_of_specProjection_Ici_apply_eq_zero
     (gramLinearPMap_isSelfAdjoint X)

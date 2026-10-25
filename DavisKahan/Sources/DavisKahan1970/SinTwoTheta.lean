@@ -3,16 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.BoundedOperator.Reflection
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.DoubleAngle.UnboundedIdealFormGap
-import DavisKahan.DoubleAngle.AngleTransport
-import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.DoubleAngle.RealUnboundedIdeal
-import DavisKahan.DoubleAngle.TangentTransport
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.BoundedOperator.Reflection
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.DoubleAngle.UnboundedIdealFormGap
+public import DavisKahan.DoubleAngle.AngleTransport
+public import DavisKahan.DoubleAngle.RealAngleIdentification
+public import DavisKahan.DoubleAngle.RealUnboundedIdeal
+public import DavisKahan.DoubleAngle.TangentTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+public section
 
 open TauCeti.DavisKahan.Angle
 

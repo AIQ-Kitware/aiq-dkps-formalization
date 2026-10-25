@@ -4,11 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
-import Mathlib.Analysis.Calculus.Deriv.Mul
-import Mathlib.Analysis.Calculus.Deriv.Star
-import Mathlib.Analysis.Complex.Basic
-import Mathlib.Tactic
+module
+
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+public import Mathlib.Analysis.Calculus.Deriv.Mul
+public import Mathlib.Analysis.Calculus.Deriv.Star
+public import Mathlib.Analysis.Complex.Basic
+public import Mathlib.Tactic
 
 /-!
 # Complex smooth-core Green identities for the free--free beam
@@ -29,6 +31,8 @@ conditions kill the boundary term.  Taking `v = u` gives
 which is the symmetry and positivity calculation required by the complex
 closed-operator realization.
 -/
+
+public section
 
 open Set
 open scoped Interval ComplexConjugate
@@ -59,6 +63,7 @@ structure ComplexFourthOrderData where
 namespace ComplexFourthOrderData
 
 /-- Free--free endpoint conditions for a complex smooth function. -/
+@[expose]
 def FreeBoundary (u : ComplexFourthOrderData) : Prop :=
   u.f2 0 = 0 ∧ u.f3 0 = 0 ∧ u.f2 1 = 0 ∧ u.f3 1 = 0
 

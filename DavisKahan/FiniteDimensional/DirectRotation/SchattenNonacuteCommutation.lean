@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenEqualAngleCompatibility
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenFixedDirections
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenEqualAngleCompatibility
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenFixedDirections
 
 /-!
 # Weighted canonical commutation without acuteness
@@ -14,6 +16,8 @@ with canonical rotation, even when right angles occur. Interior angle
 spaces use the intrinsic commutation theorem. The cosine annihilates the
 right-angle sector; both transporters fix zero-angle directions.
 -/
+
+public section
 
 noncomputable section
 

@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Natural.Generalized
-import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
-import DavisKahan.SinTheta.Natural.Real
+module
+
+public import DavisKahan.SinTheta.Natural.Generalized
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import DavisKahan.SinTheta.Natural.Real
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

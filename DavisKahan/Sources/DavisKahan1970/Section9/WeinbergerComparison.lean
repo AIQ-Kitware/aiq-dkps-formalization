@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
 
 /-!
 # Davis--Kahan 1970, Section 9: Weinberger comparison
@@ -25,6 +27,8 @@ strict inequality is actually reversed at the lower root throughout the
 printed parameter range.  The source assertion must therefore be treated as a
 formal refutation obligation rather than as an omitted proof.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970

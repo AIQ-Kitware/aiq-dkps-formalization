@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.ContinuationRieszIntegral
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Core
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.SpectralTheory.ContinuationRieszIntegral
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Core
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -54,10 +58,12 @@ noncomputable def tangentOneForm : ℂ → ℂ →L[ℂ] ℂ :=
 
 /-- Speed of the extended contour parameterization, measured using the same
 within-derivative convention as Mathlib's curve integral. -/
+@[expose]
 noncomputable def contourSpeed (Γ : PiecewiseC1ClosedContour) (t : ℝ) : ℝ :=
   ‖derivWithin Γ.path.extend (Set.Icc (0 : ℝ) 1) t‖
 
 /-- Parameterized contour length. -/
+@[expose]
 noncomputable def contourLength (Γ : PiecewiseC1ClosedContour) : ℝ :=
   ∫ t in (0 : ℝ)..1, Γ.contourSpeed t
 
@@ -123,6 +129,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The normalized Riesz operator of a bounded operator around one fixed
 proof-carrying contour. -/
+@[expose]
 noncomputable def fixedContourRieszOperator
     (Γ : PiecewiseC1ClosedContour) (A : H →L[ℂ] H) : H →L[ℂ] H :=
   rieszNormalization •

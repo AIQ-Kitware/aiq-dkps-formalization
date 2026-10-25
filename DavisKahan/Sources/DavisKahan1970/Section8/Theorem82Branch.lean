@@ -4,12 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
-import DavisKahan.Geometry.Angle.DoubleAngleGapBound
-import DavisKahan.SpectralTheory.CentralBand
-import DavisKahan.BoundedOperator.TrialResidual
-import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
+public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
+public import DavisKahan.SpectralTheory.CentralBand
+public import DavisKahan.BoundedOperator.TrialResidual
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -218,7 +222,8 @@ theorem theorem8_2_perturbationHalfGap_complex
       f t = ‖Qᗮ.starProjection ∘L
         circleRieszProjection (A0 + t • E) cen rad‖ := by
     intro t ht
-    show ‖Qᗮ.starProjection ∘L (R t).starProjection‖ = _
+    change (R t).directedProjectionGap Q = _
+    rw [Submodule.directedProjectionGap_def]
     rw [hproj t ht]
   have hfcont : ContinuousOn f (Set.Icc 0 1) := by
     refine ContinuousOn.congr ?_ (fun t ht => hfeq t ht)
@@ -238,7 +243,8 @@ theorem theorem8_2_perturbationHalfGap_complex
     exact centralBandSubspace_le_of_spectrumIn_gapExterior _ (hBself 0) hd hlr
       (hgapt 0 ⟨le_rfl, zero_le_one⟩) hQred' hQperp'
   have hf0 : f 0 = 0 := by
-    show ‖Qᗮ.starProjection ∘L (R 0).starProjection‖ = 0
+    change (R 0).directedProjectionGap Q = 0
+    rw [Submodule.directedProjectionGap_def]
     rw [norm_eq_zero]
     ext x
     have hmem : (R 0).starProjection x ∈ Q := hR0 ((R 0).starProjection_apply_mem x)
@@ -310,8 +316,8 @@ theorem theorem8_2_perturbationHalfGap_complex
     exact Submodule.starProjection_eq_self_iff.mpr
       (hR1 (P.starProjection_apply_mem x))
   have hle : P.directedProjectionGap Q ≤ f 1 := by
-    show ‖Qᗮ.starProjection ∘L P.starProjection‖ ≤
-      ‖Qᗮ.starProjection ∘L (R 1).starProjection‖
+    change P.directedProjectionGap Q ≤ (R 1).directedProjectionGap Q
+    simp only [Submodule.directedProjectionGap_def]
     calc ‖Qᗮ.starProjection ∘L P.starProjection‖
         = ‖(Qᗮ.starProjection ∘L (R 1).starProjection) ∘L P.starProjection‖ := by
           rw [ContinuousLinearMap.comp_assoc, hfixP]
@@ -337,7 +343,8 @@ theorem theorem8_2_perturbationHalfGap_angle_lt
     Real.arcsin (P.directedProjectionGap Q) < Real.pi / 4 := by
   have h := theorem8_2_perturbationHalfGap_complex hA hK hdelta hab hQ hQperp hPred hP
     hsmall
-  have h0 : (0 : ℝ) ≤ P.directedProjectionGap Q := norm_nonneg _
+  have h0 : (0 : ℝ) ≤ P.directedProjectionGap Q :=
+    Submodule.directedProjectionGap_nonneg P Q
   rw [← DavisKahan1970.Section8.arcsin_sqrt_two_div_two]
   refine Real.arcsin_lt_arcsin (by linarith) h ?_
   have : Real.sqrt 2 ≤ 2 := by
@@ -446,7 +453,8 @@ theorem theorem8_2_residualHalfGap_angle_lt
     Real.arcsin (P.directedProjectionGap Q) < Real.pi / 4 := by
   have h := theorem8_2_residualHalfGap_complex hA hK hdelta hab hQ hQperp hPred hP
     hRsmall
-  have h0 : (0 : ℝ) ≤ P.directedProjectionGap Q := norm_nonneg _
+  have h0 : (0 : ℝ) ≤ P.directedProjectionGap Q :=
+    Submodule.directedProjectionGap_nonneg P Q
   rw [← DavisKahan1970.Section8.arcsin_sqrt_two_div_two]
   refine Real.arcsin_lt_arcsin (by linarith) h ?_
   have : Real.sqrt 2 ≤ 2 := by

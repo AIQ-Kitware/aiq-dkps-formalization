@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpBlockPath
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpBlockPath
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -64,27 +68,10 @@ theorem realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces
     [CompleteSpace U]
     (hU : A.Reduces U) :
     realSpectrum (compressOperator U A) = restrictedSpectrum A U := by
-  have hInv : InvariantFor A U := by
-    intro x hx
-    exact hU.1 x hx
-  have hcompress : compressOperator U A = A.restrict hInv := by
-    apply ContinuousLinearMap.ext
-    intro u
-    apply Subtype.ext
-    change U.starProjection (A (u : Hspace)) = A (u : Hspace)
-    exact Submodule.starProjection_eq_self_iff.mpr
-      (hInv (u : Hspace) u.property)
-  rw [hcompress]
-  ext r
-  change
-    ((r : ℂ) ∈ spectrum ℂ (A.restrict hInv)) ↔
-      ∃ hInv' : InvariantFor A U,
-        (r : ℂ) ∈ spectrum ℂ (A.restrict hInv')
-  constructor
-  · intro hr
-    exact ⟨hInv, hr⟩
-  · rintro ⟨hInv', hr⟩
-    simpa using hr
+  rw [compressOperator_eq_restrict_of_reduces A U hU,
+    restrictedSpectrum_eq_restrictionSpectrum A U hU.1]
+  rfl
+
 
 omit [CompleteSpace Hspace] in
 /-- A finite-gap configuration places the genuine spectra of the two diagonal

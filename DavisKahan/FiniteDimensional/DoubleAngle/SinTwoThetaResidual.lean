@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-5.6 Thinking
 -/
-import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
-import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
-import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
+module
+
+public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
 
 /-!
 # Experimental residual `sin (2 Theta)` interface
@@ -24,6 +26,8 @@ of `A` does not control an arbitrary trial pair `(X,M)`, and the former direct
 Sylvester body was not type-correct: its displayed right-hand side consisted
 of ambient endomorphisms while the norm had rectangular type `F → E`.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional

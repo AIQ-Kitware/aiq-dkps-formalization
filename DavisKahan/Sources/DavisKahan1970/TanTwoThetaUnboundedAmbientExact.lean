@@ -3,14 +3,18 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
-import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.Geometry.Polar.DirectRotation
-import DavisKahan.DoubleAngle.TangentTransport
-import DavisKahan.TanTheta.RitzPair
-import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+module
+
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+public import DavisKahan.InfiniteDimensional.DoubleAngle
+public import DavisKahan.Geometry.Polar.DirectRotation
+public import DavisKahan.DoubleAngle.TangentTransport
+public import DavisKahan.TanTheta.RitzPair
+public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -937,9 +941,11 @@ theorem approximationNumber_tanTwoDirectedCorner
       blockCompression Uᗮ U (2 * (projectorDifference U V * doubleSecant U V)) := by
     rw [reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv,
       tanTwoBlockRepresentative, blockCompression_diagonalPair]
-  rw [(projectionBlock_same_compression Uᗮ U _) n, ← hcorner,
+  rw [(ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+      (projectionBlock_same_compression Uᗮ U _) n, ← hcorner,
     approximationNumber_reflectionTangentCorner hZsa hZ2 hS1 n,
-    hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock U V n]
+    (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+      (hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock U V) n]
 
 /-- **Davis--Kahan 1970, the `tan 2Θ` theorem, directed clause, over `ℂ`:
 `(b − a) N(tan 2Θ₀) ≤ 2 N(R)`.**

@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
-import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.SinTheta.Bounded.Core
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge
+public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.SinTheta.Bounded.Core
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

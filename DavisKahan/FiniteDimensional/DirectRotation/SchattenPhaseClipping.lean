@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimalPhase
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimalPhase
 
 /-!
 # Exact Schatten phase optimization on a truncated interval
@@ -14,6 +16,8 @@ angles. The argument uses compactness, the endpoint derivative and the
 classification of interior stationary phases, without presupposing a
 global unimodality statement.
 -/
+
+public section
 
 noncomputable section
 

@@ -3,10 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-import DavisKahan.SpectralTheory.Complexification.Subspace
-import DavisKahan.Sylvester.Gap
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+module
+
+public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
+public import DavisKahan.SpectralTheory.Complexification.Subspace
+public import DavisKahan.Sylvester.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -71,6 +75,7 @@ theorem norm_im_le (z : Eℂ) : ‖im z‖ ≤ ‖z‖ := by
   nlinarith [sq_nonneg ‖re z‖]
 
 /-- Coordinatewise complexification of a real closed-operator domain. -/
+@[expose]
 def domain (A : E →ₗ.[ℝ] E) :
     Submodule ℂ Eℂ :=
   complexifySubmodule A.domain
@@ -84,18 +89,21 @@ omit [CompleteSpace E] in
   rfl
 
 /-- Real coordinate of a vector in the complexified operator domain. -/
+@[expose]
 def domainRe
     (A : E →ₗ.[ℝ] E)
     (z : domain A) : A.domain :=
   ⟨re (z : Eℂ), (mem_domain_iff A z).mp z.property |>.1⟩
 
 /-- Imaginary coordinate of a vector in the complexified operator domain. -/
+@[expose]
 def domainIm
     (A : E →ₗ.[ℝ] E)
     (z : domain A) : A.domain :=
   ⟨im (z : Eℂ), (mem_domain_iff A z).mp z.property |>.2⟩
 
 /-- Coordinatewise action on the complexified domain. -/
+@[expose]
 def linearMap
     (A : E →ₗ.[ℝ] E) :
     domain A →ₗ[ℂ] Eℂ where
@@ -202,6 +210,7 @@ theorem linearMap_closedGraph
   exact hclosed.preimage hcoords
 
 /-- Coordinatewise complexification of a real partial map. -/
+@[expose]
 def complexify (A : E →ₗ.[ℝ] E) : Eℂ →ₗ.[ℂ] Eℂ where
   domain := domain A
   toFun := linearMap A
@@ -251,6 +260,7 @@ compatibility adapter. -/
   rfl
 
 /-- Real coordinate of a canonical partial-map domain vector. -/
+@[expose]
 def domainRePMap
     (A : E →ₗ.[ℝ] E)
     (z : (complexify A).domain) : A.domain :=
@@ -258,6 +268,7 @@ def domainRePMap
     (mem_complexify_toLinearPMap_domain_iff A z).mp z.property |>.1⟩
 
 /-- Imaginary coordinate of a canonical partial-map domain vector. -/
+@[expose]
 def domainImPMap
     (A : E →ₗ.[ℝ] E)
     (z : (complexify A).domain) : A.domain :=
@@ -292,6 +303,7 @@ theorem toLinearMap_congr
   congrArg A (Subtype.ext h)
 
 /-- The real copy of a domain vector lies in the complexified domain. -/
+@[expose]
 def ofRealDomain
     (A : E →ₗ.[ℝ] E)
     (x : A.domain) : (complexify A).domain :=
@@ -455,6 +467,7 @@ theorem semiboundedBelow_complexify
     {A : E →ₗ.[ℝ] E}
     {c : ℝ} (hA : TauCeti.LinearPMap.SemiboundedBelow A c) :
     TauCeti.LinearPMap.SemiboundedBelow (complexify A) c := by
+  rw [LinearPMap.semiboundedBelow_iff] at hA ⊢
   intro z
   have hr : c * ‖re (z : Eℂ)‖ ^ 2 ≤
       ⟪A (domainRe A z), re (z : Eℂ)⟫_ℝ := hA (domainRe A z)
@@ -472,6 +485,7 @@ theorem semiboundedAbove_complexify
     {A : E →ₗ.[ℝ] E}
     {c : ℝ} (hA : TauCeti.LinearPMap.SemiboundedAbove A c) :
     TauCeti.LinearPMap.SemiboundedAbove (complexify A) c := by
+  rw [LinearPMap.semiboundedAbove_iff] at hA ⊢
   intro z
   have hr : ⟪A (domainRe A z), re (z : Eℂ)⟫_ℝ ≤
       c * ‖re (z : Eℂ)‖ ^ 2 := hA (domainRe A z)
@@ -490,6 +504,7 @@ theorem isSymmetric_complexify
     {A : E →ₗ.[ℝ] E}
     (hA : TauCeti.LinearPMap.IsSymmetric A) :
     TauCeti.LinearPMap.IsSymmetric (complexify A) := by
+  rw [LinearPMap.isSymmetric_iff] at hA ⊢
   intro z w
   apply Complex.ext
   · change
@@ -634,7 +649,7 @@ theorem isSelfAdjoint_complexify
           ⟪zAdj, x⟫_ℂ = ⟪z, (complexify A) xDom⟫_ℂ := by
             simpa [zAdj, xDom] using hformal xDom
           _ = ⟪zAct, x⟫_ℂ := by
-            simpa [zAct, xDom] using (hsymm ⟨z, hzA⟩ xDom).symm
+            simpa [zAct, xDom] using ((LinearPMap.isSymmetric_iff _).mp hsymm ⟨z, hzA⟩ xDom).symm
     have hzero : ⟪zAdj - zAct, zAdj - zAct⟫_ℂ = 0 := by
       rw [inner_sub_left, congrFun hinner (zAdj - zAct), sub_self]
     exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
@@ -646,7 +661,8 @@ theorem realResolvent_mem_complexify
     (A : E →ₗ.[ℝ] E)
     {lam : ℝ} (hlam : lam ∈ TauCeti.LinearPMap.realResolventSet A) :
     lam ∈ TauCeti.LinearPMap.realResolventSet (complexify A) := by
-  rcases hlam with ⟨R, hleft, hright⟩
+  rcases LinearPMap.mem_realResolventSet_iff.mp hlam with ⟨R, hleft, hright⟩
+  apply LinearPMap.mem_realResolventSet_iff.mpr
   refine ⟨RealComplexification.complexify R, ?_, ?_⟩
   · intro z
     apply RealComplexification.ext
@@ -674,7 +690,7 @@ theorem complexify_realResolvent_mem
     (A : E →ₗ.[ℝ] E)
     {lam : ℝ} (hlam : lam ∈ TauCeti.LinearPMap.realResolventSet (complexify A)) :
     lam ∈ TauCeti.LinearPMap.realResolventSet A := by
-  rcases hlam with ⟨R, hleft, hright⟩
+  rcases LinearPMap.mem_realResolventSet_iff.mp hlam with ⟨R, hleft, hright⟩
   let RrLinear : E →ₗ[ℝ] E :=
     { toFun := fun y => re (R (ofReal y))
       map_add' := fun y z => by simp
@@ -685,6 +701,7 @@ theorem complexify_realResolvent_mem
         ‖RrLinear y‖ ≤ ‖R (ofReal y)‖ := norm_re_le _
         _ ≤ ‖R‖ * ‖ofReal y‖ := R.le_opNorm _
         _ = ‖R‖ * ‖y‖ := by rw [ofReal.norm_map])
+  apply LinearPMap.mem_realResolventSet_iff.mpr
   refine ⟨Rr, ?_, ?_⟩
   · intro x
     have hx := hleft (ofRealDomainPMap A x)
@@ -728,8 +745,10 @@ theorem realSpectrum_complexify
           _root_.LinearPMap.spectrum (complexify A) := by
   -- Both sides now use TauCeti's canonical spectrum; only complexification
   -- remains a mathematical equivalence to establish.
-  change _root_.LinearPMap.realSpectrum A =
-    _root_.LinearPMap.realSpectrum (complexify A)
+  rw [show Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum (complexify A) =
+      _root_.LinearPMap.realSpectrum (complexify A) by
+    ext r
+    exact _root_.LinearPMap.mem_realSpectrum_iff.symm]
   exact (closed_realSpectrum_complexify A).symm
 
 omit [CompleteSpace E] [CompleteSpace F] in

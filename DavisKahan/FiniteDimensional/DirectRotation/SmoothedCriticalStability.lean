@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutingCorrection
-import ForTauCeti.Analysis.InnerProductSpace.UnitaryTransportFrobenius
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCommutingCorrection
+public import ForTauCeti.Analysis.InnerProductSpace.UnitaryTransportFrobenius
 
 /-!
 # Quartic stability at the smoothed transport transition
@@ -19,6 +21,8 @@ subcritical quadratic coefficient vanishes.
 The underlying support and trace identities are classical. Their application
 to the exact constrained critical transport problem is the research extension.
 -/
+
+public section
 
 noncomputable section
 open scoped InnerProductSpace

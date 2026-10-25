@@ -3,12 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
-import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.Geometry.Angle.OperatorAngleGeneric
-import DavisKahan.SpectralTheory.OperatorAngle
-import DavisKahan.SpectralTheory.Complexification.Subspace
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
+public import DavisKahan.SpectralTheory.OperatorAngle
+public import DavisKahan.SpectralTheory.Complexification.Subspace
 
 /-!
 # Presentation bridges for the full Davis--Kahan operator angle
@@ -31,6 +33,8 @@ well-typed correspondence; equality of their exact maximal-angle norm is the
 coordinate-independent statement consumed by Section 8.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
@@ -50,11 +54,11 @@ private theorem norm_cfc_arcsin_of_nonneg
     (A : G →L[ℂ] G) (hA : 0 ≤ A) :
     ‖cfc Real.arcsin A‖ = Real.arcsin ‖A‖ := by
   rcases subsingleton_or_nontrivial G with hG | hG
-  · letI := hG
+  · let _ := hG
     have hAzero : A = 0 := Subsingleton.elim _ _
     have hcfcZero : cfc Real.arcsin A = 0 := Subsingleton.elim _ _
     rw [hcfcZero, norm_zero, hAzero, norm_zero, Real.arcsin_zero]
-  · letI := hG
+  · let _ := hG
     apply le_antisymm
     · refine norm_cfc_le (Real.arcsin_nonneg.mpr (norm_nonneg A)) ?_
       intro t ht
@@ -86,10 +90,10 @@ private theorem spectrum_subset_Iic_iff_norm_le_of_nonneg
   constructor
   · intro hspec
     rcases subsingleton_or_nontrivial G with hG | hG
-    · letI := hG
+    · let _ := hG
       have hAzero : A = 0 := Subsingleton.elim _ _
       simpa [hAzero] using hc
-    · letI := hG
+    · let _ := hG
       exact hspec (CStarAlgebra.norm_mem_spectrum_of_nonneg (a := A) hA)
   · intro hnorm t ht
     have hnormC : ‖((t : ℂ))‖ ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ :=
@@ -111,10 +115,10 @@ private theorem spectrum_subset_Iio_iff_norm_lt_of_nonneg
   constructor
   · intro hspec
     rcases subsingleton_or_nontrivial G with hG | hG
-    · letI := hG
+    · let _ := hG
       have hAzero : A = 0 := Subsingleton.elim _ _
       simpa [hAzero] using hc
-    · letI := hG
+    · let _ := hG
       exact hspec (CStarAlgebra.norm_mem_spectrum_of_nonneg (a := A) hA)
   · intro hnorm t ht
     have hnormC : ‖((t : ℂ))‖ ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ :=
@@ -154,7 +158,7 @@ theorem norm_sineBlockC_eq_directedProjectionGap
     ‖sineBlockC U V‖ = U.directedProjectionGap V := by
   have hseq := sameApproximationSingularValues_ambientSubspaceBlock
     U Vᗮ (sineBlockC U V)
-  have h0 := hseq 0
+  have h0 := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hseq 0
   rw [ContinuousLinearMap.approximationNumber_index_zero,
     ContinuousLinearMap.approximationNumber_index_zero] at h0
   have hamb :
@@ -176,7 +180,7 @@ theorem norm_sineBlockC_eq_directedProjectionGap
         rfl
       _ = Vᗮ.starProjection ∘L U.starProjection := by rw [hV, hU]
   rw [hamb] at h0
-  simpa [Submodule.directedProjectionGap] using h0.symm
+  simpa only [Submodule.directedProjectionGap_def] using h0.symm
 
 /-- The source positive sine modulus has the same norm as the directed gap. -/
 theorem norm_sineBlockModulusC_eq_directedProjectionGap
@@ -203,7 +207,7 @@ theorem directedProjectionGap_orthogonal
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Uᗮ.directedProjectionGap Vᗮ = V.directedProjectionGap U := by
-  rw [Submodule.directedProjectionGap, Submodule.directedProjectionGap]
+  rw [Submodule.directedProjectionGap_def, Submodule.directedProjectionGap_def]
   have hdouble : Vᗮᗮ.starProjection = V.starProjection := by
     calc
       Vᗮᗮ.starProjection = (1 : E →L[ℂ] E) - Vᗮ.starProjection :=
@@ -326,10 +330,10 @@ theorem norm_fullAngleBlockC_eq_angleOperator
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖fullAngleBlockC U V‖ = ‖Angle.angleOperator U V‖ := by
-  rw [norm_fullAngleBlockC_eq_maximalAngle, maximalAngle, Angle.angleOperator,
-    norm_cfc_arcsin_of_nonneg (Angle.sinAngleOperator U V)
-      (Angle.sinAngleOperator_nonneg U V),
-    Angle.norm_sinAngleOperator]
+  rw [norm_fullAngleBlockC_eq_maximalAngle, maximalAngle, Angle.angleOperator_complex, Angle.angleOperatorC,
+    norm_cfc_arcsin_of_nonneg (Angle.sinAngleOperatorC U V)
+      (Angle.sinAngleOperatorC_nonneg U V),
+    Angle.norm_sinAngleOperatorC]
 
 
 /-- The modern intrinsic ambient angle is positive.  This local presentation
@@ -339,11 +343,11 @@ theorem intrinsicAngleOperator_nonnegC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     0 ≤ Angle.angleOperator U V := by
-  rw [Angle.angleOperator]
+  rw [Angle.angleOperator_complex, Angle.angleOperatorC]
   apply cfc_nonneg
   intro t ht
   exact Real.arcsin_nonneg.mpr
-    (spectrum_nonneg_of_nonneg (Angle.sinAngleOperator_nonneg U V) ht)
+    (spectrum_nonneg_of_nonneg (Angle.sinAngleOperatorC_nonneg U V) ht)
 
 /-- **The literal Davis--Kahan full angle and the intrinsic ambient angle have
 the same closed upper-angle comparisons.**

@@ -3,8 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sylvester.Bounded
-import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+module
+
+public import DavisKahan.Sylvester.Bounded
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -34,14 +38,17 @@ variable {E F : Type v}
 spectral API used by the canonical unbounded theorem.  This avoids maintaining
 an unrelated bounded spectrum placeholder and makes bounded gap hypotheses
 eligible for a direct full-domain specialization bridge. -/
+@[expose]
 noncomputable def boundedRealSpectrum (A : E →L[𝕜] E) : Set ℝ :=
   _root_.LinearPMap.realSpectrum (A.toLinearMap.toPMap ⊤)
 
 /-- The real spectrum is contained in a set. -/
+@[expose]
 def SpectrumInRealSet (A : E →L[𝕜] E) (s : Set ℝ) : Prop :=
   boundedRealSpectrum A ⊆ s
 
 /-- The two blocks satisfy the interval/exterior configuration in either orientation. -/
+@[expose]
 def IntervalExteriorGap
     (A : E →L[𝕜] E) (B : F →L[𝕜] F)
     (β α δ : ℝ) : Prop :=

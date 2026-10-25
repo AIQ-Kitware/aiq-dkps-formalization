@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalAttainment
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalAttainment
 
 /-!
 # The exact higher-rank canonical-rotation cutoff
@@ -14,6 +16,8 @@ displacement precisely when every principal angle is at most
 angles. A right-angle plane always excludes canonical optimality.
 The comparison is with all admissible complex unitary transports.
 -/
+
+public section
 
 noncomputable section
 

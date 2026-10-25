@@ -3,12 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.DoubleAngle.RealUnboundedIdeal
-import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
-import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+module
+
+public import DavisKahan.DoubleAngle.RealUnboundedIdeal
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

@@ -3,7 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.SpectralCutoff
+module
+
+public import DavisKahan.SpectralTheory.SpectralCutoff
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -103,7 +107,8 @@ theorem spectraBoundedTruncation_lowerBound
   obtain ⟨hx, hb⟩ := TauCeti.LinearPMap.truncation_eq_on_specProjection hA
     (Set.Icc (-τ) τ) measurableSet_Icc (abs_le_max_zero_of_mem_Icc τ) x
   rw [show spectraBoundedTruncation A hA τ x = A ⟨_, hx⟩ from hb.symm]
-  exact hc ⟨spectraSpectralCutoff A hA τ x, hx⟩
+  exact (TauCeti.LinearPMap.semiboundedBelow_iff _ _).mp hc
+    ⟨spectraSpectralCutoff A hA τ x, hx⟩
 
 /-- An upper semibound for `A` descends to the truncations. -/
 theorem spectraBoundedTruncation_upperBound
@@ -114,7 +119,8 @@ theorem spectraBoundedTruncation_upperBound
   obtain ⟨hx, hb⟩ := TauCeti.LinearPMap.truncation_eq_on_specProjection hA
     (Set.Icc (-τ) τ) measurableSet_Icc (abs_le_max_zero_of_mem_Icc τ) x
   rw [show spectraBoundedTruncation A hA τ x = A ⟨_, hx⟩ from hb.symm]
-  exact hc ⟨spectraSpectralCutoff A hA τ x, hx⟩
+  exact (TauCeti.LinearPMap.semiboundedAbove_iff _ _).mp hc
+    ⟨spectraSpectralCutoff A hA τ x, hx⟩
 
 /-- The truncation absorbs its cutoff on both sides. -/
 theorem spectraBoundedTruncation_commutes_cutoff

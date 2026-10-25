@@ -3,9 +3,11 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SinTheta.Natural.Reducing
-import DavisKahan.SinTheta.BoundedPerturbation
-import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
+module
+
+public import DavisKahan.SinTheta.Natural.Reducing
+public import DavisKahan.SinTheta.BoundedPerturbation
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 
 /-!
 # The unbounded `sin Θ` estimate at the operator norm
@@ -19,6 +21,8 @@ It is a generic foundation, not a source façade: the moving-band Lipschitz
 estimate for Theorem 8.2's homotopy consumes it, and so does the static branch
 bound.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan1970
@@ -73,15 +77,18 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
   have hXdom : ∀ x : (TauCeti.LinearPMap.reducingRestriction A P hPred).domain,
       (P.subtypeL (x : P) : Hc) ∈ (TauCeti.LinearPMap.addBounded A Hop).domain := by
     intro x
-    exact x.2
+    exact (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A P hPred _).mp x.2
   have hReq : ∀ x : (TauCeti.LinearPMap.reducingRestriction A P hPred).domain,
       (TauCeti.LinearPMap.addBounded A Hop) ⟨P.subtypeL (x : P), hXdom x⟩ -
           P.subtypeL ((TauCeti.LinearPMap.reducingRestriction A P hPred) x) =
         (Hop ∘L (P.subtypeL : P →L[ℂ] Hc)) (x : P) := by
     intro x
-    have hxA : ((x : P) : Hc) ∈ A.domain := x.2
-    show (A (⟨((x : P) : Hc), hxA⟩ : A.domain) : Hc) + Hop ((x : P) : Hc)
-        - (A (⟨((x : P) : Hc), hxA⟩ : A.domain) : Hc) = Hop ((x : P) : Hc)
+    have hxA : ((x : P) : Hc) ∈ A.domain :=
+      (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A P hPred _).mp x.2
+    rw [TauCeti.LinearPMap.addBounded_apply]
+    change A ⟨((x : P) : Hc), hxA⟩ + Hop ((x : P) : Hc) -
+      ((TauCeti.LinearPMap.reducingRestriction A P hPred x : P) : Hc) = Hop ((x : P) : Hc)
+    rw [TauCeti.LinearPMap.coe_reducingRestriction_apply A P hPred (x : P) hxA]
     abel
   have key := DavisKahan.ExactSinTheta.sinTheta_unbounded_complex_reducingSubspace
     (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
@@ -99,8 +106,9 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
     exact (Submodule.starProjection_orthogonal Q).symm
   rw [hblock] at hle
   have hgapeq : ‖Qᗮ.starProjection ∘L (P.subtypeL : P →L[ℂ] Hc)‖ =
-      P.directedProjectionGap Q :=
-    TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection Qᗮ.starProjection P
+      P.directedProjectionGap Q := by
+    rw [Submodule.directedProjectionGap_def]
+    exact TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection Qᗮ.starProjection P
   rw [hgapeq] at hle
   refine hle.trans ?_
   calc ‖Hop ∘L (P.subtypeL : P →L[ℂ] Hc)‖ ≤ ‖Hop‖ * ‖(P.subtypeL : P →L[ℂ] Hc)‖ :=

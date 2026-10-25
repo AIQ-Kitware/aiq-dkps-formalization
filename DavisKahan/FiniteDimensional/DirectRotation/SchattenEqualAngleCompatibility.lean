@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenEqualAnglePhases
-import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenEqualAnglePhases
+public import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
 
 /-!
 # Compatibility of the intrinsic Schatten phase projection
@@ -15,6 +17,8 @@ Consequently the unique supercritical projection commutes with both
 restricted geometric operators. Other angles, including right angles,
 remain unrestricted.
 -/
+
+public section
 
 noncomputable section
 

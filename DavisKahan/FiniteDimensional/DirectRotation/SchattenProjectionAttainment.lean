@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenFrameAttainment
-import DavisKahan.FiniteDimensional.DirectRotation.SchattenFunctionalPhase
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenFrameAttainment
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenFunctionalPhase
 
 /-!
 # Attainment of every compatible Schatten phase projection
@@ -15,6 +17,8 @@ negative attaining scalar phases on its two sectors construct a global
 ambient minimum. The relative phase has a formula in terms of the actual
 cosine operator and the prescribed projection, independent of that frame.
 -/
+
+public section
 
 noncomputable section
 

@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.InfiniteDimensional.Ideals.Symmetric
-import DavisKahan.InfiniteDimensional.Ideals.CompactIntegral
-import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
-import DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup
-import TauCeti.Analysis.InnerProductSpace.Sylvester
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import DavisKahan.SpectralTheory.AbstractSpectrum
+module
+
+public import DavisKahan.InfiniteDimensional.Ideals.Symmetric
+public import DavisKahan.InfiniteDimensional.Ideals.CompactIntegral
+public import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
+public import DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup
+public import TauCeti.Analysis.InnerProductSpace.Sylvester
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import DavisKahan.SpectralTheory.AbstractSpectrum
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -68,7 +72,8 @@ theorem norm_sylvester_le_of_orderedSeparation
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d)
     (hEq : ContinuousLinearMap.sylvester A B X = C) :
     d * ‖X‖ ≤ ‖C‖ := by
-  have hrep := orderedSylvester_reconstruction hA hB hd hsep hEq
+  have hrep := orderedSylvester_reconstruction hA hB hd hsep
+    (by simpa only [ContinuousLinearMap.sylvester_apply] using hEq)
   have hgint : Integrable (Set.indicator (Set.Ici 0)
       (fun t => ‖C‖ * Real.exp (-d * t))) := by
     have hexp : IntegrableOn (fun t : ℝ => ‖C‖ * Real.exp (-d * t))
@@ -114,6 +119,7 @@ variable {Fc : Type v} [NormedAddCommGroup Fc] [InnerProductSpace ℂ Fc]
   [CompleteSpace Fc]
 
 /-- Fourier-integral solution selected under a supplied positive gap. -/
+@[expose]
 noncomputable def separatedSylvesterSolution
     (A : Fc →L[ℂ] Fc) (B : Ec →L[ℂ] Ec)
     (d : ℝ) (hd : 0 < d) (C : Ec →L[ℂ] Fc) : Ec →L[ℂ] Fc :=
@@ -130,7 +136,8 @@ theorem separatedSylvester_reconstruction
     (hEq : ContinuousLinearMap.sylvester A B X = C) :
     X = separatedSylvesterSolution A B d hd C := by
   unfold separatedSylvesterSolution
-  exact separatedSylvester_reconstruction_complex hA hB hd hsep X C hEq
+  exact separatedSylvester_reconstruction_complex hA hB hd hsep X C
+    (by simpa only [ContinuousLinearMap.sylvester_apply] using hEq)
 
 /-- The selected Fourier integral is Bochner integrable. -/
 theorem separatedSylvester_integrable
@@ -149,7 +156,8 @@ theorem sylvester_solve
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (C : Ec →L[ℂ] Fc) :
     ContinuousLinearMap.sylvester A B (separatedSylvesterSolution A B d hd C) = C := by
-  unfold ContinuousLinearMap.sylvester separatedSylvesterSolution
+  rw [ContinuousLinearMap.sylvester_apply]
+  unfold separatedSylvesterSolution
   exact spectral_step_integral_right_inverse hA hB hd hsep C
 
 /-- Universal Bhatia--Davis--McIntosh bound. -/
@@ -221,7 +229,8 @@ theorem compact_mem_of_separatedSylvester_solution
     (hEq : ContinuousLinearMap.sylvester A B X = C)
     (hC : IsCompactOperator C) :
     IsCompactOperator X := by
-  have hrep := separatedSylvester_reconstruction_complex hA hB hd hsep X C hEq
+  have hrep := separatedSylvester_reconstruction_complex hA hB hd hsep X C
+    (by simpa only [ContinuousLinearMap.sylvester_apply] using hEq)
   have hint := separatedSylvester_integrable_complex hA hB hd C
   rw [hrep]
   refine isCompactOperator_integral hint (Filter.Eventually.of_forall fun t => ?_)

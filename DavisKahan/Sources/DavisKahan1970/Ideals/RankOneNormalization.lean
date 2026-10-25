@@ -3,8 +3,10 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
-import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
+public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 
 /-!
 # Rank-one normalization for the source norm class
@@ -14,6 +16,8 @@ normalization: every norm-one rank-one operator has norm one.  This module
 derives that statement from the coherent finite gauges rather than adding it
 to the definition.
 -/
+
+public section
 
 namespace TauCeti
 namespace DavisKahan
@@ -28,6 +32,7 @@ universe u v
 namespace SymmetricNormingFunction
 
 /-- The vector `(1,0,...,0)` in dimension `n+1`. -/
+@[expose]
 def firstCoordinateVector (n : ℕ) : Fin (n + 1) → ℝ :=
   fun i => if (i : ℕ) = 0 then 1 else 0
 

@@ -4,7 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.TanTheta.Theorem63FiniteSource
+module
+
+public import DavisKahan.TanTheta.Theorem63FiniteSource
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -134,6 +138,7 @@ theorem sineSylvester (data : Theorem63TrialData Z V) (v : Z) :
 /-! ### The bounded instance -/
 
 /-- The trial-block data of a bounded symmetric ambient operator. -/
+@[expose]
 noncomputable def ofBounded (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Theorem63TrialData Z V where
@@ -223,6 +228,7 @@ theorem ofBounded_crossed_lower (T : H →L[ℂ] H) (hT : T.IsSymmetric)
 /-! ### Restriction to a subspace of the trial space -/
 
 /-- The continuous inclusion of one submodule into a larger one. -/
+@[expose]
 noncomputable def inclCLM {F Z : Submodule ℂ H} (hFZ : F ≤ Z) : F →L[ℂ] Z :=
   (Submodule.inclusion hFZ).mkContinuous 1 (fun x => by
     change ‖((x : F) : H)‖ ≤ 1 * ‖x‖
@@ -242,6 +248,7 @@ of the action being symmetric on the trial subspace.
 This is the constructor the ambient operator never appears in, so it is the one an
 unbounded ambient operator — or an unbounded Ritz compression truncated to a reducing
 subspace — can use. -/
+@[expose]
 noncomputable def ofAction (Z V : Submodule ℂ H)
     [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (act : Z →L[ℂ] H)
@@ -302,6 +309,7 @@ theorem ofAction_residual_apply (Z V : Submodule ℂ H)
     (ofAction Z V act hsym).residual z = act z - Z.starProjection (act z) := rfl
 
 /-- The trial-block data restricted to a subspace of the trial space. -/
+@[expose]
 noncomputable def restrict (data : Theorem63TrialData Z V)
     (F : Submodule ℂ H) (hFZ : F ≤ Z) [F.HasOrthogonalProjection] :
     Theorem63TrialData F V :=

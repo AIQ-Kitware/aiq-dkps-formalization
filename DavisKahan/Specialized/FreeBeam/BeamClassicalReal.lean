@@ -4,13 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Specialized.FreeBeam.BeamFormSpaceReal
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamOrthogonality
-import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
-import Mathlib.Analysis.Real.Pi.Bounds
-import Mathlib.Tactic
+module
+
+public import DavisKahan.Specialized.FreeBeam.BeamFormSpaceReal
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristicConverse
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamOrthogonality
+public import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
+public import Mathlib.Analysis.Real.Pi.Bounds
+public import Mathlib.Tactic
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -165,6 +169,7 @@ theorem affinePair_mem (a b : ℝ) :
   ring
 
 /-- The real affine ambient element `a + bt`. -/
+@[expose]
 def affineLp (a b : ℝ) : BeamL2 := a • beamOneLp + b • beamIdLp
 
 /-- The real form representative of an affine element. -/
@@ -693,6 +698,7 @@ theorem exists_classicalFreeBeamRepresentative_of_continuous_apply
 def continuousForcing : Set BeamL2 := Lp.boundedContinuousFunction ℝ 2 unitIocMeasure
 
 /-- Parameterization of the beam graph by the shifted forcing `g = (B+1)u`. -/
+@[expose]
 def beamGraphParam : BeamL2 →L[ℝ] (BeamL2 × BeamL2) :=
   beamCoerciveFormData.resolvent.prod
     ((ContinuousLinearMap.id ℝ BeamL2) - beamCoerciveFormData.resolvent)

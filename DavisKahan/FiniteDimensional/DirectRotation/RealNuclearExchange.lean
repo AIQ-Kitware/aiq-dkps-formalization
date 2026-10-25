@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6.1 Sol
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealNuclearMatching
+module
+
+public import DavisKahan.FiniteDimensional.DirectRotation.RealNuclearMatching
 
 /-!
 # Nuclear pair exchange, with exact strictness
@@ -15,6 +17,8 @@ comparison to monotonicity of cosine. Adjacent pairing beats either
 alternative on four ordered angles. This supplies the scalar exchange
 step, not yet the finite matching induction for the two sorted sums.
 -/
+
+public section
 
 noncomputable section
 

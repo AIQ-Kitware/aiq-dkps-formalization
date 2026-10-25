@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import YuWangSamworth2015.GroundedImports
+module
+
+public import YuWangSamworth2015.GroundedImports
 
 /-!
 # Yu--Wang--Samworth Section 2: the published middle-block sharpness example
@@ -61,6 +63,8 @@ As in the preprint example the model is stated over an arbitrary orthonormal
 basis of an arbitrary finite-dimensional `RCLike` inner product space, which
 covers the paper's real `p × p` matrices at `EuclideanSpace ℝ (Fin p)`.
 -/
+
+public section
 
 namespace YuWangSamworth2015
 open TauCeti

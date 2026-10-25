@@ -3,14 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import Mathlib.Analysis.InnerProductSpace.ProdL2
-import DavisKahan.Sylvester.ScalarTransport
-import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import Mathlib.Analysis.InnerProductSpace.ProdL2
+public import DavisKahan.Sylvester.ScalarTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
 # Approximation numbers of orthogonal block sums
@@ -40,6 +42,8 @@ prefix formula is stated over `ℂ`.  The result is phrased directly for
 approximation numbers, hence applies to every Ky-Fan-dominant ideal.
 -/
 
+public section
+
 namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
@@ -53,6 +57,7 @@ universe u v
 variable {𝕜 : Type u} [RCLike 𝕜]
 
 /-- Continuous orthogonal block sum on Hilbert `L²` products. -/
+@[expose]
 noncomputable def continuousOrthogonalBlockSum
     {E₀ E₁ F₀ F₁ : Type v}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
@@ -159,13 +164,15 @@ omit [CompleteSpace E₀] [CompleteSpace E₁] in
 /-- The left inclusion embeds `x` as `(x, 0)`. -/
 @[simp]
 theorem blockInl_apply (x : E₀) :
-    (blockInl (E₁ := E₁) (𝕜 := 𝕜) x) = WithLp.toLp 2 (x, (0 : E₁)) := rfl
+    (blockInl (E₁ := E₁) (𝕜 := 𝕜) x) = WithLp.toLp 2 (x, (0 : E₁)) := by
+  rfl
 
 omit [CompleteSpace E₀] [CompleteSpace E₁] in
 /-- The right inclusion embeds `y` as `(0, y)`. -/
 @[simp]
 theorem blockInr_apply (y : E₁) :
-    (blockInr (E₀ := E₀) (𝕜 := 𝕜) y) = WithLp.toLp 2 ((0 : E₀), y) := rfl
+    (blockInr (E₀ := E₀) (𝕜 := 𝕜) y) = WithLp.toLp 2 ((0 : E₀), y) := by
+  rfl
 
 omit [CompleteSpace E₀] [CompleteSpace E₁] in
 /-- The left inclusion is norm-nonexpanding — in fact isometric, which is what makes
@@ -585,6 +592,7 @@ end MergeCombinatorics
 end Aux
 
 /-- The split-prefix functional for two singular-value sequences. -/
+@[expose]
 def splitKyFanGauge
     {E₀ E₁ F₀ F₁ : Type v}
     [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
@@ -722,6 +730,7 @@ theorem hasSameApproximationNumbers_continuousOrthogonalBlockSum
     ContinuousLinearMap.HasSameApproximationNumbers
       (continuousOrthogonalBlockSum A B)
       (continuousOrthogonalBlockSum C D) := by
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   rw [approximationSingularValue_eq_kyFan_succ_sub,
     approximationSingularValue_eq_kyFan_succ_sub]
@@ -762,6 +771,7 @@ theorem sameApproximationSingularSequence_continuousOrthogonalBlockSum
     ContinuousLinearMap.HasSameApproximationNumbers
       (continuousOrthogonalBlockSum A B)
       (continuousOrthogonalBlockSum C D) := by
+  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
   intro n
   rw [approximationSingularValue_eq_kyFan_succ_sub,
     approximationSingularValue_eq_kyFan_succ_sub,
@@ -854,7 +864,7 @@ theorem orthogonalDecomposition_conj_diagonalPart
     rw [hz, zero_add]
   have hdiag : U.diagBlock A ((w.fst : H) + (w.snd : H)) =
       U.starProjection (A (w.fst : H)) + Uᗮ.starProjection (A (w.snd : H)) := by
-    simp only [Submodule.diagBlock, add_apply, ContinuousLinearMap.comp_apply]
+    simp only [Submodule.diagBlock_def, add_apply, ContinuousLinearMap.comp_apply]
     rw [hfst, hsnd]
   simp only [ContinuousLinearMap.comp_apply, hsymmcoe, hdiag, hcoe,
     continuousOrthogonalBlockSum_apply]

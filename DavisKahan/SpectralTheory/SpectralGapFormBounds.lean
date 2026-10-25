@@ -3,9 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.InfiniteDimensional.SinTheta.BoundedBorelProjectionComplex
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
-import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
+module
+
+public import DavisKahan.InfiniteDimensional.SinTheta.BoundedBorelProjectionComplex
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 
@@ -53,6 +57,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The affine cutoff that is `1` on `Iic alpha`, `0` on `Ici (alpha+delta)`,
 and interpolates linearly in between. -/
+@[expose]
 def spectralGapCutoff (alpha delta t : ℝ) : ℝ :=
   max 0 (min 1 ((alpha + delta - t) / delta))
 
@@ -84,10 +89,11 @@ theorem spectralGapCutoff_eq_zero {alpha delta t : ℝ} (hdelta : 0 < delta)
 variable (B : H →L[ℂ] H) (hB : B.IsSymmetric)
 
 /-- The cutoff pulled back to the spectrum along the real-part coordinate. -/
+@[expose]
 def spectralGapSymbol (alpha delta : ℝ) : C(spectrum ℂ B, ℝ) :=
   ⟨fun w => spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w),
     (continuous_spectralGapCutoff alpha delta).comp
-      (Complex.continuous_re.comp continuous_subtype_val)⟩
+      (TauCeti.BorelCalculus.continuous_reCoord (T := B))⟩
 
 omit [CompleteSpace H] in
 /-- Evaluating the gap symbol is evaluating the cutoff at the real part. -/
@@ -160,9 +166,9 @@ theorem re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic
     ⟨fun w => (alpha - TauCeti.BorelCalculus.reCoord w) *
         spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w),
       ((continuous_const.sub
-        (Complex.continuous_re.comp continuous_subtype_val)).mul
+        (TauCeti.BorelCalculus.continuous_reCoord (T := B))).mul
         ((continuous_spectralGapCutoff alpha delta).comp
-          (Complex.continuous_re.comp continuous_subtype_val)))⟩ with hgdef
+          (TauCeti.BorelCalculus.continuous_reCoord (T := B))))⟩ with hgdef
   have hgnonneg : ∀ w : spectrum ℂ B, 0 ≤ g w := by
     intro w
     have hmem := hgap (reCoord_mem_realSpectrum B hB w)
@@ -231,11 +237,11 @@ theorem le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal
   set g : C(spectrum ℂ B, ℝ) :=
     ⟨fun w => (TauCeti.BorelCalculus.reCoord w - (alpha + delta)) *
         (1 - spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w)),
-      (((Complex.continuous_re.comp continuous_subtype_val).sub
+      (((TauCeti.BorelCalculus.continuous_reCoord (T := B)).sub
         continuous_const).mul
         (continuous_const.sub
           ((continuous_spectralGapCutoff alpha delta).comp
-            (Complex.continuous_re.comp continuous_subtype_val))))⟩ with hgdef
+            (TauCeti.BorelCalculus.continuous_reCoord (T := B)))))⟩ with hgdef
   have hgnonneg : ∀ w : spectrum ℂ B, 0 ≤ g w := by
     intro w
     have hmem := hgap (reCoord_mem_realSpectrum B hB w)
@@ -417,11 +423,15 @@ theorem re_inner_le_of_spectrumIn_Iic
     RCLike.re ⟪y, T y⟫_ℂ ≤ a * ‖y‖ ^ 2 := by
   have hσ : spectrum ℝ (T.restrict h.invariant) ⊆ Set.Iic a := by
     intro r hr
-    exact h.subset
-      ⟨h.invariant, by simpa using (spectrum.algebraMap_mem_iff (S := ℂ)).mpr hr⟩
-  have hb :=
-    SpectralOrder.upperFormBoundOn_of_restriction_spectrum_subset_Iic
-      hT h.invariant hσ y hy
+    exact h.subset ((mem_restrictedSpectrum_iff T W r).mpr
+      ⟨h.invariant, by simpa using (spectrum.algebraMap_mem_iff (S := ℂ)).mpr hr⟩)
+  have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := W) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (W →L[ℂ] W)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  rw [← hAlg] at hσ
+  have hb := (ContinuousLinearMap.upperFormBoundOn_iff T W a).mp
+    (SpectralOrder.upperFormBoundOn_of_restriction_spectrum_subset_Iic
+      hT h.invariant hσ) y hy
   calc RCLike.re ⟪y, T y⟫_ℂ = RCLike.re ⟪T y, y⟫_ℂ :=
       (congrArg RCLike.re (hT y y)).symm
     _ ≤ a * ‖y‖ ^ 2 := hb
@@ -435,11 +445,15 @@ theorem le_re_inner_of_spectrumIn_Ici
     b * ‖y‖ ^ 2 ≤ RCLike.re ⟪y, T y⟫_ℂ := by
   have hσ : spectrum ℝ (T.restrict h.invariant) ⊆ Set.Ici b := by
     intro r hr
-    exact h.subset
-      ⟨h.invariant, by simpa using (spectrum.algebraMap_mem_iff (S := ℂ)).mpr hr⟩
-  have hb :=
-    SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
-      hT h.invariant hσ y hy
+    exact h.subset ((mem_restrictedSpectrum_iff T W r).mpr
+      ⟨h.invariant, by simpa using (spectrum.algebraMap_mem_iff (S := ℂ)).mpr hr⟩)
+  have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := W) =
+      (ContinuousLinearMap.algebra : Algebra ℝ (W →L[ℂ] W)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  rw [← hAlg] at hσ
+  have hb := (ContinuousLinearMap.lowerFormBoundOn_iff T W b).mp
+    (SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+      hT h.invariant hσ) y hy
   calc b * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := hb
     _ = RCLike.re ⟪y, T y⟫_ℂ := congrArg RCLike.re (hT y y)
 
