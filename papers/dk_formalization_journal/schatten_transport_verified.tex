@@ -449,13 +449,71 @@ has an acute restricted pair. In that case all $\xi_j$ vanish, hence
 $F_Z=0$ and the restriction is the identity.
 \end{proof}
 
-\begin{proposition}[Local minima without the opposite eigenvalue]
-\label{prop:schatten-local-global-no-minus-one}
-Every constrained local minimum with no eigenvalue $-1$ is a global
-minimum. Eigenvalue $1$ is permitted.
+\begin{proposition}[Feasible descent from reflecting blocks]
+\label{prop:schatten-reflecting-descent}
+Let $d,k\in\mathbb R$ satisfy $d^2+k^2=1$, and put
+\[
+ S=\begin{pmatrix}-d&-k\\-k&d\end{pmatrix},\qquad
+ P_0=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ W(t)=S\begin{pmatrix}
+   e^{i(d+1)t/2}&0\\0&e^{i(d-1)t/2}
+ \end{pmatrix}.
+\]
+Then $W(t)$ is unitary and $W(t)P_0W(t)^*=SP_0S^*$ for every $t$.
+For every $p>1$,
+\[
+ \|I-W(t)\|_p^p
+   =2^p-\frac{p2^p d^2}{8}t^2+o(t^2)\qquad(t\to0).
+\]
+If $d\ne0$, $S$ is not a local minimum among unitary transporters
+from $P_0$ to $SP_0S^*$. This exclusion holds inside any ambient
+orthogonal reducing decomposition, with every complementary unitary
+block fixed. A nonzero common reducing subspace of the source projection
+and transporter on which the transporter is $-I$ also excludes local
+minimality.
 \end{proposition}
 
 \begin{proof}
+The diagonal factor commutes with $P_0$, proving feasibility. Write
+\[
+ u=dt/2,\qquad \chi=\arcsin(d\sin(t/2)),\qquad
+ \alpha=u-\chi,\quad \beta=u+\chi.
+\]
+The trace and determinant of $W(t)$ equal those of the diagonal
+matrix with entries $e^{i\alpha},-e^{i\beta}$. Since $W(t)$ is
+normal, its actual displacement cost is therefore
+\[
+ |2\sin(\alpha/2)|^p+|2\cos(\beta/2)|^p.
+\]
+At zero, $\alpha=\alpha'=0$ and $\beta'=d$. The small-phase chord
+is twice continuously differentiable and vanishes with its first
+derivative, so its cost is $O(|t|^{2p})=o(t^2)$. The other term has
+expansion $2^p-p2^p d^2t^2/8+o(t^2)$. This proves strict descent
+when $d\ne0$ without twice differentiating the cost of a vanishing
+singular value.
+
+Orthogonal extension preserves feasibility and continuity. Additivity
+of Schatten powers adds a constant complementary cost, so any ambient
+local minimum would give a local minimum of the displayed planar cost.
+Finally, on a nonzero negative identity block the scalar variation
+$-e^{it}I$ preserves the source and has cost
+$\dim(H_0)|2\cos(t/2)|^p$, strictly smaller than its initial cost for
+sufficiently small nonzero $t$.
+\end{proof}
+
+\begin{proposition}[Local minima with invariant negative eigenspace]
+\label{prop:schatten-local-global-no-minus-one}
+Every constrained local minimum whose $-1$ eigenspace is invariant under
+the source projection is a global minimum. In particular, this holds
+when $-1$ is absent. Eigenvalue $1$ is permitted.
+\end{proposition}
+
+\begin{proof}
+If the negative eigenspace is nonzero and source-invariant, it is a
+common reducing subspace: the transporter is unitary and the source
+projection is self-adjoint. Proposition~\ref{prop:schatten-reflecting-descent}
+excludes this case. Thus $-1$ is absent.
+
 On the gradient kernel the transporter restricts to a self-adjoint
 unitary $R$. Since $R^2=I$, the vector $x-Rx$ satisfies
 $R(x-Rx)=-(x-Rx)$. The spectral assumption forces $R=I$.

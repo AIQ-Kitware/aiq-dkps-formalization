@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenNoMixing
 import ForTauCeti.Analysis.Normed.Lp.ProdLp
+import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
 
 /-!
 # Feasible variations of paired gradient blocks
@@ -25,19 +26,6 @@ variable {E R F : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E] [CompleteSpace E]
   [NormedAddCommGroup R] [InnerProductSpace ℂ R] [FiniteDimensional ℂ R] [CompleteSpace R]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [FiniteDimensional ℂ F] [CompleteSpace F]
-
-omit [FiniteDimensional ℂ E] [FiniteDimensional ℂ R] in
-private theorem unitary_withLpProdMap
-    {A : E →L[ℂ] E} {B : R →L[ℂ] R}
-    (hA : A ∈ unitary (E →L[ℂ] E)) (hB : B ∈ unitary (R →L[ℂ] R)) :
-    A.withLpProdMap 2 B ∈ unitary (WithLp 2 (E × R) →L[ℂ] WithLp 2 (E × R)) := by
-  let e := LinearIsometryEquiv.withLpProdCongr 2
-    (Unitary.linearIsometryEquiv ⟨A, hA⟩) (Unitary.linearIsometryEquiv ⟨B, hB⟩)
-  have h := (Unitary.linearIsometryEquiv.symm e).property
-  convert h using 1
-  ext x
-  simp [ContinuousLinearMap.withLpProdMap_apply, e]
-  exact ⟨rfl, rfl⟩
 
 omit [FiniteDimensional ℂ E] [CompleteSpace E] in
 /-- The block unitary with the same operator on each component commutes
@@ -86,7 +74,8 @@ theorem isLocalMin_paired_cost_of_isLocalMinOn_transports
   have hCunit (t : ℝ) : C t ∈ unitary (F →L[ℂ] F) := by
     have hD : D t ∈ unitary (WithLp 2 (WithLp 2 (E × E) × R) →L[ℂ]
         WithLp 2 (WithLp 2 (E × E) × R)) :=
-      unitary_withLpProdMap (unitary_withLpProdMap (hBunit t) (hBunit t)) (one_mem _)
+      ContinuousLinearMap.withLpProdMap_mem_unitary
+        (ContinuousLinearMap.withLpProdMap_mem_unitary (hBunit t) (hBunit t)) (one_mem _)
     let d := Unitary.linearIsometryEquiv ⟨D t, hD⟩
     let c := e.symm.trans (d.trans e)
     have hc := (Unitary.linearIsometryEquiv.symm c).property

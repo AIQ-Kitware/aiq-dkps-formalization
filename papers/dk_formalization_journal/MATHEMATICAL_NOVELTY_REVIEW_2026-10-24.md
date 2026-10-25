@@ -12,6 +12,62 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Reflecting-block descent after `5c2ca4ad2`
+
+The singular-gradient descent calculation now has a Lean proof. For
+`S=[[-d,-k],[-k,d]]`, `d^2+k^2=1`, right multiplication by
+`diag(exp(i*(d+1)*t/2),exp(i*(d-1)*t/2))` preserves transport of
+`diag(1,0)`. For every finite Schatten exponent `p>1`, its actual
+displacement power is
+`2^p - p*2^p*d^2*t^2/8 + o(t^2)`.
+`reflectingPhasePower_second_order`,
+`ReflectingVariation.schatten_displacement_variation`, and
+`reflecting_block_eq_zero_of_isLocalMinOn_transports_complex`
+formalize the expansion, its spectral identification, and its exclusion
+inside an unrestricted ambient local minimum whenever `d!=0`.
+The endpoint parameters `d=+1,-1` are included. A nonzero negative
+identity block is also excluded for all finite `p>=1`, including the
+nuclear endpoint; the actual-subspace version constructs the orthogonal
+block representation rather than assuming it. This also proves a stronger
+local-to-global endpoint for `1<p<2`: a local minimum is global if its
+actual negative eigenspace is source-invariant, since local minimality
+then excludes that eigenspace. The theorem is
+`isMinOn_of_isLocalMinOn_transports_of_negative_eigenspace_invariant_complex`.
+Proposition `prop:schatten-reflecting-descent` and the strengthened
+`prop:schatten-local-global-no-minus-one` are included in the checked
+manuscript.
+
+The phase has a second-order Peano bound with zero constant and linear
+terms, which makes its small-displacement cost `o(t^2)` for `p>1`.
+The proof consequently avoids an unjustified second derivative at a
+vanishing displacement singular value. The previously diagnosed cubic
+coefficient remains conventional, since the weaker compiled estimate is
+sufficient. No independent originality is claimed for Taylor expansion,
+trace/determinant reconstruction, or orthogonal block restriction.
+
+This closes an analytic step toward the pure Schatten no-spurious-minima
+theorem. It does **not** close that theorem: a common two-projection
+decomposition exists in Lean, but extracting the planar normal form from
+each actual noncommuting gradient-kernel block and reassembling the
+cost-deficit identity remain necessary. `PAPER_CONTEXT.md` gives the
+precise resumption point. The real matching and infinite ideal claims
+have not been promoted.
+
+A primary local-to-global precedent was rechecked:
+Massey, Rios and Stojanoff, *Local Lidskii's theorems for unitarily
+invariant norms* (2018),
+[Theorems 3.5 and 3.12](https://arxiv.org/html/1806.11436).
+Theorem 3.5 treats distance from a fixed self-adjoint matrix on a fixed
+eigenvalue unitary orbit. Theorem 3.12 treats distance from a fixed matrix
+on a fixed singular-value orbit; both assume a strictly convex unitarily
+invariant norm and prove local minima global, with joint spectral data.
+Our assessment is that applying them to the prescribed-projection
+transport fiber would require a further reduction not supplied by their
+statements. This comparison does not establish historical novelty.
+BLR's right-angle and Frobenius precedents below remain applicable.
+The overall transport classification's historical priority remains
+**provisional**.
+
 ## Complete finite Charbonnier optimizer set after `f51c60f13`
 
 The full all-angle ambient classification now compiles in
@@ -55,14 +111,11 @@ transport produced no additional theorem-level implication; that negative
 search evidence is limited. Historical originality is **provisional**,
 including for the all-nearest commuting-unitary application.
 
-The precise next pure Schatten obstruction is retained in `PAPER_CONTEXT.md`.
-An explicit reflecting two-plane variation has small phase
-`d*t/2-asin(d*sin(t/2))=d*(1-d^2)*t^3/48+O(t^5)` and large offset
-`d*t/2+asin(d*sin(t/2))=d*t+O(t^3)`. The resulting negative quadratic
-coefficient for `d!=0` avoids twice differentiating the spectral cost at
-zero displacement. Symbolic and numerical diagnostics checked this
-reduction; it is conventional work awaiting Lean, not a proved extension
-of the local-to-global theorem.
+The next pure Schatten obstruction recorded at that snapshot was the
+reflecting two-plane descent calculation. Its sufficient second-order
+estimate is now formalized in the newer entry above. Its stronger cubic
+phase coefficient remains a symbolic diagnostic. The unrestricted
+local-to-global theorem still needs the geometric block extraction.
 
 ## Arbitrary mixed right-angle families after `c16d48091`
 

@@ -1,9 +1,9 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** complete all-angle complex Charbonnier optimizer
-classification, independent phase/defect attainment and uniqueness for
-prescribed parameters, based on `f51c60f13`, registered first below.
+**Current research source:** reflecting-block Schatten descent and exclusion
+inside unrestricted ambient local minima, based on `5c2ca4ad2`, registered
+first below. The complete all-angle Charbonnier classification remains proved.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -17,6 +17,99 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Reflecting-block descent after `5c2ca4ad2`
+
+The previously missing **analytic descent** is now compiled, including
+the endpoint parameters `d=+1,-1`. Let `d^2+k^2=1`,
+`S=[[-d,-k],[-k,d]]`, `P0=diag(1,0)` and
+`W(t)=S*diag(exp(i*(d+1)*t/2),exp(i*(d-1)*t/2))`.
+
+- `TauCeti.reflectingPhasePower_second_order`, in
+  `SchattenReflectingPhases.lean`, proves the Peano expansion
+  `2^p - p*2^p*d^2*t^2/8 + o(t^2)` for `p>1`. The scalar statement even
+  allows arbitrary real `d`, because inverse-sine regularity is only local.
+  `reflectingPhasePower_strict_descent` gives strict improvement at all
+  sufficiently small nonzero steps when `d!=0`.
+- `ReflectingVariation.schatten_displacement_variation` identifies the
+  scalar formula with the **actual finite Schatten cost** of `W(t)` by
+  its trace and determinant. `variation_mem_unitary`, `variation_transports`
+  and `continuous_variation` certify a continuous feasible curve for all
+  real steps. `not_isLocalMinOn_reflecting_transports` excludes local
+  minimality against all planar feasible unitaries. These statements
+  require `d^2+k^2=1`; they do not exclude either endpoint or repeated roots.
+- `reflecting_block_eq_zero_of_isLocalMinOn_transports_complex` lifts
+  that exclusion through any orthogonal complementary unitary block.
+  It applies to an unrestricted ambient local minimum and forces `d=0`.
+  The exponent can be any finite Schatten exponent greater than one,
+  not just the campaign's `1<p<2` regime.
+- `ReflectingVariation.not_isLocalMinOn_negative_identity` excludes a
+  nonzero negative identity block for every finite `p>=1`, including
+  the nuclear endpoint. The ambient version is
+  `not_isLocalMinOn_of_negative_identity_block_complex`.
+  `not_isLocalMinOn_of_negative_identity_on_invariant_subspace_complex`
+  starts with an actual nonzero source-invariant subspace on which the
+  transporter acts as `-I`: it constructs its reducing complement and
+  coordinates. The source operator need only be self-adjoint.
+- `no_neg_one_of_isLocalMinOn_transports_of_source_invariant_complex`
+  excludes the entire negative eigenspace if it is source-invariant,
+  for any finite `p>=1`. Consequently
+  `isMinOn_of_isLocalMinOn_transports_of_negative_eigenspace_invariant_complex`
+  proves a constrained local minimum is global for `1<p<2` under this
+  invariance hypothesis. This strengthens the earlier no-`-1` endpoint:
+  local minimality now derives absence of `-1`. No invariance of the
+  other spectral spaces is assumed. The manuscript proposition
+  `prop:schatten-local-global-no-minus-one` includes the stronger result.
+- The reusable
+  `isLocalMinOn_block_transport_of_orthogonal_sum` transfers local
+  minimality to any unitary block over either scalar field, with no
+  assumptions on the source operators. The trace/determinant cost lemma
+  `schatten_displacement_rpow_eq_of_trace_det_fin_two` applies to any
+  normal complex planar operator, including coincident eigenvalues.
+
+The vanishing displacement contribution is handled by a second-order
+Peano bound on its **phase**, not by twice differentiating the Schatten
+cost at a zero singular value. The small-phase cost is `O(abs(t)^(2*p))`,
+which is enough for `o(t^2)` when `p>1`. The stronger cubic coefficient
+checked in earlier SymPy diagnostics is not a compiled endpoint.
+The included manuscript now states Proposition
+`prop:schatten-reflecting-descent` with these hypotheses.
+
+### Exact remaining unrestricted local-to-global obligation
+
+The analytic variation is closed. What remains is to derive the normal
+coordinates from **every actual small common invariant block** of the
+source projection and the negative spectral projection of the gradient
+kernel reflection. The existing
+`exists_orthogonal_blocks_of_two_projections` supplies a complete orthogonal
+family of nonzero blocks of dimension at most two. Negative identity
+blocks are now excluded intrinsically. A rank-one source projection on
+each remaining traceless reflecting plane still needs the explicit unitary
+normal form `P0=diag(1,0)`, `S=[[-d,-k],[-k,d]]` with real `d,k`.
+The compiled ambient exclusion then forces `d=0`, leaving only zero and
+right angles. Reassembly with the existing gradient-kernel cost-deficit
+identity would prove that every constrained local minimum is global.
+That unrestricted conclusion is **not yet Lean-verified**. Full pure
+Schatten optimizer parameter assembly, real matching and operator-ideal
+attainment remain separate open formal targets.
+
+No historical-priority claim is made for Taylor expansion, orthogonal
+block restriction or this classical descent construction. The closest
+local-to-global precedent rechecked here is Massey--Rios--Stojanoff,
+*Local Lidskii's theorems for unitarily invariant norms* (2018), Theorems
+3.5 and 3.12: their domains are fixed-eigenvalue self-adjoint orbits and
+fixed-singular-value matrix orbits, respectively. An implication for the
+prescribed-projection transport fiber would need an additional reduction.
+See the novelty review for the primary source and the priority boundary.
+
+Validation: `lake exe cache get` preceded every build. The scalar, planar,
+block-lifting, intrinsic negative-block and stronger local-to-global
+targets passed. The final `lake build DavisKahan.All ForTauCeti` passed
+(10,383 jobs; `/tmp/reflecting-final-build.log`), including all additions
+through the ordinary aggregate imports. The manuscript was rebuilt with
+BibTeX and repeated pdfLaTeX passes, without unresolved references or
+citations, multiply defined labels or overfull boxes, at
+`/tmp/dk-reflecting-descent-paper/dk-reflecting-descent.pdf`.
 
 ## Complete all-angle Charbonnier classification after `f51c60f13`
 
@@ -80,33 +173,9 @@ The isoclinic metric theorem retains its established stronger hypothesis.
 This advance supplies neither the pure Schatten all-optimizer theorem,
 the unrestricted real matching formula, nor operator-ideal attainment.
 
-### Next pure Schatten proof obligation
-
-The exact missing local-to-global step remains descent from a nonoptimal
-reflecting two-plane in the actual zero-gradient restriction. The conventional
-argument has an explicit scalar reduction. With
-`S=[[c^2,cs],[cs,s^2]]`, `W=I-2S`, `H=diag(c^2,-s^2)`, and
-`d=c^2-s^2`, put `chi(t)=asin(d*sin(t/2))`. Near zero the eigenvalues of
-`W*exp(i*t*H)` are exactly
-`exp(i*(d*t/2-chi(t)))` and `-exp(i*(d*t/2+chi(t)))`.
-The small phase is actually
-`d*(1-d^2)*t^3/48+O(t^5)`, stronger than the draft's `O(t^2)` bound.
-The large phase gives cost
-`2^p-p*2^(p-3)*d^2*t^2+o(t^2)`, whereas the small cost is
-`O(abs(t)^(3*p))=o(t^2)` for `p>1`. Thus `d!=0` should give strict
-descent without taking a second derivative of the cost at zero singular
-values. `d=0` is the right-angle reflecting optimizer and has constant
-cost along this curve. This reduction and Taylor expansion are conventional
-mathematics requiring formalization, **not new compiled declarations**.
-
-SymPy verified both cubic coefficients; NumPy checked the explicit eigenvalues
-at six angles including `0,pi/4,pi/2` and signed steps `0.01,0.1`, with
-largest residual `8.9e-16`. At `p=1.5`, the measured quadratic coefficients
-for `d=0,0.3,0.9,1` agreed with the displayed coefficient to below `3e-8`.
-These diagnostics support the next proof; they do not certify it. The next
-useful formal target is a strict local descent theorem for this actual
-two-dimensional unitary curve, followed by extension through the reducing
-gradient kernel and the already compiled cost-defect identity.
+The formerly open pure Schatten reflecting-descent calculation is now
+formalized in the newer entry above. Its geometric extraction from every
+actual gradient-kernel block remains the next unrestricted proof step.
 
 Historical novelty remains provisional. A fresh targeted search for block
 diagonal unitary trace-norm approximation and Charbonnier transport did not
