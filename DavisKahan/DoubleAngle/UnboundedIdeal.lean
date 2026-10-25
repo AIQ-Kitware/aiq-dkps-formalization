@@ -632,13 +632,17 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
         V.reflectionOperator (A x)) :
     δ * ‖directedSinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB) V‖ ≤ ‖R‖ := by
+  have : (TauCeti.SymmetricOperatorIdealFamily.opNorm.{0, v} ℂ).toOperatorIdealFamily.IsComplete := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   have h := (sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
-    (TauCeti.operatorNormFamily ℂ) A hA R hR B hB V hβα hδ
+    (TauCeti.SymmetricOperatorIdealFamily.opNorm ℂ) A hA R hR B hB V hβα hδ
     hBlow hBhigh hBcomplSpec hJdom hJintertwines
-    (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily R)).2
-  rwa [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily,
-    TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily,
-    norm_sinTwoThetaIdealBlock_complex] at h
+    (by simp [TauCeti.SymmetricOperatorIdealFamily.Mem])).2
+  simpa only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
+    TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
+    TauCeti.OperatorIdealFamily.gauge_opNorm, toReal_enorm,
+    norm_sinTwoThetaIdealBlock_complex] using h
 
 /-- Canonical complex operator-norm unbounded sine-two-theta theorem for a
 bounded self-adjoint perturbation. -/

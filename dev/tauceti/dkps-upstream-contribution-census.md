@@ -819,3 +819,32 @@ historical proof descent. Pre-retirement proofs remain at DKPS `760da90e3`.
 The Gram endpoint follow-up passed the focused three-module build (7,544 jobs)
 and full default build (21,045 jobs), with warnings treated as errors, after
 the respective `lake exe cache get` calls.
+
+
+### October 25: remove the local operator-norm family
+
+The accepted `SymmetricOperatorIdealFamily.opNorm` has the same arbitrary-Hilbert,
+scalar-generic, diagonal-universe scope as local `operatorNormFamily`. Its
+`opNorm_toOperatorIdealFamily` equation identifies the underlying family with
+accepted `OperatorIdealFamily.opNorm`; the accepted completeness instance then
+applies explicitly at the paper constructor and specialization sites. The donor constructor,
+completeness specialization, gauge wrapper, and the two paper real-gauge/membership
+endpoint wrappers are deleted, with no replacement aliases or bridge definitions.
+All consumers now instantiate the accepted symmetric family directly. The paper
+core completeness proof uses native `OperatorGauge.Carrier` rather than importing
+the retired layer for its transitional `Elem` spelling.
+
+The two unbounded Neumann estimates use Mathlib's `opNorm_comp_le` twice, removing
+the otherwise unused local two-sided norm helper. Source theorem conclusions and
+ideal scope are unchanged. The legacy historical norm exploration has only its
+import redirected; it remains an explicitly unmaintained archive.
+
+Accepted scope was checked in `TauCeti.Analysis.OperatorIdeal.OperatorNorm` at
+unchanged pin `efded067c28ffca3483fd731674eb13b42543fbb`; pre-retirement local
+source is preserved at DKPS `226aeb096`. This records consumption of accepted
+overlap, not a new audit of historical proof descent. Remaining family-carrier
+adapters and the genuinely unmerged compact ideal family are separate obligations.
+
+The operator-norm retirement passed the focused build (7,390 jobs) and full
+default build (21,043 jobs), with warnings treated as errors, after their
+respective cache fetches.

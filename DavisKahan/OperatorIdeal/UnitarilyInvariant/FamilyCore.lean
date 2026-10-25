@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
-public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
 public import Mathlib.Topology.Basic
 
 /-!
@@ -331,24 +331,25 @@ theorem toReal_gauge_ofCore {N : Core.{u, v} 𝕜}
 
 This is the field `ofCore` would otherwise drop.  The family has no completeness
 field — completeness is the separate class `IsComplete`,
-`CompleteSpace (N.Elem E F)` — whereas a `Core` carries `gauge_complete` as an
+`CompleteSpace (N.operatorGauge E F).Carrier` — whereas a `Core` carries `gauge_complete` as an
 `ℝ`-valued Cauchy statement.  Every `Core` has that field, so the instance is
 unconditional; the proof is the translation between the two idioms, using the
-fact that `Elem`'s norm is exactly the `Core`'s gauge on members. -/
+fact that the carrier's norm is exactly the `Core`'s gauge on members. -/
 instance isComplete_ofCore (N : Core.{u, v} 𝕜) :
     (ofCore N).toOperatorIdealFamily.IsComplete where
   completeSpace_carrier := by
     intro E F _ _ _ _ _ _
-    have hnorm : ∀ x : (ofCore N).toOperatorIdealFamily.Elem E F,
-        ‖x‖ = N.gauge x.val := fun x => by
-      rw [OperatorIdealFamily.Elem.norm_def]
-      exact toReal_gauge_ofCore (gauge_ofCore_ne_top_iff.mp
-        (OperatorIdealFamily.Elem.gauge_val_ne_top x))
+    have hmem : ∀ x : ((ofCore N).toOperatorIdealFamily.operatorGauge E F).Carrier,
+        N.Mem x.toContinuousLinearMap := fun x => by
+      apply gauge_ofCore_ne_top_iff.mp
+      simpa only [OperatorIdealFamily.operatorGauge_apply] using x.gauge_lt_top.ne
+    have hnorm : ∀ x : ((ofCore N).toOperatorIdealFamily.operatorGauge E F).Carrier,
+        ‖x‖ = N.gauge x.toContinuousLinearMap := fun x => by
+      rw [OperatorGauge.Carrier.norm_def, OperatorIdealFamily.operatorGauge_apply]
+      exact toReal_gauge_ofCore (hmem x)
     refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
-    have hmem : ∀ n, N.Mem (a n).val := fun n =>
-      gauge_ofCore_ne_top_iff.mp (OperatorIdealFamily.Elem.gauge_val_ne_top (a n))
     have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ M, ∀ m n, M ≤ m → M ≤ n →
-        N.gauge ((a m).val - (a n).val) < ε := by
+        N.gauge ((a m).toContinuousLinearMap - (a n).toContinuousLinearMap) < ε := by
       intro ε hε
       rw [Metric.cauchySeq_iff] at ha
       obtain ⟨M, hM⟩ := ha ε hε
@@ -356,15 +357,17 @@ instance isComplete_ofCore (N : Core.{u, v} 𝕜) :
       have h := hM m hm n hn
       rw [dist_eq_norm, hnorm] at h
       exact h
-    obtain ⟨L, hLmem, hL⟩ := N.gauge_complete (fun n => (a n).val) hmem hcauchy
-    refine ⟨OperatorIdealFamily.Elem.mk
-      ((OperatorIdealFamily.mem_carrier_iff (N := (ofCore N).toOperatorIdealFamily)).mpr
-        (gauge_ofCore_ne_top_iff.mpr hLmem)), ?_⟩
-    rw [Metric.tendsto_atTop]
-    intro ε hε
-    obtain ⟨M, hM⟩ := hL ε hε
-    refine ⟨M, fun n hn => ?_⟩
-    rw [dist_eq_norm, hnorm]
-    simpa only [OperatorIdealFamily.Elem.val_sub, OperatorIdealFamily.Elem.val_mk] using hM n hn
+    obtain ⟨L, hLmem, hL⟩ :=
+      N.gauge_complete (fun n => (a n).toContinuousLinearMap) (fun n => hmem (a n)) hcauchy
+    refine ⟨OperatorGauge.Carrier.mk L ?_, ?_⟩
+    · rw [OperatorGauge.mem_finiteSubmodule, OperatorIdealFamily.operatorGauge_apply,
+        lt_top_iff_ne_top]
+      exact gauge_ofCore_ne_top_iff.mpr hLmem
+    · rw [Metric.tendsto_atTop]
+      intro ε hε
+      obtain ⟨M, hM⟩ := hL ε hε
+      refine ⟨M, fun n hn => ?_⟩
+      rw [dist_eq_norm, hnorm]
+      simpa only [OperatorGauge.Carrier.toContinuousLinearMap_sub] using hM n hn
 
 end TauCeti.SymmetricOperatorIdealFamily

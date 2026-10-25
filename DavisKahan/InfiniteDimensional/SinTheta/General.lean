@@ -125,8 +125,8 @@ case is `norm_sylvester_le_of_orderedSeparation` and "the general case is its
 complexification transport".  **No transport is needed and none is done here.**
 `ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap` is already
 proved over general `RCLike`, for every rectangular ideal family, with constant
-one; `sinTheta_perturbation` below instantiates it at `operatorNormFamily` in
-exactly the same way.
+one; `sinTheta_perturbation` below instantiates it at
+`SymmetricOperatorIdealFamily.opNorm` in exactly the same way.
 
 The only real step is the shape change.  Ordered separation says one spectrum
 sits below the other, which gives a *cut*; the bridge wants an
@@ -152,11 +152,16 @@ theorem norm_sylvester_le_of_orderedSeparation_rclike
       exact ⟨le_trans (min_le_left _ _) (by linarith), hup⟩
     · rw [boundedRealSpectrum_eq_realSpectrum] at hr
       exact Or.inr (hAc hr)
+  have : (TauCeti.SymmetricOperatorIdealFamily.opNorm.{u, v} 𝕜).toOperatorIdealFamily.IsComplete := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
-    (TauCeti.operatorNormFamily.{u, v} 𝕜) hA hB hβc hd hgap
+    (TauCeti.SymmetricOperatorIdealFamily.opNorm.{u, v} 𝕜) hA hB hβc hd hgap
       (by simpa only [ContinuousLinearMap.sylvester_apply] using hEq)
-    (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
-  simpa only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily] using hsolve.2
+    (by simp [TauCeti.SymmetricOperatorIdealFamily.Mem])
+  simpa only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
+    TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
+    TauCeti.OperatorIdealFamily.gauge_opNorm, toReal_enorm] using hsolve.2
 
 open TauCeti.RealComplexification in
 open scoped TauCeti.DavisKahan.Foundation.RealScalarRestriction in
@@ -332,14 +337,19 @@ theorem sinTheta_perturbation
     exact intervalExteriorSeparated_restrictions hA hB hU hV hgap
   have : CompleteSpace U := completeSpace_of_hasOrthogonalProjection U
   have : CompleteSpace Vᗮ := completeSpace_of_hasOrthogonalProjection Vᗮ
+  have : (TauCeti.SymmetricOperatorIdealFamily.opNorm.{u, v} 𝕜).toOperatorIdealFamily.IsComplete := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   have hsolve := ExactSinTheta.sylvester_mem_and_gauge_le_of_intervalExteriorGap
-    (TauCeti.operatorNormFamily.{u, v} 𝕜)
+    (TauCeti.SymmetricOperatorIdealFamily.opNorm.{u, v} 𝕜)
     (LinearMap.IsSymmetric.restrict_invariant hB hV.2)
     (LinearMap.IsSymmetric.restrict_invariant hA hU.1)
     hlr hd hgap'
       (by simpa only [ContinuousLinearMap.sylvester_apply] using hEq)
-    (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily _)
-  simp only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily] at hsolve
+    (by simp [TauCeti.SymmetricOperatorIdealFamily.Mem])
+  simp only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
+    TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
+    TauCeti.OperatorIdealFamily.gauge_opNorm, toReal_enorm] at hsolve
   have hC : ‖C‖ ≤ ‖B - A‖ :=
     restricted_projection_sandwich_norm_le _ _ _
   have h2 : d * ‖((Vᗮ.starProjection ∘L U.subtypeL)).codRestrict Vᗮ

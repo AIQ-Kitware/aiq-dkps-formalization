@@ -67,7 +67,6 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
@@ -734,7 +733,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm"
+        "ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -746,17 +745,17 @@
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.OperatorNorm",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: first instance of the canonical family; the Ky Fan instance is the second and is still parked in DavisKahan)",
       "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E →L[𝕜] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
+        "TauCeti.Analysis.OperatorIdeal.OperatorNorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
+      "status": "accepted-upstream-local-copy-removed",
+      "migration_note": "October 25: migrated all consumers from operatorNormFamily to accepted SymmetricOperatorIdealFamily.opNorm; removed the constructor, completeness specialization, endpoint wrappers, and the redundant two-sided real norm helper. Consumers use native gauge laws and Mathlib composition estimates directly. Pre-retirement DKPS source: 226aeb096. Accepted scope checked at Tau Ceti efded067c28ffca3483fd731674eb13b42543fbb; this does not infer historical proof descent.",
       "upstream_pr": null
     },
     {

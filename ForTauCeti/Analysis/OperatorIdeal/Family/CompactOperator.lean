@@ -5,7 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
+public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 
 /-!
@@ -13,7 +14,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 
 The compact operators, gauged by the operator norm, form a symmetric operator
 ideal family: the smallest interesting one, sitting inside
-`TauCeti.operatorNormFamily` with the same gauge but a proper carrier.
+`TauCeti.SymmetricOperatorIdealFamily.opNorm` with the same gauge but a proper carrier.
 
 Everything the ideal laws need is in Mathlib already — `IsCompactOperator.add`,
 `.smul`, `.comp_clm`, `.clm_comp`, `isCompactOperator_zero` and
@@ -256,9 +257,8 @@ noncomputable def compactOperatorFamily (𝕜 : Type u) [RCLike 𝕜] :
         ite_eq_right hAdj, ite_eq_right hA]
 
 /-- Completeness transfers to the symmetric view, which shares its underlying
-family.  Restated rather than inherited for the reason recorded on
-`operatorNormFamily`: the base instance is at three independent universes and the
-symmetric family constrains the last two to be equal. -/
+family.  The base instance has three independent universes, whereas the symmetric
+family constrains the last two to be equal, so it is specialized explicitly. -/
 instance : (compactOperatorFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete :=
   inferInstanceAs (compactOperatorIdealFamily.{u, v, v} 𝕜).IsComplete
 

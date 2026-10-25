@@ -59,7 +59,9 @@ theorem closedSylvester_homogeneous_eq_zero_complex
   have hbound :=
     (davisKahan1970_sylvester_complex N hA hB hδ hgap hEq hzero).2
   simp only [N, KyFanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    FanDominantIdealFamily.gauge_eq_toReal,
+    TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
+    TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] at hbound
   have hle : ‖X‖ ≤ 0 := by
     -- The bound is against the norm of zero, which the arithmetic tactics do not
@@ -114,7 +116,9 @@ theorem closedSylvester_homogeneous_eq_zero_real
   have hbound :=
     (davisKahan1970_sylvester_real N hA hB hδ hgap hEq hzero).2
   simp only [N, KyFanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    FanDominantIdealFamily.gauge_eq_toReal,
+    TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
+    TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] at hbound
   have hle : ‖X‖ ≤ 0 := by
     -- The bound is against the norm of zero, which the arithmetic tactics do not

@@ -8,7 +8,7 @@ module
 public import DavisKahan.BoundedOperator.IsometricRangeProjection
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.Sylvester.Spectrum
-public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
 
 public section
 

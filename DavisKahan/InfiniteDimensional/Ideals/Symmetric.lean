@@ -209,10 +209,13 @@ noncomputable def ofCanonical
 
 /-- The operator norm ideal.
 
-Built from `TauCeti.operatorNormFamily`, like every other entry in this
+Built from `TauCeti.SymmetricOperatorIdealFamily.opNorm`, like every other entry in this
 catalogue. -/
-noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofCanonical (TauCeti.operatorNormFamily 𝕜)
+noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
+  haveI : (TauCeti.SymmetricOperatorIdealFamily.opNorm 𝕜).toOperatorIdealFamily.IsComplete := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
+  exact ofCanonical (TauCeti.SymmetricOperatorIdealFamily.opNorm 𝕜)
 
 /-! Concrete square ideals, each the diagonal restriction of the canonical
 rectangular family of the same name. -/

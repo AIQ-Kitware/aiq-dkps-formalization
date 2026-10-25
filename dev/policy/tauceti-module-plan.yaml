@@ -135,7 +135,6 @@ topics:
   - Analysis.OperatorIdeal.Family.CompactOperator
   - Analysis.OperatorIdeal.Family.HilbertSchmidt
   - Analysis.OperatorIdeal.Family.KyFan.Dominance
-  - Analysis.OperatorIdeal.Family.OperatorNorm
   - Analysis.OperatorIdeal.Family.Schatten
   - Analysis.OperatorIdeal.Family.TraceClass
   - Analysis.InnerProductSpace.SchattenNorm
@@ -417,7 +416,6 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
   - Analysis.OperatorIdeal.Family.Basic
   - Analysis.OperatorIdeal.Family.KyFan.Dominance
-  - Analysis.OperatorIdeal.Family.OperatorNorm
   - Analysis.OperatorIdeal.Family.TraceClass
 - id: G
   title: Foundations completion — the rest of topics T01-T10
@@ -485,7 +483,6 @@ rungs:
   - Analysis.OperatorIdeal.Family.Basic
   - Analysis.OperatorIdeal.Family.HilbertSchmidt
   - Analysis.OperatorIdeal.Family.KyFan.Dominance
-  - Analysis.OperatorIdeal.Family.OperatorNorm
   - Analysis.OperatorIdeal.Family.Schatten
   - Topology.ENNRealLiminf
   - Analysis.OperatorIdeal.Family.TraceClass

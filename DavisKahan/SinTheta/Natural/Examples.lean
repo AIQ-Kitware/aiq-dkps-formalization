@@ -68,7 +68,9 @@ example
         rw [FanDominantIdealFamily.mem_iff]
         simp [KyFanDominantIdealFamily.operatorNorm])
   simpa only [KyFanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    FanDominantIdealFamily.gauge_eq_toReal,
+    TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
+    TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] using hmain.2
 
 /-- The same natural theorem instantiated with the nontrivial two-term Ky Fan
@@ -127,7 +129,9 @@ example
         rw [FanDominantIdealFamily.mem_iff]
         simp [KyFanDominantIdealFamily.operatorNorm])
   simpa only [KyFanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    FanDominantIdealFamily.gauge_eq_toReal,
+    TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
+    TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] using hmain.2
 
 end AbstractRealUse
@@ -165,7 +169,9 @@ example
         rw [FanDominantIdealFamily.mem_iff]
         simp [KyFanDominantIdealFamily.operatorNorm])
   simpa only [KyFanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal, TauCeti.gauge_operatorNormFamily,
+    FanDominantIdealFamily.gauge_eq_toReal,
+    TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
+    TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] using hmain.2
 
 end AbstractBoundedUse

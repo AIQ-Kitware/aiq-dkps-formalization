@@ -409,7 +409,7 @@
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.hilbertSchmidt": "TauCeti.DavisKahanExt.SymmetricNormIdeal.hilbertSchmidt",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.kyFan": "TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily.kyFan",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.neg_mem": "TauCeti.SymmetricOperatorIdealFamily.neg_mem",
-  "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.opNorm_comp_comp_le": "TauCeti.ContinuousLinearMap.opNorm_comp_comp_le",
+  "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.opNorm_comp_comp_le": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm": "TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily.operatorNorm",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm_gauge": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.operatorNorm_mem": "",

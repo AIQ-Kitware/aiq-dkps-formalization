@@ -184,7 +184,7 @@ min--max lower bound the Ky Fan triangle inequality is proved from.
 `hk : 0 < k` is needed for exactly one law: `enorm_le_gauge`.  At `k = 0` the
 gauge is identically `0`, which satisfies the other three but is not a norm.
 
-**Intended destination.**  This belongs beside `TauCeti.operatorNormFamily` in
+**Intended destination.**  This belongs beside `TauCeti.SymmetricOperatorIdealFamily.opNorm` in
 `ForTauCeti/Analysis/OperatorIdeal/Family/`.  It cannot live there yet, because
 both `kyFanApproximationGauge` and the capability class supplying its triangle
 inequality are defined in this library; it moves when the approximation-number
@@ -447,12 +447,15 @@ variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
 @[expose]
 noncomputable def operatorNorm :
     KyFanDominantIdealFamily.{u, v} 𝕜 where
-  toSymmetricOperatorIdealFamily := TauCeti.operatorNormFamily 𝕜
-  isComplete := inferInstance
+  toSymmetricOperatorIdealFamily := TauCeti.SymmetricOperatorIdealFamily.opNorm 𝕜
+  isComplete := by
+    rw [SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   gauge_le_of_forall_kyFanApproximationGauge_le := by
     intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hmajor
     have h : ‖A‖ ≤ ‖B‖ := by simpa using hmajor 1
-    simpa [TauCeti.gauge_operatorNormFamily, ← ofReal_norm] using
+    simpa [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
+      TauCeti.OperatorIdealFamily.gauge_opNorm, ← ofReal_norm] using
       ENNReal.ofReal_le_ofReal h
 
 /-- A fixed positive finite Ky Fan gauge with its own dominance property.

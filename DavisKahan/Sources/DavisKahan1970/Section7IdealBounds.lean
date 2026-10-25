@@ -9,7 +9,7 @@ module
 public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import DavisKahan.TanTwoTheta.UnboundedIdeal
 public import DavisKahan.OperatorIdeal.CanonicalRealView
-public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
 
 /-!
 # Davis--Kahan 1970, Section 7, at arbitrary rectangular ideal-gauge scope

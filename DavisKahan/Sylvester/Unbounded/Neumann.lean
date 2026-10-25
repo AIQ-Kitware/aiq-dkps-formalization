@@ -167,8 +167,10 @@ theorem Sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     simp [ContinuousLinearMap.add_comp, ContinuousLinearMap.comp_add]
   have hTnorm : ∀ Y : F →L[𝕜] E, ‖T Y‖ ≤ q * ‖Y‖ := by
     intro Y
-    calc ‖T Y‖ ≤ ‖J‖ * ‖Y‖ * ‖B‖ :=
-          TauCeti.ContinuousLinearMap.opNorm_comp_comp_le J Y B
+    calc ‖T Y‖ ≤ ‖J‖ * ‖Y ∘L B‖ := ContinuousLinearMap.opNorm_comp_le _ _
+      _ ≤ ‖J‖ * (‖Y‖ * ‖B‖) :=
+          mul_le_mul_of_nonneg_left (ContinuousLinearMap.opNorm_comp_le Y B) (norm_nonneg J)
+      _ = ‖J‖ * ‖Y‖ * ‖B‖ := (mul_assoc _ _ _).symm
       _ ≤ (ρ + δ)⁻¹ * ‖Y‖ * ρ :=
           mul_le_mul (mul_le_mul_of_nonneg_right hInvNorm (norm_nonneg Y))
             hB (norm_nonneg B)
@@ -381,8 +383,10 @@ theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
     simp [ContinuousLinearMap.add_comp, ContinuousLinearMap.comp_add]
   have hTnorm : ∀ W : G →L[𝕜] F, ‖T W‖ ≤ q * ‖W‖ := by
     intro W
-    calc ‖T W‖ ≤ ‖S‖ * ‖W‖ * ‖J‖ :=
-          TauCeti.ContinuousLinearMap.opNorm_comp_comp_le S W J
+    calc ‖T W‖ ≤ ‖S‖ * ‖W ∘L J‖ := ContinuousLinearMap.opNorm_comp_le _ _
+      _ ≤ ‖S‖ * (‖W‖ * ‖J‖) :=
+          mul_le_mul_of_nonneg_left (ContinuousLinearMap.opNorm_comp_le W J) (norm_nonneg S)
+      _ = ‖S‖ * ‖W‖ * ‖J‖ := (mul_assoc _ _ _).symm
       _ ≤ ρ * ‖W‖ * (ρ + δ)⁻¹ :=
           mul_le_mul (mul_le_mul_of_nonneg_right hSnorm (norm_nonneg W))
             hJnorm (norm_nonneg J) (mul_nonneg hρ (norm_nonneg W))

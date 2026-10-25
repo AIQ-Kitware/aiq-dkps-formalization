@@ -24,7 +24,7 @@ The theorems that use them live in `DavisKahan.DoubleAngle.UnboundedIdeal`, whic
 where the operator-norm forms now live.  They were proved here until 2026-07-28, at which
 point their proofs turned out to be the ideal-gauge proofs written a second time: the two
 differed only in the final estimate, over ~130 identical lines of geometric spine.  Since
-`TauCeti.operatorNormFamily` has the operator norm as its gauge and every bounded operator
+`TauCeti.SymmetricOperatorIdealFamily.opNorm` has the operator norm as its gauge and every bounded operator
 as a member, each operator-norm statement is its ideal-gauge counterpart read at that
 family, so the copies collapsed to one — and the surviving proof has to sit *after* the
 ideal one, which is downstream of this module.

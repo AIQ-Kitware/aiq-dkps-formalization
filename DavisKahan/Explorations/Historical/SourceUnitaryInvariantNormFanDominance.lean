@@ -91,7 +91,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.M
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
 public import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
-public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
 public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 public import DavisKahan.Sources.DavisKahan1970.Ideals.KyFanNorm
 public import DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples

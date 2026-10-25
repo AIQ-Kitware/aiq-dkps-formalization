@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 

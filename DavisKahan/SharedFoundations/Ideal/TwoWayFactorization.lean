@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.Ideals.Symmetric
 public import DavisKahan.OperatorIdeal.CanonicalRealView
-public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
 
 /-!
 # Gauge transport through two-way contraction factorizations

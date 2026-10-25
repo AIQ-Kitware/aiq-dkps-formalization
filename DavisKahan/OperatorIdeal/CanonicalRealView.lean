@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
+public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
 public import ForTauCeti.Analysis.OperatorIdeal.Family.Modulus
 
 /-!
@@ -433,18 +433,6 @@ theorem gaugeReal_sum_range_sub_le {t : ℕ → E →L[𝕜] F} {c : ℕ → ℝ
       N.gaugeReal_finset_sum_le (Finset.Ico n m) t fun j _ => htmem j
     _ ≤ ∑ j ∈ Finset.Ico n m, c j := Finset.sum_le_sum fun j _ => htgauge j
 
-/-- Every bounded operator lies in the operator-norm ideal.  In the historical
-record this was `True` by construction; canonically it is finiteness of `‖·‖ₑ`. -/
-@[simp] theorem mem_operatorNormFamily (A : E →L[𝕜] F) :
-    (operatorNormFamily.{u, v} 𝕜).Mem A := by
-  show (operatorNormFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge A ≠ ∞
-  rw [gauge_operatorNormFamily]
-  exact enorm_ne_top
-
-/-- The real gauge of the operator-norm family is the operator norm. -/
-@[simp] theorem gaugeReal_operatorNormFamily (A : E →L[𝕜] F) :
-    (operatorNormFamily.{u, v} 𝕜).gaugeReal A = ‖A‖ := by
-  rw [gaugeReal_eq_toReal, gauge_operatorNormFamily, toReal_enorm]
 
 end SymmetricOperatorIdealFamily
 
