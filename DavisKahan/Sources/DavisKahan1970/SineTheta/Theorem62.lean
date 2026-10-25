@@ -160,9 +160,11 @@ theorem canonicalSinTheta_frame_bound
     simpa using Q.invSqrt_norm_le
   have hcomp : ContinuousLinearMap.hilbertSchmidtNorm P.canonicalSinTheta ≤
       ‖Q.invSqrt.adjoint‖ * ContinuousLinearMap.hilbertSchmidtNorm P.sylvesterOverlap := by
-    have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_le
-      Q.invSqrt.adjoint ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).2 hraw)
-      (ContinuousLinearMap.id ℂ G)
+    obtain ⟨_, b, -⟩ := exists_hilbertBasis ℂ G
+    have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_comp_le
+      Q.invSqrt.adjoint P.sylvesterOverlap (ContinuousLinearMap.id ℂ G) b
+      ((P.sylvesterOverlap.isHilbertSchmidt_iff_energy_ne_top b).mp
+        ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).mpr hraw))
     rw [ContinuousLinearMap.comp_id] at h
     rw [hblock]
     exact h.trans (mul_le_of_le_one_right
@@ -345,9 +347,11 @@ theorem canonicalSinTheta_frame_bound
     simpa using Q.invSqrt_norm_le
   have hcomp : ContinuousLinearMap.hilbertSchmidtNorm P.canonicalSinTheta ≤
       ‖Q.invSqrt.adjoint‖ * ContinuousLinearMap.hilbertSchmidtNorm P.sylvesterOverlap := by
-    have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_le
-      Q.invSqrt.adjoint ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).2 hraw)
-      (ContinuousLinearMap.id ℝ G)
+    obtain ⟨_, b, -⟩ := exists_hilbertBasis ℝ G
+    have h := ContinuousLinearMap.hilbertSchmidtNorm_comp_comp_le
+      Q.invSqrt.adjoint P.sylvesterOverlap (ContinuousLinearMap.id ℝ G) b
+      ((P.sylvesterOverlap.isHilbertSchmidt_iff_energy_ne_top b).mp
+        ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top _).mpr hraw))
     rw [ContinuousLinearMap.comp_id] at h
     rw [hcanonical]
     exact h.trans (mul_le_of_le_one_right

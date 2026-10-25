@@ -737,7 +737,7 @@
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.hilbertSchmidtIdealFamily_gauge_eq_paperHilbertSchmidtNorm": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.hilbertSchmidtNorm_adjoint": "ContinuousLinearMap.hilbertSchmidtNorm_adjoint",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.hilbertSchmidtNorm_comp_isometries_le": "ContinuousLinearMap.hilbertSchmidtNorm_comp_isometries_le",
-  "TauCeti.DavisKahan.Experimental.ExactSinTheta.hilbertSchmidtNorm_comp_le": "ContinuousLinearMap.hilbertSchmidtNorm_comp_le",
+  "TauCeti.DavisKahan.Experimental.ExactSinTheta.hilbertSchmidtNorm_comp_le": "ContinuousLinearMap.hilbertSchmidtNorm_comp_comp_le",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.hilbertSchmidtNorm_complexify": "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtNorm_complexify",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.hilbertSchmidtNorm_eq_frobenius": "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtNorm_eq_frobenius",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.hilbertSchmidtNorm_eq_rectangularFrobenius": "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtNorm_eq_frobenius",

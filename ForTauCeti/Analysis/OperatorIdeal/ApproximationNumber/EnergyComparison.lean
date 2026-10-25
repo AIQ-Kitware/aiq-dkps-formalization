@@ -168,7 +168,7 @@ private theorem hilbertSchmidtEnergy_eq_sum_approximationNumber_sq_of_finiteDime
         ENNReal.ofReal (A.approximationNumber i) ^ 2 := by
   classical
   set v := (TauCeti.rightSingularBasis (A : G →ₗ[𝕜'] H)).toHilbertBasis with hv
-  rw [A.hilbertSchmidtEnergy_indep b v, hilbertSchmidtEnergy, tsum_fintype]
+  rw [A.hilbertSchmidtEnergy_indep b v, hilbertSchmidtEnergy_def, tsum_fintype]
   refine Finset.sum_congr rfl fun i _ => ?_
   have hvi : v i = TauCeti.rightSingularBasis (A : G →ₗ[𝕜'] H) i := by
     simp [hv, OrthonormalBasis.coe_toHilbertBasis]
@@ -203,7 +203,7 @@ theorem hilbertSchmidtEnergy_eq_sum_approximationNumber_sq {G₀ : Type*}
     congrArg Subtype.val
       (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self (⟨A x, ⟨x, rfl⟩⟩ : W))
   have henergy : A.hilbertSchmidtEnergy b = S.hilbertSchmidtEnergy b := by
-    rw [hilbertSchmidtEnergy, hilbertSchmidtEnergy]
+    rw [hilbertSchmidtEnergy_def, hilbertSchmidtEnergy_def]
     exact tsum_congr fun i => by rw [← hSval (b i)]; rfl
   rw [henergy, S.hilbertSchmidtEnergy_eq_sum_approximationNumber_sq_of_finiteDimensional b]
   exact Finset.sum_congr rfl fun i _ =>
@@ -319,7 +319,7 @@ theorem hilbertSchmidtEnergy_comp_one_sub_basisTruncation {ι : Type*} [Decidabl
     (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) (s : Finset ι) :
     (T ∘L (1 - basisTruncation b s)).hilbertSchmidtEnergy b =
       ∑' i, if i ∈ s then 0 else ‖T (b i)‖ₑ ^ 2 := by
-  rw [hilbertSchmidtEnergy]
+  rw [hilbertSchmidtEnergy_def]
   refine tsum_congr fun i => ?_
   rw [ContinuousLinearMap.comp_apply, sub_apply, one_apply_eq_self,
     basisTruncation_apply_basis]
@@ -402,7 +402,7 @@ theorem hilbertSchmidtEnergy_comp_finiteBasisInclusion {ι : Type*} (T : G →L[
   classical
   set d := (EuclideanSpace.basisFun (Fin n) 𝕜').toHilbertBasis with hd
   rw [(T ∘L finiteBasisInclusion b f).hilbertSchmidtEnergy_indep c d,
-    hilbertSchmidtEnergy, tsum_fintype]
+    hilbertSchmidtEnergy_def, tsum_fintype]
   refine Finset.sum_congr rfl fun j _ => ?_
   have hdj : d j = EuclideanSpace.single j (1 : 𝕜') := by
     simp [hd, OrthonormalBasis.coe_toHilbertBasis, EuclideanSpace.basisFun_apply]
@@ -459,7 +459,7 @@ theorem tsum_approximationNumber_comp_basisTruncation_sq_le {ι : Type v}
         conv_rhs => rw [← himage]
         rw [Finset.sum_image fun i _ j _ h => hf h]
     _ ≤ T.hilbertSchmidtEnergy b := by
-        rw [hilbertSchmidtEnergy]
+        rw [hilbertSchmidtEnergy_def]
         exact ENNReal.sum_le_tsum s
 
 
@@ -480,7 +480,7 @@ theorem tendsto_enorm_comp_one_sub_basisTruncation {ι : Type v}
     exact tsum_congr fun i => by
       by_cases hi : i ∈ s <;> simp [hi]
   have hcompl := ENNReal.tendsto_tsum_compl_atTop_zero
-    (f := fun i => ‖T (b i)‖ₑ ^ 2) (by rwa [← hilbertSchmidtEnergy])
+    (f := fun i => ‖T (b i)‖ₑ ^ 2) (by rwa [← hilbertSchmidtEnergy_def])
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hcompl
     (Filter.Eventually.of_forall fun _ => by simp)
     (Filter.Eventually.of_forall fun s => ?_)
@@ -601,7 +601,7 @@ theorem hilbertSchmidtEnergy_le_tsum_approximationNumber_sq {ι : Type v}
     simp [OrthonormalBasis.coe_toHilbertBasis, EuclideanSpace.basisFun_apply]
   -- The partial sum is the whole energy of `T ∘L V`.
   have hsum : ∑ i ∈ s, ‖T (b i)‖ₑ ^ 2 = (T ∘L V).hilbertSchmidtEnergy c := by
-    rw [hilbertSchmidtEnergy, tsum_fintype,
+    rw [hilbertSchmidtEnergy_def, tsum_fintype,
       ← Finset.sum_attach s fun i => ‖T (b i)‖ₑ ^ 2]
     refine Fintype.sum_equiv e (fun i : {x // x ∈ s} => ‖T (b (i : ι))‖ₑ ^ 2)
       (fun j : Fin s.card => ‖(T ∘L V) (c j)‖ₑ ^ 2) fun i => ?_
@@ -621,7 +621,7 @@ theorem hilbertSchmidtEnergy_le_tsum_approximationNumber_sq {ι : Type v}
     exact congrArg Subtype.val
       (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self (⟨(T ∘L V) x, hmem⟩ : W))
   have henergy : (T ∘L V).hilbertSchmidtEnergy c = S.hilbertSchmidtEnergy c := by
-    rw [hilbertSchmidtEnergy, hilbertSchmidtEnergy]
+    rw [hilbertSchmidtEnergy_def, hilbertSchmidtEnergy_def]
     refine tsum_congr fun j => ?_
     rw [← hSval (c j)]
     rfl

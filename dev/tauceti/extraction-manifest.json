@@ -342,7 +342,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Lp",
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
@@ -733,7 +732,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: representation of an operator ideal family)",
-      "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `\u211d\u22650\u221e` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
+      "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `ℝ≥0∞` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
       "direct_dependencies": [
         "Mathlib"
       ],
@@ -754,7 +753,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: first instance of the canonical family; the Ky Fan instance is the second and is still parked in DavisKahan)",
-      "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E \u2192L[\ud835\udd5c] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
+      "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E →L[𝕜] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
@@ -1634,7 +1633,7 @@
       ],
       "status": "upstreamed",
       "upstream_pr": null,
-      "migration_note": "Deleted the duplicate finite-dimensional entrywise-to-operator norm estimates after validating TauCeti.Analysis.Matrix.EntrywiseOpNorm. Consumers use its generalized rectangular or square-index bounds directly. The \u2113\u00b9-to-\u2113\u00b2 estimate is taken from Mathlib's PiLp.sum_norm_le_sqrt_card_mul_norm. Historical staging path retained here."
+      "migration_note": "Deleted the duplicate finite-dimensional entrywise-to-operator norm estimates after validating TauCeti.Analysis.Matrix.EntrywiseOpNorm. Consumers use its generalized rectangular or square-index bounds directly. The ℓ¹-to-ℓ² estimate is taken from Mathlib's PiLp.sum_norm_le_sqrt_card_mul_norm. Historical staging path retained here."
     },
     {
       "source_module": "ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable",
@@ -2147,14 +2146,14 @@
       "roadmap_target": "symmetric-operator-ideals",
       "provenance_class": "authored in place 2026-07-28: the rectangular Hilbert-Schmidt energy in ENNReal, the adjoint swap and basis independence; Parseval is consumed from the accepted TauCeti.Analysis.InnerProductSpace.Parseval API",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis"
       ],
       "status": "staged-partial",
-      "migration_note": "Removed the duplicate HilbertBasis.hasSum_norm_inner_sq and HilbertBasis.tsum_enorm_inner_sq declarations. Energy expansion proofs now use TauCeti.Analysis.InnerProductSpace.Parseval.tsum_enorm_sq_inner. The energy definition and operator-energy results remain donor mathematics under broader API migration.",
+      "migration_note": "2026-10-25: canonical energy, adjoint/basis invariance and ideal laws consumed from Tau Ceti. Donor retains finite-partial-sum, negation and pointwise-bound consequences only. No energy definition or aliases remain.",
       "upstream_pr": null
     },
     {
@@ -2174,7 +2173,8 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "2026-10-25: removed the real norm definition and its duplicate zero, nonnegativity, homogeneity, adjoint, triangle and operator-domination laws. The real norm is now Tau Ceti ContinuousLinearMap.hilbertSchmidtNorm. Extended-gauge/ideal mathematics remains for a separate exact comparison with the accepted rectangular family."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
@@ -3249,7 +3249,7 @@
       ],
       "status": "upstreamed",
       "upstream_pr": null,
-      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the \u211d specialization is used directly. Historical source and declaration inventory retained here."
+      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the ℝ specialization is used directly. Historical source and declaration inventory retained here."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3289,7 +3289,7 @@
       ],
       "status": "upstreamed",
       "upstream_pr": null,
-      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the \u211d specialization is used directly. Historical source and declaration inventory retained here."
+      "migration_note": "Local implementation removed after validating the general TauCeti.ProjValMeasure X H API at the pinned TauCeti dependency; the ℝ specialization is used directly. Historical source and declaration inventory retained here."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3369,9 +3369,9 @@
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group",
+        "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3385,8 +3385,6 @@
       "source_declarations": [
         "energy_ofLp",
         "eq_of_columns_eq",
-        "hilbertSchmidtEnergy_comp_isometry",
-        "hilbertSchmidtEnergy_isometry_comp",
         "norm_conj_eq",
         "ofLp_add",
         "ofLp_smul"
@@ -3398,15 +3396,16 @@
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space"
+        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space",
+        "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Isometry"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group"
       ],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "2026-10-25: duplicate left/right energy-invariance proofs retired; ofLp and Sylvester-flow consumers use the accepted isometry/coisometry API."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3451,19 +3450,16 @@
       ],
       "current_namespace": "TauCeti.HilbertSchmidt",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidtPythagoras",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras",
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
       "provenance_class": "new",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Block"
-      ],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "2026-10-25: removed the three local splitting proofs. HilbertSchmidt.Block calls ContinuousLinearMap.tsum_tsum_hilbertSchmidtEnergy_comp directly. Accepted source checked at Tau Ceti efded067c28ffca3483fd731674eb13b42543fbb; overlap is verified, proof adaptation is not claimed."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",

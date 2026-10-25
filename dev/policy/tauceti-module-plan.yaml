@@ -150,7 +150,6 @@ topics:
   - Analysis.InnerProductSpace.HilbertSchmidt.Lp
   - Analysis.InnerProductSpace.HilbertSchmidt.Space
   - Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
-  - Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
 - id: T12
   title: The Haagerup-Zsido kernel and its Fourier transform
   modules:
@@ -502,7 +501,6 @@ rungs:
   seeds:
   - Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
   - Analysis.InnerProductSpace.HilbertSchmidt.Lp
-  - Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
   - Analysis.InnerProductSpace.HilbertSchmidt.Space
 - id: I
   title: The Haagerup-Zsido kernel and its Fourier transform (T12)

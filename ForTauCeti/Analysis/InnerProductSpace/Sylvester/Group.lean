@@ -206,9 +206,10 @@ isometries, and the energy is invariant under composition with an isometry on ei
 is what makes the flow a group of *unitaries* on `HS(F, E)`. -/
 theorem energy_conjOp (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     (conjOp U V b t f).hilbertSchmidtEnergy b = (ofLp b f).hilbertSchmidtEnergy b := by
-  rw [conjOp, hilbertSchmidtEnergy_comp_isometry _ b (V.U (-t))
-      (fun x => by rw [adjoint_U_neg]; exact norm_preserving V t x),
-    hilbertSchmidtEnergy_isometry_comp _ b (U.U t) (norm_preserving U t)]
+  rw [conjOp]
+  exact ContinuousLinearMap.hilbertSchmidtEnergy_isometry_comp_coisometry
+    (U.U t) (norm_preserving U t) (ofLp b f) (V.U (-t))
+    (fun x => by rw [adjoint_U_neg]; exact norm_preserving V t x) b b
 
 /-- The flow keeps the energy finite, so its image stays inside the Hilbert--Schmidt class. -/
 theorem energy_conjOp_ne_top (t : ℝ) (f : lp (fun _ : ι => E) 2) :
@@ -294,17 +295,17 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
   set T := ofLp b f with hT
   have hTtop : T.hilbertSchmidtEnergy b ≠ ⊤ := by rw [hT, energy_ofLp]; exact ENNReal.ofReal_ne_top
   have hTadjtop : T.adjoint.hilbertSchmidtEnergy c ≠ ⊤ := by
-    rw [← ContinuousLinearMap.hilbertSchmidtEnergy_adjoint T b c]; exact hTtop
+    rw [ContinuousLinearMap.hilbertSchmidtEnergy_adjoint T b c]; exact hTtop
   -- the two pieces of the displacement
   have h1top : ∀ r : ℝ,
       (((U.U r).comp T - T).comp (V.U (-r))).hilbertSchmidtEnergy b ≠ ⊤ := by
     intro r
-    rw [hilbertSchmidtEnergy_comp_isometry _ b (V.U (-r))
-      (fun x => by rw [adjoint_U_neg]; exact norm_preserving V r x)]
+    rw [ContinuousLinearMap.hilbertSchmidtEnergy_comp_coisometry _ (V.U (-r))
+      (fun x => by rw [adjoint_U_neg]; exact norm_preserving V r x) b b]
     exact energy_sub_comp_ne_top b T (U.U r) (norm_preserving U r) hTtop
   have h2top : ∀ r : ℝ, (T.comp (V.U (-r)) - T).hilbertSchmidtEnergy b ≠ ⊤ := by
     intro r
-    rw [ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c, map_sub,
+    rw [← ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c, map_sub,
       ContinuousLinearMap.adjoint_comp, adjoint_U_neg]
     exact energy_sub_comp_ne_top c T.adjoint (V.U r) (norm_preserving V r) hTadjtop
   set g₁ : ℝ → lp (fun _ : ι => E) 2 :=
@@ -323,8 +324,9 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
     have hrw : ∀ r : ℝ, (ofLp b (g₁ r)).hilbertSchmidtEnergy b
         = ∑' i, ‖U.U r (T (b i)) - T (b i)‖ₑ ^ 2 := by
       intro r
-      rw [hg₁, ofLp_ofOperator, hilbertSchmidtEnergy_comp_isometry _ b (V.U (-r))
-        (fun x => by rw [adjoint_U_neg]; exact norm_preserving V r x), energy_sub_comp_eq]
+      rw [hg₁, ofLp_ofOperator,
+        ContinuousLinearMap.hilbertSchmidtEnergy_comp_coisometry _ (V.U (-r))
+        (fun x => by rw [adjoint_U_neg]; exact norm_preserving V r x) b b, energy_sub_comp_eq]
     simp_rw [hrw]
     exact tendsto_energy_sub_comp b T hTtop (fun r => U.U r) (fun r => norm_preserving U r)
       (fun x => U.strong_continuous x) (fun x => by rw [U.identity]; rfl)
@@ -334,7 +336,7 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
         = ∑' j, ‖V.U r (T.adjoint (c j)) - T.adjoint (c j)‖ₑ ^ 2 := by
       intro r
       rw [hg₂, ofLp_ofOperator,
-        ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c]
+        ← ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c]
       simp only [map_sub, ContinuousLinearMap.adjoint_comp, adjoint_U_neg]
       exact energy_sub_comp_eq _ _ _
     simp_rw [hrw]

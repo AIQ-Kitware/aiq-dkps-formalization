@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Space
+public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Isometry
 
 /-!
 # Conjugating a Hilbert–Schmidt operator by isometries
@@ -91,31 +92,6 @@ omit [CompleteSpace F] in
   · rw [columns_smul, columns_ofLp]; exact lp.memℓp (c • f)
   · rw [columns_ofLp, columns_smul, columns_ofLp]; rfl
 
-/-! ### The energy under composition with isometries -/
-
-omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
-/-- Composing on the **left** with a norm-preserving map leaves the energy
-alone: every column norm is individually unchanged. -/
-theorem hilbertSchmidtEnergy_isometry_comp (T : F →L[𝕜] E) (b : HilbertBasis ι 𝕜 F)
-    (U : E →L[𝕜] G) (hU : ∀ x : E, ‖U x‖ = ‖x‖) :
-    (U.comp T).hilbertSchmidtEnergy b = T.hilbertSchmidtEnergy b := by
-  simp only [ContinuousLinearMap.hilbertSchmidtEnergy_def]
-  refine tsum_congr fun i => ?_
-  have hnn : ‖U (T (b i))‖₊ = ‖T (b i)‖₊ := NNReal.coe_injective (hU _)
-  rw [ContinuousLinearMap.comp_apply, enorm_eq_nnnorm, enorm_eq_nnnorm, hnn]
-
-/-- Composing on the **right** with a map whose adjoint is norm-preserving
-leaves the energy alone.  The proof passes to the adjoint, where the
-composition moves to the left. -/
-theorem hilbertSchmidtEnergy_comp_isometry (T : F →L[𝕜] E) (b : HilbertBasis ι 𝕜 F)
-    (V : F →L[𝕜] F) (hV : ∀ x : F, ‖V.adjoint x‖ = ‖x‖) :
-    (T.comp V).hilbertSchmidtEnergy b = T.hilbertSchmidtEnergy b := by
-  obtain ⟨w, c, -⟩ := exists_hilbertBasis 𝕜 E
-  rw [ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c,
-    ContinuousLinearMap.hilbertSchmidtEnergy_adjoint T b c,
-    ContinuousLinearMap.adjoint_comp]
-  exact hilbertSchmidtEnergy_isometry_comp _ c _ hV
-
 /-! ### The `ℓ²` norm in terms of the energy -/
 
 omit [CompleteSpace F] in
@@ -142,8 +118,9 @@ theorem norm_conj_eq (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E) 2)
     (hg : ofLp b g = (U.comp (ofLp b f)).comp V) :
     ‖g‖ = ‖f‖ := by
   have hE : (ofLp b g).hilbertSchmidtEnergy b = (ofLp b f).hilbertSchmidtEnergy b := by
-    rw [hg, hilbertSchmidtEnergy_comp_isometry _ b V hV,
-      hilbertSchmidtEnergy_isometry_comp _ b U hU]
+    rw [hg]
+    exact ContinuousLinearMap.hilbertSchmidtEnergy_isometry_comp_coisometry
+      U hU (ofLp b f) V hV b b
   rw [energy_ofLp, energy_ofLp] at hE
   have := (ENNReal.ofReal_eq_ofReal_iff (by positivity) (by positivity)).mp hE
   have hnn : (0 : ℝ) ≤ ‖g‖ := norm_nonneg _

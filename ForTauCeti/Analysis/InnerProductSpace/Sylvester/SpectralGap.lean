@@ -229,7 +229,7 @@ theorem norm_sub_smul_ge_of_grid (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
   have hsplit : ∀ g : lp (fun _ : ι => E) 2,
       ∑' p : ℤ × ℤ, ‖blockCLM b (gridProj hA ε p.1) (gridProj hB ε p.2) g‖ₑ ^ 2 = ‖g‖ₑ ^ 2 := by
     intro g
-    simpa using tsum_enorm_sq_blockFun b c (gridProj hA ε) (gridProj hB ε)
+    simpa using tsum_enorm_sq_blockFun b (gridProj hA ε) (gridProj hB ε)
       (TauCeti.LinearPMap.tsum_enorm_sq_specProjection_gridCell hA hε)
       (TauCeti.LinearPMap.tsum_enorm_sq_adjoint_specProjection_gridCell hB hε) g
   -- the block bounds, in `ℝ≥0∞`

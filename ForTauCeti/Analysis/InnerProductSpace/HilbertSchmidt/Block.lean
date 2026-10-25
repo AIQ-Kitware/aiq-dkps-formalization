@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
 public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant
-public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
+public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
 
 /-!
 # Two-sided blocks on the Hilbert–Schmidt space
@@ -62,10 +62,11 @@ theorem energy_block_ne_top (f : lp (fun _ : ι => E) 2) :
     (((P.comp (ofLp b f)).comp Q)).hilbertSchmidtEnergy b ≠ ⊤ := by
   have h1 : ((P.comp (ofLp b f)).comp Q).hilbertSchmidtEnergy b
       ≤ ‖Q‖ₑ ^ 2 * (P.comp (ofLp b f)).hilbertSchmidtEnergy b :=
-    ContinuousLinearMap.hilbertSchmidtEnergy_comp_right_le _ _ b b
+    by simpa only [mul_comm] using
+      ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_right (P.comp (ofLp b f)) Q b b
   have h2 : (P.comp (ofLp b f)).hilbertSchmidtEnergy b
       ≤ ‖P‖ₑ ^ 2 * (ofLp b f).hilbertSchmidtEnergy b :=
-    ContinuousLinearMap.hilbertSchmidtEnergy_comp_left_le _ _ b
+    ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_left _ _ b
   have hfin : (ofLp b f).hilbertSchmidtEnergy b ≠ ⊤ := by
     rw [energy_ofLp]; exact ENNReal.ofReal_ne_top
   have hchain : ((P.comp (ofLp b f)).comp Q).hilbertSchmidtEnergy b
@@ -106,9 +107,13 @@ theorem norm_blockFun_le (f : lp (fun _ : ι => E) 2) :
   have hE : ENNReal.ofReal (‖blockFun b P Q f‖ ^ 2)
       ≤ ‖Q‖ₑ ^ 2 * (‖P‖ₑ ^ 2 * ENNReal.ofReal (‖f‖ ^ 2)) := by
     rw [← energy_ofLp b (blockFun b P Q f), ofLp_blockFun, ← energy_ofLp b f]
-    refine le_trans (ContinuousLinearMap.hilbertSchmidtEnergy_comp_right_le _ _ b b) ?_
-    gcongr
-    exact ContinuousLinearMap.hilbertSchmidtEnergy_comp_left_le _ _ b
+    calc
+      _ ≤ (P.comp (ofLp b f)).hilbertSchmidtEnergy b * ‖Q‖ₑ ^ 2 :=
+        ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_right _ _ b b
+      _ ≤ (‖P‖ₑ ^ 2 * (ofLp b f).hilbertSchmidtEnergy b) * ‖Q‖ₑ ^ 2 := by
+        gcongr
+        exact ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_left _ _ b
+      _ = _ := by ac_rfl
   have hPe : ‖P‖ₑ = ENNReal.ofReal ‖P‖ := by
     rw [enorm_eq_nnnorm, ← ENNReal.ofReal_coe_nnreal, coe_nnnorm]
   have hQe : ‖Q‖ₑ = ENNReal.ofReal ‖Q‖ := by
@@ -167,7 +172,7 @@ theorem enorm_sq_eq_energy (b : HilbertBasis ι 𝕜 F) (f : lp (fun _ : ι => E
 /-- **Two-sided blocks split the `ℓ²` norm.**  This is the hypothesis
 `TauCeti.enorm_ge_of_blocks` takes, for the block family of a pair of
 norm-splitting families. -/
-theorem tsum_enorm_sq_blockFun {ι' : Type*} (b : HilbertBasis ι 𝕜 F) (c : HilbertBasis κ 𝕜 E)
+theorem tsum_enorm_sq_blockFun {ι' : Type*} (b : HilbertBasis ι 𝕜 F)
     (P : ι' → (E →L[𝕜] E)) (Q : ι' → (F →L[𝕜] F))
     (hP : ∀ v : E, ∑' i, ‖P i v‖ₑ ^ 2 = ‖v‖ₑ ^ 2)
     (hQ : ∀ v : F, ∑' j, ‖(Q j).adjoint v‖ₑ ^ 2 = ‖v‖ₑ ^ 2)
@@ -178,7 +183,8 @@ theorem tsum_enorm_sq_blockFun {ι' : Type*} (b : HilbertBasis ι 𝕜 F) (c : H
     intro p
     rw [enorm_sq_eq_energy b, ofLp_blockFun]
   rw [tsum_congr hterm, ENNReal.tsum_prod', ENNReal.tsum_comm, enorm_sq_eq_energy b f]
-  exact tsum_tsum_energy_blocks b c (ofLp b f) P Q hP hQ
+  simpa only [ContinuousLinearMap.comp_assoc] using
+    ContinuousLinearMap.tsum_tsum_hilbertSchmidtEnergy_comp (ofLp b f) b b P Q hP hQ
 
 
 /-- **A block commutes with the Sylvester flow** when each side commutes with

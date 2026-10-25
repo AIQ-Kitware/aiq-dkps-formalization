@@ -60,10 +60,12 @@ def hilbertSchmidtBasisEnergy {ι : Type*}
   ∑' i, (‖A (b i)‖₊ : ENNReal) ^ 2
 
 omit [CompleteSpace E] [CompleteSpace F] in
-/-- The paper column energy is the staged `ContinuousLinearMap.hilbertSchmidtEnergy`. -/
+/-- The paper column energy is the accepted `ContinuousLinearMap.hilbertSchmidtEnergy`. -/
 theorem hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    hilbertSchmidtBasisEnergy b A = A.hilbertSchmidtEnergy b := rfl
+    hilbertSchmidtBasisEnergy b A = A.hilbertSchmidtEnergy b := by
+  simp only [hilbertSchmidtBasisEnergy, ContinuousLinearMap.hilbertSchmidtEnergy_def,
+    enorm_eq_nnnorm]
 
 /-- Adjoint cross-swap for rectangular operators. -/
 theorem hilbertSchmidtBasisEnergy_adjoint_swap
@@ -71,7 +73,10 @@ theorem hilbertSchmidtBasisEnergy_adjoint_swap
     (bE : HilbertBasis κ 𝕜 E) (A : F →L[𝕜] E) :
     hilbertSchmidtBasisEnergy bF A =
       hilbertSchmidtBasisEnergy bE A.adjoint :=
-  A.hilbertSchmidtEnergy_adjoint bF bE
+  by
+    rw [hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy,
+      hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+    exact (A.hilbertSchmidtEnergy_adjoint bF bE).symm
 
 /-- The rectangular column-square energy does not depend on the domain basis. -/
 theorem hilbertSchmidtBasisEnergy_indep
@@ -464,13 +469,9 @@ one canonical norm, rather than about a second norm that happens to be equal to 
 theorem hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy
     (A : F →L[𝕜] E) :
     A.hilbertSchmidtNorm = Real.sqrt (approximationNumberEnergy A).toReal := by
-  rw [ContinuousLinearMap.hilbertSchmidtNorm_eq_toReal,
-    approximationNumberEnergy_eq_hilbertSchmidtENorm_sq A]
-  rcases eq_or_ne A.hilbertSchmidtENorm ⊤ with h | h
-  · rw [h]
-    rw [ENNReal.top_rpow_of_pos (by norm_num : (0:ℝ) < 2)]
-    simp
-  · rw [← ENNReal.toReal_rpow, Real.rpow_two, Real.sqrt_sq ENNReal.toReal_nonneg]
+  obtain ⟨_, b, -⟩ := exists_hilbertBasis 𝕜 F
+  rw [A.hilbertSchmidtNorm_eq_sqrt b, approximationNumberEnergy_eq_basisEnergy b A,
+    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
 
 /-- Paper square membership is equivalent to square-summable columns in any
 Hilbert basis. -/
@@ -518,8 +519,9 @@ against Milestone B3 of `TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md`
 theorem approximationNumberEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     ∑' n : ℕ, ENNReal.ofReal (approximationSingularValue n A ^ 2) =
-      A.hilbertSchmidtEnergy b :=
-  approximationNumberEnergy_eq_basisEnergy b A
+      A.hilbertSchmidtEnergy b := by
+  rw [← hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy b A]
+  exact approximationNumberEnergy_eq_basisEnergy b A
 
 /-- The staged Hilbert--Schmidt predicate is the paper one. -/
 theorem isHilbertSchmidt_iff_approximationNumberEnergy_ne_top
@@ -527,8 +529,8 @@ theorem isHilbertSchmidt_iff_approximationNumberEnergy_ne_top
     A.IsHilbertSchmidt ↔ approximationNumberEnergy A ≠ ⊤ := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
   rw [A.isHilbertSchmidt_iff_energy_ne_top b,
-    approximationNumberEnergy_eq_basisEnergy b A]
-  rfl
+    approximationNumberEnergy_eq_basisEnergy b A,
+    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
 
 /-- The staged Hilbert--Schmidt norm is the paper square norm. -/
 theorem hilbertSchmidtENorm_eq_ofReal_hilbertSchmidtNorm
@@ -536,8 +538,9 @@ theorem hilbertSchmidtENorm_eq_ofReal_hilbertSchmidtNorm
     (hA : approximationNumberEnergy A ≠ ⊤) :
     A.hilbertSchmidtENorm = ENNReal.ofReal (ContinuousLinearMap.hilbertSchmidtNorm A) := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
-  have henergy : A.hilbertSchmidtEnergy b = approximationNumberEnergy A :=
-    (approximationNumberEnergy_eq_basisEnergy b A).symm
+  have henergy : A.hilbertSchmidtEnergy b = approximationNumberEnergy A := by
+    rw [← hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy b A]
+    exact (approximationNumberEnergy_eq_basisEnergy b A).symm
   have hne : approximationNumberEnergy A ≠ ⊤ := hA
   rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy, A.hilbertSchmidtENorm_eq b,
     henergy, Real.sqrt_eq_rpow,

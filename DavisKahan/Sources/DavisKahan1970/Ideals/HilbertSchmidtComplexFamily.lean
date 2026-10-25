@@ -226,8 +226,10 @@ noncomputable def hilbertSchmidtComplex :
         exact ContinuousLinearMap.hilbertSchmidtNorm_adjoint A
       gauge_comp_le := by
         intro E F G H _ _ _ _ _ _ _ _ _ _ _ _ L A R hA
-        exact ContinuousLinearMap.hilbertSchmidtNorm_comp_le L
-          ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top A).2 hA) R
+        obtain ⟨_, b, -⟩ := exists_hilbertBasis ℂ E
+        exact ContinuousLinearMap.hilbertSchmidtNorm_comp_comp_le L A R b
+          ((A.isHilbertSchmidt_iff_energy_ne_top b).mp
+            ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top A).mpr hA))
       opNorm_le_gauge := by
         intro E F _ _ _ _ _ _ A hA
         exact opNorm_le_hilbertSchmidtNorm hA

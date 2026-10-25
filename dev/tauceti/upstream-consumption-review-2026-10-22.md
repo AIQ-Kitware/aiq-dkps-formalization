@@ -78,6 +78,27 @@ The original untracked `ProbeModulus.lean`, `feedback.txt`, and
 `luna_tauceti_upstream_first_guide.md` are preserved and are not build inputs.
 
 
+## October 25 follow-up: Hilbert–Schmidt consumption
+
+The canonical energy and real norm are now consumed from accepted Tau Ceti's
+`HilbertSchmidt.Basic`; isometry invariance and block Pythagoras are consumed
+from its `Isometry` and `Pythagoras` modules. The duplicate local Pythagoras
+module, energy definition, real norm definition, and displaced laws are removed.
+The provenance census records the exact API and scope comparisons. No paper or
+visualization files are changed.
+
+Validation: `lake exe cache get` followed by the full default `lake build` passed
+**21,043 jobs**, with warnings treated as errors. The retirement removes a net
+361 lines of maintained Lean source.
+
+The next remaining representation comparison is the local extended norm and
+ideal family against accepted `OperatorIdealFamily.hilbertSchmidt`, together with
+its approximation-number energy/completeness consumers. The finite-source
+Frobenius identity in local `SchattenNorm.lean` still permits an incomplete target;
+the accepted theorem requires a complete target, so it is not deleted as an exact
+duplicate in this pass.
+
+
 ## Scope and evidence
 
 This reviews the uploaded `aiq-dkps-formalization` source snapshot at DKPS

@@ -645,3 +645,30 @@ The maintained historical namespace map is updated to the accepted declaration
 names. Source-facing theorem names and the 29-result completion denominator are
 unchanged; their proofs consume the accepted foundations directly.
 The `ForTauCeti` and `DavisKahan.All` builds passed after this retirement.
+
+
+### October 25: canonical Hilbert–Schmidt energy and block splitting
+
+At accepted pin `efded067c28ffca3483fd731674eb13b42543fbb`, the installed
+`HilbertSchmidt/Basic.lean`, `Isometry.lean`, and `Pythagoras.lean` subsume the
+corresponding local energy construction and splitting/invariance proofs.
+The pre-retirement donor source is preserved at DKPS `a3a2bd771`.
+This is verified accepted overlap; those upstream modules do not establish
+proof descent from the local Jon Crall / Claude Opus 5 implementation, so no
+new adaptation or PR-origin claim is made here.
+
+| Retired local mathematics | Accepted owner and scope | Consumer disposition |
+| --- | --- | --- |
+| `ContinuousLinearMap.hilbertSchmidtEnergy`, its defining equation, zero/scalar laws, matrix expansion, adjoint and basis independence | `TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Basic`; real/complex spaces, arbitrary basis indices, including infinite energy | Consumers use the accepted definition and its public equation. The adjoint identity has the opposite orientation, handled explicitly. |
+| `hilbertSchmidtEnergy_comp_left_le`, `hilbertSchmidtEnergy_comp_right_le`, and `enorm_adjoint` | `ContinuousLinearMap.hilbertSchmidtEnergy_comp_le_left`, `.hilbertSchmidtEnergy_comp_le_right`, and Mathlib's isometric-adjoint `enorm_map` | The right-ideal scalar factors are reordered explicitly in the block proof; no old-name aliases remain. |
+| `TauCeti.HilbertSchmidt.hilbertSchmidtEnergy_isometry_comp` and `.hilbertSchmidtEnergy_comp_isometry` | `ContinuousLinearMap.hilbertSchmidtEnergy_isometry_comp`, `.hilbertSchmidtEnergy_comp_coisometry`, and the two-sided theorem in `HilbertSchmidt.Isometry` | The column-model conjugation and Sylvester flow apply accepted results directly. |
+| All three theorems in local `HilbertSchmidt.Pythagoras` | `ContinuousLinearMap.tsum_hilbertSchmidtEnergy_comp_left`, `.tsum_hilbertSchmidtEnergy_comp_right`, `.tsum_tsum_hilbertSchmidtEnergy_comp` | The donor module is deleted. The block decomposition consumes the stronger rectangular theorem directly, without the unnecessary target basis parameter. |
+| Local real `hilbertSchmidtNorm` definition and its nonnegativity, zero, scalar, adjoint, triangle, ideal, and operator-domination proofs | Canonical `ContinuousLinearMap.hilbertSchmidtNorm` and its energy-based API in `HilbertSchmidt.Basic` | Source-facing norm statements retain their meaning. The paper square-root-of-approximation-energy identity follows directly from the native basis formula. |
+
+The donor retains the extended-valued ideal gauge and its genuinely remaining
+ideal/column-space results, along with three additional energy consequences.
+In particular this pass does not claim that the local extended-gauge family has
+already been replaced by `OperatorIdealFamily.hilbertSchmidt`. The latter is the
+next exact carrier/consumer comparison. The real-norm/extended-gauge identity now
+uses the accepted complete-target formula; the source-facing theorems already
+work between complete Hilbert spaces.
