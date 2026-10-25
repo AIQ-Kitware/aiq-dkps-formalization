@@ -1,11 +1,11 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** the actual signed optimal-phase basis of every
-finite complex Schatten local minimum for `1<p<2`, including critical
-angles and multiplicities, built on right-defect classification commit
-`e448f45a3`. Local-to-global, angle preservation, zero-angle fixation and
-arbitrary independent attaining right-defect replacements remain proved.
+**Current research source:** the actual canonical and relative signed-phase
+basis of every finite complex Schatten local minimum for `1<p<2`, and
+whole-space canonical commutation for acute pairs, built on signed-phase
+commit `667eaecb8`. Local-to-global, angle preservation, zero-angle fixation
+and complete arbitrary independent right-defect replacement remain proved.
 The complete all-angle Charbonnier global optimizer classification remains
 proved.
 **Earlier source snapshot used for manuscript and visualization updates:**
@@ -21,6 +21,92 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Canonical relative phases and acute whole-space commutation
+
+The named canonical-rotation bridge is now compiled. In
+`Geometry/Polar/PairedPhase.lean`,
+`nonacuteDirectRotation_apply_of_paired_phase_eigenvectors` proves that
+**every** completed canonical rotation has phases `theta,-theta` on the
+same paired vectors as any feasible transporter with phases `alpha,-beta`
+and nonnegative acute mean `theta=(alpha+beta)/2`. It includes zero mean,
+needs no finite dimension, and assumes a crossed-defect isometry as input.
+It therefore does not infer infinite-dimensional defect balance or ideal
+attainment from feasibility alone.
+
+The proof uses two reusable bridges:
+
+- `nonacuteDirectRotation_mul_cosine_eq_canonicalIntertwiner`, in
+  `NonacuteCompression.lean`, proves `R*C=QP+(1-Q)(1-P)` over either scalar
+  field on any complete Hilbert space with projected subspaces and a
+  supplied defect identification. No dimension, gap or closed-range
+  hypothesis is used.
+- `CosineKernel.cosine_apply_of_sinAngleOperator_eigenvector` recovers the
+  physical cosine eigenvalue from a physical sine eigenvector by positivity
+  and the intrinsic Pythagorean identity.
+
+`positive_gradient_canonical_relative_phase_basis_of_isLocalMinOn_complex`,
+in `SchattenOptimizerPhases.lean`, now retains the optimizer, canonical
+rotation and actual relative phase `Z=R^*U` on one complete paired basis.
+On each pair `R` has phases `+/-theta_i`, and `Z` has the **same** scalar
+`exp(i*eps_i*optimalPhase(p,theta_i))` on both vectors. This applies to every
+finite complex ambient local minimum at `1<p<2`, with every defect
+completion, all multiplicities, critical angles and arbitrary right-angle
+blocks elsewhere. The strengthened Proposition
+`prop:schatten-all-signed-phases` is included.
+
+`SchattenCanonicalCommutation.lean` proves
+`commute_canonicalRotation_of_isLocalMinOn_acute_transports_complex`:
+**every** local or global minimizing transporter commutes with canonical
+rotation on the whole ambient space when all principal angles are acute.
+Zero and critical angles, repeated angles, arbitrary finite rank and empty
+spaces are included. The actual gradient kernel is fixed by both operators;
+no supplied spectral frame or kernel restriction is assumed. The checked
+manuscript includes Corollary
+`cor:schatten-acute-canonical-commutation`.
+
+The supporting theorem
+`nonacuteDirectRotation_apply_eq_self_of_projections_eq` proves canonical
+fixation wherever `P*x=Q*x`, over arbitrary real/complex complete Hilbert
+spaces and every supplied defect completion. These geometric statements
+are classical polar/projection mathematics with no separate novelty claim.
+
+### Exact continuation after canonical commutation
+
+The remaining pure Schatten intrinsic classification must assemble the
+relative scalar-real-part equation on each geometric equal-angle space
+and invoke the existing unique projection/involution API, then construct
+and certify every compatible projection parameter. The common paired
+basis and its named canonical action are now proved, so that earlier
+obstruction is closed.
+
+A useful next consequence is **canonical uniqueness at and below the
+cutoff**, including the critical angle. An angle-bound transfer can avoid
+matching eigenvalue lists: insert `f(t)=max(t-cap,0)` in
+`Submodule.sum_principalAngles_eq_paired_phases_add_comap_complex`.
+If every original principal angle is at most a nonnegative `cap`, its
+left sum is zero. All terms on the right are nonnegative, forcing every
+actual paired mean to be at most `cap`. At `cap=criticalAngle(p)`, the
+named optimal phases vanish, so the optimizer and canonical rotation
+agree on the paired basis and on the acute gradient kernel. Formalize this
+transfer and the resulting whole-space equality rather than infer it from
+the signed-basis statement alone.
+
+For the full nonacute relative equation, assemble the same positive-angle
+phase factors independently of the already classified right-defect
+identification. The existing generic phase/defect uniqueness and compatible
+projection frame APIs can supply the final iff assembly. Parameter topology,
+real matching and ideal extensions remain open. Historical priority of
+the complete transport classification remains provisional.
+
+Validation: `lake exe cache get` preceded the focused builds and final
+`lake build DavisKahan.All ForTauCeti`, which passed (10,415 jobs;
+`/tmp/schatten-canonical-relative-final-build.log`). The new geometry and
+acute-commutation modules have no new warnings. BibTeX and repeated
+pdfLaTeX passes produced
+`/tmp/dk-schatten-canonical-relative-paper/dk-schatten-canonical-relative.pdf`,
+with no unresolved references/citations, multiply defined labels or overfull
+boxes. `git diff --check` passed.
 
 ## Actual signed optimal phases of every pure Schatten optimizer
 
@@ -61,26 +147,15 @@ below the threshold the two signed expressions coincide, as the named
 phase is zero. The checked manuscript includes Proposition
 `prop:schatten-all-signed-phases`.
 
-### Exact remaining intrinsic parameter bridge
+### Intrinsic bridge at that snapshot, now closed
 
-The signed basis and scalar uniqueness are now proved. To obtain the
-intrinsic equal-angle projection parameter, prove that the actual canonical
-rotation has eigenvalues `exp(+/- i*theta_i)` on these same two vectors.
-A reusable geometric proof should compute the canonical intertwiner on a
-reflection-paired phase eigenvector as `cos(theta)*exp(i*theta)` and use
-`R*C = intertwiner` with `cos(theta)>0`. The sine equation and the intrinsic
-Pythagorean identity already give `C v=cos(theta) v`.
-
-Then `Z=R^*U` has the same eigenvalue `exp(i*eps_i*optimalPhase(p,theta_i))`
-on both paired vectors. Assemble commutation with `R` and source reflection
-on the positive-cosine space, and the scalar-real-part equation on each
-intrinsic equal-angle space. `UnitaryScalarRealPart.lean` then gives its
-unique projection parameter whenever the phase is nonzero. Construct and
-prove attainment for every compatible projection parameter, retaining the
-already proved arbitrary defect parameter. The existing smoothed
-`exists_subspace_paired_rotation_projection_basis_complex` and signed
-projection constructions supply a model for that converse, but its pure
-Schatten cost theorem must still be proved.
+The newer entry above proves the named canonical action on the same paired
+basis, its actual relative phases and acute whole-space commutation.
+The remaining step is the intrinsic equal-angle scalar-real-part/projection
+equation and converse compatible-projection attainment, with the already
+proved arbitrary defect parameter. The existing smoothed projection frame
+and signed projection constructions provide a proof model; their pure
+Schatten cost certification remains required.
 
 This signed-basis theorem is **necessary structure for every optimizer**.
 It does not yet certify the intrinsic phase-projection iff theorem,

@@ -125,6 +125,46 @@ theorem nonacuteDirectRotation_compressions_eq_cosine
   exact ⟨compression_eq_of_transport_gram P Q R C hP hRunit hC hskew hCP hRC htrans hsqP,
     compression_eq_of_transport_gram Pc Qc R C hPc hRunit hC hskew hCPc hRC htransc hsqPc⟩
 
+/-- The completed direct rotation recovers the canonical intertwiner
+when multiplied by the intrinsic cosine. The defect completion is arbitrary;
+no dimension, acuteness or closed-range assumption is needed. -/
+theorem nonacuteDirectRotation_mul_cosine_eq_canonicalIntertwiner
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (D : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    nonacuteDirectRotation U V D * Proposition35.section3CosAngleOperator U V =
+      spectraCanonicalIntertwiner U V := by
+  let R := nonacuteDirectRotation U V D
+  let C := Proposition35.section3CosAngleOperator U V
+  let P := U.starProjection
+  let Pc := Uᗮ.starProjection
+  have hRunit := nonacuteDirectRotation_mem_unitary U V D
+  have hC : IsSelfAdjoint C := ((ContinuousLinearMap.nonneg_iff_isPositive).mp
+    (Proposition35.section3CosAngleOperator_nonneg U V)).isSelfAdjoint
+  have hsum : P + Pc = 1 := by
+    dsimp only [P, Pc]
+    rw [Submodule.starProjection_orthogonal' U]
+    abel
+  obtain ⟨hP, hPc⟩ := nonacuteDirectRotation_compressions_eq_cosine U V D
+  have hdiag : P * R * P + Pc * R * Pc = C := by
+    rw [hP, hPc, ← mul_add, hsum, mul_one]
+  have hPs : star P = P := (isSelfAdjoint_starProjection U).star_eq
+  have hPcs : star Pc = Pc := (isSelfAdjoint_starProjection Uᗮ).star_eq
+  have hdiagstar := congrArg star hdiag
+  simp only [star_add, star_mul, hPs, hPcs, hC.star_eq] at hdiagstar
+  have hRP : R * P * star R = V.starProjection := by
+    rw [nonacuteDirectRotation_intertwines U V D, mul_assoc,
+      Unitary.mul_star_self_of_mem hRunit, mul_one]
+  have hRPc : R * Pc * star R = Vᗮ.starProjection := by
+    dsimp only [Pc]
+    rw [Submodule.starProjection_orthogonal' U, mul_sub, mul_one, sub_mul,
+      Unitary.mul_star_self_of_mem hRunit, hRP, Submodule.starProjection_orthogonal' V]
+  change R * C = V.starProjection * P + Vᗮ.starProjection * Pc
+  rw [← hdiagstar, mul_add]
+  calc
+    _ = (R * P * star R) * P + (R * Pc * star R) * Pc := by
+      simp only [mul_assoc]
+    _ = _ := by rw [hRP, hRPc]
+
 /-- Reflection in the source reverses the skew part of the completed
 nonacute rotation, including on the right-angle defect spaces. -/
 theorem nonacuteDirectRotation_skew_reflection

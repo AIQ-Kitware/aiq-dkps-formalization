@@ -694,8 +694,15 @@ writing $J=2P-I$,
 \end{aligned}
 \]
 The vectors $Jv_i$ form the paired negative-gradient basis.
-Thus each pair has a common signed optimal phase shift of the phases
-$(\theta_i,-\theta_i)$. At and below the transition both choices agree.
+For every completed canonical rotation $R$, the same basis satisfies
+\[
+ Rv_i=e^{i\theta_i}v_i,\qquad RJv_i=e^{-i\theta_i}Jv_i,
+ \qquad
+ R^*Ww=e^{i\varepsilon_i\delta_p(\theta_i)}w
+ \quad(w=v_i,Jv_i).
+\]
+Thus each pair has a common signed optimal phase shift of the canonical
+phases $(\theta_i,-\theta_i)$. At and below the transition both choices agree.
 \end{proposition}
 
 \begin{proof}
@@ -712,6 +719,34 @@ $d_i=\delta_p(\theta_i)$. Ordering $\alpha_i,\beta_i$ therefore gives
 one of the two sign choices in the statement. The sine equations follow
 from the actual reflection-paired eigenvector equations. The gradient
 anticommutes with $J$, which identifies the negative spectral space.
+
+On $v_i$, the canonical intertwiner $A=QP+(I-Q)(I-P)$ and intrinsic
+cosine $C$ satisfy
+\[
+ Av_i=\cos\theta_i\,e^{i\theta_i}v_i,\qquad
+ Cv_i=\cos\theta_i\,v_i.
+\]
+Every completed canonical rotation satisfies $RC=A$. Since
+$\cos\theta_i>0$, cancellation gives $Rv_i=e^{i\theta_i}v_i$.
+The relation $RJ=JR^*$ gives the paired equation. Dividing the optimizer
+phases by these canonical phases proves the relative-phase formula.
+\end{proof}
+
+\begin{corollary}[Acute optimizers commute with canonical rotation]
+\label{cor:schatten-acute-canonical-commutation}
+If all principal angles are strictly below $\pi/2$, every local or
+global minimizing transporter commutes with the canonical rotation.
+Repeated, zero and critical angles are included.
+\end{corollary}
+
+\begin{proof}
+On the positive and negative gradient spaces, the preceding proposition
+gives a common eigenbasis. On the gradient kernel, acuteness and
+Proposition~\ref{prop:schatten-optimal-kernel} make the optimizer identity.
+Source invariance then makes the source and target projections agree
+there. Canonical rotation fixes every vector where these projections
+agree, so it too is identity on that kernel. The complete orthogonal
+decomposition proves commutation on the whole ambient space.
 \end{proof}
 
 \begin{proposition}[All right-angle defect choices]

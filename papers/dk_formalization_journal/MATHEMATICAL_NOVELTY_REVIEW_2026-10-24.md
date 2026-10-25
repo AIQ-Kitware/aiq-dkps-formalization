@@ -12,6 +12,37 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Named canonical relative phases and acute commutation
+
+The signed phases are now identified relative to the **actual named canonical
+rotation**. `positive_gradient_canonical_relative_phase_basis_of_isLocalMinOn_complex`
+retains its geometric phases `+/-theta_i` and the actual relative phase
+`R^*U`, with the same scalar `exp(i*eps_i*optimalPhase(p,theta_i))` on
+both reflection-paired vectors. This is compiled for every finite complex
+ambient local minimum at `1<p<2`, every completion on the right defect,
+all multiplicities and critical angles. The checked signed-phase
+proposition includes these canonical and relative actions.
+
+`commute_canonicalRotation_of_isLocalMinOn_acute_transports_complex`
+also proves whole-space commutation for **every acute optimizer**, including
+zero/critical/repeated angles and an empty ambient space. It uses the
+actual paired basis and proves identity for both operators on the actual
+gradient kernel. The checked manuscript includes Corollary
+`cor:schatten-acute-canonical-commutation`.
+
+The geometric bridge is dimension-free: for any feasible paired phase
+eigenvector of nonnegative acute mean, the canonical intertwiner has
+coefficient `cos(theta)*exp(i*theta)`, its positive modulus has coefficient
+`cos(theta)`, and `R*C=intertwiner` gives the canonical eigenvalue. A supplied
+defect isometry remains an explicit hypothesis; no infinite ideal or
+index-balance claim follows. These are classical polar/projection identities
+with no independent novelty claim.
+
+The intrinsic scalar-real-part/projection parameter theorem and converse
+attainment are still pending. The now-proved canonical relative basis
+removes the prior canonical-action obstruction. Historical priority of the
+complete angle-dependent optimizer classification remains **provisional**.
+
 ## Signed optimal phases on every actual positive-gradient space
 
 The positive acute phase structure is now a compiled **every-optimizer**
@@ -35,8 +66,8 @@ are packaging and consequences of the already proved scalar diagram;
 no separate historical novelty is claimed for naming the phase or
 retaining the branch bounds.
 
-The intrinsic operator parameter theorem is still pending: identify the
-canonical rotation on these same paired eigenvectors, assemble the
+The newer entry above identifies canonical rotation on these same paired
+eigenvectors. The intrinsic operator parameter theorem still must assemble the
 relative phase on each geometric equal-angle multiplicity space, and prove
 attainment of every compatible projection parameter. The right-defect
 parameter and arbitrary attaining replacements are already compiled.

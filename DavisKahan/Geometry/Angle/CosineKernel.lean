@@ -67,6 +67,33 @@ theorem sinAngleOperator_apply_eq_self_iff_cosine_eq_zero
         RCLike.ofReal_one, one_mul, one_smul] using hpy)
     simpa only [ContinuousLinearMap.coe_coe, RCLike.ofReal_one, one_smul] using h
 
+/-- A physical sine eigenvector is an eigenvector of the intrinsic
+cosine with the corresponding nonnegative cosine eigenvalue. -/
+theorem cosine_apply_of_sinAngleOperator_eigenvector
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (theta : ℝ) (hθ : theta ∈ Set.Icc 0 (Real.pi / 2)) (x : H)
+    (hx : K.sinAngleOperator L x = (Real.sin theta : 𝕜) • x) :
+    section3CosAngleOperator K L x = (Real.cos theta : 𝕜) • x := by
+  let C := section3CosAngleOperator K L
+  have hpy := congrArg (fun A : H →L[𝕜] H => A x)
+    (section3CosAngleOperator_sq_add_sinAngleOperator_sq K L)
+  change C (C x) + K.sinAngleOperator L (K.sinAngleOperator L x) = x at hpy
+  rw [hx, map_smul, hx, smul_smul] at hpy
+  have htrig : (Real.cos theta : 𝕜) * (Real.cos theta : 𝕜) +
+      (Real.sin theta : 𝕜) * (Real.sin theta : 𝕜) = 1 := by
+    exact_mod_cast (show Real.cos theta * Real.cos theta + Real.sin theta * Real.sin theta = 1 by
+      nlinarith [Real.sin_sq_add_cos_sq theta])
+  have hCC : C (C x) = ((Real.cos theta : 𝕜) * (Real.cos theta : 𝕜)) • x := by
+    apply add_right_cancel (b := ((Real.sin theta : 𝕜) * (Real.sin theta : 𝕜)) • x)
+    rw [hpy, ← add_smul, htrig, one_smul]
+  have hc : 0 ≤ Real.cos theta := Real.cos_nonneg_of_mem_Icc
+    ⟨by linarith [hθ.1, Real.pi_pos], hθ.2⟩
+  have hC : C.IsPositive := ContinuousLinearMap.nonneg_iff_isPositive.mp
+    (section3CosAngleOperator_nonneg K L)
+  have h := hC.toLinearMap.apply_eq_smul_of_apply_apply_eq_smul hc
+    (by simpa only [ContinuousLinearMap.coe_coe] using hCC)
+  simpa only [ContinuousLinearMap.coe_coe] using h
+
 /-- Preserving the intrinsic sine operator also preserves the intrinsic
 cosine. No unitarity or finite-dimensional hypothesis is needed. -/
 theorem commute_section3CosAngleOperator_of_commute_sinAngleOperator
