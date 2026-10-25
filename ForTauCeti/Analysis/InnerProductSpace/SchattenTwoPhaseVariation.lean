@@ -25,15 +25,6 @@ namespace TauCeti
 
 open scoped ENNReal
 
-private theorem smul_compression_tangent
-    {A : Type*} [CStarAlgebra A] (S V H : A) (lambda d : ℂ)
-    (hSV : S * V = lambda • S) :
-    d • (S * (V * (Complex.I • H)) * S) =
-      (d * (Complex.I * lambda)) • (S * H * S) := by
-  rw [← mul_assoc S V (Complex.I • H), hSV, smul_mul_smul, smul_mul_assoc, smul_smul]
-  congr 1
-  ring
-
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
 /-- At a two-phase unitary with equal scalar gradient values, the actual
@@ -68,32 +59,21 @@ theorem hasDerivAt_schattenUnitaryGradient_two_phase
   have hfb : schattenPhaseExtension p b = (schattenPhaseDerivative p a : ℂ) :=
     (schattenPhaseExtension_eq_of_norm_eq_one p b (Complex.norm_exp_ofReal_mul_I beta)).trans
       (congrArg Complex.ofReal hlevel.symm)
-  have hd := hasDerivAt_cfc_of_affine_projection (schattenPhaseExtension p)
-    a b (schattenPhaseDerivative p a : ℂ) hab hfa hfb (Metric.sphere (0 : ℂ) 1)
+  have hd := hasDerivAt_cfc_unitary_tangent_of_affine_projection (schattenPhaseExtension p)
+    a b (schattenPhaseDerivative p a : ℂ) (da : ℂ) (db : ℂ) hab hfa hfb (Metric.sphere (0 : ℂ) 1)
     (isCompact_sphere 0 1) (continuousOn_schattenPhaseExtension_circle p hp)
     (differentiableAt_schattenPhaseExtension p a (Complex.norm_exp_ofReal_mul_I alpha) hne_a)
     (differentiableAt_schattenPhaseExtension p b (Complex.norm_exp_ofReal_mul_I beta) hne_b)
-    U x (U x * (Complex.I • H)) hU (fun t => isStarNormal_of_mem_unitary (hunit t))
+    (schattenPhaseExtension_deriv_mul_I_exp p alpha da hne_a hda)
+    (schattenPhaseExtension_deriv_mul_I_exp p beta db hne_b hdb)
+    U x H hU (fun t => isStarNormal_of_mem_unitary (hunit t))
     (fun t => spectrum.subset_circle_of_unitary (hunit t)) P hP hrepr
   have hfun : (fun t => schattenUnitaryGradient p (U t)) =
       (fun t => cfc (schattenPhaseExtension p) (U t)) := by
     funext t
     exact schattenUnitaryGradient_eq_cfc_phaseExtension p ⟨U t, hunit t⟩
   rw [← hfun] at hd
-  have hlow : (1 - P) * U x = a • (1 - P) := by
-    rw [hrepr]
-    simp only [mul_add, mul_smul_comm, mul_one,
-      hP.isIdempotentElem.one_sub_mul_self, smul_zero, add_zero]
-  have hhigh : P * U x = b • P := by
-    rw [hrepr]
-    simp only [mul_add, mul_smul_comm, mul_one, hP.isIdempotentElem.eq]
-    rw [sub_smul]
-    abel
-  apply hd.congr_deriv
-  rw [smul_compression_tangent (1 - P) (U x) H a _ hlow,
-    smul_compression_tangent P (U x) H b _ hhigh,
-    schattenPhaseExtension_deriv_mul_I_exp p alpha da hne_a hda,
-    schattenPhaseExtension_deriv_mul_I_exp p beta db hne_b hdb]
+  exact hd
 
 variable [FiniteDimensional ℂ E]
 

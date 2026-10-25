@@ -50,6 +50,53 @@ theorem commute_unitaryPhaseGradient
     Commute (unitaryPhaseGradient g U) U :=
   (Commute.refl U).cfc (star_comm_self : Commute (star U) U) _
 
+/-- Every continuous feasible Hermitian exponential variation inherits
+local minimality from a unitary conjugacy constraint. The cost is arbitrary
+and the Hilbert space need not be finite dimensional. -/
+theorem isLocalMin_unitary_right_variation_of_isLocalMinOn_conjugacy
+    (F : (E →L[ℂ] E) → ℝ)
+    (P Q : E →L[ℂ] E) (U : unitary (E →L[ℂ] E))
+    (htrans : (U : E →L[ℂ] E) * P * star (U : E →L[ℂ] E) = Q)
+    (hmin : IsLocalMinOn F
+      {W | W ∈ unitary (E →L[ℂ] E) ∧ W * P * star W = Q}
+      (U : E →L[ℂ] E))
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H) (hHP : Commute H P) :
+    IsLocalMin
+      (fun t : ℝ => F ((U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H)))) 0 := by
+  let +nondep : NormedAlgebra ℚ (E →L[ℂ] E) := .restrictScalars ℚ ℂ (E →L[ℂ] E)
+  let V : ℝ → E →L[ℂ] E := fun t => NormedSpace.exp (t • (Complex.I • H))
+  let a : ℝ → E →L[ℂ] E := fun t => (U : E →L[ℂ] E) * V t
+  have hVunit (t : ℝ) : V t ∈ unitary (E →L[ℂ] E) := by
+    apply NormedSpace.exp_mem_unitary_of_mem_skewAdjoint
+    rw [skewAdjoint.mem_iff]
+    simp [star_smul, hH.star_eq]
+  have hVP (t : ℝ) : Commute (V t) P :=
+    ((hHP.smul_left Complex.I).smul_left t).exp_left
+  have ha0 : a 0 = (U : E →L[ℂ] E) := by
+    simp only [a, V, zero_smul, NormedSpace.exp_zero, mul_one]
+  have hfeasible (t : ℝ) : a t ∈
+      {W | W ∈ unitary (E →L[ℂ] E) ∧ W * P * star W = Q} := by
+    refine ⟨mul_mem U.2 (hVunit t), ?_⟩
+    change ((U : E →L[ℂ] E) * V t) * P * star ((U : E →L[ℂ] E) * V t) = Q
+    rw [star_mul]
+    calc
+      _ = (U : E →L[ℂ] E) * (V t * P) * star (V t) * star (U : E →L[ℂ] E) := by
+        simp only [mul_assoc]
+      _ = (U : E →L[ℂ] E) * (P * V t) * star (V t) * star (U : E →L[ℂ] E) := by
+        rw [(hVP t).eq]
+      _ = (U : E →L[ℂ] E) * P * (V t * star (V t)) * star (U : E →L[ℂ] E) := by
+        simp only [mul_assoc]
+      _ = Q := by rw [(Unitary.mem_iff.mp (hVunit t)).2, mul_one, htrans]
+  have ha : Continuous a := by
+    dsimp [a, V]
+    fun_prop
+  have hmin' := hmin
+  rw [← ha0] at hmin'
+  have hcurve := hmin'.comp_continuousOn
+    (s := Set.univ) (fun t _ => hfeasible t) ha.continuousOn (Set.mem_univ 0)
+  rw [isLocalMinOn_univ_iff] at hcurve
+  exact hcurve
+
 omit [CompleteSpace E] in
 private theorem re_trace_mul_of_eigenbasis {n : ℕ}
     (b : OrthonormalBasis (Fin n) ℂ E) (A B : E →L[ℂ] E)

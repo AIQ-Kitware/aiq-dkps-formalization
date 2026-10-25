@@ -733,6 +733,103 @@ $N_g$ and apply the two-point normal spectral calculus. At zero level
 the candidates are $1$ and $-1$, proving the reflection representation.
 \end{proof}
 
+\begin{proposition}[Two-phase second variation and reflection restrictions]
+\label{prop:smoothed-two-phase-hessian}
+Let $\tau>0$ and put
+\[
+ \kappa_\tau(t)=
+ \frac{(\tau^2+2)\cos t-\cos^2t-1}
+ {(\tau^2+2-2\cos t)\sqrt{\tau^2+2-2\cos t}}.
+\]
+Then $\frac{d}{dt}h_\tau(e^{it})=\kappa_\tau(t)$ for every real $t$.
+The curvature is positive exactly when $\cos t>\eta^{-2}$ and negative
+exactly when $\cos t<\eta^{-2}$. In particular,
+\[
+ \kappa_\tau(0)=\tau^{-1},\qquad
+ \kappa_\tau(\pi)=-\frac1{\sqrt{\tau^2+4}}.
+\]
+Suppose $A$ is an orthogonal projection and
+\[
+ W=e^{i\alpha}(I-A)+e^{i\beta}A,\qquad
+ e^{i\alpha}\ne e^{i\beta},\qquad
+ h_\tau(e^{i\alpha})=h_\tau(e^{i\beta}).
+\]
+For every Hermitian $H$, the literal Charbonnier cost satisfies
+\[
+ \left.\frac{d^2}{dt^2}\Psi_\tau(We^{itH})\right|_{t=0}
+ =\kappa_\tau(\alpha)\|(I-A)H(I-A)\|_{\mathrm{HS}}^2
+  +\kappa_\tau(\beta)\|AHA\|_{\mathrm{HS}}^2.
+\]
+At a scalar unitary $W=e^{i\alpha}I$, the second variation is
+$\kappa_\tau(\alpha)\|H\|_{\mathrm{HS}}^2$.
+Thus every Hermitian direction has zero second variation when
+$\cos\alpha=\eta^{-2}$, including arbitrary critical multiplicity.
+At a local minimum among all transports from $P$ to $Q$, this expression
+is nonnegative for every Hermitian $H$ commuting with $P$.
+Thus an actual reflection transporter $W=I-2A$ at a local minimum obeys
+\[
+ \tau\|AHA\|_{\mathrm{HS}}^2\leq
+ \sqrt{\tau^2+4}\,\|(I-A)H(I-A)\|_{\mathrm{HS}}^2.
+\]
+Every orthogonal projection $B$ with $AB=B$ and $[B,P]=0$ must then vanish.
+
+For the same distinct balanced phases, let
+$V=e^{-i\alpha}(I-B)+e^{-i\beta}B$, where $B$ is an orthogonal projection,
+and assume $\cos\beta<\eta^{-2}$. Put $X=AB+BA$.
+If $AB\ne0$, then
+\[
+ \left.\frac{d^2}{dt^2}
+   \bigl(\Psi_\tau(We^{itX})+\Psi_\tau(Ve^{itX})\bigr)\right|_{t=0}<0.
+\]
+Consequently, if this paired cost has a local minimum at $t=0$, then $AB=0$.
+\end{proposition}
+
+\begin{proof}
+Differentiating
+$h_\tau(e^{it})=\sin t/\sqrt{\tau^2+2-2\cos t}$ gives the displayed
+curvature. Its numerator factors as
+$(\eta^2-\cos t)(\cos t-\eta^{-2})$. Since $\eta>1$, the first
+factor and the denominator are positive. This proves the sign criteria
+and the endpoint values.
+
+On the unit circle the symbol has the complex extension
+\[
+ \widetilde h_\tau(z)=
+ (\tau^2+2-z-z^{-1})^{-1/2}\frac{z-z^{-1}}{2i}.
+\]
+The principal complex power is differentiable near every circle point:
+the radicand there equals $\tau^2+|z-1|^2>0$, including at $z=1$.
+The two-point functional-calculus derivative has zero mixed terms
+because the symbol takes the same value at the two spectral points.
+Its diagonal terms, evaluated on $W(iH)$, give
+\[
+ \left.\frac{d}{dt}G_\tau(We^{itH})\right|_{t=0}
+ =\kappa_\tau(\alpha)(I-A)H(I-A)+\kappa_\tau(\beta)AHA.
+\]
+Differentiate the first-variation identity and use cyclicity of the
+finite trace to obtain the Hessian formula. This uses the classical
+divided-difference mechanism of spectral Hessians; see, for comparison,
+\citet[Theorem~3.3]{lewis2001twice} for real symmetric spectral functions.
+At a scalar operator, the continuous single divided difference gives
+the derivative as the scalar derivative times the operator tangent.
+This proves the coalesced-phase formula without introducing a second
+spectral point.
+
+If $[H,P]=0$, the curve $We^{itH}$ remains in the full transport fiber.
+The second-derivative test proves nonnegativity and, at a reflection,
+the compression inequality. For $H=B$ with $AB=B$ and $[B,P]=0$,
+the positive-space compression vanishes while $ABA=B$. Hence $B=0$.
+
+Finally, $X$ is Hermitian and
+$(I-A)X(I-A)=(I-B)X(I-B)=0$.
+The two remaining compressions are $AXA=2ABA$ and $BXB=2BAB$.
+If $AB\ne0$, then $ABA\ne0$, since it is the positive product of
+$AB$ with its adjoint. The two curvature coefficients equal
+$\kappa_\tau(\beta)<0$, because curvature is even. The sum of the
+two nonnegative compression squares is positive, proving the strict
+negative second variation and the local-minimum exclusion.
+\end{proof}
+
 \begin{corollary}[Complementary right-angle pairs]
 \label{cor:smoothed-complementary-right}
 Suppose $Q=I-P$ and $n=2r$. A unitary transporter $W$ is globally

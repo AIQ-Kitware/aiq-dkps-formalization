@@ -17,7 +17,9 @@ component counts, manifold dimensions, smoothed local-to-global,
 unrestricted real matching and operator-ideal optimization remain open.
 The local Charbonnier analysis now supplies actual first variations,
 source-reflection stationarity, paired two-phase gradient blocks and the
-sharp gradient bound; second-variation exclusions remain to be proved.
+sharp gradient bound. Its actual two-phase Hessian, paired overlap exclusion,
+ambient reflection compression test and coalesced-phase Hessian are now
+compiled; extracting and assembling all actual local blocks remains open.
 **Manuscript and teaching-deck update source:** `427169ce38b5` (25 October
 2026), incorporating the completed full complex optimizer classification,
 local-to-global theorem, normalized parameter bijection and exact counts.
@@ -34,6 +36,125 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Actual Charbonnier second variation and reflection tests (25 October)
+
+`SmoothedPhaseCurvature.lean` proves
+`hasDerivAt_smoothedPhaseDerivative_exp` at **every real phase** for
+`tau>0`, exact positive/negative curvature iff the cosine is above/below
+`eta^-2`, evenness, and the endpoint curvatures `1/tau` at identity and
+`-1/sqrt(tau^2+4)` at reflection. No displacement endpoint is removed.
+`CharbonnierPhaseSymbol.lean` supplies the complex extension, equality on
+the entire unit circle and complex differentiability at every circle point.
+Positive smoothing keeps its radicand strictly positive even at `z=1`.
+
+`SmoothedTwoPhaseVariation.lean` proves
+`hasDerivAt_smoothedUnitaryGradient_two_phase` on arbitrary complete complex
+Hilbert spaces and `hasDerivAt_deriv_smoothed_unitary_two_phase` for the
+**literal singular-value** objective in finite dimension. The hypotheses
+are an actual unitary two-phase representation by an actual orthogonal
+projection, distinct scalar phases and equal scalar gradient values.
+There is no simple-eigenvalue or nonzero-displacement hypothesis. The two
+coefficients are the explicit scalar curvatures and the Hessian contains
+only the two diagonal compression Frobenius squares. Coincident phases
+are covered separately by `SmoothedScalarVariation.lean`:
+`hasDerivAt_smoothedUnitaryGradient_scalar` is dimension-free and
+`hasDerivAt_deriv_smoothed_unitary_scalar` gives the actual finite cost
+Hessian `curvature*||H||_HS^2`. The specialized
+`hasDerivAt_deriv_smoothed_unitary_critical_scalar` proves zero second
+variation for **every** Hermitian direction at a critical scalar phase,
+with arbitrary multiplicity. It asserts neither local minimality nor
+higher-order growth of an unpaired scalar block.
+
+`SmoothedNoMixing.lean` proves
+`paired_phase_overlap_has_negative_second_variation` and
+`overlap_eq_zero_of_isLocalMin_paired_cost`: for actual opposite balanced
+two-phase blocks, overlap of the negative-curvature projections gives a
+strict negative second variation in the common direction `A*B+B*A`.
+The exact hypothesis is `cos(beta)<eta^-2`, with **no** unproved angular
+branch parametrization imposed. The zero-level pair `alpha=0,beta=pi`
+is allowed. These are paired-block theorems. They do not supply the block
+coordinates or prove ambient feasibility of their orthogonal extension.
+
+`SmoothedReflectionSecondVariation.lean` proves the **all-ambient**
+`two_phase_second_variation_nonneg_of_isLocalMinOn_transports`: at an actual
+two-phase local minimum, every Hermitian source-commuting direction obeys
+the Hessian inequality. Its reflection specialization
+`reflection_compression_bound_of_isLocalMinOn_transports` says
+`tau*||A*H*A||_HS^2 <= sqrt(tau^2+4)*||(1-A)*H*(1-A)||_HS^2` for an actual
+`U=I-2*A`. If the second compression vanishes, the first must vanish.
+`negative_subprojection_eq_zero_of_isLocalMinOn_reflection_transports`
+therefore excludes every nonzero negative spectral subprojection commuting
+with the source. These ambient statements allow arbitrary supplied
+conjugacy operators `P,Q`; no projection assumption is needed there.
+They do **not** yet descend local minimality to an arbitrary invariant
+reflection restriction of a larger transporter.
+
+The common donor `TwoPointDerivative.lean` now supplies the tangent form
+`hasDerivAt_cfc_unitary_tangent_of_affine_projection` for any complex
+C-star algebra, as well as `hasDerivAt_cfc_of_scalar` for the coalesced
+case. Both Schatten and Charbonnier consume the tangent theorem; the old
+private Schatten compression calculation is removed. The common donor
+`UnitarySpectralVariation.lean` also supplies
+`isLocalMin_unitary_right_variation_of_isLocalMinOn_conjugacy`, for any
+real-valued cost on an arbitrary complete complex Hilbert space. Both
+penalties' existing stationarity proofs consume it, replacing their
+duplicated feasibility arguments without changing their public statements.
+The manuscript now includes `prop:smoothed-two-phase-hessian`.
+
+Independent six-dimensional checks used random conjugated rank-three
+projections and Hermitian directions at `tau=0.7`. The Hessian agreed with
+a central difference (step `2e-4`) to `7.11e-8` for balanced phases
+`0.3,2.2834463683891806` and to `2.92e-8` for the identity/reflection pair.
+This tests repeated phases and zero displacement; it is diagnostic only.
+
+The author-hosted Lewis--Sendov paper, *Twice differentiable spectral
+functions* (2001), Theorem 3.3, was checked directly: it gives the Hessian
+of a real symmetric spectral function, including repeated eigenvalues.
+Its divided-difference mechanism is classical precedent, not a theorem
+classifying this prescribed-projection fiber. No independent historical
+novelty is claimed for the calculus or second-order necessary tests here.
+
+Validation: the focused curvature, two-phase, paired no-mixing,
+reflection and scalar/coalesced modules passed. The final
+`lake build DavisKahan.All ForTauCeti` passed (10,497 jobs;
+`/tmp/smoothed-second-final-build.log`), including all existing Schatten
+consumers of the shared donors. Every build was preceded by
+`lake exe cache get`. No warnings came from the newly authored modules
+or modified common donors; legacy module-import warnings remain elsewhere.
+The journal passed pdfLaTeX, BibTeX and two additional pdfLaTeX passes to
+`/tmp/dk-smoothed-second-paper/dk-smoothed-second.pdf` (59 pages), with no
+warnings, overfull boxes, unresolved references or duplicate labels in the
+final log. `git diff --check` passed. The 29-result source inventory,
+unrelated submodules and existing untracked files were left untouched.
+
+### Exact remaining local-to-global obligations
+
+The second-variation identity itself is closed for distinct balanced phases.
+The next useful endpoint is the **actual ambient no-overlap theorem**:
+construct opposite unitary restrictions on each positive submaximal gradient
+level using source reflection, put their scalar candidates in the required
+opposite angular form, and extend the common direction orthogonally while
+preserving the source. Follow `SchattenGradientNoMixing.lean` and
+`SchattenFeasibleBlocks.lean`, consuming the already compiled
+`PairedInvolutionDecomposition` geometry rather than introducing a new frame
+hypothesis. This needs Charbonnier orthogonal-block additivity and isometric
+coordinate invariance of the literal cost, obtainable from its spectral
+trace or weighted nuclear identity. Do not substitute a prescribed-block
+result for the actual ambient endpoint.
+
+At the maximal level the scalar candidates coalesce. Its analytic Hessian
+is now proved, but the actual scalar/unitary restriction and its cost must
+be identified in the gradient decomposition. The actual zero-gradient kernel
+is already a reflection restriction, but local minimality must first be
+transferred to it and its actual two-projection decomposition. Use the new
+reflection compression inequality to exclude nonoptimal negative/folded
+blocks, retaining all right-angle blocks. Then assemble actual local block
+costs and compare with the proved global angle sum. None of this follows
+from applying the global optimizer iff to a stationary point.
+
+The full smoothed local-to-global theorem, unrestricted real matching,
+component dimensions and operator-ideal optimization remain open.
 
 ## Actual Charbonnier stationarity and two-phase gradient blocks (25 October)
 
@@ -114,25 +235,11 @@ warnings, overfull boxes, unresolved references or duplicate labels in the
 final log. `git diff --check` passed. The 29-result source inventory and
 unrelated submodules are unchanged.
 
-### Exact remaining local-to-global obligations
-
-The ambient first variation, actual stationarity, paired reducing squared-
-gradient spaces, two-phase restrictions and zero-kernel reflection are now
-compiled. The next useful lemma is the **actual two-phase second variation**:
-use the analytic extension
-`(tau^2+2-z-z^-1)^(-1/2)*(z-z^-1)/(2*i)` of the phase symbol, then consume
-`hasDerivAt_cfc_of_affine_projection` as in
-`ForTauCeti/Analysis/InnerProductSpace/SchattenTwoPhaseVariation.lean`.
-For `tau>0` its unit-circle radicand is at least `tau^2>0`, including at
-`z=1`, so no displacement endpoint should be assumed away.
-
-Use that derivative to prove the paired-projection overlap exclusion on
-submaximal levels, treat the maximal/coalesced level, and prove descent
-for every nonoptimal zero-gradient reflection block. Then assemble the
-actual local block costs and the exact global value. The existing global
-optimizer iff cannot be applied to a merely stationary transporter.
-Smoothed local-to-global, real matching, component dimensions and ideal
-optimization remain open; the scope of the active research goal is unchanged.
+The second-variation obligations recorded with this first-variation layer
+are superseded by the preceding section: the distinct-phase Hessian and
+paired no-overlap theorem and scalar/coalesced Hessian now compile. Ambient
+block extraction, identification of the maximal scalar restriction,
+exceptional-block restriction and value assembly remain open.
 
 ## Complete effective Charbonnier coordinates and topology (25 October)
 

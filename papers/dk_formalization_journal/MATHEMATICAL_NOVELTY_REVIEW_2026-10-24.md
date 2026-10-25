@@ -16,6 +16,41 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Charbonnier two-phase Hessian and ambient reflection restrictions (25 October)
+
+The actual Charbonnier two-phase Hessian is now compiled for `tau>0`,
+distinct balanced phases and arbitrary multiplicities, **including identity
+and reflection eigenvalues**. The operator gradient derivative also permits
+infinite-dimensional complete complex Hilbert spaces; the literal trace
+objective remains finite-dimensional. Its exact two curvature coefficients
+change sign at `cos(t)=eta^-2` and equal `1/tau` and
+`-1/sqrt(tau^2+4)` at the two zero-gradient endpoints.
+`SmoothedScalarVariation` separately proves the one-point formula, including
+zero Hessian in every Hermitian direction at a critical/coalesced scalar
+phase of arbitrary multiplicity. This does not imply local minimality or
+higher-order growth for an unpaired scalar block.
+
+`SmoothedNoMixing` proves strict negative second variation for overlapping
+negative-curvature projections and disjointness at a local minimum of the
+**prescribed paired curve**. `SmoothedReflectionSecondVariation` proves an
+**ambient** Hessian necessity for actual two-phase local transport minima,
+the explicit reflection compression inequality, and exclusion of negative
+spectral subprojections commuting with the source. The latter conclusion
+requires the actual transporter itself to be a reflection. Transferring
+these tests to every actual reducing block of a general transporter,
+identifying the actual maximal scalar restrictions and assembling the
+global value remain open.
+There is still no compiled Charbonnier local-to-global theorem.
+
+The primary author-hosted [Lewis--Sendov paper (2001), Theorem 3.3](https://people.orie.cornell.edu/aslewis/publications/01-twice.pdf)
+was read directly. It gives the Hessian of a twice differentiable real
+symmetric spectral function, with the repeated-eigenvalue and divided-
+difference terms. This is classical precedent for the calculus mechanism;
+it does not identify the optimizer set of the prescribed-projection fiber.
+No independent historical novelty is claimed for these Hessian identities
+or necessary tests. The stronger classification/landscape results retain
+their previously recorded novelty boundary.
+
 ## Charbonnier local stationarity and actual gradient spectra (25 October)
 
 The local-to-global campaign now has its actual analytic first layer:
@@ -37,9 +72,10 @@ and target by the squared gradient. The included manuscript endpoint is
 `prop:smoothed-local-spectral-structure`.
 
 These are proved necessary local structure, **not** the Charbonnier
-local-to-global theorem. The remaining proof must use an actual second
-variation to exclude incompatible branch overlap and nonoptimal reflection
-blocks, including the coalesced maximal level, then assemble the value.
+local-to-global theorem. The distinct-phase second variation and paired overlap exclusion are now
+closed in the preceding entry. The remaining proof must extract their actual
+ambient blocks, handle coalesced and nonoptimal reflection blocks, and
+assemble the value.
 The general first-variation theorem in `UnitarySpectralVariation` is consumed
 by both penalties. Its continuous supporting-field hypothesis does not cover
 the nuclear singularity at identity. No independent priority claim is made

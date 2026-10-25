@@ -11,15 +11,16 @@ public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continu
 public import Mathlib.Analysis.Calculus.Deriv.Mul
 
 /-!
-# Functional-calculus derivatives at two-point normal spectra
+# Functional-calculus derivatives at scalar and two-point normal spectra
 
 When a scalar symbol has the same value at two spectral points, its
 quadratic factor gives a direct derivative of its normal functional
 calculus. The factor itself need only be continuous: its derivative is
 multiplied by the zero quadratic polynomial at the base operator.
 
-These are classical divided-difference formulas. They are developed here
-for the Schatten second variation on constant-gradient spectral blocks.
+At a scalar operator a single continuous divided difference gives the
+derivative. These classical formulas support the Schatten and Charbonnier
+second variations, including coalesced constant-gradient spectral blocks.
 -/
 
 public section
@@ -175,5 +176,96 @@ theorem hasDerivAt_cfc_of_affine_projection
     apply smul_right_injective A (sub_ne_zero.2 hab.symm)
     exact add_left_cancel (hQ.symm.trans hrepr)
   rwa [hQP] at hd
+
+/-- At a scalar normal element the functional-calculus derivative is the
+scalar derivative times the operator tangent. This includes coalesced
+two-point spectra, for which a divided difference between distinct points
+cannot be used. -/
+theorem hasDerivAt_cfc_of_scalar
+    (f : ℂ → ℂ) (a : ℂ) (s : Set ℂ) (hs : IsCompact s)
+    (hf : ContinuousOn f s) (hda : DifferentiableAt ℂ f a)
+    (U : ℝ → A) (x : ℝ) (U' : A) (hU : HasDerivAt U U' x)
+    (hnormal : ∀ t, IsStarNormal (U t)) (hspectrum : ∀ t, spectrum ℂ (U t) ⊆ s)
+    (hscalar : U x = a • (1 : A)) :
+    HasDerivAt (fun t => cfc f (U t)) (deriv f a • U') x := by
+  let k := dslope f a
+  have hk : ContinuousOn k s := by
+    intro z hz
+    by_cases hza : z = a
+    · subst z
+      exact (continuousAt_dslope_same.2 hda).continuousWithinAt
+    · exact (continuousWithinAt_dslope_of_ne hza).2 (hf z hz)
+  have heq (t : ℝ) : cfc f (U t) = (f a) • (1 : A) +
+      (U t - a • (1 : A)) * cfc k (U t) := by
+    let := hnormal t
+    have hfactor : ∀ z, f z = f a + (z - a) * k z := by
+      intro z
+      have h := sub_smul_dslope f a z
+      change (z - a) * k z = f z - f a at h
+      rw [h]
+      ring
+    have hlin : cfc (fun z : ℂ => z - a) (U t) = U t - a • (1 : A) := by
+      rw [cfc_sub (fun z : ℂ => z) (fun _ => a), cfc_id' ℂ (U t),
+        cfc_const a (U t), Algebra.algebraMap_eq_smul_one]
+    have hl : ContinuousOn (fun z : ℂ => z - a) (spectrum ℂ (U t)) :=
+      (continuous_id.sub continuous_const).continuousOn
+    calc
+      cfc f (U t) = cfc (fun z => f a + (z - a) * k z) (U t) :=
+        cfc_congr (fun z _ => hfactor z)
+      _ = (f a) • (1 : A) + cfc (fun z => (z - a) * k z) (U t) := by
+        rw [cfc_const_add (f a) (fun z => (z - a) * k z) (U t)
+          (hl.mul (hk.mono (hspectrum t))), Algebra.algebraMap_eq_smul_one]
+      _ = _ := by
+        rw [cfc_mul (fun z : ℂ => z - a) k (U t) hl (hk.mono (hspectrum t)), hlin]
+  have hcont : ContinuousAt (fun t => cfc k (U t)) x := by
+    rw [← continuousWithinAt_univ]
+    exact (continuousOn_cfc A hs k hk (U x) ⟨hnormal x, hspectrum x⟩).comp
+      hU.continuousAt.continuousWithinAt (fun t _ => ⟨hnormal t, hspectrum t⟩)
+  have hd := (hasDerivAt_mul_of_zero_of_continuousAt _ _ x _
+    (hU.sub_const (a • (1 : A))) (by rw [hscalar, sub_self]) hcont).const_add
+      ((f a) • (1 : A))
+  have hbase : cfc k (U x) = deriv f a • (1 : A) := by
+    rw [hscalar, ← Algebra.algebraMap_eq_smul_one, cfc_algebraMap,
+      Algebra.algebraMap_eq_smul_one]
+    rw [show k a = deriv f a from dslope_same f a]
+  apply (hd.congr_of_eventuallyEq (Filter.Eventually.of_forall heq)).congr_deriv
+  rw [hbase, mul_smul_comm, mul_one]
+
+private theorem smul_compression_tangent (S V H : A) (lambda d : ℂ)
+    (hSV : S * V = lambda • S) :
+    d • (S * (V * (Complex.I • H)) * S) =
+      (d * (Complex.I * lambda)) • (S * H * S) := by
+  rw [← mul_assoc S V (Complex.I • H), hSV, smul_mul_smul, smul_mul_assoc, smul_smul]
+  congr 1
+  ring
+
+/-- Tangential form of the two-point derivative. At two equal symbol
+values, only the phase derivatives and diagonal compressions contribute. -/
+theorem hasDerivAt_cfc_unitary_tangent_of_affine_projection
+    (f : ℂ → ℂ) (a b c da db : ℂ) (hab : a ≠ b) (hfa : f a = c) (hfb : f b = c)
+    (s : Set ℂ) (hs : IsCompact s) (hf : ContinuousOn f s)
+    (hda : DifferentiableAt ℂ f a) (hdb : DifferentiableAt ℂ f b)
+    (htana : deriv f a * (Complex.I * a) = da)
+    (htanb : deriv f b * (Complex.I * b) = db)
+    (U : ℝ → A) (x : ℝ) (H : A) (hU : HasDerivAt U (U x * (Complex.I • H)) x)
+    (hnormal : ∀ t, IsStarNormal (U t)) (hspectrum : ∀ t, spectrum ℂ (U t) ⊆ s)
+    (P : A) (hP : IsStarProjection P)
+    (hrepr : U x = a • (1 : A) + (b - a) • P) :
+    HasDerivAt (fun t => cfc f (U t))
+      (da • ((1 - P) * H * (1 - P)) + db • (P * H * P)) x := by
+  have hd := hasDerivAt_cfc_of_affine_projection f a b c hab hfa hfb
+    s hs hf hda hdb U x (U x * (Complex.I • H)) hU hnormal hspectrum P hP hrepr
+  have hlow : (1 - P) * U x = a • (1 - P) := by
+    rw [hrepr]
+    simp only [mul_add, mul_smul_comm, mul_one,
+      hP.isIdempotentElem.one_sub_mul_self, smul_zero, add_zero]
+  have hhigh : P * U x = b • P := by
+    rw [hrepr]
+    simp only [mul_add, mul_smul_comm, mul_one, hP.isIdempotentElem.eq]
+    rw [sub_smul]
+    abel
+  apply hd.congr_deriv
+  rw [smul_compression_tangent (1 - P) (U x) H a _ hlow,
+    smul_compression_tangent P (U x) H b _ hhigh, htana, htanb]
 
 end TauCeti
