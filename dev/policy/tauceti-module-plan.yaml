@@ -124,7 +124,6 @@ topics:
   - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
   - Analysis.OperatorIdeal.ApproximationNumber.SameSequence
   - Analysis.OperatorIdeal.ApproximationNumber.Rank
-  - Analysis.OperatorIdeal.ApproximationNumber.Isometry
 - id: T10
   title: Symmetric operator ideals and Schatten norms
   modules:

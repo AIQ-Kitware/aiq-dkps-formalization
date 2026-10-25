@@ -77,7 +77,7 @@ module
 
 public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ExtendedSequence
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint

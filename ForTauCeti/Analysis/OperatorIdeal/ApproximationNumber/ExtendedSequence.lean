@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 public import TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic
 
@@ -94,7 +94,9 @@ theorem symmetricGauge_eq_of_approxSeq_eq {Φ Ψ : SymmetricGauge}
       have hseq : approxSeq T = a := by
         funext n
         simp only [approxSeq, T, Q]
-        rw [approximationNumber_comp_linearIsometryEquiv,
+        rw [approximationNumber_eq_singularValue_toReal,
+          singularValue_comp_linearIsometryEquiv,
+          ← approximationNumber_eq_singularValue_toReal,
           ScalarTransport.approximationNumber_clm,
           approximationNumber_diagOpLp c hB0 hcB hanti n, hcnorm,
           ENNReal.ofReal_toReal (hafin n)]

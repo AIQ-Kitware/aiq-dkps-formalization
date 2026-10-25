@@ -888,3 +888,32 @@ overlap and direct consumption, without inferring historical proof descent.
 The compactness retirement passed the focused five-module build (7,788 jobs)
 and full default build (21,037 jobs), with warnings treated as errors, after
 the respective cache fetches.
+
+
+### October 25: consume the accepted isometric-transport adaptation
+
+`TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry` explicitly credits
+adaptation of this repository's donor `ApproximationNumber/Isometry.lean` under
+the Kitware Apache-2.0 license. Its private sandwich inequality and two-sided
+inverse-isometry proof follow the donor construction, now using canonical
+nonnegative singular values. The accepted theorem
+`singularValue_comp_linearIsometryEquiv T e f n` also generalizes the four normed
+spaces to seminormed spaces while preserving arbitrary nontrivially normed
+fields, independent universes, and absence of completeness assumptions.
+This is an explicit adapted-source relationship, beyond merely sharing a topic.
+
+The local `approximationNumber_comp_linearIsometryEquiv` and its private
+contraction helpers are removed with their entire donor module. The remaining
+diagonal-realization uniqueness proof uses the native theorem directly, through
+the existing real approximation-number equation; no replacement alias is added.
+The historical norm exploration has its import redirected and remains unmaintained.
+The unmerged uniqueness theorem itself is retained.
+
+Pre-retirement source is DKPS `42f55fbe8`; the accepted file and its explicit
+provenance were compared at Tau Ceti `efded067c28ffca3483fd731674eb13b42543fbb`.
+The accepted header credits Jon Crall and GPT-6; original local Jon Crall
+attribution and the Kitware license remain preserved in history and this ledger.
+
+The isometric-transport retirement passed its focused build (6,744 jobs) and
+full default build (21,037 jobs), with warnings treated as errors, after the
+respective cache fetches.

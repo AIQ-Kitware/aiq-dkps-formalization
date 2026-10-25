@@ -54,7 +54,6 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal",
@@ -567,7 +566,6 @@
       "downstream_users": [
         "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank"
@@ -5000,14 +4998,13 @@
       "roadmap_target": "approximation-number",
       "provenance_class": "new independent-universe isometric transport",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
-        "Mathlib.Analysis.Normed.Operator.LinearIsometry"
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged-needs-current-validation",
+      "status": "accepted-upstream-local-copy-removed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "October 25: removed the donor isometric-transport theorem and its private contraction helpers. The unmerged diagonal-realization uniqueness consumer uses accepted singularValue_comp_linearIsometryEquiv directly via the existing real-view equation; no forwarding theorem remains. The accepted module explicitly attributes adaptation to this DKPS donor and generalizes normed spaces to seminormed spaces, preserving independent universes and arbitrary nontrivially normed fields. Pre-retirement source 42f55fbe8; accepted source at efded067c28ffca3483fd731674eb13b42543fbb."
     },
     {
       "source_module": "new or refactored directly in ForTauCeti",
