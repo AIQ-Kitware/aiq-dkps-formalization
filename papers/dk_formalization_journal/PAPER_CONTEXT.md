@@ -21,8 +21,12 @@ sharp gradient bound. Actual ambient no-overlap on every submaximal gradient
 level, the signed maximal scalar restrictions, and local minimality on the
 actual zero-gradient reflection kernel are now compiled. That kernel obeys
 the exact balance identity `2*S*P0*S=S`. An explicit feasible reflection
-direction has negative curvature whenever this balance fails. Scalar block
-optimality and assembly of all local block costs remain open.
+direction has negative curvature whenever this balance fails. Every
+positive gradient level, including the critical level, now has a
+source-reflection-paired phase eigenbasis whose individual costs attain
+the exact scalar minima. Submaximal paired restriction costs equal the
+sum of those minima. Balanced zero-kernel geometry/cost, principal-angle
+identification and assembly remain open.
 **Manuscript and teaching-deck update source:** `427169ce38b5` (25 October
 2026), incorporating the completed full complex optimizer classification,
 local-to-global theorem, normalized parameter bijection and exact counts.
@@ -39,6 +43,61 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Exact scalar minima on every positive Charbonnier gradient level (25 October)
+
+`SmoothedBalancedPhases.lean` proves
+`balanced_roots_optimalSmoothedPhase` and
+`balanced_roots_smoothedPhaseMinimum`. For `tau>0` and **any**
+`0<a<b<pi` with equal scalar gradients, the mean `theta=(a+b)/2` is
+acute, and `delta=(b-a)/2` is exactly `optimalSmoothedPhase tau theta`.
+The literal costs of the eigenphases `a` and `-b` sum to
+`smoothedPhaseMinimum tau theta`. No branch membership or minimizing
+hypothesis is assumed. The proof uses the level quadratic to derive
+Vieta identities, factors the equation for the mean/difference cosines,
+and invokes the independent circle minimum. The universal identity
+`smoothedPhaseCost_eq_displacement_sum` connects that circle cost to
+literal eigenvalue displacements at every real phase; the canonical cost
+lemma includes zero and the critical angle.
+
+`SmoothedGradientPlanes.lean` proves
+`gradient_block_scalar_minima_of_isLocalMinOn_transports_complex`.
+For every finite complex actual ambient constrained local minimum,
+`tau>0` and `0<g<eta^-1`, it constructs a common orthonormal eigenbasis
+of the actual source-reflection-identified restrictions, retains both
+ambient actions, and proves that each opposite phase pair attains the
+scalar minimum at its acute mean angle. The sum is **exactly the literal
+Charbonnier cost of the two restrictions**. Multiplicities and empty
+eigenspaces are allowed. The theorem
+`gradient_eigenspace_phase_basis_of_isLocalMinOn_transports_complex`
+extends the ambient eigenvector/scalar-minimum statement to **every**
+positive spectral level, including `g=eta^-1`, where both phases are
+critical. These are actual ambient statements, without supplied frames.
+They do not yet identify the complete principal-angle multiset or prove
+local-to-global.
+
+The common orthogonal-projection phase-basis proof was moved from a
+private helper in `SchattenGradientPlanes.lean` to
+`TauCeti.exists_orthogonal_two_phase_basis_complex` in the donor
+`OrthogonalProjectionPhases.lean`. Both penalty theories consume it;
+the established public Schatten endpoint signatures are unchanged.
+A global search found no registered reference to the old private name.
+The manuscript adds `lem:smoothed-balanced-phases` and strengthens
+`prop:smoothed-ambient-gradient-blocks` with these exact scalar costs.
+No independent historical priority is asserted for the Vieta or basis
+identities. Twelve independent scalar diagnostics, with
+`tau=0.1,0.7,2,10` and gradient fractions `0.2,0.6,0.95`, gave maximum
+cosine-equation error `1.27e-14` and cost error `3.56e-15`; the compiler
+proofs establish the statements without those experiments.
+
+Validation: `lake exe cache get` followed by
+`lake build DavisKahan.All ForTauCeti` succeeded (10,521 jobs), including
+the unchanged public Schatten consumers of the moved phase-basis proof.
+The manuscript compiled to 61 pages with no final unresolved references,
+duplicate labels or overfull boxes. The repeated static name-drift check
+has the same 25 findings in unchanged records. The repeated Challenge
+build still fails only on the unresolved Courant--Fischer--Weyl leaderboard
+constant recorded in the preceding ambient-block layer below.
 
 ## Ambient Charbonnier blocks and the balanced zero-gradient kernel (25 October)
 
@@ -146,27 +205,18 @@ above. Neither result is presented as a successful Challenge audit.
 
 ### Exact remaining local-to-global obligations
 
-The next useful theorem is **scalar optimality of every disjoint paired
-block**, adapting `SchattenGradientPlanes.lean`. A joint eigenbasis of the
-disjoint projections permits only `(a,a)`, `(b,a)` and `(a,b)`. The equal
-small-phase pair is canonical below the cutoff. For the mixed pair, set
-`theta=(a+b)/2`, `delta=(b-a)/2`, `x=cos(a)`, `y=cos(b)`. A conventional
-algebraic derivation, still requiring Lean implementation, uses the already
-proved level quadratic and `x!=y` to obtain
-`x+y=2*g^2` and `x*y=(tau^2+2)*g^2-1`. Hence
-`g^2=cos(theta)*cos(delta)>0`, which places `theta` in `(0,pi/2)`, and
-`(cos(delta)-eta^2*cos(theta))*(cos(delta)-eta^-2*cos(theta))=0`.
-Since `0<delta<theta`, the second factor cannot vanish. Thus
-`cos(delta)=eta^2*cos(theta)`, giving exactly the known optimal smoothed
-phase. This route avoids inferring global optimality from stationarity.
+Scalar optimality on every positive gradient level is now compiled in
+`SmoothedBalancedPhases.lean` and `SmoothedGradientPlanes.lean`, as
+recorded above. The Vieta derivation formerly recorded here as pending
+has been implemented and accepted, including the coalesced critical case.
 
 On the zero-gradient kernel, the actual local reflection is now balanced.
 Use `S*(2*P0-I)*S=0` to pair its negative space with its orthogonal image
 under source reflection; its remaining orthogonal complement is fixed.
 This should construct only fixed and right-angle transport blocks and
-compute their exact attained costs. The signed maximal restrictions are
-already scalar critical phases; their paired cost needs its direct scalar
-identification. Then assemble all actual reducing squared-gradient blocks
+compute their exact attained costs. The signed maximal restrictions and their paired scalar minima are now
+proved. Identify the mean phases with actual principal-plane angles and
+then assemble all actual reducing squared-gradient blocks
 and the accepted principal-angle sums, and compare with the proved global
 minimum. Full smoothed local-to-global, real matching, component dimensions
 and operator-ideal optimization remain open.

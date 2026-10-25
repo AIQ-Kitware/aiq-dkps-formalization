@@ -845,6 +845,43 @@ two nonnegative compression squares is positive, proving the strict
 negative second variation and the local-minimum exclusion.
 \end{proof}
 
+\begin{lemma}[Distinct balanced smoothed phases]
+\label{lem:smoothed-balanced-phases}
+Suppose $0<a<b<\pi$ and $h_\tau(e^{ia})=h_\tau(e^{ib})$.
+Then $\theta=(a+b)/2\in(0,\pi/2)$ and
+\[
+ \delta=\frac{b-a}{2}=\delta_\tau(\theta),\qquad
+ \rho_\tau(|e^{ia}-1|)+\rho_\tau(|e^{-ib}-1|)=\mu_\tau(\theta).
+\]
+\end{lemma}
+
+\begin{proof}
+The common gradient $g$ is positive. Put $x=\cos a$ and $y=\cos b$.
+The scalar level equation gives
+\[
+ (x-g^2)^2=(y-g^2)^2=g^4-(\tau^2+2)g^2+1.
+\]
+Since $x\ne y$, subtracting the equations and then substituting gives
+$x+y=2g^2$ and $xy=(\tau^2+2)g^2-1$. Thus
+\[
+ \cos\theta\cos\delta=g^2,\qquad
+ \cos^2\theta+\cos^2\delta
+       =(\tau^2+2)\cos\theta\cos\delta.
+\]
+Here $0<\delta<\pi/2$, so the first identity and $0<\theta<\pi$
+force $\theta<\pi/2$. Using $\eta^2+\eta^{-2}=\tau^2+2$, the second
+identity factors as
+\[
+ (\cos\delta-\eta^2\cos\theta)
+ (\cos\delta-\eta^{-2}\cos\theta)=0.
+\]
+Because $0<\delta<\theta<\pi/2$, the second factor is positive.
+Consequently $\cos\delta=\eta^2\cos\theta<1$, and the inverse-cosine
+formula gives $\delta=\delta_\tau(\theta)$. The two eigenphases are
+$\theta-\delta=a$ and $-\theta-\delta=-b$, so the scalar minimum in
+\cref{thm:smoothed-transport} gives the cost identity.
+\end{proof}
+
 \begin{proposition}[Actual paired blocks and a balanced gradient kernel]
 \label{prop:smoothed-ambient-gradient-blocks}
 Let $W$ be a local minimum among all unitary transports from $P$ to $Q$.
@@ -864,6 +901,16 @@ have orthogonal projections $A,B$ on $N_+$ such that
  T&=e^{-ia}(I-B)+e^{-ib}B,\qquad AB=0.
  \end{aligned}
 \]
+They have a common orthonormal eigenbasis, with opposite phase pairs
+$(\alpha_j,\beta_j)$ drawn from $(a,a)$, $(b,a)$ and $(a,b)$.
+Every mean angle $\vartheta_j=(\alpha_j+\beta_j)/2$ is acute, and
+\[
+ \begin{aligned}
+ \rho_\tau(|e^{i\alpha_j}-1|)
+   +\rho_\tau(|e^{-i\beta_j}-1|)&=\mu_\tau(\vartheta_j),\\
+ \Psi_\tau(V)+\Psi_\tau(T)&=\sum_j\mu_\tau(\vartheta_j).
+ \end{aligned}
+\]
 All these spaces and identifications are determined from the actual
 gradient and source reflection. At the maximal signed levels, every
 unitary $W$ has the scalar restrictions
@@ -871,6 +918,8 @@ unitary $W$ has the scalar restrictions
  W|_{\ker(G_\tau(W)-s\eta^{-1}I)}=e^{is c_\tau}I
  \qquad(s=1,-1).
 \]
+At the positive maximal level, the paired phases are both $c_\tau$
+and satisfy the same individual scalar minimum identity.
 
 On $N_0=\ker G_\tau(W)$, the source projection restricts to an
 orthogonal projection $P_0$. The actual unitary restriction $W_0$ is
@@ -904,10 +953,18 @@ blocks. Ambient local minimality consequently passes to the paired
 curve in \cref{prop:smoothed-two-phase-hessian}. Its negative second
 variation excludes $AB\ne0$.
 
+A common orthonormal eigenbasis for the orthogonal projections $A,B$
+leaves precisely the three stated phase pairs. The pair $(a,a)$
+attains the canonical scalar minimum below $c_\tau$.
+\Cref{lem:smoothed-balanced-phases} gives the minimum for the two mixed
+pairs. Summing over this eigenbasis computes the literal spectral costs
+of $V$ and $T$.
+
 At $|g|=\eta^{-1}$, the sharp gradient equality forces
 $\operatorname{Re}z=\eta^{-2}$. The sign of the imaginary part selects
 the single principal phase $s c_\tau$. The actual unitary restriction
-is therefore scalar, including repeated phases.
+is therefore scalar, including repeated phases. Pairing the two signed
+restrictions gives the critical scalar minimum.
 
 The kernel $N_0$ is preserved by $W$, by $J$ and hence by $P=(I+J)/2$.
 Their orthogonal complements are invariant as well. Fixing the
