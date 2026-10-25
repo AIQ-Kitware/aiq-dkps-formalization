@@ -243,7 +243,11 @@ noncomputable def traceClass :
 
 /-- Hilbert--Schmidt ideal. -/
 noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  exact ofCanonical (TauCeti.hilbertSchmidtIdealFamily 𝕜)
+  let N := TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt 𝕜
+  letI : N.toOperatorIdealFamily.IsComplete := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt_toOperatorIdealFamily]
+    infer_instance
+  exact ofCanonical N
 
 /-- The symmetric-family adapter needed by `ofCanonical`; its gauge and completeness are the
 canonical TauCeti Ky Fan family. -/

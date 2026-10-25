@@ -7,27 +7,16 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
 public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+public import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 public import Mathlib.Analysis.MeanInequalities
 
 /-!
-# The Hilbert--Schmidt operator ideal
+# Extended Hilbert–Schmidt gauge laws
 
-The **Hilbert--Schmidt norm** of a bounded operator between Hilbert spaces is the square
-root of its Hilbert--Schmidt energy,
-
-```
-‖T‖_HS = (∑' i, ‖T (b i)‖ₑ ^ 2) ^ (1/2),
-```
-
-which by `ContinuousLinearMap.hilbertSchmidtEnergy_indep` does not depend on the Hilbert
-basis `b`.  Like the energy it takes values in `ℝ≥0∞` and is therefore defined for every
-bounded operator, being `∞` exactly off the ideal.
-
-The point of the file is the final construction: these operators form a
-`TauCeti.SymmetricOperatorIdealFamily`, the second concrete instance of that structure
-after the Ky Fan families.  Two instances built from genuinely different mathematics is
-what makes the structure worth having, and the Hilbert--Schmidt one is the instance the
-literature reaches for first.
+This donor retains the extended-valued gauge and its membership/limit consequences
+while consumers move to the accepted rectangular family. Tau Ceti owns the energy,
+real norm, operator-ideal family, and completeness; no parallel constructor or
+completeness proof remains here.
 
 ## Main definitions and results
 
@@ -37,7 +26,8 @@ literature reaches for first.
 * `ContinuousLinearMap.enorm_le_hilbertSchmidtENorm`: it dominates the operator norm;
 * `ContinuousLinearMap.hilbertSchmidtENorm_comp_le`: the two-sided ideal bound;
 * `ContinuousLinearMap.hilbertSchmidtENorm_adjoint`: it is adjoint-invariant;
-* `TauCeti.hilbertSchmidtIdealFamily`: the resulting symmetric operator ideal family.
+* The ideal family and its completeness are consumed from
+  `TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt`.
 
 ## Provenance
 
@@ -361,139 +351,3 @@ theorem hilbertSchmidtNorm_comp_isometries_le (L : F →L[𝕜] G) {T : E →L[�
 
 
 end ContinuousLinearMap
-
-namespace TauCeti
-
-universe u v
-
-/-- **The Hilbert--Schmidt operator ideal.**
-
-This is the second instance of `TauCeti.SymmetricOperatorIdealFamily`, after the Ky Fan
-families of `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean`.  The two are
-built from unrelated mathematics — approximation numbers there, orthonormal expansions here
-— which is the evidence that the structure captures the right notion. -/
-@[expose]
-noncomputable def hilbertSchmidtIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
-    SymmetricOperatorIdealFamily.{u, v} 𝕜 where
-  gauge A := A.hilbertSchmidtENorm
-  gauge_add_le A B := A.hilbertSchmidtENorm_add_le B
-  gauge_smul c A := A.hilbertSchmidtENorm_smul c
-  enorm_le_gauge A := A.enorm_le_hilbertSchmidtENorm
-  gauge_comp_le L A R := ContinuousLinearMap.hilbertSchmidtENorm_comp_le L A R
-  gauge_adjoint A := A.hilbertSchmidtENorm_adjoint
-
-/-- **The Hilbert--Schmidt ideal is complete.**
-
-The canonical Ky Fan family route is unavailable here -- that one gets completeness from
-`‖A‖ ≤ kyFanGauge k A ≤ k ‖A‖`, so its gauge limit *is* its operator-norm limit -- and the
-Hilbert--Schmidt gauge is not equivalent to the operator norm.  What replaces it is
-`ContinuousLinearMap.hilbertSchmidtENorm_le_liminf`: take the operator-norm limit, which
-exists because the gauge dominates the operator norm, then bound its energy, and the energy
-of each difference, by the `liminf` along the sequence. -/
-instance isComplete_hilbertSchmidtIdealFamily {𝕜 : Type u} [RCLike 𝕜] :
-    (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.IsComplete where
-  completeSpace_carrier := by
-    intro E F _ _ _ _ _ _
-    refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
-    -- the gauge dominates the operator norm, so the sequence is Cauchy there too
-    have hop : CauchySeq fun n => (a n).val :=
-      TauCeti.OperatorIdealFamily.Elem.cauchySeq_val ha
-    obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
-    obtain ⟨s, b, -⟩ := exists_hilbertBasis 𝕜 E
-    classical
-    -- pointwise, on each basis vector, the differences converge to the difference of limits
-    have hpt : ∀ (n : ℕ) (i : s),
-        Filter.Tendsto (fun m => ‖((a m).val - (a n).val) (b i)‖ₑ ^ 2) Filter.atTop
-          (nhds (‖(L - (a n).val) (b i)‖ₑ ^ 2)) := by
-      intro n i
-      have h1 : Filter.Tendsto (fun m => ((a m).val - (a n).val) (b i)) Filter.atTop
-          (nhds ((L - (a n).val) (b i))) := by
-        simpa using
-          ((ContinuousLinearMap.apply 𝕜 F (b i)).continuous.tendsto L).comp hL |>.sub
-            tendsto_const_nhds
-      exact (ENNReal.continuous_pow 2).tendsto _ |>.comp ((continuous_enorm.tendsto _).comp h1)
-    -- Fatou: the limit's energy is controlled by the tail of the Cauchy estimate
-    have hfatou : ∀ n : ℕ,
-        (L - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ) ≤
-          Filter.liminf (fun m => ((a m).val - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ))
-            Filter.atTop :=
-      fun n => ContinuousLinearMap.hilbertSchmidtENorm_le_liminf b (hpt n)
-    -- the Cauchy estimate, transported from the ideal norm to the gauge
-    have hcauchy : ∀ ε : ℝ, 0 < ε → ∃ N, ∀ n ≥ N,
-        (L - (a n).val).hilbertSchmidtENorm ≤ ENNReal.ofReal ε := by
-      intro ε hε
-      rw [Metric.cauchySeq_iff] at ha
-      obtain ⟨N, hN⟩ := ha ε hε
-      refine ⟨N, fun n hn => ?_⟩
-      have hev : ∀ᶠ m in Filter.atTop,
-          ((a m).val - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ)
-            ≤ ENNReal.ofReal ε ^ (2 : ℝ) := by
-        filter_upwards [Filter.eventually_ge_atTop N] with m hm
-        have hd : ‖a m - a n‖ < ε := by simpa [dist_eq_norm] using hN m hm n hn
-        have hgauge : ((a m).val - (a n).val).hilbertSchmidtENorm ≤ ENNReal.ofReal ε := by
-          have heq : (hilbertSchmidtIdealFamily.{u, v} 𝕜).gauge (a m - a n).val
-              = ((a m).val - (a n).val).hilbertSchmidtENorm := rfl
-          rw [← heq, ← TauCeti.OperatorIdealFamily.Elem.enorm_eq_gauge, ← ofReal_norm]
-          exact ENNReal.ofReal_le_ofReal hd.le
-        exact ENNReal.rpow_le_rpow hgauge (by norm_num)
-      have hle : Filter.liminf
-          (fun m => ((a m).val - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ))
-          Filter.atTop ≤ ENNReal.ofReal ε ^ (2 : ℝ) := by
-        calc Filter.liminf
-              (fun m => ((a m).val - (a n).val).hilbertSchmidtENorm ^ (2 : ℝ)) Filter.atTop
-            ≤ Filter.liminf (fun _ : ℕ => ENNReal.ofReal ε ^ (2 : ℝ)) Filter.atTop :=
-              Filter.liminf_le_liminf hev
-          _ = ENNReal.ofReal ε ^ (2 : ℝ) := Filter.liminf_const _
-      have h2 := (hfatou n).trans hle
-      have hpow : (0 : ℝ) < 2 := by norm_num
-      exact (ENNReal.rpow_le_rpow_iff hpow).mp h2
-    -- the limit lies in the ideal: it differs from a member by something of finite gauge
-    obtain ⟨N₁, hN₁⟩ := hcauchy 1 one_pos
-    have hmemL : L ∈ (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.carrier := by
-      have hsplit : L = (L - (a N₁).val) + (a N₁).val := by abel
-      rw [TauCeti.OperatorIdealFamily.mem_carrier_iff, hsplit]
-      refine ne_top_of_le_ne_top ?_
-        ((hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge_add_le _ _)
-      refine ENNReal.add_ne_top.mpr ⟨?_, OperatorIdealFamily.Elem.gauge_val_ne_top
-        (N := (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily) (a N₁)⟩
-      exact ne_top_of_le_ne_top ENNReal.ofReal_ne_top (hN₁ N₁ le_rfl)
-    refine ⟨TauCeti.OperatorIdealFamily.Elem.mk hmemL, ?_⟩
-    rw [Metric.tendsto_atTop]
-    intro ε hε
-    obtain ⟨N, hN⟩ := hcauchy (ε / 2) (half_pos hε)
-    refine ⟨N, fun n hn => ?_⟩
-    have hgauge : ((a n).val - L).hilbertSchmidtENorm ≤ ENNReal.ofReal (ε / 2) := by
-      have hneg : ((a n).val - L) = -(L - (a n).val) := by abel
-      rw [hneg, ContinuousLinearMap.hilbertSchmidtENorm_neg]
-      exact hN n hn
-    have hle : ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ ≤ ε / 2 := by
-      have hne : ((a n).val - L).hilbertSchmidtENorm ≠ ⊤ :=
-        ne_top_of_le_ne_top ENNReal.ofReal_ne_top hgauge
-      have := ENNReal.toReal_mono ENNReal.ofReal_ne_top hgauge
-      have hreal : ((a n).val - L).hilbertSchmidtENorm.toReal ≤ ε / 2 := by
-        rwa [ENNReal.toReal_ofReal (by positivity)] at this
-      rw [OperatorIdealFamily.Elem.norm_def, OperatorIdealFamily.Elem.val_sub,
-        OperatorIdealFamily.Elem.val_mk]
-      change ((a n).val - L).hilbertSchmidtENorm.toReal ≤ ε / 2
-      exact hreal
-    calc dist (a n) (TauCeti.OperatorIdealFamily.Elem.mk hmemL)
-        = ‖a n - TauCeti.OperatorIdealFamily.Elem.mk hmemL‖ := dist_eq_norm _ _
-      _ ≤ ε / 2 := hle
-      _ < ε := by linarith
-
-/-- Membership in the Hilbert--Schmidt ideal is exactly `IsHilbertSchmidt`. -/
-theorem mem_hilbertSchmidtIdealFamily_carrier_iff {𝕜 : Type u} [RCLike 𝕜] {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (A : E →L[𝕜] F) :
-    A ∈ (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.carrier ↔
-    A.IsHilbertSchmidt := by
-  rw [OperatorIdealFamily.mem_carrier_iff]
-  rfl
-/-- The gauge of the Hilbert--Schmidt family is the Hilbert--Schmidt norm. -/
-@[simp] theorem hilbertSchmidtIdealFamily_gauge {𝕜 : Type u} [RCLike 𝕜] {E F : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (A : E →L[𝕜] F) :
-    (hilbertSchmidtIdealFamily.{u, v} 𝕜).toOperatorIdealFamily.gauge A =
-      A.hilbertSchmidtENorm := (rfl)
-
-end TauCeti

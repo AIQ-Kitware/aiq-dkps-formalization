@@ -2168,13 +2168,14 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
+        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
+        "TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "staged",
       "upstream_pr": null,
-      "migration_note": "2026-10-25: removed the real norm definition and its duplicate zero, nonnegativity, homogeneity, adjoint, triangle and operator-domination laws. The real norm is now Tau Ceti ContinuousLinearMap.hilbertSchmidtNorm. Extended-gauge/ideal mathematics remains for a separate exact comparison with the accepted rectangular family."
+      "migration_note": "2026-10-25: canonical energy, real norm, symmetric Hilbert-Schmidt family and its completeness consumed from Tau Ceti. Duplicate family constructor, 90-line completeness proof and unused carrier/gauge aliases removed. The donor retains the extended-gauge presentation, its membership/limit consequences, and a contraction-norm consequence; no old family alias remains."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",

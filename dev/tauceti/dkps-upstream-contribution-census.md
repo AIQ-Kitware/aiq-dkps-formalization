@@ -1,6 +1,6 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-**Status: expanded, intentionally incomplete audit (2026-10-21 baseline; 2026-10-25 accepted Gram update).** This is a
+**Status: expanded, intentionally incomplete audit (2026-10-21 baseline; 2026-10-25 Gram and Hilbert–Schmidt consumption updates).** This is a
 maintained *provenance and results* record, not a PR action queue, a theorem
 census, or a claim of exclusive mathematical authorship. Its purpose is to make
 it possible to say exactly which results in TauCeti benefited from the Kitware
@@ -667,8 +667,25 @@ new adaptation or PR-origin claim is made here.
 
 The donor retains the extended-valued ideal gauge and its genuinely remaining
 ideal/column-space results, along with three additional energy consequences.
-In particular this pass does not claim that the local extended-gauge family has
-already been replaced by `OperatorIdealFamily.hilbertSchmidt`. The latter is the
-next exact carrier/consumer comparison. The real-norm/extended-gauge identity now
+The local extended-gauge presentation is still distinct from the accepted family
+gauge. The same-day constructor/completeness retirement is recorded below. The real-norm/extended-gauge identity now
 uses the accepted complete-target formula; the source-facing theorems already
 work between complete Hilbert spaces.
+
+
+**Same-day family follow-up:** the exact comparison also identifies
+`TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt` and its underlying
+`OperatorIdealFamily.hilbertSchmidt` as the canonical constructors on the same
+rectangular/diagonal carriers. The local `TauCeti.hilbertSchmidtIdealFamily`,
+its completeness proof, and unused carrier/gauge wrapper lemmas are removed,
+with no alias. `SymmetricNormIdeal.hilbertSchmidt` consumes the accepted family
+and its completeness instance directly. The source-facing finite-gauge norm
+identity is proved using `OperatorIdealFamily.gauge_hilbertSchmidt`; its theorem
+name is retained for the paper. The real and complex paper triangle inequalities
+also apply the accepted energy-based triangle theorem directly, replacing the
+local tensor/complexification detours. The extended-valued gauge and membership
+presentation still have downstream consumers and remain the next retirement
+cluster. This is accepted-API consumption, not an upstream proof-origin claim.
+
+The family follow-up passed the full default build (21,051 jobs) with warnings
+treated as errors, after `lake exe cache get`.

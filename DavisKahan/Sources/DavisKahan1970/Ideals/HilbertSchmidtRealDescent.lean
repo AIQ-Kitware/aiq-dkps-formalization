@@ -205,20 +205,12 @@ theorem hilbertSchmidtNorm_add_le_real
     (hB : approximationNumberEnergy B ≠ ⊤) :
     ContinuousLinearMap.hilbertSchmidtNorm (A + B) ≤
       ContinuousLinearMap.hilbertSchmidtNorm A + ContinuousLinearMap.hilbertSchmidtNorm B := by
-  calc
-    ContinuousLinearMap.hilbertSchmidtNorm (A + B) =
-        ContinuousLinearMap.hilbertSchmidtNorm (complexify (A + B)) := by
-          rw [hilbertSchmidtNorm_complexify]
-    _ = ContinuousLinearMap.hilbertSchmidtNorm (complexify A + complexify B) := by
-          rw [complexify_add]
-    _ ≤ ContinuousLinearMap.hilbertSchmidtNorm (complexify A) +
-          ContinuousLinearMap.hilbertSchmidtNorm (complexify B) :=
-      hilbertSchmidtNorm_add_le_complex
-        ((approximationNumberEnergy_ne_top_complexify_iff A).2 hA)
-        ((approximationNumberEnergy_ne_top_complexify_iff B).2 hB)
-    _ = ContinuousLinearMap.hilbertSchmidtNorm A + ContinuousLinearMap.hilbertSchmidtNorm B := by
-          rw [hilbertSchmidtNorm_complexify,
-            hilbertSchmidtNorm_complexify]
+  obtain ⟨_, b, -⟩ := exists_hilbertBasis ℝ E
+  exact ContinuousLinearMap.hilbertSchmidtNorm_add_le A B b
+    ((A.isHilbertSchmidt_iff_energy_ne_top b).mp
+      ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top A).mpr hA))
+    ((B.isHilbertSchmidt_iff_energy_ne_top b).mp
+      ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top B).mpr hB))
 
 /-- The complete rectangular Hilbert--Schmidt family over real Hilbert spaces. -/
 noncomputable def hilbertSchmidtReal :

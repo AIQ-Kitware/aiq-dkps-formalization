@@ -556,9 +556,13 @@ theorem hilbertSchmidtIdealFamily_gauge_eq_hilbertSchmidtNorm {G K : Type vE}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     [NormedAddCommGroup K] [InnerProductSpace 𝕜 K] [CompleteSpace K]
     (A : G →L[𝕜] K) (hA : approximationNumberEnergy A ≠ ⊤) :
-    (TauCeti.hilbertSchmidtIdealFamily 𝕜).toOperatorIdealFamily.gauge A =
-      ENNReal.ofReal (ContinuousLinearMap.hilbertSchmidtNorm A) :=
-  hilbertSchmidtENorm_eq_ofReal_hilbertSchmidtNorm A hA
+    (TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt 𝕜).toOperatorIdealFamily.gauge A =
+      ENNReal.ofReal (ContinuousLinearMap.hilbertSchmidtNorm A) := by
+  obtain ⟨_, b, -⟩ := exists_hilbertBasis 𝕜 G
+  rw [TauCeti.SymmetricOperatorIdealFamily.hilbertSchmidt_toOperatorIdealFamily,
+    TauCeti.OperatorIdealFamily.gauge_hilbertSchmidt A b]
+  rw [one_div, ← A.hilbertSchmidtENorm_eq b]
+  exact hilbertSchmidtENorm_eq_ofReal_hilbertSchmidtNorm A hA
 
 /-! ### The bridge at the two scalar fields
 

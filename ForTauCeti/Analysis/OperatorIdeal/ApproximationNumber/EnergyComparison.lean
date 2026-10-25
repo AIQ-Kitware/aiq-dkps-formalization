@@ -570,12 +570,11 @@ factors through its own range: `S = W.orthogonalProjectionOnto ∘L T ∘L V` ha
 finite-dimensional, agrees with `T ∘L V` because the range is exactly `W`, and has norm at
 most `‖T‖`.
 
-**The reverse inequality is not proved here**, and is what stands between this and
-`TauCeti.schattenFamilySymmetric 𝕜 2 = TauCeti.hilbertSchmidtIdealFamily 𝕜`.  It does *not* need
-an infinite-dimensional spectral theorem, which is worth saying because the obvious route
-through one is closed — Mathlib's eigenvector basis is finite-dimensional only.  Bounding
-`∑_{n < N} aₙ(T) ^ 2` for **fixed** `N` against a finite-rank truncation, and only then
-letting the truncation improve, avoids listing the singular values at all. -/
+The accepted counterpart is
+`ContinuousLinearMap.hilbertSchmidtEnergy_le_tsum_singularValue_sq`; its converse is
+`ContinuousLinearMap.tsum_singularValue_sq_le_hilbertSchmidtEnergy` on a complete source.
+This donor theorem retains the real-valued approximation-number presentation used by
+current consumers, pending their migration to the accepted singular-value API. -/
 theorem hilbertSchmidtEnergy_le_tsum_approximationNumber_sq {ι : Type v}
     (T : G →L[𝕜'] H) (b : HilbertBasis ι 𝕜' G) :
     T.hilbertSchmidtEnergy b ≤ ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ 2 := by

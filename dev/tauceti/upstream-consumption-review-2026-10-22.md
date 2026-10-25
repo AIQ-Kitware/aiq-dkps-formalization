@@ -91,9 +91,18 @@ Validation: `lake exe cache get` followed by the full default `lake build` passe
 **21,043 jobs**, with warnings treated as errors. The retirement removes a net
 361 lines of maintained Lean source.
 
+The committed energy checkpoint also passed explicit `Challenge` and
+`DavisKahan.Audits.All` builds (20,823 jobs). A follow-up removes the local ideal
+family constructor, completeness proof and unused membership/gauge aliases;
+source consumers use accepted `SymmetricOperatorIdealFamily.hilbertSchmidt`
+directly. The two paper triangle proofs now use the accepted energy-based law.
+The full default build after its cache fetch passed **21,051 jobs**, with warnings
+treated as errors. Across the two Hilbert–Schmidt retirements, maintained Lean
+source shrinks by a net **508 lines**.
+
 The next remaining representation comparison is the local extended norm and
-ideal family against accepted `OperatorIdealFamily.hilbertSchmidt`, together with
-its approximation-number energy/completeness consumers. The finite-source
+membership presentation against the accepted family's gauge and finite-gauge
+submodule, together with their approximation-number energy consumers. The finite-source
 Frobenius identity in local `SchattenNorm.lean` still permits an incomplete target;
 the accepted theorem requires a complete target, so it is not deleted as an exact
 duplicate in this pass.

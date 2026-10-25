@@ -86,12 +86,12 @@ theorem hilbertSchmidtNorm_add_le_complex
     (hB : approximationNumberEnergy B ≠ ⊤) :
     ContinuousLinearMap.hilbertSchmidtNorm (A + B) ≤
       ContinuousLinearMap.hilbertSchmidtNorm A + ContinuousLinearMap.hilbertSchmidtNorm B := by
-  let hAB := approximationNumberEnergy_ne_top_add_complex hA hB
-  rw [← norm_hilbertSchmidtTensor (A + B) hAB,
-    hilbertSchmidtTensor_add hA hB,
-    ← norm_hilbertSchmidtTensor A hA,
-    ← norm_hilbertSchmidtTensor B hB]
-  exact norm_add_le _ _
+  obtain ⟨_, b, -⟩ := exists_hilbertBasis ℂ E
+  exact ContinuousLinearMap.hilbertSchmidtNorm_add_le A B b
+    ((A.isHilbertSchmidt_iff_energy_ne_top b).mp
+      ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top A).mpr hA))
+    ((B.isHilbertSchmidt_iff_energy_ne_top b).mp
+      ((isHilbertSchmidt_iff_approximationNumberEnergy_ne_top B).mpr hB))
 
 /-- A zero paper Hilbert--Schmidt norm forces the represented operator to
 vanish. -/
