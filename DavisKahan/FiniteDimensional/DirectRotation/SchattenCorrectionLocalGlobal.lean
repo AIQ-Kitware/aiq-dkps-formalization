@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenLocalGlobal
+import ForTauCeti.Analysis.InnerProductSpace.UnitaryCorrectionLocalGlobal
 
 /-!
 # No nonglobal local minima for nearest subspace-preserving unitaries
@@ -41,83 +42,33 @@ theorem isMinOn_correction_of_isLocalMinOn_preserving_subspace_complex
       {W | W ∈ unitary (E →L[ℂ] E) ∧ W * K.starProjection * star W = K.starProjection}
       (V : E →L[ℂ] E) := by
   let L := K.map A.toLinearMap
-  let T := A.symm.trans V
-  let U := Unitary.linearIsometryEquiv.symm T
-  let f := fun W : E →L[ℂ] E => W * (A : E →L[ℂ] E)
-  have hTA : T.toLinearMap ∘ₗ A.toLinearMap = V.toLinearMap := by
-    ext x
-    exact congrArg V (A.symm_apply_apply x)
-  have hTmap : L.map T.toLinearMap = K := by
-    change (K.map A.toLinearMap).map T.toLinearMap = K
-    rw [← Submodule.map_comp, hTA, hV]
-  have hUmap : L.map (Unitary.linearIsometryEquiv U).toLinearMap = K := by
-    simpa only [U, MulEquiv.apply_symm_apply] using hTmap
-  have hTtrans : (T : E →L[ℂ] E) * L.starProjection * star (T : E →L[ℂ] E) =
-      K.starProjection := (map_eq_iff_conjugate_starProjection_complex L K U).mp hUmap
-  have hAmap : K.map (Unitary.linearIsometryEquiv
-      (Unitary.linearIsometryEquiv.symm A)).toLinearMap = L := by
-    simpa only [MulEquiv.apply_symm_apply] using (show K.map A.toLinearMap = L from rfl)
-  have hAtrans : (A : E →L[ℂ] E) * K.starProjection * star (A : E →L[ℂ] E) =
-      L.starProjection := (map_eq_iff_conjugate_starProjection_complex K L
-        (Unitary.linearIsometryEquiv.symm A)).mp hAmap
-  have hconj (W : E →L[ℂ] E) :
-      f W * K.starProjection * star (f W) = W * L.starProjection * star W := by
-    dsimp only [f]
-    rw [star_mul, ← hAtrans]
-    simp only [mul_assoc]
+  let A' := Unitary.linearIsometryEquiv.symm A
+  let V' := Unitary.linearIsometryEquiv.symm V
+  have hAmap : K.map (Unitary.linearIsometryEquiv A').toLinearMap = L := by
+    simpa only [A', MulEquiv.apply_symm_apply] using (show K.map A.toLinearMap = L from rfl)
+  have hVmap : K.map (Unitary.linearIsometryEquiv V').toLinearMap = K := by
+    simpa only [V', MulEquiv.apply_symm_apply] using hV
+  have hAtrans := (map_eq_iff_conjugate_starProjection_complex K L A').mp hAmap
+  have hVtrans := (map_eq_iff_conjugate_starProjection_complex K K V').mp hVmap
   have hcost (W : E →L[ℂ] E) :
-      UnitarilyInvariantSeminorm.schatten ℂ E E p (A.toLinearMap - (f W).toLinearMap) ^ p.toReal =
-        UnitarilyInvariantSeminorm.schatten ℂ E E p
-          (LinearMap.id - W.toLinearMap) ^ p.toReal := by
-    have hfactor : A.toLinearMap - (f W).toLinearMap =
+      UnitarilyInvariantSeminorm.schatten ℂ E E p
+        (A.toLinearMap - (W * (A : E →L[ℂ] E)).toLinearMap) ^ p.toReal =
+      UnitarilyInvariantSeminorm.schatten ℂ E E p
+        (LinearMap.id - W.toLinearMap) ^ p.toReal := by
+    have hfactor : A.toLinearMap - (W * (A : E →L[ℂ] E)).toLinearMap =
         (LinearMap.id - W.toLinearMap) ∘ₗ A.toLinearMap := by ext x; rfl
     rw [hfactor]
     exact congrArg (fun t : ℝ => t ^ p.toReal)
       ((UnitarilyInvariantSeminorm.schatten ℂ E E p).map_comp_linearIsometryEquiv A
         (LinearMap.id - W.toLinearMap))
-  have hfeasible (W : E →L[ℂ] E)
-      (hW : W ∈ unitary (E →L[ℂ] E) ∧ W * L.starProjection * star W = K.starProjection) :
-      f W ∈ unitary (E →L[ℂ] E) ∧
-        f W * K.starProjection * star (f W) = K.starProjection :=
-    ⟨mul_mem hW.1 (Unitary.linearIsometryEquiv.symm A).property, (hconj W).trans hW.2⟩
-  have hfT : f (T : E →L[ℂ] E) = (V : E →L[ℂ] E) := by
-    ext x
-    exact congrArg V (A.symm_apply_apply x)
-  have hmin' : IsLocalMinOn
-      (fun W : E →L[ℂ] E => UnitarilyInvariantSeminorm.schatten ℂ E E p
-        (A.toLinearMap - W.toLinearMap) ^ p.toReal)
-      {W | W ∈ unitary (E →L[ℂ] E) ∧ W * K.starProjection * star W = K.starProjection}
-      (f (T : E →L[ℂ] E)) := by rw [hfT]; exact hmin
-  have hlocal := hmin'.comp_continuousOn (g := f)
-    (s := {W | W ∈ unitary (E →L[ℂ] E) ∧ W * L.starProjection * star W = K.starProjection})
-    (fun W hW => hfeasible W hW) (continuous_id.mul_const (A : E →L[ℂ] E)).continuousOn
-    ⟨U.property, hTtrans⟩
-  have hlocalT : IsLocalMinOn
-      (fun W : E →L[ℂ] E => UnitarilyInvariantSeminorm.schatten ℂ E E p
-        (LinearMap.id - W.toLinearMap) ^ p.toReal)
-      {W | W ∈ unitary (E →L[ℂ] E) ∧ W * L.starProjection * star W = K.starProjection}
-      (T : E →L[ℂ] E) := by
-    change ∀ᶠ W in 𝓝[{W | W ∈ unitary (E →L[ℂ] E) ∧
-      W * L.starProjection * star W = K.starProjection}] (T : E →L[ℂ] E), _ ≤ _ at hlocal ⊢
-    filter_upwards [hlocal] with W hW
-    simpa only [Function.comp_apply, hcost] using hW
-  have hglobal := isMinOn_of_isLocalMinOn_transports_complex p hp hp1 hp2 L K U hUmap hlocalT
-  intro S hS
-  let B := S * (A.symm : E →L[ℂ] E)
-  have hBunit : B ∈ unitary (E →L[ℂ] E) :=
-    mul_mem hS.1 (Unitary.linearIsometryEquiv.symm A.symm).property
-  have hfB : f B = S := by
-    ext x
-    exact congrArg S (A.symm_apply_apply x)
-  have hBtrans : B * L.starProjection * star B = K.starProjection := by
-    rw [← hconj, hfB]
-    exact hS.2
-  have hg := hglobal ⟨hBunit, hBtrans⟩
-  change UnitarilyInvariantSeminorm.schatten ℂ E E p
-      (LinearMap.id - (T : E →L[ℂ] E).toLinearMap) ^ p.toReal ≤
-    UnitarilyInvariantSeminorm.schatten ℂ E E p (LinearMap.id - B.toLinearMap) ^ p.toReal at hg
-  rw [← hcost (T : E →L[ℂ] E), ← hcost B, hfT, hfB] at hg
-  exact hg
+  exact isMinOn_unitary_correction_of_transport_local_global K.starProjection L.starProjection A' V'
+    hAtrans hVtrans
+    (fun W : E →L[ℂ] E => UnitarilyInvariantSeminorm.schatten ℂ E E p
+      (LinearMap.id - W.toLinearMap) ^ p.toReal)
+    (fun W : E →L[ℂ] E => UnitarilyInvariantSeminorm.schatten ℂ E E p
+      (A.toLinearMap - W.toLinearMap) ^ p.toReal)
+    hcost (fun T ht hlocal => isMinOn_of_isLocalMinOn_transports_complex p hp hp1 hp2 L K T
+      ((map_eq_iff_conjugate_starProjection_complex L K T).mpr ht) hlocal) hmin
 
 /-- Every local minimum of the actual Schatten correction norm is
 global among all unitaries preserving the prescribed subspace. -/

@@ -22,8 +22,8 @@ The coordinate equivalence acts by `x + J y + z`. Consequently it retains
 the original source reflection, rather than only the spectrum of the
 transporter. This is the decomposition needed to identify the principal
 angles of the original subspace pair. Empty positive or kernel spaces are
-included. The global principal-angle lower bound is downstream of this
-decomposition and the separate kernel inequality.
+included. The local-to-global theorem combines this decomposition with
+the exact kernel-angle trace and the independent global lower bound.
 -/
 
 public section

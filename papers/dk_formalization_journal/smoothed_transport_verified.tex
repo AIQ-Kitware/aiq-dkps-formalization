@@ -1017,15 +1017,15 @@ minimizers as well.
  label={lst:smoothed-local-global}]
 theorem smoothed_transport_cost_eq_sum_of_isLocalMinOn_complex
     (tau : Real) (htau : 0 < tau) (K L : Submodule Complex E)
-    (U : unitary (ContinuousLinearMap Complex E E))
+    (U : unitary (ContinuousLinearMap (RingHom.id Complex) E E))
     (hmap : K.map (Unitary.linearIsometryEquiv U).toLinearMap = L)
     (hmin : IsLocalMinOn
-      (fun W : ContinuousLinearMap Complex E E =>
+      (fun W : ContinuousLinearMap (RingHom.id Complex) E E =>
         smoothedDisplacementCost tau W.toLinearMap)
-      {W | (unitary (ContinuousLinearMap Complex E E)).carrier W ∧
+      {W | Membership.mem (unitary (ContinuousLinearMap (RingHom.id Complex) E E)) W ∧
         W * K.starProjection * star W = L.starProjection}
-      (U : ContinuousLinearMap Complex E E)) :
-    smoothedDisplacementCost tau (U : ContinuousLinearMap Complex E E).toLinearMap =
+      (U : ContinuousLinearMap (RingHom.id Complex) E E)) :
+    smoothedDisplacementCost tau (U : ContinuousLinearMap (RingHom.id Complex) E E).toLinearMap =
       Finset.univ.sum (fun i : Fin (Module.finrank Complex K) =>
         smoothedPhaseMinimum tau (K.principalAngles L i))
 \end{lstlisting}
@@ -1371,6 +1371,22 @@ unitaries preserving $U$. A unitary preserves $U$ exactly when it
 commutes with $P$. Since $A-C=(W-I)C$ when $W=AC^*$, unitary
 invariance identifies the two singular-value costs. Apply
 \cref{thm:smoothed-transport,cor:smoothed-spectral-optimizer}.
+\end{proof}
+
+\begin{corollary}[Every local commuting correction is globally nearest]
+\label{cor:smoothed-correction-local-global}
+For every $\tau>0$, every local minimum of the correction problem in
+\cref{cor:smoothed-commuting-correction} is globally nearest, with cost
+$\sum_{j=1}^r\mu_\tau(\theta_j)$. The input unitary, prescribed
+subspace and all feasible ambient unitary corrections are unrestricted.
+\end{corollary}
+
+\begin{proof}
+The cost-preserving correspondence in
+\cref{cor:smoothed-commuting-correction} and its inverse are continuous.
+It therefore carries a local correction minimum to a local transport
+minimum. Apply \cref{thm:smoothed-local-global} and transfer the global
+comparison back to every feasible correction.
 \end{proof}
 
 If $\|AP-PA\|_{\mathrm{op}}<1$, every globally nearest commuting

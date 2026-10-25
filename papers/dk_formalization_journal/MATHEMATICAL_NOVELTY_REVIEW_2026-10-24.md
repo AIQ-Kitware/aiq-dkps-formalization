@@ -52,6 +52,14 @@ The generic positive-basis collection, invariant-subspace restriction map,
 reflection geometry and angle-trace identities are classical mechanisms;
 no independent priority is asserted for them. Their formal assembly closes
 the stronger constrained landscape claim that was previously conventional.
+The literal nearest subspace-preserving/commuting-unitary correction
+consequence is also compiled in `SmoothedCorrectionLocalGlobal.lean`, for
+all positive smoothing scales and arbitrary input unitaries. The transfer
+is a shared real/complex, dimension-independent topological lemma with an
+explicit transport local-to-global input; it does not establish a real
+or ideal optimization endpoint. No separate priority is claimed for this
+cost-preserving group identification.
+
 The next stronger question is whether all second-order stationary points
 are global. The present theorem assumes actual local minimality and does
 not answer that question.
@@ -1324,7 +1332,7 @@ rows of the original 29-result Davis--Kahan source inventory.
 | SP-1 | **Unrestricted complex planar** Schatten-`p` `1<p<2` minimum over *all* unitary line transporters and canonical threshold `acos((2-p)/p)` | Formalized: `SchattenPlanarOptimization.lean`, `SchattenPhaseTransition.lean` | BLR (2001) knew failure below `p=2`, incl. right angle, but the complete threshold/phase law was not located. **Credible distinct exact classification; priority unresolved** |
 | SP-2 | For `p=3/2`, critical angle `acos(1/3)` and explicit symmetry-breaking phase | Formalized scalar/planar: `SchattenThreeHalves.lean` and SP-1 | Specialization of SP-1, **not an independent substantial novelty claim** |
 | SP-3 | Complex arbitrary-rank `D_{s^p}(U,V)=sum_i m_p(theta_i)` for `1<p<2` | Complete conventional proof candidate in `schatten_optimization.tex`, with compiled gradient/variation/realization sublemmas | **Highest-potential analytic extension** if final global no-mixing reduction survives independent review; not yet a compiled global theorem |
-| SP-4 | Every local minimum of unrestricted complex Schatten-`p` transport is global; infinite-dimensional Schatten-ideal extension | Conventional arguments in `schatten_optimization.tex` | Potentially interesting but **separate unverified generalizations**; ideal-class hypotheses and zero singular values especially need review |
+| SP-4 | Every local minimum of unrestricted complex Schatten-`p` transport is global; infinite-dimensional Schatten-ideal extension | Finite complex theorem compiled in `SchattenLocalGlobal.lean`; conventional ideal arguments in `schatten_optimization.tex` | Finite `1<p<2` local-to-global is proved, including exceptional blocks. Ideal feasibility, convergence, attainment and classification remain unverified. |
 | SM-1 | Exact **all-pairs complex** finite-dimensional Charbonnier spectral-penalty minimum, attained, explicit phase transition | **Formalized**: `SmoothedPrincipalAngles.lean`, `SmoothedSubspaceOptimization.lean`, `SmoothedPhaseMinimum.lean` | Penalty and constraint each classical; **best completed mathematical originality candidate**, with no identical source located yet |
 | SM-2 | Explicit globally minimizing complex unitary via clipped functional calculus of positive cosine operator | **Formalized**: `SmoothedExplicitOptimizer.lean` | A concrete constructive strengthening of SM-1; may be an elementary companion to SM-1, but substantial for applications |
 | SM-3 | Quadratic growth from optimum below strict angle cutoff, with explicit constant and Frobenius distance for **every admissible complex transporter** | **Formalized**: `SmoothedSubspaceStability.lean` | **Distinct and credible mathematical addition** if not implied by older error-bound/strong-convexity theorem |

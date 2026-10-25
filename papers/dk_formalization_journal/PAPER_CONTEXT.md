@@ -47,6 +47,67 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
 
+## Charbonnier correction local-to-global consequence (25 October)
+
+`SmoothedCorrectionLocalGlobal.lean` proves
+`isMinOn_correction_of_isLocalMinOn_preserving_subspace_complex` and
+`isMinOn_correction_of_isLocalMinOn_commutant_complex`. For every
+`tau>0`, finite complex Hilbert space, input unitary `A`, prescribed
+subspace `K` and feasible unitary correction `V`, an actual local minimum
+of the **literal** `smoothedOperatorDistance tau A V` is globally nearest
+among all ambient unitaries preserving `K`, equivalently commuting with
+`K.starProjection`. There is no commutator-size, angle, multiplicity or
+rank restriction. The input must be unitary; this is not a theorem for
+rounding an arbitrary input matrix.
+
+The donor `UnitaryCorrectionLocalGlobal.lean` proves
+`isMinOn_unitary_correction_of_transport_local_global`. Right multiplication
+`W -> W*A` and its inverse identify the transport fiber from `A(K)` to
+`K` with the correction fiber. The real cost identity, continuity and
+surjectivity transfer both the local hypothesis and the global comparison.
+This geometric lemma is valid over `RCLike` complete Hilbert spaces with
+no dimension assumption, arbitrary conjugacy operators and supplied
+real-valued costs, **conditional on** the transport local-to-global input.
+It establishes no independent real or infinite-dimensional optimization
+theorem. Both the established Schatten correction theorem and the new
+Charbonnier correction theorem consume this one proof; the displaced
+Schatten geometric argument is removed and its public statements unchanged.
+The commutant corollary uses Mathlib's exact unitary conjugation/commutation
+equivalence. The manuscript adds
+`cor:smoothed-correction-local-global`. This cost-preserving group transfer
+has no separate historical novelty claim.
+
+Validation: focused correction builds and
+`lake build DavisKahan.All ForTauCeti`, each preceded by
+`lake exe cache get`, succeeded (10,541 aggregate jobs). This includes
+both public Schatten correction consumers of the shared transfer. The
+updated paper compiled to 62 pages with no final unresolved references,
+duplicate labels or overfull boxes. Its displayed ASCII local-to-global
+signature was separately accepted by Lean with its proof forwarded to the
+compiled endpoint; the scalar field uses `RingHom.id Complex` in the
+explicit continuous-linear-map carrier. The previously recorded unchanged
+Challenge failure and static findings remain outstanding.
+
+The strongest remaining finite complex landscape question is whether
+**every second-order stationary point is global**. The conventional route
+is to replace local minimality by the two conditions actually used in the
+proof: vanishing first derivatives along every source-preserving Hermitian
+right direction, and nonnegative second derivatives there. One must
+independently extract the stationary block pairing, transfer these two
+tests to actual restrictions and extend the overlap/balance Hessian tests
+to the ambient space. No such second-order-sufficiency or strict-saddle
+theorem is currently claimed.
+
+For the unrestricted real problem, the most direct next target remains
+**both determinant classes of the exact four-dimensional two-angle
+minimum** in `real_four_dimensional_transport.tex`. The actual real
+nonzero-gradient and zero-gradient small-block decompositions already
+compile; their four-dimensional cost bounds, angle-multiset assembly,
+matching attainment, sorted-sum exchange bounds and field-gap equalities
+remain conventional. Orthogonal determinant/parity restrictions must remain
+explicit. The new complex local-to-global theorem does not supply a real
+local landscape theorem.
+
 ## Full finite complex Charbonnier local-to-global theorem (25 October)
 
 `SmoothedLocalGlobal.lean` now proves
@@ -329,11 +390,9 @@ above. Neither result is presented as a successful Challenge audit.
 
 The former positive-basis, spectral-decomposition, actual kernel-angle
 trace and principal-angle assembly obligations are all compiled in the
-new full local-to-global entry above. The next useful consequences are
-local-to-global optimality for the literal nearest subspace-preserving
-unitary correction, and a review of whether the proof extends from local
-minimality to second-order stationarity. The latter stronger statement
-is a research target, not a current theorem. Real matching, component
+new full local-to-global entry above. The literal nearest subspace-preserving correction consequence is now
+compiled above. Whether the proof extends from local minimality to
+second-order stationarity remains a stronger research target. Real matching, component
 dimensions and justified operator-ideal extensions remain open.
 
 ## Actual Charbonnier second variation and reflection tests (25 October)

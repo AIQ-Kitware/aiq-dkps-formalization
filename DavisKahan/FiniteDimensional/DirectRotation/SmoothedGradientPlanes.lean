@@ -17,8 +17,8 @@ a common phase eigenbasis. Each resulting opposite phase pair attains
 the exact scalar minimum at its acute mean angle. The sum of those
 minimum values is the literal cost of the two actual unitary restrictions.
 The uniform positive-level basis theorem includes the coalescing critical
-level. The zero-gradient block, the principal-angle identification and
-assembly of all gradient levels are needed for a local-to-global theorem.
+level. The actual zero-gradient block and principal-angle assembly are
+handled by the downstream local-to-global theorem.
 -/
 
 public section
