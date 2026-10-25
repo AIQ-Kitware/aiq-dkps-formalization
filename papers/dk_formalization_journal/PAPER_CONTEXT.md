@@ -13,8 +13,8 @@ are compact, their active rank labels are locally constant, and different
 rank sectors have fixed-pair positive separation. Simple active factors
 with zero right defect give exactly `2^s` isolated optimizers. The subspace
 rank-stratification equivalences are algebraic. Sector connectedness,
-component counts, manifold dimensions, unrestricted real matching and
-operator-ideal optimization remain open. The full finite complex
+component counts, manifold dimensions and operator-ideal optimization
+remain open. The full finite complex
 Charbonnier local-to-global theorem is now compiled for every `tau>0`.
 The unrestricted real four-dimensional minimum now compiles for arbitrary
 rank-two subspaces, in terms of their accepted principal angles, over
@@ -34,7 +34,10 @@ and right-angle multiplicities. The actual ambient minimum is the sum of
 these explicit angle costs. Labelled matching extraction, exact removal of
 zero-angle partners, conversion between determinant classes and the draft
 weights, and the unrestricted matching lower bound now compile. Constructive
-ambient matching attainment remains open. The exact one-angle real minimum now compiles for every finite
+ambient matching attainment and the full unrestricted real matching equality
+now compile for `1<p<2`, together with an exact pairwise certificate for
+the global optimality of independent plane minima. The exact one-angle
+real minimum now compiles for every finite
 Schatten exponent at least one. For `1<p<2`, its value exceeds the complex
 one-angle value exactly at supercritical acute angles; equality holds below
 and at the critical angle and at the right endpoint.
@@ -69,7 +72,111 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
 
-## Unrestricted real matching lower bound (25 October)
+## Unrestricted real matching equality and ambient attainment (25 October)
+
+**Lean-verified:** `RealMatchingAttainment.exists_minimizing_real_schatten_transport_matching`
+closes the full arbitrary-rank real Schatten matching formula for every
+finite real inner-product space, equal-rank actual subspaces `K,L`, finite
+`p : ENNReal` with `Fact (1 <= p)` and `1 < p.toReal < 2`. It constructs an
+ambient orthogonal transporter, identifies its accepted Schatten power
+with `realPositiveSchattenMatchingMinimum` on the original labelled
+strictly positive principal angles, and compares it with **every** ambient
+orthogonal competitor. Repeated angles, right angles, zero source rank,
+all-zero angles and arbitrary common ambient dimensions are included.
+There is no acute, parity, determinant or prescribed-block restriction.
+The scalar weights are the clipped positive pair cost and the unrestricted
+real singleton cost in `real_matching_transport.tex`.
+
+`exists_real_transport_attaining_matching` is stronger than combinatorial
+attainment: **every** full-weight matching on the original positive labels
+is realized by an actual ambient orthogonal transporter with exactly that
+matching cost. Its pair weights include both determinant classes.
+Conversion to the draft's positive-edge minimum uses the existing proved
+identity between the two combinatorial minima. It does not assert that
+an arbitrary positive-edge matching is attained at its positive-class cost.
+
+The geometric construction is now independent of ambient dimension:
+
+- `Submodule.exists_cosineSine_principalAngle_frame` constructs the actual
+  equal-rank frame, using complementary vectors only for positive angles.
+  `starProjection_eq_on_cosineSine_active_orthogonal` identifies the entire
+  common remainder. `principalAngles_eq_of_cosineSine_frame` is the converse
+  computing accepted angles from a sorted frame. These are `RCLike` results.
+- `Submodule.cosineSineFrameBlock_data` constructs the actual span of any
+  selected `n` positive labels, proves dimension `2*n`, both source/target
+  ranks `n`, reduction of both projections and exact accepted angle labels.
+  Disjoint selections are orthogonal; covering selections span exactly the
+  active space. Repeated/right angles are allowed.
+- `TauCeti.exists_linearIsometryEquiv_of_orthogonal_blocks` consumes accepted
+  internal orthogonal-sum and `PiLp` isometries; its finite gluing statement
+  does not require finite dimension or completeness. The finite Schatten
+  transport version adds exact norm-power additivity.
+- `RealAngleBlockAttainment.exists_real_transport_attaining_principalAngle_groups`
+  realizes every prescribed labelled partition into singletons and pairs,
+  fixes the whole common orthogonal remainder and attains the sum of the
+  actual unrestricted block minima. Ordered one-/two-cycle coordinates
+  connect this geometry to every involutive matching.
+
+**Useful consequence:**
+`SchattenRealMatchingCriterion.exists_minimizing_real_schatten_transport_singletons_iff`
+proves that the sum of the independent real plane minima is the unrestricted
+ambient minimum **if and only if** every pair of distinct positive angle
+labels satisfies `s(theta_i)+s(theta_j) <= e(theta_i,theta_j)`. Equal numerical
+angles retain distinct labels. This is an exact pairwise certificate against
+all ambient orthogonal competitors; it avoids solving the matching problem
+when independent planes suffice. Its purely finite combinatorial version is
+`realPositiveSchattenMatchingMinimum_eq_singletons_iff`. These are independent
+plane optima, which can include reflections; they are not automatically the
+canonical rotation. No algorithmic runtime or numerical accuracy theorem is
+claimed.
+
+**Application:** `RealSchattenCommutingCorrection.exists_nearest_real_schatten_commuting_orthogonal`
+constructs a nearest real orthogonal operator commuting with a prescribed
+projection. For an arbitrary orthogonal input `A`, its literal accepted
+Schatten distance, raised to `p.toReal`, equals the matching minimum for
+the actual image-to-source pair `K.map A.toLinearMap, K`. It compares
+ordinary Schatten distances with every commuting orthogonal competitor.
+This uses the classical correction/transport bijection and orthogonal
+invariance; no separate priority, numerical-performance or physical
+implementation claim is made.
+
+**Validation:** focused builds passed for the arbitrary-ambient frame,
+selected-block geometry, prescribed-block attainment, full matching
+attainment, pairwise criterion and commuting-correction application.
+The new consumers are in the ordinary
+`DirectRotation.All` aggregate. After `lake exe cache get`, the full
+`lake build DavisKahan.All ForTauCeti` production build passed. The final
+application aggregate was then validated with the same command
+(10,735 jobs). No `sorry`, `admit` or speculative axioms were introduced.
+The checked manuscript and PDF are unchanged; the general-penalty research
+fragment remains outside `paper.tex`.
+
+**Next precise obligations:** prove/review the draft's clipped-cost exchange
+inequalities before claiming the two sorted sums. The real canonical test
+requires separating independent reflections from canonical rotations and
+connecting the real canonical displacement to its angle sum. All-rank
+real/complex equality and quantitative field gaps need independent proofs;
+the one-angle gap alone does not establish them. The full optimizer set in
+the real field, real local-to-global, general-penalty/nuclear/Charbonnier
+structural extensions and operator-ideal feasibility/convergence/attainment
+remain open. No current result implies those extensions. Historical priority
+of the full real `1<p<2` formula remains unresolved.
+
+A useful independent next endpoint is real nuclear matching by letting
+`p` decrease to one in the newly proved Schatten theorem. This avoids
+depending on the still-unproved unrestricted real Charbonnier theorem
+used by the conventional draft. The precise missing analytic steps are
+continuity of the truncated scalar minimum in the exponent at one,
+continuity of the finite matching minimum, and convergence of each fixed
+ambient spectral-power sum to its accepted nuclear norm. Mathlib already
+provides `IsCompact.continuous_sInf` and `Real.continuousAt_rpow_of_pos`;
+instantiate those APIs rather than building a new minimization framework.
+The positive-pair nuclear endpoint must be identified with
+`4*sin((theta+psi)/2)`, including zero and right endpoints, before claiming
+a nuclear matching formula. No part of this endpoint argument is currently
+registered as compiled.
+
+## Unrestricted real matching lower bound (25 October; historical stage)
 
 The **lower-bound direction** of the real Schatten matching formula now
 compiles for every finite real ambient dimension and source rank,
@@ -128,7 +235,7 @@ with the computed matching minima to less than `1e-10`. These numerical
 checks test the proposed converse in small dimension; they do not prove
 it. The checked manuscript and its PDF remain unchanged.
 
-**Remaining converse:** construct an ambient orthogonal transporter for
+**Historical next step, now closed above:** construct an ambient orthogonal transporter for
 an arbitrary matching of the original strictly positive angle labels, or
 at least for an attaining matching, with exactly the stated cost. Group
 actual principal planes along its one- and two-element orbits, verify the
@@ -146,8 +253,8 @@ After this converse, the lower bound will give equality and ambient
 attainment of the exact matching minimum. Sorted exchange inequalities,
 all-rank equality/field-gap classifications, real local-to-global,
 Charbonnier/nuclear structural extensions and Schatten-ideal lifts remain
-separate obligations. The matching claim is still excluded from
-`paper.tex`. This verification advance does not settle historical priority.
+separate obligations. The matching claim remains excluded from
+`paper.tex`; its `1<p<2` equality and attainment are now proved above. This verification advance does not settle historical priority.
 
 ## Exact real angle costs and one-angle field gap (25 October)
 

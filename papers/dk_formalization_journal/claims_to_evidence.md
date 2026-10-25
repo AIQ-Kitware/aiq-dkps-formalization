@@ -549,3 +549,28 @@ compiled; the unrestricted smoothed local-to-global theorem and nearest-correcti
 |---|---|---|
 | Every local minimum of the literal smoothed distance to a unitary input, among all unitaries preserving a prescribed subspace or commuting with its projection, is globally nearest. | `SmoothedCorrectionLocalGlobal.lean`: `isMinOn_correction_of_isLocalMinOn_preserving_subspace_complex`, `isMinOn_correction_of_isLocalMinOn_commutant_complex`; included Corollary `cor:smoothed-correction-local-global`. | Finite complex, `tau>0`, unitary input, actual feasible local minimum. All ambient feasible competitors, all angle/rank/multiplicity cases. No arbitrary-matrix rounding, real landscape, convergence or performance claim. |
 | Right multiplication by a unitary transfers local-to-global optimality from the transport fiber to its source-preserving correction fiber. | `UnitaryCorrectionLocalGlobal.lean`: `TauCeti.isMinOn_unitary_correction_of_transport_local_global`. | Complete `RCLike` Hilbert spaces without a dimension assumption, supplied conjugacy and real-cost identities on all operators, and a supplied transport local-to-global theorem. A conditional geometric transfer; both Schatten and Charbonnier endpoints consume its single proof. No independent ideal/real optimum asserted. |
+
+
+## Verified unrestricted real matching and pairwise certificate (25 October 2026)
+
+| Research theorem | Lean evidence | Exact boundary |
+| --- | --- | --- |
+| The real `1<p<2` ambient transport minimum equals the positive-edge matching minimum on the original strictly positive accepted principal-angle labels, with an actual ambient attainer and comparison with every orthogonal competitor. | `RealMatchingAttainment.lean`: `exists_minimizing_real_schatten_transport_matching`; existing lower bound `SchattenRealMatchingWeights.realPositiveSchattenMatchingMinimum_le_of_map_eq`. | Any finite real inner-product space and equal-rank actual subspaces; finite `p : ENNReal`, `Fact (1 <= p)`, `1 < p.toReal < 2`. Zero, repeated and right angles, rank zero and arbitrary common ambient directions included. No determinant or prescribed-plane restriction. Research fragment only; historical priority unresolved. |
+| Every full-weight labelled positive-angle matching is attained by an ambient orthogonal transporter. | `RealMatchingAttainment.exists_real_transport_attaining_matching`; `RealAngleBlockAttainment.exists_real_transport_attaining_principalAngle_groups`. | Full pair weights include both determinant classes. The positive-edge minimum is equal to this full-weight minimum by the already compiled pruning theorem. Arbitrary positive-edge matchings are not asserted to attain their positive-class costs by this statement. |
+| Any selected `n` positive labels generate an actual reducing block of dimension `2*n`, with both source/target ranks `n` and exactly those accepted angles. Disjoint/covering selections are orthogonal/exhaust the active space. | `Projection/CosineSineFrame.lean`, `Projection/CosineSineBlocks.lean`: `exists_cosineSine_principalAngle_frame`, `principalAngles_eq_of_cosineSine_frame`, `cosineSineFrameBlock_data`, `orthogonalFamily_cosineSineFrameBlock`, `iSup_cosineSineFrameBlock_eq_active`. | `RCLike`, finite dimension, equal-rank actual pair for frame existence; selected labels strictly positive and ordered. All multiplicities and right angles allowed. Classical CS/SVD geometry, with no separate priority claim. |
+| The independent real plane optimum value is globally optimal iff no coupled pair is cheaper than its two independent minima. | `SchattenRealMatchingCriterion.lean`: `realSchattenMatchingMinimum_eq_singletons_iff`, `realPositiveSchattenMatchingMinimum_eq_singletons_iff`, `exists_minimizing_real_schatten_transport_singletons_iff`. | A test on every pair of distinct positive labels, including equal numerical angles; the ambient corollary compares with all real orthogonal transports. Independent plane optima can include reflections. This is not yet the real canonical-rotation test or a sorted-exchange theorem. |
+
+The direct application `RealSchattenCommutingCorrection.exists_nearest_real_schatten_commuting_orthogonal`
+now also compiles: for an arbitrary real orthogonal input and a prescribed
+projection it constructs a nearest orthogonal operator in the projection's
+commutant. Its literal Schatten distance power is the positive-edge
+matching minimum for the actual image-to-source subspace pair. Minimality
+is stated for ordinary Schatten distances against every orthogonal
+commuting competitor. The correction/transport change of variables and
+orthogonal invariance are classical; the exact `1<p<2` value consumes the
+new real matching theorem. No separate priority or performance claim.
+
+These results close the previously pending ambient matching converse for
+Schatten `1<p<2`. They do not extend the verified structural theorem to
+nuclear, Charbonnier, general spectral penalties or infinite-dimensional
+ideals. The checked `paper.tex` and PDF are unchanged.

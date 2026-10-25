@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.ScaledOrthonormalExtension
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.CosineSineFrame
 public import TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle
 public import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
 public import Mathlib.Analysis.InnerProductSpace.ProdL2
@@ -14,13 +14,11 @@ public import Mathlib.Data.Matrix.Block
 /-!
 # Principal-angle cosine--sine bases, including both endpoints
 
-Apply the accepted singular system to the sine embedding `L -> Kᗮ`.
-Its right basis is already ordered by the accepted principal sines. The
-images in `K` and `Kᗮ` have diagonal Gram matrices with cosine and sine
-scales. Complete each normalized nonzero family with its original labels.
-Thus zero and right angles require no inverse on a zero scale and no
-separate acuteness assumption. The construction is real or complex and
-includes the empty pair.
+Use the principal-angle frame constructed in arbitrary ambient dimension.
+When source and complement have equal rank, complete its zero complementary
+columns to a full complement basis with their original labels. The resulting
+ambient chart uses the accepted ordered principal angles, including zero,
+repeated and right angles, over either field and for the empty pair.
 -/
 
 public section
@@ -33,16 +31,6 @@ open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
-
-private theorem inner_projection_partition (K : Submodule 𝕜 E) (x y : E) :
-    ⟪K.orthogonalProjectionOnto x, K.orthogonalProjectionOnto y⟫_𝕜 +
-      ⟪Kᗮ.orthogonalProjectionOnto x, Kᗮ.orthogonalProjectionOnto y⟫_𝕜 = ⟪x, y⟫_𝕜 := by
-  change ⟪K.starProjection x, K.starProjection y⟫_𝕜 +
-    ⟪Kᗮ.starProjection x, Kᗮ.starProjection y⟫_𝕜 = _
-  rw [K.inner_starProjection_left_eq_right, Kᗮ.inner_starProjection_left_eq_right]
-  rw [K.starProjection_eq_self_iff.mpr (K.starProjection_apply_mem y),
-    Kᗮ.starProjection_eq_self_iff.mpr (Kᗮ.starProjection_apply_mem y)]
-  rw [← inner_add_right, K.starProjection_add_starProjection_orthogonal]
 
 /-- A balanced finite pair has cosine--sine orthonormal bases labeled by
 the accepted principal angles in decreasing order. No angle is deleted:
@@ -59,59 +47,33 @@ theorem exists_orthonormalBases_cos_sin_principalAngles
           ∀ i, (w i : E) = ((Real.cos (K.principalAngles L i) : ℝ) : 𝕜) • (u i : E) +
             ((Real.sin (K.principalAngles L i) : ℝ) : 𝕜) • (v i : E) := by
   classical
-  let A : L →ₗ[𝕜] Kᗮ := Kᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ L.subtype
-  let B : L →ₗ[𝕜] K := K.orthogonalProjectionOnto.toLinearMap ∘ₗ L.subtype
-  let w := A.rightSingularBasis
-  have hsv : A.singularValues = K.principalSines L := by
-    have h := K.principalSines_range_eq_singularValues
-      (X := L.subtypeL) L.subtypeₗᵢ.isometry
-    have hrange : L.subtypeL.range = L := by
-      change L.subtype.range = L
-      exact L.range_subtype
-    have hincl : Kᗮ.subtypeₗᵢ.toLinearMap ∘ₗ A =
-        (Kᗮ.starProjection ∘L L.subtypeL).toLinearMap := by
-      ext x
-      rfl
-    rw [← LinearMap.singularValues_linearIsometry_comp Kᗮ.subtypeₗᵢ A, hincl]
-    simpa only [hrange, K.principalSines_comm L hKL] using h.symm
-  have hs (i : Fin (Module.finrank 𝕜 L)) :
-      A.singularValues i = Real.sin (K.principalAngles L i) := by
-    rw [hsv]
-    exact (K.sin_principalAngles L i).symm
-  have hAi (i j : Fin (Module.finrank 𝕜 L)) :
-      ⟪A (w i), A (w j)⟫_𝕜 =
-        if i = j then ((Real.sin (K.principalAngles L i) ^ 2 : ℝ) : 𝕜) else 0 := by
-    rw [A.inner_apply_rightSingularBasis]
-    rw [w.inner_eq_ite, hs]
-    split_ifs <;> simp_all
-  have hBi (i j : Fin (Module.finrank 𝕜 L)) :
-      ⟪B (w i), B (w j)⟫_𝕜 =
-        if i = j then ((Real.cos (K.principalAngles L i) ^ 2 : ℝ) : 𝕜) else 0 := by
-    have hsum := inner_projection_partition K (w i) (w j)
-    change ⟪B (w i), B (w j)⟫_𝕜 + ⟪A (w i), A (w j)⟫_𝕜 = ⟪w i, w j⟫_𝕜 at hsum
-    rw [hAi, w.inner_eq_ite] at hsum
+  obtain ⟨u, w, v₀, hgram, hsource, hcomplement, _, _, _⟩ :=
+    K.exists_cosineSine_principalAngle_frame L hKL
+  let f (i : Fin (Module.finrank 𝕜 L)) := Kᗮ.orthogonalProjectionOnto (w i : E)
+  have hf (i) : f i = ((Real.sin (K.principalAngles L i) : ℝ) : 𝕜) • v₀ i := by
+    apply Subtype.ext
+    exact hcomplement i
+  have hinner (i j : Fin (Module.finrank 𝕜 L)) :
+      ⟪f i, f j⟫_𝕜 =
+        if i = j then ((Real.sin (K.principalAngles L i)^2 : ℝ) : 𝕜) else 0 := by
+    rw [hf i, hf j, inner_smul_left, inner_smul_right, hgram]
+    simp only [RCLike.conj_ofReal]
     by_cases hij : i = j
     · subst j
-      simp only [ite_true] at hsum ⊢
-      have hpy : ((Real.cos (K.principalAngles L i)^2 : ℝ) : 𝕜) +
-          ((Real.sin (K.principalAngles L i)^2 : ℝ) : 𝕜) = 1 := by
-        exact_mod_cast Real.cos_sq_add_sin_sq (K.principalAngles L i)
-      linear_combination hsum - hpy
-    · simpa only [hij, ite_false, add_zero] using hsum
-  obtain ⟨u, hu⟩ := OrthonormalBasis.exists_smul_eq_of_inner_eq_ite
-    (by simpa only [Fintype.card_fin] using hKL) (fun i => B (w i))
-    (fun i => Real.cos (K.principalAngles L i)) hBi
+      by_cases hi : 0 < K.principalAngles L i
+      · simp [hi, pow_two]
+      · have hz : K.principalAngles L i = 0 :=
+          le_antisymm (le_of_not_gt hi) (K.principalAngles_nonneg L i)
+        simp [hz]
+    · simp [hij]
   obtain ⟨v, hv⟩ := OrthonormalBasis.exists_smul_eq_of_inner_eq_ite
-    (by simpa only [Fintype.card_fin] using hcomp) (fun i => A (w i))
-    (fun i => Real.sin (K.principalAngles L i)) hAi
+    (by simpa only [Fintype.card_fin] using hcomp) f
+    (fun i => Real.sin (K.principalAngles L i)) hinner
   refine ⟨u, v, w, fun i => ?_⟩
-  have hKu : K.starProjection (w i) =
-      ((Real.cos (K.principalAngles L i) : ℝ) : 𝕜) • (u i : E) :=
-    congrArg Subtype.val (hu i)
   have hKv : Kᗮ.starProjection (w i) =
       ((Real.sin (K.principalAngles L i) : ℝ) : 𝕜) • (v i : E) :=
     congrArg Subtype.val (hv i)
-  rw [← hKu, ← hKv]
+  rw [← hsource, ← hKv]
   exact (K.starProjection_add_starProjection_orthogonal (w i)).symm
 
 /-- Combine the two cosine--sine halves into a complete ambient orthonormal

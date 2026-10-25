@@ -6,7 +6,11 @@
 % SchattenRealAngleCosts.lean sums these explicit costs on the actual family.
 % Labelled matching extraction, zero removal, conversion to positive edge
 % weights and the unrestricted matching lower bound now compile for 1<p<2
-% in SchattenRealMatching*.lean. Ambient matching attainment remains conventional.
+% in SchattenRealMatching*.lean. RealMatchingAttainment.lean now proves the
+% unrestricted matching equality and actual ambient attainment for 1<p<2.
+% SchattenRealMatchingCriterion.lean gives the exact all-pairs certificate
+% for independent plane optima. Sorted exchange and field-gap claims remain
+% conventional; no general-penalty extension follows from the Schatten proof.
 % The nuclear/Charbonnier extensions below are not inferred from this scope.
 % Evidence and priority boundaries: PAPER_CONTEXT.md.
 \section{Real transport as a weighted matching problem}
@@ -57,6 +61,17 @@ An attaining transport acts on one principal plane for each unmatched
 angle and couples the two principal planes of each matched pair.
 It fixes the remaining common summands.
 \end{theorem}
+
+For $\rho(s)=s^p$ with $1<p<2$, the unrestricted equality and ambient
+attainment in Theorem~\ref{thm:real-matching-minimum} are now Lean-verified
+by \texttt{exists\_minimizing\_real\_schatten\_transport\_matching}.
+This includes all repeated and right angles and arbitrary common summands.
+The proof also gives the exact criterion for independent real plane minima:
+they are globally optimal if and only if
+$s_\rho(\theta_i)+s_\rho(\theta_j)\le e_\rho(\theta_i,\theta_j)$
+for every pair of distinct positive-angle labels. Those independent minima
+may use reflections. The more general penalty scope and the exchange and
+field-gap assertions below remain conventional research claims.
 
 We first give the algebraic decomposition used in the proof.
 
