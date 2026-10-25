@@ -1,9 +1,11 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** reflecting-block Schatten descent and exclusion
-inside unrestricted ambient local minima, based on `5c2ca4ad2`, registered
-first below. The complete all-angle Charbonnier classification remains proved.
+**Current research source:** complete fixed/right decomposition of the
+actual gradient kernel at unrestricted ambient Schatten local minima,
+based on `276828432`,
+registered first below. The complete all-angle Charbonnier classification
+remains proved.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -17,6 +19,119 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Complete reflecting-kernel geometry after `276828432`
+
+The missing **planar normal form and its application to actual invariant
+planes** are now compiled. No real reflecting matrix, basis, orthogonal
+decomposition, or restricted source operator is supplied at the ambient
+endpoint. Let `P` be an orthogonal projection, `T` an ambient unitary,
+and `N` any common invariant complex plane on which `T^2=I`.
+If `T` is a local minimum against **all ambient feasible unitaries**, then
+`T` fixes `N` pointwise or `T(P(T(x)))=x-P(x)` for every `x` in `N`.
+This is a necessary condition for every finite Schatten exponent `p>1`.
+It includes zero and full source restrictions and the identity and
+negative identity cases.
+
+- `PlanarReflection.exists_source_reflection_coordinates`, in
+  `ForTauCeti/Analysis/InnerProductSpace/PlanarReflection.lean`, constructs
+  the actual coordinate isometry for a nonconstant source projection and
+  a self-adjoint unitary other than `+I,-I`. It gives `P=diag(1,0)` and
+  `R=[[-d,-k],[-k,d]]` in the same coordinates, with `d^2+k^2=1`, `k>=0`.
+  `exists_diagonal_conjugate_real_reflection` proves the diagonal gauge
+  lemma, including a vanishing off-diagonal coefficient. The source basis
+  comes directly from Mathlib's ordered symmetric eigenbasis.
+- `eq_one_or_conjugate_eq_one_sub_of_isLocalMinOn_reflecting_plane_complex`,
+  in `SchattenReflectingPlanes.lean`,
+  proves the whole-plane alternative for every source projection.
+  `conjugate_eq_one_sub_of_isLocalMinOn_reflecting_plane_complex`
+  gives its nonidentity, nonconstant-source branch.
+- `fixes_or_exchanges_source_complement_on_invariant_plane_of_isLocalMinOn_complex`
+  is the unrestricted **ambient** endpoint. Only the actual restriction
+  is assumed involutive; all other ambient eigenvalues are unrestricted.
+  Its conclusion concerns the original operators on actual vectors.
+- `eq_one_of_isLocalMinOn_selfAdjoint_commuting_complex` and
+  `fixes_invariant_subspace_of_isLocalMinOn_involutive_commuting_complex`
+  exclude every nonidentity source-commuting reflecting block, in any
+  finite dimension and for every finite `p>=1`. The source operator in
+  these two statements need only be self-adjoint. Thus the nuclear
+  endpoint is included in the commuting-block exclusion, not in the
+  noncommuting-plane classification.
+- `SchattenTransportRestriction.lean` now constructs actual unitary
+  restrictions and their inherited local minima in
+  `exists_isLocalMinOn_restriction_of_invariant`, over real or complex
+  scalars. It assumes common invariance and a self-adjoint source.
+  `isLocalMinOn_transport_of_conj_linearIsometryEquiv` handles arbitrary
+  coordinate changes and arbitrary source operators. Both use the
+  existing finite Schatten additivity and isometry invariance APIs.
+- `fixes_or_exchanges_source_complement_on_small_invariant_block_of_isLocalMinOn_complex`
+  includes every actual block of dimension at most two. Its exchange
+  alternative explicitly forces dimension two. The dimension-one step
+  consumes `ContinuousLinearMap.commute_of_finrank_le_one`, proved over
+  arbitrary `RCLike` scalars with no inner-product or completeness
+  assumption.
+- `exists_fixed_or_right_orthogonal_blocks_of_isLocalMinOn_reflection_complex`
+  constructs a **complete orthogonal family** for a reflecting local
+  minimum from its source and negative-phase projections. Every nonzero
+  block is fixed or exchanges its source and complement; all have
+  dimension at most two.
+- `gradient_kernel_fixed_or_right_blocks_of_isLocalMinOn_transports_complex`
+  derives that family on the **actual gradient kernel of every ambient
+  local minimum**, at arbitrary rank. The unitary restriction, restricted
+  source projection, negative-phase projection and family are constructed.
+  No supplied model, frame, prescribed pairing, gap, or positive-angle
+  hypothesis is assumed. This holds for every finite complex Schatten
+  exponent `p>1`, including an empty kernel and arbitrary remaining
+  ambient eigenvalues.
+
+The checked manuscript includes Proposition
+`prop:schatten-intrinsic-reflecting-plane` and Corollary
+`cor:schatten-kernel-fixed-right`. The alternative is necessary,
+not a general sufficiency theorem for every `p>1`: for `p>2`, a
+right-angle reflection need not be optimal. The normal-form ingredients
+are classical projection and matrix geometry and carry no separate
+historical novelty claim. Historical priority of the full constrained
+transport theory remains provisional.
+
+### Exact next unrestricted local-to-global proof
+
+The two-plane normal coordinates, dimension-one exclusion, complete
+family construction and application to the actual gradient kernel are
+closed. The strongest next theorem is the **cost equality**: assemble
+the restricted principal-angle sum and actual Schatten cost over the
+constructed complete orthogonal family. The fixed blocks contribute
+zero; the exchanged rank-one planes contribute `phaseMinimum(p,pi/2)=2^p`.
+The resulting kernel cost equality, inserted into
+`gradient_kernel_cost_defect_of_isLocalMinOn_transports_complex`, would
+give the full no-spurious-local-minima theorem for `1<p<2`.
+
+That numerical cost/angle assembly and unrestricted local-to-global
+conclusion are **not yet Lean-verified**. The full pure Schatten optimizer parameters,
+real matching, and operator-ideal attainment remain open formal targets.
+Earlier chronological entries below retain their original proof frontiers.
+
+An alternative numerical route is available and needs separate Lean proofs.
+For every unitary `A` and `1<=p<=2`,
+`2^(p-2)*||I-A||_F^2 <= ||I-A||_p^p`; every self-adjoint unitary has
+equality, since its displacement singular values are zero or two.
+Thus a Frobenius-minimizing reflection minimizes the Schatten cost too.
+The constructed fixed/right family makes the source-diagonal compression
+`P*R*P+(I-P)*R*(I-P)` the identity on fixed blocks and zero on exchanged
+blocks, hence positive. A positive-compression trace certificate then
+proves Frobenius optimality: for a competitor `R*D`, `D` commutes with
+the source, and its real trace is at most the trace of that compression.
+This conventional argument was checked algebraically here. The spectral
+comparison, compression assembly and trace certificate are not new compiled
+endpoints; proving them would avoid reindexing the restricted principal-angle
+list before applying the existing exact-value theorem.
+
+Validation: `lake exe cache get` preceded every Lean build. The normal-form,
+intrinsic-plane, commuting-block and full actual-kernel targets passed.
+`lake build DavisKahan.All ForTauCeti` passed (10,387 jobs;
+`/tmp/reflecting-kernel-final-build.log`), through the ordinary aggregate
+imports. BibTeX and repeated pdfLaTeX passes produced
+`/tmp/dk-reflecting-kernel-paper/dk-reflecting-kernel.pdf`, with no unresolved
+references or citations, multiply defined labels or overfull boxes.
 
 ## Reflecting-block descent after `5c2ca4ad2`
 
@@ -75,9 +190,9 @@ checked in earlier SymPy diagnostics is not a compiled endpoint.
 The included manuscript now states Proposition
 `prop:schatten-reflecting-descent` with these hypotheses.
 
-### Exact remaining unrestricted local-to-global obligation
+### Remaining obligation at that snapshot
 
-The analytic variation is closed. What remains is to derive the normal
+The analytic variation was closed at that snapshot. The next task was to derive the normal
 coordinates from **every actual small common invariant block** of the
 source projection and the negative spectral projection of the gradient
 kernel reflection. The existing
@@ -89,7 +204,8 @@ normal form `P0=diag(1,0)`, `S=[[-d,-k],[-k,d]]` with real `d,k`.
 The compiled ambient exclusion then forces `d=0`, leaving only zero and
 right angles. Reassembly with the existing gradient-kernel cost-deficit
 identity would prove that every constrained local minimum is global.
-That unrestricted conclusion is **not yet Lean-verified**. Full pure
+The newer entry above closes the normal coordinates and actual-plane
+classification. The unrestricted conclusion is **not yet Lean-verified**. Full pure
 Schatten optimizer parameter assembly, real matching and operator-ideal
 attainment remain separate open formal targets.
 

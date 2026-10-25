@@ -501,6 +501,79 @@ $\dim(H_0)|2\cos(t/2)|^p$, strictly smaller than its initial cost for
 sufficiently small nonzero $t$.
 \end{proof}
 
+\begin{proposition}[Intrinsic reflecting-plane classification]
+\label{prop:schatten-intrinsic-reflecting-plane}
+Let $T$ be a local minimum of $\|I-T\|_p^p$ among all complex unitary
+transporters of a source projection $P$ to $TPT^*$, with finite $p>1$.
+Suppose $N$ is a two-dimensional common invariant subspace of $P$ and
+$T$, and $T^2x=x$ for every $x\in N$. Then either $T$ fixes $N$
+pointwise or
+\[
+ TPTx=x-Px\qquad(x\in N).
+\]
+Zero and full source restrictions are included and force the first
+alternative. More generally, any common invariant subspace on which
+$T^2=I$ and $TP=PT$ is fixed pointwise at a local minimum; this last
+assertion holds for every finite $p\geq1$.
+\end{proposition}
+
+\begin{proof}
+Finite-dimensional unitarity makes $N$ reducing for $T$, and
+self-adjointness of $P$ makes it reducing for $P$. Orthogonal extension
+and additivity of Schatten powers transfer local minimality to the
+actual restricted transporter $R=T|_N$. This restriction is a
+self-adjoint unitary.
+
+If $R$ commutes with the restricted source, its negative eigenspace is
+source-invariant. The scalar variation on that eigenspace excludes it
+unless it is zero, so $R=I$. This also proves the final assertion and
+handles constant source restrictions. The case $R=-I$ is excluded in
+the same way.
+
+Otherwise choose an orthonormal source basis with projection
+$\operatorname{diag}(1,0)$. A nonscalar self-adjoint planar involution
+has trace zero. Its diagonal entries are real and opposite, and
+rephasing the second basis vector makes its off-diagonal entries real.
+Thus its matrix is
+\[
+ \begin{pmatrix}-d&-k\\-k&d\end{pmatrix},
+ \qquad d^2+k^2=1,\quad k\geq0.
+\]
+This change of basis preserves the source projection, including when
+$k=0$. Proposition~\ref{prop:schatten-reflecting-descent} forces $d=0$.
+The resulting matrix conjugates $\operatorname{diag}(1,0)$ to
+$\operatorname{diag}(0,1)$, giving the claimed identity on $N$.
+\end{proof}
+
+\begin{corollary}[Complete reflecting-kernel block structure]
+\label{cor:schatten-kernel-fixed-right}
+At every constrained local minimum $W$, the actual kernel
+$Z=\ker G_p(W)$ has a complete orthogonal decomposition into nonzero
+common invariant subspaces of its source projection and unitary
+restriction, each of dimension at most two. Every block is fixed
+pointwise or is a two-dimensional block satisfying
+\[
+ W(P(Wx))=x-Px.
+\]
+Every one-dimensional block is fixed. The assertion includes an empty
+kernel and imposes no restriction on the other ambient eigenvalues.
+\end{corollary}
+
+\begin{proof}
+The source projection preserves $Z$ because it commutes with $G_p(W)^2$.
+The actual kernel unitary is a reflection $R=I-2S$, with $S$ an
+orthogonal projection. The two-projection decomposition
+\citep{halmos1969two} for $P|_Z$ and
+$S$ gives a complete orthogonal family of common invariant lines and
+planes. Invariance under $S$ also gives invariance under $R$.
+
+Local minimality descends first to $Z$ and then to each actual block.
+Endomorphisms in dimension at most one commute, so
+Proposition~\ref{prop:schatten-intrinsic-reflecting-plane} fixes each
+line. The same proposition gives the fixed-or-exchanged alternative
+on each plane. This constructs the stated complete family.
+\end{proof}
+
 \begin{proposition}[Local minima with invariant negative eigenspace]
 \label{prop:schatten-local-global-no-minus-one}
 Every constrained local minimum whose $-1$ eigenspace is invariant under

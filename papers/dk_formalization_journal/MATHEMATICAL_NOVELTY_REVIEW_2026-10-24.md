@@ -12,6 +12,60 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Complete reflecting-kernel geometry after `276828432`
+
+The normal-form obstruction recorded in the preceding iteration is now
+closed. `PlanarReflection.exists_source_reflection_coordinates` constructs
+unitary coordinates from the actual nonconstant source projection and
+nonscalar self-adjoint planar unitary. The diagonal gauge fixes the
+source, allows a zero off-diagonal coefficient, and produces real `d,k`
+with `d^2+k^2=1`, `k>=0`. Mathlib supplies the ordered symmetric eigenbasis;
+the matrix proof identifies the two scalar involutions separately.
+
+`SchattenReflectingPlanes.lean` now proves the intrinsic alternative:
+for every finite complex ambient local Schatten minimum with `p>1`,
+every common invariant complex plane on which the transporter is an
+involution is fixed pointwise or exchanges the source and complementary
+sectors. The ambient endpoint
+`fixes_or_exchanges_source_complement_on_invariant_plane_of_isLocalMinOn_complex`
+assumes no prescribed coordinates, restricted operators or orthogonal
+extension. Other ambient eigenvalues are unrestricted. Zero/full source
+restrictions and the scalar involutions are included. The commuting-block
+fixed-space theorem holds in every finite dimension for `p>=1`, with
+only self-adjointness required of the source operator. Proposition
+`prop:schatten-intrinsic-reflecting-plane` is in the checked manuscript.
+
+The extension through **every small block** and the complete actual
+gradient kernel also compiles. The dimension-one step uses the cyclic
+generator theorem to prove `ContinuousLinearMap.commute_of_finrank_le_one`
+over arbitrary real/complex normed spaces. The small-block alternative
+forces every nonfixed block to have dimension two. The full theorem
+`gradient_kernel_fixed_or_right_blocks_of_isLocalMinOn_transports_complex`
+then constructs a complete orthogonal family on the actual zero-gradient
+kernel of every ambient local minimum, for arbitrary rank and finite
+complex `p>1`. It derives the restricted unitary, actual source projection
+and negative-phase projection; no supplied block model or spectral gap
+is assumed. Corollary `cor:schatten-kernel-fixed-right` is included.
+
+This is a necessary local-minimum classification for reflecting planes.
+It is not a sufficiency assertion for all `p>1`; for `p>2` the right-angle
+reflection can have larger cost than canonical rotation. The unrestricted
+`1<p<2` no-spurious-local-minima theorem still needs the numerical
+angle/cost assembly on that complete family. `PAPER_CONTEXT.md`
+records the precise remaining declarations. No pure Schatten all-optimizer,
+real matching or operator-ideal claim has been promoted by this step.
+
+The two-projection normal form, source basis, diagonal phase gauge and
+restriction of unitary operators are classical ingredients with no
+independent priority claim. A targeted search again returned Halmos,
+*Two subspaces* (1969),
+[publisher DOI](https://doi.org/10.1090/S0002-9947-1969-0251519-5), and the
+existing BLR (2001) unitary-nearness work. The publisher's Halmos PDF was
+inaccessible on this pass (HTTP 403), so this pass supplies no new
+theorem-level historical clearance. The previously checked BLR and Local
+Lidskii comparisons below remain applicable. Historical originality of
+the broader constrained transport results remains **provisional**.
+
 ## Reflecting-block descent after `5c2ca4ad2`
 
 The singular-gradient descent calculation now has a Lean proof. For
@@ -45,11 +99,11 @@ coefficient remains conventional, since the weaker compiled estimate is
 sufficient. No independent originality is claimed for Taylor expansion,
 trace/determinant reconstruction, or orthogonal block restriction.
 
-This closes an analytic step toward the pure Schatten no-spurious-minima
-theorem. It does **not** close that theorem: a common two-projection
-decomposition exists in Lean, but extracting the planar normal form from
-each actual noncommuting gradient-kernel block and reassembling the
-cost-deficit identity remain necessary. `PAPER_CONTEXT.md` gives the
+This closed an analytic step toward the pure Schatten no-spurious-minima
+theorem. The newer entry above also closes the actual planar normal form.
+A common two-projection decomposition exists in Lean; assembling its
+fixed/right blocks and the kernel cost-deficit identity remains necessary.
+`PAPER_CONTEXT.md` gives the
 precise resumption point. The real matching and infinite ideal claims
 have not been promoted.
 
