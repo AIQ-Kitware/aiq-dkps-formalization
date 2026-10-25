@@ -127,7 +127,7 @@
       ],
       "frontier_nodes": [],
       "confidence": "high",
-      "notes": "The approximation-number power-sum triangle inequality remains here and uses generic rectangular Ky Fan dominance. The canonical family and completeness instance are provided by TauCeti.Analysis.OperatorIdeal.Family.Schatten."
+      "notes": "The approximation-number power-sum laws remain here, including homogeneity, the ideal estimate, and lower semicontinuity for 0 < p < 1, outside the accepted normed-family exponent scope. The canonical normed family and completeness instance are provided by TauCeti.Analysis.OperatorIdeal.Family.Schatten. The local exponent-one and exponent-two wrappers have been removed; maintained Gram consumers use the accepted nuclear and Hilbert-Schmidt energy APIs directly."
     },
     {
       "id": "free-beam-mode-ode",

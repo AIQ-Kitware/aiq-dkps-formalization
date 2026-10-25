@@ -794,3 +794,28 @@ The column-model retirement passed the full default build (21,045 jobs), with
 warnings treated as errors, after `lake exe cache get`.
 The committed column checkpoint `3d9bea88c` also passed explicit `Challenge`
 and `DavisKahan.Audits.All` builds (20,825 jobs), after the cache fetch.
+
+
+### October 25: detach Gram norm identities from the local Schatten power sum
+
+`nuclearENorm_gramOperator` (complex Hilbert spaces) and its private real source
+counterpart retain their arbitrary-dimensional, extended-valued statements without
+finiteness hypotheses. They now apply accepted `nuclearENorm_def`,
+`OperatorIdealFamily.gauge_hilbertSchmidt`, and
+`tsum_singularValue_sq_eq_hilbertSchmidtEnergy` directly, combined with the
+remaining donor Gram singular-value identity. No new bridge declaration is added.
+The existing real approximation-number view is still used by the unmerged Gram
+identity; this does not claim completion of that separate carrier migration.
+
+The unused `schattenENorm_one` and replaced `schattenENorm_two` wrappers are
+removed. Accepted `Family.TraceClass` and `Family.HilbertSchmidt` own the normed
+endpoints. No maintained production module now imports `Family.Schatten` from
+`ForTauCeti`. That donor remains for its stronger exponent scope: homogeneity,
+operator-norm and ideal bounds, and lower semicontinuity hold for all `0 < p`,
+including `p < 1`, while the accepted normed Schatten family requires `1 ≤ p`.
+This retirement records accepted overlap at the unchanged pin, without asserting
+historical proof descent. Pre-retirement proofs remain at DKPS `760da90e3`.
+
+The Gram endpoint follow-up passed the focused three-module build (7,544 jobs)
+and full default build (21,045 jobs), with warnings treated as errors, after
+the respective `lake exe cache get` calls.

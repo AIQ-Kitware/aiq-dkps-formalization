@@ -6,6 +6,7 @@
   "clusters": [
     {
       "cluster": "approximation-number",
+      "migration_note": "October 25: Family.Schatten retains broader positive-exponent power-sum results, including 0 < p < 1. Its obsolete schattenENorm_one/two wrappers were removed. Maintained Gram consumers now use accepted nuclear and Hilbert-Schmidt energy APIs directly, without importing this donor. The legacy real approximation-number view remains pending its own representation migration.",
       "roadmap_target": "SpectralSubspacePerturbation Part B (Approximation numbers and rectangular symmetric ideals) / public-api-integration-review PR 1",
       "roadmap_focus": "spectral-subspace-perturbation",
       "status": "staged-needs-current-validation",

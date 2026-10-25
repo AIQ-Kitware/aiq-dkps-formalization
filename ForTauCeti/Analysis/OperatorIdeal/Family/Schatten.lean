@@ -7,18 +7,19 @@ module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 public import ForTauCeti.Analysis.Normed.FiniteLpGauge
-public import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
-public import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import ForTauCeti.Topology.ENNRealLiminf
 
 /-!
-# Schatten norms from approximation numbers
+# Positive-exponent Schatten power sums
 
 The extended Schatten norm is the power sum of the approximation numbers. It is
 finite exactly on the corresponding Schatten class. This module proves its
-analytic laws, lower semicontinuity, and its identifications at exponents one
-and two. The sole family construction, including completeness, is obtained from
-`SymmetricGauge` in `Family.SymmetricGauge`.
+analytic laws and lower semicontinuity for its full exponent scope.
+
+Production normed Schatten families and completeness are provided by accepted
+Tau Ceti APIs. This donor retains broader positive-exponent power-sum laws,
+including `0 < p < 1`.
 -/
 
 open scoped ENNReal NNReal InnerProductSpace
@@ -280,50 +281,10 @@ omit [CompleteSpace E] [CompleteSpace F] in
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- `T` is **Schatten-`p`** when its Schatten norm is finite.
 
-`@[expose]`: membership in the Schatten family's carrier is this predicate by definition, and
-the carrier lemmas downstream are stated with `rfl`. -/
+This power-sum predicate also covers positive exponents below one; the accepted
+normed Schatten families require `1 ≤ p`. -/
 @[expose]
 def IsSchattenClass (p : ℝ) (T : E →L[𝕜] F) : Prop := T.schattenENorm p ≠ ∞
-
-section AgreementAtOne
-
-variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E : Type v} {F : Type w}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- **At `p = 1` the Schatten norm is the nuclear norm.**  Both are `tsum`s of the same
-sequence and the exponents are `1` and `1⁻¹`, so this is arithmetic in `ℝ≥0∞` rather than a
-theorem about operators.
-
-The exponent-two counterpart uses the basis-independent energy identity proved
-in accepted `TauCeti.Analysis.OperatorIdeal.ApproximationNumber.HilbertSchmidt`. -/
-theorem schattenENorm_one (T : E →L[𝕜] F) : T.schattenENorm 1 = T.nuclearENorm := by
-  simp [schattenENorm, ContinuousLinearMap.nuclearENorm_def,
-    approximationNumber_eq_singularValue_toReal]
-
-end AgreementAtOne
-
-section AgreementAtTwo
-
-variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E : Type v} {F : Type w}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
-/-- **The Schatten-2 norm is the Hilbert--Schmidt norm.**  Both are the square root of the
-same `ℝ≥0∞` quantity, by the identity above. -/
-theorem schattenENorm_two (T : E →L[𝕜] F) :
-    T.schattenENorm 2 = (OperatorIdealFamily.hilbertSchmidt 𝕜).gauge T := by
-  classical
-  obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 E
-  rw [schattenENorm, OperatorIdealFamily.gauge_hilbertSchmidt T b,
-    ← T.tsum_singularValue_sq_eq_hilbertSchmidtEnergy b]
-  simp [approximationNumber_eq_singularValue_toReal, one_div]
-
-
-end AgreementAtTwo
 
 end Gauge
 

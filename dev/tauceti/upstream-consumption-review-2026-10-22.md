@@ -626,3 +626,18 @@ not expand this pass into a style-only rewrite. Use ordinary Lean compilation
 rather than routine `#print axioms`, `#check` inventories, or new checker
 scripts. Do not stage unrelated working-tree files. A successful compile of
 this overlay does not by itself mean the SSP-D01 migration is complete.
+
+
+### Gram endpoint follow-up
+
+The complex and real Gram nuclear-norm identities now use the accepted
+Hilbert–Schmidt energy formula directly. The local `schattenENorm_one/two`
+wrappers are removed, and maintained production code no longer imports the local
+`Family.Schatten` donor. Its positive-exponent results, including `0 < p < 1`,
+remain because the accepted normed family has the narrower `1 ≤ p` hypothesis.
+The existing real approximation-number view and unmerged Gram theorem remain;
+no new compatibility declarations replace the deleted wrappers.
+
+The Gram endpoint follow-up passed the focused three-module build (7,544 jobs)
+and full default build (21,045 jobs), with warnings treated as errors, after
+the respective `lake exe cache get` calls.

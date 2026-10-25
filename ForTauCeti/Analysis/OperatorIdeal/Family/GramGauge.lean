@@ -5,7 +5,9 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+public import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
+public import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
 
 /-!
@@ -24,9 +26,8 @@ itself rather than some other Schatten exponent — the `p = ∞` and `p = 1` en
 The first is the C⋆-identity and already lives upstream as
 `TauCeti.ApproximationNumber.norm_gramOperator`.  This module supplies the second, which is
 not formal: it needs `aₙ(X⋆X) = aₙ(X)²` (`approximationNumber_gramOperator_complex`) together with
-the
-agreement of the Schatten-2 gauge with the basis-defined Hilbert--Schmidt gauge
-(`ContinuousLinearMap.schattenENorm_two`), and neither is arithmetic.
+the accepted identity of squared singular-value energy with Hilbert–Schmidt energy,
+and neither is arithmetic.
 
 Together the pair is exactly what a statement about the *squared* displacement `(1−W)⋆(1−W)`
 needs in order to become a statement about the displacement `1−W`.
@@ -47,7 +48,8 @@ Hilbert--Schmidt, in which case both sides are `∞`.
 * Extraction class: **authored in place** for the Tau Ceti staging layer.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — this module imports only Mathlib and `ForTauCeti`.
+* Spectra influence: **none** — the proof uses accepted Tau Ceti energy identities
+  and the remaining `ForTauCeti` Gram singular-value theorem.
 -/
 
 public section
@@ -63,16 +65,6 @@ variable {E0 E1 : Type v}
   [NormedAddCommGroup E0] [InnerProductSpace ℂ E0] [CompleteSpace E0]
   [NormedAddCommGroup E1] [InnerProductSpace ℂ E1] [CompleteSpace E1]
 
-private theorem nuclearENorm_eq_tsum_approximationNumber {G H : Type v}
-    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    (T : G →L[ℂ] H) :
-    T.nuclearENorm = ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) := by
-  rw [ContinuousLinearMap.nuclearENorm_def]
-  refine tsum_congr fun n => ?_
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
-  simp
-
 /-- **The nuclear norm of a Gram operator is the square of the Hilbert--Schmidt norm.**
 
 `‖X⋆X‖₁ = ‖X‖_HS²`, in `ℝ≥0∞` and hence with no trace-class or Hilbert--Schmidt hypothesis:
@@ -84,17 +76,18 @@ because the Hilbert--Schmidt norm is the Schatten-2 gauge of the same sequence. 
 theorem nuclearENorm_gramOperator (X : E0 →L[ℂ] E1) :
     (gramOperator X).nuclearENorm =
       (OperatorIdealFamily.hilbertSchmidt ℂ).gauge X ^ 2 := by
-  have hsum : (gramOperator X).nuclearENorm =
-      ∑' n : ℕ, ENNReal.ofReal (X.approximationNumber n) ^ (2 : ℝ) := by
-    rw [nuclearENorm_eq_tsum_approximationNumber]
-    refine tsum_congr fun n => ?_
-    rw [approximationNumber_gramOperator_complex X n,
-      ← Real.rpow_natCast (X.approximationNumber n) 2,
-      ← ENNReal.ofReal_rpow_of_nonneg (X.approximationNumber_nonneg n) (by norm_num)]
-    norm_num
-  rw [hsum, ← ContinuousLinearMap.schattenENorm_two X, ContinuousLinearMap.schattenENorm,
+  obtain ⟨_, b, -⟩ := exists_hilbertBasis ℂ E0
+  rw [ContinuousLinearMap.nuclearENorm_def,
+    OperatorIdealFamily.gauge_hilbertSchmidt X b,
     ← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_mul]
   norm_num
+  rw [← X.tsum_singularValue_sq_eq_hilbertSchmidtEnergy b]
+  refine tsum_congr fun n => ?_
+  have h := approximationNumber_gramOperator_complex X n
+  simp only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] at h
+  have hn : (gramOperator X).singularValue n = (X.singularValue n) ^ 2 := by
+    exact_mod_cast h
+  rw [hn, ENNReal.coe_pow]
 
 end ApproximationNumber
 end TauCeti

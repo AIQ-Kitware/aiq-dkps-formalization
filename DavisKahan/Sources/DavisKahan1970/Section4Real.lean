@@ -1430,23 +1430,18 @@ private theorem nuclearENorm_gramOperatorR {X Y : Type v}
     [NormedAddCommGroup Y] [InnerProductSpace ℝ Y] [CompleteSpace Y]
     (A : X →L[ℝ] Y) :
     (gramOperatorR A).nuclearENorm = ((OperatorIdealFamily.hilbertSchmidt ℝ).gauge A) ^ 2 := by
-  have hnuclear (T : X →L[ℝ] X) :
-      T.nuclearENorm = ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) := by
-    rw [ContinuousLinearMap.nuclearENorm_def]
-    refine tsum_congr fun n => ?_
-    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
-    simp
-  have hsum : (gramOperatorR A).nuclearENorm =
-      ∑' n : ℕ, ENNReal.ofReal (A.approximationNumber n) ^ (2 : ℝ) := by
-    rw [hnuclear]
-    refine tsum_congr fun n => ?_
-    rw [approximationNumber_gramOperator_real A n,
-      ← Real.rpow_natCast (A.approximationNumber n) 2,
-      ← ENNReal.ofReal_rpow_of_nonneg (A.approximationNumber_nonneg n) (by norm_num)]
-    norm_num
-  rw [hsum, ← ContinuousLinearMap.schattenENorm_two A, ContinuousLinearMap.schattenENorm,
+  obtain ⟨_, b, -⟩ := exists_hilbertBasis ℝ X
+  rw [ContinuousLinearMap.nuclearENorm_def,
+    OperatorIdealFamily.gauge_hilbertSchmidt A b,
     ← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_mul]
   norm_num
+  rw [← A.tsum_singularValue_sq_eq_hilbertSchmidtEnergy b]
+  refine tsum_congr fun n => ?_
+  have h := approximationNumber_gramOperator_real A n
+  simp only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] at h
+  have hn : (gramOperatorR A).singularValue n = (A.singularValue n) ^ 2 := by
+    exact_mod_cast h
+  rw [hn, ENNReal.coe_pow]
 
 /-- **Davis--Kahan 1970, the operator-norm consequence of Proposition 4.3, over `ℝ`**, at the
 matched-crossed-defect scope Section 4 inherits.
