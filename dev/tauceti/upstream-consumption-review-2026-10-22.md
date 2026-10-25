@@ -167,7 +167,8 @@ continuity. No adapter declarations remain for the retired representation.
 
 Validation: the focused dependency build passed 7,238 jobs; after a fresh cache
 fetch, the full default build passed **21,045 jobs**, with warnings treated as
-errors. The separate audit name update remains for explicit audit validation.
+errors. The explicit `Challenge` and `DavisKahan.Audits.All` build also passed
+**20,825 jobs** after its cache fetch, including the renamed diagnostic reference.
 
 The analytic Sylvester estimates remain local. The next broad comparison is the
 Schatten power-sum presentation against the accepted family, with an explicit

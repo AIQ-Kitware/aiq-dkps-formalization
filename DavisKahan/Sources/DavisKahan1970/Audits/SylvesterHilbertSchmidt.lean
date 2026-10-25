@@ -41,7 +41,7 @@ namespace ExactSinTheta
 
 #check nuclearNormingFunction
 #check symmetricNormingFunction_nonempty
-#check TauCeti.HilbertSchmidt.ofLp
+#check HilbertBasis.columnOperator
 #check approximationNumberEnergy_ne_top_iff_existsUnique_tensor
 #check hilbertSchmidtNorm_toOperator
 #check TauCeti.HilbertSchmidt.sylvesterGroup

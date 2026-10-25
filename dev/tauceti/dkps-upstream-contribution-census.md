@@ -792,3 +792,5 @@ Spectra tensor presentation was already replaced independently by the Mathlib
 
 The column-model retirement passed the full default build (21,045 jobs), with
 warnings treated as errors, after `lake exe cache get`.
+The committed column checkpoint `3d9bea88c` also passed explicit `Challenge`
+and `DavisKahan.Audits.All` builds (20,825 jobs), after the cache fetch.
