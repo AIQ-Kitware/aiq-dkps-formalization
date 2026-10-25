@@ -574,3 +574,20 @@ These results close the previously pending ambient matching converse for
 Schatten `1<p<2`. They do not extend the verified structural theorem to
 nuclear, Charbonnier, general spectral penalties or infinite-dimensional
 ideals. The checked `paper.tex` and PDF are unchanged.
+
+
+## Verified nuclear endpoint and real local-minimum obstruction (25 October 2026)
+
+| Research theorem | Lean evidence | Exact boundary |
+| --- | --- | --- |
+| The unrestricted real nuclear transport minimum equals the closed finite matching value, with an ambient attainer and all-competitor comparison. | `RealNuclearMatching.exists_minimizing_real_nuclear_transport_matching`. | Every finite real equal-rank pair; zero/right angles, repeated labels and all common ambient directions. Unmatched cost `min(4*sin(theta/2),2)`, pair cost `4*sin((theta+psi)/2)`. No determinant or prescribed-plane restriction. |
+| The original exact real Schatten matching statement now includes `1 <= p.toReal < 2`. | `RealNuclearMatching.exists_minimizing_real_schatten_transport_matching_of_one_le`; `SchattenOptimalPhase.optimalPhase_one`; `RealMatchingExponent.realPositiveSchattenMatchingMinimum_one`. | Finite `p : ENNReal`, `Fact (1 <= p)`, all finite real equal-rank pairs. The nuclear proof uses compact continuation, not the strict-range gradient argument or an unproved Charbonnier extension. |
+| Finite spectral-power minima vary continuously with every positive exponent, and convergent minimizers remain minimizing. | `SchattenExponentContinuity.continuousOn_singularValuePowerMinimum`, `exists_attains_singularValuePowerMinimum`, `isClosed_singularValuePower_minimizers`, `isMinOn_singularValuePowerSum_of_tendsto`. | Joint continuity includes zero singular values; compactness for value continuity/attainment, nonemptiness for attainment. Closedness alone suffices for the minimizer-limit statement. No automatic convergence of all optimizers and no ideal extension. |
+| Exact nearest real orthogonal correction to a projection commutant for nuclear distance. | `RealSchattenCommutingCorrection.exists_nearest_real_nuclear_commuting_orthogonal`. | An arbitrary real orthogonal input in any finite dimension; actual image-to-source angle matching value and comparison with every commuting orthogonal competitor. No empirical performance claim. |
+| Nuclear pair submodularity, exact strictness, adjacent four-angle exchange, and strict improvement over two positive-angle canonical rotations. | `RealNuclearExchange.realNuclearPairWeight_submodular`, `realNuclearPairWeight_strict_submodular_iff`, `realNuclearPairWeight_adjacent_exchange`, `realNuclearPairWeight_lt_canonical_sum`. | Full closed principal-angle square and all multiplicities/endpoints. The finite induction for the two sorted sums and all-rank field-gap bounds remain unproved. |
+| Unrestricted real local-to-global transport optimality fails. | `RealLocalGlobalCounterexample.real_line_schatten_nonglobal_local_minimum`, `plane_reflection_isLocalMinOn`, `plane_schatten_nonglobal_local_minimum`. | Accepted Schatten norm counterexample on the full real line for every exponent at least one, including infinity. Proper planar positive acute-angle spectral-power counterexample for every `p>1`; negative determinant components have constant reflection cost. Component-restricted sufficiency is open. |
+
+These are research evidence updates for manuscript handoff. The checked
+manuscript, TeX fragments, bibliography, PDFs and visualizations were left
+unchanged in this iteration. Historical priority is not certified by the
+Lean proofs or the finite numerical diagnostic.

@@ -35,8 +35,11 @@ these explicit angle costs. Labelled matching extraction, exact removal of
 zero-angle partners, conversion between determinant classes and the draft
 weights, and the unrestricted matching lower bound now compile. Constructive
 ambient matching attainment and the full unrestricted real matching equality
-now compile for `1<p<2`, together with an exact pairwise certificate for
-the global optimality of independent plane minima. The exact one-angle
+now compile for `1<=p<2`, including the nuclear endpoint. Nuclear scalar
+exchange and the nearest nuclear commuting correction also compile.
+The exact pairwise certificate for independent plane minima is proved
+on the strict range `1<p<2`. Unrestricted real local-to-global is refuted
+by the compiled real-line and positive-angle planar counterexamples. The exact one-angle
 real minimum now compiles for every finite
 Schatten exponent at least one. For `1<p<2`, its value exceeds the complex
 one-angle value exactly at supercritical acute angles; equality holds below
@@ -71,6 +74,118 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Real nuclear endpoint, exchange and local-minimum obstruction (25 October)
+
+**Current compiled scope:** the exact unrestricted real matching theorem
+now includes the closed exponent range `1 <= p.toReal < 2` (finite `p`,
+`Fact (1 <= p)`). `RealNuclearMatching.exists_minimizing_real_schatten_transport_matching_of_one_le`
+states this in the existing positive-edge Schatten matching API, with an
+actual ambient orthogonal attainer and comparison with every orthogonal
+competitor. Equal-rank actual subspaces in any finite real dimension are
+allowed, including zero, repeated and right angles and arbitrary common
+ambient directions. The earlier strict-exponent theorem remains available.
+
+`RealNuclearMatching.exists_minimizing_real_nuclear_transport_matching`
+states the endpoint directly in the accepted nuclear norm. Its closed
+matching weights are `min(4*sin(theta/2),2)` for an unmatched vertex and
+`4*sin((theta+psi)/2)` for an edge. As before, vertices are the original
+strictly positive accepted angle labels, with repeated values kept as
+separate vertices. No determinant or prescribed-plane restriction is made.
+This proves the nuclear matching formula previously justified in the
+conventional fragment through the unproved real Charbonnier extension.
+The new proof instead continues the proved Schatten theorem to one.
+The manuscript and visualizations are left to the next agent.
+
+**Analytic proof and reusable statements:**
+`SchattenExponentContinuity.lean` proves joint operator/exponent continuity
+of the literal finite singular-value power sum for every positive real
+exponent, including at zero singular values. Its compact-carrier minimum
+is continuous and is attained when the compact set is nonempty. At finite
+exponents at least one the power sum equals the accepted Schatten power;
+no second norm or infinite-dimensional ideal statement is introduced.
+`isClosed_singularValuePower_minimizers` and
+`isMinOn_singularValuePowerSum_of_tendsto` additionally prove that on any
+fixed **closed** operator set, a convergent family of positive-exponent
+global minimizers has a feasible globally minimizing limit. These two
+statements need no compactness. They do not claim convergence of every
+optimizer family or that every endpoint optimizer is approximable.
+
+`SchattenTransportExistence.isCompact_unitary_transport_fiber` extracts the
+existing compactness proof for reuse; the earlier attainment theorem now
+consumes it. `RealMatchingExponent` treats each positive pair as a minimum
+on a fixed compact phase interval, proves its continuity in the exponent,
+identifies it with the clipped Schatten formula on `1<p<2`, and computes
+its nuclear endpoint. Finite matching minima inherit continuity.
+`RealNuclearMatching` applies the same compact-minimum continuity to the
+whole ambient displacement fiber and passes equality to exponent one.
+`SchattenOptimalPhase.optimalPhase_one` identifies the named nuclear scalar
+phase with the geometric endpoint. Thus the original positive-edge formula
+at one is exactly the closed nuclear formula, not a change of definition.
+
+**Application:**
+`RealSchattenCommutingCorrection.exists_nearest_real_nuclear_commuting_orthogonal`
+constructs a nearest real orthogonal operator commuting with a prescribed
+projection. Its literal nuclear distance to the input is the nuclear
+matching value for the actual image-to-source pair, and it compares with
+all orthogonal commuting competitors. The change of variables is classical;
+no empirical, physical-implementation or separate priority claim is made.
+
+**Nuclear exchange now proved:**
+`RealNuclearExchange.realNuclearPairWeight_submodular` proves rectangular
+submodularity on the entire closed angle square.
+`realNuclearPairWeight_strict_submodular_iff` says the inequality is strict
+exactly when both coordinate intervals have positive length.
+`realNuclearPairWeight_adjacent_exchange` proves that adjacent pairing of
+four ordered angles costs no more than either alternative perfect pairing.
+`realNuclearPairWeight_lt_canonical_sum` proves strict improvement over two
+canonical rotations whenever both angles are positive. All endpoints and
+multiplicities are allowed. The finite matching normalization and induction
+for the **two sorted sums** remain uncompiled; scalar exchange alone does
+not establish the complete sorted formula or a field-gap bound.
+
+**Unrestricted real local-to-global is false:**
+`RealLocalGlobalCounterexample.real_line_schatten_nonglobal_local_minimum`
+uses the actual full real line transported to itself. Its orthogonal fiber
+is `{+1,-1}`; minus identity is an isolated constrained local minimum with
+positive accepted Schatten norm, while identity has cost zero. This covers
+every accepted Schatten exponent at least one, including infinity.
+`plane_schatten_nonglobal_local_minimum` also gives a proper planar line
+pair with positive acute angle `pi/3`, for every real power `p>1`, in the
+literal planar spectral-power model: the reflection is locally minimizing
+at cost `2^p`, while the canonical rotation has cost two.
+`plane_reflection_isLocalMinOn` proves the underlying obstruction for
+**every** spectral penalty: the negative orthogonal determinant component
+has constant reflection cost. A component restriction is necessary for a
+possible repair; its sufficiency in general is not proved. This is an
+elementary topological obstruction, with no separate novelty claim.
+
+**Independent diagnostic:** dynamic programming over all labelled
+matchings on 2,791 angle lists (a seven-angle grid through rank five and
+250 seeded random lists at each rank one through eight) agreed with the
+proposed nuclear two-sum value to `1.8e-15`. The largest observed field gap
+was `2-sqrt(3)` to rounding precision, attained by odd repeated `pi/3`
+angles. The grid was `0,0.1,0.4,pi/6,pi/3,1.3,pi/2`; the random seed was
+`20261025`. These are floating-point diagnostics, not a proof of sorting,
+the gap bound, or its equality classification. No checker script was added.
+
+**Validation:** the new exponent, nuclear matching, exchange, correction
+and counterexample modules passed focused builds. After `lake exe cache get`,
+`lake build DavisKahan.All ForTauCeti` passed (10,745 jobs), including all
+new aggregate imports and the affected existing complex consumers.
+The new code contains no `sorry`, `admit` or speculative axioms.
+
+**Next exact obligations:** normalize arbitrary matchings to at most one
+reflection singleton and at most one canonical singleton; put the former
+at the largest angle and the latter at the smallest remaining angle;
+then formalize the adjacent-pair induction using the compiled nuclear
+exchange inequality. This is the remaining discrete step for the nuclear
+two-sum formula. General Schatten/Charbonnier exchange, all-rank field gaps
+and equality classifications, full real optimizer classification,
+component-restricted real local-to-global and ideal-theoretic extensions
+remain open. Historical priority of the full matching theorem, including
+the nuclear endpoint, remains unresolved. This entry is a research handoff;
+no manuscript or visualization update is included in this proof iteration.
 
 ## Unrestricted real matching equality and ambient attainment (25 October)
 

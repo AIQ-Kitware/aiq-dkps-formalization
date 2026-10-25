@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, GPT-6
+Authors: Jon Crall, GPT-6, GPT-6.1 Sol
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseCriticalAngle
 
@@ -41,6 +41,33 @@ theorem optimalPhase_spec (p theta : ℝ) (hp : 1 ≤ p) (hθ : 0 ≤ theta) :
 /-- The zero-angle phase is zero for every Schatten exponent. -/
 @[simp] theorem optimalPhase_zero (p : ℝ) (hp : 1 ≤ p) : optimalPhase p 0 = 0 :=
   le_antisymm (optimalPhase_spec p 0 hp le_rfl).1.2 (optimalPhase_spec p 0 hp le_rfl).1.1
+
+/-- At exponent one the scalar cost is a cosine, on all real inputs. -/
+theorem phasePower_one (theta delta : ℝ) :
+    phasePower 1 theta delta = 4 * Real.sin (theta/2) * Real.cos (delta/2) := by
+  simp only [phasePower, Real.rpow_one, phaseChord]
+  rw [← mul_add, Real.sin_add_sin,
+    show ((theta+delta)/2+(theta-delta)/2)/2 = theta/2 by ring,
+    show ((theta+delta)/2-(theta-delta)/2)/2 = delta/2 by ring]
+  ring
+
+/-- The nuclear scalar phase is the geometric endpoint, including zero
+and right angles. Strict cosine monotonicity gives uniqueness away from zero. -/
+theorem optimalPhase_one (theta : ℝ) (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi/2) :
+    optimalPhase 1 theta = theta := by
+  obtain ⟨hmem, _, hmin⟩ := optimalPhase_spec 1 theta le_rfl h0
+  apply le_antisymm hmem.2
+  by_contra hnot
+  have hlt : optimalPhase 1 theta < theta := lt_of_not_ge hnot
+  have hs : 0 < Real.sin (theta/2) := Real.sin_pos_of_pos_of_lt_pi
+    (by linarith [hmem.1]) (by linarith [Real.pi_pos])
+  have hc : Real.cos (theta/2) < Real.cos (optimalPhase 1 theta/2) :=
+    Real.cos_lt_cos_of_nonneg_of_le_pi (by linarith [hmem.1])
+      (by linarith [Real.pi_pos]) (by linarith)
+  have hvalue := hmin ⟨h0, le_rfl⟩
+  change phasePower 1 theta (optimalPhase 1 theta) ≤ phasePower 1 theta theta at hvalue
+  rw [phasePower_one, phasePower_one] at hvalue
+  exact (not_lt_of_ge hvalue) (mul_lt_mul_of_pos_left hc (by positivity))
 
 /-- At a right angle, the named phase is the endpoint for `1≤p<2`. -/
 theorem optimalPhase_right_angle (p : ℝ) (hp1 : 1 ≤ p) (hp2 : p < 2) :

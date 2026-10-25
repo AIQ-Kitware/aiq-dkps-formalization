@@ -31,7 +31,9 @@ open scoped ENNReal
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E]
 
-private theorem map_eq_of_unitary_conjugate (K L : Submodule ℝ E)
+/-- A unitary conjugating the actual orthogonal projections transports
+their source and target subspaces. -/
+theorem map_eq_of_unitary_conjugate (K L : Submodule ℝ E)
     (U : unitary (E →L[ℝ] E))
     (htrans : (U : E →L[ℝ] E) * K.starProjection * star (U : E →L[ℝ] E) = L.starProjection) :
     K.map (Unitary.linearIsometryEquiv U).toLinearMap = L := by

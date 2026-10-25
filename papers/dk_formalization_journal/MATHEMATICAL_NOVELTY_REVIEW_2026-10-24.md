@@ -16,6 +16,51 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Nuclear matching, exchange and a false real extension (25 October)
+
+**Lean-verified:** `RealNuclearMatching.exists_minimizing_real_nuclear_transport_matching`
+proves the unrestricted real nuclear matching minimum with ambient
+attainment, for every finite real equal-rank pair, including every zero,
+repeated and right angle and arbitrary common directions. The positive
+pair cost is `4*sin((theta+psi)/2)` and the unmatched cost is
+`min(4*sin(theta/2),2)`. The companion
+`exists_minimizing_real_schatten_transport_matching_of_one_le` includes the
+endpoint in the original real Schatten matching API on `1<=p<2`.
+The proof continues both compact minima in the exponent; it does not use
+the unproved real Charbonnier theorem. Joint continuity includes zero
+singular values. The reusable donor also proves a closed minimizer graph
+on any fixed closed finite-dimensional operator set.
+
+**Compiled consequences:** exact nearest nuclear orthogonal correction
+commuting with a prescribed projection; nuclear pair submodularity with
+strictness exactly on nondegenerate rectangles; and the four-angle
+adjacent exchange inequality. The two sorted sums still require the
+finite matching normalization and induction. The dimension-free nuclear
+field-gap inequality and its equality classification remain conventional
+claims. A seeded diagnostic on 2,791 lists found no counterexample, with
+maximum two-sum error `1.8e-15`; this is not proof.
+
+**False unrestricted real local-to-global extension:** the accepted-norm
+real-line counterexample compiles for every Schatten exponent at least
+one, including infinity. Minus identity is isolated in the feasible fiber
+and has positive cost, while identity costs zero. A proper planar line
+pair at positive acute angle `pi/3` also has a compiled nonglobal local
+minimum for every `p>1` in the literal spectral-power model. The reflection
+cost is `2^p` on its open negative-determinant component, while the
+canonical rotation costs two. Component restrictions are necessary for
+any repair; general sufficiency is not proved. No separate historical
+novelty claim is made for this elementary obstruction.
+
+**Priority boundary:** the checked BLR (2001) Problem 1.1, Q-norm Theorem
+3.1 and special `1<=p<2` Lemma 3.3 remain substantive precedents, including
+at exponent one. Their inspected statements do not give this arbitrary-angle
+real matching formula. This does not certify historical priority against
+the broader Procrustes, matrix-nearness or operator-ideal literature.
+The compact-continuation argument and trigonometric exchange proof use
+classical foundations and have no separate priority claim.
+The manuscript and visualizations are reserved for another agent; this
+entry records the proof frontier and remaining publication obligations.
+
 ## Full unrestricted real Schatten matching theorem (25 October)
 
 **Lean-verified, superseding the lower-bound-only stage:**
@@ -1600,8 +1645,8 @@ rows of the original 29-result Davis--Kahan source inventory.
 | SM-4 | Global convex-relaxation tightness when commuting unitary factor is relaxed to commuting contraction (weighted nuclear cost) | **Formalized for the stated supplied structural class**: `SmoothedCommutantOptimization.lean`; instantiated in all-pairs argument | Strong proof mechanism; present as supporting theorem, not a generic statement for all convex relaxations |
 | SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Complete finite complex iff in `SmoothedNonacuteClassification`; joint attainment in `SmoothedPhaseDefectAttainment`; unique normalized parameters, full multiplicity product and topology in `SmoothedParameterNormalization`, `SmoothedMultiplicityParameters`, `SmoothedParameterTopology` | All-angle global classification and independent projection/defect homeomorphism compiled for `tau>0`, including compactness, rank-sector separation and exact simple-active count. Local-to-global is now compiled for all `tau>0`; broad-penalty extension, component counts, manifold dimensions and ideal optimization remain open |
 | R-1 | Exact real R4 rank-two minimum for *every continuous nondecreasing spectral penalty*, including separate determinant classes | **Full abstract accepted-angle minimum compiled** in `RealFourPrincipalAngles.lean`, with general continuous-monotone penalties and a closed nuclear corollary. `RealFourSchatten.lean` adds exact scalar clipping and sharp model canonical criteria; `RealFourNuclear.lean` proves the sharp nuclear model criterion. Complete negative-class optimizer sets compile in `RealFourNegative.lean`. | Every ambient orthogonal competitor and every endpoint are covered. Explicit Charbonnier piecewise corollaries remain open. Full model theorem priority unresolved; no separate priority claim for the elementary negative-class deduction. |
-| R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | **Full unrestricted Schatten `1<p<2` matching equality and ambient attainment now compile** in `RealMatchingAttainment.lean`, consuming the complete real block decomposition and lower bound. `SchattenRealMatchingCriterion.lean` proves the exact pairwise certificate for independent-plane global optimality. | Any finite real ambient dimension/source rank, equal-rank actual pair, all repeated/right/zero angles and common directions, every orthogonal competitor. Every full-weight matching has an ambient attainer. General-penalty, nuclear and Charbonnier structural extensions remain open; sorted exchange and all-rank field gaps do not follow. Historical priority unresolved. |
-| R-3 | For Schatten `1<p<2`, Charbonnier, and nuclear limits, matching reduces to minimum of **two sorted adjacent-pair sums** | Conventional derivation in `real_matching_transport.tex`; numerical checks corroborate but are not proofs | Would yield efficient exact algorithms and optimality thresholds; **submodularity and final reduction need independent proof review** |
+| R-2 | All-dimensional real optimization reduces to weighted matching in blocks of dimension at most four | **Unrestricted real matching equality and ambient attainment compile on `1<=p<2`**, including the closed nuclear formula, in `RealMatchingAttainment.lean` and `RealNuclearMatching.lean`. | Every finite real equal-rank pair and every ambient orthogonal competitor; all endpoints and multiplicities. Charbonnier/general-penalty structural extensions remain open. Unrestricted real local-to-global is refuted; component-restricted sufficiency is open. Historical priority unresolved. |
+| R-3 | Matching reduces to two sorted adjacent-pair sums | Nuclear scalar submodularity, exact strictness and four-angle adjacent exchange now compile in `RealNuclearExchange.lean`. Full nuclear matching is compiled; the conventional draft gives the remaining reduction. | **Finite matching normalization and adjacent-pair induction remain uncompiled.** General Schatten and Charbonnier submodularity also require independent proofs. Numerical agreement is diagnostic only. |
 | R-4 | Real-minus-complex optimal nuclear penalty is at most `2-sqrt(3)` regardless of dimension, with sharp equality cases | Conventional proof draft only; low-dimensional example realizes constant | **High-value sharp field-gap theorem** if globally true; proof of exclusion of higher-dimensional maxima must be scrutinized |
 | R-5 | Charbonnier real-minus-complex gap at most `2eta(1-sqrt(1-1/(4eta^4)))`, explicit equality class | Conventional proof draft only; `eta=(tau+sqrt(tau^2+4))/2` | Another high-value result, **not yet verified**, depends on R-2/R-3 and tie-surface Hessian analysis |
 

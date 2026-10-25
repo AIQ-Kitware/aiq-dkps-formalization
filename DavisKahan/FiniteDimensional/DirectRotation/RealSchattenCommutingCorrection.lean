@@ -1,9 +1,9 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, GPT-6
+Authors: Jon Crall, GPT-6, GPT-6.1 Sol
 -/
-import DavisKahan.FiniteDimensional.DirectRotation.RealMatchingAttainment
+import DavisKahan.FiniteDimensional.DirectRotation.RealNuclearMatching
 
 /-!
 # Exact nearest real orthogonal operator commuting with a projection
@@ -110,5 +110,49 @@ theorem exists_nearest_real_schatten_commuting_orthogonal
     rw [← hdist, ← schatten_distance_eq_correction_displacement p A W] at hbound
     exact (Real.rpow_le_rpow_iff (apply_nonneg _ _) (apply_nonneg _ _)
       (zero_lt_one.trans hp1)).mp hbound
+
+/-- The exact nuclear analogue of nearest real orthogonal correction to a
+projection commutant. The minimum is the closed nuclear matching value
+of the actual image-to-source pair, with an attainer and full ambient
+comparison. No differentiability of the nuclear norm is assumed. -/
+theorem exists_nearest_real_nuclear_commuting_orthogonal
+    (K : Submodule ℝ E) (A : E ≃ₗᵢ[ℝ] E) :
+    let L := K.map A.toLinearMap
+    ∃ V : E ≃ₗᵢ[ℝ] E, Commute (V : E →L[ℝ] E) K.starProjection ∧
+      UnitarilyInvariantSeminorm.schatten ℝ E E 1 (A.toLinearMap - V.toLinearMap) =
+        realNuclearMatchingMinimum
+          (fun j : {j : Fin (Module.finrank ℝ L) // 0 < L.principalAngles K j} =>
+            L.principalAngles K j.val) ∧
+      ∀ W : E ≃ₗᵢ[ℝ] E, Commute (W : E →L[ℝ] E) K.starProjection →
+        UnitarilyInvariantSeminorm.schatten ℝ E E 1 (A.toLinearMap - V.toLinearMap) ≤
+          UnitarilyInvariantSeminorm.schatten ℝ E E 1 (A.toLinearMap - W.toLinearMap) := by
+  let L := K.map A.toLinearMap
+  obtain ⟨T, hT, hcost, hmin⟩ := exists_minimizing_real_nuclear_transport_matching
+    L K (A.toLinearEquiv.finrank_map_eq K)
+  let V := A.trans T
+  have hmapV : K.map V.toLinearMap = K := by
+    change K.map (T.toLinearMap ∘ₗ A.toLinearMap) = K
+    rw [Submodule.map_comp]
+    exact hT
+  have heq : A.symm.trans V = T := by ext x; simp [V]
+  have hdist : UnitarilyInvariantSeminorm.schatten ℝ E E 1
+      (A.toLinearMap - V.toLinearMap) =
+      UnitarilyInvariantSeminorm.schatten ℝ E E 1 (LinearMap.id - T.toLinearMap) := by
+    rw [schatten_distance_eq_correction_displacement, heq]
+  refine ⟨V, (map_self_iff_commute_projection K V).mp hmapV, ?_, ?_⟩
+  · rw [hdist]
+    exact hcost
+  · intro W hW
+    have hmapW := (map_self_iff_commute_projection K W).mpr hW
+    have hmapS : L.map (A.symm.trans W).toLinearMap = K := by
+      change (K.map A.toLinearMap).map (A.symm.trans W).toLinearMap = K
+      rw [← Submodule.map_comp]
+      have hlin : (A.symm.trans W).toLinearMap ∘ₗ A.toLinearMap = W.toLinearMap := by
+        ext x
+        exact congrArg W (A.symm_apply_apply x)
+      rw [hlin, hmapW]
+    have hbound := hmin (A.symm.trans W) hmapS
+    rw [← hdist, ← schatten_distance_eq_correction_displacement 1 A W] at hbound
+    exact hbound
 
 end TauCeti.DavisKahan.FiniteDimensional.RealTransport
