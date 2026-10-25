@@ -12,6 +12,58 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Complete finite Charbonnier optimizer set after `f51c60f13`
+
+The full all-angle ambient classification now compiles in
+`SmoothedNonacuteClassification.lean`. For every finite complex equal-rank
+pair and `tau>0`, a feasible `T` is globally minimizing iff it has a
+compatible orthogonal phase projection modulo the cosine kernel and is
+self-adjoint on that kernel. The intrinsic projection is
+`1_(0,infinity)(Im(C T.adjoint R))`; it commutes with actual `R,J` and
+vanishes on `ker C`. Cosine commutation is a consequence, with no extra
+assumption on the candidate. The typed version replaces kernel
+self-adjointness by a unique crossed-defect unitary paired with its inverse.
+
+`SmoothedPhaseDefectAttainment.lean` also proves that **every** compatible
+phase projection and **every** crossed-defect unitary jointly determine
+exactly one attaining ambient transporter, with the exact global value and
+comparison against every feasible unitary. The weighted statements assume
+`0<b<a`. The literal statements assume `tau>0`. This closes the single
+nonacute iff and independent mixed parameter assembly that the preceding
+entries left open. `SmoothedCorrectionClassification.lean` transfers the
+criterion to all nearest subspace-preserving unitaries without a commutator
+norm restriction. The included manuscript now states
+`thm:smoothed-all-projections-defects` and this correction consequence.
+
+This is a full **optimizer-set** result; phase parameters can remain
+redundant on inactive directions. General product topology, normalized
+parameter homeomorphisms, and manifold dimensions are not formal endpoints.
+Neither all-local-minima-global nor the pure Schatten, real matching or
+operator-ideal classifications follows from these declarations.
+The uniqueness of a transporter with prescribed phase/defect data itself
+holds on arbitrary complex Hilbert spaces with orthogonally projected
+subspaces; its existence and cost-optimality conclusions remain finite.
+
+BLR (2001), [Lemma 3.3 and Theorem 4.2](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117),
+remain direct precedents for the right-angle scalar Schatten mechanism and
+complete Frobenius optimizer classification. The new statement concerns
+the complete arbitrary-angle weighted/Charbonnier family. The classical
+spectral-selection, defect geometry, cancellation and orthogonal extension
+ingredients carry no independent novelty claim. A further targeted search
+for block diagonal unitary trace-norm approximation and Charbonnier
+transport produced no additional theorem-level implication; that negative
+search evidence is limited. Historical originality is **provisional**,
+including for the all-nearest commuting-unitary application.
+
+The precise next pure Schatten obstruction is retained in `PAPER_CONTEXT.md`.
+An explicit reflecting two-plane variation has small phase
+`d*t/2-asin(d*sin(t/2))=d*(1-d^2)*t^3/48+O(t^5)` and large offset
+`d*t/2+asin(d*sin(t/2))=d*t+O(t^3)`. The resulting negative quadratic
+coefficient for `d!=0` avoids twice differentiating the spectral cost at
+zero displacement. Symbolic and numerical diagnostics checked this
+reduction; it is conventional work awaiting Lean, not a proved extension
+of the local-to-global theorem.
+
 ## Arbitrary mixed right-angle families after `c16d48091`
 
 The previously missing mixed right-angle converse now compiles in

@@ -113,6 +113,32 @@ theorem eq_of_relative_eq (R : E ≃ₗᵢ[𝕜] E) {T S : E ≃ₗᵢ[𝕜] E}
   simpa only [LinearIsometryEquiv.symm_symm] using
     congrArg (fun V : E ≃ₗᵢ[𝕜] E => V.symm) hsymm
 
+/-- Equality of two relative unitaries after left multiplication determines
+the original unitaries on the orthogonal complement of the multiplier's
+kernel. No positivity, normality, completeness, or finite dimension is needed. -/
+theorem eq_on_orthogonal_ker_of_relative_left_mul_eq
+    (C : E →L[𝕜] E) (R T S : E ≃ₗᵢ[𝕜] E)
+    (h : C * (R.trans T.symm : E →L[𝕜] E) =
+      C * (R.trans S.symm : E →L[𝕜] E)) :
+    ∀ x ∈ C.kerᗮ, T x = S x := by
+  have hker (y : E) : T.symm y - S.symm y ∈ C.ker := by
+    have hy := DFunLike.congr_fun h (R.symm y)
+    change C (T.symm (R (R.symm y))) = C (S.symm (R (R.symm y))) at hy
+    rw [R.apply_symm_apply] at hy
+    change C (T.symm y - S.symm y) = 0
+    rw [C.map_sub, hy, sub_self]
+  have hinner (U : E ≃ₗᵢ[𝕜] E) (x y : E) :
+      inner 𝕜 (U.symm y) x = inner 𝕜 y (U x) := by
+    have hu := U.inner_map_map (U.symm y) x
+    rw [U.apply_symm_apply] at hu
+    exact hu.symm
+  intro x hx
+  apply sub_eq_zero.mp
+  apply (inner_self_eq_zero (𝕜 := 𝕜)).mp
+  have hz := hx (T.symm (T x - S x) - S.symm (T x - S x)) (hker (T x - S x))
+  rw [inner_sub_left, hinner, hinner, ← inner_sub_right] at hz
+  exact hz
+
 /-- Taking relative inverses against a fixed isometry preserves operator
 distance. No completeness or finite-dimensional assumption is required. -/
 theorem norm_sub_relative (R T S : E ≃ₗᵢ[𝕜] E) :

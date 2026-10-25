@@ -155,4 +155,46 @@ theorem exists_unique_defect_equiv_of_selfAdjoint_on_cosine_kernel
   ext x
   exact (hD'.1 x).symm.trans (hD x).symm
 
+/-- Prescribing a defect isometry and its inverse forces the ambient
+transporter to be self-adjoint on the entire cosine kernel. The two
+defect summands need not have finite dimension. -/
+theorem selfAdjoint_on_cosine_kernel_of_defect_equiv
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (T : H ≃ₗᵢ[𝕜] H)
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L)
+    (hsrc : ∀ x : halmosSourceDefect K L, T x = (D x : H))
+    (htgt : ∀ y : halmosTargetDefect K L, T y = (D.symm y : H)) :
+    ∀ x : H, section3CosAngleOperator K L x = 0 →
+      T x = star (T : H →L[𝕜] H) x := by
+  have hTTsrc (u : halmosSourceDefect K L) : T (T u) = u := by
+    rw [hsrc, htgt, D.symm_apply_apply]
+  have hTTtgt (v : halmosTargetDefect K L) : T (T v) = v := by
+    rw [htgt, hsrc, D.apply_symm_apply]
+  intro x hx
+  have hxmem : x ∈ (section3CosAngleOperator K L).ker := hx
+  rw [ker_section3CosAngleOperator_eq_crossedDefectSum] at hxmem
+  obtain ⟨u, hu, v, hv, rfl⟩ := Submodule.mem_sup.mp hxmem
+  rw [show star (T : H →L[𝕜] H) = (T.symm : H →L[𝕜] H) from T.adjoint_eq_symm]
+  apply T.injective
+  change T (T (u + v)) = T (T.symm (u + v))
+  rw [T.apply_symm_apply, map_add, map_add, hTTsrc ⟨u, hu⟩, hTTtgt ⟨v, hv⟩]
+
+/-- Self-adjoint action on the actual right-angle kernel is equivalent to
+one defect isometry paired with its inverse. Feasibility suffices for the
+necessary direction; neither dimension nor cosine commutation is assumed. -/
+theorem selfAdjoint_on_cosine_kernel_iff_exists_defect_equiv
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (T : H ≃ₗᵢ[𝕜] H) (hT : K.map T.toLinearMap = L) :
+    (∀ x : H, section3CosAngleOperator K L x = 0 →
+      T x = star (T : H →L[𝕜] H) x) ↔
+      ∃ D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L,
+        (∀ x : halmosSourceDefect K L, T x = (D x : H)) ∧
+        (∀ y : halmosTargetDefect K L, T y = (D.symm y : H)) := by
+  constructor
+  · intro hself
+    obtain ⟨D, hD, _⟩ := exists_unique_defect_equiv_of_selfAdjoint_on_cosine_kernel K L T hT hself
+    exact ⟨D, hD⟩
+  · rintro ⟨D, hsrc, htgt⟩
+    exact selfAdjoint_on_cosine_kernel_of_defect_equiv K L T D hsrc htgt
+
 end TauCeti.DavisKahan.Proposition35

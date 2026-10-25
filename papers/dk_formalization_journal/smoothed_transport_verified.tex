@@ -514,6 +514,48 @@ on $H_0^\perp$, and has the same kernel cost by the splitting identity.
 Its total cost therefore equals the global minimum.
 \end{proof}
 
+\begin{theorem}[All minimizers, including right angles]
+\label{thm:smoothed-all-projections-defects}
+Put $H_0=\ker C$ and use the crossed defects $D_+,D_-$ above.
+A unitary transporter $W$ is globally minimizing if and only if there
+are an orthogonal projection $E$ commuting with $R,J$, with
+$E|_{H_0}=0$, and a unitary $D:D_+\to D_-$ such that
+\[
+ CW^*R=C\bigl(U_+E+U_+^*(I-E)\bigr),\qquad
+ W|_{D_+}=D,\qquad W|_{D_-}=D^*.
+\]
+An intrinsic phase projection is
+$E=1_{(0,\infty)}(\operatorname{Im}(CW^*R))$.
+Conversely, every compatible $E$ and every $D$ jointly determine
+exactly one such transporter, and it is globally minimizing.
+The defect parameter is unique for each optimizer. Phase projections
+can be redundant on directions where $U_+=U_+^*=I$.
+\end{theorem}
+
+\begin{proof}
+For a minimizing $W$, put $Z=W^*R$. Spectral separation gives
+$[Z,C]=0$ and $[CZ,R]=0$, while transport gives $[Z,J]=0$.
+Thus $H=\operatorname{Im}(CZ)=C\operatorname{Im}Z$ commutes with
+$R,J$, and vanishes on $H_0$. Its positive spectral projection $E$
+has the same properties. In a joint orthonormal eigenbasis of
+$C,\operatorname{Im}Z$, the eigenvalues are $c\geq0,g$.
+For $c>0$, the real-part identity and unitarity give
+$Zx=(\beta+ig)x$, $g^2=1-\beta^2$, with
+$\beta=\min\{1,\eta^2c\}$. Since $cg$ and $g$ have the same sign,
+$E$ selects the corresponding phase of $U_+$. For $c=0$, multiplication
+by $C$ annihilates both sides. This proves the weighted identity.
+The defect actions follow from
+\cref{prop:smoothed-arbitrary-defects}.
+
+For sufficiency, let $S$ be the global optimizer supplied by
+\cref{prop:smoothed-projection-attainment} for $E$. The weighted
+identity implies $C(W^*-S^*)=0$. Hence the range of $W^*-S^*$ lies
+in $H_0$, and $W=S$ on $H_0^\perp$. Prescribing $D,D^*$ on $H_0$
+therefore gives the global optimizer in
+\cref{prop:smoothed-arbitrary-defects}. The two orthogonal restrictions
+also prove uniqueness for the prescribed pair of parameters.
+\end{proof}
+
 \begin{corollary}[Complementary right-angle pairs]
 \label{cor:smoothed-complementary-right}
 Suppose $Q=I-P$ and $n=2r$. A unitary transporter $W$ is globally
@@ -848,6 +890,19 @@ the image pair acute, so \cref{thm:smoothed-acute-projections} classifies
 all its minimizing transporters. Applying the same cost-preserving
 bijection gives the displayed formula, including its supercritical
 families.
+
+Without a restriction on $\|AP-PA\|_{\mathrm{op}}$, put
+$G=\sqrt{I-(P-APA^*)^2}$ and $W=AC^*$.
+Every nearest commuting unitary is characterized by the reflecting
+action of $W$ on $\ker G$ and the identity
+\[
+ GC=G\bigl(U_+E+U_+^*(I-E)\bigr)R^*A,
+ \qquad E|_{\ker G}=0,
+\]
+with $E$ commuting with $R,2P-I$. This follows from
+\cref{thm:smoothed-all-projections-defects} under the same bijection;
+the reflecting action permits every unitary identification of the
+crossed defects of $U,A(U)$.
 
 When every angle is at most $c_\tau$, this correction is $C_*=R^*A$
 and is unique. If a feasible correction $C$ has objective error at most

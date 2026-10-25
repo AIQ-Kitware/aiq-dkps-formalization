@@ -1,9 +1,9 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** exact mixed right-angle cost splitting, unique
-defect parameters, and independent arbitrary-defect attainment, based on
-`c16d48091`, registered in the first section below.
+**Current research source:** complete all-angle complex Charbonnier optimizer
+classification, independent phase/defect attainment and uniqueness for
+prescribed parameters, based on `f51c60f13`, registered first below.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -17,6 +17,114 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Complete all-angle Charbonnier classification after `f51c60f13`
+
+The full finite complex ambient iff is now compiled, including every
+zero, repeated, critical, supercritical and right angle and arbitrary
+fixed directions. The pair has equal ranks. Weighted results assume
+`0<b<a`; literal Charbonnier results assume `tau>0`. Write `R` for the
+completed canonical rotation, `C` for the actual principal cosine,
+`Z=T.adjoint R`, and `U=weightedPhaseFactor a b C`. Write
+`F_P=U P+U.adjoint (I-P)`.
+
+- `SmoothedNonacuteClassification.minimizing_weighted_transport_positive_phase_projection_mod_kernel_complex`
+  constructs `P=1_(0,infinity)(Im(C*Z))` for every ambient optimizer.
+  It is an orthogonal projection commuting with `R` and source reflection,
+  vanishes on `ker C`, and satisfies `C Z=C F_P`.
+- `minimizing_weighted_transport_iff_phase_and_kernel_complex` and
+  `smoothed_transport_isMin_iff_phase_and_kernel_complex` prove the full
+  iff: a feasible transporter is globally minimizing exactly when it is
+  self-adjoint on `ker C` and has that compatible weighted phase formula.
+  Cosine commutation is **derived**, not an additional condition on the
+  candidate. In particular this is an unrestricted ambient classification.
+- `smoothed_transport_isMin_iff_phase_and_defect_equiv_complex` replaces
+  kernel self-adjointness by a unique actual unitary identification of
+  the crossed defects, paired with its inverse action. The geometric
+  reverse implication is compiled in
+  `CosineKernel.selfAdjoint_on_cosine_kernel_of_defect_equiv` and the
+  corresponding iff; these hold on arbitrary real/complex Hilbert spaces.
+- `SmoothedPhaseDefectAttainment.exists_unique_weighted_transport_from_phase_and_defect_complex`
+  and `exists_unique_smoothed_transport_from_phase_and_defect_complex`
+  take **any** orthogonal `P` commuting with `R,J` and **any** crossed-defect
+  unitary `D`. They produce exactly one ambient transporter with the
+  prescribed phase formula modulo `ker C` and actions `D,D.symm`.
+  Exact value and comparison against all ambient transporters are compiled.
+  These construction theorems even allow redundant kernel values of `P`.
+  `transport_eq_of_phase_and_defect_actions_complex` proves uniqueness
+  on arbitrary complex Hilbert spaces with orthogonally projected subspaces,
+  without finite dimension, optimality, or feasibility of the compared
+  unitaries. Existence and minimum-cost conclusions remain finite-dimensional.
+- `SmoothedCorrectionClassification.smoothed_correction_isMin_iff_phase_and_kernel_complex`
+  classifies every closest prescribed-subspace-preserving unitary, with
+  no commutator norm restriction. For `T=A V.adjoint`, it uses kernel
+  self-adjointness and `C V=C F_P R.adjoint A`.
+
+The complete theorem says
+`C T.adjoint R=C F_P`, together with the crossed-defect exchange actions.
+The operator identity cancels on `(ker C)^perp`: the adjoint difference
+has image in `ker C`. The donor
+`LinearIsometryEquiv.eq_on_orthogonal_ker_of_relative_left_mul_eq` proves
+this cancellation without positivity, completeness, or finite dimension.
+A separate unitary algebra argument shows that equality with a
+cosine-commuting reference transporter forces cosine commutation.
+
+The included manuscript now contains
+`thm:smoothed-all-projections-defects` and the all-angle commuting-correction
+criterion. The **set of all finite complex Charbonnier minimizers and
+independent attainment of every phase/defect parameter pair are closed**.
+Inactive phase projections remain redundant. No general normalized
+parameter bijection, product `Homeomorph`, Grassmannian dimension formula,
+or classification of local minima is asserted as a Lean endpoint.
+The isoclinic metric theorem retains its established stronger hypothesis.
+This advance supplies neither the pure Schatten all-optimizer theorem,
+the unrestricted real matching formula, nor operator-ideal attainment.
+
+### Next pure Schatten proof obligation
+
+The exact missing local-to-global step remains descent from a nonoptimal
+reflecting two-plane in the actual zero-gradient restriction. The conventional
+argument has an explicit scalar reduction. With
+`S=[[c^2,cs],[cs,s^2]]`, `W=I-2S`, `H=diag(c^2,-s^2)`, and
+`d=c^2-s^2`, put `chi(t)=asin(d*sin(t/2))`. Near zero the eigenvalues of
+`W*exp(i*t*H)` are exactly
+`exp(i*(d*t/2-chi(t)))` and `-exp(i*(d*t/2+chi(t)))`.
+The small phase is actually
+`d*(1-d^2)*t^3/48+O(t^5)`, stronger than the draft's `O(t^2)` bound.
+The large phase gives cost
+`2^p-p*2^(p-3)*d^2*t^2+o(t^2)`, whereas the small cost is
+`O(abs(t)^(3*p))=o(t^2)` for `p>1`. Thus `d!=0` should give strict
+descent without taking a second derivative of the cost at zero singular
+values. `d=0` is the right-angle reflecting optimizer and has constant
+cost along this curve. This reduction and Taylor expansion are conventional
+mathematics requiring formalization, **not new compiled declarations**.
+
+SymPy verified both cubic coefficients; NumPy checked the explicit eigenvalues
+at six angles including `0,pi/4,pi/2` and signed steps `0.01,0.1`, with
+largest residual `8.9e-16`. At `p=1.5`, the measured quadratic coefficients
+for `d=0,0.3,0.9,1` agreed with the displayed coefficient to below `3e-8`.
+These diagnostics support the next proof; they do not certify it. The next
+useful formal target is a strict local descent theorem for this actual
+two-dimensional unitary curve, followed by extension through the reducing
+gradient kernel and the already compiled cost-defect identity.
+
+Historical novelty remains provisional. A fresh targeted search for block
+diagonal unitary trace-norm approximation and Charbonnier transport did not
+identify a theorem subsuming this classification. BLR (2001), Lemma 3.3
+and Theorem 4.2, remain exact precedents for the right-angle scalar Schatten
+mechanism and complete Frobenius optimizer families respectively. Standard
+spectral projection, unitary cancellation, and defect geometry receive no
+separate priority claim. Earlier sections below record their dated frontiers.
+
+Validation: each Lean build was preceded by `lake exe cache get`. The
+focused classification, arbitrary-parameter attainment and correction
+targets passed. The manuscript was rebuilt with BibTeX and repeated
+pdfLaTeX passes, without unresolved references/citations, multiply defined
+labels or overfull boxes, in
+`/tmp/dk-nonacute-classification-paper/dk-nonacute-classification.pdf`.
+The final `lake build DavisKahan.All ForTauCeti` passed (10,337 jobs;
+`/tmp/nonacute-final-build.log`), including the dimension-free uniqueness
+generalization and all new modules through the ordinary aggregate imports.
 
 ## Mixed right-angle family after `c16d48091`
 
