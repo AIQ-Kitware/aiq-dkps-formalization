@@ -14,6 +14,7 @@ import numpy as np
 from manim import (
     Arc,
     Axes,
+    Circle,
     Create,
     DashedLine,
     Dot,
@@ -27,7 +28,11 @@ from manim import (
 )
 
 from dkvis.novelty_layout import resolved_region
-from dkvis.novelty_math import optimal_phase_three_halves
+from dkvis.novelty_math import (
+    optimal_phase_three_halves,
+    schatten_signed_phase_power_three_halves,
+    schatten_simple_active_signs_three_halves,
+)
 from dkvis.slide_style import (
     CURRENT,
     FAINT,
@@ -222,19 +227,19 @@ class N01ThreeStories(DeckSlide):
                 CURRENT,
                 [
                     r"complex equal-rank Charbonnier minimum formalized",
-                    r"explicit optimizer via a spectral phase correction",
+                    r"an explicit optimizer and all global minimizers classified",
                     r"quadratic growth below and quartic growth through the cutoff",
                     r"exact uniqueness test and closest commuting-unitary correction",
                 ],
             ),
             (
-                r"3. Schatten and real-field program",
+                r"3. Complete complex Schatten; open real theory",
                 TRIAL,
                 [
-                    r"complex $1<p<2$ all-rank minimum and cutoff formalized",
-                    r"no-mixing lower bound now compiled; arbitrary-rank real problem remains open",
-                    r"real matching and sharp field-gap theorems: drafted, with many verified ingredients",
-                    r"these may become the next research paper, but not all are certified yet",
+                    r"all-rank complex $1<p<2$ minimum and complete optimizer set proved",
+                    r"every constrained local minimum is global",
+                    r"multiplicity spaces determine discrete or continuous optimal families",
+                    r"unrestricted real matching and sharp real-complex gaps remain research",
                 ],
             ),
         ]
@@ -258,7 +263,7 @@ class N01ThreeStories(DeckSlide):
         self.say(
             "This review separates source formalization, the completed complex"
             " smoothed theory, and the Schatten and real-field program. The new"
-            " all-rank complex Schatten minimum and cutoff are now formalized."
+            " all-rank complex Schatten minimum and all optimizers are formalized."
             " Real matching and field-gap claims remain working mathematical drafts."
         )
         self.play(*[FadeIn(card) for card in cols], FadeIn(summary), run_time=1.0)
@@ -691,6 +696,198 @@ class N07NoMixingProof(DeckSlide):
         self.play(FadeIn(theorem), FadeIn(diagram), FadeIn(steps), FadeIn(footer), run_time=1.1)
 
 
+class N07OptimizerChoices(DeckSlide):
+    """Two distinct active simple angles produce exactly four optimizers."""
+
+    title = "Two active angles: exactly four optimal transports"
+    kicker = r"Each distinct simple supercritical angle makes an independent positive/negative phase choice"
+    section = SECTION
+
+    def body(self) -> None:
+        example = schatten_simple_active_signs_three_halves()
+        assert len(example["choices"]) == 4
+        assert max(example["costs"]) - min(example["costs"]) < 1e-10
+        header = VGroup(
+            tex(r"Finite complex Schatten $p=3/2$: $75^\circ$ and $80^\circ$ are both above the cutoff", size=24, color=MUTED),
+            math(r"\#\mathcal M_{3/2}=2^s=4\qquad(s=2,\ \text{no right-angle defect})", size=33, color=CURRENT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        theorem = place(self, "theorem", boxed(header, color=CURRENT, pad=0.20))
+
+        # A square is the product of two independent Boolean phase choices.
+        coords = {(-1, 1): (-1.85, 0.83), (1, 1): (1.85, 0.83),
+                  (-1, -1): (-1.85, -0.83), (1, -1): (1.85, -0.83)}
+        edges = VGroup(
+            Line([*coords[(-1, 1)], 0], [*coords[(1, 1)], 0], color=FAINT, stroke_width=3),
+            Line([*coords[(-1, -1)], 0], [*coords[(1, -1)], 0], color=FAINT, stroke_width=3),
+            Line([*coords[(-1, 1)], 0], [*coords[(-1, -1)], 0], color=FAINT, stroke_width=3),
+            Line([*coords[(1, 1)], 0], [*coords[(1, -1)], 0], color=FAINT, stroke_width=3),
+        )
+        labels = VGroup()
+        points = VGroup()
+        for (sgn_a, sgn_b), (x, y) in coords.items():
+            points.add(Dot([x, y, 0], radius=0.10, color=SINE))
+            signs = ("+" if sgn_a > 0 else "-", "+" if sgn_b > 0 else "-")
+            lab = math(rf"({signs[0]}\delta_1,{signs[1]}\delta_2)", size=31, color=SINE)
+            lab.move_to([x + (0.65 if x > 0 else -0.65), y + (0.12 if y > 0 else -0.12), 0])
+            labels.add(lab)
+        square = place(self, "square", VGroup(edges, points, labels))
+
+        right = VGroup(
+            tex(r"Four distinct feasible transports:", size=26, color=MUTED),
+            math(r"\delta_1\approx57.55^\circ,\qquad\delta_2\approx74.57^\circ", size=28, color=SINE),
+            tex(r"Each of the four phase-sign combinations", size=23),
+            tex(r"attains the same global displacement cost.", size=23),
+            math(r"\min\norm{I-W}_{3/2}^{3/2}\approx5.39884", size=28, color=CURRENT),
+            para(
+                r"The formalized classification proves there are exactly four;"
+                r" constructing four attaining candidates alone would not exclude others.",
+                width=5.5, size=23, color=MUTED,
+            ),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        explanation = place(self, "explain", right)
+        takeaway = place(self, "takeaway", para(
+            r"For $s$ distinct simple active angles and no right-angle defect,"
+            r" all ambient global optimizers form a set of exactly $2^s$ elements.",
+            width=12.1, size=24, color=MUTED,
+        ))
+        self.say(
+            "Both principal angles exceed the exact critical angle. Each one permits"
+            " an independent positive or negative optimal phase. In this example"
+            " there are four choices, represented by the four corners of a square."
+            " The Lean theorem proves that these are all the global optimizers,"
+            " rather than just four examples we happened to construct."
+        )
+        self.play(FadeIn(theorem), FadeIn(square), FadeIn(explanation), FadeIn(takeaway), run_time=1.0)
+
+
+class N07MultiplicityFamilies(DeckSlide):
+    """Repeated active eigenangles replace Boolean signs by projection spaces."""
+
+    title = "Repeated angles create continuous optimizer families"
+    kicker = r"One angle with multiplicity two already has infinitely many globally minimizing phase choices"
+    section = SECTION
+
+    def body(self) -> None:
+        header = VGroup(
+            tex(r"For each distinct supercritical interior angle $\theta$ of multiplicity $m_\theta$:",
+                size=24, color=MUTED),
+            math(r"\text{phase choices}\ \simeq\ \coprod_{r=0}^{m_\theta}\operatorname{Gr}_{\mathbb C}(r,m_\theta)",
+                 size=33, color=SINE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+        theorem = place(self, "theorem", boxed(header, color=SINE, pad=0.18))
+
+        # Several rank-one projections are drawn as a *real slice* of all
+        # complex lines in C^2; this is illustrative, not a topology proof.
+        circle = Circle(radius=1.18, color=FAINT, stroke_width=2)
+        lines = VGroup()
+        for angle in (0.14, 0.57, 1.02, 1.43):
+            direction = np.array([np.cos(angle), np.sin(angle), 0])
+            lines.add(Line(-1.15 * direction, 1.15 * direction,
+                           color=SINE, stroke_width=4, stroke_opacity=0.72))
+        center = Dot(radius=0.055, color=FG)
+        caption = tex(r"real slice of rank-one complex projections", size=22, color=MUTED)
+        geometry = VGroup(circle, lines, center, caption)
+        caption.next_to(circle, DOWN, buff=0.20)
+        picture = place(self, "diagram", geometry)
+
+        explanation = VGroup(
+            tex(r"Example: one active angle with $m_\theta=2$", size=26, color=MUTED),
+            math(r"\operatorname{Gr}_{\mathbb C}(0,2)\ \sqcup"
+                 r"\ \operatorname{Gr}_{\mathbb C}(1,2)\ \sqcup"
+                 r"\ \operatorname{Gr}_{\mathbb C}(2,2)", size=26, color=SINE),
+            wrapped_bullets(
+                r"Ranks zero and two each give one projection.",
+                r"Rank one can select any complex line in $\mathbb C^2$.",
+                r"A right-angle defect contributes an independent unitary factor.",
+                width=5.0, size=22,
+            ),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        explain = place(self, "explain", explanation)
+
+        takeaway = place(self, "takeaway", para(
+            r"The Lean result is an algebraic bijection of optimizer sets."
+            r" No homeomorphism, connected-component, or manifold-dimension theorem is claimed.",
+            width=12.0, size=23, color=MUTED,
+        ))
+        self.say(
+            "With repeated supercritical angles, the optimal phase is no longer a"
+            " separate binary choice for each coordinate. We instead choose an"
+            " arbitrary projection on the whole multiplicity space. For multiplicity"
+            " two, the rank-one choices already form a continuum of complex lines."
+            " The drawing shows just a real slice. The formalization establishes the"
+            " full algebraic parameterization, not yet its topology."
+        )
+        self.play(FadeIn(theorem), FadeIn(picture), FadeIn(explain), FadeIn(takeaway), run_time=1.0)
+
+
+class N07LocalGlobal(DeckSlide):
+    """Planar visual for the all-ambient no-nonglobal-local-minimum theorem."""
+
+    title = "Every constrained Schatten local minimum is global"
+    kicker = r"A planar double-well illustrates the theorem; the Lean result covers every feasible ambient unitary"
+    section = SECTION
+
+    def body(self) -> None:
+        header = VGroup(
+            tex(r"For finite-dimensional complex subspace transport, $1<p<2$:", size=25, color=MUTED),
+            math(r"W\text{ locally minimizes }\norm{I-W}_p^p\ \Longrightarrow"
+                 r"\ W\text{ globally minimizes }\norm{I-W}_p^p", size=31, color=CURRENT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        theorem = place(self, "theorem", boxed(header, color=CURRENT, pad=0.19))
+
+        theta = np.deg2rad(80.0)
+        delta_star = optimal_phase_three_halves(theta)
+        # Clip floating-point plot samples to the closed admissible phase interval.
+        fun = lambda d: schatten_signed_phase_power_three_halves(
+            theta, float(np.clip(d, -theta, theta)))
+        ymin = fun(delta_star)
+        ymax = fun(0.0)
+        axes = Axes(
+            x_range=[-theta, theta, theta / 2],
+            y_range=[ymin - 0.04, ymax + 0.04, 0.08],
+            x_length=5.25,
+            y_length=2.05,
+            axis_config={"color": FAINT, "stroke_width": 2}, tips=False,
+        )
+        curve = axes.plot(fun, x_range=[-theta, theta], color=SINE, stroke_width=4)
+        left = Dot(axes.c2p(-delta_star, ymin), radius=0.075, color=CURRENT)
+        right = Dot(axes.c2p(delta_star, ymin), radius=0.075, color=CURRENT)
+        central = Dot(axes.c2p(0, ymax), radius=0.052, color=TRIAL)
+        plot_label = tex(r"planar example: $p=3/2$, $\theta=80^\circ$", size=23, color=MUTED)
+        bottom = tex(r"phase $\delta$  (two global minima $\pm\delta_\star$)", size=22, color=MUTED)
+        chart = VGroup(axes, curve, left, right, central, plot_label, bottom)
+        plot_label.next_to(axes, UP, buff=0.12)
+        bottom.next_to(axes, DOWN, buff=0.13)
+        plot = place(self, "plot", chart)
+
+        explanation = VGroup(
+            tex(r"Global theorem: no spurious constrained local minima", size=25, color=CURRENT),
+            wrapped_bullets(
+                r"All feasible ambient unitaries, including plane-mixing ones.",
+                r"Repeated, zero, critical, and right principal angles included.",
+                r"Nearest unitary commuting with a projection inherits the result.",
+                r"The theorem does not assert convergence of a numerical solver.",
+                width=5.0, size=22, buff=0.13,
+            ),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        explain = place(self, "explain", explanation)
+
+        takeaway = place(self, "takeaway", para(
+            r"The planar plot is a scalar illustration. The formalized theorem rules"
+            r" out nonglobal local minima in the complete constrained unitary space.",
+            width=12.1, size=23, color=MUTED,
+        ))
+        self.say(
+            "The curve shows the symmetry-breaking scalar phase for a single"
+            " supercritical angle. It has two equally optimal phases. The actual"
+            " theorem is more powerful: on the full constrained space of complex"
+            " unitary transporters, every local minimum is global. The property"
+            " also transfers to nearest unitary corrections that preserve a"
+            " prescribed subspace."
+        )
+        self.play(FadeIn(theorem), FadeIn(plot), FadeIn(explain), FadeIn(takeaway), run_time=1.0)
+
+
 class N08ComplexVsReal(DeckSlide):
     title = "Why complex and real transport diverge"
     kicker = r"Complex phases decouple plane-by-plane; real transport introduces matching constraints"
@@ -703,7 +900,7 @@ class N08ComplexVsReal(DeckSlide):
                 wrapped_bullets(
                     r"A continuous phase correction is available on each principal plane",
                     r"Exact complex trace and smoothed formulas have been formalized",
-                    r"The all-rank complex Schatten $1<p<2$ optimum and cutoff are formalized",
+                    r"The all-rank complex Schatten $1<p<2$ optimum and all minimizers are classified",
                     width=5.7,
                     size=21,
                 ),
@@ -761,11 +958,12 @@ class N09StatusBoard(DeckSlide):
             VGroup(
                 para(r"\textbf{Safe strong claims}", width=3.78, size=23, color=CURRENT),
                 wrapped_bullets(
-                    r"Smoothed exact minimum and explicit optimizer",
+                    r"Smoothed exact value and all optimizer families",
                     r"Uniqueness and quartic critical growth",
                     r"Exact commuting-unitary correction criterion",
-                    r"All-rank complex Schatten $1<p<2$ minimum",
-                    r"Sharp all-rank cutoff; global no-mixing bound",
+                    r"All-rank complex Schatten minimum and exact cutoff",
+                    r"Every minimizer classified; local minima global",
+                    r"Exactly $2^s$ simple active-angle choices",
                     width=3.78,
                     size=21,
                 ),
@@ -791,9 +989,9 @@ class N09StatusBoard(DeckSlide):
             VGroup(
                 para(r"\textbf{Do not oversell yet}", width=3.78, size=23, color=TRIAL),
                 wrapped_bullets(
-                    r"Classification of every supercritical Schatten minimizer",
+                    r"Topology of the complex optimizer families",
                     r"Global real matching and sorted-pair reductions",
-                    r"Sharp trace and smoothed real-complex gaps",
+                    r"Infinite-dimensional ideal optimization and sharp field gaps",
                     width=3.78,
                     size=21,
                 ),
@@ -806,10 +1004,10 @@ class N09StatusBoard(DeckSlide):
         place(self, "working", right, align_top=True)
 
         finish = para(
-            r"The Lean development proves an \emph{exact complex smoothed-transport"
-            r" theory}, including uniqueness through the cutoff, quartic critical"
-            r" growth, and an exact symmetry-preserving correction."
-            r" Mathematical first-publication priority is still being investigated.",
+            r"The complete finite-dimensional complex Schatten theory now gives the"
+            r" exact value, every optimizer, and no nonglobal local minima."
+            r" Smoothed transport has analogous global-optimizer geometry and"
+            r" critical stability. Historical first-publication priority remains open.",
             width=12.15,
             size=24,
             color=MUTED,

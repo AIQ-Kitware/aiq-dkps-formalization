@@ -10,22 +10,19 @@ included. Every optimizer is now in algebraic bijection with a finite
 product of actual multiplicity-space projections, equivalently subspaces
 stratified by dimension, and an independent defect unitary. Simple active
 multiplicities with zero right defect give exactly `2^s` optimizers.
-The multiplicity projection coordinates and independent defect unitary
-now give an operator-norm homeomorphism onto the full optimizer set.
-The set is compact, each active rank label is locally constant, and
-different rank sectors have uniform positive separation for the fixed
-pair and exponent. Uniform Lipschitz recovery of the normalized phase
-projection is proved.
+Uniform Lipschitz recovery of the normalized phase projection is proved.
 The earlier exact value, local-to-global, sharp uniqueness and
 commutator criteria remain proved. The all-angle Charbonnier global
-optimizer classification also remains proved. Fixed-rank sector
-connectedness, component counts and manifold dimensions, the smoothed
-multiplicity product, unrestricted real matching, smoothed local-to-global
+optimizer classification also remains proved. Grassmannian topology and
+manifold dimensions, unrestricted real matching, smoothed local-to-global
 and the ideal extensions remain open.
-**Earlier source snapshot used for manuscript and visualization updates:**
-`521572a2500c` (24 October 2026, 15:48 incremental source patch,
-reconstructed and verified against base `642de34df29a`). The original
-source-result audit remains anchored to its reviewed Lean declarations.
+**Manuscript and teaching-deck update source:** `427169ce38b5` (25 October
+2026), incorporating the completed full complex optimizer classification,
+local-to-global theorem, normalized parameter bijection and exact counts.
+**Earlier integration source:** `521572a2500c` (24 October 2026, 15:48
+incremental source patch, reconstructed against base `642de34df29a`).
+The original source-result audit remains anchored to its reviewed Lean
+statements. The later mathematical extensions do not change its 29 rows.
 Earlier chronological status entries below are dated historical records;
 current proof scope is summarized first.
 **Paper:** *Formalizing Davis--Kahan Perturbation Theory and Exact Spectral Subspace Transport*
@@ -36,74 +33,27 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
 
-## Operator norm optimizer topology and separated rank sectors (25 October)
+## Publication-facing claims at `427169ce` (25 October)
 
-`SchattenParameterTopology.lean` proves
-`exists_schatten_normalized_parameter_homeomorph` and
-`exists_schatten_multiplicity_parameter_homeomorph`. These strengthen the
-previous algebraic equivalences to genuine Lean `Homeomorph`s for the
-**complete** finite complex ambient optimizer set, at finite `1<p<2`
-and equal subspace ranks. The actual phase restrictions, both independent
-right-defect actions and cosine-weighted phase equation remain conclusions.
-Zero, critical, repeated and right angles require no exceptions or new
-competitor hypotheses. All topologies use the accepted scoped Tau Ceti
-operator-norm topology on linear isometry equivalences and the usual
-operator-norm subspace topology on continuous linear maps.
-
-The multiplicity theorem also proves that each actual projection rank
-coordinate is locally constant and gives `k>0` such that different ranks
-on any active factor imply `1 <= k*||T-S||`. This is a uniform positive
-separation of different rank sectors for the **fixed** pair and exponent,
-even when both defect unitaries vary. No sharp constant or uniformity as
-the pair approaches a phase transition is claimed. Continuous optimizer
-families on connected parameter spaces have constant rank labels, and
-finite intersections of fixed-rank fibers are clopen. These follow from
-the compiled `IsLocallyConstant` conclusions and Mathlib's fiber and
-preconnected-space theorems. Connectedness of each whole rank sector,
-exact component counts and manifold dimensions are not proved here.
-
-`isCompact_schattenTransportMinimizers` proves operator-norm compactness.
-`discreteTopology_schattenTransportMinimizers_of_simple_active_angles`
-proves isolation of every optimizer when the active multiplicities are
-one and the right defect is zero; the previously compiled exact count
-is `2^s`. Inactive multiplicities remain unrestricted.
-
-`Projection/ParameterTopology.lean` proves compactness of orthogonal
-projection spaces and a homeomorphism for the joint supported paired
-projection family. It also proves that idempotents at norm distance less
-than one have equal rank (self-adjointness unnecessary), local constancy
-of projection rank, and contraction of differences under invariant
-restriction without finite dimension. `LinearIsometryEquivCompact.lean`
-proves compactness of finite-dimensional isometric-identification spaces,
-including empty and zero-dimensional cases, and continuity of rectangular
-inversion. It consumes the accepted Tau Ceti topology directly. These
-are classical ingredients, with no separate historical novelty claim.
-
-The proof uses a compact-target closed graph argument and the existing
-geometric uniqueness theorem. An explicit finite-sum extension formula
-was unnecessary. The manuscript states the projection-product
-homeomorphism in `thm:schatten-optimizer-topology`; the older subspace
-rank-stratification equivalence remains algebraic. No new analytic
-topology on Mathlib's `Module.Grassmannian` is introduced.
-
-Validation: the focused topology module passed, followed by
-`lake build DavisKahan.All ForTauCeti` (10,465 jobs;
-`/tmp/schatten-topology-final-build.log`). Every Lean build was preceded
-by `lake exe cache get`. The journal passed pdfLaTeX/BibTeX and two
-further pdfLaTeX passes, producing a 55-page PDF at
-`/tmp/dk-schatten-topology-paper/dk-schatten-topology.pdf`; the final log
-has no warnings, overfull boxes, unresolved references or duplicate labels.
-`git diff --check` passed. No source-result inventory, checker or unrelated
-submodule was changed.
-
-An independent eight-dimensional diagnostic combined a repeated active
-angle (`p=1.5`, `theta=1.43`, multiplicity two), continuously varying
-rank-one complex projections, rank-zero/two endpoints and a two-dimensional
-independent right defect. The largest objective residual was `5.33e-15`
-and transport residual `7.95e-16`. The rank-zero/rank-one distance was
-`1.961572796758968`, matching `2*sin(optimalPhase)` in this block model.
-This supports the diagnostic construction only; the general homeomorphism
-and separation results are proved by Lean.
+The journal abstract, contribution list, related work and conclusion may now
+state **complete all-angle finite complex Schatten `1<p<2` optimizer
+classification** in addition to its exact minimum. The complete classification
+is already proved in `schatten_transport_verified.tex` and backed by
+`SchattenNonacuteClassification.lean`, `SchattenParameterNormalization.lean`,
+`SchattenMultiplicityParameters.lean` and
+`SchattenPhaseDefectAttainment.lean`. All constrained local minima are global
+by `SchattenLocalGlobal.lean` and `SchattenCorrectionLocalGlobal.lean`.
+The multiplicity factors are *Grassmannian sets* (rank-stratified subspaces),
+with a separate unitary defect identification; a homeomorphism and manifold
+dimension theorem do not follow from the compiled set-level equivalence.
+Simple active angle factors with no right defect give exactly `2^s`
+minimizers. The all-angle Charbonnier minimizer classification in
+`smoothed_transport_verified.tex` is likewise compiled; smoothed local-to-global
+is not an established theorem. Do not promote the real matching, field-gap,
+or infinite-dimensional Schatten-ideal extensions. Historical first-publication
+priority is still under review. The public Manim deck `novelty-tour` now
+explains binary phase choices, multiplicity-space continuum, and the
+local-to-global statement, preserving the paper's source/target colors.
 
 ## Finite multiplicity-space coordinates and exact optimizer counts (25 October)
 
@@ -169,16 +119,15 @@ cannot commute with the reversing involution.
 
 ### Exact next proof obligations
 
-The algebraic multiplicity factorization and full projection-product
-homeomorphism are closed. To identify connected components, prove that
-each fixed-rank complex orthogonal-projection space and each balanced
-complex defect identification space is path connected, then consume the
-homeomorphism and the compiled clopen rank labels. The expected component
-count is `product_theta (dim(N_theta)+1)`; the expected stratum real
-dimension is `d^2 + sum_theta 2*r_theta*(m_theta-r_theta)`. These formulas
-remain conventional research targets, not compiled endpoints. Installed
-Mathlib supplies local path connectedness of general C*-unitary groups;
-that alone does not establish global finite-dimensional path connectedness.
+The algebraic multiplicity and rank-stratum factorization is closed.
+The full family **homeomorphism**, connected components and manifold
+dimensions remain unproved in Lean. First settle the topology on the
+parameter and optimizer carriers as operator-norm operator spaces. For a
+finite set of actual eigenspaces, the supported extension is the finite
+sum of `inclusion * Q * inclusion.adjoint` and its reflected copy; prove
+that formula and its continuity. Combine it with continuity of the full
+phase/defect construction and the existing phase-recovery estimate.
+No formal manifold theorem follows solely from the compiled `Equiv`.
 
 The same donor should next be consumed by the Charbonnier multiplicity
 classification: its all-angle operator iff and joint defect attainment

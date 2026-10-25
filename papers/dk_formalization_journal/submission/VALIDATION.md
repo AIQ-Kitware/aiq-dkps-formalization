@@ -1,3 +1,30 @@
+# Current mathematical and manuscript scope: 25 October 2026, `427169ce`
+
+The reviewed source snapshot contains the completed finite-dimensional complex
+Schatten `1<p<2` **full optimizer classification**, including every angle
+multiplicity and right-angle defect, the algebraic normalized/multiplicity
+parameter equivalences, exact `2^s` counts under the stated hypotheses, and
+the constrained local-to-global theorem. It also contains the all-global-
+minimizer Charbonnier classification. The main paper already contains their
+mathematical statements and proof outlines in `schatten_transport_verified.tex`
+and `smoothed_transport_verified.tex`; this revision promotes them to the
+abstract, contributions, related work and conclusion, adds a small optimizer-
+family example, and revises the Manim novelty tour accordingly. No Lean sources
+or 29-result inventory rows are edited by this documentation overlay.
+
+The user-reported prior aggregate Lean build for the classification is accepted
+as verification. This revision's pdfLaTeX/BibTeX builds produced a 54-page
+checked manuscript and a 55-page working manuscript, with no unresolved
+references or overfull equations. All 24 focused Manim deck, LaTeX-markup,
+numeric-model and layout tests passed. These are typesetting/source tests,
+not Lean recompilation or an end-to-end graphical Manim render. The
+arbitrary-rank real matching,
+operator-ideal/infinite-dimensional result, and Grassmannian topological
+structure remain separate proof obligations. Mathematical priority is not
+established by missing matches in a literature search.
+
+---
+
 # Current manuscript integration: 24 October 2026, `521572a2`
 
 The user-provided incremental git-well source patch was applied to the
@@ -22,8 +49,10 @@ lake build \
 
 Manuscript builds are typesetting checks, not re-verification of Lean.
 The exact complex theorem covers arbitrary ambient mixing, all physical
-principal angles and `1<p<2`. Classification of all minimizers, unrestricted
-real matching and infinite-dimensional Schatten versions are not claimed.
+principal angles and `1<p<2`. At the earlier `521572a2` revision, classification
+of all minimizers was not yet claimed; the 25 October update at the top of this
+file supersedes that boundary. Unrestricted real matching and
+infinite-dimensional Schatten-ideal optimization remain outside the checked scope.
 
 ---
 

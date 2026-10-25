@@ -220,3 +220,25 @@ def test_unrestricted_schatten_two_angle_example_matches_verified_formula():
     for theta, delta in [(-1, 0), (math.pi, 0), (0.5, -0.1), (0.5, 0.6)]:
         with pytest.raises(ValueError):
             schatten_phase_power_three_halves(theta, delta)
+
+
+def test_simple_active_schatten_sign_families():
+    from dkvis.novelty_math import (
+        schatten_simple_active_signs_three_halves,
+        schatten_signed_phase_power_three_halves,
+    )
+    z = schatten_simple_active_signs_three_halves()
+    assert z["angles_deg"] == (75.0, 80.0)
+    assert len(z["choices"]) == 4
+    assert len(set(z["choices"])) == 4
+    assert min(z["phases_deg"]) > 0
+    assert max(z["costs"]) - min(z["costs"]) < 1e-12
+    assert math.isclose(z["costs"][0], 5.398844412803351, abs_tol=1e-10)
+    for (a, b), cost in zip(z["choices"], z["costs"]):
+        assert math.isclose(cost,
+            schatten_signed_phase_power_three_halves(math.radians(75), a)
+            + schatten_signed_phase_power_three_halves(math.radians(80), b),
+            abs_tol=1e-12)
+    for phase in (-math.pi, math.pi, float('nan'), float('inf')):
+        with pytest.raises(ValueError):
+            schatten_signed_phase_power_three_halves(math.radians(80), phase)

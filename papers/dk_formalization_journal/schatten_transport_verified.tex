@@ -28,6 +28,13 @@ $1\leq p<2$. Their general constrained problem also includes subspace
 transport. The following scalar classification supplies the dependence on
 the angle in the remaining exponent range.
 
+The development below proceeds from the scalar phase cost to the full
+ambient optimum, then to the entire minimizing set. The latter theorem
+permits repeated and right principal angles and provides an algebraic
+product parametrization; see
+\cref{thm:schatten-multiplicity-parameters}. The local-to-global result
+is \cref{prop:schatten-local-is-global}.
+
 \begin{proposition}[The scalar phase diagram]
 \label{prop:schatten-scalar-diagram}
 The minimum in \cref{eq:schatten-plane-cost} has the following description.
@@ -1101,65 +1108,6 @@ determined by its range, whose dimension is one of
 $0,\ldots,m_\theta$. This gives \cref{eq:schatten-multiplicity-product}.
 \end{proof}
 
-\begin{theorem}[Topology and separation of optimizer families]
-\label{thm:schatten-optimizer-topology}
-Give the orthogonal-projection space
-\[
- \mathcal P(E)=\{\Pi\in\operatorname{End}_{\mathbb C}(E):
-                         \Pi^2=\Pi=\Pi^*\}
-\]
-the operator norm topology. With the notation of
-\cref{thm:schatten-multiplicity-parameters}, the actual phase restrictions
-and defect actions give a homeomorphism
-\[
- \mathcal M_p(P,Q)\cong
- \left(\prod_{\theta\in\mathcal A_p}\mathcal P(E_\theta^+)\right)
-       \times\operatorname{Iso}_{\mathrm u}(H_{10},H_{01}),
-\]
-where the optimizer and defect spaces also carry their operator norm
-topologies. The optimizer set is compact. Let $\Pi_\theta(T)$ denote the
-restriction of the normalized phase projection of $T$ to $E_\theta^+$.
-For each active angle,
-$T\mapsto\operatorname{rank}\Pi_\theta(T)$ is locally constant.
-Consequently every prescribed rank sector is open and closed, and every
-continuous family parametrized by a connected space has constant ranks.
-
-For the fixed pair and exponent there is a $\gamma>0$ such that
-\[
- \operatorname{rank}\Pi_\theta(T)\ne
- \operatorname{rank}\Pi_\theta(S)\text{ for some }\theta\in\mathcal A_p
- \quad\Longrightarrow\quad \|T-S\|\geq\gamma.
-\]
-\end{theorem}
-
-\begin{proof}
-Orthogonal projections form a closed subset of the operator norm unit
-ball, hence a compact space in finite dimension. Commutation, reflection
-symmetry and support on the fixed effective phase space are closed
-conditions. Restriction and extension on the paired eigenspaces have a
-closed graph: their graph is specified by their values on every vector
-of each selected eigenspace. The supported extension is unique, so this
-bijection between compact Hausdorff spaces is a homeomorphism.
-
-For the normalized phase and defect coordinates, the graph of the
-ambient transporter is specified by the two defect actions and the
-weighted phase identity in \cref{thm:schatten-normalized-parameters}.
-These conditions are closed, and they determine an ambient unitary
-uniquely even without a feasibility hypothesis. The ambient unitary group
-is compact, so the closed graph gives continuity. The parameter space
-is compact and the optimizer space is Hausdorff; the inverse is therefore
-continuous as well. Compose the two homeomorphisms.
-
-If two idempotents are at operator norm distance less than one,
-restriction of either to the other's range is injective. Their ranks
-are therefore equal. This proves local constancy of each projection rank.
-Restriction contracts operator norm, so different ranks on one factor
-force the ambient normalized phase projections to be at distance at
-least one. The recovery estimate of
-\cref{thm:schatten-normalized-parameters} then gives the asserted positive
-separation. The constant depends on the fixed pair and exponent.
-\end{proof}
-
 \begin{corollary}[Exact count for simple active angles]
 \label{cor:schatten-simple-active-count}
 Suppose $H_{10}=H_{01}=\{0\}$ and $m_\theta=1$ for every
@@ -1168,15 +1116,28 @@ $\theta\in\mathcal A_p$. Then
  \#\mathcal M_p(P,Q)=2^{\#\mathcal A_p}.
 \]
 The multiplicities of inactive angles are unrestricted.
-Every optimizer is isolated within $\mathcal M_p(P,Q)$.
 \end{corollary}
 
 \begin{proof}
 A one-dimensional space has exactly two orthogonal projections, zero and
 identity. The defect identification is unique. Count the independent
 factors in \cref{eq:schatten-multiplicity-product}.
-The finite optimizer set is Hausdorff and hence discrete.
 \end{proof}
+
+\paragraph{Optimizer families at one and two active angles.}
+At $p=3/2$, the critical angle is
+$\vartheta_{3/2}=\arccos(1/3)\approx70.53^\circ$.
+Consider two distinct interior principal angles of $75^\circ$ and
+$80^\circ$, each of multiplicity one, with no right-angle defect.
+Both are active. The two independent positive/negative phase choices
+give exactly four ambient global minimizers, by
+\cref{cor:schatten-simple-active-count}. A repeated active angle of
+multiplicity two instead contributes
+$\coprod_{r=0}^{2}\operatorname{Gr}_{\mathbb C}(r,2)$:
+two singleton rank strata at zero and two and a family
+of rank-one projections indexed by the complex lines in $\mathbb C^2$.
+This is an algebraic description of the set of minimizers; we do not
+assert a topological or smooth classification of that family.
 
 \begin{corollary}[Distance between phase parameters]
 \label{cor:schatten-phase-parameter-distance}

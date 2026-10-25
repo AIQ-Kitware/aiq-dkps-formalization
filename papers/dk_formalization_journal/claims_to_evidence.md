@@ -3,9 +3,7 @@
 This file maps the principal claims in `paper.tex` to current repository
 evidence. Read `PAPER_CONTEXT.md` for the publication boundaries. The YWS source audit
 is in `../yws_formalization_conference/`. This journal manuscript concerns
-Davis--Kahan. Later dated extension entries supersede earlier pending
-assessments; the operator-norm topology entry records the current topology
-frontier.
+Davis--Kahan.
 
 | Manuscript claim | Evidence | Qualification |
 |---|---|---|
@@ -396,13 +394,31 @@ core and retains broader unverified extensions.
 | Two full right relative-phase split representations have exact distance `||(F-G)*(P-Q)||`. | `Projection/UnitaryTransport.lean`: `LinearIsometryEquiv.norm_sub_eq_of_right_relative_split`; included Corollary `cor:schatten-phase-parameter-distance`. | Real/complex inner-product spaces, no dimension/completeness or projection hypotheses. For Schatten families `G=F.adjoint`; applies to full unweighted representations, not arbitrary redundant joint defect parameters. |
 | Every Schatten-nearest unitary preserving a prescribed subspace has exactly the full phase/defect classification for the corresponding image-to-source transport. | `SchattenCorrectionClassification.lean`: `schatten_correction_isMin_iff_phase_and_defect_complex`, `schatten_correction_isMin_iff_transport_power_isMin_complex`; included Corollary `cor:schatten-all-nearest-commuting`. | Finite complex `1<p<2`, literal Schatten norm and all ambient unitary correction competitors. The comparison equivalence holds for every positive finite exponent at least one; the complete classification uses the strict `1<p<2` hypotheses. The unitary correction/transport bijection is classical; no independent historical novelty claim for that reduction. |
 
+## Publication-facing summary for `427169ce` (25 October 2026)
+
+The checked article may combine the already compiled unrestricted complex
+Schatten minimum (`SchattenGlobalAttainment.lean`), local-to-global theorem
+(`SchattenLocalGlobal.lean`), complete optimizer iff and joint realization
+(`SchattenNonacuteClassification.lean`, `SchattenPhaseDefectAttainment.lean`),
+nonredundant parameter bijection (`SchattenParameterNormalization.lean`),
+active multiplicity-space projection factorization and exact `2^s` count
+(`SchattenMultiplicityParameters.lean`), and nearest commuting-unitary
+classification/local-to-global transfer (`SchattenCorrectionClassification.lean`,
+`SchattenCorrectionLocalGlobal.lean`). All of these quantify over full ambient
+complex unitary competitors with `1<p<2`. The Grassmannian product is an
+algebraic bijection of sets; no topological type equivalence, manifold
+structure, globally sharp recovery constant or algorithmic convergence
+statement follows. The Charbonnier all-global-minimizer classification is
+compiled but no smoothed local-to-global theorem is claimed. The original
+29 Davis--Kahan source-target rows remain unchanged.
+
 ## Nonredundant Schatten parameters and recovery (25 October 2026)
 
 | Claim | Lean evidence | Exact scope and boundary |
 |---|---|---|
 | Every raw compatible projection has a normalized compatible representative giving the same weighted phase. | `SchattenParameterNormalization.lean`: `exists_normalized_schatten_phase_projection`; definition `schattenNormalizedPhaseProjections`. | Finite complex geometry; normalization projects onto the orthogonal complement of the actual phase-weight kernel. No Schatten minimum hypothesis is required for normalization. |
 | A feasible transporter is globally minimizing iff it has exactly one normalized phase/defect pair. | Same file: `schatten_transport_isMin_iff_unique_normalized_phase_and_defect_complex`; included Theorem `thm:schatten-normalized-parameters`. | All finite complex equal-rank pairs, finite `1<p<2`, arbitrary multiplicities, zero/critical/right angles and ambient competitors. |
-| Normalized compatible projections times independent arbitrary defect unitaries are in algebraic bijection with all global optimizers, and the inverse phase coordinate has a uniform operator-norm Lipschitz bound. | Same file: `exists_schatten_normalized_parameter_equiv`; same included theorem. | Actual Lean `Equiv`, both defect actions and phase formula retained. The recovery constant depends on the fixed pair and exponent. The later multiplicity and topology entries strengthen this algebraic endpoint. No sharp constant, component or dimension theorem asserted. |
+| Normalized compatible projections times independent arbitrary defect unitaries are in algebraic bijection with all global optimizers, and the inverse phase coordinate has a uniform operator-norm Lipschitz bound. | Same file: `exists_schatten_normalized_parameter_equiv`; same included theorem. | Actual Lean `Equiv`, both defect actions and phase formula retained. The recovery constant depends on the fixed pair and exponent. No sharp constant, full homeomorphism, Grassmannian factorization, component or dimension theorem asserted. |
 | The phase weight acts by `2*i*cos(theta)*sin(optimalPhase(p,theta))`; it vanishes on fixed/right directions, and on a nonzero interior angle eigenvector iff the angle is at/below the cutoff. | Same file: `schattenPhaseWeight_apply_cos`, `schattenPhaseWeight_apply_one`, `schattenPhaseWeight_apply_zero`, `schattenPhaseWeight_apply_eq_zero_iff_le_critical`. | Exact eigenvector statements with explicit physical angle and scalar-range hypotheses; the interior iff requires a nonzero vector. |
 | Kernel-support normalization and injectivity hold over either Hilbert scalar field; uniform recovery holds whenever the effective input space is finite dimensional. | `Projection/KernelSupport.lean`: `mul_starProjection_orthogonal_ker`, `commute_starProjection_orthogonal_ker_of_isSelfAdjoint`, `commute_starProjection_orthogonal_ker_of_unitary`, `eq_of_mul_eq_of_range_orthogonal_ker`, `exists_pos_norm_le_mul_norm_mul_on_orthogonal_ker`; `Projection/UnitaryTransport.lean`: `LinearIsometryEquiv.exists_pos_normalized_split_parameter_recovery`. | Infinite ambient dimension allowed. The bound does not extend to an infinite effective input space without additional hypotheses. Classical ingredients, no independent novelty or ideal-minimization claim. |
 
@@ -416,14 +432,3 @@ core and retains broader unverified extensions.
 | Simple active multiplicities give exactly one Boolean per active angle, with arbitrary right-defect unitary still independent. | `SchattenMultiplicityParameters.lean`: `nonempty_schatten_boolean_parameter_equiv`; `Projection/FiniteParameters.lean`: `exists_bool_equiv_starProjections_of_finrank_eq_one`, `natCard_starProjections_of_finrank_eq_one`. | Requires dimension one only on actual active eigenspaces. Inactive multiplicities are unrestricted. |
 | With simple active multiplicities and zero source right defect, there are exactly `2^s` global optimizers. | `SchattenMultiplicityParameters.lean`: `natCard_schattenTransportMinimizers_of_simple_active_angles`; included Corollary `cor:schatten-simple-active-count`. | All finite complex ambient competitors, finite `1<p<2`; equal ranks also make the target defect zero. `s` counts distinct actual active angles, not principal-angle entries with multiplicity. This is an exact count, beyond the earlier sign-family construction. |
 | Distinct nonconjugate unit-circle eigenspaces of a reversing unitary have independent projection parameters, uniquely assembled under support on their paired sum. | `PairedProjectionFamily.lean`: `exists_unique_unitary_paired_projection_family`, `exists_unitary_paired_projection_equiv`, `IsStarProjection.restrict_invariant`. | Real/complex finite ambient family theorem, empty indices and eigenspaces allowed. The restriction lemma itself allows arbitrary complete invariant subspaces in an infinite ambient Hilbert space. Classical geometry, no separate novelty or infinite-dimensional optimum claim. |
-
-## Operator norm topology and rank-sector separation (25 October 2026)
-
-| Claim | Lean evidence | Exact scope and boundary |
-|---|---|---|
-| Normalized phase projections and independent defect unitaries give an operator-norm homeomorphism onto every global optimizer, retaining the actual defect actions and weighted phase equation. | `SchattenParameterTopology.lean`: `exists_schatten_normalized_parameter_homeomorph`; included Theorem `thm:schatten-optimizer-topology`. | Finite complex equal-rank pair, finite `1<p<2`. All zero/critical/repeated/right angles and all ambient unitary competitors. The previous Lipschitz inverse phase estimate is retained. Uses the accepted Tau Ceti operator-norm topology directly. |
-| The finite product of actual active multiplicity-space projection parameters and the independent crossed-defect unitary space is homeomorphic to the full optimizer set. | Same file: `exists_schatten_multiplicity_parameter_homeomorph`; same included theorem. | Every projection factor is unrestricted and independent. Actual restrictions and both defect actions retained. The older subspace rank-stratification equivalence remains algebraic; no separate topology on `Module.Grassmannian`, connected-component count or manifold dimension asserted. |
-| Each active rank label is locally constant, and different rank sectors have a uniform positive operator-norm separation for the fixed pair and exponent. | The same multiplicity homeomorphism theorem includes `IsLocallyConstant` for every inverse rank coordinate and `k>0` with `1 <= k*||T-S||` for any differing rank. | No sharp constant or uniformity through a phase transition. Mathlib's locally-constant fiber and preconnected-space lemmas give clopen rank sectors and invariance in continuous connected families. Does not prove each sector connected or control approximate optimizers. |
-| The full optimizer set is compact; simple active multiplicities and zero right defect give isolated optimizers. | Same file: `isCompact_schattenTransportMinimizers`, `discreteTopology_schattenTransportMinimizers_of_simple_active_angles`; same included theorem and Corollary `cor:schatten-simple-active-count`. | Inactive multiplicities unrestricted; the earlier exact cardinality is `2^s`. |
-| Orthogonal projection spaces are compact, paired restriction/extension is a homeomorphism, and rank is locally constant. | `Projection/ParameterTopology.lean`: `isCompact_setOf_isStarProjection`, `exists_unitary_paired_projection_homeomorph`, `finrank_range_eq_of_idempotent_of_norm_sub_lt_one`, `isLocallyConstant_starProjection_finrank`, `ContinuousLinearMap.norm_sub_le_of_restrictions`. | Classical real/complex finite-dimensional topology; empty eigenspaces/index sets and trivial spaces allowed. The restriction norm bound allows infinite dimension; the rank stability lemma needs only idempotence, not self-adjointness or completeness. No independent historical novelty claim. |
-| Finite-dimensional isometric-identification spaces are compact and rectangular inversion is continuous in the accepted operator-norm topology. | `LinearIsometryEquivCompact.lean`: `compactSpace_end_operatorNorm`, `compactSpace_operatorNorm`, `continuous_symm_operatorNorm`. | Classical real/complex geometry; the rectangular space may be empty or zero-dimensional. Domain finite for compactness; rectangular inversion continuity itself allows infinite-dimensional complete Hilbert spaces. No ideal minimization claim. |

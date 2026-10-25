@@ -113,3 +113,39 @@ def schatten_two_angle_example_three_halves() -> dict[str, float]:
         "global_sum": (schatten_phase_power_three_halves(low, 0.0)
                        + schatten_phase_power_three_halves(high, delta)),
     }
+
+
+def schatten_signed_phase_power_three_halves(theta: float, delta: float) -> float:
+    """Symmetric signed-phase cost on a physical principal plane.
+
+    The sign does not affect the singular-value multiset, so this model
+    evaluates the existing nonnegative formula at ``abs(delta)``.
+    """
+    _checked_principal_angle(theta)
+    if not math.isfinite(delta) or abs(delta) > theta:
+        raise ValueError("signed phase must satisfy |delta| <= theta")
+    return schatten_phase_power_three_halves(theta, abs(delta))
+
+
+def schatten_simple_active_signs_three_halves() -> dict:
+    """Exactly four independent choices for two simple active angles.
+
+    Equal costs in these four planar constructions illustrate the compiled
+    *completeness* theorem; the numerical evaluation alone would show only
+    four attaining examples, not that other ambient minimizers are absent.
+    """
+    low, high = math.radians(75.0), math.radians(80.0)
+    da, db = optimal_phase_three_halves(low), optimal_phase_three_halves(high)
+    assert 0 < da < low and 0 < db < high
+    phases = [(a * da, b * db) for a in (-1, 1) for b in (-1, 1)]
+    costs = [
+        schatten_signed_phase_power_three_halves(low, a)
+        + schatten_signed_phase_power_three_halves(high, b)
+        for a, b in phases
+    ]
+    return {
+        "angles_deg": (75.0, 80.0),
+        "phases_deg": (math.degrees(da), math.degrees(db)),
+        "choices": phases,
+        "costs": costs,
+    }

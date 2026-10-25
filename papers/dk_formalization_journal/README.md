@@ -11,13 +11,17 @@ minimum, an explicit optimal phase, a sharp closed cutoff for canonical
 optimality and uniqueness, and quadratic or quartic error bounds. The nearest
 commuting-unitary application is stated with a computable commutator cutoff
 and a $2\times2$ worked example in `smoothed_transport_verified.tex`.
-As of source snapshot `521572a2`, the checked journal manuscript also
-includes `schatten_transport_verified.tex`: the attained **unrestricted
-finite-dimensional complex Schatten** minimum for every `1<p<2`, its
-principal-angle sum formula, and the sharp all-rank necessary-and-sufficient
-canonical rotation cutoff. This completes a target previously described as
-only a conventional proof. It does not complete the arbitrary-rank real
-matching problem or classify all minimizers.
+At source snapshot `427169ce` (25 October 2026), the checked journal
+manuscript includes `schatten_transport_verified.tex` and its complete
+**unrestricted finite-dimensional complex Schatten** optimization theory for
+`1<p<2`: the principal-angle sum formula, classification of every global
+optimizer, no nonglobal constrained local minima, exact uniqueness and
+commutator cutoffs, independent multiplicity-space projection coordinates,
+and exact `2^s` counts for simple active angles with zero right defect.
+The classified optimizer sets are in **algebraic** bijection with products of
+Grassmannian sets and an independent right-angle defect unitary. Their
+homeomorphism/manifold structure is not yet a Lean endpoint. Unrestricted real
+matching and infinite-dimensional ideal optimization remain open.
 
 The mathematical novelty/priority investigation remains in
 [`MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md`](MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md)

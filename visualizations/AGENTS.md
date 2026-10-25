@@ -60,10 +60,15 @@ Principal angles and optimal phases are magenta (`SINE`), thresholds violet
 `novelty-tour` is anchored to the Lean-completed exact finite complex
 Charbonnier optimizer, closed uniqueness cutoff, mixed-angle quartic growth,
 critical-planar failure of quadratic growth, and commuting-unitary correction.
-The scalar worked examples come from `dkvis/novelty_math.py` and have numeric
-regression tests. Higher-rank Schatten and real matching remain conventional
-research drafts and should not become certified conclusion slides until their
-corresponding global Lean endpoints are available.
+The scalar worked examples come from `dkvis/novelty_math.py` and have
+numeric regression tests. The higher-rank finite complex Schatten `1<p<2`
+minimum, complete all-angle optimizer classification, exact simple-angle
+counts and no-nonglobal-local-minima theorem **are now Lean-verified** at
+source snapshot `427169ce`; include them as certified mathematical results.
+Its optimizer Grassmannian decomposition is an algebraic set equivalence,
+not a verified topological or smooth parametrization. The general real
+matching, sharp field gaps and infinite-dimensional ideal optimization
+remain conventional research work and should not be certified in slides.
 
 ## Canonical sine-theta notation
 

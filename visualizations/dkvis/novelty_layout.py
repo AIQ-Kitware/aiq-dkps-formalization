@@ -111,6 +111,24 @@ LAYOUTS: dict[str, dict[str, Region]] = {
         "argument": Region(0.24, R, -2.40, 0.20),
         "takeaway": Region(L, R, BOTTOM, -2.60),
     },
+    "N07OptimizerChoices": {
+        "theorem": Region(L, R, 0.48, BODY_TOP),
+        "square": Region(L, -0.26, -2.33, 0.25),
+        "explain": Region(0.24, R, -2.33, 0.25),
+        "takeaway": Region(L, R, BOTTOM, -2.58),
+    },
+    "N07MultiplicityFamilies": {
+        "theorem": Region(L, R, 0.49, BODY_TOP),
+        "diagram": Region(L, 1.03, -2.44, 0.27),
+        "explain": Region(1.31, R, -2.44, 0.27),
+        "takeaway": Region(L, R, BOTTOM, -2.63),
+    },
+    "N07LocalGlobal": {
+        "theorem": Region(L, R, 0.48, BODY_TOP),
+        "plot": Region(L, 0.26, -2.42, 0.25),
+        "explain": Region(0.56, R, -2.42, 0.25),
+        "takeaway": Region(L, R, BOTTOM, -2.62),
+    },
     "N08ComplexVsReal": {
         "complex": Region(L, -0.23, -1.52, BODY_TOP),
         "real": Region(0.23, R, -1.52, BODY_TOP),

@@ -130,7 +130,7 @@
   \texttt{cep@jhu.edu}
 }
 
-\date{24 October 2026}
+\date{25 October 2026}
 
 \begin{document}
 \maketitle
@@ -152,23 +152,27 @@ subspaces of any finite-dimensional complex Hilbert space, including
 right-angle configurations, the global trace minimum equals
 $2\sum_j\sin\like{theta}{\theta_j}$.
 
-For every Schatten exponent $1<p<2$, we now prove the exact
-\emph{unrestricted} complex transport minimum
+For every $1<p<2$, we determine the exact \emph{unrestricted}
+finite-dimensional complex Schatten transport minimum
 $\min_{W(\sym{Usource})=\sym{Vtarget}}\|I-W\|_p^p
- =\sum_j m_p(\like{theta}{\theta_j})$, where $m_p$ is an explicit
-one-variable principal-plane minimum. An attaining unitary is constructed,
-and a global lower bound excludes every cost improvement from mixing
-principal planes. The canonical rotation is globally optimal exactly when
-all principal angles are at most
-$\vartheta_p=\arccos((2-p)/p)$.
+=\sum_jm_p(\like{theta}{\theta_j})$: even ambient unitaries that mix
+principal planes cannot improve it. We classify \emph{every} minimizing
+transporter for equal-rank complex subspaces, including repeated, zero,
+critical and right principal angles. Its optimizer set is in algebraic
+bijection with independent rank-stratified projection families on the
+supercritical angle multiplicity spaces and a crossed-defect unitary.
+With $s$ distinct simple active angles and no right-angle defect, there
+are exactly $2^s$ optimizers. Every constrained local minimum is global;
+the canonical rotation is the unique minimizer exactly when all angles
+are at most $\vartheta_p=\arccos((2-p)/p)$.
 
 For the smooth spectral penalty
-$\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$, $\tau>0$, we also formalize an exact
-complex all-pairs minimum, a functional-calculus optimizer, uniqueness
-through its sharp phase cutoff, quadratic stability strictly below that
-cutoff, and quartic growth at equality. The same theory solves nearest
-commuting-unitary correction and gives a computable commutator criterion
-for canonical optimality and uniqueness.
+$\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$, $\tau>0$, we formalize an exact
+complex all-pairs minimum, an explicit functional-calculus optimizer,
+and a classification of all globally minimizing transports. The theory
+also gives a sharp uniqueness cutoff, quadratic stability below it,
+quartic growth at equality, and nearest commuting-unitary corrections
+with an exact commutator criterion.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
@@ -231,8 +235,18 @@ $\vartheta_p=\arccos((2-p)/p)$ characterizes global minimality of the
 canonical rotation at every rank, including critical, zero, and right
 angles. Our proof analyzes constrained spectral gradients, excludes
 mixing by second variation at a minimizing transporter, and controls
-zero-gradient blocks separately. The verified theorem, a matching Lean
-signature, and an illustrative two-angle calculation appear in
+zero-gradient blocks separately. The complete result extends from the minimum value to the optimizer
+set and the constrained optimization landscape. We prove that every local
+minimum is global. All global minimizers are parametrized by compatible
+spectral phase projections and independent crossed-defect unitary maps,
+including nonacute configurations. After removing redundant phase
+parameters, the solution set is in algebraic bijection with a product of
+rank-stratified complex Grassmannian sets, one for each distinct
+supercritical interior angle, and a unitary defect-identification space.
+For $s$ distinct simple supercritical angles without a right-angle defect,
+there are exactly $2^s$ minimizers. The same classification transfers to
+the nearest unitary commuting with a fixed projection. The theorem, Lean
+signatures, and two-angle example appear in
 \cref{sec:schatten-optimization}.
 
 We also solve an exact optimization problem for a smooth spectral penalty.
@@ -284,16 +298,24 @@ Appendix~\ref{app:source-review}.
     $\|I-W\|_p^p$ over \emph{all} ambient complex unitaries transporting
     two equal-rank subspaces. Its exact value is the sum of scalar
     principal-plane phase minima. We prove that mixing principal planes
-    cannot improve the cost and that the canonical rotation minimizes
-    it if and only if every principal angle is at most
-    $\arccos((2-p)/p)$, including the critical boundary.
+    cannot improve the cost. We classify every global optimizer using
+    intrinsic normalized phase projections and independent right-angle
+    defect identifications; the resulting set is algebraically
+    parametrized by rank-stratified multiplicity-space Grassmannians.
+    With simple active angles and no right defect there are exactly
+    $2^s$ optimizers. Every constrained local minimum is global, and
+    the canonical rotation is uniquely optimal if and only if every
+    principal angle is at most $\arccos((2-p)/p)$, including equality.
+    The same classification and local-to-global property hold for
+    nearest commuting-unitary correction under the Schatten cost.
   \item We solve the unrestricted finite-dimensional complex transport
     problem for the smoothed spectral penalty
     $\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$. We prove its exact
     principal-angle formula and transition cutoff, construct a globally
-    minimizing unitary by functional calculus, and establish an explicit
-    quadratic-growth bound below the cutoff and a quartic bound through
-    equality. The same cutoff characterizes uniqueness of the global minimum.
+    minimizing unitary by functional calculus, classify all globally
+    minimizing transports, and establish an explicit quadratic-growth
+    bound below the cutoff and a quartic bound through equality. The
+    same cutoff characterizes uniqueness of the global minimum.
     We derive an exact nearest commuting-unitary correction, a
     computable operator-norm commutator criterion for canonical optimality
     and uniqueness (including the equality threshold), and quantitative
@@ -673,9 +695,12 @@ Example~4.2. For $1<p<2$, our unrestricted complex result goes beyond the
 planar and special-configuration comparisons in the cited work: it
 computes the all-rank minimum and proves that cross-plane mixing cannot
 improve it (\cref{sec:schatten-optimization}). The exact angle-dependent
-cutoff distinguishes canonical from phase-corrected minimizers; this
-claim does not assert priority for the underlying constrained transport
-problem or for Schatten norms themselves.
+cutoff determines uniqueness, and the complete classification describes
+all global minimizers, including multiplicity and right-angle freedom.
+Every constrained local minimum is global. The associated minimizer-set
+factorization uses classical complex Grassmannian sets; historical
+priority for the full constrained Schatten optimization and classification
+remains unresolved.
 
 Our smoothed theorem uses the same transport constraint and a
 nonhomogeneous spectral penalty; it gives the exact all-pairs value, a
@@ -729,12 +754,19 @@ for any two real or complex projections and the attained global complex
 trace-norm minimum $2\sum_j\sin\like{theta}{\theta_j}$ for every equal-rank pair.
 These results do not require an acute-angle hypothesis.
 
-For every $1<p<2$, an unrestricted finite-dimensional complex Schatten
-transport minimum is attained and equals the sum of the independent
-principal-plane minima. The global lower bound rules out improvements by
-mixing planes, and the cutoff $\arccos((2-p)/p)$ is necessary and sufficient
-for canonical optimality at arbitrary rank. This is an additional checked
-optimization theorem, distinct from the original 29 Davis--Kahan targets.
+For every $1<p<2$, the unrestricted finite-dimensional complex
+Schatten transport minimum is attained and equals the sum of the independent
+principal-plane minima, with no improvement from mixing planes. We have
+also classified all global minimizers for arbitrary equal-rank pairs and
+proved that every constrained local minimum is global. The solutions
+are in algebraic bijection with independent projections on the active
+principal-angle multiplicity spaces and an independent crossed-defect
+unitary. At simple active angles with zero defect, their number is exactly
+$2^s$. The canonical rotation is uniquely optimal precisely when all
+angles obey the closed cutoff $\arccos((2-p)/p)$. The same classification
+and local-to-global conclusion apply to Schatten-nearest commuting-unitary
+correction. These are additional checked mathematical results, distinct
+from the original 29 Davis--Kahan targets.
 
 For the smooth spectral penalty $\rho_\tau$, the unrestricted complex
 minimum has an explicit principal-angle formula. A clipped functional
@@ -742,8 +774,10 @@ calculus supplies an optimizer, and the same nuclear support certificate
 proves a dimension-independent quadratic bound below the cutoff; a shifted
 certificate gives quartic growth through equality.
 The canonical rotation is the unique minimizer through the closed
-cutoff, while phase-adjusted global minimizers exist beyond it. For the
-associated nearest commuting-unitary problem, the canonical correction is
+cutoff. In the supercritical regime, an intrinsic phase-projection and
+defect-unitary classification describes every globally minimizing
+transport. For the associated nearest commuting-unitary problem, the
+canonical correction is
 uniquely optimal exactly when
 $\|AP-PA\|_{\mathrm{op}}\leq\sqrt{1-\eta^{-4}}$;
 feasible objective errors yield Frobenius-distance guarantees below and
