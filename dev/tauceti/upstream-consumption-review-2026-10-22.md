@@ -1,5 +1,83 @@
 # DKPS upstream-consumption review — 2026-10-22
 
+## October 25 maintenance checkpoint
+
+`c76d49cde` publishes the module-consumer APIs in the donor layer; `6388669d7`
+adds only measured-resource bookkeeping. An isolated source snapshot of that
+checkpoint, using its original Tau Ceti revision
+`f99e274230de08a9a8189a97dbfc910536646449` and unchanged Mathlib/toolchain,
+passed `lake exe cache get` followed by `lake build` (21,035 jobs).
+`lake build ForTauCeti` separately passed all 8,453 jobs with the donor's
+warnings-as-errors and Mathlib linter settings. The full checkpoint still
+emits the existing legacy-module and downstream proof warnings.
+
+The project-wide module and warning migration is now committed:
+
+- `3b6835975` consumes the accepted double-angle Gram prerequisites and retires
+  ten duplicate donor declarations without aliases;
+- `927ded55f` completes the donor interfaces needed across module boundaries;
+- `49683f340` migrates the production libraries to explicit modules and enables
+  workspace-wide warnings-as-errors.
+
+The full default `lake build`, after `lake exe cache get`, passed **21,039 jobs**
+on October 25. This verifies the production checkpoint, including all default
+companion libraries. It does not assert source completeness or historical novelty.
+Tau Ceti is pinned to `efded067c28ffca3483fd731674eb13b42543fbb`; Mathlib remains
+`2cabef97b63d3275776b8b060d802de6a6fa1055`, with Lean
+`leanprover/lean4:v4.36.0-rc1`, matching Tau Ceti's inputs.
+
+The migration uses public application and characterization lemmas for opaque
+upstream definitions. The small reusable additions include
+`ContinuousLinearMap.realAlgebra_eq_of_isScalarTower`,
+`TauCeti.BorelCalculus.continuous_reCoord`, and `Submodule.isOffDiagonal_iff`.
+Compatible real-algebra structures are identified explicitly in functional-calculus
+proofs; imported hidden bodies are not treated as available reductions. Small
+computational constructors are exposed individually when their defining behavior
+is needed downstream. Paper-facing mathematical conclusions are preserved.
+
+`91b2f3332` exposes the printed dimension condition used by the existing audit;
+`016e6a66c` completes the diagnostic/Challenge migration and updates comparator
+fixtures to the accepted API owners. After `lake exe cache get`, a combined build
+of all default targets, all maintained touched modules, `Challenge`, and
+`DavisKahan.Audits.All` passed **21,170 jobs**, with warnings treated as errors.
+Intentional `Challenge/**/Conformance.lean` holes remain open, following
+`Challenge/README.md`; the affected fixtures disable only the intentional-placeholder
+diagnostic. Their solution modules retain the comparator's trusted-dependency policy.
+
+`f3442c71b` aligns the remaining fixture telescopes and the ambient sine expression
+with the exported APIs. `lake build Challenge`, after its cache fetch, passed
+**19,763 jobs**. This fixture-only follow-up leaves the production build unchanged.
+A full signature preflight followed by affected-config reruns verifies matching raw
+universe signatures and full types for all **42 implemented targets** across the
+17 configs. The three explicitly declared missing solution targets remain `SKIP`;
+this is not evidence that their source-facing proof obligations are closed.
+No full external comparator run is claimed.
+
+The explicitly historical snapshot
+`DavisKahan.Explorations.Historical.SourceUnitaryInvariantNormFanDominance` is
+excluded from that maintained-module check. Its existing header records that it
+predates the norm-API migration, does not compile, and is retained as an archive;
+this checkpoint does not claim to repair that historical mathematics.
+
+Two auxiliary-check limitations are outside this build checkpoint:
+
+- The import-layer check reports the pre-existing dependency from
+  `DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport` to
+  `DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm`.
+  This source/generic ownership issue remains for the canonical-consumption work.
+- The syntactic declaration-name checker reports imported accepted APIs as
+  absent because it indexes local source, together with stale historical migration
+  mappings. For example, `LinearMap.exists_orthonormal_sum_inner_eq_kyFanSum`
+  exists in the pinned `TauCeti/Analysis/InnerProductSpace/KyFan.lean`.
+  These reports are not Lean build failures. Actual declaration resolution and
+  comparator signatures must be checked against installed sources.
+
+This maintenance checkpoint supersedes the earlier instructions below to ignore
+legacy-module warnings. Paper and visualization updates remain a separate task.
+The original untracked `ProbeModulus.lean`, `feedback.txt`, and
+`luna_tauceti_upstream_first_guide.md` are preserved and are not build inputs.
+
+
 ## Scope and evidence
 
 This reviews the uploaded `aiq-dkps-formalization` source snapshot at DKPS
