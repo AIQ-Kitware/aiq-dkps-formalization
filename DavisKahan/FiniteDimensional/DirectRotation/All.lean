@@ -106,6 +106,9 @@ import DavisKahan.FiniteDimensional.DirectRotation.SchattenDefectReplacement
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimalPhase
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenOptimizerPhases
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalCommutation
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalUniqueness
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenSignedOptimizers
+import DavisKahan.FiniteDimensional.DirectRotation.SchattenCommutatorCutoff
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenCorrectionLocalGlobal
 
 /-! # `DavisKahan/FiniteDimensional/DirectRotation` -/

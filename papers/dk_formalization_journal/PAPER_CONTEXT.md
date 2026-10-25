@@ -1,13 +1,14 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** the actual canonical and relative signed-phase
-basis of every finite complex Schatten local minimum for `1<p<2`, and
-whole-space canonical commutation for acute pairs, built on signed-phase
-commit `667eaecb8`. Local-to-global, angle preservation, zero-angle fixation
-and complete arbitrary independent right-defect replacement remain proved.
-The complete all-angle Charbonnier global optimizer classification remains
-proved.
+**Current research source:** exact uniqueness of the unrestricted finite
+complex Schatten transport optimizer for `1<p<2`, independent attaining
+signed phases in one derived frame, and the sharp commutator criterion
+for uniqueness of the nearest subspace-preserving unitary. The prior
+local-to-global, intrinsic angle preservation, actual canonical relative
+basis, fixed directions and arbitrary independent right-defect replacement
+remain proved. The complete all-angle Charbonnier global optimizer
+classification remains proved.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -21,6 +22,58 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Exact Schatten uniqueness and nearest commuting-unitary criterion
+
+`SchattenCanonicalUniqueness.lean` proves
+`eq_canonicalRotation_of_isLocalMinOn_angles_le_critical_complex`:
+for finite complex `1<p<2`, **every ambient local minimum equals canonical
+rotation** when all accepted principal angles are at most
+`criticalAngle(p)`. It includes critical equality, repeated/zero angles,
+empty spaces and arbitrary supplied defect completion. The bound makes
+the pair acute. The complete trace identity, tested with the positive part
+of `t-cap`, transfers the original bound to every actual paired mean.
+The optimal phases vanish; both maps fix the actual gradient kernel.
+The generic transfer is
+`Submodule.paired_phase_mean_le_of_principalAngles_le_complex`.
+
+`SchattenSignedOptimizers.lean` proves
+`exists_schatten_minimizers_with_independent_phases_complex`: one frame
+**derived from the input pair** realizes every independent attaining signed
+scalar phase, with feasibility, actual eigenvector actions, the exact
+principal-angle power and comparison against every ambient competitor.
+The right-angle endpoint and empty spaces are included. The signed cost
+identity now underlies the original nonnegative-phase identity; it is not
+a duplicate cost implementation.
+
+`exists_opposite_schatten_minimizers_complex` constructs two global
+optimizers that coincide exactly in the closed canonical regime.
+`schatten_transport_unique_minimizer_iff_complex` therefore proves
+**unique optimizer iff every accepted angle is at most the critical angle**.
+A direct isometric-equivalence formulation is also compiled.
+These facts are included in `cor:schatten-unique-minimum` and strengthen
+`cor:schatten-canonical-cutoff`.
+
+`SchattenCommutatorCutoff.lean` proves the exact projection-gap cutoff
+`2*sqrt(p-1)/p` for canonical optimality and optimizer uniqueness.
+`schatten_correction_unique_minimizer_iff_commutator_complex` proves the
+application: given any unitary `A` and source projection `P`, the
+Schatten-nearest unitary commuting with `P` is unique **iff**
+`||AP-PA|| <= 2*sqrt(p-1)/p`, including equality. Its proof is the full
+bijection `C -> C*A.adjoint` from correction to transport, preserving the
+literal Schatten power and all competitors. The positive power and norm
+have the same minimizers. Included in
+`cor:schatten-commutator-uniqueness`; no performance or physical claim.
+
+`Projection/GapThreshold.lean` now owns the reusable real/complex closed
+angle-bound criterion and unitary-image gap/commutator identity. The latter
+holds on arbitrary complete Hilbert spaces with a projected source
+subspace. `SmoothedCommutatorCutoff.lean` consumes them directly; the old
+private angle-bound proof and complex finite-only commutator proof were
+removed. These geometric identities are classical, with no separate
+historical novelty claim. The pure Schatten optimizer classification,
+real matching, smoothed local-to-global theorem and ideal extensions
+retain their explicit open boundaries below.
 
 ## Canonical relative phases and acute whole-space commutation
 
@@ -80,17 +133,13 @@ and certify every compatible projection parameter. The common paired
 basis and its named canonical action are now proved, so that earlier
 obstruction is closed.
 
-A useful next consequence is **canonical uniqueness at and below the
-cutoff**, including the critical angle. An angle-bound transfer can avoid
-matching eigenvalue lists: insert `f(t)=max(t-cap,0)` in
-`Submodule.sum_principalAngles_eq_paired_phases_add_comap_complex`.
-If every original principal angle is at most a nonnegative `cap`, its
-left sum is zero. All terms on the right are nonnegative, forcing every
-actual paired mean to be at most `cap`. At `cap=criticalAngle(p)`, the
-named optimal phases vanish, so the optimizer and canonical rotation
-agree on the paired basis and on the acute gradient kernel. Formalize this
-transfer and the resulting whole-space equality rather than infer it from
-the signed-basis statement alone.
+Canonical uniqueness through the closed cutoff is now compiled, as is
+its exact converse using opposite globally attaining phases. The current
+continuation is the intrinsic relative scalar-real-part/projection theorem
+on each equal-angle space, followed by attainment of all compatible
+projection parameters. A derived fixed frame now realizes every independent
+attaining signed phase choice, but that theorem does not classify all
+mixing optimizers in that one frame.
 
 For the full nonacute relative equation, assemble the same positive-angle
 phase factors independently of the already classified right-defect
@@ -99,14 +148,47 @@ projection frame APIs can supply the final iff assembly. Parameter topology,
 real matching and ideal extensions remain open. Historical priority of
 the complete transport classification remains provisional.
 
-Validation: `lake exe cache get` preceded the focused builds and final
-`lake build DavisKahan.All ForTauCeti`, which passed (10,415 jobs;
-`/tmp/schatten-canonical-relative-final-build.log`). The new geometry and
-acute-commutation modules have no new warnings. BibTeX and repeated
-pdfLaTeX passes produced
-`/tmp/dk-schatten-canonical-relative-paper/dk-schatten-canonical-relative.pdf`,
-with no unresolved references/citations, multiply defined labels or overfull
-boxes. `git diff --check` passed.
+### Exact remaining proof obligations and next theorem
+
+For the next intrinsic parameter theorem, take a supercritical acute
+`theta`, the actual eigenspace
+`N = eigenspace(K.sinAngleOperator L, sin(theta))`, and relative phase
+`Z = R.adjoint*U` of an actual optimizer. Prove the actual invariant
+restriction satisfies
+`Z|N + (Z|N).adjoint = 2*cos(optimalPhase(p,theta))*I`.
+The existing complete signed/canonical basis supplies the eigenvector
+identities; the self-adjoint sine eigenspaces separate all unequal acute
+angles. Fixed directions and critical angles must be kept in the
+whole-space argument, with the identity branch at zero phase.
+
+Then apply `exists_restriction_unique_phase_projection_complex` from
+`UnitaryScalarRealPart.lean`, with `beta=cos(delta)` and `s=sin(delta)>0`.
+Show the unique projection commutes with canonical rotation and source
+reflection, so its restriction to one rotation eigenspace is the independent
+multiplicity-space parameter. Construct the converse for every compatible
+projection using a compatible paired frame and the signed cost identity.
+Combine with the already independent arbitrary right-defect replacement.
+The unresolved claim is the full intrinsic phase/defect **iff**, not scalar
+sign attainment or canonical uniqueness. The Grassmannian parameter
+bijection/topology, real matching, smoothed local-to-global and ideal
+extensions remain separate obligations.
+
+The shared paired-diagonal extension now lives in
+`OrthonormalBasis.exists_paired_diagonal_commuting_involution`, in the
+real/complex donor `DiagonalUnitary.lean`. Both nonnegative and independently
+signed attainment consume it; the old paper-local construction was removed.
+This is classical reusable geometry with no separate novelty claim.
+
+Validation of this extension: focused canonical uniqueness, independent
+signed attainment, exact uniqueness and correction-commutator modules
+passed. `lake exe cache get` preceded these builds and the final
+`lake build DavisKahan.All ForTauCeti` (10,423 jobs;
+`/tmp/schatten-uniqueness-final-build.log`). BibTeX and three pdfLaTeX
+passes produced
+`/tmp/dk-schatten-uniqueness-paper/dk-schatten-uniqueness.pdf`,
+with no unresolved references/citations, multiply defined labels or
+overfull boxes. `git diff --check` passed. The original 29-result
+source formalization inventory is unchanged.
 
 ## Actual signed optimal phases of every pure Schatten optimizer
 

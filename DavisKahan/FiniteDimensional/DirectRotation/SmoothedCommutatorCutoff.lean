@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCorrectionStability
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCanonicalOptimality
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerUniqueness
+import ForTauCeti.Analysis.InnerProductSpace.Projection.GapThreshold
 
 /-!
 # The exact commutator cutoff for canonical unitary correction
@@ -34,50 +35,6 @@ theorem sin_smoothedCriticalAngle (tau : ℝ) :
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
-omit [CompleteSpace E] in
-private theorem finite_angle_bound_iff_directedGap (U V : Submodule ℂ E)
-    (theta : ℝ) (hθ : theta ∈ Set.Icc 0 (Real.pi / 2)) :
-    (∀ i : Fin (Module.finrank ℂ U), U.principalAngles V i ≤ theta) ↔
-      U.directedProjectionGap V ≤ Real.sin theta := by
-  have hfinite : (∀ i : Fin (Module.finrank ℂ U), U.principalAngles V i ≤ theta) ↔
-      ∀ i : ℕ, U.principalAngles V i ≤ theta := by
-    constructor
-    · intro h i
-      by_cases hi : i < Module.finrank ℂ U
-      · exact h ⟨i, hi⟩
-      · rw [U.principalAngles_of_finrank_le V (Nat.le_of_not_gt hi)]
-        exact hθ.1
-    · intro h i
-      exact h i
-  rw [hfinite, ← U.principalSines_zero V, ← U.sin_principalAngles V 0]
-  have hzero := U.principalAngles_nonneg V 0
-  have hpi := U.principalAngles_le_pi_div_two V 0
-  have hs := Real.strictMonoOn_sin.le_iff_le
-    (show U.principalAngles V 0 ∈ Set.Icc (-(Real.pi / 2)) (Real.pi / 2) from
-      ⟨by linarith [Real.pi_pos], hpi⟩)
-    (show theta ∈ Set.Icc (-(Real.pi / 2)) (Real.pi / 2) from
-      ⟨by linarith [Real.pi_pos, hθ.1], hθ.2⟩)
-  rw [hs]
-  exact ⟨fun h => h 0, fun h i => (U.principalAngles_antitone V (Nat.zero_le i)).trans h⟩
-
-/-- The projection displacement induced by a unitary is exactly its
-operator-norm commutator with the source projection. -/
-theorem projectionGap_unitary_image_eq_commutator (K : Submodule ℂ E) (A : E ≃ₗᵢ[ℂ] E) :
-    K.projectionGap (K.map A.toLinearMap) =
-      ‖(A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)‖ := by
-  let Q := (K.map A.toLinearMap).starProjection
-  let U := Unitary.linearIsometryEquiv.symm A
-  have hfac : (K.starProjection - Q) * (U : E →L[ℂ] E) =
-      K.starProjection * (A : E →L[ℂ] E) - (A : E →L[ℂ] E) * K.starProjection := by
-    ext x
-    change K.starProjection (A x) - Q (A x) = K.starProjection (A x) - A (K.starProjection x)
-    rw [show Q (A x) = A (K.starProjection x) by
-      dsimp only [Q]
-      rw [Submodule.starProjection_map_apply, A.symm_apply_apply]]
-  have hn := CStarRing.norm_mul_coe_unitary (K.starProjection - Q) U
-  rw [hfac, norm_sub_rev] at hn
-  exact hn.symm
-
 /-- The closed canonical regime can be tested directly from the projection
 gap, without computing the full list of principal angles. -/
 theorem smoothed_canonical_isMin_iff_projectionGap
@@ -92,7 +49,7 @@ theorem smoothed_canonical_isMin_iff_projectionGap
       K.projectionGap L ≤ Real.sin (smoothedCriticalAngle tau) := by
   have hc := smoothed_canonical_isMin_iff tau htau K L hKL
   dsimp only at hc ⊢
-  rw [hc, finite_angle_bound_iff_directedGap K L _ (smoothedCriticalAngle_mem_Icc tau),
+  rw [hc, Submodule.finite_principalAngles_le_iff_directedProjectionGap_le K L _ (smoothedCriticalAngle_mem_Icc tau),
     K.projectionGap_eq_directedProjectionGap_of_finrank_eq L hKL]
 
 omit [CompleteSpace E] in
@@ -139,7 +96,7 @@ theorem canonical_correction_isMin_iff_commutator
   have h := smoothed_canonical_isMin_iff_projectionGap tau htau K (K.map A.toLinearMap)
     (A.toLinearEquiv.finrank_map_eq K).symm
   dsimp only at h
-  rwa [projectionGap_unitary_image_eq_commutator, sin_smoothedCriticalAngle] at h
+  rwa [Submodule.projectionGap_unitary_image_eq_commutator, sin_smoothedCriticalAngle] at h
 
 
 /-- The exact commutator threshold characterizes uniqueness of the nearest
@@ -180,7 +137,7 @@ theorem smoothed_correction_unique_minimizer_iff_commutator
   have hu : (∃! C, CorrMin C) ↔ ∃! W, TransMin W := e.existsUnique_congr hpred
   have hcut : (∀ i : Fin (Module.finrank ℂ K), K.principalAngles L i ≤ smoothedCriticalAngle tau) ↔
       K.projectionGap L ≤ Real.sin (smoothedCriticalAngle tau) := by
-    rw [finite_angle_bound_iff_directedGap K L _ (smoothedCriticalAngle_mem_Icc tau),
+    rw [Submodule.finite_principalAngles_le_iff_directedProjectionGap_le K L _ (smoothedCriticalAngle_mem_Icc tau),
       K.projectionGap_eq_directedProjectionGap_of_finrank_eq L hKL]
   change (∃! C, CorrMin C) ↔ _
   rw [hu]
@@ -188,6 +145,6 @@ theorem smoothed_correction_unique_minimizer_iff_commutator
     ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
       smoothedDisplacementCost tau W.toLinearMap ≤ smoothedDisplacementCost tau T.toLinearMap) ↔ _
   rw [smoothed_transport_unique_minimizer_iff tau htau K L hKL, hcut]
-  rw [projectionGap_unitary_image_eq_commutator, sin_smoothedCriticalAngle]
+  rw [Submodule.projectionGap_unitary_image_eq_commutator, sin_smoothedCriticalAngle]
 
 end TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition

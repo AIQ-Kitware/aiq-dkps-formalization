@@ -26,6 +26,51 @@ open scoped ENNReal
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
+/-- At an acute local minimum, both the optimizer and every completed
+canonical rotation fix the actual gradient kernel pointwise. -/
+theorem optimizer_and_canonical_fix_gradient_kernel_of_isLocalMinOn_acute_transports_complex
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K L : Submodule ℂ E) (U : unitary (E →L[ℂ] E))
+    (hmap : K.map (Unitary.linearIsometryEquiv U).toLinearMap = L)
+    (hmin : IsLocalMinOn
+      (fun W : E →L[ℂ] E => UnitarilyInvariantSeminorm.schatten ℂ E E p
+        (LinearMap.id - W.toLinearMap) ^ p.toReal)
+      {W | W ∈ unitary (E →L[ℂ] E) ∧ W * K.starProjection * star W = L.starProjection}
+      (U : E →L[ℂ] E))
+    (hacute : ∀ i : ℕ, K.principalAngles L i < Real.pi / 2)
+    (D : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L) :
+    ∀ x, schattenUnitaryGradient p.toReal (U : E →L[ℂ] E) x = 0 →
+      (U : E →L[ℂ] E) x = x ∧ nonacuteDirectRotation K L D x = x := by
+  let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
+  let Z := G.toLinearMap.ker
+  let R := nonacuteDirectRotation K L D
+  have ht := (map_eq_iff_conjugate_starProjection_complex K L U).mp hmap
+  have hUfix := apply_eq_self_on_gradient_kernel_of_isMinOn_acute_transports_complex
+    p hp hp1 hp2 K L U hmap
+    (isMinOn_of_isLocalMinOn_transports_complex p hp hp1 hp2 K L U hmap hmin) hacute
+  have hG : IsSelfAdjoint G := isSelfAdjoint_schattenUnitaryGradient _ _
+  have hPK := (gradient_square_reduces_projections_of_isLocalMinOn_transports
+    p hp hp1 K L.starProjection U ht hmin).1
+  have hPZ : ∀ x ∈ Z, K.starProjection x ∈ Z :=
+    hG.isSymmetric.mapsTo_ker_of_commute_square
+      (show Commute K.starProjection.toLinearMap (G.toLinearMap * G.toLinearMap) from
+        congrArg ContinuousLinearMap.toLinearMap hPK.eq)
+  intro x hx
+  refine ⟨hUfix x hx, ?_⟩
+  have hz : x ∈ Z := hx
+  have hRfix : R x = x := by
+    have hstar := congrArg (fun A : E →L[ℂ] E => A x)
+      (Unitary.star_mul_self_of_mem U.property)
+    change star (U : E →L[ℂ] E) ((U : E →L[ℂ] E) x) = x at hstar
+    rw [hUfix x hx] at hstar
+    have hPQ := congrArg (fun A : E →L[ℂ] E => A x) ht
+    change (U : E →L[ℂ] E) (K.starProjection (star (U : E →L[ℂ] E) x)) =
+      L.starProjection x at hPQ
+    rw [hstar, hUfix _ (hPZ x hz)] at hPQ
+    exact nonacuteDirectRotation_apply_eq_self_of_projections_eq K L D x hPQ
+  exact hRfix
+
 /-- Every local Schatten minimum for an acute pair commutes with its
 canonical rotation, at every finite rank and with arbitrary angle
 multiplicities, including zero and critical angles. -/
@@ -47,26 +92,10 @@ theorem commute_canonicalRotation_of_isLocalMinOn_acute_transports_complex
   let Z := G.toLinearMap.ker
   let R := nonacuteDirectRotation K L D
   have ht := (map_eq_iff_conjugate_starProjection_complex K L U).mp hmap
-  have hUfix := apply_eq_self_on_gradient_kernel_of_isMinOn_acute_transports_complex
-    p hp hp1 hp2 K L U hmap
-    (isMinOn_of_isLocalMinOn_transports_complex p hp hp1 hp2 K L U hmap hmin) hacute
-  have hG : IsSelfAdjoint G := isSelfAdjoint_schattenUnitaryGradient _ _
-  have hPK := (gradient_square_reduces_projections_of_isLocalMinOn_transports
-    p hp hp1 K L.starProjection U ht hmin).1
-  have hPZ : ∀ x ∈ Z, K.starProjection x ∈ Z :=
-    hG.isSymmetric.mapsTo_ker_of_commute_square
-      (show Commute K.starProjection.toLinearMap (G.toLinearMap * G.toLinearMap) from
-        congrArg ContinuousLinearMap.toLinearMap hPK.eq)
-  have hRfix (z : Z) : R (z : E) = (z : E) := by
-    have hstar := congrArg (fun A : E →L[ℂ] E => A (z : E))
-      (Unitary.star_mul_self_of_mem U.property)
-    change star (U : E →L[ℂ] E) ((U : E →L[ℂ] E) z) = (z : E) at hstar
-    rw [hUfix z z.property] at hstar
-    have hPQ := congrArg (fun A : E →L[ℂ] E => A (z : E)) ht
-    change (U : E →L[ℂ] E) (K.starProjection (star (U : E →L[ℂ] E) z)) =
-      L.starProjection z at hPQ
-    rw [hstar, hUfix _ (hPZ z z.property)] at hPQ
-    exact nonacuteDirectRotation_apply_eq_self_of_projections_eq K L D z hPQ
+  have hfix := optimizer_and_canonical_fix_gradient_kernel_of_isLocalMinOn_acute_transports_complex
+    p hp hp1 hp2 K L U hmap hmin hacute D
+  have hUfix (x : E) (hx : G x = 0) : (U : E →L[ℂ] E) x = x := (hfix x hx).1
+  have hRfix (z : Z) : R (z : E) = (z : E) := (hfix z z.property).2
   obtain ⟨n, e, theta, eps, _, _, hu, hw, hR0, hR1, _, _, _, _⟩ :=
     positive_gradient_canonical_relative_phase_basis_of_isLocalMinOn_complex
       p hp hp1 hp2 K L U hmap hmin D

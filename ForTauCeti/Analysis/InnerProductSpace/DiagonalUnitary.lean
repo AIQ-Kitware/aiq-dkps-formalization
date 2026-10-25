@@ -45,4 +45,41 @@ theorem exists_linearIsometryEquiv_apply_eq_smul
   let L := f.isometryOfOrthonormal e.orthonormal horth
   exact ⟨L.toLinearIsometryEquiv rfl, hf⟩
 
+/-- Unit-norm multipliers common to each involution-paired basis pair
+extend to an ambient unitary commuting with the involution and fixing
+the remaining eigenvectors. Empty paired or remaining spaces are allowed. -/
+theorem exists_paired_diagonal_commuting_involution
+    {n m : ℕ} (e : OrthonormalBasis ((Fin 2 × Fin n) ⊕ Fin m) 𝕜 E)
+    (lam : Fin n → 𝕜) (hlam : ∀ i, ‖lam i‖ = 1)
+    (J : E ≃ₗᵢ[𝕜] E) (hJ : Function.Involutive J)
+    (hJ0 : ∀ i, J (e (.inl (0, i))) = e (.inl (1, i)))
+    (eps : Fin m → 𝕜) (hJf : ∀ j, J (e (.inr j)) = eps j • e (.inr j)) :
+    ∃ Z : E ≃ₗᵢ[𝕜] E,
+      (∀ r i, Z (e (.inl (r, i))) = lam i • e (.inl (r, i))) ∧
+      (∀ j, Z (e (.inr j)) = e (.inr j)) ∧ (∀ x, Z (J x) = J (Z x)) := by
+  classical
+  let nu : ((Fin 2 × Fin n) ⊕ Fin m) → 𝕜 := Sum.elim (fun j => lam j.2) (fun _ => 1)
+  obtain ⟨Z, hZ⟩ := e.exists_linearIsometryEquiv_apply_eq_smul nu (by
+    rintro (⟨r, i⟩ | j)
+    · exact hlam i
+    · exact norm_one)
+  have hZp (r i) : Z (e (.inl (r, i))) = lam i • e (.inl (r, i)) := hZ _
+  have hZf (j) : Z (e (.inr j)) = e (.inr j) := by
+    simpa only [nu, Sum.elim_inr, one_smul] using hZ (.inr j)
+  have hJ1 (i) : J (e (.inl (1, i))) = e (.inl (0, i)) := by rw [← hJ0, hJ]
+  refine ⟨Z, hZp, hZf, ?_⟩
+  have hmaps : Z.toLinearMap.comp J.toLinearMap = J.toLinearMap.comp Z.toLinearMap := by
+    apply e.toBasis.ext
+    intro j
+    change Z (J (e j)) = J (Z (e j))
+    rcases j with ⟨r, i⟩ | j
+    · by_cases hr : r = 0
+      · subst r
+        rw [hJ0, hZp, hZp, map_smul, hJ0]
+      · have hr1 : r = 1 := by omega
+        subst r
+        rw [hJ1, hZp, hZp, map_smul, hJ1]
+    · rw [hJf, map_smul, hZf, hJf]
+  exact fun x => DFunLike.congr_fun hmaps x
+
 end OrthonormalBasis

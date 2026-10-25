@@ -12,6 +12,47 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Exact pure Schatten uniqueness and its commutator consequence
+
+The unrestricted finite complex `1<p<2` theory now includes the **exact
+uniqueness criterion**: a unique global transporter exists iff every
+principal angle is at most `arccos((2-p)/p)`. Every local minimum then
+equals canonical rotation, including at critical equality, with repeated
+and zero angles and in dimension zero. Above the bound, two independently
+constructed opposite-phase ambient optimizers are distinct. Right angles
+are included in this nonuniqueness conclusion. Evidence:
+`SchattenCanonicalUniqueness.lean` and
+`SchattenSignedOptimizers.lean`, especially
+`schatten_transport_unique_minimizer_iff_complex`.
+The included manuscript states `cor:schatten-unique-minimum`.
+
+A common frame derived from the actual subspace pair now realizes **every
+independent attaining signed phase choice**, with exact global cost and
+comparison against all ambient unitaries. This is a converse construction
+for scalar signs; it does not yet establish the intrinsic full
+Grassmannian parameter iff or classify every optimizer in one fixed frame.
+
+The useful application is also compiled: the nearest subspace-preserving
+unitary to any prescribed unitary `A` is unique iff
+`||AP-PA|| <= 2*sqrt(p-1)/p`, with equality. The proof transfers all
+competitors by `C -> C*A.adjoint`; it does not impose a common principal
+plane decomposition on competitors. Evidence:
+`SchattenCommutatorCutoff.schatten_correction_unique_minimizer_iff_commutator_complex`;
+included `cor:schatten-commutator-uniqueness`. This is a sharp mathematical
+certificate, with no numerical-performance or implementability claim.
+
+Primary comparison rechecked: BLR (2001),
+[official journal PDF](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117),
+Lemma 3.3 (printed p. 36), already gives the planar right-angle
+`1<=p<2` optimizing relation. Theorem 3.4 gives all Frobenius minimizers
+for its block-diagonal nearness problem. Those statements are not an
+angle-dependent all-rank `1<p<2` uniqueness criterion. This comparison
+identifies a theorem-level scope difference; it is not a proof of
+historical priority. The complete transport result's novelty remains
+**provisional**, pending the broader matrix-nearness and quotient-metric
+citation investigation recorded below. The gap and commutator identities
+are classical and have no independent novelty claim.
+
 ## Named canonical relative phases and acute commutation
 
 The signed phases are now identified relative to the **actual named canonical

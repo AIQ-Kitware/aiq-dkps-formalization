@@ -61,7 +61,7 @@ theorem smoothed_correction_isMin_iff_projection_of_commutator_lt_one_complex
     transporter_of_correction_preserves_subspace K A V hV
   have hacute : IsUniformlyAcute K L := by
     change K.projectionGap (K.map A.toLinearMap) < 1
-    rw [projectionGap_unitary_image_eq_commutator]
+    rw [Submodule.projectionGap_unitary_image_eq_commutator]
     exact hdefect
   have hcorr : A.trans T.symm = V := by ext x; simp [T]
   have hmin := correction_isMin_iff_transport_isMin tau K A T

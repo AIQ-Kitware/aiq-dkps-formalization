@@ -400,6 +400,8 @@ The canonical rotation, completed by right-angle rotations when necessary,
 is globally minimizing if and only if every principal angle satisfies
 $\theta_j\leq\vartheta_p$. If any angle exceeds this cutoff, an
 independently phase-modified transport has strictly smaller cost.
+In the canonical regime the minimizer is unique; outside it there are
+at least two distinct global minimizers.
 \end{corollary}
 
 \begin{proof}
@@ -408,6 +410,8 @@ Each scalar minimum is at most its canonical cost, with equality precisely
 for $\theta_j\leq\vartheta_p$ by the scalar classification, including
 zero and right angles. Apply \cref{thm:schatten-independent-planes} and
 sum these nonnegative differences.
+The uniqueness assertions follow from
+\cref{cor:schatten-unique-minimum}.
 \end{proof}
 
 The exact cutoff has a separate Lean proof with quantification over
@@ -747,6 +751,66 @@ Source invariance then makes the source and target projections agree
 there. Canonical rotation fixes every vector where these projections
 agree, so it too is identity on that kernel. The complete orthogonal
 decomposition proves commutation on the whole ambient space.
+\end{proof}
+
+\begin{corollary}[Exact uniqueness criterion]
+\label{cor:schatten-unique-minimum}
+The unrestricted complex transport problem has a unique global minimizer
+if and only if every principal angle is at most $\vartheta_p$.
+Equivalently,
+\[
+ \|P-Q\|\leq\frac{2\sqrt{p-1}}p.
+\]
+In this regime every local minimum is the canonical rotation, including
+at the critical angle and with arbitrary angle multiplicities.
+\end{corollary}
+
+\begin{proof}
+Suppose all principal angles are bounded by $\vartheta_p$, and take any
+local minimum. In the complete paired decomposition, apply the
+principal-angle trace identity to $f(t)=\max(t-\vartheta_p,0)$.
+The original angle sum vanishes. Every term in the paired sum and the
+restricted remainder sum is nonnegative, so every paired mean is at
+most $\vartheta_p$. Proposition~\ref{prop:schatten-all-signed-phases}
+then makes every relative scalar phase zero. Both operators fix the
+gradient kernel, so the local minimum equals canonical rotation.
+Compact attainment gives existence and hence uniqueness.
+
+Conversely, use a complete canonical paired frame and choose an attaining
+phase $0\leq\delta_j\leq\theta_j$ independently on every plane.
+The common shifts $\delta_j$ and $-\delta_j$ give two feasible ambient
+transporters, each attaining $\sum_j m_p(\theta_j)$. If any original
+principal angle is supercritical, so is some angle of this frame; scalar
+optimality there forces $\delta_j>0$. Since $\delta_j\leq\pi/2$, the
+two relative phases $e^{i\delta_j}$ and $e^{-i\delta_j}$ are distinct.
+The two global minimizers therefore differ.
+
+For equal-rank projections the gap is the largest principal sine.
+Monotonicity of sine on $[0,\pi/2]$ and
+\[
+ \sin\vartheta_p
+ =\sqrt{1-\left(\frac{2-p}{p}\right)^2}
+ =\frac{2\sqrt{p-1}}p
+\]
+give the norm criterion.
+\end{proof}
+
+\begin{corollary}[Uniqueness of the nearest commuting unitary]
+\label{cor:schatten-commutator-uniqueness}
+Let $A$ be unitary and $P$ an orthogonal projection. The minimum of
+$\|A-C\|_p$ over all unitary $C$ satisfying $CP=PC$ has a unique
+attainer if and only if
+\[
+ \|AP-PA\|\leq\frac{2\sqrt{p-1}}p.
+\]
+\end{corollary}
+
+\begin{proof}
+Set $Q=APA^*$. The bijection $C\mapsto T=CA^*$ identifies commuting
+unitaries with transports satisfying $TQT^*=P$, and
+$\|A-C\|_p=\|(I-T)A\|_p=\|I-T\|_p$.
+Apply \cref{cor:schatten-unique-minimum} to $Q,P$ and use
+$\|P-Q\|=\|(P-Q)A\|=\|AP-PA\|$.
 \end{proof}
 
 \begin{proposition}[All right-angle defect choices]

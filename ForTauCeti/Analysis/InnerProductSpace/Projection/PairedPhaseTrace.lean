@@ -182,4 +182,42 @@ theorem sum_principalAngles_eq_paired_phases_add_comap_complex
   exact hglobal'.symm.trans (htrace.trans
     (congrArg (fun t => (∑ i, f ((alpha i + beta i) / 2)) + t) hlocal'))
 
+/-- Every paired mean in a complete phase decomposition satisfies any
+nonnegative upper bound on the original pair's principal angles. -/
+theorem paired_phase_mean_le_of_principalAngles_le_complex
+    (K L H Z : Submodule ℂ E) (U : E ≃ₗᵢ[ℂ] E)
+    (hmap : K.map U.toLinearMap = L)
+    {n : ℕ} (b : OrthonormalBasis (Fin n) ℂ H) (alpha beta : Fin n → ℝ)
+    (hu : ∀ i, U (b i : E) = Complex.exp ((alpha i : ℂ) * Complex.I) • (b i : E))
+    (hw : ∀ i, U (K.reflection (b i)) =
+      Complex.exp (((-beta i : ℝ) : ℂ) * Complex.I) • K.reflection (b i))
+    (hmean : ∀ i, (alpha i + beta i) / 2 ∈ Set.Icc 0 (Real.pi / 2))
+    (d : WithLp 2 (WithLp 2 (H × H) × Z) ≃ₗᵢ[ℂ] E)
+    (hd : ∀ x, d x = (x.fst.fst : E) + K.reflection x.fst.snd + (x.snd : E))
+    (hK : ∀ x ∈ Z, K.starProjection x ∈ Z)
+    (hL : ∀ x ∈ Z, L.starProjection x ∈ Z)
+    (cap : ℝ) (hcap : 0 ≤ cap)
+    (hbound : ∀ i : Fin (Module.finrank ℂ K), K.principalAngles L i ≤ cap) :
+    ∀ i, (alpha i + beta i) / 2 ≤ cap := by
+  classical
+  let f : ℝ → ℝ := fun t => max (t - cap) 0
+  have hf : f 0 = 0 := max_eq_right (by simpa using hcap)
+  have hsum := sum_principalAngles_eq_paired_phases_add_comap_complex
+    K L H Z U hmap b alpha beta hu hw hmean d hd hK hL f hf
+  have hzero : (∑ i : Fin (Module.finrank ℂ K), f (K.principalAngles L i)) = 0 := by
+    apply Finset.sum_eq_zero
+    intro i _
+    exact max_eq_right (sub_nonpos.mpr (hbound i))
+  rw [hzero] at hsum
+  have hrem : 0 ≤ ∑ j : Fin (Module.finrank ℂ (K.comap Z.subtype)),
+      f ((K.comap Z.subtype).principalAngles (L.comap Z.subtype) j) :=
+    Finset.sum_nonneg fun _ _ => le_max_right _ _
+  intro i
+  have hi : f ((alpha i + beta i) / 2) ≤ ∑ j, f ((alpha j + beta j) / 2) :=
+    Finset.single_le_sum (f := fun j => f ((alpha j + beta j) / 2))
+      (fun _ _ => le_max_right _ _) (Finset.mem_univ i)
+  have hle : (alpha i + beta i) / 2 - cap ≤ f ((alpha i + beta i) / 2) :=
+    le_max_left _ _
+  linarith
+
 end Submodule
