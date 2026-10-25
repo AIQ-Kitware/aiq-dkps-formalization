@@ -12,6 +12,51 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Intrinsic angle-space parameters, including nonacute ambient pairs
+
+The necessary phase parameter is now compiled in intrinsic coordinates:
+for every finite complex `1<p<2` ambient local/global optimizer, every
+`0<theta<pi/2` and every canonical defect completion, its actual relative
+unitary on `ker(|P-Q|-sin(theta)*I)` has scalar real part
+`cos(optimalPhase(p,theta))*I`. Above the cutoff it determines a **unique
+orthogonal projection commuting with the actual restricted canonical
+rotation and source reflection**. No acuteness hypothesis is imposed on
+other angles; zero, repeated, critical and right angles elsewhere are
+included. At and below the cutoff every optimizer agrees with canonical
+rotation on that individual angle space, even if other angles exceed it.
+
+Evidence: `SchattenEqualAnglePhases.lean` and
+`SchattenEqualAngleCompatibility.lean`, in particular
+`relative_phase_unique_compatible_projection_on_angle_of_isLocalMinOn_complex`
+and `apply_eq_canonical_on_angle_le_critical_of_isLocalMinOn_complex`.
+Included as Proposition `prop:schatten-intrinsic-angle-parameter`.
+
+The proof isolates the actual gradient-kernel obstruction:
+`gradient_kernel_sinAngleOperator_isStarProjection_of_isLocalMinOn_complex`
+holds for every finite complex `p>1`. Its restricted sine eigenvalues are
+zero or one, excluding that kernel from every interior angle space. This
+uses the already verified fixed/right kernel blocks rather than a Hessian
+at vanishing displacement. The generic supporting projection and symmetric-
+orthogonality facts are classical; the scalar-real-part two-phase spectral
+projection itself is classical as well. No separate novelty claim is made
+for these algebraic ingredients.
+
+The next unresolved claim is **attainment of every compatible phase
+projection**, then the full nonacute ambient phase/defect iff and its
+Grassmannian parameter bijection/topology. Independent signed scalar
+attainment does not yet prove that every prescribed multiplicity projection
+occurs. These boundaries remain explicit in `PAPER_CONTEXT.md`.
+
+Primary sources rechecked: [BLR (2001), Problem 1.1 and its matrix formulation](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117)
+already asks for the entire minimizer set; and
+[local Lidskii (2018), Section 1 and Theorems 3.5/3.12](https://arxiv.org/html/1806.11436)
+classifies minimizers for fixed spectral or singular-value matrix orbits.
+Those orbit constraints differ from prescribed subspace transport. The
+current angle-dependent necessary parameter theorem is not licensed as
+historically new by that domain distinction alone. Priority of the full
+transport classification remains **provisional** pending theorem-level
+comparison across the broader nearness literature.
+
 ## Exact pure Schatten uniqueness and its commutator consequence
 
 The unrestricted finite complex `1<p<2` theory now includes the **exact

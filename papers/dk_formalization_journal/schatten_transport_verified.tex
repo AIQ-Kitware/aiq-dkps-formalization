@@ -865,6 +865,67 @@ The planar right-angle optimizer relation is already treated by
 identifies the full defect action within an arbitrary subspace pair
 and proves its independence from all complementary optimizer choices.
 
+\begin{proposition}[Intrinsic phase parameters at repeated angles]
+\label{prop:schatten-intrinsic-angle-parameter}
+Let $W$ be any local minimum, let $R$ be any completed canonical rotation,
+and put $Z=R^*W$ and $J=2P-I$. For $0<\theta<\pi/2$, set
+\[
+ E_\theta=\ker\bigl(|P-Q|-\sin\theta\,I\bigr),\qquad
+ \delta=\delta_p(\theta).
+\]
+This space is invariant under $R,Z,J$, and the actual restricted relative
+unitary satisfies
+\[
+ Z|_{E_\theta}+(Z|_{E_\theta})^*=2\cos\delta\,I_{E_\theta}.
+\]
+If $\theta\leq\vartheta_p$, then $W=R$ on $E_\theta$.
+If $\theta>\vartheta_p$, there is exactly one orthogonal projection
+$B_\theta$ on $E_\theta$ such that
+\[
+ Z|_{E_\theta}
+   =(\cos\delta-i\sin\delta)I_{E_\theta}
+       +2i\sin\delta\,B_\theta.
+\]
+It commutes with both $R|_{E_\theta}$ and $J|_{E_\theta}$.
+Equivalently, $H_\theta=2B_\theta-I_{E_\theta}$ is a self-adjoint unitary
+and $Z|_{E_\theta}=\cos\delta\,I_{E_\theta}+i\sin\delta\,H_\theta$.
+The other principal angles may be zero, critical or right, and all
+multiplicities and empty angle spaces are allowed.
+\end{proposition}
+
+\begin{proof}
+On every fixed block of the actual gradient kernel the source and target
+projections agree. On every exchange block they are complementary.
+Their restricted sine operator therefore acts as zero or identity;
+the complete block family makes it an orthogonal projection.
+Since $0<\sin\theta<1$, symmetry of the sine operator makes
+$E_\theta$ orthogonal to that gradient kernel.
+
+Use the complete signed basis in
+\cref{prop:schatten-all-signed-phases}. Distinct physical angles have
+distinct sines, so only pairs of angle $\theta$ contribute to
+$E_\theta$. On each such pair, $Z$ has scalar phase
+$e^{i\varepsilon\delta}$, with $\varepsilon=\pm1$.
+Its sum with its adjoint is $2\cos\delta$, independently of the sign.
+The same paired basis diagonalizes $R$, giving commutation of $R$ and
+$Z$ on $E_\theta$. Both maps preserve sine eigenspaces; source reflection
+does too. Feasibility gives $ZJ=JZ$.
+
+At and below the cutoff $\delta=0$, and a unitary with real part
+identity equals identity. Above it, $0<\delta<\theta$, so
+$\sin\delta>0$. Unitarity and the scalar real-part identity put the
+spectrum of the restricted $Z$ in
+$\{\cos\delta-i\sin\delta,\cos\delta+i\sin\delta\}$.
+Its spectral projection at the second value is
+\[
+ B_\theta=
+ \frac{Z|_{E_\theta}-(\cos\delta-i\sin\delta)I_{E_\theta}}
+      {2i\sin\delta}.
+\]
+This proves existence, uniqueness and commutation with both geometric
+restrictions. The final representation follows by substitution.
+\end{proof}
+
 \begin{corollary}[Local minima for unitary correction]
 \label{cor:schatten-correction-local-global}
 Let $A$ be a unitary and let $P$ be an orthogonal projection on a finite

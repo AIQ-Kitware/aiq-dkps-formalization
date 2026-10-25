@@ -112,6 +112,23 @@ theorem commute_section3CosAngleOperator_of_commute_sinAngleOperator
     simpa only [hC.isSelfAdjoint.adjoint_eq, ← ContinuousLinearMap.mul_def] using hsq
   simpa only [hC.modulus_eq] using ContinuousLinearMap.commute_modulus_of_commute hgram
 
+/-- Preserving the intrinsic cosine also preserves the intrinsic sine.
+This holds for arbitrary continuous linear maps on a Hilbert space. -/
+theorem commute_sinAngleOperator_of_commute_section3CosAngleOperator
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (T : H →L[𝕜] H) (hT : Commute T (section3CosAngleOperator K L)) :
+    Commute T (K.sinAngleOperator L) := by
+  let S := K.sinAngleOperator L
+  have hS : S.IsPositive := K.isPositive_sinAngleOperator L
+  have hsq : Commute T (S * S) := by
+    have heq : S * S = 1 - section3CosAngleOperator K L * section3CosAngleOperator K L :=
+      eq_sub_of_add_eq' (section3CosAngleOperator_sq_add_sinAngleOperator_sq K L)
+    rw [heq]
+    exact (Commute.one_right T).sub_right (hT.mul_right hT)
+  have hgram : Commute T (S.adjoint ∘L S) := by
+    simpa only [hS.isSelfAdjoint.adjoint_eq, ← ContinuousLinearMap.mul_def] using hsq
+  simpa only [hS.modulus_eq] using ContinuousLinearMap.commute_modulus_of_commute hgram
+
 /-- The principal cosine commutes with the source orthogonal projection. -/
 theorem section3CosAngleOperator_comm_projection
     (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection] :

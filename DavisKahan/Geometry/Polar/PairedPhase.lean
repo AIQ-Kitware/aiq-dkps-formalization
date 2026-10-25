@@ -56,6 +56,18 @@ theorem nonacuteDirectRotation_apply_eq_self_of_projections_eq
   change nonacuteDirectRotation K L D (Proposition35.section3CosAngleOperator K L x) = _ at h
   rwa [hC, hA] at h
 
+/-- Every completed canonical rotation preserves the intrinsic sine
+angle operator, including its zero and right-angle sectors. -/
+theorem nonacuteDirectRotation_comm_sinAngleOperator
+    {𝕜 F : Type*} [RCLike 𝕜] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    [CompleteSpace F]
+    (K L : Submodule 𝕜 F) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    Commute (nonacuteDirectRotation K L D) (K.sinAngleOperator L) := by
+  apply Proposition35.commute_sinAngleOperator_of_commute_section3CosAngleOperator
+  rw [Proposition35.section3CosAngleOperator_eq_canonicalAbsoluteValue]
+  exact nonacuteDirectRotation_comm_absoluteValue K L D
+
 private theorem one_add_exp_twice (t : ℝ) :
     1 + Complex.exp (((2 * t : ℝ) : ℂ) * Complex.I) =
       (2 : ℂ) * (Real.cos t : ℂ) * Complex.exp ((t : ℂ) * Complex.I) := by

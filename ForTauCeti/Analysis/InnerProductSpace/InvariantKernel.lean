@@ -66,4 +66,26 @@ theorem apply_eq_zero_of_eigenvector_of_basis
       sub_ne_zero.mpr (fun h => hne (RCLike.ofReal_injective h))
     rw [(mul_eq_zero.mp hprod).resolve_left hcast, zero_smul]
 
+/-- An eigenvector at a value other than zero or one is orthogonal to
+every subspace on which the symmetric map acts idempotently. Invariance
+of that subspace is not required. -/
+theorem mem_orthogonal_of_eigenvector_of_idempotent_on_subspace
+    {S : Module.End 𝕜 E} (hS : S.IsSymmetric) (N : Submodule 𝕜 E)
+    (mu : ℝ) (hmu0 : mu ≠ 0) (hmu1 : mu ≠ 1)
+    (x : E) (hx : S x = (mu : 𝕜) • x)
+    (hN : ∀ z ∈ N, S (S z) = S z) : x ∈ Nᗮ := by
+  rw [Submodule.mem_orthogonal]
+  intro z hz
+  have hi := hS z x
+  have hi₂ := hS (S z) x
+  rw [hx, inner_smul_right] at hi
+  rw [hN z hz, hx, inner_smul_right] at hi₂
+  have hprod : ((mu : 𝕜) * ((mu : 𝕜) - 1)) * inner 𝕜 z x = 0 := by
+    calc
+      _ = (mu : 𝕜) * inner 𝕜 (S z) x - inner 𝕜 (S z) x := by rw [hi]; ring
+      _ = 0 := sub_eq_zero.mpr hi₂.symm
+  have hc0 : (mu : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hmu0
+  have hc1 : (mu : 𝕜) - 1 ≠ 0 := sub_ne_zero.mpr (by exact_mod_cast hmu1)
+  exact (mul_eq_zero.mp hprod).resolve_left (mul_ne_zero hc0 hc1)
+
 end LinearMap.IsSymmetric

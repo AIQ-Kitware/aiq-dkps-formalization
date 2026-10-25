@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.CStarAlgebra.TwoPointSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.PositiveUnitaryAverage
+public import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
@@ -119,6 +120,28 @@ theorem unitary_add_star_eq_scalar_iff_unique_projection_complex
   · rintro ⟨P, hP, _⟩
     exact (unitary_add_star_eq_scalar_iff_projection_complex U c s hcircle).mpr ⟨P, hP⟩
 
+omit [FiniteDimensional ℂ E] in
+/-- A scalar real-part identity restricts to any finite invariant subspace
+of an ambient unitary. The ambient Hilbert space may be infinite dimensional. -/
+theorem exists_restriction_add_star_eq_scalar_complex
+    (U : E ≃ₗᵢ[ℂ] E) (N : Submodule ℂ E) [FiniteDimensional ℂ N]
+    (hinv : ∀ x ∈ N, U x ∈ N) (c : ℝ)
+    (hreal : ∀ x : N, U (x : E) + star (U : E →L[ℂ] E) (x : E) =
+      (2 * (c : ℂ)) • (x : E)) :
+    ∃ V : N ≃ₗᵢ[ℂ] N, (∀ x : N, (V x : E) = U x) ∧
+      (V : N →L[ℂ] N) + star (V : N →L[ℂ] N) = (2 * (c : ℂ)) • 1 := by
+  obtain ⟨V, hV, hVs, _⟩ := U.exists_restriction_of_finite_invariant N hinv
+  have hsum : (V : N →L[ℂ] N) + star (V : N →L[ℂ] N) = (2 * (c : ℂ)) • 1 := by
+    ext x
+    change (V x : E) + (star (V : N →L[ℂ] N) x : E) = (2 * (c : ℂ)) • (x : E)
+    rw [show star (V : N →L[ℂ] N) = (V.symm : N →L[ℂ] N) from V.adjoint_eq_symm]
+    change (V x : E) + (V.symm x : E) = (2 * (c : ℂ)) • (x : E)
+    rw [hV, hVs]
+    change (U : E →L[ℂ] E) x + (U.symm : E →L[ℂ] E) x = _
+    rw [← U.adjoint_eq_symm]
+    exact hreal x
+  exact ⟨V, hV, hsum⟩
+
 /-- A finite invariant subspace with prescribed scalar real part has a
 unique two-phase orthogonal projection. The restricted unitary acts by the
 original ambient unitary, including on a zero-dimensional subspace. -/
@@ -132,25 +155,7 @@ theorem exists_restriction_unique_phase_projection_complex
       ∃! P : N →L[ℂ] N, IsStarProjection P ∧
         (V : N →L[ℂ] N) = ((c : ℂ) - (s : ℂ) * Complex.I) • 1 +
           (2 * (s : ℂ) * Complex.I) • P := by
-  let v : N →ₗᵢ[ℂ] N :=
-    { U.toLinearMap.restrict hinv with norm_map' := fun x => U.norm_map x }
-  let V : N ≃ₗᵢ[ℂ] N := v.toLinearIsometryEquiv rfl
-  have hV (x : N) : (V x : E) = U x := rfl
-  have hVs (x : N) : (V.symm x : E) = star (U : E →L[ℂ] E) x := by
-    apply U.injective
-    rw [show star (U : E →L[ℂ] E) = (U.symm : E →L[ℂ] E) from U.adjoint_eq_symm]
-    change U (V.symm x : E) = U (U.symm (x : E))
-    calc
-      _ = (V (V.symm x) : E) := (hV (V.symm x)).symm
-      _ = (x : E) := by rw [V.apply_symm_apply]
-      _ = _ := (U.apply_symm_apply x).symm
-  have hsum : (V : N →L[ℂ] N) + star (V : N →L[ℂ] N) = (2 * (c : ℂ)) • 1 := by
-    ext x
-    change (V x : E) + (star (V : N →L[ℂ] N) x : E) = (2 * (c : ℂ)) • (x : E)
-    rw [show star (V : N →L[ℂ] N) = (V.symm : N →L[ℂ] N) from V.adjoint_eq_symm]
-    change (V x : E) + (V.symm x : E) = (2 * (c : ℂ)) • (x : E)
-    rw [hV, hVs]
-    exact hreal x
+  obtain ⟨V, hV, hsum⟩ := exists_restriction_add_star_eq_scalar_complex U N hinv c hreal
   exact ⟨V, hV, (unitary_add_star_eq_scalar_iff_unique_projection_complex
     (Unitary.linearIsometryEquiv.symm V) c s hcircle hs).mp hsum⟩
 

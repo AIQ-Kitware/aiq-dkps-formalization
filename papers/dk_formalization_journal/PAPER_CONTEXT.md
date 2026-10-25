@@ -1,14 +1,16 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** exact uniqueness of the unrestricted finite
-complex Schatten transport optimizer for `1<p<2`, independent attaining
-signed phases in one derived frame, and the sharp commutator criterion
-for uniqueness of the nearest subspace-preserving unitary. The prior
-local-to-global, intrinsic angle preservation, actual canonical relative
-basis, fixed directions and arbitrary independent right-defect replacement
-remain proved. The complete all-angle Charbonnier global optimizer
-classification remains proved.
+**Current research source:** intrinsic compatible two-phase projection
+parameters of every finite complex Schatten local/global optimizer on each
+supercritical interior angle space, with arbitrary zero/right angles
+elsewhere. Every optimizer agrees with canonical rotation on every
+subcritical/critical interior space. The restricted actual gradient-kernel
+sine operator is a projection for every finite complex `p>1` local minimum.
+The prior exact minimum, local-to-global, full uniqueness criterion,
+independent signed attainment, sharp commuting correction criterion and
+arbitrary independent right-defect replacement remain proved. The complete
+all-angle Charbonnier global optimizer classification remains proved.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -22,6 +24,60 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Intrinsic compatible phase projection on every interior angle space
+
+`SchattenEqualAnglePhases.lean` proves
+`relative_phase_add_star_on_angle_of_isLocalMinOn_complex`: for every finite
+complex ambient local minimum at `1<p<2`, every supplied canonical defect
+completion `R` and every physical `0<theta<pi/2`, the actual relative
+unitary `Z=R.adjoint*U` satisfies
+`Z*x+Z.adjoint*x = 2*cos(optimalPhase(p,theta))*x` on the **original**
+sine eigenspace at `sin(theta)`. Other angles may be zero, critical or
+right, and all multiplicities/empty eigenspaces are included.
+`relative_phase_unique_projection_on_angle_of_isLocalMinOn_complex`
+therefore constructs the actual invariant restriction `V` and its unique
+orthogonal projection `P` when `theta>criticalAngle(p)`, with
+`V=(cos(delta)-i*sin(delta))*I+2*i*sin(delta)*P`.
+
+`SchattenEqualAngleCompatibility.lean` proves the stronger necessary form
+`relative_phase_unique_compatible_projection_on_angle_of_isLocalMinOn_complex`:
+the same unique projection commutes with the **actual restricted** canonical
+rotation and source reflection. Their unitary restrictions and the optimizer's
+relative restriction are all constructed. The proof first establishes
+`relative_phase_commutes_canonical_on_angle_of_isLocalMinOn_complex`.
+It does not assert whole-space commutation for arbitrary right-defect
+completions. The checked manuscript includes Proposition
+`prop:schatten-intrinsic-angle-parameter`.
+
+The inactive branch is compiled as
+`apply_eq_canonical_on_angle_le_critical_of_isLocalMinOn_complex`:
+**every optimizer agrees with canonical rotation on each individual positive
+angle space at/below the cutoff**, even when other angles are supercritical
+or right. Zero-angle directions remain covered by `SchattenFixedDirections`;
+right-angle sectors by the complete defect classification. No strictly
+positive Hessian is invoked at critical angles or zero displacement.
+
+The removal of the ambient acuteness hypothesis uses
+`SchattenKernelAngles.lean`:
+`gradient_kernel_sinAngleOperator_isStarProjection_of_isLocalMinOn_complex`
+proves that the restricted intrinsic sine on the actual gradient kernel is
+an orthogonal projection. This necessary fact holds for every finite complex
+`p>1`, without an upper bound of two. Then
+`mem_gradient_kernel_orthogonal_of_sin_eigenvector_of_isLocalMinOn_complex`
+puts every sine eigenvector with value different from zero and one in the
+orthogonal complement of that kernel. No kernel model is supplied.
+
+The donor lemma
+`Submodule.isStarProjection_sinAngleOperator_of_fixed_or_exchange_blocks`
+is real/complex, needs no finite ambient dimension and no orthogonality of
+the spanning block family. The symmetric-map lemma
+`mem_orthogonal_of_eigenvector_of_idempotent_on_subspace` requires no dimension,
+completeness or invariant-subspace assumption. The generic scalar-real-part
+restriction `exists_restriction_add_star_eq_scalar_complex` allows an infinite
+ambient Hilbert space and a finite invariant subspace; both zero- and nonzero-
+phase cases consume the same restriction proof. These are classical geometric
+and spectral facts, with no independent novelty claim or ideal attainment.
 
 ## Exact Schatten uniqueness and nearest commuting-unitary criterion
 
@@ -126,52 +182,50 @@ are classical polar/projection mathematics with no separate novelty claim.
 
 ### Exact continuation after canonical commutation
 
-The remaining pure Schatten intrinsic classification must assemble the
-relative scalar-real-part equation on each geometric equal-angle space
-and invoke the existing unique projection/involution API, then construct
-and certify every compatible projection parameter. The common paired
-basis and its named canonical action are now proved, so that earlier
-obstruction is closed.
-
-Canonical uniqueness through the closed cutoff is now compiled, as is
-its exact converse using opposite globally attaining phases. The current
-continuation is the intrinsic relative scalar-real-part/projection theorem
-on each equal-angle space, followed by attainment of all compatible
-projection parameters. A derived fixed frame now realizes every independent
-attaining signed phase choice, but that theorem does not classify all
-mixing optimizers in that one frame.
-
-For the full nonacute relative equation, assemble the same positive-angle
-phase factors independently of the already classified right-defect
-identification. The existing generic phase/defect uniqueness and compatible
-projection frame APIs can supply the final iff assembly. Parameter topology,
-real matching and ideal extensions remain open. Historical priority of
-the complete transport classification remains provisional.
+The relative scalar-real-part equation, its unique supercritical projection
+and its compatibility with canonical rotation and source reflection are
+now compiled on every interior angle space, including nonacute ambient pairs.
+The earlier necessary-parameter obstruction is closed. Canonical uniqueness,
+its converse and independent scalar sign attainment also remain compiled.
 
 ### Exact remaining proof obligations and next theorem
 
-For the next intrinsic parameter theorem, take a supercritical acute
-`theta`, the actual eigenspace
-`N = eigenspace(K.sinAngleOperator L, sin(theta))`, and relative phase
-`Z = R.adjoint*U` of an actual optimizer. Prove the actual invariant
-restriction satisfies
-`Z|N + (Z|N).adjoint = 2*cos(optimalPhase(p,theta))*I`.
-The existing complete signed/canonical basis supplies the eigenvector
-identities; the self-adjoint sine eigenspaces separate all unequal acute
-angles. Fixed directions and critical angles must be kept in the
-whole-space argument, with the identity branch at zero phase.
+The next theorem is **attainment of every compatible phase projection**,
+followed by the complete ambient iff. Reuse
+`SmoothedSubspaceOptimization.exists_subspace_paired_rotation_projection_basis_complex`
+to derive a paired rotation frame adapted to an arbitrary ambient orthogonal
+projection commuting with canonical rotation and source reflection. Its
+projection eigenvalue is zero or one on both vectors of each pair. Choose the
+positive or negative `optimalPhase(p,theta_i)` accordingly and apply
+`schatten_signed_paired_phase_transport_eq_sum_complex`. First extract the
+already proved construction in `SchattenSignedOptimizers` as an in-frame
+attainment theorem so this adapted frame is an input; do not assume that its
+previous one existentially chosen frame diagonalizes every projection.
 
-Then apply `exists_restriction_unique_phase_projection_complex` from
-`UnitaryScalarRealPart.lean`, with `beta=cos(delta)` and `s=sin(delta)>0`.
-Show the unique projection commutes with canonical rotation and source
-reflection, so its restriction to one rotation eigenspace is the independent
-multiplicity-space parameter. Construct the converse for every compatible
-projection using a compatible paired frame and the signed cost identity.
-Combine with the already independent arbitrary right-defect replacement.
-The unresolved claim is the full intrinsic phase/defect **iff**, not scalar
-sign attainment or canonical uniqueness. The Grassmannian parameter
-bijection/topology, real matching, smoothed local-to-global and ideal
-extensions remain separate obligations.
+For a clean intrinsic formula, define the finite spectral phase factor
+`F_p(C)=exp(i*optimalPhase(p,arccos(C)))` of the actual cosine. Finite spectral
+calculus permits the scalar symbol without a global continuity proof; unit
+modulus gives unitarity. Prove its action on every physical cosine eigenvector,
+including cosine one (optimal phase zero) and cosine zero (right endpoint).
+Then certify `R.adjoint*T=F_p(C)*P+F_p(C).adjoint*(I-P)` for each prescribed
+compatible projection, with exact cost and all-ambient comparison.
+
+The full nonacute necessary formula should be weighted by the cosine:
+`C*R.adjoint*T=C*(F_p(C)*P+F_p(C).adjoint*(I-P))`. A normalized witness can be
+the positive spectral projection of `Im(C*R.adjoint*T)`, which vanishes on
+right defects and inactive directions. The new local commutation theorem
+supplies canonical compatibility away from the cosine kernel; the existing
+fixed and arbitrary right-defect results supply the remaining sectors.
+Prove this global formula and combine it with arbitrary defect replacement
+and uniqueness for prescribed complementary/defect actions. Keep relative
+phase orientation explicit: these new pure Schatten theorems use `R.adjoint*T`,
+whereas several older smoothed uniqueness lemmas use `T.adjoint*R`.
+
+Only after the parameter iff and joint attainment are proved should the
+Grassmannian product/bijection and topology be promoted. Their conventional
+statements remain in `schatten_optimization.tex`. Real matching, smoothed
+local-to-global and justified ideal extensions remain separate obligations.
+Historical priority of the complete transport classification is provisional.
 
 The shared paired-diagonal extension now lives in
 `OrthonormalBasis.exists_paired_diagonal_commuting_involution`, in the
@@ -179,16 +233,18 @@ real/complex donor `DiagonalUnitary.lean`. Both nonnegative and independently
 signed attainment consume it; the old paper-local construction was removed.
 This is classical reusable geometry with no separate novelty claim.
 
-Validation of this extension: focused canonical uniqueness, independent
-signed attainment, exact uniqueness and correction-commutator modules
-passed. `lake exe cache get` preceded these builds and the final
-`lake build DavisKahan.All ForTauCeti` (10,423 jobs;
-`/tmp/schatten-uniqueness-final-build.log`). BibTeX and three pdfLaTeX
-passes produced
-`/tmp/dk-schatten-uniqueness-paper/dk-schatten-uniqueness.pdf`,
-with no unresolved references/citations, multiply defined labels or
-overfull boxes. `git diff --check` passed. The original 29-result
-source formalization inventory is unchanged.
+Validation of the intrinsic extension: focused kernel, equal-angle real-part,
+unique compatible projection and individual inactive-rigidity modules passed.
+`lake exe cache get` preceded these builds and
+`lake build DavisKahan.All ForTauCeti`, which passed (10,429 jobs;
+`/tmp/schatten-intrinsic-final-build.log`). The shared scalar-real-part
+restriction now consumes the generic finite invariant-unitary restriction;
+all prior Charbonnier consumers passed in the aggregate build. BibTeX and
+three pdfLaTeX passes produced
+`/tmp/dk-schatten-intrinsic-phase-paper/dk-schatten-intrinsic-phase.pdf`,
+with no unresolved references/citations, multiply defined labels or overfull
+boxes. `git diff --check` passed. The original 29-result source inventory
+is unchanged.
 
 ## Actual signed optimal phases of every pure Schatten optimizer
 

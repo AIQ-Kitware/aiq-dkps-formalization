@@ -7,6 +7,8 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.Positive
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 
 /-!
 # Diagonal compression of a fixed/right reflection
@@ -88,3 +90,60 @@ theorem isStarProjection_diagonalCompression_of_fixed_or_exchange_blocks
     module
 
 end TauCeti
+
+namespace Submodule
+
+open TauCeti
+
+variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [CompleteSpace E]
+
+/-- If a reflecting transport is fixed or exchanges source and complement
+on a spanning block family, the actual sine angle operator is a projection.
+The blocks need not be orthogonal, finite dimensional or nonzero. -/
+theorem isStarProjection_sinAngleOperator_of_fixed_or_exchange_blocks
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (T : E ≃ₗᵢ[𝕜] E) (hself : IsSelfAdjoint (T : E →L[𝕜] E))
+    (htrans : (T : E →L[𝕜] E) * K.starProjection * star (T : E →L[𝕜] E) = L.starProjection)
+    (F : Finset (Submodule 𝕜 E)) (hspan : F.sup id = ⊤)
+    (hblocks : ∀ N ∈ F, (∀ x ∈ N, K.starProjection x ∈ N) ∧
+      ((∀ x ∈ N, T x = x) ∨ (∀ x ∈ N, T (K.starProjection (T x)) = x - K.starProjection x))) :
+    IsStarProjection (K.sinAngleOperator L) := by
+  let S := K.sinAngleOperator L
+  let D := K.starProjection - L.starProjection
+  have hQ (x : E) : L.starProjection x = T (K.starProjection (T x)) := by
+    rw [← htrans, hself.star_eq]
+    rfl
+  apply isStarProjection_of_spanning_fixed_or_zero S
+    (K.isPositive_sinAngleOperator L).isSelfAdjoint F hspan
+  intro N hNF
+  obtain ⟨hPN, hcase⟩ := hblocks N hNF
+  rcases hcase with hfix | hexchange
+  · right
+    intro x hx
+    apply norm_eq_zero.mp
+    rw [K.norm_sinAngleOperator_apply L x, hQ, hfix x hx, hfix _ (hPN x hx),
+      sub_self, norm_zero]
+  · left
+    have hD (x : E) (hx : x ∈ N) : D x = (2 : 𝕜) • K.starProjection x - x := by
+      change K.starProjection x - L.starProjection x = _
+      rw [hQ, hexchange x hx]
+      module
+    intro x hx
+    have hDx : D x ∈ N := by
+      rw [hD x hx]
+      exact N.sub_mem (N.smul_mem _ (hPN x hx)) hx
+    have hDD : D (D x) = x := by
+      rw [hD _ hDx, hD x hx, map_sub, map_smul,
+        Submodule.starProjection_eq_self_iff.mpr (K.starProjection_apply_mem x)]
+      module
+    have hSS := congrArg (fun A : E →L[𝕜] E => A x) (K.sinAngleOperator_sq L)
+    change S (S x) = D (D x) at hSS
+    rw [hDD] at hSS
+    have hpos : S.toLinearMap.IsPositive := (K.isPositive_sinAngleOperator L).toLinearMap
+    have h := hpos.apply_eq_smul_of_apply_apply_eq_smul (v := x) (μ := 1)
+      (show (0 : ℝ) ≤ 1 by norm_num) (by
+        simpa only [RCLike.ofReal_one, one_mul, one_smul, ContinuousLinearMap.coe_coe] using hSS)
+    simpa only [RCLike.ofReal_one, one_smul, ContinuousLinearMap.coe_coe] using h
+
+end Submodule
