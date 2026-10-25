@@ -1,8 +1,9 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** arbitrary projection attainment and quantitative multiplicity separation
-based on `2524482e5`, registered in the first section below.
+**Current research source:** complete acute Charbonnier optimizer classification,
+exact isoclinic metric families, and all nearest acute commuting corrections,
+based on `9693e8946`, registered in the first section below.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
 reconstructed and verified against base `642de34df29a`). The original
@@ -16,6 +17,137 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Complete acute classification and isoclinic metric after `9693e8946`
+
+All optimization endpoints below concern finite-dimensional complex Hilbert
+spaces and equal-rank subspaces. The weighted statements assume `0<b<a`;
+literal Charbonnier statements assume `tau>0`. Write `C` for the actual
+principal cosine, `R` for canonical rotation, `J` for source reflection,
+`Z=T*R`, and `U=weightedPhaseFactor a b C`.
+
+- `SmoothedAcuteClassification.minimizing_weighted_transport_positive_phase_projection_complex`
+  proves that **every attaining ambient transporter** with injective `C`
+  has `Z=U P+U* (I-P)`. Its explicit witness is the positive real spectral
+  projection of `Im Z`. This projection is orthogonal and commutes with
+  both `R` and `J`. The proof uses a real joint eigenbasis of `C,Im Z`,
+  the established scalar real-part identity, and unitarity; no generic
+  eigenvalue or multiplicity assumptions are imposed.
+- `minimizing_weighted_transport_iff_projection_of_injective_cosine_complex`
+  proves both directions of that criterion. The literal all-ambient
+  endpoints are
+  `smoothed_transport_isMin_iff_projection_of_injective_cosine_complex`
+  and `smoothed_transport_isMin_iff_projection_of_isUniformlyAcute_complex`.
+  The latter has the actual hypothesis `IsUniformlyAcute K L`, meaning
+  projection gap strictly below one. Zero, critical, subcritical, repeated,
+  and supercritical acute angles and arbitrary fixed ambient directions
+  are included. Projection parameters on inactive directions are redundant;
+  no uniqueness of the unnormalized ambient parameter is asserted.
+- `SmoothedIsoclinicFamilies.exists_scaled_isometric_smoothed_isoclinic_family_complex`
+  treats the stronger **whole ambient** hypothesis `C=c I`, `0<c<1`,
+  `eta*c<eta^(-1)`. With `beta=eta*c/eta^(-1)` and
+  `s=sqrt(1-beta^2)>0`, it gives an injective assignment from all compatible
+  ambient projections to optimizers, surjectivity onto **every** feasible
+  global minimizer, the affine relative formula
+  `Z=(beta-i*s)I+2i*s P`, and the exact identity
+  `||T(P)-T(Q)||=2*s*||P-Q||`. Thus the correspondence and inverse are
+  Lipschitz. The formal deliverable is bijection and norm identity;
+  a Lean `Homeomorph`, general mixed-angle parameter topology, and
+  Grassmannian manifold dimensions have not been registered.
+- `SmoothedCorrectionClassification.smoothed_correction_isMin_iff_projection_of_commutator_lt_one_complex`
+  classifies **all** closest subspace-preserving unitary corrections to
+  `A`, under `||A P_K-P_K A||<1`. They are exactly
+  `(U E+U* (I-E)) R* A` for orthogonal `E` commuting with `R,J` of the
+  pair `(K,A K)`. Comparison is against all preserving unitaries,
+  equivalently all unitaries commuting with the prescribed projection.
+  The hypothesis permits supercritical angles and nonunique minimizers.
+  The existing cost-preserving correction/transport lemma in
+  `SmoothedCommutatorCutoff.lean` is now public and reused.
+
+These results are included as Theorem `thm:smoothed-acute-projections`,
+Corollary `cor:smoothed-isoclinic-metric`, and the all-correction formula
+following `cor:smoothed-commuting-correction`. They do not extend the
+Schatten all-minimizer theorem or the real matching formula by analogy.
+
+The generic bridge in `Geometry/Angle/AcuteCosine.lean` proves that a
+uniformly acute pair has invertible, hence injective, principal cosine
+on any real/complex Hilbert space; it makes **no** infinite-dimensional
+optimization or ideal claim. The joint real eigenbasis refinement and
+`LinearIsometryEquiv.eq_of_relative_eq`, `norm_sub_relative`, and
+`norm_sub_eq_of_relative_affine` are classical reusable ingredients.
+The last three need neither completeness nor finite dimension.
+
+The next mixed-defect reduction is also compiled in
+`Geometry/Angle/CosineKernel.lean`: the actual `ker C` equals the crossed
+source/target defect sum, the two reflections are opposite there, and
+every cosine-preserving actual transporter anticommutes with source
+reflection on that kernel. These statements are valid on arbitrary
+real/complex Hilbert spaces, with no selected defect pairing.
+`SmoothedRightDefect.smoothed_minimizer_right_defect_reflecting_complex`
+combines this with optimizer self-adjointness for every finite complex
+Charbonnier global minimizer. This is a necessary mixed right-block
+structure; arbitrary-isometry converse assembly and cost additivity
+remain to prove.
+
+Independent diagnostics used NumPy, seed 73124, `tau=0.25`. On three
+identical angles `1.35`, projection ranks 0 through 3 gave cost error
+below `1.8e-15`, transport residual below `2.2e-15`, and norm-identity
+error below `1.4e-15`, with scale `2s=1.9193988999508451`. A mixed list
+containing zero, a subcritical angle, the critical angle, a repeated
+supercritical angle, and another acute angle gave zero rounded cost
+error and transport residual below `1.3e-15`. These are diagnostics,
+not proof evidence.
+
+### Remaining strongest obligations
+
+The acute Charbonnier ambient iff is closed. For mixed right-angle
+pairs, necessity (cosine preservation and self-adjointness on `ker C`)
+and the pure complementary iff theorem are proved. The remaining converse
+must restrict to the positive-cosine part, extend an arbitrary unitary
+identification of the two actual crossed defect spaces paired with its
+adjoint, and prove nuclear cost additivity. The acute projection formula
+must not be imposed on the defect family: it gives only a subfamily there.
+General products of multiplicity Grassmannians and arbitrary defect
+unitaries still need typed restriction/assembly and topology statements.
+
+A concrete next mixed-defect lemma is the cost splitting identity
+`nuclear(a*T-b*I) = nuclear(a*T_pos-b*I_pos) + a*dim(ker C)`
+for a feasible cosine-preserving transporter self-adjoint on `ker C`,
+where `T_pos` is its restriction to `(ker C)^perp`. The second term follows
+from the compiled anticommutation and self-adjoint weighted trace formula;
+the remaining work is the actual reducing restrictions and nuclear
+orthogonal-sum additivity. The positive restriction's principal cosine
+must then be identified with the restricted ambient cosine before using
+the acute classification. This avoids assuming the desired block formula
+as a hypothesis.
+
+For pure Schatten `1<p<2`, the missing local-to-global lemma is local
+optimality of the zero-gradient reflecting restriction. The draft's
+candidate descent uses `W exp(i t H)` on a two-projection block, with
+`H=diag(cos(gamma)^2,-sin(gamma)^2)`. Away from `gamma=pi/4`, the
+large phase decreases at order `t^2`, while the phase born at zero
+has cost `O(|t|^(2p))=o(t^2)`. Its coefficient checks algebraically,
+but the needed perturbation/remainder proof is not in Lean. Do not apply
+a twice-differentiable objective theorem at a zero displacement singular
+value. Unrestricted real four-dimensional determinant classes, the real
+matching lower bound, and ideal feasibility/convergence/attainment remain
+separate unproved endpoints.
+
+The research novelty review adds the exact comparison with Contino,
+Giribet, and Maestripieri, *Weighted Procrustes problems* (2017), Theorems
+3.5 and 4.5. Their optimization variable ranges over all bounded operators;
+these results do not directly classify our constrained unitary fiber.
+No historical-priority clearance follows from this distinction.
+
+Validation for this update: `lake exe cache get` followed by the focused
+classification, isoclinic, correction, and right-kernel targets passed.
+The final `lake build DavisKahan.All ForTauCeti` passed (10,321 jobs;
+`/tmp/smoothed-classification-final-build.log`). The updated manuscript
+was typeset with BibTeX and repeated pdfLaTeX passes, with no undefined
+references/citations, multiply defined labels, or overfull boxes
+(`/tmp/dk-acute-classification-paper/dk-acute-classification.pdf`). These
+temporary logs are local build records; a fresh clone contains the Lean
+sources and exact declaration mapping needed to reproduce the checks.
 
 ## Arbitrary multiplicity projections after `2524482e5`
 

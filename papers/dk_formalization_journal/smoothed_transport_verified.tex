@@ -283,7 +283,8 @@ $Cx=cx$ with $c>0$,
  (Z+Z^*)x=2\min\{1,\eta^2c\}\,x,
  \qquad ZRx=RZx.
 \]
-On the right-angle defect space $\ker C$, one has $Wx=W^*x$.
+On the right-angle defect space $\ker C$, one has
+$Wx=W^*x$ and $WJx=-JWx$.
 Thus unequal principal angles cannot be mixed by a global optimizer;
 within each positive-cosine space its two opposite rotation phases
 are preserved separately.
@@ -318,6 +319,9 @@ $\min\{1,(a/b)c\}$, so the average gives the stated real part and
 commutation with $S$. The reconstruction $R=C+iSF$ gives commutation
 with $R$ there. Finally, on $\ker C$ one has $R=iS$ and
 $ZS+SZ^*=0$. Thus $W=iSZ^*=-iZS=W^*$ on that space.
+The kernel is the sum of the two crossed defects, where the source
+and target reflections are opposite. Since $W$ preserves the kernel,
+reflection intertwining gives $WJx=-JWx$ there.
 \end{proof}
 
 \begin{proposition}[Matching multiplicity phases]
@@ -394,6 +398,60 @@ For the norm estimate put $Z_j=W_j^*R$. On $N_+$,
 $(Z_1-Z_2)x=2is(E_1-E_2)x$. Unitary invariance of the operator norm
 gives $\|Z_1-Z_2\|_{\mathrm{op}}=\|W_1-W_2\|_{\mathrm{op}}$.
 Restricting to unit vectors in $N_+$ proves the bound.
+\end{proof}
+
+\begin{theorem}[All minimizers for an acute pair]
+\label{thm:smoothed-acute-projections}
+Assume $\|P-Q\|_{\mathrm{op}}<1$. A unitary transporter $W$ is
+globally minimizing if and only if
+\[
+ W=R\bigl(U_+E+U_+^*(I-E)\bigr)^*
+\]
+for an orthogonal projection $E$ commuting with $R$ and $J$.
+One such $E$ is the positive spectral projection of
+$\operatorname{Im}(W^*R)$. On the subcritical, critical, and fixed
+spaces both phases equal one, so the formula is independent of the
+projection there.
+\end{theorem}
+
+\begin{proof}
+The gap hypothesis makes $C$ invertible. For a minimizing $W$, spectral
+separation gives commutation of $Z=W^*R$ with $C$ and $R$; transport gives
+commutation with $J$. Its self-adjoint imaginary part
+$G=(Z-Z^*)/(2i)$ therefore commutes with these operators. The same holds
+for the positive spectral projection $E=1_{(0,\infty)}(G)$.
+
+Take a joint orthonormal eigenbasis of $C,G$, with eigenvalues $c>0,g$.
+Set $\beta=\min\{1,\eta^2c\}$. The real-part identity gives
+$Zx=(\beta+ig)x$, and unitarity gives
+$g^2=1-\beta^2$. Thus the sign of $g$ selects exactly the positive or
+negative phase of $U_+$, while $g=0$ makes the two phases equal.
+Consequently $Z=U_+E+U_+^*(I-E)$. The converse is arbitrary projection
+attainment in \cref{prop:smoothed-projection-attainment}.
+\end{proof}
+
+\begin{corollary}[Exact distances within an isoclinic family]
+\label{cor:smoothed-isoclinic-metric}
+Suppose $C=cI$ with $0<c<\eta^{-2}$, and put
+$\beta=\eta^2c$ and $s=\sqrt{1-\beta^2}>0$. The projections commuting
+with $R,J$ parameterize all global minimizers bijectively through
+\[
+ Z_E=(\beta-is)I+2isE,\qquad W_E=RZ_E^*.
+\]
+For every two such projections,
+\[
+ \|W_E-W_F\|_{\mathrm{op}}=2s\,\|E-F\|_{\mathrm{op}}.
+\]
+Hence this correspondence and its inverse are Lipschitz, with constants
+$2s$ and $1/(2s)$ respectively.
+\end{corollary}
+
+\begin{proof}
+Here $U_+=(\beta+is)I$, so the theorem gives the affine formula and
+surjectivity. Since $s>0$, distinct projections give distinct relative
+unitaries. Unitary invariance gives
+$\|W_E-W_F\|_{\mathrm{op}}=\|Z_E-Z_F\|_{\mathrm{op}}$; subtracting the
+affine formulas proves the identity and both Lipschitz estimates.
 \end{proof}
 
 \begin{corollary}[Complementary right-angle pairs]
@@ -718,6 +776,18 @@ commutes with $P$. Since $A-C=(W-I)C$ when $W=AC^*$, unitary
 invariance identifies the two singular-value costs. Apply
 \cref{thm:smoothed-transport,cor:smoothed-spectral-optimizer}.
 \end{proof}
+
+If $\|AP-PA\|_{\mathrm{op}}<1$, every globally nearest commuting
+unitary, and only such a unitary, has the form
+\[
+ C=\bigl(U_+E+U_+^*(I-E)\bigr)R^*A,
+ \qquad E=E^*=E^2,\quad [E,R]=[E,2P-I]=0.
+\]
+Indeed, $\|P-APA^*\|_{\mathrm{op}}=\|AP-PA\|_{\mathrm{op}}$ makes
+the image pair acute, so \cref{thm:smoothed-acute-projections} classifies
+all its minimizing transporters. Applying the same cost-preserving
+bijection gives the displayed formula, including its supercritical
+families.
 
 When every angle is at most $c_\tau$, this correction is $C_*=R^*A$
 and is unique. If a feasible correction $C$ has objective error at most

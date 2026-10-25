@@ -96,7 +96,9 @@ theorem smoothed_canonical_isMin_iff_projectionGap
     K.projectionGap_eq_directedProjectionGap_of_finrank_eq L hKL]
 
 omit [CompleteSpace E] in
-private theorem correction_isMin_iff_transport_isMin
+/-- The correction--transport bijection preserves global minimality for the
+literal singular-value distance. -/
+theorem correction_isMin_iff_transport_isMin
     (tau : ℝ) (K : Submodule ℂ E) (A R : E ≃ₗᵢ[ℂ] E) :
     (∀ C : E ≃ₗᵢ[ℂ] E, K.map C.toLinearMap = K →
       smoothedOperatorDistance tau A.toLinearMap (A.trans R.symm).toLinearMap ≤

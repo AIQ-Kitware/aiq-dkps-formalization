@@ -7,6 +7,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.JointEigenspace
 public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 /-!
 # A joint orthonormal eigenbasis for commuting symmetric operators
@@ -50,5 +51,25 @@ theorem exists_joint_orthonormalBasis
   · intro i
     have hm := hsumJ.subordinateOrthonormalBasis_subordinate rfl i horthJ
     exact Module.End.mem_eigenspace_iff.mp hm.2
+
+/-- A common orthonormal eigenbasis with explicitly real eigenvalues.
+This avoids choosing complex scalars for symmetric maps over `ℂ`. -/
+theorem exists_joint_orthonormalBasis_real
+    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric) (hAB : Commute A B) :
+    ∃ (e : OrthonormalBasis (Fin (Module.finrank 𝕜 E)) 𝕜 E)
+      (mu nu : Fin (Module.finrank 𝕜 E) → ℝ),
+      (∀ i, A (e i) = (mu i : 𝕜) • e i) ∧
+      (∀ i, B (e i) = (nu i : 𝕜) • e i) := by
+  obtain ⟨e, mu, nu, hAe, hBe⟩ := hA.exists_joint_orthonormalBasis hB hAB
+  have hmu (i) : (RCLike.re (mu i) : 𝕜) = mu i :=
+    RCLike.conj_eq_iff_re.mp (hA.conj_eigenvalue_eq_self
+      (Module.End.hasEigenvalue_of_hasEigenvector
+        ⟨Module.End.mem_eigenspace_iff.mpr (hAe i), e.orthonormal.ne_zero i⟩))
+  have hnu (i) : (RCLike.re (nu i) : 𝕜) = nu i :=
+    RCLike.conj_eq_iff_re.mp (hB.conj_eigenvalue_eq_self
+      (Module.End.hasEigenvalue_of_hasEigenvector
+        ⟨Module.End.mem_eigenspace_iff.mpr (hBe i), e.orthonormal.ne_zero i⟩))
+  exact ⟨e, fun i => RCLike.re (mu i), fun i => RCLike.re (nu i),
+    fun i => by rw [hmu]; exact hAe i, fun i => by rw [hnu]; exact hBe i⟩
 
 end LinearMap.IsSymmetric

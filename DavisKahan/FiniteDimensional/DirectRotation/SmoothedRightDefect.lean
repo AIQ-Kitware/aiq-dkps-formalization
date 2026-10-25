@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SmoothedOptimizerNoMixing
+import DavisKahan.Geometry.Angle.CosineKernel
 
 /-!
 # All optimizers for transport onto the orthogonal complement
@@ -22,6 +23,21 @@ namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
+
+/-- On the actual right-angle kernel of any pair, every global Charbonnier
+minimizer is self-adjoint and exchanges the two source-reflection sectors.
+Positive angles and fixed directions elsewhere are unrestricted. -/
+theorem smoothed_minimizer_right_defect_reflecting_complex
+    (tau : ℝ) (htau : 0 < tau)
+    (K L : Submodule ℂ E) (hKL : Module.finrank ℂ K = Module.finrank ℂ L)
+    (T : E ≃ₗᵢ[ℂ] E) (hT : K.map T.toLinearMap = L)
+    (hmin : ∀ S : E ≃ₗᵢ[ℂ] E, K.map S.toLinearMap = L →
+      smoothedDisplacementCost tau T.toLinearMap ≤ smoothedDisplacementCost tau S.toLinearMap)
+    (x : E) (hx : Proposition35.section3CosAngleOperator K L x = 0) :
+    T x = star (T : E →L[ℂ] E) x ∧ T (K.reflection x) = -K.reflection (T x) :=
+  ⟨smoothed_minimizer_selfAdjoint_on_right_defect_complex tau htau K L hKL T hT hmin x hx,
+    Proposition35.transport_anticommutes_reflection_on_cosine_kernel K L T hT
+      (smoothed_minimizer_commutes_cosine_complex tau htau K L hKL T hT hmin) x hx⟩
 
 /-- A complementary pair has identically zero principal cosine on the
 whole ambient space. -/

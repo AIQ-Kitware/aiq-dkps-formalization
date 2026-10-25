@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
+public import Mathlib.Analysis.Normed.Operator.NormedSpace
 
 /-!
 # Subspace transport as reflection intertwining
@@ -96,3 +97,44 @@ theorem relative_phase_projection_separation
   simpa only [norm_smul] using hbound
 
 end Submodule
+
+namespace LinearIsometryEquiv
+
+variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+
+/-- A relative unitary determines the original isometric equivalence. -/
+theorem eq_of_relative_eq (R : E ≃ₗᵢ[𝕜] E) {T S : E ≃ₗᵢ[𝕜] E}
+    (h : (R.trans T.symm : E →L[𝕜] E) = (R.trans S.symm : E →L[𝕜] E)) : T = S := by
+  have hsymm : T.symm = S.symm := by
+    ext x
+    have hx := DFunLike.congr_fun h (R.symm x)
+    change T.symm (R (R.symm x)) = S.symm (R (R.symm x)) at hx
+    simpa only [R.apply_symm_apply] using hx
+  simpa only [LinearIsometryEquiv.symm_symm] using
+    congrArg (fun V : E ≃ₗᵢ[𝕜] E => V.symm) hsymm
+
+/-- Taking relative inverses against a fixed isometry preserves operator
+distance. No completeness or finite-dimensional assumption is required. -/
+theorem norm_sub_relative (R T S : E ≃ₗᵢ[𝕜] E) :
+    ‖(R.trans T.symm : E →L[𝕜] E) - (R.trans S.symm : E →L[𝕜] E)‖ =
+      ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ := by
+  have hfac : (R.trans T.symm : E →L[𝕜] E) - (R.trans S.symm : E →L[𝕜] E) =
+      (T.symm : E →L[𝕜] E).comp
+        (((S : E →L[𝕜] E) - (T : E →L[𝕜] E)).comp (R.trans S.symm : E →L[𝕜] E)) := by
+    ext x
+    change T.symm (R x) - S.symm (R x) =
+      T.symm (S (S.symm (R x)) - T (S.symm (R x)))
+    rw [map_sub, S.apply_symm_apply, T.symm_apply_apply]
+  rw [hfac, ContinuousLinearMap.opNorm_linearIsometryEquiv_comp,
+    ContinuousLinearMap.opNorm_comp_linearIsometryEquiv, norm_sub_rev]
+
+/-- A common affine parameterization of the whole relative unitary has
+an exact operator-distance formula, stronger than a restriction estimate. -/
+theorem norm_sub_eq_of_relative_affine
+    (R T S : E ≃ₗᵢ[𝕜] E) (P Q A : E →L[𝕜] E) (kappa : 𝕜)
+    (hT : (R.trans T.symm : E →L[𝕜] E) = A + kappa • P)
+    (hS : (R.trans S.symm : E →L[𝕜] E) = A + kappa • Q) :
+    ‖(T : E →L[𝕜] E) - (S : E →L[𝕜] E)‖ = ‖kappa‖ * ‖P - Q‖ := by
+  rw [← norm_sub_relative R T S, hT, hS, add_sub_add_left_eq_sub, ← smul_sub, norm_smul]
+
+end LinearIsometryEquiv

@@ -12,6 +12,55 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Complete acute Charbonnier classification after `9693e8946`
+
+The acute all-optimizer theorem is now compiled, including arbitrary
+multiplicities, subcritical and critical angles, zero angles, and fixed
+ambient directions. Every global minimizer has
+`T*R=U E+U* (I-E)` for an orthogonal projection commuting with the actual
+canonical rotation and source reflection, and every such projection is
+attaining. An intrinsic witness is `1_(0,infinity)(Im(T*R))`.
+`SmoothedAcuteClassification.lean` proves the weighted `0<b<a` criterion
+and literal `tau>0` endpoints, both for injective actual cosine and for
+the concrete projection-gap hypothesis below one.
+
+For the **whole ambient isoclinic** case `C=c I`, `0<c<eta^(-2)`,
+`SmoothedIsoclinicFamilies.lean` gives all minimizers bijectively and
+proves `||T(E)-T(F)||=2*sqrt(1-eta^4*c^2)*||E-F||`. This improves the
+previous one-factor lower distance bound to an exact metric statement
+under its stronger hypothesis. The bijection and norm identity imply
+continuity in both directions; no Grassmannian manifold formalization
+or general mixed-angle topological classification is claimed.
+`SmoothedCorrectionClassification.lean` transfers the full acute family
+to all closest prescribed-subspace-preserving unitaries when the input
+commutator defect is below one. These compiled results are included in
+the checked manuscript. The actual right-angle kernel is now identified with the crossed-defect
+sum, and every Charbonnier optimizer is self-adjoint and anticommutes
+with source reflection there (`CosineKernel.lean`, `SmoothedRightDefect.lean`).
+These classical geometric reductions do not prove the arbitrary mixed
+defect converse. Mixed right-angle assembly, the pure Schatten full
+classification, unrestricted real matching, and ideal extensions remain
+unproved at their proposed scope.
+
+The classical joint eigenbasis, spectral projection, and relative-unitary
+norm algebra are not separate originality claims. A further exact
+precedent is Contino, Giribet, Maestripieri, *Weighted Procrustes problems*,
+JMAA 445(1), 443--458 (2017),
+[DOI](https://doi.org/10.1016/j.jmaa.2016.07.050),
+[primary preprint](https://arxiv.org/pdf/1610.00558).
+Theorems 3.5 (`B=I`) and 4.5 (general `B`) characterize minimizers of
+`||W^(1/2)(AX-B)||_p` over **all bounded operators X**, under closed-range,
+ideal, and weighted range-compatibility hypotheses. They give weighted
+inverses and a shorted-operator value. Their feasible set and operator
+weight differ from the unitary transport fiber and scalar weighted nuclear
+problem here. This comparison rules out a direct identification of those
+statements with our classification; it does not establish that no other
+precedent subsumes it. The earlier BLR Frobenius and Q-norm comparisons
+remain applicable. Historical novelty remains provisional.
+
+Earlier entries below record their dated proof frontiers; the current
+acute classification supersedes their unresolved acute assembly statements.
+
 ## Arbitrary projection attainment after `2524482e5`
 
 The new compiled converse permits an arbitrary orthogonal projection on one
