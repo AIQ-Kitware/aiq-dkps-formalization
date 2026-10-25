@@ -237,4 +237,26 @@ theorem charpoly_fourTransportMatrix_reflections (h d r s : ℝ) :
       ring
     _ = _ := by rw [htrace, hmiddle]; simp only [neg_mul]
 
+/-- The positive-component quartic factors into the two actual conjugate
+phase quadratics, with multiplicity even when the phases coalesce. -/
+theorem positive_four_quartic_eq_phase_quadratics (x y : ℝ) :
+    (X ^ 4 - C (4*Real.cos x*Real.cos y)*X ^ 3 +
+      C (4*Real.cos x^2+4*Real.cos y^2-2)*X ^ 2 -
+      C (4*Real.cos x*Real.cos y)*X + 1 : ℝ[X]) =
+      (X ^ 2 - C (2*Real.cos (x+y))*X + 1) *
+        (X ^ 2 - C (2*Real.cos (x-y))*X + 1) := by
+  have htrace : 2*Real.cos (x+y)+2*Real.cos (x-y) = 4*Real.cos x*Real.cos y := by
+    rw [Real.cos_add, Real.cos_sub]
+    ring
+  have hmiddle : 2+4*Real.cos (x+y)*Real.cos (x-y) =
+      4*Real.cos x^2+4*Real.cos y^2-2 := by
+    calc
+      _ = 2+4*(Real.cos (x+y)*Real.cos (x-y)) := by ring
+      _ = _ := by rw [cos_add_mul_cos_sub]; ring
+  calc
+    _ = X ^ 4 - C (2*Real.cos (x+y)+2*Real.cos (x-y))*X ^ 3 +
+      C (2+4*Real.cos (x+y)*Real.cos (x-y))*X ^ 2 -
+      C (2*Real.cos (x+y)+2*Real.cos (x-y))*X + 1 := by rw [htrace, hmiddle]
+    _ = _ := by simp only [map_add, map_mul, map_ofNat]; ring
+
 end TauCeti.DavisKahan.FiniteDimensional.RealTransport

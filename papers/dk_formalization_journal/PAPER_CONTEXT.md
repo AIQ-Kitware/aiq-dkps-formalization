@@ -17,9 +17,11 @@ component counts, manifold dimensions, unrestricted real matching and
 operator-ideal optimization remain open. The full finite complex
 Charbonnier local-to-global theorem is now compiled for every `tau>0`.
 The real four-dimensional cosine--sine model now has a compiled exact
-minimum and complete optimizer classification in the **negative determinant
-class**, for general monotone spectral penalties. The positive determinant
-cost assembly and unrestricted real matching remain open.
+minimum over **both determinant classes**, for every continuous nondecreasing
+spectral penalty vanishing at zero, plus a closed nuclear-cost formula.
+Every negative-class optimizer is classified for strictly increasing
+penalties. The abstract accepted-angle coordinate wrapper and unrestricted
+real matching remain open.
 The local Charbonnier analysis now supplies actual first variations,
 source-reflection stationarity, paired two-phase gradient blocks and the
 sharp gradient bound. Actual ambient no-overlap on every submaximal gradient
@@ -51,7 +53,43 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
 
-## Real four-dimensional negative class: exact value and every optimizer (25 October)
+## Exact real four-dimensional model and negative-class optimizers (25 October)
+
+`RealFourOptimization.exists_minimizing_four_transport` now proves the
+full two-class minimum in the real cosine--sine model. For
+`0<=d<=h` and `h+d<=pi/2`, let
+`phi(t)=rho(sqrt(2-2*cos t))`. If `rho` is continuous and nondecreasing
+on `[0,2]` and `rho(0)=0`, the theorem supplies `delta in [d,h]`
+minimizing `2*(phi(h+delta)+phi(h-delta))`, an actual ambient orthogonal
+transporter, its exact value
+
+```
+min { 2*(phi(h+delta)+phi(h-delta)), rho(2)+2*phi(h-d) },
+```
+
+and its comparison with **every** ambient orthogonal transporter of the
+coordinate source and target. Neither determinant nor principal-plane
+preservation is imposed on competitors. The acute, repeated, zero and
+right endpoints all occur in this one theorem. The source and target
+coordinate angles are `(h+d,h-d)`.
+
+`exists_minimizing_four_nuclear_transport` gives the closed literal
+nuclear-sum minimum
+`min(4*sin h, 2+4*sin((h-d)/2))`, with an attaining transporter and full
+ambient comparison. `four_nuclear_edge_minimum` proves that the nuclear
+edge minimum occurs at `delta=h`. The public half-angle identity proves
+that the square-root chord agrees with `2*sin(t/2)` on `[0,pi]`.
+
+`RealFourPositive.lean` proves exact costs from two reciprocal quadratics,
+then the literal costs of both actual positive components. It constructs
+their actual `arccos` phases in the full rotation rectangle. Exchanging
+the two-reflection phases places that component in the same rectangle,
+using `h+d<=pi/2`. The pointwise domination theorem then gives the full
+positive-class lower bound. Every edge point is attained by the common
+rotation `gamma=arccos(cos(delta)/cos(d))`; its denominator is proved
+positive from the ordered-angle constraints. Compactness uses continuity
+only on `[0,2]`. Splitting the actual competitor determinant into `+1/-1`
+combines the two class minima.
 
 For `0 <= u <= t <= pi/2`, write `R` for the real cosine--sine rotation
 with coordinate angles `(t,u)` and `P=diag(I_2,0)`. The new declarations
@@ -101,7 +139,8 @@ or `sin h*cos s, -sin d*cos r`. Its coordinate permutation is proved.
 for **every** nondecreasing phase function on `[0,pi]`: after simultaneous
 reflection when `x+y>pi`, choose `delta=max(d,h-abs(x-y))`. No strict
 monotonicity, convexity or differentiability enters this scalar reduction.
-This theorem alone does not identify an actual positive-class cost.
+The downstream positive module now identifies the actual costs and the
+optimization module completes the lower bound and edge attainment.
 
 The donor `NormalCharpolyCost.lean` computes normal complex displacement
 costs from characteristic root multisets, proves that scalar extension of
@@ -114,14 +153,27 @@ the full block stabilizer reduction over commutative rings, including empty
 blocks. These are classical algebra and spectral theory with no independent
 historical novelty claim.
 
-**Exact remaining R-1 obligations:** factor the positive quartic into its
-two reciprocal quadratics, identify their literal singular-value costs,
-prove the `arccos` phase-rectangle bounds in both positive components,
-and construct the edge transporter using
-`gamma=arccos(cos(delta)/cos(d))`. Then combine the two determinant classes.
-The current endpoints are in the explicit real cosine--sine model; an
-abstract rank-two real subspace theorem also needs an actual isometric
-coordinate reduction and identification with the accepted principal angles.
+**Exact remaining R-1 obligation:** the abstract rank-two real subspace
+wrapper needs an actual isometric cosine--sine coordinate reduction and
+identification with the accepted principal angles. The model minimum,
+both determinant classes, actual cost assembly, sharp phase rectangles
+and attainment are now proved. Explicit Schatten scalar clipping and the
+piecewise Charbonnier canonical-region corollaries in the draft still
+require their own formal scalar arguments.
+
+The next reusable theorem should construct a real cosine--sine chart for
+equal-rank finite subspaces in dimension twice their rank, including common,
+exterior and crossed-defect directions. Its rank-two instance must map the
+actual source projection to `diag(I_2,0)` and the actual target to the
+cosine--sine projection with angles `K.principalAngles L 0,1`. The existing
+`PrincipalPlanes/Basic.lean` is acute and omits the required right/fixed
+cases; `NonacuteCompression.lean` is `RCLike` and supplies the completed
+rotation's cosine and reflection identities. A promising construction uses
+an ordered source sine eigenbasis, normalized skew partners on positive
+sines, and a dimension-balanced common/exterior pairing at zero sine.
+The angle identification and coordinate transfer of the literal cost must
+be proved explicitly. A supplied chart must never be mistaken for a
+restriction on the competing transporter.
 The broader real gradient blocks, matching lower bound/attainment,
 exchange inequalities, sorted sums and field-gap equality assertions are
 still open. The complex strict-saddle and ideal-theoretic questions below
@@ -134,12 +186,18 @@ including zero, equal and right pairs, and four penalties: nuclear,
 the lowest value-minus-bound was `-3.56e-15`, and the largest feasibility
 residual was `5.13e-16`. Another 10,000 phase-rectangle points with the
 same penalties showed no domination violation. These floating-point
-checks are diagnostics, separate from the compiled proofs.
+checks are diagnostics, separate from the compiled proofs. A further
+all-component numerical search used six angle pairs, three penalties
+(nuclear, `p=3/2`, Charbonnier `tau=0.7`) and all four sign components.
+The numerical minima minus the formula ranged from `-2.23e-16` to
+`9.76e-10`. At `(80,75)` degrees the values were `3.90518402848`,
+`5.41426059635`, and `2.70428270925`, respectively. This is diagnostic
+optimization, without a numerical convergence or performance claim.
 
 Validation: `lake exe cache get` followed by the focused modules and
-`lake build DavisKahan.All ForTauCeti` succeeded (10,557 aggregate jobs).
+`lake build DavisKahan.All ForTauCeti` succeeded (10,561 aggregate jobs).
 The research fragment remains excluded from `paper.tex`; no whole real
-four-dimensional or matching theorem is promoted to the checked manuscript.
+abstract-angle or matching theorem is promoted to the checked manuscript.
 The 2001 BLR paper's real-scope remark, CS reduction (Theorem 4.1),
 completion parametrization (Lemma 4.3), Frobenius optimizer theorem
 (Theorem 4.2), and Q-norm theorem (Theorem 4.5) remain prior art. The new
@@ -198,12 +256,12 @@ to the ambient space. No such second-order-sufficiency or strict-saddle
 theorem is currently claimed.
 
 For the unrestricted real problem, the most direct next target is now
-**the positive determinant class and the combination of both classes**
-in the exact four-dimensional two-angle minimum from
-`real_four_dimensional_transport.tex`. The negative class and all its
-strict-penalty optimizers are proved above. The actual real
+**the abstract accepted-angle coordinate wrapper** for the exact
+four-dimensional two-angle minimum from `real_four_dimensional_transport.tex`.
+Both model determinant classes and all negative-class strict-penalty
+optimizers are proved above. The actual real
 nonzero-gradient and zero-gradient small-block decompositions already
-compile; the remaining positive four-dimensional cost bound, angle-multiset assembly,
+compile; the abstract angle identification, angle-multiset assembly,
 matching attainment, sorted-sum exchange bounds and field-gap equalities
 remain conventional. Orthogonal determinant/parity restrictions must remain
 explicit. The new complex local-to-global theorem does not supply a real

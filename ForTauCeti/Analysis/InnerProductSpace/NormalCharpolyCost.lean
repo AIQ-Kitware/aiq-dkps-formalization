@@ -27,6 +27,28 @@ noncomputable section
 
 namespace TauCeti
 
+/-- Every trace parameter in `[-2,2]` determines a conjugate reciprocal
+pair on the unit circle with the stated displacement norm. Construct the
+upper-half-circle point explicitly; no root separation is required at
+the two endpoints. -/
+theorem exists_unit_circle_pair_of_trace_mem
+    (T : ℝ) (hT : T ∈ Set.Icc (-2) 2) :
+    ∃ w : ℂ, w + star w = (T : ℂ) ∧ w * star w = 1 ∧
+      ‖1 - w‖ = Real.sqrt (2 - T) := by
+  let r := T / 2
+  let s := Real.sqrt (1 - r ^ 2)
+  let w : ℂ := ⟨r, s⟩
+  have hr : 0 ≤ 1 - r ^ 2 := by dsimp [r]; nlinarith [hT.1, hT.2]
+  have hs : s ^ 2 = 1 - r ^ 2 := Real.sq_sqrt hr
+  refine ⟨w, ?_, ?_, ?_⟩
+  · apply Complex.ext <;> simp [w, r]
+  · apply Complex.ext <;> simp [w] <;> nlinarith [hs]
+  · rw [Complex.norm_eq_sqrt_sq_add_sq]
+    congr 1
+    change (1 - r) ^ 2 + (0 - s) ^ 2 = 2 - T
+    dsimp [r] at hs ⊢
+    nlinarith [hs]
+
 /-- A normal complex displacement cost is the sum over its characteristic
 roots with algebraic multiplicities. The penalty is arbitrary and need
 not vanish at zero; fixed directions are retained in both sums. -/

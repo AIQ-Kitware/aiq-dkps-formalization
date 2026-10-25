@@ -73,27 +73,13 @@ theorem four_displacement_cost_of_negative_charpoly
     (rho : ℝ → ℝ) :
     (∑ i : Fin (Fintype.card n), rho ((LinearMap.id - A.toEuclideanLin).singularValues i)) =
       rho 0 + rho 2 + 2 * rho (Real.sqrt (2 - T)) := by
-  let r := T / 2
-  let s := Real.sqrt (1 - r ^ 2)
-  let w : ℂ := ⟨r, s⟩
-  have hr : 0 ≤ 1 - r ^ 2 := by dsimp [r]; nlinarith [hT.1, hT.2]
-  have hs : s ^ 2 = 1 - r ^ 2 := Real.sq_sqrt hr
-  have hadd : w + star w = (T : ℂ) := by
-    apply Complex.ext <;> simp [w, r]
-  have hmul : w * star w = 1 := by
-    apply Complex.ext <;> simp [w] <;> nlinarith [hs]
+  obtain ⟨w, hadd, hmul, hw⟩ := TauCeti.exists_unit_circle_pair_of_trace_mem T hT
   have hquad : (X - C w) * (X - C (star w)) =
       X ^ 2 - C (T : ℂ) * X + 1 := by
     calc
       _ = X ^ 2 - C (w + star w) * X + C (w * star w) := by
         simp only [map_add, map_mul]; ring
       _ = _ := by rw [hadd, hmul, map_one]
-  have hw : ‖1 - w‖ = Real.sqrt (2 - T) := by
-    rw [Complex.norm_eq_sqrt_sq_add_sq]
-    congr 1
-    change (1 - r) ^ 2 + (0 - s) ^ 2 = 2 - T
-    dsimp [r] at hs ⊢
-    nlinarith [hs]
   have hwstar : ‖1 - star w‖ = Real.sqrt (2 - T) := by
     rw [← star_one (R := ℂ), ← star_sub, norm_star, hw]
   have hwconj : ‖1 - (starRingEnd ℂ) w‖ = Real.sqrt (2 - T) := hwstar

@@ -25,6 +25,23 @@ public section
 
 namespace TauCeti.DavisKahan.FiniteDimensional.RealTransport
 
+/-- Multiplying an acute cosine by an arbitrary rotation cosine fills the
+reflected phase interval. Both the inverse-cosine identity and interval
+bounds are supplied, including the zero-amplitude endpoint. -/
+theorem arccos_cos_mul_cos_data (h s : ℝ) (hh : h ∈ Set.Icc 0 (Real.pi / 2)) :
+    Real.cos (Real.arccos (Real.cos h * Real.cos s)) = Real.cos h * Real.cos s ∧
+      Real.arccos (Real.cos h * Real.cos s) ∈ Set.Icc h (Real.pi - h) := by
+  have hc : 0 ≤ Real.cos h := Real.cos_nonneg_of_mem_Icc ⟨by linarith [hh.1, Real.pi_pos], hh.2⟩
+  have hlo := mul_le_mul_of_nonneg_left (Real.neg_one_le_cos s) hc
+  have hhi := mul_le_mul_of_nonneg_left (Real.cos_le_one s) hc
+  have hcos : Real.arccos (Real.cos h) = h :=
+    Real.arccos_cos hh.1 (by linarith [hh.2, Real.pi_pos])
+  refine ⟨Real.cos_arccos (by nlinarith [Real.cos_le_one h])
+    (by nlinarith [Real.cos_le_one h]), ?_, ?_⟩
+  · simpa only [mul_one, hcos] using Real.arccos_le_arccos hhi
+  · have hbound := Real.arccos_le_arccos hlo
+    simpa only [mul_neg_one, Real.arccos_neg, hcos] using hbound
+
 private theorem exists_edge_dominating_of_sum_le_pi
     (phi : ℝ → ℝ) (hphi : MonotoneOn phi (Set.Icc 0 Real.pi))
     (h d x y : ℝ) (hd : 0 ≤ d) (hdh : d ≤ h) (hh : h ≤ Real.pi / 2)
