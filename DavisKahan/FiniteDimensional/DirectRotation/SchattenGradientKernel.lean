@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientBlocks
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenReflectionBound
+import ForTauCeti.Analysis.InnerProductSpace.Projection.InvariantSubspace
 
 /-!
 # The angle-cost lower bound on the actual gradient kernel
@@ -59,24 +60,10 @@ theorem gradient_kernel_principalAngle_lower_bound
     have hscaled : IsSelfAdjoint ((2 : ℂ) • (S : Z →L[ℂ] Z)) :=
       htwo.smul hS.isSelfAdjoint
     exact IsSelfAdjoint.sub (R := Z →L[ℂ] Z) hone hscaled
-  have hVmap : K₀.map V.toLinearMap = L₀ := by
-    apply le_antisymm
-    · rintro y ⟨x, hx, rfl⟩
-      change (V x : E) ∈ L
-      rw [hV, ← hmap]
-      exact Submodule.mem_map_of_mem hx
-    · intro y hy
-      have hyL : (y : E) ∈ L := hy
-      have hu : (U : E →L[ℂ] E) (V.symm y : E) = (y : E) := by
-        rw [← hV, V.apply_symm_apply]
-      have hpre : (V.symm y : E) ∈ K := by
-        rw [← hmap] at hyL
-        obtain ⟨x, hx, hxy⟩ := hyL
-        have heq : (V.symm y : E) = x :=
-          (Unitary.linearIsometryEquiv U).injective (hu.trans hxy.symm)
-        rw [heq]
-        exact hx
-      exact ⟨V.symm y, hpre, V.apply_symm_apply y⟩
+  have hVmap : K₀.map V.toLinearMap = L₀ :=
+    Submodule.map_comap_subtype_of_isometry_restriction K L Z
+      (Unitary.linearIsometryEquiv U) V hmap hV
+
   exact ⟨V, hV, hself, hVmap,
     sum_phaseMinimum_le_selfAdjoint_transport p hp K₀ L₀ V hself hVmap⟩
 

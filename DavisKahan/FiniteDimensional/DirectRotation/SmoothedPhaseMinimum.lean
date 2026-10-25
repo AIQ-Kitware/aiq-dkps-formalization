@@ -430,6 +430,23 @@ theorem smoothedPhaseMinimum_eq_weighted (tau theta : ℝ) (hτ : 0 < tau) :
     ring
   · rfl
 
+/-- Zero principal angles contribute zero to the smoothed optimum. -/
+theorem smoothedPhaseMinimum_zero_angle (tau : ℝ) (htau : 0 < tau) :
+    smoothedPhaseMinimum tau 0 = 0 := by
+  rw [smoothedPhaseMinimum_eq_weighted tau 0 htau,
+    weightedPhaseMinimum_zero _ _ (inverse_radius_le_radius tau htau),
+    smoothingRadius_sub_inv tau htau]
+  ring
+
+/-- Each right-angle plane contributes one displacement of size two. -/
+theorem smoothedPhaseMinimum_right_angle (tau : ℝ) (htau : 0 < tau) :
+    smoothedPhaseMinimum tau (Real.pi / 2) = Real.sqrt (tau ^ 2 + 4) - tau := by
+  have heta : 0 < smoothingRadius tau := zero_lt_one.trans (one_lt_smoothingRadius tau htau)
+  rw [smoothedPhaseMinimum, Real.cos_pi_div_two, mul_zero,
+    ite_eq_right (not_le_of_gt (inv_pos.mpr heta)), Real.sin_pi_div_two, mul_one]
+  dsimp only [smoothingRadius]
+  ring
+
 /-- The smoothed minimum is attained by its explicit inverse-cosine phase. -/
 theorem smoothedPhaseCost_optimal (tau theta : ℝ) (hτ : 0 < tau)
     (hθ : theta ∈ Set.Icc 0 (Real.pi / 2)) :

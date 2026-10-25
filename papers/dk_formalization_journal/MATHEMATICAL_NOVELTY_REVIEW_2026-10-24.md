@@ -16,6 +16,46 @@ and matrix geometry?
 pending phase-parameter assessments. The original source snapshots and
 literature comparisons below remain historical research records.
 
+## Full finite complex Charbonnier local-to-global theorem (25 October)
+
+The unrestricted local-to-global theorem is now **Lean-verified** for every
+`tau>0`: `SmoothedLocalGlobal.lean` proves both exact attainment of the
+accepted principal-angle sum at every actual constrained local minimum
+and global minimality among all ambient unitary transports. Zero,
+critical and right angles, arbitrary multiplicities, fixed directions and
+all ranks are included. The earlier incomplete smoothed landscape
+snapshots below are superseded by this result.
+
+The proof constructs a basis of the whole positive gradient space from
+the prescribed level bases, pairs it by the actual source reflection and
+adjoins the actual gradient kernel. A new penalty-independent balanced
+reflection trace computes every zero-preserving principal-angle sum as
+`dim(negative space)*f(pi/2)`. The exact kernel cost and paired positive
+costs therefore assemble into the original source/target angle value.
+This is an all-ambient statement; no principal-plane competitor frame is
+assumed. It gives no convergence rate, finite-iteration guarantee or
+unrestricted real landscape theorem.
+
+The primary [Massey--Rios--Stojanoff paper, Theorems 3.5 and 3.12](https://arxiv.org/html/1806.11436)
+was reread. Their domains are a fixed-eigenvalue Hermitian orbit and a
+fixed-singular-value matrix orbit, with a strictly convex unitarily
+invariant norm distance. The present objective is the nonhomogeneous
+Charbonnier penalty on a prescribed-projection transport fiber. No
+identification of those feasible sets or reduction establishing this
+corollary was found. This is a theorem-domain comparison, not a proof of
+historical originality. Targeted searches for local minimal distortion,
+block-diagonal unitary nuclear approximation and Charbonnier transport
+yielded no further matching theorem-level precedent; that negative search
+evidence is limited. **Historical novelty remains provisional.**
+
+The generic positive-basis collection, invariant-subspace restriction map,
+reflection geometry and angle-trace identities are classical mechanisms;
+no independent priority is asserted for them. Their formal assembly closes
+the stronger constrained landscape claim that was previously conventional.
+The next stronger question is whether all second-order stationary points
+are global. The present theorem assumes actual local minimality and does
+not answer that question.
+
 ## Ambient Charbonnier no-overlap and balanced kernel restrictions (25 October)
 
 The ambient block-construction step is now compiled.
@@ -44,10 +84,9 @@ This is a proof insight produced while consuming the formal Hessian, and a
 concrete correction certificate. Historical priority is not asserted for
 this elementary balance argument. The classical projection geometry,
 Lewis--Sendov Hessian precedent and local-Lidskii scope comparisons below
-remain applicable. The **full Charbonnier local-to-global theorem is still
-open**: principal-angle identification and assembly into the global
-value remain to be formalized. The actual zero-gradient geometry and cost
-are now compiled, as described next.
+remain applicable. The subsequent full Charbonnier local-to-global entry above closes the
+then-pending principal-angle assembly. The block results in this entry
+remain its supporting evidence.
 
 The next scalar layer is now compiled. For any distinct
 `0<a<b<pi` with equal positive Charbonnier gradient, Vieta identities
@@ -71,8 +110,8 @@ valid over real and complex complete Hilbert spaces without a dimension
 assumption; the completed coordinates and literal trace cost are finite.
 These classical projection facts have no separate historical novelty
 claim. Together with the exact nonzero-level costs they close the
-individual-block obligations for smoothed local-to-global. The full
-principal-angle assembly remains unproved.
+individual-block obligations used in the now compiled full smoothed
+principal-angle assembly.
 
 The primary [Bolotnikov--Li--Rodman paper (2001)](https://www.maths.tcd.ie/EMIS/journals/ELA/ela-articles/articles/vol8_pp26-46.pdf)
 was reread at theorem level: Theorem 2.3 classifies nearest unitaries to
@@ -108,7 +147,7 @@ requires the actual transporter itself to be a reflection. The preceding entry c
 restrictions, transfer to the actual kernel, reflection balance and exact
 scalar block costs and actual fixed/right kernel geometry. Global value
 assembly remains open.
-There is still no compiled Charbonnier local-to-global theorem.
+The full local-to-global entry above supersedes this intermediate boundary.
 
 The primary author-hosted [Lewis--Sendov paper (2001), Theorem 3.3](https://people.orie.cornell.edu/aslewis/publications/01-twice.pdf)
 was read directly. It gives the Hessian of a twice differentiable real
@@ -1290,7 +1329,7 @@ rows of the original 29-result Davis--Kahan source inventory.
 | SM-2 | Explicit globally minimizing complex unitary via clipped functional calculus of positive cosine operator | **Formalized**: `SmoothedExplicitOptimizer.lean` | A concrete constructive strengthening of SM-1; may be an elementary companion to SM-1, but substantial for applications |
 | SM-3 | Quadratic growth from optimum below strict angle cutoff, with explicit constant and Frobenius distance for **every admissible complex transporter** | **Formalized**: `SmoothedSubspaceStability.lean` | **Distinct and credible mathematical addition** if not implied by older error-bound/strong-convexity theorem |
 | SM-4 | Global convex-relaxation tightness when commuting unitary factor is relaxed to commuting contraction (weighted nuclear cost) | **Formalized for the stated supplied structural class**: `SmoothedCommutantOptimization.lean`; instantiated in all-pairs argument | Strong proof mechanism; present as supporting theorem, not a generic statement for all convex relaxations |
-| SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Complete finite complex iff in `SmoothedNonacuteClassification`; joint attainment in `SmoothedPhaseDefectAttainment`; unique normalized parameters, full multiplicity product and topology in `SmoothedParameterNormalization`, `SmoothedMultiplicityParameters`, `SmoothedParameterTopology` | All-angle global classification and independent projection/defect homeomorphism compiled for `tau>0`, including compactness, rank-sector separation and exact simple-active count. Broad-penalty extension, local-to-global, component counts, manifold dimensions and ideal optimization remain open |
+| SM-5 | Complete classification of all smoothed optimizers, and broad spectral-penalty single-peak extension | Complete finite complex iff in `SmoothedNonacuteClassification`; joint attainment in `SmoothedPhaseDefectAttainment`; unique normalized parameters, full multiplicity product and topology in `SmoothedParameterNormalization`, `SmoothedMultiplicityParameters`, `SmoothedParameterTopology` | All-angle global classification and independent projection/defect homeomorphism compiled for `tau>0`, including compactness, rank-sector separation and exact simple-active count. Local-to-global is now compiled for all `tau>0`; broad-penalty extension, component counts, manifold dimensions and ideal optimization remain open |
 | R-1 | Exact real R4 rank-two minimum for *every continuous nondecreasing spectral penalty*, including separate determinant classes | Conventional proof draft in `real_four_dimensional_transport.tex` | Strong exact finite-dimensional problem; old matrix optimization warns against presenting mere nonminimality as new. **Not certified** |
 | R-2 | All-dimensional real optimization reduces to weighted matching in angle blocks of real dimension at most four | Conventional proof draft `real_matching_transport.tex`, with compiled positive-gradient block decomposition in `RealBlockDescent.lean` and related modules | **Potentially strongest structural new theorem**, but exceptional-gradient assembly and global matching bound are **not compiled** |
 | R-3 | For Schatten `1<p<2`, Charbonnier, and nuclear limits, matching reduces to minimum of **two sorted adjacent-pair sums** | Conventional derivation in `real_matching_transport.tex`; numerical checks corroborate but are not proofs | Would yield efficient exact algorithms and optimality thresholds; **submodularity and final reduction need independent proof review** |

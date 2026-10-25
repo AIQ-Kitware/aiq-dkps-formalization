@@ -34,6 +34,28 @@ open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
+/-- Restricting an ambient subspace transport to an invariant carrier
+transports the two actual intersections on that carrier. -/
+theorem map_comap_subtype_of_isometry_restriction
+    (K L Z : Submodule 𝕜 E) (U : E ≃ₗᵢ[𝕜] E) (R : Z ≃ₗᵢ[𝕜] Z)
+    (hmap : K.map U.toLinearMap = L) (hR : ∀ z : Z, (R z : E) = U z) :
+    (K.comap Z.subtype).map R.toLinearMap = L.comap Z.subtype := by
+  apply le_antisymm
+  · rintro y ⟨x, hx, rfl⟩
+    change (R x : E) ∈ L
+    rw [hR, ← hmap]
+    exact Submodule.mem_map_of_mem hx
+  · intro y hy
+    have hyL : (y : E) ∈ L := hy
+    have hu : U (R.symm y : E) = (y : E) := by
+      rw [← hR, R.apply_symm_apply]
+    have hpre : (R.symm y : E) ∈ K := by
+      rw [← hmap] at hyL
+      obtain ⟨x, hx, hxy⟩ := hyL
+      have heq : (R.symm y : E) = x := U.injective (hu.trans hxy.symm)
+      rwa [heq]
+    exact ⟨R.symm y, hpre, R.apply_symm_apply y⟩
+
 /-- An invariant ambient orthogonal projection restricts to the projection
 onto the intersection, expressed on the subspace carrier. -/
 theorem starProjection_comap_subtype_apply_of_invariant

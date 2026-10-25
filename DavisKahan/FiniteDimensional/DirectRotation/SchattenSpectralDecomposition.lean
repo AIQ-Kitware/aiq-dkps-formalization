@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenPositiveBasis
 import DavisKahan.FiniteDimensional.DirectRotation.SchattenGradientKernel
+import ForTauCeti.Analysis.InnerProductSpace.PairedSpectralDecomposition
 
 /-!
 # Orthogonal spectral decomposition of a local Schatten transport minimum
@@ -32,23 +33,6 @@ open scoped ENNReal BigOperators
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
-
-omit [FiniteDimensional ℂ E] [CompleteSpace E] in
-private theorem invariant_of_eigenbasis
-    (H : Submodule ℂ E) {n : ℕ} (e : OrthonormalBasis (Fin n) ℂ H)
-    (T : E →L[ℂ] E) (lam : Fin n → ℂ)
-    (he : ∀ i, T (e i : E) = lam i • (e i : E)) :
-    ∀ x ∈ H, T x ∈ H := by
-  intro x hx
-  let x' : H := ⟨x, hx⟩
-  have hrep := congrArg (fun y : H => (y : E)) (e.sum_repr x')
-  simp only [Submodule.coe_sum, Submodule.coe_smul] at hrep
-  change (∑ i, e.repr x' i • (e i : E)) = x at hrep
-  rw [← hrep, map_sum]
-  apply H.sum_mem
-  intro i _
-  rw [map_smul, he]
-  exact H.smul_mem _ (H.smul_mem _ (e i).property)
 
 set_option maxHeartbeats 800000 in
 /-- A local constrained minimum is an actual orthogonal sum of paired
@@ -111,7 +95,7 @@ theorem schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
   obtain ⟨n, e, g, alpha, beta, _, _, hu, hw, hmean, hscalar, hbounds⟩ :=
     positive_gradient_phase_basis_of_isLocalMinOn_transports_complex p hp hp1 hp2 K Q U htrans hmin
   have hUH : ∀ x ∈ H, (U : E →L[ℂ] E) x ∈ H :=
-    invariant_of_eigenbasis H e (U : E →L[ℂ] E)
+    e.mapsTo_submodule_of_eigenvectors (U : E →L[ℂ] E).toLinearMap
       (fun i => Complex.exp ((alpha i : ℂ) * Complex.I)) hu
   let U' := J.trans ((Unitary.linearIsometryEquiv U).trans J)
   have hu' (i) : U' (e i : E) =
@@ -119,7 +103,7 @@ theorem schatten_transport_spectral_decomposition_of_isLocalMinOn_complex
     change J ((U : E →L[ℂ] E) (J (e i))) = _
     rw [hw, map_smul, K.reflection_reflection]
   have hU'H : ∀ x ∈ H, U' x ∈ H :=
-    invariant_of_eigenbasis H e (U' : E →L[ℂ] E)
+    e.mapsTo_submodule_of_eigenvectors U'.toLinearMap
       (fun i => Complex.exp (((-beta i : ℝ) : ℂ) * Complex.I)) hu'
   let v : H →ₗᵢ[ℂ] H :=
     { (U : E →L[ℂ] E).toLinearMap.restrict hUH with

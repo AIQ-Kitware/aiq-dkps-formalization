@@ -13,8 +13,9 @@ are compact, their active rank labels are locally constant, and different
 rank sectors have fixed-pair positive separation. Simple active factors
 with zero right defect give exactly `2^s` isolated optimizers. The subspace
 rank-stratification equivalences are algebraic. Sector connectedness,
-component counts, manifold dimensions, smoothed local-to-global,
-unrestricted real matching and operator-ideal optimization remain open.
+component counts, manifold dimensions, unrestricted real matching and
+operator-ideal optimization remain open. The full finite complex
+Charbonnier local-to-global theorem is now compiled for every `tau>0`.
 The local Charbonnier analysis now supplies actual first variations,
 source-reflection stationarity, paired two-phase gradient blocks and the
 sharp gradient bound. Actual ambient no-overlap on every submaximal gradient
@@ -27,7 +28,8 @@ source-reflection-paired phase eigenbasis whose individual costs attain
 the exact scalar minima. Submaximal paired restriction costs equal the
 sum of those minima. The actual zero-gradient kernel now has constructed
 fixed/right paired coordinates and its exact dimension-weighted cost.
-Principal-angle identification and assembly remain open.
+The actual principal-angle assembly is now compiled: every constrained
+Charbonnier local minimum attains the exact unrestricted global value.
 **Manuscript and teaching-deck update source:** `427169ce38b5` (25 October
 2026), incorporating the completed full complex optimizer classification,
 local-to-global theorem, normalized parameter bijection and exact counts.
@@ -44,6 +46,80 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Full finite complex Charbonnier local-to-global theorem (25 October)
+
+`SmoothedLocalGlobal.lean` now proves
+`smoothed_transport_cost_eq_sum_of_isLocalMinOn_complex` and
+`isMinOn_of_isLocalMinOn_transports_complex`. For every `tau>0`, finite
+complex Hilbert space, subspaces `K,L`, feasible unitary `U`, and actual
+local minimum of the **literal** Charbonnier cost among **all** unitary
+transports, the cost equals
+`sum_i smoothedPhaseMinimum tau (K.principalAngles L i)`, and the local
+minimum is global. No angle, rank, phase multiplicity, identity eigenvalue,
+reflection eigenvalue or fixed-space exception remains. This closes the
+smoothed local-to-global obligation in the earlier entries below. It
+supplies no iteration bound, algorithmic convergence claim or real analogue.
+
+The proof first collects every positive-gradient level basis in
+`SmoothedPositiveBasis.lean`, then uses
+`SmoothedSpectralDecomposition.lean` to split the **actual** ambient unitary
+and literal cost over `H + J(H) + ker(G)`. The common donor
+`PositiveSpectralBasis.lean` assembles prescribed eigenspace bases while
+retaining arbitrary supplied vector properties, over `RCLike`; the
+existing public Schatten positive-basis theorem now consumes it too.
+The former private eigenbasis-invariance proof is shared there, without
+an ambient finite-dimension hypothesis. Public Schatten endpoint
+statements are unchanged.
+
+`Projection/BalancedReflectionTrace.lean` proves
+`Submodule.sum_principalAngles_of_balanced_reflection_complex` for
+**every** function `f` with `f(0)=0`: a balanced reflecting transport has
+angle sum `dim(range A)*f(pi/2)`. Its fixed remainder contributes zero.
+`SmoothedReflectionOptimality.lean` identifies the resulting trace with
+the actual reflection cost and proves that every such balanced reflection
+is globally minimizing among all ambient unitary competitors. The kernel
+proof identifies the source with the actual intersection using the
+projection action; the common restriction-map lemma in
+`Projection/InvariantSubspace.lean` identifies its actual target. Both
+its balance and all ambient actions are constructed from the local minimum.
+Adding this exact kernel trace to the paired positive trace yields the
+original source/target angle sum. The already proved independent global
+lower bound completes the comparison.
+
+The current implementation consumes the established complex
+map/conjugacy bridge from `SchattenGlobalLowerBound.lean`. This is a
+representation bridge, not an assumption of a Schatten minimum theorem.
+The smoothed scalar endpoint identities are now public in
+`SmoothedPhaseMinimum.lean`. The generic restriction and collected-basis
+proofs replace their displaced copies in the Schatten consumers.
+
+Independent numerical diagnostics used 30 random feasible starts in
+complex dimension seven, source rank three, `tau=0.15,0.7,3`, repeated
+critical angles, zero angles, right angles and a fixed ambient direction.
+After 600 feasible gradient steps, all observed cost gaps were nonnegative;
+the largest was `0.003093`, with gradient norm up to `0.006068` and
+feasibility error below `8.84e-15`. These unfinished iterates are not
+certified local minima or convergence evidence. The exact stationary
+reflection examples still require the negative-curvature test; vanishing
+first derivative alone does not imply global optimality.
+
+The manuscript adds `thm:smoothed-local-global` and its exact-value Lean
+signature. Historical priority remains provisional. The rechecked
+Massey--Rios--Stojanoff Theorems 3.5 and 3.12 concern strictly convex
+unitarily invariant norms on Hermitian or fixed-singular-value orbits;
+no reduction from this prescribed-projection fiber has been justified.
+
+Validation: `lake exe cache get` followed by
+`lake build DavisKahan.All ForTauCeti` succeeded (10,537 jobs). The focused
+local-to-global build also succeeded, including the actual spectral
+assembly and kernel-angle trace. The paper compiled to 62 pages with no
+final unresolved references, duplicate labels or overfull boxes. The
+mandatory name-drift check retains the same 25 findings in unchanged
+records. The repeated Challenge build fails on the unchanged
+`CourantFischerWeyl/Leaderboard.lean:6` reference to
+`TauCeti.abs_eigenvalues_sub_le_opNorm`; this is not reported as a passing
+Challenge audit.
 
 ## Actual zero-gradient fixed/right geometry and exact cost (25 October)
 
@@ -249,39 +325,16 @@ unresolved constant `TauCeti.abs_eigenvalues_sub_le_opNorm`. The static
 name-drift check separately reports the 25 unchanged findings described
 above. Neither result is presented as a successful Challenge audit.
 
-### Exact remaining local-to-global obligations
+### Local-to-global obligation closed
 
-Scalar optimality on every positive gradient level is now compiled in
-`SmoothedBalancedPhases.lean` and `SmoothedGradientPlanes.lean`, as
-recorded above. The Vieta derivation formerly recorded here as pending
-has been implemented and accepted, including the coalesced critical case.
-
-The balanced zero-gradient geometry and exact cost are now compiled in
-`SmoothedKernelPlanes.lean`, as recorded above. The strongest next target
-is the unrestricted **smoothed local-to-global theorem**:
-
-1. Assemble the uniform positive-level bases into a basis of the full
-   positive point-spectral space of the actual gradient. Adapt the
-   collected-basis proof in `SchattenPositiveBasis.lean`; consume
-   `gradient_eigenspace_phase_basis_of_isLocalMinOn_transports_complex`.
-2. Use the accepted paired spectral decomposition to construct
-   `H + J(H) + ker(G)` and split the literal cost with the established
-   orthogonal-block identity. `SchattenSpectralDecomposition.lean` is the
-   exact mathematical analogue, not a theorem to copy as an assumption.
-3. Identify its mean phases with actual principal angles using
-   `Submodule.sum_principalAngles_eq_paired_phases_add_comap_complex`,
-   specialized to `smoothedPhaseMinimum tau`; supply its zero-angle value.
-4. On the actual kernel identify `K0` with `K.comap L.subtype` using the
-   retained projection action, and likewise the restricted target.
-   Derive the fixed/right principal-angle sum from the constructed
-   coordinates and equate it to the proved kernel cost. Combine with
-   the established unrestricted global minimum.
-
-No nonzero or zero gradient block is now left without a compiled
-phase/geometry and scalar-cost description. The complete principal-angle
-assembly and its comparison with every ambient competitor are still open.
-Real matching, component dimensions and operator-ideal optimization
-remain open.
+The former positive-basis, spectral-decomposition, actual kernel-angle
+trace and principal-angle assembly obligations are all compiled in the
+new full local-to-global entry above. The next useful consequences are
+local-to-global optimality for the literal nearest subspace-preserving
+unitary correction, and a review of whether the proof extends from local
+minimality to second-order stationarity. The latter stronger statement
+is a research target, not a current theorem. Real matching, component
+dimensions and justified operator-ideal extensions remain open.
 
 ## Actual Charbonnier second variation and reflection tests (25 October)
 

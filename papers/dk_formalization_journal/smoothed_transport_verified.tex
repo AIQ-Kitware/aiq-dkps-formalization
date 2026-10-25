@@ -997,6 +997,59 @@ Its displacement has singular value $2$ on $M$ and zero on the
 remaining space. Summing the scalar penalty proves the cost formula.
 \end{proof}
 
+\begin{theorem}[Every smoothed local minimum is global]
+\label{thm:smoothed-local-global}
+For every $\tau>0$, every local minimum of $\Psi_\tau$ over the unitary
+transports satisfying $WPW^*=Q$ is a global minimum, and
+\[
+ \Psi_\tau(W)=\sum_{j=1}^r\mu_\tau(\theta_j).
+\]
+The conclusion includes zero, critical and right angles, repeated
+principal angles, and arbitrary fixed spaces. Thus the parameterization
+in \cref{thm:smoothed-all-projections-defects} describes all local
+minimizers as well.
+\end{theorem}
+
+\begin{lstlisting}[style=leanpaper,
+ caption={Lean signature for the exact value at every constrained local
+ minimum. The surrounding finite-dimensional complex Hilbert-space context
+ is omitted. The feasible set contains all ambient unitary transports.},
+ label={lst:smoothed-local-global}]
+theorem smoothed_transport_cost_eq_sum_of_isLocalMinOn_complex
+    (tau : Real) (htau : 0 < tau) (K L : Submodule Complex E)
+    (U : unitary (ContinuousLinearMap Complex E E))
+    (hmap : K.map (Unitary.linearIsometryEquiv U).toLinearMap = L)
+    (hmin : IsLocalMinOn
+      (fun W : ContinuousLinearMap Complex E E =>
+        smoothedDisplacementCost tau W.toLinearMap)
+      {W | (unitary (ContinuousLinearMap Complex E E)).carrier W ∧
+        W * K.starProjection * star W = L.starProjection}
+      (U : ContinuousLinearMap Complex E E)) :
+    smoothedDisplacementCost tau (U : ContinuousLinearMap Complex E E).toLinearMap =
+      Finset.univ.sum (fun i : Fin (Module.finrank Complex K) =>
+        smoothedPhaseMinimum tau (K.principalAngles L i))
+\end{lstlisting}
+
+\begin{proof}
+Collect the phase eigenbases of all positive gradient levels and pair
+them by source reflection. Their orthogonal complement is exactly
+$\ker G_\tau(W)$. By \cref{prop:smoothed-ambient-gradient-blocks}, each
+positive pair attains its scalar minimum, while the kernel splits into
+fixed directions and right-angle pairs with their exact minimum costs.
+
+To identify these means with the original principal angles, evaluate
+the directed sine spectral trace with the zero-preserving function
+$s\mapsto\mu_\tau(\arcsin s)$. The source projection has diagonal
+weight $1/2$ on each of the two vectors in a reflection pair. Its two
+trace contributions therefore add to one copy of
+$\mu_\tau((\alpha+\beta)/2)$. On the kernel, each negative reflection
+direction contributes one right angle, and the remaining fixed directions
+contribute zero. Orthogonal additivity now gives the displayed
+principal-angle sum. The global lower bound in
+\cref{thm:smoothed-transport} compares this value with every admissible
+unitary transporter.
+\end{proof}
+
 \begin{corollary}[Complementary right-angle pairs]
 \label{cor:smoothed-complementary-right}
 Suppose $Q=I-P$ and $n=2r$. A unitary transporter $W$ is globally
