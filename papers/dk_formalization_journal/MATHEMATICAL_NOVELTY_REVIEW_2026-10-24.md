@@ -12,6 +12,44 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
+## Pure Schatten unequal-angle separation and fixed directions
+
+Two further every-optimizer conclusions are now Lean-verified, including
+all degenerate angles and multiplicities at arbitrary finite complex rank
+for `1<p<2`:
+
+1. Every constrained local minimum commutes with `|P-Q|` and maps every
+   eigenspace of that operator onto itself. Since sine is injective on
+   `[0,pi/2]`, this excludes mixing between unequal principal angles,
+   including the zero- and right-angle sectors.
+2. Every such local minimum fixes every vector `x` for which `P*x=Q*x`.
+   This fixes the entire common source and common orthogonal ambient
+   space, without assuming the remaining pair is acute.
+
+The endpoints are in `SchattenOptimizerAngles.lean` and
+`SchattenFixedDirections.lean`, registered with exact names in
+`claims_to_evidence.md`. They apply to every global optimizer because a
+global minimum is local. Proposition `prop:schatten-angle-preservation`
+is included in the checked manuscript.
+
+The nonzero-gradient basis already consists of paired common eigenvectors
+of the unitary and intrinsic sine operator. The missing kernel argument
+is now a reusable classical theorem: any reflecting transporter commutes
+with the modulus of its projection difference, because conjugation
+negates that difference. This reflection lemma even holds on arbitrary
+real/complex complete Hilbert spaces. A finite-dimensional restriction
+identity then assembles the actual ambient commutation. Angle preservation
+makes the zero-angle space reducing; its inherited local minimum has
+coincident source/target and exact cost zero, forcing identity there.
+
+These are compiled components of a complete pure Schatten optimizer
+classification. The acute equal-angle phase equation, arbitrary
+right-defect intertwiner, their converse attainment, and the topology of
+the parameter family remain separate obligations. The classical algebra
+and restriction lemmas carry no originality claim. The closest identified
+BLR and Local Lidskii comparisons below still leave historical priority
+of the constrained Schatten classification **provisional**.
+
 ## Full finite complex Schatten local-to-global theorem
 
 The unrestricted finite complex landscape theorem is now **Lean-verified**
@@ -82,7 +120,7 @@ can be stated without a priority claim.
 
 The full pure Schatten operator parameterization is still conventional:
 assemble the actual paired-gradient basis into geometric equal-angle
-spaces, prove unequal-angle reduction, identify the two supercritical
+spaces (unequal-angle reduction and zero-angle rigidity now compile), identify the two supercritical
 phases with an orthogonal-projection parameter, and classify the full
 right-defect intertwiner. The current theorem also supplies no real
 matching formula, smoothed local-to-global result, or operator-ideal

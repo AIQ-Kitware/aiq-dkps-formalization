@@ -1,10 +1,10 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
 **As of:** 24 October 2026
-**Current research source:** the unrestricted finite complex Schatten
-local-to-global theorem for `1<p<2`, its nearest subspace-preserving
-unitary correction consequence, and the reusable positive-compression
-certificate, built on `44987d262`. The complete all-angle Charbonnier
+**Current research source:** unrestricted finite complex Schatten
+local-to-global optimality, preservation of every intrinsic angle space,
+and pointwise fixation of every zero-angle direction, for `1<p<2`. The
+new optimizer geometry builds on local-to-global commit `d8a31360b`. The complete all-angle Charbonnier
 global optimizer classification remains proved.
 **Earlier source snapshot used for manuscript and visualization updates:**
 `521572a2500c` (24 October 2026, 15:48 incremental source patch,
@@ -19,6 +19,88 @@ The Yu--Wang--Samworth source-version audit and manuscript fragments are in
 `../yws_formalization_conference/`; this paper covers Davis--Kahan.
 
 Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+
+## Every pure Schatten optimizer preserves angles and fixes zero angles
+
+The next classification step is now compiled at arbitrary finite complex
+rank for `1<p<2`, for **every ambient constrained local minimum** and
+therefore every global optimizer:
+
+- `commute_sinAngleOperator_of_isLocalMinOn_transports_complex`, in
+  `SchattenOptimizerAngles.lean`, proves `U*|P-Q|=|P-Q|*U` for the original
+  source and target projections. The actual paired-gradient eigenbasis
+  and actual kernel restriction are derived, not supplied.
+- `sinAngleOperator_apply_transport_of_isLocalMinOn_complex` proves the
+  eigenvector equation directly;
+  `map_sinAngleOperator_eigenspace_of_isLocalMinOn_complex` proves that
+  **every** eigenspace of the intrinsic sine operator is mapped onto
+  itself. The sine is injective on `[0,pi/2]`, so unequal principal
+  angles cannot mix. Empty, repeated, zero and right-angle eigenspaces
+  are included. These statements do not yet classify phase operators
+  within an equal-angle space.
+- `apply_eq_self_of_projections_eq_of_isLocalMinOn_transports_complex`,
+  in `SchattenFixedDirections.lean`, proves `U*x=x` whenever `P*x=Q*x`.
+  Thus both common source vectors and common orthogonal ambient
+  directions are fixed, with no acuteness assumption on the remaining
+  pair. The proof constructs the actual reducing zero-angle restriction,
+  inherits local minimality, and applies the exact value theorem to the
+  coincident restricted pair. Its attained value is zero.
+
+Reusable ingredients:
+
+- `Submodule.commute_sinAngleOperator_of_selfAdjoint_transport`, in
+  `Projection/ReflectionTransport.lean`, proves angle preservation by
+  any reflecting transporter on a real or complex complete Hilbert
+  space. It uses no finite-dimensional or minimization hypothesis:
+  reflection conjugation negates the projection difference, so the
+  reflection commutes with its squared difference and modulus.
+- `Submodule.sinAngleOperator_comap_subtype_apply_of_invariant`, added
+  to `Projection/InvariantSubspace.lean`, identifies the actual sine
+  restriction on **every vector** for a finite-dimensional reducing
+  pair. It extends the already compiled eigenvector identity by the
+  positive restricted sine eigenbasis.
+
+The checked manuscript includes Proposition
+`prop:schatten-angle-preservation`. These theorems close unequal-angle
+mixing and zero-angle rigidity in the full pure Schatten classification.
+The remaining parameter theorem must classify the phases on each
+positive acute equal-angle space and the right-angle defect intertwiner,
+and prove attainment of every parameter choice. No Grassmannian topology,
+real matching or ideal-theoretic optimizer claim is promoted by this step.
+Historical priority remains provisional; the reflection and restriction
+lemmas are classical geometry without a separate novelty claim.
+
+Validation: `lake exe cache get` preceded the focused builds and final
+`lake build DavisKahan.All ForTauCeti`, which passed (10,403 jobs;
+`/tmp/schatten-optimizer-geometry-final-build.log`). The new donor modules
+pass the strict ForTauCeti warning policy; the two new DavisKahan modules
+have no new warnings. BibTeX and repeated pdfLaTeX passes produced
+`/tmp/dk-schatten-optimizer-geometry-paper/dk-schatten-optimizer-geometry.pdf`
+with no unresolved references or citations, multiply defined labels or
+overfull boxes. `git diff --check` passed.
+
+### Precise continuation for the remaining parameter classification
+
+On each intrinsic sine eigenspace with `0<s<1`, put `theta=arcsin(s)`
+and choose its canonical rotation `R`. For the relative phase `Z=R^*U`,
+prove commutation with `R` and the source grading, and prove
+`Z+Z^*=2*cos(delta_p(theta))*I`. On the actual paired-gradient basis,
+the sine eigenvalue equation fixes `(alpha+beta)/2=theta`; scalar phase
+uniqueness should then give `abs((alpha-beta)/2)=delta_p(theta)`.
+Assemble these equations on the entire eigenspace. The already compiled
+`UnitaryScalarRealPart.lean` projection/involution classification then
+supplies the unique projection parameter when `delta>0`, while `delta=0`
+forces identity. This step must retain multiplicities and the critical
+case rather than assuming simple angles.
+
+At `s=1`, first prove that the whole right-angle eigenspace lies in the
+actual gradient kernel: every positive-gradient paired mean is strictly
+acute. The actual restriction is therefore self-adjoint. In source/target
+coordinates it should have off-diagonal factors `A,A^*`, with arbitrary
+unitary `A` between the defect spaces. Prove the converse attainment
+for every such factor, and combine it with the positive-angle projection
+parameters and the already fixed `s=0` sector. The parameter topology and
+dimension statements remain beyond these operator identities.
 
 ## Full finite complex Schatten local-to-global theorem
 
@@ -90,11 +172,12 @@ The missing bridge identifies the phase factors on each eigenspace of
 its geometric cosine operator: below and at the critical angle only the
 canonical factor is permitted; a supercritical acute multiplicity block
 has the two scalar optimal phases, hence a unique orthogonal-projection
-parameter. Prove that unequal angle spaces reduce every optimizer, then
-prove both directions of the resulting operator formula. At right angles,
+parameter. Unequal-angle reduction and zero-angle pointwise fixation are
+now compiled in the newer entry above. Prove both directions of the
+remaining equal-angle operator formula. At right angles,
 classify and attain the arbitrary defect-space unitary intertwiner;
-zero angles and fixed ambient directions must be fixed. These parameter
-assembly statements remain conventional, not compiled endpoints.
+zero angles and fixed ambient directions are now proved fixed. The
+remaining parameter assembly statements remain conventional, not compiled endpoints.
 
 The all-local-minima result proved here is **complex, finite-dimensional,
 `1<p<2`**. It does not establish a real local landscape, the real matching

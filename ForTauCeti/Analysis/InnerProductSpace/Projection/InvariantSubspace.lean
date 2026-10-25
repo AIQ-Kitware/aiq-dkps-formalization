@@ -122,4 +122,31 @@ theorem sinAngleOperator_apply_of_comap_eigenvector [CompleteSpace E]
   change S (S (x : E)) = D (D (x : E)) at h
   exact h.trans hscalar
 
+/-- On a finite-dimensional reducing subspace, the ambient sine angle
+operator restricts to the sine angle operator of the actual restricted
+pair. This is an equality on every vector, without a chosen eigenbasis. -/
+theorem sinAngleOperator_comap_subtype_apply_of_invariant
+    [FiniteDimensional 𝕜 E] [CompleteSpace E]
+    (K L Z : Submodule 𝕜 E)
+    (hK : ∀ x ∈ Z, K.starProjection x ∈ Z)
+    (hL : ∀ x ∈ Z, L.starProjection x ∈ Z) (x : Z) :
+    (((K.comap Z.subtype).sinAngleOperator (L.comap Z.subtype) x : Z) : E) =
+      K.sinAngleOperator L (x : E) := by
+  let S₀ := (K.comap Z.subtype).sinAngleOperator (L.comap Z.subtype)
+  let hS₀ := ((K.comap Z.subtype).isPositive_sinAngleOperator
+    (L.comap Z.subtype)).toLinearMap
+  let e := hS₀.isSymmetric.eigenvectorBasis rfl
+  let mu := hS₀.isSymmetric.eigenvalues rfl
+  have hmap : Z.subtype ∘ₗ S₀.toLinearMap =
+      (K.sinAngleOperator L).toLinearMap ∘ₗ Z.subtype := by
+    apply e.toBasis.ext
+    intro i
+    change (S₀ (e i) : E) = K.sinAngleOperator L (e i : E)
+    have he : S₀ (e i) = (mu i : 𝕜) • e i :=
+      hS₀.isSymmetric.apply_eigenvectorBasis rfl i
+    rw [sinAngleOperator_apply_of_comap_eigenvector K L Z hK hL
+      (e i) (mu i) (hS₀.nonneg_eigenvalues rfl i) he, he]
+    rfl
+  exact LinearMap.congr_fun hmap x
+
 end Submodule

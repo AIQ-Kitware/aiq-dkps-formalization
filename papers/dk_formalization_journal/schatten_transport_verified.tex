@@ -641,6 +641,42 @@ matrix distances also hold on Hermitian eigenvalue orbits and
 fixed-singular-value orbits \citep[Theorems~3.5 and~3.12]{massey2018local}.
 The feasible set here is the prescribed-projection transport fiber.
 
+\begin{proposition}[Angle preservation and fixed directions]
+\label{prop:schatten-angle-preservation}
+Every local minimum $W$ commutes with the intrinsic sine operator
+$S=|P-Q|$ and maps each eigenspace of $S$ onto itself. Consequently
+unequal principal-angle spaces cannot mix. Moreover,
+\[
+ Px=Qx\quad\Longrightarrow\quad Wx=x.
+\]
+Thus every optimizer fixes both the common source space and the common
+orthogonal ambient space, even when the pair has right angles.
+\end{proposition}
+
+\begin{proof}
+On each nonzero-gradient pair in the spectral decomposition, the two
+transporter eigenvectors are also eigenvectors of $S$ with the same
+eigenvalue $\sin((\alpha+\beta)/2)$. Hence $W$ commutes with $S$ there.
+On the gradient kernel, the actual restriction $R$ is self-adjoint.
+Let $P_Z,Q_Z$ be the restricted projections. Feasibility gives
+\[
+ R(P_Z-Q_Z)R=-(P_Z-Q_Z),
+\]
+so $R$ commutes with $(P_Z-Q_Z)^2$ and its positive square root.
+The sine operator of the restricted pair is the restriction of $S$.
+Completeness of the spectral decomposition proves $WS=SW$ on the
+whole space. Finite-dimensional unitarity then gives equality of the
+image of each eigenspace with itself. The sine is injective on
+$[0,\pi/2]$, giving the assertion about distinct angles.
+
+The kernel $N=\ker(P-Q)=\ker S$ is therefore reducing for $W$.
+It is also invariant under both projections, whose restrictions to
+$N$ coincide. Local minimality descends to the actual unitary
+restriction on $N$. Theorem~\ref{prop:schatten-local-is-global}
+makes that restriction globally minimizing. The identity is feasible
+and has cost zero there, so the restriction must be the identity.
+\end{proof}
+
 \begin{corollary}[Local minima for unitary correction]
 \label{cor:schatten-correction-local-global}
 Let $A$ be a unitary and let $P$ be an orthogonal projection on a finite
