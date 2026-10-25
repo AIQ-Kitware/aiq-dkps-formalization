@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI
 -/
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
+module
+
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
 
 /-!
 # Common-domain double-angle usage and signature audit
@@ -17,6 +19,8 @@ no global bounded perturbation. The ambient call has no residual, bounded
 trial operator, or whole-trial-space domain assumption. Do not repair an
 elaboration failure by adding those assumptions.
 -/
+
+public section
 
 namespace TauCeti.DavisKahan1970.CommonDomainUsage
 

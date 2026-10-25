@@ -7,7 +7,11 @@ This leaderboard audits their proof dependencies; it does not compare their
 signatures against an independent conformance module.
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+module
+
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+
+public section
 
 #print axioms TauCeti.UnitarilyInvariantSeminorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
 #print axioms TauCeti.UnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le

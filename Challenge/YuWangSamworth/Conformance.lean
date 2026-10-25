@@ -3,7 +3,9 @@
   (pending comparator challenge)
 -/
 
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 ## Comparator maintenance rule
@@ -14,6 +16,11 @@ ordinary `YuWangSamworth2015.Core.Residual` implementation imported by the paire
 leaderboard.
 -/
 
+
+public section
+
+-- Comparator statement holes are intentional; see Challenge/README.md.
+set_option warn.sorry false
 
 namespace YuWangSamworth2015
 open scoped InnerProductSpace BigOperators

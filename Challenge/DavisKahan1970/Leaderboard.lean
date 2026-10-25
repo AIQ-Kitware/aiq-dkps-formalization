@@ -22,23 +22,27 @@ The paper's unbounded extension of the directed `tan 2Theta` estimate also lacks
 one arbitrary-source-UI wrapper that derives its cutoff/denominator assembly
 from only the printed unbounded hypotheses.
 -/
-import DavisKahan.Sources.DavisKahan1970.PartIII
-import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
-import DavisKahan.Sources.DavisKahan1970.Theorem61
-import DavisKahan.Sources.DavisKahan1970.Proposition61
-import DavisKahan.Sources.DavisKahan1970.Directed
-import DavisKahan.Sources.DavisKahan1970.DirectedReal
-import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
-import DavisKahan.Sources.DavisKahan1970.AmbientReal
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
-import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
-import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
-import DavisKahan.FiniteDimensional.Sharpness
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
-import DavisKahan.Sources.DavisKahan1970.Section8.All
-import DavisKahan.Sources.DavisKahan1970.Section9.All
+module
+
+public import DavisKahan.Sources.DavisKahan1970.PartIII
+public import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
+public import DavisKahan.Sources.DavisKahan1970.Theorem61
+public import DavisKahan.Sources.DavisKahan1970.Proposition61
+public import DavisKahan.Sources.DavisKahan1970.Directed
+public import DavisKahan.Sources.DavisKahan1970.DirectedReal
+public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
+public import DavisKahan.Sources.DavisKahan1970.AmbientReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
+public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
+public import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
+public import DavisKahan.FiniteDimensional.Sharpness
+public import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
+public import DavisKahan.Sources.DavisKahan1970.Section8.All
+public import DavisKahan.Sources.DavisKahan1970.Section9.All
+
+public section
 
 open TauCeti.DavisKahan.Angle
 
@@ -90,6 +94,14 @@ theorem projectorDifference_restrictionSpectra_opNorm
     (hWhi : spectrum ℝ (B.restrict hW.1) ⊆ Set.Ici (c + g))
     (hWlo : spectrum ℝ (B.restrict hW.2) ⊆ Set.Iic c) :
     ‖(U.starProjection - W.starProjection : H →L[ℂ] H)‖ ≤ ‖B - A‖ / g := by
+  have hAlg (X : Type u) [NormedAddCommGroup X] [NormedSpace ℂ X] :
+      ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := X) =
+        (ContinuousLinearMap.algebra : Algebra ℝ (X →L[ℂ] X)) :=
+    ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
+  rw [← hAlg U] at hUhi
+  rw [← hAlg Uᗮ] at hUlo
+  rw [← hAlg W] at hWhi
+  rw [← hAlg Wᗮ] at hWlo
   exact TauCeti.SpectralOrder.opNorm_starProjection_sub_le_of_restriction_spectra
     hA hB hU hW hg hUhi hUlo hWhi hWlo
 

@@ -2,7 +2,7 @@
   "challenge_module": "Challenge.MatrixConcentration.Conformance",
   "solution_module": "Challenge.MatrixConcentration.Leaderboard",
   "theorem_names": [
-    "TauCeti.measure_forall_eigenvalues\u2080_ge_ge"
+    "TauCeti.one_sub_le_measure_forall_eigenvalues\u2080_sub_le"
   ],
   "permitted_axioms": [
     "propext",

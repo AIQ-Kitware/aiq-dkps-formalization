@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT-6 Astra Pro
 -/
-import DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
+module
+
+public import DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
 
 /-!
 # Axiom and public-interface audit for the small-angle extension
@@ -12,6 +14,8 @@ Compile after the new module. Inspect the printed axiom dependencies: in
 particular no `sorryAx` or project-specific unproved axiom may occur. This
 file records checks to run; its presence alone is not a completed audit.
 -/
+
+public section
 
 open TauCeti
 open TauCeti.DavisKahan.FiniteDimensional

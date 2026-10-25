@@ -27,7 +27,11 @@ Note that this audits a tree the default build does not compile.  The names are
 checked by `scripts/check_declaration_name_drift.py`, which is what keeps this
 file from silently pointing at nothing.
 -/
-import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+module
+
+public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+
+public section
 
 #print axioms TauCeti.ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto_complex
 #print axioms TauCeti.ApproximationNumber.approximationNumber_isLUB_finiteRestrictions_real

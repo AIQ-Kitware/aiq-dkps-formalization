@@ -7,7 +7,9 @@
 whole proof tree.
 -/
 
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 ## Comparator maintenance rule
@@ -20,6 +22,8 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
+public section
+
 namespace TauCeti.Matrix
 
 open scoped BigOperators ComplexOrder
@@ -28,9 +32,9 @@ open _root_.TauCeti.Matrix
 variable {𝕜 n : Type*} [RCLike 𝕜] [Fintype n] [DecidableEq n]
 
 /-- **Vanishing tail of the sorted eigenvalues** of a PSD matrix of rank `≤ d`. -/
-theorem PosSemidef.eigenvalues₀_eq_zero_of_rank_le {A : Matrix n n 𝕜}
+theorem _root_.Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le {A : Matrix n n 𝕜}
     (hA : A.PosSemidef) {d : ℕ} (hrank : A.rank ≤ d)
-    {i : Fin (Fintype.card n)} (hi : d ≤ (i : ℕ)) :
+    (i : Fin (Fintype.card n)) (hi : d ≤ (i : ℕ)) :
     hA.isHermitian.eigenvalues₀ i = 0 := by
   set hH := hA.isHermitian
   -- The index equivalence `eigenvalues₀ = eigenvalues ∘ e` from the definition.

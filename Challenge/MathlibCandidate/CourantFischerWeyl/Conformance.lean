@@ -11,7 +11,9 @@ min-max characterization is the proof vehicle (developed in
 whole proof tree.
 -/
 
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 ## Comparator maintenance rule
@@ -23,6 +25,8 @@ Implementations belong in the project modules imported by the paired
 statements and use only the permitted kernel dependencies.
 -/
 
+
+public section
 
 namespace TauCeti
 open scoped InnerProductSpace
@@ -199,7 +203,8 @@ private theorem eigenvalues_sub_le
     (RCLike.re_le_norm _).trans (norm_inner_le_norm _ _)
   have hbnd : ‖(S - T) x‖ * ‖x‖ ≤ ε := by
     have := hε x
-    rwa [hnx, mul_one] at this ⊢
+    rw [hnx, mul_one] at this ⊢
+    exact this
   calc hS.eigenvalues hn k - hT.eigenvalues hn k
       ≤ RCLike.re ⟪S x, x⟫_𝕜 - RCLike.re ⟪T x, x⟫_𝕜 := by linarith
     _ = RCLike.re ⟪(S - T) x, x⟫_𝕜 := hdiff
@@ -227,7 +232,7 @@ theorem abs_eigenvalues_sub_le
 symmetric operators differ by at most the operator norm of their difference. This is the
 leaf of the Courant-Fischer + Weyl development (it is proved through the discrete
 Courant-Fischer min-max characterization of the sorted eigenvalues). -/
-theorem abs_eigenvalues_sub_le_opNorm (hT : T.IsSymmetric) (hS : S.IsSymmetric)
+theorem _root_.LinearMap.IsSymmetric.abs_eigenvalues_sub_le_opNorm (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     (hn : finrank 𝕜 E = n) (k : Fin n) :
     |hT.eigenvalues hn k - hS.eigenvalues hn k|
       ≤ ‖LinearMap.toContinuousLinearMap (T - S)‖ := by

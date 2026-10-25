@@ -2,7 +2,7 @@
   "challenge_module": "Challenge.MathlibCandidate.GramRigidity.Conformance",
   "solution_module": "Challenge.MathlibCandidate.GramRigidity.Leaderboard",
   "theorem_names": [
-    "TauCeti.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq"
+    "TauCeti.gram_eq_iff_exists_linearIsometryEquiv"
   ],
   "permitted_axioms": [
     "propext",

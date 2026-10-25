@@ -7,7 +7,9 @@
 whole proof tree.
 -/
 
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 ## Comparator maintenance rule
@@ -20,25 +22,30 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
+public section
+
+-- Comparator statement holes are intentional; see Challenge/README.md.
+set_option warn.sorry false
+
 open scoped Matrix
 
 namespace TauCeti
 open scoped Matrix ENNReal
 open MeasureTheory
 
-variable {Ω : Type*} [MeasurableSpace Ω] {n : ℕ}
+variable {Ω m n : Type*} {mΩ : MeasurableSpace Ω} {μ : Measure Ω}
+  [Fintype m] [Fintype n]
 
-/-- **Empirical-Gram eigenvalue lower-bound concentration** (entrywise Chebyshev + Weyl). -/
-theorem measure_forall_eigenvalues₀_ge_ge
-    (P : Measure Ω) [IsProbabilityMeasure P]
-    (Shat : Ω → Matrix (Fin n) (Fin n) ℝ) (A : Matrix (Fin n) (Fin n) ℝ)
-    (hSherm : ∀ ω, (Shat ω).IsHermitian) (hAherm : A.IsHermitian)
-    (hmeas : ∀ k l, Measurable (fun ω => Shat ω k l))
-    (hint : ∀ k l, Integrable (fun ω => (Shat ω k l - A k l) ^ 2) P)
-    {v η : ℝ} (hη : 0 < η) (hmoment : ∀ k l, ∫ ω, (Shat ω k l - A k l) ^ 2 ∂P ≤ v) :
-    P {ω | ∀ k : Fin (Fintype.card (Fin n)),
-        hAherm.eigenvalues₀ k - (n : ℝ) * η ≤ (hSherm ω).eigenvalues₀ k}
-      ≥ 1 - ENNReal.ofReal ((n : ℝ) ^ 2 * v / η ^ 2) := by
+variable {𝕜 : Type*} [RCLike 𝕜] [DecidableEq n] [IsProbabilityMeasure μ]
+  {S : Ω → Matrix n n 𝕜} {A : Matrix n n 𝕜} {v η : ℝ}
+
+/-- Entrywise second moments give a simultaneous sorted-eigenvalue floor. -/
+theorem one_sub_le_measure_forall_eigenvalues₀_sub_le
+    (hS : ∀ ω, (S ω).IsHermitian) (hA : A.IsHermitian)
+    (hint : ∀ k l, Integrable (fun ω ↦ ‖S ω k l - A k l‖ ^ 2) μ)
+    (hmoment : ∀ k l, ∫ ω, ‖S ω k l - A k l‖ ^ 2 ∂μ ≤ v) (hη : 0 < η) :
+    1 - ENNReal.ofReal (Fintype.card n ^ 2 * v / η ^ 2) ≤
+      μ {ω | ∀ k, hA.eigenvalues₀ k - Fintype.card n * η ≤ (hS ω).eigenvalues₀ k} := by
   sorry
 
 end TauCeti

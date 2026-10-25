@@ -45,6 +45,18 @@ Principles:
 
 Any Mathlib gap/readiness claims below are historical observations from the 2026-06-14 audit, not a current submission queue.
 
+The October 25 module migration updates five comparator targets to their
+accepted declarations: `TauCeti.gram_eq_iff_exists_linearIsometryEquiv`,
+`LinearMap.IsSymmetric.abs_eigenvalues_sub_le_opNorm`,
+`TauCeti.one_sub_le_measure_forall_eigenvalues₀_sub_le`,
+`MeasureTheory.Measure.one_sub_measure_compl_le`, and
+`Matrix.PosSemidef.eigenvalues₀_eq_zero_of_rank_le`. Their conformance statements
+track the accepted hypotheses and binder structure. Intentional statement holes
+remain open; those fixtures locally disable only the diagnostic for intentional
+`sorry` placeholders so the project-wide warnings-as-errors build can include
+them. The solution modules remain subject to the comparator's axiom policy.
+
+
 ---
 
 ## Family 1 - `MathlibCandidate/` (historical candidate surfaces)

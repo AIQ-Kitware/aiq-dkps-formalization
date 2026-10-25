@@ -3,7 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.All
+module
+
+public import DavisKahan.All
 
 /-!
 # Regression invariants for the hostile-review repairs
@@ -31,6 +33,8 @@ lake build DavisKahan.Sources.DavisKahan1970.Audits.HostileReviewRegressions
 
 It is outside `DavisKahan.All` and inside `DavisKahan.Audits.All`.
 -/
+
+public section
 
 namespace TauCeti.DavisKahan1970.Audits.HostileReviewRegressions
 
@@ -167,7 +171,7 @@ theorem theorem3_1_dimension_clause_is_a_proposition
     {A₁ : Type v} [NormedAddCommGroup A₁] [InnerProductSpace 𝕜 A₁]
     {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] :
     TauCeti.DavisKahan1970.SameHilbertDimensionSum 𝕜 A₀ A₁ H =
-      Nonempty (WithLp 2 (A₀ × A₁) ≃ₗᵢ[𝕜] H) :=
+      Nonempty (WithLp 2 (A₀ × A₁) ≃ₗᵢ[𝕜] H) := by
   rfl
 
 end TauCeti.DavisKahan1970.Audits.HostileReviewRegressions

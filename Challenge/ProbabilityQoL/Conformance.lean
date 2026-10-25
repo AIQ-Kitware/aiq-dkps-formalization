@@ -7,7 +7,9 @@
 whole proof tree.
 -/
 
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 ## Comparator maintenance rule
@@ -20,12 +22,14 @@ statements and use only the permitted kernel dependencies.
 -/
 
 
+public section
+
 namespace TauCeti
 open MeasureTheory
 open scoped ENNReal
 
 /-- For a probability measure, `1 - μ sᶜ ≤ μ s`, with no measurability assumption on `s`. -/
-theorem one_sub_measure_compl_le {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω)
+theorem _root_.MeasureTheory.Measure.one_sub_measure_compl_le {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω)
     [IsProbabilityMeasure μ] (s : Set Ω) : 1 - μ sᶜ ≤ μ s := by
   rw [tsub_le_iff_right]
   calc (1 : ℝ≥0∞) = μ Set.univ := measure_univ.symm

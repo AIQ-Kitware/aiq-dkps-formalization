@@ -12,6 +12,10 @@ measurability at all.  The theorem belongs to roadmap topic **T19** (matrix
 spectra and spectral measurability), and the API review should settle whether it
 is the right general statement before a conformance pins it.
 -/
-import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
+module
+
+public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
+
+public section
 
 #print axioms TauCeti.Matrix.measurable_cfc_of_hermitian

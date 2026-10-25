@@ -2,7 +2,9 @@
 # Davis 1963 sharper total-rotation theorem (pending comparator challenge)
 -/
 
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 ## Comparator maintenance rule
@@ -12,6 +14,11 @@ this repository and do not count it as formalization debt. The proof belongs to 
 ordinary `ForMathlib` implementation imported by the paired leaderboard.
 -/
 
+
+public section
+
+-- Comparator statement holes are intentional; see Challenge/README.md.
+set_option warn.sorry false
 
 namespace TauCeti
 open scoped InnerProductSpace BigOperators

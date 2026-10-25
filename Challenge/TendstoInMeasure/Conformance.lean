@@ -7,7 +7,9 @@
 whole proof tree.
 -/
 
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 ## Comparator maintenance rule
@@ -19,6 +21,8 @@ Implementations belong in the project modules imported by the paired
 statements and use only the permitted kernel dependencies.
 -/
 
+
+public section
 
 namespace TauCeti
 open Filter MeasureTheory

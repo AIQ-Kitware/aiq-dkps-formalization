@@ -3,13 +3,17 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SinTheta.Natural.SpectralSubspace
-import DavisKahan.SinTheta.Natural.Real
-import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
-import DavisKahan.Sylvester.RealUnbounded
-import DavisKahan.SinTheta.Real.Specializations
-import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
-import DavisKahan.Sources.DavisKahan1970.PartIIIPresentation
+module
+
+public import DavisKahan.SinTheta.Natural.SpectralSubspace
+public import DavisKahan.SinTheta.Natural.Real
+public import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
+public import DavisKahan.Sylvester.RealUnbounded
+public import DavisKahan.SinTheta.Real.Specializations
+public import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
+public import DavisKahan.Sources.DavisKahan1970.PartIIIPresentation
+
+public section
 
 open TauCeti.DavisKahan.Sylvester
 

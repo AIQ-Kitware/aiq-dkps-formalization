@@ -17,3 +17,4 @@
 -- part of the ordinary claimed-mathematics build. Run the gate with
 -- `lake build Challenge`, and note that a rename touching staged declarations must
 -- do so, since a green default build does not cover this library.
+module

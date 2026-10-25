@@ -7,7 +7,9 @@
 whole proof tree.
 -/
 
-import Mathlib
+module
+
+public import Mathlib
 
 /-!
 ## Comparator maintenance rule
@@ -19,6 +21,8 @@ Implementations belong in the project modules imported by the paired
 statements and use only the permitted kernel dependencies.
 -/
 
+
+public section
 
 open scoped InnerProductSpace
 open scoped BigOperators Matrix ComplexConjugate ComplexOrder
@@ -50,7 +54,7 @@ variable {E R' : Type*} [SeminormedAddCommGroup E] [Ring R'] [Module R' E]
 
 @[simp]
 theorem LinearIsometryEquiv.ofEq_apply_mk (h : p = q) (x : E) (hx : x ∈ p) :
-    LinearIsometryEquiv.ofEq p q h ⟨x, hx⟩ = ⟨x, h ▸ hx⟩ :=
+    LinearIsometryEquiv.ofEq p q h ⟨x, hx⟩ = ⟨x, h ▸ hx⟩ := by
   rfl
 
 end
@@ -160,8 +164,6 @@ end GramSupport
 variable {𝕜 E F ι : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 E]
 
-namespace Matrix
-
 open _root_.Matrix
 
 /--
@@ -169,7 +171,7 @@ open _root_.Matrix
 finite-dimensional inner product space have equal Gram matrices if and only if
 a linear isometry equivalence of the ambient space maps one family to the other.
 -/
-theorem gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq {φ ψ : ι → E} :
+theorem gram_eq_iff_exists_linearIsometryEquiv {φ ψ : ι → E} :
     gram 𝕜 φ = gram 𝕜 ψ ↔ ∃ W : E ≃ₗᵢ[𝕜] E, ∀ i, W (φ i) = ψ i := by
   constructor
   · intro hg
@@ -179,5 +181,4 @@ theorem gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq {φ ψ : ι → E} :
     ext i j
     simp [gram_apply, ← hW i, ← hW j, LinearIsometryEquiv.inner_map_map]
 
-end Matrix
 end TauCeti

@@ -17,31 +17,38 @@ explicit red comparator obligations rather than being hidden by a nearby
 compiled specialization.
 -/
 
-import DavisKahan.FiniteDimensional.Core.All
-import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
-import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
-import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-import DavisKahan.BoundedOperator.Problem
-import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
-import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
-import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
-import DavisKahan.Geometry.Halmos.CrossedDefectGap
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
-import DavisKahan.DoubleAngle.UnboundedIdeal
-import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
-import DavisKahan.BoundedOperator.TrialResidual
-import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
-import DavisKahan.Sylvester.Unbounded.FormBoundedGap
-import DavisKahan.Sylvester.Spectrum
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
-import DavisKahan.TanTheta.Theorem63FiniteSource
-import DavisKahan.TanTheta.Theorem63InfiniteTrial
-import DavisKahan.FiniteDimensional.DirectRotation.Basic
-import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
+module
+
+public import DavisKahan.FiniteDimensional.Core.All
+public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
+public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
+public import DavisKahan.BoundedOperator.Problem
+public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
+public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
+public import DavisKahan.Geometry.Halmos.CrossedDefectGap
+public import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
+public import DavisKahan.DoubleAngle.UnboundedIdeal
+public import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
+public import DavisKahan.BoundedOperator.TrialResidual
+public import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
+public import DavisKahan.Sylvester.Unbounded.FormBoundedGap
+public import DavisKahan.Sylvester.Spectrum
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
+public import DavisKahan.TanTheta.Theorem63FiniteSource
+public import DavisKahan.TanTheta.Theorem63InfiniteTrial
+public import DavisKahan.FiniteDimensional.DirectRotation.Basic
+public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
+
+public section
+
+-- Comparator statement holes are intentional; see Challenge/README.md.
+set_option warn.sorry false
 
 open TauCeti.DavisKahan.Angle
 
