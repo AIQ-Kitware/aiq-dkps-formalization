@@ -1140,11 +1140,12 @@ def beamFiniteDataCertificate (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
 
 /-- The two-term Ky Fan ideal family over `ℂ`, the gauge equation (9.4) is stated in. -/
 def beamKyFanTwo : TauCeti.SymmetricOperatorIdealFamily.{0, 0} ℂ :=
-  kyFanSymmetricIdealFamily (𝕜 := ℂ) 2 (by norm_num)
+  (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 2 (by norm_num)).toSymmetricOperatorIdealFamily
 
 /-- The two-term Ky Fan family is a complete operator ideal family. -/
-instance : beamKyFanTwo.toOperatorIdealFamily.IsComplete :=
-  isComplete_kyFanSymmetricIdealFamily (𝕜 := ℂ) 2 (by norm_num)
+instance : beamKyFanTwo.toOperatorIdealFamily.IsComplete := by
+  change (OperatorIdealFamily.kyFan ℂ 2 (by norm_num)).IsComplete
+  infer_instance
 
 /-- The two-term Ky Fan gauge of any bounded operator is at most twice its norm: both
 approximation numbers in the sum are bounded by the operator norm. -/
@@ -1157,17 +1158,13 @@ theorem beamKyFanTwo_gaugeReal_le (T : BeamL2 →L[ℂ] BeamL2) :
     have h0 := T.approximationNumber_le_norm 0
     have h1 := T.approximationNumber_le_norm 1
     linarith
-  have hnonneg : 0 ≤ ContinuousLinearMap.kyFanGaugeReal T 2 :=
-    le_trans (norm_nonneg T)
-      (opNorm_le_kyFanApproximationGauge (k := 2) (by norm_num) T)
-  have hval : beamKyFanTwo.gaugeReal T
-      = (ENNReal.ofReal (kyFanApproximationGauge 2 T)).toReal := rfl
-  rw [hval, kyFanApproximationGauge_eq_kyFanGauge, ENNReal.toReal_ofReal hnonneg]
+  change (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 2 (by norm_num)).gauge T ≤ _
+  rw [KyFanDominantIdealFamily.kyFan_gauge]
   exact hsum
 
 /-- Every bounded operator lies in the two-term Ky Fan ideal. -/
 theorem beamKyFanTwo_mem (T : BeamL2 →L[ℂ] BeamL2) : beamKyFanTwo.Mem T :=
-  gauge_kyFanSymmetricIdealFamily_ne_top (𝕜 := ℂ) 2 (by norm_num) T
+  KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) 2 (by norm_num) T
 
 /-- **The two-term Ky Fan sum of the double-angle sines** between the free beam's
 zero-mode subspace and the perturbed operator's low subspace. -/
@@ -1705,7 +1702,7 @@ theorem beamSinThetaSum_le (ε : ℝ) :
     (selfAdjointSpectralRestriction_isSelfAdjoint (beamPerturbed ε)
       (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet)
     (β := 0) (α := 0) (δ := 500) le_rfl (by norm_num) hlow hhigh hspec
-    (gauge_kyFanSymmetricIdealFamily_ne_top (𝕜 := ℂ) 2 (by norm_num) _)
+    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) 2 (by norm_num) _)
   have hF₁norm : ‖selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
       (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet‖ ≤ 1 :=
     opNorm_le_one_of_isometry
@@ -1721,9 +1718,7 @@ theorem beamSinThetaSum_le (ε : ℝ) :
         [CompleteSpace G] (T : G →L[ℂ] beamTrial),
         beamKyFanTwo.gaugeReal T = kyFanApproximationGauge 2 T := by
       intro G _ _ _ T
-      have hval : beamKyFanTwo.gaugeReal T
-          = (ENNReal.ofReal (kyFanApproximationGauge 2 T)).toReal := rfl
-      rw [hval, ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg 2 T)]
+      exact KyFanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) 2 (by norm_num) T
     rw [hgauge]
     calc kyFanApproximationGauge 2
           (ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl) ∘L

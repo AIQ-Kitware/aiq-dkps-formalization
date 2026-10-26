@@ -50,9 +50,7 @@ noncomputable def kyFanNormalizedUnitaryInvariantNorm
   toFanDominantIdealFamily := (KyFanDominantIdealFamily.kyFan k hk).toFanDominantIdealFamily
   gauge_rankOne_eq_one := by
     intro E F _ _ _ _ _ _ V hVnorm hVrank
-    show ((kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge V).toReal = 1
-    rw [gauge_kyFanSymmetricIdealFamily, ENNReal.toReal_ofReal
-      (kyFanApproximationGauge_nonneg k V)]
+    rw [KyFanDominantIdealFamily.kyFan_gauge]
     have hsum : kyFanApproximationGauge k V
         = ∑ n ∈ Finset.range k, approximationSingularValue n V := by
       change V.kyFanGaugeReal k = _
@@ -75,7 +73,7 @@ theorem gauge_kyFanNormalizedUnitaryInvariantNorm
     (A : E →L[𝕜] F) :
     (kyFanNormalizedUnitaryInvariantNorm (𝕜 := 𝕜) k hk).gauge A
       = kyFanApproximationGauge k A :=
-  ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg k A)
+  KyFanDominantIdealFamily.kyFan_gauge k hk A
 
 /-- Every bounded operator lies in the Ky Fan member's ideal. -/
 theorem mem_kyFanNormalizedUnitaryInvariantNorm
@@ -85,7 +83,7 @@ theorem mem_kyFanNormalizedUnitaryInvariantNorm
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     (kyFanNormalizedUnitaryInvariantNorm (𝕜 := 𝕜) k hk).Mem A :=
-  gauge_kyFanSymmetricIdealFamily_ne_top k hk A
+  KyFanDominantIdealFamily.kyFan_mem k hk A
 
 /-- **The source norm class is inhabited over `ℂ`.**  So every source-exact
 façade quantifying over `NormalizedUnitaryInvariantNorm ℂ` says something. -/

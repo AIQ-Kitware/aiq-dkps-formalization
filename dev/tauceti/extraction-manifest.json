@@ -2359,18 +2359,22 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
-      "provenance_class": "upstreamed family and completeness proof; the local symmetric-family adapter now lives with the paper-facing SymmetricNormIdeal consumer",
+      "provenance_class": "accepted family/completeness overlap; duplicate DKPS construction revalidated and removed October 25, with the adjoint-invariant structure assembled only inside the source norm package",
       "direct_dependencies": [
         "Mathlib",
-        "TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic"
+        "TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic",
+        "TauCeti.Analysis.OperatorIdeal.Family.KyFan.Dominance"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric"
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric",
+        "DavisKahan.InfiniteDimensional.Ideals.Symmetric",
+        "DavisKahan.Sources.DavisKahan1970.Ideals.NormalizedUnitaryInvariantNormExamples",
+        "DavisKahan.Specialized.FreeBeam.BeamSection9"
       ],
       "status": "accepted-upstream-local-copy-removed",
       "upstream_pr": null,
-      "migration_note": "Deleted the duplicate local Ky Fan family laws and completeness proof. DavisKahan.InfiniteDimensional.Ideals.Symmetric now applies TauCeti.OperatorIdealFamily.kyFan directly through a paper-layer symmetric-family adapter."
+      "migration_note": "October 25 revalidation at DKPS 4caeeee43 found that the ScalarGeneric duplicate family/completeness body still existed despite the previous retirement label. It is now deleted together with its gauge/carrier wrappers and the separate private SymmetricNormIdeal adapter. The source KyFanDominantIdealFamily.kyFan is constructed directly from accepted OperatorIdealFamily.kyFan, its IsComplete/IsKyFanDominant instances and gauge_adjoint. Source normalization and the beam consume that package. The native constructor is rectangular, not a separately accepted symmetric constructor; the source package assembles the latter structure without another reusable adapter. Accepted Tau Ceti efded067c28ffca3483fd731674eb13b42543fbb; this statement comparison alone does not establish proof descent."
     },
     {
       "source_module": "ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass",

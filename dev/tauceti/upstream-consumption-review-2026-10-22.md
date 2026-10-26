@@ -874,3 +874,27 @@ constructor is an operator-ideal family; inspect and preserve any additional
 unmerged symmetry proofs rather than assuming a native symmetric constructor.
 The real-valued approximation-number views also remain an explicit
 representation obligation. Neither is claimed complete by this checkpoint.
+
+### October 25: direct Ky Fan family construction and completeness
+
+The duplicate finite Ky Fan family, its gauge/carrier accessors, and its direct
+completeness proof are removed from `ApproximationNumbers.ScalarGeneric`.
+The existing source norm package stores accepted `OperatorIdealFamily.kyFan`
+and consumes accepted completeness, dominance, and adjoint invariance directly.
+No replacement generic symmetric adapter is introduced. The separate private
+adapter in the square-ideal catalogue is also removed. Source normalization
+and the beam example consume the native-backed source package; their public
+mathematical statements are preserved.
+
+The extraction manifest previously overstated this retirement: the old body
+was still present at `4caeeee43`. Its entry now records the actual implementation
+and the distinction between the accepted rectangular family and the symmetric
+structure assembled within the paper package. Exact scope and provenance are
+recorded in the contribution census. Removed namespace-map destinations are
+empty, with no forwarding aliases.
+
+The focused build passed (8,096 jobs), including all edited source consumers,
+after the cache fetch. Full-build validation will be recorded when complete.
+The remaining real approximation-number and norm views, transitional carrier
+API, and local Fan-dominance records still require representation migrations;
+this checkpoint does not claim the overall upstream-consumption goal complete.

@@ -8,6 +8,7 @@ module
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Dominance
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families
@@ -22,8 +23,8 @@ scalar-specific implementations, avoiding the former real-proof import cycle.
 * `HasApproximationNumberStrongCutoff`:
   the two analytic capabilities, separated from `RCLike` because that class is
   open while these facts are established for `ℝ` and `ℂ`.
-* `kyFanSymmetricIdealFamily`: the finite Ky Fan gauge as a **canonical**
-  `TauCeti.SymmetricOperatorIdealFamily`, with a completeness instance.
+* `KyFanDominantIdealFamily.kyFan`: the source norm package constructed from
+  Tau Ceti's accepted Ky Fan family, dominance, and completeness results.
 * `KyFanDominantIdealFamily`: a complete symmetric ideal family dominated by
   the finite Ky Fan gauges — the hypothesis of the infinite-dimensional
   Davis--Kahan estimates — together with its two instances, `operatorNorm` and
@@ -158,126 +159,6 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto
   exact tendsto_finsetSum (Finset.range k)
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto
       hPproj hP n K)
-
-/-! ### The finite Ky Fan gauges as a canonical ideal family -/
-
-/-- The finite Ky Fan gauge `∑_{n < k} aₙ` as a **canonical** symmetric operator
-ideal family (`TauCeti.SymmetricOperatorIdealFamily`).
-
-The gauge is `ENNReal.ofReal` of `kyFanApproximationGauge k`, so it is finite
-everywhere — every bounded operator is a member
-(`carrier_kyFanSymmetricIdealFamily`) — and the four ideal laws are the
-real-valued ones transported along `ENNReal.ofReal`.  Only one of them,
-subadditivity, uses the accepted scalar-generic Ky Fan triangle inequality.
-
-`hk : 0 < k` is needed for exactly one law: `enorm_le_gauge`.  At `k = 0` the
-gauge is identically `0`, which satisfies the other three but is not a norm.
-
-**Intended destination.**  This belongs beside `TauCeti.SymmetricOperatorIdealFamily.opNorm` in
-`ForTauCeti/Analysis/OperatorIdeal/Family/`.  It cannot live there yet, because
-the real-valued `kyFanApproximationGauge` presentation is defined in this library.
-The corresponding accepted Ky Fan family is the next representation to consume. -/
-@[expose]
-noncomputable def kyFanSymmetricIdealFamily
-    (k : ℕ) (hk : 0 < k) :
-    TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
-  gauge A := ENNReal.ofReal (kyFanApproximationGauge k A)
-  gauge_add_le A B := by
-    rw [← ENNReal.ofReal_add (kyFanApproximationGauge_nonneg k A)
-      (kyFanApproximationGauge_nonneg k B)]
-    exact ENNReal.ofReal_le_ofReal (kyFanApproximationGauge_add_le k A B)
-  gauge_smul c A := by
-    rw [kyFanApproximationGauge_smul, ENNReal.ofReal_mul (norm_nonneg c), ofReal_norm]
-  enorm_le_gauge A := by
-    rw [← ofReal_norm]
-    exact ENNReal.ofReal_le_ofReal (opNorm_le_kyFanApproximationGauge hk A)
-  gauge_comp_le L A R := by
-    rw [← ofReal_norm, ← ofReal_norm,
-      ← ENNReal.ofReal_mul (norm_nonneg L),
-      ← ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) (kyFanApproximationGauge_nonneg k A))]
-    exact ENNReal.ofReal_le_ofReal (kyFanApproximationGauge_comp_le k L A R)
-  gauge_adjoint A := by rw [kyFanApproximationGauge_adjoint]
-
-/-- The gauge of the Ky Fan symmetric family is the `ℝ≥0∞` transport of the Ky
-Fan approximation gauge, definitionally. -/
-@[simp]
-theorem gauge_kyFanSymmetricIdealFamily
-     (k : ℕ) (hk : 0 < k)
-    (A : E →L[𝕜] F) :
-    (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A =
-      ENNReal.ofReal (kyFanApproximationGauge k A) := rfl
-
-/-- The Ky Fan gauge is never `∞`: it is `ENNReal.ofReal` of a real number.
-This is what makes every bounded operator a member of the finite Ky Fan ideal. -/
-theorem gauge_kyFanSymmetricIdealFamily_ne_top
-     (k : ℕ) (hk : 0 < k)
-    (A : E →L[𝕜] F) :
-    (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A ≠ ∞ :=
-  ENNReal.ofReal_ne_top
-
-/-- Every bounded operator lies in the finite Ky Fan ideal: the gauge is a
-finite sum of approximation numbers, so it never reaches `∞`. -/
-@[simp]
-theorem carrier_kyFanSymmetricIdealFamily
-     (k : ℕ) (hk : 0 < k) :
-    (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.carrier
-      (E := E) (F := F) = ⊤ := by
-  ext A
-  simp
-
-/-- The real-valued Ky Fan gauge is recovered from the canonical one. -/
-@[simp]
-theorem toReal_gauge_kyFanSymmetricIdealFamily
-     (k : ℕ) (hk : 0 < k)
-    (A : E →L[𝕜] F) :
-    ((kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A).toReal =
-      kyFanApproximationGauge k A :=
-  ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg k A)
-
-/-- The finite Ky Fan ideal is complete.
-
-The ideal is all of `E →L[𝕜] F` and its norm is *equivalent* to the operator
-norm — `‖A‖ ≤ ∑_{n<k} aₙ(A) ≤ k‖A‖` — so completeness is inherited from the
-bounded operators.  Both inequalities are needed: the first turns an ideal-norm
-Cauchy sequence into an operator-norm one, the second turns the operator-norm
-limit back into an ideal-norm limit. -/
-instance isComplete_kyFanSymmetricIdealFamily
-     (k : ℕ) (hk : 0 < k) :
-    (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.IsComplete where
-  completeSpace_carrier := by
-    intro E F _ _ _ _ _ _
-    have hnorm : ∀ x : (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.Elem E F,
-        ‖x‖ = kyFanApproximationGauge k x.val :=
-      fun x => by
-        rw [OperatorIdealFamily.Elem.norm_def, gauge_kyFanSymmetricIdealFamily]
-        exact ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg k _)
-    refine Metric.complete_of_cauchySeq_tendsto fun a ha => ?_
-    have hop : CauchySeq fun n => (a n).val := by
-      rw [Metric.cauchySeq_iff] at ha ⊢
-      intro ε hε
-      obtain ⟨M, hM⟩ := ha ε hε
-      refine ⟨M, fun m hm n hn => lt_of_le_of_lt ?_ (hM m hm n hn)⟩
-      rw [dist_eq_norm, dist_eq_norm, hnorm]
-      exact opNorm_le_kyFanApproximationGauge hk _
-    obtain ⟨L, hL⟩ := cauchySeq_tendsto_of_complete hop
-    refine ⟨TauCeti.OperatorIdealFamily.Elem.mk
-      ((OperatorIdealFamily.mem_carrier_iff
-        (N := (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily)).mpr
-        (gauge_kyFanSymmetricIdealFamily_ne_top k hk L)), ?_⟩
-    have hkR : (0 : ℝ) < k := by exact_mod_cast hk
-    rw [Metric.tendsto_atTop] at hL ⊢
-    intro ε hε
-    obtain ⟨M, hM⟩ := hL (ε / k) (div_pos hε hkR)
-    refine ⟨M, fun n hn => ?_⟩
-    rw [dist_eq_norm, hnorm]
-    rw [OperatorIdealFamily.Elem.val_sub, OperatorIdealFamily.Elem.val_mk]
-    calc kyFanApproximationGauge k ((a n).val - L)
-        ≤ (k : ℝ) * ‖(a n).val - L‖ :=
-          kyFanApproximationGauge_le_nat_mul_opNorm k _
-      _ < (k : ℝ) * (ε / k) := by
-          refine mul_lt_mul_of_pos_left ?_ hkR
-          simpa [dist_eq_norm] using hM n hn
-      _ = ε := by field_simp
 
 /-- A **complete symmetric operator ideal family dominated by the finite Ky Fan
 gauges**: the ideal norm decreases whenever every finite Ky Fan gauge does.
@@ -454,11 +335,17 @@ at index `k` is the conclusion. -/
 noncomputable def kyFan
     (k : ℕ) (hk : 0 < k) :
     KyFanDominantIdealFamily.{u, v} 𝕜 where
-  toSymmetricOperatorIdealFamily := kyFanSymmetricIdealFamily k hk
-  isComplete := inferInstance
+  toSymmetricOperatorIdealFamily :=
+    { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
+      gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }
+  isComplete := by
+    change (OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
+    infer_instance
   gauge_le_of_forall_kyFanApproximationGauge_le := by
     intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hmajor
-    exact ENNReal.ofReal_le_ofReal (hmajor k)
+    apply OperatorIdealFamily.gauge_le_of_forall_kyFanGauge_le
+    intro j
+    exact_mod_cast hmajor j
 
 /-! The next two are stated through `Mem`/`gauge`, the accessors.
 
@@ -475,15 +362,18 @@ historical record being deleted. -/
 @[simp]
 theorem kyFan_mem
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
-    (kyFan (𝕜 := 𝕜) k hk).Mem K :=
-  gauge_kyFanSymmetricIdealFamily_ne_top k hk K
+    (kyFan (𝕜 := 𝕜) k hk).Mem K := by
+  change (OperatorIdealFamily.kyFan 𝕜 k hk).gauge K ≠ ∞
+  simp
 
 /-- The concrete gauge of the fixed finite Ky Fan family. -/
 @[simp]
 theorem kyFan_gauge
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
-    (kyFan (𝕜 := 𝕜) k hk).gauge K = kyFanApproximationGauge k K :=
-  toReal_gauge_kyFanSymmetricIdealFamily k hk K
+    (kyFan (𝕜 := 𝕜) k hk).gauge K = kyFanApproximationGauge k K := by
+  change ((OperatorIdealFamily.kyFan 𝕜 k hk).gauge K).toReal = _
+  rw [OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal]
+  rfl
 
 end KyFanDominantIdealFamily
 

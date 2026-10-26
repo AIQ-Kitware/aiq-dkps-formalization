@@ -252,23 +252,15 @@ noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
     infer_instance
   exact ofCanonical N
 
-/-- The symmetric-family adapter needed by `ofCanonical`; its gauge and completeness are the
-canonical TauCeti Ky Fan family. -/
-private noncomputable def kyFanSymmetricOperatorIdealFamily (k : ℕ) (hk : 0 < k) :
-    TauCeti.SymmetricOperatorIdealFamily 𝕜 where
-  toOperatorIdealFamily := TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk
-  gauge_adjoint := by
-    intro E F _ _ _ _ _ _ A
-    simp
-
 /-- Ky Fan `k` gauge for positive `k`. -/
 noncomputable def kyFan
     (k : ℕ) (hk : 0 < k) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  letI : (kyFanSymmetricOperatorIdealFamily k hk).toOperatorIdealFamily.IsComplete := by
+  let N := (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
+  letI : N.toOperatorIdealFamily.IsComplete := by
     change (TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
     infer_instance
-  exact ofCanonical (kyFanSymmetricOperatorIdealFamily k hk)
+  exact ofCanonical N
 
 /-- Unitary invariance of a symmetric ideal norm.
 

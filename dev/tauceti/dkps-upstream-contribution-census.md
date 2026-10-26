@@ -1100,3 +1100,47 @@ The full comparator signature preflight passed for all 42 implemented targets
 on universe signatures and full types; the three declared absent solutions
 remain skipped. This is signature validation, not an external comparator run
 or a claim that the full source paper is complete.
+
+### October 25: retire the duplicate Ky Fan ideal construction
+
+Revalidation at DKPS `4caeeee43` found that
+`ApproximationNumbers.ScalarGeneric` still constructed the finite Ky Fan family
+and reproved its completeness, despite an older extraction-manifest label
+describing that body as retired. The actual duplicate is now removed, together
+with the four local gauge/carrier accessors. Historical namespace-map entries
+record these declarations as removed rather than forwarding to aliases.
+
+Accepted `TauCeti.OperatorIdealFamily.kyFan` in
+`TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic` supplies the four ideal laws
+and finite gauge for every positive `k`, over arbitrary `RCLike` fields and
+complete inner-product sources and targets. Its `kyFan_isComplete` instance
+supplies completeness, with independent source/target universes. Accepted
+`Family.KyFan.Dominance` supplies `isKyFanDominant_kyFan` and the adjoint-invariance
+theorem `OperatorIdealFamily.gauge_adjoint` on a single universe.
+
+The source-specific `KyFanDominantIdealFamily.kyFan` now stores that accepted
+family directly, obtains completeness by instance search, and obtains its
+dominance and adjoint fields from accepted theorems. Tau Ceti's constructor is
+an operator-ideal family, not a separately accepted symmetric constructor: the
+extra symmetric structure is assembled inside the existing source norm package.
+No replacement generic adapter, constructor alias, or forwarding export is added.
+The private symmetric-family adapter in `InfiniteDimensional.Ideals.Symmetric`
+is also removed; the square-ideal specialization consumes the source package.
+
+Source rank-one normalization and the two-term beam example use the accepted
+family through that package. Their mathematical statements and source scope
+remain intact. The native gauge is an `ENNReal` coercion of the canonical
+`NNReal` Ky Fan sum; the remaining real source views are numeric coercions.
+The explicitly noncompiling historical exploration snapshot is preserved as
+history, not counted as a current consumer or compiler evidence.
+
+Pre-retirement source and the Jon Crall/GPT-5.6 Thinking attribution remain at
+`4caeeee43`; Kitware Apache-2.0 licensing is preserved. Accepted statements were
+compared at unchanged Tau Ceti pin `efded067c28ffca3483fd731674eb13b42543fbb`.
+This records direct consumption and mathematical overlap, without inferring
+historical proof descent from matching statements. The extraction manifest now
+describes the actual replacement and corrects its prior retirement overstatement.
+
+The focused build passed (8,096 jobs), including source normalization, square
+ideals, and the beam consumer, after the cache fetch. Full-build validation
+will be recorded after it finishes. Papers and visualizations are untouched.
