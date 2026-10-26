@@ -8,6 +8,7 @@ module
 public import DavisKahan.Geometry.Polar.PairedPhase
 public import DavisKahan.Geometry.Halmos.CrossedDefectGap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteTransportDefects
 public import Mathlib.LinearAlgebra.Dimension.RankNullity
 
 /-!
@@ -112,5 +113,29 @@ theorem exists_finite_rank_transport_of_projection_sub_rank_le_of_defect_balance
   let : FiniteDimensional 𝕜 (halmosTargetDefect K L) := htarget
   exact exists_finite_rank_transport_of_projection_sub_rank_le K L
     ((crossedDefectsEquivalent_iff_finrank_eq K L).mpr hbalance) n hD
+
+/-- **Finite-rank transport feasibility.** A pair is in one orbit of the
+finite-rank restricted unitary group exactly when its projection
+difference has finite rank and its finite crossed defects are balanced.
+Both scalar fields and arbitrary ambient Hilbert dimensions are allowed. -/
+theorem finite_rank_transport_iff_projection_sub_finite_rank_and_defect_balance
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection] :
+    (∃ R : H ≃ₗᵢ[𝕜] H, K.map R.toLinearMap = L ∧
+      ∃ n : ℕ, (1 - R.toLinearMap).rank ≤ n) ↔
+    (∃ n : ℕ, (K.starProjection - L.starProjection).rank ≤ n) ∧
+      Module.finrank 𝕜 (halmosSourceDefect K L) =
+        Module.finrank 𝕜 (halmosTargetDefect K L) := by
+  constructor
+  · rintro ⟨R, hmap, n, hR⟩
+    obtain ⟨hD, _, _, hbalance⟩ :=
+      K.finite_crossedDefect_balance_of_finite_rank_transport L R hmap n hR
+    refine ⟨hD, ?_⟩
+    change Module.finrank 𝕜 (K ⊓ Lᗮ : Submodule 𝕜 H) =
+      Module.finrank 𝕜 (Kᗮ ⊓ L : Submodule 𝕜 H)
+    rwa [inf_comm Kᗮ L]
+  · rintro ⟨⟨n, hD⟩, hbalance⟩
+    obtain ⟨R, hmap, hR⟩ :=
+      exists_finite_rank_transport_of_projection_sub_rank_le_of_defect_balance K L n hD hbalance
+    exact ⟨R, hmap, n, hR⟩
 
 end TauCeti.DavisKahan

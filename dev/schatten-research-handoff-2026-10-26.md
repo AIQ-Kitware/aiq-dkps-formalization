@@ -479,3 +479,30 @@ Next obligations: prove necessity of defect balance for compact/ideal
 transporters, and construct/generalize ideal attainers when the projection
 difference is Schatten but not finite-rank. Current pair hypotheses are
 sufficient; an iff feasibility classification is not yet claimed.
+
+## Finite-rank feasibility is now an iff
+
+`DirectRotationRank.finite_rank_transport_iff_projection_sub_finite_rank_and_defect_balance`
+proves the complete finite-rank feasibility criterion, over both scalar
+fields and arbitrary Hilbert dimension: a finite-rank perturbation of
+identity transports the subspaces iff their projection difference has
+finite rank and their crossed-defect dimensions agree. The sufficiency
+constructs a completed direct rotation with displacement rank bounded by
+the projection difference rank. Necessity identifies both global defects
+with the actual defects of a finite reducing section.
+
+`Submodule.finite_crossedDefect_balance_of_finite_rank_transport`
+also proves that both defects really are finite-dimensional and the
+projection difference has finite rank. Its complement/intersection and
+support-range lemmas have no ambient completeness or dimension assumption.
+Focused build, including the exact pair optimizer consumer, passed
+(7,386 jobs).
+
+This iff currently concerns the finite-rank restricted unitary group.
+To exclude finite Schatten cost for unbalanced finite-rank projection
+pairs, next prove that a compact-displacement transporter for such a pair
+can be replaced by a finite-rank-displacement transporter. A useful route
+is to approximate it by a finite-rank unitary, use a small-gap direct
+rotation to correct the target, and note that the target correction has
+finite-rank projection difference. This avoids assuming a Fredholm-index
+identity that has not yet been connected to the projection API.
