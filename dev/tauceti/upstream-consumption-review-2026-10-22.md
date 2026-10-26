@@ -808,3 +808,28 @@ The Eckart–Young/rank retirement passed the focused consumer build (7,644 jobs
 including explicit compilation of accepted `FiniteDiagonal`, and the full default
 build (21,031 jobs), with warnings treated as errors, after the respective cache
 fetches. The full build also validates removal of the unused core re-export.
+
+
+The combined min–max and Eckart–Young retirements remove a net 1,083 Lean lines
+and four donor modules. Explicit `Challenge` and `DavisKahan.Audits.All` builds
+passed (20,807 jobs), after the cache fetch. The three original untracked files
+remain untouched and no paper or visualization files were edited.
+
+The strongest next unconsumed accepted result is
+`TauCeti.HasMinMaxLowerBound.of_completeSpace` in accepted
+`ApproximationNumber.MinMax`: it proves converse localization for any complete
+`RCLike` inner-product source and a possibly incomplete seminormed inner-product
+target. Local `MinMaxUpper` still reproves the complex threshold statement;
+`MinMaxReal` reproves it through complexification. Their consumers use the
+separate real-valued predicate `ContinuousLinearMap.HasMinMaxLowerBound` and
+`HasMinMaxLowerBoundEverywhere` class in `FiniteRestriction`. The next migration
+must consume the native predicate/result, update those consumers, and remove
+the field-specific proofs and obsolete interfaces without leaving aliases.
+Preserve the strict threshold `0 ≤ r < aₙ(T)` and `n + 1` witness count. This
+comparison establishes an available next step, not completion of that migration.
+
+The full signature preflight matched all 42 implemented comparator targets
+on universe signatures and full types. The three explicitly declared missing
+solutions remain skipped. No external comparator or source-completeness claim
+is inferred; the auxiliary local-only name parser retains its documented
+imported-declaration limitations.

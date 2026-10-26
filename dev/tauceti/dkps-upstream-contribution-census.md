@@ -1033,3 +1033,17 @@ The Eckart–Young/rank retirement passed the focused consumer build (7,644 jobs
 including explicit compilation of accepted `FiniteDiagonal`, and the full default
 build (21,031 jobs), with warnings treated as errors, after the respective cache
 fetches. The full build also validates removal of the unused core re-export.
+
+
+The min–max and Eckart–Young checkpoints (`6f7249290`, `cac7793ee`) passed explicit
+`Challenge` and `DavisKahan.Audits.All` builds (20,807 jobs), after the cache fetch.
+Together they remove a net 1,083 Lean lines and four donor modules, without new
+compatibility definitions. The remaining converse min–max predicate and global
+capability class are not retired by these checkpoints; accepted
+`TauCeti.HasMinMaxLowerBound.of_completeSpace` is the next documented comparison.
+
+The full signature preflight matched all 42 implemented comparator targets
+on universe signatures and full types. The three explicitly declared missing
+solutions remain skipped. No external comparator or source-completeness claim
+is inferred; the auxiliary local-only name parser retains its documented
+imported-declaration limitations.
