@@ -37,15 +37,18 @@ the cross terms vanish by orthogonality, leaving
 
 `re ⟪R (P x), P x⟫ + κ ‖x - P x‖²`.
 
+The bounded sine-theta consumer is now provided directly by
+`TauCeti.Analysis.InnerProductSpace.Projection.SinTheta` and its native
+`Projection.Block` reduced-extension API. The local pointwise result retains
+arbitrary linear maps, including maps not known to be continuous.
+
 ## Design
 
 The statement is about the **value** `R (P x) + κ • (x - P x)` rather than about
-a bundled operator.  That is deliberate and it is what lets one lemma serve both
-callers: one packages its extension as `E →L[𝕜] E` and needs no
-finite-dimensionality, the other arrives with `R : E →ₗ[𝕜] E` and reaches
-`E →L[𝕜] E` through `toContinuousLinearMap`, which does.  Phrased pointwise,
-neither packaging appears, and the caller discharges the one-line `simp` that its
-operator applied at `x` is that value.
+a bundled operator. It applies directly to `R : E →ₗ[𝕜] E`, without continuity
+or finite-dimensionality. The remaining finite-dimensional sine-theta consumer
+packages its extension through `toContinuousLinearMap` and identifies the
+pointwise value with a one-line `simp`. Bounded consumers use the native API.
 
 Only **invariance** of `W` under `R` is assumed — not `Reduces`, and nothing
 about `Wᗮ`.  That is all the argument uses.

@@ -17,8 +17,8 @@ public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 /-!
 # Davis--Kahan `sin Θ`: residual, directed and projector-difference bounds
@@ -250,7 +250,8 @@ form).**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried spectrum
 
 `‖P_V P_U‖` is the sine of the directed angle between the high `A`-block `U` and
 the high `B`-block `Vᗮ`.  **The finite result is dispatched from the
-arbitrary-dimension lemma** `Submodule.sinTheta_directed_coercive`: the finite
+arbitrary-dimension theorem**
+`Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div`: finite
 operators are converted to bounded operators, and the *only* finite-dimensional
 ingredient is the eigenbasis spectrum ⟹ coercivity bridge
 (`lowerFormBound_of_pointSpectrumIn` / `upperFormBound_of_pointSpectrumIn`).  The whole sin-Θ
@@ -270,17 +271,14 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
   set Bc : E →L[𝕜] E := B.toContinuousLinearMap with hBc
   have hApp : ∀ x, Ac x = A x := fun _ => rfl
   have hBpp : ∀ x, Bc x = B x := fun _ => rfl
-  have hAself : Ac.IsSymmetric := fun x y => hA x y
   have hBself : Bc.IsSymmetric := fun x y => hB x y
-  have hUred : Submodule.IsReducing U Ac :=
-    (hAself.isReducing_iff_mem_invtSubmodule U).mpr hU
-  have hVred : Submodule.IsReducing V Bc :=
-    (hBself.isReducing_iff_mem_invtSubmodule V).mpr hV
   have hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
     fun x hx => lowerFormBound_of_pointSpectrumIn hA hU hUspec x hx
   have hVc : ∀ x ∈ V, RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
     fun x hx => upperFormBound_of_pointSpectrumIn hB hV hVspec x hx
-  have hExt := Submodule.sinTheta_directed_coercive hAself hBself hUred hVred hg hUc hVc
+  have hExt := Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div
+    (A := Ac) (B := Bc) U V hBself (fun x hx => hU x hx) (fun x hx => hV x hx)
+    hg hUc hVc
   have hnorm : ‖(Bc - Ac : E →L[𝕜] E)‖ ≤ ε := by
     refine ContinuousLinearMap.opNorm_le_bound _ hε0 fun x => ?_
     have hsub : (Bc - Ac) x = (B - A) x := by
@@ -367,7 +365,7 @@ operators,
 `‖P_U - P_W‖ ≤ ε / g`.
 
 This is a finite spectral specialization of
-`Submodule.opNorm_starProjection_sub_le_of_coercive`.  In particular, there is
+`Submodule.projectionGap_le_norm_sub_div`.  In particular, there is
 no rank hypothesis and no factor-two loss. -/
 theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -397,10 +395,6 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     exact hB x y
   have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   have hWperp : IsInvariant B Wᗮ := isInvariant_orthogonal_of_isSymmetric hB hW
-  have hUred : Submodule.IsReducing U Ac :=
-    (hAself.isReducing_iff_mem_invtSubmodule U).mpr hU
-  have hWred : Submodule.IsReducing W Bc :=
-    (hBself.isReducing_iff_mem_invtSubmodule W).mpr hW
   have hUhiForm : ∀ x ∈ U,
       (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
     fun x hx => by simpa [Ac] using lowerFormBound_of_pointSpectrumIn hA hU hUhi x hx
@@ -413,8 +407,11 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
   have hWloForm : ∀ x ∈ Wᗮ,
       RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
     fun x hx => by simpa [Bc] using upperFormBound_of_pointSpectrumIn hB hWperp hWlo x hx
-  have hcore := Submodule.opNorm_starProjection_sub_le_of_coercive
-    hAself hBself hUred hWred hg hUhiForm hUloForm hWhiForm hWloForm
+  have hcore : ‖(U.starProjection - W.starProjection : E →L[𝕜] E)‖ ≤ ‖Bc - Ac‖ / g := by
+    rw [← Submodule.projectionGap_def U W]
+    exact Submodule.projectionGap_le_norm_sub_div (A := Ac) (B := Bc)
+      U W hAself hBself (fun x hx => hU x hx) (fun x hx => hW x hx)
+      hg hUhiForm hWloForm hWhiForm hUloForm
   have hnorm : ‖(Bc - Ac : E →L[𝕜] E)‖ ≤ ε := by
     refine ContinuousLinearMap.opNorm_le_bound _ hε0 fun x => ?_
     simpa [Ac, Bc] using hε x

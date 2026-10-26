@@ -1500,7 +1500,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagMeasureMulLp.lean` — 220 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FinitePVMSelection.lean` — 220 lines · Lean source
 - [x] `ForTauCeti/Analysis/Fourier/HaagerupZsido/Integrability.lean` — 216 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/SinTheta.lean` — 216 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/Polar/CFCBridge.lean` — 212 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Sylvester/Generator.lean` — 209 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/FiniteFrame.lean` — 208 lines · Lean source
@@ -1574,7 +1573,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Pythagoras.lean` — 106 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/GraphCore.lean` — 103 lines · Lean source
 - [x] `ForTauCeti/Analysis/Normed/Operator/FiniteRankCompact.lean` — 103 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/BoundedOperator/Projector.lean` — 97 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/Residual/TrialMap.lean` — 97 lines · Lean source
 - [x] `ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean` — 61 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/LeadingCutoff.lean` — 96 lines · Lean source

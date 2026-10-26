@@ -5,7 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed

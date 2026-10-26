@@ -8,7 +8,8 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Sharpness
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.Sylvester.ScalarTransport

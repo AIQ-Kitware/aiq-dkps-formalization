@@ -806,7 +806,7 @@
             ]
           },
           "canonical_declarations": [
-            "Submodule.opNorm_starProjection_sub_le_of_coercive"
+            "Submodule.projectionGap_le_norm_sub_div"
           ],
           "supporting_declarations": [
             "TauCeti.opNorm_spectralSubspace_sub_le"
@@ -815,7 +815,7 @@
           "clause_map": [
             {
               "source_clause": "A common two-sided gap g separates each selected subspace from its orthogonal complement.",
-              "lean_realization": "The four quadratic-form inequalities around c and c+g are written literally in the canonical theorem.",
+              "lean_realization": "Instantiate c′ = c in the accepted invariant-subspace projector bound and expand Submodule.projectionGap_def; this gives the common-cut four-form-bound projector norm estimate without a local duplicate theorem.",
               "status": "derived"
             },
             {

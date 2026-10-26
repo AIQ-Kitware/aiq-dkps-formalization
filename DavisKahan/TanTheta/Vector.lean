@@ -14,7 +14,8 @@ public import Mathlib.Analysis.InnerProductSpace.Symmetric
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.Analysis.Normed.Operator.NNNorm
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 

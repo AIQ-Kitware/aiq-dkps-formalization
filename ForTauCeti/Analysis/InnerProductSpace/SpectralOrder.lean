@@ -8,7 +8,8 @@ module
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
 
@@ -191,13 +192,19 @@ theorem opNorm_starProjection_sub_le_of_restriction_spectra
     (hWlo : spectrum ℝ (B.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
       hW.orthogonal_mem_invtSubmodule)) ⊆ Set.Iic c) :
     ‖(U.starProjection - W.starProjection : H →L[𝕜] H)‖ ≤ ‖B - A‖ / g := by
-  apply Submodule.opNorm_starProjection_sub_le_of_formBounds hA hB hU hW hg
-  · exact lowerFormBoundOn_of_restriction_spectrum_subset_Ici hA hU.mem_invtSubmodule hUhi
-  · exact upperFormBoundOn_of_restriction_spectrum_subset_Iic hA
-      hU.orthogonal_mem_invtSubmodule hUlo
-  · exact lowerFormBoundOn_of_restriction_spectrum_subset_Ici hB hW.mem_invtSubmodule hWhi
-  · exact upperFormBoundOn_of_restriction_spectrum_subset_Iic hB
-      hW.orthogonal_mem_invtSubmodule hWlo
+  rw [← Submodule.projectionGap_def U W]
+  apply Submodule.projectionGap_le_norm_sub_div (c := c) (c' := c)
+    U W hA hB hU.mem_invtSubmodule hW.mem_invtSubmodule hg
+  · exact (ContinuousLinearMap.lowerFormBoundOn_iff A U (c + g)).mp
+      (lowerFormBoundOn_of_restriction_spectrum_subset_Ici hA hU.mem_invtSubmodule hUhi)
+  · exact (ContinuousLinearMap.upperFormBoundOn_iff B Wᗮ c).mp
+      (upperFormBoundOn_of_restriction_spectrum_subset_Iic hB
+        hW.orthogonal_mem_invtSubmodule hWlo)
+  · exact (ContinuousLinearMap.lowerFormBoundOn_iff B W (c + g)).mp
+      (lowerFormBoundOn_of_restriction_spectrum_subset_Ici hB hW.mem_invtSubmodule hWhi)
+  · exact (ContinuousLinearMap.upperFormBoundOn_iff A Uᗮ c).mp
+      (upperFormBoundOn_of_restriction_spectrum_subset_Iic hA
+        hU.orthogonal_mem_invtSubmodule hUlo)
 
 
 end SpectralOrder

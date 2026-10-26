@@ -1,4 +1,8 @@
 {
+  "Submodule.opNorm_starProjection_sub_le_of_formBounds": "Submodule.projectionGap_le_norm_sub_div",
+  "Submodule.opNorm_starProjection_sub_le_of_coercive": "Submodule.projectionGap_le_norm_sub_div",
+  "Submodule.sinTheta_directed_of_formBounds": "Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div",
+  "Submodule.sinTheta_directed_coercive": "Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div",
   "ContinuousLinearMap.Reduces.map_isometryEquiv": "Submodule.IsReducing.map_isometryEquiv",
   "TauCeti.DavisKahan.Experimental.DKClosedOperator": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real": "TauCeti.DavisKahan.ExactSinTheta.ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real",

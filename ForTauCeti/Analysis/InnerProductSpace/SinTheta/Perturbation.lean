@@ -16,8 +16,8 @@ public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds
 
 /-!

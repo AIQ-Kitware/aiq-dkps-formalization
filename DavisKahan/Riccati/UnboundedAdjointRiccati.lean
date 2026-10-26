@@ -8,7 +8,8 @@ module
 public import DavisKahan.Riccati.UnboundedReduction
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.GraphCore
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 

@@ -56,14 +56,13 @@ example [CompleteSpace E] (A : E →L[K] E) (hA : A.IsSymmetric) :
   _root_.LinearPMap.isSelfAdjoint_toPMap_top
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)
 
-example [CompleteSpace E] {A B : E →L[K] E}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+example {A B : E →L[K] E} (hB : B.IsSymmetric)
     {U V : Submodule K E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B) {c g : Real} (hg : 0 < g)
+    (hU : ∀ x ∈ U, A x ∈ U) (hV : ∀ x ∈ V, B x ∈ V) {c g : Real} (hg : 0 < g)
     (hUc : ∀ x ∈ U, (c + g) * norm x ^ 2 ≤ RCLike.re (inner K (A x) x))
     (hVc : ∀ x ∈ V, RCLike.re (inner K (B x) x) ≤ c * norm x ^ 2) :
     norm (V.starProjection.comp U.starProjection) ≤ norm (B - A) / g :=
-  Submodule.sinTheta_directed_coercive hA hB hU hV hg hUc hVc
+  Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div U V hB hU hV hg hUc hVc
 
 example [FiniteDimensional K E] [FiniteDimensional K F]
     (N : TauCeti.UnitarilyInvariantSeminorm K E F)

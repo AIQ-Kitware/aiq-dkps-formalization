@@ -1708,3 +1708,29 @@ present in some modules. Those can consume the accepted theorem with local
 instance attributes too; preserve their actual ambient and scalar hypotheses.
 No whole-repository upstream-consumption completion is claimed. The tracked
 mathematics is committed; only the three original untracked files remain.
+
+### October 26: consume native directed and sharp projector sine bounds
+
+Delete both `BoundedOperator/SinTheta.lean` and `BoundedOperator/Projector.lean`
+from the donor. Their mathematical consumers now invoke accepted
+`Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div` and
+`Submodule.projectionGap_le_norm_sub_div` from `Projection.SinTheta` directly.
+No namespace alias, compatibility module or forwarding theorem remains. The
+finite spectral and restricted-spectrum source-facing theorems retain their
+statements; only their generic analytic core is supplied upstream.
+
+The native directed theorem is stronger: it requires no ambient completeness,
+no symmetry of the source operator, and only invariant subspaces rather than
+reducing hypotheses. The native sharp projector theorem permits two different
+cuts; the existing common-cut uses specialize them to the same value. A
+canonical-consumer example exercises the weaker native hypotheses directly.
+The continuity-free `LinearMap` reduced-extension identity remains genuine
+donor mathematics, and the other local gap extensions remain where consumed.
+The source census's derived projector review target now records the native
+bound and its explicit common-cut/projection-norm specialization.
+
+This is consumption of APIs already present at the prior TauCeti pin, not a
+claim that the latest main introduced these results. Preserve the native
+Spectra-lineage acknowledgement; matching statements do not prove that the
+native proof was copied from the DKPS donor. Papers and visualizations are
+unchanged.

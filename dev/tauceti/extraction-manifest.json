@@ -145,8 +145,6 @@
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
@@ -165,7 +163,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus"
-      ]
+      ],
+      "migration_note": " October 26: retire both bounded SinTheta/Projector donor files; their consumers import accepted Projection.SinTheta directly."
     },
     {
       "cluster": "hoffman-wielandt",
@@ -379,8 +378,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
@@ -430,7 +427,8 @@
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus"
-      ]
+      ],
+      "migration_note": " October 26: retire both bounded SinTheta/Projector donor files; their consumers import accepted Projection.SinTheta directly."
     },
     {
       "cluster": "coercive-form-method",
@@ -3849,21 +3847,23 @@
         "opNorm_starProjection_sub_le_of_formBounds",
         "over"
       ],
-      "current_namespace": "TauCeti.DavisKahan",
+      "current_namespace": "Submodule",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Projection.SinTheta",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "accepted stronger API consumed; local duplicate deleted",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta"
+        "TauCeti.Analysis.InnerProductSpace.Projection.SinTheta"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation"
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
+        "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "October 26, after DKPS 29b2b12ea: delete this entire donor and use native Submodule.projectionGap_le_norm_sub_div for the sharp projector bound, or Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div for the directed bound. Both are in accepted Projection.SinTheta at TauCeti b3de655482f7b86c77d8982566e5a73801fd64fa (already present at the preceding pin). No old-name alias or forwarding theorem remains. Native directed theory drops the source symmetry/completeness assumptions and needs only invariant subspaces with a symmetric target operator; existing source-facing statements are preserved downstream. Native projector theory permits independent cuts c and c′; the shared-cut consumers specialize c′=c. The generic LinearMap ReducedExtension donor retains its continuity-free scope. This records direct consumption of a stronger accepted API, not inferred proof ancestry; retain upstream Spectra acknowledgement separately from DKPS provenance."
     },
     {
       "source_module": "DavisKahan/BoundedOperator/SinTheta.lean",
@@ -3871,25 +3871,23 @@
         "sinTheta_directed_coercive",
         "sinTheta_directed_of_formBounds"
       ],
-      "current_namespace": "TauCeti.DavisKahan",
+      "current_namespace": "Submodule",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Projection.SinTheta",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "accepted stronger API consumed; local duplicate deleted",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
-        "TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds",
-        "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
-        "TauCeti.Analysis.InnerProductSpace.Sylvester"
+        "TauCeti.Analysis.InnerProductSpace.Projection.SinTheta"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
-        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation"
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
+        "RoadmapBridge.CanonicalConsumers"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "upstreamed",
+      "upstream_pr": null,
+      "migration_note": "October 26, after DKPS 29b2b12ea: delete this entire donor and use native Submodule.projectionGap_le_norm_sub_div for the sharp projector bound, or Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div for the directed bound. Both are in accepted Projection.SinTheta at TauCeti b3de655482f7b86c77d8982566e5a73801fd64fa (already present at the preceding pin). No old-name alias or forwarding theorem remains. Native directed theory drops the source symmetry/completeness assumptions and needs only invariant subspaces with a symmetric target operator; existing source-facing statements are preserved downstream. Native projector theory permits independent cuts c and c′; the shared-cut consumers specialize c′=c. The generic LinearMap ReducedExtension donor retains its continuity-free scope. This records direct consumption of a stronger accepted API, not inferred proof ancestry; retain upstream Spectra acknowledgement separately from DKPS provenance."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/DoubleAngle/Vector.lean",
@@ -4026,9 +4024,7 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventSandwich",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector"
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventSandwich"
       ],
       "status": "upstreamed",
       "upstream_pr": null,
@@ -4246,8 +4242,7 @@
       "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta",
+        "TauCeti.Analysis.InnerProductSpace.Projection.SinTheta",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
@@ -4386,7 +4381,7 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "staged in ForTauCeti; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; current overlay awaits Lean compilation",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector",
+        "TauCeti.Analysis.InnerProductSpace.Projection.SinTheta",
         "TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",

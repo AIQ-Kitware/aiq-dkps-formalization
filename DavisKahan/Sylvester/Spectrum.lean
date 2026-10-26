@@ -17,7 +17,8 @@ public import DavisKahan.Sylvester.Gap
 public import DavisKahan.Sylvester.Unbounded.Neumann
 public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 
 

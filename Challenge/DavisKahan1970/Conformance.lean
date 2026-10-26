@@ -26,7 +26,8 @@ public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
+public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus

@@ -112,9 +112,9 @@ Only invariance of `W` is used, not reduction.  Both coercivity bounds of
 
 The mathematics is `TauCeti.re_inner_reducedExtension_self`, stated at the value
 `R (P x) + κ • (x - P x)`; this wrapper only rewrites the operator-composition
-presentation into that one.  `BoundedOperator/SinTheta.lean` carries the same
-wrapper for `E →L[𝕜] E` and `Reduces`, and it is a wrapper there too: the shared
-statement is proved once, in the module both import. -/
+presentation into that one. Bounded-operator consumers now use the accepted
+`ContinuousLinearMap.reducedExtension` API from `Projection.Block`. The linear-map
+identity remains available without assuming continuity of the original map. -/
 private theorem re_inner_reducedExtension_self' {R : E →ₗ[𝕜] E}
     {W : Submodule 𝕜 E} [W.HasOrthogonalProjection]
     (hinv : ∀ x ∈ W, R x ∈ W) (κ : ℝ) (x : E) :
