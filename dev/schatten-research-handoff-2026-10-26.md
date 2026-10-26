@@ -1268,3 +1268,56 @@ canonical uniqueness on subcritical sine bands should force canonical
 action on the infinite inactive tail. The final unconditional
 canonical-tail/finite-phase iff remains open; do not report it as proved.
 Paper and visualization files remain untouched.
+
+
+## Every complex infinite-dimensional optimizer is now classified (`1<p<2`)
+
+The final assembly is compiled. The earlier open assembly obligations in
+this chronological record are superseded by these results:
+
+- `commute_sinAngleOperator_of_schatten_minimal`: every finite-cost
+  global optimizer commutes with the intrinsic principal-sine operator.
+  Unequal angles cannot mix, including zero and right-angle spaces.
+- `eq_canonicalPolarFactor_of_schatten_minimal_of_gap_le_critical`:
+  canonical uniqueness in arbitrary Hilbert dimension whenever the
+  projection gap is at most `sin (criticalAngle p)`. The threshold is
+  closed, including all repeated and zero-angle directions.
+- `apply_eq_nonacuteDirectRotation_on_inactive_tail_of_schatten_minimal`:
+  every global optimizer is canonical on the full complement of any
+  strict sine cutoff `Ioi c`, where `0<c<1` and `c≤sin(criticalAngle p)`.
+  This is now a conclusion; no supplied tail or block assumption remains.
+- `schatten_transport_isMin_iff_canonical_tail_phase_and_defect_complex`:
+  the complete iff for **every ambient unitary transporter**, including
+  competitors of infinite cost. Hypotheses: complex complete Hilbert
+  space (no separability needed), finite `1<p<2`, native Schatten
+  projection difference, and an actual crossed-defect unitary completion.
+  Optimality is equivalent to canonical inactive-tail action plus the
+  explicit compatible finite phase-projection / reflecting right-defect
+  normal form. The candidate is **not** assumed to have finite cost;
+  both directions prove the required finiteness. At the exact critical
+  sine cutoff all nonuniqueness is confined to a finite strictly active
+  sector. The finite theorem covers all angle multiplicities and
+  endpoint degeneracies. Focused classification build: 8,016 jobs.
+
+The proof uses the full kernel and all finite positive-gradient cutoffs
+to establish sine commutation by compact spectral completeness, then
+switches to the intrinsic sine cutoffs. Infinite reducing restriction
+optimality and finite canonical uniqueness identify the infinite
+inactive tail. The general sine restriction theorem now works for
+arbitrary orthogonally complemented common reducing subspaces, rather
+than requiring finite ambient dimension. Common source and common
+orthogonal directions are fixed, using a field-general restriction
+lemma valid at every real finite exponent `p≥1` once sine commutation
+is known.
+
+This closes the unrestricted complex **Schatten `1<p<2` optimizer-set**
+classification under the stated ideal/index feasibility assumptions.
+It does not classify nuclear, Charbonnier, real orthogonal, or all
+`p≥2` equality cases. It does not by itself formalize the topology or
+dimensions of the resulting parameter spaces, or prove historical
+novelty. The manuscript and visualizations remain assigned to another
+agent and have not been edited. Next useful consequences: every-optimizer
+critical rank budget (previously only an attaining optimizer had this
+certificate), intrinsic uniqueness iff the strict active sector is
+empty, and a topology/dimension theorem after removing redundant
+finite phase parameters.

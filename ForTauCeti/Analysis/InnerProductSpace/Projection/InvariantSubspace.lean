@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 public import TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
@@ -262,31 +263,62 @@ theorem sinAngleOperator_apply_of_comap_eigenvector [CompleteSpace E]
   change S (S (x : E)) = D (D (x : E)) at h
   exact h.trans hscalar
 
-/-- On a finite-dimensional reducing subspace, the ambient sine angle
-operator restricts to the sine angle operator of the actual restricted
-pair. This is an equality on every vector, without a chosen eigenbasis. -/
+
+/-- On any orthogonally complemented common reducing subspace, the
+ambient sine operator is exactly the sine of the actual restricted pair.
+Neither the carrier nor the ambient space needs finite dimension. -/
 theorem sinAngleOperator_comap_subtype_apply_of_invariant
-    [FiniteDimensional 𝕜 E] [CompleteSpace E]
-    (K L Z : Submodule 𝕜 E)
+    [CompleteSpace E] (K L Z : Submodule 𝕜 E)
+    [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [Z.HasOrthogonalProjection] [CompleteSpace Z]
+    [(K.comap Z.subtype).HasOrthogonalProjection] [(L.comap Z.subtype).HasOrthogonalProjection]
     (hK : ∀ x ∈ Z, K.starProjection x ∈ Z)
     (hL : ∀ x ∈ Z, L.starProjection x ∈ Z) (x : Z) :
     (((K.comap Z.subtype).sinAngleOperator (L.comap Z.subtype) x : Z) : E) =
       K.sinAngleOperator L (x : E) := by
-  let S₀ := (K.comap Z.subtype).sinAngleOperator (L.comap Z.subtype)
-  let hS₀ := ((K.comap Z.subtype).isPositive_sinAngleOperator
-    (L.comap Z.subtype)).toLinearMap
-  let e := hS₀.isSymmetric.eigenvectorBasis rfl
-  let mu := hS₀.isSymmetric.eigenvalues rfl
-  have hmap : Z.subtype ∘ₗ S₀.toLinearMap =
-      (K.sinAngleOperator L).toLinearMap ∘ₗ Z.subtype := by
-    apply e.toBasis.ext
-    intro i
-    change (S₀ (e i) : E) = K.sinAngleOperator L (e i : E)
-    have he : S₀ (e i) = (mu i : 𝕜) • e i :=
-      hS₀.isSymmetric.apply_eigenvectorBasis rfl i
-    rw [sinAngleOperator_apply_of_comap_eigenvector K L Z hK hL
-      (e i) (mu i) (hS₀.nonneg_eigenvalues rfl i) he, he]
+  let D := K.starProjection - L.starProjection
+  let D₀ := (K.comap Z.subtype).starProjection - (L.comap Z.subtype).starProjection
+  let S := K.sinAngleOperator L
+  let S₀ := Z.orthogonalProjectionOnto ∘L S ∘L Z.subtypeL
+  have hZD : Commute Z.starProjection D :=
+    (isReducing_coe_iff_commute_starProjection.mp
+      ((K.starProjection_isSymmetric.isReducing_iff_mem_invtSubmodule Z).mpr hK)).sub_right
+    (isReducing_coe_iff_commute_starProjection.mp
+      ((L.starProjection_isSymmetric.isReducing_iff_mem_invtSubmodule Z).mpr hL))
+  have hDself : IsSelfAdjoint D :=
+    (isSelfAdjoint_starProjection K).sub (isSelfAdjoint_starProjection L)
+  have hZS : Commute Z.starProjection S := by
+    change Commute Z.starProjection (K.sinAngleOperator L)
+    rw [sinAngleOperator_def]
+    apply ContinuousLinearMap.commute_modulus_of_commute
+    change Commute Z.starProjection (star D * D)
+    rw [hDself.star_eq]
+    exact hZD.mul_right hZD
+  have hSred : Z.IsReducing S.toLinearMap := isReducing_coe_iff_commute_starProjection.mpr hZS
+  have hS₀ (y : Z) : (S₀ y : E) = S (y : E) := by
+    change Z.starProjection (S (y : E)) = S (y : E)
+    exact Z.starProjection_eq_self_iff.mpr (hSred.mem_invtSubmodule y.property)
+  have hD₀ (y : Z) : (D₀ y : E) = D (y : E) := by
+    change ((K.comap Z.subtype).starProjection y : E) -
+      ((L.comap Z.subtype).starProjection y : E) = _
+    rw [K.starProjection_comap_subtype_apply_of_invariant Z hK,
+      L.starProjection_comap_subtype_apply_of_invariant Z hL]
     rfl
-  exact LinearMap.congr_fun hmap x
+  have hmod : S₀ = D₀.modulus := by
+    apply ContinuousLinearMap.eq_modulus_iff.mpr
+    refine ⟨(K.isPositive_sinAngleOperator L).orthogonalProjectionOnto_comp Z, ?_⟩
+    have hD₀self : IsSelfAdjoint D₀ :=
+      (isSelfAdjoint_starProjection _).sub (isSelfAdjoint_starProjection _)
+    rw [hD₀self.adjoint_eq]
+    apply ContinuousLinearMap.ext
+    intro y
+    apply Subtype.ext
+    change (S₀ (S₀ y) : E) = (D₀ (D₀ y) : E)
+    rw [hS₀, hS₀, hD₀, hD₀]
+    exact congrArg (fun A : E →L[𝕜] E => A (y : E)) (K.sinAngleOperator_sq L)
+  rw [sinAngleOperator_def]
+  change (D₀.modulus x : E) = S (x : E)
+  rw [← hmod]
+  exact hS₀ x
 
 end Submodule

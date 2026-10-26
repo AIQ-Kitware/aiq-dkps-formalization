@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, Claude Fable 5
+Authors: Jon Crall, Claude Fable 5, GPT-6 (Codex; configuration unspecified)
 
 Staged for Tau Ceti: the approximation numbers of a compact positive operator
 determine its eigenspace dimensions.
@@ -202,6 +202,44 @@ theorem eq_ofReal_re_of_eigenspace_ne_bot (hAs : IsSelfAdjoint A)
   simp only [ContinuousLinearMap.coe_coe]
   rw [inner_re_symm]
   exact hApos x
+
+
+/-- A compact positive operator's kernel and its positive spectral
+cutoffs determine every bounded operator. No separability is required. -/
+theorem eq_of_eq_on_ker_and_positive_eigenSpans
+    (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
+    (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (B C : E →L[𝕜] E) (hker : ∀ x ∈ A.ker, B x = C x)
+    (hcut : ∀ ε : ℝ, 0 < ε → ∀ x ∈ eigenSpan A (Set.Ioi ε), B x = C x) :
+    B = C := by
+  have hle : (⨆ μ : 𝕜, eigenspace A.toLinearMap μ) ≤ (B - C).ker := by
+    apply iSup_le
+    intro μ
+    by_cases hμ : eigenspace A.toLinearMap μ = ⊥
+    · rw [hμ]
+      exact bot_le
+    obtain ⟨hreal, hnonneg⟩ := eq_ofReal_re_of_eigenspace_ne_bot hAs hApos hμ
+    intro x hx
+    change B x - C x = 0
+    apply sub_eq_zero.mpr
+    by_cases hz : RCLike.re μ = 0
+    · apply hker x
+      change A x = 0
+      have h := Module.End.mem_eigenspace_iff.mp hx
+      rw [hreal, hz, RCLike.ofReal_zero, zero_smul] at h
+      exact h
+    · have hpos : 0 < RCLike.re μ := lt_of_le_of_ne hnonneg (Ne.symm hz)
+      apply hcut (RCLike.re μ / 2) (by positivity) x
+      apply eigenspace_le_eigenSpan A (show RCLike.re μ / 2 < RCLike.re μ by linarith)
+      rwa [← hreal]
+  have hdense : (⨆ μ : 𝕜, eigenspace A.toLinearMap μ).topologicalClosure = ⊤ :=
+    Submodule.topologicalClosure_eq_top_iff.mpr
+      (ContinuousLinearMap.orthogonalComplement_iSup_eigenspaces_eq_bot hAc hAs.isSymmetric)
+  have hall := Submodule.topologicalClosure_minimal _ hle (B - C).isClosed_ker
+  rw [hdense] at hall
+  apply ContinuousLinearMap.ext
+  intro x
+  exact sub_eq_zero.mp (show (B - C) x = 0 from hall (Submodule.mem_top))
 
 /-- **The band span is bounded below by the bottom of the band.**  Decompose a
 vector of the span into its finitely many eigencomponents; the components are

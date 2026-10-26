@@ -78,4 +78,31 @@ theorem exists_restriction_of_reducing
     _ = (x : E) := congrArg Subtype.val (V.apply_symm_apply x)
     _ = U (U.symm (x : E)) := (U.apply_symm_apply _).symm
 
+/-- A unitary commuting with a self-adjoint operator reduces its kernel.
+In infinite dimension this supplies actual surjective restrictions. -/
+theorem isReducing_ker_of_commute_selfAdjoint [CompleteSpace E]
+    (U : E ≃ₗᵢ[𝕜] E) (A : E →L[𝕜] E) (hA : IsSelfAdjoint A)
+    (hUA : Commute (U : E →L[𝕜] E) A) : A.ker.IsReducing U.toLinearMap := by
+  have hUsA : Commute (star (U : E →L[𝕜] E)) A := by
+    have h := commute_star_star.mpr hUA
+    rwa [hA.star_eq] at h
+  change A.ker.IsReducing (U : E →L[𝕜] E).toLinearMap
+  apply ContinuousLinearMap.isReducing_iff_mem_invtSubmodule_adjoint.mpr
+  constructor
+  · apply (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mpr
+    intro x hx
+    change A (U x) = 0
+    calc
+      _ = U (A x) := (congrArg (fun T : E →L[𝕜] E => T x) hUA.eq).symm
+      _ = 0 := by rw [show A x = 0 from hx, map_zero]
+  · apply (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mpr
+    intro x hx
+    change A (star (U : E →L[𝕜] E) x) = 0
+    calc
+      _ = star (U : E →L[𝕜] E) (A x) :=
+        (congrArg (fun T : E →L[𝕜] E => T x) hUsA.eq).symm
+      _ = 0 := by
+        rw [show A x = 0 from hx]
+        exact (star (U : E →L[𝕜] E)).map_zero
+
 end LinearIsometryEquiv

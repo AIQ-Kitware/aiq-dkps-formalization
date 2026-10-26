@@ -28,5 +28,9 @@ public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCutoffClassi
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenStationarity
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenGradientCutoff
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenGradientKernel
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenOptimizerAngles
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCanonicalUniqueness
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenOptimizerTail
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenOptimizerClassification
 
 /-! # `DavisKahan/InfiniteDimensional` -/

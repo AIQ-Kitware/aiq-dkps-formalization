@@ -147,4 +147,60 @@ theorem schatten_minimal_iff_restriction_of_minimizing_reference_tail
       exact add_le_add (ENNReal.rpow_le_rpow (hmin W hWmap) hp0.le) le_rfl
     exact ((ENNReal.rpow_le_rpow_iff hp0).mp hle).trans (hRmin T hT)
 
+/-- An angle-preserving finite-cost global Schatten optimizer fixes
+all common source and common orthogonal directions. This works over
+both fields at every finite exponent `p≥1`, in arbitrary dimension. -/
+theorem apply_eq_self_of_projections_eq_of_schatten_minimal_of_commute
+    (p : ℝ) (hp : 1 ≤ p)
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[𝕜] E) (hmap : K.map U.toLinearMap = L)
+    (hfinite : (OperatorIdealFamily.schatten 𝕜 p hp).gauge
+      (1 - (U : E →L[𝕜] E)) ≠ ∞)
+    (hmin : ∀ T : E ≃ₗᵢ[𝕜] E, K.map T.toLinearMap = L →
+      (OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (U : E →L[𝕜] E)) ≤
+        (OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (T : E →L[𝕜] E)))
+    (hUS : Commute (U : E →L[𝕜] E) (K.sinAngleOperator L))
+    (x : E) (hx : K.starProjection x = L.starProjection x) : U x = x := by
+  let S := K.sinAngleOperator L
+  let Z := S.ker
+  let := K.hasOrthogonalProjection_comap_subtype_of_complete Z
+  let := L.hasOrthogonalProjection_comap_subtype_of_complete Z
+  have hPQ (y : Z) : K.starProjection (y : E) = L.starProjection y := by
+    have h := K.norm_sinAngleOperator_apply L (y : E)
+    rw [show K.sinAngleOperator L (y : E) = 0 from y.property, norm_zero] at h
+    exact sub_eq_zero.mp (norm_eq_zero.mp h.symm)
+  have hK : Z.IsReducing K.starProjection.toLinearMap := by
+    apply (K.starProjection_isSymmetric.isReducing_iff_mem_invtSubmodule Z).mpr
+    intro y hy
+    change S (K.starProjection y) = 0
+    have h := congrArg (fun A : E →L[𝕜] E => A y)
+      (K.commute_starProjection_sinAngleOperator L).eq
+    change K.starProjection (S y) = S (K.starProjection y) at h
+    rw [← h, show S y = 0 from hy, map_zero]
+  have hpair : K.comap Z.subtype = L.comap Z.subtype := by
+    apply Submodule.ext
+    intro y
+    change (y : E) ∈ K ↔ (y : E) ∈ L
+    rw [← K.starProjection_eq_self_iff, hPQ y, L.starProjection_eq_self_iff]
+  obtain ⟨V, hV, _, hVmin⟩ := exists_schatten_minimizing_reducing_restriction p hp K L Z
+    U hmap hfinite hmin hK
+      (U.isReducing_ker_of_commute_selfAdjoint S
+        (K.isPositive_sinAngleOperator L).isSelfAdjoint hUS)
+  have hzero := hVmin (LinearIsometryEquiv.refl 𝕜 Z) (by
+    change (K.comap Z.subtype).map (LinearMap.id : Z →ₗ[𝕜] Z) = L.comap Z.subtype
+    rwa [Submodule.map_id])
+  have hVzero : 1 - (V : Z →L[𝕜] Z) = 0 := by
+    apply ((OperatorIdealFamily.schatten 𝕜 p hp).gauge_eq_zero_iff _).mp
+    apply le_antisymm _ zero_le
+    change (OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (V : Z →L[𝕜] Z)) ≤
+      (OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (1 : Z →L[𝕜] Z)) at hzero
+    simpa only [sub_self, OperatorIdealFamily.gauge_zero] using hzero
+  have hxZ : x ∈ Z := by
+    change S x = 0
+    apply norm_eq_zero.mp
+    rw [K.norm_sinAngleOperator_apply L, hx, sub_self, norm_zero]
+  have hvx := congrArg (fun A : Z →L[𝕜] Z => A ⟨x, hxZ⟩) hVzero
+  have hv : V ⟨x, hxZ⟩ = ⟨x, hxZ⟩ := (sub_eq_zero.mp hvx).symm
+  exact (hV ⟨x, hxZ⟩).symm.trans (congrArg Subtype.val hv)
+
 end TauCeti
