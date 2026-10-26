@@ -11,6 +11,8 @@ public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduc
 
 public section
 
+open scoped ComplexOrder
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -130,7 +132,8 @@ theorem boundedSelfAdjointSpectralProjection_Iic_eq_cfcHom
     by_cases hw : w ∈ TauCeti.BorelCalculus.reCoord (T := B) ⁻¹' Set.Iic alpha
     · have hle : TauCeti.BorelCalculus.reCoord w ≤ alpha := hw
       rw [Set.indicator_of_mem hw]
-      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, spectralGapSymbol_apply,
+      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply,
+        spectralGapSymbol_apply,
         spectralGapCutoff_eq_one hdelta hle]
       norm_num
     · have hgt : alpha < TauCeti.BorelCalculus.reCoord w := lt_of_not_ge hw
@@ -139,7 +142,8 @@ theorem boundedSelfAdjointSpectralProjection_Iic_eq_cfcHom
         · exact absurd (Set.mem_Iic.mp hlow) (not_le_of_gt hgt)
         · exact Set.mem_Ici.mp hhigh
       rw [Set.indicator_of_notMem hw]
-      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, spectralGapSymbol_apply,
+      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply,
+        spectralGapSymbol_apply,
         spectralGapCutoff_eq_zero hdelta hhigh]
       norm_num
 
@@ -178,8 +182,15 @@ theorem re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic
     · rw [spectralGapCutoff_eq_one hdelta (Set.mem_Iic.mp hlow), mul_one]
       linarith [Set.mem_Iic.mp hlow]
     · rw [spectralGapCutoff_eq_zero hdelta (Set.mem_Ici.mp hhigh), mul_zero]
-  have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
-    (a := B) hBsa.isStarNormal hgnonneg x
+  have hpos : 0 ≤
+      (⟪x, cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) x⟫_ℂ).re := by
+    have hT : 0 ≤ cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) := by
+      apply map_nonneg (cfcHom hBsa.isStarNormal)
+      intro w
+      simpa using hgnonneg w
+    exact (ContinuousLinearMap.nonneg_iff_isPositive.mp hT).re_inner_nonneg_right x
   have hsymbol :
       (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
         ((alpha : ℝ) : ℂ) •
@@ -256,8 +267,15 @@ theorem le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal
     · rw [spectralGapCutoff_eq_one hdelta (Set.mem_Iic.mp hlow), sub_self, mul_zero]
     · rw [spectralGapCutoff_eq_zero hdelta (Set.mem_Ici.mp hhigh), sub_zero, mul_one]
       linarith [Set.mem_Ici.mp hhigh]
-  have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
-    (a := B) hBsa.isStarNormal hgnonneg x
+  have hpos : 0 ≤
+      (⟪x, cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) x⟫_ℂ).re := by
+    have hT : 0 ≤ cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) := by
+      apply map_nonneg (cfcHom hBsa.isStarNormal)
+      intro w
+      simpa using hgnonneg w
+    exact (ContinuousLinearMap.nonneg_iff_isPositive.mp hT).re_inner_nonneg_right x
   have hsymbol :
       (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
         (((ContinuousMap.id ℂ).restrict (spectrum ℂ B)) -

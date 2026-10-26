@@ -246,8 +246,8 @@ Both sides are continuous in the `L²` variable (`continuous_star_lp`), so it su
 them on the dense set of bounded measurable symbols, where the statement is exactly
 `conjugation_borelCalculus_of_fixed`. -/
 theorem cyclicIsometry_star (hT : IsSelfAdjoint T) {ξ : Eℂ} (hξ : conjugation ξ = ξ)
-    (F : Lp ℂ 2 (TauCeti.BorelCalculus.diagMeasure
-      (isSelfAdjoint_complexify_bounded hT).isStarNormal ξ)) :
+    (F : Lp ℂ 2 ((cfcHom ((isSelfAdjoint_complexify_bounded
+      hT).isStarNormal)).representationDiagMeasure ξ)) :
     TauCeti.BorelCalculus.cyclicIsometry
         (isSelfAdjoint_complexify_bounded hT).isStarNormal ξ (star F)
       = conjugation (TauCeti.BorelCalculus.cyclicIsometry
@@ -438,8 +438,8 @@ complexification (`separableSpace_realComplexification`).  Nothing else was adde
 theorem exists_countable_isHilbertSum_lp_diagMeasure_conjugation_fixed
     [TopologicalSpace.SeparableSpace E] (hT : IsSelfAdjoint T) :
     ∃ ξ : ℕ → Eℂ, (∀ n, conjugation (ξ n) = ξ n) ∧
-      IsHilbertSum ℂ (fun n => Lp ℂ 2 (TauCeti.BorelCalculus.diagMeasure
-          (isSelfAdjoint_complexify_bounded hT).isStarNormal (ξ n)))
+      IsHilbertSum ℂ (fun n => Lp ℂ 2 ((cfcHom ((isSelfAdjoint_complexify_bounded
+        hT).isStarNormal)).representationDiagMeasure (ξ n)))
         (fun n => TauCeti.BorelCalculus.cyclicIsometry
           (isSelfAdjoint_complexify_bounded hT).isStarNormal (ξ n)) := by
   classical
@@ -471,8 +471,8 @@ theorem exists_countable_isHilbertSum_lp_diagMeasure_conjugation_fixed
     · rw [h0, map_zero]
     · exact hSmax.prop.conjugation_fixed _ hmS
   have horth : ∀ m n : ℕ, m ≠ n →
-      ∀ (v : Lp ℂ 2 (TauCeti.BorelCalculus.diagMeasure hA (e m)))
-        (w : Lp ℂ 2 (TauCeti.BorelCalculus.diagMeasure hA (e n))),
+      ∀ (v : Lp ℂ 2 ((cfcHom hA).representationDiagMeasure (e m)))
+        (w : Lp ℂ 2 ((cfcHom hA).representationDiagMeasure (e n))),
       ⟪TauCeti.BorelCalculus.cyclicIsometry hA (e m) v,
         TauCeti.BorelCalculus.cyclicIsometry hA (e n) w⟫_ℂ = 0 := by
     intro m n hmn v w
@@ -531,12 +531,12 @@ theorem exists_countable_isHilbertSum_lp_diagMeasure_real
     ∃ ξ : ℕ → Eℂ,
       (∀ n, ξ n ∈ Set.range (ofReal : E → Eℂ)) ∧
       (∀ n, conjugation (ξ n) = ξ n) ∧
-      IsHilbertSum ℂ (fun n => Lp ℂ 2 (TauCeti.BorelCalculus.diagMeasure
-          (isSelfAdjoint_complexify_bounded hT).isStarNormal (ξ n)))
+      IsHilbertSum ℂ (fun n => Lp ℂ 2 ((cfcHom ((isSelfAdjoint_complexify_bounded
+        hT).isStarNormal)).representationDiagMeasure (ξ n)))
         (fun n => TauCeti.BorelCalculus.cyclicIsometry
           (isSelfAdjoint_complexify_bounded hT).isStarNormal (ξ n)) ∧
-      ∀ (n : ℕ) (F : Lp ℂ 2 (TauCeti.BorelCalculus.diagMeasure
-          (isSelfAdjoint_complexify_bounded hT).isStarNormal (ξ n))),
+      ∀ (n : ℕ) (F : Lp ℂ 2 ((cfcHom ((isSelfAdjoint_complexify_bounded
+        hT).isStarNormal)).representationDiagMeasure (ξ n))),
         TauCeti.BorelCalculus.cyclicIsometry
             (isSelfAdjoint_complexify_bounded hT).isStarNormal (ξ n) (star F)
           = conjugation (TauCeti.BorelCalculus.cyclicIsometry

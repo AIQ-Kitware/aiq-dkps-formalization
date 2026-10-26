@@ -66,7 +66,7 @@ being 1000 lines (`ForTauCeti/README.md` §4).  **No statement, signature, proof
 attribute or declaration name changed.**
 
 The material itself is *new*; see
-`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` for the
+`dev/tauceti/dkps-upstream-contribution-census.md` for the
 provenance of the route, and the Spectra-removal plan for the
 comparison against Spectra's Herglotz/Poisson route that chose it.  The target is
 the Spectra endpoint `Spectra.QuantumMechanics.SpectralTheory.spectralPVM`.
@@ -166,7 +166,7 @@ theorem spectralPVM_def :
 
 /-- The Cayley singularity `{1}` is a null set for every diagonal measure. -/
 theorem diagMeasure_cayley_preimage_one (ξ : H) :
-    BorelCalculus.diagMeasure (isStarNormal_cayley hA) ξ
+    (cfcHom (isStarNormal_cayley hA)).representationDiagMeasure ξ
       ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) = 0 := by
   set U := cayley hA with hUdef
   set hU := isStarNormal_cayley hA with hUn
@@ -209,7 +209,7 @@ theorem diagMeasure_cayley_preimage_one (ξ : H) :
   have hdiag := BorelCalculus.inner_borelCalculus_self hU hindb ξ
   rw [hPzero, inner_zero_right, hind,
     integral_indicator_const _ hS, Complex.real_smul, mul_one] at hdiag
-  have : (BorelCalculus.diagMeasure hU ξ).real S = 0 := by
+  have : ((cfcHom hU).representationDiagMeasure ξ).real S = 0 := by
     exact_mod_cast hdiag.symm
   rw [MeasureTheory.measureReal_def] at this
   exact (ENNReal.toReal_eq_zero_iff _).mp this |>.resolve_right (measure_ne_top _ _)
@@ -227,7 +227,7 @@ theorem borelCalculus_congr_of_ne_one
     BorelCalculus.borelCalculus (isStarNormal_cayley hA) hf
       = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hg := by
   refine BorelCalculus.borelCalculus_congr_ae (isStarNormal_cayley hA) hf hg fun η => ?_
-  have hae : ∀ᵐ w ∂(BorelCalculus.diagMeasure (isStarNormal_cayley hA) η),
+  have hae : ∀ᵐ w ∂((cfcHom (isStarNormal_cayley hA)).representationDiagMeasure η),
       w ∉ ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) :=
     MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hA η)
   filter_upwards [hae] with w hw
@@ -409,10 +409,10 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
       = ∫ s, (z - (s : ℂ))⁻¹ ∂((spectralPVM hA).diag ξ) := by
   set hU := isStarNormal_cayley hA with hhU
   have hlhs : ⟪ξ, resolvent A z ξ⟫_ℂ
-      = ∫ w, resolventSymbol hA hz w ∂(BorelCalculus.diagMeasure hU ξ) := by
-    rw [resolvent_eq_cfcHom hA hz hzr, BorelCalculus.integral_diagMeasure]
+      = ∫ w, resolventSymbol hA hz w ∂((cfcHom hU).representationDiagMeasure ξ) := by
+    rw [resolvent_eq_cfcHom hA hz hzr, StarAlgHom.integral_representationDiagMeasure]
   have hdiag : (spectralPVM hA).diag ξ
-      = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure hU ξ) := by
+      = Measure.map (cayleyInv hA) ((cfcHom hU).representationDiagMeasure ξ) := by
     rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag,
       BorelCalculus.specDiag_def]
   have hne : ∀ s : ℝ, z - (s : ℂ) ≠ 0 := by
@@ -424,7 +424,7 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
     hcont.aestronglyMeasurable]
   refine integral_congr_ae ?_
   have hnull := diagMeasure_cayley_preimage_one hA ξ
-  have hae : ∀ᵐ w ∂(BorelCalculus.diagMeasure hU ξ),
+  have hae : ∀ᵐ w ∂((cfcHom hU).representationDiagMeasure ξ),
       w ∉ ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) :=
     MeasureTheory.compl_mem_ae_iff.mpr hnull
   filter_upwards [hae] with w hw

@@ -1488,7 +1488,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `ForTauCeti/Analysis/SpecialFunctions/Integral/SineLaplace.lean` — 250 lines · Lean source
 - [x] `ForTauCeti/Analysis/Fourier/ExponentialAbs.lean` — 249 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Polarization.lean` — 249 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` — 244 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/DiagonalMultiplication.lean` — 241 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralFormBounds.lean` — 239 lines · Lean source
 - [x] `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/StoneUniqueness.lean` — 236 lines · Lean source

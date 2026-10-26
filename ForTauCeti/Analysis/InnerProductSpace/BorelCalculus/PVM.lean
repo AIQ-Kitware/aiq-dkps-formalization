@@ -31,7 +31,7 @@ there so that the unbounded Cayley case is an instance rather than a special cas
 
 ## Provenance
 
-*New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`.
+*New*; see `dev/tauceti/dkps-upstream-contribution-census.md`.
 The target structure is the upstream, measurable-space-general
 `TauCeti.ProjValMeasure`, specialized to `ℝ`; only the construction filling it
 here remains local.
@@ -84,11 +84,11 @@ theorem specProj_def (B : Set ℝ) (hB : MeasurableSet B) :
 -- `@[expose]` for the same reason as `toProjValMeasure`, whose exposed body references
 -- this one. Recorded debt, not an endorsement.
 noncomputable def specDiag (κ' : spectrum ℂ a → ℝ) (ξ : H) : Measure ℝ :=
-  Measure.map κ' (diagMeasure ha ξ)
+  Measure.map κ' ((cfcHom ha).representationDiagMeasure ξ)
 
 /-- Rewrite form of `specDiag`, so a call site need not unfold the definition. -/
 theorem specDiag_def (κ' : spectrum ℂ a → ℝ) (ξ : H) :
-    specDiag ha κ' ξ = Measure.map κ' (diagMeasure ha ξ) := (rfl)
+    specDiag ha κ' ξ = Measure.map κ' ((cfcHom ha).representationDiagMeasure ξ) := (rfl)
 
 include hκ in
 /-- The spectral diagonal measures are finite. -/
@@ -113,7 +113,7 @@ theorem specProj_univ :
   rw [inner_specProj_self]
   have hm : ((specDiag ha κ ξ) Set.univ).toReal = ‖ξ‖ ^ 2 := by
     rw [specDiag, Measure.map_apply hκ MeasurableSet.univ, Set.preimage_univ,
-      diagMeasure_univ_toReal]
+      ← measureReal_def, StarAlgHom.representationDiagMeasure_real_univ]
   rw [hm]
   -- names the application so the norm bound applies to it directly.
   change (((‖ξ‖ ^ 2 : ℝ)) : ℂ) = ⟪ξ, ξ⟫_ℂ
@@ -231,7 +231,8 @@ theorem boundedPVM_proj (B : Set ℝ) (hB : MeasurableSet B) :
 /-- The diagonal measures of `boundedPVM` are the pushforwards of the diagonal measures
 along the real-part relabelling.  Rewrite form for consumers outside this module. -/
 theorem boundedPVM_diag (ξ : H) :
-    (boundedPVM hT).diag ξ = Measure.map reCoord (diagMeasure hT.isStarNormal ξ) := by
+    (boundedPVM hT).diag ξ = Measure.map reCoord ((cfcHom
+      hT.isStarNormal).representationDiagMeasure ξ) := by
   rw [boundedPVM, toProjValMeasure_diag, specDiag_def]
 
 /-- **The bridge to the continuous functional calculus.**  A spectral projection
@@ -267,16 +268,18 @@ only the final `integral_mono_ae` and which half-line is null. -/
 private theorem re_inner_eq_integral_reCoord
     (hT : IsSelfAdjoint T) (ξ : H) :
     (⟪T ξ, ξ⟫_ℂ).re =
-      ∫ w, reCoord (T := T) w ∂(diagMeasure hT.isStarNormal ξ) := by
+      ∫ w, reCoord (T := T) w ∂((cfcHom hT.isStarNormal).representationDiagMeasure ξ) := by
   have hcoord : IsBddMeasurable (fun w : spectrum ℂ T => (w : ℂ)) :=
     isBddMeasurable_coord (a := T)
   have hbc : ⟪ξ, borelCalculus hT.isStarNormal hcoord ξ⟫_ℂ =
-      ∫ w, (w : ℂ) ∂(diagMeasure hT.isStarNormal ξ) :=
+      ∫ w, (w : ℂ) ∂((cfcHom hT.isStarNormal).representationDiagMeasure ξ) :=
     inner_borelCalculus_self hT.isStarNormal hcoord ξ
   rw [borelCalculus_coord hT.isStarNormal] at hbc
-  have hint : Integrable (fun w : spectrum ℂ T => (w : ℂ)) (diagMeasure hT.isStarNormal ξ) :=
+  have hint : Integrable (fun w : spectrum ℂ T => (w : ℂ)) ((cfcHom
+    hT.isStarNormal).representationDiagMeasure ξ) :=
     hcoord.integrable _
-  have hre : (⟪ξ, T ξ⟫_ℂ).re = ∫ w, ((w : ℂ)).re ∂(diagMeasure hT.isStarNormal ξ) := by
+  have hre : (⟪ξ, T ξ⟫_ℂ).re = ∫ w, ((w : ℂ)).re ∂((cfcHom
+    hT.isStarNormal).representationDiagMeasure ξ) := by
     rw [hbc]
     simpa [RCLike.re_eq_complex_re] using (integral_re (𝕜 := ℂ) hint).symm
   rw [← inner_conj_symm, Complex.conj_re]
@@ -285,7 +288,7 @@ private theorem re_inner_eq_integral_reCoord
 /-- The real coordinate is integrable against the diagonal measure. -/
 private theorem integrable_reCoord (hT : IsSelfAdjoint T) (ξ : H) :
     Integrable (fun w : spectrum ℂ T => reCoord (T := T) w)
-      (diagMeasure hT.isStarNormal ξ) := by
+      ((cfcHom hT.isStarNormal).representationDiagMeasure ξ) := by
   have hcoord : IsBddMeasurable (fun w : spectrum ℂ T => (w : ℂ)) :=
     isBddMeasurable_coord (a := T)
   simpa [reCoord, RCLike.re_eq_complex_re] using (hcoord.integrable _).re
@@ -302,7 +305,7 @@ theorem re_inner_le_of_boundedPVM_proj_Ici_eq_zero (c : ℝ) {ξ : H}
     (hξ : (boundedPVM hT).proj (Set.Ici c) measurableSet_Ici ξ = 0) :
     (⟪T ξ, ξ⟫_ℂ).re ≤ c * ‖ξ‖ ^ 2 := by
   set ha := hT.isStarNormal with hha
-  set μ := diagMeasure ha ξ with hμ
+  set μ := (cfcHom ha).representationDiagMeasure ξ with hμ
   -- the diagonal measure gives the closed half-line no mass
   have hnull : μ (reCoord ⁻¹' Set.Ici c) = 0 := by
     have h := (boundedPVM hT).norm_sq_proj_apply (Set.Ici c) measurableSet_Ici ξ
@@ -327,7 +330,8 @@ theorem re_inner_le_of_boundedPVM_proj_Ici_eq_zero (c : ℝ) {ξ : H}
   calc ∫ w, reCoord (T := T) w ∂μ ≤ ∫ _w : spectrum ℂ T, c ∂μ :=
         integral_mono_ae hintc (integrable_const _) hae
     _ = c * ‖ξ‖ ^ 2 := by
-        rw [integral_const, smul_eq_mul, measureReal_def, ← diagMeasure_univ_toReal ha ξ]
+        rw [integral_const, smul_eq_mul, hμ,
+          StarAlgHom.representationDiagMeasure_real_univ]
         ring
 
 /-- **Form bound from a spectral half-line, the other side.**  If the spectral
@@ -338,7 +342,7 @@ theorem le_re_inner_of_boundedPVM_proj_Iic_eq_zero (c : ℝ) {ξ : H}
     (hξ : (boundedPVM hT).proj (Set.Iic c) measurableSet_Iic ξ = 0) :
     c * ‖ξ‖ ^ 2 ≤ (⟪T ξ, ξ⟫_ℂ).re := by
   set ha := hT.isStarNormal with hha
-  set μ := diagMeasure ha ξ with hμ
+  set μ := (cfcHom ha).representationDiagMeasure ξ with hμ
   have hnull : μ (reCoord ⁻¹' Set.Iic c) = 0 := by
     have h := (boundedPVM hT).norm_sq_proj_apply (Set.Iic c) measurableSet_Iic ξ
     rw [hξ, norm_zero] at h
@@ -358,7 +362,8 @@ theorem le_re_inner_of_boundedPVM_proj_Iic_eq_zero (c : ℝ) {ξ : H}
   have hintc : Integrable (fun w : spectrum ℂ T => reCoord (T := T) w) μ :=
     integrable_reCoord hT ξ
   calc c * ‖ξ‖ ^ 2 = ∫ _w : spectrum ℂ T, c ∂μ := by
-        rw [integral_const, smul_eq_mul, measureReal_def, ← diagMeasure_univ_toReal ha ξ]
+        rw [integral_const, smul_eq_mul, hμ,
+          StarAlgHom.representationDiagMeasure_real_univ]
         ring
     _ ≤ ∫ w, reCoord (T := T) w ∂μ :=
         integral_mono_ae (integrable_const _) hintc hae

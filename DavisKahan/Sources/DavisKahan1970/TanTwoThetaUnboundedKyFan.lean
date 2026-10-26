@@ -825,7 +825,7 @@ theorem abs_norm_sq_offDiagonalPart_sum_sub_le
           mul_le_mul_of_nonneg_left hDnorm (norm_nonneg g)
       _ = n * ε * ‖g‖ ^ 2 := by ring
       _ = n * ε * ∑ i, ‖γ i‖ ^ 2 := by rw [hgnorm]
-  simpa using herr
+  simpa only [add_sub_cancel_left] using herr
 
 /-!
 ## Compressed double-angle eigenfamilies
@@ -1374,7 +1374,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
       zero_le_one hcontr
       (fun α => sq_norm_sum_smul_le_of_orthonormal hxon (le_refl (1 : ℝ)) α)
       (fun _ => le_rfl)
-    simpa using h
+    simpa only [one_mul] using h
   have hsum2 : ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
       U.offDiagBlock Z ((x i : A.domain) : H)),
       B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
@@ -2752,7 +2752,7 @@ theorem isOddFor_residual : TauCeti.IsOddFor trial residual := by
     rw [trial_orthogonal_eq, Submodule.mem_span_singleton] at hx
     obtain ⟨c, rfl⟩ := hx
     rw [mem_trial_iff, residual_apply]
-    simp [inner_unitVector, inner_smul_right, inner_add_right, inner_neg_right]
+    simp [inner_unitVector, inner_smul_right, inner_neg_right]
 
 /-- The reflection preserves the domain of the unperturbed operator. -/
 theorem mapsDomainTo_reflectionZ :

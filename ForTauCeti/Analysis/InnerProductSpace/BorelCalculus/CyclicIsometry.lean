@@ -16,11 +16,12 @@ For a normal operator `a` and a vector `ξ`, the map
 f ↦ f(a) ξ
 ```
 
-is an **isometry** from `L²` of the scalar spectral measure `diagMeasure ha ξ` into the
+is an **isometry** from `L²` of the scalar spectral measure `(cfcHom ha).representationDiagMeasure
+ξ` into the
 ambient Hilbert space:
 
 ```text
-‖f(a) ξ‖² = ∫ ‖f x‖² d(diagMeasure ha ξ).
+‖f(a) ξ‖² = ∫ ‖f x‖² d((cfcHom ha).representationDiagMeasure ξ).
 ```
 
 This single identity is the cornerstone of the multiplication model of the spectral
@@ -63,13 +64,14 @@ variable {a : H →L[ℂ] H}
 /-- **The cyclic isometry identity.**  The squared norm of `f(a) ξ` is the `L²` norm of
 the symbol against the scalar spectral measure of `ξ`.
 
-Equivalently: `f ↦ f(a) ξ` is an isometry of `L²(diagMeasure ha ξ)` into `H`.  This is
+Equivalently: `f ↦ f(a) ξ` is an isometry of `L²((cfcHom ha).representationDiagMeasure ξ)` into
+`H`.  This is
 the analytic content of the multiplication model of the spectral theorem, and it needs
 nothing beyond multiplicativity of the calculus, its `⋆`-preservation, and the defining
 property of the diagonal measure. -/
 theorem norm_borelCalculus_apply_sq (ha : IsStarNormal a)
     {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) (ξ : H) :
-    ‖borelCalculus ha hf ξ‖ ^ 2 = ∫ x, ‖f x‖ ^ 2 ∂(diagMeasure ha ξ) := by
+    ‖borelCalculus ha hf ξ‖ ^ 2 = ∫ x, ‖f x‖ ^ 2 ∂((cfcHom ha).representationDiagMeasure ξ) := by
   have hinner : ⟪borelCalculus ha hf ξ, borelCalculus ha hf ξ⟫_ℂ
       = ⟪ξ, (borelCalculus ha hf.conj * borelCalculus ha hf) ξ⟫_ℂ := by
     rw [borelCalculus_conj, _root_.mul_apply_eq_comp,
@@ -81,8 +83,8 @@ theorem norm_borelCalculus_apply_sq (ha : IsStarNormal a)
   rw [hnorm] at hinner
   have hre := congrArg Complex.re hinner
   rw [Complex.ofReal_re] at hre
-  have hint : (∫ x, (starRingEnd ℂ) (f x) * f x ∂(diagMeasure ha ξ)).re
-      = ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂(diagMeasure ha ξ) :=
+  have hint : (∫ x, (starRingEnd ℂ) (f x) * f x ∂((cfcHom ha).representationDiagMeasure ξ)).re
+      = ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂((cfcHom ha).representationDiagMeasure ξ) :=
     (integral_re ((hf.conj.mul hf).integrable _)).symm
   rw [hint] at hre
   -- `conj z * z` has real part `‖z‖²`.

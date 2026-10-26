@@ -1111,3 +1111,26 @@ skipped. The auxiliary local-only declaration-name parser reports 23 findings,
 including imported native declarations and historical map destinations. No
 broad static-gate or external comparator pass is inferred. Papers,
 visualizations and the original three untracked files are untouched.
+
+### October 25: consume accepted representation measures
+
+The local `BorelCalculus.DiagonalMeasure` module is deleted. Every maintained
+carrier uses `(cfcHom ha).representationDiagMeasure`, including the measures
+inside cyclic `L²` types and real-spectrum transports. Native finite/regular,
+integral, uniqueness and mass results replace the local Riesz construction and
+its public helper API. No measure wrapper or compatibility name remains.
+
+Real-symbol integral statements are obtained locally by taking `Complex.re`
+of the native complex identity. Conjugation invariance is proved by continuous
+integral equality, and restriction compatibility now applies native uniqueness
+directly to complex symbols. The unused real-symbol composition helper and the
+duplicate finite-sum measure theorem are removed. Finiteness of sums comes
+from Mathlib's accepted instance.
+
+Focused polarization and restriction/naturality builds passed (6,312 and 6,400
+jobs), each following its cache fetch. The normal, complex-symbol, unrestricted
+dimension and unbounded/real consumer scopes remain intact. The extraction
+manifest separates this accepted foundation from the still-local Borel,
+cyclic/multiplicity and partial-map spectral mathematics. The original
+Kitware/Jon Crall/Claude Opus 5 provenance is retained from DKPS `9380d70b0`;
+the accepted comparison uses Tau Ceti `97bf1230` (#20399).

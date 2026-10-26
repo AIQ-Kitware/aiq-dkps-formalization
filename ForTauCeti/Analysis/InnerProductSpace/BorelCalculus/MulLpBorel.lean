@@ -100,9 +100,9 @@ include hg hgC in
 `h ∘ (↑)` against the scalar spectral measure of `F` is integrating `h ∘ g` against
 `|F|² · ρ`. -/
 theorem integral_comp_val_diagMeasure_mulLp {h : ℂ → ℂ} (hm : Measurable h) (F : Lp ℂ 2 ρ) :
-    ∫ w, h (w : ℂ) ∂(diagMeasure (isStarNormal_mulLp ρ hg hgC) F)
+    ∫ w, h (w : ℂ) ∂((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
       = ∫ x, h (g x) * ((‖(F : α → ℂ) x‖ : ℂ)) ^ 2 ∂ρ := by
-  have h1 := integral_map (μ := diagMeasure (isStarNormal_mulLp ρ hg hgC) F)
+  have h1 := integral_map (μ := (cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
     (φ := (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ))
     measurable_subtype_coe.aemeasurable (f := h) hm.aestronglyMeasurable
   rw [← h1, map_val_diagMeasure_mulLp ρ hg hgC F,
@@ -120,7 +120,7 @@ multiplication by any symbol almost everywhere equal to the composition. -/
 theorem integral_comp_val_diagMeasure_eq_inner_mulLp {h : ℂ → ℂ} (hm : Measurable h)
     {h' : α → ℂ} (hm' : Measurable h') {C' : ℝ} (hC' : ∀ x, ‖h' x‖ ≤ C')
     (heq : ∀ᵐ x ∂ρ, h' x = h (g x)) (F : Lp ℂ 2 ρ) :
-    ∫ w, h (w : ℂ) ∂(diagMeasure (isStarNormal_mulLp ρ hg hgC) F)
+    ∫ w, h (w : ℂ) ∂((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
       = ⟪F, mulLp ρ hm' hC' F⟫_ℂ := by
   rw [integral_comp_val_diagMeasure_mulLp ρ hg hgC hm F, inner_mulLp_self ρ hm' hC' F]
   refine integral_congr_ae ?_
@@ -140,7 +140,7 @@ theorem borelCalculus_comp_val_mulLp {h : ℂ → ℂ} (hm : Measurable h) {C' :
   refine ext_inner_left ℂ fun ψ => ?_
   rw [inner_borelCalculus, pair_def]
   have hint : ∀ F : Lp ℂ 2 ρ,
-      ∫ w, h (w : ℂ) ∂(diagMeasure (isStarNormal_mulLp ρ hg hgC) F)
+      ∫ w, h (w : ℂ) ∂((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
         = ⟪F, mulLp ρ hm' hC' F⟫_ℂ := fun F =>
     integral_comp_val_diagMeasure_eq_inner_mulLp ρ hg hgC hm hm' hC' heq F
   rw [hint (ξ + ψ), hint (ξ + Complex.I • ψ), hint (ξ - ψ), hint (ξ - Complex.I • ψ)]

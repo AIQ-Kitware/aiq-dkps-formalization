@@ -68,7 +68,8 @@ Insisting on `ℕ` is what drags separability in, and nothing needs `ℕ`.
 ## What is not here
 
 The decomposition is not yet organised by measure class: the vectors are unordered, the
-measures `diagMeasure ha (ξ i)` are unrelated to one another, and no multiplicity function
+measures `(cfcHom ha).representationDiagMeasure (ξ i)` are unrelated to one another, and no
+multiplicity function
 appears.  Ordering them is layer 4 and the multiplicity function is layer 5; see
 the uniform-multiplicity form, which replaces the separable normal form
 `μ₁ ≫ μ₂ ≫ …` by the uniform-multiplicity decomposition indexed by cardinals.
@@ -306,10 +307,11 @@ subspaces (`range_cyclicIsometry`); totality is the same rewriting.  Again no co
 involved. -/
 theorem exists_isHilbertSum_lp_diagMeasure (ha : IsStarNormal a) :
     ∃ (ι : Type u) (ξ : ι → H),
-      IsHilbertSum ℂ (fun i => Lp ℂ 2 (diagMeasure ha (ξ i)))
+      IsHilbertSum ℂ (fun i => Lp ℂ 2 ((cfcHom ha).representationDiagMeasure (ξ i)))
         (fun i => cyclicIsometry ha (ξ i)) := by
   obtain ⟨ι, ξ, hortho, htotal⟩ := exists_orthogonalFamily_cyclicSubspace ha
-  refine ⟨ι, ξ, IsHilbertSum.mk (𝕜 := ℂ) (G := fun i => Lp ℂ 2 (diagMeasure ha (ξ i)))
+  refine ⟨ι, ξ, IsHilbertSum.mk (𝕜 := ℂ) (G := fun i => Lp ℂ 2 ((cfcHom
+    ha).representationDiagMeasure (ξ i)))
     (V := fun i => cyclicIsometry ha (ξ i)) (fun i j hij v w => ?_) ?_⟩
   · exact (hortho.isOrtho hij).inner_eq (cyclicIsometry_mem_cyclicSubspace ha (ξ i) v)
       (cyclicIsometry_mem_cyclicSubspace ha (ξ j) w)
@@ -324,7 +326,7 @@ becomes coordinatewise multiplication by the spectral coordinate.  **The index t
 arbitrary: no separability hypothesis is used anywhere in the chain that produces it.** -/
 theorem exists_linearIsometryEquiv_lp_diagMeasure (ha : IsStarNormal a) :
     ∃ (ι : Type u) (ξ : ι → H),
-      Nonempty (H ≃ₗᵢ[ℂ] lp (fun i => Lp ℂ 2 (diagMeasure ha (ξ i))) 2) := by
+      Nonempty (H ≃ₗᵢ[ℂ] lp (fun i => Lp ℂ 2 ((cfcHom ha).representationDiagMeasure (ξ i))) 2) := by
   obtain ⟨ι, ξ, hsum⟩ := exists_isHilbertSum_lp_diagMeasure ha
   exact ⟨ι, ξ, ⟨hsum.linearIsometryEquiv⟩⟩
 

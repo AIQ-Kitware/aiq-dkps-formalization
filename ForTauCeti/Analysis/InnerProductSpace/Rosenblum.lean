@@ -46,7 +46,8 @@ measures live on the spectrum — and two dominated-convergence limits finish it
 
 The intertwining says those two sequences are equal, so `‖X ξ‖ = 0`.
 
-Only *diagonal* matrix elements appear, so `integral_diagMeasure` is the whole
+Only *diagonal* matrix elements appear, so `StarAlgHom.integral_representationDiagMeasure` is the
+whole
 measure-theoretic interface; no polarisation and no `pair` form is needed.
 
 ## Provenance
@@ -200,7 +201,7 @@ needs: everything is a *diagonal* matrix element, so no polarisation appears. -/
 @[simp]
 theorem norm_sq_cfcHom_apply (g : C(_root_.spectrum ℂ a, ℂ)) (v : H) :
     ((‖cfcHom ha g v‖ ^ 2 : ℝ) : ℂ)
-      = ∫ w, (starRingEnd ℂ) (g w) * g w ∂(BorelCalculus.diagMeasure ha v) := by
+      = ∫ w, (starRingEnd ℂ) (g w) * g w ∂((cfcHom ha).representationDiagMeasure v) := by
   have hstar : (cfcHom ha g).adjoint = cfcHom ha (star g) := by
     rw [← ContinuousLinearMap.star_eq_adjoint, ← map_star]
   have hfun : (fun w => (starRingEnd ℂ) (g w) * g w)
@@ -210,7 +211,7 @@ theorem norm_sq_cfcHom_apply (g : C(_root_.spectrum ℂ a, ℂ)) (v : H) :
     -- states the goal as the inner-product identity the structure lemma expects.
     change ⟪v, cfcHom ha (star g) (cfcHom ha g v)⟫_ℂ = _
     rw [← hstar, ContinuousLinearMap.adjoint_inner_right]
-  rw [hfun, BorelCalculus.integral_diagMeasure, key, inner_self_eq_norm_sq_to_K]
+  rw [hfun, StarAlgHom.integral_representationDiagMeasure, key, inner_self_eq_norm_sq_to_K]
   norm_cast
 
 end NormSquare
@@ -238,17 +239,17 @@ point of the Cayley spectrum has its inverse-Cayley coordinate in the real
 spectrum.  This is `SpectralSupport`, transported through the pushforward that
 defines `spectralPVM`. -/
 theorem ae_cayleyInv_mem_spectrum (v : E) :
-    ∀ᵐ w ∂(BorelCalculus.diagMeasure (isStarNormal_cayley hA) v),
+    ∀ᵐ w ∂((cfcHom (isStarNormal_cayley hA)).representationDiagMeasure v),
       ((cayleyInv hA w : ℝ) : ℂ) ∈ _root_.LinearPMap.spectrum A := by
   have hmeas : MeasurableSet (Complex.ofReal ⁻¹' resolventSet A) :=
     ((isOpen_resolventSet A).preimage Complex.continuous_ofReal).measurableSet
   have hzero : (spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A) = 0 :=
     diag_eq_zero_of_subset_resolventSet hA _ hmeas (fun _ h => h) v
   have hmap : (spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A)
-      = BorelCalculus.diagMeasure (isStarNormal_cayley hA) v
+      = (cfcHom (isStarNormal_cayley hA)).representationDiagMeasure v
           (cayleyInv hA ⁻¹' (Complex.ofReal ⁻¹' resolventSet A)) := by
     rw [show (spectralPVM hA).diag v
-        = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure (isStarNormal_cayley hA) v)
+        = Measure.map (cayleyInv hA) ((cfcHom (isStarNormal_cayley hA)).representationDiagMeasure v)
       from by
         rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag, BorelCalculus.specDiag_def],
       Measure.map_apply (measurable_cayleyInv hA) hmeas]
@@ -279,7 +280,7 @@ theorem cfcHom_separator_eq_zero (hA : IsSelfAdjoint A) (f : C(ℝ, ℝ))
     (hgval : ∀ w, g w = cayleySymbolFun f n (w : ℂ)) :
     cfcHom (isStarNormal_cayley hA) g = 0 := by
   refine ContinuousLinearMap.ext fun v => ?_
-  have hae : ∀ᵐ w ∂(BorelCalculus.diagMeasure (isStarNormal_cayley hA) v),
+  have hae : ∀ᵐ w ∂((cfcHom (isStarNormal_cayley hA)).representationDiagMeasure v),
       (starRingEnd ℂ) (g w) * g w = 0 := by
     filter_upwards [ae_cayleyInv_mem_spectrum hA v] with w hw
     have hf0 : f (cayleyInv hA w) = 0 := hfA hw
@@ -309,7 +310,7 @@ theorem tendsto_cfcHom_separator (hB : IsSelfAdjoint B) (f : C(ℝ, ℝ))
     (hgval : ∀ n w, g n w = cayleySymbolFun f n (w : ℂ)) (ξ : F) :
     Tendsto (fun n => cfcHom (isStarNormal_cayley hB) (g n) ξ) atTop (nhds ξ) := by
   set hU := isStarNormal_cayley hB with hhU
-  set μ := BorelCalculus.diagMeasure hU ξ with hμ
+  set μ := (cfcHom hU).representationDiagMeasure ξ with hμ
   have hlim : Tendsto
       (fun n => ∫ w, (starRingEnd ℂ) ((g n - 1) w) * ((g n - 1) w) ∂μ) atTop (nhds 0) := by
     have hae : ∀ᵐ w ∂μ, Tendsto

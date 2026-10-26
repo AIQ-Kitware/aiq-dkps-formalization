@@ -70,7 +70,8 @@ theorem cyclicSubspace_zero (ha : IsStarNormal a) : cyclicSubspace ha (0 : H) = 
 
 /-- A value of the cyclic isometry at the zero vector is zero. -/
 theorem cyclicIsometry_zero_apply (ha : IsStarNormal a)
-    (F : Lp ℂ 2 (diagMeasure ha (0 : H))) : cyclicIsometry ha (0 : H) F = 0 := by
+    (F : Lp ℂ 2 ((cfcHom ha).representationDiagMeasure (0 : H))) : cyclicIsometry ha (0 : H) F = 0
+      := by
   have hmem := cyclicIsometry_mem_cyclicSubspace ha (0 : H) F
   rw [cyclicSubspace_zero ha] at hmem
   exact hmem
@@ -124,7 +125,7 @@ by the enumeration are filled with the zero vector, whose summand is trivial and
 orthogonal to everything. -/
 theorem exists_countable_isHilbertSum_lp_diagMeasure_complex [TopologicalSpace.SeparableSpace H]
     (ha : IsStarNormal a) :
-    ∃ ξ : ℕ → H, IsHilbertSum ℂ (fun n => Lp ℂ 2 (diagMeasure ha (ξ n)))
+    ∃ ξ : ℕ → H, IsHilbertSum ℂ (fun n => Lp ℂ 2 ((cfcHom ha).representationDiagMeasure (ξ n)))
       (fun n => cyclicIsometry ha (ξ n)) := by
   classical
   obtain ⟨S, hSmax⟩ := exists_maximal_isOrthogonalCyclicSet ha
@@ -145,8 +146,8 @@ theorem exists_countable_isHilbertSum_lp_diagMeasure_complex [TopologicalSpace.S
     · exact Or.inl (hzero n h)
   have heS : ∀ x ∈ S, e (f x) = x := fun x hx =>
     hf (hspec (f x) ⟨x, hx, rfl⟩).1 hx (hspec (f x) ⟨x, hx, rfl⟩).2
-  have horth : ∀ m n : ℕ, m ≠ n → ∀ (v : Lp ℂ 2 (diagMeasure ha (e m)))
-      (w : Lp ℂ 2 (diagMeasure ha (e n))),
+  have horth : ∀ m n : ℕ, m ≠ n → ∀ (v : Lp ℂ 2 ((cfcHom ha).representationDiagMeasure (e m)))
+      (w : Lp ℂ 2 ((cfcHom ha).representationDiagMeasure (e n))),
       ⟪cyclicIsometry ha (e m) v, cyclicIsometry ha (e n) w⟫_ℂ = 0 := by
     intro m n hmn v w
     rcases hemem m with h0 | ⟨hmS, hmf⟩

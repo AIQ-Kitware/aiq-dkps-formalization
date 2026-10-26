@@ -17,6 +17,8 @@ public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOriented
 
 public section
 
+open scoped ComplexOrder
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -221,7 +223,8 @@ theorem boundedSelfAdjointSpectralProjection_centralBand_eq_cfcHom
     · have hband : w ∈ TauCeti.BorelCalculus.reCoord (T := B) ⁻¹' centralBand l r d := by
         refine ⟨by linarith [hin.1], by linarith [hin.2]⟩
       rw [Set.indicator_of_mem hband]
-      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, bandSymbol_apply,
+      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply,
+        bandSymbol_apply,
         bandCutoff_eq_one hd hin]
       norm_num
     · have hband : w ∉ TauCeti.BorelCalculus.reCoord (T := B) ⁻¹' centralBand l r d := by
@@ -230,7 +233,8 @@ theorem boundedSelfAdjointSpectralProjection_centralBand_eq_cfcHom
         · exact absurd hmem'.1 (by simp; linarith)
         · exact absurd hmem'.2 (by simp; linarith)
       rw [Set.indicator_of_notMem hband]
-      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, bandSymbol_apply,
+      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply,
+        bandSymbol_apply,
         bandCutoff_eq_zero hd hout]
       norm_num
 
@@ -288,8 +292,15 @@ theorem re_inner_le_of_mem_centralBandSubspace
     · rw [bandCutoff_eq_one hd hin, mul_one]
       linarith [hin.2]
     · rw [bandCutoff_eq_zero hd hout, mul_zero]
-  have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
-    (a := B) hBsa.isStarNormal hgnonneg x
+  have hpos : 0 ≤
+      (⟪x, cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) x⟫_ℂ).re := by
+    have hT : 0 ≤ cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) := by
+      apply map_nonneg (cfcHom hBsa.isStarNormal)
+      intro w
+      simpa using hgnonneg w
+    exact (ContinuousLinearMap.nonneg_iff_isPositive.mp hT).re_inner_nonneg_right x
   have hsymbol :
       (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
         ((r : ℝ) : ℂ) • (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d) -
@@ -359,8 +370,15 @@ theorem le_re_inner_of_mem_centralBandSubspace
     · rw [bandCutoff_eq_one hd hin, mul_one]
       linarith [hin.1]
     · rw [bandCutoff_eq_zero hd hout, mul_zero]
-  have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
-    (a := B) hBsa.isStarNormal hgnonneg x
+  have hpos : 0 ≤
+      (⟪x, cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) x⟫_ℂ).re := by
+    have hT : 0 ≤ cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) := by
+      apply map_nonneg (cfcHom hBsa.isStarNormal)
+      intro w
+      simpa using hgnonneg w
+    exact (ContinuousLinearMap.nonneg_iff_isPositive.mp hT).re_inner_nonneg_right x
   have hsymbol :
       (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
         ((ContinuousMap.id ℂ).restrict (spectrum ℂ B)) *
@@ -465,8 +483,15 @@ theorem norm_shiftedOperator_ge_of_mem_centralBandSubspace_orthogonal
         nlinarith [hKpos]
       · have h1 : t - c ≥ K := by rw [hc, hK, gapCenter]; linarith
         nlinarith [hKpos]
-  have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
-    (a := B) hBsa.isStarNormal hgnonneg x
+  have hpos : 0 ≤
+      (⟪x, cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) x⟫_ℂ).re := by
+    have hT : 0 ≤ cfcHom hBsa.isStarNormal
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) := by
+      apply map_nonneg (cfcHom hBsa.isStarNormal)
+      intro w
+      simpa using hgnonneg w
+    exact (ContinuousLinearMap.nonneg_iff_isPositive.mp hT).re_inner_nonneg_right x
   have hsymbol :
       (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
         ((((ContinuousMap.id ℂ).restrict (spectrum ℂ B) - ((c : ℝ) : ℂ) • 1) *

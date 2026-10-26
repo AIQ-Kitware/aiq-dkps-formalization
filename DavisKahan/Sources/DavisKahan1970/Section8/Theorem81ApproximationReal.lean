@@ -211,7 +211,8 @@ theorem canonicalLowBranchReal_form_low
   have hc := (theorem8_1_canonicalBranch_complexified A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp).branch_form_low (ofReal x) (hQc ▸ hxC)
   rw [hsum] at hc
-  simpa [re_inner_complexify] using hc
+  simpa only [re_inner_complexify, re_ofReal, im_ofReal, map_zero,
+    inner_zero_left, add_zero, ofReal.norm_map] using hc
 
 /-- **Sharp lower form bound on the real complementary branch.**  The form of
 `A + K` on the orthogonal complement of the real canonical low branch is at
@@ -239,7 +240,8 @@ theorem canonicalLowBranchReal_form_high
   have hc := (theorem8_1_canonicalBranch_complexified A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp).branch_form_high (ofReal x) (by simpa only [hQc] using hxC)
   rw [hsum] at hc
-  simpa [re_inner_complexify] using hc
+  simpa only [re_inner_complexify, re_ofReal, im_ofReal, map_zero,
+    inner_zero_left, add_zero, ofReal.norm_map] using hc
 
 /-- The perturbed upper block of the real canonical branch is positive.
 

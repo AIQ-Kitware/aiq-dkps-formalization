@@ -114,12 +114,14 @@ intertwiner.  This is `map_val_diagMeasure_eq_of_intertwines`, converted from me
 integrals. -/
 theorem integral_comp_val_diagMeasure_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] K)
     (he : ∀ x, e (a x) = b (e x)) {g : ℂ → ℂ} (hgm : Measurable g) (ξ : H) :
-    ∫ w, g (w : ℂ) ∂(diagMeasure (isStarNormal_of_intertwines ha e he) (e ξ))
-      = ∫ w, g (w : ℂ) ∂(diagMeasure ha ξ) := by
+    ∫ w, g (w : ℂ) ∂((cfcHom (isStarNormal_of_intertwines ha e he)).representationDiagMeasure (e ξ))
+      = ∫ w, g (w : ℂ) ∂((cfcHom ha).representationDiagMeasure ξ) := by
   have hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
-  have h1 := integral_map (μ := diagMeasure hb (e ξ)) (φ := (Subtype.val : spectrum ℂ b → ℂ))
+  have h1 := integral_map (μ := (cfcHom hb).representationDiagMeasure (e ξ)) (φ := (Subtype.val :
+    spectrum ℂ b → ℂ))
     measurable_subtype_coe.aemeasurable (f := g) hgm.aestronglyMeasurable
-  have h2 := integral_map (μ := diagMeasure ha ξ) (φ := (Subtype.val : spectrum ℂ a → ℂ))
+  have h2 := integral_map (μ := (cfcHom ha).representationDiagMeasure ξ) (φ := (Subtype.val :
+    spectrum ℂ a → ℂ))
     measurable_subtype_coe.aemeasurable (f := g) hgm.aestronglyMeasurable
   rw [← h1, ← h2, map_val_diagMeasure_eq_of_intertwines ha e he ξ]
 

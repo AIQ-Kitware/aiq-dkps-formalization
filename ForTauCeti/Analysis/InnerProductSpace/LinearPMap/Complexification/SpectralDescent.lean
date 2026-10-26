@@ -35,6 +35,8 @@ no parallel closed-operator bundle and no theorem-specific compatibility wrapper
 
 public section
 
+open MeasureTheory
+
 open scoped InnerProductSpace ComplexConjugate
 
 namespace TauCeti
@@ -212,14 +214,26 @@ theorem conjugateOperator_cfcHom_of_adjoint
 self-adjoint partial map are conjugation invariant. -/
 theorem diagMeasure_conjugation_complexifyReal
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A) (η : Eℂ) :
-    BorelCalculus.diagMeasure (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))
+    (cfcHom (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))).representationDiagMeasure
         (conjugation η) =
-      BorelCalculus.diagMeasure (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA)) η := by
+      (cfcHom (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))).representationDiagMeasure η
+        := by
   have hUc := conjugateOperator_cayley_complexifyReal hA
-  refine BorelCalculus.diagMeasure_congr _ (DFunLike.ext _ _ fun g => ?_)
-  rw [BorelCalculus.diagFunctional_apply, BorelCalculus.diagFunctional_apply]
+  let π := cfcHom (R := ℂ) (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))
+  change π.representationDiagMeasure (conjugation η) = π.representationDiagMeasure η
+  refine Measure.ext_of_integral_eq_on_compactlySupported fun g => ?_
+  have hi (v : Eℂ) :
+      ∫ z, g z ∂(π.representationDiagMeasure v) =
+        (⟪v, π ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) v⟫_ℂ).re := by
+    have h := π.integral_representationDiagMeasure v
+      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap)
+    change (∫ z, (g z : ℂ) ∂(π.representationDiagMeasure v)) = _ at h
+    rw [integral_complex_ofReal] at h
+    simpa only [Complex.ofReal_re] using congrArg Complex.re h
+  rw [hi, hi]
   set T := cfcHom (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))
     ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) with hT
+  change (⟪conjugation η, T (conjugation η)⟫_ℂ).re = (⟪η, T η⟫_ℂ).re
   have hfix : conjugateOperator T = T := by
     rw [hT, conjugateOperator_cfcHom_of_adjoint _ hUc,
       ContinuousMap.realToRCLikeStarAlgHom_apply,
@@ -245,8 +259,8 @@ theorem conjugateOperator_specProjection_complexifyReal
   set ind : _root_.spectrum ℂ (cayley hAℂ) → ℂ :=
     (κ ⁻¹' S).indicator (fun _ => (1 : ℂ)) with hind
   have hIreal : ∀ η : Eℂ,
-      (starRingEnd ℂ) (∫ w, ind w ∂(BorelCalculus.diagMeasure hU η)) =
-        ∫ w, ind w ∂(BorelCalculus.diagMeasure hU η) := by
+      (starRingEnd ℂ) (∫ w, ind w ∂((cfcHom hU).representationDiagMeasure η)) =
+        ∫ w, ind w ∂((cfcHom hU).representationDiagMeasure η) := by
     intro η
     rw [hind, MeasureTheory.integral_indicator_const _ hSm]
     simp

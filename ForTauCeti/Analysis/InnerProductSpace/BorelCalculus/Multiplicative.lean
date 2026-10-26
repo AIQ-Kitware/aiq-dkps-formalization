@@ -33,7 +33,7 @@ operators, and the Spectra-removal plan for the route comparison).
 
 ## Provenance
 
-*New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`.
+*New*; see `dev/tauceti/dkps-upstream-contribution-census.md`.
 -/
 
 public section
@@ -90,27 +90,30 @@ variable (ha : IsStarNormal a) {f : spectrum ℂ a → ℂ}
 /-- The diagonal of the polarised integral is the integral against the diagonal
 measure. -/
 theorem pair_self_eq_integral (hfm : Measurable f) {M : ℝ} (hfb : ∀ x, ‖f x‖ ≤ M)
-    (ξ : H) : pair ha f ξ ξ = ∫ x, f x ∂(diagMeasure ha ξ) := by
+    (ξ : H) : pair ha f ξ ξ = ∫ x, f x ∂((cfcHom ha).representationDiagMeasure ξ) := by
   refine eq_of_forall_norm_sub_le (C := 2) (by norm_num) fun ε hε => ?_
-  have : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ξ ξ k)) :=
-    isFiniteMeasure_sum_diagMeasure ha _
+  have : IsFiniteMeasure (∑ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ξ ξ k)) :=
+    by infer_instance
   set ν : Measure (spectrum ℂ a) :=
-    (∑ k : Fin 4, diagMeasure ha (pairVectors ξ ξ k)) + diagMeasure ha ξ with hν
+    (∑ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ξ ξ k)) + (cfcHom
+      ha).representationDiagMeasure ξ with hν
   have : IsFiniteMeasure ν := by rw [hν]; infer_instance
   have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
   obtain ⟨g, hgi, hgle⟩ := exists_continuous_integral_norm_sub_le ν hfi hε
-  have hdom : ∀ k : Fin 4, diagMeasure ha (pairVectors ξ ξ k) ≤ ν := fun k =>
+  have hdom : ∀ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ξ ξ k) ≤ ν := fun k =>
     Measure.le_add_right (diagMeasure_le_sum ha (pairVectors ξ ξ) k)
-  have hdomξ : diagMeasure ha ξ ≤ ν := Measure.le_add_left le_rfl
+  have hdomξ : (cfcHom ha).representationDiagMeasure ξ ≤ ν := Measure.le_add_left le_rfl
   have h1 : ‖pair ha f ξ ξ - pair ha (fun x => g x) ξ ξ‖ ≤ ε :=
     le_trans (norm_pair_sub_pair_le ha ν ξ ξ hdom hfi hgi) hgle
-  have h2 : ‖(∫ x, f x ∂(diagMeasure ha ξ)) - (∫ x, g x ∂(diagMeasure ha ξ))‖ ≤ ε :=
+  have h2 : ‖(∫ x, f x ∂((cfcHom ha).representationDiagMeasure ξ)) - (∫ x, g x ∂((cfcHom
+    ha).representationDiagMeasure ξ))‖ ≤ ε :=
     le_trans (norm_integral_sub_integral_le hdomξ hfi hgi) hgle
-  have hgeq : pair ha (fun x => g x) ξ ξ = ∫ x, g x ∂(diagMeasure ha ξ) := by
-    rw [pair_of_continuous ha g, integral_diagMeasure]
-  have key : pair ha f ξ ξ - ∫ x, f x ∂(diagMeasure ha ξ)
+  have hgeq : pair ha (fun x => g x) ξ ξ = ∫ x, g x ∂((cfcHom ha).representationDiagMeasure ξ) := by
+    rw [pair_of_continuous ha g, StarAlgHom.integral_representationDiagMeasure]
+  have key : pair ha f ξ ξ - ∫ x, f x ∂((cfcHom ha).representationDiagMeasure ξ)
       = (pair ha f ξ ξ - pair ha (fun x => g x) ξ ξ)
-        - ((∫ x, f x ∂(diagMeasure ha ξ)) - (∫ x, g x ∂(diagMeasure ha ξ))) := by
+        - ((∫ x, f x ∂((cfcHom ha).representationDiagMeasure ξ)) - (∫ x, g x ∂((cfcHom
+          ha).representationDiagMeasure ξ))) := by
     rw [hgeq]; ring
   rw [key]
   refine le_trans (norm_sub_le _ _) ?_
@@ -118,7 +121,7 @@ theorem pair_self_eq_integral (hfm : Measurable f) {M : ℝ} (hfb : ∀ x, ‖f 
 
 /-- **The diagonal matrix elements of the Borel calculus.** -/
 theorem inner_borelCalculus_self (hf : IsBddMeasurable f) (ξ : H) :
-    ⟪ξ, borelCalculus ha hf ξ⟫_ℂ = ∫ x, f x ∂(diagMeasure ha ξ) := by
+    ⟪ξ, borelCalculus ha hf ξ⟫_ℂ = ∫ x, f x ∂((cfcHom ha).representationDiagMeasure ξ) := by
   rw [inner_borelCalculus, pair_self_eq_integral ha hf.measurable hf.norm_le_chooseBound]
 
 end Diagonal
@@ -219,7 +222,7 @@ Steps 1 and 3 of `pair_mul_eq_inner_comp` are this lemma at `(ψ, η)` and `(ζ,
 is what keeps the two from being the same six lines twice. -/
 private theorem norm_pair_sub_cfcHom_le (ha : IsStarNormal a) {u : spectrum ℂ a → ℂ}
     (hu : IsBddMeasurable u) (ν : Measure (spectrum ℂ a)) [IsFiniteMeasure ν] (ψ ξ : H)
-    (hdom : ∀ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k) ≤ ν)
+    (hdom : ∀ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ψ ξ k) ≤ ν)
     (r : C(spectrum ℂ a, ℂ)) (hri : Integrable (fun x => (r : spectrum ℂ a → ℂ) x) ν)
     {δ : ℝ} (hrle : ∫ x, ‖u x - r x‖ ∂ν ≤ δ) :
     ‖pair ha u ψ ξ - ⟪ψ, cfcHom ha r ξ⟫_ℂ‖ ≤ δ := by
@@ -250,13 +253,14 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   refine eq_of_forall_norm_sub_le (C := 3 + hg.chooseBound)
     (by have := hg.chooseBound_nonneg; linarith) fun ε hε => ?_
   -- the measure attached to the target pair `(ψ, ξ)`, common to all steps
-  have : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k)) :=
-    isFiniteMeasure_sum_diagMeasure ha _
-  set νP : Measure (spectrum ℂ a) := ∑ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k) with hνP
-  have : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ψ η k)) :=
-    isFiniteMeasure_sum_diagMeasure ha _
+  have : IsFiniteMeasure (∑ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ψ ξ k)) :=
+    by infer_instance
+  set νP : Measure (spectrum ℂ a) := ∑ k : Fin 4, (cfcHom ha).representationDiagMeasure
+    (pairVectors ψ ξ k) with hνP
+  have : IsFiniteMeasure (∑ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ψ η k)) :=
+    by infer_instance
   set ν₁ : Measure (spectrum ℂ a) :=
-    νP + ∑ k : Fin 4, diagMeasure ha (pairVectors ψ η k) with hν₁
+    νP + ∑ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ψ η k) with hν₁
   have : IsFiniteMeasure ν₁ := by rw [hν₁]; infer_instance
   -- choose the approximant of `f` first
   obtain ⟨p, hpi, hple⟩ :=
@@ -269,15 +273,16 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
     exact div_le_self hε.le (le_add_of_nonneg_right (norm_nonneg p))
   -- the vector against which `g` will be tested
   set ζ := (cfcHom ha (star p)) ψ with hζ
-  have : IsFiniteMeasure (∑ k : Fin 4, diagMeasure ha (pairVectors ζ ξ k)) :=
-    isFiniteMeasure_sum_diagMeasure ha _
+  have : IsFiniteMeasure (∑ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ζ ξ k)) :=
+    by infer_instance
   set ν₂ : Measure (spectrum ℂ a) :=
-    νP + ∑ k : Fin 4, diagMeasure ha (pairVectors ζ ξ k) with hν₂
+    νP + ∑ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ζ ξ k) with hν₂
   have : IsFiniteMeasure ν₂ := by rw [hν₂]; infer_instance
   obtain ⟨q, hqi, hqle⟩ :=
     exists_continuous_integral_norm_sub_le ν₂ (hg.integrable ν₂) hε'pos
   -- step 1: replace `f` by `p` at the pair `(ψ, η)`
-  have hdom₁ : ∀ k : Fin 4, diagMeasure ha (pairVectors ψ η k) ≤ ν₁ := fun k =>
+  have hdom₁ : ∀ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ψ η k) ≤ ν₁ := fun
+    k =>
     Measure.le_add_left (diagMeasure_le_sum ha (pairVectors ψ η) k)
   have step1 : ‖pair ha f ψ η - ⟪ψ, cfcHom ha p η⟫_ℂ‖ ≤ ε :=
     norm_pair_sub_cfcHom_le ha hf ν₁ ψ η hdom₁ p hpi hple
@@ -289,7 +294,8 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   have step2 : ⟪ψ, cfcHom ha p η⟫_ℂ = pair ha g ζ ξ := by
     rw [hadj, hη, inner_borelCalculus]
   -- step 3: replace `g` by `q` at the pair `(ζ, ξ)`
-  have hdom₂ : ∀ k : Fin 4, diagMeasure ha (pairVectors ζ ξ k) ≤ ν₂ := fun k =>
+  have hdom₂ : ∀ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ζ ξ k) ≤ ν₂ := fun
+    k =>
     Measure.le_add_left (diagMeasure_le_sum ha (pairVectors ζ ξ) k)
   have step3 : ‖pair ha g ζ ξ - ⟪ζ, cfcHom ha q ξ⟫_ℂ‖ ≤ ε' :=
     norm_pair_sub_cfcHom_le ha hg ν₂ ζ ξ hdom₂ q hqi hqle
@@ -302,7 +308,8 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   -- step 5: replace the continuous product by the Borel one
   have hdomP₁ : νP ≤ ν₁ := Measure.le_add_right le_rfl
   have hdomP₂ : νP ≤ ν₂ := Measure.le_add_right le_rfl
-  have hdomP : ∀ k : Fin 4, diagMeasure ha (pairVectors ψ ξ k) ≤ νP := fun k =>
+  have hdomP : ∀ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ψ ξ k) ≤ νP := fun
+    k =>
     diagMeasure_le_sum ha (pairVectors ψ ξ) k
   have : IsFiniteMeasure νP := by rw [hνP]; infer_instance
   have hpq : IsBddMeasurable (fun x => p x * q x) :=
@@ -403,7 +410,7 @@ theorem borelCalculus_const_smul (c : ℂ) (hf : IsBddMeasurable f) :
 /-- The Borel calculus only sees the symbol up to sets that are null for every
 diagonal measure. -/
 theorem borelCalculus_congr_ae (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
-    (h : ∀ η : H, f =ᵐ[diagMeasure ha η] g) :
+    (h : ∀ η : H, f =ᵐ[(cfcHom ha).representationDiagMeasure η] g) :
     borelCalculus ha hf = borelCalculus ha hg := by
   refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
   rw [inner_borelCalculus, inner_borelCalculus]
@@ -423,8 +430,8 @@ theorem pair_conj (hfm : Measurable f) {M : ℝ} (hfb : ∀ x, ‖f x‖ ≤ M) 
   refine eq_of_forall_norm_sub_le (C := 2) (by norm_num) fun ε hε => ?_
   classical
   set v : Fin 4 ⊕ Fin 4 → H := Sum.elim (pairVectors ψ ξ) (pairVectors ξ ψ) with hv
-  set ν : Measure (spectrum ℂ a) := ∑ j, diagMeasure ha (v j) with hν
-  have : IsFiniteMeasure ν := isFiniteMeasure_sum_diagMeasure ha v
+  set ν : Measure (spectrum ℂ a) := ∑ j, (cfcHom ha).representationDiagMeasure (v j) with hν
+  have : IsFiniteMeasure ν := by dsimp only [ν]; infer_instance
   have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
   obtain ⟨g, hgi, hgle⟩ := exists_continuous_integral_norm_sub_le ν hfi hε
   have hcfi : Integrable (fun x => (starRingEnd ℂ) (f x)) ν :=
@@ -479,7 +486,7 @@ theorem norm_borelCalculus_apply_le (hf : IsBddMeasurable f) {M : ℝ} (hM : 0 �
     (hfb : ∀ x, ‖f x‖ ≤ M) (ξ : H) :
     ‖borelCalculus ha hf ξ‖ ≤ M * ‖ξ‖ := by
   have hsq : ‖borelCalculus ha hf ξ‖ ^ 2
-      = ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂(diagMeasure ha ξ) := by
+      = ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂((cfcHom ha).representationDiagMeasure ξ) := by
     have hinner : ⟪borelCalculus ha hf ξ, borelCalculus ha hf ξ⟫_ℂ
         = ⟪ξ, (borelCalculus ha hf.conj * borelCalculus ha hf) ξ⟫_ℂ := by
       rw [borelCalculus_conj, _root_.mul_apply_eq_comp,
@@ -491,8 +498,8 @@ theorem norm_borelCalculus_apply_le (hf : IsBddMeasurable f) {M : ℝ} (hM : 0 �
     rw [hnorm] at hinner
     have hre := congrArg Complex.re hinner
     rw [Complex.ofReal_re] at hre
-    have hint : (∫ x, (starRingEnd ℂ) (f x) * f x ∂(diagMeasure ha ξ)).re
-        = ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂(diagMeasure ha ξ) :=
+    have hint : (∫ x, (starRingEnd ℂ) (f x) * f x ∂((cfcHom ha).representationDiagMeasure ξ)).re
+        = ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂((cfcHom ha).representationDiagMeasure ξ) :=
       (integral_re ((hf.conj.mul hf).integrable _)).symm
     rw [← hint]
     exact hre
@@ -504,14 +511,14 @@ theorem norm_borelCalculus_apply_le (hf : IsBddMeasurable f) {M : ℝ} (hM : 0 �
     have : ‖f x‖ ^ 2 = (f x).re ^ 2 + (f x).im ^ 2 := by
       rw [← Complex.normSq_eq_norm_sq, Complex.normSq_apply]; ring
     nlinarith
-  have hbound : ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂(diagMeasure ha ξ)
+  have hbound : ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂((cfcHom ha).representationDiagMeasure ξ)
       ≤ M ^ 2 * ‖ξ‖ ^ 2 := by
-    calc ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂(diagMeasure ha ξ)
-        ≤ ∫ _x, M ^ 2 ∂(diagMeasure ha ξ) :=
+    calc ∫ x, ((starRingEnd ℂ) (f x) * f x).re ∂((cfcHom ha).representationDiagMeasure ξ)
+        ≤ ∫ _x, M ^ 2 ∂((cfcHom ha).representationDiagMeasure ξ) :=
           integral_mono ((hf.conj.mul hf).integrable _).re (integrable_const _) hptwise
       _ = ‖ξ‖ ^ 2 * M ^ 2 := by
-          rw [integral_const, smul_eq_mul, MeasureTheory.measureReal_def,
-            diagMeasure_univ_toReal]
+          rw [integral_const, smul_eq_mul,
+            StarAlgHom.representationDiagMeasure_real_univ]
       _ = M ^ 2 * ‖ξ‖ ^ 2 := by ring
   have hfinal : ‖borelCalculus ha hf ξ‖ ^ 2 ≤ (M * ‖ξ‖) ^ 2 := by
     rw [hsq, mul_pow]; exact hbound

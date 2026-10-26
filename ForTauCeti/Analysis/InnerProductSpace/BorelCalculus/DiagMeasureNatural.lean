@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
 public import Mathlib.MeasureTheory.Measure.HasOuterApproxClosed
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unique
 
@@ -36,8 +36,9 @@ than of the presentation.  The measure statement is
 measures live on the *spectrum subtypes* of `a` and of `b`, which are equal as sets but are
 different types.
 
-It follows from the naturality theorem because `diagMeasure` is characterised by
-`∫ f d(diagMeasure ha ξ) = ⟪ξ, f(a) ξ⟫` on continuous symbols, a unitary preserves inner
+It follows from the naturality theorem because `representationDiagMeasure` is characterised by
+`∫ f d((cfcHom ha).representationDiagMeasure ξ) = ⟪ξ, f(a) ξ⟫` on continuous symbols, a unitary
+preserves inner
 products, and a finite Borel measure on `ℂ` is determined by the integrals of bounded continuous
 real functions (`MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure`).
 
@@ -122,14 +123,15 @@ rather than of the presentation. -/
 theorem map_val_diagMeasure_eq_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] K)
     (he : ∀ x, e (a x) = b (e x)) (ξ : H) :
     Measure.map (Subtype.val : spectrum ℂ b → ℂ)
-        (diagMeasure (isStarNormal_of_intertwines ha e he) (e ξ))
-      = Measure.map (Subtype.val : spectrum ℂ a → ℂ) (diagMeasure ha ξ) := by
+        ((cfcHom (isStarNormal_of_intertwines ha e he)).representationDiagMeasure (e ξ))
+      = Measure.map (Subtype.val : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure ξ) := by
   have hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
   have hfa : IsFiniteMeasure
-      (Measure.map (Subtype.val : spectrum ℂ a → ℂ) (diagMeasure ha ξ)) :=
+      (Measure.map (Subtype.val : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure ξ)) :=
     Measure.isFiniteMeasure_map _ _
   have hfb : IsFiniteMeasure
-      (Measure.map (Subtype.val : spectrum ℂ b → ℂ) (diagMeasure hb (e ξ))) :=
+      (Measure.map (Subtype.val : spectrum ℂ b → ℂ) ((cfcHom hb).representationDiagMeasure (e ξ)))
+        :=
     Measure.isFiniteMeasure_map _ _
   refine MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure fun g => ?_
   have hgc : Continuous fun z : ℂ => ((g z : ℝ) : ℂ) :=
@@ -138,21 +140,31 @@ theorem map_val_diagMeasure_eq_of_intertwines (ha : IsStarNormal a) (e : H ≃�
       g.continuous.aestronglyMeasurable,
     integral_map measurable_subtype_coe.aemeasurable
       g.continuous.aestronglyMeasurable]
-  have hEa : ∫ w : spectrum ℂ a, g (w : ℂ) ∂(diagMeasure ha ξ)
+  have hEa : ∫ w : spectrum ℂ a, g (w : ℂ) ∂((cfcHom ha).representationDiagMeasure ξ)
       = (⟪ξ, cfc (fun z : ℂ => ((g z : ℝ) : ℂ)) a ξ⟫_ℂ).re := by
-    have hG := integral_diagMeasure_ofReal ha ξ
-      (⟨fun w : spectrum ℂ a => g (w : ℂ), g.continuous.comp continuous_subtype_val⟩ :
-        C(spectrum ℂ a, ℝ))
-    simp only [ContinuousMap.coe_mk] at hG
+    have hComplex := (cfcHom ha).integral_representationDiagMeasure ξ
+      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (⟨fun w : spectrum ℂ a => g (w : ℂ),
+        g.continuous.comp continuous_subtype_val⟩ :
+        C(spectrum ℂ a, ℝ)))
+    change (∫ w, (g (w : ℂ) : ℂ)
+      ∂((cfcHom ha).representationDiagMeasure ξ)) = _ at hComplex
+    rw [integral_complex_ofReal] at hComplex
+    have hG := congrArg Complex.re hComplex
+    simp only [Complex.ofReal_re] at hG
     rw [hG, cfc_apply (f := fun z : ℂ => ((g z : ℝ) : ℂ)) (a := a) ha hgc.continuousOn]
     exact congrArg (fun T : H →L[ℂ] H => (⟪ξ, T ξ⟫_ℂ).re)
       (congrArg (cfcHom ha) (ContinuousMap.ext fun _ => by simp))
-  have hEb : ∫ w : spectrum ℂ b, g (w : ℂ) ∂(diagMeasure hb (e ξ))
+  have hEb : ∫ w : spectrum ℂ b, g (w : ℂ) ∂((cfcHom hb).representationDiagMeasure (e ξ))
       = (⟪e ξ, cfc (fun z : ℂ => ((g z : ℝ) : ℂ)) b (e ξ)⟫_ℂ).re := by
-    have hG := integral_diagMeasure_ofReal hb (e ξ)
-      (⟨fun w : spectrum ℂ b => g (w : ℂ), g.continuous.comp continuous_subtype_val⟩ :
-        C(spectrum ℂ b, ℝ))
-    simp only [ContinuousMap.coe_mk] at hG
+    have hComplex := (cfcHom hb).integral_representationDiagMeasure (e ξ)
+      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (⟨fun w : spectrum ℂ b => g (w : ℂ),
+        g.continuous.comp continuous_subtype_val⟩ :
+        C(spectrum ℂ b, ℝ)))
+    change (∫ w, (g (w : ℂ) : ℂ)
+      ∂((cfcHom hb).representationDiagMeasure (e ξ))) = _ at hComplex
+    rw [integral_complex_ofReal] at hComplex
+    have hG := congrArg Complex.re hComplex
+    simp only [Complex.ofReal_re] at hG
     rw [hG, cfc_apply (f := fun z : ℂ => ((g z : ℝ) : ℂ)) (a := b) hb hgc.continuousOn]
     exact congrArg (fun T : K →L[ℂ] K => (⟪e ξ, T (e ξ)⟫_ℂ).re)
       (congrArg (cfcHom hb) (ContinuousMap.ext fun _ => by simp))

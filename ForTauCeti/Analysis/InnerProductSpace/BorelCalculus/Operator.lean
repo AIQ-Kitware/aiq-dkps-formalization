@@ -25,7 +25,7 @@ diagonal measures occurring in it.
 
 ## Provenance
 
-*New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`.
+*New*; see `dev/tauceti/dkps-upstream-contribution-census.md`.
 -/
 
 public section
@@ -91,8 +91,8 @@ theorem exists_continuous_pair_close {ι : Type*} [Finite ι] (P : ι → H × H
   classical
   have : Fintype ι := Fintype.ofFinite ι
   set v : ι × Fin 4 → H := fun p => pairVectors (P p.1).1 (P p.1).2 p.2 with hv
-  set ν : Measure (spectrum ℂ a) := ∑ j, diagMeasure ha (v j) with hν
-  have : IsFiniteMeasure ν := isFiniteMeasure_sum_diagMeasure ha v
+  set ν : Measure (spectrum ℂ a) := ∑ j, (cfcHom ha).representationDiagMeasure (v j) with hν
+  have : IsFiniteMeasure ν := by dsimp only [ν]; infer_instance
   have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
   obtain ⟨g, hgi, hgle⟩ := exists_continuous_integral_norm_sub_le ν hfi hε
   refine ⟨g, fun i => ?_⟩
@@ -224,19 +224,20 @@ section Bound
 variable (ha : IsStarNormal a) {f : spectrum ℂ a → ℂ}
 
 /-- The crude quadratic chooseBound coming straight from the definition: the total
-mass of `diagMeasure ha v` is `‖v‖ ^ 2`. -/
+mass of `(cfcHom ha).representationDiagMeasure v` is `‖v‖ ^ 2`. -/
 theorem norm_pair_le_crude (hfm : Measurable f) {M : ℝ} (hM : 0 ≤ M)
     (hfb : ∀ x, ‖f x‖ ≤ M) (ψ ξ : H) :
     ‖pair ha f ψ ξ‖ ≤ M * (‖ψ‖ ^ 2 + ‖ξ‖ ^ 2) := by
-  have key : ∀ v : H, ‖∫ x, f x ∂(diagMeasure ha v)‖ ≤ M * ‖v‖ ^ 2 := by
+  have key : ∀ v : H, ‖∫ x, f x ∂((cfcHom ha).representationDiagMeasure v)‖ ≤ M * ‖v‖ ^ 2 := by
     intro v
-    calc ‖∫ x, f x ∂(diagMeasure ha v)‖ ≤ ∫ x, ‖f x‖ ∂(diagMeasure ha v) :=
+    calc ‖∫ x, f x ∂((cfcHom ha).representationDiagMeasure v)‖ ≤ ∫ x, ‖f x‖ ∂((cfcHom
+      ha).representationDiagMeasure v) :=
           norm_integral_le_integral_norm _
-      _ ≤ ∫ _x, M ∂(diagMeasure ha v) :=
+      _ ≤ ∫ _x, M ∂((cfcHom ha).representationDiagMeasure v) :=
           integral_mono ((integrable_of_bounded hfm hfb _).norm) (integrable_const M) hfb
       _ = ‖v‖ ^ 2 * M := by
-          rw [integral_const, smul_eq_mul, MeasureTheory.measureReal_def,
-            diagMeasure_univ_toReal]
+          rw [integral_const, smul_eq_mul,
+            StarAlgHom.representationDiagMeasure_real_univ]
       _ = M * ‖v‖ ^ 2 := by ring
   have hpar1 : ‖ξ + ψ‖ ^ 2 + ‖ξ - ψ‖ ^ 2 = 2 * (‖ξ‖ ^ 2 + ‖ψ‖ ^ 2) := by
     have := parallelogram_law_with_norm ℂ ξ ψ
@@ -253,16 +254,16 @@ theorem norm_pair_le_crude (hfm : Measurable f) {M : ℝ} (hM : 0 ≤ M)
   rw [pair_def, norm_mul]
   have hq : ‖(1 / 4 : ℂ)‖ = 1 / 4 := by norm_num
   rw [hq]
-  have hsum : ‖(∫ x, f x ∂(diagMeasure ha (ξ + ψ)))
-        + Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ + Complex.I • ψ)))
-        - (∫ x, f x ∂(diagMeasure ha (ξ - ψ)))
-        - Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ - Complex.I • ψ)))‖
+  have hsum : ‖(∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + ψ)))
+        + Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + Complex.I • ψ)))
+        - (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - ψ)))
+        - Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - Complex.I • ψ)))‖
       ≤ M * ‖ξ + ψ‖ ^ 2 + M * ‖ξ + Complex.I • ψ‖ ^ 2
         + M * ‖ξ - ψ‖ ^ 2 + M * ‖ξ - Complex.I • ψ‖ ^ 2 := by
-    have e1 : ‖Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ + Complex.I • ψ)))‖
+    have e1 : ‖Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + Complex.I • ψ)))‖
         ≤ M * ‖ξ + Complex.I • ψ‖ ^ 2 := by
       rw [norm_mul, Complex.norm_I, one_mul]; exact key _
-    have e3 : ‖Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ - Complex.I • ψ)))‖
+    have e3 : ‖Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - Complex.I • ψ)))‖
         ≤ M * ‖ξ - Complex.I • ψ‖ ^ 2 := by
       rw [norm_mul, Complex.norm_I, one_mul]; exact key _
     refine le_trans (norm_sub_le _ _) ?_

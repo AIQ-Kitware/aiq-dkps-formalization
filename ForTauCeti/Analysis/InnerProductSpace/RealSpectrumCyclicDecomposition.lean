@@ -105,7 +105,8 @@ transport is an equivalence inside each summand and touches neither the index ty
 orthogonality bookkeeping. -/
 theorem isHilbertSum_lp_realSpectrumDiagMeasure_of_isHilbertSum (ha : IsSelfAdjoint a)
     {ι : Type*} {ξ : ι → H}
-    (hsum : IsHilbertSum ℂ (fun i => Lp ℂ 2 (diagMeasure ha.isStarNormal (ξ i)))
+    (hsum : IsHilbertSum ℂ (fun i => Lp ℂ 2 ((cfcHom ha.isStarNormal).representationDiagMeasure (ξ
+      i)))
       (fun i => cyclicIsometry ha.isStarNormal (ξ i))) :
     IsHilbertSum ℂ (fun i => Lp ℂ 2 (realSpectrumDiagMeasure ha (ξ i)))
       (fun i => realSpectrumCyclicIsometry ha (ξ i)) := by
@@ -194,7 +195,8 @@ axis.  A real-valued multiplication model can reuse this same `Measure ℂ` base
 `MultiplicityDatum ℝ`; only the operator value field changes. -/
 theorem map_ofReal_realSpectrumDiagMeasure (ha : IsSelfAdjoint a) (ξ : H) :
     (realSpectrumDiagMeasure ha ξ).map (fun x : spectrum ℝ a => ((x : ℝ) : ℂ))
-      = (diagMeasure ha.isStarNormal ξ).map (fun z : spectrum ℂ a => (z : ℂ)) := by
+      = ((cfcHom ha.isStarNormal).representationDiagMeasure ξ).map (fun z : spectrum ℂ a => (z :
+        ℂ)) := by
   rw [realSpectrumDiagMeasure_eq_map,
     Measure.map_map measurable_realCoord (measurable_realSpectrumHomeomorph ha)]
   exact Measure.map_congr (Filter.Eventually.of_forall fun z => coe_realSpectrumHomeomorph ha z)

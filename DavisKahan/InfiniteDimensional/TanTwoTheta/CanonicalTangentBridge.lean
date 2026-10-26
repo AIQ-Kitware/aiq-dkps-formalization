@@ -378,7 +378,7 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       rw [hN]
       -- `← ofReal_pow` pulls `(↑‖x‖) ^ 2` back to `↑(‖x‖ ^ 2)` so that
       -- `Complex.ofReal_re` can strip the coercion.
-      simp [inner_add_left, ContinuousLinearMap.adjoint_inner_left,
+      simp [ContinuousLinearMap.adjoint_inner_left,
         ← Complex.ofReal_pow]
     rw [hval]
     nlinarith [sq_nonneg ‖Y x‖, norm_nonneg x]
@@ -572,7 +572,7 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
           rw [sub_apply, ContinuousLinearMap.id_apply,
             ContinuousLinearMap.comp_apply]
         rw [hD]
-        simp [inner_sub_left, ContinuousLinearMap.adjoint_inner_left,
+        simp [ContinuousLinearMap.adjoint_inner_left,
           ← Complex.ofReal_pow]
       rw [hval]
       have hle : ‖Y x‖ ≤ ‖x‖ :=

@@ -276,10 +276,9 @@
       "roadmap_focus": "unbounded-spectral-theory",
       "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
+      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission. October 25: the diagonal Riesz-measure layer is now accepted at Tau Ceti 97bf1230 and its local construction is removed; remaining Borel, multiplicity and unbounded-operator modules are still donor mathematics.",
       "tauceti_target_marker": null,
       "staging_modules": [
-        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
@@ -316,11 +315,10 @@
       "roadmap_focus": "sylvester-hilbert-schmidt",
       "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "The blockwise lower-bound reassembly is provided by the accepted, more general TauCeti.Analysis.Normed.Group.BlockLowerBound API; the remaining listed modules are local donor mathematics.",
+      "tauceti_population": "The blockwise lower-bound reassembly is provided by the accepted, more general TauCeti.Analysis.Normed.Group.BlockLowerBound API; the remaining listed modules are local donor mathematics. October 25: the diagonal Riesz-measure layer is now accepted at Tau Ceti 97bf1230 and its local construction is removed; remaining Borel, multiplicity and unbounded-operator modules are still donor mathematics.",
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculusTransport",
-        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
@@ -2483,20 +2481,18 @@
       ],
       "current_namespace": "TauCeti.BorelCalculus",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Representation.DiagonalMeasure",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
-      "provenance_class": "staged in ForTauCeti",
+      "provenance_class": "Original DKPS/ForTauCeti diagonal Riesz construction by Jon Crall and Claude Opus 5, Kitware Apache-2.0; retired in favor of accepted generic representation measures. Acceptance verified from the pinned main history; statement comparison alone is not proof-descent evidence.",
       "direct_dependencies": [
         "Mathlib"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization"
-      ],
-      "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "October 25, following DKPS 32799562e: the independent local real-to-complex continuous-function map ofRealLM and its two accessor/star lemmas are removed. Their consumers use Mathlib ContinuousMap.realToRCLikeStarAlgHom, realToRCLikeStarAlgHom_apply, realToRCLike_apply and isSelfAdjoint_realToRCLike directly. The local positivity proof consumes accepted map_nonneg and the native positive-operator characterization. This is a preparatory retirement: diagFunctional, diagMeasure and their integral/measure consumers still remain local pending migration to the newly accepted representationDiagMeasure API. Retain original Kitware/Jon Crall/Claude Opus 5 provenance from the pre-change file; no proof descent from DKPS to the older Mathlib real-function API is claimed."
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/20399",
+      "migration_note": "October 25, following DKPS 32799562e: the independent local real-to-complex continuous-function map ofRealLM and its two accessor/star lemmas are removed. Their consumers use Mathlib ContinuousMap.realToRCLikeStarAlgHom, realToRCLikeStarAlgHom_apply, realToRCLike_apply and isSelfAdjoint_realToRCLike directly. The local positivity proof consumes accepted map_nonneg and the native positive-operator characterization. This is a preparatory retirement: diagFunctional, diagMeasure and their integral/measure consumers still remain local pending migration to the newly accepted representationDiagMeasure API. Retain original Kitware/Jon Crall/Claude Opus 5 provenance from the pre-change file; no proof descent from DKPS to the older Mathlib real-function API is claimed. Following DKPS 9380d70b0, the whole local DiagonalMeasure module is deleted, including diagFunctional, the duplicate measure/instances, real and complex integration helpers, mass formula and real-symbol CFC helper API. Every production carrier uses StarAlgHom.representationDiagMeasure (cfcHom ha) directly. Native finite/regular, integral, uniqueness and mass results are consumed without aliases or constructor wrappers. Three conjugation-invariance proofs now compare scalar continuous integrals. The restriction theorem uses complex symbols and native uniqueness directly. Source normality, arbitrary Hilbert-space dimension and complex-symbol scope are preserved. Accepted at Tau Ceti 97bf123075b7f142c1e37b827b6b37c156803248, including 8e692e2c (#20399); pre-retirement source/licensing are preserved by this record and Git history."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -2629,7 +2625,6 @@
       "source_declarations": [
         "diagMeasure_le_sum",
         "exists_continuous_integral_norm_sub_le",
-        "isFiniteMeasure_sum_diagMeasure",
         "norm_integral_sub_integral_le",
         "norm_pair_sub_pair_le",
         "pair",
@@ -2643,7 +2638,7 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged Borel integral-transport layer; shared operator polarization identity now comes from TauCeti.Analysis.InnerProductSpace.OperatorIdentities",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
+        "TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
         "TauCeti.Analysis.InnerProductSpace.OperatorIdentities",
         "Mathlib"
       ],
@@ -2652,7 +2647,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator"
       ],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "October 25, following DKPS 9380d70b0: the polarised integral is defined directly over accepted StarAlgHom.representationDiagMeasure (cfcHom ha). The duplicate finite-sum measure theorem is removed; consumers use the accepted Mathlib finite-sum instance. Other integral-transport and polarization mathematics remains local and retains its scope and Kitware provenance."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",

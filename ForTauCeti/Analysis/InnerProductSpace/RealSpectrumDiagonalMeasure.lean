@@ -13,9 +13,9 @@ public import Mathlib.MeasureTheory.Integral.Bochner.Basic
 /-!
 # The diagonal spectral measure of a self-adjoint operator, on its real spectrum
 
-`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` builds
-`TauCeti.BorelCalculus.diagMeasure`, the scalar spectral measure of a vector, as a measure on
-`spectrum ℂ a`.  `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumBorelSymbols.lean` has
+Tau Ceti's `StarAlgHom.representationDiagMeasure`, applied to `cfcHom ha`, supplies the
+scalar spectral measure of a vector on `spectrum ℂ a`.
+`ForTauCeti/Analysis/InnerProductSpace/RealSpectrumBorelSymbols.lean` has
 already moved the *symbol* side of the cyclic multiplication model to `spectrum ℝ a`.  This
 module moves the *measure* side.
 
@@ -26,7 +26,8 @@ isomorphism because both spectra carry the subspace Borel σ-algebra.
 
 ## What is delivered
 
-`realSpectrumDiagMeasure ha ξ` is the pushforward of `diagMeasure ha.isStarNormal ξ` along the
+`realSpectrumDiagMeasure ha ξ` is the pushforward of `(cfcHom
+ha.isStarNormal).representationDiagMeasure ξ` along the
 homeomorphism, and `measurePreserving_realSpectrumHomeomorph` says the homeomorphism is
 measure-preserving between the two.  Because the map is a Borel *isomorphism*, the same
 statement holds in the other direction
@@ -35,7 +36,8 @@ transport from a linear isometry to a linear isometric *equivalence*:
 
 ```text
 realSpectrumDiagMeasureLpEquiv ha ξ :
-  Lp ℂ 2 (realSpectrumDiagMeasure ha ξ) ≃ₗᵢ[ℂ] Lp ℂ 2 (diagMeasure ha.isStarNormal ξ)
+  Lp ℂ 2 (realSpectrumDiagMeasure ha ξ) ≃ₗᵢ[ℂ] Lp ℂ 2 ((cfcHom
+  ha.isStarNormal).representationDiagMeasure ξ)
 ```
 
 Mathlib supplies `MeasureTheory.Lp.compMeasurePreservingₗᵢ` in each direction; what it does not
@@ -49,7 +51,8 @@ accompanying measure-preservation proof needs no transport.
 ## What is deliberately not delivered
 
 Nothing here touches `BorelCalculus/`.  `cyclicIsometry` still lands in
-`Lp ℂ 2 (diagMeasure ha.isStarNormal ξ)`, and restating it over the real spectrum is a
+`Lp ℂ 2 ((cfcHom ha.isStarNormal).representationDiagMeasure ξ)`, and restating it over the real
+spectrum is a
 separate step: it is now the single composition
 `(cyclicIsometry ha.isStarNormal ξ).comp (realSpectrumDiagMeasureLpEquiv ha ξ).toLinearIsometry`,
 which has its own compile budget because `range_cyclicIsometry` is where the refuted
@@ -116,23 +119,24 @@ section Measure
 
 /-- **The diagonal spectral measure of a self-adjoint operator, on its real spectrum.**
 
-This is `diagMeasure ha.isStarNormal ξ` pushed forward along
+This is `(cfcHom ha.isStarNormal).representationDiagMeasure ξ` pushed forward along
 `realSpectrumHomeomorph ha : spectrum ℂ a ≃ₜ spectrum ℝ a`.  It is the measure that
 `realSpectrumBddSymbols a` is square-integrated against, and the real-spectrum counterpart of
 the scalar spectral measure the cyclic multiplication model runs on. -/
 noncomputable def realSpectrumDiagMeasure (ha : IsSelfAdjoint a) (ξ : H) :
     Measure (spectrum ℝ a) :=
-  (diagMeasure ha.isStarNormal ξ).map (realSpectrumHomeomorph ha)
+  ((cfcHom ha.isStarNormal).representationDiagMeasure ξ).map (realSpectrumHomeomorph ha)
 
 private theorem realSpectrumDiagMeasure_eq_map_aux (ha : IsSelfAdjoint a) (ξ : H) :
     realSpectrumDiagMeasure ha ξ
-      = (diagMeasure ha.isStarNormal ξ).map (realSpectrumHomeomorph ha) := rfl
+      = ((cfcHom ha.isStarNormal).representationDiagMeasure ξ).map (realSpectrumHomeomorph ha) :=
+        rfl
 
 /-- The real-spectrum diagonal measure is the pushforward of the diagonal measure: the
 characteristic lemma, so no consumer needs the body. -/
 theorem realSpectrumDiagMeasure_eq_map (ha : IsSelfAdjoint a) (ξ : H) :
     realSpectrumDiagMeasure ha ξ
-      = (diagMeasure ha.isStarNormal ξ).map (realSpectrumHomeomorph ha) :=
+      = ((cfcHom ha.isStarNormal).representationDiagMeasure ξ).map (realSpectrumHomeomorph ha) :=
   realSpectrumDiagMeasure_eq_map_aux ha ξ
 
 /-- The real-spectrum diagonal measure is finite, being the pushforward of a finite measure. -/
@@ -151,7 +155,8 @@ section MeasurePreserving
 real-spectrum counterpart on `spectrum ℝ a`.  Measurability is continuity of the
 homeomorphism, and the pushforward identity is the definition of the target measure. -/
 theorem measurePreserving_realSpectrumHomeomorph (ha : IsSelfAdjoint a) (ξ : H) :
-    MeasurePreserving (realSpectrumHomeomorph ha) (diagMeasure ha.isStarNormal ξ)
+    MeasurePreserving (realSpectrumHomeomorph ha) ((cfcHom
+      ha.isStarNormal).representationDiagMeasure ξ)
       (realSpectrumDiagMeasure ha ξ) :=
   ⟨measurable_realSpectrumHomeomorph ha, (realSpectrumDiagMeasure_eq_map ha ξ).symm⟩
 
@@ -162,7 +167,7 @@ available only because the transport is along a Borel *isomorphism*, and it is w
 `L²` transport into an equivalence rather than a bare isometry. -/
 theorem measurePreserving_realSpectrumHomeomorph_symm (ha : IsSelfAdjoint a) (ξ : H) :
     MeasurePreserving (realSpectrumHomeomorph ha).symm (realSpectrumDiagMeasure ha ξ)
-      (diagMeasure ha.isStarNormal ξ) :=
+      ((cfcHom ha.isStarNormal).representationDiagMeasure ξ) :=
   MeasurePreserving.symm (realSpectrumHomeomorph ha).toMeasurableEquiv
     (measurePreserving_realSpectrumHomeomorph ha ξ)
 
@@ -170,18 +175,20 @@ theorem measurePreserving_realSpectrumHomeomorph_symm (ha : IsSelfAdjoint a) (ξ
 diagonal measure of its preimage under the homeomorphism. -/
 theorem realSpectrumDiagMeasure_apply (ha : IsSelfAdjoint a) (ξ : H) (s : Set (spectrum ℝ a)) :
     realSpectrumDiagMeasure ha ξ s
-      = diagMeasure ha.isStarNormal ξ (realSpectrumHomeomorph ha ⁻¹' s) :=
+      = (cfcHom ha.isStarNormal).representationDiagMeasure ξ (realSpectrumHomeomorph ha ⁻¹' s) :=
   ((measurePreserving_realSpectrumHomeomorph ha ξ).measure_preimage_equiv
     (f := (realSpectrumHomeomorph ha).toMeasurableEquiv) s).symm
 
 /-- **Change of variables on integrals.**  Integrating against the real-spectrum diagonal
 measure is integrating the reindexed integrand against the diagonal measure.  This is the form
-in which the transport meets the defining property `integral_diagMeasure` of the diagonal
+in which the transport meets the defining property `StarAlgHom.integral_representationDiagMeasure`
+of the diagonal
 measure. -/
 theorem integral_realSpectrumDiagMeasure (ha : IsSelfAdjoint a) (ξ : H)
     (g : spectrum ℝ a → ℂ) :
     ∫ x, g x ∂(realSpectrumDiagMeasure ha ξ)
-      = ∫ z, g (realSpectrumHomeomorph ha z) ∂(diagMeasure ha.isStarNormal ξ) :=
+      = ∫ z, g (realSpectrumHomeomorph ha z) ∂((cfcHom ha.isStarNormal).representationDiagMeasure
+        ξ) :=
   ((measurePreserving_realSpectrumHomeomorph ha ξ).integral_comp'
     (f := (realSpectrumHomeomorph ha).toMeasurableEquiv) g).symm
 
@@ -200,7 +207,8 @@ other, which is where the measure-preservation statement is used in both directi
 With this in hand, restating the cyclic multiplication model over the real spectrum is the
 single composition of `cyclicIsometry` with this equivalence -- no further measure theory. -/
 noncomputable def realSpectrumDiagMeasureLpEquiv (ha : IsSelfAdjoint a) (ξ : H) :
-    Lp ℂ 2 (realSpectrumDiagMeasure ha ξ) ≃ₗᵢ[ℂ] Lp ℂ 2 (diagMeasure ha.isStarNormal ξ) where
+    Lp ℂ 2 (realSpectrumDiagMeasure ha ξ) ≃ₗᵢ[ℂ] Lp ℂ 2 ((cfcHom
+      ha.isStarNormal).representationDiagMeasure ξ) where
   toLinearMap :=
     Lp.compMeasurePreservingₗ ℂ (realSpectrumHomeomorph ha)
       (measurePreserving_realSpectrumHomeomorph ha ξ)
@@ -237,14 +245,14 @@ theorem realSpectrumDiagMeasureLpEquiv_apply (ha : IsSelfAdjoint a) (ξ : H)
   realSpectrumDiagMeasureLpEquiv_apply_aux ha ξ F
 
 private theorem realSpectrumDiagMeasureLpEquiv_symm_apply_aux (ha : IsSelfAdjoint a) (ξ : H)
-    (G : Lp ℂ 2 (diagMeasure ha.isStarNormal ξ)) :
+    (G : Lp ℂ 2 ((cfcHom ha.isStarNormal).representationDiagMeasure ξ)) :
     (realSpectrumDiagMeasureLpEquiv ha ξ).symm G
       = Lp.compMeasurePreserving (realSpectrumHomeomorph ha).symm
           (measurePreserving_realSpectrumHomeomorph_symm ha ξ) G := rfl
 
 /-- The inverse equivalence is composition with the inverse homeomorphism. -/
 theorem realSpectrumDiagMeasureLpEquiv_symm_apply (ha : IsSelfAdjoint a) (ξ : H)
-    (G : Lp ℂ 2 (diagMeasure ha.isStarNormal ξ)) :
+    (G : Lp ℂ 2 ((cfcHom ha.isStarNormal).representationDiagMeasure ξ)) :
     (realSpectrumDiagMeasureLpEquiv ha ξ).symm G
       = Lp.compMeasurePreserving (realSpectrumHomeomorph ha).symm
           (measurePreserving_realSpectrumHomeomorph_symm ha ξ) G :=
@@ -256,7 +264,7 @@ for the diagonal measure. -/
 theorem coeFn_realSpectrumDiagMeasureLpEquiv (ha : IsSelfAdjoint a) (ξ : H)
     (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
     (realSpectrumDiagMeasureLpEquiv ha ξ F : spectrum ℂ a → ℂ)
-      =ᵐ[diagMeasure ha.isStarNormal ξ]
+      =ᵐ[(cfcHom ha.isStarNormal).representationDiagMeasure ξ]
         (F : spectrum ℝ a → ℂ) ∘ realSpectrumHomeomorph ha := by
   rw [realSpectrumDiagMeasureLpEquiv_apply]
   exact Lp.coeFn_compMeasurePreserving F (measurePreserving_realSpectrumHomeomorph ha ξ)
@@ -264,7 +272,7 @@ theorem coeFn_realSpectrumDiagMeasureLpEquiv (ha : IsSelfAdjoint a) (ξ : H)
 /-- The pointwise description of the inverse transport, almost everywhere for the
 real-spectrum diagonal measure. -/
 theorem coeFn_realSpectrumDiagMeasureLpEquiv_symm (ha : IsSelfAdjoint a) (ξ : H)
-    (G : Lp ℂ 2 (diagMeasure ha.isStarNormal ξ)) :
+    (G : Lp ℂ 2 ((cfcHom ha.isStarNormal).representationDiagMeasure ξ)) :
     ((realSpectrumDiagMeasureLpEquiv ha ξ).symm G : spectrum ℝ a → ℂ)
       =ᵐ[realSpectrumDiagMeasure ha ξ]
         (G : spectrum ℂ a → ℂ) ∘ (realSpectrumHomeomorph ha).symm := by

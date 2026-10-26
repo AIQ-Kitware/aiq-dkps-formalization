@@ -44,7 +44,8 @@ The compression `T ↦ P_K T|_K` is a star-algebra homomorphism on any set of op
 `compress K a` -- so Stone--Weierstrass (`ContinuousMap.starAlgHom_ext_map_X`) makes them
 equal.  That is `cfcHom_comp_specIncl`.
 
-Feeding continuous symbols into `integral_diagMeasure_ofReal` on both sides then says that
+Feeding continuous symbols into `StarAlgHom.integral_representationDiagMeasure` on both sides then
+says that
 `Measure.map specIncl (diagMeasure (a|_K) x)` and `diagMeasure a x` integrate every bounded
 continuous function alike, and a finite Borel measure on a metrisable space is determined by
 those integrals (`MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure`).  That is (4),
@@ -465,43 +466,33 @@ theorem inner_compress_self {T : H →L[ℂ] H} (hT : ∀ x ∈ K, T x ∈ K) (x
     ⟪x, compress K T x⟫_ℂ = ⟪(x : H), T (x : H)⟫_ℂ := by
   rw [Submodule.coe_inner, coe_compress_apply hT]
 
-/-- Complexifying a pulled-back real symbol is pulling back its complexification. -/
-theorem realToRCLike_comp_specInclCM (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
-    (g : C(spectrum ℂ a, ℝ)) :
-    (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (g.comp (specInclCM ha hK)) =
-      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g).comp (specInclCM ha hK) := by
-  ext w
-  simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply,
-    ContinuousMap.comp_apply]
-
 /-- **The scalar spectral measures transport along the spectral inclusion.**
 
-`diagMeasure` of the restriction at a vector of `K` pushes forward, along the inclusion of
-spectra, to `diagMeasure` of `a` at the same vector.  This is what the uniform-multiplicity
+`representationDiagMeasure` of the restriction at a vector of `K` pushes forward, along the
+inclusion of
+spectra, to `representationDiagMeasure` of `a` at the same vector.  This is what the
+uniform-multiplicity
 decomposition consumes.
 
 Both measures are finite Borel measures on a metrisable space, so it is enough to compare their
 integrals of bounded continuous functions; there the statement is the compatibility law for the
-continuous calculus, read through `integral_diagMeasure_ofReal`. -/
+continuous calculus, read through `StarAlgHom.integral_representationDiagMeasure`. -/
 theorem map_specIncl_diagMeasure (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) (x : K) :
-    Measure.map (specIncl ha hK) (diagMeasure (isStarNormal_compress ha hK) x)
-      = diagMeasure ha (x : H) := by
+    Measure.map (specIncl ha hK) ((cfcHom (isStarNormal_compress ha hK)).representationDiagMeasure
+      x)
+      = (cfcHom ha).representationDiagMeasure (x : H) := by
   have : IsFiniteMeasure
-      (Measure.map (specIncl ha hK) (diagMeasure (isStarNormal_compress ha hK) x)) :=
-    (diagMeasure (isStarNormal_compress ha hK) x).isFiniteMeasure_map _
-  refine ext_of_forall_integral_eq_of_IsFiniteMeasure fun g => ?_
-  set G : C(spectrum ℂ a, ℝ) := ⟨⇑g, g.continuous⟩
-  have hmap : ∫ w, g w ∂(Measure.map (specIncl ha hK)
-        (diagMeasure (isStarNormal_compress ha hK) x))
-      = ∫ w, (G.comp (specInclCM ha hK)) w ∂(diagMeasure (isStarNormal_compress ha hK) x) :=
-    integral_map (measurable_specIncl ha hK).aemeasurable g.continuous.aestronglyMeasurable
-  have hT : ∀ y ∈ K, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) G) y ∈ K := fun _ hy =>
-    hK.cfcHom_apply_mem ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) G) hy
-  rw [hmap, integral_diagMeasure_ofReal, realToRCLike_comp_specInclCM ha hK G,
-    cfcHom_comp_specIncl ha hK ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) G),
-    inner_compress_self hT,
-    ← integral_diagMeasure_ofReal ha (x : H) G]
-  rfl
+      (Measure.map (specIncl ha hK) ((cfcHom (isStarNormal_compress ha
+        hK)).representationDiagMeasure x)) :=
+    ((cfcHom (isStarNormal_compress ha hK)).representationDiagMeasure x).isFiniteMeasure_map _
+  apply ((cfcHom ha).eq_representationDiagMeasure_iff (x : H) _).mpr
+  intro g
+  rw [integral_map (measurable_specIncl ha hK).aemeasurable
+    g.continuous.aestronglyMeasurable]
+  change (∫ w, (g.comp (specInclCM ha hK)) w
+    ∂((cfcHom (isStarNormal_compress ha hK)).representationDiagMeasure x)) = _
+  rw [StarAlgHom.integral_representationDiagMeasure, cfcHom_comp_specIncl ha hK g]
+  exact inner_compress_self (fun y hy => hK.cfcHom_apply_mem g hy) x
 
 end DiagonalMeasure
 

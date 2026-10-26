@@ -11,6 +11,8 @@ public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvarian
 
 public section
 
+open MeasureTheory
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -80,21 +82,29 @@ theorem conjugateOperator_complexify_eq_star (hT : IsSelfAdjoint T) :
 
 /-- **The diagonal measures of a complexified real self-adjoint operator are
 conjugation invariant.**  Bounded counterpart of `diagMeasure_conjugation`; the
-symbols entering `diagFunctional` are real, and a real symbol has a
-conjugation-fixed calculus image. -/
+real continuous symbols have conjugation-fixed calculus images, and the
+accepted integral characterization determines the measures. -/
 theorem diagMeasure_conjugation_complexify (hT : IsSelfAdjoint T) (η : Eℂ) :
-    TauCeti.BorelCalculus.diagMeasure
-        (isSelfAdjoint_complexify_bounded hT).isStarNormal (conjugation η)
-      = TauCeti.BorelCalculus.diagMeasure
-          (isSelfAdjoint_complexify_bounded hT).isStarNormal η := by
+    (cfcHom ((isSelfAdjoint_complexify_bounded hT).isStarNormal)).representationDiagMeasure
+      (conjugation η)
+      = (cfcHom ((isSelfAdjoint_complexify_bounded hT).isStarNormal)).representationDiagMeasure η :=
+        by
   have hUc := conjugateOperator_complexify_eq_star hT
-  refine TauCeti.BorelCalculus.diagMeasure_congr _ (DFunLike.ext _ _ fun g => ?_)
-  simp only [TauCeti.BorelCalculus.diagFunctional_apply]
-  change (⟪conjugation η, cfcHom _ ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap)
-      (conjugation η)⟫_ℂ).re
-    = (⟪η, cfcHom _ ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) η⟫_ℂ).re
+  let π := cfcHom (R := ℂ) (isSelfAdjoint_complexify_bounded hT).isStarNormal
+  change π.representationDiagMeasure (conjugation η) = π.representationDiagMeasure η
+  refine Measure.ext_of_integral_eq_on_compactlySupported fun g => ?_
+  have hi (v : Eℂ) :
+      ∫ z, g z ∂(π.representationDiagMeasure v) =
+        (⟪v, π ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) v⟫_ℂ).re := by
+    have h := π.integral_representationDiagMeasure v
+      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap)
+    change (∫ z, (g z : ℂ) ∂(π.representationDiagMeasure v)) = _ at h
+    rw [integral_complex_ofReal] at h
+    simpa only [Complex.ofReal_re] using congrArg Complex.re h
+  rw [hi, hi]
   set S := cfcHom (isSelfAdjoint_complexify_bounded hT).isStarNormal
     ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) with hS
+  change (⟪conjugation η, S (conjugation η)⟫_ℂ).re = (⟪η, S η⟫_ℂ).re
   have hfix : conjugateOperator S = S := by
     rw [hS, conjugateOperator_cfcHom _ hUc, ContinuousMap.realToRCLikeStarAlgHom_apply,
       (ContinuousMap.isSelfAdjoint_realToRCLike (𝕜 := ℂ)).star_eq]
@@ -129,8 +139,8 @@ theorem conjugateOperator_boundedPVM_proj (hT : IsSelfAdjoint T)
     (κ ⁻¹' B).indicator (fun _ => (1 : ℂ)) with hind
   -- the four polarisation integrals are real
   have hIreal : ∀ η : Eℂ,
-      (starRingEnd ℂ) (∫ w, ind w ∂(TauCeti.BorelCalculus.diagMeasure hTc.isStarNormal η))
-        = ∫ w, ind w ∂(TauCeti.BorelCalculus.diagMeasure hTc.isStarNormal η) := by
+      (starRingEnd ℂ) (∫ w, ind w ∂((cfcHom hTc.isStarNormal).representationDiagMeasure η))
+        = ∫ w, ind w ∂((cfcHom hTc.isStarNormal).representationDiagMeasure η) := by
     intro η
     rw [hind, MeasureTheory.integral_indicator_const _ hSm]
     simp

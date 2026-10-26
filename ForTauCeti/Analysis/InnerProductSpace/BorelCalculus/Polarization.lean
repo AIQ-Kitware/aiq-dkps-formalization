@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
 public import Mathlib.MeasureTheory.Function.ContinuousMapDense
 public import TauCeti.Analysis.InnerProductSpace.OperatorIdentities
 
@@ -50,12 +50,12 @@ one source's proof.
 
 The route was chosen against the Spectra library's Herglotz/Poisson construction;
 the Spectra-removal plan records that comparison, and
-`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` carries
+`dev/tauceti/dkps-upstream-contribution-census.md` carries
 the provenance of the route itself.
 
 ## Provenance
 
-*New*; see `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean`
+*New*; see `dev/tauceti/dkps-upstream-contribution-census.md`
 for the provenance of the route as a whole.
 -/
 
@@ -81,10 +81,10 @@ continuous symbols this is `⟪ψ, cfcHom f ξ⟫`; it is the blueprint for the
 matrix elements of the bounded Borel calculus. -/
 noncomputable def pair (f : spectrum ℂ a → ℂ) (ψ ξ : H) : ℂ :=
   (1 / 4 : ℂ) *
-    ((∫ x, f x ∂(diagMeasure ha (ξ + ψ)))
-      + Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ + Complex.I • ψ)))
-      - (∫ x, f x ∂(diagMeasure ha (ξ - ψ)))
-      - Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ - Complex.I • ψ))))
+    ((∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + ψ)))
+      + Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + Complex.I • ψ)))
+      - (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - ψ)))
+      - Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - Complex.I • ψ))))
 
 /-- Rewrite form of `pair`, so call sites need not unfold the definition.
 
@@ -92,17 +92,19 @@ Added 2026-07-30: `BorelCalculus/Operator` was doing `rw [pair]`, which requires
 body to be exposed. Tau Ceti's `api-design` rubric asks for the lemma instead. -/
 theorem pair_def (f : spectrum ℂ a → ℂ) (ψ ξ : H) :
     pair ha f ψ ξ = (1 / 4 : ℂ) *
-      ((∫ x, f x ∂(diagMeasure ha (ξ + ψ)))
-        + Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ + Complex.I • ψ)))
-        - (∫ x, f x ∂(diagMeasure ha (ξ - ψ)))
-        - Complex.I * (∫ x, f x ∂(diagMeasure ha (ξ - Complex.I • ψ)))) := (rfl)
+      ((∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + ψ)))
+        + Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + Complex.I • ψ)))
+        - (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - ψ)))
+        - Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - Complex.I • ψ)))) :=
+          (rfl)
 
 /-- On continuous symbols the polarised diagonal integral is the matrix element
 of the continuous functional calculus. -/
 theorem pair_of_continuous (f : C(spectrum ℂ a, ℂ)) (ψ ξ : H) :
     pair ha (fun x => f x) ψ ξ = ⟪ψ, cfcHom ha f ξ⟫_ℂ := by
-  rw [pair, integral_diagMeasure, integral_diagMeasure, integral_diagMeasure,
-    integral_diagMeasure]
+  rw [pair, StarAlgHom.integral_representationDiagMeasure,
+    StarAlgHom.integral_representationDiagMeasure, StarAlgHom.integral_representationDiagMeasure,
+    StarAlgHom.integral_representationDiagMeasure]
   exact _root_.ContinuousLinearMap.inner_polarization (cfcHom ha f) ψ ξ
 
 omit [CompleteSpace H] in
@@ -129,7 +131,7 @@ noncomputable def pairVectors (ψ ξ : H) : Fin 4 → H :=
 dominating the four diagonal measures have close polarised integrals. -/
 theorem norm_pair_sub_pair_le {f g : spectrum ℂ a → ℂ}
     (ν : Measure (spectrum ℂ a)) (ψ ξ : H)
-    (hdom : ∀ i : Fin 4, diagMeasure ha (pairVectors ψ ξ i) ≤ ν)
+    (hdom : ∀ i : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ψ ξ i) ≤ ν)
     (hf : Integrable f ν) (hg : Integrable g ν) :
     ‖pair ha f ψ ξ - pair ha g ψ ξ‖ ≤ ∫ x, ‖f x - g x‖ ∂ν := by
   set I := ∫ x, ‖f x - g x‖ ∂ν with hI
@@ -138,11 +140,11 @@ theorem norm_pair_sub_pair_le {f g : spectrum ℂ a → ℂ}
   -- is a triangle inequality on `d 0 + i · d 1 - d 2 - i · d 3`, which is unreadable while
   -- each `d i` is spelled out as a difference of two integrals against a diagonal measure.
   set d : Fin 4 → ℂ := fun i =>
-    (∫ x, f x ∂(diagMeasure ha (pairVectors ψ ξ i)))
-      - (∫ x, g x ∂(diagMeasure ha (pairVectors ψ ξ i))) with hd
+    (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (pairVectors ψ ξ i)))
+      - (∫ x, g x ∂((cfcHom ha).representationDiagMeasure (pairVectors ψ ξ i))) with hd
   have key : ∀ i : Fin 4, ‖d i‖ ≤ I := by
     intro i
-    set μ := diagMeasure ha (pairVectors ψ ξ i) with hμ
+    set μ := (cfcHom ha).representationDiagMeasure (pairVectors ψ ξ i) with hμ
     have hfμ : Integrable f μ := hf.mono_measure (hdom i)
     have hgμ : Integrable g μ := hg.mono_measure (hdom i)
     calc ‖d i‖ = ‖∫ x, (f x - g x) ∂μ‖ := by rw [hd, integral_sub hfμ hgμ]
@@ -210,17 +212,12 @@ section SumMeasure
 
 variable (ha : IsStarNormal a)
 
-/-- A finite sum of diagonal measures is finite. -/
-theorem isFiniteMeasure_sum_diagMeasure {ι : Type*} [Fintype ι] (v : ι → H) :
-    IsFiniteMeasure (∑ j, diagMeasure ha (v j)) := by
-  refine ⟨?_⟩
-  rw [Measure.coe_finsetSum, Finset.sum_apply]
-  exact ENNReal.sum_lt_top.mpr fun j _ => measure_lt_top _ _
-
 /-- Each summand of a finite sum of diagonal measures is dominated by the sum. -/
 theorem diagMeasure_le_sum {ι : Type*} [Fintype ι] (v : ι → H) (i : ι) :
-    diagMeasure ha (v i) ≤ ∑ j, diagMeasure ha (v j) :=
-  Finset.single_le_sum (f := fun j => diagMeasure ha (v j)) (fun _ _ => Measure.zero_le _)
+    (cfcHom ha).representationDiagMeasure (v i) ≤ ∑ j, (cfcHom ha).representationDiagMeasure (v j)
+      :=
+  Finset.single_le_sum (f := fun j => (cfcHom ha).representationDiagMeasure (v j)) (fun _ _ =>
+    Measure.zero_le _)
     (Finset.mem_univ i)
 
 end SumMeasure

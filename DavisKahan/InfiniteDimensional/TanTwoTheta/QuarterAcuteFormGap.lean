@@ -10,10 +10,12 @@ public import DavisKahan.Geometry.Polar.DirectRotation
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
 public import DavisKahan.SinTheta.FrameFactorization
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
-public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
 public import DavisKahan.SpectralTheory.OperatorAngle
 
 public section
+
+open scoped ComplexOrder
 
 open TauCeti.DavisKahan.Angle
 
@@ -582,8 +584,15 @@ theorem isQuarterAcute_of_orderedFormGap
       dsimp [g]
       have hz := hspecW (z : ℂ) z.property
       linarith
-    have hpos :=
-      TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg hWnormal hg x
+    have hpos : 0 ≤
+        (⟪x, cfcHom hWnormal
+          ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) x⟫_ℂ).re := by
+      have hT : 0 ≤ cfcHom hWnormal
+          ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) := by
+        apply map_nonneg (cfcHom hWnormal)
+        intro z
+        simpa using hg z
+      exact (ContinuousLinearMap.nonneg_iff_isPositive.mp hT).re_inner_nonneg_right x
     have hsymbol :
         (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
           X + star X - ((2 * α : ℝ) : ℂ) • 1 := by

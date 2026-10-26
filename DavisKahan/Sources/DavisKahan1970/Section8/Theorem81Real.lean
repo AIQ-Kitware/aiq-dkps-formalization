@@ -145,7 +145,8 @@ theorem theorem8_1_canonicalBranch_real
       (ofReal_mem_complexifySubmodule_iff Q x).2 hx
     have hc := hconcC.branch_form_low (ofReal x) (hQc ▸ hxC)
     rw [hsum] at hc
-    simpa [re_inner_complexify] using hc
+    simpa only [re_inner_complexify, re_ofReal, im_ofReal, map_zero,
+      inner_zero_left, add_zero, ofReal.norm_map] using hc
   have hhigh : ∀ x ∈ Qᗮ,
       (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪(A + H) x, x⟫_ℝ := by
     intro x hx
@@ -154,7 +155,8 @@ theorem theorem8_1_canonicalBranch_real
       exact (ofReal_mem_complexifySubmodule_iff Qᗮ x).2 hx
     have hc := hconcC.branch_form_high (ofReal x) (by simpa only [hQc] using hxC)
     rw [hsum] at hc
-    simpa [re_inner_complexify] using hc
+    simpa only [re_inner_complexify, re_ofReal, im_ofReal, map_zero,
+      inner_zero_left, add_zero, ofReal.norm_map] using hc
   have hquarterC : IsQuarterAcute (complexifySubmodule P) (complexifySubmodule Q) := by
     simpa only [hQc] using hconcC.quarter_acute
   have hquarter : IsQuarterAcute P Q :=

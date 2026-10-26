@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
 public import ForTauCeti.MeasureTheory.LpNonvanishing
 public import ForTauCeti.MeasureTheory.MeasureClass
 public import ForTauCeti.MeasureTheory.MulLpCfc
@@ -113,13 +113,13 @@ The measure `diagMeasure F` of the vector `F` for the operator `mulLp ρ g`, pus
 the spectrum subtype to `ℂ`, is the pushforward along the symbol of `|F|² · ρ`. -/
 theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
     Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
-        (diagMeasure (isStarNormal_mulLp ρ hg hgC) F)
+        ((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
       = Measure.map g (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2) := by
   have ha : IsStarNormal (mulLp ρ hg hgC) := isStarNormal_mulLp ρ hg hgC
   have hwd : IsFiniteMeasure (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2) :=
     isFiniteMeasure_withDensity_enorm_sq ρ F
   have hL : IsFiniteMeasure (Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
-      (diagMeasure ha F)) := Measure.isFiniteMeasure_map _ _
+      ((cfcHom ha).representationDiagMeasure F)) := Measure.isFiniteMeasure_map _ _
   have hR : IsFiniteMeasure
       (Measure.map g (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2)) :=
     Measure.isFiniteMeasure_map _ _
@@ -127,13 +127,19 @@ theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
   have hφc : Continuous fun z : ℂ => ((φ z : ℝ) : ℂ) :=
     Complex.continuous_ofReal.comp φ.continuous
   -- The left-hand side, through the characterisation of the diagonal measure.
-  have hleft : ∫ w : spectrum ℂ (mulLp ρ hg hgC), φ (w : ℂ) ∂(diagMeasure ha F)
+  have hleft : ∫ w : spectrum ℂ (mulLp ρ hg hgC), φ (w : ℂ) ∂((cfcHom
+    ha).representationDiagMeasure F)
       = (⟪F, cfc (fun z : ℂ => ((φ z : ℝ) : ℂ)) (mulLp ρ hg hgC) F⟫_ℂ).re := by
-    have hG := integral_diagMeasure_ofReal ha F
-      (⟨fun w : spectrum ℂ (mulLp ρ hg hgC) => φ (w : ℂ),
+    have hComplex := (cfcHom ha).integral_representationDiagMeasure F
+      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (⟨fun w : spectrum ℂ (mulLp ρ hg hgC) => φ (w :
+        ℂ),
         φ.continuous.comp continuous_subtype_val⟩ :
-        C(spectrum ℂ (mulLp ρ hg hgC), ℝ))
-    simp only [ContinuousMap.coe_mk] at hG
+        C(spectrum ℂ (mulLp ρ hg hgC), ℝ)))
+    change (∫ w, (φ (w : ℂ) : ℂ)
+      ∂((cfcHom ha).representationDiagMeasure F)) = _ at hComplex
+    rw [integral_complex_ofReal] at hComplex
+    have hG := congrArg Complex.re hComplex
+    simp only [Complex.ofReal_re] at hG
     rw [hG, cfc_apply (f := fun z : ℂ => ((φ z : ℝ) : ℂ)) (a := mulLp ρ hg hgC) ha
       hφc.continuousOn]
     exact congrArg (fun T : Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ => (⟪F, T F⟫_ℂ).re)
@@ -176,7 +182,7 @@ include hg hgC in
 /-- **Every vector's spectral measure is dominated by the pushforward of `ρ`.** -/
 theorem map_val_diagMeasure_mulLp_absolutelyContinuous (F : Lp ℂ 2 ρ) :
     Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
-        (diagMeasure (isStarNormal_mulLp ρ hg hgC) F)
+        ((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
       ≪ Measure.map g ρ := by
   rw [map_val_diagMeasure_mulLp ρ hg hgC F]
   exact (withDensity_absolutelyContinuous ρ _).map hg
@@ -190,7 +196,7 @@ theorem absolutelyContinuous_map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ)
     (hF : ∀ᵐ x ∂ρ, (F : α → ℂ) x ≠ 0) :
     Measure.map g ρ
       ≪ Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
-        (diagMeasure (isStarNormal_mulLp ρ hg hgC) F) := by
+        ((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F) := by
   rw [map_val_diagMeasure_mulLp ρ hg hgC F]
   refine Measure.AbsolutelyContinuous.map ?_ hg
   refine withDensity_absolutelyContinuous' (aemeasurable_enorm_sq ρ F) ?_
@@ -208,7 +214,7 @@ theorem exists_measureEquiv_map_val_diagMeasure_mulLp :
     ∃ F : Lp ℂ 2 ρ,
       MeasureEquiv
         (Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
-          (diagMeasure (isStarNormal_mulLp ρ hg hgC) F))
+          ((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F))
         (Measure.map g ρ) := by
   obtain ⟨F, hF⟩ := exists_ae_ne_zero_lp_two ρ
   exact ⟨F, map_val_diagMeasure_mulLp_absolutelyContinuous ρ hg hgC F,

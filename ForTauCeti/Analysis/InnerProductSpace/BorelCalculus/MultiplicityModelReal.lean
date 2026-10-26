@@ -513,9 +513,9 @@ resulting datum vanishes off the real axis, which by
 theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
     (ha : IsStarNormal a) (hsa : IsSelfAdjoint a) {cH : H → H} (hcH : Continuous cH)
     (hcHadd : ∀ x y, cH (x + y) = cH x + cH y) {ξ : ℕ → H}
-    (hsum : IsHilbertSum ℂ (fun n => Lp ℂ 2 (diagMeasure ha (ξ n)))
+    (hsum : IsHilbertSum ℂ (fun n => Lp ℂ 2 ((cfcHom ha).representationDiagMeasure (ξ n)))
       (fun n => cyclicIsometry ha (ξ n)))
-    (hstar : ∀ (n : ℕ) (F : Lp ℂ 2 (diagMeasure ha (ξ n))),
+    (hstar : ∀ (n : ℕ) (F : Lp ℂ 2 ((cfcHom ha).representationDiagMeasure (ξ n))),
       cyclicIsometry ha (ξ n) (star F) = cH (cyclicIsometry ha (ξ n) F)) :
     ∃ D : MultiplicityDatum ℂ, D.base {z : ℂ | z.im ≠ 0} = 0 ∧
       StarOperatorUnitaryEquiv cH star a D.operator := by
@@ -529,77 +529,90 @@ theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
   have hemb : MeasurableEmbedding ((↑) : spectrum ℂ a → ℂ) :=
     MeasurableEmbedding.subtype_coe hmeasSpec
   have hfin : ∀ n, IsFiniteMeasure (Measure.map ((↑) : spectrum ℂ a → ℂ)
-      (diagMeasure ha (ξ n))) := fun n => Measure.isFiniteMeasure_map _ _
+      ((cfcHom ha).representationDiagMeasure (ξ n))) := fun n => Measure.isFiniteMeasure_map _ _
   have hsum' : IsHilbertSum ℂ
-      (fun n => Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n))))
+      (fun n => Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom
+        ha).representationDiagMeasure (ξ n))))
       (fun n => (cyclicIsometry ha (ξ n)).comp
-        (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry) :=
-    isHilbertSum_comp_linearIsometryEquiv hsum fun n => embLpEquiv hemb (diagMeasure ha (ξ n))
+        (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry) :=
+    isHilbertSum_comp_linearIsometryEquiv hsum fun n => embLpEquiv hemb ((cfcHom
+      ha).representationDiagMeasure (ξ n))
   have hsum2 := isHilbertSum_sliceLp
-    (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))
+    (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure (ξ n)))
   have hA : ∀ (n : ℕ)
-      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))),
+      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure (ξ
+        n)))),
       a (((cyclicIsometry ha (ξ n)).comp
-          (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry) F)
+          (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry) F)
         = ((cyclicIsometry ha (ξ n)).comp
-          (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry)
+          (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry)
           (mulLp _ (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
             (norm_coordTrunc_le hR0) F) := by
     intro n F
-    have h1 : embLpEquiv hemb (diagMeasure ha (ξ n))
+    have h1 : embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))
         (mulLp _ (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖)) (norm_coordTrunc_le hR0) F)
-        = coordMulLp ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) F) :=
-      (embLpEquiv_mulLp hemb (diagMeasure ha (ξ n))
+        = coordMulLp ha (ξ n) (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) F) :=
+      (embLpEquiv_mulLp hemb ((cfcHom ha).representationDiagMeasure (ξ n))
         (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖)) (norm_coordTrunc_le hR0) F).trans
         (mulLp_eq_coordMulLp ha (ξ n) _ _ (fun w => coordTrunc_eq_self (hspec w)) _)
-    change a (cyclicIsometry ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) F))
-      = cyclicIsometry ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) _)
+    change a (cyclicIsometry ha (ξ n) (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ
+      n)) F))
+      = cyclicIsometry ha (ξ n) (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) _)
     rw [h1, cyclicIsometry_coordMulLp ha (ξ n)]
   have hB : ∀ (n : ℕ)
-      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))),
+      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure (ξ
+        n)))),
       (mulLp _ ((measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖)).comp measurable_fst)
           (fun p => norm_coordTrunc_le hR0 p.1))
         (sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
-          (diagMeasure ha (ξ n))) n F)
-        = sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n))) n
+          ((cfcHom ha).representationDiagMeasure (ξ n))) n F)
+        = sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom
+          ha).representationDiagMeasure (ξ n))) n
           (mulLp _ (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
             (norm_coordTrunc_le hR0) F) :=
     fun n F => (sliceLp_mulLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
-      (diagMeasure ha (ξ m))) n (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
+      ((cfcHom ha).representationDiagMeasure (ξ m))) n (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ]
+        H)‖))
       (norm_coordTrunc_le hR0) F).symm
   have hVc : ∀ (n : ℕ)
-      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))),
+      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure (ξ
+        n)))),
       ((cyclicIsometry ha (ξ n)).comp
-          (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry) (star F)
+          (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry) (star F)
         = cH (((cyclicIsometry ha (ξ n)).comp
-          (embLpEquiv hemb (diagMeasure ha (ξ n))).toLinearIsometry) F) := by
+          (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry) F) := by
     intro n F
-    change cyclicIsometry ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) (star F))
-      = cH (cyclicIsometry ha (ξ n) (embLpEquiv hemb (diagMeasure ha (ξ n)) F))
-    rw [← star_embLpEquiv hemb (diagMeasure ha (ξ n)) F, hstar]
+    change cyclicIsometry ha (ξ n) (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))
+      (star F))
+      = cH (cyclicIsometry ha (ξ n) (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))
+        F))
+    rw [← star_embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) F, hstar]
   have hWc : ∀ (n : ℕ)
-      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ n)))),
-      sliceLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ) (diagMeasure ha (ξ m))) n (star F)
+      (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure (ξ
+        n)))),
+      sliceLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom
+        ha).representationDiagMeasure (ξ m))) n (star F)
         = star (sliceLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
-          (diagMeasure ha (ξ m))) n F) :=
+          ((cfcHom ha).representationDiagMeasure (ξ m))) n F) :=
     fun n F => (star_sliceLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
-      (diagMeasure ha (ξ m))) n F).symm
+      ((cfcHom ha).representationDiagMeasure (ξ m))) n F).symm
   have hstep1 := starOperatorUnitaryEquiv_of_isHilbertSum hsum' hsum2 hA hB hcH hcHadd
     continuous_star_lp star_add_lp hVc hWc
   obtain ⟨ρ, D, hρfin, hDmeas, hDanti, hρsupp, hρzero, hstep2⟩ :=
     exists_multiplicityLevels (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
-      (diagMeasure ha (ξ n))) (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
+      ((cfcHom ha).representationDiagMeasure (ξ n))) (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ]
+        H)‖))
       (norm_coordTrunc_le hR0)
   have hbase : ρ {z : ℂ | z.im ≠ 0} = 0 := by
     refine hρsupp _ measurableSet_im_ne_zero fun n => ?_
     rw [Measure.map_apply hemb.measurable measurableSet_im_ne_zero]
-    convert measure_empty (μ := diagMeasure ha (ξ n))
+    convert measure_empty (μ := (cfcHom ha).representationDiagMeasure (ξ n))
     refine Set.eq_empty_iff_forall_notMem.mpr fun w hw => ?_
     exact hw (hsa.im_eq_zero_of_mem_spectrum w.2)
   refine ⟨⟨ρ, ‖a‖ * ‖(1 : H →L[ℂ] H)‖, D, hρfin, hR0, ?_, hρzero, hDmeas, hDanti⟩, hbase, ?_⟩
   · refine hρsupp _ (measurableSet_lt measurable_const measurable_norm) fun n => ?_
     rw [Measure.map_apply hemb.measurable (measurableSet_lt measurable_const measurable_norm)]
-    convert measure_empty (μ := diagMeasure ha (ξ n))
+    convert measure_empty (μ := (cfcHom ha).representationDiagMeasure (ξ n))
     refine Set.eq_empty_iff_forall_notMem.mpr fun w hw => ?_
     exact absurd (hspec w) (not_le.mpr hw)
   · exact starOperatorUnitaryEquiv_operator_of_mulLp_sliceSum _ (hstep1.trans hstep2)

@@ -48,7 +48,7 @@ ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure` still resolves
 to the whole development.
 
 The material itself is *new*; see
-`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/DiagonalMeasure.lean` for the
+`dev/tauceti/dkps-upstream-contribution-census.md` for the
 provenance of the route, and the Spectra-removal plan for the
 comparison against Spectra's Herglotz/Poisson route that chose it.
 -/
@@ -341,7 +341,7 @@ theorem tendsto_specProjection_Icc (x : H) :
       Filter.atTop (nhds x) := by
   classical
   set hU := isStarNormal_cayley hA with hhU
-  set μ := BorelCalculus.diagMeasure hU x with hμ
+  set μ := (cfcHom hU).representationDiagMeasure x with hμ
   set κ := cayleyInv hA with hκ
   set F : ℝ → _root_.spectrum ℂ (cayley hA) → ℝ :=
     fun τ => (κ ⁻¹' Set.Icc (-τ) τ).indicator (fun _ => (1 : ℝ)) with hF
@@ -379,8 +379,8 @@ theorem tendsto_specProjection_Icc (x : H) :
         ⟨by linarith [neg_abs_le (κ w)], by linarith [le_abs_self (κ w)]⟩
       simp [hF, hmem]
   have htot : ∫ _w, (1 : ℝ) ∂μ = ‖x‖ ^ 2 := by
-    rw [integral_const, smul_eq_mul, mul_one, MeasureTheory.measureReal_def, hμ,
-      BorelCalculus.diagMeasure_univ_toReal]
+    rw [integral_const, smul_eq_mul, mul_one, hμ,
+      StarAlgHom.representationDiagMeasure_real_univ]
   -- the squared distance is the missing mass
   have hsq : ∀ τ : ℝ,
       ‖specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x - x‖ ^ 2
@@ -766,7 +766,7 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
   have hRg : BorelCalculus.borelCalculus hU hgb = -(resolvent A (-Complex.I)) := by
     rw [hgbEq, BorelCalculus.borelCalculus_const_smul hU (-1) hgcb, ← hRcan]
     module
-  have hgae : ∀ η : H, ∀ᵐ w ∂(BorelCalculus.diagMeasure hU η),
+  have hgae : ∀ η : H, ∀ᵐ w ∂((cfcHom hU).representationDiagMeasure η),
       gsym w * ((κ w : ℂ) + Complex.I) = 1 := by
     intro η
     have hae := MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hA η)

@@ -1413,3 +1413,39 @@ local-only declaration-name parser reports 23 findings, including native
 imports it does not index and historical map destinations; no broad static-gate
 or external comparator pass is claimed. The source normality/complex-symbol
 scope, papers, visualizations and original untracked files are preserved.
+
+### October 25: retire the diagonal Riesz construction
+
+The entire donor module
+`ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure` is deleted.
+It no longer defines a positive real functional, diagonal measure, finiteness
+or regularity instances, integral identities, mass formula or real-symbol CFC
+helper API. Borel-calculus, cyclic, multiplicity, real-spectrum and unbounded
+spectral-measure consumers now use accepted
+`StarAlgHom.representationDiagMeasure (cfcHom ha)` directly. There is no local
+measure alias, constructor wrapper or old-name forwarding layer.
+
+Native finite/regular instances, the continuous scalar integral identity,
+measure characterization and mass theorem supply the replaced foundation.
+Real scalar integral identities are extracted inside the relevant proofs by
+taking `Complex.re`. The three real conjugation-invariance arguments compare
+continuous scalar integrals instead of exposing a local functional record.
+The restriction theorem uses native uniqueness on complex continuous symbols;
+its now-unneeded real-symbol composition helper is deleted. The duplicate
+finite-sum measure theorem is also removed in favor of Mathlib's instance.
+
+The normal-operator hypotheses, complex symbols, arbitrary Hilbert-space
+dimension and real/unbounded consumer scopes are preserved. The remaining
+Borel transport, cyclic/multiplicity and unbounded spectral constructions are
+unmerged donor mathematics, not claimed accepted by this retirement. The
+polarization module and the restriction/naturality core compiled in focused
+builds (6,312 and 6,400 jobs), each following its cache fetch.
+
+Accepted Tau Ceti revision is `97bf123075b7f142c1e37b827b6b37c156803248`,
+including `8e692e2c` (#20399). Pre-retirement local source is DKPS `9380d70b0`;
+original Kitware Apache-2.0/Jon Crall/Claude Opus 5 provenance and the route's
+independence from Spectra are preserved in the extraction manifest and Git
+history. Matching statements alone do not establish historical proof descent.
+The deleted file is removed from live donor clusters and the current file
+checklist, preserving every other review mark. Historical semantic-review
+snapshots remain historical. Papers and visualizations are untouched.
