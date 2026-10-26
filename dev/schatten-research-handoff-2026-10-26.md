@@ -277,3 +277,23 @@ the claimed angle-sum formula. Focused build passed (6,472 jobs).
 The next geometric obligation is a common finite reducing support for
 finite-rank competing corrections and the source projection, followed by
 an exact comparison of its angle cost with the fixed active core.
+
+## Finite reducing supports
+
+`FiniteTransportSupport.exists_finite_transport_support` proves the next
+geometric step: a finite-rank unitary perturbation and an orthogonal
+projection have a common finite reducing support containing any supplied
+finite core, with the unitary fixing the orthogonal complement pointwise.
+The construction saturates the core and displacement range by the source
+projection; it makes no assumption that the ambient competitor already
+preserves principal planes. The companion lemmas
+`LinearIsometryEquiv.apply_eq_self_of_mem_orthogonal_displacement` and
+`isReducing_of_displacement_range_le` need no finite dimension or
+closedness at all. Focused build passed (5,182 jobs).
+
+Still needed for the finite-core exact optimum: restrict a finite-rank
+competitor to this support, identify displacement gauges under orthogonal
+zero extension, compare the support's accepted angle sum to the fixed
+core, and apply the exact-fiber lower-bound criterion. These support and
+density results are classical reduction tools, not separate historical
+novelty claims.
