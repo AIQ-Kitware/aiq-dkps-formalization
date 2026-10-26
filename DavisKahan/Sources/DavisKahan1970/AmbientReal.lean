@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
@@ -87,7 +89,7 @@ open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.Foundation.RealComplexification
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -213,7 +215,7 @@ concluded. -/
 theorem tanTheta_ambient_bounded_symmetricNorming_real_of_transversality
     (N : SymmetricNormingFunction)
     (hT : IsSelfAdjoint T) (hA : IsSelfAdjoint A)
-    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    (hV : Submodule.IsReducing V T) (hAU : ∀ x ∈ U, A x ∈ U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U, ⟪compressOperatorReal U T z, z⟫_ℝ ≤
       alpha * ‖z‖ ^ 2)
@@ -255,7 +257,7 @@ second conclusion of the Section 2 `sin 2Θ` theorem and equation (7.5). -/
 theorem sinTwoTheta_ambient_bounded_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperatorReal U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperatorReal Uᗮ A),

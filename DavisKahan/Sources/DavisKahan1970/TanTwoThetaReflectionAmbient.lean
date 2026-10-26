@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.DoubleAngle.ReflectionTangentKyFan
 public import DavisKahan.InfiniteDimensional.DoubleAngle
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
@@ -42,7 +44,7 @@ open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -429,8 +431,9 @@ private theorem bounded_reflection_equation_on_U
   let C : E →L[ℂ] E := U.diagBlock Z
   let S : E →L[ℂ] E := U.offDiagBlock Z
   have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-  have hAred : A.Reduces U := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
-  have hAUperp : ∀ y ∈ Uᗮ, A y ∈ Uᗮ := hAred.2
+  have hAred : Submodule.IsReducing U A := (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule
+    hAsym _).mpr hAU
+  have hAUperp : ∀ y ∈ Uᗮ, A y ∈ Uᗮ := hAred.orthogonal_mem_invtSubmodule
   have hCU : C x ∈ U := by
     dsimp [C]
     exact TauCeti.diagonalPart_mem_of_mem U Z hx
@@ -521,10 +524,10 @@ private theorem reflection_block_data
     maps_mem_orthogonal_of_comm_starProjection N hNcomm hx
   have hLU : ∀ x ∈ U, L x ∈ Uᗮ := fun x hx => tanRep_maps_U (U := U) (V := V) hx
   have hLUperp : ∀ x ∈ Uᗮ, L x ∈ U := fun x hx => tanRep_maps_Uperp (U := U) (V := V) hx
-  have hAred : A.Reduces U := by
+  have hAred : Submodule.IsReducing U A := by
     have hs := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-    exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hs hAU
-  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
+    exact (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hs _).mpr hAU
+  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.orthogonal_mem_invtSubmodule
   have hA0sa : IsSelfAdjoint A0 := by
     dsimp [A0]
     exact isSelfAdjoint_compressOperator hA U
@@ -657,8 +660,8 @@ private theorem reflection_block_data
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
     have hAHsa := hA.add hH
     have hAHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAHsa
-    have hVred : (A + H).Reduces V :=
-      ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAHsym hAplusH_V
+    have hVred : Submodule.IsReducing V (A + H) :=
+      (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAHsym _).mpr hAplusH_V
     have hcommZ := Submodule.reflectionOperator_comm_of_reduces (A + H) V hVred
     -- Reduce the projected reflection identity to the explicit `N * L` blocks.
     have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
@@ -853,10 +856,10 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
     ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0 := by
   let Ap : E →ₗ.[ℂ] E := A.toLinearMap.toPMap ⊤
-  have hAred : A.Reduces U := by
+  have hAred : Submodule.IsReducing U A := by
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-    exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
-  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
+    exact (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAsym _).mpr hAU
+  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.orthogonal_mem_invtSubmodule
   have hred : _root_.LinearPMap.IsReducing Ap U := by
     refine ⟨(by intro x hx; exact Submodule.mem_top), ?_, ?_⟩
     · rw [_root_.LinearPMap.isInvariant_iff]
@@ -880,8 +883,8 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
     exact Submodule.mem_top
   have hAHsa : IsSelfAdjoint (A + H) := hA.add hH
   have hAHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAHsa
-  have hVred : (A + H).Reduces V :=
-    ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAHsym hAplusH_V
+  have hVred : Submodule.IsReducing V (A + H) :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAHsym _).mpr hAplusH_V
   have hcomm : V.reflectionOperator ∘L (A + H) =
       (A + H) ∘L V.reflectionOperator :=
     Submodule.reflectionOperator_comm_of_reduces (A + H) V hVred
@@ -1148,10 +1151,10 @@ theorem
           (projectionBlock Uᗮ U
             (2 * (projectorDifference U V * doubleSecant U V))) ≤
         2 * N.gauge (projectionBlock Uᗮ U H) := by
-  have hAred : A.Reduces U := by
+  have hAred : Submodule.IsReducing U A := by
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-    exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
-  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
+    exact (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAsym _).mpr hAU
+  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.orthogonal_mem_invtSubmodule
   have hA0upper : spectrum ℝ (compressOperator U A) ⊆ Set.Iic α :=
     fun r hr => (hA0spec hr).2
   have hUlow : ∀ x ∈ U,
@@ -1278,10 +1281,10 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
     (hHmem : N.Mem H) :
     N.Mem (tanTwoAngleOperatorC U V) ∧
       δ * N.gauge (tanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
-  have hAred : A.Reduces U := by
+  have hAred : Submodule.IsReducing U A := by
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
-    exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
-  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
+    exact (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAsym _).mpr hAU
+  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.orthogonal_mem_invtSubmodule
   have hA0upper : spectrum ℝ (compressOperator U A) ⊆ Set.Iic α :=
     fun r hr => (hA0spec hr).2
   have hUlow : ∀ x ∈ U,

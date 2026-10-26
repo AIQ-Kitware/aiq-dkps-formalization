@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
 public import DavisKahan.DoubleAngle.RealAngleIdentification
@@ -119,7 +121,7 @@ open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.Foundation.RealComplexification
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -276,7 +278,7 @@ theorem theorem8_2_perturbationHalfGap_real
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2) :
     P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
@@ -303,14 +305,14 @@ theorem theorem8_2_residualHalfGap_real
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
     P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   have hRsmallc : ‖residual (complexify A + complexify K)
       (complexifySubmodule P).subtypeL
       (compressOperator (complexifySubmodule P) (complexify A))‖ < delta / 2 := by
-    rw [norm_residual_complexify A K P hPred.1]
+    rw [norm_residual_complexify A K P hPred.mem_invtSubmodule]
     exact hRsmall
   have hmain := theorem8_2_residualHalfGap_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
@@ -328,7 +330,7 @@ theorem theorem8_2_branch_directed_real
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (halt : ‖K‖ < delta / 2 ∨
       ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
@@ -363,7 +365,7 @@ theorem theorem8_2_perturbationHalfGap_real_maximalAngle_lt
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
     (hsmall : ‖K‖ < delta / 2) :
@@ -389,7 +391,7 @@ theorem theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hcross : CrossedDefectsEquivalent P Q)
     (halt : ‖K‖ < delta / 2 ∨
@@ -409,7 +411,7 @@ theorem theorem8_2_branch_real_maximalAngle_lt [FiniteDimensional ℝ E]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
     (halt : ‖K‖ < delta / 2 ∨
@@ -473,7 +475,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_real
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P) :
+    (hPred : Submodule.IsReducing P A) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ := by
   have hmain := theorem8_2_sinTwoTheta_perturbation_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
@@ -497,7 +499,7 @@ theorem theorem8_2_sinTwoTheta_residual_real
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P) :
+    (hPred : Submodule.IsReducing P A) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
       2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
   have hmain := theorem8_2_sinTwoTheta_residual_complex
@@ -506,7 +508,7 @@ theorem theorem8_2_sinTwoTheta_residual_real
     (spectrumIn_orthogonal_complexify_add hQperp)
     ((complexify_reduces_iff A P).2 hPred)
   rwa [norm_sinTwoAngleOperator_complexifySubmodule,
-    norm_residual_complexify A K P hPred.1] at hmain
+    norm_residual_complexify A K P hPred.mem_invtSubmodule] at hmain
 
 /-! ### 5. The same estimate at every source unitarily invariant norm, over `ℝ`
 
@@ -563,7 +565,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hKmem : N.Mem K) :
     N.Mem (sinTwoAngleOperatorR Q P) ∧
       delta * N.gauge (sinTwoAngleOperatorR Q P) ≤ 2 * N.gauge K := by
@@ -572,7 +574,8 @@ theorem theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming
   have hKsa : IsSelfAdjoint K :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
   have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
-  have hQred : (A + K).Reduces Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : Submodule.IsReducing Q (A + K) :=
+    (Submodule.isReducing_iff _ _).mpr ⟨hQ.invariant, hQperp.invariant⟩
   have hUspec : spectrum ℝ (DavisKahan1970.compressOperatorReal Q (A + K)) ⊆
       Set.Icc beta alpha :=
     spectrum_compressOperatorReal_subset_of_spectrumIn hQ
@@ -620,12 +623,13 @@ theorem theorem8_2_sinTwoTheta_residual_real_symmetricNorming
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
     N.Mem (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ∧
       delta * N.gauge (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
         2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
-  have hseq := sameApproximationSingularSequence_residual_complexify A K P hPred.1
+  have hseq := sameApproximationSingularSequence_residual_complexify A K P
+    hPred.mem_invtSubmodule
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hseq
   have hRmemComplexified :
       N.Mem (complexify (residual (A + K) P.subtypeL (compressOperator P A))) :=
@@ -680,7 +684,7 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
@@ -698,7 +702,7 @@ theorem theorem8_2_branch_real_sourceFullAngle_lt [FiniteDimensional ℝ E]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
@@ -715,7 +719,7 @@ theorem theorem8_2_branch_real_sourceFullAngle_lt_of_crossedDefects
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hcross : CrossedDefectsEquivalent P Q)
     (hsmall : ‖K‖ < delta / 2 ∨
@@ -748,7 +752,7 @@ theorem theorem8_2_real [FiniteDimensional ℝ E]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
@@ -774,7 +778,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_real_sourceExact
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hKmem : N.Mem K) :
     N.Mem (sinTwoAngleOperatorR Q P) ∧
       delta * N.gauge (sinTwoAngleOperatorR Q P) ≤ 2 * N.gauge K :=
@@ -793,7 +797,7 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤

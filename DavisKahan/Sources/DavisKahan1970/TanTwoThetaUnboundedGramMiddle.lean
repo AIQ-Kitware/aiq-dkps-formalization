@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
 public import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 
@@ -92,7 +93,7 @@ open scoped InnerProductSpace BigOperators
 
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.ApproximationNumber
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

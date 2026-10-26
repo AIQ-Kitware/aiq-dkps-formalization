@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
 

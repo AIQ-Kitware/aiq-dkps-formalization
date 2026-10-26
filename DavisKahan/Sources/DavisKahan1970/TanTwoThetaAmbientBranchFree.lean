@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
 public import DavisKahan.DoubleAngle.TanTwoThetaApproximatePair
 
@@ -146,7 +147,7 @@ open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

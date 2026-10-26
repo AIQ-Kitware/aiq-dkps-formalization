@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.SpectralTheory.ReducingSubspace.Restriction
 
 /-!
@@ -33,7 +34,7 @@ omit [CompleteSpace E] in
 full-domain closed operator. -/
 theorem ofBounded_reducesSubspace
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.Reduces U) :
+    (hred : Submodule.IsReducing U A) :
     _root_.LinearPMap.IsReducing (A.toLinearMap.toPMap ⊤) U := by
   refine ⟨?_, ?_, ?_⟩
   · intro x hx
@@ -41,11 +42,11 @@ theorem ofBounded_reducesSubspace
   · rw [_root_.LinearPMap.isInvariant_iff]
     intro x hx
     show A (x : E) ∈ U
-    exact hred.1 (x : E) hx
+    exact hred.mem_invtSubmodule hx
   · rw [_root_.LinearPMap.isInvariant_iff]
     intro x hx
     show A (x : E) ∈ Uᗮ
-    exact hred.2 (x : E) hx
+    exact hred.orthogonal_mem_invtSubmodule hx
 
 /-- The block of a bounded operator on a subspace it reduces, as a partial map.
 
@@ -56,7 +57,7 @@ instead of a theorem to apply. -/
 @[expose]
 noncomputable def boundedReducingBlock
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.Reduces U) : U →ₗ.[𝕜] U :=
+    (hred : Submodule.IsReducing U A) : U →ₗ.[𝕜] U :=
   (A.toLinearMap.toPMap ⊤).restrict
     (ofBounded_reducesSubspace A U hred).isInvariant
 
@@ -66,7 +67,7 @@ hypothesis beyond `hred`. -/
 @[expose]
 noncomputable def boundedReducingBlockCompl
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.Reduces U) : Uᗮ →ₗ.[𝕜] Uᗮ :=
+    (hred : Submodule.IsReducing U A) : Uᗮ →ₗ.[𝕜] Uᗮ :=
   (A.toLinearMap.toPMap ⊤).restrict
     ((ofBounded_reducesSubspace A U hred).orthogonal.isInvariant)
 

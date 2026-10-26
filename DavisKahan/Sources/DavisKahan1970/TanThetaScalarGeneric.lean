@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
 public import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
@@ -29,7 +30,8 @@ on its Ky Fan majorization core.
 
 public section
 
-open scoped InnerProductSpace BigOperators TauCeti.CompleteSubspace
+open scoped InnerProductSpace BigOperators
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 namespace TauCeti
 namespace DavisKahan

@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
@@ -115,7 +116,7 @@ omit [CompleteSpace H] in
 theorem theorem63_sylvester_identity
     (T : H →L[ℂ] H) (V Z : Submodule ℂ H)
     [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
-    (hV : T.Reduces V) :
+    (hV : Submodule.IsReducing V T) :
     T ∘L theorem63DirectedSineBlock Z V -
         theorem63DirectedSineBlock Z V ∘L theorem63Compression T Z =
       Vᗮ.starProjection ∘L theorem63Residual T Z := by
@@ -128,8 +129,9 @@ theorem theorem63_sylvester_identity
       (T (z : H) - (theorem63Compression T Z z : H))
   rw [map_sub]
   congr 1
-  exact (ContinuousLinearMap.starProjection_apply_comm_of_reduces
-    T Vᗮ (hV.orthogonalComplement) (z : H)).symm
+  exact ((show ∀ x, Vᗮ.starProjection (T x) = T (Vᗮ.starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := Vᗮ)
+        (A := T)).mp ((Submodule.isReducing_orthogonal_iff _ _).mpr hV)).eq x) (z : H)).symm
 
 omit [CompleteSpace H] in
 /-- The directed sine block is a contraction. -/
@@ -162,7 +164,7 @@ false symmetric `IsUniformlyAcute Z V` claim. -/
 theorem theorem63_directed_transverse_of_form_gap
     (T : H →L[ℂ] H) (_hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
-    [Z.HasOrthogonalProjection] (_hV : T.Reduces V)
+    [Z.HasOrthogonalProjection] (_hV : Submodule.IsReducing V T)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -201,7 +203,7 @@ theorem theorem63_singularValues_sine_lt_one
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -680,7 +682,7 @@ theorem theorem63ResidualWitness_scalar
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -730,7 +732,7 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -802,7 +804,7 @@ theorem theorem6_3_all_kyFan_core
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -834,7 +836,7 @@ theorem theorem6_3_generalizedTanTheta_of_formBounds
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V)
+    (hV : Submodule.IsReducing V T)
     (_hStrictDimension : Module.rank ℂ Z < Module.rank ℂ V)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
@@ -868,14 +870,15 @@ theorem theorem6_3_generalizedTanTheta_ideal
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V)
+    (hV : Submodule.IsReducing V T)
     (hStrictDimension : Module.rank ℂ Z < Module.rank ℂ V)
     {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha)
     (hdelta : 0 < delta)
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+      spectrum ℝ (T.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) ⊆
         Set.Ici (alpha + delta))
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
@@ -900,7 +903,7 @@ theorem theorem6_3_generalizedTanTheta_ideal
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := by
     intro y hy
     exact SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+      hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_of_formBounds N T hT V Z hV
     hStrictDimension hdelta hCompressionUpper hUnwantedLower tanTheta0 htan
     hResidual
@@ -1094,7 +1097,7 @@ needs comes from the source gap through
 This is the form the Section 2 tangent theorem consumes. -/
 theorem theorem6_3_all_kyFan_core_directedTangent
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -1116,13 +1119,14 @@ theorem theorem6_3_generalizedTanTheta_ideal_directedTangent
     (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
     [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
-    (hV : T.Reduces V)
+    (hV : Submodule.IsReducing V T)
     (hStrictDimension : Module.rank ℂ Z < Module.rank ℂ V)
     {beta alpha delta : ℝ} (hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+      spectrum ℝ (T.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) ⊆
         Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem (theorem63DirectedTangent Z V) ∧
@@ -1143,7 +1147,7 @@ theorem theorem6_3_generalizedTanTheta_ideal_directedTangent
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
     SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+      hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_ideal N T hT V Z hV
     hStrictDimension hbetaalpha hdelta hCompressionSpectrum hUnwantedSpectrum
     (theorem63DirectedTangent Z V)
@@ -1176,7 +1180,7 @@ theorem theorem6_3_generalizedTanTheta_of_formBounds_equalRank
     (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
     [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -1199,12 +1203,13 @@ at arbitrary unitarily invariant ideal-gauge scope. -/
 theorem theorem6_3_generalizedTanTheta_equalRank_spectral
     (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
     [N.toOperatorIdealFamily.IsKyFanDominant]
-    (T : H →L[ℂ] H) (hT : T.IsSymmetric) (hV : T.Reduces V)
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric) (hV : Submodule.IsReducing V T)
     {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+      spectrum ℝ (T.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) ⊆
         Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem (theorem63DirectedTangent Z V) ∧
@@ -1225,7 +1230,7 @@ theorem theorem6_3_generalizedTanTheta_equalRank_spectral
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
     SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+      hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum hy
   exact theorem6_3_generalizedTanTheta_of_formBounds_equalRank Z V N T hT hV
     hdelta hCompressionUpper hUnwantedLower hResidual
 

@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpRadius
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 
@@ -87,7 +88,7 @@ variable {Hspace : Type v} [NormedAddCommGroup Hspace]
 theorem operatorPath_subspaceBlockOperatorData_A0_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (_hU : A.Reduces U) (hK : Submodule.IsOffDiagonal U K)
+    (_hU : Submodule.IsReducing U A) (hK : Submodule.IsOffDiagonal U K)
     (t : ℝ) (hpath : (operatorPath A K t).IsSymmetric) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).A0 =
       compressOperator U A := by
@@ -101,7 +102,7 @@ theorem operatorPath_subspaceBlockOperatorData_A0_eq
 theorem operatorPath_subspaceBlockOperatorData_A1_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (_hU : A.Reduces U) (hK : Submodule.IsOffDiagonal U K)
+    (_hU : Submodule.IsReducing U A) (hK : Submodule.IsOffDiagonal U K)
     (t : ℝ) (hpath : (operatorPath A K t).IsSymmetric) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).A1 =
       compressOperator Uᗮ A := by
@@ -116,7 +117,7 @@ scaled perturbation. -/
 theorem operatorPath_subspaceBlockOperatorData_B01_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     (t : ℝ) (hpath : (operatorPath A K t).IsSymmetric) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).B01 =
       U.orthogonalProjectionOnto ∘L ((t : ℂ) • K) ∘L Uᗮ.subtypeL := by
@@ -129,7 +130,7 @@ scaled perturbation. -/
 theorem operatorPath_subspaceBlockOperatorData_B10_eq
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     (t : ℝ) (hpath : (operatorPath A K t).IsSymmetric) :
     (subspaceBlockOperatorData (operatorPath A K t) U hpath).B10 =
       Uᗮ.orthogonalProjectionOnto ∘L ((t : ℂ) • K) ∘L U.subtypeL := by
@@ -141,7 +142,7 @@ theorem operatorPath_subspaceBlockOperatorData_B10_eq
 theorem norm_operatorPath_subspaceBlockOperatorData_B01_le
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1)
     (hpath : (operatorPath A K t).IsSymmetric) :
     ‖(subspaceBlockOperatorData (operatorPath A K t) U hpath).B01‖ ≤
@@ -159,7 +160,7 @@ theorem norm_operatorPath_subspaceBlockOperatorData_B01_le
 theorem norm_operatorPath_subspaceBlockOperatorData_B10_le
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     (t : ℝ) (ht : t ∈ Set.Icc (0 : ℝ) 1)
     (hpath : (operatorPath A K t).IsSymmetric) :
     ‖(subspaceBlockOperatorData (operatorPath A K t) U hpath).B10‖ ≤

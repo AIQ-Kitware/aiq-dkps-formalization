@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
@@ -244,9 +246,10 @@ private theorem tanTwoThetaGraphCoordinate_bound_of_quarterAcute
   have hAHsym : (A + H).IsSymmetric := by
     have h := hAsym.add hHsym
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
-  have hUreduces : A.Reduces U := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
-  have hVreduces : ContinuousLinearMap.Reduces (A + H) V :=
-    ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAHsym hAplusH_V
+  have hUreduces : Submodule.IsReducing U A :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAsym _).mpr hAU
+  have hVreduces : Submodule.IsReducing V (A + H) :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAHsym _).mpr hAplusH_V
   have hoff : Submodule.IsOffDiagonal U H :=
     isOffDiagonal_of_maps_orthogonal H U hHU hHUperp
   let B : BlockOperatorData (𝕜 := ℂ) (E0 := U) (E1 := Uᗮ) :=
@@ -290,7 +293,7 @@ private theorem tanTwoThetaGraphCoordinate_bound_of_quarterAcute
       RCLike.re ⟪B.A1 z, z⟫_ℂ ≤ a * ‖z‖ ^ 2 := by
     intro z
     rw [hB1]
-    have hAz : A (z : E) ∈ Uᗮ := hUreduces.2 (z : E) z.property
+    have hAz : A (z : E) ∈ Uᗮ := hUreduces.orthogonal_mem_invtSubmodule z.property
     change RCLike.re
         ⟪Uᗮ.orthogonalProjectionOnto (A (z : E)), z⟫_ℂ ≤
       a * ‖(z : E)‖ ^ 2

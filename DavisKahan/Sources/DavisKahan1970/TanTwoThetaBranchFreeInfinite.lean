@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.DoubleAngle.TanTwoThetaApproximatePair
 public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport

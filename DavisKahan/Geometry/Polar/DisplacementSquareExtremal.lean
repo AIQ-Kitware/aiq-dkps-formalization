@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Pinching

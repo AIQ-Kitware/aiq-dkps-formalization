@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
@@ -84,8 +85,8 @@ to it and already yields `‖Pᗮ_V x‖ = ‖x‖ = c * ‖x‖`, which exclude
 (`isFixedCosineReducingSubspace_of_printed`). -/
 def IsFixedCosineReducingSubspace
     (M : Submodule 𝕜 H) (c : ℝ) : Prop :=
-  (U.starProjection).Reduces M ∧
-  (V.starProjection).Reduces M ∧
+  Submodule.IsReducing M (U.starProjection) ∧
+  Submodule.IsReducing M (V.starProjection) ∧
   (∀ x : H, x ∈ M → x ∈ U → ‖V.starProjection x‖ = c * ‖x‖) ∧
   (∀ x : H, x ∈ M → x ∈ V → ‖U.starProjection x‖ = c * ‖x‖) ∧
   (∀ x : H, x ∈ M → x ∈ Uᗮ → ‖(Vᗮ).starProjection x‖ = c * ‖x‖) ∧
@@ -250,8 +251,10 @@ theorem mem_fixedCosineSubspace (c : ℝ) (w : H) :
 theorem reduces_projection_of_commute (c : ℝ) (W : Submodule 𝕜 H)
     [W.HasOrthogonalProjection]
     (hcomm : Commute (halmosCosineSq U V) (W.starProjection)) :
-    (W.starProjection).Reduces (fixedCosineSubspace U V c) := by
-  refine ContinuousLinearMap.IsSymmetric.reduces_of_invariant W.starProjection_isSymmetric ?_
+    Submodule.IsReducing (fixedCosineSubspace U V c) (W.starProjection) := by
+  refine (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule W.starProjection_isSymmetric
+    _).mpr ?_
+  change ∀ x ∈ fixedCosineSubspace U V c, W.starProjection x ∈ fixedCosineSubspace U V c
   intro x hx
   rw [mem_fixedCosineSubspace] at hx ⊢
   have hcm := congrArg (fun T : H →L[𝕜] H => T x) hcomm.eq
@@ -310,16 +313,17 @@ theorem halmosCosineSq_source_compl_apply (x : H) (hx : x ∈ Uᗮ) :
 
 /-- Complementary projections preserve a subspace reducing the projection. -/
 theorem complementaryProjection_mem_of_reduces {W M : Submodule 𝕜 H}
-    [W.HasOrthogonalProjection] (hR : (W.starProjection).Reduces M) {w : H}
+    [W.HasOrthogonalProjection] (hR : Submodule.IsReducing M (W.starProjection)) {w : H}
     (hw : w ∈ M) : (Wᗮ).starProjection w ∈ M := by
   have hcompl : (Wᗮ).starProjection w = w - W.starProjection w :=
     congrArg (fun T : H →L[𝕜] H => T w) (Submodule.starProjection_orthogonal' W)
   rw [hcompl]
-  exact M.sub_mem hw (hR.1 w hw)
+  exact M.sub_mem hw (hR.mem_invtSubmodule hw)
 
 /-- The cosine square preserves a subspace reducing both projections. -/
 theorem halmosCosineSq_mem_of_reduces {M : Submodule 𝕜 H}
-    (hRU : (U.starProjection).Reduces M) (hRV : (V.starProjection).Reduces M)
+    (hRU : Submodule.IsReducing M (U.starProjection)) (hRV : Submodule.IsReducing M
+      (V.starProjection))
     {w : H} (hw : w ∈ M) : halmosCosineSq U V w ∈ M := by
   have hval : halmosCosineSq U V w
       = U.starProjection (V.starProjection (U.starProjection w))
@@ -330,7 +334,7 @@ theorem halmosCosineSq_mem_of_reduces {M : Submodule 𝕜 H}
         * (Uᗮ).starProjection) w = _
     simp only [add_apply, mul_apply_eq_comp]
   rw [hval]
-  refine M.add_mem (hRU.1 _ (hRV.1 _ (hRU.1 _ hw))) ?_
+  refine M.add_mem (hRU.mem_invtSubmodule (hRV.mem_invtSubmodule (hRU.mem_invtSubmodule hw))) ?_
   exact complementaryProjection_mem_of_reduces hRU
     (complementaryProjection_mem_of_reduces hRV
       (complementaryProjection_mem_of_reduces hRU hw))
@@ -365,7 +369,8 @@ theorem fixedCosineSubspace_isFixedCosineReducing (c : ℝ) (hc0 : 0 < c) :
 /-- Maximality direction of Proposition 3.5: any subspace with constant
 source-side cosine `c` lies in the fixed-cosine eigenspace. -/
 theorem fixedCosineSubspace_maximal (c : ℝ) {M : Submodule 𝕜 H}
-    (hRU : (U.starProjection).Reduces M) (hRV : (V.starProjection).Reduces M)
+    (hRU : Submodule.IsReducing M (U.starProjection)) (hRV : Submodule.IsReducing M
+      (V.starProjection))
     (hU : ∀ x : H, x ∈ M → x ∈ U → ‖V.starProjection x‖ = c * ‖x‖)
     (hUc : ∀ x : H, x ∈ M → x ∈ Uᗮ → ‖(Vᗮ).starProjection x‖ = c * ‖x‖) :
     M ≤ fixedCosineSubspace U V c := by
@@ -425,7 +430,7 @@ theorem fixedCosineSubspace_maximal (c : ℝ) {M : Submodule 𝕜 H}
     have hcompl : (Uᗮ).starProjection w = w - U.starProjection w :=
       congrArg (fun T : H →L[𝕜] H => T w) (Submodule.starProjection_orthogonal' U)
     rw [hcompl]; abel
-  have e1 := hEU (U.starProjection w) (hRU.1 w hw) (U.starProjection_apply_mem w)
+  have e1 := hEU (U.starProjection w) (hRU.mem_invtSubmodule hw) (U.starProjection_apply_mem w)
   have e2 := hEUc ((Uᗮ).starProjection w)
     (complementaryProjection_mem_of_reduces hRU hw) (Uᗮ.starProjection_apply_mem w)
   conv_lhs => rw [hdecomp]
@@ -441,8 +446,8 @@ indexed by `{M ∩ U, M ∩ Uᗮ}`, not by `{M ∩ U, M ∩ V}`.  The norm form
 `‖P_V x‖ = c * ‖x‖` is the cosine form of `∠(x, Q x) = θ` with `c = cos θ`. -/
 def IsPrintedFixedCosineReducingSubspace
     (M : Submodule 𝕜 H) (c : ℝ) : Prop :=
-  (U.starProjection).Reduces M ∧
-  (V.starProjection).Reduces M ∧
+  Submodule.IsReducing M (U.starProjection) ∧
+  Submodule.IsReducing M (V.starProjection) ∧
   (∀ x : H, x ∈ M → x ∈ U → ‖V.starProjection x‖ = c * ‖x‖) ∧
   (∀ x : H, x ∈ M → x ∈ Uᗮ → ‖(Vᗮ).starProjection x‖ = c * ‖x‖)
 

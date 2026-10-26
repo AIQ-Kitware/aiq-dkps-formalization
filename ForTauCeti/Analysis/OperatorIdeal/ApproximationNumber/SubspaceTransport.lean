@@ -5,8 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
-public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 
 /-!
@@ -59,7 +59,7 @@ statements use the heterogeneous relation
 public section
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

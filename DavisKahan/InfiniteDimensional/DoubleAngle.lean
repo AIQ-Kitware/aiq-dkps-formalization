@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.BoundedOperator.Reflection
 public import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
 public import DavisKahan.InfiniteDimensional.SinTheta.General
@@ -172,23 +173,25 @@ operator. -/
 theorem reduces_reflectedSubspace
     {A : E →L[𝕜] E} {U : Submodule 𝕜 E} {V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) :
-    ContinuousLinearMap.Reduces (V.reflectionOperator ∘L A ∘L V.reflectionOperator)
-      (reflectedSubspace V U) := by
+    (hU : Submodule.IsReducing U A) :
+    Submodule.IsReducing (reflectedSubspace V U) (V.reflectionOperator ∘L A ∘L
+      V.reflectionOperator) := by
+  simp only [Submodule.isReducing_iff,
+    Module.End.mem_invtSubmodule_iff_forall_mem_of_mem, ContinuousLinearMap.coe_coe]
   constructor
   · intro y hy
     obtain ⟨u, hu, rfl⟩ := Submodule.mem_map.mp hy
     show V.reflectionOperator (A (V.reflectionOperator
       (V.reflectionOperator u))) ∈ reflectedSubspace V U
     rw [reflectionOperator_apply_apply]
-    exact Submodule.mem_map.mpr ⟨A u, hU.1 u hu, rfl⟩
+    exact Submodule.mem_map.mpr ⟨A u, hU.mem_invtSubmodule hu, rfl⟩
   · intro y hy
     rw [reflectedSubspace_orthogonal] at hy ⊢
     obtain ⟨w, hw, rfl⟩ := Submodule.mem_map.mp hy
     show V.reflectionOperator (A (V.reflectionOperator
       (V.reflectionOperator w))) ∈ reflectedSubspace V Uᗮ
     rw [reflectionOperator_apply_apply]
-    exact Submodule.mem_map.mpr ⟨A w, hU.2 w hw, rfl⟩
+    exact Submodule.mem_map.mpr ⟨A w, hU.orthogonal_mem_invtSubmodule hw, rfl⟩
 
 omit [CompleteSpace E] in
 /-- Double reflection conjugation is the identity on operators. -/
@@ -877,14 +880,14 @@ theorem sinTwoTheta_reflectionDefect
     {A : E →L[𝕜] E} (hA : A.IsSymmetric)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) {d : ℝ} (hd : 0 < d)
+    (hU : Submodule.IsReducing U A) {d : ℝ} (hd : 0 < d)
     (hfinite : FiniteGapConfiguration A U d) :
     d * ‖sinTwoAngleOperator U V‖ ≤
       ‖reflectionDefect V A‖ := by
   let A' := V.reflectionOperator ∘L A ∘L V.reflectionOperator
   let U' := reflectedSubspace V U
   have hA' : A'.IsSymmetric := isSymmetric_reflectionConjugate hA V
-  have hU' : A'.Reduces U' := reduces_reflectedSubspace hU
+  have hU' : Submodule.IsReducing U' A' := reduces_reflectedSubspace hU
   obtain ⟨l, r, l', r', hlr, hlr', hUU', hU'U⟩ :=
     finiteGap_mixedIntervalExterior V hfinite
   have hsin := sinTheta_symmetric hA hA' hU hU' hlr hlr' hd hUU' hU'U
@@ -917,7 +920,7 @@ Lean proof route for a weaker agent:
 theorem sinTwoTheta_residual
     {A : E →L[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : A.Reduces U) (X : F →L[𝕜] E) (hX : IsometricEmbedding X)
+    (hU : Submodule.IsReducing U A) (X : F →L[𝕜] E) (hX : IsometricEmbedding X)
     [(LinearMap.range X.toLinearMap).HasOrthogonalProjection]
     {M : F →L[𝕜] F} (hM : M.IsSymmetric)
     {d : ℝ} (hd : 0 < d) (hfinite : FiniteGapConfiguration A U d) :
@@ -944,7 +947,7 @@ theorem sinTwoTheta_perturbation
     (hA : A.IsSymmetric)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {d : ℝ} (hd : 0 < d)
     (hfinite : FiniteGapConfiguration A U d) :
     d * ‖sinTwoAngleOperator U V‖ ≤ 2 * ‖B - A‖ := by
@@ -977,13 +980,13 @@ theorem sinTwoTheta_generalSeparation
     (hA : A.IsSymmetric) (_hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {d : ℝ} (hd : 0 < d) (hgap : InternalGap A U d) :
     d * ‖sinTwoAngleOperator U V‖ ≤ Real.pi * ‖B - A‖ := by
   let A' := V.reflectionOperator ∘L A ∘L V.reflectionOperator
   let U' := reflectedSubspace V U
   have hA' : A'.IsSymmetric := isSymmetric_reflectionConjugate hA V
-  have hU' : A'.Reduces U' := reduces_reflectedSubspace hU
+  have hU' : Submodule.IsReducing U' A' := reduces_reflectedSubspace hU
   have hhybrid : HybridGap A A' U U' d :=
     internalGap_reflection_transport hgap
   have hsin := sinTheta_generalSeparation hA hA' hU hU' hd hhybrid

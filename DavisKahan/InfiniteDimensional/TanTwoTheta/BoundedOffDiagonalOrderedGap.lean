@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalSpectrumNonempty
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
@@ -116,7 +118,7 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_orderedSpectraSeparated
     (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] [Nontrivial U] [Nontrivial Uᗮ]
-    (hU : A.Reduces U) (hV : ContinuousLinearMap.Reduces (A + H) V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V (A + H))
     (hoff : Submodule.IsOffDiagonal U H)
     {d : ℝ} (hd : 0 < d)
     (hordered : OrderedSpectraSeparated A U A Uᗮ d)

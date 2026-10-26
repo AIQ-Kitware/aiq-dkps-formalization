@@ -1,4 +1,5 @@
 {
+  "ContinuousLinearMap.Reduces.map_isometryEquiv": "Submodule.IsReducing.map_isometryEquiv",
   "TauCeti.DavisKahan.Experimental.DKClosedOperator": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real": "TauCeti.DavisKahan.ExactSinTheta.ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.kyFanApproximationGauge_add_le_real": "",

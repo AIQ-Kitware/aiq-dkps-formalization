@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.TanTheta.RitzPair
 public import DavisKahan.Sylvester.ScalarTransport
@@ -12,7 +13,6 @@ public import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
 public import ForTauCeti.Analysis.RCLike.ScalarTransportIsometry
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ScalarTransport
-public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 
 /-!
 # Scalar transport for unbounded Ritz-compression data
@@ -32,7 +32,8 @@ sequence and every symmetric-norming gauge are unchanged.
 
 public section
 
-open scoped InnerProductSpace TauCeti.CompleteSubspace
+open scoped InnerProductSpace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 namespace TauCeti
 namespace DavisKahan

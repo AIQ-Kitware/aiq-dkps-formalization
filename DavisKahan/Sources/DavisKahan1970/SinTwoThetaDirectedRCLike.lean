@@ -17,6 +17,7 @@ bounded-trial specializations and implementation support.
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
@@ -54,7 +55,7 @@ open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

@@ -89,7 +89,7 @@ noncomputable def genericLeftProjection
     [V.HasOrthogonalProjection] :
     halmosGenericPart U V →L[ℂ] halmosGenericPart U V :=
   restrictToInvariant (U.starProjection) (halmosGenericPart U V)
-    (projection_left_reduces_halmosGenericPart U V).1
+    (projection_left_reduces_halmosGenericPart U V).mem_invtSubmodule
 
 /-- Restricted right projection on the generic Halmos summand. -/
 noncomputable def genericRightProjection
@@ -97,7 +97,7 @@ noncomputable def genericRightProjection
     [V.HasOrthogonalProjection] :
     halmosGenericPart U V →L[ℂ] halmosGenericPart U V :=
   restrictToInvariant (V.starProjection) (halmosGenericPart U V)
-    (projection_right_reduces_halmosGenericPart U V).1
+    (projection_right_reduces_halmosGenericPart U V).mem_invtSubmodule
 
 /-- Complete operator-level invariant data for a pair of projections.
 
@@ -177,7 +177,7 @@ theorem ambient_intertwines_left
   have hPt : U.starProjection (T.starProjection x) ∈ T :=
     projection_left_invariant_halmosTrivialPart U V _ ht
   have hPg : U.starProjection (G.starProjection x) ∈ G :=
-    (projection_left_reduces_halmosGenericPart U V).1 _ hg
+    (projection_left_reduces_halmosGenericPart U V).mem_invtSubmodule hg
   have e1 : D.ambient (U.starProjection (T.starProjection x))
       = (D.trivialEquiv ⟨U.starProjection (T.starProjection x), hPt⟩ : H') :=
     D.ambient_apply_trivial ⟨_, hPt⟩
@@ -195,8 +195,11 @@ theorem ambient_intertwines_left
   have hgEq := DFunLike.congr_fun D.generic_left ⟨G.starProjection x, hg⟩
   apply congrArg Subtype.val at htEq
   apply congrArg Subtype.val at hgEq
-  simpa [trivialLeftProjection, genericLeftProjection,
-    restrictToInvariant_apply] using congrArg₂ (· + ·) htEq hgEq
+  change (D.trivialEquiv ⟨U.starProjection (T.starProjection x), hPt⟩ : H') =
+    U'.starProjection (D.trivialEquiv ⟨T.starProjection x, ht⟩ : H') at htEq
+  change (D.genericEquiv ⟨U.starProjection (G.starProjection x), hPg⟩ : H') =
+    U'.starProjection (D.genericEquiv ⟨G.starProjection x, hg⟩ : H') at hgEq
+  exact congrArg₂ (· + ·) htEq hgEq
 
 /-- The assembled ambient unitary intertwines the right projections. -/
 theorem ambient_intertwines_right
@@ -217,7 +220,7 @@ theorem ambient_intertwines_right
   have hPt : V.starProjection (T.starProjection x) ∈ T :=
     projection_right_invariant_halmosTrivialPart U V _ ht
   have hPg : V.starProjection (G.starProjection x) ∈ G :=
-    (projection_right_reduces_halmosGenericPart U V).1 _ hg
+    (projection_right_reduces_halmosGenericPart U V).mem_invtSubmodule hg
   have e1 : D.ambient (V.starProjection (T.starProjection x))
       = (D.trivialEquiv ⟨V.starProjection (T.starProjection x), hPt⟩ : H') :=
     D.ambient_apply_trivial ⟨_, hPt⟩
@@ -235,8 +238,11 @@ theorem ambient_intertwines_right
   have hgEq := DFunLike.congr_fun D.generic_right ⟨G.starProjection x, hg⟩
   apply congrArg Subtype.val at htEq
   apply congrArg Subtype.val at hgEq
-  simpa [trivialRightProjection, genericRightProjection,
-    restrictToInvariant_apply] using congrArg₂ (· + ·) htEq hgEq
+  change (D.trivialEquiv ⟨V.starProjection (T.starProjection x), hPt⟩ : H') =
+    V'.starProjection (D.trivialEquiv ⟨T.starProjection x, ht⟩ : H') at htEq
+  change (D.genericEquiv ⟨V.starProjection (G.starProjection x), hPg⟩ : H') =
+    V'.starProjection (D.genericEquiv ⟨G.starProjection x, hg⟩ : H') at hgEq
+  exact congrArg₂ (· + ·) htEq hgEq
 
 /-- The assembled unitary maps the first subspace onto the first subspace. -/
 theorem map_left

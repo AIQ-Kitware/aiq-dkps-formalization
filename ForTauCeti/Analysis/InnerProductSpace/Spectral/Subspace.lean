@@ -35,7 +35,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 itself.
 
 Named for what it says.  It was called `Reduces`, which collided with
-`ContinuousLinearMap.Reduces` — a genuinely *stronger* predicate requiring
+`Submodule.IsReducing` — a *stronger* predicate requiring
 `Uᗮ` to be invariant too — so one name meant two things in one library and a
 reader meeting `IsInvariant A U` in a docstring could not tell which.  For a
 symmetric operator the two coincide, and `isInvariant_orthogonal_of_isSymmetric`

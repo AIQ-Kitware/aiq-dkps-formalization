@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Geometry.Halmos.Classification
 public import ForTauCeti.Analysis.InnerProductSpace.OrthogonalGluing
 
@@ -117,17 +118,15 @@ variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
 omit [CompleteSpace H] in
 /-- The trivial part reduces the source projection. -/
 theorem starProjection_left_reduces_halmosTrivialPart :
-    U.starProjection.Reduces (halmosTrivialPart U V) :=
-  ContinuousLinearMap.IsSymmetric.reduces_of_invariant
-    U.starProjection_isSymmetric
+    Submodule.IsReducing (halmosTrivialPart U V) U.starProjection :=
+  (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule U.starProjection_isSymmetric _).mpr
     fun y hy => projection_mem_halmosTrivialPart_left U V (x := y) hy
 
 omit [CompleteSpace H] in
 /-- The trivial part reduces the target projection. -/
 theorem starProjection_right_reduces_halmosTrivialPart :
-    V.starProjection.Reduces (halmosTrivialPart U V) :=
-  ContinuousLinearMap.IsSymmetric.reduces_of_invariant
-    V.starProjection_isSymmetric
+    Submodule.IsReducing (halmosTrivialPart U V) V.starProjection :=
+  (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule V.starProjection_isSymmetric _).mpr
     fun y hy => projection_mem_halmosTrivialPart_right U V (x := y) hy
 
 /-- **`U` is split by the trivial/generic decomposition.**  The trivial-part
@@ -135,18 +134,22 @@ projector maps `U` into itself, so a vector of `U` decomposes into a trivial and
 a generic piece each still in `U`. -/
 theorem starProjection_trivial_mem_left {x : H} (hx : x ∈ U) :
     (halmosTrivialPart U V).starProjection x ∈ U := by
-  have h := ContinuousLinearMap.starProjection_apply_comm_of_reduces
-    U.starProjection (halmosTrivialPart U V)
-    (starProjection_left_reduces_halmosTrivialPart U V) x
+  have h := (show ∀ x, (halmosTrivialPart U V).starProjection (U.starProjection x) =
+    U.starProjection ((halmosTrivialPart U V).starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U :=
+        (halmosTrivialPart U V)) (A := U.starProjection)).mp
+        (starProjection_left_reduces_halmosTrivialPart U V)).eq x) x
   rw [Submodule.starProjection_eq_self_iff.mpr hx] at h
   exact h ▸ U.starProjection_apply_mem _
 
 /-- The same for `V`. -/
 theorem starProjection_trivial_mem_right {x : H} (hx : x ∈ V) :
     (halmosTrivialPart U V).starProjection x ∈ V := by
-  have h := ContinuousLinearMap.starProjection_apply_comm_of_reduces
-    V.starProjection (halmosTrivialPart U V)
-    (starProjection_right_reduces_halmosTrivialPart U V) x
+  have h := (show ∀ x, (halmosTrivialPart U V).starProjection (V.starProjection x) =
+    V.starProjection ((halmosTrivialPart U V).starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U :=
+        (halmosTrivialPart U V)) (A := V.starProjection)).mp
+        (starProjection_right_reduces_halmosTrivialPart U V)).eq x) x
   rw [Submodule.starProjection_eq_self_iff.mpr hx] at h
   exact h ▸ V.starProjection_apply_mem _
 

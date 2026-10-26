@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
@@ -55,7 +56,7 @@ directed `sin Θ` estimates `Submodule.sinTheta_directed_coercive`. -/
 theorem opNorm_starProjection_sub_le_of_coercive
     {A B : H →L[𝕜] H} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 H} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hW : B.Reduces W)
+    (hU : Submodule.IsReducing U A) (hW : Submodule.IsReducing W B)
     {c g : ℝ} (hg : 0 < g)
     (hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
     (hUlo : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2)
@@ -68,9 +69,11 @@ theorem opNorm_starProjection_sub_le_of_coercive
     Submodule.directedProjectionGap_def]
   refine max_le ?_ ?_
   · exact sinTheta_directed_coercive hA hB hU
-      (ContinuousLinearMap.IsSymmetric.reduces_of_invariant hB hW.2) hg hUc hWlo
+      ((LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hB _).mpr
+        hW.orthogonal_mem_invtSubmodule) hg hUc hWlo
   · have h := sinTheta_directed_coercive hB hA hW
-      (ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA hU.2) hg hWc hUlo
+      ((LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hA _).mpr
+        hU.orthogonal_mem_invtSubmodule) hg hWc hUlo
     rwa [show ‖A - B‖ = ‖B - A‖ from by rw [← neg_sub, norm_neg]] at h
 
 
@@ -78,7 +81,7 @@ theorem opNorm_starProjection_sub_le_of_coercive
 theorem opNorm_starProjection_sub_le_of_formBounds
     {A B : H →L[𝕜] H} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 H} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hW : B.Reduces W)
+    (hU : Submodule.IsReducing U A) (hW : Submodule.IsReducing W B)
     {c g : ℝ} (hg : 0 < g)
     (hUhi : A.LowerFormBoundOn U (c + g))
     (hUlo : A.UpperFormBoundOn Uᗮ c)

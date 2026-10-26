@@ -5,7 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Geometry.Polar.DirectRotation
 
 /-!
@@ -478,11 +479,10 @@ theorem projection_mem_halmosGenericPart_left
     [V.HasOrthogonalProjection] {x : H}
     (hx : x ∈ halmosGenericPart U V) :
     U.starProjection x ∈ halmosGenericPart U V := by
-  have hred : U.starProjection.Reduces (halmosTrivialPart U V) :=
-    ContinuousLinearMap.IsSymmetric.reduces_of_invariant
-      U.starProjection_isSymmetric
+  have hred : Submodule.IsReducing (halmosTrivialPart U V) U.starProjection :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule U.starProjection_isSymmetric _).mpr
       (fun y hy => projection_mem_halmosTrivialPart_left U V (x := y) hy)
-  exact hred.2 x hx
+  exact hred.orthogonal_mem_invtSubmodule hx
 
 omit [CompleteSpace H] in
 /-- The target projection preserves the generic Halmos summand. -/
@@ -491,20 +491,18 @@ theorem projection_mem_halmosGenericPart_right
     [V.HasOrthogonalProjection] {x : H}
     (hx : x ∈ halmosGenericPart U V) :
     V.starProjection x ∈ halmosGenericPart U V := by
-  have hred : V.starProjection.Reduces (halmosTrivialPart U V) :=
-    ContinuousLinearMap.IsSymmetric.reduces_of_invariant
-      V.starProjection_isSymmetric
+  have hred : Submodule.IsReducing (halmosTrivialPart U V) V.starProjection :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule V.starProjection_isSymmetric _).mpr
       (fun y hy => projection_mem_halmosTrivialPart_right U V (x := y) hy)
-  exact hred.2 x hx
+  exact hred.orthogonal_mem_invtSubmodule hx
 
 omit [CompleteSpace H] in
 /-- The generic Halmos summand reduces the source projection. -/
 theorem projection_left_reduces_halmosGenericPart
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    (U.starProjection).Reduces (halmosGenericPart U V) := by
-  exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant
-    U.starProjection_isSymmetric
+    Submodule.IsReducing (halmosGenericPart U V) (U.starProjection) := by
+  exact (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule U.starProjection_isSymmetric _).mpr
     (fun x hx => projection_mem_halmosGenericPart_left U V (x := x) hx)
 
 omit [CompleteSpace H] in
@@ -512,9 +510,8 @@ omit [CompleteSpace H] in
 theorem projection_right_reduces_halmosGenericPart
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    (V.starProjection).Reduces (halmosGenericPart U V) := by
-  exact ContinuousLinearMap.IsSymmetric.reduces_of_invariant
-    V.starProjection_isSymmetric
+    Submodule.IsReducing (halmosGenericPart U V) (V.starProjection) := by
+  exact (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule V.starProjection_isSymmetric _).mpr
     (fun x hx => projection_mem_halmosGenericPart_right U V (x := x) hx)
 
 omit [CompleteSpace H] in

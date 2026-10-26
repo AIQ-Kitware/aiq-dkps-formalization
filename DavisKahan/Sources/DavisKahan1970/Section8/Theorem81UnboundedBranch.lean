@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.SpectralTheory.UnboundedCentralBand
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsionUnbounded
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAngleUnbounded

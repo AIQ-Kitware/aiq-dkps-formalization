@@ -5,8 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
-public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
 public import TauCeti.Analysis.InnerProductSpace.Sylvester
 
@@ -31,7 +31,7 @@ the canonical Mathlib namespace of the object extended; the conclusion's head
 symbol is `Submodule.starProjection`, so it is now in `Submodule`.  The statement
 and the proof are unchanged apart from spelling the compatibility aliases
 `Reduces`, `projection` and `norm_sylvester_le_of_coercive` as the canonical
-`ContinuousLinearMap.Reduces` and `Submodule.starProjection`. Its Sylvester
+`Submodule.IsReducing` and `Submodule.starProjection`. Its Sylvester
 step now applies Tau Ceti's stronger
 `mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le` directly.
 Consumers use `ContinuousLinearMap.sylvester` for the equation representation.
@@ -54,9 +54,9 @@ packaged from a bounded `T` and a reducing subspace.
 
 The mathematics is `TauCeti.re_inner_reducedExtension_self`, which is stated at
 the value `T (P x) + κ • (x - P x)` and assumes only invariance; this wrapper
-supplies the packaging and drops `Reduces` to its invariance half. -/
+supplies the packaging and uses the invariant-submodule membership of `IsReducing`. -/
 private theorem re_inner_reducedExtension_self {T : E →L[𝕜] E}
-    {W : Submodule 𝕜 E} [W.HasOrthogonalProjection] (hW : T.Reduces W)
+    {W : Submodule 𝕜 E} [W.HasOrthogonalProjection] (hW : Submodule.IsReducing W T)
     (κ : ℝ) (x : E) :
     RCLike.re ⟪(T ∘L W.starProjection
         + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x, x⟫_𝕜
@@ -68,7 +68,8 @@ private theorem re_inner_reducedExtension_self {T : E →L[𝕜] E}
     simp only [add_apply, ContinuousLinearMap.comp_apply, smul_apply, sub_apply,
       one_apply_eq_self]
   rw [hval]
-  exact TauCeti.re_inner_reducedExtension_self (R := (T : E →ₗ[𝕜] E)) hW.1 κ x
+  exact TauCeti.re_inner_reducedExtension_self (R := (T : E →ₗ[𝕜] E))
+    hW.mem_invtSubmodule κ x
 
 /-- **The dimension-free operator-norm Davis--Kahan `sin Θ` theorem, coercivity
 form.**  For self-adjoint `A, B` on an arbitrary Hilbert space, `U` reducing `A`
@@ -83,14 +84,14 @@ integral-free Sylvester estimate
 (no spectral measure, no dimension or completeness hypothesis on the *bound* itself), and the
 block construction `A ∘L P + (c+g)(1−P)`, `B ∘L Q + c(1−Q)` uses only the
 dimension-free projection commutation
-`ContinuousLinearMap.starProjection_apply_comm_of_reduces`.  The
+`Submodule.isReducing_coe_iff_commute_starProjection`.  The
 spectrum-predicate forms (`sinTheta_perturbation`, `IntervalExteriorSeparated`)
 follow from this once a bounded spectral theorem converts spectral separation to
 these coercivity bounds. -/
 theorem sinTheta_directed_coercive
     {A B : E →L[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {c g : ℝ} (hg : 0 < g)
     (hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
     (hVc : ∀ x ∈ V, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2) :
@@ -111,10 +112,14 @@ theorem sinTheta_directed_coercive
   -- commutations
   have hcommA : A ∘L P = P ∘L A := by
     ext x; simp only [ContinuousLinearMap.comp_apply]
-    exact (ContinuousLinearMap.starProjection_apply_comm_of_reduces A U hU x).symm
+    exact ((show ∀ x, U.starProjection (A x) = A (U.starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := U)
+        (A := A)).mp hU).eq x) x).symm
   have hcommB : B ∘L Q = Q ∘L B := by
     ext x; simp only [ContinuousLinearMap.comp_apply]
-    exact (ContinuousLinearMap.starProjection_apply_comm_of_reduces B V hV x).symm
+    exact ((show ∀ x, V.starProjection (B x) = B (V.starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := V)
+        (A := B)).mp hV).eq x) x).symm
   -- self-adjointness of A', B'
   have hA'sa : IsSelfAdjoint A' := by
     have h1 : IsSelfAdjoint (A ∘L P) := (IsSelfAdjoint.commute_iff hAsa hPsa).mp hcommA
@@ -161,9 +166,12 @@ theorem sinTheta_directed_coercive
     have hQrest : Q (x - Q x) = 0 := by
       have hQQ : Q (Q x) = Q x := V.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem x)
       rw [map_sub, hQQ, sub_self]
-    have hQBQ : Q (B (Q x)) = B (Q x) := V.starProjection_eq_self_iff.mpr (hV.1 _ hQxV)
+    have hQBQ : Q (B (Q x)) = B (Q x) := V.starProjection_eq_self_iff.mpr
+      (hV.mem_invtSubmodule hQxV)
     have hAP : A (P (Q x)) = P (A (Q x)) :=
-      (ContinuousLinearMap.starProjection_apply_comm_of_reduces A U hU (Q x)).symm
+      ((show ∀ x, U.starProjection (A x) = A (U.starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := U)
+        (A := A)).mp hU).eq x) (Q x)).symm
     have hAX : (A' ∘L X) x = A (P (Q x)) := by
       simp only [ContinuousLinearMap.comp_apply, hX, hA', add_apply,
         smul_apply, sub_apply,
@@ -209,7 +217,7 @@ theorem sinTheta_directed_coercive
 theorem sinTheta_directed_of_formBounds
     {A B : E →L[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {c g : ℝ} (hg : 0 < g)
     (hUhi : A.LowerFormBoundOn U (c + g))
     (hVlo : B.UpperFormBoundOn V c) :

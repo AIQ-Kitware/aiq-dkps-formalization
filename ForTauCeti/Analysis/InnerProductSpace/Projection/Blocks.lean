@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.InnerProductSpace.Projection.Block
 
 /-!
@@ -181,14 +181,16 @@ theorem norm_reflectionOperator_le_one (U : Submodule 𝕜 E)
 /-- A reducing operator commutes with the corresponding reflection. -/
 theorem reflectionOperator_comm_of_reduces
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (hU : A.Reduces U) :
+    [U.HasOrthogonalProjection] (hU : Submodule.IsReducing U A) :
     U.reflectionOperator ∘L A = A ∘L U.reflectionOperator := by
   ext x
   -- states the goal with the definition unfolded, in the shape the next step needs;
   -- there is no `_apply` lemma to rewrite with here.
   change U.reflectionOperator (A x) = A (U.reflectionOperator x)
   rw [reflectionOperator_apply, reflectionOperator_apply,
-    ContinuousLinearMap.starProjection_apply_comm_of_reduces A U hU,
+    (show ∀ x, U.starProjection (A x) = A (U.starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := U)
+        (A := A)).mp hU).eq x),
     map_sub, map_smul]
 
 /-- Complementary projection as `I-P`, pointwise. -/

@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
@@ -49,7 +50,7 @@ open TauCeti.ApproximationNumber
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
 open RealComplexification
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

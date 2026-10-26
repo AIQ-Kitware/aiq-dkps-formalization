@@ -5,13 +5,13 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.TanTheta.RitzPair
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 public import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ScalarTransport
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedReflection
-public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 
 /-!
 # Scalar transport for the unbounded double-angle hypotheses
@@ -24,7 +24,8 @@ piece is invariant under `RCLikeIso` transport.
 
 public section
 
-open scoped InnerProductSpace TauCeti.CompleteSubspace
+open scoped InnerProductSpace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 namespace TauCeti
 namespace ScalarTransport

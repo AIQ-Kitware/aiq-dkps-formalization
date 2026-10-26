@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
 public import DavisKahan.SpectralTheory.AbstractSpectrum

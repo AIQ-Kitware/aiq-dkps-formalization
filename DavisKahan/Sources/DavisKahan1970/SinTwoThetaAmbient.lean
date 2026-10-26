@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
@@ -88,7 +90,7 @@ open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -120,7 +122,7 @@ theorem sinTheta_spectrum_block_gauge
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ B),
@@ -157,7 +159,7 @@ theorem sinTheta_spectrum_block_all_kyFan
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hVspec : ∀ x ∈ spectrum ℝ (compressOperator Vᗮ B),
@@ -213,7 +215,7 @@ are coupled by Lemma 6.1 and contracted by Lemma 6.2 instead, which is the
 paper's argument for Proposition 6.1 and loses nothing. -/
 theorem symmetric_sinTheta_spectrum_all_kyFan
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -333,7 +335,7 @@ omit [U.HasOrthogonalProjection] in
 /-- The reflection displacement is bounded by twice the perturbation, at every
 Ky Fan level: `X A X - A = X H X - H` up to sign, and `X` is unitary. -/
 private theorem kyFan_reflectionDisplacement_le
-    (hV : B.Reduces V) (k : ℕ) :
+    (hV : Submodule.IsReducing V B) (k : ℕ) :
     kyFanApproximationGauge k (conjByIsometryEquiv V.reflection A - A) ≤
       2 * kyFanApproximationGauge k (B - A) := by
   have hdefect : conjByIsometryEquiv V.reflection A - A =
@@ -378,7 +380,7 @@ private theorem kyFan_reflectionDisplacement_le
 Davis--Kahan 1970 at every finite Ky Fan gauge. -/
 theorem sinTwoTheta_ambient_bounded_kyFan_complex
     (hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B)
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -435,7 +437,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -449,7 +451,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
   let D := conjByIsometryEquiv V.reflection A - A
   have hB : IsSelfAdjoint (conjByIsometryEquiv V.reflection A) :=
     isSelfAdjoint_conjByIsometryEquiv V.reflection hA
-  have hW : ContinuousLinearMap.Reduces (conjByIsometryEquiv V.reflection A) W :=
+  have hW : Submodule.IsReducing W (conjByIsometryEquiv V.reflection A) :=
     hU.map_isometryEquiv V.reflection
   have hWspec : spectrum ℝ (compressOperator W
       (conjByIsometryEquiv V.reflection A)) ⊆ Set.Icc a b := by
@@ -577,7 +579,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -621,7 +623,7 @@ theorem and equation (7.5) of Section 7. -/
 theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),

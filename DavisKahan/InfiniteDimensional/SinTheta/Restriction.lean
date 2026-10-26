@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.Sylvester.Basic
 public import ForTauCeti.Analysis.Normed.Operator.Restriction
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
@@ -191,9 +192,10 @@ omit [CompleteSpace E] [CompleteSpace F] in
 theorem directedResidual_sylvesterEquation
     {A : E →L[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     {X : F →L[𝕜] E} {M : F →L[𝕜] F} :
-    ContinuousLinearMap.sylvester (A.restrict hU.2) M
+    ContinuousLinearMap.sylvester (A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem
+      _).mp hU.orthogonal_mem_invtSubmodule)) M
       (((Uᗮ.starProjection ∘L X)).codRestrict Uᗮ (fun _x => Uᗮ.starProjection_apply_mem _)) =
       ((Uᗮ.starProjection ∘L DavisKahan.residual A X M)).codRestrict Uᗮ
         (fun _x => Uᗮ.starProjection_apply_mem _) := by
@@ -201,8 +203,12 @@ theorem directedResidual_sylvesterEquation
   apply ContinuousLinearMap.ext
   intro x
   apply Subtype.ext
-  have hUperp : A.Reduces Uᗮ := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA hU.2
-  have hcomm := ContinuousLinearMap.starProjection_apply_comm_of_reduces A Uᗮ hUperp (X x)
+  have hUperp : Submodule.IsReducing Uᗮ A :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hA _).mpr
+    hU.orthogonal_mem_invtSubmodule
+  have hcomm := (show ∀ x, Uᗮ.starProjection (A x) = A (Uᗮ.starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := Uᗮ)
+        (A := A)).mp hUperp).eq x) (X x)
   change A (Uᗮ.starProjection (X x)) - Uᗮ.starProjection (X (M x)) =
     Uᗮ.starProjection (A (X x) - X (M x))
   rw [map_sub, hcomm]
@@ -215,9 +221,10 @@ theorem directedPerturbation_sylvesterEquation
     (_hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V) :
-    ContinuousLinearMap.sylvester (B.restrict hV.2)
-      (A.restrict hU.1)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B) :
+    ContinuousLinearMap.sylvester (B.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem
+      _).mp hV.orthogonal_mem_invtSubmodule))
+      (A.restrict hU.mem_invtSubmodule)
       (((Vᗮ.starProjection ∘L U.subtypeL)).codRestrict Vᗮ
         (fun _x => Vᗮ.starProjection_apply_mem _)) =
       ((Vᗮ.starProjection ∘L (B - A) ∘L U.subtypeL)).codRestrict Vᗮ
@@ -226,8 +233,12 @@ theorem directedPerturbation_sylvesterEquation
   intro x
   apply Subtype.ext
   simp only [ContinuousLinearMap.sylvester_apply, sub_apply]
-  have hVperp : B.Reduces Vᗮ := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hB hV.2
-  have hcomm := ContinuousLinearMap.starProjection_apply_comm_of_reduces B Vᗮ hVperp (x : E)
+  have hVperp : Submodule.IsReducing Vᗮ B :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hB _).mpr
+    hV.orthogonal_mem_invtSubmodule
+  have hcomm := (show ∀ x, Vᗮ.starProjection (B x) = B (Vᗮ.starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := Vᗮ)
+        (A := B)).mp hVperp).eq x) (x : E)
   change B (Vᗮ.starProjection (x : E)) - Vᗮ.starProjection (A (x : E)) =
     Vᗮ.starProjection (B (x : E) - A (x : E))
   rw [map_sub, hcomm]
@@ -239,18 +250,21 @@ theorem hybridGap_restrictions
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (_hA : A.IsSymmetric) (_hB : B.IsSymmetric)
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {d : ℝ} (hgap : HybridGap A B U V d) :
-    SpectraSeparated (B.restrict hV.2) ⊤
-      (A.restrict hU.1) ⊤ d := by
+    SpectraSeparated (B.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      hV.orthogonal_mem_invtSubmodule)) ⊤
+      (A.restrict hU.mem_invtSubmodule) ⊤ d := by
   refine ⟨by intro x hx; trivial, by intro x hx; trivial, ?_⟩
   intro b hb a ha
   have hb' : b ∈ restrictedSpectrum B Vᗮ := by
-    rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum B Vᗮ hV.2]
+    rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum B Vᗮ
+      hV.orthogonal_mem_invtSubmodule]
     rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_top] at hb
     exact hb
   have ha' : a ∈ restrictedSpectrum A U := by
-    rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum A U hU.1]
+    rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum A U
+      hU.mem_invtSubmodule]
     rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_top] at ha
     exact ha
   simpa [abs_sub_comm] using hgap.2.2 a ha' b hb'
@@ -263,23 +277,27 @@ theorem intervalExteriorSeparated_restrictions
     {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (_hA : A.IsSymmetric) (_hB : B.IsSymmetric)
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {left right d : ℝ}
     (hgap : IntervalExteriorSeparated A U B Vᗮ left right d) :
     TauCeti.DavisKahan.ExactSinTheta.IntervalExteriorGap
-      (B.restrict hV.2) (A.restrict hU.1)
+      (B.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) (A.restrict
+        ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp hU.mem_invtSubmodule))
       left right d := by
   right
   constructor
   · intro a ha
     have ha' : a ∈ restrictedSpectrum A U := by
-      rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum A U hU.1]
+      rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum A U
+        hU.mem_invtSubmodule]
       rw [boundedRealSpectrum_eq_realSpectrum] at ha
       exact ha
     exact hgap.1.subset ha'
   · intro b hb
     have hb' : b ∈ restrictedSpectrum B Vᗮ := by
-      rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum B Vᗮ hV.2]
+      rw [TauCeti.DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum B Vᗮ
+        hV.orthogonal_mem_invtSubmodule]
       rw [boundedRealSpectrum_eq_realSpectrum] at hb
       exact hb
     exact hgap.2.subset hb'

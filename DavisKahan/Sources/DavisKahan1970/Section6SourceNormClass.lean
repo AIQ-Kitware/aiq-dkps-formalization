@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 public import DavisKahan.Sources.DavisKahan1970.Proposition61
 public import DavisKahan.Sources.DavisKahan1970.Theorem61
@@ -48,7 +49,7 @@ theorem proposition6_1_sourceExact_complex
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : DavisKahan.Sylvester.FormBoundedSylvesterGap
       (DavisKahanExt.PartialMap.boundedReducingBlock A U hU)
@@ -74,7 +75,7 @@ theorem proposition6_1_sourceExact_real
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
     {A B : E →L[ℝ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : DavisKahan.Sylvester.FormBoundedSylvesterGap
       (DavisKahanExt.PartialMap.boundedReducingBlock A U hU)

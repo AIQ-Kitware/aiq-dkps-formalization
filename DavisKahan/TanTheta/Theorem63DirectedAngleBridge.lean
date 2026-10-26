@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.TanTheta.Theorem63FiniteSource
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
@@ -45,7 +47,7 @@ namespace TanTheta
 
 open ExactSinTheta
 open Module (finrank)
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -389,7 +391,7 @@ theorem theorem63DirectedTangent_eq_subtype_comp_cfcTan_sourceDirectedAngle
 /-- Source-gap specialization: no hypothesis beyond the hypotheses already used
 by Theorem 6.3 is needed for the directed-tangent identification. -/
 theorem theorem63DirectedTangent_eq_subtype_comp_cfcTan_sourceDirectedAngle_of_form_gap
-    (T : H →L[ℂ] H) (hT : T.IsSymmetric) (hV : T.Reduces V)
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric) (hV : Submodule.IsReducing V T)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)

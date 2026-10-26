@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Geometry.Halmos.Assembly
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 

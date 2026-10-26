@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
@@ -322,7 +323,9 @@ omit [CompleteSpace E] in
 subspace complexification. -/
 theorem complexify_reduces_iff (T : E →L[ℝ] E) (U : Submodule ℝ E)
     [U.HasOrthogonalProjection] :
-    (complexify T).Reduces (complexifySubmodule U) ↔ T.Reduces U := by
+    Submodule.IsReducing (complexifySubmodule U) (complexify T) ↔ Submodule.IsReducing U T := by
+  simp only [Submodule.isReducing_iff,
+    Module.End.mem_invtSubmodule_iff_forall_mem_of_mem, ContinuousLinearMap.coe_coe]
   constructor
   · rintro ⟨hU, hUperp⟩
     constructor

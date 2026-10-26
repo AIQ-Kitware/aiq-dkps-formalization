@@ -24,6 +24,7 @@ from only the printed unbounded hypotheses.
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.PartIII
 public import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
 public import DavisKahan.Sources.DavisKahan1970.Theorem61
@@ -87,12 +88,14 @@ theorem projectorDifference_restrictionSpectra_opNorm
     {A B : H →L[ℂ] H} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule ℂ H} [U.HasOrthogonalProjection]
     [W.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hW : B.Reduces W)
+    (hU : Submodule.IsReducing U A) (hW : Submodule.IsReducing W B)
     {c g : ℝ} (hg : 0 < g)
-    (hUhi : spectrum ℝ (A.restrict hU.1) ⊆ Set.Ici (c + g))
-    (hUlo : spectrum ℝ (A.restrict hU.2) ⊆ Set.Iic c)
-    (hWhi : spectrum ℝ (B.restrict hW.1) ⊆ Set.Ici (c + g))
-    (hWlo : spectrum ℝ (B.restrict hW.2) ⊆ Set.Iic c) :
+    (hUhi : spectrum ℝ (A.restrict hU.mem_invtSubmodule) ⊆ Set.Ici (c + g))
+    (hUlo : spectrum ℝ (A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      hU.orthogonal_mem_invtSubmodule)) ⊆ Set.Iic c)
+    (hWhi : spectrum ℝ (B.restrict hW.mem_invtSubmodule) ⊆ Set.Ici (c + g))
+    (hWlo : spectrum ℝ (B.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      hW.orthogonal_mem_invtSubmodule)) ⊆ Set.Iic c) :
     ‖(U.starProjection - W.starProjection : H →L[ℂ] H)‖ ≤ ‖B - A‖ / g := by
   have hAlg (X : Type u) [NormedAddCommGroup X] [NormedSpace ℂ X] :
       ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := X) =

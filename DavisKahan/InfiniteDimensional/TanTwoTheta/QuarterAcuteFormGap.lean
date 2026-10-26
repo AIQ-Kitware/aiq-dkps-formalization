@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 public import DavisKahan.Geometry.Polar.DirectRotation
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
@@ -325,9 +326,10 @@ theorem isQuarterAcute_of_orderedFormGap
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
   have hAHsym : (A + H).toLinearMap.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAH
-  have hUred : A.Reduces U := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
-  have hVred : ContinuousLinearMap.Reduces (A + H) V :=
-    ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAHsym hAplusH_V
+  have hUred : Submodule.IsReducing U A := (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule
+    hAsym _).mpr hAU
+  have hVred : Submodule.IsReducing V (A + H) :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAHsym _).mpr hAplusH_V
   have hJcommA : J ∘L A = A ∘L J := by
     simpa only [J] using Submodule.reflectionOperator_comm_of_reduces A U hUred
   have hKcommAH : K ∘L (A + H) = (A + H) ∘L K := by

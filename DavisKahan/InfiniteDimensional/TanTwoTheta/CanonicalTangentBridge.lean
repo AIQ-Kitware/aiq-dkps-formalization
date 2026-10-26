@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRiccati
 public import DavisKahan.Geometry.Angle.OperatorAngleComplex

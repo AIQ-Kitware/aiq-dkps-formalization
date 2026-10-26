@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
@@ -104,7 +105,7 @@ theorem proposition6_1_sinAngleOperator_complex
     (N : SymmetricNormingFunction)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : FormBoundedSylvesterGap
       (PartialMap.boundedReducingBlock A U hU)
@@ -144,7 +145,7 @@ theorem proposition6_1_complex
     (N : SymmetricNormingFunction)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : FormBoundedSylvesterGap
       (PartialMap.boundedReducingBlock A U hU)
@@ -169,7 +170,7 @@ theorem proposition6_1_projectorDifference_complex
     (N : SymmetricNormingFunction)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : FormBoundedSylvesterGap
       (PartialMap.boundedReducingBlock A U hU)
@@ -223,7 +224,7 @@ theorem proposition6_1_projectorDifference_real
     (N : SymmetricNormingFunction)
     {A B : E →L[ℝ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : FormBoundedSylvesterGap
       (PartialMap.boundedReducingBlock A U hU)
@@ -270,7 +271,7 @@ theorem proposition6_1_real
     (N : SymmetricNormingFunction)
     {A B : E →L[ℝ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : FormBoundedSylvesterGap
       (PartialMap.boundedReducingBlock A U hU)

@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sylvester.Spectrum
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.Geometry.Angle.OperatorAngleComplex
@@ -88,13 +89,14 @@ theorem isSelfAdjoint_conjByIsometryEquiv (W : E ≃ₗᵢ[ℂ] E)
 
 omit [CompleteSpace E] in
 /-- Conjugation transports reducing subspaces to the image subspace. -/
-theorem _root_.ContinuousLinearMap.Reduces.map_isometryEquiv {A : E →L[ℂ] E} {U : Submodule ℂ E}
-    (hU : A.Reduces U) (W : E ≃ₗᵢ[ℂ] E) :
-    ContinuousLinearMap.Reduces (conjByIsometryEquiv W A)
-      (U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) := by
+theorem _root_.Submodule.IsReducing.map_isometryEquiv {A : E →L[ℂ] E} {U : Submodule ℂ E}
+    (hU : Submodule.IsReducing U A) (W : E ≃ₗᵢ[ℂ] E) :
+    Submodule.IsReducing (U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) (conjByIsometryEquiv W A) := by
+  simp only [Submodule.isReducing_iff,
+    Module.End.mem_invtSubmodule_iff_forall_mem_of_mem, ContinuousLinearMap.coe_coe]
   constructor
   · rintro x ⟨y, hy, rfl⟩
-    refine ⟨A y, hU.1 y hy, ?_⟩
+    refine ⟨A y, hU.mem_invtSubmodule hy, ?_⟩
     have h : conjByIsometryEquiv W A (W y) = W (A y) := by
       show W (A (W.symm (W y))) = W (A y)
       rw [W.symm_apply_apply]
@@ -103,7 +105,7 @@ theorem _root_.ContinuousLinearMap.Reduces.map_isometryEquiv {A : E →L[ℂ] E}
     rw [← Submodule.map_orthogonal_equiv] at hx
     obtain ⟨y, hy, rfl⟩ := hx
     rw [← Submodule.map_orthogonal_equiv]
-    refine ⟨A y, hU.2 y hy, ?_⟩
+    refine ⟨A y, hU.orthogonal_mem_invtSubmodule hy, ?_⟩
     have h : conjByIsometryEquiv W A (W y) = W (A y) := by
       show W (A (W.symm (W y))) = W (A y)
       rw [W.symm_apply_apply]
@@ -223,7 +225,7 @@ theorem sinTwoTheta_spectrum_defect
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -233,8 +235,8 @@ theorem sinTwoTheta_spectrum_defect
       ‖reflectionDefect V A‖ := by
   have hÃsa : IsSelfAdjoint (conjByIsometryEquiv V.reflection A) :=
     isSelfAdjoint_conjByIsometryEquiv V.reflection hA
-  have hŨred : ContinuousLinearMap.Reduces (conjByIsometryEquiv V.reflection A)
-      (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)) :=
+  have hŨred : Submodule.IsReducing (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))
+    (conjByIsometryEquiv V.reflection A) :=
     hU.map_isometryEquiv V.reflection
   have htrans1 : spectrum ℝ (compressOperator
       (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))
@@ -274,7 +276,7 @@ theorem sinTwoTheta_spectrum
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -296,7 +298,7 @@ theorem sinTwoTheta_spectrum_sinAngle
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -321,7 +323,7 @@ theorem sinTwoTheta_spectrum_gauge
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -335,8 +337,8 @@ theorem sinTwoTheta_spectrum_gauge
       2 * N.gaugeReal (B - A) := by
   have hÃsa : IsSelfAdjoint (conjByIsometryEquiv V.reflection A) :=
     isSelfAdjoint_conjByIsometryEquiv V.reflection hA
-  have hŨred : ContinuousLinearMap.Reduces (conjByIsometryEquiv V.reflection A)
-      (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)) :=
+  have hŨred : Submodule.IsReducing (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))
+    (conjByIsometryEquiv V.reflection A) :=
     hU.map_isometryEquiv V.reflection
   have hperp : Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E) =
       (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E))ᗮ :=
@@ -403,7 +405,7 @@ theorem sinTwoTheta_spectrum_residual
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -525,7 +527,7 @@ theorem sinTwoTheta_spectrum_operator
     {A B : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -543,7 +545,7 @@ theorem sinTwoTheta_spectrum_residual_operator
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),

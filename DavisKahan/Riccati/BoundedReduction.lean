@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Riccati.BoundedCore
 
 /-!
@@ -102,12 +103,13 @@ when the angular operator solves the bounded Riccati equation. -/
 theorem blockGraph_reduces_iff_solvesRiccati
     (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) :
-    ContinuousLinearMap.Reduces (blockOperator H) (blockGraph X) ↔ SolvesRiccati H X := by
+    Submodule.IsReducing (blockGraph X) (blockOperator H) ↔ SolvesRiccati H X := by
   constructor
   · intro hred
-    exact (blockGraph_invariant_iff_solvesRiccati H X).1 hred.1
+    exact (blockGraph_invariant_iff_solvesRiccati H X).1 hred.mem_invtSubmodule
   · intro hX
-    apply ContinuousLinearMap.IsSymmetric.reduces_of_invariant (blockOperator_isSelfAdjoint H)
+    apply (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule (blockOperator_isSelfAdjoint H)
+      _).mpr
     exact (blockGraph_invariant_iff_solvesRiccati H X).2 hX
 
 end DavisKahanExt

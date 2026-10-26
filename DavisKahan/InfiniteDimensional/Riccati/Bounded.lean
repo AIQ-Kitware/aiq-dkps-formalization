@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Riccati.BoundedCanonicalGraph
 public import DavisKahan.Riccati.BoundedStability
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralEnclosure
@@ -52,7 +53,7 @@ when the angular operator solves the bounded Riccati equation. -/
 theorem graph_reduces_iff_solvesRiccati
     (H : BlockOperatorData (𝕜 := 𝕜) (E0 := E0) (E1 := E1))
     (X : E0 →L[𝕜] E1) :
-    ContinuousLinearMap.Reduces (blockOperator H) (blockGraph X) ↔ SolvesRiccati H X :=
+    Submodule.IsReducing (blockGraph X) (blockOperator H) ↔ SolvesRiccati H X :=
   blockGraph_reduces_iff_solvesRiccati H X
 
 section Complex

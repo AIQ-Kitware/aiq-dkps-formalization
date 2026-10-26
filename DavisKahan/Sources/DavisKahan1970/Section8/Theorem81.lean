@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.SpectralTheory.SpectralGapFormBounds
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.OffDiagonalSpectralRepulsion
 public import DavisKahan.Geometry.Polar.DirectRotation
@@ -130,7 +132,7 @@ structure Theorem81Conclusion (A H : E →L[ℂ] E) (P Q : Submodule ℂ E)
   spectral_repulsion :
     realSpectrum (A + H) ⊆ Set.Iic alpha ∪ Set.Ici (alpha + delta)
   /-- The branch reduces the perturbed operator. -/
-  branch_reduces : ContinuousLinearMap.Reduces (A + H) Q
+  branch_reduces : Submodule.IsReducing Q (A + H)
   /-- Sharp upper form bound on the branch. -/
   branch_form_low : ∀ x ∈ Q, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2
   /-- Sharp lower form bound on its complement. -/
@@ -192,7 +194,7 @@ theorem theorem8_1_canonicalBranch
       rw [hPperpperp] at hx
       exact hHP x hx
   set Q : Submodule ℂ E := canonicalLowBranch (A + H) hAHop alpha with hQdef
-  have hQreduces : ContinuousLinearMap.Reduces (A + H) Q :=
+  have hQreduces : Submodule.IsReducing Q (A + H) :=
     boundedSelfAdjointSpectralSubspace_reduces (A + H) hAHop (Set.Iic alpha)
       measurableSet_Iic
   have hlow : ∀ x ∈ Q, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2 := fun x hx =>
@@ -208,7 +210,7 @@ theorem theorem8_1_canonicalBranch
     refine isQuarterAcute_of_orderedFormGap A H Pᗮ Qᗮ hA hH hAPperp
       ?_ (by linarith) hPhigh ?_ ?_ ?_ ?_ ?_
     · intro x hx
-      exact hQreduces.2 x hx
+      exact hQreduces.orthogonal_mem_invtSubmodule hx
     · intro x hx
       rw [hPperpperp] at hx
       exact hPlow x hx
@@ -233,8 +235,10 @@ theorem theorem8_1_canonicalBranch
       branch_reduces := hQreduces
       branch_form_low := hlow
       branch_form_high := hhigh
-      branch_spectrum_low := spectrumIn_Iic_of_re_inner_le hQreduces.1 hlow
-      branch_spectrum_high := spectrumIn_Ici_of_le_re_inner hQreduces.2 hhigh
+      branch_spectrum_low := spectrumIn_Iic_of_re_inner_le
+        (T := A + H) (U := Q) hQreduces.mem_invtSubmodule hlow
+      branch_spectrum_high := spectrumIn_Ici_of_le_re_inner
+        (T := A + H) (U := Qᗮ) hQreduces.orthogonal_mem_invtSubmodule hhigh
       quarter_acute := hquarter
       source_full_angle_lt_pi_div_four :=
         (sourceFullAngleLtC_iff_maximalAngle_lt P Q (by positivity)).2
@@ -314,7 +318,7 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M : Submodule ℂ E) [M.HasOrthogonalProjection]
-    (hMreduces : ContinuousLinearMap.Reduces (A + H) M)
+    (hMreduces : Submodule.IsReducing M (A + H))
     (hMangle : maximalAngle P M ≤ Real.pi / 4) :
     M = canonicalLowBranch (A + H)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hH)) alpha := by
@@ -345,8 +349,9 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
   have hcommT : Commute (A + H) M.starProjection := by
     show (A + H) * M.starProjection = M.starProjection * (A + H)
     refine ContinuousLinearMap.ext fun x => ?_
-    exact (ContinuousLinearMap.starProjection_apply_comm_of_reduces
-      (A + H) M hMreduces x).symm
+    exact ((show ∀ x, M.starProjection ((A + H) x) = (A + H) (M.starProjection x) from
+      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := M)
+        (A := (A + H))).mp hMreduces).eq x) x).symm
   have hcommF : Commute F M.starProjection := by
     rw [hFdef, boundedSelfAdjointSpectralProjection_Iic_eq_cfcHom (A + H) hAHop
       hdelta hconc.spectral_repulsion]
@@ -414,7 +419,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M : Submodule ℂ E) [M.HasOrthogonalProjection]
-    (hMreduces : ContinuousLinearMap.Reduces (A + H) M) :
+    (hMreduces : Submodule.IsReducing M (A + H)) :
     maximalAngle P M ≤ Real.pi / 4 ↔
       (SpectrumIn (A + H) M (Set.Iic alpha) ∧
         SpectrumIn (A + H) Mᗮ (Set.Ici (alpha + delta))) := by
@@ -457,7 +462,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
       refine isQuarterAcute_of_orderedFormGap A H Pᗮ Mᗮ hA hH hAPperp
         ?_ (by linarith) hPhigh ?_ hformHigh ?_ ?_ ?_
       · intro x hx
-        exact hMreduces.2 x hx
+        exact hMreduces.orthogonal_mem_invtSubmodule hx
       · intro x hx
         rw [hPperpperp] at hx
         exact hPlow x hx
@@ -489,7 +494,7 @@ theorem theorem8_1_eq_canonicalBranch_of_sourceFullAngle_le
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M : Submodule ℂ E) [M.HasOrthogonalProjection]
-    (hMreduces : ContinuousLinearMap.Reduces (A + H) M)
+    (hMreduces : Submodule.IsReducing M (A + H))
     (hMangle : sourceFullAngleLeC P M (Real.pi / 4)) :
     M = canonicalLowBranch (A + H)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hH)) alpha := by
@@ -509,7 +514,7 @@ theorem theorem8_1_sourceFullAngle_le_iff_spectrumIn
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M : Submodule ℂ E) [M.HasOrthogonalProjection]
-    (hMreduces : ContinuousLinearMap.Reduces (A + H) M) :
+    (hMreduces : Submodule.IsReducing M (A + H)) :
     sourceFullAngleLeC P M (Real.pi / 4) ↔
       (SpectrumIn (A + H) M (Set.Iic alpha) ∧
         SpectrumIn (A + H) Mᗮ (Set.Ici (alpha + delta))) := by

@@ -389,7 +389,8 @@ theorem theorem8_1_upperCompressionRepulsion_canonicalBranch
     (T := A + K)
     (W := DavisKahan1970.Section8.canonicalLowBranch (A + K)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha)
-    hconc.branch_reduces.1 hconc.branch_reduces.2 alpha
+    hconc.branch_reduces.mem_invtSubmodule
+      hconc.branch_reduces.orthogonal_mem_invtSubmodule alpha
   have hL0 : ∀ y : H,
       RCLike.re ⟪(DavisKahan1970.Section8.canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
@@ -456,7 +457,8 @@ theorem theorem8_1_lowerCompressionRepulsion_canonicalBranch
     (T := A + K)
     (W := DavisKahan1970.Section8.canonicalLowBranch (A + K)
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha)
-    hconc.branch_reduces.1 hconc.branch_reduces.2 (alpha + delta)
+    hconc.branch_reduces.mem_invtSubmodule
+      hconc.branch_reduces.orthogonal_mem_invtSubmodule (alpha + delta)
   have hL1 : ∀ y : H,
       (alpha + delta) * ‖y‖ ^ 2 ≤
         RCLike.re ⟪(DavisKahan1970.Section8.canonicalLowBranch (A + K)

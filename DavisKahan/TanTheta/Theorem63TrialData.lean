@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.TanTheta.Theorem63FiniteSource
 
 public section
@@ -198,7 +199,7 @@ omit [CompleteSpace H] in
 and is bounded below on `Vᗮ`. -/
 theorem ofBounded_crossed_lower (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hV : T.Reduces V) {c : ℝ}
+    (hV : Submodule.IsReducing V T) {c : ℝ}
     (hUnwantedLower : ∀ y ∈ Vᗮ, c * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ) (z : Z) :
     c * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
       RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
@@ -216,7 +217,8 @@ theorem ofBounded_crossed_lower (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     rw [← Vᗮ.inner_starProjection_left_eq_right,
       Submodule.starProjection_eq_self_iff.mpr hyV, hsplit, inner_add_right]
     have hTV : T (V.starProjection ((z : Z) : H)) ∈ V :=
-      hV.1 _ (V.starProjection_apply_mem _)
+      hV.mem_invtSubmodule
+        (V.starProjection_apply_mem _)
     rw [Submodule.inner_left_of_mem_orthogonal hTV hyV, zero_add]
   rw [haction, hpair]
   have h := hUnwantedLower y hyV

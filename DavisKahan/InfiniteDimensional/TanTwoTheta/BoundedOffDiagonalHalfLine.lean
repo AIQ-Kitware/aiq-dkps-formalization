@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalEstimate
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 public import DavisKahan.SpectralTheory.AbstractSpectrum
@@ -93,7 +95,7 @@ theorem quarterAcuteAngularCoordinate_sharp_bound_of_spectral_halfLines
     (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : ContinuousLinearMap.Reduces (A + H) V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V (A + H))
     (hoff : Submodule.IsOffDiagonal U H)
     {c d : ℝ} (hd : 0 < d)
     (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Iic c)

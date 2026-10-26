@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
@@ -118,7 +120,7 @@ open TauCeti.DavisKahan.TanTheta
 open TauCeti.ApproximationNumber
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -1080,7 +1082,7 @@ theorem approximationNumber_theorem63Residual_le
 /-- **The directed corner estimate**, in the shape Lemma 6.1 consumes:
 `δ · kyFan_k (corner of tan Θ) ≤ kyFan_k (corner of H)`. -/
 theorem corner_all_kyFan
-    (hT : T.IsSymmetric) (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    (hT : T.IsSymmetric) (hV : Submodule.IsReducing V T) (hAU : ∀ x ∈ U, A x ∈ U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U,
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -1105,7 +1107,7 @@ theorem corner_all_kyFan
 the Section 2 tangent theorem, at every finite Ky Fan gauge. -/
 theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
     (hT : T.IsSymmetric) (hA : IsSelfAdjoint A)
-    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    (hV : Submodule.IsReducing V T) (hAU : ∀ x ∈ U, A x ∈ U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U,
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -1176,7 +1178,7 @@ theorem and the assertion the paper settles just after equation (7.6). -/
 theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality
     (N : SymmetricNormingFunction)
     (hT : T.IsSymmetric) (hA : IsSelfAdjoint A)
-    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    (hV : Submodule.IsReducing V T) (hAU : ∀ x ∈ U, A x ∈ U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U,
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -1217,7 +1219,7 @@ directed estimate, dimension-free) and
 `subspaceGap_eq_directedGap_of_crossedDefectsEquivalent` (the effect of (3.5)); the tangent
 estimate itself is untouched. -/
 theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
-    (hT : T.IsSymmetric) (hV : T.Reduces V)
+    (hT : T.IsSymmetric) (hV : Submodule.IsReducing V T)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U,
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -1243,7 +1245,7 @@ The same conclusion as `tanTheta_ambient_bounded_kyFan_complex_of_transversality
 hypothesis replaced by the printed standing assumption (3.5). -/
 theorem tanTheta_ambient_bounded_kyFan_complex_of_crossedDefects
     (hT : T.IsSymmetric) (hA : IsSelfAdjoint A)
-    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    (hV : Submodule.IsReducing V T) (hAU : ∀ x ∈ U, A x ∈ U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U,
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -1266,7 +1268,7 @@ longer a hypothesis: it is derived from the form bounds and the printed (3.5). -
 theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
     (N : SymmetricNormingFunction)
     (hT : T.IsSymmetric) (hA : IsSelfAdjoint A)
-    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    (hV : Submodule.IsReducing V T) (hAU : ∀ x ∈ U, A x ∈ U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U,
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)

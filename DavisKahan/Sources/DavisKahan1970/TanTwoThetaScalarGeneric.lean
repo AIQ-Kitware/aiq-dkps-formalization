@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
@@ -35,7 +36,8 @@ functional-calculus `sourceDirectedTanTwoThetaOperator` in
 
 public section
 
-open scoped InnerProductSpace TauCeti.CompleteSubspace
+open scoped InnerProductSpace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 namespace TauCeti
 namespace DavisKahan1970

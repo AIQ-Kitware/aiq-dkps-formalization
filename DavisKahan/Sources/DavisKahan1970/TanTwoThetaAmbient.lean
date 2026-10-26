@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
@@ -179,7 +181,7 @@ open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -1260,9 +1262,10 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
   have hAHsym : (A + H).IsSymmetric := by
     have h := hAsym.add hHsym
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
-  have hUreduces : A.Reduces U := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAsym hAU
-  have hVreduces : ContinuousLinearMap.Reduces (A + H) V :=
-    ContinuousLinearMap.IsSymmetric.reduces_of_invariant hAHsym hAplusH_V
+  have hUreduces : Submodule.IsReducing U A :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAsym _).mpr hAU
+  have hVreduces : Submodule.IsReducing V (A + H) :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAHsym _).mpr hAplusH_V
   have hoff : Submodule.IsOffDiagonal U H := isOffDiagonal_of_maps_orthogonal' hHU hHUperp
   let B : BlockOperatorData (𝕜 := ℂ) (E0 := U) (E1 := Uᗮ) :=
     TauCeti.DavisKahanExt.subspaceBlockOperatorData (A + H) U hAHsym
@@ -1301,7 +1304,7 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
   have hB1low : ∀ z : Uᗮ, RCLike.re ⟪B.A1 z, z⟫_ℂ ≤ a * ‖z‖ ^ 2 := by
     intro z
     rw [hB1]
-    have hAz : A (z : E) ∈ Uᗮ := hUreduces.2 (z : E) z.property
+    have hAz : A (z : E) ∈ Uᗮ := hUreduces.orthogonal_mem_invtSubmodule z.property
     change RCLike.re ⟪Uᗮ.orthogonalProjectionOnto (A (z : E)), z⟫_ℂ ≤
       a * ‖(z : E)‖ ^ 2
     rw [Submodule.coe_inner, Submodule.coe_orthogonalProjectionOnto_apply,

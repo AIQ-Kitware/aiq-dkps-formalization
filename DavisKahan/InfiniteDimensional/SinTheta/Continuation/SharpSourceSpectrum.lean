@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpBlockPath
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
@@ -50,14 +51,13 @@ operator. -/
 theorem compressOperator_eq_restrict_of_reduces
     (A : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
-    (hU : A.Reduces U) :
-    compressOperator U A = A.restrict hU.1 := by
+    (hU : Submodule.IsReducing U A) :
+    compressOperator U A = A.restrict hU.mem_invtSubmodule := by
   apply ContinuousLinearMap.ext
   intro u
   apply Subtype.ext
   change U.starProjection (A (u : Hspace)) = A (u : Hspace)
-  exact Submodule.starProjection_eq_self_iff.mpr
-    (hU.1 (u : Hspace) u.property)
+  exact U.starProjection_eq_self_iff.mpr (hU.mem_invtSubmodule u.property)
 
 omit [CompleteSpace Hspace] in
 /-- The real spectrum of a compression to a reducing subspace is exactly the
@@ -66,10 +66,11 @@ theorem realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces
     (A : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U]
-    (hU : A.Reduces U) :
+    (hU : Submodule.IsReducing U A) :
     realSpectrum (compressOperator U A) = restrictedSpectrum A U := by
   rw [compressOperator_eq_restrict_of_reduces A U hU,
-    restrictedSpectrum_eq_restrictionSpectrum A U hU.1]
+    restrictedSpectrum_eq_restrictionSpectrum A U
+      hU.mem_invtSubmodule]
   rfl
 
 
@@ -80,7 +81,7 @@ theorem _root_.TauCeti.DavisKahan.Foundation.FiniteGapConfiguration.exists_compr
     (A : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace (Uᗮ : Submodule ℂ Hspace)]
-    (hU : A.Reduces U) {d : ℝ}
+    (hU : Submodule.IsReducing U A) {d : ℝ}
     (hfinite : FiniteGapConfiguration A U d) :
     ∃ left right : ℝ, left ≤ right ∧
       realSpectrum (compressOperator U A) ⊆ Set.Icc left right ∧
@@ -91,7 +92,7 @@ theorem _root_.TauCeti.DavisKahan.Foundation.FiniteGapConfiguration.exists_compr
   · rw [realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces A U hU]
     exact hselected.2
   · rw [realSpectrum_compressOperator_eq_restrictedSpectrum_of_reduces A Uᗮ
-      hU.orthogonalComplement]
+      ((Submodule.isReducing_orthogonal_iff _ _).mpr hU)]
     exact hcomplement.2
 
 end CompressionSpectrum
@@ -108,7 +109,7 @@ theorem _root_.TauCeti.DavisKahan.Foundation.FiniteGapConfiguration.exists_opera
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace (Uᗮ : Submodule ℂ Hspace)]
-    (hU : A.Reduces U) (hK : Submodule.IsOffDiagonal U K)
+    (hU : Submodule.IsReducing U A) (hK : Submodule.IsOffDiagonal U K)
     {d : ℝ} (hfinite : FiniteGapConfiguration A U d) :
     ∃ left right : ℝ, left ≤ right ∧
       ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →

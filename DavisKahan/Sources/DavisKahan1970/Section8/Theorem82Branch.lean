@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
 public import DavisKahan.Geometry.Angle.DoubleAngleGapBound
@@ -148,7 +150,7 @@ theorem theorem8_2_perturbationHalfGap_complex
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2) :
     P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
@@ -178,7 +180,8 @@ theorem theorem8_2_perturbationHalfGap_complex
     intro t ht
     rw [norm_smul, Real.norm_eq_abs, abs_of_nonneg ht.1, hEdef, norm_neg]
   -- the ambient gap at the start of the path, from the printed `sin 2Θ` data
-  have hQred : A0.Reduces Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : Submodule.IsReducing Q A0 :=
+    (Submodule.isReducing_iff _ _).mpr ⟨hQ.invariant, hQperp.invariant⟩
   have hgap0 : realSpectrum A0 ⊆
       Set.Icc beta alpha ∪ gapExterior beta alpha delta :=
     realSpectrum_subset_union_of_reduces hA0 hQred hQ hQperp
@@ -239,7 +242,8 @@ theorem theorem8_2_perturbationHalfGap_complex
   have hR0 : R 0 ≤ Q := by
     have hQperp' : SpectrumIn (A0 + (0 : ℝ) • E) Qᗮ (gapExterior l rr d) := by
       rw [hB0]; exact hQperp.mono hextmono
-    have hQred' : ContinuousLinearMap.Reduces (A0 + (0 : ℝ) • E) Q := by rw [hB0]; exact hQred
+    have hQred' : Submodule.IsReducing Q (A0 + (0 : ℝ) • E) :=
+      Eq.mpr (congrArg (fun T : H →L[ℂ] H => Q.IsReducing T) hB0) hQred
     exact centralBandSubspace_le_of_spectrumIn_gapExterior _ (hBself 0) hd hlr
       (hgapt 0 ⟨le_rfl, zero_le_one⟩) hQred' hQperp'
   have hf0 : f 0 = 0 := by
@@ -253,7 +257,8 @@ theorem theorem8_2_perturbationHalfGap_complex
       Submodule.starProjection_eq_self_iff.mpr hmem, sub_self]
   -- `P ≤ R 1`
   have hR1 : P ≤ R 1 := by
-    have hPred' : ContinuousLinearMap.Reduces (A0 + (1 : ℝ) • E) P := by rw [hB1]; exact hPred
+    have hPred' : Submodule.IsReducing P (A0 + (1 : ℝ) • E) :=
+      Eq.mpr (congrArg (fun T : H →L[ℂ] H => P.IsReducing T) hB1) hPred
     have hP' : SpectrumIn (A0 + (1 : ℝ) • E) P
         (Set.Icc (beta - delta / 2) (alpha + delta / 2)) := by rw [hB1]; exact hP
     refine le_centralBandSubspace_of_spectrumIn_Icc _ (hBself 1) hd hlr
@@ -265,7 +270,7 @@ theorem theorem8_2_perturbationHalfGap_complex
       f t < Real.sqrt 2 / 2 := by
     intro t ht hclose
     have hfinite : FiniteGapConfiguration A0 Q delta := ⟨beta, alpha, hab, hQ, hQperp⟩
-    have hVred : ContinuousLinearMap.Reduces (A0 + t • E) (R t) :=
+    have hVred : Submodule.IsReducing (R t) (A0 + t • E) :=
       centralBandSubspace_reduces (A0 + t • E) (hBself t)
     have hsin := sinTwoTheta_perturbation (A := A0) (B := A0 + t • E)
       hA0 (U := Q) (V := R t) hQred hVred hdelta hfinite
@@ -337,7 +342,7 @@ theorem theorem8_2_perturbationHalfGap_angle_lt
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2) :
     Real.arcsin (P.directedProjectionGap Q) < Real.pi / 4 := by
@@ -381,7 +386,7 @@ theorem theorem8_2_residualHalfGap_complex
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
     P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
@@ -390,7 +395,8 @@ theorem theorem8_2_residualHalfGap_complex
     (P.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   -- the printed residual is the first block column of the perturbation
   have hRcol : residual (A + K) P.subtypeL (compressOperator P A) = K ∘L P.subtypeL :=
-    BoundedOperator.residual_eq_comp_subtypeL A K P hPred.1
+    BoundedOperator.residual_eq_comp_subtypeL A K P
+      hPred.mem_invtSubmodule
   rw [hRcol, TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection] at hRsmall
   -- Krein's replacement: same first column, norm exactly the residual norm
   obtain ⟨K', hK'sa, hK'col, hK'norm⟩ :=
@@ -427,8 +433,9 @@ theorem theorem8_2_residualHalfGap_complex
   have hA'inv : ∀ x ∈ P, A' x ∈ P := by
     intro x hx
     rw [hA'P x hx]
-    exact hPred.1 x hx
-  have hA'red : A'.Reduces P := ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA'sym hA'inv
+    exact hPred.mem_invtSubmodule hx
+  have hA'red : Submodule.IsReducing P A' :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hA'sym _).mpr hA'inv
   -- the printed placement of `A₀` transfers, because `A'` and `A` agree on `P`
   have hA'spec : SpectrumIn A' P (Set.Icc (beta - delta / 2) (alpha + delta / 2)) :=
     spectrumIn_of_eqOn (fun x hx => (hA'P x hx).symm) hP
@@ -447,7 +454,7 @@ theorem theorem8_2_residualHalfGap_angle_lt
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
     Real.arcsin (P.directedProjectionGap Q) < Real.pi / 4 := by
@@ -470,7 +477,7 @@ theorem theorem8_2_branch
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2 ∨
       ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :

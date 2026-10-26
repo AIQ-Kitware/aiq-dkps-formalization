@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.FiniteDimensional.DirectRotation
 public import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
 public import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal

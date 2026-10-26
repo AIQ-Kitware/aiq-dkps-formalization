@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
 
 /-!
@@ -26,7 +27,7 @@ namespace TauCeti.DavisKahan1970.CommonDomainUsage
 
 open TauCeti.DavisKahan TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.Sylvester
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 universe u v

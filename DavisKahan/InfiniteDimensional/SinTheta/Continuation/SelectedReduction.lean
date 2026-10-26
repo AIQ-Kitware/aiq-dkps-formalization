@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedGraph
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
@@ -67,8 +68,8 @@ operator. -/
 theorem boundedSelfAdjointSpectralSubspace_reduces
     (A : H →L[ℂ] H) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) :
-    A.Reduces (boundedSelfAdjointSpectralSubspace A hA s hs) := by
-  apply ContinuousLinearMap.IsSymmetric.reduces_of_invariant hA
+    Submodule.IsReducing (boundedSelfAdjointSpectralSubspace A hA s hs) A := by
+  apply (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hA _).mpr
   intro x hx
   change x ∈ (boundedSelfAdjointSpectralProjection A hA s hs).range at hx
   rcases hx with ⟨y, rfl⟩
@@ -104,10 +105,9 @@ theorem selectedEndpointAngularOperator_graph_reduces_of_contour_bound
           (hself t ht) s hs)
     (hsmall : selectedBranchProjectionLipschitzConstant Γ K delta <
       Real.sqrt 2 / 2) :
-    ContinuousLinearMap.Reduces (A + K)
-      (graphSubspace (boundedSelfAdjointSpectralSubspace A hA s hs)
+    Submodule.IsReducing (graphSubspace (boundedSelfAdjointSpectralSubspace A hA s hs)
         (selectedEndpointAngularOperator Γ A K delta hdelta s hs hA hAK
-          hself hsep hidentify hsmall)) := by
+          hself hsep hidentify hsmall)) (A + K) := by
   rw [graphSubspace_selectedEndpointAngularOperator Γ A K delta hdelta
     s hs hA hAK hself hsep hidentify hsmall]
   exact boundedSelfAdjointSpectralSubspace_reduces (A + K) hAK s hs

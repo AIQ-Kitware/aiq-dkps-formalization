@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
 public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
 
@@ -56,7 +57,7 @@ variable {A V : H →L[ℂ] H} {s : Set ℝ}
 structure SelectedBranchConclusion
     (C : SpectralContinuationWitness A V s) : Prop where
   /-- The endpoint selected spectral subspace reduces `A + V`. -/
-  target_reduces : ContinuousLinearMap.Reduces (A + V) C.targetSelectedSpectralSubspace
+  target_reduces : Submodule.IsReducing C.targetSelectedSpectralSubspace (A + V)
   /-- The source and target selected spectral subspaces are connected by a
   unitary intertwining their orthogonal projections. -/
   unitary_transport : ∃ W : H →L[ℂ] H,

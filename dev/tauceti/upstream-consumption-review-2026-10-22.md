@@ -1339,3 +1339,39 @@ qualitative proofs. Preserve the separate quantitative
 accepted theorem covers its actual linear-map / incomplete-ambient scope.
 The real approximation-number and Ky Fan views also remain open migration
 obligations; no whole-goal completion is claimed by these checkpoints.
+
+### October 26: consume the native bounded reducing carrier
+
+All maintained bounded reducing-subspace statements now use accepted
+`Submodule.IsReducing U (A : Module.End 𝕜 E)` from
+`TauCeti.Analysis.InnerProductSpace.InvariantSubspace`. The local
+`ContinuousLinearMap.Reduces` definition and its symmetric-invariance,
+projection-commutation and complement proofs are deleted. Consumers use native
+invariant-submodule membership, the projection-commutation equivalence and
+`Submodule.isReducing_orthogonal_iff` directly. There is no compatibility
+predicate, alias or forwarding theorem. This is an API migration preserving the
+real/complex, dimension and completeness scopes of the existing mathematics.
+
+The genuine isometry-conjugation result moves to
+`Submodule.IsReducing.map_isometryEquiv`; its proof remains downstream and is
+not claimed accepted upstream. The `ReducingSubspace` donor now contains only
+the quantitative `LinearMap.norm_starProjection_apply_le_of_mem_orthogonal`
+result. The quantitative statement retains arbitrary symmetric linear maps and
+incomplete
+ambient spaces. A bounded Hilbert-space specialization would not replace that
+scope. The source provenance is preserved; native qualitative consumption is
+not evidence of historical proof adaptation. Papers, visualizations and the
+three original untracked files are unchanged.
+
+Consumers of the accepted projected-subspace completeness result also import
+its owning module directly. The residual quantitative donor does not re-export
+the native reducing module; qualitative-only importers no longer import the
+donor.
+
+The opt-in `TauCeti.CompleteSubspace` registration scope is retired as well.
+Consumers register accepted
+`Submodule.completeSpace_coe_of_hasOrthogonalProjection` locally with an
+instance attribute. No local theorem or instance wrapper replaces it. The
+native theorem remains opt-in rather than global, while callers no longer
+import the quantitative donor for completeness packaging. Only the two vector
+estimate consumers import that donor directly.

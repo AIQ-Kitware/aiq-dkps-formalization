@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.TanTheta.Vector
 public import DavisKahan.Sylvester.Spectrum
 public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
@@ -38,7 +39,7 @@ namespace DavisKahanExt
 open DavisKahan
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]

@@ -7,9 +7,10 @@ Staged for Tau Ceti: the normalised self-adjoint Krein/Julia column completion.
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Domination
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import TauCeti.Analysis.Normed.Operator.RealAlgebra
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic

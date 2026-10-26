@@ -19,6 +19,8 @@ compiled specialization.
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.FiniteDimensional.Core.All
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
@@ -212,12 +214,14 @@ theorem projectorDifference_restrictionSpectra_opNorm
     {A B : H →L[ℂ] H} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule ℂ H} [U.HasOrthogonalProjection]
     [W.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hW : B.Reduces W)
+    (hU : Submodule.IsReducing U A) (hW : Submodule.IsReducing W B)
     {c g : ℝ} (hg : 0 < g)
-    (hUhi : spectrum ℝ (A.restrict hU.1) ⊆ Set.Ici (c + g))
-    (hUlo : spectrum ℝ (A.restrict hU.2) ⊆ Set.Iic c)
-    (hWhi : spectrum ℝ (B.restrict hW.1) ⊆ Set.Ici (c + g))
-    (hWlo : spectrum ℝ (B.restrict hW.2) ⊆ Set.Iic c) :
+    (hUhi : spectrum ℝ (A.restrict hU.mem_invtSubmodule) ⊆ Set.Ici (c + g))
+    (hUlo : spectrum ℝ (A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      hU.orthogonal_mem_invtSubmodule)) ⊆ Set.Iic c)
+    (hWhi : spectrum ℝ (B.restrict hW.mem_invtSubmodule) ⊆ Set.Ici (c + g))
+    (hWlo : spectrum ℝ (B.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      hW.orthogonal_mem_invtSubmodule)) ⊆ Set.Iic c) :
     ‖(U.starProjection - W.starProjection : H →L[ℂ] H)‖ ≤ ‖B - A‖ / g := by
   sorry
 
@@ -252,7 +256,7 @@ open TauCeti.DavisKahan.Sylvester
 open TauCeti.DavisKahan.TanTheta
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -269,7 +273,7 @@ theorem sinTheta_wholeSpace_symmetricNorming
     (N : SymmetricNormingFunction)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : FormBoundedSylvesterGap
       (TauCeti.DavisKahanExt.PartialMap.boundedReducingBlock A U hU)
@@ -291,7 +295,7 @@ theorem tanTheta_directed_bounded_symmetricNorming_complex
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -319,12 +323,13 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
-    (hV : T.Reduces V)
+    (hV : Submodule.IsReducing V T)
     {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+      spectrum ℝ (T.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) ⊆
         Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63Residual T Z)) :
     ∃ tanTheta0 : Z →L[ℂ] H,
@@ -345,7 +350,7 @@ condition (3.5), which supplies transversality rather than assuming it separatel
 theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
     (N : SymmetricNormingFunction)
     (hT : T.IsSymmetric) (hA : IsSelfAdjoint A)
-    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    (hV : Submodule.IsReducing V T) (hAU : ∀ x ∈ U, A x ∈ U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U,
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -410,7 +415,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U)
+    (hU : Submodule.IsReducing U A)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
@@ -431,7 +436,7 @@ variable {A B : E →L[ℂ] E} {U V : Submodule ℂ E}
 theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {a b d : ℝ} (hd : 0 < d) (hab : a ≤ b)
     (hUspec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc a b)
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),

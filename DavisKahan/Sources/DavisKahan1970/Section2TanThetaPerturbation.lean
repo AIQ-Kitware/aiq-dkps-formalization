@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.TanTheta.Theorem63FiniteSource
 public import DavisKahan.TanTheta.Theorem63InfiniteTrial
 
@@ -149,7 +150,7 @@ theorem theorem6_3_perturbation_equalRank
     (T E : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -186,7 +187,7 @@ theorem theorem6_3_perturbation_infiniteTrial
     (T E : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,

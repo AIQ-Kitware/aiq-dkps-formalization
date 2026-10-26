@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.SinTheta.Natural.Reducing
 public import DavisKahan.SinTheta.BoundedPerturbation
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion

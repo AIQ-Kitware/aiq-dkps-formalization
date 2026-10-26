@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.Section6SourceNormClass
 public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
@@ -174,7 +175,7 @@ theorem proposition6_1_printedGap_sourceExact_complex
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     {β α β' α' : ℝ} (hβα : β ≤ α) (hβα' : β' ≤ α')
     (hgapUV : DavisKahan.Sylvester.RealSpectrumIntervalExteriorGap
@@ -196,7 +197,7 @@ theorem proposition6_1_printedGap_sourceExact_real
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
     {A B : E →L[ℝ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B)
     {δ : ℝ} (hδ : 0 < δ)
     {β α β' α' : ℝ} (hβα : β ≤ α) (hβα' : β' ≤ α')
     (hgapUV : DavisKahan.Sylvester.RealSpectrumIntervalExteriorGap

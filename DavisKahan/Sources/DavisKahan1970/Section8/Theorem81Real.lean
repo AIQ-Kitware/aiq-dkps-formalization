@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81
 public import DavisKahan.SpectralTheory.Complexification.BoundedGapProjection
 public import DavisKahan.SpectralTheory.Complexification.FormTransport
@@ -63,7 +64,7 @@ structure Theorem81ConclusionReal
   spectral_repulsion :
     realSpectrum (A + H) ⊆ Set.Iic alpha ∪ Set.Ici (alpha + delta)
   /-- The descended branch reduces the real perturbed operator. -/
-  branch_reduces : (A + H).Reduces Q
+  branch_reduces : Submodule.IsReducing Q (A + H)
   /-- Sharp upper form bound on the low branch. -/
   branch_form_low : ∀ x ∈ Q, ⟪(A + H) x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2
   /-- Sharp lower form bound on the complementary branch. -/
@@ -106,6 +107,9 @@ theorem theorem8_1_canonicalBranch_real
   have hHc : IsSelfAdjoint (complexify H) := (complexify_isSelfAdjoint_iff H).2 hH
   have hsum : complexify A + complexify H = complexify (A + H) :=
     (complexify_add A H).symm
+  have hsumL : (complexify A).toLinearMap + (complexify H).toLinearMap =
+      (complexify (A + H)).toLinearMap :=
+    congrArg ContinuousLinearMap.toLinearMap hsum
   have hconcC := theorem8_1_canonicalBranch
     (E := RealComplexification E)
     (complexify A) (complexify H) (complexifySubmodule P) hdelta hAc hHc
@@ -134,10 +138,10 @@ theorem theorem8_1_canonicalBranch_real
     simpa only [canonicalLowBranch, hsum] using
       (complexifySubmodule_realBoundedSpectralSubspaceIicOfGap
         (A + H) (hA.add hH) alpha delta hdelta hrep)
-  have hreducesC : (complexify (A + H)).Reduces (complexifySubmodule Q) := by
-    rw [← hsum, hQc]
+  have hreducesC : Submodule.IsReducing (complexifySubmodule Q) (complexify (A + H)) := by
+    rw [← hsumL, hQc]
     exact hconcC.branch_reduces
-  have hreduces : (A + H).Reduces Q :=
+  have hreduces : Submodule.IsReducing Q (A + H) :=
     (complexify_reduces_iff (A + H) Q).1 hreducesC
   have hlow : ∀ x ∈ Q, ⟪(A + H) x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2 := by
     intro x hx
@@ -174,9 +178,11 @@ theorem theorem8_1_canonicalBranch_real
       branch_form_low := hlow
       branch_form_high := hhigh
       branch_spectrum_low :=
-        spectrumIn_Iic_of_re_inner_le_generic hreduces.1 hlow
+        spectrumIn_Iic_of_re_inner_le_generic (T := A + H) (U := Q)
+          hreduces.mem_invtSubmodule hlow
       branch_spectrum_high :=
-        spectrumIn_Ici_of_le_re_inner_generic hreduces.2 hhigh
+        spectrumIn_Ici_of_le_re_inner_generic (T := A + H) (U := Qᗮ)
+          hreduces.orthogonal_mem_invtSubmodule hhigh
       quarter_acute := hquarter
       source_full_angle_lt_pi_div_four :=
         (sourceFullAngleLtR_iff_maximalAngle_lt P Q (by positivity)).2 hangle
@@ -200,7 +206,7 @@ theorem theorem8_1_eq_of_maximalAngle_le_real
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M N : Submodule ℝ E) [M.HasOrthogonalProjection] [N.HasOrthogonalProjection]
-    (hMreduces : (A + H).Reduces M) (hNreduces : (A + H).Reduces N)
+    (hMreduces : Submodule.IsReducing M (A + H)) (hNreduces : Submodule.IsReducing N (A + H))
     (hMangle : maximalAngle P M ≤ Real.pi / 4)
     (hNangle : maximalAngle P N ≤ Real.pi / 4) :
     M = N := by
@@ -209,11 +215,14 @@ theorem theorem8_1_eq_of_maximalAngle_le_real
   have hHc : IsSelfAdjoint (complexify H) := (complexify_isSelfAdjoint_iff H).2 hH
   have hsum : complexify A + complexify H = complexify (A + H) :=
     (complexify_add A H).symm
-  have hMreducesC : (complexify A + complexify H).Reduces (complexifySubmodule M) := by
-    rw [hsum]
+  have hsumL : (complexify A).toLinearMap + (complexify H).toLinearMap =
+      (complexify (A + H)).toLinearMap :=
+    congrArg ContinuousLinearMap.toLinearMap hsum
+  have hMreducesC : Submodule.IsReducing (complexifySubmodule M) (complexify A + complexify H) := by
+    rw [hsumL]
     exact (complexify_reduces_iff (A + H) M).2 hMreduces
-  have hNreducesC : (complexify A + complexify H).Reduces (complexifySubmodule N) := by
-    rw [hsum]
+  have hNreducesC : Submodule.IsReducing (complexifySubmodule N) (complexify A + complexify H) := by
+    rw [hsumL]
     exact (complexify_reduces_iff (A + H) N).2 hNreduces
   have hMangleC :
       maximalAngle (complexifySubmodule P) (complexifySubmodule M) ≤ Real.pi / 4 := by
@@ -265,7 +274,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn_real
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M : Submodule ℝ E) [M.HasOrthogonalProjection]
-    (hMreduces : (A + H).Reduces M) :
+    (hMreduces : Submodule.IsReducing M (A + H)) :
     maximalAngle P M ≤ Real.pi / 4 ↔
       (SpectrumIn (A + H) M (Set.Iic alpha) ∧
         SpectrumIn (A + H) Mᗮ (Set.Ici (alpha + delta))) := by
@@ -274,8 +283,11 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn_real
   have hHc : IsSelfAdjoint (complexify H) := (complexify_isSelfAdjoint_iff H).2 hH
   have hsum : complexify A + complexify H = complexify (A + H) :=
     (complexify_add A H).symm
-  have hMreducesC : (complexify A + complexify H).Reduces (complexifySubmodule M) := by
-    rw [hsum]
+  have hsumL : (complexify A).toLinearMap + (complexify H).toLinearMap =
+      (complexify (A + H)).toLinearMap :=
+    congrArg ContinuousLinearMap.toLinearMap hsum
+  have hMreducesC : Submodule.IsReducing (complexifySubmodule M) (complexify A + complexify H) := by
+    rw [hsumL]
     exact (complexify_reduces_iff (A + H) M).2 hMreduces
   have hcharC := theorem8_1_maximalAngle_le_iff_spectrumIn
     (E := RealComplexification E)
@@ -331,7 +343,7 @@ theorem theorem8_1_eq_of_sourceFullAngle_le_real
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M N : Submodule ℝ E) [M.HasOrthogonalProjection] [N.HasOrthogonalProjection]
-    (hMreduces : (A + H).Reduces M) (hNreduces : (A + H).Reduces N)
+    (hMreduces : Submodule.IsReducing M (A + H)) (hNreduces : Submodule.IsReducing N (A + H))
     (hMangle : sourceFullAngleLeR P M (Real.pi / 4))
     (hNangle : sourceFullAngleLeR P N (Real.pi / 4)) :
     M = N := by
@@ -353,7 +365,7 @@ theorem theorem8_1_sourceFullAngle_le_iff_spectrumIn_real
     (hHP : ∀ x ∈ P, H x ∈ Pᗮ)
     (hHPperp : ∀ x ∈ Pᗮ, H x ∈ P)
     (M : Submodule ℝ E) [M.HasOrthogonalProjection]
-    (hMreduces : (A + H).Reduces M) :
+    (hMreduces : Submodule.IsReducing M (A + H)) :
     sourceFullAngleLeR P M (Real.pi / 4) ↔
       (SpectrumIn (A + H) M (Set.Iic alpha) ∧
         SpectrumIn (A + H) Mᗮ (Set.Ici (alpha + delta))) := by

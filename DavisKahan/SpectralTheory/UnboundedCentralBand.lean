@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
 public import DavisKahan.SpectralTheory.GapResolvent
 public import DavisKahan.SpectralTheory.ReflectionRestriction

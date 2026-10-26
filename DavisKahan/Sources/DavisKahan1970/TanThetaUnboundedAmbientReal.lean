@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 public import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
@@ -74,7 +75,7 @@ open TauCeti.DavisKahan.TanTheta
 open TauCeti.ApproximationNumber
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

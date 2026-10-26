@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessOffDiagonal
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedRiccatiShift
 
@@ -123,7 +125,7 @@ theorem quarterAcuteAngularCoordinate_solvesRiccati
     (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
-    (hV : ContinuousLinearMap.Reduces (A + H) V) (hquarter : IsQuarterAcute U V) :
+    (hV : Submodule.IsReducing V (A + H)) (hquarter : IsQuarterAcute U V) :
     SolvesRiccati
       (subspaceBlockOperatorData (A + H) U (by
         have h := hA.add hH
@@ -136,8 +138,8 @@ theorem quarterAcuteAngularCoordinate_solvesRiccati
   have hAH : (A + H).IsSymmetric := by
     have h := hA.add hH
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
-  have hgraphReduces : ContinuousLinearMap.Reduces (A + H)
-      (graphSubspace U (quarterAcuteAngularOperator U V hquarter)) := by
+  have hgraphReduces : Submodule.IsReducing (graphSubspace U (quarterAcuteAngularOperator U V
+    hquarter)) (A + H) := by
     rw [graphSubspace_quarterAcuteAngularOperator U V hquarter]
     exact hV
   exact subspaceAngularCoordinate_solvesRiccati_of_graph_reduces
@@ -176,7 +178,7 @@ theorem subspaceBlockOperatorData_add_offDiagonal_components
     (A H : E →L[ℂ] E)
     (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hoff : Submodule.IsOffDiagonal U H) :
+    (hU : Submodule.IsReducing U A) (hoff : Submodule.IsOffDiagonal U H) :
     let hAH : (A + H).IsSymmetric := by
       have h := hA.add hH
       rwa [← ContinuousLinearMap.toLinearMap_add] at h
@@ -202,7 +204,7 @@ theorem norm_subspaceBlockOperatorData_B01_add_offDiagonal_le
     (A H : E →L[ℂ] E)
     (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
-    (hU : A.Reduces U) :
+    (hU : Submodule.IsReducing U A) :
     let hAH : (A + H).IsSymmetric := by
       have h := hA.add hH
       rwa [← ContinuousLinearMap.toLinearMap_add] at h

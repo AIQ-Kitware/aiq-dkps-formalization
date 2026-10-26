@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.InfiniteDimensional.SinTheta.BoundedBorelProjectionComplex
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction

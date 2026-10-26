@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.TanTheta.Theorem63InfiniteTrial
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
@@ -83,7 +84,7 @@ theorem tanTheta_directed_bounded_symmetricNorming_complex
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -132,12 +133,13 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
-    (hV : T.Reduces V)
+    (hV : Submodule.IsReducing V T)
     {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+      spectrum ℝ (T.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) ⊆
         Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63Residual T Z)) :
     ∃ tanTheta0 : Z →L[ℂ] H,
@@ -159,7 +161,7 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
     SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+      hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum hy
   exact tanTheta_directed_bounded_symmetricNorming_complex N T hT V Z hV hdelta hCompressionUpper
     hUnwantedLower hResidual
 

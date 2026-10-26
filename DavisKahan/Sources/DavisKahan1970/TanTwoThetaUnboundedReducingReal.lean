@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 public import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded

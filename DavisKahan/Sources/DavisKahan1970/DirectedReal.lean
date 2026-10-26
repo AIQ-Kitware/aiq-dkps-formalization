@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.Sources.DavisKahan1970.AmbientReal
 public import DavisKahan.TanTheta.Theorem63InfiniteTrial
@@ -44,7 +46,7 @@ open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.DavisKahan.TanTheta
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -204,7 +206,7 @@ is compared across fields. -/
 theorem theorem6_3_all_kyFan_core_infiniteTrial_real
     (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
     (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z, ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (k : Nat) :
@@ -215,7 +217,7 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial_real
   have hTC : (complexify T).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       ((complexify_isSelfAdjoint_iff T).2 hT)
-  have hVC : (complexify T).Reduces (complexifySubmodule V) :=
+  have hVC : Submodule.IsReducing (complexifySubmodule V) (complexify T) :=
     (complexify_reduces_iff T V).2 hV
   have hcore := theorem6_3_all_kyFan_core_infiniteTrial
     (complexify T) (complexifySubmodule V) (complexifySubmodule Z)
@@ -236,7 +238,7 @@ one, so the real tangent sequence has no pole. -/
 theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
     (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
     (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z, ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (n : Nat) :
@@ -244,7 +246,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
   have hTC : (complexify T).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       ((complexify_isSelfAdjoint_iff T).2 hT)
-  have hVC : (complexify T).Reduces (complexifySubmodule V) :=
+  have hVC : Submodule.IsReducing (complexifySubmodule V) (complexify T) :=
     (complexify_reduces_iff T V).2 hV
   have hlt := approximationSingularValue_sineBlock_lt_one_infiniteTrial
     (complexify T) (complexifySubmodule V) (complexifySubmodule Z)
@@ -435,7 +437,7 @@ theorem tanTheta_directed_bounded_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
     (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z, ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (hResidual : N.Mem (theorem63ResidualReal T Z)) :
@@ -475,7 +477,7 @@ theorem tanTheta_directed_bounded_arbitraryDimension_symmetricNorming_real
     (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
     (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     (_hinf : Not (FiniteDimensional ℝ Z))
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z, ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (hResidual : N.Mem (theorem63ResidualReal T Z)) :
@@ -509,12 +511,13 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
     (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
-    (hV : T.Reduces V)
+    (hV : Submodule.IsReducing V T)
     {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :
       spectrum ℝ (compressOperatorReal Z T) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict hV.2) ⊆ Set.Ici (alpha + delta))
+      spectrum ℝ (T.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) ⊆ Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63ResidualReal T Z)) :
     Exists (fun tanTheta0 : Z →L[ℝ] E =>
       And (HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
@@ -541,7 +544,7 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_real
   have hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ := by
     exact (ContinuousLinearMap.lowerFormBoundOn_iff T Vᗮ (alpha + delta)).mp
       (SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
-        hTsym hV.2 hUnwantedSpectrum)
+        hTsym hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum)
   exact tanTheta_directed_bounded_symmetricNorming_real N T hT V Z hV hdelta hCompressionUpper
     hUnwantedLower hResidual
 
@@ -633,7 +636,7 @@ theorem tanTheta_directed_bounded_perturbation_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (T P : E →L[ℝ] E) (hT : IsSelfAdjoint T)
     (V Z : Submodule ℝ E) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z, ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (hinv : ∀ x ∈ Z, (T + P) x ∈ Z)
@@ -684,7 +687,7 @@ strictly below one, and (3.5) identifies the symmetric gap with the directed one
 theorem norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
     (T : E →L[ℝ] E) (hT : IsSelfAdjoint T)
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U, ⟪compressOperatorReal U T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
@@ -718,7 +721,7 @@ theorem tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects
     {A T : E →L[ℝ] E} {U V : Submodule ℝ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hT : IsSelfAdjoint T) (hA : IsSelfAdjoint A)
-    (hV : T.Reduces V) (hAU : ∀ x ∈ U, A x ∈ U)
+    (hV : Submodule.IsReducing V T) (hAU : ∀ x ∈ U, A x ∈ U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U, ⟪compressOperatorReal U T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)

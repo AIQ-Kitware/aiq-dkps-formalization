@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.TanTheta.Theorem63FiniteSource
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
@@ -171,7 +172,7 @@ theorem approximationSingularValue_sineBlock_lt_one_of_finite
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V F : Submodule ℂ H) [V.HasOrthogonalProjection] [F.HasOrthogonalProjection]
     [FiniteDimensional ℂ F]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : F,
       RCLike.re ⟪theorem63Compression T F z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -342,7 +343,7 @@ private theorem compression_upper_transfer {alpha : ℝ}
 /-- The finite leakage step: an almost-invariant finite-dimensional subspace of the trial
 space obeys the target Ky Fan bound up to the leakage error. -/
 private theorem finite_leak_step (hT : T.IsSymmetric)
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -384,7 +385,7 @@ This is not an extra hypothesis: it follows from the same finite inequalities th
 the limiting argument, because a sine value at one would force the tangent bound past
 every threshold. -/
 theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial (hT : T.IsSymmetric)
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -474,7 +475,7 @@ Ritz compression is an operator on a Hilbert space.  The conclusion is the famil
 prefix inequalities that Fan dominance promotes to every supported unitarily invariant
 ideal gauge. -/
 theorem theorem6_3_all_kyFan_core_infiniteTrial (hT : T.IsSymmetric)
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -655,7 +656,7 @@ theorem theorem6_3_infiniteTrial_of_formBounds
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -758,7 +759,7 @@ theorem theorem6_3_infiniteTrial_of_formBounds_exists
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
-    (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hV : Submodule.IsReducing V T) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
@@ -819,12 +820,13 @@ theorem theorem6_3_infiniteTrial_ideal
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
-    (hV : T.Reduces V)
+    (hV : Submodule.IsReducing V T)
     {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+      spectrum ℝ (T.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) ⊆
         Set.Ici (alpha + delta))
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
@@ -846,7 +848,7 @@ theorem theorem6_3_infiniteTrial_ideal
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
     SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+      hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum hy
   exact theorem6_3_infiniteTrial_of_formBounds N T hT V Z hV hdelta
     hCompressionUpper hUnwantedLower tanTheta0 htan hResidual
 
@@ -861,13 +863,14 @@ theorem theorem6_3_generalizedTanTheta_ideal_of_infiniteTrial
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
-    (hV : T.Reduces V)
+    (hV : Submodule.IsReducing V T)
     (_hStrictDimension : Module.rank ℂ Z < Module.rank ℂ V)
     {beta alpha delta : ℝ} (hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+      spectrum ℝ (T.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) ⊆
         Set.Ici (alpha + delta))
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
@@ -888,12 +891,13 @@ theorem theorem6_3_infiniteTrial_spectral_exists
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
-    (hV : T.Reduces V)
+    (hV : Submodule.IsReducing V T)
     {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :
       spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
     (hUnwantedSpectrum :
-      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+      spectrum ℝ (T.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+        hV.orthogonal_mem_invtSubmodule)) ⊆
         Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63Residual T Z)) :
     ∃ tanTheta0 : Z →L[ℂ] H,
@@ -915,7 +919,7 @@ theorem theorem6_3_infiniteTrial_spectral_exists
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
     SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT (hV.orthogonalComplement).1 hUnwantedSpectrum hy
+      hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum hy
   exact theorem6_3_infiniteTrial_of_formBounds_exists N T hT V Z hV hdelta
     hCompressionUpper hUnwantedLower hResidual
 

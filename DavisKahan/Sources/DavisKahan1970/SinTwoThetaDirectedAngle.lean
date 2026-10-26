@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
@@ -58,7 +59,7 @@ open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.RealSpectralRestriction
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

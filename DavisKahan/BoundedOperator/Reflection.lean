@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
@@ -50,7 +51,7 @@ omit [CompleteSpace E] in
 -/
 theorem reflectionDefect_eq_zero_of_reduces
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (hU : A.Reduces U) :
+    [U.HasOrthogonalProjection] (hU : Submodule.IsReducing U A) :
     reflectionDefect U A = 0 := by
   ext x
   have hcomm := congrArg (fun T : E →L[𝕜] E => T (U.reflectionOperator x))
@@ -68,7 +69,7 @@ its perturbation.
 -/
 theorem reflectionDefect_eq_perturbationDefect
     (A B : E →L[𝕜] E) (V : Submodule 𝕜 E)
-    [V.HasOrthogonalProjection] (hV : B.Reduces V) :
+    [V.HasOrthogonalProjection] (hV : Submodule.IsReducing V B) :
     reflectionDefect V A =
       V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator - (A - B) := by
   have hB : reflectionDefect V B = 0 :=
@@ -89,7 +90,7 @@ omit [CompleteSpace E] in
 -/
 theorem norm_reflectionDefect_le_two_mul
     (A B : E →L[𝕜] E) (V : Submodule 𝕜 E)
-    [V.HasOrthogonalProjection] (hV : B.Reduces V) :
+    [V.HasOrthogonalProjection] (hV : Submodule.IsReducing V B) :
     ‖reflectionDefect V A‖ ≤ 2 * ‖A - B‖ := by
   rw [reflectionDefect_eq_perturbationDefect A B V hV]
   have hconj :

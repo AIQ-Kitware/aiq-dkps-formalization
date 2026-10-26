@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Riccati.BoundedReduction
 public import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
 public import DavisKahan.SpectralTheory.AbstractSpectrum
@@ -234,20 +235,20 @@ theorem blockDiagonalization_of_graph_transport
       W ∘L Winv = ContinuousLinearMap.id 𝕜 _ ∧
       Winv ∘L blockOperator H ∘L W = blockDiagonalOperator D0 D1 := by
   let T := Winv ∘L blockOperator H ∘L W
-  have hred : ContinuousLinearMap.Reduces (blockOperator H) (blockGraph X) :=
+  have hred : Submodule.IsReducing (blockGraph X) (blockOperator H) :=
     (blockGraph_reduces_iff_solvesRiccati H X).2 hX
   have hT0 : ∀ u : E0,
       WithLp.snd (T (blockCoordinate0 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) u)) = 0 := by
     intro u
     have hHg : blockOperator H (W (blockCoordinate0 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) u)) ∈
-        blockGraph X := hred.1 _ (hW0 u)
+        blockGraph X := hred.mem_invtSubmodule (hW0 u)
     have hback := hWinv0 _ hHg
     exact (mem_blockGraph_zero_iff_snd_eq_zero _).mp hback
   have hT1 : ∀ v : E1,
       WithLp.fst (T (blockCoordinate1 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) v)) = 0 := by
     intro v
     have hHg : blockOperator H (W (blockCoordinate1 (𝕜 := 𝕜) (E0 := E0) (E1 := E1) v)) ∈
-        (blockGraph X)ᗮ := hred.2 _ (hW1 v)
+        (blockGraph X)ᗮ := hred.orthogonal_mem_invtSubmodule (hW1 v)
     have hback := hWinv1 _ hHg
     exact fst_eq_zero_of_mem_zeroGraph_orthogonal hback
   refine ⟨blockCompression0 T, blockCompression1 T,

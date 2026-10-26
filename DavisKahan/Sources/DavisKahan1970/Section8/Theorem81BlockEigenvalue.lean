@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81EigenvalueSource
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 
@@ -45,7 +46,7 @@ open scoped InnerProductSpace
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Sylvester
 open Module (finrank)
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

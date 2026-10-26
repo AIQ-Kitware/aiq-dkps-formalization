@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Branch
 public import DavisKahan.Geometry.Halmos.CrossedDefectGap
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
@@ -181,7 +183,7 @@ open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.ApproximationNumber
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 universe u
 
@@ -284,10 +286,11 @@ theorem theorem8_2_sinTwoTheta_perturbation_complex
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P) :
+    (hPred : Submodule.IsReducing P A) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ := by
   have hA0 : (A + K).IsSymmetric := hA.add hK
-  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : Submodule.IsReducing Q (A + K) :=
+    (Submodule.isReducing_iff _ _).mpr ⟨hQ.invariant, hQperp.invariant⟩
   have hfinite : Foundation.FiniteGapConfiguration (A + K) Q delta := ⟨beta, alpha, hab, hQ, hQperp⟩
   have h := sinTwoTheta_perturbation (A := A + K) (B := A) hA0 hQred hPred hdelta hfinite
   have hdiff : ‖A - (A + K)‖ = ‖K‖ := by
@@ -312,12 +315,13 @@ theorem theorem8_2_sinTwoTheta_residual_complex
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (_hPred : A.Reduces P) :
+    (_hPred : Submodule.IsReducing P A) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
       2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
   classical
   have hA0 : (A + K).IsSymmetric := hA.add hK
-  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : Submodule.IsReducing Q (A + K) :=
+    (Submodule.isReducing_iff _ _).mpr ⟨hQ.invariant, hQperp.invariant⟩
   have hfinite : Foundation.FiniteGapConfiguration (A + K) Q delta := ⟨beta, alpha, hab, hQ, hQperp⟩
   have hrange : LinearMap.range (P.subtypeL : P →L[ℂ] H).toLinearMap = P := by
     ext x
@@ -444,7 +448,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_symmetricNorming
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hKmem : N.Mem K) :
     N.Mem (sinTwoAngleOperatorC Q P) ∧
       delta * N.gauge (sinTwoAngleOperatorC Q P) ≤ 2 * N.gauge K := by
@@ -453,7 +457,8 @@ theorem theorem8_2_sinTwoTheta_perturbation_symmetricNorming
   have hKsa : IsSelfAdjoint K :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
   have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
-  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : Submodule.IsReducing Q (A + K) :=
+    (Submodule.isReducing_iff _ _).mpr ⟨hQ.invariant, hQperp.invariant⟩
   have hUspec : spectrum ℝ (compressOperator Q (A + K)) ⊆ Set.Icc beta alpha :=
     spectrum_compressOperator_subset_of_spectrumIn hQ
   have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
@@ -485,7 +490,7 @@ theorem theorem8_2_sinTwoTheta_residual_all_kyFan
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (_hPred : A.Reduces P) :
+    (_hPred : Submodule.IsReducing P A) :
     ∀ k : ℕ,
       delta * kyFanApproximationGauge k
           (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
@@ -496,7 +501,8 @@ theorem theorem8_2_sinTwoTheta_residual_all_kyFan
   have hKsa : IsSelfAdjoint K :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
   have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
-  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : Submodule.IsReducing Q (A + K) :=
+    (Submodule.isReducing_iff _ _).mpr ⟨hQ.invariant, hQperp.invariant⟩
   have hUspec : spectrum ℝ (compressOperator Q (A + K)) ⊆ Set.Icc beta alpha :=
     spectrum_compressOperator_subset_of_spectrumIn hQ
   have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
@@ -522,7 +528,7 @@ theorem theorem8_2_sinTwoTheta_residual_symmetricNorming
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (_hPred : A.Reduces P)
+    (_hPred : Submodule.IsReducing P A)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
     N.Mem (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ∧
       delta * N.gauge (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
@@ -532,7 +538,8 @@ theorem theorem8_2_sinTwoTheta_residual_symmetricNorming
   have hKsa : IsSelfAdjoint K :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK
   have hAKsa : IsSelfAdjoint (A + K) := hAsa.add hKsa
-  have hQred : ContinuousLinearMap.Reduces (A + K) Q := ⟨hQ.invariant, hQperp.invariant⟩
+  have hQred : Submodule.IsReducing Q (A + K) :=
+    (Submodule.isReducing_iff _ _).mpr ⟨hQ.invariant, hQperp.invariant⟩
   have hUspec : spectrum ℝ (compressOperator Q (A + K)) ⊆ Set.Icc beta alpha :=
     spectrum_compressOperator_subset_of_spectrumIn hQ
   have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
@@ -566,7 +573,7 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
@@ -593,7 +600,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_sourceExact
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hKmem : N.Mem K) :
     N.Mem (sinTwoAngleOperatorC Q P) ∧
       delta * N.gauge (sinTwoAngleOperatorC Q P) ≤ 2 * N.gauge K :=
@@ -612,7 +619,7 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
@@ -635,7 +642,7 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt [FiniteDimensional ℂ H]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2) :
@@ -650,7 +657,7 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt [FiniteDimensional ℂ H]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
@@ -665,7 +672,7 @@ theorem theorem8_2_branch_maximalAngle_lt [FiniteDimensional ℂ H]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
@@ -689,7 +696,7 @@ theorem theorem8_2_branch_maximalAngle_lt_of_crossedDefects
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hcross : CrossedDefectsEquivalent P Q)
     (hsmall : ‖K‖ < delta / 2 ∨
@@ -708,7 +715,7 @@ theorem theorem8_2_branch_sourceFullAngle_lt [FiniteDimensional ℂ H]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
@@ -726,7 +733,7 @@ theorem theorem8_2_branch_sourceFullAngle_lt_of_crossedDefects
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hcross : CrossedDefectsEquivalent P Q)
     (hsmall : ‖K‖ < delta / 2 ∨
@@ -759,7 +766,7 @@ theorem theorem8_2_complex [FiniteDimensional ℂ H]
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
-    (hPred : A.Reduces P)
+    (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2 ∨

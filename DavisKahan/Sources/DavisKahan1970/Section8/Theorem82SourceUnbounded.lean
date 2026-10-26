@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82UnboundedPath
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
@@ -57,7 +58,7 @@ everywhere-defined bounded realization
 public section
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 namespace TauCeti
 namespace DavisKahan1970

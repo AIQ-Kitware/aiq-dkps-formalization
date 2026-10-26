@@ -5,8 +5,9 @@ Authors: Jon Crall, Claude Opus 4.8, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
-public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
@@ -181,18 +182,22 @@ theorem opNorm_starProjection_sub_le_of_restriction_spectra
     {A B : H →L[𝕜] H} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 H} [U.HasOrthogonalProjection]
     [W.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hW : B.Reduces W)
+    (hU : Submodule.IsReducing U A) (hW : Submodule.IsReducing W B)
     {c g : ℝ} (hg : 0 < g)
-    (hUhi : spectrum ℝ (A.restrict hU.1) ⊆ Set.Ici (c + g))
-    (hUlo : spectrum ℝ (A.restrict hU.2) ⊆ Set.Iic c)
-    (hWhi : spectrum ℝ (B.restrict hW.1) ⊆ Set.Ici (c + g))
-    (hWlo : spectrum ℝ (B.restrict hW.2) ⊆ Set.Iic c) :
+    (hUhi : spectrum ℝ (A.restrict hU.mem_invtSubmodule) ⊆ Set.Ici (c + g))
+    (hUlo : spectrum ℝ (A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      hU.orthogonal_mem_invtSubmodule)) ⊆ Set.Iic c)
+    (hWhi : spectrum ℝ (B.restrict hW.mem_invtSubmodule) ⊆ Set.Ici (c + g))
+    (hWlo : spectrum ℝ (B.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      hW.orthogonal_mem_invtSubmodule)) ⊆ Set.Iic c) :
     ‖(U.starProjection - W.starProjection : H →L[𝕜] H)‖ ≤ ‖B - A‖ / g := by
   apply Submodule.opNorm_starProjection_sub_le_of_formBounds hA hB hU hW hg
-  · exact lowerFormBoundOn_of_restriction_spectrum_subset_Ici hA hU.1 hUhi
-  · exact upperFormBoundOn_of_restriction_spectrum_subset_Iic hA hU.2 hUlo
-  · exact lowerFormBoundOn_of_restriction_spectrum_subset_Ici hB hW.1 hWhi
-  · exact upperFormBoundOn_of_restriction_spectrum_subset_Iic hB hW.2 hWlo
+  · exact lowerFormBoundOn_of_restriction_spectrum_subset_Ici hA hU.mem_invtSubmodule hUhi
+  · exact upperFormBoundOn_of_restriction_spectrum_subset_Iic hA
+      hU.orthogonal_mem_invtSubmodule hUlo
+  · exact lowerFormBoundOn_of_restriction_spectrum_subset_Ici hB hW.mem_invtSubmodule hWhi
+  · exact upperFormBoundOn_of_restriction_spectrum_subset_Iic hB
+      hW.orthogonal_mem_invtSubmodule hWlo
 
 
 end SpectralOrder

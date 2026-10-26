@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.All
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import ForTauCeti.Analysis.Normed.Operator.Restriction
@@ -58,7 +59,7 @@ example [CompleteSpace E] (A : E →L[K] E) (hA : A.IsSymmetric) :
 example [CompleteSpace E] {A B : E →L[K] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule K E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V) {c g : Real} (hg : 0 < g)
+    (hU : Submodule.IsReducing U A) (hV : Submodule.IsReducing V B) {c g : Real} (hg : 0 < g)
     (hUc : ∀ x ∈ U, (c + g) * norm x ^ 2 ≤ RCLike.re (inner K (A x) x))
     (hVc : ∀ x ∈ V, RCLike.re (inner K (B x) x) ≤ c * norm x ^ 2) :
     norm (V.starProjection.comp U.starProjection) ≤ norm (B - A) / g :=

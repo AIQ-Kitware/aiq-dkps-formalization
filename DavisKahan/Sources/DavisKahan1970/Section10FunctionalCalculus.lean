@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 public import DavisKahan.Geometry.Angle.OperatorAngleComplex
 public import DavisKahan.Sylvester.Spectrum
@@ -94,7 +96,7 @@ namespace DavisKahan1970
 open scoped InnerProductSpace
 
 open TauCeti.DavisKahan
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 
@@ -134,12 +136,13 @@ theorem cfc_gapStep_eq_starProjection_complex
     (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
     {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
     cfc f A = U.starProjection := by
-  have hAred : A.Reduces U :=
-    ContinuousLinearMap.IsSymmetric.reduces_of_invariant
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) hAU
+  have hAred : Submodule.IsReducing U A :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) _).mpr hAU
   exact TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap hA
     (subtypeL_comp_compressOperator_of_invariant A U hAU)
-    (subtypeL_comp_compressOperator_of_invariant A Uᗮ hAred.2)
+    (subtypeL_comp_compressOperator_of_invariant A Uᗮ
+      hAred.orthogonal_mem_invtSubmodule)
     hδ hA0spec hA1spec hf1 hf0
 
 /-! ### The three identities of Question 10.4 -/
@@ -324,12 +327,13 @@ theorem cfc_gapStep_eq_starProjection_real
     (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
     {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
     cfc f A = U.starProjection := by
-  have hAred : A.Reduces U :=
-    ContinuousLinearMap.IsSymmetric.reduces_of_invariant
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) hAU
+  have hAred : Submodule.IsReducing U A :=
+    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) _).mpr hAU
   exact TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap hA
     (subtypeL_comp_compressOperator_of_invariant A U hAU)
-    (subtypeL_comp_compressOperator_of_invariant A Uᗮ hAred.2)
+    (subtypeL_comp_compressOperator_of_invariant A Uᗮ
+      hAred.orthogonal_mem_invtSubmodule)
     hδ hA0spec hA1spec hf1 hf0
 
 variable (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

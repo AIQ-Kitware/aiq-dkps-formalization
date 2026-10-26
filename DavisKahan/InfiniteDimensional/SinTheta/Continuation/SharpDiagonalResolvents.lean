@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSourceSpectrum
 public import DavisKahan.SpectralTheory.ResolventOperator
 public import DavisKahan.SpectralTheory.AbstractSpectrum
@@ -66,7 +67,7 @@ theorem _root_.TauCeti.DavisKahan.Foundation.FiniteGapConfiguration.exists_opera
     (A K : Hspace →L[ℂ] Hspace)
     (U : Submodule ℂ Hspace) [U.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace (Uᗮ : Submodule ℂ Hspace)]
-    (hU : A.Reduces U) (hK : Submodule.IsOffDiagonal U K)
+    (hU : Submodule.IsReducing U A) (hK : Submodule.IsOffDiagonal U K)
     {d : ℝ} (hfinite : FiniteGapConfiguration A U d) :
     ∃ left right : ℝ, left ≤ right ∧
       ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →

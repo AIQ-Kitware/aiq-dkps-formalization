@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import DavisKahan.SinTheta.Real.Unbounded
 public import DavisKahan.SpectralTheory.Real.SpectralRestriction

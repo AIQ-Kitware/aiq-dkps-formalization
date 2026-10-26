@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.SpectralTheory.CircleRieszIntegral
 public import DavisKahan.SpectralTheory.CircleContour
 public import DavisKahan.SpectralTheory.CentralBand
@@ -258,7 +260,7 @@ chosen margin to the canonical finite-gap circle. -/
 theorem canonicalGapCircle_margin_le_realSpectrum
     (hA : A.IsSymmetric) (hE : E.IsSymmetric)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
-    (_hU : A.Reduces U) (_hoff : Submodule.IsOffDiagonal U E)
+    (_hU : Submodule.IsReducing U A) (_hoff : Submodule.IsOffDiagonal U E)
     {d left right : ℝ} (hd : 0 < d) (hlr : left ≤ right)
     (hdiag : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
       ∀ hpath : (operatorPath A E t).IsSymmetric,
@@ -405,7 +407,7 @@ Section 8. -/
 theorem exists_circleContinuationData_of_offDiagonal_halfGap
     (hA : A.IsSymmetric) (hE : E.IsSymmetric)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hoff : Submodule.IsOffDiagonal U E)
+    (hU : Submodule.IsReducing U A) (hoff : Submodule.IsOffDiagonal U E)
     {d : ℝ} (hd : 0 < d)
     (hfinite : FiniteGapConfiguration A U d)
     (hsmall : ‖E‖ < d / 2) :
@@ -478,7 +480,7 @@ off-diagonal, and perturbation half-gap hypotheses. -/
 theorem exists_spectralContinuationWitness_of_offDiagonal_halfGap
     (hA : A.IsSymmetric) (hE : E.IsSymmetric)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hoff : Submodule.IsOffDiagonal U E)
+    (hU : Submodule.IsReducing U A) (hoff : Submodule.IsOffDiagonal U E)
     {d : ℝ} (hd : 0 < d)
     (hfinite : FiniteGapConfiguration A U d)
     (hsmall : ‖E‖ < d / 2) :
@@ -516,7 +518,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 decomposition. -/
 theorem realSpectrum_subset_union_of_reduces
     {T : H →L[ℂ] H} (hT : T.IsSymmetric) {U : Submodule ℂ H}
-    [U.HasOrthogonalProjection] (hU : T.Reduces U) {p q : Set ℝ}
+    [U.HasOrthogonalProjection] (hU : Submodule.IsReducing U T) {p q : Set ℝ}
     (h0 : SpectrumIn T U p) (h1 : SpectrumIn T Uᗮ q) :
     realSpectrum T ⊆ p ∪ q := by
   let : CompleteSpace U :=

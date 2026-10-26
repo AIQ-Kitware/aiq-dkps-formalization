@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.SpectralTheory.UnboundedBandLipschitz
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded
 public import DavisKahan.Geometry.Angle.DoubleAngleGapBound

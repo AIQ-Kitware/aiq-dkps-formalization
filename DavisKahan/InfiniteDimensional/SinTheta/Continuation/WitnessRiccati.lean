@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessGraph
 public import DavisKahan.Riccati.BoundedReduction
 public import DavisKahan.Sylvester.Spectrum
@@ -139,7 +141,7 @@ theorem subspaceAngularCoordinate_solvesRiccati_of_graph_reduces
     (T : H →L[ℂ] H) (U : Submodule ℂ H) [U.HasOrthogonalProjection]
     (hT : T.IsSymmetric)
     (X : H →L[ℂ] H) (hX : IsAngularOperator U X)
-    (hred : T.Reduces (graphSubspace U X)) :
+    (hred : Submodule.IsReducing (graphSubspace U X) T) :
     SolvesRiccati (subspaceBlockOperatorData T U hT)
       (subspaceAngularCoordinate U X) := by
   let : CompleteSpace U :=
@@ -158,7 +160,7 @@ theorem subspaceAngularCoordinate_solvesRiccati_of_graph_reduces
       (u : H) + X (u : H)
     rw [Submodule.starProjection_eq_self_iff.mpr u.property]
   have hout : T ((u : H) + X (u : H)) ∈ graphSubspace U X :=
-    hred.1 _ hgraph
+    hred.mem_invtSubmodule hgraph
   have hcoord := starProjection_orthogonal_eq_of_mem_graphSubspace
     U X hX hout
   apply Subtype.ext

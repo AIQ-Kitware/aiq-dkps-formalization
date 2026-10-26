@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
@@ -271,10 +272,10 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
   have hBpp : ∀ x, Bc x = B x := fun _ => rfl
   have hAself : Ac.IsSymmetric := fun x y => hA x y
   have hBself : Bc.IsSymmetric := fun x y => hB x y
-  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
-  have hVperp : IsInvariant B Vᗮ := isInvariant_orthogonal_of_isSymmetric hB hV
-  have hUred : Ac.Reduces U := ⟨fun x hx => hU x hx, fun x hx => hUperp x hx⟩
-  have hVred : Bc.Reduces V := ⟨fun x hx => hV x hx, fun x hx => hVperp x hx⟩
+  have hUred : Submodule.IsReducing U Ac :=
+    (hAself.isReducing_iff_mem_invtSubmodule U).mpr hU
+  have hVred : Submodule.IsReducing V Bc :=
+    (hBself.isReducing_iff_mem_invtSubmodule V).mpr hV
   have hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
     fun x hx => lowerFormBound_of_pointSpectrumIn hA hU hUspec x hx
   have hVc : ∀ x ∈ V, RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
@@ -396,12 +397,10 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     exact hB x y
   have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
   have hWperp : IsInvariant B Wᗮ := isInvariant_orthogonal_of_isSymmetric hB hW
-  have hUred : Ac.Reduces U :=
-    ⟨fun x hx => by simpa [Ac] using hU x hx,
-      fun x hx => by simpa [Ac] using hUperp x hx⟩
-  have hWred : Bc.Reduces W :=
-    ⟨fun x hx => by simpa [Bc] using hW x hx,
-      fun x hx => by simpa [Bc] using hWperp x hx⟩
+  have hUred : Submodule.IsReducing U Ac :=
+    (hAself.isReducing_iff_mem_invtSubmodule U).mpr hU
+  have hWred : Submodule.IsReducing W Bc :=
+    (hBself.isReducing_iff_mem_invtSubmodule W).mpr hW
   have hUhiForm : ∀ x ∈ U,
       (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
     fun x hx => by simpa [Ac] using lowerFormBound_of_pointSpectrumIn hA hU hUhi x hx

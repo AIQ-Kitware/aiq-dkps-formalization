@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalOrderedSets
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 

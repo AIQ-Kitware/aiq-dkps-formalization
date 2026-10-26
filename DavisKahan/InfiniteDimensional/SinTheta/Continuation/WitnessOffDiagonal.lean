@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.WitnessRiccati
 
 public section
@@ -124,7 +126,7 @@ theorem subspaceBlockOperatorData_B01_add_of_reduces
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
     (hAV : (A + V).IsSymmetric)
-    (hU : A.Reduces U) :
+    (hU : Submodule.IsReducing U A) :
     (subspaceBlockOperatorData (A + V) U hAV).B01 =
       U.orthogonalProjectionOnto ∘L V ∘L Uᗮ.subtypeL := by
   change
@@ -133,7 +135,7 @@ theorem subspaceBlockOperatorData_B01_add_of_reduces
   apply ContinuousLinearMap.ext
   intro w
   apply Subtype.ext
-  have hAw : A (w : H) ∈ Uᗮ := hU.2 (w : H) w.property
+  have hAw : A (w : H) ∈ Uᗮ := hU.orthogonal_mem_invtSubmodule w.property
   have hPAw : U.starProjection (A (w : H)) = 0 :=
     (Submodule.starProjection_apply_eq_zero_iff U).2 hAw
   simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply, Submodule.coe_add,
@@ -146,7 +148,7 @@ theorem subspaceBlockOperatorData_B10_add_of_reduces
     (A V : H →L[ℂ] H) (U : Submodule ℂ H)
     [U.HasOrthogonalProjection]
     (hAV : (A + V).IsSymmetric)
-    (hU : A.Reduces U) :
+    (hU : Submodule.IsReducing U A) :
     (subspaceBlockOperatorData (A + V) U hAV).B10 =
       Uᗮ.orthogonalProjectionOnto ∘L V ∘L U.subtypeL := by
   change
@@ -155,7 +157,7 @@ theorem subspaceBlockOperatorData_B10_add_of_reduces
   apply ContinuousLinearMap.ext
   intro u
   apply Subtype.ext
-  have hAu : A (u : H) ∈ U := hU.1 (u : H) u.property
+  have hAu : A (u : H) ∈ U := hU.mem_invtSubmodule u.property
   have hQAu : Uᗮ.starProjection (A (u : H)) = 0 := by
     rw [Submodule.starProjection_orthogonal_apply,
       Submodule.starProjection_eq_self_iff.mpr hAu, sub_self]
@@ -176,7 +178,7 @@ namespace SpectralContinuationWitness
 /-- The source selected spectral subspace reduces the unperturbed operator. -/
 theorem sourceSelectedSpectralSubspace_reduces
     (C : SpectralContinuationWitness A V s) :
-    A.Reduces C.sourceSelectedSpectralSubspace := by
+    Submodule.IsReducing C.sourceSelectedSpectralSubspace A := by
   unfold sourceSelectedSpectralSubspace
   exact boundedSelfAdjointSpectralSubspace_reduces A
     C.sourceSeparatingContour.selfAdjoint s

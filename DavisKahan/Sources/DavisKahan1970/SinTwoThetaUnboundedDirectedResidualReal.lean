@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.DoubleAngle.RealUnboundedIdeal
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
@@ -74,7 +75,7 @@ open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan.RealSpectralRestriction
 
 open scoped InnerProductSpace
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

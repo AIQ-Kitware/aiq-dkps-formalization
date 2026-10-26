@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
 
 /-!
@@ -45,7 +46,7 @@ structure BoundedSpectralSelection (A : H →L[ℂ] H) where
     carrier measurable_carrier
   projection_eq : projection = boundedSelfAdjointSpectralProjection A selfAdjoint
     carrier measurable_carrier
-  reduces : A.Reduces subspace
+  reduces : Submodule.IsReducing subspace A
 
 /-- Canonical PVM selection. -/
 noncomputable def BoundedSpectralSelection.canonical
@@ -112,12 +113,8 @@ theorem projection_comp_comm
 /-- The selected complement also reduces the operator. -/
 theorem orthogonal_reduces
     {A : H →L[ℂ] H} (S : BoundedSpectralSelection A) :
-    A.Reduces S.subspaceᗮ := by
-  constructor
-  · exact S.reduces.2
-  · intro x hx
-    rw [Submodule.orthogonal_orthogonal] at hx ⊢
-    exact S.reduces.1 x hx
+    Submodule.IsReducing S.subspaceᗮ A :=
+  (Submodule.isReducing_orthogonal_iff S.subspace A).mpr S.reduces
 
 end BoundedSpectralSelection
 

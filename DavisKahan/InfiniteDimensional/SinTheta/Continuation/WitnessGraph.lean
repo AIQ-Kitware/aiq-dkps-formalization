@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Theorem
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
 
@@ -165,9 +166,8 @@ theorem selectedEndpointAngularOperator_graph_reduces
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2) :
-    ContinuousLinearMap.Reduces (A + V)
-      (graphSubspace C.sourceSelectedSpectralSubspace
-        (C.selectedEndpointAngularOperator hsmall)) := by
+    Submodule.IsReducing (graphSubspace C.sourceSelectedSpectralSubspace
+        (C.selectedEndpointAngularOperator hsmall)) (A + V) := by
   rw [C.graphSubspace_selectedEndpointAngularOperator hsmall]
   unfold targetSelectedSpectralSubspace
   exact boundedSelfAdjointSpectralSubspace_reduces

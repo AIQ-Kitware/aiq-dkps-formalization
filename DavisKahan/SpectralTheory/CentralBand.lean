@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.SpectralTheory.SpectralGapFormBounds
 -- supplies the one-sided `spectralGapCutoff`, `reCoord_mem_realSpectrum`, and the
 -- bounded self-adjoint spectral projection this module makes two-sided.
@@ -251,7 +253,7 @@ instance centralBandSubspace_hasOrthogonalProjection {l r d : ℝ} :
 
 /-- The band subspace reduces the operator it is cut from. -/
 theorem centralBandSubspace_reduces {l r d : ℝ} :
-    B.Reduces (centralBandSubspace B hB (l := l) (r := r) (d := d)) :=
+    Submodule.IsReducing (centralBandSubspace B hB (l := l) (r := r) (d := d)) B :=
   boundedSelfAdjointSpectralSubspace_reduces B hB _ _
 
 /-- The orthogonal projection onto the band subspace is the band spectral
@@ -649,13 +651,14 @@ reducing subspace. -/
 theorem commute_starProjection_centralBandSubspace
     {l r d : ℝ} (hd : 0 < d)
     (hgap : realSpectrum B ⊆ Set.Icc l r ∪ gapExterior l r d)
-    {U : Submodule ℂ H} [U.HasOrthogonalProjection] (hU : B.Reduces U) :
+    {U : Submodule ℂ H} [U.HasOrthogonalProjection] (hU : Submodule.IsReducing U B) :
     Commute (centralBandSubspace B hB (l := l) (r := r) (d := d)).starProjection
       U.starProjection := by
   have hBsa : IsSelfAdjoint B :=
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mpr hB
   have hBU : Commute B U.starProjection :=
-    (ContinuousLinearMap.starProjection_comp_comm_of_reduces B U hU).symm
+    ((show U.starProjection ∘L B = B ∘L U.starProjection from
+      ((Submodule.isReducing_coe_iff_commute_starProjection (U := U) (A := B)).mp hU).eq)).symm
   have hstar : Commute (star B) U.starProjection := by rwa [hBsa.star_eq]
   have h := Commute.cfcHom (a := B) hBsa.isStarNormal hBU hstar
     ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d))
@@ -695,14 +698,15 @@ bound by the Rayleigh description of the norm of a symmetric operator; the
 ambient carrier is `(B - c) P_U`, so no restriction appears. -/
 theorem norm_shiftedOperator_le_of_spectrumIn_Icc
     {U : Submodule ℂ H} [U.HasOrthogonalProjection] {l r : ℝ} (hlr : l ≤ r)
-    (hU : B.Reduces U) (hspec : SpectrumIn B U (Set.Icc l r))
+    (hU : Submodule.IsReducing U B) (hspec : SpectrumIn B U (Set.Icc l r))
     {x : H} (hx : x ∈ U) :
     ‖shiftedOperator B l r x‖ ≤ ((r - l) / 2) * ‖x‖ := by
   set S : H →L[ℂ] H := shiftedOperator B l r with hSdef
   set Pu : H →L[ℂ] H := U.starProjection with hPu
   have hrl : (0 : ℝ) ≤ (r - l) / 2 := by linarith
   have hcomm : Pu ∘L B = B ∘L Pu :=
-    ContinuousLinearMap.starProjection_comp_comm_of_reduces B U hU
+    (show U.starProjection ∘L B = B ∘L U.starProjection from
+      ((Submodule.isReducing_coe_iff_commute_starProjection (U := U) (A := B)).mp hU).eq)
   have hScomm : ∀ y : H, Pu (S y) = S (Pu y) := by
     intro y
     have h := congrArg (fun T : H →L[ℂ] H => T y) hcomm
@@ -778,7 +782,7 @@ theorem spectrumIn_centralBandSubspace
       (Set.Icc l r) := by
   have hinv : ∀ x ∈ centralBandSubspace B hB (l := l) (r := r) (d := d),
       B x ∈ centralBandSubspace B hB (l := l) (r := r) (d := d) :=
-    (centralBandSubspace_reduces B hB).1
+    (centralBandSubspace_reduces B hB).mem_invtSubmodule
   have hup := spectrumIn_Iic_of_re_inner_le
     (T := B) hinv (c := r)
     (fun x hx => re_inner_le_of_mem_centralBandSubspace B hB hd hgap hx)
@@ -793,7 +797,7 @@ is spectrally outside the two gaps contains the band spectral subspace. -/
 theorem centralBandSubspace_le_of_spectrumIn_gapExterior
     {l r d : ℝ} (hd : 0 < d) (hlr : l ≤ r)
     (hgap : realSpectrum B ⊆ Set.Icc l r ∪ gapExterior l r d)
-    {U : Submodule ℂ H} [U.HasOrthogonalProjection] (hU : B.Reduces U)
+    {U : Submodule ℂ H} [U.HasOrthogonalProjection] (hU : Submodule.IsReducing U B)
     (hperp : SpectrumIn B Uᗮ (gapExterior l r d)) :
     centralBandSubspace B hB (l := l) (r := r) (d := d) ≤ U := by
   set R := centralBandSubspace B hB (l := l) (r := r) (d := d) with hR
@@ -841,7 +845,7 @@ interval with the same centre is contained in the band spectral subspace. -/
 theorem le_centralBandSubspace_of_spectrumIn_Icc
     {l r d l' r' : ℝ} (hd : 0 < d) (hlr : l ≤ r) (hlr' : l' ≤ r')
     (hgap : realSpectrum B ⊆ Set.Icc l r ∪ gapExterior l r d)
-    {U : Submodule ℂ H} [U.HasOrthogonalProjection] (hU : B.Reduces U)
+    {U : Submodule ℂ H} [U.HasOrthogonalProjection] (hU : Submodule.IsReducing U B)
     (hspec : SpectrumIn B U (Set.Icc l' r'))
     (hcen : gapCenter l' r' = gapCenter l r)
     (hsmall : (r' - l') / 2 < (r - l) / 2 + d) :

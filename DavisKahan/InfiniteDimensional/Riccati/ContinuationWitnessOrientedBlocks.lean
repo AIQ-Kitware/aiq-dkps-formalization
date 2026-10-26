@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessEffectiveBlocks
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
@@ -189,33 +191,33 @@ theorem spectrum_subspaceBlockOperatorData
 /-- Reduction kills the upper-right cross block. -/
 theorem subspaceBlockOperatorData_B01_eq_zero_of_reduces
     (T : H →L[ℂ] H) (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (hT : T.IsSymmetric) (hred : T.Reduces U) :
+    (hT : T.IsSymmetric) (hred : Submodule.IsReducing U T) :
     (subspaceBlockOperatorData T U hT).B01 = 0 := by
   apply ContinuousLinearMap.ext
   intro w
   apply Subtype.ext
   change U.starProjection (T (w : H)) = 0
   exact (Submodule.starProjection_apply_eq_zero_iff U).mpr
-    (hred.2 (w : H) w.property)
+    (hred.orthogonal_mem_invtSubmodule w.property)
 
 /-- Reduction kills the lower-left cross block. -/
 theorem subspaceBlockOperatorData_B10_eq_zero_of_reduces
     (T : H →L[ℂ] H) (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (hT : T.IsSymmetric) (hred : T.Reduces U) :
+    (hT : T.IsSymmetric) (hred : Submodule.IsReducing U T) :
     (subspaceBlockOperatorData T U hT).B10 = 0 := by
   apply ContinuousLinearMap.ext
   intro u
   apply Subtype.ext
   change Uᗮ.starProjection (T (u : H)) = 0
+  have hTu : T (u : H) ∈ U := hred.mem_invtSubmodule u.property
   rw [Submodule.starProjection_orthogonal_apply,
-    Submodule.starProjection_eq_self_iff.mpr
-      (hred.1 (u : H) u.property), sub_self]
+    U.starProjection_eq_self_iff.mpr hTu, sub_self]
 
 /-- Relative to a reducing subspace, the coordinate block operator is exactly
 the direct sum of the two ambient compressions. -/
 theorem blockOperator_subspaceBlockOperatorData_eq_blockDiagonal_of_reduces
     (T : H →L[ℂ] H) (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (hT : T.IsSymmetric) (hred : T.Reduces U) :
+    (hT : T.IsSymmetric) (hred : Submodule.IsReducing U T) :
     blockOperator (subspaceBlockOperatorData T U hT) =
       blockDiagonalOperator (compressOperator U T) (compressOperator Uᗮ T) := by
   let : CompleteSpace U :=
@@ -234,7 +236,7 @@ theorem blockOperator_subspaceBlockOperatorData_eq_blockDiagonal_of_reduces
 any reducing orthogonal decomposition. -/
 theorem realSpectrum_eq_union_compressions_of_reduces
     (T : H →L[ℂ] H) (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (hT : T.IsSymmetric) (hred : T.Reduces U) :
+    (hT : T.IsSymmetric) (hred : Submodule.IsReducing U T) :
     realSpectrum T =
       realSpectrum (compressOperator U T) ∪
         realSpectrum (compressOperator Uᗮ T) := by
@@ -314,7 +316,7 @@ noncomputable def targetEffectiveBlock1
 /-- The target selected spectral subspace reduces the perturbed operator. -/
 theorem targetSelectedSpectralSubspace_reduces
     (C : SpectralContinuationWitness A V s) :
-    ContinuousLinearMap.Reduces (A + V) C.targetSelectedSpectralSubspace := by
+    Submodule.IsReducing C.targetSelectedSpectralSubspace (A + V) := by
   unfold targetSelectedSpectralSubspace
   exact boundedSelfAdjointSpectralSubspace_reduces (A + V)
     C.targetSeparatingContour.selfAdjoint s

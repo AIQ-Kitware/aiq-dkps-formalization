@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
@@ -46,7 +48,7 @@ universe v
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 variable {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -62,8 +64,8 @@ structure SymmetricSinThetaProblem where
   V : Submodule ℂ E
   proj_U : U.HasOrthogonalProjection
   proj_V : V.HasOrthogonalProjection
-  reduces_A_U : A.Reduces U
-  reduces_B_V : B.Reduces V
+  reduces_A_U : Submodule.IsReducing U A
+  reduces_B_V : Submodule.IsReducing V B
   gap : ℝ
   gap_pos : 0 < gap
   gap_U_to_Vperp : FormBoundedSylvesterGap

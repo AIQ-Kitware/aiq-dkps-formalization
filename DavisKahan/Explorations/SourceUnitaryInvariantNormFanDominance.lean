@@ -17,6 +17,7 @@ Compile with `lake env lean DavisKahan/Explorations/SourceUnitaryInvariantNormFa
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
@@ -30,7 +31,8 @@ namespace DavisKahan
 namespace ExactSinTheta
 namespace SourceUINConformance
 
-open scoped ENNReal InnerProductSpace TauCeti.CompleteSubspace
+open scoped ENNReal InnerProductSpace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 noncomputable section
 

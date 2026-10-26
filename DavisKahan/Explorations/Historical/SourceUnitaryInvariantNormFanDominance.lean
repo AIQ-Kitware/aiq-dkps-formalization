@@ -75,6 +75,7 @@ the countermodel proves that implication false.
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ExtendedSequence
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
@@ -3472,7 +3473,7 @@ The theorem names below deliberately do **not** say `sourceExact`.  Fidelity is
 metadata owned by the result ledger; these declarations are only compile probes.
 -/
 
-open scoped TauCeti.CompleteSubspace
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 universe u
 
