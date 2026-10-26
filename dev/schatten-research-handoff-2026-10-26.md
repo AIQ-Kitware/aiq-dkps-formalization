@@ -532,3 +532,30 @@ force infinite cost for every feasible ambient competitor. Focused
 feasibility build passed (7,168 jobs). This does not yet treat general
 compact or Schatten projection differences of infinite rank, nor classify
 all optimizers. The underlying index obstruction is classical.
+
+## Canonical regime at `p>=2` in arbitrary complex Hilbert dimension
+
+`SchattenCanonical.schatten_nonacuteDirectRotation_le_transport` proves
+that every completed direct rotation minimizes the accepted Schatten
+gauge for every finite real `p>=2`, against every ambient complex unitary
+transporter. No finite dimension, separability, compactness, finite-cost
+or competitor block hypothesis is imposed; a crossed-defect isometric
+identification supplies the completed direct rotation and includes the
+right-angle sector. This is the classical Q-norm regime, not a priority
+claim.
+
+`OperatorIdealFamily.gauge_schatten_gram_eq_sq` proves the native extended
+identity `Gauge_(p/2)(T* T)=Gauge_p(T)^2` in arbitrary complex Hilbert
+dimensions, including infinite values. The canonical comparison applies
+the existing full Hilbert-space squared-displacement Ky Fan theorem,
+accepted symmetric-gauge dominance and this identity. No new norm or
+parallel operator-ideal family is defined. Focused builds passed (6,600
+and 7,472 jobs respectively).
+
+Still needed to assert ideal attainment directly from a general
+`P_K-P_L in S_p` hypothesis: prove that the completed rotation differs
+from identity by a member of that ideal. A promising algebraic route is
+`(I-R)(I+R)=2(I-S)`, with `S` the canonical intertwiner, together with
+invertibility of `I+R` from the nonnegative Hermitian part of `R` and
+`I-S=(P_K-P_L)J_K`. This gives a bounded right factor of the projection
+difference and avoids assuming compact spectral enumeration.

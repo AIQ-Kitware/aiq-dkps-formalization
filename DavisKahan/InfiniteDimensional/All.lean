@@ -16,5 +16,6 @@ public import DavisKahan.InfiniteDimensional.DoubleAngle
 public import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFiniteRankPairs
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFeasibility
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCanonical
 
 /-! # `DavisKahan/InfiniteDimensional` -/
