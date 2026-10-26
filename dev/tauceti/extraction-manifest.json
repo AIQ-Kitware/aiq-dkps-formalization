@@ -4051,7 +4051,8 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "Mathlib.Analysis.InnerProductSpace.Projection.Submodule"
+        "Mathlib.Analysis.InnerProductSpace.Projection.Submodule",
+        "TauCeti.Analysis.InnerProductSpace.Projection.Completeness"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -4066,9 +4067,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun. October 26, following DKPS 8f30839ba: delete the duplicate local Submodule.isComplete_coe_of_hasOrthogonalProjection proof and import accepted TauCeti.Analysis.InnerProductSpace.Projection.Completeness. All callers, including the existing opt-in completeness instance, now consume the accepted declaration under its unchanged name and exact RCLike/complete-ambient/projected-subspace hypotheses. The native module acknowledges the DKPS observation and proves it by closedness of an idempotent range; this is recorded as consumption, not proof-adaptation inferred from matching statements. The local reducing predicate/qualitative API, quantitative orthogonal-block estimate, and opt-in instance remain; whole-module retirement is not claimed. Native Submodule.IsReducing in InvariantSubspace is a separate representation migration still required; no forwarding alias is introduced here."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Residual/AngleEmbedding.lean",

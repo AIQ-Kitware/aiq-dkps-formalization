@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import Mathlib.Analysis.InnerProductSpace.Projection.Submodule
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 
 /-!
 # Reducing subspaces for bounded operators
@@ -24,6 +25,13 @@ Davis--Kahan theory.
   destination is Tau Ceti and not Mathlib (`ForTauCeti/README.md`).
 * Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
+* Projected-subspace completeness now uses accepted
+  `TauCeti.Analysis.InnerProductSpace.Projection.Completeness` directly. The
+  native module acknowledges the same DKPS observation; its proof uses the
+  closed range of an idempotent. No local duplicate of
+  `Submodule.isComplete_coe_of_hasOrthogonalProjection` remains. The existing
+  opt-in completeness instance consumes that accepted theorem; upstream does
+  not provide a global instance.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
@@ -135,19 +143,6 @@ theorem norm_starProjection_apply_le_of_mem_orthogonal
     exact le_of_mul_le_mul_right (by simpa only [pow_two] using hsq) hzpos
 
 end LinearMap
-
-namespace Submodule
-
-/-- A subspace admitting an orthogonal projection is complete when the ambient
-space is complete. -/
-theorem isComplete_coe_of_hasOrthogonalProjection [CompleteSpace E]
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    IsComplete (U : Set E) := by
-  have hclosed : IsClosed ((Uᗮ)ᗮ : Set E) := Uᗮ.isClosed_orthogonal
-  rw [Submodule.orthogonal_orthogonal] at hclosed
-  exact hclosed.isComplete
-
-end Submodule
 
 namespace TauCeti.CompleteSubspace
 

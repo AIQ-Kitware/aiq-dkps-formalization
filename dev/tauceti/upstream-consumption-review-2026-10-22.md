@@ -1274,3 +1274,26 @@ from acceptance, its current names and its original source provenance. The
 retired source module leaves the live checklist; historical source names
 remain in provenance. Papers, visualizations and original untracked files
 are unchanged.
+
+Checkpoint `8f30839ba` passed the full default build (21,035 jobs, warnings
+as errors) and was committed immediately on success.
+
+### October 26: consume projected-subspace completeness directly
+
+The duplicate local proof of
+`Submodule.isComplete_coe_of_hasOrthogonalProjection` is deleted from
+`InnerProductSpace/ReducingSubspace`. Its consumers now use accepted
+`TauCeti.Analysis.InnerProductSpace.Projection.Completeness` under the unchanged
+name and hypotheses: every `RCLike` field, complete ambient inner-product
+space, and subspace admitting an orthogonal projection. No finite dimension,
+nonzero-space condition, or compatibility theorem is added. The focused donor
+and subspace-transport build passed (5,008 jobs), after its cache fetch.
+
+The existing opt-in completeness instance remains as local instance packaging;
+upstream intentionally offers explicit theorems rather than a global instance.
+The local reducing predicate, qualitative API and quantitative orthogonal-block
+estimate are preserved. Whole-module retirement is not claimed. Native
+`Submodule.IsReducing` is the owner for the next reducing-predicate migration.
+The native completeness module acknowledges the DKPS observation; matching
+statements alone are not proof-adaptation evidence. Papers and visualizations
+are unchanged.
