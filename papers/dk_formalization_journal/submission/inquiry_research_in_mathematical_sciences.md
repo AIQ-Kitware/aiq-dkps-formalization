@@ -4,49 +4,53 @@ Draft for coauthor approval; not sent.
 
 Route through the editorial contact requested via
 https://link.springer.com/journal/40687/contact-the-journal.
-The published page does not supply a dedicated scope-inquiry email address.
-Do not use the formal submission system merely to make this inquiry.
+The journal's contact page does not list a dedicated presubmission-inquiry
+email address. Do not submit a manuscript merely to request a scope assessment.
 
-**Subject:** Presubmission scope inquiry: Davis--Kahan (1970) in Lean
+**Subject:** Presubmission scope inquiry: exact spectral subspace transport and Davis--Kahan theory
 
 Dear Editors,
 
-My colleagues and I are preparing a manuscript entitled *Davis--Kahan (1970)
-in Lean: Formalization, Counterexample, and Repair*. We would appreciate
-advice on whether its combination of operator theory and formalized
-mathematics is suitable for Research in the Mathematical Sciences.
+My colleagues and I are preparing *Formalizing Davis--Kahan Perturbation
+Theory and Exact Spectral Subspace Transport*. We would appreciate your
+assessment of whether its results in operator theory and matrix optimization,
+together with their formal verification, would suit *Research in the
+Mathematical Sciences*.
 
-The development treats the 29 result-level targets in Davis and Kahan's
-1970 paper: 28 have Lean proofs at their reviewed source scope, and
-Proposition 4.4 has a Lean-checked counterexample. The coverage includes
-real and complex Hilbert spaces, unbounded self-adjoint operators, and
-unitarily invariant norms.
+The central problem is to minimize $\|I-W\|_{S_p}$ over all ambient orthogonal
+or unitary maps $W$ taking one prescribed subspace onto another. For arbitrary
+equal-rank subspaces of finite-dimensional **complex** Hilbert spaces and
+$1<p<2$, we prove exact principal-angle formulas, sharp angle-dependent
+transitions in the optimal transport, a classification of all global
+minimizers, and that every constrained local minimum is global. Over the
+**reals**, for $1\le p<2$, the unrestricted optimum is given by an exact
+weighted-matching problem. At the nuclear endpoint $p=1$, the complex
+minimum is $2\sum_j\sin\theta_j$; the real minimum equals it exactly when
+each principal angle strictly between zero and $\pi/2$ has even multiplicity.
+We also establish a sharp direct-rotation approximation bound for all
+unitarily invariant norms, nearest subspace-preserving unitary results,
+and exact optimization results for a smooth spectral penalty.
 
-The manuscript gives an explicit real four-dimensional family showing that
-no positive principal-angle threshold restores Proposition 4.4's
-full-displacement minimality assertion. For both principal angles theta,
-the canonical direct rotation has trace-norm displacement 8 sin(theta/2),
-while an admissible orthogonal competitor has displacement 4 sin(theta),
-for every 0 < theta < pi/2. We supply the matrix calculation, identify the
-failed inequality in the original proof, and explain the valid Q-norm
-consequence of the neighboring squared-displacement theorem.
+This work grew out of a Lean 4 formalization of Davis and Kahan's 1970
+paper. Of 29 reviewed result-level statements, 28 are proved at their
+reviewed source scope, including the unbounded self-adjoint setting;
+the printed Proposition 4.4 is refuted by a real four-dimensional
+counterexample at arbitrarily small positive principal angles. We identify
+the error in its proof and distinguish our results from the earlier known
+phase-based nonminimality examples and norm-minimization literature.
 
-Related trace-norm limitations and Q-norm minimization results were known
-before this work. Our claim concerns the explicit short-angle refutation,
-its proof diagnosis, and the formal treatment of the surrounding theory;
-we do not claim a new general Q-norm principle. The parameterized result is presented with a conventional proof,
-separately from the existing machine-checked fixed-angle counterexample.
-
-The proofs and manuscript were developed with extensive AI assistance,
-which will be disclosed in the submission. The public development is at
+The finite-dimensional results described above are machine-checked. We are
+currently pursuing infinite-dimensional extensions in Schatten operator
+ideals; these are ongoing, not asserted as established. Extensive AI
+assistance in the proof development and manuscript preparation will be
+disclosed. The draft and proof artifact are available at
 https://github.com/AIQ-Kitware/aiq-dkps-formalization.
 
-Would a manuscript with this contribution be within the journal's editorial
-interests? We would be happy to provide the current draft for a preliminary
-scope assessment.
+Would this manuscript be of interest to the journal? We would be happy to
+send the current draft for a preliminary scope assessment.
 
 Best regards,
 
-Jonathan Crall
-Kitware, Inc.
+Jonathan Crall  
+Kitware, Inc.  
 jon.crall@kitware.com
