@@ -390,3 +390,28 @@ and pass each finite singular-value penalty to the limit. The finite-rank
 reference can then be removed from the lower-bound theorem; full general
 attainment still requires compact-pair geometry and balanced defect
 spaces. Neither general attainment nor historical priority is claimed.
+
+## General unrestricted Hilbert-space lower bound (no reference)
+
+`SchattenGlobalLowerBound.sine_phaseMinimum_sum_le_schatten_transport`
+now removes the finite-rank reference entirely from the `1<p<2` lower
+bound. Its only geometric inputs are orthogonally complemented complex
+Hilbert subspaces and an actual ambient unitary mapping one to the other.
+The inequality includes infinite values, nonseparable spaces and
+infinite-rank subspaces and competitors. Finite Schatten cost itself
+implies the compactness needed in the nontrivial proof branch.
+
+The proof truncates the competitor, varies its target projection, and
+passes each finite spectral penalty sum through operator-norm convergence.
+Nonnegativity then recovers the full infinite sum. This avoids assuming
+a compact-pair decomposition or choosing an ambient principal-angle
+enumeration for the lower bound. The older, weaker reference-dependent
+lower-bound declaration and proof have been removed, and the finite-rank
+attainment theorem now consumes the general result directly. Focused
+build passed (7,370 jobs after migration).
+
+General ideal-theoretic **attainment and optimizer classification** are
+still open: the present exact-attainment theorem retains its finite-rank
+reference hypothesis. Defect-index balance, construction of a general
+Schatten attainer, and its finite-rank relation to a direct rotation for
+`1<p<2` have not been promoted to Lean theorems.

@@ -7,16 +7,14 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalAttainment
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteTransport
-public import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportDensity
 
 /-!
 # Exact Schatten transport lower bounds for finite-rank pairs in Hilbert space
 
 The spectral angle cost is intrinsic to the ambient directed sine map.
 First restrict a finite-rank competitor to its finite reducing support.
-Then exact-fiber Schatten density extends the same lower bound to every
-ambient unitary, given one feasible finite-rank reference transporter.
 The ambient complex Hilbert space may be infinite and nonseparable.
+`SchattenGlobalLowerBound` removes the finite-rank competitor hypothesis.
 -/
 
 public section
@@ -62,40 +60,5 @@ theorem sine_phaseMinimum_sum_le_schatten_finite_rank_transport
     (Unitary.linearIsometryEquiv.symm V)
     (by simpa only [MulEquiv.apply_symm_apply] using hlocal)
   exact h
-
-/-- **Unrestricted Hilbert-space lower bound for a finite-rank pair.**
-If one finite-rank perturbation of identity transports `K` to `L`, the
-intrinsic angle cost bounds every ambient complex unitary competitor,
-including competitors with infinite Schatten cost. -/
-theorem sine_phaseMinimum_sum_le_schatten_transport_of_finite_rank_reference
-    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
-    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
-    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
-    (R : E ≃ₗᵢ[ℂ] E) (hRmap : K.map R.toLinearMap = L)
-    (n : ℕ) (hR : (1 - R.toLinearMap).rank ≤ n)
-    (U : E ≃ₗᵢ[ℂ] E) (hUmap : K.map U.toLinearMap = L) :
-    (∑' j, ENNReal.ofReal (phaseMinimum p.toReal
-      (Real.arcsin ((K.sinThetaMap L).singularValue j : ℝ)))) ≤
-        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
-          (1 - (U : E →L[ℂ] E)) ^ p.toReal := by
-  let Φ := OperatorIdealFamily.schatten ℂ p.toReal hp1.le
-  let C := ∑' j, ENNReal.ofReal (phaseMinimum p.toReal
-    (Real.arcsin ((K.sinThetaMap L).singularValue j : ℝ)))
-  have hp0 : 0 < p.toReal := zero_lt_one.trans hp1
-  have hroot : C ^ (1 / p.toReal) ≤ Φ.gauge ((U : E →L[ℂ] E) - 1) := by
-    apply (schatten_transport_lower_bound_iff_finite_rank p.toReal hp1.le
-      K.starProjection L.starProjection R n hR
-      ((K.map_eq_iff_conjugate_starProjection L R).mp hRmap) _).mpr ?_ U
-        ((K.map_eq_iff_conjugate_starProjection L U).mp hUmap)
-    intro V hVP ⟨m, hm⟩
-    apply (ENNReal.rpow_le_rpow_iff hp0).mp
-    rw [← ENNReal.rpow_mul, one_div_mul_cancel hp0.ne', ENNReal.rpow_one,
-      ← neg_sub 1 (V : E →L[ℂ] E), Φ.gauge_neg]
-    exact sine_phaseMinimum_sum_le_schatten_finite_rank_transport p hp hp1 hp2 K L V
-      ((K.map_eq_iff_conjugate_starProjection L V).mpr hVP) m hm
-  have hpow := ENNReal.rpow_le_rpow hroot hp0.le
-  rw [← ENNReal.rpow_mul, one_div_mul_cancel hp0.ne', ENNReal.rpow_one,
-    ← neg_sub 1 (U : E →L[ℂ] E), Φ.gauge_neg] at hpow
-  exact hpow
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition

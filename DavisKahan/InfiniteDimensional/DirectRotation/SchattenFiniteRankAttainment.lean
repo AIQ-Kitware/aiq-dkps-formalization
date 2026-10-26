@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 -/
 module
 
-public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFiniteRank
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenGlobalLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.ExtendTransport
 
 /-!
@@ -107,7 +107,6 @@ theorem exists_unitary_minimizing_schatten_transport_of_finite_rank_reference
   refine ⟨U, hmap, hfinite, hcost, fun T hT => ?_⟩
   apply (ENNReal.rpow_le_rpow_iff (zero_lt_one.trans hp1)).mp
   rw [hcost]
-  exact sine_phaseMinimum_sum_le_schatten_transport_of_finite_rank_reference
-    p hp hp1 hp2 K L R hRmap n hR T hT
+  exact sine_phaseMinimum_sum_le_schatten_transport p hp hp1 hp2 K L T hT
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition
