@@ -38,7 +38,7 @@ statement is off-by-one free in it:
   (`ContinuousLinearMap.approximationNumber_add_le`), against the one-based
   `s_{m+n-1}`;
 * the singular-value identification is `aₙ(T) = σₙ(T)`
-  (`ContinuousLinearMap.approximationNumber_eq_singularValues`), a genuine
+  (`ContinuousLinearMap.singularValue_eq_linearMap_singularValues`), a genuine
   identity of indices, because Mathlib's `LinearMap.singularValues` is itself
   zero-indexed; one-based numbering would put an `n - 1` — truncated
   subtraction — into the flagship theorem of the development;
@@ -227,10 +227,10 @@ approximation of rank at most `n`, so `aₙ(T) = 0`.
 
 This is the first of the four statements roadmap topic T09 §A4 asks for.  It holds
 over any normed pair — no inner product, no completeness, no finite dimension —
-because `R := T` is admissible in the defining infimum.  The converse for a finite-dimensional
-source over a complete field is proved in
-`ApproximationNumber.Rank` as `approximationNumber_eq_zero_iff_rank_le`;
-it does not require an inner product. -/
+because `R := T` is admissible in the defining infimum. The converse over a complete
+field is accepted as
+`ContinuousLinearMap.singularValue_eq_zero_iff_rank_le` in Tau Ceti
+`ApproximationNumber.Compact`; it needs neither an inner product nor finite dimension. -/
 theorem approximationNumber_eq_zero_of_rank_le (T : E →L[𝕜] F) {n : ℕ}
     (hT : T.rank ≤ (n : Cardinal)) :
     T.approximationNumber n = 0 := by
@@ -277,7 +277,7 @@ This is the reverse-triangle form of `approximationNumber_add_le_add_norm`, and
 it is the perturbation statement downstream arguments actually want: it says the
 whole `s`-sequence moves no faster than the operator does.  In finite dimensions
 it specializes to Weyl's inequality for singular values, via
-`approximationNumber_eq_singularValues`. -/
+`singularValue_eq_linearMap_singularValues`. -/
 theorem abs_approximationNumber_sub_approximationNumber_le (T S : E →L[𝕜] F) (n : ℕ) :
     |T.approximationNumber n - S.approximationNumber n| ≤ ‖T - S‖ := by
   exact_mod_cast T.abs_singularValue_sub_singularValue_le S n

@@ -266,7 +266,9 @@ theorem approximationNumberEnergy_comp_starProjection
   have hsv : ∀ m : ℕ,
       approximationSingularValue m T = T.toLinearMap.singularValues m := by
     intro m
-    exact ContinuousLinearMap.approximationNumber_eq_singularValues T m
+    change T.approximationNumber m = T.toLinearMap.singularValues m
+    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+      ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
   have hfrob : ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2
       = ∑ k : Fin n, ‖T (c k)‖ ^ 2 :=
     TauCeti.sum_sq_singularValues T.toLinearMap hn c

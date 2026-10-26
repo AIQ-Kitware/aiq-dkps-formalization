@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
@@ -40,8 +40,8 @@ variable {𝕜 : Type u} [NontriviallyNormedField 𝕜] [CompleteSpace 𝕜]
   {F : Type w} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
 
 example (T : E →L[𝕜] F) (n : ℕ) :
-    T.approximationNumber n = 0 ↔ T.rank ≤ (n : Cardinal) :=
-  T.approximationNumber_eq_zero_iff_rank_le n
+    T.singularValue n = 0 ↔ T.rank ≤ (n : Cardinal) :=
+  ContinuousLinearMap.singularValue_eq_zero_iff_rank_le
 
 end Rank
 
@@ -70,8 +70,9 @@ example (p : ℝ) (hp : 1 ≤ p) :
 
 example [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]
     (T : E →L[𝕜] F) (n : ℕ) :
-    T.singularValues n = 0 ↔ T.rank ≤ (n : Cardinal) :=
-  T.singularValues_eq_zero_iff_rank_le n
+    T.toLinearMap.singularValues n = 0 ↔ T.rank ≤ (n : Cardinal) := by
+  rw [← T.singularValue_eq_linearMap_singularValues n, NNReal.coe_eq_zero]
+  exact ContinuousLinearMap.singularValue_eq_zero_iff_rank_le
 
 end Gauges
 

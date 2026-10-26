@@ -6,7 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 
@@ -336,12 +337,10 @@ theorem approximationEnergy_eq_singularValues
   unfold approximationEnergy
   apply Finset.sum_congr rfl
   intro i hi
-  have hsv :=
-    ContinuousLinearMap.approximationNumber_eq_singularValues T i
   change ((T.approximationNumber i : ℝ) ^ 2) =
     (T.toLinearMap.singularValues i : ℝ) ^ 2
-  rw [hsv]
-  rfl
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
 
 section ComplexScalars
 

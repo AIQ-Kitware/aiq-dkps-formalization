@@ -45,10 +45,10 @@ the dependency: compactness becomes a corollary
 rather than a hypothesis, so the example exercises the finite-rank side of the
 API rather than Mathlib's closure argument.
 
-Only an upper bound is proved.  The matching lower bound `aₙ(T) = ‖c‖_{[n,∞)}`
-needs the coefficients ordered, which the example does not assume; the finite
-ordered case is `ContinuousLinearMap.approximationNumber_diagOp` in
-`DiagonalExample.lean`.
+The truncations give an upper bound without ordering assumptions. For coefficients
+with antitone norms, `approximationNumber_diagOpLp` below proves exact equality.
+Accepted `ApproximationNumber.FiniteDiagonal` covers finite-dimensional rectangular
+diagonal maps, including unequal source and target dimensions.
 
 ## Sources
 

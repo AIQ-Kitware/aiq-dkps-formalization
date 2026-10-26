@@ -156,8 +156,8 @@ theorem approximationNumber_eq_eigenvalues_of_isPositive [FiniteDimensional 𝕜
     {S : H →L[𝕜] H} (hpos : (S : H →ₗ[𝕜] H).IsPositive)
     (i : Fin (finrank 𝕜 H)) :
     S.approximationNumber (i : ℕ) = hpos.isSymmetric.eigenvalues rfl i := by
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValues,
-    ← ContinuousLinearMap.toLinearMap_singularValues]
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
   exact TauCeti.singularValues_of_isPositive hpos i
 
 omit [CompleteSpace H] in
@@ -228,8 +228,8 @@ theorem approximationNumber_cosineBlock_eq_principalCosines [FiniteDimensional �
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
     (cosineBlock P Q).approximationNumber i = TauCeti.principalCosines Pᗮ Qᗮ i := by
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValues,
-    ← ContinuousLinearMap.toLinearMap_singularValues]
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
   rfl
 
 omit [CompleteSpace H] in
@@ -240,8 +240,8 @@ theorem approximationNumber_lowerCosineBlock_eq_principalCosines
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
     (lowerCosineBlock P Q).approximationNumber i = TauCeti.principalCosines P Q i := by
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValues,
-    ← ContinuousLinearMap.toLinearMap_singularValues]
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
   rfl
 
 omit [CompleteSpace H] in

@@ -52,13 +52,11 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
@@ -520,7 +518,6 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "DavisKahan.Interop.Spectra.ApproximationNumberMinMax",
         "DavisKahan.OperatorIdeal.ApproximationNumbers.Real.Threshold"
       ],
@@ -567,8 +564,7 @@
         "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank"
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax"
       ],
       "status": "partially-upstreamed",
       "upstream_pr": null,
@@ -631,29 +627,38 @@
       ],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1",
       "provenance_class": "copied (ForMathlib.* helper refs rewritten to TauCeti.*)",
       "direct_dependencies": [
-        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank",
-        "Mathlib.Analysis.InnerProductSpace.Projection.Basic",
-        "Mathlib.LinearAlgebra.Basis.Basic"
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
-        "ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
-        "RoadmapBridge.OperatorTheory"
-      ],
-      "status": "staged-needs-current-validation",
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "October 25: deleted the duplicate Eckart-Young proof and its unused perturbation/rank corollaries. Consumers use singularValue_eq_linearMap_singularValues directly via the existing real view, with no replacement aliases. Both spaces remain finite-dimensional and scalar-generic, with independent universes. Pre-retirement source 6f7249290; accepted Tau Ceti pin efded067c28ffca3483fd731674eb13b42543fbb. The local CLM plural singular-value accessor and paper real-valued view remain separate representation obligations."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample at DKPS 6f7249290",
+      "source_declarations": [
+        "ContinuousLinearMap.approximationNumber_diagOp"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDiagonal",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-number",
+      "provenance_class": "authored in place by Jon Crall and Claude Opus 5; Kitware, Inc., Apache-2.0; accepted mathematical overlap verified without inferring proof descent",
+      "direct_dependencies": [
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDiagonal"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "migration_note": "October 25: removed the unused square-diagonal example. Accepted singularValue_eq_of_pairwise_inner_eq_zero gives the sorted norms of the images of an orthonormal basis, covering the real nonnegative diagonal coefficients of this donor. Matrix.singularValue_toLin_of_ite_val_eq and its tail theorem additionally cover rectangular diagonal maps of unequal dimensions. The accepted module was explicitly built. The separate lp diagonal realization and legacy finite singular-value accessor remain.",
+      "upstream_pr": null
     },
     {
       "source_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples at DKPS 7109db970",
@@ -678,7 +683,7 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "accepted-upstream-local-copy-removed",
-      "migration_note": "October 25: all five example wrappers were retired in favor of canonical rank-cutoff, identity, and star-projection formulas. Two source block-shift cutoff consumers use singularValue_eq_zero_of_rank_le directly. Accepted identity and projection statements cover arbitrary cardinal rank, including infinite-dimensional ranges, and require no completeness. The separate diagonal example remains pending its constructor-scope comparison with accepted FiniteDiagonal.",
+      "migration_note": "October 25: all five example wrappers were retired in favor of canonical rank-cutoff, identity, and star-projection formulas. Two source block-shift cutoff consumers use singularValue_eq_zero_of_rank_le directly. Accepted identity and projection statements cover arbitrary cardinal rank, including infinite-dimensional ranges, and require no completeness. The separate diagonal example was subsequently retired against accepted FiniteDiagonal; the lp diagonal realization remains.",
       "upstream_pr": null
     },
     {
@@ -1600,8 +1605,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
-        "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample"
+        "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues"
       ],
       "status": "staged-needs-current-validation",
       "upstream_pr": null
@@ -2303,7 +2307,6 @@
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction"
       ],
       "blocked_dependencies": [],
@@ -5000,22 +5003,18 @@
       ],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Rank",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-number",
       "provenance_class": "new normed-space proof using the openness of finite rank lower bounds",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
-        "Mathlib.Analysis.Normed.Module.FiniteDimension"
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional",
-        "RoadmapBridge.OperatorTheory"
-      ],
-      "status": "staged-needs-current-validation",
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "October 25: deleted the duplicate finite-dimensional rank-cutoff proof and unused finrank wrapper. The remaining roadmap examples use accepted singularValue_eq_zero_iff_rank_le directly, which retains completeness of the scalar field but drops finite dimensionality of the source. All removed source names above are historical attribution. Pre-retirement source 6f7249290; accepted Tau Ceti pin efded067c28ffca3483fd731674eb13b42543fbb."
     },
     {
       "source_module": "new or refactored directly in ForTauCeti",

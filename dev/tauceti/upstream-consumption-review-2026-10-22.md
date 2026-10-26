@@ -782,7 +782,29 @@ source theorem statements, sign conditions, and incomplete-target scope are
 preserved. Details and provenance are in the contribution census. Papers and
 visualizations remain untouched.
 
-The min–max retirement passed its focused consumer builds (7,698 jobs with
-the two adjusted leaf proofs subsequently accepted in a 7,152-job focused build)
-and the full default build (21,037 jobs), with warnings treated as errors, after
-the respective cache fetches.
+The adjusted trial-space and tangent leaves passed the focused build (7,152 jobs).
+The full default build (21,037 jobs) then accepted all migrated consumers, with
+warnings treated as errors, after the respective cache fetches.
+
+
+### October 25: canonical Eckart–Young, rank and finite-diagonal APIs
+
+The three donor modules `ApproximationNumber.FiniteDimensional`, `.Rank`, and
+`.DiagonalExample` are deleted. Consumers use accepted
+`singularValue_eq_linearMap_singularValues` directly; no local counterpart is
+retained. The unused lower Eckart–Young wrapper in the real-valued core is also
+removed, including its re-export.
+
+The accepted rank characterization drops the donor's source finite-dimensionality
+assumption while retaining scalar completeness. The accepted diagonal formulas
+cover orthogonal basis images and rectangular diagonal maps, subsuming the unused
+square example. Source theorem statements remain unchanged; the roadmap regression
+examples now use canonical APIs. Exact scope/provenance comparisons are in the
+contribution census. Existing real-valued source views and the local plural
+singular-value accessor remain future representation migrations; this checkpoint
+does not call those interfaces canonical or the broader goal complete.
+
+The Eckart–Young/rank retirement passed the focused consumer build (7,644 jobs),
+including explicit compilation of accepted `FiniteDiagonal`, and the full default
+build (21,031 jobs), with warnings treated as errors, after the respective cache
+fetches. The full build also validates removal of the unused core re-export.

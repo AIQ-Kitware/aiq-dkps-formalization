@@ -985,7 +985,51 @@ Pre-retirement source and original Kitware/Jon Crall/OpenAI GPT-5.6 Thinking and
 Claude Opus 5 attribution remain at DKPS `7109db970`. This comparison records
 accepted scope and direct consumption without inferring historical proof descent.
 
-The min–max retirement passed its focused consumer builds (7,698 jobs with
-the two adjusted leaf proofs subsequently accepted in a 7,152-job focused build)
-and the full default build (21,037 jobs), with warnings treated as errors, after
-the respective cache fetches.
+The adjusted trial-space and tangent leaves passed the focused build (7,152 jobs).
+The full default build (21,037 jobs) then accepted all migrated consumers, with
+warnings treated as errors, after the respective cache fetches.
+
+
+### October 25: retire the finite Eckart–Young and rank-cutoff donors
+
+Accepted `ApproximationNumber.EckartYoung` supplies
+`ContinuousLinearMap.singularValue_eq_linearMap_singularValues`, with the same
+scalar-generic finite-dimensional source and target scope and independent
+universes as the donor identification. The proof and its unused auxiliary
+Eckart–Young bounds and corollaries are removed with donor `FiniteDimensional`.
+The accepted module also supplies `LinearMap.abs_singularValues_sub_singularValues_le`;
+the local CLM perturbation wrapper had no live theorem consumers and is deleted.
+The remaining paper, Ky Fan and sandwich consumers use the accepted equation
+directly; no forwarding declaration replaces the retired identification.
+The unused lower-bound wrapper in `ApproximationNumber.Core` and its downstream
+re-export are also removed. The existing real-valued equality used by source
+consumers remains an explicitly unfinished representation obligation.
+
+Accepted `ApproximationNumber.Compact` proves
+`singularValue_eq_zero_iff_rank_le` over a complete nontrivially normed field,
+without requiring a finite-dimensional source or an inner product. It therefore
+strictly subsumes the donor `Rank` proof. That module and its unused finrank
+wrapper are deleted, and the roadmap examples now state and prove the native
+rank characterization and the finite linear-map singular-value cutoff.
+
+The unused donor `DiagonalExample` is also removed. Accepted `ApproximationNumber.FiniteDiagonal` supplies
+`ContinuousLinearMap.singularValue_eq_of_pairwise_inner_eq_zero`, which gives the sorted norms of orthogonal basis images.
+For `diagOp b x`, the images are `x i • b i`; orthogonality and `x i ≥ 0` give
+norms `x i`, so it covers the square donor's antitone nonnegative case.
+`Matrix.singularValue_toLin_of_ite_val_eq` and its vanishing-tail theorem go
+further, covering rectangular diagonal maps of unequal dimensions. The accepted
+module was explicitly compiled. This does not retire the legacy `diagOp` or
+finite singular-value accessor: their consumers are a separate carrier migration.
+The unmerged `lp` diagonal realization and the unmerged infinite-dimensional
+results are retained.
+
+Pre-retirement DKPS source is `6f7249290`, preserving the Kitware Apache-2.0
+license and original Jon Crall, OpenAI GPT-5.6 Thinking and Claude Opus 5
+attribution. Accepted statements were compared at unchanged Tau Ceti pin
+`efded067c28ffca3483fd731674eb13b42543fbb`. This is verified mathematical overlap,
+without asserting a newly established historical proof-descent relationship.
+
+The Eckart–Young/rank retirement passed the focused consumer build (7,644 jobs),
+including explicit compilation of accepted `FiniteDiagonal`, and the full default
+build (21,031 jobs), with warnings treated as errors, after the respective cache
+fetches. The full build also validates removal of the unused core re-export.

@@ -266,8 +266,8 @@ the name is deliberately not "Weyl's inequality" on that account: it bounds the
 *squares*, its constant carries the extra factor `a + â` so the bound degrades
 with the size of the operators, and it needs the auxiliary hypotheses `hA`, `hÂ`
 that the genuine theorem does not.  The sharp form is
-`ContinuousLinearMap.abs_singularValues_sub_singularValues_le`
-(`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean`),
+`LinearMap.abs_singularValues_sub_singularValues_le`
+(`TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung`),
 `|σₙ(T) − σₙ(S)| ≤ ‖T − S‖`, which implies this one but not conversely — dividing
 back out by `σₖ(A) + σₖ(Â)` recovers nothing when the singular values are small.
 This version survives because it is the shape the Gram-side arguments produce. -/

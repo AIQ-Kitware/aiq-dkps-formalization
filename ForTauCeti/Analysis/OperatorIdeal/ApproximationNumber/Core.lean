@@ -8,7 +8,8 @@ module
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import Mathlib.Topology.Algebra.Module.FiniteDimension
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
@@ -155,22 +156,6 @@ theorem approximationSingularValue_comp_le
   have h := ContinuousLinearMap.approximationNumber_comp_comp_le L K R n
   exact_mod_cast h
 
-/-- On finite-dimensional Hilbert spaces, each singular value is bounded by
-the corresponding approximation singular value. This is the real-valued
-adapter for the lower Eckart--Young theorem. -/
-theorem singularValues_le_approximationSingularValue
-    {E₀ : Type vE0} {F₀ : Type vF0}
-    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
-    [FiniteDimensional 𝕜 E₀]
-    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
-    [FiniteDimensional 𝕜 F₀]
-    (A : E₀ →ₗ[𝕜] F₀) (n : ℕ) :
-    A.singularValues n ≤
-      approximationSingularValue n A.toContinuousLinearMap := by
-  have h := ContinuousLinearMap.singularValues_le_approximationNumber
-    A.toContinuousLinearMap n
-  exact_mod_cast h
-
 /-- On finite-dimensional Hilbert spaces, approximation singular values are
 exactly the ordinary singular values. -/
 theorem approximationSingularValue_eq_singularValues
@@ -182,15 +167,10 @@ theorem approximationSingularValue_eq_singularValues
     (A : E₀ →ₗ[𝕜] F₀) (n : ℕ) :
     approximationSingularValue n A.toContinuousLinearMap =
       A.singularValues n := by
-  have hNN : A.toContinuousLinearMap.approximationNumber n =
-      A.singularValues n := by
-    simpa only [← ContinuousLinearMap.toLinearMap_singularValues,
-      LinearMap.coe_toContinuousLinearMap] using
-      (ContinuousLinearMap.approximationNumber_eq_singularValues
-        A.toContinuousLinearMap n)
-  change (A.toContinuousLinearMap.approximationNumber n : ℝ) =
-    A.singularValues n
-  exact hNN
+  change A.toContinuousLinearMap.approximationNumber n = A.singularValues n
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
+    LinearMap.coe_toContinuousLinearMap]
 
 omit [CompleteSpace E] in
 /-- An orthogonal projection does not increase vector norms. -/

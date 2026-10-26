@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 
@@ -197,8 +197,10 @@ theorem kyFanSum_eq_kyFanGauge (k : ℕ) (A : E →ₗ[𝕜] F) :
   rw [kyFanGaugeReal_eq_sum]
   unfold TauCeti.kyFanSum
   rw [Fin.sum_univ_eq_sum_range]
-  exact Finset.sum_congr rfl fun n _ =>
-    (A.toContinuousLinearMap.approximationNumber_eq_singularValues n).symm
+  refine Finset.sum_congr rfl fun n _ => ?_
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
+    LinearMap.coe_toContinuousLinearMap]
 
 /-- **Step 1 of the triangle inequality**: the finite-dimensional case, transported from the
 rectangular Ky Fan norm. -/
