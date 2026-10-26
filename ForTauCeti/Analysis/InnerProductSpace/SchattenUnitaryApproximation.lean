@@ -56,7 +56,7 @@ theorem exists_schatten_finite_unitary_approximation_sequence
       ∀ n (B : E →L[𝕜] E), Commute (U : E →L[𝕜] E) B → Commute (V n : E →L[𝕜] E) B := by
   have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top p hp
     (((U : E →L[𝕜] E) - 1) : E →L[𝕜] E) hU
-  obtain ⟨V, N, hN, hlim, hdom, hcost, hcomm⟩ :=
+  obtain ⟨V, N, hN, hlim, hdom, hcost, _, hcomm⟩ :=
     exists_finite_unitary_approximation_sequence U hcompact
   refine ⟨V, N, hN, hlim, ?_, hcost, hcomm⟩
   apply OperatorIdealFamily.tendsto_gauge_schatten_zero_of_singularValue_le

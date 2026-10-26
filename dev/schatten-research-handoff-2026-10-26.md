@@ -683,3 +683,39 @@ finite acute comparison to arbitrary Hilbert dimension and nonacute
 pairs. Focused build passed (7,072 jobs). Existing finite sharpness
 witnesses remain in `SharpDisplacement` / `SharpDisplacementLimit`;
 the quantitative comparison itself is not a new historical-priority claim.
+
+## Unrestricted Hilbert-space smoothed lower bound and finite-pair attainment
+
+`CharbonnierGlobalLowerBound.sine_smoothedPhaseMinimum_sum_le_transport`
+proves the intrinsic extended sum of the **exact smoothed scalar angle
+minima** is a lower bound for every complex unitary transporter in
+arbitrary Hilbert dimension. No reference, separability, finite-rank,
+finite-cost or block-form hypothesis is imposed. Infinite values are
+included. The finite-cost branch uses the correct Hilbert--Schmidt
+domain. Compact unitary truncation now explicitly gives pointwise
+displacement singular-value domination; the smoothed objective decreases
+termwise. Finite partial angle sums pass to the limit by operator-norm
+continuity, including zero, critical and right angles.
+
+`SmoothedAngleContinuity.continuousOn_smoothedPhaseMinimum_angle`
+proves continuity on the closed principal-angle interval by a fixed
+compact scalar-phase minimization. `weightedPhaseCost_ge_radial_gap`
+and `smoothedPhaseCost_nonneg` justify nonnegativity without excluding
+exceptional angles. `CharbonnierFinite` proves exact finite-sum and
+orthogonal-zero-extension identities for the native infinite cost.
+
+`CharbonnierFiniteRankAttainment.exists_unitary_minimizing_charbonnier_transport_of_finite_rank_projection_sub`
+proves **actual exact attainment against all ambient competitors** when
+the projection difference has finite rank and its crossed defects are
+balanced. It constructs a finite-rank, finite-cost unitary attaining
+the intrinsic angle sum. The source and target subspaces may have
+infinite rank and corank, and the ambient space may be nonseparable.
+A reference-based version is also compiled. Focused build passed
+(7,210 jobs).
+
+This closes the same finite-projection-difference Hilbert-space scope
+as the Schatten result for the smoothed penalty. It does not close
+general infinite-rank Hilbert--Schmidt attainment or all-optimizer
+classification. The targeted literature searches still require a
+theorem-level priority review; formal verification is not historical
+novelty evidence.

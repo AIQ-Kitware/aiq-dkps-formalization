@@ -69,6 +69,20 @@ undefined subtraction of infinite traces occurs. -/
 @[expose] def charbonnierCost (tau : ℝ) (T : E →L[𝕜] F) : ℝ≥0∞ :=
   ∑' n, ENNReal.ofReal (Real.sqrt (tau ^ 2 + (T.singularValue n : ℝ) ^ 2) - tau)
 
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Pointwise singular-value domination decreases the Charbonnier
+spectral cost, for any scale and including infinite sums. -/
+theorem charbonnierCost_le_of_singularValue_le (tau : ℝ) (A B : E →L[𝕜] F)
+    (h : ∀ n, A.singularValue n ≤ B.singularValue n) :
+    A.charbonnierCost tau ≤ B.charbonnierCost tau := by
+  apply ENNReal.tsum_le_tsum
+  intro n
+  apply ENNReal.ofReal_le_ofReal
+  apply sub_le_sub_right
+  apply Real.sqrt_le_sqrt
+  have hn : (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ) := by exact_mod_cast h n
+  nlinarith [NNReal.coe_nonneg (A.singularValue n), NNReal.coe_nonneg (B.singularValue n)]
+
 /-- The Hilbert--Schmidt square is bounded by a finite multiple of the
 Charbonnier trace, with the exact denominator bound from the operator norm. -/
 theorem schatten_two_sq_le_mul_charbonnierCost (tau : ℝ) (hτ : 0 < tau) (T : E →L[𝕜] F) :

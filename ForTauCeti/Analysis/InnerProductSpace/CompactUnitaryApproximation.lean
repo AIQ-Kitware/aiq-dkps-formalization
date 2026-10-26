@@ -110,6 +110,8 @@ theorem exists_finite_unitary_approximation
         (((U : E →L[𝕜] E) - 1) : E →L[𝕜] E).singularValue k) ∧
       (∀ Φ : OperatorIdealFamily.{u, v, v} 𝕜,
         Φ.gauge (1 - (V : E →L[𝕜] E)) ≤ Φ.gauge (1 - (U : E →L[𝕜] E))) ∧
+      (∀ k, (1 - (V : E →L[𝕜] E)).singularValue k ≤
+        (1 - (U : E →L[𝕜] E)).singularValue k) ∧
       ∀ B : E →L[𝕜] E, Commute (U : E →L[𝕜] E) B → Commute (V : E →L[𝕜] E) B := by
   let T : E →L[𝕜] E := (U : E →L[𝕜] E) - 1
   let A := T.modulus
@@ -139,7 +141,7 @@ theorem exists_finite_unitary_approximation
       _ = ‖A (x : E)‖ := (T.norm_modulus_apply (x : E)).symm
       _ ≤ ‖A ∘L Mᗮ.subtypeL‖ * ‖x‖ := (A ∘L Mᗮ.subtypeL).le_opNorm x
       _ ≤ _ := mul_le_mul_of_nonneg_right htail (norm_nonneg x)
-  refine ⟨V, Module.finrank 𝕜 M, hVrank, hVerr.trans hTtail, ?_, hVcost, ?_⟩
+  refine ⟨V, Module.finrank 𝕜 M, hVrank, hVerr.trans hTtail, ?_, hVcost, ?_, ?_⟩
   · intro k
     have hneg : (-(T ∘L Mᗮ.starProjection)).singularValue k =
       (T ∘L Mᗮ.starProjection).singularValue k := by
@@ -152,6 +154,15 @@ theorem exists_finite_unitary_approximation
       _ ≤ T.singularValue k * 1 := by
         gcongr
         exact_mod_cast Mᗮ.starProjection_norm_le
+      _ = _ := mul_one _
+  · intro k
+    rw [hfactor]
+    calc
+      _ ≤ (1 - (U : E →L[𝕜] E)).singularValue k * ‖M.starProjection‖₊ :=
+        ContinuousLinearMap.singularValue_comp_le_right _ M.starProjection k
+      _ ≤ (1 - (U : E →L[𝕜] E)).singularValue k * 1 := by
+        gcongr
+        exact_mod_cast M.starProjection_norm_le
       _ = _ := mul_one _
   · intro B hUB
     have hBA : Commute B A := commute_displacement_modulus U B hUB.symm
@@ -187,10 +198,12 @@ theorem exists_finite_unitary_approximation_sequence
         (((U : E →L[𝕜] E) - 1) : E →L[𝕜] E).singularValue k) ∧
       (∀ n (Φ : OperatorIdealFamily.{u, v, v} 𝕜),
         Φ.gauge (1 - (V n : E →L[𝕜] E)) ≤ Φ.gauge (1 - (U : E →L[𝕜] E))) ∧
+      (∀ n k, (1 - (V n : E →L[𝕜] E)).singularValue k ≤
+        (1 - (U : E →L[𝕜] E)).singularValue k) ∧
       ∀ n (B : E →L[𝕜] E), Commute (U : E →L[𝕜] E) B → Commute (V n : E →L[𝕜] E) B := by
-  choose V N hN hbound hdom hcost hcomm using fun n : ℕ =>
+  choose V N hN hbound hdom hcost hdisp hcomm using fun n : ℕ =>
     exists_finite_unitary_approximation U hcompact (1 / ((n : ℝ) + 1)) (by positivity)
-  refine ⟨V, N, hN, tendsto_iff_norm_sub_tendsto_zero.mpr ?_, hdom, hcost, hcomm⟩
+  refine ⟨V, N, hN, tendsto_iff_norm_sub_tendsto_zero.mpr ?_, hdom, hcost, hdisp, hcomm⟩
   exact squeeze_zero (fun _ => norm_nonneg _) hbound
     (by simpa using (tendsto_one_div_add_atTop_nhds_zero_nat :
       Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (𝓝 0)))

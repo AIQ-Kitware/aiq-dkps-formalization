@@ -18,5 +18,7 @@ public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFiniteRankPa
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFeasibility
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCanonical
 public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierFeasibility
+public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierGlobalLowerBound
+public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierFiniteRankAttainment
 
 /-! # `DavisKahan/InfiniteDimensional` -/
