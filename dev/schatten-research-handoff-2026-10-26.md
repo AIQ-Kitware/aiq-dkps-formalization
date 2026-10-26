@@ -199,3 +199,31 @@ infinite-dimensional Schatten optimum and its attainment remain open.
 A useful proof route to investigate is finite-rank truncation of the
 competing unitary itself, with no increase of its gauge, rather than
 assuming Schatten-norm density of the source-commuting unitary group.
+
+## Compact unitary truncation in arbitrary Hilbert dimension
+
+`FiniteUnitaryTruncation.exists_finite_unitary_truncation` constructs an
+actual ambient unitary equal to the input on a finite invariant subspace
+and identity on its orthogonal complement. Its displacement factors as
+`(I-U) P_M`, has rank at most `dim M`, and decreases every accepted
+operator-ideal gauge. Its operator-norm error is bounded by the discarded
+restriction. The ambient space may be real or complex, nonseparable and
+infinite-dimensional.
+
+`CompactUnitaryApproximation.exists_finite_unitary_approximation` chooses
+`M` as the positive spectral band of the compact displacement modulus.
+It achieves any positive operator-norm tolerance and preserves the
+simultaneous gauge bounds. `exists_finite_unitary_approximation_sequence`
+constructs one convergent sequence of finite-rank unitary perturbations
+working for every operator-ideal family. No eigenbasis for the possibly
+nonseparable kernel is chosen. Focused builds passed (5,192 and 6,370
+jobs respectively), each after a cache fetch.
+
+These are proved infinite-dimensional approximation results, not yet the
+exact infinite-dimensional transport minimum. The approximants need not
+carry the original source projection to the original target: the target
+changes with the approximating unitary. A proof using this route must
+pass the principal-angle cost through that change. Alternatively, an
+ideal-norm approximation commuting with the source would preserve the
+original target after multiplication by a fixed transporter. Both routes
+still need their exact hypotheses and convergence statements discharged.
