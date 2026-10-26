@@ -31,7 +31,7 @@ linearly dependent ones are harmless, contributing restrictions to smaller subsp
 * `ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound`: the
   epsilon form of the min--max characterisation, packaging
   `ContinuousLinearMap.exists_linearIndependent_lowerBound_of_lt_approximationNumber_complex` with
-  its converse `ContinuousLinearMap.le_approximationNumber_of_linearIndependent` into an
+  its converse `ContinuousLinearMap.le_singularValue_of_linearIndependent` into an
   `Iff`.
 
 ## Provenance
@@ -136,16 +136,10 @@ theorem exists_finiteRestrictionApproximationNumber_gt_of_lt
   have hw : LinearIndependent 𝕜 w := by
     simpa only [w] using b.linearIndependent
   have hsNN : s ≤ (T ∘L V.subtypeL).approximationNumber n := by
-    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
-      (T ∘L V.subtypeL) n w hw
-    intro x _ hxNorm
-    have hxV : ((x : V) : E) ∈ V := x.property
-    have hxNormE : ‖((x : V) : E)‖ = 1 := by simpa using hxNorm
-    -- names the application so the norm bound applies to it directly.
-    change s ≤ ‖T ((x : V) : E)‖
-    calc
-      s = s * ‖((x : V) : E)‖ := by rw [hxNormE, mul_one]
-      _ ≤ ‖T ((x : V) : E)‖ := hV ((x : V) : E) hxV
+    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+    apply (T ∘L V.subtypeL).le_singularValue_of_linearIndependent hw
+    intro x _
+    exact hV (x : E) x.property
   exact ⟨v, by simpa only [V] using hrs.trans_le hsNN⟩
 
 /-- **Exact finite-dimensional localization.**  The ambient approximation number is the
@@ -173,7 +167,7 @@ exactly when `T` has a strictly larger uniform lower modulus on some `(n+1)`-dim
 subspace.
 
 The forward direction is the hypothesis and the reverse is
-`ContinuousLinearMap.le_approximationNumber_of_linearIndependent`, so this is the statement
+`ContinuousLinearMap.le_singularValue_of_linearIndependent`, so this is the statement
 in which both halves of the min--max theorem appear together. -/
 theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
     (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r) :
@@ -184,11 +178,8 @@ theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
   refine ⟨h T n hr0, ?_⟩
   rintro ⟨s, hrs, v, hv, hV⟩
   refine hrs.trans_le ?_
-  apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent T n v hv
-  intro x hxV hxNorm
-  calc
-    s = s * ‖x‖ := by rw [hxNorm, mul_one]
-    _ ≤ ‖T x‖ := hV x hxV
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  exact T.le_singularValue_of_linearIndependent hv hV
 
 /-- Every positive tolerance admits a finite source restriction whose approximation number
 is within that tolerance of the ambient one.  This is the exact hypothesis

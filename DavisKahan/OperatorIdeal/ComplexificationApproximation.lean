@@ -305,13 +305,8 @@ theorem approximationNumber_le_complexify
   have hlower := lowerBound_complex_span T v hs0 hV
   have hsNN : s ≤
       (RealComplexification.complexify T).approximationNumber n := by
-    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
-      (RealComplexification.complexify T) n (fun i => ofReal (v i)) hvC
-    intro z hz hnorm
-    change s ≤ ‖RealComplexification.complexify T z‖
-    calc
-      s = s * ‖z‖ := by rw [hnorm, mul_one]
-      _ ≤ ‖RealComplexification.complexify T z‖ := hlower z hz
+    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+    exact (RealComplexification.complexify T).le_singularValue_of_linearIndependent hvC hlower
   have hrsNN : r < (⟨s, hs0⟩ : NNReal) := by
     exact_mod_cast hrs
   exact hrsNN.trans_le hsNN

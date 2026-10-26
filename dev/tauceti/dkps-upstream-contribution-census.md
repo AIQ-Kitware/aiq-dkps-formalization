@@ -940,3 +940,52 @@ on raw universe signatures and full types. Three explicitly declared missing
 solutions remain skipped; no external comparator run or source-completeness
 claim is inferred. The auxiliary local-only name parser still has its recorded
 imported-declaration limitations; it is not a substitute for these compiler checks.
+
+
+### October 25: consume the canonical min–max bounds and concrete formulas
+
+At unchanged Tau Ceti pin `efded067c28ffca3483fd731674eb13b42543fbb`, accepted
+`ApproximationNumber.MinMax` supplies the coercive-subspace lower bound, its
+independent-family and unit-vector variants, the orthogonal-tail upper bound,
+and the exact infimum formula. The zero-based rank convention agrees throughout.
+The coercive lower bound only needs a normed source over a nontrivially normed
+field and a seminormed target; its unit-vector version assumes `RCLike` without
+requiring an inner product. The orthogonal-tail formula requires a complete
+inner-product source but allows an incomplete seminormed target. These cover the
+respective donor hypotheses without adding compactness or finite-dimensionality.
+
+The three local lower-bound wrappers and their proofs are removed. Homogeneous
+consumer arguments now apply `le_singularValue_of_linearIndependent` directly;
+the tangent residual estimate uses `le_singularValue_of_lt_rank_of_unit_norm`
+on its selected span. The compact eigenvalue consumer uses
+`singularValue_le_nnnorm_comp_orthogonal` directly. Public source-facing theorem
+statements, including trial-space and tangent spectral mapping, are unchanged.
+The unused projection-form infimum and its kernel/rank support are retired as an
+accepted mathematical overlap; this does not claim that every auxiliary helper
+has a separately named upstream counterpart. The source-dimension cutoff is
+provided by accepted `singularValue_eq_zero_of_rank_domain_le`.
+
+The duplicate `ApproximationNumber.Examples` module is removed. Accepted
+`singularValue_id` and `Submodule.singularValue_starProjection` give the full
+cardinal-rank profiles, including infinite rank and zero spaces, without
+completeness. Both source block-shift cutoff consumers use accepted
+`singularValue_eq_zero_of_rank_le`, converting their finite-rank bound directly.
+No forwarding aliases replace the retired examples. The separate diagonal example remains, with its obsolete module-migration
+commentary removed; comparison with accepted `FiniteDiagonal` is a follow-up.
+
+The donor `MinMax` module retains only the rectangular projection/restriction
+norm identity, its closed-unit-ball formula, and the spectral-band estimate.
+Exact accepted equivalents of these three declarations were not identified;
+they are preserved rather than deleted merely because other min–max results
+are accepted. Their statements and the spectral-band sign hypothesis remain.
+The real approximation-number view is still used by unmerged conclusions; its
+complete carrier migration is a separate remaining obligation.
+
+Pre-retirement source and original Kitware/Jon Crall/OpenAI GPT-5.6 Thinking and
+Claude Opus 5 attribution remain at DKPS `7109db970`. This comparison records
+accepted scope and direct consumption without inferring historical proof descent.
+
+The min–max retirement passed its focused consumer builds (7,698 jobs with
+the two adjusted leaf proofs subsequently accepted in a 7,152-job focused build)
+and the full default build (21,037 jobs), with warnings treated as errors, after
+the respective cache fetches.

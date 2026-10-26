@@ -762,3 +762,27 @@ on raw universe signatures and full types. Three explicitly declared missing
 solutions remain skipped; no external comparator run or source-completeness
 claim is inferred. The auxiliary local-only name parser still has its recorded
 imported-declaration limitations; it is not a substitute for these compiler checks.
+
+
+### October 25: canonical min–max consumption
+
+The duplicated coercive-subspace and independent-family lower bounds and the
+projection-form infimum proof are removed in favor of accepted
+`ApproximationNumber.MinMax`. Consumers apply native singular-value bounds,
+using homogeneous coercivity when already available and the native unit-vector
+variant for the tangent residual argument. The compact eigenvalue upper bound
+now uses the restriction-form native tail estimate directly.
+
+The duplicate identity/projection `Examples` module is deleted. Both source
+block-shift cutoff consumers use the native rank cutoff. Native identity and
+projection formulas cover arbitrary cardinal rank, including infinite rank and
+zero spaces, with no completeness hypothesis. No compatibility aliases are added.
+Three unmerged projection consequences remain in the donor `MinMax` module;
+source theorem statements, sign conditions, and incomplete-target scope are
+preserved. Details and provenance are in the contribution census. Papers and
+visualizations remain untouched.
+
+The min–max retirement passed its focused consumer builds (7,698 jobs with
+the two adjusted leaf proofs subsequently accepted in a 7,152-job focused build)
+and the full default build (21,037 jobs), with warnings treated as errors, after
+the respective cache fetches.

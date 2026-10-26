@@ -13,7 +13,7 @@ public import Mathlib.LinearAlgebra.Dimension.RankNullity
 /-!
 # The min--max theorem for approximation numbers
 
-`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMax.lean` proves the easy half of
+Accepted `TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax` proves the easy half of
 the Courant--Fischer characterisation: a uniform lower modulus on a test subspace of rank
 greater than `n` bounds `aₙ(T)` from below.  This module proves the **converse**, which is
 the half that carries the content:
@@ -107,7 +107,7 @@ variable {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [Complet
 `n`th approximation number of `T`, then `T` is bounded below by some `s > r` on a subspace
 spanned by `n + 1` independent vectors.
 
-This is the converse of `ContinuousLinearMap.le_approximationNumber_of_linearIndependent`,
+This is the converse of `ContinuousLinearMap.le_singularValue_of_linearIndependent`,
 and the two together characterise `aₙ(T)` as a supremum of lower moduli.  No compactness or
 finite-dimensionality is assumed. -/
 theorem exists_linearIndependent_lowerBound_of_lt_approximationNumber_complex

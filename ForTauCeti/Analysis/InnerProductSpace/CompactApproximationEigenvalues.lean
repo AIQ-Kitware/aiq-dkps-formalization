@@ -40,7 +40,7 @@ set `S ⊆ ℝ`.
 * **Lower half.**  On `eigenSpan A (Set.Ici μ)` the operator is bounded below by
   `μ`: decompose a vector along the (mutually orthogonal) eigenspaces and use
   Pythagoras.  Min--max
-  (`ContinuousLinearMap.le_approximationNumber_of_lt_rank`) turns that into
+  (`ContinuousLinearMap.le_singularValue_of_lt_rank`) turns that into
   `μ ≤ aₙ(A)` whenever the span has rank more than `n`.  Run backwards against
   `aₙ(A) → 0` it also *proves* the span is finite-dimensional, so no separate
   Riesz-type argument is needed.
@@ -248,9 +248,10 @@ has rank more than `n` forces `t ≤ aₙ(A)`. -/
 theorem le_approximationNumber_of_lt_rank_eigenSpan (hAs : IsSelfAdjoint A)
     {S : Set ℝ} {t : ℝ} (ht : 0 ≤ t) (hS : ∀ s ∈ S, t ≤ s) {n : ℕ}
     (hn : (n : Cardinal) < Module.rank 𝕜 (eigenSpan A S)) :
-    t ≤ A.approximationNumber n :=
-  ContinuousLinearMap.le_approximationNumber_of_lt_rank A n (eigenSpan A S) hn
-    fun x => le_norm_apply_of_mem_eigenSpan hAs ht hS x.2
+    t ≤ A.approximationNumber n := by
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  exact A.le_singularValue_of_lt_rank hn fun x hx =>
+    le_norm_apply_of_mem_eigenSpan hAs ht hS hx
 
 /-- **A band bounded away from `0` spans a finite-dimensional subspace.**  The
 approximation numbers of a compact operator tend to `0`, so some `aₙ(A) < t`; by
@@ -389,11 +390,12 @@ theorem approximationNumber_le_of_eigenSpan_cover (hAc : IsCompactOperator A)
       exact RCLike.norm_ofReal _
     rw [hnormν, abs_of_nonneg hnonneg]
     exact hle
-  calc A.approximationNumber n
-      ≤ ‖A ∘L (Wᗮ).starProjection‖ :=
-        A.approximationNumber_le_norm_comp_starProjection_orthogonal n W hn
-    _ = ‖A ∘L (Wᗮ).subtypeL‖ := A.norm_comp_starProjection_orthogonal_eq_norm_comp_subtypeL W
-    _ ≤ c := norm_comp_subtypeL_orthogonal_le hAc hAs hinv hc hbd
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  have hW : Module.rank 𝕜 W ≤ (n : Cardinal) := by
+    rw [← Module.finrank_eq_rank' 𝕜 W]
+    exact_mod_cast hn
+  exact (NNReal.coe_le_coe.mpr (A.singularValue_le_nnnorm_comp_orthogonal hW)).trans
+    (norm_comp_subtypeL_orthogonal_le hAc hAs hinv hc hbd)
 
 /-! ## Discreteness of the eigenvalues above a positive threshold -/
 

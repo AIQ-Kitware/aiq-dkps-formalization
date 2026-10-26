@@ -321,9 +321,9 @@ theorem lt_approximationNumber_competitor_of_lt_direct
     rintro x ⟨i, rfl⟩
     exact (f i).2
   have hs₁NN : (⟨s₁, hs₁0⟩ : NNReal) ≤ B.approximationNumber n := by
-    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
-      B n v hv
-    intro x hxM hxNorm
+    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+    apply B.le_singularValue_of_linearIndependent hv
+    intro x hxM
     have hxL : x ∈ L := hMle hxM
     have hCbound : ‖C x‖ ≤ c₁ * ‖x‖ :=
       CosineDisplacementData.cosine_norm_le_on_low_range D hc₂0.le hc₂c₁ x hxL
@@ -334,8 +334,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
       nlinarith only [hBsq0, hmul]
     have hlower : s₁ * ‖x‖ ≤ ‖B x‖ :=
       (sq_le_sq₀ (mul_nonneg hs₁0 (norm_nonneg x)) (norm_nonneg _)).1 hBsq
-    change s₁ ≤ ‖B x‖
-    simpa only [hxNorm, mul_one] using hlower
+    exact hlower
   have hs₁le : s₁ ≤ (B.approximationNumber n : ℝ) := hs₁NN
   exact hrs₁.trans_le hs₁le
 
@@ -455,8 +454,9 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
             (sq_lt_sq₀ hc10 hcs0).2 hc1Cs
           nlinarith [hcsSq]
         have htNN : (⟨t, ht0⟩ : NNReal) <= S.approximationNumber n := by
-          apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent S n v hv
-          intro x hxM hxNorm
+          rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+          apply S.le_singularValue_of_linearIndependent hv
+          intro x hxM
           have hxL : x ∈ L := hMle hxM
           have hCbound : ‖C x‖ <= c1 * ‖x‖ :=
             CosineDisplacementData.cosine_norm_le_on_low_range D hc0 hcC1 x hxL
@@ -468,8 +468,7 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
             nlinarith
           have hlower : t * ‖x‖ <= ‖S x‖ :=
             (sq_le_sq₀ (mul_nonneg ht0 (norm_nonneg x)) (norm_nonneg _)).1 hsq
-          change t <= ‖S x‖
-          simpa only [hxNorm, mul_one] using hlower
+          exact hlower
         have htLeS : t <= s := htNN
         exact (not_le_of_gt hsT) htLeS
 
@@ -650,8 +649,9 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
         dsimp only [ca] at hc1Ca
         nlinarith
       have hrNN : (⟨r, hr0⟩ : NNReal) <= A.approximationNumber n := by
-        apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent A n v hv
-        intro x hxM hxNorm
+        rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+        apply A.le_singularValue_of_linearIndependent hv
+        intro x hxM
         have hxL : x ∈ L := hMle hxM
         have hCbound : ‖C x‖ <= c1 * ‖x‖ :=
           CosineDisplacementData.cosine_norm_le_on_low_range D hc0 hcC1 x hxL
@@ -666,8 +666,7 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
           nlinarith
         have hlower : r * ‖x‖ <= ‖A x‖ :=
           (sq_le_sq₀ (mul_nonneg hr0 (norm_nonneg x)) (norm_nonneg _)).1 hsq
-        change r <= ‖A x‖
-        simpa only [hxNorm, mul_one] using hlower
+        exact hlower
       have hrLeA : r <= a := hrNN
       exact ((not_le_of_gt haR) hrLeA).elim
   simpa only [ca, cs, a, s] using hcaCs

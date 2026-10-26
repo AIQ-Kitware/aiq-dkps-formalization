@@ -8,7 +8,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Majorization
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationReal
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Projection
 
 public section
 
@@ -193,18 +193,26 @@ by zeros. -/
 theorem approximationNumber_upperBlockShift_eq_zero_of_le [FiniteDimensional 𝕜 H]
     (A : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
     (alpha : ℝ) {n : ℕ} (hn : finrank 𝕜 (Pᗮ : Submodule 𝕜 H) ≤ n) :
-    (upperBlockShift A P alpha).approximationNumber n = 0 :=
-  ContinuousLinearMap.approximationNumber_eq_zero_of_finrank_range_le _
-    ((Submodule.finrank_mono (range_upperBlockShift_le A P alpha)).trans hn)
+    (upperBlockShift A P alpha).approximationNumber n = 0 := by
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  have hdim := (Submodule.finrank_mono (range_upperBlockShift_le A P alpha)).trans hn
+  have hrank : (upperBlockShift A P alpha).rank ≤ (n : Cardinal) := by
+    rw [LinearMap.rank, ← Module.finrank_eq_rank']
+    exact_mod_cast hdim
+  rw [ContinuousLinearMap.singularValue_eq_zero_of_rank_le hrank, NNReal.coe_zero]
 
 omit [CompleteSpace H] in
 /-- **Extending the lower compression by zero only appends zeros.** -/
 theorem approximationNumber_lowerBlockShift_eq_zero_of_le [FiniteDimensional 𝕜 H]
     (A : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
     (alpha delta : ℝ) {n : ℕ} (hn : finrank 𝕜 P ≤ n) :
-    (lowerBlockShift A P alpha delta).approximationNumber n = 0 :=
-  ContinuousLinearMap.approximationNumber_eq_zero_of_finrank_range_le _
-    ((Submodule.finrank_mono (range_lowerBlockShift_le A P alpha delta)).trans hn)
+    (lowerBlockShift A P alpha delta).approximationNumber n = 0 := by
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  have hdim := (Submodule.finrank_mono (range_lowerBlockShift_le A P alpha delta)).trans hn
+  have hrank : (lowerBlockShift A P alpha delta).rank ≤ (n : Cardinal) := by
+    rw [LinearMap.rank, ← Module.finrank_eq_rank']
+    exact_mod_cast hdim
+  rw [ContinuousLinearMap.singularValue_eq_zero_of_rank_le hrank, NNReal.coe_zero]
 
 /-! ### 3. Cosine blocks and principal angles -/
 

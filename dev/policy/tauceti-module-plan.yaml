@@ -110,7 +110,6 @@ topics:
   - Analysis.OperatorIdeal.ApproximationNumber.Core
   - Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample
   - Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
-  - Analysis.OperatorIdeal.ApproximationNumber.Examples
   - Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
   - Analysis.OperatorIdeal.ApproximationNumber.GramSquare
   - Analysis.OperatorIdeal.ApproximationNumber.Pinching
@@ -464,7 +463,6 @@ rungs:
   - Analysis.Normed.Operator.Restriction
   - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
   - Analysis.OperatorIdeal.ApproximationNumber.Basic
-  - Analysis.OperatorIdeal.ApproximationNumber.Examples
   - Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
   - Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
   - Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers

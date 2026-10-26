@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import Mathlib.Topology.Algebra.Module.FiniteDimension
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
 /-!
@@ -362,25 +362,18 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
         hDnorm.eventually (Iio_mem_nhds (sub_pos.mpr hcs))
       filter_upwards [hsmall] with i hi
       have hcNN : c ≤ (K ∘L P i).approximationNumber n := by
-        apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
-          (K ∘L P i) n v hv
-        intro x hxV hxNorm
-        have hDx : ‖D i ⟨x, hxV⟩‖ ≤ ‖D i‖ := by
-          have h := (D i).le_opNorm ⟨x, hxV⟩
-          change ‖D i ⟨x, hxV⟩‖ ≤ ‖D i‖ * ‖x‖ at h
-          rw [hxNorm, mul_one] at h
-          exact h
-        have hDapply : D i ⟨x, hxV⟩ = K (P i x) - K x := by
-          rfl
+        rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+        apply (K ∘L P i).le_singularValue_of_linearIndependent hv
+        intro x hxV
+        have hDx : ‖D i ⟨x, hxV⟩‖ ≤ ‖D i‖ * ‖x‖ := (D i).le_opNorm ⟨x, hxV⟩
+        have hDapply : D i ⟨x, hxV⟩ = K (P i x) - K x := rfl
         have htri : ‖K x‖ ≤ ‖K (P i x)‖ + ‖D i ⟨x, hxV⟩‖ := by
           rw [hDapply]
           have h := norm_sub_le (K (P i x)) (K (P i x) - K x)
           (convert h using 1; abel_nf)
-        have hsx : s ≤ ‖K x‖ := by
-          have := hV x hxV
-          simpa only [hxNorm, mul_one] using this
-        change c ≤ ‖K (P i x)‖
-        linarith
+        have hsx := hV x hxV
+        change c * ‖x‖ ≤ ‖K (P i x)‖
+        nlinarith [mul_le_mul_of_nonneg_right hi.le (norm_nonneg x)]
       have hcReal : c ≤ approximationSingularValue n (K ∘L P i) := hcNN
       exact hrc.trans_le hcReal
     · have hrneg : r < 0 := lt_of_not_ge hr0

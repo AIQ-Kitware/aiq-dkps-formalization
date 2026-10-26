@@ -648,13 +648,38 @@
         "ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "RoadmapBridge.OperatorTheory"
       ],
       "status": "staged-needs-current-validation",
       "upstream_pr": null,
       "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples at DKPS 7109db970",
+      "source_declarations": [
+        "ContinuousLinearMap.approximationNumber_eq_zero_of_finrank_range_le",
+        "ContinuousLinearMap.approximationNumber_id",
+        "ContinuousLinearMap.approximationNumber_id_of_finrank_le",
+        "ContinuousLinearMap.approximationNumber_starProjection",
+        "ContinuousLinearMap.approximationNumber_starProjection_of_finrank_le"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Projection",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-number",
+      "provenance_class": "authored in place by Jon Crall and Claude Opus 5; Kitware, Inc., Apache-2.0; retired after accepted-scope comparison, without inferring proof descent",
+      "direct_dependencies": [
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Projection"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "migration_note": "October 25: all five example wrappers were retired in favor of canonical rank-cutoff, identity, and star-projection formulas. Two source block-shift cutoff consumers use singularValue_eq_zero_of_rank_le directly. Accepted identity and projection statements cover arbitrary cardinal rank, including infinite-dimensional ranges, and require no completeness. The separate diagonal example remains pending its constructor-scope comparison with accepted FiniteDiagonal.",
+      "upstream_pr": null
     },
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumberMinMax",
@@ -669,14 +694,20 @@
       "roadmap_target": "Part B / PR 1",
       "provenance_class": "copied",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
-        "TauCeti.Analysis.InnerProductSpace.CourantFischer"
+        "Mathlib.Analysis.InnerProductSpace.Adjoint",
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper"
       ],
+      "maintained_declarations": [
+        "ContinuousLinearMap.norm_comp_starProjection_orthogonal_eq_norm_comp_subtypeL",
+        "ContinuousLinearMap.norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall",
+        "ContinuousLinearMap.approximationNumber_le_of_spectral_band"
+      ],
+      "migration_note": "October 25: removed the donor coercive-subspace and independent-family lower bounds, orthogonal-tail formula and its unused support, and source-dimension cutoff wrapper. Consumers apply accepted singularValue min-max laws directly; no forwarding declarations replace them. The three unmerged projection consequences listed here remain. Accepted API scope checked at efded067c28ffca3483fd731674eb13b42543fbb; pre-retirement donor 7109db970. Original source names above remain historical provenance, not a list of current exports.",
       "status": "staged",
       "upstream_pr": null
     },

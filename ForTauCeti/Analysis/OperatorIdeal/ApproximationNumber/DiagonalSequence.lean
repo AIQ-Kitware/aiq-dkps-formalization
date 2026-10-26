@@ -8,12 +8,13 @@ Staged for Tau Ceti, roadmap topic T09.  Formalized by Claude Opus 5
 -/
 module
 
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.Normed.Lp.lpHolder
 public import Mathlib.Analysis.InnerProductSpace.l2Space
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 
 /-!
 # The infinite-dimensional diagonal acceptance example
@@ -274,8 +275,9 @@ theorem le_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤
     (hc : ∀ i, ‖c i‖ ≤ K) (hanti : Antitone fun i => ‖c i‖) (n : ℕ) :
     ‖c n‖ ≤ (diagOpLp c hK hc).approximationNumber n := by
   classical
-  refine ContinuousLinearMap.le_approximationNumber_of_linearIndependent _ n
-    (fun i : Fin (n + 1) =>
+  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  refine ContinuousLinearMap.le_singularValue_of_linearIndependent _
+    (v := fun i : Fin (n + 1) =>
       (lp.single 2 (i : ℕ) (1 : 𝕜) : lp (fun _ : ℕ => 𝕜) 2)) ?_ ?_
   · -- The basis vectors are linearly independent: they have disjoint supports.
     refine linearIndependent_iff'.2 fun s g hg j hj => ?_
@@ -288,7 +290,7 @@ theorem le_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤
       have hne : (k : ℕ) ≠ (j : ℕ) := fun h => hkj (Fin.ext h)
       simp [lp.single_apply, hne]
     · intro h; exact absurd hj h
-  · intro x hx hx1
+  · intro x hx
     have hpt : ∀ i, ‖(((‖c n‖ : 𝕜)) • x) i‖ ≤ ‖(diagOpLp c hK hc x) i‖ := by
       intro i
       rw [lp.coeFn_smul]
@@ -299,8 +301,7 @@ theorem le_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤
       · rw [apply_eq_zero_of_mem_span_single hx (Nat.lt_of_not_le hi)]
         simp
     have hnorm := lp.norm_mono (p := 2) (by norm_num) hpt
-    rw [norm_smul, RCLike.norm_ofReal, abs_of_nonneg (norm_nonneg (c n)), hx1,
-      mul_one] at hnorm
+    rw [norm_smul, RCLike.norm_ofReal, abs_of_nonneg (norm_nonneg (c n))] at hnorm
     exact hnorm
 
 /-- **The approximation numbers of a diagonal operator are its coefficients.**

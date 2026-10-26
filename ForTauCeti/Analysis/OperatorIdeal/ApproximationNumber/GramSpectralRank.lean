@@ -209,8 +209,9 @@ theorem rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
     exact hg.map' P.range.subtype
       (LinearMap.ker_eq_bot.mpr P.range.injective_subtype)
   have hrle : r ≤ X.approximationNumber n := by
-    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent X n v hv
-    intro x hxspan hxnorm
+    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+    apply X.le_singularValue_of_linearIndependent hv
+    intro x hxspan
     have hspan_le : Submodule.span ℂ (Set.range v) ≤ P.range := by
       apply Submodule.span_le.mpr
       rintro y ⟨i, rfl⟩
@@ -268,7 +269,7 @@ theorem rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
       simpa only [mul_pow] using hlowerSq
     have : r * ‖x‖ ≤ ‖X x‖ :=
       (sq_le_sq₀ (mul_nonneg hr0 (norm_nonneg x)) (norm_nonneg _)).1 hlowerSq'
-    simpa only [hxnorm, mul_one] using this
+    exact this
   exact (not_le_of_gt hr) hrle
 
 end

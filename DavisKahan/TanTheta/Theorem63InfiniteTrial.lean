@@ -147,21 +147,21 @@ theorem exists_finiteDimensional_le_lt_approximationSingularValue
       have hcomp : (F.subtype : F →ₗ[ℂ] H) ∘ v' = (Z.subtype : Z →ₗ[ℂ] H) ∘ v := rfl
       rw [hcomp]
       exact hmapped
-    refine ContinuousLinearMap.le_approximationNumber_of_linearIndependent
-      (K ∘L F.subtypeL) n v' hv' ?_
-    intro x _ hxnorm
+    change s ≤ (K ∘L F.subtypeL).approximationNumber n
+    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+    apply (K ∘L F.subtypeL).le_singularValue_of_linearIndependent hv'
+    intro x _
     obtain ⟨ξ, hξ, hξx⟩ := (Submodule.mem_map).mp x.2
     have hξx' : ((ξ : Z) : H) = ((x : F) : H) := hξx
-    have hnormξ : ‖ξ‖ = 1 := by
+    have hnormξ : ‖ξ‖ = ‖x‖ := by
       calc ‖ξ‖ = ‖((ξ : Z) : H)‖ := rfl
         _ = ‖((x : F) : H)‖ := by rw [hξx']
         _ = ‖x‖ := rfl
-        _ = 1 := hxnorm
     have happ : (K ∘L Z.subtypeL) ξ = (K ∘L F.subtypeL) x := by
       show K ((ξ : Z) : H) = K ((x : F) : H)
       rw [hξx']
     have h := hmod ξ hξ
-    rw [hnormξ, mul_one, happ] at h
+    rw [hnormξ, happ] at h
     exact h
   exact lt_of_lt_of_le hcs hbound
 

@@ -811,8 +811,12 @@ theorem doubleAngleTangent_approximationNumber_le
   have hlower :
       DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber n) - η ≤
         (doubleAngleTangentOperator X hcontractive).approximationNumber n := by
-    apply ContinuousLinearMap.le_approximationNumber_of_linearIndependent
-      (doubleAngleTangentOperator X hcontractive) n right hlin
+    rw [(doubleAngleTangentOperator X hcontractive).approximationNumber_eq_singularValue_toReal n]
+    apply (doubleAngleTangentOperator X hcontractive).le_singularValue_of_lt_rank_of_unit_norm
+      (V := Submodule.span ℂ (Set.range right)) (by
+        have := FiniteDimensional.span_of_finite ℂ (Set.finite_range right)
+        rw [← Module.finrank_eq_rank, finrank_span_eq_card hlin, Fintype.card_fin]
+        exact_mod_cast n.lt_succ_self)
     intro z hz hznorm
     -- Expand `z` in the orthonormal selected family.  The exact diagonal model
     -- has minimum coefficient `doubleAngleTangent (a_n X)`; the accumulated

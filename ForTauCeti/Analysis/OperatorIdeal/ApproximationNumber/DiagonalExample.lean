@@ -11,30 +11,11 @@ public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 /-!
 # The diagonal acceptance example
 
-Staged for Tau Ceti, roadmap topic T09.  This is one entry of the **acceptance
-list** in `TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md` (Part A): the
-diagonal operator whose approximation numbers are its entries.  The rest of that list is
-in `ApproximationNumber/Examples.lean`, and this one is separated from it for a
-reason that is temporary and worth stating plainly.
-
-## Why this is not in `Examples.lean`
-
-`Examples.lean` is a `module` in the new Lean module system, and a `module` may
-only import other `module`s.  `TauCeti.diagOp` and `TauCeti.singularValues_diagOp`
-live in `ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean`,
-which has not been converted yet — nor has anything in its import closure that
-mentions `diagOp`.  The reverse direction is allowed, so a plain file like this
-one can import both halves.
-
-**This file should be deleted and its theorem moved into `Examples.lean` as soon
-as `UnitarilyInvariantSeminorm.lean` becomes a `module`.**  It exists to deliver an
-acceptance example rather than to leave it blocked on a migration, and it has no
-other reason to be separate.
-
-Note that `Examples.lean`'s own "what is not here yet" note gives a *different*
-and now-stale reason for the diagonal example's absence — that it "needs the
-singular values of a diagonal map".  That prerequisite exists; the module
-boundary is what remains.
+The diagonal operator's approximation numbers are its entries. The former local
+identity and projection examples were retired in favor of accepted
+`ApproximationNumber.MinMax` and `.Projection`; their deletion does not remove
+this diagonal result. Its finite-dimensional carrier and explicit basis are
+retained here.
 
 ## Scope: this is the square case
 
