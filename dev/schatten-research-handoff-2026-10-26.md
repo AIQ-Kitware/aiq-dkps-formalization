@@ -651,3 +651,16 @@ defects are balanced. This is **not** a minimum-attainment theorem, and
 does not require trace-class projection difference. Focused builds
 passed (5,754 and 7,110 jobs). These domain facts are classical analytic
 consequences; historical novelty is not asserted.
+
+`CharbonnierLimit.lowerSemicontinuous_charbonnierCost` proves joint
+lower semicontinuity in the scale and operator norm. At zero scale,
+`charbonnierCost_zero` identifies the cost with the accepted nuclear
+gauge. `tendsto_charbonnierCost_zero` proves convergence to that gauge
+along **every eventually nonnegative scale tending to zero**, for any
+bounded operator, including operators whose nuclear gauge is infinite.
+The proof uses lower semicontinuity and the nuclear upper bound, not a
+trace-class domination assumption. Thus an operator can have finite
+cost at every positive scale while its costs diverge as the scale
+vanishes. Focused build passed (5,756 jobs). This is an analytic limit
+theorem for the objective; it does not yet justify exchanging a limit
+with minimization over an infinite-dimensional transport fiber.
