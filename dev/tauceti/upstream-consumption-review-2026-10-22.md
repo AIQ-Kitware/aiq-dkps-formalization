@@ -1205,3 +1205,28 @@ The historical source-module names remain in provenance. Current-tree and Git-hi
 when its basic foundations moved to accepted `InnerProductSpace.Modulus`.
 Its stale live staging/checklist entries are now retired; historical source
 names remain as provenance. Papers and visualizations are untouched.
+
+Validation for `5942b93a5`: the full default build passed (21,037 jobs), and
+`Challenge` plus `DavisKahan.Audits.All` passed (20,811 jobs), each following
+`lake exe cache get`. All 42 implemented comparator targets matched on universe
+signatures and full types; the three declared absent solutions were skipped.
+No external comparator result is inferred. After deleting 32 obsolete local
+build outputs for the two retired `OperatorModulus` paths, the full default
+build passed again (21,037 jobs). Compiler/linter warnings are treated as errors.
+
+The local-only declaration-name parser still reports its 23 imported-native /
+historical-map findings; no aliases were added to silence that parser. The
+untracked `ProbeModulus.lean` and the workshop export under
+`papers/dk_formalization_workshop/ForTauCeti/` still contain legacy imports;
+they are outside the maintained Lake build and are preserved under the user's
+untracked-file and paper boundary. The three original untracked files remain
+unchanged.
+
+Next concrete migration: remove the remaining coordinate-change forwarding
+lemmas `SameApproximationSingularValues.comp_isometricEquiv` and
+`of_isometricEquiv_comp` from source `Norms/SingularValueTransport.lean` by
+using accepted `sameSingularValues_comp_linearIsometryEquiv` in their callers.
+The real approximation-number / Ky Fan views also remain a representation
+migration obligation. Preserve the genuinely broader incomplete-target
+comparison theorems in `ApproximationNumber/SameSequence.lean`; the complete-
+target Douglas route is not a scope-preserving replacement for them.
