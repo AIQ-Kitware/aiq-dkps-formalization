@@ -1294,3 +1294,12 @@ historical novelty. Pre-change local source is DKPS `21ecd9818`; its authorship
 and licenses remain in place. The focused normalization/singular-value
 transport build passed (6,776 jobs), following the cache fetch. Papers,
 visualizations and the three original untracked files are untouched.
+
+The full default build passed (21,029 jobs), with warnings treated as errors,
+and was immediately committed as `be6357a2e`. Explicit `Challenge` and
+`DavisKahan.Audits.All` compilation passed (20,801 jobs), following the cache
+fetch. The signature preflight matched all 42 implemented comparator targets
+on universe signatures and full types; three declared absent solutions were
+skipped. The auxiliary local-only declaration-name parser still reports its
+23 existing findings, including accepted imported declarations it does not
+index; no broad static-gate or external comparator pass is claimed.

@@ -1002,4 +1002,11 @@ Fan-family record and its real views/factories remain explicit carrier debt,
 as does the local approximation-number sequence relation. No new forwarding
 API is introduced and the preceding removal of ideal-completeness assumptions
 is preserved. Focused compilation passed (6,776 jobs) after the cache fetch;
-the full default and explicit audit/comparator validations follow separately.
+the full default build then passed (21,029 jobs), with warnings treated as
+errors, and was immediately committed as `be6357a2e`. Explicit `Challenge` and
+`DavisKahan.Audits.All` compilation passed (20,801 jobs), following the cache
+fetch. The signature preflight matched all 42 implemented targets on universe
+signatures and full types, with three declared absent solutions skipped.
+The auxiliary local-only name parser retains its 23 existing findings,
+including imported-declaration limitations. No broad static-gate or external
+comparator pass is inferred.
