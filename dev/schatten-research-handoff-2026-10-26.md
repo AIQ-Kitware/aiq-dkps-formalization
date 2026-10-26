@@ -915,3 +915,39 @@ many positive angles can need modification, so a separate infinite
 phase construction remains necessary. General smoothed attainment,
 all-optimizer classification, and unrestricted infinite real matching
 remain open beyond the scopes explicitly proved above.
+
+## Canonical restriction and the actual infinite cutoff tail
+
+`LinearIsometryEquiv.exists_restriction_of_reducing` constructs the
+actual unitary restriction and inverse on any orthogonally complemented
+reducing subspace. It needs neither finite dimension nor ambient
+completeness. In infinite dimension, reduction rather than mere
+invariance is essential to surjectivity; the proof projects the ambient
+inverse image and uses commutation with the subspace projection.
+
+`CanonicalRestriction.nonacuteDirectRotation_diagonal_compressions_isPositive`
+proves operator positivity of both canonical diagonal compressions over
+both fields. `nonacuteDirectRotation_restriction_eq_canonicalPolarFactor_of_acute`
+identifies every actual unitary restriction with the canonical polar
+factor of the restricted acute pair. Its hypotheses permit infinite
+restricted dimension and arbitrary ambient right-angle completions.
+`exists_canonical_restriction_of_acute_reducing_pair` constructs this
+restriction with its actual forward and inverse actions.
+
+`CanonicalCutoffTail.exists_canonical_tail_of_finite_sine_cutoff` now
+closes the previously pending **geometric** tail obligation. For compact
+projection difference and `0<c<1`, the actual complement of the finite
+sine sector carries a canonical unitary restriction, and its actual
+restricted projection gap is at most `c`. Both fields and nonseparable
+fixed directions are included. Completeness supplies the restricted
+orthogonal projections; these are not extra mathematical hypotheses.
+Focused builds passed (5,174 and 7,096 jobs).
+
+The remaining general Schatten attainment gap is now the **objective**
+identity on that subcritical infinite tail. A promising route avoids
+building a complete principal-plane enumeration: construct compatible
+finite reducing unitary truncations, use the existing finite canonical
+cost identity on each actual restricted pair, and pass both inequalities
+using lower semicontinuity and nonnegative spectral partial sums. All
+historical-novelty claims remain separate from these classical
+restriction and polar-uniqueness lemmas.

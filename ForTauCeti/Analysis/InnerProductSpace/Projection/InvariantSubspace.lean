@@ -7,6 +7,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 public import TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle
+public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 
 /-!
@@ -33,6 +34,14 @@ namespace Submodule
 open scoped InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+
+/-- A closed ambient subspace has an orthogonal projection after
+intersection with any complete subspace carrier. -/
+theorem hasOrthogonalProjection_comap_subtype_of_complete
+    (K Z : Submodule 𝕜 E) [K.HasOrthogonalProjection] [CompleteSpace Z] :
+    (K.comap Z.subtype).HasOrthogonalProjection := by
+  apply hasOrthogonalProjection_iff_isClosed.mpr
+  exact K.isClosed_of_hasOrthogonalProjection.preimage continuous_subtype_val
 
 /-- Restricting an ambient subspace transport to an invariant carrier
 transports the two actual intersections on that carrier. -/
@@ -113,6 +122,31 @@ theorem sinThetaMap_comap_subtype_apply_of_invariant
     rw [L.starProjection_comap_subtype_apply_of_invariant Z hL]
   rw [sinThetaMap_apply, sinThetaMap_apply, horth,
     K.starProjection_comap_subtype_apply_of_invariant Z hK]
+
+/-- The gap of the actual restricted pair is bounded by the operator
+norm of the ambient projection difference on that carrier. The carrier
+and ambient space may both be infinite-dimensional. -/
+theorem projectionGap_comap_subtype_le_norm_projection_sub_comp
+    (K L Z : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [(K.comap Z.subtype).HasOrthogonalProjection]
+    [(L.comap Z.subtype).HasOrthogonalProjection]
+    (hK : ∀ x ∈ Z, K.starProjection x ∈ Z)
+    (hL : ∀ x ∈ Z, L.starProjection x ∈ Z) :
+    (K.comap Z.subtype).projectionGap (L.comap Z.subtype) ≤
+      ‖(K.starProjection - L.starProjection) ∘L Z.subtypeL‖ := by
+  rw [projectionGap_def]
+  apply ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _)
+  intro x
+  have hnorm :
+      ‖((K.comap Z.subtype).starProjection - (L.comap Z.subtype).starProjection) x‖ =
+        ‖(K.starProjection - L.starProjection) (x : E)‖ := by
+    change ‖(((K.comap Z.subtype).starProjection x : Z) : E) -
+      (((L.comap Z.subtype).starProjection x : Z) : E)‖ = ‖_‖
+    rw [K.starProjection_comap_subtype_apply_of_invariant Z hK,
+      L.starProjection_comap_subtype_apply_of_invariant Z hL]
+    rfl
+  rw [hnorm]
+  exact ((K.starProjection - L.starProjection) ∘L Z.subtypeL).le_opNorm x
 
 /-- Restriction to a subspace invariant under the target projection cannot
 increase the directed gap. The source projection need not preserve it. -/
