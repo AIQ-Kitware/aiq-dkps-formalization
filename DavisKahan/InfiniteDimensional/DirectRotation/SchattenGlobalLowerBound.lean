@@ -45,20 +45,20 @@ theorem continuous_sine_phaseMinimum_singularValue (p : ℝ) (hp : 0 ≤ p) (j :
   exact ENNReal.continuous_ofReal.comp h
 
 /-- **The unrestricted Hilbert-space Schatten lower bound.** For
-`1<p<2`, every complex unitary transport dominates the intrinsic ambient
+`1<=p<2`, every complex unitary transport dominates the intrinsic ambient
 principal-angle phase sum. No rank, separability, compactness or
 ideal-membership assumption is imposed on the subspaces or competitor. -/
 theorem sine_phaseMinimum_sum_le_schatten_transport
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
-    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (hp1 : 1 ≤ p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L) :
     (∑' j, ENNReal.ofReal (phaseMinimum p.toReal
       (Real.arcsin ((K.sinThetaMap L).singularValue j : ℝ)))) ≤
-        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1).gauge
           (1 - (U : E →L[ℂ] E)) ^ p.toReal := by
-  let Φ := OperatorIdealFamily.schatten ℂ p.toReal hp1.le
-  have hp0 : 0 < p.toReal := zero_lt_one.trans hp1
+  let Φ := OperatorIdealFamily.schatten ℂ p.toReal hp1
+  have hp0 : 0 < p.toReal := zero_lt_one.trans_le hp1
   by_cases hU : Φ.gauge (1 - (U : E →L[ℂ] E)) = ∞
   · change _ ≤ Φ.gauge (1 - (U : E →L[ℂ] E)) ^ p.toReal
     rw [hU, ENNReal.top_rpow_of_pos hp0]
@@ -67,7 +67,7 @@ theorem sine_phaseMinimum_sum_le_schatten_transport
     rw [← neg_sub 1 (U : E →L[ℂ] E), Φ.gauge_neg]
     exact hU
   obtain ⟨V, N, hN, hlim, _, hcost, _⟩ :=
-    exists_schatten_finite_unitary_approximation_sequence p.toReal hp1.le U hU'
+    exists_schatten_finite_unitary_approximation_sequence p.toReal hp1 U hU'
   let S (A : E →L[ℂ] E) := (1 - A * K.starProjection * star A) * K.starProjection
   have hS : Continuous S := by dsimp only [S]; fun_prop
   have hsin (W : E ≃ₗᵢ[ℂ] E) : K.sinThetaMap (K.map W.toLinearMap) = S (W : E →L[ℂ] E) := by

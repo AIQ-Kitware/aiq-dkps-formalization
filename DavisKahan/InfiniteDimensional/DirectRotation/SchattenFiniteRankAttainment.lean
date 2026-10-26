@@ -89,23 +89,23 @@ and minimizes over all complex unitary competitors, of any displacement
 rank or Schatten cost. The subspaces may have infinite rank and corank. -/
 theorem exists_unitary_minimizing_schatten_transport_of_finite_rank_reference
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
-    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (hp1 : 1 ≤ p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (R : E ≃ₗᵢ[ℂ] E) (hRmap : K.map R.toLinearMap = L)
     (n : ℕ) (hR : (1 - R.toLinearMap).rank ≤ n) :
     ∃ U : E ≃ₗᵢ[ℂ] E, K.map U.toLinearMap = L ∧
       (∃ m : ℕ, (1 - U.toLinearMap).rank ≤ m) ∧
-      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1).gauge
           (1 - (U : E →L[ℂ] E)) ^ p.toReal =
         (∑' j, ENNReal.ofReal (phaseMinimum p.toReal
           (Real.arcsin ((K.sinThetaMap L).singularValue j : ℝ)))) ∧
       ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
-        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
-          (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E)) := by
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1).gauge (1 - (U : E →L[ℂ] E)) ≤
+          (OperatorIdealFamily.schatten ℂ p.toReal hp1).gauge (1 - (T : E →L[ℂ] E)) := by
   obtain ⟨U, hmap, hfinite, hcost⟩ :=
-    exists_finite_rank_transport_attaining_sine_phaseMinimum_sum p.toReal hp1.le K L R hRmap n hR
+    exists_finite_rank_transport_attaining_sine_phaseMinimum_sum p.toReal hp1 K L R hRmap n hR
   refine ⟨U, hmap, hfinite, hcost, fun T hT => ?_⟩
-  apply (ENNReal.rpow_le_rpow_iff (zero_lt_one.trans hp1)).mp
+  apply (ENNReal.rpow_le_rpow_iff (zero_lt_one.trans_le hp1)).mp
   rw [hcost]
   exact sine_phaseMinimum_sum_le_schatten_transport p hp hp1 hp2 K L T hT
 

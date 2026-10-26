@@ -415,3 +415,37 @@ still open: the present exact-attainment theorem retains its finite-rank
 reference hypothesis. Defect-index balance, construction of a general
 Schatten attainer, and its finite-rank relation to a direct rotation for
 `1<p<2` have not been promoted to Lean theorems.
+
+## Nuclear endpoint in Hilbert space
+
+The general lower-bound theorem and finite-rank-reference exact minimum
+now cover **`1<=p<2`**, including `p=1`. The finite-section proof uses the
+already-compiled unrestricted finite nuclear theorem at the endpoint;
+the Hilbert limiting proof is unchanged and does not differentiate a
+nuclear norm.
+
+`SchattenNuclearEndpoint.phaseMinimum_one_sum_eq_twice_nuclear_sine`
+identifies the full ambient endpoint value as
+`2 * SchattenGauge_1((I-P_L)P_K)`, including infinite values.
+`twice_nuclear_sine_le_transport` proves this lower bound for every
+complex Hilbert-space unitary transporter, with no finite-rank reference.
+`exists_unitary_minimizing_nuclear_transport_of_finite_rank_reference`
+attains exactly that value by a finite-rank unitary whenever a finite-rank
+feasible reference exists; its comparison includes every ambient
+competitor. Focused endpoint build passed (7,378 jobs).
+
+The exact minimum for general Schatten-class pairs, all infinite-dimensional
+optimizer classifications, and feasibility characterized by defect-index
+balance remain beyond these theorems. In particular, a proof with a
+finite-rank **reference transporter** must not be advertised as covering
+every pair whose projection difference merely belongs to a Schatten ideal.
+
+Primary-source novelty cross-check: Andruchow--Larotonda--Recht,
+[Finsler geometry and actions of the p-Schatten unitary groups](https://arxiv.org/abs/0808.2274)
+(2008), studies rectifiable-distance geometry and minimal exponential
+curves, with the abstract's principal theorem assuming even positive
+integer exponents. This is a different objective from the present
+displacement `||I-U||_p`; the comparison is not evidence of historical
+priority. The full theorem-level predecessor audit remains necessary.
+The classical density, finite-section and zero-extension lemmas are not
+claimed as novel mathematics independently of the transport theory.

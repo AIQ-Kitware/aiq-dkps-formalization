@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 -/
 module
 
-public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalAttainment
+public import DavisKahan.FiniteDimensional.DirectRotation.SchattenNuclearEndpoint
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteTransport
 
 /-!
@@ -32,13 +32,13 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteS
 finite-rank complex unitary transporter, without a prescribed block form. -/
 theorem sine_phaseMinimum_sum_le_schatten_finite_rank_transport
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
-    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (hp1 : 1 ≤ p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (n : ℕ) (hU : (1 - U.toLinearMap).rank ≤ n) :
     (∑' j, ENNReal.ofReal (phaseMinimum p.toReal
       (Real.arcsin ((K.sinThetaMap L).singularValue j : ℝ)))) ≤
-        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1).gauge
           (1 - (U : E →L[ℂ] E)) ^ p.toReal := by
   obtain ⟨M, hM, _, V, _, hlocal, hK, hL, heq, hdisp⟩ :=
     K.exists_finite_transport_section L ⊥ U hmap n hU
@@ -47,18 +47,30 @@ theorem sine_phaseMinimum_sum_le_schatten_finite_rank_transport
   let L₀ := L.comap M.subtype
   rw [Submodule.tsum_sine_penalty_eq_principalAngle_sum_of_finite_core K L M hK hL heq
     (fun t => ENNReal.ofReal (phaseMinimum p.toReal t))
-    (by rw [phaseMinimum_zero_angle p.toReal hp1.le, ENNReal.ofReal_zero]),
+    (by rw [phaseMinimum_zero_angle p.toReal hp1, ENNReal.ofReal_zero]),
     hdisp, OperatorIdealFamily.gauge_orthogonal_extension,
     OperatorIdealFamily.gauge_schatten_rpow_eq_ofReal_finite p hp]
   have hnonneg (i : Fin (Module.finrank ℂ K₀)) :
       0 ≤ phaseMinimum p.toReal (K₀.principalAngles L₀ i) :=
-    phaseMinimum_nonneg _ _ hp1.le
+    phaseMinimum_nonneg _ _ hp1
       ⟨K₀.principalAngles_nonneg L₀ i, K₀.principalAngles_le_pi_div_two L₀ i⟩
   rw [← ENNReal.ofReal_sum_of_nonneg (fun i _ => hnonneg i)]
   apply ENNReal.ofReal_le_ofReal
-  have h := sum_phaseMinimum_le_schatten_transport_complex p hp hp1 hp2 K₀ L₀
-    (Unitary.linearIsometryEquiv.symm V)
-    (by simpa only [MulEquiv.apply_symm_apply] using hlocal)
-  exact h
+  rcases lt_or_eq_of_le hp1 with hpstrict | hpeq
+  · exact sum_phaseMinimum_le_schatten_transport_complex p hp hpstrict hp2 K₀ L₀
+      (Unitary.linearIsometryEquiv.symm V)
+      (by simpa only [MulEquiv.apply_symm_apply] using hlocal)
+  · have hpEq : p = 1 := (ENNReal.toReal_eq_one_iff p).mp hpeq.symm
+    subst p
+    have hdim := V.toLinearEquiv.finrank_map_eq K₀
+    rw [hlocal] at hdim
+    have hlin : (1 - (V : M →L[ℂ] M)).toLinearMap = LinearMap.id - V.toLinearMap := by
+      ext x
+      rfl
+    rw [hlin]
+    simp only [ENNReal.toReal_one, Real.rpow_one]
+    simp_rw [phaseMinimum_one _ (K₀.principalAngles_nonneg L₀ _)
+      (K₀.principalAngles_le_pi_div_two L₀ _)]
+    exact sum_sine_le_nuclear_transport_complex K₀ L₀ hdim.symm V hlocal
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition

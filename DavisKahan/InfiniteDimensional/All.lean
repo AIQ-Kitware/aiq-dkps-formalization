@@ -14,6 +14,6 @@ public import DavisKahan.InfiniteDimensional.TanTheta.All
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.All
 public import DavisKahan.InfiniteDimensional.DoubleAngle
 public import DavisKahan.InfiniteDimensional.DoubleAngleSpectrum
-public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFiniteRankAttainment
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenNuclearEndpoint
 
 /-! # `DavisKahan/InfiniteDimensional` -/
