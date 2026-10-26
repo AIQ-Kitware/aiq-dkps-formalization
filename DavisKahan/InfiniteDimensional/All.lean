@@ -22,5 +22,6 @@ public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierGlobalLow
 public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierFiniteRankAttainment
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCommutingCorrection
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFiniteCorrection
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCanonicalTrace
 
 /-! # `DavisKahan/InfiniteDimensional` -/

@@ -98,7 +98,9 @@ private theorem commute_displacement_modulus (U : E ≃ₗᵢ[𝕜] E) (B : E �
 
 /-- Every compact perturbation of identity in the unitary group admits
 a finite-rank unitary approximation at any positive tolerance, with no
-increase of its displacement in any accepted operator-ideal gauge. -/
+increase of its displacement in any accepted operator-ideal gauge.
+The actual finite support reduces every self-adjoint operator commuting
+with the displacement modulus, even if it does not commute with the unitary. -/
 theorem exists_finite_unitary_approximation
     (U : E ≃ₗᵢ[𝕜] E)
     (hcompact : IsCompactOperator (((U : E →L[𝕜] E) - 1) : E →L[𝕜] E))
@@ -112,7 +114,13 @@ theorem exists_finite_unitary_approximation
         Φ.gauge (1 - (V : E →L[𝕜] E)) ≤ Φ.gauge (1 - (U : E →L[𝕜] E))) ∧
       (∀ k, (1 - (V : E →L[𝕜] E)).singularValue k ≤
         (1 - (U : E →L[𝕜] E)).singularValue k) ∧
-      ∀ B : E →L[𝕜] E, Commute (U : E →L[𝕜] E) B → Commute (V : E →L[𝕜] E) B := by
+      (∀ B : E →L[𝕜] E, Commute (U : E →L[𝕜] E) B → Commute (V : E →L[𝕜] E) B) ∧
+      ∃ M : Submodule 𝕜 E, FiniteDimensional 𝕜 M ∧
+        (∀ x ∈ M, U x ∈ M) ∧
+        (∀ x ∈ M, V x = U x) ∧ (∀ x ∈ Mᗮ, V x = x) ∧
+        ∀ B : E →L[𝕜] E, IsSelfAdjoint B →
+          Commute B (((U : E →L[𝕜] E) - 1) : E →L[𝕜] E).modulus →
+            M.IsReducing B.toLinearMap := by
   let T : E →L[𝕜] E := (U : E →L[𝕜] E) - 1
   let A := T.modulus
   have hAc : IsCompactOperator A := by
@@ -129,7 +137,7 @@ theorem exists_finite_unitary_approximation
   let M := eigenSpan A (Ici ε)
   have : FiniteDimensional 𝕜 M := finiteDimensional_eigenSpan hAc hAs hε (fun _ hs => hs)
   have hUM : ∀ x ∈ M, U x ∈ M := eigenSpan_invariant_of_commute A _ hUA _
-  obtain ⟨V, _, _, hfactor, herror, hVrank, hVerr, hVcost⟩ :=
+  obtain ⟨V, hVM, hVperp, hfactor, herror, hVrank, hVerr, hVcost⟩ :=
     exists_finite_unitary_truncation U M hUM
   have htail : ‖A ∘L Mᗮ.subtypeL‖ ≤ ε :=
     norm_comp_orthogonal_eigenSpan_le hAc hAs hApos hε.le (fun _ hs => hs.le)
@@ -141,7 +149,7 @@ theorem exists_finite_unitary_approximation
       _ = ‖A (x : E)‖ := (T.norm_modulus_apply (x : E)).symm
       _ ≤ ‖A ∘L Mᗮ.subtypeL‖ * ‖x‖ := (A ∘L Mᗮ.subtypeL).le_opNorm x
       _ ≤ _ := mul_le_mul_of_nonneg_right htail (norm_nonneg x)
-  refine ⟨V, Module.finrank 𝕜 M, hVrank, hVerr.trans hTtail, ?_, hVcost, ?_, ?_⟩
+  refine ⟨V, Module.finrank 𝕜 M, hVrank, hVerr.trans hTtail, ?_, hVcost, ?_, ?_, ?_⟩
   · intro k
     have hneg : (-(T ∘L Mᗮ.starProjection)).singularValue k =
       (T ∘L Mᗮ.starProjection).singularValue k := by
@@ -184,6 +192,10 @@ theorem exists_finite_unitary_approximation
     change Commute ((1 - (U : E →L[𝕜] E)) ∘L M.starProjection) B at hpoly
     rw [← hfactor] at hpoly
     simpa only [sub_sub_cancel] using (Commute.one_left B).sub_left hpoly
+  · refine ⟨M, inferInstance, hUM, hVM, hVperp, ?_⟩
+    intro B hB hBA
+    apply (hB.isSymmetric.isReducing_iff_mem_invtSubmodule M).mpr
+    exact eigenSpan_invariant_of_commute A B hBA _
 
 /-- Compact unitary perturbations are operator-norm limits of finite-rank
 unitary perturbations, with every displacement gauge bounded by the
@@ -201,7 +213,7 @@ theorem exists_finite_unitary_approximation_sequence
       (∀ n k, (1 - (V n : E →L[𝕜] E)).singularValue k ≤
         (1 - (U : E →L[𝕜] E)).singularValue k) ∧
       ∀ n (B : E →L[𝕜] E), Commute (U : E →L[𝕜] E) B → Commute (V n : E →L[𝕜] E) B := by
-  choose V N hN hbound hdom hcost hdisp hcomm using fun n : ℕ =>
+  choose V N hN hbound hdom hcost hdisp hcomm hsupp using fun n : ℕ =>
     exists_finite_unitary_approximation U hcompact (1 / ((n : ℝ) + 1)) (by positivity)
   refine ⟨V, N, hN, tendsto_iff_norm_sub_tendsto_zero.mpr ?_, hdom, hcost, hdisp, hcomm⟩
   exact squeeze_zero (fun _ => norm_nonneg _) hbound

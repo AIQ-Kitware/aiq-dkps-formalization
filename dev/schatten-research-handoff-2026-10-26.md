@@ -951,3 +951,36 @@ cost identity on each actual restricted pair, and pass both inequalities
 using lower semicontinuity and nonnegative spectral partial sums. All
 historical-novelty claims remain separate from these classical
 restriction and polar-uniqueness lemmas.
+
+## Exact canonical spectral cost in infinite rank
+
+`schatten_nonacuteDirectRotation_rpow_eq_canonical_sine_sum` now proves
+that the native Schatten displacement power of a completed canonical
+rotation is exactly
+
+`∑' j, ENNReal.ofReal (phasePower p.toReal (arcsin (SV_j (K.sinThetaMap L))) 0)`.
+
+The hypotheses are: complex complete Hilbert space of arbitrary dimension,
+finite exponent `p>=1`, compact projection difference, uniform acuteness,
+and an actual crossed-defect completion. Schatten membership is **not**
+assumed: both sides may be infinite. The theorem does not itself assert
+canonical optimality below two. The focused build passed (7,396 jobs).
+
+The proof uses `exists_finite_canonical_approximation`, whose finite
+supports reduce **both original projections** and retain the actual
+canonical rotation. The key commutation is between the source projection
+and the displacement **modulus**, rather than the rotation. The native
+finite-section cost theorem is
+`schatten_canonical_restriction_rpow_eq_sine_sum`; the passage to limits is
+`OperatorIdealFamily.gauge_schatten_rpow_eq_tsum_of_dominated_approximation`.
+The latter includes divergent costs and requires explicit domination
+of both approximating costs. It is not an unjustified exchange of an
+infinite sum and a norm limit.
+
+The next proof obligation is now scalar: on a tail of gap at most
+`sin (criticalAngle p)`, replace each canonical phase cost by its exact
+`phaseMinimum`. Then combine the already compiled actual cost/angle
+splittings and finite-block attainer to obtain unrestricted infinite-rank
+attainment at `1<p<2`. The nuclear endpoint still requires a separate
+infinite modification construction. No historical novelty claim is
+made for the classical canonical spectral cost identity.

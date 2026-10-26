@@ -148,6 +148,24 @@ theorem projectionGap_comap_subtype_le_norm_projection_sub_comp
   rw [hnorm]
   exact ((K.starProjection - L.starProjection) ∘L Z.subtypeL).le_opNorm x
 
+/-- Restriction to a common invariant carrier cannot increase the
+projection gap, in either finite or infinite dimension. -/
+theorem projectionGap_comap_subtype_le_of_invariant
+    (K L Z : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [(K.comap Z.subtype).HasOrthogonalProjection]
+    [(L.comap Z.subtype).HasOrthogonalProjection]
+    (hK : ∀ x ∈ Z, K.starProjection x ∈ Z)
+    (hL : ∀ x ∈ Z, L.starProjection x ∈ Z) :
+    (K.comap Z.subtype).projectionGap (L.comap Z.subtype) ≤ K.projectionGap L := by
+  calc
+    _ ≤ ‖(K.starProjection - L.starProjection) ∘L Z.subtypeL‖ :=
+      K.projectionGap_comap_subtype_le_norm_projection_sub_comp L Z hK hL
+    _ ≤ ‖K.starProjection - L.starProjection‖ * ‖Z.subtypeL‖ :=
+      ContinuousLinearMap.opNorm_comp_le _ _
+    _ ≤ ‖K.starProjection - L.starProjection‖ * 1 :=
+      mul_le_mul_of_nonneg_left Z.norm_subtypeL_le (norm_nonneg _)
+    _ = K.projectionGap L := by rw [mul_one, projectionGap_def]
+
 /-- Restriction to a subspace invariant under the target projection cannot
 increase the directed gap. The source projection need not preserve it. -/
 theorem directedProjectionGap_comap_subtype_le_of_invariant

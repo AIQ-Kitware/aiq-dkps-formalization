@@ -44,6 +44,46 @@ theorem starProjection_eq_on_orthogonal_of_transport
   rw [hproj, hinv]
   exact (hfix (K.starProjection x) (hK.orthogonal_mem_invtSubmodule hx)).symm
 
+/-- Truncating a unitary on a common reducing finite subspace truncates
+the transported directed sine by the same orthogonal projection. -/
+theorem sinThetaMap_map_truncation_eq_comp_starProjection
+    (K L M : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [FiniteDimensional 𝕜 M]
+    (U V : E ≃ₗᵢ[𝕜] E) (hmap : K.map U.toLinearMap = L)
+    (hUM : ∀ x ∈ M, U x ∈ M)
+    (hK : M.IsReducing K.starProjection.toLinearMap)
+    (hL : M.IsReducing L.starProjection.toLinearMap)
+    (hV : ∀ x ∈ M, V x = U x) (hfix : ∀ x ∈ Mᗮ, V x = x) :
+    K.sinThetaMap (K.map V.toLinearMap) = (K.sinThetaMap L) ∘L M.starProjection := by
+  let L' := K.map V.toLinearMap
+  obtain ⟨W, hW, _, _⟩ := U.exists_restriction_of_finite_invariant M hUM
+  have hWV (x : M) : (W x : E) = V x := (hW x).trans (hV x x.property).symm
+  have hlocal := K.map_comap_subtype_of_isometry_restriction L M U W hmap hW
+  have hlocal' := K.map_comap_subtype_of_isometry_restriction L' M V W rfl hWV
+  have hpair : L'.comap M.subtype = L.comap M.subtype := hlocal'.symm.trans hlocal
+  have hL' : M.IsReducing L'.starProjection.toLinearMap := by
+    apply (L'.starProjection_isSymmetric.isReducing_iff_mem_invtSubmodule M).mpr
+    intro x hx
+    exact K.starProjection_map_mem_of_isometry_restriction M V W hWV
+      hK.mem_invtSubmodule x hx
+  have heq := K.starProjection_eq_on_orthogonal_of_transport L' M V rfl hK hfix
+  have hext := K.sinThetaMap_eq_orthogonal_extension L' M hK hL' heq
+  have hrestricted : (K.comap M.subtype).sinThetaMap (L'.comap M.subtype) =
+      (K.comap M.subtype).sinThetaMap (L.comap M.subtype) := by simp only [hpair]
+  rw [hrestricted] at hext
+  rw [hext]
+  symm
+  apply (ContinuousLinearMap.eq_orthogonal_extension_iff _ _ _ _).mpr
+  constructor
+  · intro x
+    change K.sinThetaMap L (M.starProjection (x : E)) = _
+    rw [M.starProjection_eq_self_iff.mpr x.property]
+    exact (K.sinThetaMap_comap_subtype_apply_of_invariant L M
+      hK.mem_invtSubmodule hL.mem_invtSubmodule x).symm
+  · intro x hx
+    change K.sinThetaMap L (M.starProjection x) = 0
+    rw [M.starProjection_apply_eq_zero_iff.mpr hx, map_zero]
+
 /-- Every finite-rank unitary subspace transport has a finite-dimensional
 section containing any prescribed finite core. The section carries the
 actual restricted transport and the full ambient displacement spectrum. -/
