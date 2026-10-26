@@ -129,7 +129,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_real
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+    ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
@@ -217,9 +218,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
           (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ≤
         2 * N.gauge R := by
   let R0 : E →L[ℝ] E := R ∘L V.subtypeL.adjoint
-  have hsameR : SameApproximationSingularSequence R0 R :=
+  have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
     sameApproximationSingularValues_extendDomainByZero V R
-  have htransport := hsameR.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
   have htwo : ‖(2 : ℝ)‖ = 2 := by norm_num
@@ -228,7 +229,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
           (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ≤
         kyFanApproximationGauge k ((2 : ℝ) • R0) := by
     intro k
-    rw [kyFanApproximationGauge_smul, htwo, hsameR.kyFanApproximationGauge_eq k]
+    erw [kyFanApproximationGauge_smul, htwo, (show kyFanApproximationGauge k _ =
+      kyFanApproximationGauge k _ from
+      hsameR.kyFanGaugeReal_eq k)]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_real hA B hB hVdom hres
       hδ hgap k
   have hMem2 : N.Mem ((2 : ℝ) • R0) := by
@@ -245,7 +248,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
 /-- The real directed endpoint restated at the **printed** separation
 hypothesis: the exact block has real spectrum inside `[β,α]` and the
 complementary block has real spectrum outside `]β-δ, α+δ[`. -/
-theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_symmetricNorming_real
+theorem
+  sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_symmetricNorming_real
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
@@ -260,7 +264,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExter
       δ * N.gauge
           (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ≤
         2 * N.gauge R :=
-  sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real N hA B hB hVdom hres hδ
+  sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real N hA B hB hVdom
+    hres hδ
     (FormBoundedSylvesterGap.intervalExterior hβα hgap) hRmem
 
 /-! ### The same two estimates at an arbitrary reducing subspace, over `ℝ`
@@ -307,7 +312,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+    ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
@@ -392,9 +398,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
           (sinTwoThetaIdealBlock U V) ≤
         2 * N.gauge R := by
   let R0 : E →L[ℝ] E := R ∘L V.subtypeL.adjoint
-  have hsameR : SameApproximationSingularSequence R0 R :=
+  have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
     sameApproximationSingularValues_extendDomainByZero V R
-  have htransport := hsameR.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
   have htwo : ‖(2 : ℝ)‖ = 2 := by norm_num
@@ -403,7 +409,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
           (sinTwoThetaIdealBlock U V) ≤
         kyFanApproximationGauge k ((2 : ℝ) • R0) := by
     intro k
-    rw [kyFanApproximationGauge_smul, htwo, hsameR.kyFanApproximationGauge_eq k]
+    erw [kyFanApproximationGauge_smul, htwo, (show kyFanApproximationGauge k _ =
+      kyFanApproximationGauge k _ from
+      hsameR.kyFanGaugeReal_eq k)]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_real
       hA hred hVdom hres hδ hgap k
   have hMem2 : N.Mem ((2 : ℝ) • R0) := by

@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
@@ -34,179 +35,20 @@ variable {E : Type vE} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-/-- Operators between possibly different Hilbert spaces have the same complete
-singular-value sequence.  This is the relation used literally in the paper.
-
-It is `ContinuousLinearMap.HasSameApproximationNumbers`, staged in
-`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SameSequence.lean`; the abbreviation
-keeps the paper's name for the source layer. -/
-abbrev SameApproximationSingularSequence
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ : Type vE1} {F₁ : Type vF1}
-    {E₂ : Type vE2} {F₂ : Type vF2}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
-    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
-    (A : E₁ →L[𝕜] F₁) (B : E₂ →L[𝕜] F₂) : Prop :=
-  A.HasSameApproximationNumbers B
-
-namespace SameApproximationSingularSequence
-
-/-- Reflexivity.  This is the cross-space relation -- unlike the same-space version later in
-the file, the two operators may live between *different* spaces, which is why the binders are
-so long. -/
-@[refl]
-theorem refl
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E : Type vE} {F : Type vF}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) : SameApproximationSingularSequence A A :=
-  ContinuousLinearMap.HasSameApproximationNumbers.refl A
-
-/-- Symmetry, swapping two independently-typed pairs of spaces. -/
-@[symm]
-theorem symm
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ : Type vE1} {F₁ : Type vF1}
-    {E₂ : Type vE2} {F₂ : Type vF2}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
-    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
-    {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) :
-    SameApproximationSingularSequence B A :=
-  ContinuousLinearMap.HasSameApproximationNumbers.symm h
-
-/-- Transitivity, across three independently-typed pairs of spaces. -/
-@[trans]
-theorem trans
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ : Type vE1} {F₁ : Type vF1}
-    {E₂ : Type vE2} {F₂ : Type vF2}
-    {E₃ : Type vE3} {F₃ : Type vF3}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
-    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
-    [NormedAddCommGroup E₃] [InnerProductSpace 𝕜 E₃] [CompleteSpace E₃]
-    [NormedAddCommGroup F₃] [InnerProductSpace 𝕜 F₃] [CompleteSpace F₃]
-    {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂} {C : E₃ →L[𝕜] F₃}
-    (hAB : SameApproximationSingularSequence A B)
-    (hBC : SameApproximationSingularSequence B C) :
-    SameApproximationSingularSequence A C :=
-  ContinuousLinearMap.HasSameApproximationNumbers.trans hAB hBC
-
-/-- Equal complete singular data gives equal operator norms. -/
-theorem opNorm_eq
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ : Type vE1} {F₁ : Type vF1}
-    {E₂ : Type vE2} {F₂ : Type vF2}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
-    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
-    {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) : ‖A‖ = ‖B‖ :=
-  ContinuousLinearMap.HasSameApproximationNumbers.norm_eq h
-
-/-- Equal complete singular data gives equal finite Ky Fan sums. -/
-theorem kyFanApproximationGauge_eq
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E₁ : Type vE1} {F₁ : Type vF1}
-    {E₂ : Type vE2} {F₂ : Type vF2}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
-    [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
-    {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) (k : ℕ) :
-    kyFanApproximationGauge k A = kyFanApproximationGauge k B :=
-  ContinuousLinearMap.HasSameApproximationNumbers.kyFanGaugeReal_eq h k
-
-end SameApproximationSingularSequence
-
-/-- Two-sided composition with isometric equivalences never increases an
-approximation number.  Only `‖U‖₊ ≤ 1` is used, so no nontriviality
-assumption on the coordinate spaces is required. -/
-private theorem approximationNumber_comp_isometricEquiv_le
-    {E₁ : Type vE1} {F₁ : Type vF1}
-    {E₂ : Type vE2} {F₂ : Type vF2}
-    [NormedAddCommGroup E₁] [NormedSpace 𝕜 E₁]
-    [NormedAddCommGroup F₁] [NormedSpace 𝕜 F₁]
-    [NormedAddCommGroup E₂] [NormedSpace 𝕜 E₂]
-    [NormedAddCommGroup F₂] [NormedSpace 𝕜 F₂]
-    (U : F₁ ≃ₗᵢ[𝕜] F₂) (V : E₂ ≃ₗᵢ[𝕜] E₁) (A : E₁ →L[𝕜] F₁) (n : ℕ) :
-    (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-        V.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber n
-      ≤ A.approximationNumber n := by
-  have hU : ‖U.toContinuousLinearEquiv.toContinuousLinearMap‖ ≤ 1 :=
-    ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by simp
-  have hV : ‖V.toContinuousLinearEquiv.toContinuousLinearMap‖ ≤ 1 :=
-    ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by simp
-  calc
-    (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-          V.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber n
-        ≤ ‖U.toContinuousLinearEquiv.toContinuousLinearMap‖ *
-            A.approximationNumber n *
-            ‖V.toContinuousLinearEquiv.toContinuousLinearMap‖ :=
-      ContinuousLinearMap.approximationNumber_comp_comp_le _ _ _ n
-    _ ≤ 1 * A.approximationNumber n * 1 := by
-      gcongr <;>
-        simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
-    _ = A.approximationNumber n := by rw [one_mul, mul_one]
-
-/-- Two-sided composition with isometric equivalences preserves every
-approximation number. -/
-private theorem approximationNumber_comp_isometricEquiv_eq
-    {E₁ : Type vE1} {F₁ : Type vF1}
-    {E₂ : Type vE2} {F₂ : Type vF2}
-    [NormedAddCommGroup E₁] [NormedSpace 𝕜 E₁]
-    [NormedAddCommGroup F₁] [NormedSpace 𝕜 F₁]
-    [NormedAddCommGroup E₂] [NormedSpace 𝕜 E₂]
-    [NormedAddCommGroup F₂] [NormedSpace 𝕜 F₂]
-    (U : F₁ ≃ₗᵢ[𝕜] F₂) (V : E₂ ≃ₗᵢ[𝕜] E₁) (A : E₁ →L[𝕜] F₁) (n : ℕ) :
-    (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-        V.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber n
-      = A.approximationNumber n := by
-  refine le_antisymm (approximationNumber_comp_isometricEquiv_le U V A n) ?_
-  have hfac :
-      U.symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
-          (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-            V.toContinuousLinearEquiv.toContinuousLinearMap) ∘L
-          V.symm.toContinuousLinearEquiv.toContinuousLinearMap = A := by
-    ext x
-    simp
-  calc A.approximationNumber n
-      = (U.symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
-            (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-              V.toContinuousLinearEquiv.toContinuousLinearMap) ∘L
-            V.symm.toContinuousLinearEquiv.toContinuousLinearMap).approximationNumber
-          n := by rw [hfac]
-    _ ≤ _ := approximationNumber_comp_isometricEquiv_le U.symm V.symm _ n
-
-/-- Two rectangular bounded operators have the same complete singular-value
-data when all of their approximation singular values agree. -/
-@[expose]
-def SameApproximationSingularValues (A B : E →L[𝕜] F) : Prop :=
-  SameApproximationSingularSequence A B
-
 namespace SameApproximationSingularValues
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Two-sided composition by isometric equivalences preserves every
 approximation singular value. -/
 theorem comp_isometricEquiv
     {A : E →L[𝕜] F}
     (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) :
-    SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
         V.toContinuousLinearEquiv.toContinuousLinearMap) A := by
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
-  intro n
-  exact approximationNumber_comp_isometricEquiv_eq U V A n
+  exact ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ V U
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- If an operator becomes another operator after unitary coordinate changes,
 they have the same complete singular sequence. -/
 theorem of_isometricEquiv_comp
@@ -217,40 +59,10 @@ theorem of_isometricEquiv_comp
     {A : E →L[𝕜] F} {B : E' →L[𝕜] F'}
     (h : U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
       V.symm.toContinuousLinearEquiv.toContinuousLinearMap = B) :
-    SameApproximationSingularSequence A B := by
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
-  intro n
-  have hkey := approximationNumber_comp_isometricEquiv_eq U V.symm A n
-  rw [h] at hkey
-  exact hkey.symm
-
-/-- Reflexivity.  With `symm` and `trans` this makes `SameApproximationSingularValues` an
-equivalence usable by `refl`/`symm`/`trans` via the attributes. -/
-@[refl]
-theorem refl (A : E →L[𝕜] F) : SameApproximationSingularValues A A :=
-  ContinuousLinearMap.HasSameApproximationNumbers.refl A
-
-/-- Symmetry. -/
-@[symm]
-theorem symm {A B : E →L[𝕜] F}
-    (h : SameApproximationSingularValues A B) :
-    SameApproximationSingularValues B A :=
-  ContinuousLinearMap.HasSameApproximationNumbers.symm h
-
-/-- Transitivity. -/
-@[trans]
-theorem trans {A B C : E →L[𝕜] F}
-    (hAB : SameApproximationSingularValues A B)
-    (hBC : SameApproximationSingularValues B C) :
-    SameApproximationSingularValues A C :=
-  ContinuousLinearMap.HasSameApproximationNumbers.trans hAB hBC
-
-/-- Equal complete singular-value data gives equal finite Ky Fan gauges. -/
-theorem kyFanApproximationGauge_eq {A B : E →L[𝕜] F}
-    (h : SameApproximationSingularValues A B) (k : ℕ) :
-    kyFanApproximationGauge k A = kyFanApproximationGauge k B := by
-  change A.kyFanGaugeReal k = B.kyFanGaugeReal k
-  exact ContinuousLinearMap.HasSameApproximationNumbers.kyFanGaugeReal_eq h k
+    ContinuousLinearMap.SameSingularValues A B := by
+  rw [← h]
+  exact ContinuousLinearMap.sameSingularValues_symm
+    (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ V.symm U)
 
 section IdealGauge
 
@@ -265,7 +77,7 @@ pair `(v, w)`; there is no single Lean structure carrying one gauge for all
 universe pairs at once.
 
 So the results below are stated for a shared universe, which is their natural
-generality, while `SameApproximationSingularSequence` and
+generality, while `ContinuousLinearMap.SameSingularValues` and
 `SinThetaRepresentativeAcross` above remain genuinely cross-universe:
 those are exactly the statements that do not mention a gauge. -/
 
@@ -279,22 +91,15 @@ theorem mem_and_gauge_eq
     (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
     [N.toOperatorIdealFamily.IsKyFanDominant]
     {A B : G →L[𝕜] H}
-    (h : SameApproximationSingularValues A B)
+    (h : ContinuousLinearMap.SameSingularValues A B)
     (hB : N.Mem B) :
     N.Mem A ∧
       N.gaugeReal A =
         N.gaugeReal B := by
-  have hs : ContinuousLinearMap.SameSingularValues A B := by
-    apply (ContinuousLinearMap.sameSingularValues_iff A B).mpr
-    intro n
-    have hn := (ContinuousLinearMap.hasSameApproximationNumbers_iff A B).mp h n
-    have hn' : (A.singularValue n : ℝ) = (B.singularValue n : ℝ) := by
-      simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hn
-    exact_mod_cast hn'
   have hraw : N.gauge A =
       N.gauge B :=
     OperatorIdealFamily.gauge_eq_of_sameSingularValues
-      (Φ := N.toOperatorIdealFamily) hs
+      (Φ := N.toOperatorIdealFamily) h
   have hA : N.Mem A := by
     change N.gauge A ≠ ⊤
     rw [hraw]
@@ -307,14 +112,14 @@ theorem mem_and_mul_gauge_le
     (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
     [N.toOperatorIdealFamily.IsKyFanDominant]
     {A B C : G →L[𝕜] H} {c : ℝ}
-    (h : SameApproximationSingularValues A B)
+    (h : ContinuousLinearMap.SameSingularValues A B)
     (hB : N.Mem B)
     (hbound : c * N.gaugeReal B ≤
       N.gaugeReal C) :
     N.Mem A ∧
       c * N.gaugeReal A ≤
         N.gaugeReal C := by
-  obtain ⟨hA, hgauge⟩ := h.mem_and_gauge_eq N hB
+  obtain ⟨hA, hgauge⟩ := mem_and_gauge_eq N h hB
   refine ⟨hA, ?_⟩
   rw [hgauge]
   exact hbound
@@ -333,7 +138,7 @@ structure SinThetaRepresentativeAcross
     (canonical : E →L[𝕜] F) where
   operator : E₀ →L[𝕜] F₀
   same_singular_sequence :
-    SameApproximationSingularSequence operator canonical
+    ContinuousLinearMap.SameSingularValues operator canonical
 
 namespace SinThetaRepresentativeAcross
 
@@ -342,7 +147,7 @@ namespace SinThetaRepresentativeAcross
 noncomputable def canonical (A : E →L[𝕜] F) :
     SinThetaRepresentativeAcross (E₀ := E) (F₀ := F) A where
   operator := A
-  same_singular_sequence := .refl A
+  same_singular_sequence := ContinuousLinearMap.sameSingularValues_refl A
 
 end SinThetaRepresentativeAcross
 
@@ -351,7 +156,7 @@ the chosen operator has exactly the complete singular-value sequence of the
 canonical directed sine block. -/
 structure SinThetaRepresentative (canonical : E →L[𝕜] F) where
   operator : E →L[𝕜] F
-  same_singular_values : SameApproximationSingularValues operator canonical
+  same_singular_values : ContinuousLinearMap.SameSingularValues operator canonical
 
 namespace SinThetaRepresentative
 
@@ -360,7 +165,7 @@ namespace SinThetaRepresentative
 noncomputable def canonical (A : E →L[𝕜] F) :
     SinThetaRepresentative A where
   operator := A
-  same_singular_values := .refl A
+  same_singular_values := ContinuousLinearMap.sameSingularValues_refl A
 
 /-- Every paper representative has exactly the same ideal membership and
 gauge as the canonical block.
@@ -380,7 +185,7 @@ theorem mem_and_gauge_eq
     N.Mem S.operator ∧
       N.gaugeReal S.operator =
         N.gaugeReal canonical :=
-  S.same_singular_values.mem_and_gauge_eq N hcanonical
+  SameApproximationSingularValues.mem_and_gauge_eq N S.same_singular_values hcanonical
 
 end SinThetaRepresentative
 

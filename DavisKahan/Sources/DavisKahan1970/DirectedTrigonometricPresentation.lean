@@ -643,7 +643,7 @@ zero-extension/modulus bridge used by the tangent presentation theorem. -/
 theorem sourceDirectedSine_hasSameApproximationNumbers_directedSineBlock
     (Z V : Submodule K E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     [CompleteSpace Z] :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (directedSinAngleOperator Z V) (TanTheta.directedSineBlock Z V) := by
   let B : Z →L[K] E := TanTheta.directedSineBlock Z V
   have hproj : Z.subtypeL ∘L Z.subtypeL.adjoint = Z.starProjection := by
@@ -657,7 +657,7 @@ theorem sourceDirectedSine_hasSameApproximationNumbers_directedSineBlock
     (Vᗮ.starProjection ∘L Z.starProjection)
   have hzero := sameApproximationSingularValues_extendDomainByZero Z B
   rw [directedSinAngleOperator]
-  refine hmod.trans ?_
+  refine ContinuousLinearMap.sameSingularValues_trans hmod ?_
   rw [← hcross]
   simpa [B] using hzero
 
@@ -686,17 +686,19 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
     tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike
       N D hV hdelta hupper hUnwanted hResidual
   have hSseq := sourceDirectedSine_hasSameApproximationNumbers_directedSineBlock Z V
-  have hSseq_apply := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hSseq
+  have hSseq_apply := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hSseq
   have htr : ‖directedSinAngleOperator Z V‖ < 1 := by
     rw [← (directedSinAngleOperator Z V).approximationNumber_index_zero, hSseq_apply 0]
     exact hlt 0
-  have hTanSeq : SameApproximationSingularSequence
+  have hTanSeq : ContinuousLinearMap.SameSingularValues
       (sourceDirectedTanThetaOperator Z V) T := by
-    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+    apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro n
+    apply NNReal.eq
+    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
     rw [approximationNumber_sourceDirectedTanThetaOperator Z V htr n,
       hSseq_apply n, hTseq n]
-  have htransport := hTanSeq.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hTanSeq
   refine ⟨hlt, htransport.1.mpr hTmem, ?_⟩
   rw [htransport.2]
   exact hTbound
@@ -731,23 +733,26 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
   obtain ⟨hlt, T, hTseq, hTmem, hTbound⟩ :=
     tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
       N V hA hred hB hV hUa hUb hab hRmem
-  have hSseq : SameApproximationSingularSequence
+  have hSseq : ContinuousLinearMap.SameSingularValues
       (sourceDirectedSinTwoThetaOperator V U)
       (DavisKahan.sinTwoThetaIdealBlock U V) := by
     rw [sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator V U]
-    exact (Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide U V).symm
-  have hSseq_apply := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hSseq
+    exact ContinuousLinearMap.sameSingularValues_symm
+      (Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide U V)
+  have hSseq_apply := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hSseq
   have hSlt : ‖sourceDirectedSinTwoThetaOperator V U‖ < 1 := by
     rw [← (sourceDirectedSinTwoThetaOperator V U).approximationNumber_index_zero,
       hSseq_apply 0]
     exact hlt 0
-  have hTanSeq : SameApproximationSingularSequence
+  have hTanSeq : ContinuousLinearMap.SameSingularValues
       (sourceDirectedTanTwoThetaOperator V U) T := by
-    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+    apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro n
+    apply NNReal.eq
+    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
     rw [approximationNumber_sourceDirectedTanTwoThetaOperator V U hSlt n,
       hSseq_apply n, hTseq n]
-  have htransport := hTanSeq.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hTanSeq
   refine ⟨hlt, htransport.1.mpr hTmem, ?_⟩
   rw [htransport.2]
   exact hTbound

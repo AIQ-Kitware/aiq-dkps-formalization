@@ -66,7 +66,7 @@ theorem result
           N.gaugeReal P.sinTheta₀.operator
         ≤ N.gaugeReal P.problem.data.residual := by
   have hcanonical := FormBoundedGeneralSinThetaProblem.result N P.problem
-  exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
+  exact SameApproximationSingularValues.mem_and_mul_gauge_le N P.sinTheta₀.same_singular_values
     hcanonical.1 hcanonical.2
 
 end GeneralSinThetaRepresentativeProblem
@@ -95,7 +95,7 @@ theorem result
           N.gaugeReal P.sinTheta₀.operator
         ≤ N.gaugeReal P.problem.data.residual := by
   have hcanonical := FormBoundedIsometricSinThetaProblem.result_complex N P.problem
-  exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
+  exact SameApproximationSingularValues.mem_and_mul_gauge_le N P.sinTheta₀.same_singular_values
     hcanonical.1 hcanonical.2
 
 end IsometricSinThetaRepresentativeProblem
@@ -133,7 +133,7 @@ theorem result
           N.gaugeReal P.sinTheta₀.operator
         ≤ N.gaugeReal P.problem.data.residual := by
   have hcanonical := RealGeneralSinThetaProblem.result N P.problem
-  exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
+  exact SameApproximationSingularValues.mem_and_mul_gauge_le N P.sinTheta₀.same_singular_values
     hcanonical.1 hcanonical.2
 
 end RealGeneralSinThetaRepresentativeProblem
@@ -161,7 +161,7 @@ theorem result
           N.gaugeReal P.sinTheta₀.operator
         ≤ N.gaugeReal P.problem.data.residual := by
   have hcanonical := FormBoundedIsometricSinThetaProblem.result_real N P.problem
-  exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
+  exact SameApproximationSingularValues.mem_and_mul_gauge_le N P.sinTheta₀.same_singular_values
     hcanonical.1 hcanonical.2
 
 end RealIsometricSinThetaRepresentativeProblem

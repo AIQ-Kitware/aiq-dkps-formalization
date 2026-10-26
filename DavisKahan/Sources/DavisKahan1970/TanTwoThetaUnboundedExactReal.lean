@@ -69,10 +69,10 @@ private theorem approximationSingularValue_directedCorner_complexify
         (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)) =
       approximationSingularValue n (blockCompression Uᗮ U K) := by
-  have hc := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hc := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (projectionBlock_same_compression (complexifySubmodule U)ᗮ
       (complexifySubmodule U) (complexify K))
-  have hr := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hr := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (projectionBlock_same_compression Uᗮ U K)
   calc
     approximationSingularValue n
@@ -806,7 +806,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
       (complexifySubmodule V).reflectionOperator :=
     DavisKahan.complexify_reflectionOperator V
   -- the directed sine corner and the ideal block, over `ℂ`
-  have hsameC := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hsameC := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock
       (complexifySubmodule U) (complexifySubmodule V))
   -- the ideal block's approximation numbers are the real ones

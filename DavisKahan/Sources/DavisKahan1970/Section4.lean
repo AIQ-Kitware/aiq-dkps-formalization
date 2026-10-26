@@ -273,7 +273,7 @@ theorem proposition4_1_compact_nonacute_directRotationValues_complex
       U V J W hWunitary hWmap).approximationNumber_direct_cosineCutoff_eq_sine
       (S := S)
       (principalSineOperator_norm_sq_eq_one_sub_sourceCosine_norm_sq U V) n
-  have hDseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (DavisKahan.Section4.sourceRestrictedDisplacement_sameApproximationSingularSequence
       U (DavisKahan.nonacuteDirectRotation U V J)) n
   let a : Real := (A.approximationNumber n : Real)

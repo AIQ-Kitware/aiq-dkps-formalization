@@ -145,7 +145,7 @@ theorem approximationSingularValue_theorem63DirectedSineBlock_complexify
       (theorem63DirectedSineBlock_complexify_equiv Z V)
     simpa [U, W, w, hw] using h.symm
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans
+  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
     (approximationSingularValue_complexify (theorem63DirectedSineBlockReal Z V) n)
 
 /-- Approximation singular values of the real Ritz residual are likewise
@@ -171,7 +171,7 @@ theorem approximationSingularValue_theorem63Residual_complexify
       (theorem63Residual_complexify_equiv T Z)
     simpa [U, W, w, hw] using h.symm
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans
+  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
     (approximationSingularValue_complexify (theorem63ResidualReal T Z) n)
 
 /-- The finite Ky Fan residual gauge is exactly preserved by the real-to-complex
@@ -719,7 +719,8 @@ theorem tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects
       delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge (T - A) :=
   ⟨norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent T hT U V hV hdelta
       hCompressionUpper hUnwantedLower h35,
-    tanTheta_ambient_bounded_symmetricNorming_real_of_transversality N hT hA hV hAU hdelta hCompressionUpper
+    tanTheta_ambient_bounded_symmetricNorming_real_of_transversality N hT hA hV hAU hdelta
+      hCompressionUpper
       hUnwantedLower
       (norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent T hT U V hV hdelta
         hCompressionUpper hUnwantedLower h35) hMem⟩

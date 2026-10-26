@@ -149,7 +149,7 @@ projection `P_(V complement) P_U`, as in the paper. -/
 theorem directedSin_same_crossProjection
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (TauCeti.DavisKahan.Angle.directedSinAngleOperatorC U V)
       (Vᗮ.starProjection ∘L U.starProjection) := by
   rw [TauCeti.DavisKahan.Angle.directedSinAngleOperatorC]
@@ -160,17 +160,20 @@ projector difference. -/
 theorem sin_same_projectionDiff
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (TauCeti.DavisKahan.Angle.sinAngleOperatorC U V)
       (U.starProjection - V.starProjection) := by
   rw [TauCeti.DavisKahan.Angle.sinAngleOperatorC]
   exact modulus_hasSameApproximationNumbers _
 
+omit [CompleteSpace E] in
 /-- Negation changes no approximation singular value. -/
 theorem sameApproximationSingularValues_neg (A : E →L[ℂ] E) :
-    SameApproximationSingularValues (-A) A := by
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+    ContinuousLinearMap.SameSingularValues (-A) A := by
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have h : ((-1 : ℂ) • A).approximationNumber n =
       ‖(-1 : ℂ)‖ * A.approximationNumber n :=
     ContinuousLinearMap.approximationNumber_smul (-1 : ℂ) A n
@@ -182,12 +185,13 @@ literal whole-space sine. -/
 theorem crossSineSum_same_literalSin
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (crossSineSum U V)
       (TauCeti.DavisKahan.Angle.sinAngleOperatorC U V) := by
-  refine (crossSineSum_same_projectionDiff U V).trans
-    (SameApproximationSingularValues.trans ?_
-      (sin_same_projectionDiff U V).symm)
+  refine ContinuousLinearMap.sameSingularValues_trans
+    (crossSineSum_same_projectionDiff U V)
+    (ContinuousLinearMap.sameSingularValues_trans ?_
+      (ContinuousLinearMap.sameSingularValues_symm (sin_same_projectionDiff U V)))
   rw [← neg_sub U.starProjection V.starProjection]
   exact sameApproximationSingularValues_neg _
 

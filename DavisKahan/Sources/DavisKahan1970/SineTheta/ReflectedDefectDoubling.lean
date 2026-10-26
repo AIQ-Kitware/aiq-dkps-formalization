@@ -88,7 +88,7 @@ and the mirror of its complement, have the same complete singular sequence. -/
 private theorem reflectedDefectBlocks_same
     {S : E →L[𝕜] E} (hS : IsSelfAdjoint S) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (projectionBlock (U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E))ᗮ U
         (reflectionDefect V S))
       (projectionBlock
@@ -129,8 +129,10 @@ private theorem reflectedDefectBlocks_same
     simp only [ContinuousLinearMap.comp_apply, neg_apply] at hanti_x
     rw [hanti_x]
     simp only [map_neg]
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [hblock, ContinuousLinearMap.approximationNumber_neg]
   have hright := sameApproximationSingularValues_comp_reflection_right V
     (V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint)
@@ -144,17 +146,17 @@ private theorem reflectedDefectBlocks_same
         ContinuousLinearMap.singularValue_adjoint]
     _ = (V.reflectionOperator ∘L
           (projectionBlock Wᗮ U D).adjoint).approximationNumber n :=
-      ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hleft n).symm
+      (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hleft n).symm
     _ = (V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint ∘L
           V.reflectionOperator).approximationNumber n :=
-      ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hright n).symm
+      (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hright n).symm
 
 /-- The two off-diagonal blocks of a self-adjoint operator have the same
 complete singular sequence. -/
 private theorem offDiagonalBlocks_same
     {S : E →L[𝕜] E} (hS : IsSelfAdjoint S) (V : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] :
-    SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (projectionBlock Vᗮ V S)
       (projectionBlock Vᗮᗮ Vᗮ S) := by
   have hadj : (projectionBlock Vᗮ V S).adjoint =
@@ -170,8 +172,10 @@ private theorem offDiagonalBlocks_same
       Submodule.starProjection_congr (Submodule.orthogonal_orthogonal V)
     unfold projectionBlock
     rw [hp]
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   calc
     (projectionBlock Vᗮ V S).approximationNumber n =
         (projectionBlock Vᗮ V S).adjoint.approximationNumber n :=

@@ -82,18 +82,20 @@ Proved by transporting both objects to the field's real-like or complex-like mod
 correspondence is already established: over `ℂ` directly, over `ℝ` through the complexification,
 which is where the real development keeps the directed angle. -/
 theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike :
-    (sinTwoThetaIdealBlock U V).HasSameApproximationNumbers
+    (sinTwoThetaIdealBlock U V).SameSingularValues
       (directedSinTwoAngleOperator U V) := by
   have key : ∀ {𝕂 : Type} [RCLike 𝕂] (e : RCLikeIso 𝕜 𝕂),
       (sinTwoThetaIdealBlock (TauCeti.ScalarTransport.submodule (e := e) U)
-          (TauCeti.ScalarTransport.submodule (e := e) V)).HasSameApproximationNumbers
+          (TauCeti.ScalarTransport.submodule (e := e) V)).SameSingularValues
         (directedSinTwoAngleOperator (TauCeti.ScalarTransport.submodule (e := e) U)
           (TauCeti.ScalarTransport.submodule (e := e) V)) →
-      (sinTwoThetaIdealBlock U V).HasSameApproximationNumbers
+      (sinTwoThetaIdealBlock U V).SameSingularValues
         (directedSinTwoAngleOperator U V) := by
     intro 𝕂 _ e h
-    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+    apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro n
+    apply NNReal.eq
+    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
     have hb := TauCeti.ScalarTransport.approximationNumber_clm (e := e)
       (sinTwoThetaIdealBlock U V) n
     have ha := TauCeti.ScalarTransport.approximationNumber_clm (e := e)
@@ -101,11 +103,13 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike :
     rw [clm_sinTwoThetaIdealBlock] at hb
     rw [clm_directedSinTwoAngleOperator] at ha
     rw [← hb, ← ha]
-    exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h n
+    exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq h n
   rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
   · apply key (𝕂 := ℝ) (RCLikeIso.real h)
-    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+    apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro n
+    apply NNReal.eq
+    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
     show ExactSinTheta.approximationSingularValue n _ =
       ExactSinTheta.approximationSingularValue n _
     rw [approximationSingularValue_sinTwoThetaIdealBlock_real,
@@ -177,9 +181,10 @@ directed `sin 2Θ` theorem consumes: the estimate is proved about the block of t
 (gap-carrying subspace, trial subspace), and the paper's conclusion is about the directed
 double-angle sine of the same pair *in the other order*. -/
 theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide :
-    (sinTwoThetaIdealBlock U V).HasSameApproximationNumbers
+    (sinTwoThetaIdealBlock U V).SameSingularValues
       (directedSinTwoAngleOperator V U) :=
-  (sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike U V).trans
+  ContinuousLinearMap.sameSingularValues_trans
+    (sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike U V)
     (directedSinTwoAngleOperator_hasSameApproximationNumbers_swap U V)
 
 /-- The block and the trial-side directed `sin 2Θ₀` have the same gauge in every source

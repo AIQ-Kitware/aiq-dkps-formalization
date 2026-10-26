@@ -198,7 +198,7 @@ not merely the operator norm. -/
 theorem sameApproximationSingularSequence_residual_complexify
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     (hPinv : ∀ x ∈ P, A x ∈ P) :
-    ExactSinTheta.SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (complexify (residual (A + K) P.subtypeL (compressOperator P A)))
       (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
         (compressOperator (complexifySubmodule P) (complexify A))) := by
@@ -623,7 +623,7 @@ theorem theorem8_2_sinTwoTheta_residual_real_symmetricNorming
       delta * N.gauge (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
         2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
   have hseq := sameApproximationSingularSequence_residual_complexify A K P hPred.1
-  have htransport := hseq.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hseq
   have hRmemComplexified :
       N.Mem (complexify (residual (A + K) P.subtypeL (compressOperator P A))) :=
     (ExactSinTheta.SymmetricNormingFunction.mem_complexify_iff N _).2 hRmem

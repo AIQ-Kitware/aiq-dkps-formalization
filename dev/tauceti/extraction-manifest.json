@@ -2445,21 +2445,25 @@
       ],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-numbers",
       "provenance_class": "copied and renamespaced 2026-07-28: the heterogeneous same-approximation-numbers relation, extracted so that DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean no longer imports the source layer -- the last recorded obstacle to extraction cluster 1b",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan"
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence",
+        "TauCeti.Analysis.InnerProductSpace.Modulus",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum",
         "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": null,
+      "migration_note": "October 26, following DKPS 4a62c33c2: the local HasSameApproximationNumbers relation, its unfolding lemma and equivalence proofs are deleted. Consumers take accepted ContinuousLinearMap.SameSingularValues directly. Both downstream SameApproximationSingularSequence and SameApproximationSingularValues relation aliases and their duplicate equivalence/Ky Fan proofs are deleted. Accepted Equivalence explicitly records adaptation from this donor, using native nonnegative singularValue sequences; this is explicit proof-adaptation provenance, not inferred from a name match. Tau Ceti revision 97bf123075b7f142c1e37b827b6b37c156803248. The native relation has broader seminormed-space, arbitrary nontrivially normed field and independent-universe scope. Additional norm equality and complete-source min--max/pointwise comparisons remain local on the native carrier, with incomplete targets permitted where the accepted factorization theorem requires complete targets; the module is not wholly retired. Accepted ApproximationNumber.Modulus supplies the complete-space modulus invariance; its remaining local duplicates are explicitly pending retirement after the native-relation checkpoint, not claimed unmerged mathematics. The existing CanonicalGauge module projects native equality to real scalar approximation-number and gauge equality, without a local relation or old-name conversion API. Source gauge/Hilbert-Schmidt transport results and ambient/unbounded scopes are retained."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",

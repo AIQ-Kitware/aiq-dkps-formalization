@@ -412,13 +412,13 @@ theorem extendedGauge_eq_of_hasSameApproximationNumbers
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     (N : SymmetricNormingFunction) {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : A.HasSameApproximationNumbers B) :
+    (h : A.SameSingularValues B) :
     N.extendedGauge A = N.extendedGauge B := by
   unfold SymmetricNormingFunction.extendedGauge
   refine iSup_congr fun n => ?_
   have hpre : approximationPrefix n A = approximationPrefix n B := by
     funext i
-    exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h (i : ℕ)
+    exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq h (i : ℕ)
   rw [prefixGauge, prefixGauge, hpre]
 
 /-- Equality of complete approximation singular-value sequences gives equality
@@ -429,13 +429,15 @@ theorem gauge_eq_of_sameApproximationSingularValues
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : SymmetricNormingFunction) {A B : E →L[𝕜] F}
-    (h : SameApproximationSingularValues A B) :
+    (h : ContinuousLinearMap.SameSingularValues A B) :
     N.extendedGauge A = N.extendedGauge B := by
   apply le_antisymm
   · exact N.extendedGauge_le_of_all_kyFan_le fun k =>
-      le_of_eq (h.kyFanApproximationGauge_eq k)
+      le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      h.kyFanGaugeReal_eq k))
   · exact N.extendedGauge_le_of_all_kyFan_le fun k =>
-      le_of_eq (h.kyFanApproximationGauge_eq k).symm
+      le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      h.kyFanGaugeReal_eq k)).symm
 
 end SymmetricNormingFunction
 

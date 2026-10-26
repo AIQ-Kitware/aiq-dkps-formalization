@@ -48,10 +48,11 @@ theorem SameApproximationSingularSequence.hilbertSchmidtNorm_eq
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) :
+    (h : ContinuousLinearMap.SameSingularValues A B) :
     A.hilbertSchmidtNorm = B.hilbertSchmidtNorm := by
   rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy,
-    hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy, h.approximationNumberEnergy_eq]
+    hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy,
+      (SameApproximationSingularSequence.approximationNumberEnergy_eq h)]
 
 /-- The modulus has the same Hilbert--Schmidt norm as the operator. -/
 theorem hilbertSchmidtNorm_operatorModulus

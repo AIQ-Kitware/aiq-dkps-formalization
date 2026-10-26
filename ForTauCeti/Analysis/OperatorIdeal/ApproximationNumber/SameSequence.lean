@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Modulus
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
@@ -17,7 +18,7 @@ Two bounded operators, possibly between different pairs of Hilbert spaces, **hav
 approximation numbers** when their whole sequences agree:
 
 ```
-A.HasSameApproximationNumbers B ↔ ∀ n, A.approximationNumber n = B.approximationNumber n.
+A.SameSingularValues B ↔ ∀ n, A.approximationNumber n = B.approximationNumber n.
 ```
 
 Since every unitarily invariant norm is a function of that sequence, this is the exact
@@ -45,8 +46,11 @@ carried the hypothesis, so this is a small generalisation.
 * Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Extraction class: **copied and renamespaced**.  The relation moves to
-  `ContinuousLinearMap.HasSameApproximationNumbers` and is spelled with
+  `ContinuousLinearMap.HasSameApproximationNumbers` and was spelled with
   `approximationNumber` rather than its `approximationSingularValue` alias.
+  The relation and its equivalence proofs have since been retired in favor of
+  accepted `ContinuousLinearMap.SameSingularValues`; only the additional
+  norm, min--max comparison and modulus results remain local.
 * Extraction motive: `DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean` — a
   *generic* module — imported the source-layer file above for these six declarations alone.
   That backwards dependency was the last obstacle recorded against extraction cluster 1b.
@@ -68,48 +72,15 @@ variable {𝕜 : Type u} [RCLike 𝕜]
   [NormedAddCommGroup E₃] [InnerProductSpace 𝕜 E₃]
   [NormedAddCommGroup F₃] [InnerProductSpace 𝕜 F₃]
 
-/-- `A` and `B` have the same complete approximation-number sequence. -/
-def HasSameApproximationNumbers (A : E₁ →L[𝕜] F₁) (B : E₂ →L[𝕜] F₂) : Prop :=
-  ∀ n : ℕ, A.approximationNumber n = B.approximationNumber n
+/-- Equal canonical singular-value sequences give equal operator norms. -/
+theorem SameSingularValues.norm_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
+    (h : A.SameSingularValues B) : ‖A‖ = ‖B‖ := by
+  have hzero := (sameSingularValues_iff _ _).mp h 0
+  simpa only [singularValue_zero, coe_nnnorm] using congrArg NNReal.toReal hzero
 
-/-- Unfolding lemma for `ContinuousLinearMap.HasSameApproximationNumbers`.  The definition is
-not exposed, so this is how a downstream module both introduces the relation and reads an
-individual index out of it. -/
-theorem hasSameApproximationNumbers_iff (A : E₁ →L[𝕜] F₁) (B : E₂ →L[𝕜] F₂) :
-    A.HasSameApproximationNumbers B ↔
-      ∀ n : ℕ, A.approximationNumber n = B.approximationNumber n :=
-  Iff.rfl
-
-namespace HasSameApproximationNumbers
-
-/-- Having the same approximation numbers is reflexive. -/
-@[refl] theorem refl (A : E₁ →L[𝕜] F₁) : A.HasSameApproximationNumbers A := fun _ => rfl
-
-/-- Having the same approximation numbers is symmetric. -/
-theorem symm {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : A.HasSameApproximationNumbers B) : B.HasSameApproximationNumbers A :=
-  fun n => (h n).symm
-
-/-- Having the same approximation numbers is transitive.  With `refl` and `symm` it is an
-equivalence, which is what lets it be used to transport ideal membership. -/
-theorem trans {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂} {C : E₃ →L[𝕜] F₃}
-    (hAB : A.HasSameApproximationNumbers B) (hBC : B.HasSameApproximationNumbers C) :
-    A.HasSameApproximationNumbers C :=
-  fun n => (hAB n).trans (hBC n)
-
-/-- Equal approximation numbers give equal operator norms: they agree already at `n = 0`. -/
-theorem norm_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : A.HasSameApproximationNumbers B) : ‖A‖ = ‖B‖ := by
-  rw [← A.approximationNumber_index_zero, ← B.approximationNumber_index_zero, h 0]
-
-/-- Equal approximation numbers give equal Ky Fan gauges. -/
-theorem kyFanGaugeReal_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : A.HasSameApproximationNumbers B) (k : ℕ) :
-    A.kyFanGaugeReal k = B.kyFanGaugeReal k := by
-  rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
-  exact Finset.sum_congr rfl fun n _ => h n
-
-end HasSameApproximationNumbers
+/-! Equality of sequences and its equivalence laws are maintained by Tau Ceti's
+`ContinuousLinearMap.SameSingularValues`. Only the additional Hilbert-space
+comparison and modulus results remain here. -/
 
 section MinMax
 
@@ -151,8 +122,12 @@ omit [CompleteSpace Y] [CompleteSpace Z] in
 operators may have different targets, which is what the heterogeneous relation is for. -/
 theorem hasSameApproximationNumbers_of_norm_apply_eq
     (A : X →L[𝕜] Y) (B : X →L[𝕜] Z) (h : ∀ x : X, ‖A x‖ = ‖B x‖) :
-    A.HasSameApproximationNumbers B := fun n =>
-  le_antisymm
+    A.SameSingularValues B := by
+  apply (sameSingularValues_iff _ _).mpr
+  intro n
+  apply NNReal.eq
+  simp only [← approximationNumber_eq_singularValue_toReal]
+  exact le_antisymm
     (approximationNumber_le_of_norm_apply_le A B (fun x => (h x).le) n)
     (approximationNumber_le_of_norm_apply_le B A (fun x => (h x).ge) n)
 
@@ -169,7 +144,7 @@ theorem modulus_hasSameApproximationNumbers {Y' : Type w₁}
     [NormedAddCommGroup Y'] [InnerProductSpace ℂ Y'] [CompleteSpace Y']
     {X' : Type v₁} [NormedAddCommGroup X'] [InnerProductSpace ℂ X'] [CompleteSpace X']
     (T : X' →L[ℂ] Y') :
-    T.modulus.HasSameApproximationNumbers T :=
+    T.modulus.SameSingularValues T :=
   hasSameApproximationNumbers_of_norm_apply_eq _ _ T.norm_modulus_apply
 
 end MinMax

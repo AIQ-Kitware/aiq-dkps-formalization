@@ -341,8 +341,10 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm]
-    rw [(projectionBlock_same_compression Uᗮ U T).kyFanApproximationGauge_eq k,
-      (projectionBlock_same_compression Uᗮ U B).kyFanApproximationGauge_eq k]
+    erw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression Uᗮ U T).kyFanGaugeReal_eq k),
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression Uᗮ U B).kyFanGaugeReal_eq k)]
     change ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       kyFanApproximationGauge k (reflectionResidualCorner U B)
     linarith [hcorner k]
@@ -452,8 +454,10 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm]
-    rw [(projectionBlock_same_compression Uᗮ U T).kyFanApproximationGauge_eq k,
-      (projectionBlock_same_compression Uᗮ U B).kyFanApproximationGauge_eq k]
+    erw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression Uᗮ U T).kyFanGaugeReal_eq k),
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression Uᗮ U B).kyFanGaugeReal_eq k)]
     change ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       kyFanApproximationGauge k (reflectionResidualCorner U B)
     linarith [hcorner k]
@@ -665,7 +669,8 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
-    tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex N V hA hBsa hB hV hUa hUb
+    tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex N
+      V hA hBsa hB hV hUa hUb
       hab hBmem
   have hcos := DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
     (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V hunit
@@ -786,7 +791,7 @@ one the canonical theorems bound. -/
 theorem tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner
     (hinv : IsUnit ((1 : Ea →L[ℂ] Ea) - 2 *
       (projectorDifference U V * projectorDifference U V))) :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (projectionBlock Uᗮ U
         (2 * (projectorDifference U V * doubleSecant U V)))
       (reflectionTangentCorner U V.reflectionOperator) := by
@@ -941,10 +946,10 @@ theorem approximationNumber_tanTwoDirectedCorner
       blockCompression Uᗮ U (2 * (projectorDifference U V * doubleSecant U V)) := by
     rw [reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv,
       tanTwoBlockRepresentative, blockCompression_diagonalPair]
-  rw [(ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  rw [ContinuousLinearMap.SameSingularValues.approximationNumber_eq
       (projectionBlock_same_compression Uᗮ U _) n, ← hcorner,
     approximationNumber_reflectionTangentCorner hZsa hZ2 hS1 n,
-    (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    ContinuousLinearMap.SameSingularValues.approximationNumber_eq
       (hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock U V) n]
 
 /-- **Davis--Kahan 1970, the `tan 2Θ` theorem, directed clause, over `ℂ`:

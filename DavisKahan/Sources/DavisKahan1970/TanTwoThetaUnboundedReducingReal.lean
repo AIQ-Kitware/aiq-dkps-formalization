@@ -103,7 +103,7 @@ private theorem approximationNumber_realAmbientDoubleSine_complexify
           RealComplexification E →ₗ[ℂ] RealComplexification E)).starProjection -
       (complexifySubmodule U).starProjection).approximationNumber n =
       (realAmbientDoubleSine U V).approximationNumber n := by
-  have hsame := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hsame := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference U V)
   have hleft : (sinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)).approximationNumber n =

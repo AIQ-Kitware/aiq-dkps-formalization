@@ -522,7 +522,7 @@ In particular each principal angle is counted **once**, as the directed
 statement requires -- the ambient `unboundedReflectionTangent U J_V` counts it
 twice, which is why the directed clause must not be routed through it. -/
 theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
-    (reflectionSineCorner U V.reflectionOperator).HasSameApproximationNumbers
+    (reflectionSineCorner U V.reflectionOperator).SameSingularValues
       (DavisKahan.sinTwoThetaIdealBlock U V) := by
   set J : H →L[ℂ] H := V.reflectionOperator with hJdef
   have hJsa : IsSelfAdjoint J :=
@@ -560,12 +560,14 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
     simp only [ContinuousLinearMap.comp_apply, hJdef,
       Submodule.reflectionOperator_apply_eq_reflection,
       LinearIsometry.coe_toContinuousLinearMap, LinearIsometryEquiv.coe_toLinearIsometry]
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   calc (reflectionSineCorner U J).approximationNumber n
       = (Uᗮ.subtypeL ∘L reflectionSineCorner U J ∘L
           U.subtypeL.adjoint).approximationNumber n :=
-        ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+        (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
           (ContinuousLinearMap.hasSameApproximationNumbers_ambientSubspaceBlock U Uᗮ
             (reflectionSineCorner U J)) n).symm
     _ = (Uᗮ.starProjection ∘L J ∘L U.starProjection).approximationNumber n := by
@@ -576,7 +578,7 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
           ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
           ContinuousLinearMap.singularValue_adjoint]
     _ = ((U.starProjection ∘L J ∘L Uᗮ.starProjection) ∘L J).approximationNumber n :=
-        ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+        (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
           (ContinuousLinearMap.hasSameApproximationNumbers_comp_right hJnorm hJnorm hJJ) n).symm
     _ = (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by rw [hblock]
 

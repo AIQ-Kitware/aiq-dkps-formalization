@@ -164,15 +164,18 @@ theorem diagonalPair_normingGauge_le
     (N.extendedGauge K).toReal
   exact (ENNReal.toReal_le_toReal hB hK).mpr hle
 
+omit [CompleteSpace E] in
 /-- Right composition with a subspace reflection preserves every approximation
 singular value. -/
 theorem sameApproximationSingularValues_comp_reflection_right
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) :
-    SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (A ∘L U.reflectionOperator) A := by
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
     exact_mod_cast Submodule.norm_reflectionOperator_le_one U
   have hright (T : E →L[𝕜] E) :
@@ -199,15 +202,18 @@ theorem sameApproximationSingularValues_comp_reflection_right
           hright (A ∘L U.reflectionOperator)
   exact key
 
+omit [CompleteSpace E] in
 /-- Left composition with a subspace reflection preserves every approximation
 singular value. -/
 theorem sameApproximationSingularValues_comp_reflection_left
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) :
-    SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (U.reflectionOperator ∘L A) A := by
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
     exact_mod_cast Submodule.norm_reflectionOperator_le_one U
   have hleft (T : E →L[𝕜] E) :
@@ -262,12 +268,13 @@ theorem crossSineSum_eq_projectionDiff_comp_reflection
   rw [hVidem]
   module
 
+omit [CompleteSpace E] in
 /-- The cross-block sum has exactly the complete singular-value sequence of the
 projector difference. -/
 theorem crossSineSum_same_projectionDiff
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (crossSineSum U V) (V.starProjection - U.starProjection) := by
   rw [crossSineSum_eq_projectionDiff_comp_reflection]
   exact sameApproximationSingularValues_comp_reflection_right V _

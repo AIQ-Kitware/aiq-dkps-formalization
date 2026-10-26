@@ -99,7 +99,7 @@ theorem approximationNumber_sinAngleOperatorC (n : ℕ) :
     (sinAngleOperatorC U V).approximationNumber n =
       (V.starProjection - U.starProjection).approximationNumber n := by
   rw [sinAngleOperatorC,
-    (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    ContinuousLinearMap.SameSingularValues.approximationNumber_eq
       (ContinuousLinearMap.modulus_hasSameApproximationNumbers
         (U.starProjection - V.starProjection)) n]
   have hneg : U.starProjection - V.starProjection =
@@ -206,7 +206,7 @@ theorem approximationNumber_sinTwoAngleOperatorC (n : ℕ) :
       ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
         U.starProjection).approximationNumber n := by
   rw [directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
-  exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (ContinuousLinearMap.modulus_hasSameApproximationNumbers _) n
 
 /-- **The ambient doubled tangent, read off the ambient double-angle sine.**

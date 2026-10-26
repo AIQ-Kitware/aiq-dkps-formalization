@@ -190,8 +190,9 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
       kyFanApproximationGauge k (tanAngleOperatorC U V) =
         kyFanApproximationGauge k (tanBlockRepresentative U V) := by
     rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
-    exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
-      (tanBlockRepresentative U V)).kyFanGaugeReal_eq k
+    exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+      (tanBlockRepresentative U V)).kyFanGaugeReal_eq k)
   rw [hmodulus]
   exact hcombine.trans hpinch
 
@@ -226,7 +227,8 @@ crossed-defect condition never has to be transported across complexification.
 problem.  Its residual is assumed to be exactly the lower `U -> U-perp` block of
 the bounded perturbation `H`; this is the operator form of the printed
 Rayleigh--Ritz condition `H_0 = 0`. -/
-theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex_of_transversality
+theorem
+  tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex_of_transversality
     (N : SymmetricNormingFunction)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -272,7 +274,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
           kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
       rw [hblock]
       have hs := sameApproximationSingularValues_extendDomainByZero U data.residual
-      exact (hs.kyFanApproximationGauge_eq k).symm
+      exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hs.kyFanGaugeReal_eq k)).symm
     calc
       delta * kyFanApproximationGauge k
           (projectionBlock Uᗮ U
@@ -332,7 +335,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
         U V h35]
     simpa only [Submodule.directedProjectionGap_def, directedSineAmbient] using hambient
   exact ⟨(hasDefinedAmbientTangent_iff_norm_sinAngleOperatorC_lt_one U V).2 htr,
-    tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex_of_transversality N data H hH
+    tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex_of_transversality
+      N data H hH
       hdelta hCompression hcross htr hResidual hMem⟩
 
 /-! ## Appendix scope: the Ritz compression itself may be unbounded -/
@@ -392,7 +396,8 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transvers
           kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
       rw [hblock]
       have hs := sameApproximationSingularValues_extendDomainByZero U D.residual
-      exact (hs.kyFanApproximationGauge_eq k).symm
+      exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hs.kyFanGaugeReal_eq k)).symm
     calc
       delta * kyFanApproximationGauge k
           (projectionBlock Uᗮ U
@@ -513,7 +518,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex
       N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   let data := Theorem63TrialData.ofUnbounded D V
-  refine tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex N data H hH hdelta
+  refine tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex N data H hH
+    hdelta
     hCompression ?_ h35 ?_ hMem
   · intro z
     exact crossed_lower_of_reducing A D V hVdom hVcomm hUnwanted z
@@ -592,7 +598,8 @@ theorem tanTheta_ambient_unboundedRitz_symmetricNorming_complex
     HasDefinedAmbientTangent U V ∧
       N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
-  tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex N D.trial A H hH hdelta
+  tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex N D.trial A H hH
+    hdelta
     D.mem_domain D.action_eq hV.mapsDomain hV.commutes hupper hUnwanted h35
     hResidual hMem
 

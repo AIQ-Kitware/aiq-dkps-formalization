@@ -113,9 +113,9 @@ theorem lemma6_1_converse_separable_complex
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
     (Ω Γ : Submodule ℂ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K Ktilde L Ltilde : E →L[ℂ] E)
-    (hK : SameApproximationSingularValues
+    (hK : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ K) (projectionBlock Ωᗮ Γᗮ Ktilde))
-    (hL : SameApproximationSingularValues
+    (hL : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ L) (projectionBlock Ωᗮ Γᗮ Ltilde))
     (hsum : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℂ,
       M.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ Ltilde) →
@@ -134,9 +134,9 @@ theorem lemma6_1_converse_separable_real
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
     (Ω Γ : Submodule ℝ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K Ktilde L Ltilde : E →L[ℝ] E)
-    (hK : SameApproximationSingularValues
+    (hK : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ K) (projectionBlock Ωᗮ Γᗮ Ktilde))
-    (hL : SameApproximationSingularValues
+    (hL : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ L) (projectionBlock Ωᗮ Γᗮ Ltilde))
     (hsum : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℝ,
       M.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ Ltilde) →
@@ -304,9 +304,11 @@ private theorem enorm_le_of_hilbertSchmidtNorm_le
     [NormedAddCommGroup X'] [InnerProductSpace 𝕜 X'] [CompleteSpace X']
     [NormedAddCommGroup Y'] [InnerProductSpace 𝕜 Y'] [CompleteSpace Y']
     {S : X →L[𝕜] Y} {R : X' →L[𝕜] Y'} {c : ℝ} (hc : 0 ≤ c)
-    (hS : ((OperatorIdealFamily.hilbertSchmidt _).gauge S) ≠ ⊤) (hR : ((OperatorIdealFamily.hilbertSchmidt _).gauge R) ≠ ⊤)
+    (hS : ((OperatorIdealFamily.hilbertSchmidt _).gauge S) ≠ ⊤) (hR :
+      ((OperatorIdealFamily.hilbertSchmidt _).gauge R) ≠ ⊤)
     (h : c * S.hilbertSchmidtNorm ≤ R.hilbertSchmidtNorm) :
-    ENNReal.ofReal c * ((OperatorIdealFamily.hilbertSchmidt _).gauge S) ≤ ((OperatorIdealFamily.hilbertSchmidt _).gauge R) := by
+    ENNReal.ofReal c * ((OperatorIdealFamily.hilbertSchmidt _).gauge S) ≤
+      ((OperatorIdealFamily.hilbertSchmidt _).gauge R) := by
   rw [← ENNReal.ofReal_toReal hS, ← ENNReal.ofReal_toReal hR,
     ← ENNReal.ofReal_mul hc]
   exact ENNReal.ofReal_le_ofReal
@@ -338,7 +340,8 @@ theorem theorem6_2_vacuity_sourceExact_complex
     {δ : ℝ} (hδ : 0 < δ) (hdist : PairwiseSpectrumGap A₀ Λ₁ δ)
     (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (sectionSixSinThetaBlock E₀ F₁ hframe hε)) :
-    ENNReal.ofReal (δ * ε) * ((OperatorIdealFamily.hilbertSchmidt _).gauge S.operator) ≤ ((OperatorIdealFamily.hilbertSchmidt _).gauge R) := by
+    ENNReal.ofReal (δ * ε) * ((OperatorIdealFamily.hilbertSchmidt _).gauge S.operator) ≤
+      ((OperatorIdealFamily.hilbertSchmidt _).gauge R) := by
   rcases eq_or_ne ((OperatorIdealFamily.hilbertSchmidt _).gauge R) ⊤ with hRtop | hRne
   · rw [hRtop]; exact le_top
   obtain ⟨hSne, hle⟩ := theorem6_2_complex A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact
@@ -367,7 +370,8 @@ theorem theorem6_2_vacuity_sourceExact_real
       ∀ α ∈ _root_.LinearPMap.realSpectrum Λ₁, δ ≤ |lam - α|)
     (S : SinThetaRepresentativeAcross (E₀ := E₀') (F₀ := F₀')
       (sectionSixSinThetaBlockReal E₀ F₁ hframe hε)) :
-    ENNReal.ofReal (δ * ε) * ((OperatorIdealFamily.hilbertSchmidt _).gauge S.operator) ≤ ((OperatorIdealFamily.hilbertSchmidt _).gauge R) := by
+    ENNReal.ofReal (δ * ε) * ((OperatorIdealFamily.hilbertSchmidt _).gauge S.operator) ≤
+      ((OperatorIdealFamily.hilbertSchmidt _).gauge R) := by
   rcases eq_or_ne ((OperatorIdealFamily.hilbertSchmidt _).gauge R) ⊤ with hRtop | hRne
   · rw [hRtop]; exact le_top
   obtain ⟨hSne, hle⟩ := theorem6_2_real A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact
@@ -486,9 +490,9 @@ theorem lemma6_1_converse_sourceOperators_separable_complex
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℂ)
     (Ω Γ : Submodule ℂ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K L : E →L[ℂ] E)
-    (hK : SameApproximationSingularValues
+    (hK : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ K) (projectionBlock Ωᗮ Γᗮ K))
-    (hL : SameApproximationSingularValues
+    (hL : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ L) (projectionBlock Ωᗮ Γᗮ L))
     (hsum : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℂ,
       M.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L) →
@@ -507,9 +511,9 @@ theorem lemma6_1_converse_sourceOperators_separable_real
     (N : NormalizedUnitaryInvariantNorm.{0, v} ℝ)
     (Ω Γ : Submodule ℝ E) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K L : E →L[ℝ] E)
-    (hK : SameApproximationSingularValues
+    (hK : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ K) (projectionBlock Ωᗮ Γᗮ K))
-    (hL : SameApproximationSingularValues
+    (hL : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ L) (projectionBlock Ωᗮ Γᗮ L))
     (hsum : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℝ,
       M.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ L) →

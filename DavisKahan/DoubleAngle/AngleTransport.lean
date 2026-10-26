@@ -165,7 +165,9 @@ private theorem starProjection_mul_crossT :
 /-- **The paper's `sin 2Θ` squares to `4(t - t²)`.** -/
 theorem directedSinTwoAngleOperatorC_mul_self :
     directedSinTwoAngleOperatorC U V * directedSinTwoAngleOperatorC U V
-      = (4 : ℝ) • ((U.starProjection * V.starProjection * U.starProjection) - (U.starProjection * V.starProjection * U.starProjection) * (U.starProjection * V.starProjection * U.starProjection)) := by
+      = (4 : ℝ) • ((U.starProjection * V.starProjection * U.starProjection) - (U.starProjection *
+        V.starProjection * U.starProjection) * (U.starProjection * V.starProjection *
+        U.starProjection)) := by
   have hcomm := commute_directedSinAngleOperatorC_directedCosAngleOperatorC U V
   have hsin : directedSinAngleOperatorC U V * directedSinAngleOperatorC U V
       = U.starProjection - crossT U V := by
@@ -233,7 +235,9 @@ theorem starProjection_reflectedU :
 theorem directedSinAngleOperatorC_reflected_mul_self :
     directedSinAngleOperatorC U (reflectedU U V) *
         directedSinAngleOperatorC U (reflectedU U V)
-      = (4 : ℝ) • ((U.starProjection * V.starProjection * U.starProjection) - (U.starProjection * V.starProjection * U.starProjection) * (U.starProjection * V.starProjection * U.starProjection)) := by
+      = (4 : ℝ) • ((U.starProjection * V.starProjection * U.starProjection) - (U.starProjection *
+        V.starProjection * U.starProjection) * (U.starProjection * V.starProjection *
+        U.starProjection)) := by
   have hfour : ∀ z : E →L[ℂ] E, (4 : ℝ) • z = 4 * z := by
     intro z; ext y; simp; module
   have hp : U.starProjection * U.starProjection = U.starProjection :=
@@ -307,10 +311,12 @@ determine membership and gauge in *every* symmetric operator ideal, so a bound
 proved for `sinTwoThetaIdealBlock U V` is a bound for the paper's object in every
 unitarily invariant norm, not only at the operator norm. -/
 theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers :
-    (sinTwoThetaIdealBlock U V).HasSameApproximationNumbers
+    (sinTwoThetaIdealBlock U V).SameSingularValues
       (directedSinTwoAngleOperatorC U V) := by
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hblock : sinTwoThetaIdealBlock U V
       = U.starProjection ∘L (reflectedU U V)ᗮ.starProjection := by
     rw [sinTwoThetaIdealBlock, starProjection_map_orthogonal_reflection]
@@ -320,7 +326,7 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers :
       ← ContinuousLinearMap.star_eq_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
       (isSelfAdjoint_starProjection U).star_eq,
       (isSelfAdjoint_starProjection (reflectedU U V)ᗮ).star_eq]
-  have hmod := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hmod := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (ContinuousLinearMap.modulus_hasSameApproximationNumbers
       ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection)) n
   rw [show ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection).modulus

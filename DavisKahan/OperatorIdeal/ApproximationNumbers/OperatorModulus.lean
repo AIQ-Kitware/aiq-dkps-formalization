@@ -42,16 +42,10 @@ variable {E : Type v} {F : Type vF}
 complete approximation-number sequence.  The modulus acts on `E` while `T` maps
 into `F`, so this is the heterogeneous relation.
 
-Named for its conclusion.  The previous name said *singular values* where the
-conclusion says `HasSameApproximationNumbers`; the two agree in this
-development, but a name has to describe the statement it is attached to.
-
-The former `modulus_sameApproximationSingularValues`, a "square-operator
-specialization", is gone: its body was identical to this one and `F := E` is a
-legal instantiation, so it was the same theorem under a second name. -/
+The square-operator case is obtained by taking `F := E`. -/
 theorem modulus_hasSameApproximationNumbers
     (T : E →L[ℂ] F) :
-    (ContinuousLinearMap.modulus T).HasSameApproximationNumbers T :=
+    (ContinuousLinearMap.modulus T).SameSingularValues T :=
   T.modulus_hasSameApproximationNumbers
 
 end

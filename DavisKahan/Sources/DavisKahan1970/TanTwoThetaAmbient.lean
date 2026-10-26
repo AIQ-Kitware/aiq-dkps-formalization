@@ -1212,7 +1212,8 @@ private theorem kyFan_upperBlock_eq_compression (K : E →L[ℂ] E) (k : ℕ) :
   have heq : projectionBlock Uᗮᗮ Uᗮ K = projectionBlock U Uᗮ K := by
     simp only [projectionBlock, Submodule.orthogonal_orthogonal]
   rw [heq]
-  exact (projectionBlock_same_compression U Uᗮ K).kyFanApproximationGauge_eq k
+  exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression U Uᗮ K).kyFanGaugeReal_eq k)
 
 private theorem kyFan_lowerBlock_eq_upperBlock (K : E →L[ℂ] E)
     (hK : IsSelfAdjoint K) (k : ℕ) :
@@ -1347,8 +1348,9 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
         (2 * (projectorDifference U V * doubleSecant U V))) =
       kyFanApproximationGauge k (doubleAngleTangentOperator X hXc) := by
     rw [tanTwoBlockRepresentative_lowerBlock hq, hambient]
-    exact (sameApproximationSingularValues_ambientSubspaceBlock U Uᗮ
-      (doubleAngleTangentOperator X hXc)).kyFanApproximationGauge_eq k
+    exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (sameApproximationSingularValues_ambientSubspaceBlock U Uᗮ
+      (doubleAngleTangentOperator X hXc)).kyFanGaugeReal_eq k)
   -- the right-hand side: the shifted block's cross entry is the upper block of `H`
   have hDB01 : Dd.B01 = -B.B01 := rfl
   have hright : kyFanApproximationGauge k Dd.B01 =
@@ -1437,8 +1439,9 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
   have hmodulus : kyFanApproximationGauge k (absTanTwoAngleOperatorC U V) =
       kyFanApproximationGauge k (tanTwoBlockRepresentative U V) := by
     rw [absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
-    exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
-      (tanTwoBlockRepresentative U V)).kyFanGaugeReal_eq k
+    exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+      (tanTwoBlockRepresentative U V)).kyFanGaugeReal_eq k)
   rw [hmodulus]
   linarith [hcombine.trans hpinch]
 
@@ -1466,7 +1469,8 @@ theorem tanTwoTheta_ambient_bounded_orderedForm_kyFan_complex
   have htr := norm_sinAngleOperatorC_lt_of_isQuarterAcute hq
   have h := tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner hH hab
     (fun _ ht => cos_two_ne_zero_of_norm_sinAngleOperatorC_lt htr ht)
-    (fun j => tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex hA hH hAU hAplusH_V
+    (fun j => tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex hA hH hAU
+      hAplusH_V
       hab hUhigh hUperpLow hHU hHUperp hq j) k
   rwa [absTanTwoAngleOperatorC_eq_directedTanTwoAngleOperatorC U V htr] at h
 

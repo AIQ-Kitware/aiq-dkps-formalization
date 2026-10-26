@@ -218,7 +218,7 @@ theorem approximationSingularValue_blockCompression_complexify
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp
     (complexifySubmoduleEquiv Ω) (complexifySubmoduleEquiv Γ)
     (blockCompression_complexify_equiv Ω Γ K)
-  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans
+  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
     (approximationSingularValue_complexify (blockCompression Ω Γ K) n)
 
 /-- The finite Ky Fan gauge of a directed corner is preserved on the nose by
@@ -539,9 +539,11 @@ theorem kyFanApproximationGauge_directedCorner_complexify (K : E →L[ℝ] E) (k
         (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)) =
       kyFanApproximationGauge k (blockCompression Uᗮ U K) := by
-  have hc := (projectionBlock_same_compression (complexifySubmodule U)ᗮ
-    (complexifySubmodule U) (complexify K)).symm.kyFanApproximationGauge_eq k
-  have hr := (projectionBlock_same_compression Uᗮ U K).kyFanApproximationGauge_eq k
+  have hc := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    (projectionBlock_same_compression (complexifySubmodule U)ᗮ
+      (complexifySubmodule U) (complexify K)).kyFanGaugeReal_eq k).symm
+  have hr := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression Uᗮ U K).kyFanGaugeReal_eq k)
   rw [hc, projectionBlock_complexifySubmodule,
     kyFanApproximationGauge_complexify, hr]
 

@@ -70,7 +70,7 @@ complete singular-value sequences. -/
 theorem sourceFullSin_same_coordinateCrossBlockSum
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (fullSinAngleBlockC U V) (crossBlockSumC U V) := by
   exact sameApproximationSingularSequence_continuousOrthogonalBlockSum
     (directedSinAngleBlock_same_sineBlock U V)
@@ -81,7 +81,7 @@ cross sum printed in the paper. -/
 theorem sourceCrossBlockSum_same_ambientCrossSum
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (crossBlockSumC U V) (crossSineSum V U) := by
   let Udom : E ≃ₗᵢ[ℂ] WithLp 2 (U × Uᗮ) := U.orthogonalDecomposition
   let Vcod : E ≃ₗᵢ[ℂ] WithLp 2 (Vᗮ × (Vᗮ)ᗮ) := Vᗮ.orthogonalDecomposition
@@ -122,18 +122,20 @@ theorem sourceCrossBlockSum_same_ambientCrossSum
     simp [crossBlockSumC, sineBlockC,
       crossSineSum, Udom, Vcod, Submodule.adjoint_subtypeL,
       hUbStar, hV1, hV2]
-  exact (SameApproximationSingularValues.of_isometricEquiv_comp
-    Vcod Udom hfactor).symm
+  exact ContinuousLinearMap.sameSingularValues_symm
+    (SameApproximationSingularValues.of_isometricEquiv_comp Vcod Udom hfactor)
 
 /-- The paper's literal full `sin Theta` has exactly the singular values of
 `P_U-P_V`. -/
 theorem sourceFullSin_same_projectionDifference
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (fullSinAngleBlockC U V) (U.starProjection - V.starProjection) := by
-  exact (sourceFullSin_same_coordinateCrossBlockSum U V).trans
-    ((sourceCrossBlockSum_same_ambientCrossSum U V).trans
+  exact ContinuousLinearMap.sameSingularValues_trans
+    (sourceFullSin_same_coordinateCrossBlockSum U V)
+    (ContinuousLinearMap.sameSingularValues_trans
+      (sourceCrossBlockSum_same_ambientCrossSum U V)
       (crossSineSum_same_projectionDiff V U))
 
 /-- Every source norm gives the same value to the literal full angle sine and
@@ -146,7 +148,8 @@ theorem sourceFullSin_mem_iff_and_gauge_eq
       N.Mem (U.starProjection - V.starProjection)) ∧
     N.gauge (fullSinAngleBlockC U V) =
       N.gauge (U.starProjection - V.starProjection) :=
-  (sourceFullSin_same_projectionDifference U V).normingMem_iff_and_gauge_eq N
+  SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N
+    (sourceFullSin_same_projectionDifference U V)
 
 end
 

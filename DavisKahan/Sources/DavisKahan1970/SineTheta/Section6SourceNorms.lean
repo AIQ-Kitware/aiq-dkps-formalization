@@ -137,9 +137,9 @@ theorem lemma6_1_converse_sourceExact
     (Ω Γ : Submodule 𝕜 E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K Ktilde L Ltilde : E →L[𝕜] E)
-    (hK : SameApproximationSingularValues
+    (hK : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ K) (projectionBlock Ωᗮ Γᗮ Ktilde))
-    (hL : SameApproximationSingularValues
+    (hL : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ L) (projectionBlock Ωᗮ Γᗮ Ltilde))
     (hsum : ∀ M : NormalizedUnitaryInvariantNorm.{u, v} 𝕜,
       M.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ Ltilde) →
@@ -231,9 +231,9 @@ theorem lemma6_1_converse_sourceExact_complex
     (Ω Γ : Submodule ℂ E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K Ktilde L Ltilde : E →L[ℂ] E)
-    (hK : SameApproximationSingularValues
+    (hK : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ K) (projectionBlock Ωᗮ Γᗮ Ktilde))
-    (hL : SameApproximationSingularValues
+    (hL : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ L) (projectionBlock Ωᗮ Γᗮ Ltilde))
     (hsum : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℂ,
       M.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ Ltilde) →
@@ -252,9 +252,9 @@ theorem lemma6_1_converse_sourceExact_real
     (Ω Γ : Submodule ℝ E)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K Ktilde L Ltilde : E →L[ℝ] E)
-    (hK : SameApproximationSingularValues
+    (hK : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ K) (projectionBlock Ωᗮ Γᗮ Ktilde))
-    (hL : SameApproximationSingularValues
+    (hL : ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ L) (projectionBlock Ωᗮ Γᗮ Ltilde))
     (hsum : ∀ M : NormalizedUnitaryInvariantNorm.{0, v} ℝ,
       M.Mem (projectionBlock Ω Γ L + projectionBlock Ωᗮ Γᗮ Ltilde) →

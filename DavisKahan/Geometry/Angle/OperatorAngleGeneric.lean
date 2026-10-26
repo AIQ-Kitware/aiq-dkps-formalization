@@ -729,7 +729,7 @@ modulus needs a real functional calculus on the operator algebra; this file acti
 calculus at every `RCLike` field, so the same one-line proof applies. -/
 theorem modulus_hasSameApproximationNumbers_rclike {F : Type v} [NormedAddCommGroup F]
     [InnerProductSpace 𝕜 F] [CompleteSpace F] (T : E →L[𝕜] F) :
-    (ContinuousLinearMap.modulus T).HasSameApproximationNumbers T :=
+    (ContinuousLinearMap.modulus T).SameSingularValues T :=
   ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq _ _ T.norm_modulus_apply
 
 /-- The literal ambient sine and either orientation of the projector difference
@@ -737,22 +737,24 @@ have the same complete approximation-number sequence.  This is a proof-facing
 transport lemma; `cfc_sin_angleOperator` is the stronger semantic identity that
 identifies the presentation object with the positive sine itself. -/
 theorem sinAngleOperator_hasSameApproximationNumbers_projectorDifference :
-    (sinAngleOperator U V).HasSameApproximationNumbers
+    (sinAngleOperator U V).SameSingularValues
       (V.starProjection - U.starProjection) := by
   rw [sinAngleOperator]
-  refine (modulus_hasSameApproximationNumbers_rclike
-    (U.starProjection - V.starProjection)).trans ?_
+  refine ContinuousLinearMap.sameSingularValues_trans
+    (modulus_hasSameApproximationNumbers_rclike (U.starProjection - V.starProjection)) ?_
   have hneg : (V.starProjection - U.starProjection : E →L[𝕜] E) =
       -(U.starProjection - V.starProjection) := by abel
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [hneg, ContinuousLinearMap.approximationNumber_neg]
 
 /-- The consequence the ambient `sin 2Θ` theorem uses: `sin 2Θ` and the reflected projector
 difference have the same complete singular-value sequence, so no unitarily invariant norm can
 tell them apart. -/
 theorem sinTwoAngleOperator_hasSameApproximationNumbers :
-    (sinTwoAngleOperator U V).HasSameApproximationNumbers
+    (sinTwoAngleOperator U V).SameSingularValues
       ((U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E)).starProjection - U.starProjection) := by
   rw [sinTwoAngleOperator_eq_modulus_starProjection_sub]
   exact modulus_hasSameApproximationNumbers_rclike _
@@ -889,7 +891,7 @@ is a fact about the doubling, and it needs a proof.
 `t = T T⋆` and `s = T⋆ T` of the single operator `T = P_U P_V`.  So with `W = T (1 - s)^{1/2}`
 the two are the moduli of `2W⋆` and `2W`, which have the same approximation numbers. -/
 theorem directedSinTwoAngleOperator_hasSameApproximationNumbers_swap :
-    (directedSinTwoAngleOperator U V).HasSameApproximationNumbers
+    (directedSinTwoAngleOperator U V).SameSingularValues
       (directedSinTwoAngleOperator V U) := by
   have hAsa : star U.starProjection = U.starProjection :=
     (isSelfAdjoint_starProjection U).star_eq
@@ -964,11 +966,13 @@ theorem directedSinTwoAngleOperator_hasSameApproximationNumbers_swap :
     change directedSinTwoAngleOperator V U * directedSinTwoAngleOperator V U =
       star ((2 : ℝ) • W) * ((2 : ℝ) • W)
     rw [hstar2, hfour, hW'W, directedSinTwoAngleOperator_mul_self, ← hsdef]
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
-  rw [hUV, hVU, (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  rw [hUV, hVU, ContinuousLinearMap.SameSingularValues.approximationNumber_eq
       (modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • star W)) n,
-    (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+    ContinuousLinearMap.SameSingularValues.approximationNumber_eq
       (modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • W)) n,
     show ((2 : ℝ) • star W) = ((2 : ℝ) • W).adjoint by
       rw [← ContinuousLinearMap.star_eq_adjoint, hstar2],

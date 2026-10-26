@@ -1145,3 +1145,34 @@ The signature preflight (`check_comparator_signatures.py --no-build`) passed
 all 42 compared declarations, with three declared absent and skipped; no
 external comparator result is inferred. The tracked mathematical tree is
 committed. The original three untracked files remain untouched.
+
+### October 26: consume native equality of singular-value sequences
+
+The relation `ContinuousLinearMap.HasSameApproximationNumbers`, its unfolding
+lemma and equivalence proofs are removed. Both source relation aliases
+`SameApproximationSingularSequence` and `SameApproximationSingularValues`, and
+their duplicated equivalence and prefix-gauge proofs, are also removed.
+Maintained consumers take accepted `ContinuousLinearMap.SameSingularValues`
+directly; no old relation name or forwarding equivalence is exported.
+
+Accepted `ApproximationNumber.Equivalence` explicitly documents adaptation
+from the DKPS donor. Its native nonnegative sequence supports independent
+universes and seminormed spaces over arbitrary nontrivially normed fields.
+This records explicit proof adaptation at Tau Ceti `97bf1230`, with historical
+Kitware/Jon Crall/OpenAI GPT-5.6 Thinking/Claude Opus 5 donor provenance retained.
+
+Additional norm equality and complete-source min--max/pointwise comparisons
+remain local on the native carrier. The comparisons permit incomplete targets,
+where the accepted factorization route requires complete targets. A semantic
+source search also identified accepted `ApproximationNumber.Modulus` results;
+the still-local complete-space modulus declarations are the next retirement
+obligation, rather than unmerged mathematics. The source norm, Hilbert--Schmidt and subspace transport results retain
+their mathematical scope. The existing real-gauge module projects native
+equality to scalar approximation-number and gauge equality by coercion; no
+old relation or conversion between relation types is maintained. The remaining real approximation-number
+and gauge views are a separate migration obligation; this change does not claim
+those views retired. Papers, visualizations and original untracked files are
+untouched. The native relation/gauge core and focused full-angle, generic
+double-angle and selected-branch consumer builds passed (6,712 and 7,646 jobs),
+each following its cache fetch. Full default validation will be recorded at
+the committed checkpoint.

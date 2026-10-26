@@ -223,8 +223,8 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmet
     tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex hA hred hB
       hZsa hZ2 hV.mapsDomain hV.commutes hUa hUb hab N hRmem
   refine ⟨fun n => ?_, fun n => ?_, hmem, hle⟩
-  · rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]; exact hcorner n
-  · rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]
+  · rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]; exact hcorner n
+  · rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
     exact approximationNumber_reflectionTangentCorner hZsa hZ2 hS1 n
 
 end DerivedReflection

@@ -729,13 +729,15 @@ theorem hasSameApproximationNumbers_continuousOrthogonalBlockSum
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     {A C : E₀ →L[𝕜] F₀} {B D : E₁ →L[𝕜] F₁}
-    (hA : ContinuousLinearMap.HasSameApproximationNumbers A C)
-    (hB : ContinuousLinearMap.HasSameApproximationNumbers B D) :
-    ContinuousLinearMap.HasSameApproximationNumbers
+    (hA : ContinuousLinearMap.SameSingularValues A C)
+    (hB : ContinuousLinearMap.SameSingularValues B D) :
+    ContinuousLinearMap.SameSingularValues
       (continuousOrthogonalBlockSum A B)
       (continuousOrthogonalBlockSum C D) := by
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [approximationSingularValue_eq_kyFan_succ_sub,
     approximationSingularValue_eq_kyFan_succ_sub]
   congr 1 <;>
@@ -743,17 +745,25 @@ theorem hasSameApproximationNumbers_continuousOrthogonalBlockSum
       kyFanApproximationGauge_continuousOrthogonalBlockSum] <;>
     apply le_antisymm
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k))
-      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k)) _
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hA.kyFanGaugeReal_eq k)))
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hB.kyFanGaugeReal_eq k))) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k).symm)
-      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k).symm) _
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hA.kyFanGaugeReal_eq k)).symm)
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hB.kyFanGaugeReal_eq k)).symm) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k))
-      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k)) _
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hA.kyFanGaugeReal_eq k)))
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hB.kyFanGaugeReal_eq k))) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k).symm)
-      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k).symm) _
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hA.kyFanGaugeReal_eq k)).symm)
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hB.kyFanGaugeReal_eq k)).symm) _
 
 
 /-- Heterogeneous version: orthogonal block sums preserve complete singular
@@ -770,13 +780,15 @@ theorem sameApproximationSingularSequence_continuousOrthogonalBlockSum
     [NormedAddCommGroup F₁'] [InnerProductSpace 𝕜 F₁'] [CompleteSpace F₁']
     {A : E₀ →L[𝕜] F₀} {B : E₁ →L[𝕜] F₁}
     {C : E₀' →L[𝕜] F₀'} {D : E₁' →L[𝕜] F₁'}
-    (hA : ContinuousLinearMap.HasSameApproximationNumbers A C)
-    (hB : ContinuousLinearMap.HasSameApproximationNumbers B D) :
-    ContinuousLinearMap.HasSameApproximationNumbers
+    (hA : ContinuousLinearMap.SameSingularValues A C)
+    (hB : ContinuousLinearMap.SameSingularValues B D) :
+    ContinuousLinearMap.SameSingularValues
       (continuousOrthogonalBlockSum A B)
       (continuousOrthogonalBlockSum C D) := by
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [approximationSingularValue_eq_kyFan_succ_sub,
     approximationSingularValue_eq_kyFan_succ_sub,
     kyFanApproximationGauge_continuousOrthogonalBlockSum,
@@ -785,17 +797,25 @@ theorem sameApproximationSingularSequence_continuousOrthogonalBlockSum
     kyFanApproximationGauge_continuousOrthogonalBlockSum]
   congr 1 <;> apply le_antisymm
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k))
-      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k)) _
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hA.kyFanGaugeReal_eq k)))
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hB.kyFanGaugeReal_eq k))) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k).symm)
-      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k).symm) _
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hA.kyFanGaugeReal_eq k)).symm)
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hB.kyFanGaugeReal_eq k)).symm) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k))
-      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k)) _
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hA.kyFanGaugeReal_eq k)))
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hB.kyFanGaugeReal_eq k))) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq (hA.kyFanGaugeReal_eq k).symm)
-      (fun k => le_of_eq (hB.kyFanGaugeReal_eq k).symm) _
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hA.kyFanGaugeReal_eq k)).symm)
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hB.kyFanGaugeReal_eq k)).symm) _
 
 section PinchChart
 

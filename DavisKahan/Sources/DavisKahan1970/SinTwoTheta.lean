@@ -204,7 +204,7 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex
       hβα hδ hBlow hBhigh hBcomplSpec hEmem
   obtain ⟨hmem, hgauge⟩ := sinTwoTheta₀.mem_and_gauge_eq N hcanonical.1
   refine ⟨hmem, ?_⟩
-  rw [hgauge]
+  erw [hgauge]
   exact hcanonical.2
 
 /-! ### The Section 8 unequal-dimension extension
@@ -309,7 +309,8 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
   simpa only [M,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
-    sinTwoTheta₀.same_singular_values.kyFanApproximationGauge_eq k] using hcanonical.2
+    (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      sinTwoTheta₀.same_singular_values.kyFanGaugeReal_eq k)] using hcanonical.2
 
 open DavisKahan in
 /-- **Section 8 closing unequal-dimension extension of the directed
@@ -539,8 +540,10 @@ theorem sinTwoTheta_directed_unboundedReflectionResidual_blockRepresentative_sym
       ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
         { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hk
           gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hk).gauge_adjoint })) R hR V hδ hgap
-      hJdom hJintertwines (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      hJdom hJintertwines (by simp [SymmetricOperatorIdealFamily.Mem,
+        OperatorIdealFamily.gauge_kyFan])
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+      ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
     exact h.2
 
@@ -583,7 +586,8 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricN
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hk
             gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hk).gauge_adjoint })) B S hB hS hδ hgap
         (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-      simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+        ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
         SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
@@ -627,7 +631,9 @@ theorem sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
         2 * N.gauge Eop := by
-  obtain ⟨hmem, hle⟩ := sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_real N A hA Eop hEop
+  obtain ⟨hmem, hle⟩ :=
+    sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_real N A hA Eop
+    hEop
     B S hB hS hδ hgap hEmem
   refine ⟨(DavisKahan.mem_directedSinTwoAngleOperatorRC_iff _ _ N).mpr hmem, ?_⟩
   rwa [DavisKahan.gauge_directedSinTwoAngleOperatorRC]
@@ -731,7 +737,8 @@ self-adjoint operator, in a source unitarily invariant norm, over `ℂ`.**
 avoiding `(β − δ, α + δ)`.
 
 The complex counterpart of `sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_real`. -/
-theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex
+theorem
+  sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
     (Eop : Hc →L[ℂ] Hc) (hEop : Eop.IsSymmetric)
@@ -766,10 +773,12 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGa
     · have h := DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
         ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
-            gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })) A hA Eop hEop B S hB hS
+            gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })) A hA Eop hEop B
+              S hB hS
         hβα hδ hBlow hBhigh hBcomplSpec
         (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-      simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+        ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
         SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
@@ -818,7 +827,8 @@ theorem sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_c
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
         2 * N.gauge Eop := by
-  obtain ⟨hmem, hle⟩ := sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex N A hA Eop hEop B S hB hS
+  obtain ⟨hmem, hle⟩ :=
+    sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex N A hA Eop hEop B S hB hS
     hβα hδ hBlow hBhigh hBcomplSpec hEmem
   refine ⟨(DavisKahan.mem_directedSinTwoAngleOperatorC_iff _ _ N).mpr hmem, ?_⟩
   rwa [DavisKahan.gauge_directedSinTwoAngleOperatorC]
@@ -890,9 +900,11 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricN
     · have h := DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap
         ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
-            gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })) A hA Eop hEop B S hB hS
+            gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })) A hA Eop hEop B
+              S hB hS
         hδ hgap (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-      simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+        ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
         SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h

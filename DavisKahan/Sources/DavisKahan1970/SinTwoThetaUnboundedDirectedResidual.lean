@@ -123,7 +123,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
     norm_num
   have : ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
     { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
-      gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })).toOperatorIdealFamily.IsComplete :=
+      gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint
+        })).toOperatorIdealFamily.IsComplete :=
     inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
     ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
@@ -133,7 +134,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
     hBlow hBhigh hBcomplSpec (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-  rw [        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+  rw [        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+    ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
@@ -210,7 +212,8 @@ requirement for a useful unbounded conclusion.
 
 The reflected system is built internally from the trial data; no reflection
 residual appears in the statement. -/
-theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex
+theorem
+  sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
@@ -228,9 +231,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_s
           (sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V) ≤
         2 * N.gauge R := by
   let R0 : H →L[ℂ] H := R ∘L V.subtypeL.adjoint
-  have hsameR : SameApproximationSingularSequence R0 R :=
+  have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
     sameApproximationSingularValues_extendDomainByZero V R
-  have htransport := hsameR.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
@@ -239,8 +242,11 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_s
           (sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V) ≤
         kyFanApproximationGauge k (((2 : ℝ) : ℂ) • R0) := by
     intro k
-    rw [kyFanApproximationGauge_smul, htwo, hsameR.kyFanApproximationGauge_eq k]
-    exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_kyFan_complex hA B hB hVdom hres
+    erw [kyFanApproximationGauge_smul, htwo, (show kyFanApproximationGauge k _ =
+      kyFanApproximationGauge k _ from
+      hsameR.kyFanGaugeReal_eq k)]
+    exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_kyFan_complex hA
+      B hB hVdom hres
       hβα hδ hBlow hBhigh hBcomplSpec k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • R0) := by
     intro htop
@@ -302,7 +308,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+    ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
@@ -392,9 +399,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
           (sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V) ≤
         2 * N.gauge R := by
   let R0 : H →L[ℂ] H := R ∘L V.subtypeL.adjoint
-  have hsameR : SameApproximationSingularSequence R0 R :=
+  have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
     sameApproximationSingularValues_extendDomainByZero V R
-  have htransport := hsameR.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
@@ -403,7 +410,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
           (sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V) ≤
         kyFanApproximationGauge k (((2 : ℝ) : ℂ) • R0) := by
     intro k
-    rw [kyFanApproximationGauge_smul, htwo, hsameR.kyFanApproximationGauge_eq k]
+    erw [kyFanApproximationGauge_smul, htwo, (show kyFanApproximationGauge k _ =
+      kyFanApproximationGauge k _ from
+      hsameR.kyFanGaugeReal_eq k)]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
       hA B hB hVdom hres hδ hgap k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • R0) := by
@@ -466,7 +475,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+    ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
@@ -557,9 +567,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
           (sinTwoThetaIdealBlock U V) ≤
         2 * N.gauge R := by
   let R0 : H →L[ℂ] H := R ∘L V.subtypeL.adjoint
-  have hsameR : SameApproximationSingularSequence R0 R :=
+  have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
     sameApproximationSingularValues_extendDomainByZero V R
-  have htransport := hsameR.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
@@ -568,7 +578,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
           (sinTwoThetaIdealBlock U V) ≤
         kyFanApproximationGauge k (((2 : ℝ) : ℂ) • R0) := by
     intro k
-    rw [kyFanApproximationGauge_smul, htwo, hsameR.kyFanApproximationGauge_eq k]
+    erw [kyFanApproximationGauge_smul, htwo, (show kyFanApproximationGauge k _ =
+      kyFanApproximationGauge k _ from
+      hsameR.kyFanGaugeReal_eq k)]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_complex
       hA hred hVdom hres hδ hgap k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • R0) := by

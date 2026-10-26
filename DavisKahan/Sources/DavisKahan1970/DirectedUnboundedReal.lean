@@ -172,7 +172,8 @@ theorem approximationSingularValue_complexifyTrialData_residual
     intro z
     rfl
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans (approximationSingularValue_complexify data.residual n)
+  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
+      (approximationSingularValue_complexify data.residual n)
 
 /-- The finite Ky Fan gauge of the residual is exactly preserved by the complexification of
 trial-block data. -/

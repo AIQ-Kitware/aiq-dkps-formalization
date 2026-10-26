@@ -74,12 +74,13 @@ theorem SameApproximationSingularSequence.approximationNumberEnergy_eq
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) :
+    (h : ContinuousLinearMap.SameSingularValues A B) :
     approximationNumberEnergy A = approximationNumberEnergy B := by
   unfold approximationNumberEnergy
   congr 1
   funext n
-  exact congrArg (fun x : ℝ => ENNReal.ofReal (x ^ 2)) ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h n)
+  exact congrArg (fun x : ℝ => ENNReal.ofReal (x ^ 2))
+    (ContinuousLinearMap.SameSingularValues.approximationNumber_eq h n)
 
 /-- Complete singular-value equality preserves Hilbert--Schmidt membership. -/
 theorem SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff
@@ -91,9 +92,9 @@ theorem SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [CompleteSpace E₂]
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) :
+    (h : ContinuousLinearMap.SameSingularValues A B) :
     approximationNumberEnergy A ≠ ⊤ ↔ approximationNumberEnergy B ≠ ⊤ := by
-  rw [h.approximationNumberEnergy_eq]
+  rw [(SameApproximationSingularSequence.approximationNumberEnergy_eq h)]
 
 
 /-- Adjoint invariance of Hilbert--Schmidt membership. -/
@@ -105,8 +106,10 @@ theorem approximationNumberEnergy_ne_top_adjoint_iff
     (A : E →L[𝕜] F) :
     approximationNumberEnergy A.adjoint ≠ ⊤ ↔ approximationNumberEnergy A ≠ ⊤ := by
   apply SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   exact approximationSingularValue_adjoint n A
 
 

@@ -327,13 +327,13 @@ private theorem tanTwoThetaGraphCoordinate_bound_of_quarterAcute
     exact N.gauge_comp_le_of_contractions hHmem
       U.starProjection Uᗮ.starProjection
       U.starProjection_norm_le Uᗮ.starProjection_norm_le
-  have hseqB : SameApproximationSingularSequence Camb B.B01 := by
+  have hseqB : ContinuousLinearMap.SameSingularValues Camb B.B01 := by
     have hseq := sameApproximationSingularValues_ambientSubspaceBlock Uᗮ U B.B01
     have hext : U.subtypeL ∘L B.B01 ∘L Uᗮ.subtypeL.adjoint = Camb := by
       simpa only [Camb] using ambientUpperRightBlock_eq H U B.B01 hB01
     rw [hext] at hseq
     exact hseq
-  have htransport := hseqB.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hseqB
   have hBmem : N.Mem B.B01 := htransport.1.mp hCambMem
   have hBgauge : N.gauge B.B01 = N.gauge Camb := htransport.2.symm
   have hCmem : N.Mem C.B01 := by
@@ -452,12 +452,12 @@ theorem tanTwoTheta_selectedBranch_symmetricNorming
   have hgraph := tanTwoThetaGraphCoordinate_bound_of_quarterAcute
     N A H U V hA hH hAU hAplusH_V hab hUhigh hUperpLow
       hHU hHUperp hHmem hquarter
-  have hseq : SameApproximationSingularSequence
+  have hseq : ContinuousLinearMap.SameSingularValues
       (directedTanTwoAngleOperatorC U V hquarter)
       (tanTwoThetaGraphCoordinateOperator U V hquarter) := by
     simpa only [tanTwoThetaGraphCoordinateOperator] using
       canonicalTanTwoAngle_hasSameApproximationNumbers_graphCoordinate U V hquarter
-  have htransport := hseq.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hseq
   refine ⟨hquarter, htransport.1.mpr hgraph.1, ?_⟩
   rw [htransport.2]
   exact hgraph.2

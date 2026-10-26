@@ -807,7 +807,7 @@ operator have the same full approximation-number sequence. -/
 theorem canonicalTanTwoAngle_hasSameApproximationNumbers_graphCoordinate
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hquarter : IsQuarterAcute U V) :
-    (directedTanTwoAngleOperatorC U V hquarter).HasSameApproximationNumbers
+    (directedTanTwoAngleOperatorC U V hquarter).SameSingularValues
       (doubleAngleTangentOperator
         (quarterAcuteAngularCoordinate U V hquarter)
         (norm_quarterAcuteAngularCoordinate_lt_one U V hquarter)) := by
@@ -825,9 +825,8 @@ theorem canonicalTanTwoAngle_hasSameApproximationNumbers_graphCoordinate
       ambient_doubleAngleTangent_eq_extendCoordinate U Y
         (quarterAcuteAngularOperator_isAngularOperator U V hquarter) hYc
   rw [hcanonical]
-  exact
-    (modulus_hasSameApproximationNumbers
-      (doubleAngleTangentOperator Y hYc)).trans
+  exact ContinuousLinearMap.sameSingularValues_trans
+    (modulus_hasSameApproximationNumbers (doubleAngleTangentOperator Y hYc))
       (by
         rw [hambient]
         exact sameApproximationSingularValues_ambientSubspaceBlock U Uᗮ

@@ -208,9 +208,11 @@ theorem approximationNumberEnergy_comp_starProjection
   have hprojL : ‖L.orthogonalProjectionOnto‖ ≤ 1 := by
     exact_mod_cast L.orthogonalProjectionOnto_norm_le
   -- hence the cutoff and the compression have the same singular sequence
-  have hsame : SameApproximationSingularSequence (A ∘L K.starProjection) T := by
-    apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  have hsame : ContinuousLinearMap.SameSingularValues (A ∘L K.starProjection) T := by
+    apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro m
+    apply NNReal.eq
+    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
     have h1 : (A ∘L K.starProjection).approximationNumber m ≤
         T.approximationNumber m := by
       calc (A ∘L K.starProjection).approximationNumber m
@@ -272,7 +274,7 @@ theorem approximationNumberEnergy_comp_starProjection
   have hfrob : ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2
       = ∑ k : Fin n, ‖T (c k)‖ ^ 2 :=
     TauCeti.sum_sq_singularValues T.toLinearMap hn c
-  rw [hsame.approximationNumberEnergy_eq,
+  rw [(SameApproximationSingularSequence.approximationNumberEnergy_eq hsame),
     approximationNumberEnergy_eq_sum_range_of_rank_le hTrank,
     ← Fin.sum_univ_eq_sum_range
       (fun m => ENNReal.ofReal ((approximationSingularValue m T) ^ 2)) n,
@@ -526,13 +528,15 @@ theorem approximationNumberEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
 theorem hilbertSchmidtGauge_eq_ofReal_hilbertSchmidtNorm
     (A : F →L[𝕜] E)
     (hA : approximationNumberEnergy A ≠ ⊤) :
-    ((OperatorIdealFamily.hilbertSchmidt 𝕜).gauge A) = ENNReal.ofReal (ContinuousLinearMap.hilbertSchmidtNorm A) := by
+    ((OperatorIdealFamily.hilbertSchmidt 𝕜).gauge A) = ENNReal.ofReal
+      (ContinuousLinearMap.hilbertSchmidtNorm A) := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
   have henergy : A.hilbertSchmidtEnergy b = approximationNumberEnergy A := by
     rw [← hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy b A]
     exact (approximationNumberEnergy_eq_basisEnergy b A).symm
   have hne : approximationNumberEnergy A ≠ ⊤ := hA
-  rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy, OperatorIdealFamily.gauge_hilbertSchmidt A b,
+  rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy,
+    OperatorIdealFamily.gauge_hilbertSchmidt A b,
     henergy, Real.sqrt_eq_rpow,
     ← ENNReal.ofReal_rpow_of_nonneg ENNReal.toReal_nonneg (by norm_num),
     ENNReal.ofReal_toReal hne, one_div]

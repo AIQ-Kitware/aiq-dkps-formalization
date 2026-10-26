@@ -159,7 +159,7 @@ theorem blockCompression_orthogonal_transport_hasSameApproximationNumbers
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (K : E →L[𝕜] E) :
     (TauCeti.DavisKahan.ExactSinTheta.blockCompression
-      (submodule (e := e) U)ᗮ (submodule (e := e) U) (clm (e := e) K)).HasSameApproximationNumbers
+      (submodule (e := e) U)ᗮ (submodule (e := e) U) (clm (e := e) K)).SameSingularValues
       (TauCeti.DavisKahan.ExactSinTheta.blockCompression
         (submodule (e := e) Uᗮ) (submodule (e := e) U) (clm (e := e) K)) := by
   let P₁ := TauCeti.DavisKahan.ExactSinTheta.projectionBlock
@@ -175,11 +175,12 @@ theorem blockCompression_orthogonal_transport_hasSameApproximationNumbers
     (submodule (e := e) U)ᗮ (submodule (e := e) U) (clm (e := e) K)
   have h₂ := TauCeti.DavisKahan.ExactSinTheta.projectionBlock_same_compression
     (submodule (e := e) Uᗮ) (submodule (e := e) U) (clm (e := e) K)
-  have hPseq : P₁.HasSameApproximationNumbers P₂ := by
+  have hPseq : P₁.SameSingularValues P₂ := by
     rw [hP]
-  exact ContinuousLinearMap.HasSameApproximationNumbers.trans
-    (ContinuousLinearMap.HasSameApproximationNumbers.symm h₁)
-    (ContinuousLinearMap.HasSameApproximationNumbers.trans hPseq h₂)
+    exact ContinuousLinearMap.sameSingularValues_refl _
+  exact ContinuousLinearMap.sameSingularValues_trans
+    (ContinuousLinearMap.sameSingularValues_symm h₁)
+    (ContinuousLinearMap.sameSingularValues_trans hPseq h₂)
 
 /-- Symmetric-norm ideal membership for the transported complementary block can be
 stated directly with `(submodule U)ᗮ`, without dependent rewriting. -/

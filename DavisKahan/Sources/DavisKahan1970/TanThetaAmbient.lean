@@ -1163,8 +1163,9 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
   have hmodulus : kyFanApproximationGauge k (tanAngleOperatorC U V) =
       kyFanApproximationGauge k (tanBlockRepresentative U V) := by
     rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
-    exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
-      (tanBlockRepresentative U V)).kyFanGaugeReal_eq k
+    exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+      (tanBlockRepresentative U V)).kyFanGaugeReal_eq k)
   rw [hmodulus]
   exact hcombine.trans hpinch
 
@@ -1251,7 +1252,8 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_crossedDefects
     ∀ k : ℕ,
       delta * kyFanApproximationGauge k (tanAngleOperatorC U V) ≤
         kyFanApproximationGauge k (T - A) :=
-  tanTheta_ambient_bounded_kyFan_complex_of_transversality hT hA hV hAU hdelta hCompressionUpper hUnwantedLower
+  tanTheta_ambient_bounded_kyFan_complex_of_transversality hT hA hV hAU hdelta hCompressionUpper
+    hUnwantedLower
     (norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent hT hV hdelta
       hCompressionUpper hUnwantedLower h35)
 
@@ -1276,7 +1278,8 @@ theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge (T - A) :=
   ⟨norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent hT hV hdelta
       hCompressionUpper hUnwantedLower h35,
-    tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality N hT hA hV hAU hdelta hCompressionUpper hUnwantedLower
+    tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality N hT hA hV hAU hdelta
+      hCompressionUpper hUnwantedLower
       (norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent hT hV hdelta
         hCompressionUpper hUnwantedLower h35) hMem⟩
 

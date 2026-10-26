@@ -19,8 +19,8 @@ identification explicit.
 
 Because the ambient and subtype coordinates are genuinely different Hilbert
 spaces, the statements use the heterogeneous relation
-`SameApproximationSingularSequence` rather than its same-type specialisation
-`SameApproximationSingularValues`.
+`ContinuousLinearMap.SameSingularValues` rather than its same-type specialisation
+`ContinuousLinearMap.SameSingularValues`.
 
 **The mathematics is not here.**  Nothing in these three statements mentions
 Davis--Kahan, so all of it lives in
@@ -49,21 +49,23 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+omit [CompleteSpace F] in
 /-- Extending a map from a closed subspace by zero on its orthogonal complement
 preserves every approximation singular value. -/
 theorem sameApproximationSingularValues_extendDomainByZero
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (T : U →L[𝕜] F) :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (T ∘L U.subtypeL.adjoint) T :=
   ContinuousLinearMap.hasSameApproximationNumbers_extendDomainByZero U T
 
+omit [CompleteSpace E] in
 /-- Including the range of a map into the ambient Hilbert space preserves every
 approximation singular value. -/
 theorem sameApproximationSingularValues_includeCodomain
     (V : Submodule 𝕜 F) [V.HasOrthogonalProjection]
     (T : E →L[𝕜] V) :
-    SameApproximationSingularSequence (V.subtypeL ∘L T) T :=
+    ContinuousLinearMap.SameSingularValues (V.subtypeL ∘L T) T :=
   ContinuousLinearMap.hasSameApproximationNumbers_includeCodomain V T
 
 /-- Ambient extension of a rectangular subspace block preserves the complete
@@ -72,7 +74,7 @@ theorem sameApproximationSingularValues_ambientSubspaceBlock
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (V : Submodule 𝕜 F) [V.HasOrthogonalProjection]
     (T : U →L[𝕜] V) :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (V.subtypeL ∘L T ∘L U.subtypeL.adjoint) T :=
   ContinuousLinearMap.hasSameApproximationNumbers_ambientSubspaceBlock U V T
 

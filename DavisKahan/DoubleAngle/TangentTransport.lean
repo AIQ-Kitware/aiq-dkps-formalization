@@ -599,7 +599,7 @@ the same approximation numbers as its operator.  Chaining the three gives the
 transport. -/
 theorem sameApproximationSingularValues_unboundedReflectionTangent
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
-    ExactSinTheta.SameApproximationSingularValues
+    ContinuousLinearMap.SameSingularValues
       (unboundedReflectionTangent U V.reflectionOperator)
       (absTanTwoAngleOperatorC U V) := by
   have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
@@ -614,17 +614,19 @@ theorem sameApproximationSingularValues_unboundedReflectionTangent
         = unboundedReflectionTangent U V.reflectionOperator := by
     rw [unboundedReflectionTangent_reflection_eq U V hinv, hrefl]
     ext x; rfl
-  have h1 : ExactSinTheta.SameApproximationSingularValues
+  have h1 : ContinuousLinearMap.SameSingularValues
       (unboundedReflectionTangent U V.reflectionOperator)
       (tanTwoBlockRepresentative U V) := by
     rw [← hcomp]
     exact ExactSinTheta.SameApproximationSingularValues.comp_isometricEquiv
       (LinearIsometryEquiv.refl ℂ Ec) U.reflection
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
-  rw [(ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h1 n,
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  rw [ContinuousLinearMap.SameSingularValues.approximationNumber_eq h1 n,
     absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
-  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (ContinuousLinearMap.modulus_hasSameApproximationNumbers
       (tanTwoBlockRepresentative U V)) n).symm
 

@@ -213,7 +213,8 @@ theorem reflectionPerturbation_normingMem_and_gauge_le
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
             gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }))
         V Eop (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-      rw [                SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      rw [                SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+        ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
         SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
@@ -814,7 +815,7 @@ approximation numbers, so no source norm can tell them apart. -/
 theorem sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
     (U V : Submodule ℝ Er)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (complexify (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorR U V))
       (complexify ((U.map (V.reflection.toLinearEquiv : Er →ₗ[ℝ] Er)).starProjection -
         U.starProjection)) := by

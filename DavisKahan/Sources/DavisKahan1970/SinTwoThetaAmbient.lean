@@ -172,7 +172,8 @@ theorem sinTheta_spectrum_block_all_kyFan
     have hdnorm : ‖((d : ℝ) : ℂ)‖ = d := by simp [abs_of_pos hd]
     have : ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
-        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })).toOperatorIdealFamily.IsComplete :=
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint
+          })).toOperatorIdealFamily.IsComplete :=
       inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
     have hraw := sinTheta_spectrum_block_gauge
       ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
@@ -180,12 +181,15 @@ theorem sinTheta_spectrum_block_all_kyFan
           gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint }))
       hA hB hU hV hd hab hUspec hVspec
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+      ENNReal.coe_toReal,
       ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
-    have hone := (projectionBlock_same_compression Vᗮ U
-      (((d : ℝ) : ℂ) • (1 : E →L[ℂ] E))).kyFanApproximationGauge_eq k
+    have hone := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression Vᗮ U
+      (((d : ℝ) : ℂ) • (1 : E →L[ℂ] E))).kyFanGaugeReal_eq k)
     have hpert :=
-      (projectionBlock_same_compression Vᗮ U (B - A)).kyFanApproximationGauge_eq k
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression Vᗮ U (B - A)).kyFanGaugeReal_eq k)
     rw [hone, hpert, blockCompression_smul_one, blockCompression_apply,
       kyFanApproximationGauge_smul, hdnorm]
     exact hraw
@@ -283,9 +287,11 @@ theorem symmetric_sinTheta_spectrum_all_kyFan
   have hsine : kyFanApproximationGauge k (crossSineSum U V) =
       kyFanApproximationGauge k
         ((V.starProjection - U.starProjection).modulus) := by
-    rw [(crossSineSum_same_projectionDiff U V).kyFanApproximationGauge_eq k]
-    exact ((modulus_hasSameApproximationNumbers
-      (V.starProjection - U.starProjection)).kyFanGaugeReal_eq k).symm
+    erw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (crossSineSum_same_projectionDiff U V).kyFanGaugeReal_eq k)]
+    exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (modulus_hasSameApproximationNumbers
+      (V.starProjection - U.starProjection)).kyFanGaugeReal_eq k)).symm
   rw [kyFanApproximationGauge_smul, hdnorm, hsine] at hcombine
   exact hcombine.trans hpinch
 
@@ -581,9 +587,9 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
         2 * N.gauge (residual A V.subtypeL M) := by
   let R : V →L[ℂ] E := residual A V.subtypeL M
   let R0 : E →L[ℂ] E := R ∘L V.subtypeL.adjoint
-  have hsameR : SameApproximationSingularSequence R0 R := by
+  have hsameR : ContinuousLinearMap.SameSingularValues R0 R := by
     exact sameApproximationSingularValues_extendDomainByZero V R
-  have htransport := hsameR.normingMem_iff_and_gauge_eq N
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hMem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
@@ -591,8 +597,9 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
       d * kyFanApproximationGauge k (sinTwoThetaIdealBlock U V) ≤
         kyFanApproximationGauge k (((2 : ℝ) : ℂ) • R0) := by
     intro k
-    rw [kyFanApproximationGauge_smul, htwo,
-      hsameR.kyFanApproximationGauge_eq k]
+    erw [kyFanApproximationGauge_smul, htwo,
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hsameR.kyFanGaugeReal_eq k)]
     exact sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
       (A := A) (U := U) (V := V) hA hU hd hab hUspec hUspec' M k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • R0) := by

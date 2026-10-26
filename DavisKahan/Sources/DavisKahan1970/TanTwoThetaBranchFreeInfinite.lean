@@ -140,7 +140,7 @@ theorem approximationNumber_blockGraphCoordinate
   have h := sameApproximationSingularValues_ambientSubspaceBlock U Uᗮ
     (blockGraphCoordinate T U)
   rw [← eq_subtypeL_comp_blockGraphCoordinate hTmem hTzero] at h
-  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h n).symm
+  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq h n).symm
 
 /-- The adjoint of the ambient graph coordinate agrees with the adjoint of the
 block coordinate on `Uᗮ`. -/
@@ -322,7 +322,8 @@ theorem sum_absDoubleAngleTangent_le_add_error
     have hden : (3 : ℝ) / 4 ≤ 1 - approximationSingularValue n T ^ 2 := by nlinarith
     have hdenabs : (3 : ℝ) / 4 ≤ |1 - approximationSingularValue n T ^ 2| :=
       hden.trans (le_abs_self _)
-    rw [absDoubleAngleTangent, div_le_iff₀ (by linarith : (0:ℝ) < |1 - approximationSingularValue n T ^ 2|)]
+    rw [absDoubleAngleTangent, div_le_iff₀ (by linarith : (0:ℝ) < |1 - approximationSingularValue
+      n T ^ 2|)]
     nlinarith
   have hpart₂ : ∑ n ∈ S₂,
       absDoubleAngleTangent (approximationSingularValue n T) ≤

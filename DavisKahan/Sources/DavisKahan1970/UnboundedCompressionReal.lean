@@ -210,7 +210,8 @@ theorem approximationSingularValue_complexifyUnboundedCompressionTrialData_resid
     intro z
     rfl
   have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n).symm.trans (approximationSingularValue_complexify D.residual n)
+  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
+      (approximationSingularValue_complexify D.residual n)
 
 /-- The finite Ky Fan gauge of the residual is exactly preserved. -/
 theorem kyFanApproximationGauge_complexifyUnboundedCompressionTrialData_residual
@@ -228,7 +229,8 @@ the same constant. -/
 theorem complexifyUnboundedCompressionTrialData_compression_upper
     (D : UnboundedCompressionTrialData Z) {alpha : ℝ}
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha) :
-    TauCeti.LinearPMap.SemiboundedAbove (complexifyUnboundedCompressionTrialData D).compression alpha :=
+    TauCeti.LinearPMap.SemiboundedAbove (complexifyUnboundedCompressionTrialData D).compression
+      alpha :=
   semiboundedAbove_unitaryConjugate (complexifySubmoduleEquiv Z)
     (ExactSinTheta.PartialMapComplexification.complexify D.compression)
     (ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify

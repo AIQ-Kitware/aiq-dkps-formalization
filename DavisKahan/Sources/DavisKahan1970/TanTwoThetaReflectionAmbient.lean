@@ -992,11 +992,13 @@ theorem tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFa
   intro k
   have h := reflection_block_data hA hH hAU hAplusH_V hab hUhigh hUperpLow
     hHU hHUperp hcos k
-  rw [← (projectionBlock_same_compression Uᗮ U
-      (tanTwoBlockRepresentative U V)).kyFanApproximationGauge_eq k,
+  erw [← (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression Uᗮ U
+      (tanTwoBlockRepresentative U V)).kyFanGaugeReal_eq k),
     tanTwoBlockRepresentative] at h
-  rw [projectionBlock_diagonalPair_lower_reflection U,
-    ← (projectionBlock_same_compression Uᗮ U H).kyFanApproximationGauge_eq k] at h
+  erw [projectionBlock_diagonalPair_lower_reflection U,
+    ← (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (projectionBlock_same_compression Uᗮ U H).kyFanGaugeReal_eq k)] at h
   exact h
 
 /-- **Branch-free Section 7 directed-corner estimate for every source
@@ -1045,7 +1047,8 @@ theorem tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_symm
 /-- The same branch-free corner estimate in the upper-residual orientation
 consumed by the ambient Lemma-6.1 assembly.  This rewrite costs **no factor**:
 it is only adjoint invariance of approximation numbers. -/
-theorem tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFan_complex_upperCorner
+theorem
+  tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFan_complex_upperCorner
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ}
@@ -1125,7 +1128,8 @@ singular data seen by the paper's norm.  There is deliberately no caller
 supplied quarter-angle branch, no `cos (2θ) ≠ 0` hypothesis, and no placement
 hypothesis on the blocks of `A+H`; pole exclusion is derived internally by the
 Section 7 reflection argument. -/
-theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex
+theorem
+  tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex
     (N : SymmetricNormingFunction)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

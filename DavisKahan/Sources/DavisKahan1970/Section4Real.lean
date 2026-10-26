@@ -445,12 +445,14 @@ theorem sourceRestrictedDisplacementR_extendDomainByZero (T : E →L[ℝ] E) :
 
 /-- The real source and ambient restricted displacements have the same approximation sequence. -/
 theorem sourceRestrictedDisplacementR_sameApproximationSingularSequence (T : E →L[ℝ] E) :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       ((1 - T) ∘L U.starProjection) (sourceRestrictedDisplacementR U T) := by
-  apply (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mpr
+  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [← sourceRestrictedDisplacementR_extendDomainByZero U T]
-  exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sameApproximationSingularValues_extendDomainByZero U
       (sourceRestrictedDisplacementR U T)) n
 
@@ -465,10 +467,10 @@ theorem Proposition4_1_nonacute_real
       ContinuousLinearMap.approximationNumber
         ((1 - W) ∘L U.starProjection) n := by
   have hsource := proposition4_1_nonacute_real U V J W hWunitary hWmap n
-  have hD := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hD := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacementR_sameApproximationSingularSequence U
       (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
-  have hW := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hW := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacementR_sameApproximationSingularSequence U W) n
   change approximationSingularValue n
       ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
@@ -524,7 +526,8 @@ complexification of the real one. -/
 theorem complexify_displacementSquare (W : E →L[ℝ] E) :
     complexify ((1 - star W) * (1 - W)) =
       (1 - star (complexify W)) * (1 - complexify W) := by
-  rw [TauCeti.DavisKahan.complexify_mul, complexify_sub, complexify_sub, TauCeti.DavisKahan.complexify_one,
+  rw [TauCeti.DavisKahan.complexify_mul, complexify_sub, complexify_sub,
+    TauCeti.DavisKahan.complexify_one,
     TauCeti.DavisKahan.complexify_star]
 
 omit [CompleteSpace E] in
@@ -613,7 +616,8 @@ copy. -/
 theorem displacementAngleSineSq_complexify (W : E →L[ℝ] E) (x : E) :
     TauCeti.DavisKahan.Section4.displacementAngleSineSq (complexify W) (ofReal x) =
       displacementAngleSineSqR W x := by
-  rw [TauCeti.DavisKahan.Section4.displacementAngleSineSq, displacementAngleSineSqR, complexify_ofReal,
+  rw [TauCeti.DavisKahan.Section4.displacementAngleSineSq, displacementAngleSineSqR,
+    complexify_ofReal,
     inner_ofReal]
   norm_num
 
@@ -1252,7 +1256,7 @@ theorem proposition4_1_compact_nonacute_directRotationValues_real
     hAnorm (sourceRestrictedDisplacementR_nonacute_norm_sq U V J)
     (sourceRestrictedDisplacementR_competitor_norm_sq_lower U V W hWunitary hWmap)
     (principalSineOperator_norm_sq_eq_one_sub_sourceCosineR_norm_sq U V) n
-  have hDseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacementR_sameApproximationSingularSequence U
       (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
   let a : Real := (A.approximationNumber n : Real)
@@ -1476,7 +1480,8 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_hilbertSchmidt
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W) :
-    ((OperatorIdealFamily.hilbertSchmidt ℝ).gauge (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) ≤
+    ((OperatorIdealFamily.hilbertSchmidt ℝ).gauge (1 - TauCeti.DavisKahan.nonacuteDirectRotation U
+      V J)) ≤
       ((OperatorIdealFamily.hilbertSchmidt ℝ).gauge (1 - W)) := by
   have hnuc :
       (gramOperatorR (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).nuclearENorm ≤
@@ -1486,7 +1491,8 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_hilbertSchmidt
     refine iSup_mono fun k => ?_
     have hk := proposition4_3_nonacute_real U V J W hWunitary hWmap k
     rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
-    have hk' : ((gramOperatorR (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k : ℝ) ≤
+    have hk' : ((gramOperatorR (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k
+      : ℝ) ≤
         ((gramOperatorR (1 - W)).kyFanGauge k : ℝ) := by
       simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
         ContinuousLinearMap.kyFanGaugeReal] using hk

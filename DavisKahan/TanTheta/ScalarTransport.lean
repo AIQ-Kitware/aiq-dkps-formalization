@@ -57,7 +57,8 @@ noncomputable def scalarTransportSubspaceCLM (Z : Submodule 𝕜 H)
     (T : Z →L[𝕜] H) :
     ScalarTransport.submodule (e := e) Z →L[𝕂] ScalarTransport e H :=
   ScalarTransport.clm (e := e) T ∘L
-    (ScalarTransport.submoduleSubtypeEquiv (e := e) Z).symm.toContinuousLinearEquiv.toContinuousLinearMap
+    (ScalarTransport.submoduleSubtypeEquiv (e := e)
+      Z).symm.toContinuousLinearEquiv.toContinuousLinearMap
 
 /-- Scalar transport is a bijection on bounded maps out of a closed subspace. -/
 @[expose]
@@ -66,7 +67,8 @@ noncomputable def scalarTransportSubspaceCLMEquiv (Z : Submodule 𝕜 H) :
       (ScalarTransport.submodule (e := e) Z →L[𝕂] ScalarTransport e H) where
   toFun := scalarTransportSubspaceCLM (e := e) Z
   invFun T := (ScalarTransport.clmEquiv (e := e)).symm
-    (T ∘L (ScalarTransport.submoduleSubtypeEquiv (e := e) Z).toContinuousLinearEquiv.toContinuousLinearMap)
+    (T ∘L (ScalarTransport.submoduleSubtypeEquiv (e := e)
+      Z).toContinuousLinearEquiv.toContinuousLinearMap)
   left_inv T := by
     apply ContinuousLinearMap.ext
     intro z
@@ -85,12 +87,12 @@ theorem approximationNumber_scalarTransportSubspaceCLM
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   let I := LinearIsometryEquiv.refl 𝕂 (ScalarTransport e H)
   have hsame :
-      (ScalarTransport.clm (e := e) T).HasSameApproximationNumbers
+      (ScalarTransport.clm (e := e) T).SameSingularValues
         (scalarTransportSubspaceCLM (e := e) Z T) := by
     refine SameApproximationSingularValues.of_isometricEquiv_comp I W ?_
     ext z
     rfl
-  rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]
+  rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
 /-- Every finite source gauge is unchanged for a transported subspace-domain map. -/
@@ -138,9 +140,11 @@ noncomputable def scalarTransportSubspaceBlockCLM
     (T : Z →L[𝕜] W) :
     ScalarTransport.submodule (e := e) Z →L[𝕂]
       ScalarTransport.submodule (e := e) W :=
-  (ScalarTransport.submoduleSubtypeEquiv (e := e) W).toContinuousLinearEquiv.toContinuousLinearMap ∘L
+  (ScalarTransport.submoduleSubtypeEquiv (e := e) W).toContinuousLinearEquiv.toContinuousLinearMap
+    ∘L
     ScalarTransport.clm (e := e) T ∘L
-      (ScalarTransport.submoduleSubtypeEquiv (e := e) Z).symm.toContinuousLinearEquiv.toContinuousLinearMap
+      (ScalarTransport.submoduleSubtypeEquiv (e := e)
+        Z).symm.toContinuousLinearEquiv.toContinuousLinearMap
 
 /-- Scalar transport is a bijection on bounded maps between closed subspaces. -/
 noncomputable def scalarTransportSubspaceBlockCLMEquiv
@@ -150,8 +154,10 @@ noncomputable def scalarTransportSubspaceBlockCLMEquiv
         ScalarTransport.submodule (e := e) W) where
   toFun := scalarTransportSubspaceBlockCLM (e := e) Z W
   invFun T := (ScalarTransport.clmEquiv (e := e)).symm
-    ((ScalarTransport.submoduleSubtypeEquiv (e := e) W).symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L T ∘L
-      (ScalarTransport.submoduleSubtypeEquiv (e := e) Z).toContinuousLinearEquiv.toContinuousLinearMap)
+    ((ScalarTransport.submoduleSubtypeEquiv (e := e)
+      W).symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L T ∘L
+      (ScalarTransport.submoduleSubtypeEquiv (e := e)
+        Z).toContinuousLinearEquiv.toContinuousLinearMap)
   left_inv T := by
     apply ContinuousLinearMap.ext
     intro z
@@ -170,11 +176,11 @@ theorem approximationNumber_scalarTransportSubspaceBlockCLM
   let U := ScalarTransport.submoduleSubtypeEquiv (e := e) W
   let V := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   have hsame :
-      (ScalarTransport.clm (e := e) T).HasSameApproximationNumbers
+      (ScalarTransport.clm (e := e) T).SameSingularValues
         (scalarTransportSubspaceBlockCLM (e := e) Z W T) := by
     refine SameApproximationSingularValues.of_isometricEquiv_comp U V ?_
     rfl
-  rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]
+  rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
 /-- Transport a bounded operator from a closed subspace to its orthogonal complement.
@@ -188,9 +194,11 @@ noncomputable def scalarTransportOrthogonalSubspaceBlockCLM
     (T : Z →L[𝕜] Zᗮ) :
     ScalarTransport.submodule (e := e) Z →L[𝕂]
       (ScalarTransport.submodule (e := e) Z)ᗮ :=
-  (ScalarTransport.orthogonalSubmoduleSubtypeEquiv (e := e) Z).toContinuousLinearEquiv.toContinuousLinearMap ∘L
+  (ScalarTransport.orthogonalSubmoduleSubtypeEquiv (e := e)
+    Z).toContinuousLinearEquiv.toContinuousLinearMap ∘L
     ScalarTransport.clm (e := e) T ∘L
-      (ScalarTransport.submoduleSubtypeEquiv (e := e) Z).symm.toContinuousLinearEquiv.toContinuousLinearMap
+      (ScalarTransport.submoduleSubtypeEquiv (e := e)
+        Z).symm.toContinuousLinearEquiv.toContinuousLinearMap
 
 /-- Transport a bounded operator from the transported subspace and its orthogonal
 complement back to the original scalar field.  This is deliberately a named inverse
@@ -204,9 +212,11 @@ noncomputable def scalarTransportOrthogonalSubspaceBlockCLMInv
       (ScalarTransport.submodule (e := e) Z)ᗮ) :
     Z →L[𝕜] Zᗮ :=
   (ScalarTransport.clmEquiv (e := e)).symm
-    ((ScalarTransport.orthogonalSubmoduleSubtypeEquiv (e := e) Z).symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
+    ((ScalarTransport.orthogonalSubmoduleSubtypeEquiv (e := e)
+      Z).symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
       T ∘L
-      (ScalarTransport.submoduleSubtypeEquiv (e := e) Z).toContinuousLinearEquiv.toContinuousLinearMap)
+      (ScalarTransport.submoduleSubtypeEquiv (e := e)
+        Z).toContinuousLinearEquiv.toContinuousLinearMap)
 
 /-- Orthogonal-corner transport preserves every approximation number. -/
 theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLM
@@ -217,11 +227,11 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLM
   let U := ScalarTransport.orthogonalSubmoduleSubtypeEquiv (e := e) Z
   let V := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   have hsame :
-      (ScalarTransport.clm (e := e) T).HasSameApproximationNumbers
+      (ScalarTransport.clm (e := e) T).SameSingularValues
         (scalarTransportOrthogonalSubspaceBlockCLM (e := e) Z T) := by
     refine SameApproximationSingularValues.of_isometricEquiv_comp U V ?_
     rfl
-  rw [← (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame n]
+  rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
 /-- Inverse orthogonal-corner transport also preserves every approximation number. -/
@@ -236,7 +246,7 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
   let X : ScalarTransport e Z →L[𝕂] ScalarTransport e Zᗮ :=
     U.symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L T ∘L
       V.toContinuousLinearEquiv.toContinuousLinearMap
-  have hcoord : T.HasSameApproximationNumbers X := by
+  have hcoord : T.SameSingularValues X := by
     refine SameApproximationSingularValues.of_isometricEquiv_comp U.symm V.symm ?_
     rfl
   have hclm :
@@ -252,11 +262,12 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
       (ScalarTransport.approximationNumber_clm (e := e)
         (scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T) n).symm
     _ = X.approximationNumber n := by rw [hclm]
-    _ = T.approximationNumber n := ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hcoord n).symm
+    _ = T.approximationNumber n := (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+      hcoord n).symm
 
 /-- The extended symmetric-norming gauge is unchanged by orthogonal-corner
 transport.  This is proved directly from the cross-field approximation-number
-identity: `HasSameApproximationNumbers` itself is intentionally same-field. -/
+identity: `SameSingularValues` itself is intentionally same-field. -/
 theorem extendedGauge_scalarTransportOrthogonalSubspaceBlockCLM
     (N : SymmetricNormingFunction) (Z : Submodule 𝕜 H) [Z.HasOrthogonalProjection]
     (T : Z →L[𝕜] Zᗮ) :
@@ -408,7 +419,7 @@ theorem scalarTransport_residual_eq (D : UnboundedCompressionTrialData Z) :
 the scalar-transported residual before the harmless domain-coordinate change. -/
 theorem scalarTransport_residual_sameApproximationNumbers_clm
     (D : UnboundedCompressionTrialData Z) :
-    (ScalarTransport.clm (e := e) D.residual).HasSameApproximationNumbers
+    (ScalarTransport.clm (e := e) D.residual).SameSingularValues
       (D.scalarTransport (e := e)).residual := by
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   let I := LinearIsometryEquiv.refl 𝕂 (ScalarTransport e H)
@@ -427,8 +438,8 @@ theorem kyFanApproximationGauge_scalarTransport_residual
         kyFanApproximationGauge k (ScalarTransport.clm (e := e) D.residual) := by
       change ((D.scalarTransport (e := e)).residual).kyFanGaugeReal k =
         (ScalarTransport.clm (e := e) D.residual).kyFanGaugeReal k
-      exact ContinuousLinearMap.HasSameApproximationNumbers.kyFanGaugeReal_eq
-        (ContinuousLinearMap.HasSameApproximationNumbers.symm hcoord) k
+      exact ContinuousLinearMap.SameSingularValues.kyFanGaugeReal_eq
+        (ContinuousLinearMap.sameSingularValues_symm hcoord) k
     _ = kyFanApproximationGauge k D.residual :=
       ScalarTransport.kyFanApproximationGauge_clm k D.residual
 
@@ -438,7 +449,8 @@ theorem mem_scalarTransport_residual_iff
     N.Mem (D.scalarTransport (e := e)).residual ↔ N.Mem D.residual := by
   unfold SymmetricNormingFunction.Mem
   rw [N.extendedGauge_eq_of_hasSameApproximationNumbers
-      (D.scalarTransport_residual_sameApproximationNumbers_clm (e := e)).symm,
+      (ContinuousLinearMap.sameSingularValues_symm
+        (D.scalarTransport_residual_sameApproximationNumbers_clm (e := e))),
     SymmetricNormingFunction.extendedGauge_clm]
 
 /-- Every source symmetric-norming gauge of the residual is invariant under transport. -/
@@ -447,7 +459,8 @@ theorem gauge_scalarTransport_residual
     N.gauge (D.scalarTransport (e := e)).residual = N.gauge D.residual := by
   unfold SymmetricNormingFunction.gauge
   rw [N.extendedGauge_eq_of_hasSameApproximationNumbers
-      (D.scalarTransport_residual_sameApproximationNumbers_clm (e := e)).symm,
+      (ContinuousLinearMap.sameSingularValues_symm
+        (D.scalarTransport_residual_sameApproximationNumbers_clm (e := e))),
     SymmetricNormingFunction.extendedGauge_clm]
 
 /-- Operator-form upper bounds on the unbounded compression are invariant under

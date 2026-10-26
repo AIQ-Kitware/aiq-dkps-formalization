@@ -341,7 +341,7 @@ theorem forward_all_kyFan
   -- The ambient transport lemma produces the *adjoint* orientation of each block, so
   -- both comparisons are heterogeneous and both pick up one adjoint step.  Ky Fan
   -- gauges are adjoint-invariant, so nothing is lost.
-  have hsine : SameApproximationSingularSequence
+  have hsine : ContinuousLinearMap.SameSingularValues
       (U.starProjection ∘L Vᗮ.starProjection)
       (D.X.adjoint ∘L D.F₁) := by
     simpa [hD, forwardData, Submodule.adjoint_subtypeL,
@@ -354,7 +354,7 @@ theorem forward_all_kyFan
       (isSelfAdjoint_starProjection U).adjoint_eq,
       (isSelfAdjoint_starProjection Vᗮ).adjoint_eq]
     rfl
-  have hres : SameApproximationSingularSequence
+  have hres : ContinuousLinearMap.SameSingularValues
       (-P.forwardResidualBlock.adjoint)
       (-(D.residual.adjoint ∘L D.F₁)) := by
     simpa [hD, forwardData, forwardResidualBlock,
@@ -366,13 +366,15 @@ theorem forward_all_kyFan
         Vᗮ U (-(D.residual.adjoint ∘L D.F₁))
   have hgaugeSine : kyFanApproximationGauge k P.forwardSineBlock =
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
-    rw [hsineAdj, kyFanApproximationGauge_adjoint,
-      hsine.kyFanApproximationGauge_eq k]
+    erw [hsineAdj, kyFanApproximationGauge_adjoint,
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hsine.kyFanGaugeReal_eq k)]
   have hgaugeRes : kyFanApproximationGauge k P.forwardResidualBlock =
       kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) := by
-    rw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
+    erw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
       ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
-      hres.kyFanApproximationGauge_eq k]
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hres.kyFanGaugeReal_eq k)]
   rw [hgaugeSine, hgaugeRes]
   exact hraw
 
@@ -396,7 +398,7 @@ theorem reverse_all_kyFan
   have hraw := unbounded_sylvester_kyFan hA0 hL P.gap_pos P.gap_V_to_Uperp hEq k
   -- Mirror of the forward case: the ambient transport lemma again produces the adjoint
   -- orientation, and Ky Fan gauges are adjoint-invariant.
-  have hsine : SameApproximationSingularSequence
+  have hsine : ContinuousLinearMap.SameSingularValues
       (V.starProjection ∘L Uᗮ.starProjection)
       (D.X.adjoint ∘L D.F₁) := by
     simpa [hD, reverseData, Submodule.adjoint_subtypeL,
@@ -413,7 +415,7 @@ theorem reverse_all_kyFan
   -- orientation rather than the adjoint one.
   have hadjH : P.perturbation.adjoint = P.perturbation :=
     P.perturbation_isSymmetric.isSelfAdjoint.adjoint_eq
-  have hres : SameApproximationSingularSequence
+  have hres : ContinuousLinearMap.SameSingularValues
       P.reverseResidualBlock
       (-(D.residual.adjoint ∘L D.F₁)) := by
     simpa [hD, reverseData, reverseResidualBlock, hadjH,
@@ -425,11 +427,13 @@ theorem reverse_all_kyFan
         Uᗮ V (-(D.residual.adjoint ∘L D.F₁))
   have hgaugeSine : kyFanApproximationGauge k P.reverseSineBlock =
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
-    rw [hsineAdj, kyFanApproximationGauge_adjoint,
-      hsine.kyFanApproximationGauge_eq k]
+    erw [hsineAdj, kyFanApproximationGauge_adjoint,
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hsine.kyFanGaugeReal_eq k)]
   have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
       kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
-    hres.kyFanApproximationGauge_eq k
+    (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hres.kyFanGaugeReal_eq k)
   rw [hgaugeSine, hgaugeRes]
   exact hraw
 
@@ -512,7 +516,7 @@ theorem symmetric_all_kyFan_crossSineSum
   calc
     P.gap * kyFanApproximationGauge k (crossSineSum U V) =
         kyFanApproximationGauge k (((P.gap : ℝ) : 𝕜) • crossSineSum U V) := by
-      rw [kyFanApproximationGauge_smul, hgapNorm]
+      erw [kyFanApproximationGauge_smul, hgapNorm]
     _ ≤ kyFanApproximationGauge k
         (diagonalPair Uᗮ V P.perturbation) := hcombine
     _ ≤ kyFanApproximationGauge k P.perturbation := hres
@@ -571,7 +575,8 @@ theorem symmetric_all_kyFan
         kyFanApproximationGauge k P.perturbation := by
   intro k
   have h := P.symmetric_all_kyFan_crossSineSum k
-  rwa [(crossSineSum_same_literalSin U V).kyFanApproximationGauge_eq k] at h
+  rwa [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (crossSineSum_same_literalSin U V).kyFanGaugeReal_eq k)] at h
 
 /-- **Davis--Kahan 1970, Proposition 6.1 on a common dense domain**, for every normalized
 unitarily invariant norm in the source sense.

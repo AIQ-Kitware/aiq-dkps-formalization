@@ -120,7 +120,8 @@ Fan-dominance reduction at (1.11)-(1.13). -/
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_sourceExact
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_sourceExact
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact
 #check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike
 #check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_complex
 #check @TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_real
@@ -133,11 +134,15 @@ Fan-dominance reduction at (1.11)-(1.13). -/
 #check @TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symmetricNorming_rclike
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real
@@ -230,7 +235,8 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.HasDefinedAmbientTangent
 #check @TauCeti.DavisKahan1970.HasDefinedAmbientTangentReal
@@ -257,10 +263,13 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects
-#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real
+#check
+  @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real
 #check @TauCeti.DavisKahan.directedGap_asymmetric_coordinateHalfSpace
 #check @TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
@@ -269,8 +278,10 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
-#check @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex
-#check @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
+#check
+  @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex
+#check
+  @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
 
 /-! ## S2-sin-two-theta: Double-angle sine theorem
 
@@ -299,15 +310,22 @@ calculus: the real calculus on `E →L[𝕜] E` is a theorem at every `RCLike` f
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex
-#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_real
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex
 #check @TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap
 #check @TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap
 #check @TauCeti.DavisKahan.sinTheta_addBounded_gauge_complex_block_of_formGap
@@ -346,16 +364,22 @@ calculus: the real calculus on `E →L[𝕜] E` is a theorem at every `RCLike` f
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex
-#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_symmetricNorming_real
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
 #check @TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap
 #check @TauCeti.DavisKahan.Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide
@@ -443,7 +467,7 @@ sines agree only at the level of the approximation-number sequence, which is
 theorem about the doubling. -/
 example {Hc : Type*} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
     (U V : Submodule ℂ Hc) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator U V).HasSameApproximationNumbers
+    (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator U V).SameSingularValues
       (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator V U) :=
   TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_hasSameApproximationNumbers_swap U V
 
@@ -454,13 +478,16 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed
 #check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
 #check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike
-#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real
 #check @TauCeti.DavisKahan.ReflectionIntertwines
 #check @TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace
 #check @TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace
@@ -482,14 +509,20 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
-#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real
 
 /-! ## DK-3.1-prop: Acute direct rotation existence and uniqueness
 
@@ -560,8 +593,10 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex
 #check @TauCeti.DavisKahan1970.theorem3_1_realization
 #check @TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicity_complex
-#check @TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex
-#check @TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real
+#check
+  @TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_complex
+#check
+  @TauCeti.DavisKahan1970.theorem3_1_realization_inAmbient_ofSpectralMultiplicityAwayFromZero_real
 #check @TauCeti.nonempty_linearIsometryEquiv_of_hilbertBasis
 #check @TauCeti.DavisKahan1970.theorem3_1_realization_ofSpectralMultiplicityAwayFromZero_complex
 #check @TauCeti.DavisKahan1970.theorem3_1_intertwiner_of_nonzeroPartsUnitaryEquiv
@@ -610,7 +645,8 @@ crossed-defect isometry and carry no acuteness hypothesis; the maximality clause
 #check @TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle
 #check @TauCeti.DavisKahan1970.proposition3_5_commutations_acute
 #check @TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute
-#check @TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply
+#check
+  @TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply
 #check @TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace
 #check @TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal
 
@@ -694,10 +730,14 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.countable_of_orthonormal
 #check @TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner
 #check @TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_tanTwoBlockCompression
-#check @TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNorming_real
+#check
+  @TauCeti.DavisKahan1970.tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangentCorner
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex
+#check
+  @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.blockCompression_diagonalPair
 #check @TauCeti.DavisKahan1970.blockCompression_mul_reflectionOperator
 #check @TauCeti.DavisKahan1970.extendedGauge_projectionBlock_eq_blockCompression
@@ -717,12 +757,15 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.DavisKahan1970.projectionBlock_complexifySubmodule
 #check @TauCeti.LinearPMap.isSelfAdjoint_complexifyReal
 #check @TauCeti.DavisKahan.complexify_sinTwoThetaIdealBlock
-#check @TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
+#check
+  @TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
 #check @TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_complexify
 #check @TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_complexify_iff
-#check @TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge_eq_of_hasSameApproximationNumbers
+#check
+  @TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge_eq_of_hasSameApproximationNumbers
 #check @TauCeti.DavisKahan.ExactSinTheta.projectionBlock_same_compression
-#check @TauCeti.DavisKahan1970.hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock
+#check
+  @TauCeti.DavisKahan1970.hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock
 #check @TauCeti.DavisKahan1970.tanTwoDirectedCornerR
 #check @TauCeti.DavisKahan1970.proposition4_4_refutingPair
 #check @TauCeti.DavisKahan.FiniteDimensional.directRotation_fullDisplacement_qnorm
@@ -858,8 +901,10 @@ spectral subspace below `α` -- and is a specialization, not a witness.
 
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
-#check @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex
-#check @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
+#check
+  @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex
+#check
+  @TauCeti.DavisKahan1970.approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex
@@ -925,7 +970,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.maximalAngle_le_of_complexifySubmodule_le
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranchUnbounded_printed_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real
 #check @TauCeti.DavisKahan1970.Section8.re_inner_split_of_reduces_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded_real
@@ -933,20 +979,31 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_iff
 #check @TauCeti.DavisKahan1970.Section8.semiboundedAbove_reducingRestriction_real_iff
 #check @TauCeti.DavisKahan1970.Section8.semiboundedBelow_reducingRestriction_real_iff
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_complex
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_real
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_complex
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_sourceFullAngle_le_iff_blockPlacement_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_blockPlacement_unbounded_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_complex
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_sourceExact_unbounded_real
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_complex
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_complex
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_ofBlockPlacement_unbounded_real
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_ofBlockPlacement_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_sourceExact
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_sourceExact_real
@@ -987,12 +1044,15 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex
 #check @TauCeti.DavisKahan.CrossedDefectsEquivalent.symm
 #check @TauCeti.DavisKahan.notMem_spectrum_addBounded_of_spectrum_gap
 #check @TauCeti.DavisKahan.spectrum_addBounded_subset_of_gap
@@ -1005,17 +1065,22 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.realSpectrum_subset_union_of_reduces
 #check @TauCeti.DavisKahan.reducesSubspace_of_isSelfAdjoint_of_invariant
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_complex
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_complex
-#check @TauCeti.DavisKahan.Foundation.RealComplexification.unitaryConj_complexifyReal_reducingRestriction
-#check @TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal
-#check @TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal_of_eq
+#check
+  @TauCeti.DavisKahan.Foundation.RealComplexification.unitaryConj_complexifyReal_reducingRestriction
+#check
+  @TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal
+#check
+  @TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_reducingRestriction_complexifyReal_of_eq
 #check @TauCeti.DavisKahan.Foundation.RealComplexification.norm_complexify_comp_subtypeL
 #check @TauCeti.DavisKahan.Foundation.RealComplexification.separableSpace_realComplexification
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_unbounded_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_maximalAngle_lt_unbounded_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_unbounded_source_real
@@ -1050,7 +1115,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.proposition3_3_real_converse_separable
 #check @TauCeti.DavisKahan1970.proposition3_4_full_complex_separable
 #check @TauCeti.DavisKahan1970.proposition3_4_full_real_separable
-#check @TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable
+#check
+  @TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable
 #check @TauCeti.DavisKahan1970.proposition3_5_commutations_separable
 #check @TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable
 #check @TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable
@@ -1097,10 +1163,13 @@ source's definedness convention. -/
 
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily
 #check @TauCeti.OperatorIdealFamily.IsKyFanDominant
-#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominanceWhereDefined
-#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined
+#check
+  @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominanceWhereDefined
+#check
+  @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.withFanDominance
-#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm.toNormalizedSymmetricOperatorIdealFamily_withFanDominance
+#check
+  @TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm.toNormalizedSymmetricOperatorIdealFamily_withFanDominance
 
 /-! ## 2026-09-07 fifth-hostile-review repairs
 
@@ -1131,8 +1200,10 @@ themselves, with the symmetric gauge at the block dimension. -/
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
-#check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
+#check
+  @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
 
 /-! ## An approximation-number extension of Theorem 8.1 (ii)
 

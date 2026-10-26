@@ -38,12 +38,12 @@ theorem prefixGauge_eq
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     (N : SymmetricNormingFunction)
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) (n : ℕ) :
+    (h : ContinuousLinearMap.SameSingularValues A B) (n : ℕ) :
     N.prefixGauge n A = N.prefixGauge n B := by
   unfold SymmetricNormingFunction.prefixGauge
   congr 1
   funext i
-  exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp h i
+  exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq h i
 
 /-- Equal complete singular data gives equal source extended values. -/
 theorem normingExtendedGauge_eq
@@ -55,12 +55,12 @@ theorem normingExtendedGauge_eq
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     (N : SymmetricNormingFunction)
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) :
+    (h : ContinuousLinearMap.SameSingularValues A B) :
     N.extendedGauge A = N.extendedGauge B := by
   unfold SymmetricNormingFunction.extendedGauge
   apply iSup_congr
   intro n
-  rw [h.prefixGauge_eq N n]
+  rw [SameApproximationSingularSequence.prefixGauge_eq N h n]
 
 /-- Equal complete singular data gives equivalent membership and equal source
 norms, even across different coordinate spaces. -/
@@ -73,9 +73,9 @@ theorem normingMem_iff_and_gauge_eq
     [NormedAddCommGroup F₂] [InnerProductSpace 𝕜 F₂] [CompleteSpace F₂]
     (N : SymmetricNormingFunction)
     {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
-    (h : SameApproximationSingularSequence A B) :
+    (h : ContinuousLinearMap.SameSingularValues A B) :
     (N.Mem A ↔ N.Mem B) ∧ N.gauge A = N.gauge B := by
-  have heq := h.normingExtendedGauge_eq N
+  have heq := SameApproximationSingularSequence.normingExtendedGauge_eq N h
   exact ⟨by simp [SymmetricNormingFunction.Mem, heq],
     by simpa only [SymmetricNormingFunction.gauge] using congrArg ENNReal.toReal heq⟩
 
@@ -96,7 +96,7 @@ theorem normingMem_iff_and_gauge_eq
     (S : SinThetaRepresentativeAcross (E₀ := E₀) (F₀ := F₀) canonical) :
     (N.Mem S.operator ↔ N.Mem canonical) ∧
       N.gauge S.operator = N.gauge canonical :=
-  S.same_singular_sequence.normingMem_iff_and_gauge_eq N
+  SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N S.same_singular_sequence
 
 end SinThetaRepresentativeAcross
 

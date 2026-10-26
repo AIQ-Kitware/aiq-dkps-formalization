@@ -157,7 +157,8 @@ theorem canonicalSinTheta_frame_bound
       ContinuousLinearMap.comp_assoc]
   have hmem : approximationNumberEnergy P.canonicalSinTheta ≠ ⊤ := by
     rw [hblock]
-    have := approximationNumberEnergy_ne_top_comp hraw Q.invSqrt.adjoint (ContinuousLinearMap.id ℂ G)
+    have := approximationNumberEnergy_ne_top_comp hraw Q.invSqrt.adjoint (ContinuousLinearMap.id ℂ
+      G)
     simpa using this
   have hnorm : ‖Q.invSqrt.adjoint‖ ≤ P.frameLowerBound⁻¹ := by
     simpa using Q.invSqrt_norm_le
@@ -200,14 +201,16 @@ theorem result
   have hraw := P.sylvesterOverlap_bound hR
   have hframe := P.canonicalSinTheta_frame_bound hraw.1
   have hS : approximationNumberEnergy S.operator ≠ ⊤ :=
-    (S.same_singular_values.approximationNumberEnergy_ne_top_iff).2 hframe.1
-  have hSnorm := S.same_singular_values.hilbertSchmidtNorm_eq
+    ((SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff
+      S.same_singular_values)).2 hframe.1
+  have hSnorm := (SameApproximationSingularSequence.hilbertSchmidtNorm_eq S.same_singular_values)
   refine ⟨hS, ?_⟩
   rw [hSnorm]
   calc
     P.gap * P.frameLowerBound * ContinuousLinearMap.hilbertSchmidtNorm P.canonicalSinTheta
         = P.gap *
-            (P.frameLowerBound * ContinuousLinearMap.hilbertSchmidtNorm P.canonicalSinTheta) := by ring
+            (P.frameLowerBound * ContinuousLinearMap.hilbertSchmidtNorm P.canonicalSinTheta) := by
+              ring
     _ ≤ P.gap * ContinuousLinearMap.hilbertSchmidtNorm P.sylvesterOverlap :=
       mul_le_mul_of_nonneg_left hframe.2 P.gap_pos.le
     _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.projectedResidual := hraw.2
@@ -253,8 +256,9 @@ theorem result_across
         ContinuousLinearMap.hilbertSchmidtNorm P.data.residual := by
   have hcanonical := P.result
     (SinThetaRepresentative.canonical P.canonicalSinTheta) hR
-  have hmem := S.same_singular_sequence.approximationNumberEnergy_ne_top_iff
-  have hnorm := S.same_singular_sequence.hilbertSchmidtNorm_eq
+  have hmem := (SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff
+    S.same_singular_sequence)
+  have hnorm := (SameApproximationSingularSequence.hilbertSchmidtNorm_eq S.same_singular_sequence)
   refine ⟨hmem.mpr hcanonical.1, ?_⟩
   rw [hnorm]
   exact hcanonical.2
@@ -273,7 +277,7 @@ theorem operatorNorm_result_across_of_rank_le
       ‖P.data.residual‖ * Real.sqrt r := by
   have hcanonical := P.operatorNorm_result_of_rank_le
     (SinThetaRepresentative.canonical P.canonicalSinTheta) hRank
-  rw [S.same_singular_sequence.opNorm_eq]
+  rw [S.same_singular_sequence.norm_eq]
   exact hcanonical
 
 end Theorem62Data
@@ -344,7 +348,8 @@ theorem canonicalSinTheta_frame_bound
       ContinuousLinearMap.comp_assoc]
   have hmem : approximationNumberEnergy P.canonicalSinTheta ≠ ⊤ := by
     rw [hcanonical]
-    have h := approximationNumberEnergy_ne_top_comp hraw Q.invSqrt.adjoint (ContinuousLinearMap.id ℝ G)
+    have h := approximationNumberEnergy_ne_top_comp hraw Q.invSqrt.adjoint (ContinuousLinearMap.id
+      ℝ G)
     rwa [ContinuousLinearMap.comp_id] at h
   have hnorm : ‖Q.invSqrt.adjoint‖ ≤ P.frameLowerBound⁻¹ := by
     simpa using Q.invSqrt_norm_le
@@ -419,13 +424,15 @@ theorem result
       _ = ContinuousLinearMap.hilbertSchmidtNorm P.data.residual :=
         ContinuousLinearMap.hilbertSchmidtNorm_adjoint P.data.residual
   have hS : approximationNumberEnergy S.operator ≠ ⊤ :=
-    (S.same_singular_values.approximationNumberEnergy_ne_top_iff).2 hcanonmem
+    ((SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff
+      S.same_singular_values)).2 hcanonmem
   refine ⟨hS, ?_⟩
-  rw [S.same_singular_values.hilbertSchmidtNorm_eq]
+  rw [(SameApproximationSingularSequence.hilbertSchmidtNorm_eq S.same_singular_values)]
   calc
     P.gap * P.frameLowerBound * ContinuousLinearMap.hilbertSchmidtNorm P.canonicalSinTheta
         = P.gap *
-            (P.frameLowerBound * ContinuousLinearMap.hilbertSchmidtNorm P.canonicalSinTheta) := by ring
+            (P.frameLowerBound * ContinuousLinearMap.hilbertSchmidtNorm P.canonicalSinTheta) := by
+              ring
     _ ≤ P.gap * ContinuousLinearMap.hilbertSchmidtNorm P.sylvesterOverlap :=
       mul_le_mul_of_nonneg_left hframe P.gap_pos.le
     _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.projectedResidual := hraw.2
@@ -467,8 +474,9 @@ theorem result_across
         ContinuousLinearMap.hilbertSchmidtNorm P.data.residual := by
   have hcanonical := P.result
     (SinThetaRepresentative.canonical P.canonicalSinTheta) hR
-  have hmem := S.same_singular_sequence.approximationNumberEnergy_ne_top_iff
-  have hnorm := S.same_singular_sequence.hilbertSchmidtNorm_eq
+  have hmem := (SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff
+    S.same_singular_sequence)
+  have hnorm := (SameApproximationSingularSequence.hilbertSchmidtNorm_eq S.same_singular_sequence)
   refine ⟨hmem.mpr hcanonical.1, ?_⟩
   rw [hnorm]
   exact hcanonical.2
@@ -487,7 +495,7 @@ theorem operatorNorm_result_across_of_rank_le
       ‖P.data.residual‖ * Real.sqrt r := by
   have hcanonical := P.operatorNorm_result_of_rank_le
     (SinThetaRepresentative.canonical P.canonicalSinTheta) hRank
-  rw [S.same_singular_sequence.opNorm_eq]
+  rw [S.same_singular_sequence.norm_eq]
   exact hcanonical
 
 end RealTheorem62Data

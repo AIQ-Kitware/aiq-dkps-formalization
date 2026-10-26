@@ -106,7 +106,7 @@ now does (`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculu
 and at every `RCLike` field), so that is history rather than an obstruction.
 
 It is stated as a raw equality of approximation numbers rather than as a
-`SameApproximationSingularSequence`, because that relation fixes a single scalar
+`ContinuousLinearMap.SameSingularValues`, because that relation fixes a single scalar
 field for both operands and `sourceFullSinR` is by construction an operator
 over `ℂ` on complexified coordinates.  Approximation numbers are real, so the
 comparison itself is unproblematic; only the relation's binders are too narrow.
@@ -121,12 +121,12 @@ theorem approximationNumber_sourceFullSinR_eq_crossSineSum
       (sourceFullSinR V U).approximationNumber n =
         (crossSineSum U V).approximationNumber n := by
   -- `crossSineSum U V` has the singular values of `P_V - P_U`.
-  have hreal : SameApproximationSingularSequence
+  have hreal : ContinuousLinearMap.SameSingularValues
       (crossSineSum U V) (V.starProjection - U.starProjection) :=
     crossSineSum_same_projectionDiff U V
   -- The literal full sine of the complexified pair has the singular values of
   -- the complexified projector difference.
-  have hcomplex : SameApproximationSingularSequence
+  have hcomplex : ContinuousLinearMap.SameSingularValues
       (sourceFullSinR V U)
       ((TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule
           V).starProjection -
@@ -145,8 +145,9 @@ theorem approximationNumber_sourceFullSinR_eq_crossSineSum
       RealComplexification.complexify_sub]
   rw [hcx] at hcomplex
   intro n
-  rw [(ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hcomplex n, ComplexificationApproximation.approximationNumber_complexify,
-    ((ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hreal n).symm]
+  rw [ContinuousLinearMap.SameSingularValues.approximationNumber_eq hcomplex n,
+      ComplexificationApproximation.approximationNumber_complexify,
+    (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hreal n).symm]
 
 /-- Exact bounded inputs of Proposition 6.1 over a real Hilbert space.  This is
 `SymmetricSinThetaProblem` with `ℂ` replaced by `ℝ`: the same printed data
@@ -301,7 +302,7 @@ theorem forward_all_kyFan
   -- The ambient transport lemma produces the *adjoint* orientation of each
   -- block, so both comparisons are heterogeneous and both pick up one adjoint
   -- step.  Ky Fan gauges are adjoint-invariant, so nothing is lost.
-  have hsine : SameApproximationSingularSequence
+  have hsine : ContinuousLinearMap.SameSingularValues
       (P.U.starProjection ∘L P.Vᗮ.starProjection)
       (D.X.adjoint ∘L D.F₁) := by
     simpa [hD, forwardData, Submodule.adjoint_subtypeL,
@@ -314,7 +315,7 @@ theorem forward_all_kyFan
       (isSelfAdjoint_starProjection P.U).adjoint_eq,
       (isSelfAdjoint_starProjection P.Vᗮ).adjoint_eq]
     rfl
-  have hres : SameApproximationSingularSequence
+  have hres : ContinuousLinearMap.SameSingularValues
       (-P.forwardResidualBlock.adjoint)
       (-(D.residual.adjoint ∘L D.F₁)) := by
     simpa [hD, forwardData, forwardResidualBlock, perturbation,
@@ -326,13 +327,15 @@ theorem forward_all_kyFan
         P.Vᗮ P.U (-(D.residual.adjoint ∘L D.F₁))
   have hgaugeSine : kyFanApproximationGauge k P.forwardSineBlock =
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
-    rw [hsineAdj, kyFanApproximationGauge_adjoint,
-      hsine.kyFanApproximationGauge_eq k]
+    erw [hsineAdj, kyFanApproximationGauge_adjoint,
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hsine.kyFanGaugeReal_eq k)]
   have hgaugeRes : kyFanApproximationGauge k P.forwardResidualBlock =
       kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) := by
-    rw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
+    erw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
       ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
-      hres.kyFanApproximationGauge_eq k]
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hres.kyFanGaugeReal_eq k)]
   rw [hgaugeSine, hgaugeRes]
   exact hraw
 
@@ -365,7 +368,7 @@ theorem reverse_all_kyFan
     P.gap_V_to_Uperp hEq k
   -- Mirror of the forward case: the ambient transport lemma again produces the
   -- adjoint orientation, and Ky Fan gauges are adjoint-invariant.
-  have hsine : SameApproximationSingularSequence
+  have hsine : ContinuousLinearMap.SameSingularValues
       (P.V.starProjection ∘L P.Uᗮ.starProjection)
       (D.X.adjoint ∘L D.F₁) := by
     simpa [hD, reverseData, Submodule.adjoint_subtypeL,
@@ -382,7 +385,7 @@ theorem reverse_all_kyFan
   -- original orientation rather than the adjoint one.
   have hadjA : P.A.adjoint = P.A := P.selfAdjoint_A.isSelfAdjoint.adjoint_eq
   have hadjB : P.B.adjoint = P.B := P.selfAdjoint_B.isSelfAdjoint.adjoint_eq
-  have hres : SameApproximationSingularSequence
+  have hres : ContinuousLinearMap.SameSingularValues
       P.reverseResidualBlock
       (-(D.residual.adjoint ∘L D.F₁)) := by
     simpa [hD, reverseData, reverseResidualBlock, perturbation, hadjA, hadjB,
@@ -394,11 +397,13 @@ theorem reverse_all_kyFan
         P.Uᗮ P.V (-(D.residual.adjoint ∘L D.F₁))
   have hgaugeSine : kyFanApproximationGauge k P.reverseSineBlock =
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
-    rw [hsineAdj, kyFanApproximationGauge_adjoint,
-      hsine.kyFanApproximationGauge_eq k]
+    erw [hsineAdj, kyFanApproximationGauge_adjoint,
+      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hsine.kyFanGaugeReal_eq k)]
   have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
       kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
-    hres.kyFanApproximationGauge_eq k
+    (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hres.kyFanGaugeReal_eq k)
   rw [hgaugeSine, hgaugeRes]
   exact hraw
 

@@ -158,7 +158,7 @@ theorem norm_sineBlockC_eq_directedProjectionGap
     ‖sineBlockC U V‖ = U.directedProjectionGap V := by
   have hseq := sameApproximationSingularValues_ambientSubspaceBlock
     U Vᗮ (sineBlockC U V)
-  have h0 := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hseq 0
+  have h0 := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hseq 0
   rw [ContinuousLinearMap.approximationNumber_index_zero,
     ContinuousLinearMap.approximationNumber_index_zero] at h0
   have hamb :
@@ -330,7 +330,8 @@ theorem norm_fullAngleBlockC_eq_angleOperator
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖fullAngleBlockC U V‖ = ‖Angle.angleOperator U V‖ := by
-  rw [norm_fullAngleBlockC_eq_maximalAngle, maximalAngle, Angle.angleOperator_complex, Angle.angleOperatorC,
+  rw [norm_fullAngleBlockC_eq_maximalAngle, maximalAngle, Angle.angleOperator_complex,
+    Angle.angleOperatorC,
     norm_cfc_arcsin_of_nonneg (Angle.sinAngleOperatorC U V)
       (Angle.sinAngleOperatorC_nonneg U V),
     Angle.norm_sinAngleOperatorC]

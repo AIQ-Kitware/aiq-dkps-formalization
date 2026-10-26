@@ -74,7 +74,7 @@ underneath use. -/
 theorem hasSameApproximationNumbers_displacement_of_isSourceDirectRotation
     {D : H →L[𝕜] H} (hD : DavisKahan.IsSourceDirectRotation U V D)
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[𝕜] DavisKahan.halmosTargetDefect U V) :
-    ((1 - D) ∘L U.starProjection).HasSameApproximationNumbers
+    ((1 - D) ∘L U.starProjection).SameSingularValues
       ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) :=
   ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq _ _ fun _ =>
     DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation U V hD J _
@@ -139,7 +139,7 @@ theorem proposition4_1_directRotation_sourceExact_complex
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_complex U V hcompact J W hWunitary hWmap
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
-  have hsame' := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame
+  have hsame' := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame
   exact ⟨hv, fun n => (hsame' n).trans (heq n), fun n => (hsame' n).trans_le (hle n)⟩
 
 /-- **Davis--Kahan 1970, Corollary 4.1, on the source's own direct rotation.**
@@ -164,8 +164,10 @@ theorem corollary4_1_directRotation_sourceExact_complex
       hWunitary hWmap hWmem
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
   obtain ⟨hmem, hle⟩ :=
-    (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le N.toSymmetricOperatorIdealFamily) hmem₀
-      (fun k => le_of_eq (hsame.kyFanGaugeReal_eq k))
+    (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le
+      N.toSymmetricOperatorIdealFamily) hmem₀
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hsame.kyFanGaugeReal_eq k)))
   exact ⟨hmem, hle.trans hle₀⟩
 
 /-- **Davis--Kahan 1970, Proposition 4.3, on the source's own direct rotation.** -/
@@ -221,7 +223,7 @@ theorem proposition4_1_directRotation_sourceExact_real
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_real U V hcompact J W hWunitary hWmap
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
-  have hsame' := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp hsame
+  have hsame' := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame
   exact ⟨hv, fun n => (hsame' n).trans (heq n), fun n => (hsame' n).trans_le (hle n)⟩
 
 /-- **Davis--Kahan 1970, Corollary 4.1 over `ℝ`, on the source's own direct
@@ -244,8 +246,10 @@ theorem corollary4_1_directRotation_sourceExact_real
       hWunitary hWmap hWmem
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
   obtain ⟨hmem, hle⟩ :=
-    (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le N.toSymmetricOperatorIdealFamily) hmem₀
-      (fun k => le_of_eq (hsame.kyFanGaugeReal_eq k))
+    (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le
+      N.toSymmetricOperatorIdealFamily) hmem₀
+      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      hsame.kyFanGaugeReal_eq k)))
   exact ⟨hmem, hle.trans hle₀⟩
 
 /-- **Davis--Kahan 1970, Proposition 4.3 over `ℝ`, on the source's own direct

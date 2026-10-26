@@ -292,7 +292,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     have hsinApprox : ∀ n : ℕ,
         (Angle.sinTwoAngleOperator U' V').approximationNumber n < 1 := by
       intro n
-      have hs := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+      have hs := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
         (Angle.sinTwoAngleOperator_hasSameApproximationNumbers (U := U') (V := V')) n
       rw [hs]
       exact hlt' n
@@ -392,12 +392,12 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rcl
   obtain ⟨hdef, habsMem, habsBound⟩ :=
     tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
       N V hA hred hBsa hB hV hUa hUb hab hBmem
-  have hseq : SameApproximationSingularSequence
+  have hseq : ContinuousLinearMap.SameSingularValues
       (Angle.tanTwoAngleOperator U V) (Angle.absTanTwoAngleOperator U V) := by
     rw [Angle.absTanTwoAngleOperator_eq_modulus_tanTwoAngleOperator U V hdef]
-    exact (Angle.modulus_hasSameApproximationNumbers_rclike
-      (Angle.tanTwoAngleOperator U V)).symm
-  have htransport := hseq.normingMem_iff_and_gauge_eq N
+    exact ContinuousLinearMap.sameSingularValues_symm
+      (Angle.modulus_hasSameApproximationNumbers_rclike (Angle.tanTwoAngleOperator U V))
+  have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hseq
   refine ⟨hdef, htransport.1.mpr habsMem, ?_⟩
   rw [htransport.2]
   exact habsBound

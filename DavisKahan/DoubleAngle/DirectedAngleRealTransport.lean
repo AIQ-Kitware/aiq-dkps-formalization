@@ -76,7 +76,7 @@ theorem approximationSingularValue_sinTwoThetaIdealBlock_real
   rw [← ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
       (sinTwoThetaIdealBlock U V) n,
     complexify_sinTwoThetaIdealBlock U V]
-  exact (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sinTwoThetaIdealBlock_hasSameApproximationNumbers
       (complexifySubmodule U) (complexifySubmodule V)) n
 

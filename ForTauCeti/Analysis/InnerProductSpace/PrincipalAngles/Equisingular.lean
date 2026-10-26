@@ -128,7 +128,7 @@ sequence of `T` unchanged, hence the value of every unitarily invariant norm. -/
 theorem hasSameApproximationNumbers_comp_left_of_adjoint_comp_self_comp
     {J : F →L[ℂ] G} {T : E →L[ℂ] F}
     (h : J.adjoint ∘L J ∘L T = T) :
-    (J ∘L T).HasSameApproximationNumbers T :=
+    (J ∘L T).SameSingularValues T :=
   ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq _ _
     (norm_comp_left_apply_of_adjoint_comp_self_comp h)
 
@@ -233,7 +233,7 @@ theorem hasSameApproximationNumbers_comp_left_cfc
     (f g : ℝ → ℝ)
     (hfg : ∀ t ∈ spectrum ℝ a, f t = t * g t)
     (hg : ContinuousOn g (spectrum ℝ a)) :
-    (J ∘L cfc f a).HasSameApproximationNumbers (cfc f a) :=
+    (J ∘L cfc f a).SameSingularValues (cfc f a) :=
   hasSameApproximationNumbers_comp_left_of_adjoint_comp_self_comp
     (adjoint_comp_self_comp_cfc ha hJ f g hfg hg)
 

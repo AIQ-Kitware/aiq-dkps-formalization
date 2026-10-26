@@ -977,7 +977,7 @@ theorem sourceRestrictedDisplacement_extendDomainByZero
 approximation-singular-value sequence as the ambient restricted displacement. -/
 theorem sourceRestrictedDisplacement_sameApproximationSingularSequence
     (T : H →L[ℂ] H) :
-    ContinuousLinearMap.HasSameApproximationNumbers
+    ContinuousLinearMap.SameSingularValues
       ((1 - T) ∘L U.starProjection) (sourceRestrictedDisplacement U T) := by
   rw [← sourceRestrictedDisplacement_extendDomainByZero U T]
   exact ContinuousLinearMap.hasSameApproximationNumbers_extendDomainByZero U
@@ -995,10 +995,10 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
         ((1 - W) ∘L U.starProjection) n := by
   have hsource := proposition4_1_approximationNumbers
     U V hacute W hWunitary hWmap n
-  have hDseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacement_sameApproximationSingularSequence
       U (spectraDirectRotation U V hacute)) n
-  have hWseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hWseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n
   change approximationSingularValue n
       ((1 - spectraDirectRotation U V hacute) ∘L U.starProjection) ≤
@@ -1025,10 +1025,10 @@ theorem proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
       ContinuousLinearMap.approximationNumber ((1 - W) ∘L U.starProjection) n := by
   have hsource := proposition4_1_nonacute_approximationNumbers
     U V J W hWunitary hWmap n
-  have hDseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacement_sameApproximationSingularSequence
       U (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
-  have hWseq := (ContinuousLinearMap.hasSameApproximationNumbers_iff _ _).mp
+  have hWseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n
   change approximationSingularValue n
       ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ≤

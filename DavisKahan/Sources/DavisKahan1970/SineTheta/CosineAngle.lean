@@ -277,12 +277,12 @@ cross projection printed in the paper.
 
 The source sine acts on the trial coordinate space `U` while the cross block
 maps `U` into `Vᗮ`, so this is the heterogeneous singular-sequence relation;
-`SameApproximationSingularValues` is the special case of it in which the two
+`ContinuousLinearMap.SameSingularValues` is the special case of it in which the two
 operators happen to share a codomain, and cannot be stated here. -/
 theorem directedSinAngleBlock_same_sineBlock
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.SameSingularValues
       (directedSinAngleBlockC U V) (sineBlockC U V) := by
   rw [directedSinAngleBlockC_eq_sineBlockModulusC]
   exact modulus_hasSameApproximationNumbers _

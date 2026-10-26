@@ -20,7 +20,7 @@ approximation-number sequence is unchanged.
 
 Because the ambient and subtype coordinates are genuinely different Hilbert spaces, the
 statements use the heterogeneous relation
-`ContinuousLinearMap.HasSameApproximationNumbers` rather than an equality of operators.
+`ContinuousLinearMap.SameSingularValues` rather than an equality of operators.
 
 ## Main results
 
@@ -45,8 +45,9 @@ statements use the heterogeneous relation
 * Extraction class: **copied and renamespaced**.  Not a hypothesis, binder or proof step
   changed; the declarations move from `TauCeti.DavisKahan.ExactSinTheta` to
   `ContinuousLinearMap`, and the conclusions are spelled with
-  `ContinuousLinearMap.HasSameApproximationNumbers`, which is what the source layer's
-  `SameApproximationSingularSequence` abbreviates.
+  `ContinuousLinearMap.HasSameApproximationNumbers` at extraction. That local
+  relation and the downstream source aliases have since been retired; the
+  statements now use accepted `ContinuousLinearMap.SameSingularValues` directly.
 * Extraction motive: `DavisKahan/Geometry/Polar/RestrictedDisplacementExtremal.lean` — a
   *generic* geometry module — imported the source-layer file above for
   `sameApproximationSingularValues_extendDomainByZero` alone.  Nothing in these three
@@ -96,10 +97,12 @@ preserves every approximation singular value. -/
 theorem hasSameApproximationNumbers_extendDomainByZero
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (T : U →L[𝕜] F) :
-    HasSameApproximationNumbers
+    SameSingularValues
       (T ∘L U.subtypeL.adjoint) T := by
-  refine (hasSameApproximationNumbers_iff _ _).mpr ?_
+  apply (sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hfactor : (T ∘L U.subtypeL.adjoint) ∘L U.subtypeL = T := by
     ext x
     simp [Submodule.adjoint_subtypeL]
@@ -134,9 +137,11 @@ approximation singular value. -/
 theorem hasSameApproximationNumbers_includeCodomain
     (V : Submodule 𝕜 F) [V.HasOrthogonalProjection]
     (T : E →L[𝕜] V) :
-    HasSameApproximationNumbers (V.subtypeL ∘L T) T := by
-  refine (hasSameApproximationNumbers_iff _ _).mpr ?_
+    SameSingularValues (V.subtypeL ∘L T) T := by
+  apply (sameSingularValues_iff _ _).mpr
   intro n
+  apply NNReal.eq
+  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hfactor : V.subtypeL.adjoint ∘L (V.subtypeL ∘L T) = T := by
     ext x
     simp [Submodule.adjoint_subtypeL]
@@ -179,8 +184,11 @@ already in bounded form can be used directly. -/
 theorem hasSameApproximationNumbers_comp_right
     {T : E →L[𝕜] F} {J J' : E →L[𝕜] E}
     (hJ : ‖J‖ ≤ 1) (hJ' : ‖J'‖ ≤ 1) (hinv : ∀ x, J (J' x) = x) :
-    HasSameApproximationNumbers (T ∘L J) T := by
-  refine (hasSameApproximationNumbers_iff _ _).mpr fun n => ?_
+    SameSingularValues (T ∘L J) T := by
+  apply (sameSingularValues_iff _ _).mpr
+  intro n
+  apply NNReal.eq
+  simp only [← approximationNumber_eq_singularValue_toReal]
   have hfactor : (T ∘L J) ∘L J' = T := by
     ext x
     simp only [ContinuousLinearMap.comp_apply, hinv]
@@ -206,11 +214,11 @@ theorem hasSameApproximationNumbers_ambientSubspaceBlock
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (V : Submodule 𝕜 F) [V.HasOrthogonalProjection]
     (T : U →L[𝕜] V) :
-    HasSameApproximationNumbers
+    SameSingularValues
       (V.subtypeL ∘L T ∘L U.subtypeL.adjoint) T :=
-  (hasSameApproximationNumbers_includeCodomain V
-    (T ∘L U.subtypeL.adjoint)).trans
-      (hasSameApproximationNumbers_extendDomainByZero U T)
+  sameSingularValues_trans
+    (hasSameApproximationNumbers_includeCodomain V (T ∘L U.subtypeL.adjoint))
+    (hasSameApproximationNumbers_extendDomainByZero U T)
 
 end ContinuousLinearMap
 
