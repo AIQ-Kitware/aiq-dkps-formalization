@@ -1,7 +1,9 @@
 # Schatten transport research checkpoint — 26 October 2026
 
 Manuscript and visualization updates are assigned separately. This record
-describes new mathematics and the exact next proof obligations.
+describes new mathematics and the exact next proof obligations. The target
+is the journal research extension on exact real and complex transport,
+not an addition to the frozen 29-result Davis--Kahan source denominator.
 
 ## All-rank real nuclear canonical-value criterion
 
@@ -116,7 +118,11 @@ are an explicit hypothesis.
 Focused builds passed: `NuclearFieldComparison` (7,682 jobs), and
 `SchattenNuclearCorrection` (7,392 jobs), each after the cache fetch.
 The real parity checkpoint previously passed the full default build
-(21,041 jobs) and was committed immediately as `3aa3faa1c`.
+(21,041 jobs) and was committed immediately as `3aa3faa1c`. The endpoint,
+field comparison and rounding application then passed the full default
+build (21,047 jobs), with warnings treated as errors, and were committed
+immediately as `0a7738706`. The working tree was clean at that mathematical
+checkpoint.
 
 ## Exact invariant-subspace rounding application
 
@@ -139,6 +145,11 @@ supercritical acute levels, while subcritical, critical and right levels
 may have unrestricted multiplicities. This remains an unproved proposed
 extension. A useful missing lemma is the complete equality case for the
 clipped real two-angle cost versus the sum of the complex scalar minima.
+An independent diagnostic found no counterexample on 1,386 multisets
+through rank six for `p` in `{1.2, 1.5, 1.8}`. Each exponent used angles
+`{0, c/2, c, (c+pi/2)/2, pi/2}`, with `c=arccos((2-p)/p)`, numerical
+scalar phase minimization and exact finite matching enumeration, at an
+equality tolerance of `1e-8`. This supplies no proof of the conjecture.
 
 The two sorted-sum formula, its finite matching normalization/induction,
 the uniform field gap, and the operator-ideal extension remain unproved
@@ -154,3 +165,17 @@ Lemma 3.3 treats a special `p<2` example; Theorem 4.5 concerns Q-norms under
 additional block hypotheses. That limited comparison does not establish
 historical novelty of the present all-rank nuclear parity theorem.
 Manuscript and visualization files remain untouched.
+
+## Exact next application lemma
+
+To express the proved complex nuclear rounding distance as a sharp
+commutator certificate, a useful next lemma is
+`nuclear(P_K-P_L) = sum_i 2 sin(theta_i)` for equal-rank finite complex
+subspaces, in the accepted norm and principal-angle APIs. With
+`L=A(K)`, the operator identity
+`P_L-P_K = (A*P_K-P_K*A)*A.adjoint` and unitary invariance identify this
+with the nuclear commutator norm. The angular rounding theorem is
+compiled; that norm-spectrum lemma and the resulting exact commutator
+formulation are not claimed by this checkpoint. Inspect the existing
+modulus API and `Proposition35.section3SinAngleOperator`, together with
+paired cosine bases, before starting a coordinate proof.
