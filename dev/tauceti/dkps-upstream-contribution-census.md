@@ -1691,3 +1691,20 @@ instance attribute. No local theorem or instance wrapper replaces it. The
 native theorem remains opt-in rather than global, while callers no longer
 import the quantitative donor for completeness packaging. Only the two vector
 estimate consumers import that donor directly.
+
+Validation for checkpoint `9ed78ed4e`: the full default build passed (21,037
+jobs), with compiler and linter warnings treated as errors, and was committed
+immediately on success. `Challenge` and `DavisKahan.Audits.All` passed separately
+(20,811 jobs); each build followed `lake exe cache get`. Exact signature
+preflight passed all 42 compared declarations on universes and full types;
+three declared absent solutions were skipped. No external comparator pass is
+claimed. The auxiliary local-only name parser retains its 23 native-import /
+historical-map findings, with no new findings from this migration.
+
+The bounded reducing carrier migration is now closed. Separate remaining
+cleanup includes the real approximation-number and Ky Fan views and the
+caller-local projected-subspace completeness instance declarations still
+present in some modules. Those can consume the accepted theorem with local
+instance attributes too; preserve their actual ambient and scalar hypotheses.
+No whole-repository upstream-consumption completion is claimed. The tracked
+mathematics is committed; only the three original untracked files remain.
