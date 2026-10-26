@@ -17,6 +17,7 @@ public import DavisKahan.Geometry.Polar.PairedPhase
 public import DavisKahan.Geometry.Polar.DirectRotationRank
 public import DavisKahan.Geometry.Polar.DirectRotationIdeal
 public import DavisKahan.Geometry.Polar.CommutingCorrection
+public import DavisKahan.Geometry.Polar.FiniteSpectralCutoff
 public import DavisKahan.Geometry.Polar.TransportUniqueness
 public import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 public import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal

@@ -764,3 +764,31 @@ They do not classify Schatten `1<p<2` displacement minimizers or the
 smoothed penalty. Their two-sided interchange constraint must not be
 confused with unrestricted one-way unitary equivalence. Historical
 priority of the new optimization extensions remains under review.
+
+## Quantitative finite sector for positive-angle phase transitions
+
+`finrank_eigenSpan_mul_cutoff_rpow_le_schatten_rpow` proves for compact
+self-adjoint operators over both fields that a spectral band bounded
+below by `c>0` satisfies `dim(band)*c^p <= Gauge_p(A)^p`, for every
+finite real `p>=1`. The multiplicative extended-valued form avoids
+division conventions and needs neither separability nor an ambient
+eigenbasis.
+
+`FiniteSpectralCutoff.finite_sine_spectral_cutoff` constructs the actual
+band `M = eigenSpan(|P_K-P_L|, (c,infinity))`. It is finite-dimensional,
+reduces both projections, and leaves a complementary projection
+difference with operator norm at most `c`.
+`sine_spectral_cutoff_isReducing_nonacuteDirectRotation` proves that
+every completed canonical rotation also reduces this finite band.
+`finrank_sine_spectral_cutoff_mul_rpow_le_schatten_projection_sub`
+gives the explicit bound
+`dim(M)*c^p <= Gauge_p(P_K-P_L)^p`. Focused builds passed (5,786 and
+7,088 jobs).
+
+This makes the finite-sector reduction quantitative for every positive
+critical angle (Schatten `1<p<2` and positive smoothing scale). It is
+not yet the theorem that an optimizer differs from direct rotation by
+finite rank: the complementary subcritical trace identity and the
+global cost decomposition still need proofs. At `p=1` the critical
+angle is zero, so this finite-sector argument cannot be used to assert
+finite-rank correction. The nuclear endpoint must be treated separately.
