@@ -832,3 +832,39 @@ can hide entries, so an unqualified zero-preserving-penalty additivity
 claim would be false. Compact blocks (or correctly justified monotone
 penalties) are the appropriate setting. Do not silently extrapolate
 the finite-dimensional block-sum theorem.
+
+## Infinite spectral trace and native block-cost additivity
+
+The preceding generic block-sum gap is now closed in the following
+precise form. `ContinuousLinearMap.tsum_singularValue_penalty_eq_tsum_eigenspace`
+groups the spectral penalty of a compact positive operator by its
+positive-eigenvalue multiplicities. It permits **every** nonnegative
+zero-preserving penalty, with no continuity, monotonicity or summability
+assumption, and handles infinite-dimensional kernels exactly. It uses
+the existing compact spectral multiplicity theorem, not an assumed
+ambient eigenbasis. `EigenspaceBlockSum` extracts the actual algebraic
+eigenspace equivalence from the accepted finite block proof and removes
+its finite-ambient restriction; finite multiplicities suffice.
+
+`CompactBlockTrace.tsum_singularValue_penalty_withLpProdMap` proves
+exact additive penalty sums for arbitrary **compact rectangular**
+orthogonal blocks, over both fields and in arbitrary Hilbert dimensions.
+The passage from positive to arbitrary blocks consumes accepted modulus
+and block singular-value identities.
+
+`OperatorIdealFamily.gauge_schatten_rpow_withLpProdMap` then proves
+**exact native Schatten-power additivity for all bounded rectangular
+blocks**, for every finite real `p>=1`, including infinite costs and
+without a compactness hypothesis. Infinite-cost cases use accepted
+compression dominance, not an invalid noncompact multiplicity count.
+`ContinuousLinearMap.charbonnierCost_withLpProdMap` proves the analogous
+extended Charbonnier-cost identity at every positive smoothing scale,
+again for **all bounded** blocks. Its infinite cases use the correct
+Hilbert--Schmidt domain and the native `p=2` block identity.
+
+Focused builds passed (5,544; 5,668; 6,410; 6,510 jobs). These are
+classical trace-ideal identities, not independent novelty claims.
+Next connect these identities to actual projection-reducing cutoffs
+via the canonical orthogonal decomposition. The subcritical tail's
+exact scalar-phase trace identification remains a separate obligation
+before asserting general `1<p<2` or smoothed attainment.
