@@ -894,7 +894,7 @@ recorded in the contribution census. Removed namespace-map destinations are
 empty, with no forwarding aliases.
 
 The focused build passed (8,096 jobs), including all edited source consumers,
-after the cache fetch. Full-build validation will be recorded when complete.
+after the cache fetch.
 The remaining real approximation-number and norm views, transitional carrier
 API, and local Fan-dominance records still require representation migrations;
 this checkpoint does not claim the overall upstream-consumption goal complete.
@@ -920,4 +920,30 @@ and the module plan records its new owner. Unmerged compact-ideal and modulus
 mathematics remains. Exact scope and provenance are in the contribution census.
 
 The focused donor/consumer build passed (7,794 jobs), after the cache fetch,
-including the source-presentation endpoint. Full-build validation follows.
+including the source-presentation endpoint. The full default build then passed
+(21,029 jobs), with warnings treated as errors,
+and was immediately committed as `851b07d82`. Both this and `89ee0d4ae` then
+passed the explicit `Challenge` and `DavisKahan.Audits.All` build (20,801 jobs),
+after the cache fetch. The two checkpoints remove a net 279 Lean lines while
+retaining unmerged mathematics. The local-only name parser retains its known
+imported-declaration limitations; no broad static-gate claim is inferred from
+the compiler checks. Papers, visualizations and the three original untracked
+files remain untouched.
+
+The next substantive representation obligation is the paper-facing
+`FanDominantIdealFamily`/`KyFanDominantIdealFamily` record pair in
+`ApproximationNumbers.ScalarGeneric`. Accepted
+`OperatorIdealFamily.IsKyFanDominant` in native `Family.KyFan.Dominance` expresses
+the same unconditional comparison over native `NNReal` Ky Fan prefixes, and
+native `IsComplete` already expresses completeness of the ideal carriers.
+Migrate the records and their consumers to these accepted properties without
+leaving conversion instances as permanent bridges. Keep the source rank-one
+normalization and the separate where-defined norm-law scope intact; neither is
+automatically implied by arbitrary ideal-family laws. The real-valued
+approximation-number facade in donor `ApproximationNumber.Basic` also remains
+an explicit, separate migration obligation.
+
+The full comparator signature preflight passed for all 42 implemented targets
+on universe signatures and full types; the three declared absent solutions
+remain skipped. This records signature validation rather than an external
+comparator run or a full-paper completion claim.

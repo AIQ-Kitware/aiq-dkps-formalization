@@ -1142,10 +1142,8 @@ historical proof descent from matching statements. The extraction manifest now
 describes the actual replacement and corrects its prior retirement overstatement.
 
 The focused build passed (8,096 jobs), including source normalization, square
-ideals, and the beam consumer, after the cache fetch. Full-build validation
-will be recorded after it finishes. Papers and visualizations are untouched.
-
-That checkpoint passed the full default build (21,029 jobs), with warnings
+ideals, and the beam consumer, after the cache fetch. The full default build
+then passed (21,029 jobs), with warnings
 treated as errors, and was immediately committed as `89ee0d4ae`.
 
 ### October 25: remove the transitional ideal carrier API
@@ -1190,5 +1188,16 @@ licensing. Scope comparisons use unchanged Tau Ceti pin
 proof of historical descent. No paper or visualization files are changed.
 
 The focused donor/consumer build passed (7,794 jobs), after the cache fetch,
-including the source-presentation endpoint. The full default build is the next
-validation step for this checkpoint.
+including the source-presentation endpoint. The full default build then passed
+(21,029 jobs), with warnings treated as errors,
+and was immediately committed as `851b07d82`. Both this and the Ky Fan checkpoint
+then passed the explicit `Challenge` and `DavisKahan.Audits.All` build (20,801
+jobs), after its cache fetch. Together they remove a net 279 Lean lines while
+preserving the unmerged block-sum, compact-family and modulus mathematics.
+The local-only declaration-name parser retains its documented imported-name
+limitations; the explicit compiler audit resolves the native targets it reports
+absent. This is build evidence, not a full-paper completion claim.
+
+The full comparator signature preflight also passed for all 42 implemented
+targets on universe signatures and full types; the three declared absent
+solutions remain skipped. No external comparator run is inferred.
