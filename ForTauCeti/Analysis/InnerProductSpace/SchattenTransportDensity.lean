@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.SchattenUnitaryApproximation
+public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenFinite
 
 /-!
 # Finite-rank updates inside an exact Schatten transport fiber
@@ -170,5 +171,41 @@ theorem schatten_transport_lower_bound_iff_finite_updates
     have hsum := hlim.const_add (Φ.gauge ((U : E →L[𝕜] E) - 1))
     rw [add_zero] at hsum
     exact ge_of_tendsto' hsum hbound
+
+/-- If a transport fiber contains a finite-rank perturbation of identity,
+every Schatten lower bound can be checked on finite-rank perturbations
+of identity. The unrestricted conclusion covers all ambient competitors. -/
+theorem schatten_transport_lower_bound_iff_finite_rank
+    (p : ℝ) (hp : 1 ≤ p) (P Q : E →L[𝕜] E) (R : E ≃ₗᵢ[𝕜] E)
+    (n : ℕ) (hR : (1 - R.toLinearMap).rank ≤ n)
+    (hRP : (R : E →L[𝕜] E) * P * star (R : E →L[𝕜] E) = Q) (c : ℝ≥0∞) :
+    (∀ U : E ≃ₗᵢ[𝕜] E,
+      (U : E →L[𝕜] E) * P * star (U : E →L[𝕜] E) = Q →
+      c ≤ (OperatorIdealFamily.schatten 𝕜 p hp).gauge ((U : E →L[𝕜] E) - 1)) ↔
+    (∀ U : E ≃ₗᵢ[𝕜] E,
+      (U : E →L[𝕜] E) * P * star (U : E →L[𝕜] E) = Q →
+      (∃ m : ℕ, (1 - U.toLinearMap).rank ≤ m) →
+      c ≤ (OperatorIdealFamily.schatten 𝕜 p hp).gauge ((U : E →L[𝕜] E) - 1)) := by
+  constructor
+  · intro h U hU _
+    exact h U hU
+  · intro h
+    let Φ := OperatorIdealFamily.schatten 𝕜 p hp
+    have hRfinite : Φ.gauge ((R : E →L[𝕜] E) - 1) ≠ ∞ := by
+      rw [← neg_sub 1 (R : E →L[𝕜] E), Φ.gauge_neg]
+      exact OperatorIdealFamily.gauge_schatten_ne_top_of_rank_le p hp
+        (1 - (R : E →L[𝕜] E)) n hR
+    apply (schatten_transport_lower_bound_iff_finite_updates p hp P Q R hRfinite hRP c).mpr
+    intro U hUP ⟨m, hm⟩
+    apply h U hUP
+    refine ⟨n + m, ?_⟩
+    have hfac : 1 - U.toLinearMap = (1 - R.toLinearMap) +
+        ((R : E →L[𝕜] E) - (U : E →L[𝕜] E)).toLinearMap := by
+      ext x
+      change x - U x = (x - R x) + (R x - U x)
+      abel
+    rw [hfac]
+    exact (LinearMap.rank_add_le _ _).trans (by
+      simpa only [Nat.cast_add] using add_le_add hR hm)
 
 end TauCeti

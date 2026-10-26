@@ -24,6 +24,26 @@ variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [NormedAddCommGroup F]
   [InnerProductSpace 𝕜 E] [InnerProductSpace 𝕜 F]
 
+/-- Subspace transport is equivalent to conjugacy of the actual
+orthogonal projections, in arbitrary Hilbert dimension. -/
+theorem map_eq_iff_conjugate_starProjection [CompleteSpace E]
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[𝕜] E) :
+    K.map U.toLinearMap = L ↔
+      (U : E →L[𝕜] E) * K.starProjection * star (U : E →L[𝕜] E) = L.starProjection := by
+  have hs : star (U : E →L[𝕜] E) = (U.symm : E →L[𝕜] E) := U.adjoint_eq_symm
+  have hp : (K.map U.toLinearMap).starProjection =
+      (U : E →L[𝕜] E) * K.starProjection * star (U : E →L[𝕜] E) := by
+    ext x
+    rw [starProjection_map_apply, hs]
+    rfl
+  constructor
+  · intro h
+    simpa only [h] using hp.symm
+  · intro h
+    have heq := hp.trans h
+    rw [← range_starProjection (K.map U.toLinearMap), ← range_starProjection L, heq]
+
 /-- An isometric equivalence transports subspaces exactly when it
 intertwines their orthogonal reflections. -/
 theorem map_eq_iff_intertwines_reflection

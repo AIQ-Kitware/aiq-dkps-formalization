@@ -325,3 +325,38 @@ ambient and carrier dimensions with explicit projection hypotheses.
 Focused builds passed (4,996; 5,752; 6,782 jobs). Next apply these cost
 identities to the existing finite complex global lower bound, then use
 exact-fiber density to include all ambient competitors.
+
+## Unrestricted Hilbert-space lower bound for finite-rank pairs
+
+`DavisKahan/InfiniteDimensional/DirectRotation/SchattenFiniteRank.lean`
+proves
+`sine_phaseMinimum_sum_le_schatten_transport_of_finite_rank_reference`.
+For `1<p<2`, orthogonally complemented complex Hilbert subspaces `K,L`
+and one unitary `R` mapping `K` to `L` with `rank(I-R)<=n`, **every**
+ambient unitary `U` mapping `K` to `L` satisfies
+
+```
+sum'_j ofReal (phaseMinimum p (arcsin (s_j((I-P_L)P_K))))
+  <= SchattenGauge_p(I-U)^p.
+```
+
+This is a literal accepted Schatten-family inequality, not a prescribed
+principal-block result. The competitor need not have finite-rank or
+finite-Schatten displacement. The ambient space need not be separable or
+finite-dimensional, and `K,L` themselves may have infinite rank and
+corank. The finite-rank **reference** is a real hypothesis, not a claim
+that arbitrary Schatten pairs have such a reference. Focused build passed
+(7,364 jobs); the module is included in `InfiniteDimensional.All`.
+
+Dependencies now include `Submodule.exists_finite_transport_section`,
+which constructs the actual finite restricted unitary, complementary
+projection agreement and exact displacement extension, and
+`schatten_transport_lower_bound_iff_finite_rank`, which reduces an exact
+fiber with finite-rank reference to finite-rank competitors. The generic
+`Submodule.map_eq_iff_conjugate_starProjection` states projection
+conjugacy without finite-dimensional or complex-only restrictions.
+
+Next prove finite-rank attainment of this ambient cost by extending the
+existing finite minimizer by identity, then replace the finite-rank
+reference hypothesis by a general feasible Schatten reference. The
+current theorem alone is a lower bound, not the full exact minimum.
