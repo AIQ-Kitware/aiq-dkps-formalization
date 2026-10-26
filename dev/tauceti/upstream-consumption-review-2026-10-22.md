@@ -1448,3 +1448,18 @@ This continues direct consumption of the accepted completeness API; it does not
 introduce new mathematics or assert additional upstream proof ancestry.
 The preceding bound migration compiled in the full default build (21,035 jobs)
 and was committed immediately as `64e6b3804`.
+
+### October 26: source ownership of the scalar-norm transport module
+
+Move `OperatorIdeal/SymmetricNormingScalarTransport.lean` to
+`Sources/DavisKahan1970/SineTheta/Norms/ScalarTransport.lean`, beside the
+source-defined `SymmetricNormingFunction` that its theorems concern. Keep every
+declaration name, hypothesis and proof unchanged. Update both mathematical
+consumers and the source norm aggregate; remove the import from the generic
+operator-ideal aggregate. There is no forwarding module at the old path.
+This fixes the previously recorded generic-to-source import-policy violation
+by assigning the implementation to its mathematical owner, without moving the
+paper's norm definition into the generic foundation or weakening the policy.
+
+The preceding native-completeness migration compiled in the full default build
+(21,035 jobs) and was committed immediately as `495f03d1a`.

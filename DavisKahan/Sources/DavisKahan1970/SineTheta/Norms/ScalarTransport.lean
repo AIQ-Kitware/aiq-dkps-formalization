@@ -9,7 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariant
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 
 /-!
-# Symmetric norming functions under `RCLike` scalar transport
+# Source-defined symmetric norming functions under `RCLike` scalar transport
 
 `ScalarTransport` renames the scalar field without changing vectors, norms,
 ranks, or approximation numbers.  A `SymmetricNormingFunction` depends only on
@@ -18,7 +18,9 @@ gauge, ideal membership, and ordinary gauge are all invariant as well.
 
 These lemmas are the norm-side adapter for scalar-generic source theorems proved
 by dispatching an arbitrary `RCLike` field to its real or complex model.  They
-are intentionally independent of Davis--Kahan tangent geometry.
+are intentionally independent of Davis--Kahan tangent geometry. This module
+belongs beside the source norm definition: its norm family is the one defined
+for the 1970 paper, rather than a generic operator-ideal foundation.
 -/
 
 public section

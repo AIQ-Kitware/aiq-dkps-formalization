@@ -9,7 +9,7 @@ public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.TanTheta.RitzPair
 public import DavisKahan.Sylvester.ScalarTransport
-public import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ScalarTransport
 public import ForTauCeti.Analysis.RCLike.ScalarTransportIsometry
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ScalarTransport

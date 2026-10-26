@@ -11,6 +11,5 @@ public import DavisKahan.OperatorIdeal.UnitarilyInvariant.All
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
-public import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
 
 /-! # `DavisKahan/OperatorIdeal` -/
