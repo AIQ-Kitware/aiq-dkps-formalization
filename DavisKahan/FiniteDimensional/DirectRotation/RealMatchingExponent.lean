@@ -133,13 +133,13 @@ theorem realNuclearPairWeight_comm (theta psi : ℝ) :
 
 /-- Literal closed real nuclear matching cost. Fixed vertices use the
 one-angle canonical/reflection minimum; edges use `4*sin((theta+psi)/2)`. -/
-def realNuclearMatchingCost (theta : ι → ℝ) (s : Equiv.Perm ι) : ℝ := by
+@[expose] def realNuclearMatchingCost (theta : ι → ℝ) (s : Equiv.Perm ι) : ℝ := by
   classical
   exact ∑ i, if s i = i then min (4*Real.sin (theta i/2)) 2
     else realNuclearPairWeight (theta i) (theta (s i))/2
 
 /-- The closed finite nuclear matching problem on a labelled angle list. -/
-def realNuclearMatchingMinimum (theta : ι → ℝ) : ℝ :=
+@[expose] def realNuclearMatchingMinimum (theta : ι → ℝ) : ℝ :=
   (realSchattenMatchings ι).inf' (realSchattenMatchings_nonempty ι)
     (realNuclearMatchingCost theta)
 
