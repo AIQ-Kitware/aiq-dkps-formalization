@@ -79,25 +79,78 @@ rank eight on the angle grid `{0, 0.1, 0.3, pi/3, pi/2}` using exact finite
 matching enumeration (floating evaluation, tolerance `1e-10`). No parity
 counterexample was found. This diagnostic is not the proof.
 
-The unrestricted complex nuclear endpoint still needs to be connected
-formally to its sine value before this can be advertised as a complete
-real-versus-complex comparison. The algebraic parity obstruction itself
-is compiled. The complete optimizer classification for the ambient real
+At this checkpoint the algebraic parity obstruction compiled first.
+The subsequent endpoint and field-comparison theorems below now identify
+the same sine sum with the unrestricted complex minimum. The complete optimizer classification for the ambient real
 problem is not inferred from a classification of attaining matchings.
 
-## Next mathematical target
+## Complex nuclear endpoint and a full comparison of the fields
 
-Close the complex nuclear endpoint by positive-exponent continuity and
-existing all-exponent scalar-phase attainment. Then state the exact
-real-versus-complex equality criterion for pairs with the same accepted
-principal-angle data. Continue to distinguish historical priority from
-formal verification. The primary 2001 predecessor is
-[Bolotnikov--Li--Rodman](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117):
-Lemma 3.3 treats a special `p<2` example; Theorem 4.5 concerns Q-norms under
-additional block hypotheses. That limited comparison does not establish
-historical novelty of the present all-rank nuclear parity theorem.
+`SchattenPhaseMinimum.continuousOn_phaseMinimum_exponent` proves
+continuity of the compact scalar minimum for every positive exponent,
+including vanishing displacement chords. `SchattenOptimalPhase.phaseMinimum_one`
+computes its endpoint as `2 sin(theta)` on the entire physical interval.
+
+`SchattenNuclearEndpoint.sum_sine_le_nuclear_transport_complex` passes
+the unrestricted strict-exponent lower bound to one, using continuity
+of both the scalar minimum and the literal singular-value power sum.
+`exists_unitary_minimizing_nuclear_transport_principalAngles_complex`
+then supplies an actual ambient complex unitary attaining the sine sum
+and comparison with every ambient unitary transporter. Its hypotheses
+are just a finite-dimensional complex inner-product space and equal-rank
+subspaces. Zero, repeated and right angles, rank zero, and arbitrary
+common ambient directions are included. It does not classify all nuclear
+optimizers or claim a nuclear local-to-global theorem.
+
+`NuclearFieldComparison.exists_complex_nuclear_minimum_with_real_parity_criterion`
+compares actual finite real and complex transport problems with the same
+accepted angle data. The source ranks agree and the angle lists agree
+under the resulting finite-index cast; the ambient dimensions need not
+agree. An actual complex minimizer has cost no greater than the literal
+unrestricted real minimum. The two minima are equal exactly when every
+strictly acute positive real angle has even multiplicity. This theorem
+does not silently assume a principal-angle invariance theorem for a
+specific implementation of complexification: equal accepted-angle data
+are an explicit hypothesis.
+
+Focused builds passed: `NuclearFieldComparison` (7,682 jobs), and
+`SchattenNuclearCorrection` (7,392 jobs), each after the cache fetch.
+The real parity checkpoint previously passed the full default build
+(21,041 jobs) and was committed immediately as `3aa3faa1c`.
+
+## Exact invariant-subspace rounding application
+
+`SchattenNuclearCorrection.exists_nearest_nuclear_subspace_preserving_unitary_complex`
+proves that, for any unitary `A` and prescribed subspace `K`, a nearest
+unitary `V` with `V(K)=K` exists in the accepted nuclear norm. Its distance
+from `A` is exactly twice the sum of the principal-angle sines between
+`A(K)` and `K`, and it compares with every ambient unitary preserving
+`K`. The transport-to-correction equivalence already established for
+positive finite Schatten exponents is specialized to one. This is an
+application consequence, not an independent historical-priority claim.
+No experimental, physical-implementation or statistical guarantees are
+inferred.
+
+## Next mathematical targets and priority boundary
+
+For `1<p<2`, investigate the analogous real-versus-complex equality
+criterion: even multiplicities may be necessary precisely for strictly
+supercritical acute levels, while subcritical, critical and right levels
+may have unrestricted multiplicities. This remains an unproved proposed
+extension. A useful missing lemma is the complete equality case for the
+clipped real two-angle cost versus the sum of the complex scalar minima.
 
 The two sorted-sum formula, its finite matching normalization/induction,
 the uniform field gap, and the operator-ideal extension remain unproved
 by this checkpoint. Scalar submodularity alone is insufficient for any
-of those conclusions. Manuscript and visualization files remain untouched.
+of those conclusions. Complex nuclear all-optimizer classification also
+remains open; it cannot be inferred merely by taking a limit of the
+strict-exponent optimizer descriptions.
+
+Continue to distinguish historical priority from formal verification.
+The primary 2001 predecessor is
+[Bolotnikov--Li--Rodman](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117):
+Lemma 3.3 treats a special `p<2` example; Theorem 4.5 concerns Q-norms under
+additional block hypotheses. That limited comparison does not establish
+historical novelty of the present all-rank nuclear parity theorem.
+Manuscript and visualization files remain untouched.

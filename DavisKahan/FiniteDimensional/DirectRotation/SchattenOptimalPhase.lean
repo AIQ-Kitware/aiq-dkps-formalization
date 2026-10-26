@@ -74,6 +74,16 @@ theorem optimalPhase_one (theta : ℝ) (h0 : 0 ≤ theta) (hpi : theta ≤ Real.
   rw [phasePower_one, phasePower_one] at hvalue
   exact (not_lt_of_ge hvalue) (mul_lt_mul_of_pos_left hc (by positivity))
 
+/-- The complex nuclear scalar minimum is the sine of the full principal
+angle, with no strict acuteness assumption. -/
+theorem phaseMinimum_one (theta : ℝ) (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi/2) :
+    phaseMinimum 1 theta = 2 * Real.sin theta := by
+  have hvalue := (optimalPhase_spec 1 theta le_rfl h0).2.1
+  rw [optimalPhase_one theta h0 hpi] at hvalue
+  simpa only [phasePower, Real.rpow_one, phaseChord, sub_self, zero_div,
+    Real.sin_zero, mul_zero, add_zero, show (theta+theta)/2 = theta by ring]
+    using hvalue.symm
+
 /-- At a right angle, the named phase is the endpoint for `1≤p<2`. -/
 theorem optimalPhase_right_angle (p : ℝ) (hp1 : 1 ≤ p) (hp2 : p < 2) :
     optimalPhase p (Real.pi / 2) = Real.pi / 2 := by

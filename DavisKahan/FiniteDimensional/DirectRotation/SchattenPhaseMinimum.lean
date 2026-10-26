@@ -28,6 +28,22 @@ below supply attainment and the intended angle and exponent hypotheses. -/
 def phaseMinimum (p theta : ℝ) : ℝ :=
   sInf (phasePower p theta '' Set.Icc 0 theta)
 
+/-- The scalar phase minimum depends continuously on every positive
+exponent, including at one and at vanishing displacement chords. -/
+theorem continuousOn_phaseMinimum_exponent (theta : ℝ) :
+    ContinuousOn (fun p => phaseMinimum p theta) (Set.Ioi 0) := by
+  unfold phaseMinimum
+  rw [continuousOn_iff_continuous_domRestrict]
+  apply isCompact_Icc.continuous_sInf
+  unfold phasePower phaseChord
+  apply Continuous.add
+  · apply Continuous.rpow (by fun_prop) (continuous_subtype_val.comp continuous_fst)
+    intro x
+    exact Or.inr x.1.property
+  · apply Continuous.rpow (by fun_prop) (continuous_subtype_val.comp continuous_fst)
+    intro x
+    exact Or.inr x.1.property
+
 /-- An attaining phase identifies the infimum with its actual power sum. -/
 theorem phaseMinimum_eq_of_isMinOn (p theta delta : ℝ)
     (hδ : delta ∈ Set.Icc 0 theta)
