@@ -1087,6 +1087,16 @@ modules. Accepted scope was compared at unchanged Tau Ceti pin
 mathematical overlap, without inferring historical proof descent. Extraction
 metadata records both the retired and retained declaration owners.
 
-The focused consumer build passed (7,166 jobs), after the cache fetch. Full-build
-and explicit diagnostic validation for this checkpoint are recorded below once
-complete. Papers and visualizations are outside this maintenance checkpoint.
+The focused consumer build passed (7,166 jobs), after the cache fetch. The full
+default build passed (21,027 jobs), with warnings treated as errors, and was
+immediately committed as `cb95b5cfa`. Explicit `Challenge` and
+`DavisKahan.Audits.All` builds then passed (20,801 jobs), after their cache fetch.
+The local-only declaration-name parser still reports imported upstream names as
+missing, including the native Ky Fan theorem that the explicit Challenge build
+successfully resolves; it is not compiler evidence. Papers and visualizations
+are outside this maintenance checkpoint.
+
+The full comparator signature preflight passed for all 42 implemented targets
+on universe signatures and full types; the three declared absent solutions
+remain skipped. This is signature validation, not an external comparator run
+or a claim that the full source paper is complete.

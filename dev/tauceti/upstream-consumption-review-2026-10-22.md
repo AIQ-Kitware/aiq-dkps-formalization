@@ -851,13 +851,26 @@ their conditional incomplete-source scope is preserved. Other unmerged cutoff,
 scalar-transport and Schatten mathematics remains. The contribution census and
 extraction manifest record exact ownership and provenance distinctions.
 
-The focused consumer build passed (7,166 jobs), after the cache fetch. Full-build
-and explicit diagnostic validation follow once complete. No paper or visualization
-files are changed, and the original three untracked files remain untouched.
+The focused consumer build passed (7,166 jobs), after the cache fetch. The full
+default build passed (21,027 jobs), with warnings treated as errors, and was
+immediately committed as `cb95b5cfa`. Explicit `Challenge` and
+`DavisKahan.Audits.All` builds then passed (20,801 jobs), after their cache fetch.
+The local-only name parser retains its imported-declaration false negatives;
+the compiled Challenge audit resolves the native theorem it reports missing.
+No paper or visualization files are changed, and the original three untracked
+files remain untouched.
+
+The full comparator signature preflight passed for all 42 implemented targets
+on universe signatures and full types; the three declared absent solutions
+remain skipped. No external comparator run or source-completeness claim is
+inferred from that check.
 
 The next separate representation migration is the locally constructed finite
 Ky Fan symmetric ideal family in `ApproximationNumbers.ScalarGeneric`: compare
-the installed native `TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic` constructor,
-its gauge and completeness API, then migrate consumers and delete the duplicate
-constructor. The real-valued approximation-number views also remain an explicit
+the installed `TauCeti.OperatorIdealFamily.kyFan` constructor in native
+`TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic`, its gauge and completeness
+API, then migrate consumers and remove duplicated construction. The native
+constructor is an operator-ideal family; inspect and preserve any additional
+unmerged symmetry proofs rather than assuming a native symmetric constructor.
+The real-valued approximation-number views also remain an explicit
 representation obligation. Neither is claimed complete by this checkpoint.
