@@ -297,3 +297,31 @@ zero extension, compare the support's accepted angle sum to the fixed
 core, and apply the exact-fiber lower-bound criterion. These support and
 density results are classical reduction tools, not separate historical
 novelty claims.
+
+## Exact spectral costs under finite-core restriction
+
+`ContinuousLinearMap.singularValue_orthogonal_extension` and
+`OperatorIdealFamily.gauge_orthogonal_extension` prove that orthogonal
+zero extension preserves every approximation number and every accepted
+ideal gauge. `eq_orthogonal_extension_iff` characterizes extension by its
+actions on the source block and its orthogonal complement. The gauge
+statement uses complete subspace carriers, as required by the accepted
+family API; no finite dimension is imposed.
+
+`SchattenFinite.gauge_schatten_rpow_eq_ofReal_finite` identifies the
+accepted Hilbert-space Schatten power with the already-used finite
+Schatten seminorm power. `gauge_schatten_ne_top_of_rank_le` proves ideal
+membership for any finite-rank bounded map. No additional Schatten norm
+is defined.
+
+`Submodule.tsum_sine_penalty_eq_principalAngle_sum_of_finite_core`
+proves that every zero-preserving ambient directed-sine penalty agrees
+exactly with the accepted principal-angle sum on a finite reducing core
+off which the two projections agree. This bypasses a choice of ambient
+principal-plane enumeration and handles arbitrary Hilbert dimension.
+The sine-map restriction lemma has been moved, with its same name and
+proof, to `Projection/InvariantSubspace.lean` and generalized to infinite
+ambient and carrier dimensions with explicit projection hypotheses.
+Focused builds passed (4,996; 5,752; 6,782 jobs). Next apply these cost
+identities to the existing finite complex global lower bound, then use
+exact-fiber density to include all ambient competitors.

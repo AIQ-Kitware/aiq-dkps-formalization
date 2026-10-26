@@ -94,6 +94,26 @@ theorem starProjection_comap_subtype_apply_of_invariant
       exact K.starProjection_inner_eq_zero x y hy
   exact congrArg (fun y : Z => (y : E)) hproj
 
+/-- The restricted directed sine map is the directed sine map of the
+actual intersections on the invariant carrier. The ambient space and
+the carrier may both be infinite-dimensional. -/
+theorem sinThetaMap_comap_subtype_apply_of_invariant
+    (K L Z : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [(K.comap Z.subtype).HasOrthogonalProjection]
+    [(L.comap Z.subtype).HasOrthogonalProjection]
+    (hK : ∀ x ∈ Z, K.starProjection x ∈ Z)
+    (hL : ∀ x ∈ Z, L.starProjection x ∈ Z) (x : Z) :
+    (((K.comap Z.subtype).sinThetaMap (L.comap Z.subtype) x : Z) : E) =
+      K.sinThetaMap L (x : E) := by
+  have horth (y : Z) :
+      (((L.comap Z.subtype)ᗮ.starProjection y : Z) : E) = Lᗮ.starProjection (y : E) := by
+    rw [starProjection_orthogonal, starProjection_orthogonal]
+    change (y : E) - ((L.comap Z.subtype).starProjection y : E) =
+      (y : E) - L.starProjection y
+    rw [L.starProjection_comap_subtype_apply_of_invariant Z hL]
+  rw [sinThetaMap_apply, sinThetaMap_apply, horth,
+    K.starProjection_comap_subtype_apply_of_invariant Z hK]
+
 /-- Restriction to a subspace invariant under the target projection cannot
 increase the directed gap. The source projection need not preserve it. -/
 theorem directedProjectionGap_comap_subtype_le_of_invariant

@@ -61,23 +61,6 @@ theorem sum_principalAngles_eq_sum_singularValues_arcsin
   rw [sum_principalAngles_eq_sum_ambient K L f hf]
   simp only [principalAngles_apply, principalSines_def]
 
-/-- The restricted directed sine map is the directed sine map of the
-actual intersections on the invariant carrier. -/
-theorem sinThetaMap_comap_subtype_apply_of_invariant
-    (K L Z : Submodule 𝕜 E)
-    (hK : ∀ x ∈ Z, K.starProjection x ∈ Z)
-    (hL : ∀ x ∈ Z, L.starProjection x ∈ Z) (x : Z) :
-    (((K.comap Z.subtype).sinThetaMap (L.comap Z.subtype) x : Z) : E) =
-      K.sinThetaMap L (x : E) := by
-  have horth (y : Z) :
-      (((L.comap Z.subtype)ᗮ.starProjection y : Z) : E) = Lᗮ.starProjection (y : E) := by
-    rw [starProjection_orthogonal, starProjection_orthogonal]
-    change (y : E) - ((L.comap Z.subtype).starProjection y : E) =
-      (y : E) - L.starProjection y
-    rw [L.starProjection_comap_subtype_apply_of_invariant Z hL]
-  rw [sinThetaMap_apply, sinThetaMap_apply, horth,
-    K.starProjection_comap_subtype_apply_of_invariant Z hK]
-
 /-- Every zero-preserving accepted principal-angle sum is additive on a
 complete finite orthogonal family reducing both projections. All source
 ranks and all zero, right and repeated principal angles are retained. -/
