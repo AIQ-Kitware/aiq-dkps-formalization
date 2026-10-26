@@ -405,7 +405,7 @@
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.gauge_eq_zero_iff": "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_eq_zero_iff",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.gauge_finset_sum_le": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.gauge_neg": "TauCeti.OperatorIdealFamily.gauge_neg",
-  "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.gauge_sub_le": "TauCeti.OperatorIdealFamily.gauge_sub_le",
+  "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.gauge_sub_le": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.hilbertSchmidt": "TauCeti.DavisKahanExt.SymmetricNormIdeal.hilbertSchmidt",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.kyFan": "TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily.kyFan",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.RectangularSymmetricIdealFamily.neg_mem": "TauCeti.SymmetricOperatorIdealFamily.neg_mem",

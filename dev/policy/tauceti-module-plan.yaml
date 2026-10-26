@@ -122,7 +122,7 @@ topics:
 - id: T10
   title: Symmetric operator ideals and Schatten norms
   modules:
-  - Analysis.OperatorIdeal.Family.Basic
+  - Analysis.OperatorIdeal.Family.BlockSum
   - Analysis.OperatorIdeal.Family.CompactOperator
   - Analysis.OperatorIdeal.Family.HilbertSchmidt
   - Analysis.OperatorIdeal.Family.KyFan.Dominance
@@ -398,7 +398,7 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
   - Analysis.OperatorIdeal.ApproximationNumber.KyFan
   - Analysis.OperatorIdeal.ApproximationNumber.MinMax
-  - Analysis.OperatorIdeal.Family.Basic
+  - Analysis.OperatorIdeal.Family.BlockSum
   - Analysis.OperatorIdeal.Family.KyFan.Dominance
   - Analysis.OperatorIdeal.Family.TraceClass
 - id: G
@@ -458,7 +458,7 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
   - Analysis.OperatorIdeal.ApproximationNumber.MinMax
   - Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-  - Analysis.OperatorIdeal.Family.Basic
+  - Analysis.OperatorIdeal.Family.BlockSum
   - Analysis.OperatorIdeal.Family.HilbertSchmidt
   - Analysis.OperatorIdeal.Family.KyFan.Dominance
   - Analysis.OperatorIdeal.Family.Schatten

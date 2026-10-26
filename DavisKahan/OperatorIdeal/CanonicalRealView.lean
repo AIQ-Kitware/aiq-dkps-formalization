@@ -78,7 +78,7 @@ variable (N : SymmetricOperatorIdealFamily.{u, v} 𝕜)
 
 /-- Membership in the ideal: the gauge is finite.
 
-The same predicate as `OperatorIdealFamily.carrier`, spelled as the `Mem` the
+The same predicate as membership in the finite-gauge submodule, spelled as the `Mem` the
 Davis--Kahan statements are written against. -/
 abbrev Mem (A : E →L[𝕜] F) : Prop :=
   N.toOperatorIdealFamily.gauge A ≠ ∞
@@ -90,9 +90,10 @@ noncomputable abbrev gaugeReal (A : E →L[𝕜] F) : ℝ :=
   (N.toOperatorIdealFamily.gauge A).toReal
 
 /-- `Mem` is exactly membership in the canonical carrier. -/
-theorem mem_iff_mem_carrier (A : E →L[𝕜] F) :
-    N.Mem A ↔ A ∈ N.toOperatorIdealFamily.carrier := by
-  rw [OperatorIdealFamily.mem_carrier_iff]
+theorem mem_iff_mem_finiteSubmodule (A : E →L[𝕜] F) :
+    N.Mem A ↔ A ∈ (N.toOperatorIdealFamily.operatorGauge E F).finiteSubmodule := by
+  simp only [Mem, OperatorGauge.mem_finiteSubmodule,
+    OperatorIdealFamily.operatorGauge_apply, lt_top_iff_ne_top]
 
 /-- The real gauge is the `toReal` of the stored `ℝ≥0∞` gauge. -/
 theorem gaugeReal_eq_toReal (A : E →L[𝕜] F) :
@@ -108,30 +109,34 @@ theorem gaugeReal_modulus_eq (A : E →L[𝕜] F) :
 
 /-- The zero operator lies in every ideal. -/
 theorem zero_mem : N.Mem (0 : E →L[𝕜] F) :=
-  (N.mem_iff_mem_carrier 0).mpr N.toOperatorIdealFamily.carrier.zero_mem
+  (N.mem_iff_mem_finiteSubmodule 0).mpr
+    (N.toOperatorIdealFamily.operatorGauge E F).finiteSubmodule.zero_mem
 
 /-- Ideals are closed under addition. -/
 theorem add_mem {A B : E →L[𝕜] F} (hA : N.Mem A) (hB : N.Mem B) : N.Mem (A + B) :=
-  (N.mem_iff_mem_carrier (A + B)).mpr
-    (N.toOperatorIdealFamily.carrier.add_mem
-      ((N.mem_iff_mem_carrier A).mp hA) ((N.mem_iff_mem_carrier B).mp hB))
+  (N.mem_iff_mem_finiteSubmodule (A + B)).mpr
+    ((N.toOperatorIdealFamily.operatorGauge E F).finiteSubmodule.add_mem
+      ((N.mem_iff_mem_finiteSubmodule A).mp hA) ((N.mem_iff_mem_finiteSubmodule B).mp hB))
 
 /-- Ideals are closed under scalar multiplication. -/
 theorem smul_mem (c : 𝕜) {A : E →L[𝕜] F} (hA : N.Mem A) : N.Mem (c • A) :=
-  (N.mem_iff_mem_carrier (c • A)).mpr
-    (N.toOperatorIdealFamily.carrier.smul_mem _ ((N.mem_iff_mem_carrier A).mp hA))
+  (N.mem_iff_mem_finiteSubmodule (c • A)).mpr
+    ((N.toOperatorIdealFamily.operatorGauge E F).finiteSubmodule.smul_mem _
+      ((N.mem_iff_mem_finiteSubmodule A).mp hA))
 
 /-- A symmetric ideal is closed under adjoints. -/
-theorem adjoint_mem {A : E →L[𝕜] F} (hA : N.Mem A) : N.Mem A.adjoint :=
-  (N.mem_iff_mem_carrier A.adjoint).mpr
-    (N.adjoint_mem_carrier ((N.mem_iff_mem_carrier A).mp hA))
+theorem adjoint_mem {A : E →L[𝕜] F} (hA : N.Mem A) : N.Mem A.adjoint := by
+  change N.gauge A.adjoint ≠ ∞
+  rw [N.gauge_adjoint]
+  exact hA
 
 /-- The two-sided ideal law: outer composition stays in the ideal. -/
 theorem comp_mem (L : F →L[𝕜] G) {A : E →L[𝕜] F} (R : H →L[𝕜] E) (hA : N.Mem A) :
     N.Mem (L ∘L A ∘L R) :=
-  (N.mem_iff_mem_carrier (L ∘L A ∘L R)).mpr
-    (N.toOperatorIdealFamily.comp_mem_carrier L R
-      ((N.mem_iff_mem_carrier A).mp hA))
+  (N.mem_iff_mem_finiteSubmodule (L ∘L A ∘L R)).mpr
+    (N.toOperatorIdealFamily.comp_left_mem_finiteSubmodule L
+      (N.toOperatorIdealFamily.comp_right_mem_finiteSubmodule
+        ((N.mem_iff_mem_finiteSubmodule A).mp hA) R))
 
 /-- The real gauge is nonnegative on members. -/
 theorem gaugeReal_nonneg {A : E →L[𝕜] F} (_hA : N.Mem A) : 0 ≤ N.gaugeReal A :=
@@ -144,7 +149,7 @@ theorem gaugeReal_zero : N.gaugeReal (0 : E →L[𝕜] F) = 0 := by
 /-- A member of gauge zero is the zero operator. -/
 theorem gaugeReal_eq_zero {A : E →L[𝕜] F} (hA : N.Mem A)
     (h : N.gaugeReal A = 0) : A = 0 :=
-  N.toOperatorIdealFamily.gauge_eq_zero
+  (N.toOperatorIdealFamily.gauge_eq_zero_iff A).mp
     (((ENNReal.toReal_eq_zero_iff _).mp h).resolve_right hA)
 
 /-- The real gauge is subadditive on members. -/
@@ -189,29 +194,30 @@ theorem gaugeReal_complete [N.toOperatorIdealFamily.IsComplete]
       N.gaugeReal (A m - A n) < ε) :
     ∃ L, N.Mem L ∧ ∀ ε : ℝ, 0 < ε → ∃ M, ∀ n, M ≤ n →
       N.gaugeReal (A n - L) < ε := by
-  -- Read the sequence inside the ideal, where the gauge *is* the norm.
-  -- Hand `Elem.mk` the membership in its canonical `∈ carrier` form.  Passing `hmem n`
-  -- directly leaves the `Mem` spelling in the term, and `Elem.val_mk` then will not match
-  -- against it -- the two are only definitionally the same predicate.
-  set a : ℕ → N.toOperatorIdealFamily.Elem E F :=
-    fun n => OperatorIdealFamily.Elem.mk ((N.mem_iff_mem_carrier (A n)).mp (hmem n)) with ha
+  let a : ℕ → (N.toOperatorIdealFamily.operatorGauge E F).Carrier :=
+    fun n => ⟨A n, (N.mem_iff_mem_finiteSubmodule (A n)).mp (hmem n)⟩
+  have hval (n : ℕ) : (a n).toContinuousLinearMap = A n := rfl
   have hdist : ∀ m n, dist (a m) (a n) = N.gaugeReal (A m - A n) := by
     intro m n
-    rw [dist_eq_norm, ha, OperatorIdealFamily.Elem.norm_def]
-    simp [gaugeReal, OperatorIdealFamily.Elem.val_mk]
+    rw [dist_eq_norm, OperatorGauge.Carrier.norm_def,
+      OperatorGauge.Carrier.toContinuousLinearMap_sub, hval, hval,
+      OperatorIdealFamily.operatorGauge_apply]
   have hcs : CauchySeq a := by
     rw [Metric.cauchySeq_iff]
     intro ε hε
     obtain ⟨M, hM⟩ := hcauchy ε hε
     exact ⟨M, fun m hm n hn => by rw [hdist]; exact hM m n hm hn⟩
   obtain ⟨l, hl⟩ := cauchySeq_tendsto_of_complete hcs
-  refine ⟨l.val, (N.mem_iff_mem_carrier l.val).mpr l.val_mem, fun ε hε => ?_⟩
+  refine ⟨l.toContinuousLinearMap,
+    (N.mem_iff_mem_finiteSubmodule l.toContinuousLinearMap).mpr l.mem_finiteSubmodule,
+    fun ε hε => ?_⟩
   rw [Metric.tendsto_atTop] at hl
   obtain ⟨M, hM⟩ := hl ε hε
   refine ⟨M, fun n hn => ?_⟩
   have := hM n hn
-  rwa [dist_eq_norm, OperatorIdealFamily.Elem.norm_def, show (a n - l).val = A n - l.val from
-    by simp [ha]] at this
+  rwa [dist_eq_norm, OperatorGauge.Carrier.norm_def,
+    OperatorGauge.Carrier.toContinuousLinearMap_sub, hval,
+    OperatorIdealFamily.operatorGauge_apply] at this
 
 /-! ### Consequences -/
 

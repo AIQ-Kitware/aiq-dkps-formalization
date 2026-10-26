@@ -57,7 +57,7 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport",
-        "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
+        "ForTauCeti.Analysis.OperatorIdeal.Family.BlockSum",
         "ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
@@ -750,19 +750,40 @@
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.Basic",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.Carrier",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: representation of an operator ideal family)",
-      "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `ℝ≥0∞` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
+      "provenance_class": "redesigned from the historical real-gauge record; the remaining transitional carrier and Elem APIs were retired in favor of accepted operatorGauge, finiteSubmodule and OperatorGauge.Carrier",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.OperatorIdeal.Family",
+        "TauCeti.Analysis.OperatorIdeal.Family.Carrier",
+        "TauCeti.Analysis.OperatorIdeal.Carrier"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator"
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "October 25: deleted Family.Basic after migrating its compact-ideal, modulus, real-view and source-presentation consumers to native operatorGauge/finiteSubmodule/Carrier. All Elem, val, carrier and membership forwarding APIs are removed rather than re-exported. Native Carrier completeness and composition closure replace the former compatibility proofs. The unmerged gauge_blockSum_le theorem is preserved in the dependency-closed Family.BlockSum module with a proof using accepted contraction estimates. The paper real-valued norm presentation and the unmerged compact family and modulus theorem are retained. Pre-retirement DKPS 89ee0d4ae; accepted Tau Ceti efded067c28ffca3483fd731674eb13b42543fbb. Historical source records elsewhere are not claimed removed by this donor retirement."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.Family.Basic at DKPS 89ee0d4ae",
+      "source_declarations": [
+        "TauCeti.OperatorIdealFamily.gauge_blockSum_le"
       ],
+      "current_namespace": "TauCeti.OperatorIdealFamily",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.Family.BlockSum",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.BlockSum",
+      "ownership_class": "tauceti",
+      "roadmap_target": "symmetric-operator-ideals",
+      "provenance_class": "unmerged DKPS block-sum consequence retained when the transitional Family.Basic API was retired; Jon Crall and OpenAI GPT-6, Kitware Apache-2.0",
+      "direct_dependencies": [
+        "TauCeti.Analysis.OperatorIdeal.Family"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "October 25: declaration name and hypotheses preserved; proof now composes native left/right contraction estimates. No accepted exact block-sum statement was found in the installed Tau Ceti sources; this theorem is not retired or counted as an accepted upstream declaration."
     },
     {
       "source_module": "DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily",

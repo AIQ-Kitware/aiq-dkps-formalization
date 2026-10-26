@@ -898,3 +898,26 @@ after the cache fetch. Full-build validation will be recorded when complete.
 The remaining real approximation-number and norm views, transitional carrier
 API, and local Fan-dominance records still require representation migrations;
 this checkpoint does not claim the overall upstream-consumption goal complete.
+
+The full default build then passed (21,029 jobs), with warnings treated as
+errors, and was immediately committed as `89ee0d4ae`.
+
+### October 25: retire carrier and Elem compatibility interfaces
+
+`Family.Basic` is removed. Its consumers now use native
+`OperatorIdealFamily.operatorGauge`, `OperatorGauge.finiteSubmodule`, and
+`OperatorGauge.Carrier`, including membership, composition closure, norms,
+arithmetic, and completeness. The compact-family carrier isometry, the
+modulus-membership equivalence, and the paper real-valued completeness argument
+retain their mathematical scope while consuming these native representations.
+The source-presentation membership consumer follows the renamed finite-submodule
+view; no old accessor is retained as an alias.
+
+The unmerged `gauge_blockSum_le` is retained in the new dependency-closed
+`Family.BlockSum` module, using accepted contraction estimates. The extraction
+manifest distinguishes this retained theorem from the retired carrier facade,
+and the module plan records its new owner. Unmerged compact-ideal and modulus
+mathematics remains. Exact scope and provenance are in the contribution census.
+
+The focused donor/consumer build passed (7,794 jobs), after the cache fetch,
+including the source-presentation endpoint. Full-build validation follows.

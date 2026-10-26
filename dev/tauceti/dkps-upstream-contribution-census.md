@@ -1144,3 +1144,51 @@ describes the actual replacement and corrects its prior retirement overstatement
 The focused build passed (8,096 jobs), including source normalization, square
 ideals, and the beam consumer, after the cache fetch. Full-build validation
 will be recorded after it finishes. Papers and visualizations are untouched.
+
+That checkpoint passed the full default build (21,029 jobs), with warnings
+treated as errors, and was immediately committed as `89ee0d4ae`.
+
+### October 25: remove the transitional ideal carrier API
+
+The former donor `Family.Basic` module is deleted. Consumers use accepted
+`OperatorIdealFamily.operatorGauge`, `OperatorGauge.finiteSubmodule`, and
+`OperatorGauge.Carrier` directly. The local `carrier` and `Elem` type aliases,
+`val` accessors, membership and arithmetic forwarding lemmas, and duplicate
+composition and Cauchy-sequence arguments are removed without replacement
+compatibility declarations. The unused gauge-subtraction namespace-map entry
+records removal rather than pointing to the deleted theorem.
+
+Accepted `Family.Carrier` supplies the family completeness class and its native
+carrier instance and the two composition-closure theorems. Accepted `Carrier`
+supplies the normed carrier, its map to bounded operators, its norm formula and
+its arithmetic rules. The paper real-valued Cauchy-completeness consequence now
+constructs and takes limits in that native carrier. The source norm view retains
+its numeric finiteness and `toReal` presentation, with the membership equivalence
+renamed to `mem_iff_mem_finiteSubmodule` and its source-presentation consumer
+migrated in the same change.
+
+The compact-ideal realization and modulus-invariance results are unmerged
+mathematics and are preserved. Their membership statements now use the native
+finite-gauge submodule. `compactOperatorIdealFamilyCarrierEquiv` is the retained
+isometry to Mathlib's compact-operator submodule, now stated over the native
+carrier; compact-family completeness still follows from that isometry and
+operator-norm closedness. This does not assume that operator-norm completeness
+implies completeness for arbitrary ideal gauges.
+
+The genuinely unmerged `OperatorIdealFamily.gauge_blockSum_le` remains with its
+original hypotheses and declaration name in donor `Family.BlockSum`. Its only
+import is accepted `TauCeti.Analysis.OperatorIdeal.Family`, and its proof now
+uses the accepted left/right contraction estimates. No exact accepted block-sum
+statement was found in the inspected native sources, so the theorem is neither
+deleted nor counted as accepted. The module plan and extraction manifest record
+this retained owner separately from the retired carrier facade.
+
+Pre-retirement source is DKPS `89ee0d4ae`, preserving the respective Jon Crall,
+OpenAI GPT-6, Claude Opus 5, and GPT-5.6 Sol attribution and Kitware Apache-2.0
+licensing. Scope comparisons use unchanged Tau Ceti pin
+`efded067c28ffca3483fd731674eb13b42543fbb`; mathematical overlap alone is not
+proof of historical descent. No paper or visualization files are changed.
+
+The focused donor/consumer build passed (7,794 jobs), after the cache fetch,
+including the source-presentation endpoint. The full default build is the next
+validation step for this checkpoint.

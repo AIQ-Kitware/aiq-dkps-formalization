@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+public import TauCeti.Analysis.OperatorIdeal.Family.Carrier
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
 /-!
@@ -85,9 +85,9 @@ theorem gauge_modulus_eq
 /-- An operator belongs to a symmetric ideal exactly when its modulus does. -/
 theorem modulus_mem_iff
     (N : SymmetricOperatorIdealFamily.{u, v} K) (T : E →L[K] F) :
-    T.modulus ∈ N.toOperatorIdealFamily.carrier ↔
-      T ∈ N.toOperatorIdealFamily.carrier := by
-  rw [OperatorIdealFamily.mem_carrier_iff, OperatorIdealFamily.mem_carrier_iff,
+    T.modulus ∈ (N.toOperatorIdealFamily.operatorGauge E E).finiteSubmodule ↔
+      T ∈ (N.toOperatorIdealFamily.operatorGauge E F).finiteSubmodule := by
+  simp only [OperatorGauge.mem_finiteSubmodule, OperatorIdealFamily.operatorGauge_apply,
     N.gauge_modulus_eq T]
 
 end

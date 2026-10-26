@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
-public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
+public import TauCeti.Analysis.OperatorIdeal.Family.Carrier
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 
 /-!
@@ -159,12 +159,14 @@ theorem gauge_compactOperatorIdealFamily (A : E →L[𝕜] F) :
 
 /-- **Membership in the compact ideal is compactness.** -/
 @[simp]
-theorem mem_carrier_compactOperatorIdealFamily {A : E →L[𝕜] F} :
-    A ∈ (compactOperatorIdealFamily.{u, v, w} 𝕜).carrier ↔ IsCompactOperator A := by
+theorem mem_finiteSubmodule_compactOperatorIdealFamily {A : E →L[𝕜] F} :
+    A ∈ ((compactOperatorIdealFamily.{u, v, w} 𝕜).operatorGauge E F).finiteSubmodule ↔
+      IsCompactOperator A := by
   classical
-  rw [OperatorIdealFamily.mem_carrier_iff, gauge_compactOperatorIdealFamily]
+  rw [OperatorGauge.mem_finiteSubmodule, OperatorIdealFamily.operatorGauge_apply,
+    gauge_compactOperatorIdealFamily]
   by_cases hA : IsCompactOperator A
-  · simp only [ite_eq_left hA, ne_eq, enorm_ne_top, not_false_eq_true, true_iff]
+  · simp only [ite_eq_left hA, enorm_lt_top, true_iff]
     exact hA
   · simp [hA]
 
@@ -179,33 +181,21 @@ theorem gauge_compactOperatorIdealFamily_of_isCompactOperator
 /-- The ideal of the compact family, as a normed space, is isometric to Mathlib's
 submodule of compact operators.  This is what carries completeness across: the
 gauge is the operator norm on members, so the two norms agree. -/
-noncomputable def compactOperatorIdealFamilyElemEquiv :
-    (compactOperatorIdealFamily.{u, v, w} 𝕜).Elem E F ≃ₗᵢ[𝕜]
+noncomputable def compactOperatorIdealFamilyCarrierEquiv :
+    ((compactOperatorIdealFamily.{u, v, w} 𝕜).operatorGauge E F).Carrier ≃ₗᵢ[𝕜]
       ↥(_root_.compactOperator (RingHom.id 𝕜) E F) where
-  toFun A := ⟨A.val, mem_carrier_compactOperatorIdealFamily.mp A.val_mem⟩
-  invFun A := OperatorIdealFamily.Elem.mk
-    (N := compactOperatorIdealFamily 𝕜)
-    (mem_carrier_compactOperatorIdealFamily.mpr A.2)
-  left_inv A := by
-    refine OperatorIdealFamily.Elem.ext ?_
-    exact OperatorIdealFamily.Elem.val_mk
-      (N := compactOperatorIdealFamily 𝕜) A.val_mem
-  right_inv A := by
-    refine Subtype.ext ?_
-    exact OperatorIdealFamily.Elem.val_mk
-      (N := compactOperatorIdealFamily 𝕜)
-      (mem_carrier_compactOperatorIdealFamily.mpr A.2)
-  map_add' A B := by
-    refine Subtype.ext ?_
-    exact OperatorIdealFamily.Elem.val_add A B
-  map_smul' c A := by
-    refine Subtype.ext ?_
-    exact OperatorIdealFamily.Elem.val_smul c A
+  toFun A := ⟨A.toContinuousLinearMap,
+    mem_finiteSubmodule_compactOperatorIdealFamily.mp A.mem_finiteSubmodule⟩
+  invFun A := ⟨A.val, mem_finiteSubmodule_compactOperatorIdealFamily.mpr A.2⟩
+  left_inv A := OperatorGauge.Carrier.ext rfl
+  right_inv _ := rfl
+  map_add' _ _ := rfl
+  map_smul' _ _ := rfl
   norm_map' A := by
-    have hA : IsCompactOperator A.val :=
-      mem_carrier_compactOperatorIdealFamily.mp A.val_mem
-    change ‖A.val‖ = ‖A‖
-    rw [OperatorIdealFamily.Elem.norm_def,
+    have hA : IsCompactOperator A.toContinuousLinearMap :=
+      mem_finiteSubmodule_compactOperatorIdealFamily.mp A.mem_finiteSubmodule
+    change ‖A.toContinuousLinearMap‖ = ‖A‖
+    rw [OperatorGauge.Carrier.norm_def, OperatorIdealFamily.operatorGauge_apply,
       gauge_compactOperatorIdealFamily_of_isCompactOperator hA, toReal_enorm]
 
 /-- **The compact ideal is complete.**  The compact operators are closed for the
@@ -221,7 +211,7 @@ instance instIsCompleteCompactOperatorIdealFamily :
     have : CompleteSpace
         ↥(_root_.compactOperator (RingHom.id 𝕜) E F) :=
       hclosed.completeSpace_coe
-    exact (compactOperatorIdealFamilyElemEquiv
+    exact (compactOperatorIdealFamilyCarrierEquiv
       (𝕜 := 𝕜) (E := E) (F := F)).toIsometryEquiv.completeSpace
 
 end Base
@@ -270,10 +260,10 @@ theorem gauge_compactOperatorFamily_of_isCompactOperator
 
 /-- Membership in the symmetric compact family is compactness. -/
 @[simp]
-theorem mem_carrier_compactOperatorFamily {A : E →L[𝕜] F} :
-    A ∈ (compactOperatorFamily.{u, v} 𝕜).toOperatorIdealFamily.carrier ↔
+theorem mem_finiteSubmodule_compactOperatorFamily {A : E →L[𝕜] F} :
+    A ∈ ((compactOperatorFamily.{u, v} 𝕜).toOperatorIdealFamily.operatorGauge E F).finiteSubmodule ↔
       IsCompactOperator A :=
-  mem_carrier_compactOperatorIdealFamily
+  mem_finiteSubmodule_compactOperatorIdealFamily
 
 end Symmetric
 
