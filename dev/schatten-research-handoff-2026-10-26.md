@@ -256,3 +256,24 @@ historical novelty is not claimed for them. The exact infinite-dimensional
 minimum is still a separate result, requiring geometric reduction and
 attainment. The next use is approximation within the exact transport
 fiber relative to a supplied feasible reference transporter.
+
+## Exact-fiber density and an unrestricted lower-bound criterion
+
+`SchattenTransportDensity.exists_schatten_transport_finite_update_sequence`
+now proves that two Schatten perturbations of identity transporting the
+same bounded operator to the same target can be approximated inside that
+exact fiber: each approximant differs from the supplied reference by
+finite rank, and converges to the competitor in Schatten gauge as well
+as operator norm. Both fields, every finite `p>=1`, arbitrary bounded
+source/target operators and nonseparable Hilbert spaces are included.
+
+`schatten_transport_lower_bound_iff_finite_updates` proves that any
+extended nonnegative lower bound for the whole transport fiber is
+equivalent to its validity on these finite-rank updates of the reference.
+The unrestricted side includes competitors with infinite cost. This
+justifies the analytic limiting step in the proposed infinite-dimensional
+proof; it does not supply the finite-dimensional geometric comparison or
+the claimed angle-sum formula. Focused build passed (6,472 jobs).
+The next geometric obligation is a common finite reducing support for
+finite-rank competing corrections and the source projection, followed by
+an exact comparison of its angle cost with the fixed active core.
