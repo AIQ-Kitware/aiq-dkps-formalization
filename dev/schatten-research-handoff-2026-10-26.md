@@ -179,3 +179,23 @@ compiled; that norm-spectrum lemma and the resulting exact commutator
 formulation are not claimed by this checkpoint. Inspect the existing
 modulus API and `Proposition35.section3SinAngleOperator`, together with
 paired cosine bases, before starting a coordinate proof.
+
+## Infinite-dimensional operator-ideal transport lower bound
+
+`ForTauCeti/Analysis/OperatorIdeal/Family/UnitaryTransport.lean` proves
+`OperatorIdealFamily.gauge_projection_sub_le_unitary_displacement`.
+For every accepted `OperatorIdealFamily`, real or complex Hilbert space,
+orthogonally complemented `K,L`, and ambient isometric equivalence
+mapping `K` to `L`, the gauge of `P_K-P_L` is at most the gauge of `I-W`.
+No dimension, separability, compactness, finite-rank or finite-gauge
+hypothesis is imposed. The proof uses the source reflection and two
+unitary translates of the displacement. It includes extended infinite
+values. Left and right isometry invariance of the accepted family gauge
+are proved as reusable lemmas. This is classical norm mathematics and
+not an independent priority claim.
+
+Focused build passed (4,996 jobs), after the cache fetch. The exact
+infinite-dimensional Schatten optimum and its attainment remain open.
+A useful proof route to investigate is finite-rank truncation of the
+competing unitary itself, with no increase of its gauge, rather than
+assuming Schatten-norm density of the source-commuting unitary group.
