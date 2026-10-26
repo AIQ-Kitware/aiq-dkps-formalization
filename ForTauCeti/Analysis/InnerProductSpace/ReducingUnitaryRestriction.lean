@@ -25,6 +25,27 @@ namespace LinearIsometryEquiv
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
+/-- An actual surjective unitary restriction forces reduction of its
+carrier. This remains valid in infinite dimension, where invariance
+alone would not imply surjectivity or reduction. -/
+theorem isReducing_of_restriction
+    (U : E ≃ₗᵢ[𝕜] E) (M : Submodule 𝕜 E) (V : M ≃ₗᵢ[𝕜] M)
+    (hV : ∀ x : M, (V x : E) = U x) : M.IsReducing U.toLinearMap := by
+  apply (M.isReducing_iff U.toLinearMap).mpr
+  constructor
+  · intro x hx
+    change U x ∈ M
+    rw [← hV ⟨x, hx⟩]
+    exact (V ⟨x, hx⟩).property
+  · intro x hx y hy
+    let z := V.symm ⟨y, hy⟩
+    have hpre : U (z : E) = y := by
+      rw [← hV]
+      exact congrArg Subtype.val (V.apply_symm_apply ⟨y, hy⟩)
+    change inner 𝕜 y (U x) = 0
+    rw [← hpre, U.inner_map_map]
+    exact hx z z.property
+
 /-- A reducing subspace with an orthogonal projection carries the
 actual unitary restriction and its actual inverse. No finite dimension
 or ambient completeness is needed. -/

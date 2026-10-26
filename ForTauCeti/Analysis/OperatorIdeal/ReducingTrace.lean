@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 -/
 module
 
+public import ForTauCeti.Analysis.InnerProductSpace.ReducingUnitaryRestriction
+
 public import ForTauCeti.Analysis.OperatorIdeal.CharbonnierBlockSum
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
@@ -119,21 +121,19 @@ theorem charbonnierCost_eq_add_of_isReducing
   simp_rw [A.singularValue_eq_orthogonal_block_of_isReducing M hM]
   exact charbonnierCost_withLpProdMap tau hτ _ _
 
-/-- An actual unitary replacement on a finite block has exactly the
-new finite-block Schatten power plus its unchanged reference tail.
+/-- An actual unitary replacement on a reducing block has exactly the
+new block's Schatten power plus its unchanged reference tail.
 The identity includes infinite reference-tail costs. -/
 theorem gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
-    (p : ℝ) (hp : 1 ≤ p) (M : Submodule 𝕜 E) [FiniteDimensional 𝕜 M]
+    (p : ℝ) (hp : 1 ≤ p) (M : Submodule 𝕜 E)
+    [M.HasOrthogonalProjection] [CompleteSpace M]
     (U R : E ≃ₗᵢ[𝕜] E) (W : M ≃ₗᵢ[𝕜] M)
     (hUM : ∀ x : M, U x = (W x : E)) (htail : ∀ x ∈ Mᗮ, U x = R x) :
     (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (U : E →L[𝕜] E)) ^ p =
       (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (W : M →L[𝕜] M)) ^ p +
         (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge
           (Mᗮ.orthogonalProjectionOnto ∘L (1 - (R : E →L[𝕜] E)) ∘L Mᗮ.subtypeL) ^ p := by
-  obtain ⟨_, _, _, hredU⟩ := U.exists_restriction_of_finite_invariant M (by
-    intro x hx
-    rw [hUM ⟨x, hx⟩]
-    exact (W ⟨x, hx⟩).property)
+  have hredU := U.isReducing_of_restriction M W (fun x => (hUM x).symm)
   have hred : M.IsReducing (1 - (U : E →L[𝕜] E)).toLinearMap := by
     apply (M.isReducing_iff _).mpr
     constructor

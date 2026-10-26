@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.InnerProductSpace.Reflection
 public import TauCeti.Analysis.InnerProductSpace.Modulus
 
@@ -65,5 +66,23 @@ theorem commute_starProjection_modulus_of_reflection_conjugate_eq_neg
   change Commute K.starProjection (star G * G)
   rw [hG.star_eq]
   exact hPsq
+
+/-- The entire kernel of a reflection-odd self-adjoint operator reduces
+its source projection, without any finite-dimensional hypothesis. -/
+theorem isReducing_ker_of_reflection_conjugate_eq_neg
+    (K : Submodule 𝕜 E) [K.HasOrthogonalProjection]
+    (G : E →L[𝕜] E) (hG : IsSelfAdjoint G)
+    (hodd : ((2 : 𝕜) • K.starProjection - 1) * G *
+      ((2 : 𝕜) • K.starProjection - 1) = -G) :
+    G.ker.IsReducing K.starProjection.toLinearMap := by
+  have hPA := K.commute_starProjection_modulus_of_reflection_conjugate_eq_neg G hG hodd
+  rw [← G.ker_modulus]
+  apply (K.starProjection_isSymmetric.isReducing_iff_mem_invtSubmodule _).mpr
+  intro x hx
+  change G.modulus (K.starProjection x) = 0
+  calc
+    _ = K.starProjection (G.modulus x) :=
+      (congrArg (fun A : E →L[𝕜] E => A x) hPA.eq).symm
+    _ = 0 := by rw [show G.modulus x = 0 from hx, map_zero]
 
 end Submodule

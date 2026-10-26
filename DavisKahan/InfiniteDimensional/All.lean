@@ -27,5 +27,6 @@ public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenGlobalAttain
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCutoffClassification
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenStationarity
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenGradientCutoff
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenGradientKernel
 
 /-! # `DavisKahan/InfiniteDimensional` -/

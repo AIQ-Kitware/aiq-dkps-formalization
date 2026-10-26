@@ -1234,3 +1234,37 @@ that actual block by finite optimality, and retain identity on its fixed
 complement. Then combine the classified gradient sectors with the kernel
 sector to force canonical inactive action. The positive-gradient normal
 forms alone are not yet the unrestricted every-optimizer iff.
+
+
+## The complete zero-gradient kernel now has a finite optimizing support
+
+`exists_finite_reflecting_support_on_gradient_kernel_of_schatten_minimal`
+now proves that every finite-cost complex Schatten optimizer (`1<p<2`)
+has an actual self-adjoint unitary restriction on its entire gradient
+kernel. This restriction is globally optimal among **all** transporters
+of the restricted pair. Its displacement is finite rank. Saturating the
+displacement range by the source projection produces a finite reducing
+support carrying a finite global optimizer; the rest of the full kernel
+is fixed pointwise. No separability or finite kernel dimension is assumed.
+The kernel core's finite optimality invokes the complete finite
+phase/defect classification without excluding legitimate `-1` directions.
+Focused build passed (7,534 jobs).
+
+Reusable ingredients: `exists_schatten_minimizing_reducing_restriction`
+now treats arbitrary infinite reducing blocks using exact finite-cost
+tail cancellation; `exists_transport_replacing_reducing_block` gives
+actual arbitrary-block replacements. The finite versions specialize
+these statements and retain their weaker invariance hypotheses.
+`exists_rank_displacement_le_of_isSelfAdjoint` uses accepted Tau Ceti
+compact-eigenspace finiteness at eigenvalue `2`.
+
+Next assembly: positive gradient cutoffs and the reflection kernel
+exhaust the Hilbert space. Prove sine-angle commutation globally using
+finite optimizer commutation on positive cutoffs and the existing
+`commute_sinAngleOperator_of_selfAdjoint_transport` on the kernel.
+Then positive sine cutoffs are finite actual minimizing restrictions;
+zero-angle directions are fixed by restriction optimality. Finite
+canonical uniqueness on subcritical sine bands should force canonical
+action on the infinite inactive tail. The final unconditional
+canonical-tail/finite-phase iff remains open; do not report it as proved.
+Paper and visualization files remain untouched.
