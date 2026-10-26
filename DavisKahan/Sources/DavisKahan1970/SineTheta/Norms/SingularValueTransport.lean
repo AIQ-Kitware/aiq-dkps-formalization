@@ -283,16 +283,22 @@ theorem mem_and_gauge_eq
     N.Mem A ∧
       N.gauge A =
         N.gauge B := by
-  let M := N.toSymmetricOperatorIdealFamily
-  have hAB : ∀ k, kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B := fun k =>
-    le_of_eq (h.kyFanApproximationGauge_eq k)
-  obtain ⟨hA, hleAB⟩ := N.majorization_mem_and_gauge_le hB hAB
-  have hBA : ∀ k, kyFanApproximationGauge k B ≤
-      kyFanApproximationGauge k A := fun k =>
-    le_of_eq (h.kyFanApproximationGauge_eq k).symm
-  obtain ⟨_, hleBA⟩ := N.majorization_mem_and_gauge_le hA hBA
-  exact ⟨hA, le_antisymm hleAB hleBA⟩
+  have hs : ContinuousLinearMap.SameSingularValues A B := by
+    apply (ContinuousLinearMap.sameSingularValues_iff A B).mpr
+    intro n
+    have hn := (ContinuousLinearMap.hasSameApproximationNumbers_iff A B).mp h n
+    have hn' : (A.singularValue n : ℝ) = (B.singularValue n : ℝ) := by
+      simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hn
+    exact_mod_cast hn'
+  have hraw : N.toSymmetricOperatorIdealFamily.gauge A =
+      N.toSymmetricOperatorIdealFamily.gauge B :=
+    OperatorIdealFamily.gauge_eq_of_sameSingularValues
+      (Φ := N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily) hs
+  have hA : N.Mem A := by
+    change N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤
+    rw [hraw]
+    exact hB
+  exact ⟨hA, congrArg ENNReal.toReal hraw⟩
 
 /-- Transfer a sharp scalar gauge estimate to any operator with the same
 complete singular-value sequence. -/

@@ -178,18 +178,10 @@ theorem `majorization_mem_and_gauge_le`. -/
 structure FanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
   /-- The canonical symmetric ideal family supplying the gauge and its laws. -/
   toSymmetricOperatorIdealFamily : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜
-  /-- **Fan dominance.**  Majorization of every finite Ky Fan gauge forces the
-  ideal gauge to be dominated too. -/
-  gauge_le_of_forall_kyFanApproximationGauge_le :
-    ∀ {E F E' F' : Type v}
-      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-      [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
-      [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
-      {A : E →L[𝕜] F} {B : E' →L[𝕜] F'},
-      (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
-      toSymmetricOperatorIdealFamily.gauge A ≤
-        toSymmetricOperatorIdealFamily.gauge B
+  /-- The accepted Ky Fan dominance property of the underlying family. -/
+  isKyFanDominant : toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsKyFanDominant
+
+attribute [instance] FanDominantIdealFamily.isKyFanDominant
 
 namespace FanDominantIdealFamily
 
@@ -283,7 +275,11 @@ theorem majorization_mem_and_gauge_le {E' F' : Type v}
     {A : E →L[𝕜] F} {B : E' →L[𝕜] F'} (hB : N.Mem B)
     (h : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
     N.Mem A ∧ N.gauge A ≤ N.gauge B := by
-  have hle := N.gauge_le_of_forall_kyFanApproximationGauge_le h
+  have hle : N.toSymmetricOperatorIdealFamily.gauge A ≤
+      N.toSymmetricOperatorIdealFamily.gauge B := by
+    apply OperatorIdealFamily.gauge_le_of_forall_kyFanGauge_le
+    intro k
+    exact_mod_cast h k
   exact ⟨ne_top_of_le_ne_top hB hle, ENNReal.toReal_mono hB hle⟩
 
 end FanDominantIdealFamily
@@ -297,12 +293,9 @@ variable (N : FanDominantIdealFamily.{u, v} 𝕜)
 noncomputable def operatorNorm :
     FanDominantIdealFamily.{u, v} 𝕜 where
   toSymmetricOperatorIdealFamily := TauCeti.SymmetricOperatorIdealFamily.opNorm 𝕜
-  gauge_le_of_forall_kyFanApproximationGauge_le := by
-    intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hmajor
-    have h : ‖A‖ ≤ ‖B‖ := by simpa using hmajor 1
-    simpa [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
-      TauCeti.OperatorIdealFamily.gauge_opNorm, ← ofReal_norm] using
-      ENNReal.ofReal_le_ofReal h
+  isKyFanDominant := by
+    rw [SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
 
 /-- A fixed positive finite Ky Fan gauge with its own dominance property.
 
@@ -315,11 +308,9 @@ noncomputable def kyFan
   toSymmetricOperatorIdealFamily :=
     { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
       gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }
-  gauge_le_of_forall_kyFanApproximationGauge_le := by
-    intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hmajor
-    apply OperatorIdealFamily.gauge_le_of_forall_kyFanGauge_le
-    intro j
-    exact_mod_cast hmajor j
+  isKyFanDominant := by
+    change (OperatorIdealFamily.kyFan 𝕜 k hk).IsKyFanDominant
+    infer_instance
 
 /-! The next two are stated through `Mem`/`gauge`, the accessors.
 

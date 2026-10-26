@@ -402,28 +402,13 @@ theorem scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
   rw [S.gaugeReal_smul (((c : ℝ) : 𝕜)) hA, RCLike.norm_ofReal, abs_of_pos hc] at hreal
   exact hreal
 
-/-- Unconditional Fan dominance for a normalized symmetric operator ideal family.
-
-Because nonmembership is represented by gauge `⊤`, this property contains both
-where-defined Fan monotonicity and the corresponding membership-transfer
-consequence. -/
-def HasFanDominance (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜) : Prop :=
-  ∀ {E F E' F' : Type v}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
-    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
-    {A : E →L[𝕜] F} {B : E' →L[𝕜] F'},
-    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
-      N.toSymmetricOperatorIdealFamily.gauge A ≤
-        N.toSymmetricOperatorIdealFamily.gauge B
-
 /-- Add unconditional Fan dominance to the base normalized symmetric family. -/
-def withFanDominance (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜) (h : N.HasFanDominance) :
+def withFanDominance (N : NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜)
+    (h : N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsKyFanDominant) :
     NormalizedUnitaryInvariantNorm.{u, v} 𝕜 where
   toFanDominantIdealFamily :=
     { toSymmetricOperatorIdealFamily := N.toSymmetricOperatorIdealFamily
-      gauge_le_of_forall_kyFanApproximationGauge_le := h }
+      isKyFanDominant := h }
   gauge_rankOne_eq_one := fun hV hr => N.gauge_rankOne_eq_one hV hr
 
 end NormalizedSymmetricOperatorIdealFamily
@@ -440,12 +425,18 @@ def toNormalizedSymmetricOperatorIdealFamily (N : NormalizedUnitaryInvariantNorm
   gauge_rankOne_eq_one := fun hV hr => N.gauge_rankOne_eq_one hV hr
   gauge_le_of_forall_kyFanApproximationGauge_le_defined := by
     intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B _ _ hAB
-    exact N.toFanDominantIdealFamily.gauge_le_of_forall_kyFanApproximationGauge_le hAB
+    apply OperatorIdealFamily.gauge_le_of_forall_kyFanGauge_le
+    intro k
+    exact_mod_cast hAB k
 
 /-- The forgotten base family satisfies unconditional Fan dominance by the field carried above it. -/
 theorem toNormalizedSymmetricOperatorIdealFamily_hasFanDominance (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) :
-    N.toNormalizedSymmetricOperatorIdealFamily.HasFanDominance :=
-  N.toFanDominantIdealFamily.gauge_le_of_forall_kyFanApproximationGauge_le
+    OperatorIdealFamily.IsKyFanDominant
+      (SymmetricOperatorIdealFamily.toOperatorIdealFamily
+        N.toNormalizedSymmetricOperatorIdealFamily.toSymmetricOperatorIdealFamily) := by
+  change OperatorIdealFamily.IsKyFanDominant
+    N.toFanDominantIdealFamily.toSymmetricOperatorIdealFamily.toOperatorIdealFamily
+  exact N.toFanDominantIdealFamily.isKyFanDominant
 
 /-- Forgetting Fan dominance and then adding back the carried property returns the same record. -/
 theorem toNormalizedSymmetricOperatorIdealFamily_withFanDominance (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) :

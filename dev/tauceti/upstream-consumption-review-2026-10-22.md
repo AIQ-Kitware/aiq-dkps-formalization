@@ -986,3 +986,20 @@ skipped. The namespace map now explicitly records removal of two stale real Ky
 Fan triangle wrappers from the preceding retirement. The auxiliary local-only
 name parser retains imported-declaration limitations and other historical map
 findings; no broad static-gate or external comparator success is inferred.
+
+### October 25: consume the native dominance property
+
+The remaining Fan-family record now stores native
+`OperatorIdealFamily.IsKyFanDominant`. The duplicate unconditional normalized
+`HasFanDominance` definition is deleted, and `withFanDominance` accepts the
+native property. Operator-norm and finite Ky Fan dominance use accepted
+instances; spectral gauge equality uses native
+`OperatorIdealFamily.gauge_eq_of_sameSingularValues` in the source consumer.
+The semantic-surface audit checks the accepted property directly.
+
+The weaker where-defined law and rank-one normalization are retained. The
+Fan-family record and its real views/factories remain explicit carrier debt,
+as does the local approximation-number sequence relation. No new forwarding
+API is introduced and the preceding removal of ideal-completeness assumptions
+is preserved. Focused compilation passed (6,776 jobs) after the cache fetch;
+the full default and explicit audit/comparator validations follow separately.

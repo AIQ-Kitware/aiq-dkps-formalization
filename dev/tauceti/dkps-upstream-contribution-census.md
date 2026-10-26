@@ -1268,3 +1268,29 @@ skipped. Two stale namespace-map destinations for the previously retired real
 Ky Fan triangle wrappers are marked removed. The auxiliary local-only name
 parser still has its imported-declaration limitations and other historical map
 findings; no broad static-gate pass or external comparator run is claimed.
+
+### October 25: native Fan dominance and spectral gauge equality
+
+The duplicate unconditional real-prefix property
+`NormalizedSymmetricOperatorIdealFamily.HasFanDominance` is deleted.
+`withFanDominance` takes accepted `OperatorIdealFamily.IsKyFanDominant`
+directly. The remaining `FanDominantIdealFamily` record stores that native
+property instead of a second comparison law; its operator-norm and finite
+Ky Fan constructors use the accepted instances. The record, real-valued views
+and constructors still require a subsequent carrier migration; they are not
+claimed retired here.
+
+The source-facing `SameApproximationSingularValues.mem_and_gauge_eq` consumes
+accepted `OperatorIdealFamily.gauge_eq_of_sameSingularValues`, replacing its
+two local majorization proofs. Membership follows from equality of the native
+extended gauges. The existing approximation-number relation is converted in
+that proof; no public conversion API is added. Rank-one normalization and the
+weaker where-defined comparison law remain unchanged, and no ideal-completeness
+hypothesis is added.
+
+This records direct consumption at unchanged accepted Tau Ceti revision
+`efded067c28ffca3483fd731674eb13b42543fbb`, not a claim of proof ancestry or
+historical novelty. Pre-change local source is DKPS `21ecd9818`; its authorship
+and licenses remain in place. The focused normalization/singular-value
+transport build passed (6,776 jobs), following the cache fetch. Papers,
+visualizations and the three original untracked files are untouched.

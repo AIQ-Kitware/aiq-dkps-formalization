@@ -1095,7 +1095,7 @@ source's definedness convention. -/
 #check @TauCeti.DavisKahan1970.lemma6_3_leakage_separable_real
 
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily
-#check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominance
+#check @TauCeti.OperatorIdealFamily.IsKyFanDominant
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.HasFanDominanceWhereDefined
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.ScaledGaugeLEWhereDefined
 #check @TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily.withFanDominance
