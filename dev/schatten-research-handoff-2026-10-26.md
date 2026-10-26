@@ -1202,3 +1202,35 @@ these restrictions with the finite reflecting kernel sector to force
 canonical action on all inactive principal-angle sectors. Only then can
 the explicit tail hypothesis be removed from the cutoff classification.
 The unrestricted every-optimizer iff is still not claimed.
+
+## Every optimizer now has classified finite gradient sectors
+
+`exists_minimizing_restriction_on_gradient_cutoff` proves that for every
+finite-cost global optimizer at any finite `p>1` and every `eps>0`, the
+actual sector `eigenSpan |G(U)| (Ioi eps)` is finite-dimensional, reduces
+both projections and `U`, and carries the actual forward/inverse unitary
+restriction. That restriction minimizes against every finite unitary
+transporter of its restricted pair. The gradient on the complementary
+sector has norm at most `eps`. This bounds the **gradient** tail, not
+the displacement tail; near `-1` they are different.
+
+`exists_phase_and_defect_on_gradient_cutoff_of_schatten_minimal` gives
+the complete compatible finite phase-projection/right-defect data on
+all these sectors for `1<p<2`. These are unconditional necessary
+statements about every ambient optimizer: no supplied block invariance,
+cosine commutation, canonical-tail action, or finite ambient dimension.
+Focused build passed (7,526 jobs).
+
+The reusable field-general algebraic lemma
+`commute_starProjection_modulus_of_reflection_conjugate_eq_neg` proves
+that reflection-odd self-adjoint operators have modulus commuting with
+the source projection. Applying it to the proved stationarity identity
+makes the finite gradient cutoffs source-reducing; actual restriction
+and transport then give target reduction and finite optimality.
+
+Remaining assembly obligation: isolate a finite source-reducing support
+of the negative part of the zero-gradient kernel reflection, classify
+that actual block by finite optimality, and retain identity on its fixed
+complement. Then combine the classified gradient sectors with the kernel
+sector to force canonical inactive action. The positive-gradient normal
+forms alone are not yet the unrestricted every-optimizer iff.
