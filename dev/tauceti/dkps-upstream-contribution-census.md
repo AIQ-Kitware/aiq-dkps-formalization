@@ -1403,3 +1403,13 @@ interface. Native symbol evaluation is normalized explicitly to complex casts
 in the gap-form identities. The focused central-band and accepted diagonal
 measure build passed (7,478 jobs), following the cache fetch, including native
 `StarAlgHom`, representation measures and normal-operator diagonal measures.
+
+The full default build passed (21,029 jobs), with warnings treated as errors,
+and was immediately committed as `5f82f288d`. Explicit `Challenge` and
+`DavisKahan.Audits.All` compilation passed (20,801 jobs), following the cache
+fetch. All 42 implemented comparator targets matched on universe signatures
+and full types; three declared absent solutions were skipped. The auxiliary
+local-only declaration-name parser reports 23 findings, including native
+imports it does not index and historical map destinations; no broad static-gate
+or external comparator pass is claimed. The source normality/complex-symbol
+scope, papers, visualizations and original untracked files are preserved.

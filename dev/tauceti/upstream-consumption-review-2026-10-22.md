@@ -1080,3 +1080,34 @@ The diagonal-measure core compiled (6,295 jobs), following the cache fetch.
 The extraction manifest retains the still-local Riesz construction as staged;
 this preparatory step does not claim that `diagMeasure` or its downstream
 Borel-calculus construction has migrated to accepted representation measures.
+
+The full default build passed (21,029 jobs), with warnings treated as errors,
+and was immediately committed as `5f82f288d`. The accepted normal-operator
+diagonal measure and its representation-measure dependencies were explicitly
+compiled alongside the central-band proof (7,478 jobs). The ordered-operator
+imports needed only by the positivity proof are private; exposing them had
+changed unrelated downstream simplification. The gap-form identities now
+normalize native symbol values to explicit complex casts before arithmetic.
+
+The strongest next retirement is the remaining local Riesz construction.
+Use `StarAlgHom.representationDiagMeasure (cfcHom ha)` directly: this accepted
+carrier keeps the existing explicit normality proof without defining a local
+measure wrapper or changing every Borel-calculus function to an implicit
+normality parameter. Consume its finite/regular instances, continuous integral
+identity and total-mass theorem. Replace `integrable_of_continuous` by native
+`ContinuousMap.integrable`. The three conjugation-invariance proofs currently
+use equality of local `diagFunctional` records; recast them as equality of
+continuous scalar integrals. Real-symbol integral identities can be obtained
+by taking `Complex.re` of the accepted complex integral identity. The remaining
+CFC real-symbol helper statements should disappear with their consumers;
+the full normal-operator and complex-symbol scope must be retained. No
+real-only or self-adjoint-only replacement of the normal Borel calculus is
+justified by this migration.
+
+Explicit `Challenge` and `DavisKahan.Audits.All` compilation passed (20,801
+jobs), following the cache fetch. All 42 implemented comparator targets matched
+on universe signatures and full types; three declared absent solutions were
+skipped. The auxiliary local-only declaration-name parser reports 23 findings,
+including imported native declarations and historical map destinations. No
+broad static-gate or external comparator pass is inferred. Papers,
+visualizations and the original three untracked files are untouched.
