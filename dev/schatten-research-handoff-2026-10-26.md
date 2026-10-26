@@ -792,3 +792,43 @@ finite rank: the complementary subcritical trace identity and the
 global cost decomposition still need proofs. At `p=1` the critical
 angle is zero, so this finite-sector argument cannot be used to assert
 finite-rank correction. The nuclear endpoint must be treated separately.
+
+## Actual finite-block phase corrections in an infinite-rank transport fiber
+
+`Submodule.exists_transport_replacing_finite_block` is a reusable
+construction over both fields. Given an actual ambient transporter, a
+finite source-reducing invariant block, and any transport of the actual
+restricted pair, it replaces precisely that block, preserves the
+entire complementary action, and bounds the update rank by the block
+dimension. No compactness, Schatten or finite ambient dimension is
+assumed.
+
+`SchattenFiniteCorrection.exists_schatten_phase_correction_on_finite_block`
+constructs exact finite phase optimizers inside an actual balanced
+Schatten transport fiber for every finite exponent `p>=1`. It proves
+that the ambient corrected unitary retains finite Schatten cost, while
+its tail equals the chosen completed canonical rotation.
+`exists_schatten_phase_correction_on_sine_cutoff` applies this to every
+positive sine cutoff at `1<p<2`: the restriction is globally minimal
+among all finite-block transporters, with the native singular-value
+power sum as objective. The full update has rank at most the cutoff
+dimension. Focused builds passed (6,376 and 7,386 jobs).
+
+**The remaining general attainment obligation is now cost identification,
+not feasibility or construction.** For the candidate at the critical
+sine cutoff, prove (1) additive spectral cost decomposition across its
+finite reducing block and infinite complementary tail, and (2) the
+canonical subcritical tail's Schatten power equals the sum of scalar
+phase minima of its directed-sine singular values. The already compiled
+unrestricted lower bound then certifies global optimality. Exact angle
+sum decomposition must also respect multiplicities and zero padding.
+These trace identities are not yet Lean-verified here. The cutoff
+construction is explicitly **not** presented as a global minimizer.
+
+The accepted decreasing-merge theorem for block singular values is
+available in Tau Ceti, but no infinite spectral-penalty sum additivity
+API was found in the installed sources. Arbitrary noncompact merges
+can hide entries, so an unqualified zero-preserving-penalty additivity
+claim would be false. Compact blocks (or correctly justified monotone
+penalties) are the appropriate setting. Do not silently extrapolate
+the finite-dimensional block-sum theorem.
