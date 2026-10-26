@@ -9,6 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryTruncation
 public import ForTauCeti.Analysis.InnerProductSpace.CompactApproximationEigenvalues
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import TauCeti.Analysis.InnerProductSpace.Modulus
+public import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Intertwining
 
 /-!
 # Compact unitary perturbations admit cost-decreasing finite truncations
@@ -83,6 +84,18 @@ theorem norm_comp_orthogonal_eigenSpan_le {A : E →L[𝕜] E}
     _ = RCLike.re ν := abs_of_nonneg hnonneg
     _ ≤ c := hle
 
+private theorem commute_displacement_modulus (U : E ≃ₗᵢ[𝕜] E) (B : E →L[𝕜] E)
+    (hBU : Commute B (U : E →L[𝕜] E)) :
+    Commute B (((U : E →L[𝕜] E) - 1) : E →L[𝕜] E).modulus := by
+  let u : unitary (E →L[𝕜] E) := Unitary.linearIsometryEquiv.symm U
+  have hBUstar : Commute B (star (U : E →L[𝕜] E)) :=
+    ContinuousLinearMap.comp_star_eq_star_comp_of_mem_unitary B u.property u.property hBU.eq
+  apply ContinuousLinearMap.commute_modulus_of_commute
+  change Commute B (star ((U : E →L[𝕜] E) - 1) * ((U : E →L[𝕜] E) - 1))
+  rw [star_sub, star_one]
+  exact (hBUstar.sub_right (Commute.one_right _)).mul_right
+    (hBU.sub_right (Commute.one_right _))
+
 /-- Every compact perturbation of identity in the unitary group admits
 a finite-rank unitary approximation at any positive tolerance, with no
 increase of its displacement in any accepted operator-ideal gauge. -/
@@ -93,8 +106,11 @@ theorem exists_finite_unitary_approximation
     ∃ V : E ≃ₗᵢ[𝕜] E, ∃ n : ℕ,
       (1 - (V : E →L[𝕜] E)).rank ≤ n ∧
       ‖(V : E →L[𝕜] E) - (U : E →L[𝕜] E)‖ ≤ ε ∧
-      ∀ Φ : OperatorIdealFamily.{u, v, v} 𝕜,
-        Φ.gauge (1 - (V : E →L[𝕜] E)) ≤ Φ.gauge (1 - (U : E →L[𝕜] E)) := by
+      (∀ k, ((V : E →L[𝕜] E) - (U : E →L[𝕜] E)).singularValue k ≤
+        (((U : E →L[𝕜] E) - 1) : E →L[𝕜] E).singularValue k) ∧
+      (∀ Φ : OperatorIdealFamily.{u, v, v} 𝕜,
+        Φ.gauge (1 - (V : E →L[𝕜] E)) ≤ Φ.gauge (1 - (U : E →L[𝕜] E))) ∧
+      ∀ B : E →L[𝕜] E, Commute (U : E →L[𝕜] E) B → Commute (V : E →L[𝕜] E) B := by
   let T : E →L[𝕜] E := (U : E →L[𝕜] E) - 1
   let A := T.modulus
   have hAc : IsCompactOperator A := by
@@ -106,20 +122,13 @@ theorem exists_finite_unitary_approximation
   have hAs : IsSelfAdjoint A := T.isSelfAdjoint_modulus
   have hApos (x : E) : 0 ≤ RCLike.re ⟪A x, x⟫_𝕜 :=
     T.isPositive_modulus.re_inner_nonneg_left x
-  have hUstar : Commute (U : E →L[𝕜] E) (star (U : E →L[𝕜] E)) := by
-    let u : unitary (E →L[𝕜] E) := Unitary.linearIsometryEquiv.symm U
-    exact commute_unitary_self_star u.property
-  have hUA : Commute (U : E →L[𝕜] E) A := by
-    apply ContinuousLinearMap.commute_modulus_of_commute
-    change Commute (U : E →L[𝕜] E) (star T * T)
-    dsimp only [T]
-    rw [star_sub, star_one]
-    exact (hUstar.sub_right (Commute.one_right _)).mul_right
-      ((Commute.refl _).sub_right (Commute.one_right _))
+  have hUA : Commute (U : E →L[𝕜] E) A :=
+    commute_displacement_modulus U _ (Commute.refl _)
   let M := eigenSpan A (Ici ε)
   have : FiniteDimensional 𝕜 M := finiteDimensional_eigenSpan hAc hAs hε (fun _ hs => hs)
   have hUM : ∀ x ∈ M, U x ∈ M := eigenSpan_invariant_of_commute A _ hUA _
-  obtain ⟨V, _, _, _, hVrank, hVerr, hVcost⟩ := exists_finite_unitary_truncation U M hUM
+  obtain ⟨V, _, _, hfactor, herror, hVrank, hVerr, hVcost⟩ :=
+    exists_finite_unitary_truncation U M hUM
   have htail : ‖A ∘L Mᗮ.subtypeL‖ ≤ ε :=
     norm_comp_orthogonal_eigenSpan_le hAc hAs hApos hε.le (fun _ hs => hs.le)
   have hTtail : ‖T ∘L Mᗮ.subtypeL‖ ≤ ε := by
@@ -130,7 +139,40 @@ theorem exists_finite_unitary_approximation
       _ = ‖A (x : E)‖ := (T.norm_modulus_apply (x : E)).symm
       _ ≤ ‖A ∘L Mᗮ.subtypeL‖ * ‖x‖ := (A ∘L Mᗮ.subtypeL).le_opNorm x
       _ ≤ _ := mul_le_mul_of_nonneg_right htail (norm_nonneg x)
-  exact ⟨V, Module.finrank 𝕜 M, hVrank, hVerr.trans hTtail, hVcost⟩
+  refine ⟨V, Module.finrank 𝕜 M, hVrank, hVerr.trans hTtail, ?_, hVcost, ?_⟩
+  · intro k
+    have hneg : (-(T ∘L Mᗮ.starProjection)).singularValue k =
+      (T ∘L Mᗮ.starProjection).singularValue k := by
+      simpa only [neg_one_smul, nnnorm_neg, nnnorm_one, one_mul] using
+        ContinuousLinearMap.singularValue_smul (-1 : 𝕜) (T ∘L Mᗮ.starProjection) k
+    rw [herror, hneg]
+    calc
+      _ ≤ T.singularValue k * ‖Mᗮ.starProjection‖₊ :=
+        ContinuousLinearMap.singularValue_comp_le_right T Mᗮ.starProjection k
+      _ ≤ T.singularValue k * 1 := by
+        gcongr
+        exact_mod_cast Mᗮ.starProjection_norm_le
+      _ = _ := mul_one _
+  · intro B hUB
+    have hBA : Commute B A := commute_displacement_modulus U B hUB.symm
+    let u : unitary (E →L[𝕜] E) := Unitary.linearIsometryEquiv.symm U
+    have hBUstar : Commute B (star (U : E →L[𝕜] E)) :=
+      ContinuousLinearMap.comp_star_eq_star_comp_of_mem_unitary B u.property u.property hUB.symm.eq
+    have hBstarU : Commute (star B) (U : E →L[𝕜] E) := by
+      simpa only [star_star] using commute_star_star.mpr hBUstar
+    have hBstarA : Commute (star B) A := commute_displacement_modulus U _ hBstarU
+    have hred : M.IsReducing B :=
+      ContinuousLinearMap.isReducing_iff_mem_invtSubmodule_adjoint.mpr
+        ⟨(Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mpr
+            (eigenSpan_invariant_of_commute A B hBA _),
+          (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mpr
+            (eigenSpan_invariant_of_commute A (star B) hBstarA _)⟩
+    have hMB : Commute M.starProjection B :=
+      Submodule.isReducing_coe_iff_commute_starProjection.mp hred
+    have hpoly := ((Commute.one_left B).sub_left hUB).mul_left hMB
+    change Commute ((1 - (U : E →L[𝕜] E)) ∘L M.starProjection) B at hpoly
+    rw [← hfactor] at hpoly
+    simpa only [sub_sub_cancel] using (Commute.one_left B).sub_left hpoly
 
 /-- Compact unitary perturbations are operator-norm limits of finite-rank
 unitary perturbations, with every displacement gauge bounded by the
@@ -141,11 +183,14 @@ theorem exists_finite_unitary_approximation_sequence
     ∃ V : ℕ → E ≃ₗᵢ[𝕜] E, ∃ N : ℕ → ℕ,
       (∀ n, (1 - (V n : E →L[𝕜] E)).rank ≤ N n) ∧
       Tendsto (fun n => (V n : E →L[𝕜] E)) atTop (𝓝 (U : E →L[𝕜] E)) ∧
-      ∀ n (Φ : OperatorIdealFamily.{u, v, v} 𝕜),
-        Φ.gauge (1 - (V n : E →L[𝕜] E)) ≤ Φ.gauge (1 - (U : E →L[𝕜] E)) := by
-  choose V N hN hbound hcost using fun n : ℕ =>
+      (∀ n k, ((V n : E →L[𝕜] E) - (U : E →L[𝕜] E)).singularValue k ≤
+        (((U : E →L[𝕜] E) - 1) : E →L[𝕜] E).singularValue k) ∧
+      (∀ n (Φ : OperatorIdealFamily.{u, v, v} 𝕜),
+        Φ.gauge (1 - (V n : E →L[𝕜] E)) ≤ Φ.gauge (1 - (U : E →L[𝕜] E))) ∧
+      ∀ n (B : E →L[𝕜] E), Commute (U : E →L[𝕜] E) B → Commute (V n : E →L[𝕜] E) B := by
+  choose V N hN hbound hdom hcost hcomm using fun n : ℕ =>
     exists_finite_unitary_approximation U hcompact (1 / ((n : ℝ) + 1)) (by positivity)
-  refine ⟨V, N, hN, tendsto_iff_norm_sub_tendsto_zero.mpr ?_, hcost⟩
+  refine ⟨V, N, hN, tendsto_iff_norm_sub_tendsto_zero.mpr ?_, hdom, hcost, hcomm⟩
   exact squeeze_zero (fun _ => norm_nonneg _) hbound
     (by simpa using (tendsto_one_div_add_atTop_nhds_zero_nat :
       Tendsto (fun n : ℕ => 1 / ((n : ℝ) + 1)) atTop (𝓝 0)))

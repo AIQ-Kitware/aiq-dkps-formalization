@@ -227,3 +227,32 @@ pass the principal-angle cost through that change. Alternatively, an
 ideal-norm approximation commuting with the source would preserve the
 original target after multiplication by a fixed transporter. Both routes
 still need their exact hypotheses and convergence statements discharged.
+
+## Schatten-norm density with simultaneous commutant preservation
+
+`OperatorIdealFamily.tendsto_gauge_schatten_zero_of_singularValue_le`
+proves a dominated-convergence theorem in the accepted Schatten family:
+operator-norm convergence to zero upgrades to Schatten-gauge convergence
+when every singular-value sequence is dominated by one fixed member of
+that Schatten ideal. The parameter filter and both Hilbert dimensions
+are arbitrary. `isCompactOperator_of_gauge_schatten_ne_top` derives
+compactness directly from summability of approximation-number powers.
+
+`CompactUnitaryApproximation` now records domination of the approximation
+error's singular values by those of `U-I`. It also proves that one
+truncation sequence preserves every bounded operator commuting with
+`U`, not only a prescribed projection or self-adjoint observable. This
+uses accepted Tau Ceti unitary intertwining of adjoints and reduction of
+spectral-band subspaces.
+
+`SchattenUnitaryApproximation.exists_schatten_finite_unitary_approximation_sequence`
+therefore proves actual Schatten-norm density of finite-rank unitary
+perturbations for all finite real exponents `p>=1`, preserving every
+commutant of the input unitary and decreasing every ideal displacement
+gauge. This includes the nuclear endpoint and arbitrary, potentially
+nonseparable Hilbert spaces. The focused build passed (6,470 jobs).
+These are classical approximation statements formally proved here;
+historical novelty is not claimed for them. The exact infinite-dimensional
+minimum is still a separate result, requiring geometric reduction and
+attainment. The next use is approximation within the exact transport
+fiber relative to a supplied feasible reference transporter.

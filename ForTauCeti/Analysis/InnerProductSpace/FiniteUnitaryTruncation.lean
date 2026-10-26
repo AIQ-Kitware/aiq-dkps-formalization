@@ -44,6 +44,8 @@ theorem exists_finite_unitary_truncation
     ∃ V : E ≃ₗᵢ[𝕜] E,
       (∀ x ∈ M, V x = U x) ∧ (∀ x ∈ Mᗮ, V x = x) ∧
       (1 - (V : E →L[𝕜] E) = (1 - (U : E →L[𝕜] E)) ∘L M.starProjection) ∧
+      ((V : E →L[𝕜] E) - (U : E →L[𝕜] E) =
+        -(((U : E →L[𝕜] E) - 1) ∘L Mᗮ.starProjection)) ∧
       (1 - (V : E →L[𝕜] E)).rank ≤ Module.finrank 𝕜 M ∧
       ‖(V : E →L[𝕜] E) - (U : E →L[𝕜] E)‖ ≤
         ‖((U : E →L[𝕜] E) - 1) ∘L Mᗮ.subtypeL‖ ∧
@@ -76,7 +78,9 @@ theorem exists_finite_unitary_truncation
     conv_lhs => arg 2; rw [← M.starProjection_add_starProjection_orthogonal x, map_add]
     abel
   refine ⟨V, fun x hx => (hVM ⟨x, hx⟩).trans (hUM' _),
-    fun x hx => hVperp ⟨x, hx⟩, hfactor, ?_, ?_, ?_⟩
+    fun x hx => hVperp ⟨x, hx⟩, hfactor, ?_, ?_, ?_, ?_⟩
+  · ext x
+    exact herror x
   · rw [hfactor]
     exact (1 - (U : E →L[𝕜] E)).rank_comp_starProjection_le
       (by rw [← Module.finrank_eq_rank])
