@@ -984,3 +984,42 @@ splittings and finite-block attainer to obtain unrestricted infinite-rank
 attainment at `1<p<2`. The nuclear endpoint still requires a separate
 infinite modification construction. No historical novelty claim is
 made for the classical canonical spectral cost identity.
+
+## General infinite-rank complex attainment is now compiled
+
+The previous subcritical-tail obligation is closed by
+`schatten_canonical_cutoff_tail_rpow_eq_phaseMinimum_sum`. The theorem
+identifies the actual compressed ambient displacement, rather than
+an independently chosen model tail. Its hypotheses are compact
+projection difference, `1<p<2`, and `0<c<1` with
+`c<=sin (criticalAngle p)`. Infinite tail rank and divergent costs are
+allowed in this identity.
+
+`exists_schatten_minimizer_by_finite_correction` now proves global
+attainment at every such cutoff. Given a Schatten projection difference
+and an actual crossed-defect completion `J`, it constructs an ambient
+unitary `U` with all of the following:
+
+- `K.map U.toLinearMap = L`;
+- finite native Schatten displacement cost;
+- exact power cost equal to the intrinsic ambient `phaseMinimum` sum;
+- minimality against **every** ambient complex unitary transporter;
+- agreement with `nonacuteDirectRotation K L J` on the entire cutoff tail;
+- update rank at most the finite sine-cutoff dimension.
+
+`SchattenPhaseTransition.exists_unitary_minimizing_schatten_transport_of_projection_sub_ne_top`
+removes the supplied `J`: native Schatten membership of the projection
+difference and equality of its finite crossed-defect dimensions suffice.
+It chooses a positive cutoff below the critical sine value. The complex
+Hilbert space can be nonseparable and both projections can have infinite
+rank and corank. The focused attainment build passed (7,466 jobs).
+
+This is now an **actual unrestricted infinite-rank minimum theorem**,
+not only a lower bound, finite-rank-pair theorem, or prescribed-block
+optimization. It remains distinct from classifying every infinite-rank
+optimizer. The nuclear endpoint, general infinite-rank smoothed
+attainment, and unrestricted infinite real matching are not covered.
+Historical priority of the exact optimized value and finite-correction
+phenomenon still requires theorem-level literature review; Lean verifies
+mathematics, not priority. Paper and visualization edits remain delegated
+to the separate paper agent at the user's request.

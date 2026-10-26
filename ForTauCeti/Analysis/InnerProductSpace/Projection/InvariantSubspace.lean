@@ -123,6 +123,30 @@ theorem sinThetaMap_comap_subtype_apply_of_invariant
   rw [sinThetaMap_apply, sinThetaMap_apply, horth,
     K.starProjection_comap_subtype_apply_of_invariant Z hK]
 
+/-- The projection difference of the actual restricted pair is the
+compression of the ambient difference on a common invariant carrier. -/
+theorem projection_sub_comap_subtype_eq_compression_of_invariant
+    (K L Z : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [Z.HasOrthogonalProjection]
+    [(K.comap Z.subtype).HasOrthogonalProjection]
+    [(L.comap Z.subtype).HasOrthogonalProjection]
+    (hK : ∀ x ∈ Z, K.starProjection x ∈ Z)
+    (hL : ∀ x ∈ Z, L.starProjection x ∈ Z) :
+    (K.comap Z.subtype).starProjection - (L.comap Z.subtype).starProjection =
+      Z.orthogonalProjectionOnto ∘L (K.starProjection - L.starProjection) ∘L Z.subtypeL := by
+  have hpoint (x : Z) :
+      (((K.comap Z.subtype).starProjection - (L.comap Z.subtype).starProjection) x : E) =
+        (K.starProjection - L.starProjection) (x : E) := by
+    change ((K.comap Z.subtype).starProjection x : E) -
+      ((L.comap Z.subtype).starProjection x : E) = _
+    rw [K.starProjection_comap_subtype_apply_of_invariant Z hK,
+      L.starProjection_comap_subtype_apply_of_invariant Z hL]
+    rfl
+  apply ContinuousLinearMap.ext
+  intro x
+  change _ = Z.orthogonalProjectionOnto ((K.starProjection - L.starProjection) (x : E))
+  rw [← hpoint, Z.orthogonalProjectionOnto_mem_subspace_eq_self]
+
 /-- The gap of the actual restricted pair is bounded by the operator
 norm of the ambient projection difference on that carrier. The carrier
 and ambient space may both be infinite-dimensional. -/
