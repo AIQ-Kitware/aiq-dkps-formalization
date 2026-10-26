@@ -15,6 +15,7 @@ public import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 public import DavisKahan.Geometry.Polar.PolarIntertwining
 public import DavisKahan.Geometry.Polar.PairedPhase
 public import DavisKahan.Geometry.Polar.DirectRotationRank
+public import DavisKahan.Geometry.Polar.CompactTransportFinitePairs
 public import DavisKahan.Geometry.Polar.TransportUniqueness
 public import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 public import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal

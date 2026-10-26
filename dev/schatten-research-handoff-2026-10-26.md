@@ -506,3 +506,29 @@ is to approximate it by a finite-rank unitary, use a small-gap direct
 rotation to correct the target, and note that the target correction has
 finite-rank projection difference. This avoids assuming a Fredholm-index
 identity that has not yet been connected to the projection API.
+
+## Compact and Schatten feasibility; infinite-cost obstruction
+
+`CompactTransportFinitePairs.exists_finite_rank_transport_of_compact_transport_of_projection_sub_rank_le`
+implements the target-correction argument just described. Together with
+`compact_transport_iff_defect_balance_of_projection_sub_rank_le`, it
+proves that compact and finite-rank unitary feasibility coincide for a
+finite-rank projection pair, and both are exactly crossed-defect balance.
+The proof works over both fields and arbitrary Hilbert dimension.
+
+`SchattenFeasibility.schatten_transport_iff_defect_balance_of_projection_sub_rank_le`
+extends this equivalence to **every finite real `p>=1`** in the accepted
+Schatten family. `schatten_transport_eq_top_of_defect_imbalance` proves
+that, for an unbalanced finite-rank projection pair, every ambient
+unitary transporter has infinite cost at all these exponents. An
+unrestricted ambient unitary equivalence therefore must not be mistaken
+for feasibility in a Schatten restricted unitary group.
+
+Combining this obstruction with the balanced-pair optimizer gives the
+complete finite-valued feasibility and value classification for complex
+finite-rank projection pairs at `1<=p<2`: balanced defects give the
+compiled exact finite-rank attainer and angle sum; unbalanced defects
+force infinite cost for every feasible ambient competitor. Focused
+feasibility build passed (7,168 jobs). This does not yet treat general
+compact or Schatten projection differences of infinite rank, nor classify
+all optimizers. The underlying index obstruction is classical.
