@@ -1,6 +1,23 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
-**As of:** 25 October 2026
+**As of:** 26 October 2026
+**Paper revision dated 26 October 2026:** `paper.tex` now includes
+`nuclear_endpoint_verified.tex`, based on the completed Lean modules
+`SchattenNuclearEndpoint`, `RealNuclearMatching`, `RealNuclearFieldEquality`,
+`NuclearFieldComparison`, `RealNuclearOptimality`,
+`SchattenNuclearCorrection` and `RealSchattenCommutingCorrection`.
+It establishes attained unrestricted real nuclear matching with its closed
+weights, full complex nuclear minimum, exact real--complex equality iff every
+strictly acute positive angle has even multiplicity, real canonical-value iff
+at most one angle is positive and all angles are at most `pi/3`, and nearest
+subspace-preserving unitary/orthogonal correction. The strict-exponent
+complex all-optimizer and local-to-global results must **not** be asserted at
+`p=1`. The proposed strict-exponent real/complex parity criterion and
+nuclear complete optimizer classification remain open. The existing sections
+below are time-stamped historical stages; these updates supersede any older
+reference to the unrestricted real matching theorem as unfinished.
+Source detail: `../../dev/schatten-research-handoff-2026-10-26.md`.
+
 **Current research source:** the complete unrestricted finite-dimensional
 complex Schatten `1<p<2` optimizer classification, its exact value,
 local-to-global theorem, canonical and uniqueness thresholds, normalized

@@ -24,8 +24,20 @@ orthogonal projections and independent right-angle defect unitaries.
 Rank labels are locally constant and distinct rank sectors have positive
 separation for fixed subspaces and parameters. The equivalent rank-stratified
 Grassmannian sets remain an algebraic description; connected-component
-counts and manifold dimensions are unproved. Smoothed local-to-global,
-unrestricted real matching and infinite-dimensional ideal optimization remain open.
+counts and manifold dimensions are unproved. The finite complex smoothed local-to-global theorem and unrestricted real
+matching for `1 <= p < 2` are proved. The strict-exponent complex all-optimizer
+and local-to-global results do not automatically extend to `p=1`;
+infinite-dimensional ideal optimization remains open.
+
+**26 October 2026 endpoint integration.** The main `paper.tex` now inputs
+`nuclear_endpoint_verified.tex`. It states the attained complex nuclear minimum
+`2 sum sin(theta)`, the all-rank unrestricted real nuclear matching formula,
+the exact even-multiplicity criterion for equality of real and complex minima,
+the necessary-and-sufficient criterion for equality with the real canonical
+spectral value, and nearest nuclear subspace-preserving orthogonal/unitary
+correction. The research handoff `../../dev/schatten-research-handoff-2026-10-26.md`
+identifies remaining proof and historical-priority questions. These results
+extend the paper's research theorems without changing the 29 source targets.
 
 The mathematical novelty/priority investigation remains in
 [`MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md`](MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md)

@@ -134,6 +134,30 @@ LAYOUTS: dict[str, dict[str, Region]] = {
         "real": Region(0.23, R, -1.52, BODY_TOP),
         "takeaway": Region(L, R, BOTTOM, -1.76),
     },
+    "N08NuclearMatching": {
+        "formula": Region(L, R, 0.47, BODY_TOP),
+        "single": Region(L, -0.23, -2.30, 0.24),
+        "pair": Region(0.23, R, -2.30, 0.24),
+        "takeaway": Region(L, R, BOTTOM, -2.52),
+    },
+    "N08NuclearParity": {
+        "formula": Region(L, R, 0.43, BODY_TOP),
+        "odd": Region(L, -0.23, -2.39, 0.19),
+        "even": Region(0.23, R, -2.39, 0.19),
+        "takeaway": Region(L, R, BOTTOM, -2.62),
+    },
+    "N08NuclearCanonical": {
+        "formula": Region(L, R, 0.46, BODY_TOP),
+        "one": Region(L, -0.23, -2.40, 0.20),
+        "two": Region(0.23, R, -2.40, 0.20),
+        "takeaway": Region(L, R, BOTTOM, -2.62),
+    },
+    "N08NuclearCorrection": {
+        "diagram": Region(L, -0.67, -2.30, BODY_TOP),
+        "theorem": Region(-0.29, R, -0.27, BODY_TOP),
+        "bullets": Region(-0.29, R, -2.30, -0.47),
+        "takeaway": Region(L, R, BOTTOM, -2.53),
+    },
     "N08CommutingCorrection": {
         "diagram": Region(L, -0.66, -2.34, BODY_TOP),
         "theorem": Region(-0.29, R, -0.34, BODY_TOP),

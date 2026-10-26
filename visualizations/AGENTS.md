@@ -66,9 +66,16 @@ minimum, complete all-angle optimizer classification, exact simple-angle
 counts and no-nonglobal-local-minima theorem **are now Lean-verified** at
 source snapshot `427169ce`; include them as certified mathematical results.
 Its optimizer Grassmannian decomposition is an algebraic set equivalence,
-not a verified topological or smooth parametrization. The general real
-matching, sharp field gaps and infinite-dimensional ideal optimization
-remain conventional research work and should not be certified in slides.
+not a verified topological or smooth parametrization. The unrestricted finite-dimensional real matching theorem for
+`1 <= p < 2` is now verified, including the nuclear endpoint. The complex
+nuclear minimum, real/complex even-multiplicity equality criterion, real
+canonical-value criterion, and exact nearest nuclear correction are also
+proved. They are visualized in `N08NuclearMatching`, `N08NuclearParity`,
+`N08NuclearCanonical`, and `N08NuclearCorrection`. Do not infer a full
+`p=1` optimizer classification, endpoint local-to-global theorem, the
+strict-exponent real/complex parity conjecture, or infinite-dimensional
+ideal theory from these claims. Unproved sorted-sum formulas, uniform
+field-gap estimates and historical-priority claims must remain qualified.
 
 ## Canonical sine-theta notation
 

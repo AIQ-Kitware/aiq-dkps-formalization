@@ -2,9 +2,8 @@
 
 The existing slide families explain the classical sin-Theta theorem, its
 formalization, and the Proposition 4.4 refutation.  This module instead teaches
-what the newer mathematics is trying to do: optimize *ambient* transport
-penalties between subspaces, distinguish what is already formalized from what is
-still only drafted, and keep the color roles consistent with the rest of the
+the completed *ambient* transport optimizations between subspaces,
+including the nuclear real/complex endpoint and the remaining open problems, and keep the color roles consistent with the rest of the
 visual system.
 """
 
@@ -29,6 +28,7 @@ from manim import (
 
 from dkvis.novelty_layout import resolved_region
 from dkvis.novelty_math import (
+    real_nuclear_matching_example,
     optimal_phase_three_halves,
     schatten_signed_phase_power_three_halves,
     schatten_simple_active_signs_three_halves,
@@ -168,7 +168,7 @@ class N00Title(DeckSlide):
             "Title. This deck is a standalone tour of the mathematical program that"
             " grows beyond the classical Davis-Kahan story: optimizing ambient"
             " transport penalties between subspaces, separating what is already"
-            " formalized from what is still conjectural or only drafted."
+            " established, and which extensions remain open."
         )
         title = place(self, "title", tex(r"What is the new math we are building?", size=56))
         sub = place(self, "subtitle", tex(
@@ -189,10 +189,9 @@ class N00Title(DeckSlide):
                 size=27,
             ),
             para(
-                r"Three threads matter: exact complex trace transport, exact smoothed"
-                r" transport with a phase transition, and the Schatten/real-field"
-                r" extensions. This deck shows what each thread says and what status it"
-                r" has right now.",
+                r"The proved results include complex Schatten and smoothed"
+                r" optimization, an exact real nuclear matching theorem, and a"
+                r" real--complex parity criterion at the nuclear endpoint.",
                 width=6.2,
                 size=27,
                 color=MUTED,
@@ -206,7 +205,7 @@ class N00Title(DeckSlide):
 
 class N01ThreeStories(DeckSlide):
     title = "Three different stories"
-    kicker = r"Formalization, completed new optimization theorems, and drafted extensions"
+    kicker = r"Formalization and completed complex and real optimization theorems"
     section = SECTION
 
     def body(self) -> None:
@@ -233,13 +232,13 @@ class N01ThreeStories(DeckSlide):
                 ],
             ),
             (
-                r"3. Complete complex Schatten; open real theory",
+                r"3. Schatten and real nuclear matching",
                 TRIAL,
                 [
                     r"all-rank complex $1<p<2$ minimum and complete optimizer set proved",
                     r"every constrained local minimum is global",
                     r"multiplicity spaces determine discrete or continuous optimal families",
-                    r"unrestricted real matching and sharp real-complex gaps remain research",
+                    r"real nuclear endpoint: exact all-rank matching and parity equality",
                 ],
             ),
         ]
@@ -264,7 +263,9 @@ class N01ThreeStories(DeckSlide):
             "This review separates source formalization, the completed complex"
             " smoothed theory, and the Schatten and real-field program. The new"
             " all-rank complex Schatten minimum and all optimizers are formalized."
-            " Real matching and field-gap claims remain working mathematical drafts."
+            " The unrestricted real nuclear matching and the exact field-equality"
+            " parity criterion are also now Lean-verified. Generalized field-gap"
+            " results and higher-exponent parity remain open."
         )
         self.play(*[FadeIn(card) for card in cols], FadeIn(summary), run_time=1.0)
 
@@ -889,68 +890,61 @@ class N07LocalGlobal(DeckSlide):
 
 
 class N08ComplexVsReal(DeckSlide):
-    title = "Why complex and real transport diverge"
-    kicker = r"Complex phases decouple plane-by-plane; real transport introduces matching constraints"
+    title = "Exact nuclear optima over two fields"
+    kicker = r"The complex minimum is a principal-sine sum; the real minimum is a finite matching"
     section = SECTION
 
     def body(self) -> None:
         complex_box = boxed(
             VGroup(
                 tex(r"Complex field", size=28, color=WANTED),
+                math(r"d_{\mathbb C}=2\sum_i\sin\theta_i", size=32, color=WANTED),
                 wrapped_bullets(
-                    r"A continuous phase correction is available on each principal plane",
-                    r"Exact complex trace and smoothed formulas have been formalized",
-                    r"The all-rank complex Schatten $1<p<2$ optimum and all minimizers are classified",
+                    r"An ambient unitary attains the exact nuclear minimum",
+                    r"Repeated, zero and right angles included",
+                    r"The planar complex phase mechanism goes back to Davis--Kahan",
                     width=5.7,
                     size=21,
                 ),
-            ).arrange(DOWN, aligned_edge=LEFT, buff=0.2),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.18),
             color=WANTED,
-            pad=0.24,
+            pad=0.22,
         )
         real_box = boxed(
             VGroup(
                 tex(r"Real field", size=28, color=TRIAL),
+                math(r"d_{\mathbb R}=\min_{M}C_1(M)", size=32, color=TRIAL),
                 wrapped_bullets(
-                    r"No arbitrary complex phases: real $2\times2$ and $4\times4$ blocks interact",
-                    r"A repeated-angle real rank-two trace optimum is formalized",
-                    r"Global matching and sharp real-complex field gaps remain drafted",
+                    r"Weighted matching on labelled positive principal angles",
+                    r"Singletons rotate or reflect; pairs couple real planes",
+                    r"Exact unrestricted minimum with an orthogonal attainer",
                     width=5.7,
                     size=21,
                 ),
-            ).arrange(DOWN, aligned_edge=LEFT, buff=0.2),
+            ).arrange(DOWN, aligned_edge=LEFT, buff=0.18),
             color=TRIAL,
-            pad=0.24,
+            pad=0.22,
         )
         place(self, "complex", complex_box, align_top=True)
         place(self, "real", real_box, align_top=True)
-
-        bottom = VGroup(
-            tex(r"Takeaway", size=26, color=MUTED),
-            para(
-                r"Many of the cleanest formulas come from the extra phase freedom of"
-                r" the complex field. The real problem is not a cosmetic variant; it is a"
-                r" different optimization geometry, which is why the real matching program"
-                r" may itself become a substantial theorem if the current drafts close.",
-                width=12.0,
-                size=24,
-            ),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-        place(self, "takeaway", bottom)
-
+        takeaway = place(self, "takeaway", para(
+            r"For matching angle data, $d_{\mathbb R}=d_{\mathbb C}$ exactly"
+            r" when every strictly acute positive angle has even multiplicity."
+            r" The result holds for the full real and complex ambient groups.",
+            width=12.0, size=24, color=MUTED,
+        ))
         self.say(
-            "This is the conceptual split to keep in mind. Over the complex field, the"
-            " optimizer can adjust a phase continuously on each principal plane. Over"
-            " the real field, that freedom disappears and the problem turns into block"
-            " matching. So the real problem is structurally different, not just a"
-            " weaker copy of the complex one."
+            "The complex nuclear minimum is twice the sum of principal-angle sines."
+            " The real nuclear minimum has an exact matching formula, with pairs"
+            " of planes and possible reflections. Both are unrestricted ambient"
+            " optima, and equality has an exact parity criterion."
         )
-        self.play(FadeIn(complex_box), FadeIn(real_box), FadeIn(bottom), run_time=1.0)
+        self.add(complex_box, real_box, takeaway)
 
 
 class N09StatusBoard(DeckSlide):
     title = "What the current formalization proves"
-    kicker = r"Exact optimization and critical stability are certified; global real matching remains research"
+    kicker = r"Complex optimization and real nuclear matching are verified; other extensions remain open"
     section = SECTION
 
     def body(self) -> None:
@@ -964,6 +958,7 @@ class N09StatusBoard(DeckSlide):
                     r"All-rank complex Schatten minimum and exact cutoff",
                     r"Every minimizer classified; local minima global",
                     r"Exactly $2^s$ simple active-angle choices",
+                    r"All-rank real nuclear matching and field parity",
                     width=3.78,
                     size=21,
                 ),
@@ -990,7 +985,7 @@ class N09StatusBoard(DeckSlide):
                 para(r"\textbf{Do not oversell yet}", width=3.78, size=23, color=TRIAL),
                 wrapped_bullets(
                     r"Topology of the complex optimizer families",
-                    r"Global real matching and sorted-pair reductions",
+                    r"Sorted-pair reductions and higher-exponent field parity",
                     r"Infinite-dimensional ideal optimization and sharp field gaps",
                     width=3.78,
                     size=21,
@@ -1007,7 +1002,9 @@ class N09StatusBoard(DeckSlide):
             r"The complete finite-dimensional complex Schatten theory now gives the"
             r" exact value, every optimizer, and no nonglobal local minima."
             r" Smoothed transport has analogous global-optimizer geometry and"
-            r" critical stability. Historical first-publication priority remains open.",
+            r" critical stability. The nuclear real matching, field-parity"
+            r" criterion and canonical-value criterion are also proved."
+            r" Historical first-publication priority remains open.",
             width=12.15,
             size=24,
             color=MUTED,
@@ -1245,3 +1242,179 @@ class N08NumericalCorrection(DeckSlide):
             " precisely above the violet cutoff."
         )
         self.play(FadeIn(graph), FadeIn(cards), FadeIn(final), run_time=1.1)
+
+
+class N08NuclearMatching(DeckSlide):
+    title = "Real nuclear transport is an exact matching"
+    kicker = r"Every positive principal-angle label is a singleton or paired with another"
+    section = SECTION
+
+    def body(self) -> None:
+        theorem = VGroup(
+            math(r"d_{\mathbb R}=\min_M\left(\sum_{i\ \mathrm{single}}s(\theta_i)"
+                 r"+\sum_{\{i,j\}\in M}e(\theta_i,\theta_j)\right)", size=30),
+            math(r"s(\theta)=\min\{4\sin(\theta/2),2\},\qquad"
+                 r" e(\theta,\psi)=4\sin((\theta+\psi)/2)", size=28, color=TRIAL),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        top = place(self, "formula", boxed(theorem, color=TRIAL, pad=0.18))
+
+        a = real_nuclear_matching_example((np.pi/6, np.pi/6))
+        left = VGroup(
+            tex(r"Two unpaired $30^\circ$ angles", size=26),
+            math(r"\circ\qquad\circ", size=56, color=TRIAL),
+            math(r"8\sin(15^\circ)\approx 2.0706", size=29),
+            tex(r"direct rotation value", size=21, color=MUTED),
+        ).arrange(DOWN, buff=0.23)
+        right = VGroup(
+            tex(r"A matched pair", size=26),
+            math(r"\circ\!\!-\!\!\circ", size=56, color=SINE),
+            math(r"4\sin(30^\circ)=2", size=30, color=CURRENT),
+            tex(r"global real nuclear optimum", size=21, color=MUTED),
+        ).arrange(DOWN, buff=0.23)
+        assert abs(a["real_minimum"] - 2.0) < 1e-11
+        a_card = place(self, "single", boxed(left, color=TRIAL, pad=0.22))
+        b_card = place(self, "pair", boxed(right, color=SINE, pad=0.22))
+        takeaway = place(self, "takeaway", para(
+            r"The finite matching theorem minimizes over every ambient orthogonal"
+            r" transporter, including both determinant classes; it is not a"
+            r" restriction to separately optimized planes.",
+            width=12.0, size=23, color=MUTED,
+        ))
+        self.say(
+            "In the real nuclear problem each strictly positive angle gets a"
+            " singleton cost or can be paired with another positive angle."
+            " At thirty degrees, two independent canonical rotations cost"
+            " approximately two point zero seven, while coupling the planes"
+            " costs exactly two. The matching theorem certifies that no"
+            " ambient orthogonal competitor can do better."
+        )
+        self.add(top, a_card, b_card, takeaway)
+
+
+class N08NuclearParity(DeckSlide):
+    title = "Exactly when real and complex minima agree"
+    kicker = r"Every strictly acute positive angle needs a partner of identical size"
+    section = SECTION
+
+    def body(self) -> None:
+        theorem = VGroup(
+            math(r"d_{\mathbb R}=d_{\mathbb C}\iff"
+                 r"\#\{i:\theta_i=t\}\ \text{even for every }0<t<\pi/2", size=31),
+            tex(r"Zero and right-angle multiplicities are unrestricted.", size=24, color=MUTED),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
+        top = place(self, "formula", boxed(theorem, color=GAP, pad=0.20))
+        single = real_nuclear_matching_example((np.pi/6,))
+        double = real_nuclear_matching_example((np.pi/6, np.pi/6))
+        left = VGroup(
+            tex(r"One $30^\circ$ angle", size=25, color=TRIAL),
+            math(r"\circ", size=65, color=TRIAL),
+            math(r"d_{\mathbb R}=4\sin 15^\circ", size=30),
+            math(r"d_{\mathbb C}=2\sin 30^\circ=1", size=28),
+            tex(r"Strict real--complex gap", size=23, color=GAP),
+        ).arrange(DOWN, buff=0.16)
+        right = VGroup(
+            tex(r"Two equal $30^\circ$ angles", size=25, color=WANTED),
+            math(r"\circ\!\!-\!\!\circ", size=65, color=SINE),
+            math(r"d_{\mathbb R}=4\sin30^\circ=2", size=29),
+            math(r"d_{\mathbb C}=4\sin30^\circ=2", size=29),
+            tex(r"Equality by within-level pairing", size=22, color=WANTED),
+        ).arrange(DOWN, buff=0.16)
+        assert single["real_minimum"] > single["complex_minimum"]
+        assert abs(double["real_minimum"] - double["complex_minimum"]) < 1e-11
+        a_card = place(self, "odd", boxed(left, color=TRIAL, pad=0.20))
+        b_card = place(self, "even", boxed(right, color=WANTED, pad=0.20))
+        takeaway = place(self, "takeaway", para(
+            r"The theorem compares pairs with the same accepted principal angles;"
+            r" the real and complex ambient dimensions may differ.",
+            width=12.0, size=23, color=MUTED,
+        ))
+        self.say(
+            "At the nuclear endpoint the real optimum always bounds the"
+            " complex one from above. Equality occurs precisely when each"
+            " positive angle smaller than ninety degrees has even multiplicity."
+            " One thirty-degree angle gives a strict gap. Two identical"
+            " thirty-degree angles can be matched to attain the complex cost."
+            " Zero and right-angle directions have no parity obstruction."
+        )
+        self.add(top, a_card, b_card, takeaway)
+
+
+class N08NuclearCanonical(DeckSlide):
+    title = "The real canonical-value criterion"
+    kicker = r"The sixty-degree plane cutoff does not protect two positive angles"
+    section = SECTION
+
+    def body(self) -> None:
+        theorem = VGroup(
+            math(r"d_{\mathbb R}=4\sum_i\sin(\theta_i/2)\iff"
+                 r"\bigl(\#\{i:\theta_i>0\}\le1\bigr)", size=31),
+            math(r"\text{and}\quad \theta_i\le\pi/3\quad\text{for every }i", size=30, color=GAP),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        top = place(self, "formula", boxed(theorem, color=GAP, pad=0.20))
+        left = VGroup(
+            tex(r"One positive $30^\circ$ angle", size=26),
+            math(r"d_{\mathbb R}=4\sin15^\circ", size=29, color=TRIAL),
+            tex(r"The canonical value is attained.", size=22, color=MUTED),
+        ).arrange(DOWN, buff=0.22)
+        right = VGroup(
+            tex(r"Two positive $30^\circ$ angles", size=26),
+            math(r"d_{\mathbb R}=2<8\sin15^\circ", size=29, color=SINE),
+            tex(r"Pairing defeats the canonical value.", size=22, color=MUTED),
+        ).arrange(DOWN, buff=0.22)
+        a_card = place(self, "one", boxed(left, color=TRIAL, pad=0.25))
+        b_card = place(self, "two", boxed(right, color=SINE, pad=0.25))
+        takeaway = place(self, "takeaway", para(
+            r"This is a criterion for equality of the minimum \emph{value}"
+            r" with the canonical spectral sum. It does not classify all"
+            r" real nuclear minimizers.",
+            width=12.0, size=23, color=MUTED,
+        ))
+        self.say(
+            "For real nuclear displacement, equality with the canonical"
+            " direct-rotation cost requires at most one positive principal angle,"
+            " and every angle must be at most sixty degrees. Two angles of"
+            " thirty degrees already violate the condition. The formal theorem"
+            " is about the unrestricted minimum value, not a classification of"
+            " every optimizer."
+        )
+        self.add(top, a_card, b_card, takeaway)
+
+
+class N08NuclearCorrection(DeckSlide):
+    title = "Nuclear-nearest subspace-preserving unitary"
+    kicker = r"An exact nearest-unitary problem follows from complex nuclear transport"
+    section = SECTION
+
+    def body(self) -> None:
+        picture = VGroup(
+            principal_plane(theta=np.pi/6, show_caption=False),
+            math(r"A(K)\;\longrightarrow\;K", size=27, color=SINE),
+        ).arrange(DOWN, buff=0.15)
+        diagram = place(self, "diagram", picture)
+        theorem = VGroup(
+            tex(r"Given a complex unitary $A$ and a subspace $K$:", size=25, color=MUTED),
+            math(r"\min_{\substack{V\ \mathrm{unitary}\\V(K)=K}}\norm{A-V}_1"
+                 r"=2\sum_{j}\sin\theta_j(AK,K)", size=33, color=WANTED),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+        formula = place(self, "theorem", boxed(theorem, color=WANTED, pad=0.22))
+        bullets = place(self, "bullets", wrapped_bullets(
+            r"A feasible nearest unitary exists for every finite complex pair",
+            r"Real orthogonal correction has the nuclear matching value",
+            r"No noise model or statistical guarantee is assumed",
+            width=6.0, size=22,
+        ))
+        takeaway = place(self, "takeaway", para(
+            r"The nuclear result is an attained distance to the stabilizer"
+            r" of $K$. It gives a precise correction objective that can be"
+            r" inserted into later application arguments.",
+            width=12.0, size=23, color=MUTED,
+        ))
+        self.say(
+            "For a complex unitary A and a fixed subspace K, we can now find"
+            " an exactly closest unitary that preserves K, using nuclear"
+            " distance. The minimum is twice the sum of the principal-angle"
+            " sines between A of K and K. This is an exact deterministic"
+            " statement. The real orthogonal analogue has the exact"
+            " nuclear matching value, with no statistical guarantee implied."
+        )
+        self.add(diagram, formula, bullets, takeaway)

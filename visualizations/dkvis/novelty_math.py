@@ -149,3 +149,70 @@ def schatten_simple_active_signs_three_halves() -> dict:
         "choices": phases,
         "costs": costs,
     }
+
+
+def nuclear_singleton_cost(theta: float) -> float:
+    """Minimum nuclear cost of one real principal-plane transporter.
+
+    The competing branches are the planar rotation and a reflection.
+    """
+    _checked_principal_angle(theta)
+    return min(4.0 * math.sin(theta / 2.0), 2.0)
+
+
+def nuclear_pair_cost(theta: float, psi: float) -> float:
+    """Coupled four-dimensional real nuclear matching edge cost."""
+    _checked_principal_angle(theta)
+    _checked_principal_angle(psi)
+    return 4.0 * math.sin((theta + psi) / 2.0)
+
+
+def real_nuclear_matching_example(angles: tuple[float, ...]) -> dict:
+    """Small-rank numeric instance of the proved unrestricted real formula.
+
+    ``angles`` are radians. The exact finite matching combinatorics are
+    enumerated by a bitmask dynamic program; the trigonometric weights are
+    evaluated in floating point. This is slide data, not a numerical proof
+    of the ambient theorem. Original angle indices are retained in the
+    returned pairs, including when repeated values are supplied.
+    """
+    from functools import lru_cache
+
+    if len(angles) > 12:
+        raise ValueError("slide example allows at most twelve angle labels")
+    for theta in angles:
+        _checked_principal_angle(theta)
+    positive = tuple((index, theta) for index, theta in enumerate(angles) if theta > 0)
+    n = len(positive)
+
+    @lru_cache(maxsize=None)
+    def solve(mask: int) -> tuple[float, tuple[tuple[int, int], ...]]:
+        if mask == 0:
+            return 0.0, ()
+        least_bit = mask & -mask
+        i = least_bit.bit_length() - 1
+        remainder = mask ^ least_bit
+        tail, choice = solve(remainder)
+        best = nuclear_singleton_cost(positive[i][1]) + tail
+        best_pairs = choice
+        for j in range(i + 1, n):
+            if remainder & (1 << j):
+                tail, choice = solve(remainder ^ (1 << j))
+                candidate = nuclear_pair_cost(positive[i][1], positive[j][1]) + tail
+                if candidate < best - 1e-13:
+                    best = candidate
+                    best_pairs = ((positive[i][0], positive[j][0]),) + choice
+        return best, best_pairs
+
+    minimum, pairs = solve((1 << n) - 1)
+    paired_indices = {j for a, b in pairs for j in (a, b)}
+    singleton_indices = tuple(i for i, _ in positive if i not in paired_indices)
+    canonical = sum(4 * math.sin(theta / 2) for theta in angles)
+    complex_minimum = sum(2 * math.sin(theta) for theta in angles)
+    return {
+        "real_minimum": minimum,
+        "complex_minimum": complex_minimum,
+        "canonical_value": canonical,
+        "pairs": pairs,
+        "singletons": singleton_indices,
+    }

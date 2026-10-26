@@ -144,18 +144,14 @@ Current presentations (in addition to the preserved reference decks):
   the full-frame VTK finale. The content runs through the sine-theta theorem,
   3D subspaces, the other three angle bounds, Proposition 4.4, source-fidelity
   review and the notation reference. See `briefs/comprehensive.md`.
-- **`novelty-tour`**: a self-contained mathematical presentation of the
-  now-verified higher-rank complex Schatten `1<p<2` transport minimum, its
-  global no-mixing argument and all-rank cutoff, the exact smoothed
-  transport/critical stability theorem, and the commuting-unitary
-  application. New scenes `N07GlobalSchatten` and `N07NoMixingProof` follow the
-  planar phase-curve slide. Mathematical roles retain source-amber,
+- **`novelty-tour`**: a 22-scene mathematical presentation of the
+  finite complex Schatten `1<p<2` global optimum and optimizer classification,
+  real nuclear matching, real--complex even-multiplicity equality, the real
+  canonical-value criterion, exact nearest nuclear corrections, and the
+  smoothed transport theory. Mathematical roles retain source-amber,
   target-blue, phase-magenta, cutoff-violet and smoothed-steel colors.
 - **`study`**: the earlier long-form curriculum, kept as an independent
   composition. See `briefs/deep-study.md`.
-- **`novelty-tour`**: eighteen independent Manim scenes teaching the new
-  spectral-penalty transport mathematics and distinguishing proved statements
-  from active higher-rank and real-field research.
 
 To build the complete collection at 1080p/30 FPS and generate a **single HTML
 file with embedded videos**, run from this directory:
@@ -344,7 +340,7 @@ $RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvi
 
 ### Standalone mathematical novelty tour
 
-The `novelty-tour` is an eighteen-scene presentation about the newer
+The `novelty-tour` is a 22-scene presentation about the newer
 spectral-transport optimization mathematics. It uses **exactly** the existing
 Manim role palette: amber for the *source* `U`, blue for the *target* `V`,
 magenta for principal angles and phase, violet for cutoffs, and steel for the
@@ -361,9 +357,19 @@ angles, the continuum of projection choices at a repeated angle, and the
 no-nonglobal-local-minima theorem. The numerical curves evaluate scalar
 formulas in `dkvis/novelty_math.py`. They illustrate the geometry; the full
 ambient theorems are Lean-verified separately. The optimizer Grassmannian
-factorization is an algebraic set equivalence; topology, unrestricted real
-matching and infinite-dimensional ideal optimization remain outside the
-certified endpoints.
+factorization is an algebraic set equivalence; unrestricted real nuclear
+matching is now proved, while sorted-sum matching shortcuts and
+infinite-dimensional ideal optimization remain open. The nuclear endpoint
+does not inherit the strict-exponent complete optimizer classification.
+
+Four nuclear-endpoint scenes (`N08NuclearMatching`, `N08NuclearParity`,
+`N08NuclearCanonical`, and `N08NuclearCorrection`) use validated numerical
+specializations from `dkvis/novelty_math.py`. They cover the unrestricted
+real matching weights, the exact parity obstruction, canonical-value
+criterion, and nearest nuclear subspace-preserving correction. The right
+and zero principal-angle cases are included in the underlying theorems;
+slides use a 30-degree example for accessibility. The historical
+29-source-result inventory remains independent of the research extensions.
 
 The content regions are maintained in `dkvis/novelty_layout.py`, and
 `slides_novelty.py` fits complete Manim groups to those regions *after LaTeX typesetting*. The regression checks cover geometry,

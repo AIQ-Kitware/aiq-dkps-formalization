@@ -130,7 +130,7 @@
   \texttt{cep@jhu.edu}
 }
 
-\date{25 October 2026}
+\date{26 October 2026}
 
 \begin{document}
 \maketitle
@@ -150,7 +150,12 @@ factor $\sec(\sym{alphaAngle}/2)$ for unitarily invariant norms, and
 exact real and complex trace-norm transport minima. For equal-dimensional
 subspaces of any finite-dimensional complex Hilbert space, including
 right-angle configurations, the global trace minimum equals
-$2\sum_j\sin\like{theta}{\theta_j}$.
+$2\sum_j\sin\like{theta}{\theta_j}$. For arbitrary equal-rank real pairs,
+the unrestricted nuclear minimum is an attained minimum-weight matching
+of their labelled principal angles. It agrees with the complex value
+exactly when every strictly acute positive angle has even multiplicity.
+The real nuclear minimum equals the canonical direct-rotation value only
+when at most one angle is positive and it is at most $\pi/3$.
 
 For every $1<p<2$, we determine the exact \emph{unrestricted}
 finite-dimensional complex Schatten transport minimum
@@ -249,6 +254,18 @@ the nearest unitary commuting with a fixed projection. The theorem, Lean
 signatures, and two-angle example appear in
 \cref{sec:schatten-optimization}.
 
+At the nuclear endpoint $p=1$, we establish the unrestricted real
+minimum through a finite matching of principal-angle labels. A matched
+pair contributes $4\sin((\theta_i+\theta_j)/2)$; an unmatched angle
+contributes $\min\{4\sin(\theta_i/2),2\}$. The formula holds without
+restrictions on determinants, multiplicities or ambient mixing. We
+characterize exactly when the real and complex minima coincide and when
+the real value agrees with the direct-rotation displacement. An
+associated complex nearest-subspace-preserving unitary has exact nuclear
+error $2\sum_j\sin\theta_j(AK,K)$. These endpoint results and the
+limits of the optimizer classification are in
+\cref{sec:nuclear-endpoint}.
+
 We also solve an exact optimization problem for a smooth spectral penalty.
 We replace each displacement singular value $s$ by
 $\sqrt{\tau^2+s^2}-\tau$, a smooth penalty connecting trace and quadratic
@@ -294,6 +311,14 @@ Appendix~\ref{app:source-review}.
     trace-norm minimum for every equal-rank complex subspace pair, including
     right-angle configurations. The optimum equals twice the sum of the
     sines of the principal angles, with no acute-angle hypothesis.
+  \item We prove the unrestricted finite real nuclear minimum as a finite
+    weighted matching of labelled principal angles, with an ambient
+    orthogonal attainer. Equality with the complex minimum holds exactly
+    when each strictly acute positive angle has even multiplicity; equality
+    with the canonical direct-rotation value holds exactly when at most one
+    angle is positive and it is at most $\pi/3$. We give the exact nuclear
+    distance and an attainer for the nearest complex unitary preserving a
+    prescribed subspace.
   \item For every $1<p<2$, we prove an attained global minimum of
     $\|I-W\|_p^p$ over \emph{all} ambient complex unitaries transporting
     two equal-rank subspaces. Its exact value is the sum of scalar
@@ -555,6 +580,7 @@ adapted from the geometric sine-theta visualization.}
 \input{counterexample.tex}
 \input{sharp_displacement.tex}
 \input{schatten_transport_verified.tex}
+\input{nuclear_endpoint_verified.tex}
 \input{smoothed_transport_verified.tex}
 
 \section{Mathematical architecture of the Davis--Kahan development}
@@ -753,6 +779,13 @@ the finite-dimensional development proves a directed-sine trace decomposition
 for any two real or complex projections and the attained global complex
 trace-norm minimum $2\sum_j\sin\like{theta}{\theta_j}$ for every equal-rank pair.
 These results do not require an acute-angle hypothesis.
+The exact real nuclear minimum is an attained labelled-angle matching
+value. Its equality with the complex minimum has an even-multiplicity
+criterion on strictly acute positive angles. The real nuclear value
+agrees with the canonical displacement sum exactly when at most one
+angle is positive and it is at most $\pi/3$. The corresponding complex
+nearest-subspace-preserving unitary is also computed exactly, as shown in
+\cref{sec:nuclear-endpoint}.
 
 For every $1<p<2$, the unrestricted finite-dimensional complex
 Schatten transport minimum is attained and equals the sum of the independent

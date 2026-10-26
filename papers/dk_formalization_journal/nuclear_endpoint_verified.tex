@@ -1,0 +1,211 @@
+% Finite-dimensional nuclear endpoint results compiled on 26 October 2026.
+% Evidence: SchattenNuclearEndpoint, RealNuclearMatching,
+% RealNuclearFieldEquality, NuclearFieldComparison, RealNuclearOptimality,
+% and SchattenNuclearCorrection. No all-optimizer or endpoint local-minimum
+% classification is inferred from the strict-exponent Schatten theorems.
+\section{The nuclear endpoint and real-field matching}
+\label{sec:nuclear-endpoint}
+
+For equal-rank subspaces $U,V$ of a finite-dimensional real or complex
+Hilbert space, write
+\[
+ d_{\mathbb F}(U,V)
+   =\min_{\substack{W\in\mathcal U_{\mathbb F}(E)\\ W(U)=V}}
+       \|I-W\|_1,
+ \qquad \mathbb F\in\{\mathbb R,\mathbb C\},
+\]
+where $\mathcal U_{\mathbb R}(E)$ is the orthogonal group and
+$\mathcal U_{\mathbb C}(E)$ is the unitary group. The minimum exists in
+both fields. We use the principal angles
+$\theta_1,\ldots,\theta_k\in[0,\pi/2]$ with their original labels;
+repeated values count separately.
+
+Over $\mathbb C$, the optimum is
+\begin{equation}
+ d_{\mathbb C}(U,V)=2\sum_{i=1}^k\sin\theta_i
+                  =\|P_U-P_V\|_1.
+ \label{eq:nuclear-complex-endpoint}
+\end{equation}
+The all-pairs identity and attainment were established in
+\cref{thm:complex-trace-all-pairs}. A second checked proof obtains the
+nuclear lower bound by taking $p\downarrow1$ in the unrestricted complex
+Schatten inequality of \cref{thm:schatten-independent-planes}. Continuity
+of the finite singular-value power sum holds even at zero singular values;
+a principal-plane phase construction attains the limiting value.
+
+The real optimum has an exact finite combinatorial description.
+Let $J=\{i:\theta_i>0\}$, retaining each angle label. Define
+\begin{equation}
+ s(\theta)=\min\{4\sin(\theta/2),\,2\},\qquad
+ e(\theta,\psi)=4\sin\!\left(\frac{\theta+\psi}{2}\right).
+ \label{eq:nuclear-matching-weights}
+\end{equation}
+An involution $\sigma:J\to J$ consists of fixed vertices and
+pairwise exchanges. Its cost is
+\begin{equation}
+ C_1(\sigma)=
+ \sum_{\substack{i\in J\\\sigma(i)=i}}s(\theta_i)
+ +\frac12\sum_{\substack{i\in J\\\sigma(i)\ne i}}
+          e(\theta_i,\theta_{\sigma(i)}).
+ \label{eq:nuclear-matching-cost}
+\end{equation}
+The factor one half counts each exchanged pair once.
+
+\begin{theorem}[Unrestricted real nuclear transport]
+\label{thm:nuclear-real-matching}
+For every pair of equal-rank subspaces in a finite-dimensional real
+Hilbert space,
+\begin{equation}
+ \boxed{d_{\mathbb R}(U,V)=\min_{\sigma^2=\mathrm{id}}C_1(\sigma).}
+ \label{eq:nuclear-real-minimum}
+\end{equation}
+An ambient orthogonal transporter attains the minimum. The formula
+includes both determinant classes, all zero, repeated and right
+principal angles, and arbitrary common ambient directions.
+\end{theorem}
+
+\begin{lstlisting}[style=leanpaper,
+ caption={The checked real nuclear attainment theorem. The omitted context
+ supplies the finite-dimensional real inner-product structure. The
+ \texttt{realNuclearMatchingMinimum} takes the original strictly positive
+ labelled angles.},
+ label={lst:nuclear-real-matching}]
+theorem exists_minimizing_real_nuclear_transport_matching
+    (K L : Submodule Real E)
+    (hKL : Module.finrank Real K = Module.finrank Real L) :
+    ∃ T : LinearIsometryEquiv (RingHom.id Real) E E,
+      K.map T.toLinearMap = L ∧
+      UnitarilyInvariantSeminorm.schatten Real E E 1
+        (LinearMap.id - T.toLinearMap) =
+        realNuclearMatchingMinimum
+          (fun j : {j : Fin (Module.finrank Real K) //
+            0 < K.principalAngles L j} => K.principalAngles L j.val) ∧
+      ∀ V : LinearIsometryEquiv (RingHom.id Real) E E,
+        K.map V.toLinearMap = L ->
+          UnitarilyInvariantSeminorm.schatten Real E E 1
+            (LinearMap.id - T.toLinearMap) <=
+          UnitarilyInvariantSeminorm.schatten Real E E 1
+            (LinearMap.id - V.toLinearMap)
+\end{lstlisting}
+
+\noindent The displayed Lean signature suppresses typeclass context and
+uses \texttt{Real} for the scalar field and the expanded isometry type;
+the source theorem states the same attainment and comparison.
+The proof passes the $1<p<2$ unrestricted real matching theorem to
+$p=1$: both the minimum over the compact ambient transport fiber and
+the finite matching minimum are continuous at the endpoint.
+The singleton weight compares rotation with reflection in a real
+principal plane. A matched pair couples two such planes in four real
+dimensions. Thus a matching optimizes over \emph{all} ambient orthogonal
+transports, rather than only block-preserving candidates.
+
+\begin{theorem}[Exact real--complex equality criterion]
+\label{thm:nuclear-real-complex-parity}
+Take a real and a complex equal-rank subspace pair with the same
+principal-angle list, counted with multiplicities. Their nuclear
+transport minima satisfy $d_{\mathbb C}\le d_{\mathbb R}$, with equality
+if and only if every angle $t\in(0,\pi/2)$ has even multiplicity:
+\begin{equation}
+ d_{\mathbb R}=d_{\mathbb C}
+ \quad\Longleftrightarrow\quad
+ \#\{i:\theta_i=t\}\ \text{is even for every }0<t<\pi/2.
+ \label{eq:nuclear-parity}
+\end{equation}
+Zero angles and right angles impose no parity restriction.
+The real and complex ambient dimensions need not agree; equality of
+the accepted principal-angle data is an explicit hypothesis.
+\end{theorem}
+
+\begin{proof}
+For $\theta\in[0,\pi/2]$, the singleton cost obeys
+$s(\theta)\ge2\sin\theta$, with equality only at zero or a right
+angle. Likewise,
+$e(\theta,\psi)\ge2\sin\theta+2\sin\psi$,
+with equality precisely for equal angles. Every matching therefore
+costs at least $2\sum_i\sin\theta_i$.
+Equality requires all strictly acute positive angles to be paired
+with an identical angle. Such a fixed-point-free pairing exists
+within every strictly acute angle level exactly when that level has
+even cardinality. The remaining zero and right-angle labels can be
+left unmatched. The unrestricted matching theorem and
+\cref{eq:nuclear-complex-endpoint} give the claim.
+\end{proof}
+
+\begin{theorem}[When the real minimum equals the direct-rotation value]
+\label{thm:nuclear-real-canonical-value}
+For an equal-rank real pair with principal-angle list
+$\theta_1,\ldots,\theta_k$,
+\begin{equation}
+ d_{\mathbb R}(U,V)=4\sum_{i=1}^k\sin(\theta_i/2)
+ \quad\Longleftrightarrow\quad
+ \left\{\begin{array}{l}
+   \theta_i\le\pi/3\ \text{for every }i,\\
+   \#\{i:\theta_i>0\}\le1.
+ \end{array}\right.
+ \label{eq:nuclear-real-canonical-value}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+If the matching minimum equals the canonical sum, the all-singleton
+matching forces $s(\theta_i)=4\sin(\theta_i/2)$ for every label,
+which is equivalent to $\theta_i\le\pi/3$. For any two positive
+angles, pairing their vertices gives a strict saving over their two
+canonical rotation costs, excluding a second positive label.
+Conversely, with at most one positive angle at most $\pi/3$,
+no exchange of distinct positive labels is possible, and the
+canonical value is attained.
+\end{proof}
+
+The last theorem is stated in Lean as an equivalence for the
+\emph{minimum value}. It does not by itself classify the full set of
+ambient real optimizers. It also shows why a one-plane reflection cutoff
+cannot establish the original Proposition~4.4: two equal
+$30^\circ$ angles give
+\[
+  d_{\mathbb R}=4\sin(30^\circ)=2
+  \quad<\quad8\sin(15^\circ)\approx2.07055,
+\]
+where the right side is the direct-rotation nuclear displacement.
+For a single $30^\circ$ angle, by contrast, the real minimum is
+$4\sin(15^\circ)>2\sin(30^\circ)=d_{\mathbb C}$.
+
+\begin{corollary}[Nearest subspace-preserving complex unitary]
+\label{cor:nuclear-unitary-rounding}
+Let $A$ be unitary on a finite-dimensional complex Hilbert space, and
+let $K$ be any subspace. Among all unitaries $V$ preserving $K$,
+there is an attainer with
+\begin{equation}
+ \boxed{\displaystyle
+ \min_{\substack{V\ \mathrm{unitary}\\V(K)=K}}\|A-V\|_1
+ =2\sum_{j=1}^{\dim K}\sin\theta_j(AK,K).}
+ \label{eq:nuclear-unitary-rounding}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+The bijection between transporters of $AK$ onto $K$ and corrections
+preserving $K$ is given by $T=VA^{-1}$. Right-unitary invariance gives
+$\|A-V\|_1=\|I-VA^{-1}\|_1$. Apply the complex nuclear transport
+minimum to the pair $AK,K$.
+\end{proof}
+
+The real analogue is also attained, with a different value formula.
+For an orthogonal $A$ and a real subspace $K$, let
+$L=A(K)$ and let $\theta_1,\ldots,\theta_k$ be the principal angles
+of $L,K$. The minimum of $\|A-V\|_1$ over all orthogonal $V$ with
+$V(K)=K$ equals the matching minimum
+$\min_{\sigma^2=\mathrm{id}} C_1(\sigma)$ of
+\cref{eq:nuclear-matching-cost} for this angle list. This value is
+attained by an orthogonal $V$ commuting with $P_K$, and the comparison
+includes every orthogonal commuting competitor. The corresponding theorems are in the checked Lean modules
+\texttt{RealSchattenCommutingCorrection} and
+\texttt{SchattenNuclearCorrection}.
+
+For $1<p<2$, the complex all-optimizer and local-to-global theorems in
+\cref{sec:schatten-optimization} remain available. At $p=1$, the
+results above establish exact values and attainment. They do not assert
+that every complex nuclear optimizer has been classified or that every
+constrained nuclear local minimum is global. The parity theorem is an
+exact endpoint result; its proposed analogue for the real/complex
+strict-exponent range is a separate question.
