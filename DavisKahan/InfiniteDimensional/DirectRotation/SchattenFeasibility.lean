@@ -6,6 +6,8 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import DavisKahan.Geometry.Polar.CompactTransportFinitePairs
+public import DavisKahan.Geometry.Polar.DirectRotationIdeal
+public import DavisKahan.Geometry.Halmos.CompactDefects
 public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenConvergence
 public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenFinite
 
@@ -32,6 +34,30 @@ open scoped ENNReal
 
 variable {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
+
+/-- A general Schatten projection difference with balanced finite
+crossed defects admits a Schatten-displacement unitary transport.
+Unlike the finite-rank feasibility iff below, the projection difference
+may have infinite rank. -/
+theorem exists_schatten_transport_of_projection_sub_ne_top_of_defect_balance
+    (p : ℝ) (hp : 1 ≤ p)
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (hD : (OperatorIdealFamily.schatten 𝕜 p hp).gauge
+      (K.starProjection - L.starProjection) ≠ ∞)
+    (hbalance : Module.finrank 𝕜 (halmosSourceDefect K L) =
+      Module.finrank 𝕜 (halmosTargetDefect K L)) :
+    ∃ U : H ≃ₗᵢ[𝕜] H, K.map U.toLinearMap = L ∧
+      (OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (U : H →L[𝕜] H)) ≠ ∞ := by
+  have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top p hp
+    (K.starProjection - L.starProjection) hD
+  obtain ⟨J⟩ := crossedDefectsEquivalent_of_compact_projection_sub_of_finrank_eq K L hcompact hbalance
+  let U := Unitary.linearIsometryEquiv
+    (⟨nonacuteDirectRotation K L J, nonacuteDirectRotation_mem_unitary K L J⟩ :
+      unitary (H →L[𝕜] H))
+  refine ⟨U, ?_, (gauge_nonacuteDirectRotation_ne_top_iff_projection_sub
+    (OperatorIdealFamily.schatten 𝕜 p hp) K L J).mpr hD⟩
+  apply (Submodule.map_eq_iff_intertwines_reflection K L U).mpr
+  exact nonacuteDirectRotation_reflection_intertwines K L J
 
 /-- For a finite-rank projection pair, feasibility at any finite
 Schatten exponent is exactly finite crossed-defect balance. In

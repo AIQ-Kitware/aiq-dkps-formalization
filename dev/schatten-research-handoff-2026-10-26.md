@@ -559,3 +559,40 @@ from identity by a member of that ideal. A promising algebraic route is
 invertibility of `I+R` from the nonnegative Hermitian part of `R` and
 `I-S=(P_K-P_L)J_K`. This gives a bounded right factor of the projection
 difference and avoids assuming compact spectral enumeration.
+
+## General operator-ideal membership and `p>=2` ideal attainment
+
+The preceding algebraic route is now compiled in
+`Geometry/Polar/DirectRotationIdeal.lean`.
+`exists_nonacuteDirectRotation_displacement_factor` proves the literal
+bounded factorization `I-R=(P_K-P_L) B` for every completed rotation.
+`gauge_nonacuteDirectRotation_ne_top_iff_projection_sub` proves, for
+**every accepted operator-ideal family**, that the completed rotation's
+displacement has finite gauge iff the projection difference does. Both
+fields, arbitrary Hilbert dimension and nonacute defects are included.
+No finite-rank or compactness assumption is used in this equivalence.
+
+`CompactDefects.finiteDimensional_crossedDefects_of_compact_projection_sub`
+embeds the two crossed defects into the `+1` and `-1` eigenspaces of a
+compact projection difference and proves their finite dimensionality.
+Thus numeric finrank balance is meaningful for general Schatten pairs,
+not only finite-rank pairs.
+
+`SchattenFeasibility.exists_schatten_transport_of_projection_sub_ne_top_of_defect_balance`
+constructs a Schatten-displacement transporter from a general Schatten
+projection difference and finite defect balance, for every finite `p>=1`
+over both fields. This is a sufficient-condition theorem for general
+infinite-rank projection differences; its converse is still pending.
+
+`SchattenCanonical.exists_unitary_minimizing_schatten_transport_of_projection_sub_ne_top`
+now proves **actual general Schatten-ideal attainment for finite `p>=2`**
+in complex Hilbert space: `P_K-P_L in S_p` and finite crossed-defect
+balance produce a finite-cost unitary minimizing against every ambient
+competitor. The projection difference may have infinite rank and no
+separability is assumed. Focused builds passed (7,006; 6,960; 7,600 jobs).
+
+Still open: general compact/ideal necessity of defect balance, exact
+general ideal attainment at `1<=p<2`, and the infinite-dimensional
+all-optimizer classification. These classical membership/feasibility
+lemmas do not independently establish historical novelty; their role is
+to justify the claimed ambient scope of the optimization theory.

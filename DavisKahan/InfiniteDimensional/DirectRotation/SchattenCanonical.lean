@@ -8,6 +8,9 @@ module
 public import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
 public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenGram
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
+public import DavisKahan.Geometry.Polar.DirectRotationIdeal
+public import DavisKahan.Geometry.Halmos.CompactDefects
+public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenConvergence
 
 /-!
 # Canonical Schatten transport optimality for finite exponents at least two
@@ -67,5 +70,34 @@ theorem schatten_nonacuteDirectRotation_le_transport
   rw [OperatorIdealFamily.gauge_schatten_gram_eq_sq p hp,
     OperatorIdealFamily.gauge_schatten_gram_eq_sq p hp] at hdom
   exact (ENNReal.rpow_le_rpow_iff (by norm_num : (0 : ℝ) < 2)).mp hdom
+
+/-- **General Schatten-ideal attainment for `p>=2`.** A Schatten
+projection difference and equality of its finite crossed-defect
+dimensions give an actual Schatten unitary minimizer against every
+ambient competitor. The projection difference may have infinite rank. -/
+theorem exists_unitary_minimizing_schatten_transport_of_projection_sub_ne_top
+    (p : ℝ) (hp : 2 ≤ p)
+    (K L : Submodule ℂ H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (hD : (OperatorIdealFamily.schatten ℂ p (by linarith)).gauge
+      (K.starProjection - L.starProjection) ≠ ∞)
+    (hbalance : Module.finrank ℂ (halmosSourceDefect K L) =
+      Module.finrank ℂ (halmosTargetDefect K L)) :
+    ∃ R : H ≃ₗᵢ[ℂ] H, K.map R.toLinearMap = L ∧
+      (OperatorIdealFamily.schatten ℂ p (by linarith)).gauge (1 - (R : H →L[ℂ] H)) ≠ ∞ ∧
+      ∀ U : H ≃ₗᵢ[ℂ] H, K.map U.toLinearMap = L →
+        (OperatorIdealFamily.schatten ℂ p (by linarith)).gauge (1 - (R : H →L[ℂ] H)) ≤
+          (OperatorIdealFamily.schatten ℂ p (by linarith)).gauge (1 - (U : H →L[ℂ] H)) := by
+  have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top p
+    (by linarith) (K.starProjection - L.starProjection) hD
+  obtain ⟨J⟩ := crossedDefectsEquivalent_of_compact_projection_sub_of_finrank_eq K L hcompact hbalance
+  let R := Unitary.linearIsometryEquiv
+    (⟨nonacuteDirectRotation K L J, nonacuteDirectRotation_mem_unitary K L J⟩ :
+      unitary (H →L[ℂ] H))
+  refine ⟨R, ?_, (gauge_nonacuteDirectRotation_ne_top_iff_projection_sub
+    (OperatorIdealFamily.schatten ℂ p (by linarith)) K L J).mpr hD, ?_⟩
+  · apply (Submodule.map_eq_iff_intertwines_reflection K L R).mpr
+    exact nonacuteDirectRotation_reflection_intertwines K L J
+  · intro U hmap
+    exact schatten_nonacuteDirectRotation_le_transport p hp K L J U hmap
 
 end TauCeti.DavisKahan.InfiniteDimensional

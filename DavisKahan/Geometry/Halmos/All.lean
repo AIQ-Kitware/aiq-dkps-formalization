@@ -10,6 +10,7 @@ public import DavisKahan.Geometry.Halmos.Assembly
 public import DavisKahan.Geometry.Halmos.BilateralShiftExample
 public import DavisKahan.Geometry.Halmos.Classification
 public import DavisKahan.Geometry.Halmos.CompactClassification
+public import DavisKahan.Geometry.Halmos.CompactDefects
 public import DavisKahan.Geometry.Halmos.CrossedDefectGap
 public import DavisKahan.Geometry.Halmos.FixedCosineSubspace
 public import DavisKahan.Geometry.Halmos.GenericPosition
