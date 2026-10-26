@@ -56,13 +56,14 @@ theorem isUnit_one_add_nonacuteDirectRotation
         ((spectraCanonicalIntertwiner K L).isPositive_modulus.re_inner_nonneg_left x)
     _ ≤ _ := RCLike.re_le_norm _
 
-/-- The completed canonical displacement has a bounded right factor
-through the actual projection difference. No compactness is assumed. -/
+/-- The completed canonical displacement factors through the actual
+projection difference with a factor of norm at most `sqrt 2`.
+No compactness is assumed. -/
 theorem exists_nonacuteDirectRotation_displacement_factor
     (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (J : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
     ∃ B : H →L[𝕜] H, 1 - nonacuteDirectRotation K L J =
-      (K.starProjection - L.starProjection) ∘L B := by
+      (K.starProjection - L.starProjection) ∘L B ∧ ‖B‖ ≤ Real.sqrt 2 := by
   let R := nonacuteDirectRotation K L J
   let S := spectraCanonicalIntertwiner K L
   let C := (spectraCanonicalIntertwiner K L).modulus
@@ -97,7 +98,32 @@ theorem exists_nonacuteDirectRotation_displacement_factor
   have hu : (u : H →L[𝕜] H) = 1 + R :=
     (isUnit_one_add_nonacuteDirectRotation K L J).unit_spec
   let B : H →L[𝕜] H := (2 : 𝕜) • (K.reflectionOperator * (↑u⁻¹ : H →L[𝕜] H))
-  refine ⟨B, ?_⟩
+  have hBbound : ‖B‖ ≤ Real.sqrt 2 := by
+    apply B.opNorm_le_bound (Real.sqrt_nonneg 2)
+    intro x
+    let y := (↑u⁻¹ : H →L[𝕜] H) x
+    have hxy : y + R y = x := by
+      change ((1 + R) * (↑u⁻¹ : H →L[𝕜] H)) x = x
+      rw [← hu, Units.mul_inv]
+      rfl
+    have hRnorm : ‖R y‖ = ‖y‖ :=
+      Unitary.norm_map ⟨R, nonacuteDirectRotation_mem_unitary K L J⟩ y
+    have hre : 0 ≤ RCLike.re (inner 𝕜 y (R y)) := by
+      rw [inner_re_symm]
+      rw [re_inner_nonacuteDirectRotation_eq_absoluteValue K L J]
+      exact S.isPositive_modulus.re_inner_nonneg_left y
+    have hsq : 2 * ‖y‖ ^ 2 ≤ ‖x‖ ^ 2 := by
+      rw [← hxy, norm_add_sq (𝕜 := 𝕜), hRnorm]
+      nlinarith
+    have hBnorm : ‖B x‖ = 2 * ‖y‖ := by
+      change ‖(2 : 𝕜) • K.reflectionOperator y‖ = 2 * ‖y‖
+      rw [norm_smul, K.reflectionOperator_norm_map]
+      norm_num
+    rw [hBnorm]
+    apply (sq_le_sq₀ (by positivity) (by positivity)).mp
+    simp only [mul_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
+    nlinarith
+  refine ⟨B, ?_, hBbound⟩
   change 1 - R = (K.starProjection - L.starProjection) * B
   calc
     _ = (1 - R) * ((1 + R) * (↑u⁻¹ : H →L[𝕜] H)) := by rw [← hu, Units.mul_inv, mul_one]
@@ -111,6 +137,39 @@ theorem exists_nonacuteDirectRotation_displacement_factor
           (K.starProjection - L.starProjection)
             ((2 : 𝕜) • K.reflectionOperator ((↑u⁻¹ : H →L[𝕜] H) x))
       rw [map_smul]
+
+/-- Universal quantitative comparison of completed canonical displacement
+with the projection difference, for every accepted operator-ideal gauge. -/
+theorem gauge_nonacuteDirectRotation_le_sqrt_two_mul_projection_sub
+    (Φ : OperatorIdealFamily.{u, v, v} 𝕜)
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (J : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    Φ.gauge (1 - nonacuteDirectRotation K L J) ≤
+      ENNReal.ofReal (Real.sqrt 2) * Φ.gauge (K.starProjection - L.starProjection) := by
+  obtain ⟨B, hB, hnorm⟩ := exists_nonacuteDirectRotation_displacement_factor K L J
+  rw [hB]
+  calc
+    _ ≤ Φ.gauge (K.starProjection - L.starProjection) * ‖B‖ₑ := Φ.gauge_comp_right_le _ B
+    _ ≤ Φ.gauge (K.starProjection - L.starProjection) *
+        ENNReal.ofReal (Real.sqrt 2) := by
+      gcongr
+      rw [← ofReal_norm]
+      exact ENNReal.ofReal_le_ofReal hnorm
+    _ = _ := mul_comm _ _
+
+/-- A completed direct rotation is within a factor `sqrt 2` of every
+ambient unitary transporter in every accepted operator-ideal gauge.
+Both fields and infinite objective values are included. -/
+theorem gauge_nonacuteDirectRotation_le_sqrt_two_mul_transport
+    (Φ : OperatorIdealFamily.{u, v, v} 𝕜)
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (J : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L)
+    (U : H ≃ₗᵢ[𝕜] H) (hmap : K.map U.toLinearMap = L) :
+    Φ.gauge (1 - nonacuteDirectRotation K L J) ≤
+      ENNReal.ofReal (Real.sqrt 2) * Φ.gauge (1 - (U : H →L[𝕜] H)) := by
+  apply (gauge_nonacuteDirectRotation_le_sqrt_two_mul_projection_sub Φ K L J).trans
+  gcongr
+  exact Φ.gauge_projection_sub_le_unitary_displacement K L U hmap
 
 /-- A completed direct rotation belongs to an accepted operator ideal
 exactly when the projection difference does, including nonacute pairs
@@ -132,7 +191,7 @@ theorem gauge_nonacuteDirectRotation_ne_top_iff_projection_sub
     have h := Φ.gauge_projection_sub_le_unitary_displacement K L R hmap
     exact ne_top_of_le_ne_top hR h
   · intro hD
-    obtain ⟨B, hB⟩ := exists_nonacuteDirectRotation_displacement_factor K L J
+    obtain ⟨B, hB, _⟩ := exists_nonacuteDirectRotation_displacement_factor K L J
     rw [hB]
     have hfinite : Φ.gauge (K.starProjection - L.starProjection) * ‖B‖ₑ ≠ ∞ :=
       ENNReal.mul_ne_top hD enorm_ne_top
@@ -164,7 +223,7 @@ theorem compact_transport_iff_compact_projection_sub_and_defect_balance
     refine ⟨U, ?_, ?_⟩
     · apply (Submodule.map_eq_iff_intertwines_reflection K L U).mpr
       exact nonacuteDirectRotation_reflection_intertwines K L J
-    · obtain ⟨B, hB⟩ := exists_nonacuteDirectRotation_displacement_factor K L J
+    · obtain ⟨B, hB, _⟩ := exists_nonacuteDirectRotation_displacement_factor K L J
       have hcompact : IsCompactOperator ((1 - (U : H →L[𝕜] H)) : H →L[𝕜] H) := by
         change IsCompactOperator ((1 - nonacuteDirectRotation K L J) : H →L[𝕜] H)
         rw [hB]

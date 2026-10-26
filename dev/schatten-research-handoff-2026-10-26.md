@@ -664,3 +664,22 @@ cost at every positive scale while its costs diverge as the scale
 vanishes. Focused build passed (5,756 jobs). This is an analytic limit
 theorem for the objective; it does not yet justify exchanging a limit
 with minimization over an infinite-dimensional transport fiber.
+
+## Universal quantitative ideal comparison
+
+`exists_nonacuteDirectRotation_displacement_factor` has been strengthened
+in place: its bounded right factor now has norm at most `sqrt 2`.
+The proof estimates `(I+R)` below by `sqrt 2` from unitarity and the
+nonnegative real part of the completed rotation. No finite-dimensional
+spectral enumeration or compactness is used.
+
+`gauge_nonacuteDirectRotation_le_sqrt_two_mul_projection_sub` bounds
+every accepted ideal gauge of `I-R` by `sqrt 2` times the gauge of the
+projection difference. Consequently,
+`gauge_nonacuteDirectRotation_le_sqrt_two_mul_transport` bounds the
+completed rotation by `sqrt 2` times **every ambient transporter**, over
+both fields and including infinite costs. This extends the existing
+finite acute comparison to arbitrary Hilbert dimension and nonacute
+pairs. Focused build passed (7,072 jobs). Existing finite sharpness
+witnesses remain in `SharpDisplacement` / `SharpDisplacementLimit`;
+the quantitative comparison itself is not a new historical-priority claim.
