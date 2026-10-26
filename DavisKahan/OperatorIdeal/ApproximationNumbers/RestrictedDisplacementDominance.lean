@@ -14,7 +14,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransp
 # Approximation-number dominance for restricted displacements
 
 Pointwise approximation-number domination gives every finite Ky Fan
-approximation-gauge inequality.  For a `KyFanDominantIdealFamily`, those
+approximation-gauge inequality.  For a `FanDominantIdealFamily`, those
 inequalities imply ideal membership and gauge domination.
 
 The final structure packages this comparison for restricted displacements, so

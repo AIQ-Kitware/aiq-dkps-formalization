@@ -41,7 +41,7 @@ variable {E F G H : Type v}
 /-- Real isometric complementary-block theorem for the complete unbounded gap
 disjunction. -/
 theorem sinTheta_unbounded_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -65,7 +65,7 @@ side is the residual block between the two coordinate spaces, before it is
 contracted back to the whole residual.  The sharp directed residual
 `sin 2Theta_0` estimate needs it at this stage. -/
 theorem sinTheta_unbounded_real_block
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -89,7 +89,7 @@ theorem sinTheta_unbounded_real_block
 
 /-- Exact real isometric theorem in directed sine form. -/
 theorem sinTheta_unbounded_exact_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℝ] E)
     (hA : _root_.IsSelfAdjoint D.A)

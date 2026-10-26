@@ -32,7 +32,7 @@ family.
 
 The complex directed endpoints
 (`sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap` and its perturbation
-form) are stated for a `KyFanDominantIdealFamily (𝕜 := ℂ)`, a scalar-fixed
+form) are stated for a `FanDominantIdealFamily (𝕜 := ℂ)`, a scalar-fixed
 class with no gauge transport across complexification, and their spectral
 hypotheses use the complex partial-map spectrum `_root_.LinearPMap.spectrum`.
 Both obstructions disappear if the argument is run over the reals
@@ -98,7 +98,7 @@ The gap is the scalar-generic form-bounded Sylvester predicate rather than the
 `ℂ`-only resolvent-set separation, which is what makes the statement available
 over `ℝ` at all. -/
 theorem sinTheta_addBounded_gauge_real_isometric
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (V : E →L[ℝ] E) (hV : V.IsSymmetric)
     (A₀ : F →ₗ.[ℝ] F) (hA₀ : IsSelfAdjoint A₀)
@@ -137,7 +137,7 @@ the two coordinate spaces, before it is contracted back to the whole
 perturbation.  The sharp directed residual `sin 2Theta_0` estimate needs it at
 this stage. -/
 theorem sinTheta_addBounded_gauge_real_block
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (V : E →L[ℝ] E) (hV : V.IsSymmetric)
     (A₀ : F →ₗ.[ℝ] F) (hA₀ : IsSelfAdjoint A₀)
@@ -198,7 +198,7 @@ overlap block — the source's `sin 2Θ₀` — lies in the ideal and satisfies
 There is no dimension hypothesis and no compactness hypothesis; membership in
 the ideal is *concluded*, exactly as in the complex statement. -/
 theorem sinTwoTheta_reflectionResidual_block_gauge_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -351,7 +351,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
 space, reflection-residual form.**  The block form above with the block
 contracted back to the whole reflection residual. -/
 theorem sinTwoTheta_reflectionResidual_gauge_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -398,7 +398,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
     {A : E →ₗ.[ℝ] E} (hA : IsSelfAdjoint A)
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U)
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -707,7 +707,7 @@ spectral subspaces of `A` and of `A + E` for prescribed measurable spectral
 sets.  There is no dimension hypothesis and no compactness hypothesis;
 membership in the ideal is *concluded*. -/
 theorem sinTwoTheta_addBounded_gauge_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (S T : Set ℝ) (hS : MeasurableSet S) (hT : MeasurableSet T)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap

@@ -565,7 +565,7 @@ theorem all_kyFan_core_of_formBounds (data : Theorem63TrialData Z V)
 /-- **Theorem 6.3 at ideal-gauge scope over trial-block data.** -/
 theorem ideal_of_formBounds (data : Theorem63TrialData Z V)
     [FiniteDimensional ℂ Z]
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hMupper : ∀ z : Z, RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hcross : ∀ z : Z, (alpha + delta) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
@@ -575,7 +575,7 @@ theorem ideal_of_formBounds (data : Theorem63TrialData Z V)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
     (hResidual : N.Mem data.residual) :
     N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge data.residual :=
-  ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hdelta hResidual
+  ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual
     (all_kyFan_core_of_formBounds data hdelta hMupper hcross tanTheta0 htan)
 
 end Chain

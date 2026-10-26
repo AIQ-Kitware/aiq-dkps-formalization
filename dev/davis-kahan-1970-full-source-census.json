@@ -6623,7 +6623,7 @@
           },
           {
             "source_clause": "The norm is an arbitrary normalized unitary-invariant norm.",
-            "lean_realization": "`N : SymmetricNormingFunction` in both canonical declarations. The ideal-family endpoints quantify over a `KyFanDominantIdealFamily` instead; the two abstractions are equi-strong for this theorem, because the paper's norm class literally contains the Ky Fan norms and Fan dominance recovers the family back.",
+            "lean_realization": "`N : SymmetricNormingFunction` in both canonical declarations. The ideal-family endpoints quantify over a `FanDominantIdealFamily`, without an ideal-completeness assumption, instead; the two abstractions are equi-strong for this theorem, because the paper's norm class literally contains the Ky Fan norms and Fan dominance recovers the family back.",
             "status": "claimed_exact",
             "kind": "hypothesis",
             "relation": "literal",

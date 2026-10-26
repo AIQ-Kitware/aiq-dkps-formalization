@@ -95,7 +95,7 @@ unitarily invariant ideal gauge, and `X` lies in the ideal whenever `R` does.
 
 The ordering is the paper's: `TauCeti.LinearPMap.SemiboundedBelow A (c + δ)` and `TauCeti.LinearPMap.SemiboundedAbove B c`.  The
 constant `δ` is sharp.  More general than the printed theorem in the scalar-ideal axis --
-the conclusion is for an arbitrary `KyFanDominantIdealFamily`, not just a fixed unitarily
+the conclusion is for an arbitrary `FanDominantIdealFamily`, not just a fixed unitarily
 invariant norm -- and the operators are unbounded closed self-adjoint rather than bounded.
 
 This is the *ordered* branch.  The interval/exterior separation hypothesis is a different

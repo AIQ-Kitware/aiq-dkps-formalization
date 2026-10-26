@@ -75,7 +75,7 @@ noncomputable def toKyFanProblem
     (P : Theorem61Data (E := E) (F := F) (G := G) (H := H))
     (k : ℕ) (hk : 0 < k) :
     FormBoundedGeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H)
-      (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) where
+      (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) where
   data := P.data
   exactMap := P.exactMap
   ambient_selfAdjoint := P.ambient_selfAdjoint
@@ -88,7 +88,7 @@ noncomputable def toKyFanProblem
   frameLowerBound_pos := P.frameLowerBound_pos
   lowerFrame := P.lowerFrame
   spectral_gap := P.spectral_gap
-  residual_mem := KyFanDominantIdealFamily.kyFan_mem
+  residual_mem := FanDominantIdealFamily.kyFan_mem
     (𝕜 := ℂ) k hk P.data.residual
 
 /-- The accepted theorem yields every finite Ky Fan inequality required by the
@@ -104,10 +104,10 @@ theorem all_kyFan_bound
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+    let N := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
     have hmain := FormBoundedGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
     have hsame := S.same_singular_values.kyFanApproximationGauge_eq k
-    simpa only [N, KyFanDominantIdealFamily.kyFan_gauge,
+    simpa only [N, FanDominantIdealFamily.kyFan_gauge,
       Theorem61Data.toKyFanProblem,
       Theorem61Data.canonicalSinTheta, hsame] using hmain.2
 
@@ -245,7 +245,7 @@ noncomputable def toKyFanProblem
     (P : RealTheorem61Data (E := E) (F := F) (G := G) (H := H))
     (k : ℕ) (hk : 0 < k) :
     RealGeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H)
-      (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk) where
+      (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk) where
   data := P.data
   exactMap := P.exactMap
   ambient_selfAdjoint := P.ambient_selfAdjoint
@@ -258,7 +258,7 @@ noncomputable def toKyFanProblem
   frameLowerBound_pos := P.frameLowerBound_pos
   lowerFrame := P.lowerFrame
   spectral_gap := P.spectral_gap
-  residual_mem := KyFanDominantIdealFamily.kyFan_mem
+  residual_mem := FanDominantIdealFamily.kyFan_mem
     (𝕜 := ℝ) k hk P.data.residual
 
 /-- Every real finite Ky Fan inequality. -/
@@ -273,10 +273,10 @@ theorem all_kyFan_bound
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk
+    let N := FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk
     have hmain := RealGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
     have hsame := S.same_singular_values.kyFanApproximationGauge_eq k
-    simpa only [N, KyFanDominantIdealFamily.kyFan_gauge,
+    simpa only [N, FanDominantIdealFamily.kyFan_gauge,
       RealTheorem61Data.toKyFanProblem,
       RealTheorem61Data.canonicalSinTheta, hsame] using hmain.2
 

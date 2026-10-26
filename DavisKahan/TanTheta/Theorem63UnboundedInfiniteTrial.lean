@@ -531,7 +531,7 @@ theorem all_kyFan_core_of_formBounds_infinite
 
 /-- Fan-dominance endpoint for arbitrary complete trial-block data. -/
 theorem ideal_of_formBounds_infinite
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hMupper : ∀ z : Z,
       RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -544,7 +544,7 @@ theorem ideal_of_formBounds_infinite
     (hResidual : N.Mem data.residual) :
     N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge data.residual := by
   refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
-    N.toFanDominantIdealFamily hdelta hResidual fun k => ?_
+    N hdelta hResidual fun k => ?_
   have hcore := data.all_kyFan_core_of_formBounds_infinite hdelta hMupper hcross k
   have hKyTan : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
@@ -561,7 +561,7 @@ theorem ideal_of_formBounds_infinite
 representative is constructed with exactly the approximation numbers prescribed by the
 paper. -/
 theorem ideal_of_formBounds_infinite_exists
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hMupper : ∀ z : Z,
       RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -595,7 +595,7 @@ This is the Appendix dimension-removal endpoint.  There is no finite-dimensional
 compactness hypothesis on `Z`.  The tangent representative is exhibited, and every
 Fan-dominant unitarily invariant ideal gauge satisfies the printed residual bound. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
@@ -621,7 +621,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing
 /-- Same arbitrary-trial unbounded theorem when a tangent representative with the paper's
 approximation numbers is supplied explicitly. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
@@ -647,7 +647,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing
 
 /-- Spectral-gap specialization of the arbitrary-trial unbounded theorem. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
@@ -675,7 +675,7 @@ form, because the existential would hand back a possibly different witness at
 each Ky Fan index.  Taking the representative as a parameter is what lets the
 paper-norm promotion quantify one operator over all indices. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)

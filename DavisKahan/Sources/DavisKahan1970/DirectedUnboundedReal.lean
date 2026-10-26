@@ -287,7 +287,7 @@ theorem approximationSingularValue_sineBlockReal_lt_one_infiniteData
 /-- **Theorem 6.3 at every real Fan-dominant ideal gauge, over real trial-block data**, with
 the tangent representative exhibited and its membership concluded. -/
 theorem theorem6_3_ideal_infiniteData_exists_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (data : Theorem63TrialData Z V)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hMupper : ∀ z : Z, ⟪data.compression z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
@@ -315,13 +315,13 @@ theorem theorem6_3_ideal_infiniteData_exists_real
     rw [htanKy]
     exact hcore
   obtain ⟨hmem, hbound⟩ :=
-    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hdelta hResidual hky
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual hky
   exact ⟨tanTheta0, htan, hmem, hbound⟩
 
 /-- The same endpoint when a real tangent representative with the paper's approximation
 numbers is supplied by the caller. -/
 theorem theorem6_3_ideal_infiniteData_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (data : Theorem63TrialData Z V)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hMupper : ∀ z : Z, ⟪data.compression z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
@@ -331,7 +331,7 @@ theorem theorem6_3_ideal_infiniteData_real
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
     (hResidual : N.Mem data.residual) :
     N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge data.residual := by
-  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hdelta hResidual fun k => ?_
+  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual fun k => ?_
   have hcore := theorem6_3_all_kyFan_core_infiniteData_real data hdelta hMupper hcross k
   have htanKy : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
@@ -371,7 +371,7 @@ the trial and reducing subspaces, the tangent representative and the ideal gauge
 real.  Only the Appendix Ky Fan passage is proved by complexification, at the finite Ky Fan
 level where approximation numbers are preserved exactly. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E)
     (D : BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -397,7 +397,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real
 /-- The same unbounded real theorem when a real tangent representative with the paper's
 approximation numbers is supplied by the caller. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E)
     (D : BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -537,7 +537,7 @@ the real spectral gap: the operator has no spectrum in `Set.Ioo α (α + δ)`.  
 space is an arbitrary complete real subspace of the operator domain and the gauge is any
 real Fan-dominant unitarily invariant ideal gauge. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (D : BoundedCompressionTrialBlock A Z)
     (hdelta : 0 < delta)
     (hgap : realSelfAdjointSpectralProjection A hA (Set.Ioo alpha (alpha + delta))
@@ -562,7 +562,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_real
 /-- The same real spectral-gap theorem when a real tangent representative with the paper's
 approximation numbers is supplied by the caller. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (D : BoundedCompressionTrialBlock A Z)
     (hdelta : 0 < delta)
     (hgap : realSelfAdjointSpectralProjection A hA (Set.Ioo alpha (alpha + delta))

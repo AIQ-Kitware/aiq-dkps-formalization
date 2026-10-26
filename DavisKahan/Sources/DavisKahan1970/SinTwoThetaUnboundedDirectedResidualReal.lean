@@ -122,13 +122,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_real
   have hDsa : ((-2 : ℝ) • trialOffDiagonalPart V M R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_real A hA B hB
-    (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk)
+    (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk)
     ((-2 : ℝ) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℝ) k hk _)
-  rw [KyFanDominantIdealFamily.kyFan_gauge,
-    KyFanDominantIdealFamily.kyFan_gauge] at hraw
+    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℝ) k hk _)
+  rw [FanDominantIdealFamily.kyFan_gauge,
+    FanDominantIdealFamily.kyFan_gauge] at hraw
   -- flip the block to the orientation of the doubling identity
   have hflip : kyFanApproximationGauge k
         ((realSelfAdjointSpectralSubspace A hA B hB).starProjection ∘L
@@ -296,13 +296,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   have hDsa : ((-2 : ℝ) • trialOffDiagonalPart V M R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_real hA hred
-    (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk)
+    (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk)
     ((-2 : ℝ) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℝ) k hk _)
-  rw [KyFanDominantIdealFamily.kyFan_gauge,
-    KyFanDominantIdealFamily.kyFan_gauge] at hraw
+    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℝ) k hk _)
+  rw [FanDominantIdealFamily.kyFan_gauge,
+    FanDominantIdealFamily.kyFan_gauge] at hraw
   -- flip the block to the orientation of the doubling identity
   have hflip : kyFanApproximationGauge k
         (U.starProjection ∘L

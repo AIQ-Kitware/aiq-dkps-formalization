@@ -56,6 +56,13 @@
           "reason": "Rectangular Sylvester-proof endpoint on `(I - F0 F0*) E0`; the ledger witness transports this result through the exact functional-calculus-sine/modulus bridge and then through modulus/gauge invariance to the literal source sine operator."
         },
         {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_idealFamily_rclike",
+          "role": "implementation_engine",
+          "scalar_scope": "rclike",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Fan-dominant ideal-family engine on the rectangular complementary-projection block. October 25: the redundant complete-family record is retired; the theorem now accepts FanDominantIdealFamily without an ideal-completeness assumption. Real and complex analytic siblings use the same weaker family scope. Completeness is supplied by native Tau Ceti finite Ky Fan carriers inside the interval-gap kernel. The where-defined source aliases and ledger witnesses are unchanged."
+        },
+        {
           "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike",
           "role": "implementation_engine",
           "scalar_scope": "rclike",

@@ -650,7 +650,7 @@ The trial space carries no dimension hypothesis.  Any tangent representative wit
 paper's approximation numbers obeys the ideal-gauge bound in every Fan-dominant unitarily
 invariant ideal family. -/
 theorem theorem6_3_infiniteTrial_of_formBounds
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
@@ -665,7 +665,7 @@ theorem theorem6_3_infiniteTrial_of_formBounds
     N.Mem tanTheta0 ∧
       delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
   refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
-    N.toFanDominantIdealFamily hdelta hResidual fun k => ?_
+    N hdelta hResidual fun k => ?_
   have hcore := theorem6_3_all_kyFan_core_infiniteTrial T V Z hT hV hdelta
     hCompressionUpper hUnwantedLower k
   have hKyTan : kyFanApproximationGauge k tanTheta0 =
@@ -752,7 +752,7 @@ unconditionally**: the tangent representative is exhibited, not assumed.  This i
 equal-dimensional infinite/noncompact half of the Section 2 tangent theorem, in form-bound
 shape. -/
 theorem theorem6_3_infiniteTrial_of_formBounds_exists
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
@@ -812,7 +812,7 @@ chain was already inert — `theorem6_3_generalizedTanTheta_of_formBounds` binds
 `_hStrictDimension` and never uses it.  Dropping an unused hypothesis strengthens the
 statement; it does not narrow it. -/
 theorem theorem6_3_infiniteTrial_ideal
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
@@ -853,7 +853,7 @@ theorem theorem6_3_infiniteTrial_ideal
 and its tangent hypothesis is definitionally the arbitrary-trial one.  Stating that
 collapse as a theorem keeps it machine-checked rather than asserted in prose. -/
 theorem theorem6_3_generalizedTanTheta_ideal_of_infiniteTrial
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
@@ -879,7 +879,7 @@ restriction's spectrum in `[α + δ, ∞)`, and the conclusion is the ideal-gaug
 bound for an exhibited representative — the Section 2 tangent theorem's residual half
 with **no** dimension hypothesis on the trial space. -/
 theorem theorem6_3_infiniteTrial_spectral_exists
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]

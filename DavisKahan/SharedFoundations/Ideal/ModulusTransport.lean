@@ -102,19 +102,18 @@ theorem SymmetricNormIdeal.modulus_mem_and_gauge_eq
 /-- Square specialization to an operator ideal family. -/
 theorem SymmetricOperatorIdealFamily.modulus_mem_and_gauge_eq
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
-    [N.toOperatorIdealFamily.IsComplete]
     {T : E →L[ℂ] E} (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧
       N.gaugeReal (ContinuousLinearMap.modulus T) = N.gaugeReal T := by
-  let I : DavisKahanExt.SymmetricNormIdeal (𝕜 := ℂ) (E := E) :=
-    DavisKahanExt.SymmetricNormIdeal.ofCanonical N
-  have h := SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq I T
-  exact ⟨h.1.mpr hT, h.2 hT⟩
+  refine ⟨?_, N.gaugeReal_modulus_eq T⟩
+  change N.gauge T.modulus ≠ ⊤
+  rw [N.gauge_modulus_eq]
+  exact hT
 
 /-- The Ky Fan dominant family inherits the transport, since its gauge is that
 of its underlying symmetric family. -/
-theorem KyFanDominantIdealFamily.modulus_mem_and_gauge_eq
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+theorem FanDominantIdealFamily.modulus_mem_and_gauge_eq
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
     (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧

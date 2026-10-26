@@ -829,7 +829,7 @@ space and the exact spectral subspace may be infinite-dimensional.  The
 conclusion holds for every approximation-number ideal family satisfying Fan
 dominance. -/
 theorem theorem6_3_generalizedTanTheta_of_formBounds
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
@@ -848,7 +848,7 @@ theorem theorem6_3_generalizedTanTheta_of_formBounds
       delta * N.gauge tanTheta0 ≤
         N.gauge (theorem63Residual T Z) := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
-    N.toFanDominantIdealFamily hdelta hResidual
+    N hdelta hResidual
       (theorem6_3_all_kyFan_core T hT V Z hV hdelta
         hCompressionUpper hUnwantedLower tanTheta0 htan)
 
@@ -862,7 +862,7 @@ assumption under its global separability convention.  The separate strict-rank
 hypothesis preserves that source condition explicitly; no symmetric acuteness
 is inferred from it. -/
 theorem theorem6_3_generalizedTanTheta_ideal
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
@@ -918,7 +918,7 @@ theorem theorem6_3_ideal_of_kyFan_core
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     {delta : ℝ} (hdelta : 0 < delta)
     {tanTheta0 residual : E →L[ℂ] F}
     (hResidual : N.Mem residual)
@@ -927,7 +927,7 @@ theorem theorem6_3_ideal_of_kyFan_core
       delta * N.gauge tanTheta0 ≤
         N.gauge residual :=
   ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
-    N.toFanDominantIdealFamily hdelta hResidual hcore
+    N hdelta hResidual hcore
 
 /-! ### A directed tangent representative exists
 
@@ -1110,7 +1110,7 @@ theorem theorem6_3_all_kyFan_core_directedTangent
 supplied rather than assumed.  Every hypothesis here is one Davis and Kahan
 state. -/
 theorem theorem6_3_generalizedTanTheta_ideal_directedTangent
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (hV : T.Reduces V)
     (hStrictDimension : Module.rank ℂ Z < Module.rank ℂ V)
@@ -1169,7 +1169,7 @@ excludes, so it cannot be obtained by specialising a statement that assumes
 Every hypothesis is a form bound or a spectral separation; nothing compares the
 ranks of `Z` and `V`, so this applies to the equal-rank pairs of Section 2. -/
 theorem theorem6_3_generalizedTanTheta_of_formBounds_equalRank
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
@@ -1180,7 +1180,7 @@ theorem theorem6_3_generalizedTanTheta_of_formBounds_equalRank
     N.Mem (theorem63DirectedTangent Z V) ∧
       delta * N.gauge (theorem63DirectedTangent Z V) ≤
         N.gauge (theorem63Residual T Z) :=
-  ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hdelta hResidual
+  ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual
     (theorem6_3_all_kyFan_core_directedTangent Z V T hT hV hdelta
       hCompressionUpper hUnwantedLower)
 
@@ -1192,7 +1192,7 @@ representative this file constructs.  No dimension comparison, no assumed
 tangent representative — this is the Section 2 tangent theorem's residual half
 at arbitrary unitarily invariant ideal-gauge scope. -/
 theorem theorem6_3_generalizedTanTheta_equalRank_spectral
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (T : H →L[ℂ] H) (hT : T.IsSymmetric) (hV : T.Reduces V)
     {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :

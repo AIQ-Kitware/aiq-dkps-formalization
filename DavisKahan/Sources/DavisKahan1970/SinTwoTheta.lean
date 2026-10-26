@@ -177,7 +177,7 @@ open DavisKahan in
 form.**  The chosen `sin 2Θ₀` may be any operator with the complete
 singular-value sequence of the canonical reflected overlap block. -/
 theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -198,8 +198,8 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex
     N.Mem sinTwoTheta₀.operator ∧
       δ * N.gauge sinTwoTheta₀.operator ≤
         2 * N.gauge E := by
-  have hcanonical := sinTwoTheta_addBounded_gauge_of_spectrum_gap
-    N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
+  have hcanonical := sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
+    N A hA E hE B S hB hS
       hβα hδ hBlow hBhigh hBcomplSpec hEmem
   obtain ⟨hmem, hgauge⟩ := sinTwoTheta₀.mem_and_gauge_eq N hcanonical.1
   refine ⟨hmem, ?_⟩
@@ -231,7 +231,7 @@ strict-dimension case explicitly at the literal representative / arbitrary
 unitarily-invariant-ideal scope, so the source sentence has a declaration whose
 signature contains the hypothesis it states. -/
 theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -265,7 +265,7 @@ domain; the chosen `sin 2Θ₀` may be any operator with the complete
 singular-value sequence of the canonical reflected overlap block, and it is
 controlled by the residual with constant one. -/
 theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
@@ -290,13 +290,20 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
     N.Mem sinTwoTheta₀.operator ∧
       δ * N.gauge sinTwoTheta₀.operator ≤
         N.gauge R := by
+  apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hRmem
+  intro k
+  rcases Nat.eq_zero_or_pos k with rfl | hk
+  · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  let M := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+  have : M.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+    inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
   have hcanonical := sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
-    N.toSymmetricOperatorIdealFamily A hA R hR B hB V
-      hβα hδ hBlow hBhigh hBcomplSpec hJdom hJintertwines hRmem
-  obtain ⟨hmem, hgauge⟩ := sinTwoTheta₀.mem_and_gauge_eq N hcanonical.1
-  refine ⟨hmem, ?_⟩
-  rw [hgauge]
-  exact hcanonical.2
+    M.toSymmetricOperatorIdealFamily A hA R hR B hB V
+      hβα hδ hBlow hBhigh hBcomplSpec hJdom hJintertwines
+      (FanDominantIdealFamily.kyFan_mem k hk R)
+  simpa only [FanDominantIdealFamily.toSymmetric_gaugeReal, M,
+    FanDominantIdealFamily.kyFan_gauge,
+    sinTwoTheta₀.same_singular_values.kyFanApproximationGauge_eq k] using hcanonical.2
 
 open DavisKahan in
 /-- **Section 8 closing unequal-dimension extension of the directed
@@ -304,7 +311,7 @@ open DavisKahan in
 is recorded exactly as printed; the proof is a
 direct specialization of the stronger dimension-free Section 7 theorem. -/
 theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (B : Set ℝ) (hB : MeasurableSet B)
@@ -355,7 +362,7 @@ open DavisKahan DavisKahan.RealSpectralRestriction in
 over a REAL Hilbert space.**  The chosen `sin 2Θ₀` may be any operator with the
 complete singular-value sequence of the canonical reflected overlap block. -/
 theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
     (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
@@ -384,7 +391,7 @@ open DavisKahan DavisKahan.RealSpectralRestriction in
 directed `sin 2Θ₀` theorem, perturbation form.**  As over `ℂ`, the underlying theorem is
 dimension-free; this declaration records the printed strict-dimension case. -/
 theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
     (Eop : Er →L[ℝ] Er) (hEop : Eop.IsSymmetric)
@@ -415,7 +422,7 @@ system on the full domain; the chosen `sin 2Θ₀` may be any operator with the
 complete singular-value sequence of the canonical reflected overlap block, and
 it is controlled by the residual with constant one. -/
 theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
     (R : Er →L[ℝ] Er) (hR : R.IsSymmetric)
@@ -447,7 +454,7 @@ open DavisKahan DavisKahan.RealSpectralRestriction in
 /-- **Real-scalar Section 8 closing unequal-dimension extension of the
 directed `sin 2Θ₀` theorem, reflection-residual form.** -/
 theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
     (R : Er →L[ℝ] Er) (hR : R.IsSymmetric)
@@ -518,10 +525,10 @@ theorem sinTwoTheta_directed_unboundedReflectionResidual_blockRepresentative_sym
   · rw [kyFanApproximationGauge_zero_real, kyFanApproximationGauge_zero_real,
       mul_zero]
   · have h := sinTwoTheta_reflectionResidual_gauge_real A hA B hB
-      (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk) R hR V hδ hgap
-      hJdom hJintertwines (KyFanDominantIdealFamily.kyFan_mem k hk R)
-    rw [KyFanDominantIdealFamily.kyFan_gauge,
-      KyFanDominantIdealFamily.kyFan_gauge] at h
+      (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk) R hR V hδ hgap
+      hJdom hJintertwines (FanDominantIdealFamily.kyFan_mem k hk R)
+    rw [FanDominantIdealFamily.kyFan_gauge,
+      FanDominantIdealFamily.kyFan_gauge] at h
     exact h.2
 
 open DavisKahan DavisKahan.RealSpectralRestriction in
@@ -559,10 +566,10 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricN
     · rw [kyFanApproximationGauge_zero_real, kyFanApproximationGauge_zero_real,
         mul_zero]
     · have h := sinTwoTheta_addBounded_gauge_real A hA Eop hEop
-        (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk) B S hB hS hδ hgap
-        (KyFanDominantIdealFamily.kyFan_mem k hk Eop)
-      rw [KyFanDominantIdealFamily.kyFan_gauge,
-        KyFanDominantIdealFamily.kyFan_gauge] at h
+        (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk) B S hB hS hδ hgap
+        (FanDominantIdealFamily.kyFan_mem k hk Eop)
+      rw [FanDominantIdealFamily.kyFan_gauge,
+        FanDominantIdealFamily.kyFan_gauge] at h
       linarith [h.2]
 
 open DavisKahan DavisKahan.RealSpectralRestriction in
@@ -740,11 +747,11 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGa
   · rcases Nat.eq_zero_or_pos k with rfl | hk
     · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have h := DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
-        (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) A hA Eop hEop B S hB hS
+        (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) A hA Eop hEop B S hB hS
         hβα hδ hBlow hBhigh hBcomplSpec
-        (KyFanDominantIdealFamily.kyFan_mem k hk Eop)
-      rw [KyFanDominantIdealFamily.kyFan_gauge,
-        KyFanDominantIdealFamily.kyFan_gauge] at h
+        (FanDominantIdealFamily.kyFan_mem k hk Eop)
+      rw [FanDominantIdealFamily.kyFan_gauge,
+        FanDominantIdealFamily.kyFan_gauge] at h
       linarith [h.2]
 
 open DavisKahan in
@@ -860,10 +867,10 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricN
   · rcases Nat.eq_zero_or_pos k with rfl | hk
     · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have h := DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap
-        (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) A hA Eop hEop B S hB hS
-        hδ hgap (KyFanDominantIdealFamily.kyFan_mem k hk Eop)
-      rw [KyFanDominantIdealFamily.kyFan_gauge,
-        KyFanDominantIdealFamily.kyFan_gauge] at h
+        (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) A hA Eop hEop B S hB hS
+        hδ hgap (FanDominantIdealFamily.kyFan_mem k hk Eop)
+      rw [FanDominantIdealFamily.kyFan_gauge,
+        FanDominantIdealFamily.kyFan_gauge] at h
       linarith [h.2]
 
 open DavisKahan in
@@ -913,7 +920,7 @@ arbitrary `SymmetricNormingFunction` and the whole `FormBoundedSylvesterGap`.
 
 `sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex`
 earlier in this file states the same extension, but only at a
-`KyFanDominantIdealFamily` and the bounded-interval spectrum gap.
+`FanDominantIdealFamily` and the bounded-interval spectrum gap.
 
 **This is a `result_adjacent_extension`, not an obligation of the counted
 result.**  Davis and Kahan state the extension "analogously to Theorems 6.1

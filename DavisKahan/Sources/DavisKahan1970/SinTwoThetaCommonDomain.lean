@@ -245,13 +245,13 @@ theorem sinTwoTheta_commonDomain_block_kyFan
   have hDsa : ((-2 : K) • trialOffDiagonalPart P 0 R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
-    hT hQ (KyFanDominantIdealFamily.kyFan (𝕜 := K) k hk)
+    hT hQ (FanDominantIdealFamily.kyFan (𝕜 := K) k hk)
     ((-2 : K) • trialOffDiagonalPart P 0 R) hDsa P hgapPos hgap
     (commonDomain_reflection_mem hdom hP)
     (commonDomain_trialReflection_intertwines hT hdom hP R hres)
-    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := K) k hk _)
-  rw [KyFanDominantIdealFamily.kyFan_gauge,
-    KyFanDominantIdealFamily.kyFan_gauge] at hraw
+    (FanDominantIdealFamily.kyFan_mem (𝕜 := K) k hk _)
+  rw [FanDominantIdealFamily.kyFan_gauge,
+    FanDominantIdealFamily.kyFan_gauge] at hraw
   have hflip : kyFanApproximationGauge k
         (Q.starProjection ∘L
           ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L

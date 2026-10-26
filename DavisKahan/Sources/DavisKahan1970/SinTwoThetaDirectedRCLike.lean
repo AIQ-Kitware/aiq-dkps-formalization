@@ -72,7 +72,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U)
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     (D : H →L[𝕜] H) (hD : D.IsSymmetric)
     (W : Submodule 𝕜 H) [W.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -239,13 +239,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   have hDsa : ((-2 : 𝕜) • trialOffDiagonalPart V M R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
-    hA hred (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk)
+    hA hred (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk)
     ((-2 : 𝕜) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk _)
-  rw [KyFanDominantIdealFamily.kyFan_gauge,
-    KyFanDominantIdealFamily.kyFan_gauge] at hraw
+    (FanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk _)
+  rw [FanDominantIdealFamily.kyFan_gauge,
+    FanDominantIdealFamily.kyFan_gauge] at hraw
   have hflip : kyFanApproximationGauge k
         (U.starProjection ∘L
           ((-2 : 𝕜) • trialOffDiagonalPart V M R) ∘L

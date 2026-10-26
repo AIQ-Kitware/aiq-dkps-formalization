@@ -21,8 +21,8 @@ Until 2026-09-05 the repository never constructed one.  This module does: the
 and Kahan's own Fan-dominance argument runs over.
 
 **What was and was not missing.**  The layer beneath,
-`KyFanDominantIdealFamily`, was already inhabited by
-`KyFanDominantIdealFamily.kyFan`, so this module builds on that rather than
+`FanDominantIdealFamily`, was already inhabited by
+`FanDominantIdealFamily.kyFan`, so this module builds on that rather than
 repeating it.  What had no witness was the *normalized* class: the single extra
 field `gauge_rankOne_eq_one`, which is the source's `‖u v*‖ = ‖u‖ ‖v‖` after
 scaling both vectors to norm one.  It is discharged by
@@ -47,10 +47,10 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 noncomputable def kyFanNormalizedUnitaryInvariantNorm
      (k : ℕ) (hk : 0 < k) :
     NormalizedUnitaryInvariantNorm.{u, v} 𝕜 where
-  toFanDominantIdealFamily := (KyFanDominantIdealFamily.kyFan k hk).toFanDominantIdealFamily
+  toFanDominantIdealFamily := FanDominantIdealFamily.kyFan k hk
   gauge_rankOne_eq_one := by
     intro E F _ _ _ _ _ _ V hVnorm hVrank
-    rw [KyFanDominantIdealFamily.kyFan_gauge]
+    rw [FanDominantIdealFamily.kyFan_gauge]
     have hsum : kyFanApproximationGauge k V
         = ∑ n ∈ Finset.range k, approximationSingularValue n V := by
       change V.kyFanGaugeReal k = _
@@ -73,7 +73,7 @@ theorem gauge_kyFanNormalizedUnitaryInvariantNorm
     (A : E →L[𝕜] F) :
     (kyFanNormalizedUnitaryInvariantNorm (𝕜 := 𝕜) k hk).gauge A
       = kyFanApproximationGauge k A :=
-  KyFanDominantIdealFamily.kyFan_gauge k hk A
+  FanDominantIdealFamily.kyFan_gauge k hk A
 
 /-- Every bounded operator lies in the Ky Fan member's ideal. -/
 theorem mem_kyFanNormalizedUnitaryInvariantNorm
@@ -83,7 +83,7 @@ theorem mem_kyFanNormalizedUnitaryInvariantNorm
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     (kyFanNormalizedUnitaryInvariantNorm (𝕜 := 𝕜) k hk).Mem A :=
-  KyFanDominantIdealFamily.kyFan_mem k hk A
+  FanDominantIdealFamily.kyFan_mem k hk A
 
 /-- **The source norm class is inhabited over `ℂ`.**  So every source-exact
 façade quantifying over `NormalizedUnitaryInvariantNorm ℂ` says something. -/

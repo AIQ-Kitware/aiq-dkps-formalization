@@ -456,7 +456,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [Complete
 /-- Every current ideal family assigns the same membership and gauge to `T`
 and its positive modulus. -/
 theorem modulus_mem_and_gauge_eq
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
     (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧

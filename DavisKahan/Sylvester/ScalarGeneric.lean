@@ -36,7 +36,7 @@ discharges it, and a leftover binder advertises as a hypothesis something the
 caller never supplies.  The 2026-09-03 sweep removed 35 such binders.
 
 Only the finite Ky Fan gauges appear.  That is the weakest form that still
-generates the rest: wherever a `KyFanDominantIdealFamily` is in hand, Fan
+generates the rest: wherever a `FanDominantIdealFamily` is in hand, Fan
 dominance recovers the arbitrary-ideal conclusion, which is how both
 `davisKahan1970_sylvester_real` and the source-facing `SymmetricNormingFunction`
 statements are already built.
@@ -117,10 +117,10 @@ instance hasUnboundedSylvesterKyFan_complex :
     · subst k
       simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
-      have hraw := davisKahan1970_sylvester_complex
-        (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos) hA hB hδ hgap hEq
-        (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hkpos C)
-      simpa only [KyFanDominantIdealFamily.kyFan_gauge] using hraw.2
+      let N := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos
+      have hraw := davisKahan1970_sylvester_complex N hA hB hδ hgap hEq
+        (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hkpos C)
+      simpa only [N, FanDominantIdealFamily.kyFan_gauge] using hraw.2
 
 /-- `ℝ` satisfies the estimate, by the complexification descent. -/
 instance hasUnboundedSylvesterKyFan_real :

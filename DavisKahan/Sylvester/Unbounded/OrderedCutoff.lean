@@ -345,13 +345,16 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     boundedInverseData_of_coercive_direct hρδ hA1coer
   have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
     sylvester_shift_invariant AF BF Xc Cc m hEqCut
+  let N := FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk
+  have : N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+    inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse
-    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
+    (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
     hA1inv B1 hρ hδ hA1invNorm hB1norm hEqShift
-      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
+      (FanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
   simp only [FanDominantIdealFamily.toSymmetric_gaugeReal] at hmain
-  rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
-    KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
+  rw [FanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
+    FanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- The opposite ordered orientation, obtained by adjointing and swapping the
@@ -445,18 +448,21 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     boundedInverseData_of_coercive_direct hρδ hB1coer
   have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
     sylvester_shift_invariant AF BF Xc Cc m hEqCut
+  let N := FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk
+  have : N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+    inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse_swapped
-    (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
+    (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
     hB1inv A1 hρ hδ hB1invNorm hA1norm hEqShift
-      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
+      (FanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
   simp only [FanDominantIdealFamily.toSymmetric_gaugeReal] at hmain
-  rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
-    KyFanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
+  rw [FanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
+    FanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- Ideal membership of the Sylvester solution from ordered cutoff estimates. -/
 theorem unbounded_sylvester_mem_of_semibounded_direct
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     {A : E →ₗ.[𝕜] E}
     {B : F →ₗ.[𝕜] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)

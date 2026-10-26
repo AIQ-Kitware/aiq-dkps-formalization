@@ -1007,7 +1007,7 @@ That is why this façade could not simply reuse the shape of the
 `SymmetricNormingFunction` theorem above.  `SymmetricNormingFunction` carries no
 scalar parameter, so its `gauge` may be applied at each operand's own field and a
 real residual sits happily beside a complex corner.  `NormalizedUnitaryInvariantNorm 𝕜`
-extends `KyFanDominantIdealFamily 𝕜`, which is indexed by one field; a single
+stores a `FanDominantIdealFamily 𝕜`, which is indexed by one field; a single
 source norm therefore cannot straddle the two, and the honest fix is to state
 both sides at `ℂ`.
 

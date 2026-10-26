@@ -339,7 +339,7 @@
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
       "section_two_endpoint": "none",
-      "canonical_status_reason": "Not the full-source endpoint: it is stated for a Fan-dominant `KyFanDominantIdealFamily` rather than the paper's `SymmetricNormingFunction`."
+      "canonical_status_reason": "Not the full-source endpoint: it is stated for a `FanDominantIdealFamily` (no ideal-completeness hypothesis) rather than the paper's `SymmetricNormingFunction`."
     },
     {
       "old_name": "sinTheta_headline",

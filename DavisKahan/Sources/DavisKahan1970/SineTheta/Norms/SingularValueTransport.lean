@@ -256,7 +256,7 @@ section IdealGauge
 
 /-! ### Gauge transport
 
-A `KyFanDominantIdealFamily` assigns a gauge to rectangular operators
+A `FanDominantIdealFamily` assigns a gauge to rectangular operators
 between Hilbert spaces drawn from a *single* universe: that is how a family
 closed under adjoints has to quantify its fields, and it is not an incidental
 restriction.  A two-universe variant would be a strictly weaker
@@ -276,7 +276,7 @@ variable {G H : Type vS}
 /-- Transport ideal membership and exact gauge equality along complete
 singular-value equality. -/
 theorem mem_and_gauge_eq
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     {A B : G →L[𝕜] H}
     (h : SameApproximationSingularValues A B)
     (hB : N.Mem B) :
@@ -297,7 +297,7 @@ theorem mem_and_gauge_eq
 /-- Transfer a sharp scalar gauge estimate to any operator with the same
 complete singular-value sequence. -/
 theorem mem_and_mul_gauge_le
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     {A B C : G →L[𝕜] H} {c : ℝ}
     (h : SameApproximationSingularValues A B)
     (hB : N.Mem B)
@@ -364,7 +364,7 @@ theorem mem_and_gauge_eq
     {G H : Type vS}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     {canonical : G →L[𝕜] H}
     (S : SinThetaRepresentative canonical)
     (hcanonical : N.Mem canonical) :

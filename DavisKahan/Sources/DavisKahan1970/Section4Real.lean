@@ -50,8 +50,8 @@ the complex one read through an equality of approximation numbers.
 
 ## The ideal family is real
 
-Corollary 4.1 is stated here over a **real** `KyFanDominantIdealFamily`, not by
-transporting a complex one.  That is deliberate: `KyFanDominantIdealFamily` is
+Corollary 4.1 is stated here over a **real** `FanDominantIdealFamily`, not by
+transporting a complex one.  That is deliberate: `FanDominantIdealFamily` is
 `RCLike`-generic but carries no gauge-complexification law, so a complex family's
 gauge cannot be read on real operators.  Nothing needs it to be: the certificate
 `RestrictedDisplacementApproximationDominance` and the bridge
@@ -578,7 +578,7 @@ For every Ky-Fan-dominant symmetric ideal family of operators on real Hilbert
 spaces, the real direct rotation's restricted displacement lies in the ideal and
 its gauge is least among all orthogonal `W` carrying `U` onto `V`.  Membership is
 concluded. -/
-theorem corollary4_1_real (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+theorem corollary4_1_real (N : FanDominantIdealFamily (𝕜 := ℝ))
     (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W)
@@ -1390,7 +1390,7 @@ The family is real, not a transported complex one, for the reason given in the
 module docstring.  The promotion consumes Ky Fan prefix sums only: the
 individual approximation numbers are *not* dominated, which is what the
 repository's refutation of Proposition 4.4 records. -/
-theorem proposition4_3_real_idealGauge (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+theorem proposition4_3_real_idealGauge (N : FanDominantIdealFamily (𝕜 := ℝ))
     (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W)

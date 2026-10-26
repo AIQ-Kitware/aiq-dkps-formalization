@@ -947,3 +947,32 @@ The full comparator signature preflight passed for all 42 implemented targets
 on universe signatures and full types; the three declared absent solutions
 remain skipped. This records signature validation rather than an external
 comparator run or a full-paper completion claim.
+
+### October 25: complete-family aggregate retirement and weaker hypotheses
+
+`KyFanDominantIdealFamily`, its completeness field and its coercion are deleted,
+without a replacement alias. Its four existing factories/accessors now belong
+to `FanDominantIdealFamily`, and consumers use that owner. The remaining
+dominance record is still a representation obligation; the native
+`OperatorIdealFamily.IsKyFanDominant` carrier migration is not claimed complete.
+
+The interval-gap proof obtains completeness from native finite Ky Fan carriers
+inside the analytic kernel and transfers the result to an arbitrary Fan-dominant
+family by majorization. Generic Sylvester and angle endpoints therefore no
+longer carry ideal completeness as a hypothesis. Unused completeness assumptions
+on the geometric transport lemmas are removed; the actual completeness
+requirements of analytic kernels are retained. Complete symmetric-family
+theorems without Fan dominance remain available at their original scope.
+
+Norm-independent data records remain separate from analytic completeness. The
+where-defined normalized source norm class is preserved. The source norm-class
+readings, Section 2 variant index/naming record, Theorem 6.3 clause mapping,
+extraction manifest and namespace map reflect the actual declarations. Historical
+notes and the source-result denominator are not rewritten into new obligations.
+
+Focused core and capstone builds passed (7,076 and 7,082 jobs), after cache
+fetches; full-project validation follows. No paper, visualization or original
+untracked file is changed. The next required carrier change is to replace the
+remaining Fan-dominance bundle and its real-prefix field by accepted native
+family properties, migrate its concrete factories to native constructors, and
+remove the remaining conversion views without losing the newly weaker scope.

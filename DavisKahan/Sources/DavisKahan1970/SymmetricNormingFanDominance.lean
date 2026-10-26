@@ -24,7 +24,7 @@ open TauCeti.DavisKahan.Sylvester
 # Reading the ideal-gauge results at the paper's own unitarily invariant norm
 
 Several results Davis and Kahan state "for every unitary-invariant norm" are
-proved here at an arbitrary `KyFanDominantIdealFamily`, and stated source-facing
+proved here at an arbitrary `FanDominantIdealFamily`, and stated source-facing
 at an arbitrary `SymmetricNormingFunction`.  The two are different Lean objects,
 and a reviewer comparing a Lean statement with the paper is entitled to ask which
 one is the printed quantifier.
@@ -113,10 +113,10 @@ theorem symmetricNorming_of_kyFanDominant
   · rw [kyFanApproximationGauge, kyFanApproximationGauge,
       ContinuousLinearMap.kyFanGaugeReal_zero_index,
       ContinuousLinearMap.kyFanGaugeReal_zero_index, mul_zero]
-  · have hM := h (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk)
-      (KyFanDominantIdealFamily.kyFan_mem k hk Y)
-    rw [KyFanDominantIdealFamily.kyFan_gauge,
-      KyFanDominantIdealFamily.kyFan_gauge] at hM
+  · have hM := h (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk)
+      (FanDominantIdealFamily.kyFan_mem k hk Y)
+    rw [FanDominantIdealFamily.kyFan_gauge,
+      FanDominantIdealFamily.kyFan_gauge] at hM
     exact hM.2
 
 /-- **The converse bridge: a source-norm estimate holds at every Fan-dominant
@@ -244,7 +244,7 @@ class -- and the arbitrary-Hilbert `SymmetricNormingFunction` theorem above it i
 retained as a registered generalization.
 
 These are one step shorter than the Section 2 façades.  The theorems here were
-already proved from `KyFanDominantIdealFamily` statements, so a source norm
+already proved from `FanDominantIdealFamily` statements, so a source norm
 reaches them by its own projection rather than through the Fan-dominance bridge;
 `normalizedUnitaryInvariant_toKyFanDominant` is that projection, and it is the
 statement that the source class sits inside the Fan-dominant one. -/
@@ -552,7 +552,7 @@ formalized: an estimate established for every `SymmetricNormingFunction` holds
 for every normalized unitarily invariant norm.
 
 The route is exactly the one the paper announces at (1.11)-(1.13).  A source norm
-is Fan dominant by construction, so it is a `KyFanDominantIdealFamily`; and
+is Fan dominant by construction, so it is a `FanDominantIdealFamily`; and
 `kyFanDominant_of_symmetricNorming` transports an estimate across that class by
 instantiating at the Ky Fan gauges.  Nothing analytic is rebuilt here.
 

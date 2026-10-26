@@ -81,8 +81,8 @@ structure NormalizedUnitaryInvariantNorm (𝕜 : Type u) [RCLike 𝕜] where
   **Completeness is deliberately not here.**  It is a property of the ideal that
   the analytic development needs and that Gohberg--Krein prove about the closed
   class; Davis and Kahan do not print it, so it must not restrict the
-  source-facing quantifier.  It lives one layer up, on
-  `KyFanDominantIdealFamily`. -/
+  source-facing quantifier. Analytic endpoints request native
+  `OperatorIdealFamily.IsComplete` separately. -/
   toFanDominantIdealFamily : FanDominantIdealFamily.{u, v} 𝕜
   /-- **The source normalization.**  A rank-one operator of norm one has norm
   one -- the Lean spelling of `‖u v*‖ = ‖u‖ ‖v‖` after scaling both vectors to

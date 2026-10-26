@@ -226,7 +226,7 @@ end Proposition41VectorForm
 section ExactCompactNonacute
 
 open scoped InnerProductSpace
-open DavisKahan.ExactSinTheta (KyFanDominantIdealFamily)
+open DavisKahan.ExactSinTheta (FanDominantIdealFamily)
 
 universe v
 
@@ -374,7 +374,7 @@ end ExactCompactNonacute
 
 section Corollary4_1Infinite
 
-open DavisKahan.ExactSinTheta (KyFanDominantIdealFamily)
+open DavisKahan.ExactSinTheta (FanDominantIdealFamily)
 
 universe v
 
@@ -385,7 +385,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 Approximation-number minimality of a chosen direct rotation promotes to every
 Ky-Fan-dominant unitarily invariant ideal gauge. -/
 theorem corollary4_1_infiniteDimensional_nonacute
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
@@ -408,7 +408,7 @@ ideal gauge.  Membership in the ideal is concluded rather than assumed, matching
 `corollary4_1_real`; `corollary4_1_infiniteDimensional_nonacute` carries the same
 statement at the matched-crossed-defect scope the paper inherits from Corollary 3.1. -/
 theorem corollary4_1_infiniteDimensional
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : DavisKahan.IsUniformlyAcute U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
@@ -510,7 +510,7 @@ section IdealGauge
 
 open DavisKahan (IsUniformlyAcute)
 open DavisKahan (spectraDirectRotation)
-open DavisKahan.ExactSinTheta (KyFanDominantIdealFamily)
+open DavisKahan.ExactSinTheta (FanDominantIdealFamily)
 
 universe v
 
@@ -531,7 +531,7 @@ This is `proposition4_3_infiniteDimensional` promoted through
 Ky Fan prefix sums only: no pointwise approximation-number domination is claimed
 here, and none is true. -/
 theorem proposition4_3_infiniteDimensional_idealGauge
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))

@@ -118,7 +118,7 @@ noncomputable def unboundedSinThetaDataOfRealSpectralSubspace
 inputs.  The real spectral projection, complementary self-adjoint restriction,
 and all exact-space bookkeeping are constructed internally. -/
 theorem sinTheta_unbounded_real_spectralSubspace
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E)
     (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →ₗ.[ℝ] F)
@@ -160,7 +160,7 @@ inputs.  It retains the sharp lower-frame factor and the exact directed sine
 operator while constructing the complementary spectral restriction
 internally. -/
 theorem generalizedSinTheta_unbounded_real_spectralSubspace
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     (A : E →ₗ.[ℝ] E)
     (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →ₗ.[ℝ] F)

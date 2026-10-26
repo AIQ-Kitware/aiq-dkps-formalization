@@ -92,7 +92,7 @@ sharp directed residual `sin 2Theta_0` estimate needs it at this stage.
 The complex mirror of `sinTheta_addBounded_gauge_real_block`, and the full-gap
 counterpart of `sinTheta_addBounded_gauge_block_of_spectrum_gap`. -/
 theorem sinTheta_addBounded_gauge_complex_block_of_formGap
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (V : H →L[ℂ] H) (hV : V.IsSymmetric)
     (A₀ : F →ₗ.[ℂ] F) (hA₀ : IsSelfAdjoint A₀)
@@ -141,7 +141,7 @@ source's separation configurations are covered, the two half-infinite ones
 included.  `sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap` is the
 same estimate under the bounded-interval hypotheses. -/
 theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -292,7 +292,7 @@ space, reflection-residual form, at the full form-bounded Sylvester gap.**  The
 block form above with the block contracted back to the whole reflection
 residual. -/
 theorem sinTwoTheta_reflectionResidual_gauge_of_formGap
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -350,7 +350,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U)
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (R : H →L[ℂ] H) (hR : R.IsSymmetric)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -508,7 +508,7 @@ space, bounded-perturbation form, at the full form-bounded Sylvester gap**:
 The full-gap counterpart of `sinTwoTheta_addBounded_gauge_of_spectrum_gap`, and
 the complex mirror of `sinTwoTheta_addBounded_gauge_real`. -/
 theorem sinTwoTheta_addBounded_gauge_of_formGap
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (Eop : H →L[ℂ] H) (hEop : Eop.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)

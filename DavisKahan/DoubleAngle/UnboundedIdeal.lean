@@ -72,7 +72,6 @@ complementary block be read either through `Uᗮ.map J_V` or through
 presentation. -/
 theorem projectionProduct_mem_and_gauge_le_isometric
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
-    [N.toOperatorIdealFamily.IsComplete]
     (U W : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     [CompleteSpace U]
@@ -128,7 +127,6 @@ theorem projectionProduct_mem_and_gauge_le_isometric
 product in every rectangular symmetric ideal family. -/
 theorem projectionProduct_mem_and_gauge_le_overlap
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
-    [N.toOperatorIdealFamily.IsComplete]
     (U W : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     [CompleteSpace U] [CompleteSpace W]
@@ -146,7 +144,6 @@ theorem projectionProduct_mem_and_gauge_le_overlap
 ideal containing the perturbation, with gauge cost at most two. -/
 theorem reflectionPerturbation_mem_and_gauge_le
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
-    [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
     (E : H →L[𝕜] H) (hEmem : N.Mem E) :
     N.Mem (reflectionPerturbation V E) ∧
@@ -556,7 +553,7 @@ theorem sinTwoTheta_addBounded_gauge_of_intervalExterior
 /-- Source-facing unitary-invariant-family wrapper for the spectrum-gap ideal
 form. -/
 theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -578,14 +575,33 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
         2 * N.gauge E := by
-  exact sinTwoTheta_addBounded_gauge_of_spectrum_gap
-    N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
-      hβα hδ hBlow hBhigh hBcomplSpec hEmem
+  let T := sinTwoThetaIdealBlock
+    (selfAdjointSpectralSubspace A hA B hB)
+    (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
+      (addBounded_isSelfAdjoint A hA E hE) S hS)
+  have hprefix : ∀ k, (δ / 2) * kyFanApproximationGauge k T ≤
+      kyFanApproximationGauge k E := by
+    intro k
+    rcases Nat.eq_zero_or_pos k with rfl | hk
+    · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    let M := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+    have : M.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+      inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
+    have hmain := sinTwoTheta_addBounded_gauge_of_spectrum_gap
+      M.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
+      hβα hδ hBlow hBhigh hBcomplSpec (FanDominantIdealFamily.kyFan_mem k hk E)
+    have hbound : δ * kyFanApproximationGauge k T ≤ 2 * kyFanApproximationGauge k E := by
+      simpa only [FanDominantIdealFamily.toSymmetric_gaugeReal, M,
+        FanDominantIdealFamily.kyFan_gauge, T] using hmain.2
+    linarith
+  obtain ⟨hT, hbound⟩ :=
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N (half_pos hδ) hEmem hprefix
+  exact ⟨hT, by linarith⟩
 
 /-- Source-facing unitary-invariant-family wrapper for the set-localized ideal
 form. -/
 theorem sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -602,9 +618,13 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
         2 * N.gauge E := by
-  exact sinTwoTheta_addBounded_gauge_of_intervalExterior
-    N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
-      hβα hδ hBsub hBcomplDisj hEmem
+  obtain ⟨hBlow, hBhigh⟩ :=
+    selfAdjointSpectralRestriction_semibounded_of_subset_Icc A hA B hB hBsub
+  have hBcomplSpec :=
+    selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
+      A hA Bᶜ hB.compl hBcomplDisj
+  exact sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
+    N A hA E hE B S hB hS hβα hδ hBlow hBhigh hBcomplSpec hEmem
 
 /-- Residual reflection form of the unbounded sine-two-theta theorem, operator norm.  The
 bounded operator `R` is required to implement reflection of `A` on its full domain.

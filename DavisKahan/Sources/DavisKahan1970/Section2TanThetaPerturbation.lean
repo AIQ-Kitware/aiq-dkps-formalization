@@ -144,7 +144,7 @@ unitarily invariant ideal gauge:
 No rank comparison between `Z` and `V`, no assumed tangent representative, and
 an arbitrary complete complex Hilbert space. -/
 theorem theorem6_3_perturbation_equalRank
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (T E : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
@@ -159,7 +159,7 @@ theorem theorem6_3_perturbation_equalRank
       delta * N.gauge (theorem63DirectedTangent Z V) ≤
         N.gauge (E ∘L Z.subtypeL) := by
   have : CompleteSpace Z := FiniteDimensional.complete ℂ Z
-  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hdelta
+  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta
     hEmem ?_
   intro k
   refine le_trans
@@ -180,7 +180,7 @@ the perturbation companion of the equal-dimensional infinite/noncompact residual
 `TanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`; the bridge is the same one
 line of algebra as in the finite case. -/
 theorem theorem6_3_perturbation_infiniteTrial
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (T E : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [CompleteSpace Z]
@@ -200,7 +200,7 @@ theorem theorem6_3_perturbation_infiniteTrial
       (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial T V Z hT hV
         hdelta hCompressionUpper hUnwantedLower n)
   refine ⟨tanTheta0, htan, ?_⟩
-  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hdelta hEmem fun k => ?_
+  refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hEmem fun k => ?_
   have hKyTan : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (approximationSingularValue n (theorem63DirectedSineBlock Z V))) := by

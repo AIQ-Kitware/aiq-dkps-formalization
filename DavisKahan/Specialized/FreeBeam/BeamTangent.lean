@@ -269,12 +269,12 @@ theorem beamTanTheta_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     exact beamPerturbed_specProjection_Ioo_eq_zero ε hε.le
   -- the operator norm, read as the first Ky Fan gauge
   have hmain := theorem6_3_unbounded_ideal_directedTangent
-    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
+    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
     (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) (beamTrialBlock ε) hδ hgap
     (beamTrialBlock_compression_form_le ε hε.le)
-    (KyFanDominantIdealFamily.kyFan_mem 1 one_pos _)
+    (FanDominantIdealFamily.kyFan_mem 1 one_pos _)
   have hgauge := hmain.2
-  rw [KyFanDominantIdealFamily.kyFan_gauge, KyFanDominantIdealFamily.kyFan_gauge,
+  rw [FanDominantIdealFamily.kyFan_gauge, FanDominantIdealFamily.kyFan_gauge,
     kyFanApproximationGauge_one, kyFanApproximationGauge_one] at hgauge
   have hchain : (500 - ritzHigh ε) * beamTanTheta ε
       ≤ orthogonalResidualSingularValue ε :=
@@ -322,7 +322,7 @@ noncomputable def beamTanThetaSum (ε : ℝ) : ℝ :=
 operator.**
 
 `tan θ₁ + tan θ₂` obeys the *same* exact envelope as `tan θ₁` alone.  The only two
-changes from `beamTanTheta_le` are the ideal gauge — `KyFanDominantIdealFamily.kyFan 2`
+changes from `beamTanTheta_le` are the ideal gauge — `FanDominantIdealFamily.kyFan 2`
 instead of `kyFan 1` — and the residual bound, which is `kyFanTwo_beamTrialBlock_residual_le`
 instead of the operator norm; the latter is available precisely because the recentered
 residual Gram matrix is rank one. -/
@@ -335,12 +335,12 @@ theorem beamTanThetaSum_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     rw [show ritzHigh ε + (500 - ritzHigh ε) = 500 from by ring]
     exact beamPerturbed_specProjection_Ioo_eq_zero ε hε.le
   have hmain := theorem6_3_unbounded_ideal_directedTangent
-    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 2 (by norm_num))
+    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) 2 (Nat.zero_lt_succ 1))
     (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) (beamTrialBlock ε) hδ hgap
     (beamTrialBlock_compression_form_le ε hε.le)
-    (KyFanDominantIdealFamily.kyFan_mem 2 (by norm_num) _)
+    (FanDominantIdealFamily.kyFan_mem 2 (Nat.zero_lt_succ 1) _)
   have hgauge := hmain.2
-  rw [KyFanDominantIdealFamily.kyFan_gauge, KyFanDominantIdealFamily.kyFan_gauge] at hgauge
+  rw [FanDominantIdealFamily.kyFan_gauge, FanDominantIdealFamily.kyFan_gauge] at hgauge
   have hchain : (500 - ritzHigh ε) * beamTanThetaSum ε
       ≤ orthogonalResidualSingularValue ε :=
     le_trans hgauge (kyFanTwo_beamTrialBlock_residual_le ε)
@@ -680,16 +680,16 @@ theorem beamColumn_tangent_le (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial)
     exact le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_Iic
       (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) y hy hydom
   have hmain := theorem6_3_unbounded_ideal_directedTangent_of_reducing
-    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
+    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
     (beamPerturbed ε) (beamColumnBlock ε v hv hvnorm a hform) (beamLowFiveHundred ε) hδ
     (orthogonal_selfAdjointSpectralSubspace_starProjection_mem_domain (beamPerturbed ε)
       (beamPerturbed_isSelfAdjoint ε) (Set.Iic 500) measurableSet_Iic)
     (selfAdjoint_apply_orthogonal_selfAdjointSpectralSubspace_starProjection
       (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) (Set.Iic 500) measurableSet_Iic)
     (beamColumnBlock_compression_form ε v hv hvnorm a hform) hUnwanted
-    (KyFanDominantIdealFamily.kyFan_mem 1 one_pos _)
+    (FanDominantIdealFamily.kyFan_mem 1 one_pos _)
   have hgauge := hmain.2
-  rw [KyFanDominantIdealFamily.kyFan_gauge, KyFanDominantIdealFamily.kyFan_gauge,
+  rw [FanDominantIdealFamily.kyFan_gauge, FanDominantIdealFamily.kyFan_gauge,
     kyFanApproximationGauge_one, kyFanApproximationGauge_one] at hgauge
   exact hgauge.trans (norm_beamColumnBlock_residual_le ε v hv hvnorm a hform hcol)
 

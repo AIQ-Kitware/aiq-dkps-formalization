@@ -21,7 +21,7 @@ open TauCeti.DavisKahan.Sylvester
 Theorem 6.3 is printed "for every unitarily invariant norm".  The repository's
 complex directed endpoints
 (`…TanTheta.theorem6_3_infiniteTrial_ideal` and its finite-trial
-siblings) are stated at `KyFanDominantIdealFamily (𝕜 := ℂ)`, while the real
+siblings) are stated at `FanDominantIdealFamily (𝕜 := ℂ)`, while the real
 endpoint `tanTheta_directed_bounded_symmetricNorming_real` is stated at the paper's own
 `SymmetricNormingFunction`.  This module supplies the missing complex half, so
 the two scalar fields carry the same norm abstraction.

@@ -209,12 +209,12 @@ theorem reflectionPerturbation_normingMem_and_gauge_le
     rcases Nat.eq_zero_or_pos k with rfl | hk
     · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have h := DavisKahan.reflectionPerturbation_mem_and_gauge_le
-        (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
-        V Eop (KyFanDominantIdealFamily.kyFan_mem k hk Eop)
+        (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
+        V Eop (FanDominantIdealFamily.kyFan_mem k hk Eop)
       rw [FanDominantIdealFamily.toSymmetric_gaugeReal,
         FanDominantIdealFamily.toSymmetric_gaugeReal,
-        KyFanDominantIdealFamily.kyFan_gauge,
-        KyFanDominantIdealFamily.kyFan_gauge] at h
+        FanDominantIdealFamily.kyFan_gauge,
+        FanDominantIdealFamily.kyFan_gauge] at h
       exact h.2
   obtain ⟨hmem, hle⟩ := N.mul_gauge_le_of_all_mul_kyFan_le one_pos hMem2 hkyFan
   refine ⟨hmem, ?_⟩

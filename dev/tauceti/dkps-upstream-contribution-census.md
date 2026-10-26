@@ -1201,3 +1201,61 @@ absent. This is build evidence, not a full-paper completion claim.
 The full comparator signature preflight also passed for all 42 implemented
 targets on universe signatures and full types; the three declared absent
 solutions remain skipped. No external comparator run is inferred.
+
+### October 25: retire the redundant complete-family aggregate
+
+The local `KyFanDominantIdealFamily` record, its stored `isComplete` field and
+its coercion to `FanDominantIdealFamily` are removed. There is no replacement
+type alias or conversion instance. The existing `operatorNorm`, `kyFan`,
+`kyFan_mem` and `kyFan_gauge` declarations now live in the remaining
+`FanDominantIdealFamily` namespace; consumers and the namespace map follow
+those actual owners. This does not claim that the remaining dominance record
+or its real-prefix field is canonical or retired.
+
+The comparison with native completeness exposed an unnecessary restriction in
+the analytic interfaces. The interval/exterior Sylvester proof now applies its
+complete symmetric-ideal kernel to each positive finite Ky Fan gauge, obtains
+that carrier's completeness from accepted
+`TauCeti.OperatorIdealFamily.kyFan_isComplete`, and transfers the prefix bounds
+by Fan dominance. The ordered branches already supply the required prefix
+bounds. Consequently `davisKahan1970_sylvester_of_spectrumGap`,
+`davisKahan1970_sylvester_complex`, and the real descent accept an arbitrary
+`FanDominantIdealFamily`, without an ideal-completeness hypothesis.
+
+The sine and double-angle consumers are migrated at that weaker scope. Pure
+residual, frame, projection-product, reflection and modulus transport lemmas
+also drop their unused ideal-completeness hypotheses. The modulus consequence
+uses the existing rectangular modulus-invariance theorem directly instead of
+constructing a complete square-ideal record. The finite-interval problem
+specializations use the stronger all-gap Fan-family theorem. The tangent-two
+companion reuses its sine bound and a private scaled inverse-cosine estimate;
+this remains the reflected-overlap companion, not a new identification with
+the functional-calculus tangent.
+
+The genuine completeness requirements remain on the bounded-inverse and
+integral analytic kernels. Their complete symmetric-family scope, including
+families without a Fan-dominance hypothesis, is preserved. Ambient Hilbert-space
+completeness, self-adjointness, domains, bounded residuals, gap alternatives,
+positive constants and quarter-acuteness assumptions are retained wherever
+required. No compactness or finite-rank assumption replaces the unrestricted
+operator scope: only the number of terms in the testing Ky Fan gauge is finite.
+
+Accepted `OperatorIdealFamily.IsComplete` is a property of native gauge carriers;
+it is not a separately accepted copy of the retired aggregate. The native Ky Fan
+completeness theorem covers complete `RCLike` inner-product sources and targets
+with independent universes. The source bundle's existing diagonal-universe
+scope is retained. Pre-retirement DKPS source is `8d72b6c98`, preserving its
+respective authorship and Kitware Apache-2.0 licensing. The accepted comparison
+uses unchanged Tau Ceti pin `efded067c28ffca3483fd731674eb13b42543fbb`; direct
+consumption does not establish historical proof descent or historical novelty.
+
+The current norm-class readings, Theorem 6.3 clause mapping and Section 2 variant
+metadata are updated by hand. The weaker normalized where-defined norm record
+is preserved: unconditional Fan dominance is not inferred from its partial
+comparison law. Historical review notes remain historical; the 29-result
+denominator and ledger-selected source aliases are unchanged.
+
+Focused builds passed for the Sylvester/normalization core (7,076 jobs) and the
+generalized sine/double-angle consumers (7,082 jobs), after their cache fetches.
+Full-project and explicit diagnostic validation are recorded after completion.
+Papers and visualizations are untouched.

@@ -70,7 +70,7 @@ inductive SpectralSylvesterGap
 /-- Source-facing Theorem 5.2 wrapper with spectral hypotheses in every
 branch. -/
 theorem davisKahan1970_sylvester_of_spectrumGap
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     {A : E →ₗ.[ℂ] E}
     {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -85,12 +85,30 @@ theorem davisKahan1970_sylvester_of_spectrumGap
   cases hgap with
   | intervalExterior hβα hgap =>
       rcases hgap with hgap | hgap
-      · exact unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
-          N.toSymmetricOperatorIdealFamily hA hB hβα hδ
-            hgap.1 hgap.2 hEq hC
-      · exact unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
-          N.toSymmetricOperatorIdealFamily hA hB hβα hδ
-            hgap.2 hgap.1 hEq hC
+      · apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC
+        intro k
+        rcases Nat.eq_zero_or_pos k with rfl | hk
+        · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+        let M := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+        have : M.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+          inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
+        have hbound := unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
+          M.toSymmetricOperatorIdealFamily hA hB hβα hδ
+          hgap.1 hgap.2 hEq (FanDominantIdealFamily.kyFan_mem k hk C)
+        simpa only [FanDominantIdealFamily.toSymmetric_gaugeReal, M,
+          FanDominantIdealFamily.kyFan_gauge] using hbound.2
+      · apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC
+        intro k
+        rcases Nat.eq_zero_or_pos k with rfl | hk
+        · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+        let M := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+        have : M.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+          inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
+        have hbound := unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
+          M.toSymmetricOperatorIdealFamily hA hB hβα hδ
+          hgap.2 hgap.1 hEq (FanDominantIdealFamily.kyFan_mem k hk C)
+        simpa only [FanDominantIdealFamily.toSymmetric_gaugeReal, M,
+          FanDominantIdealFamily.kyFan_gauge] using hbound.2
   | leftAboveRightBelow c hAspec hBspec =>
       exact OrderedSylvesterEngine.lowerUpper
         canonicalOrderedSylvesterEngine N hA hB hδ

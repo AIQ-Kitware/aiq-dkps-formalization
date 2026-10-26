@@ -529,7 +529,7 @@ constants: the tangent carries the factor `δ / 2` and is compared with the
 residual `B` itself, so no gauge of a scalar multiple of `B` is needed.  Ideal
 membership of the scaled tangent is concluded, not assumed. -/
 theorem mem_and_gauge_le_of_doubleAngleEigenbasis
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -544,7 +544,7 @@ theorem mem_and_gauge_le_of_doubleAngleEigenbasis
     N.Mem ((((b - a) / 2 : ℝ) : ℂ) • T) ∧
       N.gauge ((((b - a) / 2 : ℝ) : ℂ) • T) ≤ N.gauge B := by
   refine mem_and_gauge_le_of_all_kyFanApproximationGauge_le
-    N.toFanDominantIdealFamily hBmem fun k => ?_
+    N hBmem fun k => ?_
   rw [kyFanApproximationGauge_smul, Complex.norm_real, Real.norm_eq_abs,
     abs_of_nonneg (by linarith : (0 : ℝ) ≤ (b - a) / 2)]
   have h := gap_mul_kyFan_le_two_mul_kyFan_of_doubleAngleEigenbasis hred hB hZsa
@@ -1497,7 +1497,7 @@ unitarily invariant ideal gauge, on a compressed eigenbasis.**
 `δ N(tan 2Θ₀) ≤ 2 N(R)` in the repository's scaled form.  Ideal membership of
 the scaled tangent is concluded, not assumed. -/
 theorem mem_and_gauge_le_of_compressedDoubleAngleEigenbasis
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -1512,7 +1512,7 @@ theorem mem_and_gauge_le_of_compressedDoubleAngleEigenbasis
     N.Mem ((((b - a) / 2 : ℝ) : ℂ) • T) ∧
       N.gauge ((((b - a) / 2 : ℝ) : ℂ) • T) ≤ N.gauge B := by
   refine mem_and_gauge_le_of_all_kyFanApproximationGauge_le
-    N.toFanDominantIdealFamily hBmem fun k => ?_
+    N hBmem fun k => ?_
   rw [kyFanApproximationGauge_smul, Complex.norm_real, Real.norm_eq_abs,
     abs_of_nonneg (by linarith : (0 : ℝ) ≤ (b - a) / 2)]
   have h := gap_mul_kyFan_le_two_mul_kyFan_of_compressedDoubleAngleEigenbasis
@@ -1871,7 +1871,7 @@ unitarily invariant ideal gauge, on an invariant filtration.**
 of the scaled tangent concluded rather than assumed, and with the eigenbasis
 hypothesis replaced throughout by finite-dimensional `A`-invariance. -/
 theorem mem_and_gauge_le_of_invariantDoubleAngleFiltration
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -2405,7 +2405,7 @@ theorem gap_mul_kyFan_le_two_mul_kyFan_unboundedReflectionTangent
 tangent.  The same honest caveat as for the Ky Fan form applies: the surviving
 hypothesis is the attainment clause, not a hypothesis about `A` alone. -/
 theorem mem_and_gauge_le_unboundedReflectionTangent
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)

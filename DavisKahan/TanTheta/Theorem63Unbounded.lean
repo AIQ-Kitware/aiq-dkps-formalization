@@ -379,7 +379,7 @@ This is the Section 2 scope claim for the single-angle tangent family: the ambie
 operator is closed, unbounded and self-adjoint, and nothing in the statement or the proof
 requires it to be bounded. -/
 theorem theorem6_3_unbounded_ideal
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
@@ -406,7 +406,7 @@ right singular basis of the directed sine block, with entries `tan (arcsin sᵢ)
 `sᵢ < 1` it needs is derived from the same spectral gap, not assumed.  So this carries no
 hypothesis the printed theorem does not. -/
 theorem theorem6_3_unbounded_ideal_directedTangent
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
@@ -462,7 +462,7 @@ The compression of `A` to `V` itself is unconstrained, exactly as in the source.
 conclusion is the paper's `δ ‖tan Θ₀‖ ≤ ‖R‖` for every Fan-dominant unitarily invariant
 ideal gauge. -/
 theorem theorem6_3_unbounded_ideal_of_reducing
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
@@ -491,7 +491,7 @@ representative `Theorem63FiniteSource` constructs, diagonal in the right singula
 the directed sine block, and the `sᵢ < 1` it needs is derived from the two form bounds
 rather than assumed. -/
 theorem theorem6_3_unbounded_ideal_directedTangent_of_reducing
-    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]

@@ -80,7 +80,7 @@ theorem theorem5_2_real_ordered_sourceAudit
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-    (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.DavisKahan.ExactSinTheta.FanDominantIdealFamily (𝕜 := ℝ))
     {A : E →ₗ.[ℝ] E}
     {B : F →ₗ.[ℝ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -163,7 +163,7 @@ Fan norm."
 Two Lean objects model that class in this development.  `SymmetricNormingFunction`
 is the Gohberg--Krein reading -- a dimension-coherent symmetric gauge, extended to
 infinite dimension as the supremum of its singular-value prefixes.
-`KyFanDominantIdealFamily` is the axiomatic reading -- a symmetric operator ideal
+`FanDominantIdealFamily` is the axiomatic reading -- a symmetric operator ideal
 family with Fan dominance as a field.  Neither exhausts the other as a *type*: the
 Calkin-augmented norm `T ↦ ‖T‖ + ‖π(T)‖` is a Fan-dominant unitarily invariant norm
 on `B(H)` that agrees with the operator norm on finite-rank operators, so no

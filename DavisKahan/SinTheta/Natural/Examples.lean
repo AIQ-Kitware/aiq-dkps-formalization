@@ -63,11 +63,11 @@ example
           (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X‖ ≤
       ‖Rop‖ := by
   have hmain := sinTheta_unbounded_spectralSubspace_of_spectrumGap
-    (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
+    (FanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
       A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
         rw [FanDominantIdealFamily.mem_iff]
-        simp [KyFanDominantIdealFamily.operatorNorm])
-  simpa only [KyFanDominantIdealFamily.operatorNorm,
+        simp [FanDominantIdealFamily.operatorNorm])
+  simpa only [FanDominantIdealFamily.operatorNorm,
     FanDominantIdealFamily.gauge_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
@@ -92,11 +92,11 @@ example
             (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X)
       ≤ kyFanApproximationGauge 2 Rop := by
   have hk : 0 < (2 : ℕ) := by omega
-  let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 2 hk
+  let N := FanDominantIdealFamily.kyFan (𝕜 := ℂ) 2 hk
   have hmain := sinTheta_unbounded_spectralSubspace_of_spectrumGap
     N A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap
-      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) 2 hk Rop)
-  simpa only [N, KyFanDominantIdealFamily.kyFan_gauge] using hmain.2
+      (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) 2 hk Rop)
+  simpa only [N, FanDominantIdealFamily.kyFan_gauge] using hmain.2
 
 end AbstractComplexUse
 
@@ -124,11 +124,11 @@ example
           (realSelfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X‖ ≤
       ‖Rop‖ := by
   have hmain := sinTheta_unbounded_real_spectralSubspace
-    (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
+    (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
       A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
         rw [FanDominantIdealFamily.mem_iff]
-        simp [KyFanDominantIdealFamily.operatorNorm])
-  simpa only [KyFanDominantIdealFamily.operatorNorm,
+        simp [FanDominantIdealFamily.operatorNorm])
+  simpa only [FanDominantIdealFamily.operatorNorm,
     FanDominantIdealFamily.gauge_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
@@ -164,11 +164,11 @@ example
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)) S hS).adjoint) ∘L X‖
       ≤ ‖generalResidual A X A0‖ := by
   have hmain := sinTheta_bounded_spectralSubspace_of_spectrumGap
-    (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
+    (FanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
       A hA S hS A0 hA0 X hX hδ hgap (by
         rw [FanDominantIdealFamily.mem_iff]
-        simp [KyFanDominantIdealFamily.operatorNorm])
-  simpa only [KyFanDominantIdealFamily.operatorNorm,
+        simp [FanDominantIdealFamily.operatorNorm])
+  simpa only [FanDominantIdealFamily.operatorNorm,
     FanDominantIdealFamily.gauge_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
@@ -192,11 +192,11 @@ theorem realPlane_zeroResidual_model :
     let U : Submodule ℝ RealPlane := ⊤
     let X : RealPlane →L[ℝ] RealPlane := ContinuousLinearMap.id ℝ RealPlane
     let Rop : RealPlane →L[ℝ] RealPlane := 0
-    (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).Mem
+    (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).Mem
       ((ContinuousLinearMap.id ℝ RealPlane - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X) ∧
-      1 * (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).gauge
+      1 * (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).gauge
         ((ContinuousLinearMap.id ℝ RealPlane - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X)
-      ≤ (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).gauge Rop := by
+      ≤ (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).gauge Rop := by
   dsimp
   let A : RealPlane →ₗ.[ℝ] RealPlane :=
     ((0 : RealPlane →L[ℝ] RealPlane).toLinearMap.toPMap ⊤)
@@ -235,7 +235,7 @@ theorem realPlane_zeroResidual_model :
     exact FormBoundedSylvesterGap.trialBelow_complementAbove hA0upper
       (by simpa using hcompLower)
   apply sinTheta_unbounded_real_reducingSubspace
-    (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
+    (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
       A hA.dense_domain hA.isClosed hA U hred
       A0 hA0.dense_domain hA0.isClosed hA0
       (ContinuousLinearMap.id ℝ RealPlane) 0 (fun _ => rfl)

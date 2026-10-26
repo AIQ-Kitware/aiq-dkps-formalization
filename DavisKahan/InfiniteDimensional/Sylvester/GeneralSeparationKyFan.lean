@@ -210,7 +210,7 @@ A thin corollary of the finite Ky Fan theorem above, which is the only analytic 
 the family's own dominance axiom reconstructs the ideal statement from all of the finite
 gauges.  Membership of `X` is concluded rather than assumed. -/
 theorem idealGauge_sylvester_le_of_generalSeparation_real
-    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (N : FanDominantIdealFamily (𝕜 := ℝ))
     {A : Fr →L[ℝ] Fr} {B : Er →L[ℝ] Er}
     {X C : Er →L[ℝ] Fr}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
@@ -228,7 +228,7 @@ theorem idealGauge_sylvester_le_of_generalSeparation_real
     rw [kyFanApproximationGauge_smul, Real.norm_eq_abs, abs_of_pos hc]
     exact kyFan_sylvester_le_of_generalSeparation_real hA hB hd hsep hEq k
   obtain ⟨hX, hg⟩ :=
-    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hd hCscaled hfan
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hd hCscaled hfan
   refine ⟨hX, ?_⟩
   have hhom : N.gauge ((Real.pi / 2 : ℝ) • C) = (Real.pi / 2) * N.gauge C := by
     have h := N.toSymmetricOperatorIdealFamily.gaugeReal_smul (Real.pi / 2 : ℝ) hC

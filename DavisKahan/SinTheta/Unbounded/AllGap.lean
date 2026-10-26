@@ -45,7 +45,7 @@ variable {E F G H : Type v}
 /-- Generalized complementary-block theorem with a spectral all-gap
 hypothesis. -/
 theorem generalizedSinTheta_unbounded_of_spectrumGap
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -78,7 +78,7 @@ theorem generalizedSinTheta_unbounded_of_spectrumGap
 
 /-- Exact directed-angle form of the spectral all-gap generalized theorem. -/
 theorem generalizedSinTheta_unbounded_exact_of_spectrumGap
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -106,7 +106,7 @@ theorem generalizedSinTheta_unbounded_exact_of_spectrumGap
 
 /-- Exact isometric specialization of the spectral all-gap theorem. -/
 theorem sinTheta_unbounded_exact_of_spectrumGap
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)

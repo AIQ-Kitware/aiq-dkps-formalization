@@ -57,7 +57,7 @@ variable {E F G H : Type v}
 Ky-Fan-dominant ideal-family layer.  This is the reusable engine behind the
 paper-facing theorem below. -/
 theorem sinTheta_unbounded_formGap_idealFamily_rclike
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (F₀ : H →L[𝕜] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -80,7 +80,7 @@ theorem sinTheta_unbounded_formGap_idealFamily_rclike
       N.Mem (D.X.adjoint ∘L D.F₁) ∧
         δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
           N.gauge (-(D.residual.adjoint ∘L D.F₁)) := by
-    apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hδ hC.1
+    apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC.1
     intro k
     exact unbounded_sylvester_kyFan hA₀ hΛ₁ hδ hgap hEq k
   have hC' :
@@ -103,7 +103,7 @@ Unlike `sinTheta_unbounded_formGap_idealFamily_rclike`, this stops before conver
 rectangular Sylvester block into the ambient directed sine.  The double-angle reflection
 argument needs exactly this sharper intermediate form. -/
 theorem sinTheta_unbounded_formGap_idealFamily_block_rclike
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -123,7 +123,7 @@ theorem sinTheta_unbounded_formGap_idealFamily_block_rclike
         δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
           N.gauge (-(D.residual.adjoint ∘L D.F₁)) := by
     apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
-      N.toFanDominantIdealFamily hδ hC.1
+      N hδ hC.1
     intro k
     exact unbounded_sylvester_kyFan hA₀ hΛ₁ hδ hgap hEq k
   have hmem : N.Mem (D.residual.adjoint ∘L D.F₁) :=
@@ -138,7 +138,7 @@ This is the common real/complex engine formerly duplicated by
 `sinTheta_addBounded_gauge_complex_block_of_formGap` and
 `sinTheta_addBounded_gauge_real_block`. -/
 theorem sinTheta_addBounded_gauge_block_of_formGap_rclike
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     (A : E →ₗ.[𝕜] E) (hA : IsSelfAdjoint A)
     (Vop : E →L[𝕜] E) (hVop : Vop.IsSymmetric)
     (A₀ : F →ₗ.[𝕜] F) (hA₀ : IsSelfAdjoint A₀)
@@ -244,10 +244,10 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain := sinTheta_unbounded_formGap_idealFamily_rclike
-      (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hkpos)
+      (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hkpos)
       D F₀ hA hA₀ hΛ₁ hE₀ hExact hδ hgap
-      (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hkpos R)
-    simpa only [D, KyFanDominantIdealFamily.kyFan_gauge] using hmain.2
+      (FanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hkpos R)
+    simpa only [D, FanDominantIdealFamily.kyFan_gauge] using hmain.2
 
 /-- **Davis--Kahan 1970, Section 2 `sin Theta` theorem, scalar-generic
 paper-facing form.**

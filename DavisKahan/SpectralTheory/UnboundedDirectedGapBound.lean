@@ -91,14 +91,14 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
     rw [TauCeti.LinearPMap.coe_reducingRestriction_apply A P hPred (x : P) hxA]
     abel
   have key := DavisKahan.ExactSinTheta.sinTheta_unbounded_complex_reducingSubspace
-    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
+    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
     (TauCeti.LinearPMap.addBounded A Hop) hB.dense_domain hB.isClosed hB Q hQred
     (TauCeti.LinearPMap.reducingRestriction A P hPred)
     hA0.dense_domain hA0.isClosed hA0
     (P.subtypeL : P →L[ℂ] Hc) (Hop ∘L (P.subtypeL : P →L[ℂ] Hc)) hX hXdom hReq hδ hgap
-    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) 1 one_pos _)
+    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) 1 one_pos _)
   obtain ⟨-, hle⟩ := key
-  rw [KyFanDominantIdealFamily.kyFan_gauge, KyFanDominantIdealFamily.kyFan_gauge,
+  rw [FanDominantIdealFamily.kyFan_gauge, FanDominantIdealFamily.kyFan_gauge,
     kyFanApproximationGauge_one, kyFanApproximationGauge_one] at hle
   have hblock : (ContinuousLinearMap.id ℂ Hc -
       Q.subtypeL ∘L ContinuousLinearMap.adjoint Q.subtypeL) = Qᗮ.starProjection := by

@@ -528,7 +528,7 @@ invariant configuration).  If the off-diagonal perturbation `H` belongs to
 the ideal, then so does every `tan 2Θ₀` representative, and
 `(b - a) · N(tan 2Θ₀) ≤ 2 · N(H)`. -/
 theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
@@ -554,7 +554,7 @@ theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariant
       hHUperp hTmem hTzero hUb hUa hinv hT1 tanTwoTheta0 htan k
     linarith
   obtain ⟨hmem, hgauge⟩ :=
-    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hδ hHmem hscaled
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hHmem hscaled
   exact ⟨hmem, by linarith⟩
 
 /-- Representative packaging of the branch-free Ky Fan root: any operator
@@ -616,7 +616,7 @@ hypothesis `approximationSingularValue 0 T < 1`; the perturbed invariant
 subspace may make angles arbitrarily close to `π/2` with the trial
 subspace. -/
 theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace
-    (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
+    (N : FanDominantIdealFamily (𝕜 := 𝕜))
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
@@ -640,7 +640,7 @@ theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invaria
       hA hH hAU hHU hHUperp hTmem hTzero hUb hUa hinv hab tanTwoTheta π htan k
     linarith
   obtain ⟨hmem, hgauge⟩ :=
-    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hδ hHmem hscaled
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hHmem hscaled
   exact ⟨hmem, by linarith⟩
 
 end Main

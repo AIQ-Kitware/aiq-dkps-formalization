@@ -58,19 +58,19 @@ theorem real_unbounded_sylvester_kyFan
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
-    let K := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos
+    let K := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos
     have hcomplex := davisKahan1970_sylvester_complex K
       (isSelfAdjoint_complexify hA)
       (isSelfAdjoint_complexify hB)
       hδ (unboundedSylvesterGap_complexify hgap)
       (closedSylvesterEquation_complexify hEq)
-      (KyFanDominantIdealFamily.kyFan_mem k hkpos
+      (FanDominantIdealFamily.kyFan_mem k hkpos
         (RealComplexification.complexify C))
     have hbound := hcomplex.2
     simp only [K] at hbound
-    rw [KyFanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos
+    rw [FanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos
       (RealComplexification.complexify X),
-      KyFanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos
+      FanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos
         (RealComplexification.complexify C)] at hbound
     simpa only [kyFanApproximationGauge_complexify] using hbound
 

@@ -121,16 +121,19 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
     refine ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
+  have : (FanDominantIdealFamily.kyFan (𝕜 := ℂ)
+      k hk).toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+    inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
-    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk).toSymmetricOperatorIdealFamily
+    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk).toSymmetricOperatorIdealFamily
     A hA ((-2 : ℂ) • trialOffDiagonalPart V M R) hDsa B hB V hβα hδ
     hBlow hBhigh hBcomplSpec (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
+    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
   rw [FanDominantIdealFamily.toSymmetric_gaugeReal,
     FanDominantIdealFamily.toSymmetric_gaugeReal,
-    KyFanDominantIdealFamily.kyFan_gauge,
-    KyFanDominantIdealFamily.kyFan_gauge] at hraw
+    FanDominantIdealFamily.kyFan_gauge,
+    FanDominantIdealFamily.kyFan_gauge] at hraw
   -- flip the block to the orientation of the doubling identity
   have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
@@ -289,13 +292,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
     norm_num
   have hraw := DavisKahan.sinTwoTheta_reflectionResidual_block_gauge_of_formGap
     A hA B hB
-    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk)
+    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk)
     ((-2 : ℂ) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
-  rw [KyFanDominantIdealFamily.kyFan_gauge,
-    KyFanDominantIdealFamily.kyFan_gauge] at hraw
+    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
+  rw [FanDominantIdealFamily.kyFan_gauge,
+    FanDominantIdealFamily.kyFan_gauge] at hraw
   have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
@@ -449,13 +452,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     norm_num
   have hraw := DavisKahan.sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
     hA hred
-    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk)
+    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk)
     ((-2 : ℂ) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
-  rw [KyFanDominantIdealFamily.kyFan_gauge,
-    KyFanDominantIdealFamily.kyFan_gauge] at hraw
+    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
+  rw [FanDominantIdealFamily.kyFan_gauge,
+    FanDominantIdealFamily.kyFan_gauge] at hraw
   have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num

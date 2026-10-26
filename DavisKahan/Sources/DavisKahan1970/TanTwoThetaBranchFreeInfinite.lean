@@ -496,7 +496,7 @@ every branch-free `tan 2Θ` representative, and
 neither the ambient space nor the trial subspace is assumed
 finite-dimensional. -/
 theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_invariantSubspace
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
@@ -520,7 +520,7 @@ theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_invariantSubspace
       hHUperp hTmem hTzero hUb hUa hinv hab tanTwoTheta π htan k
     linarith
   obtain ⟨hmem, hgauge⟩ :=
-    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N.toFanDominantIdealFamily hδ hHmem hscaled
+    mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hHmem hscaled
   exact ⟨hmem, by linarith⟩
 
 end Main

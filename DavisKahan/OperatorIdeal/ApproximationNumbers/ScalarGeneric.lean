@@ -23,17 +23,18 @@ scalar-specific implementations, avoiding the former real-proof import cycle.
 * `HasApproximationNumberStrongCutoff`:
   the two analytic capabilities, separated from `RCLike` because that class is
   open while these facts are established for `ℝ` and `ℂ`.
-* `KyFanDominantIdealFamily.kyFan`: the source norm package constructed from
-  Tau Ceti's accepted Ky Fan family, dominance, and completeness results.
-* `KyFanDominantIdealFamily`: a complete symmetric ideal family dominated by
+* `FanDominantIdealFamily.kyFan`: the source norm package constructed from
+  Tau Ceti's accepted Ky Fan family and dominance results.
+* `FanDominantIdealFamily`: a symmetric ideal family dominated by
   the finite Ky Fan gauges — the hypothesis of the infinite-dimensional
   Davis--Kahan estimates — together with its two instances, `operatorNorm` and
-  `kyFan k`.
+  `kyFan k`. Analytic kernels request completeness separately through native
+  `OperatorIdealFamily.IsComplete`; no additional completeness record is defined.
 
 ## The two gauges
 
 The gauge is *stored* canonically in `ℝ≥0∞`, where the ideal laws are
-unconditional, and *read* in `ℝ` through `KyFanDominantIdealFamily.gauge`,
+unconditional, and *read* in `ℝ` through `FanDominantIdealFamily.gauge`,
 because the Davis--Kahan estimates subtract gauges and finish with `linarith`.
 The bridge is `TauCeti.SymmetricOperatorIdealFamily.gaugeReal`; see the
 "ideal interface" section below.
@@ -160,7 +161,7 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto
       hPproj hP n K)
 
-/-- A **complete symmetric operator ideal family dominated by the finite Ky Fan
+/-- A **symmetric operator ideal family dominated by the finite Ky Fan
 gauges**: the ideal norm decreases whenever every finite Ky Fan gauge does.
 
 This is the hypothesis under which the infinite-dimensional Davis--Kahan
@@ -190,27 +191,6 @@ structure FanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜] where
       toSymmetricOperatorIdealFamily.gauge A ≤
         toSymmetricOperatorIdealFamily.gauge B
 
-/-- **The Fan-dominant family together with the ideal's completeness.**
-
-Completeness is a theorem of Gohberg--Krein about the *closed* class, not one of
-the properties Davis and Kahan print, and the analytic layer genuinely needs it:
-the limiting arguments in the `sin Θ` and `sin 2Θ` development ask for the ideal
-to be a Banach space.  It therefore sits here, above the source-facing norm
-quantifier, and not in `FanDominantIdealFamily`, which carries exactly the laws
-the paper states. -/
-structure KyFanDominantIdealFamily (𝕜 : Type u) [RCLike 𝕜]
-    extends FanDominantIdealFamily.{u, v} 𝕜 where
-  /-- The ideal is complete for its own norm. -/
-  isComplete : toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete
-
-attribute [instance] KyFanDominantIdealFamily.isComplete
-
-/-- A complete Fan-dominant family is in particular a Fan-dominant one; the
-coercion is what lets the existing call sites keep passing the stronger
-structure to statements that only need the weaker one. -/
-instance : CoeOut (KyFanDominantIdealFamily.{u, v} 𝕜) (FanDominantIdealFamily.{u, v} 𝕜) :=
-  ⟨KyFanDominantIdealFamily.toFanDominantIdealFamily⟩
-
 namespace FanDominantIdealFamily
 
 /-! ### The ideal interface
@@ -232,7 +212,7 @@ variable (N : FanDominantIdealFamily.{u, v} 𝕜)
 
 /-! Both accessors below read the **canonical** family directly.  They used to
 route through a view onto the historical rectangular record, which made every one
-of the ~28 modules that consume a `KyFanDominantIdealFamily` depend on the legacy
+of the ~28 modules that consume a `FanDominantIdealFamily` depend on the legacy
 structure definitionally, even though none of them mentions it.  That view defined
 exactly `Mem A := gauge A ≠ ∞` and `gauge A := (gauge A).toReal`, so going direct
 is definitionally the same term — `mem_iff` and `gauge_eq_toReal` below are still
@@ -270,7 +250,7 @@ whose supporting lemmas are stated over the historical record — the block lemm
 in `SinTheta/**` are the usual case — has to reconcile the two.
 
 **Reconcile by normalising the hypothesis upward, not the goal downward.**  The
-older idiom was `simp only [KyFanDominantIdealFamily.gauge]`, which unfolded the
+older idiom was `simp only [FanDominantIdealFamily.gauge]`, which unfolded the
 *goal* into whatever `gauge` was defined as.  That only ever worked by accident:
 it depended on `gauge` being defined through the historical record, so repointing
 the accessor at the canonical family broke thirteen proofs across eight files at
@@ -308,18 +288,15 @@ theorem majorization_mem_and_gauge_le {E' F' : Type v}
 
 end FanDominantIdealFamily
 
-namespace KyFanDominantIdealFamily
+namespace FanDominantIdealFamily
 
-variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
+variable (N : FanDominantIdealFamily.{u, v} 𝕜)
 
 /-- The ordinary operator norm with its finite-Ky-Fan dominance property. -/
 @[expose]
 noncomputable def operatorNorm :
-    KyFanDominantIdealFamily.{u, v} 𝕜 where
+    FanDominantIdealFamily.{u, v} 𝕜 where
   toSymmetricOperatorIdealFamily := TauCeti.SymmetricOperatorIdealFamily.opNorm 𝕜
-  isComplete := by
-    rw [SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
-    infer_instance
   gauge_le_of_forall_kyFanApproximationGauge_le := by
     intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hmajor
     have h : ‖A‖ ≤ ‖B‖ := by simpa using hmajor 1
@@ -334,13 +311,10 @@ at index `k` is the conclusion. -/
 @[expose]
 noncomputable def kyFan
     (k : ℕ) (hk : 0 < k) :
-    KyFanDominantIdealFamily.{u, v} 𝕜 where
+    FanDominantIdealFamily.{u, v} 𝕜 where
   toSymmetricOperatorIdealFamily :=
     { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
       gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }
-  isComplete := by
-    change (OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
-    infer_instance
   gauge_le_of_forall_kyFanApproximationGauge_le := by
     intro E F E' F' _ _ _ _ _ _ _ _ _ _ _ _ A B hmajor
     apply OperatorIdealFamily.gauge_le_of_forall_kyFanGauge_le
@@ -351,7 +325,7 @@ noncomputable def kyFan
 
 They used to be stated through the *derived view* instead, for a reason that has
 since expired: downstream `simpa only [N, kyFan_gauge]` calls arrived with goals
-already unfolded by `simp only [KyFanDominantIdealFamily.gauge]`, so an
+already unfolded by `simp only [FanDominantIdealFamily.gauge]`, so an
 accessor-shaped left-hand side would have stopped matching.  Those unfoldings are
 gone — the sites now normalise their hypotheses up to the accessor via
 `toSymmetric_gaugeReal` rather than unfolding the goal — so the
@@ -375,7 +349,7 @@ theorem kyFan_gauge
   rw [OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal]
   rfl
 
-end KyFanDominantIdealFamily
+end FanDominantIdealFamily
 
 /-- Infinite-dimensional Fan dominance, exposed from the stronger family. -/
 theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le

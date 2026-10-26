@@ -570,7 +570,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_complex
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain :=
       FormBoundedIsometricSinThetaProblem.result_complex
-        (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos)
+        (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos)
         { data :=
             { A := A, A₀ := A₀, Λ₁ := Λ₁, X := E₀, F₁ := F₁, residual := R
               X_maps_domain := htrial.mapsDomain
@@ -590,8 +590,8 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_complex
           gap := δ
           gap_pos := hδ
           spectral_gap := hgap
-          residual_mem := KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hkpos R }
-    simpa only [KyFanDominantIdealFamily.kyFan_gauge] using hmain.2
+          residual_mem := FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hkpos R }
+    simpa only [FanDominantIdealFamily.kyFan_gauge] using hmain.2
 
 /-- **Conformance: the complex endpoint is the scalar-generic one at `𝕜 = ℂ`.**
 
@@ -724,7 +724,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain :=
       FormBoundedIsometricSinThetaProblem.result_real
-        (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hkpos)
+        (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hkpos)
         { data :=
             { A := A, A₀ := A₀, Λ₁ := Λ₁, X := E₀, F₁ := F₁, residual := R
               X_maps_domain := htrial.mapsDomain
@@ -744,8 +744,8 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real
           gap := δ
           gap_pos := hδ
           spectral_gap := hgap
-          residual_mem := KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℝ) k hkpos R }
-    simpa only [KyFanDominantIdealFamily.kyFan_gauge] using hmain.2
+          residual_mem := FanDominantIdealFamily.kyFan_mem (𝕜 := ℝ) k hkpos R }
+    simpa only [FanDominantIdealFamily.kyFan_gauge] using hmain.2
 
 /-- **The familiar Section 2 interval form, over `ℝ`.**
 

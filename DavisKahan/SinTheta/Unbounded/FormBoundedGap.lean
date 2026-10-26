@@ -41,7 +41,7 @@ variable {E F G H : Type v}
 /-- Complex isometric complementary-block theorem routed through the direct
 manuscript-shaped Sylvester engine. -/
 theorem sinTheta_unbounded_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -69,7 +69,7 @@ The complex mirror of `sinTheta_unbounded_real_block`.  Both route the same
 block identity through their field's Sylvester engine; only the engine differs.
 -/
 theorem sinTheta_unbounded_complex_block
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -94,7 +94,7 @@ theorem sinTheta_unbounded_complex_block
 /-- Exact complex isometric theorem with the directed sine operator used by
 the manuscript surface. -/
 theorem sinTheta_unbounded_exact_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -122,7 +122,7 @@ theorem sinTheta_unbounded_exact_complex
 /-- Complex generalized complementary-block theorem for all three manuscript
 gap configurations. -/
 theorem generalizedSinTheta_unbounded_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -156,7 +156,7 @@ theorem generalizedSinTheta_unbounded_complex
 /-- Exact complex generalized theorem for all three manuscript gap
 configurations. -/
 theorem generalizedSinTheta_unbounded_exact_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (N : FanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
