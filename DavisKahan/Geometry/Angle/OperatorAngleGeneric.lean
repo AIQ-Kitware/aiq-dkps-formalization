@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 public import DavisKahan.SpectralTheory.ReflectionRestriction
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
@@ -721,17 +722,6 @@ theorem sinTwoAngleOperator_eq_modulus_starProjection_sub :
     rw [sinTwoAngleOperator_complex]
     exact directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub _ _
 
-/-- **An operator and its modulus have the same approximation numbers**, at an arbitrary
-`RCLike` field.
-
-`ContinuousLinearMap.modulus_hasSameApproximationNumbers` is stated over `ℂ` because the
-modulus needs a real functional calculus on the operator algebra; this file activates that
-calculus at every `RCLike` field, so the same one-line proof applies. -/
-theorem modulus_hasSameApproximationNumbers_rclike {F : Type v} [NormedAddCommGroup F]
-    [InnerProductSpace 𝕜 F] [CompleteSpace F] (T : E →L[𝕜] F) :
-    (ContinuousLinearMap.modulus T).SameSingularValues T :=
-  ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq _ _ T.norm_modulus_apply
-
 /-- The literal ambient sine and either orientation of the projector difference
 have the same complete approximation-number sequence.  This is a proof-facing
 transport lemma; `cfc_sin_angleOperator` is the stronger semantic identity that
@@ -741,7 +731,7 @@ theorem sinAngleOperator_hasSameApproximationNumbers_projectorDifference :
       (V.starProjection - U.starProjection) := by
   rw [sinAngleOperator]
   refine ContinuousLinearMap.sameSingularValues_trans
-    (modulus_hasSameApproximationNumbers_rclike (U.starProjection - V.starProjection)) ?_
+    (ContinuousLinearMap.sameSingularValues_modulus (U.starProjection - V.starProjection)) ?_
   have hneg : (V.starProjection - U.starProjection : E →L[𝕜] E) =
       -(U.starProjection - V.starProjection) := by abel
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
@@ -757,7 +747,7 @@ theorem sinTwoAngleOperator_hasSameApproximationNumbers :
     (sinTwoAngleOperator U V).SameSingularValues
       ((U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E)).starProjection - U.starProjection) := by
   rw [sinTwoAngleOperator_eq_modulus_starProjection_sub]
-  exact modulus_hasSameApproximationNumbers_rclike _
+  exact ContinuousLinearMap.sameSingularValues_modulus _
 
 end ReflectionForm
 
@@ -971,9 +961,9 @@ theorem directedSinTwoAngleOperator_hasSameApproximationNumbers_swap :
   apply NNReal.eq
   simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [hUV, hVU, ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-      (modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • star W)) n,
+      (ContinuousLinearMap.sameSingularValues_modulus ((2 : ℝ) • star W)) n,
     ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-      (modulus_hasSameApproximationNumbers_rclike ((2 : ℝ) • W)) n,
+      (ContinuousLinearMap.sameSingularValues_modulus ((2 : ℝ) • W)) n,
     show ((2 : ℝ) • star W) = ((2 : ℝ) • W).adjoint by
       rw [← ContinuousLinearMap.star_eq_adjoint, hstar2],
     ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,

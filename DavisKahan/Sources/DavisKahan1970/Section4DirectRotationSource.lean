@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 public import DavisKahan.Sources.DavisKahan1970.Section4Real
 public import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
@@ -76,7 +77,7 @@ theorem hasSameApproximationNumbers_displacement_of_isSourceDirectRotation
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[𝕜] DavisKahan.halmosTargetDefect U V) :
     ((1 - D) ∘L U.starProjection).SameSingularValues
       ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) :=
-  ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq _ _ fun _ =>
+  ContinuousLinearMap.sameSingularValues_of_forall_norm_apply_eq fun _ =>
     DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation U V hD J _
 
 /-- The full displacement's Gram operator does not depend on which Definition 3.1

@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.DoubleAngle.Unbounded
 public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
@@ -327,7 +328,7 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers :
       (isSelfAdjoint_starProjection U).star_eq,
       (isSelfAdjoint_starProjection (reflectedU U V)ᗮ).star_eq]
   have hmod := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+    (ContinuousLinearMap.sameSingularValues_modulus
       ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection)) n
   rw [show ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection).modulus
       = directedSinTwoAngleOperatorC U V from by

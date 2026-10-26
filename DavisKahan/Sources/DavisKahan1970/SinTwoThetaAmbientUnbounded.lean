@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.Proposition61
 public import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
 public import DavisKahan.Sources.DavisKahan1970.AmbientReal
@@ -790,7 +791,7 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
   obtain ⟨hiff, hgauge⟩ :=
     SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N
       (A := X.modulus) (B := X)
-      (ContinuousLinearMap.modulus_hasSameApproximationNumbers X)
+      (ContinuousLinearMap.sameSingularValues_modulus X)
   rw [TauCeti.DavisKahan.Angle.directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   exact ⟨hiff.mpr hmem, by rw [hgauge]; exact hle⟩
 
@@ -858,7 +859,7 @@ theorem sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
       complexify_comp, complexify_comp, complexify_reflectionOperator,
       starProjection_complexifySubmodule]
   rw [hleft, hright]
-  exact ContinuousLinearMap.modulus_hasSameApproximationNumbers _
+  exact ContinuousLinearMap.sameSingularValues_modulus _
 
 open DavisKahan DavisKahan.RealSpectralRestriction
   TauCeti.RealComplexification

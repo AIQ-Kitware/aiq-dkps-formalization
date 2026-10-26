@@ -840,7 +840,7 @@
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le": "TauCeti.DavisKahan.ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.mem_boundedPullbackDomain": "TauCeti.DavisKahan.ExactSinTheta.mem_boundedPullbackDomain",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.min_le_approximationNumber_continuousOrthogonalBlockSum": "TauCeti.DavisKahan.ExactSinTheta.min_le_approximationNumber_continuousOrthogonalBlockSum",
-  "TauCeti.DavisKahan.Experimental.ExactSinTheta.modulus_hasSameApproximationNumbers": "TauCeti.DavisKahan.ExactSinTheta.modulus_hasSameApproximationNumbers",
+  "TauCeti.DavisKahan.Experimental.ExactSinTheta.modulus_hasSameApproximationNumbers": "ContinuousLinearMap.sameSingularValues_modulus",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.modulus_mem_and_gauge_eq": "TauCeti.DavisKahan.ExactSinTheta.modulus_mem_and_gauge_eq",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.mul_subspaceGap_le_max_of_two_directedGap_le": "TauCeti.DavisKahan.ExactSinTheta.mul_subspaceGap_le_max_of_two_directedGap_le",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.mul_subspaceGap_le_of_two_directedGap_le": "TauCeti.DavisKahan.ExactSinTheta.mul_subspaceGap_le_of_two_directedGap_le",

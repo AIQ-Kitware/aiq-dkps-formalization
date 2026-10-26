@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
@@ -396,7 +397,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rcl
       (Angle.tanTwoAngleOperator U V) (Angle.absTanTwoAngleOperator U V) := by
     rw [Angle.absTanTwoAngleOperator_eq_modulus_tanTwoAngleOperator U V hdef]
     exact ContinuousLinearMap.sameSingularValues_symm
-      (Angle.modulus_hasSameApproximationNumbers_rclike (Angle.tanTwoAngleOperator U V))
+      (ContinuousLinearMap.sameSingularValues_modulus (Angle.tanTwoAngleOperator U V))
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hseq
   refine ⟨hdef, htransport.1.mpr habsMem, ?_⟩
   rw [htransport.2]

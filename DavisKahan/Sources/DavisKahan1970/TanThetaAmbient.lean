@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 public import DavisKahan.Geometry.Halmos.CrossedDefectGap
@@ -1164,7 +1165,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       kyFanApproximationGauge k (tanBlockRepresentative U V) := by
     rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
     exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+      (ContinuousLinearMap.sameSingularValues_modulus
       (tanBlockRepresentative U V)).kyFanGaugeReal_eq k)
   rw [hmodulus]
   exact hcombine.trans hpinch

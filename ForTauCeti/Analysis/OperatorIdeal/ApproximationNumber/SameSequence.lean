@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 module
 
-public import TauCeti.Analysis.InnerProductSpace.Modulus
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
@@ -50,7 +49,7 @@ carried the hypothesis, so this is a small generalisation.
   `approximationNumber` rather than its `approximationSingularValue` alias.
   The relation and its equivalence proofs have since been retired in favor of
   accepted `ContinuousLinearMap.SameSingularValues`; only the additional
-  norm, min--max comparison and modulus results remain local.
+  norm and incomplete-target min--max comparison results remain local.
 * Extraction motive: `DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean` — a
   *generic* module — imported the source-layer file above for these six declarations alone.
   That backwards dependency was the last obstacle recorded against extraction cluster 1b.
@@ -80,7 +79,7 @@ theorem SameSingularValues.norm_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[�
 
 /-! Equality of sequences and its equivalence laws are maintained by Tau Ceti's
 `ContinuousLinearMap.SameSingularValues`. Only the additional Hilbert-space
-comparison and modulus results remain here. -/
+comparison results remain here. -/
 
 section MinMax
 
@@ -130,22 +129,6 @@ theorem hasSameApproximationNumbers_of_norm_apply_eq
   exact le_antisymm
     (approximationNumber_le_of_norm_apply_le A B (fun x => (h x).le) n)
     (approximationNumber_le_of_norm_apply_le B A (fun x => (h x).ge) n)
-
-/-- **An operator and its modulus have the same approximation numbers.**  The modulus acts
-on the source while the operator maps into the target, so this is genuinely the
-heterogeneous relation.
-
-Stated over `ℂ`, unlike the two above: the modulus needs a real functional calculus on the
-operator algebra, which at an abstract `RCLike` field is available only under the local
-instances of `ForTauCeti/Analysis/InnerProductSpace/OperatorRealAlgebra.lean`.  The general
-statement is `TauCeti.DavisKahan.Angle.modulus_hasSameApproximationNumbers_rclike`, which
-activates them. -/
-theorem modulus_hasSameApproximationNumbers {Y' : Type w₁}
-    [NormedAddCommGroup Y'] [InnerProductSpace ℂ Y'] [CompleteSpace Y']
-    {X' : Type v₁} [NormedAddCommGroup X'] [InnerProductSpace ℂ X'] [CompleteSpace X']
-    (T : X' →L[ℂ] Y') :
-    T.modulus.SameSingularValues T :=
-  hasSameApproximationNumbers_of_norm_apply_eq _ _ T.norm_modulus_apply
 
 end MinMax
 

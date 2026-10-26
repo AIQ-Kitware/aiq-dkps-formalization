@@ -9,7 +9,7 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.All
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
-public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric

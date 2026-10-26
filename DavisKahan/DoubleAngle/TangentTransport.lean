@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.DoubleAngle.AngleTransport
 public import DavisKahan.DoubleAngle.DirectedAngleRealTransport
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
@@ -627,7 +628,7 @@ theorem sameApproximationSingularValues_unboundedReflectionTangent
   rw [ContinuousLinearMap.SameSingularValues.approximationNumber_eq h1 n,
     absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
   exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+    (ContinuousLinearMap.sameSingularValues_modulus
       (tanTwoBlockRepresentative U V)) n).symm
 
 /-- **The reflection tangent and the paper's `|tan 2Θ|` have the same gauge in

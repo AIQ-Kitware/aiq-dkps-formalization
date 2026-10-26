@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
@@ -653,7 +654,7 @@ theorem sourceDirectedSine_hasSameApproximationNumbers_directedSineBlock
       Vᗮ.starProjection ∘L Z.starProjection := by
     rw [show B = TanTheta.directedSineBlock Z V from rfl,
       TanTheta.directedSineBlock, ContinuousLinearMap.comp_assoc, hproj]
-  have hmod := modulus_hasSameApproximationNumbers_rclike
+  have hmod := ContinuousLinearMap.sameSingularValues_modulus
     (Vᗮ.starProjection ∘L Z.starProjection)
   have hzero := sameApproximationSingularValues_extendDomainByZero Z B
   rw [directedSinAngleOperator]

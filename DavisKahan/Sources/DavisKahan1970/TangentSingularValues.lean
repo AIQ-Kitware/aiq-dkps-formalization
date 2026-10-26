@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
@@ -100,7 +101,7 @@ theorem approximationNumber_sinAngleOperatorC (n : ℕ) :
       (V.starProjection - U.starProjection).approximationNumber n := by
   rw [sinAngleOperatorC,
     ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-      (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+      (ContinuousLinearMap.sameSingularValues_modulus
         (U.starProjection - V.starProjection)) n]
   have hneg : U.starProjection - V.starProjection =
       ((-1 : ℂ)) • (V.starProjection - U.starProjection) := by
@@ -207,7 +208,7 @@ theorem approximationNumber_sinTwoAngleOperatorC (n : ℕ) :
         U.starProjection).approximationNumber n := by
   rw [directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (ContinuousLinearMap.modulus_hasSameApproximationNumbers _) n
+    (ContinuousLinearMap.sameSingularValues_modulus _) n
 
 /-- **The ambient doubled tangent, read off the ambient double-angle sine.**
 

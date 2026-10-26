@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import DavisKahan.BoundedOperator.TrialResidual
@@ -290,7 +291,7 @@ theorem symmetric_sinTheta_spectrum_all_kyFan
     erw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
       (crossSineSum_same_projectionDiff U V).kyFanGaugeReal_eq k)]
     exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (modulus_hasSameApproximationNumbers
+      (ContinuousLinearMap.sameSingularValues_modulus
       (V.starProjection - U.starProjection)).kyFanGaugeReal_eq k)).symm
   rw [kyFanApproximationGauge_smul, hdnorm, hsine] at hcombine
   exact hcombine.trans hpinch

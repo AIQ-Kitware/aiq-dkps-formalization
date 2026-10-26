@@ -751,7 +751,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `DavisKahan/OperatorIdeal/ApproximationNumbers/RestrictedDisplacementDominance.lean` — 102 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/Real/KyFanGauge.lean` — 90 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean` — 67 lines · Lean source
-- [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/OperatorModulus.lean` — 57 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/Real.lean` — 17 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/ApproximationNumbers/All.lean` — 16 lines · Lean source
 - [x] `DavisKahan/OperatorIdeal/All.lean` — 13 lines · Lean source
@@ -1472,7 +1471,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/PrincipalAngles/Equisingular.lean` — 278 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/RealSpectrumDiagonalMeasure.lean` — 278 lines · Lean source
 - [x] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramSpectralRank.lean` — 278 lines · Lean source
-- [x] `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` — 270 lines · Lean source
 - [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFanBochner.lean` — 267 lines · Lean source
 - [ ] `ForTauCeti/Analysis/InnerProductSpace/OperatorUnitaryEquiv.lean` — 264 lines · Lean source
 - [ ] `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramSquare.lean` — 264 lines · Lean source

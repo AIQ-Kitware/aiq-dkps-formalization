@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 
@@ -123,13 +124,14 @@ variable {E : Type u} {F : Type v} {G : Type w}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
 
+omit [CompleteSpace E] in
 /-- An operator isometric on the range of `T` leaves the whole approximation-number
 sequence of `T` unchanged, hence the value of every unitarily invariant norm. -/
 theorem hasSameApproximationNumbers_comp_left_of_adjoint_comp_self_comp
     {J : F →L[ℂ] G} {T : E →L[ℂ] F}
     (h : J.adjoint ∘L J ∘L T = T) :
     (J ∘L T).SameSingularValues T :=
-  ContinuousLinearMap.hasSameApproximationNumbers_of_norm_apply_eq _ _
+  ContinuousLinearMap.sameSingularValues_of_forall_norm_apply_eq
     (norm_comp_left_apply_of_adjoint_comp_self_comp h)
 
 end Approximation

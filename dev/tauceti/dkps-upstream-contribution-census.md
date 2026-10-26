@@ -1492,3 +1492,32 @@ untouched. The native relation/gauge core and focused full-angle, generic
 double-angle and selected-branch consumer builds passed (6,712 and 7,646 jobs),
 each following its cache fetch. Full default validation will be recorded at
 the committed checkpoint.
+
+The native relation checkpoint is `db3ac636f`, committed immediately after the
+full default build passed (21,037 jobs; warnings treated as errors).
+
+### October 26: consume accepted modulus invariance
+
+`ContinuousLinearMap.modulus_hasSameApproximationNumbers`, the downstream
+`ExactSinTheta` wrapper and its entire `OperatorModulus` forwarding module,
+and `Angle.modulus_hasSameApproximationNumbers_rclike` are deleted. Maintained
+consumers import accepted `ApproximationNumber.Modulus` and apply
+`ContinuousLinearMap.sameSingularValues_modulus` directly over the original
+complex or generic `RCLike` field, with arbitrary Hilbert-space dimension and
+independent source/target universes. No old-name alias or forwarding theorem
+replaces any of these declarations.
+
+The complete-target equisingularity and direct-rotation consumers also use
+`sameSingularValues_of_forall_norm_apply_eq` directly. Its stronger source
+scope permits removing an unused source-completeness assumption in the
+former. The local complete-source comparisons with incomplete targets remain
+unchanged; upstream factorization needs complete targets, so they are not
+claimed duplicated. The native factorization proof and the former local
+min--max proof are distinct routes; historical proof descent is not inferred.
+
+The current file checklist and provenance mappings retire the deleted wrapper.
+The historical source-module names remain in provenance. Current-tree and Git-history review confirmed that the separate
+`InnerProductSpace.OperatorModulus` donor was already deleted in `f8603c6e6`
+when its basic foundations moved to accepted `InnerProductSpace.Modulus`.
+Its stale live staging/checklist entries are now retired; historical source
+names remain as provenance. Papers and visualizations are untouched.

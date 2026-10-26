@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
@@ -589,7 +590,7 @@ theorem hilbertSchmidtNorm_sinAngleOperatorRC_eq_projectionDifference
           ((complexifySubmodule U).starProjection -
             (complexifySubmodule V).starProjection) :=
       SameApproximationSingularSequence.hilbertSchmidtNorm_eq
-        (modulus_hasSameApproximationNumbers _)
+        (ContinuousLinearMap.sameSingularValues_modulus _)
     _ = ContinuousLinearMap.hilbertSchmidtNorm
         (complexify (U.starProjection - V.starProjection)) := by
       rw [starProjection_complexifySubmodule,

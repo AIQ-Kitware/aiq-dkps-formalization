@@ -25,7 +25,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
@@ -83,7 +82,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary",
         "ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse",
         "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
@@ -725,21 +723,18 @@
       ],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.OperatorModulus",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Modulus",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1",
       "provenance_class": "unified and generalized (former square operatorAbs and rectangular operator-modulus APIs)",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.InnerProductSpace.Modulus"
       ],
-      "blocked_dependencies": [
-        "approximationNumber invariance under the source modulus depends on lt_approximationNumber_iff_exists_finiteDimensional_lowerBound (Spectra infinite-dim min-max) -> deferred to a later dependency-closed PR per campaign 9.2 option 2"
-      ],
-      "downstream_users": [
-        "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus (paper-norm wrappers)"
-      ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "October 26 current-tree revalidation: the InnerProductSpace.OperatorModulus donor was already deleted by DKPS f8603c6e6 (Consume accepted modulus and Gram factorization foundations). Its carrier and basic positivity/square/norm API are accepted ContinuousLinearMap.modulus in TauCeti.Analysis.InnerProductSpace.Modulus. Remove the stale staging-module entries; preserve the original source names above as provenance. The historical Spectra/min-max blocker for complete-space approximation-number invariance is also obsolete: accepted TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus proves it over RCLike by factorization. Following db3ac636f, the remaining downstream DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus forwarding module and the complex/generic invariance wrappers are deleted, with direct native consumers. This records consumption and the earlier local retirement, not newly inferred proof descent."
     },
     {
       "source_module": "DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily",
@@ -2302,8 +2297,7 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.Core",
-        "DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum",
-        "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus"
+        "DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum"
       ],
       "maintained_declarations": [
         "ContinuousLinearMap.approximationNumber_comp_subtypeL_le",
@@ -2451,7 +2445,6 @@
       "provenance_class": "copied and renamespaced 2026-07-28: the heterogeneous same-approximation-numbers relation, extracted so that DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean no longer imports the source layer -- the last recorded obstacle to extraction cluster 1b",
       "direct_dependencies": [
         "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence",
-        "TauCeti.Analysis.InnerProductSpace.Modulus",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport"
@@ -2463,7 +2456,7 @@
       ],
       "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "October 26, following DKPS 4a62c33c2: the local HasSameApproximationNumbers relation, its unfolding lemma and equivalence proofs are deleted. Consumers take accepted ContinuousLinearMap.SameSingularValues directly. Both downstream SameApproximationSingularSequence and SameApproximationSingularValues relation aliases and their duplicate equivalence/Ky Fan proofs are deleted. Accepted Equivalence explicitly records adaptation from this donor, using native nonnegative singularValue sequences; this is explicit proof-adaptation provenance, not inferred from a name match. Tau Ceti revision 97bf123075b7f142c1e37b827b6b37c156803248. The native relation has broader seminormed-space, arbitrary nontrivially normed field and independent-universe scope. Additional norm equality and complete-source min--max/pointwise comparisons remain local on the native carrier, with incomplete targets permitted where the accepted factorization theorem requires complete targets; the module is not wholly retired. Accepted ApproximationNumber.Modulus supplies the complete-space modulus invariance; its remaining local duplicates are explicitly pending retirement after the native-relation checkpoint, not claimed unmerged mathematics. The existing CanonicalGauge module projects native equality to real scalar approximation-number and gauge equality, without a local relation or old-name conversion API. Source gauge/Hilbert-Schmidt transport results and ambient/unbounded scopes are retained."
+      "migration_note": "October 26, following DKPS 4a62c33c2: the local HasSameApproximationNumbers relation, its unfolding lemma and equivalence proofs are deleted. Consumers take accepted ContinuousLinearMap.SameSingularValues directly. Both downstream SameApproximationSingularSequence and SameApproximationSingularValues relation aliases and their duplicate equivalence/Ky Fan proofs are deleted. Accepted Equivalence explicitly records adaptation from this donor, using native nonnegative singularValue sequences; this is explicit proof-adaptation provenance, not inferred from a name match. Tau Ceti revision 97bf123075b7f142c1e37b827b6b37c156803248. The native relation has broader seminormed-space, arbitrary nontrivially normed field and independent-universe scope. Additional norm equality and complete-source min--max/pointwise comparisons remain local on the native carrier, with incomplete targets permitted where the accepted factorization theorem requires complete targets; the module is not wholly retired. Accepted ApproximationNumber.Modulus supplies the complete-space modulus invariance; its remaining local duplicates are explicitly pending retirement after the native-relation checkpoint, not claimed unmerged mathematics. The existing CanonicalGauge module projects native equality to real scalar approximation-number and gauge equality, without a local relation or old-name conversion API. Source gauge/Hilbert-Schmidt transport results and ambient/unbounded scopes are retained. Following native-relation checkpoint db3ac636f: the complex donor modulus theorem, its downstream paper wrapper/module, and the generic angle modulus wrapper are now deleted. Complete-space consumers use accepted ContinuousLinearMap.sameSingularValues_modulus directly, with explicit imports of the owning ApproximationNumber.Modulus module. Two complete-target pointwise-norm consumers use sameSingularValues_of_forall_norm_apply_eq directly. The original incomplete-target comparison and pointwise-equality results remain: upstream factorization requires complete targets, so deleting those would lose formal scope. This records native consumption, not a claim that the native Douglas-factorization proof descends from the local min-max proof."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",

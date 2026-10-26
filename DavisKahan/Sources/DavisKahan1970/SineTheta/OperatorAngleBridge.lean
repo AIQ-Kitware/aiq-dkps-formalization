@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
-public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 
 public section
@@ -153,7 +153,7 @@ theorem directedSin_same_crossProjection
       (TauCeti.DavisKahan.Angle.directedSinAngleOperatorC U V)
       (Vᗮ.starProjection ∘L U.starProjection) := by
   rw [TauCeti.DavisKahan.Angle.directedSinAngleOperatorC]
-  exact modulus_hasSameApproximationNumbers _
+  exact ContinuousLinearMap.sameSingularValues_modulus _
 
 /-- The whole-space literal sine has exactly the singular values of the
 projector difference. -/
@@ -164,7 +164,7 @@ theorem sin_same_projectionDiff
       (TauCeti.DavisKahan.Angle.sinAngleOperatorC U V)
       (U.starProjection - V.starProjection) := by
   rw [TauCeti.DavisKahan.Angle.sinAngleOperatorC]
-  exact modulus_hasSameApproximationNumbers _
+  exact ContinuousLinearMap.sameSingularValues_modulus _
 
 omit [CompleteSpace E] in
 /-- Negation changes no approximation singular value. -/

@@ -11,7 +11,7 @@ module
 
 public import DavisKahan.SharedFoundations.Ideal.TwoWayFactorization
 public import DavisKahan.OperatorIdeal.CanonicalRealView
-public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 
 /-!

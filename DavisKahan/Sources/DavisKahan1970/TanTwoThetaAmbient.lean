@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
@@ -1440,7 +1441,7 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
       kyFanApproximationGauge k (tanTwoBlockRepresentative U V) := by
     rw [absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
     exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (ContinuousLinearMap.modulus_hasSameApproximationNumbers
+      (ContinuousLinearMap.sameSingularValues_modulus
       (tanTwoBlockRepresentative U V)).kyFanGaugeReal_eq k)
   rw [hmodulus]
   linarith [hcombine.trans hpinch]

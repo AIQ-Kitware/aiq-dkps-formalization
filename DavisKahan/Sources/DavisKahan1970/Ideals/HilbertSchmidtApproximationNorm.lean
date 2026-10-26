@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 
 /-!
@@ -62,7 +63,7 @@ theorem hilbertSchmidtNorm_operatorModulus
     (A : E →L[ℂ] F) :
     (ContinuousLinearMap.modulus A).hilbertSchmidtNorm = A.hilbertSchmidtNorm :=
   SameApproximationSingularSequence.hilbertSchmidtNorm_eq
-    (modulus_hasSameApproximationNumbers A)
+    (ContinuousLinearMap.sameSingularValues_modulus A)
 
 /-- Real complexification preserves the Hilbert--Schmidt norm. -/
 theorem hilbertSchmidtNorm_complexify

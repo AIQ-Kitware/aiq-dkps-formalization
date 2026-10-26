@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
-public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import Mathlib.Basic.ENNReal.Inv
 
 /-!
@@ -466,7 +466,7 @@ theorem modulus_mem_and_gauge_eq
       N.gaugeReal (ContinuousLinearMap.modulus T) =
         N.gaugeReal T :=
   SameApproximationSingularValues.mem_and_gauge_eq N
-    (modulus_hasSameApproximationNumbers T) hT
+    (ContinuousLinearMap.sameSingularValues_modulus T) hT
 
 /-- Every literal paper norm assigns exactly the same extended value to an
 operator and its positive modulus. -/
@@ -474,7 +474,7 @@ theorem normingFunction_modulus_eq
     (N : SymmetricNormingFunction) (T : E →L[ℂ] E) :
     N.extendedGauge (ContinuousLinearMap.modulus T) = N.extendedGauge T :=
   N.gauge_eq_of_sameApproximationSingularValues
-    (modulus_hasSameApproximationNumbers T)
+    (ContinuousLinearMap.sameSingularValues_modulus T)
 
 
 end ModulusPaperNorms

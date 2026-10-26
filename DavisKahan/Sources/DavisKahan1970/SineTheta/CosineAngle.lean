@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Inverse
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances
@@ -285,7 +285,7 @@ theorem directedSinAngleBlock_same_sineBlock
     ContinuousLinearMap.SameSingularValues
       (directedSinAngleBlockC U V) (sineBlockC U V) := by
   rw [directedSinAngleBlockC_eq_sineBlockModulusC]
-  exact modulus_hasSameApproximationNumbers _
+  exact ContinuousLinearMap.sameSingularValues_modulus _
 
 
 end
