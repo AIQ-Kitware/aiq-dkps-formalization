@@ -61,11 +61,8 @@ theorem starProjection_apply_eq_of_reduces
   congr 1
   exact Subtype.ext hadef
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete. -/
-noncomputable local instance instCompleteSpaceCoeReducing
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 omit [CompleteSpace E] in
 /-- **The real spectrum of a reduced partial map is covered by its two blocks.**

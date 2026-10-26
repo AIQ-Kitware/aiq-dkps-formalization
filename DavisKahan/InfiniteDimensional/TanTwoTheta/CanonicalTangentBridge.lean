@@ -79,13 +79,8 @@ universe u
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
-/-- An orthogonally complemented subspace is complete.  `DavisKahan.SinTheta.Natural.Reducing`
-declares the same instance, but `local`, so it is not exported to importing modules and has to
-be repeated here.  Without it every `ContinuousLinearMap.adjoint` on a subspace in this file
-fails to elaborate with `failed to synthesize CompleteSpace ↥U`. -/
-noncomputable local instance completeSpaceOfHasOrthogonalProjection
-    (W : Submodule ℂ E) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- `J⋆ J = 1` for the inclusion `J = W.subtypeL` of an orthogonally complemented
 subspace.  This is the *only* coercion-level fact the block decompositions below

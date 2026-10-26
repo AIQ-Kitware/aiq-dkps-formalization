@@ -736,11 +736,8 @@ section DirectedCornerCorrespondence
 variable {Ea : Type*} [NormedAddCommGroup Ea] [InnerProductSpace ℂ Ea] [CompleteSpace Ea]
 variable (U V : Submodule ℂ Ea) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
-/-- An orthogonally complemented subspace of a complete space is complete; the
-approximation-number API for block compressions needs it on the nose. -/
-local instance instCompleteSpaceCoeDirectedCorner
-    (W : Submodule ℂ Ea) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- **The canonical directed tangent corner IS the paper's directed corner.**
 
@@ -861,11 +858,8 @@ section AmbientSpelling
 variable {𝕜 : Type*} [RCLike 𝕜] {G : Type*} [NormedAddCommGroup G]
   [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
-/-- The scalar-generic completeness instance for an orthogonally complemented
-subspace, reinstalled because `local instance` does not propagate. -/
-local instance instCompleteSpaceCoeAmbientSpelling
-    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 variable (Ω Γ : Submodule 𝕜 G) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
 
@@ -897,11 +891,8 @@ section DirectedSourceEndpoint
 variable {Ea : Type*} [NormedAddCommGroup Ea] [InnerProductSpace ℂ Ea] [CompleteSpace Ea]
 variable (U V : Submodule ℂ Ea) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
-/-- An orthogonally complemented subspace of a complete space is complete;
-reinstalled for this section because `local instance` does not propagate. -/
-local instance instCompleteSpaceCoeDirectedSourceEndpoint
-    (W : Submodule ℂ Ea) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- **The paper's directed `tan 2Θ₀` corner carries the doubled directed angles,
 singular value by singular value.**

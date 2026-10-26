@@ -78,14 +78,8 @@ universe u
 variable {E : Type u}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete.  `local instance` does not propagate through imports,
-so it is reinstalled here; the whole argument happens in the coordinate spaces
-of `U` and `Uᗮ`. -/
-local instance instCompleteSpaceCoeBranchFreeInfinite
-    {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 section BlockCoordinate
 

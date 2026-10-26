@@ -327,11 +327,8 @@ end SinTwoTheta
 
 section SinTwoThetaReducing
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete. -/
-local instance instCompleteSpaceCoeUnboundedIdealFormGapReducing
-    (W : Submodule ℂ H) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- **Davis--Kahan 1970, the directed `sin 2Θ` theorem over a complex Hilbert
 space, reflection-residual block form, at an arbitrary reducing subspace.**

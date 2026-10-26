@@ -37,9 +37,8 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-noncomputable local instance completeSpaceOfHasOrthogonalProjection
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 namespace PartialMap
 

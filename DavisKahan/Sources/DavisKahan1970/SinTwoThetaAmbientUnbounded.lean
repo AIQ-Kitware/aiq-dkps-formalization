@@ -106,16 +106,8 @@ noncomputable section
 
 universe u v
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient space
-is itself complete.  `local instance` does not propagate through imports, so it is
-reinstalled here; every reducing restriction below lives in such a coordinate
-space, and all three scalar sections need it, so its binders are written out
-rather than taken from a `variable` block. -/
-local instance instCompleteSpaceCoeAmbientUnbounded
-    {𝕜 : Type u} [RCLike 𝕜]
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-! ## The reflected pair, scalar-generically -/
 

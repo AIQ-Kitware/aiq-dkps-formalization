@@ -347,11 +347,8 @@ theorem le_re_inner_of_realSpectrum_subset_Ici
     simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
   exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient space
-is itself complete. -/
-noncomputable local instance instCompleteSpaceCoeBandForm
-    (U : Submodule ℂ H) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- **A block placed in `Iic c` bounds the ambient form on that block.** -/
 theorem re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic

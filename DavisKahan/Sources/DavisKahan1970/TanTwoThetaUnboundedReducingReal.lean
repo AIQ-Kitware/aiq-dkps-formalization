@@ -66,12 +66,8 @@ universe u
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient space
-is itself complete.  `local instance` does not propagate through imports, so it
-is reinstalled here. -/
-local instance instCompleteSpaceCoeTanTwoReducingReal
-    (W : Submodule ℝ E) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 section AmbientReal
 

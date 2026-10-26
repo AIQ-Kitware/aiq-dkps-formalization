@@ -70,13 +70,8 @@ universe u
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
--- `CanonicalTangentBridge` already declares
--- `completeSpaceOfHasOrthogonalProjection` in this namespace; `local instance` only
--- scopes the *attribute*, not the name, so re-enable the attribute here rather than
--- redeclaring it.  It is needed at *statement* time -- `N.Mem
--- (tanTwoThetaGraphCoordinateOperator …)` mentions operators on `↥U` -- where the
--- `letI`s inside the proofs below cannot help.
-attribute [local instance] completeSpaceOfHasOrthogonalProjection
+-- Subspace completeness is needed when elaborating graph-coordinate operators.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- The source-permitted graph-coordinate representative of `tan 2Theta`.
 Its approximation singular values are the double-angle tangents of the

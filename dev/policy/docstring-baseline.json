@@ -2,7 +2,6 @@
   "_comment": "Undocumented public declarations accepted today, read by `aiq-lean source docstrings --baseline`. Every entry is an `alias` re-export or an instance -- one anonymous, the rest `local instance`. All were invisible to the previous checker, whose declaration regex omitted the `alias` keyword and the `local` modifier, so it reported zero undocumented declarations over the same tree. This file is the debt that check was hiding, recorded so that a NEW undocumented declaration fails. It may only shrink; a stale entry also fails, because an entry naming a declaration that no longer exists silently accepts the next one to take that name.",
   "accepted": {
     "DavisKahan/Geometry/Angle/Proposition35Exponential.lean:<anonymous>": "",
-    "DavisKahan/Geometry/Polar/RestrictedDisplacementExtremal.lean:TauCeti.DavisKahan.Section4.sourceCompleteSpace": "",
     "DavisKahan/OperatorIdeal/ApproximationNumbers/FiniteSourceSingularSystem.lean:TauCeti.completeSpace_range": "",
     "DavisKahan/OperatorIdeal/ApproximationNumbers/FiniteSourceSingularSystem.lean:TauCeti.finiteDimensional_range": "",
     "DavisKahan/Sources/DavisKahan1970/PartIIIPresentation.lean:TauCeti.DavisKahan1970.banach_sylvester_lower_bound": "",
@@ -186,10 +185,7 @@
     "DavisKahan/Sources/DavisKahan1970/Section6Theorem63Presentation.lean:TauCeti.DavisKahan1970.theorem6_3_directedTangent_approximationNumbers": "",
     "DavisKahan/Sources/DavisKahan1970/Section3AcuteCounterexample.lean:TauCeti.DavisKahan1970.Section3AcuteCounterexample.sourceSubspaceProjection": "",
     "DavisKahan/Sources/DavisKahan1970/Section3AcuteCounterexample.lean:TauCeti.DavisKahan1970.Section3AcuteCounterexample.targetSubspaceProjection": "",
-    "DavisKahan/Sources/DavisKahan1970/Section4Real.lean:TauCeti.DavisKahan1970.sourceCompleteSpaceR": "",
-    "DavisKahan/SpectralTheory/ReducingSubspace/Restriction.lean:TauCeti.DavisKahanExt.completeSpaceOfHasOrthogonalProjection": "",
     "DavisKahan/TanTheta/Spectrum.lean:TauCeti.DavisKahanExt.instCStarAlgebraSubspaceCoordinateGenuineTanTheta": "",
-    "ForTauCeti/Analysis/InnerProductSpace/PrincipalSineSequence.lean:TauCeti.sourceCompleteSpace": "",
     "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above.",
     "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean:TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above."
   }

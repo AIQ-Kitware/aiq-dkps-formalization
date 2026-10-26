@@ -253,8 +253,8 @@ private theorem real_approximationNumber_direct_cosineCutoff_eq_sine
 variable (U V : Submodule ℝ E)
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
-local instance sourceCompleteSpaceR : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-! ### Real source-coordinate model -/
 

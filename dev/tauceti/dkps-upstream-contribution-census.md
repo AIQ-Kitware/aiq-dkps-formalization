@@ -1734,3 +1734,22 @@ claim that the latest main introduced these results. Preserve the native
 Spectra-lineage acknowledgement; matching statements do not prove that the
 native proof was copied from the DKPS donor. Papers and visualizations are
 unchanged.
+
+### October 26: remove redundant subspace-completeness declarations
+
+Replace 23 local forwarding instances in 19 mathematical modules by scoped
+registrations of the accepted
+`Submodule.completeSpace_coe_of_hasOrthogonalProjection` theorem. Update the
+additional tangent consumer that explicitly registered a retired local name.
+These are direct native registrations, with no replacement local declaration,
+namespace alias or compatibility module. Four stale docstring exemptions are
+removed. The native hypotheses are the same: a complete ambient inner-product
+space and an orthogonally complemented subspace, over any `RCLike` field.
+The registration stays local because global registration would cycle with
+Mathlib's converse projection instance. Finite-dimensional ambient-completeness
+proofs and proofs with other hypotheses are unchanged.
+
+This continues direct consumption of the accepted completeness API; it does not
+introduce new mathematics or assert additional upstream proof ancestry.
+The preceding bound migration compiled in the full default build (21,035 jobs)
+and was committed immediately as `64e6b3804`.

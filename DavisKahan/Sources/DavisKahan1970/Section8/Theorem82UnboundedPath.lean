@@ -484,11 +484,8 @@ theorem theorem8_2_perturbationHalfGap_maximalAngle_lt_unbounded_complex
 
 /-! ### Theorem 8.2's residual branch at unbounded scope -/
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete. -/
-noncomputable local instance instCompleteSpaceCoeResidual
-    (U : Submodule ℂ Hc) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- **Davis--Kahan 1970, Theorem 8.2, residual alternative, at unbounded ambient
 scope, in its directed form.**
@@ -726,12 +723,8 @@ theorem theorem8_2_perturbationHalfGap_unbounded_real
     hdelta hab hPredC hQredC hQspecC hQperpC hPspecC hsmallC
   rwa [DavisKahan.Foundation.RealComplexification.directedGap_complexifySubmodule] at hmain
 
-/-- A real subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete. -/
-noncomputable local instance instCompleteSpaceCoeRealResidual
-    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-    (U : Submodule ℝ Er) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 open TauCeti.RealComplexification in
 /-- **Davis--Kahan 1970, Theorem 8.2, residual alternative, at unbounded ambient

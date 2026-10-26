@@ -249,11 +249,8 @@ theorem theorem8_1_canonicalBranchUnbounded_form
   · exact le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
       (isSelfAdjoint_perturbed hA hH) hdelta hrep x hx
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient space
-is itself complete. -/
-noncomputable local instance instCompleteSpaceCoeBranch
-    (U : Submodule ℂ H) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- **Theorem 8.1's branch in the paper's own orientation, at unbounded scope.**
 

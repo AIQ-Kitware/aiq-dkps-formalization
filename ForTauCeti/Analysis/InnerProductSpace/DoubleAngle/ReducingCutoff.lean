@@ -63,11 +63,8 @@ section Transport
 variable {𝕜 : Type*} [RCLike 𝕜] {G : Type*} [NormedAddCommGroup G]
   [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient
-space is itself complete. -/
-local instance instCompleteSpaceCoeReducingCutoff
-    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 private theorem adjoint_subtypeL_subtypeL_apply
     (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] (y : U) :
@@ -229,11 +226,8 @@ section Reducing
 
 variable {A : H →ₗ.[ℂ] H} {U : Submodule ℂ H} [U.HasOrthogonalProjection]
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient space
-is itself complete; reinstalled in this section over `ℂ`. -/
-local instance instCompleteSpaceCoeReducingCutoffC
-    (W : Submodule ℂ H) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- **The cutoff family of an arbitrary reducing subspace**: the spectral bands
 `1_{[-n,n]}(A|_U)` of the restriction, carried into the ambient space. -/

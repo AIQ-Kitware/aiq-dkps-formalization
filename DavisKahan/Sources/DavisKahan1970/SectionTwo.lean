@@ -416,14 +416,8 @@ open TauCeti.DavisKahan TauCeti.DavisKahan.ExactSinTheta TauCeti.DavisKahanExt
 
 universe v
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient space
-is itself complete.  `local instance` does not propagate through imports, so it is
-reinstalled here for the trial subspaces the directed clause quantifies over. -/
-local instance instCompleteSpaceCoeSectionTwoSource
-    {𝕜 : Type*} [RCLike 𝕜] {G : Type v}
-    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (W : Submodule 𝕜 G) [W.HasOrthogonalProjection] : CompleteSpace W :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem over `ℂ`, both printed conclusions.**
 

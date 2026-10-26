@@ -37,13 +37,8 @@ noncomputable section
 
 universe v
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient space
-is itself complete.  `local instance` does not propagate through imports, so it is
-reinstalled here. -/
-local instance instCompleteSpaceCoeBranchBound
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    (U : Submodule ℂ G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- **The `sin Θ` estimate at the operator norm, unbounded ambient scope,
 directed form.**

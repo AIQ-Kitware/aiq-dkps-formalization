@@ -45,12 +45,8 @@ variable {E F : Type v}
 
 open TauCeti.DavisKahan
 
-/-- An orthogonally complemented subspace is complete.  This repeats the
-instance carried by the reducing-restriction core, which declares it locally and
-therefore does not export it to importing modules. -/
-noncomputable local instance completeSpaceOfHasOrthogonalProjection
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- The canonical inclusions of an orthogonally complemented subspace and its
 orthogonal complement form exact Hilbert coordinates. -/

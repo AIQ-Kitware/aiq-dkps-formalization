@@ -82,9 +82,8 @@ theorem principalSineSequence_antitone (U V : Submodule 𝕜 H)
 
 variable [CompleteSpace H]
 
-local instance sourceCompleteSpace (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
-    CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+-- Use the native theorem locally; a global instance would create an instance cycle.
+attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 /-- The squared principal-sine sequence is exactly the Hilbert--Schmidt energy
 of `P_{Vᗮ}|_U`.  Both sides take values in `ℝ≥0∞`, so divergence is represented
