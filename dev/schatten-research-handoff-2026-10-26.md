@@ -631,3 +631,23 @@ For `1<p<2` this should be a finite modification on the supercritical
 spectral sector; for `p=1` infinitely many nonzero angles can require
 modification. Infinite-dimensional all-optimizer classification remains
 separate. The feasibility/index mathematics itself is classical.
+
+## Correct infinite-dimensional domain for the smoothed cost
+
+`ContinuousLinearMap.charbonnierCost` is the extended spectral sum of
+`sqrt(tau^2+s_n(T)^2)-tau`, with the baseline removed inside each
+summand. For every positive `tau`,
+`charbonnierCost_ne_top_iff_schatten_two` proves that this sum is finite
+**exactly on the Hilbert--Schmidt ideal**, over both fields and in
+arbitrary Hilbert dimensions. The two compiled comparison inequalities
+bound it above by `Gauge_2(T)^2/(2*tau)` and below by
+`Gauge_2(T)^2/(sqrt(tau^2+norm(T)^2)+tau)`, including infinite values.
+No duplicate operator-ideal norm is introduced.
+
+`CharbonnierFeasibility.charbonnier_transport_iff_schatten_two_and_defect_balance`
+therefore proves the exact finite-cost transport-feasibility criterion:
+the projection difference is Hilbert--Schmidt and the finite crossed
+defects are balanced. This is **not** a minimum-attainment theorem, and
+does not require trace-class projection difference. Focused builds
+passed (5,754 and 7,110 jobs). These domain facts are classical analytic
+consequences; historical novelty is not asserted.
