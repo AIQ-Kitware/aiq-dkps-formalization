@@ -1355,3 +1355,20 @@ revision, align its exact Mathlib/toolchain inputs, repin and retire any further
 overlap it supplies. The local approximation-number equality relation and
 real-valued facade remain separate migration obligations; this checkpoint does
 not claim the whole consumption campaign complete.
+
+### October 25: accepted dependency refresh to `97bf1230`
+
+The accepted Tau Ceti pin is refreshed from `efded067` to
+`97bf123075b7f142c1e37b827b6b37c156803248`. Direct inspection of the accepted
+manifest and toolchain confirms the same exact Mathlib
+`2cabef97b63d3275776b8b060d802de6a6fa1055` and Lean `v4.36.0-rc1` already used
+here. `lake update TauCeti` changes only that dependency's manifest entry.
+
+Accepted commit `8e692e2c` (#20399) adds diagonal Riesz measures for star
+representations, normal-operator specialization and the general quadratic
+star-representation identity. The declaration/type comparison reveals overlap
+with the local Borel-calculus diagonal-measure construction. Its retirement is
+the next mathematical consumption task, separate from this pin change. No
+historical proof-adaptation claim is inferred merely from matching statements;
+the local Kitware/Jon Crall/Claude Opus 5 provenance is retained pending that
+migration.

@@ -1046,3 +1046,21 @@ After these checks, `git ls-remote --symref` showed accepted Tau Ceti `main` at
 `efded067c28ffca3483fd731674eb13b42543fbb`. Inspecting the newer accepted APIs,
 aligning their exact Mathlib/toolchain inputs and repinning are the next
 dependency task, before further retirement of local overlaps.
+
+### October 25: refresh the accepted Tau Ceti pin
+
+`lakefile.toml` and `lake-manifest.json` now pin accepted Tau Ceti `main` at
+`97bf123075b7f142c1e37b827b6b37c156803248`, fetched and inspected directly.
+Its exact Mathlib input remains
+`2cabef97b63d3275776b8b060d802de6a6fa1055`, and its toolchain remains
+`leanprover/lean4:v4.36.0-rc1`; neither requires a change here.
+`lake update TauCeti` changed only the Tau Ceti manifest entry and confirmed
+that the toolchain is already aligned. No Lake dependency points into a
+coordination submodule.
+
+The accepted additions include normal-operator diagonal measures and the more
+general `StarAlgHom.representationDiagMeasure` construction, with finite regular
+measures, continuous integration, uniqueness, total mass and squared-norm
+identities. These overlap the donor Borel-calculus foundation. The dependency
+refresh is a separate checkpoint; it does not itself retire that local
+construction or claim that its consumers have migrated.
