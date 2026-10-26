@@ -2479,10 +2479,7 @@
         "integrable_of_continuous",
         "integral_diagMeasure",
         "integral_diagMeasure_ofReal",
-        "isSelfAdjoint_cfcHom_ofReal",
-        "ofRealLM",
-        "ofRealLM_apply",
-        "star_ofRealLM"
+        "isSelfAdjoint_cfcHom_ofReal"
       ],
       "current_namespace": "TauCeti.BorelCalculus",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
@@ -2498,7 +2495,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization"
       ],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "October 25, following DKPS 32799562e: the independent local real-to-complex continuous-function map ofRealLM and its two accessor/star lemmas are removed. Their consumers use Mathlib ContinuousMap.realToRCLikeStarAlgHom, realToRCLikeStarAlgHom_apply, realToRCLike_apply and isSelfAdjoint_realToRCLike directly. The local positivity proof consumes accepted map_nonneg and the native positive-operator characterization. This is a preparatory retirement: diagFunctional, diagMeasure and their integral/measure consumers still remain local pending migration to the newly accepted representationDiagMeasure API. Retain original Kitware/Jon Crall/Claude Opus 5 provenance from the pre-change file; no proof descent from DKPS to the older Mathlib real-function API is claimed."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",

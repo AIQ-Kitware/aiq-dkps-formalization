@@ -210,10 +210,10 @@ theorem boundedSelfAdjointSpectralProjection_centralBand_eq_cfcHom
     boundedSelfAdjointSpectralProjection B hB (centralBand l r d)
         (measurableSet_centralBand l r d) =
       cfcHom ((ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mpr hB).isStarNormal
-        (TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d)) := by
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d)) := by
   have h := boundedSelfAdjointSpectralProjection_eq_cfcL_of_agrees B hB
     (centralBand l r d) (measurableSet_centralBand l r d)
-    (TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d)) ?_
+    ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d)) ?_
   · rw [h]; rfl
   · intro w
     have hmem := hgap (reCoord_mem_realSpectrum B hB w)
@@ -221,7 +221,7 @@ theorem boundedSelfAdjointSpectralProjection_centralBand_eq_cfcHom
     · have hband : w ∈ TauCeti.BorelCalculus.reCoord (T := B) ⁻¹' centralBand l r d := by
         refine ⟨by linarith [hin.1], by linarith [hin.2]⟩
       rw [Set.indicator_of_mem hband]
-      simp only [TauCeti.BorelCalculus.ofRealLM_apply, bandSymbol_apply,
+      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, bandSymbol_apply,
         bandCutoff_eq_one hd hin]
       norm_num
     · have hband : w ∉ TauCeti.BorelCalculus.reCoord (T := B) ⁻¹' centralBand l r d := by
@@ -230,7 +230,7 @@ theorem boundedSelfAdjointSpectralProjection_centralBand_eq_cfcHom
         · exact absurd hmem'.1 (by simp; linarith)
         · exact absurd hmem'.2 (by simp; linarith)
       rw [Set.indicator_of_notMem hband]
-      simp only [TauCeti.BorelCalculus.ofRealLM_apply, bandSymbol_apply,
+      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, bandSymbol_apply,
         bandCutoff_eq_zero hd hout]
       norm_num
 
@@ -291,10 +291,10 @@ theorem re_inner_le_of_mem_centralBandSubspace
   have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
     (a := B) hBsa.isStarNormal hgnonneg x
   have hsymbol :
-      TauCeti.BorelCalculus.ofRealLM g =
-        ((r : ℝ) : ℂ) • TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d) -
+      (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
+        ((r : ℝ) : ℂ) • (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d) -
           ((ContinuousMap.id ℂ).restrict (spectrum ℂ B)) *
-            TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d) := by
+            (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d) := by
     ext w
     have hre := coe_reCoord B hB w
     -- Rewrite `g` through its value equation, not `hgdef`: rewriting to the bundled
@@ -303,10 +303,14 @@ theorem re_inner_le_of_mem_centralBandSubspace
     have hgapp : ∀ v : spectrum ℂ B, g v =
         (r - TauCeti.BorelCalculus.reCoord v) *
           bandCutoff l r d (TauCeti.BorelCalculus.reCoord v) := fun _ => rfl
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
+    simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.restrict_apply, ContinuousMap.id_apply, smul_eq_mul,
       bandSymbol_apply]
+    change Complex.ofReal ((r - TauCeti.BorelCalculus.reCoord w) *
+        bandCutoff l r d (TauCeti.BorelCalculus.reCoord w)) =
+      Complex.ofReal r * Complex.ofReal (bandCutoff l r d (TauCeti.BorelCalculus.reCoord w)) -
+        (w : ℂ) * Complex.ofReal (bandCutoff l r d (TauCeti.BorelCalculus.reCoord w))
     rw [← hre]
     push_cast
     ring
@@ -358,10 +362,10 @@ theorem le_re_inner_of_mem_centralBandSubspace
   have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
     (a := B) hBsa.isStarNormal hgnonneg x
   have hsymbol :
-      TauCeti.BorelCalculus.ofRealLM g =
+      (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
         ((ContinuousMap.id ℂ).restrict (spectrum ℂ B)) *
-            TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d) -
-          ((l : ℝ) : ℂ) • TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d) := by
+            (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d) -
+          ((l : ℝ) : ℂ) • (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d) := by
     ext w
     have hre := coe_reCoord B hB w
     -- Rewrite `g` through its value equation, not `hgdef`: rewriting to the bundled
@@ -370,10 +374,14 @@ theorem le_re_inner_of_mem_centralBandSubspace
     have hgapp : ∀ v : spectrum ℂ B, g v =
         (TauCeti.BorelCalculus.reCoord v - l) *
           bandCutoff l r d (TauCeti.BorelCalculus.reCoord v) := fun _ => rfl
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
+    simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.restrict_apply, ContinuousMap.id_apply, smul_eq_mul,
       bandSymbol_apply]
+    change Complex.ofReal ((TauCeti.BorelCalculus.reCoord w - l) *
+        bandCutoff l r d (TauCeti.BorelCalculus.reCoord w)) =
+      (w : ℂ) * Complex.ofReal (bandCutoff l r d (TauCeti.BorelCalculus.reCoord w)) -
+        Complex.ofReal l * Complex.ofReal (bandCutoff l r d (TauCeti.BorelCalculus.reCoord w))
     rw [← hre]
     push_cast
     ring
@@ -460,11 +468,11 @@ theorem norm_shiftedOperator_ge_of_mem_centralBandSubspace_orthogonal
   have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
     (a := B) hBsa.isStarNormal hgnonneg x
   have hsymbol :
-      TauCeti.BorelCalculus.ofRealLM g =
+      (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
         ((((ContinuousMap.id ℂ).restrict (spectrum ℂ B) - ((c : ℝ) : ℂ) • 1) *
             ((ContinuousMap.id ℂ).restrict (spectrum ℂ B) - ((c : ℝ) : ℂ) • 1)) -
               ((K ^ 2 : ℝ) : ℂ) • 1) *
-          (1 - TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d)) := by
+          (1 - (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d)) := by
     ext w
     have hre := coe_reCoord B hB w
     -- Rewrite `g` through its value equation, not `hgdef`: rewriting to the bundled
@@ -473,10 +481,15 @@ theorem norm_shiftedOperator_ge_of_mem_centralBandSubspace_orthogonal
     have hgapp : ∀ v : spectrum ℂ B, g v =
         ((TauCeti.BorelCalculus.reCoord v - c) ^ 2 - K ^ 2) *
           (1 - bandCutoff l r d (TauCeti.BorelCalculus.reCoord v)) := fun _ => rfl
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
+    simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.one_apply, ContinuousMap.restrict_apply,
       ContinuousMap.id_apply, smul_eq_mul, bandSymbol_apply]
+    change Complex.ofReal (((TauCeti.BorelCalculus.reCoord w - c) ^ 2 - K ^ 2) *
+        (1 - bandCutoff l r d (TauCeti.BorelCalculus.reCoord w))) =
+      (((w : ℂ) - Complex.ofReal c * 1) * ((w : ℂ) - Complex.ofReal c * 1) -
+          Complex.ofReal (K ^ 2) * 1) *
+        (1 - Complex.ofReal (bandCutoff l r d (TauCeti.BorelCalculus.reCoord w)))
     rw [← hre]
     push_cast
     ring
@@ -620,7 +633,7 @@ theorem commute_starProjection_centralBandSubspace
     (ContinuousLinearMap.starProjection_comp_comm_of_reduces B U hU).symm
   have hstar : Commute (star B) U.starProjection := by rwa [hBsa.star_eq]
   have h := Commute.cfcHom (a := B) hBsa.isStarNormal hBU hstar
-    (TauCeti.BorelCalculus.ofRealLM (bandSymbol B l r d))
+    ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (bandSymbol B l r d))
   rwa [← boundedSelfAdjointSpectralProjection_centralBand_eq_cfcHom B hB hd hgap,
     ← starProjection_centralBandSubspace B hB] at h
 

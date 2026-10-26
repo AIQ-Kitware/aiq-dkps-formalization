@@ -255,14 +255,15 @@ theorem diagMeasure_conjugation (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (�
   have hUc := conjugateOperator_cayley A hA
   refine TauCeti.BorelCalculus.diagMeasure_congr _ (DFunLike.ext _ _ fun g => ?_)
   simp only [TauCeti.BorelCalculus.diagFunctional_apply]
-  change (⟪conjugation η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap)
+  change (⟪conjugation η, cfcHom _ ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap)
       (conjugation η)⟫_ℂ).re
-    = (⟪η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap) η⟫_ℂ).re
+    = (⟪η, cfcHom _ ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) η⟫_ℂ).re
   set T := cfcHom (TauCeti.LinearPMap.isStarNormal_cayley
     (PartialMapComplexification.isSelfAdjoint_complexify hA))
-    (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap) with hT
+    ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) with hT
   have hfix : conjugateOperator T = T := by
-    rw [hT, conjugateOperator_cfcHom _ hUc, TauCeti.BorelCalculus.star_ofRealLM]
+    rw [hT, conjugateOperator_cfcHom _ hUc, ContinuousMap.realToRCLikeStarAlgHom_apply,
+      (ContinuousMap.isSelfAdjoint_realToRCLike (𝕜 := ℂ)).star_eq]
   have hstep : ⟪conjugation η, T (conjugation η)⟫_ℂ = ⟪T η, η⟫_ℂ := by
     have h1 : T (conjugation η) = conjugation (conjugateOperator T η) := by
       rw [conjugateOperator_apply, conjugation_involutive]

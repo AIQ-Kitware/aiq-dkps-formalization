@@ -8,8 +8,12 @@ module
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.RCLike.ContinuousMap
 public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 public import Mathlib.MeasureTheory.Integral.RieszMarkovKakutani.Real
+
+import Mathlib.Analysis.CStarAlgebra.CompletelyPositiveMap
+import Mathlib.Analysis.InnerProductSpace.StarOrder
 
 /-!
 # Diagonal spectral measures of a normal operator
@@ -51,7 +55,7 @@ measures, so the gap has to be closed somewhere.
 
 public section
 
-open scoped InnerProductSpace ENNReal CompactlySupported
+open scoped InnerProductSpace ENNReal CompactlySupported ComplexOrder
 open MeasureTheory
 
 attribute [local instance] IsStarNormal.instContinuousFunctionalCalculus
@@ -59,24 +63,6 @@ attribute [local instance] IsStarNormal.instContinuousFunctionalCalculus
 namespace TauCeti
 namespace BorelCalculus
 
-section OfReal
-
-variable {X : Type*} [TopologicalSpace X]
-
-/-- Complexification of a real continuous function, as an `ℝ`-linear map. -/
-noncomputable def ofRealLM : C(X, ℝ) →ₗ[ℝ] C(X, ℂ) where
-  toFun g := ⟨fun x => (g x : ℂ), Complex.continuous_ofReal.comp g.continuous⟩
-  map_add' g g' := by ext x; simp
-  map_smul' r g := by ext x; simp
-
-/-- The real-to-complex coercion of a continuous function, pointwise. -/
-@[simp] theorem ofRealLM_apply (g : C(X, ℝ)) (x : X) :
-    ofRealLM g x = (g x : ℂ) := (rfl)
-/-- A real-valued symbol is star-invariant, which is why its calculus is self-adjoint. -/
-@[simp] theorem star_ofRealLM (g : C(X, ℝ)) : star (ofRealLM g) = ofRealLM g := by
-  ext x; simp
-
-end OfReal
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable {a : H →L[ℂ] H}
@@ -87,12 +73,14 @@ variable (ha : IsStarNormal a)
 
 /-- A real continuous symbol has self-adjoint functional-calculus image. -/
 theorem isSelfAdjoint_cfcHom_ofReal (g : C(spectrum ℂ a, ℝ)) :
-    IsSelfAdjoint (cfcHom ha (ofRealLM g)) := by
-  rw [IsSelfAdjoint, ← map_star, star_ofRealLM]
+    IsSelfAdjoint (cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g)) := by
+  simpa only [ContinuousMap.realToRCLikeStarAlgHom_apply] using
+    (ContinuousMap.isSelfAdjoint_realToRCLike (𝕜 := ℂ) (f := g)).map (cfcHom ha)
 
 /-- The diagonal value of a real symbol is real. -/
 theorem inner_cfcHom_ofReal_conj (g : C(spectrum ℂ a, ℝ)) (ξ : H) :
-    (starRingEnd ℂ) ⟪ξ, cfcHom ha (ofRealLM g) ξ⟫_ℂ = ⟪ξ, cfcHom ha (ofRealLM g) ξ⟫_ℂ := by
+    (starRingEnd ℂ) ⟪ξ, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) ξ⟫_ℂ =
+      ⟪ξ, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) ξ⟫_ℂ := by
   rw [inner_conj_symm]
   conv_lhs => rw [← (isSelfAdjoint_cfcHom_ofReal ha g).star_eq]
   rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
@@ -100,32 +88,18 @@ theorem inner_cfcHom_ofReal_conj (g : C(spectrum ℂ a, ℝ)) (ξ : H) :
 /-- For a real symbol the diagonal matrix element is real, so taking `re` and coercing back is the
 identity.  This is what lets the diagonal functional be defined over `ℝ`. -/
 theorem inner_cfcHom_ofReal_re (g : C(spectrum ℂ a, ℝ)) (ξ : H) :
-    (((⟪ξ, cfcHom ha (ofRealLM g) ξ⟫_ℂ).re : ℝ) : ℂ) =
-      ⟪ξ, cfcHom ha (ofRealLM g) ξ⟫_ℂ :=
+    (((⟪ξ, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) ξ⟫_ℂ).re : ℝ) : ℂ) =
+      ⟪ξ, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) ξ⟫_ℂ :=
   Complex.conj_eq_iff_re.mp (inner_cfcHom_ofReal_conj ha g ξ)
 
 /-- Positivity: a nonnegative real symbol has nonnegative diagonal values. -/
 theorem inner_cfcHom_ofReal_nonneg {g : C(spectrum ℂ a, ℝ)} (hg : ∀ x, 0 ≤ g x) (ξ : H) :
-    0 ≤ (⟪ξ, cfcHom ha (ofRealLM g) ξ⟫_ℂ).re := by
-  set k : C(spectrum ℂ a, ℝ) :=
-    ⟨fun x => Real.sqrt (g x), Real.continuous_sqrt.comp g.continuous⟩ with hk
-  have hsq : ofRealLM k * ofRealLM k = ofRealLM g := by
-    ext x
-    simp only [ContinuousMap.mul_apply, ofRealLM_apply, hk, ContinuousMap.coe_mk,
-      ← Complex.ofReal_mul]
-    rw [Real.mul_self_sqrt (hg x)]
-  have hstar : cfcHom ha (ofRealLM k) =
-      ContinuousLinearMap.adjoint (cfcHom ha (ofRealLM k)) := by
-    conv_lhs => rw [← star_ofRealLM k, map_star]
-    rfl
-  have h1 : cfcHom ha (ofRealLM g) ξ =
-      ContinuousLinearMap.adjoint (cfcHom ha (ofRealLM k)) (cfcHom ha (ofRealLM k) ξ) := by
-    rw [← hsq, map_mul, ← hstar]; rfl
-  have hnorm : ⟪cfcHom ha (ofRealLM k) ξ, cfcHom ha (ofRealLM k) ξ⟫_ℂ =
-      ((‖cfcHom ha (ofRealLM k) ξ‖ ^ 2 : ℝ) : ℂ) := by
-    rw [inner_self_eq_norm_sq_to_K]; norm_cast
-  rw [h1, ContinuousLinearMap.adjoint_inner_right, hnorm, Complex.ofReal_re]
-  positivity
+    0 ≤ (⟪ξ, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) ξ⟫_ℂ).re := by
+  have hT : 0 ≤ cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) := by
+    apply map_nonneg (cfcHom ha)
+    intro x
+    simpa using hg x
+  exact (ContinuousLinearMap.nonneg_iff_isPositive.mp hT).re_inner_nonneg_right ξ
 
 end Positivity
 
@@ -137,14 +111,14 @@ variable (ha : IsStarNormal a)
 functions over the spectrum. -/
 noncomputable def diagFunctional (ξ : H) :
     C_c(spectrum ℂ a, ℝ) →ₚ[ℝ] ℝ where
-  toFun g := (⟪ξ, cfcHom ha (ofRealLM g.toContinuousMap) ξ⟫_ℂ).re
+  toFun g := (⟪ξ, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) ξ⟫_ℂ).re
   map_add' g g' := by
     have h : (g + g').toContinuousMap = g.toContinuousMap + g'.toContinuousMap := (rfl)
     rw [h, map_add, map_add, _root_.add_apply, inner_add_right, Complex.add_re]
   map_smul' r g := by
     have h : (r • g).toContinuousMap = r • g.toContinuousMap := (rfl)
-    have hc : ofRealLM (r • g.toContinuousMap) =
-        (r : ℂ) • ofRealLM g.toContinuousMap := by
+    have hc : (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (r • g.toContinuousMap) =
+        (r : ℂ) • (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap := by
       ext x; simp [Complex.real_smul]
     rw [h, hc, map_smul, _root_.smul_apply, inner_smul_right, Complex.re_ofReal_mul]
     rfl
@@ -158,7 +132,10 @@ noncomputable def diagFunctional (ξ : H) :
 
 /-- The diagonal functional, unfolded to the integral it is. -/
 @[simp] theorem diagFunctional_apply (ξ : H) (g : C_c(spectrum ℂ a, ℝ)) :
-    diagFunctional ha ξ g = (⟪ξ, cfcHom ha (ofRealLM g.toContinuousMap) ξ⟫_ℂ).re := (rfl)
+    diagFunctional ha ξ g =
+      (⟪ξ, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) ξ⟫_ℂ).re := by
+  rw [diagFunctional]
+  rfl
 /-- The **diagonal spectral measure** of a normal operator at a vector. -/
 noncomputable def diagMeasure (ξ : H) : Measure (spectrum ℂ a) :=
   RealRMK.rieszMeasure (diagFunctional ha ξ)
@@ -188,7 +165,8 @@ theorem integrable_of_continuous {E : Type*} [NormedAddCommGroup E] [NormedSpace
 /-- Riesz–Markov–Kakutani, specialised: real symbols integrate to diagonal
 values of the continuous functional calculus. -/
 theorem integral_diagMeasure_ofReal (ξ : H) (g : C(spectrum ℂ a, ℝ)) :
-    ∫ x, g x ∂(diagMeasure ha ξ) = (⟪ξ, cfcHom ha (ofRealLM g) ξ⟫_ℂ).re :=
+    ∫ x, g x ∂(diagMeasure ha ξ) =
+      (⟪ξ, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g) ξ⟫_ℂ).re :=
   RealRMK.integral_rieszMeasure (diagFunctional ha ξ)
     (⟨g, HasCompactSupport.of_compactSpace g⟩ : C_c(spectrum ℂ a, ℝ))
 
@@ -201,7 +179,8 @@ theorem integral_diagMeasure (ξ : H) (f : C(spectrum ℂ a, ℂ)) :
     ⟨fun x => (f x).re, Complex.continuous_re.comp f.continuous⟩ with hu
   set v : C(spectrum ℂ a, ℝ) :=
     ⟨fun x => (f x).im, Complex.continuous_im.comp f.continuous⟩ with hv
-  have hf : f = ofRealLM u + Complex.I • ofRealLM v := by
+  have hf : f = (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) u +
+      Complex.I • (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) v := by
     ext x
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
@@ -209,14 +188,15 @@ theorem integral_diagMeasure (ξ : H) (f : C(spectrum ℂ a, ℂ)) :
     rw [mul_comm]
     exact (Complex.re_add_im (f x)).symm
   have hiu : Integrable (fun x => ((u x : ℝ) : ℂ)) (diagMeasure ha ξ) :=
-    integrable_of_continuous ha ξ (ofRealLM u)
+    integrable_of_continuous ha ξ ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) u)
   have hiv : Integrable (fun x => ((v x : ℝ) : ℂ)) (diagMeasure ha ξ) :=
-    integrable_of_continuous ha ξ (ofRealLM v)
+    integrable_of_continuous ha ξ ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) v)
   have hlhs : ∫ x, f x ∂(diagMeasure ha ξ) =
       ((∫ x, u x ∂(diagMeasure ha ξ) : ℝ) : ℂ) +
         Complex.I * ((∫ x, v x ∂(diagMeasure ha ξ) : ℝ) : ℂ) := by
     conv_lhs => rw [hf]
-    rw [show (fun x => (ofRealLM u + Complex.I • ofRealLM v) x) =
+    rw [show (fun x => ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) u +
+        Complex.I • (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) v) x) =
         (fun x => ((u x : ℝ) : ℂ) + Complex.I * ((v x : ℝ) : ℂ)) from rfl,
       integral_add hiu (hiv.const_mul Complex.I), integral_const_mul,
       integral_complex_ofReal, integral_complex_ofReal]

@@ -585,7 +585,7 @@ theorem isQuarterAcute_of_orderedFormGap
     have hpos :=
       TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg hWnormal hg x
     have hsymbol :
-        TauCeti.BorelCalculus.ofRealLM g =
+        (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
           X + star X - ((2 * α : ℝ) : ℂ) • 1 := by
       ext z
       dsimp [g, X]

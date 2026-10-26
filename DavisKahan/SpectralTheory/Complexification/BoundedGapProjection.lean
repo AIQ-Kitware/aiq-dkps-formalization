@@ -79,10 +79,11 @@ theorem conjugateOperator_boundedSelfAdjointSpectralProjection_Iic_complexify
     rw [conjugateOperator_complexify, hBc.star_eq]
   rw [boundedSelfAdjointSpectralProjection_Iic_eq_cfcHom
     (complexify B) hBcop hdelta hgapC]
-  simpa only [TauCeti.BorelCalculus.star_ofRealLM] using
+  simpa only [ContinuousMap.realToRCLikeStarAlgHom_apply,
+      (ContinuousMap.isSelfAdjoint_realToRCLike (𝕜 := ℂ)).star_eq] using
     (TauCeti.LinearPMap.conjugateOperator_cfcHom_of_adjoint
       hBc.isStarNormal hconjStar
-      (TauCeti.BorelCalculus.ofRealLM
+      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ)
         (spectralGapSymbol (complexify B) alpha delta)))
 
 /-- The real bounded spectral projection for the lower side of a genuine gap,

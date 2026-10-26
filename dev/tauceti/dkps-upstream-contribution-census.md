@@ -1372,3 +1372,34 @@ the next mathematical consumption task, separate from this pin change. No
 historical proof-adaptation claim is inferred merely from matching statements;
 the local Kitware/Jon Crall/Claude Opus 5 provenance is retained pending that
 migration.
+
+### October 25: consume Mathlib's real continuous-function map
+
+The local `TauCeti.BorelCalculus.ofRealLM`, `ofRealLM_apply` and
+`star_ofRealLM` declarations are deleted. Their continuous-functional-calculus,
+gap-form, restriction and conjugation consumers use accepted Mathlib
+`ContinuousMap.realToRCLikeStarAlgHom`, its pointwise formulas and
+`isSelfAdjoint_realToRCLike` directly. No alias or old-name forwarding interface
+is retained. The restriction-specific composition lemma is renamed
+`realToRCLike_comp_specInclCM` to describe its actual carrier.
+
+The diagonal-positivity proof now applies accepted `map_nonneg` and
+`ContinuousLinearMap.nonneg_iff_isPositive`, replacing its separate square-root
+factorization argument. Its normality, completeness and pointwise nonnegativity
+hypotheses are retained. The local diagonal measure and real-functional
+construction still exist at this preparatory checkpoint; consuming the newly
+accepted `StarAlgHom.representationDiagMeasure` remains a separate migration.
+
+The focused diagonal-measure module compiled (6,295 jobs), following the cache
+fetch. Pre-change source is DKPS `32799562e`, with original Kitware/Jon Crall/
+Claude Opus 5 provenance retained. The older Mathlib real-function API is
+consumed as accepted independent infrastructure; historical proof descent is
+not inferred. The extraction manifest records precisely the three retired
+declarations and preserves the remaining donor obligations.
+
+The new positivity proof's ordered-operator dependencies are private imports;
+the accepted real-function API is public because it occurs in the mathematical
+interface. Native symbol evaluation is normalized explicitly to complex casts
+in the gap-form identities. The focused central-band and accepted diagonal
+measure build passed (7,478 jobs), following the cache fetch, including native
+`StarAlgHom`, representation measures and normal-operator diagonal measures.

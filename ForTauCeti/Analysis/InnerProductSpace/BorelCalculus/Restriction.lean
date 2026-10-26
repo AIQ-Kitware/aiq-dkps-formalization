@@ -466,11 +466,13 @@ theorem inner_compress_self {T : H →L[ℂ] H} (hT : ∀ x ∈ K, T x ∈ K) (x
   rw [Submodule.coe_inner, coe_compress_apply hT]
 
 /-- Complexifying a pulled-back real symbol is pulling back its complexification. -/
-theorem ofRealLM_comp_specInclCM (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
+theorem realToRCLike_comp_specInclCM (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
     (g : C(spectrum ℂ a, ℝ)) :
-    ofRealLM (g.comp (specInclCM ha hK)) = (ofRealLM g).comp (specInclCM ha hK) := by
+    (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (g.comp (specInclCM ha hK)) =
+      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g).comp (specInclCM ha hK) := by
   ext w
-  simp only [ofRealLM_apply, ContinuousMap.comp_apply]
+  simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply,
+    ContinuousMap.comp_apply]
 
 /-- **The scalar spectral measures transport along the spectral inclusion.**
 
@@ -493,10 +495,11 @@ theorem map_specIncl_diagMeasure (ha : IsStarNormal a) (hK : IsCalculusInvariant
         (diagMeasure (isStarNormal_compress ha hK) x))
       = ∫ w, (G.comp (specInclCM ha hK)) w ∂(diagMeasure (isStarNormal_compress ha hK) x) :=
     integral_map (measurable_specIncl ha hK).aemeasurable g.continuous.aestronglyMeasurable
-  have hT : ∀ y ∈ K, cfcHom ha (ofRealLM G) y ∈ K := fun _ hy =>
-    hK.cfcHom_apply_mem (ofRealLM G) hy
-  rw [hmap, integral_diagMeasure_ofReal, ofRealLM_comp_specInclCM ha hK G,
-    cfcHom_comp_specIncl ha hK (ofRealLM G), inner_compress_self hT,
+  have hT : ∀ y ∈ K, cfcHom ha ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) G) y ∈ K := fun _ hy =>
+    hK.cfcHom_apply_mem ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) G) hy
+  rw [hmap, integral_diagMeasure_ofReal, realToRCLike_comp_specInclCM ha hK G,
+    cfcHom_comp_specIncl ha hK ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) G),
+    inner_compress_self hT,
     ← integral_diagMeasure_ofReal ha (x : H) G]
   rfl
 

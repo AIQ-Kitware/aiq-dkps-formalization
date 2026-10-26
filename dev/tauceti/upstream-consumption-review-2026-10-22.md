@@ -1064,3 +1064,19 @@ measures, continuous integration, uniqueness, total mass and squared-norm
 identities. These overlap the donor Borel-calculus foundation. The dependency
 refresh is a separate checkpoint; it does not itself retire that local
 construction or claim that its consumers have migrated.
+
+The dependency-only full default build passed (21,029 jobs), with warnings
+treated as errors, and was immediately committed as `32799562e`.
+
+### October 25: remove the local real-symbol embedding
+
+`ofRealLM` and its two pointwise/star accessors are deleted. Consumers use
+accepted Mathlib `ContinuousMap.realToRCLikeStarAlgHom` and its public API
+directly. The restriction-specific composition lemma now says
+`realToRCLike_comp_specInclCM`. The local diagonal-positivity proof uses accepted
+star-map positivity instead of a separate square-root calculation.
+
+The diagonal-measure core compiled (6,295 jobs), following the cache fetch.
+The extraction manifest retains the still-local Riesz construction as staged;
+this preparatory step does not claim that `diagMeasure` or its downstream
+Borel-calculus construction has migrated to accepted representation measures.

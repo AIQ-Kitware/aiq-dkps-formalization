@@ -219,10 +219,11 @@ theorem diagMeasure_conjugation_complexifyReal
   refine BorelCalculus.diagMeasure_congr _ (DFunLike.ext _ _ fun g => ?_)
   rw [BorelCalculus.diagFunctional_apply, BorelCalculus.diagFunctional_apply]
   set T := cfcHom (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))
-    (BorelCalculus.ofRealLM g.toContinuousMap) with hT
+    ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) with hT
   have hfix : conjugateOperator T = T := by
     rw [hT, conjugateOperator_cfcHom_of_adjoint _ hUc,
-      BorelCalculus.star_ofRealLM]
+      ContinuousMap.realToRCLikeStarAlgHom_apply,
+      (ContinuousMap.isSelfAdjoint_realToRCLike (𝕜 := ℂ)).star_eq]
   have hstep : ⟪conjugation η, T (conjugation η)⟫_ℂ = ⟪T η, η⟫_ℂ := by
     have h1 : T (conjugation η) = conjugation (conjugateOperator T η) := by
       rw [conjugateOperator_apply, conjugation_involutive]

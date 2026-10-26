@@ -119,10 +119,10 @@ theorem boundedSelfAdjointSpectralProjection_Iic_eq_cfcHom
     (hgap : realSpectrum B ⊆ Set.Iic alpha ∪ Set.Ici (alpha + delta)) :
     boundedSelfAdjointSpectralProjection B hB (Set.Iic alpha) measurableSet_Iic =
       cfcHom ((ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mpr hB).isStarNormal
-        (TauCeti.BorelCalculus.ofRealLM (spectralGapSymbol B alpha delta)) := by
+        ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (spectralGapSymbol B alpha delta)) := by
   have h := boundedSelfAdjointSpectralProjection_eq_cfcL_of_agrees B hB
     (Set.Iic alpha) measurableSet_Iic
-    (TauCeti.BorelCalculus.ofRealLM (spectralGapSymbol B alpha delta)) ?_
+    ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (spectralGapSymbol B alpha delta)) ?_
   · rw [h]
     rfl
   · intro w
@@ -130,7 +130,7 @@ theorem boundedSelfAdjointSpectralProjection_Iic_eq_cfcHom
     by_cases hw : w ∈ TauCeti.BorelCalculus.reCoord (T := B) ⁻¹' Set.Iic alpha
     · have hle : TauCeti.BorelCalculus.reCoord w ≤ alpha := hw
       rw [Set.indicator_of_mem hw]
-      simp only [TauCeti.BorelCalculus.ofRealLM_apply, spectralGapSymbol_apply,
+      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, spectralGapSymbol_apply,
         spectralGapCutoff_eq_one hdelta hle]
       norm_num
     · have hgt : alpha < TauCeti.BorelCalculus.reCoord w := lt_of_not_ge hw
@@ -139,7 +139,7 @@ theorem boundedSelfAdjointSpectralProjection_Iic_eq_cfcHom
         · exact absurd (Set.mem_Iic.mp hlow) (not_le_of_gt hgt)
         · exact Set.mem_Ici.mp hhigh
       rw [Set.indicator_of_notMem hw]
-      simp only [TauCeti.BorelCalculus.ofRealLM_apply, spectralGapSymbol_apply,
+      simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, spectralGapSymbol_apply,
         spectralGapCutoff_eq_zero hdelta hhigh]
       norm_num
 
@@ -181,11 +181,11 @@ theorem re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic
   have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
     (a := B) hBsa.isStarNormal hgnonneg x
   have hsymbol :
-      TauCeti.BorelCalculus.ofRealLM g =
+      (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
         ((alpha : ℝ) : ℂ) •
-            TauCeti.BorelCalculus.ofRealLM (spectralGapSymbol B alpha delta) -
+            (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (spectralGapSymbol B alpha delta) -
           ((ContinuousMap.id ℂ).restrict (spectrum ℂ B)) *
-            TauCeti.BorelCalculus.ofRealLM (spectralGapSymbol B alpha delta) := by
+            (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (spectralGapSymbol B alpha delta) := by
     ext w
     have hre := coe_reCoord B hB w
     -- Rewrite `g` through its *value* equation rather than through `hgdef`: rewriting to the
@@ -194,10 +194,15 @@ theorem re_inner_le_of_mem_boundedSelfAdjointSpectralSubspace_Iic
     have hgapp : ∀ v : spectrum ℂ B, g v =
         (alpha - TauCeti.BorelCalculus.reCoord v) *
           spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord v) := fun _ => rfl
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
+    simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.restrict_apply, ContinuousMap.id_apply, smul_eq_mul,
       spectralGapSymbol_apply]
+    change Complex.ofReal ((alpha - TauCeti.BorelCalculus.reCoord w) *
+        spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w)) =
+      Complex.ofReal alpha *
+          Complex.ofReal (spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w)) -
+        (w : ℂ) * Complex.ofReal (spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w))
     rw [← hre]
     push_cast
     ring
@@ -254,10 +259,10 @@ theorem le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal
   have hpos := TauCeti.BorelCalculus.inner_cfcHom_ofReal_nonneg
     (a := B) hBsa.isStarNormal hgnonneg x
   have hsymbol :
-      TauCeti.BorelCalculus.ofRealLM g =
+      (ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g =
         (((ContinuousMap.id ℂ).restrict (spectrum ℂ B)) -
             (((alpha + delta : ℝ) : ℂ)) • 1) *
-          (1 - TauCeti.BorelCalculus.ofRealLM
+          (1 - (ContinuousMap.realToRCLikeStarAlgHom _ ℂ)
             (spectralGapSymbol B alpha delta)) := by
     ext w
     have hre := coe_reCoord B hB w
@@ -265,10 +270,14 @@ theorem le_re_inner_of_mem_boundedSelfAdjointSpectralSubspace_Iic_orthogonal
     have hgapp : ∀ v : spectrum ℂ B, g v =
         (TauCeti.BorelCalculus.reCoord v - (alpha + delta)) *
           (1 - spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord v)) := fun _ => rfl
-    simp only [TauCeti.BorelCalculus.ofRealLM_apply, hgapp,
+    simp only [ContinuousMap.realToRCLikeStarAlgHom_apply, ContinuousMap.realToRCLike_apply, hgapp,
       ContinuousMap.sub_apply, ContinuousMap.smul_apply, ContinuousMap.mul_apply,
       ContinuousMap.one_apply, ContinuousMap.restrict_apply,
       ContinuousMap.id_apply, smul_eq_mul, spectralGapSymbol_apply]
+    change Complex.ofReal ((TauCeti.BorelCalculus.reCoord w - (alpha + delta)) *
+        (1 - spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w))) =
+      ((w : ℂ) - Complex.ofReal (alpha + delta) * 1) *
+        (1 - Complex.ofReal (spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w)))
     rw [← hre]
     push_cast
     ring
