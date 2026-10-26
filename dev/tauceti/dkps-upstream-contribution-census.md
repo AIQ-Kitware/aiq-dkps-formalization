@@ -1768,3 +1768,22 @@ paper's norm definition into the generic foundation or weakening the policy.
 
 The preceding native-completeness migration compiled in the full default build
 (21,035 jobs) and was committed immediately as `495f03d1a`.
+
+### October 26: validation of the completed consumption checkpoint
+
+TauCeti is pinned to accepted main
+`b3de655482f7b86c77d8982566e5a73801fd64fa`, with its exact Mathlib/toolchain
+inputs unchanged. The complete default build passed after each migration,
+including the final source-module move (`53d8deb9b`, 21,035 jobs), with compiler
+warnings treated as errors. `Challenge` and `DavisKahan.Audits.All` then passed
+(20,809 jobs). The signature preflight matched full types and raw universe
+signatures for all 42 implemented comparator targets; the three explicitly
+absent solution targets remain declared skips, not completed obligations.
+No full external comparator run is claimed.
+
+The import-layer policy now reports zero violations, closing the previously
+recorded generic/source ownership issue. The auxiliary local-source name-drift
+scanner still reports the same 23 known findings involving imported APIs and
+historical mappings; this checkpoint does not claim that scanner passes. No
+aliases were introduced to satisfy it. Papers, visualizations, coordination
+checkouts and standalone submission submodules were not modified.
