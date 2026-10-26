@@ -596,3 +596,38 @@ general ideal attainment at `1<=p<2`, and the infinite-dimensional
 all-optimizer classification. These classical membership/feasibility
 lemmas do not independently establish historical novelty; their role is
 to justify the claimed ambient scope of the optimization theory.
+
+## General compact and Schatten feasibility iff
+
+`Submodule.finite_crossedDefect_balance_of_compact_transport` now proves
+necessity in **general Hilbert dimension with infinite-rank projection
+difference**. The actual rectangular projection `P_L|K` is a compact
+perturbation of `U|K`, hence Fredholm of index zero by accepted Tau Ceti
+theorems. Its kernel and adjoint kernel identify with the two crossed
+defects. Their finite dimensionality and equality follow from the
+accepted index and cokernel--adjoint-kernel APIs. No separability is used.
+
+`DirectRotationIdeal.compact_transport_iff_compact_projection_sub_and_defect_balance`
+therefore gives the full compact restricted-unitary feasibility iff.
+`SchattenFeasibility.schatten_transport_iff_projection_sub_ne_top_and_defect_balance`
+gives the corresponding **general** Schatten feasibility iff for every
+finite real `p>=1`, over both fields: precisely `P_K-P_L in S_p` and
+finite crossed-defect balance. The infinite-cost imbalance theorem no
+longer needs finite rank of the projection difference.
+
+The superseded finite-rank-only compact target-correction module has
+been deleted; its history remains in commit `2408c0867`. The weaker
+Schatten sufficiency and finite-rank feasibility declarations have also
+been replaced by the general iff, with no compatibility facade. The
+separate finite-rank **unitary-group** criterion remains, since it
+constructs a finite-rank reference with an explicit rank bound and has
+finite-section consumers. Focused general build passed (7,554 jobs).
+
+The central remaining optimization obligation is now sharply isolated:
+at `1<=p<2`, a general balanced Schatten pair has a finite-cost canonical
+reference and the exact universal angle lower bound, but an attainer
+realizing that angle sum in infinite rank has not been constructed.
+For `1<p<2` this should be a finite modification on the supercritical
+spectral sector; for `p=1` infinitely many nonzero angles can require
+modification. Infinite-dimensional all-optimizer classification remains
+separate. The feasibility/index mathematics itself is classical.

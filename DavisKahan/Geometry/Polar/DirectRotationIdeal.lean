@@ -8,6 +8,8 @@ module
 public import DavisKahan.Geometry.Polar.PairedPhase
 public import ForTauCeti.Analysis.OperatorIdeal.Family.UnitaryTransport
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.CompactTransportDefects
+public import DavisKahan.Geometry.Halmos.CompactDefects
 
 /-!
 # Completed direct rotations in operator ideals
@@ -135,5 +137,39 @@ theorem gauge_nonacuteDirectRotation_ne_top_iff_projection_sub
     have hfinite : Φ.gauge (K.starProjection - L.starProjection) * ‖B‖ₑ ≠ ∞ :=
       ENNReal.mul_ne_top hD enorm_ne_top
     exact ne_top_of_le_ne_top hfinite (Φ.gauge_comp_right_le _ B)
+
+/-- **Compact restricted-unitary feasibility.** A compact-displacement
+unitary transports a pair exactly when its projection difference is
+compact and its finite crossed defects are balanced. No finite-rank or
+separability hypothesis is imposed. -/
+theorem compact_transport_iff_compact_projection_sub_and_defect_balance
+    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection] :
+    (∃ U : H ≃ₗᵢ[𝕜] H, K.map U.toLinearMap = L ∧
+      IsCompactOperator (((U : H →L[𝕜] H) - 1) : H →L[𝕜] H)) ↔
+    IsCompactOperator ((K.starProjection - L.starProjection) : H →L[𝕜] H) ∧
+      Module.finrank 𝕜 (halmosSourceDefect K L) =
+        Module.finrank 𝕜 (halmosTargetDefect K L) := by
+  constructor
+  · rintro ⟨U, hmap, hU⟩
+    refine ⟨K.isCompactOperator_projection_sub_of_compact_transport L U hmap hU, ?_⟩
+    have hbalance := (K.finite_crossedDefect_balance_of_compact_transport L U hmap hU).2.2
+    change Module.finrank 𝕜 (K ⊓ Lᗮ : Submodule 𝕜 H) =
+      Module.finrank 𝕜 (Kᗮ ⊓ L : Submodule 𝕜 H)
+    rwa [inf_comm Kᗮ L]
+  · rintro ⟨hD, hbalance⟩
+    obtain ⟨J⟩ := crossedDefectsEquivalent_of_compact_projection_sub_of_finrank_eq K L hD hbalance
+    let U := Unitary.linearIsometryEquiv
+      (⟨nonacuteDirectRotation K L J, nonacuteDirectRotation_mem_unitary K L J⟩ :
+        unitary (H →L[𝕜] H))
+    refine ⟨U, ?_, ?_⟩
+    · apply (Submodule.map_eq_iff_intertwines_reflection K L U).mpr
+      exact nonacuteDirectRotation_reflection_intertwines K L J
+    · obtain ⟨B, hB⟩ := exists_nonacuteDirectRotation_displacement_factor K L J
+      have hcompact : IsCompactOperator ((1 - (U : H →L[𝕜] H)) : H →L[𝕜] H) := by
+        change IsCompactOperator ((1 - nonacuteDirectRotation K L J) : H →L[𝕜] H)
+        rw [hB]
+        exact hD.comp_clm B
+      rw [← neg_sub 1 (U : H →L[𝕜] H)]
+      exact hcompact.neg
 
 end TauCeti.DavisKahan
