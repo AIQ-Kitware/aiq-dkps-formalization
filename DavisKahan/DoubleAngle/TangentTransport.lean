@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.DoubleAngle.AngleTransport
 public import DavisKahan.DoubleAngle.DirectedAngleRealTransport
@@ -619,8 +620,8 @@ theorem sameApproximationSingularValues_unboundedReflectionTangent
       (unboundedReflectionTangent U V.reflectionOperator)
       (tanTwoBlockRepresentative U V) := by
     rw [← hcomp]
-    exact ExactSinTheta.SameApproximationSingularValues.comp_isometricEquiv
-      (LinearIsometryEquiv.refl ℂ Ec) U.reflection
+    exact ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+      _ U.reflection (LinearIsometryEquiv.refl ℂ Ec)
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq

@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
 public import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 public import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
@@ -215,11 +216,15 @@ theorem approximationSingularValue_blockCompression_complexify
         (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
           (complexify K)) =
       approximationSingularValue n (blockCompression Ω Γ K) := by
-  have hsame := SameApproximationSingularValues.of_isometricEquiv_comp
-    (complexifySubmoduleEquiv Ω) (complexifySubmoduleEquiv Γ)
-    (blockCompression_complexify_equiv Ω Γ K)
-  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
-    (approximationSingularValue_complexify (blockCompression Ω Γ K) n)
+  calc
+    approximationSingularValue n
+        (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ) (complexify K)) =
+        approximationSingularValue n (complexify (blockCompression Ω Γ K)) := by
+      rw [← blockCompression_complexify_equiv Ω Γ K]
+      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        _ (complexifySubmoduleEquiv Γ).symm
+        (complexifySubmoduleEquiv Ω)).approximationNumber_eq n
+    _ = _ := approximationSingularValue_complexify (blockCompression Ω Γ K) n
 
 /-- The finite Ky Fan gauge of a directed corner is preserved on the nose by
 complexification. -/

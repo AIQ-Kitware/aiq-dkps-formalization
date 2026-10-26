@@ -6,7 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
-public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 
 /-!
@@ -36,33 +35,6 @@ variable {E : Type vE} {F : Type vF}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
 namespace SameApproximationSingularValues
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Two-sided composition by isometric equivalences preserves every
-approximation singular value. -/
-theorem comp_isometricEquiv
-    {A : E →L[𝕜] F}
-    (U : F ≃ₗᵢ[𝕜] F) (V : E ≃ₗᵢ[𝕜] E) :
-    ContinuousLinearMap.SameSingularValues
-      (U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-        V.toContinuousLinearEquiv.toContinuousLinearMap) A := by
-  exact ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ V U
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- If an operator becomes another operator after unitary coordinate changes,
-they have the same complete singular sequence. -/
-theorem of_isometricEquiv_comp
-    {E' : Type vE1} {F' : Type vF1}
-    [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
-    [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
-    (U : F ≃ₗᵢ[𝕜] F') (V : E ≃ₗᵢ[𝕜] E')
-    {A : E →L[𝕜] F} {B : E' →L[𝕜] F'}
-    (h : U.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
-      V.symm.toContinuousLinearEquiv.toContinuousLinearMap = B) :
-    ContinuousLinearMap.SameSingularValues A B := by
-  rw [← h]
-  exact ContinuousLinearMap.sameSingularValues_symm
-    (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ V.symm U)
 
 section IdealGauge
 

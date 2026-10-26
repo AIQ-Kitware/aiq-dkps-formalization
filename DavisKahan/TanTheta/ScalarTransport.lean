@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.TanTheta.RitzPair
 public import DavisKahan.Sylvester.ScalarTransport
 public import DavisKahan.OperatorIdeal.SymmetricNormingScalarTransport
@@ -78,6 +79,7 @@ noncomputable def scalarTransportSubspaceCLMEquiv (Z : Submodule 𝕜 H) :
     intro z
     rfl
 
+omit [CompleteSpace H] in
 /-- Transporting a subspace-domain operator preserves every approximation number. -/
 theorem approximationNumber_scalarTransportSubspaceCLM
     (Z : Submodule 𝕜 H) [Z.HasOrthogonalProjection]
@@ -89,9 +91,9 @@ theorem approximationNumber_scalarTransportSubspaceCLM
   have hsame :
       (ScalarTransport.clm (e := e) T).SameSingularValues
         (scalarTransportSubspaceCLM (e := e) Z T) := by
-    refine SameApproximationSingularValues.of_isometricEquiv_comp I W ?_
-    ext z
-    rfl
+    exact ContinuousLinearMap.sameSingularValues_symm
+      (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        (ScalarTransport.clm (e := e) T) W.symm I)
   rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
@@ -167,6 +169,7 @@ noncomputable def scalarTransportSubspaceBlockCLMEquiv
     intro z
     rfl
 
+omit [CompleteSpace H] in
 /-- Two-sided transported subspace coordinates preserve every approximation number. -/
 theorem approximationNumber_scalarTransportSubspaceBlockCLM
     (Z W : Submodule 𝕜 H) [Z.HasOrthogonalProjection] [W.HasOrthogonalProjection]
@@ -178,8 +181,8 @@ theorem approximationNumber_scalarTransportSubspaceBlockCLM
   have hsame :
       (ScalarTransport.clm (e := e) T).SameSingularValues
         (scalarTransportSubspaceBlockCLM (e := e) Z W T) := by
-    refine SameApproximationSingularValues.of_isometricEquiv_comp U V ?_
-    rfl
+    exact ContinuousLinearMap.sameSingularValues_symm
+      (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ V.symm U)
   rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
@@ -218,6 +221,7 @@ noncomputable def scalarTransportOrthogonalSubspaceBlockCLMInv
       (ScalarTransport.submoduleSubtypeEquiv (e := e)
         Z).toContinuousLinearEquiv.toContinuousLinearMap)
 
+omit [CompleteSpace H] in
 /-- Orthogonal-corner transport preserves every approximation number. -/
 theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLM
     (Z : Submodule 𝕜 H) [Z.HasOrthogonalProjection]
@@ -229,11 +233,12 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLM
   have hsame :
       (ScalarTransport.clm (e := e) T).SameSingularValues
         (scalarTransportOrthogonalSubspaceBlockCLM (e := e) Z T) := by
-    refine SameApproximationSingularValues.of_isometricEquiv_comp U V ?_
-    rfl
+    exact ContinuousLinearMap.sameSingularValues_symm
+      (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ V.symm U)
   rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
+omit [CompleteSpace H] in
 /-- Inverse orthogonal-corner transport also preserves every approximation number. -/
 theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
     (Z : Submodule 𝕜 H) [Z.HasOrthogonalProjection]
@@ -247,8 +252,8 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
     U.symm.toContinuousLinearEquiv.toContinuousLinearMap ∘L T ∘L
       V.toContinuousLinearEquiv.toContinuousLinearMap
   have hcoord : T.SameSingularValues X := by
-    refine SameApproximationSingularValues.of_isometricEquiv_comp U.symm V.symm ?_
-    rfl
+    exact ContinuousLinearMap.sameSingularValues_symm
+      (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ V U.symm)
   have hclm :
       ScalarTransport.clm (e := e)
           (scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T) = X := by
@@ -331,6 +336,7 @@ theorem gauge_scalarTransportOrthogonalSubspaceBlockCLMInv
   unfold SymmetricNormingFunction.gauge
   rw [extendedGauge_scalarTransportOrthogonalSubspaceBlockCLMInv]
 
+omit [CompleteSpace H] in
 /-- Approximation numbers of the inverse transported coordinates are unchanged. -/
 theorem approximationNumber_scalarTransportSubspaceBlockCLMEquiv_symm
     (Z W : Submodule 𝕜 H) [Z.HasOrthogonalProjection] [W.HasOrthogonalProjection]
@@ -423,9 +429,9 @@ theorem scalarTransport_residual_sameApproximationNumbers_clm
       (D.scalarTransport (e := e)).residual := by
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   let I := LinearIsometryEquiv.refl 𝕂 (ScalarTransport e H)
-  refine SameApproximationSingularValues.of_isometricEquiv_comp I W ?_
-  ext z
-  rfl
+  exact ContinuousLinearMap.sameSingularValues_symm
+    (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+      (ScalarTransport.clm (e := e) D.residual) W.symm I)
 
 /-- The transported residual has the same finite Ky Fan gauges as the original. -/
 theorem kyFanApproximationGauge_scalarTransport_residual

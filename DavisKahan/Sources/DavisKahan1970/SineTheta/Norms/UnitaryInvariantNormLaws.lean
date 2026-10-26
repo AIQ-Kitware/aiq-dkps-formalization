@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 public import DavisKahan.Sylvester.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
@@ -189,7 +190,7 @@ theorem extendedGauge_unitary
         V.toContinuousLinearEquiv.toContinuousLinearMap) =
       N.extendedGauge A := by
   exact N.gauge_eq_of_sameApproximationSingularValues
-    (SameApproximationSingularValues.comp_isometricEquiv (A := A) U V)
+    (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv A V U)
 
 /-- Finite Fan dominance between operators with **different codomains**.
 

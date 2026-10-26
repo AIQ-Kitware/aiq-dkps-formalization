@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.TanTheta.Theorem63UnboundedCompression
 public import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 
@@ -209,9 +210,13 @@ theorem approximationSingularValue_complexifyUnboundedCompressionTrialData_resid
     apply ContinuousLinearMap.ext
     intro z
     rfl
-  have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
-      (approximationSingularValue_complexify D.residual n)
+  calc
+    approximationSingularValue n (complexifyUnboundedCompressionTrialData D).residual =
+        approximationSingularValue n (complexify D.residual) := by
+      rw [← hcoord]
+      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        _ W.symm U).approximationNumber_eq n
+    _ = _ := approximationSingularValue_complexify D.residual n
 
 /-- The finite Ky Fan gauge of the residual is exactly preserved. -/
 theorem kyFanApproximationGauge_complexifyUnboundedCompressionTrialData_residual

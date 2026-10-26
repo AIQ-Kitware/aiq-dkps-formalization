@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.CosineAngle
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
@@ -122,8 +123,8 @@ theorem sourceCrossBlockSum_same_ambientCrossSum
     simp [crossBlockSumC, sineBlockC,
       crossSineSum, Udom, Vcod, Submodule.adjoint_subtypeL,
       hUbStar, hV1, hV2]
-  exact ContinuousLinearMap.sameSingularValues_symm
-    (SameApproximationSingularValues.of_isometricEquiv_comp Vcod Udom hfactor)
+  rw [← hfactor]
+  exact ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ Udom.symm Vcod
 
 /-- The paper's literal full `sin Theta` has exactly the singular values of
 `P_U-P_V`. -/

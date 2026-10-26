@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
 public import DavisKahan.DoubleAngle.RealAngleIdentification
 public import DavisKahan.Sources.DavisKahan1970.AmbientReal
@@ -187,6 +188,7 @@ theorem residual_complexify_equiv
     RealComplexification.complexify_comp]
   rfl
 
+omit [CompleteSpace E] in
 /-- **The complex and real Theorem 8.2 residuals have the same complete
 approximation-singular sequence.**
 
@@ -216,8 +218,9 @@ theorem sameApproximationSingularSequence_residual_complexify
     have hw : W w = z := W.apply_symm_apply z
     have h := congrArg (fun L => L w) (residual_complexify_equiv A K P hPinv)
     simpa [U, W, w, hw] using h.symm
-  exact ExactSinTheta.SameApproximationSingularValues.of_isometricEquiv_comp
-    U W hcoord
+  rw [← hcoord]
+  exact ContinuousLinearMap.sameSingularValues_symm
+    (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ W.symm U)
 
 /-! ### 1b. The three hypothesis transports, once
 

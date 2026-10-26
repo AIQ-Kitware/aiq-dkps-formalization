@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.Sources.DavisKahan1970.DirectedReal
 public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 public import DavisKahan.SpectralTheory.Real.SpectralRestriction
@@ -171,9 +172,13 @@ theorem approximationSingularValue_complexifyTrialData_residual
     apply ContinuousLinearMap.ext
     intro z
     rfl
-  have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
-      (approximationSingularValue_complexify data.residual n)
+  calc
+    approximationSingularValue n (complexifyTrialData data).residual =
+        approximationSingularValue n (complexify data.residual) := by
+      rw [← hcoord]
+      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        _ W.symm U).approximationNumber_eq n
+    _ = _ := approximationSingularValue_complexify data.residual n
 
 /-- The finite Ky Fan gauge of the residual is exactly preserved by the complexification of
 trial-block data. -/

@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.Sources.DavisKahan1970.AmbientReal
 public import DavisKahan.TanTheta.Theorem63InfiniteTrial
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
@@ -144,9 +145,14 @@ theorem approximationSingularValue_theorem63DirectedSineBlock_complexify
     have h := congrArg (fun L => L w)
       (theorem63DirectedSineBlock_complexify_equiv Z V)
     simpa [U, W, w, hw] using h.symm
-  have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
-    (approximationSingularValue_complexify (theorem63DirectedSineBlockReal Z V) n)
+  calc
+    approximationSingularValue n
+        (theorem63DirectedSineBlock (complexifySubmodule Z) (complexifySubmodule V)) =
+        approximationSingularValue n (complexify (theorem63DirectedSineBlockReal Z V)) := by
+      rw [← hcoord]
+      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        _ W.symm U).approximationNumber_eq n
+    _ = _ := approximationSingularValue_complexify (theorem63DirectedSineBlockReal Z V) n
 
 /-- Approximation singular values of the real Ritz residual are likewise
 preserved under the complexified Theorem 6.3 configuration. -/
@@ -170,9 +176,13 @@ theorem approximationSingularValue_theorem63Residual_complexify
     have h := congrArg (fun L => L w)
       (theorem63Residual_complexify_equiv T Z)
     simpa [U, W, w, hw] using h.symm
-  have hsame := SameApproximationSingularValues.of_isometricEquiv_comp U W hcoord
-  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n).symm.trans
-    (approximationSingularValue_complexify (theorem63ResidualReal T Z) n)
+  calc
+    approximationSingularValue n (theorem63Residual (complexify T) (complexifySubmodule Z)) =
+        approximationSingularValue n (complexify (theorem63ResidualReal T Z)) := by
+      rw [← hcoord]
+      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        _ W.symm U).approximationNumber_eq n
+    _ = _ := approximationSingularValue_complexify (theorem63ResidualReal T Z) n
 
 /-- The finite Ky Fan residual gauge is exactly preserved by the real-to-complex
 Theorem 6.3 transport. -/

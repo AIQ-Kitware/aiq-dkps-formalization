@@ -1546,3 +1546,24 @@ The real approximation-number / Ky Fan views also remain a representation
 migration obligation. Preserve the genuinely broader incomplete-target
 comparison theorems in `ApproximationNumber/SameSequence.lean`; the complete-
 target Douglas route is not a scope-preserving replacement for them.
+
+### October 26: retire the coordinate-change forwarding API
+
+The two remaining source coordinate-change wrappers,
+`SameApproximationSingularValues.comp_isometricEquiv` and
+`of_isometricEquiv_comp`, are deleted. Their callers import accepted
+`ApproximationNumber.Isometry` directly and use
+`ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv`, applying
+coordinate identities at the use site. No replacement wrapper or namespace
+alias is introduced. Source norm membership and representative packaging stay
+in their established paper-facing module.
+
+The real complexification, unbounded residual, scalar-transport, full-angle and
+Lemma 6.1 block-coordinate statements retain their mathematical conclusions.
+Redundant ambient-completeness assumptions are omitted where the native theorem
+permits the stronger statement. Lemma 6.1 makes the isometry coercion explicit
+before using its existing coordinate calculation. The historical name map and
+isometry extraction record track the exact native replacements and retirements;
+the native module explicitly credits the earlier DKPS donor. This is native
+consumption, not a new submission or a new historical novelty claim. Papers,
+visualizations and the original three untracked files are untouched.

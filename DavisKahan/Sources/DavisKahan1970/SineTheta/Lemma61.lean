@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
@@ -93,8 +94,10 @@ theorem projectionBlockPair_same_blockSum
       (continuousOrthogonalBlockSum
         (blockCompression Ω Γ K)
         (blockCompression Ωᗮ Γᗮ L)) := by
-  refine SameApproximationSingularValues.of_isometricEquiv_comp
-    Ω.orthogonalDecomposition Γ.orthogonalDecomposition ?_
+  apply ContinuousLinearMap.sameSingularValues_symm
+  convert ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+    _ Γ.orthogonalDecomposition.symm Ω.orthogonalDecomposition using 1
+  symm
   refine ContinuousLinearMap.ext fun x => ?_
   have hΓfst : Γ.orthogonalProjectionOnto ((x.fst : E) + (x.snd : E)) = x.fst := by
     rw [map_add, Submodule.orthogonalProjectionOnto_mem_subspace_eq_self,
@@ -129,10 +132,11 @@ theorem projectionBlockPair_same_blockSum
       Submodule.orthogonalProjectionOnto_starProjection_of_le (le_refl Ωᗮ),
       zero_add, blockCompression, Submodule.adjoint_subtypeL]
     rfl
-  simp only [ContinuousLinearMap.comp_apply,
-    LinearIsometryEquiv.coe_toContinuousLinearEquiv, ContinuousLinearEquiv.coe_coe,
-    hz, Submodule.orthogonalDecomposition_apply, continuousOrthogonalBlockSum_apply,
-    hcomp₀, hcomp₁]
+  change Ω.orthogonalDecomposition
+    ((projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ L)
+      (Γ.orthogonalDecomposition.symm x)) =
+    WithLp.toLp 2 ((blockCompression Ω Γ K) x.fst, (blockCompression Ωᗮ Γᗮ L) x.snd)
+  rw [hz, Submodule.orthogonalDecomposition_apply, hcomp₀, hcomp₁]
 
 /-- **Davis--Kahan 1970, Lemma 6.1, forward direction.** -/
 theorem lemma61_all_kyFan
