@@ -1392,3 +1392,14 @@ present in some modules. Those can consume the accepted theorem with local
 instance attributes too; preserve their actual ambient and scalar hypotheses.
 No whole-repository upstream-consumption completion is claimed. The tracked
 mathematics is committed; only the three original untracked files remain.
+
+### October 26: align with the refreshed TauCeti main checkout
+
+Advance the pinned Git dependency from `97bf123075b7f142c1e37b827b6b37c156803248`
+to `b3de655482f7b86c77d8982566e5a73801fd64fa`, the main HEAD supplied in the
+operator's `/home/joncrall/code/TauCeti` checkout. The checkout is an explicit
+comparison input only; Lake still consumes the pinned Git dependency. The
+Lean toolchain remains `v4.36.0-rc1` and the exact Mathlib revision remains
+`2cabef97b63d3275776b8b060d802de6a6fa1055`. No operator-analysis source changed
+between these TauCeti pins. Further donor retirement therefore concerns
+already accepted APIs, not an inferred new integration from a closed PR.
