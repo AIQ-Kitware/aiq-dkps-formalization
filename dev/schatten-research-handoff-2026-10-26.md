@@ -1321,3 +1321,35 @@ critical rank budget (previously only an attaining optimizer had this
 certificate), intrinsic uniqueness iff the strict active sector is
 empty, and a topology/dimension theorem after removing redundant
 finite phase parameters.
+
+
+## Every-optimizer rank certificate and build checkpoint
+
+The complete classification was committed as `aeb6384f1` after a full
+default build passed all 21,233 jobs with warnings treated as errors.
+
+`schatten_minimizer_has_critical_rank_budget` strengthens the older
+existence-only rank certificate to **every** global optimizer. Write
+`c=sin(criticalAngle p)` and `M=eigenSpan |P-Q| (Ioi c)`. For every
+optimizer `U` and every completed direct rotation `R`,
+
+```
+rank(R-U) ≤ finrank M,
+(finrank M) * c^p ≤ gauge_p(P-Q)^p.
+```
+
+The operator update is supported on the same intrinsic strictly active
+sector for every optimizer. No finite-cost hypothesis is imposed on
+`U`; comparison with the existing finite-cost attaining transporter
+proves it. Focused rank build passed (8,018 jobs).
+
+The finite multiplicity and parameter-topology results already exist in
+`SchattenMultiplicityParameters.lean` and `SchattenParameterTopology.lean`.
+An infinite optimizer-space homeomorphism and corresponding compactness
+and multiplicity-space topology can now be obtained by identifying this
+fixed finite core with the complete ambient optimizer set. That
+homeomorphism has **not** yet been formalized. The next proof should use
+the continuous orthogonal extension and actual compression inverse,
+then compose the existing finite parameter homeomorphisms; no new
+variational argument is needed. Nuclear / smoothed / real classification
+and `p≥2` equality cases remain distinct workstreams.
