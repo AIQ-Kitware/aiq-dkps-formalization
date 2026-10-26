@@ -7,7 +7,8 @@ module
 
 public import DavisKahan.DoubleAngle.TanTwoThetaApproximatePair
 public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
-public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 
 public section
 
@@ -42,7 +43,7 @@ The family is taken for the graph coordinate *as a map between the two blocks*,
 `blockGraphCoordinate T U : U →L Uᗮ`, so that the right vectors lie in `U` and
 the left vectors in `Uᗮ` **by typing** rather than approximately.  Its
 approximation numbers are those of the ambient `T`, by the existing
-`sameApproximationSingularValues_ambientSubspaceBlock`.
+`ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock`.
 
 ## The pole at `π/4`
 
@@ -137,7 +138,7 @@ graph coordinate. -/
 theorem approximationNumber_blockGraphCoordinate
     (hTmem : ∀ x, T x ∈ Uᗮ) (hTzero : ∀ x ∈ Uᗮ, T x = 0) (n : ℕ) :
     (blockGraphCoordinate T U).approximationNumber n = T.approximationNumber n := by
-  have h := sameApproximationSingularValues_ambientSubspaceBlock U Uᗮ
+  have h := ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
     (blockGraphCoordinate T U)
   rw [← eq_subtypeL_comp_blockGraphCoordinate hTmem hTzero] at h
   exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq h n).symm

@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
 public import DavisKahan.DoubleAngle.UnboundedIdealFormGap
@@ -232,7 +233,7 @@ theorem
         2 * N.gauge R := by
   let R0 : H →L[ℂ] H := R ∘L V.subtypeL.adjoint
   have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
-    sameApproximationSingularValues_extendDomainByZero V R
+    ContinuousLinearMap.sameSingularValues_extendDomainByZero V R
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
@@ -400,7 +401,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
         2 * N.gauge R := by
   let R0 : H →L[ℂ] H := R ∘L V.subtypeL.adjoint
   have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
-    sameApproximationSingularValues_extendDomainByZero V R
+    ContinuousLinearMap.sameSingularValues_extendDomainByZero V R
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
@@ -568,7 +569,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
         2 * N.gauge R := by
   let R0 : H →L[ℂ] H := R ∘L V.subtypeL.adjoint
   have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
-    sameApproximationSingularValues_extendDomainByZero V R
+    ContinuousLinearMap.sameSingularValues_extendDomainByZero V R
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2

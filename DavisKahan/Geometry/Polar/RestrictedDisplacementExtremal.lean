@@ -11,7 +11,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestri
 public import DavisKahan.Geometry.Polar.DirectRotationSquare
 public import DavisKahan.Geometry.Polar.Section3Nonacute
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
--- supplies `hasSameApproximationNumbers_extendDomainByZero`, promoted out of
+-- supplies `sameSingularValues_extendDomainByZero`, promoted out of
 -- `Sources/DavisKahan1970/SineTheta/Norms/SubspaceSingularTransport.lean`: it is a statement
 -- about `Submodule.subtypeL` and approximation numbers, with nothing paper-specific in it.
 public import DavisKahan.Sylvester.Spectrum
@@ -980,7 +980,7 @@ theorem sourceRestrictedDisplacement_sameApproximationSingularSequence
     ContinuousLinearMap.SameSingularValues
       ((1 - T) ∘L U.starProjection) (sourceRestrictedDisplacement U T) := by
   rw [← sourceRestrictedDisplacement_extendDomainByZero U T]
-  exact ContinuousLinearMap.hasSameApproximationNumbers_extendDomainByZero U
+  exact ContinuousLinearMap.sameSingularValues_extendDomainByZero U
     (sourceRestrictedDisplacement U T)
 
 /-- Infinite-dimensional Davis--Kahan Proposition 4.1 in the ambient form used

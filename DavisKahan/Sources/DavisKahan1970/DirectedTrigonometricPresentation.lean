@@ -11,7 +11,8 @@ public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
@@ -656,7 +657,7 @@ theorem sourceDirectedSine_hasSameApproximationNumbers_directedSineBlock
       TanTheta.directedSineBlock, ContinuousLinearMap.comp_assoc, hproj]
   have hmod := ContinuousLinearMap.sameSingularValues_modulus
     (Vᗮ.starProjection ∘L Z.starProjection)
-  have hzero := sameApproximationSingularValues_extendDomainByZero Z B
+  have hzero := ContinuousLinearMap.sameSingularValues_extendDomainByZero Z B
   rw [directedSinAngleOperator]
   refine ContinuousLinearMap.sameSingularValues_trans hmod ?_
   rw [← hcross]

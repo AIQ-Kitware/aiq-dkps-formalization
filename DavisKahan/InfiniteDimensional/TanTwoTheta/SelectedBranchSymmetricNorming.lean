@@ -11,7 +11,8 @@ public import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
 public import DavisKahan.FiniteDimensional.DoubleAngle.TanTheta
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalReverseGap
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
-public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 
 public section
 
@@ -328,7 +329,7 @@ private theorem tanTwoThetaGraphCoordinate_bound_of_quarterAcute
       U.starProjection Uᗮ.starProjection
       U.starProjection_norm_le Uᗮ.starProjection_norm_le
   have hseqB : ContinuousLinearMap.SameSingularValues Camb B.B01 := by
-    have hseq := sameApproximationSingularValues_ambientSubspaceBlock Uᗮ U B.B01
+    have hseq := ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock Uᗮ U B.B01
     have hext : U.subtypeL ∘L B.B01 ∘L Uᗮ.subtypeL.adjoint = Camb := by
       simpa only [Camb] using ambientUpperRightBlock_eq H U B.B01 hB01
     rw [hext] at hseq

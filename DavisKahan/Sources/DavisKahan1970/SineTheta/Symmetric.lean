@@ -8,7 +8,8 @@ module
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.OperatorAngleBridge
-public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 public import DavisKahan.Sylvester.Unbounded.FormBoundedGap
 
@@ -213,7 +214,7 @@ theorem forward_all_kyFan
         (D.X.adjoint ∘L D.F₁) := by
       simpa [D, forwardData, Submodule.adjoint_subtypeL,
         Submodule.starProjection, ContinuousLinearMap.comp_assoc] using
-        sameApproximationSingularValues_ambientSubspaceBlock
+        ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
           P.Vᗮ P.U (D.X.adjoint ∘L D.F₁)
     have hsineAdj : P.forwardSineBlock =
         (P.U.starProjection ∘L P.Vᗮ.starProjection).adjoint := by
@@ -229,7 +230,7 @@ theorem forward_all_kyFan
         Submodule.starProjection,
         ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc,
         map_sub, map_neg] using
-        sameApproximationSingularValues_ambientSubspaceBlock
+        ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
           P.Vᗮ P.U (-(D.residual.adjoint ∘L D.F₁))
     have hgaugeSine : kyFanApproximationGauge k P.forwardSineBlock =
         kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
@@ -289,7 +290,7 @@ theorem reverse_all_kyFan
         (D.X.adjoint ∘L D.F₁) := by
       simpa [D, reverseData, Submodule.adjoint_subtypeL,
         Submodule.starProjection, ContinuousLinearMap.comp_assoc] using
-        sameApproximationSingularValues_ambientSubspaceBlock
+        ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
           P.Uᗮ P.V (D.X.adjoint ∘L D.F₁)
     have hsineAdj : P.reverseSineBlock =
         (P.V.starProjection ∘L P.Uᗮ.starProjection).adjoint := by
@@ -309,7 +310,7 @@ theorem reverse_all_kyFan
         Submodule.starProjection,
         ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc,
         map_sub, map_neg] using
-        sameApproximationSingularValues_ambientSubspaceBlock
+        ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
           P.Uᗮ P.V (-(D.residual.adjoint ∘L D.F₁))
     have hgaugeSine : kyFanApproximationGauge k P.reverseSineBlock =
         kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by

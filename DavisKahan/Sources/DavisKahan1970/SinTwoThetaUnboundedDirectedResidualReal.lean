@@ -8,7 +8,8 @@ module
 public import DavisKahan.DoubleAngle.RealUnboundedIdeal
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.TrialReflection
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.ReflectedDefectDoubling
-public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNormLaws
 
@@ -219,7 +220,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
         2 * N.gauge R := by
   let R0 : E →L[ℝ] E := R ∘L V.subtypeL.adjoint
   have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
-    sameApproximationSingularValues_extendDomainByZero V R
+    ContinuousLinearMap.sameSingularValues_extendDomainByZero V R
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
@@ -399,7 +400,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
         2 * N.gauge R := by
   let R0 : E →L[ℝ] E := R ∘L V.subtypeL.adjoint
   have hsameR : ContinuousLinearMap.SameSingularValues R0 R :=
-    sameApproximationSingularValues_extendDomainByZero V R
+    ContinuousLinearMap.sameSingularValues_extendDomainByZero V R
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2

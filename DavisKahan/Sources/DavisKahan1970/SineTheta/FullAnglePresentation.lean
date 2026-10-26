@@ -7,7 +7,8 @@ module
 
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
-public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 public import DavisKahan.SpectralTheory.OperatorAngle
 public import DavisKahan.SpectralTheory.Complexification.Subspace
@@ -156,7 +157,7 @@ theorem norm_sineBlockC_eq_directedProjectionGap
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sineBlockC U V‖ = U.directedProjectionGap V := by
-  have hseq := sameApproximationSingularValues_ambientSubspaceBlock
+  have hseq := ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
     U Vᗮ (sineBlockC U V)
   have h0 := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hseq 0
   rw [ContinuousLinearMap.approximationNumber_index_zero,

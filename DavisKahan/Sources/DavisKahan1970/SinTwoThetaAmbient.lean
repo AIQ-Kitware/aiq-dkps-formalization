@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 public import DavisKahan.DoubleAngle.UnboundedIdeal
@@ -589,7 +590,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
   let R : V →L[ℂ] E := residual A V.subtypeL M
   let R0 : E →L[ℂ] E := R ∘L V.subtypeL.adjoint
   have hsameR : ContinuousLinearMap.SameSingularValues R0 R := by
-    exact sameApproximationSingularValues_extendDomainByZero V R
+    exact ContinuousLinearMap.sameSingularValues_extendDomainByZero V R
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hsameR
   have hMem0 : N.Mem R0 := htransport.1.mpr hMem
   have hgauge : N.gauge R0 = N.gauge R := htransport.2

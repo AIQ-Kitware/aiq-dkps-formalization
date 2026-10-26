@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 public import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
@@ -274,7 +275,7 @@ theorem
         kyFanApproximationGauge k data.residual =
           kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
       rw [hblock]
-      have hs := sameApproximationSingularValues_extendDomainByZero U data.residual
+      have hs := ContinuousLinearMap.sameSingularValues_extendDomainByZero U data.residual
       exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
       hs.kyFanGaugeReal_eq k)).symm
     calc
@@ -396,7 +397,7 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transvers
         kyFanApproximationGauge k D.residual =
           kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
       rw [hblock]
-      have hs := sameApproximationSingularValues_extendDomainByZero U D.residual
+      have hs := ContinuousLinearMap.sameSingularValues_extendDomainByZero U D.residual
       exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
       hs.kyFanGaugeReal_eq k)).symm
     calc

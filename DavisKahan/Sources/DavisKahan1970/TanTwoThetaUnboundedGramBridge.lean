@@ -568,7 +568,7 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
       = (Uᗮ.subtypeL ∘L reflectionSineCorner U J ∘L
           U.subtypeL.adjoint).approximationNumber n :=
         (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-          (ContinuousLinearMap.hasSameApproximationNumbers_ambientSubspaceBlock U Uᗮ
+          (ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
             (reflectionSineCorner U J)) n).symm
     _ = (Uᗮ.starProjection ∘L J ∘L U.starProjection).approximationNumber n := by
         rw [hamb]
@@ -579,7 +579,7 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
           ContinuousLinearMap.singularValue_adjoint]
     _ = ((U.starProjection ∘L J ∘L Uᗮ.starProjection) ∘L J).approximationNumber n :=
         (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-          (ContinuousLinearMap.hasSameApproximationNumbers_comp_right hJnorm hJnorm hJJ) n).symm
+          (ContinuousLinearMap.sameSingularValues_comp_right hJnorm hJnorm hJJ) n).symm
     _ = (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by rw [hblock]
 
 end IdealBlockBridge

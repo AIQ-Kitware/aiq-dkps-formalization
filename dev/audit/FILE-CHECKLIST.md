@@ -1003,7 +1003,6 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean` — 98 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/UnitaryInvariantNormDefinite.lean` — 96 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Smallness.lean` — 93 lines · Lean source
-- [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/SubspaceSingularTransport.lean` — 87 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/All.lean` — 86 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section5.lean` — 80 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Audits/DoubleAngleTangent.lean` — 77 lines · Lean source

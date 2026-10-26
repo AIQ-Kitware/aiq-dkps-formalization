@@ -7,7 +7,8 @@ module
 
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
-public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 public import DavisKahan.Sylvester.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
@@ -81,7 +82,7 @@ theorem projectionBlock_same_compression
     ContinuousLinearMap.SameSingularValues
       (projectionBlock Ω Γ K) (blockCompression Ω Γ K) := by
   rw [projectionBlock_eq_subtypeL_comp]
-  exact sameApproximationSingularValues_ambientSubspaceBlock Γ Ω _
+  exact ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock Γ Ω _
 
 /-- The two complementary blocks are unitarily equivalent to the Hilbert
 orthogonal block sum of their compressions. -/

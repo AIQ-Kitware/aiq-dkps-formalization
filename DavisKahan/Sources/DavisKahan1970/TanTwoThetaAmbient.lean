@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 public import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
@@ -1350,7 +1351,7 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
       kyFanApproximationGauge k (doubleAngleTangentOperator X hXc) := by
     rw [tanTwoBlockRepresentative_lowerBlock hq, hambient]
     exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (sameApproximationSingularValues_ambientSubspaceBlock U Uᗮ
+      (ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
       (doubleAngleTangentOperator X hXc)).kyFanGaugeReal_eq k)
   -- the right-hand side: the shifted block's cross entry is the upper block of `H`
   have hDB01 : Dd.B01 = -B.B01 := rfl

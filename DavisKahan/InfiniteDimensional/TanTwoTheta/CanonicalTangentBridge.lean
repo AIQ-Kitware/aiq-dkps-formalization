@@ -10,7 +10,8 @@ public import DavisKahan.InfiniteDimensional.TanTwoTheta.BoundedOffDiagonalRicca
 public import DavisKahan.Geometry.Angle.OperatorAngleComplex
 public import DavisKahan.SpectralTheory.GraphSubspace
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
-public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 
 public section
 
@@ -829,7 +830,7 @@ theorem canonicalTanTwoAngle_hasSameApproximationNumbers_graphCoordinate
     (ContinuousLinearMap.sameSingularValues_modulus (doubleAngleTangentOperator Y hYc))
       (by
         rw [hambient]
-        exact sameApproximationSingularValues_ambientSubspaceBlock U Uᗮ
+        exact ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
           (doubleAngleTangentOperator X hXc))
 
 end

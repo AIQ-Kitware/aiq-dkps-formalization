@@ -6,7 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import DavisKahan.Sources.DavisKahan1970.Section4
-public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import DavisKahan.Geometry.Angle.BasisAngleEnergy
 public import DavisKahan.Geometry.Polar.DirectRotationReal
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
@@ -453,7 +454,7 @@ theorem sourceRestrictedDisplacementR_sameApproximationSingularSequence (T : E �
   simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [← sourceRestrictedDisplacementR_extendDomainByZero U T]
   exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (sameApproximationSingularValues_extendDomainByZero U
+    (ContinuousLinearMap.sameSingularValues_extendDomainByZero U
       (sourceRestrictedDisplacementR U T)) n
 
 /-- **Proposition 4.1 over `ℝ` at the exact matched-defect, nonacute scope.** -/

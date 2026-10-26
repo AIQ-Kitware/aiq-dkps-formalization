@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.HeterogeneousRepresentative
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
@@ -346,7 +347,7 @@ theorem forward_all_kyFan
       (D.X.adjoint ∘L D.F₁) := by
     simpa [hD, forwardData, Submodule.adjoint_subtypeL,
       Submodule.starProjection, ContinuousLinearMap.comp_assoc] using
-      sameApproximationSingularValues_ambientSubspaceBlock
+      ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
         Vᗮ U (D.X.adjoint ∘L D.F₁)
   have hsineAdj : P.forwardSineBlock =
       (U.starProjection ∘L Vᗮ.starProjection).adjoint := by
@@ -362,7 +363,7 @@ theorem forward_all_kyFan
       Submodule.starProjection,
       ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc,
       map_neg] using
-      sameApproximationSingularValues_ambientSubspaceBlock
+      ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
         Vᗮ U (-(D.residual.adjoint ∘L D.F₁))
   have hgaugeSine : kyFanApproximationGauge k P.forwardSineBlock =
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
@@ -403,7 +404,7 @@ theorem reverse_all_kyFan
       (D.X.adjoint ∘L D.F₁) := by
     simpa [hD, reverseData, Submodule.adjoint_subtypeL,
       Submodule.starProjection, ContinuousLinearMap.comp_assoc] using
-      sameApproximationSingularValues_ambientSubspaceBlock
+      ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
         Uᗮ V (D.X.adjoint ∘L D.F₁)
   have hsineAdj : P.reverseSineBlock =
       (V.starProjection ∘L Uᗮ.starProjection).adjoint := by
@@ -423,7 +424,7 @@ theorem reverse_all_kyFan
       Submodule.starProjection,
       ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.comp_assoc,
       map_neg] using
-      sameApproximationSingularValues_ambientSubspaceBlock
+      ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
         Uᗮ V (-(D.residual.adjoint ∘L D.F₁))
   have hgaugeSine : kyFanApproximationGauge k P.reverseSineBlock =
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by

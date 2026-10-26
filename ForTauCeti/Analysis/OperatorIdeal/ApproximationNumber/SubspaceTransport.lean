@@ -5,8 +5,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 module
 
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 
 /-!
 # Approximation-number transport across canonical subspace coordinates
@@ -24,11 +25,11 @@ statements use the heterogeneous relation
 
 ## Main results
 
-* `ContinuousLinearMap.hasSameApproximationNumbers_extendDomainByZero`: extending a map out
+* `ContinuousLinearMap.sameSingularValues_extendDomainByZero`: extending a map out
   of a closed subspace by zero on the orthogonal complement;
-* `ContinuousLinearMap.hasSameApproximationNumbers_includeCodomain`: including the target
+* `ContinuousLinearMap.sameSingularValues_includeCodomain`: including the target
   subspace into the ambient space;
-* `ContinuousLinearMap.hasSameApproximationNumbers_ambientSubspaceBlock`: the two together,
+* `ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock`: the two together,
   reading a rectangular subspace block as an ambient operator.
 
 ## Provenance
@@ -94,7 +95,7 @@ open Submodule
 omit [CompleteSpace F] in
 /-- Extending a map from a closed subspace by zero on its orthogonal complement
 preserves every approximation singular value. -/
-theorem hasSameApproximationNumbers_extendDomainByZero
+theorem sameSingularValues_extendDomainByZero
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (T : U →L[𝕜] F) :
     SameSingularValues
@@ -134,7 +135,7 @@ theorem hasSameApproximationNumbers_extendDomainByZero
 omit [CompleteSpace E] in
 /-- Including the range of a map into the ambient Hilbert space preserves every
 approximation singular value. -/
-theorem hasSameApproximationNumbers_includeCodomain
+theorem sameSingularValues_includeCodomain
     (V : Submodule 𝕜 F) [V.HasOrthogonalProjection]
     (T : E →L[𝕜] V) :
     SameSingularValues (V.subtypeL ∘L T) T := by
@@ -181,7 +182,7 @@ contraction of the other and the two sequences coincide.
 This is unitary invariance of the singular-value sequence in the source
 variable, stated without a `LinearIsometryEquiv` so that a reflection operator
 already in bounded form can be used directly. -/
-theorem hasSameApproximationNumbers_comp_right
+theorem sameSingularValues_comp_right
     {T : E →L[𝕜] F} {J J' : E →L[𝕜] E}
     (hJ : ‖J‖ ≤ 1) (hJ' : ‖J'‖ ≤ 1) (hinv : ∀ x, J (J' x) = x) :
     SameSingularValues (T ∘L J) T := by
@@ -210,15 +211,15 @@ theorem hasSameApproximationNumbers_comp_right
 
 /-- Ambient extension of a rectangular subspace block preserves the complete
 singular-value sequence. -/
-theorem hasSameApproximationNumbers_ambientSubspaceBlock
+theorem sameSingularValues_ambientSubspaceBlock
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (V : Submodule 𝕜 F) [V.HasOrthogonalProjection]
     (T : U →L[𝕜] V) :
     SameSingularValues
       (V.subtypeL ∘L T ∘L U.subtypeL.adjoint) T :=
   sameSingularValues_trans
-    (hasSameApproximationNumbers_includeCodomain V (T ∘L U.subtypeL.adjoint))
-    (hasSameApproximationNumbers_extendDomainByZero U T)
+    (sameSingularValues_includeCodomain V (T ∘L U.subtypeL.adjoint))
+    (sameSingularValues_extendDomainByZero U T)
 
 end ContinuousLinearMap
 

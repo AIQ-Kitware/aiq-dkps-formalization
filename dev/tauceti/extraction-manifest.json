@@ -6,7 +6,7 @@
   "clusters": [
     {
       "cluster": "approximation-number",
-      "migration_note": "October 25: Family.Schatten retains broader positive-exponent power-sum results, including 0 < p < 1. Its obsolete schattenENorm_one/two wrappers were removed. Maintained Gram consumers now use accepted nuclear and Hilbert-Schmidt energy APIs directly, without importing this donor. The legacy real approximation-number view remains pending its own representation migration.",
+      "migration_note": "October 25: Family.Schatten retains broader positive-exponent power-sum results, including 0 < p < 1. Its obsolete schattenENorm_one/two wrappers were removed. Maintained Gram consumers now use accepted nuclear and Hilbert-Schmidt energy APIs directly, without importing this donor. The legacy real approximation-number view remains pending its own representation migration. October 26: preserve and register the genuine SubspaceTransport donor and its CanonicalGauge dependency. Its source-name facade is deleted; direct consumers use its native-carrier sameSingularValues_* declarations. These unmerged block-transport statements are not claimed upstreamed.",
       "roadmap_target": "SpectralSubspacePerturbation Part B (Approximation numbers and rectangular symmetric ideals) / public-api-integration-review PR 1",
       "roadmap_focus": "spectral-subspace-perturbation",
       "status": "staged-needs-current-validation",
@@ -63,7 +63,9 @@
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
         "ForTauCeti.LinearAlgebra.Dimension.RankComp",
         "ForTauCeti.SetTheory.Cardinal.Lift",
-        "ForTauCeti.Topology.ENNRealLiminf"
+        "ForTauCeti.Topology.ENNRealLiminf",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport"
       ]
     },
     {
@@ -5265,6 +5267,57 @@
       "status": "accepted-upstream-local-copy-removed",
       "upstream_pr": null,
       "migration_note": "2026-10-25: deleted the duplicate reconciliation/compactness module and its unused finite-basis proof support. Both live endpoint consumers use ContinuousLinearMap.tsum_singularValue_sq_eq_hilbertSchmidtEnergy. Compactness is accepted in TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns; that module was explicitly compiled. Pre-retirement source: DKPS 57447d82a."
+    },
+    {
+      "source_module": "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport; ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport",
+      "source_declarations": [
+        "TauCeti.DavisKahan.ExactSinTheta.sameApproximationSingularValues_extendDomainByZero",
+        "TauCeti.DavisKahan.ExactSinTheta.sameApproximationSingularValues_includeCodomain",
+        "TauCeti.DavisKahan.ExactSinTheta.sameApproximationSingularValues_ambientSubspaceBlock",
+        "ContinuousLinearMap.hasSameApproximationNumbers_comp_right"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-numbers",
+      "provenance_class": "Source block transports copied and renamespaced into the donor, plus its local invertible-contraction result; original Kitware Apache-2.0/Jon Crall/OpenAI GPT-5.6 Thinking/Claude Opus 5 attribution preserved in the donor header and provenance. No Spectra influence is claimed.",
+      "direct_dependencies": [
+        "Mathlib.Analysis.InnerProductSpace.Adjoint",
+        "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.Sources.DavisKahan1970.Section4Real",
+        "DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual",
+        "DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike",
+        "DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite",
+        "DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal",
+        "DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient",
+        "DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation",
+        "DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal",
+        "DavisKahan.Sources.DavisKahan1970.SineTheta.Lemma61",
+        "DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric",
+        "DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal",
+        "DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient",
+        "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.All",
+        "DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric",
+        "DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge",
+        "DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient",
+        "DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation",
+        "DavisKahan.InfiniteDimensional.TanTwoTheta.SelectedBranchSymmetricNorming",
+        "DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge"
+      ],
+      "maintained_declarations": [
+        "ContinuousLinearMap.sameSingularValues_extendDomainByZero",
+        "ContinuousLinearMap.sameSingularValues_includeCodomain",
+        "ContinuousLinearMap.sameSingularValues_comp_right",
+        "ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock"
+      ],
+      "status": "staged",
+      "upstream_pr": null,
+      "migration_note": "October 26, following DKPS 9b783a9fd: remove the three source-name forwarding lemmas and their entire facade module. All maintained callers use the genuine donor results directly, renamed to the canonical SameSingularValues terminology, without aliases. The donor drops its unnecessary dependency on SameSequence in favor of CanonicalGauge; its comparison proofs and full hypotheses are preserved. The final Tau Ceti path is prospective: these subspace-embedding and contractive-inverse statements are not claimed accepted upstream. Native Isometry covers surjective coordinate equivalences; native Modulus pointwise comparison requires complete targets. Neither is substituted for the stronger incomplete-target zero-extension scope. Historical source declarations above preserve pre-retirement names; current names are explicit in maintained_declarations. The source norm/representative module remains a separate paper-facing dependency. Adjoint is imported explicitly from Mathlib instead of being obtained incidentally through the former SameSequence import."
     }
   ]
 }

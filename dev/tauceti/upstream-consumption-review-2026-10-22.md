@@ -1251,3 +1251,26 @@ isometry extraction record track the exact native replacements and retirements;
 the native module explicitly credits the earlier DKPS donor. This is native
 consumption, not a new submission or a new historical novelty claim. Papers,
 visualizations and the original three untracked files are untouched.
+
+Checkpoint `9b783a9fd` passed the full default build (21,037 jobs, warnings
+as errors) and was committed immediately on success.
+
+### October 26: remove the subspace-transport source facade
+
+The `Norms/SubspaceSingularTransport` forwarding module and all three of its
+source-name wrappers are deleted. Maintained callers import the genuine
+`ForTauCeti` subspace-transport mathematics directly. Its four declarations
+now use the canonical `sameSingularValues_*` names; no old-name alias remains.
+The donor's unnecessary `SameSequence` dependency is replaced by the smaller
+`CanonicalGauge` dependency. Source representative/norm packaging is imported
+explicitly where needed. The focused donor, Lemma 6.1, real symmetric and Gram
+bridge build passed (7,508 jobs), after its cache fetch.
+
+These generic block transports are unmerged mathematics, not an additional
+upstream acceptance claim. The zero-extension theorem retains incomplete
+targets, and the other hypotheses and conclusions are preserved. The manifest
+now records this donor explicitly, with the prospective target path separated
+from acceptance, its current names and its original source provenance. The
+retired source module leaves the live checklist; historical source names
+remain in provenance. Papers, visualizations and original untracked files
+are unchanged.
