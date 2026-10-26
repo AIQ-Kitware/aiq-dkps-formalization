@@ -1134,3 +1134,14 @@ manifest separates this accepted foundation from the still-local Borel,
 cyclic/multiplicity and partial-map spectral mathematics. The original
 Kitware/Jon Crall/Claude Opus 5 provenance is retained from DKPS `9380d70b0`;
 the accepted comparison uses Tau Ceti `97bf1230` (#20399).
+
+Checkpoint `4f7c6b048` was committed immediately after the full default
+build passed (21,037 jobs; warnings treated as errors). The separate
+`Challenge` / `DavisKahan.Audits.All` build passed (20,809 jobs). Each build
+followed `lake exe cache get`. The additional real Section 8 proof repairs
+only replace import-sensitive simplification; theorem statements are unchanged.
+
+The signature preflight (`check_comparator_signatures.py --no-build`) passed
+all 42 compared declarations, with three declared absent and skipped; no
+external comparator result is inferred. The tracked mathematical tree is
+committed. The original three untracked files remain untouched.

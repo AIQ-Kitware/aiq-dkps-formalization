@@ -1449,3 +1449,15 @@ history. Matching statements alone do not establish historical proof descent.
 The deleted file is removed from live donor clusters and the current file
 checklist, preserving every other review mark. Historical semantic-review
 snapshots remain historical. Papers and visualizations are untouched.
+
+Validation checkpoint `4f7c6b048` compiled the full default build (21,037
+jobs), with warnings treated as errors, after `lake exe cache get`. It was
+committed immediately on that success. The separate `Challenge` and
+`DavisKahan.Audits.All` build also passed (20,809 jobs), after its cache fetch.
+Import-sensitive real Section 8 form bounds now use explicit simplification;
+their hypotheses and conclusions are unchanged.
+
+The signature preflight (`check_comparator_signatures.py --no-build`) passed
+all 42 compared declarations, with three declared absent and skipped; no
+external comparator result is inferred. The tracked mathematical tree is
+committed. The original three untracked files remain untouched.
