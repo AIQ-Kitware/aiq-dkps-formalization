@@ -1086,3 +1086,78 @@ search results do not establish priority. The exact optimized Schatten
 classification and its ideal extension remain **historically provisional**
 pending the broader theorem-level comparison; the completed Lean proof
 is independent evidence of correctness, not evidence of historical novelty.
+
+## Infinite optimizer classification: canonical-tail iff and Hilbert gradient
+
+The full classification of **every** infinite-dimensional optimizer is
+still pending. The following compiled results now close two precise
+parts of its proof rather than assuming that an attaining example
+classifies all minimizers.
+
+`exists_schatten_minimizing_finite_restriction` proves that every actual
+finite source-reducing sector invariant under a **finite-cost** ambient
+global minimizer carries a global minimizer of its restricted pair.
+Both scalar fields and arbitrary ambient Hilbert dimension are allowed.
+The finite-cost condition permits cancellation of the unchanged tail;
+no cancellation of infinite extended costs is used.
+`schatten_minimal_iff_restriction_of_minimizing_reference_tail` gives
+the corresponding iff when the complementary action agrees with a
+known global minimizing reference.
+
+`schatten_minimal_iff_finite_restriction_of_canonical_tail` applies that
+iff to every positive subcritical sine cutoff. Its competitor `U` is
+explicitly assumed to agree with the chosen ambient completed rotation
+on the tail. Unitarity then forces the retained sector to reduce `U`,
+using the reference tail's actual inverse. Competing ambient transports
+remain unrestricted.
+
+`schatten_minimal_iff_cutoff_phase_and_defect_of_canonical_tail` gives
+the full finite compatible phase-projection and reflecting right-defect
+parameters of the actual restricted unitary. Repeated, unequal, zero,
+critical and right angles retain the existing finite theorem's scope.
+This is a classification **within the canonical-tail family**. It does
+not prove that every global optimizer belongs to that family. Focused
+classification build passed (7,976 jobs).
+
+`SchattenGradientHilbert` proves operator-norm continuity of the phase
+gradient on all Hilbert-space unitaries for `p>1`, compatibility with
+actual unitary restrictions, and compactness of the gradient whenever
+`U-I` is compact. The last proof uses finite unitary approximations,
+exact zero extension of their gradients, and closedness of compact
+operators. It assumes neither finite dimension nor separability.
+
+`SchattenGradientKernelHilbert` proves the continuous radial factorization
+of `U-U*` through the phase gradient for `1<p<2`; the multiplier contains
+`|z-1|^(2-p)` and is zero at identity. Hence every vector in the gradient
+kernel has identical forward and inverse unitary actions. The theorem
+`exists_selfAdjoint_unitary_restriction_schatten_gradient_kernel`
+constructs the actual self-adjoint unitary on the full, possibly
+infinite kernel. It assumes **no minimality** and therefore retains,
+rather than excludes, possible `-1` directions. Focused build passed
+(6,754 jobs).
+
+`OperatorIdealFamily.tendsto_gauge_of_tendsto_gauge_sub_zero` supplies
+extended ideal-cost continuity, including an infinite limit cost. The
+projection exponential formula in `Projection/Exponential.lean` supplies
+finite-support phase variations without a global eigenbasis.
+
+The precise missing analytic step is **Hilbert-space constrained
+stationarity**: for a finite-cost global minimizer and `1<p<2`, show
+`J_K G(U) J_K = -G(U)`, where `G` is the phase gradient. The existing
+finite trace-variation theorem alone does not prove it in infinite
+dimension. A concrete route is to approximate `U` in Schatten gauge by
+finite-rank unitary perturbations; for each rank-one self-adjoint
+direction, finite-support phase variations have derivatives given by
+`re inner x (G(U(t)) x)`. Gradient continuity on compact parameter sets
+provides locally uniform convergence of these derivatives, while ideal
+cost continuity gives pointwise convergence of costs. Mathlib's
+`hasDerivAt_of_tendstoUniformlyOn` can then transfer the derivative.
+Vanishing rank-one variations in `K` and `Kperp` gives stationarity.
+
+Once stationarity is proved, paired nonzero gradient sectors are finite
+and source-reducing; the restriction theorem can apply the complete
+finite classification on each pair. The kernel reflection still needs
+its optimizing `-1` sector excluded. These steps must establish the
+canonical inactive action before dropping the explicit tail hypothesis
+from the cutoff classification. Paper and visualization files are
+unchanged; historical novelty has not been upgraded by these lemmas.
