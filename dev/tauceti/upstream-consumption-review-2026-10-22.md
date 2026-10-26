@@ -971,8 +971,18 @@ extraction manifest and namespace map reflect the actual declarations. Historica
 notes and the source-result denominator are not rewritten into new obligations.
 
 Focused core and capstone builds passed (7,076 and 7,082 jobs), after cache
-fetches; full-project validation follows. No paper, visualization or original
-untracked file is changed. The next required carrier change is to replace the
+fetches. The full default build passed (21,029 jobs), with warnings treated as
+errors, and was immediately committed as `6aee36cb3`. Explicit `Challenge` and
+`DavisKahan.Audits.All` builds then passed (20,801 jobs), after the cache fetch.
+No paper, visualization or original untracked file is changed. The next required
+carrier change is to replace the
 remaining Fan-dominance bundle and its real-prefix field by accepted native
 family properties, migrate its concrete factories to native constructors, and
 remove the remaining conversion views without losing the newly weaker scope.
+
+The full signature preflight matched all 42 implemented comparator targets on
+universe signatures and full types; the three declared absent solutions remain
+skipped. The namespace map now explicitly records removal of two stale real Ky
+Fan triangle wrappers from the preceding retirement. The auxiliary local-only
+name parser retains imported-declaration limitations and other historical map
+findings; no broad static-gate or external comparator success is inferred.

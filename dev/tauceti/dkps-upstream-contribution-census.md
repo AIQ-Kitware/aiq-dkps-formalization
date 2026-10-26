@@ -1257,5 +1257,14 @@ denominator and ledger-selected source aliases are unchanged.
 
 Focused builds passed for the Sylvester/normalization core (7,076 jobs) and the
 generalized sine/double-angle consumers (7,082 jobs), after their cache fetches.
-Full-project and explicit diagnostic validation are recorded after completion.
+The full default build then passed (21,029 jobs), with warnings treated as errors,
+and was immediately committed as `6aee36cb3`. Explicit `Challenge` and
+`DavisKahan.Audits.All` builds passed (20,801 jobs), after the cache fetch.
 Papers and visualizations are untouched.
+
+The full signature preflight matched all 42 implemented comparator targets on
+universe signatures and full types; the three declared absent solutions remain
+skipped. Two stale namespace-map destinations for the previously retired real
+Ky Fan triangle wrappers are marked removed. The auxiliary local-only name
+parser still has its imported-declaration limitations and other historical map
+findings; no broad static-gate pass or external comparator run is claimed.

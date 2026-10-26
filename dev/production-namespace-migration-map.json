@@ -1,7 +1,7 @@
 {
   "TauCeti.DavisKahan.Experimental.DKClosedOperator": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real": "TauCeti.DavisKahan.ExactSinTheta.ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real",
-  "TauCeti.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.kyFanApproximationGauge_add_le_real": "TauCeti.DavisKahan.ExactSinTheta.ApproximationNumbersReal.kyFanApproximationGauge_add_le_real",
+  "TauCeti.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.kyFanApproximationGauge_add_le_real": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.ApproximationNumbersReal.kyFanApproximationGauge_comp_strongProjection_tendsto_real": "TauCeti.DavisKahan.ExactSinTheta.ApproximationNumbersReal.kyFanApproximationGauge_comp_strongProjection_tendsto_real",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.BoundedGeneralSinThetaProblem": "TauCeti.DavisKahan.ExactSinTheta.BoundedGeneralSinThetaProblem",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.BoundedGeneralSinThetaProblem.result": "TauCeti.DavisKahan.ExactSinTheta.BoundedGeneralSinThetaProblem.result",
@@ -780,7 +780,7 @@
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.isometricComplementaryBlock_mem_and_gauge_eq_directed": "TauCeti.DavisKahan.ExactSinTheta.isometricComplementaryBlock_mem_and_gauge_eq_directed",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.itself": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_add_le": "TauCeti.DavisKahan.ExactSinTheta.kyFanApproximationGauge_add_le",
-  "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_add_le_real": "TauCeti.DavisKahan.ExactSinTheta.kyFanApproximationGauge_add_le_real",
+  "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_add_le_real": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_blockSum_le": "TauCeti.DavisKahan.ExactSinTheta.kyFanApproximationGauge_blockSum_le",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_comp_strongProjection_tendsto": "TauCeti.DavisKahan.ExactSinTheta.kyFanApproximationGauge_comp_strongProjection_tendsto",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.kyFanApproximationGauge_comp_strongProjection_tendsto_real": "TauCeti.DavisKahan.ExactSinTheta.kyFanApproximationGauge_comp_strongProjection_tendsto_real",
