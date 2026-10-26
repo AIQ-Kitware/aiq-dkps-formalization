@@ -11,6 +11,7 @@ public import DavisKahan.FiniteDimensional.DirectRotation.SchattenGlobalAttainme
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.ReplaceFiniteTransport
 public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenConvergence
 public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenFinite
+public import ForTauCeti.Analysis.OperatorIdeal.ReducingTrace
 
 /-!
 # Actual finite spectral phase corrections in a Schatten transport fiber
@@ -21,10 +22,10 @@ result still transports the full Hilbert-space pair, has finite Schatten
 cost, agrees with the canonical rotation on the whole complementary
 tail, and differs from it by rank at most the cutoff dimension.
 
-The exact cost identity in this theorem is for the finite block only.
-Global infinite-rank optimality additionally needs the subcritical-tail
-trace identity and an additive cost decomposition; neither is assumed
-or asserted here.
+The full ambient cost is exactly the finite-block optimum plus the
+unchanged canonical tail cost. Global infinite-rank optimality additionally
+needs the subcritical tail's scalar-phase trace identification, which is
+not assumed or asserted here.
 -/
 
 public section
@@ -62,7 +63,12 @@ theorem exists_schatten_phase_correction_on_finite_block
       (∀ x ∈ Mᗮ, U x = R x) ∧
       (R.toLinearMap - U.toLinearMap).rank ≤ Module.finrank ℂ M ∧
       (OperatorIdealFamily.schatten ℂ p.toReal hp1).gauge
-        (1 - (U : E →L[ℂ] E)) ≠ ∞ := by
+        (1 - (U : E →L[ℂ] E)) ≠ ∞ ∧
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1).gauge
+          (1 - (U : E →L[ℂ] E)) ^ p.toReal =
+        (∑' k, ((1 - (W : M →L[ℂ] M)).singularValue k : ℝ≥0∞) ^ p.toReal) +
+          (OperatorIdealFamily.schatten ℂ p.toReal hp1).gauge
+            (Mᗮ.orthogonalProjectionOnto ∘L (1 - R) ∘L Mᗮ.subtypeL) ^ p.toReal := by
   let Φ := OperatorIdealFamily.schatten ℂ p.toReal hp1
   let R := Unitary.linearIsometryEquiv
     (⟨nonacuteDirectRotation K L J, nonacuteDirectRotation_mem_unitary K L J⟩ :
@@ -78,7 +84,11 @@ theorem exists_schatten_phase_correction_on_finite_block
     p hp (K.comap M.subtype) (L.comap M.subtype) hdim.symm
   obtain ⟨U, hUmap, hUM, hUperp, hRank⟩ :=
     K.exists_transport_replacing_finite_block L M hK R hRmap hRM W hWmap
-  refine ⟨W, U, hWmap, hWcost, hUmap, hUM, hUperp, hRank, ?_⟩
+  have hfull := ContinuousLinearMap.gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
+    p.toReal hp1 M U R W hUM hUperp
+  rw [OperatorIdealFamily.gauge_schatten_rpow p.toReal hp1
+    (1 - (W : M →L[ℂ] M))] at hfull
+  refine ⟨W, U, hWmap, hWcost, hUmap, hUM, hUperp, hRank, ?_, hfull⟩
   have hRcost : Φ.gauge (1 - (R : E →L[ℂ] E)) ≠ ∞ :=
     (gauge_nonacuteDirectRotation_ne_top_iff_projection_sub Φ K L J).mpr hD
   have hupdate : Φ.gauge ((R : E →L[ℂ] E) - (U : E →L[ℂ] E)) ≠ ∞ :=
@@ -118,7 +128,15 @@ theorem exists_schatten_phase_correction_on_sine_cutoff
       (∀ x ∈ Mᗮ, U x = R x) ∧
       (R.toLinearMap - U.toLinearMap).rank ≤ Module.finrank ℂ M ∧
       (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
-        (1 - (U : E →L[ℂ] E)) ≠ ∞ := by
+        (1 - (U : E →L[ℂ] E)) ≠ ∞ ∧
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+          (1 - (U : E →L[ℂ] E)) ^ p.toReal =
+        (∑' k, ((1 - (W : M →L[ℂ] M)).singularValue k : ℝ≥0∞) ^ p.toReal) +
+          (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+            (Mᗮ.orthogonalProjectionOnto ∘L (1 - R) ∘L Mᗮ.subtypeL) ^ p.toReal ∧
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+          (1 - (U : E →L[ℂ] E)) ≤
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - R) := by
   let M := eigenSpan (K.sinAngleOperator L) (Set.Ioi c)
   have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top
     p.toReal hp1.le (K.starProjection - L.starProjection) hD
@@ -126,10 +144,8 @@ theorem exists_schatten_phase_correction_on_sine_cutoff
   let : FiniteDimensional ℂ M := hM
   have hRM : ∀ x ∈ M, nonacuteDirectRotation K L J x ∈ M :=
     (sine_spectral_cutoff_isReducing_nonacuteDirectRotation K L J hcompact c hc).mem_invtSubmodule
-  obtain ⟨W, U, hWmap, hWcost, hUmap, hUM, hUperp, hRank, hfinite⟩ :=
+  obtain ⟨W, U, hWmap, hWcost, hUmap, hUM, hUperp, hRank, hfinite, hfull⟩ :=
     exists_schatten_phase_correction_on_finite_block p hp hp1.le K L M J hD hK hRM
-  refine ⟨W, U, hWmap, ?_, hUmap, hUM, hUperp, hRank, hfinite⟩
-  intro V hVmap
   have hvalue (X : M ≃ₗᵢ[ℂ] M) :
       (∑' k, ((1 - (X : M →L[ℂ] M)).singularValue k : ℝ≥0∞) ^ p.toReal) =
         ENNReal.ofReal (UnitarilyInvariantSeminorm.schatten ℂ M M p
@@ -137,10 +153,33 @@ theorem exists_schatten_phase_correction_on_sine_cutoff
     rw [← OperatorIdealFamily.gauge_schatten_rpow p.toReal hp1.le,
       OperatorIdealFamily.gauge_schatten_rpow_eq_ofReal_finite p hp]
     rfl
-  rw [hvalue W, hvalue V, hWcost]
-  apply ENNReal.ofReal_le_ofReal
-  exact sum_phaseMinimum_le_schatten_transport_complex p hp hp1 hp2
-    (K.comap M.subtype) (L.comap M.subtype) (Unitary.linearIsometryEquiv.symm V)
-    (by simpa only [MulEquiv.apply_symm_apply] using hVmap)
+  have hmin (V : M ≃ₗᵢ[ℂ] M)
+      (hVmap : (K.comap M.subtype).map V.toLinearMap = L.comap M.subtype) :
+      (∑' k, ((1 - (W : M →L[ℂ] M)).singularValue k : ℝ≥0∞) ^ p.toReal) ≤
+        ∑' k, ((1 - (V : M →L[ℂ] M)).singularValue k : ℝ≥0∞) ^ p.toReal := by
+    rw [hvalue W, hvalue V, hWcost]
+    apply ENNReal.ofReal_le_ofReal
+    exact sum_phaseMinimum_le_schatten_transport_complex p hp hp1 hp2
+      (K.comap M.subtype) (L.comap M.subtype) (Unitary.linearIsometryEquiv.symm V)
+      (by simpa only [MulEquiv.apply_symm_apply] using hVmap)
+  refine ⟨W, U, hWmap, hmin, hUmap, hUM, hUperp, hRank, hfinite, hfull, ?_⟩
+  let R := Unitary.linearIsometryEquiv
+    (⟨nonacuteDirectRotation K L J, nonacuteDirectRotation_mem_unitary K L J⟩ :
+      unitary (E →L[ℂ] E))
+  have hRmap : K.map R.toLinearMap = L := by
+    apply (Submodule.map_eq_iff_intertwines_reflection K L R).mpr
+    exact nonacuteDirectRotation_reflection_intertwines K L J
+  obtain ⟨V, hV, _, _⟩ := R.exists_restriction_of_finite_invariant M hRM
+  have hVmap := K.map_comap_subtype_of_isometry_restriction L M R V hRmap hV
+  have hRfull := ContinuousLinearMap.gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
+    p.toReal hp1.le M R R V (fun x => (hV x).symm) (fun _ _ => rfl)
+  rw [OperatorIdealFamily.gauge_schatten_rpow p.toReal hp1.le
+    (1 - (V : M →L[ℂ] M))] at hRfull
+  apply (ENNReal.rpow_le_rpow_iff (zero_lt_one.trans hp1)).mp
+  change (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (1 - (U : E →L[ℂ] E)) ^ p.toReal ≤
+    (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (R : E →L[ℂ] E)) ^ p.toReal
+  rw [hfull, hRfull]
+  exact add_le_add (hmin V hVmap) le_rfl
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition

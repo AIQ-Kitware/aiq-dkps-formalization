@@ -868,3 +868,50 @@ Next connect these identities to actual projection-reducing cutoffs
 via the canonical orthogonal decomposition. The subcritical tail's
 exact scalar-phase trace identification remains a separate obligation
 before asserting general `1<p<2` or smoothed attainment.
+
+## Actual reducing trace identities and cost-decreasing phase correction
+
+`ReducingTrace.eq_orthogonal_block_of_isReducing` uses the canonical
+orthogonal decomposition to identify an operator with its two actual
+compressed blocks, with no dimension or compactness hypothesis.
+`singularValue_eq_orthogonal_block_of_isReducing` preserves the entire
+native singular sequence. The resulting native Schatten-power and
+Charbonnier-cost identities split the **actual** reducing operator,
+including infinite values. The compact zero-preserving arbitrary
+penalty version is also proved.
+
+`gauge_schatten_unitary_displacement_rpow_eq_block_add_tail` identifies
+the full cost of a finite unitary replacement with its new block cost
+plus the unchanged reference-tail cost. Both
+`SchattenFiniteCorrection` construction theorems have been strengthened
+in place with this full ambient cost identity. The sine-cutoff theorem
+now also proves that the constructed ambient phase correction **never
+increases the full Schatten objective** at `1<p<2`. This follows from
+finite-block global optimality and exact tail cancellation; it does
+not assume global optimality of the tail. Focused build passed for the
+reducing trace API (6,548 jobs) and its strengthened transport consumer
+(7,420 jobs).
+
+`Submodule.tsum_sine_penalty_eq_add_of_isReducing` splits every
+zero-preserving penalty of the intrinsic directed sine into those of
+the actual restricted projection pairs. Compact projection difference,
+common reduction, and actual orthogonal projections on the restricted
+pairs are explicit hypotheses. Both fields, infinite-dimensional
+blocks, kernels and divergent costs are covered. It uses the exact
+factorization `(I-P_L)P_K=(P_K-P_L)P_K`, and does not assume an ambient
+principal-plane decomposition. Focused build passed (6,560 jobs).
+
+**Updated strongest remaining obstruction:** the block-cost and
+intrinsic-angle decompositions above supersede their earlier pending
+status. For general balanced Schatten pairs at `1<p<2`, what remains
+is the exact scalar-phase trace identity for the canonical
+**subcritical infinite tail** (and identification of its compressed
+rotation with the canonical rotation of the actual restricted pair).
+Together with the constructed optimized finite sector, the two
+compiled decompositions and the unrestricted angle lower bound, this
+would certify general infinite-rank global attainment. Do not claim
+that theorem before the tail identity compiles. At `p=1`, infinitely
+many positive angles can need modification, so a separate infinite
+phase construction remains necessary. General smoothed attainment,
+all-optimizer classification, and unrestricted infinite real matching
+remain open beyond the scopes explicitly proved above.
