@@ -456,12 +456,13 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [Complete
 /-- Every current ideal family assigns the same membership and gauge to `T`
 and its positive modulus. -/
 theorem modulus_mem_and_gauge_eq
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {T : E →L[ℂ] E}
     (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧
-      N.gauge (ContinuousLinearMap.modulus T) =
-        N.gauge T :=
+      N.gaugeReal (ContinuousLinearMap.modulus T) =
+        N.gaugeReal T :=
   SameApproximationSingularValues.mem_and_gauge_eq N
     (modulus_hasSameApproximationNumbers T) hT
 

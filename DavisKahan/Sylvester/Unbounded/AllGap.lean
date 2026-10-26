@@ -70,7 +70,8 @@ inductive SpectralSylvesterGap
 /-- Source-facing Theorem 5.2 wrapper with spectral hypotheses in every
 branch. -/
 theorem davisKahan1970_sylvester_of_spectrumGap
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A : E →ₗ.[ℂ] E}
     {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -80,8 +81,8 @@ theorem davisKahan1970_sylvester_of_spectrumGap
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
-      δ * N.gauge X ≤
-        N.gauge C := by
+      δ * N.gaugeReal X ≤
+        N.gaugeReal C := by
   cases hgap with
   | intervalExterior hβα hgap =>
       rcases hgap with hgap | hgap
@@ -89,26 +90,32 @@ theorem davisKahan1970_sylvester_of_spectrumGap
         intro k
         rcases Nat.eq_zero_or_pos k with rfl | hk
         · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
-        let M := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
-        have : M.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+        let M := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
+          { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+            gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
+        have : M.toOperatorIdealFamily.IsComplete :=
           inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
         have hbound := unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
-          M.toSymmetricOperatorIdealFamily hA hB hβα hδ
-          hgap.1 hgap.2 hEq (FanDominantIdealFamily.kyFan_mem k hk C)
-        simpa only [FanDominantIdealFamily.toSymmetric_gaugeReal, M,
-          FanDominantIdealFamily.kyFan_gauge] using hbound.2
+          M hA hB hβα hδ
+          hgap.1 hgap.2 hEq (by simp [M, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+        simpa only [M,
+          SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hbound.2
       · apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC
         intro k
         rcases Nat.eq_zero_or_pos k with rfl | hk
         · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
-        let M := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
-        have : M.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+        let M := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
+          { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+            gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
+        have : M.toOperatorIdealFamily.IsComplete :=
           inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
         have hbound := unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
-          M.toSymmetricOperatorIdealFamily hA hB hβα hδ
-          hgap.2 hgap.1 hEq (FanDominantIdealFamily.kyFan_mem k hk C)
-        simpa only [FanDominantIdealFamily.toSymmetric_gaugeReal, M,
-          FanDominantIdealFamily.kyFan_gauge] using hbound.2
+          M hA hB hβα hδ
+          hgap.2 hgap.1 hEq (by simp [M, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+        simpa only [M,
+          SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hbound.2
   | leftAboveRightBelow c hAspec hBspec =>
       exact OrderedSylvesterEngine.lowerUpper
         canonicalOrderedSylvesterEngine N hA hB hδ

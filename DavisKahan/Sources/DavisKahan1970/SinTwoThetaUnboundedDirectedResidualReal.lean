@@ -122,13 +122,17 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_real
   have hDsa : ((-2 : ℝ) • trialOffDiagonalPart V M R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_real A hA B hB
-    (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk)
+    ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hk).gauge_adjoint }))
     ((-2 : ℝ) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℝ) k hk _)
-  rw [FanDominantIdealFamily.kyFan_gauge,
-    FanDominantIdealFamily.kyFan_gauge] at hraw
+    (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   -- flip the block to the orientation of the doubling identity
   have hflip : kyFanApproximationGauge k
         ((realSelfAdjointSpectralSubspace A hA B hB).starProjection ∘L
@@ -296,13 +300,17 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   have hDsa : ((-2 : ℝ) • trialOffDiagonalPart V M R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_real hA hred
-    (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk)
+    ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hk).gauge_adjoint }))
     ((-2 : ℝ) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℝ) k hk _)
-  rw [FanDominantIdealFamily.kyFan_gauge,
-    FanDominantIdealFamily.kyFan_gauge] at hraw
+    (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   -- flip the block to the orientation of the doubling identity
   have hflip : kyFanApproximationGauge k
         (U.starProjection ∘L

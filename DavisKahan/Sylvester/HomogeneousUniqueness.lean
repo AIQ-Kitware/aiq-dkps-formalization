@@ -52,14 +52,18 @@ theorem closedSylvester_homogeneous_eq_zero_complex
     (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
-  let N := FanDominantIdealFamily.operatorNorm (𝕜 := ℂ)
+  let N := (TauCeti.SymmetricOperatorIdealFamily.opNorm ℂ)
+  have : N.toOperatorIdealFamily.IsKyFanDominant := by
+    dsimp only [N]
+    rw [SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   have hzero : N.Mem (0 : F →L[ℂ] E) := by
-    rw [FanDominantIdealFamily.mem_iff]
+    rw [SymmetricOperatorIdealFamily.Mem]
     simp [N]
   have hbound :=
     (davisKahan1970_sylvester_complex N hA hB hδ hgap hEq hzero).2
-  simp only [N, FanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal,
+  simp only [N,
+    SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] at hbound
@@ -109,14 +113,18 @@ theorem closedSylvester_homogeneous_eq_zero_real
     (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
-  let N := FanDominantIdealFamily.operatorNorm (𝕜 := ℝ)
+  let N := (TauCeti.SymmetricOperatorIdealFamily.opNorm ℝ)
+  have : N.toOperatorIdealFamily.IsKyFanDominant := by
+    dsimp only [N]
+    rw [SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   have hzero : N.Mem (0 : F →L[ℝ] E) := by
-    rw [FanDominantIdealFamily.mem_iff]
+    rw [SymmetricOperatorIdealFamily.Mem]
     simp [N]
   have hbound :=
     (davisKahan1970_sylvester_real N hA hB hδ hgap hEq hzero).2
-  simp only [N, FanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal,
+  simp only [N,
+    SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] at hbound

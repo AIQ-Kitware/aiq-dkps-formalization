@@ -345,16 +345,17 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     boundedInverseData_of_coercive_direct hρδ hA1coer
   have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
     sylvester_shift_invariant AF BF Xc Cc m hEqCut
-  let N := FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk
-  have : N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+  let N := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
+    { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
+      gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint })
+  have : N.toOperatorIdealFamily.IsComplete :=
     inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse
-    (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
+    (N)
     hA1inv B1 hρ hδ hA1invNorm hB1norm hEqShift
-      (FanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
-  simp only [FanDominantIdealFamily.toSymmetric_gaugeReal] at hmain
-  rw [FanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
-    FanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
+      (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  simp only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- The opposite ordered orientation, obtained by adjointing and swapping the
@@ -448,21 +449,23 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     boundedInverseData_of_coercive_direct hρδ hB1coer
   have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
     sylvester_shift_invariant AF BF Xc Cc m hEqCut
-  let N := FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk
-  have : N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+  let N := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
+    { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
+      gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint })
+  have : N.toOperatorIdealFamily.IsComplete :=
     inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
   have hmain := sylvester_mem_and_gauge_le_of_bound_inverse_swapped
-    (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
+    (N)
     hB1inv A1 hρ hδ hB1invNorm hA1norm hEqShift
-      (FanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk Cc)
-  simp only [FanDominantIdealFamily.toSymmetric_gaugeReal] at hmain
-  rw [FanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Xc,
-    FanDominantIdealFamily.kyFan_gauge (𝕜 := 𝕜) k hk Cc] at hmain
+      (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  simp only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- Ideal membership of the Sylvester solution from ordered cutoff estimates. -/
 theorem unbounded_sylvester_mem_of_semibounded_direct
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A : E →ₗ.[𝕜] E}
     {B : F →ₗ.[𝕜] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -484,7 +487,8 @@ theorem unbounded_sylvester_mem_of_semibounded_direct
 
 /-- Davis--Kahan Theorem 5.2 in the lower-left/upper-right orientation. -/
 theorem unbounded_sylvester_mem_and_gauge_le_direct
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A : E →ₗ.[𝕜] E}
     {B : F →ₗ.[𝕜] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -498,7 +502,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct
     (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded_direct
@@ -506,7 +510,8 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct
 
 /-- Davis--Kahan Theorem 5.2 in the upper-left/lower-right orientation. -/
 theorem unbounded_sylvester_mem_and_gauge_le_direct_swapped
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A : E →ₗ.[𝕜] E}
     {B : F →ₗ.[𝕜] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -520,7 +525,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct_swapped
     (hBc : TauCeti.LinearPMap.SemiboundedBelow B (c + δ))
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hδ hC
       (kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped

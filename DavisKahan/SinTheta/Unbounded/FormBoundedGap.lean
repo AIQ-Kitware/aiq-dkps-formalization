@@ -41,7 +41,8 @@ variable {E F G H : Type v}
 /-- Complex isometric complementary-block theorem routed through the direct
 manuscript-shaped Sylvester engine. -/
 theorem sinTheta_unbounded_complex
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -52,10 +53,10 @@ theorem sinTheta_unbounded_complex
     (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gauge (D.X.adjoint ∘L D.F₁)
-        ≤ N.gauge D.residual := by
+      δ * N.gaugeReal (D.X.adjoint ∘L D.F₁)
+        ≤ N.gaugeReal D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hF₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N D hF₁ hR
   have hRaw := davisKahan1970_sylvester_complex
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   exact ⟨hRaw.1, hRaw.2.trans hC.2⟩
@@ -69,7 +70,8 @@ The complex mirror of `sinTheta_unbounded_real_block`.  Both route the same
 block identity through their field's Sylvester engine; only the engine differs.
 -/
 theorem sinTheta_unbounded_complex_block
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -79,22 +81,23 @@ theorem sinTheta_unbounded_complex_block
     (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gauge (D.X.adjoint ∘L D.F₁)
-        ≤ N.gauge (D.residual.adjoint ∘L D.F₁) := by
+      δ * N.gaugeReal (D.X.adjoint ∘L D.F₁)
+        ≤ N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hF₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N D hF₁ hR
   have hRaw := davisKahan1970_sylvester_complex
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hmem : N.Mem (D.residual.adjoint ∘L D.F₁) :=
-    N.toSymmetricOperatorIdealFamily.comp_right_mem D.F₁
-      (N.toSymmetricOperatorIdealFamily.adjoint_mem hR)
+    N.comp_right_mem D.F₁
+      (N.adjoint_mem hR)
   refine ⟨hRaw.1, hRaw.2.trans (le_of_eq ?_)⟩
-  exact N.toSymmetricOperatorIdealFamily.gaugeReal_neg hmem
+  exact N.gaugeReal_neg hmem
 
 /-- Exact complex isometric theorem with the directed sine operator used by
 the manuscript surface. -/
 theorem sinTheta_unbounded_exact_complex
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -107,22 +110,23 @@ theorem sinTheta_unbounded_exact_complex
     (hR : N.Mem D.residual) :
     N.Mem
       ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
         ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X)
-        ≤ N.gauge D.residual := by
+        ≤ N.gaugeReal D.residual := by
   have hBlock := sinTheta_unbounded_complex
     N D hA hA₀ hΛ₁ hX hdecomp.isometry₁ hδ hgap hR
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
-    N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hX hdecomp hBlock.1
+    N D.X F₀ D.F₁ hX hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  rw [FanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
+
   rw [hAngle.2]
   exact hBlock.2
 
 /-- Complex generalized complementary-block theorem for all three manuscript
 gap configurations. -/
 theorem generalizedSinTheta_unbounded_complex
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -135,28 +139,29 @@ theorem generalizedSinTheta_unbounded_complex
     (hR : N.Mem D.residual) :
     N.Mem
         (sinThetaBlock D.X D.F₁ hframe hε) ∧
-      δ * ε * N.gauge
+      δ * ε * N.gaugeReal
           (sinThetaBlock D.X D.F₁ hframe hε)
-        ≤ N.gauge D.residual := by
+        ≤ N.gaugeReal D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hF₁ hR
+  have hC := adjointResidualBlock_mem_and_gauge_le N D hF₁ hR
   have hRaw := davisKahan1970_sylvester_complex
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
-    N.toSymmetricOperatorIdealFamily D.X D.F₁ hframe hε hRaw.1
+    N D.X D.F₁ hframe hε hRaw.1
   refine ⟨hFrame.1, ?_⟩
   calc
-    δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)
-        = δ * (ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε)) := by ring
-    _ ≤ δ * N.gauge (D.X.adjoint ∘L D.F₁) :=
+    δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
+        = δ * (ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)) := by ring
+    _ ≤ δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) :=
       mul_le_mul_of_nonneg_left hFrame.2 hδ.le
-    _ ≤ N.gauge (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
-    _ ≤ N.gauge D.residual := hC.2
+    _ ≤ N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) := hRaw.2
+    _ ≤ N.gaugeReal D.residual := hC.2
 
 /-- Exact complex generalized theorem for all three manuscript gap
 configurations. -/
 theorem generalizedSinTheta_unbounded_exact_complex
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -170,15 +175,15 @@ theorem generalizedSinTheta_unbounded_exact_complex
     (hR : N.Mem D.residual) :
     N.Mem
         (directedSinThetaOperator D.X F₀ hframe hε) ∧
-      δ * ε * N.gauge
+      δ * ε * N.gaugeReal
           (directedSinThetaOperator D.X F₀ hframe hε)
-        ≤ N.gauge D.residual := by
+        ≤ N.gaugeReal D.residual := by
   have hBlock := generalizedSinTheta_unbounded_complex
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
-    N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
+    N D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  rw [FanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
+
   rw [hAngle.2]
   exact hBlock.2
 

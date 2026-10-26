@@ -21,8 +21,8 @@ Until 2026-09-05 the repository never constructed one.  This module does: the
 and Kahan's own Fan-dominance argument runs over.
 
 **What was and was not missing.**  The layer beneath,
-`FanDominantIdealFamily`, was already inhabited by
-`FanDominantIdealFamily.kyFan`, so this module builds on that rather than
+a native symmetric ideal family with Ky Fan dominance, was already inhabited by
+`OperatorIdealFamily.kyFan`, so this module builds on that rather than
 repeating it.  What had no witness was the *normalized* class: the single extra
 field `gauge_rankOne_eq_one`, which is the source's `‖u v*‖ = ‖u‖ ‖v‖` after
 scaling both vectors to norm one.  It is discharged by
@@ -47,10 +47,14 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 noncomputable def kyFanNormalizedUnitaryInvariantNorm
      (k : ℕ) (hk : 0 < k) :
     NormalizedUnitaryInvariantNorm.{u, v} 𝕜 where
-  toFanDominantIdealFamily := FanDominantIdealFamily.kyFan k hk
+  toSymmetricOperatorIdealFamily := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
+    { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
+      gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint })
+  isKyFanDominant := inferInstanceAs (OperatorIdealFamily.kyFan 𝕜 k hk).IsKyFanDominant
   gauge_rankOne_eq_one := by
     intro E F _ _ _ _ _ _ V hVnorm hVrank
-    rw [FanDominantIdealFamily.kyFan_gauge]
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge]
     have hsum : kyFanApproximationGauge k V
         = ∑ n ∈ Finset.range k, approximationSingularValue n V := by
       change V.kyFanGaugeReal k = _
@@ -73,7 +77,10 @@ theorem gauge_kyFanNormalizedUnitaryInvariantNorm
     (A : E →L[𝕜] F) :
     (kyFanNormalizedUnitaryInvariantNorm (𝕜 := 𝕜) k hk).gauge A
       = kyFanApproximationGauge k A :=
-  FanDominantIdealFamily.kyFan_gauge k hk A
+  by
+    change ((OperatorIdealFamily.kyFan 𝕜 k hk).gauge A).toReal = _
+    rw [OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal]
+    rfl
 
 /-- Every bounded operator lies in the Ky Fan member's ideal. -/
 theorem mem_kyFanNormalizedUnitaryInvariantNorm
@@ -83,7 +90,9 @@ theorem mem_kyFanNormalizedUnitaryInvariantNorm
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     (kyFanNormalizedUnitaryInvariantNorm (𝕜 := 𝕜) k hk).Mem A :=
-  FanDominantIdealFamily.kyFan_mem k hk A
+  by
+    change (OperatorIdealFamily.kyFan 𝕜 k hk).gauge A ≠ ⊤
+    simp
 
 /-- **The source norm class is inhabited over `ℂ`.**  So every source-exact
 façade quantifying over `NormalizedUnitaryInvariantNorm ℂ` says something. -/

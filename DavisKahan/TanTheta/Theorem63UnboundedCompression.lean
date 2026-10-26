@@ -781,7 +781,8 @@ This is the Appendix's stated scope for the tangent family: `A₀ ≤ α` and `�
 **both** allowed to be unbounded, the residual `R` bounded, and the trial space of
 arbitrary dimension. -/
 theorem ideal_of_formBounds
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {α δ : ℝ} (hδ : 0 < δ)
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression α)
     (hcross : ∀ z : D.compression.domain,
@@ -791,7 +792,7 @@ theorem ideal_of_formBounds
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
     (hResidual : N.Mem D.residual) :
-    N.Mem tanTheta0 ∧ δ * N.gauge tanTheta0 ≤ N.gauge D.residual := by
+    N.Mem tanTheta0 ∧ δ * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual := by
   refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ
     hResidual fun k => ?_
   have hcore := D.all_kyFan_core V hδ hupper hcross k
@@ -810,7 +811,8 @@ theorem ideal_of_formBounds
 carries exactly the paper's approximation numbers `tan θₙ`, and the `sin θₙ < 1` it needs
 is derived from the two form bounds rather than assumed. -/
 theorem ideal_of_formBounds_exists
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {α δ : ℝ} (hδ : 0 < δ)
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression α)
     (hcross : ∀ z : D.compression.domain,
@@ -821,7 +823,7 @@ theorem ideal_of_formBounds_exists
     ∃ tanTheta0 : Z →L[ℂ] H,
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      δ * N.gauge tanTheta0 ≤ N.gauge D.residual := by
+      δ * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual := by
   obtain ⟨tanTheta0, htan⟩ :=
     exists_hasTheorem63DirectedTangentApproximationNumbersInfinite Z V
       (D.approximationSingularValue_sineBlock_lt_one V hδ hupper hcross)
@@ -849,7 +851,8 @@ The hypothesis list is the printed one:
 There is no finite-dimensionality hypothesis on the trial space, no boundedness hypothesis
 on the Ritz compression, and the compression of `A` to `V` itself is unconstrained. -/
 theorem ideal_of_reducing_exists
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H)
     {α δ : ℝ} (hδ : 0 < δ)
     (hZA : ∀ z : D.compression.domain, ((z : Z) : H) ∈ A.domain)
@@ -866,7 +869,7 @@ theorem ideal_of_reducing_exists
     ∃ tanTheta0 : Z →L[ℂ] H,
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      δ * N.gauge tanTheta0 ≤ N.gauge D.residual :=
+      δ * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual :=
   D.ideal_of_formBounds_exists V N hδ hupper
     (D.crossed_lower_of_reducing V A hZA haction hVdom hVcomm hUnwanted) hResidual
 

@@ -209,12 +209,14 @@ theorem reflectionPerturbation_normingMem_and_gauge_le
     rcases Nat.eq_zero_or_pos k with rfl | hk
     · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     · have h := DavisKahan.reflectionPerturbation_mem_and_gauge_le
-        (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
-        V Eop (FanDominantIdealFamily.kyFan_mem k hk Eop)
-      rw [FanDominantIdealFamily.toSymmetric_gaugeReal,
-        FanDominantIdealFamily.toSymmetric_gaugeReal,
-        FanDominantIdealFamily.kyFan_gauge,
-        FanDominantIdealFamily.kyFan_gauge] at h
+        ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
+          { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
+            gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }))
+        V Eop (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+      rw [                SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
       exact h.2
   obtain ⟨hmem, hle⟩ := N.mul_gauge_le_of_all_mul_kyFan_le one_pos hMem2 hkyFan
   refine ⟨hmem, ?_⟩

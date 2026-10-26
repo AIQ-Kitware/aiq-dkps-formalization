@@ -528,7 +528,8 @@ invariant configuration).  If the off-diagonal perturbation `H` belongs to
 the ideal, then so does every `tan 2Θ₀` representative, and
 `(b - a) · N(tan 2Θ₀) ≤ 2 · N(H)`. -/
 theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
@@ -543,8 +544,8 @@ theorem tanTwoTheta0_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariant
       doubleAngleTangent (approximationSingularValue n T))
     (hHmem : N.Mem H) :
     N.Mem tanTwoTheta0 ∧
-      (b - a) * N.gauge tanTwoTheta0 ≤
-        2 * N.gauge H := by
+      (b - a) * N.gaugeReal tanTwoTheta0 ≤
+        2 * N.gaugeReal H := by
   have hδ : (0 : ℝ) < (b - a) / 2 := by linarith
   have hscaled : ∀ k,
       (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta0 ≤
@@ -616,7 +617,8 @@ hypothesis `approximationSingularValue 0 T < 1`; the perturbed invariant
 subspace may make angles arbitrarily close to `π/2` with the trial
 subspace. -/
 theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invariantSubspace
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
@@ -630,7 +632,7 @@ theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_finiteDimensional_invaria
       absDoubleAngleTangent (approximationSingularValue n T))
     (hHmem : N.Mem H) :
     N.Mem tanTwoTheta ∧
-      (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by
+      (b - a) * N.gaugeReal tanTwoTheta ≤ 2 * N.gaugeReal H := by
   have hδ : (0 : ℝ) < (b - a) / 2 := by linarith
   have hscaled : ∀ k,
       (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta ≤

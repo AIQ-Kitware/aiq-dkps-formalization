@@ -58,20 +58,19 @@ theorem real_unbounded_sylvester_kyFan
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
-    let K := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos
+    let K := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hkpos
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hkpos).gauge_adjoint })
     have hcomplex := davisKahan1970_sylvester_complex K
       (isSelfAdjoint_complexify hA)
       (isSelfAdjoint_complexify hB)
       hδ (unboundedSylvesterGap_complexify hgap)
       (closedSylvesterEquation_complexify hEq)
-      (FanDominantIdealFamily.kyFan_mem k hkpos
-        (RealComplexification.complexify C))
+      (by simp [K, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     have hbound := hcomplex.2
-    simp only [K] at hbound
-    rw [FanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos
-      (RealComplexification.complexify X),
-      FanDominantIdealFamily.kyFan_gauge (𝕜 := ℂ) k hkpos
-        (RealComplexification.complexify C)] at hbound
+    simp only [K, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ] at hbound
     simpa only [kyFanApproximationGauge_complexify] using hbound
 
 /-- Real specialization of the full source-facing unbounded Sylvester theorem.
@@ -79,7 +78,8 @@ It supports interval/exterior separation and both ordered half-line
 orientations, with the same sharp constant and an arbitrary real unitarily
 invariant ideal family. -/
 theorem davisKahan1970_sylvester_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A : E →ₗ.[ℝ] E}
     {B : F →ₗ.[ℝ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -89,8 +89,8 @@ theorem davisKahan1970_sylvester_real
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
-      δ * N.gauge X ≤
-        N.gauge C := by
+      δ * N.gaugeReal X ≤
+        N.gaugeReal C := by
   apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC
   intro k
   exact real_unbounded_sylvester_kyFan hA hB hδ hgap hEq k

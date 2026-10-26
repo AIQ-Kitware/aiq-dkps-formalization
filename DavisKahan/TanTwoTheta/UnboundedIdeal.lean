@@ -202,7 +202,8 @@ theorem tanTwoTheta_addBounded_gauge_of_intervalExterior
 /-- Source-facing unitary-invariant-family wrapper for the spectrum-gap ideal
 form. -/
 theorem tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -224,25 +225,26 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ∧
-      δ * N.gauge (tanTwoThetaIdealBlock
+      δ * N.gaugeReal (tanTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ≤
-        (2 * N.gauge E) /
+        (2 * N.gaugeReal E) /
           (1 - 2 * Submodule.directedProjectionGap
             (selfAdjointSpectralSubspace A hA B hB)
             (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
               (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2) := by
   have hsin := sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     N A hA E hE B S hB hS hβα hδ hBlow hBhigh hBcomplSpec hEmem
-  exact tanTwoThetaIdealBlock_scaled_bound N.toSymmetricOperatorIdealFamily
+  exact tanTwoThetaIdealBlock_scaled_bound N
     _ _ hquarter hsin.1 hδ.le hsin.2
 
 /-- Source-facing unitary-invariant-family wrapper for the set-localized ideal
 form. -/
 theorem tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -259,12 +261,12 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ∧
-      δ * N.gauge (tanTwoThetaIdealBlock
+      δ * N.gaugeReal (tanTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter) ≤
-        (2 * N.gauge E) /
+        (2 * N.gaugeReal E) /
           (1 - 2 * Submodule.directedProjectionGap
             (selfAdjointSpectralSubspace A hA B hB)
             (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)

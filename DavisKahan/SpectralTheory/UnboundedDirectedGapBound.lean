@@ -91,15 +91,18 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
     rw [TauCeti.LinearPMap.coe_reducingRestriction_apply A P hPred (x : P) hxA]
     abel
   have key := DavisKahan.ExactSinTheta.sinTheta_unbounded_complex_reducingSubspace
-    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) 1 one_pos)
+    ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ 1 one_pos
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ 1 one_pos).gauge_adjoint }))
     (TauCeti.LinearPMap.addBounded A Hop) hB.dense_domain hB.isClosed hB Q hQred
     (TauCeti.LinearPMap.reducingRestriction A P hPred)
     hA0.dense_domain hA0.isClosed hA0
     (P.subtypeL : P →L[ℂ] Hc) (Hop ∘L (P.subtypeL : P →L[ℂ] Hc)) hX hXdom hReq hδ hgap
-    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) 1 one_pos _)
+    (by simp [SymmetricOperatorIdealFamily.Mem])
   obtain ⟨-, hle⟩ := key
-  rw [FanDominantIdealFamily.kyFan_gauge, FanDominantIdealFamily.kyFan_gauge,
-    kyFanApproximationGauge_one, kyFanApproximationGauge_one] at hle
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    kyFanApproximationGauge_one] at hle
   have hblock : (ContinuousLinearMap.id ℂ Hc -
       Q.subtypeL ∘L ContinuousLinearMap.adjoint Q.subtypeL) = Qᗮ.starProjection := by
     rw [Submodule.adjoint_subtypeL]

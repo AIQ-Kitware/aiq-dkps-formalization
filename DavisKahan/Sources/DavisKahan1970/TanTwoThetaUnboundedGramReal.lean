@@ -721,7 +721,8 @@ arbitrary-unitarily-invariant-norm endpoint of the unbounded `tan 2Θ` chain, wi
 `IsCompressedDoubleAngleEigenbasis` deleted rather than discharged, over real
 scalars. -/
 theorem mem_and_gauge_le_reflectionTangentCorner_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -736,8 +737,8 @@ theorem mem_and_gauge_le_reflectionTangentCorner_real
       (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℝ U))
     (hBmem : N.Mem (reflectionResidualCorner U B)) :
     N.Mem (((b - a) / 2 : ℝ) • reflectionTangentCorner U Z) ∧
-      N.gauge (((b - a) / 2 : ℝ) • reflectionTangentCorner U Z) ≤
-        N.gauge (reflectionResidualCorner U B) := by
+      N.gaugeReal (((b - a) / 2 : ℝ) • reflectionTangentCorner U Z) ≤
+        N.gaugeReal (reflectionResidualCorner U B) := by
   refine mem_and_gauge_le_of_all_kyFanApproximationGauge_le N hBmem fun k => ?_
   rw [kyFanApproximationGauge_smul, Real.norm_eq_abs,
     abs_of_nonneg (by linarith : (0 : ℝ) ≤ (b - a) / 2)]

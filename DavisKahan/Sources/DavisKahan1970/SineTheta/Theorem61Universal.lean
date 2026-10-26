@@ -75,7 +75,9 @@ noncomputable def toKyFanProblem
     (P : Theorem61Data (E := E) (F := F) (G := G) (H := H))
     (k : ℕ) (hk : 0 < k) :
     FormBoundedGeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H)
-      (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) where
+      ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+        { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+          gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })) where
   data := P.data
   exactMap := P.exactMap
   ambient_selfAdjoint := P.ambient_selfAdjoint
@@ -88,8 +90,7 @@ noncomputable def toKyFanProblem
   frameLowerBound_pos := P.frameLowerBound_pos
   lowerFrame := P.lowerFrame
   spectral_gap := P.spectral_gap
-  residual_mem := FanDominantIdealFamily.kyFan_mem
-    (𝕜 := ℂ) k hk P.data.residual
+  residual_mem := (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
 
 /-- The accepted theorem yields every finite Ky Fan inequality required by the
 source Fan-dominance argument. -/
@@ -104,10 +105,13 @@ theorem all_kyFan_bound
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    let N := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+    let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
     have hmain := FormBoundedGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
     have hsame := S.same_singular_values.kyFanApproximationGauge_eq k
-    simpa only [N, FanDominantIdealFamily.kyFan_gauge,
+    simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
       Theorem61Data.toKyFanProblem,
       Theorem61Data.canonicalSinTheta, hsame] using hmain.2
 
@@ -245,7 +249,9 @@ noncomputable def toKyFanProblem
     (P : RealTheorem61Data (E := E) (F := F) (G := G) (H := H))
     (k : ℕ) (hk : 0 < k) :
     RealGeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H)
-      (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk) where
+      ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
+        { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hk
+          gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hk).gauge_adjoint })) where
   data := P.data
   exactMap := P.exactMap
   ambient_selfAdjoint := P.ambient_selfAdjoint
@@ -258,8 +264,7 @@ noncomputable def toKyFanProblem
   frameLowerBound_pos := P.frameLowerBound_pos
   lowerFrame := P.lowerFrame
   spectral_gap := P.spectral_gap
-  residual_mem := FanDominantIdealFamily.kyFan_mem
-    (𝕜 := ℝ) k hk P.data.residual
+  residual_mem := (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
 
 /-- Every real finite Ky Fan inequality. -/
 theorem all_kyFan_bound
@@ -273,10 +278,13 @@ theorem all_kyFan_bound
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    let N := FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hk
+    let N := (show TauCeti.SymmetricOperatorIdealFamily ℝ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hk).gauge_adjoint })
     have hmain := RealGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
     have hsame := S.same_singular_values.kyFanApproximationGauge_eq k
-    simpa only [N, FanDominantIdealFamily.kyFan_gauge,
+    simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
       RealTheorem61Data.toKyFanProblem,
       RealTheorem61Data.canonicalSinTheta, hsame] using hmain.2
 

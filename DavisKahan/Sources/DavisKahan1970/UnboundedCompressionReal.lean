@@ -329,7 +329,8 @@ This is the Appendix's stated scope for the tangent family over a real Hilbert s
 `A₀ ≤ α` and `Λ₁ ≥ α + δ` with **both** allowed to be unbounded, the residual `R` bounded,
 and the trial space of arbitrary dimension. -/
 theorem theorem6_3_unboundedCompression_ideal_exists_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedCompressionTrialData Z) (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
@@ -340,7 +341,7 @@ theorem theorem6_3_unboundedCompression_ideal_exists_real
     ∃ tanTheta0 : Z →L[ℝ] E,
       HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge D.residual := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual := by
   obtain ⟨tanTheta0, htan⟩ :=
     exists_hasTheorem63DirectedTangentApproximationNumbersReal Z V
       (fun n => approximationSingularValue_sineBlockReal_lt_one_unboundedCompression
@@ -364,7 +365,8 @@ theorem theorem6_3_unboundedCompression_ideal_exists_real
 /-- The same endpoint when a real tangent representative with the paper's approximation
 numbers is supplied by the caller. -/
 theorem theorem6_3_unboundedCompression_ideal_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedCompressionTrialData Z) (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
@@ -374,7 +376,7 @@ theorem theorem6_3_unboundedCompression_ideal_real
     (tanTheta0 : Z →L[ℝ] E)
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
     (hResidual : N.Mem D.residual) :
-    N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge D.residual := by
+    N.Mem tanTheta0 ∧ delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual := by
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual fun k => ?_
   have hcore := all_kyFan_core_unboundedCompression_real D V hdelta hupper hcross k
   have htanKy : kyFanApproximationGauge k tanTheta0 =
@@ -399,7 +401,8 @@ The hypothesis list is the printed one:
 Everything is real: the ambient space, the ambient operator, the unbounded compression, the
 trial and reducing subspaces, the tangent representative, and the ideal gauge. -/
 theorem theorem6_3_unboundedCompression_ideal_of_reducing_exists_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedCompressionTrialData Z) (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     (A : E →ₗ.[ℝ] E)
     {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -417,7 +420,7 @@ theorem theorem6_3_unboundedCompression_ideal_of_reducing_exists_real
     ∃ tanTheta0 : Z →L[ℝ] E,
       HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge D.residual :=
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual :=
   theorem6_3_unboundedCompression_ideal_exists_real N D V hdelta hupper
     (fun z => by
       simpa using D.crossed_lower_of_reducing V A hZA haction hVdom hVcomm

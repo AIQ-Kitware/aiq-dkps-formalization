@@ -181,7 +181,9 @@ theorem forward_all_kyFan
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    let N := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+    let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
     let D := P.forwardData
     have hA0 : _root_.IsSelfAdjoint D.A₀ := by
       simpa only [D, forwardData,
@@ -202,8 +204,7 @@ theorem forward_all_kyFan
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_B)) hA0 hL
     have hraw := davisKahan1970_sylvester_complex N hA0 hL P.gap_pos
       P.gap_U_to_Vperp hEq
-      (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk
-        (-(D.residual.adjoint ∘L D.F₁)))
+      (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     -- The ambient transport lemma produces the *adjoint* orientation of each
     -- block, so both comparisons are heterogeneous and both pick up one
     -- adjoint step.  Ky Fan gauges are adjoint-invariant, so nothing is lost.
@@ -239,8 +240,9 @@ theorem forward_all_kyFan
       rw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
         ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
         hres.kyFanApproximationGauge_eq k]
-    simpa [N, FanDominantIdealFamily.kyFan_gauge,
-      hgaugeSine, hgaugeRes] using hraw.2
+    simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      hgaugeSine, hgaugeRes, kyFanApproximationGauge_neg] using hraw.2
 
 /-- Reversed one-sided estimate simultaneously for every finite Ky Fan gauge. -/
 theorem reverse_all_kyFan
@@ -253,7 +255,9 @@ theorem reverse_all_kyFan
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    let N := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
+    let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
     let D := P.reverseData
     have hA0 : _root_.IsSelfAdjoint D.A₀ := by
       simpa only [D, reverseData,
@@ -274,8 +278,7 @@ theorem reverse_all_kyFan
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr P.selfAdjoint_A)) hA0 hL
     have hraw := davisKahan1970_sylvester_complex N hA0 hL P.gap_pos
       P.gap_V_to_Uperp hEq
-      (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk
-        (-(D.residual.adjoint ∘L D.F₁)))
+      (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     -- Mirror of the forward case: the ambient transport lemma again produces
     -- the adjoint orientation, and Ky Fan gauges are adjoint-invariant.
     have hsine : SameApproximationSingularSequence
@@ -312,8 +315,9 @@ theorem reverse_all_kyFan
     have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
         kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
       hres.kyFanApproximationGauge_eq k
-    simpa [N, FanDominantIdealFamily.kyFan_gauge,
-      hgaugeSine, hgaugeRes] using hraw.2
+    simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      hgaugeSine, hgaugeRes, kyFanApproximationGauge_neg] using hraw.2
 
 /-- Ky Fan form of the symmetric sine theorem, before universal Fan
  dominance. -/

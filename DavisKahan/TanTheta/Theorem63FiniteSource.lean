@@ -829,7 +829,8 @@ space and the exact spectral subspace may be infinite-dimensional.  The
 conclusion holds for every approximation-number ideal family satisfying Fan
 dominance. -/
 theorem theorem6_3_generalizedTanTheta_of_formBounds
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
@@ -845,8 +846,8 @@ theorem theorem6_3_generalizedTanTheta_of_formBounds
     (hResidual : N.Mem
       (theorem63Residual T Z)) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤
-        N.gauge (theorem63Residual T Z) := by
+      delta * N.gaugeReal tanTheta0 ≤
+        N.gaugeReal (theorem63Residual T Z) := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hdelta hResidual
       (theorem6_3_all_kyFan_core T hT V Z hV hdelta
@@ -862,7 +863,8 @@ assumption under its global separability convention.  The separate strict-rank
 hypothesis preserves that source condition explicitly; no symmetric acuteness
 is inferred from it. -/
 theorem theorem6_3_generalizedTanTheta_ideal
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
@@ -880,8 +882,8 @@ theorem theorem6_3_generalizedTanTheta_ideal
     (hResidual : N.Mem
       (theorem63Residual T Z)) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤
-        N.gauge (theorem63Residual T Z) := by
+      delta * N.gaugeReal tanTheta0 ≤
+        N.gaugeReal (theorem63Residual T Z) := by
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
@@ -918,14 +920,15 @@ theorem theorem6_3_ideal_of_kyFan_core
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {delta : ℝ} (hdelta : 0 < delta)
     {tanTheta0 residual : E →L[ℂ] F}
     (hResidual : N.Mem residual)
     (hcore : Theorem63KyFanCore delta tanTheta0 residual) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤
-        N.gauge residual :=
+      delta * N.gaugeReal tanTheta0 ≤
+        N.gaugeReal residual :=
   ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hdelta hResidual hcore
 
@@ -1110,7 +1113,8 @@ theorem theorem6_3_all_kyFan_core_directedTangent
 supplied rather than assumed.  Every hypothesis here is one Davis and Kahan
 state. -/
 theorem theorem6_3_generalizedTanTheta_ideal_directedTangent
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (hV : T.Reduces V)
     (hStrictDimension : Module.rank ℂ Z < Module.rank ℂ V)
@@ -1122,8 +1126,8 @@ theorem theorem6_3_generalizedTanTheta_ideal_directedTangent
         Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem (theorem63DirectedTangent Z V) ∧
-      delta * N.gauge (theorem63DirectedTangent Z V) ≤
-        N.gauge (theorem63Residual T Z) := by
+      delta * N.gaugeReal (theorem63DirectedTangent Z V) ≤
+        N.gaugeReal (theorem63Residual T Z) := by
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
@@ -1169,7 +1173,8 @@ excludes, so it cannot be obtained by specialising a statement that assumes
 Every hypothesis is a form bound or a spectral separation; nothing compares the
 ranks of `Z` and `V`, so this applies to the equal-rank pairs of Section 2. -/
 theorem theorem6_3_generalizedTanTheta_of_formBounds_equalRank
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : Z,
@@ -1178,8 +1183,8 @@ theorem theorem6_3_generalizedTanTheta_of_formBounds_equalRank
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem (theorem63DirectedTangent Z V) ∧
-      delta * N.gauge (theorem63DirectedTangent Z V) ≤
-        N.gauge (theorem63Residual T Z) :=
+      delta * N.gaugeReal (theorem63DirectedTangent Z V) ≤
+        N.gaugeReal (theorem63Residual T Z) :=
   ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual
     (theorem6_3_all_kyFan_core_directedTangent Z V T hT hV hdelta
       hCompressionUpper hUnwantedLower)
@@ -1192,7 +1197,8 @@ representative this file constructs.  No dimension comparison, no assumed
 tangent representative — this is the Section 2 tangent theorem's residual half
 at arbitrary unitarily invariant ideal-gauge scope. -/
 theorem theorem6_3_generalizedTanTheta_equalRank_spectral
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric) (hV : T.Reduces V)
     {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
     (hCompressionSpectrum :
@@ -1202,8 +1208,8 @@ theorem theorem6_3_generalizedTanTheta_equalRank_spectral
         Set.Ici (alpha + delta))
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem (theorem63DirectedTangent Z V) ∧
-      delta * N.gauge (theorem63DirectedTangent Z V) ≤
-        N.gauge (theorem63Residual T Z) := by
+      delta * N.gaugeReal (theorem63DirectedTangent Z V) ≤
+        N.gaugeReal (theorem63Residual T Z) := by
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by

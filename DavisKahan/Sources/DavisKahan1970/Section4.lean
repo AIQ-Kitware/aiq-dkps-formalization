@@ -226,7 +226,7 @@ end Proposition41VectorForm
 section ExactCompactNonacute
 
 open scoped InnerProductSpace
-open DavisKahan.ExactSinTheta (FanDominantIdealFamily)
+open DavisKahan.ExactSinTheta
 
 universe v
 
@@ -354,7 +354,8 @@ theorem proposition4_1_compact_nonacute_complex
 
 /-- **Corollary 4.1 at the inherited compact, matched-defect scope.** -/
 theorem corollary4_1_compact_nonacute_complex
-    (N : DavisKahan.ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
@@ -363,9 +364,9 @@ theorem corollary4_1_compact_nonacute_complex
     (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
     N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ∧
-      N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+      N.gaugeReal ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
           U.starProjection) ≤
-        N.gauge ((1 - W) ∘L U.starProjection) :=
+        N.gaugeReal ((1 - W) ∘L U.starProjection) :=
   DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (DavisKahan.Section4.nonacute_restrictedDisplacementDominance
       U V J W hWunitary hWmap) hWmem
@@ -374,7 +375,7 @@ end ExactCompactNonacute
 
 section Corollary4_1Infinite
 
-open DavisKahan.ExactSinTheta (FanDominantIdealFamily)
+open DavisKahan.ExactSinTheta
 
 universe v
 
@@ -385,7 +386,8 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 Approximation-number minimality of a chosen direct rotation promotes to every
 Ky-Fan-dominant unitarily invariant ideal gauge. -/
 theorem corollary4_1_infiniteDimensional_nonacute
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
@@ -394,9 +396,9 @@ theorem corollary4_1_infiniteDimensional_nonacute
     (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
     N.Mem ((1 - DavisKahan.nonacuteDirectRotation
           U V J) ∘L U.starProjection) ∧
-      N.gauge ((1 - DavisKahan.nonacuteDirectRotation
+      N.gaugeReal ((1 - DavisKahan.nonacuteDirectRotation
           U V J) ∘L U.starProjection) ≤
-        N.gauge ((1 - W) ∘L U.starProjection) :=
+        N.gaugeReal ((1 - W) ∘L U.starProjection) :=
   DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (DavisKahan.Section4.nonacute_restrictedDisplacementDominance
       U V J W hWunitary hWmap) hWmem
@@ -408,7 +410,8 @@ ideal gauge.  Membership in the ideal is concluded rather than assumed, matching
 `corollary4_1_real`; `corollary4_1_infiniteDimensional_nonacute` carries the same
 statement at the matched-crossed-defect scope the paper inherits from Corollary 3.1. -/
 theorem corollary4_1_infiniteDimensional
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : DavisKahan.IsUniformlyAcute U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
@@ -416,9 +419,9 @@ theorem corollary4_1_infiniteDimensional
     (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
     N.Mem ((1 - DavisKahan.spectraDirectRotation
           U V hacute) ∘L U.starProjection) ∧
-      N.gauge ((1 - DavisKahan.spectraDirectRotation
+      N.gaugeReal ((1 - DavisKahan.spectraDirectRotation
           U V hacute) ∘L U.starProjection) ≤
-        N.gauge ((1 - W) ∘L U.starProjection) :=
+        N.gaugeReal ((1 - W) ∘L U.starProjection) :=
   DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (DavisKahan.Section4.infinite_restrictedDisplacementDominance
       U V hacute W hWunitary hWmap) hWmem
@@ -499,7 +502,7 @@ The alias above stops at Ky Fan, which is where its proof stops.  The printed
 clause is about every unitarily invariant norm, and in infinite dimensions the
 carrier of that phrase is an arbitrary Ky-Fan-dominant symmetric operator ideal
 family, exactly as for Corollary 4.1.  The promotion is
-`FanDominantIdealFamily.majorization_mem_and_gauge_le`, whose hypothesis is
+`mem_and_gauge_le_of_all_kyFanApproximationGauge_le`, whose hypothesis is
 the Ky Fan domination this alias supplies.
 
 Fan dominance constrains the prefix sums of the approximation numbers.  This is
@@ -510,7 +513,7 @@ section IdealGauge
 
 open DavisKahan (IsUniformlyAcute)
 open DavisKahan (spectraDirectRotation)
-open DavisKahan.ExactSinTheta (FanDominantIdealFamily)
+open DavisKahan.ExactSinTheta
 
 universe v
 
@@ -527,11 +530,12 @@ carrying `U` onto `V`.  Membership of the minimizer is **concluded**, not
 assumed; only the competitor is assumed to lie in the ideal.
 
 This is `proposition4_3_infiniteDimensional` promoted through
-`FanDominantIdealFamily.majorization_mem_and_gauge_le`.  The promotion consumes
+`mem_and_gauge_le_of_all_kyFanApproximationGauge_le`.  The promotion consumes
 Ky Fan prefix sums only: no pointwise approximation-number domination is claimed
 here, and none is true. -/
 theorem proposition4_3_infiniteDimensional_idealGauge
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
@@ -539,16 +543,17 @@ theorem proposition4_3_infiniteDimensional_idealGauge
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (spectraDirectRotation U V hacute)) *
         (1 - spectraDirectRotation U V hacute)) ∧
-      N.gauge ((1 - star (spectraDirectRotation U V hacute)) *
+      N.gaugeReal ((1 - star (spectraDirectRotation U V hacute)) *
           (1 - spectraDirectRotation U V hacute)) ≤
-        N.gauge ((1 - star W) * (1 - W)) :=
-  N.majorization_mem_and_gauge_le hWmem
+        N.gaugeReal ((1 - star W) * (1 - W)) :=
+  (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le N) hWmem
     (proposition4_3_infiniteDimensional U V hacute W hWunitary hWmap)
 
 /-- Proposition 4.3 promoted from Ky Fan sums to every ideal gauge at the full
 matched-crossed-defect scope inherited by Section 4. -/
 theorem proposition4_3_infiniteDimensional_nonacute_idealGauge
-    (N : DavisKahan.ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
       DavisKahan.halmosTargetDefect U V)
@@ -557,17 +562,18 @@ theorem proposition4_3_infiniteDimensional_nonacute_idealGauge
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
-      N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+      N.gaugeReal ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
-        N.gauge ((1 - star W) * (1 - W)) :=
-  N.majorization_mem_and_gauge_le hWmem
+        N.gaugeReal ((1 - star W) * (1 - W)) :=
+  (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le N) hWmem
     (proposition4_3_infiniteDimensional_nonacute U V J W hWunitary hWmap)
 
 /-- **Proposition 4.3 at the inherited compact, matched-defect source scope.**
 The compactness hypothesis records the paper's Section 3 setting; the Ky Fan proof is valid
 without it. -/
 theorem proposition4_3_compact_nonacute_idealGauge
-    (N : DavisKahan.ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
@@ -577,9 +583,9 @@ theorem proposition4_3_compact_nonacute_idealGauge
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
-      N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+      N.gaugeReal ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
-        N.gauge ((1 - star W) * (1 - W)) :=
+        N.gaugeReal ((1 - star W) * (1 - W)) :=
   proposition4_3_infiniteDimensional_nonacute_idealGauge
     N U V J W hWunitary hWmap hWmem
 

@@ -62,13 +62,15 @@ example
         selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X‖ ≤
       ‖Rop‖ := by
+  have : (TauCeti.SymmetricOperatorIdealFamily.opNorm ℂ).toOperatorIdealFamily.IsKyFanDominant := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   have hmain := sinTheta_unbounded_spectralSubspace_of_spectrumGap
-    (FanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
+    ((TauCeti.SymmetricOperatorIdealFamily.opNorm ℂ))
       A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
-        rw [FanDominantIdealFamily.mem_iff]
-        simp [FanDominantIdealFamily.operatorNorm])
-  simpa only [FanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal,
+        rw [SymmetricOperatorIdealFamily.Mem]
+        simp)
+  simpa only [    SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] using hmain.2
@@ -92,11 +94,14 @@ example
             (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X)
       ≤ kyFanApproximationGauge 2 Rop := by
   have hk : 0 < (2 : ℕ) := by omega
-  let N := FanDominantIdealFamily.kyFan (𝕜 := ℂ) 2 hk
+  let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
+    { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ 2 hk
+      gauge_adjoint := (OperatorIdealFamily.kyFan ℂ 2 hk).gauge_adjoint })
   have hmain := sinTheta_unbounded_spectralSubspace_of_spectrumGap
     N A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap
-      (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) 2 hk Rop)
-  simpa only [N, FanDominantIdealFamily.kyFan_gauge] using hmain.2
+      (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
 
 end AbstractComplexUse
 
@@ -123,13 +128,15 @@ example
         realSelfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (realSelfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X‖ ≤
       ‖Rop‖ := by
+  have : (TauCeti.SymmetricOperatorIdealFamily.opNorm ℝ).toOperatorIdealFamily.IsKyFanDominant := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   have hmain := sinTheta_unbounded_real_spectralSubspace
-    (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
+    ((TauCeti.SymmetricOperatorIdealFamily.opNorm ℝ))
       A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap (by
-        rw [FanDominantIdealFamily.mem_iff]
-        simp [FanDominantIdealFamily.operatorNorm])
-  simpa only [FanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal,
+        rw [SymmetricOperatorIdealFamily.Mem]
+        simp)
+  simpa only [    SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] using hmain.2
@@ -163,13 +170,15 @@ example
           (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)) S hS).adjoint) ∘L X‖
       ≤ ‖generalResidual A X A0‖ := by
+  have : (TauCeti.SymmetricOperatorIdealFamily.opNorm ℂ).toOperatorIdealFamily.IsKyFanDominant := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   have hmain := sinTheta_bounded_spectralSubspace_of_spectrumGap
-    (FanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
+    ((TauCeti.SymmetricOperatorIdealFamily.opNorm ℂ))
       A hA S hS A0 hA0 X hX hδ hgap (by
-        rw [FanDominantIdealFamily.mem_iff]
-        simp [FanDominantIdealFamily.operatorNorm])
-  simpa only [FanDominantIdealFamily.operatorNorm,
-    FanDominantIdealFamily.gauge_eq_toReal,
+        rw [SymmetricOperatorIdealFamily.Mem]
+        simp)
+  simpa only [    SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
     toReal_enorm] using hmain.2
@@ -192,11 +201,14 @@ theorem realPlane_zeroResidual_model :
     let U : Submodule ℝ RealPlane := ⊤
     let X : RealPlane →L[ℝ] RealPlane := ContinuousLinearMap.id ℝ RealPlane
     let Rop : RealPlane →L[ℝ] RealPlane := 0
-    (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).Mem
+    ((TauCeti.SymmetricOperatorIdealFamily.opNorm ℝ)).Mem
       ((ContinuousLinearMap.id ℝ RealPlane - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X) ∧
-      1 * (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).gauge
+      1 * ((TauCeti.SymmetricOperatorIdealFamily.opNorm ℝ)).gaugeReal
         ((ContinuousLinearMap.id ℝ RealPlane - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X)
-      ≤ (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).gauge Rop := by
+      ≤ ((TauCeti.SymmetricOperatorIdealFamily.opNorm ℝ)).gaugeReal Rop := by
+  have : (TauCeti.SymmetricOperatorIdealFamily.opNorm ℝ).toOperatorIdealFamily.IsKyFanDominant := by
+    rw [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
+    infer_instance
   dsimp
   let A : RealPlane →ₗ.[ℝ] RealPlane :=
     ((0 : RealPlane →L[ℝ] RealPlane).toLinearMap.toPMap ⊤)
@@ -235,7 +247,7 @@ theorem realPlane_zeroResidual_model :
     exact FormBoundedSylvesterGap.trialBelow_complementAbove hA0upper
       (by simpa using hcompLower)
   apply sinTheta_unbounded_real_reducingSubspace
-    (FanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
+    ((TauCeti.SymmetricOperatorIdealFamily.opNorm ℝ))
       A hA.dense_domain hA.isClosed hA U hred
       A0 hA0.dense_domain hA0.isClosed hA0
       (ContinuousLinearMap.id ℝ RealPlane) 0 (fun _ => rfl)
@@ -247,7 +259,7 @@ theorem realPlane_zeroResidual_model :
   case hδ => exact zero_lt_one
   case hgap => exact hgap
   case hR =>
-    rw [FanDominantIdealFamily.mem_iff]
+    rw [SymmetricOperatorIdealFamily.Mem]
     simp
 
 end FiniteRealModel

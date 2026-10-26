@@ -50,8 +50,8 @@ the complex one read through an equality of approximation numbers.
 
 ## The ideal family is real
 
-Corollary 4.1 is stated here over a **real** `FanDominantIdealFamily`, not by
-transporting a complex one.  That is deliberate: `FanDominantIdealFamily` is
+Corollary 4.1 is stated here over a **real** native symmetric ideal family with Ky Fan dominance, not by
+transporting a complex one.  That is deliberate: a native symmetric ideal family with Ky Fan dominance is
 `RCLike`-generic but carries no gauge-complexification law, so a complex family's
 gauge cannot be read on real operators.  Nothing needs it to be: the certificate
 `RestrictedDisplacementApproximationDominance` and the bridge
@@ -494,16 +494,17 @@ theorem restrictedDisplacementDominance_nonacute_real
   approximation_le n := Proposition4_1_nonacute_real U V J W hWunitary hWmap n
 
 /-- **Corollary 4.1 over `ℝ` at the exact matched-defect, nonacute scope.** -/
-theorem Corollary4_1_nonacute_real (N : FanDominantIdealFamily (𝕜 := ℝ))
+theorem Corollary4_1_nonacute_real (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+[N.toOperatorIdealFamily.IsKyFanDominant]
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
     N.Mem ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
         U.starProjection) ∧
-      N.gauge ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+      N.gaugeReal ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
           U.starProjection) ≤
-        N.gauge ((1 - W) ∘L U.starProjection) :=
+        N.gaugeReal ((1 - W) ∘L U.starProjection) :=
   TauCeti.DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (restrictedDisplacementDominance_nonacute_real U V J W hWunitary hWmap) hWmem
 
@@ -578,14 +579,15 @@ For every Ky-Fan-dominant symmetric ideal family of operators on real Hilbert
 spaces, the real direct rotation's restricted displacement lies in the ideal and
 its gauge is least among all orthogonal `W` carrying `U` onto `V`.  Membership is
 concluded. -/
-theorem corollary4_1_real (N : FanDominantIdealFamily (𝕜 := ℝ))
+theorem corollary4_1_real (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+[N.toOperatorIdealFamily.IsKyFanDominant]
     (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
     N.Mem ((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L U.starProjection) ∧
-      N.gauge ((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L U.starProjection) ≤
-        N.gauge ((1 - W) ∘L U.starProjection) :=
+      N.gaugeReal ((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L U.starProjection) ≤
+        N.gaugeReal ((1 - W) ∘L U.starProjection) :=
   TauCeti.DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (restrictedDisplacementDominance_real U V hacute W hWunitary hWmap) hWmem
 
@@ -1074,17 +1076,18 @@ theorem proposition4_3_nonacute_real
 /-- Proposition 4.3 over `ℝ`, promoted to every real unitarily invariant ideal gauge at the
 matched-defect nonacute scope. -/
 theorem proposition4_3_nonacute_real_idealGauge
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) ∧
-      N.gauge ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
+      N.gaugeReal ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) ≤
-        N.gauge ((1 - star W) * (1 - W)) :=
-  N.majorization_mem_and_gauge_le hWmem
+        N.gaugeReal ((1 - star W) * (1 - W)) :=
+  (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le N) hWmem
     (proposition4_3_nonacute_real U V J W hWunitary hWmap)
 
 /-- **Davis--Kahan 1970, Proposition 4.1, first formulation over `ℝ`.**
@@ -1326,7 +1329,8 @@ theorem proposition4_1_compact_nonacute_real
 
 /-- **Corollary 4.1 over `ℝ` at the inherited compact, matched-defect scope.** -/
 theorem corollary4_1_compact_nonacute_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
@@ -1334,14 +1338,15 @@ theorem corollary4_1_compact_nonacute_real
     (hWmem : N.Mem ((1 - W) ∘L U.starProjection)) :
     N.Mem ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
         U.starProjection) ∧
-      N.gauge ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+      N.gaugeReal ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
           U.starProjection) ≤
-        N.gauge ((1 - W) ∘L U.starProjection) :=
+        N.gaugeReal ((1 - W) ∘L U.starProjection) :=
   Corollary4_1_nonacute_real U V N J W hWunitary hWmap hWmem
 
 /-- **Proposition 4.3 over `ℝ` at the inherited compact, matched-defect scope.** -/
 theorem proposition4_3_compact_nonacute_real_idealGauge
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
@@ -1349,9 +1354,9 @@ theorem proposition4_3_compact_nonacute_real_idealGauge
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
         (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) ∧
-      N.gauge ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
+      N.gaugeReal ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) ≤
-        N.gauge ((1 - star W) * (1 - W)) :=
+        N.gaugeReal ((1 - star W) * (1 - W)) :=
   proposition4_3_nonacute_real_idealGauge U V N J W hWunitary hWmap hWmem
 
 /-- **Davis--Kahan 1970, Proposition 4.3, over a real Hilbert space of arbitrary
@@ -1390,17 +1395,18 @@ The family is real, not a transported complex one, for the reason given in the
 module docstring.  The promotion consumes Ky Fan prefix sums only: the
 individual approximation numbers are *not* dominated, which is what the
 repository's refutation of Proposition 4.4 records. -/
-theorem proposition4_3_real_idealGauge (N : FanDominantIdealFamily (𝕜 := ℝ))
+theorem proposition4_3_real_idealGauge (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+[N.toOperatorIdealFamily.IsKyFanDominant]
     (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
     N.Mem ((1 - star (TauCeti.DavisKahan.directRotationR U V hacute)) *
         (1 - TauCeti.DavisKahan.directRotationR U V hacute)) ∧
-      N.gauge ((1 - star (TauCeti.DavisKahan.directRotationR U V hacute)) *
+      N.gaugeReal ((1 - star (TauCeti.DavisKahan.directRotationR U V hacute)) *
           (1 - TauCeti.DavisKahan.directRotationR U V hacute)) ≤
-        N.gauge ((1 - star W) * (1 - W)) :=
-  N.majorization_mem_and_gauge_le hWmem
+        N.gaugeReal ((1 - star W) * (1 - W)) :=
+  (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le N) hWmem
     (proposition4_3_real U V hacute W hWunitary hWmap)
 
 /-! ### The two full-displacement consequences over `ℝ`

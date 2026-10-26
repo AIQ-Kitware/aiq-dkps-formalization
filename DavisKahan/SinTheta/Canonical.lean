@@ -73,7 +73,8 @@ The lower frame bound permits a non-isometric trial map.
 `SpectralGeneralSinThetaProblem` is the same package over the spectral gap; see the
 module docstring for why both exist. -/
 structure FormBoundedGeneralSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := ℂ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
   ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
@@ -92,17 +93,18 @@ namespace FormBoundedGeneralSinThetaProblem
 
 /-- The complete generalized source target. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : FormBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (directedSinThetaOperator P.data.X P.exactMap
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (directedSinThetaOperator P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   generalizedSinTheta_unbounded_exact_complex
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition P.gap_pos
@@ -111,17 +113,18 @@ theorem result
 /-- The raw complementary-block form used before the final angle
 identification. -/
 theorem complementaryBlock_result
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : FormBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (sinThetaBlock P.data.X P.data.F₁
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (sinThetaBlock P.data.X P.data.F₁
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   generalizedSinTheta_unbounded_complex
     N P.data P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition.isometry₁ P.gap_pos
@@ -133,7 +136,8 @@ end FormBoundedGeneralSinThetaProblem
 branch.  Unlike `FormBoundedGeneralSinThetaProblem.spectral_gap`, this uses the genuine
 `Spectra` spectrum and does not pass through the ordered half-line engine. -/
 structure FiniteIntervalGeneralSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := ℂ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
   ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
@@ -157,17 +161,18 @@ namespace FiniteIntervalGeneralSinThetaProblem
 /-- Completed generalized finite interval/exterior theorem with the exact
 source-facing directed sine operator. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : FiniteIntervalGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (directedSinThetaOperator P.data.X P.exactMap
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (directedSinThetaOperator P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   generalizedSinTheta_unbounded_exact_of_spectrumGap
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
     P.complement_selfAdjoint P.exact_decomposition P.gap_pos
@@ -177,17 +182,18 @@ theorem result
 /-- Complementary-overlap form of the completed finite interval/exterior
 branch. -/
 theorem complementaryBlock_result
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : FiniteIntervalGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (sinThetaBlock P.data.X P.data.F₁
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (sinThetaBlock P.data.X P.data.F₁
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   generalizedSinTheta_unbounded_of_spectrumGap
     N P.data P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
     P.exact_decomposition.isometry₁ P.gap_pos P.frameLowerBound_pos P.lowerFrame
@@ -214,7 +220,8 @@ gap given as `FormBoundedSylvesterGap`.
 Unlike `SpectralIsometricSinThetaProblem`, which is `ℂ`-only, this package is
 `RCLike`-generic and carries the real-scalar surface in `Real/Canonical.lean`. -/
 structure FormBoundedIsometricSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := 𝕜)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   data : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G)
   exactMap : H →L[𝕜] E
   ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
@@ -244,16 +251,17 @@ namespace FormBoundedIsometricSinThetaProblem
 /-- Complex specialization of the source-shaped isometric problem, routed
 through the direct manuscript gap engine. -/
 theorem result_complex
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : FormBoundedIsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         ((ContinuousLinearMap.id ℂ E -
           P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X) ∧
-      P.gap * N.gauge
+      P.gap * N.gaugeReal
           ((ContinuousLinearMap.id ℂ E -
             P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   sinTheta_unbounded_exact_complex
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.trial_isometry P.exact_decomposition
@@ -262,7 +270,8 @@ theorem result_complex
 /-- Package a complex isometric problem as the generalized theorem with lower
 frame bound one. -/
 noncomputable def toGeneral
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : FormBoundedIsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
       (G := G) (H := H) N) :
     FormBoundedGeneralSinThetaProblem (E := E) (F := F)
@@ -303,7 +312,8 @@ gap, and is the more general of the two: `formBoundedSylvesterGap_of_spectral`
 builds it from this one, so `result` here is a corollary of `result` there.
 `SinTheta/Canonical.lean` records the details. -/
 structure SpectralGeneralSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := ℂ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
   ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
@@ -332,7 +342,7 @@ theorem this tree does not have, so the redundancy runs one way only.
 Prose merged from `edward (aiq-gpu)`'s parallel implementation of this lane, which kept the
 structures in `SinTheta/Unbounded/AllGap.lean`; the relocation here is `jon (toothbrush)`'s. -/
 def toFormBounded
-    {N : FanDominantIdealFamily (𝕜 := ℂ)}
+    {N : TauCeti.SymmetricOperatorIdealFamily ℂ} [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : SpectralGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     FormBoundedGeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H) N where
@@ -356,17 +366,18 @@ def toFormBounded
 endpoint at `P.toFormBounded`.  The statement is unchanged: the conversion touches no field
 the conclusion mentions. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : SpectralGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (directedSinThetaOperator P.data.X P.exactMap
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (directedSinThetaOperator P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   FormBoundedGeneralSinThetaProblem.result N P.toFormBounded
 
 end SpectralGeneralSinThetaProblem
@@ -377,7 +388,8 @@ the spectral gap stated as `SpectralSylvesterGap`.
 This package is `ℂ`-only; `FormBoundedIsometricSinThetaProblem` is the
 `RCLike`-generic form-bounded counterpart. -/
 structure SpectralIsometricSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := ℂ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
   ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
@@ -395,7 +407,7 @@ namespace SpectralIsometricSinThetaProblem
 /-- Every spectral isometric package is a form-bounded one, by the same gap
 transport. -/
 def toFormBounded
-    {N : FanDominantIdealFamily (𝕜 := ℂ)}
+    {N : TauCeti.SymmetricOperatorIdealFamily ℂ} [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : SpectralIsometricSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     FormBoundedIsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
@@ -416,16 +428,17 @@ def toFormBounded
 
 /-- Source-shaped isometric spectral all-gap endpoint. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : SpectralIsometricSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         ((ContinuousLinearMap.id ℂ E -
           P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X) ∧
-      P.gap * N.gauge
+      P.gap * N.gaugeReal
           ((ContinuousLinearMap.id ℂ E -
             P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   FormBoundedIsometricSinThetaProblem.result_complex N P.toFormBounded
 
 end SpectralIsometricSinThetaProblem

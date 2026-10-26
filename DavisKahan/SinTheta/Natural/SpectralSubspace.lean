@@ -112,7 +112,8 @@ noncomputable def unboundedSinThetaDataOfSpectralSubspace
 The complementary restriction and all exact-space bookkeeping are constructed
 internally. -/
 theorem sinTheta_unbounded_spectralSubspace_of_spectrumGap
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →ₗ.[ℂ] E)
     (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →ₗ.[ℂ] F)
@@ -130,11 +131,11 @@ theorem sinTheta_unbounded_spectralSubspace_of_spectrumGap
       ((ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
         ((ContinuousLinearMap.id ℂ E -
           selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
             (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X)
-        ≤ N.gauge Rop := by
+        ≤ N.gaugeReal Rop := by
   let D := unboundedSinThetaDataOfSpectralSubspace
     A hA S hS A0 hA0 X Rop hXdom hReq
   have hLambda : _root_.IsSelfAdjoint D.Λ₁ := by

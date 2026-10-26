@@ -24,7 +24,7 @@ open TauCeti.DavisKahan.Sylvester
 # Reading the ideal-gauge results at the paper's own unitarily invariant norm
 
 Several results Davis and Kahan state "for every unitary-invariant norm" are
-proved here at an arbitrary `FanDominantIdealFamily`, and stated source-facing
+proved here at an arbitrary native symmetric ideal family with Ky Fan dominance, and stated source-facing
 at an arbitrary `SymmetricNormingFunction`.  The two are different Lean objects,
 and a reviewer comparing a Lean statement with the paper is entitled to ask which
 one is the printed quantifier.
@@ -105,18 +105,21 @@ theorem symmetricNorming_of_kyFanDominant
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : SymmetricNormingFunction) {X Y : E →L[𝕜] F} {d : ℝ} (hd : 0 < d)
     (hY : N.Mem Y)
-    (h : ∀ M : FanDominantIdealFamily.{u, v} 𝕜,
-      M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y) :
+    (h : ∀ (M : SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [M.toOperatorIdealFamily.IsKyFanDominant],
+      M.Mem Y → M.Mem X ∧ d * M.gaugeReal X ≤ M.gaugeReal Y) :
     N.Mem X ∧ d * N.gauge X ≤ N.gauge Y := by
   refine N.mul_gauge_le_of_all_mul_kyFan_le hd hY (fun k => ?_)
   rcases Nat.eq_zero_or_pos k with rfl | hk
   · rw [kyFanApproximationGauge, kyFanApproximationGauge,
       ContinuousLinearMap.kyFanGaugeReal_zero_index,
       ContinuousLinearMap.kyFanGaugeReal_zero_index, mul_zero]
-  · have hM := h (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk)
-      (FanDominantIdealFamily.kyFan_mem k hk Y)
-    rw [FanDominantIdealFamily.kyFan_gauge,
-      FanDominantIdealFamily.kyFan_gauge] at hM
+  · have hM := h ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
+    { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
+      gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }))
+      (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hM
     exact hM.2
 
 /-- **The converse bridge: a source-norm estimate holds at every Fan-dominant
@@ -146,11 +149,12 @@ theorem kyFanDominant_of_symmetricNorming
     {E' F' : Type v}
     [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
-    (M : FanDominantIdealFamily.{u, v} 𝕜) {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F}
+    (M : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [M.toOperatorIdealFamily.IsKyFanDominant] {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F}
     {d : ℝ} (hd : 0 < d)
     (hY : M.Mem Y)
     (h : ∀ N : SymmetricNormingFunction, N.Mem Y → N.Mem X ∧ d * N.gauge X ≤ N.gauge Y) :
-    M.Mem X ∧ d * M.gauge X ≤ M.gauge Y := by
+    M.Mem X ∧ d * M.gaugeReal X ≤ M.gaugeReal Y := by
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le M hd hY (fun k => ?_)
   rcases Nat.eq_zero_or_pos k with rfl | hk
   · rw [kyFanApproximationGauge, kyFanApproximationGauge,
@@ -174,10 +178,11 @@ theorem symmetricNorming_iff_kyFanDominant
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {X Y : E →L[𝕜] F} {d : ℝ} (hd : 0 < d) :
     (∀ N : SymmetricNormingFunction, N.Mem Y → N.Mem X ∧ d * N.gauge X ≤ N.gauge Y) ↔
-      (∀ M : FanDominantIdealFamily.{u, v} 𝕜,
-        M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y) :=
-  ⟨fun h M hY => kyFanDominant_of_symmetricNorming M hd hY h,
-    fun h N hY => symmetricNorming_of_kyFanDominant N hd hY (fun M hM => h M hM)⟩
+      (∀ (M : SymmetricOperatorIdealFamily.{u, v} 𝕜)
+      [M.toOperatorIdealFamily.IsKyFanDominant],
+        M.Mem Y → M.Mem X ∧ d * M.gaugeReal X ≤ M.gaugeReal Y) :=
+  ⟨fun h M _ hY => kyFanDominant_of_symmetricNorming M hd hY h,
+    fun h N hY => symmetricNorming_of_kyFanDominant N hd hY (fun M _ hM => h M hM)⟩
 
 /-! ## Corollary 4.1 and Proposition 4.3 at the source norm -/
 
@@ -206,7 +211,7 @@ theorem corollary4_1_compact_nonacute_symmetricNorming_complex
           U.starProjection) ≤
         N.gauge ((1 - W) ∘L U.starProjection) := by
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
-    (fun M hM => by
+    (fun M _ hM => by
       obtain ⟨h₁, h₂⟩ :=
         corollary4_1_compact_nonacute_complex M U V hcompact J W hWunitary hWmap hM
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
@@ -230,7 +235,7 @@ theorem proposition4_3_compact_nonacute_symmetricNorming_complex
           (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
         N.gauge ((1 - star W) * (1 - W)) := by
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
-    (fun M hM => by
+    (fun M _ hM => by
       obtain ⟨h₁, h₂⟩ :=
         proposition4_3_compact_nonacute_idealGauge M U V hcompact J W hWunitary hWmap hM
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
@@ -244,7 +249,7 @@ class -- and the arbitrary-Hilbert `SymmetricNormingFunction` theorem above it i
 retained as a registered generalization.
 
 These are one step shorter than the Section 2 façades.  The theorems here were
-already proved from `FanDominantIdealFamily` statements, so a source norm
+already proved from a native symmetric ideal family with Ky Fan dominance statements, so a source norm
 reaches them by its own projection rather than through the Fan-dominance bridge;
 `normalizedUnitaryInvariant_toKyFanDominant` is that projection, and it is the
 statement that the source class sits inside the Fan-dominant one. -/
@@ -264,7 +269,7 @@ theorem corollary4_1_compact_nonacute_sourceExact_complex
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
           U.starProjection) ≤
         N.gauge ((1 - W) ∘L U.starProjection) :=
-  corollary4_1_compact_nonacute_complex N.toFanDominantIdealFamily U V hcompact J W
+  corollary4_1_compact_nonacute_complex N.toSymmetricOperatorIdealFamily U V hcompact J W
     hWunitary hWmap hWmem
 
 /-- **Davis--Kahan 1970, Proposition 4.3 at the printed source scope over `ℂ`.** -/
@@ -283,7 +288,7 @@ theorem proposition4_3_compact_nonacute_sourceExact_complex
       N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
         N.gauge ((1 - star W) * (1 - W)) :=
-  proposition4_3_compact_nonacute_idealGauge N.toFanDominantIdealFamily U V hcompact J W
+  proposition4_3_compact_nonacute_idealGauge N.toSymmetricOperatorIdealFamily U V hcompact J W
     hWunitary hWmap hWmem
 
 /-- **Proposition 4.3 from the source's own hypothesis, over `ℂ`.**
@@ -337,7 +342,7 @@ theorem corollary4_1_compact_nonacute_symmetricNorming_real
           U.starProjection) ≤
         N.gauge ((1 - W) ∘L U.starProjection) := by
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
-    (fun M hM => by
+    (fun M _ hM => by
       obtain ⟨h₁, h₂⟩ :=
         corollary4_1_compact_nonacute_real U V M hcompact J W hWunitary hWmap hM
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
@@ -360,7 +365,7 @@ theorem proposition4_3_compact_nonacute_symmetricNorming_real
           (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
         N.gauge ((1 - star W) * (1 - W)) := by
   obtain ⟨hmem, hle⟩ := symmetricNorming_of_kyFanDominant N one_pos hWmem
-    (fun M hM => by
+    (fun M _ hM => by
       obtain ⟨h₁, h₂⟩ :=
         proposition4_3_compact_nonacute_real_idealGauge U V M hcompact J W hWunitary hWmap hM
       exact ⟨h₁, by rw [one_mul]; exact h₂⟩)
@@ -381,7 +386,7 @@ theorem corollary4_1_compact_nonacute_sourceExact_real
       N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
           U.starProjection) ≤
         N.gauge ((1 - W) ∘L U.starProjection) :=
-  corollary4_1_compact_nonacute_real U V N.toFanDominantIdealFamily hcompact J W
+  corollary4_1_compact_nonacute_real U V N.toSymmetricOperatorIdealFamily hcompact J W
     hWunitary hWmap hWmem
 
 /-- **Davis--Kahan 1970, Proposition 4.3 at the printed source scope over `ℝ`.** -/
@@ -400,7 +405,7 @@ theorem proposition4_3_compact_nonacute_sourceExact_real
       N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
           (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
         N.gauge ((1 - star W) * (1 - W)) :=
-  proposition4_3_compact_nonacute_real_idealGauge U V N.toFanDominantIdealFamily hcompact
+  proposition4_3_compact_nonacute_real_idealGauge U V N.toSymmetricOperatorIdealFamily hcompact
     J W hWunitary hWmap hWmem
 
 /-- **Proposition 4.3 from the source's own hypothesis, over `ℝ`.**  See the
@@ -448,7 +453,7 @@ theorem theorem5_2_symmetricNorming_complex
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   symmetricNorming_of_kyFanDominant N hδ hR
-    (fun M hM => theorem5_2 M hA hB hδ hAlow hBhigh hsyl hM)
+    (fun M _ hM => theorem5_2 M hA hB hδ hAlow hBhigh hsyl hM)
 
 /-- **Davis--Kahan 1970, Theorem 5.2 over a real Hilbert space, at every source
 unitarily invariant norm.**
@@ -468,7 +473,7 @@ theorem theorem5_2_symmetricNorming_real
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   symmetricNorming_of_kyFanDominant N hδ hR
-    (fun M hM => DavisKahan.Sylvester.davisKahan1970_sylvester_real
+    (fun M _ hM => DavisKahan.Sylvester.davisKahan1970_sylvester_real
       M hA hB hδ hgap hsyl hM)
 
 /-- **Davis--Kahan 1970, Theorem 5.2 over a real Hilbert space, at the printed ordered
@@ -520,7 +525,7 @@ theorem theorem5_2_sourceExact_complex
     (hsyl : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
-  theorem5_2 N.toFanDominantIdealFamily hA hB hδ hAlow hBhigh hsyl hR
+  theorem5_2 N.toSymmetricOperatorIdealFamily hA hB hδ hAlow hBhigh hsyl hR
 
 /-- **Davis--Kahan 1970, Theorem 5.2 at the printed source scope over `ℝ`.**
 Arbitrary real Hilbert spaces; see the complex sibling on why separability is
@@ -538,7 +543,7 @@ theorem theorem5_2_sourceExact_real
     (hR : N.Mem R) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge R :=
   DavisKahan.Sylvester.davisKahan1970_sylvester_real
-    N.toFanDominantIdealFamily hA hB hδ
+    N.toSymmetricOperatorIdealFamily hA hB hδ
     (DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow c hAlow hBhigh)
     hsyl hR
 
@@ -552,7 +557,7 @@ formalized: an estimate established for every `SymmetricNormingFunction` holds
 for every normalized unitarily invariant norm.
 
 The route is exactly the one the paper announces at (1.11)-(1.13).  A source norm
-is Fan dominant by construction, so it is a `FanDominantIdealFamily`; and
+is Fan dominant by construction, so it is a native symmetric ideal family with Ky Fan dominance; and
 `kyFanDominant_of_symmetricNorming` transports an estimate across that class by
 instantiating at the Ky Fan gauges.  Nothing analytic is rebuilt here.
 
@@ -576,7 +581,7 @@ theorem normalizedUnitaryInvariant_of_symmetricNorming
     (hd : 0 < d) (hY : N.Mem Y)
     (h : ∀ M : SymmetricNormingFunction, M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y) :
     N.Mem X ∧ d * N.gauge X ≤ N.gauge Y :=
-  kyFanDominant_of_symmetricNorming N.toFanDominantIdealFamily hd hY h
+  kyFanDominant_of_symmetricNorming N.toSymmetricOperatorIdealFamily hd hY h
 
 /-- **The Fan-dominance bridge with the source's constant on the right.**
 
@@ -624,11 +629,12 @@ theorem normalizedUnitaryInvariant_toKyFanDominant
     [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
     (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) {X : E' →L[𝕜] F'} {Y : E →L[𝕜] F} {d : ℝ}
-    (h : ∀ M : FanDominantIdealFamily.{u, v} 𝕜,
-      M.Mem Y → M.Mem X ∧ d * M.gauge X ≤ M.gauge Y)
+    (h : ∀ (M : SymmetricOperatorIdealFamily.{u, v} 𝕜)
+    [M.toOperatorIdealFamily.IsKyFanDominant],
+      M.Mem Y → M.Mem X ∧ d * M.gaugeReal X ≤ M.gaugeReal Y)
     (hY : N.Mem Y) :
     N.Mem X ∧ d * N.gauge X ≤ N.gauge Y :=
-  h N.toFanDominantIdealFamily hY
+  h N.toSymmetricOperatorIdealFamily hY
 
 end
 

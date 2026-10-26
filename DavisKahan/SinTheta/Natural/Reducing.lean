@@ -116,7 +116,8 @@ def unboundedSinThetaDataOfReducingSubspace
 
 /-- Scalar-generic natural isometric problem over a reducing exact subspace. -/
 structure NaturalReducingIsometricSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] where
   A : E →ₗ.[𝕜] E
   A_dense : Dense (A.domain : Set E)
@@ -144,7 +145,8 @@ namespace NaturalReducingIsometricSinThetaProblem
 /-- Canonical internal data of a natural reducing-subspace problem. -/
 @[expose]
 noncomputable def toData
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := 𝕜) (E := E) (F := F) N U) :
@@ -158,7 +160,8 @@ end NaturalReducingIsometricSinThetaProblem
 /-- Scalar-generic natural lower-frame problem over a reducing exact
 subspace. -/
 structure NaturalReducingGeneralSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] where
   A : E →ₗ.[𝕜] E
   A_dense : Dense (A.domain : Set E)
@@ -188,7 +191,8 @@ namespace NaturalReducingGeneralSinThetaProblem
 /-- Canonical internal data of a natural reducing lower-frame problem. -/
 @[expose]
 noncomputable def toData
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := 𝕜) (E := E) (F := F) N U) :
@@ -209,15 +213,16 @@ namespace NaturalReducingIsometricSinThetaProblem
 
 /-- Complex result for the scalar-generic natural reducing problem. -/
 theorem result_complex
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {U : Submodule ℂ EC} [U.HasOrthogonalProjection]
     (P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U) :
     N.Mem
         ((ContinuousLinearMap.id ℂ EC - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X) ∧
-      P.gap * N.gauge
+      P.gap * N.gaugeReal
           ((ContinuousLinearMap.id ℂ EC - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X)
-        ≤ N.gauge P.residual := by
+        ≤ N.gaugeReal P.residual := by
   let D := P.toData N
   have hcomp : _root_.IsSelfAdjoint D.Λ₁ := by
     simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
@@ -241,7 +246,8 @@ namespace NaturalReducingGeneralSinThetaProblem
 
 /-- Complex lower-frame result for the scalar-generic natural problem. -/
 theorem result_complex
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {U : Submodule ℂ EC} [U.HasOrthogonalProjection]
     (P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U) :
@@ -249,10 +255,10 @@ theorem result_complex
         (directedSinThetaOperator P.X U.subtypeL
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (directedSinThetaOperator P.X U.subtypeL
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.residual := by
+        ≤ N.gaugeReal P.residual := by
   let D := P.toData N
   have hcomp : _root_.IsSelfAdjoint D.Λ₁ := by
     simpa only [D, NaturalReducingGeneralSinThetaProblem.toData,
@@ -276,7 +282,8 @@ end NaturalReducingGeneralSinThetaProblem
 /-- Complex natural reducing-subspace sine-theta theorem without a problem
 record at the call site. -/
 theorem sinTheta_unbounded_complex_reducingSubspace
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : EC →ₗ.[ℂ] EC)
     (hAdense : Dense (A.domain : Set EC)) (hAclosed : A.IsClosed)
     (hA : _root_.IsSelfAdjoint A)
@@ -295,9 +302,9 @@ theorem sinTheta_unbounded_complex_reducingSubspace
     (hR : N.Mem Rop) :
     N.Mem
         ((ContinuousLinearMap.id ℂ EC - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
           ((ContinuousLinearMap.id ℂ EC - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X)
-        ≤ N.gauge Rop := by
+        ≤ N.gaugeReal Rop := by
   let P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U :=
     { A := A
@@ -322,7 +329,8 @@ theorem sinTheta_unbounded_complex_reducingSubspace
 
 /-- Complex natural lower-frame theorem over a supplied reducing subspace. -/
 theorem generalizedSinTheta_unbounded_complex_reducingSubspace
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : EC →ₗ.[ℂ] EC)
     (hAdense : Dense (A.domain : Set EC)) (hAclosed : A.IsClosed)
     (hA : _root_.IsSelfAdjoint A)
@@ -342,9 +350,9 @@ theorem generalizedSinTheta_unbounded_complex_reducingSubspace
     (hR : N.Mem Rop) :
     N.Mem
         (directedSinThetaOperator X U.subtypeL hframe hε) ∧
-      δ * ε * N.gauge
+      δ * ε * N.gaugeReal
           (directedSinThetaOperator X U.subtypeL hframe hε)
-        ≤ N.gauge Rop := by
+        ≤ N.gaugeReal Rop := by
   let P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℂ) (E := EC) (F := FC) N U :=
     { A := A
@@ -381,15 +389,16 @@ namespace NaturalReducingIsometricSinThetaProblem
 
 /-- Real result for the scalar-generic natural reducing problem. -/
 theorem result_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {U : Submodule ℝ ER} [U.HasOrthogonalProjection]
     (P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U) :
     N.Mem
         ((ContinuousLinearMap.id ℝ ER - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X) ∧
-      P.gap * N.gauge
+      P.gap * N.gaugeReal
           ((ContinuousLinearMap.id ℝ ER - U.subtypeL ∘L U.subtypeL.adjoint) ∘L P.X)
-        ≤ N.gauge P.residual := by
+        ≤ N.gaugeReal P.residual := by
   let D := P.toData N
   have hcomp : _root_.IsSelfAdjoint D.Λ₁ := by
     simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
@@ -415,7 +424,8 @@ namespace NaturalReducingGeneralSinThetaProblem
 
 /-- Real lower-frame result for the scalar-generic natural problem. -/
 theorem result_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {U : Submodule ℝ ER} [U.HasOrthogonalProjection]
     (P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U) :
@@ -423,10 +433,10 @@ theorem result_real
         (directedSinThetaOperatorReal P.X U.subtypeL
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (directedSinThetaOperatorReal P.X U.subtypeL
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.residual := by
+        ≤ N.gaugeReal P.residual := by
   let D := P.toData N
   have hcomp : _root_.IsSelfAdjoint D.Λ₁ := by
     simpa only [D, NaturalReducingGeneralSinThetaProblem.toData,
@@ -451,7 +461,8 @@ end NaturalReducingGeneralSinThetaProblem
 /-- Real natural reducing-subspace sine-theta theorem without a problem record
 at the call site. -/
 theorem sinTheta_unbounded_real_reducingSubspace
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : ER →ₗ.[ℝ] ER)
     (hAdense : Dense (A.domain : Set ER)) (hAclosed : A.IsClosed)
     (hA : _root_.IsSelfAdjoint A)
@@ -470,9 +481,9 @@ theorem sinTheta_unbounded_real_reducingSubspace
     (hR : N.Mem Rop) :
     N.Mem
         ((ContinuousLinearMap.id ℝ ER - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
           ((ContinuousLinearMap.id ℝ ER - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X)
-        ≤ N.gauge Rop := by
+        ≤ N.gaugeReal Rop := by
   let P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U :=
     { A := A
@@ -497,7 +508,8 @@ theorem sinTheta_unbounded_real_reducingSubspace
 
 /-- Real natural lower-frame theorem over a supplied reducing subspace. -/
 theorem generalizedSinTheta_unbounded_real_reducingSubspace
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : ER →ₗ.[ℝ] ER)
     (hAdense : Dense (A.domain : Set ER)) (hAclosed : A.IsClosed)
     (hA : _root_.IsSelfAdjoint A)
@@ -517,9 +529,9 @@ theorem generalizedSinTheta_unbounded_real_reducingSubspace
     (hR : N.Mem Rop) :
     N.Mem
         (directedSinThetaOperatorReal X U.subtypeL hframe hε) ∧
-      δ * ε * N.gauge
+      δ * ε * N.gaugeReal
           (directedSinThetaOperatorReal X U.subtypeL hframe hε)
-        ≤ N.gauge Rop := by
+        ≤ N.gaugeReal Rop := by
   let P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := ℝ) (E := ER) (F := FR) N U :=
     { A := A

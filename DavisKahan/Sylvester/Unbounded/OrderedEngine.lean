@@ -40,7 +40,8 @@ structure OrderedSylvesterEngine : Prop where
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-      (N : FanDominantIdealFamily (𝕜 := ℂ))
+      (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+      [N.toOperatorIdealFamily.IsKyFanDominant]
       {A : E →ₗ.[ℂ] E}
       {B : F →ₗ.[ℂ] F}
       (_hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B)
@@ -51,13 +52,14 @@ structure OrderedSylvesterEngine : Prop where
       (_hEq : _root_.LinearPMap.SylvesterEquation A B X C)
       (_hC : N.Mem C),
       N.Mem X ∧
-        δ * N.gauge X ≤
-          N.gauge C
+        δ * N.gaugeReal X ≤
+          N.gaugeReal C
   upperLower :
     ∀ {E F : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-      (N : FanDominantIdealFamily (𝕜 := ℂ))
+      (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+      [N.toOperatorIdealFamily.IsKyFanDominant]
       {A : E →ₗ.[ℂ] E}
       {B : F →ₗ.[ℂ] F}
       (_hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B)
@@ -68,8 +70,8 @@ structure OrderedSylvesterEngine : Prop where
       (_hEq : _root_.LinearPMap.SylvesterEquation A B X C)
       (_hC : N.Mem C),
       N.Mem X ∧
-        δ * N.gauge X ≤
-          N.gauge C
+        δ * N.gaugeReal X ≤
+          N.gaugeReal C
 
 end Sylvester
 end DavisKahan

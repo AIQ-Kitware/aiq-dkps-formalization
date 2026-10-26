@@ -245,13 +245,15 @@ theorem sinTwoTheta_commonDomain_block_kyFan
   have hDsa : ((-2 : K) • trialOffDiagonalPart P 0 R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
-    hT hQ (FanDominantIdealFamily.kyFan (𝕜 := K) k hk)
+    hT hQ ((show TauCeti.SymmetricOperatorIdealFamily K from { toOperatorIdealFamily := (TauCeti.OperatorIdealFamily.kyFan K k hk), gauge_adjoint := (TauCeti.OperatorIdealFamily.kyFan K k hk).gauge_adjoint }))
     ((-2 : K) • trialOffDiagonalPart P 0 R) hDsa P hgapPos hgap
     (commonDomain_reflection_mem hdom hP)
     (commonDomain_trialReflection_intertwines hT hdom hP R hres)
-    (FanDominantIdealFamily.kyFan_mem (𝕜 := K) k hk _)
-  rw [FanDominantIdealFamily.kyFan_gauge,
-    FanDominantIdealFamily.kyFan_gauge] at hraw
+    (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   have hflip : kyFanApproximationGauge k
         (Q.starProjection ∘L
           ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L

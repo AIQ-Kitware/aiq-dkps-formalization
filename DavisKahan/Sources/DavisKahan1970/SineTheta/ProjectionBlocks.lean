@@ -124,14 +124,17 @@ theorem diagonalPair_all_kyFan_le
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
-    let N := FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk
-    have : N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+    let N := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint })
+    have : N.toOperatorIdealFamily.IsComplete :=
       inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
     have h := diagonalPair_gauge_le
-      N.toSymmetricOperatorIdealFamily U V
-      (FanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk K)
+      N U V (K := K)
+      (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simpa only [N,
-      FanDominantIdealFamily.kyFan_gauge] using h
+      SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using h
 
 /-- Literal source-norm form of Davis--Kahan Lemma 6.2. -/
 theorem diagonalPair_symmetricNorming_le

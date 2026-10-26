@@ -124,11 +124,13 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_complex
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unbounded_infiniteTrial_ideal
-      (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos) A hA D hdelta hgap
+      ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+        { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hkpos
+          gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hkpos).gauge_adjoint })) A hA D hdelta hgap
       hCompression tanTheta0 htan
-      (FanDominantIdealFamily.kyFan_mem k hkpos D.residual)
-    rw [FanDominantIdealFamily.kyFan_gauge,
-      FanDominantIdealFamily.kyFan_gauge] at h
+      (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
     exact h.2
 
 end Complex
@@ -166,11 +168,13 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_real
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unbounded_infiniteTrial_ideal_real A hA
-      (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hkpos) D hdelta hgap
+      ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
+        { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hkpos
+          gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hkpos).gauge_adjoint })) D hdelta hgap
       hCompression tanTheta0 htan
-      (FanDominantIdealFamily.kyFan_mem k hkpos D.residual)
-    rw [FanDominantIdealFamily.kyFan_gauge,
-      FanDominantIdealFamily.kyFan_gauge] at h
+      (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
     exact h.2
 
 end Real
@@ -244,11 +248,13 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_complex
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := D.trial.ideal_of_formBounds V
-      (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos) hdelta hupper hcross
+      ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+        { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hkpos
+          gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hkpos).gauge_adjoint })) hdelta hupper hcross
       tanTheta0 htan
-      (FanDominantIdealFamily.kyFan_mem k hkpos D.trial.residual)
-    rw [FanDominantIdealFamily.kyFan_gauge,
-      FanDominantIdealFamily.kyFan_gauge] at h
+      (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
     exact h.2
 
 end AppendixComplex
@@ -288,11 +294,13 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_real
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unboundedCompression_ideal_real
-      (FanDominantIdealFamily.kyFan (𝕜 := ℝ) k hkpos) D.trial V hdelta hupper
+      ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
+        { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hkpos
+          gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hkpos).gauge_adjoint })) D.trial V hdelta hupper
       hcross tanTheta0 htan
-      (FanDominantIdealFamily.kyFan_mem k hkpos D.trial.residual)
-    rw [FanDominantIdealFamily.kyFan_gauge,
-      FanDominantIdealFamily.kyFan_gauge] at h
+      (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
     exact h.2
 
 end AppendixReal

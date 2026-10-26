@@ -43,7 +43,8 @@ variable {E F G H : Type v}
 
 /-- The literal complex input package for Davis--Kahan Theorem 6.1. -/
 structure GeneralSinThetaRepresentativeProblem
-    (N : FanDominantIdealFamily (𝕜 := ℂ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   problem : FormBoundedGeneralSinThetaProblem (E := E) (F := F) (G := G) (H := H) N
   sinTheta₀ : SinThetaRepresentative
     (directedSinThetaOperator problem.data.X problem.exactMap
@@ -56,13 +57,14 @@ namespace GeneralSinThetaRepresentativeProblem
 The chosen `sin Θ₀` may be any rectangular operator with the complete
 singular-value sequence prescribed in the paper. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : GeneralSinThetaRepresentativeProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem P.sinTheta₀.operator ∧
       P.problem.gap * P.problem.frameLowerBound *
-          N.gauge P.sinTheta₀.operator
-        ≤ N.gauge P.problem.data.residual := by
+          N.gaugeReal P.sinTheta₀.operator
+        ≤ N.gaugeReal P.problem.data.residual := by
   have hcanonical := FormBoundedGeneralSinThetaProblem.result N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2
@@ -71,7 +73,8 @@ end GeneralSinThetaRepresentativeProblem
 
 /-- Literal paper representative for the complex isometric theorem. -/
 structure IsometricSinThetaRepresentativeProblem
-    (N : FanDominantIdealFamily (𝕜 := ℂ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   problem : FormBoundedIsometricSinThetaProblem (𝕜 := ℂ) (E := E) (F := F)
     (G := G) (H := H) N
   sinTheta₀ : SinThetaRepresentative
@@ -83,13 +86,14 @@ namespace IsometricSinThetaRepresentativeProblem
 /-- Original isometric sine theorem with the paper's freedom to choose any
 operator realizing the same complete singular-value sequence. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : IsometricSinThetaRepresentativeProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem P.sinTheta₀.operator ∧
       P.problem.gap *
-          N.gauge P.sinTheta₀.operator
-        ≤ N.gauge P.problem.data.residual := by
+          N.gaugeReal P.sinTheta₀.operator
+        ≤ N.gaugeReal P.problem.data.residual := by
   have hcanonical := FormBoundedIsometricSinThetaProblem.result_complex N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2
@@ -108,7 +112,8 @@ variable {E F G H : Type v}
 
 /-- The literal real input package for Davis--Kahan Theorem 6.1. -/
 structure RealGeneralSinThetaRepresentativeProblem
-    (N : FanDominantIdealFamily (𝕜 := ℝ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   problem : RealGeneralSinThetaProblem (E := E) (F := F)
     (G := G) (H := H) N
   sinTheta₀ : SinThetaRepresentative
@@ -119,13 +124,14 @@ namespace RealGeneralSinThetaRepresentativeProblem
 
 /-- **Davis--Kahan 1970, Theorem 6.1, literal real form.** -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : RealGeneralSinThetaRepresentativeProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem P.sinTheta₀.operator ∧
       P.problem.gap * P.problem.frameLowerBound *
-          N.gauge P.sinTheta₀.operator
-        ≤ N.gauge P.problem.data.residual := by
+          N.gaugeReal P.sinTheta₀.operator
+        ≤ N.gaugeReal P.problem.data.residual := by
   have hcanonical := RealGeneralSinThetaProblem.result N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2
@@ -134,7 +140,8 @@ end RealGeneralSinThetaRepresentativeProblem
 
 /-- Literal paper representative for the real isometric theorem. -/
 structure RealIsometricSinThetaRepresentativeProblem
-    (N : FanDominantIdealFamily (𝕜 := ℝ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   problem : FormBoundedIsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
     (G := G) (H := H) N
   sinTheta₀ : SinThetaRepresentative
@@ -145,13 +152,14 @@ namespace RealIsometricSinThetaRepresentativeProblem
 
 /-- Original real isometric sine theorem in the literal paper formulation. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : RealIsometricSinThetaRepresentativeProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem P.sinTheta₀.operator ∧
       P.problem.gap *
-          N.gauge P.sinTheta₀.operator
-        ≤ N.gauge P.problem.data.residual := by
+          N.gaugeReal P.sinTheta₀.operator
+        ≤ N.gaugeReal P.problem.data.residual := by
   have hcanonical := FormBoundedIsometricSinThetaProblem.result_real N P.problem
   exact P.sinTheta₀.same_singular_values.mem_and_mul_gauge_le N
     hcanonical.1 hcanonical.2

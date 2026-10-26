@@ -32,7 +32,7 @@ family.
 
 The complex directed endpoints
 (`sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap` and its perturbation
-form) are stated for a `FanDominantIdealFamily (𝕜 := ℂ)`, a scalar-fixed
+form) are stated for a a complex symmetric ideal family with native Ky Fan dominance, a scalar-fixed
 class with no gauge transport across complexification, and their spectral
 hypotheses use the complex partial-map spectrum `_root_.LinearPMap.spectrum`.
 Both obstructions disappear if the argument is run over the reals
@@ -98,7 +98,8 @@ The gap is the scalar-generic form-bounded Sylvester predicate rather than the
 `ℂ`-only resolvent-set separation, which is what makes the statement available
 over `ℝ` at all. -/
 theorem sinTheta_addBounded_gauge_real_isometric
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (V : E →L[ℝ] E) (hV : V.IsSymmetric)
     (A₀ : F →ₗ.[ℝ] F) (hA₀ : IsSelfAdjoint A₀)
@@ -115,7 +116,7 @@ theorem sinTheta_addBounded_gauge_real_isometric
     {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
-      δ * N.gauge (X.adjoint ∘L F₁) ≤ N.gauge V := by
+      δ * N.gaugeReal (X.adjoint ∘L F₁) ≤ N.gaugeReal V := by
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
@@ -124,11 +125,11 @@ theorem sinTheta_addBounded_gauge_real_isometric
   have hXnorm : ‖X‖ ≤ 1 := opNorm_le_one_of_isometry hXiso
   have hResMem : N.Mem D.residual := by
     change N.Mem (V ∘L X)
-    exact N.toSymmetricOperatorIdealFamily.comp_right_mem X hVmem
+    exact N.comp_right_mem X hVmem
   have hraw := sinTheta_unbounded_real N D hD hA₀ hΛ₁ hXiso hF₁iso hδ hgap hResMem
-  have hResGauge : N.gauge D.residual ≤ N.gauge V := by
-    change N.gauge (V ∘L X) ≤ N.gauge V
-    exact N.toSymmetricOperatorIdealFamily.gaugeReal_comp_right_le X hVmem hXnorm
+  have hResGauge : N.gaugeReal D.residual ≤ N.gaugeReal V := by
+    change N.gaugeReal (V ∘L X) ≤ N.gaugeReal V
+    exact N.gaugeReal_comp_right_le X hVmem hXnorm
   exact ⟨hraw.1, hraw.2.trans hResGauge⟩
 
 /-- **Block form of the real ideal-gauge bounded-perturbation sine-theta
@@ -137,7 +138,8 @@ the two coordinate spaces, before it is contracted back to the whole
 perturbation.  The sharp directed residual `sin 2Theta_0` estimate needs it at
 this stage. -/
 theorem sinTheta_addBounded_gauge_real_block
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (V : E →L[ℝ] E) (hV : V.IsSymmetric)
     (A₀ : F →ₗ.[ℝ] F) (hA₀ : IsSelfAdjoint A₀)
@@ -154,7 +156,7 @@ theorem sinTheta_addBounded_gauge_real_block
     {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
-      δ * N.gauge (X.adjoint ∘L F₁) ≤ N.gauge ((V ∘L X).adjoint ∘L F₁) := by
+      δ * N.gaugeReal (X.adjoint ∘L F₁) ≤ N.gaugeReal ((V ∘L X).adjoint ∘L F₁) := by
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
@@ -162,7 +164,7 @@ theorem sinTheta_addBounded_gauge_real_block
     exact addBounded_isSelfAdjoint A hA V hV
   have hResMem : N.Mem D.residual := by
     change N.Mem (V ∘L X)
-    exact N.toSymmetricOperatorIdealFamily.comp_right_mem X hVmem
+    exact N.comp_right_mem X hVmem
   exact sinTheta_unbounded_real_block N D hD hA₀ hΛ₁ hF₁iso hδ hgap hResMem
 
 /-! ## The real directed `sin 2Θ` theorem -/
@@ -198,7 +200,8 @@ overlap block — the source's `sin 2Θ₀` — lies in the ideal and satisfies
 There is no dimension hypothesis and no compactness hypothesis; membership in
 the ideal is *concluded*, exactly as in the complex statement. -/
 theorem sinTwoTheta_reflectionResidual_block_gauge_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -213,9 +216,9 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS) V) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock
+      δ * N.gaugeReal (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS) V) ≤
-        N.gauge ((realSelfAdjointSpectralSubspace A hA S hS).starProjection ∘L R ∘L
+        N.gaugeReal ((realSelfAdjointSpectralSubspace A hA S hS).starProjection ∘L R ∘L
           ((realSelfAdjointSpectralSubspace A hA S hS)ᗮ.map
             (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) := by
   set U := realSelfAdjointSpectralSubspace A hA S hS with hU
@@ -281,7 +284,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
     rw [hsymm]
     simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
   have hambient := projectionProduct_mem_and_gauge_le_isometric
-    N.toSymmetricOperatorIdealFamily U
+    N U
     (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)) F₁ hF₁iso hFproj hraw.1
   -- contract the rectangular block to the ambient one
   have hF₁adjF₁ : F₁.adjoint ∘L F₁ = ContinuousLinearMap.id ℝ Uc := by
@@ -328,30 +331,31 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
             F₁ := rfl
   have hMid : N.Mem (U.starProjection ∘L R ∘L
       (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) :=
-    N.toSymmetricOperatorIdealFamily.comp_mem U.starProjection
+    N.comp_mem U.starProjection
       (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection hRmem
-  have hcontract : N.gauge ((R ∘L X).adjoint ∘L F₁) ≤
-      N.gauge (U.starProjection ∘L R ∘L
+  have hcontract : N.gaugeReal ((R ∘L X).adjoint ∘L F₁) ≤
+      N.gaugeReal (U.starProjection ∘L R ∘L
         (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) := by
     rw [hfac]
     have hXadjNorm : ‖X.adjoint‖ ≤ 1 := by
       rw [ContinuousLinearMap.adjoint.norm_map]
       exact opNorm_le_one_of_isometry hXiso
-    exact N.toSymmetricOperatorIdealFamily.gaugeReal_comp_le_of_contractions
+    exact N.gaugeReal_comp_le_of_contractions
       X.adjoint F₁ hMid hXadjNorm (opNorm_le_one_of_isometry hF₁iso)
   refine ⟨hambient.1, ?_⟩
   calc
-    δ * N.gauge (sinTwoThetaIdealBlock U V) ≤ δ * N.gauge (X.adjoint ∘L F₁) :=
+    δ * N.gaugeReal (sinTwoThetaIdealBlock U V) ≤ δ * N.gaugeReal (X.adjoint ∘L F₁) :=
       mul_le_mul_of_nonneg_left hambient.2 hδ.le
-    _ ≤ N.gauge ((R ∘L X).adjoint ∘L F₁) := hraw.2
-    _ ≤ N.gauge (U.starProjection ∘L R ∘L
+    _ ≤ N.gaugeReal ((R ∘L X).adjoint ∘L F₁) := hraw.2
+    _ ≤ N.gaugeReal (U.starProjection ∘L R ∘L
         (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) := hcontract
 
 /-- **Davis--Kahan 1970, the directed `sin 2Theta` theorem over a REAL Hilbert
 space, reflection-residual form.**  The block form above with the block
 contracted back to the whole reflection residual. -/
 theorem sinTwoTheta_reflectionResidual_gauge_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -366,12 +370,12 @@ theorem sinTwoTheta_reflectionResidual_gauge_real
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS) V) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock
-        (realSelfAdjointSpectralSubspace A hA S hS) V) ≤ N.gauge R := by
+      δ * N.gaugeReal (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA S hS) V) ≤ N.gaugeReal R := by
   obtain ⟨hmem, hle⟩ := sinTwoTheta_reflectionResidual_block_gauge_real
     A hA S hS N R hR V hδ hgap hJdom hJintertwines hRmem
   refine ⟨hmem, hle.trans ?_⟩
-  exact N.toSymmetricOperatorIdealFamily.gaugeReal_comp_le_of_contractions
+  exact N.gaugeReal_comp_le_of_contractions
     (realSelfAdjointSpectralSubspace A hA S hS).starProjection
     ((realSelfAdjointSpectralSubspace A hA S hS)ᗮ.map
       (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection hRmem
@@ -398,7 +402,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
     {A : E →ₗ.[ℝ] E} (hA : IsSelfAdjoint A)
     {U : Submodule ℝ E} [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U)
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (R : E →L[ℝ] E) (hR : R.IsSymmetric)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -412,8 +417,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
         V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock U V) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock U V) ≤
-        N.gauge (U.starProjection ∘L R ∘L
+      δ * N.gaugeReal (sinTwoThetaIdealBlock U V) ≤
+        N.gaugeReal (U.starProjection ∘L R ∘L
           (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) := by
   set Uc := (Uᗮ : Submodule ℝ E) with hUc
   set A₀ := TauCeti.LinearPMap.reducingRestriction A U hred with hA₀def
@@ -482,7 +487,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
     rw [hsymm]
     simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
   have hambient := projectionProduct_mem_and_gauge_le_isometric
-    N.toSymmetricOperatorIdealFamily U
+    N U
     (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)) F₁ hF₁iso hFproj hraw.1
   -- contract the rectangular block to the ambient one
   have hF₁adjF₁ : F₁.adjoint ∘L F₁ = ContinuousLinearMap.id ℝ Uc := by
@@ -529,23 +534,23 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
             F₁ := rfl
   have hMid : N.Mem (U.starProjection ∘L R ∘L
       (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) :=
-    N.toSymmetricOperatorIdealFamily.comp_mem U.starProjection
+    N.comp_mem U.starProjection
       (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection hRmem
-  have hcontract : N.gauge ((R ∘L X).adjoint ∘L F₁) ≤
-      N.gauge (U.starProjection ∘L R ∘L
+  have hcontract : N.gaugeReal ((R ∘L X).adjoint ∘L F₁) ≤
+      N.gaugeReal (U.starProjection ∘L R ∘L
         (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) := by
     rw [hfac]
     have hXadjNorm : ‖X.adjoint‖ ≤ 1 := by
       rw [ContinuousLinearMap.adjoint.norm_map]
       exact opNorm_le_one_of_isometry hXiso
-    exact N.toSymmetricOperatorIdealFamily.gaugeReal_comp_le_of_contractions
+    exact N.gaugeReal_comp_le_of_contractions
       X.adjoint F₁ hMid hXadjNorm (opNorm_le_one_of_isometry hF₁iso)
   refine ⟨hambient.1, ?_⟩
   calc
-    δ * N.gauge (sinTwoThetaIdealBlock U V) ≤ δ * N.gauge (X.adjoint ∘L F₁) :=
+    δ * N.gaugeReal (sinTwoThetaIdealBlock U V) ≤ δ * N.gaugeReal (X.adjoint ∘L F₁) :=
       mul_le_mul_of_nonneg_left hambient.2 hδ.le
-    _ ≤ N.gauge ((R ∘L X).adjoint ∘L F₁) := hraw.2
-    _ ≤ N.gauge (U.starProjection ∘L R ∘L
+    _ ≤ N.gaugeReal ((R ∘L X).adjoint ∘L F₁) := hraw.2
+    _ ≤ N.gaugeReal (U.starProjection ∘L R ∘L
         (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) := hcontract
 
 end SinTwoThetaReducingReal
@@ -707,7 +712,8 @@ spectral subspaces of `A` and of `A + E` for prescribed measurable spectral
 sets.  There is no dimension hypothesis and no compactness hypothesis;
 membership in the ideal is *concluded*. -/
 theorem sinTwoTheta_addBounded_gauge_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (S T : Set ℝ) (hS : MeasurableSet S) (hT : MeasurableSet T)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
@@ -718,17 +724,17 @@ theorem sinTwoTheta_addBounded_gauge_real
         (realSelfAdjointSpectralSubspace A hA S hS)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) T hT)) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock
+      δ * N.gaugeReal (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) T hT)) ≤
-        2 * N.gauge Eop := by
+        2 * N.gaugeReal Eop := by
   set V := realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
     (addBounded_isSelfAdjoint A hA Eop hEop) T hT with hVdef
   set D : E →L[ℝ] E := reflectionPerturbation V Eop with hDdef
   have hD : D.IsSymmetric := reflectionPerturbation_isSelfAdjoint V Eop hEop
   have hDideal := reflectionPerturbation_mem_and_gauge_le
-    N.toSymmetricOperatorIdealFamily V Eop hEmem
+    N V Eop hEmem
   have hmain := sinTwoTheta_reflectionResidual_gauge_real A hA S hS N D hD V hδ hgap
     (realPerturbedSpectralReflection_mem_domain A hA Eop hEop T hT)
     (real_add_reflectionPerturbation_intertwines A hA Eop hEop T hT)

@@ -496,7 +496,8 @@ every branch-free `tan 2Θ` representative, and
 neither the ambient space nor the trial subspace is assumed
 finite-dimensional. -/
 theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_invariantSubspace
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
@@ -510,7 +511,7 @@ theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_invariantSubspace
       absDoubleAngleTangent (approximationSingularValue n T))
     (hHmem : N.Mem H) :
     N.Mem tanTwoTheta ∧
-      (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by
+      (b - a) * N.gaugeReal tanTwoTheta ≤ 2 * N.gaugeReal H := by
   have hδ : (0 : ℝ) < (b - a) / 2 := by linarith
   have hscaled : ∀ k,
       (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta ≤

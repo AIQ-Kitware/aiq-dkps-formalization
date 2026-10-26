@@ -38,7 +38,8 @@ variable {E F G H : Type v}
 
 /-- Complete real input package for the generalized unbounded theorem. -/
 structure RealGeneralSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := ℝ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   data : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℝ] E
   ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
@@ -57,17 +58,18 @@ namespace RealGeneralSinThetaProblem
 
 /-- Complete real generalized source target. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : RealGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (directedSinThetaOperatorReal P.data.X P.exactMap
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (directedSinThetaOperatorReal P.data.X P.exactMap
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   generalizedSinTheta_unbounded_exact_real
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition P.gap_pos
@@ -75,17 +77,18 @@ theorem result
 
 /-- Real generalized complementary-block source target. -/
 theorem complementaryBlock_result
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : RealGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (sinThetaBlockReal P.data.X P.data.F₁
           P.lowerFrame P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (sinThetaBlockReal P.data.X P.data.F₁
               P.lowerFrame P.frameLowerBound_pos)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   generalizedSinTheta_unbounded_real
     N P.data P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.exact_decomposition.isometry₁ P.gap_pos
@@ -97,16 +100,17 @@ namespace FormBoundedIsometricSinThetaProblem
 
 /-- Real specialization of the source-shaped isometric problem. -/
 theorem result_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : FormBoundedIsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         ((ContinuousLinearMap.id ℝ E -
           P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X) ∧
-      P.gap * N.gauge
+      P.gap * N.gaugeReal
           ((ContinuousLinearMap.id ℝ E -
             P.exactMap ∘L P.exactMap.adjoint) ∘L P.data.X)
-        ≤ N.gauge P.data.residual :=
+        ≤ N.gaugeReal P.data.residual :=
   sinTheta_unbounded_exact_real
     N P.data P.exactMap P.ambient_selfAdjoint P.trial_selfAdjoint
       P.complement_selfAdjoint P.trial_isometry P.exact_decomposition
@@ -115,7 +119,8 @@ theorem result_real
 /-- Regard a real isometric problem as a real generalized problem with lower
 frame constant one. -/
 noncomputable def toGeneralReal
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : FormBoundedIsometricSinThetaProblem (𝕜 := ℝ) (E := E) (F := F)
       (G := G) (H := H) N) :
     RealGeneralSinThetaProblem (E := E) (F := F)

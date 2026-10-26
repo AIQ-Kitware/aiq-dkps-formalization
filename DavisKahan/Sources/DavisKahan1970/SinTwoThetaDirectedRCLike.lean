@@ -72,7 +72,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U)
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : H →L[𝕜] H) (hD : D.IsSymmetric)
     (W : Submodule 𝕜 H) [W.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
@@ -86,8 +87,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
         W.reflectionOperator (A x))
     (hDmem : N.Mem D) :
     N.Mem (sinTwoThetaIdealBlock U W) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock U W) ≤
-        N.gauge (U.starProjection ∘L D ∘L
+      δ * N.gaugeReal (sinTwoThetaIdealBlock U W) ≤
+        N.gaugeReal (U.starProjection ∘L D ∘L
           (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection) := by
   set Uc := (Uᗮ : Submodule 𝕜 H) with hUc
   set A₀ := A.restrict hred.isInvariant with hA₀def
@@ -144,7 +145,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     rw [hsymm]
     simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
   have hambient := projectionProduct_mem_and_gauge_le_isometric
-    N.toSymmetricOperatorIdealFamily U
+    N U
     (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)) F₁ hF₁iso hFproj hraw.1
   have hF₁adjF₁ : F₁.adjoint ∘L F₁ = ContinuousLinearMap.id 𝕜 Uc := by
     have hUcadj : Uc.subtypeL.adjoint ∘L Uc.subtypeL = ContinuousLinearMap.id 𝕜 Uc := by
@@ -190,25 +191,25 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
             F₁ := rfl
   have hMid : N.Mem (U.starProjection ∘L D ∘L
       (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection) :=
-    N.toSymmetricOperatorIdealFamily.comp_mem U.starProjection
+    N.comp_mem U.starProjection
       (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection hDmem
-  have hcontract : N.gauge ((D ∘L X).adjoint ∘L F₁) ≤
-      N.gauge (U.starProjection ∘L D ∘L
+  have hcontract : N.gaugeReal ((D ∘L X).adjoint ∘L F₁) ≤
+      N.gaugeReal (U.starProjection ∘L D ∘L
         (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection) := by
     rw [hfac]
     have hXadjNorm : ‖X.adjoint‖ ≤ 1 := by
       rw [ContinuousLinearMap.adjoint.norm_map]
       exact opNorm_le_one_of_isometry (fun _ => rfl)
     have hF₁norm : ‖F₁‖ ≤ 1 := opNorm_le_one_of_isometry hF₁iso
-    exact N.toSymmetricOperatorIdealFamily.gaugeReal_comp_le_of_contractions
+    exact N.gaugeReal_comp_le_of_contractions
       X.adjoint F₁ hMid hXadjNorm hF₁norm
   refine ⟨hambient.1, ?_⟩
   calc
-    δ * N.gauge (sinTwoThetaIdealBlock U W)
-        ≤ δ * N.gauge (X.adjoint ∘L F₁) :=
+    δ * N.gaugeReal (sinTwoThetaIdealBlock U W)
+        ≤ δ * N.gaugeReal (X.adjoint ∘L F₁) :=
       mul_le_mul_of_nonneg_left hambient.2 hδ.le
-    _ ≤ N.gauge ((D ∘L X).adjoint ∘L F₁) := hraw.2
-    _ ≤ N.gauge (U.starProjection ∘L D ∘L
+    _ ≤ N.gaugeReal ((D ∘L X).adjoint ∘L F₁) := hraw.2
+    _ ≤ N.gaugeReal (U.starProjection ∘L D ∘L
         (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection) := hcontract
 
 /-- Scalar-generic Ky Fan estimate for the printed directed `sin 2Θ₀` residual clause,
@@ -239,13 +240,17 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   have hDsa : ((-2 : 𝕜) • trialOffDiagonalPart V M R).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hDsa'
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
-    hA hred (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk)
+    hA hred ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }))
     ((-2 : 𝕜) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (FanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hk _)
-  rw [FanDominantIdealFamily.kyFan_gauge,
-    FanDominantIdealFamily.kyFan_gauge] at hraw
+    (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   have hflip : kyFanApproximationGauge k
         (U.starProjection ∘L
           ((-2 : 𝕜) • trialOffDiagonalPart V M R) ∘L

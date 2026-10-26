@@ -195,12 +195,16 @@ theorem sinTwoTheta_reflectionResidual_opNorm_real
     δ * ‖sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA S hS) V‖ ≤ ‖R‖ := by
   have h := sinTwoTheta_reflectionResidual_gauge_real A hA S hS
-    (FanDominantIdealFamily.kyFan (𝕜 := ℝ) 1 Nat.one_pos) R hR V hδ hgap
+    ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ 1 Nat.one_pos
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℝ 1 Nat.one_pos).gauge_adjoint })) R hR V hδ hgap
     hJdom hJintertwines
-    (FanDominantIdealFamily.kyFan_mem 1 Nat.one_pos R)
-  rw [FanDominantIdealFamily.kyFan_gauge,
-    FanDominantIdealFamily.kyFan_gauge,
-    kyFanApproximationGauge_one, kyFanApproximationGauge_one,
+    (by simp [SymmetricOperatorIdealFamily.Mem])
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    kyFanApproximationGauge_one,
     norm_sinTwoThetaIdealBlock_real] at h
   exact h.2
 
@@ -223,11 +227,15 @@ theorem sinTwoTheta_addBounded_opNorm_real
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) T hT)‖ ≤ 2 * ‖Eop‖ := by
   have h := sinTwoTheta_addBounded_gauge_real A hA Eop hEop
-    (FanDominantIdealFamily.kyFan (𝕜 := ℝ) 1 Nat.one_pos) S T hS hT hδ hgap
-    (FanDominantIdealFamily.kyFan_mem 1 Nat.one_pos Eop)
-  rw [FanDominantIdealFamily.kyFan_gauge,
-    FanDominantIdealFamily.kyFan_gauge,
-    kyFanApproximationGauge_one, kyFanApproximationGauge_one,
+    ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ 1 Nat.one_pos
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℝ 1 Nat.one_pos).gauge_adjoint })) S T hS hT hδ hgap
+    (by simp [SymmetricOperatorIdealFamily.Mem])
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    kyFanApproximationGauge_one,
     norm_sinTwoThetaIdealBlock_real] at h
   exact h.2
 

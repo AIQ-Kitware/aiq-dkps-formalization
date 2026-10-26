@@ -118,7 +118,8 @@ noncomputable def unboundedSinThetaDataOfRealSpectralSubspace
 inputs.  The real spectral projection, complementary self-adjoint restriction,
 and all exact-space bookkeeping are constructed internally. -/
 theorem sinTheta_unbounded_real_spectralSubspace
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →ₗ.[ℝ] E)
     (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →ₗ.[ℝ] F)
@@ -136,11 +137,11 @@ theorem sinTheta_unbounded_real_spectralSubspace
       ((ContinuousLinearMap.id ℝ E -
         realSelfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (realSelfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
         ((ContinuousLinearMap.id ℝ E -
           realSelfAdjointSpectralSubspaceInclusion A hA S hS ∘L
             (realSelfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X)
-        ≤ N.gauge Rop := by
+        ≤ N.gaugeReal Rop := by
   let D := unboundedSinThetaDataOfRealSpectralSubspace
     A hA S hS A0 X Rop hXdom hReq
   have hLambda : _root_.IsSelfAdjoint D.Λ₁ := by
@@ -160,7 +161,8 @@ inputs.  It retains the sharp lower-frame factor and the exact directed sine
 operator while constructing the complementary spectral restriction
 internally. -/
 theorem generalizedSinTheta_unbounded_real_spectralSubspace
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →ₗ.[ℝ] E)
     (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →ₗ.[ℝ] F)
@@ -178,11 +180,11 @@ theorem generalizedSinTheta_unbounded_real_spectralSubspace
       (directedSinThetaOperatorReal X
         (realSelfAdjointSpectralSubspaceInclusion A hA S hS)
         hframe hε) ∧
-      δ * ε * N.gauge
+      δ * ε * N.gaugeReal
         (directedSinThetaOperatorReal X
           (realSelfAdjointSpectralSubspaceInclusion A hA S hS)
           hframe hε)
-        ≤ N.gauge Rop := by
+        ≤ N.gaugeReal Rop := by
   let D := unboundedSinThetaDataOfRealSpectralSubspace
     A hA S hS A0 X Rop hXdom hReq
   have hLambda : _root_.IsSelfAdjoint D.Λ₁ := by

@@ -57,7 +57,7 @@ the note went stale; it is corrected here, 2026-08-09, after re-elaborating the
 endpoints.
 
 * `TauCeti.DavisKahan.TanTheta.theorem6_3_generalizedTanTheta_ideal`
-  — arbitrary complete complex Hilbert space, arbitrary `FanDominantIdealFamily`,
+  — arbitrary complete complex Hilbert space, arbitrary a native symmetric ideal family with Ky Fan dominance,
   the source's one-sided spectral placement, with ideal membership of the tangent
   *concluded* rather than assumed.
 * `…TanTheta.theorem6_3_infiniteTrial_of_formBounds` and

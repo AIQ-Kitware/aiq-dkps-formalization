@@ -37,7 +37,8 @@ variable {E F G H : Type v}
 
 /-- Bounded real source package for the generalized sine theorem. -/
 structure RealBoundedGeneralSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := ℝ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   A : E →L[ℝ] E
   A₀ : F →L[ℝ] F
   Λ₁ : G →L[ℝ] G
@@ -64,7 +65,8 @@ namespace RealBoundedGeneralSinThetaProblem
 
 /-- Embed bounded real data into the real canonical unbounded package. -/
 noncomputable def toGeneral
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : RealBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     RealGeneralSinThetaProblem (E := E) (F := F)
@@ -114,17 +116,18 @@ noncomputable def toGeneral
 /-- Bounded real generalized theorem derived through the canonical real
 unbounded theorem. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : RealBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (directedSinThetaOperatorReal P.X P.F₀ P.lowerFrame
           P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (directedSinThetaOperatorReal P.X P.F₀ P.lowerFrame
               P.frameLowerBound_pos)
-        ≤ N.gauge
+        ≤ N.gaugeReal
             (generalResidual P.A P.X P.A₀) :=
   RealGeneralSinThetaProblem.result N (P.toGeneral N)
 

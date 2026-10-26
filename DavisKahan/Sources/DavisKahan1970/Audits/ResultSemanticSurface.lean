@@ -80,7 +80,8 @@ theorem theorem5_2_real_ordered_sourceAudit
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-    (N : TauCeti.DavisKahan.ExactSinTheta.FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A : E →ₗ.[ℝ] E}
     {B : F →ₗ.[ℝ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -90,7 +91,7 @@ theorem theorem5_2_real_ordered_sourceAudit
     (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
+    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   exact TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real
     N hA hB hδ
       (TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap.leftAboveRightBelow
@@ -163,7 +164,7 @@ Fan norm."
 Two Lean objects model that class in this development.  `SymmetricNormingFunction`
 is the Gohberg--Krein reading -- a dimension-coherent symmetric gauge, extended to
 infinite dimension as the supremum of its singular-value prefixes.
-`FanDominantIdealFamily` is the axiomatic reading -- a symmetric operator ideal
+a native symmetric ideal family with Ky Fan dominance is the axiomatic reading -- a symmetric operator ideal
 family with Fan dominance as a field.  Neither exhausts the other as a *type*: the
 Calkin-augmented norm `T ↦ ‖T‖ + ‖π(T)‖` is a Fan-dominant unitarily invariant norm
 on `B(H)` that agrees with the operator norm on finite-rank operators, so no

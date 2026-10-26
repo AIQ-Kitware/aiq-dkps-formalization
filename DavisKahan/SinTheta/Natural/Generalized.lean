@@ -37,7 +37,8 @@ variable {E F : Type v}
 spectral inputs. The lower-frame polar factorization and every complementary
 spectral restriction are constructed internally. -/
 theorem generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →ₗ.[ℂ] E)
     (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →ₗ.[ℂ] F)
@@ -55,11 +56,11 @@ theorem generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
       (directedSinThetaOperator X
         (selfAdjointSpectralSubspaceInclusion A hA S hS)
         hframe hε) ∧
-      δ * ε * N.gauge
+      δ * ε * N.gaugeReal
         (directedSinThetaOperator X
           (selfAdjointSpectralSubspaceInclusion A hA S hS)
           hframe hε)
-        ≤ N.gauge Rop := by
+        ≤ N.gaugeReal Rop := by
   let D := unboundedSinThetaDataOfSpectralSubspace
     A hA S hS A0 hA0 X Rop hXdom hReq
   have hLambda : _root_.IsSelfAdjoint D.Λ₁ := by

@@ -110,17 +110,6 @@ theorem SymmetricOperatorIdealFamily.modulus_mem_and_gauge_eq
   rw [N.gauge_modulus_eq]
   exact hT
 
-/-- The Ky Fan dominant family inherits the transport, since its gauge is that
-of its underlying symmetric family. -/
-theorem FanDominantIdealFamily.modulus_mem_and_gauge_eq
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
-    {T : E →L[ℂ] E}
-    (hT : N.Mem T) :
-    N.Mem (ContinuousLinearMap.modulus T) ∧
-      N.gauge (ContinuousLinearMap.modulus T) = N.gauge T :=
-  SymmetricOperatorIdealFamily.modulus_mem_and_gauge_eq
-    N.toSymmetricOperatorIdealFamily hT
-
 end Ideal
 end SharedFoundations
 end DavisKahan

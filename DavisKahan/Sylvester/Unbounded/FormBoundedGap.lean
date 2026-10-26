@@ -96,7 +96,8 @@ Sylvester theorem.  The spectral constructor is routed through the Spectra
 spectrum theorem, while the two ordered constructors retain their form-bound
 hypotheses and call the direct engine verbatim. -/
 theorem davisKahan1970_sylvester_complex
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A : E →ₗ.[ℂ] E}
     {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -106,8 +107,8 @@ theorem davisKahan1970_sylvester_complex
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
-      δ * N.gauge X ≤
-        N.gauge C := by
+      δ * N.gaugeReal X ≤
+        N.gaugeReal C := by
   cases hgap with
   | intervalExterior hβα hgap =>
       exact davisKahan1970_sylvester_of_spectrumGap

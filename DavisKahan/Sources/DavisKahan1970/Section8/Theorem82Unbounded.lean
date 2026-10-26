@@ -138,9 +138,8 @@ theorem norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex
     N hA Hop hHop hPred hQred hδ hgap
     (mem_kyFanNormalizedUnitaryInvariantNorm 1 one_pos Hop)
   rw [hN] at hle
-  rw [gauge_kyFanNormalizedUnitaryInvariantNorm 1 one_pos,
-    gauge_kyFanNormalizedUnitaryInvariantNorm 1 one_pos,
-    kyFanApproximationGauge_one, kyFanApproximationGauge_one] at hle
+  simp only [gauge_kyFanNormalizedUnitaryInvariantNorm,
+    kyFanApproximationGauge_one] at hle
   exact hle
 
 /-- **Davis--Kahan 1970, Theorem 8.2's acute conclusion at unbounded ambient

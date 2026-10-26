@@ -379,7 +379,8 @@ This is the Section 2 scope claim for the single-angle tangent family: the ambie
 operator is closed, unbounded and self-adjoint, and nothing in the statement or the proof
 requires it to be bounded. -/
 theorem theorem6_3_unbounded_ideal
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
@@ -392,7 +393,7 @@ theorem theorem6_3_unbounded_ideal
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z
       (selfAdjointSpectralSubspace A hA (Set.Iic α) measurableSet_Iic) tanTheta0)
     (hResidual : N.Mem D.residual) :
-    N.Mem tanTheta0 ∧ δ * N.gauge tanTheta0 ≤ N.gauge D.residual :=
+    N.Mem tanTheta0 ∧ δ * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual :=
   Theorem63TrialData.ideal_of_formBounds
     (Theorem63TrialData.ofUnbounded D
       (selfAdjointSpectralSubspace A hA (Set.Iic α) measurableSet_Iic))
@@ -406,7 +407,8 @@ right singular basis of the directed sine block, with entries `tan (arcsin sᵢ)
 `sᵢ < 1` it needs is derived from the same spectral gap, not assumed.  So this carries no
 hypothesis the printed theorem does not. -/
 theorem theorem6_3_unbounded_ideal_directedTangent
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
@@ -418,9 +420,9 @@ theorem theorem6_3_unbounded_ideal_directedTangent
     (hResidual : N.Mem D.residual) :
     N.Mem (theorem63DirectedTangent Z
         (selfAdjointSpectralSubspace A hA (Set.Iic α) measurableSet_Iic)) ∧
-      δ * N.gauge (theorem63DirectedTangent Z
+      δ * N.gaugeReal (theorem63DirectedTangent Z
         (selfAdjointSpectralSubspace A hA (Set.Iic α) measurableSet_Iic)) ≤
-        N.gauge D.residual := by
+        N.gaugeReal D.residual := by
   refine theorem6_3_unbounded_ideal N A hA D hδ hgap hCompression _ ?_ hResidual
   exact hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
     Z (selfAdjointSpectralSubspace A hA (Set.Iic α) measurableSet_Iic)
@@ -462,7 +464,8 @@ The compression of `A` to `V` itself is unconstrained, exactly as in the source.
 conclusion is the paper's `δ ‖tan Θ₀‖ ≤ ‖R‖` for every Fan-dominant unitarily invariant
 ideal gauge. -/
 theorem theorem6_3_unbounded_ideal_of_reducing
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
@@ -479,7 +482,7 @@ theorem theorem6_3_unbounded_ideal_of_reducing
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
     (hResidual : N.Mem D.residual) :
-    N.Mem tanTheta0 ∧ δ * N.gauge tanTheta0 ≤ N.gauge D.residual :=
+    N.Mem tanTheta0 ∧ δ * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual :=
   Theorem63TrialData.ideal_of_formBounds (Theorem63TrialData.ofUnbounded D V) N hδ
     hCompression (crossed_lower_of_reducing A D V hVdom hVcomm hUnwanted) tanTheta0
     htan hResidual
@@ -491,7 +494,8 @@ representative `Theorem63FiniteSource` constructs, diagonal in the right singula
 the directed sine block, and the `sᵢ < 1` it needs is derived from the two form bounds
 rather than assumed. -/
 theorem theorem6_3_unbounded_ideal_directedTangent_of_reducing
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
@@ -507,7 +511,7 @@ theorem theorem6_3_unbounded_ideal_directedTangent_of_reducing
       (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (hResidual : N.Mem D.residual) :
     N.Mem (theorem63DirectedTangent Z V) ∧
-      δ * N.gauge (theorem63DirectedTangent Z V) ≤ N.gauge D.residual := by
+      δ * N.gaugeReal (theorem63DirectedTangent Z V) ≤ N.gaugeReal D.residual := by
   refine theorem6_3_unbounded_ideal_of_reducing N A D V hδ hVdom hVcomm hCompression
     hUnwanted _ ?_ hResidual
   exact hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent Z V

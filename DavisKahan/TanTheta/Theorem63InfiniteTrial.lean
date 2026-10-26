@@ -650,7 +650,8 @@ The trial space carries no dimension hypothesis.  Any tangent representative wit
 paper's approximation numbers obeys the ideal-gauge bound in every Fan-dominant unitarily
 invariant ideal family. -/
 theorem theorem6_3_infiniteTrial_of_formBounds
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
@@ -663,7 +664,7 @@ theorem theorem6_3_infiniteTrial_of_formBounds
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal (theorem63Residual T Z) := by
   refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hdelta hResidual fun k => ?_
   have hcore := theorem6_3_all_kyFan_core_infiniteTrial T V Z hT hV hdelta
@@ -752,7 +753,8 @@ unconditionally**: the tangent representative is exhibited, not assumed.  This i
 equal-dimensional infinite/noncompact half of the Section 2 tangent theorem, in form-bound
 shape. -/
 theorem theorem6_3_infiniteTrial_of_formBounds_exists
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
@@ -765,7 +767,7 @@ theorem theorem6_3_infiniteTrial_of_formBounds_exists
     ∃ tanTheta0 : Z →L[ℂ] H,
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal (theorem63Residual T Z) := by
   obtain ⟨tanTheta0, htan⟩ :=
     exists_hasTheorem63DirectedTangentApproximationNumbersInfinite Z V
       (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial T V Z hT hV
@@ -812,7 +814,8 @@ chain was already inert — `theorem6_3_generalizedTanTheta_of_formBounds` binds
 `_hStrictDimension` and never uses it.  Dropping an unused hypothesis strengthens the
 statement; it does not narrow it. -/
 theorem theorem6_3_infiniteTrial_ideal
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
@@ -827,7 +830,7 @@ theorem theorem6_3_infiniteTrial_ideal
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal (theorem63Residual T Z) := by
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by
@@ -853,7 +856,8 @@ theorem theorem6_3_infiniteTrial_ideal
 and its tangent hypothesis is definitionally the arbitrary-trial one.  Stating that
 collapse as a theorem keeps it machine-checked rather than asserted in prose. -/
 theorem theorem6_3_generalizedTanTheta_ideal_of_infiniteTrial
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
@@ -869,7 +873,7 @@ theorem theorem6_3_generalizedTanTheta_ideal_of_infiniteTrial
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
     (hResidual : N.Mem (theorem63Residual T Z)) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) :=
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal (theorem63Residual T Z) :=
   theorem6_3_infiniteTrial_ideal N T hT V Z hV hbetaalpha hdelta
     hCompressionSpectrum hUnwantedSpectrum tanTheta0 htan hResidual
 
@@ -879,7 +883,8 @@ restriction's spectrum in `[α + δ, ∞)`, and the conclusion is the ideal-gaug
 bound for an exhibited representative — the Section 2 tangent theorem's residual half
 with **no** dimension hypothesis on the trial space. -/
 theorem theorem6_3_infiniteTrial_spectral_exists
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
@@ -894,7 +899,7 @@ theorem theorem6_3_infiniteTrial_spectral_exists
     ∃ tanTheta0 : Z →L[ℂ] H,
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal (theorem63Residual T Z) := by
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hMsa : IsSelfAdjoint (theorem63Compression T Z) := by

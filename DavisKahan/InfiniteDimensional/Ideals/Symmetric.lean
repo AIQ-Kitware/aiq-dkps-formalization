@@ -256,7 +256,9 @@ noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
 noncomputable def kyFan
     (k : ℕ) (hk : 0 < k) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) := by
-  let N := (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hk).toSymmetricOperatorIdealFamily
+  let N := ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
+    { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
+      gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }))
   letI : N.toOperatorIdealFamily.IsComplete := by
     change (TauCeti.OperatorIdealFamily.kyFan 𝕜 k hk).IsComplete
     infer_instance

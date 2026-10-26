@@ -531,7 +531,8 @@ theorem all_kyFan_core_of_formBounds_infinite
 
 /-- Fan-dominance endpoint for arbitrary complete trial-block data. -/
 theorem ideal_of_formBounds_infinite
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hMupper : ∀ z : Z,
       RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -542,7 +543,7 @@ theorem ideal_of_formBounds_infinite
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
     (hResidual : N.Mem data.residual) :
-    N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge data.residual := by
+    N.Mem tanTheta0 ∧ delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal data.residual := by
   refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N hdelta hResidual fun k => ?_
   have hcore := data.all_kyFan_core_of_formBounds_infinite hdelta hMupper hcross k
@@ -561,7 +562,8 @@ theorem ideal_of_formBounds_infinite
 representative is constructed with exactly the approximation numbers prescribed by the
 paper. -/
 theorem ideal_of_formBounds_infinite_exists
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hMupper : ∀ z : Z,
       RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -573,7 +575,7 @@ theorem ideal_of_formBounds_infinite_exists
     ∃ tanTheta0 : Z →L[ℂ] H,
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge data.residual := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal data.residual := by
   obtain ⟨tanTheta0, htan⟩ :=
     exists_hasTheorem63DirectedTangentApproximationNumbersInfinite Z V
       (fun n => data.approximationSingularValue_sineBlock_lt_one_infiniteData
@@ -595,7 +597,8 @@ This is the Appendix dimension-removal endpoint.  There is no finite-dimensional
 compactness hypothesis on `Z`.  The tangent representative is exhibited, and every
 Fan-dominant unitarily invariant ideal gauge satisfies the printed residual bound. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
@@ -613,7 +616,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing
     ∃ tanTheta0 : Z →L[ℂ] H,
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge D.residual := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual := by
   let data := Theorem63TrialData.ofUnbounded D V
   exact data.ideal_of_formBounds_infinite_exists N hdelta hCompression
     (crossed_lower_of_reducing A D V hVdom hVcomm hUnwanted) hResidual
@@ -621,7 +624,8 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing
 /-- Same arbitrary-trial unbounded theorem when a tangent representative with the paper's
 approximation numbers is supplied explicitly. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
@@ -639,7 +643,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
     (hResidual : N.Mem D.residual) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge D.residual := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual := by
   let data := Theorem63TrialData.ofUnbounded D V
   exact data.ideal_of_formBounds_infinite N hdelta hCompression
     (crossed_lower_of_reducing A D V hVdom hVcomm hUnwanted)
@@ -647,7 +651,8 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing
 
 /-- Spectral-gap specialization of the arbitrary-trial unbounded theorem. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
@@ -661,7 +666,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z
         (selfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic) tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge D.residual := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual := by
   let V := selfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic
   let data := Theorem63TrialData.ofUnbounded D V
   exact data.ideal_of_formBounds_infinite_exists N hdelta hCompression
@@ -675,7 +680,8 @@ form, because the existential would hand back a possibly different witness at
 each Ky Fan index.  Taking the representative as a parameter is what lets the
 paper-norm promotion quantify one operator over all indices. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal
-    (N : ExactSinTheta.FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
@@ -689,7 +695,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal
       (selfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic) tanTheta0)
     (hResidual : N.Mem D.residual) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge D.residual := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal D.residual := by
   let V := selfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic
   let data := Theorem63TrialData.ofUnbounded D V
   exact data.ideal_of_formBounds_infinite N hdelta hCompression

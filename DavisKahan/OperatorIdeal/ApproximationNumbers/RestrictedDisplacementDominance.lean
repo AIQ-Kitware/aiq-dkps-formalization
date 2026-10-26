@@ -14,7 +14,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransp
 # Approximation-number dominance for restricted displacements
 
 Pointwise approximation-number domination gives every finite Ky Fan
-approximation-gauge inequality.  For a `FanDominantIdealFamily`, those
+approximation-gauge inequality.  For a native symmetric ideal family with Ky Fan dominance, those
 inequalities imply ideal membership and gauge domination.
 
 The final structure packages this comparison for restricted displacements, so
@@ -53,14 +53,15 @@ theorem kyFanApproximationGauge_le_of_approximationSingularValue_le
 /-- Correct infinite-dimensional ideal-dominance bridge for Corollary 4.1.
 The stronger family contains precisely the missing monotonicity principle. -/
 theorem mem_and_gauge_le_of_approximationSingularValue_le
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A B : E →L[𝕜] F}
     (hB : N.Mem B)
     (h : ∀ n, approximationSingularValue n A ≤
       approximationSingularValue n B) :
     N.Mem A ∧
-      N.gauge A ≤
-        N.gauge B := by
+      N.gaugeReal A ≤
+        N.gaugeReal B := by
   apply mem_and_gauge_le_of_all_kyFanApproximationGauge_le N hB
   intro k
   exact kyFanApproximationGauge_le_of_approximationSingularValue_le h k
@@ -75,13 +76,14 @@ structure RestrictedDisplacementApproximationDominance
 /-- Corollary 4.1 follows formally from a Proposition 4.1 certificate for every
 Fan-dominant ideal family. -/
 theorem restrictedDisplacement_idealGauge_le
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A B : E →L[𝕜] F}
     (D : RestrictedDisplacementApproximationDominance A B)
     (hB : N.Mem B) :
     N.Mem A ∧
-      N.gauge A ≤
-        N.gauge B :=
+      N.gaugeReal A ≤
+        N.gaugeReal B :=
   mem_and_gauge_le_of_approximationSingularValue_le N hB D.approximation_le
 
 omit [CompleteSpace E] [CompleteSpace F] in

@@ -45,7 +45,8 @@ variable {E F : Type v}
 
 /-- Bounded complex isometric theorem with a canonical spectral subspace. -/
 theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →L[ℂ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →L[ℂ] F) (hA0 : A0.IsSymmetric)
@@ -72,7 +73,7 @@ theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
           (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS).adjoint) ∘L X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
         ((ContinuousLinearMap.id ℂ E -
           selfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
@@ -84,7 +85,7 @@ theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
             (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS).adjoint) ∘L X)
-        ≤ N.gauge
+        ≤ N.gaugeReal
           (generalResidual A X A0) := by
   apply sinTheta_unbounded_spectralSubspace_of_spectrumGap
     N ((A.toLinearMap.toPMap ⊤))
@@ -102,7 +103,8 @@ theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
 
 /-- Bounded complex lower-frame theorem with a canonical spectral subspace. -/
 theorem generalizedSinTheta_bounded_spectralSubspace_of_spectrumGap
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →L[ℂ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →L[ℂ] F) (hA0 : A0.IsSymmetric)
@@ -125,14 +127,14 @@ theorem generalizedSinTheta_bounded_spectralSubspace_of_spectrumGap
           (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS) hframe hε) ∧
-      δ * ε * N.gauge
+      δ * ε * N.gaugeReal
         (directedSinThetaOperator X
           (selfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
             (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS) hframe hε)
-        ≤ N.gauge
+        ≤ N.gaugeReal
           (generalResidual A X A0) := by
   apply generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
     N ((A.toLinearMap.toPMap ⊤))
@@ -160,7 +162,8 @@ variable {E F : Type v}
 /-- Bounded real isometric theorem with a canonical descended spectral
 subspace. -/
 theorem sinTheta_bounded_spectralSubspace_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →L[ℝ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →L[ℝ] F) (hA0 : A0.IsSymmetric)
@@ -187,7 +190,7 @@ theorem sinTheta_bounded_spectralSubspace_real
           (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS).adjoint) ∘L X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
         ((ContinuousLinearMap.id ℝ E -
           realSelfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
@@ -199,7 +202,7 @@ theorem sinTheta_bounded_spectralSubspace_real
             (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS).adjoint) ∘L X)
-        ≤ N.gauge
+        ≤ N.gaugeReal
           (generalResidual A X A0) := by
   apply sinTheta_unbounded_real_spectralSubspace
     N ((A.toLinearMap.toPMap ⊤))
@@ -218,7 +221,8 @@ theorem sinTheta_bounded_spectralSubspace_real
 /-- Bounded real lower-frame theorem with a canonical descended spectral
 subspace. -/
 theorem sinTheta_generalized_bounded_spectralSubspace_real
-    (N : FanDominantIdealFamily (𝕜 := ℝ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℝ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →L[ℝ] E) (hA : A.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S)
     (A0 : F →L[ℝ] F) (hA0 : A0.IsSymmetric)
@@ -241,14 +245,14 @@ theorem sinTheta_generalized_bounded_spectralSubspace_real
           (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
           S hS) hframe hε) ∧
-      δ * ε * N.gauge
+      δ * ε * N.gaugeReal
         (directedSinThetaOperatorReal X
           (realSelfAdjointSpectralSubspaceInclusion
             ((A.toLinearMap.toPMap ⊤))
             (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
               (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
             S hS) hframe hε)
-        ≤ N.gauge
+        ≤ N.gaugeReal
           (generalResidual A X A0) := by
   apply generalizedSinTheta_unbounded_real_spectralSubspace
     N ((A.toLinearMap.toPMap ⊤))

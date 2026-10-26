@@ -31,7 +31,8 @@ theorem directOrderedSylvesterEngine_lowerUpper
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A : E →ₗ.[ℂ] E}
     {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -42,8 +43,8 @@ theorem directOrderedSylvesterEngine_lowerUpper
     (hEq : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧
-      δ * N.gauge X ≤
-        N.gauge R := by
+      δ * N.gaugeReal X ≤
+        N.gaugeReal R := by
   exact unbounded_sylvester_mem_and_gauge_le_direct
     (N := N) (A := A) (B := B) (X := X) (C := R) (c := c) (δ := δ)
     hA hB
@@ -58,7 +59,8 @@ theorem directOrderedSylvesterEngine_upperLower
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A : E →ₗ.[ℂ] E}
     {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -69,8 +71,8 @@ theorem directOrderedSylvesterEngine_upperLower
     (hEq : _root_.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧
-      δ * N.gauge X ≤
-        N.gauge R := by
+      δ * N.gaugeReal X ≤
+        N.gaugeReal R := by
   exact unbounded_sylvester_mem_and_gauge_le_direct_swapped
     (N := N) (A := A) (B := B) (X := X) (C := R) (c := c) (δ := δ)
     hA hB

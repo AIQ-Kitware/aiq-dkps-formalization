@@ -170,17 +170,18 @@ theorem sinTheta_spectrum_block_all_kyFan
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     have hdnorm : ‖((d : ℝ) : ℂ)‖ = d := by simp [abs_of_pos hd]
-    have : (FanDominantIdealFamily.kyFan (𝕜 := ℂ)
-        k hk).toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+    have : ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })).toOperatorIdealFamily.IsComplete :=
       inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
     have hraw := sinTheta_spectrum_block_gauge
-      (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk).toSymmetricOperatorIdealFamily
+      ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+        { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+          gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint }))
       hA hB hU hV hd hab hUspec hVspec
-      (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk (B - A))
-    rw [FanDominantIdealFamily.toSymmetric_gaugeReal,
-      FanDominantIdealFamily.toSymmetric_gaugeReal,
-      FanDominantIdealFamily.kyFan_gauge,
-      FanDominantIdealFamily.kyFan_gauge] at hraw
+      (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
     have hone := (projectionBlock_same_compression Vᗮ U
       (((d : ℝ) : ℂ) • (1 : E →L[ℂ] E))).kyFanApproximationGauge_eq k
     have hpert :=

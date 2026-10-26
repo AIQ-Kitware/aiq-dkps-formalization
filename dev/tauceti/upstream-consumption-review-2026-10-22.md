@@ -1010,3 +1010,24 @@ signatures and full types, with three declared absent solutions skipped.
 The auxiliary local-only name parser retains its 23 existing findings,
 including imported-declaration limitations. No broad static-gate or external
 comparator pass is inferred.
+
+### October 25: remove the remaining Fan-family carrier
+
+Generic analytic and geometric consumers now use accepted
+`SymmetricOperatorIdealFamily` carriers with native `IsKyFanDominant`, reading
+real estimates through `gaugeReal`. The `FanDominantIdealFamily` record,
+accessors, conversion views, concrete factories and unused modulus forwarding
+theorem are deleted. Concrete testing families are built directly from native
+`OperatorIdealFamily.kyFan` and its accepted properties at their source uses;
+there is no replacement constructor facade. Operator-norm specialization uses
+accepted `SymmetricOperatorIdealFamily.opNorm`.
+
+`NormalizedUnitaryInvariantNorm` retains source rank-one normalization while
+storing the native family and dominance property directly. The weaker
+where-defined normalized record is preserved. The existing two-part source
+majorization theorem replaces the deleted namespace helper and admits independent
+source/target pairs. The raw complete symmetric-family kernels retain their
+non-Fan scope, and ideal completeness is not added back to generic endpoints.
+Current ownership/source metadata is updated by hand; historical notes remain
+historical. The approximation-number sequence relation and its remaining
+real-valued facade are separate, still-open upstream-consumption obligations.

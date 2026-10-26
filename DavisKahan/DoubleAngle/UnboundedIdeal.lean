@@ -553,7 +553,8 @@ theorem sinTwoTheta_addBounded_gauge_of_intervalExterior
 /-- Source-facing unitary-invariant-family wrapper for the spectrum-gap ideal
 form. -/
 theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -570,11 +571,11 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock
+      δ * N.gaugeReal (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
-        2 * N.gauge E := by
+        2 * N.gaugeReal E := by
   let T := sinTwoThetaIdealBlock
     (selfAdjointSpectralSubspace A hA B hB)
     (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
@@ -584,15 +585,18 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     intro k
     rcases Nat.eq_zero_or_pos k with rfl | hk
     · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
-    let M := FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
-    have : M.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+    let M := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
+    have : M.toOperatorIdealFamily.IsComplete :=
       inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
     have hmain := sinTwoTheta_addBounded_gauge_of_spectrum_gap
-      M.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
-      hβα hδ hBlow hBhigh hBcomplSpec (FanDominantIdealFamily.kyFan_mem k hk E)
+      M A hA E hE B S hB hS
+      hβα hδ hBlow hBhigh hBcomplSpec (by simp [M, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     have hbound : δ * kyFanApproximationGauge k T ≤ 2 * kyFanApproximationGauge k E := by
-      simpa only [FanDominantIdealFamily.toSymmetric_gaugeReal, M,
-        FanDominantIdealFamily.kyFan_gauge, T] using hmain.2
+      simpa only [M,
+        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge, T] using hmain.2
     linarith
   obtain ⟨hT, hbound⟩ :=
     mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N (half_pos hδ) hEmem hprefix
@@ -601,7 +605,8 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
 /-- Source-facing unitary-invariant-family wrapper for the set-localized ideal
 form. -/
 theorem sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -613,11 +618,11 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
-      δ * N.gauge (sinTwoThetaIdealBlock
+      δ * N.gaugeReal (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
-        2 * N.gauge E := by
+        2 * N.gaugeReal E := by
   obtain ⟨hBlow, hBhigh⟩ :=
     selfAdjointSpectralRestriction_semibounded_of_subset_Icc A hA B hB hBsub
   have hBcomplSpec :=

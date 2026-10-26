@@ -529,7 +529,8 @@ constants: the tangent carries the factor `δ / 2` and is compared with the
 residual `B` itself, so no gauge of a scalar multiple of `B` is needed.  Ideal
 membership of the scaled tangent is concluded, not assumed. -/
 theorem mem_and_gauge_le_of_doubleAngleEigenbasis
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -542,7 +543,7 @@ theorem mem_and_gauge_le_of_doubleAngleEigenbasis
     (hab : a < b) {T : H →L[ℂ] H}
     (hT : IsDoubleAngleEigenbasis A U Z T) (hBmem : N.Mem B) :
     N.Mem ((((b - a) / 2 : ℝ) : ℂ) • T) ∧
-      N.gauge ((((b - a) / 2 : ℝ) : ℂ) • T) ≤ N.gauge B := by
+      N.gaugeReal ((((b - a) / 2 : ℝ) : ℂ) • T) ≤ N.gaugeReal B := by
   refine mem_and_gauge_le_of_all_kyFanApproximationGauge_le
     N hBmem fun k => ?_
   rw [kyFanApproximationGauge_smul, Complex.norm_real, Real.norm_eq_abs,
@@ -1497,7 +1498,8 @@ unitarily invariant ideal gauge, on a compressed eigenbasis.**
 `δ N(tan 2Θ₀) ≤ 2 N(R)` in the repository's scaled form.  Ideal membership of
 the scaled tangent is concluded, not assumed. -/
 theorem mem_and_gauge_le_of_compressedDoubleAngleEigenbasis
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -1510,7 +1512,7 @@ theorem mem_and_gauge_le_of_compressedDoubleAngleEigenbasis
     (hab : a < b) {T : H →L[ℂ] H}
     (hT : IsCompressedDoubleAngleEigenbasis A U Z T) (hBmem : N.Mem B) :
     N.Mem ((((b - a) / 2 : ℝ) : ℂ) • T) ∧
-      N.gauge ((((b - a) / 2 : ℝ) : ℂ) • T) ≤ N.gauge B := by
+      N.gaugeReal ((((b - a) / 2 : ℝ) : ℂ) • T) ≤ N.gaugeReal B := by
   refine mem_and_gauge_le_of_all_kyFanApproximationGauge_le
     N hBmem fun k => ?_
   rw [kyFanApproximationGauge_smul, Complex.norm_real, Real.norm_eq_abs,
@@ -1871,7 +1873,8 @@ unitarily invariant ideal gauge, on an invariant filtration.**
 of the scaled tangent concluded rather than assumed, and with the eigenbasis
 hypothesis replaced throughout by finite-dimensional `A`-invariance. -/
 theorem mem_and_gauge_le_of_invariantDoubleAngleFiltration
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -1884,7 +1887,7 @@ theorem mem_and_gauge_le_of_invariantDoubleAngleFiltration
     (hab : a < b) {T : H →L[ℂ] H}
     (hT : HasInvariantDoubleAngleFiltration A U Z T) (hBmem : N.Mem B) :
     N.Mem ((((b - a) / 2 : ℝ) : ℂ) • T) ∧
-      N.gauge ((((b - a) / 2 : ℝ) : ℂ) • T) ≤ N.gauge B :=
+      N.gaugeReal ((((b - a) / 2 : ℝ) : ℂ) • T) ≤ N.gaugeReal B :=
   mem_and_gauge_le_of_compressedDoubleAngleEigenbasis N hred hB hZsa hZ2 hZdom
     hZcomm hUa hUb hab
     (isCompressedDoubleAngleEigenbasis_of_hasInvariantDoubleAngleFiltration
@@ -2405,7 +2408,8 @@ theorem gap_mul_kyFan_le_two_mul_kyFan_unboundedReflectionTangent
 tangent.  The same honest caveat as for the Ky Fan form applies: the surviving
 hypothesis is the attainment clause, not a hypothesis about `A` alone. -/
 theorem mem_and_gauge_le_unboundedReflectionTangent
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (hred : _root_.LinearPMap.IsReducing A U) (hB : TauCeti.IsOddFor U B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
@@ -2419,8 +2423,8 @@ theorem mem_and_gauge_le_unboundedReflectionTangent
     (hT : IsCompressedDoubleAngleEigenbasis A U Z
       (unboundedReflectionTangent U Z)) (hBmem : N.Mem B) :
     N.Mem ((((b - a) / 2 : ℝ) : ℂ) • unboundedReflectionTangent U Z) ∧
-      N.gauge ((((b - a) / 2 : ℝ) : ℂ) • unboundedReflectionTangent U Z) ≤
-        N.gauge B :=
+      N.gaugeReal ((((b - a) / 2 : ℝ) : ℂ) • unboundedReflectionTangent U Z) ≤
+        N.gaugeReal B :=
   mem_and_gauge_le_of_compressedDoubleAngleEigenbasis N hred hB hZsa hZ2 hZdom
     hZcomm hUa hUb hab hT hBmem
 

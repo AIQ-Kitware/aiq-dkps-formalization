@@ -40,7 +40,8 @@ variable {E F G H : Type v}
 /-- Bounded data packaged for derivation from the canonical generalized
 unbounded theorem. -/
 structure BoundedGeneralSinThetaProblem
-    (N : FanDominantIdealFamily (𝕜 := ℂ)) where
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant] where
   A : E →L[ℂ] E
   A₀ : F →L[ℂ] F
   Λ₁ : G →L[ℂ] G
@@ -68,7 +69,8 @@ namespace BoundedGeneralSinThetaProblem
 /-- Embed a bounded problem into the full-domain closed-operator problem used
 by the canonical theorem. -/
 noncomputable def toGeneral
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : BoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     FormBoundedGeneralSinThetaProblem (E := E) (F := F)
@@ -117,17 +119,18 @@ noncomputable def toGeneral
 
 /-- Bounded generalized sine theorem derived from the canonical theorem. -/
 theorem result
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (P : BoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N) :
     N.Mem
         (directedSinThetaOperator P.X P.F₀ P.lowerFrame
           P.frameLowerBound_pos) ∧
       P.gap * P.frameLowerBound *
-          N.gauge
+          N.gaugeReal
             (directedSinThetaOperator P.X P.F₀ P.lowerFrame
               P.frameLowerBound_pos)
-        ≤ N.gauge
+        ≤ N.gaugeReal
             (generalResidual P.A P.X P.A₀) :=
   FormBoundedGeneralSinThetaProblem.result N (P.toGeneral N)
 

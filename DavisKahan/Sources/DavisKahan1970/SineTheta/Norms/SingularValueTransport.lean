@@ -256,7 +256,7 @@ section IdealGauge
 
 /-! ### Gauge transport
 
-A `FanDominantIdealFamily` assigns a gauge to rectangular operators
+A a native symmetric ideal family with Ky Fan dominance assigns a gauge to rectangular operators
 between Hilbert spaces drawn from a *single* universe: that is how a family
 closed under adjoints has to quantify its fields, and it is not an incidental
 restriction.  A two-universe variant would be a strictly weaker
@@ -276,13 +276,14 @@ variable {G H : Type vS}
 /-- Transport ideal membership and exact gauge equality along complete
 singular-value equality. -/
 theorem mem_and_gauge_eq
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A B : G →L[𝕜] H}
     (h : SameApproximationSingularValues A B)
     (hB : N.Mem B) :
     N.Mem A ∧
-      N.gauge A =
-        N.gauge B := by
+      N.gaugeReal A =
+        N.gaugeReal B := by
   have hs : ContinuousLinearMap.SameSingularValues A B := by
     apply (ContinuousLinearMap.sameSingularValues_iff A B).mpr
     intro n
@@ -290,12 +291,12 @@ theorem mem_and_gauge_eq
     have hn' : (A.singularValue n : ℝ) = (B.singularValue n : ℝ) := by
       simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hn
     exact_mod_cast hn'
-  have hraw : N.toSymmetricOperatorIdealFamily.gauge A =
-      N.toSymmetricOperatorIdealFamily.gauge B :=
+  have hraw : N.gauge A =
+      N.gauge B :=
     OperatorIdealFamily.gauge_eq_of_sameSingularValues
-      (Φ := N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily) hs
+      (Φ := N.toOperatorIdealFamily) hs
   have hA : N.Mem A := by
-    change N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤
+    change N.gauge A ≠ ⊤
     rw [hraw]
     exact hB
   exact ⟨hA, congrArg ENNReal.toReal hraw⟩
@@ -303,15 +304,16 @@ theorem mem_and_gauge_eq
 /-- Transfer a sharp scalar gauge estimate to any operator with the same
 complete singular-value sequence. -/
 theorem mem_and_mul_gauge_le
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {A B C : G →L[𝕜] H} {c : ℝ}
     (h : SameApproximationSingularValues A B)
     (hB : N.Mem B)
-    (hbound : c * N.gauge B ≤
-      N.gauge C) :
+    (hbound : c * N.gaugeReal B ≤
+      N.gaugeReal C) :
     N.Mem A ∧
-      c * N.gauge A ≤
-        N.gauge C := by
+      c * N.gaugeReal A ≤
+        N.gaugeReal C := by
   obtain ⟨hA, hgauge⟩ := h.mem_and_gauge_eq N hB
   refine ⟨hA, ?_⟩
   rw [hgauge]
@@ -370,13 +372,14 @@ theorem mem_and_gauge_eq
     {G H : Type vS}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     {canonical : G →L[𝕜] H}
     (S : SinThetaRepresentative canonical)
     (hcanonical : N.Mem canonical) :
     N.Mem S.operator ∧
-      N.gauge S.operator =
-        N.gauge canonical :=
+      N.gaugeReal S.operator =
+        N.gaugeReal canonical :=
   S.same_singular_values.mem_and_gauge_eq N hcanonical
 
 end SinThetaRepresentative

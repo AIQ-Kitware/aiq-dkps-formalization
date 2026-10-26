@@ -57,7 +57,8 @@ variable {E F G H : Type v}
 Ky-Fan-dominant ideal-family layer.  This is the reusable engine behind the
 paper-facing theorem below. -/
 theorem sinTheta_unbounded_formGap_idealFamily_rclike
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (F₀ : H →L[𝕜] E)
     (hA : _root_.IsSelfAdjoint D.A)
@@ -70,30 +71,30 @@ theorem sinTheta_unbounded_formGap_idealFamily_rclike
     (hR : N.Mem D.residual) :
     N.Mem
         ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
-      δ * N.gauge
+      δ * N.gaugeReal
           ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X)
-        ≤ N.gauge D.residual := by
+        ≤ N.gaugeReal D.residual := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
   have hC := adjointResidualBlock_mem_and_gauge_le
-    N.toSymmetricOperatorIdealFamily D hdecomp.isometry₁ hR
+    N D hdecomp.isometry₁ hR
   have hRaw :
       N.Mem (D.X.adjoint ∘L D.F₁) ∧
-        δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
-          N.gauge (-(D.residual.adjoint ∘L D.F₁)) := by
+        δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
+          N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) := by
     apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC.1
     intro k
     exact unbounded_sylvester_kyFan hA₀ hΛ₁ hδ hgap hEq k
   have hC' :
-      N.gauge (-(D.residual.adjoint ∘L D.F₁)) ≤ N.gauge D.residual := by
-    simpa only [FanDominantIdealFamily.toSymmetric_gaugeReal] using hC.2
+      N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) ≤ N.gaugeReal D.residual := by
+    simpa only [SymmetricOperatorIdealFamily.gaugeReal] using hC.2
   have hBlock :
       N.Mem (D.X.adjoint ∘L D.F₁) ∧
-        δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤ N.gauge D.residual :=
+        δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤ N.gaugeReal D.residual :=
     ⟨hRaw.1, hRaw.2.trans hC'⟩
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
-    N.toSymmetricOperatorIdealFamily D.X F₀ D.F₁ hX hdecomp hBlock.1
+    N D.X F₀ D.F₁ hX hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-  rw [FanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
+
   rw [hAngle.2]
   exact hBlock.2
 
@@ -103,7 +104,8 @@ Unlike `sinTheta_unbounded_formGap_idealFamily_rclike`, this stops before conver
 rectangular Sylvester block into the ambient directed sine.  The double-angle reflection
 argument needs exactly this sharper intermediate form. -/
 theorem sinTheta_unbounded_formGap_idealFamily_block_rclike
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -113,24 +115,24 @@ theorem sinTheta_unbounded_formGap_idealFamily_block_rclike
     (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
-        N.gauge (D.residual.adjoint ∘L D.F₁) := by
+      δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
+        N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
   have hC := adjointResidualBlock_mem_and_gauge_le
-    N.toSymmetricOperatorIdealFamily D hF₁ hR
+    N D hF₁ hR
   have hRaw :
       N.Mem (D.X.adjoint ∘L D.F₁) ∧
-        δ * N.gauge (D.X.adjoint ∘L D.F₁) ≤
-          N.gauge (-(D.residual.adjoint ∘L D.F₁)) := by
+        δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
+          N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) := by
     apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
       N hδ hC.1
     intro k
     exact unbounded_sylvester_kyFan hA₀ hΛ₁ hδ hgap hEq k
   have hmem : N.Mem (D.residual.adjoint ∘L D.F₁) :=
-    N.toSymmetricOperatorIdealFamily.comp_right_mem D.F₁
-      (N.toSymmetricOperatorIdealFamily.adjoint_mem hR)
+    N.comp_right_mem D.F₁
+      (N.adjoint_mem hR)
   refine ⟨hRaw.1, hRaw.2.trans (le_of_eq ?_)⟩
-  exact N.toSymmetricOperatorIdealFamily.gaugeReal_neg hmem
+  exact N.gaugeReal_neg hmem
 
 /-- Scalar-generic bounded-perturbation block adapter at the full form-bounded gap.
 
@@ -138,7 +140,8 @@ This is the common real/complex engine formerly duplicated by
 `sinTheta_addBounded_gauge_complex_block_of_formGap` and
 `sinTheta_addBounded_gauge_real_block`. -/
 theorem sinTheta_addBounded_gauge_block_of_formGap_rclike
-    (N : FanDominantIdealFamily (𝕜 := 𝕜))
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (A : E →ₗ.[𝕜] E) (hA : IsSelfAdjoint A)
     (Vop : E →L[𝕜] E) (hVop : Vop.IsSymmetric)
     (A₀ : F →ₗ.[𝕜] F) (hA₀ : IsSelfAdjoint A₀)
@@ -155,8 +158,8 @@ theorem sinTheta_addBounded_gauge_block_of_formGap_rclike
     {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
     (hVmem : N.Mem Vop) :
     N.Mem (X.adjoint ∘L F₁) ∧
-      δ * N.gauge (X.adjoint ∘L F₁) ≤
-        N.gauge ((Vop ∘L X).adjoint ∘L F₁) := by
+      δ * N.gaugeReal (X.adjoint ∘L F₁) ≤
+        N.gaugeReal ((Vop ∘L X).adjoint ∘L F₁) := by
   let D := boundedPerturbationSinThetaData A Vop A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
@@ -164,7 +167,7 @@ theorem sinTheta_addBounded_gauge_block_of_formGap_rclike
     exact addBounded_isSelfAdjoint A hA Vop hVop
   have hResMem : N.Mem D.residual := by
     change N.Mem (Vop ∘L X)
-    exact N.toSymmetricOperatorIdealFamily.comp_right_mem X hVmem
+    exact N.comp_right_mem X hVmem
   exact sinTheta_unbounded_formGap_idealFamily_block_rclike
     N D hD hA₀ hΛ₁ hF₁iso hδ hgap hResMem
 
@@ -244,10 +247,13 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain := sinTheta_unbounded_formGap_idealFamily_rclike
-      (FanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hkpos)
+      ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
+        { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hkpos
+          gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hkpos).gauge_adjoint }))
       D F₀ hA hA₀ hΛ₁ hE₀ hExact hδ hgap
-      (FanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hkpos R)
-    simpa only [D, FanDominantIdealFamily.kyFan_gauge] using hmain.2
+      (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+    simpa only [D, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
 
 /-- **Davis--Kahan 1970, Section 2 `sin Theta` theorem, scalar-generic
 paper-facing form.**

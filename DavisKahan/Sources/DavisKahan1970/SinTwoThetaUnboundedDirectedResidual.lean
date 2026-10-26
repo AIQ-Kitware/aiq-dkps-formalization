@@ -121,19 +121,22 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
     refine ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
-  have : (FanDominantIdealFamily.kyFan (𝕜 := ℂ)
-      k hk).toSymmetricOperatorIdealFamily.toOperatorIdealFamily.IsComplete :=
+  have : ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+    { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+      gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })).toOperatorIdealFamily.IsComplete :=
     inferInstanceAs (TauCeti.OperatorIdealFamily.kyFan ℂ k hk).IsComplete
   have hraw := sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
-    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk).toSymmetricOperatorIdealFamily
+    ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint }))
     A hA ((-2 : ℂ) • trialOffDiagonalPart V M R) hDsa B hB V hβα hδ
     hBlow hBhigh hBcomplSpec (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
-  rw [FanDominantIdealFamily.toSymmetric_gaugeReal,
-    FanDominantIdealFamily.toSymmetric_gaugeReal,
-    FanDominantIdealFamily.kyFan_gauge,
-    FanDominantIdealFamily.kyFan_gauge] at hraw
+    (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  rw [        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   -- flip the block to the orientation of the doubling identity
   have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
@@ -292,13 +295,17 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
     norm_num
   have hraw := DavisKahan.sinTwoTheta_reflectionResidual_block_gauge_of_formGap
     A hA B hB
-    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk)
+    ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint }))
     ((-2 : ℂ) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
-  rw [FanDominantIdealFamily.kyFan_gauge,
-    FanDominantIdealFamily.kyFan_gauge] at hraw
+    (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
@@ -452,13 +459,17 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     norm_num
   have hraw := DavisKahan.sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
     hA hred
-    (FanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk)
+    ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
+      { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
+        gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint }))
     ((-2 : ℂ) • trialOffDiagonalPart V M R) hDsa V hδ hgap
     (reflectionOperator_mem_domain hVdom)
     (trialReflection_intertwines hA hVdom hres)
-    (FanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
-  rw [FanDominantIdealFamily.kyFan_gauge,
-    FanDominantIdealFamily.kyFan_gauge] at hraw
+    (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
+      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num

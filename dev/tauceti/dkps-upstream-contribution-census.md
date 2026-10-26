@@ -1303,3 +1303,37 @@ on universe signatures and full types; three declared absent solutions were
 skipped. The auxiliary local-only declaration-name parser still reports its
 23 existing findings, including accepted imported declarations it does not
 index; no broad static-gate or external comparator pass is claimed.
+
+### October 25: retire the Fan-dominant carrier and factories
+
+The remaining `FanDominantIdealFamily` record is deleted. Its `Mem` and real
+`gauge` aliases, conversion views, operator-norm/Ky Fan factories and the unused
+modulus forwarding theorem are removed with it. Generic consumers now take
+accepted `SymmetricOperatorIdealFamily` and the native
+`OperatorIdealFamily.IsKyFanDominant` property directly; estimates use the
+existing `gaugeReal` view. No replacement record, type alias, exported
+constructor adapter or old-name forwarding theorem is introduced.
+
+The source-specific `NormalizedUnitaryInvariantNorm` stores that native family
+and property directly, with its rank-one normalization unchanged. The separate
+where-defined normalized norm record retains its weaker comparison law. Native
+`OperatorIdealFamily.kyFan`, its dominance/completeness instances and its
+adjoint-invariance theorem supply the finite testing families inside the actual
+source proofs. The ordinary operator-norm specialization uses accepted
+`SymmetricOperatorIdealFamily.opNorm`.
+
+The two-part real-valued membership/comparison consequence is consolidated in
+the existing source theorem
+`mem_and_gauge_le_of_all_kyFanApproximationGauge_le`, now allowing independent
+operator pairs. Source-facing Sylvester, sine and double-angle statements keep
+their full Hilbert-space, domain, spectral-gap and residual hypotheses. Ideal
+completeness remains only where the analytic kernel requires it; complete
+symmetric-family kernels without Fan dominance remain intact.
+
+Pre-change local source is DKPS `a54c126cd`, with existing authorship and
+licenses preserved. The accepted Tau Ceti pin is unchanged at
+`efded067c28ffca3483fd731674eb13b42543fbb`. This is direct API consumption;
+matching statements alone do not establish historical proof descent. The
+extraction manifest, namespace map and current source norm-class readings
+follow the actual declarations. Papers, visualizations, historical exploration
+snapshots and the three original untracked files are untouched.

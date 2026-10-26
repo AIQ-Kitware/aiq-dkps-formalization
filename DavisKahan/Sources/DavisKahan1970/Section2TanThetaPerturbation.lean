@@ -144,7 +144,8 @@ unitarily invariant ideal gauge:
 No rank comparison between `Z` and `V`, no assumed tangent representative, and
 an arbitrary complete complex Hilbert space. -/
 theorem theorem6_3_perturbation_equalRank
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T E : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [FiniteDimensional ℂ Z]
@@ -156,8 +157,8 @@ theorem theorem6_3_perturbation_equalRank
     (hinv : ∀ x ∈ Z, (T + E) x ∈ Z)
     (hEmem : N.Mem (E ∘L Z.subtypeL)) :
     N.Mem (theorem63DirectedTangent Z V) ∧
-      delta * N.gauge (theorem63DirectedTangent Z V) ≤
-        N.gauge (E ∘L Z.subtypeL) := by
+      delta * N.gaugeReal (theorem63DirectedTangent Z V) ≤
+        N.gaugeReal (E ∘L Z.subtypeL) := by
   have : CompleteSpace Z := FiniteDimensional.complete ℂ Z
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta
     hEmem ?_
@@ -180,7 +181,8 @@ the perturbation companion of the equal-dimensional infinite/noncompact residual
 `TanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`; the bridge is the same one
 line of algebra as in the finite case. -/
 theorem theorem6_3_perturbation_infiniteTrial
-    (N : FanDominantIdealFamily (𝕜 := ℂ))
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
     (T E : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection]
     [Z.HasOrthogonalProjection] [CompleteSpace Z]
@@ -194,7 +196,7 @@ theorem theorem6_3_perturbation_infiniteTrial
     ∃ tanTheta0 : Z →L[ℂ] H,
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
       N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge (E ∘L Z.subtypeL) := by
+      delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal (E ∘L Z.subtypeL) := by
   obtain ⟨tanTheta0, htan⟩ :=
     exists_hasTheorem63DirectedTangentApproximationNumbersInfinite Z V
       (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial T V Z hT hV

@@ -164,7 +164,7 @@ theorem corollary4_1_directRotation_sourceExact_complex
       hWunitary hWmap hWmem
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
   obtain ⟨hmem, hle⟩ :=
-    N.toFanDominantIdealFamily.majorization_mem_and_gauge_le hmem₀
+    (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le N.toSymmetricOperatorIdealFamily) hmem₀
       (fun k => le_of_eq (hsame.kyFanGaugeReal_eq k))
   exact ⟨hmem, hle.trans hle₀⟩
 
@@ -244,7 +244,7 @@ theorem corollary4_1_directRotation_sourceExact_real
       hWunitary hWmap hWmem
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
   obtain ⟨hmem, hle⟩ :=
-    N.toFanDominantIdealFamily.majorization_mem_and_gauge_le hmem₀
+    (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le N.toSymmetricOperatorIdealFamily) hmem₀
       (fun k => le_of_eq (hsame.kyFanGaugeReal_eq k))
   exact ⟨hmem, hle.trans hle₀⟩
 
