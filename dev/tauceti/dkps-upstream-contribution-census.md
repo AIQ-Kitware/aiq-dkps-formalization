@@ -1337,3 +1337,21 @@ matching statements alone do not establish historical proof descent. The
 extraction manifest, namespace map and current source norm-class readings
 follow the actual declarations. Papers, visualizations, historical exploration
 snapshots and the three original untracked files are untouched.
+
+The focused native carrier/normalization build passed (6,764 jobs), following
+the cache fetch. The full default build passed (21,029 jobs), with warnings
+treated as errors, and was immediately committed as `1be42ccc1`. Explicit
+`Challenge` and `DavisKahan.Audits.All` builds passed (20,801 jobs), following
+their cache fetch. All 42 implemented comparator targets matched on universe
+signatures and full types; three declared absent solutions were skipped.
+The auxiliary local-only name parser reports 23 findings, including imported
+native declarations it does not index and historical map destinations. No
+broad static-gate or external comparator pass is claimed.
+
+A subsequent `git ls-remote --symref` query observed accepted Tau Ceti `main`
+at `97bf123075b7f142c1e37b827b6b37c156803248`. This checkpoint retains the
+validated `efded067` pin. The next dependency task is to inspect that accepted
+revision, align its exact Mathlib/toolchain inputs, repin and retire any further
+overlap it supplies. The local approximation-number equality relation and
+real-valued facade remain separate migration obligations; this checkpoint does
+not claim the whole consumption campaign complete.

@@ -1031,3 +1031,18 @@ non-Fan scope, and ideal completeness is not added back to generic endpoints.
 Current ownership/source metadata is updated by hand; historical notes remain
 historical. The approximation-number sequence relation and its remaining
 real-valued facade are separate, still-open upstream-consumption obligations.
+
+The native carrier/normalization core compiled (6,764 jobs). The full default
+build passed (21,029 jobs), with warnings treated as errors, and was immediately
+committed as `1be42ccc1`. Explicit `Challenge` and `DavisKahan.Audits.All`
+builds passed (20,801 jobs). Each build followed its cache fetch. The signature
+preflight matched all 42 implemented targets on universe signatures and full
+types; three declared absent solutions were skipped. The auxiliary local-only
+name parser reports 23 findings, including native imported declarations and
+historical map destinations; no broad static-gate pass is claimed.
+
+After these checks, `git ls-remote --symref` showed accepted Tau Ceti `main` at
+`97bf123075b7f142c1e37b827b6b37c156803248`. The validated checkpoint still uses
+`efded067c28ffca3483fd731674eb13b42543fbb`. Inspecting the newer accepted APIs,
+aligning their exact Mathlib/toolchain inputs and repinning are the next
+dependency task, before further retirement of local overlaps.
