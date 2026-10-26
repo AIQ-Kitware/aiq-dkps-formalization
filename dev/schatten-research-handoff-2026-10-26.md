@@ -1161,3 +1161,44 @@ its optimizing `-1` sector excluded. These steps must establish the
 canonical inactive action before dropping the explicit tail hypothesis
 from the cutoff classification. Paper and visualization files are
 unchanged; historical novelty has not been upgraded by these lemmas.
+
+## Hilbert-space stationarity is now compiled
+
+`hasDerivAt_schatten_unitary_rankOne_variation` proves the derivative
+of the actual native Schatten displacement power (converted to a real
+finite cost) along every unit-vector phase direction, at every real
+time. The exponent is any finite `p>1`; the unitary displacement need
+only belong to `S_p`. Neither finite rank nor separability is assumed.
+The proof passes finite-rank derivatives to the limit using native
+ideal convergence and locally uniform gradient pairings, including
+crossings through identity. Focused build passed (6,832 jobs).
+
+`gradient_reflection_conjugate_eq_neg_of_schatten_minimal` now proves
+`J_K * G(U) * J_K = -G(U)` for every finite-cost global minimizer on an
+arbitrary complex Hilbert space, at every finite `p>1`. Rank-one feasible
+variations give the two vanishing diagonal quadratic forms;
+self-adjoint polarization proves that both diagonal compressions vanish.
+Only the finite-cost variation curves are converted to real costs: the
+argument does **not** reinterpret infinite extended cost as a real zero.
+Focused stationarity build passed (6,838 jobs).
+
+Correction to the earlier proposed kernel step: an optimizing right-angle
+reflection legitimately has eigenvalue `-1`. The classification must
+retain and classify this finite reflecting defect sector. It must not
+exclude every `-1` direction. The proved kernel theorem deliberately
+allows them. Stationarity makes the full gradient kernel source-reducing;
+its compact-displacement self-adjoint unitary action has a finite
+negative sector. Saturating that sector under the source projection
+isolates a finite reducing reflection block, with fixed complement.
+The finite optimizer classification should then identify its right-angle
+and fixed geometry.
+
+The next exact obligation is now geometric/spectral rather than
+variational: use stationarity to prove that each positive gradient-modulus
+cutoff is a finite common reducing block of the projection pair and
+transporter. Its actual restriction is optimal by the restriction theorem
+and hence has the compiled finite phase/defect normal form. Assemble
+these restrictions with the finite reflecting kernel sector to force
+canonical action on all inactive principal-angle sectors. Only then can
+the explicit tail hypothesis be removed from the cutoff classification.
+The unrestricted every-optimizer iff is still not claimed.

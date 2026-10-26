@@ -47,3 +47,18 @@ theorem exp_smul_starProjection (M : Submodule ℂ E) [M.HasOrthogonalProjection
     _ = _ := by rw [M.starProjection_add_starProjection_orthogonal]
 
 end Submodule
+
+namespace InnerProductSpace
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+/-- A phase variation in one unit-vector direction has an exact
+rank-one formula, in arbitrary ambient Hilbert dimension. -/
+theorem exp_smul_rankOne_of_norm_eq_one (x : E) (hx : ‖x‖ = 1) (a : ℂ) :
+    NormedSpace.exp (a • rankOne ℂ x x) = 1 + (Complex.exp a - 1) • rankOne ℂ x x := by
+  have hP : rankOne ℂ x x = (ℂ ∙ x).starProjection := by
+    ext y
+    exact (Submodule.starProjection_unit_singleton ℂ hx y).symm
+  rw [hP, Submodule.exp_smul_starProjection]
+
+end InnerProductSpace
