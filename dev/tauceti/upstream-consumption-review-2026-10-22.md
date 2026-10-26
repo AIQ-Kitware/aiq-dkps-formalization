@@ -1316,3 +1316,26 @@ estimate remain. In particular, native `Submodule.IsReducing` must replace
 `ContinuousLinearMap.Reduces` in a separate consumer migration; this cleanup
 does not treat the existing local carrier as a final architecture. Papers,
 visualizations and original untracked files remain untouched.
+
+Validation for checkpoint `8de5c2569`: full default build passed (21,037 jobs),
+with compiler/linter warnings treated as errors. `Challenge` and
+`DavisKahan.Audits.All` passed separately (20,811 jobs). Each build followed
+`lake exe cache get`. Exact signature preflight passed all 42 compared
+declarations on universes and full types; three declared absent solutions
+were skipped. No external comparator result is inferred. The native scoped
+registration therefore preserves the existing comparator surfaces.
+
+The auxiliary local-only declaration-name parser reports its 23 native-import /
+historical-map findings; no aliases were added to silence that parser. Only the
+three original untracked files remain outside Git, unchanged. No paper or
+visualization changes are included.
+
+The next substantive carrier migration is the bounded reducing predicate:
+replace `ContinuousLinearMap.Reduces A U` with accepted
+`U.IsReducing (A : Module.End 𝕜 E)` from `InvariantSubspace`, then consume its
+invariance and projection-commutation API directly and delete the displaced
+qualitative proofs. Preserve the separate quantitative
+`LinearMap.norm_starProjection_apply_le_of_mem_orthogonal` statement unless an
+accepted theorem covers its actual linear-map / incomplete-ambient scope.
+The real approximation-number and Ky Fan views also remain open migration
+obligations; no whole-goal completion is claimed by these checkpoints.
