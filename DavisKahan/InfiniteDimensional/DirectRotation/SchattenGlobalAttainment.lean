@@ -8,6 +8,7 @@ module
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenSubcriticalTail
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFiniteCorrection
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenGlobalLowerBound
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCanonical
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.ReducingSpectralTrace
 
 /-!
@@ -155,4 +156,99 @@ theorem exists_unitary_minimizing_schatten_transport_of_projection_sub_ne_top
     exists_schatten_minimizer_by_finite_correction p hp hp1 hp2 K L J hD c hc hc1 hcrit
   exact ⟨U, hmap, hfinite, hcost, hmin⟩
 
+/-- At the exact critical sine cutoff, a global optimizer has an
+explicit finite update budget controlled by the native projection
+difference cost. Critical eigenspaces need no phase correction. -/
+theorem exists_schatten_minimizer_with_critical_rank_budget
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (J : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
+    (hD : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (K.starProjection - L.starProjection) ≠ ∞) :
+    ∃ U : E ≃ₗᵢ[ℂ] E, ∃ n : ℕ,
+      K.map U.toLinearMap = L ∧
+      ((nonacuteDirectRotation K L J).toLinearMap - U.toLinearMap).rank ≤ n ∧
+      (n : ℝ≥0∞) * ENNReal.ofReal (Real.sin (criticalAngle p.toReal)) ^ p.toReal ≤
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+          (K.starProjection - L.starProjection) ^ p.toReal ∧
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (U : E →L[ℂ] E)) ≠ ∞ ∧
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+          (1 - (U : E →L[ℂ] E)) ^ p.toReal =
+        (∑' j, ENNReal.ofReal (phaseMinimum p.toReal
+          (Real.arcsin ((K.sinThetaMap L).singularValue j : ℝ)))) ∧
+      ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+            (1 - (U : E →L[ℂ] E)) ≤
+          (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+            (1 - (T : E →L[ℂ] E)) := by
+  let c := Real.sin (criticalAngle p.toReal)
+  have hangle := criticalAngle_mem p.toReal hp1 hp2
+  have hc : 0 < c := Real.sin_pos_of_pos_of_lt_pi hangle.1
+    (by linarith [hangle.2, Real.pi_pos])
+  have hc1 : c < 1 := by
+    have h := Real.strictMonoOn_sin
+      ⟨by linarith [hangle.1, Real.pi_pos], hangle.2.le⟩
+      ⟨by linarith [Real.pi_pos], le_rfl⟩ hangle.2
+    simpa only [Real.sin_pi_div_two] using h
+  have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top
+    p.toReal hp1.le (K.starProjection - L.starProjection) hD
+  obtain ⟨U, hmap, _, hRank, hfinite, hcost, hmin⟩ :=
+    exists_schatten_minimizer_by_finite_correction p hp hp1 hp2 K L J hD c hc hc1 le_rfl
+  exact ⟨U, Module.finrank ℂ (eigenSpan (K.sinAngleOperator L) (Set.Ioi c)), hmap, hRank,
+    finrank_sine_spectral_cutoff_mul_rpow_le_schatten_projection_sub p.toReal hp1.le
+      K L hcompact c hc, hfinite, hcost, hmin⟩
+
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition
+
+namespace TauCeti.DavisKahan.InfiniteDimensional
+
+open scoped ENNReal
+
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+/-- **Schatten attainment at every finite exponent greater than one.**
+Balanced Schatten projection pairs admit a finite-cost global minimizer.
+Below two this uses the finite phase correction; at and above two the
+canonical rotation itself is optimal. -/
+theorem exists_unitary_minimizing_schatten_transport_of_projection_sub_ne_top
+    (p : ℝ) (hp : 1 < p)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (hD : (OperatorIdealFamily.schatten ℂ p hp.le).gauge
+      (K.starProjection - L.starProjection) ≠ ∞)
+    (hbalance : Module.finrank ℂ (halmosSourceDefect K L) =
+      Module.finrank ℂ (halmosTargetDefect K L)) :
+    ∃ R : E ≃ₗᵢ[ℂ] E, K.map R.toLinearMap = L ∧
+      (OperatorIdealFamily.schatten ℂ p hp.le).gauge (1 - (R : E →L[ℂ] E)) ≠ ∞ ∧
+      ∀ U : E ≃ₗᵢ[ℂ] E, K.map U.toLinearMap = L →
+        (OperatorIdealFamily.schatten ℂ p hp.le).gauge (1 - (R : E →L[ℂ] E)) ≤
+          (OperatorIdealFamily.schatten ℂ p hp.le).gauge (1 - (U : E →L[ℂ] E)) := by
+  by_cases hp2 : 2 ≤ p
+  · have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top p
+      hp.le (K.starProjection - L.starProjection) hD
+    obtain ⟨J⟩ := crossedDefectsEquivalent_of_compact_projection_sub_of_finrank_eq K L hcompact hbalance
+    let R := Unitary.linearIsometryEquiv
+      (⟨nonacuteDirectRotation K L J, nonacuteDirectRotation_mem_unitary K L J⟩ :
+        unitary (E →L[ℂ] E))
+    refine ⟨R, ?_, (gauge_nonacuteDirectRotation_ne_top_iff_projection_sub
+      (OperatorIdealFamily.schatten ℂ p hp.le) K L J).mpr hD, ?_⟩
+    · apply (Submodule.map_eq_iff_intertwines_reflection K L R).mpr
+      exact nonacuteDirectRotation_reflection_intertwines K L J
+    · intro U hmap
+      exact schatten_nonacuteDirectRotation_le_transport p hp2 K L J U hmap
+  · let q := ENNReal.ofReal p
+    have hqr : q.toReal = p := ENNReal.toReal_ofReal (by linarith)
+    let : Fact (1 ≤ q) := ⟨ENNReal.one_le_ofReal.mpr hp.le⟩
+    have hq1 : 1 < q.toReal := by rwa [hqr]
+    have hq2 : q.toReal < 2 := by rw [hqr]; exact lt_of_not_ge hp2
+    have hDq : (OperatorIdealFamily.schatten ℂ q.toReal hq1.le).gauge
+        (K.starProjection - L.starProjection) ≠ ∞ := by simpa only [hqr] using hD
+    obtain ⟨U, hmap, hfinite, _, hmin⟩ :=
+      SchattenPhaseTransition.exists_unitary_minimizing_schatten_transport_of_projection_sub_ne_top
+        q ENNReal.ofReal_ne_top hq1 hq2 K L hDq hbalance
+    refine ⟨U, hmap, ?_, ?_⟩
+    · simpa only [hqr] using hfinite
+    · simpa only [hqr] using hmin
+
+end TauCeti.DavisKahan.InfiniteDimensional

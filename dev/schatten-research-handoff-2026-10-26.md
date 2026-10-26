@@ -1023,3 +1023,66 @@ Historical priority of the exact optimized value and finite-correction
 phenomenon still requires theorem-level literature review; Lean verifies
 mathematics, not priority. Paper and visualization edits remain delegated
 to the separate paper agent at the user's request.
+
+## Consequences: critical finite budget and nearest commuting operators
+
+`exists_schatten_minimizer_with_critical_rank_budget` chooses the **exact**
+critical sine cutoff, rather than an arbitrary smaller cutoff. For each
+completed direct rotation `R`, it gives a global optimizer `U` and a
+natural number `n` with
+
+`rank (R-U) <= n` and
+`n * (sin (criticalAngle p))^p <= gauge_p(P_K-P_L)^p`.
+
+The supported sector is the strict sine band above the critical value;
+critical eigenspaces are left in the canonical tail. The numerical
+budget follows from the compiled cutoff count, with no claim that the
+bound is the smallest update rank for every pair.
+
+The native real-exponent declaration
+`InfiniteDimensional.exists_unitary_minimizing_schatten_transport_of_projection_sub_ne_top`
+now covers **every finite `p>1`**. It has moved from
+`SchattenCanonical.lean` into `SchattenGlobalAttainment.lean`; the old
+`p>=2`-only existence proof was removed, not retained as a bridge. The
+stronger fixed-canonical comparison for `p>=2` stays in its original
+module. The earlier handoff paragraph naming `SchattenCanonical` records
+that previous checkpoint, not the present declaration's source home or
+full scope.
+
+`exists_nearest_schatten_commuting_unitary` and its
+`...of_commutator_norm_lt_one` version now cover **every finite `p>1`**,
+replacing their former `p>=2` hypotheses. Commutator Schatten membership
+and crossed-defect balance yield a global nearest unitary preserving
+the prescribed subspace. Operator-norm commutator less than one removes
+the balance condition. The comparisons include every ambient commuting
+unitary.
+
+`exists_nearest_schatten_commuting_unitary_eq_sine_phaseMinimum_sum`
+additionally gives the **exact** nearest-distance power for `1<p<2`,
+as the intrinsic angle sum of the image/source pair. This is a literal
+operator correction theorem, with neither finite ambient dimension nor
+finite-rank commutator assumed. Focused builds passed (7,872 jobs).
+These consequences assert no numerical performance, physical
+implementability, or statistical guarantee.
+
+The strongest remaining optimizer-classification obligation is to show
+that **every** infinite-rank minimizer has the finite active phase data
+and canonical inactive action, and to transfer the finite multiplicity
+and right-defect parameter classification. The exact infinite-rank
+canonical-optimality iff and uniqueness theorem have not yet been
+assembled. A useful next seam is an exact canonical cost theorem for an
+actual **nonacute finite restriction**: right-angle completion data need
+not agree with an independently chosen finite completion, so do not
+identify these operators by acute polar uniqueness. Their displacement
+Gram operators may instead be compared through the restricted cosine.
+The nuclear endpoint and general infinite smoothed attainment need
+separate constructions, and the unrestricted real infinite matching
+problem remains outside the compiled endpoints here.
+
+A fresh narrow search again found the direct finite-matrix predecessor,
+[Bolotnikov--Li--Rodman (2001)](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117),
+which explicitly poses the constrained unitary-nearness problem. Negative
+search results do not establish priority. The exact optimized Schatten
+classification and its ideal extension remain **historically provisional**
+pending the broader theorem-level comparison; the completed Lean proof
+is independent evidence of correctness, not evidence of historical novelty.

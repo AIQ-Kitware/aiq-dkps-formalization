@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 -/
 module
 
-public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCanonical
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenGlobalAttainment
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFeasibility
 public import DavisKahan.Geometry.Polar.CommutingCorrection
 
@@ -14,7 +14,7 @@ public import DavisKahan.Geometry.Polar.CommutingCorrection
 
 A unitary admits a Schatten-small correction commuting with a prescribed
 projection exactly when its commutator is Schatten and the image/source
-crossed defects are balanced. For complex Hilbert spaces and `p >= 2`,
+crossed defects are balanced. For complex Hilbert spaces and `p > 1`,
 the nearest commuting unitary is attained. The minimum compares with
 all ambient commuting unitaries, not a prescribed block family.
 
@@ -74,13 +74,60 @@ open scoped ENNReal
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
+/-- **Exact nonquadratic commuting-unitary correction.** For `1<p<2`,
+the nearest unitary preserving `K` exists and its literal Schatten
+distance power is exactly the intrinsic phase sum for the image/source
+pair. All commuting ambient unitaries are included as competitors. -/
+theorem exists_nearest_schatten_commuting_unitary_eq_sine_phaseMinimum_sum
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K : Submodule ℂ H) [K.HasOrthogonalProjection] (A : H ≃ₗᵢ[ℂ] H)
+    (hcomm : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      ((A : H →L[ℂ] H) * K.starProjection - K.starProjection * (A : H →L[ℂ] H)) ≠ ∞)
+    (hbalance : Module.finrank ℂ (halmosSourceDefect (K.map A.toLinearMap) K) =
+      Module.finrank ℂ (halmosTargetDefect (K.map A.toLinearMap) K)) :
+    ∃ C : H ≃ₗᵢ[ℂ] H, Commute (C : H →L[ℂ] H) K.starProjection ∧
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        ((A : H →L[ℂ] H) - (C : H →L[ℂ] H)) ≠ ∞ ∧
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+          ((A : H →L[ℂ] H) - (C : H →L[ℂ] H)) ^ p.toReal =
+        (∑' j, ENNReal.ofReal (FiniteDimensional.SchattenPhaseTransition.phaseMinimum p.toReal
+          (Real.arcsin (((K.map A.toLinearMap).sinThetaMap K).singularValue j : ℝ)))) ∧
+      ∀ V : H ≃ₗᵢ[ℂ] H, Commute (V : H →L[ℂ] H) K.starProjection →
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+            ((A : H →L[ℂ] H) - (C : H →L[ℂ] H)) ≤
+          (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+            ((A : H →L[ℂ] H) - (V : H →L[ℂ] H)) := by
+  let Φ := OperatorIdealFamily.schatten ℂ p.toReal hp1.le
+  have hD : Φ.gauge ((K.map A.toLinearMap).starProjection - K.starProjection) ≠ ∞ := by
+    rwa [Φ.gauge_projection_image_sub_eq_commutator K A]
+  obtain ⟨R, hRmap, hRcost, hcost, hmin⟩ :=
+    SchattenPhaseTransition.exists_unitary_minimizing_schatten_transport_of_projection_sub_ne_top
+      p hp hp1 hp2 (K.map A.toLinearMap) K hD hbalance
+  let C := A.trans R
+  have hrel : A.symm.trans C = R := by ext x; simp [C]
+  refine ⟨C, ?_, ?_, ?_, ?_⟩
+  · apply (K.map_eq_self_iff_commute_starProjection C).mp
+    rw [← K.map_correction_transport A C, hrel]
+    exact hRmap
+  · rw [Φ.gauge_unitary_sub_eq_displacement A C, hrel]
+    exact hRcost
+  · rw [Φ.gauge_unitary_sub_eq_displacement A C, hrel]
+    exact hcost
+  · intro V hV
+    rw [Φ.gauge_unitary_sub_eq_displacement A C,
+      Φ.gauge_unitary_sub_eq_displacement A V, hrel]
+    apply hmin
+    rw [K.map_correction_transport]
+    exact (K.map_eq_self_iff_commute_starProjection V).mpr hV
+
 /-- **Nearest unitary commuting with a prescribed projection.** For
-`p >= 2`, a Schatten commutator and balanced finite crossed defects
+`p > 1`, a Schatten commutator and balanced finite crossed defects
 give an actual finite-cost global nearest commuting unitary, in
 arbitrary complex Hilbert dimension. No competitor block restriction
 or finite-rank projection-difference assumption is imposed. -/
 theorem exists_nearest_schatten_commuting_unitary
-    (p : ℝ) (hp : 2 ≤ p) (K : Submodule ℂ H) [K.HasOrthogonalProjection]
+    (p : ℝ) (hp : 1 < p) (K : Submodule ℂ H) [K.HasOrthogonalProjection]
     (A : H ≃ₗᵢ[ℂ] H)
     (hcomm : (OperatorIdealFamily.schatten ℂ p (by linarith)).gauge
       ((A : H →L[ℂ] H) * K.starProjection - K.starProjection * (A : H →L[ℂ] H)) ≠ ∞)
@@ -116,10 +163,10 @@ theorem exists_nearest_schatten_commuting_unitary
     exact (K.map_eq_self_iff_commute_starProjection V).mpr hV
 
 /-- A commutator of operator norm strictly below one removes the
-index obstruction. In the canonical Schatten regime this gives a
+index obstruction. At every finite Schatten exponent greater than one this gives a
 nearest commuting unitary from commutator hypotheses alone. -/
 theorem exists_nearest_schatten_commuting_unitary_of_commutator_norm_lt_one
-    (p : ℝ) (hp : 2 ≤ p) (K : Submodule ℂ H) [K.HasOrthogonalProjection]
+    (p : ℝ) (hp : 1 < p) (K : Submodule ℂ H) [K.HasOrthogonalProjection]
     (A : H ≃ₗᵢ[ℂ] H)
     (hnorm : ‖(A : H →L[ℂ] H) * K.starProjection -
       K.starProjection * (A : H →L[ℂ] H)‖ < 1)
