@@ -719,3 +719,48 @@ general infinite-rank Hilbert--Schmidt attainment or all-optimizer
 classification. The targeted literature searches still require a
 theorem-level priority review; formal verification is not historical
 novelty evidence.
+
+## Hilbert-space commuting-unitary correction applications
+
+`OperatorIdealFamily.gauge_unitary_sub_eq_displacement` identifies the
+literal correction distance with relative-unitary displacement in every
+accepted ideal family. `gauge_projection_image_sub_eq_commutator`
+identifies the actual commutator cost with the image projection gap,
+and `gauge_commutator_le_unitary_correction` gives a lower certificate
+for every commuting unitary. These statements hold over both fields,
+in arbitrary Hilbert dimension, including infinite costs.
+
+`CommutingCorrection.exists_commuting_unitary_with_ideal_certificate`
+constructs an actual correction whose distance is between the
+commutator gauge and `sqrt 2` times that gauge. It requires an isometric
+identification of the image/source crossed defects, allows infinite
+defects, and assumes neither compactness nor finite rank.
+
+`SchattenCommutingCorrection.schatten_commuting_correction_iff_commutator_and_defect_balance`
+is the exact finite-cost feasibility iff for every finite `p>=1`, over
+both fields. A Schatten commutator alone does not remove the pair-index
+obstruction. `exists_nearest_schatten_commuting_unitary` gives **actual
+global nearest commuting-unitary attainment** in complex Hilbert space
+at `p>=2`, assuming commutator membership and finite defect balance.
+`exists_nearest_schatten_commuting_unitary_of_commutator_norm_lt_one`
+removes the balance hypothesis when the commutator operator norm is
+strictly below one: both crossed defects then vanish. Every commuting
+ambient competitor is included; no block restriction is present.
+Focused build passed (7,560 jobs). No uniqueness or experimental,
+physical, or statistical claim follows from these application theorems.
+
+## Additional precise classical precedents checked
+
+Dou--Shi--Cui--Du,
+[arXiv:1705.05870v1](https://arxiv.org/html/1705.05870v1), Theorem 3.1
+classifies unitaries **simultaneously interchanging** two projections
+under crossed-defect balance. Theorem 4.3 gives all completed direct
+rotations and attributes their existence criterion to Davis--Kahan
+Proposition 3.2. Remark 4.4 describes their uniqueness when both defects
+vanish and their defect-unitary freedom otherwise. Theorem 4.5 proves
+operator-norm displacement minimality in generic position. These are
+exact precedents for the underlying geometry, not new DKPS results.
+They do not classify Schatten `1<p<2` displacement minimizers or the
+smoothed penalty. Their two-sided interchange constraint must not be
+confused with unrestricted one-way unitary equivalence. Historical
+priority of the new optimization extensions remains under review.
