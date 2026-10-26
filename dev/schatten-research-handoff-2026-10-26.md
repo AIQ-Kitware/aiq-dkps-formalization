@@ -360,3 +360,33 @@ Next prove finite-rank attainment of this ambient cost by extending the
 existing finite minimizer by identity, then replace the finite-rank
 reference hypothesis by a general feasible Schatten reference. The
 current theorem alone is a lower bound, not the full exact minimum.
+
+## Exact Hilbert-space minimum and attainment for finite-rank references
+
+`SchattenFiniteRankAttainment.exists_unitary_minimizing_schatten_transport_of_finite_rank_reference`
+closes the exact `1<p<2` minimum under the preceding finite-rank reference
+hypothesis. It supplies an actual finite-rank unitary attainer, the exact
+ambient directed-sine phase sum, and comparison of its accepted Schatten
+gauge with **every** feasible ambient unitary. No finite dimension,
+separability, finite source rank, finite source corank, or competitor
+ideal-membership assumption is added.
+
+The construction
+`exists_finite_rank_transport_attaining_sine_phaseMinimum_sum` works for
+every finite `p>=1`; only the combined global-minimum theorem currently
+uses `1<p<2`. `Submodule.exists_transport_extension_by_identity` proves
+the actual extension by identity, including subspace transport and exact
+displacement factorization, even for an infinite reducing block.
+Attainment focused build passed (7,368 jobs).
+
+`SchattenAngleContinuity.continuousOn_phaseMinimum_angle` proves continuity
+of the scalar phase minimum on all nonnegative angles for `p>=0`, including
+zero and the bifurcation. It normalizes the variable phase interval to
+the fixed unit interval and uses compact-minimum continuity, rather than
+differentiating a selected optimizer. Its focused build passed (6,666
+jobs). This opens a simpler route to the **general** Schatten lower bound:
+truncate the competing unitary itself, let the target projections vary,
+and pass each finite singular-value penalty to the limit. The finite-rank
+reference can then be removed from the lower-bound theorem; full general
+attainment still requires compact-pair geometry and balanced defect
+spaces. Neither general attainment nor historical priority is claimed.

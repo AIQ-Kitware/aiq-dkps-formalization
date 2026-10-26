@@ -25,7 +25,7 @@ noncomputable section
 
 /-- The minimum Schatten power sum on a scalar-phase interval. The lemmas
 below supply attainment and the intended angle and exponent hypotheses. -/
-def phaseMinimum (p theta : ℝ) : ℝ :=
+@[expose] def phaseMinimum (p theta : ℝ) : ℝ :=
   sInf (phasePower p theta '' Set.Icc 0 theta)
 
 /-- The scalar phase minimum depends continuously on every positive
