@@ -1613,3 +1613,22 @@ estimate are preserved. Whole-module retirement is not claimed. Native
 The native completeness module acknowledges the DKPS observation; matching
 statements alone are not proof-adaptation evidence. Papers and visualizations
 are unchanged.
+
+Checkpoint `4ee1a8c10` passed the full default build (21,037 jobs, warnings
+as errors) and was committed immediately on success.
+
+### October 26: register the native completeness theorem without an adapter
+
+The local `instCompleteSpaceCoeOfHasOrthogonalProjection` declaration is now
+deleted as well. The existing `TauCeti.CompleteSubspace` scope registers
+accepted `Submodule.completeSpace_coe_of_hasOrthogonalProjection` itself with
+`attribute [scoped instance]`. Existing opt-in consumers retain their scope;
+there is no local forwarding instance, alias, or duplicate completeness proof,
+and the theorem is not made a global instance. The focused reducing-subspace
+and block-transport build passed (5,008 jobs), after its cache fetch.
+
+The local reducing predicate/qualitative API and quantitative orthogonal-block
+estimate remain. In particular, native `Submodule.IsReducing` must replace
+`ContinuousLinearMap.Reduces` in a separate consumer migration; this cleanup
+does not treat the existing local carrier as a final architecture. Papers,
+visualizations and original untracked files remain untouched.

@@ -30,8 +30,8 @@ Davis--Kahan theory.
   native module acknowledges the same DKPS observation; its proof uses the
   closed range of an idempotent. No local duplicate of
   `Submodule.isComplete_coe_of_hasOrthogonalProjection` remains. The existing
-  opt-in completeness instance consumes that accepted theorem; upstream does
-  not provide a global instance.
+  opt-in completeness scope registers the accepted theorem itself, without
+  a local instance wrapper; upstream does not provide a global instance.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
   Mathlib, `TauCeti` and `ForTauCeti` (enforced by `scripts/check_dependency_layers.py`).
 -/
@@ -146,29 +146,11 @@ end LinearMap
 
 namespace TauCeti.CompleteSubspace
 
-/-- A subspace admitting an orthogonal projection inside a complete ambient space
-is itself complete, as an instance.
+/-! Activate completeness synthesis with `open scoped TauCeti.CompleteSubspace`.
+The registered instance is the accepted theorem itself, rather than a local
+forwarding declaration. It stays opt-in to avoid the global instance-search
+loop with `HasOrthogonalProjection.ofCompleteSpace`. -/
 
-`scoped` rather than global, because the search `CompleteSpace ↥U` is one that
-fires on every subspace coercion and the cost of that is not worth paying in
-modules that do not need it.  Activate it with
-
-```
-open scoped TauCeti.CompleteSubspace
-```
-
-**Use this one.**  It exists because the same three-line `local instance` was
-written out forty-three times across `DavisKahan` and `ForTauCeti`, each under a
-different name.  That is not only duplication: the instance name is part of the
-*elaborated type* of every theorem whose statement compresses to a subspace, so
-two modules holding private copies state provably identical theorems that the
-comparator, and any exact signature comparison, reports as different.  A new
-copy would put that back. -/
-scoped instance instCompleteSpaceCoeOfHasOrthogonalProjection
-    {𝕜 : Type*} [RCLike 𝕜] {G : Type*} [NormedAddCommGroup G]
-    [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
-  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+attribute [scoped instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
 end TauCeti.CompleteSubspace
-
