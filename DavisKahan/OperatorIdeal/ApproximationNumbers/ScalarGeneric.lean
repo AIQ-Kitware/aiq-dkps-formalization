@@ -119,16 +119,6 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
   ApproximationNumbersReal.kyFanApproximationGauge_comp_strongProjection_tendsto_real
     hPproj hP k K
 
-/-- Real-Hilbert-space infinite-dimensional Ky Fan triangle inequality. -/
-theorem kyFanApproximationGauge_add_le_real
-    {ER FR : Type v}
-    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [CompleteSpace ER]
-    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [CompleteSpace FR]
-    (k : ℕ) (K L : ER →L[ℝ] FR) :
-    kyFanApproximationGauge k (K + L) ≤
-      kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
-  ApproximationNumbersReal.kyFanApproximationGauge_add_le_real k K L
-
 /-- Continuity of each approximation number under strongly convergent
 orthogonal cutoffs. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto
@@ -143,14 +133,15 @@ theorem approximationSingularValue_comp_strongProjection_tendsto
   HasApproximationNumberStrongCutoff.tendsto_comp_strongProjection
     (𝕜 := 𝕜) hPproj hP n K
 
+omit [CompleteSpace F] in
 /-- Ky Fan's addition inequality for approximation numbers. -/
 theorem kyFanApproximationGauge_add_le
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     (k : ℕ) (K L : E →L[𝕜] F) :
     kyFanApproximationGauge k (K + L) ≤
       kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
-  ContinuousLinearMap.kyFanGaugeReal_add_le_of_hasMinMaxLowerBound
-    ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out K L k
+  by
+    change ((K + L).kyFanGauge k : ℝ) ≤ K.kyFanGauge k + L.kyFanGauge k
+    exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le K L k
 
 
 /-- Ky Fan gauges converge under strong orthogonal cutoffs. -/
@@ -177,21 +168,18 @@ The gauge is `ENNReal.ofReal` of `kyFanApproximationGauge k`, so it is finite
 everywhere — every bounded operator is a member
 (`carrier_kyFanSymmetricIdealFamily`) — and the four ideal laws are the
 real-valued ones transported along `ENNReal.ofReal`.  Only one of them,
-subadditivity, is mathematics rather than bookkeeping; it arrives through
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, the `ForTauCeti` class that assumes the
-min--max lower bound the Ky Fan triangle inequality is proved from.
+subadditivity, uses the accepted scalar-generic Ky Fan triangle inequality.
 
 `hk : 0 < k` is needed for exactly one law: `enorm_le_gauge`.  At `k = 0` the
 gauge is identically `0`, which satisfies the other three but is not a norm.
 
 **Intended destination.**  This belongs beside `TauCeti.SymmetricOperatorIdealFamily.opNorm` in
 `ForTauCeti/Analysis/OperatorIdeal/Family/`.  It cannot live there yet, because
-both `kyFanApproximationGauge` and the capability class supplying its triangle
-inequality are defined in this library; it moves when the approximation-number
-layer is extracted. -/
+the real-valued `kyFanApproximationGauge` presentation is defined in this library.
+The corresponding accepted Ky Fan family is the next representation to consume. -/
 @[expose]
 noncomputable def kyFanSymmetricIdealFamily
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+    (k : ℕ) (hk : 0 < k) :
     TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜 where
   gauge A := ENNReal.ofReal (kyFanApproximationGauge k A)
   gauge_add_le A B := by
@@ -214,7 +202,7 @@ noncomputable def kyFanSymmetricIdealFamily
 Fan approximation gauge, definitionally. -/
 @[simp]
 theorem gauge_kyFanSymmetricIdealFamily
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+     (k : ℕ) (hk : 0 < k)
     (A : E →L[𝕜] F) :
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A =
       ENNReal.ofReal (kyFanApproximationGauge k A) := rfl
@@ -222,7 +210,7 @@ theorem gauge_kyFanSymmetricIdealFamily
 /-- The Ky Fan gauge is never `∞`: it is `ENNReal.ofReal` of a real number.
 This is what makes every bounded operator a member of the finite Ky Fan ideal. -/
 theorem gauge_kyFanSymmetricIdealFamily_ne_top
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+     (k : ℕ) (hk : 0 < k)
     (A : E →L[𝕜] F) :
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A ≠ ∞ :=
   ENNReal.ofReal_ne_top
@@ -231,7 +219,7 @@ theorem gauge_kyFanSymmetricIdealFamily_ne_top
 finite sum of approximation numbers, so it never reaches `∞`. -/
 @[simp]
 theorem carrier_kyFanSymmetricIdealFamily
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+     (k : ℕ) (hk : 0 < k) :
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.carrier
       (E := E) (F := F) = ⊤ := by
   ext A
@@ -240,7 +228,7 @@ theorem carrier_kyFanSymmetricIdealFamily
 /-- The real-valued Ky Fan gauge is recovered from the canonical one. -/
 @[simp]
 theorem toReal_gauge_kyFanSymmetricIdealFamily
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+     (k : ℕ) (hk : 0 < k)
     (A : E →L[𝕜] F) :
     ((kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).gauge A).toReal =
       kyFanApproximationGauge k A :=
@@ -254,7 +242,7 @@ bounded operators.  Both inequalities are needed: the first turns an ideal-norm
 Cauchy sequence into an operator-norm one, the second turns the operator-norm
 limit back into an ideal-norm limit. -/
 instance isComplete_kyFanSymmetricIdealFamily
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+     (k : ℕ) (hk : 0 < k) :
     (kyFanSymmetricIdealFamily (𝕜 := 𝕜) k hk).toOperatorIdealFamily.IsComplete where
   completeSpace_carrier := by
     intro E F _ _ _ _ _ _
@@ -463,7 +451,7 @@ noncomputable def operatorNorm :
 Dominance is immediate: the gauge *is* the `k`-th Ky Fan gauge, so majorization
 at index `k` is the conclusion. -/
 @[expose]
-noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+noncomputable def kyFan
     (k : ℕ) (hk : 0 < k) :
     KyFanDominantIdealFamily.{u, v} 𝕜 where
   toSymmetricOperatorIdealFamily := kyFanSymmetricIdealFamily k hk
@@ -485,14 +473,14 @@ historical record being deleted. -/
 
 /-- Every bounded operator belongs to the fixed finite Ky Fan family. -/
 @[simp]
-theorem kyFan_mem [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+theorem kyFan_mem
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
     (kyFan (𝕜 := 𝕜) k hk).Mem K :=
   gauge_kyFanSymmetricIdealFamily_ne_top k hk K
 
 /-- The concrete gauge of the fixed finite Ky Fan family. -/
 @[simp]
-theorem kyFan_gauge [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+theorem kyFan_gauge
     (k : ℕ) (hk : 0 < k) (K : E →L[𝕜] F) :
     (kyFan (𝕜 := 𝕜) k hk).gauge K = kyFanApproximationGauge k K :=
   toReal_gauge_kyFanSymmetricIdealFamily k hk K

@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSquare
 
 /-!

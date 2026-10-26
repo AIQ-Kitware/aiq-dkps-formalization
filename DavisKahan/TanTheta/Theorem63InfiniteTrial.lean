@@ -127,8 +127,8 @@ theorem exists_finiteDimensional_le_lt_approximationSingularValue
       c < approximationSingularValue n (K ∘L F.subtypeL) := by
   classical
   obtain ⟨s, hcs, v, hv, hmod⟩ :=
-    (ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-      (K ∘L Z.subtypeL) n hc0).mp hlt
+    (TauCeti.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+      TauCeti.HasMinMaxLowerBound.of_completeSpace (K ∘L Z.subtypeL) n hc0).mp hlt
   have hspanfin : FiniteDimensional ℂ (Submodule.span ℂ (Set.range v)) :=
     FiniteDimensional.span_of_finite ℂ (Set.finite_range v)
   refine ⟨(Submodule.span ℂ (Set.range v)).map Z.subtype, inferInstance,
@@ -241,7 +241,7 @@ theorem kyFanApproximationGauge_theorem63Residual_le_add
         kyFanApproximationGauge k (theorem63Residual T Z ∘L J + G) := by rw [hsplit]
     _ ≤ kyFanApproximationGauge k (theorem63Residual T Z ∘L J) +
         kyFanApproximationGauge k G :=
-      kyFanApproximationGauge_add_le_complex k _ _
+      by exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le (theorem63Residual T Z ∘L J) G k
     _ ≤ kyFanApproximationGauge k (theorem63Residual T Z) + (k : ℝ) * ε := by
       have h1 : kyFanApproximationGauge k (theorem63Residual T Z ∘L J) ≤
           kyFanApproximationGauge k (theorem63Residual T Z) := by

@@ -44,10 +44,9 @@ noncomputable section
 universe u v
 
 variable {𝕜 : Type u} [RCLike 𝕜]
-  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
-omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] in
 /-- **Davis--Kahan 1970, Lemma 6.2, over the literal source norm class.**
 
 `‖Ω K Υ + Ω^⊥ K Υ^⊥‖ ≤ ‖K‖` for every normalized unitarily invariant norm. -/
@@ -64,7 +63,7 @@ theorem lemma6_2_sourceExact
       exact ⟨hmem, by simpa using hle⟩
   simpa using hbridge
 
-omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] [CompleteSpace E] in
+omit [CompleteSpace E] in
 /-- The Ky Fan gauge at level `0` is the empty sum. -/
 private theorem kyFanApproximationGauge_zero' {F : Type v}
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
@@ -172,15 +171,10 @@ end
 
 /-! ### The printed scalar scope
 
-The theorems above carry `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`,
-which is a capability class rather than a Davis--Kahan hypothesis: it is what
-makes the Ky Fan gauge available over an abstract `RCLike` field.  Both `ℝ` and
-`ℂ` are instances of it, so the source-facing statements are the two fixed-field
-specializations, which carry no capability class at all.
-
-Only Lemma 6.1 needs them.  Lemma 6.2's premise does not mention a Ky Fan norm,
-so its scalar-generic statement is already free of the capability class and is
-itself source-exact over both fields. -/
+The scalar-generic prefix-gauge results use the accepted Ky Fan triangle
+inequality. The former min–max capability assumption has been removed: converse
+localization holds for every complete `RCLike` inner-product source. The existing
+fixed-field specializations retain their source-facing statements. -/
 
 noncomputable section FixedScalar
 

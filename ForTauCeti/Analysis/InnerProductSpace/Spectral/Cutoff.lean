@@ -32,9 +32,8 @@ measure:
 * on `ker (A.spectralCutoff s)`, `A` is bounded above by `s`;
 * on its orthogonal complement, `A` is bounded below by `s`.
 
-That is all the spectral theorem is used for in the min--max theorem for approximation
-numbers, so with these two lemmas that theorem needs no measure theory — see
-`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxUpper.lean`.
+These bounds supplied the former donor min–max proof. That proof is now
+consumed from accepted Tau Ceti; the independent cutoff estimates remain here.
 
 ## The two inequalities
 
@@ -59,21 +58,19 @@ and tending to `1` above it, and `norm_comp_cfc_one_sub_tailCutoff_le` and
 the Gram operator `S⋆S` of an operator between two spaces rather than for a positive operator
 on one.
 
-**A kernel cutoff and a multiplier cutoff are not interchangeable, and the difference is what
-the real min--max theorem turns on.**  `ker (A.spectralCutoff s)` is a subspace; the
-orthogonal projection onto it need not be a continuous function of `A`.  A multiplier
-`cfc f A` is one by construction, so it commutes with everything `A` commutes with — in
-particular with a conjugation, which is exactly what lets the cutoff *descend from a
-complexification to a real operator*.  That is why
-`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxReal.lean` cannot reuse the
-kernel pair and needs this one.
+A kernel cutoff is a subspace construction; its orthogonal projection need not
+be a continuous function of the operator. A multiplier `cfc f A` commutes with
+everything that commutes with `A`, including conjugation, and can therefore
+descend from a complexification. This distinction motivated the former real
+min–max proof, now retired in favor of accepted scalar-generic localization.
+The independent multiplier estimates are retained.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForTauCeti`; it has had no prior home.  The smooth
   cutoff section arrived later, from
-  `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/MinMaxReal.lean`, where it had been
+  the former `ApproximationNumber/MinMaxReal.lean`, where it had been
   written `private` against one Hilbert space; it is stated here for any.
 * Extraction class: **authored in place** for the Tau Ceti staging layer.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026 Kitware, Inc.;

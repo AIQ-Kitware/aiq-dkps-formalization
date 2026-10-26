@@ -123,7 +123,7 @@ theorem kyFanApproximationGauge_restrict_residual_le_add
         kyFanApproximationGauge k (data.residual ∘L J + G) := by rw [hsplit]
     _ ≤ kyFanApproximationGauge k (data.residual ∘L J) +
         kyFanApproximationGauge k G :=
-      kyFanApproximationGauge_add_le_complex k _ _
+      by exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le (data.residual ∘L J) G k
     _ ≤ kyFanApproximationGauge k data.residual + (k : ℝ) * ε := by
       have h1 : kyFanApproximationGauge k (data.residual ∘L J) ≤
           kyFanApproximationGauge k data.residual := by

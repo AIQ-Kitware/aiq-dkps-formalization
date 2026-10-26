@@ -290,11 +290,11 @@ identity, every approximation number of `K ∘L P i` converges to the correspond
 approximation number of `K`.
 
 Upper semicontinuity is free (`P i` is a contraction); the lower bound is where the
-generalized Courant--Fischer localization enters, and it is the only step that depends on the
-scalar field, so it is taken as the hypothesis
-`ContinuousLinearMap.HasMinMaxLowerBound`. -/
+generalized Courant--Fischer localization enters. The native hypothesis
+`TauCeti.HasMinMaxLowerBound` permits an incomplete source when localization is
+supplied independently; complete sources obtain it from the accepted theorem. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 E₀ F₀)
+    (hlb : TauCeti.HasMinMaxLowerBound 𝕜 E₀ F₀)
     {ι : Type w} {P : ι → E₀ →L[𝕜] E₀} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E₀))
@@ -315,7 +315,9 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
       ∀ᶠ i in l, r < approximationSingularValue n (K ∘L P i) := by
     intro r hr
     by_cases hr0 : 0 ≤ r
-    · obtain ⟨s, hrs, v, hv, hV⟩ := hlb K n hr0 hr
+    · obtain ⟨s, hrs, v, hv, hV⟩ := TauCeti.hasMinMaxLowerBound_iff.mp hlb K n hr0
+        (by simpa only [approximationSingularValue,
+          ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hr)
       let c : ℝ := (r + s) / 2
       have hrc : r < c := by dsimp only [c]; linarith
       have hcs : c < s := by dsimp only [c]; linarith
@@ -384,7 +386,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
       (fun i => approximationSingularValue n (K ∘L P i))
       l (𝓝 (approximationSingularValue n K)) :=
   approximationSingularValue_comp_strongProjection_tendsto_of_minMax
-    ContinuousLinearMap.hasMinMaxLowerBound_complex hPproj hP n K
+    TauCeti.HasMinMaxLowerBound.of_completeSpace hPproj hP n K
 
 end StrongCutoff
 
@@ -420,7 +422,7 @@ omit [CompleteSpace F₀] [CompleteSpace E₀] in
 /-- Finite Ky Fan approximation gauges converge under strong orthogonal cutoffs: the
 termwise statement summed over `Finset.range k`. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 E₀ F₀)
+    (hlb : TauCeti.HasMinMaxLowerBound 𝕜 E₀ F₀)
     {ι : Type w} {P : ι → E₀ →L[𝕜] E₀} {l : Filter ι}
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E₀))
@@ -447,7 +449,7 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_complex
       (fun i => kyFanApproximationGauge k (K ∘L P i))
       l (𝓝 (kyFanApproximationGauge k K)) :=
   kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
-    ContinuousLinearMap.hasMinMaxLowerBound_complex hPproj hP k K
+    TauCeti.HasMinMaxLowerBound.of_completeSpace hPproj hP k K
 
 end KyFanStrongCutoff
 
@@ -488,6 +490,8 @@ theorem kyFanApproximationGauge_add_le_finiteDimensional
       kyFanApproximationGauge k A.toContinuousLinearMap +
         kyFanApproximationGauge k B.toContinuousLinearMap :=
   ContinuousLinearMap.kyFanGaugeReal_add_le_of_finiteDimensional k A B
+
+
 
 
 section KyFanTriangle
@@ -541,51 +545,7 @@ theorem kyFanApproximationGauge_add_le_finiteSource
       kyFanApproximationGauge k A + kyFanApproximationGauge k B :=
   ContinuousLinearMap.kyFanGaugeReal_add_le_of_finiteDimensional_source k A B
 
-omit [CompleteSpace E₀] [CompleteSpace F₀] in
-/-- **The Ky Fan triangle inequality**, at whichever field supplies the min--max lower
-bound.  The localization argument is `kyFanGaugeReal_add_le_of_exists_finiteRestriction`; the
-field enters only through `hlb`. -/
-theorem kyFanApproximationGauge_add_le_of_minMax
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 E₀ F₀)
-    (k : ℕ) (K L : E₀ →L[𝕜] F₀) :
-    kyFanApproximationGauge k (K + L) ≤
-      kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
-  ContinuousLinearMap.kyFanGaugeReal_add_le_of_exists_finiteRestriction
-    (fun n ε hε => by
-      by_cases hsmall : (K + L).approximationNumber n < ε
-      · exact ⟨fun _ => 0, hsmall.trans_le
-          (le_add_of_nonneg_left
-            (ContinuousLinearMap.approximationNumber_nonneg _ n))⟩
-      · obtain ⟨v, hv⟩ := hlb.exists_finiteRestrictionApproximationNumber_gt_of_lt (K + L) n
-          (sub_nonneg.mpr (le_of_not_gt hsmall)) (sub_lt_self _ hε)
-        exact ⟨v, by linarith⟩)
-    k
-
 end KyFanTriangle
-
-section ComplexKyFanTriangle
-
-variable {E₀ : Type vE0} {F₀ : Type vF0}
-  [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-  [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-
-/-- Approximation numbers are approached from below by finite restrictions: for every
-`ε > 0` some finitely-spanned restriction comes within `ε`. -/
-theorem exists_finiteRestrictionApproximationNumber_add_gt
-    (T : E₀ →L[ℂ] F₀) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
-    ∃ v : Fin (n + 1) → E₀,
-      T.approximationNumber n <
-        (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε :=
-  T.exists_finiteRestrictionApproximationNumber_add_gt n ε hε
-
-omit [CompleteSpace F₀] in
-/-- Subadditivity of the Ky Fan gauge over `ℂ`. -/
-theorem kyFanApproximationGauge_add_le_complex
-    (k : ℕ) (K L : E₀ →L[ℂ] F₀) :
-    kyFanApproximationGauge k (K + L) ≤
-      kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
-  K.kyFanGaugeReal_add_le_complex L k
-end ComplexKyFanTriangle
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The zero-term Ky Fan gauge vanishes. -/
@@ -692,7 +652,7 @@ rectangular Ky Fan principle
 the compression is transported back along the inclusion and the projection, which are
 isometric on the vectors involved. -/
 theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
-    (hlb : ContinuousLinearMap.HasMinMaxLowerBound 𝕜 E F)
+    (hlb : TauCeti.HasMinMaxLowerBound 𝕜 E F)
     (K : E →L[𝕜] F) {k : ℕ} {ε : ℝ} (hε : 0 < ε)
     {x : Fin k → E} (hx : Orthonormal 𝕜 x)
     {y : Fin k → F} (hy : Orthonormal 𝕜 y) :
@@ -817,8 +777,7 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
 
 /-- **The Ky Fan gauge is approached by orthonormal pairings**, over `ℂ`.
 
-The min--max lower bound is discharged by `hasMinMaxLowerBound_complex`, so no hypothesis on
-the scalar field remains. -/
+The accepted converse min–max theorem supplies the localization input. -/
 theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex
     {E₂ : Type vE0} {F₂ : Type vF0}
     [NormedAddCommGroup E₂] [InnerProductSpace ℂ E₂] [CompleteSpace E₂]
@@ -829,7 +788,7 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex
     ∃ (u : Fin k → F₂) (v : Fin k → E₂), Orthonormal ℂ u ∧ Orthonormal ℂ v ∧
       kyFanApproximationGauge k K - ε ≤ RCLike.re (∑ i, ⟪u i, K (v i)⟫_ℂ) :=
   exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
-    ContinuousLinearMap.hasMinMaxLowerBound_complex K hε hx hy
+    TauCeti.HasMinMaxLowerBound.of_completeSpace K hε hx hy
 
 end ApproximationNumber
 end TauCeti

@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 
@@ -137,11 +138,13 @@ theorem sq_approximationNumber_le_approximationNumber_gramOperator (X : E0 →L[
       r ^ 2 < (gramOperator X).approximationNumber n := by
     intro r hr0 hr
     obtain ⟨s, hrs, v, hv, hV⟩ :=
-      (ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-        X n hr0).mp hr
+      (TauCeti.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+        TauCeti.HasMinMaxLowerBound.of_completeSpace X n hr0).mp hr
     have hs0 : 0 ≤ s := hr0.trans hrs.le
-    refine (ContinuousLinearMap.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-      (gramOperator X) n (by positivity)).mpr ⟨s ^ 2, by nlinarith, v, hv, ?_⟩
+    refine
+      (TauCeti.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+        TauCeti.HasMinMaxLowerBound.of_completeSpace (gramOperator X) n (by positivity)).mpr
+        ⟨s ^ 2, by nlinarith, v, hv, ?_⟩
     intro x hx
     have hlow : s * ‖x‖ ≤ ‖X x‖ := hV x hx
     have hq : ‖X x‖ ^ 2 = RCLike.re ⟪gramOperator X x, x⟫_ℂ :=

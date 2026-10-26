@@ -833,3 +833,31 @@ on universe signatures and full types. The three explicitly declared missing
 solutions remain skipped. No external comparator or source-completeness claim
 is inferred; the auxiliary local-only name parser retains its documented
 imported-declaration limitations.
+
+### October 25: native converse min–max consumption
+
+The previously identified predicate migration is implemented. Consumers use
+`TauCeti.HasMinMaxLowerBound` and its accepted `of_completeSpace` theorem directly.
+The duplicate complex and real threshold modules, local predicate, global
+capability class, field-classification proof and fixed-field Ky Fan triangle
+wrappers are removed. Native Ky Fan subadditivity is applied directly, with
+numeric coercions where the remaining source interfaces are real-valued.
+
+The native theorem preserves the strict nonnegative threshold and `n + 1`
+independent-vector witness, uniformly over `RCLike`, and permits an incomplete
+target. Selected downstream statements now omit unused target completeness.
+Unmerged finite-restriction LUB/localization results extend the native predicate;
+their conditional incomplete-source scope is preserved. Other unmerged cutoff,
+scalar-transport and Schatten mathematics remains. The contribution census and
+extraction manifest record exact ownership and provenance distinctions.
+
+The focused consumer build passed (7,166 jobs), after the cache fetch. Full-build
+and explicit diagnostic validation follow once complete. No paper or visualization
+files are changed, and the original three untracked files remain untouched.
+
+The next separate representation migration is the locally constructed finite
+Ky Fan symmetric ideal family in `ApproximationNumbers.ScalarGeneric`: compare
+the installed native `TauCeti.Analysis.OperatorIdeal.Family.KyFan.Basic` constructor,
+its gauge and completeness API, then migrate consumers and delete the duplicate
+constructor. The real-valued approximation-number views also remain an explicit
+representation obligation. Neither is claimed complete by this checkpoint.

@@ -7,6 +7,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
+public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 public import DavisKahan.Sylvester.Spectrum
 
 /-!

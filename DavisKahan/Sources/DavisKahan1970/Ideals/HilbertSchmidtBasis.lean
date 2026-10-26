@@ -361,13 +361,11 @@ theorem basisProjection_stronglyTendsto {ι : Type*}
       atTop (𝓝 x) := hsum
   exact Tendsto.congr (fun s => (basisProjection_apply b s x).symm) hpartial
 
+omit [CompleteSpace E] in
 /-- Approximation singular values of finite basis cutoffs converge pointwise.
 
-The min--max lower bound is the one scalar-specific ingredient in the whole
-coordinate bridge, and it is the only reason the bridge was ever stated over
-`ℂ` alone.  Taken as a hypothesis it is discharged at `ℂ` and at `ℝ` by
-`hasMinMaxLowerBound_complex` and `hasMinMaxLowerBound_real`, and everything
-downstream becomes scalar-generic. -/
+The accepted converse min–max theorem applies to every complete `RCLike`
+inner-product source, so the coordinate result needs no field-specific proof. -/
 theorem approximationSingularValue_cutoff_tendsto {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) (n : ℕ) :
     Tendsto
@@ -375,7 +373,7 @@ theorem approximationSingularValue_cutoff_tendsto {ι : Type*}
         (A ∘L basisProjection b s))
       atTop (𝓝 (approximationSingularValue n A)) :=
   approximationSingularValue_comp_strongProjection_tendsto_of_minMax
-    (ContinuousLinearMap.hasMinMaxLowerBound_rclike 𝕜)
+    TauCeti.HasMinMaxLowerBound.of_completeSpace
     (fun s => basisProjection_isOrthogonalProjection b s)
     (basisProjection_stronglyTendsto b) n A
 

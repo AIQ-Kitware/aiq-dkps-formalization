@@ -118,7 +118,6 @@ topics:
   - Analysis.OperatorIdeal.ApproximationNumber.KyFan
   - Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
   - Analysis.OperatorIdeal.ApproximationNumber.MinMax
-  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
   - Analysis.OperatorIdeal.ApproximationNumber.SameSequence
 - id: T10
   title: Symmetric operator ideals and Schatten norms
@@ -283,17 +282,13 @@ topics:
   modules:
   - Topology.ApproxMinimizer
   - Topology.Berge
-# T24 carried one module -- the min--max property over `ℝ`, obtained by
-# complexification.  The two `ScalarTransport` modules finish the same job: they
-# take that property from `ℝ` and `ℂ` to EVERY `RCLike` field, so the class
-# `HasMinMaxLowerBoundEverywhere` stops being a hypothesis.  They sit here rather
-# than in a topic of their own because a new topic has no roadmap entry, and
-# roadmap entries are the maintainer's to add.
+# The real/complex converse min–max proofs and capability class are retired.
+# The remaining scalar-transport results serve other perturbation interfaces;
+# complete-source localization is consumed directly from Tau Ceti.
 - id: T24
-  title: Approximation numbers at every RCLike field, by complexification and scalar transport
+  title: Scalar transport for perturbation interfaces
   modules:
   - Analysis.RCLike.ScalarTransport
-  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
   - Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
   # The rest of the dictionary the transport needs to carry a Davis--Kahan
   # statement across a change of scalar field: reducing subspaces and bounded
@@ -403,7 +398,6 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
   - Analysis.OperatorIdeal.ApproximationNumber.KyFan
   - Analysis.OperatorIdeal.ApproximationNumber.MinMax
-  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
   - Analysis.OperatorIdeal.Family.Basic
   - Analysis.OperatorIdeal.Family.KyFan.Dominance
   - Analysis.OperatorIdeal.Family.TraceClass
@@ -463,7 +457,6 @@ rungs:
   - Analysis.OperatorIdeal.ApproximationNumber.KyFan
   - Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
   - Analysis.OperatorIdeal.ApproximationNumber.MinMax
-  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
   - Analysis.OperatorIdeal.ApproximationNumber.SameSequence
   - Analysis.OperatorIdeal.Family.Basic
   - Analysis.OperatorIdeal.Family.HilbertSchmidt
@@ -570,7 +563,6 @@ rungs:
   - Analysis.InnerProductSpace.BoundedOperator.Projector
   - Analysis.InnerProductSpace.Complexification.Basic
   - Analysis.InnerProductSpace.Complexification.FunctionalCalculus
-  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
   - Analysis.InnerProductSpace.BoundedOperator.SinTheta
   - Analysis.InnerProductSpace.Residual.AngleEmbedding
   - Analysis.InnerProductSpace.Residual.Ritz

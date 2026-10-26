@@ -65,10 +65,10 @@ no scalars — it renames the field.
   Section 2 Challenge needs its four theorems at an arbitrary `RCLike` field and
   the development's endpoints are stated at `ℝ` and `ℂ`.
 * Extraction class: **new**.  It depends on nothing outside Mathlib, and is the
-  reason the two capability classes
-  `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and
-  `TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan` stopped being
-  hypotheses.
+  reason the unbounded Sylvester capability
+  `TauCeti.DavisKahan.Sylvester.HasUnboundedSylvesterKyFan` stopped being a
+  hypothesis. The former min–max capability was later replaced by accepted
+  scalar-generic Tau Ceti localization.
 * Namespace: `TauCeti`, per `ForTauCeti/README.md` section 2.
 * `@[expose]` on ten definitional carriers, each measured load-bearing by
   deleting the attribute and reading the compiler's complaint.

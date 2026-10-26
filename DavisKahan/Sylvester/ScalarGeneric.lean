@@ -16,10 +16,9 @@ Spectra spectral cutoffs and the ordered engine; `real_unbounded_sylvester_kyFan
 is proved over `ℝ`, by complexifying and descending through exact invariance of
 the approximation numbers.  Neither is `RCLike`-generic.
 
-This module does for that estimate exactly what
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` already does one layer down
-for the min--max lower bound: it names the estimate as a property *of the scalar
-field*, quantified over every pair of Hilbert spaces at once.
+This module names the unbounded estimate as a property of the scalar field,
+quantified over every pair of Hilbert spaces. The separate min–max capability
+class has been retired in favor of accepted Tau Ceti localization.
 
 **The class is discharged unconditionally.**  Until 2026-09-01 this file said that
 "it holds for `ℝ` and it holds for `ℂ`" was not by itself a proof of anything at a

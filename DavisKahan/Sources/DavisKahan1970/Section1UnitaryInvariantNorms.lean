@@ -56,7 +56,7 @@ alone: the attaining half rests on the min--max localization of approximation nu
 this library has for `ℝ` and for `ℂ` but not for an abstract `RCLike` field, since nothing
 lets an abstract `RCLike` field be reduced to those two.  The `RCLike`-generic statement,
 carrying the localization as the explicit hypothesis
-`ContinuousLinearMap.HasMinMaxLowerBound`, is
+`TauCeti.HasMinMaxLowerBound`, is
 `TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner`;
 everything below is that theorem instantiated and packaged.  The `≤` halves are
 `RCLike`-generic already and are cited, not reproved.

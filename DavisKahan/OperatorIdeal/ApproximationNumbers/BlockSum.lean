@@ -414,9 +414,13 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
     have := lt_of_lt_of_le hcon (min_le_right _ _)
     exact_mod_cast this
   obtain ⟨s, hms, v, hv, hV⟩ :=
-    ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out A i hm0 hmA
+    TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace
+      A i hm0 (by
+        simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hmA)
   obtain ⟨t, hmt, w, hw, hW⟩ :=
-    ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out B j hm0 hmB
+    TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace
+      B j hm0 (by
+        simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hmB)
   -- the combined witness family
   set f : Fin (i + 1) → WithLp 2 (E₀ × E₁) := fun k => WithLp.toLp 2 (v k, 0) with hf
   set g : Fin (j + 1) → WithLp 2 (E₀ × E₁) := fun l => WithLp.toLp 2 (0, w l) with hg
@@ -514,8 +518,8 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
         mul_pow μ ‖(WithLp.ofLp x).2‖ 2]
     exact le_of_sq_le_sq hsq (norm_nonneg _)
   have hfinal : m < (T.approximationNumber (i + j + 1) : ℝ) :=
-    (ContinuousLinearMap.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-      ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out
+    (TauCeti.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
+      TauCeti.HasMinMaxLowerBound.of_completeSpace
       T (i + j + 1) hm0).mpr ⟨μ, hmμ, _, hu, hlower⟩
   exact absurd hfinal (by rw [← hm]; exact lt_irrefl m)
 

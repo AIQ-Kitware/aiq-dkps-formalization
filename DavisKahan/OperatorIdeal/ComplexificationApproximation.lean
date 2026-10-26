@@ -283,6 +283,7 @@ theorem approximationNumber_complexify_le
       rw [← RealComplexification.complexify_sub,
         RealComplexification.norm_complexify]
 
+omit [CompleteSpace F] in
 /-- The real approximation number cannot exceed the complexified one.  A strict
 real lower threshold supplies an `(n+1)`-vector min--max witness, and that
 witness complexifies with the same lower modulus. -/
@@ -297,8 +298,8 @@ theorem approximationNumber_le_complexify
     exact (lt_of_not_ge hr0).trans_le
       (ContinuousLinearMap.approximationNumber_nonneg _ n)
   obtain ⟨s, hrs, v, hv, hV⟩ :=
-    TauCeti.ApproximationNumber.exists_linearIndependent_lowerBound_of_lt_approximationNumber_real
-      T n hr0 hr
+    TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace T n hr0
+      (by simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hr)
   have hs0 : 0 ≤ s := hr0.trans hrs.le
   have hvC : LinearIndependent ℂ (fun i => ofReal (v i)) :=
     linearIndependent_ofReal hv
@@ -311,6 +312,7 @@ theorem approximationNumber_le_complexify
     exact_mod_cast hrs
   exact hrsNN.trans_le hsNN
 
+omit [CompleteSpace F] in
 /-- Approximation numbers are exactly preserved by real complexification. -/
 theorem approximationNumber_complexify
     (T : E →L[ℝ] F) (n : ℕ) :
@@ -319,6 +321,7 @@ theorem approximationNumber_complexify
   le_antisymm (approximationNumber_complexify_le T n)
     (approximationNumber_le_complexify T n)
 
+omit [CompleteSpace F] in
 /-- Approximation singular values are exactly preserved by real
 complexification. -/
 theorem approximationSingularValue_complexify
@@ -327,6 +330,7 @@ theorem approximationSingularValue_complexify
       approximationSingularValue n T := by
   exact approximationNumber_complexify T n
 
+omit [CompleteSpace F] in
 /-- Every finite Ky Fan approximation gauge is exactly preserved by real
 complexification. -/
 theorem kyFanApproximationGauge_complexify

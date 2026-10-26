@@ -41,10 +41,8 @@ contraction cannot increase a Ky Fan gauge, and the gauge is subadditive, so the
 average is dominated.  No majorization theory is needed at this level: the
 majorization content is already inside subadditivity of the gauge.
 
-The scalar field is `ℂ` because the unconditional Ky Fan triangle inequality is
-available there (`kyFanApproximationGauge_add_le_complex`); over a general
-`RCLike` field the same proof runs given
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`.
+The pinching theorem below is stated over `ℂ`. Its proof now uses the accepted
+scalar-generic Ky Fan triangle inequality directly.
 
 ## Provenance
 
@@ -159,8 +157,14 @@ theorem kyFanApproximationGauge_diagBlock_le_complex
   have hsum : kyFanApproximationGauge k ((2 : ℂ) • U.diagBlock A) ≤
       2 * kyFanApproximationGauge k A := by
     rw [hsplit]
-    refine (kyFanApproximationGauge_add_le_complex k A
-      ((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E))).trans ?_
+    have htri := ContinuousLinearMap.kyFanGauge_add_le A
+      ((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)) k
+    have hreal : kyFanApproximationGauge k
+        (A + (U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)) ≤
+        kyFanApproximationGauge k A + kyFanApproximationGauge k
+          ((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)) := by
+      exact_mod_cast htri
+    refine hreal.trans ?_
     have := kyFanApproximationGauge_reflectionConjugate_le U A k
     linarith
   rw [kyFanApproximationGauge_smul] at hsum

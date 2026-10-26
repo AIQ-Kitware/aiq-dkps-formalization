@@ -5,7 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralVectorBounds
 
@@ -135,7 +136,8 @@ theorem natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber
   let P : E0 →L[ℂ] E0 :=
     (gramSpectralPVM X).proj (Set.Ici (r ^ 2)) measurableSet_Ici
   obtain ⟨s, hrs, v, hv, hV⟩ :=
-    X.exists_linearIndependent_lowerBound_of_lt_approximationNumber_complex n hr0 hr
+    TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace X n hr0
+      (by simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hr)
   let V : Submodule ℂ E0 := Submodule.span ℂ (Set.range v)
   let b : Module.Basis (Fin (n + 1)) ℂ V := Module.Basis.span hv
   let W : Submodule ℂ E0 := P.range

@@ -6,13 +6,12 @@ Authors: Jon Crall, GPT-5.6 Thinking
 
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.KyFanGauge
 
 /-!
 # Real Hilbert-space localization of approximation numbers
 
-This module re-exports the real-scalar approximation-number theory, split by
-topic into the real threshold theorem (with its complexification transport
-infrastructure) and the strong-cutoff / finite Ky Fan gauge results.
+This module imports the accepted converse min–max theorem and the retained
+real strong-cutoff and finite Ky Fan convergence results.
 -/

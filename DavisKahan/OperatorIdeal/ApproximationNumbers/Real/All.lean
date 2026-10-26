@@ -6,6 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.KyFanGauge
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 
 /-! # `DavisKahan/OperatorIdeal/ApproximationNumbers/Real` -/

@@ -1047,3 +1047,46 @@ on universe signatures and full types. The three explicitly declared missing
 solutions remain skipped. No external comparator or source-completeness claim
 is inferred; the auxiliary local-only name parser retains its documented
 imported-declaration limitations.
+
+### October 25: consume the native converse min–max theorem
+
+Accepted `TauCeti.HasMinMaxLowerBound.of_completeSpace` in
+`TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax` supplies the strict
+threshold witness `0 ≤ r < aₙ(T)`: a coercivity constant `s > r` on the span of
+`n + 1` independent vectors. It works uniformly over `RCLike`, with a complete
+inner-product source and a possibly incomplete seminormed inner-product target;
+source and target universes are independent. The accepted proof uses the
+quadratic-form/orthogonal-tail dichotomy, rather than field classification.
+
+The duplicate `MinMaxUpper` and `MinMaxReal` modules are deleted. The separate
+local predicate, `HasMinMaxLowerBoundEverywhere` class, scalar-transport proof of
+that class, and fixed-field threshold wrappers are removed. Consumers use the
+native predicate and its public equation, or the accepted complete-source theorem
+directly. Accepted `ContinuousLinearMap.kyFanGauge_add_le` replaces the redundant
+field-specific triangle wrappers; no compatibility aliases replace them.
+
+The finite-restriction localization, LUB, and epsilon consequences remain genuine
+unmerged donor results, now in `TauCeti.HasMinMaxLowerBound`. Their explicit native
+predicate hypothesis preserves their conditional incomplete-source scope. The
+Ky Fan argument conditional on approximation by particular finite restrictions
+also remains. Real and complex strong-cutoff consequences, projection estimates,
+scalar-transport invariance, and broader Schatten results are retained. These are
+not claimed to be separately accepted merely because they use accepted input.
+
+Consumers no longer request the obsolete capability class. Unused target
+completeness hypotheses are dropped from real complexification equalities,
+selected cutoff limits, pointwise norm comparison, and Schatten triangle results.
+The strict threshold, witness count, and source theorem norm scope are preserved.
+The Challenge audit names the native Ky Fan theorem and the retained generic
+finite-restriction LUB at their actual owners.
+
+Pre-retirement source at DKPS `c891a88ec` preserves Kitware Apache-2.0 licensing
+and the Jon Crall, GPT-5.6 Thinking, and Claude Opus 5 attribution in the respective
+modules. Accepted scope was compared at unchanged Tau Ceti pin
+`efded067c28ffca3483fd731674eb13b42543fbb`. This records direct consumption and
+mathematical overlap, without inferring historical proof descent. Extraction
+metadata records both the retired and retained declaration owners.
+
+The focused consumer build passed (7,166 jobs), after the cache fetch. Full-build
+and explicit diagnostic validation for this checkpoint are recorded below once
+complete. Papers and visualizations are outside this maintenance checkpoint.

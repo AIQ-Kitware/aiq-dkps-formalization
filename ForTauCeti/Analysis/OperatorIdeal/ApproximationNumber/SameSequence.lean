@@ -115,18 +115,17 @@ section MinMax
 
 /-! ## Comparison through the min--max characterisation
 
-These three were stated over `ℂ` until 2026-09-03, because the min--max lower bound they use
-was available only there.  `ContinuousLinearMap.hasMinMaxLowerBound_rclike` proves it
-at every `RCLike` field, so they are stated at every `RCLike` field, and no capability class
-appears in any signature.  It is used in its *theorem* form rather than through the
-`HasMinMaxLowerBoundEverywhere` class because that class fixes one universe for both spaces
-and these statements are genuinely rectangular. -/
+The native converse localization theorem holds over every `RCLike` field and
+permits independent source and target universes. These comparisons use
+`TauCeti.HasMinMaxLowerBound.of_completeSpace` directly; no global capability
+class is required. -/
 
 variable {X : Type v₁} {Y : Type w₁} {Z : Type w₂}
   [NormedAddCommGroup X] [InnerProductSpace 𝕜 X] [CompleteSpace X]
   [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y] [CompleteSpace Y]
   [NormedAddCommGroup Z] [InnerProductSpace 𝕜 Z] [CompleteSpace Z]
 
+omit [CompleteSpace Y] [CompleteSpace Z] in
 /-- **A pointwise norm bound is inherited by every approximation number.**
 
 The proof is the min--max characterisation used twice: a strict lower bound for `aₙ A` is
@@ -139,14 +138,15 @@ theorem approximationNumber_le_of_norm_apply_le
   by_contra hnot
   have hlt : B.approximationNumber n < A.approximationNumber n := lt_of_not_ge hnot
   have hB0 : 0 ≤ B.approximationNumber n := B.approximationNumber_nonneg n
-  have hmm : HasMinMaxLowerBound 𝕜 X Y := ContinuousLinearMap.hasMinMaxLowerBound_rclike 𝕜
-  have hmm' : HasMinMaxLowerBound 𝕜 X Z := ContinuousLinearMap.hasMinMaxLowerBound_rclike 𝕜
+  have hmm : TauCeti.HasMinMaxLowerBound 𝕜 X Y := TauCeti.HasMinMaxLowerBound.of_completeSpace
+  have hmm' : TauCeti.HasMinMaxLowerBound 𝕜 X Z := TauCeti.HasMinMaxLowerBound.of_completeSpace
   obtain ⟨s, hrs, v, hv, hV⟩ :=
     (hmm.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound A n hB0).mp hlt
   exact lt_irrefl _
     ((hmm'.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound B n hB0).mpr
       ⟨s, hrs, v, hv, fun x hx => (hV x hx).trans (h x)⟩)
 
+omit [CompleteSpace Y] [CompleteSpace Z] in
 /-- Pointwise equality of norms determines the whole approximation-number sequence.  The two
 operators may have different targets, which is what the heterogeneous relation is for. -/
 theorem hasSameApproximationNumbers_of_norm_apply_eq

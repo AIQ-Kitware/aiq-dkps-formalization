@@ -6,6 +6,8 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
+public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
 public import ForTauCeti.Analysis.Normed.FiniteLpGauge
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import ForTauCeti.Topology.ENNRealLiminf
@@ -58,6 +60,7 @@ end Truncation
 section Finite
 
 
+omit [CompleteSpace F] in
 /-- **The Schatten triangle inequality on a truncation.**  Every partial `ℓᵖ` sum of the
 approximation numbers of `S + T` is bounded by the *full* partial sums of `S` and of `T` at
 the same length.
@@ -91,7 +94,12 @@ theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →
         TauCeti.FiniteVector.prefixSum_comp_val
           (fun n => S.approximationNumber n + T.approximationNumber n) j,
         Finset.sum_add_distrib]
-      simpa only [kyFanGaugeReal_eq_sum] using kyFanGaugeReal_add_le S T (min j k)
+      have h : (S + T).kyFanGaugeReal (min j k) ≤
+          S.kyFanGaugeReal (min j k) + T.kyFanGaugeReal (min j k) := by
+        change ((S + T).kyFanGauge (min j k) : ℝ) ≤
+          S.kyFanGauge (min j k) + T.kyFanGauge (min j k)
+        exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le S T (min j k)
+      simpa only [kyFanGaugeReal_eq_sum] using h
   calc TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (S + T).approximationNumber i)
       ≤ TauCeti.FiniteVector.lpGauge p
           (fun i : Fin k => S.approximationNumber i + T.approximationNumber i) :=
@@ -144,6 +152,7 @@ theorem ofReal_lpGauge_le_schattenENorm {p : ℝ} (hp0 : 0 < p) (T : E →L[𝕜
 section Triangle
 
 
+omit [CompleteSpace F] in
 /-- **The Schatten triangle inequality.**
 
 Each truncation is handled by `lpGauge_approximationNumber_add_le`, whose right-hand side is
@@ -276,7 +285,8 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Schatten norm is unchanged by negation, term by term. -/
 @[simp] theorem schattenENorm_neg (p : ℝ) (T : E →L[𝕜] F) :
     (-T).schattenENorm p = T.schattenENorm p := by
-  simp only [schattenENorm, approximationNumber_neg]
+  simp only [schattenENorm, approximationNumber_eq_singularValue_toReal,
+    ← neg_one_smul 𝕜 T, singularValue_smul, nnnorm_neg, nnnorm_one, one_mul]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- `T` is **Schatten-`p`** when its Schatten norm is finite.

@@ -16,8 +16,7 @@ min--max lower-bound property holds at every `RCLike` field.
 module
 
 public import ForTauCeti.Analysis.RCLike.ScalarTransport
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 
 public section
 
@@ -28,24 +27,17 @@ touching its vectors, its norm, or its topology.  Everything an approximation
 number sees is therefore unchanged, and this file says so:
 `ScalarTransport.approximationNumber_clm`.
 
-The payoff is `ContinuousLinearMap.hasMinMaxLowerBoundEverywhere`, the instance at
-an **arbitrary** `RCLike` field.  That property was the one input to the
-approximation-number localization theory that depended on the scalar field, with
-instances at `ℝ` and at `ℂ` and nothing in between; `RCLike` has exactly those two
-models, so the case split closes it.
+The unmerged transport laws remain. Converse min–max localization is supplied
+directly by accepted `TauCeti.HasMinMaxLowerBound.of_completeSpace`; the former
+field-classification argument and its capability instance have been removed.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: none.  Written directly here, 2026-09-01.
-* Extraction class: **new**.  It completes `MinMaxReal`: that module carries the
-  min--max lower bound over `ℝ` by complexification, and this one carries it from
-  `ℝ` and `ℂ` to every `RCLike` field, which is what makes
-  `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` an instance rather than a
-  hypothesis.
-* Namespaces: `TauCeti.ScalarTransport` for the transport lemmas, and
-  `ContinuousLinearMap` for the instance, which is a fact about a
-  `ContinuousLinearMap`.
+* Extraction class: **new**, written for scalar-transport invariance. The
+  former converse min–max application is superseded by accepted Tau Ceti APIs.
+* Namespace: `TauCeti.ScalarTransport` for the transport lemmas.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none**.
@@ -122,66 +114,3 @@ theorem span_of {ι : Type*} (v : ι → E) :
 end ScalarTransport
 
 end TauCeti
-
-namespace ContinuousLinearMap
-
-open TauCeti TauCeti.ScalarTransport
-
-/-- The min--max lower-bound property transports along an isomorphism of `RCLike`
-fields: it mentions only approximation numbers, norms, linear independence and
-spans, and the transport changes none of them. -/
-theorem hasMinMaxLowerBound_of_transport {𝕜 : Type u} {𝕂 : Type w} [RCLike 𝕜] [RCLike 𝕂]
-    (e : RCLikeIso 𝕜 𝕂) {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-    {F : Type v'} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-    (h : HasMinMaxLowerBound 𝕂 (ScalarTransport e E) (ScalarTransport e F)) :
-    HasMinMaxLowerBound 𝕜 E F := by
-  intro T n r hr0 hr
-  obtain ⟨s, hrs, w, hw, hbound⟩ :=
-    h (clm (e := e) T) n hr0 (by rwa [approximationNumber_clm])
-  refine ⟨s, hrs, fun i => out (w i), ?_, fun x hx => ?_⟩
-  · rw [← linearIndependent_of_iff (e := e)]
-    exact hw
-  · have hx' : of (e := e) x ∈
-        Submodule.span 𝕂 (Set.range fun i => of (e := e) (out (w i))) := by
-      rw [span_of]
-      exact hx
-    exact hbound (of (e := e) x) hx'
-
-/-- **The min--max lower-bound property holds at every `RCLike` field.**
-
-`RCLike` is an open class, but `RCLike.I_eq_zero_or_im_I_eq_one` says it has
-exactly two models.  Transporting a `𝕜`-Hilbert space to the corresponding `ℝ`- or
-`ℂ`-Hilbert space changes no vector, no norm, no approximation number, no linear
-independence and no span, so the two fixed-field instances give the general one.
-
-This removes `[HasMinMaxLowerBoundEverywhere 𝕜]` from every downstream statement
-that carried it as a hypothesis. -/
-theorem hasMinMaxLowerBound_rclike (𝕜 : Type u) [RCLike 𝕜]
-    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    {F : Type v'} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] :
-    HasMinMaxLowerBound 𝕜 E F := by
-  rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
-  · exact hasMinMaxLowerBound_of_transport (RCLikeIso.real h)
-      TauCeti.ApproximationNumber.hasMinMaxLowerBound_real
-  · exact hasMinMaxLowerBound_of_transport (RCLikeIso.complex h) hasMinMaxLowerBound_complex
-
-/-- The single-universe class form of `hasMinMaxLowerBound_rclike`, so that the
-statements carrying `[HasMinMaxLowerBoundEverywhere 𝕜]` resolve it by instance
-search rather than by hypothesis. -/
-instance hasMinMaxLowerBoundEverywhere (𝕜 : Type u) [RCLike 𝕜] :
-    HasMinMaxLowerBoundEverywhere.{u, v} 𝕜 where
-  out := by
-    intro E _ _ _ F _ _ _
-    exact hasMinMaxLowerBound_rclike 𝕜
-
-/-- Ky Fan subadditivity on Hilbert spaces over any `RCLike` field.
-
-The min--max localization is an internal theorem, not a public capability hypothesis. -/
-theorem kyFanGaugeReal_add_le {𝕜 : Type u} [RCLike 𝕜]
-    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    {F : Type v'} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (S T : E →L[𝕜] F) (k : ℕ) :
-    (S + T).kyFanGaugeReal k ≤ S.kyFanGaugeReal k + T.kyFanGaugeReal k :=
-  kyFanGaugeReal_add_le_of_hasMinMaxLowerBound (hasMinMaxLowerBound_rclike 𝕜) S T k
-
-end ContinuousLinearMap

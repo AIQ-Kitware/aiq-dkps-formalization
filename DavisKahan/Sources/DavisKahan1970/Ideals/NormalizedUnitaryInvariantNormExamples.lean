@@ -45,7 +45,7 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 
 /-- **The `k`-th Ky Fan norm as a member of the source norm class.** -/
 noncomputable def kyFanNormalizedUnitaryInvariantNorm
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k) :
+     (k : ℕ) (hk : 0 < k) :
     NormalizedUnitaryInvariantNorm.{u, v} 𝕜 where
   toFanDominantIdealFamily := (KyFanDominantIdealFamily.kyFan k hk).toFanDominantIdealFamily
   gauge_rankOne_eq_one := by
@@ -68,7 +68,7 @@ noncomputable def kyFanNormalizedUnitaryInvariantNorm
 /-- The gauge of the Ky Fan member is the Ky Fan gauge, definitionally. -/
 @[simp]
 theorem gauge_kyFanNormalizedUnitaryInvariantNorm
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+     (k : ℕ) (hk : 0 < k)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
@@ -79,7 +79,7 @@ theorem gauge_kyFanNormalizedUnitaryInvariantNorm
 
 /-- Every bounded operator lies in the Ky Fan member's ideal. -/
 theorem mem_kyFanNormalizedUnitaryInvariantNorm
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜] (k : ℕ) (hk : 0 < k)
+     (k : ℕ) (hk : 0 < k)
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]

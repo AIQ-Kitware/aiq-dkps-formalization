@@ -20,14 +20,11 @@ open TauCeti.DavisKahan.Sylvester
 # Scalar-generic headline `sin Theta` theorem
 
 This module gives the Section 2 single-angle sine theorem an intentionally
-paper-facing production surface.  The analytic engine is scalar-generic through
-`HasUnboundedSylvesterKyFan` and
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, both of which hold at every
-`RCLike` field: `TauCeti.DavisKahan.Sylvester.hasUnboundedSylvesterKyFan` and
-`ContinuousLinearMap.hasMinMaxLowerBoundEverywhere` obtain them by transporting
-the fixed-field proofs along the real/complex dichotomy of `RCLike`.  They are
-therefore implementation infrastructure, resolved by instance search, and no
-theorem in this module quantifies over them.
+paper-facing production surface. The analytic engine uses
+`HasUnboundedSylvesterKyFan`, supplied by the existing scalar-transport instance.
+Converse min–max localization and the Ky Fan triangle inequality are accepted
+Tau Ceti theorems for complete `RCLike` inner-product sources; no min–max
+capability class remains.
 
 The public theorem `sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` avoids the historical bundled
 problem records.  It displays the operators, coordinate maps, residual

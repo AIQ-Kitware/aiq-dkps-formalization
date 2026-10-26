@@ -31,8 +31,8 @@ numbers, are what an operator-ideal theory is built from.
 
 TauCeti owns the general Ky Fan gauge triangle inequality. The local theorem
 `kyFanGaugeReal_add_le_of_exists_finiteRestriction` remains as a field-generic localization
-result for callers that provide finite-source approximation directly; the real and complex
-Hilbert-space inequalities forward to TauCeti.
+result for callers that provide finite-source approximation directly, without
+assuming source completeness. Complete-source consumers use Tau Ceti directly.
 
 ## Provenance
 
@@ -432,51 +432,6 @@ end Localization
 
 section Triangle
 
-section AnyField
-
-variable {E : Type v} {F : Type w}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
--- Neither space needs to be complete here: completeness is what `HasMinMaxLowerBound` is
--- proved from, not what the passage from it to the triangle inequality uses.
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- **The Ky Fan triangle inequality over any scalar field with a min--max lower bound.**
-
-This is the general statement: `kyFanGaugeReal_add_le_of_exists_finiteRestriction` needs a finite
-source restriction for every tolerance, and `HasMinMaxLowerBound` is exactly what produces
-one.  The two concrete fields are corollaries — `kyFanGaugeReal_add_le_complex` over `ℂ` below and
-`TauCeti.ApproximationNumber.kyFanGaugeReal_add_le_real` over `ℝ` — and neither repeats any part
-of the argument. -/
-theorem kyFanGaugeReal_add_le_of_hasMinMaxLowerBound (h : HasMinMaxLowerBound 𝕜 E F)
-    (S T : E →L[𝕜] F) (k : ℕ) :
-    (S + T).kyFanGaugeReal k ≤ S.kyFanGaugeReal k + T.kyFanGaugeReal k :=
-  kyFanGaugeReal_add_le_of_exists_finiteRestriction
-    (fun n ε hε => h.exists_finiteRestrictionApproximationNumber_add_gt (S + T) n ε hε) k
-
-end AnyField
-
-variable {E : Type v} {F : Type w}
-  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-
-/-- Every positive tolerance admits a finite source restriction whose approximation number
-is within that tolerance of the ambient one, over `ℂ`. -/
-theorem exists_finiteRestrictionApproximationNumber_add_gt
-    (T : E →L[ℂ] F) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
-    ∃ v : Fin (n + 1) → E,
-      T.approximationNumber n <
-        (T ∘L (Submodule.span ℂ (Set.range v)).subtypeL).approximationNumber n + ε :=
-  hasMinMaxLowerBound_complex.exists_finiteRestrictionApproximationNumber_add_gt T n ε hε
-
-omit [CompleteSpace F] in
-/-- **The Ky Fan triangle inequality** for bounded operators between complex Hilbert spaces.
-This forwards to TauCeti's canonical approximation-number gauge inequality. -/
-theorem kyFanGaugeReal_add_le_complex (S T : E →L[ℂ] F) (k : ℕ) :
-    (S + T).kyFanGaugeReal k ≤ S.kyFanGaugeReal k + T.kyFanGaugeReal k :=
-  by
-    change ((S + T).kyFanGauge k : ℝ) ≤ S.kyFanGauge k + T.kyFanGauge k
-    exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le S T k
 
 end Triangle
 

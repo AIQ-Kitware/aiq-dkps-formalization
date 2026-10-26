@@ -230,7 +230,9 @@ wants the two theorems below, not the bundled object. -/
 private def kyFanGaugeSeminorm (k : ℕ) : Seminorm ℂ (E →L[ℂ] F) where
   toFun T := T.kyFanGaugeReal k
   map_zero' := kyFanGaugeReal_zero k
-  add_le' S T := kyFanGaugeReal_add_le_complex S T k
+  add_le' S T := by
+    change ((S + T).kyFanGauge k : ℝ) ≤ S.kyFanGauge k + T.kyFanGauge k
+    exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le S T k
   neg' T := T.kyFanGaugeReal_neg k
   smul' c T := kyFanGaugeReal_smul c T k
 

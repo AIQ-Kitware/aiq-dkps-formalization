@@ -55,8 +55,6 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic",
@@ -2221,26 +2219,46 @@
       "upstream_pr": null
     },
     {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal at DKPS c891a88ec",
+      "source_declarations": [
+        "TauCeti.ApproximationNumber.exists_linearIndependent_lowerBound_of_lt_approximationNumber_real",
+        "TauCeti.ApproximationNumber.hasMinMaxLowerBound_real",
+        "TauCeti.ApproximationNumber.approximationNumber_isLUB_finiteRestrictions_real",
+        "TauCeti.ApproximationNumber.kyFanGaugeReal_add_le_real"
+      ],
+      "current_namespace": "TauCeti.HasMinMaxLowerBound",
+      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+      "ownership_class": "tauceti",
+      "roadmap_target": "approximation-numbers",
+      "provenance_class": "original real threshold proof by Jon Crall and GPT-5.6 Thinking through complexification; Kitware, Inc., Apache-2.0; retired after accepted-scope comparison without inferring proof descent",
+      "direct_dependencies": [
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "October 25: removed the real threshold proof, its private cutoff argument, field-specific wrappers and capability instance. The native converse theorem covers complete RCLike sources with possibly incomplete inner-product targets. The real LUB wrapper is replaced by the retained generic donor consequence over the native predicate, rather than claimed as a separately accepted theorem. Unmerged scalar-transport and cutoff estimates remain. Pre-retirement DKPS c891a88ec; accepted Tau Ceti efded067c28ffca3483fd731674eb13b42543fbb."
+    },
+    {
       "source_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
       "source_declarations": [],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-numbers",
       "provenance_class": "authored in place 2026-07-28: the hard half of the infinite-dimensional min-max theorem for approximation numbers, replacing the Spectra projection-valued-measure proof that DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean used to carry",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax"
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "DavisKahan.Interop.Spectra.ApproximationNumberMinMax"
-      ],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "migration_note": "October 25: retired the complex converse min-max proof and its private rank support. Native TauCeti.HasMinMaxLowerBound.of_completeSpace supplies the same strict threshold and n+1 independent-vector witness uniformly over RCLike fields, with no target completeness. Consumers use the public native predicate equation directly; no compatibility wrapper remains. Pre-retirement DKPS c891a88ec; accepted Tau Ceti efded067c28ffca3483fd731674eb13b42543fbb. Accepted overlap does not establish historical proof descent."
     },
     {
       "source_module": "DavisKahan.Interop.Spectra.ApproximationNumberMinMax",
@@ -2259,8 +2277,8 @@
       "roadmap_target": "approximation-numbers",
       "provenance_class": "copied and renamespaced 2026-07-28 out of DavisKahan/Interop/Spectra/ApproximationNumberMinMax.lean, which became Spectra-free once MinMaxUpper.lean replaced its projection-valued-measure proof; the source module is deleted",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper"
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -2268,6 +2286,16 @@
         "DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum",
         "DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus"
       ],
+      "maintained_declarations": [
+        "ContinuousLinearMap.approximationNumber_comp_subtypeL_le",
+        "ContinuousLinearMap.finiteRestrictionApproximationNumbers",
+        "ContinuousLinearMap.finiteRestrictionApproximationNumbers_upperBound",
+        "TauCeti.HasMinMaxLowerBound.exists_finiteRestrictionApproximationNumber_gt_of_lt",
+        "TauCeti.HasMinMaxLowerBound.approximationNumber_isLUB_finiteRestrictions",
+        "TauCeti.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound",
+        "TauCeti.HasMinMaxLowerBound.exists_finiteRestrictionApproximationNumber_add_gt"
+      ],
+      "migration_note": "October 25: deleted the local converse predicate, its global capability class and fixed-field wrappers. The unmerged finite-restriction localization and LUB results are now extensions of native TauCeti.HasMinMaxLowerBound, preserving conditional incomplete-source scope. Complete sources use the accepted of_completeSpace theorem. Historical source names above are retained for attribution, not as current exports.",
       "status": "staged",
       "upstream_pr": null
     },

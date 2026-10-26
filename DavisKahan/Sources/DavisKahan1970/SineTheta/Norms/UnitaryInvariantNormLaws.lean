@@ -87,9 +87,8 @@ theorem extendedGauge_smul (N : SymmetricNormingFunction)
 
 /-- Triangle inequality for each finite prefix gauge.
 
-The Ky Fan triangle inequality in infinite dimensions is proved from the min--max lower
-bound, so what is carried here is the class asserting that bound over the scalar field,
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`, instantiated for `ℝ` and `ℂ`. -/
+The accepted scalar-generic Ky Fan triangle inequality supplies subadditivity
+without a separate min–max capability assumption. -/
 theorem prefixGauge_add_le
     (N : SymmetricNormingFunction)
     (n : ℕ) (A B : E →L[𝕜] F) :
