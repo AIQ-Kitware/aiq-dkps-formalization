@@ -449,3 +449,33 @@ displacement `||I-U||_p`; the comparison is not evidence of historical
 priority. The full theorem-level predecessor audit remains necessary.
 The classical density, finite-section and zero-extension lemmas are not
 claimed as novel mathematics independently of the transport theory.
+
+## Exact finite-rank projection-pair theorem with explicit defect balance
+
+`SchattenFiniteRankPairs.exists_unitary_minimizing_schatten_transport_of_finite_rank_projection_sub`
+now states the exact `1<=p<2` minimum directly from `rank(P_K-P_L)<=n`
+and equality of `finrank(halmosSourceDefect K L)` and
+`finrank(halmosTargetDefect K L)`. No reference transporter is supplied by
+the caller. It constructs a finite-rank optimizer with the intrinsic
+ambient angle cost and compares it against every ambient complex unitary.
+The nuclear specialization gives exactly twice the nuclear directed
+sine gauge. Infinite rank/corank and nonseparable ambient spaces are
+still allowed.
+
+`DirectRotationRank.rank_one_sub_nonacuteDirectRotation_le_projection_sub`
+proves, over both fields in arbitrary Hilbert dimension, that every
+completed direct rotation has displacement rank at most the projection
+difference rank. The proof factors the displacement through the kernel
+quotient of the projection difference; it uses the existing theorem that
+a completed rotation fixes every vector on which the projections agree.
+`finiteDimensional_crossedDefects_of_projection_sub_rank_le` proves both
+crossed defects are finite-dimensional, so the displayed finrank balance
+is a substantive equality of finite defects, not the degenerate value
+`finrank=0` for an infinite-dimensional space. An isometric defect
+identification and then a finite-rank feasible reference are constructed.
+Focused pair build passed (7,384 jobs).
+
+Next obligations: prove necessity of defect balance for compact/ideal
+transporters, and construct/generalize ideal attainers when the projection
+difference is Schatten but not finite-rank. Current pair hypotheses are
+sufficient; an iff feasibility classification is not yet claimed.
