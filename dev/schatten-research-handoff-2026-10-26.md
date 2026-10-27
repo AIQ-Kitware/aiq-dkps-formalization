@@ -3746,3 +3746,61 @@ spread in symmetric gauges; afterward one may address compactness and
 explicit Grassmannian/right-defect factors. None of those subsequent
 claims is inferred merely from the set-theoretic bijection.
 No paper or visualization file is changed.
+
+
+## Intrinsic antipodes, sharp spread, and the common center — 27 October 2026
+
+`Geometry/Polar/NuclearRootAntipode.lean` closes the immediate geometric
+consequences of the complete parametrization. Negation preserves the
+independent signed-root set, and induces an actual involution
+`nuclearOptimizerAntipode_complex` of the full optimizer set.
+For every symmetric ideal family Phi, the compiled theorems give:
+
+* `nuclear_optimizers_gauge_sub_le_complex`:
+  `Phi(T-U) <= 2 Phi(P_K-P_L)` for every pair of nuclear optimizers;
+* `nuclearOptimizerAntipode_gauge_complex`:
+  `Phi(T-antipode(T)) = 2 Phi(P_K-P_L)` for **every** optimizer T,
+  with the same antipode attaining the bound for all Phi simultaneously;
+* `nuclear_optimizers_gauge_radius_complex`:
+  `Phi(T-A_can) = Phi(P_K-P_L)` for every optimizer, where A_can is
+  the canonical intertwiner, not a chosen unitary completion.
+
+Infinite gauge values are included. These use the existing symmetric
+ideal modulus invariance and the preceding exact metric theorem.
+The operator-norm upper bound and attainment are separately compiled:
+no pair exceeds `2 ||P_K-P_L||`, and every optimizer has an antipodal
+partner at exactly that distance. Thus the maximum family separation
+is explicit, with no uniqueness or principal-plane assumption.
+
+`nuclearOptimizerAntipode_sum_complex` proves `T+antipode(T)=2 A_can`.
+The coefficient formula and `nuclearOptimizerAntipode_independent_defect_complex`
+therefore prove that the antipode is intrinsic: it does not depend on D,
+even when there are right-angle defects. The family has the canonical
+intertwiner as a common midpoint and a constant radius in every symmetric
+ideal gauge. This quantifies ambiguity of nuclear-optimal subspace
+alignment; it makes no numerical-performance or statistical claim.
+
+All optimizer statements assume arbitrary complete complex Hilbert
+space, orthogonally complemented K,L, finite native nuclear projection
+difference and an actual crossed-defect equivalence. Root-negation and
+parameter gauge statements are RCLike-generic and need no ideal-membership
+hypothesis. The complete unrestricted real optimizer problem is not
+inferred from the complex optimizer bijection.
+
+Focused antipode build passed 7,186 jobs. The registered full default
+build passed 21,389 jobs (`/tmp/nuclear-antipode-full.log`), preceded
+by `lake exe cache get`.
+
+Next structural target, still unproved: decompose the independent root
+set spectrally. On each strictly acute positive-angle sector, prove its
+free parameter is a self-adjoint unitary on the positive-i quarter-turn
+eigenspace; reflection determines the negative-i sector. On the
+right-angle defect sector, identify the free unitary between the two
+crossed defects. Only then identify Grassmannian/right-unitary factors,
+connected components, dimensions and topology. Finite nuclear difference
+makes the nonzero sine eigenspaces finite dimensional and the tail
+summable; this suggests compactness in native nuclear distance as well
+as operator norm, but **neither compactness nor that product topology
+has yet been formalized here**. The metric and antipode theorems alone
+do not prove them. No priority claim is added, and paper/visualization
+files remain untouched.
