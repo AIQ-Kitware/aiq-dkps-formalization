@@ -3552,3 +3552,63 @@ should be consumed rather than replaced by new definitions. The
 right-angle kernel must be treated separately throughout.
 Paper and visualization files remain untouched. No historical priority
 claim is inferred from these compiler results.
+
+
+## Signed sine roots and a Hermitian all-optimizer certificate — 27 October 2026
+
+`Geometry/Polar/NuclearSignedRoot.lean` strengthens the optimizer theory
+beyond the preceding spectral-preservation checkpoint. The generic
+`nuclearTransportDual_signed_sine_structure` assumes an actual relative
+unitary Z, fixation `(I-Z)Q=0` of the full skew-kernel sector, and
+self-adjointness of its calibrated displacement. It proves, for
+`A=V*(Z-C)`, with stars denoting adjoints:
+
+* A is self-adjoint;
+* `|A|=S` and `A*A=S*S`;
+* `V*(R-Z)=S-A`.
+
+No inverse cosine, finite rank, trace assumption, source-reflection
+commutation, or restriction on right angles is used in this algebraic
+RCLike theorem. The proof derives the weighted identity
+`C(Z+Z*)=2 C*C` from the positive average and computes the exact
+Gram operator of Z-C. Accepted polar and positive-square-root APIs
+identify its modulus. This preserves the right-angle exception rather
+than falsely replacing the weighted identity by `Z+Z*=2C` globally.
+
+`nuclearTransportDual_isPositive_of_isSelfAdjoint` then proves that the
+self-adjoint displacement is automatically positive: `S-A=|A|-A` is
+twice the negative part of A. The proof consumes Mathlib's existing
+`CFC.abs_sub_self` and positive-part API. Furthermore,
+`nuclearTransportDual_displacement_finite_of_isSelfAdjoint` proves that
+finite native nuclear projection difference already forces finite
+native nuclear R-Z under these structural conditions, over either
+field. It does not require separately testing the displacement ideal.
+
+The transporter-facing endpoint
+`nuclear_isMin_iff_hermitian_certificate_complex` quantifies over **every**
+ambient transporter T. On any complete complex Hilbert space, assuming
+orthogonally complemented K,L, an actual isometric equivalence of crossed
+defects, and finite native nuclear P_K-P_L, global optimality is exactly:
+T fixes every x with P_K x=P_L x, and `V*(R-T*R)` is self-adjoint.
+**Neither positivity nor finite displacement is an extra condition on
+that right-hand side.** Both follow, including on infinite-dimensional
+fixed sectors and arbitrary right-angle multiplicities.
+
+Focused signed-root build passed 7,178 jobs. The registered full default
+build passed 21,381 jobs (`/tmp/nuclear-signed-root-full.log`), with
+`lake exe cache get` before each build. No
+historical-first claim is made for classical unitary/absolute-value
+algebra; the novel-priority question concerns the full transport
+classification in its exact scope, separately from verification.
+
+Next strongest structural step: turn the signed sine into independent
+parameters. A candidate complete parametrization is self-adjoint A
+with `|A|=S`, source-reflection oddness, and commutation with `V*C`;
+construct `Z=C+V*A`, then T=R Z*. Necessity of the last commutation
+and oddness, unitarity and transport of the construction, automatic
+trace-class cost, and the two inverse identities all still require
+formal proof. Only after that may one claim an explicit signed-root
+parametrization, and only after spectral decomposition may one identify
+its Grassmannian factors and unrestricted right-defect unitary factors.
+This candidate replaces the older coordinate-block obstruction with a
+precise basis-free theorem target. Paper and visualizations are unchanged.

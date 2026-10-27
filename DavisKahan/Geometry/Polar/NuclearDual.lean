@@ -128,6 +128,32 @@ theorem nuclearTransportDual_add_star
   rw [star_add, hF, (isSelfAdjoint_starProjection B.ker).star_eq]
   abel
 
+/-- The completed nuclear dual removes the entire canonical skew
+phase, giving the intrinsic positive sine. -/
+theorem nuclearTransportDual_adjoint_mul_skew
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    star (nuclearTransportDual K L D : E →L[𝕜] E) *
+      (nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L) =
+        K.sinAngleOperator L := by
+  let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+  let F := B.polarFactor
+  let Q := B.ker.starProjection
+  have hQ : IsSelfAdjoint Q := isSelfAdjoint_starProjection B.ker
+  have hBQ : B * Q = 0 := by ext x; exact B.ker.starProjection_apply_mem x
+  have hQB : Q * B = 0 := by
+    have hB : star B = -B := Proposition35.star_nonacuteDirectRotation_sub_cosine K L D
+    have h := congrArg star hBQ
+    rw [star_mul, hQ.star_eq, hB, mul_neg, star_zero] at h
+    exact neg_eq_zero.mp h
+  have hFB : star F * B = K.sinAngleOperator L := by
+    have h := B.adjoint_polarFactor_comp
+    change star F * B = B.modulus at h
+    exact h.trans ((Proposition35.modulus_nonacuteDirectRotation_sub_cosine K L D).trans
+      (by rw [Proposition35.section3SinAngleOperator, Submodule.sinAngleOperator_def]))
+  change star (F + Q) * B = _
+  rw [star_add, hQ.star_eq, add_mul, hFB, hQB, add_zero]
+
 /-- The actual nuclear dual commutes with completed direct rotation,
 including on fixed directions and arbitrary right-angle completions. -/
 theorem nonacuteDirectRotation_comm_nuclearTransportDual
