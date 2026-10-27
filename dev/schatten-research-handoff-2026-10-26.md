@@ -54,6 +54,11 @@ bound in the sum of the two projection errors.
 The endpoint constant is `p/(2-p)`. This differs from an objective-error
 certificate for an arbitrary near-minimizer of one fixed problem, which
 remains open.
+Nearest projection-commuting correction is now also Lipschitz in the
+input unitary, with constant `1/sqrt(1-gamma^2)` and endpoint `p/(2-p)`.
+This uses the polar factorization of the actual diagonal block and
+contractivity of pinching, so it avoids the extra loss of an image-gap
+triangle estimate. See the correction-data entry below.
 Full nuclear, real infinite-
 dimensional and infinite Charbonnier optimizer classifications remain open.
 The dated sections below preserve proof history; use this paragraph and the
@@ -396,7 +401,57 @@ next concrete correction application is a bound for the nearest
 `P`-commuting unitary as its input unitary `A` varies. The expected
 `1/sqrt(1-gamma^2)` constant should be obtained from the polar factor of
 `PAP+Pperp A Pperp`, not by inserting a cross pair with an unjustified
-gap bound. Sharpness of either data constant remains to be formalized.
+gap bound. Sharpness of the data constants remains to be formalized.
+
+## Input-error certificate for nearest commuting-unitary correction
+
+`SchattenCorrectionDataStability.lean` proves
+`norm_nearest_schatten_corrections_sub_le_of_commutator_norm_le` and
+`norm_nearest_schatten_corrections_sub_le_at_closed_critical_commutator`.
+For actual global Schatten-nearest `P_K`-commuting unitaries `C,D` for
+inputs `A,B`, respectively, with finite `1<p<2`,
+
+```
+||C-D|| <= ||A-B|| / sqrt(1-gamma^2)
+```
+
+provided both commutators are native Schatten and both commutator norms
+are at most `gamma <= sin(theta_c(p))`. The closed-critical endpoint is
+
+```
+||C-D|| <= (p/(2-p)) * ||A-B||.
+```
+
+All norms in these error inequalities are operator norms. Minimality is
+compared against **every ambient commuting unitary** in the native
+extended Schatten gauge. There is no finite-candidate-distance,
+finite-rank, index-balance or separability assumption; in particular
+`A-B` need not itself be Schatten. The existing uniqueness theorem
+provides existence and uniqueness in precisely this regime. Thus a
+certified operator-norm input error yields a deterministic output error
+certificate for optimal commuting-unitary rounding, even at the exact
+Schatten transition. This is a data-stability theorem, not an objective-
+error certificate for an arbitrary almost-minimizing output.
+
+`Geometry/Polar/CommutingCorrectionStability.lean` proves the actual
+diagonal-block identity `diagBlock(A)=S(AK,K) A`, constructs its positive
+factor under the canonical correction, and preserves its cosine
+coercivity by unitary conjugation. The theorem
+`add_mul_norm_canonical_corrections_sub_le_two_mul_norm_sub` retains
+unequal endpoint coercivity bounds. The generic donor
+`Submodule.norm_diagBlock_le` (and its subtraction form) proves
+contractivity of the **accepted upstream** diagonal-block operation
+over either scalar field, without dimension or completeness assumptions.
+The new proof consumes the upstream block API directly and introduces
+no parallel diagonal-block definition or polar implementation.
+
+Focused build passed (8,056 jobs), and the full default build passed
+(21,271 jobs), with warnings treated as errors. These are exact
+consequences of the compiled Schatten classification and the classical
+polar perturbation argument; historical first priority is not claimed.
+The most useful next step is an explicit identification with the polar
+factor of `diagBlock(A)`, followed by a formally verified two-dimensional
+equality example for optimality of the constant.
 
 ## All-rank real nuclear canonical-value criterion
 

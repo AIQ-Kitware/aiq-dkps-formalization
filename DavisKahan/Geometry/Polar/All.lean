@@ -22,6 +22,7 @@ public import DavisKahan.Geometry.Polar.CanonicalRestriction
 public import DavisKahan.Geometry.Polar.CanonicalCutoffTail
 public import DavisKahan.Geometry.Polar.CanonicalApproximation
 public import DavisKahan.Geometry.Polar.CanonicalStability
+public import DavisKahan.Geometry.Polar.CommutingCorrectionStability
 public import DavisKahan.Geometry.Polar.TransportUniqueness
 public import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 public import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
