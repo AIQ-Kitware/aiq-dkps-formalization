@@ -3356,3 +3356,33 @@ The exact defect identity above should then characterize every finite-
 cost Hilbert nuclear optimizer by fixation of the common sector and
 positivity of the actual dual displacement. Calibration, the iff and
 the subsequent phase/multiplicity parametrization are not yet claimed.
+
+
+## Full-space algebraic nuclear dual — 27 October 2026
+
+`Geometry/Polar/NuclearDual.lean` constructs the actual unitary
+`nuclearTransportDual` in an arbitrary complete RCLike Hilbert space,
+assuming orthogonally complemented K,L and an actual isometric
+identification of their crossed defect spaces. No finite dimension,
+compactness or trace assumption is used. The skew part B=R-C has kernel
+exactly ker(P_K-P_L); its accepted polar factor F is odd under source
+reflection. The dual is V=F+P_ker(B). The cosine fixes this entire kernel.
+
+`nuclearTransportDual_adjoint_mul_displacement` proves for every bounded Z:
+`V*(R-Z) = S + Q(I-Z) + F*(C-Z)`, where stars on V and F mean adjoints,
+S=|P_K-P_L| and Q is the kernel projection. This is the algebraic
+calibration identity, not yet its trace-class optimizer iff.
+
+Importing this accepted polar API together with the existing geometry
+exposed a duplicate `modulus_adjoint` declaration. The redundant donor
+proof is retired and its two internal consumers use accepted TauCeti
+polar theorems. No public alias or compatibility layer is introduced.
+The name-drift scanner retains its 23 unrelated pre-existing findings.
+
+Focused dual build passed 7,010 jobs. Full default build passed 21,371
+jobs (`/tmp/nuclear-dual-full.log`), preceded by `lake exe cache get`.
+Explicit Challenge validation follows this entry. Next: show the last term in the identity
+has zero nuclear trace for Z=T*R, prove quantitative trace calibration,
+and deduce the exact all-ambient nuclear optimizer certificate. The
+phase/multiplicity parametrization beyond that certificate remains open.
+Paper and visualization files are unchanged.

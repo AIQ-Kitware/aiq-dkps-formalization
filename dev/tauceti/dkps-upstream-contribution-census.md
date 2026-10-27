@@ -1787,3 +1787,24 @@ scanner still reports the same 23 known findings involving imported APIs and
 historical mappings; this checkpoint does not claim that scanner passes. No
 aliases were introduced to satisfy it. Papers, visualizations, coordination
 checkouts and standalone submission submodules were not modified.
+
+
+### October 27: consume accepted polar adjoint identities
+
+At the unchanged accepted TauCeti pin
+`b3de655482f7b86c77d8982566e5a73801fd64fa`, the donor
+`Polar/PartialIsometry.lean` now imports accepted `Polar/Bounded.lean`.
+Delete the local `ContinuousLinearMap.modulus_adjoint` proof: its name
+collided with the accepted theorem, whose displayed formula differs.
+The two internal consumers, `modulus_adjoint_comp_polarPartial` and
+`polarPartial_adjoint`, now use accepted `eq_polarFactor`,
+`modulus_adjoint_comp_polarFactor` and `polarFactor_adjoint`, with local
+proofs identifying the existing donor factor. No replacement public alias
+is added. The wider donor-factor migration is not claimed complete.
+
+This is direct consumption of accepted results, not evidence that the
+accepted proof was adapted from DKPS. Existing donor/Spectra ancestry is
+preserved in the source. A whole maintained-tree search found no external
+consumer or census pin of the removed local formula. The name-drift scan
+retains the same 23 previously recorded unrelated findings. Full default
+and explicit Challenge build evidence is recorded in the research handoff.

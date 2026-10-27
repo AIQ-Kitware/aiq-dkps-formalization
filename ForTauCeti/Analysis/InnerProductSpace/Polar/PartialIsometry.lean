@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
 module
 
-public import TauCeti.Analysis.InnerProductSpace.Modulus
+public import TauCeti.Analysis.InnerProductSpace.Polar.Bounded
 public import TauCeti.Analysis.InnerProductSpace.PartialIsometry
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 public import Mathlib.Analysis.Normed.Operator.Extend
@@ -70,8 +70,7 @@ subspace gives `polarPartial`.
   orthogonal projection onto it;
 * `ContinuousLinearMap.adjoint_polarPartial_comp_self`: the initial-space identity
   `W⋆ M = |M|`;
-* `ContinuousLinearMap.modulus_adjoint`: `|M⋆| = W |M| W⋆`, and
-  `ContinuousLinearMap.modulus_adjoint_comp_polarPartial`: the second polar identity
+* `ContinuousLinearMap.modulus_adjoint_comp_polarPartial`: the second polar identity
   `M = |M⋆| W`;
 * `ContinuousLinearMap.eq_polarPartial_of_comp_modulus`: **uniqueness** — a bounded `V`
   with `V |M| = M` vanishing off the initial space *is* `W`, so the decomposition is
@@ -586,49 +585,16 @@ theorem adjoint_eq_modulus_comp_adjoint_polarPartial (M : E →L[𝕜] F) :
   rw [ContinuousLinearMap.adjoint_comp, M.isSelfAdjoint_modulus.adjoint_eq] at h
   exact h.symm
 
-/-- **The modulus of the adjoint**: `|M⋆| = W |M| W⋆`.
-
-This is the other half of the polar decomposition — alongside `M = W |M|` it gives
-`M = |M⋆| W` — and it identifies the final space as the initial space of `M⋆`.  The proof
-is uniqueness of the positive square root: `W |M| W⋆` is positive, and both it squared and
-`M M⋆` reduce to `W (M⋆ M) W⋆`. -/
-theorem modulus_adjoint (M : E →L[𝕜] F) :
-    M.adjoint.modulus = M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint := by
-  refine (eq_modulus_iff.mpr ⟨?_, ?_⟩).symm
-  · exact M.isPositive_modulus.conj_adjoint
-      M.polarPartial
-  · have hP : ∀ y : E, M.polarPartial.adjoint (M.polarPartial y)
-        = M.polarInitial.starProjection y := by
-      intro y
-      rw [← ContinuousLinearMap.comp_apply, M.adjoint_comp_polarPartial]
-    have hS : ∀ z : E, M.modulus (M.polarInitial.starProjection z) = M.modulus z := by
-      intro z
-      rw [← ContinuousLinearMap.comp_apply, M.modulus_comp_starProjection]
-    have hMadj : ∀ y : F, M.adjoint y = M.modulus (M.polarPartial.adjoint y) := by
-      intro y
-      rw [M.adjoint_eq_modulus_comp_adjoint_polarPartial, ContinuousLinearMap.comp_apply]
-    have hM : ∀ z : E, M z = M.polarPartial (M.modulus z) := by
-      intro z
-      rw [M.polarPartial_apply_modulus]
-    -- states the goal with the definition unfolded, in the shape the next step needs;
-    -- there is no `_apply` lemma to rewrite with here.
-    change (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint) ∘L
-      (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint) = _
-    rw [ContinuousLinearMap.adjoint_adjoint]
-    ext x
-    simp only [ContinuousLinearMap.comp_apply]
-    rw [hP, hS, hMadj, hM]
-
 /-- The second polar identity, `M = |M⋆| W`. -/
 theorem modulus_adjoint_comp_polarPartial (M : E →L[𝕜] F) :
     M.adjoint.modulus ∘L M.polarPartial = M := by
-  rw [M.modulus_adjoint]
-  calc (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint) ∘L M.polarPartial
-      = M.polarPartial ∘L M.modulus ∘L (M.polarPartial.adjoint ∘L M.polarPartial) := by
-        simp only [ContinuousLinearMap.comp_assoc]
-    _ = M.polarPartial ∘L M.modulus := by
-        rw [M.adjoint_comp_polarPartial, M.modulus_comp_starProjection]
-    _ = M := M.polarPartial_comp_modulus
+  have hcanonical : M.polarPartial = M.polarFactor := by
+    apply eq_polarFactor M.polarPartial_comp_modulus
+    intro x hx
+    apply M.polarPartial_eq_zero_of_mem_orthogonal
+    rwa [M.polarInitial_orthogonal_eq_ker]
+  rw [hcanonical]
+  exact M.modulus_adjoint_comp_polarFactor
 
 /-- **Uniqueness of the polar partial isometry.**  A bounded `V` with `V |M| = M` that
 vanishes off the initial space *is* `W`.
@@ -689,37 +655,18 @@ theorem starProjection_comp_adjoint_polarPartial (M : E →L[𝕜] F) :
 isometry.  By uniqueness, since `W⋆ |M⋆| = M⋆` and `W⋆` vanishes on `ker M⋆`. -/
 theorem polarPartial_adjoint (M : E →L[𝕜] F) :
     M.adjoint.polarPartial = M.polarPartial.adjoint := by
-  refine (M.adjoint.eq_polarPartial_of_comp_modulus M.polarPartial.adjoint ?_ ?_).symm
-  · -- W⋆ |M⋆| = W⋆ W |M| W⋆ = P |M| W⋆ = |M| W⋆ = M⋆
-    rw [M.modulus_adjoint]
-    have hstep : M.polarPartial.adjoint ∘L
-        (M.polarPartial ∘L M.modulus ∘L M.polarPartial.adjoint)
-        = (M.polarPartial.adjoint ∘L M.polarPartial) ∘L
-            M.modulus ∘L M.polarPartial.adjoint := by
-      simp only [ContinuousLinearMap.comp_assoc]
-    rw [hstep, M.adjoint_comp_polarPartial]
-    have hstep2 : M.polarInitial.starProjection ∘L M.modulus ∘L M.polarPartial.adjoint
-        = (M.polarInitial.starProjection ∘L M.modulus) ∘L M.polarPartial.adjoint := by
-      simp only [ContinuousLinearMap.comp_assoc]
-    rw [hstep2, M.starProjection_comp_modulus,
-      ← M.adjoint_eq_modulus_comp_adjoint_polarPartial]
-  · -- W⋆ kills ker M⋆
-    intro y hy
-    have hker : y ∈ LinearMap.ker M.adjoint.toLinearMap := by
-      rwa [← M.adjoint.polarInitial_orthogonal_eq_ker]
-    have hmod : M.modulus (M.polarPartial.adjoint y) = 0 := by
-      have : M.adjoint y = 0 := hker
-      rwa [M.adjoint_eq_modulus_comp_adjoint_polarPartial,
-        ContinuousLinearMap.comp_apply] at this
-    have hperp : M.polarPartial.adjoint y ∈ M.polarInitialᗮ := by
-      rw [M.polarInitial_orthogonal_eq_ker]
-      exact (SetLike.ext_iff.mp M.ker_modulus _).mp hmod
-    have hmem : M.polarPartial.adjoint y ∈ M.polarInitial := by
-      have h := congrArg (fun T => T y) M.starProjection_comp_adjoint_polarPartial
-      simp only [ContinuousLinearMap.comp_apply] at h
-      rw [← h]
-      exact Submodule.starProjection_apply_mem _ _
-    exact inner_self_eq_zero.mp (hperp _ hmem)
+  have hcanonical : M.polarPartial = M.polarFactor := by
+    apply eq_polarFactor M.polarPartial_comp_modulus
+    intro x hx
+    apply M.polarPartial_eq_zero_of_mem_orthogonal
+    rwa [M.polarInitial_orthogonal_eq_ker]
+  have hcanonicalAdjoint : M.adjoint.polarPartial = M.adjoint.polarFactor := by
+    apply eq_polarFactor M.adjoint.polarPartial_comp_modulus
+    intro x hx
+    apply M.adjoint.polarPartial_eq_zero_of_mem_orthogonal
+    rwa [M.adjoint.polarInitial_orthogonal_eq_ker]
+  rw [hcanonical, hcanonicalAdjoint]
+  exact M.polarFactor_adjoint
 
 /-- The polar partial isometry of a skew-adjoint endomorphism is skew-adjoint. -/
 theorem adjoint_polarPartial_eq_neg_of_adjoint_eq_neg
