@@ -7,6 +7,8 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
 public import ForTauCeti.Analysis.OperatorIdeal.Family.UnitaryTransport
+public import TauCeti.Analysis.Normed.Operator.LinearIsometryEquiv.Topology
+public import Mathlib.Topology.Order.LocalExtr
 
 /-!
 # Unitary correction fibers and exact ideal costs
@@ -80,7 +82,8 @@ end Submodule
 
 namespace TauCeti.OperatorIdealFamily
 
-open scoped ENNReal
+open Filter
+open scoped ENNReal Topology TauCeti.LinearIsometryEquivOperatorNorm
 
 universe u v
 
@@ -130,6 +133,81 @@ theorem gauge_correction_isMin_iff_transport_isMin
     apply hmin
     rw [K.map_correction_transport]
     exact (K.map_eq_self_iff_commute_starProjection V).mpr hV
+
+/-- Local correction and relative-transport optimality are equivalent
+in operator norm. The actual feasible candidate and all ambient nearby
+competitors are retained; the ideal gauge may be infinite. -/
+theorem gauge_correction_isLocalMinOn_iff_transport_isLocalMinOn
+    (Φ : OperatorIdealFamily.{u, v, v} 𝕜)
+    (K : Submodule 𝕜 E) [K.HasOrthogonalProjection]
+    (A C : E ≃ₗᵢ[𝕜] E) (hC : Commute (C : E →L[𝕜] E) K.starProjection) :
+    IsLocalMinOn
+      (fun V : E ≃ₗᵢ[𝕜] E =>
+        Φ.gauge ((A : E →L[𝕜] E) - (V : E →L[𝕜] E)))
+      {V | Commute (V : E →L[𝕜] E) K.starProjection} C ↔
+    IsLocalMinOn
+      (fun T : E ≃ₗᵢ[𝕜] E => Φ.gauge (1 - (T : E →L[𝕜] E)))
+      {T | (K.map A.toLinearMap).map T.toLinearMap = K} (A.symm.trans C) := by
+  let f (T : E ≃ₗᵢ[𝕜] E) := A.trans T
+  let g (V : E ≃ₗᵢ[𝕜] E) := A.symm.trans V
+  have hfg (V : E ≃ₗᵢ[𝕜] E) : f (g V) = V := by
+    ext x
+    change V (A.symm (A x)) = V x
+    rw [A.symm_apply_apply]
+  have hgf (T : E ≃ₗᵢ[𝕜] E) : g (f T) = T := by
+    ext x
+    change T (A (A.symm x)) = T x
+    rw [A.apply_symm_apply]
+  have hf : Continuous f := by
+    apply LinearIsometryEquiv.continuous_operatorNorm_iff.mpr
+    change Continuous (fun T : E ≃ₗᵢ[𝕜] E => (T : E →L[𝕜] E) ∘L (A : E →L[𝕜] E))
+    exact LinearIsometryEquiv.isEmbedding_toContinuousLinearMap.continuous.clm_comp continuous_const
+  have hg : Continuous g := by
+    apply LinearIsometryEquiv.continuous_operatorNorm_iff.mpr
+    change Continuous (fun V : E ≃ₗᵢ[𝕜] E =>
+      (V : E →L[𝕜] E) ∘L (A.symm : E →L[𝕜] E))
+    exact LinearIsometryEquiv.isEmbedding_toContinuousLinearMap.continuous.clm_comp continuous_const
+  have hgmap (V : E ≃ₗᵢ[𝕜] E) (hV : Commute (V : E →L[𝕜] E) K.starProjection) :
+      (K.map A.toLinearMap).map (g V).toLinearMap = K := by
+    rw [K.map_correction_transport]
+    exact (K.map_eq_self_iff_commute_starProjection V).mpr hV
+  have hfmap (T : E ≃ₗᵢ[𝕜] E)
+      (hT : (K.map A.toLinearMap).map T.toLinearMap = K) :
+      Commute (f T : E →L[𝕜] E) K.starProjection := by
+    apply (K.map_eq_self_iff_commute_starProjection (f T)).mp
+    rw [← K.map_correction_transport A (f T)]
+    change (K.map A.toLinearMap).map (g (f T)).toLinearMap = K
+    rwa [hgf]
+  have hcostf (T : E ≃ₗᵢ[𝕜] E) :
+      Φ.gauge ((A : E →L[𝕜] E) - (f T : E →L[𝕜] E)) =
+        Φ.gauge (1 - (T : E →L[𝕜] E)) := by
+    rw [Φ.gauge_unitary_sub_eq_displacement]
+    change Φ.gauge (1 - (g (f T) : E →L[𝕜] E)) = _
+    rw [hgf]
+  constructor
+  · intro hmin
+    have hloc : IsLocalMinOn
+        (fun V : E ≃ₗᵢ[𝕜] E =>
+          Φ.gauge ((A : E →L[𝕜] E) - (V : E →L[𝕜] E)))
+        {V | Commute (V : E →L[𝕜] E) K.starProjection} (f (g C)) := by rwa [hfg]
+    have hcomp := hloc.comp_continuousOn
+      (s := {T : E ≃ₗᵢ[𝕜] E | (K.map A.toLinearMap).map T.toLinearMap = K})
+      (fun T hT => hfmap T hT) hf.continuousOn (hgmap C hC)
+    filter_upwards [hcomp] with T hT
+    change Φ.gauge ((A : E →L[𝕜] E) - (f (g C) : E →L[𝕜] E)) ≤
+      Φ.gauge ((A : E →L[𝕜] E) - (f T : E →L[𝕜] E)) at hT
+    rw [hcostf, hcostf] at hT
+    exact hT
+  · intro hmin
+    have hcomp := hmin.comp_continuousOn
+      (s := {V : E ≃ₗᵢ[𝕜] E | Commute (V : E →L[𝕜] E) K.starProjection})
+      (fun V hV => hgmap V hV) hg.continuousOn hC
+    filter_upwards [hcomp] with V hV
+    change Φ.gauge (1 - (g C : E →L[𝕜] E)) ≤
+      Φ.gauge (1 - (g V : E →L[𝕜] E)) at hV
+    rw [← Φ.gauge_unitary_sub_eq_displacement A C,
+      ← Φ.gauge_unitary_sub_eq_displacement A V] at hV
+    exact hV
 
 /-- Uniqueness of nearest commuting correction is equivalent to
 uniqueness of relative transport in every operator-ideal gauge. This

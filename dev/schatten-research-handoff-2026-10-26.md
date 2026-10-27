@@ -2933,3 +2933,65 @@ subspace and every such exponent. These general topological ingredients
 do not assert finite-cost local-to-global over the real field or at the
 nuclear endpoint. Paper and visualizations untouched; no first-priority
 claim is inferred from compilation.
+
+## Complete strict Schatten local symmetry-correction landscape
+
+The field-generic operator-ideal endpoint
+`TauCeti.OperatorIdealFamily.gauge_correction_isLocalMinOn_iff_transport_isLocalMinOn`
+now transfers actual operator-norm local optimality between nearest
+projection-commuting correction and relative subspace transport. It
+preserves every accepted ideal gauge, including infinite values and all
+nearby ambient competitors. Its hypothesis is feasibility of the actual
+candidate, not ideal membership or finite dimension.
+
+`SchattenCorrectionLocalGlobal.schatten_correction_isLocalMinOn_iff_global_or_noncompact_complex`
+proves the complete strict-exponent correction landscape: for a commuting
+candidate C of unitary input A, local optimality iff global optimality or
+noncompactness of `A-C`. No commutator-ideal, index or finite candidate
+cost is assumed. `schatten_correction_isMin_of_isLocalMinOn_of_finite_cost_complex`
+proves every finite-cost local correction is globally nearest, comparing
+against all ambient commuting unitaries including infinite-cost rivals.
+
+`eq_canonical_correction_of_schatten_isLocalMinOn_of_compact_of_commutator_le_critical_complex`
+identifies every **compact** locally nearest correction as
+`canonicalPolarFactor(AK,K) * A` when the actual commutator is Schatten
+and its operator norm is at most the critical sine. Candidate Schatten
+membership, finite distance and index balance are conclusions rather
+than standing assumptions. The compact hypothesis is needed to exclude
+the proved noncompact infinite-cost local plateaus. Critical equality,
+zero and repeated angles and arbitrary ambient dimension are retained.
+Focused application build passed 8,048 jobs. These approximation theorems
+do not claim convergence of an algorithm, computational performance,
+physical implementation or statistical guarantees.
+
+The completed strict complex Hilbert frontier now includes every global
+optimizer and its topology, exact uniqueness, finite-rank correction
+budgets, every operator-norm local minimum (including infinite costs),
+and the corresponding nearest symmetry-correction landscape. The generic
+compact-relative finite-update theorem simultaneously strengthens the
+smoothed density proof and supplies foundations at other finite exponents.
+Historical novelty remains a separate priority question; none of these
+compiler results by itself establishes historical priority. Paper and
+visualization files remain untouched.
+
+Most consequential remaining mathematical directions: exact trace-class
+attainment and every-optimizer classification for genuinely infinite-rank
+projection pairs (the positive critical cutoff disappears at `p=1`);
+real-field unrestricted strict-exponent optimization and its determinant
+components; topology beyond the already proved projection-factor
+homeomorphisms (connected components/manifold dimensions); and sharp
+varying-data or near-minimizer stability. The completed complex local
+proof does not establish a real local-to-global theorem, a nuclear
+nonsmooth landscape theorem, or a uniform quantitative solver guarantee.
+Resume from these exact scope boundaries rather than treating those
+extensions as compiled consequences of the strict/smoothed theory.
+
+Final compiler evidence for this strict-exponent local-landscape wave:
+full default `lake build` passed 21,345 jobs
+(`/tmp/schatten-local-final-full.log`); separate `lake build Challenge`
+passed 19,755 jobs (`/tmp/schatten-local-final-challenge.log`). Each build
+was preceded by `lake exe cache get`. Existing public global signatures
+and names were preserved; new fixed-complex endpoints carry `_complex`.
+No heartbeat limits or lint settings were relaxed. Earlier chronological
+paragraphs identifying these strict local-to-global and extended-cost
+landscape results as open are superseded by the endpoints above.
