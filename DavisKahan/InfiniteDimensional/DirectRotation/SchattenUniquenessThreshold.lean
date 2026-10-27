@@ -34,7 +34,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteS
 transporters. The native extended objective imposes no finite-cost
 assumption on competitors. All angle multiplicities and defect spaces
 are included, and no separability assumption is needed. -/
-theorem schattenHilbertTransport_unique_minimizer_iff_projectionGap
+theorem schattenHilbertTransport_unique_minimizer_iff_projectionGap_of_defectEquiv
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
@@ -94,7 +94,7 @@ theorem schattenHilbertTransport_unique_minimizer_iff_projectionGap
       hK.mem_invtSubmodule hL.mem_invtSubmodule).trans hgap
 
 /-- The same exact criterion in closed-form norm coordinates. -/
-theorem schattenHilbertTransport_unique_minimizer_iff_critical_norm
+theorem schattenHilbertTransport_unique_minimizer_iff_critical_norm_of_defectEquiv
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
@@ -104,7 +104,8 @@ theorem schattenHilbertTransport_unique_minimizer_iff_critical_norm
     (∃! U : E ≃ₗᵢ[ℂ] E,
       U ∈ schattenHilbertTransportMinimizers p.toReal hp1.le K L) ↔
       K.projectionGap L ≤ 2 * Real.sqrt (p.toReal - 1) / p.toReal := by
-  rw [schattenHilbertTransport_unique_minimizer_iff_projectionGap p hp hp1 hp2 K L J hD,
+  rw [schattenHilbertTransport_unique_minimizer_iff_projectionGap_of_defectEquiv
+      p hp hp1 hp2 K L J hD,
     sin_criticalAngle p.toReal hp1]
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition

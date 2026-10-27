@@ -25,9 +25,11 @@ see the latest topology entries below. Rank labels are locally constant
 and separated, and simple active factors with no right defect give exactly
 `2^s` isolated optimizers. Necessity of the infinite uniqueness threshold
 is now also proved: uniqueness is equivalent to the closed projection-gap
-bound `2 sqrt(p-1)/p`, under the native Schatten and balanced-defect
-hypotheses. The next mathematical targets are an exact commutator iff,
-and quantitative stability or certified approximation from inexact input.
+bound `2 sqrt(p-1)/p`, under the native Schatten hypothesis alone. The
+exact nearest-commuting-correction iff uses the same threshold on the
+actual commutator norm, also without a separate balance assumption.
+The next mathematical targets are quantitative stability or certified
+approximation from inexact input, and connectedness of rank strata.
 Full nuclear, real infinite-
 dimensional and infinite Charbonnier optimizer classifications remain open.
 The dated sections below preserve proof history; use this paragraph and the
@@ -36,8 +38,8 @@ latest endpoint sections for the current frontier.
 ## Exact infinite-dimensional uniqueness threshold
 
 `SchattenUniquenessThreshold.lean` proves
-`schattenHilbertTransport_unique_minimizer_iff_projectionGap` and
-`schattenHilbertTransport_unique_minimizer_iff_critical_norm`. For every
+`schattenHilbertTransport_unique_minimizer_iff_projectionGap_of_defectEquiv` and
+`schattenHilbertTransport_unique_minimizer_iff_critical_norm_of_defectEquiv`. For every
 complete complex Hilbert space, finite `1<p<2`, native Schatten projection
 difference, and an actual equivalence of the crossed defects, the global
 ambient minimizing unitary is unique if and only if
@@ -61,6 +63,46 @@ Focused build passed (8,042 jobs), and the full default build passed
 (21,249 jobs), with warnings treated as errors.
 This is an exact consequence of the compiled classification; historical
 priority is not inferred from its formal verification.
+
+## Exact commuting-correction iff and removal of the balance hypothesis
+
+`SchattenCorrectionCutoff.lean` proves
+`existsUnique_nearest_schatten_commuting_unitary_iff_commutator` and
+`existsUnique_nearest_schatten_commuting_unitary_iff_critical_norm`.
+For every unitary `A` on any complete complex Hilbert space and every
+orthogonally complemented `K`, assume only the native Schatten condition
+`[A,P_K] in S_p`, with finite `1<p<2`. There is exactly one nearest unitary
+commuting with `P_K` if and only if
+`norm [A,P_K] <= sin(criticalAngle p) = 2 sqrt(p-1)/p`.
+Every ambient commuting unitary is compared, including infinite-distance
+competitors. A separate relative-index or defect-balance assumption is
+unnecessary.
+
+The necessity proof explicitly excludes a potentially misleading
+extended-cost case: if a unique minimizer had infinite cost, every
+commuting unitary would minimize. Identity and negative identity would
+coincide, forcing the ambient space to be zero, where the cost is zero.
+Finite cost therefore follows from uniqueness; compact transport then
+implies balanced crossed defects. The generic equivalence
+`OperatorIdealFamily.existsUnique_correction_iff_transport` records the
+exact correction/transport uniqueness correspondence for either field
+and every accepted ideal gauge.
+
+The same module strengthens the transport criterion to **all** native
+Schatten projection pairs:
+`schattenHilbertTransport_unique_minimizer_iff_projectionGap` and
+`schattenHilbertTransport_unique_minimizer_iff_critical_norm` no longer
+assume a crossed-defect equivalence or even prior feasibility.
+Necessity turns any unique transport into a unique commuting correction;
+sufficiency has gap strictly below one and hence zero crossed defects.
+Thus unbalanced pairs and the all-infinite-cost case are included rather
+than silently excluded. The earlier balanced statements remain the
+finite-cutoff proof lemmas, with the explicit `_of_defectEquiv` suffix.
+
+Focused build passed (8,058 jobs), and the full default build passed
+(21,251 jobs), with warnings treated as errors. This work adds
+mathematical Lean results and this handoff only; manuscript and
+visualization updates remain assigned separately.
 
 ## All-rank real nuclear canonical-value criterion
 

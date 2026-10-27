@@ -129,6 +129,41 @@ theorem gauge_correction_isMin_iff_transport_isMin
     rw [K.map_correction_transport]
     exact (K.map_eq_self_iff_commute_starProjection V).mpr hV
 
+/-- Uniqueness of nearest commuting correction is equivalent to
+uniqueness of relative transport in every operator-ideal gauge. This
+also compares competitors at infinite distance. -/
+theorem existsUnique_correction_iff_transport
+    (Φ : OperatorIdealFamily.{u, v, v} 𝕜)
+    (K : Submodule 𝕜 E) [K.HasOrthogonalProjection] (A : E ≃ₗᵢ[𝕜] E) :
+    (∃! C : E ≃ₗᵢ[𝕜] E, Commute (C : E →L[𝕜] E) K.starProjection ∧
+      ∀ V : E ≃ₗᵢ[𝕜] E, Commute (V : E →L[𝕜] E) K.starProjection →
+        Φ.gauge ((A : E →L[𝕜] E) - (C : E →L[𝕜] E)) ≤
+          Φ.gauge ((A : E →L[𝕜] E) - (V : E →L[𝕜] E))) ↔
+    (∃! T : E ≃ₗᵢ[𝕜] E, (K.map A.toLinearMap).map T.toLinearMap = K ∧
+      ∀ V : E ≃ₗᵢ[𝕜] E, (K.map A.toLinearMap).map V.toLinearMap = K →
+        Φ.gauge (1 - (T : E →L[𝕜] E)) ≤ Φ.gauge (1 - (V : E →L[𝕜] E))) := by
+  let e : (E ≃ₗᵢ[𝕜] E) ≃ (E ≃ₗᵢ[𝕜] E) :=
+    { toFun := fun C => A.symm.trans C
+      invFun := fun T => A.trans T
+      left_inv := by
+        intro C
+        ext x
+        change C (A.symm (A x)) = C x
+        rw [A.symm_apply_apply]
+      right_inv := by
+        intro T
+        ext x
+        change T (A (A.symm x)) = T x
+        rw [A.apply_symm_apply] }
+  apply e.existsUnique_congr
+  intro C
+  change (Commute (C : E →L[𝕜] E) K.starProjection ∧ _) ↔
+    ((K.map A.toLinearMap).map (A.symm.trans C).toLinearMap = K ∧
+      ∀ V : E ≃ₗᵢ[𝕜] E, (K.map A.toLinearMap).map V.toLinearMap = K →
+        Φ.gauge (1 - (A.symm.trans C : E →L[𝕜] E)) ≤ Φ.gauge (1 - (V : E →L[𝕜] E)))
+  rw [Φ.gauge_correction_isMin_iff_transport_isMin K A C,
+    K.map_correction_transport A C, K.map_eq_self_iff_commute_starProjection C]
+
 /-- The actual unitary commutator and the image projection difference
 have exactly the same ideal gauge. This is an equality, not a bound. -/
 theorem gauge_projection_image_sub_eq_commutator (Φ : OperatorIdealFamily.{u, v, v} 𝕜)

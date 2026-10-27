@@ -40,6 +40,15 @@ def schattenHilbertTransportMinimizers
       (OperatorIdealFamily.schatten ℂ p hp).gauge (1 - (U : E →L[ℂ] E)) ≤
         (OperatorIdealFamily.schatten ℂ p hp).gauge (1 - (T : E →L[ℂ] E))}
 
+@[simp]
+theorem mem_schattenHilbertTransportMinimizers
+    (p : ℝ) (hp : 1 ≤ p) (K L : Submodule ℂ E) (U : E ≃ₗᵢ[ℂ] E) :
+    U ∈ schattenHilbertTransportMinimizers p hp K L ↔
+      K.map U.toLinearMap = L ∧
+        ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+          (OperatorIdealFamily.schatten ℂ p hp).gauge (1 - (U : E →L[ℂ] E)) ≤
+            (OperatorIdealFamily.schatten ℂ p hp).gauge (1 - (T : E →L[ℂ] E)) := Iff.rfl
+
 /-- The full infinite-dimensional optimizer family is homeomorphic to
 its actual finite cutoff optimizer family. Every ambient optimizer is
 included, and the extension preserves operator-norm differences exactly. -/
