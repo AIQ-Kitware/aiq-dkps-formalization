@@ -3661,3 +3661,56 @@ That will establish the complete signed-root parametrization. Its
 subsequent conversion into Grassmannian factors and right-defect unitary
 factors still requires spectral decomposition; no such topology claim
 is made at this checkpoint. Papers and visualizations are unchanged.
+
+
+## Complete infinite-dimensional signed-root parametrization — 27 October 2026
+
+`Geometry/Polar/NuclearRootClassification.lean` closes the previously
+recorded reverse direction. The independent set
+`nuclearSignedSineParameters K L D` consists exactly of bounded A with:
+self-adjointness, `|A|=S`, commutation with `V C`, and source-reflection
+oddness. The actual optimizer set `nuclearTransportOptimizers K L`
+contains the literal transport constraint and comparison against every
+ambient unitary transporter. Its definition requires no complement or
+finite-cost condition; the classification theorem carries the needed
+projection and ideal hypotheses explicitly.
+
+`nuclearSignedSineEquivOptimizers_complex` is a compiled **bijection**
+between those two sets. Its forward map is the explicit constructed
+unitary `T=R(C+VA)*`. Its inverse is the exact formula
+`A=V*(T*R-C)`, where every star denotes adjoint. Both inverse identities
+are compiled, with characteristic APIs for the literal forward relative
+coefficient and inverse root. This is more than a positivity certificate:
+the parameter conditions contain no transport or optimization predicate,
+and every admissible independent parameter produces an optimizer.
+
+Hypotheses: arbitrary complete complex Hilbert space; orthogonally
+complemented K,L; an actual isometric equivalence D of crossed defects;
+and finite native nuclear norm of P_K-P_L. There is no separability,
+finite rank, acuteness or invariant-block restriction. Zero angles,
+common ambient directions, repeated angles and right defects are all
+included. Every optimizer is covered, including unrestricted ambient
+mixing before the theorem deduces its necessary structure.
+
+The new necessity lemmas are RCLike-generic: the extracted signed root
+commutes with `V C` (without dividing by C), and it is reflection odd
+when the relative unitary preserves the source. Reconstruction of the
+original transporter from its relative coefficient is also generic.
+Only the unrestricted optimizer bijection is asserted over the complex
+field; it does not solve the unrestricted real nuclear minimum by
+assuming the complex value is always real-attainable.
+
+Focused classification build passed 7,182 jobs. The registered full
+default build passed 21,385 jobs (`/tmp/nuclear-classification-full.log`),
+preceded by `lake exe cache get`.
+
+The complete signed-root parametrization is now proved. It has **not**
+yet been decomposed into spectral Grassmannian factors and arbitrary
+right-defect unitary factors, so no dimension or topology formula is
+claimed from the algebraic bijection alone. The next useful consequence
+is to test and prove isometry of this parametrization on pairwise
+differences for symmetric ideal gauges. Then reduce the independent
+root conditions on each positive-angle spectral sector and on the
+right-defect sector. Historical priority remains a separate review;
+no first-discovery claim is inferred from these compiler results.
+Papers and visualizations remain untouched.
