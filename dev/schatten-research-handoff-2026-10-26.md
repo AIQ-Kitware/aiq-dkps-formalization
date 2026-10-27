@@ -3112,3 +3112,35 @@ passed 7,888 jobs. Full default build passed 21,353 jobs
 The historical review remains archived without promoting its reported
 source inspections to independent primary-edition authentication.
 Paper and visualization files remain untouched.
+
+## Intrinsic infinite-rank nuclear value — 27 October 2026
+
+`ContinuousLinearMap.gauge_schatten_rpow_eq_twice_of_selfAdjoint_offDiagonal`
+(in `ForTauCeti/Analysis/OperatorIdeal/OffDiagonalTrace.lean`) proves
+`||A||_p^p = 2 ||A P||_p^p` for a self-adjoint A, star projection P,
+and exact off-diagonal equation `A P=(I-P) A`, over either field and
+any finite real p>=1. No compactness, summability or separability is
+assumed, and extended infinite costs are included. The proof splits
+|A| into orthogonal self-adjoint blocks, matches their costs by adjoint
+invariance, and uses the accepted pointwise-norm approximation-number API.
+
+`gauge_schatten_projection_sub_rpow_eq_twice_sine_complex` now proves
+`||P_K-P_L||_p^p = 2 ||sinThetaMap(K,L)||_p^p` for every actual isometric
+crossed-defect identification, again without compactness or finite cost.
+The completed rotation's self-adjoint imaginary part is exactly off
+diagonal relative to K, with modulus the intrinsic sine; this identifies
+both sides with the generic off-diagonal formula.
+
+In `SchattenNuclearEndpoint.lean`,
+`gauge_nuclear_projection_sub_eq_twice_sine_complex` derives the identity
+from native nuclear projection difference and balanced defect finranks.
+`exists_unitary_minimizing_nuclear_transport_eq_phaseMinimum_sum_complex`
+then gives an unrestricted finite-cost global attainer at the literal
+infinite angle sum, with no finite-rank reference. This closes the value
+identification left open in the previous checkpoint. It does not classify
+every nuclear optimizer. The donor identity is classical spectral geometry;
+its compilation does not establish independent historical priority.
+
+Focused donor build passed 6,554 jobs; geometry passed 7,136 jobs;
+endpoint passed 7,458 jobs. Full default build passed 21,355 jobs
+(`/tmp/nuclear-angle-full.log`), after `lake exe cache get`. Paper and visualization files remain untouched.

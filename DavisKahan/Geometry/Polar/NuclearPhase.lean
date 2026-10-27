@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.Geometry.Polar.PairedPhase
 public import ForTauCeti.Analysis.OperatorIdeal.OddModulusSplit
+public import ForTauCeti.Analysis.OperatorIdeal.OffDiagonalTrace
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryCorrection
 public import Mathlib.LinearAlgebra.Dimension.RankNullity
 
@@ -164,6 +165,72 @@ theorem nonacuteDirectRotation_imaginary_properties_complex
   refine ⟨hA, hmod, ?_⟩
   change K.reflection.conjStarAlgEquiv ((-Complex.I) • B) = -((-Complex.I) • B)
   rw [map_smul, hoddB, smul_neg]
+
+/-- The self-adjoint imaginary part of completed rotation interchanges
+the source subspace and its orthogonal complement. Source-reflection
+oddness gives the exact block equation without spectral assumptions. -/
+theorem nonacuteDirectRotation_imaginary_mul_starProjection_complex
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L) :
+    let A := (-Complex.I) •
+      (nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L)
+    A * K.starProjection = (1 - K.starProjection) * A := by
+  let A := (-Complex.I) •
+    (nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L)
+  have hodd := (nonacuteDirectRotation_imaginary_properties_complex K L D).2.2
+  have hanti (x : E) : A (K.reflection x) = -K.reflection (A x) := by
+    have h := congrArg (fun T : E →L[ℂ] E => T (K.reflection x)) hodd
+    change K.reflection (A (K.reflection.symm (K.reflection x))) = -A (K.reflection x) at h
+    rw [K.reflection.symm_apply_apply] at h
+    simpa only [neg_neg] using congrArg Neg.neg h.symm
+  apply ContinuousLinearMap.ext
+  intro x
+  change A (K.starProjection x) = A x - K.starProjection (A x)
+  apply smul_right_injective E (by norm_num : (2 : ℂ) ≠ 0)
+  change (2 : ℂ) • A (K.starProjection x) = (2 : ℂ) • (A x - K.starProjection (A x))
+  rw [two_smul, two_smul]
+  calc
+    _ = A (K.reflection x) + A x := by
+      rw [Submodule.reflection_apply, map_sub, map_nsmul]
+      module
+    _ = -K.reflection (A x) + A x := by rw [hanti]
+    _ = _ := by rw [Submodule.reflection_apply]; module
+
+/-- For an actual crossed-defect identification, the native Schatten
+power of the ambient projection difference is twice the directed sine
+power, for every finite real exponent at least one. Infinite values and
+arbitrary Hilbert dimension are included. -/
+theorem gauge_schatten_projection_sub_rpow_eq_twice_sine_complex
+    (p : ℝ) (hp : 1 ≤ p)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L) :
+    (OperatorIdealFamily.schatten ℂ p hp).gauge (K.starProjection - L.starProjection) ^ p =
+      2 * (OperatorIdealFamily.schatten ℂ p hp).gauge (K.sinThetaMap L) ^ p := by
+  let Φ := OperatorIdealFamily.schatten ℂ p hp
+  let A := (-Complex.I) •
+    (nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L)
+  obtain ⟨hA, hmod, _⟩ := nonacuteDirectRotation_imaginary_properties_complex K L D
+  have h := ContinuousLinearMap.gauge_schatten_rpow_eq_twice_of_selfAdjoint_offDiagonal
+    p hp A K.starProjection hA (isStarProjection_starProjection (U := K))
+    (nonacuteDirectRotation_imaginary_mul_starProjection_complex K L D)
+  have hmodgauge (T : E →L[ℂ] E) : Φ.gauge T.modulus = Φ.gauge T := by
+    simp only [Φ, OperatorIdealFamily.gauge_schatten, ContinuousLinearMap.singularValue_modulus]
+  have hcostA : Φ.gauge A = Φ.gauge (K.starProjection - L.starProjection) := by
+    rw [← hmodgauge A, hmod, Submodule.sinAngleOperator_def, hmodgauge]
+  have hσ : (A * K.starProjection).singularValue = (K.sinThetaMap L).singularValue := by
+    funext j
+    apply ContinuousLinearMap.singularValue_eq_of_forall_norm_apply_eq
+    intro x
+    calc
+      ‖(A * K.starProjection) x‖ = ‖A.modulus (K.starProjection x)‖ :=
+        (A.norm_modulus_apply _).symm
+      _ = ‖(K.sinAngleOperator L * K.starProjection) x‖ := by rw [hmod]; rfl
+      _ = ‖(K.sinThetaMap L).modulus x‖ := by rw [K.sinAngleOperator_mul_starProjection L]
+      _ = ‖K.sinThetaMap L x‖ := (K.sinThetaMap L).norm_modulus_apply x
+  have hcostAP : Φ.gauge (A * K.starProjection) = Φ.gauge (K.sinThetaMap L) := by
+    simp only [Φ, OperatorIdealFamily.gauge_schatten, hσ]
+  change Φ.gauge A ^ p = 2 * Φ.gauge (A * K.starProjection) ^ p at h
+  rwa [hcostA, hcostAP] at h
 
 /-- The explicit common-branch complex phase of completed direct rotation. -/
 @[expose]

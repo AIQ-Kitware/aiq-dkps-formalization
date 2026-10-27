@@ -89,6 +89,25 @@ theorem exists_unitary_minimizing_nuclear_transport_of_finite_rank_reference
   rw [phaseMinimum_one_sum_eq_twice_nuclear_sine] at hcost
   exact ⟨U, hmap, hrank, hcost, hmin⟩
 
+/-- Balanced trace-class projection pairs have ambient nuclear gap
+exactly twice the directed nuclear sine. This identifies the explicit
+phase cost with its intrinsic principal-angle spectral sum. -/
+theorem gauge_nuclear_projection_sub_eq_twice_sine_complex
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (hKL : (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
+      (K.starProjection - L.starProjection) ≠ ∞)
+    (hbalance : Module.finrank ℂ (halmosSourceDefect K L) =
+      Module.finrank ℂ (halmosTargetDefect K L)) :
+    (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
+        (K.starProjection - L.starProjection) =
+      2 * (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (K.sinThetaMap L) := by
+  have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top
+    1 (by norm_num) (K.starProjection - L.starProjection) hKL
+  obtain ⟨D⟩ := crossedDefectsEquivalent_of_compact_projection_sub_of_finrank_eq
+    K L hcompact hbalance
+  simpa only [ENNReal.rpow_one] using
+    gauge_schatten_projection_sub_rpow_eq_twice_sine_complex 1 (by norm_num) K L D
+
 /-- **Exact unrestricted trace-class transport attainment.** For arbitrary
 complete complex Hilbert space, a nuclear projection difference and
 balanced crossed defects give a global attainer whose cost is precisely
@@ -116,6 +135,30 @@ theorem exists_unitary_minimizing_nuclear_transport_complex
     ?_, gauge_nuclear_nuclearPhaseRotation_complex K L D, ?_⟩
   · rwa [gauge_nuclear_nuclearPhaseRotation_complex]
   · exact nuclearPhaseRotation_isMin_complex K L D
+
+/-- **Exact infinite-rank intrinsic nuclear minimum.** The unrestricted
+native nuclear minimum is the full ambient phase sum, with finite-cost
+attainment under precisely the trace-class and balanced-defect hypotheses.
+No finite-rank reference or separability assumption is used. -/
+theorem exists_unitary_minimizing_nuclear_transport_eq_phaseMinimum_sum_complex
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (hKL : (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
+      (K.starProjection - L.starProjection) ≠ ∞)
+    (hbalance : Module.finrank ℂ (halmosSourceDefect K L) =
+      Module.finrank ℂ (halmosTargetDefect K L)) :
+    ∃ U : E ≃ₗᵢ[ℂ] E, K.map U.toLinearMap = L ∧
+      (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (U : E →L[ℂ] E)) ≠ ∞ ∧
+      (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (U : E →L[ℂ] E)) =
+        (∑' j, ENNReal.ofReal (phaseMinimum 1
+          (Real.arcsin ((K.sinThetaMap L).singularValue j : ℝ)))) ∧
+      ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+        (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (U : E →L[ℂ] E)) ≤
+          (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (T : E →L[ℂ] E)) := by
+  obtain ⟨U, hmap, hfinite, hcost, hmin⟩ :=
+    exists_unitary_minimizing_nuclear_transport_complex K L hKL hbalance
+  refine ⟨U, hmap, hfinite, ?_, hmin⟩
+  rw [hcost, phaseMinimum_one_sum_eq_twice_nuclear_sine]
+  exact gauge_nuclear_projection_sub_eq_twice_sine_complex K L hKL hbalance
 
 /-- A finite-cost global nuclear optimizer exists exactly when the
 projection difference is trace class and the crossed defects balance.
