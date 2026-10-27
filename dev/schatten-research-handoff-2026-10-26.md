@@ -3973,3 +3973,36 @@ finite spectral cutoffs commute with self-adjoint roots. The precise
 analytic seam is uniform nuclear-gauge convergence of those tails plus
 finite-head rank bounds; operator-norm compactness alone does not prove
 it. Keep that ideal-topology distinction explicit.
+
+## Ideal-norm compactness — 27 October 2026
+
+`ForTauCeti/Analysis/OperatorIdeal/Family/SchattenConvergence.lean` now
+contains `tendsto_gauge_schatten_zero_of_summable_bound` and
+`tendsto_gauge_schatten_sub_zero_of_singularValue_le`. Interlacing gives
+`s_k(T-A) <= 2 s_floor(k/2)(S)` when both singular-value sequences are
+bounded by S. Dominated convergence upgrades operator convergence to
+native Schatten convergence for any finite exponent p>=1. The existing
+operator-dominated convergence API is retained and consumes the more
+general lemma.
+
+`ForTauCeti/Analysis/InnerProductSpace/CompactModulusIdeal.lean` proves
+`isCompact_setOf_isSelfAdjoint_modulus_eq_schatten`: the full self-adjoint
+fixed-modulus fiber of a positive Schatten-p operator is compact **in the
+accepted ideal carrier norm**. No finite-rank or separability assumption
+is needed. This is classical trace-ideal analysis, not a priority claim.
+
+`Geometry/Polar/NuclearRootIdealCompactness.lean` proves
+`isCompact_nuclearSignedSineParameters_schatten` over either scalar field
+and `isCompact_nuclear_optimizer_displacements_schatten_complex` for the
+**entire ambient** complex optimizer family. The latter assumes finite
+native nuclear projection difference, an actual crossed-defect isometry,
+and q>=1. The displacements I-T are compact in the accepted Schatten-q
+carrier, including q=1. This is stronger than operator-norm compactness;
+its proof uses actual isometry of root and transport differences in the
+native ideal norm. The real root set may be empty; no real unrestricted
+optimizer classification is asserted.
+
+Focused native-carrier consumer build passed 7,200 jobs. The full default
+build passed 21,399 jobs (`/tmp/root-ideal-full.log`). No paper or
+visualization changes. Spectral factor assembly and infinite-rank real
+root existence/necessity remain the next structural work.

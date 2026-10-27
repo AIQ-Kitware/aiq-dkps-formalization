@@ -25,6 +25,7 @@ public import DavisKahan.Geometry.Polar.NuclearRootMetric
 public import DavisKahan.Geometry.Polar.NuclearRootAntipode
 public import DavisKahan.Geometry.Polar.NuclearRootCompactness
 public import DavisKahan.Geometry.Polar.NuclearRootProfile
+public import DavisKahan.Geometry.Polar.NuclearRootIdealCompactness
 public import DavisKahan.Geometry.Polar.NuclearSignedRoot
 public import DavisKahan.Geometry.Polar.NuclearSignedPhases
 public import DavisKahan.Geometry.Polar.DirectRotationRank
