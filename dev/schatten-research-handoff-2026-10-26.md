@@ -3465,3 +3465,41 @@ The registered full default build passed 21,375 jobs
 of the positive certificate, described above, remains the strongest
 precise structural obligation; the strict-exponent finite active-sector
 argument does not establish it at the nuclear endpoint.
+
+
+## Positive-unitary-average structure for nuclear parametrization — 27 October 2026
+
+The next algebraic step is now isolated and proved in the generic donor
+`InnerProductSpace/UnitaryPositiveAverage.lean`, over either RCLike field
+in arbitrary complete Hilbert dimension. For unitaries U,W and a positive
+C with `U+W=C+C`:
+
+* `TauCeti.ContinuousLinearMap.unitary_positive_average_structure`
+  proves both summands commute with C and `C(U-W*)=0`.
+* `unitary_eq_adjoint_of_positive_average_injective` gives `U=W*`
+  under injectivity of C, without assuming a bounded inverse or gap.
+* `unitary_positive_average_adjoint_on_support` gives the same equality
+  on ker(C)-orthogonal without assuming injectivity globally.
+
+The proof first obtains the two identities `UC=CW*`, `W*C=CU`,
+then commutation with C squared, and applies the existing positive
+square-root commutation lemma. It explicitly retains the kernel
+exception: if C=0 the only sum constraint is W=-U, which does not
+in general make the two unitaries adjoints.
+
+This targets the next structural transport reduction. In paired source/
+complement coordinates the positive certificate should imply that the
+two relative unitary blocks have positive average equal to the cosine.
+The compiled average theorem will then eliminate unequal-cosine mixing
+and identify adjoint phases away from the right-angle sector. **That
+coordinate/block reduction from the actual transporter certificate is
+not yet formalized or claimed here.** It remains the precise next
+mathematical obligation before an explicit nuclear phase/Grassmannian
+parametrization. The elementary donor lemma is not itself a novelty claim
+or an accepted TauCeti submission target; future promotion requires
+roadmap ownership rather than inferring it from this intended use.
+
+Focused donor build passed 6,272 jobs. Full default build passed 21,377
+jobs (`/tmp/unitary-average-full.log`), including the final TauCeti-owned
+names. All builds were preceded by `lake exe cache get`. Paper and visualization
+updates remain assigned elsewhere.
