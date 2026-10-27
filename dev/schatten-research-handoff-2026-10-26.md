@@ -3259,3 +3259,45 @@ right-angle sector separately. Do not infer these necessities merely
 from the existence of signed attaining phases. At the nuclear endpoint
 there can be infinitely many active angle sectors; the strict-exponent
 finite-active-cutoff theorem does not establish the desired classification.
+
+## Infinite nuclear trace equality is compiled — 27 October 2026
+
+The analytic equality lemma named in the preceding checkpoint is now
+proved. `ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Trace.lean`
+proves absolute summability and the norm support bound for diagonal
+traces of Hilbert–Schmidt products, over either field and arbitrary
+Hilbert-basis cardinality. Its rigidity theorem
+`eq_of_re_tsum_inner_comp_eq_hilbertSchmidtEnergy` forces Y=H when a
+self-adjoint Hilbert–Schmidt H and a no-larger-energy Y saturate the
+real diagonal trace of Y H. The proof uses the accepted square-summable
+column representation and equality in Hilbert-space Cauchy–Schwarz.
+
+`ForTauCeti/Analysis/OperatorIdeal/Nuclear/Trace.lean` proves the exact
+native Gram-energy identity and constructs a square-root polar
+factorization A=Y H with H positive, H^2=|A|, energy(H)=||A||_1,
+and energy(Y)<=energy(H). This holds even at infinite cost. For finite
+native nuclear gauge, both factors are Hilbert–Schmidt and every
+Hilbert-basis diagonal is absolutely summable.
+
+The endpoint
+`ContinuousLinearMap.re_tsum_inner_eq_nuclearENorm_iff_isPositive_complex`
+proves, for every trace-class A and every Hilbert basis b,
+`Re(sum_i <b_i,A b_i>) = nuclearENorm(A).toReal` iff A is positive.
+`re_tsum_inner_unitary_comp_eq_nuclearENorm_iff_isPositive_complex`
+gives the same equivalence after an arbitrary actual unitary change
+of target coordinates, with the original native nuclear cost. Neither
+separability nor finite rank is assumed. These are convergent diagonal
+series, not Mathlib's algebraic infinite-dimensional LinearMap.trace.
+
+Focused generic Hilbert–Schmidt build passed 5,576 jobs; focused nuclear
+trace build passed 6,662 jobs. Full default build passed 21,365 jobs
+(`/tmp/nuclear-trace-full.log`), preceded by `lake exe cache get`. This is a classical trace-ideal foundation, not a historical
+first-discovery claim. Manuscript and visualization files are untouched.
+
+Next, prove basis independence/cyclic identities for these diagonal
+trace series and construct the infinite transport dual from the polar
+quarter turn of R-C, completed by identity on its kernel. The completed
+trace-equality lemma alone does not yet prove calibration of that dual
+against every transporter, the fixed-direction necessity, or the
+remaining phase/multiplicity classification. The older statement that
+the trace-support equality itself is open is superseded.
