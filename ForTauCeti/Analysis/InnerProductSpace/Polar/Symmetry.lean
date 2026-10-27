@@ -54,6 +54,26 @@ theorem conjStarAlgEquiv_polarFactor (A : E →L[𝕜] E) (U : E ≃ₗᵢ[𝕜]
     rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply,
       A.polarFactor_apply_of_mem_ker hAx, map_zero]
 
+/-- A unitary commuting with an operator also commutes with its
+accepted canonical polar factor. No closed-range or invertibility
+assumption is needed. -/
+theorem commute_unitary_polarFactor (A : E →L[𝕜] E) (U : E ≃ₗᵢ[𝕜] E)
+    (h : Commute (U : E →L[𝕜] E) A) : Commute (U : E →L[𝕜] E) A.polarFactor := by
+  have hconj : U.conjStarAlgEquiv A = A := by
+    ext x
+    have hx := congrArg (fun T : E →L[𝕜] E => T (U.symm x)) h.eq
+    change U (A (U.symm x)) = A (U (U.symm x)) at hx
+    simpa only [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply,
+      U.apply_symm_apply] using hx
+  have hphase : U.conjStarAlgEquiv A.polarFactor = A.polarFactor := by
+    rw [conjStarAlgEquiv_polarFactor, hconj]
+  change (U : E →L[𝕜] E) * A.polarFactor = A.polarFactor * (U : E →L[𝕜] E)
+  ext x
+  change U (A.polarFactor x) = A.polarFactor (U x)
+  have hx := congrArg (fun T : E →L[𝕜] E => T (U x)) hphase
+  change U (A.polarFactor (U.symm (U x))) = A.polarFactor (U x) at hx
+  simpa only [U.symm_apply_apply] using hx
+
 /-- The accepted polar factor of a skew-adjoint operator is skew-adjoint. -/
 theorem adjoint_polarFactor_eq_neg_of_adjoint_eq_neg
     (A : E →L[𝕜] E) (hA : A.adjoint = -A) : A.polarFactor.adjoint = -A.polarFactor := by

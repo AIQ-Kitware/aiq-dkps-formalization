@@ -96,6 +96,64 @@ theorem cosine_apply_eq_self_of_mem_nonacute_skew_ker
   change nonacuteDirectRotation K L D x - Proposition35.section3CosAngleOperator K L x = 0 at hx
   exact (sub_eq_zero.mp hx).symm.trans hR
 
+/-- Completed direct rotation fixes the full skew-kernel projection. -/
+theorem nonacuteDirectRotation_mul_skew_ker_projection
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+    nonacuteDirectRotation K L D * B.ker.starProjection = B.ker.starProjection := by
+  let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+  let Q := B.ker.starProjection
+  ext x
+  apply nonacuteDirectRotation_apply_eq_self_of_projections_eq K L D
+  have hx := B.ker.starProjection_apply_mem x
+  change Q x ∈ B.ker at hx
+  rw [ker_nonacuteDirectRotation_sub_cosine_eq_projection_sub] at hx
+  exact sub_eq_zero.mp hx
+
+/-- The real part of the completed nuclear dual is precisely the
+full common-sector projection. -/
+theorem nuclearTransportDual_add_star
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+    (nuclearTransportDual K L D : E →L[𝕜] E) +
+      star (nuclearTransportDual K L D : E →L[𝕜] E) =
+        B.ker.starProjection + B.ker.starProjection := by
+  let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+  have hF : star B.polarFactor = -B.polarFactor :=
+    ContinuousLinearMap.adjoint_polarFactor_eq_neg_of_adjoint_eq_neg B
+      (Proposition35.star_nonacuteDirectRotation_sub_cosine K L D)
+  change (B.polarFactor + B.ker.starProjection) + star (B.polarFactor + B.ker.starProjection) = _
+  rw [star_add, hF, (isSelfAdjoint_starProjection B.ker).star_eq]
+  abel
+
+/-- The actual nuclear dual commutes with completed direct rotation,
+including on fixed directions and arbitrary right-angle completions. -/
+theorem nonacuteDirectRotation_comm_nuclearTransportDual
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    Commute (nonacuteDirectRotation K L D) (nuclearTransportDual K L D : E →L[𝕜] E) := by
+  let R := nonacuteDirectRotation K L D
+  let C := Proposition35.section3CosAngleOperator K L
+  let B := R - C
+  let Q := B.ker.starProjection
+  let R' := Unitary.linearIsometryEquiv
+    (⟨R, nonacuteDirectRotation_mem_unitary K L D⟩ : unitary (E →L[𝕜] E))
+  have hRC : Commute R C := Proposition35.nonacuteDirectRotation_comm_cosine K L D
+  have hRB : Commute R B := (Commute.refl R).sub_right hRC
+  have hRF : Commute R B.polarFactor := ContinuousLinearMap.commute_unitary_polarFactor B R' hRB
+  have hRQ : R * Q = Q := nonacuteDirectRotation_mul_skew_ker_projection K L D
+  have hQR : Q * R = Q := by
+    have h := congrArg star hRQ
+    rw [star_mul, (isSelfAdjoint_starProjection B.ker).star_eq] at h
+    have h' := congrArg (fun A : E →L[𝕜] E => A * R) h
+    rw [mul_assoc, Unitary.star_mul_self_of_mem (nonacuteDirectRotation_mem_unitary K L D), mul_one] at h'
+    exact h'.symm
+  have hRQcomm : Commute R Q := by change R * Q = Q * R; rw [hRQ, hQR]
+  change Commute R (B.polarFactor + Q)
+  exact hRF.add_right hRQcomm
+
 /-- **Exact nuclear dual displacement identity.** Its second term is
 the fixed-sector defect, and its last term is reflection odd whenever
 Z commutes with the source projection. No trace or summability is

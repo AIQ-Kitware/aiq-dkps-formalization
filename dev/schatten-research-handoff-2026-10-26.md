@@ -3503,3 +3503,52 @@ Focused donor build passed 6,272 jobs. Full default build passed 21,377
 jobs (`/tmp/unitary-average-full.log`), including the final TauCeti-owned
 names. All builds were preceded by `lake exe cache get`. Paper and visualization
 updates remain assigned elsewhere.
+
+
+## Nuclear optimizers cannot mix unequal principal angles — 27 October 2026
+
+The previously isolated average-reduction obstruction is now closed,
+without choosing a principal-plane basis. In
+`Geometry/Polar/NuclearOptimizerStructure.lean`, for any actual unitary
+Z that fixes ker(R-C), self-adjointness of `V*(R-Z)` forces
+
+`Z + V* Z* V = C+C`.
+
+Here C is the intrinsic cosine and V is the actual completed nuclear
+dual. `nuclearTransportDual_relative_positive_average` is generic over
+RCLike and needs no trace assumption and no source-reflection
+commutation assumption. The proof uses the new characteristic dual
+identities: R fixes the skew-kernel projection, `V+V*=2Q`, and V
+commutes with R. The latter follows from equivariance of the accepted
+polar factor under unitary conjugation; the reusable generic
+`ContinuousLinearMap.commute_unitary_polarFactor` is added to its
+existing symmetry donor.
+
+`nuclearTransportDual_relative_cosine_structure` applies the positive-
+average lemma and proves Z commutes with C. It also proves
+`Z(Vx)=V(Zx)` for every x in ker(C)-orthogonal. Thus the right-angle
+exception is carried explicitly, without assuming C invertible.
+
+`nuclear_minimizer_comm_cosine_complex` and
+`nuclear_minimizer_comm_sinAngleOperator_complex` now prove that **every**
+unrestricted ambient nuclear optimizer commutes with the intrinsic
+cosine and sine. Their exact hypotheses are: arbitrary complete complex
+Hilbert space, orthogonally complemented K,L, finite native nuclear
+projection difference, an actual isometric identification of crossed
+defects, a transporter T, and global minimality against every ambient
+unitary transporter. No invariant-block hypothesis, finite rank,
+separability, or acute-angle assumption is imposed. This rules out
+mixing between unequal principal angles; equal-angle mixing and
+right-angle families still require explicit parametrization.
+
+Focused structure build passed 7,176 jobs. The registered full default
+build passed 21,379 jobs (`/tmp/nuclear-structure-full.log`), with
+`lake exe cache get` before each build.
+The next mathematical step is to extract the real part of Z on the
+positive-cosine support, then identify its self-adjoint imaginary
+part as a signed square root of the sine square. Existing Mathlib
+`realPart`, `imaginaryPart`, and the normal-operator square identity
+should be consumed rather than replaced by new definitions. The
+right-angle kernel must be treated separately throughout.
+Paper and visualization files remain untouched. No historical priority
+claim is inferred from these compiler results.
