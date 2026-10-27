@@ -163,6 +163,44 @@ theorem nuclearTransportDual_trace_calibration_complex
     hTrOdd, add_zero, hTrQ, Complex.add_re, hTrS, hSnorm]
   linarith
 
+/-- **Quantitative nuclear fixed-sector rigidity.** The excess native
+nuclear cost bounds half the squared Hilbert–Schmidt displacement on
+the entire common sector. This holds before imposing optimality. -/
+theorem nuclearTransportDual_fixed_sector_gap_complex
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
+    (Z : E ≃ₗᵢ[ℂ] E)
+    (hZ : ∀ x, Z (K.reflection x) = K.reflection (Z x))
+    (hΔ : (K.starProjection - L.starProjection).nuclearENorm ≠ ∞)
+    (hfinite : (nonacuteDirectRotation K L D - (Z : E →L[ℂ] E)).nuclearENorm ≠ ∞) :
+    let R := nonacuteDirectRotation K L D
+    let B := R - Proposition35.section3CosAngleOperator K L
+    let G := (1 - (Z : E →L[ℂ] E)) * B.ker.starProjection
+    G.hilbertSchmidtNorm ^ 2 ≤
+      2 * ((R - (Z : E →L[ℂ] E)).nuclearENorm.toReal -
+        (K.starProjection - L.starProjection).nuclearENorm.toReal) := by
+  let X := nonacuteDirectRotation K L D - (Z : E →L[ℂ] E)
+  let Y := star (nuclearTransportDual K L D : E →L[ℂ] E) * X
+  let Φ := OperatorIdealFamily.schatten ℂ 1 (by norm_num)
+  have hnorm (A : E →L[ℂ] E) : Φ.gauge A = A.nuclearENorm := by
+    simp only [Φ, OperatorIdealFamily.gauge_schatten, one_div_one,
+      ENNReal.rpow_one, ContinuousLinearMap.nuclearENorm_def]
+  have hYnorm : Y.nuclearENorm = X.nuclearENorm := by
+    rw [← hnorm Y, ← hnorm X]
+    change Φ.gauge (star (nuclearTransportDual K L D : E →L[ℂ] E) * X) = _
+    rw [LinearIsometryEquiv.star_eq_symm]
+    exact Φ.gauge_comp_linearIsometryEquiv_left X (nuclearTransportDual K L D).symm
+  have hYfinite : Y.nuclearENorm ≠ ∞ := by rwa [hYnorm]
+  have hbound : Y.nuclearTrace.re ≤ X.nuclearENorm.toReal := by
+    calc
+      _ ≤ ‖Y.nuclearTrace‖ := Complex.re_le_norm _
+      _ ≤ Y.nuclearENorm.toReal := ContinuousLinearMap.norm_nuclearTrace_le_nuclearENorm_complex Y hYfinite
+      _ = _ := congrArg ENNReal.toReal hYnorm
+  have htrace := nuclearTransportDual_trace_calibration_complex K L D Z hZ hΔ hfinite
+  dsimp only at htrace ⊢
+  change Y.nuclearTrace.re = _ at htrace
+  linarith
+
 /-- Every trace-class relative competitor attains the sine bound exactly
 when it fixes the whole skew kernel and its dual displacement is positive.
 No invariant-angle-block assumption is imposed. -/

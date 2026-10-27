@@ -3435,3 +3435,33 @@ certificate build passed 7,172 jobs, preceded by `lake exe cache get`.
 Full default build with the registered endpoint passed 21,373 jobs
 (`/tmp/nuclear-certificate-full.log`), preceded by `lake exe cache get`.
 Papers and visualizations remain untouched.
+
+
+## Quantitative nuclear fixed-sector stability — 27 October 2026
+
+`nuclearTransportDual_fixed_sector_gap_complex` turns the exact trace
+calibration into a cost-excess bound for every finite-cost relative
+competitor commuting with source reflection. Its transporter-facing
+consequence, `nuclear_transport_fixed_sector_gap_complex`, compiles in
+`Geometry/Polar/NuclearStability.lean`. With the same complete-complex,
+trace-class-projection-difference and actual crossed-defect hypotheses,
+for **every** ambient transporter T with finite native nuclear cost:
+
+`||(I-T) Q||_HS^2 <= 2 (||I-T||_1 - ||P_K-P_L||_1)`.
+
+Here Q projects onto ker(R-C), already proved exactly equal to
+ker(P_K-P_L). Thus the theorem controls motion on the entire common
+sector by excess above the unrestricted global minimum. The sector
+may be infinite dimensional; no principal-plane preservation or finite-
+rank correction is assumed. The proof consumes the accepted TauCeti
+Hilbert–Schmidt isometry API to identify the relative defect with
+literal T displacement. It does not assert closeness to a particular
+optimizer on the moving sector, or uniqueness of a nuclear optimizer.
+Historical priority for this quantitative consequence is not established.
+
+Focused stability build passed 7,176 jobs after `lake exe cache get`.
+The registered full default build passed 21,375 jobs
+(`/tmp/nuclear-stability-full.log`), preceded by `lake exe cache get`. The moving-sector solution
+of the positive certificate, described above, remains the strongest
+precise structural obligation; the strict-exponent finite active-sector
+argument does not establish it at the nuclear endpoint.
