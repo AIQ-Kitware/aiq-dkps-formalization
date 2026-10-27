@@ -302,7 +302,7 @@ def nuclearSignedSineEquivOptimizers_complex
     ⟨nuclearSignedSineTransport K L D A.val hp.1 hp.2.1 hp.2.2.1,
       (mem_nuclearTransportOptimizers K L _).mpr
         ⟨nuclearSignedSineTransport_map K L D A.val hp.1 hp.2.1 hp.2.2.1 hp.2.2.2,
-          nuclearSignedSineTransport_isMin_complex K L D hΔ A.val hp.1 hp.2.1 hp.2.2.1 hp.2.2.2⟩⟩
+          nuclearSignedSineTransport_isMin K L D A.val hp.1 hp.2.1 hp.2.2.1 hp.2.2.2⟩⟩
   invFun T :=
     let hp := (mem_nuclearTransportOptimizers K L T.val).mp T.property
     ⟨star (nuclearTransportDual K L D : F →L[ℂ] F) *

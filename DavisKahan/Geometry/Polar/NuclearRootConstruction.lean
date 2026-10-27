@@ -21,6 +21,8 @@ noncomputable section
 
 namespace TauCeti.DavisKahan
 
+open scoped ENNReal
+
 attribute [local instance] _root_.ContinuousLinearMap.realAlgebra
   _root_.ContinuousLinearMap.realIsScalarTower
 
@@ -317,53 +319,75 @@ theorem nuclearSignedSineTransport_dual_displacement
   change star (V : E →L[𝕜] E) * _ = _
   rw [hsub, mul_sub, hVB, ← mul_assoc, Unitary.star_mul_self_of_mem hVm, one_mul]
 
-section Complex
+/-- **Exact native nuclear cost over either field.** Every admissible
+reflection-odd root attains the projection-difference lower bound,
+including infinite values. Existence of a real admissible root is an
+explicit hypothesis, not a conclusion of the complex theory. -/
+theorem nuclearSignedSineTransport_nuclearENorm
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L)
+    (A : E →L[𝕜] E) (hA : IsSelfAdjoint A) (hmod : A.modulus = K.sinAngleOperator L)
+    (hcomm : Commute A ((nuclearTransportDual K L D : E →L[𝕜] E) *
+      Proposition35.section3CosAngleOperator K L))
+    (hodd : K.reflection.conjStarAlgEquiv A = -A) :
+    (1 - (nuclearSignedSineTransport K L D A hA hmod hcomm : E →L[𝕜] E)).nuclearENorm =
+      (K.starProjection - L.starProjection).nuclearENorm := by
+  let Φ := OperatorIdealFamily.schatten 𝕜 1 (by norm_num)
+  let T := nuclearSignedSineTransport K L D A hA hmod hcomm
+  let V := nuclearTransportDual K L D
+  let R := Unitary.linearIsometryEquiv
+    (⟨nonacuteDirectRotation K L D, nonacuteDirectRotation_mem_unitary K L D⟩ : unitary (E →L[𝕜] E))
+  let S := K.sinAngleOperator L
+  have hn (B : E →L[𝕜] E) : Φ.gauge B = B.nuclearENorm := by
+    simp only [Φ, OperatorIdealFamily.gauge_schatten, one_div_one, ENNReal.rpow_one,
+      ContinuousLinearMap.nuclearENorm_def]
+  have hg : Φ.gauge (star (V : E →L[𝕜] E) *
+      (nonacuteDirectRotation K L D - (T.symm : E →L[𝕜] E) * nonacuteDirectRotation K L D)) =
+        Φ.gauge (1 - (T : E →L[𝕜] E)) := by
+    calc
+      _ = Φ.gauge (nonacuteDirectRotation K L D - (T.symm : E →L[𝕜] E) * nonacuteDirectRotation K L D) := by
+        rw [V.star_eq_symm]
+        exact Φ.gauge_comp_linearIsometryEquiv_left _ V.symm
+      _ = Φ.gauge ((1 - (T.symm : E →L[𝕜] E)) * (R : E →L[𝕜] E)) := by
+        congr 1
+      _ = Φ.gauge (1 - (T.symm : E →L[𝕜] E)) := Φ.gauge_comp_linearIsometryEquiv_right _ R
+      _ = _ := by
+        rw [hn, hn]
+        have ha : (1 - (T : E →L[𝕜] E)).adjoint = 1 - (T.symm : E →L[𝕜] E) := by
+          change star (1 - (T : E →L[𝕜] E)) = _
+          rw [star_sub, star_one, T.star_eq_symm]
+        rw [← ha, ContinuousLinearMap.nuclearENorm_adjoint]
+  rw [nuclearSignedSineTransport_dual_displacement] at hg
+  have hnegodd : K.reflection.conjStarAlgEquiv (-A) = -(-A) := by rw [map_neg, hodd]
+  have hsplit := ContinuousLinearMap.gauge_nuclear_modulus_add_of_unitary_odd (-A) hA.neg K.reflection hnegodd
+  rw [ContinuousLinearMap.modulus_neg, hmod, ← sub_eq_add_neg] at hsplit
+  change Φ.gauge (S - A) = Φ.gauge (-A) at hsplit
+  rw [Φ.gauge_neg] at hsplit
+  have hAg : Φ.gauge A = Φ.gauge S := by
+    change Φ.gauge A = Φ.gauge (K.sinAngleOperator L)
+    rw [← hmod]
+    simp only [Φ, OperatorIdealFamily.gauge_schatten, ContinuousLinearMap.singularValue_modulus]
+  have hSg : Φ.gauge S = Φ.gauge (K.starProjection - L.starProjection) := by
+    simp only [S, Submodule.sinAngleOperator_def, Φ, OperatorIdealFamily.gauge_schatten,
+      ContinuousLinearMap.singularValue_modulus]
+  exact (hn _).symm.trans (hg.symm.trans (hsplit.trans (hAg.trans (hSg.trans (hn _)))))
 
-open scoped ENNReal
-
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-
-/-- **Every admissible signed root constructs a global optimizer.**
-The minimum is over all ambient complex unitary transporters, without
-an invariant-plane restriction. Finite displacement follows automatically. -/
-theorem nuclearSignedSineTransport_isMin_complex
-    (K L : Submodule ℂ F) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
-    (D : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
-    (hΔ : (K.starProjection - L.starProjection).nuclearENorm ≠ ∞)
-    (A : F →L[ℂ] F) (hA : IsSelfAdjoint A) (hmod : A.modulus = K.sinAngleOperator L)
-    (hcomm : Commute A ((nuclearTransportDual K L D : F →L[ℂ] F) *
+/-- Whenever an admissible root exists, its transporter minimizes over
+all ambient competitors over the same field. This generic theorem
+includes real attainment without asserting existence of real roots. -/
+theorem nuclearSignedSineTransport_isMin
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L)
+    (A : E →L[𝕜] E) (hA : IsSelfAdjoint A) (hmod : A.modulus = K.sinAngleOperator L)
+    (hcomm : Commute A ((nuclearTransportDual K L D : E →L[𝕜] E) *
       Proposition35.section3CosAngleOperator K L))
     (hodd : K.reflection.conjStarAlgEquiv A = -A)
-    (W : F ≃ₗᵢ[ℂ] F) (hW : K.map W.toLinearMap = L) :
-    (1 - (nuclearSignedSineTransport K L D A hA hmod hcomm : F →L[ℂ] F)).nuclearENorm ≤
-      (1 - (W : F →L[ℂ] F)).nuclearENorm := by
-  let T := nuclearSignedSineTransport K L D A hA hmod hcomm
-  let Z := nuclearSignedSineRelative K L D A hA hmod hcomm
-  let R := Unitary.linearIsometryEquiv
-    (⟨nonacuteDirectRotation K L D, nonacuteDirectRotation_mem_unitary K L D⟩ : unitary (F →L[ℂ] F))
-  let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
-  let Q := B.ker.starProjection
-  have hT : K.map T.toLinearMap = L := nuclearSignedSineTransport_map K L D A hA hmod hcomm hodd
-  apply ((nuclear_isMin_iff_hermitian_certificate_complex K L D hΔ T hT).mpr ?_) W hW
-  constructor
-  · intro x hx
-    have hxker : x ∈ B.ker := by
-      rw [ker_nonacuteDirectRotation_sub_cosine_eq_projection_sub]
-      change K.starProjection x - L.starProjection x = 0
-      exact sub_eq_zero.mpr hx
-    have hQx : Q x = x := B.ker.starProjection_eq_self_iff.mpr hxker
-    have hfix := nuclearSignedSineRelative_fixed_projection K L D A hA hmod hcomm
-    have hZx := congrArg (fun U : F →L[ℂ] F => U x) hfix
-    change Q x - Z (Q x) = 0 at hZx
-    rw [hQx] at hZx
-    have hZsymm := congrArg Z.symm (sub_eq_zero.mp hZx)
-    rw [Z.symm_apply_apply] at hZsymm
-    change R (Z.symm x) = x
-    rw [hZsymm]
-    exact nonacuteDirectRotation_apply_eq_self_of_projections_eq K L D x hx
-  · rw [nuclearSignedSineTransport_dual_displacement]
-    exact (K.isPositive_sinAngleOperator L).isSelfAdjoint.sub hA
-
-end Complex
+    (W : E ≃ₗᵢ[𝕜] E) (hW : K.map W.toLinearMap = L) :
+    (1 - (nuclearSignedSineTransport K L D A hA hmod hcomm : E →L[𝕜] E)).nuclearENorm ≤
+      (1 - (W : E →L[𝕜] E)).nuclearENorm := by
+  rw [nuclearSignedSineTransport_nuclearENorm K L D A hA hmod hcomm hodd]
+  have h := (OperatorIdealFamily.schatten 𝕜 1 (by norm_num)).gauge_projection_sub_le_unitary_displacement K L W hW
+  simpa only [OperatorIdealFamily.gauge_schatten, one_div_one, ENNReal.rpow_one,
+    ContinuousLinearMap.nuclearENorm_def] using h
 
 end TauCeti.DavisKahan

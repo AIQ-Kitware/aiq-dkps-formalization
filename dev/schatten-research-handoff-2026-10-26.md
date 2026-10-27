@@ -3639,7 +3639,8 @@ and its map theorem proves K maps exactly to L.
 The literal relative-unitary identity and
 `nuclearSignedSineTransport_extract_root` show that extraction returns
 the exact original A. The dual displacement is exactly S-A.
-`nuclearSignedSineTransport_isMin_complex` proves this T minimizes over
+`nuclearSignedSineTransport_isMin` (generalized below from the original
+complex-only endpoint) proves this T minimizes over
 **all ambient** complex unitary transporters when P_K-P_L has finite
 native nuclear norm. It uses the actual crossed-defect equivalence D;
 no finite dimension, rank, separability or angle-block restriction is
@@ -3804,3 +3805,41 @@ as operator norm, but **neither compactness nor that product topology
 has yet been formalized here**. The metric and antipode theorems alone
 do not prove them. No priority claim is added, and paper/visualization
 files remain untouched.
+
+
+## Exact root-construction cost and attainment over either field — 27 October 2026
+
+The construction's cost is now known without appealing to the complex
+trace certificate. The RCLike-generic
+`nuclearSignedSineTransport_nuclearENorm` proves the literal equality
+`||I-T_A||_1=||P_K-P_L||_1` for every admissible reflection-odd signed
+sine root. It needs **no** finite-cost, compactness, finite-rank or
+separability assumption; infinite native nuclear values are included.
+The proof transports the cost through actual unitaries and applies the
+existing generic odd-modulus splitting theorem to S-A. Native nuclear
+adjoint invariance supplies the final orientation change.
+
+`nuclearSignedSineTransport_isMin` therefore proves unrestricted global
+minimality of the constructed transporter over the **same field**. This
+includes the real field whenever an admissible real root is supplied.
+It does not assert that such roots always exist. In particular it does
+not contradict the real matching/parity obstruction: an absent real
+root may mean the real optimum is strictly above the projection bound.
+The equivalence with **every** optimizer remains proved over the complex
+field only. Extending necessity over the real field, and classifying
+real-root existence, are separate obligations.
+
+Retire the redundant `nuclearSignedSineTransport_isMin_complex` wrapper
+and migrate the full optimizer-bijection consumer to the generic API.
+A whole-tree search found no other consumer, Challenge/comparator pin,
+or census record; the historical handoff reference above is updated.
+The declaration-name drift scan retains its same 23 unrelated
+pre-existing findings. No forwarding alias is retained.
+
+Focused construction/classification build passed 7,182 jobs. The full
+default build passed 21,389 jobs (`/tmp/nuclear-real-root-full.log`).
+Explicit Challenge validation follows. Cache retrieval precedes each
+build. This strengthens the earlier complex-only
+construction checkpoint while leaving the exact hypotheses of the
+all-complex-optimizer bijection intact. Paper and visualizations are
+unchanged.
