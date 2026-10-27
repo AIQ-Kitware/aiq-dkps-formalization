@@ -19,9 +19,11 @@ self-adjoint symmetry application below has passed the full default build
 stages and are superseded. Historical priority remains qualified; see the
 supplied-review addendum in the paper-directory novelty review.
 
-The infinite optimizer-space finite-cutoff homeomorphism and operator-norm
-compactness are now proved; see the latest topology entry below. The next
-mathematical targets are the full multiplicity-coordinate topology,
+The infinite optimizer-space finite-cutoff homeomorphism, operator-norm
+compactness and independent multiplicity-coordinate topology are now proved;
+see the latest topology entries below. Rank labels are locally constant
+and separated, and simple active factors with no right defect give exactly
+`2^s` isolated optimizers. The next mathematical targets are
 necessity of the infinite uniqueness threshold, and quantitative stability
 or certified approximation from inexact input. Full nuclear, real infinite-
 dimensional and infinite Charbonnier optimizer classifications remain open.
@@ -1513,3 +1515,57 @@ the full infinite-dimensional optimizer family. Formal Grassmannian
 connected components and manifold dimensions remain separate obligations.
 No first-publication priority is inferred from these topological consequences.
 The manuscript and visualizations remain untouched.
+
+
+## Full Hilbert multiplicity topology, rank labels and exact isolated counts
+
+Checkpoint `39261e8a2` contains the exact finite-cutoff homeomorphism and
+operator-norm compactness, after a full 21,245-job default build.
+
+`SchattenMultiplicityTopology.exists_schatten_hilbert_multiplicity_parameter_homeomorph`
+now proves the unconditional existence of an operator-norm homeomorphism
+from the product of the actual finite active canonical multiplicity
+projection factors and the finite crossed-defect unitary factor to the
+**entire** native Hilbert-space optimizer set. Hypotheses are exactly the
+proved complex `1<p<2` ideal/index assumptions, with any `0<c<1` below or
+at the critical sine. The finite restricted source/target rank equality
+is proved, not supplied. All repeated, zero, critical, right and arbitrary
+fixed ambient directions retain their established scope. No finite-rank
+projection-pair or separability assumption is added.
+
+`exists_schatten_hilbert_multiplicity_coordinates_of_homeomorph` transfers
+both locally constant projection-rank labels and uniform fixed-pair positive
+operator-norm separation of different rank labels. Its inputs are exactly
+the finite optimizer homeomorphism and difference-norm identity supplied
+by the preceding cutoff theorem. It is stated as a reusable transfer
+between an arbitrary finite optimizer carrier and the full Hilbert optimizer
+set. The unconditional coordinate theorem constructs its homeomorphism
+through this transfer. Thus the label and separation statements require
+no additional geometric hypothesis about the infinite-dimensional pair.
+
+`schatten_hilbert_optimizer_count_and_discrete_of_simple_active_angles`
+proves the exact count `Nat.card(all ambient optimizers) = 2^s` and
+discreteness of the operator-norm optimizer topology whenever the finite
+active canonical multiplicity factors have dimension one and the right
+defect is zero. Here `s` is the number of distinct active rotation angles.
+Infinite inactive multiplicities are unrestricted. Focused module build:
+8,040 jobs with warnings as errors.
+
+Implementation note: keeping the nested dependent coordinate types folded
+is necessary in this proof. Eager `dsimp only` on the full coordinate
+signature produced an internal free-variable error; introducing a
+reusable composition theorem and preserving the dependent lets compiles
+without disabling linters or increasing heartbeat limits. This does not
+alter the mathematical scope. The previous chronological statements
+calling infinite multiplicity homeomorphisms open are superseded.
+
+Exact remaining mathematical obligations: (1) prove the converse of the
+infinite uniqueness threshold, using the finite optimizer homeomorphism
+and the finite canonical/uniqueness iff, then reassemble the projection
+gap from its two reducing blocks; (2) prove connectedness and manifold
+dimension of the rank-stratified projection factors to obtain component
+counts and dimensions; (3) obtain quantitative near-minimizer or varying-
+data stability and certified approximation. Compactness and rank separation
+here concern exact optimizers of fixed data and do not imply those stronger
+stability assertions. No new historical-priority claim is made. The paper
+and visualization files remain assigned separately and unchanged.
