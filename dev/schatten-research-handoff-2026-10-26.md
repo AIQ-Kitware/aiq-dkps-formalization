@@ -2608,3 +2608,31 @@ passed 21,321 jobs (`/tmp/charbonnier-final-full.log`); the separately required
 `lake build Challenge` passed 19,755 jobs
 (`/tmp/charbonnier-final-challenge.log`). Both were preceded by
 `lake exe cache get`. The static-scanner caveat above remains unchanged.
+
+## October 27: local restriction and native local stationarity
+
+`TauCeti.exists_charbonnier_locally_minimizing_reducing_restriction`
+now descends native finite-cost local optimality in operator norm to an
+actual reducing sector, over either scalar field. Both retained and
+complementary sectors may be infinite-dimensional. The actual restricted
+unitary is feasible, has finite native cost, and is locally minimizing;
+continuous fixed-tail extension and finite tail cancellation prove this.
+`exists_charbonnier_locally_minimizing_finite_restriction` needs only
+forward invariance on a finite source-reducing sector.
+
+`CharbonnierStationarity.gradient_reflection_conjugate_eq_neg_of_charbonnier_isLocalMinOn_complex`
+now proves the ambient constrained stationarity identity for finite-cost
+operator-norm **local** minima. Native rank-one variations remain finite
+for every parameter, so converting the local ENNReal inequality to real
+first variation is justified. No continuity of the infinite native cost
+in operator norm is assumed. The existing global stationarity APIs now
+specialize the stronger local theorems; the underlying proofs are not
+duplicated. Focused local restriction/stationarity build passed 6,922 jobs.
+
+The whole infinite local-to-global theorem is not yet proved at this
+checkpoint. Next: transfer native finite-sector local optimality to the
+finite CLM landscape theorem, prove local optimizers preserve the sine
+operator using positive gradient cutoffs and the whole gradient kernel,
+and establish canonical zero/closed-subcritical action before applying
+the complete global optimizer iff. The topology is operator norm, not
+an unspecified Schatten topology. Paper and visualization files untouched.
