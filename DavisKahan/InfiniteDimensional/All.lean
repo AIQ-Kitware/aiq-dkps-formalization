@@ -35,5 +35,6 @@ public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenOptimizerCla
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenOptimizerRank
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCorrectionClassification
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCorrectionUniqueness
+public import DavisKahan.InfiniteDimensional.DirectRotation.TwoLevelSymmetryCorrection
 
 /-! # `DavisKahan/InfiniteDimensional` -/

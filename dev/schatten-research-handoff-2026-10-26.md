@@ -5,6 +5,27 @@ describes new mathematics and the exact next proof obligations. The target
 is the journal research extension on exact real and complex transport,
 not an addition to the frozen 29-result Davis--Kahan source denominator.
 
+## Current frontier — read before chronological entries
+
+General infinite-rank complex Schatten `1<p<2` attainment and the complete
+classification of **every** global optimizer are **proved**, under native
+Schatten projection difference and balanced crossed defects. Every optimizer
+has the same canonical inactive tail and a finite strictly active correction
+with an explicit rank budget (`aeb6384f1`, `113746cf9`). Every nearest
+projection-commuting correction is also classified, with a closed commutator
+uniqueness certificate and rank budget (`ddbef2d43`). The two-level
+self-adjoint symmetry application below has passed the full default build
+(21,241 jobs). Earlier statements calling these endpoints open are historical
+stages and are superseded. Historical priority remains qualified; see the
+supplied-review addendum in the paper-directory novelty review.
+
+The next mathematical targets are the infinite optimizer-space topology,
+necessity of the infinite uniqueness threshold, and quantitative stability
+or certified approximation from inexact input. Full nuclear, real infinite-
+dimensional and infinite Charbonnier optimizer classifications remain open.
+The dated sections below preserve proof history; use this paragraph and the
+latest endpoint sections for the current frontier.
+
 ## All-rank real nuclear canonical-value criterion
 
 `RealNuclearOptimality.lean` proves
@@ -1397,3 +1418,53 @@ is classical: no independent historical novelty is claimed for the
 change of variables or for these application corollaries. No empirical,
 numerical-performance or physical-implementation guarantee is inferred.
 The manuscript and visualizations remain untouched.
+
+
+## Two-level self-adjoint symmetry correction: compiled application
+
+Checkpoint `ddbef2d43` contains the nearest-correction classification,
+closed-threshold uniqueness and every-correction commutator rank budget.
+Its full default build passed 21,239 jobs with warnings as errors.
+
+`TwoLevelSymmetryCorrection.exists_unique_nearest_schatten_two_level_symmetry`
+now proves the following deterministic operator theorem on every complete
+complex Hilbert space. For a closed subspace projection `P`, real
+`energy` and positive `gap`, let `H = gap * P + energy * I`.
+For finite `1<p<2`, if `[A,H] ∈ S_p` and
+
+```
+norm([A,H]) ≤ gap * (2*sqrt(p-1)/p),
+```
+
+then `H` is self-adjoint and there is a unique Schatten-nearest ambient
+unitary commuting exactly with `H`. All ambient exact unitary symmetries
+are competitors, including those at infinite distance. The projection
+may have infinite rank and corank; even trivial eigenspaces are allowed.
+No independent defect-index assumption is needed. Focused build: 8,032 jobs.
+
+The proof is explicit: `[B,H]=gap*[B,P]`, so the commutants coincide.
+The inverse-gap scalar identity transfers native Schatten membership;
+the same identity in operator norm transfers the residual bound to the
+closed projection-commutator threshold. The already proved arbitrary-
+Hilbert-space nearest-correction theorem then supplies existence and
+uniqueness. This is an exact nearness consequence, not a claim of physical
+implementability, a numerical algorithm with certified floating-point
+input, or independent historical novelty for two-level symmetry rounding.
+The manuscript and visualization files were not edited.
+
+The supplied expanded historical review is now recorded at the top of
+`papers/dk_formalization_journal/MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md`
+(commit `4cdd5ed01`), including source-specific distinctions, precise
+priority limitations, and the corrected infinite-dimensional frontier.
+The author-hosted Appendix B PDF lead returned HTTP 503 in this pass;
+printed-edition authentication remains pending. No authors were contacted.
+
+Next substantive obligations for the active broader campaign: (1) the
+infinite optimizer-space compression/extension homeomorphism, composing
+the existing finite multiplicity homeomorphisms; (2) necessity, as well as
+sufficiency, of the infinite-dimensional uniqueness threshold; (3)
+quantitative stability and certified approximation from inexact spectral
+input. All are distinct from the now closed every-optimizer and
+nearest-correction classification. The nuclear, real infinite-dimensional
+and full infinite Charbonnier classifications remain separate research
+streams. Do not infer these endpoints from the complex `1<p<2` results.
