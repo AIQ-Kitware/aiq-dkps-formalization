@@ -3714,3 +3714,35 @@ root conditions on each positive-angle spectral sector and on the
 right-defect sector. Historical priority remains a separate review;
 no first-discovery claim is inferred from these compiler results.
 Papers and visualizations remain untouched.
+
+
+## The complete parametrization preserves ideal distances — 27 October 2026
+
+`Geometry/Polar/NuclearRootMetric.lean` proves
+`nuclearSignedSineTransport_gauge_sub`: for every symmetric operator-
+ideal family Phi and every two admissible unitary-construction roots,
+`Phi(T_A-T_B)=Phi(A-B)`. The theorem is RCLike-generic, allows infinite
+gauge values, and does not need trace class or reflection oddness.
+It follows from the literal factorization
+`T_A-T_B=R [V(A-B)]*` and the accepted unitary-invariance/adjoint API.
+This is exact distance preservation, not a distortion bound.
+
+The operator-norm specialization is
+`nuclearSignedSineTransport_norm_sub`. The complete all-optimizer
+bijection is therefore an isometric embedding into bounded operators,
+formalized by `nuclearSignedSineEquivOptimizers_isometry_complex`.
+The statement uses the actual operator-norm metric on coefficients;
+it does not silently assume a different topology on the unitary type.
+Its image is precisely all ambient nuclear minimizers by the preceding
+bijection. The hypotheses of the full optimizer result remain finite
+native nuclear projection difference and an actual crossed-defect
+equivalence on any complete complex Hilbert space.
+
+Focused metric build passed 7,184 jobs. The registered full default
+build passed 21,387 jobs (`/tmp/nuclear-metric-full.log`), preceded
+by cache retrieval. The next immediate
+geometric consequence is the root-negation antipode, with sharp family
+spread in symmetric gauges; afterward one may address compactness and
+explicit Grassmannian/right-defect factors. None of those subsequent
+claims is inferred merely from the set-theoretic bijection.
+No paper or visualization file is changed.

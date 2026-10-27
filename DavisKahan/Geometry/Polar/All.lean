@@ -21,6 +21,7 @@ public import DavisKahan.Geometry.Polar.NuclearStability
 public import DavisKahan.Geometry.Polar.NuclearPhase
 public import DavisKahan.Geometry.Polar.NuclearRootConstruction
 public import DavisKahan.Geometry.Polar.NuclearRootClassification
+public import DavisKahan.Geometry.Polar.NuclearRootMetric
 public import DavisKahan.Geometry.Polar.NuclearSignedRoot
 public import DavisKahan.Geometry.Polar.NuclearSignedPhases
 public import DavisKahan.Geometry.Polar.DirectRotationRank
