@@ -109,15 +109,63 @@ Focused build passed (8,056 jobs), and the full default build passed
 classical polar uniqueness; its formal verification is not a historical first-priority claim.
 Paper and visualization changes remain assigned separately.
 
-The next consequential independent mathematical target is formal sharpness
-of the input-error constant. A conventional two-dimensional witness is
+The input-error sharpness target described here is now **compiled**, in
+`SchattenCorrectionSharpness.lean`; see the next entry. Its real-coordinate
+version has the conventional two-dimensional witness
 `A=[[c,s],[-s,c]]`, `B=[[-c,s],[-s,-c]]`, with `c=cos(theta)>0` and
 `s=sin(theta)`. Their diagonal polar corrections are `I` and `-I`, both
 commutator norms equal `s`, and their input/output distance ratio is `1/c`.
-At the critical angle this is `p/(2-p)`. **This witness is not yet
-formalized**; no sharpness claim is made for the compiled Lipschitz bound.
+At the critical angle this is `p/(2-p)`. The compiled witness uses the
+existing diagonal eigenbasis model of these actual unitaries.
 General objective-error control for arbitrary near-minimizers also remains
 open, and must distinguish norm excess from power-cost excess.
+
+## Sharp correction conditioning at every commutator budget
+
+`SchattenCorrectionSharpness.lean` proves
+`exists_nearest_schatten_corrections_attaining_commutator_ratio` and
+`exists_nearest_schatten_corrections_attaining_critical_ratio`.
+For every finite `1<p<2` and **every**
+`0 <= gamma <= sin(criticalAngle p)`, there are genuine complex 2-dimensional
+unitaries `A,B,C,D` such that:
+
+- both `C,D` commute with the fixed diagonal-line projection;
+- both input commutators are native Schatten and have norm **exactly** `gamma`;
+- `C,D` globally minimize their respective native extended Schatten costs
+  over **all** ambient commuting unitaries;
+- `norm(A-B)>0` and
+  `norm(C-D) = norm(A-B)/sqrt(1-gamma^2)`.
+
+Consequently the preceding dimension-free certificate cannot use a smaller
+uniform coefficient at any admissible budget. In particular `p/(2-p)` is
+attained at the exact critical budget, not just approached in a limit.
+The angle-parametrized equality theorem is
+`exists_nearest_schatten_corrections_attaining_cosine_ratio`.
+
+The witness uses `A=scalarPhaseTransport theta 0`,
+`B=scalarPhaseTransport (pi-theta) 0`, `C=I`, `D=-I`, and
+`theta=arcsin(gamma)`. Its diagonal blocks are `cos(theta) I` and
+`-cos(theta) I`. The exact commutator is `sin(theta)` times an actual
+unitary; the input distance is `2 cos(theta)` and output distance `2`.
+`planar_nearest_schatten_corrections` certifies both global minimizing
+properties using the preceding literal diagonal-polar characterization.
+Thus this is an ambient optimization result, rather than merely sharpness
+of an algebraic bound on a constructed family.
+
+Focused build passed (8,080 jobs), and the full default build passed
+(21,273 jobs), with warnings treated as errors. Coordinate lemmas were
+added to the existing planar model rather than duplicating its unitary
+construction. This is an exact sharp consequence of the Schatten optimizer
+theory; sharp classical polar conditioning alone is not claimed historically
+new. Manuscript and visualization changes remain separate.
+
+The next substantial independent extension being investigated is general
+infinite-rank **Charbonnier** attainment. Its natural feasibility ideal is
+Schatten 2, because the penalty is quadratic near zero. Existing unrestricted
+lower bounds and finite-rank attainment do not yet establish that endpoint.
+The candidate proof splits off a finite spectral cutoff and uses the
+canonical smoothed-optimal tail; both the exact tail cost and global
+attainment must be proved before promoting the result.
 
 ## Exact infinite-dimensional uniqueness threshold
 

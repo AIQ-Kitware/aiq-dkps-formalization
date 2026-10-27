@@ -223,12 +223,14 @@ private theorem projection_sourceLine_apply (x : E2) :
     | add a b _ _ ha hb => rw [inner_add_right, ha, hb, add_zero]
     | smul c a _ ha => rw [inner_smul_right, ha, mul_zero]
 
-private theorem projection_sourceLine_zero (x : E2) :
+/-- The first coordinate of projection onto the diagonal source line. -/
+theorem projection_sourceLine_zero (x : E2) :
     projection sourceLine x 0 = (x 0 + x 1) / 2 := by
   rw [projection_sourceLine_apply]
   simp [diagonalVector_zero]
 
-private theorem projection_sourceLine_one (x : E2) :
+/-- The second coordinate of projection onto the diagonal source line. -/
+theorem projection_sourceLine_one (x : E2) :
     projection sourceLine x 1 = (x 0 + x 1) / 2 := by
   rw [projection_sourceLine_apply]
   simp [diagonalVector_one]

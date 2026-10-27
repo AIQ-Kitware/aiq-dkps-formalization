@@ -62,6 +62,20 @@ theorem scalarPhaseTransport_toLinearMap (theta delta : ℝ) :
     example42Competitor_eq_phase_smul, example42Competitor_eq_phase_smul,
     smul_smul, example42Phase_mul, sub_add_cancel]
 
+/-- First coordinate of the actual planar phase transporter. -/
+theorem scalarPhaseTransport_apply_zero (theta delta : ℝ) (x : ComplexPlane) :
+    scalarPhaseTransport theta delta x 0 = example42Phase (theta + delta) * x 0 := by
+  change (scalarPhaseTransport theta delta).toLinearMap x 0 = _
+  rw [scalarPhaseTransport_toLinearMap]
+  simp [example42Competitor, Matrix.toLpLin_apply, Matrix.vecHead, Matrix.vecTail]
+
+/-- Second coordinate of the actual planar phase transporter. -/
+theorem scalarPhaseTransport_apply_one (theta delta : ℝ) (x : ComplexPlane) :
+    scalarPhaseTransport theta delta x 1 = example42Phase (delta - theta) * x 1 := by
+  change (scalarPhaseTransport theta delta).toLinearMap x 1 = _
+  rw [scalarPhaseTransport_toLinearMap]
+  simp [example42Competitor, Matrix.toLpLin_apply, Matrix.vecHead, Matrix.vecTail]
+
 /-- Scalar phases preserve the target line, so every member of this family
 is an admissible unitary transport for the same pair of lines. -/
 theorem scalarPhaseTransport_transports (theta delta : ℝ) :
