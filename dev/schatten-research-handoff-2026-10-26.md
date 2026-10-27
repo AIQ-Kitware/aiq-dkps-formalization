@@ -3845,3 +3845,65 @@ unrelated findings, so no claim that that scanner passes is made. This strengthe
 construction checkpoint while leaving the exact hypotheses of the
 all-complex-optimizer bijection intact. Paper and visualizations are
 unchanged.
+
+
+## Norm compactness of the complete optimizer family — 27 October 2026
+
+The operator-norm compactness obligation is now closed.
+`ForTauCeti/Analysis/InnerProductSpace/CompactModulusFiber.lean` proves
+`TauCeti.isCompact_setOf_isSelfAdjoint_modulus_eq`: for every compact
+positive S on any complete RCLike Hilbert space, all self-adjoint
+operators A with `|A|=S` form a norm-compact set. The proof is independent
+of transport. A finite spectral cutoff of S approximates every A in
+this entire fiber by the same finite-dimensional corner; the error is
+at most twice the cutoff. Finite-dimensional compact operator balls
+supply finite nets, and the fixed Gram identity supplies closedness.
+No separability or finite ambient rank is assumed. This is new local
+proof code for classical compact-operator reasoning, without a priority
+or accepted-roadmap claim.
+
+`Geometry/Polar/NuclearRootCompactness.lean` proves the signed-root
+parameter set is closed, and compact whenever P_K-P_L is compact, over
+either field. The real parameter set is allowed to be empty. Using the
+exact complex bijection and its norm isometry,
+`isCompact_nuclear_optimizer_coefficients_complex` proves compactness
+of all optimizer coefficients. `isCompact_nuclearTransportOptimizers_complex`
+proves compactness of the actual unitary family in the **accepted
+operator norm topology**. Its hypotheses are complete complex Hilbert
+space, complemented K,L, actual crossed-defect equivalence, and finite
+native nuclear P_K-P_L. Nonseparable fixed sectors, infinite-rank moving
+sectors, repeated angles and right defects are included.
+
+The finite-nuclear hypothesis in the full-family theorem is essential:
+with only compact difference and infinite nuclear minimum, the extended
+objective can make every feasible infinite-cost competitor a minimizer.
+The algebraic root set alone must not be substituted for that larger set.
+
+Consequences now compiled:
+`exists_secondary_minimizer_nuclear_transport_complex` gives attainment
+of every lower semicontinuous extended nonnegative secondary objective
+while retaining the exact unrestricted nuclear optimum.
+`exists_nearest_reference_nuclear_optimizer_schatten_complex` specializes
+to Schatten-q distance from an arbitrary bounded reference for q>=1.
+The finite-distance endpoint
+`exists_finite_nearest_reference_nuclear_optimizer_schatten_complex`
+assumes I-reference belongs to Schatten q and proves the selected
+secondary minimum is finite. This distinguishes a meaningful alignment
+tie-break from the possible all-infinite extended-cost case. No numerical
+performance, uniqueness, statistical, or implementability assertion is
+made by these existence results.
+
+Focused fixed-modulus build passed 6,374 jobs; focused full compactness
+and secondary-selection build passed 7,192 jobs. The registered full
+default build passed 21,393 jobs (`/tmp/nuclear-compact-full.log`),
+with cache retrieval before every build. Paper and
+visualization files are unchanged.
+
+Still open: compactness in native nuclear distance; explicit spectral
+Grassmannian/right-unitary factors, connected components and dimensions;
+and real-root existence/necessity. The next immediate independent
+consequence is the full Schatten cost profile of a nuclear optimizer:
+odd-modulus splitting should show every nuclear optimizer has the same
+Schatten-q displacement for each q>=1, and give a sharp simultaneous
+approximation factor when the norm exponent is not fixed in advance.
+No such profile is claimed until its exact constants compile.
