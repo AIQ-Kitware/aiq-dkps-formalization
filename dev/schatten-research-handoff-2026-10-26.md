@@ -2536,3 +2536,50 @@ Next independent application: transfer native Charbonnier transport to
 nearest projection-commuting unitaries, with an unconditional HS commutator
 and critical norm uniqueness certificate. No historical novelty claim is
 inferred from the transfer or the existing finite topology.
+
+## October 27: native smoothed projection-symmetry correction
+
+`CharbonnierCommutingCorrection.existsUnique_nearest_charbonnier_commuting_unitary_iff_complex`
+proves, for an arbitrary unitary A and orthogonally complemented K on any
+complete complex Hilbert space, that a unique Charbonnier-nearest unitary
+commuting with P_K exists iff `[A,P_K]` is Hilbert--Schmidt and its operator
+norm is at most the smoothed critical sine. No standing compactness,
+candidate finite-distance, rank-balance or separability hypothesis is used.
+`eq_canonical_correction_of_charbonnier_minimal_of_commutator_le_critical_complex`
+identifies **every** minimizing correction under that certificate as
+`canonicalPolarFactor(AK,K) * A`.
+
+`exists_nearest_charbonnier_commuting_unitary_complex` gives exact finite-cost
+attainment and the full intrinsic minimum sum for a Hilbert--Schmidt
+commutator and balanced image/source crossed defects. Its competitors are
+all ambient commuting unitaries. The balance hypothesis matters above the
+critical gap; it is automatically eliminated by the small-gap certificate.
+`charbonnier_nearest_commuting_unitary_has_critical_rank_budget_complex`
+proves every nearest correction differs from each completed canonical
+correction by rank at most the actual strictly-supercritical sine-sector
+dimension, with the dimension controlled by the squared HS commutator
+gauge divided by the squared critical sine.
+
+The reusable field-generic donor
+`ForTauCeti/Analysis/InnerProductSpace/Projection/CharbonnierCorrection.lean`
+proves invariance of native smoothed trace under arbitrary isometric
+changes of domain/codomain, exact equality of correction and relative
+transport cost, and both minimality and unique-minimality correspondences.
+The cost keeps extended values; it is never treated as an operator-ideal
+norm. The approximation-number isometry theorem is consumed directly
+from accepted TauCeti. These approximation consequences make no assertion
+about computational performance, physical realizability or noisy data.
+
+Next consequential research seam: infinite-dimensional local minima.
+The global optimizer iff is proved, but the new stationarity and reducing
+restriction endpoints currently assume global minimality. To prove that
+finite-cost local minima are global, one must first descend **local**
+minimality to actual finite reducing sectors (with a stated operator-norm
+or ideal topology), including the zero-gradient reflection kernel, then
+use finite landscape rigidity and native trace limits. The existing
+global restriction lemma alone does not discharge this obligation.
+Infinite nuclear and real full-optimizer classifications remain separate
+open extensions; the positive critical sine used here is unavailable at
+the nuclear endpoint. Higher-rank projection-factor connectedness and
+manifold dimensions, and dimension-independent near-minimizer estimates,
+are also not claimed. Paper and visualization updates remain external.
