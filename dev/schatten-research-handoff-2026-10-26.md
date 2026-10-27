@@ -15,13 +15,13 @@ before repeating the literature search; do not infer first-discovery priority.
 ## Current frontier — reconciled 27 October 2026
 
 Start with the maintained [research plan](schatten-transport-research-plan.md).
-It records the next real equality-certificate theorem, the longer theory goals,
+It records the completed real equality certificate, the publication-core goals,
 claim boundaries, dependencies, build evidence and new-machine transfer steps.
 The [unification/provenance note](spectral-transport-unification.md) joins the
 regimes and records exact primary-source comparisons. The parity converse
 campaign below advances mathematical checkpoint `96aeb922d`; its final full
-default build passed **21,425 jobs**, with warnings as errors, including the
-upstream dimension-lemma consumption. The dated sections below are proof history; their
+default build passed **21,427 jobs**, with warnings as errors, including the
+shared real/complex trace and equality-certificate proofs. The dated sections below are proof history; their
 statements of open obligations apply at their recorded checkpoint only.
 
 **Complex nuclear endpoint:** exact general infinite-rank attainment, the
@@ -74,19 +74,24 @@ intersection with K, giving an equivalent even-source-multiplicity criterion.
 Right-angle factors exist under defect balance; zero sectors have no free root
 factor. Assembly constructs actual real orthogonal transporters attaining the
 projection nuclear lower bound, finite when Delta is trace class. Necessity of
-the certificate for all real finite-cost equality attainers remains open.
+the certificate for all real finite-cost equality attainers is now proved;
+the signed-root parametrization covers all such attainers over either field.
 When roots do not exist the real optimal value may be larger; the unrestricted
 infinite-rank real matching/optimizer theory is a further target.
 
-**New bridge proved:** a finite real skew-adjoint negative-square G block
-with an anticommuting self-adjoint involution J admits the compatible projection
-iff its dimension is divisible by four. The converse uses an orthogonal complex
-structure on the J-fixed half; the actual spectral half-dimension and infinite
-assembly are also compiled. **Next proof:** derive the signed-root certificate
-from every real finite-cost transporter attaining `||P-Q||_1`. The present
-necessity argument depends on complex-only trace equality and dual calibration.
-Do not infer real necessity from generic root sufficiency. A literal equality
-with finite labelled principal-angle counts is another useful remaining corollary.
+**New bridge proved:** the finite negative-square/reflection projection iff,
+full/half spectral dimension and arbitrary-rank real root assembly are compiled.
+The subsequent field-independent trace certificate now also proves real
+necessity. Equality attainment for trace-class real pairs with D holds iff
+all acute source-side multiplicities are even; every equality attainer is
+represented by an independent signed root. A violating block gives a strict
+cost inequality for each transporter, not a uniform infimum gap.
+
+**Next central task:** assess and prove the useful spectral-penalty decoupling
+principle, with the two-parameter smoothed-power family as the concrete target.
+A publication core, not the entire research backlog, is the success criterion.
+The finite labelled angle-count identity, full real optimizer topology and
+above-bound infinite-rank matching are secondary unless the core needs them.
 
 The next broader goals are exponent-endpoint family convergence, explicit
 factor geometry/components, nonunique-regime stability and a certified finite
@@ -4221,3 +4226,56 @@ dimension-lemma consumption. The final full default `lake build` passed
 affected consumers. `lake exe cache get` preceded the build. The final log is
 `/tmp/dkps-unification/full-build-upstream-final.log`; reproducing the proof
 requires the committed sources and pinned Lake inputs, not this temporary log.
+
+## Shared trace certificate and exact real nuclear equality — 27 October 2026
+
+The real necessity gap in the preceding entry is now closed. The new
+`Nuclear/CompactGram.lean` proves the classical compact Gram trace identity
+over both fields using the existing compact spectral multiplicity formula
+and Hilbert--Schmidt basis independence. `Nuclear/Trace.lean` now shares its
+trace bound, positivity equality, cyclicity and projected-sector rigidity
+proofs over `RCLike`; the original complex names remain specialized theorems.
+No second trace, nuclear norm or complexification carrier is introduced.
+
+In `NuclearOptimizerCertificate.lean`,
+`nuclearTransportDual_trace_calibration`,
+`nuclear_eq_projection_sub_iff_relative_certificate` and
+`nuclear_eq_projection_sub_iff_certificate` now apply over either field.
+The last theorem concerns every actual transporter, with trace-class Delta
+and D: equality with the projection bound is equivalent to finite displacement,
+fixing the full common sector and positive relative dual displacement.
+The complex global-minimum theorem consumes this shared equality theorem;
+its separate complex attainment proof is retained.
+
+`NuclearRootClassification.lean` now proves
+`nuclear_eq_projection_sub_signed_sine_parameters` and the explicit bijection
+`nuclearSignedSineEquivProjectionBoundAttainers`. They classify **all** finite
+projection-bound attainers, real or complex, without prescribing invariant
+planes. The old complex all-optimizer extraction consumes this shared proof.
+
+Consequently `NuclearRealRootCriteria.lean` proves
+`exists_real_nuclear_transport_eq_projection_sub_iff_four_dvd` and
+`exists_real_nuclear_transport_eq_projection_sub_iff_even_source_multiplicity`.
+These are exact arbitrary-rank real equality-attainment criteria, under
+trace-class projection difference and balanced defects. A violating block
+gives `nuclear_projection_sub_lt_transport_of_sine_dimension_real` for every
+real transporter. This pointwise strict inequality does not prove a uniform
+gap for the infimum or classify above-bound real optimizers.
+
+Mathematical provenance: the Gram, trace and positivity arguments are classical
+ingredients formally generalized; no novelty is claimed for them. The exact
+real equality-attainer classification and numerical arbitrary-rank transport
+criterion are candidate extensions, with historical priority unresolved.
+The unification note's T8 and T14 give the precise boundary.
+
+The focused shared-trace build passed 6,438 jobs; shared calibration passed
+7,160 jobs. The full default build, after cache retrieval, passed **21,427 jobs**
+with warnings as errors (`/tmp/dkps-unification/real-certificate-full.log`).
+All new declarations and maintained consumers are included.
+
+The user's refined success criterion is a publication-worthy central theory,
+not exhaustion of this handoff. At this successful checkpoint, reassess the
+conjectural spectral-penalty fragment and two-parameter smoothed-power family.
+Produce the publication-core assessment before another large campaign. Full
+real topology, exhaustive endpoint set limits and arbitrary-regime stability
+are secondary. No manuscript or visualization changes are authorized.

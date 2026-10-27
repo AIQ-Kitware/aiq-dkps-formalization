@@ -13,6 +13,8 @@ public import DavisKahan.Geometry.Polar.NuclearRootConstruction
 The parameters are independent bounded self-adjoint sine roots,
 reflection odd and commuting with the dual times cosine. The forward
 construction is inverted literally, including all exceptional sectors.
+Over either scalar field this gives every finite nuclear projection-bound
+attainer; in the complex case it gives every global nuclear optimizer.
 
 The spectral theorem, trace duality, and polar decomposition used in the
 construction are classical ingredients. The precise complete transport
@@ -28,6 +30,8 @@ public section
 noncomputable section
 
 namespace TauCeti.DavisKahan
+
+open scoped ENNReal
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
@@ -238,6 +242,109 @@ theorem mem_nuclearTransportOptimizers
       ∀ W : E ≃ₗᵢ[𝕜] E, K.map W.toLinearMap = L →
         (1 - (T : E →L[𝕜] E)).nuclearENorm ≤ (1 - (W : E →L[𝕜] E)).nuclearENorm := Iff.rfl
 
+/-- Every transporter attaining the finite nuclear projection bound
+has an independent signed-root certificate over either scalar field.
+No principal-angle invariance is assumed of the transporter. -/
+theorem nuclear_eq_projection_sub_signed_sine_parameters
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L)
+    (hΔ : (K.starProjection - L.starProjection).nuclearENorm ≠ ∞)
+    (T : E ≃ₗᵢ[𝕜] E) (hT : K.map T.toLinearMap = L)
+    (hcost : (1 - (T : E →L[𝕜] E)).nuclearENorm =
+      (K.starProjection - L.starProjection).nuclearENorm) :
+    let C := Proposition35.section3CosAngleOperator K L
+    let R := nonacuteDirectRotation K L D
+    let V := nuclearTransportDual K L D
+    let A := star (V : E →L[𝕜] E) * ((T.symm : E →L[𝕜] E) * R - C)
+    A ∈ nuclearSignedSineParameters K L D ∧
+      (T.symm : E →L[𝕜] E) * R = C + (V : E →L[𝕜] E) * A := by
+  let R := Unitary.linearIsometryEquiv
+    (⟨nonacuteDirectRotation K L D, nonacuteDirectRotation_mem_unitary K L D⟩ : unitary (E →L[𝕜] E))
+  let Z := R.trans T.symm
+  let C := Proposition35.section3CosAngleOperator K L
+  let B := nonacuteDirectRotation K L D - C
+  let Q := B.ker.starProjection
+  have hcert := (nuclear_eq_projection_sub_iff_certificate K L D hΔ T hT).mp hcost
+  have hRref (x : E) : R (K.reflection x) = L.reflection (R x) :=
+    nonacuteDirectRotation_reflection_intertwines K L D x
+  have hTref := (K.map_eq_iff_intertwines_reflection L T).mp hT
+  have hZ (x : E) : Z (K.reflection x) = K.reflection (Z x) := by
+    apply T.injective
+    change T (T.symm (R (K.reflection x))) = T (K.reflection (T.symm (R x)))
+    rw [T.apply_symm_apply, hTref, T.apply_symm_apply, hRref]
+  have hfix : (1 - (Z : E →L[𝕜] E)) * Q = 0 := by
+    ext x
+    have hx := B.ker.starProjection_apply_mem x
+    change Q x ∈ B.ker at hx
+    rw [ker_nonacuteDirectRotation_sub_cosine_eq_projection_sub] at hx
+    change K.starProjection (Q x) - L.starProjection (Q x) = 0 at hx
+    have hR : R (Q x) = Q x :=
+      nonacuteDirectRotation_apply_eq_self_of_projections_eq K L D _ (sub_eq_zero.mp hx)
+    have hTQ := hcert.2.1 (Q x) (sub_eq_zero.mp hx)
+    have hZQ : Z (Q x) = Q x := by
+      apply T.injective
+      change T (T.symm (R (Q x))) = T (Q x)
+      rw [T.apply_symm_apply, hR, hTQ]
+    change Q x - Z (Q x) = 0
+    rw [hZQ, sub_self]
+  have hself : IsSelfAdjoint (star (nuclearTransportDual K L D : E →L[𝕜] E) *
+      (nonacuteDirectRotation K L D - (Z : E →L[𝕜] E))) := hcert.2.2.isSelfAdjoint
+  obtain ⟨hA, hmod, hcomm, hodd, hrelative⟩ :=
+    nuclearTransportDual_signed_sine_parameters K L D Z hZ hfix hself
+  exact ⟨(mem_nuclearSignedSineParameters K L D _).mpr ⟨hA, hmod, hcomm, hodd⟩, hrelative⟩
+
+/-- Actual transporters attaining the projection nuclear lower bound.
+Over the reals this set may be empty even when the ambient transport
+fiber has finite-cost elements. -/
+def nuclearProjectionBoundAttainers
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection] :
+    Set (E ≃ₗᵢ[𝕜] E) :=
+  {T | K.map T.toLinearMap = L ∧
+    (1 - (T : E →L[𝕜] E)).nuclearENorm = (K.starProjection - L.starProjection).nuclearENorm}
+
+omit [CompleteSpace E] in
+/-- Membership records the literal transport and nuclear equality. -/
+@[simp]
+theorem mem_nuclearProjectionBoundAttainers
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (T : E ≃ₗᵢ[𝕜] E) :
+    T ∈ nuclearProjectionBoundAttainers K L ↔ K.map T.toLinearMap = L ∧
+      (1 - (T : E →L[𝕜] E)).nuclearENorm = (K.starProjection - L.starProjection).nuclearENorm :=
+  Iff.rfl
+
+/-- **Field-independent classification of all finite nuclear lower-bound
+attainers.** Independent signed roots and actual equality-attaining
+transporters are in explicit bijection. This does not assert that the
+parameter set is nonempty over the reals. -/
+@[expose]
+def nuclearSignedSineEquivProjectionBoundAttainers
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L)
+    (hΔ : (K.starProjection - L.starProjection).nuclearENorm ≠ ∞) :
+    nuclearSignedSineParameters K L D ≃ nuclearProjectionBoundAttainers K L where
+  toFun A :=
+    let hp := (mem_nuclearSignedSineParameters K L D A.val).mp A.property
+    ⟨nuclearSignedSineTransport K L D A.val hp.1 hp.2.1 hp.2.2.1,
+      (mem_nuclearProjectionBoundAttainers K L _).mpr
+        ⟨nuclearSignedSineTransport_map K L D A.val hp.1 hp.2.1 hp.2.2.1 hp.2.2.2,
+        nuclearSignedSineTransport_nuclearENorm K L D A.val hp.1 hp.2.1 hp.2.2.1 hp.2.2.2⟩⟩
+  invFun T :=
+    let hp := (mem_nuclearProjectionBoundAttainers K L T.val).mp T.property
+    ⟨star (nuclearTransportDual K L D : E →L[𝕜] E) *
+      ((T.val.symm : E →L[𝕜] E) * nonacuteDirectRotation K L D -
+        Proposition35.section3CosAngleOperator K L),
+      (nuclear_eq_projection_sub_signed_sine_parameters K L D hΔ
+        T.val hp.1 hp.2).1⟩
+  left_inv A := by
+    apply Subtype.ext
+    exact nuclearSignedSineTransport_extract_root K L D A.val _ _ _
+  right_inv T := by
+    apply Subtype.ext
+    have hp := (mem_nuclearProjectionBoundAttainers K L T.val).mp T.property
+    exact nuclearSignedSineTransport_eq_of_relative K L D _ _ _ _ T.val
+      (nuclear_eq_projection_sub_signed_sine_parameters K L D hΔ
+        T.val hp.1 hp.2).2
+
 section Complex
 
 open scoped ENNReal
@@ -260,40 +367,9 @@ theorem nuclear_minimizer_signed_sine_parameters_complex
     let A := star (V : F →L[ℂ] F) * ((T.symm : F →L[ℂ] F) * R - C)
     A ∈ nuclearSignedSineParameters K L D ∧
       (T.symm : F →L[ℂ] F) * R = C + (V : F →L[ℂ] F) * A := by
-  let R := Unitary.linearIsometryEquiv
-    (⟨nonacuteDirectRotation K L D, nonacuteDirectRotation_mem_unitary K L D⟩ : unitary (F →L[ℂ] F))
-  let Z := R.trans T.symm
-  let C := Proposition35.section3CosAngleOperator K L
-  let B := nonacuteDirectRotation K L D - C
-  let Q := B.ker.starProjection
-  have hcert := (nuclear_isMin_iff_hermitian_certificate_complex K L D hΔ T hT).mp hmin
-  have hRref (x : F) : R (K.reflection x) = L.reflection (R x) :=
-    nonacuteDirectRotation_reflection_intertwines K L D x
-  have hTref := (K.map_eq_iff_intertwines_reflection L T).mp hT
-  have hZ (x : F) : Z (K.reflection x) = K.reflection (Z x) := by
-    apply T.injective
-    change T (T.symm (R (K.reflection x))) = T (K.reflection (T.symm (R x)))
-    rw [T.apply_symm_apply, hTref, T.apply_symm_apply, hRref]
-  have hfix : (1 - (Z : F →L[ℂ] F)) * Q = 0 := by
-    ext x
-    have hx := B.ker.starProjection_apply_mem x
-    change Q x ∈ B.ker at hx
-    rw [ker_nonacuteDirectRotation_sub_cosine_eq_projection_sub] at hx
-    change K.starProjection (Q x) - L.starProjection (Q x) = 0 at hx
-    have hR : R (Q x) = Q x :=
-      nonacuteDirectRotation_apply_eq_self_of_projections_eq K L D _ (sub_eq_zero.mp hx)
-    have hTQ := hcert.1 (Q x) (sub_eq_zero.mp hx)
-    have hZQ : Z (Q x) = Q x := by
-      apply T.injective
-      change T (T.symm (R (Q x))) = T (Q x)
-      rw [T.apply_symm_apply, hR, hTQ]
-    change Q x - Z (Q x) = 0
-    rw [hZQ, sub_self]
-  have hself : IsSelfAdjoint (star (nuclearTransportDual K L D : F →L[ℂ] F) *
-      (nonacuteDirectRotation K L D - (Z : F →L[ℂ] F))) := hcert.2
-  obtain ⟨hA, hmod, hcomm, hodd, hrelative⟩ :=
-    nuclearTransportDual_signed_sine_parameters K L D Z hZ hfix hself
-  exact ⟨(mem_nuclearSignedSineParameters K L D _).mpr ⟨hA, hmod, hcomm, hodd⟩, hrelative⟩
+  have hcert := (nuclear_isMin_iff_certificate_complex K L D hΔ T hT).mp hmin
+  have hcost := (nuclear_eq_projection_sub_iff_certificate K L D hΔ T hT).mpr hcert
+  exact nuclear_eq_projection_sub_signed_sine_parameters K L D hΔ T hT hcost
 
 /-- **Complete signed-root parametrization of every complex nuclear
 optimizer.** The maps are the explicit construction and exact root

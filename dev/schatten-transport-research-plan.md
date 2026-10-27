@@ -17,6 +17,17 @@ changes remain assigned separately.
 
 ## Objective and a useful completion boundary
 
+The success criterion is a cohesive, publication-worthy central theory,
+not completion of every open item below. The central thesis is: spectral
+penalties select optimal phases, the scalar field imposes compatibility,
+and operator ideals govern infinite-dimensional feasibility and attainment.
+The active real equality-certificate milestone is now proved. Before another
+large theorem campaign, assess the proposed general penalty argument in
+`papers/dk_formalization_journal/spectral_penalty_transport.tex`; it is
+conjectural and excluded from the verified manuscript. The next central
+target is the two-parameter smoothed-power family, not exhaustive real
+topology, stability or infinite-rank matching.
+
 Develop exact extrinsic transport optimization over **every** unitary or
 orthogonal W taking K to L, with objective `||I-W||_p` or an explicitly specified
 spectral penalty. The intended theory explains the minimum, every optimizer,
@@ -25,8 +36,8 @@ useful correction construction. Path length, matrix-logarithm distance, and
 frame-fitting Procrustes problems have different objectives or constraints.
 
 The complex theory already has exact infinite-dimensional strict-exponent and
-smoothed classifications and the complete nuclear certificate. The largest
-remaining mathematical gap is the real classification. A journal contribution
+smoothed classifications and the complete nuclear certificate. The real equality-attainment criterion is now complete; unrestricted real
+classification above that bound is a secondary extension. A journal contribution
 can have a precise, complete scope before every extension below is solved.
 Historical originality requires its own theorem-level literature comparison.
 
@@ -47,7 +58,7 @@ does not imply feasibility with finite ideal displacement.
 | Complex nuclear optimizer topology | The entire displacement family is compact in every native Schatten-q carrier, `q>=1`. All optimizers have the same displacement Schatten profile. | `NuclearRootIdealCompactness.lean`, `NuclearRootProfile.lean`. |
 | Complex Charbonnier, `tau>0` | Native Hilbert--Schmidt projection difference and defect balance give exact finite-cost feasibility/attainment. Complete optimizer classification, canonical tail, finite multiplicity topology and closed uniqueness threshold are proved. | `DavisKahan/InfiniteDimensional/DirectRotation/CharbonnierGlobalAttainment.lean`, `CharbonnierOptimizerClassification.lean`, `CharbonnierMultiplicityTopology.lean`, `CharbonnierUniquenessThreshold.lean`. |
 | Real `1<=p<2`, finite dimension | Unrestricted matching value and attaining ambient orthogonal transporters are proved. Nuclear weights, field-equality parity and canonical-value criteria are proved. | `DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean`, `RealNuclearFieldEquality.lean`, `RealNuclearOptimality.lean`. |
-| Real nuclear roots, compact Hilbert pairs | Exact numerical root-existence iff: every strictly acute sine eigenspace has real dimension divisible by four, equivalently even source-side multiplicity. Right-angle factors exist under defect balance. The constructed orthogonal transport attains the projection nuclear lower bound, finite when Delta is trace class. | `NuclearRootSpectralFactors.lean`, `NuclearRealRootCriteria.lean`, donor `RealSpectralSignExistence.lean`. |
+| Real nuclear roots, compact Hilbert pairs | Exact numerical root-existence iff: every strictly acute sine eigenspace has real dimension divisible by four, equivalently even source-side multiplicity. Right-angle factors exist under defect balance. The constructed orthogonal transport attains the projection nuclear lower bound. In the trace-class case, every equality attainer is a signed root and parity is also necessary for equality attainment. | `NuclearRootSpectralFactors.lean`, `NuclearRealRootCriteria.lean`, donor `RealSpectralSignExistence.lean`. |
 | Complex `p>=2` | Canonical transport gives a finite-cost global attainer under native Schatten difference and balanced defects. | Generic `InfiniteDimensional.exists_unitary_minimizing_schatten_transport_of_projection_sub_ne_top` in `SchattenGlobalAttainment.lean`. |
 
 Finite-cost complex local-to-global is proved in both strict Schatten and
@@ -114,7 +125,7 @@ Generic donor proofs, in dependency order:
 These spectral and ideal-analysis foundations use classical mathematics. Their
 formal implementation does not establish a historical-first claim.
 
-## First priority: close the real theory
+## Completed structural real nuclear bridge
 
 ### Completed bridge: numerical real root existence
 
@@ -143,19 +154,24 @@ finite `Nat.card` angle-count expression in the matching theorem. That literal
 identification is a useful remaining corollary. No necessity assertion for
 all real equality attainers follows merely from this root-existence iff.
 
-### 1. Prove necessity of the real equality certificate
+### Completed: necessity of the real equality certificate
 
-The complex trace argument gives every complex nuclear optimizer's signed root.
-It has not yet proved that every **real** transporter attaining `||Delta||_1`
-has that structure. Establish the real equality case directly or by a justified
-complexification preserving the required ideals, costs and transport data.
-Do not infer it from generic root sufficiency or finite matching value equality.
+The trace-support proof and dual calibration now work over either field,
+using the compact Gram trace identity and the accepted Hilbert--Schmidt
+column API. `nuclear_eq_projection_sub_iff_certificate` characterizes every
+actual finite-bound equality attainer. In `NuclearRootClassification.lean`,
+`nuclear_eq_projection_sub_signed_sine_parameters` extracts its independent
+root and `nuclearSignedSineEquivProjectionBoundAttainers` gives a literal
+bijection with all equality attainers, real or complex.
 
-Together with the now-proved parity converse this would give an arbitrary-rank real
-criterion for attaining the complex/projection lower bound and classify all
-such real attainers.
+For trace-class real Delta and D,
+`exists_real_nuclear_transport_eq_projection_sub_iff_even_source_multiplicity`
+is the exact arbitrary-rank equality-attainment criterion. The full sine
+dimension version is `exists_real_nuclear_transport_eq_projection_sub_iff_four_dvd`.
+`nuclear_projection_sub_lt_transport_of_sine_dimension_real` proves pointwise
+strict cost when parity fails; it does not assert a uniform infimum gap.
 
-### 2. Classify every real minimizer when the lower bound is unattainable
+### Secondary: real minimizers when the lower bound is unattainable
 
 Finite real matching values and constructed attainers are already proved.
 They do not classify all real minimizers. Analyze ties between matchings,
@@ -166,7 +182,7 @@ orthogonal transporter. Quantitative field gaps should follow from established
 classification/equality statements; earlier draft gap formulas are research
 claims requiring counterexample tests.
 
-## Second priority: connect exponent and smoothing regimes
+## Secondary directions: connect exponent and smoothing regimes
 
 The proposed explanation is the change in the optimizer's active spectrum:
 for `1<p<2`, every optimizer has a finite active correction; at `p=1`, freedom
@@ -196,7 +212,7 @@ optimizer is approximable from an open exponent range. Use ideal-norm compactnes
 where its hypotheses actually apply. Check normalization and the ideal dictated
 by Charbonnier's quadratic behavior near zero.
 
-## Third priority: explicit geometry, stability and one certified application
+## Secondary directions: geometry, stability and an application
 
 Reduce the nuclear local factors to complex Grassmannians on acute phase halves,
 right-defect unitary factors, and their real counterparts. Prove connectedness
@@ -247,7 +263,7 @@ inventory is unchanged by this independent research program.
 Everything mathematically required is committed. Ordinary Lake builds do not
 require coordination submodules. Do not transfer `.lake` as source or depend on
 old `/tmp` logs. The real parity-converse campaign's full default build passed
-**21,425 jobs**, with warnings as errors, after consuming Tau Ceti's dimension
+**21,427 jobs**, with warnings as errors, after consuming Tau Ceti's dimension
 necessity and retiring the local copy. The earlier spectral-factor checkpoint
 was `96aeb922d` (21,413 jobs); ideal compactness was `395d6dd0f` (21,399 jobs).
 

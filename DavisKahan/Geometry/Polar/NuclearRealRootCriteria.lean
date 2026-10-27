@@ -25,9 +25,13 @@ the application joins the local finite real matching parity with the
 compact signed-root product. An equivalent predecessor for this exact
 transport criterion has not been located in the sources examined; its
 historical priority remains unresolved. See provenance row T8 in
-`dev/spectral-transport-unification.md`. Necessity of this certificate
-for every real lower-bound attainer is not proved here, nor is a
-classification of real minimizers whose value exceeds that bound.
+`dev/spectral-transport-unification.md`. The field-independent trace
+certificate now also proves necessity for every finite-cost real
+lower-bound attainer, so the numerical parity test exactly characterizes
+equality attainment for trace-class pairs. A violating acute block forces
+each transporter strictly above the projection bound. A uniform gap for
+the infimum and classification of real minimizers above that bound are
+separate statements.
 -/
 
 public section
@@ -36,7 +40,7 @@ noncomputable section
 
 namespace TauCeti.DavisKahan
 
-open scoped InnerProductSpace
+open scoped InnerProductSpace ENNReal
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
 
@@ -521,5 +525,68 @@ theorem exists_real_nuclear_transport_of_sine_parity
     nuclearSignedSineTransport_map K L D A hself hmod hcomm hodd,
     nuclearSignedSineTransport_nuclearENorm K L D A hself hmod hcomm hodd, ?_⟩
   exact fun W hW => nuclearSignedSineTransport_isMin K L D A hself hmod hcomm hodd W hW
+
+/-- **Exact real nuclear equality-attainment criterion.** For a trace-class
+projection pair with balanced defects, an actual orthogonal transporter
+attains the projection lower bound if and only if every strictly acute
+full sine eigenspace has dimension divisible by four. Necessity uses the
+field-independent trace certificate, rather than a planar assumption. -/
+theorem exists_real_nuclear_transport_eq_projection_sub_iff_four_dvd
+    (K L : Submodule ℝ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[ℝ] halmosTargetDefect K L)
+    (hΔ : (K.starProjection - L.starProjection).nuclearENorm ≠ ∞) :
+    (∃ T : E ≃ₗᵢ[ℝ] E, K.map T.toLinearMap = L ∧
+      (1 - (T : E →L[ℝ] E)).nuclearENorm = (K.starProjection - L.starProjection).nuclearENorm) ↔
+      ∀ s : ℝ, 0 < s → s < 1 →
+        4 ∣ Module.finrank ℝ (Module.End.eigenspace (K.sinAngleOperator L).toLinearMap s) := by
+  have hcompact := ContinuousLinearMap.isCompactOperator_of_nuclearENorm_ne_top hΔ
+  constructor
+  · rintro ⟨T, hT, hcost⟩
+    let A := (nuclearSignedSineEquivProjectionBoundAttainers K L D hΔ).symm
+      ⟨T, (mem_nuclearProjectionBoundAttainers K L T).mpr ⟨hT, hcost⟩⟩
+    exact (nuclearSignedSineParameters_nonempty_iff_four_dvd_real K L D hcompact).mp
+      ⟨A.val, A.property⟩
+  · intro hparity
+    obtain ⟨T, hT, hcost, _⟩ := exists_real_nuclear_transport_of_sine_parity K L D hcompact hparity
+    exact ⟨T, hT, hcost⟩
+
+/-- The same exact equality-attainment criterion in intrinsic principal-side
+multiplicities. Right-angle multiplicities are unrestricted. -/
+theorem exists_real_nuclear_transport_eq_projection_sub_iff_even_source_multiplicity
+    (K L : Submodule ℝ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[ℝ] halmosTargetDefect K L)
+    (hΔ : (K.starProjection - L.starProjection).nuclearENorm ≠ ∞) :
+    (∃ T : E ≃ₗᵢ[ℝ] E, K.map T.toLinearMap = L ∧
+      (1 - (T : E →L[ℝ] E)).nuclearENorm = (K.starProjection - L.starProjection).nuclearENorm) ↔
+      ∀ s : ℝ, 0 < s → s < 1 →
+        Even (Module.finrank ℝ (K.comap
+          (Module.End.eigenspace (K.sinAngleOperator L).toLinearMap s).subtype)) := by
+  have hc := ContinuousLinearMap.isCompactOperator_of_nuclearENorm_ne_top hΔ
+  exact (exists_real_nuclear_transport_eq_projection_sub_iff_four_dvd K L D hΔ).trans
+    ((nuclearSignedSineParameters_nonempty_iff_four_dvd_real K L D hc).symm.trans
+      (nuclearSignedSineParameters_nonempty_iff_even_source_multiplicity_real K L D hc))
+
+/-- A violating acute block forces every real transporter to have cost
+strictly above the finite projection bound. This is a pointwise strict
+inequality, not a uniform gap or a formula for the real infimum. -/
+theorem nuclear_projection_sub_lt_transport_of_sine_dimension_real
+    (K L : Submodule ℝ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[ℝ] halmosTargetDefect K L)
+    (hΔ : (K.starProjection - L.starProjection).nuclearENorm ≠ ∞)
+    (s : ℝ) (hs0 : 0 < s) (hs1 : s < 1)
+    (hbad : ¬4 ∣ Module.finrank ℝ (Module.End.eigenspace (K.sinAngleOperator L).toLinearMap s))
+    (T : E ≃ₗᵢ[ℝ] E) (hT : K.map T.toLinearMap = L) :
+    (K.starProjection - L.starProjection).nuclearENorm < (1 - (T : E →L[ℝ] E)).nuclearENorm := by
+  have hbound := (OperatorIdealFamily.schatten ℝ 1 (by norm_num)).gauge_projection_sub_le_unitary_displacement
+    K L T hT
+  simp only [OperatorIdealFamily.gauge_schatten, one_div_one, ENNReal.rpow_one] at hbound
+  have hle : (K.starProjection - L.starProjection).nuclearENorm ≤
+      (1 - (T : E →L[ℝ] E)).nuclearENorm := by
+    rw [ContinuousLinearMap.nuclearENorm_def, ContinuousLinearMap.nuclearENorm_def]
+    exact hbound
+  apply lt_of_le_of_ne hle
+  intro heq
+  exact hbad ((exists_real_nuclear_transport_eq_projection_sub_iff_four_dvd K L D hΔ).mp
+    ⟨T, hT, heq.symm⟩ s hs0 hs1)
 
 end TauCeti.DavisKahan
