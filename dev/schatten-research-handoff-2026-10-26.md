@@ -3386,3 +3386,52 @@ has zero nuclear trace for Z=T*R, prove quantitative trace calibration,
 and deduce the exact all-ambient nuclear optimizer certificate. The
 phase/multiplicity parametrization beyond that certificate remains open.
 Paper and visualization files are unchanged.
+
+
+## Every Hilbert nuclear optimizer: exact certificate — 27 October 2026
+
+`Geometry/Polar/NuclearOptimizerCertificate.lean` now compiles the
+previously missing trace calibration and all-ambient optimizer iff.
+Assume E is any complete complex Hilbert space, K,L admit orthogonal
+projections, the native nuclear norm of P_K-P_L is finite, and an actual
+isometric equivalence D of crossed defects is supplied. There is no
+finite-rank, separability, acute-angle or invariant-block hypothesis.
+
+* `nuclearTransportDual_trace_calibration_complex`: for every actual
+  unitary Z commuting with source reflection, with trace-class R-Z,
+  `Re tr(V*(R-Z)) = ||P_K-P_L||_1 + ||(I-Z)Q||_HS^2/2`.
+  Here R is completed direct rotation, B=R-C, Q=P_ker(B), V is the
+  actual nuclear dual, and the star on V denotes its adjoint.
+  The proof establishes trace-class membership of every summand;
+  the reflection-odd summand has zero absolutely convergent trace.
+* `nuclear_eq_projection_sub_iff_relative_certificate_complex`:
+  the native nuclear norm of R-Z equals the sine minimum exactly
+  when `(I-Z)Q=0` and `V*(R-Z)` is positive.
+* `nuclear_isMin_iff_certificate_complex`: for every transporter T,
+  global minimality among **all** ambient unitary transporters is
+  equivalent to trace-class I-T, fixation of every vector x with
+  P_K x=P_L x, and positivity of `V*(R-T*R)`. Stars again denote
+  adjoints. Competitors of infinite native cost are included in
+  the quantified optimization; the certificate necessarily excludes
+  their being minimizers because the explicit phase attainer is finite.
+* `nuclear_minimizer_apply_eq_self_of_projections_eq_complex`:
+  every optimizer fixes that entire sector. This extends the previous
+  finite-dimensional rigidity theorem, including infinite ambient
+  directions and arbitrary projection multiplicities.
+
+This is a complete necessary-and-sufficient operator certificate for
+**every** nuclear optimizer. It is not yet an explicit phase/Grassmannian
+parametrization of the nuclear optimizer families. In particular the
+p=1 moving sector can be infinite rank, so the strict-exponent finite
+active-correction reduction cannot be reused without a new argument.
+The exact remaining structural step is to solve the positive dual
+constraint together with transporter unitarity on that moving sector,
+and determine possible mixing between unequal angles and right defects.
+No historical-first claim follows from compiler acceptance.
+
+The full-space dual checkpoint passed the explicit Challenge build
+(19,757 jobs; `/tmp/nuclear-dual-challenge.log`). The focused optimizer
+certificate build passed 7,172 jobs, preceded by `lake exe cache get`.
+Full default build with the registered endpoint passed 21,373 jobs
+(`/tmp/nuclear-certificate-full.log`), preceded by `lake exe cache get`.
+Papers and visualizations remain untouched.
