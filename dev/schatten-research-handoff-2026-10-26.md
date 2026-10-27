@@ -74,8 +74,11 @@ are compiled; see the new attainment entry below. Full nuclear, real infinite-
 dimensional and infinite Charbonnier **every-optimizer classifications** remain open.
 The native infinite Charbonnier rank-one first variation, constrained
 stationarity, compact gradient and actual finite minimizing gradient-cutoff
-sectors are now proved. The next gap is the full zero-gradient reflection
-sector and the passage from cutoff classifications to every ambient optimizer.
+sectors are now proved. The full zero-gradient reflection sector and preservation of every intrinsic
+angle sector are now also proved. Every finite-cost global smoothed optimizer
+fixes all vectors on which the projections agree. The next gap is closed-
+threshold canonical uniqueness, then canonical-tail necessity and the full
+finite-cutoff characterization of every ambient optimizer.
 The dated sections below preserve proof history; use this paragraph and the
 latest endpoint sections for the current frontier.
 
@@ -363,7 +366,7 @@ accepted approximation-number and Ky Fan APIs, rather than any moved
 smoothed declaration. Compiler validation of `Challenge` is run separately
 because it is outside the default targets.
 
-### Immediate remaining classification obligations
+### Classification obligations at the first-variation checkpoint (superseded below)
 
 1. Prove the smoothed radial identity
    `U-U* = CFC(2 i sqrt(tau^2+|z-1|^2), U) * G`.
@@ -382,6 +385,100 @@ because it is outside the default targets.
 The native first variation and cutoff-sector results alone do not imply
 that every optimizer has the canonical tail. Infinite nuclear and real
 classification remain separate open workstreams.
+
+## Full smoothed gradient kernel, angle preservation and fixed directions
+
+`CharbonnierGradientKernelHilbert.lean` proves
+`unitary_sub_star_eq_radial_mul_smoothedUnitaryGradient`:
+for every actual complex Hilbert-space unitary and `tau>0`,
+
+```
+U - U* = CFC(z => 2 i sqrt(tau^2 + |z-1|^2), U) * smoothedUnitaryGradient tau U.
+```
+
+The continuous multiplier is bounded on the unit circle and nonsingular at
+identity. Thus `unitary_apply_eq_symm_of_smoothedUnitaryGradient_apply_eq_zero`
+and `exists_selfAdjoint_unitary_restriction_smoothed_gradient_kernel` identify
+the actual self-adjoint unitary action on the **entire** gradient kernel.
+No finite-dimensional kernel, compactness, minimality or nonzero-displacement
+assumption is needed. Both identity and negative-identity directions remain.
+
+`CharbonnierGradientKernel.lean` proves
+`exists_finite_reflecting_support_on_gradient_kernel_of_charbonnier_minimal`.
+At every finite-cost global ambient optimizer, this full kernel restriction
+inherits unrestricted native optimality. Its nonidentity action is supported
+on a finite source-reducing sector whose actual restriction is a finite
+smoothed global optimizer, with the complementary kernel fixed pointwise.
+The proof uses compact displacement, the existing compact-reflection theorem
+and cancellation of the actual finite complementary cost. It retains
+right-angle reflecting choices rather than assuming the kernel is fixed.
+
+`CharbonnierOptimizerAngles.lean` proves
+`commute_sinAngleOperator_of_charbonnier_minimal`: every finite-cost global
+complex smoothed optimizer commutes with `K.sinAngleOperator L`, in arbitrary
+complete Hilbert dimension. Unequal principal-angle sectors cannot mix.
+Compact gradient spectral completeness combines all positive minimizing
+cutoffs with the actual self-adjoint zero-gradient restriction.
+The finite input is the new direct consequence
+`commute_sinAngleOperator_of_smoothed_minimal` in
+`SmoothedOptimizerAngles.lean`: the existing weighted-attainment cosine
+commutation theorem, Pythagoras and accepted modulus commutation give the
+full sine commutation identity without new coordinates.
+
+`apply_eq_self_of_projections_eq_of_charbonnier_minimal` now proves that every
+such ambient optimizer fixes **each** vector `x` with `P_K x=P_L x`, including
+common-source and common-orthogonal directions. Its reusable either-field
+conditional form is
+`apply_eq_self_of_projections_eq_of_charbonnier_minimal_of_commute` in
+`CharbonnierMinimizerRestriction.lean`.
+The native-faithfulness lemma
+`ContinuousLinearMap.charbonnierCost_eq_zero_iff` holds for every **nonnegative**
+smoothing scale and either scalar field, without finite rank, compactness
+or completeness. The leading approximation number gives the operator norm,
+so no illegal cancellation of an infinite trace enters this proof.
+
+Focused build passed (7,348 jobs), and the full default build passed
+**21,303 jobs**, with warnings treated as errors. `lake build Challenge`
+also passed (19,755 jobs) after the preceding gradient ownership move;
+the static name-drift findings for unrelated upstream declarations therefore
+do not establish a compiler failure of those Challenge consumers.
+Paper and visualization changes remain separate. These are exact scope
+extensions of the optimizer theory; no new historical priority clearance
+is inferred from their compilation.
+
+### Strongest next mathematical endpoint
+
+Close **infinite smoothed canonical uniqueness through the closed threshold**,
+then the full canonical-tail necessity and finite-cutoff optimizer iff.
+The remaining route is now explicit and independent of first-variation debt:
+
+1. Adapt `SchattenCanonicalUniqueness.lean` using the proved smoothed angle
+   commutation and fixed-direction theorem. Every positive sine cutoff is
+   finite and carries an unrestricted minimizing restriction. Convert its
+   native cost with `charbonnierCost_eq_ofReal_sum` and apply
+   `smoothed_canonical_unique_minimizer` at the inherited closed principal-
+   angle bound. Compact sine spectral completeness identifies the ambient
+   unitary with `spectraCanonicalPolarFactor`.
+2. Adapt `SchattenOptimizerTail.lean`. The actual infinite inactive restriction
+   inherits native smoothed minimality, has finite cost by native S_2
+   compression and `charbonnierCost_ne_top_iff_schatten_two`, and satisfies
+   the closed gap bound. Apply step 1 and the existing geometric canonical-
+   cutoff-tail identity to prove agreement with every completed rotation.
+3. Combine canonical-tail necessity with exact Charbonnier block replacement
+   additivity and the already compiled global attainer. Prove global minimality
+   iff the actual finite restriction is a finite global minimum. Insert
+   `smoothed_transport_isMin_iff_phase_and_defect_equiv_complex` to obtain the
+   full multiplicity/defect normal form. Native feasibility guarantees a finite
+   attainer, so arbitrary global minimizing competitors automatically have
+   finite cost; do not retain that assumption unnecessarily in the final iff.
+4. Treat the infeasible finite-cost regime separately: if an ambient transport
+   exists but no finite-cost one exists, every feasible transport minimizes
+   the extended objective at infinity. Do not apply finite-cost stationarity
+   or phase classification in that regime.
+
+The current kernel and angle theorems are **not yet** the full infinite
+smoothed every-optimizer classification. Full infinite nuclear and real
+classification remain independent open directions.
 
 ## Exact infinite-dimensional uniqueness threshold
 

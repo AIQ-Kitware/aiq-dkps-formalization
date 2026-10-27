@@ -134,4 +134,26 @@ theorem charbonnierCost_ne_top_iff_schatten_two (tau : ℝ) (hτ : 0 < tau) (T :
     exact ne_top_of_le_ne_top (ENNReal.mul_ne_top ENNReal.ofReal_ne_top hsquare)
       (T.charbonnierCost_le_mul_schatten_two_sq tau hτ)
 
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- At every nonnegative smoothing scale, the native extended
+Charbonnier trace vanishes exactly at the zero operator. -/
+theorem charbonnierCost_eq_zero_iff (tau : ℝ) (hτ : 0 ≤ tau) (T : E →L[𝕜] F) :
+    T.charbonnierCost tau = 0 ↔ T = 0 := by
+  constructor
+  · intro hzero
+    have h := ENNReal.le_tsum (f := fun n : ℕ => ENNReal.ofReal
+      (Real.sqrt (tau ^ 2 + (T.singularValue n : ℝ) ^ 2) - tau)) 0
+    change ENNReal.ofReal (Real.sqrt (tau ^ 2 + (T.singularValue 0 : ℝ) ^ 2) - tau) ≤
+      T.charbonnierCost tau at h
+    rw [hzero] at h
+    have hle := ENNReal.ofReal_eq_zero.mp (le_antisymm h bot_le)
+    rw [ContinuousLinearMap.singularValue_zero] at hle
+    change Real.sqrt (tau ^ 2 + ‖T‖ ^ 2) - tau ≤ 0 at hle
+    have hs := Real.sq_sqrt (show 0 ≤ tau ^ 2 + ‖T‖ ^ 2 by positivity)
+    have hr := Real.sqrt_nonneg (tau ^ 2 + ‖T‖ ^ 2)
+    apply norm_eq_zero.mp
+    nlinarith [norm_nonneg T]
+  · rintro rfl
+    simp [charbonnierCost, Real.sqrt_sq hτ]
+
 end ContinuousLinearMap
