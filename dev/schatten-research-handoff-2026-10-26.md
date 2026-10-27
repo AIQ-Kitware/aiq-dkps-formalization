@@ -47,9 +47,10 @@ for every near-minimizer remains a separate task.
 The original norm objective, as well as its `p`-th power, now has its
 exact positive critical coefficient and its actual ambient planar
 no-quadratic-modulus theorem; see the latest critical-norm entry below.
-Varying-data stability is now also proved for a fixed source: throughout
-the closed canonical regime, actual infinite-dimensional Schatten
-optimizers obey a dimension-free Lipschitz bound in the target projection.
+Varying-data stability is now also proved for simultaneous source and
+target changes: throughout the closed canonical regime, actual
+infinite-dimensional Schatten optimizers obey a dimension-free Lipschitz
+bound in the sum of the two projection errors.
 The endpoint constant is `p/(2-p)`. This differs from an objective-error
 certificate for an arbitrary near-minimizer of one fixed problem, which
 remains open.
@@ -278,7 +279,7 @@ near-minimizer, with constants uniform in Hilbert dimension and explicit
 dependence on a strict critical-gap margin. At equality any such theorem
 must accommodate the fourth-order obstruction just proved. The
 phase-bifurcation amplitude and variation of optimizers under perturbed
-projection data remain further research targets; neither is implied by
+projection data outside the canonical regime remain further research targets; neither is implied by
 the fixed-pair quartic law.
 
 ## Dimension-free data stability, including the critical boundary
@@ -355,6 +356,47 @@ unpowered norm excess also requires care: adding unchanged positive-cost
 blocks dilutes norm excess under the `p`-th root. The power objective is
 the natural first target; a formal ambient dilution counterexample is
 an independent useful next step.
+
+## Joint source and target error certificates
+
+The data-stability results above now permit **both** projections to vary.
+`norm_canonicalPolarFactor_sub_le_of_projectionGaps_le` states
+
+```
+||R(K,L)-R(N,M)||
+  <= (projectionGap(K,N)+projectionGap(L,M)) / sqrt(1-gamma^2),
+```
+
+assuming only the two endpoint gaps `gap(K,L), gap(N,M) <= gamma < 1`.
+There is no condition on either intermediate cross pair. The proof
+combines the exact one-projection intertwiner norm identities with the
+same two-endpoint polar perturbation argument; it does not apply the
+canonical bound to an intermediate pair that might not be acute.
+
+`norm_schatten_minimizers_sub_le_of_projectionGaps_le` and
+`norm_schatten_minimizers_sub_le_at_closed_critical_gaps` transfer this
+to **every** actual optimizer of the two native Schatten problems. The
+closed-critical endpoint is
+
+```
+||U_(K,L)-U_(N,M)||
+  <= (p/(2-p)) * (projectionGap(K,N)+projectionGap(L,M)).
+```
+
+Both endpoint projection differences must be native Schatten, finite
+`1<p<2`, and both endpoint gaps must be in the closed canonical regime.
+No candidate finite-cost, index-balance, separability, or finite-rank
+assumption is added. The fixed-source statements are now short
+specializations of these general proofs. This supplies a deterministic
+optimizer error certificate when both input subspaces are estimated.
+
+Focused build passed (8,080 jobs), and the full default build passed
+(21,265 jobs), with warnings treated as errors. The
+next concrete correction application is a bound for the nearest
+`P`-commuting unitary as its input unitary `A` varies. The expected
+`1/sqrt(1-gamma^2)` constant should be obtained from the polar factor of
+`PAP+Pperp A Pperp`, not by inserting a cross pair with an unjustified
+gap bound. Sharpness of either data constant remains to be formalized.
 
 ## All-rank real nuclear canonical-value criterion
 

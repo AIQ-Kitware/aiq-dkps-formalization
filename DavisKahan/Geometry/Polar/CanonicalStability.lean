@@ -12,10 +12,10 @@ public import ForTauCeti.Analysis.InnerProductSpace.Positive.ModulusLowerBound
 /-!
 # Quantitative stability of the canonical transport under varying data
 
-With the source fixed, changes in the canonical pre-polar intertwiner
-have exactly the norm of the change in target projection. The sharp
-cosine lower bound and the classical polar perturbation argument then
-control changes in the actual canonical unitary, in arbitrary complex
+Changes in one projection give exactly the same norm change in the
+canonical pre-polar intertwiner; joint changes are bounded by their sum.
+The cosine lower bound and the classical polar perturbation argument
+control joint changes in the actual canonical unitary, in arbitrary complex
 Hilbert dimension and without compactness assumptions.
 -/
 
@@ -53,6 +53,34 @@ theorem norm_canonicalIntertwiner_sub_eq_projectionGap
   rw [href]
   change ‖(L.starProjection - M.starProjection) * (K.reflection : E →L[ℂ] E)‖ = _
   exact ContinuousLinearMap.opNorm_mul_linearIsometryEquiv _ _
+
+/-- The same exact norm identity when only the source changes. -/
+theorem norm_canonicalIntertwiner_sub_same_target_eq_projectionGap
+    (K N L : Submodule ℂ E) [K.HasOrthogonalProjection] [N.HasOrthogonalProjection]
+    [L.HasOrthogonalProjection] :
+    ‖spectraCanonicalIntertwiner K L - spectraCanonicalIntertwiner N L‖ = K.projectionGap N := by
+  calc
+    _ = ‖star (spectraCanonicalIntertwiner K L - spectraCanonicalIntertwiner N L)‖ :=
+      (norm_star _).symm
+    _ = ‖spectraCanonicalIntertwiner L K - spectraCanonicalIntertwiner L N‖ := by
+      rw [star_sub, star_spectraCanonicalIntertwiner, star_spectraCanonicalIntertwiner]
+    _ = _ := norm_canonicalIntertwiner_sub_eq_projectionGap L K N
+
+/-- Joint projection error controls the pre-polar data without any
+gap or feasibility hypothesis on the intermediate pair. -/
+theorem norm_canonicalIntertwiner_sub_le_add_projectionGap
+    (K L N M : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [N.HasOrthogonalProjection] [M.HasOrthogonalProjection] :
+    ‖spectraCanonicalIntertwiner K L - spectraCanonicalIntertwiner N M‖ ≤
+      K.projectionGap N + L.projectionGap M := by
+  calc
+    _ ≤ ‖spectraCanonicalIntertwiner K L - spectraCanonicalIntertwiner K M‖ +
+        ‖spectraCanonicalIntertwiner K M - spectraCanonicalIntertwiner N M‖ :=
+      norm_sub_le_norm_sub_add_norm_sub _ _ _
+    _ = L.projectionGap M + K.projectionGap N := by
+      rw [norm_canonicalIntertwiner_sub_eq_projectionGap,
+        norm_canonicalIntertwiner_sub_same_target_eq_projectionGap]
+    _ = _ := add_comm _ _
 
 private theorem canonicalIntertwiner_energy (K L : Submodule ℂ E)
     [K.HasOrthogonalProjection] [L.HasOrthogonalProjection] (x : E) :
@@ -94,9 +122,39 @@ theorem canonical_modulus_coercive_of_gap_sq_add_le_one
   have hbudget := mul_le_mul_of_nonneg_right hgap (sq_nonneg ‖y‖)
   nlinarith
 
-/-- A two-endpoint cosine bound for the canonical unitary transport.
-The source is fixed, while the two target projections are arbitrary.
-There is no finite-rank, ideal-membership or separability assumption. -/
+/-- Simultaneous source and target perturbation under two endpoint
+cosine bounds. Only the original and perturbed pairs must be acute. -/
+theorem add_mul_norm_canonicalPolarFactor_sub_le_two_mul_add_projectionGap
+    (K L N M : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [N.HasOrthogonalProjection] [M.HasOrthogonalProjection] (a b : ℝ) (ha : 0 < a) (hb : 0 < b)
+    (hL : a ^ 2 + K.projectionGap L ^ 2 ≤ 1)
+    (hM : b ^ 2 + N.projectionGap M ^ 2 ≤ 1) :
+    (a + b) * ‖spectraCanonicalPolarFactor K L - spectraCanonicalPolarFactor N M‖ ≤
+      2 * (K.projectionGap N + L.projectionGap M) := by
+  have hacuteL : IsUniformlyAcute K L := by
+    change K.projectionGap L < 1
+    nlinarith [sq_pos_of_pos ha, sq_nonneg (K.projectionGap L - 1)]
+  have hacuteM : IsUniformlyAcute N M := by
+    change N.projectionGap M < 1
+    nlinarith [sq_pos_of_pos hb, sq_nonneg (N.projectionGap M - 1)]
+  let U := Unitary.linearIsometryEquiv (spectraCanonicalPolarFactorUnitary K L hacuteL)
+  let V := Unitary.linearIsometryEquiv (spectraCanonicalPolarFactorUnitary N M hacuteM)
+  let X := spectraCanonicalIntertwiner K L
+  let Y := spectraCanonicalIntertwiner N M
+  have hX : X = (U : E →L[ℂ] E) * X.modulus :=
+    (spectraCanonicalPolarFactor_decomposition K L).symm
+  have hY : Y = (V : E →L[ℂ] E) * Y.modulus :=
+    (spectraCanonicalPolarFactor_decomposition N M).symm
+  have h := ContinuousLinearMap.add_mul_norm_sub_unitary_le_two_mul_norm_sub X Y
+    X.modulus Y.modulus U V hX hY X.isPositive_modulus.isSelfAdjoint Y.isPositive_modulus.isSelfAdjoint
+    a b (canonical_modulus_coercive_of_gap_sq_add_le_one K L a ha.le hL)
+      (canonical_modulus_coercive_of_gap_sq_add_le_one N M b hb.le hM)
+  change (a + b) * ‖spectraCanonicalPolarFactor K L - spectraCanonicalPolarFactor N M‖ ≤
+    2 * ‖spectraCanonicalIntertwiner K L - spectraCanonicalIntertwiner N M‖ at h
+  exact h.trans (mul_le_mul_of_nonneg_left
+    (norm_canonicalIntertwiner_sub_le_add_projectionGap K L N M) (by norm_num))
+
+/-- The fixed-source specialization retains unequal endpoint cosine bounds. -/
 theorem add_mul_norm_canonicalPolarFactor_sub_le_two_mul_projectionGap
     (K L M : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     [M.HasOrthogonalProjection] (a b : ℝ) (ha : 0 < a) (hb : 0 < b)
@@ -104,27 +162,30 @@ theorem add_mul_norm_canonicalPolarFactor_sub_le_two_mul_projectionGap
     (hM : b ^ 2 + K.projectionGap M ^ 2 ≤ 1) :
     (a + b) * ‖spectraCanonicalPolarFactor K L - spectraCanonicalPolarFactor K M‖ ≤
       2 * L.projectionGap M := by
-  have hacuteL : IsUniformlyAcute K L := by
-    change K.projectionGap L < 1
-    nlinarith [sq_pos_of_pos ha, sq_nonneg (K.projectionGap L - 1)]
-  have hacuteM : IsUniformlyAcute K M := by
-    change K.projectionGap M < 1
-    nlinarith [sq_pos_of_pos hb, sq_nonneg (K.projectionGap M - 1)]
-  let U := Unitary.linearIsometryEquiv (spectraCanonicalPolarFactorUnitary K L hacuteL)
-  let V := Unitary.linearIsometryEquiv (spectraCanonicalPolarFactorUnitary K M hacuteM)
-  let X := spectraCanonicalIntertwiner K L
-  let Y := spectraCanonicalIntertwiner K M
-  have hX : X = (U : E →L[ℂ] E) * X.modulus :=
-    (spectraCanonicalPolarFactor_decomposition K L).symm
-  have hY : Y = (V : E →L[ℂ] E) * Y.modulus :=
-    (spectraCanonicalPolarFactor_decomposition K M).symm
-  have h := ContinuousLinearMap.add_mul_norm_sub_unitary_le_two_mul_norm_sub X Y
-    X.modulus Y.modulus U V hX hY X.isPositive_modulus.isSelfAdjoint Y.isPositive_modulus.isSelfAdjoint
-    a b (canonical_modulus_coercive_of_gap_sq_add_le_one K L a ha.le hL)
-      (canonical_modulus_coercive_of_gap_sq_add_le_one K M b hb.le hM)
-  change (a + b) * ‖spectraCanonicalPolarFactor K L - spectraCanonicalPolarFactor K M‖ ≤
-    2 * ‖spectraCanonicalIntertwiner K L - spectraCanonicalIntertwiner K M‖ at h
-  rwa [norm_canonicalIntertwiner_sub_eq_projectionGap] at h
+  have hzero : K.projectionGap K = 0 := by rw [Submodule.projectionGap_def, sub_self, norm_zero]
+  simpa only [hzero, zero_add] using
+    add_mul_norm_canonicalPolarFactor_sub_le_two_mul_add_projectionGap K L K M a b ha hb hL hM
+
+/-- Joint Lipschitz bound under the original and perturbed gap bounds;
+no condition is imposed on a cross pair of subspaces. -/
+theorem norm_canonicalPolarFactor_sub_le_of_projectionGaps_le
+    (K L N M : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [N.HasOrthogonalProjection] [M.HasOrthogonalProjection]
+    (gamma : ℝ) (hgamma : 0 ≤ gamma) (hgamma1 : gamma < 1)
+    (hL : K.projectionGap L ≤ gamma) (hM : N.projectionGap M ≤ gamma) :
+    ‖spectraCanonicalPolarFactor K L - spectraCanonicalPolarFactor N M‖ ≤
+      (K.projectionGap N + L.projectionGap M) / Real.sqrt (1 - gamma ^ 2) := by
+  have hpos : 0 < 1 - gamma ^ 2 := by nlinarith
+  have hcos : 0 < Real.sqrt (1 - gamma ^ 2) := Real.sqrt_pos.mpr hpos
+  have hL0 : 0 ≤ K.projectionGap L := by rw [Submodule.projectionGap_def]; positivity
+  have hM0 : 0 ≤ N.projectionGap M := by rw [Submodule.projectionGap_def]; positivity
+  have hLsq := mul_self_le_mul_self hL0 hL
+  have hMsq := mul_self_le_mul_self hM0 hM
+  have h := add_mul_norm_canonicalPolarFactor_sub_le_two_mul_add_projectionGap K L N M _ _ hcos hcos
+    (by nlinarith [Real.sq_sqrt hpos.le] : Real.sqrt (1 - gamma ^ 2) ^ 2 + K.projectionGap L ^ 2 ≤ 1)
+    (by nlinarith [Real.sq_sqrt hpos.le] : Real.sqrt (1 - gamma ^ 2) ^ 2 + N.projectionGap M ^ 2 ≤ 1)
+  apply (le_div_iff₀ hcos).mpr
+  nlinarith
 
 /-- Uniform Lipschitz bound on a closed projection-gap ball of radius
 less than one. It remains valid at any interior Schatten critical cutoff. -/
@@ -134,16 +195,8 @@ theorem norm_canonicalPolarFactor_sub_le_of_projectionGap_le
     (hL : K.projectionGap L ≤ gamma) (hM : K.projectionGap M ≤ gamma) :
     ‖spectraCanonicalPolarFactor K L - spectraCanonicalPolarFactor K M‖ ≤
       L.projectionGap M / Real.sqrt (1 - gamma ^ 2) := by
-  have hpos : 0 < 1 - gamma ^ 2 := by nlinarith
-  have hcos : 0 < Real.sqrt (1 - gamma ^ 2) := Real.sqrt_pos.mpr hpos
-  have hL0 : 0 ≤ K.projectionGap L := by rw [Submodule.projectionGap_def]; positivity
-  have hM0 : 0 ≤ K.projectionGap M := by rw [Submodule.projectionGap_def]; positivity
-  have hLsq := mul_self_le_mul_self hL0 hL
-  have hMsq := mul_self_le_mul_self hM0 hM
-  have h := add_mul_norm_canonicalPolarFactor_sub_le_two_mul_projectionGap K L M _ _ hcos hcos
-    (by nlinarith [Real.sq_sqrt hpos.le] : Real.sqrt (1 - gamma ^ 2) ^ 2 + K.projectionGap L ^ 2 ≤ 1)
-    (by nlinarith [Real.sq_sqrt hpos.le] : Real.sqrt (1 - gamma ^ 2) ^ 2 + K.projectionGap M ^ 2 ≤ 1)
-  apply (le_div_iff₀ hcos).mpr
-  nlinarith
+  have hzero : K.projectionGap K = 0 := by rw [Submodule.projectionGap_def, sub_self, norm_zero]
+  simpa only [hzero, zero_add] using
+    norm_canonicalPolarFactor_sub_le_of_projectionGaps_le K L K M gamma hgamma hgamma1 hL hM
 
 end TauCeti.DavisKahan

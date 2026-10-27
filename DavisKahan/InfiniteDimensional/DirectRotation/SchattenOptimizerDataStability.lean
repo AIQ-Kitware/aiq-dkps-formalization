@@ -12,7 +12,7 @@ public import DavisKahan.Geometry.Polar.CanonicalStability
 # Dimension-free data stability of the unique Schatten optimizer
 
 In the closed canonical regime the actual global minimizer is a
-Lipschitz function of the target projection, with the source fixed.
+Lipschitz function of both the source and target projections.
 This includes the critical equality case, despite its quartic objective
 flatness. The estimate is about varying data, not arbitrary inexact
 minimizers of one fixed problem.
@@ -66,6 +66,75 @@ theorem eq_canonicalPolarFactor_of_mem_schattenHilbertTransportMinimizers
 /-- A projection-error certificate for the actual unrestricted
 Schatten optimizers in a closed subcritical gap ball. Both problems
 may have infinite-rank data and arbitrary fixed ambient directions. -/
+theorem norm_schatten_minimizers_sub_le_of_projectionGaps_le
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K L N M : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [N.HasOrthogonalProjection] [M.HasOrthogonalProjection]
+    (hDL : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (K.starProjection - L.starProjection) ≠ ∞)
+    (hDM : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (N.starProjection - M.starProjection) ≠ ∞)
+    (gamma : ℝ) (hgamma : 0 ≤ gamma)
+    (hcrit : gamma ≤ Real.sin (criticalAngle p.toReal))
+    (hL : K.projectionGap L ≤ gamma) (hM : N.projectionGap M ≤ gamma)
+    (U V : E ≃ₗᵢ[ℂ] E)
+    (hU : U ∈ schattenHilbertTransportMinimizers p.toReal hp1.le K L)
+    (hV : V ∈ schattenHilbertTransportMinimizers p.toReal hp1.le N M) :
+    ‖(U : E →L[ℂ] E) - (V : E →L[ℂ] E)‖ ≤
+      (K.projectionGap N + L.projectionGap M) / Real.sqrt (1 - gamma ^ 2) := by
+  rw [eq_canonicalPolarFactor_of_mem_schattenHilbertTransportMinimizers
+      p hp hp1 hp2 K L hDL (hL.trans hcrit) U hU,
+    eq_canonicalPolarFactor_of_mem_schattenHilbertTransportMinimizers
+      p hp hp1 hp2 N M hDM (hM.trans hcrit) V hV]
+  exact norm_canonicalPolarFactor_sub_le_of_projectionGaps_le K L N M gamma hgamma
+    (hcrit.trans_lt (sin_critical_lt_one _ hp1 hp2)) hL hM
+
+/-- Throughout the entire closed canonical regime, including critical
+equality, the optimizer has the explicit data-Lipschitz constant
+`p / (2-p)`. Quartic objective flatness does not obstruct this data bound. -/
+theorem norm_schatten_minimizers_sub_le_at_closed_critical_gaps
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K L N M : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [N.HasOrthogonalProjection] [M.HasOrthogonalProjection]
+    (hDL : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (K.starProjection - L.starProjection) ≠ ∞)
+    (hDM : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (N.starProjection - M.starProjection) ≠ ∞)
+    (hL : K.projectionGap L ≤ Real.sin (criticalAngle p.toReal))
+    (hM : N.projectionGap M ≤ Real.sin (criticalAngle p.toReal))
+    (U V : E ≃ₗᵢ[ℂ] E)
+    (hU : U ∈ schattenHilbertTransportMinimizers p.toReal hp1.le K L)
+    (hV : V ∈ schattenHilbertTransportMinimizers p.toReal hp1.le N M) :
+    ‖(U : E →L[ℂ] E) - (V : E →L[ℂ] E)‖ ≤
+      p.toReal / (2 - p.toReal) * (K.projectionGap N + L.projectionGap M) := by
+  rw [eq_canonicalPolarFactor_of_mem_schattenHilbertTransportMinimizers
+      p hp hp1 hp2 K L hDL hL U hU,
+    eq_canonicalPolarFactor_of_mem_schattenHilbertTransportMinimizers
+      p hp hp1 hp2 N M hDM hM V hV]
+  let theta := criticalAngle p.toReal
+  have hcpos : 0 < Real.cos theta := by
+    rw [show Real.cos theta = (2 - p.toReal) / p.toReal from cos_criticalAngle _ hp1 hp2]
+    exact div_pos (by linarith) (by linarith)
+  have hL0 : 0 ≤ K.projectionGap L := by rw [Submodule.projectionGap_def]; positivity
+  have hM0 : 0 ≤ N.projectionGap M := by rw [Submodule.projectionGap_def]; positivity
+  have hLsq := mul_self_le_mul_self hL0 hL
+  have hMsq := mul_self_le_mul_self hM0 hM
+  have h := add_mul_norm_canonicalPolarFactor_sub_le_two_mul_add_projectionGap K L N M _ _ hcpos hcpos
+    (by nlinarith [Real.sin_sq_add_cos_sq theta] : Real.cos theta ^ 2 + K.projectionGap L ^ 2 ≤ 1)
+    (by nlinarith [Real.sin_sq_add_cos_sq theta] : Real.cos theta ^ 2 + N.projectionGap M ^ 2 ≤ 1)
+  have hcos : p.toReal * (Real.cos theta + Real.cos theta) = 2 * (2 - p.toReal) := by
+    rw [show Real.cos theta = (2 - p.toReal) / p.toReal from cos_criticalAngle _ hp1 hp2]
+    field_simp
+    norm_num
+  have hscaled := mul_le_mul_of_nonneg_left h (by linarith : 0 ≤ p.toReal)
+  rw [← mul_assoc, hcos] at hscaled
+  rw [div_mul_eq_mul_div]
+  apply (le_div_iff₀ (by linarith : 0 < 2 - p.toReal)).mpr
+  nlinarith
+
+/-- Fixed-source specialization of the joint data-error certificate. -/
 theorem norm_schatten_minimizers_sub_le_of_projectionGap_le
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
@@ -83,16 +152,12 @@ theorem norm_schatten_minimizers_sub_le_of_projectionGap_le
     (hV : V ∈ schattenHilbertTransportMinimizers p.toReal hp1.le K M) :
     ‖(U : E →L[ℂ] E) - (V : E →L[ℂ] E)‖ ≤
       L.projectionGap M / Real.sqrt (1 - gamma ^ 2) := by
-  rw [eq_canonicalPolarFactor_of_mem_schattenHilbertTransportMinimizers
-      p hp hp1 hp2 K L hDL (hL.trans hcrit) U hU,
-    eq_canonicalPolarFactor_of_mem_schattenHilbertTransportMinimizers
-      p hp hp1 hp2 K M hDM (hM.trans hcrit) V hV]
-  exact norm_canonicalPolarFactor_sub_le_of_projectionGap_le K L M gamma hgamma
-    (hcrit.trans_lt (sin_critical_lt_one _ hp1 hp2)) hL hM
+  have hzero : K.projectionGap K = 0 := by rw [Submodule.projectionGap_def, sub_self, norm_zero]
+  simpa only [hzero, zero_add] using
+    norm_schatten_minimizers_sub_le_of_projectionGaps_le p hp hp1 hp2 K L K M hDL hDM
+      gamma hgamma hcrit hL hM U V hU hV
 
-/-- Throughout the entire closed canonical regime, including critical
-equality, the optimizer has the explicit data-Lipschitz constant
-`p / (2-p)`. Quartic objective flatness does not obstruct this data bound. -/
+/-- Fixed-source specialization at the closed Schatten critical cutoff. -/
 theorem norm_schatten_minimizers_sub_le_at_closed_critical_gap
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
@@ -109,29 +174,9 @@ theorem norm_schatten_minimizers_sub_le_at_closed_critical_gap
     (hV : V ∈ schattenHilbertTransportMinimizers p.toReal hp1.le K M) :
     ‖(U : E →L[ℂ] E) - (V : E →L[ℂ] E)‖ ≤
       p.toReal / (2 - p.toReal) * L.projectionGap M := by
-  rw [eq_canonicalPolarFactor_of_mem_schattenHilbertTransportMinimizers
-      p hp hp1 hp2 K L hDL hL U hU,
-    eq_canonicalPolarFactor_of_mem_schattenHilbertTransportMinimizers
-      p hp hp1 hp2 K M hDM hM V hV]
-  let theta := criticalAngle p.toReal
-  have hcpos : 0 < Real.cos theta := by
-    rw [show Real.cos theta = (2 - p.toReal) / p.toReal from cos_criticalAngle _ hp1 hp2]
-    exact div_pos (by linarith) (by linarith)
-  have hL0 : 0 ≤ K.projectionGap L := by rw [Submodule.projectionGap_def]; positivity
-  have hM0 : 0 ≤ K.projectionGap M := by rw [Submodule.projectionGap_def]; positivity
-  have hLsq := mul_self_le_mul_self hL0 hL
-  have hMsq := mul_self_le_mul_self hM0 hM
-  have h := add_mul_norm_canonicalPolarFactor_sub_le_two_mul_projectionGap K L M _ _ hcpos hcpos
-    (by nlinarith [Real.sin_sq_add_cos_sq theta] : Real.cos theta ^ 2 + K.projectionGap L ^ 2 ≤ 1)
-    (by nlinarith [Real.sin_sq_add_cos_sq theta] : Real.cos theta ^ 2 + K.projectionGap M ^ 2 ≤ 1)
-  have hcos : p.toReal * (Real.cos theta + Real.cos theta) = 2 * (2 - p.toReal) := by
-    rw [show Real.cos theta = (2 - p.toReal) / p.toReal from cos_criticalAngle _ hp1 hp2]
-    field_simp
-    norm_num
-  have hscaled := mul_le_mul_of_nonneg_left h (by linarith : 0 ≤ p.toReal)
-  rw [← mul_assoc, hcos] at hscaled
-  rw [div_mul_eq_mul_div]
-  apply (le_div_iff₀ (by linarith : 0 < 2 - p.toReal)).mpr
-  nlinarith
+  have hzero : K.projectionGap K = 0 := by rw [Submodule.projectionGap_def, sub_self, norm_zero]
+  simpa only [hzero, zero_add] using
+    norm_schatten_minimizers_sub_le_at_closed_critical_gaps p hp hp1 hp2 K L K M hDL hDM
+      hL hM U V hU hV
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition
