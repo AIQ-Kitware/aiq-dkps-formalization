@@ -2506,3 +2506,33 @@ with negation both minimize; uniqueness forces the ambient space to be
 zero, contradicting infinite cost. This also covers the zero-space edge.
 These are native extended-objective statements, not only ideal-restricted
 competitor statements. The paper and visualizations remain untouched.
+
+## October 27: full smoothed multiplicity topology and exact isolated counts
+
+`CharbonnierMultiplicityTopology.exists_charbonnier_hilbert_multiplicity_parameter_homeomorph`
+identifies the entire Hilbert optimizer family with the product of one
+orthogonal-projection factor on each actual finite active canonical
+multiplicity space and an independent finite crossed-defect unitary factor.
+This includes possible mixing within equal-angle sectors; unequal angles
+retain the proved no-mixing constraint. The index and multiplicity spaces
+are the finite weighted-rotation ones with weights `smoothingRadius tau`
+and its inverse. No principal frame is prescribed to ambient competitors.
+
+`exists_charbonnier_hilbert_multiplicity_coordinates_of_homeomorph`
+transfers locally constant projection-rank labels and a uniform positive
+operator-norm separation of different rank labels, for fixed pair and
+positive smoothing scale. The preceding unconditional homeomorphism
+supplies its exact norm-preserving transfer input. These results do not
+imply near-minimizer coercivity or varying-data stability.
+
+`charbonnier_hilbert_optimizer_count_and_discrete_of_simple_active_angles`
+proves exactly `2^s` ambient global optimizers and discreteness of their
+operator-norm topology when all active multiplicity factors have dimension
+one and there is no right-angle defect. Infinite inactive multiplicities
+are unrestricted. Focused build passed (7,478 jobs). Formal connected
+components and manifold dimensions of higher-rank projection factors
+remain separate obligations; no such dimension assertion is implied here.
+Next independent application: transfer native Charbonnier transport to
+nearest projection-commuting unitaries, with an unconditional HS commutator
+and critical norm uniqueness certificate. No historical novelty claim is
+inferred from the transfer or the existing finite topology.
