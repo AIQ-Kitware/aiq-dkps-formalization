@@ -24,23 +24,23 @@ noncomputable section
 namespace TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition
 
 open FiniteDimensional.SchattenPhaseTransition
-open scoped ENNReal
+open scoped ENNReal TauCeti.LinearIsometryEquivOperatorNorm
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
-/-- Every finite-cost global complex Schatten optimizer commutes with
+/-- Every finite-cost local complex Schatten optimizer commutes with
 the intrinsic sine-angle operator in arbitrary Hilbert dimension.
 In particular unequal angle sectors cannot mix. -/
-theorem commute_sinAngleOperator_of_schatten_minimal
+theorem commute_sinAngleOperator_of_schatten_isLocalMinOn_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
       (1 - (U : E →L[ℂ] E)) ≠ ∞)
-    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
-      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
-        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E))) :
+    (hmin : IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U) :
     Commute (U : E →L[ℂ] E) (K.sinAngleOperator L) := by
   let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
   let A := G.modulus
@@ -90,7 +90,7 @@ theorem commute_sinAngleOperator_of_schatten_minimal
     have hK : Z.IsReducing K.starProjection.toLinearMap :=
       K.isReducing_ker_of_reflection_conjugate_eq_neg G
         (isSelfAdjoint_schattenUnitaryGradient _ _)
-        (gradient_reflection_conjugate_eq_neg_of_schatten_minimal p hp hp1 K L U hmap hfinite hmin)
+        (gradient_reflection_conjugate_eq_neg_of_schatten_isLocalMinOn_complex p hp hp1 K L U hmap hfinite hmin)
     have hL : Z.IsReducing L.starProjection.toLinearMap := by
       apply (L.starProjection_isSymmetric.isReducing_iff_mem_invtSubmodule Z).mpr
       intro x hx
@@ -114,7 +114,7 @@ theorem commute_sinAngleOperator_of_schatten_minimal
     exact hlocal_commutes Z hK hL V hV hVS
   · intro ε hε
     obtain ⟨hM, hK, hL, _, _, V, hV, _, hlocal, hVmin⟩ :=
-      exists_minimizing_restriction_on_gradient_cutoff p hp hp1 K L U hmap hfinite hmin ε hε
+      exists_minimizing_restriction_on_gradient_cutoff_of_isLocalMinOn_complex p hp hp1 hp2 K L U hmap hfinite hmin ε hε
     let M := eigenSpan A (Set.Ioi ε)
     let : FiniteDimensional ℂ M := hM
     let V' := Unitary.linearIsometryEquiv.symm V
@@ -130,5 +130,23 @@ theorem commute_sinAngleOperator_of_schatten_minimal
     have hVS := commute_sinAngleOperator_of_isLocalMinOn_transports_complex p hp hp1 hp2
       (K.comap M.subtype) (L.comap M.subtype) V' hlocal hmin'.isLocalMinOn
     exact hlocal_commutes M hK hL V hV hVS
+
+/-- Global optimality implies the stronger local angle rigidity. -/
+theorem commute_sinAngleOperator_of_schatten_minimal
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
+    (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (1 - (U : E →L[ℂ] E)) ≠ ∞)
+    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E))) :
+    Commute (U : E →L[ℂ] E) (K.sinAngleOperator L) := by
+  exact commute_sinAngleOperator_of_schatten_isLocalMinOn_complex p hp hp1 hp2 K L U hmap hfinite
+    (show IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U
+      from fun T hT => hmin T hT).isLocalMinOn
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition

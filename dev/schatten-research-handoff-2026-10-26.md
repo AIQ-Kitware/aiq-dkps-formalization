@@ -2827,3 +2827,31 @@ restriction/stationarity and finite-transfer builds passed 6,908 and
 claimed: the next dependency is local finite gradient cutoffs, preserving
 the existing global cutoff API's broader `p>1` scope rather than silently
 adding a `p<2` hypothesis to it. Paper and visualizations untouched.
+
+## Strict Schatten local spectral reduction and no mixing
+
+`SchattenGradientCutoff.exists_locally_minimizing_restriction_on_gradient_cutoff_complex`
+extracts actual finite locally minimizing restrictions, with finite native
+cost, for every positive gradient cutoff of every finite-cost ambient
+operator-norm local minimum at `p>1`. Actual forward/inverse actions,
+source/target reduction and the complementary gradient bound are proved.
+The established global cutoff API retains its full `p>1` scope, using
+ambient global minimality to promote its restriction independently of
+any strict-exponent finite landscape theorem.
+
+For `1<p<2`, the new endpoint
+`exists_minimizing_restriction_on_gradient_cutoff_of_isLocalMinOn_complex`
+promotes those native local restrictions to finite global minima.
+`SchattenOptimizerAngles.commute_sinAngleOperator_of_schatten_isLocalMinOn_complex`
+then proves every finite-cost Hilbert local minimum preserves the entire
+principal-sine operator. Its proof uses compact spectral completeness
+and the actual self-adjoint transport on the whole zero-gradient kernel;
+no invertibility of displacement or simplicity of angles is assumed.
+The old global angle-preservation theorem specializes the stronger local
+rigidity. Focused cutoff/angle builds passed 7,538 and 7,546 jobs.
+
+The remaining strict-exponent local-to-global obstruction is action on
+common zero-angle directions, followed by closed-threshold inactive-tail
+rigidity. Compact reflection support and the finite native landscape are
+available to discharge it; none of those infinite conclusions is inferred
+from no mixing alone. Paper and visualization files remain untouched.
