@@ -110,4 +110,64 @@ theorem norm_nearest_schatten_corrections_sub_le_at_closed_critical_commutator
       rw [div_div_eq_mul_div]
       ring
 
+private theorem eq_diagonal_factor_of_nearest
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K : Submodule ℂ E) [K.HasOrthogonalProjection] (A C : E ≃ₗᵢ[ℂ] E)
+    (hC : Commute (C : E →L[ℂ] E) K.starProjection)
+    (hcomm : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      ((A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)) ≠ ∞)
+    (hnorm : ‖(A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)‖ ≤
+      Real.sin (criticalAngle p.toReal))
+    (hmin : IsMinOn (fun W : E ≃ₗᵢ[ℂ] E =>
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge ((A : E →L[ℂ] E) - (W : E →L[ℂ] E)))
+      {W | Commute (W : E →L[ℂ] E) K.starProjection} C) :
+    (C : E →L[ℂ] E) = (K.diagBlock (A : E →L[ℂ] E)).factorThru
+      (K.diagBlock (A : E →L[ℂ] E)).modulus := by
+  have hCeq := eq_canonical_correction_of_schatten_minimal_of_commutator_le_critical
+    p hp hp1 hp2 K A C hC hcomm hnorm (fun _ hW => hmin hW)
+  let theta := criticalAngle p.toReal
+  have hcos : 0 < Real.cos theta := by
+    rw [show Real.cos theta = (2 - p.toReal) / p.toReal from cos_criticalAngle _ hp1 hp2]
+    exact div_pos (by linarith) (by linarith)
+  have hsq := mul_self_le_mul_self (norm_nonneg _) hnorm
+  exact canonical_correction_eq_diagBlock_factorThru_modulus K A C hCeq _ hcos
+    (by nlinarith [Real.sin_sq_add_cos_sq theta])
+
+/-- Exact construction of every nearest commuting correction in the
+closed canonical regime. The right side uses Tau Ceti's accepted factor
+through the modulus of `PAP + Pperp A Pperp`; feasibility and global
+minimality are equivalent to this literal operator equality. -/
+theorem schatten_correction_isMin_iff_eq_diagBlock_factorThru_modulus
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K : Submodule ℂ E) [K.HasOrthogonalProjection] (A : E ≃ₗᵢ[ℂ] E)
+    (hcomm : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      ((A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)) ≠ ∞)
+    (hnorm : ‖(A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)‖ ≤
+      Real.sin (criticalAngle p.toReal)) (C : E ≃ₗᵢ[ℂ] E) :
+    (Commute (C : E →L[ℂ] E) K.starProjection ∧
+      IsMinOn (fun W : E ≃ₗᵢ[ℂ] E =>
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge ((A : E →L[ℂ] E) - (W : E →L[ℂ] E)))
+        {W | Commute (W : E →L[ℂ] E) K.starProjection} C) ↔
+      (C : E →L[ℂ] E) = (K.diagBlock (A : E →L[ℂ] E)).factorThru
+        (K.diagBlock (A : E →L[ℂ] E)).modulus := by
+  constructor
+  · rintro ⟨hC, hmin⟩
+    exact eq_diagonal_factor_of_nearest p hp hp1 hp2 K A C hC hcomm hnorm hmin
+  · intro hC
+    obtain ⟨D, hD, _⟩ := exists_unique_nearest_schatten_commuting_unitary_of_commutator_le_critical
+      p hp hp1 hp2 K A hcomm hnorm
+    have hminD : IsMinOn (fun W : E ≃ₗᵢ[ℂ] E =>
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge ((A : E →L[ℂ] E) - (W : E →L[ℂ] E)))
+        {W | Commute (W : E →L[ℂ] E) K.starProjection} D := by
+      intro W hW
+      exact hD.2 W hW
+    have heq := eq_diagonal_factor_of_nearest p hp hp1 hp2 K A D hD.1 hcomm hnorm hminD
+    have hCD : C = D := by
+      ext x
+      exact congrArg (fun T : E →L[ℂ] E => T x) (hC.trans heq.symm)
+    subst C
+    exact ⟨hD.1, hminD⟩
+
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition

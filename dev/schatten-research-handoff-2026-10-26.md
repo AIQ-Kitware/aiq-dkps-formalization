@@ -71,6 +71,54 @@ dimensional and infinite Charbonnier optimizer classifications remain open.
 The dated sections below preserve proof history; use this paragraph and the
 latest endpoint sections for the current frontier.
 
+## Explicit diagonal-block construction of every nearest correction
+
+`SchattenCorrectionDataStability.lean` now proves
+`schatten_correction_isMin_iff_eq_diagBlock_factorThru_modulus`.
+Let `E` be any complete complex Hilbert space, `K` an orthogonally
+complemented submodule, `A` an actual unitary, and `1<p<2` finite. Assume
+`[A,P_K]` belongs to the native Schatten ideal and its operator norm is
+at most `sin(criticalAngle p) = 2 sqrt(p-1)/p`. For **every** ambient unitary
+`C`, the following are equivalent:
+
+- `C` commutes with `P_K` and globally minimizes the native extended
+  Schatten distance to `A` over all commuting ambient unitaries;
+- as an operator, `C = T.factorThru T.modulus`, where
+  `T = K.diagBlock A = P_K A P_K + (I-P_K) A (I-P_K)`.
+
+This is an exact construction and characterization at the **closed**
+threshold, not an optimization within a prescribed block ansatz. It
+requires no separate index balance, separability or finite-rank hypothesis.
+The native objective includes competitors at infinite distance. Existing
+existence establishes that the literal accepted `factorThru` expression
+is an actual unitary in this regime.
+
+Reusable supporting statements are
+`ContinuousLinearMap.IsPositive.eq_modulus_of_unitary_factorization`,
+`ContinuousLinearMap.eq_factorThru_modulus_of_unitary_factorization_of_coercive`
+(in `ForTauCeti/.../Polar/Perturbation.lean`, either scalar field and arbitrary
+Hilbert dimension), and
+`canonical_correction_eq_diagBlock_factorThru_modulus`
+(in `DavisKahan/Geometry/Polar/CommutingCorrectionStability.lean`).
+The proof identifies the positive factor with the accepted modulus and
+uses coercivity to eliminate the kernel in the accepted factor-through API.
+No new polar-factor definition or forwarding facade is introduced.
+
+Focused build passed (8,056 jobs), and the full default build passed
+(21,271 jobs), with warnings treated as errors. This construction uses
+classical polar uniqueness; its formal verification is not a historical first-priority claim.
+Paper and visualization changes remain assigned separately.
+
+The next consequential independent mathematical target is formal sharpness
+of the input-error constant. A conventional two-dimensional witness is
+`A=[[c,s],[-s,c]]`, `B=[[-c,s],[-s,-c]]`, with `c=cos(theta)>0` and
+`s=sin(theta)`. Their diagonal polar corrections are `I` and `-I`, both
+commutator norms equal `s`, and their input/output distance ratio is `1/c`.
+At the critical angle this is `p/(2-p)`. **This witness is not yet
+formalized**; no sharpness claim is made for the compiled Lipschitz bound.
+General objective-error control for arbitrary near-minimizers also remains
+open, and must distinguish norm excess from power-cost excess.
+
 ## Exact infinite-dimensional uniqueness threshold
 
 `SchattenUniquenessThreshold.lean` proves
