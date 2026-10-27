@@ -8,6 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.ReducingUnitaryRestriction
 
 public import ForTauCeti.Analysis.OperatorIdeal.CharbonnierBlockSum
+public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenFinite
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
@@ -158,5 +159,41 @@ theorem gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
       Mᗮ.orthogonalProjectionOnto ((x : E) - R x)
     rw [htail x x.property]
   rw [gauge_schatten_rpow_eq_add_of_isReducing p hp _ M hred, hblock, htail']
+
+/-- A unitary with a finite-dimensional actual restriction and an
+ideal-small reference tail has finite Schatten displacement. -/
+theorem gauge_schatten_displacement_ne_top_of_finite_restriction_and_ideal_tail
+    (p : ℝ) (hp : 1 ≤ p) (M : Submodule 𝕜 E) [FiniteDimensional 𝕜 M]
+    (U : E ≃ₗᵢ[𝕜] E) (R : E →L[𝕜] E) (V : M ≃ₗᵢ[𝕜] M)
+    (hV : ∀ x : M, (V x : E) = U x)
+    (htail : ∀ x ∈ Mᗮ, U x = R x)
+    (hR : (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - R) ≠ ∞) :
+    (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (U : E →L[𝕜] E)) ≠ ∞ := by
+  let Φ := TauCeti.OperatorIdealFamily.schatten 𝕜 p hp
+  have hdisp : Mᗮ.orthogonalProjectionOnto ∘L (1 - (U : E →L[𝕜] E)) ∘L Mᗮ.subtypeL =
+      Mᗮ.orthogonalProjectionOnto ∘L (1 - R) ∘L Mᗮ.subtypeL := by
+    apply ContinuousLinearMap.ext
+    intro x
+    change Mᗮ.orthogonalProjectionOnto ((x : E) - U x) =
+      Mᗮ.orthogonalProjectionOnto ((x : E) - R x)
+    rw [htail x x.property]
+  have htailfinite : Φ.gauge
+      (Mᗮ.orthogonalProjectionOnto ∘L (1 - R) ∘L Mᗮ.subtypeL) ≠ ∞ := by
+    apply ne_top_of_le_ne_top hR
+    exact (Φ.gauge_comp_left_le_self Mᗮ.orthogonalProjectionOnto_norm_le _).trans
+      (Φ.gauge_comp_right_le_self _ Mᗮ.norm_subtypeL_le)
+  have hsplit := ContinuousLinearMap.gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
+    p hp M U U V (fun x => (hV x).symm) (fun _ _ => rfl)
+  have hheadfinite := TauCeti.OperatorIdealFamily.gauge_schatten_ne_top_of_rank_le p hp
+    (1 - (V : M →L[𝕜] M)) (Module.finrank 𝕜 M)
+      (by simpa only [Module.finrank_eq_rank] using
+        LinearMap.rank_le_domain (1 - (V : M →L[𝕜] M)).toLinearMap)
+  have hpow : Φ.gauge (1 - (U : E →L[𝕜] E)) ^ p ≠ ∞ := by
+    rw [hsplit, hdisp]
+    exact ENNReal.add_ne_top.mpr
+      ⟨ENNReal.rpow_ne_top_of_nonneg (by linarith) hheadfinite,
+        ENNReal.rpow_ne_top_of_nonneg (by linarith) htailfinite⟩
+  exact fun h => hpow ((ENNReal.rpow_eq_top_iff_of_pos (zero_lt_one.trans_le hp)).mpr h)
+
 
 end ContinuousLinearMap

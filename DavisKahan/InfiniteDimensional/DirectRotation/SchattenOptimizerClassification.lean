@@ -30,39 +30,6 @@ open scoped ENNReal
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
-private theorem finite_cost_of_finite_restriction_and_ideal_tail
-    (p : ℝ) (hp : 1 ≤ p) (M : Submodule ℂ E) [FiniteDimensional ℂ M]
-    (U : E ≃ₗᵢ[ℂ] E) (R : E →L[ℂ] E) (V : M ≃ₗᵢ[ℂ] M)
-    (hV : ∀ x : M, (V x : E) = U x)
-    (htail : ∀ x ∈ Mᗮ, U x = R x)
-    (hR : (OperatorIdealFamily.schatten ℂ p hp).gauge (1 - R) ≠ ∞) :
-    (OperatorIdealFamily.schatten ℂ p hp).gauge (1 - (U : E →L[ℂ] E)) ≠ ∞ := by
-  let Φ := OperatorIdealFamily.schatten ℂ p hp
-  have hdisp : Mᗮ.orthogonalProjectionOnto ∘L (1 - (U : E →L[ℂ] E)) ∘L Mᗮ.subtypeL =
-      Mᗮ.orthogonalProjectionOnto ∘L (1 - R) ∘L Mᗮ.subtypeL := by
-    apply ContinuousLinearMap.ext
-    intro x
-    change Mᗮ.orthogonalProjectionOnto ((x : E) - U x) =
-      Mᗮ.orthogonalProjectionOnto ((x : E) - R x)
-    rw [htail x x.property]
-  have htailfinite : Φ.gauge
-      (Mᗮ.orthogonalProjectionOnto ∘L (1 - R) ∘L Mᗮ.subtypeL) ≠ ∞ := by
-    apply ne_top_of_le_ne_top hR
-    exact (Φ.gauge_comp_left_le_self Mᗮ.orthogonalProjectionOnto_norm_le _).trans
-      (Φ.gauge_comp_right_le_self _ Mᗮ.norm_subtypeL_le)
-  have hsplit := ContinuousLinearMap.gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
-    p hp M U U V (fun x => (hV x).symm) (fun _ _ => rfl)
-  have hheadfinite := OperatorIdealFamily.gauge_schatten_ne_top_of_rank_le p hp
-    (1 - (V : M →L[ℂ] M)) (Module.finrank ℂ M)
-      (by simpa only [Module.finrank_eq_rank] using
-        LinearMap.rank_le_domain (1 - (V : M →L[ℂ] M)).toLinearMap)
-  have hpow : Φ.gauge (1 - (U : E →L[ℂ] E)) ^ p ≠ ∞ := by
-    rw [hsplit, hdisp]
-    exact ENNReal.add_ne_top.mpr
-      ⟨ENNReal.rpow_ne_top_of_nonneg (by linarith) hheadfinite,
-        ENNReal.rpow_ne_top_of_nonneg (by linarith) htailfinite⟩
-  exact fun h => hpow ((ENNReal.rpow_eq_top_iff_of_pos (zero_lt_one.trans_le hp)).mpr h)
-
 /-- **Complete unrestricted Hilbert-space optimizer classification.**
 On the entire inactive sector every optimizer is canonical. On the
 finite remaining sector, all and only compatible phase projections
@@ -119,7 +86,9 @@ theorem schatten_transport_isMin_iff_canonical_tail_phase_and_defect_complex
         c hc hc1 hcrit U hmap hfinite htail
     exact ⟨htail, V, hdim, hV, hlocal, hiff.mp hmin⟩
   · rintro ⟨htail, V, hdim, hV, hlocal, hphase⟩
-    have hfinite := finite_cost_of_finite_restriction_and_ideal_tail p.toReal hp1.le M U
+    have hfinite :=
+      ContinuousLinearMap.gauge_schatten_displacement_ne_top_of_finite_restriction_and_ideal_tail
+        p.toReal hp1.le M U
       (nonacuteDirectRotation K L J) V hV htail
       ((gauge_nonacuteDirectRotation_ne_top_iff_projection_sub
         (OperatorIdealFamily.schatten ℂ p.toReal hp1.le) K L J).mpr hD)

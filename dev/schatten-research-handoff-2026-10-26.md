@@ -19,7 +19,9 @@ self-adjoint symmetry application below has passed the full default build
 stages and are superseded. Historical priority remains qualified; see the
 supplied-review addendum in the paper-directory novelty review.
 
-The next mathematical targets are the infinite optimizer-space topology,
+The infinite optimizer-space finite-cutoff homeomorphism and operator-norm
+compactness are now proved; see the latest topology entry below. The next
+mathematical targets are the full multiplicity-coordinate topology,
 necessity of the infinite uniqueness threshold, and quantitative stability
 or certified approximation from inexact input. Full nuclear, real infinite-
 dimensional and infinite Charbonnier optimizer classifications remain open.
@@ -1468,3 +1470,46 @@ input. All are distinct from the now closed every-optimizer and
 nearest-correction classification. The nuclear, real infinite-dimensional
 and full infinite Charbonnier classifications remain separate research
 streams. Do not infer these endpoints from the complex `1<p<2` results.
+
+
+## Infinite optimizer topology: finite cutoff homeomorphism and compactness
+
+`SchattenOptimizerTopology.exists_schatten_finite_cutoff_optimizer_homeomorph`
+proves that the full native Schatten optimizer set on any complete complex
+Hilbert space is homeomorphic, in the accepted operator-norm topology, to
+the actual finite optimizer set on `eigenSpan |P-Q| (Ioi c)`. Assumptions:
+finite `1<p<2`, native Schatten projection difference, an actual balanced
+crossed-defect completion, `0<c<1` and `c≤sin(criticalAngle p)`.
+The theorem proves the restricted source/target rank balance, actual head
+action, canonical complementary action, and exact equality of operator-
+norm differences between ambient and restricted optimizer pairs. All
+ambient optimizers are included; finite cost and block preservation are
+not baked into the new native set `schattenHilbertTransportMinimizers`.
+
+`isCompact_schattenHilbertTransportMinimizers` consequently proves compactness
+of the **entire** optimizer family in operator norm, even for infinite-rank
+pairs and nonseparable fixed directions. This is compactness of the exact
+optimizer set for fixed data. It does not assert compactness of arbitrary
+near-minimizing sequences or continuity under varying projection data.
+Focused topology build passed (8,038 jobs), with warnings as errors.
+
+The reusable field-general `LinearIsometryEquiv.exists_reference_tail_homeomorph`
+works for arbitrary orthogonally complemented reducing sectors, even when
+both sectors are infinite-dimensional. It supplies actual restriction and
+extension coordinates and exact operator difference norms. The accepted
+Tau Ceti operator-norm topology is used directly. Orthogonal zero extension
+norm equality is obtained from the existing singular-value identity at zero.
+The existing private finite-head/ideal-tail cost lemma was moved into
+`ContinuousLinearMap.gauge_schatten_displacement_ne_top_of_finite_restriction_and_ideal_tail`
+and generalized over both fields; the optimizer classification consumes it
+without retaining a duplicate. The finite optimizer set now has its direct
+membership simplification lemma for downstream use.
+
+Next unblocked step: compose this exact finite-cutoff homeomorphism with
+`exists_schatten_multiplicity_parameter_homeomorph`. This should transfer
+independent projection factors and crossed-defect coordinates, locally
+constant rank labels and positive separation of distinct rank sectors to
+the full infinite-dimensional optimizer family. Formal Grassmannian
+connected components and manifold dimensions remain separate obligations.
+No first-publication priority is inferred from these topological consequences.
+The manuscript and visualizations remain untouched.

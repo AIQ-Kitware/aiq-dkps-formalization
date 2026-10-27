@@ -257,6 +257,20 @@ def schattenTransportMinimizers
         UnitarilyInvariantSeminorm.schatten ℂ E E p
           (LinearMap.id - V.toLinearMap) ^ p.toReal}
 
+omit [CompleteSpace E] in
+/-- Membership in the finite optimizer set records feasibility and
+comparison with every ambient unitary transporter. -/
+@[simp]
+theorem mem_schattenTransportMinimizers
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (K L : Submodule ℂ E) (T : E ≃ₗᵢ[ℂ] E) :
+    T ∈ schattenTransportMinimizers p K L ↔
+      K.map T.toLinearMap = L ∧
+      ∀ V : E ≃ₗᵢ[ℂ] E, K.map V.toLinearMap = L →
+        UnitarilyInvariantSeminorm.schatten ℂ E E p
+            (LinearMap.id - T.toLinearMap) ^ p.toReal ≤
+          UnitarilyInvariantSeminorm.schatten ℂ E E p
+            (LinearMap.id - V.toLinearMap) ^ p.toReal := Iff.rfl
+
 /-- Normalized compatible projections and independent defect unitaries
 parametrize every global optimizer bijectively, with the actual actions,
 weighted phase formula and uniform Lipschitz recovery of the phase

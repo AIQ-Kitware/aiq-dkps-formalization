@@ -87,6 +87,17 @@ theorem singularValue_orthogonal_extension
     exact congrArg Subtype.val (by simp)
   rwa [heq] at h
 
+/-- Orthogonal zero extension preserves the operator norm, even when
+either subspace is infinite-dimensional or zero-dimensional. -/
+theorem norm_orthogonal_extension
+    (M : Submodule 𝕜 E) (N : Submodule 𝕜 F)
+    [M.HasOrthogonalProjection] [N.HasOrthogonalProjection]
+    (T : M →L[𝕜] N) :
+    ‖N.subtypeL ∘L T ∘L M.orthogonalProjectionOnto‖ = ‖T‖ := by
+  have h := singularValue_orthogonal_extension M N T 0
+  rw [singularValue_zero, singularValue_zero] at h
+  exact congrArg (fun x : NNReal => (x : ℝ)) h
+
 end ContinuousLinearMap
 
 namespace TauCeti.OperatorIdealFamily
