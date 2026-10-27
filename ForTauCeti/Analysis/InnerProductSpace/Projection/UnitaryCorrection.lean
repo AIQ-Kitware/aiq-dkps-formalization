@@ -80,6 +80,8 @@ end Submodule
 
 namespace TauCeti.OperatorIdealFamily
 
+open scoped ENNReal
+
 universe u v
 
 variable {𝕜 : Type u} [RCLike 𝕜] {E : Type v}
@@ -163,6 +165,56 @@ theorem existsUnique_correction_iff_transport
         Φ.gauge (1 - (A.symm.trans C : E →L[𝕜] E)) ≤ Φ.gauge (1 - (V : E →L[𝕜] E)))
   rw [Φ.gauge_correction_isMin_iff_transport_isMin K A C,
     K.map_correction_transport A C, K.map_eq_self_iff_commute_starProjection C]
+
+/-- A unique nearest commuting correction has finite ideal distance.
+If its distance were infinite, identity and negative identity would both
+minimize; their equality forces the space to be zero, where the cost is zero.
+This argument applies to every accepted ideal gauge in either field. -/
+theorem gauge_unitary_sub_ne_top_of_unique_correction
+    (Φ : OperatorIdealFamily.{u, v, v} 𝕜)
+    (K : Submodule 𝕜 E) [K.HasOrthogonalProjection] (A C : E ≃ₗᵢ[𝕜] E)
+    (hC : Commute (C : E →L[𝕜] E) K.starProjection ∧
+      ∀ V : E ≃ₗᵢ[𝕜] E, Commute (V : E →L[𝕜] E) K.starProjection →
+        Φ.gauge ((A : E →L[𝕜] E) - (C : E →L[𝕜] E)) ≤
+          Φ.gauge ((A : E →L[𝕜] E) - (V : E →L[𝕜] E)))
+    (huni : ∀ V : E ≃ₗᵢ[𝕜] E,
+      (Commute (V : E →L[𝕜] E) K.starProjection ∧
+        ∀ W : E ≃ₗᵢ[𝕜] E, Commute (W : E →L[𝕜] E) K.starProjection →
+          Φ.gauge ((A : E →L[𝕜] E) - (V : E →L[𝕜] E)) ≤
+            Φ.gauge ((A : E →L[𝕜] E) - (W : E →L[𝕜] E))) → V = C) :
+    Φ.gauge ((A : E →L[𝕜] E) - (C : E →L[𝕜] E)) ≠ ∞ := by
+  intro htop
+  have hall (W : E ≃ₗᵢ[𝕜] E) (hW : Commute (W : E →L[𝕜] E) K.starProjection) :
+      Φ.gauge ((A : E →L[𝕜] E) - (W : E →L[𝕜] E)) = ∞ := by
+    apply top_unique
+    simpa only [htop] using hC.2 W hW
+  let I := LinearIsometryEquiv.refl 𝕜 E
+  let N : E ≃ₗᵢ[𝕜] E := LinearIsometryEquiv.neg 𝕜
+  have hI : Commute (I : E →L[𝕜] E) K.starProjection := by
+    change Commute 1 K.starProjection
+    exact Commute.one_left _
+  have hN : Commute (N : E →L[𝕜] E) K.starProjection := by
+    ext x
+    change -(K.starProjection x) = K.starProjection (-x)
+    rw [map_neg]
+  have hmin (W : E ≃ₗᵢ[𝕜] E) (hW : Commute (W : E →L[𝕜] E) K.starProjection) :
+      ∀ V : E ≃ₗᵢ[𝕜] E, Commute (V : E →L[𝕜] E) K.starProjection →
+        Φ.gauge ((A : E →L[𝕜] E) - (W : E →L[𝕜] E)) ≤
+          Φ.gauge ((A : E →L[𝕜] E) - (V : E →L[𝕜] E)) := by
+    intro V hV
+    rw [hall W hW, hall V hV]
+  have heq : I = N := (huni I ⟨hI, hmin I hI⟩).trans (huni N ⟨hN, hmin N hN⟩).symm
+  have hzero (x : E) : x = 0 := by
+    have hx : x = -x := congrArg (fun U : E ≃ₗᵢ[𝕜] E => U x) heq
+    have htwo : (2 : 𝕜) • x = 0 := by
+      rw [two_smul]
+      exact add_eq_zero_iff_eq_neg.mpr hx
+    exact (smul_eq_zero.mp htwo).resolve_left two_ne_zero
+  have hdiff : (A : E →L[𝕜] E) - (C : E →L[𝕜] E) = 0 := by
+    ext x
+    exact hzero _
+  rw [hdiff, Φ.gauge_zero] at htop
+  exact ENNReal.zero_ne_top htop
 
 /-- The actual unitary commutator and the image projection difference
 have exactly the same ideal gauge. This is an equality, not a bound. -/

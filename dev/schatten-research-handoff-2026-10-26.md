@@ -28,6 +28,11 @@ is now also proved: uniqueness is equivalent to the closed projection-gap
 bound `2 sqrt(p-1)/p`, under the native Schatten hypothesis alone. The
 exact nearest-commuting-correction iff uses the same threshold on the
 actual commutator norm, also without a separate balance assumption.
+The strongest iff statements now make even native Schatten membership
+part of the conclusion: arbitrary orthogonally complemented projection
+pairs have a unique optimizer exactly when their difference is Schatten
+and their gap obeys the closed threshold. The correction version has the
+analogous necessary-and-sufficient membership and norm conditions.
 The next mathematical targets are quantitative stability or certified
 approximation from inexact input, and connectedness of rank strata.
 Full nuclear, real infinite-
@@ -103,6 +108,46 @@ Focused build passed (8,058 jobs), and the full default build passed
 (21,251 jobs), with warnings treated as errors. This work adds
 mathematical Lean results and this handoff only; manuscript and
 visualization updates remain assigned separately.
+
+## Unrestricted uniqueness, including non-Schatten data
+
+`schattenHilbertTransport_unique_minimizer_iff` in
+`SchattenCorrectionCutoff.lean` states the final criterion with no standing
+compactness, ideal-membership, feasibility or defect-balance hypothesis:
+for any orthogonally complemented pair on any complete complex Hilbert
+space and finite `1<p<2`,
+
+```
+there exists exactly one ambient global Schatten optimizer
+  iff (P_K-P_L belongs to S_p) and (gap K L <= 2 sqrt(p-1)/p).
+```
+
+`existsUnique_nearest_schatten_commuting_unitary_iff` gives the analogous
+criterion for arbitrary ambient unitaries `A`:
+
+```
+there exists exactly one nearest P_K-commuting unitary
+  iff ([A,P_K] belongs to S_p) and (norm [A,P_K] <= 2 sqrt(p-1)/p).
+```
+
+The objectives still use the native extended gauge and compare all
+ambient feasible unitaries. Membership is necessary because uniqueness
+forces finite cost. That argument is now the generic reusable lemma
+`OperatorIdealFamily.gauge_unitary_sub_ne_top_of_unique_correction`,
+valid in either scalar field for every accepted ideal gauge. It replaces
+the former specialized proof rather than duplicating it. No separability
+or rank restriction occurs. Earlier conditional iff statements remain
+useful specializations of this mathematical frontier.
+
+Focused build passed (8,058 jobs), and the full default build passed
+(21,251 jobs), with warnings treated as errors. The next substantial
+unclosed theorem is quantitative near-minimizer stability: control the
+distance of an arbitrary almost-minimizing ambient unitary to the full
+optimizer set, with explicit dependence on a strict critical-gap margin.
+The critical boundary needs its own growth law; a quadratic estimate
+must not be assumed there. Connectedness of the fixed-rank multiplicity
+strata is an independent next task; local constancy alone does not prove
+that these are the connected components.
 
 ## All-rank real nuclear canonical-value criterion
 

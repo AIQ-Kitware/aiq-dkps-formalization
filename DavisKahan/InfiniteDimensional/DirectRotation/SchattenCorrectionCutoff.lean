@@ -51,42 +51,7 @@ theorem existsUnique_nearest_schatten_commuting_unitary_iff_commutator
     let Φ := OperatorIdealFamily.schatten ℂ p.toReal hp1.le
     have htransport := (Φ.existsUnique_correction_iff_transport K A).mp hunique
     obtain ⟨C, hC, huni⟩ := hunique
-    have hfinite : Φ.gauge ((A : E →L[ℂ] E) - (C : E →L[ℂ] E)) ≠ ∞ := by
-      intro htop
-      have hall (W : E ≃ₗᵢ[ℂ] E) (hW : Commute (W : E →L[ℂ] E) K.starProjection) :
-          Φ.gauge ((A : E →L[ℂ] E) - (W : E →L[ℂ] E)) = ∞ := by
-        apply top_unique
-        have h := hC.2 W hW
-        change Φ.gauge ((A : E →L[ℂ] E) - (C : E →L[ℂ] E)) ≤
-          Φ.gauge ((A : E →L[ℂ] E) - (W : E →L[ℂ] E)) at h
-        rwa [htop] at h
-      let I := LinearIsometryEquiv.refl ℂ E
-      let N : E ≃ₗᵢ[ℂ] E := LinearIsometryEquiv.neg ℂ
-      have hI : Commute (I : E →L[ℂ] E) K.starProjection := by
-        change Commute 1 K.starProjection
-        exact Commute.one_left _
-      have hN : Commute (N : E →L[ℂ] E) K.starProjection := by
-        ext x
-        change -(K.starProjection x) = K.starProjection (-x)
-        rw [map_neg]
-      have hmin (W : E ≃ₗᵢ[ℂ] E) (hW : Commute (W : E →L[ℂ] E) K.starProjection) :
-          ∀ V : E ≃ₗᵢ[ℂ] E, Commute (V : E →L[ℂ] E) K.starProjection →
-            Φ.gauge ((A : E →L[ℂ] E) - (W : E →L[ℂ] E)) ≤
-              Φ.gauge ((A : E →L[ℂ] E) - (V : E →L[ℂ] E)) := by
-        intro V hV
-        rw [hall W hW, hall V hV]
-      have heq : I = N := (huni I ⟨hI, hmin I hI⟩).trans (huni N ⟨hN, hmin N hN⟩).symm
-      have hzero (x : E) : x = 0 := by
-        have hx : x = -x := congrArg (fun U : E ≃ₗᵢ[ℂ] E => U x) heq
-        have htwo : (2 : ℂ) • x = 0 := by
-          rw [two_smul]
-          exact add_eq_zero_iff_eq_neg.mpr hx
-        exact (smul_eq_zero.mp htwo).resolve_left two_ne_zero
-      have hdiff : (A : E →L[ℂ] E) - (C : E →L[ℂ] E) = 0 := by
-        ext x
-        exact hzero _
-      rw [hdiff, Φ.gauge_zero] at htop
-      exact ENNReal.zero_ne_top htop
+    have hfinite := Φ.gauge_unitary_sub_ne_top_of_unique_correction K A C hC huni
     let L := K.map A.toLinearMap
     let T := A.symm.trans C
     have hmap : L.map T.toLinearMap = K := by
@@ -194,5 +159,75 @@ theorem schattenHilbertTransport_unique_minimizer_iff_critical_norm
       K.projectionGap L ≤ 2 * Real.sqrt (p.toReal - 1) / p.toReal := by
   rw [schattenHilbertTransport_unique_minimizer_iff_projectionGap p hp hp1 hp2 K L hD,
     sin_criticalAngle p.toReal hp1]
+
+/-- Complete uniqueness criterion for an arbitrary unitary: Schatten
+commutator membership and the closed critical norm bound are both
+necessary and jointly sufficient. No compactness or feasibility is
+assumed, and the objective retains its extended values. -/
+theorem existsUnique_nearest_schatten_commuting_unitary_iff
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K : Submodule ℂ E) [K.HasOrthogonalProjection] (A : E ≃ₗᵢ[ℂ] E) :
+    (∃! C : E ≃ₗᵢ[ℂ] E, Commute (C : E →L[ℂ] E) K.starProjection ∧
+      ∀ W : E ≃ₗᵢ[ℂ] E, Commute (W : E →L[ℂ] E) K.starProjection →
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+            ((A : E →L[ℂ] E) - (C : E →L[ℂ] E)) ≤
+          (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+            ((A : E →L[ℂ] E) - (W : E →L[ℂ] E))) ↔
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+          ((A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)) ≠ ∞ ∧
+        ‖(A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)‖ ≤
+          2 * Real.sqrt (p.toReal - 1) / p.toReal := by
+  constructor
+  · intro hunique
+    obtain ⟨C, hC, huni⟩ := hunique
+    let Φ := OperatorIdealFamily.schatten ℂ p.toReal hp1.le
+    have hfinite := Φ.gauge_unitary_sub_ne_top_of_unique_correction K A C hC huni
+    have hcomm := ne_top_of_le_ne_top hfinite
+      (Φ.gauge_commutator_le_unitary_correction K A C hC.1)
+    exact ⟨hcomm, (existsUnique_nearest_schatten_commuting_unitary_iff_critical_norm
+      p hp hp1 hp2 K A hcomm).mp ⟨C, hC, huni⟩⟩
+  · rintro ⟨hcomm, hnorm⟩
+    exact (existsUnique_nearest_schatten_commuting_unitary_iff_critical_norm
+      p hp hp1 hp2 K A hcomm).mpr hnorm
+
+/-- Complete uniqueness criterion for arbitrary orthogonally
+complemented projection pairs. Native Schatten membership is a
+conclusion of uniqueness, not a standing assumption. This includes
+noncompact pairs and pairs without a near-identity feasible transport. -/
+theorem schattenHilbertTransport_unique_minimizer_iff
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection] :
+    (∃! U : E ≃ₗᵢ[ℂ] E,
+      U ∈ schattenHilbertTransportMinimizers p.toReal hp1.le K L) ↔
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+          (K.starProjection - L.starProjection) ≠ ∞ ∧
+        K.projectionGap L ≤ 2 * Real.sqrt (p.toReal - 1) / p.toReal := by
+  constructor
+  · intro hunique
+    obtain ⟨U, hU⟩ := hunique.exists
+    have hmap := (mem_schattenHilbertTransportMinimizers _ _ _ _ U).mp hU |>.1
+    have hLmap : L.map U.symm.toLinearMap = K :=
+      (Submodule.map_symm_eq_iff U.toLinearEquiv).mpr hmap
+    have hproj : (L.map U.symm.toLinearMap).starProjection = K.starProjection := by
+      congr 1
+    let Φ := OperatorIdealFamily.schatten ℂ p.toReal hp1.le
+    have htransport : ∃! T : E ≃ₗᵢ[ℂ] E,
+        (L.map U.symm.toLinearMap).map T.toLinearMap = L ∧
+          ∀ V : E ≃ₗᵢ[ℂ] E, (L.map U.symm.toLinearMap).map V.toLinearMap = L →
+            Φ.gauge (1 - (T : E →L[ℂ] E)) ≤ Φ.gauge (1 - (V : E →L[ℂ] E)) := by
+      simpa only [hLmap, mem_schattenHilbertTransportMinimizers, Φ] using hunique
+    have hcorrection := (Φ.existsUnique_correction_iff_transport L U.symm).mpr htransport
+    have hcomm := ((existsUnique_nearest_schatten_commuting_unitary_iff
+      p hp hp1 hp2 L U.symm).mp hcorrection).1
+    have hD : Φ.gauge (K.starProjection - L.starProjection) ≠ ∞ := by
+      rw [← Φ.gauge_projection_image_sub_eq_commutator L U.symm, hproj] at hcomm
+      exact hcomm
+    exact ⟨hD, (schattenHilbertTransport_unique_minimizer_iff_critical_norm
+      p hp hp1 hp2 K L hD).mp hunique⟩
+  · rintro ⟨hD, hnorm⟩
+    exact (schattenHilbertTransport_unique_minimizer_iff_critical_norm
+      p hp hp1 hp2 K L hD).mpr hnorm
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition
