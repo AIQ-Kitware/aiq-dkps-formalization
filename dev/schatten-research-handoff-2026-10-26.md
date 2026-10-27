@@ -5,6 +5,13 @@ describes new mathematics and the exact next proof obligations. The target
 is the journal research extension on exact real and complex transport,
 not an addition to the frozen 29-result Davis--Kahan source denominator.
 
+Historical-search handoff: the user-supplied external review is archived in
+[historical-priority-review-2026-10-26.md](historical-priority-review-2026-10-26.md).
+It records the Aubrun–Szarek exercise lead, inspected neighboring formulations,
+source-authentication limits and remaining citation checks. Its older infinite-
+dimensional status is superseded by the frontier below. Reuse that record
+before repeating the literature search; do not infer first-discovery priority.
+
 ## Current frontier — read before chronological entries
 
 General infinite-rank complex Schatten `1<p<2` attainment and the complete
