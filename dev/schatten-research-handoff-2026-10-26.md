@@ -3907,3 +3907,69 @@ odd-modulus splitting should show every nuclear optimizer has the same
 Schatten-q displacement for each q>=1, and give a sharp simultaneous
 approximation factor when the norm exponent is not fixed in advance.
 No such profile is claimed until its exact constants compile.
+
+
+## Entire Schatten profile and simultaneous comparison — 27 October 2026
+
+`Geometry/Polar/NuclearRootProfile.lean` proves the exact displacement
+cost of **every** complex nuclear optimizer for every finite q>=1:
+
+`||I-T||_q = 2^(1-1/q) ||P_K-P_L||_q`.
+
+The native theorem is `nuclear_optimizer_schatten_profile_complex`.
+Its hypotheses remain an arbitrary complete complex Hilbert space,
+complemented K,L, an actual crossed-defect equivalence, finite native
+nuclear projection difference, and membership in the full ambient
+nuclear optimizer set. It is not a theorem only for constructed or
+principal-plane-preserving competitors. The complete root bijection
+supplies all independent root conditions.
+
+`nuclearSignedSineTransport_schatten_power` and
+`nuclearSignedSineTransport_schatten_profile` prove the corresponding
+construction statements over either RCLike field, including infinite
+values and without a trace-class assumption. The proof consumes the
+existing odd-modulus splitting identity and actual unitary invariance.
+The generic `nuclearSignedSineTransport_gauge_displacement` identifies
+its displacement gauge with that of S-A for every symmetric ideal.
+No unproved limiting argument or exchange of infinite sums is used.
+
+`nuclear_optimizer_operatorNorm_complex` closes the q=infinity endpoint:
+`||I-T|| = 2 ||P_K-P_L||`. The proof uses orthogonal modulus splits,
+reflection equality of their norms, and Mathlib's existing norm-max
+identity for self-adjoint zero-product operators. Its construction
+version is stated over the complex field, matching the C-star theorem
+used in its proof; no additional generic-field scope is silently claimed.
+
+`nuclear_optimizer_schatten_comparison_complex` therefore bounds each
+nuclear optimizer's q-cost by `2^(1-1/q)` times **every** feasible ambient
+competitor's q-cost. `nuclear_optimizer_operatorNorm_comparison_complex`
+gives the endpoint factor 2. These are simultaneous mathematical
+comparison guarantees when the exponent is not fixed before choosing
+a nuclear optimizer. The exact profile is proved; a theorem that no
+smaller uniform comparison factor can work has **not** yet been
+formalized. Small acute-angle examples suggest the constants are
+optimal, but that limiting sharpness must be checked separately.
+
+All nuclear optimizers consequently have equal displacement cost for
+every Schatten norm and operator norm. Switching only the displacement
+norm cannot distinguish them. The preceding compact-family secondary
+selection theorem can instead use a prescribed reference B; its finite-
+distance ideal hypothesis remains explicit.
+
+Focused profile build passed 7,188 jobs. The registered full default
+build passed 21,395 jobs (`/tmp/nuclear-profile-full.log`), with cache
+retrieval before each build. No new
+historical-priority claim is made. Paper and visualization files remain
+untouched.
+
+Next strongest exact structural targets: (1) the singular-value
+sequence itself, rather than only all Schatten moments; (2) the
+Grassmannian/right-defect spectral factorization and topology;
+(3) native nuclear-distance compactness and agreement of Schatten
+topologies on the optimizer family; (4) real-root existence and the
+real-field necessity direction. For (3), fixed-modulus pointwise norm
+identities also identify every tail's approximation numbers, while
+finite spectral cutoffs commute with self-adjoint roots. The precise
+analytic seam is uniform nuclear-gauge convergence of those tails plus
+finite-head rank bounds; operator-norm compactness alone does not prove
+it. Keep that ideal-topology distinction explicit.
