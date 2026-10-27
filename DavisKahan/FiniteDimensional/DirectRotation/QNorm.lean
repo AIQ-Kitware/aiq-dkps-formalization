@@ -35,6 +35,14 @@ apply that to the norm `M` witnessing the `Q`-property and take square roots.
 The counterexample and this theorem fit together exactly: `kyFanSum` at the
 full rank is the trace norm, and `kyFan_not_isQNorm` below turns the
 counterexample around to show that it is *not* a `Q`-norm.
+
+Mathematical attribution: the source squared-displacement assertion is
+Davis--Kahan (1970), Proposition 4.3. Q-norm minimal-distortion theory
+already appears in Bolotnikov--Li--Rodman (2001), Theorem 3.1 and
+Lemma 3.2, pp. 33--36, DOI 10.13001/1081-3810.1058. Thus the repair is
+a formalized classical consequence, not a new norm-minimality principle.
+The verified comparison and source-authentication boundary are recorded
+in `dev/spectral-transport-unification.md`, row T3.
 -/
 
 public section

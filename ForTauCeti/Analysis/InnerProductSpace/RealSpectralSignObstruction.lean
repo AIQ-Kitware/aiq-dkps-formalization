@@ -26,7 +26,7 @@ namespace TauCeti
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E] [FiniteDimensional ℝ E]
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- An invariant subspace of a real operator whose square is a negative
 nonzero scalar has even real dimension. Orthogonality is unnecessary. -/
 theorem even_finrank_invariant_of_square_neg_real
@@ -45,7 +45,7 @@ theorem even_finrank_invariant_of_square_neg_real
     rw [hcoeff, neg_one_smul]
   exact (show AlmostComplexStructure M from ⟨H, hsquare⟩).even_finrank_real
 
-omit [CompleteSpace E] in
+omit [CompleteSpace E] [FiniteDimensional ℝ E] in
 /-- A commuting projection in a negative-square real block has even
 rank. This is the real obstruction hidden by complex phase choices. -/
 theorem even_finrank_range_of_commuting_projection_square_neg_real

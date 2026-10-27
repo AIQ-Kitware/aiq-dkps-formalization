@@ -387,4 +387,31 @@ theorem phasePower_right_angle_eq_minimum_iff (p delta : ℝ)
       Real.zero_rpow (show p ≠ 0 by linarith), add_zero]
 
 end
+/-- The quadratic right-angle cost is flat in the scalar phase. This
+endpoint degeneracy contrasts with the unique subquadratic phase. -/
+theorem phasePower_two_right_angle (delta : ℝ) :
+    phasePower 2 (Real.pi / 2) delta = 4 := by
+  simp only [phasePower, Real.rpow_two]
+  rw [phaseChord_add_sq, Real.cos_pi_div_two, mul_zero, zero_mul, sub_zero]
+
+/-- **Endpoint optimizer-set obstruction.** Exact right-angle scalar
+minimizers at exponents below two cannot converge to phase zero,
+although phase zero is quadratic-optimal. No assertion about limits
+of unrestricted ambient optimizer sets is inferred from this statement. -/
+theorem not_tendsto_zero_of_right_angle_subquadratic_minimizers
+    {ι : Type*} {l : Filter ι} [l.NeBot] (p delta : ι → ℝ)
+    (h : ∀ᶠ i in l, 1 ≤ p i ∧ p i < 2 ∧ delta i ∈ Set.Icc 0 (Real.pi / 2) ∧
+      phasePower (p i) (Real.pi / 2) (delta i) = phaseMinimum (p i) (Real.pi / 2)) :
+    ¬Filter.Tendsto delta l (nhds 0) := by
+  intro ht
+  have hevent : delta =ᶠ[l] fun _ => Real.pi / 2 := by
+    filter_upwards [h] with i hi
+    exact (phasePower_right_angle_eq_minimum_iff (p i) (delta i) hi.1 hi.2.1 hi.2.2.1).mp
+      hi.2.2.2
+  have hc : Filter.Tendsto delta l (nhds (Real.pi / 2)) :=
+    (tendsto_const_nhds : Filter.Tendsto (fun _ : ι => Real.pi / 2) l
+      (nhds (Real.pi / 2))).congr' hevent.symm
+  have heq := tendsto_nhds_unique ht hc
+  linarith [Real.pi_pos]
+
 end TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition

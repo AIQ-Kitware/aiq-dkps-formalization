@@ -15,10 +15,13 @@ before repeating the literature search; do not infer first-discovery priority.
 ## Current frontier — reconciled 27 October 2026
 
 Start with the maintained [research plan](schatten-transport-research-plan.md).
-It records the exact next real-block lemma, the longer theory-completion goals,
+It records the next real equality-certificate theorem, the longer theory goals,
 claim boundaries, dependencies, build evidence and new-machine transfer steps.
-The latest mathematical checkpoint is `96aeb922d` (21,413-job full default
-build, warnings as errors). The dated sections below are proof history; their
+The [unification/provenance note](spectral-transport-unification.md) joins the
+regimes and records exact primary-source comparisons. The parity converse
+campaign below advances mathematical checkpoint `96aeb922d`; its final full
+default build passed **21,425 jobs**, with warnings as errors, including the
+upstream dimension-lemma consumption. The dated sections below are proof history; their
 statements of open obligations apply at their recorded checkpoint only.
 
 **Complex nuclear endpoint:** exact general infinite-rank attainment, the
@@ -64,22 +67,26 @@ analogue is already refuted; do not restart it as an unqualified conjecture.
 
 **Real compact Hilbert pairs:** the independent signed-root construction is
 RCLike-generic and a real root attains the projection lower bound. Root
-existence is exactly equivalent to solvability of every independent local
-spectral projection factor. A necessary condition is
+existence now has an exact numerical criterion:
 `4 | finrank_R ker(S-sI)` for every 0<s<1, where S is the sine operator.
-The numerical converse, conversion to principal-side even multiplicity, and
-necessity of the root certificate for all real lower-bound attainers remain
-open. Zero and right angles are exempt from this fourfold obstruction.
+The full nonzero sine eigenspace has twice the dimension of its source-side
+intersection with K, giving an equivalent even-source-multiplicity criterion.
+Right-angle factors exist under defect balance; zero sectors have no free root
+factor. Assembly constructs actual real orthogonal transporters attaining the
+projection nuclear lower bound, finite when Delta is trace class. Necessity of
+the certificate for all real finite-cost equality attainers remains open.
 When roots do not exist the real optimal value may be larger; the unrestricted
 infinite-rank real matching/optimizer theory is a further target.
 
-**Next proof:** on a finite real block with skew-adjoint G, G^2=-c^2 I,
-c>0, and an orthogonal involution J anticommuting with G, prove existence of
-an orthogonal P commuting with G and satisfying PJ+JP=J iff the block dimension
-is divisible by four. Necessity is compiled. The proposed converse uses an
-orthogonal complex structure on the J-fixed half-space; details and exact
-supporting declarations are in the research plan. Then assemble with the
-already proved spectral product criterion.
+**New bridge proved:** a finite real skew-adjoint negative-square G block
+with an anticommuting self-adjoint involution J admits the compatible projection
+iff its dimension is divisible by four. The converse uses an orthogonal complex
+structure on the J-fixed half; the actual spectral half-dimension and infinite
+assembly are also compiled. **Next proof:** derive the signed-root certificate
+from every real finite-cost transporter attaining `||P-Q||_1`. The present
+necessity argument depends on complex-only trace equality and dual calibration.
+Do not infer real necessity from generic root sufficiency. A literal equality
+with finite labelled principal-angle counts is another useful remaining corollary.
 
 The next broader goals are exponent-endpoint family convergence, explicit
 factor geometry/components, nonunique-regime stability and a certified finite
@@ -4090,3 +4097,127 @@ priority upgrades were made.
 Full default verification for this spectral/real layer passed 21,413
 jobs (`/tmp/spectral-real-full.log`), with cache retrieval beforehand.
 All new focused modules and their maintained consumers are included.
+
+## Real parity converse, spectral assembly and provenance — 27 October 2026
+
+This entry supersedes the preceding entry's open numerical real-parity
+converse. The existing complex strict-Schatten, Charbonnier and nuclear
+classifications remain the starting frontier, not unfinished targets.
+
+The new donor
+`ForTauCeti/Analysis/InnerProductSpace/RealSpectralSignExistence.lean` proves
+`TauCeti.exists_spectral_sign_projection_iff_four_dvd_finrank_real`.
+Hypotheses: finite real Hilbert space, `G*=-G`, `G²=-c²I` with c nonzero,
+`J*=J`, `J²=I`, `JG=-GJ`. Conclusion: an orthogonal E commuting with G and
+satisfying `EJ+JE=J` exists iff `4 | finrank_R H`. Normalize G to an orthogonal
+complex structure K₀. On the J-fixed half choose an orthogonal complex
+structure U using the **existing** `AlmostComplexStructure` API, extend it
+by zero to H₀, and set `A=K₀H₀+H₀K₀`, `E=(I+A)/2`. The necessity reuses the
+existing obstruction. The supporting full/half dimension theorem
+`finrank_eq_two_mul_positive_eigenspace_real` is also compiled. These are
+classical linear-algebra constructions, not a discovery claim for complex
+structure parity; the pinned upstream sources were inspected before adding
+the missing compatible-projection theorem.
+
+For actual compact real pairs with a crossed-defect equivalence D,
+`DavisKahan/Geometry/Polar/NuclearRealRootCriteria.lean` now proves the
+following public declarations in `TauCeti.DavisKahan`:
+
+- `finrank_sine_eigenspace_eq_two_mul_source_side_real`: for s nonzero,
+  `dim_R N_s = 2 dim_R(K ∩ N_s)`, literally as an actual subspace comap.
+- `nuclearSignedSineSpectralFactors_nonempty_iff_four_dvd_real`: on each
+  `0<s<1`, the local projection factor is nonempty iff `4 | dim_R N_s`.
+- `nuclearSignedSineSpectralFactors_nonempty_one_real`: the right-angle
+  factor exists. Its restricted VC is zero, and the positive projection of
+  the self-adjoint involution vj supplies the factor. No acute parity test
+  is imposed at s=1.
+- `nuclearSignedSineParameters_nonempty_iff_four_dvd_real`: exact arbitrary-
+  rank root existence iff all the strictly acute full sine dimensions are
+  divisible by four. Existing independent spectral assembly supplies the
+  global root. There is no new infinite-sum infrastructure.
+- `nuclearSignedSineParameters_nonempty_iff_even_source_multiplicity_real`:
+  equivalent criterion in source-side multiplicities. This intrinsic
+  eigenspace half is not yet a new literal equality with the `Nat.card`
+  labelled-angle expression from the finite matching theorem.
+- `exists_real_nuclear_transport_of_sine_parity`: an actual orthogonal T
+  transporting K to L attains the projection nuclear lower bound and is
+  globally minimizing over real competitors. With trace-class Delta this
+  is a finite minimum; with only compact Delta its extended cost may be
+  infinite. The theorem does not conflate the two.
+
+The bridge explains finite real matching parity by orthogonal complex
+structures on the reflection half and extends **root existence** to compact
+infinite-rank pairs. The new exact transport criterion is a potentially novel
+extension within the examined literature, with priority unresolved. It does
+not classify all real minimizers or prove necessity of a real signed root for
+every transporter attaining the finite bound. That last necessity theorem is
+the next consequential target: the current analytic seam is the complex-only
+`ContinuousLinearMap.re_nuclearTrace_eq_nuclearENorm_iff_isPositive_complex`
+and `nuclearTransportDual_trace_calibration_complex`. Either supply their
+correct real counterparts or justify complexification preserving the relevant
+trace/ideal/certificate data. Do not assert a general real strict field gap
+from nonexistence of roots before this implication is established.
+
+`SchattenPhaseMinimum.lean` also now contains
+`phasePower_two_right_angle` and
+`not_tendsto_zero_of_right_angle_subquadratic_minimizers`. At theta=pi/2 the
+quadratic scalar objective is identically four, but exact `1<=p<2` scalar
+minimizers are forced to phase pi/2 and cannot converge to zero. This is a
+compiled endpoint optimizer-approximation obstruction, scoped to scalar
+phases. It does not by itself prove a set-limit theorem for all ambient
+optimizers. Minimum-value continuity was already compiled.
+
+The new [mathematical unification note](spectral-transport-unification.md)
+contains the common ambient optimization problem, the above bridge, a
+conventional logarithmic-curvature scalar transition principle that covers
+the two existing strict scalar proofs, and explicit endpoint exceptions.
+Local curvature alone is insufficient, as an explicit nonnegative polynomial
+penalty demonstrates. These general analytic observations are not advertised
+as a new generic Lean API. The note also gives finite-dimensional smoothing
+value estimates and explains which optimizer-set limits remain open.
+For general penalty feasibility it reuses the existing Schatten/ideal
+transport theorem: positive global comparison with t^q supplies the desired
+finite-cost criterion. Near-zero comparison alone is insufficient if the
+penalty has another zero. No new penalty abstraction or checker was added.
+
+The same note is the source-to-Lean provenance map (T1–T13), separating
+classical assertions/ingredients, formalized corrections, new extensions,
+candidate novelty and open obligations. Primary statements actually inspected
+include Jordan's canonical angular forms; Davis (1958), Theorems 7.1, 7.3,
+7.4; Bolotnikov–Li–Rodman (2001), Problem 1.1, Theorem 3.1, Lemmas 3.2–3.3;
+Qiu–Zhang–Li §5; Zhang–Qiu (2010) §4 p. 1615; Avron–Seiler–Simon index and
+projection identities; Li's nonsingular polar-factor bound; and the distinct
+Lidskii/weighted-Procrustes optimization settings. Kaftal–Loreaux (2017),
+Proposition 2.7(ii), was also directly verified: it is the exact proper-ideal,
+zero-index restricted-unitary feasibility predecessor on separable complex
+Hilbert space. The real/nonseparable hypotheses of our formal theorems remain
+explicit; the underlying ideal criterion is classical. The precise original
+1970 propositions rely on the repository's prior source audit rather than a
+fresh publisher full-text confirmation. Exact Halmos/Bhatia book statements,
+original Sz.-Nagy/Kato statements and the authoritative Aubrun–Szarek
+Exercise B.12 remain explicitly unauthenticated in this review. No absence-of-
+search-result argument is promoted to historical first priority.
+
+Relevant Lean module documentation now records these classical predecessors
+and candidate-extension boundaries. Existing author/proof-provenance headers
+are preserved. No manuscript, visualization, submission, external roadmap,
+or frozen 29-result source-census changes belong to this campaign.
+
+The pinned Tau Ceti source also already supplies
+`AlmostComplexStructure.even_finrank_real`. The duplicate local necessity
+proof is retired and `OrthogonalComplexStructure.lean` consumes the accepted
+theorem directly. Its orthogonal existence converse and the genuinely missing
+compatible-projection theorem remain local. The upstream contribution ledger
+records this as consumption, without inferring DKPS proof descent upstream.
+
+The classical Charbonnier potential was independently checked in the
+author-hosted published 1997 paper, Table I, p. 301. Our smoothing is its
+explicit rescaling; the transport classification, not the penalty itself,
+is the candidate extension. See source S12 in the unification note.
+
+Validation: the focused real-root target passed 7,228 jobs before the upstream
+dimension-lemma consumption. The final full default `lake build` passed
+**21,425 jobs**, with warnings as errors, after that consumption and its
+affected consumers. `lake exe cache get` preceded the build. The final log is
+`/tmp/dkps-unification/full-build-upstream-final.log`; reproducing the proof
+requires the committed sources and pinned Lake inputs, not this temporary log.

@@ -17,6 +17,12 @@ projection with arbitrary reflecting right-defect unitary on the
 remaining angle sector. All competitors are ambient unitaries.
 Finite cost and the block structure are conclusions of optimality.
 No separability, finite-rank pair or angle simplicity is assumed.
+
+The ambient distortion problem and special subquadratic phase phenomena
+precede this classification: Bolotnikov--Li--Rodman (2001), Problem 1.1
+and Lemma 3.3. The exact all-optimizer Hilbert-space statement is a
+candidate extension; historical priority remains unresolved. See
+`dev/spectral-transport-unification.md`, row T5, for the precise boundary.
 -/
 
 public section

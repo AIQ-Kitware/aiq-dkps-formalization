@@ -17,6 +17,13 @@ minimizes the native smoothed trace precisely when it is canonical on
 the infinite inactive tail and its actual finite active restriction has
 the complete phase/defect form. Finite cost and block preservation are
 conclusions, not hypotheses on the unitary being classified.
+
+Charbonnier regularization is an established penalty, and the ambient
+distortion problem is classical (Bolotnikov--Li--Rodman, 2001,
+Problem 1.1). The exact unrestricted Hilbert-space classification here
+is a potentially novel extension, with priority unresolved; see
+`dev/spectral-transport-unification.md`, row T5. The scalar phase
+calculation alone is not the unrestricted-global-optimality argument.
 -/
 
 public section

@@ -13,6 +13,14 @@ public import DavisKahan.Geometry.Polar.NuclearRootConstruction
 The parameters are independent bounded self-adjoint sine roots,
 reflection odd and commuting with the dual times cosine. The forward
 construction is inverted literally, including all exceptional sectors.
+
+The spectral theorem, trace duality, and polar decomposition used in the
+construction are classical ingredients. The precise complete transport
+parametrization is a potentially novel extension, not a priority claim
+for these ingredients or for trace-norm nonminimality of direct rotation
+(already explicit in Zhang--Qiu (2010), Section 4, p. 1615).
+See `dev/spectral-transport-unification.md`, row T6, for verified
+predecessors and the unresolved historical boundary.
 -/
 
 public section

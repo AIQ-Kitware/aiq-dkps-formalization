@@ -1808,3 +1808,23 @@ preserved in the source. A whole maintained-tree search found no external
 consumer or census pin of the removed local formula. The name-drift scan
 retains the same 23 previously recorded unrelated findings. Full default
 and explicit Challenge build evidence is recorded in the research handoff.
+
+## 2026-10-27: consume accepted almost-complex dimension necessity
+
+During the real signed-root parity converse, the pinned accepted Tau Ceti
+revision `b3de655482f7b86c77d8982566e5a73801fd64fa` was inspected directly.
+`TauCeti/Geometry/Symplectic/Finrank.lean` already declares
+`TauCeti.AlmostComplexStructure.even_finrank_real`, without a finite-dimensional
+hypothesis. The local same-name finite-dimensional proof in
+`ForTauCeti/Analysis/InnerProductSpace/OrthogonalComplexStructure.lean` is
+retired; that module now imports and uses the accepted declaration directly.
+Its genuine orthogonal existence converse, paired orthonormal construction
+and compatible-metric facts remain local. The new real compatible-projection
+theorem consumes this existing converse and the accepted dimension necessity.
+
+This records direct consumption and removal of a duplicate, not a submission
+or evidence of DKPS proof descent in the accepted theorem. Upstream integration
+is verified by the actual pinned source; its PR and original proof ancestry
+were not separately audited. The underlying complex-dimension parity fact is
+classical. Mathematical attribution and the transport application are recorded
+in [the unification note](../spectral-transport-unification.md), rows T1/T8.

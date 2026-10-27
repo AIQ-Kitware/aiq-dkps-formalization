@@ -16,6 +16,14 @@ fixed compact sets; on the matching side the set is finite and each
 positive pair is itself a compact scalar minimum. This passage includes
 zero singular values, right angles and every multiplicity. Compact
 attainment supplies an actual ambient nuclear minimizer.
+
+The ambient minimal-distortion problem itself is classical:
+Bolotnikov--Li--Rodman (2001), Problem 1.1. The exact unrestricted real
+matching formula and its endpoint continuation are candidate extensions;
+no equivalent formula was located in the sources examined, and priority
+is unresolved. See `dev/spectral-transport-unification.md`, row T7, for
+the theorem-level comparison, rather than attributing this entire family
+to the classical problem formulation.
 -/
 
 public section

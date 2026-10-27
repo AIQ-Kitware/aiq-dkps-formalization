@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import TauCeti.Geometry.Symplectic.Hermitian
+public import TauCeti.Geometry.Symplectic.Finrank
 public import Mathlib.Analysis.InnerProductSpace.LinearMap
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 public import Mathlib.RingTheory.AlgebraTower
@@ -22,6 +23,8 @@ Thus no replacement norm or parallel complex-module representation is needed.
 
 These are classical compatible-triple facts, used in the real stationary
 transport decomposition; no mathematical novelty is claimed for them.
+The even-dimensional necessity is consumed directly from Tau Ceti's
+`Geometry.Symplectic.Finrank`; only the orthogonal converse is proved here.
 -/
 
 public section
@@ -186,18 +189,6 @@ theorem exists_paired_orthonormalBasis [FiniteDimensional ℝ E]
   refine ⟨Module.finrank ℂ E, e, he0, ?_⟩
   intro i
   rw [← he0, J.apply_apply]
-
-/-- A finite real vector space carrying a complex structure has even
-real dimension. Orthogonality is unnecessary for this obstruction. -/
-theorem even_finrank_real [FiniteDimensional ℝ E] (J : AlmostComplexStructure E) :
-    Even (Module.finrank ℝ E) := by
-  let := J.complexModule
-  let := J.complexModule_isScalarTower
-  refine ⟨Module.finrank ℂ E, ?_⟩
-  calc
-    Module.finrank ℝ E = Module.finrank ℝ ℂ * Module.finrank ℂ E :=
-      (Module.finrank_mul_finrank ℝ ℂ E).symm
-    _ = _ := by rw [Complex.finrank_real_complex]; omega
 
 /-- **Exact finite-dimensional real complex-structure criterion.** A real
 Hilbert multiplicity space admits an orthogonal quarter-turn exactly
