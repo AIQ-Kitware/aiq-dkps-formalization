@@ -7,11 +7,13 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.SchattenRankOneVariation
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
+public import TauCeti.Analysis.Normed.Operator.LinearIsometryEquiv.Topology
+public import Mathlib.Topology.Order.LocalExtr
 
 /-!
 # Constrained Schatten stationarity in arbitrary Hilbert dimension
 
-Finite-cost global minimizers have vanishing rank-one phase variations
+Finite-cost operator-norm local minimizers have vanishing rank-one phase variations
 in the source and its orthogonal complement. Polarization turns those
 scalar identities into the intrinsic reflection/gradient stationarity
 equation. No finite-dimensional trace on the ambient space is used.
@@ -23,21 +25,21 @@ noncomputable section
 
 namespace TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition
 
-open scoped ENNReal InnerProductSpace Topology
+open scoped ENNReal InnerProductSpace Topology TauCeti.LinearIsometryEquivOperatorNorm
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
 /-- The phase-gradient quadratic form vanishes on each feasible unit
-rank-one direction at a finite-cost global minimizer. -/
-theorem re_inner_schatten_gradient_eq_zero_on_unit_directions
+rank-one direction at a finite-cost local minimizer. -/
+theorem re_inner_schatten_gradient_eq_zero_on_unit_directions_of_isLocalMinOn_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
       (1 - (U : E →L[ℂ] E)) ≠ ∞)
-    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
-      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
-        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E)))
+    (hmin : IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U)
     (x : E) (hx : ‖x‖ = 1) (hxK : x ∈ K ∨ x ∈ Kᗮ) :
     (inner ℂ x (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E) x)).re = 0 := by
   let Φ := OperatorIdealFamily.schatten ℂ p.toReal hp1.le
@@ -82,29 +84,45 @@ theorem re_inner_schatten_gradient_eq_zero_on_unit_directions
         rw [hEP.eq]
         noncomm_ring
       _ = _ := by rw [Unitary.mul_star_self_of_mem (hExp s), mul_one, hUproj]
+  have hW0 : W 0 = U := by
+    ext y
+    change A 0 y = U y
+    simp only [A, zero_smul, NormedSpace.exp_zero, mul_one]
+    rfl
+  have hcont : Continuous W := by
+    apply LinearIsometryEquiv.continuous_operatorNorm_iff.mpr
+    change Continuous A
+    let +nondep : NormedAlgebra ℚ (E →L[ℂ] E) := .restrictScalars ℚ ℂ (E →L[ℂ] E)
+    exact continuous_const.mul (NormedSpace.exp_continuous.comp
+      (continuous_id.smul continuous_const))
+  have hcurveNative : IsLocalMin (fun s : ℝ => Φ.gauge (1 - A s)) 0 := by
+    have hloc : IsLocalMinOn
+        (fun T : E ≃ₗᵢ[ℂ] E => Φ.gauge (1 - (T : E →L[ℂ] E)))
+        {T | K.map T.toLinearMap = L} (W 0) := by rwa [hW0]
+    have h := hloc.comp_continuousOn (s := Set.univ)
+      (fun s _ => hWmap s) hcont.continuousOn (Set.mem_univ 0)
+    rwa [IsLocalMinOn, nhdsWithin_univ] at h
   have hcurve : IsLocalMin (fun s : ℝ => (Φ.gauge (1 - A s) ^ p.toReal).toReal) 0 := by
-    apply Filter.Eventually.of_forall
-    intro s
-    have hle := ENNReal.rpow_le_rpow (hmin (W s) (hWmap s)) (zero_lt_one.trans hp1).le
+    filter_upwards [hcurveNative] with s hs
+    have hle := ENNReal.rpow_le_rpow hs (zero_lt_one.trans hp1).le
     have hcost := schatten_unitary_rankOne_variation_ne_top p.toReal hp1.le U hfinite x hx s
-    have hreal := ENNReal.toReal_mono
+    exact ENNReal.toReal_mono
       (ENNReal.rpow_ne_top_of_nonneg (zero_lt_one.trans hp1).le hcost) hle
-    simpa only [A, W, zero_smul, NormedSpace.exp_zero, mul_one] using hreal
   have hd := hasDerivAt_schatten_unitary_rankOne_variation p hp hp1 U hfinite x hx 0
   simp only [zero_smul, NormedSpace.exp_zero, mul_one] at hd
   exact hcurve.hasDerivAt_eq_zero hd
 
 /-- The same quadratic form vanishes on all source and complementary
 directions, with normalization justified explicitly. -/
-theorem re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal
+theorem re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal_of_isLocalMinOn_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
       (1 - (U : E →L[ℂ] E)) ≠ ∞)
-    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
-      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
-        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E)))
+    (hmin : IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U)
     (x : E) (hxK : x ∈ K ∨ x ∈ Kᗮ) :
     (inner ℂ x (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E) x)).re = 0 := by
   by_cases hx0 : x = 0
@@ -118,7 +136,7 @@ theorem re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal
     exact inv_mul_cancel₀ (norm_ne_zero_iff.mpr hx0)
   have hyK : y ∈ K ∨ y ∈ Kᗮ := hxK.imp (fun h => K.smul_mem (r : ℂ) h)
     (fun h => Kᗮ.smul_mem (r : ℂ) h)
-  have h := re_inner_schatten_gradient_eq_zero_on_unit_directions p hp hp1 K L U hmap
+  have h := re_inner_schatten_gradient_eq_zero_on_unit_directions_of_isLocalMinOn_complex p hp hp1 K L U hmap
     hfinite hmin y hy hyK
   have hscale : (inner ℂ y (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E) y)).re =
       r ^ 2 * (inner ℂ x (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E) x)).re := by
@@ -129,18 +147,18 @@ theorem re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal
   exact (mul_eq_zero.mp h).resolve_left (pow_ne_zero _ hr.ne')
 
 /-- **Unrestricted Hilbert-space constrained stationarity.** At a
-finite-cost global Schatten minimizer for any `p>1`, reflection in the
+finite-cost local Schatten minimizer for any `p>1`, reflection in the
 source negates the self-adjoint phase gradient. No rank, separability,
 simple-spectrum or nonzero-displacement assumption is imposed. -/
-theorem gradient_reflection_conjugate_eq_neg_of_schatten_minimal
+theorem gradient_reflection_conjugate_eq_neg_of_schatten_isLocalMinOn_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
       (1 - (U : E →L[ℂ] E)) ≠ ∞)
-    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
-      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
-        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E))) :
+    (hmin : IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U) :
     let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
     ((2 : ℂ) • K.starProjection - 1) * G * ((2 : ℂ) • K.starProjection - 1) = -G := by
   let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
@@ -169,10 +187,10 @@ theorem gradient_reflection_conjugate_eq_neg_of_schatten_minimal
     ext x
     exact LinearMap.congr_fun hzero x
   have hK := hdiag K (fun x hx =>
-    re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal p hp hp1 K L U hmap
+    re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal_of_isLocalMinOn_complex p hp hp1 K L U hmap
       hfinite hmin x (Or.inl hx))
   have hKc := hdiag Kᗮ (fun x hx =>
-    re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal p hp hp1 K L U hmap
+    re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal_of_isLocalMinOn_complex p hp hp1 K L U hmap
       hfinite hmin x (Or.inr hx))
   rw [Submodule.starProjection_orthogonal'] at hKc
   change ((2 : ℂ) • K.starProjection - 1) * G * ((2 : ℂ) • K.starProjection - 1) = -G
@@ -183,5 +201,59 @@ theorem gradient_reflection_conjugate_eq_neg_of_schatten_minimal
       simp only [two_smul]
       noncomm_ring
     _ = -G := by rw [hK, hKc]; simp
+
+/-- Global optimality implies the local stationarity identity. -/
+theorem re_inner_schatten_gradient_eq_zero_on_unit_directions
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
+    (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (1 - (U : E →L[ℂ] E)) ≠ ∞)
+    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E)))
+    (x : E) (hx : ‖x‖ = 1) (hxK : x ∈ K ∨ x ∈ Kᗮ) :
+    (inner ℂ x (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E) x)).re = 0 := by
+  exact re_inner_schatten_gradient_eq_zero_on_unit_directions_of_isLocalMinOn_complex p hp hp1 K L U hmap hfinite
+    (show IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U
+      from fun T hT => hmin T hT).isLocalMinOn x hx hxK
+
+/-- Global optimality implies the local stationarity identity. -/
+theorem re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
+    (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (1 - (U : E →L[ℂ] E)) ≠ ∞)
+    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E)))
+    (x : E) (hxK : x ∈ K ∨ x ∈ Kᗮ) :
+    (inner ℂ x (schattenUnitaryGradient p.toReal (U : E →L[ℂ] E) x)).re = 0 := by
+  exact re_inner_schatten_gradient_eq_zero_on_source_or_orthogonal_of_isLocalMinOn_complex p hp hp1 K L U hmap hfinite
+    (show IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U
+      from fun T hT => hmin T hT).isLocalMinOn x hxK
+
+/-- Global optimality implies the local stationarity identity. -/
+theorem gradient_reflection_conjugate_eq_neg_of_schatten_minimal
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞) (hp1 : 1 < p.toReal)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
+    (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (1 - (U : E →L[ℂ] E)) ≠ ∞)
+    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E))) :
+    let G := schattenUnitaryGradient p.toReal (U : E →L[ℂ] E)
+    ((2 : ℂ) • K.starProjection - 1) * G * ((2 : ℂ) • K.starProjection - 1) = -G := by
+  exact gradient_reflection_conjugate_eq_neg_of_schatten_isLocalMinOn_complex p hp hp1 K L U hmap hfinite
+    (show IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U
+      from fun T hT => hmin T hT).isLocalMinOn
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition

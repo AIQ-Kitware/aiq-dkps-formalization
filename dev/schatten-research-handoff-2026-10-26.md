@@ -2799,3 +2799,31 @@ full default `lake build` passed 21,333 jobs
 passed 19,755 jobs (`/tmp/charbonnier-local-final-challenge.log`). Each build
 was preceded by `lake exe cache get`. All preceding focused endpoints
 were accepted without increasing heartbeat limits or disabling linters.
+
+## Strict Schatten local-landscape campaign: analytic and restriction seams
+
+`TauCeti.exists_schatten_locally_minimizing_reducing_restriction` and its
+finite specialization now descend operator-norm local minimality of the
+native Schatten gauge to actual reducing sectors over either scalar
+field, for every finite real exponent at least one. Both sectors can be
+infinite. The proof uses exact additivity of the positive powered gauge,
+finite tail cancellation and strict monotonicity of that positive power.
+Restricted native cost is proved finite.
+
+`SchattenStationarity.gradient_reflection_conjugate_eq_neg_of_schatten_isLocalMinOn_complex`
+now proves native finite-cost local stationarity for every `p>1` in
+arbitrary complete complex Hilbert dimension. The rank-one curve remains
+in the exact transport fiber and has finite native cost at every
+parameter; the proved native first variation includes zero displacement.
+The existing global APIs now specialize the local identities.
+
+`SchattenNativeLocalGlobal.schatten_power_isMin_of_isLocalMinOn_complex`
+and `schatten_isMin_of_isLocalMinOn_finite_complex` transfer native local
+optimality in the actual operator-norm unitary group to the complete
+finite real landscape for `1<p<2`, including all angle degeneracies.
+The accepted embedding's exact neighborhood image is used. Focused
+restriction/stationarity and finite-transfer builds passed 6,908 and
+7,390 jobs respectively. The infinite local-to-global result is not yet
+claimed: the next dependency is local finite gradient cutoffs, preserving
+the existing global cutoff API's broader `p>1` scope rather than silently
+adding a `p<2` hypothesis to it. Paper and visualizations untouched.
