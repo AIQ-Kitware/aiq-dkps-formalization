@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 -/
 module
 
-public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenOptimizerAngles
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenLocalFixed
 public import DavisKahan.Geometry.Polar.CanonicalCutoffTail
 public import DavisKahan.FiniteDimensional.DirectRotation.SchattenCanonicalUniqueness
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.GapThreshold
@@ -13,7 +13,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Projection.GapThreshold
 /-!
 # Closed-threshold uniqueness in arbitrary Hilbert dimension
 
-Every finite-cost global optimizer is canonical when the projection gap
+Every finite-cost local optimizer is canonical when the projection gap
 is at most the critical sine. Compact sine cutoffs inherit finite
 optimality; finite canonical uniqueness applies on each. Kernel and
 spectral completeness retain arbitrary fixed ambient directions.
@@ -26,23 +26,23 @@ noncomputable section
 namespace TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition
 
 open FiniteDimensional.SchattenPhaseTransition
-open scoped ENNReal
+open scoped ENNReal TauCeti.LinearIsometryEquivOperatorNorm
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
-/-- Below and at the critical sine, every finite-cost global optimizer
+/-- Below and at the critical sine, every finite-cost local optimizer
 is the canonical polar rotation. Infinite rank, angle multiplicities,
 zero angles and arbitrary fixed ambient directions are included. -/
-theorem eq_canonicalPolarFactor_of_schatten_minimal_of_gap_le_critical
+theorem eq_canonicalPolarFactor_of_schatten_isLocalMinOn_of_gap_le_critical_complex
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
       (1 - (U : E →L[ℂ] E)) ≠ ∞)
-    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
-      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
-        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E)))
+    (hmin : IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U)
     (hgap : K.projectionGap L ≤ Real.sin (criticalAngle p.toReal)) :
     (U : E →L[ℂ] E) = spectraCanonicalPolarFactor K L := by
   have hcrit := criticalAngle_mem p.toReal hp1 hp2
@@ -70,7 +70,7 @@ theorem eq_canonicalPolarFactor_of_schatten_minimal_of_gap_le_critical
       rw [Submodule.sinAngleOperator_def, ContinuousLinearMap.singularValue_modulus]
     rw [hseq]
     exact hD.tendsto_singularValue
-  have hUS := commute_sinAngleOperator_of_schatten_minimal p hp hp1 hp2 K L U hmap hfinite hmin
+  have hUS := commute_sinAngleOperator_of_schatten_isLocalMinOn_complex p hp hp1 hp2 K L U hmap hfinite hmin
   rw [← hRpolar]
   apply eq_of_eq_on_ker_and_positive_eigenSpans hSc
     (K.isPositive_sinAngleOperator L).isSelfAdjoint
@@ -80,15 +80,15 @@ theorem eq_canonicalPolarFactor_of_schatten_minimal_of_gap_le_critical
       have h := K.norm_sinAngleOperator_apply L x
       rw [show S x = 0 from hx, norm_zero] at h
       exact sub_eq_zero.mp (norm_eq_zero.mp h.symm)
-    exact (apply_eq_self_of_projections_eq_of_schatten_minimal_of_commute p.toReal hp1.le
-      K L U hmap hfinite hmin hUS x hPQ).trans
+    exact (apply_eq_self_of_projections_eq_of_schatten_isLocalMinOn_complex p hp hp1 hp2
+      K L U hmap hfinite hmin x hPQ).trans
         (nonacuteDirectRotation_apply_eq_self_of_projections_eq K L J x hPQ).symm
   · intro ε hε x hx
     let M := eigenSpan S (Set.Ioi ε)
     obtain ⟨hM, hK, hL, _⟩ := finite_sine_spectral_cutoff K L hD ε hε
     let : FiniteDimensional ℂ M := hM
     have hUM : ∀ y ∈ M, U y ∈ M := eigenSpan_invariant_of_commute S _ hUS _
-    obtain ⟨V, hV, hlocal, hVmin⟩ := exists_schatten_minimizing_finite_restriction
+    obtain ⟨V, hV, hlocal, _, hVmin⟩ := exists_schatten_locally_minimizing_finite_restriction
       p.toReal hp1.le K L M U hmap hfinite hmin hK hUM
     have hRred := sine_spectral_cutoff_isReducing_nonacuteDirectRotation K L J hD ε hε
     let R' := Unitary.linearIsometryEquiv
@@ -107,6 +107,8 @@ theorem eq_canonicalPolarFactor_of_schatten_minimal_of_gap_le_critical
     have hacute₀ : IsUniformlyAcute K₀ L₀ := hgap₀.trans_lt hs1
     have hz₀ := halmosSourceDefect_eq_bot_of_isUniformlyAcute K₀ L₀ hacute₀
     have hz₀' := halmosTargetDefect_eq_bot_of_isUniformlyAcute K₀ L₀ hacute₀
+    have hVglobal := schatten_isMin_of_isLocalMinOn_finite_complex
+      p hp hp1 hp2 K₀ L₀ V hlocal hVmin
     have hmin' : IsMinOn
         (fun T : M →L[ℂ] M => UnitarilyInvariantSeminorm.schatten ℂ M M p
           (LinearMap.id - T.toLinearMap) ^ p.toReal)
@@ -114,7 +116,7 @@ theorem eq_canonicalPolarFactor_of_schatten_minimal_of_gap_le_critical
         (V : M →L[ℂ] M) := by
       intro T hT
       let T' := Unitary.linearIsometryEquiv (⟨T, hT.1⟩ : unitary (M →L[ℂ] M))
-      have h := ENNReal.rpow_le_rpow (hVmin T'
+      have h := ENNReal.rpow_le_rpow (hVglobal T'
         ((map_eq_iff_conjugate_starProjection_complex K₀ L₀ ⟨T, hT.1⟩).mpr hT.2))
           (zero_lt_one.trans hp1).le
       rw [OperatorIdealFamily.gauge_schatten_rpow_eq_ofReal_finite p hp,
@@ -135,5 +137,24 @@ theorem eq_canonicalPolarFactor_of_schatten_minimal_of_gap_le_critical
       _ = (W ⟨x, hx⟩ : E) := congrArg Subtype.val
         (congrArg (fun T : M →L[ℂ] M => T ⟨x, hx⟩) hVW)
       _ = R x := hW _
+
+/-- Global canonical rigidity follows from closed-threshold local rigidity. -/
+theorem eq_canonicalPolarFactor_of_schatten_minimal_of_gap_le_critical
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
+    (hfinite : (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+      (1 - (U : E →L[ℂ] E)) ≠ ∞)
+    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
+        (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E)))
+    (hgap : K.projectionGap L ≤ Real.sin (criticalAngle p.toReal)) :
+    (U : E →L[ℂ] E) = spectraCanonicalPolarFactor K L := by
+  exact eq_canonicalPolarFactor_of_schatten_isLocalMinOn_of_gap_le_critical_complex p hp hp1 hp2 K L U hmap hfinite
+    (show IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E))) {T | K.map T.toLinearMap = L} U
+      from fun T hT => hmin T hT).isLocalMinOn hgap
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition

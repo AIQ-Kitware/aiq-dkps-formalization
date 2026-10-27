@@ -2855,3 +2855,43 @@ common zero-angle directions, followed by closed-threshold inactive-tail
 rigidity. Compact reflection support and the finite native landscape are
 available to discharge it; none of those infinite conclusions is inferred
 from no mixing alone. Paper and visualization files remain untouched.
+
+## Hilbert strict Schatten finite-cost local-to-global
+
+`SchattenLocalFixed.eq_one_of_schatten_isLocalMinOn_self_transport_complex`
+proves identity is the only finite-cost operator-norm self-transport
+local minimum for `1<p<2`. The proof retains the entire gradient kernel,
+uses its actual self-adjoint restriction and compact reflecting support,
+and applies the finite native landscape on that support and on all
+positive gradient cutoffs. This yields
+`apply_eq_self_of_projections_eq_of_schatten_isLocalMinOn_complex` for
+all common-source and common-orthogonal directions in arbitrary dimension.
+
+The closed critical regime and entire inactive tail are now rigid for
+finite-cost **local** minima via
+`eq_canonicalPolarFactor_of_schatten_isLocalMinOn_of_gap_le_critical_complex`
+and
+`apply_eq_nonacuteDirectRotation_on_inactive_tail_of_schatten_isLocalMinOn_complex`.
+Their existing global endpoints specialize these stronger results.
+The exact closed cutoff is still `cos(theta_c)=(2-p)/p`.
+
+`SchattenLocalGlobal.schatten_isMin_of_isLocalMinOn_complex` now proves
+every finite-cost operator-norm local minimum is globally minimizing
+over all ambient complex unitary transporters, including infinite-cost
+competitors, for `1<p<2` on any complete Hilbert space. There is no
+standing separability, finite-rank, simple-angle, prescribed-tail or
+index assumption: finite native feasibility supplies the projection
+ideal and defect balance. The companion
+`schatten_isLocalMinOn_iff_isMinOn_of_finite_cost_complex` is the exact
+local/global iff on the finite-cost part of the fiber. Focused fixed,
+canonical-tail and final endpoint builds passed 7,548, 8,024 and 8,030
+jobs respectively. Historical priority remains independent of compilation.
+
+Still to close at this checkpoint: classify infinite-cost local minima.
+The existing compact-relative transport approximation is enough to
+prove that, within a finitely feasible fiber, compact-displacement local
+minima cannot have infinite Schatten cost. Noncompact displacements
+instead give open infinite-cost plateaus. The intended unconditional
+landscape is local iff global or noncompact displacement; the finite-cost
+implication alone does not yet establish this equivalence. Paper and
+visualization files remain untouched.
