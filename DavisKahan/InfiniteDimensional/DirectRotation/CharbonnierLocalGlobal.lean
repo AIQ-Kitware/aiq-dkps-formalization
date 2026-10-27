@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierOptimizerClassification
-public import ForTauCeti.Analysis.InnerProductSpace.CharbonnierInfiniteLocal
+public import ForTauCeti.Analysis.InnerProductSpace.CharbonnierTransportDensity
 
 /-!
 # No nonglobal finite-cost Hilbert Charbonnier local minima
@@ -91,5 +91,48 @@ theorem charbonnier_isLocalMinOn_iff_isMinOn_of_finite_cost_complex
   · intro hmin
     exact fun T hT => charbonnier_isMin_of_isLocalMinOn_complex tau hτ K L U hmap hfinite hmin T hT
   · exact IsMinOn.isLocalMinOn
+
+/-- **Complete extended-cost landscape.** Every operator-norm local
+minimum is either globally minimizing or has noncompact displacement.
+Conversely, every global minimizer and every noncompact-displacement
+transporter is locally minimizing. There are no standing feasibility,
+ideal, index, rank or separability assumptions. Noncompact points lie on
+open infinite-cost plateaus, rather than representing finite-cost traps. -/
+theorem charbonnier_isLocalMinOn_iff_global_or_noncompact_complex
+    (tau : ℝ) (hτ : 0 < tau)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L) :
+    IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+      {T | K.map T.toLinearMap = L} U ↔
+    IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+      {T | K.map T.toLinearMap = L} U ∨
+      ¬ IsCompactOperator ((1 - (U : E →L[ℂ] E)) : E →L[ℂ] E) := by
+  classical
+  constructor
+  · intro hmin
+    by_cases hcompact : IsCompactOperator ((1 - (U : E →L[ℂ] E)) : E →L[ℂ] E)
+    · left
+      by_cases hfeasible : ∃ R : E ≃ₗᵢ[ℂ] E, K.map R.toLinearMap = L ∧
+          (1 - (R : E →L[ℂ] E)).charbonnierCost tau ≠ ∞
+      · obtain ⟨R, hRmap, hRfinite⟩ := hfeasible
+        have hfinite := charbonnierCost_displacement_ne_top_of_isLocalMinOn_of_compact
+          tau hτ K L R U hRmap hmap hRfinite hcompact hmin
+        exact (charbonnier_isLocalMinOn_iff_isMinOn_of_finite_cost_complex
+          tau hτ K L U hmap hfinite).mp hmin
+      · have htop (T : E ≃ₗᵢ[ℂ] E) (hT : K.map T.toLinearMap = L) :
+            (1 - (T : E →L[ℂ] E)).charbonnierCost tau = ∞ := by
+          by_contra hfinite
+          exact hfeasible ⟨T, hT, hfinite⟩
+        intro T hT
+        change (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≤
+          (1 - (T : E →L[ℂ] E)).charbonnierCost tau
+        rw [htop U hmap, htop T hT]
+    · exact Or.inr hcompact
+  · rintro (hglobal | hnoncompact)
+    · exact hglobal.isLocalMinOn
+    · exact (isLocalMin_charbonnierCost_of_not_isCompactOperator
+        tau hτ U hnoncompact).isLocalMinOn _
 
 end TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition

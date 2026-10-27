@@ -9,13 +9,15 @@ public import ForTauCeti.Analysis.InnerProductSpace.SchattenUnitaryApproximation
 public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenFinite
 
 /-!
-# Finite-rank updates inside an exact Schatten transport fiber
+# Finite-rank updates inside exact operator transport fibers
 
 Two Schatten perturbations of identity transporting the same source
 operator to the same target differ by a source-commuting unitary factor.
 Truncate that factor while preserving its commutant and multiply by the
 reference transporter. The resulting finite-rank updates stay in the
-original fiber and converge in Schatten norm.
+original fiber and converge in Schatten norm. More generally, compact
+relative displacement suffices for operator-norm density of finite-rank
+updates, even when neither transporter is near identity.
 
 ## Provenance
 
@@ -56,6 +58,69 @@ private theorem unitary_conjugate_iff_intertwines
     ext x
     change U (P (U.symm x)) = Q x
     rw [h, U.apply_symm_apply]
+
+/-- Every compact relative displacement within an exact bounded-operator
+transport fiber is an operator-norm limit of finite-rank updates of the
+reference. Neither unitary need itself be near identity. -/
+theorem exists_compact_transport_finite_update_sequence
+    (P Q : E →L[𝕜] E) (R U : E ≃ₗᵢ[𝕜] E)
+    (hcompact : IsCompactOperator
+      (((U : E →L[𝕜] E) - (R : E →L[𝕜] E)) : E →L[𝕜] E))
+    (hRP : (R : E →L[𝕜] E) * P * star (R : E →L[𝕜] E) = Q)
+    (hUP : (U : E →L[𝕜] E) * P * star (U : E →L[𝕜] E) = Q) :
+    ∃ V : ℕ → E ≃ₗᵢ[𝕜] E, ∃ N : ℕ → ℕ,
+      (∀ n, (V n : E →L[𝕜] E) * P * star (V n : E →L[𝕜] E) = Q) ∧
+      (∀ n, ((R : E →L[𝕜] E) - (V n : E →L[𝕜] E)).rank ≤ N n) ∧
+      Tendsto (fun n => (V n : E →L[𝕜] E)) atTop (𝓝 (U : E →L[𝕜] E)) := by
+  let Z := U.trans R.symm
+  have hZfac : (Z : E →L[𝕜] E) - 1 =
+      (R.symm : E →L[𝕜] E) ∘L ((U : E →L[𝕜] E) - (R : E →L[𝕜] E)) := by
+    ext x
+    change R.symm (U x) - x = R.symm (U x - R x)
+    rw [map_sub, R.symm_apply_apply]
+  have hZ : IsCompactOperator (((Z : E →L[𝕜] E) - 1) : E →L[𝕜] E) := by
+    rw [hZfac]
+    exact hcompact.clm_comp (R.symm : E →L[𝕜] E)
+  have hRP' := (unitary_conjugate_iff_intertwines R P Q).mp hRP
+  have hUP' := (unitary_conjugate_iff_intertwines U P Q).mp hUP
+  have hZP : Commute (Z : E →L[𝕜] E) P := by
+    ext x
+    change R.symm (U (P x)) = P (R.symm (U x))
+    apply R.injective
+    rw [R.apply_symm_apply, hUP', hRP', R.apply_symm_apply]
+  obtain ⟨S, N, hN, hlim, _, _, _, hcomm⟩ :=
+    exists_finite_unitary_approximation_sequence Z hZ
+  let V (n : ℕ) := (S n).trans R
+  have hVfac (n : ℕ) : (V n : E →L[𝕜] E) = (R : E →L[𝕜] E) * (S n : E →L[𝕜] E) := by
+    ext x
+    rfl
+  have hRZ : (R : E →L[𝕜] E) * (Z : E →L[𝕜] E) = (U : E →L[𝕜] E) := by
+    ext x
+    exact R.apply_symm_apply (U x)
+  refine ⟨V, N, ?_, ?_, ?_⟩
+  · intro n
+    apply (unitary_conjugate_iff_intertwines (V n) P Q).mpr
+    intro x
+    have hScomm := congrArg (fun T : E →L[𝕜] E => T x) (hcomm n P hZP).eq
+    change S n (P x) = P (S n x) at hScomm
+    change R (S n (P x)) = Q (R (S n x))
+    rw [hScomm, hRP']
+  · intro n
+    have hfac : (R : E →L[𝕜] E) - (V n : E →L[𝕜] E) =
+        (R : E →L[𝕜] E) ∘L (1 - (S n : E →L[𝕜] E)) := by
+      ext x
+      change R x - R (S n x) = R (x - S n x)
+      rw [map_sub]
+    rw [hfac]
+    have h := LinearMap.lift_rank_comp_le_right
+      (1 - (S n : E →L[𝕜] E)).toLinearMap (R : E →L[𝕜] E).toLinearMap
+    have h' : ((R : E →L[𝕜] E) ∘L (1 - (S n : E →L[𝕜] E))).rank ≤
+        (1 - (S n : E →L[𝕜] E)).rank := by
+      simpa only [Cardinal.lift_id, ContinuousLinearMap.toLinearMap_comp] using h
+    exact h'.trans (hN n)
+  · simp_rw [hVfac]
+    rw [← hRZ]
+    exact hlim.const_mul (R : E →L[𝕜] E)
 
 /-- Finite-rank updates of any feasible Schatten transporter are dense
 in its exact transport fiber in Schatten norm. Every approximant has

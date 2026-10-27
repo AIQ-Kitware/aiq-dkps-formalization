@@ -2714,3 +2714,35 @@ exact transport fiber, of finite-cost finite-rank updates of a fixed
 finite-cost reference near every compact-displacement transporter. The
 existing compact-unitary approximation preserves all commutants, so this
 is an unblocked route to a complete (extended-cost) landscape iff.
+
+## Complete native extended-cost local landscape
+
+`CharbonnierLocalGlobal.charbonnier_isLocalMinOn_iff_global_or_noncompact_complex`
+now classifies **every** operator-norm local minimum, including infinite
+cost, with no standing feasibility, ideal or index assumptions:
+for a feasible ambient complex transporter U, local optimality iff
+U is globally optimal **or** `1-U` is noncompact. Noncompact displacements
+lie on open infinite-cost plateaus. When finite cost is infeasible, every
+feasible transporter is already an infinite-cost global minimum. Thus the
+statement covers both feasibility regimes and does not misidentify the
+infinite plateaus as finite-cost traps.
+
+The missing compact infinite-cost case is discharged constructively.
+`TauCeti.exists_compact_transport_finite_update_sequence` proves operator-norm
+density of finite-rank updates of R near U in an exact bounded-operator
+transport fiber whenever `U-R` is compact. Neither unitary itself need be
+near identity; source and target bounded operators need not be projections,
+and both scalar fields are included. Accepted compact unitary approximation
+preserves the full commutant, hence preserves the exact target.
+
+`exists_charbonnier_transport_finite_update_sequence` then approximates every
+compact-displacement transporter in a finitely feasible fiber by actual
+finite-cost finite-rank updates of a chosen finite-cost reference.
+`charbonnierCost_displacement_ne_top_of_isLocalMinOn_of_compact` proves, over
+both fields, that compact-displacement local minima in such a fiber must
+have finite cost. The proof needs no native trace continuity or convergence
+of the objective values: eventual local comparison with any of the finite
+approximants suffices. Combined with the finite-cost complex landscape,
+this yields the unconditional exact local/global/noncompact iff above.
+Paper and visualizations remain untouched; no historical-priority claim is
+inferred from the formal landscape result.
