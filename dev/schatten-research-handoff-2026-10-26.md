@@ -2995,3 +2995,26 @@ and names were preserved; new fixed-complex endpoints carry `_complex`.
 No heartbeat limits or lint settings were relaxed. Earlier chronological
 paragraphs identifying these strict local-to-global and extended-cost
 landscape results as open are superseded by the endpoints above.
+
+## Nuclear infinite-rank campaign: exact modulus-split cost
+
+`ContinuousLinearMap.gauge_schatten_rpow_add_of_selfAdjoint_mul_eq_zero`
+now proves exact native Schatten-power additivity for self-adjoint
+operators with zero product, over either field, without compactness or
+finite-cost assumptions. The proof identifies the actual reducing
+kernel/complement sectors and consumes the established block trace API.
+
+`gauge_schatten_rpow_modulus_add_of_unitary_odd` proves that if unitary
+conjugation negates a self-adjoint A, its two modulus splits have equal
+cost and orthogonal supports, with
+`||2 A||_p^p = 2 || |A|+A ||_p^p` for every finite real `p>=1`.
+`gauge_nuclear_modulus_add_of_unitary_odd` gives the exact endpoint identity
+`|| |A|+A ||_1 = ||A||_1`. Infinite values and arbitrary ambient kernels
+are included. Unitary conjugation of the modulus is proved using the
+existing Gram-conjugation/modulus API, rather than a new spectral basis.
+
+Next: apply the identity to the self-adjoint imaginary part of completed
+direct rotation, whose modulus is the projection sine operator. The
+candidate `R (C + i S)` should be an explicit global nuclear attainer.
+The exact infinite-rank attainment theorem is not yet claimed at this
+foundation checkpoint. Paper and visualizations remain untouched.
