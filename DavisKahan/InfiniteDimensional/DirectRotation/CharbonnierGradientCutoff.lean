@@ -6,12 +6,13 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierStationarity
-public import ForTauCeti.Analysis.InnerProductSpace.CharbonnierMinimizerRestriction
+public import ForTauCeti.Analysis.InnerProductSpace.CharbonnierLocalRestriction
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.AnticommutingModulus
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNonacuteClassification
+public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedNativeLocalGlobal
 
 /-!
-# Finite spectral sectors of every Hilbert-space Charbonnier optimizer
+# Finite spectral sectors of every Hilbert-space Charbonnier local minimum
 
 Constrained stationarity makes the gradient modulus commute with the
 source projection. Its positive spectral cutoffs are finite and reduce
@@ -27,7 +28,7 @@ noncomputable section
 namespace TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition
 
 open FiniteDimensional.SmoothedPhaseTransition
-open scoped ENNReal
+open scoped ENNReal TauCeti.LinearIsometryEquivOperatorNorm
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
@@ -36,14 +37,14 @@ optimizer.** Every positive gradient-modulus cutoff reduces both
 projections and the minimizing unitary, carries its actual forward and
 inverse restrictions, and inherits unrestricted finite optimality.
 Only the gradient, rather than displacement, is bounded on its tail. -/
-theorem exists_charbonnier_minimizing_restriction_on_gradient_cutoff
+theorem exists_charbonnier_minimizing_restriction_on_gradient_cutoff_of_isLocalMinOn_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (hfinite : (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≠ ∞)
-    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
-      (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≤
-        (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+    (hmin : IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+      {T | K.map T.toLinearMap = L} U)
     (ε : ℝ) (hε : 0 < ε) :
     let G := smoothedUnitaryGradient tau (U : E →L[ℂ] E)
     let M := eigenSpan G.modulus (Set.Ioi ε)
@@ -84,7 +85,7 @@ theorem exists_charbonnier_minimizing_restriction_on_gradient_cutoff
   let : FiniteDimensional ℂ M := hM
   have hPA : Commute K.starProjection A :=
     K.commute_starProjection_modulus_of_reflection_conjugate_eq_neg G hG
-      (gradient_reflection_conjugate_eq_neg_of_charbonnier_minimal tau hτ K L U hmap hfinite hmin)
+      (gradient_reflection_conjugate_eq_neg_of_charbonnier_isLocalMinOn_complex tau hτ K L U hmap hfinite hmin)
   have hK : M.IsReducing K.starProjection.toLinearMap := by
     apply (K.starProjection_isSymmetric.isReducing_iff_mem_invtSubmodule M).mpr
     exact eigenSpan_invariant_of_commute A K.starProjection hPA _
@@ -96,7 +97,7 @@ theorem exists_charbonnier_minimizing_restriction_on_gradient_cutoff
     exact hUG.mul_right hUG
   have hUM : ∀ x ∈ M, U x ∈ M := eigenSpan_invariant_of_commute A _ hUA _
   obtain ⟨_, _, _, hUred⟩ := U.exists_restriction_of_finite_invariant M hUM
-  obtain ⟨V, hV, hlocal, hVmin⟩ := exists_charbonnier_minimizing_finite_restriction tau hτ
+  obtain ⟨V, hV, hlocal, _, hVmin⟩ := exists_charbonnier_locally_minimizing_finite_restriction tau hτ
     K L M U hmap hfinite hmin hK hUM
   have hL : M.IsReducing L.starProjection.toLinearMap := by
     apply (L.starProjection_isSymmetric.isReducing_iff_mem_invtSubmodule M).mpr
@@ -119,19 +120,36 @@ theorem exists_charbonnier_minimizing_restriction_on_gradient_cutoff
   · intro x
     apply U.injective
     rw [← hV, V.apply_symm_apply, U.apply_symm_apply]
-  · intro W hW
-    have hcost (X : M ≃ₗᵢ[ℂ] M) : (1 - (X : M →L[ℂ] M)).charbonnierCost tau =
-        ENNReal.ofReal (smoothedDisplacementCost tau X.toLinearMap) := by
-      rw [ContinuousLinearMap.charbonnierCost_eq_ofReal_sum tau hτ.le]
-      rfl
-    have hnonneg : 0 ≤ smoothedDisplacementCost tau W.toLinearMap := by
-      unfold smoothedDisplacementCost
-      apply Finset.sum_nonneg
-      intro i _
-      exact sub_nonneg.mpr (Real.le_sqrt_of_sq_le
-        (by nlinarith [sq_nonneg ((LinearMap.id - W.toLinearMap).singularValues i)]))
-    have h := hVmin W hW
-    rw [hcost, hcost] at h
-    exact (ENNReal.ofReal_le_ofReal_iff hnonneg).mp h
+  · exact smoothed_isMin_of_charbonnier_isLocalMinOn_complex tau hτ
+      (K.comap M.subtype) (L.comap M.subtype) V hlocal hVmin
+
+/-- Global optimality is a special case of the local cutoff theorem. -/
+theorem exists_charbonnier_minimizing_restriction_on_gradient_cutoff
+    (tau : ℝ) (hτ : 0 < tau)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
+    (hfinite : (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≠ ∞)
+    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≤
+        (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+    (ε : ℝ) (hε : 0 < ε) :
+    let G := smoothedUnitaryGradient tau (U : E →L[ℂ] E)
+    let M := eigenSpan G.modulus (Set.Ioi ε)
+    ∃ hM : FiniteDimensional ℂ M,
+      let _ : FiniteDimensional ℂ M := hM
+      M.IsReducing K.starProjection.toLinearMap ∧
+      M.IsReducing L.starProjection.toLinearMap ∧ M.IsReducing U.toLinearMap ∧
+      ‖G ∘L Mᗮ.subtypeL‖ ≤ ε ∧
+      ∃ V : M ≃ₗᵢ[ℂ] M,
+        (∀ x : M, (V x : E) = U x) ∧ (∀ x : M, (V.symm x : E) = U.symm x) ∧
+        (K.comap M.subtype).map V.toLinearMap = L.comap M.subtype ∧
+        ∀ W : M ≃ₗᵢ[ℂ] M,
+          (K.comap M.subtype).map W.toLinearMap = L.comap M.subtype →
+          smoothedDisplacementCost tau V.toLinearMap ≤
+            smoothedDisplacementCost tau W.toLinearMap := by
+  exact exists_charbonnier_minimizing_restriction_on_gradient_cutoff_of_isLocalMinOn_complex tau hτ K L U hmap hfinite
+    (show IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+      {T | K.map T.toLinearMap = L} U from fun T hT => hmin T hT).isLocalMinOn ε hε
 
 end TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition

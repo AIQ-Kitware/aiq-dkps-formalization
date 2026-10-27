@@ -2636,3 +2636,32 @@ operator using positive gradient cutoffs and the whole gradient kernel,
 and establish canonical zero/closed-subcritical action before applying
 the complete global optimizer iff. The topology is operator norm, not
 an unspecified Schatten topology. Paper and visualization files untouched.
+
+## Native finite landscape transfer and local angle preservation
+
+`SmoothedNativeLocalGlobal.smoothed_isMin_of_charbonnier_isLocalMinOn_complex`
+and `charbonnier_isMin_of_isLocalMinOn_finite_complex` connect actual
+operator-norm unitary local minima of the native extended trace to the
+complete finite real landscape theorem, including all angle endpoints.
+The proof uses the accepted operator-norm embedding and its exact
+`map_nhdsWithin_eq`, plus the nonnegative finite cost identity. Giving the
+implicit competitor explicitly in the final `IsMinOn` application avoids
+expansion of singular-value constructions during representation inference;
+no heartbeat increase was needed.
+
+`CharbonnierGradientCutoff.exists_charbonnier_minimizing_restriction_on_gradient_cutoff_of_isLocalMinOn_complex`
+now extracts an actual finite **global** optimizer on every positive
+gradient-modulus cutoff of a finite-cost ambient local minimum. The whole
+zero-gradient kernel is retained. With its algebraic self-adjoint kernel
+restriction, compact spectral completeness proves
+`CharbonnierOptimizerAngles.commute_sinAngleOperator_of_charbonnier_isLocalMinOn_complex`:
+every finite-cost operator-norm local minimum preserves the intrinsic
+principal-sine operator. The previous global endpoints specialize these
+stronger local results, without duplicate underlying proofs.
+Focused finite-transfer/local-cutoff/angle build passed 7,556 jobs.
+
+Still open at this checkpoint: local fixed common directions and canonical
+inactive tails. Local angle preservation alone does not identify action
+on the zero-angle sector. The next proof must retain the finite reflecting
+support of the full zero-gradient kernel and apply finite local-to-global
+rigidity, before concluding any infinite local-to-global theorem.

@@ -25,21 +25,21 @@ noncomputable section
 namespace TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition
 
 open FiniteDimensional.SmoothedPhaseTransition
-open scoped ENNReal
+open scoped ENNReal TauCeti.LinearIsometryEquivOperatorNorm
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
-/-- Every finite-cost global complex Charbonnier optimizer commutes with
+/-- Every finite-cost local complex Charbonnier optimizer commutes with
 the intrinsic sine-angle operator in arbitrary Hilbert dimension.
 In particular unequal angle sectors cannot mix. -/
-theorem commute_sinAngleOperator_of_charbonnier_minimal
+theorem commute_sinAngleOperator_of_charbonnier_isLocalMinOn_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (hfinite : (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≠ ∞)
-    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
-      (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≤
-        (1 - (T : E →L[ℂ] E)).charbonnierCost tau) :
+    (hmin : IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+      {T | K.map T.toLinearMap = L} U) :
     Commute (U : E →L[ℂ] E) (K.sinAngleOperator L) := by
   let G := smoothedUnitaryGradient tau (U : E →L[ℂ] E)
   let A := G.modulus
@@ -90,7 +90,7 @@ theorem commute_sinAngleOperator_of_charbonnier_minimal
     have hK : Z.IsReducing K.starProjection.toLinearMap :=
       K.isReducing_ker_of_reflection_conjugate_eq_neg G
         (isSelfAdjoint_smoothedUnitaryGradient _ _)
-        (gradient_reflection_conjugate_eq_neg_of_charbonnier_minimal tau hτ K L U hmap hfinite hmin)
+        (gradient_reflection_conjugate_eq_neg_of_charbonnier_isLocalMinOn_complex tau hτ K L U hmap hfinite hmin)
     have hL : Z.IsReducing L.starProjection.toLinearMap := by
       apply (L.starProjection_isSymmetric.isReducing_iff_mem_invtSubmodule Z).mpr
       intro x hx
@@ -114,7 +114,7 @@ theorem commute_sinAngleOperator_of_charbonnier_minimal
     exact hlocal_commutes Z hK hL V hV hVS
   · intro ε hε
     obtain ⟨hM, hK, hL, _, _, V, hV, _, hlocal, hVmin⟩ :=
-      exists_charbonnier_minimizing_restriction_on_gradient_cutoff tau hτ K L U hmap
+      exists_charbonnier_minimizing_restriction_on_gradient_cutoff_of_isLocalMinOn_complex tau hτ K L U hmap
         hfinite hmin ε hε
     let M := eigenSpan A (Set.Ioi ε)
     let : FiniteDimensional ℂ M := hM
@@ -126,6 +126,22 @@ theorem commute_sinAngleOperator_of_charbonnier_minimal
     have hVS := commute_sinAngleOperator_of_smoothed_minimal tau hτ
       (K.comap M.subtype) (L.comap M.subtype) hdim V hlocal hVmin
     exact hlocal_commutes M hK hL V hV hVS
+
+/-- Global optimality implies angle preservation as a special case of
+local rigidity. -/
+theorem commute_sinAngleOperator_of_charbonnier_minimal
+    (tau : ℝ) (hτ : 0 < tau)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
+    (hfinite : (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≠ ∞)
+    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≤
+        (1 - (T : E →L[ℂ] E)).charbonnierCost tau) :
+    Commute (U : E →L[ℂ] E) (K.sinAngleOperator L) := by
+  exact commute_sinAngleOperator_of_charbonnier_isLocalMinOn_complex tau hτ K L U hmap hfinite
+    (show IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+      {T | K.map T.toLinearMap = L} U from fun T hT => hmin T hT).isLocalMinOn
 
 /-- Every finite-cost global complex Charbonnier optimizer fixes each
 common-source and common-orthogonal direction, in arbitrary dimension. -/
