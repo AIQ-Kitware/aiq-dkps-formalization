@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 -/
 module
 
-public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierOptimizerAngles
+public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierLocalFixed
 public import DavisKahan.Geometry.Polar.CanonicalCutoffTail
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.GapThreshold
@@ -13,7 +13,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Projection.GapThreshold
 /-!
 # Closed-threshold uniqueness in arbitrary Hilbert dimension
 
-Every finite-cost global optimizer is canonical when the projection gap
+Every finite-cost local optimizer is canonical when the projection gap
 is at most the critical sine. Compact sine cutoffs inherit finite
 optimality; finite canonical uniqueness applies on each. Kernel and
 spectral completeness retain arbitrary fixed ambient directions.
@@ -26,21 +26,21 @@ noncomputable section
 namespace TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition
 
 open FiniteDimensional.SmoothedPhaseTransition
-open scoped ENNReal
+open scoped ENNReal TauCeti.LinearIsometryEquivOperatorNorm
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
-/-- Below and at the critical sine, every finite-cost global optimizer
+/-- Below and at the critical sine, every finite-cost local optimizer
 is the canonical polar rotation. Infinite rank, angle multiplicities,
 zero angles and arbitrary fixed ambient directions are included. -/
-theorem eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_complex
+theorem eq_canonicalPolarFactor_of_charbonnier_isLocalMinOn_of_gap_le_critical_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
     (hfinite : (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≠ ∞)
-    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
-      (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≤
-        (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+    (hmin : IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+      {T | K.map T.toLinearMap = L} U)
     (hgap : K.projectionGap L ≤ Real.sin (smoothedCriticalAngle tau)) :
     (U : E →L[ℂ] E) = spectraCanonicalPolarFactor K L := by
   have hcrit := smoothedCriticalAngle_mem tau hτ
@@ -69,7 +69,7 @@ theorem eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_comple
       rw [Submodule.sinAngleOperator_def, ContinuousLinearMap.singularValue_modulus]
     rw [hseq]
     exact hD.tendsto_singularValue
-  have hUS := commute_sinAngleOperator_of_charbonnier_minimal tau hτ K L U hmap hfinite hmin
+  have hUS := commute_sinAngleOperator_of_charbonnier_isLocalMinOn_complex tau hτ K L U hmap hfinite hmin
   rw [← hRpolar]
   apply eq_of_eq_on_ker_and_positive_eigenSpans hSc
     (K.isPositive_sinAngleOperator L).isSelfAdjoint
@@ -79,15 +79,15 @@ theorem eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_comple
       have h := K.norm_sinAngleOperator_apply L x
       rw [show S x = 0 from hx, norm_zero] at h
       exact sub_eq_zero.mp (norm_eq_zero.mp h.symm)
-    exact (apply_eq_self_of_projections_eq_of_charbonnier_minimal_of_commute tau hτ
-      K L U hmap hfinite hmin hUS x hPQ).trans
+    exact (apply_eq_self_of_projections_eq_of_charbonnier_isLocalMinOn_complex tau hτ
+      K L U hmap hfinite hmin x hPQ).trans
         (nonacuteDirectRotation_apply_eq_self_of_projections_eq K L J x hPQ).symm
   · intro ε hε x hx
     let M := eigenSpan S (Set.Ioi ε)
     obtain ⟨hM, hK, hL, _⟩ := finite_sine_spectral_cutoff K L hD ε hε
     let : FiniteDimensional ℂ M := hM
     have hUM : ∀ y ∈ M, U y ∈ M := eigenSpan_invariant_of_commute S _ hUS _
-    obtain ⟨V, hV, hlocal, hVmin⟩ := exists_charbonnier_minimizing_finite_restriction
+    obtain ⟨V, hV, hlocal, _, hVmin⟩ := exists_charbonnier_locally_minimizing_finite_restriction
       tau hτ K L M U hmap hfinite hmin hK hUM
     have hRred := sine_spectral_cutoff_isReducing_nonacuteDirectRotation K L J hD ε hε
     let R' := Unitary.linearIsometryEquiv
@@ -118,7 +118,8 @@ theorem eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_comple
       (⟨nonacuteDirectRotation K₀ L₀ J₀,
         nonacuteDirectRotation_mem_unitary K₀ L₀ J₀⟩ : unitary (M →L[ℂ] M))
     have huniq := smoothed_canonical_unique_minimizer tau hτ K₀ L₀ hdim hmax
-    have hle := hVmin R₀ huniq.1
+    have hVglobal := charbonnier_isMin_of_isLocalMinOn_finite_complex tau hτ K₀ L₀ V hlocal hVmin
+    have hle := hVglobal R₀ huniq.1
     rw [hcost, hcost] at hle
     have hVeq : V = R₀ := (huniq.2 V hlocal).2
       ((ENNReal.ofReal_le_ofReal_iff (by
@@ -140,5 +141,21 @@ theorem eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_comple
       _ = (W ⟨x, hx⟩ : E) := congrArg Subtype.val
         (congrArg (fun T : M →L[ℂ] M => T ⟨x, hx⟩) hVW)
       _ = R x := hW _
+
+/-- Global rigidity follows from the closed-threshold local rigidity. -/
+theorem eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_complex
+    (tau : ℝ) (hτ : 0 < tau)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)
+    (hfinite : (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≠ ∞)
+    (hmin : ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+      (1 - (U : E →L[ℂ] E)).charbonnierCost tau ≤
+        (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+    (hgap : K.projectionGap L ≤ Real.sin (smoothedCriticalAngle tau)) :
+    (U : E →L[ℂ] E) = spectraCanonicalPolarFactor K L := by
+  exact eq_canonicalPolarFactor_of_charbonnier_isLocalMinOn_of_gap_le_critical_complex tau hτ K L U hmap hfinite
+    (show IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (1 - (T : E →L[ℂ] E)).charbonnierCost tau)
+      {T | K.map T.toLinearMap = L} U from fun T hT => hmin T hT).isLocalMinOn hgap
 
 end TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition

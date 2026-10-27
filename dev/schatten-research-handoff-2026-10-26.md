@@ -2665,3 +2665,52 @@ inactive tails. Local angle preservation alone does not identify action
 on the zero-angle sector. The next proof must retain the finite reflecting
 support of the full zero-gradient kernel and apply finite local-to-global
 rigidity, before concluding any infinite local-to-global theorem.
+
+## Hilbert Charbonnier finite-cost local-to-global, and its sharp scope
+
+`CharbonnierLocalFixed.eq_one_of_charbonnier_isLocalMinOn_self_transport_complex`
+proves identity is the only finite-cost operator-norm local minimum for
+self-transport. The proof retains the entire zero-gradient kernel,
+uses compactness of its self-adjoint displacement to obtain a finite
+source-reducing reflecting support, and applies finite landscape rigidity
+there and on every positive gradient cutoff. This discharges the singular
+kernel obstruction rather than assuming away zero displacement or fixed
+ambient directions. The same argument on the zero-angle restriction gives
+`apply_eq_self_of_projections_eq_of_charbonnier_isLocalMinOn_complex`.
+
+Closed-threshold canonical rigidity and canonical inactive-tail necessity
+now hold for finite-cost **local** minima as
+`eq_canonicalPolarFactor_of_charbonnier_isLocalMinOn_of_gap_le_critical_complex`
+and
+`apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_isLocalMinOn_complex`.
+Their old global APIs specialize these stronger results.
+
+`CharbonnierLocalGlobal.charbonnier_isMin_of_isLocalMinOn_complex`
+proves every finite-cost operator-norm local minimum is globally minimizing
+against all ambient complex unitary transports, on any complete Hilbert
+space. No separate compactness, ideal, index, prescribed-block or
+separability assumption is imposed: native finite feasibility supplies
+HS projection difference and balanced defects. The companion
+`charbonnier_isLocalMinOn_iff_isMinOn_of_finite_cost_complex` is the exact
+local/global iff on the finite-cost part of the fiber. All zero, repeated,
+critical and right angles remain included.
+
+The finite-cost qualifier is essential in operator norm. The either-field
+donor `CharbonnierInfiniteLocal.isLocalMin_charbonnierCost_of_not_isCompactOperator`
+proves every noncompact unitary displacement lies on an open native
+infinite-cost plateau. The closedness of compact operators, not continuity
+of the infinite trace, proves this. The explicit theorem
+`neg_isLocalMinOn_not_isMinOn_charbonnier_self_transport` shows negative
+identity is an infinite-cost local minimum but not a global minimum for
+self-transport of **any** subspace in an infinite-dimensional real or
+complex Hilbert space; identity has cost zero. This refutes an unrestricted
+infinite-dimensional no-spurious-local-minima assertion. Focused endpoint
+build passed 7,634 jobs. Paper and visualizations remain untouched.
+
+Next mathematical refinement: determine whether the remaining infinite-cost
+local minima are exactly these noncompact plateaus when finite transport
+is feasible. The missing lemma is density, in operator norm and within the
+exact transport fiber, of finite-cost finite-rank updates of a fixed
+finite-cost reference near every compact-displacement transporter. The
+existing compact-unitary approximation preserves all commutants, so this
+is an unblocked route to a complete (extended-cost) landscape iff.
