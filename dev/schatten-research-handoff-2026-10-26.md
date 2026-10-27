@@ -167,6 +167,39 @@ The candidate proof splits off a finite spectral cutoff and uses the
 canonical smoothed-optimal tail; both the exact tail cost and global
 attainment must be proved before promoting the result.
 
+## Exact infinite Charbonnier canonical and cutoff-tail costs
+
+`CharbonnierCanonicalTrace.lean` proves
+`charbonnier_nonacuteDirectRotation_eq_minimum_sum_of_subcritical`:
+for every positive `tau`, compact complex projection difference and actual
+crossed-defect completion, if
+`projectionGap K L <= sin(smoothedCriticalAngle tau)`, the literal
+Charbonnier cost of the canonical rotation equals the intrinsic sum of
+`smoothedPhaseMinimum tau` over directed sine singular angles. No Schatten
+membership, finite-rank or separability hypothesis is imposed, and the
+equality includes infinite costs.
+
+`CharbonnierSubcriticalTail.lean` proves
+`charbonnier_canonical_cutoff_tail_eq_minimum_sum`: removing a finite sine
+sector above any positive cutoff no larger than the closed critical sine
+leaves exactly this minimum cost on the full complementary pair.
+Critical eigenvalues and nonseparable fixed directions are included.
+
+The proof identifies actual finite restrictions with the restricted-pair
+canonical rotation, applies the existing finite exact optimizer theorem,
+and passes to the norm limit by lower semicontinuity. Scalar monotonicity
+is used only in the subcritical range where the canonical branch applies.
+The unrestricted Hilbert lower bound supplies the reverse inequality.
+Thus no unproved infinite spectral decomposition or exchange of divergent
+traces is assumed.
+
+Focused builds passed (7,294 and 7,302 jobs), and the full default build
+passed (21,277 jobs), with warnings treated as errors. The next step is
+finite smoothed-block replacement plus the proved canonical tail: this
+will establish full infinite-rank attainment under native Schatten-2
+projection difference and balanced crossed defects. That assembly is
+not asserted by the tail theorem alone.
+
 ## Exact infinite-dimensional uniqueness threshold
 
 `SchattenUniquenessThreshold.lean` proves
