@@ -72,6 +72,10 @@ are necessary and sufficient for a finite-cost global attainer. Its exact
 angle value and a finite correction with an explicit critical rank budget
 are compiled; see the new attainment entry below. Full nuclear, real infinite-
 dimensional and infinite Charbonnier **every-optimizer classifications** remain open.
+The native infinite Charbonnier rank-one first variation, constrained
+stationarity, compact gradient and actual finite minimizing gradient-cutoff
+sectors are now proved. The next gap is the full zero-gradient reflection
+sector and the passage from cutoff classifications to every ambient optimizer.
 The dated sections below preserve proof history; use this paragraph and the
 latest endpoint sections for the current frontier.
 
@@ -258,7 +262,7 @@ Focused build passed (7,346 jobs), and the full default build passed
 scope extensions, not a theorem-level historical priority clearance.
 The paper and visualizations remain assigned to a different agent.
 
-### Exact next proof obligations for every smoothed optimizer
+### Next obligations at the attainment checkpoint (superseded below)
 
 Attainment does not yet classify arbitrary minimizers. The finite smoothed
 classification already exists, but the infinite analogue of
@@ -293,6 +297,91 @@ and recover the finite active head and canonical inactive tail before
 claiming all-optimizer classification or uniqueness. Infinite nuclear
 attainment/classification and real infinite-dimensional theory remain
 independent open directions.
+
+## Native Charbonnier first variation and every-optimizer stationarity
+
+The analytic first-variation obstruction in the preceding checkpoint is now
+**closed**, including its native infinite trace-convergence step.
+
+`ForTauCeti/Analysis/InnerProductSpace/CharbonnierRankOneVariation.lean`
+proves `TauCeti.hasDerivAt_charbonnier_unitary_rankOne_variation`: on every
+complete complex Hilbert space, for `tau>0`, an actual unitary `U` with
+finite native Charbonnier displacement cost, and any unit vector `x`, the
+real native cost along `U exp(s i rankOne(x,x))` has derivative
+`Re inner x (smoothedUnitaryGradient tau U_s x)` at **every** real time.
+No separability, finite-rank displacement, simple spectrum or nonzero
+singular-value condition is required. Finite cost along the entire
+variation is proved before taking `toReal`.
+
+The missing convergence is supplied by
+`ContinuousLinearMap.tendsto_charbonnierCost_of_singularValue_tail_le`
+and `tendsto_charbonnierCost_of_bounded_rank_perturbation` in
+`ForTauCeti/.../OperatorIdeal/CharbonnierConvergence.lean`. In either scalar
+field and for arbitrary complete Hilbert carriers, operator-norm limits
+preserve the native trace if the singular-value tails, after one fixed
+finite index shift, are dominated by a fixed native Hilbert--Schmidt
+operator. Interlacing supplies the rank-one shift for the varied finite
+unitary approximations. Dominated convergence uses the quadratic bound;
+mere operator-norm convergence is **not** asserted sufficient.
+
+The existing `smoothedPhaseDerivative`, `smoothedUnitaryGradient` and their
+basic scalar/self-adjointness/commutation/eigenvector lemmas were moved from
+the finite paper namespace to their reusable `TauCeti` owner in
+`CharbonnierGradientHilbert.lean`. The finite consumers use these declarations
+directly; no alias, duplicate gradient or forwarding namespace remains.
+The eigenvector lemma retains its actual finite-dimensional hypothesis.
+The general Hilbert restriction theorem uses accepted CFC intertwining.
+Continuity on the full unitary group, compactness for compact perturbations
+of identity, and locally uniform convergence of gradient pairings are proved.
+`CharbonnierFiniteRankVariation.lean` identifies the native finite-support
+cost with its normal spectral trace and certifies its actual derivative.
+
+`CharbonnierStationarity.lean` proves
+`gradient_reflection_conjugate_eq_neg_of_charbonnier_minimal`.
+For **every** finite-cost global ambient transporter `U`, its self-adjoint
+gradient `G` satisfies `J_K G J_K = -G`. The proof derives vanishing feasible
+rank-one derivatives, normalizes arbitrary vectors, and polarizes the two
+zero diagonal quadratic forms. It does not assume a principal-plane form.
+
+`CharbonnierGradientCutoff.lean` proves
+`exists_charbonnier_minimizing_restriction_on_gradient_cutoff`.
+Every positive gradient-modulus cutoff of **every** finite-cost global
+optimizer is finite-dimensional, reduces both source and target projections
+and the actual unitary, retains the forward and inverse restrictions, and
+carries an unrestricted finite smoothed global minimizer. The complementary
+gradient norm is at most the cutoff. No canonical-tail or block assumption
+is imposed on the given optimizer. The either-field reusable restriction
+lemmas in `CharbonnierMinimizerRestriction.lean` cancel the actual finite-cost
+complementary trace; cancellation is never applied to an infinite cost.
+
+Focused builds passed for stationarity (6,854 jobs) and cutoff sectors
+(7,336 jobs). The full default build passed **21,295 jobs**, with warnings
+treated as errors. This is proof evidence, not historical-priority evidence.
+No manuscript or visualization was changed. The name-drift command was run;
+it reports unrelated migration-map/upstream-name findings, including the
+accepted approximation-number and Ky Fan APIs, rather than any moved
+smoothed declaration. Compiler validation of `Challenge` is run separately
+because it is outside the default targets.
+
+### Immediate remaining classification obligations
+
+1. Prove the smoothed radial identity
+   `U-U* = CFC(2 i sqrt(tau^2+|z-1|^2), U) * G`.
+   It should imply `U x = U.symm x` on `ker G`, including identity and
+   negative-identity directions. Establish the actual self-adjoint unitary
+   restriction on the **whole** gradient kernel.
+2. At a finite-cost global minimizer, use compact displacement and the
+   either-field compact-reflection theorem to isolate a finite optimizing
+   reflection support within that kernel, with an exactly fixed complement.
+   Right-angle defect choices must be retained explicitly.
+3. Combine positive cutoff classifications with the kernel classification,
+   then prove the common canonical inactive tail and the finite active
+   multiplicity/defect normal form for every optimizer. Only after that
+   establish the exact infinite smoothed uniqueness iff and optimizer topology.
+
+The native first variation and cutoff-sector results alone do not imply
+that every optimizer has the canonical tail. Infinite nuclear and real
+classification remain separate open workstreams.
 
 ## Exact infinite-dimensional uniqueness threshold
 

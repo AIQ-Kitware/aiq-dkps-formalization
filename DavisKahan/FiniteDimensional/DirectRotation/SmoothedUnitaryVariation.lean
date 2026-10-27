@@ -6,8 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralCost
-public import ForTauCeti.Analysis.InnerProductSpace.CharbonnierSpectralTrace
-public import ForTauCeti.Analysis.InnerProductSpace.UnitarySpectralVariation
+public import ForTauCeti.Analysis.InnerProductSpace.CharbonnierGradientHilbert
 
 /-!
 # Actual first variations of Charbonnier displacement
@@ -26,64 +25,8 @@ namespace TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
 
 open scoped ComplexConjugate
 
-/-- The scalar phase derivative in an argument-free form. -/
-@[expose] def smoothedPhaseDerivative (tau : ℝ) (z : ℂ) : ℝ :=
-  (conj (charbonnierDisplacementGradient tau z) * (Complex.I * z)).re
-
-/-- The phase derivative is the imaginary coordinate divided by the
-positive smoothed displacement radius. -/
-theorem smoothedPhaseDerivative_eq (tau : ℝ) (z : ℂ) :
-    smoothedPhaseDerivative tau z = z.im / Real.sqrt (tau ^ 2 + ‖z - 1‖ ^ 2) := by
-  simp only [smoothedPhaseDerivative, charbonnierDisplacementGradient,
-    Complex.mul_re, Complex.mul_im, Complex.conj_re, Complex.conj_im,
-    Complex.ofReal_re, Complex.ofReal_im, Complex.sub_re, Complex.sub_im,
-    Complex.one_re, Complex.one_im, Complex.I_re, Complex.I_im, div_eq_mul_inv]
-  ring
-
-/-- Zero phase gradient on the unit circle means eigenvalue `1` or `-1`. -/
-theorem smoothedPhaseDerivative_eq_zero_iff_of_norm_eq_one
-    (tau : ℝ) (htau : 0 < tau) (z : ℂ) (hz : ‖z‖ = 1) :
-    smoothedPhaseDerivative tau z = 0 ↔ z = 1 ∨ z = -1 := by
-  constructor
-  · intro hzero
-    rw [smoothedPhaseDerivative_eq] at hzero
-    have him : z.im = 0 := (div_eq_zero_iff.mp hzero).resolve_right
-      (charbonnier_radius_pos tau htau z).ne'
-    have hsquare : z.re ^ 2 = 1 := by
-      have h := Complex.normSq_eq_norm_sq z
-      rw [hz, one_pow, Complex.normSq_apply, him] at h
-      nlinarith
-    rcases sq_eq_one_iff.mp hsquare with hre | hre
-    · exact Or.inl (Complex.ext hre him)
-    · exact Or.inr (Complex.ext (by simpa using hre) (by simpa using him))
-  · rintro (rfl | rfl) <;> simp [smoothedPhaseDerivative_eq]
-
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
-
-/-- The actual Charbonnier unitary phase gradient. -/
-@[expose] def smoothedUnitaryGradient (tau : ℝ) (U : E →L[ℂ] E) : E →L[ℂ] E :=
-  unitaryPhaseGradient (charbonnierDisplacementGradient tau) U
-
-omit [FiniteDimensional ℂ E] in
-/-- The phase gradient is self-adjoint. -/
-theorem isSelfAdjoint_smoothedUnitaryGradient (tau : ℝ) (U : E →L[ℂ] E) :
-    IsSelfAdjoint (smoothedUnitaryGradient tau U) :=
-  isSelfAdjoint_unitaryPhaseGradient _ _
-
-omit [FiniteDimensional ℂ E] in
-/-- The phase gradient commutes with the underlying normal operator. -/
-theorem commute_smoothedUnitaryGradient
-    (tau : ℝ) (U : E →L[ℂ] E) [IsStarNormal U] :
-    Commute (smoothedUnitaryGradient tau U) U :=
-  commute_unitaryPhaseGradient _ _
-
-/-- Eigenvectors of the transporter have the scalar phase gradient. -/
-theorem smoothedUnitaryGradient_apply_of_apply_eq_smul
-    (tau : ℝ) (U : E →L[ℂ] E) [IsStarNormal U] (x : E) (mu : ℂ)
-    (hx : U x = mu • x) :
-    smoothedUnitaryGradient tau U x = (smoothedPhaseDerivative tau mu : ℂ) • x :=
-  ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal _ hx
 
 /-- The literal singular-value Charbonnier cost is a normal spectral trace. -/
 theorem smoothedDisplacementCost_eq_re_trace_cfc
