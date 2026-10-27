@@ -6,14 +6,19 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFiniteRankAttainment
+public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFeasibility
+public import DavisKahan.Geometry.Polar.NuclearPhase
 
 /-!
 # Nuclear transport in arbitrary complex Hilbert dimension
 
 At exponent one the ambient phase sum is twice the nuclear gauge of the
 directed sine map `(I-P_L) P_K`. This bounds every ambient unitary
-transport. A finite-rank feasible reference gives a finite-rank attainer
-and the exact unrestricted minimum, even for infinite-rank subspaces.
+transport. The explicit phase of completed direct rotation attains the
+native nuclear projection difference. Trace-class projection difference
+and balanced crossed defects give a finite-cost global attainer with no
+finite-rank or separability assumption. The older finite-rank-reference
+endpoint is retained with its directed-sine formula.
 -/
 
 public section
@@ -83,5 +88,57 @@ theorem exists_unitary_minimizing_nuclear_transport_of_finite_rank_reference
   simp only [ENNReal.toReal_one, ENNReal.rpow_one] at hcost hmin
   rw [phaseMinimum_one_sum_eq_twice_nuclear_sine] at hcost
   exact ⟨U, hmap, hrank, hcost, hmin⟩
+
+/-- **Exact unrestricted trace-class transport attainment.** For arbitrary
+complete complex Hilbert space, a nuclear projection difference and
+balanced crossed defects give a global attainer whose cost is precisely
+the nuclear projection difference. The phase construction requires no
+finite-rank reference or separability; all ambient competitors are included. -/
+theorem exists_unitary_minimizing_nuclear_transport_complex
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (hKL : (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
+      (K.starProjection - L.starProjection) ≠ ∞)
+    (hbalance : Module.finrank ℂ (halmosSourceDefect K L) =
+      Module.finrank ℂ (halmosTargetDefect K L)) :
+    ∃ U : E ≃ₗᵢ[ℂ] E, K.map U.toLinearMap = L ∧
+      (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (U : E →L[ℂ] E)) ≠ ∞ ∧
+      (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (U : E →L[ℂ] E)) =
+        (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
+          (K.starProjection - L.starProjection) ∧
+      ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+        (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (U : E →L[ℂ] E)) ≤
+          (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (T : E →L[ℂ] E)) := by
+  have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top
+    1 (by norm_num) (K.starProjection - L.starProjection) hKL
+  obtain ⟨D⟩ := crossedDefectsEquivalent_of_compact_projection_sub_of_finrank_eq
+    K L hcompact hbalance
+  refine ⟨nuclearPhaseRotation_complex K L D, nuclearPhaseRotation_map_complex K L D,
+    ?_, gauge_nuclear_nuclearPhaseRotation_complex K L D, ?_⟩
+  · rwa [gauge_nuclear_nuclearPhaseRotation_complex]
+  · exact nuclearPhaseRotation_isMin_complex K L D
+
+/-- A finite-cost global nuclear optimizer exists exactly when the
+projection difference is trace class and the crossed defects balance.
+Necessity is the classical restricted-unitary index obstruction;
+sufficiency now includes exact attainment for genuinely infinite-rank pairs. -/
+theorem exists_finite_nuclear_minimizer_iff_complex
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection] :
+    (∃ U : E ≃ₗᵢ[ℂ] E, K.map U.toLinearMap = L ∧
+      (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (U : E →L[ℂ] E)) ≠ ∞ ∧
+      ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+        (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (U : E →L[ℂ] E)) ≤
+          (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge (1 - (T : E →L[ℂ] E))) ↔
+    (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
+        (K.starProjection - L.starProjection) ≠ ∞ ∧
+      Module.finrank ℂ (halmosSourceDefect K L) =
+        Module.finrank ℂ (halmosTargetDefect K L) := by
+  constructor
+  · rintro ⟨U, hmap, hfinite, _⟩
+    exact (schatten_transport_iff_projection_sub_ne_top_and_defect_balance
+      1 (by norm_num) K L).mp ⟨U, hmap, hfinite⟩
+  · rintro ⟨hKL, hbalance⟩
+    obtain ⟨U, hmap, hfinite, _, hmin⟩ :=
+      exists_unitary_minimizing_nuclear_transport_complex K L hKL hbalance
+    exact ⟨U, hmap, hfinite, hmin⟩
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition

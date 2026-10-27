@@ -70,8 +70,11 @@ General infinite-rank complex Charbonnier **attainment** is now also proved:
 native Hilbert--Schmidt projection difference and balanced crossed defects
 are necessary and sufficient for a finite-cost global attainer. Its exact
 angle value and a finite correction with an explicit critical rank budget
-are compiled; see the new attainment entry below. Full nuclear, real infinite-
-dimensional and infinite Charbonnier **every-optimizer classifications** remain open.
+are compiled; see the new attainment entry below. General infinite-rank
+complex nuclear attainment is also proved by the explicit phase construction
+recorded at the end of this handoff. Classification of every nuclear optimizer
+and real infinite-dimensional optimization remain open. The later entries
+supersede earlier Charbonnier and strict-Schatten classification gaps.
 The native infinite Charbonnier rank-one first variation, constrained
 stationarity, compact gradient and actual finite minimizing gradient-cutoff
 sectors are now proved. The full zero-gradient reflection sector and preservation of every intrinsic
@@ -3018,3 +3021,54 @@ direct rotation, whose modulus is the projection sine operator. The
 candidate `R (C + i S)` should be an explicit global nuclear attainer.
 The exact infinite-rank attainment theorem is not yet claimed at this
 foundation checkpoint. Paper and visualizations remain untouched.
+
+
+## Exact infinite-rank complex nuclear attainment — 27 October 2026
+
+The trace-class endpoint now has an explicit global optimizer, with no
+finite-rank reference and no separability assumption. In
+`DavisKahan/Geometry/Polar/NuclearPhase.lean`, let R be completed direct
+rotation for any actual isometric identification D of the crossed defects,
+C the intrinsic cosine and S the intrinsic sine. Then
+`nuclearPhaseRotation_complex K L D = R (C + i S)` is an actual unitary
+transporting K onto L. The compiled theorem
+`gauge_nuclear_nuclearPhaseRotation_complex` proves its literal native
+nuclear displacement equals `||P_K-P_L||_1`, even when this value is infinite.
+`nuclearPhaseRotation_isMin_complex` compares it with **every** ambient
+unitary transporter, using the universal projection-difference lower bound.
+Zero, repeated and right angles and fixed ambient directions are included.
+
+The proof identifies `A=-i(R-C)` as self-adjoint, with `|A|=S`, and
+source reflection conjugating A to -A. The exact factorization
+`I-R(C+iS)=-i R(A+S)` reduces the cost to the previously compiled odd
+modulus-split identity. It does not construct an infinite eigenbasis or
+assume a finite strictly active sector at the nuclear endpoint.
+
+In `SchattenNuclearEndpoint.lean`,
+`exists_unitary_minimizing_nuclear_transport_complex` assumes precisely
+that `P_K-P_L` has finite native nuclear gauge and the finite crossed-defect
+dimensions agree. It constructs the identification D and proves existence,
+finite cost, exact value `||P_K-P_L||_1` and unrestricted global minimality.
+`exists_finite_nuclear_minimizer_iff_complex` makes those two conditions
+necessary and sufficient for existence of a finite-cost global minimizer.
+The necessity consumes the existing restricted-unitary feasibility theorem;
+this work does not claim discovery of the classical index obstruction.
+The older finite-rank-reference theorem and all existing public signatures
+are retained.
+
+Focused endpoint build passed 7,456 jobs; the full default build passed
+21,351 jobs (`/tmp/nuclear-attainment-full.log`). Both were preceded by
+`lake exe cache get`, with warnings treated as errors. No manuscript or
+visualization is changed; historical priority remains separate from
+compilation. The supplied historical review is already committed as
+`e5e80e52f`, with its qualified negative-search conclusions intact.
+
+Next exact obligations: classify **every** infinite-rank nuclear optimizer
+(the explicit common-branch phase proves attainment, not exhaustiveness);
+prove the balanced-pair identity between the ambient nuclear projection
+difference and twice the directed nuclear sine if exposing that intrinsic
+value; determine whether a nuclear optimizer can differ from canonical
+rotation by finite rank for genuinely infinite-rank pairs. The strict-exponent
+finite-active-cutoff proof cannot be reused at p=1 because its critical
+angle is zero. The new explicit construction supplies the missing endpoint
+attainer without claiming these remaining structural statements.
