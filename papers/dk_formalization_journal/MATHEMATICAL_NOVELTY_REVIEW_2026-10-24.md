@@ -12,10 +12,40 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
-**Current verification frontier:** the 26 October addendum immediately
-below supersedes the older infinite-dimensional status in this chronological
-record. The source snapshots and earlier literature comparisons remain
-historical evidence, not current proof-frontier claims.
+**Verification update:** 27 October 2026, mathematical checkpoint
+`96aeb922d`; full default build passed 21,413 jobs with warnings as errors.
+The [current research plan](../../dev/schatten-transport-research-plan.md)
+and current-frontier paragraph of the
+[proof handoff](../../dev/schatten-research-handoff-2026-10-26.md) supersede
+older proof-status statements in this chronological record. This documentation
+pass did not repeat or expand the historical source search.
+
+## Current proof frontier and priority boundary — 27 October 2026
+
+Complex infinite-dimensional strict-Schatten and Charbonnier attainment and
+complete optimizer classifications are proved. The complex nuclear endpoint
+now also has a certificate for every optimizer, an explicit signed-root
+bijection, independent spectral projection factors and compactness of the
+entire displacement family in every native Schatten-q norm, q>=1. Exact
+Schatten profiles and antipodal ideal-distance geometry are compiled.
+
+Over the reals, finite-dimensional matching values/attainers and nuclear
+value-equality parity are proved. Infinite-dimensional root existence is
+exactly reduced to independent local projection equations; the fourfold acute
+sine-eigenspace obstruction is necessary. The numerical parity converse, real
+equality-certificate necessity, and unrestricted real infinite-dimensional
+matching/every-optimizer results remain open. Finite real matching attainment
+must not be described as classification of every real minimizer.
+
+These updates change the mathematical comparison target, not the confidence
+of historical priority. The generic sign-projection, spectral assembly,
+orthogonal-complex-structure and ideal compactness lemmas use classical
+mathematics. The new constrained optimizer/equality statements require exact
+comparison with predecessor domains and hypotheses. The supplied literature
+review did not review all of these newer Hilbert nuclear endpoints.
+Grassmannian/right-unitary reductions, endpoint-family convergence and further
+stability/application theorems remain proposed research. No additional
+historical-first claim is made by this update.
 
 ## Supplied expanded historical-priority review (26 October 2026)
 

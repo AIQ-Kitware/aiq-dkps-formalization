@@ -1,4 +1,4 @@
-# Schatten transport research checkpoint — 26 October 2026
+# Schatten transport research checkpoint — updated 27 October 2026
 
 Manuscript and visualization updates are assigned separately. This record
 describes new mathematics and the exact next proof obligations. The target
@@ -12,92 +12,82 @@ source-authentication limits and remaining citation checks. Its older infinite-
 dimensional status is superseded by the frontier below. Reuse that record
 before repeating the literature search; do not infer first-discovery priority.
 
-## Current frontier — read before chronological entries
+## Current frontier — reconciled 27 October 2026
 
-As of 27 October, the complex nuclear endpoint also has exact general
-infinite-rank attainment and intrinsic sine value under trace-class
-projection difference and balanced defects. Its uniqueness criterion is
-complete without standing hypotheses: unique global optimizer iff K=L.
-Opposite explicit global optimizers have separation `2 ||P_K-P_L||`.
-The finite-dimensional nuclear endpoint now has a single dual-positivity
-certificate characterizing every ambient optimizer, and all optimizers
-fix the full kernel of the projection difference. The complete infinite-
-rank nuclear **every-optimizer** certificate and phase/multiplicity
-parametrization remain open; see the final entry for the exact analytic
-obligation. These statements supersede older nuclear value/uniqueness
-gaps in chronological entries, without extending historical-priority claims.
+Start with the maintained [research plan](schatten-transport-research-plan.md).
+It records the exact next real-block lemma, the longer theory-completion goals,
+claim boundaries, dependencies, build evidence and new-machine transfer steps.
+The latest mathematical checkpoint is `96aeb922d` (21,413-job full default
+build, warnings as errors). The dated sections below are proof history; their
+statements of open obligations apply at their recorded checkpoint only.
 
+**Complex nuclear endpoint:** exact general infinite-rank attainment, the
+certificate for every ambient optimizer, a literal independent signed-root
+bijection, and a product homeomorphism of independent spectral projection
+factors are all proved. Hypotheses are trace-class projection difference,
+orthogonally complemented subspaces in a complete complex Hilbert space, and
+balanced crossed defects. Every optimizer fixes the full projection-difference
+kernel. The whole displacement family is compact in every native Schatten-q
+carrier, q>=1. Every optimizer has the exact profile
+`||I-T||_q = 2^(1-1/q) ||P_K-P_L||_q` and operator norm
+`||I-T|| = 2 ||P_K-P_L||`. Antipodal optimizer pairs have a common canonical
+intertwiner center and attain the proved simultaneous ideal-distance bounds.
+Nuclear uniqueness iff K=L is already proved. Nuclear local-to-global and
+reduced Grassmannian/right-unitary factors are separate open statements.
 
-General infinite-rank complex Schatten `1<p<2` attainment and the complete
-classification of **every** global optimizer are **proved**, under native
-Schatten projection difference and balanced crossed defects. Every optimizer
-has the same canonical inactive tail and a finite strictly active correction
-with an explicit rank budget (`aeb6384f1`, `113746cf9`). Every nearest
-projection-commuting correction is also classified, with a closed commutator
-uniqueness certificate and rank budget (`ddbef2d43`). The two-level
-self-adjoint symmetry application below has passed the full default build
-(21,241 jobs). Earlier statements calling these endpoints open are historical
-stages and are superseded. Historical priority remains qualified; see the
-supplied-review addendum in the paper-directory novelty review.
+**Complex strict Schatten, 1<p<2:** general infinite-rank attainment and the
+classification of every global optimizer are proved under native Schatten
+projection difference and balanced crossed defects. Every optimizer is canonical
+on the inactive tail and has a finite active correction with a rank budget.
+The whole optimizer set has independent finite multiplicity-projection and
+right-defect unitary coordinates and the actual operator-norm topology.
+Closed uniqueness thresholds, finite-cost local-to-global and nearest
+commuting-correction classifications are proved. Data-Lipschitz bounds for
+changing both subspaces and changing the input unitary hold throughout the
+closed canonical regime, with critical constant p/(2-p). Critical planar
+quartic growth and failure of quadratic growth are also proved. A global
+objective-excess bound for arbitrary near-minimizers remains separate.
 
-The infinite optimizer-space finite-cutoff homeomorphism, operator-norm
-compactness and independent multiplicity-coordinate topology are now proved;
-see the latest topology entries below. Rank labels are locally constant
-and separated, and simple active factors with no right defect give exactly
-`2^s` isolated optimizers. Necessity of the infinite uniqueness threshold
-is now also proved: uniqueness is equivalent to the closed projection-gap
-bound `2 sqrt(p-1)/p`, under the native Schatten hypothesis alone. The
-exact nearest-commuting-correction iff uses the same threshold on the
-actual commutator norm, also without a separate balance assumption.
-The strongest iff statements now make even native Schatten membership
-part of the conclusion: arbitrary orthogonally complemented projection
-pairs have a unique optimizer exactly when their difference is Schatten
-and their gap obeys the closed threshold. The correction version has the
-analogous necessary-and-sufficient membership and norm conditions.
-The next mathematical targets are quantitative stability or certified
-approximation from inexact input, and connectedness of rank strata.
-Critical scalar-phase conditioning is now proved exactly: the excess
-cost divided by the fourth power of phase tends to a strictly positive
-explicit coefficient. Two-sided local quartic growth and failure of
-every positive quadratic modulus are compiled. The same coefficient
-now holds for the literal planar Schatten-power cost divided by the
-fourth power of actual operator-norm transporter distance. The planar
-no-quadratic-modulus theorem therefore excludes quadratic growth over
-all ambient feasible unitary transporters. A positive lower growth bound
-for every near-minimizer remains a separate task.
-The original norm objective, as well as its `p`-th power, now has its
-exact positive critical coefficient and its actual ambient planar
-no-quadratic-modulus theorem; see the latest critical-norm entry below.
-Varying-data stability is now also proved for simultaneous source and
-target changes: throughout the closed canonical regime, actual
-infinite-dimensional Schatten optimizers obey a dimension-free Lipschitz
-bound in the sum of the two projection errors.
-The endpoint constant is `p/(2-p)`. This differs from an objective-error
-certificate for an arbitrary near-minimizer of one fixed problem, which
-remains open.
-Nearest projection-commuting correction is now also Lipschitz in the
-input unitary, with constant `1/sqrt(1-gamma^2)` and endpoint `p/(2-p)`.
-This uses the polar factorization of the actual diagonal block and
-contractivity of pinching, so it avoids the extra loss of an image-gap
-triangle estimate. See the correction-data entry below.
-General infinite-rank complex Charbonnier **attainment** is now also proved:
-native Hilbert--Schmidt projection difference and balanced crossed defects
-are necessary and sufficient for a finite-cost global attainer. Its exact
-angle value and a finite correction with an explicit critical rank budget
-are compiled; see the new attainment entry below. General infinite-rank
-complex nuclear attainment is also proved by the explicit phase construction
-recorded at the end of this handoff. Classification of every nuclear optimizer
-and real infinite-dimensional optimization remain open. The later entries
-supersede earlier Charbonnier and strict-Schatten classification gaps.
-The native infinite Charbonnier rank-one first variation, constrained
-stationarity, compact gradient and actual finite minimizing gradient-cutoff
-sectors are now proved. The full zero-gradient reflection sector and preservation of every intrinsic
-angle sector are now also proved. Every finite-cost global smoothed optimizer
-fixes all vectors on which the projections agree. The next gap is closed-
-threshold canonical uniqueness, then canonical-tail necessity and the full
-finite-cutoff characterization of every ambient optimizer.
-The dated sections below preserve proof history; use this paragraph and the
-latest endpoint sections for the current frontier.
+**Complex Charbonnier, tau>0:** general infinite-rank exact attainment,
+finite-cost feasibility, every-optimizer classification, canonical inactive
+tail, finite active rank budget, multiplicity topology, closed uniqueness
+threshold and finite-cost local-to-global are proved. The compatible native
+ideal for the projection difference is Hilbert--Schmidt. Earlier entries
+calling these analytic/classification steps open are superseded.
+
+**Real finite dimension:** unrestricted matching values and ambient attaining
+orthogonal transporters are proved for 1<=p<2. Nuclear closed weights,
+real--complex value-equality parity, canonical-value criteria and nearest
+commuting-correction consequences are proved. These value/attainment results
+do not yet classify every real optimizer. An unrestricted real local-to-global
+analogue is already refuted; do not restart it as an unqualified conjecture.
+
+**Real compact Hilbert pairs:** the independent signed-root construction is
+RCLike-generic and a real root attains the projection lower bound. Root
+existence is exactly equivalent to solvability of every independent local
+spectral projection factor. A necessary condition is
+`4 | finrank_R ker(S-sI)` for every 0<s<1, where S is the sine operator.
+The numerical converse, conversion to principal-side even multiplicity, and
+necessity of the root certificate for all real lower-bound attainers remain
+open. Zero and right angles are exempt from this fourfold obstruction.
+When roots do not exist the real optimal value may be larger; the unrestricted
+infinite-rank real matching/optimizer theory is a further target.
+
+**Next proof:** on a finite real block with skew-adjoint G, G^2=-c^2 I,
+c>0, and an orthogonal involution J anticommuting with G, prove existence of
+an orthogonal P commuting with G and satisfying PJ+JP=J iff the block dimension
+is divisible by four. Necessity is compiled. The proposed converse uses an
+orthogonal complex structure on the J-fixed half-space; details and exact
+supporting declarations are in the research plan. Then assemble with the
+already proved spectral product criterion.
+
+The next broader goals are exponent-endpoint family convergence, explicit
+factor geometry/components, nonunique-regime stability and a certified finite
+reconstruction theorem. These are proposals requiring proof. The generic
+spectral sign and ideal-analysis foundations are classical mathematical
+ingredients; no historical-first claim follows from their formalization.
+The archived supplied historical review retains its source-authentication and
+priority limitations. Manuscript and visualization updates remain separate.
 
 ## Explicit diagonal-block construction of every nearest correction
 

@@ -3,17 +3,40 @@
 This file maps the principal claims in `paper.tex` to current repository
 evidence. Read `PAPER_CONTEXT.md` for the publication boundaries. The YWS source audit
 is in `../yws_formalization_conference/`. This journal manuscript concerns
-Davis--Kahan. The dated chronological entries below preserve their original development
-status. The 26 October endpoint table supersedes any older entry saying
-finite real matching or the complex nuclear minimum is not Lean-certified;
-the effective Charbonnier coordinates and operator-norm topology entries
-record the current finite-complex classification scope.
+Davis--Kahan. The dated chronological entries below preserve their original integration
+status. Research evidence was reconciled with mathematical checkpoint
+`96aeb922d` on 27 October; the full default build passed 21,413 jobs with
+warnings as errors. The newer research table below does not assert that all
+these results have already been included in the manuscript. Use the
+[current research plan](../../dev/schatten-transport-research-plan.md) for
+remaining proof obligations and new-machine resumption.
+
+## Compiled research evidence beyond the recorded manuscript integration — 27 October
+
+Unless stated otherwise, Hilbert results assume complete complex ambient space,
+orthogonally complemented subspaces and balanced crossed defects. Native
+ideal-membership hypotheses are part of each statement, not inferred from
+ambient transport feasibility. File paths below are relative to `DavisKahan/`.
+
+| Compiled research claim | Declaration evidence | Exact boundary |
+| --- | --- | --- |
+| Every complex Hilbert Schatten optimizer for 1<p<2 has canonical inactive tail and finite active phase/defect parameters. | `InfiniteDimensional/DirectRotation/SchattenOptimizerClassification.lean`: `schatten_transport_isMin_iff_canonical_tail_phase_and_defect_complex`; `SchattenMultiplicityTopology.lean`: `exists_schatten_hilbert_multiplicity_parameter_homeomorph`. | Native Schatten projection difference; every ambient competitor, no separability or finite-rank assumption. |
+| Every complex Hilbert Charbonnier optimizer has canonical tail and finite phase/defect parameters, with independent multiplicity topology. | `InfiniteDimensional/DirectRotation/CharbonnierOptimizerClassification.lean`: `charbonnier_transport_isMin_iff_canonical_tail_phase_and_defect_complex`; `CharbonnierMultiplicityTopology.lean`: `exists_charbonnier_hilbert_multiplicity_parameter_homeomorph_complex`. | tau>0 and native Hilbert--Schmidt projection difference. |
+| Every complex nuclear optimizer is characterized by a dual certificate and independent signed-sine root. | `Geometry/Polar/NuclearOptimizerCertificate.lean`: `nuclear_isMin_iff_certificate_complex`; `NuclearRootClassification.lean`: `nuclearSignedSineEquivOptimizers_complex`. | Trace-class projection difference. The strict-exponent local-to-global theorem is not asserted at p=1. |
+| Independent spectral projection factors describe every complex Hilbert nuclear optimizer topologically. | `Geometry/Polar/NuclearRootSpectralFactors.lean`: `exists_nuclear_optimizer_spectral_homeomorph_complex`. | Includes infinite rank, repeated angles, fixed directions and defects; reduced Grassmannian/unitary-group descriptions remain open. |
+| The entire nuclear optimizer displacement family is compact in every native Schatten-q carrier. | `Geometry/Polar/NuclearRootIdealCompactness.lean`: `isCompact_nuclear_optimizer_displacements_schatten_complex`. | q>=1, trace-class projection difference and balanced defects. This is compactness in the ideal norm itself. |
+| Every complex nuclear optimizer has q-cost `2^(1-1/q) ||P_K-P_L||_q` and operator-norm cost `2 ||P_K-P_L||`. | `Geometry/Polar/NuclearRootProfile.lean`: `nuclear_optimizer_schatten_profile_complex`, `nuclear_optimizer_operatorNorm_complex`. | q>=1; does not by itself identify the literal singular-value sequence or prove limiting sharpness of comparison constants. |
+| Over either field, all signed roots are independent compatible spectral projection factors; existence iff every factor is nonempty. | `Geometry/Polar/NuclearRootSpectralFactors.lean`: `exists_nuclearSignedSine_spectral_homeomorph`, `nuclearSignedSineParameters_nonempty_iff_spectral_factors`. | Compact projection difference and an actual defect isometry; a real root gives a real lower-bound attainer, not automatically every real minimizer. |
+| A real root forces `4 | dim_R ker(S-sI)` on every strictly acute sine level. | `Geometry/Polar/NuclearRealRootCriteria.lean`: `nuclearSignedSineParameters_four_dvd_sine_eigenspace_real`. | Compact difference, real root existence and 0<s<1; numerical sufficiency and a full real equality certificate remain open. |
+
+Historical-priority assessments are kept in the novelty review. Generic spectral
+and trace-ideal foundations do not carry a historical-first claim.
 
 ## Nuclear endpoint and real-field results integrated 26 October 2026
 
 | Journal claim | Lean evidence | Boundary |
 | --- | --- | --- |
-| In finite complex equal-rank pairs, the attained unrestricted nuclear transport minimum is `2 sum_i sin(theta_i)`, including zero and right angles. | `SchattenNuclearEndpoint.exists_unitary_minimizing_nuclear_transport_principalAngles_complex`; earlier `ComplexTracePrincipalAngles.exists_global_complex_trace_minimizer_with_principalAngles`; `nuclear_endpoint_verified.tex`. | The value and existence are proved; no complete `p=1` optimizer or local-to-global classification is inferred. |
+| In finite complex equal-rank pairs, the attained unrestricted nuclear transport minimum is `2 sum_i sin(theta_i)`, including zero and right angles. | `SchattenNuclearEndpoint.exists_unitary_minimizing_nuclear_transport_principalAngles_complex`; earlier `ComplexTracePrincipalAngles.exists_global_complex_trace_minimizer_with_principalAngles`; `nuclear_endpoint_verified.tex`. | This finite value theorem supplies attainment. Complete complex p=1 optimizer classification is now proved separately by the nuclear root/certificate results above; p=1 local-to-global remains a separate question. |
 | Every finite real equal-rank pair has an attained nuclear global minimum given by matching strictly positive **labelled** principal angles. Singletons cost `min(4 sin(theta/2), 2)`; pairs cost `4 sin((theta+psi)/2)`. | `RealNuclearMatching.exists_minimizing_real_nuclear_transport_matching`. | All ambient orthogonal competitors and both determinants, arbitrary fixed/right/repeated angles, all ambient dimensions. |
 | For a real and complex pair with explicitly matched principal-angle data, real and complex nuclear minima agree iff every strictly acute positive angle occurs an even number of times. | `RealNuclearFieldEquality.realTransportPowerMinimum_one_eq_sine_sum_iff_even_multiplicities`; `NuclearFieldComparison.exists_complex_nuclear_minimum_with_real_parity_criterion`. | Zero and right-angle counts unrestricted; no unproved complexification invariance is assumed. |
 | The real nuclear minimum **value** equals `4 sum sin(theta_i/2)` iff all angles are `<= pi/3` and at most one **label** is positive. | `RealNuclearOptimality.realTransportPowerMinimum_one_eq_canonical_iff`. | Equality of the value is verified; it is not a full classification of all real minimizers. |

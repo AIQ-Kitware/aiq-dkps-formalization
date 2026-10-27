@@ -23,9 +23,11 @@ Mathematical status is separate from priority. The report's statement that
 general infinite-rank attainment remains open is superseded for the complex
 `1<p<2` theory: native Schatten projection difference and balanced crossed
 defects now yield attainment and classification of every optimizer. See the
-[current research handoff](schatten-research-handoff-2026-10-26.md), including
-its exact hypotheses and remaining nuclear, real and smoothed infinite-
-dimensional gaps. This historical report is not the current proof inventory.
+[current research handoff](schatten-research-handoff-2026-10-26.md) and the
+[current research plan](schatten-transport-research-plan.md) for exact hypotheses
+and remaining obligations. Complex infinite-rank nuclear and smoothed
+optimizer classifications have subsequently been proved as recorded there.
+The report below retains its attributed historical-search scope.
 
 ## Main reported finding: Aubrun–Szarek Exercise B.12
 

@@ -1,96 +1,76 @@
 # Paper context: established claims, boundaries, and editorial decisions
 
-**As of:** 26 October 2026
-**Paper revision dated 26 October 2026:** `paper.tex` now includes
-`nuclear_endpoint_verified.tex`, based on the completed Lean modules
-`SchattenNuclearEndpoint`, `RealNuclearMatching`, `RealNuclearFieldEquality`,
-`NuclearFieldComparison`, `RealNuclearOptimality`,
-`SchattenNuclearCorrection` and `RealSchattenCommutingCorrection`.
-It establishes attained unrestricted real nuclear matching with its closed
-weights, full complex nuclear minimum, exact real--complex equality iff every
-strictly acute positive angle has even multiplicity, real canonical-value iff
-at most one angle is positive and all angles are at most `pi/3`, and nearest
-subspace-preserving unitary/orthogonal correction. The strict-exponent
-complex all-optimizer and local-to-global results must **not** be asserted at
-`p=1`. The proposed strict-exponent real/complex parity criterion and
-nuclear complete optimizer classification remain open. The existing sections
-below are time-stamped historical stages; these updates supersede any older
-reference to the unrestricted real matching theorem as unfinished.
-Source detail: `../../dev/schatten-research-handoff-2026-10-26.md`.
+**Research context updated:** 27 October 2026, checked against mathematical
+checkpoint `96aeb922d`; full default Lean build: 21,413 jobs, warnings as errors.
+**Last recorded manuscript integration:** 26 October 2026. This context update
+does not edit the manuscript or visualizations or assert that the newer
+infinite-dimensional results have already been integrated into `paper.tex`.
 
-**Current research source:** the complete unrestricted finite-dimensional
-complex Schatten `1<p<2` optimizer classification, its exact value,
-local-to-global theorem, canonical and uniqueness thresholds, normalized
-phase/defect parameters, and multiplicity-space operator-norm homeomorphism.
-The full Charbonnier optimizer set for `tau>0` now also has unique normalized
-phase/defect parameters, an independent finite multiplicity-space product
-and its operator-norm homeomorphism. Both theories include every zero,
-critical, repeated, fixed and right-angle direction. Both optimizer sets
-are compact, their active rank labels are locally constant, and different
-rank sectors have fixed-pair positive separation. Simple active factors
-with zero right defect give exactly `2^s` isolated optimizers. The subspace
-rank-stratification equivalences are algebraic. Sector connectedness,
-component counts, manifold dimensions and operator-ideal optimization
-remain open. The full finite complex
-Charbonnier local-to-global theorem is now compiled for every `tau>0`.
-The unrestricted real four-dimensional minimum now compiles for arbitrary
-rank-two subspaces, in terms of their accepted principal angles, over
-**both determinant classes**, for every continuous nondecreasing spectral
-penalty vanishing at zero. Closed nuclear and clipped Schatten `1<p<2`
-formulas include attainment and comparison with every ambient orthogonal
-transporter. Sharp canonical criteria compile in the full cosine--sine
-model. Every negative-class optimizer is classified for strictly increasing
-penalties. Every real global Schatten minimum for `1<p<2` now has a
-complete orthogonal decomposition into fixed blocks, rank-one problems in
-real dimension two, and rank-two problems in real dimension four. Every
-actual restriction is globally minimal among all orthogonal competitors,
-and the full cost is the exact sum of its restriction costs. Every two-block
-and four-block value is explicit, and their accepted
-principal-angle multisets recover the original pair with exact zero, repeated
-and right-angle multiplicities. The actual ambient minimum is the sum of
-these explicit angle costs. Labelled matching extraction, exact removal of
-zero-angle partners, conversion between determinant classes and the draft
-weights, and the unrestricted matching lower bound now compile. Constructive
-ambient matching attainment and the full unrestricted real matching equality
-now compile for `1<=p<2`, including the nuclear endpoint. Nuclear scalar
-exchange and the nearest nuclear commuting correction also compile.
-The exact pairwise certificate for independent plane minima is proved
-on the strict range `1<p<2`. Unrestricted real local-to-global is refuted
-by the compiled real-line and positive-angle planar counterexamples. The exact one-angle
-real minimum now compiles for every finite
-Schatten exponent at least one. For `1<p<2`, its value exceeds the complex
-one-angle value exactly at supercritical acute angles; equality holds below
-and at the critical angle and at the right endpoint.
-The local Charbonnier analysis now supplies actual first variations,
-source-reflection stationarity, paired two-phase gradient blocks and the
-sharp gradient bound. Actual ambient no-overlap on every submaximal gradient
-level, the signed maximal scalar restrictions, and local minimality on the
-actual zero-gradient reflection kernel are now compiled. That kernel obeys
-the exact balance identity `2*S*P0*S=S`. An explicit feasible reflection
-direction has negative curvature whenever this balance fails. Every
-positive gradient level, including the critical level, now has a
-source-reflection-paired phase eigenbasis whose individual costs attain
-the exact scalar minima. Submaximal paired restriction costs equal the
-sum of those minima. The actual zero-gradient kernel now has constructed
-fixed/right paired coordinates and its exact dimension-weighted cost.
-The actual principal-angle assembly is now compiled: every constrained
-Charbonnier local minimum attains the exact unrestricted global value.
-**Manuscript and teaching-deck update source:** `427169ce38b5` (25 October
-2026), incorporating the completed full complex optimizer classification,
-local-to-global theorem, normalized parameter bijection and exact counts.
-**Earlier integration source:** `521572a2500c` (24 October 2026, 15:48
-incremental source patch, reconstructed against base `642de34df29a`).
-The original source-result audit remains anchored to its reviewed Lean
-statements. The later mathematical extensions do not change its 29 rows.
-Earlier chronological status entries below are dated historical records;
-current proof scope is summarized first.
+**Start here for continued research:**
+[Current research plan](../../dev/schatten-transport-research-plan.md), then the
+[dated proof handoff](../../dev/schatten-research-handoff-2026-10-26.md).
+The plan contains exact next proof obligations and new-machine transfer steps.
+The chronological entries below describe their dated development stages.
+This current summary supersedes their earlier statements of unfinished work.
+
+## Current mathematical scope and publication boundaries
+
+- Complex `1<p<2`: finite and arbitrary-dimensional complete Hilbert theories
+  have exact attainment, every-optimizer classification, canonical inactive
+  tails, finite active correction/rank budgets, independent multiplicity and
+  defect parameters, optimizer topology and finite-cost local-to-global.
+  Native Schatten projection difference and balanced crossed defects supply
+  finite-cost feasibility. Closed uniqueness and correction certificates and
+  closed-canonical-regime data stability are also proved.
+- Complex `p=1`: trace-class projection difference and balanced crossed defects
+  give exact general infinite-rank attainment and a certificate for **every**
+  ambient nuclear optimizer. Literal signed-root parameters and independent
+  spectral projection factors classify the whole optimizer family, including
+  fixed and right-angle directions. The displacement family is compact in
+  every native Schatten-q norm, q>=1. All nuclear optimizers have the exact
+  simultaneous Schatten profile and antipodal ideal-distance geometry.
+  Nuclear local-to-global is not supplied by these statements.
+- Complex Charbonnier, tau>0: under native Hilbert--Schmidt projection
+  difference and defect balance, exact infinite-rank attainment, complete
+  optimizer classification, canonical tail, finite active parameters/rank
+  budgets, topology, closed uniqueness and finite-cost local-to-global are
+  proved. Operator-ideal optimization in these three complex regimes is no
+  longer an open frontier.
+- Real finite dimension: unrestricted matching values and actual ambient
+  orthogonal attainers are proved for 1<=p<2. At p=1 the singleton/pair weights
+  are `min(4 sin(theta/2),2)` and `4 sin((theta+psi)/2)`. Nuclear real--complex
+  equality holds iff every strictly acute positive angle has even labelled
+  multiplicity. Canonical nuclear value equality holds iff at most one label
+  is positive and all angles are at most pi/3. Complete classification of
+  every real minimizer remains separate. Real local-to-global is refuted.
+- Real compact Hilbert pairs: independent signed-root existence is exactly
+  equivalent to local spectral projection solvability. Every acute sine
+  eigenspace must have real dimension divisible by four if a real root
+  exists. Sufficiency of this numerical test and necessity of the root
+  certificate for every real lower-bound attainer are still open. Real roots
+  attain the projection/complex lower bound; when roots are absent, the real
+  optimum may be larger. The unrestricted infinite-rank real matching and
+  every-optimizer classifications remain open.
+
+The immediate next proof is the finite real compatible-projection parity
+converse, followed by its infinite assembly and the real equality certificate.
+Further proposed goals are exponent-endpoint optimizer-family convergence,
+explicit Grassmannian/right-unitary geometry, set-valued stability outside the
+canonical regime and certified finite reconstruction. These proposals are not
+publication claims. A positive global growth bound for every near-minimizer is
+not supplied by the proved planar critical quartic examples.
+
+`claims_to_evidence.md` now separates newer compiled research evidence from the
+26 October manuscript integration. The original 29-result Davis--Kahan source
+inventory remains unchanged: the extensions do not add source obligations.
+The source audit and research-extension verification remain separate from
+historical mathematical priority. Read the novelty review and archived supplied
+literature report before repeating a broad priority search.
+
 **Paper:** *Formalizing Davis--Kahan Perturbation Theory and Exact Spectral Subspace Transport*
-**Scope of this record:** working context for authors and future manuscript agents. This is deliberately **not** an appendix or a source of text to paste into the paper.
-
-The Yu--Wang--Samworth source-version audit and manuscript fragments are in
-`../yws_formalization_conference/`; this paper covers Davis--Kahan.
-
-Start here when updating `paper.tex`. The fact that an assertion appears in an old draft, a development note, or a prior agent's answer does not make it current. Follow the evidence links below and preserve differences between source claims, Lean-verified statements, and mathematical arguments outside Lean.
+**Scope of this record:** working context for authors and future manuscript agents.
+It is not manuscript prose. The Yu--Wang--Samworth source-version audit and
+manuscript fragments remain in `../yws_formalization_conference/`.
 
 ## Real nuclear endpoint, exchange and local-minimum obstruction (25 October)
 
