@@ -3144,3 +3144,39 @@ its compilation does not establish independent historical priority.
 Focused donor build passed 6,554 jobs; geometry passed 7,136 jobs;
 endpoint passed 7,458 jobs. Full default build passed 21,355 jobs
 (`/tmp/nuclear-angle-full.log`), after `lake exe cache get`. Paper and visualization files remain untouched.
+
+
+## Complete nuclear uniqueness criterion — 27 October 2026
+
+`NuclearSignedPhases.lean` constructs the opposite explicit optimal
+phase `negativeNuclearPhaseRotation_complex = R(C-iS)`. It is source-
+reflection conjugate to the adjoint of the positive phase. Native
+nuclear cost is therefore exactly the same projection-difference
+value, even at infinity, and the unitary transports the actual pair.
+`norm_nuclearPhaseRotation_sub_negative_complex` proves the exact
+separation of these two global optimizers is `2 ||P_K-P_L||` in operator
+norm, including fixed vectors and right angles.
+
+`NuclearUniqueness.nuclear_transport_unique_minimizer_iff_complex`
+proves the full endpoint criterion, for **arbitrary** orthogonally
+complemented pairs in a complete complex Hilbert space: a unique global
+native extended nuclear optimizer exists iff K=L. No trace-class,
+balance, separability or transport-feasibility assumption is imposed.
+Finite-cost uniqueness forces the two opposite optimal phases to agree,
+and their separation forces the projection gap to vanish. For an
+infinite-cost optimum, the negative of any transporter is another
+optimizer; equality can occur only in the zero space, also with K=L.
+For K=L the unique optimizer is identity by definiteness of the gauge.
+
+`existsUnique_nearest_nuclear_commuting_unitary_iff_complex` transfers
+the result to exact symmetry correction: there is a unique globally
+nearest nuclear commuting unitary iff the input A already commutes
+with P_K. This is the zero critical-threshold endpoint of the strict-
+Schatten uniqueness theory, and explains intrinsic nonuniqueness of
+nuclear alignment as soon as a correction is needed. It does not
+classify all nonunique optimizer families or establish their topology.
+
+Focused signed-phase build passed 7,138 jobs; uniqueness passed 7,462;
+the application passed 7,894. Full default build passed 21,359 jobs
+(`/tmp/nuclear-signed-full.log`), preceded by `lake exe cache get`. Manuscript and visualization files remain untouched; historical
+priority is not inferred from Lean verification.

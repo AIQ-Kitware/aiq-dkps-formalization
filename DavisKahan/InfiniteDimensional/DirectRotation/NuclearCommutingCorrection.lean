@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenNuclearEndpoint
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenCommutingCorrection
+public import DavisKahan.InfiniteDimensional.DirectRotation.NuclearUniqueness
 
 /-!
 # Exact nuclear correction to a projection-preserving unitary
@@ -124,5 +125,22 @@ theorem exists_finite_nearest_nuclear_commuting_unitary_iff_complex
     obtain ⟨C, hC, hfinite, _, hmin⟩ :=
       exists_nearest_nuclear_commuting_unitary_complex K A hcomm hbalance
     exact ⟨C, hC, hfinite, hmin⟩
+
+/-- **Nuclear correction is unique only for an existing symmetry.**
+For an arbitrary ambient unitary, the globally nearest projection-
+commuting unitary is unique exactly when the input already commutes
+with the projection. No ideal, norm-gap or defect hypotheses are needed. -/
+theorem existsUnique_nearest_nuclear_commuting_unitary_iff_complex
+    (K : Submodule ℂ E) [K.HasOrthogonalProjection] (A : E ≃ₗᵢ[ℂ] E) :
+    (∃! C : E ≃ₗᵢ[ℂ] E, Commute (C : E →L[ℂ] E) K.starProjection ∧
+      ∀ V : E ≃ₗᵢ[ℂ] E, Commute (V : E →L[ℂ] E) K.starProjection →
+        (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
+            ((A : E →L[ℂ] E) - (C : E →L[ℂ] E)) ≤
+          (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
+            ((A : E →L[ℂ] E) - (V : E →L[ℂ] E))) ↔
+      Commute (A : E →L[ℂ] E) K.starProjection := by
+  rw [(OperatorIdealFamily.schatten ℂ 1 (by norm_num)).existsUnique_correction_iff_transport K A,
+    SchattenPhaseTransition.nuclear_transport_unique_minimizer_iff_complex,
+    K.map_eq_self_iff_commute_starProjection A]
 
 end TauCeti.DavisKahan.InfiniteDimensional
