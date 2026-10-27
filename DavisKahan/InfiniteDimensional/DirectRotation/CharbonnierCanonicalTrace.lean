@@ -274,4 +274,19 @@ theorem charbonnier_nonacuteDirectRotation_eq_minimum_sum_of_subcritical
       (Eventually.of_forall (fun n => (heq n).trans_le (hdom n)))
   · exact sine_smoothedPhaseMinimum_sum_le_transport tau hτ K L R hmap
 
+/-- The canonical rotation globally minimizes the smoothed objective
+throughout the closed canonical gap regime, among all ambient unitary
+transporters. Infinite extended costs are permitted. -/
+theorem charbonnier_nonacuteDirectRotation_minimal_of_subcritical
+    (tau : ℝ) (hτ : 0 < tau)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (J : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
+    (hD : IsCompactOperator ((K.starProjection - L.starProjection) : E →L[ℂ] E))
+    (hcut : K.projectionGap L ≤ Real.sin (smoothedCriticalAngle tau))
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L) :
+    (1 - nonacuteDirectRotation K L J).charbonnierCost tau ≤
+      (1 - (U : E →L[ℂ] E)).charbonnierCost tau := by
+  rw [charbonnier_nonacuteDirectRotation_eq_minimum_sum_of_subcritical tau hτ K L J hD hcut]
+  exact sine_smoothedPhaseMinimum_sum_le_transport tau hτ K L U hmap
+
 end TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition

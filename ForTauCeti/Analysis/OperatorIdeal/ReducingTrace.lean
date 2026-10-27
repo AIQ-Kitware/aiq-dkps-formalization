@@ -172,6 +172,43 @@ theorem gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
     rw [htail x x.property]
   rw [gauge_schatten_rpow_eq_add_of_isReducing p hp _ M hred, hblock, htail']
 
+/-- Replacing an actual unitary block preserves the complete reference
+tail's Charbonnier cost. Both block and tail may have infinite cost. -/
+theorem charbonnierCost_unitary_displacement_eq_block_add_tail
+    (tau : ℝ) (hτ : 0 < tau) (M : Submodule 𝕜 E)
+    [M.HasOrthogonalProjection] [CompleteSpace M]
+    (U R : E ≃ₗᵢ[𝕜] E) (W : M ≃ₗᵢ[𝕜] M)
+    (hUM : ∀ x : M, U x = (W x : E)) (htail : ∀ x ∈ Mᗮ, U x = R x) :
+    (1 - (U : E →L[𝕜] E)).charbonnierCost tau =
+      (1 - (W : M →L[𝕜] M)).charbonnierCost tau +
+        (Mᗮ.orthogonalProjectionOnto ∘L (1 - (R : E →L[𝕜] E)) ∘L
+          Mᗮ.subtypeL).charbonnierCost tau := by
+  have hredU := U.isReducing_of_restriction M W (fun x => (hUM x).symm)
+  have hred : M.IsReducing (1 - (U : E →L[𝕜] E)).toLinearMap := by
+    apply (M.isReducing_iff _).mpr
+    constructor
+    · intro x hx
+      change x - U x ∈ M
+      exact M.sub_mem hx (hredU.mem_invtSubmodule hx)
+    · intro x hx
+      change x - U x ∈ Mᗮ
+      exact Mᗮ.sub_mem hx (hredU.orthogonal_mem_invtSubmodule hx)
+  have hblock : M.orthogonalProjectionOnto ∘L (1 - (U : E →L[𝕜] E)) ∘L M.subtypeL =
+      1 - (W : M →L[𝕜] M) := by
+    apply ContinuousLinearMap.ext
+    intro x
+    change M.orthogonalProjectionOnto ((x : E) - U x) = x - W x
+    rw [hUM, map_sub, M.orthogonalProjectionOnto_mem_subspace_eq_self,
+      M.orthogonalProjectionOnto_mem_subspace_eq_self]
+  have htail' : Mᗮ.orthogonalProjectionOnto ∘L (1 - (U : E →L[𝕜] E)) ∘L Mᗮ.subtypeL =
+      Mᗮ.orthogonalProjectionOnto ∘L (1 - (R : E →L[𝕜] E)) ∘L Mᗮ.subtypeL := by
+    apply ContinuousLinearMap.ext
+    intro x
+    change Mᗮ.orthogonalProjectionOnto ((x : E) - U x) =
+      Mᗮ.orthogonalProjectionOnto ((x : E) - R x)
+    rw [htail x x.property]
+  rw [charbonnierCost_eq_add_of_isReducing tau hτ _ M hred, hblock, htail']
+
 /-- A unitary with a finite-dimensional actual restriction and an
 ideal-small reference tail has finite Schatten displacement. -/
 theorem gauge_schatten_displacement_ne_top_of_finite_restriction_and_ideal_tail

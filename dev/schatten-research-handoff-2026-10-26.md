@@ -66,8 +66,12 @@ input unitary, with constant `1/sqrt(1-gamma^2)` and endpoint `p/(2-p)`.
 This uses the polar factorization of the actual diagonal block and
 contractivity of pinching, so it avoids the extra loss of an image-gap
 triangle estimate. See the correction-data entry below.
-Full nuclear, real infinite-
-dimensional and infinite Charbonnier optimizer classifications remain open.
+General infinite-rank complex Charbonnier **attainment** is now also proved:
+native Hilbert--Schmidt projection difference and balanced crossed defects
+are necessary and sufficient for a finite-cost global attainer. Its exact
+angle value and a finite correction with an explicit critical rank budget
+are compiled; see the new attainment entry below. Full nuclear, real infinite-
+dimensional and infinite Charbonnier **every-optimizer classifications** remain open.
 The dated sections below preserve proof history; use this paragraph and the
 latest endpoint sections for the current frontier.
 
@@ -159,8 +163,8 @@ construction. This is an exact sharp consequence of the Schatten optimizer
 theory; sharp classical polar conditioning alone is not claimed historically
 new. Manuscript and visualization changes remain separate.
 
-The next substantial independent extension being investigated is general
-infinite-rank **Charbonnier** attainment. Its natural feasibility ideal is
+The next extension selected after this checkpoint was general
+infinite-rank **Charbonnier** attainment, now completed in the later entry below. Its natural feasibility ideal is
 Schatten 2, because the penalty is quadratic near zero. Existing unrestricted
 lower bounds and finite-rank attainment do not yet establish that endpoint.
 The candidate proof splits off a finite spectral cutoff and uses the
@@ -199,6 +203,96 @@ finite smoothed-block replacement plus the proved canonical tail: this
 will establish full infinite-rank attainment under native Schatten-2
 projection difference and balanced crossed defects. That assembly is
 not asserted by the tail theorem alone.
+
+## General infinite-rank Charbonnier attainment and exact feasibility
+
+`CharbonnierGlobalAttainment.lean` now proves the following unrestricted
+complex Hilbert-space endpoints, for every positive smoothing parameter.
+No separability, finite ambient dimension, finite-rank difference or
+prescribed competitor block assumption is imposed.
+
+- `exists_charbonnier_minimizer_by_finite_correction`: given actual crossed-
+  defect equivalence and native Hilbert--Schmidt projection difference,
+  every positive cutoff at or below the smoothed critical sine yields
+  a global optimizer `U`. It has finite literal Charbonnier cost, exact
+  intrinsic `smoothedPhaseMinimum` angle sum, and agrees with completed
+  direct rotation `R` on the whole complementary tail. The actual update
+  rank is at most the cutoff dimension.
+- `exists_unitary_minimizing_charbonnier_transport_of_projection_sub_ne_top`:
+  native Schatten-2 projection difference and equality of the finite crossed-
+  defect dimensions give an actual finite-cost attainer with that value,
+  compared against **every** ambient unitary transporter, including
+  infinite-cost competitors.
+- `exists_charbonnier_minimizer_with_critical_rank_budget`: one can choose
+  `rank(R-U) <= n` with
+  `n * sin(smoothedCriticalAngle tau)^2 <= norm(P-Q)_{S_2}^2`.
+  The Lean statement uses the native extended gauge and real powers.
+  Critical eigenspaces require no phase correction.
+- `charbonnier_finite_minimum_iff_projection_sub_and_defect_balance`:
+  finite-cost global attainment holds **iff** the projection difference
+  is native Hilbert--Schmidt and the crossed defects balance. Necessity
+  uses the previously proved full feasibility criterion; sufficiency
+  now supplies global attainment, rather than only a feasible reference.
+
+The reusable either-field, arbitrary-dimension donor
+`ContinuousLinearMap.charbonnierCost_unitary_displacement_eq_block_add_tail`
+(in `ForTauCeti/.../OperatorIdeal/ReducingTrace.lean`) supplies exact block
+replacement additivity, including divergent block and tail costs.
+`CharbonnierCanonicalTrace.lean` also now exposes
+`charbonnier_nonacuteDirectRotation_minimal_of_subcritical`, an unrestricted
+infinite-dimensional canonical-optimality sufficiency theorem through the
+closed smoothed gap threshold. Necessity and uniqueness are not claimed
+by that theorem.
+
+The assembly proof uses a finite common reducing sine sector, optimizes
+its actual restricted pair, replaces that block in the canonical rotation,
+and combines the exact finite optimum, proved infinite canonical tail and
+intrinsic reducing-trace decomposition. Native Schatten-2 membership
+ensures finite cost because the penalty is quadratic near zero. The
+unrestricted Hilbert lower bound proves global optimality of the assembled
+unitary. Right-angle defects are inside the finite sector; zero and
+infinite fixed sectors remain on the canonical tail.
+
+Focused build passed (7,346 jobs), and the full default build passed
+(21,279 jobs), with warnings treated as errors. These are new compiled
+scope extensions, not a theorem-level historical priority clearance.
+The paper and visualizations remain assigned to a different agent.
+
+### Exact next proof obligations for every smoothed optimizer
+
+Attainment does not yet classify arbitrary minimizers. The finite smoothed
+classification already exists, but the infinite analogue of
+`SchattenStationarity.lean` / `SchattenGradientCutoff.lean` is missing.
+The next decisive analytic lemma is a rank-one first variation of the
+**native finite Charbonnier trace** for `1-U in S_2`, at every real time:
+for unit `x`, with `U_s = U exp(s i rankOne(x,x))`, prove
+
+```
+d/ds CharbonnierCost_tau(1-U_s)
+  = Re inner x (smoothedUnitaryGradient tau U_s x).
+```
+
+Use `toReal` only after proving finite cost along the whole variation.
+The gradient is already defined by continuous functional calculus in
+`SmoothedUnitaryVariation.lean`; its self-adjointness and commutation
+statements already omit finite dimension. Its scalar symbol is
+`Im(z)/sqrt(tau^2+|z-1|^2)`. Stationarity should then imply reflection
+conjugation negates this gradient. Compact positive gradient cutoffs can
+inherit finite global optimality using the proved Charbonnier block
+additivity and cancellation of a **finite** complementary cost.
+
+For the derivative limit, do not infer continuity of the trace from mere
+operator-norm convergence. A possible route is finite unitary truncation
+in native S_2, plus uniform control of the rank-one-perturbed singular-
+value tails (rank-one interlacing), the quadratic Charbonnier bound and
+the existing finite derivative/CFC arguments. This route remains unproved.
+A general S_2-continuity lemma for the Charbonnier trace would also supply
+the missing convergence, if established with actual hypotheses.
+After stationarity, handle the zero-gradient reflection sector explicitly
+and recover the finite active head and canonical inactive tail before
+claiming all-optimizer classification or uniqueness. Infinite nuclear
+attainment/classification and real infinite-dimensional theory remain
+independent open directions.
 
 ## Exact infinite-dimensional uniqueness threshold
 
