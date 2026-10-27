@@ -12,9 +12,117 @@ mathematical result, as opposed to a formalization achievement, an explicit
 correction of a printed statement, or a consequence of standard projection
 and matrix geometry?
 
-**Current verification frontier:** the 25 October entry supersedes earlier
-pending phase-parameter assessments. The original source snapshots and
-literature comparisons below remain historical research records.
+**Current verification frontier:** the 26 October addendum immediately
+below supersedes the older infinite-dimensional status in this chronological
+record. The source snapshots and earlier literature comparisons remain
+historical evidence, not current proof-frontier claims.
+
+## Supplied expanded historical-priority review (26 October 2026)
+
+**Provenance:** supplied by Jon Crall in the research conversation on
+26 October, attributed to another LLM's historical review. This entry
+preserves its findings, source leads and limitations so subsequent agents
+do not repeat the same broad searches. It is not an independent endorsement
+of every source attribution or a claim of exhaustive priority clearance.
+The supplied report did not include the advertised downloadable full note,
+exact URLs for all sources, or source-page images. Those artifacts are not
+silently treated as inspected evidence here.
+
+**Correct the supplied report's stale mathematical frontier.** At committed
+source `711fef189` (classification `aeb6384f1`, rank certificate
+`113746cf9`), the complex `1<p<2` theory already has exact general
+infinite-rank attainment and classification of **every** global optimizer
+under native Schatten projection-difference and balanced crossed-defect
+hypotheses. Every optimizer is canonical outside the same finite strictly
+supercritical sector; no separability is needed. See
+`SchattenGlobalAttainment.lean`, `SchattenOptimizerClassification.lean`,
+`SchattenOptimizerRank.lean` and the current
+[research handoff](../../dev/schatten-research-handoff-2026-10-26.md).
+The supplied claim that broader exact attainment is still open is
+superseded. Its priority search does **not** establish historical novelty
+of these newly completed infinite-dimensional endpoints.
+
+**Terminology:** real nuclear *value*, attainment, parity and canonical-value
+criteria are proved. A complete description of **every real nuclear
+optimizer** is a different claim and remains outside those results.
+
+### Source chain and what was reportedly compared
+
+| Source | Supplied finding and mathematical distinction | Evidence boundary / next action |
+| --- | --- | --- |
+| Davis--Kahan (1970), *The Rotation of Eigenvectors by a Perturbation. III* | Complex phase improvements already occur; the specifically printed real Proposition 4.4 has the project's verified arbitrarily-small-angle refutation. | The phase mechanism and generic trace nonoptimality carry no first-discovery claim. Preserve the exact source correction and its repaired scope. |
+| Bolotnikov--Li--Rodman (2001), ELA 8, 26--46, DOI `10.13001/1081-3810.1058` | Problem 1.1 poses the ambient transport minimum. Q-norm results cover Schatten `p>=2`; Frobenius optimizer classifications are explicit. Lemma 3.3 treats a special `1<=p<2` failure. | [Official journal PDF](https://journals.uwyo.edu/index.php/ela/article/download/117/117/117). Prior repository review already inspected these exact statements. Compare any newly found theorem at the level of hypotheses and optimization domain. |
+| Qiu--Zhang--Li (2005/2006), *Unitarily Invariant Metrics on the Grassmann Space*, SIAM JMAA 27, 507--531, DOI `10.1137/040607605` | Section 5 reportedly repeats the small-angle direct-rotation optimality assertion. Its matrix-logarithm and shortest-path objectives are distinct from extrinsic displacement. | Already recorded in the earlier literature map. Do not claim that refuting extrinsic optimality refutes the intrinsic/logarithmic result. |
+| Zhang--Qiu (2010), *From Subadditive Inequalities of Singular Values to Triangle Inequalities of Canonical Angles*, SIAM JMAA 31, 1606--1620, DOI `10.1137/09074841X` | Explicitly acknowledges trace-norm nonoptimality of direct rotation. | Rules out novelty for nonoptimality alone. The supplied review located no below-sixty-degree correction or all-rank matching/parity theorem there. |
+| Aubrun--Szarek (2017), *Alice and Bob Meet Banach*, Appendix B, equation (B.13), Exercise B.12 and solution hint | Supplied review attributes to the book the same real extrinsic quotient objective, an all-exponent canonical-angle formula, and coordinatewise singular-value domination. | Earlier repository inspection used a third-party Appendix B reproduction. The supplied review cites an author domain but gives no edition/page artifact. [Author landing page](https://math.univ-lyon1.fr/~aubrun/ABMB/index.html) explicitly offers a preliminary version; [author PDF lead](https://math.univ-lyon1.fr/~aubrun/ABMB/ABMB.pdf). Independent PDF retrieval on 26 October returned HTTP 503 through both browser and direct fetch. Original printed/publisher edition verification remains pending. |
+| Aubrun--Szarek posted errata | Supplied review reports no Exercise B.12 correction in the errata dated 7 September 2023. | [Author-hosted errata](https://case.edu/artsci/math/szarek/ABMB/errata.pdf) was accessible in this recording pass and gives that update date. The earlier inspection also recorded no listed quotient correction. This does not establish the contents of later printings or authors' awareness. |
+| Massey--Rios--Stojanoff (2018), *Local Lidskii's Theorems for Unitarily Invariant Norms* | Related local-to-global theorems on spectral or fixed-singular-value orbits. | [Primary manuscript](https://arxiv.org/html/1806.11436); prior detailed comparison is below. No reduction from the transport fiber to those optimization domains was established by the supplied review. |
+| Contino--Giribet--Maestripieri, *Weighted Procrustes Problems* | Weighted Schatten approximation over general bounded operators differs from constrained unitary/orthogonal transport. | [Primary preprint](https://arxiv.org/abs/1610.00558). This comparison identifies a domain difference; it does not exclude all Procrustes reductions. |
+| Watson's Procrustes work; Loring on principal angles; Andruchow--Larotonda--Recht on restricted Schatten-unitary geometry | Related frame fitting, real/complex/quaternionic projection geometry, and rectifiable/Finsler path geometry. | The supplied expanded report names these authors without exact theorem locators or complete bibliography. Preserve them as checked-topic reports and source leads, not completed theorem-level exclusions. Recover exact sources from the reviewing agent's full note before treating these branches as closed. |
+| Avron--Seiler--Simon relative-index theory (1990/1994) | The index obstruction to near-identity transport is classical. | [1994 author-hosted paper](https://phsites.technion.ac.il/avron/wp-content/uploads/sites/3/2013/05/J_Func_Anal_120_220_1994_index_pair.pdf). Credit this foundation; investigate priority of the exact nonquadratic optimum and all-optimizer finite-sector theorem separately. |
+
+### Supplied textbook counterexample and its exact scope
+
+For two real planes in `R^4` with both principal angles `pi/6`, the
+supplied independent numerical check reports canonical displacement
+singular values `(2 sin(pi/12),2 sin(pi/12),2 sin(pi/12),2 sin(pi/12))`
+and competitor values `(1,1,0,0)`. Thus the nuclear costs are
+`8 sin(pi/12) = 2.070552...` and `2`. The last two coordinates refute
+the claimed coordinatewise domination. This is consistent with the
+project's compiled small-angle real counterexample mechanism; the
+reported decimals are not new compiler evidence. The simpler orthogonal
+real-line example already documented below also contradicts the all-p
+extrinsic formula. Neither example by itself refutes shortest-path or
+matrix-logarithm optimality.
+
+The correction may have scholarly interest across the 1970 source,
+2005/2006 restatement and attributed 2017 exercise. It remains essential
+to verify the printed edition before describing a published-book error
+as independently authenticated. No author contact has been authorized
+or performed in this recording pass.
+
+### Claim-level priority assessment retained from the supplied review
+
+| Project result | Assessment from located literature |
+| --- | --- |
+| Ambient unitary transport objective; complex phase mechanism; generic nuclear nonoptimality | Established precedents; not originality claims. |
+| Specific real Proposition 4.4 correction at arbitrarily small angles | Correction not located earlier in the examined sources; historical priority remains qualified. |
+| Complex nuclear value `2 sum sin(theta)` | Proved here, with classical ingredients; independent mathematical priority uncertain. |
+| Unrestricted real nuclear weighted matching; strictly-acute positive-angle even-multiplicity equality criterion | Strong originality candidates; no equivalent theorem located in examined sources. The parity criterion is a consequence of the matching theory. |
+| Real nuclear canonical-value criterion (at most one positive angle, at most `pi/3`) | Sharp repair/consequence; distinguish value equality from complete optimizer classification. |
+| Complex `1<p<2` exact transition, all-optimizer classification and finite complex local-to-global theorem | Strong originality candidates; adjacent orbit theorems require explicit comparison. |
+| Exact Charbonnier transport minimum, optimizer parameters and stability | Candidate contribution; no equivalent constrained transport theorem located. Smooth penalties themselves are established. |
+| Infinite-dimensional pair-index obstruction and canonical `p>=2` optimality | Classical substance; verified scope and implementation are separate contributions. |
+| Newly completed general infinite-rank `1<p<2` attainment and every-optimizer finite-sector classification | Beyond the supplied review's inspected frontier; historical assessment still required. |
+| Nearest subspace-preserving unitary consequences | Useful application consequences; change of variables supplies no independent fundamental-priority claim. |
+
+### Searches to retain, and the remaining targeted search
+
+The supplied review reports searches under orthogonal/unitary Procrustes,
+optimal block-diagonal unitary approximation, Grassmann extrinsic quotient
+distance, local Lidskii orbit optimization, restricted Schatten-unitary
+geometry and pair-index theory. Reuse the explicit comparisons above;
+do not rerun broad keyword searches and call the same absence fresh evidence.
+
+The review could not perform exhaustive authenticated MathSciNet/zbMATH
+citation-chain clearance, lacked some older full texts, and encountered
+incomplete or inconsistent citation records. Its strongest supported
+negative conclusion is that no equivalent arbitrary-rank real matching,
+nuclear parity or intermediate-exponent complex classification theorem
+was located in the primary sources it examined. This is not proof of
+first publication. Next targeted checks are: recover the full review's
+exact older-paper locators; authenticate Appendix B against an identified
+edition; follow the BLR/Qiu citation chains; and compare the newly proved
+infinite-dimensional optimizer finite-sector principle against **extrinsic**
+operator-ideal nearness results. Intrinsic geodesic results must keep their
+own objective and feasibility conditions.
+
+The supplied editorial recommendation is to lead with the exact
+optimization theory and use the historical correction as motivation.
+Its suggested finite-dimensional novelty wording is conservative. The
+infinite-dimensional contribution can now be stated at the compiled scope
+above, with historical priority still qualified. This entry is research
+evidence only; it does not edit `paper.tex` or contact external authors.
 
 ## Nuclear matching, exchange and a false real extension (25 October)
 
