@@ -2746,3 +2746,56 @@ approximants suffices. Combined with the finite-cost complex landscape,
 this yields the unconditional exact local/global/noncompact iff above.
 Paper and visualizations remain untouched; no historical-priority claim is
 inferred from the formal landscape result.
+
+## Complete local landscape for nearest symmetry correction
+
+The field-generic donor
+`TauCeti.charbonnier_correction_isLocalMinOn_iff_transport_isLocalMinOn`
+now transfers actual operator-norm local minimality between nearest
+projection-commuting correction and relative subspace transport. The
+candidate is feasible, the maps are continuous inverses on actual unitary
+groups, and all native extended costs and nearby ambient competitors are
+retained. No finite-cost or positive-smoothing assumption is needed for
+this algebraic/topological correspondence itself.
+
+For positive smoothing on any complete complex Hilbert space,
+`CharbonnierCommutingCorrection.charbonnier_correction_isLocalMinOn_iff_global_or_noncompact_complex`
+classifies every locally nearest commuting correction C of input A:
+local optimality iff global optimality or noncompactness of `A-C`.
+The latter points lie on open infinite-cost plateaus. The correspondence
+between compactness of `A-C` and of the relative displacement is proved
+by the two actual unitary factorizations, not by treating Charbonnier cost
+as an ideal gauge.
+`charbonnier_correction_isMin_of_isLocalMinOn_of_finite_cost_complex`
+then proves every finite-cost local correction is globally nearest among
+all ambient commuting unitaries. No standing index or commutator-ideal
+condition is assumed in either landscape endpoint. Focused application
+build passed 7,682 jobs. No algorithmic convergence, experimental, physical
+implementation or statistical guarantee is claimed.
+
+The completed complex smoothed frontier now includes exact global values
+and attainment; every optimizer and its topology; exact uniqueness;
+finite-rank correction budgets; every operator-norm local minimum,
+including the complete extended-cost obstruction; and the corresponding
+nearest symmetry-correction landscape. All statements retain their exact
+ideal/index conditions where those are needed for finite attainment.
+Historical priority and formal verification remain separate questions.
+Paper and visualization files remain untouched.
+
+Next substantive theorem: extend the finite-cost Hilbert local-to-global
+argument to strict Schatten exponents `1<p<2`, preserving the full
+zero-gradient kernel and handling singular displacement values through
+the existing native rank-one first variation. The new compact-relative
+transport density and plateau arguments are field-generic foundations
+for its extended-cost landscape, but they do not by themselves prove
+its finite-cost local-to-global implication. Infinite nuclear and real
+optimizer classifications, projection-factor connectedness/manifold
+dimensions, and quantitative varying-data/near-minimizer stability remain
+open and are not implied by this smoothed closure.
+
+Final compiler evidence for the complete landscape/application wave:
+full default `lake build` passed 21,333 jobs
+(`/tmp/charbonnier-local-final-full.log`), and separate `lake build Challenge`
+passed 19,755 jobs (`/tmp/charbonnier-local-final-challenge.log`). Each build
+was preceded by `lake exe cache get`. All preceding focused endpoints
+were accepted without increasing heartbeat limits or disabling linters.

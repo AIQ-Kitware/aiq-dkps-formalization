@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierUniquenessThreshold
+public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierLocalGlobal
 public import DavisKahan.InfiniteDimensional.DirectRotation.CharbonnierOptimizerRank
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.CharbonnierCorrection
 
@@ -27,7 +28,7 @@ noncomputable section
 namespace TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition
 
 open FiniteDimensional.SmoothedPhaseTransition
-open scoped ENNReal
+open scoped ENNReal TauCeti.LinearIsometryEquivOperatorNorm
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
@@ -180,5 +181,90 @@ theorem charbonnier_nearest_commuting_unitary_has_critical_rank_budget_complex
     rw [hfactor]
     exact (LinearMap.rank_comp_le_left _ _).trans hRank
   · simpa only [L, OperatorIdealFamily.gauge_projection_image_sub_eq_commutator] using hbudget
+
+/-- **Complete local landscape for unitary symmetry correction.**
+A feasible commuting correction is locally nearest in operator norm iff
+it is globally nearest or its difference from the input is noncompact.
+The latter points lie on infinite-cost plateaus. No finite-distance,
+commutator-ideal or index hypothesis is imposed. -/
+theorem charbonnier_correction_isLocalMinOn_iff_global_or_noncompact_complex
+    (tau : ℝ) (hτ : 0 < tau)
+    (K : Submodule ℂ E) [K.HasOrthogonalProjection] (A C : E ≃ₗᵢ[ℂ] E)
+    (hC : Commute (C : E →L[ℂ] E) K.starProjection) :
+    IsLocalMinOn
+      (fun V : E ≃ₗᵢ[ℂ] E =>
+        ((A : E →L[ℂ] E) - (V : E →L[ℂ] E)).charbonnierCost tau)
+      {V | Commute (V : E →L[ℂ] E) K.starProjection} C ↔
+    IsMinOn
+      (fun V : E ≃ₗᵢ[ℂ] E =>
+        ((A : E →L[ℂ] E) - (V : E →L[ℂ] E)).charbonnierCost tau)
+      {V | Commute (V : E →L[ℂ] E) K.starProjection} C ∨
+      ¬ IsCompactOperator
+        (((A : E →L[ℂ] E) - (C : E →L[ℂ] E)) : E →L[ℂ] E) := by
+  let L := K.map A.toLinearMap
+  let T := A.symm.trans C
+  have hmap : L.map T.toLinearMap = K := by
+    rw [K.map_correction_transport]
+    exact (K.map_eq_self_iff_commute_starProjection C).mpr hC
+  have hglobal :
+      IsMinOn
+        (fun V : E ≃ₗᵢ[ℂ] E =>
+          ((A : E →L[ℂ] E) - (V : E →L[ℂ] E)).charbonnierCost tau)
+        {V | Commute (V : E →L[ℂ] E) K.starProjection} C ↔
+      IsMinOn
+        (fun V : E ≃ₗᵢ[ℂ] E => (1 - (V : E →L[ℂ] E)).charbonnierCost tau)
+        {V | L.map V.toLinearMap = K} T := by
+    constructor
+    · intro hmin V hV
+      exact (charbonnier_correction_isMin_iff_transport_isMin tau K A C).mp
+        (fun W hW => @hmin W hW) V hV
+    · intro hmin V hV
+      exact (charbonnier_correction_isMin_iff_transport_isMin tau K A C).mpr
+        (fun W hW => @hmin W hW) V hV
+  have hcompact :
+      IsCompactOperator (((A : E →L[ℂ] E) - (C : E →L[ℂ] E)) : E →L[ℂ] E) ↔
+      IsCompactOperator ((1 - (T : E →L[ℂ] E)) : E →L[ℂ] E) := by
+    have hfactor : (A : E →L[ℂ] E) - (C : E →L[ℂ] E) =
+        (1 - (T : E →L[ℂ] E)) ∘L (A : E →L[ℂ] E) := by
+      ext x
+      change A x - C x = A x - C (A.symm (A x))
+      rw [A.symm_apply_apply]
+    have hfactor' : 1 - (T : E →L[ℂ] E) =
+        ((A : E →L[ℂ] E) - (C : E →L[ℂ] E)) ∘L (A.symm : E →L[ℂ] E) := by
+      ext x
+      change x - C (A.symm x) = A (A.symm x) - C (A.symm x)
+      rw [A.apply_symm_apply]
+    constructor
+    · intro h
+      rw [hfactor']
+      exact h.comp_clm (A.symm : E →L[ℂ] E)
+    · intro h
+      rw [hfactor]
+      exact h.comp_clm (A : E →L[ℂ] E)
+  exact (charbonnier_correction_isLocalMinOn_iff_transport_isLocalMinOn tau K A C hC).trans
+    ((charbonnier_isLocalMinOn_iff_global_or_noncompact_complex tau hτ L K T hmap).trans
+      (or_congr hglobal.symm (not_congr hcompact.symm)))
+
+/-- A finite-cost local correction is globally nearest among all
+projection-commuting ambient unitaries, including infinite-cost rivals. -/
+theorem charbonnier_correction_isMin_of_isLocalMinOn_of_finite_cost_complex
+    (tau : ℝ) (hτ : 0 < tau)
+    (K : Submodule ℂ E) [K.HasOrthogonalProjection] (A C : E ≃ₗᵢ[ℂ] E)
+    (hC : Commute (C : E →L[ℂ] E) K.starProjection)
+    (hfinite : ((A : E →L[ℂ] E) - (C : E →L[ℂ] E)).charbonnierCost tau ≠ ∞)
+    (hmin : IsLocalMinOn
+      (fun V : E ≃ₗᵢ[ℂ] E =>
+        ((A : E →L[ℂ] E) - (V : E →L[ℂ] E)).charbonnierCost tau)
+      {V | Commute (V : E →L[ℂ] E) K.starProjection} C) :
+    IsMinOn
+      (fun V : E ≃ₗᵢ[ℂ] E =>
+        ((A : E →L[ℂ] E) - (V : E →L[ℂ] E)).charbonnierCost tau)
+      {V | Commute (V : E →L[ℂ] E) K.starProjection} C := by
+  have h := (charbonnier_correction_isLocalMinOn_iff_global_or_noncompact_complex
+    tau hτ K A C hC).mp hmin
+  apply h.resolve_right
+  exact not_not.mpr (OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top
+    2 (by norm_num) _
+    ((ContinuousLinearMap.charbonnierCost_ne_top_iff_schatten_two tau hτ _).mp hfinite))
 
 end TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition
