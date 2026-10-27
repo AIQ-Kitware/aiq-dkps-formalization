@@ -38,9 +38,12 @@ approximation from inexact input, and connectedness of rank strata.
 Critical scalar-phase conditioning is now proved exactly: the excess
 cost divided by the fourth power of phase tends to a strictly positive
 explicit coefficient. Two-sided local quartic growth and failure of
-every positive quadratic modulus are compiled. This is presently a
-scalar-phase result; the actual-transporter norm interpretation and
-unrestricted ambient near-minimizer bounds are separate steps.
+every positive quadratic modulus are compiled. The same coefficient
+now holds for the literal planar Schatten-power cost divided by the
+fourth power of actual operator-norm transporter distance. The planar
+no-quadratic-modulus theorem therefore excludes quadratic growth over
+all ambient feasible unitary transporters. A positive lower growth bound
+for every near-minimizer remains a separate task.
 Full nuclear, real infinite-
 dimensional and infinite Charbonnier optimizer classifications remain open.
 The dated sections below preserve proof history; use this paragraph and the
@@ -190,6 +193,44 @@ step is an exact operator-norm or Frobenius-distance phase formula and
 the literal planar Schatten cost-to-distance limit, followed by the
 ambient no-quadratic-modulus theorem. No historical-priority claim is
 made for this conditioning consequence of the phase-transition theory.
+
+## Critical growth for actual ambient planar transporters
+
+`SchattenCriticalTransportGrowth.lean` proves
+`tendsto_critical_planar_transport_quartic_ratio`. For finite `1<p<2`,
+`theta=theta_c(p)`, the literal finite Schatten-power cost satisfies
+
+```
+( ||I-U_delta||_p^p - ||I-U_0||_p^p ) / ||U_delta-U_0||_op^4
+  -> p (2-p) chord(theta_c)^(p-2) / 24    as delta -> 0+.
+```
+
+Here every `U_delta` is the actual bundled `scalarPhaseTransport` carrying
+the same source line to the same target line. The reusable exact formula
+`scalarPhaseTransport_norm_sub` identifies the operator distance between
+any two phases with their unit-complex-phase distance;
+`scalarPhaseTransport_norm_sub_zero` gives `abs(chord(delta))`.
+`scalarPhaseTransport_schattenPower` identifies the literal cost on the
+entire feasible phase interval, including endpoints.
+
+`tendsto_critical_planar_transport_quadratic_ratio` makes the corresponding
+quadratic quotient tend to zero. The endpoint
+`critical_planar_transport_no_quadratic_modulus` states that, for **every**
+positive coefficient and **every** positive operator-norm radius, a
+feasible nonzero planar unitary transporter lies inside that radius and
+violates that quadratic Schatten-**power** growth bound. Consequently
+no such bound can hold over all ambient competitors. The canonical
+phase's global optimality at equality is supplied separately by the
+already compiled exact planar optimality theorem. This does not claim
+an unrestricted quartic lower bound for every ambient competitor, nor
+does it yet replace the power objective by its `p`-th root in the
+conditioning theorem.
+
+Focused build passed (6,842 jobs), and the full default build passed
+(21,255 jobs), with warnings treated as errors. The next
+useful extension is the original Schatten-norm excess (including its
+exact coefficient), and a quantitative lower bound that applies to
+every ambient near-minimizer rather than just phase curves.
 
 ## All-rank real nuclear canonical-value criterion
 
