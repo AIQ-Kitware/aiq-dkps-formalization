@@ -47,6 +47,12 @@ for every near-minimizer remains a separate task.
 The original norm objective, as well as its `p`-th power, now has its
 exact positive critical coefficient and its actual ambient planar
 no-quadratic-modulus theorem; see the latest critical-norm entry below.
+Varying-data stability is now also proved for a fixed source: throughout
+the closed canonical regime, actual infinite-dimensional Schatten
+optimizers obey a dimension-free Lipschitz bound in the target projection.
+The endpoint constant is `p/(2-p)`. This differs from an objective-error
+certificate for an arbitrary near-minimizer of one fixed problem, which
+remains open.
 Full nuclear, real infinite-
 dimensional and infinite Charbonnier optimizer classifications remain open.
 The dated sections below preserve proof history; use this paragraph and the
@@ -274,6 +280,81 @@ must accommodate the fourth-order obstruction just proved. The
 phase-bifurcation amplitude and variation of optimizers under perturbed
 projection data remain further research targets; neither is implied by
 the fixed-pair quartic law.
+
+## Dimension-free data stability, including the critical boundary
+
+`Geometry/Polar/CanonicalStability.lean` proves
+`norm_canonicalPolarFactor_sub_le_of_projectionGap_le`: on any complete
+complex Hilbert space, for fixed `K` and arbitrary target subspaces `L,M`,
+if both source/target projection gaps are at most `gamma < 1`, then
+
+```
+||R(K,L)-R(K,M)|| <= projectionGap(L,M) / sqrt(1-gamma^2).
+```
+
+There is no compactness, ideal, finite-rank or separability hypothesis in
+this geometric theorem. The two-endpoint cosine estimate
+`add_mul_norm_canonicalPolarFactor_sub_le_two_mul_projectionGap` permits
+unequal cosine lower bounds. `canonical_modulus_coercive_of_gap_sq_add_le_one`
+proves the full ambient modulus lower bound, retaining fixed directions.
+The pre-polar target-difference identity is exact in operator norm.
+
+`SchattenOptimizerDataStability.lean` transfers these bounds to **every**
+actual global optimizer of each native Schatten problem, for finite
+`1<p<2`. The two source/target projection differences must belong to `S_p`;
+candidate finite cost and separate index balance are conclusions. The
+main endpoints are `norm_schatten_minimizers_sub_le_of_projectionGap_le`
+and `norm_schatten_minimizers_sub_le_at_closed_critical_gap`.
+Throughout the entire closed canonical regime the latter gives
+
+```
+||U_L-U_M|| <= (p/(2-p)) * projectionGap(L,M).
+```
+
+Thus a target-projection error bound gives an actual optimizer error
+bound, independently of Hilbert dimension. The critical equality case
+is included: quartic growth of a fixed objective does not prevent
+Lipschitz dependence of its unique optimizer on these projection data.
+This is a deterministic error certificate, not a numerical-performance
+or statistical guarantee. Optimality of the displayed Lipschitz constant
+has not yet been formally proved here.
+
+The reusable donor lemmas are
+`ContinuousLinearMap.add_mul_norm_sub_unitary_le_two_mul_norm_sub`
+(actual unitary factorizations, either scalar field, unequal form lower
+bounds) and
+`ContinuousLinearMap.mul_norm_sq_le_re_inner_modulus_of_sq_mul_norm_sq_le`
+(complex Hilbert modulus coercivity from a squared norm lower bound).
+They use accepted Tau Ceti Sylvester and modulus APIs and Mathlib's
+operator-monotone square root. The full bounded-polar upstream module
+is not needed: importing it alongside the still-unmerged local partial
+polar module exposed an existing declaration collision, so the new
+factorization lemma imports only its actual Mathlib adjoint dependencies.
+No adapter or copied upstream polar implementation was introduced.
+
+Historical boundary: the matrix polar perturbation estimate is classical,
+not a novelty claim. An author-hosted primary account verifies the exact
+factor `2/(sigma_min(X)+sigma_min(Y))` and attributes it to Li (1995):
+[R.-C. Li, Handbook of Linear Algebra, Section 15.3, Fact 3, p.15-8](https://bpb-us-e1.wpmucdn.com/websites.uta.edu/dist/7/5059/files/2021/06/li2007HLA.pdf).
+The author-hosted publication list and
+[LAPACK Working Note 83](https://www.netlib.org/lapack/lawnspdf/lawn83.pdf)
+also corroborate the bibliography. This proof formalizes that mechanism
+and applies it to the new exact Schatten optimizer regime; it does not
+establish first priority for projection-transport continuity.
+
+Focused build passed (8,080 jobs), and the full default build passed
+(21,265 jobs), with warnings treated as errors.
+The exact outstanding objective-error lemma is a lower bound of the form
+`ofReal(c * ||U-R||^2) + Phi(1-R)^p <= Phi(1-U)^p` for **every** feasible
+ambient `U`, with positive `c=c(p,gamma)` under a strict critical-gap
+margin. The current global lower bound uses a local-minimum normal form
+and cannot simply retain such a residual for an arbitrary competitor.
+At critical equality the quadratic version is false, by the preceding
+compiled planar obstruction. A dimension-free assertion for the
+unpowered norm excess also requires care: adding unchanged positive-cost
+blocks dilutes norm excess under the `p`-th root. The power objective is
+the natural first target; a formal ambient dilution counterexample is
+an independent useful next step.
 
 ## All-rank real nuclear canonical-value criterion
 
