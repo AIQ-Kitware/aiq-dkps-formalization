@@ -2408,3 +2408,27 @@ data stability and certified approximation. Compactness and rank separation
 here concern exact optimizers of fixed data and do not imply those stronger
 stability assertions. No new historical-priority claim is made. The paper
 and visualization files remain assigned separately and unchanged.
+
+## Infinite Charbonnier closed-threshold rigidity and canonical tails
+
+The native finite-cost complex Charbonnier theory now includes
+`eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical` and
+`apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal`.
+The first proves canonical uniqueness through the closed critical gap;
+the second proves canonical action on the entire complementary sine-cutoff
+tail of every global optimizer. Both hold on arbitrary complete complex
+Hilbert spaces, without separability or finite-rank assumptions. The
+stationarity and angle-preservation theorems supply the reducing structure;
+it is not imposed on the optimizer. Compact spectral completeness includes
+the whole zero-angle kernel. Finite native cost remains an essential
+hypothesis; the extended all-infinite-cost problem has different optimizers.
+
+The tail statement assumes native Hilbert--Schmidt projection difference,
+an actual crossed-defect isometry, and any positive cutoff below one and
+at most the critical sine. Its restricted native finiteness is proved by
+Hilbert--Schmidt compression and the quadratic Charbonnier ideal equivalence,
+without treating Charbonnier cost itself as an ideal norm. Focused builds
+passed (7,364 and 7,366 jobs respectively). Next: combine tail necessity,
+finite-block cost additivity and the finite phase/defect iff to classify
+every infinite-dimensional optimizer under the finite-cost feasibility
+conditions. Historical novelty remains a separate priority question.
