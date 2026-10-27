@@ -8,6 +8,7 @@ module
 public import DavisKahan.Geometry.Polar.PairedPhase
 public import ForTauCeti.Analysis.OperatorIdeal.OddModulusSplit
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryCorrection
+public import Mathlib.LinearAlgebra.Dimension.RankNullity
 
 /-!
 # An explicit nuclear-optimal phase of completed direct rotation
@@ -63,6 +64,54 @@ theorem cosine_add_i_sine_mem_unitary_complex
         rw [hprod, mul_smul_comm, smul_mul_assoc, hCS.eq]
         module
       _ = 1 := hpy
+
+/-- The common nuclear phase fixes exactly the vectors on which the
+projections agree. Unitarity converts a fixed-vector equation to its
+adjoint equation; their difference forces the sine to vanish. -/
+theorem cosine_add_i_sine_apply_eq_self_iff_complex
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (x : E) :
+    (Proposition35.section3CosAngleOperator K L + Complex.I • K.sinAngleOperator L) x = x ↔
+      K.starProjection x = L.starProjection x := by
+  let C := Proposition35.section3CosAngleOperator K L
+  let S := K.sinAngleOperator L
+  let F := C + Complex.I • S
+  have hC := ((ContinuousLinearMap.nonneg_iff_isPositive).mp
+    (Proposition35.section3CosAngleOperator_nonneg K L)).isSelfAdjoint
+  have hS := (K.isPositive_sinAngleOperator L).isSelfAdjoint
+  constructor
+  · intro hx
+    have hinv := congrArg (fun T : E →L[ℂ] E => T x)
+      (Unitary.star_mul_self_of_mem (cosine_add_i_sine_mem_unitary_complex K L))
+    change star F (F x) = x at hinv
+    rw [hx] at hinv
+    have hstar : star F = C - Complex.I • S := by
+      change star (C + Complex.I • S) = C - Complex.I • S
+      rw [star_add, star_smul, hC.star_eq, hS.star_eq]
+      simp [C, S, sub_eq_add_neg]
+    rw [hstar] at hinv
+    change C x - Complex.I • S x = x at hinv
+    change C x + Complex.I • S x = x at hx
+    have hzero : (2 : ℂ) • (Complex.I • S x) = 0 := by
+      calc
+        _ = (C x + Complex.I • S x) - (C x - Complex.I • S x) := by module
+        _ = 0 := by rw [hx, hinv, sub_self]
+    have hSx : S x = 0 := by
+      exact (smul_eq_zero.mp ((smul_eq_zero.mp hzero).resolve_left (by norm_num))).resolve_left
+        Complex.I_ne_zero
+    apply sub_eq_zero.mp
+    apply norm_eq_zero.mp
+    rw [← K.norm_sinAngleOperator_apply L x, hSx, norm_zero]
+  · intro hx
+    have hSx : K.sinAngleOperator L x = 0 := by
+      apply norm_eq_zero.mp
+      rw [K.norm_sinAngleOperator_apply L x, hx, sub_self, norm_zero]
+    have hCx := Proposition35.cosine_apply_of_sinAngleOperator_eigenvector K L 0
+      ⟨le_rfl, by linarith [Real.pi_pos]⟩ x
+      (by simpa only [Real.sin_zero, RCLike.ofReal_zero, zero_smul] using hSx)
+    simp only [Real.cos_zero, RCLike.ofReal_one, one_smul] at hCx
+    change C x + Complex.I • S x = x
+    rw [hCx, hSx, smul_zero, add_zero]
 
 /-- The actual imaginary part of completed rotation is self-adjoint,
 has modulus equal to the intrinsic projection sine, and is reversed by
@@ -149,6 +198,36 @@ theorem nuclearPhaseRotation_map_complex
     (K.map_eq_iff_intertwines_reflection L R).mpr (nonacuteDirectRotation_reflection_intertwines K L D)
   change K.map (R.toLinearMap.comp V.toLinearMap) = L
   rw [Submodule.map_comp, hVmap, hRmap]
+
+/-- The correction from completed direct rotation to its common nuclear
+phase has exactly the rank of the projection difference, as a cardinal.
+Thus this explicit endpoint correction is finite rank exactly for
+finite-rank projection pairs; it cannot have the strict-exponent finite
+active cutoff on genuinely infinite-rank pairs. -/
+theorem rank_nuclearPhaseRotation_sub_directRotation_complex
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L) :
+    ((nuclearPhaseRotation_complex K L D : E →L[ℂ] E) -
+      nonacuteDirectRotation K L D).rank = (K.starProjection - L.starProjection).rank := by
+  let A := ((nuclearPhaseRotation_complex K L D : E →L[ℂ] E) -
+    nonacuteDirectRotation K L D).toLinearMap
+  let B := (K.starProjection - L.starProjection).toLinearMap
+  let R := Unitary.linearIsometryEquiv
+    (⟨nonacuteDirectRotation K L D, nonacuteDirectRotation_mem_unitary K L D⟩ :
+      unitary (E →L[ℂ] E))
+  have hker : A.ker = B.ker := by
+    ext x
+    change (nuclearPhaseRotation_complex K L D) x - R x = 0 ↔
+      K.starProjection x - L.starProjection x = 0
+    rw [sub_eq_zero, sub_eq_zero]
+    change R ((Proposition35.section3CosAngleOperator K L +
+      Complex.I • K.sinAngleOperator L) x) = R x ↔ _
+    rw [R.injective.eq_iff]
+    exact cosine_add_i_sine_apply_eq_self_iff_complex K L x
+  calc
+    A.rank = Module.rank ℂ (E ⧸ A.ker) := A.quotKerEquivRange.rank_eq.symm
+    _ = Module.rank ℂ (E ⧸ B.ker) := by rw [hker]
+    _ = B.rank := B.quotKerEquivRange.rank_eq
 
 /-- The displacement of the explicit nuclear phase is a unitary factor
 times the equal-cost modulus split of the rotation's imaginary part. -/

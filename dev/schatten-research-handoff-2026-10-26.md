@@ -3072,3 +3072,43 @@ rotation by finite rank for genuinely infinite-rank pairs. The strict-exponent
 finite-active-cutoff proof cannot be reused at p=1 because its critical
 angle is zero. The new explicit construction supplies the missing endpoint
 attainer without claiming these remaining structural statements.
+
+
+## Nuclear correction certificate and exact phase-update rank — 27 October 2026
+
+`NuclearCommutingCorrection.lean` proves
+`exists_nearest_nuclear_commuting_unitary_complex`: for a unitary A and
+orthogonally complemented K in any complete complex Hilbert space, a
+trace-class commutator `[A,P_K]` and balanced crossed defects of `(AK,K)`
+give an actual unitary C commuting with P_K, at finite nuclear distance,
+with exact globally minimal cost `||A-C||_1 = ||[A,P_K]||_1`. All ambient
+commuting unitaries are competitors. The construction composes A with
+the explicit nuclear phase transport of its image back to K.
+
+`exists_finite_nearest_nuclear_commuting_unitary_iff_complex` proves the
+commutator-ideal and defect conditions are also necessary. The theorem
+`exists_nearest_nuclear_commuting_unitary_of_commutator_norm_lt_one_complex`
+removes the separate defect hypothesis when the actual commutator operator
+norm is strictly below one. The exact nuclear value is a certificate,
+not a claim about a numerical algorithm or computational performance.
+This application is a proved consequence of the new attainment theorem;
+no separate fundamental-priority claim is made for the change of variables.
+
+In `NuclearPhase.lean`,
+`cosine_add_i_sine_apply_eq_self_iff_complex` identifies the fixed vectors
+of the phase with exactly the vectors on which the projections agree.
+`rank_nuclearPhaseRotation_sub_directRotation_complex` then proves, as
+an exact cardinal rank identity and without compactness,
+`rank(W-R) = rank(P_K-P_L)`. Thus the explicit nuclear phase correction
+is finite rank exactly for finite-rank projection difference. For
+genuinely infinite-rank pairs this construction cannot be described by
+the strict-exponent finite-active correction theorem. This does **not**
+prove that every nuclear optimizer must have infinite-rank correction;
+that universal classification remains open.
+
+Focused geometry build passed 7,134 jobs; focused application build
+passed 7,888 jobs. Full default build passed 21,353 jobs
+(`/tmp/nuclear-consequences-full.log`), preceded by `lake exe cache get`.
+The historical review remains archived without promoting its reported
+source inspections to independent primary-edition authentication.
+Paper and visualization files remain untouched.
