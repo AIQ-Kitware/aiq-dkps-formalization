@@ -23,12 +23,44 @@ The infinite optimizer-space finite-cutoff homeomorphism, operator-norm
 compactness and independent multiplicity-coordinate topology are now proved;
 see the latest topology entries below. Rank labels are locally constant
 and separated, and simple active factors with no right defect give exactly
-`2^s` isolated optimizers. The next mathematical targets are
-necessity of the infinite uniqueness threshold, and quantitative stability
-or certified approximation from inexact input. Full nuclear, real infinite-
+`2^s` isolated optimizers. Necessity of the infinite uniqueness threshold
+is now also proved: uniqueness is equivalent to the closed projection-gap
+bound `2 sqrt(p-1)/p`, under the native Schatten and balanced-defect
+hypotheses. The next mathematical targets are an exact commutator iff,
+and quantitative stability or certified approximation from inexact input.
+Full nuclear, real infinite-
 dimensional and infinite Charbonnier optimizer classifications remain open.
 The dated sections below preserve proof history; use this paragraph and the
 latest endpoint sections for the current frontier.
+
+## Exact infinite-dimensional uniqueness threshold
+
+`SchattenUniquenessThreshold.lean` proves
+`schattenHilbertTransport_unique_minimizer_iff_projectionGap` and
+`schattenHilbertTransport_unique_minimizer_iff_critical_norm`. For every
+complete complex Hilbert space, finite `1<p<2`, native Schatten projection
+difference, and an actual equivalence of the crossed defects, the global
+ambient minimizing unitary is unique if and only if
+`projectionGap K L <= sin(criticalAngle p) = 2 sqrt(p-1)/p`.
+The objective is the native extended gauge, and every ambient competitor
+is included, without a finite-cost assumption. The threshold is closed;
+critical angles, repeated angles, zero directions and right defects are
+not excluded by supplementary hypotheses.
+
+The proof transfers uniqueness through the already compiled full
+finite-cutoff homeomorphism, applies the finite exact uniqueness theorem,
+and recovers the ambient gap from its actual reducing compressions. The
+new reusable lemma
+`ContinuousLinearMap.norm_eq_max_compressions_of_isReducing` gives that
+norm identity in either scalar field, without compactness, completeness
+or finite-dimensional assumptions beyond orthogonal complementation.
+Thus a supercritical angle necessarily gives distinct ambient global
+optimizers, rather than just nonuniqueness in a chosen competitor family.
+
+Focused build passed (8,042 jobs), and the full default build passed
+(21,249 jobs), with warnings treated as errors.
+This is an exact consequence of the compiled classification; historical
+priority is not inferred from its formal verification.
 
 ## All-rank real nuclear canonical-value criterion
 

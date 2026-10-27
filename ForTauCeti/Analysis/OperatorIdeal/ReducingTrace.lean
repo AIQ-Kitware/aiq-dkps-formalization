@@ -74,6 +74,18 @@ theorem singularValue_eq_orthogonal_block_of_isReducing
   exact singularValue_comp_linearIsometryEquiv _ M.orthogonalDecomposition
     M.orthogonalDecomposition.symm n
 
+/-- The operator norm on an actual reducing decomposition is exactly
+the larger compressed norm. No compactness or finite dimension is needed. -/
+theorem norm_eq_max_compressions_of_isReducing
+    (A : E →L[𝕜] E) (M : Submodule 𝕜 E) [M.HasOrthogonalProjection]
+    (hM : M.IsReducing A.toLinearMap) :
+    ‖A‖ = max ‖M.orthogonalProjectionOnto ∘L A ∘L M.subtypeL‖
+      ‖Mᗮ.orthogonalProjectionOnto ∘L A ∘L Mᗮ.subtypeL‖ := by
+  have h := A.singularValue_eq_orthogonal_block_of_isReducing M hM 0
+  rw [singularValue_zero, singularValue_zero] at h
+  have hn := congrArg (fun x : ℝ≥0 => (x : ℝ)) h
+  exact hn.trans (norm_withLpProdMap _ _)
+
 variable [CompleteSpace E]
 
 /-- Exact additive spectral penalties on the actual two reducing
