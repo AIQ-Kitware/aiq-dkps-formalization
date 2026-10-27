@@ -19,7 +19,7 @@ It records the completed real equality certificate, the publication-core goals,
 claim boundaries, dependencies, build evidence and new-machine transfer steps.
 The [unification/provenance note](spectral-transport-unification.md) joins the
 regimes and records exact primary-source comparisons. The parity converse
-campaign below advances mathematical checkpoint `96aeb922d`; its final full
+and equality-certificate campaigns culminate in `ff3c1657d`; the final full
 default build passed **21,427 jobs**, with warnings as errors, including the
 shared real/complex trace and equality-certificate proofs. The dated sections below are proof history; their
 statements of open obligations apply at their recorded checkpoint only.
@@ -4279,3 +4279,50 @@ conjectural spectral-penalty fragment and two-parameter smoothed-power family.
 Produce the publication-core assessment before another large campaign. Full
 real topology, exhaustive endpoint set limits and arbitrary-regime stability
 are secondary. No manuscript or visualization changes are authorized.
+
+## Publication-core reassessment after `ff3c1657d` — 27 October 2026
+
+The [publication-core assessment](spectral-transport-publication-core.md)
+now gives the central thesis, five precise principal statements and their
+proof statuses, a dependency diagram, closest-source comparison, a supported
+abstract and theorem-level outline. The real equality-attainer milestone is
+committed and fully validated. The next campaign is the organizing finite
+complex spectral-penalty theorem, not optional real topology or exhaustive
+classification work.
+
+The conjectural fragment `spectral_penalty_transport.tex` was read without
+editing it. Its core is a shared gradient-pairing/overlap-exclusion argument.
+The ordinary curvature calculation confirms the proposed smoothed-power
+critical surface. More substantively, the unification note now gives a
+common conventional scalar proof: with q=2-p, B=tau²+2, c=cos(theta) and
+d=cos(delta), divide the logarithmic-curvature numerator N by (d-c)².
+That quotient decreases in d, although the raw cubic need not do so. The
+existing scalar sufficient principle then yields uniqueness and the closed
+transition across the regular two-parameter family. The nuclear corner and
+quadratic right-angle degeneracy are treated separately. This is a derived
+mathematical argument, **not** a new compiled family theorem.
+
+The finite-to-Hilbert mechanism also has a precise reusable form: use the
+existing finite-rank unitary approximants with pointwise dominated
+displacement singular values; restrict to finite transport sections; apply
+the finite theorem to moving targets; pass finite angle prefixes to the
+limit. Positive activation thresholds then give finite active attainment;
+the nuclear corner uses independent infinite signed-root assembly.
+Neither the general lift nor the family-specific unrestricted reduction has
+yet been packaged as a Lean theorem. Their existing strict-Schatten and
+Charbonnier instances remain compiled.
+
+Bolotnikov–Li–Rodman's Theorems 4.2 and 4.5 were rechecked in the official
+primary PDF. Complete Frobenius minimizers and the Q-norm regime are prior
+art; the chain compatibility assumption in 4.5 is automatic for a single
+pair. Candidate originality concerns the subquadratic/smoothed solution
+theory and precise equality/classification results. The Exercise B.12
+authentication limitation persists. No priority claim was upgraded merely
+because a search did not find an equivalent.
+
+Decision: prove the concrete family C1/C2 with a shared operator/scalar
+argument, then instantiate the reusable lift C5. A broader C² shape theorem
+is useful if it simplifies that campaign, not as an unrelated prerequisite.
+The narrower verified nuclear/strict-Schatten/Charbonnier theory already
+supports the proposed coherent abstract; claiming the full smoothed-power
+family still requires proof. The active goal remains the publication core.

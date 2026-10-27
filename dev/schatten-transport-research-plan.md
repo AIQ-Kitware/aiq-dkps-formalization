@@ -1,9 +1,9 @@
 # Spectral subspace transport: current research plan
 
-Updated 27 October 2026, after the real parity converse campaign. The earlier
-mathematical checkpoint was `96aeb922d` (accounting `2b481b94d`); the current
-frontier additionally includes the numerical real root iff and attained
-transport described below. See the
+Updated 27 October 2026. Mathematical checkpoint `ff3c1657d` includes the
+field-independent nuclear equality certificate and exact real equality-
+attainment criterion. The earlier spectral checkpoint was `96aeb922d`
+(accounting `2b481b94d`). See the
 [unification and provenance note](spectral-transport-unification.md) for the
 structural explanation, exact theorem map and source-authentication boundaries.
 
@@ -21,8 +21,9 @@ The success criterion is a cohesive, publication-worthy central theory,
 not completion of every open item below. The central thesis is: spectral
 penalties select optimal phases, the scalar field imposes compatibility,
 and operator ideals govern infinite-dimensional feasibility and attainment.
-The active real equality-certificate milestone is now proved. Before another
-large theorem campaign, assess the proposed general penalty argument in
+The active real equality-certificate milestone is now proved. The
+[publication-core assessment](spectral-transport-publication-core.md) examines
+the proposed general penalty argument in
 `papers/dk_formalization_journal/spectral_penalty_transport.tex`; it is
 conjectural and excluded from the verified manuscript. The next central
 target is the two-parameter smoothed-power family, not exhaustive real
@@ -40,6 +41,30 @@ smoothed classifications and the complete nuclear certificate. The real equality
 classification above that bound is a secondary extension. A journal contribution
 can have a precise, complete scope before every extension below is solved.
 Historical originality requires its own theorem-level literature comparison.
+
+## Immediate priority: the organizing penalty theorem
+
+The publication-core assessment specifies five principal statements and their
+status. The next campaign is C1/C2 for
+`rho_(p,tau)(s)=(tau^2+s^2)^(p/2)-tau^p`, `1<=p<=2`, tau>=0:
+
+1. Prove one unrestricted finite complex reduction using gradient pairing,
+   two-phase second variations and overlap exclusion; include the zero-gradient
+   reflection sector. Do not assume invariant principal planes of competitors.
+2. Prove the shared scalar transition law. The unification note now derives
+   the critical surface and the useful monotonic quantity `N/(d-c)^2`;
+   the raw cubic N is not required to be monotone. These derivations are
+   conventional mathematics, not new compiled declarations.
+3. Package the existing moving-target finite-unitary-approximation lower-bound
+   lift. Positive activation threshold gives finite active attainment; the
+   nuclear corner uses the already compiled infinite signed-root assembly.
+
+The proposed C² penalty-shape theorem has not been refuted, but is not yet
+formally verified. Begin with the concrete family, whose phase-gradient
+extension fits the existing two-point functional-calculus machinery. Prove
+the public organizing statements before optional topology, stability, or
+exhaustive real matching/endpoint-family extensions. The assessment contains
+the dependency diagram, closest-source comparison and a proof-supported abstract.
 
 ## Current proved frontier
 

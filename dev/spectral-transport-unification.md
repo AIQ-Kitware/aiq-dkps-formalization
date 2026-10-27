@@ -276,6 +276,124 @@ feasible attainment. In infinite dimension ideal control and tail arguments
 are also required. Scalar calculus does not supply these conclusions, and
 the real matching results rule out a field-independent planar reduction.
 
+## The smoothed-power family: a common scalar mechanism
+
+The following continuation is a conventional derivation, not a new Lean
+theorem. It examines the user's proposed organizing family rather than adding
+another independent penalty case. Its publication role and proof obligations
+are assessed in [the publication-core note](spectral-transport-publication-core.md).
+
+Let `rho_(p,tau)(s)=(tau^2+s^2)^(p/2)-tau^p`, `1<=p<=2`, tau>=0.
+For tau>0 this is strictly convex, with elasticity
+
+\[
+E(s)=\frac{\tau^2+(p-1)s^2}{\tau^2+s^2},\qquad
+E'(s)=-\frac{2(2-p)\tau^2s}{(\tau^2+s^2)^2}\le0.
+\]
+
+For tau=0, p>1 the elasticity is the constant p-1. Thus the regular family
+has the one-peak phase derivative required by the conjectural ambient
+decoupling theorem. This observation alone does not give uniqueness of its
+scalar minimizing phase. The logarithmic-curvature argument does.
+
+Set `B=tau^2+2`, `q=2-p`, c=cos theta, d=cos delta, with
+`0<theta<pi/2` and `0<=delta<theta`. Then
+
+\[
+a(t)=\phi'(t)=p\sin t\,(B-2\cos t)^{-q/2},\qquad
+\phi''(t)=p(B-2\cos t)^{p/2-2}
+  [p-2+B\cos t-p\cos^2t].
+\]
+
+The curvature threshold is therefore exactly
+
+\[
+C_{p,\tau}=
+\frac{B-\sqrt{B^2-4p(2-p)}}{2p}.
+\]
+
+The smaller root lies in [0,1], and the other root is at least one.
+For tau=0, `1<p<2`, C=(2-p)/p; for p=1, tau>0 it is the established
+Charbonnier threshold; for p=2 it is zero. Increasing p or positive tau
+moves the acute activation threshold toward pi/2. The nonsmooth nuclear
+corner p=1, tau=0 has limiting C=1, not the regularity required by the
+zero-phase Hessian argument at zero angle.
+
+There is also a **global** scalar shape proof. With
+
+\[
+D=B^2-4Bcd+4(c^2+d^2-1),\qquad
+N=cD-q(Bd-2c)(d^2-c^2),
+\]
+
+the logarithmic phase ratio in the preceding section satisfies
+`L'=2 sin(theta) N/[(d^2-c^2)D]`. Both denominator factors are positive.
+Write u=B-2=tau² and
+
+\[
+N=2(d-c)^2(pc-qd)+u H(d)+u^2c,\qquad
+H(d)=4c-(4-q)c^2d-qd^3.
+\]
+
+The raw cubic N need not be monotone; requiring that would discard useful
+members of the family. Divide instead by the positive factor (d-c)².
+For e=d-c, `0<e<=1-c`,
+
+\[
+\begin{split}
+(d-c)H'(d)-2H(d)
+&=-8c(1-c^2)+(4+2q)c^2e-qe^3\\
+&\le -c(1-c)(8+2c)<0.
+\end{split}
+\]
+
+Consequently `H(d)/(d-c)^2` strictly decreases. So does
+
+\[
+K(d)=\frac{N}{(d-c)^2}
+=2pc-2qd+u\frac{H(d)}{(d-c)^2}+\frac{u^2c}{(d-c)^2}
+\]
+
+whenever q>0 or u>0. For the regular subquadratic family, `K(cos delta)`
+is precisely an increasing H_theta in the earlier sufficient principle,
+with a positive weight. Its initial sign is determined by
+
+\[
+N(1)=(B-2c)[p-2+Bc-pc^2].
+\]
+
+Moreover a(0+)=0 and a(2 theta)>0 in that regular regime, giving the
+required infinite endpoint limit of L. This proves conventionally: zero
+phase is uniquely minimizing when cos theta>=C, including equality; when
+cos theta<C there is exactly one positive minimizing phase, characterized
+by `a(theta+delta)=a(theta-delta)`. This is a shared proof, not a dispatch
+to the two earlier penalty classifications.
+
+The exceptions have explicit formulas. At theta=pi/2, q>0, the phase sum
+is strictly decreasing in delta because `x -> (B+x)^(p/2)+(B-x)^(p/2)`
+strictly decreases for x>0; its unique phase is pi/2. At p=2 the sum is
+`4-4 cos(theta)cos(delta)` and is flat at a right angle. At the nuclear
+corner it is `4 sin(theta/2)cos(delta/2)`, minimized at delta=theta.
+These boundary observations do not assert approximation of every endpoint
+optimizer by interior ones.
+
+The family also has the explicit quadratic comparison, for tau>0, s in [0,2],
+
+\[
+\frac p2(\tau^2+4)^{p/2-1}s^2
+\le\rho_{p,\tau}(s)
+\le\frac p2\tau^{p-2}s^2.
+\]
+
+Thus its finite-cost ideal is S_2 for every positive smoothing parameter,
+while at zero smoothing it is S_p. The general feasibility corollary below
+applies with these positive constants; no new ideal needs defining.
+Concavity of `x^(p/2)` also gives
+`0<=s^p-rho_(p,tau)(s)<=tau^p`, hence uniform finite-dimensional cost and
+minimum-value error at most n tau^p. That gives a route to the nuclear
+**value** boundary without differentiating a nonsmooth objective. None of
+these scalar or value facts alone proves unrestricted ambient decoupling.
+
 ## Limits of regimes: a proved obstruction and the remaining claims
 
 Finite-dimensional exponent continuity and closedness of the minimizer graph
@@ -390,7 +508,11 @@ not evidence that the source proof was adapted.
   Problem 1.1 and (1.6), pp. 26–28, formulate the ambient transport distortion
   problem and its block-diagonal formulation. Theorem 3.1, pp. 33–35, proves
   Q-norm block minimality; Lemmas 3.2–3.3, pp. 35–36, treat planar power costs,
-  including a subquadratic right-angle example. The introduction explicitly
+  including a subquadratic right-angle example. Theorem 4.2, p. 39, classifies
+  Frobenius minimizers. Theorem 4.5, p. 45, gives a Q-norm result for chains
+  under block-diagonal VW* compatibility; for one pair this condition is
+  automatic. These statements were rechecked for the publication assessment.
+  The introduction explicitly
   says the proofs apply over the reals. These precede the problem formulation,
   the Q-norm regime and special subquadratic phenomena; they are not evidence
   of the present exact matching or Hilbert all-optimizer classifications.
