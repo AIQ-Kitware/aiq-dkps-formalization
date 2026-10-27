@@ -14,6 +14,20 @@ before repeating the literature search; do not infer first-discovery priority.
 
 ## Current frontier — read before chronological entries
 
+As of 27 October, the complex nuclear endpoint also has exact general
+infinite-rank attainment and intrinsic sine value under trace-class
+projection difference and balanced defects. Its uniqueness criterion is
+complete without standing hypotheses: unique global optimizer iff K=L.
+Opposite explicit global optimizers have separation `2 ||P_K-P_L||`.
+The finite-dimensional nuclear endpoint now has a single dual-positivity
+certificate characterizing every ambient optimizer, and all optimizers
+fix the full kernel of the projection difference. The complete infinite-
+rank nuclear **every-optimizer** certificate and phase/multiplicity
+parametrization remain open; see the final entry for the exact analytic
+obligation. These statements supersede older nuclear value/uniqueness
+gaps in chronological entries, without extending historical-priority claims.
+
+
 General infinite-rank complex Schatten `1<p<2` attainment and the complete
 classification of **every** global optimizer are **proved**, under native
 Schatten projection difference and balanced crossed defects. Every optimizer
@@ -3180,3 +3194,68 @@ Focused signed-phase build passed 7,138 jobs; uniqueness passed 7,462;
 the application passed 7,894. Full default build passed 21,359 jobs
 (`/tmp/nuclear-signed-full.log`), preceded by `lake exe cache get`. Manuscript and visualization files remain untouched; historical
 priority is not inferred from Lean verification.
+
+
+## Every finite nuclear optimizer: exact dual certificate — 27 October 2026
+
+`NuclearOptimizerCertificate.lean` closes the nonsmooth finite equality
+case without taking derivatives at vanishing displacement. The theorem
+`nuclear_eq_sine_sum_iff_certificate_complex` applies even to competitors
+that only contract the paired basis vectors and satisfy the paired
+imaginary-diagonal constraint. Equality with `sum 2 sin(theta_i)` is
+**equivalent** to fixation of all fixed basis directions and positivity
+of `V* (R-Z)`. Here V has phases i,-i on each strictly positive angle
+and identity on the fixed directions. Right angles are included. Zero
+principal angles are represented in the fixed sector, avoiding the
+undefined zero-denominator endpoint of the smoothed dual formula.
+
+`exists_paired_nuclear_optimizer_certificate_complex` constructs a
+single paired basis and actual unitary V from **every** finite-dimensional
+equal-rank complex pair, then proves the criterion simultaneously for
+**every** ambient unitary transporter T. With canonical R and
+`Z=T* R`, global minimality over all ambient competitors is equivalent to
+fixed common directions plus positivity of the literal dual displacement
+`V* (R-T*R)`. The basis and dual do not depend on the candidate. No
+simple-angle, acuteness, positive-displacement or block-preservation
+hypothesis is imposed on T. This is a complete equality certificate;
+it is not yet a Grassmannian parametrization of its solutions.
+
+`nuclear_minimizer_apply_eq_self_of_projections_eq_complex` proves every
+such finite global nuclear optimizer fixes **every** x with
+`P_K x=P_L x`. The paired canonical eigenvectors of positive angle are
+orthogonal to such x; expansion in the paired basis reduces x to the
+fixed sector already forced by the certificate. This is an exact
+all-competitor theorem, not a property only of the explicit phase family.
+
+Focused build passed 7,310 jobs before import minimization. Full default
+build passed 21,361 jobs (`/tmp/nuclear-certificate-full.log`), preceded
+by `lake exe cache get`, with warnings treated as errors. The proof consumes existing
+paired rotation bases, trace support and the nuclear trace/positivity
+equality theorem, extending the smoothed certificate's method to the
+nonsmooth endpoint while retaining its distinct zero-angle treatment.
+Manuscript and visualization files remain untouched.
+
+### Exact remaining analytic obligation for infinite nuclear classification
+
+General native trace-class attainment, intrinsic value and uniqueness
+are compiled. To lift the complete certificate, prove the trace-class
+version of unitary trace-support equality: for a trace-class bounded
+operator X and a fixed unitary V on an arbitrary complete complex
+Hilbert space, equality of the real trace of `V* X` with the native
+nuclear gauge is equivalent to positivity of `V* X`. Definitions,
+absolute summability, nonseparable kernels and equality must all be
+justified; the current `NuclearTrace.lean` certificate is finite dimensional.
+An alternative is to derive the same equality from all finite paired
+compressions, using native Ky Fan support bounds and their nonnegative
+slacks. The new finite certificate deliberately accepts contractions,
+so compressed competitors need not be unitary or preserve the section.
+
+After that equality lift, the finite positive-slack argument should force
+fixation of the common sector and a positive dual displacement for every
+finite-cost infinite optimizer. The remaining algebra must then prove
+preservation of each cosine sector, extract self-adjoint-unitary phase
+choices on the positive acute multiplicity spaces, and treat the finite
+right-angle sector separately. Do not infer these necessities merely
+from the existence of signed attaining phases. At the nuclear endpoint
+there can be infinitely many active angle sectors; the strict-exponent
+finite-active-cutoff theorem does not establish the desired classification.
