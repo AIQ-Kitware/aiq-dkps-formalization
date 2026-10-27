@@ -84,7 +84,7 @@ theorem charbonnier_minimal_iff_canonical_tail_finite_minimal_complex
   constructor
   · intro hmin
     have hfinite := ne_top_of_le_ne_top hTfinite (hmin T hTmap)
-    have htail := apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal
+    have htail := apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal_complex
       tau hτ K L J hD c hc hc1 hcrit U hmap hfinite hmin
     have hUred : M.IsReducing U.toLinearMap := U.isReducing_of_eq_on_orthogonal R M hRred htail
     obtain ⟨V, hV, hlocal, hVmin⟩ := exists_charbonnier_minimizing_finite_restriction

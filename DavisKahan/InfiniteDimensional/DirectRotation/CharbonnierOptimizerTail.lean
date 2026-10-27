@@ -38,7 +38,7 @@ positive cutoff below or at the critical sine, every finite-cost global
 optimizer agrees with every completed direct rotation on the full
 complementary sector. Neither canonical-tail action nor block
 preservation is assumed of the optimizer. -/
-theorem apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal
+theorem apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (J : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
@@ -84,7 +84,7 @@ theorem apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal
       (Φ.gauge_comp_right_le_self _ N.norm_subtypeL_le)
   obtain ⟨W, hW, _, hWcanonical, hgap⟩ :=
     exists_canonical_tail_of_finite_sine_cutoff K L J hcompact c hc hc1
-  have hVcanonical := eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical
+  have hVcanonical := eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_complex
     tau hτ (K.comap N.subtype) (L.comap N.subtype) V hlocal
       ((ContinuousLinearMap.charbonnierCost_ne_top_iff_schatten_two tau hτ _).mpr
         (ne_top_of_le_ne_top hSp hVle)) hVmin (hgap.trans hcrit)

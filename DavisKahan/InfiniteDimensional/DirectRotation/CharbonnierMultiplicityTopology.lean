@@ -33,7 +33,7 @@ omit [CompleteSpace E] in
 /-- Multiplicity coordinates transfer through any exact norm-preserving
 homeomorphism from a finite optimizer space. The finite-cutoff theorem
 provides this homeomorphism for every admissible Hilbert projection pair. -/
-theorem exists_charbonnier_hilbert_multiplicity_coordinates_of_homeomorph
+theorem exists_charbonnier_hilbert_multiplicity_coordinates_of_homeomorph_complex
     {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
     [FiniteDimensional ℂ F] [CompleteSpace F]
     (tau : ℝ) (hτ : 0 < tau)
@@ -71,7 +71,7 @@ theorem exists_charbonnier_hilbert_multiplicity_coordinates_of_homeomorph
 /-- The entire Hilbert-space optimizer family has independent finite
 active multiplicity-projection and crossed-defect unitary coordinates,
 with the actual operator-norm topology. -/
-theorem exists_charbonnier_hilbert_multiplicity_parameter_homeomorph
+theorem exists_charbonnier_hilbert_multiplicity_parameter_homeomorph_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (J : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
@@ -98,18 +98,18 @@ theorem exists_charbonnier_hilbert_multiplicity_parameter_homeomorph
   let : FiniteDimensional ℂ M := (finite_sine_spectral_cutoff K L
     (OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top 2 (by norm_num)
       (K.starProjection - L.starProjection) hD) c hc).1
-  obtain ⟨hKL, eH, _, _, hnorm⟩ := exists_charbonnier_finite_cutoff_optimizer_homeomorph
+  obtain ⟨hKL, eH, _, _, hnorm⟩ := exists_charbonnier_finite_cutoff_optimizer_homeomorph_complex
     tau hτ K L J hD c hc hc1 hcrit
   refine ⟨hKL, ?_⟩
   -- Preserve the dependent parameter types when composing the two homeomorphisms.
-  obtain ⟨e, _, _⟩ := exists_charbonnier_hilbert_multiplicity_coordinates_of_homeomorph
+  obtain ⟨e, _, _⟩ := exists_charbonnier_hilbert_multiplicity_coordinates_of_homeomorph_complex
     tau hτ K L (K.comap M.subtype) (L.comap M.subtype) hKL eH hnorm
   exact ⟨e⟩
 
 /-- Simple active factors and zero right defect give exactly `2^s`
 ambient Hilbert-space optimizers, each isolated in the operator-norm
 optimizer topology. Infinite inactive multiplicities are unrestricted. -/
-theorem charbonnier_hilbert_optimizer_count_and_discrete_of_simple_active_angles
+theorem charbonnier_hilbert_optimizer_count_and_discrete_of_simple_active_angles_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (J : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
@@ -138,7 +138,7 @@ theorem charbonnier_hilbert_optimizer_count_and_discrete_of_simple_active_angles
   let : FiniteDimensional ℂ M := (finite_sine_spectral_cutoff K L
     (OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top 2 (by norm_num)
       (K.starProjection - L.starProjection) hD) c hc).1
-  obtain ⟨hKL, eH, _, _, _⟩ := exists_charbonnier_finite_cutoff_optimizer_homeomorph
+  obtain ⟨hKL, eH, _, _, _⟩ := exists_charbonnier_finite_cutoff_optimizer_homeomorph_complex
     tau hτ K L J hD c hc hc1 hcrit
   refine ⟨hKL, ?_⟩
   intro hdefect hsimple

@@ -34,7 +34,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteS
 transporters. The native extended objective imposes no finite-cost
 assumption on competitors. All angle multiplicities and defect spaces
 are included, and no separability assumption is needed. -/
-theorem charbonnierHilbertTransport_unique_minimizer_iff_projectionGap_of_defectEquiv
+theorem charbonnierHilbertTransport_unique_minimizer_iff_projectionGap_of_defectEquiv_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (J : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
@@ -55,14 +55,14 @@ theorem charbonnierHilbertTransport_unique_minimizer_iff_projectionGap_of_defect
     2 (by norm_num) (K.starProjection - L.starProjection) hD
   obtain ⟨hM, hK, hL, htail⟩ := finite_sine_spectral_cutoff K L hcompact c hc
   let : FiniteDimensional ℂ M := hM
-  obtain ⟨hdim, e, _⟩ := exists_charbonnier_finite_cutoff_optimizer_homeomorph
+  obtain ⟨hdim, e, _⟩ := exists_charbonnier_finite_cutoff_optimizer_homeomorph_complex
     tau hτ K L J hD c hc hc1 hcrit
   have hfinite :=
     smoothed_transport_unique_minimizer_iff
       tau hτ (K.comap M.subtype) (L.comap M.subtype) hdim
   have htransfer := e.toEquiv.existsUnique_subtype_congr
   rw [← htransfer]
-  simp_rw [mem_smoothedTransportMinimizers]
+  simp_rw [mem_smoothedTransportMinimizers_complex]
   rw [hfinite,
     Submodule.finite_principalAngles_le_iff_directedProjectionGap_le _ _ _
       ⟨hcangle.1.le, hcangle.2.le⟩,
@@ -96,7 +96,7 @@ theorem charbonnierHilbertTransport_unique_minimizer_iff_projectionGap_of_defect
 index hypothesis on the pair. Uniqueness itself forces native finite
 cost, hence Hilbert--Schmidt membership; the critical gap removes the
 index obstruction. All ambient competitors retain extended costs. -/
-theorem charbonnierHilbertTransport_unique_minimizer_iff
+theorem charbonnierHilbertTransport_unique_minimizer_iff_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection] :
     (∃! U : E ≃ₗᵢ[ℂ] E, U ∈ charbonnierHilbertTransportMinimizers tau K L) ↔
@@ -105,17 +105,17 @@ theorem charbonnierHilbertTransport_unique_minimizer_iff
         K.projectionGap L ≤ Real.sin (smoothedCriticalAngle tau) := by
   constructor
   · rintro ⟨U, hU, huni⟩
-    have hU' := (mem_charbonnierHilbertTransportMinimizers tau K L U).mp hU
+    have hU' := (mem_charbonnierHilbertTransportMinimizers_complex tau K L U).mp hU
     have hfinite := charbonnierCost_displacement_ne_top_of_unique_transport tau hτ.le
       K L U hU'.1 hU'.2
-        (fun T hT => huni T ((mem_charbonnierHilbertTransportMinimizers tau K L T).mpr hT))
+        (fun T hT => huni T ((mem_charbonnierHilbertTransportMinimizers_complex tau K L T).mpr hT))
     obtain ⟨hD, hbalance⟩ :=
       (charbonnier_transport_iff_schatten_two_and_defect_balance tau hτ K L).mp ⟨U, hU'.1, hfinite⟩
     have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top
       2 (by norm_num) (K.starProjection - L.starProjection) hD
     obtain ⟨J⟩ := crossedDefectsEquivalent_of_compact_projection_sub_of_finrank_eq
       K L hcompact hbalance
-    exact ⟨hD, (charbonnierHilbertTransport_unique_minimizer_iff_projectionGap_of_defectEquiv
+    exact ⟨hD, (charbonnierHilbertTransport_unique_minimizer_iff_projectionGap_of_defectEquiv_complex
       tau hτ K L J hD).mp ⟨U, hU, huni⟩⟩
   · rintro ⟨hD, hgap⟩
     have hangle := smoothedCriticalAngle_mem tau hτ
@@ -128,7 +128,7 @@ theorem charbonnierHilbertTransport_unique_minimizer_iff
     have hz := halmosSourceDefect_eq_bot_of_isUniformlyAcute K L hacute
     have hz' := halmosTargetDefect_eq_bot_of_isUniformlyAcute K L hacute
     let J := LinearIsometryEquiv.ofEq _ _ (hz.trans hz'.symm)
-    exact (charbonnierHilbertTransport_unique_minimizer_iff_projectionGap_of_defectEquiv
+    exact (charbonnierHilbertTransport_unique_minimizer_iff_projectionGap_of_defectEquiv_complex
       tau hτ K L J hD).mpr hgap
 
 end TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition

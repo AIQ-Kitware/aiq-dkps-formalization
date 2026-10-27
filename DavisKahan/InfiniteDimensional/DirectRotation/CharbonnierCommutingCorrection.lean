@@ -46,8 +46,8 @@ theorem existsUnique_nearest_charbonnier_commuting_unitary_iff_complex
         ‖(A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)‖ ≤
           Real.sin (smoothedCriticalAngle tau) := by
   refine (existsUnique_charbonnier_correction_iff_transport tau K A).trans ?_
-  have h := charbonnierHilbertTransport_unique_minimizer_iff tau hτ (K.map A.toLinearMap) K
-  simp only [mem_charbonnierHilbertTransportMinimizers, Submodule.projectionGap_def] at h
+  have h := charbonnierHilbertTransport_unique_minimizer_iff_complex tau hτ (K.map A.toLinearMap) K
+  simp only [mem_charbonnierHilbertTransportMinimizers_complex, Submodule.projectionGap_def] at h
   rw [OperatorIdealFamily.gauge_projection_image_sub_eq_commutator,
     K.norm_projection_image_sub_eq_commutator A] at h
   exact h
@@ -80,17 +80,17 @@ theorem eq_canonical_correction_of_charbonnier_minimal_of_commutator_le_critical
     rw [K.map_correction_transport]
     exact (K.map_eq_self_iff_commute_starProjection C).mpr hC
   have hTmin := (charbonnier_correction_isMin_iff_transport_isMin tau K A C).mp hmin
-  obtain ⟨T₀, hT₀, huni⟩ := (charbonnierHilbertTransport_unique_minimizer_iff
+  obtain ⟨T₀, hT₀, huni⟩ := (charbonnierHilbertTransport_unique_minimizer_iff_complex
     tau hτ L K).mpr ⟨hD, hgap⟩
-  have hT₀' := (mem_charbonnierHilbertTransportMinimizers tau L K T₀).mp hT₀
+  have hT₀' := (mem_charbonnierHilbertTransportMinimizers_complex tau L K T₀).mp hT₀
   have hTfinite := charbonnierCost_displacement_ne_top_of_unique_transport tau hτ.le
     L K T₀ hT₀'.1 hT₀'.2 (fun V hV => huni V
-      ((mem_charbonnierHilbertTransportMinimizers tau L K V).mpr hV))
-  have heq : T = T₀ := huni T ((mem_charbonnierHilbertTransportMinimizers tau L K T).mpr
+      ((mem_charbonnierHilbertTransportMinimizers_complex tau L K V).mpr hV))
+  have heq : T = T₀ := huni T ((mem_charbonnierHilbertTransportMinimizers_complex tau L K T).mpr
     ⟨hmap, hTmin⟩)
   have hfinite : (1 - (T : E →L[ℂ] E)).charbonnierCost tau ≠ ∞ := by
     rwa [heq]
-  have hcanonical := eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical
+  have hcanonical := eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_complex
     tau hτ L K T hmap hfinite hTmin hgap
   calc
     (C : E →L[ℂ] E) = (T : E →L[ℂ] E) ∘L (A : E →L[ℂ] E) := by
@@ -168,7 +168,7 @@ theorem charbonnier_nearest_commuting_unitary_has_critical_rank_budget_complex
     exact (K.map_eq_self_iff_commute_starProjection C).mpr hC
   have hTmin := (charbonnier_correction_isMin_iff_transport_isMin tau K A C).mp hmin
   obtain ⟨hRank, hbudget⟩ :=
-    charbonnier_minimizer_has_critical_rank_budget tau hτ L K J hD T hmap hTmin
+    charbonnier_minimizer_has_critical_rank_budget_complex tau hτ L K J hD T hmap hTmin
   refine ⟨?_, ?_⟩
   · have hfactor : (nonacuteDirectRotation L K J).toLinearMap.comp A.toLinearMap -
         C.toLinearMap = ((nonacuteDirectRotation L K J).toLinearMap - T.toLinearMap).comp

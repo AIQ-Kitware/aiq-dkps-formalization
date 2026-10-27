@@ -33,7 +33,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteS
 /-- Below and at the critical sine, every finite-cost global optimizer
 is the canonical polar rotation. Infinite rank, angle multiplicities,
 zero angles and arbitrary fixed ambient directions are included. -/
-theorem eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical
+theorem eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L)

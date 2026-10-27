@@ -153,7 +153,7 @@ def smoothedTransportMinimizers (tau : ℝ) (K L : Submodule ℂ E) : Set (E ≃
 
 omit [CompleteSpace E] in
 @[simp]
-theorem mem_smoothedTransportMinimizers
+theorem mem_smoothedTransportMinimizers_complex
     (tau : ℝ) (K L : Submodule ℂ E) (U : E ≃ₗᵢ[ℂ] E) :
     U ∈ smoothedTransportMinimizers tau K L ↔
       K.map U.toLinearMap = L ∧

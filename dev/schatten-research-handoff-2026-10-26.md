@@ -2412,8 +2412,8 @@ and visualization files remain assigned separately and unchanged.
 ## Infinite Charbonnier closed-threshold rigidity and canonical tails
 
 The native finite-cost complex Charbonnier theory now includes
-`eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical` and
-`apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal`.
+`eq_canonicalPolarFactor_of_charbonnier_minimal_of_gap_le_critical_complex` and
+`apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal_complex`.
 The first proves canonical uniqueness through the closed critical gap;
 the second proves canonical action on the entire complementary sine-cutoff
 tail of every global optimizer. Both hold on arbitrary complete complex
@@ -2453,7 +2453,7 @@ underlying exact unrestricted finite reduction. The reusable either-field
 `TauCeti.charbonnier_minimal_iff_restriction_of_minimizing_reference_tail`
 proves equivalence by native trace additivity and finite-tail cancellation.
 
-`CharbonnierOptimizerRank.charbonnier_minimizer_has_critical_rank_budget`
+`CharbonnierOptimizerRank.charbonnier_minimizer_has_critical_rank_budget_complex`
 proves, for **every** global optimizer U and every completed rotation R,
 `rank(R-U) <= dim M` for the strictly supercritical sine sector M, with
 `dim M * sin(theta_c)^2 <= ||P-Q||_HS^2`. Thus only a uniformly bounded
@@ -2478,16 +2478,16 @@ The paper and visualization files remain untouched.
 
 ## October 27: full Charbonnier optimizer topology and exact uniqueness
 
-`CharbonnierOptimizerTopology.exists_charbonnier_finite_cutoff_optimizer_homeomorph`
+`CharbonnierOptimizerTopology.exists_charbonnier_finite_cutoff_optimizer_homeomorph_complex`
 identifies the entire ambient Hilbert optimizer family with the actual
 finite active-cutoff optimizer family, by an operator-norm homeomorphism
 that preserves pairwise operator-norm differences exactly. Its hypotheses
 are the positive-scale HS projection difference and actual defect equivalence,
 with any positive cutoff below one and at most the critical sine.
-`isCompact_charbonnierHilbertTransportMinimizers` proves operator-norm
+`isCompact_charbonnierHilbertTransportMinimizers_complex` proves operator-norm
 compactness of the full family, with all multiplicities and defects.
 
-`CharbonnierUniquenessThreshold.charbonnierHilbertTransport_unique_minimizer_iff`
+`CharbonnierUniquenessThreshold.charbonnierHilbertTransport_unique_minimizer_iff_complex`
 removes **all** standing compactness, ideal-membership and index assumptions:
 for any orthogonally complemented pair on a complete complex Hilbert space,
 there is exactly one native-cost global minimizing ambient unitary iff
@@ -2509,7 +2509,7 @@ competitor statements. The paper and visualizations remain untouched.
 
 ## October 27: full smoothed multiplicity topology and exact isolated counts
 
-`CharbonnierMultiplicityTopology.exists_charbonnier_hilbert_multiplicity_parameter_homeomorph`
+`CharbonnierMultiplicityTopology.exists_charbonnier_hilbert_multiplicity_parameter_homeomorph_complex`
 identifies the entire Hilbert optimizer family with the product of one
 orthogonal-projection factor on each actual finite active canonical
 multiplicity space and an independent finite crossed-defect unitary factor.
@@ -2518,14 +2518,14 @@ retain the proved no-mixing constraint. The index and multiplicity spaces
 are the finite weighted-rotation ones with weights `smoothingRadius tau`
 and its inverse. No principal frame is prescribed to ambient competitors.
 
-`exists_charbonnier_hilbert_multiplicity_coordinates_of_homeomorph`
+`exists_charbonnier_hilbert_multiplicity_coordinates_of_homeomorph_complex`
 transfers locally constant projection-rank labels and a uniform positive
 operator-norm separation of different rank labels, for fixed pair and
 positive smoothing scale. The preceding unconditional homeomorphism
 supplies its exact norm-preserving transfer input. These results do not
 imply near-minimizer coercivity or varying-data stability.
 
-`charbonnier_hilbert_optimizer_count_and_discrete_of_simple_active_angles`
+`charbonnier_hilbert_optimizer_count_and_discrete_of_simple_active_angles_complex`
 proves exactly `2^s` ambient global optimizers and discreteness of their
 operator-norm topology when all active multiplicity factors have dimension
 one and there is no right-angle defect. Infinite inactive multiplicities
@@ -2583,3 +2583,28 @@ open extensions; the positive critical sine used here is unavailable at
 the nuclear endpoint. Higher-rank projection-factor connectedness and
 manifold dimensions, and dimension-independent near-minimizer estimates,
 are also not claimed. Paper and visualization updates remain external.
+
+## Final API scope and validation boundary
+
+All newly introduced fixed-complex-field theorem names in this wave now
+carry `_complex`, including the closed-threshold rigidity, canonical-tail,
+rank, topology, multiplicity and exact uniqueness endpoints. The generic
+either-field cost, feasibility and correction-transfer lemmas retain their
+unqualified names. Consumers and the preceding handoff references were
+updated together; a whole-repository exact-name search found no remaining
+references to the former theorem names. No paper census claims or existing
+Challenge endpoints depended on the renamed declarations.
+
+Focused renamed-consumer build passed (7,490 jobs). The required static
+name-drift script still reports the same 23 pre-existing findings involving
+historical migration destinations or accepted upstream APIs, with no new
+Charbonnier or smoothed names among its findings. This scanner failure is
+not being presented as a passing check; compiler validation of the default
+and separate Challenge targets is the independent evidence. No scanner
+logic or unrelated migration records were changed.
+
+Final compiler evidence after the scope renames: full default `lake build`
+passed 21,321 jobs (`/tmp/charbonnier-final-full.log`); the separately required
+`lake build Challenge` passed 19,755 jobs
+(`/tmp/charbonnier-final-challenge.log`). Both were preceded by
+`lake exe cache get`. The static-scanner caveat above remains unchanged.

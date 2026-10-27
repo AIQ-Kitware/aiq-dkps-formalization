@@ -42,7 +42,7 @@ def charbonnierHilbertTransportMinimizers
 
 omit [CompleteSpace E] in
 @[simp]
-theorem mem_charbonnierHilbertTransportMinimizers
+theorem mem_charbonnierHilbertTransportMinimizers_complex
     (tau : ℝ) (K L : Submodule ℂ E) (U : E ≃ₗᵢ[ℂ] E) :
     U ∈ charbonnierHilbertTransportMinimizers tau K L ↔
       K.map U.toLinearMap = L ∧
@@ -53,7 +53,7 @@ theorem mem_charbonnierHilbertTransportMinimizers
 /-- The full infinite-dimensional optimizer family is homeomorphic to
 its actual finite cutoff optimizer family. Every ambient optimizer is
 included, and the extension preserves operator-norm differences exactly. -/
-theorem exists_charbonnier_finite_cutoff_optimizer_homeomorph
+theorem exists_charbonnier_finite_cutoff_optimizer_homeomorph_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (J : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
@@ -128,7 +128,7 @@ theorem exists_charbonnier_finite_cutoff_optimizer_homeomorph
         (e₀ V).val ∈ charbonnierHilbertTransportMinimizers tau K L := by
     constructor
     · intro hV
-      rw [mem_smoothedTransportMinimizers] at hV
+      rw [mem_smoothedTransportMinimizers_complex] at hV
       obtain ⟨T, hTmap, hTM, hTtail, _⟩ := K.exists_transport_replacing_finite_block L M
         hK R hRmap hRred.mem_invtSubmodule V hV.1
       let T' : Tail := ⟨T, hTtail⟩
@@ -140,7 +140,7 @@ theorem exists_charbonnier_finite_cutoff_optimizer_homeomorph
         exact (congrArg (fun U : Tail => K.map U.val.toLinearMap) heq).symm.trans hTmap
       exact ⟨hmap, (hminiff V hmap).mpr hV.2⟩
     · intro hU
-      rw [mem_smoothedTransportMinimizers]
+      rw [mem_smoothedTransportMinimizers_complex]
       exact ⟨K.map_comap_subtype_of_isometry_restriction L M (e₀ V).val V hU.1
         (fun x => (hhead V x).symm), (hminiff V hU.1).mp hU.2⟩
   have htail (U : charbonnierHilbertTransportMinimizers tau K L) :
@@ -162,7 +162,7 @@ theorem exists_charbonnier_finite_cutoff_optimizer_homeomorph
 /-- The full ambient complex Charbonnier optimizer set is compact in
 operator norm even in infinite Hilbert dimension. The compact family
 includes all angle multiplicities, right defects and fixed directions. -/
-theorem isCompact_charbonnierHilbertTransportMinimizers
+theorem isCompact_charbonnierHilbertTransportMinimizers_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (J : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
@@ -180,7 +180,7 @@ theorem isCompact_charbonnierHilbertTransportMinimizers
   let : FiniteDimensional ℂ M := (finite_sine_spectral_cutoff K L
     (OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top 2 (by norm_num)
       (K.starProjection - L.starProjection) hD) c hc).1
-  obtain ⟨hdim, e, _, _, _⟩ := exists_charbonnier_finite_cutoff_optimizer_homeomorph
+  obtain ⟨hdim, e, _, _, _⟩ := exists_charbonnier_finite_cutoff_optimizer_homeomorph_complex
     tau hτ K L J hD c hc hc1 hcrit
   let : CompactSpace (smoothedTransportMinimizers tau (K.comap M.subtype) (L.comap M.subtype)) :=
     isCompact_iff_compactSpace.mp

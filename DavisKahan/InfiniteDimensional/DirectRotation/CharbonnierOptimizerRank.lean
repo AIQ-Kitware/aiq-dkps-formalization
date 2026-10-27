@@ -30,7 +30,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteS
 /-- **Every optimizer has the critical finite-rank budget.** The same
 intrinsic sector controls all optimizers and every defect completion,
 rather than only a specially constructed attaining transporter. -/
-theorem charbonnier_minimizer_has_critical_rank_budget
+theorem charbonnier_minimizer_has_critical_rank_budget_complex
     (tau : ℝ) (hτ : 0 < tau)
     (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
     (J : halmosSourceDefect K L ≃ₗᵢ[ℂ] halmosTargetDefect K L)
@@ -63,7 +63,7 @@ theorem charbonnier_minimizer_has_critical_rank_budget
   obtain ⟨T, hTmap, _, _, hTfinite, _, _⟩ :=
     exists_charbonnier_minimizer_by_finite_correction tau hτ K L J hD c hc hc1 le_rfl
   have hfinite := ne_top_of_le_ne_top hTfinite (hmin T hTmap)
-  have htail := apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal
+  have htail := apply_eq_nonacuteDirectRotation_on_inactive_tail_of_charbonnier_minimal_complex
     tau hτ K L J hD c hc hc1 le_rfl U hmap hfinite hmin
   refine ⟨?_, finrank_sine_spectral_cutoff_mul_rpow_le_schatten_projection_sub 2 (by norm_num)
     K L hcompact c hc⟩
