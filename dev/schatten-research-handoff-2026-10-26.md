@@ -4006,3 +4006,97 @@ Focused native-carrier consumer build passed 7,200 jobs. The full default
 build passed 21,399 jobs (`/tmp/root-ideal-full.log`). No paper or
 visualization changes. Spectral factor assembly and infinite-rank real
 root existence/necessity remain the next structural work.
+
+## Independent spectral factors and real-root criteria — 27 October 2026
+
+The new spectral layer is compiled through
+`Geometry/Polar/NuclearRootSpectralFactors.lean` and
+`Geometry/Polar/NuclearRealRootCriteria.lean` (focused build 7,226 jobs).
+The following statements are Lean-verified, not conventional conjectures.
+
+* `exists_unique_supported_sign_projection` gives the unique orthogonal
+  projection P commuting with a positive S and vanishing on ker S such
+  that every self-adjoint root is `A=(2P-I)S`. This requires no compactness.
+  Its converse `isSelfAdjoint_modulus_signed_projection` also compiles.
+* `exists_unique_commuting_spectral_projection` assembles **arbitrary
+  infinite** projection families on a compact self-adjoint operator's
+  actual eigenspaces, including an arbitrary-dimensional kernel. The
+  companion equivalence is deliberately not called a homeomorphism:
+  operator norm on these unweighted ambient projections is finer than
+  product topology in general.
+* `exists_compact_modulus_spectral_homeomorph` gives the entire
+  self-adjoint fixed-modulus root fiber as a product of projection spaces
+  on **nonzero** eigenspaces. Its formula is
+  `A x = mu (2 P_mu x - x)`. Product topology is exactly operator norm on
+  the weighted roots. Each nonzero eigenspace is finite dimensional;
+  the potentially nonseparable zero eigenspace has no free factor.
+* `exists_compact_modulus_symmetry_spectral_homeomorph` imposes commuting
+  G and odd J symmetries independently on every block. The local
+  equations are `Commute P_mu G_mu` and
+  `P_mu J_mu + J_mu P_mu = J_mu`. No invertibility of G is assumed.
+* `exists_nuclearSignedSine_spectral_homeomorph` applies this product to
+  actual transport roots with `S=sinAngleOperator`, `G=V C`, and source
+  reflection J. It is RCLike-generic and requires compact projection
+  difference and an actual crossed-defect equivalence. No unequal-angle
+  mixing is inserted or excluded by construction: the equivalence
+  accounts for all independent roots. Repeated-angle freedom remains
+  in the full local projection factor.
+* `exists_nuclear_optimizer_spectral_homeomorph_complex` composes with
+  the complete optimizer classification: it is a homeomorphism onto
+  **every ambient complex nuclear optimizer**, under finite native
+  nuclear projection difference. This includes infinite rank, common
+  fixed directions and right-angle defects. The right-angle factor is
+  specified by its complement-exchange equation; the reduced U(d)
+  description is not yet a compiled theorem.
+* `nuclearSignedSineParameters_nonempty_iff_spectral_factors` is an
+  **exact**, independent spectral-block solvability criterion over
+  either field. Each local set has only explicit projection equations,
+  not a hidden transporter or global minimization hypothesis.
+
+The real multiplicity obstruction now extends to compact pairs of
+arbitrary ambient dimension and rank.
+`nuclear_spectral_phase_square` proves `(VC)^2=(mu^2-1)I` on every
+nonzero sine eigenspace. For real `0<s<1`, this is a nondegenerate
+negative-square block. The new donor
+`RealSpectralSignObstruction.lean` proves that a commuting projection in
+such a real block has even rank, and that an involution exchanging it
+with its complement forces the whole block dimension to be divisible
+by four. Consequently
+`nuclearSignedSineParameters_four_dvd_sine_eigenspace_real` proves
+`4 | finrank_R ker(S-sI)` for every real root and every `s in (0,1)`.
+A single violating block excludes all real roots, irrespective of the
+other blocks. Compactness is used to make this eigenspace finite, not
+to assume a finite ambient space. Zero and right angles are exempt.
+
+The existing orthogonal-complex-structure donor also now proves
+`exists_isometric_iff_even_finrank_real` and
+`exists_skew_unitary_iff_even_finrank_real`: orthogonal complex
+structures/skew-adjoint orthogonal factors on a finite real
+multiplicity space exist exactly in even dimension (including zero).
+These are classical linear-algebra facts, not novelty claims.
+
+Claim boundary: the explicit spectral product and its topology are
+proved. A reduced product of complex Grassmannians on one phase half
+and right-defect unitary groups, its connected components and dimensions,
+and a sufficient **numerical** infinite-rank real parity criterion are
+still open. The fourfold sine-eigenspace test is necessary here; it has
+not been promoted to an iff. Translate full sine-block dimensions to
+principal-side multiplicities only with an explicit half-dimension
+proof. Most useful next step: classify each finite real compatible
+projection factor under the negative-square/reflection relations, prove
+its existence iff the half-block dimension is even, then use the
+compiled product assembly to obtain arbitrary-rank real root existence.
+
+Keep roots distinct from unrestricted real minimizers: roots attain the
+projection/complex lower bound by the existing generic construction.
+When roots do not exist, the real minimum may be strictly larger.
+Necessity of the signed-root certificate for every real transporter
+attaining that bound still needs its scalar-field proof; it is not
+silently imported from the complex trace argument. No unrestricted real
+optimizer classification or general infinite-rank real matching formula
+is claimed by these changes. No paper/visualization edits or historical
+priority upgrades were made.
+
+Full default verification for this spectral/real layer passed 21,413
+jobs (`/tmp/spectral-real-full.log`), with cache retrieval beforehand.
+All new focused modules and their maintained consumers are included.

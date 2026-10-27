@@ -9,6 +9,8 @@ public import TauCeti.Geometry.Symplectic.Hermitian
 public import Mathlib.Analysis.InnerProductSpace.LinearMap
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 public import Mathlib.RingTheory.AlgebraTower
+public import Mathlib.LinearAlgebra.Complex.FiniteDimensional
+public import Mathlib.Analysis.InnerProductSpace.Adjoint
 
 /-!
 # The ambient norm of an orthogonal complex structure
@@ -184,5 +186,85 @@ theorem exists_paired_orthonormalBasis [FiniteDimensional ℝ E]
   refine ⟨Module.finrank ℂ E, e, he0, ?_⟩
   intro i
   rw [← he0, J.apply_apply]
+
+/-- A finite real vector space carrying a complex structure has even
+real dimension. Orthogonality is unnecessary for this obstruction. -/
+theorem even_finrank_real [FiniteDimensional ℝ E] (J : AlmostComplexStructure E) :
+    Even (Module.finrank ℝ E) := by
+  let := J.complexModule
+  let := J.complexModule_isScalarTower
+  refine ⟨Module.finrank ℂ E, ?_⟩
+  calc
+    Module.finrank ℝ E = Module.finrank ℝ ℂ * Module.finrank ℂ E :=
+      (Module.finrank_mul_finrank ℝ ℂ E).symm
+    _ = _ := by rw [Complex.finrank_real_complex]; omega
+
+/-- **Exact finite-dimensional real complex-structure criterion.** A real
+Hilbert multiplicity space admits an orthogonal quarter-turn exactly
+when its real dimension is even. This is the algebraic obstruction for
+real signed roots on a strictly acute positive angle block. -/
+theorem exists_isometric_iff_even_finrank_real [FiniteDimensional ℝ E] :
+    (∃ J : AlmostComplexStructure E, Isometry J) ↔ Even (Module.finrank ℝ E) := by
+  constructor
+  · rintro ⟨J, _⟩
+    exact J.even_finrank_real
+  · rintro ⟨m, hm⟩
+    let F := EuclideanSpace ℂ (Fin m)
+    have hdim : Module.finrank ℝ E = Module.finrank ℝ F := by
+      rw [finrank_real_of_complex F, finrank_euclideanSpace_fin]
+      omega
+    let u : E ≃ₗᵢ[ℝ] F :=
+      ((stdOrthonormalBasis ℝ E).reindex (finCongr hdim)).repr.trans
+        (stdOrthonormalBasis ℝ F).repr.symm
+    let M : F →ₗ[ℝ] F :=
+      (Complex.I • (LinearMap.id : F →ₗ[ℂ] F)).restrictScalars ℝ
+    let J : AlmostComplexStructure E :=
+      { toLinearMap := u.symm.toLinearMap.comp (M.comp u.toLinearMap)
+        square_neg := by
+          ext x
+          change u.symm (Complex.I • u (u.symm (Complex.I • u x))) = -x
+          rw [u.apply_symm_apply, smul_smul, Complex.I_mul_I, neg_one_smul,
+            map_neg, u.symm_apply_apply] }
+    refine ⟨J, ?_⟩
+    apply (show Isometry J.toLinearMap from ?_)
+    apply AddMonoidHomClass.isometry_of_norm J.toLinearMap
+    intro x
+    change ‖u.symm (Complex.I • u x)‖ = ‖x‖
+    rw [u.symm.norm_map, norm_smul, Complex.norm_I, one_mul, u.norm_map]
+
+/-- **Exact real skew-unitary factor criterion.** A finite real
+multiplicity space admits a skew-adjoint orthogonal operator exactly
+when its dimension is even. The zero-dimensional space is included. -/
+theorem exists_skew_unitary_iff_even_finrank_real [FiniteDimensional ℝ E] [CompleteSpace E] :
+    (∃ U : E →L[ℝ] E, U ∈ unitary (E →L[ℝ] E) ∧ star U = -U) ↔
+      Even (Module.finrank ℝ E) := by
+  constructor
+  · rintro ⟨U, hU, hstar⟩
+    have hsq : U * U = -1 := by
+      have h := Unitary.star_mul_self_of_mem hU
+      rw [hstar, neg_mul] at h
+      exact neg_eq_iff_eq_neg.mp h
+    let J : AlmostComplexStructure E :=
+      { toLinearMap := U.toLinearMap
+        square_neg := by
+          ext x
+          exact congrArg (fun A : E →L[ℝ] E => A x) hsq }
+    exact J.even_finrank_real
+  · intro hdim
+    obtain ⟨J, hJ⟩ := exists_isometric_iff_even_finrank_real.mpr hdim
+    let V := (J.toLinearMap.toLinearIsometry hJ).toLinearIsometryEquiv rfl
+    let U : E →L[ℝ] E := V
+    have hU : U ∈ unitary (E →L[ℝ] E) :=
+      (Unitary.linearIsometryEquiv.symm V).property
+    have hsq : U * U = -1 := by
+      ext x
+      exact J.apply_apply x
+    refine ⟨U, hU, ?_⟩
+    have hneg : -star U = U := by
+      calc
+        _ = star U * (-1) := by simp only [mul_neg, mul_one]
+        _ = star U * (U * U) := by rw [hsq]
+        _ = U := by rw [← mul_assoc, Unitary.star_mul_self_of_mem hU, one_mul]
+    exact neg_eq_iff_eq_neg.mp hneg
 
 end TauCeti.AlmostComplexStructure
