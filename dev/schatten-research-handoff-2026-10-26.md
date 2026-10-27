@@ -3612,3 +3612,52 @@ parametrization, and only after spectral decomposition may one identify
 its Grassmannian factors and unrestricted right-defect unitary factors.
 This candidate replaces the older coordinate-block obstruction with a
 precise basis-free theorem target. Paper and visualizations are unchanged.
+
+
+## Constructing all admissible signed-root optimizers — 27 October 2026
+
+`Geometry/Polar/NuclearRootConstruction.lean` closes the construction
+half of the proposed parameter theorem. Over an arbitrary complete
+RCLike Hilbert space, let C,S,R,V be the existing canonical cosine,
+sine, completed rotation and completed nuclear dual. An independent
+parameter A satisfies:
+
+1. A is self-adjoint;
+2. its native modulus is S;
+3. A commutes with V C;
+4. source-reflection conjugation negates A.
+
+`signed_sine_root_kernel_and_cosine` proves A annihilates the entire
+common-sector projection on both sides, commutes with C, and squares
+to S squared. `signed_sine_relative_mem_unitary` proves `C+VA` is
+unitary using only conditions 1–3; no inverse cosine is used, so right
+angles are included. `nuclearSignedSineRelative` is that actual unitary.
+`nuclearSignedSineRelative_map` uses condition 4 to prove source
+preservation. `nuclearSignedSineTransport` constructs `T=R(C+VA)*`,
+and its map theorem proves K maps exactly to L.
+
+The literal relative-unitary identity and
+`nuclearSignedSineTransport_extract_root` show that extraction returns
+the exact original A. The dual displacement is exactly S-A.
+`nuclearSignedSineTransport_isMin_complex` proves this T minimizes over
+**all ambient** complex unitary transporters when P_K-P_L has finite
+native nuclear norm. It uses the actual crossed-defect equivalence D;
+no finite dimension, rank, separability or angle-block restriction is
+assumed. Finite displacement is a consequence of the Hermitian
+certificate. The construction/map/inverse algebra is RCLike-generic;
+the unrestricted minimizing endpoint here is complex only.
+
+New characteristic dual APIs prove its cosine commutation, common-
+projection fixation, and exact reflection conjugation with the full
+common projection retained. Focused construction build passed 7,180
+jobs. The registered full default build passed 21,383 jobs
+(`/tmp/nuclear-construction-full.log`), with cache retrieval before
+each build.
+
+Remaining direction: for an arbitrary global complex optimizer, its
+extracted signed root already has conditions 1–2. Prove conditions
+3–4 and that reconstruction returns the exact original transporter.
+That will establish the complete signed-root parametrization. Its
+subsequent conversion into Grassmannian factors and right-defect unitary
+factors still requires spectral decomposition; no such topology claim
+is made at this checkpoint. Papers and visualizations are unchanged.

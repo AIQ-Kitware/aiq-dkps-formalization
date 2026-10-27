@@ -180,6 +180,77 @@ theorem nonacuteDirectRotation_comm_nuclearTransportDual
   change Commute R (B.polarFactor + Q)
   exact hRF.add_right hRQcomm
 
+/-- The cosine fixes the entire common-sector projection. -/
+theorem cosine_mul_skew_ker_projection
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+    Proposition35.section3CosAngleOperator K L * B.ker.starProjection = B.ker.starProjection := by
+  ext x
+  exact cosine_apply_eq_self_of_mem_nonacute_skew_ker K L D _
+    ((nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L).ker.starProjection_apply_mem x)
+
+/-- The actual dual fixes the entire common-sector projection. -/
+theorem nuclearTransportDual_mul_skew_ker_projection
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+    (nuclearTransportDual K L D : E →L[𝕜] E) * B.ker.starProjection = B.ker.starProjection := by
+  let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+  have hFQ : B.polarFactor * B.ker.starProjection = 0 := by
+    ext x
+    exact B.polarFactor_apply_of_mem_ker (B.ker.starProjection_apply_mem x)
+  change (B.polarFactor + B.ker.starProjection) * B.ker.starProjection = _
+  rw [add_mul, hFQ, (isStarProjection_starProjection (U := B.ker)).isIdempotentElem.eq, zero_add]
+
+/-- The nuclear dual preserves the intrinsic cosine, including its
+zero and unit eigenspaces. -/
+theorem nuclearTransportDual_comm_cosine
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    Commute (nuclearTransportDual K L D : E →L[𝕜] E) (Proposition35.section3CosAngleOperator K L) := by
+  let R := nonacuteDirectRotation K L D
+  let V := nuclearTransportDual K L D
+  let C := Proposition35.section3CosAngleOperator K L
+  have hVm : (V : E →L[𝕜] E) ∈ unitary (E →L[𝕜] E) := (Unitary.linearIsometryEquiv.symm V).property
+  have hVR : Commute (V : E →L[𝕜] E) R := (nonacuteDirectRotation_comm_nuclearTransportDual K L D).symm
+  have hc := (commute_unitary_iff_star_right_conjugate hVm).mp hVR
+  have hcs := congrArg star hc
+  simp only [star_mul, star_star] at hcs
+  have hVRs : Commute (V : E →L[𝕜] E) (star R) :=
+    (commute_unitary_iff_star_right_conjugate hVm).mpr (by simpa only [mul_assoc] using hcs)
+  have h := (hVR.add_right hVRs).eq
+  have hsum : R + star R = C + C := nonacuteDirectRotation_add_star_eq_two_cosine K L D
+  rw [hsum] at h
+  change (V : E →L[𝕜] E) * C = C * (V : E →L[𝕜] E)
+  apply smul_right_injective (E →L[𝕜] E) (by norm_num : (2 : 𝕜) ≠ 0)
+  simpa only [two_smul, mul_add, add_mul] using h
+
+/-- Reflection reverses the moving part of the dual and retains the
+full common-sector projection. -/
+theorem reflection_conj_nuclearTransportDual
+    (K L : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (D : halmosSourceDefect K L ≃ₗᵢ[𝕜] halmosTargetDefect K L) :
+    let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+    K.reflection.conjStarAlgEquiv (nuclearTransportDual K L D : E →L[𝕜] E) =
+      -(nuclearTransportDual K L D : E →L[𝕜] E) + B.ker.starProjection + B.ker.starProjection := by
+  let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+  let F := B.polarFactor
+  let Q := B.ker.starProjection
+  have hF : K.reflection.conjStarAlgEquiv F = -F :=
+    reflection_conj_polarFactor_nonacuteDirectRotation_sub_cosine K L D
+  have hQformula : Q = 1 - star F * F := by
+    have h := B.adjoint_polarFactor_comp_polarFactor
+    change star F * F = B.kerᗮ.starProjection at h
+    rw [Submodule.starProjection_orthogonal'] at h
+    rw [h]
+    abel
+  have hQ : K.reflection.conjStarAlgEquiv Q = Q := by
+    rw [hQformula, map_sub, map_one, map_mul, map_star, hF, star_neg, neg_mul, mul_neg, neg_neg]
+  change K.reflection.conjStarAlgEquiv (F + Q) = -(F + Q) + Q + Q
+  rw [map_add, hF, hQ]
+  abel
+
 /-- **Exact nuclear dual displacement identity.** Its second term is
 the fixed-sector defect, and its last term is reflection odd whenever
 Z commutes with the source projection. No trace or summability is
