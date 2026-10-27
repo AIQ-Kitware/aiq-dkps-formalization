@@ -66,6 +66,7 @@ def phaseAmplitude (p t : Real) : Real :=
   Real.cos (t / 2) * (phaseChord t) ^ (p - 1)
 
 /-- First derivative of the phase power sum in the positive-chord region. -/
+@[expose]
 def phaseSlope (p theta delta : Real) : Real :=
   p * (phaseAmplitude p (theta + delta) - phaseAmplitude p (theta - delta))
 

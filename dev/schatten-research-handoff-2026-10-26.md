@@ -35,6 +35,12 @@ and their gap obeys the closed threshold. The correction version has the
 analogous necessary-and-sufficient membership and norm conditions.
 The next mathematical targets are quantitative stability or certified
 approximation from inexact input, and connectedness of rank strata.
+Critical scalar-phase conditioning is now proved exactly: the excess
+cost divided by the fourth power of phase tends to a strictly positive
+explicit coefficient. Two-sided local quartic growth and failure of
+every positive quadratic modulus are compiled. This is presently a
+scalar-phase result; the actual-transporter norm interpretation and
+unrestricted ambient near-minimizer bounds are separate steps.
 Full nuclear, real infinite-
 dimensional and infinite Charbonnier optimizer classifications remain open.
 The dated sections below preserve proof history; use this paragraph and the
@@ -148,6 +154,42 @@ The critical boundary needs its own growth law; a quadratic estimate
 must not be assumed there. Connectedness of the fixed-rank multiplicity
 strata is an independent next task; local constancy alone does not prove
 that these are the connected components.
+
+## Exact critical Schatten phase conditioning
+
+`SchattenCriticalGrowth.lean` proves
+`tendsto_critical_phase_quartic_ratio`: for each real `1<p<2`, at
+`theta_c = arccos((2-p)/p)`,
+
+```
+(F_{p,theta_c}(delta)-F_{p,theta_c}(0)) / delta^4
+  -> p (2-p) (2 sin(theta_c/2))^(p-2) / 24   as delta -> 0, delta != 0.
+```
+
+`critical_phase_quartic_coefficient_pos` proves that this coefficient is
+strictly positive. `critical_phase_quartic_growth` bounds phase excess
+above and below by positive multiples of `delta^4` on a positive
+feasible neighborhood. `tendsto_critical_phase_quadratic_ratio` and
+`critical_phase_no_quadratic_modulus` prove that no positive quadratic
+growth coefficient works even locally along feasible nonzero phases.
+These statements include the exact critical equality case and use the
+actual scalar Schatten power sum already linked to planar singular
+values, but do not yet use a norm of the difference of two transporters.
+
+The proof differentiates positive-chord powers, computes the fourth
+phase variation as `p (2-p) chord(theta_c)^(p-2)`, and applies the accepted
+L'Hopital theorem three times. All derivatives are justified on an actual
+neighborhood with positive chords. Symbolic and high-precision numeric
+checks agreed with the coefficient before formal proof; those diagnostics
+are not evidence in place of the compiled Lean limit. The scalar slope
+definition is exposed for reuse, without changing its definition.
+
+Focused build passed (6,670 jobs), and the full default build passed
+(21,253 jobs), with warnings treated as errors. The next
+step is an exact operator-norm or Frobenius-distance phase formula and
+the literal planar Schatten cost-to-distance limit, followed by the
+ambient no-quadratic-modulus theorem. No historical-priority claim is
+made for this conditioning consequence of the phase-transition theory.
 
 ## All-rank real nuclear canonical-value criterion
 
