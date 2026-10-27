@@ -1353,3 +1353,47 @@ the continuous orthogonal extension and actual compression inverse,
 then compose the existing finite parameter homeomorphisms; no new
 variational argument is needed. Nuclear / smoothed / real classification
 and `p≥2` equality cases remain distinct workstreams.
+
+
+## Every nearest commuting correction and its commutator certificates
+
+`SchattenCorrectionClassification.schatten_correction_isMin_iff_canonical_tail_phase_and_defect_complex`
+now transfers the complete arbitrary-Hilbert-space `1<p<2` optimizer
+classification to **every** nearest unitary commuting with a prescribed
+orthogonal projection. Assumptions: native Schatten commutator and an
+actual image/source crossed-defect completion; all ambient commuting
+unitaries are competitors. Neither finite candidate distance nor angle
+block preservation is assumed. The relative correction has canonical
+inactive action and precisely the finite compatible phase/reflection data.
+
+`schatten_nearest_commuting_unitary_has_critical_rank_budget` proves
+`rank(R*A-C) ≤ dim M` for **every** nearest correction `C`, with
+`dim M * sin(criticalAngle p)^p ≤ gauge_p([A,P])^p`. Here `R` is any
+completed canonical image/source rotation and `M` is the same intrinsic
+strictly active sector for all corrections. This is a certificate for the
+additional optimization beyond the canonical correction, not a claim
+that the complete correction of the input has finite rank.
+
+`SchattenCorrectionUniqueness.exists_unique_nearest_schatten_commuting_unitary_of_commutator_le_critical`
+gives a directly checkable sufficient condition for unique optimal
+correction, without a separate index hypothesis:
+`[A,P] ∈ S_p` and `norm([A,P]) ≤ sin(criticalAngle p)`.
+The accompanying equality theorem identifies **every** nearest correction
+with `canonicalPolarFactor(AK,K) * A`. The closed threshold includes
+critical, repeated and zero angles and arbitrary fixed ambient directions.
+The existing `sin_criticalAngle` lemma supplies the algebraic form
+`2*sqrt(p-1)/p`. It was moved unchanged from `SchattenCommutatorCutoff`
+to the earlier scalar `SchattenPhaseCriticalAngle` module, preserving
+its name and stronger `p>1` scope so infinite consumers need no finite
+optimizer-theory import. No duplicate identity is retained.
+These results do not yet assert a necessary-and-sufficient uniqueness
+criterion in infinite dimension. Focused application build: 8,030 jobs.
+
+The reusable native ideal-gauge comparison equivalence
+`OperatorIdealFamily.gauge_correction_isMin_iff_transport_isMin` works
+over both scalar fields in arbitrary complete Hilbert dimension, for
+every accepted ideal gauge including infinite costs. The correspondence
+is classical: no independent historical novelty is claimed for the
+change of variables or for these application corollaries. No empirical,
+numerical-performance or physical-implementation guarantee is inferred.
+The manuscript and visualizations remain untouched.

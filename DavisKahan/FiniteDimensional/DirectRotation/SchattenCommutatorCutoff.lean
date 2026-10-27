@@ -25,17 +25,6 @@ namespace TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition
 
 open scoped ENNReal
 
-/-- The critical sine has a rational square-root expression. -/
-theorem sin_criticalAngle (p : ℝ) (hp1 : 1 < p) :
-    Real.sin (criticalAngle p) = 2 * Real.sqrt (p - 1) / p := by
-  have hp0 : 0 < p := by linarith
-  rw [criticalAngle, Real.sin_arccos,
-    show 1 - ((2 - p) / p) ^ 2 = (2 / p) ^ 2 * (p - 1) by
-      field_simp
-      ring,
-    Real.sqrt_mul (sq_nonneg (2 / p)), Real.sqrt_sq (div_nonneg (by norm_num) hp0.le)]
-  ring
-
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 

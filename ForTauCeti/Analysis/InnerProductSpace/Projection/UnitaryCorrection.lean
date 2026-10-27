@@ -98,6 +98,37 @@ theorem gauge_unitary_sub_eq_displacement (Φ : OperatorIdealFamily.{u, v, v} �
     rw [A.symm_apply_apply]
   rw [hfactor, Φ.gauge_comp_linearIsometryEquiv_right]
 
+
+/-- Correction minimality and relative-transport minimality are exactly
+equivalent in every operator-ideal gauge, including infinite costs.
+The candidate need not be assumed feasible for this comparison identity. -/
+theorem gauge_correction_isMin_iff_transport_isMin
+    (Φ : OperatorIdealFamily.{u, v, v} 𝕜)
+    (K : Submodule 𝕜 E) [K.HasOrthogonalProjection] (A C : E ≃ₗᵢ[𝕜] E) :
+    (∀ V : E ≃ₗᵢ[𝕜] E, Commute (V : E →L[𝕜] E) K.starProjection →
+      Φ.gauge ((A : E →L[𝕜] E) - (C : E →L[𝕜] E)) ≤
+        Φ.gauge ((A : E →L[𝕜] E) - (V : E →L[𝕜] E))) ↔
+    (∀ T : E ≃ₗᵢ[𝕜] E, (K.map A.toLinearMap).map T.toLinearMap = K →
+      Φ.gauge (1 - (A.symm.trans C : E →L[𝕜] E)) ≤
+        Φ.gauge (1 - (T : E →L[𝕜] E))) := by
+  constructor
+  · intro hmin T hT
+    let V := A.trans T
+    have hrel : A.symm.trans V = T := by ext x; simp [V]
+    have hV : Commute (V : E →L[𝕜] E) K.starProjection := by
+      apply (K.map_eq_self_iff_commute_starProjection V).mp
+      rw [← K.map_correction_transport A V, hrel]
+      exact hT
+    have h := hmin V hV
+    rwa [Φ.gauge_unitary_sub_eq_displacement A C,
+      Φ.gauge_unitary_sub_eq_displacement A V, hrel] at h
+  · intro hmin V hV
+    rw [Φ.gauge_unitary_sub_eq_displacement A C,
+      Φ.gauge_unitary_sub_eq_displacement A V]
+    apply hmin
+    rw [K.map_correction_transport]
+    exact (K.map_eq_self_iff_commute_starProjection V).mpr hV
+
 /-- The actual unitary commutator and the image projection difference
 have exactly the same ideal gauge. This is an equality, not a bound. -/
 theorem gauge_projection_image_sub_eq_commutator (Φ : OperatorIdealFamily.{u, v, v} 𝕜)

@@ -46,6 +46,18 @@ theorem cos_criticalAngle (p : ℝ) (hp1 : 1 < p) (hp2 : p < 2) :
   have hc := critical_cos_mem p hp1 hp2
   exact Real.cos_arccos (by linarith [hc.1]) hc.2.le
 
+
+/-- The critical sine has a rational square-root expression. -/
+theorem sin_criticalAngle (p : ℝ) (hp1 : 1 < p) :
+    Real.sin (criticalAngle p) = 2 * Real.sqrt (p - 1) / p := by
+  have hp0 : 0 < p := by linarith
+  rw [criticalAngle, Real.sin_arccos,
+    show 1 - ((2 - p) / p) ^ 2 = (2 / p) ^ 2 * (p - 1) by
+      field_simp
+      ring,
+    Real.sqrt_mul (sq_nonneg (2 / p)), Real.sqrt_sq (div_nonneg (by norm_num) hp0.le)]
+  ring
+
 /-- The algebraic threshold is equivalent to the explicit angle cutoff. -/
 theorem critical_inequality_iff (p theta : ℝ) (hp1 : 1 < p) (hp2 : p < 2)
     (hθ : theta ∈ Icc 0 Real.pi) :
