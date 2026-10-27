@@ -3301,3 +3301,58 @@ trace-equality lemma alone does not yet prove calibration of that dual
 against every transporter, the fixed-direction necessity, or the
 remaining phase/multiplicity classification. The older statement that
 the trace-support equality itself is open is superseded.
+
+## Basis-independent nuclear trace and exact fixed-sector slack — 27 October 2026
+
+The trace foundation now includes a basis-independent scalar
+`ContinuousLinearMap.nuclearTrace`, with its complex trace-class
+properties proved from absolutely convergent diagonal sums. Additivity,
+scalar homogeneity, adjoint conjugation, bounded-factor cyclicity,
+unitary-conjugation invariance, zero trace of unitary-odd operators,
+and faithfulness on positive operators are compiled in
+`ForTauCeti/Analysis/OperatorIdeal/Nuclear/Trace.lean`. All properties
+retain native trace-class hypotheses. The definition does not assert
+an operator-norm continuous trace on all bounded operators.
+
+The generic Hilbert–Schmidt foundation proves full scalar basis
+independence and cyclicity over either field. Polarization of three
+accepted Hilbert–Schmidt energies gives real-part invariance; applying
+it to every scalar multiple determines the scalar trace. Thus the
+argument avoids an unjustified interchange of conditionally convergent
+series and applies to arbitrary Hilbert-basis cardinalities.
+
+`two_mul_re_nuclearTrace_unitary_projection_defect_complex` proves the
+exact quantitative identity
+`2 Re tr((I-Z)Q) = ||(I-Z)Q||_HS^2` for every actual unitary Z and star
+projection Q, assuming only `(I-Z)Q` is trace class. In particular Q
+need not be finite rank, and Z-I need not be trace class globally.
+`re_nuclearTrace_unitary_projection_defect_nonneg_and_eq_zero_iff_complex`
+proves its real trace is nonnegative, with equality precisely when Z
+fixes the entire projected sector. This supplies both the sign and
+rigidity of the nuclear transport dual's common-direction defect.
+
+The square-root trace proof now consumes the accepted Tau Ceti
+`polarFactor` and `factorThru` norm estimate directly, removing its
+initial use of the local `polarPartial` donor representation.
+`ForTauCeti/Analysis/InnerProductSpace/Polar/Symmetry.lean` supplies the
+missing negation and unitary-conjugation symmetries of that accepted
+factor. A skew-adjoint polar factor, completed by identity on its
+kernel, is proved unitary over either field in arbitrary dimension.
+This is the intended actual nuclear transport dual.
+
+Focused nuclear trace build passed (6,664 jobs in the joint build);
+focused canonical polar symmetry build passed 6,296 jobs. Full default
+build passed 21,369 jobs (`/tmp/nuclear-trace-cyclic-full.log`), preceded
+by `lake exe cache get`. These are classical trace and
+polar foundations; their formal verification alone establishes no
+historical novelty. Paper and visualizations remain untouched.
+
+Next actual transport theorem: let B=R-C and complete B.polarFactor
+by identity on ker B to the unitary V. For relative Z=T*R, prove
+`V*(R-Z) = S + Q(I-Z) + (B.polarFactor)*(C-Z)`, where the last factor
+uses the adjoint polar phase and Q is the kernel projection. Its last
+term is odd under source reflection, hence has zero nuclear trace.
+The exact defect identity above should then characterize every finite-
+cost Hilbert nuclear optimizer by fixation of the common sector and
+positivity of the actual dual displacement. Calibration, the iff and
+the subsequent phase/multiplicity parametrization are not yet claimed.
