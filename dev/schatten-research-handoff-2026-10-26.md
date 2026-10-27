@@ -44,6 +44,9 @@ fourth power of actual operator-norm transporter distance. The planar
 no-quadratic-modulus theorem therefore excludes quadratic growth over
 all ambient feasible unitary transporters. A positive lower growth bound
 for every near-minimizer remains a separate task.
+The original norm objective, as well as its `p`-th power, now has its
+exact positive critical coefficient and its actual ambient planar
+no-quadratic-modulus theorem; see the latest critical-norm entry below.
 Full nuclear, real infinite-
 dimensional and infinite Charbonnier optimizer classifications remain open.
 The dated sections below preserve proof history; use this paragraph and the
@@ -231,6 +234,46 @@ Focused build passed (6,842 jobs), and the full default build passed
 useful extension is the original Schatten-norm excess (including its
 exact coefficient), and a quantitative lower bound that applies to
 every ambient near-minimizer rather than just phase curves.
+
+## Critical conditioning for the original Schatten norm objective
+
+`SchattenCriticalNormGrowth.lean` proves
+`tendsto_critical_planar_schatten_norm_quartic_ratio`. For finite
+`1<p<2`, actual feasible planar `U_delta`, and `theta=theta_c(p)`,
+
+```
+( ||I-U_delta||_p - ||I-U_0||_p ) / ||U_delta-U_0||_op^4
+  -> (2-p) 2^(1/p-1) / (24 chord(theta_c))    as delta -> 0+.
+```
+
+`critical_schatten_norm_quartic_coefficient_pos` proves strict positivity.
+The accepted Mathlib `dslope` identity and continuity at a differentiable
+point transfer the power-cost limit through the positive `p`-th root.
+This avoids a false nonvanishing assumption on intermediate objective
+differences. The proof simplifies the derivative factor using justified
+positive-base real-power identities.
+
+`tendsto_critical_planar_schatten_norm_quadratic_ratio` makes the actual
+norm-excess quadratic quotient tend to zero, and
+`critical_planar_schatten_norm_no_quadratic_modulus` constructs a feasible
+nonzero unitary transporter in **every** positive operator-norm
+neighborhood violating **every** proposed positive quadratic modulus
+for the original norm objective. Thus no certificate
+`distance <= C sqrt(objective excess)` can hold uniformly at criticality,
+even on one complex principal plane. This is an obstruction to a global
+quadratic error estimate, not a claim of an unrestricted quartic lower
+bound or of numerical performance. The exact fourth-order law is proved
+along the displayed feasible phase curve.
+
+Focused build passed (6,844 jobs), and the full default build passed
+(21,257 jobs), with warnings treated as errors. The next
+major proof obligation remains a lower growth bound for every ambient
+near-minimizer, with constants uniform in Hilbert dimension and explicit
+dependence on a strict critical-gap margin. At equality any such theorem
+must accommodate the fourth-order obstruction just proved. The
+phase-bifurcation amplitude and variation of optimizers under perturbed
+projection data remain further research targets; neither is implied by
+the fixed-pair quartic law.
 
 ## All-rank real nuclear canonical-value criterion
 
