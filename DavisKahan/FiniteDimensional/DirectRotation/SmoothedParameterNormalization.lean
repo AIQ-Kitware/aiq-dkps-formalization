@@ -151,6 +151,16 @@ def smoothedTransportMinimizers (tau : ℝ) (K L : Submodule ℂ E) : Set (E ≃
     ∀ S : E ≃ₗᵢ[ℂ] E, K.map S.toLinearMap = L →
       smoothedDisplacementCost tau T.toLinearMap ≤ smoothedDisplacementCost tau S.toLinearMap}
 
+omit [CompleteSpace E] in
+@[simp]
+theorem mem_smoothedTransportMinimizers
+    (tau : ℝ) (K L : Submodule ℂ E) (U : E ≃ₗᵢ[ℂ] E) :
+    U ∈ smoothedTransportMinimizers tau K L ↔
+      K.map U.toLinearMap = L ∧
+        ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
+          smoothedDisplacementCost tau U.toLinearMap ≤
+            smoothedDisplacementCost tau T.toLinearMap := Iff.rfl
+
 /-- Normalized compatible projections and independent defect unitaries
 parametrize every global optimizer bijectively, with the actual actions,
 weighted phase formula and uniform Lipschitz recovery of the phase

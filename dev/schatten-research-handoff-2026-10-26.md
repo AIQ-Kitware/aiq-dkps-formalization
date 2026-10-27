@@ -2475,3 +2475,34 @@ then transfer compactness, exact uniqueness iff, and multiplicity topology.
 The previous paragraphs marking the full smoothed optimizer iff open are
 superseded. Historical priority is not inferred from formal verification.
 The paper and visualization files remain untouched.
+
+## October 27: full Charbonnier optimizer topology and exact uniqueness
+
+`CharbonnierOptimizerTopology.exists_charbonnier_finite_cutoff_optimizer_homeomorph`
+identifies the entire ambient Hilbert optimizer family with the actual
+finite active-cutoff optimizer family, by an operator-norm homeomorphism
+that preserves pairwise operator-norm differences exactly. Its hypotheses
+are the positive-scale HS projection difference and actual defect equivalence,
+with any positive cutoff below one and at most the critical sine.
+`isCompact_charbonnierHilbertTransportMinimizers` proves operator-norm
+compactness of the full family, with all multiplicities and defects.
+
+`CharbonnierUniquenessThreshold.charbonnierHilbertTransport_unique_minimizer_iff`
+removes **all** standing compactness, ideal-membership and index assumptions:
+for any orthogonally complemented pair on a complete complex Hilbert space,
+there is exactly one native-cost global minimizing ambient unitary iff
+`P-Q` is Hilbert--Schmidt and the full projection gap is at most
+`sin(smoothedCriticalAngle tau)`. Equality at the threshold is included.
+The gap bound automatically eliminates crossed defects. The preliminary
+`..._iff_projectionGap_of_defectEquiv` transfers finite uniqueness through
+the cutoff homeomorphism and recovers the entire gap by a reducing norm
+maximum, rather than assuming that finite cutoffs exhaust operator norm.
+
+The reusable either-field
+`TauCeti.charbonnierCost_displacement_ne_top_of_unique_transport`
+proves unique optimality forces finite cost even without projection or
+compactness assumptions: otherwise a transporter and its composition
+with negation both minimize; uniqueness forces the ambient space to be
+zero, contradicting infinite cost. This also covers the zero-space edge.
+These are native extended-objective statements, not only ideal-restricted
+competitor statements. The paper and visualizations remain untouched.

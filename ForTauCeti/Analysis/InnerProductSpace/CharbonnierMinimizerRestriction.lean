@@ -28,6 +28,60 @@ open scoped ENNReal
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
+omit [CompleteSpace E] in
+/-- A unique ambient Charbonnier minimizer has finite cost. If all
+feasible costs were infinite, composing a transporter with negation
+would give another minimizer, unless the entire space were zero. -/
+theorem charbonnierCost_displacement_ne_top_of_unique_transport
+    (tau : ℝ) (hτ : 0 ≤ tau) (K L : Submodule 𝕜 E)
+    (U : E ≃ₗᵢ[𝕜] E) (hmap : K.map U.toLinearMap = L)
+    (hmin : ∀ T : E ≃ₗᵢ[𝕜] E, K.map T.toLinearMap = L →
+      (1 - (U : E →L[𝕜] E)).charbonnierCost tau ≤
+        (1 - (T : E →L[𝕜] E)).charbonnierCost tau)
+    (huni : ∀ T : E ≃ₗᵢ[𝕜] E,
+      (K.map T.toLinearMap = L ∧
+        ∀ W : E ≃ₗᵢ[𝕜] E, K.map W.toLinearMap = L →
+          (1 - (T : E →L[𝕜] E)).charbonnierCost tau ≤
+            (1 - (W : E →L[𝕜] E)).charbonnierCost tau) → T = U) :
+    (1 - (U : E →L[𝕜] E)).charbonnierCost tau ≠ ∞ := by
+  intro htop
+  have hall (T : E ≃ₗᵢ[𝕜] E) (hT : K.map T.toLinearMap = L) :
+      (1 - (T : E →L[𝕜] E)).charbonnierCost tau = ∞ := by
+    apply top_unique
+    simpa only [htop] using hmin T hT
+  let N := U.trans (LinearIsometryEquiv.neg 𝕜)
+  have hNmap : K.map N.toLinearMap = L := by
+    apply le_antisymm
+    · rintro y ⟨x, hx, rfl⟩
+      change -(U x) ∈ L
+      apply L.neg_mem
+      rw [← hmap]
+      exact Submodule.mem_map_of_mem hx
+    · intro y hy
+      have hny : -y ∈ K.map U.toLinearMap := by
+        rw [hmap]
+        exact L.neg_mem hy
+      obtain ⟨x, hx, hxy⟩ := hny
+      refine ⟨x, hx, ?_⟩
+      change -(U x) = y
+      change U x = -y at hxy
+      rw [hxy, neg_neg]
+  have hNU : N = U := huni N ⟨hNmap, fun W hW => by rw [hall N hNmap, hall W hW]⟩
+  have hzero (y : E) : y = 0 := by
+    have hy : -y = y := by
+      have h := congrArg (fun T : E ≃ₗᵢ[𝕜] E => T (U.symm y)) hNU
+      change -(U (U.symm y)) = U (U.symm y) at h
+      rwa [U.apply_symm_apply] at h
+    have htwo : (2 : 𝕜) • y = 0 := by
+      rw [two_smul]
+      exact add_eq_zero_iff_eq_neg.mpr hy.symm
+    exact (smul_eq_zero.mp htwo).resolve_left two_ne_zero
+  have hdisp : 1 - (U : E →L[𝕜] E) = 0 := by
+    ext x
+    exact hzero _
+  rw [hdisp, (ContinuousLinearMap.charbonnierCost_eq_zero_iff tau hτ _).mpr rfl] at htop
+  exact ENNReal.zero_ne_top htop
+
 /-- Finite-cost global optimality descends to every actual reducing
 sector, including an infinite-dimensional one. Competitors on that
 sector extend with exactly the original complementary action. -/
