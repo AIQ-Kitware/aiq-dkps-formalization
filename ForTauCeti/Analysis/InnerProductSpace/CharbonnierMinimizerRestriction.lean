@@ -94,6 +94,51 @@ theorem exists_charbonnier_minimizing_finite_restriction
   exact exists_charbonnier_minimizing_reducing_restriction tau hτ K L M U hmap hfinite hmin hK hred
 
 
+/-- With the same complementary action as a global minimizing
+reference, global optimality is equivalent to optimality of the actual
+finite restriction. The tail may have infinite rank. -/
+theorem charbonnier_minimal_iff_restriction_of_minimizing_reference_tail
+    (tau : ℝ) (hτ : 0 < tau)
+    (K L M : Submodule 𝕜 E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    [FiniteDimensional 𝕜 M]
+    (U R : E ≃ₗᵢ[𝕜] E) (hmap : K.map U.toLinearMap = L)
+    (hRmap : K.map R.toLinearMap = L)
+    (hfinite : (1 - (U : E →L[𝕜] E)).charbonnierCost tau ≠ ∞)
+    (hRmin : ∀ T : E ≃ₗᵢ[𝕜] E, K.map T.toLinearMap = L →
+      (1 - (R : E →L[𝕜] E)).charbonnierCost tau ≤
+        (1 - (T : E →L[𝕜] E)).charbonnierCost tau)
+    (hK : M.IsReducing K.starProjection.toLinearMap)
+    (hRM : ∀ x ∈ M, R x ∈ M)
+    (htail : ∀ x ∈ Mᗮ, U x = R x)
+    (V : M ≃ₗᵢ[𝕜] M) (hV : ∀ x : M, (V x : E) = U x) :
+    (∀ T : E ≃ₗᵢ[𝕜] E, K.map T.toLinearMap = L →
+      (1 - (U : E →L[𝕜] E)).charbonnierCost tau ≤
+        (1 - (T : E →L[𝕜] E)).charbonnierCost tau) ↔
+    (∀ W : M ≃ₗᵢ[𝕜] M,
+      (K.comap M.subtype).map W.toLinearMap = L.comap M.subtype →
+      (1 - (V : M →L[𝕜] M)).charbonnierCost tau ≤
+        (1 - (W : M →L[𝕜] M)).charbonnierCost tau) := by
+  constructor
+  · intro hmin
+    obtain ⟨V', hV', _, hmin'⟩ := exists_charbonnier_minimizing_finite_restriction tau hτ K L M
+      U hmap hfinite hmin hK (fun x hx => by rw [← hV ⟨x, hx⟩]; exact (V ⟨x, hx⟩).property)
+    have heq : V' = V := by
+      ext x
+      exact (hV' x).trans (hV x).symm
+    simpa only [heq] using hmin'
+  · intro hmin T hT
+    obtain ⟨W, hW, _, _⟩ := R.exists_restriction_of_finite_invariant M hRM
+    have hWmap := K.map_comap_subtype_of_isometry_restriction L M R W hRmap hW
+    have hUcost := ContinuousLinearMap.charbonnierCost_unitary_displacement_eq_block_add_tail
+      tau hτ M U R V (fun x => (hV x).symm) htail
+    have hRcost := ContinuousLinearMap.charbonnierCost_unitary_displacement_eq_block_add_tail
+      tau hτ M R R W (fun x => (hW x).symm) (fun _ _ => rfl)
+    have hle : (1 - (U : E →L[𝕜] E)).charbonnierCost tau ≤
+      (1 - (R : E →L[𝕜] E)).charbonnierCost tau := by
+      rw [hUcost, hRcost]
+      exact add_le_add (hmin W hWmap) le_rfl
+    exact hle.trans (hRmin T hT)
+
 /-- An angle-preserving finite-cost global Charbonnier optimizer fixes
 all common source and common orthogonal directions. This works over
 both fields at every positive smoothing scale, in arbitrary dimension. -/

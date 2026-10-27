@@ -2432,3 +2432,46 @@ passed (7,364 and 7,366 jobs respectively). Next: combine tail necessity,
 finite-block cost additivity and the finite phase/defect iff to classify
 every infinite-dimensional optimizer under the finite-cost feasibility
 conditions. Historical novelty remains a separate priority question.
+
+## Complete infinite Charbonnier optimizer iff and uniform correction rank
+
+`CharbonnierOptimizerClassification.charbonnier_transport_isMin_iff_canonical_tail_phase_and_defect_complex`
+now classifies every ambient minimizing complex unitary, without candidate
+finite-cost, separability, finite-rank-pair or prescribed-block assumptions.
+For positive smoothing scale, native Hilbert--Schmidt projection difference,
+an actual crossed-defect equivalence, and any cutoff in `(0,1)` below or at
+the critical sine, the iff requires exactly canonical complementary action
+and a finite actual restriction satisfying the complete finite smoothed
+phase/defect formula. The relative factor is `R.trans V.symm`; the phase
+factor is the weighted factor with weights `smoothingRadius tau` and its
+inverse. The actual right-defect equivalence is unique for each optimizer;
+the phase projection vanishes on the cosine kernel. Unequal, repeated,
+zero, critical and right principal angles retain the finite theorem's scope.
+
+`charbonnier_minimal_iff_canonical_tail_finite_minimal_complex` gives the
+underlying exact unrestricted finite reduction. The reusable either-field
+`TauCeti.charbonnier_minimal_iff_restriction_of_minimizing_reference_tail`
+proves equivalence by native trace additivity and finite-tail cancellation.
+
+`CharbonnierOptimizerRank.charbonnier_minimizer_has_critical_rank_budget`
+proves, for **every** global optimizer U and every completed rotation R,
+`rank(R-U) <= dim M` for the strictly supercritical sine sector M, with
+`dim M * sin(theta_c)^2 <= ||P-Q||_HS^2`. Thus only a uniformly bounded
+finite-dimensional sector can change; the critical sector is canonical.
+Focused classification and rank builds passed (7,438 and 7,440 jobs).
+
+The complementary regime is separately explicit in
+`charbonnier_all_transport_costs_eq_top_iff` and
+`charbonnier_minimal_of_infinite_cost_regime`: if HS membership fails or
+crossed-defect finranks differ, every feasible ambient transporter has
+cost infinity and is an extended-cost global minimizer. The universal
+cost statement allows an empty fiber; the optimizer statement requires
+an actual feasible transporter. No stationarity or finite-block
+classification is asserted in this regime. Both results are field-generic.
+
+Next unblocked consequences: establish an operator-norm homeomorphism
+between the full Hilbert optimizer family and its finite cutoff family,
+then transfer compactness, exact uniqueness iff, and multiplicity topology.
+The previous paragraphs marking the full smoothed optimizer iff open are
+superseded. Historical priority is not inferred from formal verification.
+The paper and visualization files remain untouched.
