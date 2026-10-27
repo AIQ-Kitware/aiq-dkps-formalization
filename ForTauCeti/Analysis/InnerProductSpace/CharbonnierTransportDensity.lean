@@ -46,7 +46,6 @@ theorem exists_charbonnier_transport_finite_update_sequence
       (∀ n, (1 - (V n : E →L[𝕜] E)).charbonnierCost tau ≠ ∞) ∧
       (∀ n, ((R : E →L[𝕜] E) - (V n : E →L[𝕜] E)).rank ≤ N n) ∧
       Tendsto V atTop (𝓝 U) := by
-  let Φ := OperatorIdealFamily.schatten 𝕜 2 (by norm_num)
   have hRhs := (ContinuousLinearMap.charbonnierCost_ne_top_iff_schatten_two tau hτ _).mp hRfinite
   have hRc := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top
     2 (by norm_num) (1 - (R : E →L[𝕜] E)) hRhs
@@ -56,21 +55,17 @@ theorem exists_charbonnier_transport_finite_update_sequence
         -(1 - (U : E →L[𝕜] E)) + (1 - (R : E →L[𝕜] E)) := by abel
     rw [hfac]
     exact hUcompact.neg.add hRc
-  obtain ⟨V, N, hVP, hN, hlim⟩ := exists_compact_transport_finite_update_sequence
-    K.starProjection L.starProjection R U hUR
+  obtain ⟨V, N, hVP, hVfinite, hN, hlim⟩ :=
+    exists_schatten_transport_finite_update_sequence_of_compact 2 (by norm_num)
+      K.starProjection L.starProjection R U hRhs hUR
       ((K.map_eq_iff_conjugate_starProjection L R).mp hRmap)
       ((K.map_eq_iff_conjugate_starProjection L U).mp hUmap)
   refine ⟨V, N, fun n => (K.map_eq_iff_conjugate_starProjection L (V n)).mpr (hVP n),
     ?_, hN, ?_⟩
   · intro n
     apply (ContinuousLinearMap.charbonnierCost_ne_top_iff_schatten_two tau hτ _).mpr
-    have hpert : Φ.gauge ((R : E →L[𝕜] E) - (V n : E →L[𝕜] E)) ≠ ∞ :=
-      OperatorIdealFamily.gauge_schatten_ne_top_of_rank_le 2 (by norm_num) _ (N n) (hN n)
-    have hfac : 1 - (V n : E →L[𝕜] E) =
-        (1 - (R : E →L[𝕜] E)) + ((R : E →L[𝕜] E) - (V n : E →L[𝕜] E)) := by abel
-    rw [hfac]
-    exact ne_top_of_le_ne_top (ENNReal.add_ne_top.mpr ⟨hRhs, hpert⟩) (Φ.gauge_add_le _ _)
-  · exact LinearIsometryEquiv.isEmbedding_toContinuousLinearMap.tendsto_nhds_iff.mpr hlim
+    exact hVfinite n
+  · exact hlim
 
 /-- Within a fiber admitting finite native cost, a local minimum with
 compact displacement necessarily has finite cost. A merely compact,

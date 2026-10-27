@@ -2895,3 +2895,41 @@ instead give open infinite-cost plateaus. The intended unconditional
 landscape is local iff global or noncompact displacement; the finite-cost
 implication alone does not yet establish this equivalence. Paper and
 visualization files remain untouched.
+
+## Complete strict Schatten extended-cost landscape
+
+`SchattenLocalGlobal.schatten_isLocalMinOn_iff_global_or_noncompact_complex`
+now classifies every operator-norm local minimum for `1<p<2` on an
+arbitrary complete complex Hilbert space: a feasible U is locally
+minimizing iff it is globally minimizing or `1-U` is noncompact.
+There are no standing ideal, index, finite-cost, rank, simple-angle or
+separability assumptions on the pair/candidate. In the absence of finite
+feasibility every feasible transporter is globally minimizing at infinity;
+otherwise noncompact displacements are exactly the additional infinite-cost
+local minima. The finite-cost local-to-global proof is used only after
+finite cost is justified, not on an infinite objective value.
+
+The general field-generic endpoint
+`TauCeti.exists_schatten_transport_finite_update_sequence_of_compact`
+constructs native finite-cost finite-rank updates of any Schatten reference
+near every compact-relative transporter, in the exact bounded-operator
+conjugacy fiber, for every finite real exponent `p>=1`. Neither arbitrary
+source nor target bounded operator needs to be a projection. The competitor
+may have infinite Schatten cost; convergence is operator norm, not a
+claim of Schatten convergence to an infinite-cost point. The smoothed
+density theorem now directly consumes this result at exponent two and
+the native Charbonnier/HS domain equivalence, retiring its duplicate
+finite-update gauge argument.
+
+`SchattenLocalTopology.gauge_schatten_displacement_ne_top_of_isLocalMinOn_of_compact`
+proves compact-displacement local minima have finite cost whenever their
+fiber has a finite reference, over both fields and for every finite real
+exponent at least one. Noncompact points instead lie on open infinite-cost
+plateaus by `isLocalMin_schatten_of_not_isCompactOperator`.
+`neg_isLocalMinOn_not_isMinOn_schatten_self_transport` gives an explicit
+nonglobal local minimum of infinite cost at negative identity in every
+infinite-dimensional real or complex Hilbert space, for any self-transport
+subspace and every such exponent. These general topological ingredients
+do not assert finite-cost local-to-global over the real field or at the
+nuclear endpoint. Paper and visualizations untouched; no first-priority
+claim is inferred from compilation.

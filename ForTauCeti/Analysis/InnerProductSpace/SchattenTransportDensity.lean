@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.SchattenUnitaryApproximation
 public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenFinite
+public import TauCeti.Analysis.Normed.Operator.LinearIsometryEquiv.Topology
 
 /-!
 # Finite-rank updates inside exact operator transport fibers
@@ -34,7 +35,7 @@ noncomputable section
 namespace TauCeti
 
 open Filter
-open scoped Topology ENNReal
+open scoped Topology ENNReal TauCeti.LinearIsometryEquivOperatorNorm
 
 universe u v
 
@@ -121,6 +122,36 @@ theorem exists_compact_transport_finite_update_sequence
   · simp_rw [hVfac]
     rw [← hRZ]
     exact hlim.const_mul (R : E →L[𝕜] E)
+
+/-- Finite-cost finite-rank updates of a Schatten reference are dense
+in its full compact-relative transport fiber, in operator norm. The
+competitor need not have finite Schatten cost. Source and target may be
+arbitrary bounded operators, over either field and in any dimension. -/
+theorem exists_schatten_transport_finite_update_sequence_of_compact
+    (p : ℝ) (hp : 1 ≤ p) (P Q : E →L[𝕜] E) (R U : E ≃ₗᵢ[𝕜] E)
+    (hR : (OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (R : E →L[𝕜] E)) ≠ ∞)
+    (hcompact : IsCompactOperator
+      (((U : E →L[𝕜] E) - (R : E →L[𝕜] E)) : E →L[𝕜] E))
+    (hRP : (R : E →L[𝕜] E) * P * star (R : E →L[𝕜] E) = Q)
+    (hUP : (U : E →L[𝕜] E) * P * star (U : E →L[𝕜] E) = Q) :
+    ∃ V : ℕ → E ≃ₗᵢ[𝕜] E, ∃ N : ℕ → ℕ,
+      (∀ n, (V n : E →L[𝕜] E) * P * star (V n : E →L[𝕜] E) = Q) ∧
+      (∀ n, (OperatorIdealFamily.schatten 𝕜 p hp).gauge
+        (1 - (V n : E →L[𝕜] E)) ≠ ∞) ∧
+      (∀ n, ((R : E →L[𝕜] E) - (V n : E →L[𝕜] E)).rank ≤ N n) ∧
+      Tendsto V atTop (𝓝 U) := by
+  let Φ := OperatorIdealFamily.schatten 𝕜 p hp
+  obtain ⟨V, N, hVP, hN, hlim⟩ :=
+    exists_compact_transport_finite_update_sequence P Q R U hcompact hRP hUP
+  refine ⟨V, N, hVP, ?_, hN, ?_⟩
+  · intro n
+    have hpert : Φ.gauge ((R : E →L[𝕜] E) - (V n : E →L[𝕜] E)) ≠ ∞ :=
+      OperatorIdealFamily.gauge_schatten_ne_top_of_rank_le p hp _ (N n) (hN n)
+    have hfac : 1 - (V n : E →L[𝕜] E) =
+        (1 - (R : E →L[𝕜] E)) + ((R : E →L[𝕜] E) - (V n : E →L[𝕜] E)) := by abel
+    rw [hfac]
+    exact ne_top_of_le_ne_top (ENNReal.add_ne_top.mpr ⟨hR, hpert⟩) (Φ.gauge_add_le _ _)
+  · exact LinearIsometryEquiv.isEmbedding_toContinuousLinearMap.tendsto_nhds_iff.mpr hlim
 
 /-- Finite-rank updates of any feasible Schatten transporter are dense
 in its exact transport fiber in Schatten norm. Every approximant has

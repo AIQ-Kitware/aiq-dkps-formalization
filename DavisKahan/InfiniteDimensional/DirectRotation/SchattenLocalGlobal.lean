@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenOptimizerClassification
 public import DavisKahan.InfiniteDimensional.DirectRotation.SchattenFeasibility
+public import ForTauCeti.Analysis.InnerProductSpace.SchattenLocalTopology
 
 /-!
 # No nonglobal finite-cost Hilbert Schatten local minima
@@ -98,5 +99,51 @@ theorem schatten_isLocalMinOn_iff_isMinOn_of_finite_cost_complex
     exact fun T hT => schatten_isMin_of_isLocalMinOn_complex p hp hp1 hp2 K L U
       hmap hfinite hmin T hT
   · exact IsMinOn.isLocalMinOn
+
+/-- **Complete extended-cost landscape.** Every operator-norm local
+minimum is either globally minimizing or has noncompact displacement.
+Conversely, every global minimizer and every noncompact-displacement
+transporter is locally minimizing. For `1<p<2` there are no standing feasibility,
+ideal, index, rank or separability assumptions. Noncompact points lie on
+open infinite-cost plateaus, rather than representing finite-cost traps. -/
+theorem schatten_isLocalMinOn_iff_global_or_noncompact_complex
+    (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K L : Submodule ℂ E) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
+    (U : E ≃ₗᵢ[ℂ] E) (hmap : K.map U.toLinearMap = L) :
+    IsLocalMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E)))
+      {T | K.map T.toLinearMap = L} U ↔
+    IsMinOn
+      (fun T : E ≃ₗᵢ[ℂ] E => (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge
+        (1 - (T : E →L[ℂ] E)))
+      {T | K.map T.toLinearMap = L} U ∨
+      ¬ IsCompactOperator ((1 - (U : E →L[ℂ] E)) : E →L[ℂ] E) := by
+  classical
+  constructor
+  · intro hmin
+    by_cases hcompact : IsCompactOperator ((1 - (U : E →L[ℂ] E)) : E →L[ℂ] E)
+    · left
+      by_cases hfeasible : ∃ R : E ≃ₗᵢ[ℂ] E, K.map R.toLinearMap = L ∧
+          (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (R : E →L[ℂ] E)) ≠ ∞
+      · obtain ⟨R, hRmap, hRfinite⟩ := hfeasible
+        have hfinite := gauge_schatten_displacement_ne_top_of_isLocalMinOn_of_compact
+          p.toReal hp1.le K L R U hRmap hmap hRfinite hcompact hmin
+        exact (schatten_isLocalMinOn_iff_isMinOn_of_finite_cost_complex
+          p hp hp1 hp2 K L U hmap hfinite).mp hmin
+      · have htop (T : E ≃ₗᵢ[ℂ] E) (hT : K.map T.toLinearMap = L) :
+            (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E)) = ∞ := by
+          by_contra hfinite
+          exact hfeasible ⟨T, hT, hfinite⟩
+        intro T hT
+        change (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (U : E →L[ℂ] E)) ≤
+          (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge (1 - (T : E →L[ℂ] E))
+        rw [htop U hmap, htop T hT]
+    · exact Or.inr hcompact
+  · rintro (hglobal | hnoncompact)
+    · exact hglobal.isLocalMinOn
+    · exact (isLocalMin_schatten_of_not_isCompactOperator
+        p.toReal hp1.le U hnoncompact).isLocalMinOn _
 
 end TauCeti.DavisKahan.InfiniteDimensional.SchattenPhaseTransition
