@@ -3838,8 +3838,10 @@ pre-existing findings. No forwarding alias is retained.
 
 Focused construction/classification build passed 7,182 jobs. The full
 default build passed 21,389 jobs (`/tmp/nuclear-real-root-full.log`).
-Explicit Challenge validation follows. Cache retrieval precedes each
-build. This strengthens the earlier complex-only
+The explicit Challenge build passed 19,757 jobs
+(`/tmp/nuclear-real-root-challenge.log`). Cache retrieval preceded each
+build. The auxiliary name-drift scanner retains its 23 pre-existing
+unrelated findings, so no claim that that scanner passes is made. This strengthens the earlier complex-only
 construction checkpoint while leaving the exact hypotheses of the
 all-complex-optimizer bijection intact. Paper and visualizations are
 unchanged.
