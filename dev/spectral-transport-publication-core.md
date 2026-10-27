@@ -1,7 +1,9 @@
 # Publication core: spectral penalties, field compatibility and ideals
 
-Assessment at mathematical checkpoint `ff3c1657d`, 27 October 2026.
-The full default build passed 21,427 jobs with warnings as errors.
+Assessment begun at mathematical checkpoint `ff3c1657d`, updated 27 October 2026.
+The real equality checkpoint passed 21,427 jobs with warnings as errors.
+The shared family mechanism and all consumers passed 21,437 jobs with
+warnings as errors after `lake exe cache get` and `lake build`.
 The success criterion is a coherent central theory and defensible attribution,
 not completion of the research backlog. This assessment is research planning;
 the proposed abstract below is not a manuscript edit.
@@ -66,8 +68,16 @@ convexity controls the zero-gradient reflection sector.
 formula plus existence of an attainer; it does not itself classify every
 optimizer. The Hessian identity needs a proved spectral differentiation
 argument under the stated regularity, and all exceptional gradient levels,
-common directions and multiplicities must be retained. Existing Schatten and
-Charbonnier no-mixing proofs separately certify those cases.
+common directions and multiplicities must be retained. The shared finite
+trace Hessian and projection-overlap descent are now
+compiled in `UnitaryPhaseHessian`, and both existing penalty proofs consume
+them. The concrete smoothed-power family has a proved analytic extension,
+actual Hessian, unrestricted ambient stationarity `JGJ=-G`, and paired-block
+overlap exclusion in `SmoothedPowerVariation`.
+These settle the displayed no-mixing calculation for that family, including
+identity and reflection phases. The passage from an arbitrary ambient
+minimizer to those actual paired blocks, feasibility of their simultaneous
+variation, and the kernel-sector bound still need a family-wide proof.
 
 ### C2. One phase-transition surface for smoothed powers — derived scalar law
 
@@ -101,9 +111,14 @@ delta=pi/2. These boundary assertions agree with the existing proved formulas;
 they are not an assertion that all endpoint optimizers are limits of interior ones.
 
 **Status:** existing strict-Schatten, nuclear and Charbonnier scalar instances
-are Lean-verified; the two-parameter statement and shared scalar proof are
-conventional derivations awaiting formalization. C1 is additionally needed
-to promote the scalar law to an unrestricted ambient optimum.
+are Lean-verified. For `tau>0`, the family first/second derivatives,
+critical curvature surface and strict single-peak shape are now formally
+proved in `SmoothedPowerPhase`; its zero-smoothing and quadratic critical
+cosines are also proved. The full shared minimizing-phase uniqueness law,
+including the critical angle, remains a conventional derivation awaiting
+formalization. C1 is additionally needed to promote scalar optimality to an
+unrestricted ambient optimum. Exact declarations and hypotheses appear in
+the [common-mechanism record](spectral-transport-unification.md#formally-proved-common-phase-mechanism--27-october-follow-up).
 
 ### C3. Nuclear signed roots and exact real compatibility — formally proved
 
@@ -188,8 +203,8 @@ Solid mathematical dependencies are shown; status labels are part of each node.
 
 ```mermaid
 flowchart TD
-  G[Classical projection geometry and transport fiber: proved] --> D[Gradient pairing and overlap descent: known instances proved]
-  S[Family scalar shape and critical surface: derived, not formalized] --> F[C1 family finite decoupling: candidate]
+  G[Classical projection geometry and transport fiber: proved] --> D[Ambient stationarity and paired overlap descent: family proved; block assembly: open]
+  S[Family single-peak shape and curvature surface: proved; full scalar minima: derived] --> F[C1 family finite decoupling: candidate]
   D --> F
   F --> L[C5 Hilbert lift and finite active attainment: candidate family; known instances proved]
   I[Classical ideal membership and defect index: proved] --> L
@@ -211,6 +226,7 @@ contains exact declarations and authentication limits.
 | --- | --- | --- |
 | Jordan (1875), §§46–50; Davis (1958), Theorems 7.1, 7.3, 7.4 | Classical angular geometry and canonical operator/Hilbert--Schmidt/Schatten p>=2 extremal theory. | Exact subquadratic phase selection and its field compatibility, not invention of angles or direct rotation. |
 | Davis–Kahan (1970), Propositions 4.3–4.4 and examples | Squared displacement, norm-scope failure and the printed real short-angle assertion. Original wording here relies on the repository's prior source audit. | Formal correction with exact scope, followed by an optimization theory beyond the false assertion. |
+| Sun–Roth–Black (2010), §4; Barron (2019), equation (4) | The scalar generalized Charbonnier family itself, up to our subtraction at zero. | Constrained transport phase selection and operator structure; no claim to invent the penalty. Primary authentication is S13 in the provenance map. |
 | Bolotnikov–Li–Rodman (2001), Problem 1.1; Theorems 3.1, 4.2, 4.5; Lemma 3.3 | The ambient distortion problem, Q-norm theory, complete Frobenius minimizers and a special subquadratic phase example. Theorem 4.5's chain compatibility condition is automatic for a single subspace pair. | The subquadratic/smoothed solution theory and C1 if proved. The optimization problem itself is prior art. |
 | Qiu–Zhang–Li (2006), §5; Zhang–Qiu (2010), §4 p. 1615 | Grassmann/logarithmic objectives and explicit trace-norm nonminimality. | Exact extrinsic optimizer classifications, not a new discovery that direct rotation can fail for the trace norm. |
 | Avron–Seiler–Simon (1994), Proposition 3.1; Kaftal–Loreaux (2017), Proposition 2.7(ii) | Relative index and exact proper-ideal restricted-unitary feasibility on separable complex Hilbert space. | Formal real/nonseparable scope and a penalty-specific optimizer solution above those classical ingredients. |
@@ -264,8 +280,13 @@ real classification, topology or broad stability is not a publication gate.
 Historical comparison still needs resolution, and a paper claiming C1 or the
 full smoothed-power law needs further proof.
 
-**Next campaign:** formalize C1 for the concrete family using one shared
-gradient/overlap argument, and C2 using the shared scalar shape calculation.
+**Next central step:** assemble C1 from stationarity and the now-proved
+family single-peak/Hessian/overlap mechanism; retain the zero-gradient
+reflection sector and every principal-angle multiplicity. The missing step
+is ambient spectral-block assembly, not another penalty-specific Hessian.
+Then formalize C2's shared logarithmic-ratio minimizing-phase argument.
+Do not begin optional topology or unrestricted real matching extensions at
+this checkpoint.
 Then package the already-used C5 lower-bound lift and instantiate the family.
 For tau>0 the phase-gradient extension is analytic near the unit circle; for
 tau=0 the existing strict-exponent treatment handles the identity singularity.

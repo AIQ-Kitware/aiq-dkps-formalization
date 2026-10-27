@@ -11,6 +11,7 @@ public import TauCeti.Analysis.InnerProductSpace.NormalOperator
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Analysis.InnerProductSpace.NormPow
+public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 public import Mathlib.Analysis.InnerProductSpace.Dual
 public import Mathlib.Analysis.Convex.Deriv
 public import TauCeti.Analysis.Convex.StrictConvexSpace
@@ -56,22 +57,28 @@ section NormPower
 
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
 
-/-- The tangent inequality for a power of the Hilbert norm, valid also at
-the zero vector. Restricting the accepted convex norm power to the affine
-line from `x` to `y` reduces the assertion to the one-variable secant bound. -/
-theorem norm_rpow_support (p : ℝ) (hp : 1 < p) (x y : F) :
+/-- Classical tangent support for a convex Hilbert norm power at a nonzero
+vector. Unlike the everywhere differentiable version, this includes exponent
+one. The derivative is obtained from the smooth squared norm. -/
+theorem norm_rpow_support_of_ne_zero (p : ℝ) (hp : 1 ≤ p) (x y : F) (hx : x ≠ 0) :
     ‖x‖ ^ p + p * ‖x‖ ^ (p - 2) * ⟪x, y - x⟫_ℝ ≤ ‖y‖ ^ p := by
   have hconv : ConvexOn ℝ Set.univ fun t : ℝ => ‖AffineMap.lineMap x y t‖ ^ p := by
     simpa only [Set.preimage_univ, Function.comp_def] using!
-      (convexOn_norm_rpow (E := F) hp.le).comp_affineMap (AffineMap.lineMap x y)
+      (convexOn_norm_rpow (E := F) hp).comp_affineMap (AffineMap.lineMap x y)
+  have hnorm : HasFDerivAt (fun z : F => ‖z‖ ^ p)
+      ((p * ‖x‖ ^ (p - 2)) • innerSL ℝ x) x := by
+    apply HasStrictFDerivAt.hasFDerivAt
+    convert (hasStrictFDerivAt_norm_sq x).rpow_const (p := p / 2) (by simp [hx]) using 0
+    simp_rw [← Real.rpow_natCast_mul (norm_nonneg _), ← Nat.cast_smul_eq_nsmul ℝ, smul_smul]
+    ring_nf
   have hd : HasDerivAt (fun t : ℝ => ‖AffineMap.lineMap x y t‖ ^ p)
       (p * ‖x‖ ^ (p - 2) * ⟪x, y - x⟫_ℝ) 0 := by
     have hdline : HasDerivAt (AffineMap.lineMap x y) (y - x) (0 : ℝ) :=
       AffineMap.hasDerivAt_lineMap
-    have hnorm : HasFDerivAt (fun z : F => ‖z‖ ^ p)
+    have hnorm' : HasFDerivAt (fun z : F => ‖z‖ ^ p)
         ((p * ‖x‖ ^ (p - 2)) • innerSL ℝ x) (AffineMap.lineMap x y (0 : ℝ)) := by
-      simpa only [AffineMap.lineMap_apply_zero] using hasFDerivAt_norm_rpow x hp
-    have h := hnorm.comp_hasDerivAt (0 : ℝ) hdline
+      simpa only [AffineMap.lineMap_apply_zero] using hnorm
+    have h := hnorm'.comp_hasDerivAt (0 : ℝ) hdline
     simpa only [AffineMap.lineMap_apply_zero, smul_apply,
       innerSL_apply_apply, smul_eq_mul, Function.comp_def] using! h
   have h := hconv.le_slope_of_hasDerivAt (Set.mem_univ 0) (Set.mem_univ 1)
@@ -79,6 +86,16 @@ theorem norm_rpow_support (p : ℝ) (hp : 1 < p) (x y : F) :
   simp only [slope_def_field, AffineMap.lineMap_apply_zero,
     AffineMap.lineMap_apply_one, sub_zero, div_one] at h
   linarith
+
+/-- The tangent inequality for a power of the Hilbert norm, valid also at
+the zero vector for exponents strictly greater than one. -/
+theorem norm_rpow_support (p : ℝ) (hp : 1 < p) (x y : F) :
+    ‖x‖ ^ p + p * ‖x‖ ^ (p - 2) * ⟪x, y - x⟫_ℝ ≤ ‖y‖ ^ p := by
+  by_cases hx : x = 0
+  · subst x
+    simpa only [norm_zero, Real.zero_rpow (by linarith : p ≠ 0), inner_zero_left,
+      mul_zero, add_zero] using Real.rpow_nonneg (norm_nonneg y) p
+  · exact norm_rpow_support_of_ne_zero p hp.le x y hx
 
 /-- The gradient of a Hilbert norm power is continuous, including at zero
 when `1 < p < 2`. Transport the accepted continuous Fréchet derivative through

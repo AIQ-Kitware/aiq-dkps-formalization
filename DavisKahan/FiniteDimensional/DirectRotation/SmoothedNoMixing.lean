@@ -60,26 +60,9 @@ theorem paired_phase_overlap_has_negative_second_variation
     ((U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • X))).toLinearMap
   let CV := fun t : ℝ => smoothedDisplacementCost tau
     ((V : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • X))).toLinearMap
-  let TUA := (LinearMap.trace ℂ E ((A * X * A).adjoint * (A * X * A)).toLinearMap).re
-  let TVB := (LinearMap.trace ℂ E ((B * X * B).adjoint * (B * X * B)).toLinearMap).re
-  let cb := smoothedPhaseCurvature tau b
   have hX : IsSelfAdjoint X :=
     isSelfAdjoint_projection_overlap hA.isSelfAdjoint hB.isSelfAdjoint
-  have hlowA : (1 - A) * X * (1 - A) = 0 :=
-    projection_overlap_complement_compression hA.isIdempotentElem B
-  have hlowB : (1 - B) * X * (1 - B) = 0 := by
-    simpa only [X, add_comm] using
-      projection_overlap_complement_compression hB.isIdempotentElem A
-  have hhigh : A * X * A ≠ 0 := by
-    change A * (A * B + B * A) * A ≠ 0
-    rw [projection_overlap_compression hA.isIdempotentElem B]
-    have hABA : A * B * A ≠ 0 := fun h =>
-      hAB ((projection_compression_eq_zero_iff_mul_eq_zero hA hB).1 h)
-    simpa only [two_nsmul, two_smul] using
-      smul_ne_zero (by norm_num : (2 : ℂ) ≠ 0) hABA
-  have hpos : 0 < TUA := (ContinuousLinearMap.re_trace_adjoint_mul_self_pos_iff _).2 hhigh
-  have hnonneg : 0 ≤ TVB := ContinuousLinearMap.re_trace_adjoint_mul_self_nonneg _
-  have hcb : cb < 0 := (smoothedPhaseCurvature_neg_iff tau b htau).2 hnegative
+  have hcb : smoothedPhaseCurvature tau b < 0 := (smoothedPhaseCurvature_neg_iff tau b htau).2 hnegative
   have habneg : Complex.exp (((-a : ℝ) : ℂ) * Complex.I) ≠
       Complex.exp (((-b : ℝ) : ℂ) * Complex.I) := by
     simp only [Complex.ofReal_neg, neg_mul, Complex.exp_neg]
@@ -92,24 +75,17 @@ theorem paired_phase_overlap_has_negative_second_variation
     U X A hX hA hU
   have hDV := hasDerivAt_deriv_smoothed_unitary_two_phase tau (-a) (-b) htau habneg hbalneg
     V X B hX hB hV
-  have hDU' : HasDerivAt (deriv CU) (cb * TUA) 0 := by
-    simpa only [CU, cb, TUA, hlowA, map_zero, zero_mul,
-      _root_.ContinuousLinearMap.toLinearMap_zero, Complex.zero_re, mul_zero, zero_add] using hDU
-  have hDV' : HasDerivAt (deriv CV) (cb * TVB) 0 := by
-    simpa only [CV, cb, TVB, smoothedPhaseCurvature_neg, hlowB, map_zero, zero_mul,
-      _root_.ContinuousLinearMap.toLinearMap_zero, Complex.zero_re, mul_zero, zero_add] using hDV
-  have hderiv : deriv (pairedSmoothedCost tau U V X) =
-      (fun t => deriv CU t + deriv CV t) := by
-    funext t
-    exact deriv_add
-      (hasDerivAt_smoothed_unitary_right_variation_at tau htau U X hX t).differentiableAt
-      (hasDerivAt_smoothed_unitary_right_variation_at tau htau V X hX t).differentiableAt
-  have hsum := hDU'.add hDV'
-  change HasDerivAt (fun t => deriv CU t + deriv CV t) (cb * TUA + cb * TVB) 0 at hsum
-  rw [← hderiv] at hsum
-  exact ⟨cb * TUA + cb * TVB,
-    add_neg_of_neg_of_nonpos (mul_neg_of_neg_of_pos hcb hpos)
-      (mul_nonpos_of_nonpos_of_nonneg hcb.le hnonneg), hsum⟩
+  have hDV' : HasDerivAt (deriv CV)
+      (smoothedPhaseCurvature tau a * (LinearMap.trace ℂ E
+        (((1 - B) * X * (1 - B)).adjoint * ((1 - B) * X * (1 - B))).toLinearMap).re +
+       smoothedPhaseCurvature tau b *
+        (LinearMap.trace ℂ E ((B * X * B).adjoint * (B * X * B)).toLinearMap).re) 0 := by
+    simpa only [smoothedPhaseCurvature_neg] using hDV
+  exact exists_negative_second_variation_of_projection_overlap CU CV
+    (fun t => (hasDerivAt_smoothed_unitary_right_variation_at tau htau U X hX t).differentiableAt)
+    (fun t => (hasDerivAt_smoothed_unitary_right_variation_at tau htau V X hX t).differentiableAt)
+    A B hA hB (smoothedPhaseCurvature tau a) (smoothedPhaseCurvature tau b)
+    (smoothedPhaseCurvature tau a) (smoothedPhaseCurvature tau b) hcb hcb.le hDU hDV' hAB
 
 /-- A local minimum along the actual paired overlap curve has disjoint
 negative-curvature phase projections. -/

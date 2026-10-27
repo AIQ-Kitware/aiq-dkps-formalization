@@ -21,8 +21,22 @@ The [unification/provenance note](spectral-transport-unification.md) joins the
 regimes and records exact primary-source comparisons. The parity converse
 and equality-certificate campaigns culminate in `ff3c1657d`; the final full
 default build passed **21,427 jobs**, with warnings as errors, including the
-shared real/complex trace and equality-certificate proofs. The dated sections below are proof history; their
+shared real/complex trace and equality-certificate proofs. The subsequent
+shared family mechanism and its consumers passed **21,437 jobs**, again with
+warnings as errors. The dated sections below are proof history; their
 statements of open obligations apply at their recorded checkpoint only.
+
+**Shared smoothed-power mechanism:** positive smoothing now has one formal
+convex-support first variation, ambient constrained stationarity `JGJ=-G`,
+analytic two-phase gradient derivative, exact
+curvature surface and strict single-peak phase shape. The actual paired-block
+local-minimum theorem `SmoothedPowerTransport.highPhaseProjections_mul_eq_zero_of_localMin`
+proves no overlap of high-phase projections for `1<=p<=2`, `tau>0`.
+Both existing Schatten and Charbonnier Hessian/no-mixing proofs consume the
+new shared `UnitaryPhaseHessian`. This is not yet C1 unrestricted ambient
+decoupling: derive and assemble the paired blocks of arbitrary minimizers,
+including their feasible variations and the zero-gradient reflection sector.
+The full C2 scalar minimizing-phase law also remains to be formalized.
 
 **Complex nuclear endpoint:** exact general infinite-rank attainment, the
 certificate for every ambient optimizer, a literal independent signed-root
@@ -4326,3 +4340,65 @@ is useful if it simplifies that campaign, not as an unrelated prerequisite.
 The narrower verified nuclear/strict-Schatten/Charbonnier theory already
 supports the proposed coherent abstract; claiming the full smoothed-power
 family still requires proof. The active goal remains the publication core.
+
+## Shared smoothed-power phase mechanism — 27 October 2026 follow-up
+
+The next central campaign has reached a family-wide structural checkpoint.
+No optional topology, stability or unrestricted real matching campaign was
+started. The publication-core note and T15 of the unification/provenance map
+now distinguish the new proved mechanism from the remaining C1/C2 statements.
+
+New reusable donor modules:
+
+- `UnitaryPhaseHessian`: the actual trace-gradient Hessian and the paired
+  projection-overlap negative-second-variation/local-minimum theorem.
+  The existing `SchattenTwoPhaseVariation`, `SmoothedTwoPhaseVariation`,
+  `SchattenNoMixing` and `SmoothedNoMixing` now consume it; duplicated
+  trace and overlap calculations were removed without changing public APIs.
+- `SmoothedPowerSpectralTrace`: convex norm-power support on the augmented
+  Hilbert plane gives actual first variation for `p>=1`, `tau>0`, including
+  identity eigenvalues. Exact zero-smoothing and quadratic symbol reductions
+  are proved. `SpectralTrace.norm_rpow_support_of_ne_zero` supplies the
+  classical p=1 nonzero-vector tangent; the old p>1 theorem now consumes it.
+- `SmoothedPowerPhase`: actual first and second scalar derivatives, the
+  critical curvature root, `0<=C<1`, both curvature signs, and strict increase
+  then decrease of the phase slope. At zero smoothing `C=(2-p)/p`; at p=2
+  `C=0`. Curvature thresholds alone are not the complete minimizing-phase law.
+- `SmoothedPowerPhaseSymbol`: one complex extension, regular at every circle
+  point for positive smoothing, agreeing with the actual phase gradient and
+  with tangential derivative equal to its actual curvature.
+
+New paper-facing module `SmoothedPowerVariation` (included in `DirectRotation.All`):
+`gradient_reflection_conjugate_eq_neg_of_isLocalMinOn_transports` proves
+stationarity for every ambient constrained local minimum, without a paired-
+block hypothesis. `hasDerivAt_gradient_two_phase` needs no finite dimension;
+`hasDerivAt_deriv_cost_two_phase` identifies the actual finite cost Hessian;
+`highPhaseProjections_mul_eq_zero_of_localMin` derives `AB=0` from balanced
+opposite phase blocks, `cos(b)<C`, and local minimality of their actual common
+right variation. The cost is the literal finite CFC spectral trace, not an
+assumed block objective unrelated to an operator. No existing global
+Schatten/Charbonnier optimization theorem is called in this family derivation.
+
+Proof ancestry is explicit in the Lean module headers. Convex norm support,
+normal spectral differentiation and two-point CFC are classical ingredients.
+The shared formulation refactors existing local proofs; the family extension
+has unresolved historical priority. The provenance map does not infer a
+first-discovery claim from compilation or an unsuccessful literature search.
+
+Checkpoint decision: continue with **ambient spectral-block assembly for C1**.
+The family single-peak/Hessian/no-overlap steps are now available and should
+not be reproved as separate penalty cases. The scalar ratio argument for C2
+and the reusable Hilbert lift C5 remain the following central obligations.
+The full generic C² theorem and optional real topology/above-bound optimizer
+classification remain secondary. Manuscripts, visualizations and submission
+surfaces were not edited in this follow-up.
+
+The scalar family itself is established generalized Charbonnier prior art:
+S13 verifies Sun–Roth–Black (2010), §4, and Barron (2019), equation (4).
+Only its transport consequences have unresolved novelty; the source-level
+header and provenance table now make this distinction explicit.
+
+Validation: after `lake exe cache get`, the full default `lake build`
+passed **21,437 jobs**, warnings as errors. A final full incremental build
+also checks the added ambient stationarity theorem and provenance header;
+its log is `/tmp/dkps-unification/family-final-full.log`.

@@ -2,7 +2,9 @@
 
 Updated 27 October 2026. Mathematical checkpoint `ff3c1657d` includes the
 field-independent nuclear equality certificate and exact real equality-
-attainment criterion. The earlier spectral checkpoint was `96aeb922d`
+attainment criterion. The subsequent shared smoothed-power mechanism now
+includes actual ambient stationarity and paired-block overlap exclusion;
+the full default build passed 21,437 jobs with warnings as errors. The earlier spectral checkpoint was `96aeb922d`
 (accounting `2b481b94d`). See the
 [unification and provenance note](spectral-transport-unification.md) for the
 structural explanation, exact theorem map and source-authentication boundaries.
@@ -53,11 +55,21 @@ status. The next campaign is C1/C2 for
    reflection sector. Do not assume invariant principal planes of competitors.
 2. Prove the shared scalar transition law. The unification note now derives
    the critical surface and the useful monotonic quantity `N/(d-c)^2`;
-   the raw cubic N is not required to be monotone. These derivations are
-   conventional mathematics, not new compiled declarations.
+   the raw cubic N is not required to be monotone. The actual family
+   derivatives, critical curvature surface and single-peak phase shape are
+   now compiled in `SmoothedPowerPhase`; the full global minimizing-phase
+   law from the ratio argument is still conventional mathematics.
 3. Package the existing moving-target finite-unitary-approximation lower-bound
    lift. Positive activation threshold gives finite active attainment; the
    nuclear corner uses the already compiled infinite signed-root assembly.
+
+The shared `UnitaryPhaseHessian` now replaces the duplicated Schatten and
+Charbonnier trace-Hessian/overlap calculations. `SmoothedPowerVariation` proves
+ambient constrained stationarity `JGJ=-G`, the actual family Hessian and high-phase overlap exclusion for paired blocks
+throughout positive smoothing. The next proof is **ambient assembly**: derive
+those blocks from an arbitrary minimizer, extend their common variation
+feasibly, and bound the zero-gradient reflection sector. The paired-block
+result alone is not the unrestricted C1 theorem. See T15 in the provenance map.
 
 The proposed C² penalty-shape theorem has not been refuted, but is not yet
 formally verified. Begin with the concrete family, whose phase-gradient

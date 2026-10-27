@@ -278,8 +278,10 @@ the real matching results rule out a field-independent planar reduction.
 
 ## The smoothed-power family: a common scalar mechanism
 
-The following continuation is a conventional derivation, not a new Lean
-theorem. It examines the user's proposed organizing family rather than adding
+The global minimizing-phase conclusion below remains a conventional
+derivation. Its derivative, critical curvature surface and single-peak
+shape are now compiled; see the formal common-mechanism section below.
+This examines the user's proposed organizing family rather than adding
 another independent penalty case. Its publication role and proof obligations
 are assessed in [the publication-core note](spectral-transport-publication-core.md).
 
@@ -393,6 +395,86 @@ Concavity of `x^(p/2)` also gives
 minimum-value error at most n tau^p. That gives a route to the nuclear
 **value** boundary without differentiating a nonsmooth objective. None of
 these scalar or value facts alone proves unrestricted ambient decoupling.
+
+## Formally proved common phase mechanism — 27 October follow-up
+
+The positively smoothed family now has a shared formal analytic mechanism.
+The scalar family is established generalized Charbonnier prior art (S13);
+its constrained spectral transport application is the research target.
+For `1<=p<=2`, `tau>0`, put `B=tau²+2`, `phi(t)=rho_(p,tau)(2 sin(t/2))`
+(with the even chord interpretation outside [0,pi]), and
+
+\[
+ C=\frac{B-\sqrt{B^2-4p(2-p)}}{2p},\qquad c=\arccos C.
+\]
+
+The following assertions are compiled, rather than only conventional calculations:
+
+- `TauCeti.hasDerivAt_smoothedPowerPhaseCost` and
+  `hasDerivAt_smoothedPowerPhaseSlope` give the actual derivatives
+  `phi'(t)=p sin(t)(B-2 cos(t))^((p-2)/2)` and
+  `phi''(t)=p(B-2 cos(t))^(p/2-2)[p-2+B cos(t)-p cos²(t)]`.
+- `smoothedPowerCriticalCosine_mem` proves `0<=C<1`.
+  `smoothedPowerPhaseCurvature_neg_iff_cos_lt_critical` and
+  `smoothedPowerPhaseCurvature_pos_iff_critical_lt_cos` identify both signs.
+  `smoothedPowerPhaseSlope_strictMonoOn` and
+  `smoothedPowerPhaseSlope_strictAntiOn` prove the single peak on [0,pi].
+  These declarations are in [SmoothedPowerPhase](../ForTauCeti/Analysis/InnerProductSpace/SmoothedPowerPhase.lean).
+- `smoothedPowerCriticalCosine_zero` proves `C_(p,0)=(2-p)/p` for `p>=1`;
+  `smoothedPowerCriticalCosine_two` proves `C_(2,tau)=0`.
+  The latter is a curvature statement, not a claim that the quadratic planar
+  problem develops a nonzero unique optimal phase.
+- `smoothedPowerDisplacement_support` and
+  `hasDerivAt_smoothedPower_unitary_right_variation_at`, in
+  [SmoothedPowerSpectralTrace](../ForTauCeti/Analysis/InnerProductSpace/SmoothedPowerSpectralTrace.lean),
+  derive the **actual finite operator first variation** from convex norm powers
+  on the augmented Hilbert space `(tau,z-1)`. They cover all `p>=1`, `tau>0`,
+  spectral collisions and identity eigenvalues. The new symbol reduces exactly
+  to the powered displacement at zero smoothing and to squared displacement at p=2.
+
+The shared operator step is now
+`TauCeti.hasDerivAt_deriv_unitary_cost_of_compressed_gradient`, in
+[UnitaryPhaseHessian](../ForTauCeti/Analysis/InnerProductSpace/UnitaryPhaseHessian.lean).
+It turns a proved trace-gradient first variation and a compressed gradient
+second variation into the actual cost Hessian. The same module proves
+`exists_negative_second_variation_of_projection_overlap` and
+`projection_overlap_eq_zero_of_paired_second_variations`: if the high
+curvatures are negative/nonpositive, overlap produces negative second variation.
+There is no condition on the low curvatures. Both existing Schatten and
+Charbonnier two-phase Hessian and no-mixing proofs now consume these common
+results; the duplicate trace and overlap calculations were removed.
+
+For the new family, namespace
+`TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport` in
+[SmoothedPowerVariation](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerVariation.lean)
+proves `hasDerivAt_gradient_two_phase` (arbitrary complete complex Hilbert space)
+and `hasDerivAt_deriv_cost_two_phase` (finite dimension). In finite dimension,
+`gradient_reflection_conjugate_eq_neg_of_isLocalMinOn_transports` also proves
+`JGJ=-G` at **every local minimum on the full transport fiber**, without
+assuming invariant planes or paired blocks. These follow from
+one analytic extension, `smoothedPowerPhaseExtension`, and the existing
+`hasDerivAt_cfc_unitary_tangent_of_affine_projection`; they do not call either
+penalty-specific global optimization theorem.
+
+Its new structural conclusion is
+`highPhaseProjections_mul_eq_zero_of_localMin`. Let A,B be orthogonal
+projections and let U,V have the actual two-phase representations
+`U=e^(ia)(I-A)+e^(ib)A`, `V=e^(-ia)(I-B)+e^(-ib)B`. Assume the phase
+slopes at a,b agree, `cos b<C`, and the **actual sum of spectral trace costs**
+has a local minimum along their common right variation by `X=AB+BA`.
+Then `AB=0`. This holds throughout `1<=p<=2`, `tau>0`; the proof uses the
+family curvature threshold and the common projection-overlap theorem.
+
+**Exact remaining boundary.** This proves ambient stationarity, the
+single-peak hypothesis and the no-overlap mechanism proposed in C1. It does not prove that an arbitrary
+ambient minimizer has the displayed paired-block form, that this paired
+variation extends feasibly to the full transport fiber, or the zero-gradient
+sector lower bound. The family-wide finite decoupling theorem is still open.
+Likewise the common logarithmic-ratio argument above has not yet been
+formalized to prove the full scalar minimizing-phase uniqueness law, including
+critical-angle behavior. Neither result should be inferred from the curvature
+formula alone. The zero-smoothing nuclear corner remains covered by the
+separate complete signed-root theory.
 
 ## Limits of regimes: a proved obstruction and the remaining claims
 
@@ -592,6 +674,19 @@ not evidence that the source proof was adapted.
   classification. The table cites earlier work by the same authors; earliest
   priority within that sequence was not separately audited.
 
+- **S13. Generalized Charbonnier family.** Sun, Roth and Black (2010),
+  *Secrets of Optical Flow Estimation and Their Principles*, §4,
+  “Penalty functions,” PDF pp. 4–5,
+  [author-hosted paper](https://cs.brown.edu/~dqsun/pubs/cvpr_2010_flow.pdf),
+  explicitly use `(x²+epsilon²)^a`. Our family sets `a=p/2` and subtracts
+  its value at zero. Barron (2019), *A General and Adaptive Robust Loss
+  Function*, equation (4), also states that family; the directly checked
+  [arXiv v10](https://arxiv.org/pdf/1701.03077v10), p. 2 and Appendix D,
+  equation (28), p. 11, gives its relation to the broader robust-loss model.
+  **The scalar penalty is established prior art.** These are verified
+  occurrences, not claims of earliest priority; neither supplies the
+  constrained spectral transport theorem under investigation.
+
 ## Source-to-Lean provenance map
 
 Namespace abbreviations in this table are exact: **D** = `TauCeti.DavisKahan`,
@@ -619,6 +714,8 @@ including its pre-DKPS/Spectra ancestry and independent-work distinctions.
 | **T12** `I.SchattenPhaseTransition.norm_nearest_schatten_corrections_sub_le_at_closed_critical_commutator`, [SchattenCorrectionDataStability](../DavisKahan/InfiniteDimensional/DirectRotation/SchattenCorrectionDataStability.lean) | In the native-ideal feasible closed canonical regime, nearest projection-commuting corrections have operator-norm data stability, including constant p/(2-p) at the closed threshold. | S7 Theorem 1 is a classical polar-conditioning ingredient; S8 weighted Procrustes is a different constraint. | Transport/correction application and exact threshold extension; polar perturbation ingredient classical. | Primary ingredients checked; exact application priority unresolved. | T5 uniqueness; `canonical_correction_eq_diagBlock_factorThru_modulus`; polar-factor perturbation estimate. | Operator-norm data stability, not objective-excess distance in an ideal norm. Critical quartic growth excludes an automatic quadratic excess estimate. |
 | **T13** `F.SchattenPhaseTransition.phasePower_two_right_angle` and `not_tendsto_zero_of_right_angle_subquadratic_minimizers`, [SchattenPhaseMinimum](../DavisKahan/FiniteDimensional/DirectRotation/SchattenPhaseMinimum.lean) | Quadratic right-angle phases are all optimal, but subquadratic exact scalar minimizers cannot converge to phase zero. | Elementary consequence of the existing right-angle phase formula; S4 Lemma 3.3 is a classical special-phase predecessor. | New formal endpoint obstruction; no independent novelty claim for the elementary scalar observation. | Compiled; exact earlier endpoint wording not located. | `phaseChord_add_sq`; `phasePower_right_angle_eq_minimum_iff`; uniqueness of limits. | Refutes scalar endpoint approximability, not by itself a full ambient optimizer-set limit theorem. |
 | **T14** `ContinuousLinearMap.nuclearENorm_adjoint_comp_self_eq_hilbertSchmidtEnergy`, `re_nuclearTrace_eq_nuclearENorm_iff_isPositive`, `nuclearTrace_mul_comm`, [Nuclear/Trace](../ForTauCeti/Analysis/OperatorIdeal/Nuclear/Trace.lean); compact reduction in [CompactGram](../ForTauCeti/Analysis/OperatorIdeal/Nuclear/CompactGram.lean) | Over either field, arbitrary Hilbert dimension: nuclear Gram gauge equals Hilbert--Schmidt energy, including infinity; finite trace saturates its norm bound iff positive; finite trace is cyclic. | Classical Hilbert--Schmidt/trace-ideal ingredients, proved directly from the accepted column, Parseval and compact spectral APIs. An exact external theorem/page for the positivity equality is not newly authenticated. | Classical proof ingredients formally verified and generalized from the former complex API. | Pinned formal sources and full build checked; exact external trace locator remains pending. | Tau Ceti Hilbert--Schmidt columns and compactness; compact positive eigenvalue-multiplicity sum; square-root polar factorization; Cauchy--Schwarz equality. | No novelty claim for trace identities. The new mathematical application is T8; no parallel real trace definition is introduced. |
+
+| **T15** `TauCeti.smoothedPowerPhaseSlope_strictMonoOn`, `smoothedPowerPhaseSlope_strictAntiOn`, `smoothedPowerPhaseCurvature_neg_iff_cos_lt_critical`, [SmoothedPowerPhase](../ForTauCeti/Analysis/InnerProductSpace/SmoothedPowerPhase.lean); `TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport.highPhaseProjections_mul_eq_zero_of_localMin`, [SmoothedPowerVariation](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerVariation.lean); same namespace `gradient_reflection_conjugate_eq_neg_of_isLocalMinOn_transports` | `1<=p<=2`, positive smoothing: ambient local minima satisfy `JGJ=-G`; one peak of the actual phase gradient with the displayed critical surface; equal-gradient paired unitary blocks at a local minimum have disjoint high-phase projections. | Classical convexity/calculus/CFC ingredients; formal proof adapts existing local Schatten/Charbonnier Hessian and overlap proofs. S4 establishes the ambient problem and a special subquadratic example; S12 verifies the classical p=1 smoothing penalty; S13 verifies the general scalar penalty itself. No exact family transport theorem is authenticated in the examined sources. | Shared proof refactoring and new family derivation/extension; historical priority unresolved. | Compiler verified; named primary predecessors verified, exact family priority not independently settled. | Mathlib convex norm powers and squared-norm derivative; `SpectralTrace` support; analytic two-point CFC; `UnitaryPhaseHessian` and star-projection compression. | A proved family-wide local structural mechanism, not unrestricted global decoupling or the full scalar minimizing-phase law. No novelty claim for the norm-power tangent or CFC Hessian. |
 
 Unresolved source work is substantive, not a request to add a checker: obtain
 the authoritative Exercise B.12 statement; authenticate the original 1970
@@ -660,7 +757,10 @@ After `lake exe cache get`, the full default `lake build` passed **21,427 jobs**
 with warnings as errors. This includes the new block and real spectral criteria,
 scalar endpoint obstruction, and all maintained consumers after replacing the
 local complex-dimension necessity proof with the accepted Tau Ceti declaration.
-The final log is `/tmp/dkps-unification/real-certificate-full.log`.
+The real equality log is `/tmp/dkps-unification/real-certificate-full.log`.
+The follow-up family mechanism and all maintained consumers subsequently
+passed the full default build, **21,437 jobs** with warnings as errors;
+final validation is recorded in `/tmp/dkps-unification/family-final-full.log`.
 The shared trace target passed 6,438 jobs and the generic calibration target
 passed 7,160 jobs before the full consumer build. These certify
 the formal statements; they do not certify historical novelty or turn this

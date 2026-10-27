@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPhaseCurvature
 public import ForTauCeti.Analysis.CStarAlgebra.TwoPointDerivative
+public import ForTauCeti.Analysis.InnerProductSpace.UnitaryPhaseHessian
 
 /-!
 # Actual Charbonnier second variations on two-phase gradient blocks
@@ -114,7 +115,6 @@ theorem hasDerivAt_deriv_smoothed_unitary_two_phase
   let +nondep : NormedAlgebra ℚ (E →L[ℂ] E) := .restrictScalars ℚ ℂ (E →L[ℂ] E)
   let V : ℝ → E →L[ℂ] E := fun t =>
     (U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H))
-  let C := fun t : ℝ => smoothedDisplacementCost tau (V t).toLinearMap
   let D : E →L[ℂ] E :=
     (smoothedPhaseCurvature tau alpha : ℂ) • ((1 - P) * H * (1 - P)) +
     (smoothedPhaseCurvature tau beta : ℂ) • (P * H * P)
@@ -132,34 +132,11 @@ theorem hasDerivAt_deriv_smoothed_unitary_two_phase
   have hgrad : HasDerivAt (fun t => smoothedUnitaryGradient tau (V t)) D 0 :=
     hasDerivAt_smoothedUnitaryGradient_two_phase tau alpha beta htau hab hlevel
       V 0 H hunit hV P hP (hV0.trans hrepr)
-  let tr : (E →L[ℂ] E) →L[ℝ] ℝ :=
-    Complex.reCLM.comp ((traceCLM ℂ E).restrictScalars ℝ)
-  have htr (T : E →L[ℂ] E) : tr T = (LinearMap.trace ℂ E T.toLinearMap).re := by
-    simp only [tr, _root_.ContinuousLinearMap.comp_apply, Complex.reCLM_apply]
-    exact congrArg Complex.re (traceCLM_apply T)
-  have hd := tr.hasFDerivAt.comp_hasDerivAt 0 (hgrad.mul_const H)
-  have hderiv : deriv C = (fun t => tr (smoothedUnitaryGradient tau (V t) * H)) := by
-    funext t
-    rw [htr]
-    exact (hasDerivAt_smoothed_unitary_right_variation_at tau htau U H hH t).deriv
-  change HasDerivAt (fun t => tr (smoothedUnitaryGradient tau (V t) * H))
-    (tr (D * H)) 0 at hd
-  rw [← hderiv] at hd
-  apply hd.congr_deriv
-  have hcomplex : LinearMap.trace ℂ E (D * H).toLinearMap =
-      (smoothedPhaseCurvature tau alpha : ℂ) * LinearMap.trace ℂ E
-        (((1 - P) * H * (1 - P)).adjoint * ((1 - P) * H * (1 - P))).toLinearMap +
-      (smoothedPhaseCurvature tau beta : ℂ) *
-        LinearMap.trace ℂ E ((P * H * P).adjoint * (P * H * P)).toLinearMap := by
-    dsimp only [D]
-    rw [add_mul, smul_mul_assoc, smul_mul_assoc,
-      _root_.ContinuousLinearMap.toLinearMap_add,
-      _root_.ContinuousLinearMap.toLinearMap_smul, _root_.ContinuousLinearMap.toLinearMap_smul,
-      map_add, map_smul, map_smul,
-      ContinuousLinearMap.trace_compression_mul_eq_trace_adjoint_square H (1 - P) hH hP.one_sub,
-      ContinuousLinearMap.trace_compression_mul_eq_trace_adjoint_square H P hH hP]
-    simp only [smul_eq_mul]
-  rw [htr, hcomplex, Complex.add_re]
-  simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero]
+  exact hasDerivAt_deriv_unitary_cost_of_compressed_gradient
+    (fun W => smoothedDisplacementCost tau W.toLinearMap)
+    (smoothedUnitaryGradient tau) U H P hH hP
+    (smoothedPhaseCurvature tau alpha) (smoothedPhaseCurvature tau beta)
+    (fun t => hasDerivAt_smoothed_unitary_right_variation_at tau htau U H hH t) hgrad
+
 
 end TauCeti.DavisKahan.FiniteDimensional.SmoothedPhaseTransition
