@@ -235,224 +235,398 @@ reduction from unrestricted nuclear-optimal real transport to weighted
 principal-plane matching (\cref{sec:example-transport}).
 \end{enumerate}
 
-\section{Historical setting and mathematical foundations}
+\section{The mathematical development behind Davis--Kahan theory}
 \label{sec:related}
 
-The main components of Davis--Kahan theory originated in several
-mathematical traditions.  Principal angles describe how subspaces meet;
-orthogonal projections and spectral measures make the geometry
-available in Hilbert space; Sylvester estimates turn spectral separation
-into a bound; and symmetric operator norms determine which displacement
-measure is controlled.  Their combination in the 1970 paper explains
-both the scope of our formalization and the source error found in its
-direct-rotation section.
+The Davis--Kahan paper joins several lines of mathematics that arose for
+different purposes.  The geometry of angles between subspaces developed
+before Hilbert-space operator theory; the perturbation of spectral
+projections grew out of the study of differential operators and quantum
+mechanics; and singular-value norms made it possible to compare the
+movement of an entire subspace without choosing a particular basis.
+Davis and Kahan's synthesis uses all three, with a Sylvester equation
+linking spectral separation to geometric error.
 
-\subsection{From Jordan's principal angles to pairs of projections}
+There are useful histories of individual parts of this development.
+Paige and Wei trace the cosine--sine decomposition from Jordan through
+Davis--Kahan and Stewart \citep{paige1994history}.  Simon reconstructs
+the Sz.-Nagy--Kato theory of nearby projections, including its
+connection to analytic eigenvalue perturbation \citep[\S5]{simon2018kato}.
+B\"ottcher and Spitkovsky survey the algebra and geometry of pairs of
+projections \citep{bottcher2010gentle}.  Together with the primary works,
+these provide the history of the objects entering the formalization.
+
+\subsection{Angles before operators: Jordan, canonical correlation, and the
+cosine--sine decomposition}
 \label{sec:related-classical}
 
-Camille Jordan's 1875 study of higher-dimensional geometry contains the
-early theory of principal angles between linear subspaces
-\citep{jordan1875essai}.  In finite dimensions, let $E,F$ be subspaces
-with orthonormal coordinate matrices $X,Y$.  The singular values of
-$X^*Y$ are the cosines of their principal angles:
-\[
-  \sigma_j(X^*Y)=\cos\theta_j,\qquad 0\leq\theta_j\leq\frac{\pi}{2}.
-\]
-Equivalently, if $P$ and $Q$ project orthogonally onto $E$ and $F$,
-then the compression $PQP$ on $E$ has eigenvalues
-$\cos^2\theta_j$.  These formulations express the relative position of
-the subspaces without privileging a particular choice of basis.  The
-principal-angle viewpoint was later developed into numerical procedures
-for computing the angles and their associated vectors by Bj\"orck and
-Golub \citep{bjorck1973numerical}.
+Camille Jordan studied the geometry of linear subspaces in $n$
+dimensions in 1875 \citep{jordan1875essai}.  For two lines, a single
+acute angle describes their relative position.  For subspaces of
+higher dimension, one needs a sequence of \emph{principal angles}.
+The successive principal vectors are selected under orthogonality
+constraints, so their angles are independent of the coordinates used
+to describe either subspace.  This separates the geometry of a
+subspace from the arbitrary choice of its orthonormal basis.
 
-The passage to infinite-dimensional Hilbert space changes the
-representation: orthogonal projections remain bounded, but an angle
-operator may have continuous spectrum.  Jacques Dixmier studied the
-relative positions of closed subspaces in 1948
-\citep{dixmier1948position}.  Chandler Davis's 1958 \emph{Separation
-of Two Linear Subspaces} introduced closeness and separation operators
-that extend the cosine/sine viewpoint to Hilbert space and organized
-extremal questions around them \citep{davis1958separation}.  Paul
-Halmos's 1969 \emph{Two Subspaces} described a general pair by its
-intersection and orthogonality components together with a generic
-part modeled by an operator graph \citep{halmos1969two}.  These
-constructions give a common language for both the finite principal
-planes of the counterexample and the operator-valued angles needed for
-the full perturbation theory.
+One modern description begins with isometries $X$ and $Y$ whose ranges
+are finite-dimensional subspaces $E$ and $F$.  The singular values of
+the overlap matrix are the principal cosines:
+\begin{equation}
+  \sigma_j(X^*Y)=\cos\theta_j,
+  \qquad 0\leq\theta_j\leq\frac{\pi}{2}.
+  \label{eq:history-principal-cosines}
+\end{equation}
+The corresponding principal vectors $x_j\in E$ and $y_j\in F$ satisfy
+$\langle x_i,y_j\rangle=\delta_{ij}\cos\theta_j$ in suitably oriented
+coordinates.  For nonzero acute angles, each pair determines a real
+two-dimensional plane in which the relative position is an ordinary
+rotation.  An entire pair of subspaces is described by these planes,
+together with their shared and orthogonal components.
 
-\subsection{Nearby projections and the canonical rotation}
+The same geometric data appeared in statistics: Hotelling's 1936
+canonical correlation analysis sought pairs of maximally correlated
+linear combinations of two sets of variables
+\citep{hotelling1936relations}.  After appropriate whitening, the
+canonical correlations are singular values of a cross-coordinate map.
+In numerical linear algebra, Bj\"orck and Golub developed algorithms
+for computing principal angles and vectors in 1973
+\citep{bjorck1973numerical}.  Their computational formulation makes
+the basis-invariant angles available from orthonormal matrix
+factorizations.
+
+A further formulation uses the cosine--sine decomposition, or CSD, of
+a partitioned orthogonal or unitary matrix.  The blocks of the
+decomposition contain compatible diagonal cosine and sine factors.
+Davis--Kahan gave much of the relevant subspace geometry, and Stewart
+subsequently developed the CSD as a matrix factorization; Paige and
+Wei describe that history and its connection to the direct rotation
+\citep{paige1994history,stewart1977perturbation}.
+This is more than a change of notation.  The same principal angles
+can be obtained from an overlap matrix, a pair of projections, or a
+block unitary decomposition.  The formalization uses the projection
+and functional-calculus descriptions, while the finite-dimensional
+counterexample uses principal-plane coordinates.
+
+\subsection{The passage to Hilbert space: the structure of two projections}
+\label{sec:related-two-projections}
+
+For a closed subspace of a Hilbert space $\mathcal H$, the orthogonal
+projection remains a bounded operator even when the subspace is
+infinite dimensional.  Denote the projections onto two closed
+subspaces by $P$ and $Q$.  The positive compression $PQP$ on
+$\operatorname{ran}P$ is the operator version of the squared overlap
+matrix: in finite dimensions its eigenvalues are
+$\cos^2\theta_j$.  In Hilbert space it need not have a discrete
+spectrum.  Functional calculus nevertheless defines its positive
+square root and the associated cosine and sine of an angle operator.
+
+The relative position of two closed subspaces was studied by Dixmier
+in 1948 and by Davis in his 1958 paper \emph{Separation of Two Linear
+Subspaces} \citep{dixmier1948position,davis1958separation}.  Davis's
+closeness and separation operators place the cosine/sine data in an
+operator-theoretic setting.  Halmos's 1969 \emph{Two Subspaces} gives a
+particularly transparent structural description
+\citep{halmos1969two}.  One first splits off the four intersection
+spaces corresponding to the combinations of membership in the ranges
+and kernels of $P$ and $Q$.  On their remaining, generic part, the pair
+is unitarily equivalent to
+\begin{equation}
+ P_{\mathrm{gen}}=\begin{pmatrix}I&0\\0&0\end{pmatrix},
+ \qquad
+ Q_{\mathrm{gen}}=\begin{pmatrix}C^2&CS\\CS&S^2\end{pmatrix},
+ \qquad C^2+S^2=I,
+ \quad CS=SC,
+ \label{eq:history-halmos-block}
+\end{equation}
+where $C$ and $S$ are commuting positive contractions on a common
+Hilbert space.  Thus an operator-valued angle replaces a finite list
+of principal angles.  B\"ottcher and Spitkovsky survey this
+representation and its consequences for the algebra generated by two
+projections \citep{bottcher2010gentle}.
+
+The four intersection spaces have a second role.  Directions in
+$\operatorname{ran}P\cap\ker Q$ are orthogonal to the target subspace;
+directions in $\ker P\cap\operatorname{ran}Q$ are orthogonal to the
+source.  These are the right-angle defect spaces.  At acute angles
+both disappear.  For a general pair they affect whether a specified
+intertwining operator, in particular a direct rotation, exists.
+The nonacute Section~3 assertions of Davis--Kahan retain these
+conditions rather than replacing the Hilbert-space problem by a
+finite matrix with a chosen basis.
+
+\subsection{Sz.-Nagy and Kato: transporting nearby spectral subspaces}
 \label{sec:related-projections}
 
-A different question asks for an ambient unitary that actually carries
-one closed subspace to another.  B\'ela Sz.-Nagy proved in the 1940s
-that orthogonal projections $P,Q$ satisfying $\|P-Q\|<1$ are related by
-a unitary conjugation, in work motivated by the perturbation of
-self-adjoint operators \citep{sznagy1947perturbations,simon2018kato}.
-Tosio Kato developed an explicit algebraic construction and used it in
-his perturbation theory \citep{kato1966perturbation,simon2018kato}.
-The familiar intertwiner
-\[
-  T=QP+(I-Q)(I-P),\qquad TP=QT,
-\]
-becomes invertible under the small-gap condition.  Its unitary polar
-factor transports the projections:
-\[
-  U=T(T^*T)^{-1/2},\qquad UPU^*=Q.
-\]
-For nearby orthogonal projections this is the canonical direct
-rotation.  The formula also exhibits why the geometry calls for polar
-decomposition and functional calculus, rather than just a choice of
-orthonormal bases.  The finite principal-plane rotations and the
-operator construction describe the same transformation from different
-points of view.
+Spectral perturbation leads naturally to a different question from
+measuring the angle: if the projection $P$ of an isolated spectral
+cluster changes to $Q$, can the two ranges be identified by a unitary
+that depends continuously, or analytically, on the projections?
+Sz.-Nagy developed the nearby-projection construction in work
+published in 1947, with a Hungarian precursor from 1942
+\citep{sznagy1947perturbations,simon2018kato}.  Kato gave a streamlined
+algebraic construction, described in his 1955 report and later in
+\emph{Perturbation Theory for Linear Operators}
+\citep{kato1966perturbation,simon2018kato}.
 
-Davis and Kahan's direct rotation refines this transport question with
-symmetries, commutation properties, and extremal displacement results
-\citep{davis1970rotation}.  The acute condition determines a canonical
-branch.  Outside that regime, subspaces can contain orthogonal defect
-directions and transport requires additional compatibility conditions.
-Those cases are represented explicitly in the source formalization,
-including when finite-dimensional principal-angle lists are no longer
-available.
+For orthogonal projections the useful intertwiner is
+\begin{equation}
+ T=QP+(I-Q)(I-P), \qquad TP=QT.
+ \label{eq:history-kato-T}
+\end{equation}
+The identity
+\begin{equation}
+ T^*T=I-(P-Q)^2
+ \label{eq:history-kato-square}
+\end{equation}
+shows why $\|P-Q\|<1$ is the natural threshold: it makes $T^*T$
+strictly positive and invertible.  Hence
+\begin{equation}
+ U=T\bigl(I-(P-Q)^2\bigr)^{-1/2},
+ \qquad UPU^*=Q
+ \label{eq:history-kato-unitary}
+\end{equation}
+is unitary.  This operator is the unitary polar factor of $T$.
+In principal-plane coordinates it is the direct rotation through the
+principal angle, acting trivially on common directions.
 
-\subsection{Spectral projections, unbounded operators, and the residual}
+Kato used such transformations to identify nearby spectral
+subspaces of analytic operator families, thereby reducing the study
+of an isolated moving eigenvalue cluster to a fixed coordinate
+space.  Simon's historical account explains the earlier Sz.-Nagy
+construction, Kato's formula, and subsequent work on pairs of
+projections \citep[\S5]{simon2018kato}.  In the formalization,
+\cref{eq:history-kato-square,eq:history-kato-unitary} motivate the
+polar-decomposition and square-root APIs used for Davis--Kahan's
+existence, uniqueness, and symmetry theorems.  The small-angle
+hypothesis is a geometric operator-norm condition, not an assumption
+about the matrix dimensions.
+
+\subsection{From the spectral theorem to perturbations of eigenspaces}
 \label{sec:related-spectral}
 
-The spectral theorem for self-adjoint operators provides the analytic
-counterpart to the geometry.  A self-adjoint operator determines
-spectral projections and a functional calculus; for an unbounded
-operator, its domain is part of the mathematical object.  Classical
-perturbation theory developed these tools to follow spectral clusters
-as an operator varies, and Kato's 1966 monograph provides a systematic
-account \citep{kato1966perturbation,simon2018kato}.  This distinction
-matters when an eigenvalue cluster is separated from an unbounded
-portion of the spectrum: the associated spectral projection is bounded
-even though the underlying self-adjoint operator need not be.
+The spectral theorem supplies a second way of obtaining a subspace:
+select a region of the spectrum of a self-adjoint operator and take
+the corresponding spectral projection.  The functional-calculus
+framework developed from the work of Riesz, von Neumann, and others;
+Kato made spectral projections central to the perturbation theory of
+closed operators \citep{kato1966perturbation,simon2018kato}.
+Unlike the finite-dimensional eigenspace picture, a spectral
+subspace need not be spanned by a finite list of eigenvectors.
+A self-adjoint operator may be unbounded, while each of its spectral
+projections is bounded and everywhere defined.  Its domain is still
+indispensable when the operator acts on a trial vector or when an
+intertwining identity is asserted.
 
-Davis investigated the rotation of eigenspaces under perturbation in
-his 1963 and 1965 papers \citep{davis1963rotation,davis1965rotation}.
-The 1970 collaboration with William Kahan brought that development
-together with computable error bounds for approximate invariant
-subspaces \citep{davis1970rotation}.  One may know a trial-coordinate
-operator $A_0$ and an isometry $E_0$ into the ambient space without
-knowing an exact eigenbasis.  The residual
-\[
-  R=AE_0-E_0A_0
-\]
-measures the failure of the trial space to be invariant under the
-ambient operator.  A spectral gap $\delta$ separating the target block
-from its complement turns this algebraic defect into a geometric
-bound, schematically
-\[
-  \delta\,\|\sin\Theta\|\leq\|R\|.
-\]
-The sine operator describes the component of the trial subspace
-orthogonal to the desired exact spectral subspace.  The resulting
-statement is basis-independent: it bounds subspace movement rather
-than the arbitrary rotation of eigenvectors within a degenerate
-spectral cluster.
+The Courant--Fischer min--max principle and Weyl-type eigenvalue
+perturbation bounds provide complementary information about spectral
+\emph{values} \citep{bhatia1997matrix,kato1966perturbation}.  They do
+not by themselves identify a stable basis inside a multiple-eigenvalue
+cluster, or quantify the movement of its invariant subspace.  This
+separation between eigenvalue error and subspace error helped shape
+Davis's perturbation program.  It also connects to the Courant--Fischer
+and Weyl interfaces developed in the present formalization effort and
+subsequently adapted into Tau Ceti.
 
-\subsection{Sylvester separation as the analytic bridge}
+Davis studied the rotation of eigenvectors under perturbation in
+1963 and 1965 \citep{davis1963rotation,davis1965rotation}.  The
+1969 Davis--Kahan announcement preceded their extended 1970 treatment
+\citep{daviskahan1969bounds,davis1970rotation}.  Their problem has
+two closely related formulations.  In one, the original self-adjoint
+operator is perturbed and the movement of an exact spectral subspace
+is estimated.  In the other, one has an approximate trial subspace and
+a computable residual: how far can it be from the desired exact
+spectral subspace?  Unlike a comparison of individual eigenvectors,
+these are meaningful even when an eigenvalue has multiplicity and its
+orthonormal eigenbasis is nonunique.
+
+Let $E_0$ embed the trial-coordinate Hilbert space into the ambient
+space isometrically, and let $A_0$ be a self-adjoint trial operator.
+The residual is the bounded operator agreeing, where defined, with
+\begin{equation}
+ R=AE_0-E_0A_0.
+ \label{eq:history-residual}
+\end{equation}
+It measures the failure of the trial coordinates to intertwine with
+the ambient operator $A$.  A second isometric coordinate map for the
+desired exact spectral space defines its orthogonal projection $P$.
+The positive operator
+\begin{equation}
+ \sin\Theta_0=\bigl(I-E_0^*PE_0\bigr)^{1/2}
+ \label{eq:history-angle-sine}
+\end{equation}
+measures the component of a trial vector lying outside the exact
+subspace.  The critical distinction for the formal proof is that this
+positive sine acts on the trial-coordinate space, whereas
+$(I-P)E_0$ maps into the ambient space.  Their moduli coincide, so
+unitarily invariant ideal norms can compare them without conflating
+their domains and codomains.
+
+\subsection{Sylvester and Rosenblum: the analytic mechanism of the angle bounds}
 \label{sec:related-sylvester}
 
-The operator equation $BX-XA=Y$ belongs to a line of research beginning
-with Sylvester's matrix equations in 1884
-\citep{sylvester1884equation}.  Rosenblum studied spectral separation
-for operator equations in 1956 and later addressed possibly unbounded
-self-adjoint coefficients \citep{rosenblum1956equation,rosenblum1969selfadjoint}.
-Davis and Kahan use the Sylvester map to connect the residual to the
-angle operator.  If $F_1$ is an isometric coordinate map for the
-complementary spectral subspace, then $X=F_1^*E_0$ satisfies, with the
-appropriate domains,
-\[
-  \Lambda_1 X-XA_0=F_1^*R.
-\]
-An interval/exterior or ordered spectral separation then yields the
-factor $\delta$ in the sine estimate.  This is why the formalization
-must represent operator domains and not merely an everywhere-defined
-matrix product.  The domain-aware Sylvester interface in
-\cref{sec:foundations} is a direct implementation of this link between
-the classical operator equation and the perturbation theorem.
+The matrix equation $BX-XA=Y$ is associated with Sylvester's 1884
+work \citep{sylvester1884equation}.  Rosenblum studied separated
+operator spectra in 1956 and later the equation with self-adjoint
+coefficients \citep{rosenblum1956equation,rosenblum1969selfadjoint}.
+The key idea for spectral perturbation is that separation of the
+actions on two blocks controls the operator joining those blocks.
 
-\subsection{Singular values, symmetric norms, and the displacement problem}
+Let $F_1$ give isometric coordinates for the unwanted complementary
+spectral subspace, with self-adjoint block $\Lambda_1$.  Writing
+$X=F_1^*E_0$ converts the residual identity into a Sylvester equation:
+\begin{equation}
+ \Lambda_1X-XA_0=F_1^*R
+ \label{eq:history-sylvester}
+\end{equation}
+on the appropriate domain.  Thus $X$ describes the geometric leakage
+of the trial space into the unwanted block, while the right side is
+controlled by the computable residual.  Under the interval/exterior
+or ordered spectral-gap hypotheses of the sine-theta theorem,
+separated Sylvester estimates give
+\begin{equation}
+ \delta\,N(X)\leq N(F_1^*R)\leq N(R).
+ \label{eq:history-separation-bound}
+\end{equation}
+This is the bridge from a spectral-gap assumption to the bound on the
+sine of a subspace angle.
+
+The precise separation configuration matters.  A gap between two
+arbitrary interlaced spectra does not by itself establish the same
+constant-one inequality for every unitarily invariant norm.  Davis
+and Kahan treat particular ordered and interval/exterior positions;
+the full-scope Lean theorem retains those alternatives, including
+cases where both operators are unbounded.  A formal implementation
+therefore needs the domains of unbounded self-adjoint operators,
+their spectral projections, strong spectral cutoffs, and the
+ideal-norm inequalities used to pass through bounded approximations.
+
+\subsection{Von Neumann, Schatten, Ky Fan, and the choice of displacement cost}
 \label{sec:related-norms}
 
-The norm used to measure rotation is itself a separate mathematical
-choice.  John von Neumann characterized unitarily invariant matrix
-norms using symmetric gauge functions of singular values in 1937
-\citep{vonneumann1937matrix}.  Robert Schatten developed the
-corresponding operator-ideal perspective
-\citep{schatten1950crossspaces}; Ky Fan's inequalities provide the
-partial-sum comparisons that control entire classes of such norms
-\citep{fan1951maximum,bhatia1997matrix}.  For example, the nuclear
-norm sums singular values, whereas the Frobenius norm takes the
-Euclidean norm of their vector.  They can therefore order two
-transporter displacements differently.
+The geometry of a pair of subspaces is fixed, but there are many ways
+to assign a cost to a unitary transporting one onto the other.
+Von Neumann's study of unitarily invariant matrix norms identified
+the role of symmetric gauge functions of singular values
+\citep{vonneumann1937matrix}.  Schatten developed normed operator
+ideals, while Ky Fan's eigenvalue and singular-value inequalities
+provided the partial-sum comparisons underlying majorization
+arguments \citep{schatten1950crossspaces,fan1951maximum,bhatia1997matrix}.
+For a matrix $Z$, the Schatten norms include
+\begin{equation}
+ \|Z\|_{S_p}=\left(\sum_j s_j(Z)^p\right)^{1/p},
+ \qquad
+ \|Z\|_{S_1}=\sum_j s_j(Z),
+ \quad
+ \|Z\|_{S_2}=\left(\sum_j s_j(Z)^2\right)^{1/2}.
+ \label{eq:history-schatten}
+\end{equation}
+In infinite dimensions these expressions are finite on their
+corresponding operator ideals; outside an ideal they need not define
+a finite norm.  This is why the 1970 paper's ``where defined''
+qualification belongs to the mathematical hypotheses of its
+norm-general theorems.
 
-Davis had already proved Hilbert--Schmidt and finite-dimensional
-Schatten-$p$ extremal properties for $p\geq2$ in 1958
-\citep[Theorems~7.3--7.4]{davis1958separation}.  Davis and Kahan later
-showed that direct rotation minimizes certain restricted and squared
-displacement costs, but also exhibited a complex-phase example in
-which full nuclear displacement is smaller for another transporter
-\citep[Example~4.2 and Proposition~4.3]{davis1970rotation}.  Their
-Proposition~4.4 asserts full-displacement optimality in the real case
-when all principal angles are at most $\pi/3$.  The real
-four-dimensional family in \cref{sec:prop44} violates that conclusion:
-its competing transporter concentrates displacement into fewer
-singular directions, lowering their sum.
+Davis established Hilbert--Schmidt and finite-dimensional Schatten
+extremal properties for exponents at least two in his 1958 subspace
+paper \citep[Theorems~7.3--7.4]{davis1958separation}.  Davis and
+Kahan's Section~4 distinguishes a restricted displacement, a
+squared full displacement, and the full displacement $I-W$ of an
+ambient transporter.  Those are different optimization objectives.
+They exhibited a complex-phase modification that decreases the nuclear
+norm of full displacement \citep[Example~4.2]{davis1970rotation}.
+In contrast, Proposition~4.4 asserts that direct rotation minimizes
+full displacement for real subspaces if their principal angles are no
+larger than $\pi/3$.  The four-dimensional example in
+\cref{sec:prop44} gives a smaller trace norm at every positive acute
+angle.  It exposes the failed step: adding singular-value sums of
+restrictions to separate principal planes is not a valid global lower
+bound for an arbitrary ambient transporter.
 
-Bolotnikov, Li, and Rodman later studied the general minimum-distortion
-problem for unitary maps constrained to transport subspaces, including
-complete Frobenius results and a counterexample for Schatten exponents
-below two \citep{bolotnikov2001minimal}.  Qiu, Zhang, and Li examined
-unitarily invariant Grassmann-space metrics
-\citep{qiu2006grassmann}; Zhang and Qiu investigated canonical-angle
-inequalities and trace-norm nonminimality
-\citep{zhang2010canonicalangles}.  This sequence situates the
-Proposition~4.4 correction in a continuing study of how a
-subspace-invariant geometry interacts with different spectral costs.
+The subsequent minimal-distortion theory of Bolotnikov, Li, and Rodman
+studied the same class of subspace-transport constraints, including
+Frobenius and Q-norm optimality and explicit subquadratic
+counterexamples \citep{bolotnikov2001minimal}.  Later work on
+Grassmannian metrics and canonical-angle inequalities also separates
+intrinsic paths between subspaces from minimizing the extrinsic
+operator displacement \citep{qiu2006grassmann,zhang2010canonicalangles}.
+These results give the norm-theoretic context for the source
+correction and for the nuclear-matching question described in
+\cref{sec:example-transport}.
 
-\subsection{Formal libraries and the ancestry of the development}
+\subsection{The numerical and statistical legacy after 1970}
+\label{sec:related-numerical}
+
+The 1970 theory influenced more than the analysis of exact
+self-adjoint eigenvectors.  Wedin's 1972 singular-subspace
+perturbation bounds address the corresponding problem for singular
+vectors of general rectangular matrices
+\citep{wedin1972perturbation}.  Bj\"orck and Golub's angle algorithms
+made the subspace quantities computable
+\citep{bjorck1973numerical}.  Stewart's work on pseudoinverses,
+projections, and least-squares sensitivity helped connect these
+geometric notions with matrix computations
+\citep{stewart1977perturbation,stewart1990matrix}.
+Paige and Wei's 1994 history shows how the cosine--sine decomposition
+links the principal-angle geometry of Davis and Kahan with numerical
+matrix factorizations \citep{paige1994history}.
+
+The same subspace-versus-eigenvector distinction remains central in
+statistical spectral estimation.  For example, Yu, Wang, and
+Samworth analyze a version of Davis--Kahan particularly suited to
+estimating eigenspaces from data \citep{yu2015davis}, while Chen and
+collaborators survey spectral methods across statistical learning
+problems \citep{chen2021spectral}.  These are applications and
+adaptations of perturbation theory, rather than predecessors of the
+1970 proof.  Their dependence on stable subspaces explains the value
+of a reusable formal theorem stated at the operator level rather than
+for one matrix dimension or one matrix norm.
+
+\subsection{Historical foundations as reusable formal mathematics}
 \label{sec:related-formal}
 
-The formalization is built on Lean~4 and Mathlib
-\citep{demoura2021lean4,mathlib2020,dedecker2025cfc}.
-Adam Bornemann's \emph{Spectra} project supplies earlier formal
-foundations for projection-valued measures and Borel spectral calculus,
-parts of which were adapted and generalized in this project
-\citep{bornemann2026spectra}.  The additional formal mathematics
-includes partial-map representations for unbounded operators, spectral
-cutoffs and approximations, principal-angle and direct-rotation
-interfaces, and symmetric operator ideals.
+Each historical component above corresponds to a specific requirement
+in the formalization.  Jordan's angle geometry and Halmos's
+projection blocks lead to positive principal-angle operators rather
+than chosen eigenbases.  The Sz.-Nagy--Kato intertwiner requires
+polar decomposition, square roots, and real/complex transfer.
+Spectral projections require Borel functional calculus, including for
+unbounded self-adjoint operators.  The Sylvester proof requires a
+representation carrying operator domains and a controlled passage
+through spectral cutoffs.  Schatten and Ky Fan theory requires
+approximation numbers and symmetric operator ideals to express
+inequalities with the source's norm generality.
 
-Several results developed while formalizing Davis--Kahan were later
-adapted into the \href{https://github.com/TauCetiProject/TauCeti}{Tau
-Ceti Lean library} as part of its operator-theory roadmap.  For
-example, the upstream
-\href{https://github.com/TauCetiProject/TauCeti/pull/13599}{Courant--Fischer
+The implementation uses Lean~4 and Mathlib
+\citep{demoura2021lean4,mathlib2020,dedecker2025cfc}.
+Projection-valued-measure and Borel-calculus constructions also use
+material adapted from Adam Bornemann's \emph{Spectra} formalization
+\citep{bornemann2026spectra}.  Several foundations developed during
+the Davis--Kahan effort were subsequently adapted into the
+\href{https://github.com/TauCetiProject/TauCeti}{Tau Ceti Lean library}.
+The \href{https://github.com/TauCetiProject/TauCeti/pull/13599}{Courant--Fischer
 and Weyl contribution} and
 \href{https://github.com/TauCetiProject/TauCeti/pull/14241}{rectangular
-unitarily invariant seminorm contribution} document DKPS donor
-adaptations.  The
+unitarily invariant seminorm contribution} record DKPS donor
+adaptations; the
 \href{https://github.com/TauCetiProject/TauCeti/pull/17527}{projection-valued
-measure contribution} incorporates work with Spectra ancestry.  Other
-roadmap items, including canonical polar decomposition, were
-implemented independently by upstream contributors.  The repository's
-contribution census preserves these distinctions between a classical
-mathematical source, a formalization donor, and an independently
-implemented upstream theorem.
+measure contribution} has Spectra ancestry.  Other upstream
+contributions, including canonical polar decomposition, were proved
+independently there.  These distinctions concern the provenance of
+formal implementations; the mathematical statements retain their
+classical attributions.
 
-\paragraph{How the historical ingredients enter the formal proof.}
-The principal-angle and projection literature supplies the geometric
-operators; the Sz.-Nagy--Kato transport construction supplies the
-canonical unitary; spectral calculus supplies the exact spectral
-subspaces; the Sylvester equation connects them to a residual; and
-symmetric ideals measure the resulting angle and perturbation
-operators.  \Cref{sec:coverage,sec:foundations} follows this dependency
-chain through the formal development, while \cref{sec:prop44} shows how
-its norm-comparison layer exposed a false step in the original paper.
+This history also separates the two mathematical questions that meet
+in the project.  The sine-theta theorem estimates \emph{how far} an
+approximate or perturbed spectral subspace lies from an exact one.
+The direct-rotation problem asks \emph{which} ambient transformation
+carries one given subspace onto another at minimum displacement cost.
+The latter optimization problem is not derived from the sine-theta
+inequality.  It became accessible in the same formal development
+because its principal-angle, projection, and operator-ideal
+foundations had already been built.  The resulting Proposition~4.4
+counterexample and the follow-on matching theorem are examined in
+\cref{sec:prop44,sec:example-transport}.
 
 \section{Source coverage and the sine-theta theorem}
 \label{sec:coverage}

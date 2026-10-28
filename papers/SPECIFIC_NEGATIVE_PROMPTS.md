@@ -159,3 +159,23 @@ to insert self-protective commentary into published prose.
 These editorial rules do not authorize omitting genuine mathematical
 hypotheses, known counterexamples, material limitations, or necessary source
 attribution. Express such facts precisely rather than through generic hedges.
+
+## Research ownership without default external escalation (2026-10-28)
+
+- **Do not end a manuscript/research task with generic advice to seek expert
+  review.** The project does not have a standing external reviewer. A
+  recommendation for unspecified external validation is not an action item.
+  Instead, provide concrete, internally executable checks: an explicit
+  theorem-to-source comparison, a small worked example, a conventional
+  proof, a counterexample search, or a direct analysis of the relevant
+  Lean statement and dependencies.
+- Historical attribution should cite actual publications and contrast
+  their precise claims with ours; do not replace this with a request for
+  a specialist to adjudicate priority.
+- Keep real limitations explicit: do not infer a false claim of priority,
+  or inflate scope, merely to avoid mentioning an unresolved mathematical
+  question. A concrete open conjecture belongs in the research notes; a
+  generic appeal for review does not belong in the paper.
+- Existing historical surveys are valuable prior scholarship. Credit
+  specialized surveys on CS decomposition, pairs of projections, and Kato
+  rather than presenting our narrative as the first historical account.

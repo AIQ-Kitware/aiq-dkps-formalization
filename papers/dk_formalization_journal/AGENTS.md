@@ -50,3 +50,19 @@ correction as the primary scientific account. New optimal-transport theory
 is retained in sibling `../optimal_spectral_transport/`; only a selected
 matching theorem is used here to demonstrate a verified follow-on question.
 Do not promote every new transport theorem into this article.
+
+## Historical exposition and self-contained investigation (2026-10-28)
+
+When revising the historical section, identify the primary mathematical
+source and cite existing surveys (Paige--Wei, Simon on Kato,
+Bottcher--Spitkovsky) for their actual scope. Explain what each
+mathematical development contributed to Davis--Kahan's theorem and
+which formalized dependency represents it. Do not reduce the section
+to a name-and-year list, and do not displace the formalization as the
+article's main contribution.
+
+Do not conclude implementation or editorial work with unspecified
+'get expert review' advice. Make remaining tasks concrete and
+actionable within this repository: theorem/source correspondence,
+proof exposition, literature comparison, and reproducible examples.
+Follow `../SPECIFIC_NEGATIVE_PROMPTS.md`.
