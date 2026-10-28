@@ -10,6 +10,7 @@ Do not use these words as rhetorical emphasis:
 - `silently`
 - `quietly`
 - `unusually`
+- `particularly`
 
 Do not replace them with a synonym that performs the same empty emphasis. State the concrete consequence.
 

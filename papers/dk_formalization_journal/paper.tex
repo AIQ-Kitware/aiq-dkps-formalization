@@ -103,7 +103,6 @@
 \newcommand{\DKRefutedCount}{1}
 \newcommand{\DKSemanticAcceptedCount}{29}
 
-%\newcommand{\jonsays}[1]{{\color{red}\small\textbf{[\emoji{person-raising-hand}: #1]}}}
 % Usage: \margincomment{Check this formula!}
 %\newcommand{\jonsays}[1]{%
 %  \marginpar{%
@@ -126,7 +125,17 @@
     \emoji{person-raising-hand}: \\#1%
   }%
 }
+%\newcommand{\jonsays}[1]{{\color{red}\small\textbf{[\emoji{person-raising-hand}: #1]}}}
 
+% Usage: \margincomment{Your comment that now wraps perfectly!}
+%\newcommand{\agentsays}[1]{%
+%  \marginpar{%
+%    \raggedright% Forces text to wrap beautifully without ugly hyphenation
+%    \color{red}\scriptsize% Using \scriptsize makes the text tighter
+%    \emoji{robot}: \\#1%
+%  }%
+%}
+\newcommand{\agentsays}[1]{{\color{red}\small\textbf{[\emoji{robot}: #1]}}}
 
 
 \title{Formalizing Davis--Kahan Perturbation Theory in Lean 4}
@@ -392,19 +401,22 @@ In numerical linear algebra, Bj\"orck and Golub developed algorithms for
 Their computational formulation makes the basis-invariant angles available from
   orthonormal matrix factorizations.
 
-A further formulation uses the cosine--sine decomposition, or CSD, of a
+A further formulation uses the cosine--sine decomposition, or CSD \jonsays{for
+  acronyms use parenthesis after full names, e.g. (CSD) is sufficient}, of a
   partitioned orthogonal or unitary matrix.
 The blocks of the decomposition contain compatible diagonal cosine and sine
   factors.
 Davis--Kahan gave much of the relevant subspace geometry, and Stewart
   subsequently developed the CSD as a matrix factorization; Paige and Wei
   describe that history and its connection to the direct rotation
-  \citep{paige1994history,stewart1977perturbation}.
+  \citep{paige1994history,stewart1977perturbation}. \jonsays{It is unclear to me what is being said here wrt to what DK are doing}
 This is more than a change of notation.
+\jonsays{Previous sentence is LLM fluff dialect}
 The same principal angles can be obtained from an overlap matrix, a pair of
   projections, or a block unitary decomposition.
 The formalization uses the projection and functional-calculus descriptions,
   while the finite-dimensional counterexample uses principal-plane coordinates.
+\jonsays{Transition is abrupt here, we are talking about historical work, and then we shift to the formalization, we should say "our formalization" to distinguish when it is something we did, unless we can identify that the formalization was existant in mathlib or spectra and we just reused it, but its likely that here we actually did the formalization, but verify this}
 
 
 \subsection{The other nineteenth-century problem: approximate eigenvalues and modes}
@@ -421,6 +433,7 @@ variational approximation in the work published in 1909
 a trial space and studies the action of the operator through that
 space.  This is a precursor to the trial-coordinate viewpoint that
 Davis and Kahan later use in their residual bounds.
+\jonsays{This is the first time we use the word trial, and it is important to lay out a good intuition for what that means. It is something I still have a hard time with.}
 
 For a Hermitian matrix $A$, the Rayleigh quotient
 $\langle Ax,x\rangle/\langle x,x\rangle$ expresses the scalar action
@@ -449,7 +462,7 @@ put
 The matrices have identical ordered eigenvalues and
 $\|A_\varepsilon-B_\varepsilon\|_{\mathrm{op}}=\varepsilon$,
 yet their lowest-eigenvalue lines are perpendicular.  The gap of
-each matrix is itself $\varepsilon$.  Thus the ratio of perturbation
+each matrix is itself $\varepsilon$. \jonsays{would saying eigengap be more clear here? Or gap between the eigenvalues, can we be more explicit?}  Thus the ratio of perturbation
 size to spectral separation, not perturbation size alone, must enter
 an eigenspace estimate.  For a cluster with repeated eigenvalues, an
 entire invariant subspace is likewise more natural than a selected
@@ -458,10 +471,11 @@ orthonormal eigenbasis.
 The analytic theory of this question developed through Rellich's
 work on perturbations of self-adjoint operators and Kato's later
 systematic account \citep{simon2018kato,kato1966perturbation}.
+\jonsays{Stating the years would be helpful here, we are putting things in historical context, and we started doing it earlier, but now its unclear what was developed when}
 Rayleigh--Ritz approximation supplies a candidate subspace, Weyl-type
 bounds describe spectral values, and principal angles describe the
 missing geometric quantity.  Davis--Kahan provides the quantitative
-connection between them.
+connection between them. \jonsays{Again, don't be vauge. If there is a connection state plainly what it is}
 
 \subsection{The passage to Hilbert space: the structure of two projections}
 \label{sec:related-two-projections}
@@ -470,7 +484,7 @@ For a closed subspace of a Hilbert space $\mathcal H$, the orthogonal
 projection remains a bounded operator even when the subspace is
 infinite dimensional.  Denote the projections onto two closed
 subspaces by $P$ and $Q$.  The positive compression $PQP$ on
-$\operatorname{ran}P$ is the operator version of the squared overlap
+$\operatorname{ran}P$ \jonsays{ran here doesn't read well to me. I would prefer range(P), (same with kernel and other functions later, maybe use a latex command so we can switch notation if we want to) it also doesn't say where this idea of compression was introduced} is the operator version of the squared overlap
 matrix: in finite dimensions its eigenvalues are
 $\cos^2\theta_j$.  In Hilbert space it need not have a discrete
 spectrum.  Functional calculus nevertheless defines its positive
@@ -481,7 +495,7 @@ in 1948 and by Davis in his 1958 paper \emph{Separation of Two Linear
 Subspaces} \citep{dixmier1948position,davis1958separation}.  Davis's
 closeness and separation operators place the cosine/sine data in an
 operator-theoretic setting.  Halmos's 1969 \emph{Two Subspaces} gives a
-particularly transparent structural description
+particularly \jonsays{llmy language, this is the same issue as unusually, adding to the banned word list. and even transparent is a fluff adjective} transparent structural description
 \citep{halmos1969two}.  One first splits off the four intersection
 spaces corresponding to the combinations of membership in the ranges
 and kernels of $P$ and $Q$.  On their remaining, generic part, the pair
@@ -505,7 +519,7 @@ $\operatorname{ran}P\cap\ker Q$ are orthogonal to the target subspace;
 directions in $\ker P\cap\operatorname{ran}Q$ are orthogonal to the
 source.  These are the right-angle defect spaces.  At acute angles
 both disappear.  For a general pair they affect whether a specified
-intertwining operator, in particular a direct rotation, exists.
+intertwining operator \jonsays{I feel like "intertwining" needs to be defined clearly, I still don't have an intuitive picture of it}, in particular a direct rotation, exists.
 The nonacute Section~3 assertions of Davis--Kahan retain these
 conditions rather than replacing the Hilbert-space problem by a
 finite matrix with a chosen basis.
@@ -517,7 +531,7 @@ angle operator can instead have continuous spectrum.  The spectral
 calculus of the pair of projections takes the place of a finite list
 of angles, and the intersection and defect spaces cannot be discarded.
 The formal direct-rotation results therefore use operator identities
-that make sense without selecting principal vectors.  The familiar
+that make sense without selecting principal vectors.  The familiar \jonsays{Again with the word familiar}
 finite-dimensional pictures are instances of that more general
 construction.
 
@@ -529,7 +543,7 @@ measuring the angle: if the projection $P$ of an isolated spectral
 cluster changes to $Q$, can the two ranges be identified by a unitary
 that depends continuously, or analytically, on the projections?
 Sz.-Nagy developed the nearby-projection construction in work
-published in 1947, with a Hungarian precursor from 1942
+published in 1947, with a Hungarian precursor \jonsays{Like the matching algorithm? Unclear} from 1942
 \citep{sznagy1947perturbations,simon2018kato}.  Kato gave a streamlined
 algebraic construction, described in his 1955 report and later in
 \emph{Perturbation Theory for Linear Operators}
@@ -552,7 +566,7 @@ strictly positive and invertible.  Hence
  \qquad UPU^*=Q
  \label{eq:history-kato-unitary}
 \end{equation}
-is unitary.  This operator is the unitary polar factor of $T$.
+is unitary.  This operator is the unitary polar factor of $T$. \jonsays{what polar factor means is unclear}
 In principal-plane coordinates it is the direct rotation through the
 principal angle, acting trivially on common directions.
 
@@ -576,7 +590,7 @@ projections \citep[\S5]{simon2018kato}.  In the formalization,
 polar-decomposition and square-root APIs used for Davis--Kahan's
 existence, uniqueness, and symmetry theorems.  The small-angle
 hypothesis is a geometric operator-norm condition, not an assumption
-about the matrix dimensions.
+about the matrix dimensions. \jonsays{This is an is X not Y rule break, and it could be stated far more clearly}
 
 \subsection{From the spectral theorem to perturbations of eigenspaces}
 \label{sec:related-spectral}
@@ -610,7 +624,7 @@ general Borel spectral projections cover intervals and half-lines,
 including spectral configurations for which a single isolated
 finite-eigenvalue cluster is not the right model.  These are among
 the reasons the Lean development needs Borel functional calculus,
-not just diagonalization of finite matrices.
+not just diagonalization of finite matrices. \jonsays{broken X not Y rule}
 
 The Courant--Fischer min--max principle and Weyl-type eigenvalue
 perturbation bounds provide complementary information about spectral
@@ -741,10 +755,10 @@ rotating each principal plane through its smallest angle.
 
 Davis established Hilbert--Schmidt and finite-dimensional Schatten
 extremal properties for exponents at least two in his 1958 subspace
-paper \citep[Theorems~7.3--7.4]{davis1958separation}.  Davis and
+paper \citep[Theorems~7.3--7.4]{davis1958separation}. \jonsays{When we talk about prop 4.4 and other theorems from other work, we should use this style} Davis and
 Kahan's Section~4 distinguishes a restricted displacement, a
 squared full displacement, and the full displacement $I-W$ of an
-ambient transporter.  Those are different optimization objectives.
+ambient transporter. \jonsays{I feel like this is too vague, this is the first place we talk about the displacement operator and it is glossed over, but it is critical.}  Those are different optimization objectives.
 They exhibited a complex-phase modification that decreases the nuclear
 norm of full displacement \citep[Example~4.2]{davis1970rotation}.
 In contrast, Proposition~4.4 asserts that direct rotation minimizes
@@ -770,7 +784,7 @@ correction and for the nuclear-matching question described in
 \subsection{The 1969--1970 synthesis: an angle estimate from an observable residual}
 \label{sec:related-synthesis}
 
-The historical strands met in Davis's earlier papers on the rotation
+The historical strands met \jonsays{Fluffy way of saying it} in Davis's earlier papers on the rotation
 of eigenvectors in 1963 and 1965, the 1969 Davis--Kahan announcement,
 and the extended 1970 paper
 \citep{davis1963rotation,davis1965rotation,daviskahan1969bounds,davis1970rotation}.
@@ -798,7 +812,7 @@ The resulting chain of equalities and inequalities is
 Each equality has its own mathematical ancestry: the first is
 principal-angle and polar-decomposition geometry; the middle estimate
 is a Sylvester separation theorem; and the final bound uses ideal
-norm properties.  This also explains the architecture of the formal
+norm properties. \jonsays{I feel like this needs to be expanded, its vague} This also explains the architecture of the formal
 proof.  The objects have different domains and codomains, the
 unbounded operators require domain hypotheses, and the norm may be
 finite only on a specified ideal.
@@ -831,6 +845,7 @@ geometric notions with matrix computations
 Paige and Wei's 1994 history shows how the cosine--sine decomposition
 links the principal-angle geometry of Davis and Kahan with numerical
 matrix factorizations \citep{paige1994history}.
+\jonsays{Is it important to state that this route to the formalization might not be the only way that it could have been done? Perhaps we discuss something that could have been useful, but we did not formalize? In other words, this is an appropriate place for a tiny bit of hedging.}
 
 The same subspace-versus-eigenvector distinction remains central in
 statistical spectral estimation.  For example, Yu, Wang, and
@@ -862,7 +877,7 @@ The implementation uses Lean~4 and Mathlib
 \citep{demoura2021lean4,mathlib2020,dedecker2025cfc}.
 Projection-valued-measure and Borel-calculus constructions also use
 material adapted from Adam Bornemann's \emph{Spectra} formalization
-\citep{bornemann2026spectra}.  Several foundations developed during
+\citep{bornemann2026spectra}.  Several foundations \jonsays{We should probably say operator theory and be more specific than several} developed during
 the Davis--Kahan effort were subsequently adapted into the
 \href{https://github.com/TauCetiProject/TauCeti}{Tau Ceti Lean library}.
 The \href{https://github.com/TauCetiProject/TauCeti/pull/13599}{Courant--Fischer
@@ -871,7 +886,7 @@ and Weyl contribution} and
 unitarily invariant seminorm contribution} record DKPS donor
 adaptations; the
 \href{https://github.com/TauCetiProject/TauCeti/pull/17527}{projection-valued
-measure contribution} has Spectra ancestry.  Other upstream
+measure contribution} has Spectra ancestry.  \jonsays{do the links need to be something removed for blind review? Should we setup a latex if statement to include or not include them?} Other upstream
 contributions, including canonical polar decomposition, were proved
 independently there.  These distinctions concern the provenance of
 formal implementations; the mathematical statements retain their
@@ -921,7 +936,9 @@ Davis; Kahan & Residual-to-angle bounds, tangent estimates,
 \caption{The mathematical sources and their roles in the Davis--Kahan
 formalization. The mathematical attributions and the history of the
 formal implementations are distinct; the latter includes reused
-Mathlib, Spectra, and DKPS-to-Tau Ceti developments.}
+Mathlib, Spectra, and DKPS-to-Tau Ceti developments.
+\jonsays{I almost wonder if a timeline would be more interesting than a table here, or could we include years in the table to start and then maybe think about turning it into a timeline later after we do more important edits? If years don't make sense then just leave it.}
+}
 \label{tab:historical-lineage}
 \end{table}
 
