@@ -26,6 +26,29 @@ of new transport results remains a separate literature question.
 make -C papers/dk_formalization_journal paper
 ```
 
+The PDF is written to `build/paper.pdf`. The build requires `latexmk`,
+LuaLaTeX, BibTeX, and an emoji font such as Noto Color Emoji.
+The project selects LuaLaTeX even for `latexmk -pdf`, including LaTeXBox builds.
+Configure editor builds to use `latexmk`
+from this directory so they read `.latexmkrc`. If an older build mixed
+auxiliary files in the source directory and `build/`, clean both once:
+
+```bash
+cd papers/dk_formalization_journal
+latexmk -outdir=. -C paper.tex
+latexmk -gg -pdf paper.tex
+```
+
+The project keeps the previous PDF when compilation fails. To diagnose a
+silent LaTeXBox background build, run these commands in Vim with `paper.tex`
+open (these settings affect only the current session):
+
+```vim
+:lcd %:p:h
+:let g:LatexBox_latexmk_async = 0
+:Latexmk!
+:LatexErrors
+```
 
 ## Lean artifact and reproduction
 

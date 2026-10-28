@@ -23,6 +23,8 @@
 \usepackage{listings}
 \usepackage{listingsutf8}
 \usepackage{authblk}
+\usepackage{emoji} % Requires LuaLaTeX compiler
+
 \setlength{\emergencystretch}{3em}
 
 % ArXiv-friendly Lean code: no shell escape, minted, or external highlighter.
@@ -101,6 +103,32 @@
 \newcommand{\DKRefutedCount}{1}
 \newcommand{\DKSemanticAcceptedCount}{29}
 
+%\newcommand{\jonsays}[1]{{\color{red}\small\textbf{[\emoji{person-raising-hand}: #1]}}}
+% Usage: \margincomment{Check this formula!}
+%\newcommand{\jonsays}[1]{%
+%  \marginpar{%
+%    \raggedright\color{red}\tiny% Change to \footnotesize if text is too small
+%    \emoji{person-raising-hand} \textbf{Comment:}\\#1%
+%  }%
+%}
+
+\geometry{
+  % Keeps your main text layout intact while expanding the side margin box
+  marginparwidth=2.2cm,
+  marginparsep=0.3cm
+}
+
+% Usage: \margincomment{Your comment that now wraps perfectly!}
+\newcommand{\jonsays}[1]{%
+  \marginpar{%
+    \raggedright% Forces text to wrap beautifully without ugly hyphenation
+    \color{red}\scriptsize% Using \scriptsize makes the text tighter
+    \emoji{person-raising-hand}: \\#1%
+  }%
+}
+
+
+
 \title{Formalizing Davis--Kahan Perturbation Theory in Lean 4}
 % Additional authors are expected; keep the confirmed ordering below stable.
 
@@ -126,6 +154,12 @@
 
 \begin{document}
 \maketitle
+
+\jonsays{I do wonder if we discuss the role of AI here, in that it increasing the
+    rate of the production of mathematical statements, but in a way that isn't
+    always clear. Do we discuss the existential issues looming over us? Do we
+    pretend like they don't exist?
+}
 
 \begin{abstract}
 We formalize the Davis--Kahan theory of spectral-subspace perturbations
@@ -158,6 +192,8 @@ new formal research.
 formal verification; Lean 4; operator theory; direct rotation; principal angles.
 
 \smallskip
+
+\jonsays{Links here or hover text might be nice?}
 \noindent\textbf{Mathematics Subject Classification (2020):}
 68V20, 47A55, 15A42.
 
@@ -168,6 +204,13 @@ formal verification; Lean 4; operator theory; direct rotation; principal angles.
 \section{Introduction}
 \label{sec:introduction}
 
+
+\jonsays{Is this the best lead in? Granted, the issue I have here is that I could use a more basic introduction, but perhaps more mathematically sophisticated readers want something shorter that speaks to what they already know. There is a serious audience mismatch issue here. It's clear that this formalization is valuable, and it's incredible that
+    someone outside the field could spur it into existence, and then within a few months get well enough up to speed to be able to discuss it - at least at a high level - and
+    I feel like this is screaming to be talked about, but what people are and aren't willing to talk about or what venue is appropriate for what feels very unclear.
+    Some people want to embrace the new world and bound ahead, some want to pretend like it doesn't exist, and others are somewhere in between.
+}
+
 When a self-adjoint operator is perturbed, an individual eigenvector may
 be unstable even when the invariant subspace to which it belongs remains
 well determined.  For instance, a multiple eigenvalue admits many
@@ -175,125 +218,163 @@ orthonormal eigenbases, while the span of the corresponding eigenvectors
 is independent of that choice.  The Davis--Kahan theory quantifies the
 stability of such subspaces through their principal angles, the
 separation of relevant parts of the spectrum, and a perturbation or
-computable residual \citep{davis1970rotation}.  This point of view
+computable residual \citep{davis1970rotation}.
+\jonsays{Does it? I mean DK has applications in both, but what information saying it like this this adding, what is this effectively communicating the reader? Just saying it connects isn't helping.}
+This point of view
 connects infinite-dimensional operator theory with the numerical
 analysis of approximate eigenvectors.
 
-The 1970 Davis--Kahan paper is an unusually rich formalization target.
-It unifies the geometry of two closed subspaces with spectral
-perturbation estimates, and frequently states conclusions for real and
-complex Hilbert spaces, possibly unbounded self-adjoint operators, and
-unitarily invariant norms on operator ideals.  A finite-matrix
-specialization captures familiar sine-theta inequalities but omits
-substantial parts of the source: domain conditions, half-infinite
-spectral-gap configurations, and the behavior of operator ideals in
-infinite dimensions.  The historical development of these mathematical
-tools is traced in \cref{sec:related}.
+The 1970 Davis--Kahan paper is an unusually \jonsays{unusually is a banned word,
+  agents editing this document must respect the banned words list and house
+  style prompts.
+this entire sentence needs to be rewriten, likely by me.
+Or maybe let me just set the tone I want.
+Why did we choose to formalize it here.
+The answer is because a variant of it is needed for DKPS, and then we were so
+  excited by the fact that such a formalization was possible, that we wanted to
+  extend it and push the results to maximum generality, so we targeted a widely
+  known - at least within the small mathematical community - result and instead
+  of seeking to formalize exactly what we need, we formalized the result at the
+  scope in which it was originally published } rich formalization target.
+It unifies \jonsays{careful with the word unifies, perhaps relates is the better
+  word?}
+the geometry of two closed subspaces with spectral perturbation estimates, and
+  frequently states conclusions for real and complex Hilbert spaces, possibly
+  unbounded self-adjoint operators, and unitarily invariant norms on operator
+  ideals.
+A finite-matrix specialization captures familiar \jonsays{I hate presuming this;
+  I wasn't familiar with this when I started.}
+sine-theta inequalities but omits substantial parts of the source: domain
+  conditions, half-infinite \jonsays{The phrase half-infinte drew some comments,
+  is that standard?}
+spectral-gap configurations, and the behavior of operator ideals in infinite
+  dimensions.
+\jonsays{This next sentence feels abrupt.}
+The historical development of these mathematical tools is traced in
+  \cref{sec:related}.
 
-Our Lean~4 formalization covers a reviewed set of 29 result-level
-statements from the 1970 paper.  We prove 28 at their reviewed source
-scope, including a sine-theta estimate for unbounded self-adjoint
-operators and supported symmetric operator-ideal norms.  The remaining
-statement, Proposition~4.4, asserts a false full-displacement
-optimality property for direct rotation; a parameterized real
-four-dimensional counterexample refutes it.  The complete source
-inventory appears in Appendix~\ref{app:dk-inventory}.
+Our Lean~4 formalization covers a reviewed set of 29 result-level statements
+  from the 1970 paper.
+We prove 28 at their reviewed source scope \jonsays{"reviewed source scope" is
+  such an llm-dialect fluff phrase.
+I don't like it. We should make sure we don't just fix the issues without codifying them, otherwise they will just return as we edit and write}, including a sine-theta estimate for unbounded self-adjoint
+  operators and supported symmetric operator-ideal norms.
+The remaining statement, Proposition~4.4, asserts a false full-displacement
+  optimality property for direct rotation; a parameterized real four-dimensional
+  counterexample refutes it.
+  \jonsays{We should likely hint at the significance - or lack there of - of the result, as well as what related work is in the area, what was known and what wasn't. Not sure if we can do this concisely}
+The complete source inventory appears in Appendix~\ref{app:dk-inventory}.
 
-To establish these statements, we developed and reused mathematical
-interfaces for principal-angle operators, direct rotation, approximation
-numbers, symmetric ideals, Borel spectral calculus, and domain-aware
-Sylvester estimates.  Some foundations developed here were later
-adapted into \href{https://github.com/TauCetiProject/TauCeti}{Tau Ceti};
-other parts were adapted from existing Mathlib and Spectra developments.
-The formalization and its upstream contributions constitute a reusable
-base for subsequent theorems.  In \cref{sec:example-transport} we give
-one concrete example: the exact global minimum of nuclear displacement
-under real orthogonal subspace transport is characterized by weighted
-matching of principal angles.  This follow-on question arose from the
-Proposition~4.4 investigation and uses the foundations developed during
-the formalization effort.
+To establish these statements, we developed and reused \jonsays{Might be better
+  to talk about what we developed first, and then talk about what we reused and
+  extended} mathematical interfaces for principal-angle operators, direct
+  rotation, approximation numbers, symmetric ideals, Borel spectral calculus,
+  and domain-aware Sylvester estimates.
+Some foundations developed here were later adapted into
+  \href{https://github.com/TauCetiProject/TauCeti}{Tau Ceti}; other parts were
+  adapted from existing Mathlib and Spectra developments. \jonsays{The semicolon here doesn't make sense. We could just say the operator theory foundations so we aren't hedging. Also is this an issue with blind review? For reference, the Operator Theory roadmap that was merged is here: \url{https://github.com/TauCetiProject/TauCetiRoadmap/pull/126}, note: comments like this that help ground the conversation are things that don't always need to be said. LLMs have an issue with saying things thats that don't need to be said because it helps their attention mechanism I suppose. What we should do instead is use latex comments or macros that can be removed in a published version for humans, provide LLMs with the context that they need to make decisive non-hedging statements.}
+The formalization and its upstream contributions constitute a reusable base for
+  subsequent theorems.
+\jonsays{The exact extension that we use here can be subject to change, depending on several factors including my ability to discuss and defend it.}
+In \cref{sec:example-transport} we give one concrete example: the exact global
+  minimum of nuclear displacement under real orthogonal subspace transport is
+  characterized by weighted matching of principal angles.
+This follow-on question arose from the Proposition~4.4 investigation and uses
+  the foundations developed during the formalization effort.
 
 \paragraph{Contributions.}
-\begin{enumerate}
-\item \textbf{A source-level formalization.} The 29-result review of
-Davis--Kahan (1970) comprises 28 proved results and a formally refuted
-Proposition~4.4.  The sine-theta theorem retains the real/complex
-setting, unbounded self-adjoint domains, ordered as well as
-interval/exterior gaps, and where-defined operator-ideal norms
-(\cref{sec:coverage,sec:sine-theta}).
-\item \textbf{An operator-theoretic library.} The proof develops
-mathematical interfaces spanning the historical foundations of the
-paper.  Parts of these interfaces were subsequently adapted into Tau
-Ceti, with documented distinctions between adapted and independently
-developed upstream implementations (\cref{sec:related,sec:foundations}).
-\item \textbf{A correction to the 1970 source.} We give a real
-four-dimensional counterexample at arbitrarily small positive angles,
-identify the invalid Ky Fan comparison in Proposition~4.4, and prove a
-valid Q-norm consequence of Proposition~4.3 (\cref{sec:prop44}).
-\item \textbf{A formalization-enabled extension.} We exhibit a proved
-reduction from unrestricted nuclear-optimal real transport to weighted
-principal-plane matching (\cref{sec:example-transport}).
+\begin{enumerate} \item \textbf{A source-level formalization.}
+The 29-result review of Davis--Kahan
+(1970) comprises 28 proved results and a formally refuted Proposition~4.4.
+The sine-theta theorem retains \jonsays{I don't like the word retained} the
+  real/complex setting, unbounded self-adjoint domains, ordered as well as
+  interval/exterior gaps, and where-defined operator-ideal norms
+  (\cref{sec:coverage,sec:sine-theta}).
+\item \textbf{An operator-theoretic library.}
+The proof develops mathematical interfaces spanning the historical foundations
+of the paper. \jonsays{This is such a roundabout way of saying that we formalized the foundations. Say it plainly. Stop using so many fancy synonyms}
+Parts of these interfaces were subsequently adapted into Tau Ceti, with
+  documented distinctions between adapted and independently developed upstream
+  implementations (\cref{sec:related,sec:foundations}). \jonsays{This is an important point, but its said in an odd way. We developed a large amount of the foundation, but also adapted the existing implementations when they existed}
+\item \textbf{A correction to the 1970 source.}
+We give a real four-dimensional counterexample at arbitrarily small positive
+  angles, identify the invalid Ky Fan comparison in Proposition~4.4, and prove a
+  valid Q-norm consequence of Proposition~4.3 (\cref{sec:prop44}). \jonsays{Again, we might want to clarify the level of significance here}
+\item \textbf{A formalization-enabled extension.}
+We exhibit a proved reduction from unrestricted nuclear-optimal real transport
+to weighted principal-plane matching (\cref{sec:example-transport}). \jonsays{"We exhibit" is fancy synonymn usage. I would prefer repetition and predictable writing patterns than "flavorful" fancy writing. Also we should pick one word for the trace norm and stick to it.}
 \end{enumerate}
 
 \section{From subspace geometry to the Davis--Kahan estimates}
 \label{sec:related}
+\jonsays{Sections need to be titled more plainly}
 
 The 1970 paper of Davis and Kahan is the point where several problems,
-originally pursued for different reasons, become one theorem.  How does
-one measure the relative position of two subspaces without selecting
-bases?  How does one identify a subspace after the operator defining it
-has changed?  What quantitative information does an approximate
-eigenpair provide about the exact spectral subspace?  And how does one
-measure error when the relevant operators act in infinite dimensions?
-The answers came from geometry, spectral theory, numerical analysis,
-and the theory of operator ideals, respectively.
+  originally pursued for different reasons, become one theorem.
+\jonsays{This is a very LLMy sentence. Again we want to say it more plainly}
+How does one measure the relative position of two subspaces without selecting
+  bases?
+How does one identify a subspace after the operator defining it has changed?
+What quantitative information does an approximate eigenpair provide about the
+  exact spectral subspace?
+And how does one measure error when the relevant operators act in infinite
+  dimensions?
+The answers came from geometry, spectral theory, numerical analysis, and the
+  theory of operator ideals, respectively.
 
-The connecting question is simple to state.  Suppose a self-adjoint
-operator $A$ has a distinguished spectral subspace, and $E_0$ describes
-an approximate one.  The output we want is an estimate on their
-\emph{relative geometry}, not a comparison of arbitrary eigenbases.
+The connecting question is simple to state.
+\jonsays{Fluff lead in sentence. Remove the fluff}
+Suppose a self-adjoint operator $A$ has a distinguished spectral subspace, and
+  $E_0$ describes an approximate one.
+The output we want is an estimate on their \emph{relative geometry}, not a
+  comparison of arbitrary eigenbases.
+\jonsays{Could be stated more clearly}
 To obtain it, one first describes geometry using principal angles and
-projections; then expresses failure of invariance as a residual;
-then solves an operator equation whose coefficients are separated in
-spectrum; and finally measures its solution in an appropriate
-unitarily invariant norm.  The 1970 sine-theta bound is the point at
-which those steps meet.
+  projections; then expresses failure of invariance as a residual; then solves
+  an operator equation whose coefficients are separated in spectrum; and finally
+  measures its solution in an appropriate unitarily invariant norm.
+The 1970 sine-theta bound is the point at which those steps meet.
+\jonsays{LLMy sentence}
 
-The historical literature is distributed across these mathematical
-traditions.  Paige and Wei give a history of the cosine--sine
-decomposition and its connections to Jordan, Davis, Kahan, and Stewart
-\citep{paige1994history}.  Simon reconstructs the Sz.-Nagy--Kato
-construction for nearby spectral projections and its role in
-perturbation theory \citep[\S5]{simon2018kato}.  B\"ottcher and
-Spitkovsky review the theory of two projections and its operator
-algebraic extensions \citep{bottcher2010gentle}.  We use these accounts
-together with the original works to follow the mathematical questions
-through to the formalization.  The same historical objects recur in
-the Lean development, which is why the mathematical lineage also
-serves as a guide to its prerequisites.  A compact source-to-proof
-map appears in \cref{tab:historical-lineage}.
+The historical literature is distributed across these mathematical traditions.
+Paige and Wei give a history of the cosine--sine decomposition and its
+  connections to Jordan, Davis, Kahan, and Stewart \citep{paige1994history}.
+Simon reconstructs the Sz.-Nagy--Kato construction for nearby spectral
+  projections and its role in perturbation theory \citep[\S5]{simon2018kato}.
+B\"ottcher and Spitkovsky review the theory of two projections and its operator
+  algebraic extensions \citep{bottcher2010gentle}.
+We use these accounts together with the original works to follow the
+  mathematical questions through to the formalization.
+The same historical objects recur in the Lean development, which is why the
+  mathematical lineage also serves as a guide to its prerequisites.
+A compact source-to-proof map appears in \cref{tab:historical-lineage}.
 
 \subsection{Angles before operators: Jordan, canonical correlation, and the
 cosine--sine decomposition}
 \label{sec:related-classical}
+\jonsays{Again, need plain and clear titles}
 
-Camille Jordan studied the geometry of linear subspaces in $n$
-dimensions in 1875 \citep{jordan1875essai}.  For two lines, a single
-acute angle describes their relative position.  For subspaces of
-higher dimension, one needs a sequence of \emph{principal angles}.
-The successive principal vectors are selected under orthogonality
-constraints, so their angles are independent of the coordinates used
-to describe either subspace.  This separates the geometry of a
-subspace from the arbitrary choice of its orthonormal basis.
+Camille Jordan studied the geometry of linear subspaces in $n$ dimensions in
+  1875 \citep{jordan1875essai}.
+\jonsays{It would be useful at least wile I'm editing to use the name/date style of citation, but I do went to go back to IEEE before submitting}
+For two lines, a single acute angle describes their relative position.
+For subspaces of higher dimension, one needs a sequence of \emph{principal
+  angles}.
+The successive principal vectors are selected under orthogonality constraints,
+  so their angles are independent of the coordinates used to describe either
+  subspace.
+This separates the geometry of a subspace from the arbitrary choice of its
+  orthonormal basis.
 
-One modern description begins with isometries $X$ and $Y$ whose ranges
-are finite-dimensional subspaces $E$ and $F$.  The singular values of
-the overlap matrix are the principal cosines:
+One modern description begins with isometries $X$ and $Y$ whose ranges are
+  finite-dimensional subspaces $E$ and $F$.
+The singular values of the overlap matrix are the principal cosines:
 \begin{equation}
   \sigma_j(X^*Y)=\cos\theta_j,
   \qquad 0\leq\theta_j\leq\frac{\pi}{2}.
   \label{eq:history-principal-cosines}
 \end{equation}
+\jonsays{Are we using notation consistently across all related work? I'm not sure if it is possible. If it is extending the color coding might be nice, but don't do that if notation shifts meaning}
 The corresponding principal vectors $x_j\in E$ and $y_j\in F$ satisfy
 $\langle x_i,y_j\rangle=\delta_{ij}\cos\theta_j$ in suitably oriented
 coordinates.  For nonzero acute angles, each pair determines a real
@@ -301,29 +382,29 @@ two-dimensional plane in which the relative position is an ordinary
 rotation.  An entire pair of subspaces is described by these planes,
 together with their shared and orthogonal components.
 
-The same geometric data appeared in statistics: Hotelling's 1936
-canonical correlation analysis sought pairs of maximally correlated
-linear combinations of two sets of variables
-\citep{hotelling1936relations}.  After appropriate whitening, the
-canonical correlations are singular values of a cross-coordinate map.
-In numerical linear algebra, Bj\"orck and Golub developed algorithms
-for computing principal angles and vectors in 1973
-\citep{bjorck1973numerical}.  Their computational formulation makes
-the basis-invariant angles available from orthonormal matrix
-factorizations.
+The same geometric data appeared in statistics: Hotelling's 1936 canonical
+  correlation analysis sought pairs of maximally correlated linear combinations
+  of two sets of variables \citep{hotelling1936relations}.
+After appropriate whitening, the canonical correlations are singular values of a
+  cross-coordinate map.
+In numerical linear algebra, Bj\"orck and Golub developed algorithms for
+  computing principal angles and vectors in 1973 \citep{bjorck1973numerical}.
+Their computational formulation makes the basis-invariant angles available from
+  orthonormal matrix factorizations.
 
-A further formulation uses the cosine--sine decomposition, or CSD, of
-a partitioned orthogonal or unitary matrix.  The blocks of the
-decomposition contain compatible diagonal cosine and sine factors.
+A further formulation uses the cosine--sine decomposition, or CSD, of a
+  partitioned orthogonal or unitary matrix.
+The blocks of the decomposition contain compatible diagonal cosine and sine
+  factors.
 Davis--Kahan gave much of the relevant subspace geometry, and Stewart
-subsequently developed the CSD as a matrix factorization; Paige and
-Wei describe that history and its connection to the direct rotation
-\citep{paige1994history,stewart1977perturbation}.
-This is more than a change of notation.  The same principal angles
-can be obtained from an overlap matrix, a pair of projections, or a
-block unitary decomposition.  The formalization uses the projection
-and functional-calculus descriptions, while the finite-dimensional
-counterexample uses principal-plane coordinates.
+  subsequently developed the CSD as a matrix factorization; Paige and Wei
+  describe that history and its connection to the direct rotation
+  \citep{paige1994history,stewart1977perturbation}.
+This is more than a change of notation.
+The same principal angles can be obtained from an overlap matrix, a pair of
+  projections, or a block unitary decomposition.
+The formalization uses the projection and functional-calculus descriptions,
+  while the finite-dimensional counterexample uses principal-plane coordinates.
 
 
 \subsection{The other nineteenth-century problem: approximate eigenvalues and modes}
