@@ -98,7 +98,7 @@ byte-identical.
 | [#13331](https://github.com/TauCetiProject/TauCeti/pull/13331) | MSS-B03: matrix entrywise/operator bound | DKPS matrix and `PiL2` estimates, with source named | D, M13 |
 | [#13333](https://github.com/TauCetiProject/TauCeti/pull/13333) | PD-A02–A06: orthonormal subfamily spans | `ForTauCeti/Analysis/InnerProductSpace/BasisSpan.lean` | D, M13 |
 | [#13475](https://github.com/TauCetiProject/TauCeti/pull/13475) | MSS-A08: exact-rank factorization uniqueness | `ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean` | D, B |
-| [#13599](https://github.com/TauCetiProject/TauCeti/pull/13599) | PD-A50–A53: Courant–Fischer and Weyl | `ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean` | D, M13 |
+| [#13599](https://github.com/TauCetiProject/TauCeti/pull/13599) | PD-A50–A53: Courant–Fischer and Weyl | `ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean`; developed locally on Mathlib, then adapted upstream | D, M13; [28 October donor/accepted-proof comparison](../../papers/dk_formalization_journal/COURANT_FISCHER_LINEAGE_AUDIT.md) |
 | [#13866](https://github.com/TauCetiProject/TauCeti/pull/13866) | OI: approximation-number equivalence/isometric invariance | DKPS approximation-number results; cites an exact donor commit/path | D, B |
 | [#13869](https://github.com/TauCetiProject/TauCeti/pull/13869) | SA: Stone generator/commutant with C0-groups | Adapted Kitware DKPS partial-operator/group infrastructure | D, B |
 | [#13871](https://github.com/TauCetiProject/TauCeti/pull/13871) | SA: closed partial operators, graphs and form bounds | Adapted DKPS `LinearPMap` foundations; some Spectra ancestry | D, B |

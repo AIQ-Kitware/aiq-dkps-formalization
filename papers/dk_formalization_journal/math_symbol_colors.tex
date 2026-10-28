@@ -144,6 +144,13 @@
 \dkDeclareSymbol{Uperp}{U^{\perp}}{unwanted}
 \dkDeclareSymbol{F1}{F_1}{unwantedframe}
 \dkDeclareSymbol{Lambda1}{\Lambda_1}{unwantedspectrum}
+% Spectral measure and set (distinct from the ambient space E and sine block S).
+\dkDeclareSymbol{SpectralMeasure}{E}{wantedprojection}
+\dkDeclareSymbol{SpectralSet}{S}{wantedspectrum}
+% Generic Sylvester coefficients and right side, by source/target role.
+\dkDeclareSymbol{SylvesterLeft}{B}{unwantedspectrum}
+\dkDeclareSymbol{SylvesterRight}{C}{trialspectrum}
+\dkDeclareSymbol{SylvesterRHS}{Y}{resid}
 \dkDeclareSymbol{w}{w}{unwantedvector}
 \dkDeclareSymbol{f1}{f_1}{unwantedvector}
 \dkDeclareSymbol{lambda1}{\lambda_1}{unwantedspectrum}
@@ -171,6 +178,10 @@
 \dkDeclareSymbol{r}{r}{residvector}
 \dkDeclareSymbol{R}{R}{resid}
 \dkDeclareSymbol{Kdisplacement}{K}{displacement}
+% Matching proof: the gradient and its spectral level are not a space or gap.
+\dkDeclareSymbol{SpectralGradient}{G}{displacement}
+\dkDeclareSymbol{GradientLevel}{g}{displacement}
+\dkDeclareSymbol{SkewDirection}{B}{ambient}
 % Spectral separation family: gap and original gap are NOT identical.
 \dkDeclareSymbol{delta}{\delta}{gap}
 \dkDeclareSymbol{g}{g}{gaporiginal}
@@ -195,6 +206,10 @@
 \dkDeclareSymbol{NormN}{N}{norm}
 \dkDeclareSymbol{NormM}{M}{normaux}
 \dkDeclareSymbol{NormQ}{Q}{normaux}
+\dkDeclareSymbol{SingletonCost}{s}{norm}
+\dkDeclareSymbol{PairCost}{e}{norm}
+\dkDeclareSymbol{Matching}{M}{normaux}
+\dkDeclareSymbol{PowerCost}{\Phi}{norm}
 % Statistical application / operator provenance.
 \dkDeclareSymbol{Sigma}{\Sigma}{old}
 \dkDeclareSymbol{SigmaHat}{\widehat\Sigma}{current}

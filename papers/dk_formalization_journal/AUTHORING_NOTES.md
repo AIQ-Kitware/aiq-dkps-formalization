@@ -64,6 +64,44 @@ The AI-role paragraph proposed in chat remains rejected. The article keeps a
 brief disclosure naming ChatGPT and Claude. A broader discussion paragraph has
 not been substituted; its wording and placement remain open for author review.
 
+## Second prose correction pass (28 October 2026)
+
+The author's subsequent responses are applied, with review-note invocations
+removed and their three macro definitions retained. The committed review
+preserves the original comments and replies.
+
+- Added the operator-perturbation viewpoint to the introduction: a bound on
+  the error in an available Hermitian matrix estimate controls its eigenspace
+  residual relative to the unknown matrix. Kept the explanation concise.
+- Added the QUENCH citation at the DKPS motivation, inside the existing
+  non-anonymous branch. Used “half-infinite intervals” consistently and
+  removed “unnumbered” from the rendered target-selection description.
+- Described the Q-norm conclusion as a repair by restricting the norm class,
+  preserving Proposition 4.3 and the earlier Bolotnikov--Li--Rodman results.
+  Highlighted the proved global trace minimum for the four-dimensional pair.
+  `TraceOptimality.lean` supplies the lower bound and the explicit attainer.
+- Dimension minimality remains a separate Lean task. The source TODO beside
+  the counterexample specifies the missing low-dimensional statement and the
+  corollary that could be added after it compiles and its scope is checked.
+  No dimension-minimality claim was added to the rendered article.
+- Used the author's “a significant amount of operator theory, namely” wording
+  as a local exception. Named the foundations adapted into Tau Ceti, with the
+  Courant--Fischer/Weyl direction established by the linked audit. Preserved
+  the broader lineage-consolidation TODO.
+- Called the transport contribution a reduction to weighted matching. Kept
+  “under spectral separation” as the author requested on reconsideration.
+- Introduced the cited historical surveys as surveys and moved their overview
+  table before the historical subsections. Removed the unused CSD acronym.
+- Added the finite-dimensional principal-angle interpretation of an acute
+  pair, a spectral-theorem statement, the meaning of its spectral projections,
+  and a resolvent definition before the contour formula. Explained domains
+  using the Hellinger--Toeplitz theorem, citing the original 1910 paper
+  ([publisher metadata](https://link.springer.com/article/10.1007/BF01456325)).
+- Applied semantic symbol colors by mathematical role throughout the main
+  exposition and included proofs. Extended the existing symbol dictionary and
+  notation appendix for the spectral measure, generic Sylvester equation,
+  and matching proof; kept the Manim palette and monochrome control.
+
 ## Local evidence index
 
 Paths below are relative to this paper directory. Prefer these existing records
@@ -76,6 +114,7 @@ and exact source declarations to a competing provenance inventory.
 | What is the source's mathematical scope? | [Distributable source specification](../../prose/distilled_literature/DavisKahan1970_part_III.tex) and [claims to evidence](claims_to_evidence.md). |
 | What supports the correction and its literature comparison? | [Proposition 4.4 literature map](PROPOSITION_4_4_LITERATURE_MAP.md), [literature audit](submission/LITERATURE_AUDIT.md), and [claims to evidence](claims_to_evidence.md). Check each claim at the source's real/complex, norm, and angle scope. |
 | Which formal results were adapted into Tau Ceti, independently re-proved there, or built on earlier donors? | [Contribution and lineage census](../../dev/tauceti/dkps-upstream-contribution-census.md) and [upstream consumption review](../../dev/tauceti/upstream-consumption-review-2026-10-22.md). These are dated evidence, not proof of current remote status. |
+| Did our Courant--Fischer/Weyl proofs originate here? | [28 October proof-lineage audit](COURANT_FISCHER_LINEAGE_AUDIT.md): immutable June/August donor sources, the accepted October port, and six declaration/proof comparisons establish local development followed by upstream adaptation and local consumption. The broader lineage consolidation requested in the review remains pending. |
 | Which parts have Spectra ancestry? | [Spectra provenance map](../../dev/tauceti/spectra-provenance-map.md), [preserved upstream attribution](../../retired/Spectra.UPSTREAM.md), and the Lean provenance headers. |
 | Which roadmap topics correspond to donor work? | [Donor topic map](../../dev/tauceti/roadmap-topic-map.md). Topic overlap alone does not establish proof descent. |
 | What notation and colors does this article use? | [Symbol macros](math_symbol_colors.tex), [notation appendix source](appendix_notation.tex), and the [Manim glossary](../../visualizations/dkvis/slides_glossary.py). |

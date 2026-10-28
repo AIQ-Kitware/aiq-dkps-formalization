@@ -8,7 +8,7 @@ this contradiction of the printed real-space claim has not previously been
 published. Its complex-phase construction is already in the authors'
 Example~4.2; the distinction between trace-norm failure and Q-norm optimality
 also has earlier treatments \citep{bolotnikov2001minimal}. We give the
-counterexample, the failed comparison, and a valid Q-norm consequence below.
+counterexample, the failed comparison, and a Q-norm repair below.
 
 Write $\sym{Psource}$ and $\sym{Qtarget}$ for the orthogonal projections
 onto subspaces $\sym{Usource}$ and $\sym{Vtarget}$. For an orthogonal or
@@ -51,7 +51,7 @@ the canonical direct rotation $\like{Rrotation}{R_\theta}$ satisfies
 \end{theorem}
 
 \begin{proof}
-Put $c=\cos\sym{theta}$, $s=\sin\sym{theta}$, and let
+Put $\sym{CosAngle}=\cos\sym{theta}$, $\sym{SinAngle}=\sin\sym{theta}$, and let
 \[
  \sym{Jturn}=\begin{pmatrix}0&-1\\1&0\end{pmatrix},\quad
  \sym{Cturn}=\cos(2\sym{theta})I_2+\sin(2\sym{theta})\sym{Jturn},\quad
@@ -60,51 +60,51 @@ Put $c=\cos\sym{theta}$, $s=\sin\sym{theta}$, and let
 Define
 \begin{equation}
  \like{Wcompetitor}{W_\theta}=\sym{Hmix}\begin{pmatrix}\sym{Cturn}&0\\0&I_2\end{pmatrix}\sym{Hmix}^T
- =\begin{pmatrix}c^2I_2+sc\sym{Jturn}&-s^2I_2+sc\sym{Jturn}\\
-                  -s^2I_2+sc\sym{Jturn}&c^2I_2+sc\sym{Jturn}\end{pmatrix}.
+ =\begin{pmatrix}\like{CosAngle}{c^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}&-\like{SinAngle}{s^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\\
+                  -\like{SinAngle}{s^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}&\like{CosAngle}{c^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\end{pmatrix}.
  \label{eq:wtheta}
 \end{equation}
 Both $\sym{Hmix}$ and $\sym{Cturn}$ are orthogonal, so $\like{Wcompetitor}{W_\theta}$ is orthogonal. Let
 $\sym{Usource}=\mathbb R^2\oplus\{0\}$ and $\like{Vtarget}{V_\theta}=\like{Wcompetitor}{W_\theta} \sym{Usource}$.
 The first two columns of $\like{Wcompetitor}{W_\theta}$ factor as
 \[
- \begin{pmatrix}c^2I_2+sc\sym{Jturn}\\-s^2I_2+sc\sym{Jturn}\end{pmatrix}
- =\begin{pmatrix}cI_2\\s\sym{Jturn}\end{pmatrix}(cI_2+s\sym{Jturn}).
+ \begin{pmatrix}\like{CosAngle}{c^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\\-\like{SinAngle}{s^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\end{pmatrix}
+ =\begin{pmatrix}\sym{CosAngle}I_2\\\sym{SinAngle}\sym{Jturn}\end{pmatrix}(\sym{CosAngle}I_2+\sym{SinAngle}\sym{Jturn}).
 \]
-Since $cI_2+s\sym{Jturn}$ is orthogonal, the columns of
-$\sym{Yframe}=\binom{cI_2}{s\sym{Jturn}}$ form an orthonormal basis of $\like{Vtarget}{V_\theta}$.
-With $\sym{Xframe}=\binom{I_2}{0}$, one has $\sym{Xframe}^T\sym{Yframe}=cI_2$.
-Thus both principal cosines are $c>0$, and both principal angles are
+Since $\sym{CosAngle}I_2+\sym{SinAngle}\sym{Jturn}$ is orthogonal, the columns of
+$\sym{Yframe}=\binom{\sym{CosAngle}I_2}{\sym{SinAngle}\sym{Jturn}}$ form an orthonormal basis of $\like{Vtarget}{V_\theta}$.
+With $\sym{Xframe}=\binom{I_2}{0}$, one has $\sym{Xframe}^T\sym{Yframe}=\sym{CosAngle}I_2$.
+Thus both principal cosines are $\sym{CosAngle}>0$, and both principal angles are
 $\sym{theta}$.
 
 The corresponding projections and canonical intertwiner are
 \[
  \sym{Psource}=\begin{pmatrix}I_2&0\\0&0\end{pmatrix},\qquad
- \sym{Qtarget}=\sym{Yframe}\sym{Yframe}^T=\begin{pmatrix}c^2I_2&-sc\sym{Jturn}\\sc\sym{Jturn}&s^2I_2\end{pmatrix},
+ \sym{Qtarget}=\sym{Yframe}\sym{Yframe}^T=\begin{pmatrix}\like{CosAngle}{c^2}I_2&-\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\\\sym{SinAngle}\sym{CosAngle}\sym{Jturn}&\like{SinAngle}{s^2}I_2\end{pmatrix},
 \]
 \begin{equation}
  \sym{IntertwinerT}=\sym{Qtarget}\sym{Psource}+(I-\sym{Qtarget})(I-\sym{Psource})
-   =c\begin{pmatrix}cI_2&s\sym{Jturn}\\s\sym{Jturn}&cI_2\end{pmatrix}.
+   =\sym{CosAngle}\begin{pmatrix}\sym{CosAngle}I_2&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}I_2\end{pmatrix}.
  \label{eq:intertwiner-theta}
 \end{equation}
-The last block matrix is orthogonal and $c>0$, so $|\sym{IntertwinerT}|=cI_4$ and
+The last block matrix is orthogonal and $\sym{CosAngle}>0$, so $|\sym{IntertwinerT}|=\sym{CosAngle}I_4$ and
 its polar factor is exactly
 \[
- \like{Rrotation}{R_\theta}=\begin{pmatrix}cI_2&s\sym{Jturn}\\s\sym{Jturn}&cI_2\end{pmatrix}.
+ \like{Rrotation}{R_\theta}=\begin{pmatrix}\sym{CosAngle}I_2&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}I_2\end{pmatrix}.
 \]
 In particular, this calculation identifies the canonical direct rotation
-of the constructed pair. Since $\like{Rrotation}{R_\theta}+\like{Rrotation}{R_\theta}^T=2cI_4$,
+of the constructed pair. Since $\like{Rrotation}{R_\theta}+\like{Rrotation}{R_\theta}^T=2\sym{CosAngle}I_4$,
 \[
- (I-\like{Rrotation}{R_\theta})^T(I-\like{Rrotation}{R_\theta})=(2-2c)I_4.
+ (I-\like{Rrotation}{R_\theta})^T(I-\like{Rrotation}{R_\theta})=(2-2\sym{CosAngle})I_4.
 \]
 Consequently all four displacement singular values equal
-$\sqrt{2-2c}=2\sin(\sym{theta}/2)$.
+$\sqrt{2-2\sym{CosAngle}}=2\sin(\sym{theta}/2)$.
 
 On the other hand, \cref{eq:wtheta} shows that the singular values of
 $I-\like{Wcompetitor}{W_\theta}$ are those of $(I_2-\sym{Cturn})\oplus0_2$.
 The identity
-$(I_2-\sym{Cturn})^T(I_2-\sym{Cturn})=4s^2I_2$ gives the list
-$(2s,2s,0,0)$. The two trace formulas follow. Finally,
+$(I_2-\sym{Cturn})^T(I_2-\sym{Cturn})=4\like{SinAngle}{s^2}I_2$ gives the list
+$(2\sym{SinAngle},2\sym{SinAngle},0,0)$. The two trace formulas follow. Finally,
 \[
  4\sin\sym{theta}
  =8\sin(\sym{theta}/2)\cos(\sym{theta}/2)
@@ -132,8 +132,21 @@ with rank four for $\like{Rrotation}{R_\theta}$. The operator norm favors the ca
 rotation instead:
 $\|I-\like{Rrotation}{R_\theta}\|_{\mathrm{op}}=2\sin(\sym{theta}/2)
  <2\sin\sym{theta}=\|I-\like{Wcompetitor}{W_\theta}\|_{\mathrm{op}}$.
-Global trace-norm minimality of this competitor follows from the
-matching result described in Section~\ref{sec:example-transport}.
+The competitor attains the global trace-norm minimum $4\sin\sym{theta}$.
+Indeed, the projection difference has trace norm
+$\|\sym{Psource}-\sym{Qtarget}\|_1=4\sin\sym{theta}$, and every orthogonal
+transporter $\sym{Wcompetitor}$ satisfies
+$\|\sym{Psource}-\sym{Qtarget}\|_1\leq\|I-\sym{Wcompetitor}\|_1$.
+Equation~\eqref{eq:competitor-trace} attains this lower bound.
+% Formal proof: DavisKahan/FiniteDimensional/DirectRotation/TraceOptimality.lean,
+% SmallAngleCounterexample.traceDisplacement_lower_bound and Wequiv_traceMinimizer.
+% TODO (Lean dimension minimality): Prove that no real ambient space of
+% dimension at most three admits a trace-norm counterexample under the
+% printed acute-pair and largest-principal-angle <= pi/3 hypotheses.
+% Once that theorem compiles and its statement is matched to these hypotheses,
+% add a corollary that four is the least real ambient dimension for this
+% trace-norm failure. The current global-minimizer theorem concerns the
+% fixed four-dimensional pair, not this separate dimension claim.
 
 At $\sym{theta}=\pi/4$, \cref{fig:prop44-displacement-planes}
 shows the different displacement patterns of the canonical direct rotation
@@ -148,10 +161,10 @@ fixes half of the ambient space; the direct rotation moves both principal planes
 subspaces of $\mathbb R^4$, whose principal angles are both $45^\circ$.
 \emph{Left:} the canonical direct rotation $\like{Rrotation}{R_{\pi/4}}$
 rotates its two principal planes by opposite $45^\circ$ angles, yielding
-four equal singular values $\sqrt{2-\sqrt2}$ for $I-R$.
+four equal singular values $\sqrt{2-\sqrt2}$ for $I-\sym{Rrotation}$.
 \emph{Right:} the competitor $\like{Wcompetitor}{W_{\pi/4}}$ rotates one
 of its own invariant real planes by $90^\circ$ and fixes the other,
-yielding $(\sqrt2,\sqrt2,0,0)$ for $I-W$.
+yielding $(\sqrt2,\sqrt2,0,0)$ for $I-\sym{Wcompetitor}$.
 The respective trace norms are $4\sqrt{2-\sqrt2}>2\sqrt2$:
 concentrating displacement into two singular directions lowers its sum,
 even though the largest displacement increases.
@@ -194,7 +207,7 @@ The domain planes are orthogonal, but their images under $\sym{Kdisplacement}$ n
 the singular-value sums of these restrictions cannot be added in the
 asserted direction.
 
-\subsection{A Q-norm consequence of Proposition 4.3}
+\subsection{A Q-norm repair from Proposition 4.3}
 
 Call a unitarily invariant norm $\sym{NormN}$ a $\sym{NormQ}$-norm when there is a unitarily
 invariant norm $\sym{NormM}$ satisfying
@@ -245,7 +258,7 @@ realification. Indeed, under the identification $\mathbb C^2\simeq
 represented by $\sym{Jturn}$ from \cref{eq:wtheta}, the matrices
 \[
  \like{Rrotation}{R_\theta}^{\mathbb C}=
- \begin{pmatrix}c&is\\is&c\end{pmatrix},\qquad
+ \begin{pmatrix}\sym{CosAngle}&i\sym{SinAngle}\\i\sym{SinAngle}&\sym{CosAngle}\end{pmatrix},\qquad
  \like{Wcompetitor}{W_\theta}^{\mathbb C}=e^{i\sym{theta}}\like{Rrotation}{R_\theta}^{\mathbb C}
 \]
 become precisely $\like{Rrotation}{R_\theta}$ and $\like{Wcompetitor}{W_\theta}$ above. Realification doubles

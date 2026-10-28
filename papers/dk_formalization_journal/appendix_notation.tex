@@ -36,10 +36,12 @@ $\sym{A0}$ & Self-adjoint trial operator. A Rayleigh--Ritz choice is $\sym{A0}=\
 $\sym{F0}:\sym{Hexact}\to\sym{Eambient}$ & Isometric coordinates for the desired exact spectral subspace.\\
 $\sym{F1}:\sym{Gunwanted}\to\sym{Eambient}$ & Isometric coordinates for its orthogonal complement.\\
 $\sym{Lambda1}$ & Complementary self-adjoint block, with $\sym{Acurrent}\sym{F1}=\sym{F1}\sym{Lambda1}$ on its domain.\\
+$\sym{SpectralMeasure},\sym{SpectralSet}$ & Projection-valued measure and Borel spectral set; $\sym{SpectralMeasure}(\sym{SpectralSet})$ is the corresponding spectral projection. These symbols differ from the ambient space $\sym{Eambient}$ and complementary block $\sym{S}$.\\
 $\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ & Projection onto the desired exact subspace in the sine-theta theorem.\\
 $\sym{Theta0},\sym{sinTheta0}$ & Trial-coordinate angle operator and its positive sine, with $\sym{sinTheta0}=(I-\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2}$.\\
 $\sym{S}=(I-\sym{Pexact})\sym{E0}$ & Complementary block, with modulus $|\sym{S}|=\sym{sinTheta0}$.\\
 $\sym{X}=\like{F1}{F_1^*}\sym{E0}$ & Coordinates of the trial component in the unwanted space; $\sym{S}=\sym{F1}\sym{X}$.\\
+$\sym{SylvesterLeft},\sym{SylvesterRight},\sym{SylvesterRHS}$ & Generic left and right Sylvester coefficients and right side: $\sym{SylvesterLeft}\sym{X}-\sym{X}\sym{SylvesterRight}=\sym{SylvesterRHS}$. The historical equation writes the right coefficient as $\like{SylvesterRight}{A}$.\\
 $\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}$ & Bounded residual agreeing with this difference on $\DKDom(\sym{A0})$.\\
 $\sym{delta}>0$ & Spectral-separation parameter in the sine-theta estimate.\\
 $[\sym{betaEndpoint},\sym{alphaEndpoint}]$ & Interval in the interval/exterior gap hypothesis.\\
@@ -48,7 +50,7 @@ $\sym{Usource},\sym{Vtarget}$ & Source and target subspaces in the displacement 
 $\sym{Psource},\sym{Qtarget}$ & Orthogonal projections onto $\sym{Usource},\sym{Vtarget}$ in that problem.\\
 $\sym{Rrotation},\sym{Wcompetitor}$ & Direct rotation and an arbitrary orthogonal or unitary transporter carrying $\sym{Usource}$ onto $\sym{Vtarget}$.\\
 $\sym{IntertwinerT}$ & The intertwiner $\sym{Qtarget}\sym{Psource}+(I-\sym{Qtarget})(I-\sym{Psource})$, whose unitary polar factor is the acute direct rotation.\\
-$\sym{theta},\theta_j$ & Individual principal angles, in $[0,\pi/2]$.\\
+$\sym{theta},\like{theta}{\theta_j}$ & Individual principal angles, in $[0,\pi/2]$.\\
 $\sym{Xframe},\sym{Yframe}$ & Orthonormal coordinate matrices for the source and target in the real counterexample.\\
 $\sym{Jturn},\sym{Cturn},\sym{Hmix}$ & Planar quarter-turn, rotation through $2\sym{theta}$, and orthogonal mixing matrix used in that counterexample.\\
 $\sym{Kdisplacement}=I-\sym{Wcompetitor}$ & Full displacement operator in the failed Ky Fan comparison.\\
@@ -61,5 +63,7 @@ $\|T\|_F$ & Frobenius norm, $\bigl(\sum_j s_j(T)^2\bigr)^{1/2}$.\\
 $\|T\|_1$ & Trace norm, $\sum_j s_j(T)$.\\
 $\|T\|_{(j)}$ & Ky Fan norm, the sum of the $j$ largest singular values.\\
 $\sym{NormQ}\text{-norm}$ & A norm satisfying $\sym{NormN}(T)^2=\sym{NormM}(T^*T)$ for a unitarily invariant norm $\sym{NormM}$.\\
+$\sym{Matching},\sym{SingletonCost},\sym{PairCost}$ & Matching of positive principal-angle labels, with singleton and paired costs in \cref{eq:nuclear-matching-costs}.\\
+$\like{PowerCost}{\Phi_p},\sym{SpectralGradient},\sym{GradientLevel},\sym{SkewDirection}$ & Displacement power sum, its skew-symmetric spectral gradient, a positive gradient level, and a skew-symmetric variation direction in the matching proof.\\
 \end{longtable}
 \endgroup

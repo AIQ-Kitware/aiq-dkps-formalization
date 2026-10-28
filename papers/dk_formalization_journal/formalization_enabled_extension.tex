@@ -8,34 +8,34 @@ principal-angle geometry, real and complex operator constructions, and
 singular-value norms developed for the formalization, together with
 additional optimization arguments.
 
-Let $K,L\subseteq\mathbb R^n$ have the same dimension and let
-$\theta_1,\ldots,\theta_m\in(0,\pi/2]$ be their positive principal angles,
-counted with multiplicity.  A matching $M$ on the angle labels consists
+Let $\like{Usource}{K},\like{Vtarget}{L}\subseteq\mathbb R^n$ have the same dimension and let
+$\like{theta}{\theta_1},\ldots,\like{theta}{\theta_m}\in(0,\pi/2]$ be their positive principal angles,
+counted with multiplicity.  A matching $\sym{Matching}$ on the angle labels consists
 of disjoint unordered pairs; labels outside the pairs are unmatched.
 Define the singleton and paired costs
 \begin{equation}\label{eq:nuclear-matching-costs}
- s(\theta)=\min\{4\sin(\theta/2),2\},\qquad
- e(\theta,\psi)=4\sin((\theta+\psi)/2).
+ \sym{SingletonCost}(\sym{theta})=\min\{4\sin(\sym{theta}/2),2\},\qquad
+ \sym{PairCost}(\sym{theta},\like{theta}{\psi})=4\sin((\sym{theta}+\like{theta}{\psi})/2).
 \end{equation}
 
 A singleton represents transporting one principal plane independently.
-Rotating it through $\theta$ costs $4\sin(\theta/2)$; an orthogonal
+Rotating it through $\sym{theta}$ costs $4\sin(\sym{theta}/2)$; an orthogonal
 reflection carrying the same source line to the target costs $2$. Their
-minimum is $s(\theta)$. A matched pair allows the two principal planes to
+minimum is $\sym{SingletonCost}(\sym{theta})$. A matched pair allows the two principal planes to
 interact: an orthogonal transporter on their four-dimensional sum attains
-cost $e(\theta,\psi)$. Common zero-angle directions can remain fixed.
+cost $\sym{PairCost}(\sym{theta},\like{theta}{\psi})$. Common zero-angle directions can remain fixed.
 
 \begin{theorem}[Real trace-norm matching reduction]
 \label{thm:real-matching-example}
-For equal-dimensional real subspaces $K,L$ as above,
+For equal-dimensional real subspaces $\like{Usource}{K},\like{Vtarget}{L}$ as above,
 \begin{equation}\label{eq:real-nuclear-match}
-\min_{\substack{W\in O(n)\\W(K)=L}}\|I-W\|_1
+\min_{\substack{\sym{Wcompetitor}\in O(n)\\\sym{Wcompetitor}(\like{Usource}{K})=\like{Vtarget}{L}}}\|I-\sym{Wcompetitor}\|_1
 =
-\min_{M\text{ a matching}}
+\min_{\sym{Matching}\text{ a matching}}
 \left(
-\sum_{\{i,j\}\in M}e(\theta_i,\theta_j)
+\sum_{\{i,j\}\in \sym{Matching}}\sym{PairCost}(\like{theta}{\theta_i},\like{theta}{\theta_j})
 +
-\sum_{i\text{ unmatched}}s(\theta_i)
+\sum_{i\text{ unmatched}}\sym{SingletonCost}(\like{theta}{\theta_i})
 \right).
 \end{equation}
 Both minima are attained.  The equality includes repeated angles,
@@ -45,25 +45,25 @@ principal-plane or determinant constraint.
 
 \begin{proof}[Proof outline]
 For $1<p<2$, minimize the displacement cost
-$\Phi_p(W)=\sum_j s_j(I-W)^p$ over the orthogonal transporters. The feasible
+$\like{PowerCost}{\Phi_p}(\sym{Wcompetitor})=\sum_j s_j(I-\sym{Wcompetitor})^p$ over the orthogonal transporters. The feasible
 set is nonempty and compact, so a minimizer exists. The formal proof first
 reduces such a minimizer to common invariant blocks for the source
 projection, target projection, and transporter, of real dimension two or
 four, together with fixed common directions.
 
-The reduction uses first variations along $W\exp(tB)$. The skew-symmetric
-spectral gradient $G$ commutes with $W$ and represents this derivative by
+The reduction uses first variations along $\sym{Wcompetitor}\exp(t\sym{SkewDirection})$. The skew-symmetric
+spectral gradient $\sym{SpectralGradient}$ commutes with $\sym{Wcompetitor}$ and represents this derivative by
 \[
- \left.\frac{d}{dt}\Phi_p(W\exp(tB))\right|_{t=0}
- =-\operatorname{tr}(GB)
+ \left.\frac{d}{dt}\like{PowerCost}{\Phi_p}(\sym{Wcompetitor}\exp(t\sym{SkewDirection}))\right|_{t=0}
+ =-\operatorname{tr}(\sym{SpectralGradient}\sym{SkewDirection})
 \]
-for skew-symmetric $B$. When $B$ commutes with the source projection $P$,
+for skew-symmetric $\sym{SkewDirection}$. When $\sym{SkewDirection}$ commutes with the source projection $\sym{Psource}$,
 the curve remains feasible. Stationarity for these directions gives
-$JGJ=-G$ for $J=2P-I$. On a positive spectral level $-G^2=g^2I$,
-the operator $G/g$ squares to $-I$ and defines complex multiplication;
-$J$ acts as conjugation. On $0<t<\pi$, the scalar phase cost
+$\sym{Jreflect}\sym{SpectralGradient}\sym{Jreflect}=-\sym{SpectralGradient}$ for $\sym{Jreflect}=2\sym{Psource}-I$. On a positive spectral level $-\like{SpectralGradient}{G^2}=\like{GradientLevel}{g^2}I$,
+the operator $\sym{SpectralGradient}/\sym{GradientLevel}$ squares to $-I$ and defines complex multiplication;
+$\sym{Jreflect}$ acts as conjugation. On $0<t<\pi$, the scalar phase cost
 $(2|\sin(t/2)|)^p$ has a derivative with at most two roots at each
-positive level. Viewed in these complex coordinates, $W$ therefore has
+positive level. Viewed in these complex coordinates, $\sym{Wcompetitor}$ therefore has
 at most two phases. A real orthogonal block
 decomposition of its Hermitian spectral projection gives the claimed
 two- and four-dimensional real blocks. On the zero-gradient space, the
@@ -82,8 +82,8 @@ any matching can be realized by taking the orthogonal sum of the
 corresponding one- and two-plane transporters. This proves the matching
 minimum for $1<p<2$.
 
-Finally let $p$ decrease to $1$. In fixed finite dimension, $\Phi_p(W)$
-converges uniformly to $\|I-W\|_1$ on the compact feasible set. The scalar
+Finally let $p$ decrease to $1$. In fixed finite dimension, $\like{PowerCost}{\Phi_p}(\sym{Wcompetitor})$
+converges uniformly to $\|I-\sym{Wcompetitor}\|_1$ on the compact feasible set. The scalar
 block minima also vary continuously with $p$, and there are only finitely
 many matchings. Passing to the limit gives the displayed singleton and
 pair costs and proves \cref{eq:real-nuclear-match}. Compactness gives an
@@ -96,7 +96,7 @@ attaining transporter at the endpoint.
 % All paths are under DavisKahan/FiniteDimensional/DirectRotation/.
 % See AUTHORING_NOTES.md for the mathematical and provenance evidence.
 
-For $\theta_1=\theta_2=\pi/6$, the direct rotation costs
+For $\like{theta}{\theta_1}=\like{theta}{\theta_2}=\pi/6$, the direct rotation costs
 $8\sin(\pi/12)>2$, whereas the paired competitor costs
 $4\sin(\pi/6)=2$. The theorem includes comparison with every ambient
 orthogonal transporter, so this paired cost is globally minimal in the
