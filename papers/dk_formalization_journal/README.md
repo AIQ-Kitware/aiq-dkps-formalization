@@ -26,3 +26,47 @@ of new transport results remains a separate literature question.
 make -C papers/dk_formalization_journal paper
 ```
 
+
+## Lean artifact and reproduction
+
+The root `lean-toolchain` and `lake-manifest.json` pin the Lean compiler and
+library dependencies. From the repository root, run:
+
+```bash
+lake exe cache get
+lake build
+```
+
+A focused check of the direct-rotation aggregate and the source-facing
+Proposition 4.4 counterexample is:
+
+```bash
+lake exe cache get
+lake build \
+  DavisKahan.FiniteDimensional.DirectRotation.All \
+  DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
+```
+
+The paper PDF is generated with:
+
+```bash
+make -C papers/dk_formalization_journal paper
+```
+
+The paper-facing source wrappers reside in
+`DavisKahan/Sources/DavisKahan1970`; local reusable foundations are in
+`ForTauCeti`, with some modules replaced by accepted upstream `TauCeti`
+implementations. The source inventory is
+`dev/davis-kahan-1970-formalization-result-inventory.json`.
+
+The explicit trace-norm counterexample is in
+`DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean`,
+with the arbitrary-angle family in
+`DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean`
+and its source wrapper in
+`DavisKahan/Sources/DavisKahan1970/Section4SmallAngle.lean`.
+
+The nuclear matching reduction is in
+`DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean`.
+The full transport optimization manuscript is maintained separately in
+`papers/optimal_spectral_transport`.

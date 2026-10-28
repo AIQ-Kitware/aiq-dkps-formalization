@@ -121,34 +121,37 @@
   \texttt{cep@jhu.edu}
 }
 
-\date{27 October 2026}
+\date{28 October 2026}
 
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We formalize the Davis--Kahan spectral-subspace perturbation theory from
-its 1970 primary source in Lean~4.  Among 29 reviewed result-level statements,
-28 have verified counterparts under their reviewed source hypotheses; the
-remaining assertion, the printed Proposition~4.4, is false.  The formalization
-covers direct rotations, principal-angle operators, Sylvester separation,
-sine and tangent estimates, and their operator-ideal and unbounded
-self-adjoint settings.  We describe the proof infrastructure required to
-retain these hypotheses, distinguish kernel verification from the comparison
-of Lean statements with the historical source, and document reusable results
-adapted into Tau Ceti, while crediting earlier Mathlib and Spectra work.
+We formalize the Davis--Kahan theory of spectral-subspace perturbations
+from its 1970 primary source in Lean~4.  Of 29 reviewed result-level
+statements, 28 are proved under their source hypotheses; the remaining
+statement, Proposition~4.4, is refuted.  The development includes the
+sine and tangent theorems, direct rotations, principal-angle operators,
+Sylvester separation, unitarily invariant operator-ideal norms, and
+unbounded self-adjoint operators.  We place these constructions in their
+mathematical lineage, from the geometry of principal angles through
+the theory of projections and the spectral methods underlying Davis
+and Kahan's estimates.
 
-A four-dimensional real counterexample refutes Proposition~4.4 even when
-both principal angles are arbitrarily small.  Its construction realifies a
-complex phase mechanism already present in Davis and Kahan; the formal audit
-also identifies the invalid singular-value inequality in the printed proof.
-As a concrete follow-on enabled by the developed infrastructure, we report a
-separately verified reduction of finite-dimensional real nuclear-optimal
-subspace transport to a matching problem on principal angles.  Its historical
-priority remains under study.  The paper concentrates on what the classical
-formalization establishes, what its audit detects, and how the resulting
-foundations support further formal mathematics.
+The formalization required reusable operator theory, portions of which
+were subsequently adapted into Tau Ceti, with additional foundations
+adapted from Mathlib and the Spectra project.  Examining the full
+displacement assertion in Proposition~4.4 produced a real
+four-dimensional counterexample with arbitrarily small positive principal
+angles.  We locate the failed singular-value comparison and prove a
+corrected optimality statement for Q-norms.  The resulting infrastructure
+also supports a later, separately proved theorem reducing nuclear-norm
+optimal real subspace transport to weighted matching on principal
+angles.  These outcomes show how developing the foundations of a
+classical mathematical theory can support both a source correction and
+new formal research.
+
 \end{abstract}
 
 \noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
@@ -165,147 +168,291 @@ formal verification; Lean 4; operator theory; direct rotation; principal angles.
 \section{Introduction}
 \label{sec:introduction}
 
-Davis and Kahan's perturbation theory bounds the change of invariant
-subspaces under perturbations of self-adjoint operators
-\citep{davis1970rotation}.  The sine-theta estimates compare a trial
-subspace with an exact spectral subspace through a residual and a spectral
-separation parameter.  They allow the subspace to remain stable when
-individual eigenvectors are not uniquely determined, and are used in
-numerical linear algebra, spectral estimation, and related analysis
-\citep{stewart1990matrix,wedin1972perturbation}.
+When a self-adjoint operator is perturbed, an individual eigenvector may
+be unstable even when the invariant subspace to which it belongs remains
+well determined.  For instance, a multiple eigenvalue admits many
+orthonormal eigenbases, while the span of the corresponding eigenvectors
+is independent of that choice.  The Davis--Kahan theory quantifies the
+stability of such subspaces through their principal angles, the
+separation of relevant parts of the spectrum, and a perturbation or
+computable residual \citep{davis1970rotation}.  This point of view
+connects infinite-dimensional operator theory with the numerical
+analysis of approximate eigenvectors.
 
-In Lean~4, a mathematical assertion must be expressed with its precise
-hypotheses and then proved using definitions and previously verified results.
-Mathlib provides general Hilbert-space and continuous-functional-calculus
-foundations \citep{demoura2021lean4,mathlib2020,dedecker2025cfc}.  The
-Davis--Kahan source also uses unbounded self-adjoint operators, spectral
-projections, direct rotations, domain-sensitive Sylvester equations, and
-unitarily invariant norms on operator ideals.  Establishing the 1970
-statements with these hypotheses therefore required additional reusable
-operator theory, including contributions that were later adapted into Tau
-Ceti \citep{tauceti2026}.
+The 1970 Davis--Kahan paper is an unusually rich formalization target.
+It unifies the geometry of two closed subspaces with spectral
+perturbation estimates, and frequently states conclusions for real and
+complex Hilbert spaces, possibly unbounded self-adjoint operators, and
+unitarily invariant norms on operator ideals.  A finite-matrix
+specialization captures familiar sine-theta inequalities but omits
+substantial parts of the source: domain conditions, half-infinite
+spectral-gap configurations, and the behavior of operator ideals in
+infinite dimensions.  The historical development of these mathematical
+tools is traced in \cref{sec:related}.
 
-We evaluated the formalization against the statements as printed in the
-1970 paper, not only against familiar modern finite-dimensional
-specializations.  This distinction affects the ordered half-infinite
-spectral-gap cases, both real and complex scalar fields, the domains of
-unbounded operators, and the source's ``where-defined'' norm convention.
-The resulting 29-item review consists of 28 verified source statements
-and a verified refutation of Proposition~4.4.  The source inventory and
-comparison criteria are given in Appendices~\ref{app:dk-inventory} and
-\ref{app:source-review}.
+Our Lean~4 formalization covers a reviewed set of 29 result-level
+statements from the 1970 paper.  We prove 28 at their reviewed source
+scope, including a sine-theta estimate for unbounded self-adjoint
+operators and supported symmetric operator-ideal norms.  The remaining
+statement, Proposition~4.4, asserts a false full-displacement
+optimality property for direct rotation; a parameterized real
+four-dimensional counterexample refutes it.  The complete source
+inventory appears in Appendix~\ref{app:dk-inventory}.
 
-The false proposition concerns the direct rotation between two real
-subspaces.  It asserts minimum displacement under every unitarily
-invariant norm when the largest principal angle is at most $\pi/3$.
-Davis and Kahan already provided a complex phase-based example showing
-that direct rotation need not minimize trace displacement in general.
-We give a real four-dimensional realization of that mechanism, valid
-at every positive acute angle, and verify its matrix identities and the
-failure of the proof's Ky Fan comparison.  This correction leaves the
-sine-theta perturbation bounds intact.
-
-The same foundation subsequently supported a broader analysis of
-subspace transport.  To show a concrete research use of the formal
-development, we present one downstream theorem: nuclear-norm-optimal
-orthogonal transport in finite dimensions reduces to weighted matching
-of principal angles.  This theorem solves a different optimization
-question from the sine-theta bound; it was developed in the course of
-this formalization project and uses its principal-angle and norm
-infrastructure.  We do not claim that it follows from a Davis--Kahan
-perturbation inequality.  A separate working manuscript retains the
-larger transport theory.
+To establish these statements, we developed and reused mathematical
+interfaces for principal-angle operators, direct rotation, approximation
+numbers, symmetric ideals, Borel spectral calculus, and domain-aware
+Sylvester estimates.  Some foundations developed here were later
+adapted into \href{https://github.com/TauCetiProject/TauCeti}{Tau Ceti};
+other parts were adapted from existing Mathlib and Spectra developments.
+The formalization and its upstream contributions constitute a reusable
+base for subsequent theorems.  In \cref{sec:example-transport} we give
+one concrete example: the exact global minimum of nuclear displacement
+under real orthogonal subspace transport is characterized by weighted
+matching of principal angles.  This follow-on question arose from the
+Proposition~4.4 investigation and uses the foundations developed during
+the formalization effort.
 
 \paragraph{Contributions.}
 \begin{enumerate}
-\item \textbf{Formalization of a primary mathematical source.}
-We give source-reviewed Lean statements for the full 29-result target
-set of Davis--Kahan (1970), with proofs of 28 and a checked counterexample
-to the remaining proposition.  The verified sine-theta theorem retains
-unbounded self-adjoint operators, real or complex Hilbert spaces, the
-source's spectral-gap alternatives, and where-defined symmetric
-operator-ideal norms (\cref{sec:coverage,sec:sine-theta}).
-\item \textbf{Reusable formal foundations.}
-We develop domain-aware operator and spectral infrastructure needed by
-these results and document its relation to Mathlib, Spectra, and
-accepted or independently re-proved Tau Ceti contributions
-(\cref{sec:foundations,sec:related}).
-\item \textbf{A mathematical source correction.}
-We formalize a real four-dimensional counterexample to Proposition~4.4,
-locate the invalid singular-value comparison in its proof, and establish
-a valid Q-norm consequence of Proposition~4.3
-(\cref{sec:prop44}).
-\item \textbf{A verified follow-on example.}
-We state the independently proved real nuclear matching reduction to
-illustrate one new question tractable with the foundational development,
-while distinguishing its conjectured historical novelty from the
-classical phase mechanism (\cref{sec:example-transport}).
+\item \textbf{A source-level formalization.} The 29-result review of
+Davis--Kahan (1970) comprises 28 proved results and a formally refuted
+Proposition~4.4.  The sine-theta theorem retains the real/complex
+setting, unbounded self-adjoint domains, ordered as well as
+interval/exterior gaps, and where-defined operator-ideal norms
+(\cref{sec:coverage,sec:sine-theta}).
+\item \textbf{An operator-theoretic library.} The proof develops
+mathematical interfaces spanning the historical foundations of the
+paper.  Parts of these interfaces were subsequently adapted into Tau
+Ceti, with documented distinctions between adapted and independently
+developed upstream implementations (\cref{sec:related,sec:foundations}).
+\item \textbf{A correction to the 1970 source.} We give a real
+four-dimensional counterexample at arbitrarily small positive angles,
+identify the invalid Ky Fan comparison in Proposition~4.4, and prove a
+valid Q-norm consequence of Proposition~4.3 (\cref{sec:prop44}).
+\item \textbf{A formalization-enabled extension.} We exhibit a proved
+reduction from unrestricted nuclear-optimal real transport to weighted
+principal-plane matching (\cref{sec:example-transport}).
 \end{enumerate}
 
-\section{Mathematical and formalization background}
+\section{Historical setting and mathematical foundations}
 \label{sec:related}
 
-\subsection{Classical perturbation and direct rotation}
+The main components of Davis--Kahan theory originated in several
+mathematical traditions.  Principal angles describe how subspaces meet;
+orthogonal projections and spectral measures make the geometry
+available in Hilbert space; Sylvester estimates turn spectral separation
+into a bound; and symmetric operator norms determine which displacement
+measure is controlled.  Their combination in the 1970 paper explains
+both the scope of our formalization and the source error found in its
+direct-rotation section.
+
+\subsection{From Jordan's principal angles to pairs of projections}
 \label{sec:related-classical}
 
-The principal-angle and two-subspace geometry underlying direct rotation
-has a longer history than the Davis--Kahan perturbation inequalities.
-Dixmier analyzed the relative position of closed subspaces
-\citep{dixmier1948position}, Davis developed the separation and angle
-operators \citep{davis1958separation}, and Halmos described the general
-geometry of pairs of subspaces \citep{halmos1969two}.  Kato's treatment
-provides standard constructions relating nearby projections
-\citep{kato1966perturbation,kato1976perturbation}.  In particular,
-Davis (1958) already established the Hilbert--Schmidt and finite
-Schatten-$p$, $p\ge2$, optimality results for canonical rotations
-\citep[Theorems~7.3--7.4]{davis1958separation}.
+Camille Jordan's 1875 study of higher-dimensional geometry contains the
+early theory of principal angles between linear subspaces
+\citep{jordan1875essai}.  In finite dimensions, let $E,F$ be subspaces
+with orthonormal coordinate matrices $X,Y$.  The singular values of
+$X^*Y$ are the cosines of their principal angles:
+\[
+  \sigma_j(X^*Y)=\cos\theta_j,\qquad 0\leq\theta_j\leq\frac{\pi}{2}.
+\]
+Equivalently, if $P$ and $Q$ project orthogonally onto $E$ and $F$,
+then the compression $PQP$ on $E$ has eigenvalues
+$\cos^2\theta_j$.  These formulations express the relative position of
+the subspaces without privileging a particular choice of basis.  The
+principal-angle viewpoint was later developed into numerical procedures
+for computing the angles and their associated vectors by Bj\"orck and
+Golub \citep{bjorck1973numerical}.
 
-Davis and Kahan's 1970 paper gave the perturbation estimates that are the
-subject of our formalization, together with geometric direct-rotation
-results and extremality claims \citep{davis1970rotation}.  Their complex
-phase counterexample in Example~4.2 is a predecessor of our real
-counterexample, and their valid squared-displacement extremality in
-Proposition~4.3 implies Q-norm optimality.  Bolotnikov, Li, and Rodman
-later studied the general problem of minimizing ambient unitary
-displacement under subspace constraints, proving Frobenius and Q-norm
-results and demonstrating failures for smaller Schatten exponents
-\citep{bolotnikov2001minimal}.  Qiu, Zhang, and Li discussed
-Grassmannian metrics and repeated the small-angle full-norm assertion
-\citep{qiu2006grassmann}; Zhang and Qiu also discussed trace-norm
-nonminimality \citep{zhang2010canonicalangles}.  This prior work rules
-out crediting the original complex mechanism or general trace-norm
-nonminimality to the present project.
+The passage to infinite-dimensional Hilbert space changes the
+representation: orthogonal projections remain bounded, but an angle
+operator may have continuous spectrum.  Jacques Dixmier studied the
+relative positions of closed subspaces in 1948
+\citep{dixmier1948position}.  Chandler Davis's 1958 \emph{Separation
+of Two Linear Subspaces} introduced closeness and separation operators
+that extend the cosine/sine viewpoint to Hilbert space and organized
+extremal questions around them \citep{davis1958separation}.  Paul
+Halmos's 1969 \emph{Two Subspaces} described a general pair by its
+intersection and orthogonality components together with a generic
+part modeled by an operator graph \citep{halmos1969two}.  These
+constructions give a common language for both the finite principal
+planes of the counterexample and the operator-valued angles needed for
+the full perturbation theory.
 
-Modern numerical matrix perturbation theory also includes Wedin's
-singular-subspace results and Stewart's matrix perturbation treatments
-\citep{wedin1972perturbation,stewart1990matrix}.  The source-side
-Davis--Kahan claims proved here retain the spectral-gap hypotheses and
-operator domains that may be suppressed in applications using finite
-matrices.
+\subsection{Nearby projections and the canonical rotation}
+\label{sec:related-projections}
 
-\subsection{Formal libraries and reuse}
+A different question asks for an ambient unitary that actually carries
+one closed subspace to another.  B\'ela Sz.-Nagy proved in the 1940s
+that orthogonal projections $P,Q$ satisfying $\|P-Q\|<1$ are related by
+a unitary conjugation, in work motivated by the perturbation of
+self-adjoint operators \citep{sznagy1947perturbations,simon2018kato}.
+Tosio Kato developed an explicit algebraic construction and used it in
+his perturbation theory \citep{kato1966perturbation,simon2018kato}.
+The familiar intertwiner
+\[
+  T=QP+(I-Q)(I-P),\qquad TP=QT,
+\]
+becomes invertible under the small-gap condition.  Its unitary polar
+factor transports the projections:
+\[
+  U=T(T^*T)^{-1/2},\qquad UPU^*=Q.
+\]
+For nearby orthogonal projections this is the canonical direct
+rotation.  The formula also exhibits why the geometry calls for polar
+decomposition and functional calculus, rather than just a choice of
+orthonormal bases.  The finite principal-plane rotations and the
+operator construction describe the same transformation from different
+points of view.
+
+Davis and Kahan's direct rotation refines this transport question with
+symmetries, commutation properties, and extremal displacement results
+\citep{davis1970rotation}.  The acute condition determines a canonical
+branch.  Outside that regime, subspaces can contain orthogonal defect
+directions and transport requires additional compatibility conditions.
+Those cases are represented explicitly in the source formalization,
+including when finite-dimensional principal-angle lists are no longer
+available.
+
+\subsection{Spectral projections, unbounded operators, and the residual}
+\label{sec:related-spectral}
+
+The spectral theorem for self-adjoint operators provides the analytic
+counterpart to the geometry.  A self-adjoint operator determines
+spectral projections and a functional calculus; for an unbounded
+operator, its domain is part of the mathematical object.  Classical
+perturbation theory developed these tools to follow spectral clusters
+as an operator varies, and Kato's 1966 monograph provides a systematic
+account \citep{kato1966perturbation,simon2018kato}.  This distinction
+matters when an eigenvalue cluster is separated from an unbounded
+portion of the spectrum: the associated spectral projection is bounded
+even though the underlying self-adjoint operator need not be.
+
+Davis investigated the rotation of eigenspaces under perturbation in
+his 1963 and 1965 papers \citep{davis1963rotation,davis1965rotation}.
+The 1970 collaboration with William Kahan brought that development
+together with computable error bounds for approximate invariant
+subspaces \citep{davis1970rotation}.  One may know a trial-coordinate
+operator $A_0$ and an isometry $E_0$ into the ambient space without
+knowing an exact eigenbasis.  The residual
+\[
+  R=AE_0-E_0A_0
+\]
+measures the failure of the trial space to be invariant under the
+ambient operator.  A spectral gap $\delta$ separating the target block
+from its complement turns this algebraic defect into a geometric
+bound, schematically
+\[
+  \delta\,\|\sin\Theta\|\leq\|R\|.
+\]
+The sine operator describes the component of the trial subspace
+orthogonal to the desired exact spectral subspace.  The resulting
+statement is basis-independent: it bounds subspace movement rather
+than the arbitrary rotation of eigenvectors within a degenerate
+spectral cluster.
+
+\subsection{Sylvester separation as the analytic bridge}
+\label{sec:related-sylvester}
+
+The operator equation $BX-XA=Y$ belongs to a line of research beginning
+with Sylvester's matrix equations in 1884
+\citep{sylvester1884equation}.  Rosenblum studied spectral separation
+for operator equations in 1956 and later addressed possibly unbounded
+self-adjoint coefficients \citep{rosenblum1956equation,rosenblum1969selfadjoint}.
+Davis and Kahan use the Sylvester map to connect the residual to the
+angle operator.  If $F_1$ is an isometric coordinate map for the
+complementary spectral subspace, then $X=F_1^*E_0$ satisfies, with the
+appropriate domains,
+\[
+  \Lambda_1 X-XA_0=F_1^*R.
+\]
+An interval/exterior or ordered spectral separation then yields the
+factor $\delta$ in the sine estimate.  This is why the formalization
+must represent operator domains and not merely an everywhere-defined
+matrix product.  The domain-aware Sylvester interface in
+\cref{sec:foundations} is a direct implementation of this link between
+the classical operator equation and the perturbation theorem.
+
+\subsection{Singular values, symmetric norms, and the displacement problem}
+\label{sec:related-norms}
+
+The norm used to measure rotation is itself a separate mathematical
+choice.  John von Neumann characterized unitarily invariant matrix
+norms using symmetric gauge functions of singular values in 1937
+\citep{vonneumann1937matrix}.  Robert Schatten developed the
+corresponding operator-ideal perspective
+\citep{schatten1950crossspaces}; Ky Fan's inequalities provide the
+partial-sum comparisons that control entire classes of such norms
+\citep{fan1951maximum,bhatia1997matrix}.  For example, the nuclear
+norm sums singular values, whereas the Frobenius norm takes the
+Euclidean norm of their vector.  They can therefore order two
+transporter displacements differently.
+
+Davis had already proved Hilbert--Schmidt and finite-dimensional
+Schatten-$p$ extremal properties for $p\geq2$ in 1958
+\citep[Theorems~7.3--7.4]{davis1958separation}.  Davis and Kahan later
+showed that direct rotation minimizes certain restricted and squared
+displacement costs, but also exhibited a complex-phase example in
+which full nuclear displacement is smaller for another transporter
+\citep[Example~4.2 and Proposition~4.3]{davis1970rotation}.  Their
+Proposition~4.4 asserts full-displacement optimality in the real case
+when all principal angles are at most $\pi/3$.  The real
+four-dimensional family in \cref{sec:prop44} violates that conclusion:
+its competing transporter concentrates displacement into fewer
+singular directions, lowering their sum.
+
+Bolotnikov, Li, and Rodman later studied the general minimum-distortion
+problem for unitary maps constrained to transport subspaces, including
+complete Frobenius results and a counterexample for Schatten exponents
+below two \citep{bolotnikov2001minimal}.  Qiu, Zhang, and Li examined
+unitarily invariant Grassmann-space metrics
+\citep{qiu2006grassmann}; Zhang and Qiu investigated canonical-angle
+inequalities and trace-norm nonminimality
+\citep{zhang2010canonicalangles}.  This sequence situates the
+Proposition~4.4 correction in a continuing study of how a
+subspace-invariant geometry interacts with different spectral costs.
+
+\subsection{Formal libraries and the ancestry of the development}
 \label{sec:related-formal}
 
-The development uses Lean~4 and Mathlib
+The formalization is built on Lean~4 and Mathlib
 \citep{demoura2021lean4,mathlib2020,dedecker2025cfc}.
-Parts of its projection-valued-measure, Borel spectral calculus, and
-self-adjoint infrastructure were ported or adapted from Adam
-Bornemann's Spectra development \citep{bornemann2026spectra}.
-The Tau Ceti operator-theory roadmap includes results originally
-formalized in this project and then upstreamed, as well as results
-proved independently by other contributors \citep{tauceti2026}.
-For example, donor adaptations include Courant--Fischer and Weyl
-prerequisites, rectangular unitarily invariant seminorms, and
-projection-valued measures; canonical polar decomposition received an
-independent upstream implementation.  We distinguish mathematical
-prior art from the ancestry of Lean implementations and record the
-corresponding contribution evidence in the repository.
+Adam Bornemann's \emph{Spectra} project supplies earlier formal
+foundations for projection-valued measures and Borel spectral calculus,
+parts of which were adapted and generalized in this project
+\citep{bornemann2026spectra}.  The additional formal mathematics
+includes partial-map representations for unbounded operators, spectral
+cutoffs and approximations, principal-angle and direct-rotation
+interfaces, and symmetric operator ideals.
 
-The formalized classical theorems and our later transport results are
-distinct contributions.  A formal proof of a newly formulated
-proposition establishes that proposition in Lean; checking its
-mathematical correspondence to an earlier publication or its historical
-priority requires separate review.
+Several results developed while formalizing Davis--Kahan were later
+adapted into the \href{https://github.com/TauCetiProject/TauCeti}{Tau
+Ceti Lean library} as part of its operator-theory roadmap.  For
+example, the upstream
+\href{https://github.com/TauCetiProject/TauCeti/pull/13599}{Courant--Fischer
+and Weyl contribution} and
+\href{https://github.com/TauCetiProject/TauCeti/pull/14241}{rectangular
+unitarily invariant seminorm contribution} document DKPS donor
+adaptations.  The
+\href{https://github.com/TauCetiProject/TauCeti/pull/17527}{projection-valued
+measure contribution} incorporates work with Spectra ancestry.  Other
+roadmap items, including canonical polar decomposition, were
+implemented independently by upstream contributors.  The repository's
+contribution census preserves these distinctions between a classical
+mathematical source, a formalization donor, and an independently
+implemented upstream theorem.
+
+\paragraph{How the historical ingredients enter the formal proof.}
+The principal-angle and projection literature supplies the geometric
+operators; the Sz.-Nagy--Kato transport construction supplies the
+canonical unitary; spectral calculus supplies the exact spectral
+subspaces; the Sylvester equation connects them to a residual; and
+symmetric ideals measure the resulting angle and perturbation
+operators.  \Cref{sec:coverage,sec:foundations} follows this dependency
+chain through the formal development, while \cref{sec:prop44} shows how
+its norm-comparison layer exposed a false step in the original paper.
 
 \section{Source coverage and the sine-theta theorem}
 \label{sec:coverage}
@@ -637,99 +784,100 @@ square-norm estimate at the scope stated in the source.
 
 \subsection{Formal foundations and ancestry}
 
-Several of the preceding objects had no sufficiently general interface in the
-available Lean libraries when this work began.  The development therefore adds
-a focused theory of principal angles and projections, approximation numbers and
-symmetric operator ideals, polar decomposition and direct rotations, Borel
+The analytic and geometric ingredients above required interfaces not
+previously available in sufficient generality in the project's pinned
+Lean dependencies.  The development adds the principal-angle and
+projection constructions, approximation numbers and symmetric
+operator ideals, polar decomposition and direct rotations, Borel
 spectral calculus, unbounded self-adjoint partial maps, and real/complex
-transfer.  Complexification is used to prove analytic results once when the
-complex spectral theorem is the natural tool and then descend the conclusions
-to real Hilbert spaces where Davis and Kahan state them as well.
+transfer.  Complexification allows spectral arguments to be developed
+using complex functional calculus and then specialized to real Hilbert
+spaces when the historical statement covers both fields.
 
-Mathlib supplies the general algebraic, topological, Hilbert-space, and
-continuous-functional-calculus foundation \citep{mathlib2020,dedecker2025cfc}.
-Parts of the projection-valued-measure, Borel-calculus, and self-adjoint
-infrastructure were copied, adapted, or generalized from Spectra
-\citep{bornemann2026spectra}.  Parts of this development were adapted into Tau Ceti
-\citep{tauceti2026}; other overlapping results were independently developed
-upstream.  The recorded donor and accepted-implementation ancestry is
-distinguished in Appendix~\ref{app:formalization-process}.  The paper-specific
-Davis--Kahan package contains the source statements, examples, and the
-Proposition~4.4 counterexample; Appendix~\ref{app:source-review} records the
-statement-level review procedure.
+Mathlib provides the basic algebraic, topological, Hilbert-space, and
+continuous-functional-calculus framework
+\citep{mathlib2020,dedecker2025cfc}.  Projection-valued-measure and
+Borel-calculus constructions also use ideas adapted from Bornemann's
+Spectra development \citep{bornemann2026spectra}.  Several DKPS donor
+results were subsequently integrated into the
+\href{https://github.com/TauCetiProject/TauCeti}{Tau Ceti source
+library}; other operator-theory roadmap results were proved
+independently upstream.  The source-level statements and the
+Proposition~4.4 counterexample remain in the Davis--Kahan package.
+The mathematical ancestry of these interfaces is described in
+\cref{sec:related-formal}.
+
 
 
 \input{counterexample.tex}
 
 \input{formalization_enabled_extension.tex}
 
-\section{Discussion and limits}
+\section{Discussion: what the formalization made accessible}
 \label{sec:discussion}
 
-The 29-result target set measures source-level coverage of one
-historical paper.  It does not measure the number of supporting Lean
-lemmas, the number of accepted Tau Ceti contributions, or the number of
-new subspace-transport results.  The source comparison has a different
-purpose from kernel checking: Lean proves the encoded statements;
-comparison with the printed source tests whether the encoded objects,
-domains, norm conventions, and gap conditions express the intended
-claim.  Proposition~4.4 required a counterexample instead of a proof.
+The formalization brings together the geometric, spectral, and
+norm-theoretic components of the 1970 paper in one reusable setting.
+Its sine-theta statement includes ordered half-infinite gap cases and
+unbounded self-adjoint domains; its direct-rotation results treat the
+operator geometry of closed Hilbert subspaces; and its operator-ideal
+layer supports norm comparisons beyond a single finite-dimensional
+matrix norm.  These choices matter mathematically because changing
+the scalar field, restricting to finite matrices, or suppressing the
+domain of an unbounded operator changes which theorem has been proved.
 
-A formalization effort can enable subsequent theorem development
-without making the original theorems logical prerequisites of the
-subsequent statements.  Here the direct-rotation, principal-angle,
-polar-decomposition, and ideal-norm interfaces developed for the
-source formalization support later optimization questions.  Some
-interfaces have been adapted to Tau Ceti, so their current import
-paths do not by themselves identify where their formalization began.
-The relationship is documented through donor modules and accepted
-upstream implementations rather than inferred from module names.
+Proposition~4.4 illustrates a different benefit of source-level
+formalization.  Proposition~4.3 controls a squared-displacement
+quantity, but a sum-of-singular-values inequality for the unsquared
+displacement requires an additional argument.  The explicit
+counterexample demonstrates that this further implication fails.  In
+the positive direction, the Q-norm result identifies a class of costs
+for which the squared-displacement theorem does establish direct-
+rotation optimality.  The distinction is visible in the singular
+values of the real four-dimensional example, rather than only in the
+outcome of a proof search.
 
-The broader smoothed-Schatten transport theory, real matching
-classifications, and infinite-dimensional optimizer results have a
-separate mathematical draft.  Further questions include whether the
-verified matching characterization admits a verified sorting-based
-algorithm, whether equivalent matching theorems occur in earlier
-literature, and how the transport costs relate to downstream spectral
-embedding errors.  We make no assertion of improved Davis--Kahan
-perturbation constants or algorithmic rates from these transport
-results.
+The new real nuclear matching theorem in \cref{sec:example-transport}
+uses the same principal-angle, real/complex, and operator-norm
+infrastructure.  It is a further result of the formalization research
+program: the original source audit made the transport question
+concrete, and the resulting library supported its formal investigation.
+The separate spectral-transport manuscript develops the stronger
+classification and infinite-dimensional results.  For the
+formalization paper, the matching theorem supplies a specific example
+of subsequent mathematical work enabled by reusable foundations.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-We formalized the Davis--Kahan perturbation theory against its 1970
-primary source and completed the review of 29 result-level statements.
-Lean proofs establish 28 under the reviewed hypotheses, including the
-unbounded self-adjoint sine-theta theorem and supported unitarily
-invariant operator-ideal norms.  The remaining printed proposition has
-a formal counterexample in four real dimensions.  Its failure concerns
-full displacement minimization and leaves the classical perturbation
-estimates unaffected.
+We have formalized 28 of the 29 reviewed Davis--Kahan source results,
+including the sine-theta theorem for unbounded self-adjoint operators
+and supported symmetric operator-ideal norms, and have refuted the
+remaining printed assertion, Proposition~4.4.  The explicit
+four-dimensional counterexample identifies the failure of a proposed
+singular-value comparison in the direct-rotation argument and leads
+to a corrected Q-norm conclusion.
 
-This work required reusable operator theory, including machinery
-subsequently adapted into Tau Ceti and foundations adapted from earlier
-formal projects.  The resulting library also supports formally checked
-transport optimization results beyond the source theorems.  We give the
-real nuclear principal-plane matching reduction as one example of that
-further development.  The connection between formalization,
-mathematical source audit, and subsequent research is documented while
-keeping separate the questions of kernel correctness, source
-correspondence, and historical originality.
+The formalization also establishes a connected body of reusable
+operator theory: principal angles and direct rotation, Borel spectral
+calculus, approximation-number ideals, and domain-aware Sylvester
+separation.  Portions were subsequently adapted into Tau Ceti.  The
+real nuclear principal-plane matching theorem shows one further
+mathematical direction developed using these foundations.  Together,
+the source formalization, correction, and later theorem illustrate how
+the formal development of classical mathematics can support further
+research on the same objects.
 
 \section*{AI assistance disclosure}
-ChatGPT, Claude Code, and Codex were used for mathematical and library search,
-Lean proof development, debugging, and manuscript drafting. Lean checked the encoded propositions.  Source correspondence and
-interpretation require independent mathematical review, for which the
-authors retain responsibility.
-Appendix~\ref{app:formalization-process} describes the verification method.
+ChatGPT, Claude Code, and Codex assisted with library and literature
+search, Lean proof development, debugging, and manuscript preparation.
+The project used iterative agent-assisted development with the Lean
+formalization as its mathematical artifact.
 
 \section*{Code and data availability}
-The Lean sources, dependency pins, source-correspondence records, and manuscript
-sources are openly available at
+The formalization, source-result inventory, mathematical provenance
+records, and manuscript sources are available at
 \url{https://github.com/AIQ-Kitware/aiq-dkps-formalization}.
-Appendix~\ref{app:artifact} identifies the mathematical modules and reproduction
-commands.
 
 \section*{Acknowledgments}
 
@@ -760,8 +908,7 @@ such as \texttt{(hA : IsSelfAdjoint A)} supplies the corresponding fact;
 bundled predicates such as \texttt{IsTrialResidual} and
 \texttt{IsExactSpectralDecomposition} collect related assumptions.  Braces mark
 arguments normally inferred by Lean, while square brackets request typeclass
-instances supplying ambient algebraic, analytic, or topological structure.  The
-proposition after the final colon is checked by Lean's kernel
+instances supplying ambient algebraic, analytic, or topological structure.  The proposition after the final colon is the theorem's conclusion
 \citep{demoura2021lean4}.
 
 In \Cref{lst:dk-sintheta-headline}, \texttt{RCLike} is the Mathlib abstraction
