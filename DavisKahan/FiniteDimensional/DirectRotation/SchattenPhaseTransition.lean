@@ -9,6 +9,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section4Examples
 public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 public import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 public import Mathlib.Analysis.Calculus.DerivativeTest
+public import ForTauCeti.Analysis.Calculus.SingleCrossingMinimum
 public import Mathlib.Topology.Order.Compact
 
 /-!
@@ -578,49 +579,6 @@ theorem canonical_phase_unique_min_of_subcritical
   exact ⟨hmono.monotoneOn hzero hδ hδ.1,
     ⟨fun h => hmono.injOn hδ hzero h, fun h => by rw [h]⟩⟩
 
-private theorem phaseLogRatio_continuousOn_Icc (p theta a b : ℝ)
-    (hθ : 0 < theta) (hπ : theta < Real.pi / 2)
-    (ha : 0 ≤ a) (hb : b < theta) :
-    ContinuousOn (phaseLogRatio p theta) (Set.Icc a b) := by
-  intro delta hdelta
-  obtain ⟨hp0, hpπ, hm0, hmπ⟩ :=
-    phase_region hθ hπ.le (ha.trans hdelta.1) (lt_of_le_of_lt hdelta.2 hb)
-  exact (phaseLogRatio_hasDerivAt p theta delta hp0 hpπ hm0 hmπ).continuousAt
-    |>.continuousWithinAt
-
-private theorem phaseLogRatio_deriv_eq_zero_iff (p theta delta : ℝ)
-    (hθ : 0 < theta) (hπ : theta < Real.pi / 2)
-    (hδ : 0 ≤ delta) (hδθ : delta < theta) :
-    deriv (phaseLogRatio p theta) delta = 0 ↔
-      p * Real.cos theta = (2 - p) * Real.cos delta := by
-  obtain ⟨hp0, hpπ, hm0, hmπ⟩ := phase_region hθ hπ.le hδ hδθ
-  rw [(phaseLogRatio_hasDerivAt p theta delta hp0 hpπ hm0 hmπ).deriv]
-  have hs : Real.sin theta ≠ 0 :=
-    (Real.sin_pos_of_pos_of_lt_pi hθ (by linarith [Real.pi_pos])).ne'
-  have hd := (phase_log_denom_pos hθ hπ hδ hδθ).ne'
-  simp [div_eq_zero_iff, hs, hd, sub_eq_zero]
-
-private theorem phaseLogRatio_not_two_roots (p theta a b : ℝ) (hp : p < 2)
-    (hθ : 0 < theta) (hπ : theta < Real.pi / 2)
-    (ha : 0 < a) (hab : a < b) (hb : b < theta)
-    (hfa : phaseLogRatio p theta a = 0) (hfb : phaseLogRatio p theta b = 0) :
-    False := by
-  have hf0 : phaseLogRatio p theta 0 = 0 := by simp [phaseLogRatio]
-  obtain ⟨x, hx, hxderiv⟩ := exists_deriv_eq_zero ha
-    (phaseLogRatio_continuousOn_Icc p theta 0 a hθ hπ le_rfl (lt_trans hab hb))
-    (hf0.trans hfa.symm)
-  obtain ⟨y, hy, hyderiv⟩ := exists_deriv_eq_zero hab
-    (phaseLogRatio_continuousOn_Icc p theta a b hθ hπ ha.le hb)
-    (hfa.trans hfb.symm)
-  have hKx := (phaseLogRatio_deriv_eq_zero_iff p theta x hθ hπ hx.1.le
-    (lt_trans hx.2 (lt_trans hab hb))).mp hxderiv
-  have hKy := (phaseLogRatio_deriv_eq_zero_iff p theta y hθ hπ
-    (lt_trans ha hy.1).le (lt_trans hy.2 hb)).mp hyderiv
-  have hcos : Real.cos y < Real.cos x :=
-    Real.strictAntiOn_cos ⟨hx.1.le, by linarith [hx.2, Real.pi_pos]⟩
-      ⟨by linarith [hy.1], by linarith [hy.2, Real.pi_pos]⟩ (lt_trans hx.2 hy.1)
-  nlinarith [mul_pos (sub_pos.mpr hp) (sub_pos.mpr hcos)]
-
 /-- There is at most one positive stationary phase in the open phase
 interval. The proof uses Rolle's theorem twice and the strict monotonicity
 of the numerator of the logarithmic-ratio derivative. -/
@@ -636,14 +594,26 @@ theorem phasePower_stationary_unique (p theta : ℝ) (hp : p ≠ 0) (hp2 : p < 2
     have hamp := (phasePower_stationary_iff p theta delta hp
       (phaseChord_pos hp0 hpπ) (phaseChord_pos hm0 hmπ)).mp hderiv
     rw [phaseLogRatio_eq_log_amplitude p theta delta hp0 hpπ hm0 hmπ, hamp, sub_self]
-  have haroot := hroot a ha hfa
-  have hbroot := hroot b hb hfb
-  rcases lt_trichotomy a b with hab | hab | hab
-  · exact False.elim (phaseLogRatio_not_two_roots p theta a b hp2 hθ hπ
-      ha.1 hab hb.2 haroot hbroot)
-  · exact hab
-  · exact False.elim (phaseLogRatio_not_two_roots p theta b a hp2 hθ hπ
-      hb.1 hab ha.2 hbroot haroot)
+  let H := fun d : ℝ => p * Real.cos theta - (2 - p) * Real.cos d
+  have hfactor : ∀ d ∈ Set.Ico 0 theta, ∃ w > 0,
+      HasDerivAt (phaseLogRatio p theta) (w * H d) d := by
+    intro d hd
+    obtain ⟨hp0, hpπ, hm0, hmπ⟩ := phase_region hθ hπ.le hd.1 hd.2
+    refine ⟨Real.sin theta / (Real.cos d ^ 2 - Real.cos theta ^ 2),
+      div_pos (Real.sin_pos_of_pos_of_lt_pi hθ (by linarith [hπ, Real.pi_pos]))
+        (phase_log_denom_pos hθ hπ hd.1 hd.2), ?_⟩
+    apply (phaseLogRatio_hasDerivAt p theta d hp0 hpπ hm0 hmπ).congr_deriv
+    dsimp only [H]
+    ring
+  have hmono : StrictMonoOn H (Set.Ico 0 theta) := by
+    intro x hx y hy hxy
+    have hcos := Real.strictAntiOn_cos
+      ⟨hx.1, by linarith [hx.2, hπ, Real.pi_pos]⟩
+      ⟨hy.1, by linarith [hy.2, hπ, Real.pi_pos]⟩ hxy
+    dsimp only [H]
+    nlinarith [mul_pos (sub_pos.mpr hp2) (sub_pos.mpr hcos)]
+  exact SingleCrossingMinimum.positive_roots_eq (by simp [phaseLogRatio]) hfactor hmono
+    ha hb (hroot a ha hfa) (hroot b hb hfb)
 
 /-- In the supercritical regime an admissible positive phase strictly
 improves on the canonical phase. This excludes a merely flat local maximum. -/

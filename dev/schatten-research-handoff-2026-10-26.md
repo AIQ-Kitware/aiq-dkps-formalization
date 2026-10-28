@@ -26,8 +26,9 @@ shared family mechanism and its consumers passed **21,437 jobs**, again with
 warnings as errors. The ambient structural decomposition C1a subsequently
 passed **21,453 jobs** with warnings as errors. The subsequent closed-family
 C1b minimum/attainment theorem and all consumers passed **21,463 jobs**,
-again with warnings as errors. The dated sections below are
-proof history; their
+again with warnings as errors. The shared C2 phase law and closed
+unrestricted canonical criterion then passed **21,475 jobs**, warnings as
+errors. The dated sections below are proof history; their
 statements of open obligations apply at their recorded checkpoint only.
 
 **Shared smoothed-power mechanism:** C1a, the unrestricted ambient structural
@@ -53,10 +54,16 @@ classical nuclear reflection bound and canonical phase attainers. Continuous
 minimum values and fixed-unitary costs give the zero-smoothing bound;
 `displacementCost_zero_smoothing` identifies the native Schatten objective.
 No old penalty-specific optimum is invoked to establish the family result.
-C2's full shared scalar minimizing-phase law and C5's family-wide Hilbert
-lift remain open. The next central proof is C2, followed by a decision about
-whether C5 is essential to the paper's scope. Optional real topology and broad
-stability are deferred; do not restart C1a/C1b or the real equality certificate.
+C2's shared scalar minimum law and the full closed unrestricted canonical
+criterion are now proved. The exact latter declaration is
+`SmoothedPowerTransport.nonacuteDirectRotation_isMin_iff_principalAngles_critical`
+in `SmoothedPowerCanonicalCriterion.lean`, with the same namespace prefix.
+It includes zero/right angles and nuclear/quadratic boundaries; its conclusion
+concerns canonical optimality, not classification of every family optimizer.
+C5's family-wide Hilbert value/attainment lift remains open. This is the next
+central proof after inspecting the existing approximation and generic ideal
+APIs. Optional real topology and broad stability are deferred; do not restart
+C1/C2 or the real equality certificate.
 
 **Complex nuclear endpoint:** exact general infinite-rank attainment, the
 certificate for every ambient optimizer, a literal independent signed-root
@@ -4567,3 +4574,64 @@ real topology, stability or exhaustive limits to fill a backlog.
 with warnings as errors. Log: `/tmp/dkps-unification/family-closed-full.log`.
 No manuscript, visualization, submission or roadmap file was edited in this
 campaign. Preexisting unrelated changes were left untouched.
+
+## 27 October 2026 — shared scalar phase law and unrestricted canonical criterion
+
+**Main new theorem.** For `1<=p<=2`, `tau>=0`, equal-rank subspaces of finite
+complex Hilbert space, canonical nonacute direct rotation minimizes the
+literal family cost over every ambient unitary transporter iff every source
+principal-angle cosine is at least
+`(tau^2+2-sqrt((tau^2+2)^2-4p(2-p)))/(2p)`.
+Exact declaration:
+`TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport.nonacuteDirectRotation_isMin_iff_principalAngles_critical`,
+`SmoothedPowerCanonicalCriterion.lean`. The proof combines C1b's exact
+ambient minimum with C2's scalar law; it assumes no competitor plane structure.
+
+**Common scalar mechanism.** The new reusable classical calculus module
+`ForTauCeti/Analysis/Calculus/SingleCrossingMinimum.lean` proves that positive
+weight times strictly increasing derivative control yields at most one
+positive log-imbalance root. Nonnegative initial control gives a unique
+canonical cost minimum, including the critical zero-control case. Negative
+initial control, derivative-sign equivalence and positive endpoint derivative
+give one interior global minimum. Neither continuity of the control nor an
+infinite endpoint log limit is required. `SmoothedPowerPhaseRatio.lean` proves
+strict decrease of normalized `N/(d-c)^2`; `SmoothedPowerPhaseLogRatio.lean`
+proves the actual positive-weight derivative identity. The old public
+`SchattenPhaseTransition.phasePower_stationary_unique` now consumes the
+shared Rolle principle; its statement is preserved.
+
+**Paper-facing declarations.** Prefix
+`TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport`:
+
+- `canonical_phase_unique_min_of_subcritical`,
+  `exists_unique_phase_minimizer_of_supercritical`,
+  `phaseCost_stationary_unique`, `positive_stationary_isMinOn`:
+  `SmoothedPowerPhaseSelection.lean`; positive smoothing and acute angle.
+- `canonical_phase_isMinOn_iff_on_physical_interval`,
+  `phaseMinimum_eq_canonical_iff`: `SmoothedPowerPhaseEndpoints.lean`;
+  full closed parameter family and every physical angle.
+- `phaseCost_right_angle_unique_min`, `phaseCost_two_right_angle`,
+  `phaseCost_zero_smoothing_eq_phasePower`, `phaseMinimum_zero_smoothing_eq`,
+  `phaseCost_nuclear_strictAntiOn`: same endpoint module. These retain
+  quadratic right-angle flatness and nuclear endpoint behavior explicitly.
+
+**Attribution and boundary.** T17 records classical calculus formalization
+and extraction ancestry; T18 records the family transition and ambient
+canonical extension with exact source comparisons and unresolved priority.
+No new scalar penalty, general arbitrary-penalty ambient theorem, real planar
+reduction, family-wide every-optimizer classification or endpoint optimizer-
+set convergence theorem is claimed. The known quartic obstruction remains.
+
+**Next consequential theorem.** C5: a common ideal lower-bound/attainment
+lift with explicit finite-cost and defect hypotheses. First inspect the
+existing generic finite-unitary approximation and cost-continuity machinery;
+reuse accepted results or existing donor APIs. Keep this to family values,
+attainment and feasibility; full optimizer topology and real infinite-rank
+matching remain optional. The publication-core note now treats C1/C2 and the
+canonical criterion as a complete finite organizing theorem.
+
+**Validation.** Focused canonical-criterion target passed 7,286 jobs. After
+`lake exe cache get`, the full default `lake build` passed **21,475 jobs**
+with warnings as errors. Log: `/tmp/dkps-unification/family-phase-core-full.log`.
+Manuscript, visualization, submission and roadmap files were not edited;
+preexisting unrelated changes were preserved.

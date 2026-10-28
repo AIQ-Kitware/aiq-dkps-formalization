@@ -208,9 +208,11 @@ above the bound follows. Those are not prerequisites for the publication core.
 
 ## A common scalar transition principle
 
-The following is a conventional analytic derivation, **not a new generic Lean
-theorem**. It identifies a reusable sufficient condition satisfied by both
-existing strict-regime scalar proofs. Those proofs remain separately compiled.
+The following analytic specialization is now backed by the generic scalar
+calculus theorem in `SingleCrossingMinimum`; the precise formal hypotheses
+and the separate operator-level boundary are recorded below. It identifies a reusable sufficient condition satisfied by both
+strict-regime scalar models. Their formal APIs are preserved; the Schatten
+stationary-root proof now consumes the common Rolle principle.
 
 Fix `0<theta<pi/2` and `g(t)=f(2 sin(t/2))` on [0,2 theta]. Assume g is
 continuous there and C² on (0,pi), with `a=g'>0` on (0,pi) and
@@ -279,9 +281,11 @@ the real matching results rule out a field-independent planar reduction.
 
 ## The smoothed-power family: a common scalar mechanism
 
-The global minimizing-phase conclusion below remains a conventional
-derivation. Its derivative, critical curvature surface and single-peak
-shape are now compiled; see the formal common-mechanism section below.
+The global minimizing-phase conclusion below is now compiled for positive
+smoothing through a shared scalar minimum principle. Zero-smoothing costs
+and minima are identified with the existing Schatten theory; the closed
+canonical criterion is compiled for all physical angles. See the formal
+phase-selection checkpoint below.
 This examines the user's proposed organizing family rather than adding
 another independent penalty case. Its publication role and proof obligations
 are assessed in [the publication-core note](spectral-transport-publication-core.md).
@@ -366,7 +370,7 @@ N(1)=(B-2c)[p-2+Bc-pc^2].
 \]
 
 Moreover a(0+)=0 and a(2 theta)>0 in that regular regime, giving the
-required infinite endpoint limit of L. This proves conventionally: zero
+required infinite endpoint limit of L. The formal phase-selection checkpoint below now proves: zero
 phase is uniquely minimizing when cos theta>=C, including equality; when
 cos theta<C there is exactly one positive minimizing phase, characterized
 by `a(theta+delta)=a(theta-delta)`. This is a shared proof, not a dispatch
@@ -586,12 +590,76 @@ consumer uses it instead of taking a limit of solved Schatten optima.
 
 **Exact remaining boundary.** C1a is necessary local-minimum structure for
 positive smoothing; C1b is the exact closed-family value and an attaining
-construction. They do not classify every family optimizer. The shared C2
-logarithmic-ratio proof of the full minimizing-phase law and the C5 family
-Hilbert lift remain unformalized. The wider arbitrary-penalty shape theorem
+construction. They do not classify every family optimizer. The C2 logarithmic-ratio proof and
+closed unrestricted canonical criterion are now proved below. The C5 family
+Hilbert lift remains unformalized. The wider arbitrary-penalty shape theorem
 also remains conjectural. Zero-smoothing value continuity does not assert
 convergence of entire optimizer sets. The nuclear corner retains the already
 proved independent signed-root geometry.
+
+### Shared scalar law and unrestricted canonical criterion — proved
+
+The analytic argument above now has three compiled layers.
+
+1. **Classical sufficient principle.** In
+   [SingleCrossingMinimum](../ForTauCeti/Analysis/Calculus/SingleCrossingMinimum.lean),
+   `TauCeti.SingleCrossingMinimum.positive_roots_eq` applies Rolle twice:
+   `L(0)=0`, `L'=w H` on `[0,theta)` with w>0 and H strictly increasing
+   exclude two positive roots. `initial_neg_of_positive_root` shows that
+   any positive root forces H(0)<0. `strictMonoOn_of_initial_nonneg` gives
+   strict cost monotonicity when H(0)>=0, assuming continuity of the cost
+   on `[0,theta]` and positive-derivative sign equivalence with L inside.
+   `exists_unique_minimizer_of_initial_neg` gives a unique interior global
+   minimum when H(0)<0, using negative/zero derivative-sign equivalences and
+   an actual positive derivative at theta. No H-continuity or infinite
+   endpoint log limit is assumed. These are classical calculus consequences,
+   abstracted from the existing Schatten argument; its public stationary-
+   uniqueness theorem now consumes the shared `positive_roots_eq`.
+2. **Family verification.**
+   [SmoothedPowerPhaseRatio](../ForTauCeti/Analysis/InnerProductSpace/SmoothedPowerPhaseRatio.lean)
+   proves the normalized control K(d)=N/(d-c)^2 strictly decreases for
+   `1<=p<=2`, `tau>0`, `0<c<1`, `c<d<=1`.
+   [SmoothedPowerPhaseLogRatio](../ForTauCeti/Analysis/InnerProductSpace/SmoothedPowerPhaseLogRatio.lean)
+   identifies the actual log phase-slope ratio and proves its derivative
+   is a positive weight times K(cos delta). The initial sign is precisely
+   `cos(theta)-C_(p,tau)`. In
+   [SmoothedPowerPhaseSelection](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseSelection.lean),
+   `canonical_phase_unique_min_of_subcritical` includes the critical angle;
+   `exists_unique_phase_minimizer_of_supercritical` gives one positive
+   interior global minimizer; `phaseCost_stationary_unique` excludes a
+   second positive stationary phase; `positive_stationary_isMinOn` certifies
+   every positive balanced phase as that global scalar minimum.
+3. **Boundaries and ambient consequence.**
+   [SmoothedPowerPhaseEndpoints](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseEndpoints.lean)
+   proves right-angle strict endpoint optimality for positive smoothing and
+   p<2, quadratic flatness, the exact zero-smoothing Schatten cost/minimum
+   identities and nuclear endpoint behavior. The shared canonical criterion
+   `canonical_phase_isMinOn_iff_on_physical_interval` and minimum-value
+   equivalence `phaseMinimum_eq_canonical_iff` hold for the full closed
+   `1<=p<=2`, `tau>=0`, `theta in [0,pi/2]` family. The strict zero-smoothing
+   scalar regime is transported through exact identities to its existing
+   proofs, rather than asserted from a limit of optimizer sets.
+
+Combining C1b and C2 proves the unrestricted complex criterion
+
+\[
+ R_{K,L}\text{ minimizes }\mathcal F_{p,\tau}\text{ on }\mathcal T(P_K,P_L)
+ \quad\Longleftrightarrow\quad
+ \forall j,\ C_{p,\tau}\le\cos\theta_j.
+\]
+
+Here K,L have equal rank in finite complex Hilbert space, `1<=p<=2`,
+`tau>=0`, and R is the actual canonical nonacute direct rotation.
+`nonacuteDirectRotation_isMin_iff_principalAngles_critical`, in
+[SmoothedPowerCanonicalCriterion](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerCanonicalCriterion.lean),
+is the exact declaration, with prefix
+`TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport` for this and
+all paper-facing names in the numbered items. It compares every ambient
+unitary transporter, with no assumed plane invariance. Quadratic ties at
+right angles are retained. The criterion is complex-field only and does
+not assert the whole family optimizer classification or an infinite-
+dimensional family lift. The wider generic spectral-penalty decoupling
+conjecture remains distinct from this proved generic scalar principle.
 
 ## Limits of regimes: a proved obstruction and the remaining claims
 
@@ -833,6 +901,8 @@ including its pre-DKPS/Spectra ancestry and independent-work distinctions.
 | **T14** `ContinuousLinearMap.nuclearENorm_adjoint_comp_self_eq_hilbertSchmidtEnergy`, `re_nuclearTrace_eq_nuclearENorm_iff_isPositive`, `nuclearTrace_mul_comm`, [Nuclear/Trace](../ForTauCeti/Analysis/OperatorIdeal/Nuclear/Trace.lean); compact reduction in [CompactGram](../ForTauCeti/Analysis/OperatorIdeal/Nuclear/CompactGram.lean) | Over either field, arbitrary Hilbert dimension: nuclear Gram gauge equals Hilbert--Schmidt energy, including infinity; finite trace saturates its norm bound iff positive; finite trace is cyclic. | Classical Hilbert--Schmidt/trace-ideal ingredients, proved directly from the accepted column, Parseval and compact spectral APIs. An exact external theorem/page for the positivity equality is not newly authenticated. | Classical proof ingredients formally verified and generalized from the former complex API. | Pinned formal sources and full build checked; exact external trace locator remains pending. | Tau Ceti Hilbert--Schmidt columns and compactness; compact positive eigenvalue-multiplicity sum; square-root polar factorization; Cauchy--Schwarz equality. | No novelty claim for trace identities. The new mathematical application is T8; no parallel real trace definition is introduced. |
 | **T15** `TauCeti.smoothedPowerPhaseSlope_strictMonoOn`, `smoothedPowerPhaseSlope_strictAntiOn`, [SmoothedPowerPhase](../ForTauCeti/Analysis/InnerProductSpace/SmoothedPowerPhase.lean); `TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport.spectral_decomposition_of_isLocalMinOn_transports`, [SmoothedPowerSpectralDecomposition](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerSpectralDecomposition.lean); same namespace `gradient_block_no_overlap_of_isLocalMinOn_transports`, [SmoothedPowerGradientNoMixing](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGradientNoMixing.lean) | `1<=p<=2`, positive smoothing, finite complex Hilbert space: every ambient constrained local minimum has actual reflection-paired phase blocks with acute/right means and a self-adjoint kernel restriction; literal spectral cost splits exactly. | Classical convexity/calculus/CFC/eigenspace ingredients; formal proof adapts the existing Schatten/Charbonnier restriction and overlap arguments. S4 establishes the ambient problem and a special subquadratic example; S12/S13 authenticate the scalar penalties. No exact family transport structural theorem is authenticated in the examined sources. | Shared proof refactoring and new family structural derivation/extension; historical priority unresolved. | Compiler verified; named primary predecessors verified, exact family priority not independently settled. | Common scalar single-peak and radial-weight monotonicity; two-preimage CFC restriction; feasible paired variation; common negative Hessian; positive spectral basis and paired involution decomposition; arbitrary-penalty spectral cost additivity. | C1a is a proved ambient structural theorem, not the C1b global minimum formula, a converse characterization of local minima, or the full scalar minimizing-phase law. No novelty claim for the classical spectral bridges. |
 | **T16** `F.SmoothedPowerTransport.exists_unitary_minimizing_transport_principalAngles_of_nonneg`, `displacementCost_zero_smoothing`, [SmoothedPowerBoundary](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerBoundary.lean); `sum_phaseMinimum_le_transport`, [SmoothedPowerGlobalLowerBound](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGlobalLowerBound.lean); `exists_unitary_attaining_principalAngles`, [SmoothedPowerGlobalAttainment](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean) | Finite complex Hilbert space, equal-rank subspaces, `1<=p<=2`, `tau>=0`: the unrestricted minimum of the literal family spectral trace equals the sum of attained compact planar minima over all source principal angles. An actual canonical phase attainer exists; zero smoothing is the native Schatten power. | S4 Problem 1.1 formulates the ambient problem; Theorems 4.2/4.5 cover the classical quadratic/Q-norm regimes, not this entire nonhomogeneous family. S12/S13 authenticate the scalar penalties. No equivalent closed-family transport theorem is authenticated in the examined sources. | Family-wide structural derivation/extension; potentially novel transport theorem, with established boundary cases and classical ingredients. | Compiled; direct primary predecessor comparisons as recorded above; exact extension priority unresolved, including S10. | T15 common ambient structure; `Submodule.sum_principalAngles_eq_paired_phases_add_comap_complex`; `phaseMinimum_mean_le_sum`, `phaseMinimum_le_penalty_two_mul_sin`; classical `normalDisplacementSpectralCost_of_isSelfAdjoint` and `two_mul_sum_sin_principalAngles_le_nuclear_transport`; compact attainment, canonical CS geometry, `continuous_phaseMinimum_smoothing` and `continuous_displacementCost_smoothing`. | C1b values/attainment are proved, not every optimizer, the full C2 phase law, a real decoupling theorem, a generic C² penalty theorem, or the C5 infinite-dimensional family lift. No novelty claim for scalar penalties, CS geometry, convexity, trace bounds, or continuity of compact minima; no newly authenticated external locator is claimed for these elementary ingredients. |
+| **T17** `TauCeti.SingleCrossingMinimum.positive_roots_eq`, `initial_neg_of_positive_root`, `strictMonoOn_of_initial_nonneg`, `exists_unique_minimizer_of_initial_neg`, [SingleCrossingMinimum](../ForTauCeti/Analysis/Calculus/SingleCrossingMinimum.lean) | On a nontrivial compact scalar interval, a cost is continuous, L(0)=0, L'=wH on the half-open interval with positive w and strictly increasing H. Interior derivative-sign equivalence gives unique canonical optimality for H(0)>=0; negative/zero sign equivalences and positive endpoint derivative give a unique interior global minimum for H(0)<0. | Classical Rolle/mean-value, compact attainment and one-sided derivative sign arguments. Exact pinned Mathlib `exists_deriv_eq_zero` and `eventually_nhdsWithin_sign_eq_of_deriv_pos/neg` APIs checked; no new external book locator is claimed. Proof abstracts the old `SchattenPhaseTransition` arguments; its `phasePower_stationary_unique` now forwards to the common positive-root theorem. | Classical calculus formally verified and generalized into a reusable sufficient principle; proof adaptation recorded. | Compiler verified and pinned primary formal sources inspected; no historical originality claim. | Mathlib Rolle, derivative-sign monotonicity, compact interval minimum and local-extremum derivative. | No assumption of the minimizing phase; no H-continuity or infinite endpoint limit is needed. This is a scalar theorem, not an unrestricted operator reduction for arbitrary penalties. |
+| **T18** `F.SmoothedPowerTransport.canonical_phase_unique_min_of_subcritical`, `exists_unique_phase_minimizer_of_supercritical`, `positive_stationary_isMinOn`, [SmoothedPowerPhaseSelection](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseSelection.lean); same namespace `canonical_phase_isMinOn_iff_on_physical_interval`, [SmoothedPowerPhaseEndpoints](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseEndpoints.lean); `nonacuteDirectRotation_isMin_iff_principalAngles_critical`, [SmoothedPowerCanonicalCriterion](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerCanonicalCriterion.lean) | The positively smoothed finite planar family has one global phase transition, including unique canonical minimum at critical equality and unique positive stationary/global-minimum phase above it. The full closed family has canonical scalar optimality iff C<=cos(theta), for every physical angle. For finite complex equal-rank pairs, canonical rotation is unrestrictedly optimal iff every principal angle satisfies that condition. | S4 supplies the ambient problem, classical Q-norm/quadratic theory and special subquadratic phase example; S12/S13 authenticate scalar penalties. No exact full-family transition/canonical theorem is authenticated in the examined sources. | New family structural derivation/extension; potentially novel transport result with classical boundary cases. | Compiled; primary predecessors as recorded, historical priority unresolved including S10. | T17 scalar principle; `smoothedPowerPhaseRatioControl_strictAntiOn`; actual `hasDerivAt_smoothedPowerPhaseLogRatio`; initial curvature factor; T16 ambient minimum; exact zero-smoothing scalar identities and existing Schatten endpoint/strict-exponent proofs. | No real-field planar reduction, no every-optimizer classification for the family, no family-wide Hilbert lift or optimizer-set convergence claim. Scalar generalized Charbonnier penalties and classical quadratic/canonical geometry are not new. |
 
 Unresolved source work is substantive, not a request to add a checker: obtain
 the authoritative Exercise B.12 statement; authenticate the original 1970
@@ -865,7 +935,7 @@ This organization supports a coherent contribution without claiming a common
 unrestricted optimizer formula for arbitrary penalties or a complete real
 Hilbert matching theory. The real bridge is T8 and the
 closed-family finite complex minimum theorem is T16. The next central step
-is the shared full scalar phase-selection law C2. Real equality necessity is now proved;
+is now the family-wide ideal value/attainment lift C5. Real equality necessity is now proved;
 full real optimizer topology and exhaustive limiting classifications are
 secondary to the publication core.
 
@@ -899,3 +969,10 @@ with warnings as errors, including the native nuclear endpoint refactor and
 all maintained consumers. The log is
 `/tmp/dkps-unification/family-closed-full.log`. The earlier C1b-open status
 describes the preceding C1a checkpoint only.
+
+The subsequent shared C2 phase-selection and closed unrestricted canonical
+criterion target passed **7,286 jobs**. After `lake exe cache get`, the full
+default `lake build` passed **21,475 jobs** with warnings as errors, including
+the refactored strict-Schatten consumers and every maintained aggregate.
+Log: `/tmp/dkps-unification/family-phase-core-full.log`. This proves the formal
+scopes above; it does not settle historical priority or the C5 family lift.

@@ -5,7 +5,10 @@ The real equality checkpoint passed 21,427 jobs with warnings as errors.
 The closed-family exact value/attainment theorem and all consumers passed
 21,463 jobs with warnings as errors after `lake exe cache get` and `lake build`.
 The log is `/tmp/dkps-unification/family-closed-full.log`. The preceding
-ambient structural checkpoint passed 21,453 jobs.
+ambient structural checkpoint passed 21,453 jobs. The subsequent shared C2
+phase law, closed unrestricted canonical criterion and all consumers passed
+**21,475 jobs**, warnings as errors, after the same cache/build commands.
+Log: `/tmp/dkps-unification/family-phase-core-full.log`.
 The success criterion is a coherent central theory and defensible attribution,
 not completion of the research backlog. This assessment is research planning;
 the proposed abstract below is not a manuscript edit.
@@ -26,9 +29,9 @@ changes the value when complex phases cannot be realized.
 The finite-dimensional organizing theorem is now proved for the entire
 closed smoothed-power family. It derives the exact unrestricted complex
 minimum from a common ambient decomposition, without invoking the old
-Schatten or Charbonnier optimum theorems. The next central proof is the full
-shared scalar phase-selection law C2. A family-wide Hilbert lifting theorem
-C5 remains a separate extension; the established infinite-dimensional
+Schatten or Charbonnier optimum theorems. The shared scalar phase-selection law C2
+and exact unrestricted canonical criterion are now also proved. A family-wide
+Hilbert lifting theorem C5 remains the next central extension; the established infinite-dimensional
 Schatten, nuclear and Charbonnier classifications already support the core.
 The broader derivative-shape fragment is still conjectural.
 
@@ -110,7 +113,8 @@ No claim about entire optimizer sets is passed through this limit.
 
 **Exact boundary.** C1b proves values and an attaining construction. C1a is
 necessary local-minimum structure for positive smoothing. Neither is a
-classification of all family optimizers or the full C2 minimizing-phase law.
+classification of all family optimizers. C2 now supplies the separate
+minimizing-phase law described below.
 The proof shares variation and spectral restriction mechanisms across the
 family, rather than dispatching cases to the older optimum theorems.
 
@@ -122,46 +126,73 @@ establish that broader assertion: generic differentiation and the required
 phase/angle budget still need their own hypotheses and proof. No concrete
 counterexample is claimed here.
 
-### C2. One phase-transition surface for smoothed powers — derived scalar law
+### C2. One phase-transition surface and an ambient criterion — proved
 
-For `1<=p<=2`, tau>=0, define
-
-\[
-\rho_{p,\tau}(s)=(\tau^2+s^2)^{p/2}-\tau^p.
-\]
-
-In the regular subquadratic regimes (tau>0, `1<=p<2`, or tau=0,
-`1<p<2`), the candidate complete scalar law is: for `0<theta<pi/2`
-the minimizing absolute phase is unique; it is zero at and below the critical
-angle and positive above it, where
+For `1<=p<=2`, `tau>=0`, put
 
 \[
-\cos\theta_c=
-\frac{\tau^2+2-\sqrt{(\tau^2+2)^2-4p(2-p)}}{2p}.
+ C_{p,\tau}=\frac{\tau^2+2-
+       \sqrt{(\tau^2+2)^2-4p(2-p)}}{2p}.
 \]
 
-This formula is the correct curvature threshold. A common logarithmic-derivative
-shape argument also supplies a conventional proof of the global scalar law;
-the algebra and inequalities are in the
-[unification note](spectral-transport-unification.md#the-smoothed-power-family-a-common-scalar-mechanism).
-Thus the proposed transition is supported by more than a local curvature test.
+For `tau>0`, `0<theta<pi/2`, zero phase is the unique global minimizer
+on `[0,theta]`
+exactly when `C_(p,tau)<=cos(theta)`. Equality is included. If
+`cos(theta)<C_(p,tau)`, there is exactly one positive stationary phase in
+`(0,theta)`, and it is the unique global minimum on `[0,theta]`. Its equation is
 
-At tau=0, p=1 the derivative-at-zero hypothesis fails and the nuclear optimum
-is the boundary phase delta=theta. At p=2 the cost is quadratic for every tau:
-zero phase is uniquely optimal at acute angles and every scalar phase is
-optimal at a right angle. For p<2, the right-angle minimum is instead at
-delta=pi/2. These boundary assertions agree with the existing proved formulas;
-they are not an assertion that all endpoint optimizers are limits of interior ones.
+\[
+ \phi'_{p,\tau}(\theta+\delta)=\phi'_{p,\tau}(\theta-\delta).
+\]
 
-**Status:** existing strict-Schatten, nuclear and Charbonnier scalar instances
-are Lean-verified. For `tau>0`, the family first/second derivatives,
-critical curvature surface and strict single-peak shape are now formally
-proved in `SmoothedPowerPhase`; its zero-smoothing and quadratic critical
-cosines are also proved. The full shared minimizing-phase uniqueness law,
-including the critical angle, remains a conventional derivation awaiting
-formalization. C1 is additionally needed to promote scalar optimality to an
-unrestricted ambient optimum. Exact declarations and hypotheses appear in
-the [common-mechanism record](spectral-transport-unification.md#formally-proved-common-phase-mechanism--27-october-follow-up).
+These are `canonical_phase_unique_min_of_subcritical`,
+`exists_unique_phase_minimizer_of_supercritical`, `phaseCost_stationary_unique`
+and `positive_stationary_isMinOn` in
+[SmoothedPowerPhaseSelection](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseSelection.lean),
+with prefix `TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport`.
+
+The proof uses a **generic scalar minimum principle**, not separate
+Schatten/Charbonnier optimizer theorems. If `L(0)=0`, `L'=w H` on `[0,theta)`
+with w positive and H strictly increasing, and the derivative of a continuous
+cost has L's sign, nonnegative H(0) gives a strictly increasing cost. Negative
+H(0), together with a positive endpoint derivative, gives one interior global
+minimum. No continuity of H or infinite endpoint limit of L is required.
+The exact sufficient hypotheses and conclusions are in
+[SingleCrossingMinimum](../ForTauCeti/Analysis/Calculus/SingleCrossingMinimum.lean).
+The old Schatten stationary-uniqueness theorem now consumes its two-Rolle
+principle too. The family verifies these hypotheses through its actual
+logarithmic derivative and the decreasing normalized cubic `N/(d-c)^2`,
+not by assuming the desired minimizing phase.
+
+**Closed boundaries are retained.** At zero smoothing, the literal cost and
+its compact minimum are proved equal to the established Schatten scalars.
+Thus `C_(p,0)=(2-p)/p` gives the existing strict-Schatten law, while the nuclear
+corner has its unique endpoint phase `delta=theta`. At p=2 the cost is
+`4-4 cos(theta)cos(delta)`, independent of smoothing, and is flat at a right
+angle. For p<2 a right-angle cost instead has its unique endpoint phase.
+`canonical_phase_isMinOn_iff_on_physical_interval` and
+`phaseMinimum_eq_canonical_iff`, in
+[SmoothedPowerPhaseEndpoints](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseEndpoints.lean),
+prove the common canonical criterion for all `theta in [0,pi/2]` and the
+full closed parameter family. The zero-angle interval is a singleton.
+No endpoint optimizer-set limit follows from these statements.
+
+**Ambient consequence.** For finite complex equal-rank pairs, throughout
+`1<=p<=2`, `tau>=0`, canonical nonacute direct rotation globally minimizes
+the literal spectral transport cost if and only if
+
+\[
+ \forall j,\qquad C_{p,\tau}\le\cos\theta_j.
+\]
+
+The exact declaration is
+`nonacuteDirectRotation_isMin_iff_principalAngles_critical` in
+[SmoothedPowerCanonicalCriterion](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerCanonicalCriterion.lean),
+with the same namespace prefix. This is a consequence of C1b and C2 over
+all ambient competitors, not a scalar-only optimality statement. At p=2
+it recovers classical canonical optimality; at the nuclear corner it requires
+all angles to vanish. It does not classify all family optimizers or extend
+the planar conclusion to the real field. Exact priority remains unresolved.
 
 ### C3. Nuclear signed roots and exact real compatibility — formally proved
 
@@ -250,7 +281,9 @@ flowchart TD
   S[Family single-peak shape and radial weight: proved] --> D
   D --> F[C1b exact closed-family value and attainment: proved]
   B[Scalar compact minima, reflection comparison and zero-smoothing continuity: proved] --> F
-  C[C2 transition law: conventional proof; formalization open] --> A[Explicit ambient family phase formula: candidate]
+  P0[Classical scalar log-curvature minimum principle: proved] --> C[C2 common phase law and closed critical surface: proved]
+  N[Normalized family control and actual logarithmic derivative: proved] --> C
+  C --> A[Exact unrestricted canonical criterion: proved]
   F --> A
   F --> L[C5 Hilbert lift and finite active attainment: candidate family; known instances proved]
   I[Classical ideal membership and defect index: proved] --> L
@@ -273,7 +306,7 @@ contains exact declarations and authentication limits.
 | Jordan (1875), §§46–50; Davis (1958), Theorems 7.1, 7.3, 7.4 | Classical angular geometry and canonical operator/Hilbert--Schmidt/Schatten p>=2 extremal theory. | Exact subquadratic phase selection and its field compatibility, not invention of angles or direct rotation. |
 | Davis–Kahan (1970), Propositions 4.3–4.4 and examples | Squared displacement, norm-scope failure and the printed real short-angle assertion. Original wording here relies on the repository's prior source audit. | Formal correction with exact scope, followed by an optimization theory beyond the false assertion. |
 | Sun–Roth–Black (2010), §4; Barron (2019), equation (4) | The scalar generalized Charbonnier family itself, up to our subtraction at zero. | Constrained transport phase selection and operator structure; no claim to invent the penalty. Primary authentication is S13 in the provenance map. |
-| Bolotnikov–Li–Rodman (2001), Problem 1.1; Theorems 3.1, 4.2, 4.5; Lemma 3.3 | The ambient distortion problem, Q-norm theory, complete Frobenius minimizers and a special subquadratic phase example. Theorem 4.5's chain compatibility condition is automatic for a single subspace pair. | The common closed-family finite complex minimum/attainment theorem C1b, necessary local structure C1a, and solved infinite-dimensional classifications. The optimization problem itself is prior art; exact extension priority is unresolved. |
+| Bolotnikov–Li–Rodman (2001), Problem 1.1; Theorems 3.1, 4.2, 4.5; Lemma 3.3 | The ambient distortion problem, Q-norm theory, complete Frobenius minimizers and a special subquadratic phase example. Theorem 4.5's chain compatibility condition is automatic for a single subspace pair. | The common closed-family finite complex minimum/attainment theorem C1b, necessary local structure C1a, common phase law C2, sharp unrestricted canonical criterion, and solved infinite-dimensional classifications. The optimization problem itself is prior art; exact extension priority is unresolved. |
 | Qiu–Zhang–Li (2006), §5; Zhang–Qiu (2010), §4 p. 1615 | Grassmann/logarithmic objectives and explicit trace-norm nonminimality. | Exact extrinsic optimizer classifications, not a new discovery that direct rotation can fail for the trace norm. |
 | Avron–Seiler–Simon (1994), Proposition 3.1; Kaftal–Loreaux (2017), Proposition 2.7(ii) | Relative index and exact proper-ideal restricted-unitary feasibility on separable complex Hilbert space. | Formal real/nonseparable scope and a penalty-specific optimizer solution above those classical ingredients. |
 
@@ -295,7 +328,9 @@ minimizing spectral penalties of the ambient displacement. For complex Hilbert
 spaces of finite dimension we prove an exact reduction of the full closed
 smoothed-power family to attained planar minima over principal angles. A
 common ambient spectral decomposition derives this reduction without assuming
-plane preservation by competitors. We also give exact infinite-dimensional
+plane preservation by competitors. A common logarithmic-curvature principle
+proves the penalty-dependent phase transition and yields a sharp unrestricted
+criterion for canonical optimality throughout the closed family. We also give exact infinite-dimensional
 optimizer descriptions for subquadratic Schatten powers,
 the nuclear endpoint and smoothed nuclear penalties. The regular regimes
 select phases on a finite active angle spectrum, while nuclear equality
@@ -309,8 +344,9 @@ phase selection, real compatibility and infinite-dimensional attainment within
 one transport-fiber variational problem.
 
 This abstract claims the proved finite family value/attainment reduction and
-the established infinite-dimensional regimes. It does not claim the full C2
-family phase law or C5 family-wide Hilbert extension.
+the common phase-selection law and established infinite-dimensional regimes.
+It does not claim a C5 family-wide Hilbert extension or every-optimizer
+classification for the whole two-parameter family.
 
 ## Theorem-level outline and the next proof decision
 
@@ -318,7 +354,8 @@ family phase law or C5 family-wide Hilbert extension.
    Q-norm boundary, source correction, ideal feasibility and attribution.
 2. **Penalty selection.** The proved C1a ambient decomposition and C1b
    closed-family value/attainment theorem, followed by explicit scalar laws
-   in the established regimes. Add the full shared C2 law when proved.
+   from the shared C2 log-curvature principle, with the closed canonical
+   criterion as their principal ambient consequence.
 3. **Field compatibility.** C3 nuclear equality geometry and C4 finite real
    matching; explain the real complex-structure obstruction.
 4. **Infinite-dimensional assembly.** C5 lower-bound lift, finite active
@@ -326,7 +363,7 @@ family phase law or C5 family-wide Hilbert extension.
 5. **Consequences and boundaries.** Include only consequences needed to explain
    the theory; state real above-bound and endpoint set-limit limitations.
 
-C1a and C1b now supply a family-wide organizing theorem with a precise,
+C1a, C1b and C2 now supply a family-wide organizing theorem with a precise,
 complete finite-dimensional scope. Together with C3, C4 and the established
 infinite-dimensional classifications, they support a coherent narrower paper.
 Further unrestricted real classification, topology and broad stability are
@@ -335,14 +372,21 @@ novel; the scalar family, ambient problem, CS geometry, trace bounds and
 compactness principles are established ingredients. Historical comparison
 still needs resolution, especially the authoritative Exercise B.12 statement.
 
-**Reassessment at this checkpoint:** a paper claiming the displayed exact
-finite family reduction needs no further proof of C1. A stronger paper claiming
-one explicit phase-transition law across that family still needs C2; a
-family-wide infinite-dimensional theorem needs C5. Prioritize C2 next because
-it explains how the penalty selects the planar phase now known to govern the
-unrestricted minimum. Use the shared logarithmic-ratio argument already
-recorded in the unification note. Then assess whether packaging C5 materially
-strengthens the central paper before starting that larger campaign. Defer
-optional real topology, stability and exhaustive limiting classifications.
-No claim of publication acceptance or settled first priority follows from
-compiler verification.
+**Reassessment at this checkpoint:** no further scalar proof is needed to
+claim the displayed finite-family reduction, regular phase-selection law and
+closed unrestricted canonical criterion. These are a coherent central result,
+with the real signed-root compatibility theorem and known Hilbert regimes
+as structural consequences and extensions. The broader generic penalty
+operator theorem and a family-wide every-optimizer classification are not
+prerequisites for that finite core.
+
+The next consequential proof is C5's common infinite-dimensional value and
+attainment lift, restricted to its actual ideal and defect hypotheses. First
+inspect the existing finite-unitary approximation and penalty-cost APIs;
+reuse a generic theorem if it already implies the family case. Positive
+smoothing should use Hilbert--Schmidt displacement and a finite active
+spectrum; the nuclear corner already has signed-root attainment. Do not
+require full family optimizer topology or infinite-rank real matching to
+establish that lift. Historical priority still needs source-level review;
+compiler verification does not settle it. Optional stability and exhaustive
+limiting classifications remain deferred.

@@ -6,8 +6,9 @@ attainment criterion. The subsequent smoothed-power campaign proves the
 closed-family finite complex minimum/attainment theorem C1b, including zero smoothing, and
 ambient spectral decomposition C1a: every finite complex constrained local
 minimum has actual paired phase blocks with acute/right means and a
-self-adjoint kernel restriction, with exact cost splitting. The full default
-build passed 21,463 jobs with warnings as errors after `lake exe cache get`.
+self-adjoint kernel restriction, with exact cost splitting. The shared C2
+phase law and the closed unrestricted canonical criterion are now also
+proved. The full default build passed 21,475 jobs with warnings as errors after `lake exe cache get`.
 The earlier spectral checkpoint was `96aeb922d`
 (accounting `2b481b94d`). See the
 [unification and provenance note](spectral-transport-unification.md) for the
@@ -51,7 +52,8 @@ Historical originality requires its own theorem-level literature comparison.
 ## Immediate priority: the organizing penalty theorem
 
 The publication-core assessment specifies five principal statements and their
-status. C1 is proved for the finite complex family; the next campaign is C2 for
+status. C1/C2 are proved for the finite complex family; the next central
+campaign is the operator-ideal lift C5 for
 `rho_(p,tau)(s)=(tau^2+s^2)^(p/2)-tau^p`, `1<=p<=2`, tau>=0:
 
 1. **Completed:** C1b's exact value/attainment formula for `1<=p<=2`,
@@ -63,15 +65,27 @@ status. C1 is proved for the finite complex family; the next campaign is C2 for
    phases attain it. Continuity of scalar minimum values and each fixed
    unitary cost extends the bound to zero smoothing; the native Schatten
    power identity is proved. No entire optimizer-set limit is asserted.
-2. Prove the shared scalar transition law. The unification note now derives
-   the critical surface and the useful monotonic quantity `N/(d-c)^2`;
-   the raw cubic N is not required to be monotone. The actual family
-   derivatives, critical curvature surface and single-peak phase shape are
-   now compiled in `SmoothedPowerPhase`; the full global minimizing-phase
-   law from the ratio argument is still conventional mathematics.
-3. Package the existing moving-target finite-unitary-approximation lower-bound
-   lift. Positive activation threshold gives finite active attainment; the
-   nuclear corner uses the already compiled infinite signed-root assembly.
+2. **Completed:** the shared scalar phase law, including critical equality,
+   unique positive stationary/global-minimum phase beyond the threshold,
+   right-angle behavior, and exact zero-smoothing scalar identifications.
+   `SingleCrossingMinimum` supplies the classical sufficient principle;
+   actual log-ratio differentiation and normalized `N/(d-c)^2` monotonicity
+   verify its hypotheses across positive smoothing. The old Schatten
+   stationary-uniqueness proof now consumes this common principle too.
+   `SmoothedPowerPhaseSelection.lean` and `SmoothedPowerPhaseEndpoints.lean`
+   give the exact declarations. The main ambient consequence is
+   `SmoothedPowerTransport.nonacuteDirectRotation_isMin_iff_principalAngles_critical`
+   in `SmoothedPowerCanonicalCriterion.lean`: for the full closed finite
+   complex family, canonical rotation is optimal iff every principal-angle
+   cosine lies above the critical surface. This does not classify all optimizers.
+3. **Next:** inspect and package the existing moving-target finite-unitary-
+   approximation lower-bound lift at its actual ideal scope. Target common
+   family values/attainment and finite-cost feasibility, rather than a full
+   every-optimizer classification. Positive smoothing uses Hilbert--Schmidt
+   displacement and a finite active angle spectrum; the nuclear corner uses
+   the already proved signed-root assembly. Reuse a generic theorem or
+   record its corollary when it already suffices. Do not start optional
+   real topology, broad stability or exhaustive endpoint set limits.
 
 The shared `UnitaryPhaseHessian` replaces the duplicated Schatten and
 Charbonnier Hessian/overlap calculations. `UnitarySpectralRestriction` now
@@ -81,12 +95,13 @@ also replaces their duplicated classical two-phase restriction proofs.
 constructs all actual paired blocks and the full kernel from ambient local
 minimality; `SmoothedPowerFeasibleBlocks` certifies their feasible common
 variation. C1a assumes no prescribed planes; C1b now proves the unrestricted
-closed-family principal-angle minimum and an actual attainer. C2 remains
-open as a shared formal minimizing-phase law. See T15–T16 in the provenance map.
+closed-family principal-angle minimum and an actual attainer. C2 and its
+closed unrestricted canonical criterion are also proved. See T15–T18 in
+the provenance map.
 
 The proposed C² penalty-shape theorem has not been refuted, but is not yet
-formally verified. The concrete family now has its own common proof. Prioritize
-the shared scalar phase law before optional topology, stability, or
+formally verified. The concrete family now has its own common proof and scalar minimum
+principle. Prioritize the scoped ideal lift before optional topology, stability, or
 exhaustive real matching/endpoint-family extensions. The assessment contains
 the dependency diagram, closest-source comparison and a proof-supported abstract.
 
@@ -251,8 +266,9 @@ endpoint: `phasePower_two_right_angle` is flat, while
 to its zero phase from exact subquadratic scalar minimizers. Both are in
 `SchattenPhaseMinimum.lean`. Do not promote this to an ambient set-limit theorem
 without the additional argument. The unification note derives a common scalar
-logarithmic-curvature sufficient principle and finite-dimensional smoothing
-value bounds conventionally; these are not new generic Lean theorems.
+logarithmic-curvature sufficient principle with compiled exact hypotheses;
+finite-dimensional quantitative smoothing-value bounds remain conventional
+claims. These are distinct from the proved value-continuity boundary argument.
 
 Study `p downarrow 1`, `p uparrow 2` and the appropriate Charbonnier limit.
 Specify whether the cost is a norm or its p-th power. At defects or thresholds,
