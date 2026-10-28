@@ -134,18 +134,19 @@ theorem charbonnierCost_eq_add_of_isReducing
   simp_rw [A.singularValue_eq_orthogonal_block_of_isReducing M hM]
   exact charbonnierCost_withLpProdMap tau hτ _ _
 
-/-- An actual unitary replacement on a reducing block has exactly the
-new block's Schatten power plus its unchanged reference tail.
-The identity includes infinite reference-tail costs. -/
-theorem gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
-    (p : ℝ) (hp : 1 ≤ p) (M : Submodule 𝕜 E)
-    [M.HasOrthogonalProjection] [CompleteSpace M]
+omit [CompleteSpace E] in
+/-- Actual reducing unitary blocks give the same displacement
+compressions for every spectral penalty. This classical geometry is shared
+by the Schatten, Charbonnier and generic compact spectral-cost identities. -/
+theorem unitary_displacement_compressions_of_restriction
+    (M : Submodule 𝕜 E) [M.HasOrthogonalProjection] [CompleteSpace M]
     (U R : E ≃ₗᵢ[𝕜] E) (W : M ≃ₗᵢ[𝕜] M)
     (hUM : ∀ x : M, U x = (W x : E)) (htail : ∀ x ∈ Mᗮ, U x = R x) :
-    (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (U : E →L[𝕜] E)) ^ p =
-      (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (W : M →L[𝕜] M)) ^ p +
-        (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge
-          (Mᗮ.orthogonalProjectionOnto ∘L (1 - (R : E →L[𝕜] E)) ∘L Mᗮ.subtypeL) ^ p := by
+    M.IsReducing (1 - (U : E →L[𝕜] E)).toLinearMap ∧
+      M.orthogonalProjectionOnto ∘L (1 - (U : E →L[𝕜] E)) ∘L M.subtypeL =
+        1 - (W : M →L[𝕜] M) ∧
+      Mᗮ.orthogonalProjectionOnto ∘L (1 - (U : E →L[𝕜] E)) ∘L Mᗮ.subtypeL =
+        Mᗮ.orthogonalProjectionOnto ∘L (1 - (R : E →L[𝕜] E)) ∘L Mᗮ.subtypeL := by
   have hredU := U.isReducing_of_restriction M W (fun x => (hUM x).symm)
   have hred : M.IsReducing (1 - (U : E →L[𝕜] E)).toLinearMap := by
     apply (M.isReducing_iff _).mpr
@@ -170,6 +171,39 @@ theorem gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
     change Mᗮ.orthogonalProjectionOnto ((x : E) - U x) =
       Mᗮ.orthogonalProjectionOnto ((x : E) - R x)
     rw [htail x x.property]
+  exact ⟨hred, hblock, htail'⟩
+
+/-- Every zero-preserving spectral penalty splits across an actual
+unitary replacement when the displacement is compact. Extended costs and
+infinite-rank blocks are allowed. -/
+theorem tsum_unitary_displacement_penalty_eq_block_add_tail
+    (M : Submodule 𝕜 E) [M.HasOrthogonalProjection] [CompleteSpace M]
+    (U R : E ≃ₗᵢ[𝕜] E) (W : M ≃ₗᵢ[𝕜] M)
+    (hUM : ∀ x : M, U x = (W x : E)) (htail : ∀ x ∈ Mᗮ, U x = R x)
+    (hcompact : IsCompactOperator ((1 - (U : E →L[𝕜] E)) : E →L[𝕜] E))
+    (f : ℝ≥0 → ℝ≥0∞) (hf : f 0 = 0) :
+    (∑' n, f ((1 - (U : E →L[𝕜] E)).singularValue n)) =
+      (∑' n, f ((1 - (W : M →L[𝕜] M)).singularValue n)) +
+        ∑' n, f ((Mᗮ.orthogonalProjectionOnto ∘L (1 - (R : E →L[𝕜] E)) ∘L
+          Mᗮ.subtypeL).singularValue n) := by
+  obtain ⟨hred, hblock, htail'⟩ :=
+    unitary_displacement_compressions_of_restriction M U R W hUM htail
+  rw [tsum_singularValue_penalty_eq_add_of_isReducing _ hcompact M hred f hf, hblock, htail']
+
+/-- An actual unitary replacement on a reducing block has exactly the
+new block's Schatten power plus its unchanged reference tail.
+The identity includes infinite reference-tail costs. -/
+theorem gauge_schatten_unitary_displacement_rpow_eq_block_add_tail
+    (p : ℝ) (hp : 1 ≤ p) (M : Submodule 𝕜 E)
+    [M.HasOrthogonalProjection] [CompleteSpace M]
+    (U R : E ≃ₗᵢ[𝕜] E) (W : M ≃ₗᵢ[𝕜] M)
+    (hUM : ∀ x : M, U x = (W x : E)) (htail : ∀ x ∈ Mᗮ, U x = R x) :
+    (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (U : E →L[𝕜] E)) ^ p =
+      (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (W : M →L[𝕜] M)) ^ p +
+        (TauCeti.OperatorIdealFamily.schatten 𝕜 p hp).gauge
+          (Mᗮ.orthogonalProjectionOnto ∘L (1 - (R : E →L[𝕜] E)) ∘L Mᗮ.subtypeL) ^ p := by
+  obtain ⟨hred, hblock, htail'⟩ :=
+    unitary_displacement_compressions_of_restriction M U R W hUM htail
   rw [gauge_schatten_rpow_eq_add_of_isReducing p hp _ M hred, hblock, htail']
 
 /-- Replacing an actual unitary block preserves the complete reference
@@ -183,30 +217,8 @@ theorem charbonnierCost_unitary_displacement_eq_block_add_tail
       (1 - (W : M →L[𝕜] M)).charbonnierCost tau +
         (Mᗮ.orthogonalProjectionOnto ∘L (1 - (R : E →L[𝕜] E)) ∘L
           Mᗮ.subtypeL).charbonnierCost tau := by
-  have hredU := U.isReducing_of_restriction M W (fun x => (hUM x).symm)
-  have hred : M.IsReducing (1 - (U : E →L[𝕜] E)).toLinearMap := by
-    apply (M.isReducing_iff _).mpr
-    constructor
-    · intro x hx
-      change x - U x ∈ M
-      exact M.sub_mem hx (hredU.mem_invtSubmodule hx)
-    · intro x hx
-      change x - U x ∈ Mᗮ
-      exact Mᗮ.sub_mem hx (hredU.orthogonal_mem_invtSubmodule hx)
-  have hblock : M.orthogonalProjectionOnto ∘L (1 - (U : E →L[𝕜] E)) ∘L M.subtypeL =
-      1 - (W : M →L[𝕜] M) := by
-    apply ContinuousLinearMap.ext
-    intro x
-    change M.orthogonalProjectionOnto ((x : E) - U x) = x - W x
-    rw [hUM, map_sub, M.orthogonalProjectionOnto_mem_subspace_eq_self,
-      M.orthogonalProjectionOnto_mem_subspace_eq_self]
-  have htail' : Mᗮ.orthogonalProjectionOnto ∘L (1 - (U : E →L[𝕜] E)) ∘L Mᗮ.subtypeL =
-      Mᗮ.orthogonalProjectionOnto ∘L (1 - (R : E →L[𝕜] E)) ∘L Mᗮ.subtypeL := by
-    apply ContinuousLinearMap.ext
-    intro x
-    change Mᗮ.orthogonalProjectionOnto ((x : E) - U x) =
-      Mᗮ.orthogonalProjectionOnto ((x : E) - R x)
-    rw [htail x x.property]
+  obtain ⟨hred, hblock, htail'⟩ :=
+    unitary_displacement_compressions_of_restriction M U R W hUM htail
   rw [charbonnierCost_eq_add_of_isReducing tau hτ _ M hred, hblock, htail']
 
 /-- A unitary with a finite-dimensional actual restriction and an

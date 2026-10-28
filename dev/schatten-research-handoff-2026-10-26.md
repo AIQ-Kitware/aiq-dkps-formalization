@@ -28,7 +28,9 @@ passed **21,453 jobs** with warnings as errors. The subsequent closed-family
 C1b minimum/attainment theorem and all consumers passed **21,463 jobs**,
 again with warnings as errors. The shared C2 phase law and closed
 unrestricted canonical criterion then passed **21,475 jobs**, warnings as
-errors. The dated sections below are proof history; their
+errors. C5 then passed **21,495 jobs**, warnings as errors, including the
+common Hilbert-space value/attainment theorem and all consumers.
+The dated sections below are proof history; their
 statements of open obligations apply at their recorded checkpoint only.
 
 **Shared smoothed-power mechanism:** C1a, the unrestricted ambient structural
@@ -60,10 +62,19 @@ criterion are now proved. The exact latter declaration is
 in `SmoothedPowerCanonicalCriterion.lean`, with the same namespace prefix.
 It includes zero/right angles and nuclear/quadratic boundaries; its conclusion
 concerns canonical optimality, not classification of every family optimizer.
-C5's family-wide Hilbert value/attainment lift remains open. This is the next
-central proof after inspecting the existing approximation and generic ideal
-APIs. Optional real topology and broad stability are deferred; do not restart
-C1/C2 or the real equality certificate.
+C5's family-wide Hilbert value/attainment lift is now proved. The main
+`SmoothedPowerTransport.exists_unitary_minimizing_transport_of_projection_cost_ne_top`
+(prefix `TauCeti.DavisKahan.InfiniteDimensional`) assumes finite family
+projection cost and balanced crossed defects, on any complete complex Hilbert
+space with complemented subspaces. It gives an actual finite-cost attainer,
+the intrinsic directed-angle sum and the bound against every ambient
+transporter. The finite-cost domain is Schatten-p at zero smoothing and
+Hilbert--Schmidt at positive smoothing. Feasibility has the same exact ideal
+and balance criterion over either field. A common finite active correction
+constructs a regular attainer; only the nuclear corner uses signed roots.
+There is no all-family optimizer classification or infinite real matching
+formula. The next step is the core completion/source audit, not another
+optional proof campaign.
 
 **Complex nuclear endpoint:** exact general infinite-rank attainment, the
 certificate for every ambient optimizer, a literal independent signed-root
@@ -4633,5 +4644,74 @@ canonical criterion as a complete finite organizing theorem.
 **Validation.** Focused canonical-criterion target passed 7,286 jobs. After
 `lake exe cache get`, the full default `lake build` passed **21,475 jobs**
 with warnings as errors. Log: `/tmp/dkps-unification/family-phase-core-full.log`.
+Manuscript, visualization, submission and roadmap files were not edited;
+preexisting unrelated changes were preserved.
+
+
+## 27 October 2026 — common Hilbert family value, feasibility and attainment
+
+**Main theorem.** For a complete complex Hilbert space, complemented K,L,
+`1<=p<=2`, `tau>=0`, finite family cost of `P_K-P_L` and equal crossed-defect
+finranks, there exists a unitary U taking K to L with finite cost
+
+```
+cost_(p,tau)(I-U) = tsum_j m_(p,tau)(arcsin(s_j((I-P_L)P_K)))
+                 <= cost_(p,tau)(I-T)
+```
+
+for every ambient unitary transporter T. Exact prefix:
+`TauCeti.DavisKahan.InfiniteDimensional.SmoothedPowerTransport`.
+The declarations are `exists_unitary_minimizing_transport_of_projection_cost_ne_top`
+and `finite_minimum_iff_projection_cost_and_defect_balance`, in
+`SmoothedPowerGlobalAttainment.lean`. Separability and finite rank are not
+assumed. The second theorem makes the ideal and balance conditions necessary
+as well as sufficient for finite-cost global attainment.
+
+**Common mechanism and genuine endpoint difference.**
+`TauCeti.tsum_angle_penalty_le_displacement_of_finite_transport_bound`
+abstracts the existing moving-target finite-unitary approximation argument.
+The displacement penalty is monotone, finite cost forces compact displacement,
+and the angle penalty is continuous and zero-preserving. A finite-section
+bound then lifts to arbitrary dimension, including divergent extended costs;
+continuity of the displacement penalty is not required for this lower bound.
+The existing Charbonnier lower bound now consumes the common theorem.
+`angle_minimum_sum_le_transport` instantiates it for the whole family.
+
+For every regular member (`tau>0 or p>1`), C2 supplies a positive canonical
+cutoff. Compact projection difference gives a finite sector above it. The
+finite C1 attainer, the actual compressed canonical tail trace and a generic
+spectral block identity construct an exact global attainer equal to canonical
+rotation off that sector. Its correction rank is at most the sector dimension:
+`exists_minimizer_by_finite_correction`. This describes a constructed attainer,
+not every optimizer. At p=1,tau=0 there is no positive cutoff; the main theorem
+reuses the existing nuclear signed-root attainment instead.
+
+**Native domain and feasibility.** `TauCeti.smoothedPower_quadratic_bounds`
+proves explicit positive quadratic comparison constants by the classical mean
+value theorem. `ContinuousLinearMap.smoothedPowerCost_ne_top_iff_schatten_two`
+identifies positive-smoothing cost finiteness with Hilbert--Schmidt membership;
+`smoothedPowerCost_zero_smoothing` identifies the exact extended Schatten-p
+power. The cost subtracts its baseline inside each summand. Over either field,
+`transport_iff_projection_cost_and_defect_balance` is obtained from the existing
+restricted-unitary/index theorem, without duplicating that proof. Failure of
+either condition precludes finite cost; it does not determine whether the
+ambient fiber is empty or all its feasible costs are infinite.
+
+**Provenance and scope.** T19/T20 in the maintained unification note record
+the classical scalar/index ingredients, proof-extraction ancestry and the
+potentially novel family transport extension. The scalar penalty and ambient
+minimal-distortion problem are established prior art. No arbitrary-penalty
+operator theorem, full-family optimizer classification, real infinite-rank
+matching, or endpoint optimizer-set convergence is claimed.
+
+**Reassessment.** C1/C2/C5 establish the organizing closed-family complex
+minimum/attainment theory; C3/C4 supply field compatibility. The next action
+is a completion audit of these hypotheses and source mappings, including the
+finite labelled/intrinsic multiplicity interface, before optional extensions.
+Full real topology, broad stability and exhaustive limits are not prerequisites.
+
+**Validation.** Focused attainment target passed **7,544 jobs**. After
+`lake exe cache get`, full default `lake build` passed **21,495 jobs**, warnings
+as errors. Log: `/tmp/dkps-unification/family-hilbert-core-full.log`.
 Manuscript, visualization, submission and roadmap files were not edited;
 preexisting unrelated changes were preserved.

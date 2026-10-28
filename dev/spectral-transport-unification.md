@@ -592,7 +592,7 @@ consumer uses it instead of taking a limit of solved Schatten optima.
 positive smoothing; C1b is the exact closed-family value and an attaining
 construction. They do not classify every family optimizer. The C2 logarithmic-ratio proof and
 closed unrestricted canonical criterion are now proved below. The C5 family
-Hilbert lift remains unformalized. The wider arbitrary-penalty shape theorem
+Hilbert lift is now proved in the checkpoint below. The wider arbitrary-penalty shape theorem
 also remains conjectural. Zero-smoothing value continuity does not assert
 convergence of entire optimizer sets. The nuclear corner retains the already
 proved independent signed-root geometry.
@@ -657,9 +657,93 @@ is the exact declaration, with prefix
 all paper-facing names in the numbered items. It compares every ambient
 unitary transporter, with no assumed plane invariance. Quadratic ties at
 right angles are retained. The criterion is complex-field only and does
-not assert the whole family optimizer classification or an infinite-
-dimensional family lift. The wider generic spectral-penalty decoupling
+not assert the whole family optimizer classification or by itself establish an
+infinite-dimensional family lift; the separate C5 proof follows below.
+The wider generic spectral-penalty decoupling
 conjecture remains distinct from this proved generic scalar principle.
+
+### The common Hilbert-space value and attainment lift — proved
+
+C5 is now proved for the whole closed `1<=p<=2`, `tau>=0` family. For any
+complete complex Hilbert space and orthogonally complemented K,L, put
+Delta=P_K-P_L and q=p at zero smoothing, q=2 at positive smoothing. Finite
+cost is feasible exactly when Delta belongs to S_q and the crossed defects
+balance. Under these conditions an actual ambient unitary attains
+
+\[
+ D_{\rho_{p,\tau}}(P_K,P_L)
+ =\sum_{j\ge0}m_{p,\tau}\bigl(\arcsin s_j((I-P_L)P_K)\bigr)<\infty.
+\]
+
+`exists_unitary_minimizing_transport_of_projection_cost_ne_top` and
+`finite_minimum_iff_projection_cost_and_defect_balance`, in
+[SmoothedPowerGlobalAttainment](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean),
+are the exact declarations with prefix
+`TauCeti.DavisKahan.InfiniteDimensional.SmoothedPowerTransport`.
+The formal domain condition is finite family cost of Delta, whose equivalence
+to the stated native ideal is separately proved. No separability, finite rank
+or prescribed competitor block structure is assumed.
+
+The reusable theorem
+`TauCeti.tsum_angle_penalty_le_displacement_of_finite_transport_bound`, in
+[SpectralTransportLimit](../ForTauCeti/Analysis/InnerProductSpace/Projection/SpectralTransportLimit.lean),
+requires a monotone nonnegative displacement penalty, compactness from finite
+cost, a continuous zero-preserving angle penalty and the finite-section bound.
+It does not require continuity of the displacement penalty for this step.
+Spectral finite-rank unitary approximants decrease every displacement singular
+value and converge in operator norm; their target subspaces move. Passing
+finite angle sums to the limit gives the full extended lower bound. The
+existing Charbonnier lower-bound theorem now consumes this principle, and
+`angle_minimum_sum_le_transport` in
+[SmoothedPowerGlobalLowerBound](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalLowerBound.lean)
+applies it to the whole family, even when costs diverge or balance fails.
+A lower bound in such a case is not an assertion of finite-cost attainment.
+
+The native-domain calculation is also compiled. For p in (0,2], tau>0 and
+0<=s<=M,
+
+\[
+ \frac p2(\tau^2+M^2)^{p/2-1}s^2
+ \le (\tau^2+s^2)^{p/2}-\tau^p
+ \le \frac p2(\tau^2)^{p/2-1}s^2.
+\]
+
+`TauCeti.smoothedPower_quadratic_bounds`, in
+[SmoothedPowerScalar](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPowerScalar.lean),
+is the classical mean-value proof with positive explicit constants.
+`ContinuousLinearMap.smoothedPowerCost_ne_top_iff_schatten_two` and
+`smoothedPowerCost_zero_smoothing`, in
+[SmoothedPower](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPower.lean),
+give the ideal domain and exact extended native-power identity.
+[SmoothedPowerFeasibility](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerFeasibility.lean)
+then uses the existing restricted-unitary theorem to obtain
+`transport_iff_projection_cost_and_defect_balance` over either field.
+No new ideal norm or duplicate index proof is introduced.
+
+Attainment is a different structural step. The real scalar minimum is
+continuous and monotone in the physical angle by
+[SmoothedPowerAngleContinuity](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerAngleContinuity.lean).
+In every regular regime `tau>0 or p>1`, C2 gives a positive canonical cutoff.
+Compactness of Delta makes the sector above that cutoff finite. C1 supplies
+an exact finite attainer; actual canonical restrictions, lower semicontinuity
+and dominated angle sums determine the complete infinite tail cost in
+[SmoothedPowerCanonicalTrace](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerCanonicalTrace.lean).
+`exists_minimizer_by_finite_correction` then constructs a global attainer
+fixing that tail relative to canonical rotation, with correction rank bounded
+by the actual finite cutoff dimension. The shared generic spectral block
+identity is `ContinuousLinearMap.tsum_unitary_displacement_penalty_eq_block_add_tail`
+in [ReducingTrace](../ForTauCeti/Analysis/OperatorIdeal/ReducingTrace.lean).
+The existing Schatten/Charbonnier block-cost proofs now share its underlying
+unitary compression geometry. Native finite-cost closure is reused through
+[SmoothedPowerFiniteCorrection](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPowerFiniteCorrection.lean).
+
+At p=1,tau=0 there is no positive canonical cutoff. The final theorem uses
+the existing signed-root nuclear attainer, rather than a finite-active-sector
+claim. Thus the endpoint difference is part of the proof's mechanism. C5
+does not classify every optimizer of every family member, assert convergence
+of optimizer sets, or lift the complex angle formula to real transport.
+Outside the ideal or balance conditions there is no finite-cost transporter;
+the fiber may be empty or consist entirely of infinite-cost competitors.
 
 ## Limits of regimes: a proved obstruction and the remaining claims
 
@@ -725,7 +809,9 @@ give finite f-cost iff `I-U ∈ S_q`. The existing feasibility theorem yields
 existence of a finite-cost transporter iff `P-Q ∈ S_q` and the finite crossed
 defects balance, over either field. This argument gives feasibility only,
 not the form of any optimizer. The comparison-to-trace corollary has not been
-packaged as a new Lean theorem.
+packaged as a new generic Lean theorem. The smoothed-power family case is
+now certified above with explicit comparison constants and the existing
+restricted-unitary feasibility theorem.
 
 The positivity-away-from-zero hypothesis cannot simply be dropped. The
 continuous nonnegative penalty `f(t)=min(t^2,(2-t)^2)` agrees with t² near
@@ -903,6 +989,8 @@ including its pre-DKPS/Spectra ancestry and independent-work distinctions.
 | **T16** `F.SmoothedPowerTransport.exists_unitary_minimizing_transport_principalAngles_of_nonneg`, `displacementCost_zero_smoothing`, [SmoothedPowerBoundary](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerBoundary.lean); `sum_phaseMinimum_le_transport`, [SmoothedPowerGlobalLowerBound](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGlobalLowerBound.lean); `exists_unitary_attaining_principalAngles`, [SmoothedPowerGlobalAttainment](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean) | Finite complex Hilbert space, equal-rank subspaces, `1<=p<=2`, `tau>=0`: the unrestricted minimum of the literal family spectral trace equals the sum of attained compact planar minima over all source principal angles. An actual canonical phase attainer exists; zero smoothing is the native Schatten power. | S4 Problem 1.1 formulates the ambient problem; Theorems 4.2/4.5 cover the classical quadratic/Q-norm regimes, not this entire nonhomogeneous family. S12/S13 authenticate the scalar penalties. No equivalent closed-family transport theorem is authenticated in the examined sources. | Family-wide structural derivation/extension; potentially novel transport theorem, with established boundary cases and classical ingredients. | Compiled; direct primary predecessor comparisons as recorded above; exact extension priority unresolved, including S10. | T15 common ambient structure; `Submodule.sum_principalAngles_eq_paired_phases_add_comap_complex`; `phaseMinimum_mean_le_sum`, `phaseMinimum_le_penalty_two_mul_sin`; classical `normalDisplacementSpectralCost_of_isSelfAdjoint` and `two_mul_sum_sin_principalAngles_le_nuclear_transport`; compact attainment, canonical CS geometry, `continuous_phaseMinimum_smoothing` and `continuous_displacementCost_smoothing`. | C1b values/attainment are proved, not every optimizer, the full C2 phase law, a real decoupling theorem, a generic C² penalty theorem, or the C5 infinite-dimensional family lift. No novelty claim for scalar penalties, CS geometry, convexity, trace bounds, or continuity of compact minima; no newly authenticated external locator is claimed for these elementary ingredients. |
 | **T17** `TauCeti.SingleCrossingMinimum.positive_roots_eq`, `initial_neg_of_positive_root`, `strictMonoOn_of_initial_nonneg`, `exists_unique_minimizer_of_initial_neg`, [SingleCrossingMinimum](../ForTauCeti/Analysis/Calculus/SingleCrossingMinimum.lean) | On a nontrivial compact scalar interval, a cost is continuous, L(0)=0, L'=wH on the half-open interval with positive w and strictly increasing H. Interior derivative-sign equivalence gives unique canonical optimality for H(0)>=0; negative/zero sign equivalences and positive endpoint derivative give a unique interior global minimum for H(0)<0. | Classical Rolle/mean-value, compact attainment and one-sided derivative sign arguments. Exact pinned Mathlib `exists_deriv_eq_zero` and `eventually_nhdsWithin_sign_eq_of_deriv_pos/neg` APIs checked; no new external book locator is claimed. Proof abstracts the old `SchattenPhaseTransition` arguments; its `phasePower_stationary_unique` now forwards to the common positive-root theorem. | Classical calculus formally verified and generalized into a reusable sufficient principle; proof adaptation recorded. | Compiler verified and pinned primary formal sources inspected; no historical originality claim. | Mathlib Rolle, derivative-sign monotonicity, compact interval minimum and local-extremum derivative. | No assumption of the minimizing phase; no H-continuity or infinite endpoint limit is needed. This is a scalar theorem, not an unrestricted operator reduction for arbitrary penalties. |
 | **T18** `F.SmoothedPowerTransport.canonical_phase_unique_min_of_subcritical`, `exists_unique_phase_minimizer_of_supercritical`, `positive_stationary_isMinOn`, [SmoothedPowerPhaseSelection](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseSelection.lean); same namespace `canonical_phase_isMinOn_iff_on_physical_interval`, [SmoothedPowerPhaseEndpoints](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseEndpoints.lean); `nonacuteDirectRotation_isMin_iff_principalAngles_critical`, [SmoothedPowerCanonicalCriterion](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerCanonicalCriterion.lean) | The positively smoothed finite planar family has one global phase transition, including unique canonical minimum at critical equality and unique positive stationary/global-minimum phase above it. The full closed family has canonical scalar optimality iff C<=cos(theta), for every physical angle. For finite complex equal-rank pairs, canonical rotation is unrestrictedly optimal iff every principal angle satisfies that condition. | S4 supplies the ambient problem, classical Q-norm/quadratic theory and special subquadratic phase example; S12/S13 authenticate scalar penalties. No exact full-family transition/canonical theorem is authenticated in the examined sources. | New family structural derivation/extension; potentially novel transport result with classical boundary cases. | Compiled; primary predecessors as recorded, historical priority unresolved including S10. | T17 scalar principle; `smoothedPowerPhaseRatioControl_strictAntiOn`; actual `hasDerivAt_smoothedPowerPhaseLogRatio`; initial curvature factor; T16 ambient minimum; exact zero-smoothing scalar identities and existing Schatten endpoint/strict-exponent proofs. | No real-field planar reduction, no every-optimizer classification for the family, no family-wide Hilbert lift or optimizer-set convergence claim. Scalar generalized Charbonnier penalties and classical quadratic/canonical geometry are not new. |
+| **T19** `TauCeti.smoothedPower_quadratic_bounds`, [SmoothedPowerScalar](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPowerScalar.lean); `ContinuousLinearMap.smoothedPowerCost_ne_top_iff_schatten_two`, `smoothedPowerCost_zero_smoothing`, [SmoothedPower](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPower.lean); `I.SmoothedPowerTransport.transport_iff_projection_cost_and_defect_balance`, [SmoothedPowerFeasibility](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerFeasibility.lean) | Positive smoothing and 1<=p<=2 have the Hilbert--Schmidt finite-cost domain; zero smoothing is exactly the accepted Schatten-p power. Over either field, finite-cost transport exists iff the projection penalty is finite and crossed defects balance. | Classical real-power mean value/comparison and native ideal/index theory; S6/S11 authenticate the relative-index and complex separable proper-ideal feasibility predecessors. No new scalar penalty or ideal is claimed. | Classical ingredients formally verified; precise family domain/feasibility corollary derived by reusing the existing restricted-unitary theorem. | Compiled; primary S6/S11 scope as recorded; real/nonseparable formal extension is distinguished from those printed scopes. | `exists_hasDerivAt_eq_slope`; accepted singular values and Schatten gauges; `schatten_transport_iff_projection_sub_ne_top_and_defect_balance`; `gauge_nonacuteDirectRotation_ne_top_iff_projection_sub`. | Feasibility over both fields, not real planar optimality. No finite-rank or separability assumption. A finite-cost statement is distinct from extended-cost minimization on a possibly empty fiber. |
+| **T20** `TauCeti.tsum_angle_penalty_le_displacement_of_finite_transport_bound`, [SpectralTransportLimit](../ForTauCeti/Analysis/InnerProductSpace/Projection/SpectralTransportLimit.lean); `I.SmoothedPowerTransport.angle_minimum_sum_le_transport`, [SmoothedPowerGlobalLowerBound](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalLowerBound.lean); same namespace `exists_minimizer_by_finite_correction`, `exists_unitary_minimizing_transport_of_projection_cost_ne_top`, `finite_minimum_iff_projection_cost_and_defect_balance`, [SmoothedPowerGlobalAttainment](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean) | Complete complex Hilbert space of arbitrary dimension, 1<=p<=2, tau>=0: all ambient transports obey the intrinsic angle-sum lower bound, including infinite costs. Finite projection penalty plus balanced crossed defects gives an actual finite-cost global attainer equal to that sum, and is necessary for finite-cost attainment. In regular regimes an attainer can be chosen as a finite correction of canonical rotation. | S4 establishes the finite ambient problem and classical quadratic/Q-norm theory; S6/S11 supply classical index/ideal feasibility; S12/S13 authenticate scalar penalties. No equivalent full closed-family Hilbert value/attainment theorem is authenticated in the sources examined. The proof abstracts/adapts the existing Charbonnier/Schatten approximation and tail assembly; the nuclear corner consumes the existing signed-root result. | General transport lifting derivation and full family solution extension; potentially novel, exact historical priority unresolved. | Full compiler validation; predecessor primary confirmations as recorded, S10 remains unauthenticated. | C1 finite unrestricted value; C2 positive canonical cutoff; compact unitary truncation and moving targets; finite reducing transport sections; T19 domains; angle continuity/monotonicity; lower semicontinuity and actual canonical restrictions; generic spectral block trace; existing nuclear signed-root attainment. | The finite correction describes a constructed regular attainer, not every family optimizer. The nuclear corner uses an independent infinite signed-root construction. No full real matching formula in infinite rank, arbitrary-penalty optimizer theorem, or endpoint optimizer-set limit is claimed. |
 
 Unresolved source work is substantive, not a request to add a checker: obtain
 the authoritative Exercise B.12 statement; authenticate the original 1970
@@ -935,7 +1023,7 @@ This organization supports a coherent contribution without claiming a common
 unrestricted optimizer formula for arbitrary penalties or a complete real
 Hilbert matching theory. The real bridge is T8 and the
 closed-family finite complex minimum theorem is T16. The next central step
-is now the family-wide ideal value/attainment lift C5. Real equality necessity is now proved;
+is a final core statement/provenance audit; C5 is now proved. Real equality necessity is now proved;
 full real optimizer topology and exhaustive limiting classifications are
 secondary to the publication core.
 
@@ -975,4 +1063,12 @@ criterion target passed **7,286 jobs**. After `lake exe cache get`, the full
 default `lake build` passed **21,475 jobs** with warnings as errors, including
 the refactored strict-Schatten consumers and every maintained aggregate.
 Log: `/tmp/dkps-unification/family-phase-core-full.log`. This proves the formal
-scopes above; it does not settle historical priority or the C5 family lift.
+scopes above; at that checkpoint C5 was still open. The following checkpoint
+supersedes that status; historical priority remains unresolved.
+
+The full closed-family Hilbert lower bound, domain/feasibility identities,
+canonical-tail trace and finite-cost attainment passed the focused target,
+**7,544 jobs**. After `lake exe cache get`, the full default `lake build`
+passed **21,495 jobs** with warnings as errors, including the refactored
+Charbonnier lower bound and shared Schatten/Charbonnier block geometry.
+Log: `/tmp/dkps-unification/family-hilbert-core-full.log`.

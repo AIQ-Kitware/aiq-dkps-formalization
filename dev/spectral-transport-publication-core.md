@@ -8,7 +8,10 @@ The log is `/tmp/dkps-unification/family-closed-full.log`. The preceding
 ambient structural checkpoint passed 21,453 jobs. The subsequent shared C2
 phase law, closed unrestricted canonical criterion and all consumers passed
 **21,475 jobs**, warnings as errors, after the same cache/build commands.
-Log: `/tmp/dkps-unification/family-phase-core-full.log`.
+Log: `/tmp/dkps-unification/family-phase-core-full.log`. The common C5
+Hilbert-space value/attainment theorem and all consumers subsequently passed
+**21,495 jobs**, warnings as errors, after the cache/build commands.
+Log: `/tmp/dkps-unification/family-hilbert-core-full.log`.
 The success criterion is a coherent central theory and defensible attribution,
 not completion of the research backlog. This assessment is research planning;
 the proposed abstract below is not a manuscript edit.
@@ -26,14 +29,14 @@ The complex strict-Schatten and Charbonnier classifications explain two regular
 phase-selection regimes. Finite real matching explains how real compatibility
 changes the value when complex phases cannot be realized.
 
-The finite-dimensional organizing theorem is now proved for the entire
-closed smoothed-power family. It derives the exact unrestricted complex
-minimum from a common ambient decomposition, without invoking the old
-Schatten or Charbonnier optimum theorems. The shared scalar phase-selection law C2
-and exact unrestricted canonical criterion are now also proved. A family-wide
-Hilbert lifting theorem C5 remains the next central extension; the established infinite-dimensional
-Schatten, nuclear and Charbonnier classifications already support the core.
-The broader derivative-shape fragment is still conjectural.
+The organizing theorem is now proved in arbitrary complex Hilbert dimension
+for the full closed smoothed-power family, under its exact finite-cost and
+defect conditions. C1 derives the finite ambient minimum, C2 determines its
+phase transition, and C5 supplies the common ideal lower-bound and attainment
+lift. The regular members share one finite-correction construction; the nuclear
+corner uses the already proved signed-root construction. C3/C4 describe the
+field-dependent compatibility boundary. The broader arbitrary-penalty operator
+fragment remains conjectural; it is not needed for this family theorem.
 
 ## Five principal statements
 
@@ -239,37 +242,71 @@ C3 now explains its parity by complex structures on spectral half-spaces.
 A new literal equality between the finite labelled angle counts and C3's
 intrinsic multiplicity has not yet been added; both exact formulations compile.
 
-### C5. Finite-to-Hilbert lifting and the ideal boundary — partly formal
+### C5. Exact Hilbert-space family values, feasibility and attainment — proved
 
-A useful reusable lower-bound principle is available in proof form: let f be
-continuous, increasing and nonnegative on [0,2], f(0)=0, finite f-cost imply
-compact displacement, and m(theta) be continuous with m(0)=0. If every finite
-complex transport satisfies the angle-sum lower bound for (f,m), the same
-lower bound holds for arbitrary Hilbert-space transports, including infinite
-costs. This is not an assumption of the infinite-dimensional conclusion.
+Let E be any complete complex Hilbert space, K,L orthogonally complemented,
+`1<=p<=2`, `tau>=0`, and Delta=P_K-P_L. Write
 
-For finite-cost U, the existing finite-rank unitary approximants U_n converge
-in operator norm and have displacement singular values pointwise bounded by
-those of U. Restrict U_n to its existing finite reducing transport section,
-apply the finite theorem to **moving targets** U_n K, pass each
-finite angle prefix to the limit, and take the supremum of prefixes. The
-approximants need not preserve the original target L. This resolves a genuine
-gap in a naive fixed-fiber compression argument.
+\[
+ q=\begin{cases}p&\tau=0,\\2&\tau>0.\end{cases}
+\]
 
-Attainment requires another construction. If the scalar canonical regime
-contains `[0,theta_c]` with theta_c>0, compact Delta has only finitely many
-active sectors. Balanced defects and the finite attainer give an actual finite
-correction of R. At the nuclear endpoint theta_c=0, use infinite signed-root
-assembly instead. Classification of every Hilbert optimizer additionally
-requires tail rigidity; it does not follow just from a finite formula.
+A finite-cost transporter exists exactly when `Delta in S_q` and the finite
+crossed defects have equal dimension. Under these conditions the common
+spectral minimum is attained and equals
 
-**Evidence/status:** the lower-bound, finite correction and full classification
-instances for strict Schatten and Charbonnier are compiled. Their common
-abstract lifting principle is not yet packaged as a Lean theorem. For the
-family, tau>0 gives quadratic near-zero comparison and hence S_2 feasibility;
-tau=0 gives S_p feasibility. Both require zero relative defect index. The
-ideal criterion is classical; the general family application remains to be
-certified after C1. Explicit comparison constants appear in the unification note.
+\[
+ \min_{UP_KU^*=P_L}\operatorname{Tr}\rho_{p,\tau}(|I-U|)
+ =\sum_{j\ge0}m_{p,\tau}\bigl(\arcsin s_j((I-P_L)P_K)\bigr)<\infty.
+\]
+
+The literal cost is an extended singular-value sum with the baseline
+subtracted inside each summand. The exact declaration is
+`I.SmoothedPowerTransport.exists_unitary_minimizing_transport_of_projection_cost_ne_top`
+in [SmoothedPowerGlobalAttainment](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean),
+where `I=TauCeti.DavisKahan.InfiniteDimensional`. Its formal hypothesis is
+finite family cost of Delta and equality of the crossed-defect finranks;
+the native-ideal identities above translate this exactly to S_q and balance.
+`finite_minimum_iff_projection_cost_and_defect_balance` proves necessity and
+sufficiency for actual finite-cost global attainment.
+
+**One common lower-bound principle.**
+`TauCeti.tsum_angle_penalty_le_displacement_of_finite_transport_bound`, in
+[SpectralTransportLimit](../ForTauCeti/Analysis/InnerProductSpace/Projection/SpectralTransportLimit.lean),
+assumes an increasing nonnegative displacement penalty f, finite f-cost
+forcing compact unitary displacement, a continuous zero-preserving angle
+penalty m, and the bound on actual finite sections. It proves the angle-sum
+bound for every ambient complex transporter, with infinite costs allowed.
+Continuity of f is not needed for this lower-bound step. Norm-convergent
+spectral unitary truncations decrease every displacement singular value.
+Their target subspaces move; the proof passes finite angle prefixes to the
+limit rather than assuming fixed-target compression. The existing
+Charbonnier ambient lower bound now consumes this common theorem.
+
+**Attainment and the endpoint difference.** In every regular regime
+`tau>0 or p>1`, a positive canonical cutoff exists by C2. Compact Delta
+has a finite sine sector above it. C1 optimizes that actual finite section;
+canonical restrictions, lower semicontinuity and angle monotonicity identify
+the whole remaining tail cost. A generic spectral block identity assembles
+the two costs. `exists_minimizer_by_finite_correction` supplies an attainer
+agreeing with canonical rotation off that finite sector, with update rank at
+most its dimension. This is an existence assertion, not a classification of
+all family optimizers. The nuclear corner has no positive canonical cutoff;
+C5 instead reuses the independent signed-root attainer from C3.
+
+**Native domain and field scope.**
+`ContinuousLinearMap.smoothedPowerCost_ne_top_iff_schatten_two` and
+`smoothedPowerCost_zero_smoothing`, in
+[SmoothedPower](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPower.lean),
+prove the ideal switch and extended native-power identity.
+`transport_iff_projection_cost_and_defect_balance`, in
+[SmoothedPowerFeasibility](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerFeasibility.lean),
+proves the same finite-cost feasibility condition over either field by using
+the existing restricted-unitary theorem. The complex value formula does not
+extend to real transport by that feasibility argument. Failure of the domain
+or balance condition means no finite-cost transporter; the fiber may be empty
+or all its feasible costs may be infinite. Such extended minima do not give
+stationarity or finite-cost optimizer classifications.
 
 ## Dependency diagram
 
@@ -285,12 +322,14 @@ flowchart TD
   N[Normalized family control and actual logarithmic derivative: proved] --> C
   C --> A[Exact unrestricted canonical criterion: proved]
   F --> A
-  F --> L[C5 Hilbert lift and finite active attainment: candidate family; known instances proved]
+  C --> L
+  F --> L[C5 exact Hilbert family values, finite-cost feasibility and attainment: proved]
   I[Classical ideal membership and defect index: proved] --> L
   U[Compact unitary approximation: proved] --> L
   T[Shared trace calibration: proved] --> R[C3 signed-root equality-attainer classification: proved]
   J[Orthogonal complex structures and spectral half dimensions: proved] --> P[Real parity criterion: proved]
   R --> P
+  R --> L
   M[C4 unrestricted finite real matching: proved] --> E[Finite field-equality parity: proved]
   P --> X[Structural explanation of field compatibility]
   E --> X
@@ -306,7 +345,7 @@ contains exact declarations and authentication limits.
 | Jordan (1875), §§46–50; Davis (1958), Theorems 7.1, 7.3, 7.4 | Classical angular geometry and canonical operator/Hilbert--Schmidt/Schatten p>=2 extremal theory. | Exact subquadratic phase selection and its field compatibility, not invention of angles or direct rotation. |
 | Davis–Kahan (1970), Propositions 4.3–4.4 and examples | Squared displacement, norm-scope failure and the printed real short-angle assertion. Original wording here relies on the repository's prior source audit. | Formal correction with exact scope, followed by an optimization theory beyond the false assertion. |
 | Sun–Roth–Black (2010), §4; Barron (2019), equation (4) | The scalar generalized Charbonnier family itself, up to our subtraction at zero. | Constrained transport phase selection and operator structure; no claim to invent the penalty. Primary authentication is S13 in the provenance map. |
-| Bolotnikov–Li–Rodman (2001), Problem 1.1; Theorems 3.1, 4.2, 4.5; Lemma 3.3 | The ambient distortion problem, Q-norm theory, complete Frobenius minimizers and a special subquadratic phase example. Theorem 4.5's chain compatibility condition is automatic for a single subspace pair. | The common closed-family finite complex minimum/attainment theorem C1b, necessary local structure C1a, common phase law C2, sharp unrestricted canonical criterion, and solved infinite-dimensional classifications. The optimization problem itself is prior art; exact extension priority is unresolved. |
+| Bolotnikov–Li–Rodman (2001), Problem 1.1; Theorems 3.1, 4.2, 4.5; Lemma 3.3 | The ambient distortion problem, Q-norm theory, complete Frobenius minimizers and a special subquadratic phase example. Theorem 4.5's chain compatibility condition is automatic for a single subspace pair. | The common closed-family finite complex minimum/attainment theorem C1b, necessary local structure C1a, common phase law C2, sharp unrestricted canonical criterion, and full closed-family Hilbert value/attainment theorem. Existing complete optimizer classifications remain available in their precise regimes. The optimization problem itself is prior art; exact extension priority is unresolved. |
 | Qiu–Zhang–Li (2006), §5; Zhang–Qiu (2010), §4 p. 1615 | Grassmann/logarithmic objectives and explicit trace-norm nonminimality. | Exact extrinsic optimizer classifications, not a new discovery that direct rotation can fail for the trace norm. |
 | Avron–Seiler–Simon (1994), Proposition 3.1; Kaftal–Loreaux (2017), Proposition 2.7(ii) | Relative index and exact proper-ideal restricted-unitary feasibility on separable complex Hilbert space. | Formal real/nonseparable scope and a penalty-specific optimizer solution above those classical ingredients. |
 
@@ -323,70 +362,64 @@ original-source authentication limitations.
 
 ## Proposed abstract, supported by the current proved core
 
-We study unitary and orthogonal transport between spectral subspaces by
-minimizing spectral penalties of the ambient displacement. For complex Hilbert
-spaces of finite dimension we prove an exact reduction of the full closed
-smoothed-power family to attained planar minima over principal angles. A
-common ambient spectral decomposition derives this reduction without assuming
-plane preservation by competitors. A common logarithmic-curvature principle
-proves the penalty-dependent phase transition and yields a sharp unrestricted
-criterion for canonical optimality throughout the closed family. We also give exact infinite-dimensional
-optimizer descriptions for subquadratic Schatten powers,
-the nuclear endpoint and smoothed nuclear penalties. The regular regimes
-select phases on a finite active angle spectrum, while nuclear equality
-attainers admit an independent signed-root parametrization in arbitrary rank.
-This parametrization works over both scalar fields. Over the reals its
-solvability is equivalent to even multiplicity on every strictly acute
-source-side sine eigenspace, explaining the parity condition in the finite
-orthogonal matching problem. Operator-ideal membership and balanced crossed
-defects specify finite-cost feasibility. The results connect penalty-dependent
-phase selection, real compatibility and infinite-dimensional attainment within
-one transport-fiber variational problem.
+We study optimal unitary and orthogonal transport between spectral subspaces
+under penalties of the ambient displacement. For the closed smoothed-power
+family, we determine the exact attained minimum on complete complex Hilbert
+spaces under its necessary ideal-membership and defect-balance conditions.
+A common ambient spectral decomposition establishes unrestricted finite
+reduction, while a logarithmic-curvature principle proves the phase transition
+and a sharp canonical-optimality criterion. Spectral unitary approximation
+and a finite active-sector correction lift the value formula to arbitrary
+Hilbert dimension. Positive smoothing selects the Hilbert--Schmidt domain;
+zero smoothing selects the corresponding Schatten domain. At the nuclear
+corner, an independent signed-root parametrization replaces the finite active
+construction and classifies equality attainers over both scalar fields. Its
+real solvability requires even acute source multiplicities, explaining the
+parity obstruction in finite orthogonal matching. The results connect penalty-
+dependent phase selection, real compatibility and infinite-dimensional
+feasibility and attainment within one transport-fiber variational problem.
 
-This abstract claims the proved finite family value/attainment reduction and
-the common phase-selection law and established infinite-dimensional regimes.
-It does not claim a C5 family-wide Hilbert extension or every-optimizer
-classification for the whole two-parameter family.
+This abstract claims the proved C1/C2/C5 family value/attainment theory and
+C3/C4 field compatibility results. It does not claim a complete optimizer
+classification for every smoothed-power parameter, a real-field planar
+formula, an infinite-dimensional real matching classification, or convergence
+of every endpoint optimizer from regular regimes.
 
 ## Theorem-level outline and the next proof decision
 
-1. **Classical geometry and the variational fiber.** Definitions, angle data,
-   Q-norm boundary, source correction, ideal feasibility and attribution.
-2. **Penalty selection.** The proved C1a ambient decomposition and C1b
-   closed-family value/attainment theorem, followed by explicit scalar laws
-   from the shared C2 log-curvature principle, with the closed canonical
-   criterion as their principal ambient consequence.
-3. **Field compatibility.** C3 nuclear equality geometry and C4 finite real
-   matching; explain the real complex-structure obstruction.
-4. **Infinite-dimensional assembly.** C5 lower-bound lift, finite active
-   corrections and the different nuclear infinite-product mechanism.
-5. **Consequences and boundaries.** Include only consequences needed to explain
-   the theory; state real above-bound and endpoint set-limit limitations.
+1. **Problem and classical geometry.** The transport fiber, angle data,
+   direct rotation, the Q-norm boundary and precise predecessor attribution.
+2. **Main spectral transport theorem.** State the C5 exact Hilbert value,
+   finite-cost feasibility and attainment result, alongside the C2 critical
+   surface and its boundary regimes.
+3. **Finite ambient mechanism.** Prove C1a by actual gradients and no-overlap;
+   derive C1b using the kernel reflection bound and canonical phase attainers.
+   Prove C2 through the generic scalar log-curvature principle.
+4. **Ideal lifting and endpoint structure.** Moving-target lower bounds,
+   canonical tails and finite corrections, then the nuclear signed-root
+   mechanism that covers the corner with no positive cutoff.
+5. **Field compatibility.** C3 nuclear certificates and real parity, C4 finite
+   matching, and the precise limitation of a universal real planar theorem.
+6. **Boundaries and selected consequences.** State only relevant established
+   correction/limiting results; retain the right-angle optimizer-set obstruction
+   and leave broad topology or stability outside the central theorem.
 
-C1a, C1b and C2 now supply a family-wide organizing theorem with a precise,
-complete finite-dimensional scope. Together with C3, C4 and the established
-infinite-dimensional classifications, they support a coherent narrower paper.
-Further unrestricted real classification, topology and broad stability are
-not publication gates. The exact family transport theorem remains potentially
-novel; the scalar family, ambient problem, CS geometry, trace bounds and
-compactness principles are established ingredients. Historical comparison
-still needs resolution, especially the authoritative Exercise B.12 statement.
+**Reassessment at this checkpoint:** C1/C2/C5 now give a proved organizing
+minimum-and-attainment theory across the whole family and arbitrary complex
+Hilbert dimension. C3/C4 add rigorous field dependence. There is no remaining
+proof prerequisite for those displayed theorem statements. A fully generic
+operator penalty theorem, every-family-optimizer classification, unrestricted
+infinite-dimensional real matching and exhaustive topology/stability are
+additional research directions, not publication gates.
 
-**Reassessment at this checkpoint:** no further scalar proof is needed to
-claim the displayed finite-family reduction, regular phase-selection law and
-closed unrestricted canonical criterion. These are a coherent central result,
-with the real signed-root compatibility theorem and known Hilbert regimes
-as structural consequences and extensions. The broader generic penalty
-operator theorem and a family-wide every-optimizer classification are not
-prerequisites for that finite core.
-
-The next consequential proof is C5's common infinite-dimensional value and
-attainment lift, restricted to its actual ideal and defect hypotheses. First
-inspect the existing finite-unitary approximation and penalty-cost APIs;
-reuse a generic theorem if it already implies the family case. Positive
-smoothing should use Hilbert--Schmidt displacement and a finite active
-spectrum; the nuclear corner already has signed-root attainment. Do not
-require full family optimizer topology or infinite-rank real matching to
-establish that lift. Historical priority still needs source-level review;
-compiler verification does not settle it. Optional stability and exhaustive
-limiting classifications remain deferred.
+The next work is a completion audit of this core's exact hypotheses and
+source attribution, including the finite labelled/intrinsic multiplicity
+interface already identified in C4. It should distinguish any genuine missing
+bridge from a classical identification already available in the APIs before
+starting another proof campaign. Historical priority remains unresolved;
+authenticate the authoritative Exercise B.12 statement and maintain the
+recorded early-source limits before making stronger priority claims. The
+scalar family, ambient problem, canonical geometry, ideal index and calculus
+ingredients are prior mathematics; the full family transport solution remains
+a potentially novel extension on the evidence examined. No manuscript or
+visualization changes are authorized by this assessment.

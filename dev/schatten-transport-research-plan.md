@@ -8,7 +8,10 @@ ambient spectral decomposition C1a: every finite complex constrained local
 minimum has actual paired phase blocks with acute/right means and a
 self-adjoint kernel restriction, with exact cost splitting. The shared C2
 phase law and the closed unrestricted canonical criterion are now also
-proved. The full default build passed 21,475 jobs with warnings as errors after `lake exe cache get`.
+proved. C5 now proves the full closed-family value, finite-cost feasibility
+and attainment theorem in arbitrary complex Hilbert dimension. The full
+default build passed **21,495 jobs**, warnings as errors, after
+`lake exe cache get`.
 The earlier spectral checkpoint was `96aeb922d`
 (accounting `2b481b94d`). See the
 [unification and provenance note](spectral-transport-unification.md) for the
@@ -32,9 +35,10 @@ The active real equality-certificate milestone is now proved. The
 [publication-core assessment](spectral-transport-publication-core.md) examines
 the proposed general penalty argument in
 `papers/dk_formalization_journal/spectral_penalty_transport.tex`; it is
-conjectural and excluded from the verified manuscript. The next central
-target is the two-parameter smoothed-power family, not exhaustive real
-topology, stability or infinite-rank matching.
+conjectural and excluded from the verified manuscript. Its concrete
+two-parameter smoothed-power specialization is now proved, including the
+Hilbert-space lift. The next step is a completion and attribution audit of
+this core, before any optional theorem campaign.
 
 Develop exact extrinsic transport optimization over **every** unitary or
 orthogonal W taking K to L, with objective `||I-W||_p` or an explicitly specified
@@ -49,11 +53,10 @@ classification above that bound is a secondary extension. A journal contribution
 can have a precise, complete scope before every extension below is solved.
 Historical originality requires its own theorem-level literature comparison.
 
-## Immediate priority: the organizing penalty theorem
+## Completed organizing penalty theorem and immediate audit
 
 The publication-core assessment specifies five principal statements and their
-status. C1/C2 are proved for the finite complex family; the next central
-campaign is the operator-ideal lift C5 for
+status. C1/C2 and the operator-ideal lift C5 are proved for
 `rho_(p,tau)(s)=(tau^2+s^2)^(p/2)-tau^p`, `1<=p<=2`, tau>=0:
 
 1. **Completed:** C1b's exact value/attainment formula for `1<=p<=2`,
@@ -78,14 +81,24 @@ campaign is the operator-ideal lift C5 for
    in `SmoothedPowerCanonicalCriterion.lean`: for the full closed finite
    complex family, canonical rotation is optimal iff every principal-angle
    cosine lies above the critical surface. This does not classify all optimizers.
-3. **Next:** inspect and package the existing moving-target finite-unitary-
-   approximation lower-bound lift at its actual ideal scope. Target common
-   family values/attainment and finite-cost feasibility, rather than a full
-   every-optimizer classification. Positive smoothing uses Hilbert--Schmidt
-   displacement and a finite active angle spectrum; the nuclear corner uses
-   the already proved signed-root assembly. Reuse a generic theorem or
-   record its corollary when it already suffices. Do not start optional
-   real topology, broad stability or exhaustive endpoint set limits.
+3. **Completed:** C5's exact Hilbert-space family value and attainment.
+   `SmoothedPowerTransport.exists_unitary_minimizing_transport_of_projection_cost_ne_top`
+   in `SmoothedPowerGlobalAttainment.lean`, prefix
+   `TauCeti.DavisKahan.InfiniteDimensional`, assumes complemented subspaces,
+   finite family cost of the projection difference and balanced crossed
+   defects. The native domain is Schatten-p at zero smoothing and
+   Hilbert--Schmidt at positive smoothing. The theorem attains the intrinsic
+   directed-angle sum and compares every ambient complex transporter, in
+   arbitrary Hilbert dimension. The shared moving-target lower-bound lift
+   also covers infinite costs. Every regular regime shares one finite active
+   correction and canonical tail construction; only the nuclear corner uses
+   the existing signed-root attainer. Feasibility over either field follows
+   from the existing native restricted-unitary/index theorem. This does not
+   classify every family optimizer or give a real planar formula.
+4. **Next:** audit the displayed core hypotheses and exact source mappings,
+   including the finite labelled-angle/intrinsic multiplicity interface in
+   C4. The three central family statements are proved; further classification,
+   topology, stability and endpoint set limits are not publication gates.
 
 The shared `UnitaryPhaseHessian` replaces the duplicated Schatten and
 Charbonnier Hessian/overlap calculations. `UnitarySpectralRestriction` now
@@ -97,12 +110,13 @@ minimality; `SmoothedPowerFeasibleBlocks` certifies their feasible common
 variation. C1a assumes no prescribed planes; C1b now proves the unrestricted
 closed-family principal-angle minimum and an actual attainer. C2 and its
 closed unrestricted canonical criterion are also proved. See T15–T18 in
-the provenance map.
+the provenance map. T19/T20 now record the native domains, generic lifting
+principle and full family Hilbert extension.
 
 The proposed C² penalty-shape theorem has not been refuted, but is not yet
 formally verified. The concrete family now has its own common proof and scalar minimum
-principle. Prioritize the scoped ideal lift before optional topology, stability, or
-exhaustive real matching/endpoint-family extensions. The assessment contains
+principle and a proved ideal lift. Audit the completed core before optional
+topology, stability, or exhaustive real matching/endpoint-family extensions. The assessment contains
 the dependency diagram, closest-source comparison and a proof-supported abstract.
 
 ## Current proved frontier
@@ -116,6 +130,7 @@ does not imply feasibility with finite ideal displacement.
 
 | Regime | Lean-verified scope | Starting evidence |
 | --- | --- | --- |
+| Complex full smoothed-power family, `1<=p<=2`, `tau>=0` | Exact intrinsic angle-sum value and finite-cost attainment in arbitrary complete Hilbert dimension iff projection cost is finite and crossed defects balance. Native domain: Schatten-p at zero smoothing, Hilbert--Schmidt at positive smoothing. Finite complex canonical optimality has the exact C2 critical surface. | `SmoothedPowerGlobalAttainment.lean`, `SmoothedPowerFeasibility.lean`, finite `SmoothedPowerCanonicalCriterion.lean`. |
 | Complex `1<p<2`, finite dimension | Exact angle value, attainment, every optimizer, finite multiplicity/defect parameters, topology, thresholds and local-to-global. | `DavisKahan/FiniteDimensional/DirectRotation/SchattenGlobalAttainment.lean` and the classification/topology consumers. |
 | Complex `1<p<2`, arbitrary Hilbert dimension | Native Schatten projection difference and balanced defects give exact attainment. Every optimizer is canonical on the inactive tail and differs by a finite active correction. Every optimizer has independent finite multiplicity-projection and defect-unitary coordinates. | `DavisKahan/InfiniteDimensional/DirectRotation/SchattenGlobalAttainment.lean`, `SchattenOptimizerClassification.lean`, `SchattenMultiplicityTopology.lean`. |
 | Complex nuclear endpoint | Trace-class projection difference and balanced defects give exact attainment and a certificate for **every** optimizer. Complete independent signed-root and spectral-projection parameters are proved. | `DavisKahan/Geometry/Polar/NuclearOptimizerCertificate.lean`, `NuclearRootClassification.lean`, `NuclearRootSpectralFactors.lean`. |
@@ -316,16 +331,20 @@ negative evidence. Newly completed infinite-dimensional and nuclear optimizer
 theorems require further theorem-level comparison. The attributed Aubrun--Szarek
 Exercise B.12 lead still has a printed-edition authentication limitation.
 
-The theorem package sought is: exact values, every optimizer, field dependence,
-endpoint transitions and one quantitative correction consequence, with all
-feasibility and ideal hypotheses explicit. More Lean declarations alone do not
+The proved publication core is: full-family complex values and attainment,
+phase transitions, exact ideal feasibility, nuclear equality certificates and
+real compatibility, with hypotheses explicit. Existing optimizer classifications
+and selected correction consequences support it at their stated regimes;
+classifying every optimizer for every family member is not a completion gate. More Lean declarations alone do not
 establish historical priority. Keep compiled theorems, conventional proofs,
 conjectures, and refuted statements distinct. The 29-result Davis--Kahan source
 inventory is unchanged by this independent research program.
 
 ## Reproduce and resume on another machine
 
-Everything mathematically required is committed. Ordinary Lake builds do not
+The current C5 full default build passed **21,495 jobs**, warnings as errors;
+log `/tmp/dkps-unification/family-hilbert-core-full.log`. Its focused target
+passed 7,544 jobs. Ordinary Lake builds do not
 require coordination submodules. Do not transfer `.lake` as source or depend on
 old `/tmp` logs. The real parity-converse campaign's full default build passed
 **21,427 jobs**, with warnings as errors, after consuming Tau Ceti's dimension

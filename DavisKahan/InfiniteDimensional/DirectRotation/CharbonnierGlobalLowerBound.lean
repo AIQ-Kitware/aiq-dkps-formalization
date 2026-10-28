@@ -10,7 +10,7 @@ public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedAngleContinuit
 public import ForTauCeti.Analysis.OperatorIdeal.CharbonnierFinite
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteTransport
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.UnitaryTransport
-public import ForTauCeti.Analysis.InnerProductSpace.CompactUnitaryApproximation
+public import ForTauCeti.Analysis.InnerProductSpace.Projection.SpectralTransportLimit
 public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenConvergence
 
 /-!
@@ -34,7 +34,7 @@ noncomputable section
 namespace TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition
 
 open FiniteDimensional.SmoothedPhaseTransition Filter
-open scoped ENNReal Topology
+open scoped ENNReal NNReal Topology
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 
@@ -102,46 +102,42 @@ theorem sine_smoothedPhaseMinimum_sum_le_transport
     (∑' j, ENNReal.ofReal (smoothedPhaseMinimum tau
       (Real.arcsin ((K.sinThetaMap L).singularValue j : ℝ)))) ≤
         (1 - (U : E →L[ℂ] E)).charbonnierCost tau := by
-  by_cases hU : (1 - (U : E →L[ℂ] E)).charbonnierCost tau = ∞
-  · rw [hU]
-    exact le_top
-  have hSp := (ContinuousLinearMap.charbonnierCost_ne_top_iff_schatten_two tau hτ _).mp hU
-  have hcompact := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top 2
-    (by norm_num) (1 - (U : E →L[ℂ] E)) hSp
-  have hcompact' : IsCompactOperator (((U : E →L[ℂ] E) - 1) : E →L[ℂ] E) := by
-    rw [← neg_sub 1 (U : E →L[ℂ] E)]
-    exact hcompact.neg
-  obtain ⟨V, N, hN, hlim, _, _, hdom, _⟩ :=
-    exists_finite_unitary_approximation_sequence U hcompact'
-  let S (A : E →L[ℂ] E) := (1 - A * K.starProjection * star A) * K.starProjection
-  have hS : Continuous S := by dsimp only [S]; fun_prop
-  have hsin (W : E ≃ₗᵢ[ℂ] E) : K.sinThetaMap (K.map W.toLinearMap) = S (W : E →L[ℂ] E) := by
-    have hproj := (K.map_eq_iff_conjugate_starProjection (K.map W.toLinearMap) W).mp rfl
-    rw [Submodule.sinThetaMap_def, Submodule.starProjection_orthogonal, ← hproj]
-    rfl
-  suffices (∑' j, ENNReal.ofReal (smoothedPhaseMinimum tau
-      (Real.arcsin ((S (U : E →L[ℂ] E)).singularValue j : ℝ)))) ≤
-        (1 - (U : E →L[ℂ] E)).charbonnierCost tau by
-    simpa only [← hsin, hmap] using this
-  rw [ENNReal.tsum_eq_iSup_sum]
-  apply iSup_le
-  intro s
-  have hterm (j : ℕ) :=
-    (((continuous_sine_smoothedPhaseMinimum_singularValue tau hτ j).comp hS).tendsto
-      (U : E →L[ℂ] E)).comp hlim
-  have hsum := tendsto_finsetSum s (fun j _ => hterm j)
-  apply le_of_tendsto' hsum
-  intro n
-  calc
-    _ ≤ ∑' j, ENNReal.ofReal (smoothedPhaseMinimum tau
-        (Real.arcsin ((S (V n : E →L[ℂ] E)).singularValue j : ℝ))) := ENNReal.sum_le_tsum s
-    _ = ∑' j, ENNReal.ofReal (smoothedPhaseMinimum tau
-        (Real.arcsin ((K.sinThetaMap (K.map (V n).toLinearMap)).singularValue j : ℝ))) := by
-      rw [← hsin]
-    _ ≤ (1 - (V n : E →L[ℂ] E)).charbonnierCost tau :=
-      sine_smoothedPhaseMinimum_sum_le_finite_rank_transport tau hτ K
-        (K.map (V n).toLinearMap) (V n) rfl (N n) (hN n)
-    _ ≤ (1 - (U : E →L[ℂ] E)).charbonnierCost tau :=
-      ContinuousLinearMap.charbonnierCost_le_of_singularValue_le tau _ _ (hdom n)
+  let f := fun s : ℝ≥0 => ENNReal.ofReal (Real.sqrt (tau ^ 2 + (s : ℝ) ^ 2) - tau)
+  let m := fun t : ℝ => ENNReal.ofReal (smoothedPhaseMinimum tau t)
+  have hf : Monotone f := by
+    intro s t hst
+    apply ENNReal.ofReal_le_ofReal
+    apply sub_le_sub_right
+    apply Real.sqrt_le_sqrt
+    have hst' : (s : ℝ) ≤ t := by exact_mod_cast hst
+    nlinarith [s.coe_nonneg, t.coe_nonneg]
+  have hm : ContinuousOn m (Set.Icc 0 (Real.pi / 2)) :=
+    ENNReal.continuous_ofReal.comp_continuousOn (continuousOn_smoothedPhaseMinimum_angle tau hτ)
+  apply tsum_angle_penalty_le_displacement_of_finite_transport_bound f hf m
+    (by simp only [m, smoothedPhaseMinimum_zero_angle tau hτ, ENNReal.ofReal_zero]) hm
+    ?_ ?_ K L U hmap
+  · intro V hfinite
+    have hSp := (ContinuousLinearMap.charbonnierCost_ne_top_iff_schatten_two tau hτ _).mp hfinite
+    have hc := OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top 2
+      (by norm_num) (1 - (V : E →L[ℂ] E)) hSp
+    rw [← neg_sub 1 (V : E →L[ℂ] E)]
+    exact hc.neg
+  · intro M hM K₀ L₀ V hVmap
+    have hdim : Module.finrank ℂ K₀ = Module.finrank ℂ L₀ := by
+      rw [← hVmap]
+      exact (V.toLinearEquiv.finrank_map_eq K₀).symm
+    have hnonneg (i : Fin (Module.finrank ℂ K₀)) :
+        0 ≤ smoothedPhaseMinimum tau (K₀.principalAngles L₀ i) :=
+      smoothedPhaseMinimum_nonneg tau _ hτ
+        ⟨K₀.principalAngles_nonneg L₀ i, K₀.principalAngles_le_pi_div_two L₀ i⟩
+    change (∑ i : Fin (Module.finrank ℂ K₀),
+      ENNReal.ofReal (smoothedPhaseMinimum tau (K₀.principalAngles L₀ i))) ≤
+        (1 - (V : M →L[ℂ] M)).charbonnierCost tau
+    rw [← ENNReal.ofReal_sum_of_nonneg (fun i _ => hnonneg i),
+      ContinuousLinearMap.charbonnierCost_eq_ofReal_sum tau hτ.le]
+    apply ENNReal.ofReal_le_ofReal
+    obtain ⟨_, _, _, hmin⟩ :=
+      exists_unitary_minimizing_smoothed_transport_principalAngles tau hτ K₀ L₀ hdim
+    exact hmin V hVmap
 
 end TauCeti.DavisKahan.InfiniteDimensional.SmoothedPhaseTransition
