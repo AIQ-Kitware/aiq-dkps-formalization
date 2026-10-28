@@ -34,6 +34,20 @@ given.
   policy.
 <!-- END llm_resource_tally -->
 
+## Publication-directed research steering (27 October 2026)
+
+Before selecting optional spectral-transport proof work for publication, read
+[`dev/publication-direction-dkps-to-transport-2026-10-27.md`](dev/publication-direction-dkps-to-transport-2026-10-27.md).
+The research trajectory is **DK formalization + developed/upstreamed foundations
+→ Section 4 source correction → verified transport extensions**. This is a
+historical and infrastructural relationship, **not** a claim that the
+sine-theta theorem logically implies matching, nor a claim that all TauCeti
+imports originated here. Prioritize the exact unrestricted real matching
+reduction, its possible sorting refinement, source-level attribution, and a
+conventional proof a specialist can challenge. Avoid extending the theorem
+inventory merely to enlarge a manuscript. All established Lean build,
+source-fidelity and upstream policies below still apply.
+
 ## What counts as progress
 
 **jon, 2026-08-02.** The deliverable is **polished, Tau Ceti-ready proofs.**

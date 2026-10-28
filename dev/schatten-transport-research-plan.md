@@ -1,5 +1,13 @@
 # Spectral subspace transport: current research plan
 
+**Publication steering:** Read
+[`publication-direction-dkps-to-transport-2026-10-27.md`](publication-direction-dkps-to-transport-2026-10-27.md)
+before beginning another optional theorem campaign. It records why this
+research arose from the Davis--Kahan formalization *effort*, the upstream
+ancestry boundary, the matching-first publication hypothesis, the open sorted
+matching and priority questions, and stop conditions. This is a research
+priority note, not a replacement for the proved mathematics summarized here.
+
 Updated 27 October 2026. Mathematical checkpoint `ff3c1657d` includes the
 field-independent nuclear equality certificate and exact real equality-
 attainment criterion. The subsequent smoothed-power campaign proves the
