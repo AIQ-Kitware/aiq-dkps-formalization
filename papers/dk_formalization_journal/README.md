@@ -7,6 +7,13 @@ a source correction to Proposition 4.4, and one follow-on matching example.
 For scientific scope and publication boundaries, read
 [FORMALIZATION_PAPER_SCOPE.md](FORMALIZATION_PAPER_SCOPE.md).
 
+For editing, start with [AGENTS.md](AGENTS.md), the
+[shared positive style guide](../STYLE_GUIDE.md), and the
+[journal style guide](STYLE_GUIDE.md). [AUTHORING_NOTES.md](AUTHORING_NOTES.md)
+records the current author-review decisions, pending manuscript changes, and
+paths to result mappings, provenance evidence, and the optional upstream campaign
+checkout. The older dated plans in `PAPER_CONTEXT.md` are historical checkpoints.
+
 The older mathematics-first manuscript, including the complete two-parameter
 spectral-penalty theory, optimizer classifications, real matching, nuclear
 endpoint, and infinite-dimensional extensions, is preserved as a buildable
@@ -49,6 +56,24 @@ open (these settings affect only the current session):
 :Latexmk!
 :LatexErrors
 ```
+
+## Draft controls
+
+The preamble of `paper.tex` provides independent switches:
+
+- Set `\DKAnonymoustrue` in place of `\DKAnonymousfalse` to omit author and
+  affiliation details, identifying artifact links, and acknowledgments.
+- Set `\DKColoredSymbolsfalse` in place of `\DKColoredSymbolstrue` for
+  monochrome mathematical symbols. The mathematical role palette remains the
+  same as the Manim visualizations in the colored version.
+
+For wrapper builds, defining `\DKAnonymousReview` enables anonymous mode and
+`\DKMonochromeMath` enables monochrome symbols before `\input{paper.tex}`.
+Author--year citations are enabled for editing. The final bibliography style
+can be changed to the submission venue's requirements later.
+
+The `\jonsays`, `\agentsays`, and `\jonrsp` macros remain defined for the
+next review round; their calls have been removed from the revised manuscript.
 
 ## Lean artifact and reproduction
 

@@ -2,6 +2,10 @@
 
 These rules apply to manuscript prose, captions, headings, and appendix prose. This file is the negative companion to [STYLE_GUIDE.md](STYLE_GUIDE.md): it records vocabulary and constructions to remove.
 
+Apply these rules to the scientific prose at the level of detail appropriate
+to its section. Author-requested review macros may contain editorial notes
+during revision; keep them until the requested review or correction step.
+
 ## Banned rhetorical words
 
 Do not use these words as rhetorical emphasis:

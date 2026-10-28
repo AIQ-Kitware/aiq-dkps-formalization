@@ -1,106 +1,119 @@
 # Formalization paper style guide
 
-This guide describes the prose and structure we want for the manuscript. It is affirmative: use it to decide how to write. See [../BANNED_WORDS_AND_PHRASES.md](../BANNED_WORDS_AND_PHRASES.md) and [../SPECIFIC_NEGATIVE_PROMPTS.md](../SPECIFIC_NEGATIVE_PROMPTS.md) for constructions and recurring failure modes to remove.
+Use [../STYLE_GUIDE.md](../STYLE_GUIDE.md) for the shared affirmative guidance,
+[../BANNED_WORDS_AND_PHRASES.md](../BANNED_WORDS_AND_PHRASES.md) for rhetorical
+habits to remove, and [../SPECIFIC_NEGATIVE_PROMPTS.md](../SPECIFIC_NEGATIVE_PROMPTS.md)
+for recurring review failures. [AUTHORING_NOTES.md](AUTHORING_NOTES.md) records
+this paper's current author decisions and evidence locations.
 
-## Write for a mathematical reader
+## Give the abstract and body their own jobs
 
-Write as the authors of the work, addressing readers who care about the mathematics, the formalization, and the evidence. State what we proved, formalized, adapted, measured, or found. Prefer the mathematical fact to the project-management story that produced it.
+The abstract summarizes the formalization, foundations, correction, and
+follow-on result for a mathematical audience. It can name established theories
+and make broad connections concisely. Define the objects and explain the
+attribution in the body. Preserve the author's acceptance of that level of
+abstraction when applying a request for clearer definitions elsewhere.
 
-Use concrete nouns and verbs. Give the theorem, construction, counterexample, formal dependency, measurement, or limitation directly. A caveat should identify the assumption or missing observation that changes how a result is interpreted.
+Introduce the mathematical problem accessibly in the body. The motivation is
+that a perturbation result was needed for DKPS, after which the project pursued
+the original Davis--Kahan theorem's generality. Keep that motivation concrete.
+The discussion is a possible home for an account of AI's role; its wording and
+placement remain an author decision.
 
-Keep the main text focused on the scientific claims. Put exact file paths, Lean declaration inventories, registry mechanics, generator details, and audit bookkeeping in the appendices.
+## State the formalization contribution plainly
 
+Say what we formalized and what we reused or adapted. Explain the mathematical
+content: principal angles, projections, operator ideals, spectral calculus,
+and Sylvester estimates. Credit Mathlib, Spectra, and Tau Ceti through their
+actual mathematical and formal contributions. Consult the evidence links in
+[AUTHORING_NOTES.md](AUTHORING_NOTES.md) when making those statements.
 
-## Structure the opening around motivation, Lean, and results
+Use a heading such as “Formalized operator-theoretic foundations” when it
+identifies the section's contribution. The author also accepts the current
+follow-on section heading. Choose each heading for its function.
 
-Use the Introduction to establish the mathematical importance of Davis--Kahan and its perturbation bounds. Introduce Lean 4 and Mathlib before explaining what formalization means in this project. Then motivate the source audit, reusable foundational development, and resource study, followed by the contribution list.
+The selection criterion is the four unnumbered Section 2 headline theorems and
+every named theorem, proposition, lemma, and corollary that Davis and Kahan
+establish in the 1970 paper. This gives 29 targets: 28 proved statements and
+Proposition 4.4 refuted as printed. State that criterion in ordinary language
+and refer to the result table. Keep source-correspondence review procedures
+and verification bookkeeping in the repository's evidence documents.
 
-Use the next section to state the formalization coverage prominently and exhibit the central source theorems beside their Lean signatures. State the complete Davis--Kahan coverage directly; put the detailed counting rule and full source correspondence in the referenced appendix.
+## Define the mathematics through its use
 
-## Organize around mathematical claims
+Give brief definitions of trial vectors and spaces, intertwining, compression,
+polar factors, displacement operators, and operator ideals where the body first
+uses them. A reminder of singular values can be short. Explain why a defined
+object is needed by the next equation or theorem. For an interval extending to
+infinity, give an example showing its finite endpoint and infinite side.
 
-Lead sections with the mathematical question or result. Let the source theorems provide the organizational spine of the exposition.
+For the correction, first explain full displacement and its difference from
+restriction to a subspace. Introduce the competing transporters geometrically
+before the block calculation. Give an example of a Q-norm when explaining the
+repair. Repeat a short norm-membership reminder where the sine-theta theorem
+needs it.
 
-For theorem-to-Lean comparisons:
+When introducing an acronym, use the full name followed by the acronym in
+parentheses. Prefer “trace norm” consistently in this article. Use “range” and
+“kernel” consistently; a notation macro can support later typographic choices.
 
-1. introduce shared mathematical notation before the theorem-specific subsection;
-2. state the mathematical theorem or inequality;
-3. place the corresponding Lean signature immediately after it;
-4. explain only the Lean predicates whose mathematical meaning is not evident from the signature;
-5. continue with the mathematical interpretation or consequence.
+## Keep notation and colors consistent
 
-Define each mathematical symbol once, at its first mathematical occurrence. Treat nearby prose, equations, and captions as one continuous explanation: when a symbol or relation has already been defined, refer to it without defining it again. Use the caption to explain genuinely new Lean-specific names or encodings needed to connect the signature to the mathematics.
+Use one convention for the original and perturbed operators across the
+historical account and theorem statements, with an explicit translation to the
+source where needed. Keep the symbol colors aligned with the Manim role
+palette. The residual R and rotation R have different roles and can have
+different colors. Each argument must also remain readable in monochrome.
 
-Keep the short general guide to Lean syntax in the appendix. Refer readers there before the first displayed Lean signature. Around each theorem, explain only the mathematical meaning specific to that theorem.
+Define notation before its substantive use and refer back to nearby definitions.
+A short reminder later can help the reader resume a topic. Keep a notation
+appendix useful to the current article rather than accumulating slide symbols
+that the article does not use.
 
-The Davis--Kahan coverage claims should be stated at the strongest scope supported by the source audit. Define detailed denominators and correspondence rules in the appendix.
+## State the theorem before its Lean signature
 
-## Explain Lean in mathematical language
+Introduce the shared notation, state the mathematical theorem, and place its
+Lean signature immediately afterward. Number these displays “Formalization.”
+Explain theorem-specific predicates in mathematical terms. Keep general Lean
+syntax in the reader guide and refer to it before the first signature.
 
-Number displayed theorem signatures as **Formalization 1**, **Formalization 2**, and so on. In prose, call the displayed declaration **code** or a **Lean signature**. Define theorem-specific mathematical names at first use, then carry those definitions through the surrounding prose, equation, signature, and caption without repetition. Define new domain-specific Lean names when they first appear; keep general Lean notation such as linear-map arrows, index types, typeclass syntax, and implementation abstractions in the appendix guide.
+Explain the complementary block, its positive modulus, and equality of the
+relevant norm values explicitly. Retain genuine scalar-field, domain,
+spectral-separation, and norm hypotheses. Describe those hypotheses directly.
 
-Captions should say that surrounding Lean context is omitted when appropriate and should help a reader map the important arguments and hypotheses to the mathematical statement.
+## Explain history and new results together
 
-The main body should contain only Lean names needed for the displayed theorem signatures. Move additional declaration names and code-level evidence to the appendix.
+State each predecessor's actual contribution and cite its theorem, proposition,
+example, or page when discussing a particular claim. Give publication years
+where they support the historical account and its table. The language of an
+old publication is unnecessary unless it changes the historical argument.
 
-## Present formalization coverage as a contribution
+Distinguish the known complex-phase mechanism from the explicit refutation of
+the printed real, small-angle Proposition 4.4. Present the best-supported claim
+about an unpublished correction concisely, with the existing mathematical
+precursors beside it. Keep exact evidence in author files or source comments.
 
-State the complete Davis--Kahan result coverage explicitly. Explain what full generality means where needed: real or complex Hilbert spaces, infinite-dimensional settings, unbounded self-adjoint operators, or arbitrary unitarily invariant norms when those are part of the source statement.
+For the follow-on theorem, explain its optimization objective, matching costs,
+and relation to preceding results sufficiently for this paper to be assessed
+on its own. Keep references to sibling working manuscripts in author notes.
 
-Treat formalization as a source audit by explaining the mechanism briefly: each hypothesis, boundary convention, and intermediate identity must support a checked derivation, which can expose algebraic errors, boundary failures, and false extremal claims. Then discuss the actual defects found.
+## Match supporting material to the reader's task
 
-## Describe foundational work through the mathematics
+A compact result table can use IDs mapped to Lean declarations in the artifact.
+Explain the selection criterion and provide a path to that mapping. Include
+columns because they help the reader, rather than because the underlying JSON
+contains them. Implementation and source-review evidence remains accessible
+through [AUTHORING_NOTES.md](AUTHORING_NOTES.md).
 
-When motivating the project, note that formalizing Davis--Kahan required substantial mathematical infrastructure that was absent from the available Lean library and can support later formalizations.
+Keep optional resource reporting proportional to the scientific question. If
+measurements are included, distinguish incomplete observed telemetry, backfills,
+modeled quantities, and extrapolations, with their assumptions and coverage.
+Technical measurement and reproduction details can live in artifact documents.
 
-In the foundations section, begin with the gap between the source statements and the available formal library. Name the basic theory areas that were developed and describe their scope in mathematical terms. Use declaration graphs and module classifications as supporting evidence in the appendix.
+## Keep the AI account at the author's chosen level
 
-Describe coverage with scoped qualitative language such as focused interface, focused development, substantial reusable development, or broad partial development. State known omissions when they affect the interpretation.
-
-## Give formal ancestry directly
-
-Credit prior formal work by saying what came from it. If part of the PVM or self-adjoint infrastructure was copied, ported, adapted, generalized, or used as a reference from Spectra or another Lean development, say so directly and cite the source.
-
-Treat mathematical provenance and formal ancestry as ordinary scholarly attribution. The main text should contain the ancestry that affects credit or helps readers understand the development; declaration-level attribution tables can remain in the appendix.
-
-## Keep source-audit bookkeeping in the appendix
-
-Use the main text to state the coverage result and the mathematical consequences. Put census construction, exact source-unit counts, correction/extension bookkeeping, correspondence tables, and declaration-level evidence in a concise appendix section with explicit cross-references from the main text.
-
-When referring readers to supplementary material, use an explicit section or appendix reference.
-
-## Report resource use in layers
-
-Separate directly observed telemetry from quantities inferred with a model and from project-scale extrapolations. Name the extrapolation model explicitly; for the current resource analysis, describe the project-scale calculation as a simple linear extrapolation and state its formula.
-
-Use **retained observed telemetry** in the header and caption of tables containing incomplete resource measurements so a skim reader cannot mistake those values for project totals. Keep explicit backfills separate from live commit-attributed observations because aggregated recovery rows are not commit-local calibration data. State the fraction of the project represented by live exact observations using transparent denominators such as commit coverage and cumulative Lean-line churn.
-
-Keep modeled operational energy in kWh separate from observed token counts. Put model assumptions, cache pricing, ledger schema, and other reproduction details in the appendix. Keep coverage-scaled project estimates in columns or tables distinct from retained observed telemetry and state the scaling assumption concisely.
-
-The abstract should emphasize directly observed quantities and their coverage. Reserve modeled cost, emissions, energy, and extrapolated totals for the body unless they become sufficiently well established to support a headline claim.
-
-## Describe the formalization process concisely
-
-The methods appendix should state the tools and workflow in ordinary research language. The project used Lean 4 and Mathlib through the ChatGPT chat interface, Claude Code, and Codex.
-
-Describe the recurring process as source transcription, decomposition into intermediate obligations, search for existing mathematical and formal results, Lean implementation, compiler-driven proof repair, and repeated source comparison by humans and LLMs. Explain that source-coverage tooling was added as the project grew.
-
-Keep workflow detail only when it helps another researcher understand or reproduce the method.
-
-## Use citations as part of the argument
-
-Store bibliographic metadata in `references.bib` and use the real published record when available. Cite mathematical sources where their results enter the argument and formal sources where their Lean work was reused or adapted.
-
-Related work should compare scientific approaches. When discussing alternative formalization frameworks such as MathCode or AutoLean, state the aspect of workflow that creates a useful comparison with this project.
-
-## Handle uncertainty briefly
-
-State the best-supported claim and the uncertainty that changes it. For a literature search, a concise formulation such as "To the best of our knowledge..." is enough when the search has not found a prior correction.
-
-For incomplete telemetry, name the live-exact observed fraction and describe the measured totals as retained observations. State the historical-audit limitation concisely. For modeled quantities, identify them as estimates and give the assumptions or sensitivity that governs interpretation.
-
-State the evidence available at the manuscript date and phrase literature-search conclusions at that scope.
-
-## End sections with results or questions
-
-Use conclusions and transitions to summarize mathematical results, empirical findings, or research questions. The resource section can close by asking whether alternative AI formalization workflows reduce token and energy costs under comparable mathematical obligations. The conclusion should return to the formalized results, the defects exposed, the reusable theory developed, and the open efficiency question in compact form.
+Use “ChatGPT and Claude” when naming the systems in ordinary paper prose.
+Develop an AI discussion only around the point the author wants to make. A
+brief disclosure can remain brief or be consolidated with that discussion.
+The previously proposed AI-role paragraph was rejected; preserve that decision
+without inventing a more detailed substitute or assigning the author a motive.

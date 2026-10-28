@@ -1,76 +1,23 @@
-% Adapted from visualizations/dkvis/slides_glossary.py (G01--G03) and
-% visualizations/dkvis/notation.py. The slide notation is not identical to
-% the notation of the journal article; the crosswalk below is deliberate.
 \section{Symbols and conventions}
 \label{app:notation}
-\agentsays{Your notation concern applies to this crosswalk too: it includes slide symbols and operator roles beyond the current article. I would check every entry against the included text, resolve avoidable letter reuse, and keep color assignments specific to each mathematical role.}
 
+We write $\sym{A}$ for a reference operator and
+$\sym{Acurrent}=\sym{A}+\sym{H}$ for the perturbed operator. The
+sine-theta theorem uses coordinate maps for trial and exact subspaces.
+The transport results name the subspaces $\sym{Usource},\sym{Vtarget}$
+and their projections $\sym{Psource},\sym{Qtarget}$ directly.
 
-The sine-theta theorem is expressed using coordinate maps for trial and
-exact subspaces; the displacement results instead name the subspaces
-$\sym{Usource},\sym{Vtarget}$ and their projections $\sym{Psource},\sym{Qtarget}$.  The same letter can have different
-local meanings in those two settings.  This table gives both the formal
-meaning and a short description of what the object measures.  It also
-provides the notation used in the accompanying geometric illustrations.
-
-In the general sine-theta statement, $\sym{Acurrent}$ denotes the ambient operator
-being studied.  In examples starting with an original operator and adding
-$\sym{H}$, the illustrations distinguish the original $\sym{A}$ from
-$\sym{Ahat}=\sym{A}+\sym{H}$.  Thus the operator called $\sym{Ahat}$ in those examples
-corresponds to the ambient $\sym{Acurrent}$ in \cref{sec:sine-theta}.
-
-\paragraph{Reading the colors and their shades.}
-The colored edition follows the light-theme Manim roles: blue for
-exact/target data, amber for trial/source data, cyan for the exact unwanted
-complement, magenta for angles and angle-related operators, green for
-residuals and displacement errors, and violet for spectral separation.
-Related but different objects receive \emph{distinct shades} within their
-family: for example, a subspace, an isometric frame for it, its orthogonal
-projection, and a transporter of it are related but are not the same operator.
-Operator provenance retains the subordinate colors tan (original), steel
-(current), and vermilion (perturbation); norm functionals use quiet slate
-colors. A symbol's local definition, not its letter, determines its shade.
-In particular, source $\sym{Usource}$ is amber and target $\sym{Vtarget}$ blue in
-the transport results; some Manim slides use $U$ for the wanted subspace.
-$\sym{R}$ is a green residual in the sine-theta theorem, but
-$\sym{Rrotation}$ is the blue-family direct rotation. The sine-theta
-projection $\sym{Pexact}$ is onto the \emph{exact target}, whereas the
-transport projection $\sym{Psource}$ is onto the \emph{source}.
-A $\sym{NormQ}$-norm is a norm class, unrelated to the target projector
-$\sym{Qtarget}$. Colors never replace the mathematical definitions and
-are disabled globally using \verb|\DKMathColorsfalse| in the preamble.
-
-\begin{center}
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\renewcommand{\arraystretch}{1.13}
-\begin{tabularx}{\linewidth}{@{}p{0.19\linewidth}X@{}}
-\toprule
-\textbf{Family} & \textbf{Related objects with distinct shades}\\
-\midrule
-Exact/target (blue) & $\sym{Vtarget}$ subspace, $\sym{F0}$ frame,
-  $\sym{Qtarget}$ projection, $\sym{Rrotation}$ direct rotation.\\
-Trial/source (amber) & $\sym{Usource}$ subspace, $\sym{E0}$ frame,
-  $\sym{Psource}$ projection, $\sym{Wcompetitor}$ competitor.\\
-Unwanted (cyan) & $\sym{F1}$ complementary frame,
-  $\sym{Lambda1}$ complementary spectral block.\\
-Angles (magenta) & $\sym{theta}$ principal angle,
-  $\sym{Theta0}$ angle operator, $\sym{sinTheta0}$ positive sine,
-  $\sym{S}$ rectangular sine block, $\sym{X}$ Sylvester block.\\
-Residuals (green) & $\sym{R}$ residual, $\sym{r}$ vector residual,
-  $\sym{Kdisplacement}$ displacement error.\\
-Separation (violet) & $\sym{delta}$ certified gap, $\sym{g}$ original gap.\\
-Norms (slate) & $\sym{NormN}$ unitarily invariant gauge,
-  $\sym{NormM}$ auxiliary gauge of a $\sym{NormQ}$-norm.\\
-\bottomrule
-\end{tabularx}
-\end{center}
+In the colored version, blue identifies exact or target data, amber trial
+or source data, cyan the exact complementary block, magenta angles, green
+residuals, and violet spectral separation. The residual $\sym{R}$ and
+direct rotation $\sym{Rrotation}$ have distinct roles and colors. The
+notation and definitions also apply in monochrome.
 
 \begingroup
 \small
 \setlength{\tabcolsep}{4pt}
 \renewcommand{\arraystretch}{1.15}
-\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}p{0.71\textwidth}@{}}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.29\textwidth}>{\raggedright\arraybackslash}p{0.65\textwidth}@{}}
 \toprule
 \textbf{Symbol} & \textbf{Definition or interpretation}\\
 \midrule
@@ -82,53 +29,37 @@ Norms (slate) & $\sym{NormN}$ unitarily invariant gauge,
 \endhead
 \bottomrule
 \endfoot
-\multicolumn{2}{@{}l}{\textbf{Trial and exact spectral data}}\\[2pt]
-$\sym{Acurrent}$ (general theorem) & Self-adjoint ambient operator under study. The slide notation for it is $\sym{Ahat}$ in perturbation examples.\\
-$\sym{Ahat}$ & Operator after perturbation, $\sym{Ahat}=\sym{A}+\sym{H}$; used to distinguish it from the original $\sym{Acurrent}$ in the illustrations.\\
-$\sym{E0}:\sym{Ftrial}\to \sym{Eambient}$ & Isometric \emph{trial frame}: its range is the subspace whose accuracy is being assessed.\\
-$\sym{A0}$ & Self-adjoint operator on trial coordinates; the approximate action of the ambient operator, tested by the residual. In Rayleigh--Ritz examples, $\sym{A0}=\like{E0}{E_0^*}\sym{Ahat} \sym{E0}$.\\
-$\sym{F0}:\sym{Hexact}\to \sym{Eambient}$ & Isometric \emph{exact wanted frame}: its range is the target spectral subspace.\\
-$\sym{F1}:\sym{Gunwanted}\to \sym{Eambient}$ & Isometric \emph{exact unwanted frame}: its range is the orthogonal complement of the target.\\
-$\sym{Lambda0},\sym{Lambda1}$ & Exact spectral blocks on the wanted and unwanted coordinate spaces; in particular $\sym{Acurrent}\sym{F1}=\sym{F1}\sym{Lambda1}$ on the appropriate domain.\\
-$\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ & Orthogonal projection onto the exact wanted subspace in the sine-theta section.\\
-$\sym{E1}$ & Additional complementary frame used in some perturbation decompositions in the illustrations.\\
-\addlinespace[4pt]
-\multicolumn{2}{@{}l}{\textbf{Angle, error, and residual}}\\[2pt]
-$\sym{theta}$ & A single principal angle, between zero and $\pi/2$; it describes the separation of two lines in the elementary pictures.\\
-$\sym{Theta0}(\sym{E0},\sym{F0})$ & Positive principal-angle operator on the trial-coordinate space, determined by the ranges of $\sym{E0}$ and $\sym{F0}$.\\
-$\sym{sinTheta0}$ & Positive \emph{directed sine} on trial coordinates: $\bigl(I-\like{E0}{E_0^*}\sym{F0}\like{F0}{F_0^*}\sym{E0}\bigr)^{1/2}$. It measures the part of a trial vector outside the exact target.\\
-$\sym{S}=(I-\sym{Pexact})\sym{E0}$ & Rectangular complementary block in the proof, with $|\sym{S}|=\sym{sinTheta0}$. Unlike $\sym{sinTheta0}$, $\sym{S}$ maps trial coordinates into the ambient space.\\
-$\sym{Theta}$ & Ambient angle operator in the direct-rotation construction. In finite-dimensional principal-plane coordinates each positive principal angle contributes twice to its spectrum.\\
-$\sym{X}=\like{F1}{F_1^*}\sym{E0}$ & Trial-coordinate overlap with the exact unwanted block; $\sym{S}=\sym{F1}\sym{X}$ and the corresponding unitarily invariant gauges agree where defined.\\
-$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}$ & \emph{Residual} in the sine-theta section; it measures failure of the trial pair to intertwine with $\sym{Acurrent}$. Later, $\sym{Rrotation}$ instead denotes a \emph{direct rotation}.\\
-$\sym{v},\sym{rho},\sym{r}$ & In one-vector examples: trial unit vector $\like{v}{v}$, trial scalar $\sym{rho}$, and residual $\sym{r}=\sym{Ahat}\sym{v}-\sym{rho}\sym{v}$. For a Rayleigh--Ritz choice, $\sym{rho}=\like{v}{v^*}\sym{Ahat}\sym{v}$; the sharp equality picture uses a different trial scalar. These are one-column analogues of $\sym{E0},\sym{A0},\sym{R}$.\\
-$\sym{f0},\sym{f1}$ & Individual exact wanted and unwanted eigenvectors in the two-dimensional illustrations.\\
-\addlinespace[4pt]
-\multicolumn{2}{@{}l}{\textbf{Spectra, separation, and perturbation examples}}\\[2pt]
-$\sigma(\sym{A0}),\sigma(\sym{Lambda1})$ & Trial-coordinate spectrum and exact unwanted spectrum; separation of these is an input to the sine-theta estimate.\\
-$[\sym{betaEndpoint},\sym{alphaEndpoint}]$ & Spectral interval used in the interval/exterior separation hypothesis. Here $\sym{alphaEndpoint}$ is an interval endpoint in the sine-theta spectral separation.\\
-$\sym{delta}>0$ & Certified separation between the trial and unwanted spectra, entering $\sym{delta} N(\sym{sinTheta0})\leq N(\sym{R})$.\\
-$\sym{A},\sym{H},\sym{Ahat}$ (perturbation example) & Original operator, additive perturbation, and perturbed operator $\sym{Ahat}=\sym{A}+\sym{H}$. This is the explanatory setup, rather than an additional input to the general sine-theta theorem.\\
-$\sym{g}$ & Original wanted/unwanted eigengap of $\sym{A}$ in perturbation examples. It need not be the certified separation $\sym{delta}$ for $\sym{A0}$ and $\sym{Lambda1}$.\\
-$\dkrole{perturb}{\varepsilon}$ & Size of $\sym{H}$ in fixed-size-perturbation illustrations (often $\|\sym{H}\|_{\mathrm{op}}=\varepsilon$); elsewhere a generic positive error threshold.\\
-$a_0,a_1,\lambda_j$ & Original two-by-two eigenvalues $a_0,a_1$ and exact perturbed eigenvalues $\lambda_j$ in illustrative finite matrices.\\
-$\sym{b};\ \sym{H0},\sym{B},\sym{H1}$ & Off-diagonal coupling $b$ and perturbation blocks $\sym{H0},\sym{B},\sym{H1}$ in the original spectral basis of a two-block example.\\
-$\sym{A1}$ & Original operator's complementary block in a perturbation decomposition; not the exact unwanted block $\sym{Lambda1}$ of $\sym{Ahat}$.\\
-\addlinespace[4pt]
-\multicolumn{2}{@{}l}{\textbf{Subspace transport and norms}}\\[2pt]
-$\sym{Usource},\sym{Vtarget};\ \sym{ProjSource},\sym{ProjTarget}$ & Source and target subspaces; their orthogonal projections. In the displacement sections, $\sym{Psource}=\sym{ProjSource}$ and $\sym{Qtarget}=\sym{ProjTarget}$.\\
-$\sym{Rrotation},\like{Rrotation}{\mathcal R}$ & Canonical direct rotation transporting $\sym{Usource}$ to $\sym{Vtarget}$. The figures and slides use $\like{Rrotation}{\mathcal R}$ where that avoids confusion with the sine-theta residual $\sym{Rrotation}$.\\
-$\sym{Wcompetitor}$ & Any admissible orthogonal or unitary competitor satisfying $\sym{Wcompetitor}(\sym{Usource})=\sym{Vtarget}$.\\
-$\sym{Jturn}$ & Locally a planar quarter-turn $\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$ in the real counterexample; elsewhere $\sym{Jreflect}=2\sym{Psource}-I$ denotes a reflection used in the projection-distance proof.\\
-$\sym{ReflectionSigma}=\sym{Pexact}-\sym{PexactPerp}$ & Reflection $2\sym{Pexact}-I$ in a local sine-$2\Theta$ proof; the relevant $P$ in that context projects onto $\sym{Vtarget}$.\\
-$\like{Theta}{C_0},\like{Theta}{C_1},\like{Jturn}{J_0}$ & Cosine blocks and a partial isometry appearing in the direct-rotation factorization.\\
-$\like{SourceVector}{x_j},\like{TargetVector}{y_j}$ & Principal vectors on the two sides of a principal plane.\\
-$\sym{NormN}(T)$ & Unitarily invariant norm or seminorm of $T$. For infinite-dimensional operator-ideal norms it is used only where the gauge is defined and finite.\\
-$\|T\|_{\mathrm{op}}$ & Operator (spectral) norm, the largest singular value. The slide figures sometimes abbreviate this as $\|T\|_2$; the paper uses the explicit subscript.\\
-$\|T\|_F$ & Frobenius/Schatten-two norm, $\bigl(\sum_j s_j(T)^2\bigr)^{1/2}$ in finite dimension.\\
-$\|T\|_1$ & Trace/Schatten-one norm, $\sum_j s_j(T)$ in finite dimension.\\
-$\|T\|_{(\nu)}$ & Ky Fan $\nu$-norm, the sum of the $\nu$ largest singular values. The slides also write $\|T\|_\nu$.\\
-$\sym{NormQ}\text{-norm}$ & A norm satisfying $\sym{NormN}(T)^2=\sym{NormM}(T^*T)$ for a unitarily invariant norm $\sym{NormM}$; it has an exact direct-rotation minimality property.\\
-\addlinespace[4pt]
+$\sym{A},\sym{H},\sym{Acurrent}$ & Reference operator, additive perturbation, and perturbed operator $\sym{Acurrent}=\sym{A}+\sym{H}$.\\
+$\sym{Eambient};\ \sym{Ftrial},\sym{Hexact},\sym{Gunwanted}$ & Ambient, trial-coordinate, exact-coordinate, and complementary-coordinate Hilbert spaces.\\
+$\sym{E0}:\sym{Ftrial}\to\sym{Eambient}$ & Isometric embedding of the trial subspace.\\
+$\sym{A0}$ & Self-adjoint trial operator. A Rayleigh--Ritz choice is $\sym{A0}=\like{E0}{E_0^*}\sym{Acurrent}\sym{E0}$.\\
+$\sym{F0}:\sym{Hexact}\to\sym{Eambient}$ & Isometric coordinates for the desired exact spectral subspace.\\
+$\sym{F1}:\sym{Gunwanted}\to\sym{Eambient}$ & Isometric coordinates for its orthogonal complement.\\
+$\sym{Lambda1}$ & Complementary self-adjoint block, with $\sym{Acurrent}\sym{F1}=\sym{F1}\sym{Lambda1}$ on its domain.\\
+$\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ & Projection onto the desired exact subspace in the sine-theta theorem.\\
+$\sym{Theta0},\sym{sinTheta0}$ & Trial-coordinate angle operator and its positive sine, with $\sym{sinTheta0}=(I-\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2}$.\\
+$\sym{S}=(I-\sym{Pexact})\sym{E0}$ & Complementary block, with modulus $|\sym{S}|=\sym{sinTheta0}$.\\
+$\sym{X}=\like{F1}{F_1^*}\sym{E0}$ & Coordinates of the trial component in the unwanted space; $\sym{S}=\sym{F1}\sym{X}$.\\
+$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}$ & Bounded residual agreeing with this difference on $\DKDom(\sym{A0})$.\\
+$\sym{delta}>0$ & Spectral-separation parameter in the sine-theta estimate.\\
+$[\sym{betaEndpoint},\sym{alphaEndpoint}]$ & Interval in the interval/exterior gap hypothesis.\\
+$\DKRange(T),\DKKernel(T),\DKDom(T)$ & Range, kernel, and domain of an operator.\\
+$\sym{Usource},\sym{Vtarget}$ & Source and target subspaces in the displacement problem.\\
+$\sym{Psource},\sym{Qtarget}$ & Orthogonal projections onto $\sym{Usource},\sym{Vtarget}$ in that problem.\\
+$\sym{Rrotation},\sym{Wcompetitor}$ & Direct rotation and an arbitrary orthogonal or unitary transporter carrying $\sym{Usource}$ onto $\sym{Vtarget}$.\\
+$\sym{IntertwinerT}$ & The intertwiner $\sym{Qtarget}\sym{Psource}+(I-\sym{Qtarget})(I-\sym{Psource})$, whose unitary polar factor is the acute direct rotation.\\
+$\sym{theta},\theta_j$ & Individual principal angles, in $[0,\pi/2]$.\\
+$\sym{Xframe},\sym{Yframe}$ & Orthonormal coordinate matrices for the source and target in the real counterexample.\\
+$\sym{Jturn},\sym{Cturn},\sym{Hmix}$ & Planar quarter-turn, rotation through $2\sym{theta}$, and orthogonal mixing matrix used in that counterexample.\\
+$\sym{Kdisplacement}=I-\sym{Wcompetitor}$ & Full displacement operator in the failed Ky Fan comparison.\\
+$\sym{OmegaOne},\sym{OmegaTwo}$ & Principal-plane projections used to test that comparison.\\
+$|T|=(T^*T)^{1/2}$ & Positive modulus of an operator.\\
+$s_j(T)$ & Ordered singular values; approximation numbers provide the corresponding comparisons for bounded operators in Hilbert space.\\
+$\sym{NormN}(T)$ & A unitarily invariant norm, or an operator-ideal norm on its domain of finiteness.\\
+$\|T\|_{\mathrm{op}}$ & Operator norm; in finite dimension, the largest singular value.\\
+$\|T\|_F$ & Frobenius norm, $\bigl(\sum_j s_j(T)^2\bigr)^{1/2}$.\\
+$\|T\|_1$ & Trace norm, $\sum_j s_j(T)$.\\
+$\|T\|_{(j)}$ & Ky Fan norm, the sum of the $j$ largest singular values.\\
+$\sym{NormQ}\text{-norm}$ & A norm satisfying $\sym{NormN}(T)^2=\sym{NormM}(T^*T)$ for a unitarily invariant norm $\sym{NormM}$.\\
 \end{longtable}
 \endgroup

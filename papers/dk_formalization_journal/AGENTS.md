@@ -1,86 +1,95 @@
 # Formalization paper authoring instructions
 
-This directory contains the manuscript and its generated analysis snapshots.
+This is the Davis--Kahan formalization manuscript. User instructions determine
+whether the current task is review, guidance maintenance, or manuscript editing.
 
-Before editing manuscript prose, read:
+## Read before writing
 
-- [PAPER_CONTEXT.md](PAPER_CONTEXT.md), which keeps accepted results, mathematical
-  and verification boundaries, publication decisions, and unresolved questions;
-- [STYLE_GUIDE.md](STYLE_GUIDE.md), which describes the writing style and manuscript structure we want;
-- [../BANNED_WORDS_AND_PHRASES.md](../BANNED_WORDS_AND_PHRASES.md), which lists prohibited vocabulary and recurring LLM writing patterns.
-- [../SPECIFIC_NEGATIVE_PROMPTS.md](../SPECIFIC_NEGATIVE_PROMPTS.md), which records recurring manuscript-specific failure modes.
+- [../STYLE_GUIDE.md](../STYLE_GUIDE.md): shared affirmative writing guidance.
+- [STYLE_GUIDE.md](STYLE_GUIDE.md): this paper's audience, exposition, notation,
+  and contribution framing.
+- [../BANNED_WORDS_AND_PHRASES.md](../BANNED_WORDS_AND_PHRASES.md) and
+  [../SPECIFIC_NEGATIVE_PROMPTS.md](../SPECIFIC_NEGATIVE_PROMPTS.md): rhetorical
+  habits and recurring editorial mistakes.
+- [AUTHORING_NOTES.md](AUTHORING_NOTES.md): accepted and rejected review
+  suggestions, pending manuscript changes, and an index of supporting evidence.
+- [FORMALIZATION_PAPER_SCOPE.md](FORMALIZATION_PAPER_SCOPE.md): scientific scope.
+- [PAPER_CONTEXT.md](PAPER_CONTEXT.md): mathematical evidence and historical
+  checkpoints; its older manuscript plans are historical, as marked there.
 
-The YWS material previously in this article was moved to
-`../yws_formalization_conference/`. Keep the Davis--Kahan paper scoped to the
-1970 source and its mathematical extensions.
+These instructions apply to the main text, captions, abstract, and appendices.
+Shared style rules are applied according to the function of the passage: the
+abstract may be compressed, while the body defines the objects it uses.
 
-These rules apply to the main text, appendices, captions, and generated prose intended for the paper.
+## Review and correction rounds
 
-## Manuscript operating rules
+- Read all relevant `\jonsays`, `\agentsays`, and `\jonrsp` comments before
+  proposing revisions. The author's responses can reject or qualify an earlier
+  agent suggestion; do not treat every agent comment as an accepted edit.
+- Use the requested macros during review-only work. Keep review comments and
+  proposed changes separate from revised scientific prose.
+- During guidance calibration, record future requests without applying them
+  prematurely to the manuscript. Preserve notes until the user requests their
+  removal, and retain macro definitions for the next round when requested.
+- Separate evergreen preferences from decisions about particular passages.
+  Update shared guidance only for reusable principles; keep paper-specific
+  decisions and unresolved questions in `AUTHORING_NOTES.md`.
+- Answer direct questions in chat when requested. A request to define a term in
+  the paper calls for a definition in the correction pass, not just a chat reply.
 
-- Keep the main text centered on the mathematics, formalization results, source-audit findings, foundational theory, and reported resource measurements.
-- Maintain evidence and uncertainty that does not warrant publication in
-  `PAPER_CONTEXT.md` and `claims_to_evidence.md`; do not insert
-  editorial decisions, agent handoffs, or negative-evidence logs into the rendered paper.
-- Put source-coverage bookkeeping, declaration graphs, provenance tables, exact Lean names beyond the displayed signatures, file paths, registry mechanics, and regeneration details in the appendices.
-- When comparing a source theorem with Lean, state the theorem first and place its Lean signature immediately afterward. Keep shared notation above theorem-specific subsections.
-- Keep the general Lean-reader guide in the appendix and refer to it before the first displayed signature.
-- Keep the formalization-process description in the methods appendix. State the tools and recurring workflow without turning the manuscript into an agent handoff.
-- Put references before the appendices.
-- Cross-reference appendix sections explicitly whenever the main text sends a reader to supplementary evidence.
-- Label incomplete resource data as retained observed telemetry, state that it is incomplete, and keep live exact, explicit backfill, pending, modeled, and extrapolated quantities separate. Do not describe the retained aggregate as a strict lower bound unless duplicate-observation risk has been ruled out.
+## Scientific scope and attribution
 
-## Citations and bibliography
+This is a formalization-first paper about the 1970 Davis--Kahan results, their
+operator-theory foundations, the Proposition 4.4 correction, and a selected
+follow-on theorem. The source-result denominator remains 29. Changing the
+rendered table or removing a review appendix does not change that denominator,
+the source inventories, or the repository's semantic and compiler obligations.
 
-- Put bibliographic metadata in `references.bib` and cite entries from the manuscript with Natbib commands.
-- Use published metadata and DOI records when available.
-- Cite external Lean developments when their formal work was copied, ported, adapted, generalized, or used as a substantive reference.
+The original complex-phase mechanism and earlier Q-norm results retain their
+attribution. Compare them precisely with the real short-angle assertion being
+refuted. Use the paper-directory evidence index to support direct statements
+about our foundations, reuse of Mathlib and Spectra, and later Tau Ceti work.
+Keep pinned revisions, PR bookkeeping, and proof-development history in author
+files or non-rendered LaTeX comments. Include scholarly mathematical and formal
+attribution in the rendered article.
 
-## Generated data
+The broader transport work is preserved under
+[../optimal_spectral_transport/](../optimal_spectral_transport/). Do not expand
+this article to cover every such theorem. Explain the included result within
+this article; keep publication-packaging choices out of its scientific prose.
+YWS submission material lives in
+[../yws_formalization_conference/](../yws_formalization_conference/).
 
-Do not hand-edit generated snapshot tables when the corresponding generator is available. Regenerate them with the existing scripts and keep raw evidence linked to exact source results and Lean declarations.
+## Manuscript conventions
 
+- State a mathematical theorem before its Lean signature; explain its specific
+  predicates and cite the general Lean reader guide once before the first one.
+- Define technical objects in the body with enough intuition for their use.
+  Keep notation consistent and align optional colors with the Manim palette.
+- Describe historical mathematical relationships explicitly and cite primary
+  sources together with the Paige--Wei, Simon, and Bottcher--Spitkovsky surveys
+  where they support the account. Give dates when they clarify chronology.
+- Store bibliographic metadata in `references.bib` and use Natbib. Reject
+  unresolved citations. Put references before appendices and use explicit
+  section references when pointing to supplementary material.
+- Keep a compact source-result table with an artifact path from IDs to Lean.
+  Appendices serve a reader's task; author evidence need not be rendered there.
+- Use the current `paper.tex` inclusion graph as the ground truth. Preserve
+  existing figures unless the requested manuscript revision calls for their
+  addition or removal.
+- If resource data is reported, label incomplete observed telemetry and keep
+  live observations, backfills, modeled quantities, and extrapolations separate.
+  Do not hand-edit generated snapshots when their generator is available.
+- Do not conclude editorial or research tasks with unspecified requests for
+  expert review. Name a concrete source comparison, calculation, or proof task.
 
-## Current publication direction (27 October 2026)
+## Validation
 
-Read [FORMALIZATION_PAPER_SCOPE.md](FORMALIZATION_PAPER_SCOPE.md) before
-changing the paper. This is a formalization-first manuscript. Keep the
-29-result source audit, operator-theory foundations, and Proposition 4.4
-correction as the primary scientific account. New optimal-transport theory
-is retained in sibling `../optimal_spectral_transport/`; only a selected
-matching theorem is used here to demonstrate a verified follow-on question.
-Do not promote every new transport theorem into this article.
+For changed TeX, run `make -C papers/dk_formalization_journal paper` from the
+repository root and inspect the log for errors and unresolved references. The
+PDF is `build/paper.pdf`; the project configuration selects LuaLaTeX for emoji
+notes and retains the previous PDF on compilation failure. Build instructions
+and editor troubleshooting are in [README.md](README.md).
 
-## Historical exposition and self-contained investigation (2026-10-28)
-
-When revising the historical section, identify the primary mathematical
-source and cite existing surveys (Paige--Wei, Simon on Kato,
-Bottcher--Spitkovsky) for their actual scope. Explain what each
-mathematical development contributed to Davis--Kahan's theorem and
-which formalized dependency represents it. Do not reduce the section
-to a name-and-year list, and do not displace the formalization as the
-article's main contribution.
-
-Do not conclude implementation or editorial work with unspecified
-'get expert review' advice. Make remaining tasks concrete and
-actionable within this repository: theorem/source correspondence,
-proof exposition, literature comparison, and reproducible examples.
-Follow `../SPECIFIC_NEGATIVE_PROMPTS.md`.
-
-## Historical story and figure constraints (2026-10-28)
-
-- The article is a formalization paper. Present the source lineage as a
-  connected account of the mathematical problems solved, not a catalog of
-  people and dates. Explain how principal angles, eigenvalue approximation,
-  projection transport, spectral calculus, Sylvester separation, and
-  symmetric ideals combine in the 1970 theorems.
-- Retain precise original-source attributions, alongside surveys that
-  explain the historical connections. Distinguish contributions to
-  mathematics from the provenance of formal Lean implementations.
-- The former illustrations have been removed deliberately. Do not
-  restore the rank-one sine-theta or Proposition 4.4 displacement figures
-  without an explicit new author request; retain their analytical
-  calculations in prose.
-- Build the bibliography from the current source and reject unresolved
-  citations. Do not recommend unspecified external expert review as an
-  answer to source-comparison or attribution work.
+Documentation-only guidance changes require link and consistency review; they
+do not require a Lean build or a manuscript rebuild.

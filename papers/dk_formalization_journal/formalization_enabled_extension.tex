@@ -1,18 +1,12 @@
 \section{A follow-on theorem enabled by the formal development}
 \label{sec:example-transport}
-\agentsays{This title foregrounds how the result arose. I would use a mathematical title such as Trace-norm subspace transport and choose whether this is the follow-on example after you have reviewed its conventional proof.}
-\jonrsp{No, I actually like this section name, but maybe the first sentence says directly what it is? I'm less sure here}
 
-
-The source correction asks whether direct rotation minimizes the cost
-of transporting a subspace.  This question differs from the perturbation
-estimates: here the subspaces are fixed and the cost is measured over
-all orthogonal maps between them.  The formalization supplied the
-principal-angle, real/complex, and unitarily invariant norm interfaces
-needed to examine this larger family of admissible transports.
-\agentsays{Supplied interfaces is the same indirect description of formalizing foundations that you flagged earlier. I would name the mathematical ingredients used by this proof and say which were developed here.}
-\jonrsp{Yes}
-
+We prove an exact formula for the smallest trace-norm displacement of a real
+orthogonal map carrying one given subspace onto another. The formula is a
+weighted-matching problem on their principal angles. Its proof uses the
+principal-angle geometry, real and complex operator constructions, and
+singular-value norms developed for the formalization, together with
+additional optimization arguments.
 
 Let $K,L\subseteq\mathbb R^n$ have the same dimension and let
 $\theta_1,\ldots,\theta_m\in(0,\pi/2]$ be their positive principal angles,
@@ -24,7 +18,14 @@ Define the singleton and paired costs
  e(\theta,\psi)=4\sin((\theta+\psi)/2).
 \end{equation}
 
-\begin{theorem}[Verified real nuclear matching reduction]
+A singleton represents transporting one principal plane independently.
+Rotating it through $\theta$ costs $4\sin(\theta/2)$; an orthogonal
+reflection carrying the same source line to the target costs $2$. Their
+minimum is $s(\theta)$. A matched pair allows the two principal planes to
+interact: an orthogonal transporter on their four-dimensional sum attains
+cost $e(\theta,\psi)$. Common zero-angle directions can remain fixed.
+
+\begin{theorem}[Real trace-norm matching reduction]
 \label{thm:real-matching-example}
 For equal-dimensional real subspaces $K,L$ as above,
 \begin{equation}\label{eq:real-nuclear-match}
@@ -41,29 +42,71 @@ Both minima are attained.  The equality includes repeated angles,
 right angles, and common ambient directions; the left side has no
 principal-plane or determinant constraint.
 \end{theorem}
-\agentsays{The formula introduces a combinatorial matching with little intuition. I would explain unmatched angles, paired angles, and why two real principal planes can share a cheaper transporter before stating the global reduction.}
 
+\begin{proof}[Proof outline]
+For $1<p<2$, minimize the displacement cost
+$\Phi_p(W)=\sum_j s_j(I-W)^p$ over the orthogonal transporters. The feasible
+set is nonempty and compact, so a minimizer exists. The formal proof first
+reduces such a minimizer to common invariant blocks for the source
+projection, target projection, and transporter, of real dimension two or
+four, together with fixed common directions.
 
-The Lean development proves the unrestricted equality in
-\cref{eq:real-nuclear-match}, including comparison with arbitrary
-ambient orthogonal transporters.  Pairing two real principal planes
-allows a displacement pattern unavailable to a single real plane;
-this is the mechanism visible in the four-dimensional counterexample.
-For $\theta_1=\theta_2=\pi/6$, the canonical direct rotation costs
+The reduction uses first variations along $W\exp(tB)$. The skew-symmetric
+spectral gradient $G$ commutes with $W$ and represents this derivative by
+\[
+ \left.\frac{d}{dt}\Phi_p(W\exp(tB))\right|_{t=0}
+ =-\operatorname{tr}(GB)
+\]
+for skew-symmetric $B$. When $B$ commutes with the source projection $P$,
+the curve remains feasible. Stationarity for these directions gives
+$JGJ=-G$ for $J=2P-I$. On a positive spectral level $-G^2=g^2I$,
+the operator $G/g$ squares to $-I$ and defines complex multiplication;
+$J$ acts as conjugation. On $0<t<\pi$, the scalar phase cost
+$(2|\sin(t/2)|)^p$ has a derivative with at most two roots at each
+positive level. Viewed in these complex coordinates, $W$ therefore has
+at most two phases. A real orthogonal block
+decomposition of its Hermitian spectral projection gives the claimed
+two- and four-dimensional real blocks. On the zero-gradient space, the
+transporter is a reflection and the two-projection decomposition gives
+blocks of dimension at most two. A one-dimensional $-1$ block can be
+replaced by $+1$ without changing the transported subspace, so it cannot
+occur at a minimum.
+
+Replacing the transporter on one common invariant block preserves feasibility,
+so a global minimizer restricts to a minimizer on each block.
+Each two-dimensional block contributes a one-angle cost. Each
+four-dimensional block contributes either two independent one-angle costs
+or a paired cost. Principal-angle multisets and displacement costs add
+over these common blocks, so their choices define a matching. Conversely,
+any matching can be realized by taking the orthogonal sum of the
+corresponding one- and two-plane transporters. This proves the matching
+minimum for $1<p<2$.
+
+Finally let $p$ decrease to $1$. In fixed finite dimension, $\Phi_p(W)$
+converges uniformly to $\|I-W\|_1$ on the compact feasible set. The scalar
+block minima also vary continuously with $p$, and there are only finitely
+many matchings. Passing to the limit gives the displayed singleton and
+pair costs and proves \cref{eq:real-nuclear-match}. Compactness gives an
+attaining transporter at the endpoint.
+\end{proof}
+% Formal proof locations: RealNuclearMatching.lean (endpoint continuation),
+% SchattenRealDecomposition.lean / SchattenRealRestrictions.lean (block
+% reduction), SchattenRealMatchingWeights.lean / RealMatchingAttainment.lean
+% (matching and attainment), SchattenRealAngleCosts.lean (angle costs).
+% All paths are under DavisKahan/FiniteDimensional/DirectRotation/.
+% See AUTHORING_NOTES.md for the mathematical and provenance evidence.
+
+For $\theta_1=\theta_2=\pi/6$, the direct rotation costs
 $8\sin(\pi/12)>2$, whereas the paired competitor costs
-$4\sin(\pi/6)=2$.
+$4\sin(\pi/6)=2$. The theorem includes comparison with every ambient
+orthogonal transporter, so this paired cost is globally minimal in the
+example.
 
-The complex-phase construction behind this example was already present
-in Davis and Kahan \citep[Example~4.2]{davis1970rotation}.  The general
-unitary minimal-distortion problem was studied by Bolotnikov, Li, and
-Rodman \citep{bolotnikov2001minimal}.  Theorem~\ref{thm:real-matching-example} gives an exact global
-weighted-matching characterization for arbitrary finite-dimensional
-real orthogonal transporters; the earlier complex example and the
-minimal-distortion results provide its geometric and optimization
-context.  The conventional proof and additional Schatten and
-smoothed-penalty results are developed in the separate
-spectral-transport manuscript.  The matching theorem is presented
-here as a mathematical result enabled by the formalization of the
-Davis--Kahan foundations.
-\agentsays{The comparison says the earlier results provide context without specifying their relation to this formula. I would identify their exact optimization objectives and conclusions, then explain what the unrestricted real matching theorem adds, using trace norm throughout.}
-\jonrsp{Yes}
+Davis and Kahan's complex-phase example already shows how a phase change
+can decrease full trace displacement \citep[Example~4.2]{davis1970rotation}.
+Bolotnikov, Li, and Rodman formulate the ambient unitary minimal-distortion
+problem and prove Q-norm and Frobenius optimality results
+\citep[Problem~1.1 and Theorems~3.1, 4.2]{bolotnikov2001minimal}. The formula
+above specifies the unrestricted real trace-norm minimum through singleton
+and paired angle costs. The real field permits pairing between distinct
+principal planes, which is why the answer is an optimization over matchings.

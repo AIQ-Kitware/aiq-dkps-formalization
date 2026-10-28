@@ -1,3 +1,68 @@
+# Recurring manuscript review failures
+
+Read [STYLE_GUIDE.md](STYLE_GUIDE.md) for affirmative guidance. The rules below
+record recurring mistakes; apply them with the audience and purpose of the
+passage in mind.
+
+## Do not demand every detail everywhere
+
+- Do not criticize an abstract merely for naming established concepts without
+  defining them, grouping contributions, or giving broad context. The body is
+  where the definitions and detailed comparisons belong.
+- Do not turn a request to define a term into an extended elementary tutorial.
+  A brief definition, reminder, or example often supplies what is missing.
+- Do not answer an editorial comment such as “intertwining needs a definition”
+  only with a chat explanation when the task is to revise the manuscript.
+- Do not make every heading purely mathematical. A heading can appropriately
+  name a formalization contribution or a follow-on result. Preserve author
+  approval of a specific heading.
+- Do not treat an appendix as the automatic destination for every omitted
+  detail. Implementation evidence can remain in author notes and source
+  comments. Include only appendices that help the reader.
+
+## Do not replace direct language with more elaborate synonyms
+
+Avoid “reviewed source scope,” “full-scope,” “supplied interfaces,” and “analytic
+proof engine” when the mathematical statement can be named directly. State
+which theorem we proved or which foundations we formalized. Prefer consistent
+technical terms and ordinary verbs to ornamental variation. Do not presume a
+reader finds an object “familiar,” or call a construction “transparent” in place
+of explaining it. Replacing “half-infinite interval” with “half-line” does not
+address a request for an example.
+
+## Do not turn supporting evidence into the paper's subject
+
+- Keep pinned dependency revisions, PR-status bookkeeping, source-review
+  procedures, and proof-repair history in author files or artifact documentation.
+  Mathematical provenance and credit for reused formal work remain scholarly
+  content; state those contributions directly.
+- Do not add status or disposition columns simply because those fields exist
+  in an internal inventory. A column must convey something the reader needs.
+- Do not replace compact result IDs with unwieldy Lean names when the artifact
+  already maps those IDs to declarations.
+- Do not narrate the choice between sibling manuscripts or send readers to an
+  unpublished companion for the explanation needed to assess an included result.
+  Keep the current paper self-contained at its chosen level of exposition.
+
+## Do not obscure a specific contribution with blanket caution
+
+Acknowledging an earlier mathematical mechanism does not dispose of a claim
+that a particular published theorem is false. Compare those claims precisely.
+Support a concise “to the best of our knowledge” statement where justified;
+do not replace it with recurring declarations that novelty is unresolved.
+Conversely, author approval of a proposed priority statement is not evidence
+that every ingredient or repair is new.
+
+## Do not expand AI disclosures by default
+
+A request to discuss AI's role does not require a detailed account of source
+selection, human/agent task allocation, review passes, or software products in
+every disclosure. Use the author's chosen level of detail. If a substantive
+discussion covers the topic, a separate disclosure may be unnecessary. Use the
+requested product names without expanding them into a taxonomy of interfaces
+and models. Keep uncertainty about a proposed paragraph or its placement open
+until the author settles it.
+
 ## Banned repository-development vocabulary in the main text
 
 Do not use repository-internal development labels as scientific terminology in the main body when direct mathematical prose is available. This includes:

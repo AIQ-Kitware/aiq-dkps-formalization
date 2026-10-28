@@ -1,5 +1,25 @@
 # Paper context: proven results, historical provenance, and editorial boundaries
 
+## Current authoring entry point (28 October 2026)
+
+The current article is *Formalizing Davis--Kahan Perturbation Theory in Lean 4*.
+Its main source is `paper.tex`, with `counterexample.tex` and
+`formalization_enabled_extension.tex` as the included mathematical sections.
+It is a formalization-first article with the Proposition 4.4 correction and a
+selected follow-on result. Use [FORMALIZATION_PAPER_SCOPE.md](FORMALIZATION_PAPER_SCOPE.md)
+for its scientific boundary, [STYLE_GUIDE.md](STYLE_GUIDE.md) for writing, and
+[AUTHORING_NOTES.md](AUTHORING_NOTES.md) for current review decisions and evidence
+locations. The 28 October correction pass applies the accepted author
+responses. Review-note calls have been removed from the included manuscript;
+their macro definitions remain available for another round.
+
+The dated material below preserves research and authoring checkpoints. Its
+references to a “current title,” included files, submission plans, build tools,
+or remaining proof work describe the stated checkpoint. Revalidate them against
+the current sources and author decisions before acting on them.
+
+## Historical context recorded on 27 October 2026
+
 **Editorial integration:** 27 October 2026, based on the uploaded research
 snapshot `aiq-dkps-formalization-source-2026-10-27T205231-5-71f46bc5aa2a`.
 The repository records a full default Lean build (21,413 jobs, warnings as

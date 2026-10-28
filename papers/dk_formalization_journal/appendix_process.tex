@@ -1,69 +1,60 @@
-\section{Davis--Kahan result inventory}
+\section{Formalized Davis--Kahan results}
 \label{app:dk-inventory}
 
-\Cref{tab:dk-full-inventory} records the maintained result-level denominator.
-The rows correspond to the 1970 result statements.
-\agentsays{The table names branch selection, pinching, and nonacute criteria without explaining them. I would add short mathematical descriptions and the original proposition or theorem numbers so a reader can locate the source claims without internal IDs.}
-\jonrsp{No, I'm on the fence about even having this, but I think its fine. Do we have a document in the repo that uses these short code names? I think the lean names would be too long an unwieldy. As long as there is a path from ID to the lean via some json doc in the repo, then we are good. We need to also remove the disposition column, it adds nothing. This is LLM over-specificity}
-  The disposition
-column distinguishes proved source claims from the refutation of
-Proposition~4.4.
+Table~\ref{tab:dk-full-inventory} lists the \DKResultCount{} source targets:
+the four headline theorems of Section~2 and every named theorem,
+proposition, lemma, and corollary established in the paper. The table keeps
+compact IDs for reference. The artifact maps each ID to the corresponding
+Lean declarations.
+\ifDKAnonymous\else
+The \href{https://github.com/AIQ-Kitware/aiq-dkps-formalization/blob/main/dev/davis-kahan-1970-formalization-result-inventory.json}{result-to-Lean mapping}
+contains that correspondence.
+\fi
 
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.49\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.68\linewidth}}
 \caption{The \DKResultCount{} Davis--Kahan result-level targets.}
 \label{tab:dk-full-inventory}\\
 \toprule
-ID & Result & Disposition \\
+ID & Result \\
 \midrule
 \endfirsthead
 \toprule
-ID & Result & Disposition \\
+ID & Result \\
 \midrule
 \endhead
-\path{S2-sin-theta} & Single-angle sine theorem & proved at source scope \\
-\path{S2-tan-theta} & Single-angle tangent theorem & proved at source scope \\
-\path{S2-sin-two-theta} & Double-angle sine theorem & proved at source scope \\
-\path{S2-tan-two-theta} & Double-angle tangent theorem & proved at source scope \\
-\path{DK-3.1-prop} & Acute direct rotation existence and uniqueness & proved at source scope \\
-\path{DK-3.2-prop} & Nonacute existence criterion & proved at source scope \\
-\path{DK-3.3-prop} & Principal square-root characterization & proved at source scope \\
-\path{DK-3.4-prop} & Square as a direct rotation & proved at source scope \\
-\path{DK-3.1-thm} & Classification of pairs of subspaces & proved at source scope \\
-\path{DK-3.1-cor} & Compact classification by angle eigenvalues & proved at source scope \\
-\path{DK-3.5-prop} & Angle commutation and eigenspace geometry & proved at source scope \\
-\path{DK-3.2-cor} & Reversal symmetry & proved at source scope \\
-\path{DK-4.1-prop} & Pointwise and singular-value extremality of the direct rotation & proved at source scope \\
-\path{DK-4.1-cor} & Unitarily invariant norm minimality of restricted displacement & proved at source scope \\
-\path{DK-4.2-prop} & Basis-angle square-sum extremality & proved at source scope \\
-\path{DK-4.3-prop} & Squared-displacement unitarily invariant norm minimality & proved at source scope \\
-\path{DK-4.4-prop} & Full-displacement claim of Proposition~4.4 & refuted as printed; repaired separately \\
-\path{DK-5.1-thm} & Banach-space Sylvester lower bound & proved at source scope \\
-\path{DK-5.2-thm} & Semibounded self-adjoint Sylvester theorem & proved at source scope \\
-\path{DK-5.1-lem} & Strong-cutoff convergence of singular values & proved at source scope \\
-\path{DK-6.1-lem} & Direct-sum norm comparison and converse & proved at source scope \\
-\path{DK-6.2-lem} & Reflection-pinch contraction & proved at source scope \\
-\path{DK-6.1-prop} & Sine proof, ambient limitation, and symmetric sine theorem & proved at source scope \\
-\path{DK-6.1-thm} & Generalized sine theorem & proved at source scope \\
-\path{DK-6.2-thm} & Pairwise-gap square-norm sine theorem & proved at source scope \\
-\path{DK-6.3-thm} & Generalized tangent theorem and supporting machinery & proved at source scope \\
-\path{DK-6.3-lem} & Finite-rank near-maximizer leakage estimate & proved at source scope \\
-\path{DK-8.1-thm} & Branch selection and spectral repulsion & proved at source scope \\
-\path{DK-8.2-thm} & Smallness selects the acute branch & proved at source scope \\
+\path{S2-sin-theta} & Single-angle sine theorem \\
+\path{S2-tan-theta} & Single-angle tangent theorem \\
+\path{S2-sin-two-theta} & Double-angle sine theorem \\
+\path{S2-tan-two-theta} & Double-angle tangent theorem \\
+\path{DK-3.1-prop} & Acute direct rotation existence and uniqueness \\
+\path{DK-3.2-prop} & Nonacute existence criterion \\
+\path{DK-3.3-prop} & Principal square-root characterization \\
+\path{DK-3.4-prop} & Square as a direct rotation \\
+\path{DK-3.1-thm} & Classification of pairs of subspaces \\
+\path{DK-3.1-cor} & Compact classification by angle eigenvalues \\
+\path{DK-3.5-prop} & Angle commutation and eigenspace geometry \\
+\path{DK-3.2-cor} & Reversal symmetry \\
+\path{DK-4.1-prop} & Pointwise and singular-value extremality of the direct rotation \\
+\path{DK-4.1-cor} & Unitarily invariant norm minimality of restricted displacement \\
+\path{DK-4.2-prop} & Basis-angle square-sum extremality \\
+\path{DK-4.3-prop} & Squared-displacement unitarily invariant norm minimality \\
+\path{DK-4.4-prop} & Full-displacement claim of Proposition~4.4 \\
+\path{DK-5.1-thm} & Banach-space Sylvester lower bound \\
+\path{DK-5.2-thm} & Semibounded self-adjoint Sylvester theorem \\
+\path{DK-5.1-lem} & Strong-cutoff convergence of singular values \\
+\path{DK-6.1-lem} & Direct-sum norm comparison and converse \\
+\path{DK-6.2-lem} & Reflection-pinch contraction \\
+\path{DK-6.1-prop} & Sine proof, ambient limitation, and symmetric sine theorem \\
+\path{DK-6.1-thm} & Generalized sine theorem \\
+\path{DK-6.2-thm} & Pairwise-gap square-norm sine theorem \\
+\path{DK-6.3-thm} & Generalized tangent theorem and supporting machinery \\
+\path{DK-6.3-lem} & Finite-rank near-maximizer leakage estimate \\
+\path{DK-8.1-thm} & Branch selection and spectral repulsion \\
+\path{DK-8.2-thm} & Smallness selects the acute branch \\
 \bottomrule
 \end{longtable}
 
-The result table is keyed to source results.  One source result can require many
-Lean declarations, while a single reusable Lean theorem can support more than
-one source-specific wrapper.  The denominator therefore remains stable under
-refactoring of implementation modules.
-
-\section{Source-correspondence review}
-\label{app:source-review}
-
-The review compares each selected source statement with its Lean counterpart,
-including hypotheses, scalar field, operator domains, spectral-gap cases, and
-norm conventions.  The public sine-theta theorem uses the positive sine
-operator; \Cref{eq:modulus-sine} identifies it with the modulus of the
-rectangular off-diagonal block used in the analytic proof.  The inventory
-records Proposition~4.4 through its four-dimensional counterexample and
-corrected Q-norm conclusion.
+A single source result may use several Lean declarations. The IDs identify
+source statements independently of the organization of the formal library.
+Proposition~4.4 is refuted by the counterexample in
+Section~\ref{sec:prop44}; its Q-norm consequence is stated separately there.
