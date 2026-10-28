@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealAngleCosts
 public import DavisKahan.FiniteDimensional.DirectRotation.SchattenTransportExistence
+public import ForTauCeti.Combinatorics.Matching.WeightedInvolution
 
 /-!
 # Labelled matchings extracted from unrestricted real transport minima
@@ -51,19 +52,24 @@ def realSchattenMatchingCost {ι : Type*} [Fintype ι]
   exact ∑ i, if s i = i then realSingleSchattenCost p (theta i)
     else realSchattenPairWeight p (theta i) (theta (s i)) / 2
 
+/-- The labelled transport objective uses the common weighted-involution
+cost. This identity avoids unfolding finite sums in relabelling arguments. -/
+theorem realSchattenMatchingCost_eq_cost {ι : Type*} [Fintype ι]
+    (p : ℝ) (theta : ι → ℝ) (s : Equiv.Perm ι) :
+    realSchattenMatchingCost p theta s = WeightedInvolution.cost
+      (fun i => realSingleSchattenCost p (theta i))
+      (fun i j => realSchattenPairWeight p (theta i) (theta j)) s := by
+  classical
+  rw [realSchattenMatchingCost, WeightedInvolution.cost_eq_sum]
+
 /-- Relabelling the vertices preserves the matching cost. -/
 theorem realSchattenMatchingCost_reindex {ι κ : Type*} [Fintype ι] [Fintype κ]
     (p : ℝ) (theta : κ → ℝ) (s : Equiv.Perm κ) (e : ι ≃ κ) :
     realSchattenMatchingCost p (theta ∘ e) ((e.trans s).trans e.symm) =
       realSchattenMatchingCost p theta s := by
-  classical
-  unfold realSchattenMatchingCost
-  rw [← e.sum_comp (fun i => if s i = i then realSingleSchattenCost p (theta i)
-    else realSchattenPairWeight p (theta i) (theta (s i)) / 2)]
-  apply Finset.sum_congr rfl
-  intro i _
-  simp only [Equiv.trans_apply, Function.comp_apply, Equiv.apply_symm_apply,
-    Equiv.symm_apply_eq]
+  simp only [realSchattenMatchingCost_eq_cost]
+  exact WeightedInvolution.cost_reindex (fun i => realSingleSchattenCost p (theta i))
+    (fun i j => realSchattenPairWeight p (theta i) (theta j)) s e.symm
 
 /-- Disjoint unions of labelled matchings have additive costs. -/
 theorem realSchattenMatchingCost_sigma {ι : Type*} [Fintype ι]

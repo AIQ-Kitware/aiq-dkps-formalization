@@ -1,5 +1,18 @@
 # Spectral subspace transport: current research plan
 
+**Proof-polish checkpoint, 28 October 2026:** the weighted matching layer now
+supports division-semiring costs, with `2 != 0` imposed only when two half-edge
+contributions are combined; the exchange identities work over fields of
+characteristic different from two. Cost no longer carries a decidable-equality
+parameter. Schatten and nuclear relabelling share `WeightedInvolution.cost_reindex`
+through explicit cost-identification lemmas. The duplicate conjugation map was
+removed in favor of Mathlib `Equiv.conj`; its involutivity API is independent of
+finiteness. The paper-facing sorting and ambient attainment statements retain
+their scope. This is theorem/API refinement under the supplied TauCeti review
+rubrics, not another optional classification campaign. See the latest handoff
+entry for exact declarations and validation. After `lake exe cache get`, the
+full default `lake build` passed **21,509 jobs**, warnings as errors.
+
 **Overnight checkpoint, 28 October 2026:** the unrestricted lower-bound proof
 roadmap is written and the exact real nuclear two-sorted-sums formula is now
 proved, including actual ambient attainment. The full default build passed

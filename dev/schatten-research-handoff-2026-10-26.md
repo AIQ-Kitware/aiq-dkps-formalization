@@ -14,6 +14,11 @@ before repeating the literature search; do not infer first-discovery priority.
 
 ## Current frontier — reconciled 27 October 2026
 
+**28 October theorem-polish update:** the finite matching foundation now has
+weaker algebraic hypotheses, shared relabelling, characteristic simplification
+lemmas and no duplicate conjugation definition. The sorting/ambient theorem
+scope is preserved. See the latest entry for the exact API changes.
+
 **28 October overnight update:** nuclear sorting is now proved. See the final
 entry and the current research plan: exact optional-singleton normalization,
 two-sum finite matching minimum, unrestricted real transport value and ambient
@@ -4843,3 +4848,59 @@ Validation remains the focused 7,322-job target and the full **21,507-job**
 default build after cache retrieval, warnings as errors. No Lean edits followed
 that full build. Manuscript and visualization work remain exclusively with the
 user; preexisting unrelated changes were preserved.
+
+
+### Matching theorem polish and library reuse — 28 October
+
+The user requested theorem polish, natural generality, reuse and simplification,
+applying the supplied `/home/joncrall/code/TauCetiReview/rubrics/` where relevant.
+This was a manual source review and implementation; no reviewer orchestration,
+roadmap change or new checking infrastructure was introduced.
+
+The classical weighted-matching foundation now separates its actual assumptions:
+
+- `TauCeti.WeightedInvolution.cost`, `cost_eq_sum`, `cost_id` and `cost_reindex`
+  work over a division semiring. Cost has no `DecidableEq` parameter; the sum
+  equation supports whichever equality instance the consumer uses. Relabelling
+  works between arbitrary finite types without symmetry or involutivity.
+- `cost_sub_cost_eq_sum` works over a division ring and localizes changes to
+  the vertices where the two maps differ. It consumes Mathlib's
+  `Fintype.sum_subset` and replaces the private real-valued sum-balancing proof.
+- `cost_conjugate_fixed_edge`, `cost_conjugate_two_edges` and `cost_joinFixed`
+  work over a field with `NeZero (2 : R)`; no order or positivity is assumed.
+  The fixed-edge theorem no longer asks for an inequality forced by the
+  involution, and the two-edge theorem no longer asks for two forced partner
+  inequalities. All local transport consumers were updated.
+- `exists_tail_of_fixed` and `cost_prependFixed` work over a division semiring;
+  `exists_tail_of_pair` and `cost_prependPair` additionally require nonzero two.
+  The half-edge assembly uses Mathlib's `add_halves` rather than real polynomial
+  normalization. The constructors and their cost recurrences have a normal-form
+  simplification API; their bodies are no longer exposed.
+
+Mathlib's `Equiv.conj` replaces the local `WeightedInvolution.conjugate`
+definition entirely. The new canonical extension
+`Equiv.involutive_conj_iff` in `ForTauCeti/Logic/Equiv/Involutive.lean` is over
+arbitrary sorts and equivalences, with no finite-type assumption. There is no
+compatibility alias. Standard `Function.Involutive.eq_iff` and
+`Fin.one_le_of_ne_zero` replace repeated inverse and numeric bookkeeping.
+
+The paper-facing cost bridges `RealTransport.realSchattenMatchingCost_eq_cost`
+in `SchattenRealMatching.lean` and `realNuclearMatchingCost_eq_cost` in
+`RealMatchingExponent.lean` both have prefix
+`TauCeti.DavisKahan.FiniteDimensional`. Their relabelling proofs now consume
+`WeightedInvolution.cost_reindex`; `nuclearMatchingEnergy_eq_cost` no longer
+needs a vertex equality instance or another finite-sum comparison.
+
+The exact nuclear sorting and unrestricted real transport value/attainment
+statements are preserved. These are generalizations and implementation
+improvements to classical algebraic/combinatorial ingredients; no new historical
+priority claim is made. Provenance row T21 in the existing unification note was
+updated, retaining T22's separate, unresolved transport-priority boundary.
+
+Validation: `lake exe cache get` completed with no files to download. The
+focused `lake build DavisKahan.FiniteDimensional.DirectRotation.RealNuclearSortedTransport`
+passed **7,324 jobs**; after the final algebraic generality/import refinements,
+the full default `lake build` passed **21,509 jobs**, warnings as errors. The
+final build log is `/tmp/dkps-polish/full-build.log`. `git diff --check` passed.
+No Lean edits followed the final full build. The user's unrelated changes and
+manuscript work were preserved.

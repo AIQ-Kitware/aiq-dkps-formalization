@@ -26,7 +26,7 @@ open WeightedInvolution
 
 /-- The nuclear matching energy on a function; involutivity is imposed in
 its theorems. This is the existing labelled matching cost on actual permutations. -/
-@[expose] def nuclearMatchingEnergy {ι : Type*} [Fintype ι] [DecidableEq ι]
+@[expose] def nuclearMatchingEnergy {ι : Type*} [Fintype ι]
     (theta : ι → ℝ) (s : ι → ι) : ℝ :=
   cost (fun i => min (nuclearCanonicalCost (theta i)) 2)
     (fun i j => realNuclearPairWeight (theta i) (theta j)) s
@@ -55,7 +55,7 @@ theorem exists_nuclear_head_normalization {n : ℕ} (theta : Fin (n + 2) → ℝ
     have hc0eq : c 0 = nuclearCanonicalCost (theta 0) := min_eq_left (not_le.mp hC0).le
     by_cases hs1 : s 1 = 1
     · let t := joinFixed s 0 1
-      have ht0 : t 0 = 1 := by simp only [t, joinFixed, hs0, Equiv.swap_apply_left]
+      have ht0 : t 0 = 1 := by simp only [t, joinFixed_apply, hs0, Equiv.swap_apply_left]
       have hc1eq : c 1 = nuclearCanonicalCost (theta 1) :=
         min_eq_left (hc0.trans (not_le.mp hC0).le)
       have hid := cost_joinFixed c w hw s hs 0 1 Fin.zero_ne_one hs0 hs1
@@ -71,19 +71,17 @@ theorem exists_nuclear_head_normalization {n : ℕ} (theta : Fin (n + 2) → ℝ
         intro h
         exact (Ne.symm Fin.zero_ne_one) (hs.injective (h.trans hs0.symm))
       have hsb : s b = 1 := hs 1
-      have h1b : (1 : Fin (n + 2)) ≤ b := by
-        rw [Fin.le_iff_val_le_val, Fin.val_one]
-        exact Nat.one_le_iff_ne_zero.mpr (fun h => hb0 (Fin.ext h))
-      let t := conjugate (Equiv.swap 0 b) s
+      have h1b : (1 : Fin (n + 2)) ≤ b := Fin.one_le_of_ne_zero hb0
+      let t := (Equiv.swap 0 b).conj s
       have ht0 : t 0 = 1 := by
-        simp only [t, conjugate, Equiv.symm_swap, Equiv.swap_apply_left, hsb,
+        simp only [t, Equiv.conj_apply, Equiv.symm_swap, Equiv.swap_apply_left, hsb,
           Equiv.swap_apply_of_ne_of_ne (Ne.symm Fin.zero_ne_one) hb1.symm]
       have hid := cost_conjugate_fixed_edge c w hw s hs 0 1 b
-        Fin.zero_ne_one hs0 rfl hb1.symm
+        hs0 rfl hb1.symm
       have hbound := (nuclear_pair_canonical_exchange (theta 0) (theta 1) (theta b)
         (htheta b).1 (horder h1b) h01 (htheta 0).2).trans (min_le_right _ _)
-      refine ⟨t, conjugate_involutive _ s hs, ?_, Or.inr ht0⟩
-      change cost c w (conjugate (Equiv.swap 0 b) s) ≤ cost c w s
+      refine ⟨t, (Equiv.involutive_conj_iff _ s).mpr hs, ?_, Or.inr ht0⟩
+      change cost c w ((Equiv.swap 0 b).conj s) ≤ cost c w s
       change w 0 1 + _ ≤ nuclearCanonicalCost (theta 0) + w 1 b at hbound
       rw [← hc0eq] at hbound
       linarith [hc_le b]
@@ -93,39 +91,37 @@ theorem exists_nuclear_head_normalization {n : ℕ} (theta : Fin (n + 2) → ℝ
   have ha0 : a ≠ 0 := hs0
   have ha1 : a ≠ 1 := hs01
   have hsa : s a = 0 := hs 0
-  have h1a : (1 : Fin (n + 2)) ≤ a := by
-    rw [Fin.le_iff_val_le_val, Fin.val_one]
-    exact Nat.one_le_iff_ne_zero.mpr (fun h => ha0 (Fin.ext h))
+  have h1a : (1 : Fin (n + 2)) ≤ a := Fin.one_le_of_ne_zero ha0
   by_cases hs1 : s 1 = 1
   · by_cases hC1 : 2 ≤ nuclearCanonicalCost (theta 1)
-    · let t := conjugate (Equiv.swap 1 0) s
+    · let t := (Equiv.swap 1 0).conj s
       have ht0 : t 0 = 0 := by
-        simp only [t, conjugate, Equiv.symm_swap, Equiv.swap_apply_right, hs1,
+        simp only [t, Equiv.conj_apply, Equiv.symm_swap, Equiv.swap_apply_right, hs1,
           Equiv.swap_apply_left]
       have hc0eq : c 0 = 2 := min_eq_right (hC1.trans hc0)
       have hc1eq : c 1 = 2 := min_eq_right hC1
       have hid := cost_conjugate_fixed_edge c w hw s hs 1 a 0
-        ha1.symm hs1 hsa ha0
+        hs1 hsa ha0
       have hbound := realNuclearPairWeight_mono_left (theta 1) (theta 0) (theta a)
         (htheta 1).1 h01 (htheta 0).2 (htheta a)
       rw [hw a 0, hc0eq, hc1eq] at hid
-      refine ⟨t, conjugate_involutive _ s hs, ?_, Or.inl ⟨ht0, hc0eq⟩⟩
-      change cost c w (conjugate (Equiv.swap 1 0) s) ≤ cost c w s
+      refine ⟨t, (Equiv.involutive_conj_iff _ s).mpr hs, ?_, Or.inl ⟨ht0, hc0eq⟩⟩
+      change cost c w ((Equiv.swap 1 0).conj s) ≤ cost c w s
       change w 1 a ≤ w 0 a at hbound
       linarith
-    · let t := conjugate (Equiv.swap 1 a) s
+    · let t := (Equiv.swap 1 a).conj s
       have ht0 : t 0 = 1 := by
-        simp only [t, conjugate, Equiv.symm_swap,
+        simp only [t, Equiv.conj_apply, Equiv.symm_swap,
           Equiv.swap_apply_of_ne_of_ne Fin.zero_ne_one ha0.symm,
           show s 0 = a from rfl, Equiv.swap_apply_right]
       have hc1eq : c 1 = nuclearCanonicalCost (theta 1) := min_eq_left (not_le.mp hC1).le
       have hid := cost_conjugate_fixed_edge c w hw s hs 1 0 a
-        (Ne.symm Fin.zero_ne_one) hs1 rfl ha0.symm
+        hs1 rfl ha0.symm
       have hbound := (nuclear_pair_canonical_exchange (theta 0) (theta 1) (theta a)
         (htheta a).1 (horder h1a) h01 (htheta 0).2).trans (min_le_left _ _)
       rw [hw 1 0, hc1eq] at hid
-      refine ⟨t, conjugate_involutive _ s hs, ?_, Or.inr ht0⟩
-      change cost c w (conjugate (Equiv.swap 1 a) s) ≤ cost c w s
+      refine ⟨t, (Equiv.involutive_conj_iff _ s).mpr hs, ?_, Or.inr ht0⟩
+      change cost c w ((Equiv.swap 1 a).conj s) ≤ cost c w s
       change w 0 1 + _ ≤ w 0 a + nuclearCanonicalCost (theta 1) at hbound
       linarith [hc_le a]
   · let b := s 1
@@ -135,21 +131,18 @@ theorem exists_nuclear_head_normalization {n : ℕ} (theta : Fin (n + 2) → ℝ
       have h' := congrArg s h
       rw [hs 1] at h'
       exact ha1 h'.symm
-    have hab : a ≠ b := hs.injective.ne Fin.zero_ne_one
-    have h1b : (1 : Fin (n + 2)) ≤ b := by
-      rw [Fin.le_iff_val_le_val, Fin.val_one]
-      exact Nat.one_le_iff_ne_zero.mpr (fun h => hb0 (Fin.ext h))
-    let t := conjugate (Equiv.swap 1 a) s
+    have h1b : (1 : Fin (n + 2)) ≤ b := Fin.one_le_of_ne_zero hb0
+    let t := (Equiv.swap 1 a).conj s
     have ht0 : t 0 = 1 := by
-      simp only [t, conjugate, Equiv.symm_swap,
+      simp only [t, Equiv.conj_apply, Equiv.symm_swap,
         Equiv.swap_apply_of_ne_of_ne Fin.zero_ne_one ha0.symm,
         show s 0 = a from rfl, Equiv.swap_apply_right]
     have hid := cost_conjugate_two_edges c w hw s hs 0 1 a b
-      Fin.zero_ne_one ha0.symm hb0.symm ha1.symm hb1.symm hab rfl rfl
+      Fin.zero_ne_one ha0.symm hb0.symm hb1.symm rfl rfl
     have hbound := nuclear_pair_largest_exchange (theta 0) (theta 1) (theta a) (theta b)
       (htheta a).1 (htheta b).1 (horder h1a) (horder h1b) h01 (htheta 0).2
-    refine ⟨t, conjugate_involutive _ s hs, ?_, Or.inr ht0⟩
-    change cost c w (conjugate (Equiv.swap 1 a) s) ≤ cost c w s
+    refine ⟨t, (Equiv.involutive_conj_iff _ s).mpr hs, ?_, Or.inr ht0⟩
+    change cost c w ((Equiv.swap 1 a).conj s) ≤ cost c w s
     change w 0 1 + w a b ≤ w 0 a + w 1 b at hbound
     linarith
 

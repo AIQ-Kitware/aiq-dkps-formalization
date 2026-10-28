@@ -138,6 +138,15 @@ one-angle canonical/reflection minimum; edges use `4*sin((theta+psi)/2)`. -/
   exact ∑ i, if s i = i then min (4*Real.sin (theta i/2)) 2
     else realNuclearPairWeight (theta i) (theta (s i))/2
 
+/-- The closed nuclear cost is an instance of the common weighted cost,
+with the canonical/reflection singleton minimum. -/
+theorem realNuclearMatchingCost_eq_cost (theta : ι → ℝ) (s : Equiv.Perm ι) :
+    realNuclearMatchingCost theta s = WeightedInvolution.cost
+      (fun i => min (4 * Real.sin (theta i / 2)) 2)
+      (fun i j => realNuclearPairWeight (theta i) (theta j)) s := by
+  classical
+  rw [realNuclearMatchingCost, WeightedInvolution.cost_eq_sum]
+
 /-- The closed finite nuclear matching problem on a labelled angle list. -/
 @[expose] def realNuclearMatchingMinimum (theta : ι → ℝ) : ℝ :=
   (realSchattenMatchings ι).inf' (realSchattenMatchings_nonempty ι)

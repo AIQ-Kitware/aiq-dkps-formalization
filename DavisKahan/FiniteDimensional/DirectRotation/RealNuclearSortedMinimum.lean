@@ -105,11 +105,11 @@ theorem nuclearSortedMinimum_le_energy (n : ℕ) (theta : Fin n → ℝ)
     (s : Fin n → Fin n) (hs : Function.Involutive s) :
     nuclearSortedMinimum theta ≤ nuclearMatchingEnergy theta s := by
   induction n using Nat.twoStepInduction with
-  | zero => simp [nuclearSortedMinimum, nuclearMatchingEnergy, cost]
+  | zero => simp [nuclearSortedMinimum, nuclearMatchingEnergy, cost_eq_sum]
   | one =>
     have hs0 : s 0 = 0 := Subsingleton.elim _ _
     simp only [nuclearSortedMinimum, nuclearAdjacentSum, nuclearMatchingEnergy,
-      cost, Fin.sum_univ_one, hs0, ite_true, add_zero]
+      cost_eq_sum, Fin.sum_univ_one, hs0, ite_true, add_zero]
     exact le_rfl
   | more n ih ih1 =>
     obtain ⟨t, ht, hcost, hhead⟩ := exists_nuclear_head_normalization theta htheta horder s hs
@@ -153,11 +153,11 @@ theorem exists_nuclear_energy_le_adjacent (n : ℕ) (theta : Fin n → ℝ) :
     ∃ s : Fin n → Fin n, Function.Involutive s ∧
       nuclearMatchingEnergy theta s ≤ nuclearAdjacentSum theta := by
   induction n using Nat.twoStepInduction with
-  | zero => exact ⟨id, fun _ => rfl, by simp [nuclearMatchingEnergy, cost, nuclearAdjacentSum]⟩
+  | zero =>
+    exact ⟨id, fun _ => rfl, by simp [nuclearMatchingEnergy, nuclearAdjacentSum]⟩
   | one =>
     refine ⟨id, fun _ => rfl, ?_⟩
-    change (∑ i : Fin 1, min (nuclearCanonicalCost (theta i)) 2) ≤ _
-    rw [Fin.sum_univ_one]
+    simp only [nuclearMatchingEnergy, cost_id, Fin.sum_univ_one, nuclearAdjacentSum]
     exact min_le_left _ _
   | more n ih _ =>
     obtain ⟨s, hs, hcost⟩ := ih (fun i : Fin n => theta i.succ.succ)
@@ -177,7 +177,8 @@ theorem exists_nuclear_energy_le_sorted (n : ℕ) (theta : Fin n → ℝ) :
     ∃ s : Fin n → Fin n, Function.Involutive s ∧
       nuclearMatchingEnergy theta s ≤ nuclearSortedMinimum theta := by
   cases n with
-  | zero => exact ⟨id, fun _ => rfl, by simp [nuclearMatchingEnergy, cost, nuclearSortedMinimum]⟩
+  | zero =>
+    exact ⟨id, fun _ => rfl, by simp [nuclearMatchingEnergy, nuclearSortedMinimum]⟩
   | succ n =>
     by_cases h : nuclearAdjacentSum theta ≤
         2 + nuclearAdjacentSum (fun i : Fin n => theta i.succ)
@@ -199,14 +200,11 @@ theorem exists_nuclear_energy_le_sorted (n : ℕ) (theta : Fin n → ℝ) :
 
 /-- The function-based exchange energy is the existing labelled nuclear
 matching cost on permutations. -/
-theorem nuclearMatchingEnergy_eq_cost {ι : Type*} [Fintype ι] [DecidableEq ι]
+theorem nuclearMatchingEnergy_eq_cost {ι : Type*} [Fintype ι]
     (theta : ι → ℝ) (s : Equiv.Perm ι) :
     nuclearMatchingEnergy theta s = realNuclearMatchingCost theta s := by
-  simp only [nuclearMatchingEnergy, cost, realNuclearMatchingCost,
+  simp only [nuclearMatchingEnergy, realNuclearMatchingCost_eq_cost,
     nuclearCanonicalCost, realNuclearPairWeight, add_zero]
-  apply Finset.sum_congr rfl
-  intro i _
-  split_ifs <;> rfl
 
 /-- **Two adjacent sums for the exact nuclear matching minimum.**
 All optional singleton choices, repeated/zero/right angles and both empty
@@ -235,14 +233,9 @@ theorem realNuclearMatchingCost_reindex {ι κ : Type*} [Fintype ι] [Fintype κ
     (theta : κ → ℝ) (s : Equiv.Perm κ) (e : ι ≃ κ) :
     realNuclearMatchingCost (theta ∘ e) ((e.trans s).trans e.symm) =
       realNuclearMatchingCost theta s := by
-  classical
-  unfold realNuclearMatchingCost
-  rw [← e.sum_comp (fun i => if s i = i then min (4 * Real.sin (theta i / 2)) 2
-    else realNuclearPairWeight (theta i) (theta (s i)) / 2)]
-  apply Finset.sum_congr rfl
-  intro i _
-  simp only [Equiv.trans_apply, Function.comp_apply, Equiv.apply_symm_apply,
-    Equiv.symm_apply_eq]
+  simp only [realNuclearMatchingCost_eq_cost]
+  exact cost_reindex (fun i => min (4 * Real.sin (theta i / 2)) 2)
+    (fun i j => realNuclearPairWeight (theta i) (theta j)) s e.symm
 
 private theorem nuclear_minimum_reindex_le {ι κ : Type*} [Fintype ι] [Fintype κ]
     (theta : κ → ℝ) (e : ι ≃ κ) :
@@ -252,10 +245,7 @@ private theorem nuclear_minimum_reindex_le {ι κ : Type*} [Fintype ι] [Fintype
     (realSchattenMatchings_nonempty κ) (realNuclearMatchingCost theta)
   have hinv := (mem_realSchattenMatchings s).mp hs
   let t := (e.trans s).trans e.symm
-  have ht : Function.Involutive t := by
-    intro i
-    simp only [t, Equiv.trans_apply, Equiv.apply_symm_apply]
-    exact (congrArg e.symm (hinv (e i))).trans (e.symm_apply_apply i)
+  have ht : Function.Involutive t := (Equiv.involutive_conj_iff e.symm s).mpr hinv
   have hbound : realNuclearMatchingMinimum (theta ∘ e) ≤
       realNuclearMatchingCost (theta ∘ e) t :=
     Finset.inf'_le _ ((mem_realSchattenMatchings t).mpr ht)
