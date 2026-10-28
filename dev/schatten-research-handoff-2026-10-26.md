@@ -23,20 +23,30 @@ and equality-certificate campaigns culminate in `ff3c1657d`; the final full
 default build passed **21,427 jobs**, with warnings as errors, including the
 shared real/complex trace and equality-certificate proofs. The subsequent
 shared family mechanism and its consumers passed **21,437 jobs**, again with
-warnings as errors. The dated sections below are proof history; their
+warnings as errors. The ambient structural decomposition C1a subsequently
+passed **21,453 jobs** with warnings as errors. The dated sections below are
+proof history; their
 statements of open obligations apply at their recorded checkpoint only.
 
-**Shared smoothed-power mechanism:** positive smoothing now has one formal
-convex-support first variation, ambient constrained stationarity `JGJ=-G`,
-analytic two-phase gradient derivative, exact
-curvature surface and strict single-peak phase shape. The actual paired-block
-local-minimum theorem `SmoothedPowerTransport.highPhaseProjections_mul_eq_zero_of_localMin`
-proves no overlap of high-phase projections for `1<=p<=2`, `tau>0`.
-Both existing Schatten and Charbonnier Hessian/no-mixing proofs consume the
-new shared `UnitaryPhaseHessian`. This is not yet C1 unrestricted ambient
-decoupling: derive and assemble the paired blocks of arbitrary minimizers,
-including their feasible variations and the zero-gradient reflection sector.
-The full C2 scalar minimizing-phase law also remains to be formalized.
+**Shared smoothed-power mechanism:** C1a, the unrestricted ambient structural
+decomposition, is now proved for `1<=p<=2`, `tau>0`, finite complex Hilbert
+space. Every actual constrained local minimum has a complete source-reflection-
+paired phase basis and a self-adjoint unitary on its gradient kernel. The
+phase means lie in `(0,pi/2]` and the literal cost splits exactly into phase
+costs plus the retained kernel cost. The exact declaration is
+`SmoothedPowerTransport.spectral_decomposition_of_isLocalMinOn_transports`
+with prefix `TauCeti.DavisKahan.FiniteDimensional`. Two angular branches,
+actual spectral restrictions, feasible common variations and no-overlap are
+proved; maximal gradient and zero-gradient sectors are included.
+
+Both existing Schatten/Charbonnier Hessian proofs consume `UnitaryPhaseHessian`,
+and their block-restriction proofs now consume `UnitarySpectralRestriction`.
+The new family derivation invokes no existing global penalty-specific optimum.
+C1b's exact principal-angle minimum/attainment formula and C2's full scalar
+minimizing-phase law remain to be formalized. The next lower-bound step is
+phase/angle cost assembly and the nuclear bound on the reflection remainder;
+do not restart the already proved ambient assembly or classify every kernel
+optimizer as an unrelated prerequisite.
 
 **Complex nuclear endpoint:** exact general infinite-rank attainment, the
 certificate for every ambient optimizer, a literal independent signed-root
@@ -4402,3 +4412,91 @@ Validation: after `lake exe cache get`, the full default `lake build`
 passed **21,437 jobs**, warnings as errors. A final full incremental build
 also checks the added ambient stationarity theorem and provenance header;
 its log is `/tmp/dkps-unification/family-final-full.log`.
+
+## Family-wide ambient structural reduction C1a — 27 October 2026 follow-up
+
+The previous turn at `29843d7bb` proved the common variation mechanism.
+This follow-up derives its blocks from arbitrary ambient constrained local
+minima and assembles them into the actual transporter, rather than supplying
+paired blocks as hypotheses.
+
+The main new theorem is
+`TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport.spectral_decomposition_of_isLocalMinOn_transports`
+in `SmoothedPowerSpectralDecomposition.lean`. For finite complete complex E,
+`1<=p<=2`, `tau>0`, actual U with `U P_K U*=Q`, and local minimality on the
+full transport fiber, let G be its actual family phase gradient, H its positive
+spectral space and Z its kernel. There exist a basis e_i of H, phases alpha_i,
+beta_i in `(0,pi)` with `0<(alpha_i+beta_i)/2<=pi/2`, and a self-adjoint
+unitary R on Z. Isometric coordinates `d(x,y,z)=x+K.reflection(y)+z` give the
+actual orthogonal block representation of U with phase blocks
+`diag(exp(i alpha_i))`, `diag(exp(-i beta_i))`, and R. The literal spectral
+cost is exactly the sum of phase costs plus the cost of R. Empty spaces,
+repeated levels and the maximal gradient level are included. This is a
+necessary structural theorem, not a converse classification of local minima
+and not yet the global minimum formula.
+
+The proof path is now explicit:
+
+- `SmoothedPowerGradientBranches`: exact signed submaximal level sets and
+  unique maximal phase. `balanced_phase_sum_le_pi` uses the decreasing radial
+  weight, in addition to single-peak shape, to put the paired means in the
+  physical acute/right range. Gradient-branch uniqueness is not the desired
+  minimizing-phase uniqueness law C2.
+- `SmoothedPowerGradientBlocks`: actual positive/negative unitary restrictions,
+  source-reflection pairing, signed peak scalar restrictions and the full
+  zero-gradient self-adjoint restriction.
+- `SmoothedPowerFeasibleBlocks`: generic geometric paired variations and
+  arbitrary-penalty trace additivity transfer actual ambient local minimality.
+- `SmoothedPowerGradientNoMixing`: derives disjoint high-phase factors on each
+  actual positive submaximal eigenspace.
+- `SmoothedPowerPositiveBasis`: a simultaneous phase basis on the entire
+  positive gradient space, with acute/right means, from the existing
+  `PositiveSpectralBasis` and `OrthogonalProjectionPhases` infrastructure.
+- `SmoothedPowerSpectralDecomposition`: the existing paired involution
+  decomposition assembles all blocks and retains the kernel term.
+
+Two reusable classical bridges are factored into `UnitarySpectralCost` and
+`UnitarySpectralRestriction`. The former proves the trace/singular-value
+identity, coordinate invariance and block additivity for an arbitrary finite
+real penalty; convexity is not needed for those identities. The latter proves
+actual two-phase unitary restriction from a two-preimage scalar CFC level.
+The old private proofs in `SchattenGradientBlocks` and `SmoothedGradientBlocks`
+now consume it, preserving their public statements and provenance. Pinned
+sources were checked before adding these missing bridges. The restriction
+proof needs the same finite subspace spectral elaboration budget as its
+predecessors; its source explains that budget. No new verification tooling was
+added.
+
+The remaining C1b route is sharper: in the positive planes choose the scalar
+phase difference to bound each cost by its phase minimum; use the accepted
+principal-angle sum assembly on the actual coordinates. On Z a reflection R
+costs `rho(2)||I-R||_1/2`. The classical projection nuclear bound and convexity
+imply the required kernel lower bound because
+`m(theta)<=rho(2 sin(theta))<=rho(2)sin(theta)`. This avoids requiring a
+complete family-wide kernel optimizer classification. Construct the matching
+independent scalar phases for attainment. The zero-smoothing value requires a
+finite uniform-limit argument; no whole optimizer-set limit is implied.
+Then prove C2's shared logarithmic-ratio minimizing-phase law and package C5.
+Optional topology, exhaustive real matching and arbitrary-regime stability
+remain deferred.
+
+Provenance T15 and the publication-core assessment now identify C1a as proved
+and C1b as open. The generalized Charbonnier penalty itself remains classical
+S13 prior art. The spectral/eigenspace tools are classical formalizations;
+priority of the family transport structural consequence remains unresolved.
+No manuscript or visualization surfaces were edited.
+
+Validation: `lake exe cache get`, then the full default `lake build`,
+**21,453 jobs**, warnings as errors. Log:
+`/tmp/dkps-unification/family-ambient-full.log`.
+
+For the next proof, the existing angle assembly API is
+`Submodule.sum_principalAngles_eq_paired_phases_add_comap_complex` in
+`ForTauCeti/Analysis/InnerProductSpace/Projection/PairedPhaseTrace.lean`.
+It accepts an arbitrary zero-preserving scalar function and the actual
+paired coordinates with means in `[0,pi/2]`. The C1a theorem now supplies
+those means without folding. `SmoothedLocalGlobal` demonstrates the existing
+geometry/restricted-kernel projection interface, but its penalty-specific
+scalar and kernel optimizer classification must not be imported as the new
+family argument. The C1b lower-bound route above uses the nuclear bound
+instead, and does not require C2's complete phase uniqueness law first.

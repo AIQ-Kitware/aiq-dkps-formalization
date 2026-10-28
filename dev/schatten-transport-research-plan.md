@@ -2,9 +2,11 @@
 
 Updated 27 October 2026. Mathematical checkpoint `ff3c1657d` includes the
 field-independent nuclear equality certificate and exact real equality-
-attainment criterion. The subsequent shared smoothed-power mechanism now
-includes actual ambient stationarity and paired-block overlap exclusion;
-the full default build passed 21,437 jobs with warnings as errors. The earlier spectral checkpoint was `96aeb922d`
+attainment criterion. The subsequent smoothed-power campaign proves
+ambient spectral decomposition C1a: every finite complex constrained local
+minimum has actual paired phase blocks with acute/right means and a
+self-adjoint kernel restriction, with exact cost splitting. The full default
+build passed 21,453 jobs with warnings as errors. The earlier spectral checkpoint was `96aeb922d`
 (accounting `2b481b94d`). See the
 [unification and provenance note](spectral-transport-unification.md) for the
 structural explanation, exact theorem map and source-authentication boundaries.
@@ -50,9 +52,14 @@ The publication-core assessment specifies five principal statements and their
 status. The next campaign is C1/C2 for
 `rho_(p,tau)(s)=(tau^2+s^2)^(p/2)-tau^p`, `1<=p<=2`, tau>=0:
 
-1. Prove one unrestricted finite complex reduction using gradient pairing,
-   two-phase second variations and overlap exclusion; include the zero-gradient
-   reflection sector. Do not assume invariant principal planes of competitors.
+1. Finish the organizing C1b exact value/attainment formula. The unrestricted
+   ambient structural reduction C1a is proved. Use its actual phase coordinates
+   to identify the principal-angle sum, bound positive-plane costs by scalar
+   minima, and control the zero-gradient reflection cost by the nuclear
+   projection-distance bound and convexity. Then construct independent scalar
+   phase attainers. A complete kernel optimizer classification is unnecessary
+   for this lower-bound route. Treat zero-smoothing values by a justified finite
+   uniform limit, without inferring convergence of entire optimizer sets.
 2. Prove the shared scalar transition law. The unification note now derives
    the critical surface and the useful monotonic quantity `N/(d-c)^2`;
    the raw cubic N is not required to be monotone. The actual family
@@ -63,13 +70,16 @@ status. The next campaign is C1/C2 for
    lift. Positive activation threshold gives finite active attainment; the
    nuclear corner uses the already compiled infinite signed-root assembly.
 
-The shared `UnitaryPhaseHessian` now replaces the duplicated Schatten and
-Charbonnier trace-Hessian/overlap calculations. `SmoothedPowerVariation` proves
-ambient constrained stationarity `JGJ=-G`, the actual family Hessian and high-phase overlap exclusion for paired blocks
-throughout positive smoothing. The next proof is **ambient assembly**: derive
-those blocks from an arbitrary minimizer, extend their common variation
-feasibly, and bound the zero-gradient reflection sector. The paired-block
-result alone is not the unrestricted C1 theorem. See T15 in the provenance map.
+The shared `UnitaryPhaseHessian` replaces the duplicated Schatten and
+Charbonnier Hessian/overlap calculations. `UnitarySpectralRestriction` now
+also replaces their duplicated classical two-phase restriction proofs.
+`SmoothedPowerTransport.spectral_decomposition_of_isLocalMinOn_transports`
+(prefix `TauCeti.DavisKahan.FiniteDimensional`, source `SmoothedPowerSpectralDecomposition.lean`)
+constructs all actual paired blocks and the full kernel from ambient local
+minimality; `SmoothedPowerFeasibleBlocks` certifies their feasible common
+variation. C1a is proved, not a prescribed-plane hypothesis. C1b's unrestricted
+principal-angle minimum formula and C2's full scalar minimizing-phase law
+remain open as family-wide formal statements. See T15 in the provenance map.
 
 The proposed C² penalty-shape theorem has not been refuted, but is not yet
 formally verified. Begin with the concrete family, whose phase-gradient

@@ -2,8 +2,8 @@
 
 Assessment begun at mathematical checkpoint `ff3c1657d`, updated 27 October 2026.
 The real equality checkpoint passed 21,427 jobs with warnings as errors.
-The shared family mechanism and all consumers passed 21,437 jobs with
-warnings as errors after `lake exe cache get` and `lake build`.
+The family-wide ambient structural theorem and all consumers passed 21,453
+jobs with warnings as errors after `lake exe cache get` and `lake build`.
 The success criterion is a coherent central theory and defensible attribution,
 not completion of the research backlog. This assessment is research planning;
 the proposed abstract below is not a manuscript edit.
@@ -31,8 +31,38 @@ in this examination; it is still a candidate theorem, not a verified result.
 
 ## Five principal statements
 
-### C1. Complex spectral-penalty decoupling — candidate central theorem
+### C1. Ambient structural reduction — proved; exact value formula still open
 
+**C1a is now formally proved for the positively smoothed family.** Let E
+be finite-dimensional complex Hilbert space, `1<=p<=2`, `tau>0`, and U any
+local minimum of the literal family spectral cost on the full fiber taking
+P_K to Q. Set J=2P_K-I, G the actual phase gradient, H its positive spectral
+space and Z=ker G. There are an orthonormal basis e_j of H, phases
+`alpha_j,beta_j in (0,pi)`, and a self-adjoint unitary R on Z such that
+
+[
+ d(x,y,z)=x+Jy+z,qquad
+ d^{-1}Ud=operatorname{diag}igl(operatorname{diag}(e^{ialpha_j}),
+             operatorname{diag}(e^{-ieta_j}),Rigr),
+ quad 0<(alpha_j+eta_j)/2lepi/2,
+]
+
+and the actual cost is
+
+[
+ mathcal F_{p,	au}(U)=sum_j{phi_{p,	au}(alpha_j)+phi_{p,	au}(eta_j)}
+                         +mathcal F_{p,	au}(R).
+]
+
+The coordinate map is an isometry onto E, so it retains the actual source
+reflection and the original transporter. The theorem supplies these blocks
+from ambient local minimality; it does not assume them. It includes empty
+positive/kernel spaces and the maximal gradient level. Its exact declaration
+is `SmoothedPowerTransport.spectral_decomposition_of_isLocalMinOn_transports`
+in [SmoothedPowerSpectralDecomposition](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerSpectralDecomposition.lean),
+with prefix `TauCeti.DavisKahan.FiniteDimensional`.
+
+**C1b, the organizing exact value formula, remains open as a family theorem.**
 Let H be finite-dimensional complex Hilbert space, P,Q orthogonal projections
 of equal rank, and theta_j their source-indexed principal angles, including
 zeros and right angles. For a nonnegative increasing penalty rho with rho(0)=0,
@@ -64,20 +94,20 @@ its Hessian is negative if AB is nonzero. This is the substantive no-mixing
 step. After excluding overlap, an angle budget gives the planar lower bounds;
 convexity controls the zero-gradient reflection sector.
 
-**Status:** not a compiled generic theorem. The fragment's claim is a minimum
-formula plus existence of an attainer; it does not itself classify every
-optimizer. The Hessian identity needs a proved spectral differentiation
-argument under the stated regularity, and all exceptional gradient levels,
-common directions and multiplicities must be retained. The shared finite
-trace Hessian and projection-overlap descent are now
-compiled in `UnitaryPhaseHessian`, and both existing penalty proofs consume
-them. The concrete smoothed-power family has a proved analytic extension,
-actual Hessian, unrestricted ambient stationarity `JGJ=-G`, and paired-block
-overlap exclusion in `SmoothedPowerVariation`.
-These settle the displayed no-mixing calculation for that family, including
-identity and reflection phases. The passage from an arbitrary ambient
-minimizer to those actual paired blocks, feasibility of their simultaneous
-variation, and the kernel-sector bound still need a family-wide proof.
+**Status:** C1a, the ambient block construction, feasible common paired
+variation, no-overlap theorem, maximum-level restriction and self-adjoint
+kernel restriction are now compiled across `1<=p<=2`, `tau>0`. The existing
+Schatten and Charbonnier block-restriction proofs consume the same classical
+two-preimage restriction theorem. The family proof uses no penalty-specific
+global optimization theorem and assumes no scalar minimizing-phase law.
+
+C1b is still a candidate theorem. The remaining route is more precise now:
+identify the physical angle sum from the actual paired coordinates; bound
+each phase pair by its scalar minimum; bound the reflection-sector cost
+using the nuclear projection-distance inequality and convexity of rho; then
+construct independent scalar-phase attainers. The reflection bound avoids
+requiring a complete family-wide kernel optimizer classification. The wider
+C² shape theorem and its spectral differentiation hypotheses remain separate.
 
 ### C2. One phase-transition surface for smoothed powers — derived scalar law
 
@@ -203,9 +233,12 @@ Solid mathematical dependencies are shown; status labels are part of each node.
 
 ```mermaid
 flowchart TD
-  G[Classical projection geometry and transport fiber: proved] --> D[Ambient stationarity and paired overlap descent: family proved; block assembly: open]
-  S[Family single-peak shape and curvature surface: proved; full scalar minima: derived] --> F[C1 family finite decoupling: candidate]
-  D --> F
+  G[Classical projection geometry and transport fiber: proved] --> D[C1a ambient spectral blocks, feasible descent and exact cost splitting: family proved]
+  S[Family single-peak shape and radial weight: proved] --> D
+  D --> F[C1b exact family value formula: candidate]
+  B[Scalar compact minima and reflection cost comparison: open] --> F
+  C[C2 transition law: conventional proof; formalization open] --> A[Explicit ambient family phase formula: candidate]
+  F --> A
   F --> L[C5 Hilbert lift and finite active attainment: candidate family; known instances proved]
   I[Classical ideal membership and defect index: proved] --> L
   U[Compact unitary approximation: proved] --> L
@@ -227,7 +260,7 @@ contains exact declarations and authentication limits.
 | Jordan (1875), §§46–50; Davis (1958), Theorems 7.1, 7.3, 7.4 | Classical angular geometry and canonical operator/Hilbert--Schmidt/Schatten p>=2 extremal theory. | Exact subquadratic phase selection and its field compatibility, not invention of angles or direct rotation. |
 | Davis–Kahan (1970), Propositions 4.3–4.4 and examples | Squared displacement, norm-scope failure and the printed real short-angle assertion. Original wording here relies on the repository's prior source audit. | Formal correction with exact scope, followed by an optimization theory beyond the false assertion. |
 | Sun–Roth–Black (2010), §4; Barron (2019), equation (4) | The scalar generalized Charbonnier family itself, up to our subtraction at zero. | Constrained transport phase selection and operator structure; no claim to invent the penalty. Primary authentication is S13 in the provenance map. |
-| Bolotnikov–Li–Rodman (2001), Problem 1.1; Theorems 3.1, 4.2, 4.5; Lemma 3.3 | The ambient distortion problem, Q-norm theory, complete Frobenius minimizers and a special subquadratic phase example. Theorem 4.5's chain compatibility condition is automatic for a single subspace pair. | The subquadratic/smoothed solution theory and C1 if proved. The optimization problem itself is prior art. |
+| Bolotnikov–Li–Rodman (2001), Problem 1.1; Theorems 3.1, 4.2, 4.5; Lemma 3.3 | The ambient distortion problem, Q-norm theory, complete Frobenius minimizers and a special subquadratic phase example. Theorem 4.5's chain compatibility condition is automatic for a single subspace pair. | The solved subquadratic/smoothed regimes and the now-proved C1a family structural theorem. C1b remains open; the optimization problem itself is prior art. |
 | Qiu–Zhang–Li (2006), §5; Zhang–Qiu (2010), §4 p. 1615 | Grassmann/logarithmic objectives and explicit trace-norm nonminimality. | Exact extrinsic optimizer classifications, not a new discovery that direct rotation can fail for the trace norm. |
 | Avron–Seiler–Simon (1994), Proposition 3.1; Kaftal–Loreaux (2017), Proposition 2.7(ii) | Relative index and exact proper-ideal restricted-unitary feasibility on separable complex Hilbert space. | Formal real/nonseparable scope and a penalty-specific optimizer solution above those classical ingredients. |
 
@@ -246,7 +279,9 @@ original-source authentication limitations.
 
 We study unitary and orthogonal transport between spectral subspaces by
 minimizing spectral penalties of the ambient displacement. For complex Hilbert
-spaces we give exact optimizer descriptions for subquadratic Schatten powers,
+spaces we prove a common ambient spectral decomposition for every local
+minimum of the positively smoothed convex-power family, retaining its
+reflection kernel and exact cost splitting. We also give exact optimizer descriptions for subquadratic Schatten powers,
 the nuclear endpoint and smoothed nuclear penalties. The regular regimes
 select phases on a finite active angle spectrum, while nuclear equality
 attainers admit an independent signed-root parametrization in arbitrary rank.
@@ -258,15 +293,17 @@ defects specify finite-cost feasibility. The results connect penalty-dependent
 phase selection, real compatibility and infinite-dimensional attainment within
 one transport-fiber variational problem.
 
-This abstract claims the proved regimes. C1/C2 across the full two-parameter
-family would strengthen its central assertion after verification.
+This abstract claims the proved family structural reduction and solved
+regimes. C1b's exact value formula and C2's full minimizing-phase law across
+the two-parameter family still require proof.
 
 ## Theorem-level outline and the next proof decision
 
 1. **Classical geometry and the variational fiber.** Definitions, angle data,
    Q-norm boundary, source correction, ideal feasibility and attribution.
-2. **Penalty selection.** C1 finite decoupling, C2 family phase law and exact
-   boundary regimes. Keep the ambient and scalar theorems distinct.
+2. **Penalty selection.** The proved C1a family ambient decomposition, exact
+   solved regimes, and the remaining C1b/C2 value and phase-selection
+   statements. Keep ambient reduction and scalar optimization distinct.
 3. **Field compatibility.** C3 nuclear equality geometry and C4 finite real
    matching; explain the real complex-structure obstruction.
 4. **Infinite-dimensional assembly.** C5 lower-bound lift, finite active
@@ -274,19 +311,22 @@ family would strengthen its central assertion after verification.
 5. **Consequences and boundaries.** Include only consequences needed to explain
    the theory; state real above-bound and endpoint set-limit limitations.
 
-The verified narrower nuclear/strict-Schatten/Charbonnier core is mathematically
-self-contained and cohesive enough to organize a paper. Further unrestricted
+The proved C1a theorem supplies a family-wide organizing mechanism for the
+verified nuclear/strict-Schatten/Charbonnier core. A paper centered on that
+structural result and the solved regimes has a coherent mathematical scope. Further unrestricted
 real classification, topology or broad stability is not a publication gate.
-Historical comparison still needs resolution, and a paper claiming C1 or the
-full smoothed-power law needs further proof.
+Historical comparison still needs resolution. A paper claiming C1b's exact
+family value formula or the full smoothed-power minimizing-phase law needs
+further proof; the recommended next work remains C1b.
 
-**Next central step:** assemble C1 from stationarity and the now-proved
-family single-peak/Hessian/overlap mechanism; retain the zero-gradient
-reflection sector and every principal-angle multiplicity. The missing step
-is ambient spectral-block assembly, not another penalty-specific Hessian.
-Then formalize C2's shared logarithmic-ratio minimizing-phase argument.
-Do not begin optional topology or unrestricted real matching extensions at
-this checkpoint.
+**Next central step:** finish C1b's principal-angle lower bound and
+independent-phase attaining construction using the now-proved C1a ambient
+decomposition. The phase means are already acute/right, so no extra folding
+argument is needed for the family. Use the nuclear projection-distance bound
+and convexity for the retained reflection sector, rather than beginning a
+complete kernel classification. Then formalize C2's shared logarithmic-ratio
+minimizing-phase argument. Optional topology and unrestricted real matching
+extensions remain deferred.
 Then package the already-used C5 lower-bound lift and instantiate the family.
 For tau>0 the phase-gradient extension is analytic near the unit circle; for
 tau=0 the existing strict-exponent treatment handles the identity singularity.

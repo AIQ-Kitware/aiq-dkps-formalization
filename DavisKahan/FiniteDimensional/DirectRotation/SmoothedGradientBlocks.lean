@@ -8,6 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedGradientBranches
 public import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
 public import ForTauCeti.Analysis.CStarAlgebra.TwoPointSpectrum
+public import ForTauCeti.Analysis.InnerProductSpace.UnitarySpectralRestriction
 
 /-!
 # Actual angular Charbonnier-gradient restrictions
@@ -43,40 +44,14 @@ private theorem two_phase_representation_on_invariant_subspace
       (V : K →L[ℂ] K) = Complex.exp ((a : ℂ) * Complex.I) • 1 +
         (Complex.exp ((b : ℂ) * Complex.I) -
           Complex.exp ((a : ℂ) * Complex.I)) • P := by
-  obtain ⟨V, hV, _, _⟩ :=
-    (Unitary.linearIsometryEquiv U).exists_restriction_of_finite_invariant K hinv
-  let : IsStarNormal (V : K →L[ℂ] K) :=
-    isStarNormal_of_mem_unitary (Unitary.linearIsometryEquiv.symm V).property
-  have hs : spectrum ℂ (V : K →L[ℂ] K) ⊆
-      {Complex.exp ((a : ℂ) * Complex.I), Complex.exp ((b : ℂ) * Complex.I)} := by
-    intro mu hmu
-    rw [_root_.ContinuousLinearMap.spectrum_eq] at hmu
-    obtain ⟨x, hx⟩ := (Module.End.hasEigenvalue_iff_mem_spectrum.2 hmu).exists_hasEigenvector
-    have hx0 : (x : E) ≠ 0 := fun h => hx.2 (Subtype.ext h)
-    have hxU : (U : E →L[ℂ] E) (x : E) = mu • (x : E) := by
-      have h := congrArg (fun y : K => (y : E)) hx.apply_eq_smul
-      exact (hV x).symm.trans h
-    have hnorm : ‖mu‖ = 1 := by
-      have h := _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.2 (x : E)
-      rw [hxU, norm_smul] at h
-      exact mul_right_cancel₀ (norm_ne_zero_iff.2 hx0) (by simpa using h)
-    have hphase : Complex.exp (((mu.arg : ℝ) : ℂ) * Complex.I) = mu := by
-      simpa only [hnorm, Complex.ofReal_one, one_mul] using
-        Complex.norm_mul_exp_arg_mul_I mu
-    have hxG : smoothedUnitaryGradient tau (U : E →L[ℂ] E) (x : E) =
-        (g : ℂ) • (x : E) :=
-      hG x x.2
-    have hsymbol := smoothedUnitaryGradient_apply_of_apply_eq_smul tau
-      (U : E →L[ℂ] E) (x : E) mu hxU
-    rw [hxG] at hsymbol
-    have hreal : smoothedPhaseDerivative tau mu = g := by
-      exact_mod_cast (smul_left_injective ℂ hx0 hsymbol).symm
-    have hroot := hlevel mu.arg (Complex.abs_arg_le_pi mu) (by rwa [hphase])
-    simpa only [hphase, Set.mem_insert_iff, Set.mem_singleton_iff] using hroot
-  obtain ⟨P, hP, hrepr⟩ := exists_isStarProjection_eq_affine_of_spectrum_subset_pair
-    (V : K →L[ℂ] K) (Complex.exp ((a : ℂ) * Complex.I))
-      (Complex.exp ((b : ℂ) * Complex.I)) hs
-  exact ⟨V, P, hP, hV, hrepr⟩
+  apply exists_two_phase_restriction_of_cfc_level
+    (fun z => (smoothedPhaseDerivative tau z : ℂ)) (g : ℂ)
+    (Complex.exp ((a : ℂ) * Complex.I)) (Complex.exp ((b : ℂ) * Complex.I)) U K hinv hG
+  intro z hz hg
+  have hphase : Complex.exp (((z.arg : ℝ) : ℂ) * Complex.I) = z := by
+    simpa only [hz, Complex.ofReal_one, one_mul] using Complex.norm_mul_exp_arg_mul_I z
+  have hreal : smoothedPhaseDerivative tau z = g := by exact_mod_cast hg
+  simpa only [hphase] using hlevel z.arg (Complex.abs_arg_le_pi z) (by rwa [hphase])
 
 /-- Opposite positive and negative gradient levels use a common pair of
 phase roots, with opposite signs in their two projection representations. -/
