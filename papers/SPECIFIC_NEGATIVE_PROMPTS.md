@@ -100,3 +100,62 @@ When historical provenance is useful to future editors, prefer non-rendered LaTe
 comments immediately beside the relevant prose. When a historical correction changes
 a worked example, rewrite the example in its final mathematical form and keep the
 repair history out of the rendered explanation.
+
+## Formalization-paper editorial rules (2026-10-28)
+
+These rules apply to the Davis--Kahan formalization manuscript and, where
+relevant, to other formal-mathematics papers. They override an agent's tendency
+to insert self-protective commentary into published prose.
+
+- **Do not insert generic validation disclaimers.** In particular, do not write
+  variants of "source correspondence and interpretation require independent
+  mathematical review" or "the authors retain responsibility". A paper should
+  state its actual formalized mathematical results, hypotheses, and source
+  mapping directly, not advertise an unspecified future review.
+- **Do not state the obvious about Lean.** Ban filler such as "Lean checked the
+  encoded propositions" or recurrent reminders that a compiling proof is
+  checked by Lean. Describe any nontrivial methodological distinction once,
+  where scientifically necessary; focus on the mathematics and formalization.
+- **Do not put reproduction instructions in the paper.** Move `lake` commands,
+  environment installation, build recipes, exact checkout procedures, and
+  file-by-file reproduction checklists to the repository README or dedicated
+  artifact documentation. A concise artifact-availability citation or link
+  may remain in the manuscript.
+- **Do not invent bibliographic citations.** Every `\\cite{...}` must resolve
+  to a real bibliography entry representing an actual source. In particular,
+  do not present TauCeti as a published paper if no such publication exists.
+  Cite the actual mathematical originator where applicable; identify TauCeti
+  as a software library with an accurate project URL/version when relevant.
+  Distinguish mathematical source attribution from formalization/API ancestry.
+- **Do not insert ritual uncertainty about historical priority.** Avoid
+  unsupported metacommentary such as "its historical priority remains under
+  study", "novelty remains provisional", and repeated defensive qualifications.
+  State the precise result proved, cite and compare the closest established
+  predecessors, and say concretely what differs. Do not claim "first" without
+  evidence; do not add disclaimers merely because exhaustive priority
+  certification is impossible. Keep live research questions in internal notes.
+- **Do not narrate novelty as a list of things the authors cannot claim.**
+  Ban defensive attribution wording such as "This prior work rules out
+  crediting the original complex mechanism or general trace-norm
+  nonminimality to the present project." Give the historical fact directly:
+  "Davis and Kahan exhibited the complex-phase counterexample to trace-norm
+  optimality" (with the primary citation). Then describe precisely the
+  result obtained here. Prefer affirmative, source-grounded mathematical
+  comparisons over self-referential credit disclaimers. This does not
+  justify erasing credit for predecessors.
+- **Do not compress away the historical mathematical development.** The
+  formalization paper should situate its constructions and prerequisites in
+  the development of principal angles, projections, direct rotation,
+  perturbation theory, and operator-theoretic foundations. Explain how
+  existing theorems and theorems formalized for the project fit together.
+  Longer exposition is acceptable when it contributes to understanding; do
+  not optimize for page-count reduction as an end in itself.
+- **Do not conflate dependency provenance with logical consequence.** New
+  transport research can be enabled by the formalization infrastructure,
+  including DKPS material later moved upstream to TauCeti, without following
+  logically from the Davis--Kahan sine-theta theorem. Attribute direct ports,
+  independent upstream re-proofs, and common classical sources accurately.
+
+These editorial rules do not authorize omitting genuine mathematical
+hypotheses, known counterexamples, material limitations, or necessary source
+attribution. Express such facts precisely rather than through generic hedges.

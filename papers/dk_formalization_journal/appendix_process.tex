@@ -2,9 +2,9 @@
 \label{app:dk-inventory}
 
 \Cref{tab:dk-full-inventory} records the maintained result-level denominator.
-Every row is currently verified in the ordinary Lean build and has accepted
-semantic/source-correspondence review. The disposition column distinguishes a
-proof of the source claim from the checked refutation of Proposition~4.4.
+The rows correspond to the 1970 result statements.  The disposition
+column distinguishes proved source claims from the refutation of
+Proposition~4.4.
 
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.49\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}}
 \caption{The \DKResultCount{} Davis--Kahan result-level targets.}
@@ -57,107 +57,10 @@ refactoring of implementation modules.
 \section{Source-correspondence review}
 \label{app:source-review}
 
-A result is accepted only after two distinct checks.
-
-\paragraph{Mechanical verification.}
-The declaration must resolve in the ordinary project build, and every theorem
-on which it depends must be accepted by Lean's kernel.  This establishes the
-formal proposition exactly as encoded.
-
-\paragraph{Source comparison.}
-The encoded proposition is compared with the cited source location.  The review
-checks the mathematical objects, hypotheses, conclusion, scalar field,
-dimension, norm class, boundary conventions, and operator-domain assumptions.
-For a nonliteral representation, the review also records the theorem or
-mathematical argument that justifies the correspondence.  \Cref{eq:modulus-sine} is the main example: the public Lean sine-theta theorem
-is stated on the positive sine operator, while its rectangular analytic proof
-engine is connected to that operator by an exact modulus identity and
-polar-decomposition transport of the symmetric ideal gauge.
-
-This separation prevents theorem names from serving as evidence of fidelity.
-For example, the proved declaration
-\texttt{sinTheta\_unbounded\_intervalExterior\_characterizedWitness\_rclike}
-remains a useful finite-gap theorem, but it is not the selected source endpoint
-because it does not include the half-infinite gap cases.  Conversely,
-Proposition~4.4 is complete in the inventory even though its printed assertion
-has no proof: the completed formal treatment consists of the transcribed claim
-as a proposition, a checked counterexample/refutation, a diagnosis of the
-source proof, and repaired theorems.
-
-\section{Formalization procedure}
-\label{app:formalization-process}
-
-For each source theorem, we identified its standing assumptions, selected a
-mathematical representation in Lean, and proved the required intermediate
-results against the pinned Mathlib and Tau Ceti dependencies. Proof
-development used Lean's elaborator and kernel to resolve domain conditions,
-separation hypotheses, and norm-ideal membership. The source-correspondence
-review in Appendix~\ref{app:source-review} was performed separately from
-compilation; it compared the elaborated statement with the original theorem,
-including conventions inherited from surrounding text.
-
-ChatGPT, Claude Code, and Codex were used for literature and library search,
-proof design, implementation, debugging, and manuscript preparation. The
-human authors selected and reviewed the mathematical statements and are
-responsible for their interpretation and the submitted text. The main text
-and the source inventory identify the formal results; the project archive
-contains the corresponding proofs and pinned dependencies.
-
-\section{Artifact organization}
-\label{app:artifact}
-
-The paper-facing Davis--Kahan declarations are under
-\path{DavisKahan/Sources/DavisKahan1970}.  Reusable mathematical infrastructure
-is split between local \path{ForTauCeti} modules and accepted upstream
-Tau Ceti declarations.  The repository records donor origins of upstream
-adaptations and distinguishes independently implemented upstream work.  The maintained Davis--Kahan result inventory is
-\path{dev/davis-kahan-1970-formalization-result-inventory.json}.  This organization permits
-source-audit records and paper-specific counterexamples to remain local to the
-paper package while reusable analysis is prepared for upstream integration.
-
-
-\subsection{Counterexample and follow-on verification}
-\label{app:small-angle-artifact}
-
-The 29-item source inventory concerns the statements made in the 1970
-paper.  The real four-dimensional counterexample and the failure of the
-printed Ky Fan inequality are proved in
-\path{DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean}.
-The parameterized family is in
-\path{DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean},
-with a source-facing wrapper in
-\path{DavisKahan/Sources/DavisKahan1970/Section4SmallAngle.lean}.
-The declaration \texttt{arbitrarilySmall\_fullDisplacement\_refuted}
-establishes failure below every positive threshold.
-
-The follow-on matching statement in Theorem~\ref{thm:real-matching-example}
-is supported by
-\path{DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean},
-including \path{exists_minimizing_real_nuclear_transport_matching}.
-Its finite-dimensional global lower bound and attainment quantify over
-all ambient orthogonal transporters.  The full optimization development,
-including the general Schatten and smoothed cases, remains in the
-separate spectral-transport paper project.  These results are not counted
-as additional statements in the 1970 source inventory.
-
-\subsection{Reproduction}
-
-The root \path{lean-toolchain} and \path{lake-manifest.json} pin the
-compiler and dependencies. From the repository root, the ordinary build
-checks the source-facing development:
-\begin{verbatim}
-lake exe cache get
-lake build
-\end{verbatim}
-The direct-rotation aggregate includes the quantitative displacement and
-smoothed optimization extensions. A narrower build checks these together
-with the source-facing counterexample wrapper:
-\begin{verbatim}
-lake build \
-  DavisKahan.FiniteDimensional.DirectRotation.All \
-  DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
-\end{verbatim}
-The mathematical manuscript builds independently of Lean:
-\begin{verbatim}
-make -C papers/dk_formalization_journal paper
-\end{verbatim}
+The review compares each selected source statement with its Lean counterpart,
+including hypotheses, scalar field, operator domains, spectral-gap cases, and
+norm conventions.  The public sine-theta theorem uses the positive sine
+operator; \Cref{eq:modulus-sine} identifies it with the modulus of the
+rectangular off-diagonal block used in the analytic proof.  The inventory
+records Proposition~4.4 through its four-dimensional counterexample and
+corrected Q-norm conclusion.
