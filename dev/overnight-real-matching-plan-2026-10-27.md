@@ -1,7 +1,10 @@
 # Overnight plan: make real spectral transport referee-ready
 
-Prepared 27 October 2026. **Status: plan only; execution has not started.**
-The user will review this plan before activating the overnight run.
+Prepared 27 October 2026. **Execution activated by the user, 28 October 2026.**
+The conventional lower-bound roadmap and complete nuclear sorting/ambient
+attainment theorem are proved and documented. The 21,507-job full build
+passed. Worked examples and targeted primary-source comparison remain active;
+then the final handoff will audit every outcome below.
 
 This plan follows the publication direction in
 [the steering note](publication-direction-dkps-to-transport-2026-10-27.md),

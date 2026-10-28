@@ -14,6 +14,13 @@ before repeating the literature search; do not infer first-discovery priority.
 
 ## Current frontier — reconciled 27 October 2026
 
+**28 October overnight update:** nuclear sorting is now proved. See the final
+entry and the current research plan: exact optional-singleton normalization,
+two-sum finite matching minimum, unrestricted real transport value and ambient
+attainment. Full default build: **21,507 jobs**, warnings as errors. This
+supersedes all older entries calling nuclear sorting open. Strict-exponent or
+positive-smoothing sorting is not asserted.
+
 Start with the maintained [research plan](schatten-transport-research-plan.md).
 It records the completed real equality certificate, the publication-core goals,
 claim boundaries, dependencies, build evidence and new-machine transfer steps.
@@ -4744,3 +4751,49 @@ The proposed abstract, five core statements, dependency diagram and section
 outline are ready for the requested evaluation of mathematical synthesis.
 No Lean changes followed the 21,495-job build; the audit edits research
 records only.
+
+
+## 28 October 2026 — exact real nuclear sorting and unrestricted proof roadmap
+
+The new `RealNuclearSortedTransport.lean` proves, with prefix
+`TauCeti.DavisKahan.FiniteDimensional.RealTransport`:
+
+- `realTransportPowerMinimum_one_eq_sorted`;
+- `exists_minimizing_real_nuclear_transport_sorted`.
+
+For equal-rank finite real pairs and decreasing labelled positive angles,
+let B pair adjacent angles, appending a scalar zero to an odd list. The value
+is zero on an empty list, otherwise `min(B(theta), 2+B(tail theta))`.
+An actual ambient orthogonal transporter attains that nuclear value and bounds
+every orthogonal competitor. Zero filtering and all multiplicities are carried
+by the actual ordered positive-index subtype.
+
+`exists_nuclear_head_normalization` is the missing combinatorial bridge:
+every matching has a no-dearer replacement with the largest angle either
+reflected or paired with the second-largest. Its case analysis includes both
+singleton choices and partner exchanges. Exact weighted-involution cost
+identities and leading-orbit restriction/extension support a two-step
+induction. `realNuclearMatchingMinimum_eq_sorted` includes zero, repeated and
+right angles, arbitrary optional singletons, and empty/singleton lists.
+The proof does not stop at an adjacent exchange for perfect matchings.
+
+The conventional lower-bound roadmap is now in the existing unification note.
+It explains why global minimization precedes block extraction, how real
+conjugation yields complete two/four-dimensional sectors including the
+zero-gradient kernel, why restrictions are real global minima, and how exact
+angle labels and matching constructions give both bounds. Nuclear continuity
+transfers values without claiming optimizer-set limits.
+
+Provenance rows T21/T22 distinguish classical finite exchanges from the
+transport sorting consequence. Exact historical priority remains unresolved;
+no new penalty, ambient problem or uncrossing method is claimed. The
+algorithmic consequence is two sums after sorting, not a verified executable
+sort, bit complexity or stability result. No strict-exponent or positive-
+smoothing sorting theorem is asserted. Worked examples and the targeted
+primary-source comparison remain the next obligations of this active run.
+
+Validation: focused ambient target **7,322 jobs**; `lake exe cache get`, then
+full default `lake build`: **21,507 jobs**, warnings as errors. Log:
+`/tmp/dkps-overnight-2026-10-28/full-sorting-build.log`. No manuscript,
+visualization, submission, roadmap or other-repository edits were made;
+preexisting unrelated worktree changes were preserved.

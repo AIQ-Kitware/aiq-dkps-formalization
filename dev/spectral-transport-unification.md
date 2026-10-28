@@ -69,6 +69,187 @@ nuclear product theorem describes that freedom in operator norm, and its
 trace-class displacement family is compact in every native Schatten-q norm,
 q>=1. Operator norm and these ideal norms are not interchangeable.
 
+## Why matching bounds every real transporter — conventional proof roadmap
+
+Execution checkpoint, 28 October 2026. Let K,L have equal dimension in a
+finite real Hilbert space, and let 1<p<2. Write `C_p(U)=||I-U||_p^p`.
+The matching has one vertex for every **labelled positive** principal angle;
+repeated angles retain separate vertices. Its singleton weight is the smaller
+of the canonical plane cost and the reflection cost. Its edge weight is the
+proved two-angle minimum. The claim is about every ambient orthogonal map
+U(K)=L, not a fiber restricted in advance to principal planes.
+
+**1. Minimize first, then analyze the minimizer.** The full orthogonal
+transport fiber is nonempty and compact, and C_p is continuous. Choose an
+actual global minimizer U*. The arbitrary competitor U need not be stationary
+or block diagonal: it suffices to show that some matching has cost C_p(U*),
+since C_p(U*)<=C_p(U). This logical order is implemented explicitly by
+`exists_matching_cost_le_real_transport` in `SchattenRealMatching.lean`.
+Compact minimization and the orthogonal transport geometry are classical.
+
+**2. Obtain real small blocks from real variations.** Complexify the actual
+real minimizer and retain its canonical conjugation kappa. Its Hermitian
+spectral gradient G satisfies kappa G kappa=-G. Feasible real source-preserving
+variations give JGJ=-G, where J=2P_K-I; complex variations are not substituted
+for real ones. On a positive G-level the scalar phase-gradient equation has
+at most two spectral branches. The induced conjugation J kappa and the actual
+two-phase restriction admit common complex lines/planes. Doubling by J and
+descending to real fixed points gives orthogonal reducing real blocks of
+dimension two or four. The maximal-gradient level is included. On ker G the
+unitary is a reflection; the actual source and negative-phase projections
+give a complete real lines/planes decomposition. Thus no zero-gradient sector
+is discarded. These steps are `gradient_reflection_conjugate_eq_neg_of_isLocalMinOn_real_transports`,
+`gradient_eigenspace_small_blocks_of_isLocalMinOn_real_transports`,
+`gradient_kernel_real_blocks_of_isLocalMinOn_real_transports` and
+`exists_complete_real_blocks_of_isLocalMinOn_real_transports` in the respective
+real stationarity/gradient/kernel/decomposition modules. Spectral calculus,
+conjugation and two-projection geometry are classical ingredients; their
+constrained assembly here is the structural step requiring comparison with
+prior transport results. Real local-to-global is neither assumed nor true.
+
+**3. Every restriction is a real global minimum.** A cheaper orthogonal
+transporter on one reducing block could replace that restriction, leaving
+all other blocks unchanged. Orthogonal block additivity would contradict
+global minimality. Consequently each balanced two-dimensional block has its
+one-angle minimum and each four-dimensional rank-two block has its exact
+two-angle minimum; fixed blocks contribute zero. Both determinant classes
+are retained. `exists_complete_globally_minimizing_blocks_real` and
+`exists_real_schatten_angle_cost_decomposition` certify the replacement argument,
+the cost sum and the exact principal-angle multiset sum. This is not merely
+a comparison of the spectra of two conveniently selected maps.
+
+**4. Transfer blocks to the original labelled angles.** The actual angle-index
+equivalence identifies each one-angle block with a fixed matching vertex and
+each two-angle block with a two-cycle, without losing ties or right angles.
+Zero-angle edges can be stripped at unchanged cost. The negative-class pair
+alternative is resolved into allowable singleton choices or the positive-class
+pair weight. The resulting positive-label matching has exactly C_p(U*).
+See `exists_matching_cost_eq_of_isMinOn_real_transport` and
+`exists_positive_matching_cost_eq_of_isMinOn_real_transport`. Taking the finite
+matching minimum proves the universal lower bound, as stated in
+`realPositiveSchattenMatchingMinimum_le_of_map_eq`.
+
+**5. Construct the converse.** Given any labelled matching, its disjoint
+singletons and two-cycles select actual principal-angle planes and pairs of
+planes. The proved plane/four-dimensional minimizers act on these reducing
+sectors; identity acts on the common complement. Costs add to exactly that
+matching's cost. `exists_real_transport_attaining_matching` proves this for
+every matching; choosing a minimum yields
+`exists_minimizing_real_schatten_transport_matching`. This is the upper-bound
+and attainment direction, logically separate from steps 1–4.
+
+**6. Reach p=1 without a nuclear first-variation assumption.** On the fixed
+compact fiber the spectral power objective is jointly continuous at p=1,
+including zero singular values. Each scalar pair cost is a minimum on a fixed
+compact phase interval; finitely many matchings give a continuous matching
+minimum. Taking p down to one proves equality of the two minimum values;
+compact attainment supplies an actual nuclear transporter. The exact results
+are `realTransportPowerMinimum_one_eq_nuclearMatching` and
+`exists_minimizing_real_nuclear_transport_matching` in `RealNuclearMatching.lean`.
+The weights become `min(4 sin(theta/2),2)` and `4 sin((theta+psi)/2)`.
+Continuity of compact minima is classical; it transfers values, not whole
+optimizer sets or a classification of every nuclear minimizer.
+
+All unqualified declarations in this roadmap have prefix
+`TauCeti.DavisKahan.FiniteDimensional.RealTransport`, except the stationarity,
+gradient, kernel and local-decomposition declarations, whose prefix is
+`TauCeti.DavisKahan.FiniteDimensional.SchattenPhaseTransition`.
+Module homes are `DavisKahan/FiniteDimensional/DirectRotation/`.
+Provenance row T7 and sources S2–S5 record the closest confirmed predecessors;
+this roadmap makes no first-priority claim. A Q-norm canonical theorem or a
+four-dimensional example alone does not supply steps 2–4 of the matching
+reduction. A stronger predecessor that does supply them would change the
+novelty classification and must be recorded if located.
+
+## Nuclear matching now reduces to two adjacent sums — 28 October 2026
+
+Let `theta_1>=...>=theta_k>0` be the labelled positive principal angles of
+equal-rank real subspaces in finite dimension. Set
+
+\[
+ e(a,b)=4\sin((a+b)/2),\qquad c(a)=e(a,0)=4\sin(a/2).
+\]
+
+For a descending list t, pair adjacent entries, append a scalar zero if its
+length is odd, and let B(t) be the sum of these edge costs; B(empty)=0. Then
+
+\[
+ D_1(K,L)=\begin{cases}
+ 0,&k=0,\\
+ \min\{B(\theta_1,\ldots,\theta_k),\;
+       2+B(\theta_2,\ldots,\theta_k)\},&k>0.
+ \end{cases}
+\]
+
+This is now a **compiled unrestricted ambient transport theorem**, not just a
+four-angle exchange inequality or an assertion restricted to perfect
+matchings. Exact declarations, prefix
+`TauCeti.DavisKahan.FiniteDimensional.RealTransport`:
+
+- `exists_nuclear_head_normalization`, [RealNuclearHeadNormalization](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearHeadNormalization.lean):
+  on an ordered physical list of length at least two, any involution has a
+  cost-nonincreasing replacement whose leading orbit is either a reflection
+  singleton or the edge joining the first two labels.
+- `realNuclearMatchingMinimum_eq_sorted`, [RealNuclearSortedMinimum](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearSortedMinimum.lean):
+  the two-sum identity for the complete finite matching problem, including
+  zero, repeated and right angles, and empty/singleton lists. Fixed vertices
+  keep their actual `min(c(theta),2)` costs throughout the proof.
+- `realTransportPowerMinimum_one_eq_sorted` and
+  `exists_minimizing_real_nuclear_transport_sorted`, [RealNuclearSortedTransport](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearSortedTransport.lean):
+  the exact unrestricted real nuclear value, an actual ambient orthogonal
+  attainer and the comparison with every orthogonal transporter. Source and
+  target have equal rank, but no acuteness, multiplicity, determinant or
+  prescribed-plane hypothesis is imposed.
+
+`orderedPositivePrincipalAngles` uses the inherited order of the original
+positive label subtype. Its order is antitone and its cardinality is exactly
+the number of positive labels, so no zero filtering or multiplicity is hidden
+in the interface. This theorem does not require the separate, as-yet-unadded
+pointwise identification with intrinsic signed-root multiplicities.
+
+**Why the singleton normalization works.** If the largest angle is already a
+reflection singleton, remove it. If it is canonical, compare its orbit with
+the second angle's orbit. Joining two canonical singletons is no dearer than
+their separate costs. A canonical singleton and an edge can exchange using
+four-angle submodularity with a scalar zero. Two disjoint edges can rejoin the
+two largest vertices by the established adjacent exchange. If instead the
+second angle is a reflection singleton, monotonicity permits moving that
+reflection to the largest angle. These are all possible leading-orbit cases.
+The local modifications preserve an actual involution, with exact cost
+identities in the donor weighted-involution module.
+
+Remove the resulting leading fixed point or two-cycle and induct on the
+remaining list. This gives the lower bound against **every** optional-singleton
+matching. Adjacent pair constructions give the opposite bound. The scalar
+relations `e(a,b)<=4` and monotonicity eliminate repeated/interior reflection
+choices from the value comparison, leaving exactly the two displayed sums.
+There is no appeal to an unsupported induction for perfect matchings alone.
+The proof is independent of nuclear first variation and consumes the already
+proved unrestricted matching theorem at the final transport interface.
+
+**Algorithmic boundary.** Given the angles, sorting and evaluating two adjacent
+sums suffices for the nuclear value; a generic blossom computation is no longer
+necessary for this endpoint. Once angles are in sorted order, the two sums
+require linearly many scalar evaluations. With unsorted input, an ordinary
+comparison sort gives the conventional O(k log k) arithmetic/comparison count.
+This is a mathematical consequence, not a Lean verification of an executable
+sort, transcendental evaluation, bit complexity, numerical stability or the
+cost of computing the principal angles. General Schatten matching remains
+proved for 1<=p<2, but this sorting proof does not establish a sorting-only
+formula at strict exponents or positive smoothing.
+
+**Evidence and provenance.** Bounded scratch exploration checked 7,035 lists
+against exhaustive matching recurrence, including zeros, ties and right
+angles, with no discrepancy at tolerance 1e-10. That was exploratory numerical
+evidence only; it is superseded for the stated theorem by the Lean proof.
+The focused ambient target passed 7,322 jobs; after `lake exe cache get`, full
+default `lake build` passed **21,507 jobs**, warnings as errors. Log:
+`/tmp/dkps-overnight-2026-10-28/full-sorting-build.log`. The exact combinatorial
+operations are classical exchange/finite induction; no novelty is claimed for
+uncrossing or sorting itself. The transport simplification follows from T7
+and the new complete normalization. T21/T22 record the dependency and priority
+boundary; no earliest-discovery claim follows from the search record.
+
 ## The new real bridge
 
 ### Finite block theorem and construction
@@ -992,6 +1173,9 @@ including its pre-DKPS/Spectra ancestry and independent-work distinctions.
 | **T19** `TauCeti.smoothedPower_quadratic_bounds`, [SmoothedPowerScalar](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPowerScalar.lean); `ContinuousLinearMap.smoothedPowerCost_ne_top_iff_schatten_two`, `smoothedPowerCost_zero_smoothing`, [SmoothedPower](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPower.lean); `I.SmoothedPowerTransport.transport_iff_projection_cost_and_defect_balance`, [SmoothedPowerFeasibility](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerFeasibility.lean) | Positive smoothing and 1<=p<=2 have the Hilbert--Schmidt finite-cost domain; zero smoothing is exactly the accepted Schatten-p power. Over either field, finite-cost transport exists iff the projection penalty is finite and crossed defects balance. | Classical real-power mean value/comparison and native ideal/index theory; S6/S11 authenticate the relative-index and complex separable proper-ideal feasibility predecessors. No new scalar penalty or ideal is claimed. | Classical ingredients formally verified; precise family domain/feasibility corollary derived by reusing the existing restricted-unitary theorem. | Compiled; primary S6/S11 scope as recorded; real/nonseparable formal extension is distinguished from those printed scopes. | `exists_hasDerivAt_eq_slope`; accepted singular values and Schatten gauges; `schatten_transport_iff_projection_sub_ne_top_and_defect_balance`; `gauge_nonacuteDirectRotation_ne_top_iff_projection_sub`. | Feasibility over both fields, not real planar optimality. No finite-rank or separability assumption. A finite-cost statement is distinct from extended-cost minimization on a possibly empty fiber. |
 | **T20** `TauCeti.tsum_angle_penalty_le_displacement_of_finite_transport_bound`, [SpectralTransportLimit](../ForTauCeti/Analysis/InnerProductSpace/Projection/SpectralTransportLimit.lean); `I.SmoothedPowerTransport.angle_minimum_sum_le_transport`, [SmoothedPowerGlobalLowerBound](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalLowerBound.lean); same namespace `exists_minimizer_by_finite_correction`, `exists_unitary_minimizing_transport_of_projection_cost_ne_top`, `finite_minimum_iff_projection_cost_and_defect_balance`, [SmoothedPowerGlobalAttainment](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean) | Complete complex Hilbert space of arbitrary dimension, 1<=p<=2, tau>=0: all ambient transports obey the intrinsic angle-sum lower bound, including infinite costs. Finite projection penalty plus balanced crossed defects gives an actual finite-cost global attainer equal to that sum, and is necessary for finite-cost attainment. In regular regimes an attainer can be chosen as a finite correction of canonical rotation. | S4 establishes the finite ambient problem and classical quadratic/Q-norm theory; S6/S11 supply classical index/ideal feasibility; S12/S13 authenticate scalar penalties. No equivalent full closed-family Hilbert value/attainment theorem is authenticated in the sources examined. The proof abstracts/adapts the existing Charbonnier/Schatten approximation and tail assembly; the nuclear corner consumes the existing signed-root result. | General transport lifting derivation and full family solution extension; potentially novel, exact historical priority unresolved. | Full compiler validation; predecessor primary confirmations as recorded, S10 remains unauthenticated. | C1 finite unrestricted value; C2 positive canonical cutoff; compact unitary truncation and moving targets; finite reducing transport sections; T19 domains; angle continuity/monotonicity; lower semicontinuity and actual canonical restrictions; generic spectral block trace; existing nuclear signed-root attainment. | The finite correction describes a constructed regular attainer, not every family optimizer. The nuclear corner uses an independent infinite signed-root construction. No full real matching formula in infinite rank, arbitrary-penalty optimizer theorem, or endpoint optimizer-set limit is claimed. |
 
+| **T21** `TauCeti.WeightedInvolution.cost_conjugate_fixed_edge`, `cost_conjugate_two_edges`, `cost_joinFixed`, [WeightedInvolution](../ForTauCeti/Combinatorics/Matching/WeightedInvolution.lean); `exists_tail_of_fixed`, `exists_tail_of_pair`, `cost_prependFixed`, `cost_prependPair`, [WeightedFin](../ForTauCeti/Combinatorics/Matching/WeightedFin.lean) | Exact weighted cost changes under actual involution exchanges, and exact removal/extension identities for leading fixed points and two-cycles. Arbitrary finite vertex sets and arbitrary symmetric edge costs in the exchange results; empty tails included. | Classical finite matching and permutation/sum manipulations. Pinned Mathlib/TauCeti checked for an equivalent weighted exchange API; no exact external theorem locator newly authenticated. | Classical combinatorial ingredients formally verified, independently implemented here. | Compiled in the full 21,507-job build; no mathematical originality claim. | Mathlib involutions, transpositions, finite sums, Fin predecessor/successor and proof-preserving relabelling. | Not an optimization theorem by itself and not an implementation of blossom or a sorting algorithm. |
+| **T22** `F.RealTransport.exists_nuclear_head_normalization`, [RealNuclearHeadNormalization](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearHeadNormalization.lean); `realNuclearMatchingMinimum_eq_sorted`, [RealNuclearSortedMinimum](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearSortedMinimum.lean); `realTransportPowerMinimum_one_eq_sorted`, `exists_minimizing_real_nuclear_transport_sorted`, [RealNuclearSortedTransport](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearSortedTransport.lean) | Finite real equal-rank pairs: the unrestricted nuclear minimum is zero for no positive angles, otherwise the smaller of two adjacent sums, optionally reflecting the largest angle. Actual ambient attainment and a bound for every orthogonal competitor. The combinatorial theorem includes arbitrary optional singletons, zero/repeated/right angles and empty/singleton lists. | T7 is the proved unrestricted transport predecessor; S4 is the published ambient problem/Q-norm/Frobenius predecessor. Scalar submodularity and finite exchanges are classical ingredients. Exact priority of this nuclear transport sorting consequence remains unresolved. | Derived algorithmic simplification of the verified matching solution; potentially novel transport consequence, not a claim to invent sorting or Monge exchange. | Full compiler validation and primary S4 comparison; broader algorithmic/historical priority not settled. | T21 exact local exchanges/removal/construction; `realNuclearPairWeight_adjacent_exchange`, `nuclear_pair_canonical_exchange`, `nuclear_pair_largest_exchange`; two-step finite induction; exact positive-label enumeration and matching relabelling; `realTransportPowerMinimum_one_eq_nuclearMatching` and its ambient attainer. | Does not classify all nuclear optimizers or prove sorting for strict Schatten/Charbonnier, infinite-rank real matching, numerical stability, or executable algorithm complexity. |
+
 Unresolved source work is substantive, not a request to add a checker: obtain
 the authoritative Exercise B.12 statement; authenticate the original 1970
 propositions against the maintained reconstruction; inspect the original
@@ -1001,6 +1185,7 @@ S11 now supplies a directly verified ideal-feasibility predecessor for T10. Abse
 an equivalent in the sources examined is evidence for a **candidate**, never
 proof of historical novelty. No new theorem is attributed to the whole author
 list of a classical field merely by keyword overlap.
+
 
 ## Theorem organization for a future mathematical treatment
 
@@ -1075,3 +1260,9 @@ canonical-tail trace and finite-cost attainment passed the focused target,
 passed **21,495 jobs** with warnings as errors, including the refactored
 Charbonnier lower bound and shared Schatten/Charbonnier block geometry.
 Log: `/tmp/dkps-unification/family-hilbert-core-full.log`.
+
+The 28 October nuclear sorting checkpoint passed the focused ambient target,
+**7,322 jobs**. After `lake exe cache get`, the full default `lake build`
+passed **21,507 jobs**, warnings as errors, including the production aggregate
+import of `RealNuclearSortedTransport`. Log:
+`/tmp/dkps-overnight-2026-10-28/full-sorting-build.log`.
