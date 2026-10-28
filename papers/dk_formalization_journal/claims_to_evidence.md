@@ -1,15 +1,25 @@
 # Journal claims to evidence
 
-This file maps the principal claims in `paper.tex` to current repository
-evidence. Read `PAPER_CONTEXT.md` for the publication boundaries. The YWS source audit
-is in `../yws_formalization_conference/`. This journal manuscript concerns
-Davis--Kahan. The dated chronological entries below preserve their original integration
-status. Research evidence was reconciled with mathematical checkpoint
-`96aeb922d` on 27 October; the full default build passed 21,413 jobs with
-warnings as errors. The newer research table below does not assert that all
-these results have already been included in the manuscript. Use the
-[current research plan](../../dev/schatten-transport-research-plan.md) for
-remaining proof obligations and new-machine resumption.
+**27 October 2026 manuscript integration.** The LaTeX paper now includes
+`unified_spectral_transport.tex` as its common mathematical core,
+`appendix_transport_provenance.tex` as the theorem/source mapping, and
+an explicit, primary-source related-work survey. The repository records
+successful formal verification at its mathematical checkpoint; this
+LaTeX overlay does not alter the proofs.
+
+| Integrated manuscript theorem | Lean evidence | Scope and boundary |
+| --- | --- | --- |
+| `thm:family-finite`: exact complex closed-family minimum and actual attainer | `FiniteDimensional/DirectRotation/SmoothedPowerBoundary.lean`: `SmoothedPowerTransport.exists_unitary_minimizing_transport_principalAngles_of_nonneg` | Equal rank, finite complex, all ambient unitaries, `1<=p<=2`, `tau>=0`; value and existence, not all optimizers. |
+| `thm:family-canonical`: sharp phase critical surface | `FiniteDimensional/DirectRotation/SmoothedPowerCanonicalCriterion.lean`: `SmoothedPowerTransport.nonacuteDirectRotation_isMin_iff_principalAngles_critical` | Canonical global **minimality** iff every angle satisfies closed cutoff; does not assert unique minimizer. |
+| `thm:family-infinite`: exact finite-cost feasibility and minimum | `InfiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean`: `SmoothedPowerTransport.exists_unitary_minimizing_transport_of_projection_cost_ne_top` and `finite_minimum_iff_projection_cost_and_defect_balance` | Complex complete Hilbert, index-balanced, `P-Q` in `S_p` at zero smoothing or `S_2` otherwise; actual attainment and convergent angle sum. |
+| `sec:family-real`: real matching and nuclear field equality | `FiniteDimensional/DirectRotation/RealNuclearMatching.lean`, `RealNuclearFieldEquality.lean` | Real finite, unsmoothed `1<=p<2`; no general positive-smoothing matching claimed. |
+| Infinite real nuclear equality attainer | `Geometry/Polar/NuclearRealRootCriteria.lean`: `exists_real_nuclear_transport_eq_projection_sub_iff_even_source_multiplicity`; `NuclearRootClassification.lean` | Trace-class projection difference and balanced defects; equality with complex lower bound, not all real minimizers. |
+| Original Davis--Kahan coverage and correction | `Sources/DavisKahan1970/` source-review inventory and counterexample modules | 28 reviewed statements formally proved, one printed statement refuted; classical results are attributed to original authors. |
+
+The novel-versus-classical distinction and scholarly references are
+in `paper.tex` under `sec:related` and Appendix `app:transport-provenance`.
+Earlier evidence checkpoints are retained below but should not be treated
+as evidence that subsequently integrated mathematics is still absent.
 
 ## Compiled research evidence beyond the recorded manuscript integration — 27 October
 

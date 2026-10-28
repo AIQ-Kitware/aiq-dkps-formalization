@@ -1,66 +1,50 @@
-# Davis--Kahan (1970) in Lean: Formalization, Counterexample, and Repair
+# Optimal spectral subspace transport and formalized Davis--Kahan theory
 
-This directory contains the journal manuscript on the Lean formalization and
-mathematical audit of Davis--Kahan perturbation theory. **Start with
-[`PAPER_CONTEXT.md`](PAPER_CONTEXT.md)** for established results, verification
-status, unresolved publication questions, and current editorial decisions.
-The YWS source audit and old manuscript sections now live in the separate
-[`yws_formalization_conference`](../yws_formalization_conference/) stub.
-The checked manuscript also includes an exact complex smoothed spectral-transport
-minimum, an explicit optimal phase, a sharp closed cutoff for canonical
-optimality and uniqueness, and quadratic or quartic error bounds. The nearest
-commuting-unitary application is stated with a computable commutator cutoff
-and a $2\times2$ worked example in `smoothed_transport_verified.tex`.
-At source snapshot `427169ce` (25 October 2026), the checked journal
-manuscript includes `schatten_transport_verified.tex` and its complete
-**unrestricted finite-dimensional complex Schatten** optimization theory for
-`1<p<2`: the principal-angle sum formula, classification of every global
-optimizer, no nonglobal constrained local minima, exact uniqueness and
-commutator cutoffs, independent multiplicity-space projection coordinates,
-and exact `2^s` counts for simple active angles with zero right defect.
-The optimizer sets for both this Schatten regime and Charbonnier `tau>0`
-are homeomorphic in operator norm to products of multiplicity-space
-orthogonal projections and independent right-angle defect unitaries.
-Rank labels are locally constant and distinct rank sectors have positive
-separation for fixed subspaces and parameters. The equivalent rank-stratified
-Grassmannian sets remain an algebraic description; connected-component
-counts and manifold dimensions are unproved. The finite complex smoothed local-to-global theorem and unrestricted real
-matching for `1 <= p < 2` are proved. The strict-exponent complex all-optimizer
-and local-to-global results do not automatically extend to `p=1`;
-infinite-dimensional ideal optimization remains open.
+This directory contains the journal manuscript. **Start with
+[`PAPER_CONTEXT.md`](PAPER_CONTEXT.md)** for the historical source audit,
+mathematical scope, and provenance conventions. The source-driven YWS
+material also lives in [`yws_formalization_conference`](../yws_formalization_conference/).
 
-**26 October 2026 endpoint integration.** The main `paper.tex` now inputs
-`nuclear_endpoint_verified.tex`. It states the attained complex nuclear minimum
-`2 sum sin(theta)`, the all-rank unrestricted real nuclear matching formula,
-the exact even-multiplicity criterion for equality of real and complex minima,
-the necessary-and-sufficient criterion for equality with the real canonical
-spectral value, and nearest nuclear subspace-preserving orthogonal/unitary
-correction. The research handoff `../../dev/schatten-research-handoff-2026-10-26.md`
-identifies remaining proof and historical-priority questions. These results
-extend the paper's research theorems without changing the 29 source targets.
+**27 October 2026: mathematical reframe.** The manuscript now opens with
+the **verified complex two-parameter smoothed-power transport theory**
+(`unified_spectral_transport.tex`). The penalty
+`rho_{p,tau}(s) = (tau^2 + s^2)^(p/2) - tau^p` covers `1 <= p <= 2`
+and `tau >= 0`. The finite-dimensional theorem gives the unrestricted
+principal-angle minimum and sharp canonical-optimality threshold. The
+infinite-dimensional theorem gives the exact finite-cost feasibility and
+attainment conditions for complete complex Hilbert spaces: equal crossed
+defects and `P-Q` in `S_p` for `tau=0`, or `S_2` for `tau>0`.
 
-The mathematical novelty/priority investigation remains in
-[`MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md`](MATHEMATICAL_NOVELTY_REVIEW_2026-10-24.md)
-and is separate from the journal exposition.
+The established complementary real results include unrestricted
+finite-dimensional matching for unsmoothed `1 <= p < 2`, the nuclear
+real/complex even-multiplicity equality condition, and the
+infinite-dimensional trace-class signed-root equality-attainer criterion.
+The full two-parameter theorem **does not** classify every optimizer in
+every regime and **does not** establish an unrestricted real positive-
+smoothing minimum formula. The older strict-Schatten, nuclear, and
+Charbonnier classification theorems remain individually in their proved
+scope and are included below the unified theorem.
 
-The scope is now fixed:
+The related-work section (`paper.tex`) and the formal source mappings
+(`appendix_transport_provenance.tex`) explicitly credit Davis (1958),
+Davis--Kahan (1970), Bolotnikov--Li--Rodman (2001), Grassmannian metric
+and Procrustes precedents, relative-index theory, Lean/Mathlib, and
+Spectra. They distinguish established results and reused proof machinery
+from new verified transport statements. Formal verification does not by
+itself establish historical priority.
 
-- **primary subject:** Davis and Kahan's 1970 perturbation paper and the reusable
-  operator-theoretic infrastructure required to formalize it;
-- **additional verified mathematical results:** a real four-dimensional refutation
-  at every positive acute angle, an all-norm projection-displacement lower bound,
-  the sharp secant approximation factor, an attained real trace-norm optimum,
-  the directed-sine trace decomposition, and the all-pairs exact complex
-  trace-norm minimum; and
-- **out of scope for this manuscript:** downstream application projects and the
-  workshop paper's empirical human--LLM/process study, practitioner corpus, and
-  resource-accounting analysis.
+The separately verified Davis--Kahan formalization still covers 29
+reviewed 1970 source statements: 28 are proved at reviewed scope and the
+printed Proposition 4.4 is disproved. The new transport results are not
+counted as source-theorem formalizations. The unverified generic penalty
+fragment (`spectral_penalty_transport.tex`) is **not included** in the
+compiled manuscript. Manim/visualization sources are not modified by
+this paper overlay.
 
-The workshop paper in `../dk_formalization_workshop/` remains useful editorially. In
-particular, this journal draft adopts its sharper separation between kernel
-verification and semantic/source correspondence, its treatment of representation
-mismatches, and its more precise language for source defects. It does not import
-the workshop paper's process-study contribution as a journal-paper contribution.
+## Historical checkpoints (retained for provenance)
+
+The following older notes record the status at their stated dates.
+They must not be interpreted as current research frontiers.
 
 ## October 23 mathematical and manuscript status
 

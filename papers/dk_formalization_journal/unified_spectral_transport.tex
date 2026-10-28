@@ -1,0 +1,240 @@
+% This section summarizes the verified full closed smoothed-power family.
+% Formal scope and declarations are in Appendix~\ref{app:transport-provenance}.
+% The generic convex spectral-penalty criterion in spectral_penalty_transport.tex
+% has NOT been established, and is deliberately not imported here.
+\section{Spectral-penalty transport: a common variational problem}
+\label{sec:unified-transport}
+
+Let $P,Q$ be orthogonal projections on a complex Hilbert space $E$.
+The \emph{transport fiber} is
+\begin{equation}
+ \mathcal T(P,Q)=\{W\in\mathcal U(E):WPW^*=Q\}.
+ \label{eq:transport-fiber}
+\end{equation}
+For a unitary $W$, the singular values of $I-W$ measure its
+\emph{ambient displacement}.  The fiber condition fixes the image of
+$\operatorname{ran}P$, while allowing $W$ to act freely within that subspace
+and its orthogonal complement.  A principal-plane construction supplies
+feasible transports, but it does not by itself exclude lower-cost
+transformations mixing different principal planes
+\citep{davis1958separation,davis1970rotation,bolotnikov2001minimal}.
+
+We consider the closed two-parameter family of nonnegative penalties
+\begin{equation}
+ \rho_{p,\tau}(s)
+   =(\tau^2+s^2)^{p/2}-\tau^p,
+ \qquad 1\le p\le2,\quad \tau\ge0,\quad s\ge0,
+ \label{eq:family-rho}
+\end{equation}
+where $\rho_{p,0}(s)=s^p$.  Define
+\begin{equation}
+ \mathcal F_{p,\tau}(W)=
+    \operatorname{Tr}\rho_{p,\tau}(|I-W|),\qquad
+ \phi_{p,\tau}(t)=(\tau^2+2-2\cos t)^{p/2}-\tau^p,
+ \label{eq:family-objective}
+\end{equation}
+and, for $0\le\theta\le\pi/2$,
+\begin{equation}
+ m_{p,\tau}(\theta)=
+ \min_{0\le\delta\le\theta}\bigl\{
+      \phi_{p,\tau}(\theta+\delta)
+     +\phi_{p,\tau}(\theta-\delta)\bigr\}.
+ \label{eq:family-planar-minimum}
+\end{equation}
+The scalar phase $\delta$ adjusts the two eigenphases of a
+principal-plane transporter.  Equation~\eqref{eq:family-planar-minimum}
+by itself optimizes only that planar family; the next theorem concerns
+\emph{every} ambient transporter.
+
+\begin{theorem}[Exact unrestricted complex transport for the closed family]
+\label{thm:family-finite}
+Let $P,Q$ be equal-rank orthogonal projections on a finite-dimensional
+complex Hilbert space, and let
+$\theta_1,\ldots,\theta_r\in[0,\pi/2]$ be their principal angles,
+with multiplicity.  For every $1\le p\le2$ and $\tau\ge0$,
+\begin{equation}
+ \min_{W\in\mathcal T(P,Q)}\mathcal F_{p,\tau}(W)
+   =\sum_{j=1}^r m_{p,\tau}(\theta_j).
+ \label{eq:family-finite-minimum}
+\end{equation}
+The minimum is attained by a unitary using independently minimizing
+phases in a cosine--sine decomposition and fixing the unused common
+directions.  The lower bound holds for all ambient unitaries satisfying
+$WPW^*=Q$, without a principal-plane preservation assumption.
+\end{theorem}
+
+\begin{proof}[Structure of the formalized argument]
+For $\tau>0$, compactness of the fiber gives a minimizing unitary.
+First variation along the unitary stabilizer of $P$ forces an
+anticommutation identity between the spectral gradient and the source
+reflection $2P-I$.  Second variation excludes overlapping large-phase
+spectral subspaces.  The resulting decomposition consists of paired
+transport planes and a zero-gradient reflection sector.  Each plane
+has cost at least~\eqref{eq:family-planar-minimum}; the reflection
+sector is bounded using the nuclear projection-distance inequality
+and the convexity comparison
+\[
+ m_{p,\tau}(\theta)
+   \le\rho_{p,\tau}(2\sin\theta)
+   \le\rho_{p,\tau}(2)\sin\theta.
+\]
+An independent-phase construction attains the sum of these lower
+bounds.  At $\tau=0$, continuity of the finite-dimensional spectral
+cost and its compact minimum, together with an explicit limiting
+construction, yields the closed boundary.  These steps are certified
+by the finite-dimensional spectral-decomposition and boundary
+theorems identified in Appendix~\ref{app:transport-provenance}.
+\end{proof}
+
+\subsection{A sharp phase-transition surface}
+\label{sec:family-phase}
+
+Set
+\begin{equation}
+ C_{p,\tau}=
+ \frac{\tau^2+2-\sqrt{(\tau^2+2)^2-4p(2-p)}}{2p}.
+ \label{eq:family-critical-cosine}
+\end{equation}
+This threshold belongs to $[0,1]$ for the indicated parameters.
+For $\tau>0$ and $0<\theta<\pi/2$, the unique minimizing phase
+in~\eqref{eq:family-planar-minimum} is $\delta=0$ when
+$\cos\theta\ge C_{p,\tau}$.  When $\cos\theta<C_{p,\tau}$,
+there is a unique positive minimizing phase, characterized by
+\[
+ \phi_{p,\tau}'(\theta+\delta)
+   =\phi_{p,\tau}'(\theta-\delta).
+\]
+The same canonical-minimum criterion extends to the closed parameter
+range and all $\theta\in[0,\pi/2]$, with the endpoint conventions
+spelled out below.
+
+\begin{theorem}[Ambient canonical-optimality criterion]
+\label{thm:family-canonical}
+Under the hypotheses of \cref{thm:family-finite}, a completed canonical
+direct rotation is a global minimizer of $\mathcal F_{p,\tau}$ over
+$\mathcal T(P,Q)$ if and only if
+\begin{equation}
+  \cos\theta_j\ge C_{p,\tau}\qquad\text{for every }j.
+  \label{eq:family-canonical-criterion}
+\end{equation}
+\end{theorem}
+
+The threshold comes from the scalar curvature identity
+\[
+ \phi_{p,\tau}''(t)
+  =p(\tau^2+2-2\cos t)^{p/2-2}
+     \bigl[p-2+(\tau^2+2)\cos t-p\cos^2t\bigr]
+\]
+where the expression is evaluated away from points at which the
+unsmoothed derivative is singular.  The formally proved
+single-crossing argument converts the curvature change into a global
+phase-minimum statement; the ambient equivalence then follows from
+\cref{thm:family-finite}.  Its boundary cases include
+$C_{p,0}=(2-p)/p$, the nuclear corner $C_{1,0}=1$, and
+$C_{2,\tau}=0$.  At $p=2$, the phase cost is independent of $\tau$
+and is flat at a right angle; \cref{thm:family-canonical} asserts
+minimality there, without asserting uniqueness.
+
+The two-parameter theorem supplies minimum values and an attaining
+construction.  Complete classifications of \emph{all} minimizers and
+local-to-global conclusions have separately been proved for the strict
+unsmoothed Schatten regime, the nuclear endpoint, and the original
+Charbonnier penalty; the family theorem alone does not extend those
+classifications to every interior pair $(p,\tau)$.
+
+\subsection{Operator ideals and infinite-dimensional attainment}
+\label{sec:family-infinite}
+
+For a complete, possibly nonseparable complex Hilbert space, the trace
+in~\eqref{eq:family-objective} is the extended positive trace.
+In particular, a nonempty transport fiber can have infinite cost for
+every transporter.  Define the crossed defects
+\[
+ D_{P\bar Q}=\operatorname{ran}P\cap\ker Q,
+ \qquad D_{\bar P Q}=\ker P\cap\operatorname{ran}Q.
+\]
+For $\Delta=P-Q$, the necessary ideal depends on smoothing:
+\begin{equation}
+ q=\begin{cases}
+       p,&\tau=0,\\
+       2,&\tau>0.
+    \end{cases}
+ \label{eq:family-ideal-exponent}
+\end{equation}
+The change occurs because $\rho_{p,0}(s)=s^p$, whereas for
+$\tau>0$ one has
+$\rho_{p,\tau}(s)\sim \tfrac p2\tau^{p-2}s^2$
+as $s\downarrow0$.
+
+\begin{theorem}[Finite-cost feasibility and exact Hilbert-space minimum]
+\label{thm:family-infinite}
+Let $P,Q$ be orthogonal projections on a complete complex Hilbert
+space, $1\le p\le2$, and $\tau\ge0$.  A transporter
+$W\in\mathcal T(P,Q)$ with $\mathcal F_{p,\tau}(W)<\infty$
+exists if and only if
+\begin{equation}
+ \Delta=P-Q\in S_q,
+ \qquad \dim D_{P\bar Q}=\dim D_{\bar P Q},
+ \label{eq:family-ideal-and-defect}
+\end{equation}
+where $q$ is given in~\eqref{eq:family-ideal-exponent}.
+Under these conditions the infimum is attained and
+\begin{equation}
+ \min_{W\in\mathcal T(P,Q)}\mathcal F_{p,\tau}(W)
+   =\sum_j m_{p,\tau}(\theta_j)<\infty.
+ \label{eq:family-infinite-minimum}
+\end{equation}
+Here $(\theta_j)$ lists the positive principal angles determined by
+the nonzero singular values of $(I-Q)P$, counted with multiplicity;
+zero angles contribute zero.  The list is countable under the ideal
+hypothesis, even when the ambient Hilbert space is nonseparable.
+\end{theorem}
+
+The lower bound applies to arbitrary ambient transporters through
+finite-section approximation and passage to the spectral-angle sum.
+Existence uses a balanced-defect completion of the direct rotation and
+compatible phase corrections; the nuclear corner requires a distinct
+signed-root construction.  The relative-index obstruction is classical
+\citep{avron1994index}, while the attained value for this spectral
+penalty family follows from the formally verified transport theorem.
+The existence theorem does not assert an all-optimizer classification
+for arbitrary $(p,\tau)$.
+
+\subsection{Real-field compatibility and the nuclear endpoint}
+\label{sec:family-real}
+
+The complex phase selections in \cref{thm:family-finite} need not be
+realizable by independent real principal-plane rotations.  For
+finite-dimensional real equal-rank subspaces and unsmoothed Schatten
+powers $1\le p<2$, the separately proved unrestricted real minimum is
+an attained weighted matching of the principal-angle labels.
+At $p=1$, writing $J=\{i:\theta_i>0\}$, a matching $M$ consists of
+disjoint unordered pairs from $J$, and its cost is
+\begin{equation}
+ \sum_{\{i,j\}\in M}4\sin\frac{\theta_i+\theta_j}{2}
+ +\sum_{i\in J\setminus\cup M}
+          \min\{4\sin(\theta_i/2),2\}.
+ \label{eq:family-real-matching}
+\end{equation}
+The real nuclear minimum is the smallest such cost over all matchings.
+The complex counterpart is $2\sum_j\sin\theta_j$.
+The two values are equal precisely when every strictly acute positive
+principal angle has even multiplicity; zero and right angles are
+unrestricted.  \Cref{sec:nuclear-endpoint} gives the finite-dimensional
+theorems and the sharp condition for equality with the real canonical
+cost.
+
+In arbitrary complete real Hilbert spaces, for trace-class
+$P-Q$ and balanced crossed defects, the complex nuclear lower bound
+$\|P-Q\|_1$ is attained by a real transporter exactly when each
+strictly acute positive sine-eigenspace has even \emph{source-side}
+multiplicity.  All equality attainers admit the checked signed-root
+certificate.  This extends the explanation of the finite parity rule
+to compact spectral blocks; it does not give an unrestricted real
+infinite-rank matching formula when parity fails.
+
+Consequently, the complex closed-family theorem, the real finite
+matching result, and the real nuclear compatibility criterion form a
+field-sensitive theory with precisely different scopes.  In particular,
+no unrestricted real analogue of \cref{thm:family-finite} for positive
+smoothing and arbitrary $p$ is claimed here.

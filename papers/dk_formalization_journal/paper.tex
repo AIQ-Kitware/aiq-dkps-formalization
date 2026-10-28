@@ -110,7 +110,7 @@
   \includeUnformalizedRealTransportfalse
 \fi
 
-\title{Formalizing Davis--Kahan Perturbation Theory and\\Exact Spectral Subspace Transport}
+\title{Optimal Spectral Subspace Transport and\\Formalized Davis--Kahan Perturbation Theory}
 % Additional authors are expected; keep the confirmed ordering below stable.
 
 \author[1]{Jonathan Crall}
@@ -130,58 +130,50 @@
   \texttt{cep@jhu.edu}
 }
 
-\date{26 October 2026}
+\date{27 October 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-We formalize 29 reviewed result-level statements of Davis and Kahan
-(1970) in Lean~4: 28 are proved at their reviewed source scope and the
-printed Proposition~4.4 is refuted. The formalization retains real and
-complex Hilbert spaces, unbounded self-adjoint operators, finite and
-ordered half-infinite spectral gaps, and where-defined operator-ideal
-norms. For the sine-theta theorem, we identify the source's positive
-angle operator with the modulus of its rectangular Sylvester representative.
+We determine the exact cost of transporting one spectral subspace onto
+another by an ambient unitary for a closed two-parameter family of
+spectral displacement penalties
+$\rho_{p,\tau}(s)=(\tau^2+s^2)^{p/2}-\tau^p$,
+$1\le p\le2$ and $\tau\ge0$. For equal-rank subspaces of a finite-dimensional
+complex Hilbert space, the unrestricted minimum is the sum of scalar
+principal-angle phase minima. We derive a sharp phase-transition surface
+characterizing global optimality of canonical direct rotation, including
+the nuclear, intermediate Schatten, smoothed, and quadratic boundaries.
+For arbitrary complete complex Hilbert spaces, we prove finite-cost
+feasibility and attainment exactly when the projection difference belongs
+to $S_p$ at zero smoothing or $S_2$ at positive smoothing, and the crossed
+defect dimensions agree. The attained value is the corresponding
+principal-angle series.
 
-We formalize a real four-dimensional counterexample to Proposition~4.4
-at every positive acute angle, a sharp uniform direct-rotation approximation
-factor $\sec(\sym{alphaAngle}/2)$ for unitarily invariant norms, and
-exact real and complex trace-norm transport minima. For equal-dimensional
-subspaces of any finite-dimensional complex Hilbert space, including
-right-angle configurations, the global trace minimum equals
-$2\sum_j\sin\like{theta}{\theta_j}$. For arbitrary equal-rank real pairs,
-the unrestricted nuclear minimum is an attained minimum-weight matching
-of their labelled principal angles. It agrees with the complex value
-exactly when every strictly acute positive angle has even multiplicity.
-The real nuclear minimum equals the canonical direct-rotation value only
-when at most one angle is positive and it is at most $\pi/3$.
+Over the reals, the unsmoothed finite-dimensional problem for
+$1\le p<2$ has an exact weighted-matching solution. At the nuclear
+endpoint the real minimum equals the complex value
+$2\sum_j\sin\theta_j$ precisely when all strictly acute positive angles
+have even multiplicity. An intrinsic signed-root criterion extends
+attainment of this complex lower bound to trace-class projection pairs
+on arbitrary real Hilbert spaces. Complete optimizer classifications
+and local-to-global results are proved in specified Schatten and
+Charbonnier subfamilies; no all-optimizer classification is asserted for
+the full two-parameter family.
 
-For every $1<p<2$, we determine the exact \emph{unrestricted}
-finite-dimensional complex Schatten transport minimum
-$\min_{W(\sym{Usource})=\sym{Vtarget}}\|I-W\|_p^p
-=\sum_jm_p(\like{theta}{\theta_j})$: even ambient unitaries that mix
-principal planes cannot improve it. We classify \emph{every} minimizing
-transporter for equal-rank complex subspaces, including repeated, zero,
-critical and right principal angles. Its optimizer set is in algebraic
-bijection with independent rank-stratified projection families on the
-supercritical angle multiplicity spaces and a crossed-defect unitary.
-With $s$ distinct simple active angles and no right-angle defect, there
-are exactly $2^s$ optimizers. Every constrained local minimum is global;
-the canonical rotation is the unique minimizer exactly when all angles
-are at most $\vartheta_p=\arccos((2-p)/p)$.
-
-For the smooth spectral penalty
-$\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$, $\tau>0$, we formalize an exact
-complex all-pairs minimum, an explicit functional-calculus optimizer,
-and a classification of all globally minimizing transports. The theory
-also gives a sharp uniqueness cutoff, quadratic stability below it,
-quartic growth at equality, and nearest commuting-unitary corrections
-with an exact commutator criterion.
+The analysis grew from a Lean~4 formalization of the 1970 Davis--Kahan
+perturbation paper. Of 29 reviewed result-level statements, 28 are proved
+at their reviewed source scope, including unbounded self-adjoint and
+operator-ideal formulations. The printed Proposition~4.4 is refuted by a
+real four-dimensional counterexample at every positive acute angle.
+We distinguish the original direct-rotation and minimal-distortion
+results from the exact transport formulas and classifications established
+here; all reported mathematical results are formally verified.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
-direct rotations; Schatten norms; spectral optimization; unitarily invariant norms; Lean.
+direct rotations; Schatten norms; spectral penalties; phase transitions; operator ideals; formal verification; Lean.
 
 \smallskip
 \noindent\textbf{Mathematics Subject Classification (2020):}
@@ -194,158 +186,306 @@ direct rotations; Schatten norms; spectral optimization; unitarily invariant nor
 \section{Introduction}
 \label{sec:introduction}
 
-Davis and Kahan's perturbation bounds relate the change in a spectral
-subspace of a self-adjoint operator to the size of a residual and the
-separation of spectra \citep{davis1970rotation,kato1976perturbation}.
-Their 1970 treatment includes direct rotations of subspaces, inequalities
-for unitarily invariant norms, and sine and tangent estimates for unbounded
-operators. The finite-dimensional theory underlies many spectral algorithms
-\citep{stewart1990matrix,wedin1972perturbation}.
+Let $P$ and $Q$ be orthogonal projections on a Hilbert space.  A
+unitary $W$ transporting $\operatorname{ran}P$ to
+$\operatorname{ran}Q$ satisfies $WPW^*=Q$.  Such a transporter is
+rarely unique.  The canonical direct rotation is distinguished by the
+principal-angle geometry of the pair, but its optimality depends on how
+the displacement $I-W$ is measured.  This paper studies exact
+minimization of spectral displacement penalties over the full unitary
+or orthogonal transport fiber, allowing arbitrary coupling between
+principal-angle sectors.
 
-We have formalized the original Davis--Kahan results in Lean~4
-\citep{demoura2021lean4}, using Mathlib \citep{mathlib2020}. The central
-sine-theta estimate has a scope substantially broader than its familiar
-matrix version. Its self-adjoint operators may be unbounded, its spectral
-gap may be expressed through ordered half-lines rather than a finite
-interval, and the unitarily invariant norm need only be defined on the
-operators appearing in the estimate. These hypotheses require a formal
-treatment of domains, spectral calculus, and symmetric operator ideals.
-They also require care in identifying the positive angle operator in the
-source with the modulus of the rectangular operator used in the proof.
-We develop this identity in \cref{sec:sine-theta}; the corresponding Lean
-signature is displayed beside the mathematical theorem.
+The setting originates in classical subspace geometry
+\citep{dixmier1948position,davis1958separation,halmos1969two} and the
+direct-rotation and perturbation theory of Davis and Kahan
+\citep{davis1970rotation,kato1976perturbation}.  Davis established
+Hilbert--Schmidt and finite-dimensional Schatten-$p$ optimality for
+$p\ge2$ in 1958 \citep[Theorems~7.3--7.4]{davis1958separation}.
+The phase-based failure of optimality under some smaller-exponent
+costs is also classical.  Bolotnikov, Li, and Rodman subsequently
+formulated the ambient unitary minimal-distortion problem and solved
+substantial parts of it, including the Frobenius case and Q-norm
+results \citep{bolotnikov2001minimal}.  These antecedents determine the
+historical scope of the present optimization results; the comparison
+is developed in \cref{sec:related}.
 
-A review of the source statements also found an incorrect extremal
-claim in Section~4. Proposition~4.4 asserts that, for real subspaces with
-largest principal angle at most $\pi/3$, the canonical direct rotation
-minimizes $\sym{NormN}(I-\sym{Wcompetitor})$ over all orthogonal maps carrying one subspace onto
-the other, for every unitarily invariant norm $\sym{NormN}$. We give a real
-four-dimensional counterexample for every positive acute angle. It is the
-realification of the phase mechanism already exhibited over $\mathbb C$
-by Davis and Kahan themselves \citep[Example~4.2]{davis1970rotation}.
-The formalization pinpoints the invalid Ky Fan inequality in their proof,
-recovers the valid $\sym{NormQ}$-norm assertion, and establishes the sharp factor
-$\sec(\alpha/2)$ for arbitrary unitarily invariant norms. The historical
-norm-minimization work of \citet{bolotnikov2001minimal} and subsequent
-Grassmann-angle results \citep{qiu2006grassmann,zhang2007angular,zhang2010canonicalangles}
-provide the appropriate context for these deductions.
+Our main objective is the spectral family
+\[
+ \rho_{p,\tau}(s)=(\tau^2+s^2)^{p/2}-\tau^p,
+ \qquad 1\le p\le2,\quad\tau\ge0.
+\]
+It contains the nuclear and quadratic endpoints, intermediate Schatten
+powers, and the smooth Charbonnier penalty.  We determine the global
+minimum over \emph{all} ambient complex unitary transporters as a sum
+of independent scalar phase minima, and obtain an explicit threshold
+for when canonical direct rotation attains that minimum.  The same
+family admits an infinite-dimensional version with an exact finite-cost
+ideal condition and balanced-defect requirement.  These results are
+stated together in \cref{sec:unified-transport}.
 
-The failure also motivates minimization of the full Schatten
-$1<p<2$ displacement, where convexity of the scalar power does not imply
-minimality of the canonical direct rotation. We prove that arbitrary
-unitary mixing between principal planes cannot improve the minimum:
-for every equal-rank complex subspace pair, the cost is the sum of
-independently optimized principal-plane costs. The explicit cutoff
-$\vartheta_p=\arccos((2-p)/p)$ characterizes global minimality of the
-canonical rotation at every rank, including critical, zero, and right
-angles. Our proof analyzes constrained spectral gradients, excludes
-mixing by second variation at a minimizing transporter, and controls
-zero-gradient blocks separately. The complete result extends from the minimum value to the optimizer
-set and the constrained optimization landscape. We prove that every local
-minimum is global. All global minimizers are parametrized by compatible
-spectral phase projections and independent crossed-defect unitary maps,
-including nonacute configurations. After removing redundant phase
-parameters, the solution set is in algebraic bijection with a product of
-rank-stratified complex Grassmannian sets, one for each distinct
-supercritical interior angle, and a unitary defect-identification space.
-For $s$ distinct simple supercritical angles without a right-angle defect,
-there are exactly $2^s$ minimizers. The same classification transfers to
-the nearest unitary commuting with a fixed projection. The theorem, Lean
-signatures, and two-angle example appear in
-\cref{sec:schatten-optimization}.
+The scalar field changes the feasible spectral geometry.  In a real
+Hilbert space, phase choices that are possible on an individual complex
+principal plane may require coupling distinct real planes.  The exact
+finite real Schatten problem below exponent two reduces to a weighted
+matching of principal angles.  At the nuclear endpoint, the real
+and complex minima agree exactly under an even-multiplicity condition
+on strictly acute positive angles.  Its infinite-dimensional
+signed-root formulation explains the compatibility obstruction on
+actual spectral subspaces; the real theory is treated in
+\cref{sec:family-real,sec:nuclear-endpoint}.  The paper does not claim
+a complete real smoothed-power transport formula.
 
-At the nuclear endpoint $p=1$, we establish the unrestricted real
-minimum through a finite matching of principal-angle labels. A matched
-pair contributes $4\sin((\theta_i+\theta_j)/2)$; an unmatched angle
-contributes $\min\{4\sin(\theta_i/2),2\}$. The formula holds without
-restrictions on determinants, multiplicities or ambient mixing. We
-characterize exactly when the real and complex minima coincide and when
-the real value agrees with the direct-rotation displacement. An
-associated complex nearest-subspace-preserving unitary has exact nuclear
-error $2\sum_j\sin\theta_j(AK,K)$. These endpoint results and the
-limits of the optimizer classification are in
-\cref{sec:nuclear-endpoint}.
+The original motivation was a formal audit of the Davis--Kahan 1970
+paper.  Davis--Kahan perturbation estimates bound how far invariant
+subspaces move when a self-adjoint operator is perturbed, using spectral
+separation and residuals \citep{davis1970rotation,wedin1972perturbation}.
+The transporter optimization studied here is a different question,
+connected to perturbation theory by projections and principal angles.
+In particular, the optimal phase formulas do not themselves provide
+new spectral-gap or residual bounds.
 
-We also solve an exact optimization problem for a smooth spectral penalty.
-We replace each displacement singular value $s$ by
-$\sqrt{\tau^2+s^2}-\tau$, a smooth penalty connecting trace and quadratic
-costs. For arbitrary equal-rank complex subspaces we compute the global
-minimum, construct an optimizer by continuous functional calculus, and
-bound every feasible unitary's distance from the canonical rotation, with
-quadratic growth below the cutoff and quartic growth through equality.
-The supporting nuclear-norm certificate excludes improvements by mixing
-principal planes. The result also solves exact nearest-unitary correction
-subject to commuting with a specified projection. Its canonical correction
-is optimal and the solution is unique precisely when the operator-norm
-commutator defect lies below an explicit cutoff (equality included).
-The inequalities turn feasible objective errors into Frobenius-distance
-certificates. A two-dimensional example shows the transition from a unique
-canonical correction to phase-adjusted optima; see
-\cref{sec:smoothed-worked-example}. These results, proved in Lean,
-are developed in \cref{sec:smoothed-transport}.
-
-The complete Davis--Kahan result correspondence appears in
-Appendix~\ref{app:dk-inventory}, with the review method in
-Appendix~\ref{app:source-review}.
+We formalized the Davis--Kahan arguments in Lean~4 using Mathlib
+\citep{demoura2021lean4,mathlib2020}.  The formalization covers 29
+reviewed result-level statements: 28 have proved counterparts at
+the reviewed source scope, including real and complex Hilbert spaces,
+unbounded self-adjoint operators, ordered half-infinite spectral gaps,
+and where-defined unitarily invariant operator-ideal norms.  The
+printed Proposition~4.4 fails: a real four-dimensional counterexample
+exists even for arbitrarily small positive principal angles.  It
+realifies the phase mechanism already described by Davis and Kahan
+\citep[Example~4.2]{davis1970rotation}.  The source proof contains an
+invalid Ky Fan comparison; we state the valid remaining conclusions,
+including a sharp direct-rotation approximation factor, in
+\cref{sec:prop44,sec:sharp-displacement}.
 
 \paragraph{Contributions.}
 \begin{enumerate}
-  \item We prove 28 of the 29 reviewed results of Davis and Kahan (1970)
-    at their source scope and formally refute the remaining proposition.
-    The formalization includes real and complex, infinite-dimensional and
-    unbounded-operator results, with the original spectral-separation and
-    operator-ideal hypotheses. We construct the spectral, Sylvester, and
-    operator-ideal theory needed for these proofs.
-  \item We formalize a real four-dimensional refutation of the original
-    Proposition~4.4 at every positive acute angle, including the claimed
-    $\pi/3$ range and arbitrarily small angles. We diagnose the failed
-    inequality and derive the valid $\sym{NormQ}$-norm consequence.
-  \item We prove the projection-distance lower bound for every unitarily
-    invariant seminorm and the sharp approximation factor
-    $\sec(\sym{alphaAngle}/2)$ for the direct rotation. The Lean results
-    include fixed-angle sharpness, the optimal common factor $2/\sqrt3$
-    within the printed angle range, and an attained global trace-norm
-    minimum for the real counterexample family.
-  \item We formalize an exact trace-norm decomposition for arbitrary pairs
-    of finite-dimensional real or complex projections, and an attained global
-    trace-norm minimum for every equal-rank complex subspace pair, including
-    right-angle configurations. The optimum equals twice the sum of the
-    sines of the principal angles, with no acute-angle hypothesis.
-  \item We prove the unrestricted finite real nuclear minimum as a finite
-    weighted matching of labelled principal angles, with an ambient
-    orthogonal attainer. Equality with the complex minimum holds exactly
-    when each strictly acute positive angle has even multiplicity; equality
-    with the canonical direct-rotation value holds exactly when at most one
-    angle is positive and it is at most $\pi/3$. We give the exact nuclear
-    distance and an attainer for the nearest complex unitary preserving a
-    prescribed subspace.
-  \item For every $1<p<2$, we prove an attained global minimum of
-    $\|I-W\|_p^p$ over \emph{all} ambient complex unitaries transporting
-    two equal-rank subspaces. Its exact value is the sum of scalar
-    principal-plane phase minima. We prove that mixing principal planes
-    cannot improve the cost. We classify every global optimizer using
-    intrinsic normalized phase projections and independent right-angle
-    defect identifications; the resulting set is algebraically
-    parametrized by rank-stratified multiplicity-space Grassmannians.
-    With simple active angles and no right defect there are exactly
-    $2^s$ optimizers. Every constrained local minimum is global, and
-    the canonical rotation is uniquely optimal if and only if every
-    principal angle is at most $\arccos((2-p)/p)$, including equality.
-    The same classification and local-to-global property hold for
-    nearest commuting-unitary correction under the Schatten cost.
-  \item We solve the unrestricted finite-dimensional complex transport
-    problem for the smoothed spectral penalty
-    $\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$. We prove its exact
-    principal-angle formula and transition cutoff, construct a globally
-    minimizing unitary by functional calculus, classify all globally
-    minimizing transports, and establish an explicit quadratic-growth
-    bound below the cutoff and a quartic bound through equality. The
-    same cutoff characterizes uniqueness of the global minimum.
-    We derive an exact nearest commuting-unitary correction, a
-    computable operator-norm commutator criterion for canonical optimality
-    and uniqueness (including the equality threshold), and quantitative
-    objective-error certificates for feasible corrections.
+ \item \textbf{A common complex optimization theorem.} We prove the exact
+ unrestricted minimum and an attaining unitary for the full closed
+ $(p,\tau)$ family, for every finite-dimensional complex equal-rank
+ subspace pair. A single phase-transition surface characterizes
+ canonical global optimality over the entire closed parameter range
+ (\cref{thm:family-finite,thm:family-canonical}).
+ \item \textbf{The operator-ideal lift.} On any complete complex Hilbert
+ space, including nonseparable spaces, finite-cost transport is possible
+ precisely under the relevant Schatten ideal condition and equality of
+ crossed-defect dimensions. We prove the infinite principal-angle
+ minimum series and its attainment
+ (\cref{thm:family-infinite}).
+ \item \textbf{Real-field compatibility.} We establish exact unrestricted
+ finite-dimensional real matching for unsmoothed $1\le p<2$ costs,
+ the nuclear real--complex parity criterion, and the signed-root
+ equality-attainment criterion on general trace-class projection pairs.
+ These results identify where the complex phase construction cannot be
+ realized by independent real planes (\cref{sec:family-real,sec:nuclear-endpoint}).
+ \item \textbf{Optimizer structure in specific regimes.} Separate verified
+ theorems classify all complex global minimizers in the strict Schatten,
+ nuclear, and Charbonnier cases. The strict Schatten and Charbonnier
+ problems also admit local-to-global theorems and quantitative or
+ topological results under their stated hypotheses
+ (\cref{sec:schatten-optimization,sec:smoothed-transport}).
+ \item \textbf{Formalized classical foundations and a source correction.}
+ We formalize the original Davis--Kahan theorem family, refute its
+ printed Proposition~4.4, identify the failed proof step, and recover
+ its valid norm conclusions. The full-scope sine-theta result includes
+ unbounded operators and where-defined ideal norms
+ (\cref{sec:sine-theta}).
 \end{enumerate}
+
+The detailed source-to-theorem correspondence for the 1970 paper is in
+Appendix~\ref{app:dk-inventory}. The mathematical provenance of the
+new transport statements and their classical dependencies is recorded
+in Appendix~\ref{app:transport-provenance}.
+
+\section{Related work and mathematical provenance}
+\label{sec:related}
+
+\subsection{Principal angles, direct rotation, and perturbation bounds}
+\label{sec:related-classical}
+
+The relative-position theory of two closed Hilbert subspaces predates
+the Davis--Kahan perturbation estimates.  Dixmier developed the
+operator-theoretic structure of pairs of closed subspaces
+\citep{dixmier1948position}; Davis explicitly credited that structural
+work in his treatment of angle, sine, cosine, and separation operators
+\citep[Introduction]{davis1958separation}.  Halmos later gave an
+influential account of the geometry of two subspaces
+\citep{halmos1969two}.  Direct rotations and the polar-decomposition
+methods used here are classical; Kato's perturbation theory provides
+another standard treatment \citep{kato1966perturbation,kato1976perturbation}.
+
+Davis's 1958 Theorem~7.2 establishes an extremal inequality for the
+squared displacement compressed to the source subspace.
+Theorem~7.3 proves Hilbert--Schmidt optimality and Theorem~7.4 gives
+finite-dimensional Schatten-$p$ optimality for $p\ge2$
+\citep{davis1958separation}.  Davis also discusses failure of the
+analogous assertion for $p<2$ near orthogonality.  These results
+precede Davis and Kahan's 1970 work and are acknowledged as classical
+optimality statements here.
+
+Davis and Kahan's 1970 paper derives perturbation bounds for spectral
+subspaces, including the sine-theta and tangent theorems
+\citep{davis1970rotation}.  Their Example~4.2 contains the complex
+phase mechanism behind nuclear nonminimality.  Their printed real
+Proposition~4.4 asserts a stronger small-angle extremal property,
+which the real four-dimensional example in \cref{sec:prop44} refutes.
+The squared-displacement conclusion and the direct-rotation
+construction remain valid.  Qiu, Zhang, and Li later restated the
+small-angle full-norm assertion in Section~5 of their Grassmann-space
+paper \citep{qiu2006grassmann}; Zhang and Qiu subsequently recognized
+trace-norm nonminimality explicitly
+\citep{zhang2010canonicalangles}.  We claim a formalized contradiction
+of the printed proposition and sharp replacement statements, without
+claiming to have discovered the original complex phase mechanism.
+
+Wedin's singular-subspace perturbation bounds and subsequent matrix
+and Sylvester-equation treatments concern the stability of spectral
+subspaces under changes of an operator
+\citep{wedin1972perturbation,stewart1990matrix,grubisic2005sylvester,grubisic2010tan}.
+They provide perturbation-theoretic context for the source formalization.
+The present transport objective fixes two subspaces and minimizes the
+ambient displacement of a unitary relating them; it does not involve
+a spectral-gap assumption or a residual.
+
+\subsection{Minimal distortion on a unitary transport fiber}
+\label{sec:related-minimal-distortion}
+
+Bolotnikov, Li, and Rodman formulated the ambient constrained problem
+of minimizing $\|I-W\|$ over unitary maps transporting one or more
+prescribed subspaces \citep[Problem~1.1]{bolotnikov2001minimal}.
+Their paper gives the full Frobenius minimum and its minimizing set,
+proves Q-norm results under the structural assumptions in their
+Theorem~3.1, and includes a failure example for $1\le p<2$
+\citep[Lemma~3.3]{bolotnikov2001minimal}.  Their Q-norm class
+includes Schatten-$p$ norms for $p\ge2$.  The paper's special-case and
+norm-dependent results are the closest direct predecessors of our
+optimization problem.  Our closed-family theorem supplies an attained
+principal-angle minimum over \emph{every} ambient transporter for all
+$1\le p\le2$ and $\tau\ge0$, together with the explicit canonical
+phase-transition threshold and an operator-ideal attainment lift.
+The separately verified real matching and complete optimizer
+classifications address different aspects of the same problem.
+The cited 2001 results do not state these full-family formulas or the
+real multiplicity criterion; historical priority of equivalent
+formulations under other terminology remains a separate question.
+
+The lower bounds use established singular-value majorization and
+unitarily invariant norm theory \citep{bhatia1997matrix}.
+The complex spectral-gradient and second-variation arguments belong to
+the wider theory of differentiating spectral functions
+\citep{lewis1996derivatives,lewis2001twice}.  Local-to-global results
+for spectral or singular-value \emph{orbits} also appear in work of
+Massey, Rios, and Stojanoff \citep{massey2018local}; their orbit
+constraint is different from $WPW^*=Q$.  Our local-to-global claims
+are limited to the transport problems and penalties for which they
+have been proved in \cref{sec:schatten-optimization,sec:smoothed-transport}.
+
+\subsection{Grassmann metrics and Procrustes formulations}
+\label{sec:related-objectives}
+
+The principal-angle metrics of Qiu, Zhang, and Li and the angular
+inequalities studied by Zhang and Qiu are intrinsic functions of the
+subspaces \citep{qiu2006grassmann,zhang2007angular,zhang2010canonicalangles}.
+The length of a curve on a Grassmann manifold, a norm of a logarithm,
+a projection-distance norm, and the extrinsic chordal transport cost
+$\|I-W\|$ are distinct optimization objectives.  Work on Schatten
+unitary groups develops rectifiable Finsler distance and minimal-curve
+theorems \citep{andruchow2010finsler,larotonda2026shortcurves}; these
+results are relevant geometric context without identifying their
+geodesic objectives with the present one.
+
+Weighted Procrustes and Parseval-frame approximation results
+\citep{contino2017weighted,corach2014procrustes} likewise involve
+closely related matrix factorizations, but their feasible sets are
+weighted bounded-operator solutions or frame constraints.  The
+stabilizer condition in~\eqref{eq:transport-fiber} must be retained
+when comparing minima.  A reduction from one formulation to another
+would need to preserve that condition and the chosen displacement
+penalty; no such general equivalence is assumed here.
+
+\subsection{Smoothing, Schatten ideals, and defect index}
+\label{sec:related-ideals}
+
+The generalized Charbonnier form $(\tau^2+s^2)^a$ is a standard
+regularization penalty in imaging
+\citep{sun2010secrets,lobos2026smooth}.  Subtracting its value at zero
+normalizes the present operator cost.  The novelty claim concerns exact
+optimization \emph{subject to unitary subspace transport}, not the
+invention of this scalar penalty or its use in regularization.
+
+For infinite-dimensional projections, relative index and balanced
+crossed defects are classical concerns: Avron, Seiler, and Simon give
+index formulas and a unitary equivalence criterion for pairs of
+projections \citep{avron1994index}.  The existence of a transporter
+with finite Schatten displacement requires additional ideal control;
+the classical index obstruction is therefore explicitly credited.
+Our contribution in \cref{thm:family-infinite} is the exact
+$S_p$-versus-$S_2$ finite-cost boundary, the attained minimum for the
+whole smoothed-power family, and the angle-series formula under the
+specified ideal and defect conditions.  The real infinite-dimensional
+nuclear equality criterion combines this background with the
+signed-root compatibility construction.  A general real positive-
+smoothing formula and an all-optimizer classification for every family
+parameter are outside the proved scope.
+
+\subsection{Prior formalization work and attribution}
+\label{sec:related-formal}
+
+The Lean development uses Lean~4 and Mathlib
+\citep{demoura2021lean4,mathlib2020}.  Its continuous functional
+calculus and basic Hilbert-space constructions reuse accepted
+foundations \citep{dedecker2025cfc}.  Parts of the projection-valued-
+measure, Borel spectral calculus, and self-adjoint infrastructure were
+ported, adapted, or generalized from the Spectra development
+\citep{bornemann2026spectra}.  Reusable results are being contributed
+to Tau Ceti \citep{tauceti2026}.  The Davis--Kahan source theorems,
+where previously established, are described as formalizations of
+classical mathematics.  New transport statements, the printed-source
+counterexample, and source-level verification are identified separately
+in Appendix~\ref{app:transport-provenance}.
+
+\begin{table}[tbp]
+\centering\small
+\caption{Scope of the closest mathematical precedents. The comparisons
+identify what is established by each cited source and what is proved here;
+they do not assert exhaustive historical priority.}
+\label{tab:related-comparison}
+\begin{tabularx}{\textwidth}{@{}p{0.30\textwidth}X@{}}
+\toprule
+Earlier result & Scope added by the present formalization \\
+\midrule
+Davis (1958): squared displacement, Hilbert--Schmidt and finite
+$p\ge2$ Schatten optimality \citep{davis1958separation}
+ & Sharp spectral-penalty phase criterion throughout $1\le p\le2$ and
+ $\tau\ge0$; classical quadratic case recovered at $p=2$. \\
+Davis--Kahan (1970): perturbation theory, direct rotation and complex
+phase example \citep{davis1970rotation}
+ & Formalization of 28 source results; a real counterexample to printed
+Proposition~4.4 and a sharp full-displacement comparison. \\
+Bolotnikov--Li--Rodman (2001): transport minimization, Frobenius solution,
+Q-norm and special $p<2$ results \citep{bolotnikov2001minimal}
+ & Unrestricted complex closed-family angle formula, critical surface,
+infinite-dimensional attainment, real unsmoothed matching and selected
+all-optimizer classifications. \\
+Avron--Seiler--Simon (1994): index of a projection pair
+\citep{avron1994index}
+ & Exact family-dependent ideal threshold and attained spectral-angle
+minimum under balanced crossed defects. \\
+Grassmannian and restricted-unitary path metrics
+\citep{qiu2006grassmann,andruchow2010finsler,larotonda2026shortcurves}
+ & Extrinsic displacement optimization on the transport fiber; no
+identification of path-length minima with chordal minima. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\input{unified_spectral_transport.tex}
+\input{counterexample.tex}
+\input{sharp_displacement.tex}
+\input{schatten_transport_verified.tex}
+\input{nuclear_endpoint_verified.tex}
+\input{smoothed_transport_verified.tex}
 
 \section{Source coverage and the sine-theta theorem}
 \label{sec:coverage}
@@ -577,12 +717,6 @@ adapted from the geometric sine-theta visualization.}
 \label{fig:sine-theta-rank-one}
 \end{figure}
 
-\input{counterexample.tex}
-\input{sharp_displacement.tex}
-\input{schatten_transport_verified.tex}
-\input{nuclear_endpoint_verified.tex}
-\input{smoothed_transport_verified.tex}
-
 \section{Mathematical architecture of the Davis--Kahan development}
 \label{sec:dk-rest}
 
@@ -702,121 +836,57 @@ Davis--Kahan package contains the source statements, examples, and the
 Proposition~4.4 counterexample; Appendix~\ref{app:source-review} records the
 statement-level review procedure.
 
-\section{Related work}
-\label{sec:related}
-
-Classical perturbation theory for invariant and singular subspaces includes the
-Davis--Kahan results, Wedin's singular-subspace bounds, and later matrix and
-operator treatments
-\citep{davis1970rotation,wedin1972perturbation,stewart1990matrix}.
-Sylvester-equation methods provide closely related estimates for operator
-angles and unbounded self-adjoint operators
-\citep{grubisic2005sylvester,grubisic2010tan}.
-
-The ambient unitary transport optimization itself was studied by
-\citet{bolotnikov2001minimal}, who establish canonical minimality for
-$Q$-norms and exhibit Schatten-$p$ failure for $1\leq p<2$.
-The scalar phase mechanism is already present in Davis and Kahan's
-Example~4.2. For $1<p<2$, our unrestricted complex result goes beyond the
-planar and special-configuration comparisons in the cited work: it
-computes the all-rank minimum and proves that cross-plane mixing cannot
-improve it (\cref{sec:schatten-optimization}). The exact angle-dependent
-cutoff determines uniqueness, and the complete classification describes
-all global minimizers, including multiplicity and right-angle freedom.
-Every constrained local minimum is global. The associated minimizer-set
-factorization uses classical complex Grassmannian sets; historical
-priority for the full constrained Schatten optimization and classification
-remains unresolved.
-
-Our smoothed theorem uses the same transport constraint and a
-nonhomogeneous spectral penalty; it gives the exact all-pairs value, a
-constructive optimizer, and quantitative growth estimates through the phase-transition cutoff. Smooth
-hyperbolic singular-value penalties are established in low-rank
-regularization \citep{lobos2026smooth}. The optimization domain here is
-the ambient unitary transporter set; intrinsic Grassmannian path lengths
-and distances between projections have different objectives
-\citep{qiu2006grassmann}. The closest norm-minimization results above do
-not state the smoothed angle formula or growth bound of
-\cref{sec:smoothed-transport}.
-
-Weighted operator approximation and Parseval-frame Procrustes problems
-also admit exact solutions \citep{contino2017weighted,corach2014procrustes}.
-Their respective feasible sets consist of all bounded linear operators
-and Parseval coisometries. In the weighted-nuclear formulation of our
-problem, the unitary factor must commute with the source projection;
-removing this constraint can strictly decrease the minimum.
-
-The formal development builds on Lean~4 and Mathlib
-\citep{demoura2021lean4,mathlib2020}.  Large source-driven formalizations such
-as Flyspeck and the Liquid Tensor Experiment show how verification of a
-specific body of mathematics can require substantial library construction
-\citep{hales2017kepler,scholze2022liquid}.  Spectra is technically close to the
-present work because it develops spectral and operator infrastructure in Lean;
-we directly adapted and generalized parts of that development
-\citep{bornemann2026spectra}.
-
-The comparison with Davis and Kahan's statements depends on the domains of
-unbounded operators, the form of the spectral gap, and the ideal membership
-hypotheses. In particular, \cref{eq:modulus-sine} connects the source angle
-operator with the rectangular Sylvester block used in the formal proof.
-
 \section{Conclusion}
 \label{sec:conclusion}
 
-We formalized 28 of the 29 identified results of Davis and Kahan (1970)
-at their reviewed scope and refuted Proposition~4.4 as printed. The
-full-scope sine-theta estimate retains unbounded self-adjoint operators,
-ordered half-infinite gaps, and the operator-ideal hypotheses of the
-original argument. Its proof uses an explicit modulus identity between
-the positive angle operator and a rectangular Sylvester block.
+For every $1\le p\le2$ and $\tau\ge0$, the complex spectral transport
+problem with penalty $\rho_{p,\tau}$ has an attained unrestricted
+finite-dimensional minimum given by the sum of principal-angle phase
+minima.  A single closed critical-cosine formula specifies exactly when
+a canonical direct rotation minimizes that cost.  The theorem includes
+the nuclear, intermediate Schatten, Charbonnier, and Frobenius regimes;
+it does not require competing transporters to preserve principal planes.
 
-The real four-dimensional counterexamples to Proposition~4.4 exist at
-arbitrarily small angles. The valid squared-displacement theorem yields
-$\sym{NormQ}$-norm minimality, while the general sharp comparison gives a factor
-$\sec(\alpha/2)$ for unitarily invariant norms. The factor, its uniform
-optimality, and the exact real trace-norm minimum are formalized. In addition,
-the finite-dimensional development proves a directed-sine trace decomposition
-for any two real or complex projections and the attained global complex
-trace-norm minimum $2\sum_j\sin\like{theta}{\theta_j}$ for every equal-rank pair.
-These results do not require an acute-angle hypothesis.
-The exact real nuclear minimum is an attained labelled-angle matching
-value. Its equality with the complex minimum has an even-multiplicity
-criterion on strictly acute positive angles. The real nuclear value
-agrees with the canonical displacement sum exactly when at most one
-angle is positive and it is at most $\pi/3$. The corresponding complex
-nearest-subspace-preserving unitary is also computed exactly, as shown in
-\cref{sec:nuclear-endpoint}.
+In arbitrary complete complex Hilbert spaces, finite-cost transport is
+characterized by membership of the projection difference in $S_p$ at
+zero smoothing or $S_2$ at positive smoothing, together with balanced
+crossed defects.  Under these conditions the same phase-minimum series
+is finite and attained.  This ideal change reflects the behavior of
+the penalty near zero.  The relative-index obstruction and the
+quadratic direct-rotation case have classical predecessors
+\citep{davis1958separation,avron1994index}.
 
-For every $1<p<2$, the unrestricted finite-dimensional complex
-Schatten transport minimum is attained and equals the sum of the independent
-principal-plane minima, with no improvement from mixing planes. We have
-also classified all global minimizers for arbitrary equal-rank pairs and
-proved that every constrained local minimum is global. The solutions
-are in algebraic bijection with independent projections on the active
-principal-angle multiplicity spaces and an independent crossed-defect
-unitary. At simple active angles with zero defect, their number is exactly
-$2^s$. The canonical rotation is uniquely optimal precisely when all
-angles obey the closed cutoff $\arccos((2-p)/p)$. The same classification
-and local-to-global conclusion apply to Schatten-nearest commuting-unitary
-correction. These are additional checked mathematical results, distinct
-from the original 29 Davis--Kahan targets.
+The scalar field affects which complex-optimal phase patterns are
+available.  The finite-dimensional real unsmoothed Schatten minimum
+below exponent two is an attained weighted matching of principal
+angles.  At the nuclear endpoint, equality with the complex minimum
+has a sharp even-multiplicity criterion for strictly acute positive
+angles.  The signed-root equality certificate extends that criterion
+to trace-class real Hilbert-space projection pairs with balanced
+defects.  Separate verified results classify every complex optimizer
+for the strict unsmoothed Schatten, nuclear, and Charbonnier regimes,
+and establish local-to-global and stability properties under their
+specific hypotheses.  An all-optimizer classification for arbitrary
+$(p,\tau)$ and a general real smoothed-power matching formula remain
+outside the results proved here.
 
-For the smooth spectral penalty $\rho_\tau$, the unrestricted complex
-minimum has an explicit principal-angle formula. A clipped functional
-calculus supplies an optimizer, and the same nuclear support certificate
-proves a dimension-independent quadratic bound below the cutoff; a shifted
-certificate gives quartic growth through equality.
-The canonical rotation is the unique minimizer through the closed
-cutoff. In the supercritical regime, an intrinsic phase-projection and
-defect-unitary classification describes every globally minimizing
-transport. For the associated nearest commuting-unitary problem, the
-canonical correction is
-uniquely optimal exactly when
-$\|AP-PA\|_{\mathrm{op}}\leq\sqrt{1-\eta^{-4}}$;
-feasible objective errors yield Frobenius-distance guarantees below and
-at the transition. These results retain the classical transport constraint
-and use a nonhomogeneous spectral penalty whose exact minimization and
-growth estimates are established in the formal development.
+The companion Lean formalization proves 28 of 29 reviewed source
+statements from Davis and Kahan (1970), including their unbounded
+self-adjoint sine-theta result and its operator-ideal hypotheses.
+Their printed Proposition~4.4 fails for real subspaces at arbitrarily
+small positive principal angles.  Our four-dimensional counterexample
+uses the complex phase mechanism already present in that source; the
+formal development identifies the invalid proof inequality and
+establishes valid replacements.  The new spectral transport theorems
+are distinguished from this historical correction and from the
+classical minimal-distortion problem \citep{bolotnikov2001minimal}.
+
+The mathematical setting and attribution are summarized in
+\cref{sec:related,tab:related-comparison}, with formal theorem evidence
+and source correspondence in the appendices.  The present optimization
+results do not assert improved spectral-gap perturbation constants or
+downstream algorithmic rates; those require separate links between the
+ambient transport cost and the error quantity used in an application.
 
 \section*{AI assistance disclosure}
 ChatGPT, Claude Code, and Codex were used for mathematical and library search,
@@ -876,5 +946,7 @@ suffix \texttt{Real} refers to the codomain of the gauge and not to the scalar
 field.
 
 \input{appendix_process.tex}
+
+\input{appendix_transport_provenance.tex}
 
 \end{document}

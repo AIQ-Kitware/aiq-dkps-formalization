@@ -1,76 +1,90 @@
-# Paper context: established claims, boundaries, and editorial decisions
+# Paper context: proven results, historical provenance, and editorial boundaries
 
-**Research context updated:** 27 October 2026, checked against mathematical
-checkpoint `96aeb922d`; full default Lean build: 21,413 jobs, warnings as errors.
-**Last recorded manuscript integration:** 26 October 2026. This context update
-does not edit the manuscript or visualizations or assert that the newer
-infinite-dimensional results have already been integrated into `paper.tex`.
+**Editorial integration:** 27 October 2026, based on the uploaded research
+snapshot `aiq-dkps-formalization-source-2026-10-27T205231-5-71f46bc5aa2a`.
+The repository records a full default Lean build (21,413 jobs, warnings as
+errors) for the mathematical checkpoint. The present manuscript overlay changes
+LaTeX and author-facing documentation only; it does not modify or rebuild Lean.
 
-**Start here for continued research:**
-[Current research plan](../../dev/schatten-transport-research-plan.md), then the
-[dated proof handoff](../../dev/schatten-research-handoff-2026-10-26.md).
-The plan contains exact next proof obligations and new-machine transfer steps.
-The chronological entries below describe their dated development stages.
-This current summary supersedes their earlier statements of unfinished work.
+**Current title:** *Optimal Spectral Subspace Transport and Formalized
+Davis--Kahan Perturbation Theory*. The mathematical narrative is
+spectral-penalty subspace transport with explicit prior-art attribution.
+The source-faithful Davis--Kahan formalization and its Proposition 4.4
+counterexample remain substantial separate contributions, not the definition
+of the optimization problem.
 
-## Current mathematical scope and publication boundaries
+**Where to look:** `paper.tex` loads `unified_spectral_transport.tex` as its
+first main mathematical section, after the introduction and related-work
+survey. `appendix_transport_provenance.tex` maps principal claims to Lean
+source declarations and established mathematical precursors.
+`references.bib` contains direct citations to Davis 1958, Davis--Kahan 1970,
+Bolotnikov--Li--Rodman 2001, relative-index work and adjacent geometric
+optimization formulations. `claims_to_evidence.md` maps claims to the
+underlying Lean modules.
 
-- Complex `1<p<2`: finite and arbitrary-dimensional complete Hilbert theories
-  have exact attainment, every-optimizer classification, canonical inactive
-  tails, finite active correction/rank budgets, independent multiplicity and
-  defect parameters, optimizer topology and finite-cost local-to-global.
-  Native Schatten projection difference and balanced crossed defects supply
-  finite-cost feasibility. Closed uniqueness and correction certificates and
-  closed-canonical-regime data stability are also proved.
-- Complex `p=1`: trace-class projection difference and balanced crossed defects
-  give exact general infinite-rank attainment and a certificate for **every**
-  ambient nuclear optimizer. Literal signed-root parameters and independent
-  spectral projection factors classify the whole optimizer family, including
-  fixed and right-angle directions. The displacement family is compact in
-  every native Schatten-q norm, q>=1. All nuclear optimizers have the exact
-  simultaneous Schatten profile and antipodal ideal-distance geometry.
-  Nuclear local-to-global is not supplied by these statements.
-- Complex Charbonnier, tau>0: under native Hilbert--Schmidt projection
-  difference and defect balance, exact infinite-rank attainment, complete
-  optimizer classification, canonical tail, finite active parameters/rank
-  budgets, topology, closed uniqueness and finite-cost local-to-global are
-  proved. Operator-ideal optimization in these three complex regimes is no
-  longer an open frontier.
-- Real finite dimension: unrestricted matching values and actual ambient
-  orthogonal attainers are proved for 1<=p<2. At p=1 the singleton/pair weights
-  are `min(4 sin(theta/2),2)` and `4 sin((theta+psi)/2)`. Nuclear real--complex
-  equality holds iff every strictly acute positive angle has even labelled
-  multiplicity. Canonical nuclear value equality holds iff at most one label
-  is positive and all angles are at most pi/3. Complete classification of
-  every real minimizer remains separate. Real local-to-global is refuted.
-- Real compact Hilbert pairs: independent signed-root existence is exactly
-  equivalent to local spectral projection solvability. Every acute sine
-  eigenspace must have real dimension divisible by four if a real root
-  exists. Sufficiency of this numerical test and necessity of the root
-  certificate for every real lower-bound attainer are still open. Real roots
-  attain the projection/complex lower bound; when roots are absent, the real
-  optimum may be larger. The unrestricted infinite-rank real matching and
-  every-optimizer classifications remain open.
+## Current theorem scope
 
-The immediate next proof is the finite real compatible-projection parity
-converse, followed by its infinite assembly and the real equality certificate.
-Further proposed goals are exponent-endpoint optimizer-family convergence,
-explicit Grassmannian/right-unitary geometry, set-valued stability outside the
-canonical regime and certified finite reconstruction. These proposals are not
-publication claims. A positive global growth bound for every near-minimizer is
-not supplied by the proved planar critical quartic examples.
+- **Full smoothed-power family, complex finite-dimensional:** for every
+  `1 <= p <= 2`, `tau >= 0`, and equal-rank subspaces, exact attained
+  unrestricted ambient unitary minimum as a sum of scalar principal-angle
+  phase minima; an explicit necessary-and-sufficient canonical-rotation
+  threshold. These results have actual Lean declarations under
+  `SmoothedPowerBoundary.lean` and `SmoothedPowerCanonicalCriterion.lean`.
+- **Full family, complex complete Hilbert spaces:** exact finite-cost
+  feasibility (balanced crossed defects plus `P-Q` in `S_p` when `tau=0`,
+  or `S_2` when `tau>0`), an attained global minimum, and a convergent
+  principal-angle series. The ambient Hilbert space need not be separable.
+  Proved in `SmoothedPowerGlobalAttainment.lean` and supporting modules.
+- **Specific complex regimes:** full optimizer classifications, local
+  landscape and stability results apply only in their separately proved
+  strict Schatten, nuclear and Charbonnier settings. Do not promote these
+  to an all-optimizer classification for arbitrary `(p,tau)`.
+- **Real finite-dimensional, unsmoothed:** exact unrestricted weighted
+  matching and global attainment for `1 <= p < 2`. At `p=1`, equality of
+  real and complex minima holds exactly when all strictly acute positive
+  principal angles have even multiplicity. The real canonical-value
+  criterion is about the value, not classification of every real optimizer.
+- **Real complete Hilbert spaces, nuclear:** under trace-class projection
+  difference and balanced defects, attaining the complex nuclear lower
+  bound is equivalent to even source-side strictly-acute sine spectral
+  multiplicities; all equality attainers have signed-root certificates.
+  This does not give the general real infinite-rank matching minimum when
+  the parity condition fails.
+- **Davis--Kahan original work:** 29 reviewed source-level statements,
+  28 proved at reviewed scope and Proposition 4.4 refuted as printed.
+  The core sine-theta theorem includes unbounded self-adjoint operators
+  and where-defined ideal norms. The complex phase idea behind the
+  counterexample is present in Davis--Kahan Example 4.2.
 
-`claims_to_evidence.md` now separates newer compiled research evidence from the
-26 October manuscript integration. The original 29-result Davis--Kahan source
-inventory remains unchanged: the extensions do not add source obligations.
-The source audit and research-extension verification remain separate from
-historical mathematical priority. Read the novelty review and archived supplied
-literature report before repeating a broad priority search.
+## Attribution and publication boundaries
 
-**Paper:** *Formalizing Davis--Kahan Perturbation Theory and Exact Spectral Subspace Transport*
-**Scope of this record:** working context for authors and future manuscript agents.
-It is not manuscript prose. The Yu--Wang--Samworth source-version audit and
-manuscript fragments remain in `../yws_formalization_conference/`.
+- Credit Davis (1958) for classical squared-displacement, Hilbert--Schmidt
+  and finite-dimensional `p >= 2` optimality; Davis--Kahan (1970) for
+  the perturbation theory and its original direct-rotation analysis;
+  Bolotnikov--Li--Rodman (2001) for the ambient constrained
+  minimal-distortion problem and its earlier Frobenius/Q-norm results.
+- Credit the classical theory of pairs of projections and relative index,
+  and its operator-ideal precursors. Distinguish ambient chordal displacement
+  from Grassmann geodesic, logarithmic and Procrustes objectives.
+- Distinguish machine-checked mathematical truth from authenticated
+  priority. No exhaustive MathSciNet/zbMATH priority clearance is claimed.
+- The unverified generic arbitrary-penalty conjecture in
+  `spectral_penalty_transport.tex` remains excluded from `paper.tex`.
+  No unrestricted positive-smoothing real matching formula or full
+  arbitrary-family all-optimizer classification is claimed.
+- No improved downstream Davis--Kahan spectral-gap bound or QUENCH
+  performance theorem follows immediately from the transport results.
+- The new common-penalty main theorem is presented in conventional notation
+  with a structural proof outline and exact Lean source declarations. The
+  full argument remains available in Lean; a fully self-contained journal
+  exposition of its spectral decoupling and infinite-dimensional limit
+  construction needs further editorial development before submission.
+
+## Dated historical checkpoints
+
+The chronology below is preserved as authoring history. Its earlier
+"current status" phrases reflect their respective dates rather than the
+mathematical and manuscript state described above.
 
 ## Real nuclear endpoint, exchange and local-minimum obstruction (25 October)
 
