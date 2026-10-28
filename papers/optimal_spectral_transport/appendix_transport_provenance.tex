@@ -1,0 +1,102 @@
+\section{Provenance of the spectral transport results}
+\label{app:transport-provenance}
+
+This appendix identifies the formal statements supporting the central
+optimization theorems.  The claims in this section use three distinct
+categories: established mathematical results used as inputs, new
+statements proved in this project, and corrections of printed claims.
+A Lean declaration verifies its formal proposition; correspondence to a
+published statement is a separate source-review step.  The full
+Davis--Kahan source audit appears in Appendix~\ref{app:dk-inventory}.
+
+\paragraph{Classical geometry and optimality.}
+Dixmier's relative-position analysis, Davis's principal-angle and
+squared-displacement results, Halmos's two-subspace geometry, and
+Kato's perturbation framework supply the established projection
+machinery \citep{dixmier1948position,davis1958separation,halmos1969two,kato1966perturbation}.
+Davis's 1958 Theorems~7.3--7.4 establish the Hilbert--Schmidt and
+finite-dimensional Schatten-$p$ optimality cited in the main text.
+Davis--Kahan (1970) supplies the operator perturbation theorems,
+direct-rotation framework, and complex phase example
+\citep{davis1970rotation}.  Bolotnikov--Li--Rodman (2001) poses the
+ambient unitary minimal-distortion problem and proves Frobenius and
+Q-norm results in its stated regimes \citep{bolotnikov2001minimal}.
+The project does not assign originality to those results.
+
+\paragraph{Closed-family finite-dimensional value and phase threshold.}
+Theorem~\ref{thm:family-finite} corresponds to
+\path{SmoothedPowerTransport.exists_unitary_minimizing_transport_principalAngles_of_nonneg}
+in
+\path{DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerBoundary.lean}.
+Its positive-smoothing structural argument is formalized by
+\path{SmoothedPowerTransport.spectral_decomposition_of_isLocalMinOn_transports}
+in
+\path{DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerSpectralDecomposition.lean}.
+Theorem~\ref{thm:family-canonical} is
+\path{SmoothedPowerTransport.nonacuteDirectRotation_isMin_iff_principalAngles_critical}
+in
+\path{DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerCanonicalCriterion.lean}.
+The scalar one-crossing analysis uses
+\path{DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseSelection.lean}
+and the general calculus lemma in
+\path{ForTauCeti/Analysis/Calculus/SingleCrossingMinimum.lean}.
+These are additional transport theorems; neither Davis (1958) nor
+Bolotnikov--Li--Rodman (2001) is credited with this particular
+closed-family formula.
+
+\paragraph{Infinite-dimensional ideal and minimum.}
+Theorem~\ref{thm:family-infinite} is supported by
+\path{SmoothedPowerTransport.exists_unitary_minimizing_transport_of_projection_cost_ne_top}
+in
+\path{DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean}.
+The finite-cost equivalence is
+\path{SmoothedPowerTransport.finite_minimum_iff_projection_cost_and_defect_balance}
+in the same infinite-dimensional development.  The finite-section
+lower-bound principle is
+\path{TauCeti.tsum_angle_penalty_le_displacement_of_finite_transport_bound}
+in
+\path{ForTauCeti/Analysis/InnerProductSpace/Projection/SpectralTransportLimit.lean}.
+The relative-index and defect obstruction is credited to the classical
+literature \citep{avron1994index}; the attained angle-series value and
+the change of ideal with smoothing are results of this development.
+
+\paragraph{Real matching and signed-root compatibility.}
+The verified unrestricted real Schatten matching result is
+\path{RealTransport.realTransportPowerMinimum_eq_matching}
+in
+\path{DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean},
+with explicit ambient attainment proved in the companion real-matching
+modules.  The exact nuclear real--complex parity statement is
+\path{RealTransport.realTransportPowerMinimum_one_eq_sine_sum_iff_even_multiplicities}
+in
+\path{DavisKahan/FiniteDimensional/DirectRotation/RealNuclearFieldEquality.lean}.
+The arbitrary-dimensional real nuclear equality criterion is
+\path{exists_real_nuclear_transport_eq_projection_sub_iff_even_source_multiplicity}
+in
+\path{DavisKahan/Geometry/Polar/NuclearRealRootCriteria.lean}.
+The signed-root equality-attainer correspondence is
+\path{nuclearSignedSineEquivProjectionBoundAttainers} in the polar
+subsystem.  These results use classical principal-angle and complex
+structure theory; no earlier unrestricted real matching or nuclear
+parity theorem was identified in the sources examined for this paper.
+That is a bounded historical assessment, rather than a proof of first
+priority.
+
+\paragraph{Specialized optimizer classifications.}
+\Cref{sec:schatten-optimization,sec:smoothed-transport} contain the
+full classification and local landscape theorems in their established
+subfamilies, with proof modules under
+\path{DavisKahan/FiniteDimensional/DirectRotation/} and
+\path{DavisKahan/InfiniteDimensional/DirectRotation/}.
+These stronger descriptions have not been formally generalized to
+all $1\le p\le2$, $\tau\ge0$.  The unverified generic-penalty
+fragment \path{papers/dk_formalization_journal/spectral_penalty_transport.tex}
+is excluded from this manuscript and contributes no claim.
+
+\paragraph{Formal ancestry and scope.}
+The development uses Mathlib's Hilbert and continuous-functional-calculus
+interfaces \citep{mathlib2020,dedecker2025cfc}; parts of its spectral
+measure and unbounded self-adjoint infrastructure were adapted from
+Spectra \citep{bornemann2026spectra}.  Proof compilation and the
+separate comparison of Lean statements with published hypotheses are
+documented in Appendix~\ref{app:formalization-process}.

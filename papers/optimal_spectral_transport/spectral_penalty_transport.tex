@@ -1,0 +1,139 @@
+% Independent conventional research fragment, excluded from paper.tex.
+% Proof and priority boundaries are recorded in PAPER_CONTEXT.md.
+\section{Independent planes for convex spectral penalties}
+\label{sec:spectral-penalty-transport}
+
+Let $\rho:[0,\infty)\to[0,\infty)$ be convex and continuously
+differentiable, with $\rho(0)=\rho'(0)=0$ and $\rho'(s)>0$ for $s>0$.
+Assume also that $\rho$ is twice continuously differentiable away from
+zero. Define
+\[
+ \phi(t)=\rho\bigl(2\sin(t/2)\bigr)\quad(0\leq t\leq\pi),
+ \qquad
+ m_\rho(\theta)=\min_{0\leq\delta\leq\theta}
+       \{\phi(\theta+\delta)+\phi(\theta-\delta)\}.
+\]
+For a unitary $W$, let
+$\mathcal F_\rho(W)=\sum_j\rho(\sigma_j(I-W))$.
+
+\begin{theorem}[A spectral-penalty decoupling criterion]
+\label{thm:spectral-penalty-decoupling}
+Suppose there is a $c\in(0,\pi)$ such that $\phi'$ is strictly
+increasing on $[0,c]$ and strictly decreasing on $[c,\pi]$, with
+$\phi''(t)<0$ for $c<t<\pi$. For equal-rank complex orthogonal
+projections $P,Q$, with principal angles $\theta_1,\ldots,\theta_r$,
+\[
+ \min_{WPW^*=Q}\mathcal F_\rho(W)
+       =\sum_{j=1}^r m_\rho(\theta_j).
+\]
+An attaining transporter optimizes the scalar phase independently on each
+principal plane and fixes all remaining directions.
+\end{theorem}
+
+\begin{proof}
+The objective is continuous on the compact transport fiber and has a
+global minimizer $W$. Extend $\phi$ evenly and periodically to the
+real line. The condition $\rho'(0)=0$ makes this extension continuously
+differentiable at the identity eigenphase. Its derivative is positive on
+$(0,\pi)$ and negative on $(-\pi,0)$. Let $G$ be the Hermitian spectral
+gradient of $\mathcal F_\rho$ at $W$. The spectral first-variation
+formula and the feasible curves $W\exp(itH)$, $[H,P]=0$, give
+$JGJ=-G$ for $J=2P-I$, as in
+\cref{eq:schatten-gradient-anticommutation}. Hence $G^2$ commutes with
+$P,Q,W$, and $J$ identifies the $g$ and $-g$ eigenspaces of $G$.
+
+For $0<g<\max\phi'$, the single-peak assumption gives exactly two
+roots $0<a<c<b<\pi$ of $\phi'(t)=g$. On the paired gradient spaces,
+identified by $J$, write
+\[
+ W_+=e^{ia}(I-A)+e^{ib}A,\qquad
+ W_-=e^{-ia}(I-B)+e^{-ib}B,
+\]
+with orthogonal projections $A,B$. The same common right variation
+$\exp(itX)$ on both spaces preserves the transport constraint. Choose
+$X=AB+BA$. The lower-phase compressions
+$(I-A)X(I-A)$ and $(I-B)X(I-B)$ vanish. The finite spectral Hessian
+therefore reduces to
+\[
+ \left.\frac{d^2}{dt^2}\mathcal F_\rho
+      \bigl((W_+\oplus W_-)\exp(it(X\oplus X))\bigr)\right|_{t=0}
+ =\phi''(b)\bigl(\|AXA\|_F^2+\|BXB\|_F^2\bigr).
+\]
+If $AB\ne0$, then $AXA=2ABA\ne0$, and the displayed expression is
+negative. Local minimality forces $AB=0$.
+
+The orthogonal decomposition
+$\operatorname{ran}A\oplus\operatorname{ran}B\oplus\ker(A+B)$ now
+splits the paired block into two-dimensional transport planes. Their
+absolute eigenphase pairs are $(b,a)$, $(a,b)$, or $(a,a)$.
+At the maximal gradient level the pair is $(c,c)$ instead.
+For any such plane of physical angle $\theta$, the eigenphase angle
+budget used in \cref{prop:schatten-planar-minimum} gives a scalar
+competitor of cost at most the plane's cost: the argument uses only
+that $\rho$ increases. This also covers a phase mean above $\pi/2$,
+since its physical angle is the acute angle determined by the two lines.
+Thus each plane costs at least $m_\rho(\theta)$.
+
+On $\ker G$, the only unitary eigenvalues are $1$ and $-1$, so the
+restriction is a reflection. Its cost is
+$\rho(2)\|I-W\|_1/2$. The projection-distance inequality and convexity
+give
+\[
+ \frac{\rho(2)}2\|I-W\|_1
+ \geq \rho(2)\sum_j\sin\theta_j
+ \geq \sum_j\rho(2\sin\theta_j)
+ \geq \sum_j m_\rho(\theta_j).
+\]
+Every gradient-square block reduces both projections, so its principal
+angles, with multiplicity, contribute to those of the full pair.
+Adding the block bounds proves the lower bound. Independent scalar phases
+in a cosine--sine decomposition attain the reverse bound.
+\end{proof}
+
+\begin{corollary}[A logarithmic-elasticity criterion]
+\label{cor:spectral-penalty-elasticity}
+Under the preceding regularity assumptions, suppose $\rho''(s)>0$ and
+\[
+ E_\rho(s)=\frac{s\rho''(s)}{\rho'(s)}
+\]
+is nonincreasing on $(0,2)$. Then the decoupling conclusion holds.
+\end{corollary}
+
+\begin{proof}
+Put $s=2\sin(t/2)$. Direct differentiation gives
+\[
+ \phi''(t)=\rho''(s)(1-s^2/4)-\tfrac14s\rho'(s).
+\]
+Its sign is the sign of
+$E_\rho(s)-s^2/(4-s^2)$. The first function is positive and
+nonincreasing; the second increases strictly from zero to infinity.
+Continuity gives exactly one crossing. The derivative $\phi'$ increases
+strictly before it and decreases strictly afterward, with strictly
+negative second derivative on the latter interval.
+\end{proof}
+
+This criterion includes $\rho(s)=s^p$ for every $p>1$, where
+$E_\rho=p-1$. It also includes the smooth family
+\[
+ \rho_{p,\tau}(s)=(\tau^2+s^2)^{p/2}-\tau^p,
+ \qquad 1\leq p\leq2,\quad\tau>0,
+\]
+whose elasticity is
+\[
+ E_{p,\tau}(s)=\frac{\tau^2+(p-1)s^2}{\tau^2+s^2}.
+\]
+For $1\leq p<2$, the zero-phase curvature changes sign at the angle
+whose cosine is
+\begin{equation}
+ C_{p,\tau}=
+ \frac{\tau^2+2-\sqrt{(\tau^2+2)^2-4p(2-p)}}{2p}.
+ \label{eq:smoothed-power-critical-cosine}
+\end{equation}
+To obtain this expression, set $C=\cos t$ in the curvature numerator;
+it becomes $p-2+(\tau^2+2)C-pC^2$. At $p=1$,
+\cref{eq:smoothed-power-critical-cosine} gives the explicit smoothed
+nuclear transition of \cref{thm:smoothed-transport}. As $\tau$ tends
+to zero and $1<p<2$ is fixed, it gives $(2-p)/p$.
+The criterion proves independence of the principal planes for this
+two-parameter family. Its scalar global phase classification for
+$1<p<2$ and $\tau>0$ is a separate one-dimensional question.

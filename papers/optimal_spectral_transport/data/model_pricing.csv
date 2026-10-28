@@ -1,0 +1,11 @@
+model,provider,input_usd_per_million,cache_write_usd_per_million,cache_read_usd_per_million,output_usd_per_million,effective_date,source,notes
+claude-opus-4-8,Anthropic,,,,,,,Fill with the historically applicable provider/billing rate before quoting dollar costs.
+claude-opus-5,Anthropic,,,,,,,Fill with the historically applicable provider/billing rate before quoting dollar costs.
+claude-fable-5,Anthropic,,,,,,,Fill with the historically applicable provider/billing rate before quoting dollar costs.
+gpt-5.6-sol,OpenAI,,,,,,,Fill with the historically applicable provider/billing rate before quoting dollar costs.
+gpt-5.6-terra,OpenAI,,,,,,,Fill with the historically applicable provider/billing rate before quoting dollar costs.
+gpt-5.6-thinking,OpenAI,,,,,,,Raw Git provenance label. On unledgered commits in the configured 2026-06-03--2026-08-14 study window this is resolved to GPT-5.6 Sol chat-interface work; preserve the raw label and do not price it separately unless exact measured usage appears.
+gpt-5.6-high,OpenAI,,,,,,,Raw Git provenance label. On unledgered commits in the configured 2026-06-03--2026-08-14 study window this is resolved to GPT-5.6 Sol chat-interface work; preserve the raw label and do not price it separately unless exact measured usage appears.
+gpt-5.6-codex,OpenAI,,,,,,,Git provenance contains this model even though the local ledger currently has no direct measured tokens for it.
+gpt-5-codex,OpenAI,,,,,,,Git provenance contains this model even though the local ledger currently has no direct measured tokens for it.
+<synthetic>,synthetic,0,0,0,0,2026-08-14,ledger schema,Synthetic bookkeeping carries no model tokens in the current ledger.

@@ -1,0 +1,36 @@
+{
+  "schema": "formalization-draft2/formalization-trace-snapshot/v1",
+  "snapshot_date": "2026-08-17",
+  "source": "Compiler-backed declaration dependencies from tools/leanq decl_index.lean.",
+  "counts": {
+    "source_units": 53,
+    "yws_source_units": 24,
+    "dk_results": 29,
+    "root_rows": 320,
+    "unique_root_declarations": 305,
+    "reached_declarations": 887,
+    "dependency_edges": 2446,
+    "reachability_rows": 1874,
+    "reached_modules": 203
+  },
+  "hashes": {
+    "registries": {
+      "dev/yu-wang-samworth-2015-full-source-census.json": "c0ab767714a5a561095b4377b9b92206abd58e53e6f27cfb45c08b5c9c03ba1c",
+      "dev/davis-kahan-1970-formalization-result-inventory.json": "3fdbc4cf0a2edbcb15cba6336ee238b293aee2382bf630c9d20788ab737f4761"
+    }
+  },
+  "compiler_provenance": {
+    "git_head": "cd95fcc1c55b41d9aa207d4fd3f6f029647b06f2",
+    "lean_toolchain": "leanprover/lean4:v4.33.0-rc2",
+    "decl_index_path": "tools/leanq/src/leanq/lean/decl_index.lean",
+    "decl_index_sha256": "255a827b0b3953e8276c0fc31b7047a8cb4c0be91ee716077991916079b7be43",
+    "project_lean_source_files_hashed": 1101,
+    "project_lean_source_sha256": "6989ad3f0fafa3836692907b17b9fceefac82e54b391d1b0e109b07e377e42bc",
+    "indexed_project_declarations": 13750
+  },
+  "semantics": {
+    "dependency_edge": "dependent -> prerequisite, from constants in elaborated declaration type/value expressions",
+    "reachability": "minimum project-local declaration distance from any declaration registered to the source unit",
+    "scope": "All maintained YWS census units and all maintained DK formalization-result entries."
+  }
+}

@@ -1,0 +1,493 @@
+% Broader research draft; only its finite complex core is included by paper.tex.
+\input{schatten_transport_verified.tex}
+
+% The full local-to-global theorem and correction corollary are included
+% in the Lean-certified fragment above.
+
+\begin{proposition}[All minimizers for an acute pair]
+\label{prop:schatten-all-acute-minimizers}
+Suppose that every principal angle of $P,Q$ is less than $\pi/2$, and let
+$R$ be their canonical direct rotation. In a cosine--sine decomposition,
+group equal positive principal angles into summands
+$M_\theta\otimes\mathbb C^2$, with
+$R=I_{M_\theta}\otimes R_\theta$ on each such summand. Set
+$\delta_p(\theta)=0$ for $\theta\leq\vartheta_p$.
+Then all minimizing transporters are the identity on the fixed summands and
+have the form
+\begin{equation}
+ W\big|_{M_\theta\otimes\mathbb C^2}
+       =\exp\bigl(i\delta_p(\theta)S_\theta\bigr)\otimes R_\theta,
+ \qquad S_\theta=S_\theta^*=S_\theta^{-1},
+ \label{eq:schatten-all-acute-minimizers}
+\end{equation}
+where the self-adjoint unitaries $S_\theta$ may be chosen independently.
+In particular, the minimizing transporter is unique if and only if all
+principal angles are at most $\vartheta_p$.
+\end{proposition}
+
+\begin{proof}
+A global minimum is a local minimum. The nonzero-gradient blocks in the
+proof of \cref{thm:schatten-independent-planes} split into canonical
+planes of angle $a<\vartheta_p$ and balanced planes of angle
+$\sigma>\vartheta_p$. On a balanced plane the eigenphases are $(b,-a)$
+or $(a,-b)$, so the transporter is $e^{i\delta}R_\sigma$ or
+$e^{-i\delta}R_\sigma$, with $\delta=(b-a)/2$. The scalar uniqueness
+in \cref{prop:schatten-scalar-diagram} fixes
+$\delta=\delta_p(\sigma)$ as a function of the geometric angle.
+The coincident-root blocks give $R_{\vartheta_p}$.
+
+These decompositions reduce $P,Q$, and their planes are therefore
+subordinate to the equal-angle summands of the cosine--sine decomposition.
+The zero-gradient analysis in \cref{prop:schatten-local-is-global} leaves
+only the identity on fixed directions and right-angle blocks. Acuteness
+excludes the latter. Thus a minimizer has only the two stated scalar
+phases on each supercritical equal-angle summand. Their orthogonal
+multiplicity subspaces are the $+1$ and $-1$ eigenspaces of a
+self-adjoint unitary $S_\theta$, giving
+\cref{eq:schatten-all-acute-minimizers}.
+
+Conversely, diagonalize each $S_\theta$. The displayed operator becomes
+an orthogonal sum of scalar-phase minimizers, so it attains
+\cref{eq:schatten-unrestricted-minimum}. Below and at the transition
+the phase is zero. At any supercritical angle, the choices
+$S_\theta=I$ and $S_\theta=-I$ give distinct minimizers, proving the
+uniqueness criterion.
+\end{proof}
+
+If a supercritical angle has multiplicity $m$, its minimizing choices are
+parametrized by the orthogonal projections $E$ on $\mathbb C^m$, through
+$S=2E-I$. The parameter space is consequently the disjoint union
+$\coprod_{k=0}^{m}\operatorname{Gr}(k,m)$ of complex Grassmannians.
+For distinct positive principal angles, exactly $k$ of which are
+supercritical, there are exactly $2^k$ minimizing transporters.
+
+\begin{corollary}[When real transport attains the complex minimum]
+\label{cor:schatten-real-parity}
+Let $P,Q$ be equal-rank real orthogonal projections whose principal
+angles are all less than $\pi/2$. The minimum of $\|I-W\|_p$ over real
+orthogonal transporters equals the minimum over complex unitary
+transporters if and only if every principal angle greater than
+$\vartheta_p$ has even multiplicity. If one such multiplicity is odd,
+the real minimum is strictly larger.
+\end{corollary}
+
+\begin{proof}
+Choose a real cosine--sine decomposition. Complexification preserves the
+principal angles and the displacement singular values. By
+\cref{prop:schatten-all-acute-minimizers}, a complex minimizer on a
+supercritical angle space of multiplicity $m$ has multiplicity factor
+\[
+ \exp(i\delta S)=\cos\delta\,I+i\sin\delta\,S,
+ \qquad S=S^*=S^{-1},\qquad 0<\delta<\pi/2.
+\]
+This factor is real precisely when $S=iJ$ for a real matrix $J$.
+The conditions on $S$ then give $J^T=-J$ and $J^2=-I$.
+Such an orthogonal complex structure exists on $\mathbb R^m$ precisely
+when $m$ is even: necessity follows by taking determinants of $J^2=-I$,
+and sufficiency follows from a direct sum of quarter-turn matrices.
+Below and at the cutoff, the multiplicity factor is the identity.
+Thus a real complex-minimizing transporter exists exactly under the
+stated parity condition. Both feasible sets are compact and nonempty,
+so failure to attain the complex minimum forces a strict gap between
+the two minimum values.
+\end{proof}
+
+\begin{corollary}[The sharp exponent-dependent angle cutoff]
+\label{cor:schatten-canonical-cutoff}
+For an acute complex pair with largest principal angle $\alpha$ (taken
+to be zero when the principal-angle list is empty), the
+canonical direct rotation minimizes the Schatten displacement if and
+only if $\alpha\leq\vartheta_p$. The same inequality is sufficient over
+the real field. It is the largest cutoff that works uniformly over
+real dimensions: whenever $\vartheta_p<\theta<\pi/2$, a real pair with
+two principal angles equal to $\theta$ has a strictly cheaper
+orientation-preserving transport.
+\end{corollary}
+
+\begin{proof}
+The complex assertion follows by summing
+\cref{prop:schatten-scalar-diagram}. A real transporter is a complex
+transporter after complexification, with unchanged singular values, so
+the sufficient condition also holds over the real field. For sharpness,
+realify a complex planar scalar-phase improvement. Every displacement
+singular value is then repeated twice, both real principal angles are
+$\theta$, and the real determinant is the squared modulus of the complex
+determinant, hence one.
+\end{proof}
+
+\begin{corollary}[A sharp Schatten comparison constant]
+\label{cor:schatten-sharp-ratio}
+For a principal-plane direct rotation $R$ of a finite-dimensional real
+or complex pair, and every admissible transporter $W$,
+\begin{equation}
+ \|I-R\|_p\leq 2^{1/p-1/2}\|I-W\|_p.
+ \label{eq:schatten-sharp-ratio}
+\end{equation}
+The constant is attained by a right-angle plane in either field and is
+the optimal uniform constant for acute pairs as well.
+\end{corollary}
+
+\begin{proof}
+For a scalar-phase plane, put
+$x=2\sin((\theta+\delta)/2)$ and
+$y=2\sin((\theta-\delta)/2)$. Then
+\[
+ x^p+y^p\geq(x^2+y^2)^{p/2}
+ \geq\bigl(2(2\sin(\theta/2))^2\bigr)^{p/2},
+\]
+because $x^2+y^2=4-4\cos\theta\cos\delta
+\geq4-4\cos\theta$. Consequently
+$2f_p(\theta)\leq2^{1-p/2}m_p(\theta)$.
+Sum this inequality and apply \cref{thm:schatten-independent-planes}.
+Complexification gives the real inequality. At a right angle the direct
+rotation has displacement singular values $(\sqrt2,\sqrt2)$, while a
+reflection has $(2,0)$. Their norm ratio is $2^{1/p-1/2}$. Real
+reflections on planes with angles tending to $\pi/2$ show that the same
+constant is necessary for acute pairs.
+\end{proof}
+
+\subsection{The nearest subspace-preserving unitary}
+
+For a specified orthogonal projection $P$, let
+$\mathcal C(P)=\{V\in U(n):VP=PV\}$. Given a unitary $U$, finding its
+nearest element of $\mathcal C(P)$ enforces exact subspace preservation
+with the smallest possible change to the full unitary.
+This is the block-diagonal approximation formulation of the unitary
+distortion problem in \citet[Section~3]{bolotnikov2001minimal}.
+
+\begin{corollary}[Exact unitary rounding]
+\label{cor:schatten-unitary-rounding}
+Let $\theta_j$ be the principal angles between $\operatorname{ran}P$
+and $U\operatorname{ran}P$, and let $\alpha$ be their largest value,
+taken to be zero for an empty list. Then
+\begin{equation}
+ \min_{V\in\mathcal C(P)}\|U-V\|_p^p=\sum_j m_p(\theta_j),\qquad
+ \min_{V\in\mathcal C(P)}\|U-V\|_p
+          \leq2^{1-1/p}\|[P,U]\|_p.
+ \label{eq:schatten-unitary-rounding}
+\end{equation}
+The constant in the second inequality is optimal. If the pair is acute,
+the blockwise unitary polar factor of
+$PUP+(I-P)U(I-P)$ is nearest precisely when
+\begin{equation}
+ \|[P,U]\|_\infty\leq\frac{2\sqrt{p-1}}{p}.
+ \label{eq:schatten-polar-rounding-cutoff}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Set $Q=UPU^*$. The correspondence $W=UV^*$, with inverse $V=W^*U$,
+identifies $\mathcal C(P)$ with $\mathcal U(P,Q)$ and satisfies
+$\|U-V\|_p=\|I-W\|_p$. This proves the exact formula.
+The singular values of $P-Q$ are $\sin\theta_j$, each twice, and
+$(P-Q)U=[P,U]$. The endpoint phase gives
+$m_p(\theta)\leq(2\sin\theta)^p$. Summing yields
+\[
+ \sum_j m_p(\theta_j)\leq2^{p-1}\|[P,U]\|_p^p.
+\]
+At a right angle in dimension two, the minimum distance is $2$ and
+the commutator norm is $2^{1/p}$, so the constant is necessary.
+
+In an acute cosine--sine decomposition, write $U=L R_\Theta M$ with
+$L,M$ block diagonal relative to $P$. The diagonal cosine blocks are
+positive definite, so their blockwise unitary polar factor is $LM$.
+The direct rotation from $P$ to $Q$ is $L R_\Theta L^*$, and hence its
+associated rounded unitary is $LM$. The optimality criterion follows
+from \cref{cor:schatten-canonical-cutoff}, because
+$\|[P,U]\|_\infty=\sin\alpha$ and
+$\sin\vartheta_p=2\sqrt{p-1}/p$.
+\end{proof}
+
+This is also a rounding problem for a two-level Hamiltonian. If
+$H=E_0I+\Delta(I-P)$ with $\Delta>0$, the sharp estimate becomes
+\[
+ \min_{\substack{V\in U(n)\\VH=HV}}\|U-V\|_p
+       \leq\frac{2^{1-1/p}}{\Delta}\|[H,U]\|_p.
+\]
+Rounding approximate symmetries to ground-space-preserving operators is
+studied by \citet{chubb2017approximate}. For the two-level Hamiltonian
+above, the principal-angle formula determines the smallest possible
+Schatten displacement to a unitary commuting with $H$ and gives its sharp
+dimension-independent bound.
+
+\subsection{Computing the optimizer and resolving the transition}
+
+In the supercritical regime define
+\[
+ \eta_p(\theta)=\arccos\frac{p\cos\theta}{2-p}.
+\]
+Equation~\eqref{eq:schatten-log-ratio-derivative} shows that
+$D_{p,\theta}$ increases strictly on
+$(\eta_p(\theta),\theta)$ and that its unique positive zero lies in
+this interval. Bisection of this scalar equation therefore computes the
+global plane optimizer with a certified choice of branch. Together with
+\cref{thm:schatten-independent-planes}, this reduces the matrix problem
+to a cosine--sine decomposition and one scalar root for each supercritical
+principal angle.
+
+At $p=3/2$ that root is explicit. Writing $c=\cos\theta$, one obtains
+\begin{equation}
+ \delta_{3/2}(\theta)=\arccos\frac{c}{1-2c},\qquad
+       \arccos(1/3)<\theta\leq\pi/2,
+ \label{eq:schatten-three-halves-phase}
+\end{equation}
+and
+\begin{equation}
+ m_{3/2}(\theta)^{2/3}=
+ \begin{cases}
+  2^{2/3}\,2\sin(\theta/2),&0\leq\theta\leq\arccos(1/3),\\
+  2(1+c)^{1/3}(1-2c)^{1/6},&\arccos(1/3)\leq\theta\leq\pi/2.
+ \end{cases}
+ \label{eq:schatten-three-halves-value}
+\end{equation}
+To verify these formulas above the transition, put
+$x=2\sin((\theta+\delta)/2)$ and
+$y=2\sin((\theta-\delta)/2)$. Squaring the positive stationary
+amplitudes gives $x-x^3/4=y-y^3/4$. Since $x>y$, this is equivalent to
+$x^2+xy+y^2=4$. The identities
+\[
+ x^2+y^2=4-4c\cos\delta,\qquad
+ xy=2(\cos\delta-c)
+\]
+give $(1-2c)\cos\delta=c$ and hence
+\cref{eq:schatten-three-halves-phase}. Moreover,
+\[
+ x+y=\frac{2(1-c)}{\sqrt{1-2c}},\qquad
+ \sqrt{xy}=\frac{2c}{\sqrt{1-2c}}.
+\]
+Using $x^{3/2}+y^{3/2}
+=\sqrt{x+y+2\sqrt{xy}}\,(x+y-\sqrt{xy})$ proves
+\cref{eq:schatten-three-halves-value}. Continuity includes the two
+displayed boundary angles.
+
+\begin{proposition}[A hyperbolic parametrization of the optimal phase]
+\label{prop:schatten-hyperbolic-phase}
+Let $1<p<2$, put $\beta=(2-p)/p$, and suppose
+$\vartheta_p<\theta<\pi/2$. There is a unique $u>0$ satisfying
+\begin{equation}
+ \cos\theta=\frac{\sinh(\beta u)}{\sinh u}.
+ \label{eq:schatten-hyperbolic-angle}
+\end{equation}
+The optimal phase and minimum power sum are
+\begin{equation}
+ \cos\delta_p(\theta)=\frac{\cosh(\beta u)}{\cosh u},\qquad
+ m_p(\theta)=2^{p+1}\cosh u
+     \left(\frac{\sinh(2(p-1)u/p)}{\sinh(2u)}\right)^{p/2}.
+ \label{eq:schatten-hyperbolic-value}
+\end{equation}
+The ratio in \cref{eq:schatten-hyperbolic-angle} strictly decreases
+from $\beta$ to zero, giving a monotone equation for every supercritical
+acute angle.
+\end{proposition}
+
+\begin{proof}
+Put $a=\theta-\delta_p(\theta)$, $b=\theta+\delta_p(\theta)$,
+$x=\sin(a/2)$, $y=\sin(b/2)$, and $q=p-1$.
+Then $0<x<y<1$ and the stationary balance reads
+$x^q\sqrt{1-x^2}=y^q\sqrt{1-y^2}$.
+With $r=x/y=e^{-t}$, $t>0$, it gives
+\[
+ y^2=\frac{1-r^{2q}}{1-r^{2p}}
+      =e^t\frac{\sinh(qt)}{\sinh(pt)},\qquad
+ x^2=e^{-t}\frac{\sinh(qt)}{\sinh(pt)}.
+\]
+The cosine addition identities yield
+\[
+ \cos\theta=\frac{\sinh t-\sinh(qt)}{\sinh(pt)}
+           =\frac{\sinh((2-p)t/2)}{\sinh(pt/2)},
+ \qquad
+ \cos\delta_p(\theta)=\frac{\sinh t+\sinh(qt)}{\sinh(pt)}
+           =\frac{\cosh((2-p)t/2)}{\cosh(pt/2)}.
+\]
+Set $u=pt/2$ and sum $2^p(x^p+y^p)$ to obtain the formulas.
+For uniqueness, $v\coth v$ strictly increases on $(0,\infty)$:
+its derivative has numerator $\sinh v\cosh v-v>0$, since that
+numerator vanishes at zero and has derivative $2\sinh^2v>0$.
+Consequently
+\[
+ \frac{d}{du}\log\frac{\sinh(\beta u)}{\sinh u}
+      =\beta\coth(\beta u)-\coth u<0.
+\]
+The endpoint limits are $\beta$ and zero.
+\end{proof}
+
+For $p=2n/(n+1)$, $n\geq2$, this scalar equation is polynomial.
+Let $T_n,U_{n-1}$ be the Chebyshev polynomials characterized by
+$T_n(\cosh v)=\cosh(nv)$ and
+$U_{n-1}(\cosh v)=\sinh(nv)/\sinh v$ for $v>0$.
+Putting $z=\cosh(u/n)>1$ gives
+\[
+ U_{n-1}(z)=\frac1{\cos\theta},\qquad
+ \cos\delta_p(\theta)=\frac{z}{T_n(z)}.
+\]
+There is exactly one root $z>1$ when $\cos\theta<1/n$.
+In particular, $n=2$ gives another elementary closed form.
+
+\begin{corollary}[The explicit four-thirds minimum]
+\label{cor:schatten-four-thirds}
+For $p=4/3$ the scalar critical angle is $\pi/3$. Above it,
+\begin{equation}
+ \delta_{4/3}(\theta)=\arccos\frac{\cos\theta}{1-2\cos^2\theta},
+ \qquad
+ m_{4/3}(\theta)=2^{4/3}(1-2\cos^2\theta)^{1/3}.
+ \label{eq:schatten-four-thirds-value}
+\end{equation}
+Below it, $\delta_{4/3}=0$ and
+$m_{4/3}(\theta)=2(2\sin(\theta/2))^{4/3}$.
+The formulas agree at $\pi/3$ and extend continuously to $\pi/2$.
+\end{corollary}
+
+\begin{proof}
+Here $\beta=1/2$. Write $c=\cos\theta$ and $z=\cosh(u/2)$.
+Then $c=1/(2z)$ and
+$\cos\delta=z/(2z^2-1)=c/(1-2c^2)$.
+Since $\sinh(2u)=4\sinh(u/2)z\cosh u$, the minimum becomes
+\[
+ m_{4/3}(\theta)=2\left(\frac{\cosh u}{z^2}\right)^{1/3}
+               =2^{4/3}(1-2c^2)^{1/3}.
+\]
+The remaining assertions follow from the scalar classification and continuity.
+\end{proof}
+
+\begin{proposition}[Shape of the minimum value]
+\label{prop:schatten-value-convexity}
+The function $m_p$ is strictly convex on $[0,\vartheta_p]$ and strictly
+concave on $[\vartheta_p,\pi/2]$.
+\end{proposition}
+
+\begin{proof}
+Below the transition $m_p=2f_p$, and
+\cref{eq:schatten-amplitude-derivative} gives the strict convexity.
+For $\vartheta_p<\sigma<\pi/2$, let $a<b$ be its two optimizing
+eigenphase magnitudes. Thus $a<\vartheta_p<b$, $a+b=2\sigma$, and
+$f_p'(a)=f_p'(b)=s>0$. The derivative of $f_p(t)-st$ is positive on
+$(a,b)$ and negative on $(b,\pi)$. Consequently
+\[
+ f_p(t)\leq f_p(b)+s(t-b),\qquad a\leq t\leq\pi,
+\]
+with equality only at $t=b$. For $a\leq\theta\leq\pi/2$, choose the
+admissible phase $\delta=\theta-a$. This gives
+\begin{equation}
+ m_p(\theta)\leq f_p(a)+f_p(2\theta-a)
+       \leq m_p(\sigma)+2s(\theta-\sigma),
+ \label{eq:schatten-balanced-support}
+\end{equation}
+where the second inequality is strict unless $\theta=\sigma$.
+In particular, every interior point $\sigma$ of the supercritical
+interval has a strict affine upper support over that whole interval.
+Taking $\sigma$ to be a strict convex combination of two distinct
+angles proves strict concavity, including the endpoints.
+\end{proof}
+
+The transition also determines the smoothness of the minimum value.
+Fix $p$ and write $c_p=2\sin(\vartheta_p/2)$ and
+$\varepsilon=2-p-p\cos\theta$. Expanding the logarithmic ratio at
+$(\vartheta_p,0)$ gives
+\[
+ D_{p,\theta}(\delta)
+ =\frac{\delta}{\sin\vartheta_p}
+   \left[-\varepsilon+\frac{2-p}{6}\delta^2
+       +O(\varepsilon^2+\varepsilon\delta^2+\delta^4)\right].
+\]
+The implicit function theorem applied after dividing by $\delta$ and
+using $\delta^2$ as the variable yields
+\begin{equation}
+ \delta_p(\theta)^2
+    =\frac{6\varepsilon}{2-p}+O(\varepsilon^2),\qquad
+ m_p(\theta)=2f_p(\theta)
+    -\frac{3p c_p^{p-2}}{2(2-p)}\varepsilon^2
+    +O(\varepsilon^3),
+ \label{eq:schatten-transition-asymptotics}
+\end{equation}
+as $\theta\downarrow\vartheta_p$ from above. In particular, the
+nonzero optimizing phase grows as the square root of the excess angle.
+The minimum value is continuously differentiable at the transition, but
+its one-sided second derivatives are
+\[
+ m_p''(\vartheta_p-)=0,\qquad
+ m_p''(\vartheta_p+)
+   =-\frac{3p^3 c_p^{p-2}\sin^2\vartheta_p}{2-p}<0.
+\]
+Thus the quotient displacement cost loses twice differentiability at an
+acute angle determined by $p$, before the geometric right-angle boundary.
+
+\subsection{Schatten-class perturbations in a Hilbert space}
+
+The finite-dimensional formula also gives an attained minimum in the
+Schatten ideal. Let $\mathcal S_p$ denote the Schatten class on a separable
+complex Hilbert space $\mathcal H$.
+
+\begin{theorem}[An optimum differing by finite rank from direct rotation]
+\label{thm:schatten-ideal-minimum}
+Let $P,Q$ be orthogonal projections with $P-Q\in\mathcal S_p$ and
+\[
+ \dim(\operatorname{ran}P\cap\ker Q)
+   =\dim(\ker P\cap\operatorname{ran}Q).
+\]
+List their positive principal angles with multiplicity as
+$(\theta_j)_{j\geq1}$, using a finite list when appropriate. Then
+\begin{equation}
+ \min_{\substack{W\text{ unitary},\ WPW^*=Q\\ I-W\in\mathcal S_p}}
+       \|I-W\|_p^p=\sum_j m_p(\theta_j).
+ \label{eq:schatten-ideal-minimum}
+\end{equation}
+For any principal-plane direct rotation $R$, including a choice of pairing
+on the right-angle defect spaces, an attaining $W_*$ can be chosen with
+\begin{equation}
+ \operatorname{rank}(W_*-R)
+       \leq 2\,\#\{j:\theta_j>\vartheta_p\}<\infty.
+ \label{eq:schatten-finite-correction}
+\end{equation}
+In particular, $R$ is optimal if and only if all principal angles are at
+most $\vartheta_p$.
+\end{theorem}
+
+\begin{proof}
+The decomposition of two projections \citep{halmos1969two}, together with
+compactness of $P-Q$, gives orthogonal principal planes for all nonzero
+angles and a fixed complement. The defect-space hypothesis allows the
+right-angle spaces to be paired. Since the nonzero singular values of
+$P-Q$ are $\sin\theta_j$, each twice, we have
+$\sum_j\sin^p\theta_j<\infty$ and $\theta_j\to0$ if the list is infinite.
+The direct rotation $R$ is the identity on the fixed complement and has
+two displacement singular values $2\sin(\theta_j/2)$ on each plane.
+The inequality $2\sin(\theta/2)\leq\sqrt2\sin\theta$ on
+$[0,\pi/2]$ implies $I-R\in\mathcal S_p$.
+
+First suppose the angle list is infinite, and let $R_N$ be $R$ on its
+first $N$ principal planes and the identity elsewhere. Then
+$R_N-R\to0$ in $\mathcal S_p$. For any feasible $W$, put $Z=R^*W$.
+It commutes with $P$ and satisfies $Z-I\in\mathcal S_p$. The compact
+normal operator $Z-I$ has an orthonormal eigenbasis off its kernel.
+Because $Z$ commutes with $P$, its finite-dimensional nontrivial
+eigenspaces admit bases in $\operatorname{ran}P$ or $\ker P$.
+Truncating these eigenspaces gives unitaries $Z_N$ commuting with $P$,
+with $Z_N-I$ of finite rank and $Z_N-Z\to0$ in $\mathcal S_p$.
+
+Set $W_N=R_N Z_N$ and $Q_N=R_N P R_N^*$. The ranges of $R_N-I$ and
+$Z_N-I$ lie in a common finite-dimensional $P$-invariant space $M_N$.
+Both unitaries preserve $M_N$ and equal the identity on its orthogonal
+complement. Their product transports $P|_{M_N}$ to $Q_N|_{M_N}$.
+The latter pair has the first $N$ positive principal angles of $P,Q$,
+with any remaining angles zero. Thus
+\cref{thm:schatten-independent-planes} gives
+\[
+ \|I-W_N\|_p^p\geq\sum_{j=1}^N m_p(\theta_j).
+\]
+Unitary invariance and the ideal norm inequality yield
+\[
+ \|W_N-W\|_p
+  \leq\|R_N-R\|_p+\|Z_N-Z\|_p\longrightarrow0.
+\]
+Passing to the limit proves the lower bound. For a finite angle list,
+keep $R_N=R$ and use the same approximation of $Z$.
+
+Choose $W_*$ by the independently minimizing phases on the principal
+planes and the identity on the fixed complement. Its cost is the sum
+in \cref{eq:schatten-ideal-minimum}, bounded above by the finite cost of
+$R$. Only finitely many angles exceed the positive number
+$\vartheta_p$. Every other plane uses phase zero, proving
+\cref{eq:schatten-finite-correction}. The optimality criterion follows
+from the scalar classification and its strict improvement above the
+transition.
+\end{proof}

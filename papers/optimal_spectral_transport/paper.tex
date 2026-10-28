@@ -1,0 +1,952 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,array,longtable}
+\usepackage[section]{placeins}
+\usepackage{float}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{xurl}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage[nameinlink]{cleveref}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+% Mathematical symbol colors follow the Manim glossary's LIGHT role palette.
+% Turn ALL symbol coloring off by uncommenting the following line after input:
+\input{math_symbol_colors.tex}
+% \DKMathColorsfalse  % monochrome mathematics; same statements and notation
+% Or, without editing paper.tex, define \DKMonochromeMath before \input{paper.tex}.
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\usepackage{listingsutf8}
+\usepackage{authblk}
+\setlength{\emergencystretch}{3em}
+
+% ArXiv-friendly Lean code: no shell escape, minted, or external highlighter.
+\definecolor{leankeyword}{HTML}{243B6B}
+\definecolor{leantactic}{HTML}{70477A}
+\definecolor{leantype}{HTML}{1F6473}
+\definecolor{leancomment}{HTML}{39734D}
+\definecolor{leanstring}{HTML}{8A4B2A}
+\definecolor{leannumber}{HTML}{777777}
+\definecolor{leanbackground}{HTML}{F7F7F3}
+\lstdefinelanguage{lean}{%
+  sensitive=true,
+  morecomment=[l]{--},
+  morecomment=[s]{/-}{-/},
+  morestring=[b]",
+  morekeywords=[1]{import,open,namespace,section,end,noncomputable,variable,variables,
+    universe,universes,set_option,attribute,axiom,opaque,theorem,lemma,def,abbrev,
+    example,instance,structure,class,inductive,notation,local,deriving,extends,
+    by,where,let,have,show,fun,match,with,if,then,else,do,return,in,forall},
+  morekeywords=[2]{simp,simpa,rw,erw,dsimp,unfold,ring,ring_nf,nlinarith,linarith,
+    positivity,norm_num,field_simp,omega,exact,refine,apply,assumption,intro,intros,
+    ext,funext,cases,rcases,obtain,constructor,left,right,classical,by_contra,
+    contrapose,convert,using,suffices,calc},
+  morekeywords=[3]{Prop,Type,Nat,Int,Real,Fin,Set,Submodule,Matrix,EuclideanSpace,
+    LinearMap,ContinuousLinearMap,LinearPMap,RCLike,IsTrialResidual,
+    IsExactSpectralDecomposition,FormBoundedSylvesterGap,
+    NormalizedSymmetricOperatorIdealFamily},
+}
+\lstdefinestyle{leanpaper}{%
+  language=lean,
+  columns=fullflexible,
+  backgroundcolor=\color{leanbackground},
+  basicstyle=\ttfamily\scriptsize,
+  commentstyle=\color{leancomment}\itshape,
+  keywordstyle=[1]\color{leankeyword}\bfseries,
+  keywordstyle=[2]\color{leantactic},
+  keywordstyle=[3]\color{leantype},
+  stringstyle=\color{leanstring},
+  numberstyle=\tiny\color{leannumber},
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=6pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  aboveskip=0.8em,
+  belowskip=0.8em,
+  literate=
+    {\\KField}{{$\Bbbk$}}1
+    {∃}{{$\exists$}}1
+    {∧}{{$\land$}}1
+    {∀}{{$\forall$}}1
+    {≠}{{$\neq$}}1
+    {⊤}{{$\top$}}1
+}
+\crefname{lstlisting}{formalization}{formalizations}
+\Crefname{lstlisting}{Formalization}{Formalizations}
+\renewcommand{\lstlistingname}{Formalization}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{corollary}[theorem]{Corollary}
+
+
+\newcommand{\Lean}{\textsc{Lean}}
+\newcommand{\DK}{Davis--Kahan}
+\newcommand{\TauCeti}{Tau Ceti}
+\newcommand{\DKResultCount}{29}
+\newcommand{\DKProvedCount}{28}
+\newcommand{\DKRefutedCount}{1}
+\newcommand{\DKSemanticAcceptedCount}{29}
+
+% The complex all-pairs trace formula is now in the checked manuscript.
+% Only the real line/hyperplane minimization remains a working extension.
+\newif\ifincludeUnformalizedRealTransport
+\ifdefined\DKWorkingDraft
+  \includeUnformalizedRealTransporttrue
+\else
+  \includeUnformalizedRealTransportfalse
+\fi
+
+\title{Optimal Spectral Subspace Transport and\\Formalized Davis--Kahan Perturbation Theory}
+% Additional authors are expected; keep the confirmed ordering below stable.
+
+\author[1]{Jonathan Crall}
+\author[2]{Edward Wang}
+\author[1]{Brian Hu}
+\author[2]{Carey E. Priebe}
+
+\affil[1]{%
+  Kitware, Inc.\\
+  \texttt{jon.crall@kitware.com},
+  \texttt{brian.hu@kitware.com}
+}
+
+\affil[2]{%
+  Johns Hopkins University\\
+  \texttt{ewang43@jhu.edu},
+  \texttt{cep@jhu.edu}
+}
+
+\date{27 October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We determine the exact cost of transporting one spectral subspace onto
+another by an ambient unitary for a closed two-parameter family of
+spectral displacement penalties
+$\rho_{p,\tau}(s)=(\tau^2+s^2)^{p/2}-\tau^p$,
+$1\le p\le2$ and $\tau\ge0$. For equal-rank subspaces of a finite-dimensional
+complex Hilbert space, the unrestricted minimum is the sum of scalar
+principal-angle phase minima. We derive a sharp phase-transition surface
+characterizing global optimality of canonical direct rotation, including
+the nuclear, intermediate Schatten, smoothed, and quadratic boundaries.
+For arbitrary complete complex Hilbert spaces, we prove finite-cost
+feasibility and attainment exactly when the projection difference belongs
+to $S_p$ at zero smoothing or $S_2$ at positive smoothing, and the crossed
+defect dimensions agree. The attained value is the corresponding
+principal-angle series.
+
+Over the reals, the unsmoothed finite-dimensional problem for
+$1\le p<2$ has an exact weighted-matching solution. At the nuclear
+endpoint the real minimum equals the complex value
+$2\sum_j\sin\theta_j$ precisely when all strictly acute positive angles
+have even multiplicity. An intrinsic signed-root criterion extends
+attainment of this complex lower bound to trace-class projection pairs
+on arbitrary real Hilbert spaces. Complete optimizer classifications
+and local-to-global results are proved in specified Schatten and
+Charbonnier subfamilies; no all-optimizer classification is asserted for
+the full two-parameter family.
+
+The analysis grew from a Lean~4 formalization of the 1970 Davis--Kahan
+perturbation paper. Of 29 reviewed result-level statements, 28 are proved
+at their reviewed source scope, including unbounded self-adjoint and
+operator-ideal formulations. The printed Proposition~4.4 is refuted by a
+real four-dimensional counterexample at every positive acute angle.
+We distinguish the original direct-rotation and minimal-distortion
+results from the exact transport formulas and classifications established
+here; all reported mathematical results are formally verified.
+\end{abstract}
+
+\noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
+direct rotations; Schatten norms; spectral penalties; phase transitions; operator ideals; formal verification; Lean.
+
+\smallskip
+\noindent\textbf{Mathematics Subject Classification (2020):}
+47A55, 15A42, 68V20.
+
+\smallskip
+\noindent\textbf{Corresponding author:} Jonathan Crall
+(\texttt{jon.crall@kitware.com}).
+
+\section{Introduction}
+\label{sec:introduction}
+
+Let $P$ and $Q$ be orthogonal projections on a Hilbert space.  A
+unitary $W$ transporting $\operatorname{ran}P$ to
+$\operatorname{ran}Q$ satisfies $WPW^*=Q$.  Such a transporter is
+rarely unique.  The canonical direct rotation is distinguished by the
+principal-angle geometry of the pair, but its optimality depends on how
+the displacement $I-W$ is measured.  This paper studies exact
+minimization of spectral displacement penalties over the full unitary
+or orthogonal transport fiber, allowing arbitrary coupling between
+principal-angle sectors.
+
+The setting originates in classical subspace geometry
+\citep{dixmier1948position,davis1958separation,halmos1969two} and the
+direct-rotation and perturbation theory of Davis and Kahan
+\citep{davis1970rotation,kato1976perturbation}.  Davis established
+Hilbert--Schmidt and finite-dimensional Schatten-$p$ optimality for
+$p\ge2$ in 1958 \citep[Theorems~7.3--7.4]{davis1958separation}.
+The phase-based failure of optimality under some smaller-exponent
+costs is also classical.  Bolotnikov, Li, and Rodman subsequently
+formulated the ambient unitary minimal-distortion problem and solved
+substantial parts of it, including the Frobenius case and Q-norm
+results \citep{bolotnikov2001minimal}.  These antecedents determine the
+historical scope of the present optimization results; the comparison
+is developed in \cref{sec:related}.
+
+Our main objective is the spectral family
+\[
+ \rho_{p,\tau}(s)=(\tau^2+s^2)^{p/2}-\tau^p,
+ \qquad 1\le p\le2,\quad\tau\ge0.
+\]
+It contains the nuclear and quadratic endpoints, intermediate Schatten
+powers, and the smooth Charbonnier penalty.  We determine the global
+minimum over \emph{all} ambient complex unitary transporters as a sum
+of independent scalar phase minima, and obtain an explicit threshold
+for when canonical direct rotation attains that minimum.  The same
+family admits an infinite-dimensional version with an exact finite-cost
+ideal condition and balanced-defect requirement.  These results are
+stated together in \cref{sec:unified-transport}.
+
+The scalar field changes the feasible spectral geometry.  In a real
+Hilbert space, phase choices that are possible on an individual complex
+principal plane may require coupling distinct real planes.  The exact
+finite real Schatten problem below exponent two reduces to a weighted
+matching of principal angles.  At the nuclear endpoint, the real
+and complex minima agree exactly under an even-multiplicity condition
+on strictly acute positive angles.  Its infinite-dimensional
+signed-root formulation explains the compatibility obstruction on
+actual spectral subspaces; the real theory is treated in
+\cref{sec:family-real,sec:nuclear-endpoint}.  The paper does not claim
+a complete real smoothed-power transport formula.
+
+The original motivation was a formal audit of the Davis--Kahan 1970
+paper.  Davis--Kahan perturbation estimates bound how far invariant
+subspaces move when a self-adjoint operator is perturbed, using spectral
+separation and residuals \citep{davis1970rotation,wedin1972perturbation}.
+The transporter optimization studied here is a different question,
+connected to perturbation theory by projections and principal angles.
+In particular, the optimal phase formulas do not themselves provide
+new spectral-gap or residual bounds.
+
+We formalized the Davis--Kahan arguments in Lean~4 using Mathlib
+\citep{demoura2021lean4,mathlib2020}.  The formalization covers 29
+reviewed result-level statements: 28 have proved counterparts at
+the reviewed source scope, including real and complex Hilbert spaces,
+unbounded self-adjoint operators, ordered half-infinite spectral gaps,
+and where-defined unitarily invariant operator-ideal norms.  The
+printed Proposition~4.4 fails: a real four-dimensional counterexample
+exists even for arbitrarily small positive principal angles.  It
+realifies the phase mechanism already described by Davis and Kahan
+\citep[Example~4.2]{davis1970rotation}.  The source proof contains an
+invalid Ky Fan comparison; we state the valid remaining conclusions,
+including a sharp direct-rotation approximation factor, in
+\cref{sec:prop44,sec:sharp-displacement}.
+
+\paragraph{Contributions.}
+\begin{enumerate}
+ \item \textbf{A common complex optimization theorem.} We prove the exact
+ unrestricted minimum and an attaining unitary for the full closed
+ $(p,\tau)$ family, for every finite-dimensional complex equal-rank
+ subspace pair. A single phase-transition surface characterizes
+ canonical global optimality over the entire closed parameter range
+ (\cref{thm:family-finite,thm:family-canonical}).
+ \item \textbf{The operator-ideal lift.} On any complete complex Hilbert
+ space, including nonseparable spaces, finite-cost transport is possible
+ precisely under the relevant Schatten ideal condition and equality of
+ crossed-defect dimensions. We prove the infinite principal-angle
+ minimum series and its attainment
+ (\cref{thm:family-infinite}).
+ \item \textbf{Real-field compatibility.} We establish exact unrestricted
+ finite-dimensional real matching for unsmoothed $1\le p<2$ costs,
+ the nuclear real--complex parity criterion, and the signed-root
+ equality-attainment criterion on general trace-class projection pairs.
+ These results identify where the complex phase construction cannot be
+ realized by independent real planes (\cref{sec:family-real,sec:nuclear-endpoint}).
+ \item \textbf{Optimizer structure in specific regimes.} Separate verified
+ theorems classify all complex global minimizers in the strict Schatten,
+ nuclear, and Charbonnier cases. The strict Schatten and Charbonnier
+ problems also admit local-to-global theorems and quantitative or
+ topological results under their stated hypotheses
+ (\cref{sec:schatten-optimization,sec:smoothed-transport}).
+ \item \textbf{Formalized classical foundations and a source correction.}
+ We formalize the original Davis--Kahan theorem family, refute its
+ printed Proposition~4.4, identify the failed proof step, and recover
+ its valid norm conclusions. The full-scope sine-theta result includes
+ unbounded operators and where-defined ideal norms
+ (\cref{sec:sine-theta}).
+\end{enumerate}
+
+The detailed source-to-theorem correspondence for the 1970 paper is in
+Appendix~\ref{app:dk-inventory}. The mathematical provenance of the
+new transport statements and their classical dependencies is recorded
+in Appendix~\ref{app:transport-provenance}.
+
+\section{Related work and mathematical provenance}
+\label{sec:related}
+
+\subsection{Principal angles, direct rotation, and perturbation bounds}
+\label{sec:related-classical}
+
+The relative-position theory of two closed Hilbert subspaces predates
+the Davis--Kahan perturbation estimates.  Dixmier developed the
+operator-theoretic structure of pairs of closed subspaces
+\citep{dixmier1948position}; Davis explicitly credited that structural
+work in his treatment of angle, sine, cosine, and separation operators
+\citep[Introduction]{davis1958separation}.  Halmos later gave an
+influential account of the geometry of two subspaces
+\citep{halmos1969two}.  Direct rotations and the polar-decomposition
+methods used here are classical; Kato's perturbation theory provides
+another standard treatment \citep{kato1966perturbation,kato1976perturbation}.
+
+Davis's 1958 Theorem~7.2 establishes an extremal inequality for the
+squared displacement compressed to the source subspace.
+Theorem~7.3 proves Hilbert--Schmidt optimality and Theorem~7.4 gives
+finite-dimensional Schatten-$p$ optimality for $p\ge2$
+\citep{davis1958separation}.  Davis also discusses failure of the
+analogous assertion for $p<2$ near orthogonality.  These results
+precede Davis and Kahan's 1970 work and are acknowledged as classical
+optimality statements here.
+
+Davis and Kahan's 1970 paper derives perturbation bounds for spectral
+subspaces, including the sine-theta and tangent theorems
+\citep{davis1970rotation}.  Their Example~4.2 contains the complex
+phase mechanism behind nuclear nonminimality.  Their printed real
+Proposition~4.4 asserts a stronger small-angle extremal property,
+which the real four-dimensional example in \cref{sec:prop44} refutes.
+The squared-displacement conclusion and the direct-rotation
+construction remain valid.  Qiu, Zhang, and Li later restated the
+small-angle full-norm assertion in Section~5 of their Grassmann-space
+paper \citep{qiu2006grassmann}; Zhang and Qiu subsequently recognized
+trace-norm nonminimality explicitly
+\citep{zhang2010canonicalangles}.  We claim a formalized contradiction
+of the printed proposition and sharp replacement statements, without
+claiming to have discovered the original complex phase mechanism.
+
+Wedin's singular-subspace perturbation bounds and subsequent matrix
+and Sylvester-equation treatments concern the stability of spectral
+subspaces under changes of an operator
+\citep{wedin1972perturbation,stewart1990matrix,grubisic2005sylvester,grubisic2010tan}.
+They provide perturbation-theoretic context for the source formalization.
+The present transport objective fixes two subspaces and minimizes the
+ambient displacement of a unitary relating them; it does not involve
+a spectral-gap assumption or a residual.
+
+\subsection{Minimal distortion on a unitary transport fiber}
+\label{sec:related-minimal-distortion}
+
+Bolotnikov, Li, and Rodman formulated the ambient constrained problem
+of minimizing $\|I-W\|$ over unitary maps transporting one or more
+prescribed subspaces \citep[Problem~1.1]{bolotnikov2001minimal}.
+Their paper gives the full Frobenius minimum and its minimizing set,
+proves Q-norm results under the structural assumptions in their
+Theorem~3.1, and includes a failure example for $1\le p<2$
+\citep[Lemma~3.3]{bolotnikov2001minimal}.  Their Q-norm class
+includes Schatten-$p$ norms for $p\ge2$.  The paper's special-case and
+norm-dependent results are the closest direct predecessors of our
+optimization problem.  Our closed-family theorem supplies an attained
+principal-angle minimum over \emph{every} ambient transporter for all
+$1\le p\le2$ and $\tau\ge0$, together with the explicit canonical
+phase-transition threshold and an operator-ideal attainment lift.
+The separately verified real matching and complete optimizer
+classifications address different aspects of the same problem.
+The cited 2001 results do not state these full-family formulas or the
+real multiplicity criterion; historical priority of equivalent
+formulations under other terminology remains a separate question.
+
+The lower bounds use established singular-value majorization and
+unitarily invariant norm theory \citep{bhatia1997matrix}.
+The complex spectral-gradient and second-variation arguments belong to
+the wider theory of differentiating spectral functions
+\citep{lewis1996derivatives,lewis2001twice}.  Local-to-global results
+for spectral or singular-value \emph{orbits} also appear in work of
+Massey, Rios, and Stojanoff \citep{massey2018local}; their orbit
+constraint is different from $WPW^*=Q$.  Our local-to-global claims
+are limited to the transport problems and penalties for which they
+have been proved in \cref{sec:schatten-optimization,sec:smoothed-transport}.
+
+\subsection{Grassmann metrics and Procrustes formulations}
+\label{sec:related-objectives}
+
+The principal-angle metrics of Qiu, Zhang, and Li and the angular
+inequalities studied by Zhang and Qiu are intrinsic functions of the
+subspaces \citep{qiu2006grassmann,zhang2007angular,zhang2010canonicalangles}.
+The length of a curve on a Grassmann manifold, a norm of a logarithm,
+a projection-distance norm, and the extrinsic chordal transport cost
+$\|I-W\|$ are distinct optimization objectives.  Work on Schatten
+unitary groups develops rectifiable Finsler distance and minimal-curve
+theorems \citep{andruchow2010finsler,larotonda2026shortcurves}; these
+results are relevant geometric context without identifying their
+geodesic objectives with the present one.
+
+Weighted Procrustes and Parseval-frame approximation results
+\citep{contino2017weighted,corach2014procrustes} likewise involve
+closely related matrix factorizations, but their feasible sets are
+weighted bounded-operator solutions or frame constraints.  The
+stabilizer condition in~\eqref{eq:transport-fiber} must be retained
+when comparing minima.  A reduction from one formulation to another
+would need to preserve that condition and the chosen displacement
+penalty; no such general equivalence is assumed here.
+
+\subsection{Smoothing, Schatten ideals, and defect index}
+\label{sec:related-ideals}
+
+The generalized Charbonnier form $(\tau^2+s^2)^a$ is a standard
+regularization penalty in imaging
+\citep{sun2010secrets,lobos2026smooth}.  Subtracting its value at zero
+normalizes the present operator cost.  The novelty claim concerns exact
+optimization \emph{subject to unitary subspace transport}, not the
+invention of this scalar penalty or its use in regularization.
+
+For infinite-dimensional projections, relative index and balanced
+crossed defects are classical concerns: Avron, Seiler, and Simon give
+index formulas and a unitary equivalence criterion for pairs of
+projections \citep{avron1994index}.  The existence of a transporter
+with finite Schatten displacement requires additional ideal control;
+the classical index obstruction is therefore explicitly credited.
+Our contribution in \cref{thm:family-infinite} is the exact
+$S_p$-versus-$S_2$ finite-cost boundary, the attained minimum for the
+whole smoothed-power family, and the angle-series formula under the
+specified ideal and defect conditions.  The real infinite-dimensional
+nuclear equality criterion combines this background with the
+signed-root compatibility construction.  A general real positive-
+smoothing formula and an all-optimizer classification for every family
+parameter are outside the proved scope.
+
+\subsection{Prior formalization work and attribution}
+\label{sec:related-formal}
+
+The Lean development uses Lean~4 and Mathlib
+\citep{demoura2021lean4,mathlib2020}.  Its continuous functional
+calculus and basic Hilbert-space constructions reuse accepted
+foundations \citep{dedecker2025cfc}.  Parts of the projection-valued-
+measure, Borel spectral calculus, and self-adjoint infrastructure were
+ported, adapted, or generalized from the Spectra development
+\citep{bornemann2026spectra}.  Reusable results are being contributed
+to Tau Ceti \citep{tauceti2026}.  The Davis--Kahan source theorems,
+where previously established, are described as formalizations of
+classical mathematics.  New transport statements, the printed-source
+counterexample, and source-level verification are identified separately
+in Appendix~\ref{app:transport-provenance}.
+
+\begin{table}[tbp]
+\centering\small
+\caption{Scope of the closest mathematical precedents. The comparisons
+identify what is established by each cited source and what is proved here;
+they do not assert exhaustive historical priority.}
+\label{tab:related-comparison}
+\begin{tabularx}{\textwidth}{@{}p{0.30\textwidth}X@{}}
+\toprule
+Earlier result & Scope added by the present formalization \\
+\midrule
+Davis (1958): squared displacement, Hilbert--Schmidt and finite
+$p\ge2$ Schatten optimality \citep{davis1958separation}
+ & Sharp spectral-penalty phase criterion throughout $1\le p\le2$ and
+ $\tau\ge0$; classical quadratic case recovered at $p=2$. \\
+Davis--Kahan (1970): perturbation theory, direct rotation and complex
+phase example \citep{davis1970rotation}
+ & Formalization of 28 source results; a real counterexample to printed
+Proposition~4.4 and a sharp full-displacement comparison. \\
+Bolotnikov--Li--Rodman (2001): transport minimization, Frobenius solution,
+Q-norm and special $p<2$ results \citep{bolotnikov2001minimal}
+ & Unrestricted complex closed-family angle formula, critical surface,
+infinite-dimensional attainment, real unsmoothed matching and selected
+all-optimizer classifications. \\
+Avron--Seiler--Simon (1994): index of a projection pair
+\citep{avron1994index}
+ & Exact family-dependent ideal threshold and attained spectral-angle
+minimum under balanced crossed defects. \\
+Grassmannian and restricted-unitary path metrics
+\citep{qiu2006grassmann,andruchow2010finsler,larotonda2026shortcurves}
+ & Extrinsic displacement optimization on the transport fiber; no
+identification of path-length minima with chordal minima. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\input{unified_spectral_transport.tex}
+\input{counterexample.tex}
+\input{sharp_displacement.tex}
+\input{schatten_transport_verified.tex}
+\input{nuclear_endpoint_verified.tex}
+\input{smoothed_transport_verified.tex}
+
+\section{Source coverage and the sine-theta theorem}
+\label{sec:coverage}
+
+The formalization covers \DKResultCount{} result-level statements in Davis
+and Kahan's paper: the Section~2 sine and tangent inequalities, the geometry
+and extremal properties of direct rotations, the bounded and unbounded
+Sylvester estimates, the generalized Section~6 perturbation bounds, and the
+spectral branch-selection theorems. \DKProvedCount{} have checked Lean proofs
+with their reviewed source hypotheses; Proposition~4.4 is refuted as printed.
+Appendix~\ref{app:dk-inventory} specifies the counting rule and gives the
+complete result table, and Appendix~\ref{app:source-review} states the
+comparison procedure.
+
+Appendix~\ref{app:notation} collects the symbols used in the sine-theta
+and direct-rotation arguments.
+
+These results depend on spectral and operator-ideal constructions that cannot
+be reduced to finite matrices without changing the assumptions of the source
+statements.
+
+\subsection{The full-scope sine-theta theorem}
+\label{sec:sine-theta}
+
+\subsubsection{Trial and exact subspaces}
+
+Davis and Kahan distinguish a reference operator $\sym{A}$ from a perturbed operator
+$\sym{A}+\sym{H}$.  For the formal statement we write $\sym{Acurrent}$ for the perturbed full-space
+operator, corresponding to the source's $\sym{A}+\sym{H}$.
+
+Let $\sym{Eambient}$ be the ambient Hilbert space.  Let $\sym{A0}$ be a self-adjoint operator on a
+trial-coordinate space $\sym{Ftrial}$, and let
+\[
+  \sym{E0}:\sym{Ftrial}\to \sym{Eambient}
+\]
+be an isometric coordinate map for the trial subspace.  The residual compares
+applying the ambient operator after embedding with applying the trial operator
+before embedding:
+\begin{equation}
+  \sym{R} = \sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}.
+  \label{eq:residual}
+\end{equation}
+When the operators are unbounded, \cref{eq:residual} is asserted on
+$\operatorname{dom}(\sym{A0})$ and $\sym{R}$ is the bounded residual that agrees there.
+The Lean predicate \texttt{IsTrialResidual} packages the isometry, the required
+domain inclusion, and this residual identity.
+
+Let $\sym{F0}:\sym{Hexact}\to \sym{Eambient}$ be isometric coordinates for the desired exact spectral
+subspace and let $\sym{F1}:\sym{Gunwanted}\to \sym{Eambient}$ be isometric coordinates for its orthogonal
+complement.  A self-adjoint operator $\sym{Lambda1}$ on $\sym{Gunwanted}$ describes the
+complementary spectral block through
+\[
+  \sym{Acurrent}\sym{F1} = \sym{F1}\sym{Lambda1}
+\]
+on its domain.  The predicate \texttt{IsExactSpectralDecomposition} also records
+orthogonality and completeness of the two coordinate ranges.
+
+\subsubsection{The sine operator and its rectangular representative}
+
+The source angle operator acts on the trial-coordinate space.  If
+$\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ is the orthogonal projection onto the desired exact subspace, then
+\[
+  \cos\sym{Theta0} = (\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2},
+  \qquad
+  \sym{sinTheta0} = (I-\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2}.
+\]
+The analytic proof uses the rectangular complementary block
+\begin{equation}
+  \sym{S}=(I-\sym{Pexact})\sym{E0}.
+  \label{eq:rectangular-sine}
+\end{equation}
+The source-facing Lean theorem is stated on a positive operator on the
+trial-coordinate space.  The rectangular block has codomain $\sym{Eambient}$, while the
+positive sine has codomain $\sym{Ftrial}$.  Their relationship is
+\[
+  \sym{S}^*\sym{S}
+  = \like{E0}{E_0^*}(I-\sym{Pexact})\sym{E0}
+  = I-\like{E0}{E_0^*}\sym{Pexact}\sym{E0},
+\]
+so
+\begin{equation}
+  |\sym{S}|=(\sym{S}^*\sym{S})^{1/2}=\sym{sinTheta0}.
+  \label{eq:modulus-sine}
+\end{equation}
+The Lean API constructs the directed angle on trial coordinates by functional
+calculus and defines its sine by applying $\sin$ through the same calculus.
+Under the isometry hypotheses, Lean proves that this operator is exactly the
+modulus $|\sym{S}|$ in \cref{eq:modulus-sine}.  A polar decomposition $\sym{S}=\sym{PolarU}|\sym{S}|$ and
+the ideal laws then imply
+\[
+  \sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0})
+\]
+whenever the norm is defined.  The rectangular theorem is the analytic proof
+engine; the selected source-facing theorem transports its conclusion to the
+positive sine operator.
+
+\subsubsection{Gap geometry and the inequality}
+
+Fix $\sym{delta}>0$. The separation hypothesis has the following alternatives.
+For some $\sym{betaEndpoint}\leq\sym{alphaEndpoint}$, one of the two spectra
+$\sigma(\sym{A0})$ and $\sigma(\sym{Lambda1})$ lies in $[\sym{betaEndpoint},\sym{alphaEndpoint}]$ and the other
+lies in
+\[
+ (-\infty,\sym{betaEndpoint}-\sym{delta}]\;\cup\;[\sym{alphaEndpoint}+\sym{delta},\infty).
+\]
+Alternatively, for some real $b$, the operator forms satisfy either
+\[
+ \sym{A0}\geq (b+\sym{delta})I,\quad \sym{Lambda1}\leq bI,
+ \qquad\text{or}\qquad
+ \sym{A0}\leq bI,\quad \sym{Lambda1}\geq (b+\sym{delta})I.
+\]
+Each form inequality is asserted on the domain of the corresponding operator;
+for example, $\sym{A0}\geq aI$ means
+$\langle \sym{A0}x,x\rangle\geq a\|x\|^2$ for every
+$x\in\operatorname{dom}(\sym{A0})$. For self-adjoint operators the source's ordered
+spectral half-line hypotheses imply these form bounds. The Lean predicate
+\texttt{FormBoundedSylvesterGap} records precisely the finite-interval
+alternative, in either spectral order, and these two ordered form alternatives.
+
+Both blocks may be unbounded in an ordered configuration. For instance,
+on $\ell^2(\mathbb N_{\geq1})$, take diagonal operators
+$\sym{A0}e_n=(n+\sym{delta})e_n$ and $\sym{Lambda1}e_n=-ne_n$, on the domains where their
+images are square summable. They satisfy the first ordered configuration
+with $b=0$, while neither spectrum lies in a finite interval. This example
+explains why retaining the half-infinite alternatives changes the theorem's
+applicability.
+
+The source also writes a common-domain equality for the unbounded trial
+configuration.  That equality discharges the forward domain condition consumed
+by \texttt{IsTrialResidual}.  Source correspondence is checked from the combined
+hypotheses, with this equality supplying the required domain condition.
+
+Appendix~\ref{app:lean-guide} explains the general Lean syntax in the
+following theorem signature; the geometric and spectral hypotheses have been
+defined above.
+
+\begin{theorem}[Sine-theta estimate]
+\label{thm:sine-theta}
+Let the scalar field be $\mathbb R$ or $\mathbb C$, let $\sym{Eambient}$ be separable,
+and let $\sym{Acurrent}$, $\sym{A0}$, and $\sym{Lambda1}$ be self-adjoint operators on the
+Hilbert spaces above. Suppose the isometries, domain inclusions, residual
+identity, exact complementary decomposition, and one of the three gap
+configurations hold. Let $\sym{NormN}$ be a supported normalized symmetric
+operator-ideal norm. Whenever $\sym{sinTheta0}$ and $\sym{R}$ belong to its domain,
+\begin{equation}
+ \sym{delta}\,\sym{NormN}(\sym{sinTheta0})\leq \sym{NormN}(\sym{R}).
+ \label{eq:dk-sine}
+\end{equation}
+\end{theorem}
+
+\begin{lstlisting}[style=leanpaper,
+  caption={Lean signature for the sine-theta estimate. The surrounding
+  scalar-field and Hilbert-space context is omitted. The positive
+  trial-coordinate sine is \texttt{sourceDirectedSinThetaOperator E0 F0};
+  \texttt{FormBoundedSylvesterGap} encodes the interval/exterior and ordered
+  half-infinite separation hypotheses described above.},
+  label={lst:dk-sintheta-headline}]
+theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
+    [TopologicalSpace.SeparableSpace E]
+    (N : NormalizedSymmetricOperatorIdealFamily K)
+    (A : LinearPMap K E E)
+    (A0 : LinearPMap K F F)
+    (Lambda1 : LinearPMap K G G)
+    (E0 : ContinuousLinearMap K F E)
+    (F0 : ContinuousLinearMap K H E)
+    (F1 : ContinuousLinearMap K G E)
+    (R : ContinuousLinearMap K F E)
+    (hA : IsSelfAdjoint A)
+    (hA0 : IsSelfAdjoint A0)
+    (hLambda1 : IsSelfAdjoint Lambda1)
+    (htrial : IsTrialResidual A A0 E0 R)
+    (hexact : IsExactSpectralDecomposition A Lambda1 F0 F1)
+    (delta : Real) (hdelta : 0 < delta)
+    (hgap : FormBoundedSylvesterGap A0 Lambda1 delta) :
+    N.Mem (sourceDirectedSinThetaOperator E0 F0) ->
+    N.Mem R ->
+      delta * N.gaugeReal (sourceDirectedSinThetaOperator E0 F0) <=
+        N.gaugeReal R
+\end{lstlisting}
+
+The two ideal-membership hypotheses express the ``where-defined'' restriction.
+The proof first estimates the rectangular map $\sym{S}=(I-\sym{F0}\like{F0}{F_0^*})\sym{E0}$ and then
+uses \cref{eq:modulus-sine} and modulus invariance of the ideal gauge. The
+ambient Hilbert-space instances are omitted from the displayed Lean signature.
+The theorem contains all three separation configurations encoded by its gap
+hypothesis.  The ordered half-infinite cases have distinct hypotheses from
+the finite interval/exterior specialization, so source correspondence is checked
+against the complete family of gap hypotheses.
+
+\subsubsection{Why the Sylvester estimate gives the angle bound}
+
+Set $\sym{X}=\like{F1}{F_1^*}\sym{E0}$. The exact complementary decomposition gives
+$\sym{S}=\sym{F1}\sym{X}$, and multiplication by the isometry $\sym{F1}$ preserves the supported
+singular-value gauges. Self-adjointness, the domain hypotheses, and the
+residual identity yield the Sylvester relation
+\[
+ \sym{Lambda1} \sym{X}-\sym{X}\sym{A0}=\like{F1}{F_1^*}\sym{R}
+\]
+on $\operatorname{dom}(\sym{A0})$, with the left side represented by the bounded
+right side. The separated Sylvester estimate gives
+\[
+ \sym{delta} \sym{NormN}(\sym{X})\leq \sym{NormN}(\like{F1}{F_1^*}\sym{R})\leq \sym{NormN}(\sym{R}).
+\]
+Combining this with $\sym{NormN}(\sym{X})=\sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0})$ proves the conclusion.
+For unbounded operators, deriving the domain compatibility for $\sym{X}$ is part of
+the argument; the displayed relation is not an everywhere-defined composition
+of unbounded maps. The constant-one estimate uses the specified interval or
+ordered gap geometry, rather than an arbitrary assertion that the two spectra
+are disjoint.
+
+
+The rank-one equality example in \cref{fig:sine-theta-rank-one} takes
+$\sym{Acurrent}=\operatorname{diag}(0,\sym{delta})$, $\sym{A0}=0$, and the trial unit vector
+$\like{v}{v_\theta}=(\cos\sym{theta},\sin\sym{theta})$.  Then the complementary component
+has length $\sin\sym{theta}$ and the residual has length $\sym{delta}\sin\sym{theta}$.
+This geometric picture is a finite-dimensional specialization of the
+preceding theorem, whose domain and operator-ideal hypotheses remain as
+stated above.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/sine_theta_rank_one.pdf}
+\caption{Rank-one sine-theta equality case. The trial vector $\like{v}{v_\theta}$
+projects onto the exact target line, leaving a component of length
+$\sin\sym{theta}$. With $\sym{Acurrent}=\operatorname{diag}(0,\sym{delta})$ and $\sym{A0}=0$, its
+residual is $(0,\sym{delta}\sin\sym{theta})$, so
+$\sym{delta}\,\|\sym{sinTheta0}\|=\|\sym{R}\|$. The finite-dimensional picture is
+adapted from the geometric sine-theta visualization.}
+\label{fig:sine-theta-rank-one}
+\end{figure}
+
+\section{Mathematical architecture of the Davis--Kahan development}
+\label{sec:dk-rest}
+
+The proofs draw on three closely related areas: the geometry of two
+subspaces, symmetric operator ideals and majorization, and Sylvester
+estimates for spectrally separated operators.
+
+\subsection{Direct rotations and the geometry of two subspaces}
+
+Let $\sym{Psource}$ and $\sym{Qtarget}$ be the orthogonal projections onto closed subspaces $\sym{Usource}$ and
+$\sym{Vtarget}$.  Davis and Kahan organize their geometry through the operators obtained
+from $\sym{Psource}$, $\sym{Qtarget}$, and their complements.  In the acute case, the compression
+$\sym{Psource}\sym{Qtarget}\sym{Psource}$ has no kernel on $\sym{Usource}$ and determines the cosine of the angle operator;
+the complementary compression determines its sine.  Polar decomposition then
+supplies the partial isometries that pair the corresponding principal
+subspaces.  Combining these pieces gives the direct rotation, an orthogonal or
+unitary operator $\sym{Rrotation}$ satisfying $\sym{Rrotation}(\sym{Usource})=\sym{Vtarget}$ and rotating along the principal
+planes.
+
+This construction explains several results that look separate when stated only
+at theorem level.  Existence and uniqueness in the acute case, the
+principal-square-root characterization, commutation with the angle operators,
+and reversal symmetry all express compatibility among the same projection and
+polar-decomposition data.  The nonacute theory records the additional kernel
+conditions needed when principal angles reach $\pi/2$.  For compact angle
+operators, the resulting decomposition reduces to the familiar sequence of
+principal angles; the general Hilbert-space statements do not require such a
+discrete spectrum.
+
+Section~8 returns to this geometry from the spectral side.  Perturbation
+smallness and spectral repulsion rule out the wrong branch and place the two
+spectral subspaces in the acute regime where the direct rotation is available.
+In the formal development this branch-selection argument uses the same
+unbounded spectral calculus as the perturbation theorems.  Acuteness therefore
+follows from the spectral hypotheses, with no separate matrix-level assumption.
+
+\subsection{Approximation numbers, majorization, and unitarily invariant norms}
+
+Davis and Kahan formulate many extremal statements simultaneously for broad
+classes of unitarily invariant norms.  In finite dimensions such a norm can be
+described by a symmetric gauge function of the singular values.  The
+infinite-dimensional formalization uses approximation numbers as the singular
+value sequence of a compact operator and symmetric norming functions to encode
+the gauge.  Ky Fan partial sums then provide the bridge from pointwise or
+majorization statements to norm inequalities.
+
+This layer is essential in Section~4.  If $\sym{Rrotation}$ is the direct rotation and $\sym{Wcompetitor}$
+is any unitary carrying $\sym{Usource}$ onto $\sym{Vtarget}$, the restricted displacement has
+singular-value extremality strong enough to imply
+unitarily invariant norm minimality.  Davis and Kahan also prove a
+majorization theorem for the squared full displacement
+$(I-\sym{Wcompetitor})^*(I-\sym{Wcompetitor})$.  Squaring changes the relevant singular values from
+$s_j(I-\sym{Wcompetitor})$ to $s_j(I-\sym{Wcompetitor})^2$, so a majorization statement at the squared level
+does not automatically imply the corresponding statement for the unsquared
+trace norm.  Proposition~4.4 attempts precisely that stronger passage. The
+counterexample in Section~\ref{sec:prop44} shows where it fails; the
+$\sym{NormQ}$-norm assertion and quantitative bound in
+Section~\ref{sec:sharp-displacement} give two valid conclusions.
+
+The same operator-ideal machinery is used in the perturbation inequalities.
+For the sine theorem, the statement $\sym{delta}\,\sym{NormN}(\sym{S})\leq \sym{NormN}(\sym{R})$ is meaningful for
+any supported symmetric operator ideal once both $S$ and the residual belong to
+that ideal.  The formal theorem therefore keeps the source's ``where-defined''
+convention and does not build an accidental finite-dimensional compactness
+assumption into the statement.
+
+\subsection{Sylvester separation and unbounded operators}
+
+The analytic engine behind the sine and tangent estimates is the Sylvester map
+\[
+  \sym{X} \longmapsto AX-XB.
+\]
+Under the interval/exterior or ordered spectral-gap configurations used above,
+Davis and Kahan obtain lower bounds of the form
+\[
+  \delta\,\sym{NormN}(\sym{X}) \leq \sym{NormN}(AX-XB).
+\]
+The perturbation theorems result by identifying the appropriate off-diagonal or
+trial-subspace operator $\sym{X}$ and rewriting its Sylvester residual in terms of the
+original perturbation.
+
+The unbounded case forces domain information into this argument.  Expressions
+such as $AX-XB$ are only meaningful on the appropriate domains, and the
+spectral separation may be encoded by a finite interval/exterior configuration
+or by an ordered pair of half-lines.  The reusable development represents
+unbounded operators as domain-carrying linear partial maps, develops the
+self-adjoint and semibounded interfaces needed by the proof, and connects
+spectral hypotheses to a form-bounded Sylvester gap.  Strong spectral cutoffs
+reduce parts of the argument to bounded operators; convergence of the relevant
+approximation numbers then permits passage back to the unbounded setting.
+
+Section~6 reuses this engine after weakening the trial-coordinate assumptions.
+Reflection pinching and direct-sum norm comparisons control the resulting block
+operators, while the Sylvester estimate supplies the spectral-gap factor.  This
+produces the generalized sine and tangent theorems and the pairwise-gap
+square-norm estimate at the scope stated in the source.
+
+\subsection{Formal foundations and ancestry}
+
+Several of the preceding objects had no sufficiently general interface in the
+available Lean libraries when this work began.  The development therefore adds
+a focused theory of principal angles and projections, approximation numbers and
+symmetric operator ideals, polar decomposition and direct rotations, Borel
+spectral calculus, unbounded self-adjoint partial maps, and real/complex
+transfer.  Complexification is used to prove analytic results once when the
+complex spectral theorem is the natural tool and then descend the conclusions
+to real Hilbert spaces where Davis and Kahan state them as well.
+
+Mathlib supplies the general algebraic, topological, Hilbert-space, and
+continuous-functional-calculus foundation \citep{mathlib2020,dedecker2025cfc}.
+Parts of the projection-valued-measure, Borel-calculus, and self-adjoint
+infrastructure were copied, adapted, or generalized from Spectra
+\citep{bornemann2026spectra}.  Reusable declarations from this project are
+organized under the \texttt{TauCeti.*} namespaces and are being prepared for
+integration with Tau Ceti \citep{tauceti2026}.  The paper-specific
+Davis--Kahan package contains the source statements, examples, and the
+Proposition~4.4 counterexample; Appendix~\ref{app:source-review} records the
+statement-level review procedure.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+For every $1\le p\le2$ and $\tau\ge0$, the complex spectral transport
+problem with penalty $\rho_{p,\tau}$ has an attained unrestricted
+finite-dimensional minimum given by the sum of principal-angle phase
+minima.  A single closed critical-cosine formula specifies exactly when
+a canonical direct rotation minimizes that cost.  The theorem includes
+the nuclear, intermediate Schatten, Charbonnier, and Frobenius regimes;
+it does not require competing transporters to preserve principal planes.
+
+In arbitrary complete complex Hilbert spaces, finite-cost transport is
+characterized by membership of the projection difference in $S_p$ at
+zero smoothing or $S_2$ at positive smoothing, together with balanced
+crossed defects.  Under these conditions the same phase-minimum series
+is finite and attained.  This ideal change reflects the behavior of
+the penalty near zero.  The relative-index obstruction and the
+quadratic direct-rotation case have classical predecessors
+\citep{davis1958separation,avron1994index}.
+
+The scalar field affects which complex-optimal phase patterns are
+available.  The finite-dimensional real unsmoothed Schatten minimum
+below exponent two is an attained weighted matching of principal
+angles.  At the nuclear endpoint, equality with the complex minimum
+has a sharp even-multiplicity criterion for strictly acute positive
+angles.  The signed-root equality certificate extends that criterion
+to trace-class real Hilbert-space projection pairs with balanced
+defects.  Separate verified results classify every complex optimizer
+for the strict unsmoothed Schatten, nuclear, and Charbonnier regimes,
+and establish local-to-global and stability properties under their
+specific hypotheses.  An all-optimizer classification for arbitrary
+$(p,\tau)$ and a general real smoothed-power matching formula remain
+outside the results proved here.
+
+The companion Lean formalization proves 28 of 29 reviewed source
+statements from Davis and Kahan (1970), including their unbounded
+self-adjoint sine-theta result and its operator-ideal hypotheses.
+Their printed Proposition~4.4 fails for real subspaces at arbitrarily
+small positive principal angles.  Our four-dimensional counterexample
+uses the complex phase mechanism already present in that source; the
+formal development identifies the invalid proof inequality and
+establishes valid replacements.  The new spectral transport theorems
+are distinguished from this historical correction and from the
+classical minimal-distortion problem \citep{bolotnikov2001minimal}.
+
+The mathematical setting and attribution are summarized in
+\cref{sec:related,tab:related-comparison}, with formal theorem evidence
+and source correspondence in the appendices.  The present optimization
+results do not assert improved spectral-gap perturbation constants or
+downstream algorithmic rates; those require separate links between the
+ambient transport cost and the error quantity used in an application.
+
+\section*{AI assistance disclosure}
+ChatGPT, Claude Code, and Codex were used for mathematical and library search,
+Lean proof development, debugging, and manuscript drafting. The authors
+reviewed the mathematical statements, correspondence to published sources,
+and the final exposition, and retain responsibility for the work.
+Appendix~\ref{app:formalization-process} describes the verification method.
+
+\section*{Code and data availability}
+The Lean sources, dependency pins, source-correspondence records, and manuscript
+sources are openly available at
+\url{https://github.com/AIQ-Kitware/aiq-dkps-formalization}.
+Appendix~\ref{app:artifact} identifies the mathematical modules and reproduction
+commands.
+
+\section*{Acknowledgments}
+
+This material is based upon work supported by the Defense Advanced Research
+Project Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings
+and conclusions or recommendations expressed in this material are those of the
+author(s) and do not necessarily reflect the views of the Defense Advanced
+Research Project Agency (DARPA).
+
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\clearpage
+\appendix
+
+\input{appendix_notation.tex}
+
+\section{Reading the Lean signatures}
+\label{app:lean-guide}
+\label{app:reading-lean}
+
+A Lean theorem declaration has the form
+\[
+  \texttt{theorem name (parameters) (hypotheses) : conclusion := proof}.
+\]
+Parameters introduce the mathematical objects under discussion.  A hypothesis
+such as \texttt{(hA : IsSelfAdjoint A)} supplies the corresponding fact;
+bundled predicates such as \texttt{IsTrialResidual} and
+\texttt{IsExactSpectralDecomposition} collect related assumptions.  Braces mark
+arguments normally inferred by Lean, while square brackets request typeclass
+instances supplying ambient algebraic, analytic, or topological structure.  The
+proposition after the final colon is checked by Lean's kernel
+\citep{demoura2021lean4}.
+
+In \Cref{lst:dk-sintheta-headline}, \texttt{RCLike} is the Mathlib abstraction
+covering $\mathbb{R}$ and $\mathbb{C}$.  A type
+\texttt{ContinuousLinearMap K F E} is a continuous linear map.  A type
+\texttt{LinearPMap K E E} is a linear partial map whose
+domain is a submodule; this is the representation used for possibly unbounded
+operators.  \texttt{N.Mem T} states that the ideal gauge associated with $\sym{NormN}$ is
+finite on $T$, and \texttt{N.gaugeReal T} is the corresponding real value.  The
+suffix \texttt{Real} refers to the codomain of the gauge and not to the scalar
+field.
+
+\input{appendix_process.tex}
+
+\input{appendix_transport_provenance.tex}
+
+\end{document}

@@ -1,0 +1,77 @@
+{
+  "schema": "formalization-draft2/quench-reuse-roots/v1",
+  "snapshot_date": "2026-08-17",
+  "purpose": "Ancillary audit of which project-local YWS/Davis-Kahan foundation declarations are conservatively visible from the Quench aligned-CMDS bridge. This is not part of the paper's source-completeness claim.",
+  "build_targets": [
+    "DkpsQuench2026.Geometry.AlignedCMDS"
+  ],
+  "import_modules": [
+    "DkpsQuench2026.Geometry.AlignedCMDS"
+  ],
+  "project_module_prefixes": [
+    "DkpsQuench2026",
+    "Acharyya2025",
+    "Acharyya2024",
+    "ForTauCeti",
+    "DavisKahan",
+    "YuWangSamworth2015"
+  ],
+  "root_groups": [
+    {
+      "id": "quench_finite_config_bridge",
+      "label": "finite-configuration embedding bridge",
+      "declarations": [
+        "DkpsQuench2026.quench_uniform_embedding_error_of_finite_configError"
+      ]
+    },
+    {
+      "id": "quench_aligned_spectral_bridge",
+      "label": "aligned spectral embedding bridge",
+      "declarations": [
+        "DkpsQuench2026.quench_uniform_embedding_error_of_aligned_spectral"
+      ]
+    },
+    {
+      "id": "quench_part2_aligned",
+      "label": "Quench Theorem 2 part 2 from aligned CMDS",
+      "declarations": [
+        "DkpsQuench2026.quench_part2_from_aligned_configError_hp"
+      ]
+    },
+    {
+      "id": "quench_query_eff_aligned",
+      "label": "query efficiency from aligned spectral estimator",
+      "declarations": [
+        "DkpsQuench2026.queryEfficient_nn_of_aligned_spectral"
+      ]
+    },
+    {
+      "id": "quench_query_eff_mean",
+      "label": "query efficiency from response mean",
+      "declarations": [
+        "DkpsQuench2026.queryEfficient_nn_of_response_mean"
+      ]
+    },
+    {
+      "id": "quench_query_eff_second_moment",
+      "label": "query efficiency from second moment",
+      "declarations": [
+        "DkpsQuench2026.queryEfficient_nn_of_second_moment"
+      ]
+    },
+    {
+      "id": "quench_query_eff_canonical",
+      "label": "canonical second-moment query efficiency",
+      "declarations": [
+        "DkpsQuench2026.queryEfficient_nn_of_second_moment_canonical"
+      ]
+    },
+    {
+      "id": "quench_query_eff_top_eigenvalue",
+      "label": "canonical top-eigenvalue query efficiency",
+      "declarations": [
+        "DkpsQuench2026.queryEfficient_nn_of_second_moment_canonical_topEigenvalue"
+      ]
+    }
+  ]
+}

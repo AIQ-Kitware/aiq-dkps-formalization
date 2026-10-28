@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="470" viewBox="0 0 1080 470">
+<desc>Adaptation of Manim P02Counterexample: the invariant-plane rotations of the verified real 4D witness and displacement singular-value profiles. The invariant decompositions for R and W are different.</desc>
+<rect width="1080" height="470" fill="white"/>
+<g font-family="DejaVu Sans, Arial, sans-serif">
+<text x="254.00" y="34.00" fill="#23364b" font-size="25" font-weight="600" text-anchor="middle" >Direct rotation R</text>
+<text x="806.00" y="34.00" fill="#23364b" font-size="25" font-weight="600" text-anchor="middle" >Competitor W</text>
+<line x1="542.00" y1="20.00" x2="542.00" y2="434.00" stroke="#d3dde5" stroke-width="2"  />
+<text x="254.00" y="62.00" fill="#657789" font-size="18" font-weight="400" text-anchor="middle" >two principal planes</text>
+<text x="806.00" y="62.00" fill="#657789" font-size="18" font-weight="400" text-anchor="middle" >a moving and a fixed plane</text>
+<circle cx="141" cy="149" r="65" fill="none" stroke="#d3dde5" stroke-width="2"/>
+<line x1="141.00" y1="149.00" x2="206.00" y2="149.00" stroke="#657789" stroke-width="2"  />
+<line x1="141.00" y1="149.00" x2="186.96" y2="103.04" stroke="#23364b" stroke-width="3"  stroke-linecap="round"/><polygon fill="#23364b" points="186.96,103.04 183.79,111.18 178.82,106.21"/>
+<line x1="206.00" y1="149.00" x2="186.96" y2="103.04" stroke="#D12A7B" stroke-width="5"  stroke-linecap="round"/>
+<text x="141.00" y="245.00" fill="#23364b" font-size="20" font-weight="400" text-anchor="middle" >+45°</text>
+<circle cx="368" cy="149" r="65" fill="none" stroke="#d3dde5" stroke-width="2"/>
+<line x1="368.00" y1="149.00" x2="433.00" y2="149.00" stroke="#657789" stroke-width="2"  />
+<line x1="368.00" y1="149.00" x2="413.96" y2="194.96" stroke="#23364b" stroke-width="3"  stroke-linecap="round"/><polygon fill="#23364b" points="413.96,194.96 405.82,191.79 410.79,186.82"/>
+<line x1="433.00" y1="149.00" x2="413.96" y2="194.96" stroke="#D12A7B" stroke-width="5"  stroke-linecap="round"/>
+<text x="368.00" y="245.00" fill="#23364b" font-size="20" font-weight="400" text-anchor="middle" >−45°</text>
+<circle cx="695" cy="149" r="65" fill="none" stroke="#d3dde5" stroke-width="2"/>
+<line x1="695.00" y1="149.00" x2="760.00" y2="149.00" stroke="#657789" stroke-width="2"  />
+<line x1="695.00" y1="149.00" x2="695.00" y2="84.00" stroke="#23364b" stroke-width="3"  stroke-linecap="round"/><polygon fill="#23364b" points="695.00,84.00 698.52,92.00 691.48,92.00"/>
+<line x1="760.00" y1="149.00" x2="695.00" y2="84.00" stroke="#D12A7B" stroke-width="5"  stroke-linecap="round"/>
+<text x="695.00" y="245.00" fill="#23364b" font-size="20" font-weight="400" text-anchor="middle" >+90°</text>
+<circle cx="918" cy="149" r="65" fill="none" stroke="#d3dde5" stroke-width="2"/>
+<line x1="918.00" y1="149.00" x2="983.00" y2="149.00" stroke="#657789" stroke-width="2"  />
+<line x1="918.00" y1="149.00" x2="983.00" y2="149.00" stroke="#23364b" stroke-width="3"  stroke-linecap="round"/><polygon fill="#23364b" points="983.00,149.00 975.00,152.52 975.00,145.48"/>
+<circle cx="983.00" cy="149.00" r="6" fill="#D12A7B"/>
+<text x="918.00" y="245.00" fill="#23364b" font-size="20" font-weight="400" text-anchor="middle" >0° (fixed)</text>
+<text x="42.00" y="299.00" fill="#23364b" font-size="20" font-weight="400" text-anchor="start" >Singular values of I − R</text>
+<text x="576.00" y="299.00" fill="#23364b" font-size="20" font-weight="400" text-anchor="start" >Singular values of I − W</text>
+<rect x="42.00" y="327" width="60.76" height="33" fill="#1F6FD1" rx="3"/>
+<rect x="104.76" y="327" width="60.76" height="33" fill="#1F6FD1" rx="3"/>
+<rect x="167.52" y="327" width="60.76" height="33" fill="#1F6FD1" rx="3"/>
+<rect x="230.28" y="327" width="60.76" height="33" fill="#1F6FD1" rx="3"/>
+<rect x="576.00" y="327" width="113.97" height="33" fill="#657789" rx="3"/>
+<rect x="691.97" y="327" width="113.97" height="33" fill="#657789" rx="3"/>
+<rect x="817.93" y="327" width="12" height="33" fill="none" stroke="#657789" stroke-width="2" stroke-dasharray="3,3" rx="2"/>
+<rect x="835.93" y="327" width="12" height="33" fill="none" stroke="#657789" stroke-width="2" stroke-dasharray="3,3" rx="2"/>
+<text x="42.00" y="386.00" fill="#657789" font-size="19" font-weight="400" text-anchor="start" >4 × 0.765…</text>
+<text x="42.00" y="420.00" fill="#23364b" font-size="22" font-weight="600" text-anchor="start" >trace sum = 3.061…</text>
+<text x="576.00" y="386.00" fill="#657789" font-size="19" font-weight="400" text-anchor="start" >2 × 1.414… + 0 + 0</text>
+<text x="576.00" y="420.00" fill="#23364b" font-size="22" font-weight="600" text-anchor="start" >trace sum = 2.828…</text>
+<text x="540.00" y="457.00" fill="#657789" font-size="17" font-weight="400" text-anchor="middle" >Both maps send U to V; both principal angles are 45°.</text>
+</g></svg>

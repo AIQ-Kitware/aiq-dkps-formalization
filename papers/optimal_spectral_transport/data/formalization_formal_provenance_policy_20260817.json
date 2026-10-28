@@ -1,0 +1,38 @@
+{
+  "schema": "formalization-draft2/formal-provenance-policy/v1",
+  "snapshot_date": "2026-08-17",
+  "purpose": "Credit formal sources separately from mathematical literature provenance and from resource accounting.",
+  "default_rule": "A project-local declaration in the checked-in formalization dependency inventory is credited as formalized in this project unless an explicit positive external-formalization claim applies to that exact declaration.",
+  "ordinary_library_rule": "Declarations outside the project-local inventory, including ordinary Mathlib/Lean dependencies, are upstream library dependencies and are not counted as project formalizations.",
+  "resource_rule": "Project-formalization credit means the current Lean artifact was produced or independently rederived in this project and belongs to the formalization campaign; it does not assert that every token or edit was machine-generated. Adapted/copied artifacts can also incur project adaptation cost while retaining upstream formal credit.",
+  "positive_claim_rule": "Only explicit source-side provenance evidence creates a non-default formal-provenance relation. Absence of a positive external formal-provenance citation is treated as project formalization under the project's citation discipline.",
+  "primary_categories": {
+    "project_native": "No positive external formal-provenance claim applies; formalization credit is local to this project.",
+    "project_with_formal_reference": "The source explicitly credits an external formal development for theorem selection, comparison, historical ancestry, or a donor strategy, while stating that the current definition/proof is independently developed or replaced locally.",
+    "adapted_or_ported": "The current Lean artifact materially adapts, ports, generalizes, or wraps a formal construction/result credited to an external formal source.",
+    "copied_or_rehomed": "The current Lean artifact is copied or essentially verbatim from an external formal source, possibly with namespace/module-system changes."
+  },
+  "priority": [
+    "copied_or_rehomed",
+    "adapted_or_ported",
+    "project_with_formal_reference",
+    "project_native"
+  ],
+  "external_sources": {
+    "spectra": {
+      "label": "Spectra Formalization Project",
+      "repository": "https://github.com/adambornemann-glitch/Spectra",
+      "revision": "8dbaaf6728d1342ae16acf79fd7eef7c59b37e63",
+      "license": "Apache-2.0",
+      "citation_key": "bornemann2026spectra",
+      "maintained_registry": "dev/tauceti/spectra-provenance-map.md"
+    },
+    "lean_stat_learning_theory": {
+      "label": "Statistical Learning Theory in Lean 4",
+      "repository": "https://github.com/YuanheZ/lean-stat-learning-theory",
+      "citation_key": "zhang2026sltrepo",
+      "maintained_registry": "dev/external-lean-references.md",
+      "note": "Referenced in source-side proof-source/cross-check comments; current positive claims are only added when a compiler-inventory declaration is explicitly linked to it."
+    }
+  }
+}

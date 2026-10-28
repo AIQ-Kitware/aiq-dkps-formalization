@@ -1,0 +1,76 @@
+{
+  "schema": "formalization-draft2/accounting-config/v3",
+  "history_cutoff_ref": "HEAD",
+  "study_start_date": "2026-06-03",
+  "primary_repository": "aiq-dkps-formalization",
+  "included_ledger_labels": {
+    "aiq-dkps-formalization": "historical primary checkout/worktree basename",
+    "aiq-gpu-docs": "historical Claude worktree basename for commits from this same Git repository"
+  },
+  "primary_history_ledger_labels": [
+    "aiq-dkps-formalization",
+    "aiq-gpu-docs"
+  ],
+  "exclude_commits_if_only_touch": [
+    "papers/formalization_draft2/",
+    "papers/dk_formalization_journal/"
+  ],
+  "gpt_chat_trailer_rule": {
+    "start_date": "2026-06-03",
+    "end_date": "2026-08-14",
+    "raw_models": [
+      "gpt-5.6-high",
+      "gpt-5.6-thinking"
+    ],
+    "resolved_model": "gpt-5.6-sol",
+    "channel": "chat_interface",
+    "apply_only_without_exact_ledger": true,
+    "rationale": "Author-confirmed study-window convention: GPT-5.6 High and Thinking co-author labels were chat-interface setting labels for GPT-5.6 Sol. Exact ledger model attribution, when present, remains authoritative. The rule is deliberately time-bounded and must not be projected onto future commits."
+  },
+  "pending_window_minutes": 0,
+  "ridge_alpha": 5.0,
+  "rolling_validation_folds": 5,
+  "bootstrap_draws": 1000,
+  "bootstrap_seed": 20260814,
+  "component_patterns": {
+    "yws": [
+      "YuWangSamworth2015/",
+      "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/"
+    ],
+    "davis_kahan": [
+      "DavisKahan/",
+      "ForTauCeti/Analysis/InnerProductSpace/DavisKahan/",
+      "papers/old/davis_kahan_prop_4_4/davis_kahan_prop_4_4_counterexample.tex"
+    ],
+    "quench": [
+      "DkpsQuench2026/"
+    ],
+    "tauceti_staging": [
+      "ForTauCeti/"
+    ],
+    "papers_docs": [
+      "papers/",
+      "docs/",
+      "prose/"
+    ],
+    "tooling": [
+      "scripts/",
+      "tools/",
+      "dev/",
+      ".llm_resource_tally/"
+    ]
+  },
+  "git_date_basis": "Git author timestamp local date; do not convert to UTC before applying date-bounded provenance rules or presenting snapshot dates",
+  "lean_churn_coverage_adjustments": [
+    {
+      "commit": "cd47c879fe146c2be6f698f4dea8161ac294001a",
+      "label": "Pristine Spectra vendor import",
+      "reason": "Bulk import of the pinned third-party Spectra snapshot; excluded only from the adjusted formalization-text coverage proxy."
+    },
+    {
+      "commit": "d503a2101672859154a55efa9a92bba41a60efec",
+      "label": "Retired Spectra fork deletion",
+      "reason": "Bulk deletion of the former Spectra tree after the project-specific fork was preserved as a patch; excluded only from the adjusted formalization-text coverage proxy."
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+% Semantic, multi-shade mathematical notation for the Davis--Kahan paper.
+% The six core families follow visualizations/dkvis/palette.py (LIGHT).
+% Subshades distinguish objects that are RELATED but not IDENTICAL.
+% Values were chosen for legibility against white manuscript paper; some
+% amber, green, and vermilion anchors are a little darker than the slides.
+%
+% A SINGLE ON/OFF SWITCH:
+%   \DKMathColorsfalse   (after \input{math_symbol_colors.tex} in paper.tex)
+% or pass \def\DKMonochromeMath{1} before \input{paper.tex}, without editing.
+% EVERY \sym, \like, and \dkrole obeys this switch, including the glossary.
+% No color is required to identify a mathematical object: the glyphs, indices,
+% definitions and adjacent prose also distinguish them.
+%
+% Families (base hue): exact/target=blue, trial/source=amber, exact unwanted=
+% cyan, angles and their operators=magenta, residual/displacement=green,
+% gaps=violet. Norm gauges=slate; provenance retains brown/steel/vermilion.
+% Scope matters: P is the exact-target projector in sine-theta, but the
+% SOURCE projector in the transport proof. Likewise R is the residual there
+% and the canonical direct rotation later. Never color by bare letter globally.
+\newif\ifDKMathColors
+\DKMathColorstrue
+\ifdefined\DKMonochromeMath
+  \DKMathColorsfalse
+\fi
+
+% Family anchors (print-compatible versions of the Manim light palette).
+\definecolor{dkfg}{HTML}{1B1F24}
+\definecolor{dkmuted}{HTML}{6B7280}
+\definecolor{dkwanted}{HTML}{1F6FD1}
+\definecolor{dktrial}{HTML}{A66705}
+\definecolor{dkunwanted}{HTML}{007C91}
+\definecolor{dksine}{HTML}{D12A7B}
+\definecolor{dkresid}{HTML}{087D43}
+\definecolor{dkgap}{HTML}{6E4BD8}
+\definecolor{dkold}{HTML}{705519}
+\definecolor{dkcurrent}{HTML}{054669}
+\definecolor{dkperturb}{HTML}{BB491B}
+\definecolor{dkrefuted}{HTML}{C62828}
+
+% Related yet distinguishable shades. These are NOT new unrelated categories:
+% objects inherit their parent family; a different shade signals a different
+% mathematical object (e.g., a frame versus its subspace or its projection).
+\definecolor{dkwantedframe}{HTML}{1254A9}
+\definecolor{dkwantedprojection}{HTML}{08618D}
+\definecolor{dkwantedrotation}{HTML}{4248B0}
+\definecolor{dkwantedspectrum}{HTML}{345F8F}
+\definecolor{dkwantedvector}{HTML}{1468AA}
+\definecolor{dktrialframe}{HTML}{905600}
+\definecolor{dktrialprojection}{HTML}{79511B}
+\definecolor{dktrialcompetitor}{HTML}{A04D10}
+\definecolor{dktrialspectrum}{HTML}{79591C}
+\definecolor{dktrialvector}{HTML}{9B522A}
+\definecolor{dkunwantedframe}{HTML}{006477}
+\definecolor{dkunwantedspectrum}{HTML}{00546B}
+\definecolor{dkunwantedprojection}{HTML}{145B6D}
+\definecolor{dkunwantedvector}{HTML}{256879}
+\definecolor{dkangleoperator}{HTML}{923478}
+\definecolor{dksineoperator}{HTML}{AA275A}
+\definecolor{dksineblock}{HTML}{B43F70}
+\definecolor{dksylvester}{HTML}{804074}
+\definecolor{dkanglemax}{HTML}{B32185}
+\definecolor{dkanglecos}{HTML}{824276}
+\definecolor{dkresidvector}{HTML}{086038}
+\definecolor{dkdisplacement}{HTML}{226C50}
+\definecolor{dkgaporiginal}{HTML}{4E4D89}
+\definecolor{dkgapstat}{HTML}{7039A7}
+\definecolor{dkgapinterval}{HTML}{574A82}
+\definecolor{dkambient}{HTML}{36516A}
+\definecolor{dknorm}{HTML}{475875}
+\definecolor{dknormaux}{HTML}{66526E}
+\definecolor{dkintertwiner}{HTML}{4A6280}
+\definecolor{dkturn}{HTML}{47647D}
+\definecolor{dkmix}{HTML}{505B65}
+
+% Coloring primitives; all descendants (including indices and adjoints) can
+% be colored as ONE semantic expression by writing \like{key}{expression}.
+\newcommand{\dkrole}[2]{\ifDKMathColors\textcolor{dk#1}{#2}\else#2\fi}
+\newcommand{\dkDeclareSymbol}[3]{%
+  \expandafter\def\csname dkrole@#1\endcsname{#3}%
+  \expandafter\def\csname dksym@#1\endcsname{\dkrole{#3}{#2}}%
+}
+\newcommand{\sym}[1]{%
+  \ifcsname dksym@#1\endcsname
+    \csname dksym@#1\endcsname
+  \else
+    \PackageError{dk-math-colors}{Unknown symbol key #1}{See math_symbol_colors.tex}%
+  \fi
+}
+\newcommand{\like}[2]{%
+  \ifcsname dkrole@#1\endcsname
+    \dkrole{\csname dkrole@#1\endcsname}{#2}%
+  \else
+    \PackageError{dk-math-colors}{Unknown role key #1}{See math_symbol_colors.tex}%
+  \fi
+}
+
+% Manim's original symbol keys, now split into semantic subshades.
+% Ambient and perturbed operators (provenance is independent of geometry).
+\dkDeclareSymbol{A}{A}{old}
+\dkDeclareSymbol{A1}{A_1}{old}
+\dkDeclareSymbol{a1}{a_1}{old}
+\dkDeclareSymbol{Ahat}{\widehat A}{current}
+\dkDeclareSymbol{Acurrent}{A}{current}
+\dkDeclareSymbol{H}{H}{perturb}
+\dkDeclareSymbol{H0}{H_0}{perturb}
+\dkDeclareSymbol{H1}{H_1}{perturb}
+\dkDeclareSymbol{B}{B}{perturb}
+\dkDeclareSymbol{b}{b}{perturb}
+% Trial/source family: subspace, frame, compressed operator, projector, vector.
+\dkDeclareSymbol{U}{U}{wanted}% Manim's U remains wanted in local slide notation.
+\dkDeclareSymbol{V}{V}{trial}% Manim's V remains trial in local slide notation.
+\dkDeclareSymbol{Usource}{U}{trial}
+\dkDeclareSymbol{E0}{E_0}{trialframe}
+\dkDeclareSymbol{A0}{A_0}{trialspectrum}
+\dkDeclareSymbol{v}{v}{trialvector}
+\dkDeclareSymbol{rho}{\rho}{trialspectrum}
+\dkDeclareSymbol{mu}{\mu}{trialspectrum}
+\dkDeclareSymbol{a0}{a_0}{trialspectrum}
+\dkDeclareSymbol{Wcompetitor}{W}{trialcompetitor}
+\dkDeclareSymbol{Psource}{P}{trialprojection}
+\dkDeclareSymbol{ProjSource}{P_U}{trialprojection}
+\dkDeclareSymbol{SourceVector}{x}{trialvector}
+\dkDeclareSymbol{Xframe}{X}{trialframe}
+\dkDeclareSymbol{Ftrial}{F}{trialframe}
+\dkDeclareSymbol{Eambient}{E}{ambient}
+% Exact/wanted family: the target subspace, its frame, projection and rotation.
+\dkDeclareSymbol{Vtarget}{V}{wanted}
+\dkDeclareSymbol{F0}{F_0}{wantedframe}
+\dkDeclareSymbol{Lambda0}{\Lambda_0}{wantedspectrum}
+\dkDeclareSymbol{u}{u}{wantedvector}
+\dkDeclareSymbol{f0}{f_0}{wantedvector}
+\dkDeclareSymbol{lambda0}{\lambda_0}{wantedspectrum}
+\dkDeclareSymbol{lambdau}{\lambda_u}{wantedspectrum}
+\dkDeclareSymbol{Pexact}{P}{wantedprojection}
+\dkDeclareSymbol{PexactPerp}{P^\perp}{unwantedprojection}
+\dkDeclareSymbol{ReflectionSigma}{\Sigma}{wantedprojection}
+\dkDeclareSymbol{Qtarget}{Q}{wantedprojection}
+\dkDeclareSymbol{ProjTarget}{P_V}{wantedprojection}
+\dkDeclareSymbol{Rrotation}{R}{wantedrotation}
+\dkDeclareSymbol{Yframe}{Y}{wantedframe}
+\dkDeclareSymbol{TargetVector}{y}{wantedvector}
+\dkDeclareSymbol{Hexact}{H}{wantedframe}% Coordinate Hilbert space (not perturbation).
+% Exact/unwanted family; the trial error operators are MAGENTA, not cyan.
+\dkDeclareSymbol{Uperp}{U^{\perp}}{unwanted}
+\dkDeclareSymbol{F1}{F_1}{unwantedframe}
+\dkDeclareSymbol{Lambda1}{\Lambda_1}{unwantedspectrum}
+\dkDeclareSymbol{w}{w}{unwantedvector}
+\dkDeclareSymbol{f1}{f_1}{unwantedvector}
+\dkDeclareSymbol{lambda1}{\lambda_1}{unwantedspectrum}
+\dkDeclareSymbol{lambdaw}{\lambda_w}{unwantedspectrum}
+\dkDeclareSymbol{Gunwanted}{G}{unwantedframe}
+\dkDeclareSymbol{E1}{E_1}{unwantedframe}
+\dkDeclareSymbol{Vperp}{V^{\perp}}{unwanted}
+% Angle and error geometry, including distinct rectangular and positive maps.
+\dkDeclareSymbol{theta}{\theta}{sine}
+\dkDeclareSymbol{Theta}{\Theta}{angleoperator}
+\dkDeclareSymbol{Theta0}{\Theta_0}{angleoperator}
+\dkDeclareSymbol{sintheta}{\sin\theta}{sine}
+\dkDeclareSymbol{sinTheta0}{\sin\Theta_0}{sineoperator}
+\dkDeclareSymbol{S}{S}{sineblock}
+\dkDeclareSymbol{X}{X}{sylvester}
+\dkDeclareSymbol{alphaAngle}{\alpha}{anglemax}
+\dkDeclareSymbol{CosAngle}{c}{anglecos}
+\dkDeclareSymbol{SinAngle}{s}{sineoperator}
+\dkDeclareSymbol{EpsilonAngle}{\varepsilon}{anglemax}
+\dkDeclareSymbol{PhiAngle}{\varphi}{angleoperator}
+\dkDeclareSymbol{Bblock}{B}{sineblock}
+\dkDeclareSymbol{Cblock}{C}{sylvester}
+\dkDeclareSymbol{Ablock}{A}{anglecos}
+% Residual/error-displacement family.
+\dkDeclareSymbol{r}{r}{residvector}
+\dkDeclareSymbol{R}{R}{resid}
+\dkDeclareSymbol{Kdisplacement}{K}{displacement}
+% Spectral separation family: gap and original gap are NOT identical.
+\dkDeclareSymbol{delta}{\delta}{gap}
+\dkDeclareSymbol{g}{g}{gaporiginal}
+\dkDeclareSymbol{Delta}{\Delta}{gapstat}
+\dkDeclareSymbol{alphaEndpoint}{\alpha}{gapinterval}
+\dkDeclareSymbol{betaEndpoint}{\beta}{gapinterval}
+% Spectral/projector and auxiliary matrix objects, context-scoped.
+\dkDeclareSymbol{P}{P}{fg}% Neutral historical Manim key; prefer Pexact/Psource.
+\dkDeclareSymbol{Q}{Q}{fg}% Neutral historical Manim key; prefer Qtarget.
+\dkDeclareSymbol{IntertwinerT}{T}{intertwiner}
+\dkDeclareSymbol{Jturn}{J}{turn}
+\dkDeclareSymbol{PolarU}{U}{intertwiner}
+\dkDeclareSymbol{Cturn}{C}{turn}
+\dkDeclareSymbol{Hmix}{H}{mix}% Hadamard mixing, NOT the perturbation H.
+\dkDeclareSymbol{Jreflect}{J}{trialprojection}
+\dkDeclareSymbol{Dblock}{D}{mix}
+\dkDeclareSymbol{OmegaOne}{\Omega_1}{turn}
+\dkDeclareSymbol{OmegaTwo}{\Omega_2}{intertwiner}
+\dkDeclareSymbol{Dplanar}{D}{wantedrotation}
+\dkDeclareSymbol{Hreflection}{H}{trialcompetitor}
+% Unitarily invariant gauge family; N, M are NOT a norm versus its input.
+\dkDeclareSymbol{NormN}{N}{norm}
+\dkDeclareSymbol{NormM}{M}{normaux}
+\dkDeclareSymbol{NormQ}{Q}{normaux}
+% Statistical application / operator provenance.
+\dkDeclareSymbol{Sigma}{\Sigma}{old}
+\dkDeclareSymbol{SigmaHat}{\widehat\Sigma}{current}
+\dkDeclareSymbol{YWSV}{V}{wanted}
+\dkDeclareSymbol{YWSVhat}{\widehat V}{trialframe}

@@ -1,0 +1,1284 @@
+% Lean-certified finite-dimensional complex Schatten transport theorem.
+\section{Exact Schatten costs for complex subspace transport}
+\label{sec:schatten-optimization}
+
+Fix $1<p<2$. For $0\leq t\leq\pi$, set
+\[
+ f_p(t)=\bigl(2\sin(t/2)\bigr)^p,
+ \qquad
+ a_p(t)=\cos(t/2)\bigl(2\sin(t/2)\bigr)^{p-1},
+ \qquad
+ \vartheta_p=\arccos\frac{2-p}{p}.
+\]
+Thus $f_p'=p a_p$ on $(0,\pi)$ and $0<\vartheta_p<\pi/2$.
+For a principal angle $\theta\in[0,\pi/2]$, define
+\begin{equation}
+ m_p(\theta)=\min_{0\leq\delta\leq\theta}
+       \{f_p(\theta+\delta)+f_p(\theta-\delta)\}.
+ \label{eq:schatten-plane-cost}
+\end{equation}
+Multiplying a planar direct rotation by $e^{i\delta}$ changes its two
+eigenphases from $(\theta,-\theta)$ to $(\theta+\delta,-\theta+\delta)$.
+The expression in \cref{eq:schatten-plane-cost} is its full displacement
+Schatten power sum.
+
+Bolotnikov, Li, and Rodman \citep[Lemmas~3.2--3.3]{bolotnikov2001minimal}
+solve the planar problem for $p\geq2$ and the right-angle case for
+$1\leq p<2$. Their general constrained problem also includes subspace
+transport. The following scalar classification supplies the dependence on
+the angle in the remaining exponent range.
+
+The development below proceeds from the scalar phase cost to the full
+ambient optimum, then to the entire minimizing set. The latter theorem
+permits repeated and right principal angles and provides an algebraic
+product parametrization; see
+\cref{thm:schatten-multiplicity-parameters}. The local-to-global result
+is \cref{prop:schatten-local-is-global}.
+
+\begin{proposition}[The scalar phase diagram]
+\label{prop:schatten-scalar-diagram}
+The minimum in \cref{eq:schatten-plane-cost} has the following description.
+\begin{enumerate}
+ \item If $0\leq\theta\leq\vartheta_p$, its unique minimizing phase is
+ $\delta=0$, and $m_p(\theta)=2f_p(\theta)$. Its phase derivative is
+ strictly positive on $(0,\theta)$.
+ \item If $\vartheta_p<\theta<\pi/2$, its unique minimizing phase
+ $\delta_p(\theta)$ is the unique solution in $(0,\theta)$ of
+ \begin{equation}
+    a_p(\theta+\delta)=a_p(\theta-\delta).
+    \label{eq:schatten-stationary-balance}
+ \end{equation}
+ \item At $\theta=\pi/2$, the unique minimizing phase is $\delta=\theta$,
+ and $m_p(\pi/2)=2^p$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+For $0\leq\delta<\theta<\pi/2$, both amplitudes in
+\cref{eq:schatten-stationary-balance} are positive. Their logarithmic ratio
+\[
+ D_{p,\theta}(\delta)=
+       \log a_p(\theta+\delta)-\log a_p(\theta-\delta)
+\]
+has the same sign as the derivative of the objective in
+\cref{eq:schatten-plane-cost}. Direct differentiation gives
+\begin{equation}
+ D_{p,\theta}'(\delta)=
+ \frac{\sin\theta\,[p\cos\theta-(2-p)\cos\delta]}
+      {\cos^2\delta-\cos^2\theta}.
+ \label{eq:schatten-log-ratio-derivative}
+\end{equation}
+The denominator is positive on $(0,\theta)$, and the bracket in the
+numerator increases strictly there. If $\theta\leq\vartheta_p$, that
+bracket is positive for every $\delta>0$, including when it vanishes at
+$\delta=0$. Since $D_{p,\theta}(0)=0$, the objective increases strictly
+on $[0,\theta]$.
+
+If $\theta>\vartheta_p$, the bracket starts negative and ends positive.
+Consequently $D_{p,\theta}$ first decreases and then increases. Moreover,
+$D_{p,\theta}(\delta)\to+\infty$ as $\delta\uparrow\theta$, because
+$a_p(2\theta)>0$ and $a_p(0)=0$. It has exactly one positive zero, and
+the objective decreases before that zero and increases afterward.
+Continuity includes the endpoint $\delta=\theta$.
+
+For $\theta=\pi/2$, \cref{eq:schatten-log-ratio-derivative} becomes
+$D_{p,\pi/2}'(\delta)=-(2-p)/\cos\delta<0$. The objective therefore
+decreases strictly up to its endpoint, where its two displacement singular
+values are $2$ and $0$. The case $\theta=0$ has only one admissible phase.
+\end{proof}
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=\linewidth]{figures/schatten_phase_diagram.pdf}
+ \caption{The scalar phase transition. The cutoff is
+ $\vartheta_p=\arccos((2-p)/p)$. At $p=3/2$, the canonical phase minimizes
+ the cost at $60^\circ$, while an interior phase gives a smaller cost at
+ $80^\circ$. The optimizing phase starts at zero and approaches the
+ principal angle at the right-angle boundary.}
+ \label{fig:schatten-phase-diagram}
+\end{figure}
+
+The scalar minimization determines the unrestricted complex problem as well.
+Write $\mathcal U(\sym{Psource},\sym{Qtarget})
+=\{\sym{Wcompetitor}\in U(n):\sym{Wcompetitor}\sym{Psource}
+\sym{Wcompetitor}^{*}=\sym{Qtarget}\}$ for the transporters of
+two orthogonal projections of equal rank. Here the amber projection
+$\sym{Psource}$ denotes the source subspace and the blue projection
+$\sym{Qtarget}$ the target, consistently with the notation of
+\cref{sec:sharp-displacement}.
+
+\begin{proposition}[The unrestricted planar minimum]
+\label{prop:schatten-planar-minimum}
+For two complex lines of principal angle $\theta$ in $\mathbb C^2$,
+the minimum displacement power over all unitary transporters is
+$m_p(\theta)$.
+\end{proposition}
+
+\begin{proof}
+Let $x$ be a unit vector in the source line. For an admissible $W$,
+$|\langle x,Wx\rangle|=\cos\theta$. Write its eigenphases in
+$[-\pi,\pi]$ as $\alpha,\beta$. In an orthonormal eigenbasis,
+\[
+ \langle x,Wx\rangle=s e^{i\alpha}+(1-s)e^{i\beta},\qquad 0\leq s\leq1.
+\]
+Multiplying this average by $e^{-i(\alpha+\beta)/2}$ gives real part
+$\cos((\alpha-\beta)/2)$. If $|\alpha|+|\beta|<2\theta$, its modulus
+would consequently be at least
+$\cos((|\alpha|+|\beta|)/2)>\cos\theta$, a contradiction. Thus
+$|\alpha|+|\beta|\geq2\theta$.
+
+Scale the two nonnegative absolute eigenphases down, if necessary, until
+their sum is $2\theta$. Both remain in $[0,\pi]$, where $f_p$ increases.
+Reordering the resulting angles gives $\theta+\delta,\theta-\delta$
+for some $0\leq\delta\leq\theta$. Hence
+\[
+ \|I-W\|_p^p=f_p(|\alpha|)+f_p(|\beta|)
+       \geq f_p(\theta+\delta)+f_p(\theta-\delta)\geq m_p(\theta).
+\]
+The zero total-angle case has $\theta=0$ and the same conclusion.
+An optimizing scalar phase attains the bound.
+\end{proof}
+
+\begin{theorem}[Independent principal-plane minimization]
+\label{thm:schatten-independent-planes}
+Let $P,Q$ be orthogonal projections of rank $r$ on $\mathbb C^n$, and let
+$\theta_1,\ldots,\theta_r\in[0,\pi/2]$ be their principal angles, with
+multiplicity. Then
+\begin{equation}
+ \boxed{\min_{\sym{Wcompetitor}\in\mathcal U(P,Q)}\|I-\sym{Wcompetitor}\|_p^p
+                 =\sum_{j=1}^r m_p(\like{theta}{\theta_j}).}
+ \label{eq:schatten-unrestricted-minimum}
+\end{equation}
+An attaining transporter is the identity on the fixed summands of a
+cosine--sine decomposition and, on each nonzero principal plane, a scalar
+phase of the direct rotation with phase $\delta_p(\theta_j)$ or its
+negative. In particular, allowing transports that mix principal planes
+cannot lower the minimum.
+\end{theorem}
+
+This is an optimum over the \emph{entire} unitary transport fiber, not just
+over transports chosen to preserve a prescribed set of principal planes.
+Independent plane optimization immediately constructs a feasible unitary
+and hence gives an upper bound. The content of the theorem is the matching
+lower bound for every other feasible unitary. For the formal Lean signature,
+\texttt{phaseMinimum} is the scalar function $m_p$, and the extended
+nonnegative exponent is required to have finite real value in $(1,2)$.
+
+
+\begin{lstlisting}[style=leanpaper,
+ caption={Lean signature for the unrestricted Schatten minimum. The surrounding
+ finite-dimensional complex Hilbert-space context is omitted. The parameter
+ \texttt{p} is an extended nonnegative real; the hypotheses require its finite
+ real value to lie in $(1,2)$. The scalar minimum is \texttt{phaseMinimum}.},
+ label={lst:schatten-global}]
+theorem exists_unitary_minimizing_schatten_transport_principalAngles_complex
+    (p : ENNReal) [Fact (1 <= p)] (hp : p ≠ ⊤)
+    (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
+    (K L : Submodule Complex E)
+    (hKL : Module.finrank Complex K = Module.finrank Complex L) :
+    ∃ W : LinearIsometryEquiv (RingHom.id Complex) E E,
+      K.map W.toLinearMap = L ∧
+      UnitarilyInvariantSeminorm.schatten Complex E E p
+          (LinearMap.id - W.toLinearMap) ^ p.toReal =
+        (Finset.univ.sum (fun i : Fin (Module.finrank Complex K) =>
+          phaseMinimum p.toReal (K.principalAngles L i))) ∧
+      ∀ T : LinearIsometryEquiv (RingHom.id Complex) E E,
+        K.map T.toLinearMap = L ->
+        (Finset.univ.sum (fun i : Fin (Module.finrank Complex K) =>
+          phaseMinimum p.toReal (K.principalAngles L i))) <=
+          UnitarilyInvariantSeminorm.schatten Complex E E p
+            (LinearMap.id - T.toLinearMap) ^ p.toReal
+\end{lstlisting}
+
+We give the reduction to principal planes before proving the theorem.
+Extend the scalar cost to the $2\pi$-periodic function
+\[
+ \phi_p(t)=\bigl(2|\sin(t/2)|\bigr)^p.
+\]
+It is continuously differentiable because $p>1$. If
+$W=\sum_j e^{it_j}E_j$ is a spectral decomposition of a unitary, put
+\[
+ G_p(W)=\sum_j\phi_p'(t_j)E_j.
+\]
+The definition is independent of the phase representatives. This
+self-adjoint operator commutes with $W$.
+
+\begin{proposition}[First variation and two spectral roots]
+\label{prop:schatten-critical-blocks}
+If $W$ is a local minimum of the displacement power on $\mathcal U(P,Q)$ and
+$J=2P-I$, then
+\begin{equation}
+ JG_p(W)J=-G_p(W).
+ \label{eq:schatten-gradient-anticommutation}
+\end{equation}
+For each positive eigenvalue $g$ of $G_p(W)$, the spaces $H_g$ and
+$H_{-g}$ have the same dimension. Identifying them by $J$, the restriction
+of $W$ to their sum has the form
+\begin{equation}
+ W_+=e^{ia}\exp\bigl(i(b-a)A\bigr),\qquad
+ W_-=e^{-ia}\exp\bigl(-i(b-a)B\bigr),
+ \label{eq:schatten-critical-two-roots}
+\end{equation}
+where $A,B$ are orthogonal projections on $H_g$ and
+\[
+ 0<a<\vartheta_p<b<\pi,\qquad p a_p(a)=p a_p(b)=g.
+\]
+When $g=p a_p(\vartheta_p)$, both restrictions instead have the single
+eigenphase $\vartheta_p$ and $-\vartheta_p$, respectively.
+\end{proposition}
+
+\begin{proof}
+For a Hermitian $H$ commuting with $P$, the curve $W\exp(itH)$ remains
+in $\mathcal U(P,Q)$. The spectral first-derivative formula gives
+\begin{equation}
+ \left.\frac{d}{dt}\|I-W\exp(itH)\|_p^p\right|_{t=0}
+              =\operatorname{tr}(G_p(W)H).
+ \label{eq:schatten-first-variation}
+\end{equation}
+For completeness, choose a local logarithm of the unitary near $W$ with
+its cut outside the finite spectrum. Apply the differentiability theorem
+for Hermitian spectral functions \citep[Theorem~1.1]{lewis1996derivatives}
+to the resulting Hermitian logarithm. In an eigenbasis, differentiating
+$W\exp(itH)$ shows that the diagonal entries of the logarithm's derivative
+are those of $H$, which gives \cref{eq:schatten-first-variation}.
+The derivative vanishes for every such $H$. Taking $H$ supported on
+either diagonal block relative to $P\oplus P^\perp$ shows that the two
+diagonal compressions of $G_p(W)$ vanish. This is
+\cref{eq:schatten-gradient-anticommutation}.
+
+The operator $J$ therefore interchanges $H_g$ and $H_{-g}$. On their sum
+we can write $J=\left(\begin{smallmatrix}0&I\\I&0\end{smallmatrix}\right)$.
+Since $W$ commutes with $G_p(W)$, it is block diagonal there. On
+$(0,\pi)$,
+\begin{equation}
+ a_p'(t)=\frac12\bigl(2\sin(t/2)\bigr)^{p-2}
+                    [p\cos t-(2-p)].
+ \label{eq:schatten-amplitude-derivative}
+\end{equation}
+Thus $a_p$ increases strictly up to $\vartheta_p$ and decreases strictly
+afterward, with zero endpoint values. The equation $p a_p(t)=g$ has
+exactly the two stated roots, except at its maximum, where the roots
+coincide. The signs of $\phi_p'$ distinguish the positive and negative
+phase spaces and give \cref{eq:schatten-critical-two-roots}.
+\end{proof}
+
+\begin{lemma}[Second variation on a two-phase block]
+\label{lem:schatten-two-phase-hessian}
+Let $\alpha,\beta\in(-\pi,\pi)\setminus\{0\}$ be distinct and satisfy
+$\phi_p'(\alpha)=\phi_p'(\beta)$. For an orthogonal projection $A$, put
+$V=e^{i\alpha}(I-A)+e^{i\beta}A$. If $X=X^*$, then
+\begin{align}
+ \left.\frac{d^2}{dt^2}\|I-V\exp(itX)\|_p^p\right|_{t=0}
+  &=\phi_p''(\alpha)\|(I-A)X(I-A)\|_2^2
+    +\phi_p''(\beta)\|AXA\|_2^2.
+ \label{eq:schatten-two-phase-hessian}
+\end{align}
+Here $\|\cdot\|_2$ is the Frobenius norm.
+\end{lemma}
+
+\begin{proof}
+Choose a smooth Hermitian logarithm $L(t)$ of $V\exp(itX)$ near zero,
+with $L(0)=\alpha(I-A)+\beta A$. The spectral trace Hessian formula
+\citep[Theorem~3.3]{lewis2001twice} applies to the sum of the scalar
+function $\phi_p$ near these two nonzero phases. Its Hermitian version
+follows from the real symmetric version by realification, which doubles
+both spectral traces. Since the two scalar first derivatives agree, the
+cross terms between distinct eigenspaces vanish. The second derivative
+along $L(t)$ is therefore
+\[
+ \phi_p''(\alpha)\|(I-A)L'(0)(I-A)\|_2^2
+ +\phi_p''(\beta)\|AL'(0)A\|_2^2
+ +\phi_p'(\alpha)\operatorname{tr}L''(0).
+\]
+Differentiate $\exp(iL(t))=V\exp(itX)$ and compress to its initial
+eigenspaces. The exponential power series gives
+\[
+ AL'(0)A=AXA,\qquad
+ (I-A)L'(0)(I-A)=(I-A)X(I-A).
+\]
+Finally,
+\[
+ \exp(i\operatorname{tr}L(t))=\det(V)\exp(it\operatorname{tr}X).
+\]
+Continuity fixes the integer ambiguity, so $\operatorname{tr}L(t)$ is
+affine near zero and its second derivative vanishes. This proves the
+formula.
+\end{proof}
+
+\begin{proposition}[Exclusion of overlapping large-phase spaces]
+\label{prop:schatten-no-mixing}
+At a local minimum, the two large-phase projections in
+\cref{eq:schatten-critical-two-roots} satisfy $AB=0$.
+\end{proposition}
+
+\begin{proof}
+Suppose $AB\ne0$ and set
+\begin{equation}
+ X=AB+BA.
+ \label{eq:schatten-mixing-direction}
+\end{equation}
+This operator is Hermitian, and idempotence gives
+\[
+ (I-A)X(I-A)=(I-B)X(I-B)=0,\qquad
+ AXA=2ABA,\quad BXB=2BAB.
+\]
+Use the same $X$ on $H_g$ and $H_{-g}$ and zero on the remaining
+blocks. The resulting Hermitian $H=\operatorname{diag}(X,X)$ commutes
+with $J$, so $W\exp(itH)$ is feasible.
+
+Apply \cref{lem:schatten-two-phase-hessian} to $W_+$ and $W_-$.
+Their phase derivatives are constant on each block, and $\phi_p''$ is
+even. The complementary compressions vanish, leaving
+\begin{equation}
+ \left.\frac{d^2}{dt^2}\|I-W\exp(itH)\|_p^p\right|_{t=0}
+     =4f_p''(b)\bigl(\|ABA\|_2^2+\|BAB\|_2^2\bigr)<0.
+ \label{eq:schatten-mixing-negative-curvature}
+\end{equation}
+Indeed, $f_p''(b)=p a_p'(b)<0$ because $b>\vartheta_p$.
+Also $ABA=(BA)^*(BA)$, so $AB\ne0$ implies $ABA\ne0$.
+Thus the displayed squared-norm sum is positive. All other spectral
+blocks stay fixed along the curve, so zero displacement singular values
+there do not affect this second derivative. The negative second variation
+contradicts local minimality, proving $AB=0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:schatten-independent-planes}]
+The feasible set is nonempty and compact, so a minimum exists. Choose a
+minimizer $W$ and decompose by the eigenspaces of $G_p(W)^2$. These
+spaces reduce $P$, $W$, and $Q=WPW^*$.
+
+Consider a nonzero spectral block. When the amplitude roots coincide,
+it is a sum of canonical planes with angle $\vartheta_p$. Otherwise,
+\cref{prop:schatten-no-mixing} gives the orthogonal decomposition
+\[
+ H_g=\operatorname{ran}A\oplus\operatorname{ran}B
+              \oplus(\ker A\cap\ker B).
+\]
+The common kernel produces canonical planes of angle $a$, each with
+cost $2f_p(a)=m_p(a)$. Each of the other two summands produces a plane
+with eigenphases $(b,-a)$ or $(a,-b)$.
+
+Put $\sigma=(a+b)/2$. We have $a+b<\pi$: indeed,
+\[
+ \frac{a_p(\pi-a)}{a_p(a)}
+        =\tan(a/2)^{2-p}<1,
+\]
+and $a_p$ decreases strictly on $(\vartheta_p,\pi)$. The phase
+$(b-a)/2$ satisfies \cref{eq:schatten-stationary-balance} for
+$\theta=\sigma$, so \cref{prop:schatten-scalar-diagram} implies
+$\sigma>\vartheta_p$ and $f_p(a)+f_p(b)=m_p(\sigma)$.
+To identify the geometric angle, note that on $H_g\oplus H_{-g}$,
+\[
+ (2Q-I)(2P-I)=
+ \operatorname{diag}(W_+W_-^*,W_-W_+^*).
+\]
+Its scalar phases on the displayed summands are $\pm2a$ or
+$\pm(a+b)$, so their principal angles are exactly $a$ or $\sigma$.
+The cost on every nonzero spectral block is consequently the sum of
+the corresponding $m_p$ costs.
+
+On $\ker G_p(W)$ the unitary has only eigenvalues $1$ and $-1$.
+Its displacement singular values are consequently zero or two. The
+projection-distance inequality gives
+\[
+ \|I-W\|_p^p
+   =2^{p-1}\|I-W\|_1
+   \geq2^{p-1}\|P-Q\|_1
+   =2^p\sum_j\sin\theta_j.
+\]
+For every physical angle,
+$m_p(\theta)\leq(2\sin\theta)^p\leq2^p\sin\theta$, using
+$p>1$ and $0\leq\sin\theta\leq1$. This block therefore also costs at
+least the sum of its principal-plane minima. Combining the blocks gives
+the lower inequality in \cref{eq:schatten-unrestricted-minimum}.
+
+For the reverse inequality, use a cosine--sine decomposition of $P,Q$.
+On each nonzero principal plane choose the scalar phase from
+\cref{prop:schatten-scalar-diagram}, and use the identity on the remaining
+fixed space. The orthogonal sum is an admissible unitary. Schatten
+power sums add across these blocks, giving exactly the right-hand side
+of \cref{eq:schatten-unrestricted-minimum}.
+\end{proof}
+
+
+\begin{corollary}[The canonical cutoff]
+\label{cor:schatten-canonical-cutoff}
+The canonical rotation, completed by right-angle rotations when necessary,
+is globally minimizing if and only if every principal angle satisfies
+$\theta_j\leq\vartheta_p$. If any angle exceeds this cutoff, an
+independently phase-modified transport has strictly smaller cost.
+In the canonical regime the minimizer is unique; outside it there are
+at least two distinct global minimizers.
+\end{corollary}
+
+\begin{proof}
+The canonical displacement power is $\sum_j 2f_p(\theta_j)$.
+Each scalar minimum is at most its canonical cost, with equality precisely
+for $\theta_j\leq\vartheta_p$ by the scalar classification, including
+zero and right angles. Apply \cref{thm:schatten-independent-planes} and
+sum these nonnegative differences.
+The uniqueness assertions follow from
+\cref{cor:schatten-unique-minimum}.
+\end{proof}
+
+The exact cutoff has a separate Lean proof with quantification over
+every admissible unitary, in the same finite-dimensional complex setting
+as \cref{thm:schatten-independent-planes}. In particular, the cutoff is
+not merely necessary or sufficient for a selected planar phase family.
+
+\begin{proposition}[The exceptional part of every optimizer]
+\label{prop:schatten-optimal-kernel}
+Let $W$ be any global minimizer and put $Z=\ker G_p(W)$.
+Its restriction to $Z$ is a self-adjoint unitary transporting
+$\operatorname{ran}P\cap Z$ onto $\operatorname{ran}Q\cap Z$.
+Every principal angle of this restricted pair is zero or $\pi/2$.
+If the original pair is acute, $W$ fixes $Z$ pointwise.
+\end{proposition}
+
+\begin{proof}
+The spectral decomposition above splits the cost into attained scalar
+minima on the nonzero gradient blocks and the cost $F_Z$ on $Z$.
+It splits the principal-angle sum into the same nonzero-block sum and
+$M_Z$, the sum of scalar minima for the restricted pair. Thus
+\[
+ \|I-W\|_p^p-\sum_j m_p(\theta_j)=F_Z-M_Z.
+\]
+Global optimality forces $F_Z=M_Z$. The restriction to $Z$ is a
+reflection, so the projection-distance bound gives
+\[
+ F_Z\geq2^p\sum_j\sin\xi_j\geq\sum_jm_p(\xi_j)=M_Z,
+\]
+where $\xi_j$ are the restricted principal angles. For
+$0<\xi<\pi/2$, the scalar endpoint competitor satisfies
+\[
+ m_p(\xi)\leq(2\sin\xi)^p<2^p\sin\xi.
+\]
+Equality of the sums therefore excludes every interior angle.
+Restriction to a subspace invariant under the target projection cannot
+increase the directed projection gap. An acute ambient pair consequently
+has an acute restricted pair. In that case all $\xi_j$ vanish, hence
+$F_Z=0$ and the restriction is the identity.
+\end{proof}
+
+\begin{proposition}[Feasible descent from reflecting blocks]
+\label{prop:schatten-reflecting-descent}
+Let $d,k\in\mathbb R$ satisfy $d^2+k^2=1$, and put
+\[
+ S=\begin{pmatrix}-d&-k\\-k&d\end{pmatrix},\qquad
+ P_0=\begin{pmatrix}1&0\\0&0\end{pmatrix},\qquad
+ W(t)=S\begin{pmatrix}
+   e^{i(d+1)t/2}&0\\0&e^{i(d-1)t/2}
+ \end{pmatrix}.
+\]
+Then $W(t)$ is unitary and $W(t)P_0W(t)^*=SP_0S^*$ for every $t$.
+For every $p>1$,
+\[
+ \|I-W(t)\|_p^p
+   =2^p-\frac{p2^p d^2}{8}t^2+o(t^2)\qquad(t\to0).
+\]
+If $d\ne0$, $S$ is not a local minimum among unitary transporters
+from $P_0$ to $SP_0S^*$. This exclusion holds inside any ambient
+orthogonal reducing decomposition, with every complementary unitary
+block fixed. A nonzero common reducing subspace of the source projection
+and transporter on which the transporter is $-I$ also excludes local
+minimality.
+\end{proposition}
+
+\begin{proof}
+The diagonal factor commutes with $P_0$, proving feasibility. Write
+\[
+ u=dt/2,\qquad \chi=\arcsin(d\sin(t/2)),\qquad
+ \alpha=u-\chi,\quad \beta=u+\chi.
+\]
+The trace and determinant of $W(t)$ equal those of the diagonal
+matrix with entries $e^{i\alpha},-e^{i\beta}$. Since $W(t)$ is
+normal, its actual displacement cost is therefore
+\[
+ |2\sin(\alpha/2)|^p+|2\cos(\beta/2)|^p.
+\]
+At zero, $\alpha=\alpha'=0$ and $\beta'=d$. The small-phase chord
+is twice continuously differentiable and vanishes with its first
+derivative, so its cost is $O(|t|^{2p})=o(t^2)$. The other term has
+expansion $2^p-p2^p d^2t^2/8+o(t^2)$. This proves strict descent
+when $d\ne0$ without twice differentiating the cost of a vanishing
+singular value.
+
+Orthogonal extension preserves feasibility and continuity. Additivity
+of Schatten powers adds a constant complementary cost, so any ambient
+local minimum would give a local minimum of the displayed planar cost.
+Finally, on a nonzero negative identity block the scalar variation
+$-e^{it}I$ preserves the source and has cost
+$\dim(H_0)|2\cos(t/2)|^p$, strictly smaller than its initial cost for
+sufficiently small nonzero $t$.
+\end{proof}
+
+\begin{proposition}[Intrinsic reflecting-plane classification]
+\label{prop:schatten-intrinsic-reflecting-plane}
+Let $T$ be a local minimum of $\|I-T\|_p^p$ among all complex unitary
+transporters of a source projection $P$ to $TPT^*$, with finite $p>1$.
+Suppose $N$ is a two-dimensional common invariant subspace of $P$ and
+$T$, and $T^2x=x$ for every $x\in N$. Then either $T$ fixes $N$
+pointwise or
+\[
+ TPTx=x-Px\qquad(x\in N).
+\]
+Zero and full source restrictions are included and force the first
+alternative. More generally, any common invariant subspace on which
+$T^2=I$ and $TP=PT$ is fixed pointwise at a local minimum; this last
+assertion holds for every finite $p\geq1$.
+\end{proposition}
+
+\begin{proof}
+Finite-dimensional unitarity makes $N$ reducing for $T$, and
+self-adjointness of $P$ makes it reducing for $P$. Orthogonal extension
+and additivity of Schatten powers transfer local minimality to the
+actual restricted transporter $R=T|_N$. This restriction is a
+self-adjoint unitary.
+
+If $R$ commutes with the restricted source, its negative eigenspace is
+source-invariant. The scalar variation on that eigenspace excludes it
+unless it is zero, so $R=I$. This also proves the final assertion and
+handles constant source restrictions. The case $R=-I$ is excluded in
+the same way.
+
+Otherwise choose an orthonormal source basis with projection
+$\operatorname{diag}(1,0)$. A nonscalar self-adjoint planar involution
+has trace zero. Its diagonal entries are real and opposite, and
+rephasing the second basis vector makes its off-diagonal entries real.
+Thus its matrix is
+\[
+ \begin{pmatrix}-d&-k\\-k&d\end{pmatrix},
+ \qquad d^2+k^2=1,\quad k\geq0.
+\]
+This change of basis preserves the source projection, including when
+$k=0$. Proposition~\ref{prop:schatten-reflecting-descent} forces $d=0$.
+The resulting matrix conjugates $\operatorname{diag}(1,0)$ to
+$\operatorname{diag}(0,1)$, giving the claimed identity on $N$.
+\end{proof}
+
+\begin{corollary}[Complete reflecting-kernel block structure]
+\label{cor:schatten-kernel-fixed-right}
+At every constrained local minimum $W$, the actual kernel
+$Z=\ker G_p(W)$ has a complete orthogonal decomposition into nonzero
+common invariant subspaces of its source projection and unitary
+restriction, each of dimension at most two. Every block is fixed
+pointwise or is a two-dimensional block satisfying
+\[
+ W(P(Wx))=x-Px.
+\]
+Every one-dimensional block is fixed. The assertion includes an empty
+kernel and imposes no restriction on the other ambient eigenvalues.
+\end{corollary}
+
+\begin{proof}
+The source projection preserves $Z$ because it commutes with $G_p(W)^2$.
+The actual kernel unitary is a reflection $R=I-2S$, with $S$ an
+orthogonal projection. The two-projection decomposition
+\citep{halmos1969two} for $P|_Z$ and
+$S$ gives a complete orthogonal family of common invariant lines and
+planes. Invariance under $S$ also gives invariance under $R$.
+
+Local minimality descends first to $Z$ and then to each actual block.
+Endomorphisms in dimension at most one commute, so
+Proposition~\ref{prop:schatten-intrinsic-reflecting-plane} fixes each
+line. The same proposition gives the fixed-or-exchanged alternative
+on each plane. This constructs the stated complete family.
+\end{proof}
+
+\begin{lemma}[A reflecting transport certificate]
+\label{lem:schatten-reflecting-certificate}
+Let $P$ be an orthogonal projection on a finite real or complex Hilbert
+space, and let $R$ be a self-adjoint unitary. If
+\[
+ H=PRP+(I-P)R(I-P)\geq0,
+\]
+then $R$ minimizes $\|I-W\|_q^q$ among all unitaries satisfying
+$WPW^*=RPR$, for every $1\leq q\leq2$.
+\end{lemma}
+
+\begin{proof}
+Write $W=RD$. Feasibility implies $DP=PD$, and cyclicity of trace gives
+\[
+ \operatorname{Re}\operatorname{tr}W
+   =\operatorname{Re}\operatorname{tr}(HD)
+   \leq\|H\|_1=\operatorname{tr}H=\operatorname{tr}R.
+\]
+Thus $R$ minimizes Frobenius displacement, since
+$\|I-W\|_F^2=2(\dim E-\operatorname{Re}\operatorname{tr}W)$.
+Every displacement singular value lies in $[0,2]$, so
+\[
+ 2^{q-2}\|I-W\|_F^2\leq\|I-W\|_q^q.
+\]
+Equality holds for $R$, whose displacement singular values are zero
+or two. Combining the two inequalities proves the claim. The trace
+argument is the usual block Procrustes certificate; compare
+\citet[Theorems~3.4 and~4.2]{bolotnikov2001minimal}.
+\end{proof}
+
+\begin{theorem}[Every local minimum is global]
+\label{prop:schatten-local-is-global}
+\label{prop:schatten-local-global-no-minus-one}
+Every local minimum of $W\mapsto\|I-W\|_p^p$ on $\mathcal U(P,Q)$
+attains $\sum_jm_p(\theta_j)$ and is a global minimum. The same holds
+for $W\mapsto\|I-W\|_p$. Zero and right principal angles, repeated
+angles, eigenvalues $1$ and $-1$, and fixed ambient directions are
+included.
+\end{theorem}
+
+\begin{proof}
+At a local minimum let $R$ be the actual unitary restriction to
+$Z=\ker G_p(W)$ and let $P_Z$ be its source projection.
+Corollary~\ref{cor:schatten-kernel-fixed-right} supplies a complete
+orthogonal family of fixed blocks and source/complement exchanges.
+The compression
+\[
+ P_ZRP_Z+(I_Z-P_Z)R(I_Z-P_Z)
+\]
+is the identity on the fixed blocks and zero on the exchanged blocks.
+It is therefore an orthogonal projection. Lemma~\ref{lem:schatten-reflecting-certificate}
+proves that $R$ is globally optimal for the restricted pair.
+
+The attained global value for that pair is $M_Z$, by
+\cref{thm:schatten-independent-planes}. Consequently $F_Z=M_Z$.
+The cost-deficit identity in the proof of
+Proposition~\ref{prop:schatten-optimal-kernel} now gives
+$\|I-W\|_p^p=\sum_jm_p(\theta_j)$. Taking a positive power preserves
+both local and global minima of a nonnegative function, proving the
+norm statement as well.
+\end{proof}
+
+Local-to-global results for strictly convex unitarily invariant
+matrix distances also hold on Hermitian eigenvalue orbits and
+fixed-singular-value orbits \citep[Theorems~3.5 and~3.12]{massey2018local}.
+The feasible set here is the prescribed-projection transport fiber.
+
+\begin{proposition}[Angle preservation and fixed directions]
+\label{prop:schatten-angle-preservation}
+Every local minimum $W$ commutes with the intrinsic sine operator
+$S=|P-Q|$ and maps each eigenspace of $S$ onto itself. Consequently
+unequal principal-angle spaces cannot mix. Moreover,
+\[
+ Px=Qx\quad\Longrightarrow\quad Wx=x.
+\]
+Thus every optimizer fixes both the common source space and the common
+orthogonal ambient space, even when the pair has right angles.
+\end{proposition}
+
+\begin{proof}
+On each nonzero-gradient pair in the spectral decomposition, the two
+transporter eigenvectors are also eigenvectors of $S$ with the same
+eigenvalue $\sin((\alpha+\beta)/2)$. Hence $W$ commutes with $S$ there.
+On the gradient kernel, the actual restriction $R$ is self-adjoint.
+Let $P_Z,Q_Z$ be the restricted projections. Feasibility gives
+\[
+ R(P_Z-Q_Z)R=-(P_Z-Q_Z),
+\]
+so $R$ commutes with $(P_Z-Q_Z)^2$ and its positive square root.
+The sine operator of the restricted pair is the restriction of $S$.
+Completeness of the spectral decomposition proves $WS=SW$ on the
+whole space. Finite-dimensional unitarity then gives equality of the
+image of each eigenspace with itself. The sine is injective on
+$[0,\pi/2]$, giving the assertion about distinct angles.
+
+The kernel $N=\ker(P-Q)=\ker S$ is therefore reducing for $W$.
+It is also invariant under both projections, whose restrictions to
+$N$ coincide. Local minimality descends to the actual unitary
+restriction on $N$. Theorem~\ref{prop:schatten-local-is-global}
+makes that restriction globally minimizing. The identity is feasible
+and has cost zero there, so the restriction must be the identity.
+\end{proof}
+
+\begin{proposition}[The signed phases of every optimizer]
+\label{prop:schatten-all-signed-phases}
+For acute angles, extend $\delta_p(\theta)$ by zero at and below
+$\vartheta_p$. Let $W$ be any constrained local minimum and let
+$H$ be the positive spectral space of its actual gradient $G_p(W)$.
+There are an orthonormal basis $(v_i)$ of $H$, angles
+$0<\theta_i<\pi/2$, and signs $\varepsilon_i\in\{1,-1\}$ such that,
+writing $J=2P-I$,
+\[
+\begin{aligned}
+ Wv_i&=e^{i(\theta_i+\varepsilon_i\delta_p(\theta_i))}v_i,\\
+ WJv_i&=e^{i(-\theta_i+\varepsilon_i\delta_p(\theta_i))}Jv_i,\\
+ |P-Q|v_i&=\sin\theta_i\,v_i,\qquad
+ |P-Q|Jv_i=\sin\theta_i\,Jv_i.
+\end{aligned}
+\]
+The vectors $Jv_i$ form the paired negative-gradient basis.
+For every completed canonical rotation $R$, the same basis satisfies
+\[
+ Rv_i=e^{i\theta_i}v_i,\qquad RJv_i=e^{-i\theta_i}Jv_i,
+ \qquad
+ R^*Ww=e^{i\varepsilon_i\delta_p(\theta_i)}w
+ \quad(w=v_i,Jv_i).
+\]
+Thus each pair has a common signed optimal phase shift of the canonical
+phases $(\theta_i,-\theta_i)$. At and below the transition both choices agree.
+\end{proposition}
+
+\begin{proof}
+The positive-gradient basis construction gives phases
+$0<\alpha_i,\beta_i<\pi$ with strictly acute mean
+$\theta_i=(\alpha_i+\beta_i)/2$ and attained scalar cost
+\[
+ f_p(\alpha_i)+f_p(\beta_i)=m_p(\theta_i).
+\]
+Set $d_i=|\alpha_i-\beta_i|/2$. Nonnegativity of the phases gives
+$0\leq d_i\leq\theta_i$. The left-hand side is the scalar objective
+at $d_i$, so its unique minimizing phase gives
+$d_i=\delta_p(\theta_i)$. Ordering $\alpha_i,\beta_i$ therefore gives
+one of the two sign choices in the statement. The sine equations follow
+from the actual reflection-paired eigenvector equations. The gradient
+anticommutes with $J$, which identifies the negative spectral space.
+
+On $v_i$, the canonical intertwiner $A=QP+(I-Q)(I-P)$ and intrinsic
+cosine $C$ satisfy
+\[
+ Av_i=\cos\theta_i\,e^{i\theta_i}v_i,\qquad
+ Cv_i=\cos\theta_i\,v_i.
+\]
+Every completed canonical rotation satisfies $RC=A$. Since
+$\cos\theta_i>0$, cancellation gives $Rv_i=e^{i\theta_i}v_i$.
+The relation $RJ=JR^*$ gives the paired equation. Dividing the optimizer
+phases by these canonical phases proves the relative-phase formula.
+\end{proof}
+
+\begin{corollary}[Acute optimizers commute with canonical rotation]
+\label{cor:schatten-acute-canonical-commutation}
+If all principal angles are strictly below $\pi/2$, every local or
+global minimizing transporter commutes with the canonical rotation.
+Repeated, zero and critical angles are included.
+\end{corollary}
+
+\begin{proof}
+On the positive and negative gradient spaces, the preceding proposition
+gives a common eigenbasis. On the gradient kernel, acuteness and
+Proposition~\ref{prop:schatten-optimal-kernel} make the optimizer identity.
+Source invariance then makes the source and target projections agree
+there. Canonical rotation fixes every vector where these projections
+agree, so it too is identity on that kernel. The complete orthogonal
+decomposition proves commutation on the whole ambient space.
+\end{proof}
+
+\begin{corollary}[Exact uniqueness criterion]
+\label{cor:schatten-unique-minimum}
+The unrestricted complex transport problem has a unique global minimizer
+if and only if every principal angle is at most $\vartheta_p$.
+Equivalently,
+\[
+ \|P-Q\|\leq\frac{2\sqrt{p-1}}p.
+\]
+In this regime every local minimum is the canonical rotation, including
+at the critical angle and with arbitrary angle multiplicities.
+\end{corollary}
+
+\begin{proof}
+Suppose all principal angles are bounded by $\vartheta_p$, and take any
+local minimum. In the complete paired decomposition, apply the
+principal-angle trace identity to $f(t)=\max(t-\vartheta_p,0)$.
+The original angle sum vanishes. Every term in the paired sum and the
+restricted remainder sum is nonnegative, so every paired mean is at
+most $\vartheta_p$. Proposition~\ref{prop:schatten-all-signed-phases}
+then makes every relative scalar phase zero. Both operators fix the
+gradient kernel, so the local minimum equals canonical rotation.
+Compact attainment gives existence and hence uniqueness.
+
+Conversely, use a complete canonical paired frame and choose an attaining
+phase $0\leq\delta_j\leq\theta_j$ independently on every plane.
+The common shifts $\delta_j$ and $-\delta_j$ give two feasible ambient
+transporters, each attaining $\sum_j m_p(\theta_j)$. If any original
+principal angle is supercritical, so is some angle of this frame; scalar
+optimality there forces $\delta_j>0$. Since $\delta_j\leq\pi/2$, the
+two relative phases $e^{i\delta_j}$ and $e^{-i\delta_j}$ are distinct.
+The two global minimizers therefore differ.
+
+For equal-rank projections the gap is the largest principal sine.
+Monotonicity of sine on $[0,\pi/2]$ and
+\[
+ \sin\vartheta_p
+ =\sqrt{1-\left(\frac{2-p}{p}\right)^2}
+ =\frac{2\sqrt{p-1}}p
+\]
+give the norm criterion.
+\end{proof}
+
+\begin{corollary}[Uniqueness of the nearest commuting unitary]
+\label{cor:schatten-commutator-uniqueness}
+Let $A$ be unitary and $P$ an orthogonal projection. The minimum of
+$\|A-C\|_p$ over all unitary $C$ satisfying $CP=PC$ has a unique
+attainer if and only if
+\[
+ \|AP-PA\|\leq\frac{2\sqrt{p-1}}p.
+\]
+\end{corollary}
+
+\begin{proof}
+Set $Q=APA^*$. The bijection $C\mapsto T=CA^*$ identifies commuting
+unitaries with transports satisfying $TQT^*=P$, and
+$\|A-C\|_p=\|(I-T)A\|_p=\|I-T\|_p$.
+Apply \cref{cor:schatten-unique-minimum} to $Q,P$ and use
+$\|P-Q\|=\|(P-Q)A\|=\|AP-PA\|$.
+\end{proof}
+
+\begin{proposition}[All right-angle defect choices]
+\label{prop:schatten-all-right-defects}
+Put
+\[
+ H_{10}=\operatorname{ran}P\cap\ker Q,\qquad
+ H_{01}=\ker P\cap\operatorname{ran}Q,\qquad
+ N=H_{10}\oplus H_{01}.
+\]
+Every local minimizing transporter $W$ has exactly one unitary
+$D:H_{10}\to H_{01}$ such that
+\[
+ Wu=Du\quad(u\in H_{10}),\qquad
+ Wv=D^*v\quad(v\in H_{01}).
+\]
+Conversely, given any local minimizing transporter $W_0$ and any such
+unitary $D$, there is exactly one globally minimizing transporter with
+these two defect actions and with $W=W_0$ on $N^\perp$. Its cost splits as
+\[
+ \|I-W\|_p^p
+   =\|I_{N^\perp}-W|_{N^\perp}\|_p^p
+       +2^{p-1}\dim N.
+\]
+The other principal angles and their multiplicities are unrestricted.
+\end{proposition}
+
+\begin{proof}
+The intrinsic sine operator is identity on $N$.
+Every nonzero-gradient pair has sine eigenvalue
+$\sin((\alpha+\beta)/2)<1$. Orthogonality of eigenspaces and
+completeness of the paired-gradient decomposition imply
+$N\subseteq\ker G_p(W)$. The actual restriction of $W$ to $N$ is
+therefore a self-adjoint unitary. Feasibility exchanges $H_{10}$ and
+$H_{01}$; self-adjointness makes the two restrictions adjoints of each other,
+giving the unique $D$.
+
+For the converse, use $D$ and $D^*$ on the two defect sectors and
+$W_0$ on their orthogonal complement. These are reducing source and
+target summands, so their orthogonal sum is a feasible ambient unitary.
+Its defect restriction is a reflection anticommuting with source
+reflection, hence has trace zero. Its displacement singular values
+are zero and two with equal multiplicities. Thus its defect cost is
+$2^{p-1}\dim N$, independently of $D$. Additivity of Schatten powers
+preserves the full cost of $W_0$, which is globally minimal by
+Theorem~\ref{prop:schatten-local-is-global}. The prescribed actions
+on complementary summands determine $W$ uniquely.
+\end{proof}
+
+The planar right-angle optimizer relation is already treated by
+\citet[Lemma~3.3]{bolotnikov2001minimal}. Proposition~\ref{prop:schatten-all-right-defects}
+identifies the full defect action within an arbitrary subspace pair
+and proves its independence from all complementary optimizer choices.
+
+\begin{proposition}[Intrinsic phase parameters at repeated angles]
+\label{prop:schatten-intrinsic-angle-parameter}
+Let $W$ be any local minimum, let $R$ be any completed canonical rotation,
+and put $Z=R^*W$ and $J=2P-I$. For $0<\theta<\pi/2$, set
+\[
+ E_\theta=\ker\bigl(|P-Q|-\sin\theta\,I\bigr),\qquad
+ \delta=\delta_p(\theta).
+\]
+This space is invariant under $R,Z,J$, and the actual restricted relative
+unitary satisfies
+\[
+ Z|_{E_\theta}+(Z|_{E_\theta})^*=2\cos\delta\,I_{E_\theta}.
+\]
+If $\theta\leq\vartheta_p$, then $W=R$ on $E_\theta$.
+If $\theta>\vartheta_p$, there is exactly one orthogonal projection
+$B_\theta$ on $E_\theta$ such that
+\[
+ Z|_{E_\theta}
+   =(\cos\delta-i\sin\delta)I_{E_\theta}
+       +2i\sin\delta\,B_\theta.
+\]
+It commutes with both $R|_{E_\theta}$ and $J|_{E_\theta}$.
+Equivalently, $H_\theta=2B_\theta-I_{E_\theta}$ is a self-adjoint unitary
+and $Z|_{E_\theta}=\cos\delta\,I_{E_\theta}+i\sin\delta\,H_\theta$.
+The other principal angles may be zero, critical or right, and all
+multiplicities and empty angle spaces are allowed.
+\end{proposition}
+
+\begin{proof}
+On every fixed block of the actual gradient kernel the source and target
+projections agree. On every exchange block they are complementary.
+Their restricted sine operator therefore acts as zero or identity;
+the complete block family makes it an orthogonal projection.
+Since $0<\sin\theta<1$, symmetry of the sine operator makes
+$E_\theta$ orthogonal to that gradient kernel.
+
+Use the complete signed basis in
+\cref{prop:schatten-all-signed-phases}. Distinct physical angles have
+distinct sines, so only pairs of angle $\theta$ contribute to
+$E_\theta$. On each such pair, $Z$ has scalar phase
+$e^{i\varepsilon\delta}$, with $\varepsilon=\pm1$.
+Its sum with its adjoint is $2\cos\delta$, independently of the sign.
+The same paired basis diagonalizes $R$, giving commutation of $R$ and
+$Z$ on $E_\theta$. Both maps preserve sine eigenspaces; source reflection
+does too. Feasibility gives $ZJ=JZ$.
+
+At and below the cutoff $\delta=0$, and a unitary with real part
+identity equals identity. Above it, $0<\delta<\theta$, so
+$\sin\delta>0$. Unitarity and the scalar real-part identity put the
+spectrum of the restricted $Z$ in
+$\{\cos\delta-i\sin\delta,\cos\delta+i\sin\delta\}$.
+Its spectral projection at the second value is
+\[
+ B_\theta=
+ \frac{Z|_{E_\theta}-(\cos\delta-i\sin\delta)I_{E_\theta}}
+      {2i\sin\delta}.
+\]
+This proves existence, uniqueness and commutation with both geometric
+restrictions. The final representation follows by substitution.
+\end{proof}
+
+Extend $\delta_p$ to the endpoints by
+$\delta_p(0)=0$ and $\delta_p(\pi/2)=\pi/2$. For the intrinsic cosine
+$C$, define the unitary spectral phase factor
+\[
+ F_p(C)=\exp\bigl(i\delta_p(\arccos C)\bigr).
+\]
+This finite-dimensional functional calculus fixes cosine-one vectors and
+acts by $i$ on the cosine kernel.
+
+\begin{theorem}[All complex Schatten minimizers]
+\label{thm:schatten-all-phase-defect-minimizers}
+Use the fixed completed canonical rotation $R$ and put $J=2P-I$.
+A feasible unitary $T$ is globally minimizing if and only if there are
+an orthogonal projection $\Pi$ and a unitary
+$D:H_{10}\to H_{01}$ satisfying
+\[
+ [\Pi,R]=[\Pi,J]=0,\qquad
+ C R^*T=C\bigl(F_p(C)\Pi+F_p(C)^*(I-\Pi)\bigr),
+\]
+and
+\[
+ Tx=Dx\quad(x\in H_{10}),\qquad
+ Ty=D^*y\quad(y\in H_{01}).
+\]
+Every compatible projection and every such defect unitary occur jointly
+in exactly one globally minimizing transporter. All angle multiplicities,
+zero and right angles, and the critical threshold are included.
+The projection parameter can be redundant on inactive and right-angle
+directions.
+\end{theorem}
+
+\begin{proof}
+For necessity, write $Z=R^*T$. The preceding proposition gives commutation
+of $Z$ with $R$ on every interior angle space. Both rotations fix the
+zero-angle space, and the cosine annihilates the right-angle space.
+Consequently $CZ$ commutes with $R$ on the whole space. Feasibility gives
+$ZJ=JZ$, and $C$ commutes with both $Z$ and $J$.
+Thus the positive spectral projection
+\[
+ \Pi=\mathbf1_{(0,\infty)}\bigl(\operatorname{Im}(CZ)\bigr)
+\]
+commutes with $R$ and $J$.
+
+Jointly diagonalize $C$ and $\operatorname{Im}(CZ)$.
+On a vector with positive cosine eigenvalue $c=\cos\theta$, the
+scalar real-part identity and unitarity give the relative phase
+$\cos\delta_p(\theta)\pm i\sin\delta_p(\theta)$.
+Multiplication by $c>0$ preserves the sign of its imaginary part, so
+$\Pi$ selects the positive phase. The zero-phase case gives identity.
+At $c=0$ both sides of the weighted formula vanish.
+Proposition~\ref{prop:schatten-all-right-defects} supplies the unique
+defect identification.
+
+Conversely, diagonalize a prescribed compatible $\Pi$ in a paired
+canonical frame. Its eigenvalue is zero or one on both vectors of each
+reflected pair. Choose the negative or positive attaining phase accordingly.
+The resulting feasible unitary has cost $\sum_j m_p(\theta_j)$,
+which is minimal against all ambient competitors. Replace its right-angle
+action by the prescribed $D,D^*$; this preserves its cost and the
+cosine-weighted phase formula.
+
+Finally, the weighted formula and both defect actions determine the
+transporter uniquely. Since $R$ preserves $C$, equality of weighted
+relative phases implies $CT=CS$ for any two candidates. Their inverses
+then agree on the orthogonal complement of $\ker C$; the reflecting
+defect actions make their inverses agree on $\ker C$ as well.
+The candidates are therefore equal.
+\end{proof}
+
+\begin{theorem}[Nonredundant optimizer parameters]
+\label{thm:schatten-normalized-parameters}
+Put
+\[
+ B_p=C\bigl(F_p(C)-F_p(C)^*\bigr),\qquad E_p=(\ker B_p)^\perp.
+\]
+Each global optimizer in
+\cref{thm:schatten-all-phase-defect-minimizers} has exactly one pair
+$(\Pi,D)$ satisfying its formulas and $\operatorname{ran}\Pi\subseteq E_p$.
+Conversely, every compatible orthogonal projection with this range
+condition and every defect unitary determine a unique global optimizer.
+These correspondences give a bijection between the normalized
+phase/defect parameters and all global optimizers.
+
+The space $E_p$ is the orthogonal sum of the interior angle spaces with
+$\vartheta_p<\theta<\pi/2$. For the fixed pair and exponent, there is a
+finite constant $L\geq0$ such that the normalized projections of any two
+optimizers satisfy, in operator norm,
+\[
+ \|\Pi_T-\Pi_S\|\leq L\|T-S\|.
+\]
+\end{theorem}
+
+\begin{proof}
+Let $A_p$ be orthogonal projection onto $E_p$.
+A compatible projection $\Pi$ commutes with $C$, hence with $B_p$.
+It preserves $\ker B_p$ and its orthogonal complement, so $A_p\Pi$ is
+an orthogonal projection. The same kernel argument shows that $A_p$
+commutes with $R$ and $J$. Thus $A_p\Pi$ remains compatible. Since
+$B_pA_p=B_p$, it has the same weighted phase formula:
+\[
+ C\bigl(F_p(C)\Pi+F_p(C)^*(I-\Pi)\bigr)
+       =CF_p(C)^*+B_p\Pi.
+\]
+Apply \cref{thm:schatten-all-phase-defect-minimizers} to obtain existence
+in both directions. If two normalized phase projections give the same
+optimizer, their difference has range in $E_p$ and is annihilated by
+$B_p$. Its range is therefore zero. The optimizer's action on $H_{10}$
+determines $D$ uniquely.
+
+On a cosine eigenvector with physical angle $\theta$,
+\[
+ B_px=2i\cos\theta\sin\delta_p(\theta)\,x.
+\]
+This coefficient vanishes on fixed and right-angle directions. For
+$0<\theta<\pi/2$, it vanishes exactly when
+$\theta\leq\vartheta_p$, proving the stated description of $E_p$.
+
+The restriction of $B_p$ to $E_p$ is injective and $E_p$ is finite
+dimensional. Consequently there is a finite $k>0$ with
+$\|X\|\leq k\|B_pX\|$ whenever $\operatorname{ran}X\subseteq E_p$.
+Subtracting the two weighted phase formulas gives
+\[
+ B_p(\Pi_T-\Pi_S)=CR^*(T-S).
+\]
+Hence the recovery estimate holds with $L=k\|C\|$.
+\end{proof}
+
+\begin{theorem}[Multiplicity-space optimizer coordinates]
+\label{thm:schatten-multiplicity-parameters}
+Let $\mathcal M_p(P,Q)$ be the set of global minimizers, and put
+\[
+ \mathcal A_p=\{\theta\in(0,\pi/2):\theta>\vartheta_p,
+             \ \ker(R-e^{i\theta}I)\ne\{0\}\},\qquad
+ E_\theta^+=\ker(R-e^{i\theta}I).
+\]
+The set $\mathcal A_p$ is finite. Write $m_\theta=\dim_{\mathbb C}E_\theta^+$.
+There is a bijection of sets
+\begin{equation}
+ \mathcal M_p(P,Q)\simeq
+ \left(\prod_{\theta\in\mathcal A_p}
+    \coprod_{r=0}^{m_\theta}\operatorname{Gr}_{\mathbb C}(r,E_\theta^+)\right)
+       \times\operatorname{Iso}_{\mathrm u}(H_{10},H_{01}),
+ \label{eq:schatten-multiplicity-product}
+\end{equation}
+where $\operatorname{Gr}_{\mathbb C}(r,E)$ denotes the set of
+$r$-dimensional complex subspaces of $E$, and
+$\operatorname{Iso}_{\mathrm u}$ denotes unitary identifications.
+Every factor may be chosen independently. The empty product is a point.
+\end{theorem}
+
+\begin{proof}
+The map $\theta\mapsto e^{i\theta}$ is injective on $(0,\pi/2)$.
+The canonical rotation has finitely many eigenvalues, proving finiteness.
+Distinct positive eigenphases are neither equal nor complex conjugate,
+so their eigenspaces and reflected copies are mutually orthogonal.
+Source reflection maps $E_\theta^+$ onto
+$\ker(R-e^{-i\theta}I)$.
+
+A normalized compatible projection preserves every $E_\theta^+$.
+Its restriction there is an arbitrary orthogonal projection, and
+commutation with source reflection determines the restriction on the
+conjugate eigenspace. Conversely, prescribe such a projection on each
+$E_\theta^+$. Project onto the sum of their ranges and their reflected
+ranges. The resulting ambient projection commutes with $R$ and $J$ and
+has the prescribed restrictions. Its range lies in $E_p$ from
+\cref{thm:schatten-normalized-parameters}. It is unique: two such
+projections agree on the selected eigenspace pairs and vanish on their
+orthogonal complement.
+
+Apply \cref{thm:schatten-normalized-parameters}, keeping the defect
+identification independent. Finally, each orthogonal projection is
+determined by its range, whose dimension is one of
+$0,\ldots,m_\theta$. This gives \cref{eq:schatten-multiplicity-product}.
+\end{proof}
+
+\begin{theorem}[Topology and separation of optimizer families]
+\label{thm:schatten-optimizer-topology}
+Use the operator norm topology on the orthogonal-projection spaces
+$\mathcal P(E)$ from \cref{thm:smoothed-effective-coordinates}.
+With the notation of
+\cref{thm:schatten-multiplicity-parameters}, the actual phase restrictions
+and defect actions give a homeomorphism
+\[
+ \mathcal M_p(P,Q)\cong
+ \left(\prod_{\theta\in\mathcal A_p}\mathcal P(E_\theta^+)\right)
+       \times\operatorname{Iso}_{\mathrm u}(H_{10},H_{01}),
+\]
+where the optimizer and defect spaces also carry their operator norm
+topologies. The optimizer set is compact. Let $\Pi_\theta(T)$ denote the
+restriction of the normalized phase projection of $T$ to $E_\theta^+$.
+For each active angle,
+$T\mapsto\operatorname{rank}\Pi_\theta(T)$ is locally constant.
+Consequently every prescribed rank sector is open and closed, and every
+continuous family parametrized by a connected space has constant ranks.
+
+For the fixed pair and exponent there is a $\gamma>0$ such that
+\[
+ \operatorname{rank}\Pi_\theta(T)\ne
+ \operatorname{rank}\Pi_\theta(S)\text{ for some }\theta\in\mathcal A_p
+ \quad\Longrightarrow\quad \|T-S\|\geq\gamma.
+\]
+\end{theorem}
+
+\begin{proof}
+Orthogonal projections form a closed subset of the operator norm unit
+ball, hence a compact space in finite dimension. Commutation, reflection
+symmetry and support on the fixed effective phase space are closed
+conditions. Restriction and extension on the paired eigenspaces have a
+closed graph: their graph is specified by their values on every vector
+of each selected eigenspace. The supported extension is unique, so this
+bijection between compact Hausdorff spaces is a homeomorphism.
+
+For the normalized phase and defect coordinates, the graph of the
+ambient transporter is specified by the two defect actions and the
+weighted phase identity in \cref{thm:schatten-normalized-parameters}.
+These conditions are closed, and they determine an ambient unitary
+uniquely even without a feasibility hypothesis. The ambient unitary group
+is compact, so the closed graph gives continuity. The parameter space
+is compact and the optimizer space is Hausdorff; the inverse is therefore
+continuous as well. Compose the two homeomorphisms.
+
+If two idempotents are at operator norm distance less than one,
+restriction of either to the other's range is injective. Their ranks
+are therefore equal. This proves local constancy of each projection rank.
+Restriction contracts operator norm, so different ranks on one factor
+force the ambient normalized phase projections to be at distance at
+least one. The recovery estimate of
+\cref{thm:schatten-normalized-parameters} then gives the asserted positive
+separation. The constant depends on the fixed pair and exponent.
+\end{proof}
+
+\begin{corollary}[Exact count for simple active angles]
+\label{cor:schatten-simple-active-count}
+Suppose $H_{10}=H_{01}=\{0\}$ and $m_\theta=1$ for every
+$\theta\in\mathcal A_p$. Then
+\[
+ \#\mathcal M_p(P,Q)=2^{\#\mathcal A_p}.
+\]
+The multiplicities of inactive angles are unrestricted.
+Every optimizer is isolated within $\mathcal M_p(P,Q)$.
+\end{corollary}
+
+\begin{proof}
+A one-dimensional space has exactly two orthogonal projections, zero and
+identity. The defect identification is unique. Count the independent
+factors in \cref{eq:schatten-multiplicity-product}.
+The finite optimizer set is Hausdorff and hence discrete.
+\end{proof}
+
+\paragraph{Optimizer families at one and two active angles.}
+At $p=3/2$, the critical angle is
+$\vartheta_{3/2}=\arccos(1/3)\approx70.53^\circ$.
+Consider two distinct interior principal angles of $75^\circ$ and
+$80^\circ$, each of multiplicity one, with no right-angle defect.
+Both are active. The two independent positive/negative phase choices
+give exactly four ambient global minimizers, by
+\cref{cor:schatten-simple-active-count}. A repeated active angle of
+multiplicity two instead contributes
+$\coprod_{r=0}^{2}\operatorname{Gr}_{\mathbb C}(r,2)$:
+two singleton rank strata at zero and two and a family
+of rank-one projections indexed by the complex lines in $\mathbb C^2$.
+This is an algebraic description of the set of minimizers; we do not
+assert a topological or smooth classification of that family.
+
+\begin{corollary}[Distance between phase parameters]
+\label{cor:schatten-phase-parameter-distance}
+For two full relative-phase representations
+\[
+ R^*T=F\Pi+F^*(I-\Pi),\qquad
+ R^*S=F\Sigma+F^*(I-\Sigma),
+\]
+their operator distance is exactly
+\[
+ \|T-S\|=\|(F-F^*)(\Pi-\Sigma)\|.
+\]
+On a fixed supercritical interior angle space this reduces to
+$2\sin\delta_p(\theta)\,\|\Pi-\Sigma\|$ for the restricted transporters
+and phase projections.
+\end{corollary}
+
+\begin{proof}
+Left multiplication by $R^*$ preserves operator norm. Subtract the two
+representations and factor the difference. On the stated angle space,
+$F-F^*=2i\sin\delta_p(\theta)I$.
+\end{proof}
+
+\begin{corollary}[All nearest commuting unitaries]
+\label{cor:schatten-all-nearest-commuting}
+Let $A$ be a unitary on a finite complex Hilbert space, and let $P$ be an
+orthogonal projection. Put $Q=APA^*$. For $1<p<2$, a unitary $V$
+commuting with $P$ is Schatten-nearest to $A$ among all such unitaries
+if and only if $T=VA^*$ has the phase and defect data of
+\cref{thm:schatten-all-phase-defect-minimizers} for the pair $(Q,P)$.
+Every compatible choice of these data determines exactly one nearest $V$.
+\end{corollary}
+
+\begin{proof}
+The maps $V\mapsto VA^*$ and $T\mapsto TA$ are inverse bijections
+between the commuting unitaries and $\mathcal U(Q,P)$. Right unitary
+invariance gives
+\[
+ \|A-V\|_p=\|(A-V)A^*\|_p=\|I-VA^*\|_p.
+\]
+Minimizing this norm is equivalent to minimizing its $p$th power.
+Apply \cref{thm:schatten-all-phase-defect-minimizers}, including its
+joint attainment and uniqueness statement.
+\end{proof}
+
+\begin{corollary}[Local minima for unitary correction]
+\label{cor:schatten-correction-local-global}
+Let $A$ be a unitary and let $P$ be an orthogonal projection on a finite
+complex Hilbert space. Every local minimum of $V\mapsto\|A-V\|_p$
+over unitaries satisfying $VP=PV$ is globally nearest. The same holds
+for the $p$th power of the distance.
+\end{corollary}
+
+\begin{proof}
+The continuous bijection $V\mapsto T=VA^*$ identifies the feasible
+set with $\mathcal U(APA^*,P)$, with continuous inverse $T\mapsto TA$.
+Unitary invariance gives $\|A-V\|_p=\|I-VA^*\|_p$.
+Apply \cref{prop:schatten-local-is-global}. This conclusion concerns the full feasible
+set and does not assert convergence of a numerical algorithm.
+\end{proof}
+
+\paragraph{A two-angle example.}
+Take two complex rank-two subspaces in $\mathbb C^4$ with principal
+angles $45^\circ$ and $80^\circ$, and choose $p=3/2$. The critical angle is
+$\vartheta_{3/2}=\arccos(1/3)\approx70.53^\circ$. The first plane is
+already optimal at phase zero, while the second has an improving phase
+$\delta_{3/2}(80^\circ)\approx74.57^\circ$. For the sum of both planes,
+\[
+\begin{aligned}
+\text{canonical displacement power}
+  &\approx 1.33917+2.91525=4.25442,\\
+\text{global minimum}
+  &\approx 1.33917+2.75418=4.09335.
+\end{aligned}
+\]
+The direct-sum construction realizes the second value, and
+\cref{thm:schatten-independent-planes} proves that no transporter mixing
+these planes can do better. This result makes the contrast with the
+classical $p\geq2$ squared-displacement minimality concrete.
+
+The proof turns the failure of universal direct-rotation minimality into
+an exact decision and construction. A cosine--sine decomposition supplies
+the principal planes. The canonical phase suffices below the cutoff;
+above it a single scalar equation with a unique interior root determines
+the phase, and at a right angle the endpoint phase attains the minimum.
+The lower bound certifies optimality against all ambient unitary transports.
