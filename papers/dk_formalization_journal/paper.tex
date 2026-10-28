@@ -137,6 +137,8 @@
 %}
 \newcommand{\agentsays}[1]{{\color{red}\small\textbf{[\emoji{robot}: #1]}}}
 
+\newcommand{\jonrsp}[1]{{\color{red}\small\textbf{[\emoji{person-raising-hand}: #1]}}}
+
 
 \title{Formalizing Davis--Kahan Perturbation Theory in Lean 4}
 % Additional authors are expected; keep the confirmed ordering below stable.
@@ -170,6 +172,62 @@
     pretend like they don't exist?
 }
 
+\agentsays{
+- AI’s role and the opening: Yes, the change in who can initiate this work, learn the mathematics, and produce formal proofs deserves discussion. I would describe the concrete human–agent workflow and what this project demonstrates. Claims about increased productivity need supporting measurements; the broader societal questions can be acknowledged as questions. For the introduction, I favor a short, accessible subspace example followed by your actual motivation: DKPS prompted the work, and successful formalization encouraged pursuing the original theorem’s generality.
+
+- Significance of Proposition 4.4: The specific contribution is identifying the failure of the printed real, small-angle assertion, locating its invalid proof step, and formally verifying the counterexample and repair. The complex-phase mechanism and Q-norm optimality have predecessors. This correction does not change the main sine-theta perturbation bounds.
+
+- Trial spaces: A trial space is a proposed approximation to the desired invariant subspace. For one vector \(v\) and a proposed eigenvalue \(\mu\), the residual \(Av-\mu v\) measures how poorly they satisfy the eigenvector equation. The paper’s \(E_0,A_0\) formulation extends this idea to several vectors and their coordinates.
+
+- Intertwining, compression, and polar factors: These need explanations at first use. “Intertwining,” \(WP=QW\), means that projecting before applying \(W\) agrees with applying \(W\) before the corresponding target projection. A compression \(PQP\), restricted to \(\operatorname{range}(P)\), applies \(Q\) and projects back into that space. In the invertible setting here, \(T=U|T|\) separates positive stretching \(|T|\) from a unitary factor \(U\).
+
+- “Half-infinite” and “eigengap”: Half-infinite intervals are half-lines such as \((-\infty,a]\). I would use “half-lines” and display them. In your two-dimensional example, “the gap between the two eigenvalues is \(\varepsilon\)” is clearest. The general theorem needs “spectral separation,” since its operators can have continuous spectrum.
+- The “Hungarian precursor”: This means an earlier publication in Hungarian, unrelated to the matching algorithm. Simon explicitly identifies a Hungarian-language version from 1942 preceding Sz.-Nagy’s 1947 paper. Simon’s account
+
+- Notation and colors: We can normalize our exposition while translating original-source notation explicitly where needed. Currently, letters change roles: \(P\) denotes different projections, and \(R\) denotes both a residual and a rotation. Colors should follow those mathematical roles; globally coloring a letter would introduce errors.
+
+- Who formalized the foundations: The current source confirms a mixture. We have project-developed principal-angle results and the source-specific sine-operator construction, alongside accepted Tau Ceti angle APIs and Mathlib foundations. Attribution needs to identify the particular construction. “Our formalization” describes the assembled development; claims about newly developed components need narrower wording.
+
+- Alternative proof routes: Yes, one short explanation would help. Finite-dimensional arguments can use coordinates and the cosine–sine decomposition. Our projection and functional-calculus approach supports the unbounded Hilbert-space theorem. We should explain that choice without suggesting it is the only possible formalization.
+
+- Author–year citations while editing: Natbib supports switching with \setcitestyle{authoryear,round}. We can later restore numeric citations. The current numeric bibliography is not itself a complete IEEE formatting setup.
+
+- MSC links and hover text: Clickable links to the AMS classification entries would help. I prefer links or short descriptions because hover text is inconsistently supported by PDF readers
+
+- Blind review: That depends on the chosen venue. An anonymization switch could control author information, acknowledgments, and identifying artifact links if required. Scholarly attribution should remain; any anonymized artifact must follow the venue’s policy.
+
+- Timeline versus table: Adding publication years to the existing table is a useful first step. A timeline would communicate chronology; the table currently communicates mathematical roles and dependencies. They answer different questions.
+}
+
+\jonrsp{
+    I don't like the paragraph you wrote in chat for AI's role.
+
+    For the significance, even though the complex mechanism was known, AFAIK wasn't tied to prop 4.4 in this paper.
+
+    On trial spaces, yes, just define them properly
+
+    On intertwining, again, that was less of a question and more saying: just define them properly.
+
+    For half infinite I think half line is just as much an issue use either one and then give an (e.g. to show that you mean there is one finite endpoint and then the other side extends to infinity)
+
+    On Hungarian precursor, the language it was published in has no relevance, esp with AI translation, it is not an important detail, drop it.
+
+    Let's try to keep the colors the same as in the manim visualizations, and its very important to keep the notation consistent and standard, but using colors to distinguish R as a residual from a rotation is a good idea. 
+
+    We should have enough detail on what originated where, if it is scattered around, we need to have note documents in the paper repo point to them. This is also a great use for latex comments, so we can put the important info you care about so you know you have concrete backing to say something but not include the instruction detail in the output itself. See /home/joncrall/code/tauceti-dkps-campaign for a repo that should also keep track of how the upstreaming to tauceti has been going. I think a lot of the docs are scattered, unify them or point to the different locations for later unification as you see fit. Just don't pollute the main text. You can write additional files to the paper directory for reference as much as you want. That is the place to write down all of the hard evidence you need to feel confident.
+
+    I agree with your take on Alternative proof routes.
+
+    Please do it: Author–year citations while editing
+
+    Please do it: MSC links and hover text
+
+    An anonymization switch: please add it with latex if statements. Add an if statement for enable/disable of the colored symbols too.
+
+    Adding publication years to the existing table is a useful first step: add the years to the table, I'll make a timeline if I want to later.
+}
+
+
 \begin{abstract}
 We formalize the Davis--Kahan theory of spectral-subspace perturbations
 from its 1970 primary source in Lean~4.  Of 29 reviewed result-level
@@ -181,10 +239,16 @@ unbounded self-adjoint operators.  We place these constructions in their
 mathematical lineage, from the geometry of principal angles through
 the theory of projections and the spectral methods underlying Davis
 and Kahan's estimates.
+\agentsays{This abstract names several theories before explaining what was formalized. I would lead with the subspace-stability result, then group the supporting operator theory instead of presenting an unexplained list.}
+\jonrsp{No, I think the abstract is a fine place to name drop well known items for a mathematical audience. The important part is that we define them in the body}
+
 
 The formalization required reusable operator theory, portions of which
 were subsequently adapted into Tau Ceti, with additional foundations
-adapted from Mathlib and the Spectra project.  Examining the full
+adapted from Mathlib and the Spectra project.
+\agentsays{The same attribution issue appears here as in your introduction note. I would distinguish foundations we formalized from existing implementations we adapted, and state the later Tau Ceti contributions directly.}
+\jonrsp{Again, the abstract is the place for this. Don't confuse the roles of where details belong and where they don't}
+  Examining the full
 displacement assertion in Proposition~4.4 produced a real
 four-dimensional counterexample with arbitrarily small positive principal
 angles.  We locate the failed singular-value comparison and prove a
@@ -194,6 +258,9 @@ optimal real subspace transport to weighted matching on principal
 angles.  These outcomes show how developing the foundations of a
 classical mathematical theory can support both a source correction and
 new formal research.
+\agentsays{The closing sentence announces a general benefit without adding evidence. I would end with the concrete results and distinguish the real counterexample from the complex construction already in the 1970 paper.}
+\jonrsp{Similary, abstract can be vague.}
+
 
 \end{abstract}
 
@@ -357,6 +424,9 @@ We use these accounts together with the original works to follow the
 The same historical objects recur in the Lean development, which is why the
   mathematical lineage also serves as a guide to its prerequisites.
 A compact source-to-proof map appears in \cref{tab:historical-lineage}.
+\agentsays{The last two sentences repeat the section's purpose. I would replace them with one explicit transition naming the first mathematical construction and its role in the proof.}
+\jonrsp{ok}
+
 
 \subsection{Angles before operators: Jordan, canonical correlation, and the
 cosine--sine decomposition}
@@ -421,6 +491,9 @@ The formalization uses the projection and functional-calculus descriptions,
 
 \subsection{The other nineteenth-century problem: approximate eigenvalues and modes}
 \label{sec:related-ritz-weyl}
+\agentsays{Your heading critique applies here too. I would use a direct title such as Eigenvalue approximation and define trial spaces through a small candidate-eigenvector example.}
+\jonrsp{yes}
+
 
 Jordan's angles answered how to compare subspaces once they are given.
 An independent question came from mechanics and numerical analysis:
@@ -479,6 +552,9 @@ connection between them. \jonsays{Again, don't be vauge. If there is a connectio
 
 \subsection{The passage to Hilbert space: the structure of two projections}
 \label{sec:related-two-projections}
+\agentsays{This heading uses a narrative transition where the mathematical topic would suffice. I would use Two orthogonal projections and introduce compression by explaining what projecting before and after the operator does.}
+\jonrsp{yes}
+
 
 For a closed subspace of a Hilbert space $\mathcal H$, the orthogonal
 projection remains a bounded operator even when the subspace is
@@ -579,6 +655,9 @@ arbitrary choice of frames.  It also makes the separate extremal
 question in Davis and Kahan's Section~4 possible: under which
 measures of displacement is this distinguished transporter actually
 the least expensive one?
+\agentsays{The terms frames, acute regime, and extremal question assume the same background you flagged elsewhere. I would explain the allowable maps and displacement cost before asking which map minimizes it.}
+\jonrsp{yes}
+
 
 Kato used such transformations to identify nearby spectral
 subspaces of analytic operator families, thereby reducing the study
@@ -669,6 +748,9 @@ positive sine acts on the trial-coordinate space, whereas
 $(I-P)E_0$ maps into the ambient space.  Their moduli coincide, so
 unitarily invariant ideal norms can compare them without conflating
 their domains and codomains.
+\agentsays{The discussion introduces modulus and rectangular operators without the intuition you requested for polar factors. I would explain that the positive modulus records stretching on the input space and say why the norm values agree.}
+\jonrsp{yes}
+
 
 \subsection{Sylvester and Rosenblum: the analytic mechanism of the angle bounds}
 \label{sec:related-sylvester}
@@ -687,6 +769,9 @@ The difficulty is to preserve the appropriate lower bound when the
 operators act on different spaces, may be unbounded, and the error
 is measured by a singular-value norm rather than one scalar absolute
 value.  The Sylvester theorems provide exactly this analytic step.
+\agentsays{The phrases key idea and exactly this analytic step still leave the estimate unspecified. I would let the scalar example introduce the problem and then state the required operator inequality and gap assumptions directly.}
+\jonrsp{yes}
+
 
 Let $F_1$ give isometric coordinates for the unwanted complementary
 spectral subspace, with self-adjoint block $\Lambda_1$.  Writing
@@ -719,6 +804,9 @@ ideal-norm inequalities used to pass through bounded approximations.
 
 \subsection{Von Neumann, Schatten, Ky Fan, and the choice of displacement cost}
 \label{sec:related-norms}
+\agentsays{The title could simply name Operator ideals and displacement norms. As in your chronology note, I would also give the publication years when introducing von Neumann, Schatten, and Ky Fan.}
+\jonrsp{yes}
+
 
 The geometry of a pair of subspaces is fixed, but there are many ways
 to assign a cost to a unitary transporting one onto the other.
@@ -742,6 +830,10 @@ corresponding operator ideals; outside an ideal they need not define
 a finite norm.  This is why the 1970 paper's ``where defined''
 qualification belongs to the mathematical hypotheses of its
 norm-general theorems.
+\agentsays{This assumes the reader already knows singular values and operator ideals. I would first describe singular values as stretching factors, explain what each norm aggregates, and then explain finiteness in infinite dimensions.}
+\jonrsp{I think a brief introduction is ok. I think singular values are more widely known, and we can make a few assumptions here, but it wouldn't hurt to have a quick reminder. Ideals are probably something the audience will know, but they are something I did not know at the start of this, so good to define}
+
+
 
 The largest singular value gives the operator norm, the Euclidean
 norm of the singular-value sequence gives the Hilbert--Schmidt norm,
@@ -752,6 +844,9 @@ increasing the largest displacement or its squared sum.  The
 connection to Ky Fan majorization is therefore a question about the
 \emph{whole ordered singular-value sequence}, not merely about
 rotating each principal plane through its smallest angle.
+\agentsays{The claim about concentrating displacement needs a concrete comparison. I would point to the two singular-value lists in the counterexample and explain their sums and maxima, using trace norm consistently.}
+\jonrsp{Yes, but this also has an X not Y problem}
+
 
 Davis established Hilbert--Schmidt and finite-dimensional Schatten
 extremal properties for exponents at least two in his 1958 subspace
@@ -857,6 +952,9 @@ adaptations of perturbation theory, rather than predecessors of the
 1970 proof.  Their dependence on stable subspaces explains the value
 of a reusable formal theorem stated at the operator level rather than
 for one matrix dimension or one matrix norm.
+\agentsays{This claims value through generality without specifying the statistical use. I would name the hypothesis or error quantity changed in the cited statistical theorem and explain which formal result could support that application.}
+\jonrsp{ok}
+
 
 \subsection{Historical foundations as reusable formal mathematics}
 \label{sec:related-formal}
@@ -937,13 +1035,15 @@ Davis; Kahan & Residual-to-angle bounds, tangent estimates,
 formalization. The mathematical attributions and the history of the
 formal implementations are distinct; the latter includes reused
 Mathlib, Spectra, and DKPS-to-Tau Ceti developments.
-\jonsays{I almost wonder if a timeline would be more interesting than a table here, or could we include years in the table to start and then maybe think about turning it into a timeline later after we do more important edits? If years don't make sense then just leave it.}
 }
 \label{tab:historical-lineage}
 \end{table}
+\jonsays{I almost wonder if a timeline would be more interesting than a table here, or could we include years in the table to start and then maybe think about turning it into a timeline later after we do more important edits? If years don't make sense then just leave it.}
 
 \section{Source coverage and the sine-theta theorem}
 \label{sec:coverage}
+\agentsays{The opening repeats the reviewed-source wording you flagged. I would state what is proved in ordinary mathematical terms and leave the counting procedure and review terminology in the appendix.}
+\jonrsp{I don't even think we discuss the source correspondence review, this isn't the point of this paper. I think we just what our selection rule for what to formalize was: every top level mathematical statement result from the DK paper that was proved in that paper. I think we have that exact criteria documented and we can say what it was here, and then say it resulted in in the 29 theorem targets which are enumerated in appendix C. We can remove appendix D. Counting procedure is vague and makes no sense out of context. }
 
 The formalization covers \DKResultCount{} result-level statements in Davis
 and Kahan's paper: the Section~2 sine and tangent inequalities, the geometry
@@ -964,12 +1064,21 @@ statements.
 
 \subsection{The full-scope sine-theta theorem}
 \label{sec:sine-theta}
+\agentsays{Full-scope is an internal assessment rather than a description of the theorem. I would name the self-adjoint setting in the heading and state its domain and norm assumptions below.}
+\jonrsp{Yes}
+
 
 \subsubsection{Trial and exact subspaces}
+\agentsays{For the audience issue you raised, I would introduce one approximate eigenvector and its residual before the coordinate maps. Then explain that a trial subspace is a proposed approximation and show how the same calculation extends to several vectors.}
+\jonrsp{Yes}
+
 
 Davis and Kahan distinguish a reference operator $\sym{A}$ from a perturbed operator
 $\sym{A}+\sym{H}$.  For the formal statement we write $\sym{Acurrent}$ for the perturbed full-space
 operator, corresponding to the source's $\sym{A}+\sym{H}$.
+\agentsays{The same printed A now denotes the original operator and then the perturbed one. I would choose one convention across the history and theorem sections and show the translation to the source once; colors should follow mathematical roles.}
+\jonrsp{Yes!!!! We have to be consistent here, although in the real paper we likely are going to remove the colors, but I'll probably include them in an arxiv version, and they help me a lot}
+
 
 Let $\sym{Eambient}$ be the ambient Hilbert space.  Let $\sym{A0}$ be a self-adjoint operator on a
 trial-coordinate space $\sym{Ftrial}$, and let
@@ -997,6 +1106,9 @@ complementary spectral block through
 \]
 on its domain.  The predicate \texttt{IsExactSpectralDecomposition} also records
 orthogonality and completeness of the two coordinate ranges.
+\agentsays{Intertwining and exact complementary decomposition reappear through predicates here. I would explain the displayed identity as applying the same operator in two coordinate systems, then state precisely what completeness adds.}
+\jonrsp{yes.}
+
 
 \subsubsection{The sine operator and its rectangular representative}
 
@@ -1036,6 +1148,9 @@ the ideal laws then imply
 whenever the norm is defined.  The rectangular theorem is the analytic proof
 engine; the selected source-facing theorem transports its conclusion to the
 positive sine operator.
+\agentsays{Analytic proof engine and selected source-facing theorem repeat the development jargon you criticized. I would say directly that the estimate is proved for the complementary block and transferred using equality of the two norm values.}
+\jonrsp{yes, but I think you need to be more specific than that.}
+
 
 \subsubsection{Gap geometry and the inequality}
 
@@ -1072,6 +1187,9 @@ The source also writes a common-domain equality for the unbounded trial
 configuration.  That equality discharges the forward domain condition consumed
 by \texttt{IsTrialResidual}.  Source correspondence is checked from the combined
 hypotheses, with this equality supplying the required domain condition.
+\agentsays{Discharges and consumed describe implementation mechanics. I would write the actual common-domain condition and explain why the residual is defined there, leaving the predicate comparison to the appendix.}
+\jonrsp{yes}
+
 
 Appendix~\ref{app:lean-guide} explains the general Lean syntax in the
 following theorem signature; the geometric and spectral hypotheses have been
@@ -1122,6 +1240,9 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
 \end{lstlisting}
 
 The two ideal-membership hypotheses express the ``where-defined'' restriction.
+\agentsays{Supported and where-defined remain opaque without a concrete norm class. I would give one finite-norm example and explain the membership assumptions while preserving the theorem's full operator-ideal statement.}
+\jonrsp{I think it would help to remind the reader of the details here}
+
 The proof first estimates the rectangular map $\sym{S}=(I-\sym{F0}\like{F0}{F_0^*})\sym{E0}$ and then
 uses \cref{eq:modulus-sine} and modulus invariance of the ideal gauge. The
 ambient Hilbert-space instances are omitted from the displayed Lean signature.
@@ -1161,6 +1282,9 @@ residual has norm $\sym{delta}\sin\sym{theta}$.  Thus equality holds
 in the sine-theta estimate for this finite-dimensional configuration.
 
 \section{Reusable operator-theoretic foundations}
+\agentsays{The same plain-title preference suggests Operator-theory foundations. I would begin this section by stating what we formalized, then identify reused and upstream implementations alongside the relevant mathematics.}
+\jonrsp{How about Formalized operator-theoretic foundation? Just reiterate that this is a formalization paper.}
+
 \label{sec:foundations}
 \label{sec:dk-rest}
 
@@ -1189,6 +1313,9 @@ conditions needed when principal angles reach $\pi/2$.  For compact angle
 operators, the resulting decomposition reduces to the familiar sequence of
 principal angles; the general Hilbert-space statements do not require such a
 discrete spectrum.
+\agentsays{This paragraph again assumes principal-square-root characterization, reversal symmetry, and the acute/nonacute distinction. I would explain one construction and its consequences before naming these theorem families, and remove the claim that readers find them familiar.}
+\jonrsp{yes}
+
 
 Section~8 returns to this geometry from the spectral side.  Perturbation
 smallness and spectral repulsion rule out the wrong branch and place the two
@@ -1196,6 +1323,9 @@ spectral subspaces in the acute regime where the direct rotation is available.
 In the formal development this branch-selection argument uses the same
 unbounded spectral calculus as the perturbation theorems.  Acuteness therefore
 follows from the spectral hypotheses, with no separate matrix-level assumption.
+\agentsays{Wrong branch and spectral repulsion need definitions before they can explain Section 8. I would state which principal-angle alternatives the hypotheses exclude and cite the specific Davis--Kahan result.}
+\jonrsp{yes}
+
 
 \subsection{Approximation numbers, majorization, and unitarily invariant norms}
 
@@ -1219,6 +1349,10 @@ trace norm.  Proposition~4.4 attempts precisely that stronger passage. The
 counterexample in Section~\ref{sec:prop44} shows where it fails; the
 $\sym{NormQ}$-norm assertion and quantitative bound in
 Section~\ref{sec:prop44} give two valid conclusions.
+\agentsays{This promises a quantitative bound as well as the Q-norm result, but the included correction section currently states the latter. I would identify the intended second result or remove that promise in the correction pass.}
+\jonrsp{Remove the promise, maybe use a latex comment to remind ourselfs of what we actually have in terms of the lean, because we have more results formalized in the repo than we are presenting in this paper.}
+
+
 
 The same operator-ideal machinery is used in the perturbation inequalities.
 For the sine theorem, the statement $\sym{delta}\,\sym{NormN}(\sym{S})\leq \sym{NormN}(\sym{R})$ is meaningful for
@@ -1226,8 +1360,14 @@ any supported symmetric operator ideal once both $S$ and the residual belong to
 that ideal.  The formal theorem therefore keeps the source's ``where-defined''
 convention and does not build an accidental finite-dimensional compactness
 assumption into the statement.
+\agentsays{The last clause is another defensive contrast. I would state the ideal-membership and dimension assumptions directly and explain when the norm is finite, using the same wording as the theorem section.}
+\jonrsp{yes}
+
 
 \subsection{Sylvester separation and unbounded operators}
+\agentsays{The Sylvester map is called the analytic engine again below. I would state its lower bound directly and identify A, B, and X here, since their roles differ from earlier uses of those letters.}
+\jonrsp{yes}
+
 
 The analytic engine behind the sine and tangent estimates is the Sylvester map
 \[
@@ -1257,8 +1397,14 @@ Reflection pinching and direct-sum norm comparisons control the resulting block
 operators, while the Sylvester estimate supplies the spectral-gap factor.  This
 produces the generalized sine and tangent theorems and the pairwise-gap
 square-norm estimate at the scope stated in the source.
+\agentsays{Reflection pinching, direct sums, and square-norm estimates are introduced as a list of names. I would explain one block operation, what it controls, and which numbered source theorem uses it.}
+\jonrsp{yes}
+
 
 \subsection{Formal foundations and ancestry}
+\agentsays{This repeats the earlier provenance section without separating development from reuse. I would consolidate the attribution, name the theorem families we contributed, and reserve declaration-level history for the appendix.}
+\jonrsp{Oh, this is a nasty subsection, we are talking about the projects pinned dependencies and we should not be doing that. That is an implementation detail that stays out of the paper. It is a very fine line for which details go in and which stay out. I do think its good to state what mathlib did start with, and what came from spectra. That is important.}
+
 
 The analytic and geometric ingredients above required interfaces not
 previously available in sufficient generality in the project's pinned
@@ -1291,6 +1437,9 @@ The mathematical ancestry of these interfaces is described in
 
 \section{Discussion: what the formalization made accessible}
 \label{sec:discussion}
+\agentsays{The discussion title announces a benefit. I would use Discussion and replace the broad opening with the mathematical consequences already established, without another list of library components.}
+\jonrsp{Yes, I'm also wondering if the discussion of AI formalization goes here rather than the introduction. Maybe.}
+
 
 The formalization brings together the geometric, spectral, and
 norm-theoretic components of the 1970 paper in one reusable setting.
@@ -1301,6 +1450,8 @@ layer supports norm comparisons beyond a single finite-dimensional
 matrix norm.  These choices matter mathematically because changing
 the scalar field, restricting to finite matrices, or suppressing the
 domain of an unbounded operator changes which theorem has been proved.
+\agentsays{These choices matter mathematically repeats the significance-announcement pattern. I would name one concrete loss of scope, such as excluding unbounded operators, instead of explaining generally that assumptions change a theorem.}
+
 
 Proposition~4.4 illustrates a different benefit of source-level
 formalization.  Proposition~4.3 controls a squared-displacement
@@ -1312,6 +1463,8 @@ for which the squared-displacement theorem does establish direct-
 rotation optimality.  The distinction is visible in the singular
 values of the real four-dimensional example, rather than only in the
 outcome of a proof search.
+\agentsays{The final contrast is unnecessary. I would explain the singular-value calculation directly and connect the real counterexample to the earlier complex example and the established Q-norm result.}
+\jonrsp{Yes}
 
 The new real nuclear matching theorem in \cref{sec:example-transport}
 uses the same principal-angle, real/complex, and operator-norm
@@ -1322,9 +1475,15 @@ The separate spectral-transport manuscript develops the stronger
 classification and infinite-dimensional results.  For the
 formalization paper, the matching theorem supplies a specific example
 of subsequent mathematical work enabled by reusable foundations.
+\agentsays{This paragraph mixes a result with editorial decisions about two manuscripts. I would explain exactly which proved ingredients support the matching result and keep the choice of follow-on example in author notes until we settle it.}
+\jonrsp{Yes, do not mention separate papers. Keep this paper self-contained}
+
 
 \section{Conclusion}
 \label{sec:conclusion}
+\agentsays{The conclusion repeats the reviewed-results wording, switches back to nuclear norm, and ends with another general research benefit. I would use the same plain contribution statements and trace-norm terminology as the revised opening.}
+\jonrsp{Yes}
+
 
 We have formalized 28 of the 29 reviewed Davis--Kahan source results,
 including the sine-theta theorem for unbounded self-adjoint operators
@@ -1349,6 +1508,10 @@ ChatGPT, Claude Code, and Codex assisted with library and literature
 search, Lean proof development, debugging, and manuscript preparation.
 The project used iterative agent-assisted development with the Lean
 formalization as its mathematical artifact.
+\agentsays{This gives the tools but leaves the human and agent work unspecified. I would describe how the source target was chosen, how proofs and source comparisons were produced, and what supports any claim about time or increased output.}
+\jonrsp{NO, these are details better left unsaid. This is one place where LLMs keep reintroducing the same issues I keep trying to take out. Also codex and GPT are the same thing, just use ChatGPT and Claude, no need to be overly formal here. In fact, we might not even include this section if we have it in the discussion}
+
+
 
 \section*{Code and data availability}
 The formalization, source-result inventory, mathematical provenance

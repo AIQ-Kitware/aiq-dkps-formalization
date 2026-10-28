@@ -1,5 +1,8 @@
 \section{Direct rotations and displacement norms}
 \label{sec:prop44}
+\agentsays{The displacement term needs the intuition you requested in the history section. I would first explain that (I-W)x is the change in a vector under the transporter, then distinguish measuring it on the source subspace from measuring it on the whole space.}
+\jonrsp{Yes, but we also need to introduce this section as containing --- to the best of our knowledge --- unpublished results beyond the formalization}
+
 
 Write $\sym{Psource}$ and $\sym{Qtarget}$ for the orthogonal projections onto two subspaces $\sym{Usource}$ and
 $\sym{Vtarget}$. In the finite-dimensional acute case the canonical direct rotation is
@@ -12,8 +15,14 @@ Proposition~4.4 of \citet{davis1970rotation} asserts that, for real
 subspaces whose largest principal angle is at most $\pi/3$, the direct
 rotation minimizes $\sym{NormN}(I-\sym{Wcompetitor})$ among orthogonal maps $\sym{Wcompetitor}$ satisfying $\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}$,
 for every unitarily invariant norm $\sym{NormN}$.
+\agentsays{For significance, I would place the earlier complex example beside this precise real-space claim before the construction. That would make clear what the counterexample corrects without suggesting that the perturbation bounds fail.}
+\jonrsp{Yes}
+
 
 \subsection{An explicit one-parameter family}
+\agentsays{A plainer heading would identify the real four-dimensional counterexample. I would also explain before the block formulas that the competitor moves fewer ambient directions, so the calculation has a geometric purpose.}
+\jonrsp{Yes}
+
 
 \begin{theorem}[Trace-norm failure throughout the acute angle range]
 \label{thm:small-angle}
@@ -139,6 +148,7 @@ The invariant-plane decompositions of the two maps are different.}
 \end{figure}
 
 \subsection{Failure of the published proof}
+\jonrsp{This needs to explicitly call this out as the counterexample to Prop 4.4}
 
 At $\sym{theta}=\pi/4$, the family gives
 \[
@@ -174,6 +184,9 @@ the singular-value sums of these restrictions cannot be added in the
 asserted direction.
 
 \subsection{The Q-norm statement}
+\agentsays{The norm class needs an example as well as its identity. I would explain the Frobenius case, with the necessary formal or classical support, and distinguish this finite-dimensional repair from the full source theorem.}
+\jonrsp{Yes}
+
 
 Call a unitarily invariant norm $\sym{NormN}$ a $\sym{NormQ}$-norm when there is a unitarily
 invariant norm $\sym{NormM}$ satisfying
@@ -208,8 +221,14 @@ unitarily invariant seminorm interface. The trace norm on the counterexample
 space is also formally shown to fail the $\sym{NormQ}$-norm predicate. The formal
 result makes no identification of that predicate with additional named norm
 families unless the corresponding identity is proved.
+\agentsays{This is the implementation-caution language you objected to in the introduction. I would state the exact proved norm-class result and give justified examples, without narrating what the formal interface declines to identify.}
+
 
 \subsection{Historical context}
+\agentsays{This comparison supplies the significance missing from earlier summaries. I would move a short version before the counterexample, keep the explicit realification here, and cite each predecessor with its theorem or example number.}
+\jonrsp{Yes, I very much agree, that we need to lead with enough information so its clear that most of this has already been understood, but as far as we know, nobody has made the error in this paper explicit  }
+
+
 
 Davis and Kahan already exhibited a complex two-dimensional phase
 modification that decreases the trace norm of full displacement
