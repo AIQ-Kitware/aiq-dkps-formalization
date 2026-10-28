@@ -114,14 +114,29 @@ Global trace-norm minimality of this competitor follows from the
 matching result described in Section~\ref{sec:example-transport}.
 
 
-At $\sym{theta}=\pi/4$, the displacement singular values of the
-direct rotation are four copies of $\sqrt{2-\sqrt{2}}$, whereas the
-competitor has singular values $(\sqrt{2},\sqrt{2},0,0)$.
-The latter concentrates the displacement into one moving real
-invariant plane and fixes its orthogonal complement.  The corresponding
-trace-norm sums satisfy $4\sqrt{2-\sqrt{2}}>2\sqrt{2}$.
-The two transformations use different invariant-plane decompositions
-of $\mathbb R^4$.
+At $\sym{theta}=\pi/4$, \cref{fig:prop44-displacement-planes}
+shows the different displacement patterns of the canonical direct rotation
+and the competing transporter. Both carry the same source subspace onto the
+same target, with both principal angles equal to $45^\circ$. The competitor
+fixes half of the ambient space rather than rotating both principal planes.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/prop44_displacement_planes.pdf}
+\caption{Two orthogonal transporters of the same pair of two-dimensional
+subspaces of $\mathbb R^4$, whose principal angles are both $45^\circ$.
+\emph{Left:} the canonical direct rotation $\like{Rrotation}{R_{\pi/4}}$
+rotates its two principal planes by opposite $45^\circ$ angles, yielding
+four equal singular values $\sqrt{2-\sqrt2}$ for $I-R$.
+\emph{Right:} the competitor $\like{Wcompetitor}{W_{\pi/4}}$ rotates one
+of its own invariant real planes by $90^\circ$ and fixes the other,
+yielding $(\sqrt2,\sqrt2,0,0)$ for $I-W$.
+The respective trace norms are $4\sqrt{2-\sqrt2}>2\sqrt2$:
+concentrating displacement into two singular directions lowers its sum,
+even though the largest displacement increases.
+The invariant-plane decompositions of the two maps are different.}
+\label{fig:prop44-displacement-planes}
+\end{figure}
 
 \subsection{Failure of the published proof}
 
