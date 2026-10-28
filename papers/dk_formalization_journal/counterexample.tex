@@ -114,22 +114,27 @@ Global trace-norm minimality of this competitor follows from the
 matching result described in Section~\ref{sec:example-transport}.
 
 
-\Cref{fig:prop44-displacement-planes} shows the two invariant-plane
-rotation patterns at $\sym{theta}=\pi/4$ and how their displacement singular
-values add in trace norm. The displayed invariant planes are specific to
-each map; they need not be the same pair of planes.
+At $\sym{theta}=\pi/4$, \cref{fig:prop44-displacement-planes}
+shows the different displacement patterns of the canonical direct rotation
+and the competing transporter. Both carry the same source subspace onto the
+same target, with both principal angles equal to $45^\circ$. The competitor
+fixes half of the ambient space rather than rotating both principal planes.
 
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.98\linewidth]{figures/prop44_displacement_planes.pdf}
-\caption{The real four-dimensional counterexample at $\sym{theta}=\pi/4$.
-The direct rotation turns two principal planes by $\pm45^\circ$;
-$\like{Wcompetitor}{W_{\pi/4}}$ turns one of its own invariant planes by $90^\circ$ and
-fixes the other. Each rotating real two-plane contributes two copies
-of the chord length $2\sin(|\varphi|/2)$ to the singular values of
-$I-T$. Consequently the trace-norm sums are
-$4\sqrt{2-\sqrt2}>2\sqrt2$. The planes displayed for the two maps
-are different decompositions of $\mathbb R^4$.}
+\caption{Two orthogonal transporters of the same pair of two-dimensional
+subspaces of $\mathbb R^4$, whose principal angles are both $45^\circ$.
+\emph{Left:} the canonical direct rotation $\like{Rrotation}{R_{\pi/4}}$
+rotates its two principal planes by opposite $45^\circ$ angles, yielding
+four equal singular values $\sqrt{2-\sqrt2}$ for $I-R$.
+\emph{Right:} the competitor $\like{Wcompetitor}{W_{\pi/4}}$ rotates one
+of its own invariant real planes by $90^\circ$ and fixes the other,
+yielding $(\sqrt2,\sqrt2,0,0)$ for $I-W$.
+The respective trace norms are $4\sqrt{2-\sqrt2}>2\sqrt2$:
+concentrating displacement into two singular directions lowers its sum,
+even though the largest displacement increases.
+The invariant-plane decompositions of the two maps are different.}
 \label{fig:prop44-displacement-planes}
 \end{figure}
 
