@@ -233,19 +233,23 @@ eigenvectors difficult to distinguish. Davis--Kahan theory bounds the angles
 between approximate and exact spectral subspaces in terms of a residual or
 perturbation and a separation between the relevant spectra
 \citep{davis1970rotation}.
+\jonsays{This makes it feel like A is always available so you can compute the residual, maybe it would be good to say something like: furthermore, even if only an approximate version of A is available, the difference between A and Ahat is bounds the residual... not sure the exact right way to say it, but this introduction only presents one of the major two ways you could view DK - or at least how I understand it}
 
 Our project began with a variant of this bound needed for
 \ifDKAnonymous a spectral-estimation application\else the data kernel
 perspective space (DKPS)\fi.
+\jonsays{Missing citation, cite quench}
 We extended the formalization to the results established in the original 1970
 paper, including real and complex Hilbert spaces, unbounded self-adjoint
 operators, and unitarily invariant operator-ideal norms. In particular, the
 spectral-separation hypotheses allow intervals with one finite endpoint and
-one infinite side, such as $(-\infty,a]$. These settings require operator
+one infinite side, such as $(-\infty,a]$. \jonsays{you can say half infinite-intervals (e.g.  $(-\infty,a]$)}
+These settings require operator
 domains, spectral calculus, and norm estimates beyond finite matrices.
 
 We formalized the four unnumbered headline theorems in Section~2 and every
 named theorem, proposition, lemma, and corollary established in the 1970 paper.
+\jonsays{There is a more concise way to say this, I guess just remove unnumbered and that fixes it.}
 This gives \DKResultCount{} targets, enumerated in
 Appendix~\ref{app:dk-inventory}. We prove \DKProvedCount{} of them and refute
 Proposition~4.4 as printed. That proposition asserts a full-displacement
@@ -257,11 +261,12 @@ Example~4.2. To the best of our knowledge, its contradiction of the printed
 real, small-angle Proposition~4.4 has not previously been made explicit.
 Section~\ref{sec:prop44} compares these statements and gives a valid Q-norm
 consequence of Proposition~4.3.
+\jonsays{Would it be better to talk about this in terms of a repair? Also didn't we prove that our counterexample is minimal in some way? Not sure if that's worth highlighting here}
 
-The proofs required us to formalize operator theory: principal angles and
+The proofs required us to formalize \jonsays{add "a significant amount of operator theory, namely:" -- I know I'm breaking my own rule, but it does make sense here} operator theory: principal angles and
 direct rotations, approximation numbers and symmetric operator ideals, Borel
 spectral calculus, and Sylvester estimates for unbounded operators. We also
-adapted existing developments from Mathlib and Spectra. Some of the
+adapted existing developments from Mathlib and Spectra. Some of the \jonsays{don't hedge here, just say: These operator-theory}
 operator-theory foundations developed here were subsequently adapted into
 Tau Ceti. Section~\ref{sec:related} explains the mathematical history and
 formal ancestry; Section~\ref{sec:foundations} describes the foundations used
@@ -289,7 +294,7 @@ and prove the Q-norm consequence of the valid squared-displacement theorem
 (\cref{sec:prop44}).
 \item \textbf{A follow-on theorem.} We prove the unrestricted real
 trace-norm transport minimum as a weighted-matching formula
-(\cref{sec:example-transport}).
+(\cref{sec:example-transport}).\jonsays{Probably best to call it a reduction?}
 \end{enumerate}
 
 \section{Mathematical background}
@@ -298,7 +303,7 @@ trace-norm transport minimum as a weighted-matching formula
 The Davis--Kahan angle estimates use three constructions. Principal angles
 measure the error between subspaces; a residual measures how well a proposed
 subspace represents the operator; and a Sylvester estimate bounds the first
-quantity by the second under spectral separation. Operator ideals allow the
+quantity by the second under spectral separation. \jonsays{Maybe a better way to say it as an assumption or hypothesis. under spectral separation is vague maybe when there is a gap - I can't think of a better concise way to phrase it} Operator ideals allow the
 same argument to express several norms. We describe the development of these
 constructions before stating the formalized sine-theta theorem.
 
@@ -309,7 +314,7 @@ projections \citep[\S5]{simon2018kato}. B\"ottcher and Spitkovsky survey
 pairs of projections and their operator algebras
 \citep{bottcher2010gentle}. We use these accounts together with the primary
 sources. Table~\ref{tab:historical-lineage} summarizes the mathematical
-constructions used in our formalization.
+constructions used in our formalization.\jonsays{Move table 1 up?}
 
 \subsection{Principal angles}
 \label{sec:related-classical}
