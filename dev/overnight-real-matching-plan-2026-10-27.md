@@ -1,10 +1,12 @@
 # Overnight plan: make real spectral transport referee-ready
 
-Prepared 27 October 2026. **Execution activated by the user, 28 October 2026.**
-The conventional lower-bound roadmap and complete nuclear sorting/ambient
-attainment theorem are proved and documented. The 21,507-job full build
-passed. Worked examples and targeted primary-source comparison remain active;
-then the final handoff will audit every outcome below.
+Prepared 27 October 2026. **Executed 28 October 2026.**
+Mathematical checkpoint: `5bc7e40f5`. The conventional lower-bound roadmap,
+complete nuclear sorting/ambient attainment theorem, worked examples and
+targeted primary-source comparison are complete. The full default build
+passed **21,507 jobs**, warnings as errors. No Lean changes followed that build.
+The original execution specification below is retained; its initial open
+statuses are superseded by the completion record at the end.
 
 This plan follows the publication direction in
 [the steering note](publication-direction-dkps-to-transport-2026-10-27.md),
@@ -100,7 +102,8 @@ its length is odd, and sum their e-costs; `B(empty)=0`. The exact target is
  \end{cases}
 \]
 
-This statement is currently **unproved** in Lean. The old manuscript argument
+At plan creation this statement was **unproved** in Lean; it is now proved
+in the checkpoint above. The old manuscript argument
 is a conjectural proof sketch, not evidence that the normalization is complete.
 
 Start with a bounded scratch calculation of exact finite matching minima and
@@ -228,3 +231,26 @@ The morning report should answer:
 - Stop when the proof explanation, sorting disposition, examples and targeted
   literature comparison are complete. Recommend focused writing and specialist
   review at that point; do not select another theorem merely to use the night.
+
+
+## Completion audit — 28 October 2026
+
+| Required outcome | Authoritative completed evidence |
+| --- | --- |
+| Independently readable unrestricted lower-bound proof | `spectral-transport-unification.md`, “Why matching bounds every real transporter”: compact minimization, real stationarity/conjugation, complete kernel and positive sectors, actual restriction optimality, angle-label transfer, both matching bounds and nuclear continuation. Exact source declarations were inspected. |
+| Full nuclear sorting normalization | `RealNuclearHeadNormalization.lean`, `RealNuclearSortedMinimum.lean`: arbitrary optional-singleton matching, exact cost-preserving/reducing exchanges and actual induction; no perfect-matching gap. |
+| Ambient value and attainment | `RealNuclearSortedTransport.lean`: `realTransportPowerMinimum_one_eq_sorted`, `exists_minimizing_real_nuclear_transport_sorted`; equal-rank finite real pairs, actual ordered positive labels, all zero/tie/right-angle cases included. Production aggregate imports the result. |
+| Worked four-dimensional example | Unification note: explicit orthogonal block matrices, actual transport, fixed/rotating planes, exact spectra, nuclear comparison at pi/6 and compiled alternate-coordinate anchors. |
+| Three or more distinct angles | Unification note: all four three-label matchings at `(pi/2,pi/3,pi/6)`, exact radical costs, exact comparison and attaining block spectra. Separate rounded `(85,75,45)` example uses the proved p=3/2 scalar formula to illustrate exponent dependence, without claiming a new Lean-certified numerical ordering. |
+| Skeptical theorem-level literature comparison | Existing source map and new targeted comparison: Davis, Davis–Kahan source-audit boundary, BLR, both Qiu/Zhang papers, Cape and structured perfect matching. A concrete two-projection argument rules out direct Q-norm specialization for p<2. No first-priority claim. |
+| Bounded exercise authentication | Author-hosted preliminary version directly inspected at pp. 316/317/371. Publisher returned 403. The printed edition remains explicitly unauthenticated; historical review updated without promoting the draft to a printed-book correction. |
+| Publication contribution and stopping decision | `spectral-transport-publication-core.md`, focused 28 October decision: unrestricted reduction is the main candidate extension; sorting is its classical-exchange consequence. Focused article outline and optional separate complex-theory outline are recorded. Writing and specialist review are next; further theorem campaigns are unnecessary for this scoped contribution. |
+| Required compilation | Focused target: 7,322 jobs. `lake exe cache get`, then full default `lake build`: 21,507 jobs, warnings as errors. Log `/tmp/dkps-overnight-2026-10-28/full-sorting-build.log`. Documentation-only edits followed. |
+| Commit and handoff discipline | Mathematics and initial proof/provenance records committed as `5bc7e40f5`; final records update the current plan and dated handoff. Resource accounting is published separately before the final report. |
+| Scope invariants | No manuscript, visualization, submission, roadmap or other-repository edits; no ancestry campaign, subagents, lane system, checker/dashboard or unrelated theorem campaign. Existing user worktree changes preserved. |
+
+The source-authentication and exact-priority questions remain research limits,
+not assertions of completion. Nuclear sorting is proved; sorting for strict
+exponents/positive smoothing, executable complexity, full optimizer
+classification and infinite-real matching are not claimed. All mandatory
+outcomes of this run are satisfied at the stated scopes. Stop at this boundary.

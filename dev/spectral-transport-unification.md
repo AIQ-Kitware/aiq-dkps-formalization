@@ -250,6 +250,117 @@ uncrossing or sorting itself. The transport simplification follows from T7
 and the new complete normalization. T21/T22 record the dependency and priority
 boundary; no earliest-discovery claim follows from the search record.
 
+## Worked finite examples — exact calculations and numerical illustrations
+
+### A checkable real four-dimensional witness
+
+Here is a convenient conventional coordinate realization of the same mechanism
+as the compiled `SmallAngleCounterexample`. Write R^4=R^2⊕R^2, put
+
+\[
+ J=\begin{pmatrix}0&-1\\1&0\end{pmatrix},\quad
+ A=cI+sJ,\quad c=\cos\theta,\ s=\sin\theta,
+\]
+\[
+ K=\{(x,0)\},\quad L=\{(cx,sx)\},\quad
+ R=\begin{pmatrix}cI&-sI\\sI&cI\end{pmatrix},\qquad
+ W=R\operatorname{diag}(A,A).
+\]
+
+Since J*=-J and J²=-I, A*A=(c²+s²)I=I; both R and W are orthogonal.
+Moreover W(x,0)=(cAx,sAx), so W(K)=L. This explicitly verifies the same
+transport constraint for the alternative, not just its cost. The two principal
+angles are theta. The planes `M_+={(x,Jx)}` and `M_-={(x,-Jx)}` are orthogonal.
+W fixes M_+ and acts on M_- as A², a rotation through 2 theta. Hence
+
+\[
+ s(I-R)=(2\sin(\theta/2))^{[4]},\qquad
+ s(I-W)=(2\sin\theta,2\sin\theta,0,0).
+\]
+
+At theta=pi/6 the costs are `8 sin(pi/12)=2(sqrt(6)-sqrt(2))≈2.070552361`
+and `2`, respectively. Strictness follows from
+`sqrt(6)-sqrt(2)>1`: squaring reduces this to `sqrt(2)<3/2`.
+The nuclear matching theorem gives the exact global minimum 2 for these two
+identical angles; the example therefore exhibits an optimizer, not merely an
+improving competitor.
+
+**Formal versus conventional evidence:** the block matrices displayed here are
+checked by the preceding elementary algebra; no new Lean declaration identifies
+them literally with the repository's alternate coordinate representation.
+The existing compiled family in
+[SmallAngleCounterexample](../DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean)
+proves actual orthogonal transport, both singular-value spectra, accepted
+principal angles and strict comparison for every 0<theta<pi/2. Exact names in
+`TauCeti.DavisKahan.FiniteDimensional.SmallAngleCounterexample` include
+`singularValues_displacement_R`, `singularValues_displacement_W`,
+`principalAngles_eq`, `kyFanSum_displacement_R`, `kyFanSum_displacement_W`
+and `kyFanSum_lt`. The new matching/sorting theorem proves the global value.
+This illustration is not a replacement for those formal statements.
+
+### Three distinct positive angles: all four matching choices
+
+Take the three principal angles `(pi/2,pi/3,pi/6)`, for example using K spanned
+by e_1,e_2,e_3 in R^6 and L spanned by
+`cos(theta_i)e_i+sin(theta_i)f_i` in its canonical CS coordinates. There are
+exactly four matchings on three labels: all singletons, or one singleton and
+the pair formed by the other two. The proved nuclear weights give:
+
+| Assignment | Exact cost | Decimal illustration |
+| --- | --- | --- |
+| All singletons | `4+sqrt(6)-sqrt(2)` | 5.035276180 |
+| Reflect pi/2; couple pi/3 and pi/6 | `2+2 sqrt(2)` | **4.828427125** |
+| Reflect pi/3; couple pi/2 and pi/6 | `2+2 sqrt(3)` | 5.464101615 |
+| Canonical singleton pi/6; couple pi/2 and pi/3 | `2 sqrt(6)` | 4.898979486 |
+
+These are **symbolic conventional calculations** from the formal weights, not
+new Lean-certified evaluations of these particular radicals. Their comparison
+is exact: `1+sqrt(2)<sqrt(6)` follows from `2 sqrt(2)<3`; comparison with the
+all-singleton cost reduces to `sqrt(6)>2`; and sqrt(2)<sqrt(3).
+Thus the unrestricted ambient nuclear value is `2+2 sqrt(2)` by the matching
+theorem. The new sorting theorem recovers it as the second of its two sums.
+Its attainer reflects the largest-angle plane and uses the four-dimensional
+positive-class pair attainer on the remaining two planes. The largest plane
+has displacement spectrum `(2,0)`; the paired block has spectrum
+`(sqrt(2),sqrt(2),0,0)`. The total spectrum is therefore
+`(2,sqrt(2),sqrt(2),0,0,0)`, with the asserted cost. Orthogonal block assembly
+is exactly the existing matching-attainment mechanism.
+
+### Changing the exponent can change the preferred assignment
+
+For the distinct angles `(85,75,45)` degrees, evaluate the already proved
+matching weights at p=1 and p=3/2. The costs below are rounded numerical
+illustrations, independently evaluated using the explicit scalar formula,
+not a newly Lean-certified strict comparison at these fixed angles.
+
+| Assignment | p=1 cost | p=3/2 cost |
+| --- | --- | --- |
+| All singletons | 5.530733729 | 6.854457305 |
+| Singleton 85; couple 75 and 45 | **5.464101615** | 6.854457305 |
+| Singleton 75; couple 85 and 45 | 5.625231148 | 7.167262145 |
+| Singleton 45; couple 85 and 75 | 5.469964742 | **6.847534409** |
+
+The p=3/2 pair computation is reproducible without a numerical search. Put
+`h=(a+b)/2`, `d=abs(a-b)/2`. If cos(h)>=1/3, the clipped minimizing phase is d.
+Otherwise put `delta_*=arccos(cos(h)/(1-2 cos(h)))` and use
+`delta=max(d,delta_*)`. The pair cost is
+
+\[
+ 2\{[2\sin((h+\delta)/2)]^{3/2}
+       +[2\sin((h-\delta)/2)]^{3/2}\}.
+\]
+
+For the active `(85,75)` pair, the squared pair minimum is
+`32(1+cos(h))sqrt(1-2 cos(h))`. These formulas are backed by
+`explicit_phase_minimizer_three_halves` and `phaseMinimum_three_halves_sq`
+in `SchattenThreeHalves.lean`, together with the proved truncated-phase law.
+The rounded table was checked both by a bounded phase minimization and an
+independent 55-digit Decimal evaluation of these formulas. Neither numerical
+calculation is a new proof-kernel certification. The structural matching
+minimum theorem is already formal for both exponents. These evaluations illustrate penalty-dependent choices. They neither prove
+nor refute a two-pattern theorem with exponent-dependent weights. Only nuclear
+sorting is established by this run.
+
 ## The new real bridge
 
 ### Finite block theorem and construction
@@ -1100,11 +1211,14 @@ not evidence that the source proof was adapted.
   checked, but exact book theorem statements were not independently obtained.
   S2 and S5 supply directly checked primary comparison results; do not invent
   an exact Bhatia theorem number or infer proof adaptation from subject overlap.
-* **S10 — Unauthenticated exercise lead.** Aubrun–Szarek, *Alice and Bob Meet
-  Banach*, Exercise B.12: the previous review's limitation persists. An
-  authoritative printed-edition statement was not checked. Its precise
-  hypotheses and priority implications remain unresolved. The supplied
-  external-agent report and third-party reproductions are not primary confirmation.
+* **S10 — Exercise lead, version boundary.** Aubrun–Szarek,
+  *Alice and Bob Meet Banach*, Exercise B.12. On 28 October the
+  [author-hosted preliminary PDF](https://math.univ-lyon1.fr/~aubrun/ABMB/ABMB.pdf)
+  was directly inspected: (B.13), p. 316; exercise, p. 317; hint, p. 371.
+  It confirms the reported extrinsic formula and singular-value domination
+  claim in that version. The authors' page identifies it as preliminary;
+  the printed edition remains unauthenticated (publisher access returned 403).
+  Do not promote a draft discrepancy to an authenticated printed-book correction.
 * **S11 — Kaftal–Loreaux (2017),** *Kadison's Pythagorean Theorem and essential
   codimension*, [author-hosted primary version](https://www.siue.edu/~jloreau/papers/essential-codimension-kl.pdf),
   Proposition 2.7(ii), preprint p. 8. On a separable infinite-dimensional
@@ -1139,6 +1253,70 @@ not evidence that the source proof was adapted.
   occurrences, not claims of earliest priority; neither supplies the
   constrained spectral transport theorem under investigation.
 
+* **S14 — Cape (2020),** *A Note on the Orthogonal Procrustes Problem
+  and Norm-Dependent Optimality*, ELA 36, 158–168,
+  [official primary PDF](https://journals.uwyo.edu/index.php/ela/article/download/5009/5027).
+  Equation (1.1), p. 158, optimizes an r-by-r right alignment of two fixed
+  m-by-r orthonormal frames. Its Frobenius, spectral and two-to-infinity
+  residuals differ from the full ambient nuclear displacement studied here.
+  This is related norm-dependent alignment, not an exact predecessor matching
+  theorem for the same objective and feasible set.
+* **S15 — Delon–Salomon–Sobolevski (2011 author version),** *Minimum-weight
+  perfect matching for non-intrinsic distances on the line*,
+  [primary author-hosted preprint](https://who.rocq.inria.fr/Julien.Salomon/docs/JSSrecursion.pdf),
+  HAL v1, 8 February 2011. Section 2 treats distance weights generated by a
+  concave function of absolute separation; Theorem 6, p. 9, gives a recursion
+  for perfect matchings. Our sine-of-sum weights and optional canonical/
+  reflection singletons are different data. The source confirms classical
+  structured matching context, not priority for our exact reduction or a
+  direct theorem that supplies the ambient transport lower bound.
+
+### Targeted novelty challenge after the sorting proof — 28 October
+
+The comparison below checks actual objectives and hypotheses rather than
+inferring novelty from terminology. The primary sources S2/S4/S5/S14/S15 were
+reopened for this run; S3 retains the existing source-audit boundary. A
+statement not supplying the conclusion by specialization is not proof that no
+other published theorem supplies it.
+
+| Closest statement | Field / dimension and feasible set | Objective and verified conclusion | Exact boundary relative to real matching |
+| --- | --- | --- | --- |
+| Davis (1958), §7, Theorems 7.3/7.4, pp. 185–186; §7 setup p. 183 | Real/complex Hilbert projection pairs in that section, with equivalently positioned subspaces; competing ambient unitaries | Hilbert--Schmidt canonical minimality; finite-dimensional Schatten p>=2 canonical minimality | The norm/exponent restriction differs. Neither statement gives arbitrary-angle real p<2 matching. The p>=2 sign is the visually authenticated S2 reading, not the damaged OCR. |
+| Davis–Kahan (1970), Proposition 4.3, Examples 4.1–4.2, Proposition 4.4 | Real/complex source Hilbert setting; full ambient transport | Squared-displacement UI comparison, known phase improvements, and the false printed real small-angle assertion | The real four-dimensional coupling defeats that assertion even at small angles. The maintained reconstruction, rather than a fresh publisher scan, supports this source comparison. |
+| Bolotnikov–Li–Rodman (2001), Problem 1.1/(1.6), Theorems 3.1/4.2/4.5, Lemmas 3.2–3.3, pp. 26–28, 33–36, 39, 45 | Finite complex chains; proofs stated to apply over reals; same ambient constraint for one pair | Q-norm canonical solution (chain compatibility automatic for one pair); all Frobenius minimizers; special subquadratic phase example | No direct specialization gives nuclear/strict-subquadratic matching: those Schatten norms are not Q-norms. Frobenius minimizers need not minimize nuclear cost. The ambient problem and phase-improvement phenomenon are prior art. |
+| Qiu–Zhang–Li (2006), §5, Theorem 6, preprint p. 20 | Finite real/complex subspaces; ambient transport for the logarithmic theorem | Canonical minimization of a UI norm of log(V); the adjacent discussion repeats the real pi/3 full-displacement claim | A logarithmic/path-length objective differs from nuclear displacement. Our discrepancy does not refute the logarithmic theorem; the repeated full-displacement assertion has the same coupling obstruction. |
+| Zhang–Qiu (2010), §4, p. 1615 | Finite complex subspaces and direct rotations | Explicit trace-norm nonminimality and Frobenius discussion | Awareness of trace-norm failure is already published; an unrestricted real matching formula is a different conclusion. |
+| Cape (2020), equation (1.1), p. 158 | Real m-by-r orthonormal frames; right alignment W in O(r) | Frame residuals in Frobenius, spectral and two-to-infinity norms | An r-by-r frame alignment does not charge the displacement of an ambient O(m) completion. Identifying frame residuals alone does not solve our objective. |
+| Delon–Salomon–Sobolevski (2011 author version), §2 and Theorem 6 | Complete nonbipartite graph of points on a line, perfect matchings | Concave functions of absolute-distance weights and a recurrence | Our sine-of-sum weight has e(t,t)>0 for t>0, and optional singletons have two costs. Direct identification with a distance/perfect-matching theorem fails. This does not make exchange methods new. |
+
+**A concrete obstruction to importing the Q-norm conclusion.** If Schatten-p
+were a Q-norm for 1<=p<2, its associate norm Phi would satisfy
+`Phi(X*X)=||X||_p^2`. For orthogonal rank-one projections P,Q in dimension two,
+this gives `Phi(P)=Phi(Q)=1`, but `Phi(P+Q)=2^(2/p)>2`, contradicting the
+triangle inequality for Phi. Thus a Q-norm theorem cannot simply be specialized
+to this range. This elementary argument is conventional mathematics, not a
+new Lean declaration. It rules out that specialization, not all possible
+indirect derivations from earlier mathematics.
+
+**Where the claimed universal real argument breaks.** A real two-dimensional
+reflection-versus-rotation comparison does not control orthogonal coupling of
+two principal planes. Realification realizes a phase improvement in four real
+dimensions while respecting the same subspace transport constraint. The source
+reconstruction exposes the printed Proposition 4.4 conclusion and its
+examples; this run does not claim to authenticate an exact erroneous line in
+the original printed proof. The obstruction is mathematical and machine-checked,
+while that finer original-source audit remains a separate historical question.
+
+**Contribution classification.** The difficult candidate extension is the
+unrestricted real p<2 reduction and attainment, including arbitrary labelled
+angles and multiplicities. The nuclear two-sum result is an elementary
+exchange/induction simplification **after** that reduction, rather than a new
+claim to invent structured matching or sorting. No examined primary theorem
+was found to supply the whole ambient matching lower bound. Priority remains
+uncertain and specialist review is still needed. The author-hosted B.12 draft
+has now been checked, but its printed-edition status remains unresolved as in
+S10. No correspondence or public novelty announcement occurred.
+
 ## Source-to-Lean provenance map
 
 Namespace abbreviations in this table are exact: **D** = `TauCeti.DavisKahan`,
@@ -1155,7 +1333,7 @@ including its pre-DKPS/Spectra ancestry and independent-work distinctions.
 | **T1** `TauCeti.AlmostComplexStructure.exists_skew_unitary_iff_even_finrank_real`, [OrthogonalComplexStructure](../ForTauCeti/Analysis/InnerProductSpace/OrthogonalComplexStructure.lean); `TauCeti.exists_spectral_sign_projection_iff_four_dvd_finrank_real`, [new block theorem](../ForTauCeti/Analysis/InnerProductSpace/RealSpectralSignExistence.lean) | Orthogonal complex structures exist in even finite real dimension; the G/J-compatible projection exists iff the full dimension is divisible by four, with all G/J hypotheses above. | Classical complex-module dimension and orthonormal-pair construction. Accepted Tau Ceti `AlmostComplexStructure.even_finrank_real` supplies necessity; its documentation cites McDuff–Salamon §2.1, not freshly authenticated here. | Classical construction formally verified; local projection consequence derived here. | Accepted upstream proof checked; exact external projection predecessor unresolved. | Accepted almost-complex module/Hermitian API; existing orthogonal-complex-structure converse; `four_dvd_finrank_of_spectral_sign_projection_real`. | No novelty claim for parity of complex structures. The transport application is T8. |
 | **T2** `TauCeti.singularValues_starProjection_comp_starProjection`, [PrincipalAngles](../ForTauCeti/Analysis/InnerProductSpace/PrincipalAngles.lean); `D.compact_transport_iff_compact_projection_sub_and_defect_balance`, [DirectRotationIdeal](../DavisKahan/Geometry/Polar/DirectRotationIdeal.lean) | Orthonormal frames recover principal cosines; in arbitrary complete real/complex Hilbert space a compact displacement transporter exists iff projection difference is compact and crossed defects balance. | S1 angular ancestry; S6 Proposition 3.1 and Theorem 3.3 for relative index; S11 Proposition 2.7(ii) for exact complex separable restricted-unitary feasibility. S9 for early source-authentication limits. | Classical geometry and index ingredients; derived exact transport feasibility. | Direct primary S1/S6/S11; complex separable predecessor confirmed. | Accepted principal-angle/singular-value API; `Submodule.finite_crossedDefect_balance_of_compact_transport`; direct rotation factorization and Fredholm index. | Ambient unitary equivalence alone is weaker; S6's simultaneous swap is not silently substituted for near-identity feasibility. |
 | **T3** `F.directRotation_displacementSquare_uiNorm`, [Majorization](../DavisKahan/FiniteDimensional/DirectRotation/Majorization.lean); `F.directRotation_fullDisplacement_qnorm`, [QNorm](../DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean) | Squared displacement is UI-norm minimal; full displacement is minimal for Q-norms over either field without a short-angle bound. | S2 Theorem 7.4 and proof, p. 185; S3 Proposition 4.3; S4 Theorem 3.1 and Lemma 3.2. | Classical result formally verified; source-claim repair by a classical consequence. | Direct primary S2/S4; S3 existing source audit. | Ky Fan/majorization comparison; UI norm monotonicity; Q-norm square identity. | Do not claim Q-norm optimality, the p>=2 regime or its derivation as new mathematics. |
-| **T4** `F.SmallAngleCounterexample.arbitrarilySmall_fullDisplacement_refuted`, [SmallAngleCounterexample](../DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean) | A real four-dimensional trace-norm counterexample exists below every positive principal-angle threshold. | S3 printed Proposition 4.4 and its adjacent examples; S5 repeats the real threshold assertion. Earlier norm failures: S2/S4/S5. S10 remains unauthenticated. | Historical correction; explicit formal counterexample strengthening the absence of a positive repair threshold. | Lean proof direct; printed 1970 wording relies on existing source audit; S5 repetition directly checked. | Actual canonical rotation identification, four-dimensional orthogonal competitor and exact singular values. | General nonminimality is classical; historical priority for this exact correction remains unresolved. |
+| **T4** `F.SmallAngleCounterexample.arbitrarilySmall_fullDisplacement_refuted`, [SmallAngleCounterexample](../DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean) | A real four-dimensional trace-norm counterexample exists below every positive principal-angle threshold. | S3 printed Proposition 4.4 and its adjacent examples; S5 repeats the real threshold assertion. Earlier norm failures: S2/S4/S5. S10’s printed edition remains unauthenticated. | Historical correction; explicit formal counterexample strengthening the absence of a positive repair threshold. | Lean proof direct; printed 1970 wording relies on existing source audit; S5 repetition directly checked. | Actual canonical rotation identification, four-dimensional orthogonal competitor and exact singular values. | General nonminimality is classical; historical priority for this exact correction remains unresolved. |
 | **T5** `I.SchattenPhaseTransition.schatten_transport_isMin_iff_canonical_tail_phase_and_defect_complex`, [Schatten classification](../DavisKahan/InfiniteDimensional/DirectRotation/SchattenOptimizerClassification.lean); `I.SmoothedPhaseTransition.charbonnier_transport_isMin_iff_canonical_tail_phase_and_defect_complex`, [Charbonnier classification](../DavisKahan/InfiniteDimensional/DirectRotation/CharbonnierOptimizerClassification.lean) | For feasible native finite-cost pairs, every complex optimizer is canonical on the inactive tail and has the exact finite active phase/defect structure; `1<p<2` or `tau>0`, respectively. | Classical ambient problem S4 Problem 1.1; special planar phenomenon S4 Lemma 3.3; classical smoothing penalty S12 Table I. No equivalent full classification located in the examined sources. | Potentially novel derivations/extensions. | Primary predecessors verified; exact historical priority unresolved. | Separate scalar transition proofs, no-mixing and gradient-kernel lemmas, unrestricted spectral lower bounds, ideal tail and attainment theorems. | Not a universal planar-penalty theorem, real classification, or infinite-cost local-minimum statement. |
 | **T6** `D.nuclearSignedSineEquivOptimizers_complex`, [NuclearRootClassification](../DavisKahan/Geometry/Polar/NuclearRootClassification.lean); `D.exists_nuclear_optimizer_spectral_homeomorph_complex`, [NuclearRootSpectralFactors](../DavisKahan/Geometry/Polar/NuclearRootSpectralFactors.lean) | Trace-class complex pairs with D: all ambient nuclear optimizers are exactly independent signed roots, and their operator-norm topology is the independent nonzero-eigenspace projection product. | Trace-norm nonminimality is already S3 Example 4.2 / S5 p. 1615. Spectral decomposition, polar factors and trace duality are classical ingredients. No equivalent complete parametrization located. | Potentially novel complete parametrization and constrained product application. | Primary S5; S3 source-audit evidence; parametrization priority unresolved. | `nuclear_eq_projection_sub_iff_relative_certificate_complex`, generic root construction, `SignedModulusProjection`, `CompactModulusSymmetryFactors`. | No novelty claimed for the spectral theorem or noncanonical phases; T8 gives the shared real/complex equality-attainer classification. |
 | **T7** `F.RealTransport.realTransportPowerMinimum_eq_matching` and `exists_minimizing_real_schatten_transport_matching_of_one_le`, [RealNuclearMatching](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean); `realTransportPowerMinimum_one_eq_sine_sum_iff_even_multiplicities`, [RealNuclearFieldEquality](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearFieldEquality.lean), same namespace | Finite real `1<=p<2` exact matching value with an actual attainer; nuclear equality with the complex sine sum iff all strictly acute accepted angle multiplicities are even. | S4 is a predecessor for the problem and special planar costs, not a located exact matching formula. | Potentially novel unrestricted real matching/equality derivation. | Primary predecessor verified; equivalent theorem not located, priority unresolved. | Real stationary spectral decomposition, orthogonal complex structures, finite matching combinatorics, compact exponent continuity to p=1. | Values plus constructed attainers are not classification of all real optimizers. |
@@ -1171,7 +1349,7 @@ including its pre-DKPS/Spectra ancestry and independent-work distinctions.
 | **T17** `TauCeti.SingleCrossingMinimum.positive_roots_eq`, `initial_neg_of_positive_root`, `strictMonoOn_of_initial_nonneg`, `exists_unique_minimizer_of_initial_neg`, [SingleCrossingMinimum](../ForTauCeti/Analysis/Calculus/SingleCrossingMinimum.lean) | On a nontrivial compact scalar interval, a cost is continuous, L(0)=0, L'=wH on the half-open interval with positive w and strictly increasing H. Interior derivative-sign equivalence gives unique canonical optimality for H(0)>=0; negative/zero sign equivalences and positive endpoint derivative give a unique interior global minimum for H(0)<0. | Classical Rolle/mean-value, compact attainment and one-sided derivative sign arguments. Exact pinned Mathlib `exists_deriv_eq_zero` and `eventually_nhdsWithin_sign_eq_of_deriv_pos/neg` APIs checked; no new external book locator is claimed. Proof abstracts the old `SchattenPhaseTransition` arguments; its `phasePower_stationary_unique` now forwards to the common positive-root theorem. | Classical calculus formally verified and generalized into a reusable sufficient principle; proof adaptation recorded. | Compiler verified and pinned primary formal sources inspected; no historical originality claim. | Mathlib Rolle, derivative-sign monotonicity, compact interval minimum and local-extremum derivative. | No assumption of the minimizing phase; no H-continuity or infinite endpoint limit is needed. This is a scalar theorem, not an unrestricted operator reduction for arbitrary penalties. |
 | **T18** `F.SmoothedPowerTransport.canonical_phase_unique_min_of_subcritical`, `exists_unique_phase_minimizer_of_supercritical`, `positive_stationary_isMinOn`, [SmoothedPowerPhaseSelection](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseSelection.lean); same namespace `canonical_phase_isMinOn_iff_on_physical_interval`, [SmoothedPowerPhaseEndpoints](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerPhaseEndpoints.lean); `nonacuteDirectRotation_isMin_iff_principalAngles_critical`, [SmoothedPowerCanonicalCriterion](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerCanonicalCriterion.lean) | The positively smoothed finite planar family has one global phase transition, including unique canonical minimum at critical equality and unique positive stationary/global-minimum phase above it. The full closed family has canonical scalar optimality iff C<=cos(theta), for every physical angle. For finite complex equal-rank pairs, canonical rotation is unrestrictedly optimal iff every principal angle satisfies that condition. | S4 supplies the ambient problem, classical Q-norm/quadratic theory and special subquadratic phase example; S12/S13 authenticate scalar penalties. No exact full-family transition/canonical theorem is authenticated in the examined sources. | New family structural derivation/extension; potentially novel transport result with classical boundary cases. | Compiled; primary predecessors as recorded, historical priority unresolved including S10. | T17 scalar principle; `smoothedPowerPhaseRatioControl_strictAntiOn`; actual `hasDerivAt_smoothedPowerPhaseLogRatio`; initial curvature factor; T16 ambient minimum; exact zero-smoothing scalar identities and existing Schatten endpoint/strict-exponent proofs. | No real-field planar reduction, no every-optimizer classification for the family, no family-wide Hilbert lift or optimizer-set convergence claim. Scalar generalized Charbonnier penalties and classical quadratic/canonical geometry are not new. |
 | **T19** `TauCeti.smoothedPower_quadratic_bounds`, [SmoothedPowerScalar](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPowerScalar.lean); `ContinuousLinearMap.smoothedPowerCost_ne_top_iff_schatten_two`, `smoothedPowerCost_zero_smoothing`, [SmoothedPower](../ForTauCeti/Analysis/OperatorIdeal/SmoothedPower.lean); `I.SmoothedPowerTransport.transport_iff_projection_cost_and_defect_balance`, [SmoothedPowerFeasibility](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerFeasibility.lean) | Positive smoothing and 1<=p<=2 have the Hilbert--Schmidt finite-cost domain; zero smoothing is exactly the accepted Schatten-p power. Over either field, finite-cost transport exists iff the projection penalty is finite and crossed defects balance. | Classical real-power mean value/comparison and native ideal/index theory; S6/S11 authenticate the relative-index and complex separable proper-ideal feasibility predecessors. No new scalar penalty or ideal is claimed. | Classical ingredients formally verified; precise family domain/feasibility corollary derived by reusing the existing restricted-unitary theorem. | Compiled; primary S6/S11 scope as recorded; real/nonseparable formal extension is distinguished from those printed scopes. | `exists_hasDerivAt_eq_slope`; accepted singular values and Schatten gauges; `schatten_transport_iff_projection_sub_ne_top_and_defect_balance`; `gauge_nonacuteDirectRotation_ne_top_iff_projection_sub`. | Feasibility over both fields, not real planar optimality. No finite-rank or separability assumption. A finite-cost statement is distinct from extended-cost minimization on a possibly empty fiber. |
-| **T20** `TauCeti.tsum_angle_penalty_le_displacement_of_finite_transport_bound`, [SpectralTransportLimit](../ForTauCeti/Analysis/InnerProductSpace/Projection/SpectralTransportLimit.lean); `I.SmoothedPowerTransport.angle_minimum_sum_le_transport`, [SmoothedPowerGlobalLowerBound](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalLowerBound.lean); same namespace `exists_minimizer_by_finite_correction`, `exists_unitary_minimizing_transport_of_projection_cost_ne_top`, `finite_minimum_iff_projection_cost_and_defect_balance`, [SmoothedPowerGlobalAttainment](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean) | Complete complex Hilbert space of arbitrary dimension, 1<=p<=2, tau>=0: all ambient transports obey the intrinsic angle-sum lower bound, including infinite costs. Finite projection penalty plus balanced crossed defects gives an actual finite-cost global attainer equal to that sum, and is necessary for finite-cost attainment. In regular regimes an attainer can be chosen as a finite correction of canonical rotation. | S4 establishes the finite ambient problem and classical quadratic/Q-norm theory; S6/S11 supply classical index/ideal feasibility; S12/S13 authenticate scalar penalties. No equivalent full closed-family Hilbert value/attainment theorem is authenticated in the sources examined. The proof abstracts/adapts the existing Charbonnier/Schatten approximation and tail assembly; the nuclear corner consumes the existing signed-root result. | General transport lifting derivation and full family solution extension; potentially novel, exact historical priority unresolved. | Full compiler validation; predecessor primary confirmations as recorded, S10 remains unauthenticated. | C1 finite unrestricted value; C2 positive canonical cutoff; compact unitary truncation and moving targets; finite reducing transport sections; T19 domains; angle continuity/monotonicity; lower semicontinuity and actual canonical restrictions; generic spectral block trace; existing nuclear signed-root attainment. | The finite correction describes a constructed regular attainer, not every family optimizer. The nuclear corner uses an independent infinite signed-root construction. No full real matching formula in infinite rank, arbitrary-penalty optimizer theorem, or endpoint optimizer-set limit is claimed. |
+| **T20** `TauCeti.tsum_angle_penalty_le_displacement_of_finite_transport_bound`, [SpectralTransportLimit](../ForTauCeti/Analysis/InnerProductSpace/Projection/SpectralTransportLimit.lean); `I.SmoothedPowerTransport.angle_minimum_sum_le_transport`, [SmoothedPowerGlobalLowerBound](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalLowerBound.lean); same namespace `exists_minimizer_by_finite_correction`, `exists_unitary_minimizing_transport_of_projection_cost_ne_top`, `finite_minimum_iff_projection_cost_and_defect_balance`, [SmoothedPowerGlobalAttainment](../DavisKahan/InfiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean) | Complete complex Hilbert space of arbitrary dimension, 1<=p<=2, tau>=0: all ambient transports obey the intrinsic angle-sum lower bound, including infinite costs. Finite projection penalty plus balanced crossed defects gives an actual finite-cost global attainer equal to that sum, and is necessary for finite-cost attainment. In regular regimes an attainer can be chosen as a finite correction of canonical rotation. | S4 establishes the finite ambient problem and classical quadratic/Q-norm theory; S6/S11 supply classical index/ideal feasibility; S12/S13 authenticate scalar penalties. No equivalent full closed-family Hilbert value/attainment theorem is authenticated in the sources examined. The proof abstracts/adapts the existing Charbonnier/Schatten approximation and tail assembly; the nuclear corner consumes the existing signed-root result. | General transport lifting derivation and full family solution extension; potentially novel, exact historical priority unresolved. | Full compiler validation; predecessor primary confirmations as recorded, S10’s printed edition remains unauthenticated. | C1 finite unrestricted value; C2 positive canonical cutoff; compact unitary truncation and moving targets; finite reducing transport sections; T19 domains; angle continuity/monotonicity; lower semicontinuity and actual canonical restrictions; generic spectral block trace; existing nuclear signed-root attainment. | The finite correction describes a constructed regular attainer, not every family optimizer. The nuclear corner uses an independent infinite signed-root construction. No full real matching formula in infinite rank, arbitrary-penalty optimizer theorem, or endpoint optimizer-set limit is claimed. |
 
 | **T21** `TauCeti.WeightedInvolution.cost_conjugate_fixed_edge`, `cost_conjugate_two_edges`, `cost_joinFixed`, [WeightedInvolution](../ForTauCeti/Combinatorics/Matching/WeightedInvolution.lean); `exists_tail_of_fixed`, `exists_tail_of_pair`, `cost_prependFixed`, `cost_prependPair`, [WeightedFin](../ForTauCeti/Combinatorics/Matching/WeightedFin.lean) | Exact weighted cost changes under actual involution exchanges, and exact removal/extension identities for leading fixed points and two-cycles. Arbitrary finite vertex sets and arbitrary symmetric edge costs in the exchange results; empty tails included. | Classical finite matching and permutation/sum manipulations. Pinned Mathlib/TauCeti checked for an equivalent weighted exchange API; no exact external theorem locator newly authenticated. | Classical combinatorial ingredients formally verified, independently implemented here. | Compiled in the full 21,507-job build; no mathematical originality claim. | Mathlib involutions, transpositions, finite sums, Fin predecessor/successor and proof-preserving relabelling. | Not an optimization theorem by itself and not an implementation of blossom or a sorting algorithm. |
 | **T22** `F.RealTransport.exists_nuclear_head_normalization`, [RealNuclearHeadNormalization](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearHeadNormalization.lean); `realNuclearMatchingMinimum_eq_sorted`, [RealNuclearSortedMinimum](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearSortedMinimum.lean); `realTransportPowerMinimum_one_eq_sorted`, `exists_minimizing_real_nuclear_transport_sorted`, [RealNuclearSortedTransport](../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearSortedTransport.lean) | Finite real equal-rank pairs: the unrestricted nuclear minimum is zero for no positive angles, otherwise the smaller of two adjacent sums, optionally reflecting the largest angle. Actual ambient attainment and a bound for every orthogonal competitor. The combinatorial theorem includes arbitrary optional singletons, zero/repeated/right angles and empty/singleton lists. | T7 is the proved unrestricted transport predecessor; S4 is the published ambient problem/Q-norm/Frobenius predecessor. Scalar submodularity and finite exchanges are classical ingredients. Exact priority of this nuclear transport sorting consequence remains unresolved. | Derived algorithmic simplification of the verified matching solution; potentially novel transport consequence, not a claim to invent sorting or Monge exchange. | Full compiler validation and primary S4 comparison; broader algorithmic/historical priority not settled. | T21 exact local exchanges/removal/construction; `realNuclearPairWeight_adjacent_exchange`, `nuclear_pair_canonical_exchange`, `nuclear_pair_largest_exchange`; two-step finite induction; exact positive-label enumeration and matching relabelling; `realTransportPowerMinimum_one_eq_nuclearMatching` and its ambient attainer. | Does not classify all nuclear optimizers or prove sorting for strict Schatten/Charbonnier, infinite-rank real matching, numerical stability, or executable algorithm complexity. |

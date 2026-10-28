@@ -2,6 +2,12 @@
 
 ## Provenance and scope
 
+**28 October update:** a bounded independent check now authenticates the
+reported wording in the authors' preliminary PDF, not in the printed edition.
+See the final version-specific update. The supplied review below retains its
+original evidence level; do not mistake its older access status for the new
+primary-version check.
+
 The user supplied an external agent's **“Historical priority review — October
 26, 2026”** in the conversation on this date. This record preserves its
 findings, comparisons, negative-search limits and remaining checks so another
@@ -187,3 +193,15 @@ use the current handoff, not this report's superseded snapshot.
 
 No manuscript or visualization is changed by this archive. The paper's framing,
 precise novelty wording and any correspondence remain separate work.
+
+
+## Independent version-specific update — 28 October 2026
+
+The [author-hosted preliminary PDF](https://math.univ-lyon1.fr/~aubrun/ABMB/ABMB.pdf)
+was directly inspected at (B.13), p. 316; Exercise B.12, p. 317; hint, p. 371.
+It confirms the reported formula and domination assertion in that version.
+The authors' page labels the file preliminary; publisher access returned 403.
+The printed edition therefore remains unauthenticated. The exact transport
+comparison and newly proved nuclear sorting theorem are recorded in the
+maintained unification note, sources S10/S14/S15 and provenance T21/T22.
+No author contact was made.

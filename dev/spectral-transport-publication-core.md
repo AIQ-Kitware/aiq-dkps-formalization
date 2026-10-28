@@ -38,6 +38,74 @@ corner uses the already proved signed-root construction. C3/C4 describe the
 field-dependent compatibility boundary. The broader arbitrary-penalty operator
 fragment remains conjectural; it is not needed for this family theorem.
 
+## Focused publication decision after the overnight proof — 28 October
+
+The active proof priority is the real matching argument and its sorting
+refinement. The user is revising the formalization manuscript separately;
+its emphasis remains with the user. Ancestry reconstruction is maintained
+in a different repository and was excluded from this run. The wider C1–C5
+complex theory below remains valid and available as a separate contribution.
+
+The focused contribution is: **source-faithful formalization exposed a real
+coupling obstruction, and the ensuing unrestricted real optimization has an
+exact attained matching solution, with a nuclear two-sorted-sums consequence.**
+The conventional lower-bound roadmap, exact examples and targeted primary-source
+comparison now appear in the unification note. They separate global minimizer
+extraction from an arbitrary competitor, real block descent from complex
+optimality, and the lower bound from the matching construction.
+
+The new theorem is
+`RealTransport.realTransportPowerMinimum_one_eq_sorted`, with ambient
+attainment in `exists_minimizing_real_nuclear_transport_sorted`, prefix
+`TauCeti.DavisKahan.FiniteDimensional`. For a descending list of positive
+labelled angles, it proves zero for the empty list, otherwise
+`min(B(theta), 2+B(tail theta))`, where B pairs adjacent entries and uses a
+final scalar zero for odd length. `realNuclearMatchingMinimum_eq_sorted`
+proves the finite combinatorial identity, including optional singletons,
+zero/repeated/right angles and k=0/1. The full default build passed
+**21,507 jobs**, warnings as errors. Mathematical checkpoint: `5bc7e40f5`.
+
+This improves the algorithmic statement: the nuclear value needs two sums after
+sorting. It does not verify an executable algorithm, numerical stability or
+sorting for every strict exponent/positive smoothing. Its exchange machinery
+is classical. The candidate original mathematics should remain centered on the
+unrestricted ambient reduction, rather than on the existence of a sorting
+procedure or the already-known phase-improvement mechanism.
+
+A focused theorem-level article can use this sequence:
+
+1. **Formalization and source fidelity:** the reviewed Davis–Kahan targets,
+   reusable formal mathematics, and the distinction between kernel checking
+   and faithful source interpretation. Refer to existing provenance; do not
+   reconstruct all upstream ancestry here.
+2. **The discrepancy and its scope:** the exact real four-dimensional witness,
+   known complex-phase context and the classical Q-norm repair.
+3. **The unrestricted matching theorem:** precise real finite-dimensional
+   hypotheses for 1<=p<2, the universal lower bound through complete real
+   sectors, matching realization, and continuity at the nuclear endpoint.
+4. **Nuclear consequences and computation:** explicit weights, the now-proved
+   two-sum theorem, real/complex equality parity, canonical-value criterion,
+   and the worked distinct-angle example.
+5. **Boundaries and literature comparison:** no new perturbation bound is
+   asserted; distinguish frame Procrustes and geodesic metrics, preserve
+   uncertainty of priority, and state the remaining authentication limits.
+
+An optional separate pure transport article can organize the complete complex
+family by ambient spectral reduction, the common phase law, ideal lifting and
+nuclear signed-root compatibility. Its main results and broader outline are
+preserved below. Neither article needs exhaustive real infinite-rank matching,
+all-family optimizer topology or a QUENCH application as a prerequisite.
+
+**Decision at the current boundary:** the overnight sorting target is achieved.
+The focused article now needs conventional exposition and specialist review,
+not another automatically selected theorem campaign. Primary comparison did
+not locate a predecessor supplying the full real matching reduction, but this
+is qualified evidence, not first-priority clearance. The author-hosted B.12
+preliminary version is now directly checked; the printed edition remains
+unauthenticated. Original-source and indexing limitations remain explicit.
+No manuscript, visualization, submission or other-repository edit follows
+from this assessment.
+
 ## Five principal statements
 
 ### C1. Common ambient structure and exact minimum — proved

@@ -8,8 +8,13 @@ results are `RealTransport.realTransportPowerMinimum_one_eq_sorted` and
 `exists_minimizing_real_nuclear_transport_sorted`, prefix
 `TauCeti.DavisKahan.FiniteDimensional`, in `RealNuclearSortedTransport.lean`.
 The finite normalization handles optional singletons, zeros, ties and right
-angles. Targeted literature comparison and worked examples remain active in
-[the overnight plan](overnight-real-matching-plan-2026-10-27.md).
+angles. Targeted primary-source comparison, the exact four-dimensional and
+three-distinct-angle examples, and the completion audit are now recorded in
+[the executed overnight plan](overnight-real-matching-plan-2026-10-27.md) and
+the unification note. Mathematical checkpoint: `5bc7e40f5`. The next productive
+step is focused exposition and specialist review, not another automatic
+theorem campaign. The author-hosted Exercise B.12 draft is checked; the printed
+edition and exact historical priority remain unresolved.
 DKPS-to-TauCeti ancestry is maintained elsewhere and is not a campaign here;
 manuscript edits remain with the user.
 

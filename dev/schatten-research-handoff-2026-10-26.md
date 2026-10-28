@@ -19,7 +19,9 @@ entry and the current research plan: exact optional-singleton normalization,
 two-sum finite matching minimum, unrestricted real transport value and ambient
 attainment. Full default build: **21,507 jobs**, warnings as errors. This
 supersedes all older entries calling nuclear sorting open. Strict-exponent or
-positive-smoothing sorting is not asserted.
+positive-smoothing sorting is not asserted. The final conventional examples,
+targeted source comparison and completion audit are now recorded; this run
+ends at the focused exposition/specialist-review boundary.
 
 Start with the maintained [research plan](schatten-transport-research-plan.md).
 It records the completed real equality certificate, the publication-core goals,
@@ -4797,3 +4799,47 @@ full default `lake build`: **21,507 jobs**, warnings as errors. Log:
 `/tmp/dkps-overnight-2026-10-28/full-sorting-build.log`. No manuscript,
 visualization, submission, roadmap or other-repository edits were made;
 preexisting unrelated worktree changes were preserved.
+
+
+### Completed overnight synthesis and source comparison — 28 October
+
+Mathematical checkpoint `5bc7e40f5` is followed by documentation-only synthesis.
+The unification note contains a short unrestricted lower-bound proof roadmap,
+a four-dimensional actual transport witness with explicit orthogonal block
+matrices and displacement spectra, and a three-distinct-angle example with
+all matching choices. For `(pi/2,pi/3,pi/6)` the exact nuclear value is
+`2+2 sqrt(2)`, achieved by reflecting the largest plane and pairing the rest;
+the alternative adjacent sum is `2 sqrt(6)`. These particular radical
+evaluations are conventional symbolic calculations from the formal theorem,
+clearly separated from the compiled general formula. A separate rounded
+example illustrates a p=1 versus p=3/2 matching change using the already proved
+explicit scalar phase formula; its numerical ordering is not advertised as
+another Lean theorem.
+
+The targeted comparison reopens Davis 1958, BLR 2001, Qiu–Zhang–Li,
+Zhang–Qiu, Cape's frame Procrustes objective and a structured perfect-matching
+source. It identifies objective/field/dimension/feasible-set and norm-scope
+boundaries. The nuclear/strict-subquadratic Schatten norm cannot directly
+specialize a Q-norm result: a hypothetical associate norm on two orthogonal
+rank-one projections would violate its triangle inequality. No examined
+statement supplied the unrestricted real matching lower bound, but priority
+remains conditional on specialist scrutiny. Classical finite exchanges and
+sorting are not presented as inventions.
+
+The author-hosted preliminary Aubrun–Szarek PDF was directly checked at
+(B.13) p. 316, Exercise B.12 p. 317 and its hint p. 371. The printed edition
+remains unauthenticated after publisher 403; the historical review and S10
+preserve this version distinction. No contacts or public correction were made.
+
+The publication-core note now gives the focused formalization/discrepancy/
+matching article outline and keeps the larger complex family theory available
+as a separate optional article. The ancestry campaign was excluded as the user
+requested. The next consequential step is conventional exposition and external
+specialist review; no further large proof campaign is needed for this scoped
+contribution. The executed overnight plan contains the requirement-by-requirement
+completion audit and records outstanding historical questions honestly.
+
+Validation remains the focused 7,322-job target and the full **21,507-job**
+default build after cache retrieval, warnings as errors. No Lean edits followed
+that full build. Manuscript and visualization work remain exclusively with the
+user; preexisting unrelated changes were preserved.
