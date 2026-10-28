@@ -46,22 +46,16 @@ private theorem sorted_le_reflection {n : ℕ} (theta : Fin (n + 1) → ℝ) :
   cases n with
   | zero => exact min_le_right _ _
   | succ n =>
+    -- Expand the two patterns: the reflected branch agrees, and a pair costs at most four.
     change min (realNuclearPairWeight (theta 0) (theta 1) +
         nuclearAdjacentSum (fun i : Fin n => theta i.succ.succ))
       (2 + nuclearAdjacentSum (fun i : Fin (n + 1) => theta i.succ)) ≤
       2 + min (nuclearAdjacentSum (fun i : Fin (n + 1) => theta i.succ))
         (2 + nuclearAdjacentSum (fun i : Fin n => theta i.succ.succ))
-    rcases le_total
-        (nuclearAdjacentSum (fun i : Fin (n + 1) => theta i.succ))
-        (2 + nuclearAdjacentSum (fun i : Fin n => theta i.succ.succ)) with h | h
-    · rw [min_eq_left h]
-      exact min_le_right _ _
-    · rw [min_eq_right h]
-      have hmin := min_le_left
-        (realNuclearPairWeight (theta 0) (theta 1) +
-          nuclearAdjacentSum (fun i : Fin n => theta i.succ.succ))
-        (2 + nuclearAdjacentSum (fun i : Fin (n + 1) => theta i.succ))
-      linarith [realNuclearPairWeight_le_four (theta 0) (theta 1)]
+    rw [add_min]
+    apply le_min (min_le_right _ _)
+    exact (min_le_left _ _).trans (by
+      linarith [realNuclearPairWeight_le_four (theta 0) (theta 1)])
 
 private theorem sorted_le_pair {n : ℕ} (theta : Fin (n + 2) → ℝ)
     (htheta : ∀ i, theta i ∈ Icc 0 (Real.pi / 2)) (horder : Antitone theta) :
@@ -78,6 +72,7 @@ private theorem sorted_le_pair {n : ℕ} (theta : Fin (n + 2) → ℝ)
       rw [realNuclearPairWeight_comm b d]
       exact realNuclearPairWeight_mono_left d a b
         (htheta _).1 hda (htheta 0).2 (htheta 1)
+    -- Expand the patterns with the common unreflected branch; use `hed` on the other branch.
     change min (realNuclearPairWeight a b +
         nuclearAdjacentSum (fun i : Fin (n + 1) => theta i.succ.succ))
       (2 + (realNuclearPairWeight b d +
@@ -85,18 +80,8 @@ private theorem sorted_le_pair {n : ℕ} (theta : Fin (n + 2) → ℝ)
       realNuclearPairWeight a b +
         min (nuclearAdjacentSum (fun i : Fin (n + 1) => theta i.succ.succ))
           (2 + nuclearAdjacentSum (fun i : Fin n => theta i.succ.succ.succ))
-    rcases le_total
-        (nuclearAdjacentSum (fun i : Fin (n + 1) => theta i.succ.succ))
-        (2 + nuclearAdjacentSum (fun i : Fin n => theta i.succ.succ.succ)) with h | h
-    · rw [min_eq_left h]
-      exact min_le_left _ _
-    · rw [min_eq_right h]
-      have hmin := min_le_right
-        (realNuclearPairWeight a b +
-          nuclearAdjacentSum (fun i : Fin (n + 1) => theta i.succ.succ))
-        (2 + (realNuclearPairWeight b d +
-          nuclearAdjacentSum (fun i : Fin n => theta i.succ.succ.succ)))
-      linarith
+    rw [add_min]
+    exact min_le_min le_rfl (by linarith)
 
 /-- The two-sum value bounds every nuclear matching, not just perfect
 matchings. The angle list is ordered, but zeros, ties and right angles are allowed. -/
