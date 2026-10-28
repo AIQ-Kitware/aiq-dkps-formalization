@@ -1,7 +1,8 @@
 # Spectral subspace transport: structure and mathematical provenance
 
 Research checkpoint, 27 October 2026. This note joins the current proved
-theory to the real signed-root converse proved in this campaign. It is not
+theory to the real signed-root converse and the common closed-family
+finite complex minimum theorem proved in this campaign. It is not
 a manuscript or a claim of historical priority. The accompanying
 [research plan](schatten-transport-research-plan.md) and
 [handoff](schatten-research-handoff-2026-10-26.md) give the continuation point.
@@ -294,7 +295,7 @@ E'(s)=-\frac{2(2-p)\tau^2s}{(\tau^2+s^2)^2}\le0.
 \]
 
 For tau=0, p>1 the elasticity is the constant p-1. Thus the regular family
-has the one-peak phase derivative required by the conjectural ambient
+has the one-peak phase derivative used by the now-proved family ambient
 decoupling theorem. This observation alone does not give uniqueness of its
 scalar minimizing phase. The logarithmic-curvature argument does.
 
@@ -503,12 +504,12 @@ H the positive gradient space and Z=ker G. There are phases
 actual self-adjoint unitary R on Z. The isometric coordinates
 `d(x,y,z)=x+Jy+z` give
 
-[
- d^{-1}Ud=operatorname{diag}igl(operatorname{diag}(e^{ialpha_j}),
-             operatorname{diag}(e^{-ieta_j}),Rigr),qquad
- mathcal F_{p,	au}(U)=sum_j{phi_{p,	au}(alpha_j)+phi_{p,	au}(eta_j)}
-                         +mathcal F_{p,	au}(R).
-]
+\[
+ d^{-1}Ud=\operatorname{diag}\bigl(\operatorname{diag}(e^{i\alpha_j}),
+                   \operatorname{diag}(e^{-i\beta_j}),R\bigr),\qquad
+ \mathcal F_{p,\tau}(U)=\sum_j\{\phi_{p,\tau}(\alpha_j)+\phi_{p,\tau}(\beta_j)\}
+                           +\mathcal F_{p,\tau}(R).
+\]
 
 Every block and the kernel contribution comes from the original transporter.
 No invariant-plane hypothesis on competitors, scalar minimizing-phase formula,
@@ -528,18 +529,69 @@ restriction proof in both `SchattenGradientBlocks` and `SmoothedGradientBlocks`.
 The old public declarations retain their statements. These bridges are
 classical spectral formalizations, with no independent novelty claim.
 
-**Exact remaining boundary.** C1a proves the unrestricted ambient structural
-reduction. C1b's exact principal-angle minimum formula is still open for the
-family: compare the phase sums and retained reflection cost with scalar minima,
-identify the actual principal-angle sum, and construct an attaining transporter.
-The phase means are already in the correct acute/right range. For the kernel,
-there is a direct conventional lower-bound route: a reflection R costs
-`rho(2)||I-R||_1/2`, projection distance bounds the principal sine sum, and
-convexity gives `m_rho(theta)<=rho(2 sin(theta))<=rho(2)sin(theta)`.
-This does not require classifying every kernel optimizer before proving C1b.
-The shared logarithmic-ratio argument for C2's full minimizing-phase law also
-remains to be formalized. The nuclear corner retains its separate signed-root
-geometry; zero-smoothing family values need an explicit boundary argument.
+### Exact common minimum, including zero smoothing — proved
+
+C1b now closes the finite-dimensional ambient reduction. For equal-rank
+subspaces K,L of a finite complex Hilbert space, `1<=p<=2`, `tau>=0`, put
+
+\[
+ m_{p,\tau}(\theta)=\min_{0\le\delta\le\theta}
+   \{\phi_{p,\tau}(\theta+\delta)+\phi_{p,\tau}(\theta-\delta)\}.
+\]
+
+Then
+
+\[
+ \min_{UP_KU^*=P_L}\operatorname{Tr}\rho_{p,\tau}(|I-U|)
+   =\sum_{j=1}^{\dim K}m_{p,\tau}(\theta_j),
+\]
+
+with an actual ambient attainer formed from independently minimizing
+canonical phases. Every unitary transporter obeys the lower bound. There
+is no assumed block structure on the competitor. The exact declaration is
+`SmoothedPowerTransport.exists_unitary_minimizing_transport_principalAngles_of_nonneg`
+in [SmoothedPowerBoundary](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerBoundary.lean),
+with prefix `TauCeti.DavisKahan.FiniteDimensional`.
+
+The common proof has three parts, each now compiled:
+
+1. [SmoothedPowerScalarMinimum](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerScalarMinimum.lean)
+   defines the literal compact minimum, proves attainment and continuity of
+   its value in smoothing, and proves
+   `phaseMinimum_mean_le_sum` and `phaseMinimum_le_penalty_two_mul_sin`.
+   The second bound uses convexity of the augmented norm power between
+   `(tau,0)` and `(tau,2)`, not a penalty-specific optimum formula.
+2. [SmoothedPowerReflectionBound](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerReflectionBound.lean)
+   bounds the entire retained kernel sector. For a reflection R,
+   `F(R)=rho(2)||I-R||_1/2`; the classical projection-distance inequality
+   bounds `2 sum sin(theta_j)` by that nuclear displacement, while convexity
+   gives `m(theta)<=rho(2 sin(theta))<=rho(2)sin(theta)`.
+   [SmoothedPowerGlobalLowerBound](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGlobalLowerBound.lean)
+   combines this with C1a and the actual paired-angle trace, then uses compact
+   attainment to cover every ambient competitor. No full kernel optimizer
+   classification is required.
+3. [SmoothedPowerGlobalAttainment](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean)
+   constructs canonical independent-phase attainers; the boundary module
+   passes the lower bound to zero smoothing by continuity of values.
+   `displacementCost_zero_smoothing` identifies the literal objective with
+   the native Schatten power, including nuclear and quadratic endpoints.
+
+The reusable classical reflection identity is
+`TauCeti.normalDisplacementSpectralCost_of_isSelfAdjoint` in
+[UnitarySpectralCost](../ForTauCeti/Analysis/InnerProductSpace/UnitarySpectralCost.lean).
+`ComplexTraceOptimality.two_mul_sum_sin_principalAngles_le_nuclear_transport`
+in [ComplexTracePrincipalAngles](../DavisKahan/FiniteDimensional/DirectRotation/ComplexTracePrincipalAngles.lean)
+now supplies the direct classical sine bound; the existing nuclear endpoint
+consumer uses it instead of taking a limit of solved Schatten optima.
+
+**Exact remaining boundary.** C1a is necessary local-minimum structure for
+positive smoothing; C1b is the exact closed-family value and an attaining
+construction. They do not classify every family optimizer. The shared C2
+logarithmic-ratio proof of the full minimizing-phase law and the C5 family
+Hilbert lift remain unformalized. The wider arbitrary-penalty shape theorem
+also remains conjectural. Zero-smoothing value continuity does not assert
+convergence of entire optimizer sets. The nuclear corner retains the already
+proved independent signed-root geometry.
 
 ## Limits of regimes: a proved obstruction and the remaining claims
 
@@ -779,8 +831,8 @@ including its pre-DKPS/Spectra ancestry and independent-work distinctions.
 | **T12** `I.SchattenPhaseTransition.norm_nearest_schatten_corrections_sub_le_at_closed_critical_commutator`, [SchattenCorrectionDataStability](../DavisKahan/InfiniteDimensional/DirectRotation/SchattenCorrectionDataStability.lean) | In the native-ideal feasible closed canonical regime, nearest projection-commuting corrections have operator-norm data stability, including constant p/(2-p) at the closed threshold. | S7 Theorem 1 is a classical polar-conditioning ingredient; S8 weighted Procrustes is a different constraint. | Transport/correction application and exact threshold extension; polar perturbation ingredient classical. | Primary ingredients checked; exact application priority unresolved. | T5 uniqueness; `canonical_correction_eq_diagBlock_factorThru_modulus`; polar-factor perturbation estimate. | Operator-norm data stability, not objective-excess distance in an ideal norm. Critical quartic growth excludes an automatic quadratic excess estimate. |
 | **T13** `F.SchattenPhaseTransition.phasePower_two_right_angle` and `not_tendsto_zero_of_right_angle_subquadratic_minimizers`, [SchattenPhaseMinimum](../DavisKahan/FiniteDimensional/DirectRotation/SchattenPhaseMinimum.lean) | Quadratic right-angle phases are all optimal, but subquadratic exact scalar minimizers cannot converge to phase zero. | Elementary consequence of the existing right-angle phase formula; S4 Lemma 3.3 is a classical special-phase predecessor. | New formal endpoint obstruction; no independent novelty claim for the elementary scalar observation. | Compiled; exact earlier endpoint wording not located. | `phaseChord_add_sq`; `phasePower_right_angle_eq_minimum_iff`; uniqueness of limits. | Refutes scalar endpoint approximability, not by itself a full ambient optimizer-set limit theorem. |
 | **T14** `ContinuousLinearMap.nuclearENorm_adjoint_comp_self_eq_hilbertSchmidtEnergy`, `re_nuclearTrace_eq_nuclearENorm_iff_isPositive`, `nuclearTrace_mul_comm`, [Nuclear/Trace](../ForTauCeti/Analysis/OperatorIdeal/Nuclear/Trace.lean); compact reduction in [CompactGram](../ForTauCeti/Analysis/OperatorIdeal/Nuclear/CompactGram.lean) | Over either field, arbitrary Hilbert dimension: nuclear Gram gauge equals Hilbert--Schmidt energy, including infinity; finite trace saturates its norm bound iff positive; finite trace is cyclic. | Classical Hilbert--Schmidt/trace-ideal ingredients, proved directly from the accepted column, Parseval and compact spectral APIs. An exact external theorem/page for the positivity equality is not newly authenticated. | Classical proof ingredients formally verified and generalized from the former complex API. | Pinned formal sources and full build checked; exact external trace locator remains pending. | Tau Ceti Hilbert--Schmidt columns and compactness; compact positive eigenvalue-multiplicity sum; square-root polar factorization; Cauchy--Schwarz equality. | No novelty claim for trace identities. The new mathematical application is T8; no parallel real trace definition is introduced. |
-
 | **T15** `TauCeti.smoothedPowerPhaseSlope_strictMonoOn`, `smoothedPowerPhaseSlope_strictAntiOn`, [SmoothedPowerPhase](../ForTauCeti/Analysis/InnerProductSpace/SmoothedPowerPhase.lean); `TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport.spectral_decomposition_of_isLocalMinOn_transports`, [SmoothedPowerSpectralDecomposition](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerSpectralDecomposition.lean); same namespace `gradient_block_no_overlap_of_isLocalMinOn_transports`, [SmoothedPowerGradientNoMixing](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGradientNoMixing.lean) | `1<=p<=2`, positive smoothing, finite complex Hilbert space: every ambient constrained local minimum has actual reflection-paired phase blocks with acute/right means and a self-adjoint kernel restriction; literal spectral cost splits exactly. | Classical convexity/calculus/CFC/eigenspace ingredients; formal proof adapts the existing Schatten/Charbonnier restriction and overlap arguments. S4 establishes the ambient problem and a special subquadratic example; S12/S13 authenticate the scalar penalties. No exact family transport structural theorem is authenticated in the examined sources. | Shared proof refactoring and new family structural derivation/extension; historical priority unresolved. | Compiler verified; named primary predecessors verified, exact family priority not independently settled. | Common scalar single-peak and radial-weight monotonicity; two-preimage CFC restriction; feasible paired variation; common negative Hessian; positive spectral basis and paired involution decomposition; arbitrary-penalty spectral cost additivity. | C1a is a proved ambient structural theorem, not the C1b global minimum formula, a converse characterization of local minima, or the full scalar minimizing-phase law. No novelty claim for the classical spectral bridges. |
+| **T16** `F.SmoothedPowerTransport.exists_unitary_minimizing_transport_principalAngles_of_nonneg`, `displacementCost_zero_smoothing`, [SmoothedPowerBoundary](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerBoundary.lean); `sum_phaseMinimum_le_transport`, [SmoothedPowerGlobalLowerBound](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGlobalLowerBound.lean); `exists_unitary_attaining_principalAngles`, [SmoothedPowerGlobalAttainment](../DavisKahan/FiniteDimensional/DirectRotation/SmoothedPowerGlobalAttainment.lean) | Finite complex Hilbert space, equal-rank subspaces, `1<=p<=2`, `tau>=0`: the unrestricted minimum of the literal family spectral trace equals the sum of attained compact planar minima over all source principal angles. An actual canonical phase attainer exists; zero smoothing is the native Schatten power. | S4 Problem 1.1 formulates the ambient problem; Theorems 4.2/4.5 cover the classical quadratic/Q-norm regimes, not this entire nonhomogeneous family. S12/S13 authenticate the scalar penalties. No equivalent closed-family transport theorem is authenticated in the examined sources. | Family-wide structural derivation/extension; potentially novel transport theorem, with established boundary cases and classical ingredients. | Compiled; direct primary predecessor comparisons as recorded above; exact extension priority unresolved, including S10. | T15 common ambient structure; `Submodule.sum_principalAngles_eq_paired_phases_add_comap_complex`; `phaseMinimum_mean_le_sum`, `phaseMinimum_le_penalty_two_mul_sin`; classical `normalDisplacementSpectralCost_of_isSelfAdjoint` and `two_mul_sum_sin_principalAngles_le_nuclear_transport`; compact attainment, canonical CS geometry, `continuous_phaseMinimum_smoothing` and `continuous_displacementCost_smoothing`. | C1b values/attainment are proved, not every optimizer, the full C2 phase law, a real decoupling theorem, a generic C² penalty theorem, or the C5 infinite-dimensional family lift. No novelty claim for scalar penalties, CS geometry, convexity, trace bounds, or continuity of compact minima; no newly authenticated external locator is claimed for these elementary ingredients. |
 
 Unresolved source work is substantive, not a request to add a checker: obtain
 the authoritative Exercise B.12 statement; authenticate the original 1970
@@ -811,8 +863,9 @@ list of a classical field merely by keyword overlap.
 
 This organization supports a coherent contribution without claiming a common
 unrestricted optimizer formula for arbitrary penalties or a complete real
-Hilbert matching theory. The new bridge is T8; the next mathematical step is
-the unified spectral-penalty theorem. Real equality necessity is now proved;
+Hilbert matching theory. The real bridge is T8 and the
+closed-family finite complex minimum theorem is T16. The next central step
+is the shared full scalar phase-selection law C2. Real equality necessity is now proved;
 full real optimizer topology and exhaustive limiting classifications are
 secondary to the publication core.
 
@@ -835,5 +888,14 @@ The subsequent C1a ambient structural assembly and all maintained consumers
 passed **21,453 jobs**, warnings as errors, after `lake exe cache get` and the
 full default `lake build`. The log is
 `/tmp/dkps-unification/family-ambient-full.log`. This validates the necessary
-structural theorem and exact cost identity; C1b and the full C2 minimizing-
-phase law remain separate unproved formal statements.
+structural theorem and exact cost identity. At that checkpoint C1b and
+the full C2 minimizing-phase law were separate unproved formal statements;
+the C1b status is superseded by the closed-family checkpoint below.
+
+The C1b value/attainment campaign also passes the full closed family through
+zero smoothing. Its focused target passed **7,266 jobs**. After
+`lake exe cache get`, the full default `lake build` passed **21,463 jobs**
+with warnings as errors, including the native nuclear endpoint refactor and
+all maintained consumers. The log is
+`/tmp/dkps-unification/family-closed-full.log`. The earlier C1b-open status
+describes the preceding C1a checkpoint only.

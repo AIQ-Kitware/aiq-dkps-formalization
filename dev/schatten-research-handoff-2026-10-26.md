@@ -24,7 +24,9 @@ default build passed **21,427 jobs**, with warnings as errors, including the
 shared real/complex trace and equality-certificate proofs. The subsequent
 shared family mechanism and its consumers passed **21,437 jobs**, again with
 warnings as errors. The ambient structural decomposition C1a subsequently
-passed **21,453 jobs** with warnings as errors. The dated sections below are
+passed **21,453 jobs** with warnings as errors. The subsequent closed-family
+C1b minimum/attainment theorem and all consumers passed **21,463 jobs**,
+again with warnings as errors. The dated sections below are
 proof history; their
 statements of open obligations apply at their recorded checkpoint only.
 
@@ -42,11 +44,19 @@ proved; maximal gradient and zero-gradient sectors are included.
 Both existing Schatten/Charbonnier Hessian proofs consume `UnitaryPhaseHessian`,
 and their block-restriction proofs now consume `UnitarySpectralRestriction`.
 The new family derivation invokes no existing global penalty-specific optimum.
-C1b's exact principal-angle minimum/attainment formula and C2's full scalar
-minimizing-phase law remain to be formalized. The next lower-bound step is
-phase/angle cost assembly and the nuclear bound on the reflection remainder;
-do not restart the already proved ambient assembly or classify every kernel
-optimizer as an unrelated prerequisite.
+C1b's exact principal-angle minimum/attainment theorem is now proved for
+`1<=p<=2`, `tau>=0`, finite complex equal-rank pairs. The declaration is
+`SmoothedPowerTransport.exists_unitary_minimizing_transport_principalAngles_of_nonneg`
+in `SmoothedPowerBoundary.lean`, with the same namespace prefix as C1a.
+The common proof uses actual angle assembly, scalar compact minima, the
+classical nuclear reflection bound and canonical phase attainers. Continuous
+minimum values and fixed-unitary costs give the zero-smoothing bound;
+`displacementCost_zero_smoothing` identifies the native Schatten objective.
+No old penalty-specific optimum is invoked to establish the family result.
+C2's full shared scalar minimizing-phase law and C5's family-wide Hilbert
+lift remain open. The next central proof is C2, followed by a decision about
+whether C5 is essential to the paper's scope. Optional real topology and broad
+stability are deferred; do not restart C1a/C1b or the real equality certificate.
 
 **Complex nuclear endpoint:** exact general infinite-rank attainment, the
 certificate for every ambient optimizer, a literal independent signed-root
@@ -4500,3 +4510,60 @@ geometry/restricted-kernel projection interface, but its penalty-specific
 scalar and kernel optimizer classification must not be imported as the new
 family argument. The C1b lower-bound route above uses the nuclear bound
 instead, and does not require C2's complete phase uniqueness law first.
+
+## 27 October 2026 — closed-family exact minimum and publication-core reassessment
+
+**New theorem.** For `1<=p<=2`, `tau>=0`, finite complex Hilbert space and
+equal-rank subspaces, the minimum of the literal smoothed-power displacement
+trace over every ambient unitary transporter equals the sum of attained
+scalar minima over all source principal angles. An explicit canonical
+independent-phase transporter attains it. This includes zero/right angles,
+empty subspaces, nuclear and quadratic boundaries. The scalar minimum is
+not a restatement of an ambient optimum hypothesis: compact attainment,
+actual C1a phase blocks, the paired-angle trace and a separate common
+reflection comparison prove the unrestricted lower bound.
+
+**Declaration homes.** Namespace prefix
+`TauCeti.DavisKahan.FiniteDimensional.SmoothedPowerTransport`:
+
+- `exists_unitary_minimizing_transport_principalAngles_of_nonneg` and
+  `displacementCost_zero_smoothing`, `SmoothedPowerBoundary.lean`.
+- `sum_phaseMinimum_le_transport` and `exists_transport_minimizer`,
+  `SmoothedPowerGlobalLowerBound.lean`.
+- `exists_unitary_attaining_principalAngles`, `SmoothedPowerGlobalAttainment.lean`.
+- `sum_phaseMinimum_le_selfAdjoint_transport`, `SmoothedPowerReflectionBound.lean`.
+- `phaseMinimum_mean_le_sum`, `phaseMinimum_le_penalty_two_mul_sin`,
+  `exists_attains_phaseMinimum_of_nonneg` and `continuous_phaseMinimum_smoothing`,
+  `SmoothedPowerScalarMinimum.lean`.
+
+The classical donor identity
+`TauCeti.normalDisplacementSpectralCost_of_isSelfAdjoint` is in
+`ForTauCeti/Analysis/InnerProductSpace/UnitarySpectralCost.lean`.
+The direct classical sine bound
+`ComplexTraceOptimality.two_mul_sum_sin_principalAngles_le_nuclear_transport`
+is in `ComplexTracePrincipalAngles.lean`; the existing public nuclear endpoint
+now forwards to it instead of a limit of solved strict-Schatten optima.
+The public nuclear theorem statement is retained.
+
+**Boundary proof.** Compact planar minima and actual fixed-unitary spectral
+costs are continuous in smoothing. Right limits transfer the positive-
+smoothing lower bound to zero. Canonical scalar minimizers directly attain
+that boundary value. This proves values/attainment, not convergence or
+surjectivity of whole optimizer sets. The broader penalty-shape conjecture,
+every-optimizer family classification and family Hilbert lift remain separate.
+
+**Attribution and decision.** T16 extends the existing provenance map with the
+exact new declaration, classical ingredients, S4 ambient predecessors and
+S12/S13 scalar prior art. Historical priority of the family transport theorem
+remains unresolved. The publication-core assessment now includes the proved
+C1b, revised dependency diagram, proposed abstract and proof-scope decision:
+the finite family reduction is a complete central theorem; C2 is the next
+valuable explanation of phase selection, while C5 should be undertaken only
+if its stronger infinite-dimensional scope is needed. Do not start optional
+real topology, stability or exhaustive limits to fill a backlog.
+
+**Validation.** Focused closed-family target: 7,266 jobs passed. After
+`lake exe cache get`, the full default `lake build` passed **21,463 jobs**
+with warnings as errors. Log: `/tmp/dkps-unification/family-closed-full.log`.
+No manuscript, visualization, submission or roadmap file was edited in this
+campaign. Preexisting unrelated changes were left untouched.

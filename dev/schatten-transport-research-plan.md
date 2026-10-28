@@ -2,11 +2,13 @@
 
 Updated 27 October 2026. Mathematical checkpoint `ff3c1657d` includes the
 field-independent nuclear equality certificate and exact real equality-
-attainment criterion. The subsequent smoothed-power campaign proves
+attainment criterion. The subsequent smoothed-power campaign proves the
+closed-family finite complex minimum/attainment theorem C1b, including zero smoothing, and
 ambient spectral decomposition C1a: every finite complex constrained local
 minimum has actual paired phase blocks with acute/right means and a
 self-adjoint kernel restriction, with exact cost splitting. The full default
-build passed 21,453 jobs with warnings as errors. The earlier spectral checkpoint was `96aeb922d`
+build passed 21,463 jobs with warnings as errors after `lake exe cache get`.
+The earlier spectral checkpoint was `96aeb922d`
 (accounting `2b481b94d`). See the
 [unification and provenance note](spectral-transport-unification.md) for the
 structural explanation, exact theorem map and source-authentication boundaries.
@@ -49,17 +51,18 @@ Historical originality requires its own theorem-level literature comparison.
 ## Immediate priority: the organizing penalty theorem
 
 The publication-core assessment specifies five principal statements and their
-status. The next campaign is C1/C2 for
+status. C1 is proved for the finite complex family; the next campaign is C2 for
 `rho_(p,tau)(s)=(tau^2+s^2)^(p/2)-tau^p`, `1<=p<=2`, tau>=0:
 
-1. Finish the organizing C1b exact value/attainment formula. The unrestricted
-   ambient structural reduction C1a is proved. Use its actual phase coordinates
-   to identify the principal-angle sum, bound positive-plane costs by scalar
-   minima, and control the zero-gradient reflection cost by the nuclear
-   projection-distance bound and convexity. Then construct independent scalar
-   phase attainers. A complete kernel optimizer classification is unnecessary
-   for this lower-bound route. Treat zero-smoothing values by a justified finite
-   uniform limit, without inferring convergence of entire optimizer sets.
+1. **Completed:** C1b's exact value/attainment formula for `1<=p<=2`,
+   `tau>=0`, equal-rank subspaces of finite complex Hilbert space. Its
+   declaration is `SmoothedPowerTransport.exists_unitary_minimizing_transport_principalAngles_of_nonneg`
+   in `SmoothedPowerBoundary.lean`, prefix `TauCeti.DavisKahan.FiniteDimensional`.
+   C1a supplies actual paired coordinates; their angle trace and the common
+   convex/nuclear reflection bound give the lower bound. Canonical independent
+   phases attain it. Continuity of scalar minimum values and each fixed
+   unitary cost extends the bound to zero smoothing; the native Schatten
+   power identity is proved. No entire optimizer-set limit is asserted.
 2. Prove the shared scalar transition law. The unification note now derives
    the critical surface and the useful monotonic quantity `N/(d-c)^2`;
    the raw cubic N is not required to be monotone. The actual family
@@ -77,14 +80,13 @@ also replaces their duplicated classical two-phase restriction proofs.
 (prefix `TauCeti.DavisKahan.FiniteDimensional`, source `SmoothedPowerSpectralDecomposition.lean`)
 constructs all actual paired blocks and the full kernel from ambient local
 minimality; `SmoothedPowerFeasibleBlocks` certifies their feasible common
-variation. C1a is proved, not a prescribed-plane hypothesis. C1b's unrestricted
-principal-angle minimum formula and C2's full scalar minimizing-phase law
-remain open as family-wide formal statements. See T15 in the provenance map.
+variation. C1a assumes no prescribed planes; C1b now proves the unrestricted
+closed-family principal-angle minimum and an actual attainer. C2 remains
+open as a shared formal minimizing-phase law. See T15–T16 in the provenance map.
 
 The proposed C² penalty-shape theorem has not been refuted, but is not yet
-formally verified. Begin with the concrete family, whose phase-gradient
-extension fits the existing two-point functional-calculus machinery. Prove
-the public organizing statements before optional topology, stability, or
+formally verified. The concrete family now has its own common proof. Prioritize
+the shared scalar phase law before optional topology, stability, or
 exhaustive real matching/endpoint-family extensions. The assessment contains
 the dependency diagram, closest-source comparison and a proof-supported abstract.
 

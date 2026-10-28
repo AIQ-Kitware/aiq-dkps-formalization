@@ -104,4 +104,49 @@ theorem normalDisplacementSpectralCost_withLpProdMap
     normalDisplacementSpectralCost_eq_sum_singularValues, hblock]
   exact sum_singularValues_prodMap_withLpMap _ _ rho
 
+/-- A self-adjoint unitary has only displacement singular values zero and
+two. Every zero-preserving spectral penalty is consequently a fixed multiple
+of its nuclear displacement. This classical identity adapts the eigenbasis
+argument of `SchattenInvolution` to arbitrary penalties. -/
+theorem normalDisplacementSpectralCost_of_isSelfAdjoint
+    (rho : ℝ → ℝ) (hrho : rho 0 = 0) (U : unitary (E →L[ℂ] E))
+    (hU : IsSelfAdjoint (U : E →L[ℂ] E)) :
+    normalDisplacementSpectralCost rho (U : E →L[ℂ] E) =
+      (rho 2 / 2) * UnitarilyInvariantSeminorm.nuclear ℂ E E
+        (LinearMap.id - (U : E →L[ℂ] E).toLinearMap) := by
+  let b := hU.isSymmetric.eigenvectorBasis rfl
+  let mu := hU.isSymmetric.eigenvalues rfl
+  let lam (i : Fin (Module.finrank ℂ E)) : ℂ := 1 - (mu i : ℂ)
+  have heigen (i : Fin (Module.finrank ℂ E)) :
+      (U : E →L[ℂ] E) (b i) = (mu i : ℂ) • b i :=
+    hU.isSymmetric.apply_eigenvectorBasis rfl i
+  have hnorm (i : Fin (Module.finrank ℂ E)) : |mu i| = 1 := by
+    have h := _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.2 (b i)
+    rw [heigen, norm_smul, b.orthonormal.1 i, mul_one] at h
+    simpa only [Complex.norm_real, Real.norm_eq_abs] using h
+  have hlam (i : Fin (Module.finrank ℂ E)) : ‖lam i‖ = 0 ∨ ‖lam i‖ = 2 := by
+    rcases (abs_eq (by norm_num : (0 : ℝ) ≤ 1)).1 (hnorm i) with hi | hi
+    · left
+      simp [lam, hi]
+    · right
+      have hi' : lam i = (2 : ℂ) := by norm_num [lam, hi]
+      rw [hi', RCLike.norm_ofNat]
+  have hdisp (i : Fin (Module.finrank ℂ E)) :
+      ((LinearMap.id : E →ₗ[ℂ] E) - (U : E →L[ℂ] E).toLinearMap) (b i) = lam i • b i := by
+    change b i - (U : E →L[ℂ] E) (b i) = (1 - (mu i : ℂ)) • b i
+    rw [heigen, sub_smul, one_smul]
+  have htrace : UnitarilyInvariantSeminorm.nuclear ℂ E E
+      (LinearMap.id - (U : E →L[ℂ] E).toLinearMap) = ∑ i, ‖lam i‖ := by
+    simpa only [ENNReal.toReal_one, Real.rpow_one, UnitarilyInvariantSeminorm.schatten_one] using
+      schatten_rpow_eq_sum_norm_eigenvalues b _ lam hdisp 1 ENNReal.one_ne_top
+  let := isStarNormal_of_mem_unitary U.property
+  rw [normalDisplacementSpectralCost_eq_sum_singularValues,
+    sum_singularValues_eq_sum_norm_eigenvalues b _ lam hdisp rho, htrace, Finset.mul_sum]
+  apply Finset.sum_congr rfl
+  intro i _
+  rcases hlam i with hi | hi
+  · simp only [hi, hrho, mul_zero]
+  · rw [hi]
+    ring
+
 end TauCeti

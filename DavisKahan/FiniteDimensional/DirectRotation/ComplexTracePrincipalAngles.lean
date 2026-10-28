@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.ComplexPhaseTrace
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.TraceSine
+public import TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle
 
 /-!
 # The principal-angle formula for the global complex trace optimum
@@ -97,6 +98,30 @@ theorem kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles
   rw [kyFanSum_projectionDifference_eq_directed_sines U V, hswap,
     kyFanSum_directedSine_eq_sum_sin_principalAngles U V]
   ring
+
+/-- The classical nuclear projection-distance bound in the accepted
+principal-angle coordinates. This uses the direct UI-norm inequality,
+without taking a limit of Schatten transport optima. -/
+theorem two_mul_sum_sin_principalAngles_le_nuclear_transport
+    (K L : Submodule ℂ H) (hKL : finrank ℂ K = finrank ℂ L) (W : H ≃ₗᵢ[ℂ] H)
+    (hmap : K.map W.toLinearMap = L) :
+    2 * (∑ i : Fin (finrank ℂ K), Real.sin (K.principalAngles L i)) ≤
+      UnitarilyInvariantSeminorm.nuclear ℂ H H (LinearMap.id - W.toLinearMap) := by
+  have hsines : TauCeti.principalSines K L = K.principalSines L := by
+    rw [TauCeti.principalSines, Submodule.principalSines_def]
+    congr 1
+    rw [Submodule.sinThetaMap_def]
+    rfl
+  have htrace := kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles K L hKL
+  have hfull (A : H →ₗ[ℂ] H) : TauCeti.kyFanSum (finrank ℂ H) A =
+      UnitarilyInvariantSeminorm.nuclear ℂ H H A := by
+    rw [TauCeti.kyFanSum_eq_kyFan, UnitarilyInvariantSeminorm.kyFan_apply]
+    exact A.kyFanSum_eq_nuclear (LinearMap.finrank_range_le A)
+  rw [hfull] at htrace
+  simp_rw [sin_principalAngles_eq_principalSines, hsines, ← Submodule.sin_principalAngles] at htrace
+  rw [← htrace]
+  exact projectionDifference_uiNorm_le_displacement
+    (UnitarilyInvariantSeminorm.nuclear ℂ H H) K L W hmap
 
 /-- **Complete unconditional complex trace optimum**, including the classical
 principal-angle sum and an explicitly attained global minimum. -/
