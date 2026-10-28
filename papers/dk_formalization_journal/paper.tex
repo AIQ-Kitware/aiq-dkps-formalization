@@ -234,22 +234,37 @@ between approximate and exact spectral subspaces in terms of a residual or
 perturbation and a separation between the relevant spectra
 \citep{davis1970rotation}.
 \jonsays{This makes it feel like A is always available so you can compute the residual, maybe it would be good to say something like: furthermore, even if only an approximate version of A is available, the difference between A and Ahat is bounds the residual... not sure the exact right way to say it, but this introduction only presents one of the major two ways you could view DK - or at least how I understand it}
+\agentsays{Yes: the opening should distinguish an approximate eigenpair from perturbing an operator. For matrices, let $\widehat A=A+H$ be the available estimate of an unknown $A$, and suppose $\widehat A E_0=E_0A_0$ with $E_0$ isometric. The residual relative to $A$ is $R_A=AE_0-E_0A_0=-HE_0$, so $\|R_A\|_{\mathrm{op}}\leq\|H\|_{\mathrm{op}}$. A bound on $H$, including a probabilistic one, can therefore bound subspace error without evaluating $R_A$. I would present both viewpoints and identify which operator is available in each.}
+\jonrsp{Ok, do it, but not in that much detail. This is the introduction after all, but with enough precision in language where is it very clear to. I think that's really what we want to strive for: precision and consistency in language.}
+
 
 Our project began with a variant of this bound needed for
 \ifDKAnonymous a spectral-estimation application\else the data kernel
 perspective space (DKPS)\fi.
 \jonsays{Missing citation, cite quench}
+\agentsays{Agreed. The QUENCH paper is already in the bibliography as \citet{helm2026query}, \emph{Query-Efficient Model Evaluation Using Cached Responses}. I would cite it at the DKPS motivation sentence, with the identifying self-reference handled by the existing anonymous-review conditional.}
+\jonrsp{We can put a conditional here to omit for blind review}
+
 We extended the formalization to the results established in the original 1970
 paper, including real and complex Hilbert spaces, unbounded self-adjoint
 operators, and unitarily invariant operator-ideal norms. In particular, the
 spectral-separation hypotheses allow intervals with one finite endpoint and
 one infinite side, such as $(-\infty,a]$. \jonsays{you can say half infinite-intervals (e.g.  $(-\infty,a]$)}
+\agentsays{Agreed. I would use ``half-infinite intervals, e.g.\ $(-\infty,a]$'' here. The example supplies the meaning; the longer explanation of the endpoints can be removed.}
+\jonrsp{good, do it}
+
+
+
 These settings require operator
 domains, spectral calculus, and norm estimates beyond finite matrices.
 
 We formalized the four unnumbered headline theorems in Section~2 and every
 named theorem, proposition, lemma, and corollary established in the 1970 paper.
 \jonsays{There is a more concise way to say this, I guess just remove unnumbered and that fixes it.}
+\agentsays{Agreed. ``The four headline theorems in Section~2'' identifies the same targets. Removing ``unnumbered'' leaves the selection criterion and its 29 results unchanged.}
+\jonrsp{good, do it}
+
+
 This gives \DKResultCount{} targets, enumerated in
 Appendix~\ref{app:dk-inventory}. We prove \DKProvedCount{} of them and refute
 Proposition~4.4 as printed. That proposition asserts a full-displacement
@@ -262,11 +277,19 @@ real, small-angle Proposition~4.4 has not previously been made explicit.
 Section~\ref{sec:prop44} compares these statements and gives a valid Q-norm
 consequence of Proposition~4.3.
 \jonsays{Would it be better to talk about this in terms of a repair? Also didn't we prove that our counterexample is minimal in some way? Not sure if that's worth highlighting here}
+\agentsays{I would call the Q-norm result a repair obtained by restricting the norm class, and keep the earlier Q-norm attribution beside it. There are two minimality statements to distinguish. The explicit competitor is a Lean-proved global trace-norm minimizer for its subspaces, with minimum $4\sin\theta$ (\texttt{TraceOptimality.lean}). Four is also the least real ambient dimension permitting the small-angle failure; the current dimension-minimality argument is conventional, recorded in the real-transport notes, rather than a separately established Lean theorem. I would highlight the global minimum briefly here and reserve the dimension argument for the correction section if included.}
+\jonrsp{can we build the lean proof? Finish all of the edits and put a latex comment in about what we could add if we had the lean proof. As someone who is publishing mathematics while still working to digest it myself, a lean proof and  my ability to recognize the correspondence between the lean and the theorem statement is the only thing that allows me to take responsibility and claim that this is correct - up to soundness holes, which I frankly don't give much weight to.}
 
-The proofs required us to formalize \jonsays{add "a significant amount of operator theory, namely:" -- I know I'm breaking my own rule, but it does make sense here} operator theory: principal angles and
+
+The proofs required us to formalize \jonsays{add "a significant amount of operator theory, namely:" -- I know I'm breaking my own rule, but it does make sense here}
+\agentsays{I would use your wording here: ``a significant amount of operator theory, namely:''. The following list of mathematical areas gives the scale claim content. This is a local author-approved exception to the general preference against significance adjectives.}
+\jonrsp{good}
+ operator theory: principal angles and
 direct rotations, approximation numbers and symmetric operator ideals, Borel
 spectral calculus, and Sylvester estimates for unbounded operators. We also
 adapted existing developments from Mathlib and Spectra. Some of the \jonsays{don't hedge here, just say: These operator-theory}
+\agentsays{I would name the contributions directly: ``These operator-theory foundations include the Courant--Fischer and Weyl results, rectangular unitarily invariant seminorms, and projection-valued measures subsequently adapted into Tau Ceti.'' That replaces the vague quantity with the actual mathematical work and keeps the Spectra ancestry attached to the measure constructions.}
+\jonrsp{Uhh... we did courant fischer ourselves? no? if we don't have this lineage right then that makes me nervous. put a latex comment here with a TODO to consolidate all sporatic lineage documents, consolidate them, and audit them so each carries evidence that can be corroborated}
 operator-theory foundations developed here were subsequently adapted into
 Tau Ceti. Section~\ref{sec:related} explains the mathematical history and
 formal ancestry; Section~\ref{sec:foundations} describes the foundations used
@@ -295,6 +318,9 @@ and prove the Q-norm consequence of the valid squared-displacement theorem
 \item \textbf{A follow-on theorem.} We prove the unrestricted real
 trace-norm transport minimum as a weighted-matching formula
 (\cref{sec:example-transport}).\jonsays{Probably best to call it a reduction?}
+\agentsays{Yes. I would call this contribution ``A reduction to weighted matching'' and say that we reduce the unrestricted real trace-norm transport problem to that finite optimization. Equality of the minimum values and attainment make ``reduction'' precise.}
+\jonrsp{good, do it}
+
 \end{enumerate}
 
 \section{Mathematical background}
@@ -303,11 +329,17 @@ trace-norm transport minimum as a weighted-matching formula
 The Davis--Kahan angle estimates use three constructions. Principal angles
 measure the error between subspaces; a residual measures how well a proposed
 subspace represents the operator; and a Sylvester estimate bounds the first
-quantity by the second under spectral separation. \jonsays{Maybe a better way to say it as an assumption or hypothesis. under spectral separation is vague maybe when there is a gap - I can't think of a better concise way to phrase it} Operator ideals allow the
+quantity by the second under spectral separation. \jonsays{Maybe a better way to say it as an assumption or hypothesis. under spectral separation is vague maybe when there is a gap - I can't think of a better concise way to phrase it}
+\agentsays{I would write ``assuming a positive gap between the specified spectral sets.'' The later theorem should still give their ordered or interval/exterior positions: separation by distance alone does not give its constant-one bound for every unitarily invariant norm.}
+\jonrsp{spectral separation is fine for now I guess. I need to understand this part of the theory better.}
+ Operator ideals allow the
 same argument to express several norms. We describe the development of these
 constructions before stating the formalized sine-theta theorem.
 
 \jonsays{It wasn't initially clear to me that these were other historical accounts of the topic, we should make that clear.}
+\agentsays{Agreed. I would introduce the next paragraph with ``Existing historical surveys cover these developments'', then name the different scopes of Paige--Wei, Simon, and B\"ottcher--Spitkovsky. That makes their role clear before describing what each account contributes.}
+\jonsays{Good, do it}
+
 Paige and Wei trace the cosine--sine decomposition from Jordan's subspace
 geometry to its numerical formulations \citep{paige1994history}.
 Simon describes the Sz.-Nagy--Kato construction for nearby spectral
@@ -316,6 +348,8 @@ pairs of projections and their operator algebras
 \citep{bottcher2010gentle}. We use these accounts together with the primary
 sources. Table~\ref{tab:historical-lineage} summarizes the mathematical
 constructions used in our formalization.\jonsays{Move table 1 up?}
+\agentsays{Yes. I would move the table immediately after this first reference so it gives an overview before the historical subsections. I would also check the rendered placement, since moving its source alone can still leave a LaTeX float several pages later.}
+\jonsays{Good, do it}
 
 \subsection{Principal angles}
 \label{sec:related-classical}
@@ -359,6 +393,8 @@ Their computational formulation makes the basis-invariant angles available from
   orthonormal matrix factorizations.
 
   A further formulation uses the cosine--sine decomposition (CSD) of a \jonsays{Don't define an acronym if it is not reused}
+\agentsays{Agreed. CSD is introduced only once and is not subsequently used as an acronym. I would keep ``cosine--sine decomposition'' and remove the parenthesized abbreviation.}
+\jonsays{Good, do it}
 partitioned orthogonal or unitary matrix.
 The blocks of the decomposition contain compatible diagonal cosine and sine
   factors.
@@ -534,7 +570,10 @@ and continuously connected to the identity in the acute regime.  That
 choice makes the construction valuable in perturbation theory: the
 transport identifies moving spectral subspaces while avoiding an
 arbitrary choice of orthonormal bases. A pair is called acute here when
-$\|P-Q\|<1$. \jonsays{not sure how obvious it is, but it would have helped ground me if you add:, "which implies the angle between their subspaces are less than \pi/2" or maybe you can say it is analogous to if it's not an exact correspondence, or correct me if I'm wrong} For an orthogonal or unitary transporter $W$, the operator
+$\|P-Q\|<1$. \jonsays{not sure how obvious it is, but it would have helped ground me if you add:, "which implies the angle between their subspaces are less than $\pi/2$" or maybe you can say it is analogous to if it's not an exact correspondence, or correct me if I'm wrong}
+\agentsays{For equal-dimensional finite subspaces, this is exact: $\|P-Q\|=\sin\theta_{\max}$, so $\|P-Q\|<1$ is equivalent to $\theta_{\max}<\pi/2$. I would add that interpretation here. In infinite-dimensional Hilbert space the norm condition gives a uniform bound away from $\pi/2$; merely having individual angles below $\pi/2$ would allow a sequence approaching it. The operator-norm definition should therefore remain the general one.}
+\jonrsp{I think adding a concise parenthetical reminder here is the way to go, but use precise language saying "away from" without saying what the object is is something I dislike as imprecise}
+ For an orthogonal or unitary transporter $W$, the operator
 $I-W$ records the displacement of every vector. Davis and Kahan ask which
 norms of this displacement are minimized by the direct rotation
 \citep[Section~4]{davis1970rotation}.
@@ -553,7 +592,10 @@ $\|P-Q\|<1$ applies in arbitrary Hilbert dimension.
 \subsection{Spectral projections and residuals}
 \label{sec:related-spectral}
 
-The spectral theorem \jonsays{might be good to add "--- which states that ... --- "} supplies a second way of obtaining a subspace:
+The spectral theorem \jonsays{might be good to add "--- which states that ... --- "}
+\agentsays{I would add a brief statement in the form used here: ``The spectral theorem represents a self-adjoint operator as $A=\int \lambda\,dE(\lambda)$ for a projection-valued measure $E$.'' Then explain that $E(S)$ is the orthogonal projection selecting a Borel spectral set $S$. This directly supplies the meaning of the spectral projection used in the next sentence.}
+\jonrsp{Good do it}
+ supplies a second way of obtaining a subspace:
 select a region of the spectrum of a self-adjoint operator and take
 the corresponding spectral projection.  The functional-calculus
 framework developed from the work of Riesz, von Neumann, and others;
@@ -563,11 +605,17 @@ Unlike the finite-dimensional eigenspace picture, a spectral
 subspace need not be spanned by a finite list of eigenvectors.
 A self-adjoint operator may be unbounded, while each of its spectral
 projections is bounded and everywhere defined.  Its domain is still
-indispensable \jonsays{This feels imprecise, there has to be a plainer way to say that without specifying the domain the operator is ill-posed or whatever the correct way of saying it is.} when the operator acts on a trial vector or when an
+indispensable \jonsays{This feels imprecise, there has to be a plainer way to say that without specifying the domain the operator is ill-posed or whatever the correct way of saying it is.}
+\agentsays{I would say: ``For an unbounded operator, $Ax$ is defined only when $x\in\DKDom(A)$, so a residual or intertwining equation must include the required domain inclusions.'' The same differential expression can have different self-adjoint realizations with different domains and spectra. I would avoid calling the operator ``ill-posed'', which usually describes a separate existence, uniqueness, or stability issue for a problem.}
+\jonrsp{Maybe also name and cite the Hellinger–Toeplitz theorem?}
+ when the operator acts on a trial vector or when an
 intertwining identity is asserted.
 
 For an isolated spectral cluster, the projection can be recovered
-from a contour integral of the resolvent \jonsays{I don't think we have defined resolvent}.  Using a positively oriented
+from a contour integral of the resolvent \jonsays{I don't think we have defined resolvent}
+\agentsays{Correct. I would define it before this integral: ``For $z$ in the resolvent set, $zI-A$ has a bounded, everywhere-defined inverse; this inverse $(zI-A)^{-1}$ is the resolvent.'' The contour must lie in that set and enclose the isolated spectral part being selected.}
+\jonrsp{good, do it}
+.  Using a positively oriented
 contour $\Gamma$ in the resolvent set enclosing the cluster, the
 complex case has the representation
 \begin{equation}
@@ -579,7 +627,10 @@ This makes the spectral projection a stable object for perturbation analysis,
   while preserving the separate domain requirements whenever $A$ itself appears
   in an identity.
 More general Borel spectral projections cover intervals and half-lines
-  \jonsays{if we change terminology earlier, we need to make it agree here},
+  \jonsays{if we change terminology earlier, we need to make it agree here}
+\agentsays{Agreed. I would use ``finite and half-infinite intervals'' here as well, matching the introduction. We can keep the explicit example at its first occurrence and use the same terminology throughout the spectral-gap discussion.}
+\jonrsp{good, do it}
+,
   including spectral configurations for which a single isolated
   finite-eigenvalue cluster is not the right model.
 Our formalization uses Borel functional calculus to construct projections for
@@ -605,7 +656,10 @@ spectral subspace?  Unlike a comparison of individual eigenvectors,
 these are meaningful even when an eigenvalue has multiplicity and its
 orthonormal eigenbasis is nonunique.
 
-\jonsays{Looks like we are missing color on a lot of symbols, maybe we define a newcommand for every mathematical object that we use so we effectively have a table where we can inspect our entire set of notation choices, which will let us identify these color issues without having to parse through everything. Oh, it looks like we do ahve that in math_symbol_colors. I suppose we just use it everywhere?}
+\jonsays{Looks like we are missing color on a lot of symbols, maybe we define a newcommand for every mathematical object that we use so we effectively have a table where we can inspect our entire set of notation choices, which will let us identify these color issues without having to parse through everything. Oh, it looks like we do ahve that in \texttt{math\_\allowbreak symbol\_\allowbreak colors}. I suppose we just use it everywhere?}
+\agentsays{Yes. I would apply the existing semantic keys consistently to the equations and their surrounding prose, using the same Manim role palette. For example, a residual uses the key \texttt{R}, a rotation \texttt{Rrotation}, and source and exact projections have different keys even when both are printed as $P$. Each occurrence needs its mathematical role assigned; a global replacement by bare letter would mix those roles. I would check the notation table and the monochrome version together.}
+\jonrsp{good, do it}
+
 Write $A$ for a reference operator and $\widehat A=A+H$ for the perturbed
 ambient operator. We use this convention in the sine-theta statement below.
 Let $E_0$ embed a trial-coordinate Hilbert space into the ambient space
