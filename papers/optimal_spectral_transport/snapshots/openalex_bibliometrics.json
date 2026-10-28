@@ -1,0 +1,145 @@
+{
+  "retrieved_at_utc": "2026-08-17T20:33:55Z",
+  "schema_version": 1,
+  "source": "OpenAlex",
+  "works": [
+    {
+      "citation_key": "davis1970rotation",
+      "cited_by_count": 1228,
+      "counts_by_year": [
+        {
+          "cited_by_count": 57,
+          "year": 2026
+        },
+        {
+          "cited_by_count": 60,
+          "year": 2025
+        },
+        {
+          "cited_by_count": 49,
+          "year": 2024
+        },
+        {
+          "cited_by_count": 36,
+          "year": 2023
+        },
+        {
+          "cited_by_count": 56,
+          "year": 2022
+        },
+        {
+          "cited_by_count": 85,
+          "year": 2021
+        },
+        {
+          "cited_by_count": 95,
+          "year": 2020
+        },
+        {
+          "cited_by_count": 77,
+          "year": 2019
+        },
+        {
+          "cited_by_count": 73,
+          "year": 2018
+        },
+        {
+          "cited_by_count": 67,
+          "year": 2017
+        },
+        {
+          "cited_by_count": 53,
+          "year": 2016
+        },
+        {
+          "cited_by_count": 43,
+          "year": 2015
+        },
+        {
+          "cited_by_count": 59,
+          "year": 2014
+        },
+        {
+          "cited_by_count": 46,
+          "year": 2013
+        },
+        {
+          "cited_by_count": 26,
+          "year": 2012
+        }
+      ],
+      "doi": "10.1137/0707001",
+      "key": "davis_kahan_1970",
+      "macro_stem": "DavisKahan",
+      "openalex_id": "W1970377488",
+      "openalex_updated_date": "2026-08-16T07:02:28.622633",
+      "publication_year": 1970,
+      "title": "The Rotation of Eigenvectors by a Perturbation. III"
+    },
+    {
+      "citation_key": "yu2015davis",
+      "cited_by_count": 462,
+      "counts_by_year": [
+        {
+          "cited_by_count": 22,
+          "year": 2026
+        },
+        {
+          "cited_by_count": 49,
+          "year": 2025
+        },
+        {
+          "cited_by_count": 35,
+          "year": 2024
+        },
+        {
+          "cited_by_count": 34,
+          "year": 2023
+        },
+        {
+          "cited_by_count": 57,
+          "year": 2022
+        },
+        {
+          "cited_by_count": 68,
+          "year": 2021
+        },
+        {
+          "cited_by_count": 64,
+          "year": 2020
+        },
+        {
+          "cited_by_count": 50,
+          "year": 2019
+        },
+        {
+          "cited_by_count": 38,
+          "year": 2018
+        },
+        {
+          "cited_by_count": 25,
+          "year": 2017
+        },
+        {
+          "cited_by_count": 14,
+          "year": 2016
+        },
+        {
+          "cited_by_count": 4,
+          "year": 2015
+        },
+        {
+          "cited_by_count": 2,
+          "year": 2014
+        }
+      ],
+      "doi": "10.1093/biomet/asv008",
+      "key": "yu_wang_samworth_2015",
+      "macro_stem": "YuWangSamworth",
+      "openalex_id": "W2088911135",
+      "openalex_updated_date": "2026-08-16T07:02:28.622633",
+      "publication_year": 2015,
+      "title": "A useful variant of the Davis\u2013Kahan theorem for statisticians"
+    }
+  ]
+}

@@ -1,0 +1,969 @@
+% Independent conventional research fragment; excluded from paper.tex.
+% The complete original-space block reduction and exact Schatten cost assembly
+% are Lean-verified for 1<p<2 in SchattenRealRestrictions.lean, including global
+% minima of the actual restrictions and the exact four-block values.
+% Original-angle multiset assembly and exact one-angle costs now also compile.
+% SchattenRealAngleCosts.lean sums these explicit costs on the actual family.
+% Labelled matching extraction, zero removal, conversion to positive edge
+% weights and the unrestricted matching lower bound now compile for 1<p<2
+% in SchattenRealMatching*.lean. RealMatchingAttainment.lean now proves the
+% unrestricted matching equality and actual ambient attainment for 1<p<2.
+% SchattenRealMatchingCriterion.lean gives the exact all-pairs certificate
+% for independent plane optima. Sorted exchange and field-gap claims remain
+% conventional; no general-penalty extension follows from the Schatten proof.
+% The nuclear/Charbonnier extensions below are not inferred from this scope.
+% Evidence and priority boundaries: PAPER_CONTEXT.md.
+\section{Real transport as a weighted matching problem}
+\label{sec:real-matching-transport}
+
+The real four-dimensional formula determines the global minimum in every
+finite real dimension for a class of spectral penalties. The reduction
+uses the stationary operator's spectral blocks and a real orthogonal
+normal form for a complex Hermitian projection.
+
+Let $\rho:[0,2]\to\mathbb R$ be continuously differentiable, with
+$\rho(0)=\rho'(0)=0$ and $\rho'(s)>0$ for $s>0$. Set
+\[
+ \phi(t)=\rho\bigl(2\sin(t/2)\bigr),\qquad 0\leq t\leq\pi.
+\]
+In dimension $n$, write
+$\mathcal F_\rho(W)=\sum_{j=1}^n\rho(\sigma_j(I-W))$.
+Assume that for some $c\in(0,\pi)$ the derivative $\phi'$ is strictly
+increasing on $[0,c]$ and strictly decreasing on $[c,\pi]$.
+These hypotheses include the Schatten powers $\rho(s)=s^p$, $p>1$,
+and the Charbonnier penalty. Define the one-angle and two-angle costs
+\[
+ s_\rho(\theta)=\min\{2\phi(\theta),\rho(2)\},
+\]
+\[
+ e_\rho(\theta,\psi)=
+   2\min_{|\theta-\psi|/2\leq\delta\leq(\theta+\psi)/2}
+    \left[\phi\left(\frac{\theta+\psi}{2}+\delta\right)
+          +\phi\left(\frac{\theta+\psi}{2}-\delta\right)\right].
+\]
+A matching $M$ on $\{1,\ldots,k\}$ is a set of disjoint unordered
+pairs; its unmatched vertices are denoted by $U(M)$.
+
+\begin{theorem}[The exact real matching formula]
+\label{thm:real-matching-minimum}
+Let $P,Q$ be equal-rank real orthogonal projections on $\mathbb R^n$,
+and let $\theta_1,\ldots,\theta_k$ be their positive principal angles,
+including multiplicities and right angles. Then
+\begin{equation}
+ \min_{\substack{W\in O(n)\\WPW^T=Q}}
+   \sum_{j=1}^n\rho(\sigma_j(I-W))
+ =\min_M\left\{
+    \sum_{\{i,j\}\in M}e_\rho(\theta_i,\theta_j)
+     +\sum_{i\in U(M)}s_\rho(\theta_i)\right\}.
+ \label{eq:real-matching-minimum}
+\end{equation}
+An attaining transport acts on one principal plane for each unmatched
+angle and couples the two principal planes of each matched pair.
+It fixes the remaining common summands.
+\end{theorem}
+
+For $\rho(s)=s^p$ with $1<p<2$, the unrestricted equality and ambient
+attainment in Theorem~\ref{thm:real-matching-minimum} are now Lean-verified
+by \texttt{exists\_minimizing\_real\_schatten\_transport\_matching}.
+This includes all repeated and right angles and arbitrary common summands.
+The proof also gives the exact criterion for independent real plane minima:
+they are globally optimal if and only if
+$s_\rho(\theta_i)+s_\rho(\theta_j)\le e_\rho(\theta_i,\theta_j)$
+for every pair of distinct positive-angle labels. Those independent minima
+may use reflections. The more general penalty scope and the exchange and
+field-gap assertions below remain conventional research claims.
+
+We first give the algebraic decomposition used in the proof.
+
+\begin{lemma}[A Hermitian projection under real orthogonal coordinates]
+\label{lem:hermitian-projection-real-blocks}
+Every complex Hermitian projection is conjugate by a real orthogonal
+matrix to a direct sum of scalar blocks $0,1$ and blocks
+\[
+ \begin{pmatrix}
+   \lambda&-i\sqrt{\lambda(1-\lambda)}\\
+   i\sqrt{\lambda(1-\lambda)}&1-\lambda
+ \end{pmatrix},\qquad 0<\lambda\leq\tfrac12.
+\]
+\end{lemma}
+
+\begin{proof}
+Write the projection as $A=X+iY$, where $X$ is real symmetric and
+$Y$ is real skew-symmetric. The identities $A^2=A$ give
+\[
+ X^2-Y^2=X,\qquad XY+YX=Y.
+\]
+For real $v$, positivity and contractivity of $A$ give
+$0\leq v^TXv\leq\|v\|^2$, so the eigenvalues of $X$ lie in $[0,1]$.
+The second identity makes $Y$ map the $\lambda$-eigenspace of $X$
+to the $(1-\lambda)$-eigenspace. On the former space,
+\[
+ -Y^2=\lambda(1-\lambda)I.
+\]
+For $0<\lambda<1/2$, an orthonormal basis $v_j$ of the first space
+is therefore matched with the orthonormal basis
+$Yv_j/\sqrt{\lambda(1-\lambda)}$ of the second. Each pair gives
+the displayed block. On the $1/2$-eigenspace, $2Y$ is an orthogonal
+complex structure; choose successive orthonormal pairs $v,2Yv$.
+On the zero and one eigenspaces, skew-symmetry and $Y^2=0$ force
+$Y=0$, giving the scalar blocks.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:real-matching-minimum}]
+The feasible set is nonempty and compact. Choose a global minimizer $W$.
+Extend $\phi$ evenly and periodically to the real line. Its extension is
+continuously differentiable, including at zero and $\pi$.
+Let $K$ be the real skew-symmetric spectral gradient of $W$: on a real
+rotation block through $t$, its value is $\phi'(t)$ times the quarter-turn
+matrix, and on the eigenvalues $1,-1$ it is zero.
+It commutes with $W$.
+
+For every real skew-symmetric $H$, the spectral first-variation formula
+\citep{lewis1996derivatives} gives
+\[
+ \left.\frac{d}{dt}\mathcal F_\rho(W\exp(tH))\right|_{t=0}
+       =-\operatorname{tr}(KH).
+\]
+As in the proof of \cref{eq:schatten-first-variation}, one may use a local
+logarithm whose cut avoids the finite spectrum and apply the Hermitian
+spectral derivative theorem. The periodic extension's continuous
+differentiability covers the eigenvalues $1,-1$.
+When $H$ commutes with $P$, the curve is feasible. Take $H$ to be the
+block diagonal compression of $K$ to $P\oplus P^\perp$.
+Then $-\operatorname{tr}(KH)=\|H\|_F^2$, so stationarity forces
+both diagonal compressions to vanish. For $J=2P-I$ this says
+\[
+ JKJ=-K.
+\]
+Consequently $-K^2$ commutes with $P,W$, and $Q=WPW^T$.
+
+Consider a positive spectral level $-K^2=g^2I$. The operator
+$\mathcal I=K/g$ is an orthogonal complex structure, and $J$ is an
+antilinear isometric involution for this complex structure. Its fixed
+space is the range of $P$. Choosing a real orthonormal basis of that
+fixed space identifies the whole level with its complexification,
+with $J$ acting as conjugation. The restriction of $W$ is then a
+complex unitary matrix $V$.
+
+Every eigenphase of $V$ solves $\phi'(t)=g$ in $(0,\pi)$.
+The single-peak hypothesis gives at most two roots, say $a,b$.
+If there are two roots, write
+\[
+ V=e^{ia}I+(e^{ib}-e^{ia})A
+\]
+with a complex Hermitian projection $A$; if the roots coalesce,
+$V$ is scalar. Apply \cref{lem:hermitian-projection-real-blocks}.
+Its real change of coordinates preserves $J$ and therefore $P$.
+It decomposes the real level into orthogonal $P,W,Q$-invariant
+blocks of dimension two or four, with source ranks one or two.
+The scalar-root case gives two-dimensional blocks directly.
+
+On $\ker K$, the only eigenvalues of $W$ are $1,-1$, so $W$ is a
+reflection. The real decomposition of two projections, applied to
+$P$ and $(I-W)/2$, gives common invariant blocks of dimension at most
+two. A one-dimensional block with $W=-1$ cannot occur at a global
+minimum: replacing it by $+1$ preserves transport and lowers the cost.
+The other one-dimensional blocks have zero cost and zero angle.
+
+On a two-dimensional rank-one block, the cost is at least
+$s_\rho(\theta)$. Indeed, its four orthogonal line transporters have
+costs $2\phi(\theta)$, $2\phi(\pi-\theta)$, and $\rho(2)$ for
+each of the two reflections; the second is no smaller than the first.
+On a four-dimensional rank-two block, \cref{thm:real-four-dimensional-minimum}
+gives the lower bound
+\[
+ \min\{e_\rho(\theta,\psi),
+                 s_\rho(\theta)+s_\rho(\psi)\}.
+\]
+To see the equivalence with that theorem's formula, note that
+$e_\rho\leq2\phi(\theta)+2\phi(\psi)$ and
+$e_\rho\leq2\rho(2)$, the latter by choosing the endpoint phase.
+For $\theta\geq\psi$, the remaining choice is exactly
+$\rho(2)+2\phi(\psi)$.
+
+Principal-angle multisets add across common reducing blocks of $P,Q$.
+Selecting a pair or two singletons in each four-dimensional block
+therefore gives a matching whose value is no larger than the cost of
+$W$. Zero angles can be discarded: $s_\rho(0)=0$ and
+$e_\rho(\theta,0)=2\phi(\theta)\geq s_\rho(\theta)$.
+This proves the lower bound in \cref{eq:real-matching-minimum}.
+
+Conversely, choose a cosine--sine decomposition of $P,Q$ and any matching.
+Use an attaining common rotation from
+\cref{thm:real-four-dimensional-minimum} on each matched pair of principal
+planes. On each unmatched plane choose the cheaper canonical rotation
+or reflection. Fix every remaining common direction. The resulting
+orthogonal sum is feasible and has exactly the matching's value,
+proving the reverse inequality and attainment.
+\end{proof}
+
+Put $g_{ij}=s_\rho(\theta_i)+s_\rho(\theta_j)-e_\rho(\theta_i,\theta_j)$.
+Then \cref{eq:real-matching-minimum} is equivalently
+\[
+ \sum_i s_\rho(\theta_i)-\max_M\sum_{\{i,j\}\in M}g_{ij}.
+\]
+Edges of nonpositive weight may be omitted. Thus evaluation of the scalar
+costs followed by a maximum-weight matching gives an exact global
+optimization procedure. At $p=4/3$, $p=3/2$, and for the Charbonnier penalty the
+edge costs are explicit; other Schatten exponents require only the
+one-dimensional scalar balance equation.
+
+The same matching solves nearest commuting-orthogonal correction. Given
+$U\in O(n)$ and a prescribed projection $P$, put $Q=UPU^T$. The map
+$W\mapsto V=W^TU$ is a bijection from transporters of $P$ onto $Q$
+to orthogonal matrices commuting with $P$. Since
+$U-V=(I-W^T)U$, its displacement has the same singular values as
+$I-W$. Thus the formula computes an orthogonal correction that preserves
+the prescribed subspace and has the least spectral penalty among all
+such corrections.
+
+\begin{lemma}[Ordering of the Schatten and smoothed pair costs]
+\label{lem:real-pair-cost-submodular}
+For a Schatten power with $1<p<2$, or for the Charbonnier penalty,
+$e_\rho$ is symmetric, nondecreasing in each argument, and submodular:
+for $x\geq x'$ and $y\geq y'$ in $[0,\pi/2]$,
+\begin{equation}
+ e_\rho(x,y)+e_\rho(x',y')
+       \leq e_\rho(x,y')+e_\rho(x',y).
+ \label{eq:real-pair-cost-submodular}
+\end{equation}
+Also $e_\rho(0,t)=2\phi(t)$.
+\end{lemma}
+
+\begin{proof}
+Write $m(h)$ for the unrestricted scalar-phase minimum and $c$ for its
+critical angle. The real four-dimensional formula gives two branches:
+\[
+ e_\rho(\theta,\psi)=
+ \begin{cases}
+  2\phi(\theta)+2\phi(\psi),&\delta_*(h)\leq d,\\
+  2m(h),&\delta_*(h)>d,
+ \end{cases}
+ \quad h=\frac{\theta+\psi}{2},\quad d=\frac{|\theta-\psi|}{2},
+\]
+where $\delta_*$ is the unique scalar minimizer. On the second branch
+$h>c$ and $m$ is continuously differentiable, increasing, and strictly
+concave. For the Schatten cost, concavity was proved in
+\cref{prop:schatten-value-convexity}; its derivative is obtained by
+differentiating at the unique scalar minimizer. For the smoothed cost
+$m(h)=2\eta\sin h-2\tau$ on this branch.
+
+For a fixed $\theta$, the second branch occurs on an upper interval of
+$\psi$. For Schatten powers its lower endpoint is the other root of
+$\phi'(\psi)=\phi'(\theta)$, when that root lies in $[0,\pi/2]$;
+the amplitude is increasing before $c$ and decreasing afterward.
+The equal-root case is $\theta=\psi=c$.
+For the smoothed cost the same assertion follows directly from
+\[
+ \tan\frac\theta2\tan\frac\psi2
+       >\frac{\tau}{\sqrt{\tau^2+4}}.
+\]
+
+On the first branch $\partial_\theta e_\rho=2\phi'(\theta)$.
+On the second it is $m'(h)$, which is nonnegative and decreases as
+$\psi$ increases. At the junction the scalar minimizer is $d$, so
+the stationary balance gives
+$m'(h)=2\phi'(\theta)=2\phi'(\psi)$.
+Thus the two derivatives join continuously, including the critical
+diagonal, and $\partial_\theta e_\rho$ is nonincreasing in $\psi$.
+Integrating this derivative over $[x',x]$ proves
+\cref{eq:real-pair-cost-submodular}. The same formulas give monotonicity;
+symmetry and the value at zero follow from the definition.
+\end{proof}
+
+\begin{theorem}[Two sorted sums for real Schatten and smoothed transport]
+\label{thm:real-sorted-spectral-minimum}
+For either penalty in \cref{lem:real-pair-cost-submodular}, sort the positive
+principal angles as $\theta_1\geq\cdots\geq\theta_k>0$.
+For a descending list $t=(t_1,\ldots,t_m)$, append a zero if $m$ is
+odd and set
+\[
+ B_\rho(t)=\sum_{j=1}^{\lceil m/2\rceil}
+                 e_\rho(t_{2j-1},t_{2j}),\qquad
+ B_\rho(\varnothing)=0.
+\]
+If $k\geq1$, the exact real transport minimum is
+\begin{equation}
+ \min_{WPW^T=Q}\mathcal F_\rho(W)
+  =\min\{B_\rho(\theta_1,\ldots,\theta_k),\quad
+          \rho(2)+B_\rho(\theta_2,\ldots,\theta_k)\}.
+ \label{eq:real-sorted-spectral-minimum}
+\end{equation}
+The minimum is zero for an empty angle list.
+\end{theorem}
+
+\begin{proof}
+Start from the exact matching formula. Each singleton uses either a
+canonical rotation of cost $e_\rho(0,t)=2\phi(t)$ or a reflection of
+cost $\rho(2)$. Since
+\[
+ e_\rho(t,u)\leq2\phi(t)+2\phi(u),\qquad
+ e_\rho(t,u)\leq2\rho(2),
+\]
+pairing two singleton choices of the same type cannot increase cost.
+Hence there is an optimum with at most one singleton of each type.
+Monotonicity puts a reflection singleton at the largest angle, by
+exchanging it with the largest angle's current assignment.
+
+Submodularity puts a canonical singleton at the smallest remaining angle:
+for $u\geq v$ and any partner $a\geq0$,
+\[
+ e_\rho(a,u)+e_\rho(0,v)
+       \leq e_\rho(a,v)+e_\rho(0,u).
+\]
+Thus exchanging the singleton $u$ with a smaller paired angle $v$ cannot
+increase cost. Represent the resulting canonical singleton by an appended
+zero.
+
+For any four sorted angles $a\geq b\geq c\geq d$, submodularity and
+symmetry give
+\[
+ e_\rho(a,b)+e_\rho(c,d)
+   \leq\min\{e_\rho(a,c)+e_\rho(b,d),\quad
+             e_\rho(a,d)+e_\rho(b,c)\}.
+\]
+Exchanging the partners of the two largest angles therefore pairs those
+angles together without increasing cost. Induction proves adjacent
+pairing of the full remaining list, including its possible zero.
+The sole remaining choice is whether the largest angle is a reflection
+singleton. These are exactly the two costs in
+\cref{eq:real-sorted-spectral-minimum}, and both are attained by the
+block constructions already given.
+\end{proof}
+
+Thus after sorting, only the pair costs in two adjacent pairing sequences
+must be evaluated. At exponents $4/3$, $3/2$, and for the Charbonnier penalty,
+\cref{cor:real-four-thirds-matching,cor:real-three-halves-matching,cor:real-four-smoothed} make these
+costs explicit. Other Schatten exponents require the scalar balance
+equation only for those pairs.
+
+\begin{corollary}[The exact real nuclear minimum]
+\label{cor:real-nuclear-matching}
+The matching formula also holds for $\rho(s)=s$, with
+\[
+ s_1(\theta)=\min\{4\sin(\theta/2),2\},\qquad
+ e_1(\theta,\psi)=4\sin\frac{\theta+\psi}{2}.
+\]
+\end{corollary}
+
+\begin{proof}
+For $s\in[0,2]$ the Charbonnier penalties satisfy
+$|\rho_\tau(s)-s|\leq\tau$. Their objectives converge uniformly on
+$O(n)$, so their constrained minima converge to the nuclear minimum.
+The one-angle and two-angle costs converge uniformly as well.
+There are finitely many matchings, so the minimum of their costs
+converges to the minimum of the limiting costs. The limits are exactly
+the two displayed expressions, by \cref{eq:real-four-nuclear} and its
+one-angle counterpart.
+\end{proof}
+
+\begin{theorem}[Two sorted sums for real nuclear transport]
+\label{thm:real-nuclear-two-sums}
+Sort the positive principal angles as
+$\theta_1\geq\cdots\geq\theta_k>0$.
+For a descending list $t=(t_1,\ldots,t_m)$, append one zero if $m$ is
+odd, and define
+\[
+ B(t)=4\sum_{j=1}^{\lceil m/2\rceil}
+           \sin\frac{t_{2j-1}+t_{2j}}2,
+ \qquad B(\varnothing)=0.
+\]
+For $k\geq1$, the exact real nuclear transport minimum is
+\begin{equation}
+ \min_{WPW^T=Q}\|I-W\|_1
+  =\min\left\{B(\theta_1,\ldots,\theta_k),\quad
+               2+B(\theta_2,\ldots,\theta_k)\right\}.
+ \label{eq:real-nuclear-two-sums}
+\end{equation}
+The first choice uses adjacent coupled principal planes and, when $k$ is
+odd, a canonical rotation on the smallest-angle plane. The second first
+reflects the largest-angle plane, then applies the same rule to the rest.
+If $k=0$, the minimum is zero.
+\end{theorem}
+
+\begin{proof}
+Apply \cref{thm:real-sorted-spectral-minimum} to the Charbonnier penalty
+and let $\tau\downarrow0$. The objectives converge uniformly on $O(n)$,
+so their constrained minima converge. Each of the finitely many paired
+costs converges to $4\sin((t+u)/2)$, including a pair with zero; the
+reflection cost converges to two. Passing to the limit in the two finite
+sums proves \cref{eq:real-nuclear-two-sums} and the stated constructions.
+\end{proof}
+
+\begin{theorem}[The sharp additive gap between real and complex nuclear transport]
+\label{thm:real-complex-nuclear-additive-gap}
+Let $d_{\mathbb R,1}(P,Q)$ be the real nuclear transport minimum, and
+let $d_{\mathbb C,1}(P,Q)$ be the minimum after complexifying the same
+real subspaces. In every finite dimension,
+\begin{equation}
+ 0\leq d_{\mathbb R,1}(P,Q)-d_{\mathbb C,1}(P,Q)
+       \leq2-\sqrt3.
+ \label{eq:real-complex-nuclear-additive-gap}
+\end{equation}
+The upper constant is attained by a single principal angle $\pi/3$.
+\end{theorem}
+
+\begin{proof}
+The complex minimum is $2\sum_i\sin\theta_i$ and is a lower bound
+for the real one. For an angle list $\theta$, write their difference
+as $D_k(\theta)$. The matching formula makes $D_k$ continuous on the
+compact ordered simplex
+$\pi/2\geq\theta_1\geq\cdots\geq\theta_k\geq0$.
+Its maximum on the boundary is bounded by a maximum with fewer angles:
+a zero angle can be discarded, a right angle can use a reflection of
+cost two, and two equal adjacent angles can be coupled at cost
+$4\sin\theta_i$. Each removed block attains its complex minimum, so
+removing it cannot decrease the largest possible gap.
+
+We show that when $k\geq2$ there is no interior local maximum.
+Let $C_0=B(\theta_1,\ldots,\theta_k)$ and
+$C_1=2+B(\theta_2,\ldots,\theta_k)$ be the two costs in
+\cref{eq:real-nuclear-two-sums}, and put
+\[
+ A=C_0-2\sum_i\sin\theta_i,\qquad
+ B=C_1-2\sum_i\sin\theta_i.
+\]
+Thus $D_k=\min\{A,B\}$. At a strictly ordered interior point,
+\[
+ \partial_1A=2\cos\frac{\theta_1+\theta_2}{2}
+                    -2\cos\theta_1>0,
+ \qquad \partial_1B=-2\cos\theta_1<0.
+\]
+A local maximum must therefore satisfy $A=B$.
+The tie set is a smooth hypersurface, since
+$\partial_1(A-B)=2\cos((\theta_1+\theta_2)/2)>0$.
+The Lagrange multiplier condition on this hypersurface gives
+$\lambda\in(0,1)$ such that
+\[
+ \nabla F=0,\qquad F=\lambda A+(1-\lambda)B.
+\]
+The interval for $\lambda$ follows from the two opposite first
+derivatives just displayed.
+
+For each coordinate $i$, let $q_i^0$ and $q_i^1$ be the cosine of its
+paired half-sum in $C_0$ and $C_1$. A canonical singleton has half-sum
+$\theta_i/2$, and the reflection singleton in $C_1$ has $q_1^1=0$.
+The stationary equations are
+\[
+ \cos\theta_i=\lambda q_i^0+(1-\lambda)q_i^1.
+\]
+The two cosines differ at every coordinate: the two pairings use the
+opposite adjacent neighbors, with the zero and reflection conventions
+at the ends. Strict concavity of $q\mapsto\sqrt{1-q^2}$ on $[0,1]$
+therefore gives
+\[
+ s_i:=\lambda\sqrt{1-(q_i^0)^2}
+        +(1-\lambda)\sqrt{1-(q_i^1)^2}
+       <\sin\theta_i.
+\]
+
+The Hessian of $F$ is positive definite. Indeed, a paired cost contributes
+$-\sin((\theta_i+\theta_j)/2)(v_i+v_j)^2$ to its second variation;
+a canonical singleton contributes $-\sin(\theta_i/2)v_i^2$;
+and a reflection contributes zero. The subtracted complex minimum
+contributes $2\sum_i\sin\theta_i v_i^2$.
+Using $(v_i+v_j)^2\leq2(v_i^2+v_j^2)$, and weakening the singleton
+terms to the same bound, yields
+\[
+ v^T\nabla^2F\,v
+       \geq2\sum_i(\sin\theta_i-s_i)v_i^2>0
+       \quad(v\ne0).
+\]
+Since $k\geq2$, the tie hypersurface has a nonzero tangent vector.
+Along a smooth curve in that direction its second variation is positive:
+on the tie set $D_k=F$, and $\nabla F=0$ removes the curve's
+acceleration term. This contradicts a local maximum.
+
+Compactness and induction now reduce the maximal gap to one angle.
+There it equals
+\[
+ \min\{4\sin(\theta/2)-2\sin\theta,\ 2-2\sin\theta\}.
+\]
+The first expression increases on $[0,\pi/2]$, the second decreases,
+and they agree at $\theta=\pi/3$. Their common value is
+$2-\sqrt3$, which proves both the bound and sharpness.
+\end{proof}
+
+\begin{corollary}[When the real nuclear minimum equals the complex one]
+\label{cor:real-nuclear-parity}
+The real nuclear transport minimum equals $2\sum_i\sin\theta_i$
+exactly when each positive acute principal angle has even multiplicity.
+Right-angle multiplicities are unrestricted.
+The real canonical rotation minimizes the nuclear cost exactly when
+there is at most one positive principal angle and that angle is at most
+$\pi/3$.
+\end{corollary}
+
+\begin{proof}
+For $0<\theta<\pi/2$, both choices in
+$s_1(\theta)=\min\{4\sin(\theta/2),2\}$ strictly exceed
+$2\sin\theta$. At a right angle the reflection attains equality.
+Also
+\[
+ e_1(\theta,\psi)
+ =4\sin\frac{\theta+\psi}{2}
+ \geq2\sin\theta+2\sin\psi,
+\]
+with equality for positive angles exactly when $\theta=\psi$.
+Equality in the finite matching sum therefore requires and permits
+pairing each positive acute angle with an equal angle. The complex
+minimum is the displayed sine sum.
+
+If there are two positive angles, their paired cost is strictly less
+than the sum of their canonical costs, since
+\[
+ 4\sin\frac{\theta+\psi}{2}
+ <4\sin\frac\theta2+4\sin\frac\psi2.
+\]
+For a single positive angle, the one-plane canonical choice is optimal
+exactly when $4\sin(\theta/2)\leq2$, or $\theta\leq\pi/3$.
+\end{proof}
+
+\begin{corollary}[All maximizers of the nuclear field gap]
+\label{cor:real-complex-nuclear-gap-equality}
+Equality in the upper bound of
+\cref{eq:real-complex-nuclear-additive-gap} holds exactly when the
+positive principal angles are all $\pi/3$ and their multiplicity is odd.
+Zero angles and unchanged ambient directions are unrestricted.
+\end{corollary}
+
+\begin{proof}
+Write $r=\pi/3$. An odd list of $r$'s has the stated gap by the two
+sorted sums: pair all but one angle, then use either a canonical rotation
+or a reflection of cost two on the last plane.
+
+For necessity, use induction on the length of the compact angle list in
+the proof of \cref{thm:real-complex-nuclear-additive-gap}. An attaining
+list of length at least two cannot lie in the strictly ordered interior.
+Removing a boundary zero, right angle, or equal pair cannot lower its
+upper gap bound. The remaining list must therefore also attain the sharp
+constant, and by induction its positive angles are an odd number of $r$'s.
+A removed zero has no effect.
+
+A removed right angle is impossible: couple it with the unmatched $r$
+instead of reflecting both. The new cost is
+$4\sin((\pi/2+r)/2)<4$, whereas the two reflections cost four.
+If a removed equal pair has angle $a>r$, reflect one $a$ and couple the
+other with the unmatched $r$. Its cost
+$2+4\sin((a+r)/2)$ is strictly less than $2+4\sin a$.
+If $0<a<r$, the strict submodular inequality gives
+\[
+ e_1(r,a)+e_1(0,a)<e_1(r,0)+e_1(a,a).
+\]
+Indeed, $\partial_x\partial_y e_1(x,y)=-\sin((x+y)/2)<0$
+on the interior of $[a,r]\times[0,a]$.
+Thus coupling $r$ with one $a$ and rotating the other $a$ canonically
+strictly improves the previous construction. Only a removed equal pair
+at $a=r$ can remain, preserving the asserted odd multiplicity.
+\end{proof}
+
+\begin{corollary}[The two largest angles determine canonical optimality]
+\label{cor:real-smoothed-canonical-top-two}
+For the Charbonnier cost, let $\theta_{(1)}\geq\theta_{(2)}$ be the
+two largest principal angles, inserting zeros when necessary.
+The canonical rotation is globally optimal over the real field exactly
+when
+\[
+ \cos\theta_{(1)}\geq\tfrac12\eta^{-2},\qquad
+ \tan\frac{\theta_{(1)}}2\tan\frac{\theta_{(2)}}2
+       \leq\frac{\tau}{\sqrt{\tau^2+4}}.
+\]
+\end{corollary}
+
+\begin{proof}
+The matching formula shows that canonical transport is optimal exactly
+when neither a single reflection nor a paired rotation lowers its cost.
+By \cref{cor:real-four-smoothed}, these conditions are
+\[
+ \cos\theta_i\geq\tfrac12\eta^{-2},\qquad
+ \frac{\cos((\theta_i+\theta_j)/2)}
+      {\cos((\theta_i-\theta_j)/2)}\geq\eta^{-2}
+ \quad(i\ne j).
+\]
+Writing $u_i=\tan(\theta_i/2)$ makes the ratio
+$(1-u_iu_j)/(1+u_iu_j)$. Its inequality becomes
+\[
+ u_iu_j\leq\frac{1-\eta^{-2}}{1+\eta^{-2}}
+           =\frac{\tau}{\sqrt{\tau^2+4}}.
+\]
+All $u_i$ are nonnegative and increase with the angle, so the two largest
+angles give the strongest pair condition. The largest angle also gives
+the strongest reflection condition.
+\end{proof}
+
+\begin{theorem}[The sharp additive field gap for smoothed transport]
+\label{thm:real-complex-smoothed-additive-gap}
+For the Charbonnier penalty, let $d_{\mathbb R,\tau}$ and
+$d_{\mathbb C,\tau}$ be the optimal costs for a real subspace pair
+and its complexification. Then
+\begin{equation}
+ 0\leq d_{\mathbb R,\tau}-d_{\mathbb C,\tau}
+    \leq\Delta_\tau,
+ \qquad
+ \Delta_\tau=2\eta\left(1-\sqrt{1-\frac{1}{4\eta^4}}\right).
+ \label{eq:real-complex-smoothed-additive-gap}
+\end{equation}
+The constant is sharp and independent of dimension and rank.
+A single angle with $\cos\theta=\eta^{-2}/2$ attains it; its complex
+optimal scalar phase is $\pi/3$.
+\end{theorem}
+
+\begin{proof}
+Put $c=\arccos\eta^{-2}$. Fix every angle at most $c$ by its canonical
+rotation, which attains the complex minimum on those planes. For the
+remaining angles, consider real matchings using only their planes.
+Every pair is on the coupled branch, of cost
+$4\eta\sin((\theta+\psi)/2)-4\tau$; a singleton can use its
+canonical rotation or a reflection. By the ordering argument in
+\cref{thm:real-sorted-spectral-minimum}, the minimum among these
+constructions is given by two sorted sums.
+Subtract $\sum_i(2\eta\sin\theta_i-2\tau)$ and call the resulting
+excess $E_k(\theta)$. It bounds the full real-minus-complex gap from
+above.
+
+Maximize $E_k$ on the compact ordered simplex with angles in
+$[c,\pi/2]$. Its boundary reduces to fewer angles: an angle $c$ has
+a canonical zero-excess choice, a right angle has a reflecting
+zero-excess choice, and an equal pair has a coupled zero-excess choice.
+These choices are permitted matchings, so removing such a block cannot
+decrease the maximal excess. We repeat the interior maximum argument of
+\cref{thm:real-complex-nuclear-additive-gap}.
+
+The two sorted excesses $A,B$ have opposite first derivatives in the
+largest angle. An interior local maximum must lie on their smooth tie
+hypersurface and satisfy
+$\nabla[\lambda A+(1-\lambda)B]=0$ for some $0<\lambda<1$.
+For paired coordinates put $q=\cos((\theta_i+\theta_j)/2)$; a
+reflection contributes $q=0$. A canonical singleton contributes
+\[
+ q(\theta)=\frac{\sin\theta}{\eta D(\theta)},\qquad
+ D(\theta)=\sqrt{\tau^2+2-2\cos\theta}.
+\]
+The stationary equations again read
+$\cos\theta_i=\lambda q_i^0+(1-\lambda)q_i^1$.
+
+On $[c,\pi/2]$, $q(\theta)\geq\cos\theta$, strictly above $c$.
+Indeed, for $u=\cos\theta\leq\eta^{-2}$,
+\[
+ \sin^2\theta-\eta^2u^2D(\theta)^2
+    =(1-\eta^2u)(1+\eta^2u-2u^2)\geq0.
+\]
+The two $q$ values therefore differ at every coordinate, including a
+canonical singleton at the smaller endpoint.
+
+Its second derivative obeys the bound needed for the same positive
+Hessian certificate. Since $|D'|\leq1$,
+\[
+ D''=-\frac{1-\cos\theta}{D}
+              +\frac{1-(D')^2}{D}
+       \geq-\frac{1-\cos\theta}{D}.
+\]
+For $r=(1-\cos\theta)/(\eta D)$ we have
+\[
+ q^2+r^2=\frac{2-2\cos\theta}{\eta^2D^2}\leq1,
+ \qquad q'\geq-r\geq-\sqrt{1-q^2}.
+\]
+Thus the second variation of a canonical singleton is at least
+$-2\eta\sqrt{1-q^2}\,v_i^2$. A paired cost contributes
+$-\eta\sin((\theta_i+\theta_j)/2)(v_i+v_j)^2$, and a reflection
+contributes zero. Strict concavity of $\sqrt{1-q^2}$ and the stationary
+equations now give
+\[
+ v^T\nabla^2[\lambda A+(1-\lambda)B]v
+ \geq2\eta\sum_i\left[\sin\theta_i
+    -\lambda\sqrt{1-(q_i^0)^2}
+    -(1-\lambda)\sqrt{1-(q_i^1)^2}\right]v_i^2>0
+ \quad(v\ne0).
+\]
+For $k\geq2$ a nonzero tangent direction on the tie hypersurface
+contradicts an interior maximum. Compact induction reduces the bound to
+one supercritical angle.
+
+There the canonical excess increases, because its derivative is
+$2\eta(q(\theta)-\cos\theta)>0$, and the reflecting excess
+$2\eta(1-\sin\theta)$ decreases. They agree when
+$\cos\theta=\eta^{-2}/2$, giving exactly $\Delta_\tau$.
+The real rank-one formula proves sharpness; the scalar phase formula
+$\cos\delta=\eta^2\cos\theta$ gives $\delta=\pi/3$.
+\end{proof}
+
+\begin{corollary}[All maximizers of the smoothed field gap]
+\label{cor:real-complex-smoothed-gap-equality}
+Put
+\[
+ r_\tau=\arccos(\eta^{-2}/2),\qquad
+ a_\tau=2\arctan\left(
+   \frac{\tau}{\sqrt{\tau^2+4}\tan(r_\tau/2)}\right).
+\]
+Then $0<a_\tau<c<r_\tau<\pi/2$, where $c=\arccos\eta^{-2}$.
+The real-minus-complex gap equals $\Delta_\tau$ exactly when there
+are an odd number of principal angles equal to $r_\tau$ and every
+other principal angle is at most $a_\tau$.
+\end{corollary}
+
+\begin{proof}
+The restricted excess $E_k$ in the preceding proof is itself bounded by
+$\Delta_\tau$. Its attaining lists consist exactly of an odd number
+of $r_\tau$'s. To verify necessity, repeat the compact induction with
+equality. A boundary angle $c$ can be coupled with the unmatched
+$r_\tau$, strictly improving the sum of their canonical costs.
+A boundary right angle can be coupled with it at cost strictly less
+than two reflections. If a removed equal pair has angle $a>r_\tau$,
+reflect one $a$ and couple the other with $r_\tau$; strict monotonicity
+of the active sine cost lowers the cost. If $c\leq a<r_\tau$, use
+\[
+ e_\tau(r_\tau,a)+e_\tau(0,a)
+   <e_\tau(r_\tau,0)+e_\tau(a,a).
+\]
+This is the submodular inequality from
+\cref{lem:real-pair-cost-submodular}, made strict by the nonempty open
+active region in $[a,r_\tau]\times[0,a]$: there
+$\partial_x\partial_y e_\tau=-\eta\sin((x+y)/2)<0$.
+Thus only equal pairs at $r_\tau$ may be removed. The one-angle
+base case has its unique maximum at $r_\tau$.
+
+If the full field gap attains $\Delta_\tau$, then so does this
+restricted upper bound. All angles above $c$ are consequently an odd
+number of $r_\tau$'s. For an additional angle $t\leq c$, coupling it
+with the unmatched $r_\tau$ strictly improves the construction exactly
+when
+\[
+ \tan(t/2)\tan(r_\tau/2)>\frac{\tau}{\sqrt{\tau^2+4}},
+\]
+or $t>a_\tau$. Such an angle is therefore impossible.
+Conversely, if every additional angle is at most $a_\tau$, all pairs
+involving such an angle have additive canonical cost; reflections there
+cannot improve it. Equal pairs of $r_\tau$ attain their complex
+minimum, and odd parity leaves exactly one singleton with excess
+$\Delta_\tau$. The exact matching formula proves sufficiency.
+Finally, $\tan^2(c/2)=\tau/\sqrt{\tau^2+4}$ and $r_\tau>c$
+give $0<a_\tau<c$.
+\end{proof}
+
+The field gap tends to $2-\sqrt3$ as $\tau\downarrow0$ and is
+asymptotic to $1/(4\tau^3)$ as $\tau\to\infty$. Thus the sharp
+additive cost of enforcing real transport decreases to zero as the
+smoothed objective approaches its quadratic regime.
+
+\begin{corollary}[Canonical real Schatten transport from the two largest angles]
+\label{cor:real-schatten-canonical-top-two}
+Let $1<p<2$, and let $\theta_{(1)}\geq\theta_{(2)}$ be the two largest
+principal angles, inserting zeros when necessary. Put
+\[
+ c_p=\arccos\frac{2-p}{p},\qquad
+ r_p=2\arcsin(2^{-1/p}).
+\]
+For $c_p<t\leq\pi/2$, let $a_p(t)\in(0,c_p)$ be the unique smaller
+root of
+\[
+ (2\sin(a_p(t)/2))^{p-1}\cos(a_p(t)/2)
+       =(2\sin(t/2))^{p-1}\cos(t/2).
+\]
+The canonical real transport minimizes the Schatten $p$-cost exactly when
+\[
+ \theta_{(1)}\leq r_p
+ \quad\hbox{and}\quad
+ \left[\theta_{(1)}\leq c_p
+       \ \hbox{or}\ \theta_{(2)}\leq a_p(\theta_{(1)})\right].
+\]
+\end{corollary}
+
+\begin{proof}
+The amplitude $g_p(t)=(2\sin(t/2))^{p-1}\cos(t/2)$ strictly
+increases from zero to its maximum at $c_p$, then strictly decreases
+to zero at $\pi$. This proves existence and uniqueness of $a_p(t)$.
+A single reflection cannot improve the canonical cost exactly when
+$2(2\sin(\theta/2))^p\leq2^p$, or $\theta\leq r_p$.
+
+For two distinct positive angles $\theta>\psi$, put
+$h=(\theta+\psi)/2$ and $d=(\theta-\psi)/2$.
+The restricted scalar cost has its canonical endpoint at $d$, where
+its derivative is $p[g_p(\theta)-g_p(\psi)]$.
+The scalar cost strictly decreases to its unique minimizer and strictly
+increases afterward. Thus a pair improves the canonical cost exactly
+when $g_p(\theta)<g_p(\psi)$.
+Equal angles improve it exactly when they exceed $c_p$.
+Pairs involving zero cannot improve it.
+
+If $\theta_{(1)}\leq c_p$, every pair is subcritical and canonical.
+If $\theta_{(1)}>c_p$, the pairs containing $\theta_{(1)}$ are all
+canonical exactly when every other angle is at most
+$a_p(\theta_{(1)})$. In that case the remaining angles are below
+$c_p$, so their mutual pairs are canonical as well. Conversely, if
+$\theta_{(2)}>a_p(\theta_{(1)})$, the largest pair strictly improves
+the cost, including the case of equal largest angles. The matching
+formula now proves the criterion.
+\end{proof}
+
+\begin{corollary}[Sharp real Schatten rounding constant]
+\label{cor:real-schatten-rounding-constant}
+For $1\leq p\leq2$, every real orthogonal matrix $U$ and real
+orthogonal projection $P$ admit a real orthogonal $V$ commuting with
+$P$ such that
+\begin{equation}
+ \|U-V\|_p\leq
+    \frac{\|[P,U]\|_p}{\sqrt{1-2^{-2/p}}}.
+ \label{eq:real-schatten-rounding-constant}
+\end{equation}
+The constant is optimal in every ambient dimension at least two.
+\end{corollary}
+
+\begin{proof}
+Put $u=\sin(\theta/2)$ for a principal angle, so
+$0\leq u\leq1/\sqrt2$. The best one-plane real transporter has
+Schatten power $\min\{2(2u)^p,2^p\}$, while the corresponding
+commutator block has power $2(2u\sqrt{1-u^2})^p$.
+For $u>0$ their ratio of norms is
+\[
+ \begin{cases}
+  (1-u^2)^{-1/2},&u\leq2^{-1/p},\\[2pt]
+  \bigl(2^{1/p}u\sqrt{1-u^2}\bigr)^{-1},&u\geq2^{-1/p}.
+ \end{cases}
+\]
+The first branch increases in $u$; the second decreases on
+$[2^{-1/p},1/\sqrt2]$, since $u\sqrt{1-u^2}$ increases there.
+Their common maximum is $(1-2^{-2/p})^{-1/2}$.
+At $u=0$ both block costs vanish. Choosing the cheaper one-plane
+transporter independently and summing the $p$th powers gives
+\cref{eq:real-schatten-rounding-constant} through the transporter--rounding
+bijection.
+
+For sharpness, take a single principal plane with
+$\theta=2\arcsin(2^{-1/p})$. Every real line transporter on this
+plane is a canonical or long rotation or a reflection, and the
+canonical and reflection choices have the same cost. Their ratio to
+the commutator cost is the displayed constant. Adding fixed common
+directions preserves this rank-one minimum, by the matching formula
+(or its nuclear endpoint). Hence every ambient dimension at least two
+has the same optimal constant.
+\end{proof}
+
+\begin{corollary}[Explicit matching costs at exponent three halves]
+\label{cor:real-three-halves-matching}
+For $\rho(s)=s^{3/2}$, put $f(t)=(2\sin(t/2))^{3/2}$.
+For a pair $\theta\geq\psi$, set
+$h=(\theta+\psi)/2$, $d=(\theta-\psi)/2$, and $c=\cos h$.
+The matching weights are
+\[
+ s_{3/2}(\theta)=\min\{2f(\theta),2^{3/2}\},
+\]
+\[
+ e_{3/2}(\theta,\psi)=
+ \begin{cases}
+  2f(\theta)+2f(\psi),&
+       c\geq\dfrac{\cos d}{1+2\cos d},\\[3pt]
+  2\sqrt{8(1+c)\sqrt{1-2c}},&
+       c<\dfrac{\cos d}{1+2\cos d}.
+ \end{cases}
+\]
+On the second branch an attaining common rotation has angle
+\[
+ \gamma=\arccos\frac{c}{(1-2c)\cos d}.
+\]
+Write $x_i=\sin(\theta_{(i)}/2)$ for the two largest angles, inserting
+zeros when necessary. The real canonical rotation is globally optimal
+exactly when
+\begin{equation}
+ x_1\leq2^{-2/3},\qquad x_1^2+x_1x_2+x_2^2\leq1.
+ \label{eq:real-three-halves-canonical-top-two}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+Above its scalar transition, the optimal phase satisfies
+$\cos\delta_{3/2}(h)=c/(1-2c)$, and the squared scalar minimum is
+$8(1+c)\sqrt{1-2c}$, by
+\cref{eq:schatten-three-halves-phase,eq:schatten-three-halves-value}.
+The restricted optimum is canonical exactly when
+$\delta_{3/2}(h)\leq d$, which is equivalent to
+$c\geq\cos d/(1+2\cos d)$. This inequality also includes every
+subcritical $h$, since then $c\geq1/3$. Substituting the scalar minimum
+gives the second branch and the attaining rotation. On that branch
+$c<1/3$, so its denominator is positive.
+
+A single reflection improves canonical transport exactly when
+$2(2\sin(\theta/2))^{3/2}>2^{3/2}$.
+Its exclusion for every angle is the first inequality in
+\cref{eq:real-three-halves-canonical-top-two}.
+For $x=\sin(\theta/2)$ and $y=\sin(\psi/2)$, direct expansion gives
+\[
+ \cos h\,(1+2\cos d)-\cos d
+       =2(1-x^2-xy-y^2).
+\]
+Thus no pair lowers the canonical cost exactly when
+$x^2+xy+y^2\leq1$ for every pair. The expression increases with either
+nonnegative argument, so the two largest angles suffice. Apply
+\cref{thm:real-matching-minimum}.
+\end{proof}
+
+\begin{corollary}[Explicit real four-thirds costs]
+\label{cor:real-four-thirds-matching}
+For $\rho(s)=s^{4/3}$, put $f(t)=(2\sin(t/2))^{4/3}$.
+For $\theta\geq\psi$, set $h=(\theta+\psi)/2$,
+$d=(\theta-\psi)/2$, $c=\cos h$, and $q=\cos d$.
+Then
+\[
+ s_{4/3}(\theta)=\min\{2f(\theta),2^{4/3}\},\qquad
+ e_{4/3}(\theta,\psi)=
+ \begin{cases}
+  2f(\theta)+2f(\psi),&q(1-2c^2)\leq c,\\
+  2^{7/3}(1-2c^2)^{1/3},&q(1-2c^2)>c.
+ \end{cases}
+\]
+On the coupled branch an attaining common rotation has
+$\cos\gamma=c/((1-2c^2)q)$. These costs, inserted in the two
+sorted sums, give the unrestricted real minimum in every finite dimension.
+\end{corollary}
+
+\begin{proof}
+Use \cref{eq:schatten-four-thirds-value} and clip the optimal scalar
+phase to $[d,h]$. Coupling occurs exactly when its cosine is less
+than $\cos d$, or $q(1-2c^2)>c$. This implies $c<1/2$, automatically
+selecting a supercritical mean angle and a positive denominator.
+The attaining rotation is the one from the four-dimensional formula.
+Apply \cref{thm:real-sorted-spectral-minimum}.
+\end{proof}
+
+\begin{corollary}[Polynomial canonical tests at reciprocal-integer exponents]
+\label{cor:real-reciprocal-integer-canonical}
+Let $m\geq2$ be an integer, $p=1+1/m$, and set
+$u_i=\sin^{2/m}(\theta_{(i)}/2)$ for the two largest angles,
+inserting zeros when necessary. The real canonical transport is globally
+optimal exactly when
+\begin{equation}
+ u_1\leq2^{-2/(m+1)},\qquad
+ \sum_{j=0}^{m}u_1^{m-j}u_2^j\leq1.
+ \label{eq:real-reciprocal-integer-canonical}
+\end{equation}
+At $p=4/3$ the second condition is
+$u_1^3+u_1^2u_2+u_1u_2^2+u_2^3\leq1$.
+\end{corollary}
+
+\begin{proof}
+Apart from a positive constant, the squared phase amplitude at angle $t$
+is $u-u^{m+1}$, where $u=\sin^{2/m}(t/2)$. For $u>v$,
+\[
+ (u-u^{m+1})-(v-v^{m+1})
+    =(u-v)\left(1-\sum_{j=0}^{m}u^{m-j}v^j\right).
+\]
+Thus the pair test in \cref{cor:real-schatten-canonical-top-two} is exactly
+the second inequality. When $u=v$, it reduces to
+$(m+1)\sin^2(t/2)\leq1$, the scalar critical-angle condition.
+The reflection test $\sin(\theta_{(1)}/2)\leq2^{-1/p}$ becomes the
+first inequality after taking the power $2/m$.
+\end{proof}
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=\linewidth]{figures/real_transport_matching.pdf}
+ \caption{Real Schatten transport at $p=3/2$.
+ (a) The minimizing transporter in four dimensions is canonical, a
+ reflection on the larger-angle plane, or a coupled rotation.
+ The solid green curve is $x_1^2+x_1x_2+x_2^2=1$;
+ the dotted orange line is $x_1=2^{-2/3}$.
+ The dashed blue line is the complex canonical cutoff.
+ (b) Positive edge weights are improvements over the best independent
+ one-plane choices. The maximizing matching pairs $80^\circ$ with
+ $75^\circ$, leaving the remaining four angles unmatched.}
+ \label{fig:real-transport-matching}
+\end{figure}

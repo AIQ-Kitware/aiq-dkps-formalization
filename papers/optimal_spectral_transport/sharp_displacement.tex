@@ -1,0 +1,332 @@
+\section{Sharp bounds for full displacement}
+\label{sec:sharp-displacement}
+
+Let $\sym{Usource},\sym{Vtarget}$ be subspaces of the same finite-dimensional real or complex
+Hilbert space, with orthogonal projections $\sym{Psource},\sym{Qtarget}$. An admissible orthogonal
+or unitary operator $\sym{Wcompetitor}$ satisfies $\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}$. We write $\sym{NormN}$ for a unitarily
+invariant norm, or more generally a unitarily invariant seminorm. The
+principal angles of $\sym{Usource}$ and $\sym{Vtarget}$ are $\like{theta}{\theta_j}\in[0,\pi/2]$; for an acute
+pair let $\sym{alphaAngle}=\max_j\like{theta}{\theta_j}<\pi/2$, with $\sym{alphaAngle}=0$ when
+$\sym{Usource}=\sym{Vtarget}=\{0\}$.
+
+\begin{proposition}[Projection-distance lower bound]
+\label{prop:projection-lower}
+For every admissible $\sym{Wcompetitor}$ and every unitarily invariant seminorm $\sym{NormN}$,
+\begin{equation}
+  \sym{NormN}(\sym{Psource}-\sym{Qtarget})\leq \sym{NormN}(I-\sym{Wcompetitor}).
+  \label{eq:projection-lower}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Relative to $\sym{Usource}\oplus \like{Usource}{U^\perp}$, write
+$\sym{Wcompetitor}=\left(\begin{smallmatrix}\sym{Ablock}&\sym{Bblock}\\\sym{Cblock}&\sym{Dblock}\end{smallmatrix}\right)$ and
+$\sym{Jreflect}=2\sym{Psource}-I$. The off-diagonal part of $I-\sym{Wcompetitor}$ is
+\[
+ \frac{(I-\sym{Wcompetitor})-\sym{Jreflect}(I-\sym{Wcompetitor})\sym{Jreflect}}{2}
+ =-\begin{pmatrix}0&\sym{Bblock}\\\sym{Cblock}&0\end{pmatrix}.
+\]
+By the triangle inequality and unitary invariance, its $\sym{NormN}$-seminorm is
+at most $\sym{NormN}(I-\sym{Wcompetitor})$. Because $\sym{Wcompetitor}(\sym{Usource})=\sym{Vtarget}$, the singular values of $\sym{Ablock}$ are the
+principal cosines $\cos\like{theta}{\theta_j}$. Unitarity gives
+$\sym{Cblock}^*\sym{Cblock}=I-\sym{Ablock}^*\sym{Ablock}$ and $\sym{Bblock}\sym{Bblock}^*=I-\sym{Ablock}\sym{Ablock}^*$, so the nonzero singular values of both
+$\sym{Bblock}$ and $\sym{Cblock}$ are the principal sines. The off-diagonal matrix therefore
+has singular values $\sin\like{theta}{\theta_j}$ twice, with zeros for the remaining
+dimensions. The difference $\sym{Psource}-\sym{Qtarget}$ has the same singular-value list
+\citep{zhang2007angular,bhatia1997matrix}. Unitary invariance proves
+\cref{eq:projection-lower}.
+\end{proof}
+
+\begin{theorem}[Sharp full-displacement comparison]
+\label{thm:sharp-displacement}
+Let $\sym{Usource},\sym{Vtarget}$ be an acute pair with largest principal angle $\sym{alphaAngle}$ and
+canonical direct rotation $\sym{Rrotation}$. For every unitarily invariant seminorm $\sym{NormN}$
+and every admissible $\sym{Wcompetitor}$,
+\begin{equation}
+ \boxed{\quad \sym{NormN}(I-\sym{Rrotation})\leq\sec(\sym{alphaAngle}/2)\,\sym{NormN}(\sym{Psource}-\sym{Qtarget})
+                \leq\sec(\sym{alphaAngle}/2)\,\sym{NormN}(I-\sym{Wcompetitor}).\quad}
+ \label{eq:sharp-displacement}
+\end{equation}
+For every fixed $0<\sym{alphaAngle}<\pi/2$, the coefficient $\sec(\sym{alphaAngle}/2)$
+is best possible among coefficients valid for all dimensions, scalar
+fields, and unitarily invariant norms. Consequently, the best common
+coefficient under the hypothesis $\sym{alphaAngle}\leq\pi/3$ is $2/\sqrt3$;
+$\sqrt2$ is a uniform bound for all acute pairs.
+\end{theorem}
+
+\begin{lstlisting}[style=leanpaper,
+ caption={Lean signature for the sharp displacement bound, over real and
+ complex finite-dimensional spaces for every unitarily invariant seminorm.
+ The scalar-field and ambient-space context is omitted, and the linear
+ isometry equivalence type is written without its Unicode notation.},
+ label={lst:sharp-displacement}]
+theorem cos_half_arcsin_projectionGap_mul_uiNorm_directRotation_le_displacement
+    (N : UnitarilyInvariantSeminorm K E E)
+    (U V : Submodule K E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : IsAcute U V)
+    (W : LinearIsometryEquiv K E E)
+    (hmap : U.map W.toLinearMap = V) :
+    Real.cos (Real.arcsin (U.projectionGap V) / 2) *
+      N (LinearMap.id - (directRotation U V hacute).toLinearMap) <=
+        N (LinearMap.id - W.toLinearMap)
+\end{lstlisting}
+
+\begin{proof}
+On a principal plane with angle $\like{theta}{\theta_j}$, the singular values of
+$I-\sym{Rrotation}$ are $2\sin(\like{theta}{\theta_j}/2)$, twice, whereas those of $\sym{Psource}-\sym{Qtarget}$ are
+$\sin\like{theta}{\theta_j}$, twice. Both operators vanish on the remaining fixed
+summand. As $0\leq\like{theta}{\theta_j}\leq\sym{alphaAngle}<\pi/2$,
+\[
+ 2\sin(\like{theta}{\theta_j}/2)
+ =\frac{\sin\like{theta}{\theta_j}}{\cos(\like{theta}{\theta_j}/2)}
+ \leq\sec(\sym{alphaAngle}/2)\sin\like{theta}{\theta_j}.
+\]
+Monotonicity of symmetric gauge functions gives the first inequality in
+\cref{eq:sharp-displacement}; the second is
+Proposition~\ref{prop:projection-lower}. For the family in
+\cref{thm:small-angle}, both principal angles equal $\sym{alphaAngle}$ and
+\[
+ \|\sym{Psource}-\sym{Qtarget}\|_1=4\sin\sym{alphaAngle}
+ =\|I-\like{Wcompetitor}{W_\alpha}\|_1,
+ \qquad \|I-\like{Rrotation}{R_\alpha}\|_1=8\sin(\sym{alphaAngle}/2).
+\]
+Thus the ratio to the best admissible trace-norm displacement is exactly
+$\sec(\sym{alphaAngle}/2)$. At $\sym{alphaAngle}=\pi/3$ it is $2/\sqrt3$, and it tends
+to $\sqrt2$ as $\sym{alphaAngle}\uparrow\pi/2$.
+\end{proof}
+
+\begin{corollary}[Exact trace minimum for the real family]
+\label{cor:real-trace-optimum}
+For the subspaces $\sym{Usource},\like{Vtarget}{V_\theta}\subset\mathbb R^4$ of
+\cref{thm:small-angle}, $0<\sym{theta}<\pi/2$,
+\begin{equation}
+ \min_{\sym{Wcompetitor}\in O(4):\,\sym{Wcompetitor}\sym{Usource}=\like{Vtarget}{V_\theta}}\|I-\sym{Wcompetitor}\|_1
+ =\|\sym{Psource}-\sym{Qtarget}\|_1=4\sin\sym{theta},
+ \label{eq:real-trace-minimum}
+\end{equation}
+with the minimum attained by the explicit $\like{Wcompetitor}{W_\theta}$ in
+\cref{eq:wtheta}.
+\end{corollary}
+
+\begin{proof}
+The singular-value calculation in \cref{thm:small-angle} gives
+$\|\sym{Psource}-\sym{Qtarget}\|_1=4\sin\sym{theta}=\|I-\like{Wcompetitor}{W_\theta}\|_1$.
+Apply Proposition~\ref{prop:projection-lower} to any other admissible orthogonal
+map.
+\end{proof}
+
+The factor is optimal uniformly over unitarily invariant norms, not for
+an individual norm: $\sym{NormQ}$-norms, for example, admit the stronger constant one.
+The projection bound, comparison theorem, fixed-angle sharpness, and real
+minimum are formalized in Lean; see Appendix~\ref{app:small-angle-artifact}.
+
+The intertwining polar unitary itself is classical. Kato
+\citep[Chapter~I, \S4.6, equations~(4.33)--(4.42)]{kato1966perturbation}
+constructed it from the two projections, with earlier work by
+Sz.-Nagy cited there. In the notation above the formula is
+\[
+ \sym{Rrotation}=\bigl(QP+(I-\sym{Qtarget})(I-\sym{Psource})\bigr)\bigl(I-(\sym{Psource}-\sym{Qtarget})^2\bigr)^{-1/2}.
+\]
+Murphy \citep[Lemma~6.2.1, p.~178]{murphy1990operator} established an
+operator-norm comparison from the same polar factor. The estimate
+\cref{eq:sharp-displacement} uses the projection singular values and
+applies to every unitarily invariant seminorm; its global sharpness
+comes from the real four-dimensional family. Bolotnikov, Li, and Rodman
+\citep[Problem~1.1]{bolotnikov2001minimal} had already formulated the
+corresponding ambient unitary-constrained norm optimization problem.
+
+\subsection{Exact complex trace-norm minimization}
+\label{sec:complex-trace-model}
+
+The projector-distance lower bound is attained for \emph{every} pair of
+finite-dimensional complex subspaces of the same rank, even when a principal
+angle is $\pi/2$. A trace identity underlying this fact is valid over both
+real and complex fields and does not require equal ranks.
+
+\begin{proposition}[Directed-sine trace decomposition]
+\label{prop:projection-trace-sine}
+Let $\sym{Usource},\sym{Vtarget}$ be subspaces of a finite-dimensional real or complex
+Hilbert space, with orthogonal projections $\sym{Psource},\sym{Qtarget}$. Then
+\begin{equation}
+ \|\sym{Psource}-\sym{Qtarget}\|_1
+ =\|P_{V^\perp}P_U\|_1+\|P_{U^\perp}P_V\|_1.
+ \label{eq:projection-directed-sines}
+\end{equation}
+\end{proposition}
+
+\begin{lstlisting}[style=leanpaper,
+ caption={Lean signature of the directed-sine trace identity, over real or
+ complex finite-dimensional inner-product spaces. The surrounding
+ scalar-field and ambient-space context is omitted.},
+ label={lst:projection-trace-sine}]
+theorem kyFanSum_projectionDifference_eq_directed_sines
+    (U V : Submodule K E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    kyFanSum (finrank K E) (projection U - projection V) =
+      kyFanSum (finrank K E) (sinThetaMap U V) +
+        kyFanSum (finrank K E) (sinThetaMap V U)
+\end{lstlisting}
+
+\begin{proof}
+Put $A=P_{V^\perp}P_U$ and $B=P_{U^\perp}P_V$. The Gram identity
+\[
+ (\sym{Psource}-\sym{Qtarget})^2=A^*A+BB^*
+\]
+splits into operators supported on $U$ and $U^\perp$, respectively.
+Their positive square roots have orthogonal supports, so uniqueness of the
+positive square root gives
+\begin{equation}
+ |\sym{Psource}-\sym{Qtarget}|=|A|+|B^*|.
+ \label{eq:projection-modulus-split}
+\end{equation}
+Taking the finite-dimensional trace yields
+\cref{eq:projection-directed-sines}, since $A$ and $A^*$ (likewise $B$
+and $B^*$) have the same singular values.
+\end{proof}
+
+\begin{theorem}[Global complex trace-norm optimum]
+\label{thm:complex-trace-all-pairs}
+Let $\sym{Usource},\sym{Vtarget}$ be equal-dimensional subspaces of a finite-dimensional
+complex Hilbert space, with $k=\dim\sym{Usource}=\dim\sym{Vtarget}$ and
+principal angles $\like{theta}{\theta_1},\ldots,\like{theta}{\theta_k}\in[0,\pi/2]$,
+counted with multiplicity. Then a unitary transporter attains
+\begin{equation}
+ \boxed{\displaystyle
+ \min_{\substack{\sym{Wcompetitor}\ \mathrm{unitary}\\
+                 \sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}}}\|I-\sym{Wcompetitor}\|_1
+ =\|\sym{Psource}-\sym{Qtarget}\|_1
+ =2\sum_{j=1}^{k}\sin\like{theta}{\theta_j}.}
+ \label{eq:complex-trace-optimum}
+\end{equation}
+There is no acuteness hypothesis; zero and right angles are included.
+\end{theorem}
+
+\begin{lstlisting}[style=leanpaper,
+ caption={The principal-angle theorem's selected Lean declaration. The scalar
+ field is written as \texttt{Complex}, and the unitary type as
+ \texttt{LinearIsometryEquiv}; the displayed mathematical theorem gives the
+ complete conclusion, including attainment and comparison with every competitor.},
+ label={lst:complex-trace-optimum}]
+theorem exists_global_complex_trace_minimizer_with_principalAngles
+    (U V : Submodule Complex H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hUV : finrank Complex U = finrank Complex V) :
+    Exists fun (W : LinearIsometryEquiv Complex H H) =>
+      U.map W.toLinearMap = V /\
+      kyFanSum (finrank Complex H) (LinearMap.id - W.toLinearMap) =
+        kyFanSum (finrank Complex H) (projection U - projection V) /\
+      kyFanSum (finrank Complex H) (LinearMap.id - W.toLinearMap) =
+        2 * Finset.univ.sum (fun j : Fin (finrank Complex U) =>
+          Real.sin (principalAngles U V (j : Nat))) /\
+      forall Z : LinearIsometryEquiv Complex H H,
+        U.map Z.toLinearMap = V ->
+          kyFanSum (finrank Complex H) (LinearMap.id - W.toLinearMap) <=
+            kyFanSum (finrank Complex H) (LinearMap.id - Z.toLinearMap)
+\end{lstlisting}
+
+\begin{proof}
+For any transporter $\sym{Wcompetitor}$, Proposition~\ref{prop:projection-lower}
+gives the first lower bound in \cref{eq:complex-trace-optimum}.
+Equal source and target ranks imply that the two directed sine maps
+$P_{V^\perp}P_U$ and $P_{U^\perp}P_V$ have the same principal singular
+values $\sin\like{theta}{\theta_j}$, including zeros. By
+\cref{prop:projection-trace-sine},
+$\|\sym{Psource}-\sym{Qtarget}\|_1=2\sum_j\sin\like{theta}{\theta_j}$.
+
+To attain the lower bound, one may choose orthogonal complex principal
+planes. Choose orthonormal vectors $u,e$ on one plane so that the target
+line is spanned by $\cos\sym{theta}\,u+\sin\sym{theta}\,e$. In the basis
+$(u,-ie)$, the unitary
+\begin{equation}
+ \like{Rrotation}{R_\theta}=
+ \begin{pmatrix}\cos\sym{theta}&i\sin\sym{theta}\\
+                 i\sin\sym{theta}&\cos\sym{theta}\end{pmatrix},\qquad
+ \like{Wcompetitor}{W_\theta}=e^{i\sym{theta}}\like{Rrotation}{R_\theta}
+ \label{eq:complex-phase}
+\end{equation}
+transports the source line to its target line. Its eigenvalues are
+$1,e^{2i\sym{theta}}$, so $\|I-\like{Wcompetitor}{W_\theta}\|_1=2\sin\sym{theta}$.
+The orthogonal direct sum of these unitary maps, together with the identity
+on the common and unused summands, attains the stated value. This
+construction also applies to angles $\sym{theta}=\pi/2$.
+\end{proof}
+
+The Lean proof does not assume a supplied principal-plane coordinate
+system. Equal ranks first give an isometric equivalence between the
+crossed defect subspaces $U\cap V^\perp$ and $V\cap U^\perp$, from which
+a nonacute completed direct rotation $\like{Rrotation}{R_0}$ is constructed.
+Writing $C$ and $\sym{S}$ for the commuting ambient cosine and sine
+operators, put $\sym{Kdisplacement}=\like{Rrotation}{R_0}-C$ and
+$B=i\sym{Kdisplacement}$. The operators $\sym{S}\pm B$ are positive, and
+both phase corrections
+$\like{Wcompetitor}{W_\pm}=\like{Rrotation}{R_0}(C\pm i\sym{S})$
+transport $\sym{Usource}$ onto $\sym{Vtarget}$. The operator factorization of their
+displacements yields
+\[
+ \|I-\like{Wcompetitor}{W_+}\|_1=\operatorname{tr}(\sym{S}-B),\qquad
+ \|I-\like{Wcompetitor}{W_-}\|_1=\operatorname{tr}(\sym{S}+B).
+\]
+Their sum is $2\operatorname{tr}(\sym{S})=2\|\sym{Psource}-\sym{Qtarget}\|_1$.
+Both terms are individually bounded below by
+$\|\sym{Psource}-\sym{Qtarget}\|_1$, hence each attains the lower bound.
+This argument handles crossed right-angle defects without first producing a
+principal-plane basis. The verified principal-angle formula then identifies
+the common value in \cref{eq:complex-trace-optimum}. The planar phase
+mechanism already appears in Davis and Kahan's
+\citep[Example~4.2]{davis1970rotation}; the general constrained-unitary
+minimization problem is studied by \citet{bolotnikov2001minimal}.
+
+\ifincludeUnformalizedRealTransport
+\begin{tcolorbox}[
+ enhanced,breakable,colback=white,colframe=red!80!black,
+ colbacktitle=red!6!white,coltitle=red!80!black,
+ title={Working extension --- real rank-one and codimension-one transport},
+ fonttitle=\bfseries,boxrule=1pt,
+ left=9pt,right=9pt,top=9pt,bottom=9pt,
+ before skip=12pt,after skip=12pt]
+\begin{proposition}[Exact real line/hyperplane norm minimization]
+Let $n\geq2$ and let $\sym{Usource},\sym{Vtarget}\subset\mathbb R^n$ be lines or hyperplanes
+at principal angle $\sym{theta}\in[0,\pi/2]$. Put
+$a=2\sin(\sym{theta}/2)$ and, with trailing zero entries to size $n$, let
+$\sym{Dplanar}=\operatorname{diag}(a,a,0,\ldots,0)$ and
+$\sym{Hreflection}=\operatorname{diag}(2,0,\ldots,0)$. For every unitarily invariant
+norm $\sym{NormN}$,
+\[
+  \min_{\sym{Wcompetitor}\in O(n):\,\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}} \sym{NormN}(I-\sym{Wcompetitor})
+    =\min\{\sym{NormN}(\sym{Dplanar}),\sym{NormN}(\sym{Hreflection})\}.
+\]
+Both candidates are attained, respectively by a direct planar rotation
+of determinant $+1$ and by a Householder reflection of determinant $-1$.
+Consequently, Davis--Kahan's $\pi/3$ minimality claim holds for all
+real subspace pairs in ambient dimension at most three. The verified
+$\mathbb R^4$ counterexample shows that four is the minimum ambient
+real dimension for failure of that short-angle assertion.
+\end{proposition}
+\begin{proof}
+Select unit vectors $\sym{SourceVector},\sym{TargetVector}$ representing the source and target lines,
+or unit normals for hyperplanes, so $\langle \sym{SourceVector},\sym{TargetVector}\rangle=\cos\sym{theta}$.
+An admissible $\sym{Wcompetitor}$ has $\sym{Wcompetitor}\sym{SourceVector}=\pm \sym{TargetVector}$, whence
+$\|I-\sym{Wcompetitor}\|_{\rm op}\geq 2\sin(\sym{theta}/2)=a$.
+If $\det \sym{Wcompetitor}=1$, the nonreal eigenvalues of the real orthogonal matrix
+occur in conjugate pairs and the multiplicity of $-1$ is even.
+Thus the two largest singular values of $I-\sym{Wcompetitor}$ coincide, and both are
+at least $a$. Fan dominance gives $\sym{NormN}(I-\sym{Wcompetitor})\geq \sym{NormN}(\sym{Dplanar})$, with equality
+for the direct planar rotation. If $\det \sym{Wcompetitor}=-1$, $-1$ occurs as an
+eigenvalue, and $I-\sym{Wcompetitor}$ has singular value $2$; hence
+$\sym{NormN}(I-\sym{Wcompetitor})\geq \sym{NormN}(\sym{Hreflection})$. A single Householder reflection mapping $\sym{SourceVector}$
+to $\sym{TargetVector}$ attains this bound (if $\sym{SourceVector}=\sym{TargetVector}$, choose a reflection fixing $\sym{SourceVector}$).
+The minimum is therefore the smaller of the two values.
+Finally, $\sym{Dplanar}$ is weakly majorized by $\sym{Hreflection}$ exactly when $2a\leq2$,
+equivalently $\sym{theta}\leq\pi/3$. Every pair of nonzero proper
+subspaces of the same rank in $\mathbb R^2$ or $\mathbb R^3$
+is a line/hyperplane pair. The fixed-angle $\mathbb R^4$ family
+from \cref{thm:small-angle} violates the asserted minimality at
+arbitrarily small positive angles.
+\end{proof}
+The proof is conventional mathematics and has not been compiled as a
+new Lean theorem. Its source-level novelty remains under investigation;
+see the separate research note. This box is excluded from the
+checked-only manuscript.
+\end{tcolorbox}
+\fi

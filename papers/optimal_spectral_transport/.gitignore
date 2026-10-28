@@ -1,0 +1,40 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+
+# Disposable paper-analysis outputs and raw API responses. These are rebuilt
+# from repository evidence and should never be committed. Small manuscript-facing
+# artifacts live in the tracked snapshots/ directory instead.
+generated/
+
+# LaTeX / latexmk build products.  Source .tex/.bib files remain tracked.
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.ps
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.upa
+*.upb
+*.vrb
+*.xdv
+*.pdf
+
+# Stable print figure assets used by paper.tex. SVG sources remain editable.
+!/figures/sine_theta_rank_one.pdf
+!/figures/prop44_displacement_planes.pdf
+
+# Editor / OS noise
+*~
+.DS_Store

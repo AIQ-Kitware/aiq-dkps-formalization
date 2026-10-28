@@ -1,0 +1,237 @@
+\section{Davis--Kahan result inventory}
+\label{app:dk-inventory}
+
+\Cref{tab:dk-full-inventory} records the maintained result-level denominator.
+Every row is currently verified in the ordinary Lean build and has accepted
+semantic/source-correspondence review. The disposition column distinguishes a
+proof of the source claim from the checked refutation of Proposition~4.4.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.49\linewidth}>{\raggedright\arraybackslash}p{0.18\linewidth}}
+\caption{The \DKResultCount{} Davis--Kahan result-level targets.}
+\label{tab:dk-full-inventory}\\
+\toprule
+ID & Result & Disposition \\
+\midrule
+\endfirsthead
+\toprule
+ID & Result & Disposition \\
+\midrule
+\endhead
+\path{S2-sin-theta} & Single-angle sine theorem & proved at source scope \\
+\path{S2-tan-theta} & Single-angle tangent theorem & proved at source scope \\
+\path{S2-sin-two-theta} & Double-angle sine theorem & proved at source scope \\
+\path{S2-tan-two-theta} & Double-angle tangent theorem & proved at source scope \\
+\path{DK-3.1-prop} & Acute direct rotation existence and uniqueness & proved at source scope \\
+\path{DK-3.2-prop} & Nonacute existence criterion & proved at source scope \\
+\path{DK-3.3-prop} & Principal square-root characterization & proved at source scope \\
+\path{DK-3.4-prop} & Square as a direct rotation & proved at source scope \\
+\path{DK-3.1-thm} & Classification of pairs of subspaces & proved at source scope \\
+\path{DK-3.1-cor} & Compact classification by angle eigenvalues & proved at source scope \\
+\path{DK-3.5-prop} & Angle commutation and eigenspace geometry & proved at source scope \\
+\path{DK-3.2-cor} & Reversal symmetry & proved at source scope \\
+\path{DK-4.1-prop} & Pointwise and singular-value extremality of the direct rotation & proved at source scope \\
+\path{DK-4.1-cor} & Unitarily invariant norm minimality of restricted displacement & proved at source scope \\
+\path{DK-4.2-prop} & Basis-angle square-sum extremality & proved at source scope \\
+\path{DK-4.3-prop} & Squared-displacement unitarily invariant norm minimality & proved at source scope \\
+\path{DK-4.4-prop} & Full-displacement claim of Proposition~4.4 & refuted as printed; repaired separately \\
+\path{DK-5.1-thm} & Banach-space Sylvester lower bound & proved at source scope \\
+\path{DK-5.2-thm} & Semibounded self-adjoint Sylvester theorem & proved at source scope \\
+\path{DK-5.1-lem} & Strong-cutoff convergence of singular values & proved at source scope \\
+\path{DK-6.1-lem} & Direct-sum norm comparison and converse & proved at source scope \\
+\path{DK-6.2-lem} & Reflection-pinch contraction & proved at source scope \\
+\path{DK-6.1-prop} & Sine proof, ambient limitation, and symmetric sine theorem & proved at source scope \\
+\path{DK-6.1-thm} & Generalized sine theorem & proved at source scope \\
+\path{DK-6.2-thm} & Pairwise-gap square-norm sine theorem & proved at source scope \\
+\path{DK-6.3-thm} & Generalized tangent theorem and supporting machinery & proved at source scope \\
+\path{DK-6.3-lem} & Finite-rank near-maximizer leakage estimate & proved at source scope \\
+\path{DK-8.1-thm} & Branch selection and spectral repulsion & proved at source scope \\
+\path{DK-8.2-thm} & Smallness selects the acute branch & proved at source scope \\
+\bottomrule
+\end{longtable}
+
+The result table is keyed to source results.  One source result can require many
+Lean declarations, while a single reusable Lean theorem can support more than
+one source-specific wrapper.  The denominator therefore remains stable under
+refactoring of implementation modules.
+
+\section{Source-correspondence review}
+\label{app:source-review}
+
+A result is accepted only after two distinct checks.
+
+\paragraph{Mechanical verification.}
+The declaration must resolve in the ordinary project build, and every theorem
+on which it depends must be accepted by Lean's kernel.  This establishes the
+formal proposition exactly as encoded.
+
+\paragraph{Source comparison.}
+The encoded proposition is compared with the cited source location.  The review
+checks the mathematical objects, hypotheses, conclusion, scalar field,
+dimension, norm class, boundary conventions, and operator-domain assumptions.
+For a nonliteral representation, the review also records the theorem or
+mathematical argument that justifies the correspondence.  \Cref{eq:modulus-sine} is the main example: the public Lean sine-theta theorem
+is stated on the positive sine operator, while its rectangular analytic proof
+engine is connected to that operator by an exact modulus identity and
+polar-decomposition transport of the symmetric ideal gauge.
+
+This separation prevents theorem names from serving as evidence of fidelity.
+For example, the proved declaration
+\texttt{sinTheta\_unbounded\_intervalExterior\_characterizedWitness\_rclike}
+remains a useful finite-gap theorem, but it is not the selected source endpoint
+because it does not include the half-infinite gap cases.  Conversely,
+Proposition~4.4 is complete in the inventory even though its printed assertion
+has no proof: the completed formal treatment consists of the transcribed claim
+as a proposition, a checked counterexample/refutation, a diagnosis of the
+source proof, and repaired theorems.
+
+\section{Formalization procedure}
+\label{app:formalization-process}
+
+For each source theorem, we identified its standing assumptions, selected a
+mathematical representation in Lean, and proved the required intermediate
+results against the pinned Mathlib and Tau Ceti dependencies. Proof
+development used Lean's elaborator and kernel to resolve domain conditions,
+separation hypotheses, and norm-ideal membership. The source-correspondence
+review in Appendix~\ref{app:source-review} was performed separately from
+compilation; it compared the elaborated statement with the original theorem,
+including conventions inherited from surrounding text.
+
+ChatGPT, Claude Code, and Codex were used for literature and library search,
+proof design, implementation, debugging, and manuscript preparation. The
+human authors selected and reviewed the mathematical statements and are
+responsible for their interpretation and the submitted text. The main text
+and the source inventory identify the formal results; the project archive
+contains the corresponding proofs and pinned dependencies.
+
+\section{Artifact organization}
+\label{app:artifact}
+
+The paper-facing Davis--Kahan declarations are under
+\path{DavisKahan/Sources/DavisKahan1970}.  Reusable mathematical infrastructure
+is primarily under \path{ForTauCeti}; its declarations already use final
+\texttt{TauCeti.*} namespaces.  The maintained Davis--Kahan result inventory is
+\path{dev/davis-kahan-1970-formalization-result-inventory.json}.  This organization permits
+source-audit records and paper-specific counterexamples to remain local to the
+paper package while reusable analysis is prepared for upstream integration.
+
+
+\subsection{Displacement theorems beyond the original inventory}
+\label{app:small-angle-artifact}
+
+The 29-target count concerns results stated in the 1970 paper. The fixed
+counterexample and failure of the published Ky Fan inequality are in
+\path{DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean}.
+The parameterized family is in
+\path{DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean},
+with source-facing aliases in \path{DavisKahan/Sources/DavisKahan1970/Section4SmallAngle.lean}.
+The Lean theorem
+\texttt{arbitrarilySmall\_fullDisplacement\_refuted} proves failure below
+every positive angle threshold.
+
+The following additional modules contain the proved quantitative results:
+\path{ProjectionDisplacement.lean} proves the projection-distance lower
+bound Proposition~\ref{prop:projection-lower}; \path{TraceOptimality.lean} establishes
+the global real-family minimum Corollary~\ref{cor:real-trace-optimum}; and
+\path{SharpDisplacement.lean} proves the real/complex unitarily invariant
+seminorm inequality \cref{thm:sharp-displacement}, its fixed-angle
+sharpness, and the optimal common factor $2/\sqrt3$ for the $\pi/3$ range.
+These files are in \path{DavisKahan/FiniteDimensional/DirectRotation}.
+
+The same directory contains \path{ComplexTraceOptimality.lean},
+\path{ComplexTraceAssembly.lean}, and \path{ComplexTraceFiniteModel.lean},
+which establish planar and finite block-model trace optima. The general
+finite-dimensional complex theorem, with no supplied coordinate model or
+acute-angle assumption, is in \path{ComplexPhaseTrace.lean}
+(\texttt{exists\_global\_complex\_trace\_minimizer}). The matched crossed-defect
+isometry needed at right angles is in \path{ComplexCrossedDefects.lean}.
+\path{ComplexTracePrincipalAngles.lean} proves the explicit
+$2\sum_j\sin\theta_j$ formula and the attained all-pairs optimum
+\cref{thm:complex-trace-all-pairs}.
+The reusable real/complex identity \cref{prop:projection-trace-sine},
+including unequal ranks, is in
+\path{ForTauCeti/Analysis/InnerProductSpace/Projection/TraceSine.lean}.
+These are additional theorems beyond the fixed 29-result source inventory.
+The real line/hyperplane norm formula in the optional working draft remains
+a conventional argument without a corresponding general Lean theorem.
+
+The smoothed optimization results in \cref{sec:smoothed-transport} are
+also in the direct-rotation directory. \path{SmoothedSpectralCost.lean}
+identifies the literal singular-value penalty with its weighted nuclear
+norm. \path{SmoothedPrincipalAngles.lean} proves
+\path{exists_unitary_minimizing_smoothed_transport_principalAngles},
+the attained global principal-angle formula.
+\path{SmoothedExplicitOptimizer.lean} defines
+\texttt{optimalSmoothedTransport} and proves its admissibility, exact cost,
+and global optimality. \path{SmoothedSubspaceStability.lean} proves
+\path{smoothed_transport_growth_of_principalAngles_le}, with the
+explicit positive coefficient used in \cref{cor:smoothed-stability}.
+\path{SmoothedCommutingCorrection.lean} defines the literal operator
+singular-value distance and its named nearest commuting correction;
+\path{optimalSmoothedCorrection_isMin_of_commute} proves the global
+minimality in \cref{cor:smoothed-commuting-correction}.
+\path{SmoothedCorrectionStability.lean} transfers the quadratic and quartic
+growth certificates to feasible corrections and identifies the named
+optimizer with the canonical correction through the cutoff.
+\path{SmoothedCommutatorCutoff.lean} gives the necessary-and-sufficient
+operator-norm commutator test for canonical correction optimality and
+uniqueness of the closest feasible correction.
+\path{SmoothedCriticalStability.lean} proves the root growth inequality and
+fourth-power error certificate in \cref{prop:smoothed-critical-stability},
+with an explicitly constructed critical rotation. Its hypotheses specify
+the skew-adjoint unitary and its reversal by the actual source reflection.
+\path{SmoothedQuarticStability.lean} proves
+\path{smoothed_transport_quartic_growth} and
+\path{smoothed_transport_quartic_error_bound} for all angles at or below
+the cutoff, and \path{smoothed_canonical_unique_minimizer} proves feasibility,
+global minimality, and uniqueness there. These are the endpoints for
+\cref{thm:smoothed-quartic-stability}; arbitrary mixtures of critical and
+smaller angles are permitted.
+\path{SmoothedCanonicalOptimality.lean} proves
+\path{smoothed_canonical_isMin_iff} and
+\path{optimalSmoothedTransport_lt_canonical_of_supercritical}, giving the
+necessary-and-sufficient accepted-principal-angle criterion and the strict
+improvement by the explicit optimizer in \cref{cor:smoothed-canonical-cutoff}.
+\path{SmoothedOptimizerUniqueness.lean} constructs the opposite-phase
+optimizer, proves its distinctness above the cutoff, and characterizes
+uniqueness of the global minimum by the same principal-angle criterion.
+\path{SmoothedCalibration.lean} inverts the cutoff into the explicit
+smoothing-parameter criterion given after that corollary.
+\path{SmoothedCriticalFlatness.lean} proves the quartic scalar upper bound
+and failure of every local positive quadratic modulus. Its endpoint
+\path{tendsto_critical_phase_quartic_ratio} gives the exact leading
+fourth-order coefficient in \cref{prop:smoothed-critical-flatness}.
+\path{SmoothedCriticalTransportFlatness.lean} realizes that failure for
+actual planar unitary transporters at the exact cutoff, with the literal
+singular-value cost and Frobenius distance. Its endpoint
+\path{smoothed_critical_planar_no_quadratic_growth} certifies the final
+assertion of \cref{prop:smoothed-critical-flatness}.
+\path{SmoothedValueSensitivity.lean} proves the optimal scalar Lipschitz
+constant, the derivative at the cutoff, and the angle-list error bound in
+\cref{cor:smoothed-value-sensitivity}.
+The global lower-bound endpoints quantify over every admissible complex
+unitary; they require no supplied principal-plane coordinates or restriction
+on mixing. The general angle theorem supplies an optimizer; the stability theorems
+supply quadratic growth below the cutoff and quartic growth through equality.
+The critical-family theorem gives its sharper root estimate. These results do not classify all supercritical optimizers.
+
+\subsection{Reproduction}
+
+The root \path{lean-toolchain} and \path{lake-manifest.json} pin the
+compiler and dependencies. From the repository root, the ordinary build
+checks the source-facing development:
+\begin{verbatim}
+lake exe cache get
+lake build
+\end{verbatim}
+The direct-rotation aggregate includes the quantitative displacement and
+smoothed optimization extensions. A narrower build checks these together
+with the source-facing counterexample wrapper:
+\begin{verbatim}
+lake build \
+  DavisKahan.FiniteDimensional.DirectRotation.All \
+  DavisKahan.Sources.DavisKahan1970.Section4SmallAngle
+\end{verbatim}
+The mathematical manuscript builds independently of Lean:
+\begin{verbatim}
+make -C papers/dk_formalization_journal paper
+\end{verbatim}

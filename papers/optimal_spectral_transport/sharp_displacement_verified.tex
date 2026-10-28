@@ -1,0 +1,153 @@
+% Mathematical exposition of additional results compiled in Lean, separate
+% from the original 29-item Davis--Kahan (1970) source-result inventory.
+\section{Sharp bounds for full displacement}
+\label{sec:verified-sharp-displacement}
+
+This section states results beyond the original 1970 paper's source targets.
+The real counterexample, projector lower bound, real global trace optimum,
+universal sharp UI-seminorm estimate, and fixed-angle sharpness have compiled
+Lean proofs. The full complex trace optimum without an angle restriction
+has a conventional proof, but its unconditional finite-dimensional Lean
+formalization remains separately identified in
+\cref{sec:unformalized-sharp-displacement}.
+
+Let $\mathbb F$ denote $\mathbb R$ or $\mathbb C$, and let $U,V$ be subspaces
+of equal dimension $k$ in an $n$-dimensional $\mathbb F$-Hilbert space.
+Write $P=P_U$ and $Q=P_V$ for their orthogonal projections and
+$0\leq\theta_1\leq\cdots\leq\theta_k\leq\pi/2$ for their
+principal angles, including any zero angles. A norm $N$ on square operators
+is \emph{unitarily invariant} when $N(AXB)=N(X)$ for orthogonal or unitary
+$A,B$. The notation $\|\cdot\|_1$ denotes the trace norm.
+
+\begin{proposition}[Projection-distance lower bound]
+\label{prop:draft-projection-lower}
+For every orthogonal or unitary map $W$ satisfying $WU=V$, and every
+unitarily invariant norm $N$,
+\begin{equation}
+  N(P-Q)\leq N(I-W).
+  \label{eq:draft-projection-lower}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Decompose $W$ with respect to $U\oplus U^\perp$:
+\[
+ W=\begin{pmatrix}A&B\\ C&D\end{pmatrix},
+ \qquad J=2P-I=\begin{pmatrix}I&0\\0&-I\end{pmatrix}.
+\]
+For $K=I-W$, its off-diagonal part is
+\begin{equation}
+ \frac{K-JKJ}{2}=-\begin{pmatrix}0&B\\C&0\end{pmatrix}.
+ \label{eq:draft-offdiag}
+\end{equation}
+By the triangle inequality and invariance under conjugation by $J$,
+\[
+ N\!\left(\frac{K-JKJ}{2}\right)
+ \leq\frac{N(K)+N(JKJ)}2=N(K).
+\]
+The singular values of $A=P W|_U$ are $\cos\theta_j$: indeed,
+$W|_U$ is an isometry onto $V$, so these are the singular values of
+$P|_V$ in an orthonormal frame. The identities from $W^*W=WW^*=I$ give
+\[
+ C^*C=I_U-A^*A,
+ \qquad BB^*=I_U-AA^*.
+\]
+Thus the nonzero singular values of each of $B$ and $C$ are the
+$\sin\theta_j$, with the appropriate zeros. The off-diagonal operator in
+\cref{eq:draft-offdiag} has singular values $\sin\theta_j$, each twice,
+together with zeros. The cosine-sine decomposition for a pair of projections
+shows that $P-Q$ has exactly the same singular values
+\citep{stewart1990matrix,bhatia1997matrix}.
+Unitary invariance therefore identifies the left side of the preceding
+pinching estimate with $N(P-Q)$, proving \cref{eq:draft-projection-lower}.
+\end{proof}
+
+This lower bound is independently verified in Lean as
+\texttt{projectionDifference\_uiNorm\_le\_displacement}, with the stronger
+seminorm hypothesis and without an acute-angle restriction.
+
+\begin{theorem}[Sharp multiplicative displacement estimate]
+\label{thm:draft-sharp-displacement}
+Assume that $\alpha=\theta_k<\pi/2$, and let $R$ be the canonical direct
+rotation from $U$ to $V$. For every unitarily invariant norm $N$,
+\begin{equation}
+ N(I-R)\leq\sec(\alpha/2)
+ \min_{W:\,WU=V}N(I-W).
+ \label{eq:draft-sharp-displacement}
+\end{equation}
+For each fixed $0<\alpha<\pi/2$, the factor $\sec(\alpha/2)$ is
+attained by a real four-dimensional pair and the trace norm. In particular,
+under the angle hypothesis $\alpha\leq\pi/3$ the sharp common factor is
+$2/\sqrt3$; uniformly for acute pairs, $\sqrt2$ is a valid upper bound.
+\end{theorem}
+
+\begin{proof}
+In the principal-plane decomposition, the canonical direct rotation acts
+on the plane of angle $\theta_j$ as a rotation through that angle and is
+the identity on the remaining orthogonal complement. The nonzero singular
+values of $I-R$ are consequently
+\[
+ 2\sin(\theta_j/2),\quad 2\sin(\theta_j/2)
+ \qquad (j=1,\ldots,k),
+\]
+with zeros for the remaining dimensions. Similarly, the singular values of
+$P-Q$ are $\sin\theta_j$, each twice, with zeros. For every $j$,
+\[
+ 2\sin(\theta_j/2)
+ =\frac{\sin\theta_j}{\cos(\theta_j/2)}
+ \leq \sec(\alpha/2)\sin\theta_j.
+\]
+The corresponding singular-value domination, or equivalently
+the positive-sine functional-calculus factorization used in Lean,
+together with symmetric-gauge monotonicity of unitarily invariant norms
+\citep{bhatia1997matrix} yields
+\[
+ N(I-R)\leq\sec(\alpha/2)N(P-Q).
+\]
+Combining this with \cref{eq:draft-projection-lower}, valid for every
+admissible $W$, proves \cref{eq:draft-sharp-displacement}. In Lean the comparison is stated for each admissible $W$; no
+compactness argument is needed. The displayed minimum exists independently
+by continuity and compactness of the finite-dimensional orthogonal or unitary group.
+
+For the real family in \cref{thm:small-angle}, the two principal angles are
+$\theta_1=\theta_2=\alpha$. Hence $\|P-Q\|_1=4\sin\alpha$, while the
+verified formulas give
+\[
+ \|I-W_\alpha\|_1=4\sin\alpha,
+ \qquad \|I-R_\alpha\|_1=8\sin(\alpha/2).
+\]
+The projection lower bound proves that $W_\alpha$ is a \emph{global}
+trace-norm minimizer for this pair, as formalized by
+\texttt{SmallAngleCounterexample.exists\_traceMinimizer}. The ratio of the canonical displacement
+to that minimum equals $\sec(\alpha/2)$, giving equality in
+\cref{eq:draft-sharp-displacement} for every fixed $0<\alpha<\pi/2$.
+The exact identity $\cos(\alpha/2)\|I-R_\alpha\|_1
+=\|I-W_\alpha\|_1$ is also Lean-verified as
+\texttt{SmallAngleCounterexample.cos\_half\_mul\_directTrace\_eq\_competitorTrace};
+the attained-minimum theorem is compiled in
+\texttt{TraceOptimality.lean}.
+At $\alpha=\pi/3$ this ratio is $2/\sqrt3$, and as
+$\alpha\uparrow\pi/2$ it approaches $\sqrt2$. Hence no smaller
+uniform acute-pair factor can hold: for any $c<\sqrt2$, choose
+$\alpha<\pi/2$ sufficiently close to $\pi/2$ that
+$\sec(\alpha/2)>c$ and use the same real witness.
+\end{proof}
+
+
+\paragraph{Lean evidence and scope.}
+The operator-theoretic comparison is
+\texttt{cos\_half\_mul\_uiNorm\_directRotation\_le\_projection},
+composed with
+\texttt{projectionDifference\_uiNorm\_le\_displacement}.
+The largest-principal-angle form is
+\texttt{cos\_half\_maxPrincipalAngle\_mul\_uiNorm\_directRotation\_le\_displacement}.
+The original angle-range constant is
+\texttt{uiNorm\_directRotation\_le\_two\_div\_sqrt\_three\_mul\_displacement};
+\texttt{SmallAngleCounterexample.pi\_div\_three\_common\_factor\_necessary}
+proves necessity. The uniform acute bound is
+\texttt{uiNorm\_directRotation\_le\_sqrt\_two\_mul\_displacement}.
+The real projection trace formula is
+\texttt{SmallAngleCounterexample.kyFanSum\_projectionDifference},
+and the attained trace minimum is
+\texttt{SmallAngleCounterexample.exists\_traceMinimizer}.
+All are additional mathematical results, not new historical source-target rows.

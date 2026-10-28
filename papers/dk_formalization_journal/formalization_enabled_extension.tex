@@ -1,0 +1,57 @@
+\section{A follow-on theorem enabled by the formal development}
+\label{sec:example-transport}
+
+The source correction asks whether direct rotation minimizes the cost
+of transporting a subspace.  This question differs from the perturbation
+estimates: here the subspaces are fixed and the cost is measured over
+all orthogonal maps between them.  The formalization supplied the
+principal-angle, real/complex, and unitarily invariant norm interfaces
+needed to examine this larger family of admissible transports.
+
+Let $K,L\subseteq\mathbb R^n$ have the same dimension and let
+$\theta_1,\ldots,\theta_m\in(0,\pi/2]$ be their positive principal angles,
+counted with multiplicity.  A matching $M$ on the angle labels consists
+of disjoint unordered pairs; labels outside the pairs are unmatched.
+Define the singleton and paired costs
+\begin{equation}\label{eq:nuclear-matching-costs}
+ s(\theta)=\min\{4\sin(\theta/2),2\},\qquad
+ e(\theta,\psi)=4\sin((\theta+\psi)/2).
+\end{equation}
+
+\begin{theorem}[Verified real nuclear matching reduction]
+\label{thm:real-matching-example}
+For equal-dimensional real subspaces $K,L$ as above,
+\begin{equation}\label{eq:real-nuclear-match}
+\min_{\substack{W\in O(n)\\W(K)=L}}\|I-W\|_1
+=
+\min_{M\text{ a matching}}
+\left(
+\sum_{\{i,j\}\in M}e(\theta_i,\theta_j)
++
+\sum_{i\text{ unmatched}}s(\theta_i)
+\right).
+\end{equation}
+Both minima are attained.  The equality includes repeated angles,
+right angles, and common ambient directions; the left side has no
+principal-plane or determinant constraint.
+\end{theorem}
+
+The Lean development proves the unrestricted equality in
+\cref{eq:real-nuclear-match}, including comparison with arbitrary
+ambient orthogonal transporters.  Pairing two real principal planes
+allows a displacement pattern unavailable to a single real plane;
+this is the mechanism visible in the four-dimensional counterexample.
+For $\theta_1=\theta_2=\pi/6$, the canonical direct rotation costs
+$8\sin(\pi/12)>2$, whereas the paired competitor costs
+$4\sin(\pi/6)=2$.
+
+The complex-phase construction behind this example was already present
+in Davis and Kahan \citep[Example~4.2]{davis1970rotation}.  The general
+unitary minimal-distortion problem was studied by Bolotnikov, Li, and
+Rodman \citep{bolotnikov2001minimal}.  The exact unrestricted real
+matching formula is a candidate extension beyond those sources;
+historical priority has not been resolved.  Its full proof and the
+broader Schatten and smoothed-penalty results are reserved for the
+separate spectral-transport manuscript.  Here it provides a concrete
+example of a theorem developed with the formal infrastructure created
+for the Davis--Kahan source audit.

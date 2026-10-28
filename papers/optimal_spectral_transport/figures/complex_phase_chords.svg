@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="365" viewBox="0 0 940 365">
+<rect width="940" height="365" fill="#ffffff"/>
+<style>text{font-family:DejaVu Sans,Arial,sans-serif;fill:#223044;font-size:15px}.h{font-size:18px;font-weight:700}.small{font-size:13px}.axis{stroke:#bbc7d1;stroke-width:1.6}.circle{stroke:#667d8e;stroke-width:2;fill:none}.chord{stroke:#d06030;stroke-width:4;stroke-linecap:round}.point{fill:#113f70}.note{fill:#a43b26}.grid{stroke:#eeeeee;stroke-width:1}</style>
+<text x="92" y="30" class="h">Before: two displacement chords</text>
+<text x="555" y="30" class="h">After phase: one displacement chord</text>
+
+<circle class="circle" cx="210" cy="174" r="105"/>
+<line class="axis" x1="75" y1="174" x2="345" y2="174"/>
+<line class="axis" x1="210" y1="51" x2="210" y2="297"/>
+<text x="348" y="178" class="small">Re</text>
+<text x="217" y="49" class="small">Im</text>
+<circle class="point" cx="315" cy="174" r="4"/>
+<text x="323" y="194" class="small">1</text>
+<circle class="circle" cx="684" cy="174" r="105"/>
+<line class="axis" x1="549" y1="174" x2="819" y2="174"/>
+<line class="axis" x1="684" y1="51" x2="684" y2="297"/>
+<text x="822" y="178" class="small">Re</text>
+<text x="691" y="49" class="small">Im</text>
+<circle class="point" cx="789" cy="174" r="4"/>
+<text x="797" y="194" class="small">1</text>
+<path class="chord" d="M 315 174 L 300.93 121.50"/>
+<path class="chord" d="M 315 174 L 300.93 226.50"/>
+<circle class="point" cx="300.93" cy="121.50" r="5"/>
+<circle class="point" cx="300.93" cy="226.50" r="5"/>
+<text x="212" y="108">e^(+iθ)</text>
+<text x="212" y="254">e^(−iθ)</text>
+<text x="135" y="323" class="note">2 chords × 2 sin(θ/2)</text>
+<text x="145" y="344" class="small">trace cost = 4 sin(θ/2)</text>
+<path class="chord" d="M 789 174 L 736.50 83.07"/>
+<circle class="point" cx="736.50" cy="83.07" r="5"/>
+<text x="690" y="69">e^(2iθ)</text>
+<text x="599" y="323" class="note">1 chord × 2 sin(θ)</text>
+<text x="588" y="344" class="small">trace cost = 2 sin(θ)</text>
+<text x="715" y="214" class="small">fixed eigenvalue at 1</text>
+<text x="330" y="104" class="small">multiply both by e^(iθ)</text><path d="M 347 116 L 555 116" stroke="#536c81" stroke-width="2" fill="none"/><path d="M 548 109 L 555 116 L 548 123" stroke="#536c81" stroke-width="2" fill="none"/>
+<text x="62" y="65" class="small">θ = π/6 shown; angles and formulas are general</text></svg>

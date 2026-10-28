@@ -39,3 +39,14 @@ These rules apply to the main text, appendices, captions, and generated prose in
 ## Generated data
 
 Do not hand-edit generated snapshot tables when the corresponding generator is available. Regenerate them with the existing scripts and keep raw evidence linked to exact source results and Lean declarations.
+
+
+## Current publication direction (27 October 2026)
+
+Read [FORMALIZATION_PAPER_SCOPE.md](FORMALIZATION_PAPER_SCOPE.md) before
+changing the paper. This is a formalization-first manuscript. Keep the
+29-result source audit, operator-theory foundations, and Proposition 4.4
+correction as the primary scientific account. New optimal-transport theory
+is retained in sibling `../optimal_spectral_transport/`; only a selected
+matching theorem is used here to demonstrate a verified follow-on question.
+Do not promote every new transport theorem into this article.

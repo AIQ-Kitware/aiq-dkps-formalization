@@ -1,0 +1,356 @@
+% Independent research fragment; not included by paper.tex.
+% Conventional proofs. Formalization and priority status: PAPER_CONTEXT.md.
+\section{Smoothed nuclear transport and an exact convex relaxation}
+\label{sec:smoothed-transport}
+
+For $\tau>0$, define the smooth spectral displacement cost
+\[
+ \Psi_\tau(W)=\operatorname{tr}
+  \sqrt{\tau^2I+(I-W)^*(I-W)}-n\tau.
+\]
+Each displacement singular value $s$ contributes
+$\rho_\tau(s)=\sqrt{\tau^2+s^2}-\tau$. This penalty is quadratic near
+zero and asymptotically linear. Smooth functions of singular values,
+including this hyperbolic penalty, are used in low-rank inverse-problem
+regularization \citep{lobos2026smooth}. Put
+\[
+ \eta=\frac{\tau+\sqrt{\tau^2+4}}2>1,
+ \qquad c_\tau=\arccos(\eta^{-2}).
+\]
+The identity $\tau=\eta-\eta^{-1}$ gives, for every unitary $W$,
+\begin{equation}
+ \Psi_\tau(W)=\|\eta W-\eta^{-1}I\|_1-n\tau.
+ \label{eq:smoothed-weighted-nuclear}
+\end{equation}
+Indeed, the two matrices under the positive square roots have the same
+Gram matrix, namely $(\tau^2+2)I-W-W^*$.
+
+\begin{theorem}[Exact smoothed transport]
+\label{thm:smoothed-transport}
+Let $P,Q$ be orthogonal projections of the same rank $r$ on
+$\mathbb C^n$, with principal angles $\theta_1,\ldots,\theta_r$.
+Then
+\begin{equation}
+ \min_{WPW^*=Q}\Psi_\tau(W)=\sum_{j=1}^r \mu_\tau(\theta_j),
+ \label{eq:smoothed-global-minimum}
+\end{equation}
+where the minimum is over unitary $W$ and
+\[
+ \mu_\tau(\theta)=
+ \begin{cases}
+  2\bigl(\sqrt{\tau^2+2-2\cos\theta}-\tau\bigr),
+        &0\leq\theta\leq c_\tau,\\
+  2\eta\sin\theta-2\tau,
+        &c_\tau\leq\theta\leq\pi/2.
+ \end{cases}
+\]
+An attaining transporter is the identity on the fixed summands of a
+cosine--sine decomposition and $e^{i\delta_\tau(\theta)}R_\theta$ on
+each nonzero principal plane, where
+\[
+ R_\theta=\begin{pmatrix}\cos\theta&-\sin\theta\\
+                              \sin\theta&\cos\theta\end{pmatrix},
+ \qquad
+ \delta_\tau(\theta)=
+ \begin{cases}
+   0,&\theta\leq c_\tau,\\
+   \arccos(\eta^2\cos\theta),&\theta\geq c_\tau.
+ \end{cases}
+\]
+The nonnegative phase displayed here uniquely minimizes the scalar-phase
+cost over $[0,\theta]$.
+\end{theorem}
+
+\begin{proof}
+We first prove the scalar claim. Write $a=\eta$, $b=\eta^{-1}$, and
+identify the principal plane with $\mathbb C$. The scalar cost plus
+$2\tau$ is the sum of the distances from $x=be^{i\delta}$ to the two
+points $u=ae^{i\theta}$ and $v=ae^{-i\theta}$:
+\begin{equation}
+ \rho_\tau\bigl(2\sin((\theta+\delta)/2)\bigr)
+ +\rho_\tau\bigl(2\sin((\theta-\delta)/2)\bigr)+2\tau
+ =|u-x|+|v-x|.
+ \label{eq:smoothed-ellipse}
+\end{equation}
+If $a\cos\theta\leq b$, the segment $[u,v]$ meets the circle
+$|x|=b$. Equality in the triangle inequality gives the minimum
+$|u-v|=2a\sin\theta$. The intersection in the upper half-plane has
+$\cos\delta=(a/b)\cos\theta$; it lies on the segment because $a>b$.
+It also satisfies $0\leq\delta\leq\theta$. This intersection is unique
+in the upper half-plane, including the point of tangency.
+
+If $a\cos\theta\geq b$, let $g(x)=|u-x|+|v-x|$. Convexity and
+reflection symmetry give $g(\operatorname{Re}x)\leq g(x)$. On the real
+axis to the left of $a\cos\theta$, the function $g$ decreases strictly
+as the coordinate increases. Since $\operatorname{Re}x\leq b$, the
+unique circle minimum is $x=b$, or $\delta=0$. Its value is
+$2\sqrt{a^2+b^2-2ab\cos\theta}$. Subtracting $2\tau$ proves the
+scalar formula.
+
+For the global lower bound, choose a cosine--sine decomposition and let
+$R$ be the direct sum of the rotations $R_{\theta_j}$ and identities
+on the remaining fixed directions. Every transporter has the form
+$W=RV$ with $V$ unitary and commuting with $P$. Unitary invariance gives
+\[
+ \|aW-bI\|_1=\|aR-bV^*\|_1.
+\]
+We shall prove the bound for every contraction $Z$ commuting with $P$,
+which includes $Z=V^*$. Define a unitary $T$ separately on each principal
+plane. When $a\cos\theta\geq b$, put
+\[
+ d=\sqrt{a^2+b^2-2ab\cos\theta},\qquad
+ T_\theta=\frac{aR_\theta-bI}{d}.
+\]
+Its two diagonal entries equal $h=(a\cos\theta-b)/d\geq0$.
+When $a\cos\theta\leq b$, put
+\[
+ T_\theta=\begin{pmatrix}0&-1\\1&0\end{pmatrix},
+ \qquad h=0.
+\]
+Use $T=I$ on the fixed directions. The off-diagonal part of $T$ maps
+$P\mathbb C^n$ to $(I-P)\mathbb C^n$ and conversely. Consequently it
+has zero trace pairing with $Z$. Every diagonal entry of a contraction
+has real part at most one, so
+\[
+ \operatorname{Re}\operatorname{tr}(T^*Z)
+ \leq \operatorname{tr}(\text{diagonal part of }T).
+\]
+The nuclear norm support inequality therefore yields
+\begin{align*}
+ \|aR-bZ\|_1
+ &\geq \operatorname{Re}\operatorname{tr}\bigl(T^*(aR-bZ)\bigr)\\
+ &\geq (n-2k)(a-b)
+   +\sum_{j=1}^{k}
+    \begin{cases}
+       2\sqrt{a^2+b^2-2ab\cos\theta_j},
+                            &a\cos\theta_j\geq b,\\
+       2a\sin\theta_j,      &a\cos\theta_j\leq b.
+    \end{cases}
+\end{align*}
+Here the $k$ displayed planes correspond to the positive principal
+angles. The scalar construction attains this bound with a unitary $Z$,
+independently on every plane. Since $a-b=\tau$, subtracting $n\tau$
+proves \cref{eq:smoothed-global-minimum}; zero principal angles
+contribute zero.
+\end{proof}
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=\linewidth]{figures/smoothed_transport_diagram.pdf}
+ \caption{The smoothed transport transition. (a) At $\tau=1/4$ and
+ $\theta=60^\circ$, a minimizing circle point $x_*$ lies on the segment
+ between the two foci; the canonical point $b$ gives a longer broken path.
+ (b) The optimal nonnegative phase changes from zero to a positive value
+ as the angle crosses the cutoff. (c) The exact optimal phase for three
+ smoothing parameters. The global theorem proves that these independent
+ scalar choices attain the unrestricted unitary minimum.}
+ \label{fig:smoothed-transport}
+\end{figure}
+
+\begin{corollary}[Exact convex relaxation]
+\label{cor:smoothed-exact-relaxation}
+In the cosine--sine coordinates used above,
+\[
+ \min_{\substack{Z^*Z\leq I\\ZP=PZ}}\|\eta R-\eta^{-1}Z\|_1
+ =\min_{\substack{Z^*Z=I\\ZP=PZ}}\|\eta R-\eta^{-1}Z\|_1.
+\]
+A minimizing contraction is diagonal: on both directions of a principal
+plane use $\min\{1,\eta^2\cos\theta\}$, and use one on the fixed
+directions. A minimizing unitary is obtained by replacing the two entries
+on each supercritical plane by $e^{i\delta_\tau(\theta)}$.
+\end{corollary}
+
+\begin{proof}
+The preceding trace bound applies to every feasible contraction. The
+displayed diagonal contraction attains it: on a supercritical plane
+the residual is $\eta\sin\theta$ times the quarter-turn matrix.
+The scalar formula supplies the unitary attaining the same value.
+\end{proof}
+
+\begin{corollary}[An explicit spectral optimizer]
+\label{cor:smoothed-spectral-optimizer}
+Let $C=\sqrt{I-(P-Q)^2}$, let $R$ be a completed canonical rotation,
+and apply the scalar function $c\mapsto\min\{1,\eta^2c\}$ to $C$:
+\[
+ B=\min\{I,\eta^2C\},\qquad
+ Z=B+i\sqrt{I-B^2},\qquad W=RZ^*.
+\]
+Then $B$ attains the convex relaxation, $Z$ is unitary and commutes
+with $P$, and $W$ attains \cref{eq:smoothed-global-minimum}.
+All square roots are positive square roots; the minimum defining $B$
+is spectral.
+\end{corollary}
+
+\begin{proof}
+On a cosine eigenspace of eigenvalue $c=\cos\theta$, the factor $Z$
+is the scalar
+\[
+ \min\{1,\eta^2c\}
+   +i\sqrt{1-\min\{1,\eta^2c\}^2}
+ =e^{i\delta_\tau(\theta)}.
+\]
+Thus $Z$ is the attaining phase factor from the preceding proof.
+The real part $B$ is the attaining contraction from
+\cref{cor:smoothed-exact-relaxation}. Since $C$ commutes with $P$,
+so do both spectral factors. The formula for $W$ now gives the
+required transport and exact cost.
+\end{proof}
+
+\begin{theorem}[All smoothed minimizers]
+\label{thm:smoothed-all-minimizers}
+Fix cosine--sine coordinates, group equal positive angles together, and
+write $W=RZ^*$ with $ZP=PZ$. Every minimizing $W$ preserves these angle
+summands and is the identity on the common fixed summands. On an acute
+angle $\theta$ of multiplicity $m$ its factor $Z$ is
+\[
+ Z_\theta=\begin{pmatrix}E_\theta&0\\0&E_\theta\end{pmatrix},
+ \qquad
+ E_\theta=
+ \begin{cases}
+  I_m,&\theta\leq c_\tau,\\
+  \cos\delta_\tau(\theta)I_m+
+    i\sin\delta_\tau(\theta)H_\theta,&\theta>c_\tau,
+ \end{cases}
+\]
+where $H_\theta=H_\theta^*=H_\theta^{-1}$ is arbitrary.
+On the right-angle summand, of multiplicity $m$, every minimizer has
+\[
+ W_{\pi/2}=\begin{pmatrix}0&A\\A^*&0\end{pmatrix},
+ \qquad A\in\mathrm U(m).
+\]
+Conversely, every displayed choice is minimizing. In particular, the
+canonical rotation is the unique minimizer exactly when all principal
+angles are at most $c_\tau$. If the supercritical angles are acute and
+simple, and there are no right angles, there are exactly $2^k$ minimizers,
+where $k$ is the number of supercritical angles.
+\end{theorem}
+
+\begin{proof}
+Use the dual unitary $T$ in the proof of
+\cref{thm:smoothed-transport}. Equality in its diagonal bound forces
+$\operatorname{Re}\langle e,Ze\rangle=1$ on each basis vector carrying
+a strictly positive diagonal weight. Since $Z$ is unitary, this implies
+$Ze=e$. Thus $Z$ is the identity on the fixed directions and on every
+strictly subcritical angle summand, with no coupling to their orthogonal
+complement.
+
+On the remaining summand, including the critical angles, write
+\[
+ R=\begin{pmatrix}C&-S\\S&C\end{pmatrix},\qquad
+ Z=\begin{pmatrix}X&0\\0&Y\end{pmatrix},\qquad
+ D=(a/b)C\leq I.
+\]
+Here $T$ is the quarter-turn matrix. For a unitary $T$, equality
+$\operatorname{Re}\operatorname{tr}(T^*B)=\|B\|_1$ is equivalent to
+$T^*B\geq0$, by equality in the trace-norm support inequality.
+In particular, $T^*(aR-bZ)$ must be Hermitian. Its off-diagonal blocks
+give
+\begin{equation}
+ X+Y^*=2D.
+ \label{eq:smoothed-unitary-average}
+\end{equation}
+
+We use an elementary fact about a positive average of two unitaries.
+If $U+V=2D\geq0$, then $U^*D=DV$, hence
+$U^*D^2U=D^2$. Therefore $U$ commutes with $D$, by uniqueness of the
+positive square root. The same holds for $V$. On $(\ker D)^\perp$,
+$U^*D=DV$ now implies $V=U^*$; on $\ker D$ the average identity gives
+$V=-U$. Apply this fact with $U=X$ and $V=Y^*$.
+
+It follows that $X,Y$ preserve the eigenspaces of $C$, so distinct
+remaining angles cannot mix. On each acute angle summand, $Y=X$ and
+$\operatorname{Re}X=(a/b)\cos\theta\,I$. At the critical angle this
+forces $X=I$. Above it, unitarity gives precisely the displayed
+$E_\theta$, with a self-adjoint unitary $H_\theta$. On $\ker C$,
+$Y=-X^*$; substituting into $W=RZ^*$ gives the stated right-angle block.
+
+These necessary forms also make $T^*(aR-bZ)$ positive. For an acute
+supercritical angle its diagonal blocks are $a\sin\theta\,I$, and
+its off-diagonal part has norm $b\sin\delta_\tau(\theta)$. The identity
+\[
+ a^2\sin^2\theta-b^2\sin^2\delta_\tau(\theta)=a^2-b^2>0
+\]
+proves positivity. On the right-angle block the eigenvalues are $a+b$
+and $a-b$. The earlier scalar computation handles the subcritical
+blocks. This proves sufficiency and the assertions about uniqueness.
+\end{proof}
+
+\begin{corollary}[A quantitative certificate below the transition]
+\label{cor:smoothed-stability}
+Suppose every principal angle is at most $\theta_*$, where
+$0\leq\theta_*<c_\tau$. For every
+unitary transporter $W$, the canonical rotation $R$ satisfies
+\[
+ \Psi_\tau(W)-\Psi_\tau(R)
+ \geq
+ \frac{\cos\theta_*-\eta^{-2}}
+      {2\sqrt{\tau^2+2-2\cos\theta_*}}\,\|W-R\|_F^2.
+\]
+Thus an objective error bounds the Frobenius distance from the unique
+minimizer, with a constant determined by the largest principal angle.
+\end{corollary}
+
+\begin{proof}
+Write $W=RZ^*$ as above. Retaining the slack in the dual certificate gives
+\[
+ \Psi_\tau(W)-\Psi_\tau(R)
+ \geq b\sum_\ell h_\ell
+       \bigl(1-\operatorname{Re}\langle e_\ell,Ze_\ell\rangle\bigr),
+ \qquad
+ h_\theta=\frac{a\cos\theta-b}
+                  {\sqrt{a^2+b^2-2ab\cos\theta}},
+\]
+with $h_\ell=1$ on fixed directions. Unitarity gives
+$1-\operatorname{Re}\langle e,Ze\rangle=\|(Z-I)e\|^2/2$.
+The function $(ac-b)/\sqrt{a^2+b^2-2abc}$ is increasing in $c$:
+its derivative is
+$a^2(a-bc)/(a^2+b^2-2abc)^{3/2}>0$ for $c\in[b/a,1]$.
+Consequently $h_\ell\geq h_{\theta_*}>0$. Sum over the basis, use
+$\|Z-I\|_F=\|W-R\|_F$, and substitute $ab=1$ and $b=\eta^{-1}$.
+\end{proof}
+
+The same formula gives an exact correction to a unitary that fails to
+commute with a prescribed projection. If $U$ is unitary, the map
+$W\mapsto V=W^*U$ sends transporters from $P$ to $UPU^*$ bijectively
+onto the unitaries commuting with $P$, and
+$\rho_\tau(U-V)$ has the same singular-value sum as $\Psi_\tau(W)$.
+Thus \cref{thm:smoothed-transport} solves
+\[
+ \min_{\substack{V\text{ unitary}\\VP=PV}}
+ \operatorname{tr}\sqrt{\tau^2I+(U-V)^*(U-V)}-n\tau.
+\]
+It provides the optimum value, an attaining correction, and a trace
+certificate that can be checked without solving a nonconvex optimization
+problem. As $\tau\downarrow0$ the angle cost tends to $2\sin\theta$;
+as $\tau\to\infty$, $2\tau\mu_\tau(\theta)$ tends to
+$8\sin^2(\theta/2)$, the canonical squared Frobenius displacement.
+
+\begin{corollary}[The real line transition]
+\label{cor:smoothed-real-line}
+For two real lines of angle $\theta$ in $\mathbb R^n$, $n\geq2$,
+the minimum over orthogonal transporters is
+\[
+ \min\left\{
+  2\bigl(\sqrt{\tau^2+2-2\cos\theta}-\tau\bigr),\,
+  \sqrt{\tau^2+4}-\tau\right\}.
+\]
+The canonical rotation is optimal exactly when
+$\cos\theta\geq\eta^{-2}/2$. The other term is attained by a single
+Householder reflection transporting the source line to the target line.
+\end{corollary}
+
+\begin{proof}
+If an orthogonal transporter has negative determinant, it has an eigenvalue
+$-1$ and hence a displacement singular value $2$. Its cost is at least
+$\rho_\tau(2)$, attained by a transporting Householder reflection.
+If it has positive determinant, the two largest displacement singular
+values agree: nonreal eigenvalues occur in conjugate pairs and the
+multiplicity of $-1$ is even. For a source unit vector $x$ its image is
+one of the two target unit vectors, so $\|(I-W)x\|\geq2\sin(\theta/2)$.
+Both largest singular values are at least this number. Their cost is
+therefore at least $2\rho_\tau(2\sin(\theta/2))$, attained by the
+canonical planar rotation. Finally,
+$\sqrt{\tau^2+4}=\eta+\eta^{-1}$ and
+$\tau=\eta-\eta^{-1}$ show that equality of the two costs is equivalent
+to $\cos\theta=\eta^{-2}/2$.
+\end{proof}

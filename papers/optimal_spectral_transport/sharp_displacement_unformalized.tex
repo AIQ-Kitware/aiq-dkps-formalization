@@ -1,0 +1,126 @@
+% Historical conventional CS-decomposition derivation. The all-pairs complex
+% trace theorem IS NOW FORMALIZED in ComplexPhaseTrace.lean and
+% ComplexTracePrincipalAngles.lean, independently of a supplied chart.
+% This archival file is NOT input by either paper.tex or paper_working.tex;
+% its mathematics is incorporated in sharp_displacement.tex instead.
+\section{Complex trace-norm optimality: archived conventional derivation}
+\label{sec:unformalized-sharp-displacement}
+
+\begin{tcolorbox}[
+  enhanced, breakable, colback=white, colframe=red!80!black,
+  colbacktitle=red!6!white, coltitle=red!80!black,
+  title={ARCHIVED CONVENTIONAL DERIVATION --- full theorem now Lean-verified},
+  fonttitle=\bfseries, boxrule=1.05pt,
+  left=9pt, right=9pt, top=9pt, bottom=9pt,
+  before skip=12pt, after skip=12pt]
+
+The complex two-dimensional phase construction has a Lean proof in
+\texttt{ComplexTraceOptimality.lean}. Exact trace-norm additivity across
+orthogonal blocks, arbitrary finite-plane assembly, an unchanged summand,
+and transport under a supplied ambient unitary coordinate equivalence
+are formalized in \texttt{BlockTrace.lean},
+\texttt{ComplexTraceAssembly.lean} and
+\texttt{ComplexTraceFiniteModel.lean}. The newer `ComplexPhaseTrace.lean` proves an unconditional optimum via
+paired phases and nonacute completions; `ComplexTracePrincipalAngles.lean`
+proves its exact principal-angle formula. The following CS-decomposition
+argument is retained for comparison with that formal proof.
+
+\begin{proposition}[Exact trace-norm optimum over complex spaces]
+\label{prop:draft-complex-trace-optimum}
+If $U,V$ are equal-dimensional subspaces of a finite-dimensional complex
+Hilbert space, then
+\begin{equation}
+  \min_{W:\,WU=V}\|I-W\|_1
+  =\|P-Q\|_1
+  =2\sum_{j=1}^k\sin\theta_j.
+  \label{eq:draft-complex-trace-optimum}
+\end{equation}
+No acuteness hypothesis is needed.
+\end{proposition}
+
+\begin{proof}
+The lower bound is \cref{prop:draft-projection-lower}. We construct a unitary
+attaining it, including zero and right angles, without using acuteness.
+
+Let $T=P_V|_U:U\to V$. Its finite-dimensional singular-value
+decomposition supplies orthonormal bases $(u_j)_{j=1}^k$ of $U$ and
+$(v_j)_{j=1}^k$ of $V$ such that
+\[
+ \langle u_j,v_\ell\rangle=\delta_{j\ell}c_j,
+ \qquad c_j=\cos\theta_j\in[0,1].
+\]
+The zero singular values cause no problem: complete the nonzero left
+singular vectors to an orthonormal basis of $V$, matching the remaining
+right singular vectors arbitrarily. Equal dimensions make the index sets
+match. When $c_j=1$, the equality case of Cauchy--Schwarz gives
+$v_j=u_j$, so this index contributes a common fixed line.
+
+For every $j$ with $s_j=\sin\theta_j>0$ put
+\[
+ e_j=\frac{v_j-c_j u_j}{s_j}.
+\]
+The overlap identities give
+$\langle u_\ell,e_j\rangle=0$ for every $\ell$,
+and $\langle e_j,e_\ell\rangle=\delta_{j\ell}$; in particular all
+planes $K_j=\operatorname{span}_{\mathbb C}\{u_j,e_j\}$ are mutually
+orthogonal. Moreover $v_j=c_j u_j+s_j e_j$. This is valid at a
+right angle ($c_j=0$, $e_j=v_j$) as well as at a generic angle.
+The orthogonal complement of the sum of the $K_j$, together with the
+zero-angle lines, is an unchanged summand on which both projections
+vanish or coincide. This establishes the required \emph{finite} CS
+principal-plane model explicitly.
+
+In the ordered basis $(u_j,e_j)$ of each $K_j$, let
+\[
+ R_j=\begin{pmatrix}c_j&-s_j\\s_j&c_j\end{pmatrix},
+ \qquad W_j=e^{i\theta_j}R_j.
+\]
+Here $R_ju_j=v_j$, and the complex scalar $e^{i\theta_j}$ does not
+change the target line; hence $W_j(\mathbb C u_j)=\mathbb C v_j$.
+The eigenvalues of $R_j$ are $e^{\pm i\theta_j}$, so those of $W_j$
+are $1$ and $e^{2i\theta_j}$. Consequently
+\[
+ \|I-W_j\|_1=|1-e^{2i\theta_j}|=2s_j.
+\]
+Equivalently, after replacing $e_j$ by $-ie_j$, the same standard rotation
+has matrix
+\begin{equation}
+ R_\theta=\begin{pmatrix}
+   \cos\theta&i\sin\theta\\ i\sin\theta&\cos\theta
+ \end{pmatrix},
+ \qquad W_\theta=e^{i\theta}R_\theta.
+ \label{eq:draft-complex-phase}
+\end{equation}
+This is the phase-modified matrix used in the formalized complex planar
+construction. In the original basis it maps the source line to the target
+line exactly up to a complex phase.
+
+Take the orthogonal sum of $W_j$ for the indices with $s_j>0$ and the
+identity on the unchanged summand. The resulting ambient unitary $W$
+satisfies $WU=V$. Trace norm is additive over orthogonal blocks, so
+\[
+ \|I-W\|_1=\sum_{j=1}^k2s_j.
+\]
+On $K_j$ the two rank-one orthogonal projections have difference of
+square $s_j^2I_{K_j}$, with two singular values $s_j$. Their difference
+vanishes on the unchanged summand. It follows that
+$\|P-Q\|_1=2\sum_js_j=\|I-W\|_1$. The universal projection lower bound
+then proves that this $W$ is a global minimizer.
+\end{proof}
+
+\paragraph{The real four-dimensional realization.}
+Identifying $\mathbb C^2$ with $\mathbb R^4$ and complex multiplication by
+$i$ with $J=\left(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right)$
+turns \cref{eq:draft-complex-phase} into the real block matrices in
+\cref{eq:wtheta}, including the canonical rotation $R_\theta$. Complex
+singular values are duplicated under realification, producing the trace
+norms in \cref{eq:competitor-trace,eq:direct-trace}. Davis and Kahan already
+used a complex scalar phase to exhibit trace-norm nonminimality
+\citep[Example~4.2]{davis1970rotation}; the realification explains why
+their subsequent restriction to real spaces does not restore the asserted
+minimality. Bolotnikov, Li, and Rodman later studied this norm-minimization
+problem and the role of $Q$-norms in detail
+\citep{bolotnikov2001minimal}.
+
+
+\end{tcolorbox}
