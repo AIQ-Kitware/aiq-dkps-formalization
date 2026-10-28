@@ -16,8 +16,9 @@ before repeating the literature search; do not infer first-discovery priority.
 
 **28 October theorem-polish update:** the finite matching foundation now has
 weaker algebraic hypotheses, shared relabelling, characteristic simplification
-lemmas and no duplicate conjugation definition. The sorting/ambient theorem
-scope is preserved. See the latest entry for the exact API changes.
+lemmas and no duplicate conjugation definition. Leading fixed vertices and
+two-cycles now have exact, unique tail reconstructions independent of costs.
+The sorting/ambient theorem scope is preserved. See the latest entry for the exact API changes.
 
 **28 October overnight update:** nuclear sorting is now proved. See the final
 entry and the current research plan: exact optional-singleton normalization,
@@ -4904,3 +4905,53 @@ the full default `lake build` passed **21,509 jobs**, warnings as errors. The
 final build log is `/tmp/dkps-polish/full-build.log`. `git diff --check` passed.
 No Lean edits followed the final full build. The user's unrelated changes and
 manuscript work were preserved.
+
+
+### Exact matching reconstruction and sorting recurrence polish — 28 October
+
+Re-read the updated main manuscript and its `FORMALIZATION_PAPER_SCOPE.md`:
+the main paper centers the Davis--Kahan formalization and uses real nuclear
+matching as its selected follow-on theorem. The older broad transport title in
+`PAPER_CONTEXT.md` is not the current main-paper scope. Manuscript editing
+remains with the user.
+
+The structural matching API is now stronger than an equality of weighted sums:
+
+- `TauCeti.WeightedInvolution.existsUnique_prependFixed`: for any involution
+  `s : Fin (n+1) → Fin (n+1)` with `s 0 = 0`, there is a unique involutive
+  `t : Fin n → Fin n` satisfying `s = prependFixed t`.
+- `TauCeti.WeightedInvolution.existsUnique_prependPair`: for any involution
+  `s : Fin (n+2) → Fin (n+2)` with `s 0 = 1`, there is a unique involutive
+  `t : Fin n → Fin n` satisfying `s = prependPair t`. Involutivity forces
+  `s 1 = 0`. The theorem includes the empty tail.
+
+Both declarations live in `ForTauCeti/Combinatorics/Matching/WeightedFin.lean`.
+They require no scalar type, weights, positivity, symmetry or characteristic
+assumption. Uniqueness concerns the tail of the given map, not an optimizing
+matching or an ambient transport minimizer. The existing `exists_tail_of_fixed`
+and `exists_tail_of_pair` retain their statements and now follow in two-line
+proofs from exact reconstruction and the constructor cost equations. This
+separates the actual orbit decomposition from its weighted consequence.
+
+The pinned upstream permutation decomposition and finite-index APIs were
+inspected. The proof reuses `Fin.succ_pred`, `Fin.succ_injective`, the constructor
+simplification lemmas and `Fin.succ_succ_ne_one`; the last replaces explicit
+value arithmetic in excluding a leading two-cycle endpoint. No parallel
+permutation representation or new removal definition was introduced.
+
+In `RealNuclearSortedMinimum.lean`, `sorted_le_reflection` and `sorted_le_pair`
+now use Mathlib `add_min`, `le_min` and `min_le_min`. The original scalar
+monotonicity and pair-cost upper bound remain the mathematical inputs; the
+duplicated min-branch case analyses are gone. The public sorted minimum,
+unrestricted lower bound, and ambient attainment retain their hypotheses and
+conclusions.
+
+These are classical finite-involution facts and proof/API improvements to the
+existing transport derivation. Provenance row T21 was updated; no new historical
+priority claim or optimizer classification is asserted.
+
+Validation: `lake exe cache get` completed with no files to download. The
+focused weighted-matching and sorted-transport build passed **7,324 jobs**;
+the final full default `lake build` passed **21,509 jobs**, warnings as errors.
+Logs are in `/tmp/dkps-polish-reconstruction/`. `git diff --check` passed.
+No Lean edits followed the final full build; no manuscript files were edited.

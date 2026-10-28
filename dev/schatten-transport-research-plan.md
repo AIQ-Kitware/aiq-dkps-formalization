@@ -8,8 +8,13 @@ parameter. Schatten and nuclear relabelling share `WeightedInvolution.cost_reind
 through explicit cost-identification lemmas. The duplicate conjugation map was
 removed in favor of Mathlib `Equiv.conj`; its involutivity API is independent of
 finiteness. The paper-facing sorting and ambient attainment statements retain
-their scope. This is theorem/API refinement under the supplied TauCeti review
-rubrics, not another optional classification campaign. See the latest handoff
+their scope. A further polish pass proves `existsUnique_prependFixed` and
+`existsUnique_prependPair`: exact, unique tail decompositions of a given finite
+involution, independent of all costs. The cost-removal statements now derive
+from these structural results; the sorting recurrence uses Mathlib minimum
+identities instead of repeated scalar case splits. This is theorem/API
+refinement under the supplied TauCeti review rubrics, not another optional
+classification campaign. See the latest handoff
 entry for exact declarations and validation. After `lake exe cache get`, the
 full default `lake build` passed **21,509 jobs**, warnings as errors.
 
