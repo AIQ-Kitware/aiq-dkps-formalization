@@ -66,3 +66,21 @@ Do not conclude implementation or editorial work with unspecified
 actionable within this repository: theorem/source correspondence,
 proof exposition, literature comparison, and reproducible examples.
 Follow `../SPECIFIC_NEGATIVE_PROMPTS.md`.
+
+## Historical story and figure constraints (2026-10-28)
+
+- The article is a formalization paper. Present the source lineage as a
+  connected account of the mathematical problems solved, not a catalog of
+  people and dates. Explain how principal angles, eigenvalue approximation,
+  projection transport, spectral calculus, Sylvester separation, and
+  symmetric ideals combine in the 1970 theorems.
+- Retain precise original-source attributions, alongside surveys that
+  explain the historical connections. Distinguish contributions to
+  mathematics from the provenance of formal Lean implementations.
+- The former illustrations have been removed deliberately. Do not
+  restore the rank-one sine-theta or Proposition 4.4 displacement figures
+  without an explicit new author request; retain their analytical
+  calculations in prose.
+- Build the bibliography from the current source and reject unresolved
+  citations. Do not recommend unspecified external expert review as an
+  answer to source-comparison or attribution work.

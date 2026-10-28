@@ -92,3 +92,18 @@ lines of prior scholarship. Useful extended accounts include:
 These complement the original Davis (1958), Davis--Kahan (1970),
 Kato (1966), and Rosenblum papers. The historical section explains
 how their mathematical ideas become prerequisites of the formalization.
+
+
+## Historical exposition
+
+The manuscript's historical chapter traces the questions and results
+needed for Davis--Kahan: principal-angle geometry, variational
+eigenvalue approximation, spectral projection transport, the
+Sylvester/residual argument, and unitarily invariant operator ideals.
+Its annotated dependency table identifies which formal foundations
+realize each historical mathematical component. Primary papers and
+historical surveys are cited in `references.bib`.
+
+The sine-theta and four-dimensional counterexample illustrations are
+kept as independent visualization assets outside the rendered article;
+the paper now gives their calculations directly.
