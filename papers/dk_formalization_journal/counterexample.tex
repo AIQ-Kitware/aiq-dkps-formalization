@@ -140,13 +140,14 @@ $\|\sym{Psource}-\sym{Qtarget}\|_1\leq\|I-\sym{Wcompetitor}\|_1$.
 Equation~\eqref{eq:competitor-trace} attains this lower bound.
 % Formal proof: DavisKahan/FiniteDimensional/DirectRotation/TraceOptimality.lean,
 % SmallAngleCounterexample.traceDisplacement_lower_bound and Wequiv_traceMinimizer.
-% TODO (Lean dimension minimality): Prove that no real ambient space of
-% dimension at most three admits a trace-norm counterexample under the
-% printed acute-pair and largest-principal-angle <= pi/3 hypotheses.
-% Once that theorem compiles and its statement is matched to these hypotheses,
-% add a corollary that four is the least real ambient dimension for this
-% trace-norm failure. The current global-minimizer theorem concerns the
-% fixed four-dimensional pair, not this separate dimension claim.
+% Dimension minimality is now proved in DirectRotation/DimensionMinimality.lean:
+% nuclear_directRotation_le_of_finrank_le_three compares the actual direct
+% rotation with every ambient real orthogonal transporter in dimension <= 3,
+% under the acute-pair and largest-principal-angle <= pi/3 hypotheses.
+% isLeast_real_shortAngle_nuclear_counterexample_dimension proves the least
+% dimension is four; the same file retains arbitrarily small positive witnesses.
+% Proposed corollary for the next prose review: Four is the least real ambient
+% dimension for trace-norm failure under the printed short-angle hypotheses.
 
 At $\sym{theta}=\pi/4$, \cref{fig:prop44-displacement-planes}
 shows the different displacement patterns of the canonical direct rotation

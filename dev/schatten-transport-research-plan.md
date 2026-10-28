@@ -1,5 +1,20 @@
 # Spectral subspace transport: current research plan
 
+**Dimension-minimality checkpoint, 28 October 2026:** four is the least real
+ambient dimension admitting a trace-norm counterexample to direct-rotation
+minimality under the printed largest-angle bound `pi/3`. The compiled
+[`DimensionMinimality.lean`](../DavisKahan/FiniteDimensional/DirectRotation/DimensionMinimality.lean)
+proves the unrestricted comparison in dimensions at most three and the exact
+`IsLeast` statement, with arbitrarily small positive witnesses in dimension
+four. The proof uses the existing orthogonal principal-plane dimension bound
+and all-rank real nuclear optimality criterion; a new trace-norm/chord-sum
+identity connects that criterion to the actual direct rotation. This resolves
+the author's flagged minimality question and is supplementary to the unchanged
+29-result source denominator. The manuscript evidence map and non-rendered
+source note name the declarations; a rendered corollary remains for prose review.
+After `lake exe cache get`, the full default `lake build` passed with warnings
+as errors (21,511 jobs). The manuscript also builds after the source-note update.
+
 **Proof-polish checkpoint, 28 October 2026:** the weighted matching layer now
 supports division-semiring costs, with `2 != 0` imposed only when two half-edge
 contributions are combined; the exchange identities work over fields of

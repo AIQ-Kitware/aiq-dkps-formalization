@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5
+Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5, GPT-6 (configuration unspecified)
 -/
 module
 
@@ -61,6 +61,15 @@ noncomputable def principalPlaneSine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) : ℝ :=
   (sinThetaMap U V).singularValues (nontrivialAngleIndex U V i)
+
+/-- The sine attached to a principal plane is the corresponding nonzero
+singular value of the directed sine map. -/
+theorem principalPlaneSine_eq_singularValue (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (i : Fin (nontrivialAngleCount U V)) :
+    principalPlaneSine U V i = (sinThetaMap U V).singularValues (i : ℕ) := by
+  rw [principalPlaneSine]
+  rfl
 
 /-- Cosine attached to a nontrivial principal plane. -/
 @[expose] noncomputable def principalPlaneCosine (U V : Submodule 𝕜 E)

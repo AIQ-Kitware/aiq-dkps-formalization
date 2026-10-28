@@ -80,10 +80,15 @@ preserves the original comments and replies.
   preserving Proposition 4.3 and the earlier Bolotnikov--Li--Rodman results.
   Highlighted the proved global trace minimum for the four-dimensional pair.
   `TraceOptimality.lean` supplies the lower bound and the explicit attainer.
-- Dimension minimality remains a separate Lean task. The source TODO beside
-  the counterexample specifies the missing low-dimensional statement and the
-  corollary that could be added after it compiles and its scope is checked.
-  No dimension-minimality claim was added to the rendered article.
+- Dimension minimality was left as a separate Lean task during the prose pass.
+  It is now proved in `DirectRotation/DimensionMinimality.lean`:
+  `nuclear_directRotation_le_of_finrank_le_three` gives trace-norm minimality
+  for every real orthogonal transporter in dimension at most three, under the
+  acute-pair and largest-angle-at-most-pi/3 hypotheses.
+  `isLeast_real_shortAngle_nuclear_counterexample_dimension` proves the least
+  dimension admitting such a counterexample is four. The source comment beside
+  the counterexample links the declarations and proposes the corollary for
+  the next prose review; the rendered article has not been expanded.
 - Used the author's “a significant amount of operator theory, namely” wording
   as a local exception. Named the foundations adapted into Tau Ceti, with the
   Courant--Fischer/Weyl direction established by the linked audit. Preserved
