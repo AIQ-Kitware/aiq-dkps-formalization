@@ -37,8 +37,10 @@ the proposed general penalty argument in
 `papers/dk_formalization_journal/spectral_penalty_transport.tex`; it is
 conjectural and excluded from the verified manuscript. Its concrete
 two-parameter smoothed-power specialization is now proved, including the
-Hilbert-space lift. The next step is a completion and attribution audit of
-this core, before any optional theorem campaign.
+Hilbert-space lift. The completion and attribution audit at `cda45e2d4`
+checks the displayed core against actual declarations and records its
+remaining historical authentication limits. Evaluate that assessment before
+choosing any optional theorem campaign.
 
 Develop exact extrinsic transport optimization over **every** unitary or
 orthogonal W taking K to L, with objective `||I-W||_p` or an explicitly specified
@@ -53,7 +55,7 @@ classification above that bound is a secondary extension. A journal contribution
 can have a precise, complete scope before every extension below is solved.
 Historical originality requires its own theorem-level literature comparison.
 
-## Completed organizing penalty theorem and immediate audit
+## Completed organizing theorem and audited completion boundary
 
 The publication-core assessment specifies five principal statements and their
 status. C1/C2 and the operator-ideal lift C5 are proved for
@@ -95,10 +97,14 @@ status. C1/C2 and the operator-ideal lift C5 are proved for
    the existing signed-root attainer. Feasibility over either field follows
    from the existing native restricted-unitary/index theorem. This does not
    classify every family optimizer or give a real planar formula.
-4. **Next:** audit the displayed core hypotheses and exact source mappings,
-   including the finite labelled-angle/intrinsic multiplicity interface in
-   C4. The three central family statements are proved; further classification,
-   topology, stability and endpoint set limits are not publication gates.
+4. **Audit completed:** the publication-core note checks the displayed
+   hypotheses, field and ideal scope, value/classification distinctions and
+   exact source mappings. The finite labelled-angle/intrinsic multiplicity
+   equality remains an explicitly unformalized interface, used by no displayed
+   core proof. Further classification, topology, stability and endpoint set
+   limits are not publication gates. Historical priority remains qualified;
+   original-source authentication questions are preserved in the provenance
+   map. No further large proof campaign is part of this completed core.
 
 The shared `UnitaryPhaseHessian` replaces the duplicated Schatten and
 Charbonnier Hessian/overlap calculations. `UnitarySpectralRestriction` now
@@ -115,8 +121,9 @@ principle and full family Hilbert extension.
 
 The proposed C² penalty-shape theorem has not been refuted, but is not yet
 formally verified. The concrete family now has its own common proof and scalar minimum
-principle and a proved ideal lift. Audit the completed core before optional
-topology, stability, or exhaustive real matching/endpoint-family extensions. The assessment contains
+principle and a proved ideal lift. The core audit is complete. Optional
+topology, stability, or exhaustive real matching/endpoint-family extensions
+require a separate research decision. The assessment contains
 the dependency diagram, closest-source comparison and a proof-supported abstract.
 
 ## Current proved frontier

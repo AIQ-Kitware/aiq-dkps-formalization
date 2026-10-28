@@ -73,8 +73,10 @@ Hilbert--Schmidt at positive smoothing. Feasibility has the same exact ideal
 and balance criterion over either field. A common finite active correction
 constructs a regular attainer; only the nuclear corner uses signed roots.
 There is no all-family optimizer classification or infinite real matching
-formula. The next step is the core completion/source audit, not another
-optional proof campaign.
+formula. The core completion/source audit is now recorded in the publication-
+core assessment at `cda45e2d4`. The displayed theory needs no further proof
+prerequisite; unresolved priority checks and the unused finite count interface
+remain explicit. Evaluate the synthesis before any optional proof campaign.
 
 **Complex nuclear endpoint:** exact general infinite-rank attainment, the
 certificate for every ambient optimizer, a literal independent signed-root
@@ -4715,3 +4717,30 @@ Full real topology, broad stability and exhaustive limits are not prerequisites.
 as errors. Log: `/tmp/dkps-unification/family-hilbert-core-full.log`.
 Manuscript, visualization, submission and roadmap files were not edited;
 preexisting unrelated changes were preserved.
+
+
+### Completion audit after the Hilbert-family checkpoint
+
+Mathematical checkpoint: `cda45e2d4`. The final section of
+`spectral-transport-publication-core.md` checks C1–C5 against the actual
+statements. It confirms the ideal switch, actual defect hypotheses, finite
+versus extended cost scope, constructed versus every-optimizer assertions,
+and real versus complex boundaries. The full/half sine-eigenspace dimension
+identity is proved. A literal finite labelled-angle-count identity remains
+unformalized, but no displayed core theorem depends on it. The diagram joins
+the two proved parity descriptions conceptually without claiming that missing
+formal identity as a dependency.
+
+The stated publication core has no remaining mathematical proof prerequisite.
+The scalar family and ambient problem are prior art; the common transport
+solution and exact compatibility results remain potentially novel, with
+priority qualified by the recorded sources and authentication limits.
+Aubrun–Szarek Exercise B.12 is not independently authenticated, and the
+recorded early Halmos/Sz.-Nagy/Kato/Bhatia locators are not silently upgraded.
+The general operator-penalty conjecture, exhaustive real infinite-rank matching,
+full family optimizer classification and broad stability/limits are optional.
+Do not use their open status to restart an indefinite backlog campaign.
+The proposed abstract, five core statements, dependency diagram and section
+outline are ready for the requested evaluation of mathematical synthesis.
+No Lean changes followed the 21,495-job build; the audit edits research
+records only.

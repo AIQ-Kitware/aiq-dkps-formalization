@@ -1008,7 +1008,9 @@ list of a classical field merely by keyword overlap.
    geometry, defect index and exact ideal feasibility before any cost formula.
 2. **Penalty-dependent phase selection.** Give the scalar shape principle
    with its exceptional endpoints, then the separately justified unrestricted
-   complex lifting theorems. Include the real obstruction to a universal lift.
+   complex lifting theorems. Lead with the full closed-family Hilbert value
+   and attainment theorem, then derive its finite canonical criterion. Include
+   the real obstruction to a universal lift.
 3. **Complete complex regimes.** Present strict Schatten/Charbonnier finite
    active classifications beside the qualitatively different nuclear root
    product. Separate values, all optimizers and their native topologies.
@@ -1022,9 +1024,10 @@ list of a classical field merely by keyword overlap.
 This organization supports a coherent contribution without claiming a common
 unrestricted optimizer formula for arbitrary penalties or a complete real
 Hilbert matching theory. The real bridge is T8 and the
-closed-family finite complex minimum theorem is T16. The next central step
-is a final core statement/provenance audit; C5 is now proved. Real equality necessity is now proved;
-full real optimizer topology and exhaustive limiting classifications are
+closed-family finite complex minimum theorem is T16. The core statement and
+provenance audit is now recorded in the publication-core assessment; C5 is
+proved and no further proof is needed for its displayed scope. Real equality
+necessity is now proved; full real optimizer topology and exhaustive limiting classifications are
 secondary to the publication core.
 
 ## Completed compiler validation

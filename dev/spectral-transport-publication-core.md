@@ -412,14 +412,31 @@ operator penalty theorem, every-family-optimizer classification, unrestricted
 infinite-dimensional real matching and exhaustive topology/stability are
 additional research directions, not publication gates.
 
-The next work is a completion audit of this core's exact hypotheses and
-source attribution, including the finite labelled/intrinsic multiplicity
-interface already identified in C4. It should distinguish any genuine missing
-bridge from a classical identification already available in the APIs before
-starting another proof campaign. Historical priority remains unresolved;
-authenticate the authoritative Exercise B.12 statement and maintain the
-recorded early-source limits before making stronger priority claims. The
-scalar family, ambient problem, canonical geometry, ideal index and calculus
-ingredients are prior mathematics; the full family transport solution remains
-a potentially novel extension on the evidence examined. No manuscript or
-visualization changes are authorized by this assessment.
+## Completed core audit at `cda45e2d4`
+
+The displayed statements were checked against their actual declarations and
+hypotheses after the full C5 build. This is a scope review, not a substitute
+for compilation or an assertion of historical first priority.
+
+| Core assertion | Audit disposition |
+| --- | --- |
+| C1 finite unrestricted reduction and attained value | Exact finite complex equal-rank scope; positive-smoothing necessary local structure is separate from the closed-family global minimum. No competitor plane invariance is assumed. |
+| C2 critical surface | Positive-smoothing acute uniqueness, zero-smoothing identification, nuclear endpoint, critical equality and quadratic right-angle ties have distinct proved statements. The ambient iff is finite complex. |
+| C5 Hilbert value and attainment | Complete complex Hilbert space, complemented subspaces, finite projection cost and balanced crossed defects. Native q=p at tau=0 and q=2 at tau>0. The universal lower bound includes infinity; actual finite attainment uses both hypotheses. |
+| Regular versus nuclear construction | A regular attainer has a finite correction of canonical rotation. No claim that every family optimizer has this form follows. The nuclear corner instead uses existing signed-root attainment. |
+| C3 real equality necessity and parity | All finite-cost projection-bound attainers have signed-root certificates. Compact spectral root existence, full/half dimension doubling and trace-class equality attainment are distinct theorems. No real infimum gap is inferred from pointwise strictness. |
+| C4 matching interface | Unrestricted finite real matching and its labelled-angle parity criterion are proved. C3 independently gives the intrinsic spectral parity criterion. The exact pointwise equality between labelled counts and intrinsic half-eigenspace dimensions has not been formally added; no dependency in the diagram or displayed theorem assumes it. |
+| Mathematical provenance | T1–T20 distinguish classical formalizations/ingredients, corrections and potential extensions. The ambient problem and scalar penalty are prior art. Unauthenticated original statements and exercise leads remain explicitly unresolved. |
+
+**Decision:** the stated core has no remaining mathematical proof prerequisite.
+The finite labelled/intrinsic multiplicity identification is a useful future
+interface theorem, not an implicit ingredient in the proved statements.
+A stronger assertion of first priority would require authoritative
+Aubrun–Szarek Exercise B.12 authentication and the recorded early-source
+checks. The broader operator-penalty conjecture is still open; it is not
+needed for the proved family theorem. Full real matching in infinite rank,
+all-family optimizer classification, arbitrary-regime stability and exhaustive
+endpoint limits remain optional extensions. Do not start those campaigns
+without a new research decision. This assessment provides the requested
+mathematical synthesis, abstract, theorem outline and literature boundaries;
+it does not authorize manuscript or visualization edits.
