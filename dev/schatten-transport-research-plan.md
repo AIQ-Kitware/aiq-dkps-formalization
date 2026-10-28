@@ -1,5 +1,13 @@
 # Spectral subspace transport: current research plan
 
+**Next run, planned only:**
+[overnight real-matching plan](overnight-real-matching-plan-2026-10-27.md).
+The user's latest correction de-emphasizes DKPS-to-TauCeti ancestry: that
+record is maintained elsewhere. The planned sequence is the unrestricted
+matching proof explanation, nuclear sorting normalization, targeted novelty
+comparison and worked examples, followed by compilation and handoff. No
+execution has begun; manuscript edits remain with the user.
+
 **Publication steering:** Read
 [`publication-direction-dkps-to-transport-2026-10-27.md`](publication-direction-dkps-to-transport-2026-10-27.md)
 before beginning another optional theorem campaign. It records why this
