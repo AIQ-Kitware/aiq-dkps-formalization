@@ -307,6 +307,7 @@ quantity by the second under spectral separation. \jonsays{Maybe a better way to
 same argument to express several norms. We describe the development of these
 constructions before stating the formalized sine-theta theorem.
 
+\jonsays{It wasn't initially clear to me that these were other historical accounts of the topic, we should make that clear.}
 Paige and Wei trace the cosine--sine decomposition from Jordan's subspace
 geometry to its numerical formulations \citep{paige1994history}.
 Simon describes the Sz.-Nagy--Kato construction for nearby spectral
@@ -357,7 +358,7 @@ In numerical linear algebra, Bj\"orck and Golub developed algorithms for
 Their computational formulation makes the basis-invariant angles available from
   orthonormal matrix factorizations.
 
-A further formulation uses the cosine--sine decomposition (CSD) of a
+  A further formulation uses the cosine--sine decomposition (CSD) of a \jonsays{Don't define an acronym if it is not reused}
 partitioned orthogonal or unitary matrix.
 The blocks of the decomposition contain compatible diagonal cosine and sine
   factors.
@@ -533,7 +534,7 @@ and continuously connected to the identity in the acute regime.  That
 choice makes the construction valuable in perturbation theory: the
 transport identifies moving spectral subspaces while avoiding an
 arbitrary choice of orthonormal bases. A pair is called acute here when
-$\|P-Q\|<1$. For an orthogonal or unitary transporter $W$, the operator
+$\|P-Q\|<1$. \jonsays{not sure how obvious it is, but it would have helped ground me if you add:, "which implies the angle between their subspaces are less than \pi/2" or maybe you can say it is analogous to if it's not an exact correspondence, or correct me if I'm wrong} For an orthogonal or unitary transporter $W$, the operator
 $I-W$ records the displacement of every vector. Davis and Kahan ask which
 norms of this displacement are minimized by the direct rotation
 \citep[Section~4]{davis1970rotation}.
@@ -552,7 +553,7 @@ $\|P-Q\|<1$ applies in arbitrary Hilbert dimension.
 \subsection{Spectral projections and residuals}
 \label{sec:related-spectral}
 
-The spectral theorem supplies a second way of obtaining a subspace:
+The spectral theorem \jonsays{might be good to add "--- which states that ... --- "} supplies a second way of obtaining a subspace:
 select a region of the spectrum of a self-adjoint operator and take
 the corresponding spectral projection.  The functional-calculus
 framework developed from the work of Riesz, von Neumann, and others;
@@ -562,25 +563,27 @@ Unlike the finite-dimensional eigenspace picture, a spectral
 subspace need not be spanned by a finite list of eigenvectors.
 A self-adjoint operator may be unbounded, while each of its spectral
 projections is bounded and everywhere defined.  Its domain is still
-indispensable when the operator acts on a trial vector or when an
+indispensable \jonsays{This feels imprecise, there has to be a plainer way to say that without specifying the domain the operator is ill-posed or whatever the correct way of saying it is.} when the operator acts on a trial vector or when an
 intertwining identity is asserted.
 
 For an isolated spectral cluster, the projection can be recovered
-from a contour integral of the resolvent.  Using a positively oriented
+from a contour integral of the resolvent \jonsays{I don't think we have defined resolvent}.  Using a positively oriented
 contour $\Gamma$ in the resolvent set enclosing the cluster, the
 complex case has the representation
 \begin{equation}
  P_\Gamma=\frac{1}{2\pi i}\int_\Gamma(zI-A)^{-1}\,dz.
  \label{eq:history-riesz-projection}
 \end{equation}
-The resolvent is bounded at each point of $\Gamma$ even when $A$ is
-unbounded.  This makes the spectral projection a stable object for
-perturbation analysis, while preserving the separate domain
-requirements whenever $A$ itself appears in an identity.  More
-general Borel spectral projections cover intervals and half-lines,
-including spectral configurations for which a single isolated
-finite-eigenvalue cluster is not the right model.  Our formalization uses Borel functional calculus to construct projections
-for these spectral sets, including for unbounded self-adjoint operators.
+The resolvent is bounded at each point of $\Gamma$ even when $A$ is unbounded.
+This makes the spectral projection a stable object for perturbation analysis,
+  while preserving the separate domain requirements whenever $A$ itself appears
+  in an identity.
+More general Borel spectral projections cover intervals and half-lines
+  \jonsays{if we change terminology earlier, we need to make it agree here},
+  including spectral configurations for which a single isolated
+  finite-eigenvalue cluster is not the right model.
+Our formalization uses Borel functional calculus to construct projections for
+  these spectral sets, including for unbounded self-adjoint operators.
 
 The Courant--Fischer min--max principle and Weyl-type eigenvalue
 perturbation bounds provide complementary information about spectral
@@ -602,6 +605,7 @@ spectral subspace?  Unlike a comparison of individual eigenvectors,
 these are meaningful even when an eigenvalue has multiplicity and its
 orthonormal eigenbasis is nonunique.
 
+\jonsays{Looks like we are missing color on a lot of symbols, maybe we define a newcommand for every mathematical object that we use so we effectively have a table where we can inspect our entire set of notation choices, which will let us identify these color issues without having to parse through everything. Oh, it looks like we do ahve that in math_symbol_colors. I suppose we just use it everywhere?}
 Write $A$ for a reference operator and $\widehat A=A+H$ for the perturbed
 ambient operator. We use this convention in the sine-theta statement below.
 Let $E_0$ embed a trial-coordinate Hilbert space into the ambient space
