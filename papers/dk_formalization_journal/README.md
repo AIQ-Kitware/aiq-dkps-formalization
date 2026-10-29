@@ -89,10 +89,11 @@ The preamble of `paper.tex` provides independent switches:
 - Set `\DKAnonymoustrue` in place of `\DKAnonymousfalse` to omit author and
   affiliation details, identifying artifact links, and acknowledgments.
 - Set `\DKSymbolTooltipsfalse` after the symbol-macro input to disable the
-  default glossary reminders on hover. The short descriptions live beside
-  the semantic symbol declarations in `math_symbol_colors.tex`; selected
-  notation-appendix entries reuse them directly. Native PDF tooltips have no
-  navigation action and require viewer support. They cover `\sym` and `\like`
+  default glossary reminders on hover. Definitions, coordinate spaces, and
+  local roles live in the optional reminder argument of each semantic symbol
+  declaration in `math_symbol_colors.tex`. The final argument supplies a short
+  description for the notation appendix and the fallback hover text. Native PDF
+  tooltips have no navigation action and require viewer support. They cover `\sym` and `\like`
   expressions in text, equations, captions, and the three live PGF figures.
   In Okular, enable **View → Show Forms** to expose the hover regions. Other viewers may enable PDF tooltips automatically.
 - Set `\DKColoredSymbolsfalse` in place of `\DKColoredSymbolstrue` for

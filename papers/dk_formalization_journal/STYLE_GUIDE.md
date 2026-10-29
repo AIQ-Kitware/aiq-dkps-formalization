@@ -70,6 +70,12 @@ A short reminder later can help the reader resume a topic. Keep a notation
 appendix useful to the current article rather than accumulating slide symbols
 that the article does not use.
 
+Give hover reminders enough detail to recover the object: its defining formula,
+the spaces it maps between, and its role in the argument where these help.
+Identify conditions on special cases, such as orthogonality of the Rayleigh
+residual. Use separate semantic keys when the same color covers objects with
+different definitions, including scalar spectral values and operator blocks.
+
 ## Keep figures visual
 
 Use figures for geometry, graphs, concise labels, and numerical comparisons.

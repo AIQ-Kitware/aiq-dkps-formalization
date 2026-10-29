@@ -464,7 +464,7 @@ Hermitian perturbation \citep{weyl1912eigenwerte,bhatia1997matrix}.  In modern n
 if $\sym{A}$ and $\sym{Acurrent}=\sym{A}+\sym{H}$ are Hermitian $n$-by-$n$ matrices and their eigenvalues
 are arranged in the same order, then
 \begin{equation}
-  \max_j |\like{Lambda0}{\lambda_j}(\sym{A})-\like{Lambda0}{\lambda_j}(\sym{Acurrent})|\leq\|\sym{H}\|_{\mathrm{op}}.
+  \max_j |\like{SpectralValue}{\lambda_j}(\sym{A})-\like{SpectralValue}{\lambda_j}(\sym{Acurrent})|\leq\|\sym{H}\|_{\mathrm{op}}.
   \label{eq:history-weyl}
 \end{equation}
 This is an estimate on \emph{eigenvalues}; it does not tell us which
@@ -617,7 +617,7 @@ $\|\sym{Psource}-\sym{Qtarget}\|<1$ applies in arbitrary Hilbert dimension.
 \label{sec:related-spectral}
 
 The spectral theorem represents a self-adjoint operator as
-$\sym{A}=\int\like{Lambda0}{\lambda}\,d\sym{SpectralMeasure}(\like{Lambda0}{\lambda})$ for a projection-valued measure $\sym{SpectralMeasure}$.
+$\sym{A}=\int\like{SpectralValue}{\lambda}\,d\sym{SpectralMeasure}(\like{SpectralValue}{\lambda})$ for a projection-valued measure $\sym{SpectralMeasure}$.
 For a Borel set $\sym{SpectralSet}$, the operator $\sym{SpectralMeasure}(\sym{SpectralSet})$ is the orthogonal projection onto
 the corresponding spectral subspace. This gives a second way of obtaining
 a subspace: select a region of the spectrum and take the range of its
