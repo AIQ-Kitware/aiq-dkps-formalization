@@ -184,7 +184,7 @@
 We formalize the Davis--Kahan theory of spectral-subspace perturbations
 from its 1970 primary source in Lean~4.  Of 29 result-level
 statements, 28 are proved under their source hypotheses; the remaining
-statement, Proposition~4.4, is refuted.  The development includes the
+statement is refuted \citep[Proposition~4.4]{davis1970rotation}. The development includes the
 sine and tangent theorems, direct rotations, principal-angle operators,
 Sylvester separation, unitarily invariant operator-ideal norms, and
 unbounded self-adjoint operators.  We place these constructions in their
@@ -195,7 +195,7 @@ and Kahan's estimates.
 The formalization required reusable operator theory, portions of which
 were subsequently adapted into Tau Ceti, with additional foundations
 adapted from Mathlib and the Spectra project. Examining the full
-displacement assertion in Proposition~4.4 produced a real
+displacement assertion produced a real
 four-dimensional counterexample with arbitrarily small positive principal
 angles.  We locate the failed singular-value comparison and prove a
 corrected optimality statement for Q-norms.  The resulting infrastructure
@@ -257,18 +257,21 @@ named theorem, proposition, lemma, and corollary established in the 1970 paper.
 
 This gives \DKResultCount{} targets, enumerated in
 Appendix~\ref{app:dk-inventory}. We prove \DKProvedCount{} of them and refute
-Proposition~4.4 as printed. That proposition asserts a full-displacement
+the printed statement \citep[Proposition~4.4]{davis1970rotation}.
+That proposition asserts a full-displacement
 optimality property for real direct rotations. We give a real four-dimensional
 counterexample at arbitrarily small positive principal angles and identify
 the invalid singular-value comparison in its proof. The phase construction
 behind the counterexample occurs over the complex field in the authors'
-Example~4.2. To the best of our knowledge, its contradiction of the printed
-real, small-angle Proposition~4.4 has not previously been made explicit.
+example \citep[Example~4.2]{davis1970rotation}. To the best of our knowledge,
+its contradiction of the printed real, small-angle claim has not previously
+been made explicit.
 For the constructed pair, whose two principal angles both equal
 $\sym{theta}$, the competing transporter attains the global trace-norm minimum
 $4\sin\sym{theta}$ for the constructed subspaces. Section~\ref{sec:prop44}
 compares these statements and repairs the optimality claim by restricting
-the norm class to Q-norms. This repair follows from Proposition~4.3;
+the norm class to Q-norms. This repair follows from the squared-displacement
+comparison \citep[Proposition~4.3]{davis1970rotation};
 earlier Q-norm minimization results appear in \citet{bolotnikov2001minimal}.
 
 % TODO (lineage): Consolidate the scattered lineage records through the
@@ -303,7 +306,8 @@ one subspace onto another reduces to weighted matching on principal angles.
 \paragraph{Contributions.}
 \begin{enumerate}
 \item \textbf{Davis--Kahan formalization.} We prove 28 of the 29 source
-results and refute Proposition~4.4. The sine-theta theorem covers real and
+results and refute the full-displacement assertion
+\citep[Proposition~4.4]{davis1970rotation}. The sine-theta theorem covers real and
 complex Hilbert spaces, unbounded self-adjoint operators, the source's
 spectral-separation alternatives, and operator-ideal norms where finite
 (\cref{sec:coverage,sec:sine-theta}).
@@ -311,8 +315,9 @@ spectral-separation alternatives, and operator-ideal norms where finite
 geometric and analytic results required by these theorems, adapted existing
 formal mathematics, and contributed foundations later used in Tau Ceti
 (\cref{sec:related-formal,sec:foundations}).
-\item \textbf{Correction of Proposition~4.4.} We identify a false comparison
-of Ky Fan sums, give a real counterexample at every positive acute angle,
+\item \textbf{Source correction.} We identify a false comparison
+of Ky Fan sums in the printed claim \citep[Proposition~4.4]{davis1970rotation},
+give a real counterexample at every positive acute angle,
 and prove the Q-norm consequence of the valid squared-displacement theorem
 (\cref{sec:prop44}).
 \item \textbf{A reduction to weighted matching.} We reduce unrestricted
@@ -784,7 +789,8 @@ $\sym{Usource}$ onto $\sym{Vtarget}$: its restricted displacement $(I-\sym{Wcomp
 displacement $(I-\sym{Wcompetitor})^*(I-\sym{Wcompetitor})$, and its full displacement $I-\sym{Wcompetitor}$. The last acts
 on every ambient vector, including vectors outside $\sym{Usource}$. They gave a
 complex-phase modification that decreases its trace norm \citep[Example~4.2]{davis1970rotation}.
-Proposition~4.4 of the same paper asserts that direct rotation minimizes
+The full-displacement claim \citep[Proposition~4.4]{davis1970rotation}
+asserts that direct rotation minimizes
 full displacement for real subspaces if their principal angles are no
 larger than $\pi/3$.  The four-dimensional example in
 \cref{sec:prop44} gives a smaller trace norm at every positive acute
@@ -909,8 +915,9 @@ carries one given subspace onto another at minimum displacement cost.
 Our proofs of the optimization results use the principal-angle,
 projection, and operator-ideal foundations developed for the formalization.
 The matching theorem has its own proof; the shared foundations explain the
-relationship between the two parts of the work.  The resulting Proposition~4.4
-counterexample and the follow-on matching theorem are examined in
+relationship between the two parts of the work. The resulting counterexample
+to the full-displacement claim \citep[Proposition~4.4]{davis1970rotation}
+and the follow-on matching theorem are examined in
 \cref{sec:prop44,sec:example-transport}.
 
 \section{Davis--Kahan formalization and the sine-theta theorem}
@@ -922,8 +929,9 @@ Kahan in the 1970 paper. These \DKResultCount{} results include the sine and
 tangent inequalities, the geometry and extremal properties of direct
 rotations, bounded and unbounded Sylvester estimates, the generalized
 Section~6 perturbation bounds, and the spectral-selection theorems of
-Section~8. We prove \DKProvedCount{} results and refute Proposition~4.4 as
-printed. Appendix~\ref{app:dk-inventory} lists these targets.
+Section~8. We prove \DKProvedCount{} results and refute the printed
+full-displacement claim \citep[Proposition~4.4]{davis1970rotation}.
+Appendix~\ref{app:dk-inventory} lists these targets.
 
 We state the sine-theta theorem below. Appendix~\ref{app:notation} collects
 its notation and the notation used in the direct-rotation argument.
@@ -1198,12 +1206,14 @@ its spectral decomposition recovers a sequence of principal angles
 
 The double-angle inequalities also require a spectral choice. Since
 $\sin(2\sym{theta})$ can be small near both $0$ and $\pi/2$, its bound alone does
-not identify the desired subspace. Theorem~8.1 characterizes the choice
+not identify the desired subspace. The branch-selection result
+\citep[Theorem~8.1]{davis1970rotation} characterizes the choice
 $\sym{Theta}\leq\pi/4$ by the ordering of the reducing spectral blocks and gives
-the associated spectral-repulsion inequalities. Theorem~8.2 selects
+the associated spectral-repulsion inequalities. The smallness criterion
+\citep[Theorem~8.2]{davis1970rotation} selects
 $\sym{Theta}<\pi/4$ under the sine-double-angle hypotheses, the additional
 spectral inclusion, and an operator-norm perturbation or residual smaller
-than half the gap \citep[Theorems~8.1--8.2]{davis1970rotation}. Our proofs use
+than half the gap. Our proofs use
 the spectral calculus to make this choice in Hilbert space.
 
 \subsection{Approximation numbers and operator-ideal norms}
@@ -1219,7 +1229,7 @@ For example, let $\sym{Rrotation}$ be the direct rotation and
 $\sym{Wcompetitor}$ any unitary carrying $\sym{Usource}$ onto
 $\sym{Vtarget}$. The restricted displacement of the direct rotation has
 singular-value minimality, which implies minimality for unitarily invariant
-norms. Proposition~4.3 compares the squared full displacements
+norms. The squared-displacement result compares
 $(I-\sym{Rrotation})^*(I-\sym{Rrotation})$ and
 $(I-\sym{Wcompetitor})^*(I-\sym{Wcompetitor})$
 \citep[Proposition~4.3]{davis1970rotation}. Their singular values are the
@@ -1287,8 +1297,10 @@ conditions and bounded residuals. The operator-ideal statements require
 finite norm values. These hypotheses determine which approximation problems
 the estimates address.
 
-The correction of Proposition~4.4 separates two extremal statements.
-Proposition~4.3 gives squared-displacement minimality; its Q-norm consequence
+The correction of the full-displacement claim
+\citep[Proposition~4.4]{davis1970rotation} separates two extremal statements.
+The valid comparison \citep[Proposition~4.3]{davis1970rotation}
+gives squared-displacement minimality; its Q-norm consequence
 is valid. Full trace-norm minimality fails for real subspaces at arbitrarily
 small positive principal angles. In the counterexample, the competitor has
 two nonzero displacement singular values while the direct rotation has four.
@@ -1307,7 +1319,8 @@ optimization arguments, including a passage to the trace-norm endpoint.
 \label{sec:conclusion}
 
 We formalized 28 of the 29 selected Davis--Kahan results and refuted the
-remaining printed statement, Proposition~4.4. The sine-theta theorem includes
+remaining printed statement \citep[Proposition~4.4]{davis1970rotation}.
+The sine-theta theorem includes
 unbounded self-adjoint operators and symmetric operator-ideal norms with
 their domain and finiteness assumptions. The direct-rotation calculation
 identifies the failed singular-value comparison and gives an explicit real

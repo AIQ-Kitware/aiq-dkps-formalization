@@ -2,11 +2,11 @@
 \label{sec:prop44}
 
 This section gives an explicit real counterexample to the small-angle
-optimality assertion in Proposition~4.4 of \citet{davis1970rotation} and
+optimality assertion \citep[Proposition~4.4]{davis1970rotation} and
 identifies the invalid inequality in its proof. To the best of our knowledge,
 this contradiction of the printed real-space claim has not previously been
 published. Its complex-phase construction is already in the authors'
-Example~4.2; the distinction between trace-norm failure and Q-norm optimality
+example \citep[Example~4.2]{davis1970rotation}; the distinction between trace-norm failure and Q-norm optimality
 also has earlier treatments \citep{bolotnikov2001minimal}. We give the
 counterexample, the failed comparison, and a Q-norm repair below.
 
@@ -26,7 +26,8 @@ is the orthogonal or unitary polar factor of
  \sym{IntertwinerT}=\sym{Qtarget}\sym{Psource}
  +(I-\sym{Qtarget})(I-\sym{Psource}).
 \]
-Proposition~4.4 claims that, for real subspaces with largest principal angle
+The printed claim \citep[Proposition~4.4]{davis1970rotation} asserts that,
+for real subspaces with largest principal angle
 at most $\pi/3$, it minimizes $\sym{NormN}(I-\sym{Wcompetitor})$ for every
 unitarily invariant norm $\sym{NormN}$.
 
@@ -158,7 +159,8 @@ fixes half of the ambient space; the direct rotation moves both principal planes
 \begin{figure}[tbp]
 \centering
 \resizebox{0.98\linewidth}{!}{\input{figures/prop44_displacement_planes.pgf}}
-\caption{A counterexample to Davis--Kahan Proposition~4.4 at
+\caption{A counterexample to the full-displacement claim
+\citep[Proposition~4.4]{davis1970rotation} at
 $\sym{theta}=\pi/4$. Both orthogonal maps carry $\sym{Usource}$ onto
 $\sym{Vtarget}$. Each circle shows the action on one invariant real
 two-plane: the principal planes $\Pi_1,\Pi_2$ for $\sym{Rrotation}$,
@@ -221,10 +223,12 @@ invariant norm $\sym{NormM}$ satisfying
 For example, the Frobenius norm is a $\sym{NormQ}$-norm because
 $\|Z\|_F^2=\|Z^*Z\|_1$: its squared norm is the sum of the eigenvalues of
 the positive matrix $Z^*Z$. This identity uses the trace norm for
-$\sym{NormM}$. Earlier Q-norm minimization results appear in
+$\sym{NormM}$. The squared-displacement comparison
+\citep[Proposition~4.3]{davis1970rotation} gives the following Q-norm consequence.
+Earlier Q-norm minimization results appear in
 \citet[Theorem~3.1]{bolotnikov2001minimal}.
 
-\begin{proposition}[$\sym{NormQ}$-norm consequence of Davis--Kahan Proposition~4.3]
+\begin{proposition}[$\sym{NormQ}$-norm consequence]
 \label{prop:qnorm-repair}
 Let $\sym{Usource},\sym{Vtarget}$ be an acute pair of subspaces of a finite-dimensional real or
 complex Hilbert space, and let $\sym{Rrotation}$ be their canonical direct rotation.
@@ -265,17 +269,20 @@ represented by $\sym{Jturn}$ from \cref{eq:wtheta}, the matrices
 \]
 become precisely $\like{Rrotation}{R_\theta}$ and $\like{Wcompetitor}{W_\theta}$ above. Realification doubles
 the complex singular-value multiplicities. Thus the real short-angle
-restriction in Proposition~4.4 does not eliminate the mechanism of the
+restriction in the full-displacement claim
+\citep[Proposition~4.4]{davis1970rotation} does not eliminate the mechanism of the
 authors' preceding example.
 
 \citet{bolotnikov2001minimal} studied related unitary completion and
-subspace-mapping problems. Their Theorem~3.1 proves a $\sym{NormQ}$-norm
-minimization result, and Lemma~3.3 exhibits failure for Schatten
-$p$-norms with $1\leq p<2$. Those results establish the earlier norm-class
+subspace-mapping problems. Their results give a $\sym{NormQ}$-norm
+minimization theorem and a counterexample for Schatten $p$-norms with
+$1\leq p<2$ \citep[Theorem~3.1 and Lemma~3.3]{bolotnikov2001minimal}.
+Those results establish the earlier norm-class
 distinction. \citet[Section~5]{qiu2006grassmann} subsequently repeated
 the $\pi/3$ assertion, whereas
 \citet[Section~4, p.~1615]{zhang2010canonicalangles} explicitly noted
 general trace-norm nonminimality without addressing that particular
 real-space restriction. The present refutation identifies the invalid
-inequality in Proposition~4.4.  The Q-norm conclusion above follows
+inequality in the printed full-displacement claim
+\citep[Proposition~4.4]{davis1970rotation}. The Q-norm conclusion above follows
 from the earlier squared-displacement extremality statement.

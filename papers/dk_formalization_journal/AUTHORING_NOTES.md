@@ -6,6 +6,11 @@ from the pending correction pass. Current user instructions determine the stage.
 
 ## Calibration from the review
 
+- Put the numbers of external theorems, propositions, lemmas, and examples
+  inside citation postnotes, for example
+  `\citep[Proposition~4.4]{davis1970rotation}`. The original review pointed
+  to the Davis 1958 citation as the model. Keep local result references as
+  `\cref` references.
 - The abstract may name established objects, summarize attribution, and make
   broad connections. Define and explain them in the body. The author rejected
   the agent's demand for more detail throughout the abstract.

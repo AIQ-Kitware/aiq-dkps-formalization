@@ -90,6 +90,12 @@ spectral-separation, and norm hypotheses. Describe those hypotheses directly.
 
 ## Explain history and new results together
 
+Put an external result's number inside the citation postnote when referring
+to it in prose: for example,
+`the printed claim \citep[Proposition~4.4]{davis1970rotation}`. Apply this convention to
+theorems, propositions, lemmas, and examples from other works. Use
+`\cref` for results numbered in this manuscript.
+
 State each predecessor's actual contribution and cite its theorem, proposition,
 example, or page when discussing a particular claim. Give publication years
 where they support the historical account and its table. The language of an
