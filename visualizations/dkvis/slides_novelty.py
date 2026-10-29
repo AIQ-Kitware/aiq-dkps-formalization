@@ -1295,14 +1295,14 @@ class N08NuclearMatching(DeckSlide):
 
 class N08MatchingGraph(DeckSlide):
     title = "Turn block costs into edge savings"
-    kicker = r"Three labeled principal angles: $30^\circ$, $45^\circ$, $75^\circ$"
+    kicker = r"Pairing saves $g_{ij}$; an angle can belong to at most one selected edge"
     section = SECTION
 
     def body(self) -> None:
         ex = nuclear_matching_graph_example()
         formula = math(
             r"g_{ij}=s_i+s_j-e_{ij},\qquad C(M)=\sum_i s_i-\sum_{\{i,j\}\in M}g_{ij}",
-            size=33, color=CURRENT)
+            size=39)
         place(self, "formula", formula)
         points = [np.array([-2.0, .50, 0]), np.array([2.0, .50, 0]), np.array([0, -.65, 0])]
         graph = VGroup()
@@ -1310,15 +1310,15 @@ class N08MatchingGraph(DeckSlide):
         positions = {(0, 1): [0, .72, 0], (0, 2): [-1.75, -.20, 0], (1, 2): [1.75, -.20, 0]}
         for (i, j), gain in ex["savings"].items():
             line = DashedLine(points[i], points[j], color=FAINT, stroke_width=3)
-            label = math(f"{gain:+.4f}", size=25, color=MUTED).move_to(positions[(i, j)])
+            label = math(f"{gain:+.4f}", size=31, color=MUTED).move_to(positions[(i, j)])
             graph.add(line, label)
             if (i, j) in ex["pairs"]:
                 selected.add(Line(points[i], points[j], buff=.09, color=CURRENT, stroke_width=7))
         for i, (point, angle, cost) in enumerate(zip(points, ex["angles_deg"], ex["singleton_costs"])):
             dot = Dot(point, radius=.075, color=SINE)
             labels = VGroup(
-                math(rf"\theta_{i+1}={angle:.0f}^\circ", size=27, color=SINE),
-                math(rf"s_{i+1}={cost:.4f}", size=23, color=MUTED),
+                math(rf"\theta_{i+1}={angle:.0f}^\circ", size=34, color=SINE),
+                math(rf"s_{i+1}={cost:.4f}", size=28, color=MUTED),
             ).arrange(DOWN, buff=.03)
             labels.next_to(dot, UP if i < 2 else DOWN, buff=.12)
             graph.add(dot, labels)
@@ -1330,17 +1330,16 @@ class N08MatchingGraph(DeckSlide):
         choices += [(rf"\{{\{{{i+1},{j+1}\}}\}}", ex["all_singletons"]-gain,
                      CURRENT if (i,j) in ex["pairs"] else FG)
                     for (i,j), gain in ex["savings"].items()]
-        rows = VGroup(tex("Matching", size=25).move_to([0, .5, 0], aligned_edge=LEFT),
-                      tex("Cost (rounded)", size=25).move_to([2.35, .5, 0], aligned_edge=LEFT))
+        rows = VGroup(tex("Matching", size=28).move_to([0, .5, 0], aligned_edge=LEFT),
+                      tex("Cost (rounded)", size=28).move_to([2.35, .5, 0], aligned_edge=LEFT))
         for k, (label, cost, color) in enumerate(choices):
             y = -.05 - .5*k
-            rows.add(math(label, size=30, color=color).move_to([0, y, 0], aligned_edge=LEFT),
-                     math(f"{cost:.4f}", size=30, color=color).move_to([2.35, y, 0], aligned_edge=LEFT))
+            rows.add(math(label, size=36, color=color).move_to([0, y, 0], aligned_edge=LEFT),
+                     math(f"{cost:.4f}", size=36, color=color).move_to([2.35, y, 0], aligned_edge=LEFT))
         place(self, "costs", rows)
-        result = place(self, "takeaway", para(
-            r"Choose disjoint edges of maximum total savings. Here pair $1,2$;"
-            r" leave angle $3$ single. The cost is $4\sin(37.5^\circ)+2\approx4.4350$.",
-            width=12, size=24, color=CURRENT))
+        result = place(self, "takeaway", math(
+            r"M=\{\{1,2\}\},\quad 3\ \text{single},\qquad "
+            r"C(M)=4\sin(37.5^\circ)+2\approx4.4350", size=32))
         self.add(formula, graph, rows)
         self.say("Start with all three angles single. Each edge records the saving from pairing its endpoints. "
                  "The negative edge makes the cost worse. The two positive edges share a vertex, so we cannot take both.")
@@ -1358,31 +1357,41 @@ class N08MatchingReduction(DeckSlide):
     section = SECTION
 
     def body(self) -> None:
+        def block_choice(label, operator, space, cost):
+            block = VGroup(math(operator, size=36, color=WANTED),
+                           math(space, size=28), math(cost, size=27, color=CURRENT)
+                           ).arrange(DOWN, buff=.08)
+            return VGroup(math(label, size=36, color=SINE),
+                          math(r"\longmapsto", size=32),
+                          boxed(block, color=WANTED, pad=.14)
+                          ).arrange(RIGHT, buff=.25)
+
         build = VGroup(
-            tex("Matching to transporter", size=28, color=WANTED),
-            math(r"M\longmapsto W_M=\bigoplus_{\{i,j\}\in M}W_{ij}"
-                 r"\ \oplus\!\bigoplus_{i\ \mathrm{single}}W_i", size=26),
-            para(r"Each edge uses a four-dimensional paired block. Each singleton uses"
-                 r" a two-dimensional rotation or reflection. Fix the common directions.", width=5.5, size=24),
-            math(r"W_M(\sym{Usource})=\sym{Vtarget},\qquad\|I-W_M\|_1=C(M)", size=26, color=CURRENT),
-            math(r"d_{\mathbb R}\leq\min_M C(M)", size=30, color=WANTED),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=.22)
+            tex("Matching to transporter", size=32, color=WANTED),
+            block_choice(r"\{i,j\}", r"W_{ij}", r"\mathbb R^4", r"e_{ij}"),
+            block_choice(r"i\ \text{single}", r"W_i", r"\mathbb R^2", r"s_i"),
+            tex("Orthogonal sum; fix common directions", size=23),
+            math(r"\|I-W_M\|_1=C(M)", size=34),
+        ).arrange(DOWN, buff=.18)
+        left = place(self, "construction", build)
+
+        def step(*lines):
+            return boxed(VGroup(*lines).arrange(DOWN, buff=.10), color=TRIAL, pad=.15)
+
         reduce = VGroup(
-            tex("Ambient minimum to matching", size=28, color=TRIAL),
-            math(r"\Phi_p(W)=\sum_k s_k(I-W)^p,\qquad1<p<2", size=27),
-            para(r"Compactness gives a global minimizer. First variations and spectral"
-                 r" decomposition reduce it to common invariant blocks of dimension"
-                 r" two or four, plus fixed directions.", width=5.5, size=24),
-            para(r"Block minima add. Each block selects singletons or a pair, so"
-                 r" the minimum is a matching cost $C_p(M)$.", width=5.5, size=24, color=CURRENT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=.22)
-        left = place(self, "construction", boxed(build, color=WANTED, pad=.20))
-        right = place(self, "reduction", boxed(reduce, color=TRIAL, pad=.20))
+            tex("Ambient minimum to matching", size=32, color=TRIAL),
+            step(math(r"\min_W\Phi_p(W),\quad 1<p<2", size=34)),
+            math(r"\Downarrow", size=27),
+            step(tex("Common invariant blocks", size=27),
+                 math(r"\mathbb R^2\quad\text{or}\quad\mathbb R^4", size=32)),
+            math(r"\Downarrow", size=27),
+            step(math(r"\min_M C_p(M)", size=34)),
+        ).arrange(DOWN, buff=.12)
+        right = place(self, "reduction", reduce)
         endpoint = place(self, "endpoint", VGroup(
-            math(r"p\downarrow1:\quad\Phi_p\to\|I-W\|_1\ \text{uniformly on the compact feasible set}", size=26),
-            tex(r"$C_p(M)\to C(M)$ for finitely many matchings, so $d_{\mathbb R}=\min_M C(M)$.",
-                size=24, color=CURRENT),
-        ).arrange(DOWN, buff=.14))
+            math(r"p\downarrow1:\quad\Phi_p\to\|I-W\|_1\ \text{uniformly}", size=30),
+            math(r"C_p(M)\to C(M)\quad\Longrightarrow\quad d_{\mathbb R}=\min_M C(M)", size=32),
+        ).arrange(DOWN, buff=.15))
         self.add(left, right, endpoint)
         self.say("Constructing block transporters proves an upper bound for every matching. "
                  "For the converse, we do not assume an arbitrary transporter has this block form. "

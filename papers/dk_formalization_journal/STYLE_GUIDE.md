@@ -70,6 +70,13 @@ A short reminder later can help the reader resume a topic. Keep a notation
 appendix useful to the current article rather than accumulating slide symbols
 that the article does not use.
 
+## Keep figures visual
+
+Use figures for geometry, graphs, concise labels, and numerical comparisons.
+Put explanatory sentences and derivations in the caption or adjacent text.
+Use the manuscript's LaTeX lettering for mathematical labels and retain live
+symbol macros so figure labels support the same glossary reminders as the body.
+
 ## State the theorem before its Lean signature
 
 Introduce the shared notation, state the mathematical theorem, and place its

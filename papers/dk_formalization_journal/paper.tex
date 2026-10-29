@@ -9,12 +9,14 @@
 \usepackage{float}
 \usepackage{microtype}
 \usepackage{graphicx}
+\usepackage{pgf} % Live vector figures with LaTeX symbol labels and tooltips
 % Editing citations: switch to the venue's numeric style at submission.
 \usepackage[authoryear,round]{natbib}
 \usepackage{xurl}
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 \usepackage[nameinlink]{cleveref}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern} % Scalable LaTeX lettering, shared with the Manim slides
 \usepackage{xcolor}
 % Draft controls. Set these independently for review, print, or arXiv versions.
 \newif\ifDKAnonymous
@@ -1069,7 +1071,7 @@ as illustrated in \cref{fig:sine-theta-residual}.
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=\linewidth]{figures/sine_theta_residual_geometry.pdf}
+\resizebox{\linewidth}{!}{\input{figures/sine_theta_residual_geometry.pgf}}
 \caption{A rank-one equality case for the sine-theta estimate.
 The exact frames are $\sym{F0}(h)=(h,0)$ and $\sym{F1}(g)=(0,g)$,
 with $\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$.

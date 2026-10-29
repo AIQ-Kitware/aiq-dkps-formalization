@@ -53,14 +53,14 @@ endpoints. Figure~\ref{fig:real-nuclear-matching} works out a three-angle exampl
 
 \begin{figure}[tb]
 \centering
-\includegraphics[width=\linewidth]{figures/real_nuclear_matching.pdf}
+\resizebox{\linewidth}{!}{\input{figures/real_nuclear_matching.pgf}}
 \caption{Weighted matching for principal angles $30^\circ$, $45^\circ$, and
-$75^\circ$. Each vertex is an angle label with singleton cost $s_i$;
-each edge is labeled by its saving $g_{ij}$. The solid edge selects the largest feasible total saving.
-The table lists all four matchings, with costs rounded to four decimals.
-An attaining transporter on $\mathbb R^6$ combines a four-dimensional
-paired block for angles $1,2$ with a two-dimensional reflection for
-angle $3$. Common ambient directions can remain fixed.}
+$75^\circ$. Vertices carry singleton costs $s_i$; edge labels give pair
+savings $g_{ij}$. The solid edge pairs labels $1,2$ and leaves label $3$
+single. The table lists all four matchings; costs and savings are rounded
+to four decimals. An attaining transporter on $\mathbb R^6$ combines a
+four-dimensional paired block with a two-dimensional singleton reflection,
+with cost $4\sin(37.5^\circ)+2\approx4.4350$.}
 \label{fig:real-nuclear-matching}
 \end{figure}
 

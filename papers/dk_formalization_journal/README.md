@@ -59,9 +59,10 @@ open (these settings affect only the current session):
 
 ## Manuscript figures
 
-The counterexample figure is committed as vector PDF and editable SVG. To
-regenerate it with Matplotlib and NumPy from the existing verified numerical
-model in `visualizations/dkvis/prop44.py`, run:
+The figures are committed as live PGF sources and standalone vector PDF/SVG.
+The manuscript inputs PGF so its LaTeX fonts, symbol colors, and hover reminders
+also apply inside figures. Slides are rendered separately with Manim.
+To regenerate the counterexample from the existing checked numerical model in `visualizations/dkvis/prop44.py`, run:
 
 ```bash
 make -C papers/dk_formalization_journal counterexample-figure
@@ -70,13 +71,15 @@ make -C papers/dk_formalization_journal counterexample-figure
 The sine-theta geometry and weighted-matching figures use the numerical models
 shared with the Manim slides. The first adapts `S08Why` and `S10Sharp`; the
 second shares its three-angle example with `N08MatchingGraph`. Regenerate their
-vector PDFs and editable SVGs with:
+PGF sources and standalone vector exports with:
 
 ```bash
 make -C papers/dk_formalization_journal teaching-figures
 ```
 
-Use the `figures` target to regenerate all three manuscript figures.
+Use the `figures` target to regenerate all three manuscript figures. Regeneration
+requires LuaLaTeX and Poppler's `pdftocairo`/`pdftoppm` in addition to Matplotlib
+and NumPy. Ordinary paper builds consume the committed PGF sources.
 
 ## Draft controls
 
@@ -89,17 +92,16 @@ The preamble of `paper.tex` provides independent switches:
   the semantic symbol declarations in `math_symbol_colors.tex`; selected
   notation-appendix entries reuse them directly. Native PDF tooltips have no
   navigation action and require viewer support. They cover `\sym` and `\like`
-  expressions in text, equations, and captions; labels inside imported figures
-  are separate artwork. In Okular, enable **View → Show Forms** to expose
-  the hover regions. Other viewers may enable PDF tooltips automatically.
+  expressions in text, equations, captions, and the three live PGF figures.
+  In Okular, enable **View → Show Forms** to expose the hover regions. Other viewers may enable PDF tooltips automatically.
 - Set `\DKColoredSymbolsfalse` in place of `\DKColoredSymbolstrue` for
   monochrome mathematical symbols. The mathematical role palette remains the
   same as the Manim visualizations in the colored version.
 
 For wrapper builds, defining `\DKNoSymbolTooltips` before `\input{paper.tex}`
-disables the hover annotations. Defining `\DKAnonymousReview` enables anonymous
-mode and
-`\DKMonochromeMath` enables monochrome symbols before `\input{paper.tex}`.
+disables the hover annotations. Defining `\DKAnonymousReview` enables
+anonymous mode; `\DKMonochromeMath` enables monochrome symbols. Set these
+wrapper flags before `\input{paper.tex}`.
 Author--year citations are enabled for editing. The final bibliography style
 can be changed to the submission venue's requirements later.
 
