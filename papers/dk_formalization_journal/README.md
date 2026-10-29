@@ -69,8 +69,9 @@ make -C papers/dk_formalization_journal counterexample-figure
 ```
 
 The sine-theta geometry and weighted-matching figures use the numerical models
-shared with the Manim slides. The first adapts `S08Why` and `S10Sharp`; the
-second shares its three-angle example with `N08MatchingGraph`. Regenerate their
+shared with the Manim slides. The first adapts the residual triangle from
+`S05Residual` and the exact component split from `S08Why`; the second shares
+its three-angle example with `N08MatchingGraph`. Regenerate their
 PGF sources and standalone vector exports with:
 
 ```bash

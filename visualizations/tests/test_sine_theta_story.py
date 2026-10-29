@@ -121,9 +121,10 @@ def test_tan_two_theta_keeps_the_matching_eigenvector_within_45_degrees():
         assert pair.gap * pair.tan_two_theta == pytest.approx(2 * story.PERTURBATION_EPS)
 
 
-@pytest.mark.parametrize("theta_degrees", [5.0, 20.0, 35.0, 60.0, 85.0])
-def test_tan_theta_is_exact_for_two_directions(theta_degrees):
-    ex = story.TwoDirections(0.8, 2.6, math.radians(theta_degrees))
+@pytest.mark.parametrize("eigenvalues", [(0.8, 2.6), story.RESIDUAL_EIGENVALUES])
+@pytest.mark.parametrize("theta_degrees", [5.0, 20.0, 35.0, 40.0, 60.0, 85.0])
+def test_tan_theta_is_exact_for_two_directions(eigenvalues, theta_degrees):
+    ex = story.TwoDirections(*eigenvalues, math.radians(theta_degrees))
     ex.verify()
     assert ex.delta * ex.tan_theta == pytest.approx(ex.residual_norm)
     assert ex.delta * ex.sin_theta < ex.residual_norm

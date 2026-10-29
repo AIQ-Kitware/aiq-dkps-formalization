@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Vector teaching figures using the numerical models shared with Manim.
 
-The rank-one construction follows S08Why/S10Sharp without changing those
-preserved scenes. The graph example is shared with N08MatchingGraph.
+The rank-one construction combines S05Residual with the exact-coordinate
+component geometry of S08Why. The graph example is shared with N08MatchingGraph.
 """
 from pathlib import Path
 import sys
@@ -15,7 +15,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'visualizations'))
-from dkvis.sine_theta import SineThetaModel
+from dkvis import sine_theta_story as story
 from dkvis.novelty_math import nuclear_matching_graph_example
 from dkvis.palette import LIGHT
 from figure_style import configure, save
@@ -33,62 +33,66 @@ def arrow(ax, start, end, color, width=2.5):
 
 
 def sine_theta():
-    model = SineThetaModel.from_degrees(35, delta=1.3)
-    model.verify()
-    v, pv = model.trial_vector, model.desired_projection
-    fig = plt.figure(figsize=(12.4, 5.7), facecolor='white')
-    fig.text(.245, .94, '(a) Project the trial vector', ha='center', fontsize=20, color=FG)
-    fig.text(.75, .94, '(b) Scale the unwanted component', ha='center', fontsize=20, color=FG)
-    fig.add_artist(plt.Line2D([.5, .5], [.26, .89], transform=fig.transFigure, color=GUIDE, lw=1))
-    ax = fig.add_axes([.055, .29, .405, .57])
-    ax.set(xlim=(-.16, 1.3), ylim=(-.19, 1.02), aspect='equal')
-    ax.axis('off')
-    ax.plot([-.1, 1.2], [0, 0], color=WANTED, lw=1.3)
-    ax.plot([0, 0], [0, .93], color=UNWANTED, lw=1.3)
-    ax.add_patch(Arc((0, 0), 2, 2, theta1=0, theta2=90, color=GUIDE, lw=1))
+    # The actual S05Residual data and its initial 40-degree trial direction.
+    ex = story.TwoDirections(*story.RESIDUAL_EIGENVALUES, np.radians(40))
+    ex.verify()
+    model = ex.model
+    v, pv = model.v, np.array([model.v[0], 0.0])
+    fig = plt.figure(figsize=(12.4, 4.8), facecolor='white')
+    fig.text(.25, .94, '(a) Subspace error', ha='center', fontsize=21, color=FG)
+    fig.text(.75, .94, '(b) Residual triangle', ha='center', fontsize=21, color=FG)
+    fig.add_artist(plt.Line2D([.5, .5], [.10, .89], transform=fig.transFigure,
+                             color=GUIDE, lw=1))
+    axes = []
+    for box in [[.055, .08, .415, .78], [.55, .08, .415, .78]]:
+        ax = fig.add_axes(box)
+        # Identical scales in both panels: vector lengths are comparable.
+        ax.set(xlim=(-.18, 1.85), ylim=(-.16, 1.20), aspect='equal')
+        ax.axis('off')
+        ax.plot([-.10, 1.72], [0, 0], color=WANTED, lw=1.2)
+        ax.plot([0, 0], [0, 1.06], color=UNWANTED, lw=1.2)
+        ax.text(.04, 1.10, r'$\mathrm{range}(\sym{F1})$', fontsize=17, color=FG)
+        ax.text(1.72, -.13, r'$\mathrm{range}(\sym{F0})$', fontsize=17,
+                color=FG, ha='right')
+        axes.append(ax)
+
+    ax = axes[0]
     arrow(ax, (0, 0), v, TRIAL)
     arrow(ax, (0, 0), pv, WANTED)
     arrow(ax, pv, v, SINE, 3)
-    ax.add_patch(Arc((0, 0), .52, .52, theta1=0, theta2=35, color=SINE, lw=1.6))
-    ax.text(.29, .075, r'$\sym{theta}$', fontsize=21, color=SINE)
-    ax.text(.40, .52, r'$\like{v}{v_\theta}=\sym{E0}(1)$', fontsize=18, color=TRIAL, ha='center')
-    ax.text(.48, -.12, r'$\sym{Pexact}\like{v}{v_\theta}$', fontsize=18, color=WANTED, ha='center')
-    ax.text(.86, .28, r'$\sym{S}(1)$', fontsize=19, color=SINE)
-    ax.text(.86, .17, r'$\Vert\sym{S}(1)\Vert=\sym{sintheta}$', fontsize=16, color=SINE)
-    ax.text(.05, .90, r'$\mathrm{range}(\sym{F1})$', fontsize=16, color=UNWANTED)
-    ax.text(1.26, -.12, r'$\mathrm{range}(\sym{F0})$', fontsize=16, color=WANTED, ha='right')
-    ax.plot([pv[0]-.055, pv[0]-.055, pv[0]], [.0, .055, .055], color=GUIDE, lw=1)
+    ax.add_patch(Arc((0, 0), .53, .53, theta1=0, theta2=40, color=SINE, lw=1.5))
+    ax.text(.29, .075, r'$\sym{theta}$', fontsize=22, color=FG)
+    ax.text(.44, .78, r'$\sym{v}=\sym{E0}(1)$', fontsize=21, color=FG, ha='center')
+    ax.text(.41, -.13, r'$\sym{Pexact}\sym{v}$', fontsize=21, color=FG, ha='center')
+    ax.text(.87, .38, r'$\sym{S}(1)$', fontsize=21, color=FG)
+    ax.text(.87, .22, r'$\Vert\sym{S}(1)\Vert=\sym{sintheta}$', fontsize=18, color=FG)
+    ax.plot([pv[0]-.055, pv[0]-.055, pv[0]], [0, .055, .055], color=GUIDE, lw=1)
 
-    fig.text(.75, .85, r'$\sym{Acurrent}=\mathrm{diag}(0,\sym{delta}),\quad\sym{A0}=0$',
-             fontsize=19, ha='center', color=FG)
-    spec = fig.add_axes([.60, .68, .30, .10])
-    spec.set(xlim=(-.2, 1.5), ylim=(-.40, .4)); spec.axis('off')
-    spec.plot([-.12, 1.42], [0, 0], color=GUIDE, lw=1.6)
-    spec.plot(0, 0, 'o', color=TRIAL, markersize=7)
-    spec.plot(1.3, 0, 'o', color=GAP, markersize=7)
-    spec.text(0, -.16, r'$\sym{A0}:0$', ha='center', va='top', fontsize=16, color=TRIAL)
-    spec.text(1.3, -.16, r'$\sym{Lambda1}:\sym{delta}$', ha='center', va='top', fontsize=16, color=GAP)
-    spec.annotate('', (0, .25), (1.3, .25), arrowprops={'arrowstyle':'|-|','color':GAP})
-    spec.text(.65, .28, r'gap $\sym{delta}$', ha='center', va='bottom', fontsize=16, color=GAP)
-    ax = fig.add_axes([.57, .29, .37, .31])
-    ax.set(xlim=(-.25, 1.75), ylim=(-.16, .91), aspect='equal'); ax.axis('off')
-    arrow(ax, (0, 0), (0, model.sin_theta), SINE, 3)
-    arrow(ax, (.95, 0), (.95, model.residual_norm), RESIDUAL, 3)
-    ax.text(-.06, -.10, r'$\sym{S}(1)$', color=SINE, fontsize=18, ha='center')
-    ax.text(1.0, -.10, r'$\sym{R}(1)$', color=RESIDUAL, fontsize=18, ha='center')
-    ax.text(.08, .29, r'$\sym{sintheta}$', color=SINE, fontsize=17)
-    ax.text(1.03, .40, r'$\sym{delta}\sym{sintheta}$', color=RESIDUAL, fontsize=17)
-    ax.annotate(r'$\times\sym{delta}$', (.87, .65), (.16, .65), fontsize=18, ha='left', color=GAP,
-                arrowprops={'arrowstyle':'->','color':GAP, 'connectionstyle':'arc3,rad=-.25'})
-    fig.text(.5, .18, r'$\sym{E0}:\mathbb{R}\to\mathbb{R}^2,\ x\mapsto x\like{v}{v_\theta}'
-             r'\qquad\sym{S}:\mathbb{R}\to\mathbb{R}^2,\ x\mapsto(0,x\sym{sintheta})$',
-             ha='center', fontsize=18, color=FG)
-    fig.text(.5, .085, r'$\sym{sinTheta0}:\mathbb{R}\to\mathbb{R},\ x\mapsto x\sym{sintheta}'
-             r'\qquad\sym{delta}\Vert\sym{sinTheta0}\Vert_{\mathrm{op}}=\Vert\sym{R}\Vert_{\mathrm{op}}$',
-             ha='center', fontsize=18, color=FG)
+    ax = axes[1]
+    ax.plot(*np.array([[0, 0], 1.55*v]).T, color=TRIAL, lw=1.2, ls='--', alpha=.65)
+    arrow(ax, (0, 0), model.rho_v, TRIAL, 2.8)
+    arrow(ax, (0, 0), model.Av, COST, 2.8)
+    # The residual is the endpoint-to-endpoint difference, not an origin arrow.
+    arrow(ax, model.rho_v, model.Av, RESIDUAL, 3.5)
+    corner = np.array([model.Av[0], model.rho_v[1]])
+    ax.plot(*np.array([model.rho_v, corner, model.Av]).T,
+            color=GUIDE, lw=1.7, ls=(0, (4, 3)), zorder=1)
+    # Rayleigh--Ritz makes the residual perpendicular to the trial line.
+    toward_origin = -v
+    along_residual = model.residual / model.residual_norm
+    marker = np.array([model.rho_v+.075*toward_origin,
+                       model.rho_v+.075*(toward_origin+along_residual),
+                       model.rho_v+.075*along_residual])
+    ax.plot(*marker.T, color=MUTED, lw=1)
+    ax.text(.93, 1.04, r'$\sym{rho}\,\sym{v}$', fontsize=21, color=FG, ha='center')
+    ax.text(1.53, .23, r'$\sym{Acurrent}\sym{v}$', fontsize=21, color=FG, ha='center')
+    ax.text(1.20, .64, r'$\sym{r}$', fontsize=24, color=FG, ha='center')
+    ax.text(1.31, 1.04, r'$\sym{Pexact}\sym{r}$', fontsize=20, color=FG, ha='center')
+    ax.text(1.65, .68, r'$\sym{PexactPerp}\sym{r}$', fontsize=20, color=FG, ha='center')
     save(fig, 'sine_theta_residual_geometry',
-         'Rank-one sine-theta equality example: trial frame, exact projection, complementary error, '
-         'certified spectral gap, residual, and the two sine-operator carriers. Theta=35 degrees, delta=1.3.')
+         'Rayleigh residual triangle from S05Residual, combined with the exact-coordinate '
+         'projection geometry of S08Why. Ahat=diag(1.9,0.7), theta=40 degrees; '
+         'the residual joins rho*v to Ahat*v and is perpendicular to the trial line.')
 
 
 def matching():

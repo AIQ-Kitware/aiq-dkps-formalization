@@ -1069,28 +1069,31 @@ Hilbert--Schmidt operators with their respective norms are examples; the
 operator norm on bounded operators is another. For an ideal norm, both the
 residual and the positive sine must belong to its domain.
 
-For a one-dimensional trial space, take
-$\sym{Acurrent}=\operatorname{diag}(0,\sym{delta})$, the trial scalar
-$\sym{A0}=0$, and the unit vector
-$\like{v}{v_\theta}=(\cos\sym{theta},\sin\sym{theta})$.
-The complementary component has norm $\sin\sym{theta}$ and the
-residual has norm $\sym{delta}\sin\sym{theta}$.  Thus equality holds
-in the sine-theta estimate for this finite-dimensional configuration,
-as illustrated in \cref{fig:sine-theta-residual}.
+In two dimensions, take a one-dimensional trial frame $\sym{E0}(x)=x\sym{v}$ with
+$\|\sym{v}\|=1$. A scalar trial operator $\sym{A0}=\sym{rho}$ gives
+$\sym{r}=\sym{R}(1)=\sym{Acurrent}\sym{v}-\sym{rho}\sym{v}$.
+Choosing $\sym{rho}=\langle\sym{v},\sym{Acurrent}\sym{v}\rangle$
+makes $\sym{rho}\sym{v}$ the orthogonal projection of
+$\sym{Acurrent}\sym{v}$ onto the trial line. The residual is therefore
+perpendicular to that line. Figure~\ref{fig:sine-theta-residual} pairs this
+residual triangle with the exact complementary projection that measures
+the subspace error.
 
 \begin{figure}[tb]
 \centering
 \resizebox{\linewidth}{!}{\input{figures/sine_theta_residual_geometry.pgf}}
-\caption{A rank-one equality case for the sine-theta estimate.
-The exact frames are $\sym{F0}(h)=(h,0)$ and $\sym{F1}(g)=(0,g)$,
-with $\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$.
-(a) Projecting the unit trial vector onto the unwanted direction gives
-$\sym{S}(1)=(0,\sin\sym{theta})$.
-(b) For $\sym{Acurrent}=\operatorname{diag}(0,\sym{delta})$ and $\sym{A0}=0$,
-the residual is $\sym{R}(1)=\sym{delta}\sym{S}(1)$.
-The bottom row distinguishes the rectangular error $\sym{S}$ from the
-positive trial-coordinate sine $\sym{sinTheta0}$.
-The drawing uses $\sym{theta}=35^\circ$ and $\sym{delta}=1.3$.}
+\caption{Rank-one Rayleigh residual geometry. The exact frames are
+$\sym{F0}(h)=(h,0)$ and $\sym{F1}(g)=(0,g)$, with
+$\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ and $\sym{PexactPerp}=I-\sym{Pexact}$.
+(a) The pink leg $\sym{S}(1)=\sym{PexactPerp}\sym{v}$ has length $\sin\sym{theta}$.
+(b) The green residual joins $\sym{rho}\sym{v}$ to $\sym{Acurrent}\sym{v}$;
+for the Rayleigh choice it is perpendicular to the trial line. The dashed
+legs are its exact wanted and unwanted components. Their lengths give
+$\sym{delta}\sin\sym{theta}=\|\sym{PexactPerp}\sym{r}\|_2
+\leq\|\sym{r}\|_2=\|\sym{R}\|_{\mathrm{op}}$.
+The drawing uses $\sym{Acurrent}=\operatorname{diag}(1.9,0.7)$,
+$\sym{theta}=40^\circ$, $\sym{rho}=\langle\sym{v},\sym{Acurrent}\sym{v}\rangle$,
+and $\sym{delta}=\sym{rho}-0.7$.}
 \label{fig:sine-theta-residual}
 \end{figure}
 
@@ -1167,6 +1170,14 @@ For unbounded operators, deriving the domain compatibility for $\sym{X}$ is part
 the argument. The displayed relation holds on $\DKDom(\sym{A0})$ and
 has a bounded right side. The constant-one estimate uses the specified
 interval/exterior or ordered spectral positions.
+
+For a one-dimensional trial space, take
+$\sym{Acurrent}=\operatorname{diag}(0,\sym{delta})$, the trial scalar
+$\sym{A0}=0$, and the unit vector
+$\like{v}{v_\theta}=(\cos\sym{theta},\sin\sym{theta})$.
+The complementary component has norm $\sin\sym{theta}$ and the
+residual has norm $\sym{delta}\sin\sym{theta}$. Thus equality holds
+in the sine-theta estimate for this finite-dimensional configuration.
 
 \section{Formalized operator-theoretic foundations}
 \label{sec:foundations}

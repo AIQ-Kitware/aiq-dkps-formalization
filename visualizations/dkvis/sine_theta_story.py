@@ -488,7 +488,7 @@ class TwoDirections:
         self.model.verify(atol=atol)
         # The tan theta theorem's hypotheses hold (Rayleigh--Ritz value, the one
         # unwanted eigenvalue on one side), and in two dimensions it is an equality:
-        # delta = (lam_w - lam_u) cos^2 theta and ||r|| = (lam_w - lam_u) sin theta cos theta.
+        # delta = |lam_w - lam_u| cos^2 theta and ||r|| = |lam_w - lam_u| sin theta cos theta.
         if 0 <= self.theta < math.pi / 2:
             assert math.isclose(self.delta * self.tan_theta, self.residual_norm, rel_tol=1e-9, abs_tol=atol)
         assert math.isclose(self.w_part, (self.lam_w - self.rho) * self.sin_theta, abs_tol=atol)
