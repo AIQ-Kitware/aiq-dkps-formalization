@@ -4,7 +4,7 @@
 % Values were chosen for legibility against white manuscript paper; some
 % amber, green, and vermilion anchors are a little darker than the slides.
 %
-% A SINGLE ON/OFF SWITCH:
+% Color control (independent of hover reminders):
 %   \DKMathColorsfalse   (after \input{math_symbol_colors.tex} in paper.tex)
 % or pass \def\DKMonochromeMath{1} before \input{paper.tex}, without editing.
 % EVERY \sym, \like, and \dkrole obeys this switch, including the glossary.
@@ -75,143 +75,199 @@
 % Coloring primitives; all descendants (including indices and adjoints) can
 % be colored as ONE semantic expression by writing \like{key}{expression}.
 \newcommand{\dkrole}[2]{\ifDKMathColors\textcolor{dk#1}{#2}\else#2\fi}
-\newcommand{\dkDeclareSymbol}[3]{%
+\newcommand{\dkDeclareSymbol}[4]{%
+  \expandafter\def\csname dkgloss@#1\endcsname{#4}%
+  \expandafter\pdfstringdef\csname dkpdfgloss@#1\endcsname{#4}%
+  \expandafter\def\csname dkglyph@#1\endcsname{#2}%
   \expandafter\def\csname dkrole@#1\endcsname{#3}%
   \expandafter\def\csname dksym@#1\endcsname{\dkrole{#3}{#2}}%
 }
-\newcommand{\sym}[1]{%
+\DeclareRobustCommand{\sym}[1]{%
   \ifcsname dksym@#1\endcsname
-    \csname dksym@#1\endcsname
+    \dkSymbolTooltip{#1}{\csname dksym@#1\endcsname}%
   \else
     \PackageError{dk-math-colors}{Unknown symbol key #1}{See math_symbol_colors.tex}%
   \fi
 }
-\newcommand{\like}[2]{%
+\DeclareRobustCommand{\like}[2]{%
   \ifcsname dkrole@#1\endcsname
-    \dkrole{\csname dkrole@#1\endcsname}{#2}%
+    \dkSymbolTooltip{#1}{\dkrole{\csname dkrole@#1\endcsname}{#2}}%
   \else
     \PackageError{dk-math-colors}{Unknown role key #1}{See math_symbol_colors.tex}%
   \fi
 }
 
+% A short description belongs to the semantic key, not the bare letter.
+% The same descriptions are available to the notation appendix.
+\DeclareRobustCommand{\dkSymbolDescription}[1]{\csname dkgloss@#1\endcsname}
+\newif\ifDKSymbolTooltips
+\DKSymbolTooltipstrue
+\ifdefined\DKNoSymbolTooltips\DKSymbolTooltipsfalse\fi
+\newsavebox{\DKTooltipBox}
+\newcount\DKTooltipCount
+% Register only shipped widgets through hyperref's existing form-field
+% machinery. Poppler/Okular need the catalog's field list, not just page
+% annotations. The deferred aux write also discards measuring-only copies.
+\makeatletter
+\newcommand{\dkRegisterTooltipField}{%
+  \expandafter\HyField@@AddToFields\expandafter{\number\pdffeedback lastannot}%
+}
+\makeatother
+\AtBeginDocument{\ifDKSymbolTooltips\Form[NeedAppearances=false]\fi}
+\AtEndDocument{\endForm}
+% Native LuaLaTeX PDF widgets: no navigation action or JavaScript. Avoid
+% pdfcomment's soulpos dependency, which previously broke local Vim builds.
+% Measure in the CURRENT math style, then emit the original expression as-is:
+% boxing the visible math would change spacing, scripts and line breaking.
+\newcommand{\dkSymbolTooltip}[2]{%
+  \ifDKSymbolTooltips
+    \begingroup
+      \DKSymbolTooltipsfalse % suppress nested annotations while measuring
+      \ifmmode
+        \edef\DKTooltipStyle{\ifcase\mathstyle
+          \displaystyle\or\displaystyle\or\textstyle\or\textstyle\or
+          \scriptstyle\or\scriptstyle\or\scriptscriptstyle\or\scriptscriptstyle\fi}%
+        \sbox{\DKTooltipBox}{$\DKTooltipStyle#2$}%
+      \else
+        \leavevmode\sbox{\DKTooltipBox}{#2}%
+      \fi
+      \global\advance\DKTooltipCount by 1
+      \pdfextension annot width\wd\DKTooltipBox
+        height\ht\DKTooltipBox depth\dp\DKTooltipBox
+        {/Subtype /Widget /FT /Btn /Ff 65536 /F 512
+         /T (dk-symbol-\the\DKTooltipCount) /TU (\csname dkpdfgloss@#1\endcsname)
+         /H /N /BS << /W 0 >> /Border [0 0 0]}%
+      \dkRegisterTooltipField
+      #2%
+    \endgroup
+  \else
+    #2%
+  \fi
+}
+\pdfstringdefDisableCommands{%
+  \def\sym#1{\csname dkglyph@#1\endcsname}%
+  \def\like#1#2{#2}%
+}
+
+% Declarations: key, printed glyph, color role, plain-text glossary reminder.
 % Manim's original symbol keys, now split into semantic subshades.
 % Ambient and perturbed operators (provenance is independent of geometry).
-\dkDeclareSymbol{A}{A}{old}
-\dkDeclareSymbol{A1}{A_1}{old}
-\dkDeclareSymbol{a1}{a_1}{old}
-\dkDeclareSymbol{Ahat}{\widehat A}{current}
-\dkDeclareSymbol{Acurrent}{\widehat A}{current}
-\dkDeclareSymbol{H}{H}{perturb}
-\dkDeclareSymbol{H0}{H_0}{perturb}
-\dkDeclareSymbol{H1}{H_1}{perturb}
-\dkDeclareSymbol{B}{B}{perturb}
-\dkDeclareSymbol{b}{b}{perturb}
+\dkDeclareSymbol{A}{A}{old}{Reference self-adjoint operator before perturbation.}
+\dkDeclareSymbol{A1}{A_1}{old}{Complementary block of the reference operator.}
+\dkDeclareSymbol{a1}{a_1}{old}{Reference eigenvalue or complementary spectral value.}
+\dkDeclareSymbol{Ahat}{\widehat A}{current}{Operator under study; in the perturbation setting, the reference operator plus its perturbation.}
+\dkDeclareSymbol{Acurrent}{\widehat A}{current}{Operator under study; in the perturbation setting, the reference operator plus its perturbation.}
+\dkDeclareSymbol{H}{H}{perturb}{Additive self-adjoint perturbation of the reference operator.}
+\dkDeclareSymbol{H0}{H_0}{perturb}{Wanted diagonal block of the perturbation.}
+\dkDeclareSymbol{H1}{H_1}{perturb}{Unwanted diagonal block of the perturbation.}
+\dkDeclareSymbol{B}{B}{perturb}{Off-diagonal perturbation or coupling block.}
+\dkDeclareSymbol{b}{b}{perturb}{Scalar perturbation or coupling coefficient.}
 % Trial/source family: subspace, frame, compressed operator, projector, vector.
-\dkDeclareSymbol{U}{U}{wanted}% Manim's U remains wanted in local slide notation.
-\dkDeclareSymbol{V}{V}{trial}% Manim's V remains trial in local slide notation.
-\dkDeclareSymbol{Usource}{U}{trial}
-\dkDeclareSymbol{E0}{E_0}{trialframe}
-\dkDeclareSymbol{A0}{A_0}{trialspectrum}
-\dkDeclareSymbol{v}{v}{trialvector}
-\dkDeclareSymbol{rho}{\rho}{trialspectrum}
-\dkDeclareSymbol{mu}{\mu}{trialspectrum}
-\dkDeclareSymbol{a0}{a_0}{trialspectrum}
-\dkDeclareSymbol{Wcompetitor}{W}{trialcompetitor}
-\dkDeclareSymbol{Psource}{P}{trialprojection}
-\dkDeclareSymbol{ProjSource}{P_U}{trialprojection}
-\dkDeclareSymbol{SourceVector}{x}{trialvector}
-\dkDeclareSymbol{Xframe}{X}{trialframe}
-\dkDeclareSymbol{Ftrial}{F}{trialframe}
-\dkDeclareSymbol{Eambient}{E}{ambient}
+\dkDeclareSymbol{U}{U}{wanted}{Desired exact subspace in the local geometric notation.}% Manim's U remains wanted in local slide notation.
+\dkDeclareSymbol{V}{V}{trial}{Trial subspace in the local geometric notation.}% Manim's V remains trial in local slide notation.
+\dkDeclareSymbol{Usource}{U}{trial}{Source subspace to be transported onto the target subspace.}
+\dkDeclareSymbol{E0}{E_0}{trialframe}{Isometric embedding of the trial subspace; its adjoint returns trial coordinates.}
+\dkDeclareSymbol{A0}{A_0}{trialspectrum}{Self-adjoint operator on trial coordinates; its eigenvalues are the trial spectral values.}
+\dkDeclareSymbol{v}{v}{trialvector}{Trial vector or vector in the trial subspace.}
+\dkDeclareSymbol{rho}{\rho}{trialspectrum}{Trial eigenvalue or scalar trial operator.}
+\dkDeclareSymbol{mu}{\mu}{trialspectrum}{Trial spectral value.}
+\dkDeclareSymbol{a0}{a_0}{trialspectrum}{Wanted trial eigenvalue or trial spectral value.}
+\dkDeclareSymbol{Wcompetitor}{W}{trialcompetitor}{Orthogonal or unitary competitor carrying the source subspace onto the target.}
+\dkDeclareSymbol{Psource}{P}{trialprojection}{Orthogonal projection onto the source subspace in the transport problem.}
+\dkDeclareSymbol{ProjSource}{P_U}{trialprojection}{Orthogonal projection onto the source subspace in the transport problem.}
+\dkDeclareSymbol{SourceVector}{x}{trialvector}{Vector in the source subspace.}
+\dkDeclareSymbol{Xframe}{X}{trialframe}{Orthonormal coordinate matrix for the source subspace in the counterexample.}
+\dkDeclareSymbol{Ftrial}{F}{trialframe}{Hilbert space of trial coordinates.}
+\dkDeclareSymbol{Eambient}{E}{ambient}{Ambient Hilbert space containing the trial and exact subspaces.}
 % Exact/wanted family: the target subspace, its frame, projection and rotation.
-\dkDeclareSymbol{Vtarget}{V}{wanted}
-\dkDeclareSymbol{F0}{F_0}{wantedframe}
-\dkDeclareSymbol{Lambda0}{\Lambda_0}{wantedspectrum}
-\dkDeclareSymbol{u}{u}{wantedvector}
-\dkDeclareSymbol{f0}{f_0}{wantedvector}
-\dkDeclareSymbol{lambda0}{\lambda_0}{wantedspectrum}
-\dkDeclareSymbol{lambdau}{\lambda_u}{wantedspectrum}
-\dkDeclareSymbol{Pexact}{P}{wantedprojection}
-\dkDeclareSymbol{PexactPerp}{P^\perp}{unwantedprojection}
-\dkDeclareSymbol{ReflectionSigma}{\Sigma}{wantedprojection}
-\dkDeclareSymbol{Qtarget}{Q}{wantedprojection}
-\dkDeclareSymbol{ProjTarget}{P_V}{wantedprojection}
-\dkDeclareSymbol{Rrotation}{R}{wantedrotation}
-\dkDeclareSymbol{Yframe}{Y}{wantedframe}
-\dkDeclareSymbol{TargetVector}{y}{wantedvector}
-\dkDeclareSymbol{Hexact}{F_{\mathrm{ex}}}{wantedframe}% Coordinate Hilbert space (not perturbation).
+\dkDeclareSymbol{Vtarget}{V}{wanted}{Target subspace in the transport problem.}
+\dkDeclareSymbol{F0}{F_0}{wantedframe}{Isometric coordinates for the desired exact spectral subspace; star denotes the adjoint.}
+\dkDeclareSymbol{Lambda0}{\Lambda_0}{wantedspectrum}{Self-adjoint block on the desired exact spectral subspace.}
+\dkDeclareSymbol{u}{u}{wantedvector}{Vector in the desired exact subspace.}
+\dkDeclareSymbol{f0}{f_0}{wantedvector}{Component or coordinate vector in the desired exact subspace.}
+\dkDeclareSymbol{lambda0}{\lambda_0}{wantedspectrum}{Wanted exact eigenvalue or wanted spectral value.}
+\dkDeclareSymbol{lambdau}{\lambda_u}{wantedspectrum}{Eigenvalue associated with a desired exact vector.}
+\dkDeclareSymbol{Pexact}{P}{wantedprojection}{Orthogonal projection onto the desired exact subspace in the sine-theta theorem.}
+\dkDeclareSymbol{PexactPerp}{P^\perp}{unwantedprojection}{Orthogonal projection onto the exact complementary subspace.}
+\dkDeclareSymbol{ReflectionSigma}{\Sigma}{wantedprojection}{Reflection associated with the desired exact spectral projection.}
+\dkDeclareSymbol{Qtarget}{Q}{wantedprojection}{Orthogonal projection onto the target subspace in the transport problem.}
+\dkDeclareSymbol{ProjTarget}{P_V}{wantedprojection}{Orthogonal projection onto the target subspace in the transport problem.}
+\dkDeclareSymbol{Rrotation}{R}{wantedrotation}{Canonical direct rotation carrying the source subspace onto the target.}
+\dkDeclareSymbol{Yframe}{Y}{wantedframe}{Orthonormal coordinate matrix for the target subspace in the counterexample.}
+\dkDeclareSymbol{TargetVector}{y}{wantedvector}{Vector in the target subspace.}
+\dkDeclareSymbol{Hexact}{F_{\mathrm{ex}}}{wantedframe}{Hilbert space of coordinates for the desired exact spectral subspace.}% Coordinate Hilbert space (not perturbation).
 % Exact/unwanted family; the trial error operators are MAGENTA, not cyan.
-\dkDeclareSymbol{Uperp}{U^{\perp}}{unwanted}
-\dkDeclareSymbol{F1}{F_1}{unwantedframe}
-\dkDeclareSymbol{Lambda1}{\Lambda_1}{unwantedspectrum}
+\dkDeclareSymbol{Uperp}{U^{\perp}}{unwanted}{Orthogonal complement of the desired exact subspace in the local notation.}
+\dkDeclareSymbol{F1}{F_1}{unwantedframe}{Isometric coordinates for the exact complementary subspace; star denotes the adjoint.}
+\dkDeclareSymbol{Lambda1}{\Lambda_1}{unwantedspectrum}{Self-adjoint operator on exact complementary coordinates: the unwanted spectral block.}
 % Spectral measure and set (distinct from the ambient space E and sine block S).
-\dkDeclareSymbol{SpectralMeasure}{E}{wantedprojection}
-\dkDeclareSymbol{SpectralSet}{S}{wantedspectrum}
+\dkDeclareSymbol{SpectralMeasure}{E}{wantedprojection}{Projection-valued spectral measure of a self-adjoint operator.}
+\dkDeclareSymbol{SpectralSet}{S}{wantedspectrum}{Borel spectral set used to select a spectral subspace.}
 % Generic Sylvester coefficients and right side, by source/target role.
-\dkDeclareSymbol{SylvesterLeft}{B}{unwantedspectrum}
-\dkDeclareSymbol{SylvesterRight}{C}{trialspectrum}
-\dkDeclareSymbol{SylvesterRHS}{Y}{resid}
-\dkDeclareSymbol{w}{w}{unwantedvector}
-\dkDeclareSymbol{f1}{f_1}{unwantedvector}
-\dkDeclareSymbol{lambda1}{\lambda_1}{unwantedspectrum}
-\dkDeclareSymbol{lambdaw}{\lambda_w}{unwantedspectrum}
-\dkDeclareSymbol{Gunwanted}{G}{unwantedframe}
-\dkDeclareSymbol{E1}{E_1}{unwantedframe}
-\dkDeclareSymbol{Vperp}{V^{\perp}}{unwanted}
+\dkDeclareSymbol{SylvesterLeft}{B}{unwantedspectrum}{Left coefficient of the Sylvester equation; corresponds to the unwanted spectral block.}
+\dkDeclareSymbol{SylvesterRight}{C}{trialspectrum}{Right coefficient of the Sylvester equation; corresponds to the trial operator.}
+\dkDeclareSymbol{SylvesterRHS}{Y}{resid}{Right-hand side of the Sylvester equation, obtained by projecting the residual.}
+\dkDeclareSymbol{w}{w}{unwantedvector}{Vector in an unwanted or complementary spectral subspace.}
+\dkDeclareSymbol{f1}{f_1}{unwantedvector}{Component or coordinate vector in the unwanted exact subspace.}
+\dkDeclareSymbol{lambda1}{\lambda_1}{unwantedspectrum}{Unwanted exact eigenvalue or complementary spectral value.}
+\dkDeclareSymbol{lambdaw}{\lambda_w}{unwantedspectrum}{Eigenvalue associated with an unwanted exact vector.}
+\dkDeclareSymbol{Gunwanted}{G}{unwantedframe}{Hilbert space of exact complementary coordinates.}
+\dkDeclareSymbol{E1}{E_1}{unwantedframe}{Isometric coordinates for the complementary trial subspace.}
+\dkDeclareSymbol{Vperp}{V^{\perp}}{unwanted}{Orthogonal complement of the trial subspace in the local notation.}
 % Angle and error geometry, including distinct rectangular and positive maps.
-\dkDeclareSymbol{theta}{\theta}{sine}
-\dkDeclareSymbol{Theta}{\Theta}{angleoperator}
-\dkDeclareSymbol{Theta0}{\Theta_0}{angleoperator}
-\dkDeclareSymbol{sintheta}{\sin\theta}{sine}
-\dkDeclareSymbol{sinTheta0}{\sin\Theta_0}{sineoperator}
-\dkDeclareSymbol{S}{S}{sineblock}
-\dkDeclareSymbol{X}{X}{sylvester}
-\dkDeclareSymbol{alphaAngle}{\alpha}{anglemax}
-\dkDeclareSymbol{CosAngle}{c}{anglecos}
-\dkDeclareSymbol{SinAngle}{s}{sineoperator}
-\dkDeclareSymbol{EpsilonAngle}{\varepsilon}{anglemax}
-\dkDeclareSymbol{PhiAngle}{\varphi}{angleoperator}
-\dkDeclareSymbol{Bblock}{B}{sineblock}
-\dkDeclareSymbol{Cblock}{C}{sylvester}
-\dkDeclareSymbol{Ablock}{A}{anglecos}
+\dkDeclareSymbol{theta}{\theta}{sine}{Principal angle between the subspaces under comparison.}
+\dkDeclareSymbol{Theta}{\Theta}{angleoperator}{Principal-angle operator.}
+\dkDeclareSymbol{Theta0}{\Theta_0}{angleoperator}{Directed principal-angle operator acting on trial coordinates.}
+\dkDeclareSymbol{sintheta}{\sin\theta}{sine}{Sine of an individual principal angle: the complementary component of a unit trial vector.}
+\dkDeclareSymbol{sinTheta0}{\sin\Theta_0}{sineoperator}{Positive sine operator on trial coordinates; the modulus of the rectangular complementary error.}
+\dkDeclareSymbol{S}{S}{sineblock}{Rectangular complementary error: the trial frame projected onto the unwanted exact subspace.}
+\dkDeclareSymbol{X}{X}{sylvester}{Solution of the Sylvester equation; for the sine bound, the trial frame in unwanted exact coordinates.}
+\dkDeclareSymbol{alphaAngle}{\alpha}{anglemax}{Largest principal angle.}
+\dkDeclareSymbol{CosAngle}{c}{anglecos}{Cosine of a principal angle or the corresponding positive cosine block.}
+\dkDeclareSymbol{SinAngle}{s}{sineoperator}{Sine of a principal angle or the corresponding positive sine block.}
+\dkDeclareSymbol{EpsilonAngle}{\varepsilon}{anglemax}{Angle parameter controlling the maximum subspace deviation.}
+\dkDeclareSymbol{PhiAngle}{\varphi}{angleoperator}{Auxiliary angle or angle operator in the two-subspace comparison.}
+\dkDeclareSymbol{Bblock}{B}{sineblock}{Off-diagonal block in the two-subspace decomposition.}
+\dkDeclareSymbol{Cblock}{C}{sylvester}{Complementary or Sylvester block in the two-subspace decomposition.}
+\dkDeclareSymbol{Ablock}{A}{anglecos}{Positive cosine-related block in the two-subspace decomposition.}
 % Residual/error-displacement family.
-\dkDeclareSymbol{r}{r}{residvector}
-\dkDeclareSymbol{R}{R}{resid}
-\dkDeclareSymbol{Kdisplacement}{K}{displacement}
+\dkDeclareSymbol{r}{r}{residvector}{Residual vector of an approximate eigenpair.}
+\dkDeclareSymbol{R}{R}{resid}{Bounded residual of the trial eigenproblem, agreeing with the operator difference on the trial domain.}
+\dkDeclareSymbol{Kdisplacement}{K}{displacement}{Full displacement of a transporter from the identity.}
 % Matching proof: the gradient and its spectral level are not a space or gap.
-\dkDeclareSymbol{SpectralGradient}{G}{displacement}
-\dkDeclareSymbol{GradientLevel}{g}{displacement}
-\dkDeclareSymbol{SkewDirection}{B}{ambient}
+\dkDeclareSymbol{SpectralGradient}{G}{displacement}{Skew-symmetric spectral gradient of the displacement power sum in the matching proof.}
+\dkDeclareSymbol{GradientLevel}{g}{displacement}{Positive gradient level; the gradient squared is minus this level squared times the identity.}
+\dkDeclareSymbol{SkewDirection}{B}{ambient}{Skew-symmetric direction for a first variation of an orthogonal transporter.}
 % Spectral separation family: gap and original gap are NOT identical.
-\dkDeclareSymbol{delta}{\delta}{gap}
-\dkDeclareSymbol{g}{g}{gaporiginal}
-\dkDeclareSymbol{Delta}{\Delta}{gapstat}
-\dkDeclareSymbol{alphaEndpoint}{\alpha}{gapinterval}
-\dkDeclareSymbol{betaEndpoint}{\beta}{gapinterval}
+\dkDeclareSymbol{delta}{\delta}{gap}{Positive spectral separation between the trial operator and the unwanted exact block.}
+\dkDeclareSymbol{g}{g}{gaporiginal}{Original spectral gap of the reference operator; distinct from the certified sine-theta separation.}
+\dkDeclareSymbol{Delta}{\Delta}{gapstat}{Population or statistical spectral gap.}
+\dkDeclareSymbol{alphaEndpoint}{\alpha}{gapinterval}{Upper endpoint of the finite interval in the interval/exterior gap hypothesis.}
+\dkDeclareSymbol{betaEndpoint}{\beta}{gapinterval}{Lower endpoint of the finite interval in the interval/exterior gap hypothesis.}
 % Spectral/projector and auxiliary matrix objects, context-scoped.
-\dkDeclareSymbol{P}{P}{fg}% Neutral historical Manim key; prefer Pexact/Psource.
-\dkDeclareSymbol{Q}{Q}{fg}% Neutral historical Manim key; prefer Qtarget.
-\dkDeclareSymbol{IntertwinerT}{T}{intertwiner}
-\dkDeclareSymbol{Jturn}{J}{turn}
-\dkDeclareSymbol{PolarU}{U}{intertwiner}
-\dkDeclareSymbol{Cturn}{C}{turn}
-\dkDeclareSymbol{Hmix}{H}{mix}% Hadamard mixing, NOT the perturbation H.
-\dkDeclareSymbol{Jreflect}{J}{trialprojection}
-\dkDeclareSymbol{Dblock}{D}{mix}
-\dkDeclareSymbol{OmegaOne}{\Omega_1}{turn}
-\dkDeclareSymbol{OmegaTwo}{\Omega_2}{intertwiner}
-\dkDeclareSymbol{Dplanar}{D}{wantedrotation}
-\dkDeclareSymbol{Hreflection}{H}{trialcompetitor}
+\dkDeclareSymbol{P}{P}{fg}{Orthogonal projection; its source or exact-target role is specified locally.}% Neutral historical Manim key; prefer Pexact/Psource.
+\dkDeclareSymbol{Q}{Q}{fg}{Orthogonal projection; its role is specified locally.}% Neutral historical Manim key; prefer Qtarget.
+\dkDeclareSymbol{IntertwinerT}{T}{intertwiner}{Two-projection intertwiner; its unitary polar factor is the acute direct rotation.}
+\dkDeclareSymbol{Jturn}{J}{turn}{Planar quarter-turn used in the real counterexample.}
+\dkDeclareSymbol{PolarU}{U}{intertwiner}{Partial isometry in the polar decomposition; unitary when the operator is invertible.}
+\dkDeclareSymbol{Cturn}{C}{turn}{Planar rotation through twice the principal angle in the counterexample.}
+\dkDeclareSymbol{Hmix}{H}{mix}{Orthogonal mixing matrix in the counterexample; separate from the additive perturbation.}% Hadamard mixing, NOT the perturbation H.
+\dkDeclareSymbol{Jreflect}{J}{trialprojection}{Reflection equal to twice the source projection minus the identity.}
+\dkDeclareSymbol{Dblock}{D}{mix}{Auxiliary diagonal or block matrix in the counterexample.}
+\dkDeclareSymbol{OmegaOne}{\Omega_1}{turn}{First principal-plane projection in the failed Ky Fan comparison.}
+\dkDeclareSymbol{OmegaTwo}{\Omega_2}{intertwiner}{Second principal-plane projection in the failed Ky Fan comparison.}
+\dkDeclareSymbol{Dplanar}{D}{wantedrotation}{Planar direct-rotation block.}
+\dkDeclareSymbol{Hreflection}{H}{trialcompetitor}{Planar reflection carrying the source line to the target.}
 % Unitarily invariant gauge family; N, M are NOT a norm versus its input.
-\dkDeclareSymbol{NormN}{N}{norm}
-\dkDeclareSymbol{NormM}{M}{normaux}
-\dkDeclareSymbol{NormQ}{Q}{normaux}
-\dkDeclareSymbol{SingletonCost}{s}{norm}
-\dkDeclareSymbol{PairCost}{e}{norm}
-\dkDeclareSymbol{Matching}{M}{normaux}
-\dkDeclareSymbol{PowerCost}{\Phi}{norm}
+\dkDeclareSymbol{NormN}{N}{norm}{A unitarily invariant norm, or a symmetric operator-ideal norm on its domain of finiteness.}
+\dkDeclareSymbol{NormM}{M}{normaux}{Auxiliary unitarily invariant norm used to define a Q-norm through the squared modulus.}
+\dkDeclareSymbol{NormQ}{Q}{normaux}{Q-norm: its square is a unitarily invariant norm of the squared modulus.}
+\dkDeclareSymbol{SingletonCost}{s}{norm}{Minimum trace displacement for one real principal plane: choose a rotation or a reflection.}
+\dkDeclareSymbol{PairCost}{e}{norm}{Trace displacement cost of coupling two principal planes in a four-dimensional block.}
+\dkDeclareSymbol{Matching}{M}{normaux}{Matching of positive principal-angle labels: disjoint pairs, with all remaining labels single.}
+\dkDeclareSymbol{PowerCost}{\Phi}{norm}{Sum of the p-th powers of displacement singular values.}
 % Statistical application / operator provenance.
-\dkDeclareSymbol{Sigma}{\Sigma}{old}
-\dkDeclareSymbol{SigmaHat}{\widehat\Sigma}{current}
-\dkDeclareSymbol{YWSV}{V}{wanted}
-\dkDeclareSymbol{YWSVhat}{\widehat V}{trialframe}
+\dkDeclareSymbol{Sigma}{\Sigma}{old}{Population covariance matrix.}
+\dkDeclareSymbol{SigmaHat}{\widehat\Sigma}{current}{Estimated or perturbed covariance matrix.}
+\dkDeclareSymbol{YWSV}{V}{wanted}{Orthonormal coordinates for the population eigenspace in the statistical application.}
+\dkDeclareSymbol{YWSVhat}{\widehat V}{trialframe}{Estimated eigenspace frame in the statistical application.}

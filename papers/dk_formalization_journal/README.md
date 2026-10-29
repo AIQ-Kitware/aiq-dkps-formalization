@@ -84,11 +84,21 @@ The preamble of `paper.tex` provides independent switches:
 
 - Set `\DKAnonymoustrue` in place of `\DKAnonymousfalse` to omit author and
   affiliation details, identifying artifact links, and acknowledgments.
+- Set `\DKSymbolTooltipsfalse` after the symbol-macro input to disable the
+  default glossary reminders on hover. The short descriptions live beside
+  the semantic symbol declarations in `math_symbol_colors.tex`; selected
+  notation-appendix entries reuse them directly. Native PDF tooltips have no
+  navigation action and require viewer support. They cover `\sym` and `\like`
+  expressions in text, equations, and captions; labels inside imported figures
+  are separate artwork. In Okular, enable **View → Show Forms** to expose
+  the hover regions. Other viewers may enable PDF tooltips automatically.
 - Set `\DKColoredSymbolsfalse` in place of `\DKColoredSymbolstrue` for
   monochrome mathematical symbols. The mathematical role palette remains the
   same as the Manim visualizations in the colored version.
 
-For wrapper builds, defining `\DKAnonymousReview` enables anonymous mode and
+For wrapper builds, defining `\DKNoSymbolTooltips` before `\input{paper.tex}`
+disables the hover annotations. Defining `\DKAnonymousReview` enables anonymous
+mode and
 `\DKMonochromeMath` enables monochrome symbols before `\input{paper.tex}`.
 Author--year citations are enabled for editing. The final bibliography style
 can be changed to the submission venue's requirements later.
