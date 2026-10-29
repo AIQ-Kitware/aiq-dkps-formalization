@@ -57,7 +57,7 @@ open (these settings affect only the current session):
 :LatexErrors
 ```
 
-## Counterexample figure
+## Manuscript figures
 
 The counterexample figure is committed as vector PDF and editable SVG. To
 regenerate it with Matplotlib and NumPy from the existing verified numerical
@@ -66,6 +66,17 @@ model in `visualizations/dkvis/prop44.py`, run:
 ```bash
 make -C papers/dk_formalization_journal counterexample-figure
 ```
+
+The sine-theta geometry and weighted-matching figures use the numerical models
+shared with the Manim slides. The first adapts `S08Why` and `S10Sharp`; the
+second shares its three-angle example with `N08MatchingGraph`. Regenerate their
+vector PDFs and editable SVGs with:
+
+```bash
+make -C papers/dk_formalization_journal teaching-figures
+```
+
+Use the `figures` target to regenerate all three manuscript figures.
 
 ## Draft controls
 

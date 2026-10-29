@@ -22,6 +22,8 @@ SCENES = [
     "N07LocalGlobal",
     "N08ComplexVsReal",
     "N08NuclearMatching",
+    "N08MatchingGraph",
+    "N08MatchingReduction",
     "N08NuclearParity",
     "N08NuclearCanonical",
     "N08NuclearCorrection",

@@ -43,6 +43,27 @@ right angles, and common ambient directions; the left side has no
 principal-plane or determinant constraint.
 \end{theorem}
 
+We can solve the matching problem by maximizing the savings from pairing angles.
+Write $s_i=\sym{SingletonCost}(\like{theta}{\theta_i})$ and
+$e_{ij}=\sym{PairCost}(\like{theta}{\theta_i},\like{theta}{\theta_j})$.
+Starting from the all-singleton cost $C_0=\sum_i s_i$, pairing $i,j$ saves
+$g_{ij}=s_i+s_j-e_{ij}$. Thus a matching $\sym{Matching}$ costs
+$C_0-\sum_{\{i,j\}\in\sym{Matching}}g_{ij}$, and its edges must have disjoint
+endpoints. Figure~\ref{fig:real-nuclear-matching} works out a three-angle example.
+
+\begin{figure}[tb]
+\centering
+\includegraphics[width=\linewidth]{figures/real_nuclear_matching.pdf}
+\caption{Weighted matching for principal angles $30^\circ$, $45^\circ$, and
+$75^\circ$. Each vertex is an angle label with singleton cost $s_i$;
+each edge is labeled by its saving $g_{ij}$. The solid edge selects the largest feasible total saving.
+The table lists all four matchings, with costs rounded to four decimals.
+An attaining transporter on $\mathbb R^6$ combines a four-dimensional
+paired block for angles $1,2$ with a two-dimensional reflection for
+angle $3$. Common ambient directions can remain fixed.}
+\label{fig:real-nuclear-matching}
+\end{figure}
+
 \begin{proof}[Proof outline]
 For $1<p<2$, minimize the displacement cost
 $\like{PowerCost}{\Phi_p}(\sym{Wcompetitor})=\sum_j s_j(I-\sym{Wcompetitor})^p$ over the orthogonal transporters. The feasible

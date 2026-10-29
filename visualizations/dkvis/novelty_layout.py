@@ -135,10 +135,21 @@ LAYOUTS: dict[str, dict[str, Region]] = {
         "takeaway": Region(L, R, BOTTOM, -1.76),
     },
     "N08NuclearMatching": {
-        "formula": Region(L, R, 0.47, BODY_TOP),
-        "single": Region(L, -0.23, -2.30, 0.24),
-        "pair": Region(0.23, R, -2.30, 0.24),
+        "formula": Region(L, R, -0.25, BODY_TOP),
+        "single": Region(L, -0.23, -2.35, -0.45),
+        "pair": Region(0.23, R, -2.35, -0.45),
         "takeaway": Region(L, R, BOTTOM, -2.52),
+    },
+    "N08MatchingGraph": {
+        "formula": Region(L, R, 0.83, BODY_TOP),
+        "graph": Region(L, -0.23, -2.25, 0.62),
+        "costs": Region(0.23, R, -2.25, 0.62),
+        "takeaway": Region(L, R, BOTTOM, -2.47),
+    },
+    "N08MatchingReduction": {
+        "construction": Region(L, -0.23, -1.92, BODY_TOP),
+        "reduction": Region(0.23, R, -1.92, BODY_TOP),
+        "endpoint": Region(L, R, BOTTOM, -2.14),
     },
     "N08NuclearParity": {
         "formula": Region(L, R, 0.43, BODY_TOP),

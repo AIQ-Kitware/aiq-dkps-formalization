@@ -33,6 +33,8 @@ NOVELTY_TOUR_ORDER = [
     "N07LocalGlobal",
     "N08ComplexVsReal",
     "N08NuclearMatching",
+    "N08MatchingGraph",
+    "N08MatchingReduction",
     "N08NuclearParity",
     "N08NuclearCanonical",
     "N08NuclearCorrection",
@@ -91,7 +93,8 @@ def test_comprehensive_covers_every_distinct_reference_scene():
         "C00LongTitle", "C01Foundations", "C02ThreeDimensions",
         "C03TheoremFamily", "C04Proposition", "C05Evidence", "C06Notation",
     }
-    assert used == (set(MODULE_OF) - {"S00Title", "S00TitleShort"}) | chapters
+    matching = {"N08NuclearMatching", "N08MatchingGraph", "N08MatchingReduction"}
+    assert used == matching | (set(MODULE_OF) - {"S00Title", "S00TitleShort"}) | chapters
     assert len(complete.scene_names) == len(used)
     assert all(slide.depth == "" for slide in complete.slides)
 
@@ -108,6 +111,12 @@ def test_comprehensive_has_a_coherent_topic_progression():
     assert names.index("S07Theorem") < names.index("S12Lean") < names.index("D01Planes")
     assert names.index("D04Perturb") < names.index("F01Setup") < names.index("S13Family")
     assert names.index("P02Counterexample") < names.index("P04LeanRefutation") < names.index("W02TwoChecks")
+    matching_progression = [
+        "P04LeanRefutation", "N08NuclearMatching", "N08MatchingGraph",
+        "N08MatchingReduction", "C05Evidence",
+    ]
+    positions = [names.index(scene) for scene in matching_progression]
+    assert positions == sorted(positions)
     assert names.index("W06Claims") < names.index("G01Matrices") < names.index("S14Summary")
     assert names[-2:] == ["S14Summary", "V01VTKFinale"]
     assert "V00Manim3DFinale" not in names

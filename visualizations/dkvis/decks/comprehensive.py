@@ -1,7 +1,7 @@
 """A narrative-first composition of every distinct existing Davis--Kahan scene.
 
 A long, self-contained presentation: intuition -> sine-theta theorem -> 3D ->
-other angle bounds -> Proposition 4.4 -> checking and evidence -> notation ->
+other angle bounds -> Proposition 4.4 -> real matching -> checking and evidence -> notation ->
 conclusion.  The 21-scene Kitware talk is separately preserved; this deck is
 free to improve the previously optional/reference-only scenes.
 
@@ -22,6 +22,8 @@ def _chapter(scene: str):
         # Navigational scenes belong to this presentation, not to the preserved
         # reference-deck scene registry.
         return use("dkvis.slides_compendium", scene)
+    if scene.startswith("N08"):
+        return use("dkvis.slides_novelty", scene)
     return ref_use(scene, core=True)
 
 
@@ -83,6 +85,10 @@ COMPREHENSIVE_SCENES = [
     "P03Why",
     "P04Details",
     "P04LeanRefutation",
+    # From the failed plane-by-plane minimum to unrestricted real matching.
+    "N08NuclearMatching",
+    "N08MatchingGraph",
+    "N08MatchingReduction",
     # How to read the result of a formalization process responsibly.
     "C05Evidence",
     "W01Workflow",

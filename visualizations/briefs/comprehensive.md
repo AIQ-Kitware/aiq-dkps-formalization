@@ -36,6 +36,9 @@ purpose should appear in the presentation itself.
    trace norm exposes the failure, explicit numerical witness and the exact
    Lean refutation/Q-norm repair. Do not generalize the refutation beyond its
    actual norm class or confuse this with the three-dimensional sine model.
+   Follow with the unrestricted real trace-norm matching theorem, the shared
+   three-angle graph example, and both directions of the block reduction,
+   including the passage from $1<p<2$ to the nuclear endpoint.
 6. **The formalization and its limitations.** Human/agent workflow, kernel
    check versus source comparison, three differently scoped statements,
    reversals, foundations and retained usage, and careful claims about

@@ -216,3 +216,28 @@ def real_nuclear_matching_example(angles: tuple[float, ...]) -> dict:
         "pairs": pairs,
         "singletons": singleton_indices,
     }
+
+
+def nuclear_matching_graph_example() -> dict:
+    """Three labeled angles shared by the manuscript and matching slides.
+
+    Edge weights are savings against leaving both endpoints single. Thus
+    a minimum-cost partition is a maximum-weight matching; negative edges
+    can be omitted. Keep costs and savings distinct in every renderer.
+    """
+    degrees = (30.0, 45.0, 75.0)
+    angles = tuple(math.radians(t) for t in degrees)
+    singletons = tuple(nuclear_singleton_cost(t) for t in angles)
+    pairs = {(i, j): nuclear_pair_cost(angles[i], angles[j])
+             for i in range(3) for j in range(i + 1, 3)}
+    savings = {(i, j): singletons[i] + singletons[j] - cost
+               for (i, j), cost in pairs.items()}
+    return {
+        "angles_deg": degrees,
+        "angles": angles,
+        "singleton_costs": singletons,
+        "pair_costs": pairs,
+        "savings": savings,
+        "all_singletons": sum(singletons),
+        **real_nuclear_matching_example(angles),
+    }

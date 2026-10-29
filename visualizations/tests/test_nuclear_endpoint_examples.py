@@ -11,10 +11,28 @@ import math
 import pytest
 
 from dkvis.novelty_math import (
+    nuclear_matching_graph_example,
     nuclear_pair_cost,
     nuclear_singleton_cost,
     real_nuclear_matching_example,
 )
+
+
+def test_three_angle_graph_selects_best_disjoint_saving():
+    example = nuclear_matching_graph_example()
+    singles = example["singleton_costs"]
+    baseline = example["all_singletons"]
+    # All four matchings on three vertices, checked independently of the DP.
+    candidates = [baseline] + [
+        cost + singles[3 - i - j]
+        for (i, j), cost in example["pair_costs"].items()
+    ]
+    assert example["real_minimum"] == pytest.approx(min(candidates))
+    assert example["pairs"] == ((0, 1),)
+    assert example["singletons"] == (2,)
+    assert singles[2] == 2  # the 75-degree singleton uses the reflection branch
+    assert example["savings"][(0, 2)] < 0 < example["savings"][(1, 2)]
+    assert baseline - example["savings"][(0, 1)] == pytest.approx(example["real_minimum"])
 
 
 def test_single_angle_zero_sixty_ninety_boundary():

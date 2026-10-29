@@ -140,11 +140,11 @@ Current presentations (in addition to the preserved reference decks):
   `friday`. The scene order and the underlying finished-talk slides are preserved;
   the filename is now stable. See `briefs/kitware-talk.md`.
 - **`comprehensive`**: all the distinct mathematical/evidence scenes in a new
-  62-scene narrative order, with a broader cover, six chapter transitions, and
+  65-scene narrative order, with a broader cover, six chapter transitions, and
   the full-frame VTK finale. The content runs through the sine-theta theorem,
-  3D subspaces, the other three angle bounds, Proposition 4.4, source-fidelity
+  3D subspaces, the other three angle bounds, Proposition 4.4, real matching, source-fidelity
   review and the notation reference. See `briefs/comprehensive.md`.
-- **`novelty-tour`**: a 22-scene mathematical presentation of the
+- **`novelty-tour`**: a 24-scene mathematical presentation of the
   finite complex Schatten `1<p<2` global optimum and optimizer classification,
   real nuclear matching, real--complex even-multiplicity equality, the real
   canonical-value criterion, exact nearest nuclear corrections, and the
@@ -340,7 +340,7 @@ $RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvi
 
 ### Standalone mathematical novelty tour
 
-The `novelty-tour` is a 22-scene presentation about the newer
+The `novelty-tour` is a 24-scene presentation about the newer
 spectral-transport optimization mathematics. It uses **exactly** the existing
 Manim role palette: amber for the *source* `U`, blue for the *target* `V`,
 magenta for principal angles and phase, violet for cutoffs, and steel for the
@@ -370,6 +370,13 @@ criterion, and nearest nuclear subspace-preserving correction. The right
 and zero principal-angle cases are included in the underlying theorems;
 slides use a 30-degree example for accessibility. The historical
 29-source-result inventory remains independent of the research extensions.
+
+`N08MatchingGraph` works through the labeled $30^\circ,45^\circ,75^\circ$
+example shared with the manuscript: singleton costs, edge savings, disjoint
+choices, and the optimal pair plus singleton. `N08MatchingReduction` explains
+the block construction and the converse through $1<p<2$ minimizers followed
+by the nuclear limit. The comprehensive deck includes this three-scene
+matching sequence after the Proposition 4.4 discussion.
 
 The content regions are maintained in `dkvis/novelty_layout.py`, and
 `slides_novelty.py` fits complete Manim groups to those regions *after LaTeX typesetting*. The regression checks cover geometry,
