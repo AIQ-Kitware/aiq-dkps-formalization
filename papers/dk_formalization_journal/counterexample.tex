@@ -158,18 +158,19 @@ fixes half of the ambient space; the direct rotation moves both principal planes
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.98\linewidth]{figures/prop44_displacement_planes.pdf}
-\caption{A counterexample to Davis--Kahan Proposition~4.4. Two orthogonal transporters of the same pair of two-dimensional
-subspaces of $\mathbb R^4$, whose principal angles are both $45^\circ$.
-\emph{Left:} the canonical direct rotation $\like{Rrotation}{R_{\pi/4}}$
-rotates its two principal planes by opposite $45^\circ$ angles, yielding
-four equal singular values $\sqrt{2-\sqrt2}$ for $I-\sym{Rrotation}$.
-\emph{Right:} the competitor $\like{Wcompetitor}{W_{\pi/4}}$ rotates one
-of its own invariant real planes by $90^\circ$ and fixes the other,
-yielding $(\sqrt2,\sqrt2,0,0)$ for $I-\sym{Wcompetitor}$.
-The respective trace norms are $4\sqrt{2-\sqrt2}>2\sqrt2$:
-concentrating displacement into two singular directions lowers its sum,
-even though the largest displacement increases.
-The invariant-plane decompositions of the two maps are different.}
+\caption{A counterexample to Davis--Kahan Proposition~4.4 at
+$\sym{theta}=\pi/4$. Both orthogonal maps carry $\sym{Usource}$ onto
+$\sym{Vtarget}$. Each circle shows the action on one invariant real
+two-plane: the principal planes $\Pi_1,\Pi_2$ for $\sym{Rrotation}$,
+and the moving and fixed planes $M,Z$ for $\sym{Wcompetitor}$.
+The unit inputs are $u_1=e_0$, $u_2=e_1$,
+$x=(e_0+e_2)/\sqrt2$, and $z=(e_0-e_2)/\sqrt2$.
+For $T=\sym{Rrotation}$ or $\sym{Wcompetitor}$, the green arrow from
+the image $Tq$ to the input $q$ is the displacement $(I-T)q$.
+The bars list the four singular values of $I-T$, grouped by contributing
+plane, on the same vertical scale. Their sums give
+$\|I-\sym{Wcompetitor}\|_1=2\sqrt2<4\sqrt{2-\sqrt2}=\|I-\sym{Rrotation}\|_1$.
+The two maps have different invariant-plane decompositions.}
 \label{fig:prop44-displacement-planes}
 \end{figure}
 

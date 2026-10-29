@@ -57,6 +57,16 @@ open (these settings affect only the current session):
 :LatexErrors
 ```
 
+## Counterexample figure
+
+The counterexample figure is committed as vector PDF and editable SVG. To
+regenerate it with Matplotlib and NumPy from the existing verified numerical
+model in `visualizations/dkvis/prop44.py`, run:
+
+```bash
+make -C papers/dk_formalization_journal counterexample-figure
+```
+
 ## Draft controls
 
 The preamble of `paper.tex` provides independent switches:

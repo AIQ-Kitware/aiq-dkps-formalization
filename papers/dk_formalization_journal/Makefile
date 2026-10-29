@@ -2,7 +2,7 @@ PYTHON ?= python3
 CUTOFF ?=
 ACCOUNTING_CUTOFF_ARG := $(if $(strip $(CUTOFF)),--cutoff $(CUTOFF),)
 
-.PHONY: all accounting bibliometrics paper literature clean
+.PHONY: all accounting bibliometrics counterexample-figure paper literature clean
 
 all: paper
 
@@ -20,6 +20,10 @@ bibliometrics:
 # Manuscript builds consume the checked-in snapshots and are offline.
 paper:
 	latexmk -pdf paper.tex
+
+# Optional regeneration; ordinary paper builds use the committed vector figure.
+counterexample-figure:
+	$(PYTHON) scripts/build_counterexample_figure.py
 
 literature:
 	latexmk -pdf literature_review.tex
