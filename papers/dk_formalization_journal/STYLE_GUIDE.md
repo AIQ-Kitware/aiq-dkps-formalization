@@ -54,8 +54,8 @@ repair. Repeat a short norm-membership reminder where the sine-theta theorem
 needs it.
 
 When introducing an acronym, use the full name followed by the acronym in
-parentheses. Prefer “trace norm” consistently in this article. Use “range” and
-“kernel” consistently; a notation macro can support later typographic choices.
+parentheses. Prefer “trace norm” consistently in this article. Use “range”,
+“kernel”, and “domain” consistently; a notation macro can support later typographic choices.
 
 ## Keep notation and colors consistent
 
