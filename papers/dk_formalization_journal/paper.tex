@@ -252,7 +252,7 @@ spectral-separation hypotheses allow half-infinite intervals
 (e.g.\ $(-\infty,a]$). These settings require operator domains, spectral
 calculus, and norm estimates beyond finite matrices.
 
-We formalized the four headline theorems in Section~2 and every
+We formalized the four headline theorems \citep[Section~2]{davis1970rotation} and every
 named theorem, proposition, lemma, and corollary established in the 1970 paper.
 
 This gives \DKResultCount{} targets, enumerated in
@@ -565,7 +565,8 @@ Sz.-Nagy developed the nearby-projection construction in work
 published in 1947 \citep{sznagy1947perturbations,simon2018kato}.  Kato gave a streamlined
 algebraic construction, described in his 1955 report and later in
 \emph{Perturbation Theory for Linear Operators}
-\citep{kato1966perturbation,simon2018kato}.
+\citep[Chapter~I, \S4.6, equations~(4.33)--(4.42)]{kato1966perturbation};
+see also \citet[\S5]{simon2018kato}.
 
 For orthogonal projections the useful intertwiner is
 \begin{equation}
@@ -784,7 +785,7 @@ these comparisons determine which norm inequalities follow.
 Davis established Hilbert--Schmidt and finite-dimensional Schatten
 extremal properties for exponents at least two in his 1958 subspace
 paper \citep[Theorems~7.3--7.4]{davis1958separation}.  Davis and
-Kahan's Section~4 compares three objectives for a transporter $\sym{Wcompetitor}$ carrying
+Kahan compare three objectives \citep[Section~4]{davis1970rotation} for a transporter $\sym{Wcompetitor}$ carrying
 $\sym{Usource}$ onto $\sym{Vtarget}$: its restricted displacement $(I-\sym{Wcompetitor})\like{Psource}{P_U}$, its squared full
 displacement $(I-\sym{Wcompetitor})^*(I-\sym{Wcompetitor})$, and its full displacement $I-\sym{Wcompetitor}$. The last acts
 on every ambient vector, including vectors outside $\sym{Usource}$. They gave a
@@ -841,8 +842,9 @@ proof of the theorem.
 
 The tangent and double-angle estimates use related projection blocks.
 For example, an estimate for $\sin(2\sym{Theta})$ allows angles near zero and
-near $\pi/2$. The spectral-selection results of Section~8 identify which
-spectral subspaces give the small-angle alternative. Section~4 instead
+near $\pi/2$. The spectral-selection results \citep[Section~8]{davis1970rotation}
+identify which spectral subspaces give the small-angle alternative.
+The direct-rotation analysis \citep[Section~4]{davis1970rotation}
 studies the orthogonal or unitary map carrying one subspace onto another
 and asks which displacement norms the direct rotation minimizes.
 
@@ -923,13 +925,13 @@ and the follow-on matching theorem are examined in
 \section{Davis--Kahan formalization and the sine-theta theorem}
 \label{sec:coverage}
 
-Our targets are the four headline theorems in Section~2 and every
+Our targets are the four headline theorems \citep[Section~2]{davis1970rotation} and every
 named theorem, proposition, lemma, and corollary established by Davis and
 Kahan in the 1970 paper. These \DKResultCount{} results include the sine and
 tangent inequalities, the geometry and extremal properties of direct
 rotations, bounded and unbounded Sylvester estimates, the generalized
-Section~6 perturbation bounds, and the spectral-selection theorems of
-Section~8. We prove \DKProvedCount{} results and refute the printed
+perturbation bounds \citep[Section~6]{davis1970rotation}, and the spectral-selection
+theorems \citep[Section~8]{davis1970rotation}. We prove \DKProvedCount{} results and refute the printed
 full-displacement claim \citep[Proposition~4.4]{davis1970rotation}.
 Appendix~\ref{app:dk-inventory} lists these targets.
 

@@ -1,4 +1,4 @@
-\section{A counterexample to Davis--Kahan Proposition 4.4}
+\section{A counterexample to full-displacement optimality}
 \label{sec:prop44}
 
 This section gives an explicit real counterexample to the small-angle
@@ -194,7 +194,8 @@ The two trace norms are
 For $\sym{Kdisplacement}=I-\like{Wcompetitor}{W_{\pi/4}}$, let $\sym{OmegaOne}$ and $\sym{OmegaTwo}$ be the projections onto
 $\operatorname{span}\{e_0,e_3\}$ and
 $\operatorname{span}\{e_1,e_2\}$. These are principal planes for the pair.
-Davis and Kahan's equation~(4.3), applied to this configuration, requires
+The published singular-value comparison \citep[equation~(4.3)]{davis1970rotation},
+applied to this configuration, requires
 \begin{equation}
  \|\sym{Kdisplacement}\|_{(4)}\geq
  \|\sym{Kdisplacement}\sym{OmegaOne}\|_{(2)}+\|\sym{Kdisplacement}\sym{OmegaTwo}\|_{(2)},
@@ -211,7 +212,7 @@ The domain planes are orthogonal, but their images under $\sym{Kdisplacement}$ n
 the singular-value sums of these restrictions cannot be added in the
 asserted direction.
 
-\subsection{A Q-norm repair from Proposition 4.3}
+\subsection{A Q-norm repair from squared-displacement optimality}
 
 Call a unitarily invariant norm $\sym{NormN}$ a $\sym{NormQ}$-norm when there is a unitarily
 invariant norm $\sym{NormM}$ satisfying

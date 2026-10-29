@@ -99,8 +99,11 @@ spectral-separation, and norm hypotheses. Describe those hypotheses directly.
 Put an external result's number inside the citation postnote when referring
 to it in prose: for example,
 `the printed claim \citep[Proposition~4.4]{davis1970rotation}`. Apply this convention to
-theorems, propositions, lemmas, and examples from other works. Use
-`\cref` for results numbered in this manuscript.
+theorems, propositions, lemmas, and examples from other works, and to numbered
+equations, sections, and chapters. Use descriptive headings with the source
+locator cited in the adjacent prose. Put passage-specific locators in citation
+postnotes rather than bibliography notes. Use `\cref` for results numbered in
+this manuscript.
 
 State each predecessor's actual contribution and cite its theorem, proposition,
 example, or page when discussing a particular claim. Give publication years
