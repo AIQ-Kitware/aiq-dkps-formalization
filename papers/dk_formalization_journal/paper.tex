@@ -1084,7 +1084,15 @@ the subspace error.
 \begin{figure}[tb]
 \centering
 \resizebox{\linewidth}{!}{\input{figures/sine_theta_residual_geometry.pgf}}
-\caption{Rank-one Rayleigh residual geometry. The exact frames are
+\caption{Rayleigh residual geometry for a one-dimensional trial space in
+$\mathbb R^2$ (the rank-one case). With $\sym{E0}(x)=x\sym{v}$, the residual
+operator satisfies $\sym{R}(x)=x\sym{r}$, where
+$\sym{r}=\sym{Acurrent}\sym{v}-\sym{rho}\sym{v}$.
+For a higher-dimensional trial space,
+$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}$ assigns a residual vector
+to each trial-coordinate vector. In a finite-dimensional eigenbasis of
+$\sym{A0}$, its columns are the individual eigenpair residuals.
+The exact frames in the drawing are
 $\sym{F0}(h)=(h,0)$ and $\sym{F1}(g)=(0,g)$, with
 $\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ and $\sym{PexactPerp}=I-\sym{Pexact}$.
 (a) The pink leg $\sym{S}(1)=\sym{PexactPerp}\sym{v}$ has length $\sin\sym{theta}$.
