@@ -1828,3 +1828,44 @@ is verified by the actual pinned source; its PR and original proof ancestry
 were not separately audited. The underlying complex-dimension parity fact is
 classical. Mathematical attribution and the transport application are recorded
 in [the unification note](../spectral-transport-unification.md), rows T1/T8.
+
+
+## 2026-10-30: consume the accepted real spectral grid (SA-E32--E34)
+
+**Upstream integration:** [TauCeti #18927](https://github.com/TauCetiProject/TauCeti/pull/18927), accepted main commit
+[`3bd7882f07072fe6918ca2a50175cbca678f07de`](https://github.com/TauCetiProject/TauCeti/commit/3bd7882f07072fe6918ca2a50175cbca678f07de),
+confirmed in the supplied TauCeti tree at
+`463ab293070d4cb355d0a0e036469464070088bc`. Its implementation lives in
+`TauCeti/Order/Interval/Set/RealGrid.lean` and
+`TauCeti/MeasureTheory/Constructions/BorelSpace/Real.lean`, in the `Real`
+namespace; the accepted source explicitly identifies the original Kitware DKPS
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralGrid.lean` as adapted
+source. This is a source-backed **adaptation**, not an inference from the roadmap
+node alone. It changes ownership from the partial-operator namespace to reusable
+real interval and measure theory and strengthens the disjointness result to all
+widths.
+
+**Historical donor anchor:** DKPS `e4637c3919ae`,
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralGrid.lean`
+(Kitware, Inc.; Jon Crall and Claude Opus 5; Apache-2.0). The six original
+declarations are `TauCeti.LinearPMap.gridCell`, `.measurableSet_gridCell`,
+`.pairwise_disjoint_gridCell`, `.iUnion_gridCell`, `.abs_le_of_mem_gridCell`,
+and `.abs_sub_le_of_mem_gridCell`. They are now replaced, respectively, by
+`Real.gridCell`, `Real.measurableSet_gridCell`, `Real.pairwise_disjoint_gridCell`,
+`Real.iUnion_gridCell`, `Real.abs_le_of_mem_gridCell`, and
+`Real.abs_sub_le_of_mem_gridCell`. The original proofs and names remain in Git
+history and the extraction manifest's historical `source_declarations` field.
+
+**Retirement scope:** Delete the six donor proofs/definition; update
+`ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid` and its
+`ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap` consumer to import
+and apply the accepted `Real` API directly. Retain four unmerged theorem
+statements: `tsum_enorm_sq_specProjection_gridCell`,
+`tsum_enorm_sq_adjoint_specProjection_gridCell`, `specProjection_comp_self`,
+`exists_mem_spectrum_of_specProjection_ne_zero`. No public aliases are added.
+
+**Build boundary:** the dependency-pin checkpoint and the subsequent
+consumption change require focused and downstream Lean compilation in the live
+checkout; this dated entry documents the proposed migration, not a fabricated
+build result. The prior #18927 row in the October 21 historical table records
+its then-open status and must not be read as current.

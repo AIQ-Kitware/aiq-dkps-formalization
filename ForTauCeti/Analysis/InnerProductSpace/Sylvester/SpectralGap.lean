@@ -82,8 +82,8 @@ variable {A : E →ₗ.[ℂ] E} {Bop : F →ₗ.[ℂ] F}
 
 /-- The spectral projection of the `k`-th grid cell. -/
 noncomputable def gridProj (hA : IsSelfAdjoint A) (ε : ℝ) (k : ℤ) : E →L[ℂ] E :=
-  TauCeti.LinearPMap.specProjection hA (TauCeti.LinearPMap.gridCell ε k)
-    (TauCeti.LinearPMap.measurableSet_gridCell ε k)
+  TauCeti.LinearPMap.specProjection hA (Real.gridCell ε k)
+    (Real.measurableSet_gridCell ε k)
 
 /-- The grid projections commute with the group they were built from. -/
 private theorem gridProj_comm (hA : IsSelfAdjoint A) (ε : ℝ) (k : ℤ) (t : ℝ) (y : E) :
@@ -143,9 +143,9 @@ theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
     TauCeti.LinearPMap.exists_mem_spectrum_of_specProjection_ne_zero hB _ _ hQz
   have hsep : δ ≤ |lam - alp| := hgap lam hlamSpec alp halpSpec
   have hlamNear : |lam - (k : ℝ) * ε| ≤ ε :=
-    TauCeti.LinearPMap.abs_sub_le_of_mem_gridCell hε k hlamCell
+    Real.abs_sub_le_of_mem_gridCell hlamCell
   have halpNear : |alp - (l : ℝ) * ε| ≤ ε :=
-    TauCeti.LinearPMap.abs_sub_le_of_mem_gridCell hε l halpCell
+    Real.abs_sub_le_of_mem_gridCell halpCell
   have hrep : δ - 2 * ε ≤ |(k : ℝ) * ε - (l : ℝ) * ε| := by
     have h1 := abs_sub_abs_le_abs_sub (lam - alp) (((k : ℝ) * ε) - ((l : ℝ) * ε))
     have h2 : |(lam - alp) - (((k : ℝ) * ε) - ((l : ℝ) * ε))| ≤ 2 * ε := by
@@ -155,18 +155,18 @@ theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
       exact (abs_sub _ _).trans (by linarith)
     linarith
   have hest := norm_sylvester_block_sub_smul_le U V b hA hB hUA hVB
-    (TauCeti.LinearPMap.measurableSet_gridCell ε k)
-    (TauCeti.LinearPMap.measurableSet_gridCell ε l)
-    (fun t ht => TauCeti.LinearPMap.abs_le_of_mem_gridCell hε k ht) hε.le
-    (fun t ht => TauCeti.LinearPMap.abs_sub_le_of_mem_gridCell hε k ht)
-    (fun t ht => TauCeti.LinearPMap.abs_le_of_mem_gridCell hε l ht) hε.le
-    (fun t ht => TauCeti.LinearPMap.abs_sub_le_of_mem_gridCell hε l ht)
+    (Real.measurableSet_gridCell ε k)
+    (Real.measurableSet_gridCell ε l)
+    (fun t ht => Real.abs_le_of_mem_gridCell ht) hε.le
+    (fun t ht => Real.abs_sub_le_of_mem_gridCell ht)
+    (fun t ht => Real.abs_le_of_mem_gridCell ht) hε.le
+    (fun t ht => Real.abs_sub_le_of_mem_gridCell ht)
     ⟨W, hmemW⟩
     (by
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
-      change (TauCeti.LinearPMap.specProjection hA (TauCeti.LinearPMap.gridCell ε k)
-        (TauCeti.LinearPMap.measurableSet_gridCell ε k)).comp (b.columnOperator W) =
+      change (TauCeti.LinearPMap.specProjection hA (Real.gridCell ε k)
+        (Real.measurableSet_gridCell ε k)).comp (b.columnOperator W) =
         b.columnOperator W
       rw [hW, blockCLM_apply]
       exact comp_columnOperator_blockFun_left b
@@ -175,7 +175,7 @@ theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
       change (b.columnOperator W).comp (TauCeti.LinearPMap.specProjection hB
-        (TauCeti.LinearPMap.gridCell ε l) (TauCeti.LinearPMap.measurableSet_gridCell ε l))
+        (Real.gridCell ε l) (Real.measurableSet_gridCell ε l))
         = b.columnOperator W
       rw [hW, blockCLM_apply]
       exact comp_columnOperator_blockFun_right b _

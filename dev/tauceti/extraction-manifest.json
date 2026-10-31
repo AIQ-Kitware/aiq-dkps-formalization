@@ -2954,8 +2954,9 @@
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/18927",
+      "migration_note": "2026-10-30: Consume the accepted Real.gridCell API from TauCeti main 463ab293070d4cb355d0a0e036469464070088bc (integration commit 3bd7882f07072fe6918ca2a50175cbca678f07de, PR #18927). Retire the six local definitions and proofs gridCell, measurableSet_gridCell, pairwise_disjoint_gridCell, iUnion_gridCell, abs_le_of_mem_gridCell, and abs_sub_le_of_mem_gridCell. Migrate the remaining spectral-grid donor and the Sylvester spectral-gap consumer to Real.* with no forwarders. The original source_declarations list remains historical, not a present-day API index. Keep the four unmerged spectral-projection theorems in this donor. Historical source: DKPS e4637c3919ae at the staging_module path, Kitware/Apache-2.0; TauCeti adapted source explicitly acknowledges DKPS."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",

@@ -10,33 +10,35 @@ second permanent library implementation.
 
 ## Start here
 
-1. [**Current upstream-consumption review and next work (2026-10-22)**](upstream-consumption-review-2026-10-22.md)
+1. [**October 30 accepted-real-grid consumption and current handoff**](upstream-consumption-2026-10-30.md)
+   -- concrete pinned-input update, source retirement, remaining donors and build steps.
+2. [**Prior upstream-consumption review (2026-10-22)**](upstream-consumption-review-2026-10-22.md)
    — reviewed upstream-consumption changes, the compiled SSP-D01 eigenframe
    retirement, the one-way corresponding-eigenblock comparison, and remaining
-   scope-sensitive or unmerged boundaries. This is the current *action queue*.
-2. [**DKPS-to-TauCeti contribution and mathematical-lineage census**](dkps-upstream-contribution-census.md)
+   scope-sensitive or unmerged boundaries. This is historical for later acceptance. The October 30 handoff is current.
+3. [**DKPS-to-TauCeti contribution and mathematical-lineage census**](dkps-upstream-contribution-census.md)
    — initial, incomplete PR/result provenance ledger. Separates direct
    adaptation, broader campaign activity, independent overlapping results,
    and future Hilbert-space-operator-theory provenance work. Do not equate a
    shared roadmap item, a Bors title, or a closed PR with proof descent.
-3. [**Historical reducing-restriction handoff (2026-10-21)**](upstream_consumption_reducing_2026-10-21.md)
+4. [**Historical reducing-restriction handoff (2026-10-21)**](upstream_consumption_reducing_2026-10-21.md)
    — checkpoint evidence from an earlier migration. Its old "next slices"
    are superseded by the current review; much of that work has since landed.
-4. [**Canonical-spectrum migration proof lineage**](proof-lineage/2026-10-20-canonical-spectrum-migration.md)
+5. [**Canonical-spectrum migration proof lineage**](proof-lineage/2026-10-20-canonical-spectrum-migration.md)
    — exact original proof anchors, source scope, and the boundary between
    canonical and legacy spectral/resolvent concepts.
-5. [`extraction-manifest.json`](extraction-manifest.json),
+6. [`extraction-manifest.json`](extraction-manifest.json),
    [`roadmap-topic-map.md`](roadmap-topic-map.md), and
    [`spectra-provenance-map.md`](spectra-provenance-map.md)
    — maintained donor inventory, roadmap topic grouping, and layered Spectra
    ancestry. A topic grouping is not a statement of accepted upstream status.
-6. [`submission-ladder.md`](submission-ladder.md)
+7. [`submission-ladder.md`](submission-ladder.md)
    — regenerate/check with its maintained derivation tool rather than trusting
    hard-coded counts in prose.
 
 The [overnight instruction sheet](overnight-accepted-upstream-consumption-2026-10-21.md)
 records the completed October 21--22 campaign and is **not** a live todo list;
-the review above supersedes it as a new starting point.
+the dated October 22 review superseded it; the October 30 handoff now takes precedence.
 
 The former `canonical-port-completion.md` pointer was stale and is not a
 current entry point. Do not reconstruct an obsolete completion gate from old
