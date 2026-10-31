@@ -244,7 +244,7 @@ theorem singularValues_tanThetaEmbedding
     (X : F →ₗᵢ[𝕜] E)
     (htrans : IsTransverse (approximateSubspace X) U) :
     (tanThetaEmbedding U X).singularValues =
-      principalTangents (approximateSubspace X) U := by
+      (approximateSubspace X).principalTangents U := by
   classical
   let S := sinThetaEmbedding U X
   let T := tanThetaEmbedding U X
@@ -309,7 +309,7 @@ theorem singularValues_tanThetaEmbedding
           (E := F) (n := finrank 𝕜 F) rfl b hdanti hd0 i
       _ = Real.tan (Real.arcsin (S.singularValues k)) := by
         rw [Real.tan_arcsin]
-      _ = principalTangents (approximateSubspace X) U k := by
+      _ = (approximateSubspace X).principalTangents U k := by
         simpa [S] using
           (principalTangents_approximateSubspace_apply U X k).symm
   · rw [T.singularValues_of_finrank_le hk]
@@ -434,7 +434,7 @@ theorem singularValues_graphOperator (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
     (htrans : IsTransverse (approximateSubspace X) U) :
     (graphOperator U X).singularValues =
-      principalTangents (approximateSubspace X) U := by
+      (approximateSubspace X).principalTangents U := by
   simpa [graphOperator] using singularValues_tanThetaEmbedding U X htrans
 
 /-- **Davis--Kahan `tan Θ`, ordered residual form, every UI norm.** -/

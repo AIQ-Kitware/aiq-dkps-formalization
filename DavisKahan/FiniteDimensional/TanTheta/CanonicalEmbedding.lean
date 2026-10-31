@@ -36,7 +36,7 @@ theorem tanThetaEmbedding_ritzResidual_le
     δ * N (tanThetaEmbedding U X) ≤ N (ritzResidual A X) := by
   have htrans := isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap
   have htan : (tanThetaEmbedding U X).singularValues =
-      principalTangents (approximateSubspace X) U := by
+      (approximateSubspace X).principalTangents U := by
     rw [← graphOperator_eq_tanThetaEmbedding U X htrans]
     exact singularValues_graphOperator U X htrans
   exact tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap

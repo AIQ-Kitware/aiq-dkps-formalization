@@ -149,7 +149,7 @@ theorem partIII_tanTheta_uiNorm
     (hAspec : Module.End.PointSpectrumIn A Uᗮ (Set.Ici (α + δ)))
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents (approximateSubspace X) U) :
+      (approximateSubspace X).principalTangents U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   sorry
 

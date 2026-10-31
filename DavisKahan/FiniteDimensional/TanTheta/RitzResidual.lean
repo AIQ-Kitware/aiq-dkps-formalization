@@ -103,20 +103,18 @@ theorem isTransverse_of_tanThetaIntervalGap
 theorem principalTangents_approximateSubspace_apply
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E) (i : ℕ) :
-    principalTangents (approximateSubspace X) U i =
+    (approximateSubspace X).principalTangents U i =
       Real.tan (Real.arcsin ((sinThetaEmbedding U X).singularValues i)) := by
-  simp only [principalTangents, principalAngles, Finsupp.mapRange_apply]
-  rw [← singularValues_sinThetaEmbedding U X]
-
-omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
-private theorem sinThetaEmbedding_contraction
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (X : F →ₗᵢ[𝕜] E) (x : F) :
-    ‖sinThetaEmbedding U X x‖ ≤ ‖x‖ := by
-  calc
-    ‖sinThetaEmbedding U X x‖ = ‖Uᗮ.starProjection (X x)‖ := rfl
-    _ ≤ ‖X x‖ := Uᗮ.norm_starProjection_apply_le _
-    _ = ‖x‖ := X.norm_map x
+  -- The source-coordinate sine block has the accepted subspace principal sines.
+  have hsines :
+      principalSines (approximateSubspace X) U =
+        (approximateSubspace X).principalSines U := by
+    rw [TauCeti.principalSines, Submodule.principalSines_def]
+    congr 1
+    rw [Submodule.sinThetaMap_def]
+    rfl
+  rw [Submodule.principalTangents_apply, Submodule.principalAngles_apply,
+    ← hsines, ← singularValues_sinThetaEmbedding U X]
 
 /-- Transversality makes every singular value of the directed sine block strictly less than one. -/
 theorem singularValues_sinThetaEmbedding_lt_one_of_isTransverse
@@ -129,7 +127,7 @@ theorem singularValues_sinThetaEmbedding_lt_one_of_isTransverse
   let v := rightSingularBasis S i
   have hle : S.singularValues i ≤ 1 :=
     singularValues_le_one_of_contraction
-      (sinThetaEmbedding_contraction U X) rfl i
+      (sinThetaEmbedding_apply_norm_le U X) rfl i
   by_contra hlt
   have hσ : S.singularValues i = 1 := le_antisymm hle (not_lt.mp hlt)
   have hvnorm : ‖v‖ = 1 := (rightSingularBasis S).orthonormal.norm_eq_one i
@@ -416,7 +414,7 @@ theorem tanThetaResidualWitness_scalar
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents (approximateSubspace X) U)
+      (approximateSubspace X).principalTangents U)
     (i : Fin (finrank 𝕜 F)) :
     δ * tanTheta0.singularValues i ≤
       RCLike.re ⟪tanThetaResidualWitness U X i,
@@ -433,7 +431,7 @@ theorem tanThetaResidualWitness_scalar
   have hcpos : 0 < Real.sqrt (1 - σ ^ 2) := Real.sqrt_pos.2 (by nlinarith)
   have htan_i : tanTheta0.singularValues i = σ / Real.sqrt (1 - σ ^ 2) := by
     calc
-      tanTheta0.singularValues i = principalTangents (approximateSubspace X) U i :=
+      tanTheta0.singularValues i = (approximateSubspace X).principalTangents U i :=
         congrArg (fun z : ℕ →₀ ℝ => z (i : ℕ)) htan
       _ = Real.tan (Real.arcsin σ) := by
         simpa [S, σ] using principalTangents_approximateSubspace_apply U X (i : ℕ)
@@ -560,7 +558,7 @@ private theorem kyFan_tanTheta0_ritzResidual_le_of_le_finrank
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents (approximateSubspace X) U)
+      (approximateSubspace X).principalTangents U)
     {k : ℕ} (hk : k ≤ finrank 𝕜 F) :
     δ * TauCeti.kyFanSum k tanTheta0 ≤
       TauCeti.kyFanSum k
@@ -608,7 +606,7 @@ theorem kyFan_tanTheta0_ritzResidual_le
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents (approximateSubspace X) U) (k : ℕ) :
+      (approximateSubspace X).principalTangents U) (k : ℕ) :
     δ * TauCeti.kyFanSum k tanTheta0 ≤
       TauCeti.kyFanSum k
         (ritzResidual A X) := by
@@ -638,7 +636,7 @@ theorem tanTheta0_ritzResidual_le
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents (approximateSubspace X) U) :
+      (approximateSubspace X).principalTangents U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   have hprefix : ∀ k,
       TauCeti.kyFanSum k
@@ -670,7 +668,7 @@ theorem davisKahan1970_tanTheta0_ritzResidual_le
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents (approximateSubspace X) U) :
+      (approximateSubspace X).principalTangents U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   exact tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan
 
@@ -689,7 +687,7 @@ theorem davisKahan1970_generalizedTanTheta0_ritzResidual_le
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents (approximateSubspace X) U) :
+      (approximateSubspace X).principalTangents U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   exact tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan
 
@@ -703,7 +701,7 @@ theorem tanTheta0_ritzResidual_le_and_isTransverse
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      principalTangents (approximateSubspace X) U) :
+      (approximateSubspace X).principalTangents U) :
     IsTransverse (approximateSubspace X) U ∧
       δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   exact ⟨isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap,

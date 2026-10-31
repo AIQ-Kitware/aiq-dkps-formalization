@@ -3835,9 +3835,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun. 2026-10-31: consume accepted Submodule.principalTangents directly in finite-dimensional Davis--Kahan/Ritz consumers and remove the parallel TauCeti.principalTangents definition from AngleGeometry. The original donor declaration and its history at e4637c3919ae are retained in source_declarations. Upstream owner: TauCeti.Analysis.InnerProductSpace.Projection.Acute, introduced via #16645 (2026-10-15). The subsequently accepted #19329 provides Submodule.tanThetaMap and singularValues_tanThetaMap, but those map values are not identical to the DKPS trial-coordinate tanThetaEmbedding = S |C|^+; the latter and its Ritz-residual proofs remain maintained here. This is direct API consumption, not a claim of DKPS proof descent for #16645 or #19329."
     },
     {
       "source_module": "DavisKahan/BoundedOperator/Projector.lean",

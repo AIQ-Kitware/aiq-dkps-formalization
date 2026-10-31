@@ -10,6 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+public import TauCeti.Analysis.InnerProductSpace.Projection.Acute
 
 /-!
 # Directed principal-angle geometry
@@ -122,14 +123,6 @@ the principal sines.  `arcsin 0 = 0` keeps the support finite. -/
 noncomputable def principalAngles (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
   (principalSines U V).mapRange Real.arcsin Real.arcsin_zero
-
-/-- Principal-angle tangents: `tan` applied to the principal angles.  `tan 0 = 0`
-keeps the support finite (poles at `π/2` are only reached in the non-acute
-configuration, excluded by the tangent theorems' hypotheses). -/
-@[expose]
-noncomputable def principalTangents (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
-  (principalAngles U V).mapRange Real.tan Real.tan_zero
 
 omit [FiniteDimensional 𝕜 E] in
 /-- `sin Θ` of a subspace with itself is zero: the complementary projector kills

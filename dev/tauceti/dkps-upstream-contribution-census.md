@@ -1925,3 +1925,37 @@ TauCeti pin, run `lake exe cache get` before focused builds of
 `DavisKahan.Sources.DavisKahan1970.PartIII`,
 `DavisKahan.FiniteDimensional.Sharpness`, and finally the default project
 build. Commit only after those pass.
+
+## 2026-10-31: retire the parallel finite principal-tangent definition
+
+**Upstream owner:** `Submodule.principalTangents` in
+`TauCeti/Analysis/InnerProductSpace/Projection/Acute.lean`, accepted in
+[TauCeti #16645](https://github.com/TauCetiProject/TauCeti/pull/16645)
+(2026-10-15). The accepted source is present at pinned TauCeti
+`463ab293070d4cb355d0a0e036469464070088bc`.
+
+**Retired DKPS declaration:** `TauCeti.principalTangents` from
+`ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean`, historically
+`DavisKahan/FiniteDimensional/Core/AngleGeometry.lean`. The exact original
+statement and implementation can be recovered with:
+
+`git show e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean`
+
+The accepted definition and the donor definition each map the corresponding
+principal angles through `Real.tan`, with the same zero-padded `Finsupp` result.
+The finite Davis--Kahan Ritz, graph-operator, canonical-embedding, source
+presentation and challenge/comparator consumers now use `(approximateSubspace X).principalTangents U`
+directly, retaining the local sine-embedding bridge needed for isometric trial
+coordinates. The redundant private contraction proof in the finite Ritz module
+is also removed in favor of the existing donor
+`sinThetaEmbedding_apply_norm_le` theorem.
+
+**Important scope boundary:** [#19329](https://github.com/TauCetiProject/TauCeti/pull/19329)
+subsequently added `Submodule.tanThetaMap` and its principal-tangent
+singular-value identity. It does **not** justify deleting the DKPS map
+`tanThetaEmbedding U X = S |C|⁺` or the corresponding residual inequalities:
+these maps have different source coordinates and different actions, even
+when their singular values agree. Those results remain in the donor until an
+exact replacement is available. No forwarding alias is introduced, and no
+independent upstream proof is attributed to DKPS solely because it overlaps
+our formalization.
