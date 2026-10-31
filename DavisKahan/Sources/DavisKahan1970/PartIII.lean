@@ -9,6 +9,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
 public import DavisKahan.FiniteDimensional.DirectRotation.Basic
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Symmetric
 public import DavisKahan.FiniteDimensional.SinTheta.TrialMap
 public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 public import DavisKahan.FiniteDimensional.TanTheta.Vector
@@ -107,11 +108,13 @@ the chosen unitarily invariant norm. -/
 alias partIII_sinTheta_uiNorm :=
   UnitarilyInvariantSeminorm.apply_starProjection_comp_starProjection_le
 
-/-- The full-space canonical sine-angle-operator form.  It records explicitly
-the forward and reverse interval/exterior hypotheses needed for a
-constant-one estimate in an arbitrary square unitarily invariant norm. -/
+/-- The full-space canonical sine-angle-operator form, using the accepted
+TauCeti symmetric two-orientation theorem directly. The forward and reverse
+interval/exterior hypotheses yield constant one for every square UI seminorm.
+The canonical sine-angle operator is `Submodule.sinAngleOperator`; the former
+local `TauCeti.sinAngleOperator_perturbation_le` proof was consumed by #19817. -/
 alias partIII_sinTheta_angleOperator_uiNorm :=
-  sinAngleOperator_perturbation_le
+  UnitarilyInvariantSeminorm.mul_map_sinAngleOperator_le_map_sub
 
 /-- The equal-rank Ritz-residual `tan Theta` theorem for every rectangular
 unitarily invariant norm.

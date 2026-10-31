@@ -4267,9 +4267,24 @@
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
         "RoadmapBridge.Integration"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "staged-partial",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun. 2026-10-31 upstream consumption SSP-C24: PR #19817 / accepted main commit 140f78ce562fc8b1652cc184a409bf38a70cb81f (included at pinned 463ab293070d4cb355d0a0e036469464070088bc) adapts the original donor symmetric two-orientation Davis--Kahan estimate; remove its old full proof, proof-only private lemmas and old local public theorem rather than keeping a forwarder. Retain the paper-facing PartIII alias, now pointing directly to UnitarilyInvariantSeminorm.mul_map_sinAngleOperator_le_map_sub. Preserve original DKPS source at e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean (Apache-2.0, Kitware, Jon Crall/GPT 5.6 High). Keep all other genuinely distinct one-sided, ordered, op-norm, Frobenius and spectral-distance results in the staging module. source_declarations is historical, not an active declaration index. This staged-partial record is not an assertion of full upstream completion or a compiler pass.",
+      "accepted_upstream_declarations": [
+        "TauCeti.UnitarilyInvariantSeminorm.mul_map_sub_starProjection_le_map_sub",
+        "TauCeti.UnitarilyInvariantSeminorm.mul_map_sinAngleOperator_le_map_sub",
+        "TauCeti.UnitarilyInvariantSeminorm.map_comp_starProjection_sub_starProjection_comp_le"
+      ],
+      "retired_local_declarations": [
+        "TauCeti.sinAngleOperator_perturbation_le",
+        "TauCeti.kyFanSum_smul_compression_le_of_intervalExteriorGap (private)",
+        "TauCeti.uiNorm_projection_sub_le_of_kyFanSum_le (private)",
+        "TauCeti.subtypeₗᵢ_toLinearMap_eq_subtype (private)",
+        "TauCeti.adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto (private)",
+        "TauCeti.adjoint_orthogonalProjectionOnto_eq_subtype (private)",
+        "TauCeti.adjoint_orthogonalProjectionOnto_comp_subtype (private)",
+        "TauCeti.adjoint_orthogonalProjectionOnto_comp_op_subtype (private)"
+      ]
     },
     {
       "source_module": "DavisKahan/Specialized/Statistics.lean",

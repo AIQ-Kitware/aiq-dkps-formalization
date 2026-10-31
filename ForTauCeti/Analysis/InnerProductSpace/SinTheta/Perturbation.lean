@@ -58,9 +58,9 @@ over it. It is divided at its own `## Perturbation form` boundary:
 * the residual, directed and two-sided projector-difference bounds are now in
   `ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds`, which this
   module imports;
-* this file keeps the **perturbation form** — the six private lemmas transporting
-  a bound across the canonical isometric inclusion of a subspace, and the wrappers
-  built on them: `sinTheta_perturbation_le`, `sinAngleOperator_perturbation_le`,
+* this file keeps the **perturbation form** — the transport lemmas for the
+  canonical isometric inclusion of a subspace, and the theorems built on them:
+  `sinTheta_perturbation_le`,
   `sinTheta_perturbation_le_of_orderedGap`,
   `opNorm_sinThetaMap_le_of_intervalGap`,
   `frobenius_sinTheta_residual_le_of_spectralDistance`,
@@ -68,10 +68,25 @@ over it. It is divided at its own `## Perturbation form` boundary:
   `sinTheta_perturbation_le_of_spectralDistance`.
 
 The seam is that transport: nothing in `DirectedBounds` mentions a domain
-isometry, and everything kept here does. **No statement, signature, proof,
-attribute or declaration name changed**, and a consumer's
-`import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation` still
-resolves to the whole development.
+isometry, and the perturbation theorems kept here use that transport.
+At the time of the split, statements, signatures, proofs and declaration
+names were unchanged. The import
+`ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation` continued to
+provide the development. Later upstream consumption is recorded below.
+
+## October 31 accepted-upstream consumption
+
+The original `sinAngleOperator_perturbation_le` was the finite-dimensional
+symmetric, two-orientation, constant-one Davis--Kahan bound. TauCeti #19817
+adapted it into the canonical `UnitarilyInvariantSeminorm` API, including the
+projector-difference and symmetric sine-angle formulations. Its local proof,
+private cross-block/adjoint helpers, and Ky Fan block-assembly lemmas have been
+removed. `DavisKahan.Sources.DavisKahan1970.PartIII` uses the accepted
+`mul_map_sinAngleOperator_le_map_sub` theorem directly through its source-specific alias.
+The one-sided, ordered-gap, spectral-distance, and Frobenius results in this
+module are separate results and remain maintained. The pre-consumption source
+and detailed declaration mapping are recorded in the upstream contribution
+census and extraction manifest.
 -/
 
 public section
@@ -104,57 +119,6 @@ private theorem adjoint_subtype_eq_orthogonalProjectionOnto
   change ⟪U.starProjection x, (y : E)⟫_𝕜 = ⟪x, (y : E)⟫_𝕜
   rw [U.inner_starProjection_left_eq_right,
     U.starProjection_eq_self_iff.mpr y.2]
-
-omit [FiniteDimensional 𝕜 E] in
-/-- The linear map underlying the canonical isometric inclusion is the
-ordinary submodule inclusion. -/
-private theorem subtypeₗᵢ_toLinearMap_eq_subtype
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    U.subtypeₗᵢ.toLinearMap = U.subtype := by
-  ext x
-  rfl
-
-/-- The adjoint of the ordinary submodule inclusion is orthogonal projection
-onto that subspace. -/
-private theorem adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    LinearMap.adjoint U.subtype =
-      U.orthogonalProjectionOnto.toLinearMap := by
-  rw [← subtypeₗᵢ_toLinearMap_eq_subtype U]
-  exact adjoint_subtype_eq_orthogonalProjectionOnto U
-
-/-- The adjoint of orthogonal projection onto a subspace, viewed as a map into
-that subspace, is the canonical inclusion. -/
-private theorem adjoint_orthogonalProjectionOnto_eq_subtype
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    LinearMap.adjoint U.orthogonalProjectionOnto.toLinearMap = U.subtype := by
-  rw [← adjoint_subtype_eq_orthogonalProjectionOnto U,
-    LinearMap.adjoint_adjoint,
-    subtypeₗᵢ_toLinearMap_eq_subtype]
-
-/-- **The adjoint of a cross-block map.**  Projecting onto `W` after including `V` transposes to
-projecting onto `V` after including `W`.
-
-Both `sin Θ` block arguments in this file form the two off-diagonal blocks of a perturbation and
-then need each one's adjoint; without this the same three-lemma `simp only` is written once per
-block. -/
-private theorem adjoint_orthogonalProjectionOnto_comp_subtype
-    (W V : Submodule 𝕜 E) [W.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    LinearMap.adjoint (W.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype) =
-      V.orthogonalProjectionOnto.toLinearMap ∘ₗ W.subtype := by
-  simp only [LinearMap.adjoint_comp, adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
-    adjoint_orthogonalProjectionOnto_eq_subtype]
-
-/-- The same transposition with a symmetric operator inserted between the projection and the
-inclusion. -/
-private theorem adjoint_orthogonalProjectionOnto_comp_op_subtype
-    (W V : Submodule 𝕜 E) [W.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    {T : E →ₗ[𝕜] E} (hT : LinearMap.adjoint T = T) :
-    LinearMap.adjoint (W.orthogonalProjectionOnto.toLinearMap ∘ₗ (T ∘ₗ V.subtype)) =
-      (V.orthogonalProjectionOnto.toLinearMap ∘ₗ T) ∘ₗ W.subtype := by
-  simp only [LinearMap.adjoint_comp, hT,
-    adjoint_subtypeLinearMap_eq_orthogonalProjectionOnto,
-    adjoint_orthogonalProjectionOnto_eq_subtype, LinearMap.comp_assoc]
 
 /-- Transporting the rectangular sine embedding on `U` back to the ambient
 square space gives the one-sided sine cross projection `P_{Vᗮ} P_U`. -/
@@ -243,315 +207,6 @@ theorem sinTheta_perturbation_le
         δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) := by rw [hsin]
     _ ≤ NU (residual B U.subtypeₗᵢ (A.restrict hU)) := hres
     _ ≤ N (B - A) := hresBound
-
-/-- **The scaled compression of a reducing block is Ky Fan dominated by its
-residual.**  For symmetric `A`, `B` with `U` invariant under `A` and `Wᗮ`
-invariant under `B`, an interval/exterior gap of width `δ` gives
-
-`Σₖ σ (δ • P_{Wᗮ}|_U) ≤ Σₖ σ (P_{Wᗮ} (B - A)|_U)`
-
-at every `k`.  The proof restricts both operators to their blocks, transports the
-gap through `pointSpectrumIn_restrict_iff`, checks the Sylvester equation
-`B|_{Wᗮ} X - X A|_U = C`, and applies `kyFan_sylvester_le_of_intervalGap`.
-
-`sinAngleOperator_perturbation_le` needs this on both diagonals — once as
-`(A, B, U, V)` and once as `(B, A, V, U)` — and built it twice inline. -/
-private theorem kyFanSum_smul_compression_le_of_intervalExteriorGap
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U W : Submodule 𝕜 E} [W.HasOrthogonalProjection]
-    (hU : IsInvariant A U) (hWperp : IsInvariant B Wᗮ)
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap A U B Wᗮ a b δ) (k : ℕ) :
-    TauCeti.kyFanSum k
-        (((δ : ℝ) : 𝕜) •
-          (Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype)) ≤
-      TauCeti.kyFanSum k
-        (Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)) := by
-  set AU : U →ₗ[𝕜] U := A.restrict hU with hAUdef
-  set BWperp : Wᗮ →ₗ[𝕜] Wᗮ := B.restrict hWperp with hBWdef
-  set X : U →ₗ[𝕜] Wᗮ :=
-    Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype with hXdef
-  set C : U →ₗ[𝕜] Wᗮ :=
-    Wᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype) with hCdef
-  have hAU : AU.IsSymmetric := hA.restrict_invariant hU
-  have hBWperp : BWperp.IsSymmetric := hB.restrict_invariant hWperp
-  have hgap' : IntervalSylvesterGap BWperp AU a b δ := by
-    constructor
-    · exact (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
-    · exact (pointSpectrumIn_restrict_iff B hWperp
-        {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}).2 hgap.2
-  have hEq : BWperp ∘ₗ X - X ∘ₗ AU = C := by
-    ext x
-    have hcomm := projection_apply_comm_of_isInvariant hB hWperp (x : E)
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change Wᗮ.starProjection (B (x : E)) =
-      B (Wᗮ.starProjection (x : E)) at hcomm
-    -- and the goal, in the matching shape: `simp only` on the local definitions
-    -- normalises further and leaves the rewrite below nothing to match.
-    change B (Wᗮ.starProjection (x : E)) -
-        Wᗮ.starProjection (A (x : E)) =
-      Wᗮ.starProjection ((B - A) (x : E))
-    rw [← hcomm]
-    simp only [LinearMap.sub_apply, map_sub]
-  -- states the goal with the local definitions unfolded, in the exact shape the
-  -- following rewrite needs. `simp only` on those definitions normalises further
-  -- and the rewrite then has nothing to match -- tried, and it fails here.
-  rw [TauCeti.kyFanSum_eq_kyFan k (((δ : ℝ) : 𝕜) • X),
-    TauCeti.kyFanSum_eq_kyFan k C]
-  rw [map_smul_eq_mul,
-    RCLike.norm_ofReal, abs_of_nonneg hδ.le]
-  simpa only [TauCeti.kyFanSum_eq_kyFan] using
-    kyFan_sylvester_le_of_intervalGap hBWperp hAU hδ hgap' hEq k
-
-/-- **The orthogonal block sum turns the two diagonal Ky Fan bounds into a bound
-on the projector difference.**  Transport the two compressions into
-`WithLp 2 (U × Uᗮ) → WithLp 2 (Vᗮ × V)` coordinates, take the orthogonal block
-sum, and read the result back through the ambient norm.
-
-This is the middle third of `sinAngleOperator_perturbation_le`, stated
-separately because it is one step: everything between "the diagonals are Ky Fan
-dominated" and "the projector difference is norm dominated" belongs to it, and
-none of it mentions the spectral gap that produced the diagonal bounds.
-
-**Why it is still long after that split.**  Roughly a third of the body is ten
-`let`s naming the block-coordinate data: the two cross blocks `XUV`/`XVU` and
-their residuals `CUV`/`CVU`, the two orthogonal decompositions `EU`/`EV`, the
-transported norm `NB`, the two assembled block maps, and `liftBlock`.  Those are
-not intermediate *steps* and factoring them out means passing all ten back in as
-arguments, which trades length for a signature nobody can read.  The argument
-proper is four moves: block the two sides, scale out `δ`, transport the norm
-through `liftBlock`, and identify the two lifted blocks with the operators in
-the statement. -/
-private theorem uiNorm_projection_sub_le_of_kyFanSum_le
-    (N : UnitarilyInvariantSeminorm 𝕜 E E)
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    {δ : ℝ} (hδ : 0 < δ)
-    (hkyUV : ∀ k, TauCeti.kyFanSum k
-        (((δ : ℝ) : 𝕜) •
-          (Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype)) ≤
-      TauCeti.kyFanSum k
-        (Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)))
-    (hkyVU : ∀ k, TauCeti.kyFanSum k
-        (((δ : ℝ) : 𝕜) •
-          (-(Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype).adjoint)) ≤
-      TauCeti.kyFanSum k
-        (Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
-          ((A - B) ∘ₗ V.subtype)).adjoint) :
-    δ * N (projection U - projection V) ≤
-      N ((B - A) ∘ₗ projection U - projection V ∘ₗ (B - A)) := by
-  let XUV : U →ₗ[𝕜] Vᗮ :=
-    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype
-  let CUV : U →ₗ[𝕜] Vᗮ :=
-    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)
-  let XVU : V →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype
-  let CVU : V →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((A - B) ∘ₗ V.subtype)
-  let EU : E ≃ₗᵢ[𝕜] WithLp 2 (U × Uᗮ) := U.orthogonalDecomposition
-  let EV : E ≃ₗᵢ[𝕜] WithLp 2 (Vᗮ × V) :=
-    V.orthogonalDecomposition.trans
-      (LinearIsometryEquiv.withLpProdComm 2 𝕜 V Vᗮ)
-  let NB : UnitarilyInvariantSeminorm 𝕜
-      (WithLp 2 (U × Uᗮ)) (WithLp 2 (Vᗮ × V)) :=
-    UnitarilyInvariantSeminorm.domainIsometryTransport
-      (N.codomainIsometryTransport EV.symm.toLinearIsometry)
-      EU.symm.toLinearIsometry
-  let Xblock := UnitarilyInvariantSeminorm.orthogonalBlockSum
-    XUV (-XVU.adjoint)
-  let Cblock := UnitarilyInvariantSeminorm.orthogonalBlockSum
-    CUV CVU.adjoint
-  have hNBscaled : NB (((δ : ℝ) : 𝕜) • Xblock) ≤ NB Cblock := by
-    have h :=
-      UnitarilyInvariantSeminorm.orthogonalBlockSum_apply_le_of_kyFanSum_le
-        NB hkyUV hkyVU
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change NB (((δ : ℝ) : 𝕜) •
-        UnitarilyInvariantSeminorm.orthogonalBlockSum
-          XUV (-XVU.adjoint)) ≤
-      NB (UnitarilyInvariantSeminorm.orthogonalBlockSum
-        CUV CVU.adjoint)
-    rw [← UnitarilyInvariantSeminorm.orthogonalBlockSum_smul]
-    exact h
-  have hNB : δ * NB Xblock ≤ NB Cblock := by
-    rw [map_smul_eq_mul NB, RCLike.norm_ofReal, abs_of_nonneg hδ.le] at hNBscaled
-    exact hNBscaled
-  -- The ambient operator represented by a block map in the `U ⊕ Uᗮ` domain
-  -- and `Vᗮ ⊕ V` codomain coordinates.  This uses the exact adjoint appearing
-  -- in `domainIsometryTransport`, so the norm identity below is definitional.
-  let liftBlock :
-      ((WithLp 2 (U × Uᗮ)) →ₗ[𝕜] (WithLp 2 (Vᗮ × V))) →
-        (E →ₗ[𝕜] E) := fun T =>
-    EV.symm.toLinearIsometry.toLinearMap ∘ₗ T ∘ₗ
-      LinearMap.adjoint EU.symm.toLinearIsometry.toLinearMap
-  have hNB_apply (T : WithLp 2 (U × Uᗮ) →ₗ[𝕜]
-      WithLp 2 (Vᗮ × V)) : NB T = N (liftBlock T) := by
-    rfl
-  have hEUadj :
-      LinearMap.adjoint EU.symm.toLinearIsometry.toLinearMap =
-        EU.toLinearMap := by
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change LinearMap.adjoint EU.symm.toLinearMap = EU.toLinearMap
-    exact (EU.symm).adjoint_toLinearMap_eq_symm
-  have hXVUadj :
-      XVU.adjoint =
-        V.orthogonalProjectionOnto.toLinearMap ∘ₗ Uᗮ.subtype :=
-    adjoint_orthogonalProjectionOnto_comp_subtype Uᗮ V
-  have hCVUadj :
-      CVU.adjoint =
-        (V.orthogonalProjectionOnto.toLinearMap ∘ₗ (A - B)) ∘ₗ
-          Uᗮ.subtype :=
-    adjoint_orthogonalProjectionOnto_comp_op_subtype Uᗮ V
-      (by simp only [map_sub, hA.adjoint_eq, hB.adjoint_eq])
-  have hXlift : liftBlock Xblock = projection U - projection V := by
-    ext x
-    simp [liftBlock, Xblock, EU, EV, hEUadj, hXVUadj, XUV,
-      UnitarilyInvariantSeminorm.orthogonalBlockSum,
-      projection, Submodule.orthogonalDecomposition_apply,
-      LinearMap.comp_apply]
-  have hClift : liftBlock Cblock =
-      (B - A) ∘ₗ projection U - projection V ∘ₗ (B - A) := by
-    ext x
-    (simp [liftBlock, Cblock, EU, EV, hEUadj, CUV, hCVUadj,
-      UnitarilyInvariantSeminorm.orthogonalBlockSum,
-      projection, Submodule.orthogonalDecomposition_apply,
-      LinearMap.comp_apply]; module)
-  rw [hNB_apply, hNB_apply, hXlift, hClift] at hNB
-  exact hNB
-
-/-- **Symmetric sharp `sin Θ` theorem.**  The full-space angle operator
-contains both one-sided sine blocks.  For a general UI norm the constant-one
-conclusion therefore requires a forward and reverse interval/exterior gap;
-two arbitrary mixed spectral-distance gaps support only the separate
-`π/2` theory.  A single interval/exterior gap controls only
-`sinThetaMap U V` (except in the operator norm).  This is the finite
-Davis--Kahan Proposition 6.1 configuration.
--/
-theorem sinAngleOperator_perturbation_le
-    (N : UnitarilyInvariantSeminorm 𝕜 E E)
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
-    {a b c d δ : ℝ} (hδ : 0 < δ)
-    (hgapUV : PointIntervalExteriorGap A U B Vᗮ a b δ)
-    (hgapVU : PointIntervalExteriorGap B V A Uᗮ c d δ) :
-    δ * N (sinAngleOperator U V) ≤ N (B - A) := by
-  classical
-  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
-  have hVperp : IsInvariant B Vᗮ := isInvariant_orthogonal_of_isSymmetric hB hV
-  -- The two compressions the block-sum below is built from.
-  let XUV : U →ₗ[𝕜] Vᗮ :=
-    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype
-  let CUV : U →ₗ[𝕜] Vᗮ :=
-    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
-      ((B - A) ∘ₗ U.subtype)
-  have hkyUV : ∀ k,
-      TauCeti.kyFanSum k
-          (((δ : ℝ) : 𝕜) • XUV) ≤
-        TauCeti.kyFanSum k CUV :=
-    kyFanSum_smul_compression_le_of_intervalExteriorGap hA hB hU hVperp hδ hgapUV
-  -- The mirrored compression, for the other diagonal.
-  let XVU : V →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ V.subtype
-  let CVU : V →ₗ[𝕜] Uᗮ :=
-    Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ
-      ((A - B) ∘ₗ V.subtype)
-  have hkyVU : ∀ k,
-      TauCeti.kyFanSum k
-          (((δ : ℝ) : 𝕜) • (-XVU.adjoint)) ≤
-        TauCeti.kyFanSum k CVU.adjoint := by
-    intro k
-    have hbase0 :=
-      kyFanSum_smul_compression_le_of_intervalExteriorGap hB hA hV hUperp hδ hgapVU k
-    rw [TauCeti.kyFanSum_real_smul k XVU hδ.le] at hbase0
-    have hbase : δ * TauCeti.kyFanSum k XVU ≤
-        TauCeti.kyFanSum k CVU := by
-      simpa [CVU] using hbase0
-    have hleft :
-        TauCeti.kyFanSum k
-            (-XVU.adjoint) =
-          TauCeti.kyFanSum k XVU := by
-      calc
-        TauCeti.kyFanSum k
-            (-XVU.adjoint) =
-          TauCeti.kyFanSum k
-              XVU.adjoint := by
-          rw [TauCeti.kyFanSum_eq_kyFan k (-XVU.adjoint),
-            TauCeti.kyFanSum_eq_kyFan k XVU.adjoint]
-          exact map_neg_eq_map
-            (UnitarilyInvariantSeminorm.kyFan (𝕜 := 𝕜) (E := Uᗮ) (F := V) k)
-            XVU.adjoint
-        _ = TauCeti.kyFanSum k XVU := by
-          unfold TauCeti.kyFanSum
-          exact Finset.sum_congr rfl fun i _ =>
-            XVU.singularValues_adjoint_apply (i : ℕ)
-    have hright :
-        TauCeti.kyFanSum k CVU.adjoint =
-          TauCeti.kyFanSum k CVU := by
-      unfold TauCeti.kyFanSum
-      exact Finset.sum_congr rfl fun i _ =>
-        CVU.singularValues_adjoint_apply (i : ℕ)
-    calc
-      TauCeti.kyFanSum k
-          (((δ : ℝ) : 𝕜) • (-XVU.adjoint)) =
-          δ * TauCeti.kyFanSum k
-            (-XVU.adjoint) :=
-        TauCeti.kyFanSum_real_smul
-          k (-XVU.adjoint) hδ.le
-      _ = δ * TauCeti.kyFanSum k XVU := by
-        rw [hleft]
-      _ ≤ TauCeti.kyFanSum k CVU := hbase
-      _ = TauCeti.kyFanSum k CVU.adjoint :=
-        hright.symm
-  -- Orthogonal decompositions of the ambient space along each subspace.
-  have hNB : δ * N (projection U - projection V) ≤
-      N ((B - A) ∘ₗ projection U - projection V ∘ₗ (B - A)) :=
-    uiNorm_projection_sub_le_of_kyFanSum_le N hA hB hδ hkyUV hkyVU
-  rw [uiNorm_projection_sub_eq_sinAngleOperator N U V] at hNB
-  -- The perturbation and the two block reflections.
-  let H : E →ₗ[𝕜] E := B - A
-  let JU : E ≃ₗᵢ[𝕜] E := U.reflection
-  let JV : E ≃ₗᵢ[𝕜] E := V.reflection
-  have hchecker : H ∘ₗ projection U - projection V ∘ₗ H =
-      (((2 : ℝ)⁻¹ : ℝ) : 𝕜) •
-        (H ∘ₗ JU.toLinearMap - JV.toLinearMap ∘ₗ H) := by
-    ext x
-    simp [H, JU, JV, projection, Submodule.reflection_apply,
-      LinearMap.comp_apply]
-    module
-  have hcheckerNorm :
-      N (H ∘ₗ projection U - projection V ∘ₗ H) ≤ N H := by
-    rw [hchecker, map_smul_eq_mul N, RCLike.norm_ofReal,
-      abs_of_nonneg (by positivity : 0 ≤ (2 : ℝ)⁻¹)]
-    calc
-      (2 : ℝ)⁻¹ * N (H ∘ₗ JU.toLinearMap - JV.toLinearMap ∘ₗ H) ≤
-          (2 : ℝ)⁻¹ *
-            (N (H ∘ₗ JU.toLinearMap) + N (-(JV.toLinearMap ∘ₗ H))) := by
-        gcongr
-        simpa [sub_eq_add_neg] using
-          map_add_le_add N (H ∘ₗ JU.toLinearMap) (-(JV.toLinearMap ∘ₗ H))
-      _ = (2 : ℝ)⁻¹ * (N H + N H) := by
-        have hJU : JU.toLinearMap = (JU : E →ₗ[𝕜] E) := by
-          ext x
-          simp
-        have hJV : JV.toLinearMap = (JV : E →ₗ[𝕜] E) := by
-          ext x
-          simp
-        have hright : N (H ∘ₗ JU.toLinearMap) = N H := by
-          rw [hJU]
-          exact N.map_comp_linearIsometryEquiv JU H
-        have hleft : N (JV.toLinearMap ∘ₗ H) = N H := by
-          rw [hJV]
-          exact N.map_linearIsometryEquiv_comp JV H
-        rw [map_neg_eq_map N, hright, hleft]
-      _ = N H := by ring
-  exact hNB.trans (by simpa [H] using hcheckerNorm)
 
 /-- Ordered half-line perturbation form.
 -/

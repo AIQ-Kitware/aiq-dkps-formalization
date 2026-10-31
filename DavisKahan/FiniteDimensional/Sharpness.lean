@@ -1776,8 +1776,10 @@ theorem intervalExteriorGap_sinTheta_model_symm {a b θ : ℝ} (hab : a < b) :
 Both operators are symmetric, each of the two lines is invariant under its own operator, the
 interval/exterior gap holds in both orientations with `δ = b - a`, and the residual is exactly
 `modelSinThetaPerturbation a b θ`.  Consequently `sinTheta_model_equality` -- and through it
-`sinTheta_constant_optimal` -- is equality in `TauCeti.sinAngleOperator_perturbation_le`, that
-is, sharpness of the **theorem's** constant, not of a matrix identity. -/
+`sinTheta_constant_optimal` -- is equality in the symmetric full-projector
+conclusion of `UnitarilyInvariantSeminorm.mul_map_sub_starProjection_le_map_sub`
+(after `uiNorm_projection_sub_eq_sinAngleOperator`), establishing the theorem's
+constant is sharp, not just a matrix-identity constant. -/
 theorem sinTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b) :
     (modelGappedOperator (𝕜 := 𝕜) a b).IsSymmetric ∧
       (modelRotatedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
@@ -1799,9 +1801,12 @@ theorem sinTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b) :
 
 /-- **Equality in the `sin Θ` perturbation theorem.**
 
-`TauCeti.sinAngleOperator_perturbation_le` gives `δ * N (sin Θ) ≤ N (B - A)` for an admissible
-pair; `sinTheta_model_isAdmissiblePair` supplies one with `δ = b - a`, and here the inequality
-is an equality for every unitarily invariant seminorm. -/
+The accepted `UnitarilyInvariantSeminorm.mul_map_sub_starProjection_le_map_sub`
+gives `δ * N (P_U - P_V) ≤ N (B - A)` for an admissible pair. The existing
+`uiNorm_projection_sub_eq_sinAngleOperator` bridge identifies its left-hand
+norm with the local model's `N (sin Θ)`. The admissible pair is given by
+`sinTheta_model_isAdmissiblePair` with `δ = b - a`, and this theorem proves
+equality for every unitarily invariant seminorm. -/
 theorem sinTheta_perturbation_le_model_equality
     (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜) (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :

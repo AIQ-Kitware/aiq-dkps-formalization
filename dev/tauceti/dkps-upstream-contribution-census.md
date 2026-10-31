@@ -1869,3 +1869,59 @@ consumption change require focused and downstream Lean compilation in the live
 checkout; this dated entry documents the proposed migration, not a fabricated
 build result. The prior #18927 row in the October 21 historical table records
 its then-open status and must not be read as current.
+
+
+## 2026-10-31: consume accepted symmetric two-orientation Davis--Kahan (SSP-C24)
+
+**Integration:** [TauCeti #19817](https://github.com/TauCetiProject/TauCeti/pull/19817),
+accepted main commit [`140f78ce562fc8b1652cc184a409bf38a70cb81f`](https://github.com/TauCetiProject/TauCeti/commit/140f78ce562fc8b1652cc184a409bf38a70cb81f),
+present in the supplied TauCeti main tree at `463ab293070d4cb355d0a0e036469464070088bc`.
+The accepted source
+`TauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/SinTheta/Symmetric.lean`
+explicitly names the original DKPS `sinAngleOperator_perturbation_le` as adapted
+source (Kitware / Apache-2.0; Jon Crall and GPT-6 for the accepted adaptation).
+It provides the symmetric constant-one theorem for both projector difference
+(`UnitarilyInvariantSeminorm.mul_map_sub_starProjection_le_map_sub`) and the
+canonical full-space sine angle operator
+(`UnitarilyInvariantSeminorm.mul_map_sinAngleOperator_le_map_sub`), with the two
+opposite interval/exterior spectral-gap hypotheses. The upstream version uses
+bounded operators and `Submodule.sinAngleOperator`, while the DKPS original used
+linear maps, `TauCeti.sinAngleOperator`, and an explicit `0 < δ` assumption. The
+upstream version also handles `δ ≤ 0`. This is a theorem-level proof adaptation
+with broader scalar-gap scope, not merely a common roadmap number.
+
+**Historical source:** DKPS `e4637c3919ae`,
+`ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean`; before its
+extraction, `DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean` (see the
+manifest's historical `source_module` and `source_declarations`). Copyright
+2026 Kitware, Inc.; authors Jon Crall and GPT 5.6 High; Apache-2.0. The
+original complete proof is recoverable with:
+`git show e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean`.
+
+**Retired maintenance:** Delete the local public theorem
+`TauCeti.sinAngleOperator_perturbation_le`, its two private Ky Fan/compression
+proof stages, and five private adjoint/subtype transport helpers used only by
+that symmetric proof. No local forwarding theorem or staging alias is retained.
+The original Part III source-facing name
+`TauCeti.DavisKahan.FiniteDimensional.partIII_sinTheta_angleOperator_uiNorm`
+now aliases the **accepted upstream**
+`UnitarilyInvariantSeminorm.mul_map_sinAngleOperator_le_map_sub` directly. The
+original local theorem and its eight retired local declarations remain indexed
+in the extraction manifest's historical provenance; the upstream accepted
+module remains responsible for the reusable mathematics.
+
+**Preserved:** The distinct directed/one-sided `sinTheta_perturbation_le`,
+`sinTheta_perturbation_le_of_orderedGap`, operator-norm interval gap, Frobenius
+spectral-distance theorem, `frobenius_sinTheta_le`, `kyFan_sinTheta_le`, and
+other spectral-distance results are not covered by SSP-C24 and remain local.
+The planar sharpness theorem remains and its documentation now identifies the
+accepted theorem as the target of its constant-one equality. The previous
+source name appears in historical documentation only.
+
+**Validation boundary:** This entry records source comparison and a proposed
+upstream-consumption change, not a local Lean compilation. With the accepted
+TauCeti pin, run `lake exe cache get` before focused builds of
+`ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation`,
+`DavisKahan.Sources.DavisKahan1970.PartIII`,
+`DavisKahan.FiniteDimensional.Sharpness`, and finally the default project
+build. Commit only after those pass.
