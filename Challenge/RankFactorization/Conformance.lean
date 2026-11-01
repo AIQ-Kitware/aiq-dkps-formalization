@@ -24,9 +24,9 @@ statements and use only the permitted kernel dependencies.
 
 public section
 
-namespace TauCeti.Matrix
+namespace Matrix
 
--- Binder names match the library source (`{𝕜 m n}`); the comparator exports
+-- Binder names match the native TauCeti theorem (`{𝕜 m n}`); the comparator exports
 -- de Bruijn terms so names do not affect matching, but keeping them identical
 -- avoids any ambiguity.
 --
@@ -34,19 +34,18 @@ namespace TauCeti.Matrix
 -- signature: it appeared in the type and was used only by the `Pi.single`
 -- witness in the proof, which `classical` supplies.  A challenge statement
 -- follows the API it validates; it does not pin it.
-open Module (finrank)
 open _root_.Matrix
 
 variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n]
 
 /-- Rank factorization (exact): every matrix factors as `M = L * R` with inner
 dimension `Fin M.rank`. -/
-theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
+theorem exists_eq_mul_fin_rank (M : Matrix m n 𝕜) :
     ∃ (L : Matrix m (Fin M.rank) 𝕜) (R : Matrix (Fin M.rank) n 𝕜), M = L * R := by
   classical
-  have hdim : finrank 𝕜 (LinearMap.range M.mulVecLin) = M.rank := rfl
-  let b : Module.Basis (Fin M.rank) 𝕜 (LinearMap.range M.mulVecLin) :=
-    Module.finBasisOfFinrankEq 𝕜 _ hdim
+  have hdim : _root_.Module.finrank 𝕜 (LinearMap.range M.mulVecLin) = M.rank := rfl
+  let b : _root_.Module.Basis (Fin M.rank) 𝕜 (LinearMap.range M.mulVecLin) :=
+    _root_.Module.finBasisOfFinrankEq 𝕜 _ hdim
   have hcol : ∀ j : n, (fun i => M i j) ∈ LinearMap.range M.mulVecLin := by
     intro j
     refine ⟨Pi.single j 1, ?_⟩
@@ -66,7 +65,7 @@ theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
 /-- Rank factorization (padded to `Fin r` for any `M.rank ≤ r`). -/
 theorem exists_eq_mul_of_rank_le (M : Matrix m n 𝕜) {r : ℕ} (h : M.rank ≤ r) :
     ∃ (L : Matrix m (Fin r) 𝕜) (R : Matrix (Fin r) n 𝕜), M = L * R := by
-  obtain ⟨L₀, R₀, hM⟩ := exists_eq_mul_rank M
+  obtain ⟨L₀, R₀, hM⟩ := exists_eq_mul_fin_rank M
   refine ⟨Matrix.of fun i k => if hk : (k : ℕ) < M.rank then L₀ i ⟨k, hk⟩ else 0,
     Matrix.of fun k j => if hk : (k : ℕ) < M.rank then R₀ ⟨k, hk⟩ j else 0, ?_⟩
   ext i j
@@ -100,4 +99,4 @@ theorem rank_le_iff_exists_eq_mul (M : Matrix m n 𝕜) (r : ℕ) :
     _ ≤ Fintype.card (Fin r) := L.rank_le_card_width
     _ = r := Fintype.card_fin r
 
-end TauCeti.Matrix
+end Matrix

@@ -11,7 +11,7 @@ public import Mathlib.Analysis.Matrix.Spectrum
 public import Mathlib.Analysis.Matrix.PosDef
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.InnerProductSpace.PiL2
-public import ForTauCeti.LinearAlgebra.Matrix.RankFactorization
+public import TauCeti.LinearAlgebra.Matrix.Rank
 
 /-! # Rank-constrained positive-semidefinite factorization
 
@@ -24,7 +24,7 @@ The factorization is assembled from two reusable pieces:
 * the **square** factorization `B = Aᴴ * A` with `A` square, built spectrally
   (`A = √D · Uᴴ` for the spectral decomposition `B = U D Uᴴ`); and
 * the **rank factorization** `A = L * R` through `Fin d`
-  (`TauCeti.Matrix.exists_eq_mul_of_rank_le`), which compresses the inner
+  (`Matrix.exists_eq_mul_of_rank_le`), which compresses the inner
   dimension.
 
 A second application of the square factorization to `Lᴴ * L` then yields the
@@ -69,7 +69,8 @@ reproved through the rank-factorization API by Claude Fable 5 (claude-fable-5[1m
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
   Mathlib, `TauCeti` and `ForTauCeti` (rule 2 of
-  `scripts/check_dependency_layers.py`); this module imports Mathlib only.
+  `scripts/check_dependency_layers.py`); this module uses accepted TauCeti
+  matrix rank factorization.
 
 ## Provenance
 
@@ -186,7 +187,7 @@ theorem PosSemidef.exists_conjTranspose_mul_self_of_rank_le
   have hrankA₀ : A₀.rank ≤ d := by
     rwa [hA₀, rank_conjTranspose_mul_self] at hrank
   -- Compress the inner dimension to `Fin d` by rank factorization.
-  obtain ⟨L, R, hLR⟩ := exists_eq_mul_of_rank_le A₀ hrankA₀
+  obtain ⟨L, R, hLR⟩ := _root_.Matrix.exists_eq_mul_of_rank_le A₀ hrankA₀
   -- Absorb the leftover Gram factor `Lᴴ * L` by a second square factorization.
   obtain ⟨S, hS⟩ :=
     PosSemidef.exists_eq_conjTranspose_mul_self (posSemidef_conjTranspose_mul_self L)
