@@ -5349,6 +5349,29 @@
       "status": "staged",
       "upstream_pr": null,
       "migration_note": "October 26, following DKPS 9b783a9fd: remove the three source-name forwarding lemmas and their entire facade module. All maintained callers use the genuine donor results directly, renamed to the canonical SameSingularValues terminology, without aliases. The donor drops its unnecessary dependency on SameSequence in favor of CanonicalGauge; its comparison proofs and full hypotheses are preserved. The final Tau Ceti path is prospective: these subspace-embedding and contractive-inverse statements are not claimed accepted upstream. Native Isometry covers surjective coordinate equivalences; native Modulus pointwise comparison requires complete targets. Neither is substituted for the stronger incomplete-target zero-extension scope. Historical source declarations above preserve pre-retirement names; current names are explicit in maintained_declarations. The source norm/representative module remains a separate paper-facing dependency. Adjoint is imported explicitly from Mathlib instead of being obtained incidentally through the former SameSequence import."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.ReducedExtension",
+      "source_declarations": [
+        "TauCeti.norm_sq_eq_starProjection_add_sub",
+        "TauCeti.re_inner_reducedExtension_self"
+      ],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.ReducedExtension",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Projection.Block",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SpectralSubspacePerturbation SSP-C09/C10: reduced extensions and spectral form bounds",
+      "provenance_class": "Kitware DKPS source, Jon Crall and Claude Opus 5, Apache-2.0; TauCeti PR #19277 explicitly adapts the bounded reduced-extension mathematics from the DKPS donor, but does not replace its arbitrary LinearMap generality",
+      "direct_dependencies": [
+        "Mathlib.Analysis.InnerProductSpace.Projection.Basic"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm (no longer imports this module: uses accepted ContinuousLinearMap upper/lower bounds)"
+      ],
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/19277",
+      "migration_note": "November 1 upstream consumption: preserve the remaining pointwise TauCeti.re_inner_reducedExtension_self theorem in ForTauCeti/Analysis/InnerProductSpace/ReducedExtension.lean because it applies to arbitrary possibly-discontinuous linear maps on any normed inner-product space; accepted TauCeti ContinuousLinearMap.re_inner_reducedExtension_self does not subsume this scope. Retire the duplicated local TauCeti.norm_sq_eq_starProjection_add_sub helper; Mathlib/Submodule supplies norm_sq_eq_add_norm_sq_starProjection, already used by the native form bounds. Migrate the only maintained consumer ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm to TauCeti.Analysis.InnerProductSpace.Projection.Block and its stronger ContinuousLinearMap.le_re_inner_reducedExtension_self and ContinuousLinearMap.re_inner_reducedExtension_self_le; remove private consumer wrapper re_inner_reducedExtension_self'. Preserve the downstream theorem statement, both forms of its Sylvester residual identity, and paper-facing results. Upstream integration commit ca1eac22f582487d71706084aee719436b098186 (PR #19277) is an ancestor of pinned TauCeti main 463ab293070d4cb355d0a0e036469464070088bc. PR #19277 explicitly identifies the Kitware DKPS ReducedExtension.lean as the adaptation source; upstream Projection.Block also credits Spectra for the overall block-operator development. Historical donor source and both declarations at e4637c3919ae, authored Jon Crall and Claude Opus 5 (Apache-2.0). No forwarding theorem was introduced."
     }
   ]
 }

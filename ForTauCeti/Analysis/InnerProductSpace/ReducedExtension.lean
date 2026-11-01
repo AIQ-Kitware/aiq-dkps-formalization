@@ -37,18 +37,18 @@ the cross terms vanish by orthogonality, leaving
 
 `re ⟪R (P x), P x⟫ + κ ‖x - P x‖²`.
 
-The bounded sine-theta consumer is now provided directly by
-`TauCeti.Analysis.InnerProductSpace.Projection.SinTheta` and its native
-`Projection.Block` reduced-extension API. The local pointwise result retains
-arbitrary linear maps, including maps not known to be continuous.
+The bounded sine-theta consumers now use the accepted `Projection.Block`
+reduced-extension API directly. The remaining pointwise result still accepts
+arbitrary linear maps, including maps not known to be continuous, and has not
+been replaced upstream in that generality.
 
 ## Design
 
 The statement is about the **value** `R (P x) + κ • (x - P x)` rather than about
 a bundled operator. It applies directly to `R : E →ₗ[𝕜] E`, without continuity
-or finite-dimensionality. The remaining finite-dimensional sine-theta consumer
-packages its extension through `toContinuousLinearMap` and identifies the
-pointwise value with a one-line `simp`. Bounded consumers use the native API.
+or finite-dimensionality. The finite-dimensional sine-theta consumer now uses
+the accepted bounded-operator coercivity inequalities instead of wrapping this
+result; keep this theorem for its genuinely broader linear-map scope.
 
 Only **invariance** of `W` under `R` is assumed — not `Reduces`, and nothing
 about `Wᗮ`.  That is all the argument uses.
@@ -68,8 +68,10 @@ the cross terms.
   `ForTauCeti/Analysis/InnerProductSpace/SinTheta/OperatorNorm.lean`
   (`exists_isSymmetric_comp_sub_comp_eq`), where it had been proved four times
   inline.
-* Extraction class: **de-duplicated in place** — no statement is new; the four
-  inline copies become one named lemma and its two callers.
+* Extraction class: **de-duplicated in place** — the four historical inline
+  copies became one named lemma. The bounded consumers subsequently moved to
+  TauCeti's accepted `ContinuousLinearMap` API. The original pointwise
+  `LinearMap` result remains here with its broader scope.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — imports only Mathlib.
@@ -81,20 +83,6 @@ namespace TauCeti
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-
-/-- **Pythagoras for an orthogonal projection.**  A vector splits into its
-projection and the complementary part, and the squared norms add. -/
-theorem norm_sq_eq_starProjection_add_sub {W : Submodule 𝕜 E}
-    [W.HasOrthogonalProjection] (x : E) :
-    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 := by
-  have hpx : W.starProjection x ∈ W := W.starProjection_apply_mem x
-  have hrest : x - W.starProjection x ∈ Wᗮ :=
-    W.sub_starProjection_mem_orthogonal x
-  have h0 : RCLike.re ⟪W.starProjection x, x - W.starProjection x⟫_𝕜 = 0 := by
-    rw [Submodule.inner_right_of_mem_orthogonal hpx hrest]; simp
-  have hns := norm_add_sq (𝕜 := 𝕜) (W.starProjection x) (x - W.starProjection x)
-  rw [show W.starProjection x + (x - W.starProjection x) = x by abel, h0] at hns
-  linarith
 
 /-- **The quadratic form of a reduced extension splits.**  If `W` is invariant
 under `R`, then the extension agreeing with `R` on `W` and with the real scalar

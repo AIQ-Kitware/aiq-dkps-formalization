@@ -2175,3 +2175,39 @@ SampleMean, Variance, and matrix-concentration donors are not affected.
 Lean compilation. In the live checkout, build
 `DkpsQuench2026.Spectral.GramSpectrum` and the default `lake build` before
 committing the deletion.
+
+
+## 2026-11-01: consume SSP-C09/C10 bounds, retain the broader pointwise donor
+
+**Bounded-operator consumption (14 donor lines plus 26 consumer lines retired).**
+`ForTauCeti/Analysis/InnerProductSpace/SinTheta/OperatorNorm.lean` now imports
+`TauCeti.Analysis.InnerProductSpace.Projection.Block` directly. Its two
+coercivity/upper-bound steps use
+`ContinuousLinearMap.le_re_inner_reducedExtension_self` and
+`ContinuousLinearMap.re_inner_reducedExtension_self_le`, replacing the private
+`re_inner_reducedExtension_self'` wrapper and its repeated Pythagorean algebra.
+The public theorem `exists_isSymmetric_comp_sub_comp_eq`, its two coercivity
+bounds, its Sylvester residual identity, and downstream sin-Θ results retain
+their original statements. The local `norm_sq_eq_starProjection_add_sub`
+helper is retired: `Submodule.norm_sq_eq_add_norm_sq_starProjection` is
+available upstream and used by the native form-bound proofs.
+
+**Genuinely remaining statement.** The donor module stays in the tree, with its
+`TauCeti.re_inner_reducedExtension_self` theorem. Unlike the accepted bounded
+`ContinuousLinearMap` result, it assumes only an arbitrary
+`R : E →ₗ[𝕜] E`, without continuity or finite-dimensionality. This is
+strictly broader in carrier scope and is not claimed to be upstreamed. The
+last maintained consumer happens to convert finite-dimensional maps to bounded
+maps, so it can use the accepted API directly without requiring a new adapter.
+
+**Provenance.** [TauCeti PR #19277](https://github.com/TauCetiProject/TauCeti/pull/19277)
+explicitly identifies the maintained Kitware DKPS
+`ForTauCeti/Analysis/InnerProductSpace/ReducedExtension.lean` as the source
+for its accepted bounded reduced-extension mathematics. Integration commit
+`ca1eac22f582487d71706084aee719436b098186` is an ancestor of pinned main
+`463ab293070d4cb355d0a0e036469464070088bc`. The original DKPS donor at
+`e4637c3919ae` is attributed to Jon Crall and Claude Opus 5 (Apache-2.0).
+TauCeti `Projection.Block` separately credits the Spectra Formalization
+Project for the broader projection-block development. Both provenances are
+retained without claiming the proofs were copied verbatim. See the existing
+`extraction-manifest.json` for source declarations and replacement mapping.

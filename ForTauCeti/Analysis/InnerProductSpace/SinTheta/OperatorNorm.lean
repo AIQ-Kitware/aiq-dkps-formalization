@@ -15,7 +15,7 @@ Built on Tau Ceti's Sylvester bound without any dimension factor.
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.ReducedExtension
+public import TauCeti.Analysis.InnerProductSpace.Projection.Block
 public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 public import TauCeti.Analysis.InnerProductSpace.Sylvester
 import Mathlib.Analysis.InnerProductSpace.Semisimple
@@ -99,38 +99,6 @@ theorem starProjection_comp_toContinuousLinearMap_comm {T : E →ₗ[𝕜] E}
 
 variable {T S : E →ₗ[𝕜] E}
 
-omit [CompleteSpace E] in
-/-- **The quadratic form of a reduced extension splits.**  For `R : E →ₗ[𝕜] E`
-leaving `W` invariant, the bounded extension `R ∘L P_W + κ (1 - P_W)` — equal to
-`R` on `W` and to the scalar `κ` on `Wᗮ` — has quadratic form
-
-`re ⟪R (P x), P x⟫ + κ ‖x - P x‖²`.
-
-Only invariance of `W` is used, not reduction.  Both coercivity bounds of
-`exists_isSymmetric_comp_sub_comp_eq` are this identity: the lower at
-`R = T`, `W = U`, `κ = c + g`, the upper at `R = S`, `W = V`, `κ = c`.
-
-The mathematics is `TauCeti.re_inner_reducedExtension_self`, stated at the value
-`R (P x) + κ • (x - P x)`; this wrapper only rewrites the operator-composition
-presentation into that one. Bounded-operator consumers now use the accepted
-`ContinuousLinearMap.reducedExtension` API from `Projection.Block`. The linear-map
-identity remains available without assuming continuity of the original map. -/
-private theorem re_inner_reducedExtension_self' {R : E →ₗ[𝕜] E}
-    {W : Submodule 𝕜 E} [W.HasOrthogonalProjection]
-    (hinv : ∀ x ∈ W, R x ∈ W) (κ : ℝ) (x : E) :
-    RCLike.re ⟪(LinearMap.toContinuousLinearMap R ∘L W.starProjection
-        + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x, x⟫_𝕜
-      = RCLike.re ⟪R (W.starProjection x), W.starProjection x⟫_𝕜
-        + κ * ‖x - W.starProjection x‖ ^ 2 := by
-  have hval : (LinearMap.toContinuousLinearMap R ∘L W.starProjection
-      + ((κ : ℝ) : 𝕜) • (1 - W.starProjection)) x
-      = R (W.starProjection x) + ((κ : ℝ) : 𝕜) • (x - W.starProjection x) := by
-    simp only [add_apply, ContinuousLinearMap.comp_apply,
-      LinearMap.coe_toContinuousLinearMap', smul_apply, sub_apply,
-      one_apply_eq_self]
-  rw [hval]
-  exact TauCeti.re_inner_reducedExtension_self hinv κ x
-
 /-- **The norm-free Davis–Kahan setup.**  From the two invariant subspaces and
 their quadratic-form separation, builds the coercive `A` and the bounded `B`
 whose separated Sylvester equation the cross-projection
@@ -194,28 +162,34 @@ theorem exists_isSymmetric_comp_sub_comp_eq (hT : T.IsSymmetric) (hS : S.IsSymme
     exact hB ▸ h1.add h2
   have hAsym : A.IsSymmetric := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAsa
   have hBsym : B.IsSymmetric := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hBsa
-  -- Coercivity of `A`: `(c+g)‖x‖² ≤ re⟪A x, x⟫`.
+  -- The canonical reduced extensions are exactly the two constructed blocks.
+  have hAext : A = Tc.reducedExtension U (c + g) := by
+    rw [hA, hP, ContinuousLinearMap.reducedExtension_def,
+      Submodule.starProjection_orthogonal']
+  have hBext : B = Sc.reducedExtension V c := by
+    rw [hB, hQ, ContinuousLinearMap.reducedExtension_def,
+      Submodule.starProjection_orthogonal']
+  -- Apply the accepted reduced-extension coercivity bounds directly.
   have hAc : ∀ x, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
     intro x
-    have hpx : P x ∈ U := U.starProjection_apply_mem x
-    have hre : RCLike.re ⟪A x, x⟫_𝕜
-        = RCLike.re ⟪T (P x), P x⟫_𝕜 + (c + g) * ‖x - P x‖ ^ 2 := by
-      rw [hA, hTc, hP]; exact re_inner_reducedExtension_self' hUinv (c + g) x
-    have hpyth : ‖x‖ ^ 2 = ‖P x‖ ^ 2 + ‖x - P x‖ ^ 2 := by
-      rw [hP]; exact TauCeti.norm_sq_eq_starProjection_add_sub x
-    rw [hre, hpyth]
-    nlinarith [hU (P x) hpx]
-  -- Upper bound for `B`: `re⟪B x, x⟫ ≤ c‖x‖²`.
+    rw [hAext]
+    apply Tc.le_re_inner_reducedExtension_self U
+      (by
+        intro y hy
+        simpa only [hTc, LinearMap.coe_toContinuousLinearMap'] using hUinv y hy)
+      (le_refl (c + g))
+    · intro y hy
+      simpa only [hTc, LinearMap.coe_toContinuousLinearMap'] using hU y hy
   have hBc : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
     intro x
-    have hqx : Q x ∈ V := V.starProjection_apply_mem x
-    have hre : RCLike.re ⟪B x, x⟫_𝕜
-        = RCLike.re ⟪S (Q x), Q x⟫_𝕜 + c * ‖x - Q x‖ ^ 2 := by
-      rw [hB, hSc, hQ]; exact re_inner_reducedExtension_self' hVinv c x
-    have hpyth : ‖x‖ ^ 2 = ‖Q x‖ ^ 2 + ‖x - Q x‖ ^ 2 := by
-      rw [hQ]; exact TauCeti.norm_sq_eq_starProjection_add_sub x
-    rw [hre, hpyth]
-    nlinarith [hV (Q x) hqx]
+    rw [hBext]
+    apply Sc.re_inner_reducedExtension_self_le V
+      (by
+        intro y hy
+        simpa only [hSc, LinearMap.coe_toContinuousLinearMap'] using hVinv y hy)
+      (le_refl c)
+    · intro y hy
+      simpa only [hSc, LinearMap.coe_toContinuousLinearMap'] using hV y hy
   -- Sylvester relation `A ∘L X − X ∘L B = Y`.
   have hsylv : A ∘L X - X ∘L B = Y := by
     ext x
