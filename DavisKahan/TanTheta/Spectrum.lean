@@ -8,7 +8,7 @@ module
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.TanTheta.Vector
 public import DavisKahan.Sylvester.Spectrum
-public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
 public section
 
@@ -85,7 +85,7 @@ theorem formBounds_of_compress_spectrum_subset_Icc
     rw [← hyz, Set.mem_Icc]
     constructor <;> [linarith [hmem.1]; linarith [hmem.2]]
   have hM₁norm : ‖M₁‖ ≤ (β - α) / 2 :=
-    (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc
+    (IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc
       (A := ↥W →L[ℂ] ↥W) hM₁sa he0).mpr hM₁spec
   have key : ∀ u : E, ∀ hu : u ∈ W,
       |RCLike.re ⟪T u, u⟫_ℂ - (α + β) / 2 * ‖u‖ ^ 2| ≤

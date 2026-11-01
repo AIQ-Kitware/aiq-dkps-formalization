@@ -276,7 +276,7 @@ theorem exists_contractive_riccati_solution_of_spectrum_gap
     · rw [hc, hrdef]
       linarith [hmem.2]
   have hB0cnorm : ‖B0c‖ ≤ r :=
-    (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB0csa hr0).mpr hB0cspec
+    (IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB0csa hr0).mpr hB0cspec
   have hA1cunit : IsUnit A1c :=
     (hA1csa.isUnit_and_norm_ringInverse_le (A := E1 →L[ℂ] E1) hrd hA1cspec).1
   set J : E1 →L[ℂ] E1 := Ring.inverse A1c

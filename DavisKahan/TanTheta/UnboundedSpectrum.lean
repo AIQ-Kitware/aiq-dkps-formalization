@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.TanTheta.UnboundedVector
 public import DavisKahan.TanTheta.Spectrum
-public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 
 /-!
 # The unbounded tangent theorem with a genuine trial spectrum

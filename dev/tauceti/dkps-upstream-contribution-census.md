@@ -2003,3 +2003,56 @@ but do not substitute for Lean compilation. After `lake exe cache get`, build
 principal-angle / coordinate-embedding / UI-seminorm consumers,
 `DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly`, and the
 repository default targets before committing.
+
+
+## 2026-10-31: retire the C-star spectral-interval donor and unused singular-system proofs
+
+**Whole-module retirement — norm versus real spectrum.** The DKPS module
+`ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean` (Kitware, Jon Crall,
+Claude Fable 5; Apache-2.0) contained the theorem
+`TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc`:
+for self-adjoint `a` and `0 ≤ r`, `‖a‖ ≤ r` iff `spectrum ℝ a ⊆ Set.Icc (-r) r`.
+The identical statement is accepted as
+`IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc` in
+`TauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean`,
+[TauCeti #21259](https://github.com/TauCetiProject/TauCeti/pull/21259),
+main commit `9af2e53076bedeb7ae6d0cdddb5f0057a1f66e52` (2026-10-30).
+The accepted proof uses the real spectral-radius theorem; it is not represented here as a
+port of the donor proof using continuous functional calculus. The earlier DKPS
+spectral-gap inverse result was adapted in
+[TauCeti #13872](https://github.com/TauCetiProject/TauCeti/pull/13872).
+
+The entire local C-star module is deleted. Five direct importers use the native
+TauCeti module; four theorem calls in the tangent/Riccati/Sylvester proofs
+use the root `IsSelfAdjoint` name. The original source and transformation
+history remain recoverable from donor revision `e4637c3919ae804c3f2ffd3356dd3d6132432d04`,
+`ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean`; its provenance
+header records earlier `ForMathlib` development at `fc38eb4`. The manifest
+retains the historical declaration names and the accepted replacement.
+There is no forwarding module or forwarding theorem.
+
+**Partial local singular-system retirement.** The following four DKPS declarations
+in `ForTauCeti/Analysis/InnerProductSpace/Singular/System.lean` no longer have
+maintained source consumers: `TauCeti.selfCompAdjoint_apply_leftSingularVector`,
+`TauCeti.singular_reconstruction`, `TauCeti.eq_sum_singularValue_rankOne`, and
+`TauCeti.exists_orthonormalBasis_extending_leftSingularVector`. The accepted
+`TauCeti/Analysis/InnerProductSpace/SingularValues.lean` provides, respectively,
+`LinearMap.self_comp_adjoint_leftSingularVector`,
+`LinearMap.apply_eq_sum_singularValues_smul`,
+`LinearMap.eq_sum_singularValues_smul_rankOne`, and
+`LinearMap.exists_orthonormalBasis_apply_eq_leftSingularVector`. The final theorem
+upstream even chooses a compatible indexed codomain basis, stronger than the
+original set-range inclusion. The finite singular expansion uses the same
+ordered eigenbasis and normalized left vectors, with scalar factors grouped
+differently. No maintained proof relies on the four retired names; the stale
+reference in `DavisKahan/Explorations/Historical/SourceUnitaryInvariantNormFanDominance.lean`
+is kept as historical text because that file is explicitly not a build target.
+
+The still-used local definitions and singular relations are intentionally retained;
+this change does not erase the genuine Ritz-residual and coordinate tangent results.
+The original complete singular-system source is preserved in donor revision
+`e4637c3919ae804c3f2ffd3356dd3d6132432d04`,
+`ForTauCeti/Analysis/InnerProductSpace/Singular/System.lean` (earlier origin
+`82d20de`, Kitware, Jon Crall, GPT-5.6 High, Claude Fable 5; Apache-2.0).
+The TauCeti singular-system implementation is identified as overlapping accepted
+mathematics, not asserted to be copied from DKPS.

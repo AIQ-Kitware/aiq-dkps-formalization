@@ -15,7 +15,7 @@ public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
 public import DavisKahan.Sylvester.Gap
 public import DavisKahan.Sylvester.Unbounded.Neumann
-public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
@@ -160,7 +160,7 @@ theorem norm_sylvester_le_of_spectrum_intervalExterior
   have hB₁spec : spectrum ℝ B₁ ⊆ Set.Icc (-r) r :=
     shifted_spectrum_interior hc hrdef hBspec
   have hB₁norm : ‖B₁‖ ≤ r :=
-    (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
+    (IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
   have hA₁unit : IsUnit A₁ :=
     (hA₁sa.isUnit_and_norm_ringInverse_le (A := F →L[ℂ] F) hrd hA₁spec).1
   set J : F →L[ℂ] F := Ring.inverse A₁
@@ -427,7 +427,7 @@ theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
   have hB₁spec : spectrum ℝ B₁ ⊆ Set.Icc (-r) r :=
     shifted_spectrum_interior hc hrdef hBspec
   have hB₁norm : ‖B₁‖ ≤ r :=
-    (TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
+    (IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
   have hA₁unit : IsUnit A₁ :=
     (hA₁sa.isUnit_and_norm_ringInverse_le (A := F₁ →L[ℂ] F₁) hrd hA₁spec).1
   set J : F₁ →L[ℂ] F₁ := Ring.inverse A₁

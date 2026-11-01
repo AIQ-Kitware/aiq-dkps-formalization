@@ -21,13 +21,12 @@ of `A†A`; left singular vectors are the normalized images `σᵢ⁻¹ • A v�
 * `TauCeti.apply_rightSingularBasis_eq_smul_leftSingularVector`: the singular relation
   `A vᵢ = σᵢ • uᵢ`, including the zero case;
 * `TauCeti.orthonormal_leftSingularVector_subtype`: left singular vectors attached to
-  nonzero singular values are orthonormal;
-* `TauCeti.selfCompAdjoint_apply_leftSingularVector`: nonzero left singular vectors are
-  eigenvectors of `AA†` with eigenvalue `σᵢ²`;
-* `TauCeti.singular_reconstruction` and `TauCeti.eq_sum_singularValue_rankOne`: the
-  intrinsic singular expansion of `A`;
-* `TauCeti.exists_orthonormalBasis_extending_leftSingularVector`: the nonzero left
-  singular family extends to an orthonormal basis of the codomain.
+  nonzero singular values are orthonormal.
+
+The local right/left singular definitions and their still-used relations are retained.
+For the self-adjoint target Gram equation, singular expansion, rank-one expansion,
+and extension to a codomain orthonormal basis, use the stronger accepted
+`LinearMap` API in `TauCeti.Analysis.InnerProductSpace.SingularValues`.
 
 ## Proof sources
 
@@ -42,8 +41,10 @@ copied verbatim.
 * Original module: `ForMathlib.Analysis.InnerProductSpace.SingularSystem`, moved to
   `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
   commit `82d20de`.
-* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
-  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
+* Extraction class: **moved**. The Wave-1 migration renamed the namespace
+  `ForMathlib` to `TauCeti`; 2026-10-31 upstream consumption subsequently
+  retired four superseded local theorem proofs, with exact names recorded in
+  `dev/tauceti/extraction-manifest.json`.
 * Original authors / copyright: Jon Crall, GPT-5.6 High, Claude Fable 5; Copyright (c) 2026
   Kitware, Inc.;
   Apache 2.0.
@@ -156,72 +157,5 @@ theorem adjoint_apply_leftSingularVector
     adjointCompSelf_apply_rightSingularBasis, smul_smul, RCLike.ofReal_pow]
   congr 1
   field_simp
-
-/-- Every nonzero left singular vector is an eigenvector of `AA†` with eigenvalue `σᵢ²`. -/
-theorem selfCompAdjoint_apply_leftSingularVector
-    (A : E →ₗ[𝕜] F) {i : Fin (finrank 𝕜 E)}
-    (hi : A.singularValues i ≠ 0) :
-    (A.comp A.adjoint) (leftSingularVector A i) =
-      (((A.singularValues i : ℝ) ^ 2 : ℝ) : 𝕜) • leftSingularVector A i := by
-  have hσ : ((A.singularValues i : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hi
-  have hadj : A.adjoint (leftSingularVector A i) =
-      ((A.singularValues i : ℝ) : 𝕜) • rightSingularBasis A i := by
-    rw [leftSingularVector, map_smul,
-    ← LinearMap.comp_apply,
-      adjointCompSelf_apply_rightSingularBasis, smul_smul, RCLike.ofReal_pow]
-    congr 1
-    field_simp
-  calc (A.comp A.adjoint) (leftSingularVector A i)
-      = A (A.adjoint (leftSingularVector A i)) := rfl
-    _ = ((A.singularValues i : ℝ) : 𝕜) • A (rightSingularBasis A i) := by
-        rw [hadj, map_smul]
-    _ = (((A.singularValues i : ℝ) ^ 2 : ℝ) : 𝕜) • leftSingularVector A i := by
-        rw [apply_rightSingularBasis_eq_smul_leftSingularVector, smul_smul,
-          RCLike.ofReal_pow, sq]
-
-/-- Intrinsic finite singular expansion of `A x`. -/
-theorem singular_reconstruction (A : E →ₗ[𝕜] F) (x : E) :
-    A x = ∑ i : Fin (finrank 𝕜 E),
-      (inner 𝕜 (rightSingularBasis A i) x * ((A.singularValues i : ℝ) : 𝕜)) •
-        leftSingularVector A i := by
-  conv_lhs => rw [← (rightSingularBasis A).sum_repr x, map_sum]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [map_smul, apply_rightSingularBasis_eq_smul_leftSingularVector, smul_smul,
-    (rightSingularBasis A).repr_apply_apply]
-
-/-- Rank-one operator reconstruction of `A`. -/
-theorem eq_sum_singularValue_rankOne (A : E →ₗ[𝕜] F) :
-    A = ∑ i : Fin (finrank 𝕜 E),
-      ((A.singularValues i : ℝ) : 𝕜) •
-        (InnerProductSpace.rankOne 𝕜
-          (leftSingularVector A i) (rightSingularBasis A i)).toLinearMap := by
-  apply LinearMap.ext
-  intro x
-  rw [LinearMap.sum_apply, singular_reconstruction A x]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [LinearMap.smul_apply, ContinuousLinearMap.coe_coe, InnerProductSpace.rankOne_apply,
-    smul_smul, mul_comm]
-
-/-- The nonzero left singular family extends to an orthonormal basis of the codomain. -/
-theorem exists_orthonormalBasis_extending_leftSingularVector
-    (A : E →ₗ[𝕜] F) :
-    ∃ b : OrthonormalBasis (Fin (finrank 𝕜 F)) 𝕜 F,
-      Set.range
-          (fun i : {j : Fin (finrank 𝕜 E) // A.singularValues j ≠ 0} =>
-            leftSingularVector A i.1) ⊆ Set.range b := by
-  classical
-  have hon := orthonormal_leftSingularVector_subtype A
-  have hsub : Orthonormal 𝕜 ((↑) : Set.range
-      (fun i : {j : Fin (finrank 𝕜 E) // A.singularValues j ≠ 0} =>
-        leftSingularVector A i.1) → F) := hon.toSubtypeRange
-  obtain ⟨u, b, hvu, hb⟩ := hsub.exists_orthonormalBasis_extension
-  have hcard : Fintype.card u = finrank 𝕜 F := by
-    rw [Fintype.card_coe]
-    exact (Module.finrank_eq_card_finset_basis b.toBasis).symm
-  refine ⟨b.reindex (Fintype.equivFinOfCardEq hcard), ?_⟩
-  intro y hy
-  have hyu : y ∈ (u : Set F) := hvu hy
-  refine ⟨Fintype.equivFinOfCardEq hcard ⟨y, hyu⟩, ?_⟩
-  rw [OrthonormalBasis.reindex_apply, Equiv.symm_apply_apply, hb]
 
 end TauCeti

@@ -249,13 +249,11 @@
       "cluster": "cstar-gap-inverse",
       "roadmap_target": "Invertibility of a self-adjoint element away from a spectral gap, in a C*-algebra.",
       "roadmap_focus": "cstar-algebra",
-      "status": "staged-unreviewed",
-      "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. Every module carries a `## Provenance` section and an Apache-2.0 Kitware header; the import firewall holds (Mathlib and sibling staging modules only), so the cluster is independently copyable. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree.",
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/21259",
+      "tauceti_population": "No remaining donor source. Spectral-gap inverse accepted in PR #13872; norm/spectrum iff accepted in PR #21259. Both are native TauCeti APIs.",
       "tauceti_target_marker": null,
-      "staging_modules": [
-        "ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse"
-      ]
+      "staging_modules": []
     },
     {
       "cluster": "orthogonal-series",
@@ -799,13 +797,11 @@
       "upstream_pr": null
     },
     {
-      "source_module": "ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse",
+      "source_module": "ForMathlib.Analysis.CStarAlgebra.SelfAdjointGapInverse",
       "source_declarations": [
-        "TauCeti.sum_mul_comp_perm_le_sum_mul_of_antitone",
-        "TauCeti.sum_mul_sum_mul_le_sum_mul_of_antitone",
-        "TauCeti.sum_eigenvalues_mul_re_inner_self_le",
-        "TauCeti.sum_sq_norm_apply_eq_sum_sq_eigenvalues",
-        "TauCeti.sum_sq_eigenvalues_sub_le_sum_sq_norm_apply"
+        "ForMathlib.IsSelfAdjoint.norm_le_of_spectrum_subset_Icc",
+        "ForMathlib.IsSelfAdjoint.exists_two_sided_inverse_of_spectrum_gap",
+        "TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc"
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse",
@@ -818,8 +814,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/21259",
+      "migration_note": "2026-10-31 upstream consumption: delete ForTauCeti/Analysis/CStarAlgebra/SelfAdjointGapInverse.lean. Its sole maintained declaration, TauCeti.IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc, has the exact statement of root IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc in TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse, accepted as PR #21259 (main commit 9af2e53076bedeb7ae6d0cdddb5f0057a1f66e52); the upstream proof is independently written and does not claim donor proof descent. Direct imports and four theorem uses migrated to native API. The original DKPS source (e4637c3919ae, historical ForMathlib form from fc38eb4) and its authorship remain recoverable. The earlier DKPS spectral-gap inverse was adapted upstream separately in PR #13872. The stale five unrelated source_declarations that were in the old manifest record were replaced by the actual historical source names. The donor code is removed, not replaced by a forwarding alias."
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.ExponentialAbs",
@@ -1513,7 +1510,12 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.SingularSystem",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.selfCompAdjoint_apply_leftSingularVector",
+        "TauCeti.singular_reconstruction",
+        "TauCeti.eq_sum_singularValue_rankOne",
+        "TauCeti.exists_orthonormalBasis_extending_leftSingularVector"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularSystem",
@@ -1526,8 +1528,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": null,
+      "migration_note": "2026-10-31 upstream consumption: remove four locally unused singular-system proofs from ForTauCeti.Analysis.InnerProductSpace.Singular.System: the self-adjoint target Gram relation, finite singular expansion, rank-one expansion, and orthonormal-basis extension. The accepted TauCeti.Analysis.InnerProductSpace.SingularValues supplies respectively LinearMap.self_comp_adjoint_leftSingularVector, LinearMap.apply_eq_sum_singularValues_smul, LinearMap.eq_sum_singularValues_smul_rankOne, and LinearMap.exists_orthonormalBasis_apply_eq_leftSingularVector (the latter has stronger pointwise-index agreement). No maintained consumers call the four retired declarations; the one old reference to eq_sum_singularValue_rankOne is in a preserved, non-build historical exploration snapshot. The remaining local singular-system declarations remain because active DKPS proofs still depend on them. Historical source: e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Singular/System.lean, earlier introduced at donor commit 82d20de. This does not claim that the accepted TauCeti singular-system proofs were adapted from DKPS."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",

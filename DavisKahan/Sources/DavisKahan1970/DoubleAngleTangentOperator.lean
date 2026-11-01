@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 public import DavisKahan.DoubleAngle.TanTwoThetaKyFan
-public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 public import TauCeti.Analysis.Normed.Lp.PiLp
 
 public section

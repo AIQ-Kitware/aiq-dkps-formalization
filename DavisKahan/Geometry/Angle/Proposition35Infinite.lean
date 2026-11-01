@@ -18,7 +18,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 public import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
 public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 public import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
-public import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 public section
