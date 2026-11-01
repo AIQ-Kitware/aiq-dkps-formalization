@@ -993,20 +993,35 @@
     },
     {
       "source_module": "ForTauCeti.Probability.Moments.CenteredScatter",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.finiteMean",
+        "TauCeti.finiteMean_def",
+        "TauCeti.centeredScatter",
+        "TauCeti.sum_sub_finiteMean_eq_zero",
+        "TauCeti.finiteMean_append",
+        "TauCeti.centeredScatter_append",
+        "TauCeti.re_inner_centeredScatter_self",
+        "TauCeti.centeredScatter_isPositive",
+        "TauCeti.centeredScatter_le_append",
+        "TauCeti.re_inner_centeredScatter_append"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Probability.Moments.CenteredScatter",
-      "final_tauceti_module": "TauCeti.Probability.Moments.CenteredScatter",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.CenteredScatter",
       "ownership_class": "tauceti",
-      "roadmap_target": "probability-concentration",
-      "provenance_class": "copied; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "roadmap_target": "MatrixSpectralStatistics MSS-C06-C14 (finite means and centered scatter)",
+      "provenance_class": "DKPS source originated at Kitware; accepted TauCeti #15445 independent of DKPS port #13876",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.Convex.FiniteMean",
+        "TauCeti.Analysis.InnerProductSpace.CenteredScatter"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "DkpsQuench2026.Spectral.GramSpectrum (migrated to accepted API)"
+      ],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/15445",
+      "migration_note": "November 1 upstream consumption: deleted the complete 273-line donor module and migrated DkpsQuench2026.Spectral.GramSpectrum to TauCeti.Analysis.InnerProductSpace.CenteredScatter and TauCeti.Analysis.Convex.FiniteMean. The accepted API is generalized from Fin n to arbitrary finite index types; renamed identities are finiteMean_def -> finiteMean_eq_inv_smul_sum; sum_sub_finiteMean_eq_zero -> sum_sub_finiteMean; finiteMean_append -> finiteMean_snoc; centeredScatter_append -> centeredScatter_snoc; re_inner_centeredScatter_self -> re_inner_centeredScatter_apply_self; centeredScatter_isPositive -> isPositive_centeredScatter; centeredScatter_le_append -> centeredScatter_le_centeredScatter_snoc; re_inner_centeredScatter_append -> re_inner_centeredScatter_snoc_apply_self. TauCeti main commit 819340e91e33bd6aeb480d520f39308421e08c67 (PR #15445) is an ancestor of pinned 463ab293070d4cb355d0a0e036469464070088bc. PR #15445 explicitly identifies its implementation as independent of DKPS bulk PR #13876; do not classify it as a copied or adapted DKPS proof. Historical donor source is preserved at e4637c3919ae:ForTauCeti/Probability/Moments/CenteredScatter.lean; original source introduction fc38eb4 (ForMathlib/Analysis/InnerProductSpace/CenteredScatter.lean). No forwarding aliases retained."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.EigenvalueChange",

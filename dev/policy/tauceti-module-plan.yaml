@@ -269,7 +269,6 @@ topics:
   modules:
   - Probability.Moments.SampleMean
   - Probability.Moments.Variance
-  - Probability.Moments.CenteredScatter
 - id: T21
   title: Matrix rank factorization and positive semidefiniteness
   modules:
@@ -582,7 +581,6 @@ rungs:
 - id: S
   title: Sample moments and matrix concentration (T20)
   seeds:
-  - Probability.Moments.CenteredScatter
   - Probability.Moments.SampleMean
   - Probability.Moments.Variance
 - id: T

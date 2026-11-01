@@ -2137,3 +2137,41 @@ The remaining matrix spectral measurability definitions, spectral projection
 construction, and statistical/paper-facing conclusions are **not** removed.
 No forwarding aliases are introduced. The extraction manifest and module plan
 record the source retirement; these are independent from compilation evidence.
+
+## 2026-11-01: retire the independently implemented finite-mean and centered-scatter donor
+
+**Full donor retirement (MSS-C06--C14).** Remove the 273-line
+`ForTauCeti/Probability/Moments/CenteredScatter.lean` and migrate its only maintained
+Lean importer, `DkpsQuench2026/Spectral/GramSpectrum.lean`, to
+`TauCeti.Analysis.Convex.FiniteMean` and
+`TauCeti.Analysis.InnerProductSpace.CenteredScatter`. The Quench spectral-floor
+and centered-augmentation results remain; their statements do not change.
+
+The original Kitware donor was authored at `fc38eb4` in
+`ForMathlib/Analysis/InnerProductSpace/CenteredScatter.lean` (Jon Crall,
+GPT-5.6 High, Claude Fable 5; Apache-2.0), and its complete pre-retirement
+source is recoverable from
+`e4637c3919ae:ForTauCeti/Probability/Moments/CenteredScatter.lean`. The
+original declarations and exact accepted replacements are recorded in the
+`extraction-manifest.json` record. The original DKPS statement uses `Fin n`;
+TauCeti's replacement works over an arbitrary finite index type.
+
+**Independent upstream mathematics, not proof descent.**
+[#15445](https://github.com/TauCetiProject/TauCeti/pull/15445), accepted on
+TauCeti `main` as commit `819340e91e33bd6aeb480d520f39308421e08c67`,
+**explicitly states that its implementation was independent of the DKPS bulk
+port #13876**. The commit is an ancestor of the pinned TauCeti main
+`463ab293070d4cb355d0a0e036469464070088bc`. Do not count this as a DKPS proof
+port. It supersedes the local implementation, so there is no reason to
+continue maintaining the duplicate.
+
+The Quench proof now uses `finiteMean_eq_inv_smul_sum`,
+`re_inner_centeredScatter_apply_self`, and
+`re_inner_centeredScatter_snoc_apply_self`. No replacement adapters,
+forwarding aliases, or new theorem statements are introduced. The remaining
+SampleMean, Variance, and matrix-concentration donors are not affected.
+
+**Build boundary:** Source inspection and fresh ZIP extraction do not certify
+Lean compilation. In the live checkout, build
+`DkpsQuench2026.Spectral.GramSpectrum` and the default `lake build` before
+committing the deletion.

@@ -963,7 +963,7 @@ The proof is the online-variance route through the rectangular Gram bridge:
 `quadratic_floor_of_eigenvalues₀_configGram_lower` converts `href` (with
 `d ≤ n`) back into the quadratic floor of the centered reference cloud;
 `sum_sq_centered_le_augmented` — the exact add-one centered-scatter identity
-`TauCeti.centeredScatter_append` — shows the augmented centered
+`TauCeti.centeredScatter_snoc` — shows the augmented centered
 squared-projection sum dominates it by the nonnegative rank-one correction
 `(n/(n+1)) ⟪x, target - centroid⟫²`; and
 `eigenvalues₀_configGram_lower_of_quadratic_floor` transfers the floor to
