@@ -1959,3 +1959,47 @@ when their singular values agree. Those results remain in the donor until an
 exact replacement is available. No forwarding alias is introduced, and no
 independent upstream proof is attributed to DKPS solely because it overlaps
 our formalization.
+
+
+## 2026-10-31: consume native coisometry singular-value padding
+
+**Accepted source:** `TauCeti/Analysis/InnerProductSpace/SingularValues.lean` at
+TauCeti `463ab293070d4cb355d0a0e036469464070088bc` defines
+`LinearMap.singularValues_linearIsometry_comp` and
+`LinearMap.singularValues_comp_adjoint_linearIsometry`. They preserve the exact
+zero-padded singular-value sequence on postcomposition by an isometric embedding
+and precomposition by its adjoint. These are the same statements as the DKPS
+`TauCeti.singularValues_linearIsometry_comp` and
+`TauCeti.singularValues_comp_adjoint_linearIsometry`, respectively, with
+the second theorem taking its arguments in the opposite order.
+
+**Historical donor:** `ForTauCeti/Analysis/InnerProductSpace/RectangularSingularValues.lean`
+at DKPS commit `e4637c3919ae` (original `ForMathlib` extraction entry,
+introduced by commit `82d20de`; Kitware 2026, Jon Crall, GPT-5.6 High,
+Claude Fable 5; Apache-2.0). Recover with:
+
+`git show e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/RectangularSingularValues.lean`
+
+**Retired maintained mathematics:** The original DKPS proof of
+`LinearMap.singularValues_adjoint` and its pointwise
+`LinearMap.singularValues_adjoint_apply` wrapper; the DKPS postcomposition-isometry and
+coisometry-padding theorems; the proof-only
+`LinearIsometry.adjoint_eq_zero_of_mem_orthogonal`; and the private padded
+orthonormal-basis / zero-eigenvalue argument used solely by the coisometry proof.
+Their pre-retirement statements and implementation remain recoverable in Git;
+`source_declarations` in the extraction manifest records the retired public names.
+
+**Updated consumers:** Principal-angle embeddings, coordinate sine/cosine
+embeddings, singular-value majorization and UI-seminorm transports, and the
+planar zero-extension used in Davis--Kahan sharpness examples and the
+sandwich-majorization proof now use the accepted `LinearMap` theorems directly. The rectangular Gram/eigenspace
+comparison results and the genuine Ritz-residual tangent bounds are retained.
+This is direct use of accepted APIs, not a claim that TauCeti adapted its
+proofs from DKPS.
+
+**Build boundary:** Source-to-API and reference checks support the retirement,
+but do not substitute for Lean compilation. After `lake exe cache get`, build
+`ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues`, the updated
+principal-angle / coordinate-embedding / UI-seminorm consumers,
+`DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly`, and the
+repository default targets before committing.

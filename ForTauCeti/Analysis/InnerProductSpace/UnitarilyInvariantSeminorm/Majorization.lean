@@ -204,9 +204,9 @@ private theorem singularValues_coordinateLift
   calc
     (ιF.toLinearMap ∘ₗ X ∘ₗ LinearMap.adjoint ιE.toLinearMap).singularValues =
         (X ∘ₗ LinearMap.adjoint ιE.toLinearMap).singularValues :=
-      singularValues_linearIsometry_comp ιF _
+      LinearMap.singularValues_linearIsometry_comp ιF _
     _ = X.singularValues :=
-      singularValues_comp_adjoint_linearIsometry ιE X
+      LinearMap.singularValues_comp_adjoint_linearIsometry X ιE
 
 /-- The initial coordinate embedding determined by the first `d` vectors of
 the standard orthonormal basis. -/

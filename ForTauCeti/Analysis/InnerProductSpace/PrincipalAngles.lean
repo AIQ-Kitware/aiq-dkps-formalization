@@ -291,7 +291,7 @@ theorem singularValues_comp_adjoint_familyIsometry
     (X : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] EuclideanSpace 𝕜 (Fin d)) :
     (X ∘ₗ LinearMap.adjoint (familyIsometry hu).toLinearMap).singularValues
       = X.singularValues := by
-  exact singularValues_comp_adjoint_linearIsometry (familyIsometry hu) X
+  exact LinearMap.singularValues_comp_adjoint_linearIsometry X (familyIsometry hu)
 
 /-- Coordinates of the overlap operator: `(overlapOp hu hv y) i = ⟪uᵢ, ι_v y⟫`. -/
 theorem overlapOp_coord {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
@@ -625,7 +625,7 @@ theorem singularValues_orthogonal_familyIsometry_comm
 /-- **Factor a projection composite through the coordinate isometry.**  `starProjection`
 onto `span (range u)` is `ι_u ∘ ι_u⋆`, so any operator postcomposed with it factors as
 "restrict to coordinates, act, and pad back" -- the shape
-`singularValues_comp_adjoint_linearIsometry` consumes.
+`LinearMap.singularValues_comp_adjoint_linearIsometry` consumes.
 
 Stated once because the two halves of the symmetry below used it with `u` and `v` and were
 otherwise identical; each was twelve lines of `change` and one rewrite. -/
@@ -672,13 +672,13 @@ theorem singularValues_orthogonal_starProjection_comp_starProjection_comm
           (Submodule.span 𝕜 (Set.range u)).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues =
         Suv.singularValues := by
       rw [hfactorUV,
-        singularValues_comp_adjoint_linearIsometry (familyIsometry hu) Suv]
+        LinearMap.singularValues_comp_adjoint_linearIsometry Suv (familyIsometry hu)]
     _ = Svu.singularValues := by
       simpa only [Suv, Svu] using singularValues_orthogonal_familyIsometry_comm hu hv
     _ = (((Submodule.span 𝕜 (Set.range u))ᗮ.starProjection ∘L
           (Submodule.span 𝕜 (Set.range v)).starProjection : E →L[𝕜] E) :
             E →ₗ[𝕜] E).singularValues := by
       rw [hfactorVU,
-        singularValues_comp_adjoint_linearIsometry (familyIsometry hv) Svu]
+        LinearMap.singularValues_comp_adjoint_linearIsometry Svu (familyIsometry hv)]
 
 end TauCeti

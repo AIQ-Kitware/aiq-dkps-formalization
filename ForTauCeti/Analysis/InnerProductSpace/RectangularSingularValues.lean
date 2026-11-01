@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-5.6 High, Claude Fable 5
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Adjoint
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
 public import Mathlib.Analysis.InnerProductSpace.SingularValues
 public import Mathlib.Analysis.InnerProductSpace.Positive
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
@@ -28,8 +29,6 @@ codomain-side Gram operator.
   `x ↦ A x` (inverse `y ↦ μ⁻¹ • A† y`) between the nonzero `μ`-eigenspaces of `A†A` and `AA†`;
 * `TauCeti.eigenvalues_adjointCompSelf_eq_selfCompAdjoint`: the sorted eigenvalue lists of
   `A†A` and `AA†` agree at every index below both dimensions;
-* `LinearMap.singularValues_adjoint`: zero-padded adjoint invariance
-  `A†.singularValues = A.singularValues`;
 * `TauCeti.sq_singularValues_selfCompAdjoint`: the sorted eigenvalues of `AA†` are the
   squared singular values of `A`, zero-padded past the rank;
 * `TauCeti.le_eigenvalues_selfCompAdjoint_of_norm_sq_floor`: a quadratic floor
@@ -263,35 +262,11 @@ theorem eigenvalues_adjointCompSelf_eq_selfCompAdjoint
     (fun _ hc => card_filter_eigenvalues_adjointCompSelf_eq_selfCompAdjoint A hd hn hc)
     hkd hkn
 
-/-! ### Adjoint invariance of singular values -/
+/-! ### Codomain Gram spectra via the accepted adjoint singular-value theorem
 
-/-- Singular values are invariant under adjoint.  Both sequences are zero-padded past the
-common rank, so the statement needs no relation between the two dimensions. -/
-theorem _root_.LinearMap.singularValues_adjoint (A : E →ₗ[𝕜] F) :
-    A.adjoint.singularValues = A.singularValues := by
-  ext k
-  rcases lt_or_ge k (finrank 𝕜 F) with hkn | hkn
-  · rcases lt_or_ge k (finrank 𝕜 E) with hkd | hkd
-    · have h3 : A.adjoint.isSymmetric_adjoint_comp_self.eigenvalues rfl ⟨k, hkn⟩ =
-          (isSymmetric_self_comp_adjoint A).eigenvalues rfl ⟨k, hkn⟩ :=
-        congrFun (LinearMap.IsSymmetric.eigenvalues_congr (by rw [adjoint_adjoint])
-          A.adjoint.isSymmetric_adjoint_comp_self (isSymmetric_self_comp_adjoint A) rfl) _
-      rw [A.adjoint.singularValues_of_lt rfl hkn, A.singularValues_of_lt rfl hkd, h3,
-        ← eigenvalues_adjointCompSelf_eq_selfCompAdjoint A rfl rfl hkd hkn]
-    · have h1 : A.adjoint.singularValues k = 0 :=
-        A.adjoint.singularValues_eq_zero_iff_le_finrank_range.mpr
-          (by rw [finrank_range_adjoint]; exact A.finrank_range_le.trans hkd)
-      rw [h1, A.singularValues_of_finrank_le hkd]
-  · have h1 : A.singularValues k = 0 :=
-      A.singularValues_eq_zero_iff_le_finrank_range.mpr
-        ((Submodule.finrank_le A.range).trans hkn)
-    rw [h1, A.adjoint.singularValues_of_finrank_le hkn]
-
-/-- Pointwise adjoint invariance, convenient for rewriting a fixed index. -/
-@[simp]
-theorem _root_.LinearMap.singularValues_adjoint_apply (A : E →ₗ[𝕜] F) (k : ℕ) :
-    A.adjoint.singularValues k = A.singularValues k := by
-  rw [A.singularValues_adjoint]
+`LinearMap.singularValues_adjoint` is supplied by TauCeti's singular-value module.
+The original DKPS independent proof was retired in the 2026-10-31 consumption.
+-/
 
 /-- The sorted eigenvalues of the codomain Gram operator `AA†` are the squared singular
 values of `A`, zero-padded past the rank of `A`. -/
@@ -299,7 +274,7 @@ theorem sq_singularValues_selfCompAdjoint (A : E →ₗ[𝕜] F) {n : ℕ}
     (hn : finrank 𝕜 F = n) (i : Fin n) :
     A.singularValues i ^ 2 = (isSymmetric_self_comp_adjoint A).eigenvalues hn i := by
   have h1 := A.adjoint.sq_singularValues_fin hn i
-  rw [A.singularValues_adjoint_apply] at h1
+  rw [LinearMap.singularValues_adjoint] at h1
   rw [h1]
   exact congrFun (LinearMap.IsSymmetric.eigenvalues_congr (by rw [adjoint_adjoint])
     A.adjoint.isSymmetric_adjoint_comp_self (isSymmetric_self_comp_adjoint A) hn) i
@@ -419,229 +394,5 @@ theorem singularValues_eq_of_gram_eq {F' : Type*} [NormedAddCommGroup F']
     exact congrFun (LinearMap.IsSymmetric.eigenvalues_congr h A.isSymmetric_adjoint_comp_self
       B.isSymmetric_adjoint_comp_self rfl) _
   · rw [A.singularValues_of_finrank_le hi, B.singularValues_of_finrank_le hi]
-
-/-- Postcomposing with a linear isometric embedding preserves singular values.
-
-This is the rectangular analogue of unitary invariance on the codomain.  It
-needs no dimension comparison: the Gram operator is unchanged because an
-isometry preserves inner products. -/
-theorem singularValues_linearIsometry_comp
-    {D F : Type*}
-    [NormedAddCommGroup D] [InnerProductSpace 𝕜 D] [FiniteDimensional 𝕜 D]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
-    (ι : F →ₗᵢ[𝕜] E) (X : D →ₗ[𝕜] F) :
-    (ι.toLinearMap ∘ₗ X).singularValues = X.singularValues := by
-  apply singularValues_eq_of_gram_eq
-  ext x
-  apply ext_inner_right 𝕜
-  intro y
-  simp only [LinearMap.comp_apply, LinearMap.adjoint_inner_left]
-  exact ι.inner_map_map (X x) (X y)
-
-/-- **The adjoint of a linear isometry annihilates the orthogonal complement of
-its range.**  Together with `LinearIsometry.adjoint_apply_apply` this says `ι⋆`
-is the orthogonal projection onto the source. -/
-theorem LinearIsometry.adjoint_eq_zero_of_mem_orthogonal {D : Type*}
-    [NormedAddCommGroup D] [InnerProductSpace 𝕜 D] [FiniteDimensional 𝕜 D]
-    (ι : D →ₗᵢ[𝕜] E) {y : E}
-    (hy : y ∈ (LinearMap.range ι.toLinearMap)ᗮ) :
-    LinearMap.adjoint ι.toLinearMap y = 0 :=
-  ext_inner_right 𝕜 fun z => by
-    rw [LinearMap.adjoint_inner_left, inner_zero_left]
-    exact Submodule.inner_left_of_mem_orthogonal
-      (LinearMap.mem_range.mpr ⟨z, rfl⟩) hy
-
-section IsometryPad
-
-variable {D : Type*} [NormedAddCommGroup D] [InnerProductSpace 𝕜 D]
-
-/-- An isometric embedding cannot raise dimension. -/
-private theorem finrank_le_of_linearIsometry (ι : D →ₗᵢ[𝕜] E) :
-    finrank 𝕜 D ≤ finrank 𝕜 E := by
-  have hdimU : finrank 𝕜 (LinearMap.range ι.toLinearMap) = finrank 𝕜 D :=
-    LinearMap.finrank_range_of_inj ι.injective
-  have hsum := Submodule.finrank_add_finrank_orthogonal (LinearMap.range ι.toLinearMap)
-  omega
-
-/-- The orthogonal complement of the range of an isometric embedding has the
-dimension the range leaves over. -/
-private theorem finrank_orthogonal_range_linearIsometry (ι : D →ₗᵢ[𝕜] E) :
-    finrank 𝕜 ((LinearMap.range ι.toLinearMap)ᗮ : Submodule 𝕜 E)
-      = finrank 𝕜 E - finrank 𝕜 D := by
-  have hdimU : finrank 𝕜 (LinearMap.range ι.toLinearMap) = finrank 𝕜 D :=
-    LinearMap.finrank_range_of_inj ι.injective
-  have hsum := Submodule.finrank_add_finrank_orthogonal (LinearMap.range ι.toLinearMap)
-  omega
-
-/-- **The padded family.**  `ι` applied to an orthonormal basis of `D` on the first
-`finrank 𝕜 D` slots, and the standard orthonormal basis of `(range ι)ᗮ` on the rest.
-
-This is the construction every coisometry-padding argument in this file rebuilds:
-`ι` transports eigendata into `E`, and the complement carries the zero padding. -/
-private noncomputable def isometryPad (ι : D →ₗᵢ[𝕜] E)
-    (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) : Fin (finrank 𝕜 E) → E := fun i =>
-  if h : (i : ℕ) < finrank 𝕜 D then ι (v ⟨(i : ℕ), h⟩)
-  else
-    (stdOrthonormalBasis 𝕜 ((LinearMap.range ι.toLinearMap)ᗮ : Submodule 𝕜 E)
-      (Fin.cast (finrank_orthogonal_range_linearIsometry ι).symm
-        ⟨(i : ℕ) - finrank 𝕜 D, by have := i.isLt; omega⟩) : E)
-
-private theorem isometryPad_of_lt (ι : D →ₗᵢ[𝕜] E)
-    (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) {i : Fin (finrank 𝕜 E)}
-    (h : (i : ℕ) < finrank 𝕜 D) : isometryPad ι v i = ι (v ⟨(i : ℕ), h⟩) :=
-  dite_eq_left h
-
-private theorem isometryPad_of_ge (ι : D →ₗᵢ[𝕜] E)
-    (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) {i : Fin (finrank 𝕜 E)}
-    (h : ¬ (i : ℕ) < finrank 𝕜 D) :
-    isometryPad ι v i
-      = (stdOrthonormalBasis 𝕜 ((LinearMap.range ι.toLinearMap)ᗮ : Submodule 𝕜 E)
-          (Fin.cast (finrank_orthogonal_range_linearIsometry ι).symm
-            ⟨(i : ℕ) - finrank 𝕜 D, by have := i.isLt; omega⟩) : E) :=
-  dite_eq_right h
-
-private theorem isometryPad_mem_range (ι : D →ₗᵢ[𝕜] E)
-    (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) {i : Fin (finrank 𝕜 E)}
-    (h : (i : ℕ) < finrank 𝕜 D) : isometryPad ι v i ∈ LinearMap.range ι.toLinearMap := by
-  rw [isometryPad_of_lt ι v h]; exact ⟨_, rfl⟩
-
-private theorem isometryPad_mem_orthogonal (ι : D →ₗᵢ[𝕜] E)
-    (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) {i : Fin (finrank 𝕜 E)}
-    (h : ¬ (i : ℕ) < finrank 𝕜 D) :
-    isometryPad ι v i ∈ (LinearMap.range ι.toLinearMap)ᗮ := by
-  rw [isometryPad_of_ge ι v h]; exact SetLike.coe_mem _
-
-/-- The padded family is orthonormal: `ι` preserves inner products on the first block,
-the complement basis is orthonormal on the second, and the two blocks are orthogonal
-by construction. -/
-private theorem orthonormal_isometryPad (ι : D →ₗᵢ[𝕜] E)
-    (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) : Orthonormal 𝕜 (isometryPad ι v) := by
-  classical
-  rw [orthonormal_iff_ite]
-  intro i j
-  by_cases hi : (i : ℕ) < finrank 𝕜 D
-  · by_cases hj : (j : ℕ) < finrank 𝕜 D
-    · rw [isometryPad_of_lt ι v hi, isometryPad_of_lt ι v hj, ι.inner_map_map,
-        orthonormal_iff_ite.mp v.orthonormal]
-      by_cases hij : i = j
-      · subst hij; rw [ite_eq_left rfl, ite_eq_left rfl]
-      · rw [ite_eq_right (fun hc => hij (Fin.ext (by simpa using congrArg Fin.val hc))),
-          ite_eq_right hij]
-    · rw [ite_eq_right (fun hc : i = j => hj (hc ▸ hi))]
-      exact Submodule.inner_right_of_mem_orthogonal (isometryPad_mem_range ι v hi)
-        (isometryPad_mem_orthogonal ι v hj)
-  · by_cases hj : (j : ℕ) < finrank 𝕜 D
-    · rw [ite_eq_right (fun hc : i = j => hi (hc ▸ hj))]
-      exact Submodule.inner_left_of_mem_orthogonal (isometryPad_mem_range ι v hj)
-        (isometryPad_mem_orthogonal ι v hi)
-    · rw [isometryPad_of_ge ι v hi, isometryPad_of_ge ι v hj, ← Submodule.coe_inner,
-        orthonormal_iff_ite.mp (stdOrthonormalBasis 𝕜
-          ((LinearMap.range ι.toLinearMap)ᗮ : Submodule 𝕜 E)).orthonormal]
-      by_cases hij : i = j
-      · subst hij; rw [ite_eq_left rfl, ite_eq_left rfl]
-      · rw [ite_eq_right (fun hc => ?_), ite_eq_right hij]
-        rw [Fin.cast_inj] at hc
-        have hval : (i : ℕ) - finrank 𝕜 D = (j : ℕ) - finrank 𝕜 D := by
-          simpa using congrArg Fin.val hc
-        have hi' := i.isLt
-        have hj' := j.isLt
-        exact hij (Fin.ext (by omega))
-
-/-- **The padded orthonormal basis of `E`.**  `finrank 𝕜 E` orthonormal vectors, so
-`OrthonormalBasis.mk` needs only the count. -/
-private noncomputable def isometryPadBasis (ι : D →ₗᵢ[𝕜] E)
-    (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) :
-    OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E :=
-  OrthonormalBasis.mk (orthonormal_isometryPad ι v) (by
-    refine (Submodule.eq_top_of_finrank_eq ?_).ge
-    rw [finrank_span_eq_card (orthonormal_isometryPad ι v).linearIndependent,
-      Fintype.card_fin])
-
-@[simp] private theorem isometryPadBasis_apply (ι : D →ₗᵢ[𝕜] E)
-    (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) (i : Fin (finrank 𝕜 E)) :
-    isometryPadBasis ι v i = isometryPad ι v i :=
-  congrFun (OrthonormalBasis.coe_mk _ _) i
-
-/-- Padding an antitone nonnegative sequence with zeros keeps it antitone -- the
-sortedness half of every padding argument. -/
-private theorem antitone_padZero {n m : ℕ} {μ : Fin n → ℝ} (hanti : Antitone μ)
-    (hnonneg : ∀ i, 0 ≤ μ i) :
-    Antitone (fun i : Fin m => if h : (i : ℕ) < n then μ ⟨(i : ℕ), h⟩ else 0) := by
-  intro i j hij
-  have hvij : (i : ℕ) ≤ (j : ℕ) := hij
-  dsimp only
-  by_cases hj : (j : ℕ) < n
-  · have hi : (i : ℕ) < n := lt_of_le_of_lt hvij hj
-    rw [dite_eq_left hi, dite_eq_left hj]
-    exact hanti (Fin.mk_le_mk.mpr hvij)
-  · rw [dite_eq_right hj]
-    by_cases hi : (i : ℕ) < n
-    · rw [dite_eq_left hi]; exact hnonneg _
-    · rw [dite_eq_right hi]
-
-/-- **The padded basis is an eigenbasis of the conjugated operator.**  If `v` diagonalises
-`G` on `D`, then `ι ∘ G ∘ ι⋆` is diagonalised on `E` by the padded basis, with the extra
-slots carrying eigenvalue `0` -- they lie in `(range ι)ᗮ`, which `ι⋆` kills. -/
-private theorem isometryPadBasis_conj_apply [FiniteDimensional 𝕜 D] (ι : D →ₗᵢ[𝕜] E)
-    (G : D →ₗ[𝕜] D)
-    (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) (μ : Fin (finrank 𝕜 D) → ℝ)
-    (hv : ∀ j, G (v j) = ((μ j : ℝ) : 𝕜) • v j) (i : Fin (finrank 𝕜 E)) :
-    (ι.toLinearMap ∘ₗ (G ∘ₗ LinearMap.adjoint ι.toLinearMap)) (isometryPadBasis ι v i)
-      = (((if h : (i : ℕ) < finrank 𝕜 D then μ ⟨(i : ℕ), h⟩ else 0 : ℝ)) : 𝕜)
-          • isometryPadBasis ι v i := by
-  classical
-  rw [isometryPadBasis_apply]
-  by_cases h : (i : ℕ) < finrank 𝕜 D
-  · simp only [dite_eq_left h, isometryPad_of_lt ι v h, LinearMap.comp_apply,
-      LinearIsometry.adjoint_apply_apply, hv, map_smul, LinearIsometry.coe_toLinearMap]
-  · simp only [dite_eq_right h, isometryPad_of_ge ι v h, LinearMap.comp_apply,
-      LinearIsometry.adjoint_eq_zero_of_mem_orthogonal ι (SetLike.coe_mem _),
-      map_zero, zero_smul]
-
-end IsometryPad
-
-/-- Precomposing with the adjoint of a linear isometric embedding preserves
-singular values, with the additional ambient-domain slots padded by zero.
-
-This is the reusable coisometry-padding theorem behind the principal-angle
-embedding and rectangular zero extension.  The analytic content is independent
-of the eventual Davis--Kahan application: the Gram operator is conjugated onto
-the isometry range and vanishes on its orthogonal complement. -/
-theorem singularValues_comp_adjoint_linearIsometry
-    {D F : Type*}
-    [NormedAddCommGroup D] [InnerProductSpace 𝕜 D] [FiniteDimensional 𝕜 D]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
-    (ι : D →ₗᵢ[𝕜] E) (X : D →ₗ[𝕜] F) :
-    (X ∘ₗ LinearMap.adjoint ι.toLinearMap).singularValues = X.singularValues := by
-  classical
-  set Y : E →ₗ[𝕜] F := X ∘ₗ LinearMap.adjoint ι.toLinearMap with hYdef
-  -- the gram operator of `Y` is that of `X`, conjugated onto the range of `ι`
-  have hgram : LinearMap.adjoint Y ∘ₗ Y =
-      ι.toLinearMap ∘ₗ ((LinearMap.adjoint X ∘ₗ X) ∘ₗ LinearMap.adjoint ι.toLinearMap) := by
-    rw [hYdef, LinearMap.adjoint_comp, LinearMap.adjoint_adjoint]
-    ext x
-    simp only [LinearMap.comp_apply]
-  have hGX : (LinearMap.adjoint X ∘ₗ X).IsSymmetric := X.isSymmetric_adjoint_comp_self
-  -- push its eigenbasis into `E` along `ι`, padding the complement with zeros
-  have heq := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
-    Y.isSymmetric_adjoint_comp_self rfl (isometryPadBasis ι (hGX.eigenvectorBasis rfl))
-    (antitone_padZero (hGX.eigenvalues_antitone rfl)
-      (fun i => X.isPositive_adjoint_comp_self.nonneg_eigenvalues rfl i))
-    (fun i => by
-      rw [hgram]
-      exact isometryPadBasis_conj_apply ι _ _ (hGX.eigenvalues rfl)
-        (fun j => hGX.apply_eigenvectorBasis rfl j) i)
-  -- three ranges of the index: inside `D`, the padding, and past `E`
-  refine Finsupp.ext fun i => ?_
-  rcases lt_or_ge i (finrank 𝕜 D) with hid | hid
-  · have hin : i < finrank 𝕜 E := lt_of_lt_of_le hid (finrank_le_of_linearIsometry ι)
-    rw [Y.singularValues_of_lt rfl hin, X.singularValues_of_lt rfl hid, heq]
-    simp only [dite_eq_left hid]
-  · rcases lt_or_ge i (finrank 𝕜 E) with hin | hin
-    · rw [Y.singularValues_of_lt rfl hin, X.singularValues_of_finrank_le hid, heq]
-      simp only [dite_eq_right (not_lt.mpr hid)]
-      exact Real.sqrt_zero
-    · rw [Y.singularValues_of_finrank_le hin, X.singularValues_of_finrank_le hid]
-
 
 end TauCeti

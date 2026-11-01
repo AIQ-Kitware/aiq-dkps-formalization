@@ -56,8 +56,8 @@ theorem singularValues_planarZeroExtension
   calc
     (ι.toLinearMap ∘ₗ T ∘ₗ LinearMap.adjoint ι.toLinearMap).singularValues =
         (T ∘ₗ LinearMap.adjoint ι.toLinearMap).singularValues :=
-      singularValues_linearIsometry_comp ι _
-    _ = T.singularValues := singularValues_comp_adjoint_linearIsometry ι T
+      LinearMap.singularValues_linearIsometry_comp ι _
+    _ = T.singularValues := LinearMap.singularValues_comp_adjoint_linearIsometry T ι
 
 /-- Every Ky Fan prefix of a zero-extended plane equals the corresponding
 prefix in the original plane, including prefixes beyond dimension two. -/

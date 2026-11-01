@@ -691,7 +691,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 The adjoint of the isometric inclusion `U → E` is the orthogonal projection
 onto `U`, so the second map is the first precomposed with the adjoint of an
-isometric embedding, which is `singularValues_comp_adjoint_linearIsometry`. -/
+isometric embedding, which is `LinearMap.singularValues_comp_adjoint_linearIsometry`. -/
 theorem singularValues_comp_subtype (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (A : E →ₗ[𝕜] F) :
     (A ∘ₗ U.subtype).singularValues = (A ∘ₗ projection U).singularValues := by
@@ -713,7 +713,7 @@ theorem singularValues_comp_subtype (U : Submodule 𝕜 E)
     rw [hadj]
     ext x
     rfl
-  rw [← hcomp, singularValues_comp_adjoint_linearIsometry]
+  rw [← hcomp, LinearMap.singularValues_comp_adjoint_linearIsometry]
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The cosine cross projection is unchanged by precomposition with `P_U`. -/

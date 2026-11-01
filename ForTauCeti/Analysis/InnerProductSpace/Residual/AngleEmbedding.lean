@@ -383,7 +383,7 @@ theorem singularValues_sinThetaEmbedding (U : Submodule 𝕜 E)
   calc
     (sinThetaEmbedding U X).singularValues =
         (sinThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint).singularValues :=
-      (singularValues_comp_adjoint_linearIsometry X (sinThetaEmbedding U X)).symm
+      (LinearMap.singularValues_comp_adjoint_linearIsometry (sinThetaEmbedding U X) X).symm
     _ = (sinThetaMap (approximateSubspace X) U).singularValues := by rw [hmap]
     _ = principalSines (approximateSubspace X) U :=
       singularValues_sinThetaMap (approximateSubspace X) U
@@ -403,7 +403,7 @@ theorem singularValues_cosThetaEmbedding (U : Submodule 𝕜 E)
   calc
     (cosThetaEmbedding U X).singularValues =
         (cosThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint).singularValues :=
-      (singularValues_comp_adjoint_linearIsometry X (cosThetaEmbedding U X)).symm
+      (LinearMap.singularValues_comp_adjoint_linearIsometry (cosThetaEmbedding U X) X).symm
     _ = (cosThetaMap (approximateSubspace X) U).singularValues := by rw [hmap]
     _ = principalCosines (approximateSubspace X) U :=
       singularValues_cosThetaMap (approximateSubspace X) U

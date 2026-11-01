@@ -1380,7 +1380,13 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues",
-      "source_declarations": [],
+      "source_declarations": [
+        "LinearMap.singularValues_adjoint",
+        "LinearMap.singularValues_adjoint_apply",
+        "TauCeti.singularValues_linearIsometry_comp",
+        "TauCeti.LinearIsometry.adjoint_eq_zero_of_mem_orthogonal",
+        "TauCeti.singularValues_comp_adjoint_linearIsometry"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
@@ -1394,7 +1400,8 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "2026-10-31 upstream consumption: retire the original DKPS proof of coisometry zero-padding (TauCeti.singularValues_comp_adjoint_linearIsometry), the postcomposition-isometry lemma (TauCeti.singularValues_linearIsometry_comp), and the private isometry-padding basis/eigenvalue machinery from ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues. The only consumer of the local LinearIsometry.adjoint_eq_zero_of_mem_orthogonal was the retired padding proof, so it is retired too. Consumers now invoke accepted LinearMap.singularValues_comp_adjoint_linearIsometry (operator first, embedding second) and LinearMap.singularValues_linearIsometry_comp directly from TauCeti.Analysis.InnerProductSpace.SingularValues at the pinned TauCeti main commit 463ab293070d4cb355d0a0e036469464070088bc. The DKPS original implementation is recoverable at donor commit e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/RectangularSingularValues.lean (older ForMathlib provenance: 82d20de). This is consumption of an accepted equivalent; no proof-descent assertion is made. Keep staged status because the other rectangular Gram/singular-value results in this module remain locally maintained. The same upstream SingularValues module also owns LinearMap.singularValues_adjoint. Its original DKPS proof and the pointwise singularValues_adjoint_apply wrapper are retired; consumers use the upstream equality of Finsupp singular-value sequences. The remaining DKPS Gram-spectrum results keep their original statements."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.SchattenNorm",

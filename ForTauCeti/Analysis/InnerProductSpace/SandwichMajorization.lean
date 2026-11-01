@@ -235,7 +235,7 @@ theorem sum_re_inner_apply_comp_le_sum_range_mul_sq
         _ = ∑ j ∈ Finset.range m, d j := by
             refine Finset.sum_congr rfl fun j hj => ?_
             simp only [hd, ite_eq_left (lt_of_lt_of_le (Finset.mem_range.mp hj) hmk),
-              LinearMap.singularValues_adjoint_apply]
+              LinearMap.singularValues_adjoint]
     · -- Above the cut: Parseval, then Ky Fan for `D⋆ D` on `w` itself.
       have htot : ∑ j ∈ Finset.range (finrank 𝕜 E), c j = ∑ i : Fin k, ‖D (w i)‖ ^ 2 := by
         rw [← Fin.sum_univ_eq_sum_range (fun j => c j) (finrank 𝕜 E)]
