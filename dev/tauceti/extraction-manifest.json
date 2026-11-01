@@ -1237,21 +1237,35 @@
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.LinearMap.exists_linearIsometryEquiv_comp_polarFactor",
+        "TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_apply_le",
+        "TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_le",
+        "TauCeti.ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_apply_le",
+        "TauCeti.ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_le"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.NearIsometry",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Polar.Unitary",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
-      "provenance_class": "moved; introduced at Davis--Kahan commit fc38eb4; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "Kitware, Apache-2.0, original ForMathlib NearIsometry at Davis--Kahan commit fc38eb4; Jon Crall, Claude Fable 5, Claude Opus 4.8 and later Claude Opus 5. Upstream PR #16127 explicitly independently implemented unitary polar factorization / near-isometry rather than adapting the DKPS proof.",
       "direct_dependencies": [
-        "Mathlib",
-        "TauCeti.Analysis.SpecialFunctions.Sqrt"
+        "TauCeti.Analysis.InnerProductSpace.Polar.Unitary",
+        "TauCeti.Analysis.SpecialFunctions.Sqrt",
+        "Mathlib.Analysis.InnerProductSpace.Adjoint",
+        "Mathlib.Analysis.InnerProductSpace.Spectrum"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "Acharyya2025.PolarFactor",
+        "Acharyya2025.ConfigPerturbation",
+        "Challenge.NearIsometry.Leaderboard",
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry"
+      ],
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16127",
+      "migration_note": "2026-11-01: The original eigenbasis/diagonal polar near-isometry proof, including its 15 proof-only private helper declarations, was replaced by a short use of accepted LinearMap.exists_linearIsometryEquiv_comp_operatorAbs_eq and LinearMap.norm_operatorAbs_apply_sub_le, plus isSymmetric_operatorAbs and operatorAbs_sq. This retains the same historical statement TauCeti.LinearMap.exists_linearIsometryEquiv_comp_polarFactor and the four other public statements as downstream paper/challenge-facing formulations. The witness S is now precisely M.operatorAbs. Accepted #16127 at TauCeti commit 2b69ec4d36 was independently implemented according to PR author notes, NOT copied/adapted from DKPS. The original source was ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean at Davis--Kahan fc38eb4, retained in DKPS donor e4637c3919ae; Kitware copyright and original AI co-authorship remain attributed. The local declarations still serve paper-specific spellings and a historical weaker-constant challenge theorem; the reusable foundation is now consumed upstream, not reproved locally."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.OrthogonalSeries",

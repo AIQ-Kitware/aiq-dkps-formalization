@@ -2211,3 +2211,35 @@ TauCeti `Projection.Block` separately credits the Spectra Formalization
 Project for the broader projection-block development. Both provenances are
 retained without claiming the proofs were copied verbatim. See the existing
 `extraction-manifest.json` for source declarations and replacement mapping.
+
+
+## 2026-11-01: near-isometry polar factorization consumes independent TauCeti #16127
+
+**Retired private implementation, retained paper-facing statements.** The
+maintained donor `ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean`
+previously reconstructed the modulus and unitary polar factor using a custom
+real orthonormal eigenbasis, diagonal operators, and inverse-square-root
+coordinates. Its private lemmas for diagonal arithmetic, spectral estimates,
+Gram eigenbasis construction, and isometry extension have no remaining
+consumers and are now removed.
+
+The same public factorization theorem
+`TauCeti.LinearMap.exists_linearIsometryEquiv_comp_polarFactor` is proved by
+taking `S = M.operatorAbs` and `W` from the accepted
+`LinearMap.exists_linearIsometryEquiv_comp_operatorAbs_eq`, with
+`LinearMap.isSymmetric_operatorAbs`, `LinearMap.operatorAbs_sq`, and
+`LinearMap.norm_operatorAbs_apply_sub_le`. The original sharp estimate and
+historical factor-two variants retain their statements for Acharyya and
+challenge consumers; there is no new TauCeti forwarding API.
+
+**Scope and lineage.** [PR #16127](https://github.com/TauCetiProject/TauCeti/pull/16127)
+provides the finite-dimensional `RCLike` unitary polar construction and the
+modulus estimate, strictly generalizing the real-specific algebraic foundation
+used here. Its integration commit `2b69ec4d36` is in the pinned TauCeti main
+snapshot `463ab293070d`. The PR *explicitly calls its proof independent* of the
+DKPS donor; it must not be counted as a DKPS proof port. The historical donor
+was introduced in Davis--Kahan commit `fc38eb4` for Jon Crall, developed by Claude Fable 5
+and Claude Opus 4.8, then redesigned by Claude Opus 5 (Kitware, Apache-2.0).
+The original reconstruction is present in donor revision `e4637c3919ae`.
+The local five public declarations are preserved, and their original naming
+and source history remain in `extraction-manifest.json`.
