@@ -2056,3 +2056,47 @@ The original complete singular-system source is preserved in donor revision
 `82d20de`, Kitware, Jon Crall, GPT-5.6 High, Claude Fable 5; Apache-2.0).
 The TauCeti singular-system implementation is identified as overlapping accepted
 mathematics, not asserted to be copied from DKPS.
+
+
+## 2026-10-31: consume accepted native matrix rank factorization
+
+**Full donor-module retirement (MSS-A08).** The 301-line
+`ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean` is deleted from
+maintained DKPS sources. Original proof code is preserved in repository history
+at `e4637c3919ae:ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean`,
+tracing earlier to `7bc63b8` in the former `ForMathlib` staging layer. The original
+Kitware development is attributed to Jon Crall and Claude Fable 5 (Apache-2.0).
+
+The accepted TauCeti replacements at pin `463ab293070d` are:
+
+- `TauCeti/LinearAlgebra/Matrix/Rank.lean`: `Matrix.exists_eq_mul_fin_rank`
+  (originally `TauCeti.Matrix.exists_eq_mul_rank`),
+  `Matrix.exists_eq_mul_of_rank_le`, and `Matrix.rank_le_iff_exists_eq_mul`;
+  accepted as part of [#14510](https://github.com/TauCetiProject/TauCeti/pull/14510),
+  main commit `2e37076eb3` (2026-10-11). The native implementation uses
+  linear-map/basis factorization and accepts arbitrary row index types.
+- `TauCeti/LinearAlgebra/Matrix/Rank/Factorization.lean`:
+  `Matrix.exists_unit_eq_mul_of_rank_factorization` generalizes the original
+  `TauCeti.Matrix.exists_units_eq_mul_of_rank_factorization` from `Fin r` to
+  an arbitrary finite intermediate index type; adapted with direct DKPS source
+  attribution in [#13475](https://github.com/TauCetiProject/TauCeti/pull/13475),
+  main commit `1d10f2719b` (2026-10-16).
+- `Matrix.rank_left_factor_eq`, `Matrix.range_left_factor_eq` (native `Rank.lean`)
+  and `Matrix.exists_mul_eq_of_range_le`,
+  `Matrix.mul_left_cancel_of_mulVec_injective` (native `Range.lean`) replace
+  the donor's proof-only lifting, rank/range, and cancellation machinery.
+
+The still-unmerged result in
+`ForTauCeti/LinearAlgebra/Matrix/PosDef.lean` (rank-constrained positive
+semidefinite Gram realization) is **retained**, with its rank-factorization
+step now calling `Matrix.exists_eq_mul_of_rank_le` directly. The paired rank
+challenge's independent conformance statement and its leaderboard now use
+TauCeti's native `Matrix` namespace and the renamed exact-rank theorem.
+No forwarding alias is kept in `ForTauCeti`. The module-plan seed and
+manifest staging reference are removed, and the manifest's historical record
+retains the original declaration names and new destinations.
+
+**Build boundary:** Source-reference and archive checks are not Lean
+compilation. In the live checkout, run `lake exe cache get`, build
+`ForTauCeti.LinearAlgebra.Matrix.PosDef` and the challenge modules, then
+run the repository default `lake build` before committing this deletion.

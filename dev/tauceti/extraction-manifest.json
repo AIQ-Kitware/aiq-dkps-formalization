@@ -463,7 +463,6 @@
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.LinearAlgebra.Matrix.PosDef",
-        "ForTauCeti.LinearAlgebra.Matrix.RankFactorization",
         "ForTauCeti.Topology.ApproxMinimizer",
         "ForTauCeti.Topology.Berge"
       ]
@@ -4804,13 +4803,19 @@
     {
       "source_module": "ForMathlib/LinearAlgebra/Matrix/RankFactorization.lean",
       "source_declarations": [
-        "exists_eq_mul_of_rank_le",
         "exists_eq_mul_rank",
-        "rank_le_iff_exists_eq_mul"
+        "exists_eq_mul_of_rank_le",
+        "rank_le_iff_exists_eq_mul",
+        "injective_mulVecLin_of_rank_eq",
+        "rank_left_factor_eq",
+        "range_left_factor_eq",
+        "exists_mul_eq_of_range_le",
+        "eq_of_mul_left_cancel",
+        "exists_units_eq_mul_of_rank_factorization"
       ],
-      "current_namespace": "ForMathlib.Matrix",
-      "staging_module": "ForTauCeti.LinearAlgebra.Matrix.RankFactorization",
-      "final_tauceti_module": "TauCeti.LinearAlgebra.Matrix.RankFactorization",
+      "current_namespace": "TauCeti.Matrix (retired donor namespace)",
+      "staging_module": null,
+      "final_tauceti_module": "TauCeti.LinearAlgebra.Matrix.Rank.Factorization",
       "ownership_class": "tauceti",
       "roadmap_target": "Matrix rank factorization and PSD realization, Berge's maximum theorem and the approximate-minimizer lemma.",
       "provenance_class": "moved verbatim from the retired ForMathlib library; namespace deliberately unchanged (comparator pins)",
@@ -4818,11 +4823,10 @@
         "Mathlib"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.LinearAlgebra.Matrix.PosDef"
-      ],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [],
+      "status": "consumed-upstream",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/13475",
+      "migration_note": "2026-10-31 full donor removal at pinned TauCeti 463ab293070d. The original TauCeti.Matrix.exists_eq_mul_rank is replaced by Matrix.exists_eq_mul_fin_rank; the two rank-bound theorems are replaced by Matrix.exists_eq_mul_of_rank_le and Matrix.rank_le_iff_exists_eq_mul (#14510, main commit 2e37076eb3). Exact-rank uniqueness is replaced by the more general Matrix.exists_unit_eq_mul_of_rank_factorization, through arbitrary finite index type (#13475, main commit 1d10f2719b). Other proof-only rank, range, lifting, and cancellation lemmas are replaced by the accepted Matrix.rank_left_factor_eq, Matrix.range_left_factor_eq, Matrix.exists_mul_eq_of_range_le and Matrix.mul_left_cancel_of_mulVec_injective APIs. The residual ForTauCeti.LinearAlgebra.Matrix.PosDef donor continues to prove rank-constrained PSD Gram realization using the native Matrix.exists_eq_mul_of_rank_le. The rank challenge now points to accepted Matrix namespace and original full proofs remain recoverable at DKPS commit e4637c3919ae in ForTauCeti/LinearAlgebra/Matrix/RankFactorization.lean, with earlier source at donor commit 7bc63b8. No forwarding theorem or compatibility module remains."
     },
     {
       "source_module": "ForMathlib/LinearAlgebra/Matrix/PosDef.lean",

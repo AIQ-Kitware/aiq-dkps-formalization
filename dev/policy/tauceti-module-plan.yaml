@@ -274,7 +274,6 @@ topics:
 - id: T21
   title: Matrix rank factorization and positive semidefiniteness
   modules:
-  - LinearAlgebra.Matrix.RankFactorization
   - LinearAlgebra.Matrix.PosDef
 - id: T22
   title: Berge's maximum theorem and approximate minimizers
@@ -592,7 +591,6 @@ rungs:
   title: Matrix rank factorization and positive semidefiniteness (T21)
   seeds:
   - LinearAlgebra.Matrix.PosDef
-  - LinearAlgebra.Matrix.RankFactorization
 - id: U
   title: Berge's maximum theorem and approximate minimizers (T22)
   seeds:
