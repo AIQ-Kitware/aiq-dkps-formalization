@@ -1031,9 +1031,12 @@ theorem eigenvalues₀_augmented_centeredGram_upper
       _ ≤ 2 * B * (2 * B) := mul_le_mul (hcnorm a) (hcnorm b) (norm_nonneg _) (by positivity)
       _ = 4 * B ^ 2 := by ring
   calc (configGramPosSemidef (centerConfig points)).isHermitian.eigenvalues₀ i
-      ≤ ((n + 1 : ℕ) : ℝ) * (4 * B ^ 2) :=
-        TauCeti.Matrix.eigenvalues₀_le_of_entry_le
-          (configGramPosSemidef (centerConfig points)).isHermitian hentry i
+      ≤ |(configGramPosSemidef (centerConfig points)).isHermitian.eigenvalues₀ i| :=
+        le_abs_self _
+    _ ≤ ((n + 1 : ℕ) : ℝ) * (4 * B ^ 2) := by
+        simpa only [Fintype.card_fin] using
+          Matrix.IsHermitian.abs_eigenvalues₀_le_of_entry_le
+            (configGramPosSemidef (centerConfig points)).isHermitian hentry i
     _ = 4 * ((n + 1 : Nat) : ℝ) * B ^ 2 := by ring
 
 set_option maxHeartbeats 1000000 in

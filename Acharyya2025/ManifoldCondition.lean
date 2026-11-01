@@ -51,7 +51,7 @@ theorem eigenvalues₀_eq_zero_of_eq_zero {n : Nat} {B : Matrix (Fin n) (Fin n) 
     (hB : B.IsHermitian) (h0 : B = 0) (k : Fin (Fintype.card (Fin n))) :
     hB.eigenvalues₀ k = 0 := by
   have hbound : ∀ i j, |B i j| ≤ (0 : Real) := by simp [h0]
-  have h := TauCeti.Matrix.abs_eigenvalues₀_le_of_entry_le hB
+  have h := hB.abs_eigenvalues₀_le_of_entry_le
     (fun i j => by simpa only [Real.norm_eq_abs] using hbound i j) k
   rw [mul_zero] at h
   exact abs_eq_zero.mp (le_antisymm h (abs_nonneg _))

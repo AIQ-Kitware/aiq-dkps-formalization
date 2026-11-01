@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
 public import ForTauCeti.Analysis.Matrix.SpectralProjection
-public import ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue
+public import TauCeti.Analysis.Matrix.Eigenvalues
 public import TauCeti.Analysis.OperatorIdeal.Family.Schatten
 public import TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
 
@@ -141,7 +141,9 @@ example {A B : Matrix (Fin n) (Fin n) 𝕜} (hA : A.IsHermitian) (hB : B.IsHermi
     {e : ℝ} (he : ∀ i j, ‖B i j - A i j‖ ≤ e)
     (k : Fin (Fintype.card (Fin n))) :
     |hB.eigenvalues₀ k - hA.eigenvalues₀ k| ≤ (n : ℝ) * e :=
-  TauCeti.Matrix.abs_eigenvalues₀_sub_le_of_entry_le hA hB he k
+  by
+    simpa only [Fintype.card_fin] using
+      hB.abs_eigenvalues₀_sub_le_of_entry_le hA he k
 
 end Matrices
 

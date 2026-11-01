@@ -2100,3 +2100,40 @@ retains the original declaration names and new destinations.
 compilation. In the live checkout, run `lake exe cache get`, build
 `ForTauCeti.LinearAlgebra.Matrix.PosDef` and the challenge modules, then
 run the repository default `lake build` before committing this deletion.
+
+
+## 2026-11-01: consume native entrywise matrix eigenvalue bounds
+
+**Full donor retirement (MSS matrix spectral bounds).** Delete the 80-line
+`ForTauCeti/Analysis/Matrix/EntrywiseEigenvalue.lean` module after migrating its sole
+source importer `RoadmapBridge.OperatorTheory` to the accepted
+`Matrix.IsHermitian.abs_eigenvalues₀_sub_le_of_entry_le`. The donor theorem was
+`TauCeti.Matrix.abs_eigenvalues₀_sub_le_of_entry_le` for `Fin n` matrices; the
+accepted result works for arbitrary finite index types (including empty types)
+and has the same numerical coefficient. `Fintype.card_fin` transports the bound.
+
+The accepted TauCeti result is in
+`TauCeti/Analysis/Matrix/Eigenvalues.lean`, [PR #15222](https://github.com/TauCetiProject/TauCeti/pull/15222),
+main commit `20f931816c` (2026-10-12), present at the pinned revision
+`463ab293070d`. The DKPS original is recoverable at
+`e4637c3919ae:ForTauCeti/Analysis/Matrix/EntrywiseEigenvalue.lean`; its
+earlier `ForMathlib` introduction was `2356fd0` (Jon Crall, Claude Opus 4.8;
+Apache-2.0, Kitware, Inc.). The statements overlap mathematically; this
+entry does not assert the TauCeti proof was copied from DKPS.
+
+**Partial retirement of spectral measurability donor.** Remove
+`TauCeti.Matrix.abs_eigenvalues₀_le_of_entry_le` and the one-sided
+`TauCeti.Matrix.eigenvalues₀_le_of_entry_le` from
+`ForTauCeti/Analysis/Matrix/SpectralFunctionMeasurable.lean`.
+The native `Matrix.IsHermitian.abs_eigenvalues₀_le_of_entry_le` supplies the
+stronger statement; the one-sided estimate follows from `le_abs_self`. Update
+`Acharyya2025.ManifoldCondition`, `DkpsQuench2026.Spectral.Regularity`, and
+`Helm2025.AcharyyaBridge` to consume it directly. The original local proofs
+remain recoverable from the same donor revision `e4637c3919ae`, tracing the
+measurability module's initial `ForMathlib` source `82989e1` (Jon Crall,
+Claude Fable 5, Claude Opus 4.8; Apache-2.0).
+
+The remaining matrix spectral measurability definitions, spectral projection
+construction, and statistical/paper-facing conclusions are **not** removed.
+No forwarding aliases are introduced. The extraction manifest and module plan
+record the source retirement; these are independent from compilation evidence.

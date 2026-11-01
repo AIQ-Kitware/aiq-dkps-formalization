@@ -185,7 +185,6 @@
       "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
-        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.Analysis.Matrix.SpectralProjection",
         "ForTauCeti.MeasureTheory.CfcMeasurable"
@@ -200,7 +199,6 @@
       "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
       "tauceti_target_marker": null,
       "staging_modules": [
-        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
         "ForTauCeti.MeasureTheory.CfcMeasurable",
         "ForTauCeti.Probability.Moments.CenteredScatter",
@@ -1633,10 +1631,12 @@
     },
     {
       "source_module": "ForMathlib.Analysis.Matrix.EntrywiseEigenvalue",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.Matrix.abs_eigenvalues₀_sub_le_of_entry_le"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
-      "final_tauceti_module": "TauCeti.Analysis.Matrix.EntrywiseEigenvalue",
+      "final_tauceti_module": "TauCeti.Analysis.Matrix.Eigenvalues",
       "ownership_class": "tauceti",
       "roadmap_target": "matrix-spectral",
       "provenance_class": "moved; introduced at Davis--Kahan commit 2356fd0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
@@ -1646,12 +1646,10 @@
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "RoadmapBridge.OperatorTheory"
-      ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/15222",
+      "migration_note": "2026-11-01 upstream consumption: remove the 80-line finite-Fin-n donor at ForTauCeti/Analysis/Matrix/EntrywiseEigenvalue.lean. RoadmapBridge now uses Matrix.IsHermitian.abs_eigenvalues₀_sub_le_of_entry_le from TauCeti.Analysis.Matrix.Eigenvalues (accepted #15222, main commit 20f931816c). The accepted theorem also covers arbitrary Fintype indices and zero-dimensional matrices. Original code at DKPS e4637c3919ae, historical ForMathlib source introduced in 2356fd0 (Jon Crall, Claude Opus 4.8; Apache-2.0). Equivalent mathematical statements; do not infer direct proof descent from this overlap."
     },
     {
       "source_module": "ForMathlib.Analysis.Matrix.EntrywiseOpNorm",
@@ -1671,7 +1669,6 @@
         "Acharyya2025.OperatorBridge",
         "DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator",
         "DkpsQuench2026.Geometry.Covariance",
-        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable"
       ],
       "status": "upstreamed",
@@ -1680,7 +1677,10 @@
     },
     {
       "source_module": "ForMathlib.Analysis.Matrix.SpectralFunctionMeasurable",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.Matrix.abs_eigenvalues₀_le_of_entry_le",
+        "TauCeti.Matrix.eigenvalues₀_le_of_entry_le"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
       "final_tauceti_module": "TauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
@@ -1704,12 +1704,11 @@
         "Acharyya2025.ManifoldCondition",
         "Acharyya2025.MatrixPerturbation",
         "Challenge.SpectralFunctionMeasurable.Leaderboard",
-        "ForTauCeti.Analysis.Matrix.EntrywiseEigenvalue",
         "ForTauCeti.Analysis.Matrix.SpectralProjection"
       ],
-      "status": "staged-needs-current-validation",
+      "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "2026-11-01: remove two locally proved scalar eigenvalue bounds: TauCeti.Matrix.abs_eigenvalues₀_le_of_entry_le and its one-sided corollary TauCeti.Matrix.eigenvalues₀_le_of_entry_le. Consumers use Matrix.IsHermitian.abs_eigenvalues₀_le_of_entry_le accepted in TauCeti.Analysis.Matrix.Eigenvalues (#15222); derive any one-sided bound from le_abs_self. Retain distinct measurable matrix spectral functional calculus and Borel instances in the donor. Original source remains at DKPS e4637c3919ae (Jon Crall, Claude Fable 5, Claude Opus 4.8; Apache-2.0). No proof-descent claim for upstream."
     },
     {
       "source_module": "ForTauCeti.Analysis.Matrix.Spectrum",

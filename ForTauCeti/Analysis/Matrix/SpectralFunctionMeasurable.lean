@@ -121,31 +121,6 @@ theorem abs_coord_le_norm (x : EuclideanSpace ℝ (Fin n)) (i : Fin n) :
         refine Finset.sum_congr rfl fun j _ => ?_
         simp [Real.norm_eq_abs, sq_abs]
 
-/-- Entrywise bound on a Hermitian matrix bounds all its eigenvalues. -/
-theorem abs_eigenvalues₀_le_of_entry_le {𝕜 : Type*} [RCLike 𝕜]
-    {B : Matrix (Fin n) (Fin n) 𝕜}
-    (hB : B.IsHermitian) {β : ℝ} (hβ : ∀ i j, ‖B i j‖ ≤ β)
-    (k : Fin (Fintype.card (Fin n))) :
-    |hB.eigenvalues₀ k| ≤ (n : ℝ) * β := by
-  set u := (opSym hB).eigenvectorBasis finrank_euclideanSpace with hu
-  have hnorm1 : ‖u k‖ = 1 := u.orthonormal.1 k
-  have happly : Matrix.toEuclideanLin B (u k) = (hB.eigenvalues₀ k : 𝕜) • u k := by
-    rw [hu]
-    exact (opSym hB).apply_eigenvectorBasis finrank_euclideanSpace k
-  have hle : ‖Matrix.toEuclideanLin B (u k)‖ ≤ (n : ℝ) * β * ‖u k‖ :=
-    by simpa [Fintype.card_fin] using
-      Matrix.norm_toEuclideanLin_le_of_entry_le_square hβ (u k)
-  rwa [happly, norm_smul, RCLike.norm_ofReal, hnorm1, mul_one, mul_one] at hle
-
-/-- One-sided form of the entrywise eigenvalue bound.  A consumer that only needs a
-spectral ceiling states it against this rather than discharging the absolute value. -/
-theorem eigenvalues₀_le_of_entry_le {𝕜 : Type*} [RCLike 𝕜]
-    {B : Matrix (Fin n) (Fin n) 𝕜}
-    (hB : B.IsHermitian) {β : ℝ} (hβ : ∀ i j, ‖B i j‖ ≤ β)
-    (k : Fin (Fintype.card (Fin n))) :
-    hB.eigenvalues₀ k ≤ (n : ℝ) * β :=
-  le_trans (le_abs_self _) (abs_eigenvalues₀_le_of_entry_le hB hβ k)
-
 /-! ### Canonical continuous functional calculus -/
 
 section RCLike

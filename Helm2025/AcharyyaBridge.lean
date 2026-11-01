@@ -16,6 +16,7 @@ public import Acharyya2025.GramRealization
 public import Acharyya2025.RateChain
 public import Helm2025.Basic
 public import ForTauCeti.Probability.RigidAlignment
+public import TauCeti.Analysis.Matrix.Eigenvalues
 
 public section
 
@@ -517,9 +518,16 @@ theorem alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound
       (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian.eigenvalues₀ l
         ≤ (((n + 1 : ℕ) : ℝ) * β) := by
     intro ω l
-    apply TauCeti.Matrix.eigenvalues₀_le_of_entry_le
-    intro i j
-    simpa [Acharyya2025.MathlibBridge.disMatToMatrix] using hentry ω i j
+    calc
+      (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian.eigenvalues₀ l
+          ≤ |(populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian.eigenvalues₀ l| :=
+        le_abs_self _
+      _ ≤ (((n + 1 : ℕ) : ℝ) * β) := by
+        simpa only [Fintype.card_fin] using
+          Matrix.IsHermitian.abs_eigenvalues₀_le_of_entry_le
+            (populationCMDS_posSemidef_of_gram Dpop hgram ω).isHermitian
+            (fun i j => by
+              simpa [Acharyya2025.MathlibBridge.disMatToMatrix] using hentry ω i j) l
   exact alignmentConsistency_of_aligned_spectral_of_gram hd P Dhat hsym Dpop
     hα_pos hgram hcap rate hrate_nonneg hrate_zero hgood_meas hgood
 
