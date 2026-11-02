@@ -5,7 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+public import TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge.Faithfulness
+public import Mathlib.Analysis.InnerProductSpace.l2Space
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 public import TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic
@@ -14,9 +15,10 @@ public import TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic
 # Extended-real approximation-number sequences
 
 This is the bridge from DKPS's real-valued approximation numbers to the `ℝ≥0∞` sequences consumed
-by Tau Ceti's symmetric-gauge extension. The injectivity theorem below records a useful consequence
-of the diagonal realization: agreement of two extended gauges on all Hilbert-space operators forces
-agreement on every antitone sequence.
+by Tau Ceti's symmetric-gauge extension. The accepted faithfulness theorem determines the
+extension from the operator-ideal family.
+The adapter below preserves arbitrary scalar and carrier universes by transporting operators
+through a real/complex scalar isomorphism and universe lifts.
 -/
 
 public section
@@ -56,62 +58,38 @@ theorem approxSeq_antitone {E F : Type*}
       (ContinuousLinearMap.antitone_singularValue A)) hmn)
 
 /-- Equal symmetric-gauge values on all bounded Hilbert-space maps determine the extensions on
-antitone nonnegative sequences. Bounded sequences are realized by diagonal operators; an
-unbounded sequence has infinite extension for every symmetric gauge. -/
+antitone nonnegative sequences. Scalar transport and universe lifts reduce the original
+statement to accepted operator-ideal-family faithfulness, without restricting its universes. -/
 theorem symmetricGauge_eq_of_approxSeq_eq {Φ Ψ : SymmetricGauge}
     (h : ∀ {E : Type v} {F : Type w}
       [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       (A : E →L[𝕜] F), Φ.extend (approxSeq A) = Ψ.extend (approxSeq A))
     {a : ℕ → ENNReal} (ha : Antitone a) : Φ.extend a = Ψ.extend a := by
-  classical
-  by_cases hbdd : ∃ B : NNReal, ∀ n, a n ≤ (B : ENNReal)
-  · obtain ⟨B, hB⟩ := hbdd
-    have hafin : ∀ n, a n ≠ ⊤ := fun n =>
-      ne_top_of_le_ne_top (by simp) (hB n)
-    have realize {L : Type} [RCLike L] (e : RCLikeIso L 𝕜) :
-        Φ.extend a = Ψ.extend a := by
-      let c : ℕ → L := fun n => ((a n).toReal : L)
-      have hcnorm : ∀ n, ‖c n‖ = (a n).toReal := by
-        intro n
-        simp [c, abs_of_nonneg ENNReal.toReal_nonneg]
-      have hB0 : (0 : ℝ) ≤ (B : ℝ) := B.coe_nonneg
-      have hcB : ∀ n, ‖c n‖ ≤ (B : ℝ) := by
-        intro n
-        rw [hcnorm]
-        exact (ENNReal.toReal_le_toReal (hafin n) (by simp)).2 (hB n)
-      have hanti : Antitone fun n => ‖c n‖ := by
-        intro i j hij
-        simp only [hcnorm]
-        exact (ENNReal.toReal_le_toReal (hafin j) (hafin i)).2 (ha hij)
-      let H := ScalarTransport e (lp (fun _ : ℕ => L) 2)
-      let Q : H →L[𝕜] H := ScalarTransport.clm (e := e) (diagOpLp c hB0 hcB)
-      let ev : ULift.{v, 0} H ≃ₗᵢ[𝕜] H := LinearIsometryEquiv.ulift 𝕜 H
-      let ew : H ≃ₗᵢ[𝕜] ULift.{w, 0} H :=
-        (LinearIsometryEquiv.ulift 𝕜 H).symm
-      let T : ULift.{v, 0} H →L[𝕜] ULift.{w, 0} H :=
-        ew.toLinearIsometry.toContinuousLinearMap ∘L Q ∘L
-          ev.toLinearIsometry.toContinuousLinearMap
-      have hseq : approxSeq T = a := by
-        funext n
-        simp only [approxSeq, T, Q]
-        rw [
-          singularValue_comp_linearIsometryEquiv,
-          ScalarTransport.approximationNumber_clm,
-          approximationNumber_diagOpLp c hB0 hcB hanti n, hcnorm,
-          ENNReal.ofReal_toReal (hafin n)]
-      simpa only [hseq] using h T
-    rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with hI | hI
-    · exact realize (RCLikeIso.real hI).symm
-    · exact realize (RCLikeIso.complex hI).symm
-  · push Not at hbdd
-    have hsup : (⨆ n, a n) = ⊤ := by
-      refine iSup_eq_top.2 fun b hb => ?_
-      lift b to NNReal using hb.ne
-      obtain ⟨n, hn⟩ := hbdd b
-      exact ⟨n, hn⟩
-    have hinf : ∀ Theta : SymmetricGauge, Theta.extend a = ⊤ := fun Theta =>
-      top_le_iff.1 (hsup ▸ Theta.iSup_le_extend a)
-    rw [hinf Φ, hinf Ψ]
+  have transfer {L : Type} [RCLike L] (e : RCLikeIso L 𝕜) :
+      Φ.operatorIdealFamily.{0, 0, 0} L = Ψ.operatorIdealFamily.{0, 0, 0} L := by
+    apply OperatorIdealFamily.ext
+    intro E F _ _ _ _ _ _ A
+    let H := ScalarTransport e E
+    let K := ScalarTransport e F
+    let ev : ULift.{v, 0} H ≃ₗᵢ[𝕜] H := LinearIsometryEquiv.ulift 𝕜 H
+    let ew : K ≃ₗᵢ[𝕜] ULift.{w, 0} K :=
+      (LinearIsometryEquiv.ulift 𝕜 K).symm
+    let T : ULift.{v, 0} H →L[𝕜] ULift.{w, 0} K :=
+      ew.toLinearIsometry.toContinuousLinearMap ∘L ScalarTransport.clm (e := e) A ∘L
+        ev.toLinearIsometry.toContinuousLinearMap
+    have hs : approxSeq T = (fun n => (A.singularValue n : ENNReal)) := by
+      funext n
+      simp only [approxSeq, T]
+      rw [singularValue_comp_linearIsometryEquiv, ScalarTransport.approximationNumber_clm]
+      exact ENNReal.ofReal_coe_nnreal
+    have hT := h T
+    rw [hs] at hT
+    simpa only [SymmetricGauge.operatorIdealFamily_gauge, SymmetricGauge.opGauge_def] using hT
+  rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with hI | hI
+  · exact SymmetricGauge.extend_eq_of_operatorIdealFamily_eq
+      (transfer (RCLikeIso.real hI).symm) ha
+  · exact SymmetricGauge.extend_eq_of_operatorIdealFamily_eq
+      (transfer (RCLikeIso.complex hI).symm) ha
 
 end TauCeti

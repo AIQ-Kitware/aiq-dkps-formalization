@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.Geometry.Halmos.GenericReconstruction
 public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
@@ -87,25 +88,12 @@ theorem approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent
     (A.singularValue n : ℝ) = (B.singularValue n : ℝ) := by
   obtain ⟨U, hU⟩ := h
   have hUapp : ∀ x, B (U x) = U (A x) := fun x => (hU x).symm
-  have hUnorm : ‖(U : E →L[𝕜] F)‖ ≤ 1 :=
-    U.toLinearIsometry.norm_toContinuousLinearMap_le
-  have hUsnorm : ‖(U.symm : F →L[𝕜] E)‖ ≤ 1 :=
-    U.symm.toLinearIsometry.norm_toContinuousLinearMap_le
-  have hBfact : B = (U : E →L[𝕜] F) ∘L A ∘L (U.symm : F →L[𝕜] E) := by
+  have hBfact : B = U.toLinearIsometry.toContinuousLinearMap ∘L A ∘L
+      U.symm.toLinearIsometry.toContinuousLinearMap := by
     ext y
     change B y = U (A (U.symm y))
     rw [← hUapp (U.symm y), U.apply_symm_apply]
-  have hAfact : A = (U.symm : F →L[𝕜] E) ∘L B ∘L (U : E →L[𝕜] F) := by
-    ext x
-    change A x = U.symm (B (U x))
-    rw [hUapp x, U.symm_apply_apply]
-  refine le_antisymm ?_ ?_
-  · conv_lhs => rw [hAfact]
-    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
-      (U.symm : F →L[𝕜] E) (U : E →L[𝕜] F) hUsnorm hUnorm n
-  · conv_lhs => rw [hBfact]
-    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
-      (U : E →L[𝕜] F) (U.symm : F →L[𝕜] E) hUnorm hUsnorm n
+  rw [hBfact, ContinuousLinearMap.singularValue_comp_linearIsometryEquiv]
 
 /-! ## The angle operator is compact with trivial kernel -/
 

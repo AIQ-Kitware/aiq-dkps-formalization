@@ -3557,3 +3557,55 @@ ancestry. Both original headers credit Jon Crall, OpenAI GPT-5.6 Thinking,
 Niels Voss, Arnav Mehta, Rawad Kansoh and Claude Opus 5, Kitware copyright,
 Apache-2.0. Preserve original source names (including pre-extraction names) in
 the manifest; remove only active module-plan and extraction-cluster entries.
+
+
+## 2026-11-02: canonical infinite diagonals and accepted gauge faithfulness
+
+Retire the local `diagCoord`, `diagOpLp`, `truncDiagOpLp` construction and
+its norm, truncation/rank/tail, compactness, convergence, singular-value formula
+and finite-support proof engine. Halmos angle operators now use `lp.diagonalCLM`;
+compactness does not require sorted coefficients. Native
+`lp.exists_singularValue_diagonalCLM_eq` supplies the sequence-space witness in
+PrescribedSequence. The original arbitrary infinite-dimensional Hilbert-space
+realization, including nonseparable spaces, remains: it needs the countable closed
+span, Hilbert-basis conjugation and zero extension. The extension theorem retains
+its incomplete-ambient scope with only `W.HasOrthogonalProjection`. The generic
+contractions helper is deleted, and unitary conjugation uses native invariance.
+
+The accepted diagonal engine is [#15706](https://github.com/TauCetiProject/TauCeti/pull/15706),
+integration `bab29bb854c90d9b9565ccf87c28b09841e78154`, in pin
+`463ab293070d4cb355d0a0e036469464070088bc`. Its general lp constructor was later
+moved by #21091 (`2ca1127e251c2849880bc31d0478e87692dd2953`); that move is not
+the constructor's introduction. No explicit DKPS adaptation or independence
+disclosure was found for #15706, so no proof-descent claim is made. Its use of
+Mathlib `lp.mapCLM` is transitive reuse. The unsorted convergence theorem is
+covered by native compactness plus `IsCompactOperator.tendsto_singularValue`,
+independent #14589 (`c83058a3d5ab008a376e25d7330650b5bcec8179`). The original
+operator and truncation correspondences and unsorted convergence compiled with
+the original arbitrary scalar universes. Only star-fixed-coefficient
+self-adjointness remains in DiagonalSequence, as `lp.isSelfAdjoint_diagonalCLM`;
+the coordinate inner-product proof is adapted to the native carrier.
+
+Delete the ExtendedSequence bounded/unbounded diagonal proof engine in favor of
+`SymmetricGauge.extend_eq_of_operatorIdealFamily_eq`, accepted in
+[#20867](https://github.com/TauCetiProject/TauCeti/pull/20867), integration
+`cbc46d8963d5c26811ed734b54ff066735dc77bf`. This explicitly adapts the Kitware
+Family/SymmetricGauge donor (accepted header Claude Opus 5 / GPT-6, Apache-2.0).
+The original local theorem permits arbitrary scalar universe and independently
+fixed carrier universes; the accepted theorem is stated at universe zero. A
+small scalar-isomorphism and ULift reduction transports arbitrary complete
+Hilbert-space operators to those fixed universes and derives native family
+equality. This preserves the full theorem while consuming the accepted engine.
+Its isometry invariance is explicitly DKPS-adapted #13866
+(`7bbe813acf610ee6db4caba078b9c4facf357b90`), distinct from the unestablished
+proof ancestry of #15706. The downstream `approxSeq` correspondence stays.
+
+Historical sources are recoverable at `e4637c3919ae` and pre-retirement
+`0285eb77b` under `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`:
+DiagonalSequence (introduction `b24cd4145659ca6cc8784c53ec0fea30a09ae328`,
+Jon Crall / Claude Opus 5, variant `claude-opus-5[1m]`), PrescribedSequence
+(introduction `036581df09d39cc706306126ccb41c9edce2bf9c`, Jon Crall / Claude
+Fable 5), and ExtendedSequence (Jon Crall / Claude Opus 5). All retain Kitware
+copyright and Apache-2.0 licensing. Original declaration names remain in the
+manifest; the unbounded diagonal multiplication donor is unchanged except for
+its reference to the canonical bounded companion.

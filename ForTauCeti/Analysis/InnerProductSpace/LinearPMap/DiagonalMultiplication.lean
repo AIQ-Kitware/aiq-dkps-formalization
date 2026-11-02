@@ -45,9 +45,8 @@ sums, each of which lies in the domain because it has finite support.
 *New.*  Mathlib has `LinearPMap.adjoint` and the `lp` inner-product API, but no
 diagonal or multiplication operator presented as a `LinearPMap`, and no
 self-adjointness criterion for one.  The bounded companion in this library is
-`TauCeti.diagOpLp` (`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/
-DiagonalSequence.lean`), which requires a uniformly bounded multiplier; nothing
-there survives the unbounded case, where the domain is the whole point.
+accepted `lp.diagonalCLM`, which takes a bounded coefficient sequence. The
+unbounded multiplier instead requires the maximal domain defined here.
 
 Written for the Davis--Kahan 1970 Section 9 example, whose trial vector is in the
 form domain of such an operator but not in its operator domain.

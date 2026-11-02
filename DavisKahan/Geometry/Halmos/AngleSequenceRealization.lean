@@ -121,36 +121,42 @@ theorem conj_angleSinSeq (n : ℕ) :
 @[expose]
 noncomputable def angleCosOp :
     AngleSequenceSpace 𝕜 →L[𝕜] AngleSequenceSpace 𝕜 :=
-  diagOpLp (angleCosSeq 𝕜 θ) zero_le_one (norm_angleCosSeq_le 𝕜 θ)
+  lp.diagonalCLM (p := 2) ⟨angleCosSeq 𝕜 θ, memℓp_infty ⟨1, by
+    rintro _ ⟨n, rfl⟩
+    exact norm_angleCosSeq_le 𝕜 θ n⟩⟩
 
 /-- `sin Θ` for the prescribed sequence: multiplication by `sin θₙ` on `ℓ²`. -/
 @[expose]
 noncomputable def angleSinOp :
     AngleSequenceSpace 𝕜 →L[𝕜] AngleSequenceSpace 𝕜 :=
-  diagOpLp (angleSinSeq 𝕜 θ) zero_le_one (norm_angleSinSeq_le 𝕜 θ)
+  lp.diagonalCLM (p := 2) ⟨angleSinSeq 𝕜 θ, memℓp_infty ⟨1, by
+    rintro _ ⟨n, rfl⟩
+    exact norm_angleSinSeq_le 𝕜 θ n⟩⟩
 
 /-- `sin² Θ` for the prescribed sequence: multiplication by `sin² θₙ` on `ℓ²`. -/
 noncomputable def angleSinSqOp :
     AngleSequenceSpace 𝕜 →L[𝕜] AngleSequenceSpace 𝕜 :=
-  diagOpLp (angleSinSqSeq 𝕜 θ) zero_le_one (norm_angleSinSqSeq_le 𝕜 θ)
+  lp.diagonalCLM (p := 2) ⟨angleSinSqSeq 𝕜 θ, memℓp_infty ⟨1, by
+    rintro _ ⟨n, rfl⟩
+    exact norm_angleSinSqSeq_le 𝕜 θ n⟩⟩
 
 /-- `cos Θ` multiplies the `n`-th coordinate by `cos θₙ`. -/
 @[simp]
 theorem angleCosOp_apply (x : AngleSequenceSpace 𝕜) (n : ℕ) :
     (angleCosOp 𝕜 θ x : ∀ _ : ℕ, 𝕜) n = angleCosSeq 𝕜 θ n * x n :=
-  diagOpLp_apply _ _ _ x n
+  lp.diagonalCLM_apply _ x n
 
 /-- `sin Θ` multiplies the `n`-th coordinate by `sin θₙ`. -/
 @[simp]
 theorem angleSinOp_apply (x : AngleSequenceSpace 𝕜) (n : ℕ) :
     (angleSinOp 𝕜 θ x : ∀ _ : ℕ, 𝕜) n = angleSinSeq 𝕜 θ n * x n :=
-  diagOpLp_apply _ _ _ x n
+  lp.diagonalCLM_apply _ x n
 
 /-- `sin² Θ` multiplies the `n`-th coordinate by `sin² θₙ`. -/
 @[simp]
 theorem angleSinSqOp_apply (x : AngleSequenceSpace 𝕜) (n : ℕ) :
     (angleSinSqOp 𝕜 θ x : ∀ _ : ℕ, 𝕜) n = angleSinSqSeq 𝕜 θ n * x n :=
-  diagOpLp_apply _ _ _ x n
+  lp.diagonalCLM_apply _ x n
 
 /-- The square of `sin Θ` is the diagonal operator with coefficients `sin² θₙ`. -/
 theorem angleSinOp_comp_angleSinOp :
@@ -176,10 +182,10 @@ noncomputable def angleSequenceDatum :
   cos₁ := angleCosOp 𝕜 θ
   sin₁ := angleSinOp 𝕜 θ
   intertwiner := 1
-  isSelfAdjoint_cos₀ := isSelfAdjoint_diagOpLp _ _ _ (conj_angleCosSeq 𝕜 θ)
-  isSelfAdjoint_sin₀ := isSelfAdjoint_diagOpLp _ _ _ (conj_angleSinSeq 𝕜 θ)
-  isSelfAdjoint_cos₁ := isSelfAdjoint_diagOpLp _ _ _ (conj_angleCosSeq 𝕜 θ)
-  isSelfAdjoint_sin₁ := isSelfAdjoint_diagOpLp _ _ _ (conj_angleSinSeq 𝕜 θ)
+  isSelfAdjoint_cos₀ := lp.isSelfAdjoint_diagonalCLM _ (conj_angleCosSeq 𝕜 θ)
+  isSelfAdjoint_sin₀ := lp.isSelfAdjoint_diagonalCLM _ (conj_angleSinSeq 𝕜 θ)
+  isSelfAdjoint_cos₁ := lp.isSelfAdjoint_diagonalCLM _ (conj_angleCosSeq 𝕜 θ)
+  isSelfAdjoint_sin₁ := lp.isSelfAdjoint_diagonalCLM _ (conj_angleSinSeq 𝕜 θ)
   commute₀ := by
     refine ContinuousLinearMap.ext fun x => lp.ext (funext fun n => ?_)
     simp only [ContinuousLinearMap.comp_apply, angleCosOp_apply, angleSinOp_apply]
@@ -295,15 +301,29 @@ theorem approximationNumber_modelInl_comp_fstL (T : A →L[𝕜] A) (n : ℕ) :
     refine ContinuousLinearMap.ext fun x => ?_
     simp only [ContinuousLinearMap.comp_apply]
     rfl
+  have hi : ‖modelInl 𝕜 A B‖₊ ≤ 1 := by
+    exact_mod_cast (norm_modelInl_le_one : ‖modelInl 𝕜 A B‖ ≤ (1 : ℝ))
+  have hp : ‖WithLp.fstL 2 𝕜 A B‖₊ ≤ 1 := by
+    exact_mod_cast (norm_fstL_le_one : ‖WithLp.fstL 2 𝕜 A B‖ ≤ (1 : ℝ))
+  apply congrArg NNReal.toReal
   refine le_antisymm ?_ ?_
-  · exact ApproximationNumber.approximationNumber_comp_contractions_le
-      (modelInl 𝕜 A B) (T := T) (WithLp.fstL 2 𝕜 A B)
-      norm_modelInl_le_one norm_fstL_le_one n
-  · conv_lhs => rw [hfactor]
-    exact ApproximationNumber.approximationNumber_comp_contractions_le
-      (WithLp.fstL 2 𝕜 A B)
-      (T := modelInl 𝕜 A B ∘L T ∘L WithLp.fstL 2 𝕜 A B) (modelInl 𝕜 A B)
-      norm_fstL_le_one norm_modelInl_le_one n
+  · calc
+      (modelInl 𝕜 A B ∘L T ∘L WithLp.fstL 2 𝕜 A B).singularValue n ≤
+          ‖modelInl 𝕜 A B‖₊ * T.singularValue n * ‖WithLp.fstL 2 𝕜 A B‖₊ :=
+        ContinuousLinearMap.singularValue_comp_comp_le _ _ _ n
+      _ ≤ 1 * T.singularValue n * 1 := by gcongr
+      _ = T.singularValue n := by simp
+  · calc
+      T.singularValue n = (WithLp.fstL 2 𝕜 A B ∘L
+          (modelInl 𝕜 A B ∘L T ∘L WithLp.fstL 2 𝕜 A B) ∘L modelInl 𝕜 A B).singularValue n := by
+        rw [← hfactor]
+      _ ≤ ‖WithLp.fstL 2 𝕜 A B‖₊ *
+          (modelInl 𝕜 A B ∘L T ∘L WithLp.fstL 2 𝕜 A B).singularValue n *
+          ‖modelInl 𝕜 A B‖₊ :=
+        ContinuousLinearMap.singularValue_comp_comp_le _ _ _ n
+      _ ≤ 1 * (modelInl 𝕜 A B ∘L T ∘L WithLp.fstL 2 𝕜 A B).singularValue n * 1 := by
+        gcongr
+      _ = (modelInl 𝕜 A B ∘L T ∘L WithLp.fstL 2 𝕜 A B).singularValue n := by simp
 
 omit [CompleteSpace A] [CompleteSpace B] in
 /-- An operator on the first factor, extended by zero, stays compact. -/
@@ -379,16 +399,21 @@ theorem tendsto_angleSinSqSeq (hlim : Tendsto θ atTop (nhds 0)) :
 
 /-- `sin² Θ` is a compact operator when the prescribed angles tend to `0`. -/
 theorem isCompactOperator_angleSinSqOp (hlim : Tendsto θ atTop (nhds 0)) :
-    IsCompactOperator (angleSinSqOp 𝕜 θ) :=
-  isCompactOperator_diagOpLp _ _ _ (tendsto_angleSinSqSeq hlim)
+    IsCompactOperator (angleSinSqOp 𝕜 θ) := by
+  rw [angleSinSqOp]
+  apply lp.isCompactOperator_diagonalCLM
+  simpa only [Nat.cofinite_eq_atTop, norm_zero] using
+    (tendsto_angleSinSqSeq (𝕜 := 𝕜) hlim).norm
 
 /-- The approximation numbers of `sin² Θ` are the prescribed `sin² θₙ`. -/
 theorem approximationNumber_angleSinSqOp (hθ0 : ∀ n, 0 ≤ θ n)
     (hθ2 : ∀ n, θ n ≤ Real.pi / 2) (hanti : Antitone θ) (n : ℕ) :
     ((angleSinSqOp 𝕜 θ).singularValue n : ℝ) = Real.sin (θ n) ^ 2 := by
   rw [angleSinSqOp,
-    approximationNumber_diagOpLp _ _ _ (antitone_norm_angleSinSqSeq hθ0 hθ2 hanti) n,
-    angleSinSqSeq, RCLike.norm_ofReal, abs_of_nonneg (sq_nonneg (Real.sin (θ n)))]
+    lp.singularValue_diagonalCLM _ (antitone_norm_angleSinSqSeq hθ0 hθ2 hanti) n,
+    coe_nnnorm]
+  change ‖angleSinSqSeq 𝕜 θ n‖ = Real.sin (θ n) ^ 2
+  rw [angleSinSqSeq, RCLike.norm_ofReal, abs_of_nonneg (sq_nonneg (Real.sin (θ n)))]
 
 /-- **The defect block is compact** — the printed hypothesis of Corollary 3.1. -/
 theorem isCompactOperator_angleSequenceDefectBlock

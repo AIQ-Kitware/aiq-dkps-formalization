@@ -5,13 +5,14 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Diagonal
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 
 /-!
 # Operators with a prescribed approximation-number sequence
 
-`TauCeti.approximationNumber_diagOpLp` realises every bounded antitone nonnegative
+Accepted `lp.exists_singularValue_diagonalCLM_eq` realises every bounded antitone nonnegative
 sequence as the approximation numbers of a diagonal operator on `ℓ²`.  This module
 transports that realisation into an arbitrary infinite-dimensional real or complex Hilbert space:
 for every bounded antitone nonnegative `d : ℕ → ℝ` there is a bounded operator on the
@@ -41,33 +42,6 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
 omit [CompleteSpace E] in
-/-- Sandwiching between contractions does not increase approximation numbers. -/
-theorem approximationNumber_comp_contractions_le
-    {D F G : Type*}
-    [NormedAddCommGroup D] [InnerProductSpace 𝕜 D]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
-    (L : F →L[𝕜] G) {T : E →L[𝕜] F} (R : D →L[𝕜] E)
-    (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (n : ℕ) :
-    ((L ∘L T ∘L R).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) := by
-  have h1 : ((L ∘L T ∘L R).singularValue n : ℝ) ≤
-      ‖L‖ * ((T ∘L R).singularValue n : ℝ) :=
-    (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left L (T ∘L R) n))
-  have h2 : ((T ∘L R).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) * ‖R‖ :=
-    (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right T R n))
-  have hTn : 0 ≤ (T.singularValue n : ℝ) := (T.singularValue n).coe_nonneg
-  have hTRn : 0 ≤ ((T ∘L R).singularValue n : ℝ) :=
-    ((T ∘L R).singularValue n).coe_nonneg
-  calc
-    ((L ∘L T ∘L R).singularValue n : ℝ) ≤ ‖L‖ * ((T ∘L R).singularValue n : ℝ) := h1
-    _ ≤ 1 * ((T ∘L R).singularValue n : ℝ) :=
-      mul_le_mul_of_nonneg_right hL hTRn
-    _ = ((T ∘L R).singularValue n : ℝ) := one_mul _
-    _ ≤ (T.singularValue n : ℝ) * ‖R‖ := h2
-    _ ≤ (T.singularValue n : ℝ) * 1 := mul_le_mul_of_nonneg_left hR hTn
-    _ = (T.singularValue n : ℝ) := mul_one _
-
-omit [CompleteSpace E] in
 /-- **Extension by zero preserves every approximation number.**
 
 `W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto` is the operator on the ambient space that
@@ -82,14 +56,9 @@ theorem approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto
     (W : Submodule 𝕜 E) [W.HasOrthogonalProjection] (A : W →L[𝕜] W) (n : ℕ) :
     ((W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).singularValue n : ℝ) =
       (A.singularValue n : ℝ) := by
-  have hsubnorm : ‖W.subtypeL‖ ≤ (1 : ℝ) := W.norm_subtypeL_le
-  have hprojnorm : ‖W.orthogonalProjectionOnto‖ ≤ (1 : ℝ) :=
-    W.orthogonalProjectionOnto_norm_le
-  refine le_antisymm
-    (approximationNumber_comp_contractions_le W.subtypeL W.orthogonalProjectionOnto
-      hsubnorm hprojnorm n) ?_
-  -- Compressing the zero extension back to `W` returns `A`; there is no `_apply` lemma
-  -- to rewrite with, so the pointwise identity is stated with `change`.
+  have hsubnorm : ‖W.subtypeL‖₊ ≤ 1 := by exact_mod_cast W.norm_subtypeL_le
+  have hprojnorm : ‖W.orthogonalProjectionOnto‖₊ ≤ 1 := by
+    exact_mod_cast W.orthogonalProjectionOnto_norm_le
   have hfact : A = W.orthogonalProjectionOnto ∘L
       (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto) ∘L W.subtypeL := by
     refine ContinuousLinearMap.ext fun x => ?_
@@ -100,13 +69,24 @@ theorem approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto
     change A x = W.orthogonalProjectionOnto
         ((A (W.orthogonalProjectionOnto (x : E)) : W) : E)
     rw [h1, h2]
-  calc (A.singularValue n : ℝ)
-      = ((W.orthogonalProjectionOnto ∘L
-          (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto) ∘L
-            W.subtypeL).singularValue n : ℝ) := by rw [← hfact]
-    _ ≤ ((W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).singularValue n : ℝ) :=
-      approximationNumber_comp_contractions_le W.orthogonalProjectionOnto W.subtypeL
-        hprojnorm hsubnorm n
+  apply congrArg NNReal.toReal
+  refine le_antisymm ?_ ?_
+  · calc
+      (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).singularValue n ≤
+          ‖W.subtypeL‖₊ * A.singularValue n * ‖W.orthogonalProjectionOnto‖₊ :=
+        ContinuousLinearMap.singularValue_comp_comp_le _ _ _ n
+      _ ≤ 1 * A.singularValue n * 1 := by gcongr
+      _ = A.singularValue n := by simp
+  · calc
+      A.singularValue n = (W.orthogonalProjectionOnto ∘L
+          (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto) ∘L W.subtypeL).singularValue n := by
+        rw [← hfact]
+      _ ≤ ‖W.orthogonalProjectionOnto‖₊ *
+          (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).singularValue n * ‖W.subtypeL‖₊ :=
+        ContinuousLinearMap.singularValue_comp_comp_le _ _ _ n
+      _ ≤ 1 * (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).singularValue n * 1 := by
+        gcongr
+      _ = (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).singularValue n := by simp
 
 /-- **Every bounded antitone nonnegative sequence is an approximation-number sequence**
 on an infinite-dimensional real or complex Hilbert space. -/
@@ -171,56 +151,25 @@ theorem exists_approximationNumber_eq_of_antitone
       Set.mem_preimage, himage]
     exact hx
   set B : HilbertBasis ℕ 𝕜 W := HilbertBasis.mk he' hsp with hB_def
-  -- The diagonal operator with the prescribed coefficients.
-  set c : ℕ → 𝕜 := fun n => (d n : 𝕜) with hc_def
-  have hK : (0 : ℝ) ≤ d 0 := h0 0
-  have hc : ∀ n, ‖c n‖ ≤ d 0 := fun n => by
-    rw [hc_def]
-    simp only [RCLike.norm_ofReal, abs_of_nonneg (h0 n)]
-    exact hanti (Nat.zero_le n)
-  have hcnorm : ∀ n, ‖c n‖ = d n := fun n => by
-    rw [hc_def]
-    simp only [RCLike.norm_ofReal, abs_of_nonneg (h0 n)]
-  have hcanti : Antitone fun n => ‖c n‖ := by
-    intro m n hmn
-    change ‖c n‖ ≤ ‖c m‖
-    rw [hcnorm, hcnorm]
-    exact hanti hmn
-  set Diag := diagOpLp c hK hc with hDiag_def
-  have hDiagAn : ∀ n, (Diag.singularValue n : ℝ) = d n := fun n => by
-    rw [hDiag_def, approximationNumber_diagOpLp c hK hc hcanti n, hcnorm]
+  -- Consume the accepted sequence-space realization.
+  let values : ℕ → NNReal := fun n => ⟨d n, h0 n⟩
+  have hvalues : Antitone values := fun _ _ h => NNReal.coe_le_coe.mpr (hanti h)
+  obtain ⟨coeffs, hcoeffs⟩ :=
+    lp.exists_singularValue_diagonalCLM_eq (𝕜 := 𝕜) (p := 2) hvalues
+  let Diag := lp.diagonalCLM (p := 2) coeffs
+  have hDiagAn : ∀ n, (Diag.singularValue n : ℝ) = d n := fun n =>
+    congrArg NNReal.toReal (congrFun hcoeffs n)
   -- Conjugate through the Hilbert-basis identification and extend by zero.
   set U : W →L[𝕜] lp (fun _ : ℕ => 𝕜) 2 :=
     B.repr.toLinearIsometry.toContinuousLinearMap with hU_def
   set U' : lp (fun _ : ℕ => 𝕜) 2 →L[𝕜] W :=
     B.repr.symm.toLinearIsometry.toContinuousLinearMap with hU'_def
-  have hUnorm : ‖U‖ ≤ 1 := B.repr.toLinearIsometry.norm_toContinuousLinearMap_le
-  have hU'norm : ‖U'‖ ≤ 1 := B.repr.symm.toLinearIsometry.norm_toContinuousLinearMap_le
-  have hU'U : U' ∘L U = ContinuousLinearMap.id 𝕜 W := by
-    apply ContinuousLinearMap.ext
-    intro x
-    exact B.repr.symm_apply_apply x
-  have hUU' : U ∘L U' = ContinuousLinearMap.id 𝕜 (lp (fun _ : ℕ => 𝕜) 2) := by
-    apply ContinuousLinearMap.ext
-    intro x
-    exact B.repr.apply_symm_apply x
   set D₀ : W →L[𝕜] W := U' ∘L Diag ∘L U with hD₀_def
   have hD₀An : ∀ n, (D₀.singularValue n : ℝ) = d n := by
     intro n
-    refine le_antisymm ?_ ?_
-    · rw [← hDiagAn n]
-      exact approximationNumber_comp_contractions_le U' U hU'norm hUnorm n
-    · rw [← hDiagAn n]
-      have hfact : Diag = U ∘L D₀ ∘L U' := by
-        rw [hD₀_def]
-        apply ContinuousLinearMap.ext
-        intro x
-        change Diag x = B.repr (B.repr.symm (Diag (B.repr (B.repr.symm x))))
-        rw [B.repr.apply_symm_apply, B.repr.apply_symm_apply]
-      calc (Diag.singularValue n : ℝ) = ((U ∘L D₀ ∘L U').singularValue n : ℝ) := by
-            rw [← hfact]
-        _ ≤ (D₀.singularValue n : ℝ) :=
-          approximationNumber_comp_contractions_le U U' hUnorm hU'norm n
+    rw [hD₀_def, hU_def, hU'_def,
+      ContinuousLinearMap.singularValue_comp_linearIsometryEquiv]
+    exact hDiagAn n
   -- Extension by zero to the whole space.
   refine ⟨W.subtypeL ∘L D₀ ∘L W.orthogonalProjectionOnto, fun n => ?_⟩
   rw [approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto W D₀ n]
