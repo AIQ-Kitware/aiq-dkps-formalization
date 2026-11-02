@@ -146,9 +146,9 @@ theorem singularValues_projectionDifference (theta : ℝ)
 
 /-- The exact trace norm of the difference of the two rank-two projections. -/
 theorem kyFanSum_projectionDifference (theta : ℝ) (hs : 0 ≤ Real.sin theta) :
-    kyFanSum 4 (projection U4 - projection (V4 theta)) =
+    (projection U4 - projection (V4 theta)).kyFanSum 4 =
       4 * Real.sin theta := by
-  rw [kyFanSum_eq_sum_fin, Fin.sum_univ_four]
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_four]
   rw [singularValues_projectionDifference theta hs 0,
     singularValues_projectionDifference theta hs 1,
     singularValues_projectionDifference theta hs 2,
@@ -159,15 +159,15 @@ theorem kyFanSum_projectionDifference (theta : ℝ) (hs : 0 ≤ Real.sin theta) 
 least `4 sin(theta)`. -/
 theorem traceDisplacement_lower_bound (theta : ℝ) (hs : 0 ≤ Real.sin theta)
     (W : E4 ≃ₗᵢ[ℝ] E4) (hmap : U4.map W.toLinearMap = V4 theta) :
-    4 * Real.sin theta ≤ kyFanSum 4 (LinearMap.id - W.toLinearMap) := by
+    4 * Real.sin theta ≤ (LinearMap.id - W.toLinearMap).kyFanSum 4 := by
   rw [← kyFanSum_projectionDifference theta hs]
   exact projectionDifference_kyFanSum_le_displacement U4 (V4 theta) W hmap 4
 
 /-- The explicit competitor attains the global trace lower bound. -/
 theorem Wequiv_traceMinimizer (theta : ℝ) (hs : 0 ≤ Real.sin theta)
     (W : E4 ≃ₗᵢ[ℝ] E4) (hmap : U4.map W.toLinearMap = V4 theta) :
-    kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) ≤
-      kyFanSum 4 (LinearMap.id - W.toLinearMap) := by
+    (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 ≤
+      (LinearMap.id - W.toLinearMap).kyFanSum 4 := by
   rw [kyFanSum_displacement_W theta hs]
   exact traceDisplacement_lower_bound theta hs W hmap
 
@@ -176,10 +176,10 @@ abstract minimization operator. -/
 theorem exists_traceMinimizer (theta : ℝ) (hs : 0 ≤ Real.sin theta) :
     ∃ W : E4 ≃ₗᵢ[ℝ] E4,
       U4.map W.toLinearMap = V4 theta ∧
-      kyFanSum 4 (LinearMap.id - W.toLinearMap) = 4 * Real.sin theta ∧
+      (LinearMap.id - W.toLinearMap).kyFanSum 4 = 4 * Real.sin theta ∧
       ∀ Z : E4 ≃ₗᵢ[ℝ] E4, U4.map Z.toLinearMap = V4 theta →
-        kyFanSum 4 (LinearMap.id - W.toLinearMap) ≤
-          kyFanSum 4 (LinearMap.id - Z.toLinearMap) := by
+        (LinearMap.id - W.toLinearMap).kyFanSum 4 ≤
+          (LinearMap.id - Z.toLinearMap).kyFanSum 4 := by
   refine ⟨Wequiv theta, rfl, kyFanSum_displacement_W theta hs, ?_⟩
   intro Z hZ
   exact Wequiv_traceMinimizer theta hs Z hZ
@@ -189,9 +189,9 @@ canonical displacement achieve the `sec(theta/2)` ratio. -/
 theorem directTrace_sharpRatio (theta : ℝ)
     (h0 : 0 < theta) (h1 : theta < Real.pi / 2) :
     Real.cos (theta / 2) *
-      kyFanSum 4 (LinearMap.id -
+      (LinearMap.id -
         (directRotation U4 (V4 theta)
-          (acute theta (cos_pos theta h0 h1))).toLinearMap) =
+          (acute theta (cos_pos theta h0 h1))).toLinearMap).kyFanSum 4 =
       4 * Real.sin theta := by
   rw [cos_half_mul_directTrace_eq_competitorTrace theta h0 h1]
   exact kyFanSum_displacement_W theta

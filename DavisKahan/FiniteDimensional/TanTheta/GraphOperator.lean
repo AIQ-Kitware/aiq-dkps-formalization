@@ -87,12 +87,9 @@ theorem kyFan_tanTheta_le
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) (k : ℕ) :
-    δ * TauCeti.kyFanSum k
-        (tanThetaEmbedding U X) ≤
-      TauCeti.kyFanSum k
-        (residual A X M) := by
-  simpa only [UnitarilyInvariantSeminorm.kyFan_apply,
-    kyFanSum_eq_sum_range, LinearMap.kyFanSum_def] using
+    δ * (tanThetaEmbedding U X).kyFanSum k ≤
+      (residual A X M).kyFanSum k := by
+  simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using
     tanTheta_perturbation_le
       (UnitarilyInvariantSeminorm.kyFan
         (𝕜 := 𝕜) (E := F) (F := E) k)

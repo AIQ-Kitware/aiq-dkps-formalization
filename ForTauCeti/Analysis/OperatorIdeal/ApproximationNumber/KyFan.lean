@@ -192,11 +192,10 @@ variable {E : Type v} {F : Type w}
 
 /-- In finite dimensions the Ky Fan gauge is the rectangular Ky Fan singular-value sum. -/
 theorem kyFanSum_eq_kyFanGauge (k : ℕ) (A : E →ₗ[𝕜] F) :
-    TauCeti.kyFanSum k A =
+    A.kyFanSum k =
       A.toContinuousLinearMap.kyFanGaugeReal k := by
   rw [kyFanGaugeReal_eq_sum]
-  unfold TauCeti.kyFanSum
-  rw [Fin.sum_univ_eq_sum_range]
+  rw [LinearMap.kyFanSum_def]
   refine Finset.sum_congr rfl fun n _ => ?_
   rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
     ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
@@ -209,9 +208,6 @@ theorem kyFanGaugeReal_add_le_of_finiteDimensional (k : ℕ) (A B : E →ₗ[�
       A.toContinuousLinearMap.kyFanGaugeReal k + B.toContinuousLinearMap.kyFanGaugeReal k := by
   rw [← kyFanSum_eq_kyFanGauge k (A + B),
     ← kyFanSum_eq_kyFanGauge k A, ← kyFanSum_eq_kyFanGauge k B]
-  rw [TauCeti.kyFanSum_eq_linearMap_kyFanSum k (A + B),
-    TauCeti.kyFanSum_eq_linearMap_kyFanSum k A,
-    TauCeti.kyFanSum_eq_linearMap_kyFanSum k B]
   exact LinearMap.kyFanSum_add_le A B k
 
 end FiniteDimensional

@@ -438,12 +438,12 @@ theorem kyFanSum_orthogonalBlockSum_self
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 E₀] [FiniteDimensional 𝕜 F₀]
     (A : E₀ →ₗ[𝕜] F₀) (k : ℕ) :
-    kyFanSum (2 * k) (orthogonalBlockSum A A) =
-      2 * kyFanSum k A := by
+    (orthogonalBlockSum A A).kyFanSum (2 * k) =
+      2 * A.kyFanSum k := by
   classical
   let e : Fin k × Fin 2 ≃ Fin (2 * k) :=
     finProdFinEquiv.trans (finCongr (by omega))
-  unfold kyFanSum
+  simp only [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
   calc
     ∑ j : Fin (2 * k), (orthogonalBlockSum A A).singularValues (j : ℕ) =
         ∑ p : Fin k × Fin 2,
@@ -606,16 +606,14 @@ theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
     (NB : UnitarilyInvariantSeminorm 𝕜
       (WithLp 2 (E₁ × E₂)) (WithLp 2 (F₁ × F₂)))
     {A C : E₁ →ₗ[𝕜] F₁} {B D : E₂ →ₗ[𝕜] F₂}
-    (hA : ∀ k, kyFanSum k A ≤ kyFanSum k C)
-    (hB : ∀ k, kyFanSum k B ≤ kyFanSum k D) :
+    (hA : ∀ k, A.kyFanSum k ≤ C.kyFanSum k)
+    (hB : ∀ k, B.kyFanSum k ≤ D.kyFanSum k) :
     NB (orthogonalBlockSum A B) ≤ NB (orthogonalBlockSum C D) := by
   apply NB.map_le_of_mem_twoSidedUnitaryOrbitHull
   change (A.prodMap B).withLpMap 2 ∈ ((C.prodMap D).withLpMap 2).twoSidedUnitaryOrbitHull
   exact LinearMap.prodMap_withLpMap_mem_twoSidedUnitaryOrbitHull
-    (LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le.mpr fun k => by
-      simpa only [kyFanSum_eq_linearMap_kyFanSum] using hA k)
-    (LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le.mpr fun k => by
-      simpa only [kyFanSum_eq_linearMap_kyFanSum] using hB k)
+    (LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le.mpr hA)
+    (LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le.mpr hB)
 
 /-- Pointwise singular-value dominance implies norm dominance.
 -/
@@ -623,7 +621,7 @@ theorem apply_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
     (h : ∀ i, A.singularValues i ≤ B.singularValues i) : N A ≤ N B := by
   apply N.map_le_of_kyFanSum_le
   intro k
-  rw [LinearMap.kyFanSum_def, LinearMap.kyFanSum_def]
+  simp only [LinearMap.kyFanSum_def]
   exact Finset.sum_le_sum fun i _ => h i
 
 

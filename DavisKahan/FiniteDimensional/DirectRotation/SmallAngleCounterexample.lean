@@ -312,9 +312,9 @@ theorem singularValues_displacement_R (theta : Real) (hc : 0 < Real.cos theta) (
 
 /-- The trace norm of the canonical direct displacement. -/
 theorem kyFanSum_displacement_R (theta : Real) (hc : 0 < Real.cos theta) :
-    kyFanSum 4 (LinearMap.id - (directRotation U4 (V4 theta) (acute theta hc)).toLinearMap) =
+    (LinearMap.id - (directRotation U4 (V4 theta) (acute theta hc)).toLinearMap).kyFanSum 4 =
       4 * Real.sqrt (2 - 2 * Real.cos theta) := by
-  rw [kyFanSum_eq_sum_fin, Fin.sum_univ_four]
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_four]
   rw [singularValues_displacement_R theta hc 0, singularValues_displacement_R theta hc 1,
     singularValues_displacement_R theta hc 2, singularValues_displacement_R theta hc 3]
   ring
@@ -370,12 +370,12 @@ theorem singularValues_displacement_W (theta : Real) (j : Fin 4) :
 
 /-- The trace norm of the competitor is `4 sin(theta)` for nonnegative sine. -/
 theorem kyFanSum_displacement_W (theta : Real) (hs : 0 ≤ Real.sin theta) :
-    kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) = 4 * Real.sin theta := by
+    (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 = 4 * Real.sin theta := by
   have hsqrt : Real.sqrt (4 * Real.sin theta ^ 2) = 2 * Real.sin theta := by
     have hsq := Real.sq_sqrt (by positivity : (0 : Real) ≤ 4 * Real.sin theta ^ 2)
     have hn := Real.sqrt_nonneg (4 * Real.sin theta ^ 2)
     nlinarith
-  rw [Wequiv_toLinearMap, kyFanSum_eq_sum_fin, Fin.sum_univ_four]
+  rw [Wequiv_toLinearMap, LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_four]
   simp only [singularValues_displacement_W theta 0, singularValues_displacement_W theta 1,
     singularValues_displacement_W theta 2, singularValues_displacement_W theta 3]
   change Real.sqrt (4 * Real.sin theta ^ 2) + Real.sqrt (4 * Real.sin theta ^ 2) +
@@ -461,9 +461,10 @@ theorem cos_pos (theta : Real) (h0 : 0 < theta) (h1 : theta < Real.pi / 2) :
 
 /-- The strict trace-norm comparison, for every acute positive angle. -/
 theorem kyFanSum_lt (theta : Real) (h0 : 0 < theta) (h1 : theta < Real.pi / 2) :
-    kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) <
-      kyFanSum 4 (LinearMap.id -
-        (directRotation U4 (V4 theta) (acute theta (cos_pos theta h0 h1))).toLinearMap) := by
+    (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 <
+      (LinearMap.id -
+        (directRotation U4 (V4 theta) (acute theta (cos_pos theta h0 h1))).toLinearMap).kyFanSum
+          4 := by
   have hc : 0 < Real.cos theta := cos_pos theta h0 h1
   have hs : 0 < Real.sin theta :=
     Real.sin_pos_of_pos_of_lt_pi h0 (by linarith [Real.pi_pos])
@@ -503,8 +504,8 @@ theorem arbitrarilySmall_fullDisplacement_refuted (epsilon : Real) (hepsilon : 0
       0 < Submodule.principalAngles U V 0 ∧
       Submodule.principalAngles U V 0 < epsilon ∧
       Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧
-      kyFanSum 4 (LinearMap.id - W.toLinearMap) <
-        kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap) := by
+      (LinearMap.id - W.toLinearMap).kyFanSum 4 <
+        (LinearMap.id - (directRotation U V hacute).toLinearMap).kyFanSum 4 := by
   let theta := min (epsilon / 2) (Real.pi / 4)
   have h0 : 0 < theta := lt_min (by linarith) (by linarith [Real.pi_pos])
   have heps : theta < epsilon :=

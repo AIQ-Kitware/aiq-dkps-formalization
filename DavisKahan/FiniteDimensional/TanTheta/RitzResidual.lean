@@ -549,9 +549,8 @@ private theorem kyFan_tanTheta0_ritzResidual_le_of_le_finrank
     (htan : tanTheta0.singularValues =
       (approximateSubspace X).principalTangents U)
     {k : ℕ} (hk : k ≤ finrank 𝕜 F) :
-    δ * TauCeti.kyFanSum k tanTheta0 ≤
-      TauCeti.kyFanSum k
-        (ritzResidual A X) := by
+    δ * tanTheta0.kyFanSum k ≤
+      (ritzResidual A X).kyFanSum k := by
   let S := sinThetaEmbedding U X
   let castIndex : Fin k → Fin (finrank 𝕜 F) := fun i => Fin.castLE hk i
   have htrans := isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap
@@ -569,10 +568,13 @@ private theorem kyFan_tanTheta0_ritzResidual_le_of_le_finrank
     simpa [castIndex] using
       (orthonormal_iff_ite.mp (LinearMap.rightSingularBasis S).orthonormal
         (castIndex i) (castIndex j))
-  have hsum := TauCeti.sum_le_kyFanSum_of_orthonormal
-    hk hu hv (fun i =>
-      tanThetaResidualWitness_scalar hA hU X hδ hgap tanTheta0 htan (castIndex i))
-  unfold TauCeti.kyFanSum
+  have hnorm := (ritzResidual A X).norm_sum_inner_le_kyFanSum hu hv
+  simp only [Fintype.card_fin] at hnorm
+  have hreal := (RCLike.re_le_norm _).trans hnorm
+  rw [map_sum] at hreal
+  have hsum := (Finset.sum_le_sum fun i _ =>
+    tanThetaResidualWitness_scalar hA hU X hδ hgap tanTheta0 htan (castIndex i)).trans hreal
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
   rw [Finset.mul_sum]
   exact hsum
 
@@ -596,15 +598,18 @@ theorem kyFan_tanTheta0_ritzResidual_le
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
       (approximateSubspace X).principalTangents U) (k : ℕ) :
-    δ * TauCeti.kyFanSum k tanTheta0 ≤
-      TauCeti.kyFanSum k
-        (ritzResidual A X) := by
+    δ * tanTheta0.kyFanSum k ≤
+      (ritzResidual A X).kyFanSum k := by
   by_cases hk : k ≤ finrank 𝕜 F
   · exact kyFan_tanTheta0_ritzResidual_le_of_le_finrank hA hU X hδ hgap
       tanTheta0 htan hk
   · have hk' : finrank 𝕜 F ≤ k := Nat.le_of_not_ge hk
-    rw [TauCeti.kyFanSum_eq_of_finrank_le hk' tanTheta0,
-      TauCeti.kyFanSum_eq_of_finrank_le hk' (ritzResidual A X)]
+    rw [((tanTheta0.kyFanSum_eq_nuclear ((LinearMap.finrank_range_le tanTheta0).trans hk')).trans
+        (tanTheta0.kyFanSum_eq_nuclear (LinearMap.finrank_range_le tanTheta0)).symm),
+      (((ritzResidual A X).kyFanSum_eq_nuclear
+        ((LinearMap.finrank_range_le (ritzResidual A X)).trans hk')).trans
+        ((ritzResidual A X).kyFanSum_eq_nuclear
+          (LinearMap.finrank_range_le (ritzResidual A X))).symm)]
     exact kyFan_tanTheta0_ritzResidual_le_of_le_finrank hA hU X hδ hgap
       tanTheta0 htan le_rfl
 
@@ -628,17 +633,13 @@ theorem tanTheta0_ritzResidual_le
       (approximateSubspace X).principalTangents U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   have hprefix : ∀ k,
-      TauCeti.kyFanSum k
-          (((δ : ℝ) : 𝕜) • tanTheta0) ≤
-        TauCeti.kyFanSum k
-          (ritzResidual A X) := by
+      (((δ : ℝ) : 𝕜) • tanTheta0).kyFanSum k ≤
+        (ritzResidual A X).kyFanSum k := by
     intro k
-    rw [TauCeti.kyFanSum_real_smul
-      k tanTheta0 hδ.le]
+    rw [LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg hδ.le]
     exact kyFan_tanTheta0_ritzResidual_le hA hU X hβα hδ hgap
       tanTheta0 htan k
-  have hN := N.map_le_of_kyFanSum_le (fun k => by
-    simpa only [kyFanSum_eq_linearMap_kyFanSum] using hprefix k)
+  have hN := N.map_le_of_kyFanSum_le (hprefix)
   rw [map_smul_eq_mul N] at hN
   simpa [RCLike.norm_ofReal, abs_of_pos hδ] using hN
 

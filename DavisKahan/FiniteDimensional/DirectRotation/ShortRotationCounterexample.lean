@@ -15,7 +15,7 @@ the 2026-07-21 repair note (Git history): the transcribed
 Davis--Kahan Proposition 4.4 — *"over a real space, if every principal angle
 is at most `π/3` then the direct rotation minimizes every unitarily invariant
 norm of the full displacement `I - W` over unitaries `W` carrying `U` onto
-`V`"* — fails, already for the trace norm (`kyFanSum 4`) in `ℝ⁴`.
+`V`"* — fails, already for the trace norm (`LinearMap.kyFanSum · 4`) in `ℝ⁴`.
 
 ## The configuration
 
@@ -331,9 +331,9 @@ theorem singularValues_displacement_R (j : Fin 4) :
 
 /-- The trace norm of the direct displacement is `4√(2-√2)`. -/
 theorem kyFanSum_displacement_R :
-    kyFanSum 4 (LinearMap.id - (directRotation U4 V4 acute).toLinearMap) =
+    (LinearMap.id - (directRotation U4 V4 acute).toLinearMap).kyFanSum 4 =
       4 * Real.sqrt (2 - Real.sqrt 2) := by
-  rw [kyFanSum_eq_sum_fin, Fin.sum_univ_four]
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_four]
   rw [singularValues_displacement_R 0, singularValues_displacement_R 1,
     singularValues_displacement_R 2, singularValues_displacement_R 3]
   ring
@@ -523,8 +523,8 @@ theorem singularValues_displacement_W (j : Fin 4) :
 
 /-- The trace norm of the competitor displacement is `2√2`. -/
 theorem kyFanSum_displacement_W :
-    kyFanSum 4 (LinearMap.id - Wlin) = 2 * Real.sqrt 2 := by
-  rw [kyFanSum_eq_sum_fin, Fin.sum_univ_four]
+    (LinearMap.id - Wlin).kyFanSum 4 = 2 * Real.sqrt 2 := by
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_four]
   simp only [singularValues_displacement_W 0, singularValues_displacement_W 1,
     singularValues_displacement_W 2, singularValues_displacement_W 3,
     show ((![2, 2, 0, 0] : Fin 4 → ℝ) 2) = 0 from rfl,
@@ -541,7 +541,7 @@ chosen as `span{e₀,e₃}` and `span{e₁,e₂}`.  If `K = I - W` and `Ω₁, �
 the corresponding orthogonal projections, the printed proof of Proposition 4.4
 uses the inequality
 
-`kyFanSum 4 K ≥ kyFanSum 2 (K ∘ Ω₁) + kyFanSum 2 (K ∘ Ω₂)`.
+`K.kyFanSum 4 ≥ (K ∘ Ω₁).kyFanSum 2 + (K ∘ Ω₂).kyFanSum 2`.
 
 The declarations below certify the opposite strict inequality: each block has
 Ky Fan two sum `2`, while the full displacement has Ky Fan four sum `2√2`.
@@ -696,24 +696,24 @@ private theorem singularValues_equation43Block2 (j : Fin 4) :
     congrFun heig ⟨(j : ℕ), j.isLt⟩]
 
 /-- The first principal-plane block in equation (4.3) has Ky Fan two sum `2`. -/
-theorem kyFanSum_equation43Block1 : kyFanSum 2 equation43Block1 = 2 := by
+theorem kyFanSum_equation43Block1 : equation43Block1.kyFanSum 2 = 2 := by
   have h0 : equation43Block1.singularValues 0 = 1 := by
     simpa using singularValues_equation43Block1 (0 : Fin 4)
   have h1 : equation43Block1.singularValues 1 = 1 := by
     simpa using singularValues_equation43Block1 (1 : Fin 4)
-  rw [kyFanSum_eq_sum_fin, Fin.sum_univ_two]
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_two]
   change equation43Block1.singularValues 0 +
       equation43Block1.singularValues 1 = 2
   rw [h0, h1]
   norm_num
 
 /-- The second principal-plane block in equation (4.3) has Ky Fan two sum `2`. -/
-theorem kyFanSum_equation43Block2 : kyFanSum 2 equation43Block2 = 2 := by
+theorem kyFanSum_equation43Block2 : equation43Block2.kyFanSum 2 = 2 := by
   have h0 : equation43Block2.singularValues 0 = 1 := by
     simpa using singularValues_equation43Block2 (0 : Fin 4)
   have h1 : equation43Block2.singularValues 1 = 1 := by
     simpa using singularValues_equation43Block2 (1 : Fin 4)
-  rw [kyFanSum_eq_sum_fin, Fin.sum_univ_two]
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_two]
   change equation43Block2.singularValues 0 +
       equation43Block2.singularValues 1 = 2
   rw [h0, h1]
@@ -725,8 +725,8 @@ counterexample, the global Ky Fan four sum is `2√2`, whereas the two Ky Fan tw
 principal-plane terms sum to `4`; hence the printed lower bound points in the
 wrong direction on this admissible configuration. -/
 theorem davisKahanEquation4_3_refuted :
-    kyFanSum 4 (LinearMap.id - Wlin) <
-      kyFanSum 2 equation43Block1 + kyFanSum 2 equation43Block2 := by
+    (LinearMap.id - Wlin).kyFanSum 4 <
+      equation43Block1.kyFanSum 2 + equation43Block2.kyFanSum 2 := by
   rw [kyFanSum_displacement_W, kyFanSum_equation43Block1,
     kyFanSum_equation43Block2]
   have hsqrt : Real.sqrt 2 < 2 := by
@@ -788,9 +788,9 @@ theorem principalAngle_le : Submodule.principalAngles U4 V4 0 ≤ Real.pi / 3 :=
 
 /-- The competitor beats the direct rotation in trace norm. -/
 theorem kyFanSum_lt :
-    kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) <
-      kyFanSum 4 (LinearMap.id -
-        (directRotation U4 V4 acute).toLinearMap) := by
+    (LinearMap.id - Wequiv.toLinearMap).kyFanSum 4 <
+      (LinearMap.id -
+        (directRotation U4 V4 acute).toLinearMap).kyFanSum 4 := by
   rw [Wequiv_toLinearMap, kyFanSum_displacement_W, kyFanSum_displacement_R]
   have h2 := sqrt_two_mul_self
   have hs2 : Real.sqrt 2 < 3 / 2 := by
@@ -810,7 +810,7 @@ open ShortRotationCounterexample in
 /-- **The transcribed short-rotation Proposition 4.4 is false.**  There is an
 acute pair of subspaces of `ℝ⁴` whose principal angles are all at most `π/3`
 together with a unitary competitor carrying `U` onto `V` whose full
-displacement `I - W` has strictly smaller trace norm (`kyFanSum 4`) than the
+displacement `I - W` has strictly smaller trace norm (`LinearMap.kyFanSum · 4`) than the
 direct rotation's — so no unitarily invariant norm minimality of the full
 displacement can hold under a largest-angle hypothesis.  The valid endpoints
 are `uiNorm_restrictedDisplacement_le` (restricted displacement, no angle
@@ -822,8 +822,8 @@ theorem shortRotation_fullDisplacement_refuted :
       (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),
       U.map W.toLinearMap = V ∧
       Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧
-      kyFanSum 4 (LinearMap.id - W.toLinearMap) <
-        kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap) :=
+      (LinearMap.id - W.toLinearMap).kyFanSum 4 <
+        (LinearMap.id - (directRotation U V hacute).toLinearMap).kyFanSum 4 :=
   ⟨U4, V4, acute, Wequiv, rfl, principalAngle_le, kyFanSum_lt⟩
 
 /-! ### The source claim as a single proposition
@@ -863,7 +863,7 @@ open ShortRotationCounterexample in
 invariant norm" form in which the source states it.  The witnessing norm is the
 trace norm of `ℝ⁴`, presented as the bundled unitarily invariant norm
 `(UnitarilyInvariantSeminorm.kyFan 4)`, whose underlying
-function is `kyFanSum 4`.
+function is `LinearMap.kyFanSum · 4`.
 
 Stated at universe `0`, where the witness `EuclideanSpace ℝ (Fin 4)` lives.
 Lean cannot quantify over universes, so `¬ P.{0}` is the strongest available
@@ -874,17 +874,16 @@ theorem not_davisKahanProposition4_4_Finite :
   intro h
   have hN := h E4 U4 V4 acute principalAngle_le Wequiv rfl
     (UnitarilyInvariantSeminorm.kyFan (𝕜 := ℝ) (E := E4) (F := E4) 4)
-  have hle : kyFanSum 4 (LinearMap.id - (directRotation U4 V4 acute).toLinearMap) ≤
-      kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
-    simpa only [UnitarilyInvariantSeminorm.kyFan_apply,
-      TauCeti.kyFanSum_eq_linearMap_kyFanSum] using hN
+  have hle : (LinearMap.id - (directRotation U4 V4 acute).toLinearMap).kyFanSum 4 ≤
+      (LinearMap.id - Wequiv.toLinearMap).kyFanSum 4 := by
+    simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using hN
   exact absurd hle (not_le.mpr kyFanSum_lt)
 
 open ShortRotationCounterexample in
 /-- **The trace norm is not a `Q`-norm.**  Read in the other direction, the
 counterexample separates the two norm classes: `directRotation_fullDisplacement_qnorm`
 holds for every `Q`-norm without a largest-angle threshold, so any norm violating
-full-displacement minimality — as `kyFanSum 4` does on `ℝ⁴` — cannot be one.
+full-displacement minimality — as `LinearMap.kyFanSum · 4` does on `ℝ⁴` — cannot be one.
 
 This is the formal counterpart of the classical fact that the Schatten `Q`-norms
 are exactly those with `2 ≤ p ≤ ∞`: the trace norm is the `p = 1` endpoint. -/
@@ -893,10 +892,9 @@ theorem kyFan_not_isQNorm :
       (𝕜 := ℝ) (E := E4) (F := E4) 4) := by
   intro hQ
   have hle := directRotation_fullDisplacement_qnorm _ hQ U4 V4 acute Wequiv rfl
-  have hle' : kyFanSum 4 (LinearMap.id - (directRotation U4 V4 acute).toLinearMap) ≤
-      kyFanSum 4 (LinearMap.id - Wequiv.toLinearMap) := by
-    simpa only [UnitarilyInvariantSeminorm.kyFan_apply,
-      TauCeti.kyFanSum_eq_linearMap_kyFanSum] using hle
+  have hle' : (LinearMap.id - (directRotation U4 V4 acute).toLinearMap).kyFanSum 4 ≤
+      (LinearMap.id - Wequiv.toLinearMap).kyFanSum 4 := by
+    simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using hle
   exact absurd hle' (not_le.mpr kyFanSum_lt)
 
 end DavisKahan.FiniteDimensional

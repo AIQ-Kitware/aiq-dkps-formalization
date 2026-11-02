@@ -544,13 +544,13 @@ theorem kyFanSum_directRotation_displacement_eq_principalChords
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) (k : ℕ) :
-    kyFanSum k (LinearMap.id - (directRotation U V hacute).toLinearMap) =
+    (LinearMap.id - (directRotation U V hacute).toLinearMap).kyFanSum k =
       (∑ i : Fin (min (k / 2) (nontrivialAngleCount U V)),
         2 * principalPlaneChord U V
           (Fin.castLE (min_le_right _ _) i)) +
       if hodd : k % 2 = 1 ∧ k / 2 < nontrivialAngleCount U V then
         principalPlaneChord U V ⟨k / 2, hodd.2⟩ else 0 := by
-  rw [kyFanSum_eq_sum_fin]
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
   simp_rw [singularValues_directRotation_displacement U V hacute]
   exact sum_repeated_pair_prefix (fun i => principalPlaneChord U V i) k
 end DavisKahan.FiniteDimensional

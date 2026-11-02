@@ -339,13 +339,11 @@ theorem kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
           ⟪X (eE j), eF i⟫_𝕜 =
         ⟪C (eE j), eF i⟫_𝕜)
     (k : ℕ) :
-    δ * TauCeti.kyFanSum k X ≤
+    δ * X.kyFanSum k ≤
       (Real.pi / 2) *
-        TauCeti.kyFanSum k C := by
-  let K := TauCeti.kyFanSum k C
-  have hK0 : 0 ≤ K := by
-    dsimp [K, TauCeti.kyFanSum]
-    exact Finset.sum_nonneg fun i _ => C.singularValues_nonneg (i : ℕ)
+        C.kyFanSum k := by
+  let K := C.kyFanSum k
+  have hK0 : 0 ≤ K := C.kyFanSum_nonneg k
   apply le_of_forall_pos_le_add
   intro eta heta
   let eps := eta / (K + 1)
@@ -359,35 +357,27 @@ theorem kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
       eF eE α β hinterp hcoeff
   rcases hcert with ⟨_, cert, hmass⟩
   have hbound :
-      TauCeti.kyFanSum (2 * k)
-          (((δ : ℝ) : 𝕜) •
-            UnitarilyInvariantSeminorm.orthogonalBlockSum X X) ≤
-        cert.mass * TauCeti.kyFanSum (2 * k)
-          (UnitarilyInvariantSeminorm.orthogonalBlockSum C C) := by
-    simpa only [TauCeti.UnitarilyInvariantSeminorm.kyFan_apply,
-      TauCeti.kyFanSum_eq_sum_range, LinearMap.kyFanSum_def] using
+      (((δ : ℝ) : 𝕜) •
+            UnitarilyInvariantSeminorm.orthogonalBlockSum X X).kyFanSum (2 * k) ≤
+        cert.mass * (UnitarilyInvariantSeminorm.orthogonalBlockSum C C).kyFanSum (2 * k) := by
+    simpa only [TauCeti.UnitarilyInvariantSeminorm.kyFan_apply] using
       cert.apply_le_mass_mul
         (TauCeti.UnitarilyInvariantSeminorm.kyFan 𝕜
           (WithLp 2 (E × E)) (WithLp 2 (F × F)) (2 * k))
-  have hnonneg : 0 ≤ TauCeti.kyFanSum (2 * k)
-      (UnitarilyInvariantSeminorm.orthogonalBlockSum C C) := by
-    rw [TauCeti.kyFanSum_eq_linearMap_kyFanSum]
+  have hnonneg : 0 ≤ (UnitarilyInvariantSeminorm.orthogonalBlockSum C C).kyFanSum (2 * k) := by
     exact LinearMap.kyFanSum_nonneg _ _
   have hbound' := hbound.trans (mul_le_mul_of_nonneg_right hmass hnonneg)
   have hscale :
-      TauCeti.kyFanSum (2 * k)
-          (((δ : ℝ) : 𝕜) •
-            UnitarilyInvariantSeminorm.orthogonalBlockSum X X) =
-        δ * TauCeti.kyFanSum (2 * k)
-          (UnitarilyInvariantSeminorm.orthogonalBlockSum X X) :=
-    TauCeti.kyFanSum_real_smul
-      (2 * k) (UnitarilyInvariantSeminorm.orthogonalBlockSum X X) hδ.le
+      (((δ : ℝ) : 𝕜) •
+            UnitarilyInvariantSeminorm.orthogonalBlockSum X X).kyFanSum (2 * k) =
+        δ * (UnitarilyInvariantSeminorm.orthogonalBlockSum X X).kyFanSum (2 * k) := by
+    rw [LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg hδ.le]
   rw [hscale,
     TauCeti.UnitarilyInvariantSeminorm.kyFanSum_orthogonalBlockSum_self,
     TauCeti.UnitarilyInvariantSeminorm.kyFanSum_orthogonalBlockSum_self]
       at hbound'
   have hbound' :
-      δ * TauCeti.kyFanSum k X ≤
+      δ * X.kyFanSum k ≤
         (Real.pi / 2 + eps) * K := by
     dsimp only [K] at hbound' ⊢
     nlinarith
@@ -396,7 +386,7 @@ theorem kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
       div_le_iff₀ hdenom]
     nlinarith
   calc
-    δ * TauCeti.kyFanSum k X ≤
+    δ * X.kyFanSum k ≤
         (Real.pi / 2 + eps) * K := hbound'
     _ = (Real.pi / 2) * K + eps * K := by ring
     _ ≤ (Real.pi / 2) * K + eta := by gcongr
@@ -416,9 +406,9 @@ theorem kyFan_reciprocalMultiplier_le_of_integrableKernel
           ⟪X (eE j), eF i⟫_𝕜 =
         ⟪C (eE j), eF i⟫_𝕜)
     (k : ℕ) :
-    δ * TauCeti.kyFanSum k X ≤
+    δ * X.kyFanSum k ≤
       (Real.pi / 2) *
-        TauCeti.kyFanSum k C := by
+        C.kyFanSum k := by
   apply kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
     eF eE α β hδ _ hcoeff k
   intro eps heps

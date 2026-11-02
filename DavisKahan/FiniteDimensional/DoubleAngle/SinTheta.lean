@@ -728,13 +728,12 @@ theorem kyFan_sinTwoTheta_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) (k : ℕ) :
-    (b - a) * kyFanSum k (sinTwoAngleOperator U V) ≤ 2 * kyFanSum k (B - A) := by
+    (b - a) * (sinTwoAngleOperator U V).kyFanSum k ≤ 2 * (B - A).kyFanSum k := by
   let NK : UnitarilyInvariantSeminorm 𝕜 E E :=
     (UnitarilyInvariantSeminorm.kyFan
       (𝕜 := 𝕜) (E := E) (F := E) k)
   have h := sinTwoTheta_perturbation_le NK hA hB hU hV hab hgap
-  simpa only [NK, UnitarilyInvariantSeminorm.kyFan_apply,
-    TauCeti.kyFanSum_eq_linearMap_kyFanSum] using h
+  simpa only [NK, UnitarilyInvariantSeminorm.kyFan_apply] using h
 
 end DavisKahan.FiniteDimensional
 end TauCeti

@@ -68,9 +68,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 omit [CompleteSpace E] in
 private theorem fullKyFanSum_eq_nuclear (A : E →ₗ[ℂ] E) :
-    TauCeti.kyFanSum (Module.finrank ℂ E) A =
+    A.kyFanSum (Module.finrank ℂ E) =
       UnitarilyInvariantSeminorm.nuclear ℂ E E A := by
-  rw [TauCeti.kyFanSum_eq_kyFan, UnitarilyInvariantSeminorm.kyFan_apply]
   exact A.kyFanSum_eq_nuclear (LinearMap.finrank_range_le A)
 
 /-- The displacement of a reflecting transporter dominates the endpoint

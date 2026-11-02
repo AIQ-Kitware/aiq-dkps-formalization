@@ -114,21 +114,21 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
           intro i hi
           simp [f, lt_of_lt_of_le i.isLt hkn]
     rw [hprefix]
-    rw [← TauCeti.kyFanSum_eq_linearMap_kyFanSum]
-    unfold TauCeti.kyFanSum
+    rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
     apply Finset.sum_congr rfl
     intro i hi
     exact TauCeti.singularValues_diagOp
       (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin n))
       finrank_euclideanSpace_fin b hxanti hx0
       ⟨i, lt_of_lt_of_le i.isLt hkn⟩
-  · have hstab :=
-      TauCeti.kyFanSum_eq_of_finrank_le (k := k) (by simpa using hnk) (TauCeti.diagOp b x)
-    rw [← TauCeti.kyFanSum_eq_linearMap_kyFanSum]
+  · have hnk' : Module.finrank ℂ (EuclideanSpace ℂ (Fin n)) ≤ k := by simpa using hnk
+    have hstab := ((TauCeti.diagOp b x).kyFanSum_eq_nuclear
+      ((LinearMap.finrank_range_le _).trans hnk')).trans
+        ((TauCeti.diagOp b x).kyFanSum_eq_nuclear (LinearMap.finrank_range_le _)).symm
     rw [hstab]
     rw [finrank_euclideanSpace_fin]
     rw [FiniteVector.prefixSum_eq_full_sum_of_le x hnk]
-    unfold TauCeti.kyFanSum
+    rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
     apply Finset.sum_congr rfl
     intro i hi
     exact TauCeti.singularValues_diagOp

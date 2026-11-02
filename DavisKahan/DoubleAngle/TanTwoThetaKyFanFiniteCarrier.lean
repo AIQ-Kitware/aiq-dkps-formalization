@@ -401,8 +401,7 @@ theorem sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace
   have hH'id : H'.toLinearMap.toContinuousLinearMap = H' := by
     ext x; rfl
   have hHbridge : ∀ j : ℕ,
-      TauCeti.kyFanSum j
-        H'.toLinearMap = kyFanApproximationGauge j H' := by
+      H'.toLinearMap.kyFanSum j = kyFanApproximationGauge j H' := by
     intro j
     rw [kyFanSum_eq_kyFanApproximationGauge j H'.toLinearMap,
       hH'id]
@@ -433,8 +432,7 @@ theorem sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace
   rw [hLHS]
   calc (b - a) * ∑ x ∈ S',
         absDoubleAngleTangent (T'.toLinearMap.singularValues (x : ℕ))
-      ≤ 2 * TauCeti.kyFanSum S'.card
-          H'.toLinearMap := hfin
+      ≤ 2 * H'.toLinearMap.kyFanSum S'.card := hfin
     _ = 2 * kyFanApproximationGauge S'.card H' := by rw [hHbridge S'.card]
     _ ≤ 2 * kyFanApproximationGauge S'.card H := by linarith [hHgauge S'.card]
     _ ≤ 2 * kyFanApproximationGauge S.card H := by linarith

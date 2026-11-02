@@ -166,7 +166,7 @@ theorem singularValues_phaseUnitary (theta : ℝ)
 `2 sin theta`; no acute-angle restriction occurs. -/
 theorem kyFanSum_phaseUnitary (theta : ℝ)
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    kyFanSum 2 (LinearMap.id - (phaseUnitary theta).toLinearMap) =
+    (LinearMap.id - (phaseUnitary theta).toLinearMap).kyFanSum 2 =
       2 * Real.sin theta := by
   rw [phaseUnitary_toLinearMap]
   exact example4_2_endpoint_traceDisplacement h0 hpi
@@ -364,9 +364,9 @@ theorem singularValues_projectionDifference (theta : ℝ)
 /-- The complex planar projection distance is exactly `2 sin theta`. -/
 theorem kyFanSum_projectionDifference (theta : ℝ)
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    kyFanSum 2 (projection sourceLine - projection (targetLine theta)) =
+    (projection sourceLine - projection (targetLine theta)).kyFanSum 2 =
       2 * Real.sin theta := by
-  rw [kyFanSum_eq_sum_fin, Fin.sum_univ_two,
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_two,
     singularValues_projectionDifference theta h0 hpi]
   simp [TauCeti.pairSingularValues]
   ring
@@ -377,18 +377,18 @@ theorem phaseUnitary_global_trace_minimizer (theta : ℝ)
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
     (∀ W : E2 ≃ₗᵢ[ℂ] E2,
       sourceLine.map W.toLinearMap = targetLine theta →
-        kyFanSum 2 (LinearMap.id - (phaseUnitary theta).toLinearMap) ≤
-          kyFanSum 2 (LinearMap.id - W.toLinearMap)) ∧
-      kyFanSum 2 (LinearMap.id - (phaseUnitary theta).toLinearMap) =
-        kyFanSum 2 (projection sourceLine - projection (targetLine theta)) := by
+        (LinearMap.id - (phaseUnitary theta).toLinearMap).kyFanSum 2 ≤
+          (LinearMap.id - W.toLinearMap).kyFanSum 2) ∧
+      (LinearMap.id - (phaseUnitary theta).toLinearMap).kyFanSum 2 =
+        (projection sourceLine - projection (targetLine theta)).kyFanSum 2 := by
   constructor
   · intro W hmap
     calc
-      kyFanSum 2 (LinearMap.id - (phaseUnitary theta).toLinearMap) =
+      (LinearMap.id - (phaseUnitary theta).toLinearMap).kyFanSum 2 =
           2 * Real.sin theta := kyFanSum_phaseUnitary theta h0 hpi
-      _ = kyFanSum 2 (projection sourceLine - projection (targetLine theta)) :=
+      _ = (projection sourceLine - projection (targetLine theta)).kyFanSum 2 :=
         (kyFanSum_projectionDifference theta h0 hpi).symm
-      _ ≤ kyFanSum 2 (LinearMap.id - W.toLinearMap) :=
+      _ ≤ (LinearMap.id - W.toLinearMap).kyFanSum 2 :=
         projectionDifference_kyFanSum_le_displacement sourceLine
           (targetLine theta) W hmap 2
   · exact (kyFanSum_phaseUnitary theta h0 hpi).trans
@@ -397,8 +397,8 @@ theorem phaseUnitary_global_trace_minimizer (theta : ℝ)
 /-- The global projection bound already supplies the universal lower inequality
 for this complex plane, valid even at `theta = pi/2`. -/
 theorem projectionDifference_le_phaseUnitary (theta : ℝ) :
-    kyFanSum 2 (projection sourceLine - projection (targetLine theta)) ≤
-      kyFanSum 2 (LinearMap.id - (phaseUnitary theta).toLinearMap) :=
+    (projection sourceLine - projection (targetLine theta)).kyFanSum 2 ≤
+      (LinearMap.id - (phaseUnitary theta).toLinearMap).kyFanSum 2 :=
   projectionDifference_kyFanSum_le_displacement sourceLine
     (targetLine theta) (phaseUnitary theta) (phaseUnitary_transports theta) 2
 

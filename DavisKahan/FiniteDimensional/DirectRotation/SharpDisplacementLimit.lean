@@ -32,10 +32,10 @@ Together with `uiNorm_directRotation_le_sqrt_two_mul_displacement`, this makes
 `sqrt 2` the least common displacement factor on acute pairs. -/
 theorem sqrt_two_common_factor_necessary (c : ℝ)
     (hbound : ∀ (theta : ℝ) (h0 : 0 < theta) (h1 : theta < Real.pi / 2),
-      kyFanSum 4 (LinearMap.id -
+      (LinearMap.id -
         (directRotation ShortRotationCounterexample.U4 (V4 theta)
-          (acute theta (cos_pos theta h0 h1))).toLinearMap) ≤
-        c * kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap)) :
+          (acute theta (cos_pos theta h0 h1))).toLinearMap).kyFanSum 4 ≤
+        c * (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4) :
     Real.sqrt 2 ≤ c := by
   have hpi : 0 < Real.pi / 2 := by positivity
   have hcont : Continuous (fun theta : ℝ => c * Real.cos (theta / 2)) := by

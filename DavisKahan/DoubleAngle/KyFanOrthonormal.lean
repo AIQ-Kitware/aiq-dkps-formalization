@@ -86,20 +86,17 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
       Submodule.starProjection_eq_self_iff.mpr (humem i)]
   -- finite Ky Fan principle on the compression
   have hfin : RCLike.re (∑ i, ⟪u' i, K' (v' i)⟫_𝕜) ≤
-      TauCeti.kyFanSum k K'.toLinearMap := by
+      K'.toLinearMap.kyFanSum k := by
     calc
       RCLike.re (∑ i, ⟪u' i, K' (v' i)⟫_𝕜)
           ≤ ‖∑ i, ⟪u' i, K' (v' i)⟫_𝕜‖ := RCLike.re_le_norm _
       _ ≤ K'.toLinearMap.kyFanSum k := by
         simpa using K'.toLinearMap.norm_sum_inner_le_kyFanSum hu' hv'
-      _ = TauCeti.kyFanSum k K'.toLinearMap :=
-        (TauCeti.kyFanSum_eq_linearMap_kyFanSum k K'.toLinearMap).symm
   -- finite bridge to the approximation-number prefix
   have hK'id : K'.toLinearMap.toContinuousLinearMap = K' := by
     ext x; rfl
   have hbridge :
-      TauCeti.kyFanSum
-        k K'.toLinearMap = kyFanApproximationGauge k K' := by
+      K'.toLinearMap.kyFanSum k = kyFanApproximationGauge k K' := by
     rw [kyFanSum_eq_kyFanApproximationGauge, hK'id]
   -- the compression does not increase approximation numbers
   have hmono : kyFanApproximationGauge k K' ≤ kyFanApproximationGauge k K := by
@@ -123,8 +120,7 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
       = RCLike.re (∑ i, ⟪u' i, K' (v' i)⟫_𝕜) := by
         congr 1
         exact Finset.sum_congr rfl fun i _ => (hpair i).symm
-    _ ≤ TauCeti.kyFanSum
-          k K'.toLinearMap := hfin
+    _ ≤ K'.toLinearMap.kyFanSum k := hfin
     _ = kyFanApproximationGauge k K' := hbridge
     _ ≤ kyFanApproximationGauge k K := hmono
 

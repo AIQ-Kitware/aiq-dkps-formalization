@@ -63,8 +63,9 @@ theorem singularValues_planarZeroExtension
 prefix in the original plane, including prefixes beyond dimension two. -/
 theorem kyFanSum_planarZeroExtension
     (ι : E2 →ₗᵢ[ℂ] H) (T : E2 →ₗ[ℂ] E2) (k : ℕ) :
-    kyFanSum k (planarZeroExtension ι T) = kyFanSum k T := by
-  simp only [kyFanSum_eq_sum_fin, singularValues_planarZeroExtension]
+    (planarZeroExtension ι T).kyFanSum k = T.kyFanSum k := by
+  simp only [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range,
+    singularValues_planarZeroExtension]
 
 /-- The range of a zero-extended planar map has complex dimension at most two. -/
 theorem finrank_range_planarZeroExtension_le_two
@@ -85,8 +86,7 @@ theorem finrank_range_planarZeroExtension_le_two
 first two singular values. -/
 private theorem kyFanSum_finrank_eq_two_of_rank_le
     (A : H →ₗ[ℂ] H) (h : finrank ℂ (LinearMap.range A) ≤ 2) :
-    kyFanSum (finrank ℂ H) A = kyFanSum 2 A := by
-  rw [kyFanSum_eq_linearMap_kyFanSum, kyFanSum_eq_linearMap_kyFanSum]
+    A.kyFanSum (finrank ℂ H) = A.kyFanSum 2 := by
   calc
     A.kyFanSum (finrank ℂ H) =
         A.kyFanSum (min (finrank ℂ H) (finrank ℂ (LinearMap.range A))) :=
@@ -99,13 +99,13 @@ private theorem kyFanSum_finrank_eq_two_of_rank_le
 original trace norm, regardless of the dimension of the ambient space. -/
 theorem trace_planarZeroExtension
     (ι : E2 →ₗᵢ[ℂ] H) (T : E2 →ₗ[ℂ] E2) :
-    kyFanSum (finrank ℂ H) (planarZeroExtension ι T) = kyFanSum 2 T := by
+    (planarZeroExtension ι T).kyFanSum (finrank ℂ H) = T.kyFanSum 2 := by
   calc
-    kyFanSum (finrank ℂ H) (planarZeroExtension ι T) =
-        kyFanSum 2 (planarZeroExtension ι T) :=
+    (planarZeroExtension ι T).kyFanSum (finrank ℂ H) =
+        (planarZeroExtension ι T).kyFanSum 2 :=
       kyFanSum_finrank_eq_two_of_rank_le _
         (finrank_range_planarZeroExtension_le_two ι T)
-    _ = kyFanSum 2 T := kyFanSum_planarZeroExtension ι T 2
+    _ = T.kyFanSum 2 := kyFanSum_planarZeroExtension ι T 2
 
 /-- A phase-corrected complex principal plane, embedded into an arbitrarily
 large ambient complex Hilbert space, contributes exactly `2 sin theta` to the
@@ -113,8 +113,8 @@ ambient trace displacement. -/
 theorem trace_planarPhaseDisplacement
     (ι : E2 →ₗᵢ[ℂ] H) (theta : ℝ)
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    kyFanSum (finrank ℂ H)
-      (planarZeroExtension ι (LinearMap.id - (phaseUnitary theta).toLinearMap)) =
+    (planarZeroExtension ι (LinearMap.id - (phaseUnitary theta).toLinearMap)).kyFanSum
+      (finrank ℂ H) =
         2 * Real.sin theta := by
   rw [trace_planarZeroExtension]
   exact kyFanSum_phaseUnitary theta h0 hpi
@@ -124,8 +124,8 @@ same full ambient trace norm as the embedded phase displacement. -/
 theorem trace_planarProjectionDifference
     (ι : E2 →ₗᵢ[ℂ] H) (theta : ℝ)
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    kyFanSum (finrank ℂ H)
-      (planarZeroExtension ι (projection sourceLine - projection (targetLine theta))) =
+    (planarZeroExtension ι (projection sourceLine - projection (targetLine theta))).kyFanSum
+      (finrank ℂ H) =
         2 * Real.sin theta := by
   rw [trace_planarZeroExtension]
   exact kyFanSum_projectionDifference theta h0 hpi
@@ -134,10 +134,10 @@ theorem trace_planarProjectionDifference
 theorem trace_planarPhase_eq_projectionDifference
     (ι : E2 →ₗᵢ[ℂ] H) (theta : ℝ)
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    kyFanSum (finrank ℂ H)
-        (planarZeroExtension ι (LinearMap.id - (phaseUnitary theta).toLinearMap)) =
-      kyFanSum (finrank ℂ H)
-        (planarZeroExtension ι (projection sourceLine - projection (targetLine theta))) := by
+    (planarZeroExtension ι (LinearMap.id - (phaseUnitary theta).toLinearMap)).kyFanSum
+      (finrank ℂ H) =
+      (planarZeroExtension ι (projection sourceLine - projection (targetLine theta))).kyFanSum
+        (finrank ℂ H) := by
   rw [trace_planarPhaseDisplacement ι theta h0 hpi,
     trace_planarProjectionDifference ι theta h0 hpi]
 
@@ -204,12 +204,12 @@ theorem twoPlanePhaseUnitary_trace_eq_projectionDifference
     (theta phi : ℝ)
     (h0theta : 0 ≤ theta) (hpiTheta : theta ≤ Real.pi / 2)
     (h0phi : 0 ≤ phi) (hpiPhi : phi ≤ Real.pi / 2) :
-    kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))
-        (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap) =
-      kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))
-        (UnitarilyInvariantSeminorm.orthogonalBlockSum
+    (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap).kyFanSum
+      (finrank ℂ (WithLp 2 (E2 × E2))) =
+      (UnitarilyInvariantSeminorm.orthogonalBlockSum
           (projection sourceLine - projection (targetLine theta))
-          (projection sourceLine - projection (targetLine phi))) := by
+          (projection sourceLine - projection (targetLine phi))).kyFanSum
+            (finrank ℂ (WithLp 2 (E2 × E2))) := by
   rw [twoPlanePhaseUnitary_displacement,
     kyFanSum_orthogonalBlockSum_full, kyFanSum_orthogonalBlockSum_full]
   have hdim : finrank ℂ E2 = 2 := finrank_euclideanSpace_fin
@@ -248,14 +248,13 @@ theorem twoPlanePhaseUnitary_global_trace_minimizer
     (h0phi : 0 ≤ phi) (hpiPhi : phi ≤ Real.pi / 2) :
     (∀ W : WithLp 2 (E2 × E2) ≃ₗᵢ[ℂ] WithLp 2 (E2 × E2),
       twoPlaneSource.map W.toLinearMap = twoPlaneTarget theta phi →
-      kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))
-        (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap) ≤
-      kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))
-        (LinearMap.id - W.toLinearMap)) ∧
-    kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))
-        (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap) =
-      kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))
-        (projection twoPlaneSource - projection (twoPlaneTarget theta phi)) := by
+      (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap).kyFanSum
+        (finrank ℂ (WithLp 2 (E2 × E2))) ≤
+      (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))) ∧
+    (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap).kyFanSum
+      (finrank ℂ (WithLp 2 (E2 × E2))) =
+      (projection twoPlaneSource - projection (twoPlaneTarget theta phi)).kyFanSum
+        (finrank ℂ (WithLp 2 (E2 × E2))) := by
   have hproj :
       projection twoPlaneSource - projection (twoPlaneTarget theta phi) =
         UnitarilyInvariantSeminorm.orthogonalBlockSum
@@ -271,12 +270,11 @@ theorem twoPlanePhaseUnitary_global_trace_minimizer
   constructor
   · intro W hmap
     calc
-      kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))
-          (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap) =
-          kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))
-            (projection twoPlaneSource - projection (twoPlaneTarget theta phi)) := heq
-      _ ≤ kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))
-            (LinearMap.id - W.toLinearMap) :=
+      (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap).kyFanSum
+        (finrank ℂ (WithLp 2 (E2 × E2))) =
+          (projection twoPlaneSource - projection (twoPlaneTarget theta phi)).kyFanSum
+            (finrank ℂ (WithLp 2 (E2 × E2))) := heq
+      _ ≤ (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ (WithLp 2 (E2 × E2))) :=
         projectionDifference_kyFanSum_le_displacement
           twoPlaneSource (twoPlaneTarget theta phi) W hmap _
   · exact heq

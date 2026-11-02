@@ -461,7 +461,7 @@ theorem kyFanSum_le_kyFanApproximationGauge
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 F₀]
     (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
-    TauCeti.kyFanSum k A ≤
+    A.kyFanSum k ≤
       kyFanApproximationGauge k A.toContinuousLinearMap :=
   (ContinuousLinearMap.kyFanSum_eq_kyFanGauge k A).le
 
@@ -474,7 +474,7 @@ theorem kyFanSum_eq_kyFanApproximationGauge
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 F₀]
     (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
-    TauCeti.kyFanSum k A =
+    A.kyFanSum k =
       kyFanApproximationGauge k A.toContinuousLinearMap :=
   ContinuousLinearMap.kyFanSum_eq_kyFanGauge k A
 
@@ -742,7 +742,7 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
     kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq W' (K ∘L W.subtypeL) hKW k
   obtain ⟨u', v', hu', hv', heq⟩ :=
     K'.toLinearMap.exists_orthonormal_sum_inner_eq_kyFanSum hkW hkW'
-  have hbridge : TauCeti.kyFanSum k K'.toLinearMap
+  have hbridge : K'.toLinearMap.kyFanSum k
       = kyFanApproximationGauge k K' :=
     kyFanSum_eq_kyFanApproximationGauge k K'.toLinearMap
   refine ⟨fun i => (u' i : F), fun i => (v' i : E), ?_, ?_, ?_⟩
@@ -768,8 +768,6 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
             = RCLike.re (∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜) :=
               congrArg RCLike.re hsum
         _ = K'.toLinearMap.kyFanSum k := by rw [heq]; simp
-        _ = TauCeti.kyFanSum k K'.toLinearMap :=
-          (TauCeti.kyFanSum_eq_linearMap_kyFanSum k K'.toLinearMap).symm
         _ = kyFanApproximationGauge k K' := hbridge
         _ = kyFanApproximationGauge k (K ∘L W.subtypeL) := hgaugeK'
     rw [hreal]

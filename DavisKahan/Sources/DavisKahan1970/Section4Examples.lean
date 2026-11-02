@@ -226,8 +226,8 @@ theorem example4_1_reflection_singularValues (theta : ℝ) :
 
 /-- The paper's displayed Ky Fan two norm for the reflection is exactly `2`. -/
 theorem example4_1_reflection_kyFan_two (theta : ℝ) :
-    TauCeti.kyFanSum 2 (LinearMap.id - example41Reflection theta) = 2 := by
-  rw [TauCeti.kyFanSum_eq_sum_fin, Fin.sum_univ_two,
+    (LinearMap.id - example41Reflection theta).kyFanSum 2 = 2 := by
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_two,
     example4_1_reflection_singularValues]
   simp
 
@@ -235,9 +235,9 @@ theorem example4_1_reflection_kyFan_two (theta : ℝ) :
 `4 sin(theta/2)`. -/
 theorem example4_1_directRotation_kyFan_two
     {theta : ℝ} (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    TauCeti.kyFanSum 2 (LinearMap.id - example41DirectRotation theta) =
+    (LinearMap.id - example41DirectRotation theta).kyFanSum 2 =
       4 * Real.sin (theta / 2) := by
-  rw [TauCeti.kyFanSum_eq_sum_fin, Fin.sum_univ_two,
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_two,
     example4_1_directRotation_singularValues h0 hpi]
   simp
   ring
@@ -247,8 +247,8 @@ reflecting competitor has smaller Ky Fan two displacement exactly for
 `theta > pi/3`. -/
 theorem example4_1_reflection_beats_direct_iff
     {theta : ℝ} (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    TauCeti.kyFanSum 2 (LinearMap.id - example41Reflection theta) <
-        TauCeti.kyFanSum 2 (LinearMap.id - example41DirectRotation theta) ↔
+    (LinearMap.id - example41Reflection theta).kyFanSum 2 <
+        (LinearMap.id - example41DirectRotation theta).kyFanSum 2 ↔
       Real.pi / 3 < theta := by
   rw [example4_1_reflection_kyFan_two,
     example4_1_directRotation_kyFan_two h0 hpi]
@@ -500,9 +500,9 @@ theorem example4_2_endpoint_singularValues
 /-- Exact complex two-dimensional trace displacement at the optimal phase. -/
 theorem example4_2_endpoint_traceDisplacement
     {theta : ℝ} (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    TauCeti.kyFanSum 2 (LinearMap.id - example42Competitor theta theta) =
+    (LinearMap.id - example42Competitor theta theta).kyFanSum 2 =
       2 * Real.sin theta := by
-  rw [TauCeti.kyFanSum_eq_sum_fin, Fin.sum_univ_two,
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_two,
     example4_2_endpoint_singularValues h0 hpi]
   simp [TauCeti.pairSingularValues]
 
@@ -510,9 +510,9 @@ theorem example4_2_endpoint_traceDisplacement
 theorem example4_2_competitor_kyFan_two
     {theta delta : ℝ} (h0 : 0 ≤ delta) (hlt : delta < theta)
     (hpi : theta ≤ Real.pi / 2) :
-    TauCeti.kyFanSum 2 (LinearMap.id - example42Competitor theta delta) =
+    (LinearMap.id - example42Competitor theta delta).kyFanSum 2 =
       4 * Real.sin (theta / 2) * Real.cos (delta / 2) := by
-  rw [TauCeti.kyFanSum_eq_sum_fin, Fin.sum_univ_two,
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_two,
     example4_2_competitor_singularValues h0 hlt hpi]
   simp
   rw [show (theta + delta) / 2 = theta / 2 + delta / 2 by ring,
@@ -533,8 +533,8 @@ phase `0 < delta < theta` strictly lowers the Ky Fan two displacement. -/
 theorem example4_2_nonzero_phase_beats_direct
     {theta delta : ℝ} (hdelta : 0 < delta) (hlt : delta < theta)
     (hpi : theta ≤ Real.pi / 2) :
-    TauCeti.kyFanSum 2 (LinearMap.id - example42Competitor theta delta) <
-      TauCeti.kyFanSum 2 (LinearMap.id - example42DirectRotation theta) := by
+    (LinearMap.id - example42Competitor theta delta).kyFanSum 2 <
+      (LinearMap.id - example42DirectRotation theta).kyFanSum 2 := by
   have htheta : 0 < theta := hdelta.trans hlt
   have hsource := example4_2_competitor_kyFan_two hdelta.le hlt hpi
   have hzero := example4_2_competitor_kyFan_two

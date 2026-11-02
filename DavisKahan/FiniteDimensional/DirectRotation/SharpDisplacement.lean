@@ -511,10 +511,10 @@ attains the universal sharp factor, expressed via the actual maximal angle. -/
 theorem fixedAngle_sharpFactor_attained (theta : ℝ)
     (h0 : 0 < theta) (h1 : theta < Real.pi / 2) :
     Real.cos (Real.arcsin (U4.projectionGap (V4 theta)) / 2) *
-      kyFanSum 4 (LinearMap.id -
+      (LinearMap.id -
         (directRotation U4 (V4 theta)
-          (acute theta (cos_pos theta h0 h1))).toLinearMap) =
-      kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) := by
+          (acute theta (cos_pos theta h0 h1))).toLinearMap).kyFanSum 4 =
+      (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 := by
   rw [projectionGap_eq_sin theta h0 h1,
     Real.arcsin_sin (by linarith [Real.pi_pos]) h1.le]
   exact cos_half_mul_directTrace_eq_competitorTrace theta h0 h1
@@ -524,37 +524,37 @@ must be at least `sec(theta/2)`; equivalently its cosine-weighted value is
 at least one. The witness is a global minimum, not merely a cheaper competitor. -/
 theorem factor_necessary_at_fixedAngle (theta c : ℝ)
     (h0 : 0 < theta) (h1 : theta < Real.pi / 2)
-    (hbound : kyFanSum 4 (LinearMap.id -
+    (hbound : (LinearMap.id -
         (directRotation U4 (V4 theta)
-          (acute theta (cos_pos theta h0 h1))).toLinearMap) ≤
-      c * kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap)) :
+          (acute theta (cos_pos theta h0 h1))).toLinearMap).kyFanSum 4 ≤
+      c * (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4) :
     1 ≤ c * Real.cos (theta / 2) := by
   have hc : 0 < Real.cos (theta / 2) :=
     Real.cos_pos_of_mem_Ioo
       ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
   have hs : 0 < Real.sin theta :=
     Real.sin_pos_of_pos_of_lt_pi h0 (by linarith [Real.pi_pos])
-  have hw : 0 < kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) := by
+  have hw : 0 < (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 := by
     rw [kyFanSum_displacement_W theta hs.le]
     positivity
   have heq := cos_half_mul_directTrace_eq_competitorTrace theta h0 h1
   have hscaled := mul_le_mul_of_nonneg_left hbound hc.le
-  have hfactor : kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) ≤
+  have hfactor : (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 ≤
       (c * Real.cos (theta / 2)) *
-        kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) := by
+        (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 := by
     calc
-      kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) =
-          Real.cos (theta / 2) * kyFanSum 4 (LinearMap.id -
+      (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 =
+          Real.cos (theta / 2) * (LinearMap.id -
             (directRotation U4 (V4 theta)
-              (acute theta (cos_pos theta h0 h1))).toLinearMap) := heq.symm
+              (acute theta (cos_pos theta h0 h1))).toLinearMap).kyFanSum 4 := heq.symm
       _ ≤ Real.cos (theta / 2) *
-          (c * kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap)) := hscaled
+          (c * (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4) := hscaled
       _ = (c * Real.cos (theta / 2)) *
-          kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) := by ring
+          (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 := by ring
   have hfactor' : (1 : ℝ) *
-      kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) ≤
+      (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 ≤
       (c * Real.cos (theta / 2)) *
-        kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) := by
+        (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 := by
     simpa using hfactor
   exact le_of_mul_le_mul_right hfactor' hw
 
@@ -562,11 +562,11 @@ theorem factor_necessary_at_fixedAngle (theta c : ℝ)
 /-- Optimality of `2 / sqrt 3` on the original Davis--Kahan angle range:
 even just the trace-norm real witness at `theta = pi/3` forces this factor. -/
 theorem pi_div_three_common_factor_necessary (c : ℝ)
-    (hbound : kyFanSum 4 (LinearMap.id -
+    (hbound : (LinearMap.id -
         (directRotation U4 (V4 (Real.pi / 3))
           (acute (Real.pi / 3) (cos_pos (Real.pi / 3)
-            (by positivity) (by have := Real.pi_pos; linarith)))).toLinearMap) ≤
-      c * kyFanSum 4 (LinearMap.id - (Wequiv (Real.pi / 3)).toLinearMap)) :
+            (by positivity) (by have := Real.pi_pos; linarith)))).toLinearMap).kyFanSum 4 ≤
+      c * (LinearMap.id - (Wequiv (Real.pi / 3)).toLinearMap).kyFanSum 4) :
     2 / Real.sqrt 3 ≤ c := by
   have hpi0 : 0 < Real.pi / 3 := by positivity
   have hpi1 : Real.pi / 3 < Real.pi / 2 := by

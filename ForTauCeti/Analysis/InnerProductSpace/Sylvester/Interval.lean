@@ -461,12 +461,11 @@ theorem kyFan_sylvester_le_of_intervalGap
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ) (hgap : IntervalSylvesterGap A B a b δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
-    δ * TauCeti.kyFanSum k X ≤
-      TauCeti.kyFanSum k C := by
+    δ * X.kyFanSum k ≤
+      C.kyFanSum k := by
   have h := uiNorm_sylvester_le_of_intervalGap
     (UnitarilyInvariantSeminorm.kyFan 𝕜 E F k) hA hB hδ hgap hEq
-  simpa only [UnitarilyInvariantSeminorm.kyFan_apply,
-    LinearMap.kyFanSum_def, TauCeti.kyFanSum_eq_sum_range] using h
+  simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using h
 
 /-- Ordered positivity/coercivity form used by the existing integral-free
 proof.

@@ -195,35 +195,37 @@ identity.  No dimension matching or acute-angle assumption is needed. -/
 theorem kyFanSum_projectionDifference_eq_directed_sines
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    kyFanSum (finrank 𝕜 E) (projection U - projection V) =
-      kyFanSum (finrank 𝕜 E) (sinThetaMap U V) +
-        kyFanSum (finrank 𝕜 E) (sinThetaMap V U) := by
+    (projection U - projection V).kyFanSum (finrank 𝕜 E) =
+      (sinThetaMap U V).kyFanSum (finrank 𝕜 E) +
+        (sinThetaMap V U).kyFanSum (finrank 𝕜 E) := by
   let A : E →ₗ[𝕜] E := LinearMap.operatorAbs (sinThetaMap U V)
   let B : E →ₗ[𝕜] E := LinearMap.operatorAbs ((sinThetaMap V U).adjoint)
   have hA : A.IsPositive := LinearMap.isPositive_operatorAbs _
   have hB : B.IsPositive := LinearMap.isPositive_operatorAbs _
-  have hD : kyFanSum (finrank 𝕜 E) (projection U - projection V) =
-      kyFanSum (finrank 𝕜 E) (A + B) := by
-    change kyFanSum (finrank 𝕜 E) (projection U - projection V) =
-      kyFanSum (finrank 𝕜 E)
-        (LinearMap.operatorAbs (sinThetaMap U V) +
-          LinearMap.operatorAbs ((sinThetaMap V U).adjoint))
+  have hD : (projection U - projection V).kyFanSum (finrank 𝕜 E) =
+      (A + B).kyFanSum (finrank 𝕜 E) := by
+    change (projection U - projection V).kyFanSum (finrank 𝕜 E) =
+      (LinearMap.operatorAbs (sinThetaMap U V) +
+          LinearMap.operatorAbs ((sinThetaMap V U).adjoint)).kyFanSum (finrank 𝕜 E)
     rw [← operatorAbs_projectionDifference_eq_directed_sine_sum U V]
-    simp only [kyFanSum_eq_sum_fin, LinearMap.singularValues_operatorAbs]
-  have hleft : kyFanSum (finrank 𝕜 E) A =
-      kyFanSum (finrank 𝕜 E) (sinThetaMap U V) := by
-    simp only [A, kyFanSum_eq_sum_fin, LinearMap.singularValues_operatorAbs]
-  have hright : kyFanSum (finrank 𝕜 E) B =
-      kyFanSum (finrank 𝕜 E) (sinThetaMap V U) := by
-    simp only [B, kyFanSum_eq_sum_fin, LinearMap.singularValues_operatorAbs,
+    simp only [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range,
+      LinearMap.singularValues_operatorAbs]
+  have hleft : A.kyFanSum (finrank 𝕜 E) =
+      (sinThetaMap U V).kyFanSum (finrank 𝕜 E) := by
+    simp only [A, LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range,
+      LinearMap.singularValues_operatorAbs]
+  have hright : B.kyFanSum (finrank 𝕜 E) =
+      (sinThetaMap V U).kyFanSum (finrank 𝕜 E) := by
+    simp only [B, LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range,
+      LinearMap.singularValues_operatorAbs,
       LinearMap.singularValues_adjoint]
   calc
-    kyFanSum (finrank 𝕜 E) (projection U - projection V) =
-        kyFanSum (finrank 𝕜 E) (A + B) := hD
-    _ = kyFanSum (finrank 𝕜 E) A + kyFanSum (finrank 𝕜 E) B :=
+    (projection U - projection V).kyFanSum (finrank 𝕜 E) =
+        (A + B).kyFanSum (finrank 𝕜 E) := hD
+    _ = A.kyFanSum (finrank 𝕜 E) + B.kyFanSum (finrank 𝕜 E) :=
       kyFanSum_add_of_isPositive A B hA hB
-    _ = kyFanSum (finrank 𝕜 E) (sinThetaMap U V) +
-          kyFanSum (finrank 𝕜 E) (sinThetaMap V U) := by
+    _ = (sinThetaMap U V).kyFanSum (finrank 𝕜 E) +
+          (sinThetaMap V U).kyFanSum (finrank 𝕜 E) := by
       rw [hleft, hright]
 
 end TauCeti

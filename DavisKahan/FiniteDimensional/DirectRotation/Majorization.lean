@@ -374,7 +374,7 @@ theorem LinearMap.IsPositive.of_hermitianPart_contraction
 theorem kyFanSum_pinch_le
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →ₗ[𝕜] E) (k : ℕ) :
-    kyFanSum k (pinch U A) ≤ kyFanSum k A := by
+    (pinch U A).kyFanSum k ≤ A.kyFanSum k := by
   have hpinch : (((2 : ℝ) : 𝕜)) • pinch U A =
       A + U.reflection.toLinearMap ∘ₗ A ∘ₗ U.reflection.toLinearMap := by
     ext x
@@ -402,8 +402,7 @@ theorem kyFanSum_pinch_le
           (U.reflection.toLinearMap ∘ₗ A) U.reflection k
       _ = A.kyFanSum k :=
         LinearMap.kyFanSum_linearIsometryEquiv_comp U.reflection A k
-  rw [hcomp, ← kyFanSum_eq_linearMap_kyFanSum k (pinch U A),
-    ← kyFanSum_eq_linearMap_kyFanSum k A] at htri
+  rw [hcomp] at htri
   linarith
 
 /-- Invertibility makes every finite singular value strictly positive. -/
@@ -426,7 +425,7 @@ theorem positive_affine_reverse_kyFanSum
     {C A : E →ₗ[𝕜] E} (hA : A.IsPositive) (hC : C.IsSymmetric)
     (hAC : A = (2 : 𝕜) • (LinearMap.id - C))
     (k : ℕ) :
-    kyFanSum k A =
+    A.kyFanSum k =
       ∑ i : Fin (min k (finrank 𝕜 E)),
         2 * (1 - hC.eigenvalues rfl
           (Fin.rev (Fin.castLE (min_le_right k (finrank 𝕜 E)) i))) := by
@@ -449,9 +448,9 @@ theorem positive_affine_reverse_kyFanSum
     have hlam := hC.eigenvalues_antitone rfl hrev
     linarith
   have hAeig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl br hanti heig
-  have hrange : kyFanSum k A
+  have hrange : A.kyFanSum k
       = ∑ i ∈ Finset.range (min k (finrank 𝕜 E)), A.singularValues i := by
-    rw [kyFanSum_eq_sum_range]
+    rw [LinearMap.kyFanSum_def]
     refine (Finset.sum_subset
       (fun i hi => Finset.mem_range.mpr
         (lt_of_lt_of_le (Finset.mem_range.mp hi) (min_le_left _ _)))
@@ -523,8 +522,8 @@ theorem directRotation_displacementSquare_kyFan
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) (k : ℕ) :
-    kyFanSum k (displacementSquare (directRotation U V hacute).toLinearMap) ≤
-      kyFanSum k (displacementSquare W.toLinearMap) := by
+    (displacementSquare (directRotation U V hacute).toLinearMap).kyFanSum k ≤
+      (displacementSquare W.toLinearMap).kyFanSum k := by
   classical
   let S := canonicalIntertwiner U V
   let C := S.operatorAbs
@@ -607,7 +606,7 @@ theorem directRotation_displacementSquare_kyFan
         projection_inner_left_eq_right]
       exact add_nonneg (hA1pos.re_inner_nonneg_left _)
         (hA1pos.re_inner_nonneg_left _)
-  have hprefix : ∀ j, kyFanSum j A0 ≤ kyFanSum j P1 := by
+  have hprefix : ∀ j, A0.kyFanSum j ≤ P1.kyFanSum j := by
     intro j
     -- Diagonalize `C` and `H`.  The Fan--Hoffman inequality gives
     -- `lambda_i(H) <= lambda_i(C) = sigma_i(B)`.  Applying the decreasing
@@ -639,7 +638,7 @@ theorem directRotation_displacementSquare_uiNorm
     N (displacementSquare (directRotation U V hacute).toLinearMap) ≤
       N (displacementSquare W.toLinearMap) :=
   N.map_le_of_kyFanSum_le (fun k => by
-    simpa only [kyFanSum_eq_linearMap_kyFanSum] using
+    exact
       directRotation_displacementSquare_kyFan U V hacute W hmap k)
 
 /-!

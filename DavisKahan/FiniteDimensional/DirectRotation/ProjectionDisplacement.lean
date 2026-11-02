@@ -128,9 +128,9 @@ theorem projectionDifference_kyFanSum_le_displacement
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V)
     (k : ℕ) :
-    kyFanSum k (projection U - projection V) ≤
-      kyFanSum k (LinearMap.id - W.toLinearMap) := by
-  rw [kyFanSum_eq_kyFan, kyFanSum_eq_kyFan]
+    (projection U - projection V).kyFanSum k ≤
+      (LinearMap.id - W.toLinearMap).kyFanSum k := by
+  rw [← UnitarilyInvariantSeminorm.kyFan_apply, ← UnitarilyInvariantSeminorm.kyFan_apply]
   exact projectionDifference_uiNorm_le_displacement
     (UnitarilyInvariantSeminorm.kyFan 𝕜 E E k) U V W hmap
 

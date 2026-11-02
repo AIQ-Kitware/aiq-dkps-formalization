@@ -1210,7 +1210,8 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan"
       ],
       "status": "partially-upstreamed",
-      "upstream_pr": null
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/14136",
+      "migration_note": "2026-11-02: retire TauCeti.kyFanSum, kyFanSum_eq_sum_fin, kyFanSum_eq_sum_range, kyFanSum_eq_linearMap_kyFanSum, kyFanSum_eq_kyFan, kyFanSum_eq_of_finrank_le, kyFanSum_le_of_singularValues_le, kyFanSum_real_smul and sum_le_kyFanSum_of_orthonormal. All maintained callers use LinearMap.kyFanSum with the accepted operator-first argument order; Fin prefixes are converted directly with Fin.sum_univ_eq_sum_range. Native kyFanSum_min_finrank_range/kyFanSum_eq_nuclear, kyFanSum_smul and norm_sum_inner_le_kyFanSum replace local saturation, homogeneity and signed witnesses; the seminorm uses UnitarilyInvariantSeminorm.kyFan_apply. Accepted #14136 integration d5e905c6f95e6e14eb5f36562be6cc5edb858995 is in pin 463ab293070d and explicitly reports no vendored or adapted formalization: independent implementation of the same roadmap result, not DKPS proof descent. Retain eigenvalues_operatorAbs (sorted eigenvalue identity), sum_filter_lt_eq_sum_fin (actual finite-vector consumers), orthonormal_unimodular_smul (arbitrary index/phase preservation), and sum_abs_le_kyFanSum_of_orthonormal (rephasing needed for absolute real parts in branch-free double-angle bounds), now on the native sum. Historical donor e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/KyFan.lean, introduced 199390a, Jon Crall / Claude Fable 5, Kitware Inc., Apache-2.0. The earlier native variational/trace/triangle retirements remain preserved in provenance_class."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed",

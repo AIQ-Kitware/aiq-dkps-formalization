@@ -42,16 +42,16 @@ noncomputable section
 singular value `2 sin (θ/2)`. -/
 theorem example4_1_directRotation_kyFan_one
     {theta : ℝ} (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    TauCeti.kyFanSum 1 (LinearMap.id - example41DirectRotation theta) =
+    (LinearMap.id - example41DirectRotation theta).kyFanSum 1 =
       2 * Real.sin (theta / 2) := by
-  rw [TauCeti.kyFanSum_eq_sum_fin, Fin.sum_univ_one,
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_one,
     example4_1_directRotation_singularValues h0 hpi]
   simp
 
 /-- The Ky Fan one-sum of Example 4.1's reflection is `2`. -/
 theorem example4_1_reflection_kyFan_one (theta : ℝ) :
-    TauCeti.kyFanSum 1 (LinearMap.id - example41Reflection theta) = 2 := by
-  rw [TauCeti.kyFanSum_eq_sum_fin, Fin.sum_univ_one,
+    (LinearMap.id - example41Reflection theta).kyFanSum 1 = 2 := by
+  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_one,
     example4_1_reflection_singularValues]
   simp
 
@@ -79,12 +79,12 @@ theorem example4_1_directRotation_uiNorm_le_reflection_of_le_pi_div_three
     simp [RealPlane]
   have hky :
       ∀ k,
-        TauCeti.kyFanSum k (LinearMap.id - example41DirectRotation theta) ≤
-          TauCeti.kyFanSum k (LinearMap.id - example41Reflection theta) := by
+        (LinearMap.id - example41DirectRotation theta).kyFanSum k ≤
+          (LinearMap.id - example41Reflection theta).kyFanSum k := by
     intro k
     by_cases hk0 : k = 0
     · subst hk0
-      simp [TauCeti.kyFanSum_eq_sum_fin]
+      simp [LinearMap.kyFanSum_def]
     by_cases hk1 : k = 1
     · subst hk1
       rw [example4_1_directRotation_kyFan_one h0 hpi,
@@ -94,8 +94,12 @@ theorem example4_1_directRotation_uiNorm_le_reflection_of_le_pi_div_three
       nlinarith
     · have hk2 : 2 ≤ k := by omega
       have hfin : finrank ℝ RealPlane ≤ k := by simpa [hfinrank] using hk2
-      rw [TauCeti.kyFanSum_eq_of_finrank_le hfin,
-        TauCeti.kyFanSum_eq_of_finrank_le hfin, hfinrank]
+      have hsat (T : RealPlane →ₗ[ℝ] RealPlane) :
+          T.kyFanSum k = T.kyFanSum 2 := by
+        simpa only [hfinrank] using
+          (T.kyFanSum_eq_nuclear ((LinearMap.finrank_range_le T).trans hfin)).trans
+            (T.kyFanSum_eq_nuclear (LinearMap.finrank_range_le T)).symm
+      rw [hsat, hsat]
       rw [example4_1_directRotation_kyFan_two h0 hpi,
         example4_1_reflection_kyFan_two]
       have hhalf : Real.sin (theta / 2) ≤ 1 / 2 :=
@@ -103,8 +107,6 @@ theorem example4_1_directRotation_uiNorm_le_reflection_of_le_pi_div_three
       nlinarith
   apply N.map_le_of_kyFanSum_le
   intro k
-  rw [← TauCeti.kyFanSum_eq_linearMap_kyFanSum k _,
-    ← TauCeti.kyFanSum_eq_linearMap_kyFanSum k _]
   exact hky k
 
 /-- Package the two plane competitors in Example 4.1.  `false` is the direct

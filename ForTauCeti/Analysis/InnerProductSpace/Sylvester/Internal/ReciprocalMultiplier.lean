@@ -585,9 +585,9 @@ theorem kyFan_reciprocalMultiplier_le
           ⟪X (eE j), eF i⟫_𝕜 =
         ⟪C (eE j), eF i⟫_𝕜)
     (k : ℕ) :
-    δ * TauCeti.kyFanSum k X ≤
+    δ * X.kyFanSum k ≤
       (Real.pi / 2) *
-        TauCeti.kyFanSum k C :=
+        C.kyFanSum k :=
   kyFan_reciprocalMultiplier_le_of_integrableKernel eF eE α β hδ hgap
     hasIntegrableReciprocalFourierKernel_pi_div_two hcoeff k
 

@@ -406,12 +406,12 @@ theorem kyFan_sinTheta_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) (k : ℕ) :
-    δ * kyFanSum k (sinThetaMap U V) ≤ kyFanSum k (B - A) := by
+    δ * (sinThetaMap U V).kyFanSum k ≤ (B - A).kyFanSum k := by
   let NK : UnitarilyInvariantSeminorm 𝕜 E E :=
     (UnitarilyInvariantSeminorm.kyFan
       (𝕜 := 𝕜) (E := E) (F := E) k)
   have h := sinTheta_perturbation_le NK hA hB hU hV hδ hgap
-  simpa only [NK, TauCeti.kyFanSum_eq_kyFan] using h
+  simpa only [NK, UnitarilyInvariantSeminorm.kyFan_apply] using h
 
 /-- General two-sided spectral separation with the `π/2` constant.  The
 ambient transport proof is complete; the only open analytic input is the Ky Fan

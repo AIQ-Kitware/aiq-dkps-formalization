@@ -32,10 +32,10 @@ displacement.  This is the precise, denominator-free sharpness identity. -/
 theorem cos_half_mul_directTrace_eq_competitorTrace
     (theta : ℝ) (h0 : 0 < theta) (h1 : theta < Real.pi / 2) :
     Real.cos (theta / 2) *
-        kyFanSum 4 (LinearMap.id -
+        (LinearMap.id -
           (directRotation U4 (V4 theta)
-            (acute theta (cos_pos theta h0 h1))).toLinearMap) =
-      kyFanSum 4 (LinearMap.id - (Wequiv theta).toLinearMap) := by
+            (acute theta (cos_pos theta h0 h1))).toLinearMap).kyFanSum 4 =
+      (LinearMap.id - (Wequiv theta).toLinearMap).kyFanSum 4 := by
   have hc : 0 < Real.cos theta := cos_pos theta h0 h1
   have hs : 0 ≤ Real.sin theta :=
     (Real.sin_pos_of_pos_of_lt_pi h0 (by linarith [Real.pi_pos])).le

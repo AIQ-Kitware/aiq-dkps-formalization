@@ -89,8 +89,7 @@ theorem nuclear_directRotation_displacement_eq_sum_principalAngles
       rw [singularValues_directRotation_displacement U V hacute]
       simp [n]
     have hrank := A.singularValues_eq_zero_iff_le_finrank_range.mp htail
-    rw [← A.kyFanSum_eq_nuclear hrank, ← kyFanSum_eq_linearMap_kyFanSum,
-      kyFanSum_directRotation_displacement_eq_principalChords]
+    rw [← A.kyFanSum_eq_nuclear hrank, kyFanSum_directRotation_displacement_eq_principalChords]
     simp only [Nat.mul_mod_right, Nat.zero_ne_one, false_and, dite_false, add_zero]
     have hsize : min (2 * n / 2) n = n := by omega
     exact Fintype.sum_equiv (finCongr hsize) _ _ (fun _ => rfl)
@@ -193,8 +192,7 @@ theorem exists_four_dimensional_shortAngle_nuclear_counterexample
   obtain ⟨U, V, hacute, W, hmap, hpos, hsmall, hshort, hstrict⟩ :=
     arbitrarilySmall_fullDisplacement_refuted epsilon hepsilon
   have hnorm (A : EuclideanSpace ℝ (Fin 4) →ₗ[ℝ] EuclideanSpace ℝ (Fin 4)) :
-      kyFanSum 4 A = UnitarilyInvariantSeminorm.nuclear ℝ _ _ A := by
-    rw [kyFanSum_eq_linearMap_kyFanSum]
+      A.kyFanSum 4 = UnitarilyInvariantSeminorm.nuclear ℝ _ _ A := by
     exact A.kyFanSum_eq_nuclear
       ((LinearMap.finrank_range_le A).trans_eq finrank_euclideanSpace_fin)
   rw [hnorm, hnorm] at hstrict

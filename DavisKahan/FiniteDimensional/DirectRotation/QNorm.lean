@@ -32,7 +32,7 @@ immediate from the valid squared-displacement theorem
 `directRotation_displacementSquare_uiNorm` (the source's Proposition 4.3):
 apply that to the norm `M` witnessing the `Q`-property and take square roots.
 
-The counterexample and this theorem fit together exactly: `kyFanSum` at the
+The counterexample and this theorem fit together exactly: `LinearMap.kyFanSum` at the
 full rank is the trace norm, and `kyFan_not_isQNorm` below turns the
 counterexample around to show that it is *not* a `Q`-norm.
 

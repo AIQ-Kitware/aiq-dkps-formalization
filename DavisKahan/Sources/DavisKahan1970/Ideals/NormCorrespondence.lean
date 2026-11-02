@@ -304,20 +304,16 @@ noncomputable def finiteNorm (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
               (fun k => (A + B).singularValues k),
             TauCeti.sum_filter_lt_eq_sum_fin hm (fun k => A.singularValues k),
             TauCeti.sum_filter_lt_eq_sum_fin hm (fun k => B.singularValues k),
-            ← TauCeti.kyFanSum_eq_sum_fin, ← TauCeti.kyFanSum_eq_sum_fin,
-            ← TauCeti.kyFanSum_eq_sum_fin]
-          rw [TauCeti.kyFanSum_eq_linearMap_kyFanSum m (A + B),
-            TauCeti.kyFanSum_eq_linearMap_kyFanSum m A,
-            TauCeti.kyFanSum_eq_linearMap_kyFanSum m B]
+            Fin.sum_univ_eq_sum_range, ← LinearMap.kyFanSum_def, Fin.sum_univ_eq_sum_range,
+              ← LinearMap.kyFanSum_def,
+            Fin.sum_univ_eq_sum_range, ← LinearMap.kyFanSum_def]
           exact LinearMap.kyFanSum_add_le A B m
         · have huniv :
               (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
             Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
-          rw [huniv, ← TauCeti.kyFanSum_eq_sum_fin,
-            ← TauCeti.kyFanSum_eq_sum_fin, ← TauCeti.kyFanSum_eq_sum_fin]
-          rw [TauCeti.kyFanSum_eq_linearMap_kyFanSum n (A + B),
-            TauCeti.kyFanSum_eq_linearMap_kyFanSum n A,
-            TauCeti.kyFanSum_eq_linearMap_kyFanSum n B]
+          rw [huniv, Fin.sum_univ_eq_sum_range, ← LinearMap.kyFanSum_def,
+            Fin.sum_univ_eq_sum_range, ← LinearMap.kyFanSum_def, Fin.sum_univ_eq_sum_range,
+              ← LinearMap.kyFanSum_def]
           exact LinearMap.kyFanSum_add_le A B n
       show Φ.gauge n (fun i : Fin n => (A + B).singularValues (i : ℕ)) ≤
         Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ)) +

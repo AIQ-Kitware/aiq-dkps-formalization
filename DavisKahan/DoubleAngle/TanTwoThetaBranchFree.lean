@@ -170,7 +170,7 @@ private theorem sum_absDoubleAngleTangent_le_of_ne_zero
     (S : Finset (Fin (finrank 𝕜 E)))
     (hSne : ∀ x ∈ S, T.singularValues (x : ℕ) ≠ 0) :
     (b - a) * ∑ x ∈ S, absDoubleAngleTangent (T.singularValues (x : ℕ)) ≤
-      2 * kyFanSum S.card H := by
+      2 * H.kyFanSum S.card := by
   classical
   have hmn : S.card ≤ finrank 𝕜 E := by
     calc S.card ≤ Finset.univ.card := Finset.card_le_univ S
@@ -218,7 +218,7 @@ private theorem sum_absDoubleAngleTangent_le_of_ne_zero
           (T.singularValues ((e j : Fin (finrank 𝕜 E)) : ℕ)) := by
         rw [hsum, Finset.mul_sum, Finset.mul_sum]
         exact Finset.sum_congr rfl fun j _ => by ring
-    _ ≤ 2 * kyFanSum S.card H := by linarith
+    _ ≤ 2 * H.kyFanSum S.card := by linarith
 
 /-- **The branch-free Ky Fan root of the `tan 2Θ` theorem**
 (Davis--Kahan 1970, Section 7, equation (7.6) and the following
@@ -241,7 +241,7 @@ theorem sum_absDoubleAngleTangent_le
     (hab : a < b)
     (S : Finset (Fin (finrank 𝕜 E))) :
     (b - a) * ∑ x ∈ S, absDoubleAngleTangent (T.singularValues (x : ℕ)) ≤
-      2 * kyFanSum S.card H := by
+      2 * H.kyFanSum S.card := by
   classical
   set S' : Finset (Fin (finrank 𝕜 E)) :=
     S.filter (fun j => T.singularValues (j : ℕ) ≠ 0) with hS'
@@ -257,14 +257,8 @@ theorem sum_absDoubleAngleTangent_le
     intro x _ hx hzero
     rw [hzero, absDoubleAngleTangent_zero] at hx
     exact hx rfl
-  have hmono : kyFanSum S'.card H ≤ kyFanSum S.card H := by
-    unfold kyFanSum
-    rw [Fin.sum_univ_eq_sum_range (fun i => H.singularValues i) S'.card,
-      Fin.sum_univ_eq_sum_range (fun i => H.singularValues i) S.card]
-    exact Finset.sum_le_sum_of_subset_of_nonneg
-      (fun x hx => Finset.mem_range.mpr
-        (lt_of_lt_of_le (Finset.mem_range.mp hx) (Finset.card_le_card hsub)))
-      fun i _ _ => H.singularValues_nonneg i
+  have hmono : H.kyFanSum S'.card ≤ H.kyFanSum S.card :=
+    H.kyFanSum_mono (Finset.card_le_card hsub)
   have hcore := sum_absDoubleAngleTangent_le_of_ne_zero hA hH hAU hHU hHUperp
     hTmem hTzero hUb hUa hinv hab S' hSne
   rw [hLHS]
@@ -299,8 +293,8 @@ theorem absTanTwoTheta0_offDiagonal_le
   classical
   have hba : (0 : ℝ) ≤ b - a := by linarith
   have hkey : ∀ k, k ≤ finrank 𝕜 E →
-      (b - a) * kyFanSum k tanTwoTheta ≤
-        2 * kyFanSum k H := by
+      (b - a) * tanTwoTheta.kyFanSum k ≤
+        2 * H.kyFanSum k := by
     intro k hk
     set P : Finset (Fin (finrank 𝕜 E)) :=
       Finset.univ.filter (fun j : Fin (finrank 𝕜 E) => (j : ℕ) < k) with hP
@@ -315,20 +309,13 @@ theorem absTanTwoTheta0_offDiagonal_le
           Finset.card_le_card_of_injOn (fun x => (x : ℕ)) hmaps
             fun x _ y _ h => Fin.val_injective h
         _ = k := Finset.card_range k
-    have hmono : kyFanSum S.card H ≤ kyFanSum k H := by
-      unfold kyFanSum
-      rw [Fin.sum_univ_eq_sum_range (fun i => H.singularValues i) S.card,
-        Fin.sum_univ_eq_sum_range (fun i => H.singularValues i) k]
-      exact Finset.sum_le_sum_of_subset_of_nonneg
-        (fun x hx => Finset.mem_range.mpr
-          (lt_of_lt_of_le (Finset.mem_range.mp hx) hScard))
-        fun i _ _ => H.singularValues_nonneg i
-    have hLHS : kyFanSum k tanTwoTheta =
+    have hmono : H.kyFanSum S.card ≤ H.kyFanSum k :=
+      H.kyFanSum_mono hScard
+    have hLHS : tanTwoTheta.kyFanSum k =
         ∑ x ∈ S, absDoubleAngleTangent (T.singularValues (x : ℕ)) := by
-      have h1 : kyFanSum k tanTwoTheta =
+      have h1 : tanTwoTheta.kyFanSum k =
           ∑ x ∈ P, tanTwoTheta.singularValues (x : ℕ) := by
-        unfold kyFanSum
-        rw [hP]
+        rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, hP]
         exact (sum_filter_lt_eq_sum_fin (n := finrank 𝕜 E) hk
           (fun j => tanTwoTheta.singularValues j)).symm
       rw [h1, hS, Finset.sum_image (fun x _ y _ h => σ.symm.injective h)]
@@ -339,19 +326,21 @@ theorem absTanTwoTheta0_offDiagonal_le
     rw [hLHS]
     linarith
   have hprefix : ∀ k,
-      kyFanSum k (((b - a : ℝ) : 𝕜) • tanTwoTheta) ≤
-        kyFanSum k (((2 : ℝ) : 𝕜) • H) := by
+      (((b - a : ℝ) : 𝕜) • tanTwoTheta).kyFanSum k ≤
+        (((2 : ℝ) : 𝕜) • H).kyFanSum k := by
     intro k
-    rw [kyFanSum_real_smul k tanTwoTheta hba,
-      kyFanSum_real_smul k H (by norm_num : (0 : ℝ) ≤ 2)]
+    rw [LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg hba,
+      LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg (by norm_num : (0 : ℝ) ≤ 2)]
     by_cases hk : k ≤ finrank 𝕜 E
     · exact hkey k hk
     · have hk' : finrank 𝕜 E ≤ k := Nat.le_of_not_ge hk
-      rw [TauCeti.kyFanSum_eq_of_finrank_le hk' tanTwoTheta,
-        TauCeti.kyFanSum_eq_of_finrank_le hk' H]
+      rw [((tanTwoTheta.kyFanSum_eq_nuclear
+          ((LinearMap.finrank_range_le tanTwoTheta).trans hk')).trans
+        (tanTwoTheta.kyFanSum_eq_nuclear (LinearMap.finrank_range_le tanTwoTheta)).symm),
+        ((H.kyFanSum_eq_nuclear ((LinearMap.finrank_range_le H).trans hk')).trans
+        (H.kyFanSum_eq_nuclear (LinearMap.finrank_range_le H)).symm)]
       exact hkey (finrank 𝕜 E) le_rfl
-  have hN := N.map_le_of_kyFanSum_le (fun k => by
-    simpa only [kyFanSum_eq_linearMap_kyFanSum] using hprefix k)
+  have hN := N.map_le_of_kyFanSum_le (hprefix)
   rw [map_smul_eq_mul N, map_smul_eq_mul N] at hN
   have hnorm1 : ‖(((b - a : ℝ)) : 𝕜)‖ = b - a := by
     rw [RCLike.norm_ofReal]

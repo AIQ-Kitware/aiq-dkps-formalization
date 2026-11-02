@@ -41,6 +41,6 @@ example (epsilon : Real) (h : 0 < epsilon) :
       0 < Submodule.principalAngles U V 0 ∧
       Submodule.principalAngles U V 0 < epsilon ∧
       Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧
-      kyFanSum 4 (LinearMap.id - W.toLinearMap) <
-        kyFanSum 4 (LinearMap.id - (directRotation U V ha).toLinearMap) :=
+      (LinearMap.id - W.toLinearMap).kyFanSum 4 <
+        (LinearMap.id - (directRotation U V ha).toLinearMap).kyFanSum 4 :=
   TauCeti.DavisKahan1970.proposition4_4_arbitrarilySmall_refutingPair epsilon h

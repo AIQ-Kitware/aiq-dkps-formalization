@@ -101,9 +101,9 @@ theorem kyFan_sylvester_le_of_spectralDistance
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) (k : ℕ) :
-    δ * TauCeti.kyFanSum k X ≤
+    δ * X.kyFanSum k ≤
       (Real.pi / 2) *
-        TauCeti.kyFanSum k C := by
+        C.kyFanSum k := by
   apply kyFan_reciprocalMultiplier_le
     (eF := hA.eigenvectorBasis rfl)
     (eE := hB.eigenvectorBasis rfl)
@@ -158,29 +158,25 @@ theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
     rw [← LinearMap.twoSidedUnitaryOrbitHull_eq_convexHull]
     apply LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le.mpr
     intro k
-    rw [← kyFanSum_eq_linearMap_kyFanSum, ← kyFanSum_eq_linearMap_kyFanSum]
     have hcore :=
       kyFan_sylvester_le_of_spectralDistance
         hA hB hδ hgap hEq k
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
     change δ *
-        TauCeti.kyFanSum k X ≤
-      p * TauCeti.kyFanSum k C at hcore
+        X.kyFanSum k ≤
+      p * C.kyFanSum k at hcore
     calc
-      TauCeti.kyFanSum k Y =
-          p⁻¹ * TauCeti.kyFanSum k
-            (((δ : 𝕜)) • X) := by
-        simpa only [Y] using
-          TauCeti.kyFanSum_real_smul k
-            (((δ : 𝕜)) • X) hpinv0
+      Y.kyFanSum k =
+          p⁻¹ * (((δ : 𝕜)) • X).kyFanSum k := by
+        simp only [Y, LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg hpinv0]
       _ = p⁻¹ *
-          (δ * TauCeti.kyFanSum k X) := by
-        rw [TauCeti.kyFanSum_real_smul k X (le_of_lt hδ)]
+          (δ * X.kyFanSum k) := by
+        rw [LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg (le_of_lt hδ)]
       _ ≤ p⁻¹ *
-          (p * TauCeti.kyFanSum k C) :=
+          (p * C.kyFanSum k) :=
         mul_le_mul_of_nonneg_left hcore hpinv0
-      _ = TauCeti.kyFanSum k C := by
+      _ = C.kyFanSum k := by
         field_simp [ne_of_gt hp]
   · dsimp [Y]
     rw [smul_smul, ← RCLike.ofReal_mul]
@@ -228,9 +224,8 @@ theorem uiNorm_sylvester_le_of_spectralDistance
   have hscaled : N (((δ : 𝕜)) • X) ≤ N (((p : 𝕜)) • C) := by
     apply N.map_le_of_kyFanSum_le
     intro k
-    rw [← kyFanSum_eq_linearMap_kyFanSum, ← kyFanSum_eq_linearMap_kyFanSum]
-    rw [TauCeti.kyFanSum_real_smul k X hδ0,
-      TauCeti.kyFanSum_real_smul k C hp0]
+    rw [LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg hδ0,
+      LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg hp0]
     simpa [p] using
       kyFan_sylvester_le_of_spectralDistance hA hB hδ hgap hEq k
   calc

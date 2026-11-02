@@ -345,11 +345,12 @@ theorem kyFanSum_restrictedDisplacement_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (k : ℕ) :
-    kyFanSum k ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-        projection U) ≤
-      kyFanSum k ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
-  kyFanSum_le_of_singularValues_le
-    (singularValues_restrictedDisplacement_le U V hacute W hmap) k
+    ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
+        projection U).kyFanSum k ≤
+      ((LinearMap.id - W.toLinearMap) ∘ₗ projection U).kyFanSum k := by
+  simp only [LinearMap.kyFanSum_def]
+  exact Finset.sum_le_sum fun i _ =>
+    singularValues_restrictedDisplacement_le U V hacute W hmap i
 
 /-- **Unitarily-invariant-norm minimality of the restricted displacement**
 (Davis--Kahan Corollary 4.1): the direct rotation minimizes `N ((I - W) P_U)`
@@ -366,7 +367,7 @@ theorem uiNorm_restrictedDisplacement_le
         projection U) ≤
       N ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
   N.map_le_of_kyFanSum_le (fun k => by
-    simpa only [kyFanSum_eq_linearMap_kyFanSum] using
+    exact
       kyFanSum_restrictedDisplacement_le U V hacute W hmap k)
 end DavisKahan.FiniteDimensional
 end TauCeti

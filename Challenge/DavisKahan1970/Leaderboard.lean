@@ -117,8 +117,8 @@ theorem proposition4_4_counterexample :
       (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),
       U.map W.toLinearMap = V ∧
       Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧
-      kyFanSum 4 (LinearMap.id - W.toLinearMap) <
-        kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap) := by
+      (LinearMap.id - W.toLinearMap).kyFanSum 4 <
+        (LinearMap.id - (directRotation U V hacute).toLinearMap).kyFanSum 4 := by
   exact shortRotation_fullDisplacement_refuted
 
 end DavisKahan.FiniteDimensional

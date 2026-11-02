@@ -918,15 +918,15 @@ theorem sinTwoTheta_model_equality_fails_beyond_operatorNorm
         (𝕜 := 𝕜) (E := Plane 𝕜) (F := Plane 𝕜) 2)
       (sinTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)) = Real.sin (2 * θ) := by
-    rw [UnitarilyInvariantSeminorm.kyFan_apply, ← TauCeti.kyFanSum_eq_linearMap_kyFanSum]
-    rw [TauCeti.kyFanSum,
+    rw [UnitarilyInvariantSeminorm.kyFan_apply]
+    rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range,
       singularValues_sinTwoAngle_model hθ0.le hθ1]
     simp [Fin.sum_univ_two]
   have hR : (UnitarilyInvariantSeminorm.kyFan
         (𝕜 := 𝕜) (E := Plane 𝕜) (F := Plane 𝕜) 2)
       (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) = (b - a) * Real.sin (2 * θ) := by
-    rw [UnitarilyInvariantSeminorm.kyFan_apply, ← TauCeti.kyFanSum_eq_linearMap_kyFanSum]
-    rw [TauCeti.kyFanSum,
+    rw [UnitarilyInvariantSeminorm.kyFan_apply]
+    rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range,
       singularValues_modelSinTwoThetaPerturbation hab hθ0.le hθ1]
     simp only [Fin.sum_univ_two, Fin.isValue, Fin.val_zero, Fin.val_one,
       pairSingularValues_zero, pairSingularValues_one]

@@ -2866,3 +2866,44 @@ exactly which proof engine retires and which broader/source formulations remain.
 Validation: focused finite, infinite, Ritz, counterexample, Section 8 and
 changed audit builds passed. The full default `lake build` (21,535 jobs) and
 `lake build Challenge` (19,783 jobs) passed without compiler or linter warnings.
+
+## 2026-11-02: canonical Ky Fan sums throughout maintained consumers
+
+Retired the finite-prefix definition `TauCeti.kyFanSum` and its
+`kyFanSum_eq_sum_fin`, `kyFanSum_eq_sum_range`,
+`kyFanSum_eq_linearMap_kyFanSum` and `kyFanSum_eq_kyFan` conversion aliases.
+All maintained paper, donor, ideal and comparator statements now use
+`LinearMap.kyFanSum A k`; the exact Fin/range correspondence is handled with
+Mathlib's `Fin.sum_univ_eq_sum_range` where needed.
+
+Accepted [#14136](https://github.com/TauCetiProject/TauCeti/pull/14136),
+`d5e905c6f95e6e14eb5f36562be6cc5edb858995`, is integrated in the unchanged pin
+`463ab293070d`. Its commit explicitly says no formalization was vendored or
+adapted: this is independent work on the same roadmap result, not a DKPS proof
+adaptation. Native `kyFanSum_min_finrank_range`/`kyFanSum_eq_nuclear`,
+`kyFanSum_smul`, `norm_sum_inner_le_kyFanSum` and the Ky Fan seminorm application
+law also replace `kyFanSum_eq_of_finrank_le`, `kyFanSum_real_smul` and
+`sum_le_kyFanSum_of_orthonormal`. The pointwise-domination helper
+`kyFanSum_le_of_singularValues_le` also retires; its paper caller sums the
+pointwise comparison directly. Native monotonicity replaces the paper's
+finite-index monotonicity proofs.
+
+The donor retains four additional results: `eigenvalues_operatorAbs` is the
+sorted-modulus eigenvalue identity; `sum_filter_lt_eq_sum_fin` still serves
+finite-vector prefix consumers; `orthonormal_unimodular_smul` preserves an
+arbitrary orthonormal family under independent unit phases; and
+`sum_abs_le_kyFanSum_of_orthonormal` rephases coefficients to bound their
+absolute **real parts**, used in the branch-free double-angle argument. The
+native bound on the norm of a sum does not immediately give the sum of
+absolute real parts; this rephasing proof remains on the native sum.
+
+Original donor:
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/KyFan.lean`, originally
+`ForMathlib.Analysis.InnerProductSpace.KyFan`, introduction `199390a`;
+Jon Crall / Claude Fable 5, copyright Kitware, Inc., Apache-2.0.
+Historical exploratory sources are not rewritten as current consumers.
+
+Validation: focused donor/ideal/block-trace, branch-free double-angle, Ritz,
+finite trace and source norm builds passed. Full default `lake build`
+(21,535 jobs) and `lake build Challenge` (19,783 jobs) passed without compiler
+or linter warnings.

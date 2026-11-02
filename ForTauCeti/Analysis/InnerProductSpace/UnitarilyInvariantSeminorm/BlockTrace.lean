@@ -37,8 +37,8 @@ theorem kyFanSum_orthogonalBlockSum_full
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
     (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂) :
-    kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) (orthogonalBlockSum A B) =
-      kyFanSum (finrank 𝕜 E₁) A + kyFanSum (finrank 𝕜 E₂) B := by
+    (orthogonalBlockSum A B).kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) =
+      A.kyFanSum (finrank 𝕜 E₁) + B.kyFanSum (finrank 𝕜 E₂) := by
   classical
   let n₁ := finrank 𝕜 E₁
   let n₂ := finrank 𝕜 E₂
@@ -65,10 +65,10 @@ theorem kyFanSum_orthogonalBlockSum_full
     rw [operatorAbs_orthogonalBlockSum]
     simp [b, OrthonormalBasis.reindex_apply]
   calc
-    kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) (orthogonalBlockSum A B) =
+    (orthogonalBlockSum A B).kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) =
         ∑ k : Fin (n₁ + n₂),
           RCLike.re ⟪LinearMap.operatorAbs (orthogonalBlockSum A B) (b k), b k⟫_𝕜 := by
-      rw [hn, kyFanSum_eq_sum_fin]
+      rw [hn, LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
       exact (sum_re_inner_abs_self_eq_sum_singularValues
         (orthogonalBlockSum A B) hn b).symm
     _ = ∑ k : Fin n₁ ⊕ Fin n₂,
@@ -80,12 +80,12 @@ theorem kyFanSum_orthogonalBlockSum_full
       exact congrArg₂ (· + ·)
         (Finset.sum_congr rfl (fun i _ => hleft i))
         (Finset.sum_congr rfl (fun i _ => hright i))
-    _ = kyFanSum (finrank 𝕜 E₁) A + kyFanSum (finrank 𝕜 E₂) B := by
+    _ = A.kyFanSum (finrank 𝕜 E₁) + B.kyFanSum (finrank 𝕜 E₂) := by
       congr 1
       · exact (sum_re_inner_abs_self_eq_sum_singularValues A rfl b₁).trans
-          (kyFanSum_eq_sum_fin _ A).symm
+          (((LinearMap.kyFanSum_def A _).trans (Fin.sum_univ_eq_sum_range _ _).symm)).symm
       · exact (sum_re_inner_abs_self_eq_sum_singularValues B rfl b₂).trans
-          (kyFanSum_eq_sum_fin _ B).symm
+          (((LinearMap.kyFanSum_def B _).trans (Fin.sum_univ_eq_sum_range _ _).symm)).symm
 
 
 /-- An orthogonal product of two unitary transports carries a block-sum

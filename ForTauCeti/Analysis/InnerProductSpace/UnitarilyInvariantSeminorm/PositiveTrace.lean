@@ -41,12 +41,12 @@ any orthonormal basis. -/
 theorem kyFanSum_positive_eq_basis_trace (A : E →ₗ[𝕜] E)
     (hA : A.IsPositive)
     (b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E) :
-    kyFanSum (finrank 𝕜 E) A =
+    A.kyFanSum (finrank 𝕜 E) =
       ∑ i : Fin (finrank 𝕜 E), RCLike.re ⟪A (b i), b i⟫_𝕜 := by
   calc
-    kyFanSum (finrank 𝕜 E) A =
+    A.kyFanSum (finrank 𝕜 E) =
         ∑ i : Fin (finrank 𝕜 E), A.singularValues i :=
-      kyFanSum_eq_sum_fin _ A
+      ((LinearMap.kyFanSum_def A _).trans (Fin.sum_univ_eq_sum_range _ _).symm)
     _ = ∑ i : Fin (finrank 𝕜 E),
         RCLike.re ⟪A.operatorAbs (b i), b i⟫_𝕜 :=
       (sum_re_inner_abs_self_eq_sum_singularValues A rfl b).symm
@@ -56,8 +56,8 @@ theorem kyFanSum_positive_eq_basis_trace (A : E →ₗ[𝕜] E)
 /-- The trace norm is additive on positive endomorphisms. -/
 theorem kyFanSum_add_of_isPositive
     (A B : E →ₗ[𝕜] E) (hA : A.IsPositive) (hB : B.IsPositive) :
-    kyFanSum (finrank 𝕜 E) (A + B) =
-      kyFanSum (finrank 𝕜 E) A + kyFanSum (finrank 𝕜 E) B := by
+    (A + B).kyFanSum (finrank 𝕜 E) =
+      A.kyFanSum (finrank 𝕜 E) + B.kyFanSum (finrank 𝕜 E) := by
   let b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E :=
     stdOrthonormalBasis 𝕜 E
   rw [kyFanSum_positive_eq_basis_trace (A + B) (hA.add hB) b,

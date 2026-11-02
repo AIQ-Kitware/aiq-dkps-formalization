@@ -412,9 +412,9 @@ private theorem nonacute_phase_geometry
 /-- Full Ky Fan trace is additive for positive bounded endomorphisms. -/
 private theorem kyFanSum_add_of_nonneg
     (A B : BEnd H) (hA : 0 ≤ A) (hB : 0 ≤ B) :
-    kyFanSum (finrank ℂ H) (A + B).toLinearMap =
-      kyFanSum (finrank ℂ H) A.toLinearMap +
-        kyFanSum (finrank ℂ H) B.toLinearMap := by
+    (A + B).toLinearMap.kyFanSum (finrank ℂ H) =
+      A.toLinearMap.kyFanSum (finrank ℂ H) +
+        B.toLinearMap.kyFanSum (finrank ℂ H) := by
   have hA' : A.toLinearMap.IsPositive := by
     apply (LinearMap.isPositive_toContinuousLinearMap_iff A.toLinearMap).mpr
     exact (ContinuousLinearMap.nonneg_iff_isPositive).mp hA
@@ -431,23 +431,23 @@ private theorem kyFanSum_add_of_nonneg
 /-- A bounded-operator unitary produces the same linear-map Ky Fan sum. -/
 private theorem kyFanSum_displacement_of_unitary
     (T : BEnd H) (hT : T ∈ unitary (BEnd H)) :
-    kyFanSum (finrank ℂ H)
-      (LinearMap.id -
-        (Unitary.linearIsometryEquiv (⟨T, hT⟩ : unitary (BEnd H))).toLinearMap) =
-      kyFanSum (finrank ℂ H) (1 - T).toLinearMap := by
+    (LinearMap.id -
+        (Unitary.linearIsometryEquiv (⟨T, hT⟩ : unitary (BEnd H))).toLinearMap).kyFanSum
+          (finrank ℂ H) =
+      (1 - T).toLinearMap.kyFanSum (finrank ℂ H) := by
   congr 1
 
 /-- Multiplication on the right by a unitary preserves full Ky Fan trace. -/
 private theorem kyFanSum_mul_unitary_right
     (A T : BEnd H) (hT : T ∈ unitary (BEnd H)) :
-    kyFanSum (finrank ℂ H) (A * T).toLinearMap =
-      kyFanSum (finrank ℂ H) A.toLinearMap := by
+    (A * T).toLinearMap.kyFanSum (finrank ℂ H) =
+      A.toLinearMap.kyFanSum (finrank ℂ H) := by
   let W : H ≃ₗᵢ[ℂ] H :=
     Unitary.linearIsometryEquiv (⟨T, hT⟩ : unitary (BEnd H))
   have hmul : (A * T).toLinearMap = A.toLinearMap ∘ₗ W.toLinearMap := by
     ext x
     rfl
-  rw [hmul, kyFanSum_eq_linearMap_kyFanSum, kyFanSum_eq_linearMap_kyFanSum]
+  rw [hmul]
   exact LinearMap.kyFanSum_comp_linearIsometryEquiv A.toLinearMap W _
 
 /-- The full Ky Fan trace norm of the ambient sine operator is exactly the
@@ -455,9 +455,8 @@ trace norm of the projector difference. -/
 private theorem kyFanSum_projector_eq_nonacute_sine
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    kyFanSum (finrank ℂ H) (projection U - projection V) =
-      kyFanSum (finrank ℂ H)
-        (Proposition35.section3SinAngleOperator U V).toLinearMap := by
+    (projection U - projection V).kyFanSum (finrank ℂ H) =
+      (Proposition35.section3SinAngleOperator U V).toLinearMap.kyFanSum (finrank ℂ H) := by
   let S : BEnd H := Proposition35.section3SinAngleOperator U V
   have hcont : (projection U - projection V).toContinuousLinearMap =
       (U.starProjection - V.starProjection : BEnd H) := by
@@ -474,17 +473,18 @@ private theorem kyFanSum_projector_eq_nonacute_sine
       (LinearMap.operatorAbs (projection U - projection V)).toContinuousLinearMap x
     exact congrArg (fun T : BEnd H => T x) habs.symm
   calc
-    kyFanSum (finrank ℂ H) (projection U - projection V) =
+    (projection U - projection V).kyFanSum (finrank ℂ H) =
         (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H))
           (projection U - projection V) :=
-      kyFanSum_eq_kyFan (finrank ℂ H) (projection U - projection V)
+      (UnitarilyInvariantSeminorm.kyFan_apply
+        (finrank ℂ H) (projection U - projection V)).symm
     _ = (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H))
           (sinAngleOperator U V) :=
       uiNorm_projection_sub_eq_sinAngleOperator
         (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H)) U V
-    _ = kyFanSum (finrank ℂ H) S.toLinearMap := by
+    _ = S.toLinearMap.kyFanSum (finrank ℂ H) := by
       rw [← hS]
-      exact (kyFanSum_eq_kyFan (finrank ℂ H) S.toLinearMap).symm
+      exact UnitarilyInvariantSeminorm.kyFan_apply (finrank ℂ H) S.toLinearMap
 
 /-- The phase-corrected completed rotation is trace optimal on *every*
 finite-dimensional complex equal-rank pair, including right-angle defects.
@@ -562,43 +562,39 @@ theorem exists_trace_optimal_unitary_of_equal_finrank
     change 1 - R * phaseMinus C S =
       (S + imaginaryUnit * (R - C)) * (S + imaginaryUnit * C)
     exact hfactor.2
-  have htraceP : kyFanSum (finrank ℂ H)
-      (LinearMap.id - Wp.toLinearMap) =
-        kyFanSum (finrank ℂ H) (S - B).toLinearMap := by
+  have htraceP : (LinearMap.id - Wp.toLinearMap).kyFanSum (finrank ℂ H) =
+        (S - B).toLinearMap.kyFanSum (finrank ℂ H) := by
     rw [kyFanSum_displacement_of_unitary Tp hTpunit, hDp]
     exact kyFanSum_mul_unitary_right (S - B) Qm hQphase.2
-  have htraceM : kyFanSum (finrank ℂ H)
-      (LinearMap.id - Wm.toLinearMap) =
-        kyFanSum (finrank ℂ H) (S + B).toLinearMap := by
+  have htraceM : (LinearMap.id - Wm.toLinearMap).kyFanSum (finrank ℂ H) =
+        (S + B).toLinearMap.kyFanSum (finrank ℂ H) := by
     rw [kyFanSum_displacement_of_unitary Tm hTmunit, hDm]
     exact kyFanSum_mul_unitary_right (S + B) Qp hQphase.1
   have htracePair :
-      kyFanSum (finrank ℂ H) (S - B).toLinearMap +
-          kyFanSum (finrank ℂ H) (S + B).toLinearMap =
-        kyFanSum (finrank ℂ H) S.toLinearMap +
-          kyFanSum (finrank ℂ H) S.toLinearMap := by
+      (S - B).toLinearMap.kyFanSum (finrank ℂ H) +
+          (S + B).toLinearMap.kyFanSum (finrank ℂ H) =
+        S.toLinearMap.kyFanSum (finrank ℂ H) +
+          S.toLinearMap.kyFanSum (finrank ℂ H) := by
     calc
-      kyFanSum (finrank ℂ H) (S - B).toLinearMap +
-          kyFanSum (finrank ℂ H) (S + B).toLinearMap =
-          kyFanSum (finrank ℂ H) ((S - B) + (S + B)).toLinearMap :=
+      (S - B).toLinearMap.kyFanSum (finrank ℂ H) +
+          (S + B).toLinearMap.kyFanSum (finrank ℂ H) =
+          ((S - B) + (S + B)).toLinearMap.kyFanSum (finrank ℂ H) :=
         (kyFanSum_add_of_nonneg (S - B) (S + B) hpos.1 hpos.2).symm
-      _ = kyFanSum (finrank ℂ H) (S + S).toLinearMap := by
+      _ = (S + S).toLinearMap.kyFanSum (finrank ℂ H) := by
         congr 1
         abel_nf
-      _ = kyFanSum (finrank ℂ H) S.toLinearMap +
-          kyFanSum (finrank ℂ H) S.toLinearMap :=
+      _ = S.toLinearMap.kyFanSum (finrank ℂ H) +
+          S.toLinearMap.kyFanSum (finrank ℂ H) :=
         kyFanSum_add_of_nonneg S S hS0 hS0
-  have hprojtrace : kyFanSum (finrank ℂ H)
-      (projection U - projection V) =
-      kyFanSum (finrank ℂ H) S.toLinearMap :=
+  have hprojtrace : (projection U - projection V).kyFanSum (finrank ℂ H) =
+      S.toLinearMap.kyFanSum (finrank ℂ H) :=
     kyFanSum_projector_eq_nonacute_sine U V
   have hboundP := projectionDifference_kyFanSum_le_displacement
     U V Wp hmapP (finrank ℂ H)
   have hboundM := projectionDifference_kyFanSum_le_displacement
     U V Wm hmapM (finrank ℂ H)
-  have hOptimal : kyFanSum (finrank ℂ H)
-      (LinearMap.id - Wp.toLinearMap) =
-        kyFanSum (finrank ℂ H) (projection U - projection V) := by
+  have hOptimal : (LinearMap.id - Wp.toLinearMap).kyFanSum (finrank ℂ H) =
+        (projection U - projection V).kyFanSum (finrank ℂ H) := by
     rw [hprojtrace] at hboundP hboundM ⊢
     rw [htraceP] at hboundP ⊢
     rw [htraceM] at hboundM
@@ -613,11 +609,11 @@ theorem exists_global_complex_trace_minimizer
     (hUV : finrank ℂ U = finrank ℂ V) :
     ∃ W : H ≃ₗᵢ[ℂ] H,
       U.map W.toLinearMap = V ∧
-      kyFanSum (finrank ℂ H) (LinearMap.id - W.toLinearMap) =
-        kyFanSum (finrank ℂ H) (projection U - projection V) ∧
+      (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) =
+        (projection U - projection V).kyFanSum (finrank ℂ H) ∧
       ∀ Z : H ≃ₗᵢ[ℂ] H, U.map Z.toLinearMap = V →
-        kyFanSum (finrank ℂ H) (LinearMap.id - W.toLinearMap) ≤
-          kyFanSum (finrank ℂ H) (LinearMap.id - Z.toLinearMap) := by
+        (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) ≤
+          (LinearMap.id - Z.toLinearMap).kyFanSum (finrank ℂ H) := by
   obtain ⟨W, hW⟩ := exists_trace_optimal_unitary_of_equal_finrank U V hUV
   exact ⟨W, hW.1, hW.2, fun Z hZ => hW.le_competitor Z hZ⟩
 
