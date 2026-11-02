@@ -86,8 +86,8 @@ This is the statement that makes `‖tan Θ‖` in the printed theorem a norm of
 `tan θ₀, tan θ₁, …` rather than merely of some operator called `tan Θ`. -/
 theorem approximationNumber_tanAngleOperatorC
     (htr : ‖sinAngleOperatorC U V‖ < 1) (n : ℕ) :
-    (tanAngleOperatorC U V).approximationNumber n =
-      Real.tan (Real.arcsin ((sinAngleOperatorC U V).approximationNumber n)) := by
+    ((tanAngleOperatorC U V).singularValue n : ℝ) =
+      Real.tan (Real.arcsin (((sinAngleOperatorC U V).singularValue n : ℝ))) := by
   refine approximationNumber_eq_tanArcsin (isSelfAdjoint_sinAngleOperatorC U V)
     (isSelfAdjoint_tanAngleOperatorC U V) htr ?_ n
   have h := tan_sq_mul_one_sub_sin_sq (U := U) (V := V) htr
@@ -97,8 +97,8 @@ theorem approximationNumber_tanAngleOperatorC
 /-- The ambient sine's singular values are those of the projector difference: the modulus
 does not move an approximation number. -/
 theorem approximationNumber_sinAngleOperatorC (n : ℕ) :
-    (sinAngleOperatorC U V).approximationNumber n =
-      (V.starProjection - U.starProjection).approximationNumber n := by
+    ((sinAngleOperatorC U V).singularValue n : ℝ) =
+      ((V.starProjection - U.starProjection).singularValue n : ℝ) := by
   rw [sinAngleOperatorC,
     ContinuousLinearMap.SameSingularValues.approximationNumber_eq
       (ContinuousLinearMap.sameSingularValues_modulus
@@ -190,9 +190,9 @@ however far the doubled angle runs past a right angle — the branch-free readin
 unitarily invariant norm forces. -/
 theorem approximationNumber_absTanTwoAngleOperatorC
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) (n : ℕ) :
-    (absTanTwoAngleOperatorC U V).approximationNumber n =
+    ((absTanTwoAngleOperatorC U V).singularValue n : ℝ) =
       Real.tan (Real.arcsin
-        ((sinTwoAngleOperatorC U V).approximationNumber n)) := by
+        (((sinTwoAngleOperatorC U V).singularValue n : ℝ))) := by
   refine approximationNumber_eq_tanArcsin (isSelfAdjoint_sinTwoAngleOperatorC U V)
     (isSelfAdjoint_absTanTwoAngleOperatorC U V)
     (norm_sinTwoAngleOperatorC_lt_one U V hcos) ?_ n
@@ -203,9 +203,9 @@ theorem approximationNumber_absTanTwoAngleOperatorC
 /-- The ambient double-angle sine's singular values are those of the projector difference
 between `U` and its mirror image in `V` — the operator the `sin 2Θ` theorem bounds. -/
 theorem approximationNumber_sinTwoAngleOperatorC (n : ℕ) :
-    (sinTwoAngleOperatorC U V).approximationNumber n =
-      ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
-        U.starProjection).approximationNumber n := by
+    ((sinTwoAngleOperatorC U V).singularValue n : ℝ) =
+      (((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
+        U.starProjection).singularValue n : ℝ) := by
   rw [directedSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (ContinuousLinearMap.sameSingularValues_modulus _) n
@@ -227,10 +227,10 @@ sequence, and here it is applied to the doubled sine, not the single one. -/
 theorem approximationNumber_absTanTwoAngleOperatorC_projectorDifference
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0)
     (n : ℕ) :
-    (absTanTwoAngleOperatorC U V).approximationNumber n =
+    ((absTanTwoAngleOperatorC U V).singularValue n : ℝ) =
       Real.tan (Real.arcsin
-        (((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
-          U.starProjection).approximationNumber n)) := by
+        ((((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
+          U.starProjection).singularValue n : ℝ))) := by
   rw [approximationNumber_absTanTwoAngleOperatorC U V hcos n,
     approximationNumber_sinTwoAngleOperatorC U V n]
 
@@ -240,8 +240,8 @@ value Lean's field division assigns at a pole. -/
 theorem approximationNumber_projectorDifference_lt_one
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0)
     (n : ℕ) :
-    ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
-      U.starProjection).approximationNumber n < 1 := by
+    (((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
+      U.starProjection).singularValue n : ℝ) < 1 := by
   rw [← approximationNumber_sinTwoAngleOperatorC U V n]
   exact lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n)
     (norm_sinTwoAngleOperatorC_lt_one U V hcos)

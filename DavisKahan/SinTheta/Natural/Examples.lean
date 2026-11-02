@@ -101,7 +101,7 @@ example
     N A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap
       (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
+      ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
 
 end AbstractComplexUse
 

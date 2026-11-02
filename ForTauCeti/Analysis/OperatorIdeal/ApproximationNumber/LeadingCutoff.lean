@@ -49,7 +49,7 @@ variable {E1 : Type v} [NormedAddCommGroup E1] [NormedSpace ℂ E1]
 
 /-- The length of the strict leading prefix `ε < a_i(X)` inside `Finset.range k`. -/
 noncomputable def leadingCount (X : E0 →L[ℂ] E1) (k : ℕ) (ε : ℝ) : ℕ :=
-  if h : ∃ n : ℕ, n < k ∧ X.approximationNumber n ≤ ε then Nat.find h else k
+  if h : ∃ n : ℕ, n < k ∧ (X.singularValue n : ℝ) ≤ ε then Nat.find h else k
 
 /-- The cutoff never runs past the prefix length it is measured inside. -/
 @[simp]
@@ -65,27 +65,27 @@ theorem leadingCount_le (X : E0 →L[ℂ] E1) (k : ℕ) (ε : ℝ) :
 theorem approximationNumber_gt_of_lt_leadingCount
     (X : E0 →L[ℂ] E1) (k : ℕ) (ε : ℝ) {i : ℕ}
     (hi : i < leadingCount X k ε) :
-    ε < X.approximationNumber i := by
+    ε < (X.singularValue i : ℝ) := by
   classical
   unfold leadingCount at hi
   split_ifs at hi with h
   · have hik : i < k := hi.trans (Nat.find_spec h).1
     by_contra hnot
-    have hle : X.approximationNumber i ≤ ε := le_of_not_gt hnot
+    have hle : (X.singularValue i : ℝ) ≤ ε := le_of_not_gt hnot
     exact (Nat.find_min h hi) ⟨hik, hle⟩
   · by_contra hnot
-    have hle : X.approximationNumber i ≤ ε := le_of_not_gt hnot
+    have hle : (X.singularValue i : ℝ) ≤ ε := le_of_not_gt hnot
     exact h ⟨i, hi, hle⟩
 
 /-- At and after the cutoff, while still below `k`, approximation numbers are at most `ε`. -/
 theorem approximationNumber_le_of_leadingCount_le
     (X : E0 →L[ℂ] E1) (k : ℕ) (ε : ℝ) {n : ℕ}
     (hcount : leadingCount X k ε ≤ n) (hnk : n < k) :
-    X.approximationNumber n ≤ ε := by
+    (X.singularValue n : ℝ) ≤ ε := by
   classical
   unfold leadingCount at hcount
   split_ifs at hcount with h
-  · have hcut : X.approximationNumber (Nat.find h) ≤ ε := (Nat.find_spec h).2
+  · have hcut : (X.singularValue (Nat.find h) : ℝ) ≤ ε := (Nat.find_spec h).2
     exact (X.approximationNumber_antitone hcount).trans hcut
   · exact False.elim ((not_lt_of_ge hcount) hnk)
 

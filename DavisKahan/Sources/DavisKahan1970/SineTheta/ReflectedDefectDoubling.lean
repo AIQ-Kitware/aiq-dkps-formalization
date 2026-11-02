@@ -132,23 +132,21 @@ private theorem reflectedDefectBlocks_same
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [hblock, ContinuousLinearMap.approximationNumber_neg]
   have hright := sameApproximationSingularValues_comp_reflection_right V
     (V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint)
   have hleft := sameApproximationSingularValues_comp_reflection_left V
     (projectionBlock Wᗮ U D).adjoint
   calc
-    (projectionBlock Wᗮ U D).approximationNumber n =
-        (projectionBlock Wᗮ U D).adjoint.approximationNumber n :=
-      by rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
-        ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ((projectionBlock Wᗮ U D).singularValue n : ℝ) =
+        ((projectionBlock Wᗮ U D).adjoint.singularValue n : ℝ) :=
+      by rw [
         ContinuousLinearMap.singularValue_adjoint]
-    _ = (V.reflectionOperator ∘L
-          (projectionBlock Wᗮ U D).adjoint).approximationNumber n :=
+    _ = ((V.reflectionOperator ∘L
+          (projectionBlock Wᗮ U D).adjoint).singularValue n : ℝ) :=
       (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hleft n).symm
-    _ = (V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint ∘L
-          V.reflectionOperator).approximationNumber n :=
+    _ = ((V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint ∘L
+          V.reflectionOperator).singularValue n : ℝ) :=
       (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hright n).symm
 
 /-- The two off-diagonal blocks of a self-adjoint operator have the same
@@ -175,15 +173,13 @@ private theorem offDiagonalBlocks_same
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   calc
-    (projectionBlock Vᗮ V S).approximationNumber n =
-        (projectionBlock Vᗮ V S).adjoint.approximationNumber n :=
-      by rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
-        ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ((projectionBlock Vᗮ V S).singularValue n : ℝ) =
+        ((projectionBlock Vᗮ V S).adjoint.singularValue n : ℝ) :=
+      by rw [
         ContinuousLinearMap.singularValue_adjoint]
-    _ = (projectionBlock V Vᗮ S).approximationNumber n := by rw [hadj]
-    _ = (projectionBlock Vᗮᗮ Vᗮ S).approximationNumber n := by
+    _ = ((projectionBlock V Vᗮ S).singularValue n : ℝ) := by rw [hadj]
+    _ = ((projectionBlock Vᗮᗮ Vᗮ S).singularValue n : ℝ) := by
       rw [hperpBlock]
 
 /-- **The sharp factor two for a reflection defect, at every Ky Fan gauge.**

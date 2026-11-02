@@ -45,7 +45,7 @@ noncomputable def approxSeq {E F : Type*}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) (n : ℕ) : ℝ≥0∞ :=
-  ENNReal.ofReal (A.approximationNumber n)
+  ENNReal.ofReal ((A.singularValue n : ℝ))
 
 theorem approxSeq_antitone {E F : Type*}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -94,9 +94,8 @@ theorem symmetricGauge_eq_of_approxSeq_eq {Φ Ψ : SymmetricGauge}
       have hseq : approxSeq T = a := by
         funext n
         simp only [approxSeq, T, Q]
-        rw [approximationNumber_eq_singularValue_toReal,
+        rw [
           singularValue_comp_linearIsometryEquiv,
-          ← approximationNumber_eq_singularValue_toReal,
           ScalarTransport.approximationNumber_clm,
           approximationNumber_diagOpLp c hB0 hcB hanti n, hcnorm,
           ENNReal.ofReal_toReal (hafin n)]

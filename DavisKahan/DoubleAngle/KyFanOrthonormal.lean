@@ -108,14 +108,14 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
     have h1 : ‖L₁.orthogonalProjectionOnto‖ ≤ 1 :=
       L₁.orthogonalProjectionOnto_norm_le
     have h2 : ‖L₂.subtypeL‖ ≤ 1 := L₂.norm_subtypeL_le
-    have h0 := approximationSingularValue_nonneg n K
-    calc ‖L₁.orthogonalProjectionOnto‖ * approximationSingularValue n K *
+    have h0 := (K.singularValue n).coe_nonneg
+    calc ‖L₁.orthogonalProjectionOnto‖ * (K.singularValue n : ℝ) *
           ‖L₂.subtypeL‖
-        ≤ 1 * approximationSingularValue n K * 1 := by
+        ≤ 1 * (K.singularValue n : ℝ) * 1 := by
           refine mul_le_mul (mul_le_mul h1 le_rfl h0 zero_le_one) h2
             (norm_nonneg _) ?_
           positivity
-      _ = approximationSingularValue n K := by ring
+      _ = (K.singularValue n : ℝ) := by ring
   calc RCLike.re (∑ i, ⟪u i, K (v i)⟫_𝕜)
       = RCLike.re (∑ i, ⟪u' i, K' (v' i)⟫_𝕜) := by
         congr 1
@@ -313,18 +313,18 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge_of_contraction
     refine Finset.sum_le_sum fun n _ => ?_
     have hcomp := approximationSingularValue_comp_le n
       (ContinuousLinearMap.adjoint M) K N
-    have h0 := approximationSingularValue_nonneg n K
-    have s1 : ‖ContinuousLinearMap.adjoint M‖ * approximationSingularValue n K ≤
-        cu * approximationSingularValue n K :=
+    have h0 := (K.singularValue n).coe_nonneg
+    have s1 : ‖ContinuousLinearMap.adjoint M‖ * (K.singularValue n : ℝ) ≤
+        cu * (K.singularValue n : ℝ) :=
       mul_le_mul_of_nonneg_right hMn h0
-    have s2 : ‖ContinuousLinearMap.adjoint M‖ * approximationSingularValue n K *
-        ‖N‖ ≤ cu * approximationSingularValue n K * ‖N‖ :=
+    have s2 : ‖ContinuousLinearMap.adjoint M‖ * (K.singularValue n : ℝ) *
+        ‖N‖ ≤ cu * (K.singularValue n : ℝ) * ‖N‖ :=
       mul_le_mul_of_nonneg_right s1 (norm_nonneg N)
-    have s3 : cu * approximationSingularValue n K * ‖N‖ ≤
-        cu * approximationSingularValue n K * cv :=
+    have s3 : cu * (K.singularValue n : ℝ) * ‖N‖ ≤
+        cu * (K.singularValue n : ℝ) * cv :=
       mul_le_mul_of_nonneg_left hNn (by positivity)
-    have s4 : cu * approximationSingularValue n K * cv =
-        cu * cv * approximationSingularValue n K := by ring
+    have s4 : cu * (K.singularValue n : ℝ) * cv =
+        cu * cv * (K.singularValue n : ℝ) := by ring
     exact hcomp.trans (le_trans s2 (s3.trans_eq s4))
   calc RCLike.re (∑ i, ⟪u i, K (v i)⟫_𝕜)
       = RCLike.re (∑ i, ⟪EuclideanSpace.single i (1 : 𝕜),

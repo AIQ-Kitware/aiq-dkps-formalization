@@ -205,11 +205,11 @@ and combines with `approximationNumber_le_of_gramResolvent` into the *equality*
 theorem approximationNumber_le_of_gramContraction
     (Y : E0 →L[ℂ] E1) {Q : E0 →L[ℂ] E0}
     (hQ : ∀ y, Q y = gramOperator Y y - gramOperator Y (Q y)) (n : ℕ) :
-    Q.approximationNumber n ≤
-      Y.approximationNumber n ^ 2 / (1 + Y.approximationNumber n ^ 2) := by
-  set a : ℝ := Y.approximationNumber n with hadef
-  have ha0 : 0 ≤ a := Y.approximationNumber_nonneg n
-  have key : ∀ r : ℝ, a < r → Q.approximationNumber n ≤ r ^ 2 / (1 + r ^ 2) := by
+    (Q.singularValue n : ℝ) ≤
+      (Y.singularValue n : ℝ) ^ 2 / (1 + (Y.singularValue n : ℝ) ^ 2) := by
+  set a : ℝ := (Y.singularValue n : ℝ) with hadef
+  have ha0 : 0 ≤ a := (Y.singularValue n).coe_nonneg
+  have key : ∀ r : ℝ, a < r → (Q.singularValue n : ℝ) ≤ r ^ 2 / (1 + r ^ 2) := by
     intro r hr
     have hr0 : 0 ≤ r := ha0.trans hr.le
     obtain ⟨r', hr1', hr2'⟩ := exists_between hr
@@ -231,14 +231,14 @@ theorem approximationNumber_le_of_gramContraction
       rw [map_sub, hPP, sub_self]
     exact norm_gramContraction_apply_le_of_gramProjection_apply_eq_zero Y hQ hr0 hsqlt hPy
   by_contra hcon
-  have hcon' : a ^ 2 / (1 + a ^ 2) < Q.approximationNumber n := lt_of_not_ge hcon
+  have hcon' : a ^ 2 / (1 + a ^ 2) < (Q.singularValue n : ℝ) := lt_of_not_ge hcon
   have hcont : ContinuousAt (fun u : ℝ => u ^ 2 / (1 + u ^ 2)) a := by
     apply ContinuousAt.div
     · fun_prop
     · fun_prop
     · positivity
   have hev : ∀ᶠ r in nhdsWithin a (Set.Ioi a),
-      (fun u : ℝ => u ^ 2 / (1 + u ^ 2)) r < Q.approximationNumber n :=
+      (fun u : ℝ => u ^ 2 / (1 + u ^ 2)) r < (Q.singularValue n : ℝ) :=
     Filter.Tendsto.eventually_lt_const hcon'
       (hcont.continuousWithinAt (s := Set.Ioi a))
   have hgt : ∀ᶠ r in nhdsWithin a (Set.Ioi a), a < r :=

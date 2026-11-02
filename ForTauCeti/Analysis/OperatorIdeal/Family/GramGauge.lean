@@ -84,7 +84,6 @@ theorem nuclearENorm_gramOperator (X : E0 →L[ℂ] E1) :
   rw [← X.tsum_singularValue_sq_eq_hilbertSchmidtEnergy b]
   refine tsum_congr fun n => ?_
   have h := approximationNumber_gramOperator_complex X n
-  simp only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] at h
   have hn : (gramOperator X).singularValue n = (X.singularValue n) ^ 2 := by
     exact_mod_cast h
   rw [hn, ENNReal.coe_pow]

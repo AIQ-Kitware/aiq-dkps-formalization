@@ -133,9 +133,9 @@ An `s`-lower witness for `X` is an `s²`-lower witness for `X†X`, since
 `‖X†Xx‖‖x‖ ≥ re ⟪X†Xx, x⟫ = ‖Xx‖²`. -/
 theorem sq_approximationNumber_le_approximationNumber_gramOperator (X : E0 →L[ℂ] E1)
     (n : ℕ) :
-    X.approximationNumber n ^ 2 ≤ (gramOperator X).approximationNumber n := by
-  have key : ∀ r : ℝ, 0 ≤ r → r < X.approximationNumber n →
-      r ^ 2 < (gramOperator X).approximationNumber n := by
+    (X.singularValue n : ℝ) ^ 2 ≤ ((gramOperator X).singularValue n : ℝ) := by
+  have key : ∀ r : ℝ, 0 ≤ r → r < (X.singularValue n : ℝ) →
+      r ^ 2 < ((gramOperator X).singularValue n : ℝ) := by
     intro r hr0 hr
     obtain ⟨s, hrs, v, hv, hV⟩ :=
       (TauCeti.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
@@ -164,13 +164,13 @@ theorem sq_approximationNumber_le_approximationNumber_gramOperator (X : E0 →L[
       exact norm_nonneg _
     · exact le_of_mul_le_mul_right h2 hx0
   by_contra hcon
-  have hcon' : (gramOperator X).approximationNumber n < X.approximationNumber n ^ 2 :=
+  have hcon' : ((gramOperator X).singularValue n : ℝ) < (X.singularValue n : ℝ) ^ 2 :=
     lt_of_not_ge hcon
-  have ha0 : 0 ≤ X.approximationNumber n := X.approximationNumber_nonneg n
-  have hg0 : 0 ≤ (gramOperator X).approximationNumber n :=
-    (gramOperator X).approximationNumber_nonneg n
-  have hlt : Real.sqrt ((gramOperator X).approximationNumber n) <
-      X.approximationNumber n := by
+  have ha0 : 0 ≤ (X.singularValue n : ℝ) := (X.singularValue n).coe_nonneg
+  have hg0 : 0 ≤ ((gramOperator X).singularValue n : ℝ) :=
+    ((gramOperator X).singularValue n).coe_nonneg
+  have hlt : Real.sqrt (((gramOperator X).singularValue n : ℝ)) <
+      (X.singularValue n : ℝ) := by
     have h := Real.sqrt_lt_sqrt hg0 hcon'
     rwa [Real.sqrt_sq ha0] at h
   have hfin := key _ (Real.sqrt_nonneg _) hlt
@@ -183,10 +183,10 @@ For each `r > aₙ(X)` pick `r'` strictly between.  The Gram spectral projection
 has rank at most `n`, its orthogonal band is invariant under `X†X`, and on that band
 `‖X†Xy‖² = ⟪Xy, X(X†Xy)⟫ ≤ r‖y‖ · r‖X†Xy‖`, so the band bound is `r²`. -/
 theorem approximationNumber_gramOperator_le_sq (X : E0 →L[ℂ] E1) (n : ℕ) :
-    (gramOperator X).approximationNumber n ≤ X.approximationNumber n ^ 2 := by
-  have ha0 : 0 ≤ X.approximationNumber n := X.approximationNumber_nonneg n
-  have key : ∀ r : ℝ, X.approximationNumber n < r →
-      (gramOperator X).approximationNumber n ≤ r ^ 2 := by
+    ((gramOperator X).singularValue n : ℝ) ≤ (X.singularValue n : ℝ) ^ 2 := by
+  have ha0 : 0 ≤ (X.singularValue n : ℝ) := (X.singularValue n).coe_nonneg
+  have key : ∀ r : ℝ, (X.singularValue n : ℝ) < r →
+      ((gramOperator X).singularValue n : ℝ) ≤ r ^ 2 := by
     intro r hr
     have hr0 : 0 ≤ r := ha0.trans hr.le
     obtain ⟨r', hr1, hr2⟩ := exists_between hr
@@ -236,19 +236,19 @@ theorem approximationNumber_gramOperator_le_sq (X : E0 →L[ℂ] E1) (n : ℕ) :
           _ = (r ^ 2 * ‖x - P x‖) * ‖gramOperator X (x - P x)‖ := by ring
       exact le_of_mul_le_mul_right hmul h0
   by_contra hcon
-  have hcon' : X.approximationNumber n ^ 2 < (gramOperator X).approximationNumber n :=
+  have hcon' : (X.singularValue n : ℝ) ^ 2 < ((gramOperator X).singularValue n : ℝ) :=
     lt_of_not_ge hcon
-  have hg0 : 0 ≤ (gramOperator X).approximationNumber n :=
-    (gramOperator X).approximationNumber_nonneg n
-  have hlt : X.approximationNumber n <
-      Real.sqrt ((gramOperator X).approximationNumber n) := by
+  have hg0 : 0 ≤ ((gramOperator X).singularValue n : ℝ) :=
+    ((gramOperator X).singularValue n).coe_nonneg
+  have hlt : (X.singularValue n : ℝ) <
+      Real.sqrt (((gramOperator X).singularValue n : ℝ)) := by
     have h := Real.sqrt_lt_sqrt (by positivity) hcon'
     rwa [Real.sqrt_sq ha0] at h
   obtain ⟨t, ht1, ht2⟩ := exists_between hlt
   have ht0 : 0 ≤ t := ha0.trans ht1.le
-  have hts : t ^ 2 < (gramOperator X).approximationNumber n := by
+  have hts : t ^ 2 < ((gramOperator X).singularValue n : ℝ) := by
     nlinarith [Real.sq_sqrt hg0, Real.sqrt_nonneg
-      ((gramOperator X).approximationNumber n)]
+      (((gramOperator X).singularValue n : ℝ))]
   exact absurd (key t ht1) (not_le.mpr hts)
 
 /-- **The approximation numbers of the Gram operator are the squares.**
@@ -256,7 +256,7 @@ theorem approximationNumber_gramOperator_le_sq (X : E0 →L[ℂ] E1) (n : ℕ) :
 `aₙ(X†X) = aₙ(X)²`.  This is the step that lets an approximation-number domination at the
 first power be squared and summed into a Ky Fan statement about squared displacements. -/
 theorem approximationNumber_gramOperator_complex (X : E0 →L[ℂ] E1) (n : ℕ) :
-    (gramOperator X).approximationNumber n = X.approximationNumber n ^ 2 :=
+    ((gramOperator X).singularValue n : ℝ) = (X.singularValue n : ℝ) ^ 2 :=
   le_antisymm (approximationNumber_gramOperator_le_sq X n)
     (sq_approximationNumber_le_approximationNumber_gramOperator X n)
 

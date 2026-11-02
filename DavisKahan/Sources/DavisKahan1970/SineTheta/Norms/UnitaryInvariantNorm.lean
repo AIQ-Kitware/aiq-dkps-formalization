@@ -112,7 +112,7 @@ def approximationPrefix
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (n : ℕ) (A : E →L[𝕜] F) : Fin n → ℝ :=
-  fun i => approximationSingularValue (i : ℕ) A
+  fun i => (A.singularValue (i : ℕ) : ℝ)
 
 /-- Evaluation of the source norm on the first `n` singular values. -/
 @[expose]
@@ -226,7 +226,7 @@ theorem sum_approximationPrefix
   rw [kyFanApproximationGauge_eq_kyFanGauge,
     ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   simp only [approximationPrefix]
-  exact Fin.sum_univ_eq_sum_range (fun m => approximationSingularValue m A) n
+  exact Fin.sum_univ_eq_sum_range (fun m => (A.singularValue m : ℝ)) n
 
 /-- Finite Fan dominance for the paper gauge, obtained from the repository's
 proved T-transform theorem rather than postulated as extra norm data. -/
@@ -245,22 +245,21 @@ theorem prefixGauge_le_of_all_kyFan_le
   · intro i j hij
     exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
   · intro i
-    exact approximationSingularValue_nonneg _ _
+    exact (ContinuousLinearMap.singularValue _ _).coe_nonneg
   · intro m
     simp only [TauCeti.prefixSum_def]
     rcases le_or_gt m n with hm | hm
     · simp only [approximationPrefix]
       rw [sum_filter_lt_eq_sum_fin hm
-          (fun k => approximationSingularValue k A),
+          (fun k => (A.singularValue k : ℝ)),
         sum_filter_lt_eq_sum_fin hm
-          (fun k => approximationSingularValue k B),
+          (fun k => (B.singularValue k : ℝ)),
         Fin.sum_univ_eq_sum_range
-          (fun k => approximationSingularValue k A) m,
+          (fun k => (A.singularValue k : ℝ)) m,
         Fin.sum_univ_eq_sum_range
-          (fun k => approximationSingularValue k B) m]
+          (fun k => (B.singularValue k : ℝ)) m]
       simpa only [kyFanApproximationGauge_eq_kyFanGauge,
-        ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-        approximationSingularValue] using h m
+        ContinuousLinearMap.kyFanGaugeReal_eq_sum] using h m
     · have huniv :
           (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
             Finset.univ :=
@@ -288,23 +287,22 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
       exact mul_le_mul_of_nonneg_left
         (approximationSingularValue_antitone A (Fin.le_def.mp hij)) hc
     · intro i
-      exact mul_nonneg hc (approximationSingularValue_nonneg _ _)
+      exact mul_nonneg hc ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
     · intro m
       simp only [TauCeti.prefixSum_def]
       rcases le_or_gt m n with hm | hm
       · simp only [Pi.smul_apply, smul_eq_mul, approximationPrefix]
         rw [sum_filter_lt_eq_sum_fin hm
-            (fun k => c * approximationSingularValue k A),
+            (fun k => c * (A.singularValue k : ℝ)),
           sum_filter_lt_eq_sum_fin hm
-            (fun k => approximationSingularValue k B),
+            (fun k => (B.singularValue k : ℝ)),
           ← Finset.mul_sum,
           Fin.sum_univ_eq_sum_range
-            (fun k => approximationSingularValue k A) m,
+            (fun k => (A.singularValue k : ℝ)) m,
           Fin.sum_univ_eq_sum_range
-            (fun k => approximationSingularValue k B) m]
+            (fun k => (B.singularValue k : ℝ)) m]
         simpa only [kyFanApproximationGauge_eq_kyFanGauge,
-          ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-          approximationSingularValue] using h m
+          ContinuousLinearMap.kyFanGaugeReal_eq_sum] using h m
       · have huniv :
             (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
               Finset.univ :=

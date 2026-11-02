@@ -80,7 +80,7 @@ private theorem orthonormal_polar_comp
 
 omit [CompleteSpace E0] [CompleteSpace E1] in
 private theorem approximationNumber_le_norm_local (T : E0 →L[ℂ] E1) (n : ℕ) :
-    T.approximationNumber n ≤ ‖T‖ :=
+    (T.singularValue n : ℝ) ≤ ‖T‖ :=
   T.approximationNumber_le_norm n
 
 /-- A uniform error coefficient for the actual-tangent approximate-pair
@@ -636,7 +636,7 @@ theorem reflectionTangent_selected_le_kyFan_add_error
     (heq76 : (C1 ∘L T) ∘L A0 - A1 ∘L (C1 ∘L T) =
       B ∘L C0 + C1 ∘L B)
     {k : ℕ} {eps : ℝ} (F : ApproximateLeadingSingularFamily T k eps) :
-    (b - a) * ∑ i : Fin F.count, T.approximationNumber (i : ℕ) ≤
+    (b - a) * ∑ i : Fin F.count, (T.singularValue (i : ℕ) : ℝ) ≤
       2 * kyFanApproximationGauge F.count B +
         F.count * (reflectionTangentErrorCoefficient A0 A1 B T C0 C1 * eps) := by
   let J0 := C0.polarFactor
@@ -644,7 +644,7 @@ theorem reflectionTangent_selected_le_kyFan_add_error
   have hJ0 := orthonormal_polar_comp C0 hC0 hC0unit F.right_orthonormal
   have hJ1 := orthonormal_polar_comp C1 hC1 hC1unit F.left_orthonormal
   have hscalar : ∀ i : Fin F.count,
-      (b - a) * T.approximationNumber (i : ℕ) ≤
+      (b - a) * (T.singularValue (i : ℕ) : ℝ) ≤
         |RCLike.re ⟪F.left i, B (F.right i)⟫_ℂ| +
           |RCLike.re ⟪J1 (F.left i), B (J0 (F.right i))⟫_ℂ| +
           reflectionTangentErrorCoefficient A0 A1 B T C0 C1 * eps := by
@@ -652,10 +652,10 @@ theorem reflectionTangent_selected_le_kyFan_add_error
     exact reflectionTangent_approximate_pair A0 A1 B T C0 C1
       hA0 hA1 hC0 hC1 hC0unit hC1unit hab hA0high hA1low hgram0 hgram1 heq76
       (F.right_orthonormal.norm_eq_one i) (F.left_orthonormal.norm_eq_one i)
-      (T.approximationNumber_nonneg _) (approximationNumber_le_norm_local T _)
+      ((T.singularValue _).coe_nonneg) (approximationNumber_le_norm_local T _)
       (F.apply_residual i) (F.adjoint_residual i)
   have hsum :
-      ∑ i : Fin F.count, (b - a) * T.approximationNumber (i : ℕ) ≤
+      ∑ i : Fin F.count, (b - a) * (T.singularValue (i : ℕ) : ℝ) ≤
         ∑ i : Fin F.count,
           (|RCLike.re ⟪F.left i, B (F.right i)⟫_ℂ| +
             |RCLike.re ⟪J1 (F.left i), B (J0 (F.right i))⟫_ℂ| +
@@ -672,8 +672,8 @@ theorem reflectionTangent_selected_le_kyFan_add_error
     (t := fun i => |RCLike.re ⟪J1 (F.left i), B (J0 (F.right i))⟫_ℂ|)
     (fun _i => le_rfl)
   calc
-    (b - a) * ∑ i : Fin F.count, T.approximationNumber (i : ℕ) =
-        ∑ i : Fin F.count, (b - a) * T.approximationNumber (i : ℕ) := by
+    (b - a) * ∑ i : Fin F.count, (T.singularValue (i : ℕ) : ℝ) =
+        ∑ i : Fin F.count, (b - a) * (T.singularValue (i : ℕ) : ℝ) := by
           rw [Finset.mul_sum]
     _ ≤ ∑ i : Fin F.count, |RCLike.re ⟪F.left i, B (F.right i)⟫_ℂ| +
         ∑ i : Fin F.count, |RCLike.re ⟪J1 (F.left i), B (J0 (F.right i))⟫_ℂ| +
@@ -722,10 +722,10 @@ theorem reflectionTangent_all_kyFan
   have hBmono : kyFanApproximationGauge F.count B ≤ kyFanApproximationGauge k B :=
     kyFanApproximationGauge_mono_length B F.count_le
   have hprefix :
-      (b - a) * Finset.sum (Finset.range F.count) (fun n => T.approximationNumber n) ≤
+      (b - a) * Finset.sum (Finset.range F.count) (fun n => (T.singularValue n : ℝ)) ≤
         2 * kyFanApproximationGauge k B + (k : ℝ) * (Ctot * eps) := by
-    have hsumfin : ∑ i : Fin F.count, T.approximationNumber (i : ℕ) =
-        Finset.sum (Finset.range F.count) (fun n => T.approximationNumber n) := by
+    have hsumfin : ∑ i : Fin F.count, (T.singularValue (i : ℕ) : ℝ) =
+        Finset.sum (Finset.range F.count) (fun n => (T.singularValue n : ℝ)) := by
       rw [← Fin.sum_univ_eq_sum_range]
     rw [hsumfin, ← hCtot] at hselected
     have hcount : (F.count : ℝ) ≤ k := by exact_mod_cast F.count_le
@@ -733,7 +733,7 @@ theorem reflectionTangent_all_kyFan
       mul_le_mul_of_nonneg_right hcount (by positivity)
     linarith only [hselected, hBmono, herr]
   have htail :
-      Finset.sum (Finset.Ico F.count k) (fun n => T.approximationNumber n) ≤
+      Finset.sum (Finset.Ico F.count k) (fun n => (T.singularValue n : ℝ)) ≤
         (k - F.count : ℕ) * eps := by
     calc
       _ ≤ Finset.sum (Finset.Ico F.count k) (fun _n => eps) := by
@@ -746,12 +746,12 @@ theorem reflectionTangent_all_kyFan
           Nat.cast_sub F.count_le]
   have hsplit :
       kyFanApproximationGauge k T =
-        Finset.sum (Finset.range F.count) (fun n => T.approximationNumber n) +
-          Finset.sum (Finset.Ico F.count k) (fun n => T.approximationNumber n) := by
+        Finset.sum (Finset.range F.count) (fun n => (T.singularValue n : ℝ)) +
+          Finset.sum (Finset.Ico F.count k) (fun n => (T.singularValue n : ℝ)) := by
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
-    rw [← Finset.sum_range_add_sum_Ico (f := fun n => T.approximationNumber n) F.count_le]
+    rw [← Finset.sum_range_add_sum_Ico (f := fun n => (T.singularValue n : ℝ)) F.count_le]
   have htailScaled :
-      (b - a) * Finset.sum (Finset.Ico F.count k) (fun n => T.approximationNumber n) ≤
+      (b - a) * Finset.sum (Finset.Ico F.count k) (fun n => (T.singularValue n : ℝ)) ≤
         (k : ℝ) * ((b - a) * eps) := by
     have h := mul_le_mul_of_nonneg_left htail hd.le
     have hkdiff : ((k - F.count : ℕ) : ℝ) ≤ k := by

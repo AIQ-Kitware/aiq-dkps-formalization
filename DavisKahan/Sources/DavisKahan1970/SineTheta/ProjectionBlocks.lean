@@ -122,7 +122,7 @@ theorem diagonalPair_all_kyFan_le
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
@@ -134,7 +134,7 @@ theorem diagonalPair_all_kyFan_le
       (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simpa only [N,
       SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using h
+      ← kyFanApproximationGauge_eq_kyFanGauge] using h
 
 /-- Literal source-norm form of Davis--Kahan Lemma 6.2. -/
 theorem diagonalPair_symmetricNorming_le
@@ -175,30 +175,29 @@ theorem sameApproximationSingularValues_comp_reflection_right
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
     exact_mod_cast Submodule.norm_reflectionOperator_le_one U
   have hright (T : E →L[𝕜] E) :
-      (T ∘L U.reflectionOperator).approximationNumber n ≤
-        T.approximationNumber n :=
-    calc (T ∘L U.reflectionOperator).approximationNumber n
-        ≤ T.approximationNumber n *
+      ((T ∘L U.reflectionOperator).singularValue n : ℝ) ≤
+        (T.singularValue n : ℝ) :=
+    calc ((T ∘L U.reflectionOperator).singularValue n : ℝ)
+        ≤ (T.singularValue n : ℝ) *
             ‖(U.reflectionOperator : E →L[𝕜] E)‖ :=
           T.approximationNumber_comp_le_mul_norm _ n
-      _ ≤ T.approximationNumber n * 1 := by
-        exact mul_le_mul_of_nonneg_left hnn (T.approximationNumber_nonneg n)
-      _ = T.approximationNumber n := mul_one _
+      _ ≤ (T.singularValue n : ℝ) * 1 := by
+        exact mul_le_mul_of_nonneg_left hnn ((T.singularValue n).coe_nonneg)
+      _ = (T.singularValue n : ℝ) := mul_one _
   have hcomp :
       (A ∘L U.reflectionOperator) ∘L U.reflectionOperator = A := by
     rw [ContinuousLinearMap.comp_assoc, U.reflectionOperator_involutive,
       ContinuousLinearMap.comp_id]
-  have key : (A ∘L U.reflectionOperator).approximationNumber n
-      = A.approximationNumber n := by
+  have key : ((A ∘L U.reflectionOperator).singularValue n : ℝ)
+      = (A.singularValue n : ℝ) := by
     refine le_antisymm (hright A) ?_
-    calc A.approximationNumber n
-        = ((A ∘L U.reflectionOperator) ∘L
-            U.reflectionOperator).approximationNumber n := by rw [hcomp]
-      _ ≤ (A ∘L U.reflectionOperator).approximationNumber n :=
+    calc (A.singularValue n : ℝ)
+        = (((A ∘L U.reflectionOperator) ∘L
+            U.reflectionOperator).singularValue n : ℝ) := by rw [hcomp]
+      _ ≤ ((A ∘L U.reflectionOperator).singularValue n : ℝ) :=
           hright (A ∘L U.reflectionOperator)
   exact key
 
@@ -213,30 +212,29 @@ theorem sameApproximationSingularValues_comp_reflection_left
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
     exact_mod_cast Submodule.norm_reflectionOperator_le_one U
   have hleft (T : E →L[𝕜] E) :
-      (U.reflectionOperator ∘L T).approximationNumber n ≤
-        T.approximationNumber n :=
-    calc (U.reflectionOperator ∘L T).approximationNumber n
+      ((U.reflectionOperator ∘L T).singularValue n : ℝ) ≤
+        (T.singularValue n : ℝ) :=
+    calc ((U.reflectionOperator ∘L T).singularValue n : ℝ)
         ≤ ‖(U.reflectionOperator : E →L[𝕜] E)‖ *
-            T.approximationNumber n :=
+            (T.singularValue n : ℝ) :=
           ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ T n
-      _ ≤ 1 * T.approximationNumber n := by
-        exact mul_le_mul_of_nonneg_right hnn (T.approximationNumber_nonneg n)
-      _ = T.approximationNumber n := one_mul _
+      _ ≤ 1 * (T.singularValue n : ℝ) := by
+        exact mul_le_mul_of_nonneg_right hnn ((T.singularValue n).coe_nonneg)
+      _ = (T.singularValue n : ℝ) := one_mul _
   have hcomp :
       U.reflectionOperator ∘L (U.reflectionOperator ∘L A) = A := by
     rw [← ContinuousLinearMap.comp_assoc, U.reflectionOperator_involutive,
       ContinuousLinearMap.id_comp]
-  have key : (U.reflectionOperator ∘L A).approximationNumber n
-      = A.approximationNumber n := by
+  have key : ((U.reflectionOperator ∘L A).singularValue n : ℝ)
+      = (A.singularValue n : ℝ) := by
     refine le_antisymm (hleft A) ?_
-    calc A.approximationNumber n
-        = (U.reflectionOperator ∘L
-            (U.reflectionOperator ∘L A)).approximationNumber n := by rw [hcomp]
-      _ ≤ (U.reflectionOperator ∘L A).approximationNumber n :=
+    calc (A.singularValue n : ℝ)
+        = ((U.reflectionOperator ∘L
+            (U.reflectionOperator ∘L A)).singularValue n : ℝ) := by rw [hcomp]
+      _ ≤ ((U.reflectionOperator ∘L A).singularValue n : ℝ) :=
           hleft (U.reflectionOperator ∘L A)
   exact key
 

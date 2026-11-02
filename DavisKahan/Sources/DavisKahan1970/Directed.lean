@@ -106,11 +106,10 @@ theorem tanTheta_directed_bounded_symmetricNorming_complex
       hCompressionUpper hUnwantedLower k
     have htanKy : kyFanApproximationGauge k tanTheta0 =
         ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-          (approximationSingularValue n (theorem63DirectedSineBlock Z V))) := by
+          (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
       simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
       refine Finset.sum_congr rfl fun n _ => ?_
       have h := htan n
-      unfold approximationSingularValue at h
       exact h
     rw [htanKy]
     exact hcore

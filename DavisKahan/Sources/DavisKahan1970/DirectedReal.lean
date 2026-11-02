@@ -132,9 +132,8 @@ real complexification and the canonical trial-subspace coordinate change. -/
 theorem approximationSingularValue_theorem63DirectedSineBlock_complexify
     (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (n : Nat) :
-    approximationSingularValue n
-        (theorem63DirectedSineBlock (complexifySubmodule Z) (complexifySubmodule V)) =
-      approximationSingularValue n (theorem63DirectedSineBlockReal Z V) := by
+    ((theorem63DirectedSineBlock (complexifySubmodule Z) (complexifySubmodule V)).singularValue n : ℝ) =
+      ((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ) := by
   let U := LinearIsometryEquiv.refl Complex (RealComplexification E)
   let W := complexifySubmoduleEquiv Z
   have hcoord :
@@ -150,9 +149,8 @@ theorem approximationSingularValue_theorem63DirectedSineBlock_complexify
       (theorem63DirectedSineBlock_complexify_equiv Z V)
     simpa [U, W, w, hw] using h.symm
   calc
-    approximationSingularValue n
-        (theorem63DirectedSineBlock (complexifySubmodule Z) (complexifySubmodule V)) =
-        approximationSingularValue n (complexify (theorem63DirectedSineBlockReal Z V)) := by
+    ((theorem63DirectedSineBlock (complexifySubmodule Z) (complexifySubmodule V)).singularValue n : ℝ) =
+        ((complexify (theorem63DirectedSineBlockReal Z V)).singularValue n : ℝ) := by
       rw [← hcoord]
       exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
         _ W.symm U).approximationNumber_eq n
@@ -163,9 +161,8 @@ preserved under the complexified Theorem 6.3 configuration. -/
 theorem approximationSingularValue_theorem63Residual_complexify
     (T : E →L[ℝ] E) (Z : Submodule ℝ E)
     [Z.HasOrthogonalProjection] (n : Nat) :
-    approximationSingularValue n
-        (theorem63Residual (complexify T) (complexifySubmodule Z)) =
-      approximationSingularValue n (theorem63ResidualReal T Z) := by
+    ((theorem63Residual (complexify T) (complexifySubmodule Z)).singularValue n : ℝ) =
+      ((theorem63ResidualReal T Z).singularValue n : ℝ) := by
   let U := LinearIsometryEquiv.refl Complex (RealComplexification E)
   let W := complexifySubmoduleEquiv Z
   have hcoord :
@@ -181,8 +178,8 @@ theorem approximationSingularValue_theorem63Residual_complexify
       (theorem63Residual_complexify_equiv T Z)
     simpa [U, W, w, hw] using h.symm
   calc
-    approximationSingularValue n (theorem63Residual (complexify T) (complexifySubmodule Z)) =
-        approximationSingularValue n (complexify (theorem63ResidualReal T Z)) := by
+    ((theorem63Residual (complexify T) (complexifySubmodule Z)).singularValue n : ℝ) =
+        ((complexify (theorem63ResidualReal T Z)).singularValue n : ℝ) := by
       rw [← hcoord]
       exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
         _ W.symm U).approximationNumber_eq n
@@ -214,7 +211,7 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial_real
     (k : Nat) :
     delta * Finset.sum (Finset.range k) (fun n =>
       Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlockReal Z V)))) <=
+        (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))) <=
       kyFanApproximationGauge k (theorem63ResidualReal T Z) := by
   have hTC : (complexify T).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
@@ -244,7 +241,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
     (hCompressionUpper : ∀ z : Z, ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (n : Nat) :
-    approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1 := by
+    ((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ) < 1 := by
   have hTC : (complexify T).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       ((complexify_isSelfAdjoint_iff T).2 hT)
@@ -268,17 +265,17 @@ prescribed by the paper's directed angle. -/
 def HasTheorem63DirectedTangentApproximationNumbersInfiniteReal
     (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (tanTheta0 : Z →L[ℝ] E) : Prop :=
-  ∀ n, approximationSingularValue n tanTheta0 =
+  ∀ n, (tanTheta0.singularValue n : ℝ) =
     Real.tan (Real.arcsin
-      (approximationSingularValue n (theorem63DirectedSineBlockReal Z V)))
+      (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))
 
 /-- Inclusion of a closed real trial subspace preserves every approximation
 singular value of an endomorphism of that subspace. -/
 theorem approximationSingularValue_subtypeL_comp_real
     (Z : Submodule ℝ E) [Z.HasOrthogonalProjection]
     (A : Z →L[ℝ] Z) (k : Nat) :
-    approximationSingularValue k (Z.subtypeL.comp A) =
-      approximationSingularValue k A := by
+    ((Z.subtypeL.comp A).singularValue k : ℝ) =
+      (A.singularValue k : ℝ) := by
   have hmem : ∀ x : Z, (Z.subtypeL.comp A) x ∈ Z :=
     fun x => (A x).property
   have hcomp : Z.orthogonalProjectionOnto.comp (Z.subtypeL.comp A) = A := by
@@ -286,12 +283,11 @@ theorem approximationSingularValue_subtypeL_comp_real
     change Z.starProjection ((A x : E)) = ((A x : E))
     exact Submodule.starProjection_eq_self_iff.mpr (A x).property
   calc
-    approximationSingularValue k (Z.subtypeL.comp A) =
-        approximationSingularValue k
-          (Z.orthogonalProjectionOnto.comp (Z.subtypeL.comp A)) :=
+    ((Z.subtypeL.comp A).singularValue k : ℝ) =
+        ((Z.orthogonalProjectionOnto.comp (Z.subtypeL.comp A)).singularValue k : ℝ) :=
       (approximationSingularValue_orthogonalProjectionOnto_comp_eq Z
         (Z.subtypeL.comp A) hmem k).symm
-    _ = approximationSingularValue k A := by rw [hcomp]
+    _ = (A.singularValue k : ℝ) := by rw [hcomp]
 
 /-- On an infinite-dimensional real trial space, the tangent representative
 with the paper's complete singular-value sequence exists as a real operator. -/
@@ -299,17 +295,17 @@ theorem exists_hasTheorem63DirectedTangentApproximationNumbersInfiniteReal
     (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hinf : Not (FiniteDimensional ℝ Z))
     (hlt : ∀ n,
-      approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1) :
+      ((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ) < 1) :
     Exists (fun tanTheta0 : Z →L[ℝ] E =>
       HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0) := by
   let d : Nat → ℝ := fun n => Real.tan (Real.arcsin
-    (approximationSingularValue n (theorem63DirectedSineBlockReal Z V)))
+    (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))
   have h0 : forall n, 0 <= d n := fun n =>
-    TanArcsin.tanArcsin_nonneg (approximationSingularValue_nonneg _ _)
+    TanArcsin.tanArcsin_nonneg ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
   have hanti : Antitone d := by
     intro m n hmn
     exact TanArcsin.tanArcsin_le_tanArcsin
-      (approximationSingularValue_nonneg _ _)
+      ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
       (approximationSingularValue_antitone (theorem63DirectedSineBlockReal Z V) hmn)
       (hlt m)
   obtain ⟨D0, hD0⟩ :=
@@ -335,7 +331,7 @@ noncomputable def theorem63DirectedTangentDiagonalReal
     (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (Module.finrank ℝ Z)) : ℝ :=
   Real.tan (Real.arcsin
-    (approximationSingularValue (i : Nat) (theorem63DirectedSineBlockReal Z V)))
+    (((theorem63DirectedSineBlockReal Z V).singularValue (i : Nat) : ℝ)))
 
 /-- A real directed tangent representative on a finite-dimensional trial space,
 diagonal in an arbitrary orthonormal basis of that space. -/
@@ -354,7 +350,7 @@ theorem approximationSingularValue_eq_zero_of_finrank_le_real
     (Z : Submodule ℝ E) [FiniteDimensional ℝ Z]
     {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
     [CompleteSpace Z] (A : Z →L[ℝ] G) {k : Nat} (hk : Module.finrank ℝ Z ≤ k) :
-    approximationSingularValue k A = 0 := by
+    (A.singularValue k : ℝ) = 0 := by
   refine approximationSingularValue_eq_zero_of_rank_le_nat
     (r := Module.finrank ℝ Z) ?_ hk
   calc (A : Z →ₗ[ℝ] G).rank ≤ Module.rank ℝ Z := LinearMap.rank_le_domain _
@@ -366,15 +362,15 @@ theorem hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63Dir
     (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     [FiniteDimensional ℝ Z]
     (hlt : ∀ n,
-      approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1) :
+      ((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ) < 1) :
     HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V
       (theorem63DirectedTangentReal Z V) := by
   have ht0 : ∀ i, 0 ≤ theorem63DirectedTangentDiagonalReal Z V i := fun i =>
-    TanArcsin.tanArcsin_nonneg (approximationSingularValue_nonneg _ _)
+    TanArcsin.tanArcsin_nonneg ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
   have htanti : Antitone (theorem63DirectedTangentDiagonalReal Z V) := by
     intro i j hij
     exact TanArcsin.tanArcsin_le_tanArcsin
-      (approximationSingularValue_nonneg _ _)
+      ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
       (approximationSingularValue_antitone (theorem63DirectedSineBlockReal Z V)
         (by exact_mod_cast hij))
       (hlt (i : Nat))
@@ -382,11 +378,10 @@ theorem hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63Dir
   by_cases hk : k < Module.finrank ℝ Z
   · have hkfin : ((⟨k, hk⟩ : Fin (Module.finrank ℝ Z)) : Nat) = k := rfl
     calc
-      approximationSingularValue k (theorem63DirectedTangentReal Z V)
-        = approximationSingularValue k
-            ((Matrix.toLin ((stdOrthonormalBasis ℝ Z)).toBasis ((stdOrthonormalBasis ℝ
+      ((theorem63DirectedTangentReal Z V).singularValue k : ℝ)
+        = (((Matrix.toLin ((stdOrthonormalBasis ℝ Z)).toBasis ((stdOrthonormalBasis ℝ
                 Z)).toBasis (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonalReal Z
-                V)) i : _)))).toContinuousLinearMap :=
+                V)) i : _)))).toContinuousLinearMap.singularValue k : ℝ) :=
           approximationSingularValue_subtypeL_comp_real Z _ k
       _ = ((Matrix.toLin ((stdOrthonormalBasis ℝ Z)).toBasis ((stdOrthonormalBasis ℝ Z)).toBasis
           (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonalReal Z V)) i :
@@ -400,8 +395,7 @@ theorem hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63Dir
           simpa only [hkfin, Equiv.refl_apply, Real.norm_eq_abs, abs_of_nonneg (ht0 _)] using
             Matrix.singularValues_toLin_diagonal (stdOrthonormalBasis ℝ Z)
               (theorem63DirectedTangentDiagonalReal Z V) (Equiv.refl _) ha ⟨k, hk⟩
-      _ = Real.tan (Real.arcsin (approximationSingularValue k
-            (theorem63DirectedSineBlockReal Z V))) := rfl
+      _ = Real.tan (Real.arcsin (((theorem63DirectedSineBlockReal Z V).singularValue k : ℝ))) := rfl
   · have hkge : Module.finrank ℝ Z ≤ k := Nat.le_of_not_lt hk
     rw [approximationSingularValue_eq_zero_of_finrank_le_real Z
         (theorem63DirectedTangentReal Z V) hkge,
@@ -414,7 +408,7 @@ subspace**, of finite or infinite dimension. -/
 theorem exists_hasTheorem63DirectedTangentApproximationNumbersReal
     (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hlt : ∀ n,
-      approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1) :
+      ((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ) < 1) :
     Exists (fun tanTheta0 : Z →L[ℝ] E =>
       HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0) := by
   classical
@@ -466,7 +460,7 @@ theorem tanTheta_directed_bounded_symmetricNorming_real
     have htanKy : kyFanApproximationGauge k tanTheta0 =
         Finset.sum (Finset.range k) (fun n =>
           Real.tan (Real.arcsin
-            (approximationSingularValue n (theorem63DirectedSineBlockReal Z V)))) := by
+            (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))) := by
       simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
@@ -595,8 +589,8 @@ involved. -/
 theorem approximationSingularValue_theorem63ResidualReal_le_of_invariant
     (T P : E →L[ℝ] E) (Z : Submodule ℝ E) [Z.HasOrthogonalProjection]
     (hinv : ∀ x ∈ Z, (T + P) x ∈ Z) (n : Nat) :
-    approximationSingularValue n (theorem63ResidualReal T Z) ≤
-      approximationSingularValue n (P ∘L Z.subtypeL) := by
+    ((theorem63ResidualReal T Z).singularValue n : ℝ) ≤
+      ((P ∘L Z.subtypeL).singularValue n : ℝ) := by
   rw [theorem63ResidualReal_eq_neg_of_invariant T P Z hinv,
     approximationSingularValue_neg]
   have hcomp := approximationSingularValue_comp_le (𝕜 := ℝ) n
@@ -611,19 +605,19 @@ theorem approximationSingularValue_theorem63ResidualReal_le_of_invariant
     ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
       simpa only [one_mul] using Submodule.norm_starProjection_apply_le Zᗮ x
   have hone : ‖(1 : Z →L[ℝ] Z)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have hnn : 0 ≤ approximationSingularValue n (P ∘L Z.subtypeL) :=
-    approximationSingularValue_nonneg _ _
+  have hnn : 0 ≤ ((P ∘L Z.subtypeL).singularValue n : ℝ) :=
+    (ContinuousLinearMap.singularValue _ _).coe_nonneg
   calc
     ‖(Zᗮ.starProjection : E →L[ℝ] E)‖ *
-        approximationSingularValue n (P ∘L Z.subtypeL) *
+        ((P ∘L Z.subtypeL).singularValue n : ℝ) *
           ‖(1 : Z →L[ℝ] Z)‖ ≤
-        1 * approximationSingularValue n (P ∘L Z.subtypeL) * 1 := by
+        1 * ((P ∘L Z.subtypeL).singularValue n : ℝ) * 1 := by
       have h1 : ‖(Zᗮ.starProjection : E →L[ℝ] E)‖ *
-          approximationSingularValue n (P ∘L Z.subtypeL) ≤
-          1 * approximationSingularValue n (P ∘L Z.subtypeL) :=
+          ((P ∘L Z.subtypeL).singularValue n : ℝ) ≤
+          1 * ((P ∘L Z.subtypeL).singularValue n : ℝ) :=
         mul_le_mul_of_nonneg_right hP hnn
       exact mul_le_mul h1 hone (norm_nonneg (1 : Z →L[ℝ] Z)) (by linarith)
-    _ = approximationSingularValue n (P ∘L Z.subtypeL) := by ring
+    _ = ((P ∘L Z.subtypeL).singularValue n : ℝ) := by ring
 
 /-- **Real directed Theorem 6.3, perturbation form, at every source unitarily invariant
 norm.**
@@ -666,7 +660,7 @@ theorem tanTheta_directed_bounded_perturbation_symmetricNorming_real
     have htanKy : kyFanApproximationGauge k tanTheta0 =
         Finset.sum (Finset.range k) (fun n =>
           Real.tan (Real.arcsin
-            (approximationSingularValue n (theorem63DirectedSineBlockReal Z V)))) := by
+            (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))) := by
       simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     have hres : kyFanApproximationGauge k (theorem63ResidualReal T Z) ≤

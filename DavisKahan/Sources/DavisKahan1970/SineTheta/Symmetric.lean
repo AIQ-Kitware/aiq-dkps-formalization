@@ -182,7 +182,7 @@ theorem forward_all_kyFan
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
@@ -247,7 +247,7 @@ theorem forward_all_kyFan
       hres.kyFanGaugeReal_eq k)]
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
       hgaugeSine, hgaugeRes, kyFanApproximationGauge_neg] using hraw.2
 
 /-- Reversed one-sided estimate simultaneously for every finite Ky Fan gauge. -/
@@ -259,7 +259,7 @@ theorem reverse_all_kyFan
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
@@ -325,7 +325,7 @@ theorem reverse_all_kyFan
       hres.kyFanGaugeReal_eq k)
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
       hgaugeSine, hgaugeRes, kyFanApproximationGauge_neg] using hraw.2
 
 /-- Ky Fan form of the symmetric sine theorem, before universal Fan

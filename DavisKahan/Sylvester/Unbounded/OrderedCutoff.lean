@@ -274,7 +274,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   apply kyFanApproximationGauge_le_of_leftCutoff_le hA PCA k
   intro τA hτA
@@ -355,7 +355,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     hA1inv B1 hρ hδ hA1invNorm hB1norm hEqShift
       (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   simp only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hmain
+      ← kyFanApproximationGauge_eq_kyFanGauge] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- The opposite ordered orientation, obtained by adjointing and swapping the
@@ -378,7 +378,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   apply kyFanApproximationGauge_le_of_leftCutoff_le hA PCA k
   intro τA hτA
@@ -459,7 +459,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     hB1inv A1 hρ hδ hB1invNorm hA1norm hEqShift
       (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   simp only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hmain
+      ← kyFanApproximationGauge_eq_kyFanGauge] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- Ideal membership of the Sylvester solution from ordered cutoff estimates. -/

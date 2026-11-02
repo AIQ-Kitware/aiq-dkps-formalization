@@ -60,8 +60,8 @@ obtained by applying `tan ∘ arcsin` to the directed doubled-sine sequence. -/
 def HasDirectedDoubleTangentApproximationNumbers
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (T : U →L[𝕜] Uᗮ) : Prop :=
-  ∀ n, T.approximationNumber n =
-    Real.tan (Real.arcsin ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))
+  ∀ n, (T.singularValue n : ℝ) =
+    Real.tan (Real.arcsin (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ)))
 
 /-- **Davis--Kahan `tan 2Θ₀`, full unbounded directed residual form, scalar-generic.**
 
@@ -86,7 +86,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_𝕜)
     (hab : a < b)
     (hRmem : N.Mem (blockCompression Uᗮ U B)) :
-    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : ℕ, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       ∃ T : U →L[𝕜] Uᗮ,
         HasDirectedDoubleTangentApproximationNumbers U V T ∧
         N.Mem T ∧
@@ -125,14 +125,14 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     let T : U →L[𝕜] Uᗮ :=
       DavisKahan.TanTheta.scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) U T'
     have hsine : ∀ n : ℕ,
-        (DavisKahan.sinTwoThetaIdealBlock U' V').approximationNumber n =
-          (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by
+        ((DavisKahan.sinTwoThetaIdealBlock U' V').singularValue n : ℝ) =
+          ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) := by
       intro n
       rw [← Angle.clm_sinTwoThetaIdealBlock (e := e) U V]
       exact ScalarTransport.approximationNumber_clm (e := e)
         (DavisKahan.sinTwoThetaIdealBlock U V) n
     have hlt : ∀ n : ℕ,
-        (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1 := by
+        ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1 := by
       intro n
       rw [← hsine n]
       exact hlt' n
@@ -141,9 +141,9 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
       have hTn :=
         DavisKahan.TanTheta.approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
           (e := e) U T' n
-      change T.approximationNumber n = _
+      change (T.singularValue n : ℝ) = _
       rw [hTn]
-      change T'.approximationNumber n = _
+      change (T'.singularValue n : ℝ) = _
       dsimp [T']
       rw [hseq' n, hsine n]
     have hmem : N.Mem T := by
@@ -198,14 +198,14 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     let T : U →L[𝕜] Uᗮ :=
       DavisKahan.TanTheta.scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) U T'
     have hsine : ∀ n : ℕ,
-        (DavisKahan.sinTwoThetaIdealBlock U' V').approximationNumber n =
-          (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by
+        ((DavisKahan.sinTwoThetaIdealBlock U' V').singularValue n : ℝ) =
+          ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) := by
       intro n
       rw [← Angle.clm_sinTwoThetaIdealBlock (e := e) U V]
       exact ScalarTransport.approximationNumber_clm (e := e)
         (DavisKahan.sinTwoThetaIdealBlock U V) n
     have hlt : ∀ n : ℕ,
-        (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1 := by
+        ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1 := by
       intro n
       rw [← hsine n]
       exact hlt' n
@@ -214,9 +214,9 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
       have hTn :=
         DavisKahan.TanTheta.approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
           (e := e) U T' n
-      change T.approximationNumber n = _
+      change (T.singularValue n : ℝ) = _
       rw [hTn]
-      change T'.approximationNumber n = _
+      change (T'.singularValue n : ℝ) = _
       dsimp [T']
       rw [hseq' n, hsine n]
     have hmem : N.Mem T := by
@@ -293,7 +293,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
         hA' hred'
         hB' hUa' hUb' hab N V' hBsa' hV' hBmem'
     have hsinApprox : ∀ n : ℕ,
-        (Angle.sinTwoAngleOperator U' V').approximationNumber n < 1 := by
+        ((Angle.sinTwoAngleOperator U' V').singularValue n : ℝ) < 1 := by
       intro n
       have hs := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
         (Angle.sinTwoAngleOperator_hasSameApproximationNumbers (U := U') (V := V')) n

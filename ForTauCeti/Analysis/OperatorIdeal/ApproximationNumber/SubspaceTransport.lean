@@ -103,33 +103,28 @@ theorem sameSingularValues_extendDomainByZero
   apply (sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hfactor : (T ∘L U.subtypeL.adjoint) ∘L U.subtypeL = T := by
     ext x
     simp [Submodule.adjoint_subtypeL]
-  have key : (T ∘L U.subtypeL.adjoint).approximationNumber n
-      = T.approximationNumber n := by
+  have key : ((T ∘L U.subtypeL.adjoint).singularValue n : ℝ)
+      = (T.singularValue n : ℝ) := by
     refine le_antisymm ?_ ?_
-    · calc (T ∘L U.subtypeL.adjoint).approximationNumber n
-          ≤ T.approximationNumber n * ‖U.subtypeL.adjoint‖ :=
+    · calc ((T ∘L U.subtypeL.adjoint).singularValue n : ℝ)
+          ≤ (T.singularValue n : ℝ) * ‖U.subtypeL.adjoint‖ :=
             T.approximationNumber_comp_le_mul_norm _ n
-        _ ≤ T.approximationNumber n * 1 := by
-            gcongr <;>
-              first
-                | exact norm_adjoint_subtypeL_le_one U
-                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
-        _ = T.approximationNumber n := mul_one _
-    · calc T.approximationNumber n
-          = ((T ∘L U.subtypeL.adjoint) ∘L U.subtypeL).approximationNumber n := by
+        _ ≤ (T.singularValue n : ℝ) * 1 := by
+            gcongr
+            exact norm_adjoint_subtypeL_le_one U
+        _ = (T.singularValue n : ℝ) := mul_one _
+    · calc (T.singularValue n : ℝ)
+          = (((T ∘L U.subtypeL.adjoint) ∘L U.subtypeL).singularValue n : ℝ) := by
             rw [hfactor]
-        _ ≤ (T ∘L U.subtypeL.adjoint).approximationNumber n * ‖U.subtypeL‖ :=
+        _ ≤ ((T ∘L U.subtypeL.adjoint).singularValue n : ℝ) * ‖U.subtypeL‖ :=
             (T ∘L U.subtypeL.adjoint).approximationNumber_comp_le_mul_norm _ n
-        _ ≤ (T ∘L U.subtypeL.adjoint).approximationNumber n * 1 := by
-            gcongr <;>
-              first
-                | exact norm_subtypeL_le_one U
-                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
-        _ = (T ∘L U.subtypeL.adjoint).approximationNumber n := mul_one _
+        _ ≤ ((T ∘L U.subtypeL.adjoint).singularValue n : ℝ) * 1 := by
+            gcongr
+            exact norm_subtypeL_le_one U
+        _ = ((T ∘L U.subtypeL.adjoint).singularValue n : ℝ) := mul_one _
   exact key
 
 omit [CompleteSpace E] in
@@ -142,33 +137,28 @@ theorem sameSingularValues_includeCodomain
   apply (sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hfactor : V.subtypeL.adjoint ∘L (V.subtypeL ∘L T) = T := by
     ext x
     simp [Submodule.adjoint_subtypeL]
-  have key : (V.subtypeL ∘L T).approximationNumber n
-      = T.approximationNumber n := by
+  have key : ((V.subtypeL ∘L T).singularValue n : ℝ)
+      = (T.singularValue n : ℝ) := by
     refine le_antisymm ?_ ?_
-    · calc (V.subtypeL ∘L T).approximationNumber n
-          ≤ ‖V.subtypeL‖ * T.approximationNumber n :=
+    · calc ((V.subtypeL ∘L T).singularValue n : ℝ)
+          ≤ ‖V.subtypeL‖ * (T.singularValue n : ℝ) :=
             ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ T n
-        _ ≤ 1 * T.approximationNumber n := by
-            gcongr <;>
-              first
-                | exact norm_subtypeL_le_one V
-                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
-        _ = T.approximationNumber n := one_mul _
-    · calc T.approximationNumber n
-          = (V.subtypeL.adjoint ∘L (V.subtypeL ∘L T)).approximationNumber n := by
+        _ ≤ 1 * (T.singularValue n : ℝ) := by
+            gcongr
+            exact norm_subtypeL_le_one V
+        _ = (T.singularValue n : ℝ) := one_mul _
+    · calc (T.singularValue n : ℝ)
+          = ((V.subtypeL.adjoint ∘L (V.subtypeL ∘L T)).singularValue n : ℝ) := by
             rw [hfactor]
-        _ ≤ ‖V.subtypeL.adjoint‖ * (V.subtypeL ∘L T).approximationNumber n :=
+        _ ≤ ‖V.subtypeL.adjoint‖ * ((V.subtypeL ∘L T).singularValue n : ℝ) :=
             ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ n
-        _ ≤ 1 * (V.subtypeL ∘L T).approximationNumber n := by
-            gcongr <;>
-              first
-                | exact norm_adjoint_subtypeL_le_one V
-                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
-        _ = (V.subtypeL ∘L T).approximationNumber n := one_mul _
+        _ ≤ 1 * ((V.subtypeL ∘L T).singularValue n : ℝ) := by
+            gcongr
+            exact norm_adjoint_subtypeL_le_one V
+        _ = ((V.subtypeL ∘L T).singularValue n : ℝ) := one_mul _
   exact key
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -189,25 +179,22 @@ theorem sameSingularValues_comp_right
   apply (sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← approximationNumber_eq_singularValue_toReal]
   have hfactor : (T ∘L J) ∘L J' = T := by
     ext x
     simp only [ContinuousLinearMap.comp_apply, hinv]
   refine le_antisymm ?_ ?_
-  · calc (T ∘L J).approximationNumber n ≤ T.approximationNumber n * ‖J‖ :=
+  · calc ((T ∘L J).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) * ‖J‖ :=
         T.approximationNumber_comp_le_mul_norm _ n
-      _ ≤ T.approximationNumber n * 1 := by
+      _ ≤ (T.singularValue n : ℝ) * 1 := by
           gcongr
-          exact ContinuousLinearMap.approximationNumber_nonneg _ _
-      _ = T.approximationNumber n := mul_one _
-  · calc T.approximationNumber n
-        = ((T ∘L J) ∘L J').approximationNumber n := by rw [hfactor]
-      _ ≤ (T ∘L J).approximationNumber n * ‖J'‖ :=
+      _ = (T.singularValue n : ℝ) := mul_one _
+  · calc (T.singularValue n : ℝ)
+        = (((T ∘L J) ∘L J').singularValue n : ℝ) := by rw [hfactor]
+      _ ≤ ((T ∘L J).singularValue n : ℝ) * ‖J'‖ :=
           (T ∘L J).approximationNumber_comp_le_mul_norm _ n
-      _ ≤ (T ∘L J).approximationNumber n * 1 := by
+      _ ≤ ((T ∘L J).singularValue n : ℝ) * 1 := by
           gcongr
-          exact ContinuousLinearMap.approximationNumber_nonneg _ _
-      _ = (T ∘L J).approximationNumber n := mul_one _
+      _ = ((T ∘L J).singularValue n : ℝ) := mul_one _
 
 /-- Ambient extension of a rectangular subspace block preserves the complete
 singular-value sequence. -/

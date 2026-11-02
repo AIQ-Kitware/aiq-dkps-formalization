@@ -231,46 +231,42 @@ theorem sndL_comp_blockSum_comp_blockInr (A : E₀ →L[𝕜] F₀) (B : E₁ �
 approximation number of the block sum. -/
 theorem approximationNumber_le_blockSum_left
     (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (n : ℕ) :
-    A.approximationNumber n ≤
-      (continuousOrthogonalBlockSum A B).approximationNumber n := by
+    (A.singularValue n : ℝ) ≤
+      ((continuousOrthogonalBlockSum A B).singularValue n : ℝ) := by
   have h := ContinuousLinearMap.approximationNumber_comp_comp_le
     (WithLp.fstL 2 𝕜 F₀ F₁) (continuousOrthogonalBlockSum A B)
     (blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁)) n
   rw [fstL_comp_blockSum_comp_blockInl] at h
   refine h.trans ?_
   calc ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖ *
-        (continuousOrthogonalBlockSum A B).approximationNumber n *
+        ((continuousOrthogonalBlockSum A B).singularValue n : ℝ) *
         ‖(blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁))‖
-      ≤ 1 * (continuousOrthogonalBlockSum A B).approximationNumber n * 1 := by
+      ≤ 1 * ((continuousOrthogonalBlockSum A B).singularValue n : ℝ) * 1 := by
         gcongr <;>
           first
             | exact norm_fstL_le
             | exact norm_blockInl_le
-            | simpa using
-                ContinuousLinearMap.approximationNumber_nonneg _ _
     _ = _ := by rw [one_mul, mul_one]
 
 /-- Every approximation number of the second summand is dominated by the
 corresponding approximation number of the block sum. -/
 theorem approximationNumber_le_blockSum_right
     (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (n : ℕ) :
-    B.approximationNumber n ≤
-      (continuousOrthogonalBlockSum A B).approximationNumber n := by
+    (B.singularValue n : ℝ) ≤
+      ((continuousOrthogonalBlockSum A B).singularValue n : ℝ) := by
   have h := ContinuousLinearMap.approximationNumber_comp_comp_le
     (WithLp.sndL 2 𝕜 F₀ F₁) (continuousOrthogonalBlockSum A B)
     (blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁)) n
   rw [sndL_comp_blockSum_comp_blockInr] at h
   refine h.trans ?_
   calc ‖(WithLp.sndL 2 𝕜 F₀ F₁)‖ *
-        (continuousOrthogonalBlockSum A B).approximationNumber n *
+        ((continuousOrthogonalBlockSum A B).singularValue n : ℝ) *
         ‖(blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁))‖
-      ≤ 1 * (continuousOrthogonalBlockSum A B).approximationNumber n * 1 := by
+      ≤ 1 * ((continuousOrthogonalBlockSum A B).singularValue n : ℝ) * 1 := by
         gcongr <;>
           first
             | exact norm_sndL_le
             | exact norm_blockInr_le
-            | simpa using
-                ContinuousLinearMap.approximationNumber_nonneg _ _
     _ = _ := by rw [one_mul, mul_one]
 
 /-- The operator norm of a block sum is the larger of the two block norms;
@@ -367,8 +363,8 @@ theorem rank_continuousOrthogonalBlockSum_le
 by the larger of the two block approximation numbers. -/
 theorem approximationNumber_continuousOrthogonalBlockSum_le_max
     (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (r s : ℕ) :
-    (continuousOrthogonalBlockSum A B).approximationNumber (r + s) ≤
-      max (A.approximationNumber r) (B.approximationNumber s) := by
+    ((continuousOrthogonalBlockSum A B).singularValue (r + s) : ℝ) ≤
+      max ((A.singularValue r : ℝ)) ((B.singularValue s : ℝ)) := by
   apply le_of_forall_pos_le_add
   intro ε hε
   obtain ⟨R, hRrank, hRdist⟩ := A.exists_rank_le_norm_sub_lt_approximationNumber_add r hε
@@ -399,28 +395,28 @@ variable {E₀ E₁ F₀ F₁ : Type v}
 block sum. -/
 theorem min_le_approximationNumber_continuousOrthogonalBlockSum
     (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (i j : ℕ) :
-    min (A.approximationNumber i) (B.approximationNumber j) ≤
-      (continuousOrthogonalBlockSum A B).approximationNumber (i + j + 1) := by
+    min ((A.singularValue i : ℝ)) ((B.singularValue j : ℝ)) ≤
+      ((continuousOrthogonalBlockSum A B).singularValue (i + j + 1) : ℝ) := by
   classical
   by_contra hcon
   push Not at hcon
   set T := continuousOrthogonalBlockSum A B with hT
-  set m : ℝ := T.approximationNumber (i + j + 1) with hm
-  have hm0 : 0 ≤ m := T.approximationNumber_nonneg (i + j + 1)
-  have hmA : m < A.approximationNumber i := by
+  set m : ℝ := (T.singularValue (i + j + 1) : ℝ) with hm
+  have hm0 : 0 ≤ m := (T.singularValue (i + j + 1)).coe_nonneg
+  have hmA : m < (A.singularValue i : ℝ) := by
     have := lt_of_lt_of_le hcon (min_le_left _ _)
     exact_mod_cast this
-  have hmB : m < B.approximationNumber j := by
+  have hmB : m < (B.singularValue j : ℝ) := by
     have := lt_of_lt_of_le hcon (min_le_right _ _)
     exact_mod_cast this
   obtain ⟨s, hms, v, hv, hV⟩ :=
     TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace
       A i hm0 (by
-        simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hmA)
+        exact hmA)
   obtain ⟨t, hmt, w, hw, hW⟩ :=
     TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace
       B j hm0 (by
-        simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hmB)
+        exact hmB)
   -- the combined witness family
   set f : Fin (i + 1) → WithLp 2 (E₀ × E₁) := fun k => WithLp.toLp 2 (v k, 0) with hf
   set g : Fin (j + 1) → WithLp 2 (E₀ × E₁) := fun l => WithLp.toLp 2 (0, w l) with hg
@@ -517,7 +513,7 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
       nlinarith [e1, e2, mul_pow μ ‖(WithLp.ofLp x).1‖ 2,
         mul_pow μ ‖(WithLp.ofLp x).2‖ 2]
     exact le_of_sq_le_sq hsq (norm_nonneg _)
-  have hfinal : m < (T.approximationNumber (i + j + 1) : ℝ) :=
+  have hfinal : m < ((T.singularValue (i + j + 1) : ℝ) : ℝ) :=
     (TauCeti.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
       TauCeti.HasMinMaxLowerBound.of_completeSpace
       T (i + j + 1) hm0).mpr ⟨μ, hmμ, _, hu, hlower⟩
@@ -650,10 +646,10 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
     kyFanApproximationGauge k (continuousOrthogonalBlockSum A B) =
       splitKyFanGauge k A B := by
   classical
-  set a : ℕ → ℝ := fun n => approximationSingularValue n A with ha
-  set b : ℕ → ℝ := fun n => approximationSingularValue n B with hb
+  set a : ℕ → ℝ := fun n => (A.singularValue n : ℝ) with ha
+  set b : ℕ → ℝ := fun n => (B.singularValue n : ℝ) with hb
   set c : ℕ → ℝ := fun n =>
-    approximationSingularValue n (continuousOrthogonalBlockSum A B) with hcdef
+    ((continuousOrthogonalBlockSum A B).singularValue n : ℝ) with hcdef
   have hac : ∀ n, a n ≤ c n := fun n => by
     have := approximationNumber_le_blockSum_left A B n
     exact_mod_cast this
@@ -673,8 +669,7 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
     obtain ⟨r, hrk, hle⟩ := exists_split_prefix_sum_le a b c hmax k
     have hle' : kyFanApproximationGauge k (continuousOrthogonalBlockSum A B) ≤
         kyFanApproximationGauge r A + kyFanApproximationGauge (k - r) B := by
-      simpa [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-        approximationSingularValue, ha, hb, hcdef] using hle
+      simpa [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum, ha, hb, hcdef] using hle
     refine le_trans hle' ?_
     exact Finset.le_sup'
       (f := fun r => kyFanApproximationGauge r A + kyFanApproximationGauge (k - r) B)
@@ -686,8 +681,7 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
     intro r hr
     have hrle : r ≤ k := Nat.lt_succ_iff.mp (Finset.mem_range.mp hr)
     have hsplit := split_prefix_sum_le a b c hac hbc hmin k r (k - r) (by omega)
-    simpa [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-      approximationSingularValue, ha, hb, hcdef] using hsplit
+    simpa [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum, ha, hb, hcdef] using hsplit
 
 /-- Weak majorization is stable under orthogonal block sum.  This is the
 infinite-dimensional singular-value content of Davis--Kahan Lemma 6.1. -/
@@ -714,7 +708,7 @@ theorem approximationSingularValue_eq_kyFan_succ_sub
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (n : ℕ) (A : E →L[𝕜] F) :
-    A.approximationNumber n =
+    (A.singularValue n : ℝ) =
       kyFanApproximationGauge (n + 1) A - kyFanApproximationGauge n A := by
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   rw [Finset.sum_range_succ]
@@ -737,7 +731,6 @@ theorem hasSameApproximationNumbers_continuousOrthogonalBlockSum
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [approximationSingularValue_eq_kyFan_succ_sub,
     approximationSingularValue_eq_kyFan_succ_sub]
   congr 1 <;>
@@ -788,7 +781,6 @@ theorem sameApproximationSingularSequence_continuousOrthogonalBlockSum
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [approximationSingularValue_eq_kyFan_succ_sub,
     approximationSingularValue_eq_kyFan_succ_sub,
     kyFanApproximationGauge_continuousOrthogonalBlockSum,

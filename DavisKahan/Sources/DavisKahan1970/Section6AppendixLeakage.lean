@@ -80,7 +80,7 @@ variable {𝕜 : Type w} [RCLike 𝕜] {E : Type u} {F : Type v}
 /-- Sum of squares of the first `n` approximation numbers. -/
 noncomputable def approximationEnergy
     (T : E →L[𝕜] F) (n : ℕ) : ℝ :=
-  ∑ i ∈ Finset.range n, (approximationSingularValue i T) ^ 2
+  ∑ i ∈ Finset.range n, ((T.singularValue i : ℝ)) ^ 2
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The prefix square energy is a sum of squares, hence nonnegative. -/
@@ -99,15 +99,14 @@ theorem opNorm_sq_le_approximationEnergy
   unfold approximationEnergy
   have hmem : 0 ∈ Finset.range n := Finset.mem_range.mpr hn
   have hzero :
-      (approximationSingularValue 0 T) ^ 2 = ‖T‖ ^ 2 := by
-    unfold approximationSingularValue
+      ((T.singularValue 0 : ℝ)) ^ 2 = ‖T‖ ^ 2 := by
     rw [T.approximationNumber_index_zero]
   calc
-    ‖T‖ ^ 2 = (approximationSingularValue 0 T) ^ 2 := hzero.symm
+    ‖T‖ ^ 2 = ((T.singularValue 0 : ℝ)) ^ 2 := hzero.symm
     _ ≤ ∑ i ∈ Finset.range n,
-        (approximationSingularValue i T) ^ 2 := by
+        ((T.singularValue i : ℝ)) ^ 2 := by
       exact Finset.single_le_sum
-        (fun i hi => sq_nonneg (approximationSingularValue i T)) hmem
+        (fun i hi => sq_nonneg ((T.singularValue i : ℝ))) hmem
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Left composition by an orthogonal projection cannot increase the first
@@ -121,20 +120,19 @@ theorem approximationEnergy_starProjection_comp_le
   apply Finset.sum_le_sum
   intro i hi
   have hcomp :
-      approximationSingularValue i (Q.starProjection ∘L K) ≤
-        approximationSingularValue i K := by
-    unfold approximationSingularValue
+      ((Q.starProjection ∘L K).singularValue i : ℝ) ≤
+        (K.singularValue i : ℝ) := by
     calc
-      (Q.starProjection ∘L K).approximationNumber i
-          ≤ ‖Q.starProjection‖ * K.approximationNumber i :=
+      ((Q.starProjection ∘L K).singularValue i : ℝ)
+          ≤ ‖Q.starProjection‖ * (K.singularValue i : ℝ) :=
             ContinuousLinearMap.approximationNumber_comp_le_norm_mul
               Q.starProjection K i
-      _ ≤ 1 * K.approximationNumber i :=
+      _ ≤ 1 * (K.singularValue i : ℝ) :=
             mul_le_mul_of_nonneg_right Q.starProjection_norm_le
-              (K.approximationNumber_nonneg i)
-      _ = K.approximationNumber i := one_mul _
+              ((K.singularValue i).coe_nonneg)
+      _ = (K.singularValue i : ℝ) := one_mul _
   exact pow_le_pow_left₀
-    (approximationSingularValue_nonneg i _)
+    ((ContinuousLinearMap.singularValue _ i).coe_nonneg)
     hcomp 2
 
 /-- A finite-rank operator's prefix square energy is the real form of its
@@ -337,9 +335,7 @@ theorem approximationEnergy_eq_singularValues
   unfold approximationEnergy
   apply Finset.sum_congr rfl
   intro i hi
-  change ((T.approximationNumber i : ℝ) ^ 2) =
-    (T.toLinearMap.singularValues i : ℝ) ^ 2
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+  rw [
     ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
 
 section ComplexScalars

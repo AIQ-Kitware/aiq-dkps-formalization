@@ -113,8 +113,8 @@ ambient development proves about `upperBlockShift` is an estimate about the
 block. -/
 theorem approximationNumber_upperBlockCompression (A : G →L[𝕜] G) (P : Submodule 𝕜 G)
     [P.HasOrthogonalProjection] (alpha : ℝ) (n : ℕ) :
-    (upperBlockCompression A P alpha).approximationNumber n =
-      (upperBlockShift A P alpha).approximationNumber n := by
+    ((upperBlockCompression A P alpha).singularValue n : ℝ) =
+      ((upperBlockShift A P alpha).singularValue n : ℝ) := by
   rw [← subtypeL_comp_upperBlockCompression A P alpha,
     ApproximationNumber.approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto]
 
@@ -122,8 +122,8 @@ omit [CompleteSpace G] in
 /-- The lower block's approximation numbers, likewise. -/
 theorem approximationNumber_lowerBlockCompression (A : G →L[𝕜] G) (P : Submodule 𝕜 G)
     [P.HasOrthogonalProjection] (alpha delta : ℝ) (n : ℕ) :
-    (lowerBlockCompression A P alpha delta).approximationNumber n =
-      (lowerBlockShift A P alpha delta).approximationNumber n := by
+    ((lowerBlockCompression A P alpha delta).singularValue n : ℝ) =
+      ((lowerBlockShift A P alpha delta).singularValue n : ℝ) := by
   rw [← subtypeL_comp_lowerBlockCompression A P alpha delta,
     ApproximationNumber.approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto]
 
@@ -171,7 +171,7 @@ theorem approximationNumber_upperBlockCompression_eq_eigenvalues [FiniteDimensio
     [P.HasOrthogonalProjection] (alpha : ℝ)
     (hnn : (0 : G →L[𝕜] G) ≤ upperBlockShift A P alpha)
     (i : Fin (finrank 𝕜 (Pᗮ : Submodule 𝕜 G))) :
-    (upperBlockCompression A P alpha).approximationNumber (i : ℕ)
+    ((upperBlockCompression A P alpha).singularValue (i : ℕ) : ℝ)
       = (isSymmetric_upperBlockCompression hA P alpha).eigenvalues rfl i :=
   approximationNumber_eq_eigenvalues_of_isPositive
     (isPositive_toLinearMap_of_nonneg (nonneg_compressOperator_of_nonneg hnn Pᗮ)) i
@@ -182,7 +182,7 @@ theorem approximationNumber_lowerBlockCompression_eq_eigenvalues [FiniteDimensio
     [P.HasOrthogonalProjection] (alpha delta : ℝ)
     (hnn : (0 : G →L[𝕜] G) ≤ lowerBlockShift A P alpha delta)
     (i : Fin (finrank 𝕜 (P : Submodule 𝕜 G))) :
-    (lowerBlockCompression A P alpha delta).approximationNumber (i : ℕ)
+    ((lowerBlockCompression A P alpha delta).singularValue (i : ℕ) : ℝ)
       = (isSymmetric_lowerBlockCompression hA P alpha delta).eigenvalues rfl i :=
   approximationNumber_eq_eigenvalues_of_isPositive
     (isPositive_toLinearMap_of_nonneg (nonneg_compressOperator_of_nonneg hnn P)) i
@@ -454,15 +454,15 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
   have hgauge := (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi) (weaklyMajorized_comp_castLE hle hmaj)
   simp only [Fin.val_castLE] at hgauge
   have hfA : (fun i : Fin (finrank ℂ (Pᗮ : Submodule ℂ H)) =>
-      (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+      ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       = fun i => (isSymmetric_upperBlockCompression hA P alpha).eigenvalues rfl i := by
     funext i
     rw [← approximationNumber_upperBlockCompression A P alpha]
     exact approximationNumber_upperBlockCompression_eq_eigenvalues hA P alpha
       (upperBlockShift_nonneg A P hdelta.le hA hPhigh) i
   have hfQ : (fun i : Fin (finrank ℂ (Pᗮ : Submodule ℂ H)) =>
-      (upperBlockShift (A + K) (branch A K alpha hA hK) alpha).approximationNumber (i : ℕ) *
-        (cosineBlock P (branch A K alpha hA hK)).approximationNumber (i : ℕ) ^ 2)
+      ((upperBlockShift (A + K) (branch A K alpha hA hK) alpha).singularValue (i : ℕ) : ℝ) *
+        ((cosineBlock P (branch A K alpha hA hK)).singularValue (i : ℕ) : ℝ) ^ 2)
       = fun i => (isSymmetric_upperBlockCompression (hA.add hK)
             (branch A K alpha hA hK) alpha).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_orthogonal_branch_eq A K P hdelta hA hK hAP
@@ -506,16 +506,16 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
   have hgauge := (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi) (weaklyMajorized_comp_castLE hle hmaj)
   simp only [Fin.val_castLE] at hgauge
   have hfA : (fun i : Fin (finrank ℂ (P : Submodule ℂ H)) =>
-      (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+      ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       = fun i => (isSymmetric_lowerBlockCompression hA P alpha delta).eigenvalues rfl i := by
     funext i
     rw [← approximationNumber_lowerBlockCompression A P alpha delta]
     exact approximationNumber_lowerBlockCompression_eq_eigenvalues hA P alpha delta
       (lowerBlockShift_nonneg A P hdelta.le hA hPlow) i
   have hfQ : (fun i : Fin (finrank ℂ (P : Submodule ℂ H)) =>
-      (lowerBlockShift (A + K) (branch A K alpha hA hK) alpha delta
-        ).approximationNumber (i : ℕ) *
-        (lowerCosineBlock P (branch A K alpha hA hK)).approximationNumber (i : ℕ) ^ 2)
+      ((lowerBlockShift (A + K) (branch A K alpha hA hK) alpha delta
+        ).singularValue (i : ℕ) : ℝ) *
+        ((lowerCosineBlock P (branch A K alpha hA hK)).singularValue (i : ℕ) : ℝ) ^ 2)
       = fun i => (isSymmetric_lowerBlockCompression (hA.add hK)
             (branch A K alpha hA hK) alpha delta).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_branch_eq A K P hdelta hA hK hAP
@@ -707,7 +707,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
   have hgauge := (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi) (weaklyMajorized_comp_castLE hle hmaj)
   simp only [Fin.val_castLE] at hgauge
   have hfA : (fun i : Fin (finrank ℝ (Pᗮ : Submodule ℝ E)) =>
-      (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+      ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       = fun i => (isSymmetric_upperBlockCompression hA P alpha).eigenvalues rfl i := by
     funext i
     rw [← approximationNumber_upperBlockCompression A P alpha]
@@ -715,10 +715,10 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
       (upperBlockShift_nonneg A P hdelta.le hA
         (by simpa only [RCLike.re_to_real] using hPhigh)) i
   have hfQ : (fun i : Fin (finrank ℝ (Pᗮ : Submodule ℝ E)) =>
-      (upperBlockShift (A + K) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
-            hPhigh hKP hKPperp) alpha).approximationNumber (i : ℕ) *
-        (cosineBlock P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
-              hPhigh hKP hKPperp)).approximationNumber (i : ℕ) ^ 2)
+      ((upperBlockShift (A + K) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+            hPhigh hKP hKPperp) alpha).singularValue (i : ℕ) : ℝ) *
+        ((cosineBlock P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+              hPhigh hKP hKPperp)).singularValue (i : ℕ) : ℝ) ^ 2)
       = fun i => (isSymmetric_upperBlockCompression (hA.add hK)
           (canonicalLowBranchReal A K P hdelta hA hK
           hAP hPlow
@@ -771,7 +771,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
   have hgauge := (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi) (weaklyMajorized_comp_castLE hle hmaj)
   simp only [Fin.val_castLE] at hgauge
   have hfA : (fun i : Fin (finrank ℝ (P : Submodule ℝ E)) =>
-      (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+      ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       = fun i => (isSymmetric_lowerBlockCompression hA P alpha delta).eigenvalues rfl i := by
     funext i
     rw [← approximationNumber_lowerBlockCompression A P alpha delta]
@@ -779,10 +779,10 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
       (lowerBlockShift_nonneg A P hdelta.le hA
         (by simpa only [RCLike.re_to_real] using hPlow)) i
   have hfQ : (fun i : Fin (finrank ℝ (P : Submodule ℝ E)) =>
-      (lowerBlockShift (A + K) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
-            hPhigh hKP hKPperp) alpha delta).approximationNumber (i : ℕ) *
-        (lowerCosineBlock P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
-              hPhigh hKP hKPperp)).approximationNumber (i : ℕ) ^ 2)
+      ((lowerBlockShift (A + K) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+            hPhigh hKP hKPperp) alpha delta).singularValue (i : ℕ) : ℝ) *
+        ((lowerCosineBlock P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+              hPhigh hKP hKPperp)).singularValue (i : ℕ) : ℝ) ^ 2)
       = fun i => (isSymmetric_lowerBlockCompression (hA.add hK)
           (canonicalLowBranchReal A K P hdelta hA hK
           hAP hPlow
@@ -867,10 +867,10 @@ theorem theorem8_1_upperApproximationRepulsion_blockExtension
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (upperBlockCompression A P alpha).approximationNumber n ≤
+    ((upperBlockCompression A P alpha).singularValue n : ℝ) ≤
       ‖cosineBlock P (branch A K alpha hA hK)‖ ^ 2 *
-        (upperBlockCompression (A + K) (branch A K alpha hA hK) alpha
-          ).approximationNumber n := by
+        ((upperBlockCompression (A + K) (branch A K alpha hA hK) alpha
+          ).singularValue n : ℝ) := by
   rw [approximationNumber_upperBlockCompression A P alpha,
     approximationNumber_upperBlockCompression (A + K) (branch A K alpha hA hK) alpha]
   exact theorem8_1_upperApproximationRepulsion A K P hdelta hA hK hAP hPlow hPhigh
@@ -887,10 +887,10 @@ theorem theorem8_1_lowerApproximationRepulsion_blockExtension
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (lowerBlockCompression A P alpha delta).approximationNumber n ≤
+    ((lowerBlockCompression A P alpha delta).singularValue n : ℝ) ≤
       ‖lowerCosineBlock P (branch A K alpha hA hK)‖ ^ 2 *
-        (lowerBlockCompression (A + K) (branch A K alpha hA hK) alpha delta
-          ).approximationNumber n := by
+        ((lowerBlockCompression (A + K) (branch A K alpha hA hK) alpha delta
+          ).singularValue n : ℝ) := by
   rw [approximationNumber_lowerBlockCompression A P alpha delta,
     approximationNumber_lowerBlockCompression (A + K) (branch A K alpha hA hK)
       alpha delta]
@@ -915,12 +915,12 @@ theorem theorem8_1_upperApproximationRepulsion_blockExtension_real
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (upperBlockCompression A P alpha).approximationNumber n ≤
+    ((upperBlockCompression A P alpha).singularValue n : ℝ) ≤
       ‖cosineBlock P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh
         hKP hKPperp)‖ ^ 2 *
-        (upperBlockCompression (A + K)
+        ((upperBlockCompression (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)
-          alpha).approximationNumber n := by
+          alpha).singularValue n : ℝ) := by
   rw [approximationNumber_upperBlockCompression A P alpha,
     approximationNumber_upperBlockCompression (A + K)
       (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha]
@@ -938,12 +938,12 @@ theorem theorem8_1_lowerApproximationRepulsion_blockExtension_real
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (lowerBlockCompression A P alpha delta).approximationNumber n ≤
+    ((lowerBlockCompression A P alpha delta).singularValue n : ℝ) ≤
       ‖lowerCosineBlock P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
         hPhigh hKP hKPperp)‖ ^ 2 *
-        (lowerBlockCompression (A + K)
+        ((lowerBlockCompression (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)
-          alpha delta).approximationNumber n := by
+          alpha delta).singularValue n : ℝ) := by
   rw [approximationNumber_lowerBlockCompression A P alpha delta,
     approximationNumber_lowerBlockCompression (A + K)
       (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)

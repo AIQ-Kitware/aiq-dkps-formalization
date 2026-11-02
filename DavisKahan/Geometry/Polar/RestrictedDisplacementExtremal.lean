@@ -211,10 +211,10 @@ competitor.  This is the hard min--max statement. -/
 theorem lt_approximationNumber_competitor_of_lt_direct
     {C : E →L[ℂ] E} {A B : E →L[ℂ] F}
     (D : CosineDisplacementData C A B) (n : ℕ) {r : ℝ}
-    (hr0 : 0 ≤ r) (hr : r < (A.approximationNumber n : ℝ)) :
-    r < (B.approximationNumber n : ℝ) := by
+    (hr0 : 0 ≤ r) (hr : r < ((A.singularValue n : ℝ) : ℝ)) :
+    r < ((B.singularValue n : ℝ) : ℝ) := by
   classical
-  let a : ℝ := (A.approximationNumber n : ℝ)
+  let a : ℝ := ((A.singularValue n : ℝ) : ℝ)
   let s₁ : ℝ := (2 * r + a) / 3
   let s₂ : ℝ := (r + 2 * a) / 3
   have hra : r < a := by simpa only [a] using hr
@@ -236,7 +236,6 @@ theorem lt_approximationNumber_competitor_of_lt_direct
     dsimp [c₁, c₂]
     have hsquares : s₁ ^ 2 < s₂ ^ 2 := (sq_lt_sq₀ hs₁0 hs₂0).2 hs₁s₂
     linarith
-
   have hCsa : IsSelfAdjoint C :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.cosine_selfAdjoint
   let PVM : TauCeti.ProjValMeasure ℝ E :=
@@ -247,7 +246,6 @@ theorem lt_approximationNumber_competitor_of_lt_direct
     have h := PVM.proj_compl (Set.Iic c₂) measurableSet_Iic
     rw [PVM.proj_congr Set.compl_Iic measurableSet_Iic.compl measurableSet_Ioi] at h
     exact h
-
   have htailNorm : ‖A ∘L Q‖ ≤ s₂ := by
     refine (A ∘L Q).opNorm_le_bound hs₂0 ?_
     intro x
@@ -285,7 +283,6 @@ theorem lt_approximationNumber_competitor_of_lt_direct
       _ ≤ s₂ * ‖x‖ :=
         mul_le_mul_of_nonneg_left
           (PVM.norm_proj_apply_le (Set.Ioi c₂) measurableSet_Ioi x) hs₂0
-
   have hPrank : ¬ P.rank ≤ (n : Cardinal) := by
     intro hP
     let R : E →L[ℂ] F := A ∘L P
@@ -303,7 +300,6 @@ theorem lt_approximationNumber_competitor_of_lt_direct
         _ = ‖A ∘L Q‖ := by rw [herr]
         _ ≤ s₂ := htailNorm
     exact (not_le_of_gt hs₂a) has₂
-
   let L : Submodule ℂ E :=
     pvmRangeSubspace PVM (Set.Iic c₂) measurableSet_Iic
   have hnrank : ((n + 1 : ℕ) : Cardinal) ≤ Module.rank ℂ L := by
@@ -321,8 +317,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
     apply Submodule.span_le.mpr
     rintro x ⟨i, rfl⟩
     exact (f i).2
-  have hs₁NN : (⟨s₁, hs₁0⟩ : NNReal) ≤ B.approximationNumber n := by
-    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  have hs₁NN : (⟨s₁, hs₁0⟩ : NNReal) ≤ (B.singularValue n : ℝ) := by
     apply B.le_singularValue_of_linearIndependent hv
     intro x hxM
     have hxL : x ∈ L := hMle hxM
@@ -336,7 +331,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
     have hlower : s₁ * ‖x‖ ≤ ‖B x‖ :=
       (sq_le_sq₀ (mul_nonneg hs₁0 (norm_nonneg x)) (norm_nonneg _)).1 hBsq
     exact hlower
-  have hs₁le : s₁ ≤ (B.approximationNumber n : ℝ) := hs₁NN
+  have hs₁le : s₁ ≤ ((B.singularValue n : ℝ) : ℝ) := hs₁NN
   exact hrs₁.trans_le hs₁le
 
 omit [CompleteSpace F] in
@@ -345,15 +340,15 @@ argument. -/
 theorem approximationNumber_direct_le_competitor
     {C : E →L[ℂ] E} {A B : E →L[ℂ] F}
     (D : CosineDisplacementData C A B) (n : ℕ) :
-    A.approximationNumber n ≤ B.approximationNumber n := by
+    (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ) := by
   by_contra hnot
-  have hlt : B.approximationNumber n < A.approximationNumber n :=
+  have hlt : (B.singularValue n : ℝ) < (A.singularValue n : ℝ) :=
     lt_of_not_ge hnot
-  have hltReal : (B.approximationNumber n : ℝ) <
-      (A.approximationNumber n : ℝ) := by exact_mod_cast hlt
+  have hltReal : ((B.singularValue n : ℝ) : ℝ) <
+      ((A.singularValue n : ℝ) : ℝ) := by exact_mod_cast hlt
   have htransfer := D.lt_approximationNumber_competitor_of_lt_direct n
-    (B.approximationNumber_nonneg n) hltReal
-  exact (lt_irrefl (B.approximationNumber n : ℝ)) htransfer
+    ((B.singularValue n).coe_nonneg) hltReal
+  exact (lt_irrefl ((B.singularValue n : ℝ) : ℝ)) htransfer
 
 
 set_option maxHeartbeats 800000 in
@@ -367,15 +362,15 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
     (D : CosineDisplacementData C A B)
     (hSsq : ∀ x, ‖S x‖ ^ 2 = ‖x‖ ^ 2 - ‖C x‖ ^ 2)
     (n : ℕ) :
-    1 - ((A.approximationNumber n : Real) ^ 2) / 2 =
-      Real.sqrt (1 - ((S.approximationNumber n : Real) ^ 2)) := by
+    1 - (((A.singularValue n : ℝ) : Real) ^ 2) / 2 =
+      Real.sqrt (1 - (((S.singularValue n : ℝ) : Real) ^ 2)) := by
   classical
-  let a : Real := (A.approximationNumber n : Real)
-  let s : Real := (S.approximationNumber n : Real)
+  let a : Real := ((A.singularValue n : ℝ) : Real)
+  let s : Real := ((S.singularValue n : ℝ) : Real)
   let ca : Real := 1 - a ^ 2 / 2
   let cs : Real := Real.sqrt (1 - s ^ 2)
-  have ha0 : 0 <= a := A.approximationNumber_nonneg n
-  have hs0 : 0 <= s := S.approximationNumber_nonneg n
+  have ha0 : 0 <= a := (A.singularValue n).coe_nonneg
+  have hs0 : 0 <= s := (S.singularValue n).coe_nonneg
   have haNorm : a <= ‖A‖ := A.approximationNumber_le_norm n
   have haSqrt : a <= Real.sqrt 2 := haNorm.trans D.direct_norm_le_sqrt_two
   have haSq : a ^ 2 <= 2 := by
@@ -383,7 +378,6 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
     rwa [Real.sq_sqrt (by norm_num : (0 : Real) <= 2)] at h
   have hca0 : 0 <= ca := by dsimp only [ca]; linarith
   have hca1 : ca <= 1 := by dsimp only [ca]; nlinarith [sq_nonneg a]
-
   have hSnorm : ‖S‖ <= 1 := by
     refine S.opNorm_le_bound (by norm_num) ?_
     intro x
@@ -402,7 +396,6 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
     linarith
   have hcs0 : 0 <= cs := Real.sqrt_nonneg _
   have hcs1 : cs <= 1 := by nlinarith [hcsSq]
-
   have hcaCs : ca = cs := by
     rcases lt_trichotomy ca cs with hlt | heq | hgt
     · let c : Real := (ca + cs) / 2
@@ -418,7 +411,6 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
         have h := PVM.proj_compl (Set.Iic c) measurableSet_Iic
         rw [PVM.proj_congr Set.compl_Iic measurableSet_Iic.compl measurableSet_Ioi] at h
         exact h
-
       have hPrank : P.rank <= (n : Cardinal) := by
         by_contra hnot
         have hnlt : (n : Cardinal) < P.rank := lt_of_not_ge hnot
@@ -454,8 +446,7 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
           have hc1Sq : c1 ^ 2 < cs ^ 2 :=
             (sq_lt_sq₀ hc10 hcs0).2 hc1Cs
           nlinarith [hcsSq]
-        have htNN : (⟨t, ht0⟩ : NNReal) <= S.approximationNumber n := by
-          rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+        have htNN : (⟨t, ht0⟩ : NNReal) <= (S.singularValue n : ℝ) := by
           apply S.le_singularValue_of_linearIndependent hv
           intro x hxM
           have hxL : x ∈ L := hMle hxM
@@ -472,7 +463,6 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
           exact hlower
         have htLeS : t <= s := htNN
         exact (not_le_of_gt hsT) htLeS
-
       let r : Real := Real.sqrt (2 * (1 - c))
       have hr0 : 0 <= r := Real.sqrt_nonneg _
       have hrSq : r ^ 2 = 2 * (1 - c) := by
@@ -547,7 +537,6 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
         exact h
       have hCsa : IsSelfAdjoint C :=
         ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.cosine_selfAdjoint
-
       have hPrank : ¬ P.rank <= (n : Cardinal) := by
         intro hP
         let t : Real := Real.sqrt (1 - c ^ 2)
@@ -616,7 +605,6 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
             _ = ‖S ∘L Q‖ := by rw [herr]
             _ <= t := htailNorm
         exact (not_le_of_gt htS) hsT
-
       let L : Submodule ℂ E := pvmRangeSubspace PVM (Set.Iic c) measurableSet_Iic
       have hnrank : (((n + 1 : ℕ) : Cardinal) <= Module.rank ℂ L) := by
         change ((n + 1 : ℕ) : Cardinal) <= P.rank
@@ -649,8 +637,7 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
         rw [hrSq]
         dsimp only [ca] at hc1Ca
         nlinarith
-      have hrNN : (⟨r, hr0⟩ : NNReal) <= A.approximationNumber n := by
-        rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+      have hrNN : (⟨r, hr0⟩ : NNReal) <= (A.singularValue n : ℝ) := by
         apply A.le_singularValue_of_linearIndependent hv
         intro x hxM
         have hxL : x ∈ L := hMle hxM
@@ -948,9 +935,9 @@ theorem proposition4_1_nonacute_approximationNumbers
       halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
-    (sourceRestrictedDisplacement U
-        (TauCeti.DavisKahan.nonacuteDirectRotation U V J)).approximationNumber n ≤
-      (sourceRestrictedDisplacement U W).approximationNumber n :=
+    ((sourceRestrictedDisplacement U
+        (TauCeti.DavisKahan.nonacuteDirectRotation U V J)).singularValue n : ℝ) ≤
+      ((sourceRestrictedDisplacement U W).singularValue n : ℝ) :=
   CosineDisplacementData.approximationNumber_direct_le_competitor
     (proposition4_1_nonacuteCosineDisplacementData U V J W hWunitary hWmap) n
 
@@ -959,9 +946,9 @@ theorem proposition4_1_approximationNumbers
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
-    (sourceRestrictedDisplacement U
-        (spectraDirectRotation U V hacute)).approximationNumber n ≤
-      (sourceRestrictedDisplacement U W).approximationNumber n :=
+    ((sourceRestrictedDisplacement U
+        (spectraDirectRotation U V hacute)).singularValue n : ℝ) ≤
+      ((sourceRestrictedDisplacement U W).singularValue n : ℝ) :=
   CosineDisplacementData.approximationNumber_direct_le_competitor
     (proposition4_1_cosineDisplacementData U V hacute W hWunitary hWmap) n
 
@@ -990,10 +977,8 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
-    ContinuousLinearMap.approximationNumber
-        ((1 - spectraDirectRotation U V hacute) ∘L U.starProjection) n ≤
-      ContinuousLinearMap.approximationNumber
-        ((1 - W) ∘L U.starProjection) n := by
+    (((1 - spectraDirectRotation U V hacute) ∘L U.starProjection).singularValue n : ℝ) ≤
+      (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   have hsource := proposition4_1_approximationNumbers
     U V hacute W hWunitary hWmap n
   have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
@@ -1001,18 +986,15 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
       U (spectraDirectRotation U V hacute)) n
   have hWseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n
-  change approximationSingularValue n
-      ((1 - spectraDirectRotation U V hacute) ∘L U.starProjection) ≤
-    approximationSingularValue n ((1 - W) ∘L U.starProjection)
+  change (((1 - spectraDirectRotation U V hacute) ∘L U.starProjection).singularValue n : ℝ) ≤
+    (((1 - W) ∘L U.starProjection).singularValue n : ℝ)
   calc
-    approximationSingularValue n
-        ((1 - spectraDirectRotation U V hacute) ∘L U.starProjection) =
-        approximationSingularValue n
-          (sourceRestrictedDisplacement U
-            (spectraDirectRotation U V hacute)) := hDseq
-    _ ≤ approximationSingularValue n (sourceRestrictedDisplacement U W) := by
-      simpa only [approximationSingularValue] using hsource
-    _ = approximationSingularValue n ((1 - W) ∘L U.starProjection) := hWseq.symm
+    (((1 - spectraDirectRotation U V hacute) ∘L U.starProjection).singularValue n : ℝ) =
+        ((sourceRestrictedDisplacement U
+            (spectraDirectRotation U V hacute)).singularValue n : ℝ) := hDseq
+    _ ≤ ((sourceRestrictedDisplacement U W).singularValue n : ℝ) := by
+      exact hsource
+    _ = (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := hWseq.symm
 
 /-- Ambient restricted-displacement form of Proposition 4.1 for a
 chosen nonacute direct rotation. -/
@@ -1021,9 +1003,8 @@ theorem proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
       halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
-    ContinuousLinearMap.approximationNumber
-        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) n ≤
-      ContinuousLinearMap.approximationNumber ((1 - W) ∘L U.starProjection) n := by
+    (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection).singularValue n : ℝ) ≤
+      (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   have hsource := proposition4_1_nonacute_approximationNumbers
     U V J W hWunitary hWmap n
   have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
@@ -1031,18 +1012,15 @@ theorem proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
       U (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
   have hWseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n
-  change approximationSingularValue n
-      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) ≤
-    approximationSingularValue n ((1 - W) ∘L U.starProjection)
+  change (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection).singularValue n : ℝ) ≤
+    (((1 - W) ∘L U.starProjection).singularValue n : ℝ)
   calc
-    approximationSingularValue n
-        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) =
-        approximationSingularValue n
-          (sourceRestrictedDisplacement U
-            (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) := hDseq
-    _ ≤ approximationSingularValue n (sourceRestrictedDisplacement U W) := by
-      simpa only [approximationSingularValue] using hsource
-    _ = approximationSingularValue n ((1 - W) ∘L U.starProjection) := hWseq.symm
+    (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection).singularValue n : ℝ) =
+        ((sourceRestrictedDisplacement U
+            (TauCeti.DavisKahan.nonacuteDirectRotation U V J)).singularValue n : ℝ) := hDseq
+    _ ≤ ((sourceRestrictedDisplacement U W).singularValue n : ℝ) := by
+      exact hsource
+    _ = (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := hWseq.symm
 
 /-- Approximation-number dominance package for a chosen nonacute direct rotation. -/
 theorem nonacute_restrictedDisplacementDominance
@@ -1067,7 +1045,7 @@ theorem infinite_restrictedDisplacementDominance
       ((1 - W) ∘L U.starProjection) where
   approximation_le := by
     intro n
-    simpa only [approximationSingularValue] using
+    exact
       proposition4_1_restrictedDisplacement_approximationNumbers
         U V hacute W hWunitary hWmap n
 

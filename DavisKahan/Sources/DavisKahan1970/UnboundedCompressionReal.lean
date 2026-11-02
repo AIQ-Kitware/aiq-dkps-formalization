@@ -199,8 +199,8 @@ theorem im_action_complexifyUnboundedCompressionTrialData
 complexification of unbounded-compression data. -/
 theorem approximationSingularValue_complexifyUnboundedCompressionTrialData_residual
     (D : UnboundedCompressionTrialData Z) (n : ℕ) :
-    approximationSingularValue n (complexifyUnboundedCompressionTrialData D).residual =
-      approximationSingularValue n D.residual := by
+    ((complexifyUnboundedCompressionTrialData D).residual.singularValue n : ℝ) =
+      (D.residual.singularValue n : ℝ) := by
   let U := LinearIsometryEquiv.refl ℂ (RealComplexification E)
   let W := complexifySubmoduleEquiv Z
   have hcoord :
@@ -212,8 +212,8 @@ theorem approximationSingularValue_complexifyUnboundedCompressionTrialData_resid
     intro z
     rfl
   calc
-    approximationSingularValue n (complexifyUnboundedCompressionTrialData D).residual =
-        approximationSingularValue n (complexify D.residual) := by
+    ((complexifyUnboundedCompressionTrialData D).residual.singularValue n : ℝ) =
+        ((complexify D.residual).singularValue n : ℝ) := by
       rw [← hcoord]
       exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
         _ W.symm U).approximationNumber_eq n
@@ -301,7 +301,7 @@ theorem all_kyFan_core_unboundedCompression_real
         ⟪Vᗮ.starProjection (((z : Z) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
     (k : ℕ) :
     delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlockReal Z V))) ≤
+        (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) ≤
       kyFanApproximationGauge k D.residual := by
   have hcore := (complexifyUnboundedCompressionTrialData D).all_kyFan_core
     (complexifySubmodule V) hdelta
@@ -321,7 +321,7 @@ theorem approximationSingularValue_sineBlockReal_lt_one_unboundedCompression
       (alpha + delta) * ‖Vᗮ.starProjection (((z : Z) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : Z) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
     (n : ℕ) :
-    approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1 := by
+    ((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ) < 1 := by
   have hlt := (complexifyUnboundedCompressionTrialData D)
     |>.approximationSingularValue_sineBlock_lt_one (complexifySubmodule V) hdelta
     (complexifyUnboundedCompressionTrialData_compression_upper D hupper)
@@ -361,7 +361,7 @@ theorem theorem6_3_unboundedCompression_ideal_exists_real
     have hcore := all_kyFan_core_unboundedCompression_real D V hdelta hupper hcross k
     have htanKy : kyFanApproximationGauge k tanTheta0 =
         ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-          (approximationSingularValue n (theorem63DirectedSineBlockReal Z V))) := by
+          (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) := by
       simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
@@ -389,7 +389,7 @@ theorem theorem6_3_unboundedCompression_ideal_real
   have hcore := all_kyFan_core_unboundedCompression_real D V hdelta hupper hcross k
   have htanKy : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlockReal Z V))) := by
+        (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) := by
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     exact Finset.sum_congr rfl fun n _ => htan n
   rw [htanKy]

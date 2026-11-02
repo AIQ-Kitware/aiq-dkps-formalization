@@ -149,8 +149,8 @@ theorem theorem8_1_upperSandwichApproximation
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (upperBlockShift A P alpha).approximationNumber n ≤
-      (ContinuousLinearMap.adjoint (cosineBlock P (canonicalLowBranch (A + K)
+    ((upperBlockShift A P alpha).singularValue n : ℝ) ≤
+      ((ContinuousLinearMap.adjoint (cosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)) ∘L
         upperBlockShift (A + K) (canonicalLowBranch (A + K)
@@ -158,7 +158,7 @@ theorem theorem8_1_upperSandwichApproximation
             (hA.add hK)) alpha) alpha ∘L
         cosineBlock P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha)).approximationNumber n := by
+            (hA.add hK)) alpha)).singularValue n : ℝ) := by
   set Q : Submodule ℂ H := canonicalLowBranch (A + K)
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
     with hQdef
@@ -229,13 +229,13 @@ theorem theorem8_1_upperApproximationRepulsion
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (upperBlockShift A P alpha).approximationNumber n ≤
+    ((upperBlockShift A P alpha).singularValue n : ℝ) ≤
       ‖cosineBlock P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha)‖ ^ 2 *
-        (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha) alpha).approximationNumber n :=
+            (hA.add hK)) alpha) alpha).singularValue n : ℝ) :=
   (theorem8_1_upperSandwichApproximation A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n).trans
     (approximationNumber_adjoint_sandwich_le _ _ n)
@@ -294,8 +294,8 @@ theorem theorem8_1_lowerSandwichApproximation
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (lowerBlockShift A P alpha delta).approximationNumber n ≤
-      (ContinuousLinearMap.adjoint (lowerCosineBlock P (canonicalLowBranch (A + K)
+    ((lowerBlockShift A P alpha delta).singularValue n : ℝ) ≤
+      ((ContinuousLinearMap.adjoint (lowerCosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)) ∘L
         lowerBlockShift (A + K) (canonicalLowBranch (A + K)
@@ -303,7 +303,7 @@ theorem theorem8_1_lowerSandwichApproximation
             (hA.add hK)) alpha) alpha delta ∘L
         lowerCosineBlock P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha)).approximationNumber n := by
+            (hA.add hK)) alpha)).singularValue n : ℝ) := by
   set Q : Submodule ℂ H := canonicalLowBranch (A + K)
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
     with hQdef
@@ -358,13 +358,13 @@ theorem theorem8_1_lowerApproximationRepulsion
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (lowerBlockShift A P alpha delta).approximationNumber n ≤
+    ((lowerBlockShift A P alpha delta).singularValue n : ℝ) ≤
       ‖lowerCosineBlock P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha)‖ ^ 2 *
-        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha) alpha delta).approximationNumber n :=
+            (hA.add hK)) alpha) alpha delta).singularValue n : ℝ) :=
   (theorem8_1_lowerSandwichApproximation A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n).trans
     (approximationNumber_adjoint_sandwich_le _ _ n)

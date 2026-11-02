@@ -57,13 +57,13 @@ padded by zero when the directed sine operator has finite rank. -/
 @[expose]
 noncomputable def principalSineSequence (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (n : ℕ) : ℝ :=
-  (principalSineOperator U V).approximationNumber n
+  ((principalSineOperator U V).singularValue n : ℝ)
 
 /-- Principal sines are nonnegative. -/
 theorem principalSineSequence_nonneg (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (n : ℕ) :
     0 ≤ principalSineSequence U V n :=
-  (principalSineOperator U V).approximationNumber_nonneg n
+  ((principalSineOperator U V).singularValue n).coe_nonneg
 
 /-- Every principal sine lies in the unit interval. -/
 theorem principalSineSequence_le_one (U V : Submodule 𝕜 H)
@@ -93,8 +93,7 @@ theorem tsum_sq_principalSineSequence_eq_hilbertSchmidtEnergy
     {ι : Type v} (b : HilbertBasis ι 𝕜 U) :
     (∑' n : ℕ, ENNReal.ofReal (principalSineSequence U V n) ^ 2) =
       (principalSineOperator U V).hilbertSchmidtEnergy b := by
-  simpa [principalSineSequence,
-    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using
+  simpa [principalSineSequence] using
     (principalSineOperator U V).tsum_singularValue_sq_eq_hilbertSchmidtEnergy b
 
 /-- Basis form of the principal-sine energy identity. -/

@@ -380,16 +380,16 @@ theorem approximationNumber_adjoint_sandwich_weaklyMajorized [CompleteSpace E]
     {M : E →L[𝕜] E} (hM : (0 : E →L[𝕜] E) ≤ M) (D : E →L[𝕜] E) :
     IsWeaklyMajorizedBy
       (fun i : Fin (finrank 𝕜 E) =>
-        (ContinuousLinearMap.adjoint D ∘L M ∘L D).approximationNumber (i : ℕ))
+        ((ContinuousLinearMap.adjoint D ∘L M ∘L D).singularValue (i : ℕ) : ℝ))
       (fun i : Fin (finrank 𝕜 E) =>
-        M.approximationNumber (i : ℕ) * D.approximationNumber (i : ℕ) ^ 2) := by
+        (M.singularValue (i : ℕ) : ℝ) * (D.singularValue (i : ℕ) : ℝ) ^ 2) := by
   have hMpos : (M : E →ₗ[𝕜] E).IsPositive :=
     ((ContinuousLinearMap.nonneg_iff_isPositive).mp hM).toLinearMap
   have hcoe : ((ContinuousLinearMap.adjoint D ∘L M ∘L D : E →L[𝕜] E) : E →ₗ[𝕜] E)
       = (D : E →ₗ[𝕜] E).adjoint ∘ₗ (M : E →ₗ[𝕜] E) ∘ₗ (D : E →ₗ[𝕜] E) := rfl
   have hmain := singularValues_adjoint_sandwich_weaklyMajorized hMpos (D : E →ₗ[𝕜] E)
   rw [← hcoe] at hmain
-  simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+  simpa only [
     ContinuousLinearMap.singularValue_eq_linearMap_singularValues] using hmain
 
 end TauCeti

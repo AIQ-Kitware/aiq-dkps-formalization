@@ -201,7 +201,7 @@ theorem reflectionPerturbation_normingMem_and_gauge_le
     intro k
     rw [one_mul, kyFanApproximationGauge_smul, htwo]
     rcases Nat.eq_zero_or_pos k with rfl | hk
-    · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    · simp [kyFanApproximationGauge]
     · have h := DavisKahan.reflectionPerturbation_mem_and_gauge_le
         ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
@@ -209,9 +209,9 @@ theorem reflectionPerturbation_normingMem_and_gauge_le
         V Eop (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
       rw [                SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
         ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
         SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
+      ← kyFanApproximationGauge_eq_kyFanGauge] at h
       exact h.2
   obtain ⟨hmem, hle⟩ := N.mul_gauge_le_of_all_mul_kyFan_le one_pos hMem2 hkyFan
   refine ⟨hmem, ?_⟩
@@ -498,7 +498,7 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
     intro k
     by_cases hk0 : k = 0
     · subst k
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp [kyFanApproximationGauge]
     · have hk : 0 < k := Nat.pos_of_ne_zero hk0
       have hmain :=
         sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike

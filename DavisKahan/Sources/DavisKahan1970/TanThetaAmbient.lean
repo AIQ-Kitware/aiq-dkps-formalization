@@ -968,8 +968,8 @@ omit [CompleteSpace E] in
 /-- The ambient directed sine block factors through the trial subspace's own
 sine block, so it has no larger approximation numbers. -/
 theorem approximationNumber_directedSineAmbient_le (n : ℕ) :
-    (directedSineAmbient U V).approximationNumber n ≤
-      approximationSingularValue n (theorem63DirectedSineBlock U V) := by
+    ((directedSineAmbient U V).singularValue n : ℝ) ≤
+      ((theorem63DirectedSineBlock U V).singularValue n : ℝ) := by
   have hfactor : directedSineAmbient U V =
       theorem63DirectedSineBlock U V ∘L U.orthogonalProjectionOnto := by
     rw [directedSineAmbient, theorem63DirectedSineBlock,
@@ -978,17 +978,17 @@ theorem approximationNumber_directedSineAmbient_le (n : ℕ) :
   rw [hfactor]
   refine le_trans (ContinuousLinearMap.approximationNumber_comp_le_mul_norm _ _ n) ?_
   have h1 : ‖U.orthogonalProjectionOnto‖ ≤ (1 : ℝ) := U.orthogonalProjectionOnto_norm_le
-  have h0 : 0 ≤ (theorem63DirectedSineBlock U V).approximationNumber n :=
-    ContinuousLinearMap.approximationNumber_nonneg _ _
-  calc (theorem63DirectedSineBlock U V).approximationNumber n *
+  have h0 : 0 ≤ ((theorem63DirectedSineBlock U V).singularValue n : ℝ) :=
+    (ContinuousLinearMap.singularValue _ _).coe_nonneg
+  calc ((theorem63DirectedSineBlock U V).singularValue n : ℝ) *
         ‖U.orthogonalProjectionOnto‖
-      ≤ (theorem63DirectedSineBlock U V).approximationNumber n * 1 := by gcongr
-    _ = approximationSingularValue n (theorem63DirectedSineBlock U V) := mul_one _
+      ≤ ((theorem63DirectedSineBlock U V).singularValue n : ℝ) * 1 := by gcongr
+    _ = ((theorem63DirectedSineBlock U V).singularValue n : ℝ) := mul_one _
 
 /-- The trial-space sine block is a strict contraction as well. -/
 theorem approximationSingularValue_theorem63DirectedSineBlock_lt_one
     (htr : ‖sinAngleOperatorC U V‖ < 1) (n : ℕ) :
-    approximationSingularValue n (theorem63DirectedSineBlock U V) < 1 := by
+    ((theorem63DirectedSineBlock U V).singularValue n : ℝ) < 1 := by
   have hfac : theorem63DirectedSineBlock U V =
       directedSineAmbient U V ∘L U.subtypeL := by
     rw [directedSineAmbient, theorem63DirectedSineBlock,
@@ -997,7 +997,7 @@ theorem approximationSingularValue_theorem63DirectedSineBlock_lt_one
     ext x
     change (x : E) = U.starProjection (x : E)
     exact (Submodule.starProjection_eq_self_iff.mpr x.2).symm
-  have hle : approximationSingularValue n (theorem63DirectedSineBlock U V) ≤
+  have hle : ((theorem63DirectedSineBlock U V).singularValue n : ℝ) ≤
       ‖directedSineAmbient U V‖ := by
     refine le_trans (ContinuousLinearMap.approximationNumber_le_norm _ n) ?_
     rw [hfac]
@@ -1011,14 +1011,14 @@ scalars.**  This is where the Möbius transfer of approximation numbers is
 used. -/
 theorem approximationNumber_lowerCorner_le
     (htr : ‖sinAngleOperatorC U V‖ < 1) (n : ℕ) :
-    (projectionBlock Uᗮ U (projectorDifference U V *
-        secantSquared U V)).approximationNumber n ≤
+    ((projectionBlock Uᗮ U (projectorDifference U V *
+        secantSquared U V)).singularValue n : ℝ) ≤
       Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock U V))) := by
+        (((theorem63DirectedSineBlock U V).singularValue n : ℝ))) := by
   set c := projectionBlock Uᗮ U (projectorDifference U V *
     secantSquared U V) with hcdef
-  set sig := (directedSineAmbient U V).approximationNumber n with hsigdef
-  have hsig0 : 0 ≤ sig := ContinuousLinearMap.approximationNumber_nonneg _ _
+  set sig := ((directedSineAmbient U V).singularValue n : ℝ) with hsigdef
+  have hsig0 : 0 ≤ sig := (ContinuousLinearMap.singularValue _ _).coe_nonneg
   have hsiglt : sig < 1 :=
     lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n)
       (norm_directedSineAmbient_lt_one htr)
@@ -1034,9 +1034,9 @@ theorem approximationNumber_lowerCorner_le
     rw [Real.tan_arcsin, div_pow]
     congr 1
     nlinarith [hsqrt]
-  have hstep : c.approximationNumber n ≤ Real.tan (Real.arcsin sig) := by
-    have hc0 : 0 ≤ c.approximationNumber n :=
-      ContinuousLinearMap.approximationNumber_nonneg _ _
+  have hstep : (c.singularValue n : ℝ) ≤ Real.tan (Real.arcsin sig) := by
+    have hc0 : 0 ≤ (c.singularValue n : ℝ) :=
+      (ContinuousLinearMap.singularValue _ _).coe_nonneg
     have ht0 : 0 ≤ Real.tan (Real.arcsin sig) := TanArcsin.tanArcsin_nonneg hsig0
     nlinarith [hres, htanSq]
   refine hstep.trans (TanArcsin.tanArcsin_le_tanArcsin hsig0 ?_ ?_)
@@ -1049,7 +1049,7 @@ theorem kyFan_lowerCorner_le (htr : ‖sinAngleOperatorC U V‖ < 1) (k : ℕ) :
     kyFanApproximationGauge k (projectionBlock Uᗮ U
         (projectorDifference U V * secantSquared U V)) ≤
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock U V))) := by
+        (((theorem63DirectedSineBlock U V).singularValue n : ℝ))) := by
   rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_le_sum fun n _ => approximationNumber_lowerCorner_le htr n
 
@@ -1058,8 +1058,8 @@ omit [CompleteSpace E] in
 the lower corner of the perturbation. -/
 theorem approximationNumber_theorem63Residual_le
     (hAU : ∀ x ∈ U, A x ∈ U) (n : ℕ) :
-    (theorem63Residual T U).approximationNumber n ≤
-      (projectionBlock Uᗮ U (T - A)).approximationNumber n := by
+    ((theorem63Residual T U).singularValue n : ℝ) ≤
+      ((projectionBlock Uᗮ U (T - A)).singularValue n : ℝ) := by
   have hfac : theorem63Residual T U =
       projectionBlock Uᗮ U (T - A) ∘L U.subtypeL := by
     rw [theorem63Residual_eq_complementaryProjection, projectionBlock]
@@ -1075,8 +1075,8 @@ theorem approximationNumber_theorem63Residual_le
   rw [hfac]
   refine le_trans (ContinuousLinearMap.approximationNumber_comp_le_mul_norm _ _ n) ?_
   have h1 : ‖U.subtypeL‖ ≤ (1 : ℝ) := U.norm_subtypeL_le
-  have h0 : 0 ≤ (projectionBlock Uᗮ U (T - A)).approximationNumber n :=
-    ContinuousLinearMap.approximationNumber_nonneg _ _
+  have h0 : 0 ≤ ((projectionBlock Uᗮ U (T - A)).singularValue n : ℝ) :=
+    (ContinuousLinearMap.singularValue _ _).coe_nonneg
   nlinarith
 
 /-- **The directed corner estimate**, in the shape Lemma 6.1 consumes:
@@ -1227,7 +1227,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
     ‖sinAngleOperatorC U V‖ < 1 := by
-  have hdirected : approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
+  have hdirected : ((theorem63DirectedSineBlock U V).singularValue 0 : ℝ) < 1 :=
     approximationSingularValue_sineBlock_lt_one_infiniteTrial T V U hT hV hdelta
       hCompressionUpper hUnwantedLower 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by

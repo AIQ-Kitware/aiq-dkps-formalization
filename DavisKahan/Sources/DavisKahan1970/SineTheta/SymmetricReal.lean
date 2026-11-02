@@ -121,8 +121,8 @@ theorem approximationNumber_sourceFullSinR_eq_crossSineSum
     (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ∀ n : ℕ,
-      (sourceFullSinR V U).approximationNumber n =
-        (crossSineSum U V).approximationNumber n := by
+      ((sourceFullSinR V U).singularValue n : ℝ) =
+        ((crossSineSum U V).singularValue n : ℝ) := by
   -- `crossSineSum U V` has the singular values of `P_V - P_U`.
   have hreal : ContinuousLinearMap.SameSingularValues
       (crossSineSum U V) (V.starProjection - U.starProjection) :=

@@ -129,7 +129,7 @@ theorem gramSpectralPVM_proj_eq_specProjection (X : E0 →L[ℂ] E1)
 `E_{X†X}([r²,∞))`. -/
 theorem natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber
     (X : E0 →L[ℂ] E1) (n : ℕ) {r : ℝ}
-    (hr0 : 0 ≤ r) (hr : r < X.approximationNumber n) :
+    (hr0 : 0 ≤ r) (hr : r < (X.singularValue n : ℝ)) :
     ((n + 1 : ℕ) : Cardinal) ≤
       ((gramSpectralPVM X).proj (Set.Ici (r ^ 2)) measurableSet_Ici).rank := by
   classical
@@ -137,7 +137,7 @@ theorem natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber
     (gramSpectralPVM X).proj (Set.Ici (r ^ 2)) measurableSet_Ici
   obtain ⟨s, hrs, v, hv, hV⟩ :=
     TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace X n hr0
-      (by simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hr)
+      (by exact hr)
   let V : Submodule ℂ E0 := Submodule.span ℂ (Set.range v)
   let b : Module.Basis (Fin (n + 1)) ℂ V := Module.Basis.span hv
   let W : Submodule ℂ E0 := P.range
@@ -193,7 +193,7 @@ theorem natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber
 `E_{X†X}((r²,∞))` to have rank at most `n`. -/
 theorem rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
     (X : E0 →L[ℂ] E1) (n : ℕ) {r : ℝ}
-    (hr0 : 0 ≤ r) (hr : X.approximationNumber n < r) :
+    (hr0 : 0 ≤ r) (hr : (X.singularValue n : ℝ) < r) :
     ((gramSpectralPVM X).proj (Set.Ioi (r ^ 2)) measurableSet_Ioi).rank ≤
       (n : Cardinal) := by
   classical
@@ -210,8 +210,7 @@ theorem rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
   have hv : LinearIndependent ℂ v := by
     exact hg.map' P.range.subtype
       (LinearMap.ker_eq_bot.mpr P.range.injective_subtype)
-  have hrle : r ≤ X.approximationNumber n := by
-    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  have hrle : r ≤ (X.singularValue n : ℝ) := by
     apply X.le_singularValue_of_linearIndependent hv
     intro x hxspan
     have hspan_le : Submodule.span ℂ (Set.range v) ≤ P.range := by

@@ -88,14 +88,14 @@ theorem theorem8_1_upperWeightedWeakMajorization_real [FiniteDimensional ℝ E]
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift (A + K)
+        ((upperBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha).approximationNumber (i : ℕ) *
-          (cosineBlock P
+              hKPperp) alpha).singularValue (i : ℕ) : ℝ) *
+          ((cosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp)).approximationNumber (i : ℕ) ^ 2) := by
+              hKPperp)).singularValue (i : ℕ) : ℝ) ^ 2) := by
   set Q : Submodule ℝ E :=
     canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp
     with hQdef
@@ -106,11 +106,11 @@ theorem theorem8_1_upperWeightedWeakMajorization_real [FiniteDimensional ℝ E]
   -- Link one: the real Weyl step, promoted from pointwise domination.
   have hstep1 : IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       (fun i : Fin (Module.finrank ℝ E) =>
-        (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
+        ((ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
           upperBlockShift (A + K) Q alpha ∘L
-          cosineBlock P Q).approximationNumber (i : ℕ)) :=
+          cosineBlock P Q).singularValue (i : ℕ) : ℝ)) :=
     IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
         (upperBlockShift A P alpha).approximationNumber_antitone (Fin.le_def.mp hij))
@@ -118,10 +118,10 @@ theorem theorem8_1_upperWeightedWeakMajorization_real [FiniteDimensional ℝ E]
         (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
           upperBlockShift (A + K) Q alpha ∘L
           cosineBlock P Q).approximationNumber_antitone (Fin.le_def.mp hij))
-      (fun i => (upperBlockShift A P alpha).approximationNumber_nonneg _)
-      (fun i => (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
+      (fun i => ((upperBlockShift A P alpha).singularValue _).coe_nonneg)
+      (fun i => ((ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
         upperBlockShift (A + K) Q alpha ∘L
-        cosineBlock P Q).approximationNumber_nonneg _)
+        cosineBlock P Q).singularValue _).coe_nonneg)
       (fun i => theorem8_1_upperSandwichApproximation_real A K P hdelta hA hK
         hAP hPlow hPhigh hKP hKPperp (i : ℕ))
   -- Link two: the generic positive-sandwich weak majorization, at `𝕜 = ℝ`.
@@ -145,14 +145,14 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_real [FiniteDimensional ℝ E]
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift (A + K)
+        ((upperBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha).approximationNumber (i : ℕ) *
-          (cosineBlock P
+              hKPperp) alpha).singularValue (i : ℕ) : ℝ) *
+          ((cosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp)).approximationNumber (i : ℕ) ^ 2) :=
+              hKPperp)).singularValue (i : ℕ) : ℝ) ^ 2) :=
   (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi)
     (theorem8_1_upperWeightedWeakMajorization_real A K P hdelta hA hK hAP hPlow
       hPhigh hKP hKPperp)
@@ -177,14 +177,14 @@ theorem theorem8_1_lowerWeightedWeakMajorization_real [FiniteDimensional ℝ E]
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift (A + K)
+        ((lowerBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha delta).approximationNumber (i : ℕ) *
-          (lowerCosineBlock P
+              hKPperp) alpha delta).singularValue (i : ℕ) : ℝ) *
+          ((lowerCosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp)).approximationNumber (i : ℕ) ^ 2) := by
+              hKPperp)).singularValue (i : ℕ) : ℝ) ^ 2) := by
   set Q : Submodule ℝ E :=
     canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp
     with hQdef
@@ -193,11 +193,11 @@ theorem theorem8_1_lowerWeightedWeakMajorization_real [FiniteDimensional ℝ E]
       hPhigh hKP hKPperp
   have hstep1 : IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       (fun i : Fin (Module.finrank ℝ E) =>
-        (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+        ((ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
           lowerBlockShift (A + K) Q alpha delta ∘L
-          lowerCosineBlock P Q).approximationNumber (i : ℕ)) :=
+          lowerCosineBlock P Q).singularValue (i : ℕ) : ℝ)) :=
     IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
         (lowerBlockShift A P alpha delta).approximationNumber_antitone
@@ -206,10 +206,10 @@ theorem theorem8_1_lowerWeightedWeakMajorization_real [FiniteDimensional ℝ E]
         (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
           lowerBlockShift (A + K) Q alpha delta ∘L
           lowerCosineBlock P Q).approximationNumber_antitone (Fin.le_def.mp hij))
-      (fun i => (lowerBlockShift A P alpha delta).approximationNumber_nonneg _)
-      (fun i => (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+      (fun i => ((lowerBlockShift A P alpha delta).singularValue _).coe_nonneg)
+      (fun i => ((ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
         lowerBlockShift (A + K) Q alpha delta ∘L
-        lowerCosineBlock P Q).approximationNumber_nonneg _)
+        lowerCosineBlock P Q).singularValue _).coe_nonneg)
       (fun i => theorem8_1_lowerSandwichApproximation_real A K P hdelta hA hK
         hAP hPlow hPhigh hKP hKPperp (i : ℕ))
   exact hstep1.trans
@@ -231,14 +231,14 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_real [FiniteDimensional ℝ E]
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift (A + K)
+        ((lowerBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha delta).approximationNumber (i : ℕ) *
-          (lowerCosineBlock P
+              hKPperp) alpha delta).singularValue (i : ℕ) : ℝ) *
+          ((lowerCosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp)).approximationNumber (i : ℕ) ^ 2) :=
+              hKPperp)).singularValue (i : ℕ) : ℝ) ^ 2) :=
   (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi)
     (theorem8_1_lowerWeightedWeakMajorization_real A K P hdelta hA hK hAP hPlow
       hPhigh hKP hKPperp)

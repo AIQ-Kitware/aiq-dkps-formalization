@@ -166,7 +166,7 @@ theorem nuclearNormingFunction_prefixGauge
   have habs : ∀ i : Fin n,
       |SymmetricNormingFunction.approximationPrefix n A i| =
         SymmetricNormingFunction.approximationPrefix n A i := fun _ =>
-    abs_of_nonneg (approximationSingularValue_nonneg _ _)
+    abs_of_nonneg ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
   rw [SymmetricNormingFunction.prefixGauge,
     nuclearNormingFunction_finiteGauge, l1Gauge,
     Finset.sum_congr rfl fun i _ => habs i,

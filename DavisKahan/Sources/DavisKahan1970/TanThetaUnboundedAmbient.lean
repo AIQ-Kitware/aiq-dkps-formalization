@@ -284,7 +284,7 @@ theorem
           (projectionBlock Uᗮ U
             (projectorDifference U V * secantSquared U V))
           ≤ delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-              (approximationSingularValue n (theorem63DirectedSineBlock U V))) :=
+              (((theorem63DirectedSineBlock U V).singularValue n : ℝ))) :=
         mul_le_mul_of_nonneg_left hcorner hdelta.le
       _ ≤ kyFanApproximationGauge k data.residual := hcore
       _ = kyFanApproximationGauge k (projectionBlock Uᗮ U H) := hresKy
@@ -325,7 +325,7 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
       N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   have hdirected :
-      approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
+      ((theorem63DirectedSineBlock U V).singularValue 0 : ℝ) < 1 :=
     data.approximationSingularValue_sineBlock_lt_one_infiniteData
       hdelta hCompression hcross 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
@@ -406,7 +406,7 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transvers
           (projectionBlock Uᗮ U
             (projectorDifference U V * secantSquared U V))
           ≤ delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-              (approximationSingularValue n (theorem63DirectedSineBlock U V))) :=
+              (((theorem63DirectedSineBlock U V).singularValue n : ℝ))) :=
         mul_le_mul_of_nonneg_left hcorner hdelta.le
       _ ≤ kyFanApproximationGauge k D.residual := hcore
       _ = kyFanApproximationGauge k (projectionBlock Uᗮ U H) := hresKy
@@ -440,7 +440,7 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex
       N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H := by
   have hdirected :
-      approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
+      ((theorem63DirectedSineBlock U V).singularValue 0 : ℝ) < 1 :=
     D.approximationSingularValue_sineBlock_lt_one V hdelta hupper hcross 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
     have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
@@ -564,7 +564,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_unboundedRitz
   have hcross := D.trial.crossed_lower_of_reducing V A D.mem_domain D.action_eq
     hV.mapsDomain hV.commutes hUnwanted
   have hdirected :
-      approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
+      ((theorem63DirectedSineBlock U V).singularValue 0 : ℝ) < 1 :=
     D.trial.approximationSingularValue_sineBlock_lt_one V hdelta hupper hcross 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
     have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0

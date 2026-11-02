@@ -118,11 +118,11 @@ theorem approximationNumber_eq_tanArcsin_of_gramMoebius
     (hmoebius : ∀ y,
       gramOperator T y = gramOperator X y + gramOperator X (gramOperator T y))
     (n : ℕ) :
-    T.approximationNumber n = Real.tan (Real.arcsin (X.approximationNumber n)) := by
-  set s : ℝ := X.approximationNumber n with hsdef
-  set t : ℝ := T.approximationNumber n with htdef
-  have hs0 : 0 ≤ s := X.approximationNumber_nonneg n
-  have ht0 : 0 ≤ t := T.approximationNumber_nonneg n
+    (T.singularValue n : ℝ) = Real.tan (Real.arcsin ((X.singularValue n : ℝ))) := by
+  set s : ℝ := (X.singularValue n : ℝ) with hsdef
+  set t : ℝ := (T.singularValue n : ℝ) with htdef
+  have hs0 : 0 ≤ s := (X.singularValue n).coe_nonneg
+  have ht0 : 0 ≤ t := (T.singularValue n).coe_nonneg
   have hs1 : s < 1 := lt_of_le_of_lt (X.approximationNumber_le_norm n) hX
   have hden : (0 : ℝ) < 1 - s ^ 2 := by nlinarith
   -- the adjoint orientation: `Q = P + Q · P`, hence `P = Q − Q · P`
@@ -191,7 +191,7 @@ theorem approximationNumber_eq_tanArcsin
     {S Tg : E →L[ℂ] E} (hS : IsSelfAdjoint S) (hTg : IsSelfAdjoint Tg)
     (hSlt : ‖S‖ < 1)
     (hrel : Tg * Tg = S * S + Tg * Tg * (S * S)) (n : ℕ) :
-    Tg.approximationNumber n = Real.tan (Real.arcsin (S.approximationNumber n)) := by
+    (Tg.singularValue n : ℝ) = Real.tan (Real.arcsin ((S.singularValue n : ℝ))) := by
   refine approximationNumber_eq_tanArcsin_of_gramMoebius S Tg hSlt (fun y => ?_) n
   have hgS : gramOperator S = S * S := gramOperator_of_isSelfAdjoint hS
   have hgT : gramOperator Tg = Tg * Tg := gramOperator_of_isSelfAdjoint hTg

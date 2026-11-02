@@ -460,7 +460,7 @@ theorem sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     have hmain :=
       sinTheta_unbounded_formGap_symmetricNorming_rclike
@@ -566,7 +566,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_complex
   intro k
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain :=
       FormBoundedIsometricSinThetaProblem.result_complex
@@ -594,7 +594,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_complex
           spectral_gap := hgap
           residual_mem := (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan]) }
     simpa only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
+      ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
 
 /-- **Conformance: the complex endpoint is the scalar-generic one at `𝕜 = ℂ`.**
 
@@ -723,7 +723,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real
   intro k
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain :=
       FormBoundedIsometricSinThetaProblem.result_real
@@ -751,7 +751,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_real
           spectral_gap := hgap
           residual_mem := (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan]) }
     simpa only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
+      ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
 
 /-- **The familiar Section 2 interval form, over `ℝ`.**
 

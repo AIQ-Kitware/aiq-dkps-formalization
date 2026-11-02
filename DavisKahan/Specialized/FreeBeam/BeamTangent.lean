@@ -196,7 +196,7 @@ theorem beamTrialBlock_residual_rank_le (ε : ℝ) :
 /-- **The second approximation number of the Rayleigh--Ritz residual vanishes.**  The
 residual is its own rank-one approximant. -/
 theorem approximationSingularValue_one_beamTrialBlock_residual_le (ε : ℝ) :
-    approximationSingularValue 1 ((beamTrialBlock ε).residual) ≤ 0 := by
+    (((beamTrialBlock ε).residual).singularValue 1 : ℝ) ≤ 0 := by
   have hrank : ((beamTrialBlock ε).residual).rank ≤ ((1 : ℕ) : Cardinal) := by
     simpa using beamTrialBlock_residual_rank_le ε
   have h := ((beamTrialBlock ε).residual).approximationNumber_le_norm_sub hrank
@@ -207,16 +207,16 @@ norm bound.**  This is the paper's `‖R̂‖₁ = ‖R̂‖₂ = ε/√15`. -/
 theorem kyFanTwo_beamTrialBlock_residual_le (ε : ℝ) :
     kyFanApproximationGauge 2 ((beamTrialBlock ε).residual)
       ≤ orthogonalResidualSingularValue ε := by
-  have h0 : approximationSingularValue 0 ((beamTrialBlock ε).residual)
+  have h0 : (((beamTrialBlock ε).residual).singularValue 0 : ℝ)
       ≤ orthogonalResidualSingularValue ε := by
-    have hz : approximationSingularValue 0 ((beamTrialBlock ε).residual)
+    have hz : (((beamTrialBlock ε).residual).singularValue 0 : ℝ)
         = ‖(beamTrialBlock ε).residual‖ :=
       ((beamTrialBlock ε).residual).approximationNumber_index_zero
     rw [hz]
     exact norm_beamTrialBlock_residual_le ε
   have h1 := approximationSingularValue_one_beamTrialBlock_residual_le ε
-  have hsum : approximationSingularValue 0 ((beamTrialBlock ε).residual)
-      + approximationSingularValue 1 ((beamTrialBlock ε).residual)
+  have hsum : (((beamTrialBlock ε).residual).singularValue 0 : ℝ)
+      + (((beamTrialBlock ε).residual).singularValue 1 : ℝ)
       ≤ orthogonalResidualSingularValue ε := by linarith
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero, zero_add]
@@ -277,7 +277,7 @@ theorem beamTanTheta_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     (by simp [SymmetricOperatorIdealFamily.Mem])
   have hgauge := hmain.2
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
     kyFanApproximationGauge_one] at hgauge
   have hchain : (500 - ritzHigh ε) * beamTanTheta ε
       ≤ orthogonalResidualSingularValue ε :=
@@ -346,7 +346,7 @@ theorem beamTanThetaSum_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   have hgauge := hmain.2
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hgauge
+      ← kyFanApproximationGauge_eq_kyFanGauge] at hgauge
   have hchain : (500 - ritzHigh ε) * beamTanThetaSum ε
       ≤ orthogonalResidualSingularValue ε :=
     le_trans hgauge (kyFanTwo_beamTrialBlock_residual_le ε)
@@ -699,7 +699,7 @@ theorem beamColumn_tangent_le (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial)
     (by simp [SymmetricOperatorIdealFamily.Mem])
   have hgauge := hmain.2
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
     kyFanApproximationGauge_one] at hgauge
   exact hgauge.trans (norm_beamColumnBlock_residual_le ε v hv hvnorm a hform hcol)
 

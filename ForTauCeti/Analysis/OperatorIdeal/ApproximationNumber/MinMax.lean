@@ -103,7 +103,7 @@ theorem approximationNumber_le_of_spectral_band [CompleteSpace F₁]
     (hδ : 0 ≤ δ) (hidem : IsIdempotentElem P) (hsa : IsSelfAdjoint P)
     (hrank : P.rank ≤ (r : Cardinal))
     (hband : ∀ x : E₁, ‖T (x - P x)‖ ≤ δ * ‖x - P x‖) :
-    T.approximationNumber r ≤ δ := by
+    (T.singularValue r : ℝ) ≤ δ := by
   -- `1 - P` is a star projection, hence a contraction.
   have hproj : IsStarProjection (1 - P : E₁ →L[𝕜] E₁) :=
     IsStarProjection.one_sub ⟨hidem, hsa⟩

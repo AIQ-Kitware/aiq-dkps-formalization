@@ -94,7 +94,6 @@ theorem sinTheta_unbounded_formGap_idealFamily_rclike
   have hAngle := isometricComplementaryBlock_mem_and_gauge_eq_directed
     N D.X F₀ D.F₁ hX hdecomp hBlock.1
   refine ⟨hAngle.1, ?_⟩
-
   rw [hAngle.2]
   exact hBlock.2
 
@@ -244,7 +243,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike
   intro k
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain := sinTheta_unbounded_formGap_idealFamily_rclike
       ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
@@ -253,7 +252,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike
       D F₀ hA hA₀ hΛ₁ hE₀ hExact hδ hgap
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simpa only [D, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
+      ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
 
 /-- **Davis--Kahan 1970, Section 2 `sin Theta` theorem, scalar-generic
 paper-facing form.**

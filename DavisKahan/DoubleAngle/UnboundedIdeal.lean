@@ -585,7 +585,7 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
       kyFanApproximationGauge k E := by
     intro k
     rcases Nat.eq_zero_or_pos k with rfl | hk
-    · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    · simp [kyFanApproximationGauge]
     let M := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
         gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
@@ -597,7 +597,7 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     have hbound : δ * kyFanApproximationGauge k T ≤ 2 * kyFanApproximationGauge k E := by
       simpa only [M,
         SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge, T] using hmain.2
+      ← kyFanApproximationGauge_eq_kyFanGauge, T] using hmain.2
     linarith
   obtain ⟨hT, hbound⟩ :=
     mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N (half_pos hδ) hEmem hprefix

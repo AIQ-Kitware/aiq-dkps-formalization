@@ -680,7 +680,6 @@ theorem sinAngleOperator_hasSameApproximationNumbers_projectorDifference :
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [hneg, ContinuousLinearMap.approximationNumber_neg]
 
 /-- The consequence the ambient `sin 2Θ` theorem uses: `sin 2Θ` and the reflected projector
@@ -902,15 +901,12 @@ theorem directedSinTwoAngleOperator_hasSameApproximationNumbers_swap :
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [hUV, hVU, ContinuousLinearMap.SameSingularValues.approximationNumber_eq
       (ContinuousLinearMap.sameSingularValues_modulus ((2 : ℝ) • star W)) n,
     ContinuousLinearMap.SameSingularValues.approximationNumber_eq
       (ContinuousLinearMap.sameSingularValues_modulus ((2 : ℝ) • W)) n,
     show ((2 : ℝ) • star W) = ((2 : ℝ) • W).adjoint by
       rw [← ContinuousLinearMap.star_eq_adjoint, hstar2],
-    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
-    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
     ContinuousLinearMap.singularValue_adjoint]
 
 end Swap

@@ -54,15 +54,14 @@ noncomputable def kyFanNormalizedUnitaryInvariantNorm
   gauge_rankOne_eq_one := by
     intro E F _ _ _ _ _ _ V hVnorm hVrank
     simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge]
+      ← kyFanApproximationGauge_eq_kyFanGauge]
     have hsum : kyFanApproximationGauge k V
-        = ∑ n ∈ Finset.range k, approximationSingularValue n V := by
-      change V.kyFanGaugeReal k = _
+        = ∑ n ∈ Finset.range k, (V.singularValue n : ℝ) := by
+      change (V.kyFanGauge k : ℝ) = _
       rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum]
-      simp only [approximationSingularValue]
     rw [hsum]
     have hval : ∀ n ∈ Finset.range k,
-        approximationSingularValue n V = if n = 0 then 1 else 0 := fun n _ =>
+        (V.singularValue n : ℝ) = if n = 0 then 1 else 0 := fun n _ =>
       SymmetricNormingFunction.approximationSingularValue_rankOne hVnorm hVrank n
     rw [Finset.sum_congr rfl hval, Finset.sum_ite_eq' (Finset.range k) 0 (fun _ => (1 : ℝ))]
     simp [hk]

@@ -198,12 +198,12 @@ Lemma 6.1 block coupling. -/
 theorem approximationNumber_le_of_gramResolvent
     (X : E0 →L[ℂ] E1) {T : E0 →L[ℂ] E0} (hX : ‖X‖ < 1)
     (hT : ∀ y, T y = gramOperator X y + gramOperator X (T y)) (n : ℕ) :
-    T.approximationNumber n ≤
-      X.approximationNumber n ^ 2 / (1 - X.approximationNumber n ^ 2) := by
-  set a : ℝ := X.approximationNumber n with hadef
-  have ha0 : 0 ≤ a := X.approximationNumber_nonneg n
+    (T.singularValue n : ℝ) ≤
+      (X.singularValue n : ℝ) ^ 2 / (1 - (X.singularValue n : ℝ) ^ 2) := by
+  set a : ℝ := (X.singularValue n : ℝ) with hadef
+  have ha0 : 0 ≤ a := (X.singularValue n).coe_nonneg
   have ha1 : a < 1 := lt_of_le_of_lt (X.approximationNumber_le_norm n) hX
-  have key : ∀ r : ℝ, a < r → r < 1 → T.approximationNumber n ≤ r ^ 2 / (1 - r ^ 2) := by
+  have key : ∀ r : ℝ, a < r → r < 1 → (T.singularValue n : ℝ) ≤ r ^ 2 / (1 - r ^ 2) := by
     intro r hr hr1
     have hr0 : 0 ≤ r := ha0.trans hr.le
     obtain ⟨r', hr1', hr2'⟩ := exists_between hr
@@ -227,7 +227,7 @@ theorem approximationNumber_le_of_gramResolvent
     exact norm_gramResolvent_apply_le_of_gramProjection_apply_eq_zero X hX hT hr0 hr1
       hsqlt hPy
   by_contra hcon
-  have hcon' : a ^ 2 / (1 - a ^ 2) < T.approximationNumber n := lt_of_not_ge hcon
+  have hcon' : a ^ 2 / (1 - a ^ 2) < (T.singularValue n : ℝ) := lt_of_not_ge hcon
   have hden : (1 : ℝ) - a ^ 2 ≠ 0 := by nlinarith
   have hcont : ContinuousAt (fun u : ℝ => u ^ 2 / (1 - u ^ 2)) a := by
     apply ContinuousAt.div
@@ -235,7 +235,7 @@ theorem approximationNumber_le_of_gramResolvent
     · fun_prop
     · exact hden
   have hev : ∀ᶠ r in nhdsWithin a (Set.Ioi a),
-      (fun u : ℝ => u ^ 2 / (1 - u ^ 2)) r < T.approximationNumber n :=
+      (fun u : ℝ => u ^ 2 / (1 - u ^ 2)) r < (T.singularValue n : ℝ) :=
     Filter.Tendsto.eventually_lt_const hcon'
       (hcont.continuousWithinAt (s := Set.Ioi a))
   have hlt1 : ∀ᶠ r in nhdsWithin a (Set.Ioi a), r < 1 :=

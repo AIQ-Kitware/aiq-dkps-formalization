@@ -211,12 +211,12 @@ theorem approximationSingularValue_sineBlock_lt_one_of_finiteData
         RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
           Vᗮ.starProjection (data.action z)⟫_ℂ)
     (n : ℕ) :
-    approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1 := by
+    ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) < 1 := by
   by_cases hn : n < finrank ℂ Z
   · have hlt := data.sine_lt_one_of_formBounds hdelta hMupper hcross ⟨n, hn⟩
     have hb := approximationSingularValue_eq_finiteSourceSingularValue
       (theorem63DirectedSineBlock Z V) ⟨n, hn⟩
-    simpa using hb ▸ hlt
+    exact hb.trans_lt hlt
   · have h0 := approximationSingularValue_eq_zero_of_finrank_le_complex
       (Z := Z) (theorem63DirectedSineBlock Z V) (le_of_not_gt hn)
     rw [h0]
@@ -244,7 +244,7 @@ private theorem finite_leak_step
           F.starProjection ((data.compression (inclCLM hFZ f) : Z) : H)‖ ≤
         ε * ‖(f : H)‖) :
     delta * ∑ n ∈ Finset.range k', Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock F V))) ≤
+        (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) ≤
       kyFanApproximationGauge k' data.residual + (k' : ℝ) * ε := by
   let dataF := data.restrict F hFZ
   have hMupperF := data.restrict_compression_upper F hFZ hMupper
@@ -258,15 +258,14 @@ private theorem finite_leak_step
     (theorem63DirectedTangent F V) htan k'
   have hKyTan : kyFanApproximationGauge k' (theorem63DirectedTangent F V) =
       ∑ n ∈ Finset.range k', Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock F V))) := by
+        (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) := by
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htan n
-    unfold approximationSingularValue at h
     exact h
   calc
     delta * ∑ n ∈ Finset.range k', Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock F V))) =
+        (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) =
         delta * kyFanApproximationGauge k' (theorem63DirectedTangent F V) := by
       rw [hKyTan]
     _ ≤ kyFanApproximationGauge k' dataF.residual := hcore
@@ -284,15 +283,15 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteData
         RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
           Vᗮ.starProjection (data.action z)⟫_ℂ)
     (n : ℕ) :
-    approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1 := by
+    ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) < 1 := by
   classical
   by_contra hcon
-  have ha_le : approximationSingularValue n (theorem63DirectedSineBlock Z V) ≤ 1 := by
+  have ha_le : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) ≤ 1 := by
     refine (approximationSingularValue_le_opNorm _ _).trans ?_
     refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => ?_
     rw [one_mul]
     exact theorem63DirectedSineBlock_apply_norm_le Z V z
-  have haeq : approximationSingularValue n (theorem63DirectedSineBlock Z V) = 1 :=
+  have haeq : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) = 1 :=
     le_antisymm ha_le (le_of_not_gt fun h => hcon h)
   set B' : ℝ := kyFanApproximationGauge (n + 1) data.residual with hB'_def
   have hB'0 : 0 ≤ B' := kyFanApproximationGauge_nonneg _ _
@@ -300,7 +299,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteData
   have hC0 : 0 ≤ C := by positivity
   set c : ℝ := Real.sin (Real.arctan C) with hc_def
   have hc0 : 0 ≤ c := Real.sin_arctan_nonneg.mpr hC0
-  have hclt : c < approximationSingularValue n (theorem63DirectedSineBlock Z V) := by
+  have hclt : c < ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) := by
     rw [haeq]
     exact TanArcsin.sin_arctan_lt_one C
   obtain ⟨F₁, hF₁fin, hF₁Z, hF₁⟩ :=
@@ -319,28 +318,28 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteData
     intro f
     obtain ⟨y, hyF, hy⟩ := hleak₀ f
     exact (norm_sub_starProjection_le_of_mem _ hyF).trans hy
-  have hmono : approximationSingularValue n (theorem63DirectedSineBlock F₁ V) ≤
-      approximationSingularValue n (theorem63DirectedSineBlock F V) :=
+  have hmono : ((theorem63DirectedSineBlock F₁ V).singularValue n : ℝ) ≤
+      ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
     approximationSingularValue_restrict_mono (Vᗮ.starProjection) n hF₁F
-  have hcF : c < approximationSingularValue n (theorem63DirectedSineBlock F V) :=
+  have hcF : c < ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
     lt_of_lt_of_le hF₁ hmono
   let dataF := data.restrict F hFZ
   have hMupperF := data.restrict_compression_upper F hFZ hMupper
   have hcrossF := data.restrict_crossed_lower F hFZ hcross
-  have hFlt1 : approximationSingularValue n (theorem63DirectedSineBlock F V) < 1 :=
+  have hFlt1 : ((theorem63DirectedSineBlock F V).singularValue n : ℝ) < 1 :=
     dataF.approximationSingularValue_sineBlock_lt_one_of_finiteData
       hdelta hMupperF hcrossF n
   have hgc : Real.tan (Real.arcsin c) ≤ Real.tan (Real.arcsin
-      (approximationSingularValue n (theorem63DirectedSineBlock F V))) :=
+      (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) :=
     TanArcsin.tanArcsin_le_tanArcsin hc0 hcF.le hFlt1
   have hsum : Real.tan (Real.arcsin
-      (approximationSingularValue n (theorem63DirectedSineBlock F V))) ≤
+      (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) ≤
       ∑ m ∈ Finset.range (n + 1), Real.tan (Real.arcsin
-        (approximationSingularValue m (theorem63DirectedSineBlock F V))) := by
+        (((theorem63DirectedSineBlock F V).singularValue m : ℝ))) := by
     refine Finset.single_le_sum
       (f := fun m => Real.tan (Real.arcsin
-        (approximationSingularValue m (theorem63DirectedSineBlock F V))))
-      (fun m _ => TanArcsin.tanArcsin_nonneg (approximationSingularValue_nonneg _ _))
+        (((theorem63DirectedSineBlock F V).singularValue m : ℝ))))
+      (fun m _ => TanArcsin.tanArcsin_nonneg ((ContinuousLinearMap.singularValue _ _).coe_nonneg))
       (Finset.self_mem_range_succ n)
   have hfinal := finite_leak_step data hdelta hMupper hcross
     (n + 1) F hFZ hεp.le hleak
@@ -348,14 +347,14 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteData
   have hchain : delta * C ≤ B' + delta / 2 := by
     have h1 : delta * Real.tan (Real.arcsin c) ≤
         delta * ∑ m ∈ Finset.range (n + 1), Real.tan (Real.arcsin
-          (approximationSingularValue m (theorem63DirectedSineBlock F V))) :=
+          (((theorem63DirectedSineBlock F V).singularValue m : ℝ))) :=
       mul_le_mul_of_nonneg_left (hgc.trans hsum) hdelta.le
     have h2 : ((n : ℝ) + 1) * (delta / (2 * ((n : ℝ) + 1))) = delta / 2 := by
       field_simp
     rw [hCval] at h1
     calc
       delta * C ≤ delta * ∑ m ∈ Finset.range (n + 1), Real.tan (Real.arcsin
-          (approximationSingularValue m (theorem63DirectedSineBlock F V))) := h1
+          (((theorem63DirectedSineBlock F V).singularValue m : ℝ))) := h1
       _ ≤ B' + ((n : ℝ) + 1) * (delta / (2 * ((n : ℝ) + 1))) := by
         push_cast at hfinal ⊢
         linarith
@@ -380,11 +379,10 @@ theorem all_kyFan_core_of_formBounds_infinite
           Vᗮ.starProjection (data.action z)⟫_ℂ)
     (k : ℕ) :
     delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))) ≤
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) ≤
       kyFanApproximationGauge k data.residual := by
   classical
-  have ha_lt_one : ∀ n, approximationSingularValue n
-      (theorem63DirectedSineBlock Z V) < 1 := fun n =>
+  have ha_lt_one : ∀ n, ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) < 1 := fun n =>
     data.approximationSingularValue_sineBlock_lt_one_infiniteData
       hdelta hMupper hcross n
   rcases Nat.eq_zero_or_pos k with hk0 | hkpos
@@ -400,13 +398,13 @@ theorem all_kyFan_core_of_formBounds_infinite
       ∀ (F : Submodule ℂ H), Fn ≤ F → F ≤ Z →
         ∀ [F.HasOrthogonalProjection] [FiniteDimensional ℂ F],
         Real.tan (Real.arcsin
-          (approximationSingularValue n (theorem63DirectedSineBlock Z V))) ≤
+          (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) ≤
         Real.tan (Real.arcsin
-          (approximationSingularValue n (theorem63DirectedSineBlock F V))) + κ' := by
+          (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) + κ' := by
     intro n _
-    set an : ℝ := approximationSingularValue n (theorem63DirectedSineBlock Z V)
+    set an : ℝ := ((theorem63DirectedSineBlock Z V).singularValue n : ℝ)
       with han_def
-    have han0 : 0 ≤ an := approximationSingularValue_nonneg _ _
+    have han0 : 0 ≤ an := (ContinuousLinearMap.singularValue _ _).coe_nonneg
     rcases eq_or_lt_of_le han0 with hzero | hpos
     · refine ⟨⊥, inferInstance, bot_le, ?_⟩
       intro F _ hFZ _ _
@@ -414,7 +412,7 @@ theorem all_kyFan_core_of_formBounds_infinite
         rw [← hzero, Real.arcsin_zero, Real.tan_zero]
       rw [h0]
       have := TanArcsin.tanArcsin_nonneg
-        (approximationSingularValue_nonneg n (theorem63DirectedSineBlock F V))
+        (((theorem63DirectedSineBlock F V).singularValue n).coe_nonneg)
       linarith
     · have hcont := TanArcsin.continuousAt_tanArcsin han0 (ha_lt_one n)
       obtain ⟨d, hd0, hd⟩ := Metric.continuousAt_iff.mp hcont κ' hκ'0
@@ -444,19 +442,19 @@ theorem all_kyFan_core_of_formBounds_infinite
       refine ⟨Fn, hFnfin, hFnZ, ?_⟩
       intro F hFnF hFZ _ _
       have := hFnfin
-      have hmono : approximationSingularValue n (theorem63DirectedSineBlock Fn V) ≤
-          approximationSingularValue n (theorem63DirectedSineBlock F V) :=
+      have hmono : ((theorem63DirectedSineBlock Fn V).singularValue n : ℝ) ≤
+          ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
         approximationSingularValue_restrict_mono (Vᗮ.starProjection) n hFnF
-      have hcF : cn ≤ approximationSingularValue n (theorem63DirectedSineBlock F V) :=
+      have hcF : cn ≤ ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
         (lt_of_lt_of_le hFn hmono).le
       let dataF := data.restrict F hFZ
       have hMupperF := data.restrict_compression_upper F hFZ hMupper
       have hcrossF := data.restrict_crossed_lower F hFZ hcross
-      have hFlt1 : approximationSingularValue n (theorem63DirectedSineBlock F V) < 1 :=
+      have hFlt1 : ((theorem63DirectedSineBlock F V).singularValue n : ℝ) < 1 :=
         dataF.approximationSingularValue_sineBlock_lt_one_of_finiteData
           hdelta hMupperF hcrossF n
       have hgmono : Real.tan (Real.arcsin cn) ≤ Real.tan (Real.arcsin
-          (approximationSingularValue n (theorem63DirectedSineBlock F V))) :=
+          (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) :=
         TanArcsin.tanArcsin_le_tanArcsin hcn0 hcF hFlt1
       linarith [hnear.1, hnear.2]
   choose Fn hFnfin hFnZ hFnbound using hkey
@@ -481,9 +479,9 @@ theorem all_kyFan_core_of_formBounds_infinite
     exact (norm_sub_starProjection_le_of_mem _ hyF).trans hy
   have hperterm : ∀ n ∈ Finset.range k,
       Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))) ≤
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) ≤
       Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock F V))) + κ' := by
+        (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) + κ' := by
     intro n hn
     have hFnF : Fn n hn ≤ F := by
       refine le_trans ?_ hF₀F
@@ -491,18 +489,18 @@ theorem all_kyFan_core_of_formBounds_infinite
         (Finset.mem_attach _ ⟨n, hn⟩)
     exact hFnbound n hn F hFnF hFZ
   have hsumbound : ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))) ≤
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) ≤
       (∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock F V)))) +
+        (((theorem63DirectedSineBlock F V).singularValue n : ℝ)))) +
         (k : ℝ) * κ' := by
     calc
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-          (approximationSingularValue n (theorem63DirectedSineBlock Z V))) ≤
+          (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) ≤
           ∑ n ∈ Finset.range k, (Real.tan (Real.arcsin
-            (approximationSingularValue n (theorem63DirectedSineBlock F V))) + κ') :=
+            (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) + κ') :=
         Finset.sum_le_sum hperterm
       _ = (∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-            (approximationSingularValue n (theorem63DirectedSineBlock F V)))) +
+            (((theorem63DirectedSineBlock F V).singularValue n : ℝ)))) +
           (k : ℝ) * κ' := by
         rw [Finset.sum_add_distrib, Finset.sum_const, Finset.card_range, nsmul_eq_mul]
   have hfinstep := finite_leak_step data hdelta hMupper hcross
@@ -514,13 +512,13 @@ theorem all_kyFan_core_of_formBounds_infinite
     field_simp
   calc
     delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))) ≤
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) ≤
         delta * ((∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-          (approximationSingularValue n (theorem63DirectedSineBlock F V)))) +
+          (((theorem63DirectedSineBlock F V).singularValue n : ℝ)))) +
             (k : ℝ) * κ') :=
       mul_le_mul_of_nonneg_left hsumbound hdelta.le
     _ = delta * (∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-          (approximationSingularValue n (theorem63DirectedSineBlock F V)))) +
+          (((theorem63DirectedSineBlock F V).singularValue n : ℝ)))) +
         delta * ((k : ℝ) * κ') := by ring
     _ ≤ (kyFanApproximationGauge k data.residual +
           (k : ℝ) * (κ / (2 * (k : ℝ)))) + delta * ((k : ℝ) * κ') := by
@@ -549,11 +547,10 @@ theorem ideal_of_formBounds_infinite
   have hcore := data.all_kyFan_core_of_formBounds_infinite hdelta hMupper hcross k
   have hKyTan : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))) := by
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htan n
-    unfold approximationSingularValue at h
     exact h
   rw [hKyTan]
   exact hcore

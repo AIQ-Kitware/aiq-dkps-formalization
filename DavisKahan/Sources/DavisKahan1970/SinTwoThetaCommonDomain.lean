@@ -236,7 +236,7 @@ theorem sinTwoTheta_commonDomain_block_kyFan
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart P 0 R) :=
     isSelfAdjoint_trialOffDiagonalPart
@@ -252,9 +252,9 @@ theorem sinTwoTheta_commonDomain_block_kyFan
     (commonDomain_trialReflection_intertwines hT hdom hP R hres)
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
+      ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   have hflip : kyFanApproximationGauge k
         (Q.starProjection ∘L
           ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L
@@ -330,7 +330,7 @@ theorem sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
     intro k
     by_cases hk0 : k = 0
     · subst k
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp [kyFanApproximationGauge]
     · have hk : 0 < k := Nat.pos_of_ne_zero hk0
       have hblock := sinTwoTheta_commonDomain_block_kyFan
         hT hdom hP hQ R hres hgapPos hgap k

@@ -114,13 +114,13 @@ theorem kyFanApproximationGauge_gramOperator_mono_complex {E F G : Type u}
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     (A : E →L[ℂ] F) (B : E →L[ℂ] G)
-    (h : ∀ n, A.approximationNumber n ≤ B.approximationNumber n) (k : ℕ) :
+    (h : ∀ n, (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ)) (k : ℕ) :
     kyFanApproximationGauge k (ApproximationNumber.gramOperator A) ≤
       kyFanApproximationGauge k (ApproximationNumber.gramOperator B) := by
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   rw [approximationNumber_gramOperator_complex, approximationNumber_gramOperator_complex]
-  have h0 : 0 ≤ A.approximationNumber n := A.approximationNumber_nonneg n
+  have h0 : 0 ≤ (A.singularValue n : ℝ) := (A.singularValue n).coe_nonneg
   nlinarith [h n, h0]
 
 /-- The `U`-compression of a Gram operator is the Gram operator of the compression, since
@@ -308,12 +308,12 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_complex,
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_complex]
   have hU : ∀ n,
-      ((1 - spectraDirectRotation U V hacute) ∘L U.subtypeL).approximationNumber n ≤
-        ((1 - W) ∘L U.subtypeL).approximationNumber n :=
+      (((1 - spectraDirectRotation U V hacute) ∘L U.subtypeL).singularValue n : ℝ) ≤
+        (((1 - W) ∘L U.subtypeL).singularValue n : ℝ) :=
     proposition4_1_approximationNumbers U V hacute W hWunitary hWmap
   have hUperp : ∀ n,
-      ((1 - spectraDirectRotation U V hacute) ∘L Uᗮ.subtypeL).approximationNumber n ≤
-        ((1 - W) ∘L Uᗮ.subtypeL).approximationNumber n := by
+      (((1 - spectraDirectRotation U V hacute) ∘L Uᗮ.subtypeL).singularValue n : ℝ) ≤
+        (((1 - W) ∘L Uᗮ.subtypeL).singularValue n : ℝ) := by
     intro n
     have h := proposition4_1_approximationNumbers Uᗮ Vᗮ
       (isUniformlyAcute_orthogonal hacute) W hWunitary
@@ -383,12 +383,12 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_complex,
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_complex]
   have hU : ∀ n,
-      ((1 - nonacuteDirectRotation U V J) ∘L U.subtypeL).approximationNumber n ≤
-        ((1 - W) ∘L U.subtypeL).approximationNumber n :=
+      (((1 - nonacuteDirectRotation U V J) ∘L U.subtypeL).singularValue n : ℝ) ≤
+        (((1 - W) ∘L U.subtypeL).singularValue n : ℝ) :=
     proposition4_1_nonacute_approximationNumbers U V J W hWunitary hWmap
   have hUperp : ∀ n,
-      ((1 - nonacuteDirectRotation U V J) ∘L U.orthogonal.subtypeL).approximationNumber n ≤
-        ((1 - W) ∘L U.orthogonal.subtypeL).approximationNumber n := by
+      (((1 - nonacuteDirectRotation U V J) ∘L U.orthogonal.subtypeL).singularValue n : ℝ) ≤
+        (((1 - W) ∘L U.orthogonal.subtypeL).singularValue n : ℝ) := by
     intro n
     have h := proposition4_1_nonacute_approximationNumbers U.orthogonal V.orthogonal
       (orthogonalCrossedDefectEquiv U V J) W hWunitary

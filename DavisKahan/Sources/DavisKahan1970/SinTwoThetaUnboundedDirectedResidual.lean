@@ -115,7 +115,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
   intro k
   by_cases hk0 : k = 0
   · subst hk0
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
@@ -138,9 +138,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   rw [        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
     ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
+      ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   -- flip the block to the orientation of the doubling identity
   have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
@@ -293,7 +293,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
   intro k
   by_cases hk0 : k = 0
   · subst hk0
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
@@ -312,9 +312,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
     ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
+      ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num
@@ -460,7 +460,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   intro k
   by_cases hk0 : k = 0
   · subst hk0
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
@@ -479,9 +479,9 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
     ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
+      ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
   have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
     rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
     norm_num

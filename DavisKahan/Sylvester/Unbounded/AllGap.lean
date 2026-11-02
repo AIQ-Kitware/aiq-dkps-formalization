@@ -89,7 +89,7 @@ theorem davisKahan1970_sylvester_of_spectrumGap
       · apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC
         intro k
         rcases Nat.eq_zero_or_pos k with rfl | hk
-        · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+        · simp [kyFanApproximationGauge]
         let M := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
             gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
@@ -100,11 +100,11 @@ theorem davisKahan1970_sylvester_of_spectrumGap
           hgap.1 hgap.2 hEq (by simp [M, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
         simpa only [M,
           SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hbound.2
+      ← kyFanApproximationGauge_eq_kyFanGauge] using hbound.2
       · apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hC
         intro k
         rcases Nat.eq_zero_or_pos k with rfl | hk
-        · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+        · simp [kyFanApproximationGauge]
         let M := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
             gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
@@ -115,7 +115,7 @@ theorem davisKahan1970_sylvester_of_spectrumGap
           hgap.2 hgap.1 hEq (by simp [M, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
         simpa only [M,
           SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hbound.2
+      ← kyFanApproximationGauge_eq_kyFanGauge] using hbound.2
   | leftAboveRightBelow c hAspec hBspec =>
       exact OrderedSylvesterEngine.lowerUpper
         canonicalOrderedSylvesterEngine N hA hB hδ

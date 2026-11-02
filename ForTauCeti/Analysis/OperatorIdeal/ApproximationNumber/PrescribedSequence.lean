@@ -49,23 +49,23 @@ theorem approximationNumber_comp_contractions_le
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     (L : F →L[𝕜] G) {T : E →L[𝕜] F} (R : D →L[𝕜] E)
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (n : ℕ) :
-    (L ∘L T ∘L R).approximationNumber n ≤ T.approximationNumber n := by
-  have h1 : (L ∘L T ∘L R).approximationNumber n ≤
-      ‖L‖ * (T ∘L R).approximationNumber n :=
+    ((L ∘L T ∘L R).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) := by
+  have h1 : ((L ∘L T ∘L R).singularValue n : ℝ) ≤
+      ‖L‖ * ((T ∘L R).singularValue n : ℝ) :=
     ContinuousLinearMap.approximationNumber_comp_le_norm_mul L (T ∘L R) n
-  have h2 : (T ∘L R).approximationNumber n ≤ T.approximationNumber n * ‖R‖ :=
+  have h2 : ((T ∘L R).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) * ‖R‖ :=
     T.approximationNumber_comp_le_mul_norm R n
-  have hTn : 0 ≤ T.approximationNumber n := T.approximationNumber_nonneg n
-  have hTRn : 0 ≤ (T ∘L R).approximationNumber n :=
-    (T ∘L R).approximationNumber_nonneg n
+  have hTn : 0 ≤ (T.singularValue n : ℝ) := (T.singularValue n).coe_nonneg
+  have hTRn : 0 ≤ ((T ∘L R).singularValue n : ℝ) :=
+    ((T ∘L R).singularValue n).coe_nonneg
   calc
-    (L ∘L T ∘L R).approximationNumber n ≤ ‖L‖ * (T ∘L R).approximationNumber n := h1
-    _ ≤ 1 * (T ∘L R).approximationNumber n :=
+    ((L ∘L T ∘L R).singularValue n : ℝ) ≤ ‖L‖ * ((T ∘L R).singularValue n : ℝ) := h1
+    _ ≤ 1 * ((T ∘L R).singularValue n : ℝ) :=
       mul_le_mul_of_nonneg_right hL hTRn
-    _ = (T ∘L R).approximationNumber n := one_mul _
-    _ ≤ T.approximationNumber n * ‖R‖ := h2
-    _ ≤ T.approximationNumber n * 1 := mul_le_mul_of_nonneg_left hR hTn
-    _ = T.approximationNumber n := mul_one _
+    _ = ((T ∘L R).singularValue n : ℝ) := one_mul _
+    _ ≤ (T.singularValue n : ℝ) * ‖R‖ := h2
+    _ ≤ (T.singularValue n : ℝ) * 1 := mul_le_mul_of_nonneg_left hR hTn
+    _ = (T.singularValue n : ℝ) := mul_one _
 
 omit [CompleteSpace E] in
 /-- **Extension by zero preserves every approximation number.**
@@ -80,8 +80,8 @@ supported on a subspace has the same singular data read on that subspace as read
 whole space. -/
 theorem approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto
     (W : Submodule 𝕜 E) [W.HasOrthogonalProjection] (A : W →L[𝕜] W) (n : ℕ) :
-    (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).approximationNumber n =
-      A.approximationNumber n := by
+    ((W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).singularValue n : ℝ) =
+      (A.singularValue n : ℝ) := by
   have hsubnorm : ‖W.subtypeL‖ ≤ (1 : ℝ) := W.norm_subtypeL_le
   have hprojnorm : ‖W.orthogonalProjectionOnto‖ ≤ (1 : ℝ) :=
     W.orthogonalProjectionOnto_norm_le
@@ -100,11 +100,11 @@ theorem approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto
     change A x = W.orthogonalProjectionOnto
         ((A (W.orthogonalProjectionOnto (x : E)) : W) : E)
     rw [h1, h2]
-  calc A.approximationNumber n
-      = (W.orthogonalProjectionOnto ∘L
+  calc (A.singularValue n : ℝ)
+      = ((W.orthogonalProjectionOnto ∘L
           (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto) ∘L
-            W.subtypeL).approximationNumber n := by rw [← hfact]
-    _ ≤ (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).approximationNumber n :=
+            W.subtypeL).singularValue n : ℝ) := by rw [← hfact]
+    _ ≤ ((W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto).singularValue n : ℝ) :=
       approximationNumber_comp_contractions_le W.orthogonalProjectionOnto W.subtypeL
         hprojnorm hsubnorm n
 
@@ -113,7 +113,7 @@ on an infinite-dimensional real or complex Hilbert space. -/
 theorem exists_approximationNumber_eq_of_antitone
     (hinf : ¬ FiniteDimensional 𝕜 E)
     (d : ℕ → ℝ) (h0 : ∀ n, 0 ≤ d n) (hanti : Antitone d) :
-    ∃ D : E →L[𝕜] E, ∀ n, D.approximationNumber n = d n := by
+    ∃ D : E →L[𝕜] E, ∀ n, (D.singularValue n : ℝ) = d n := by
   classical
   -- A countable orthonormal family.
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 E
@@ -187,7 +187,7 @@ theorem exists_approximationNumber_eq_of_antitone
     rw [hcnorm, hcnorm]
     exact hanti hmn
   set Diag := diagOpLp c hK hc with hDiag_def
-  have hDiagAn : ∀ n, Diag.approximationNumber n = d n := fun n => by
+  have hDiagAn : ∀ n, (Diag.singularValue n : ℝ) = d n := fun n => by
     rw [hDiag_def, approximationNumber_diagOpLp c hK hc hcanti n, hcnorm]
   -- Conjugate through the Hilbert-basis identification and extend by zero.
   set U : W →L[𝕜] lp (fun _ : ℕ => 𝕜) 2 :=
@@ -205,7 +205,7 @@ theorem exists_approximationNumber_eq_of_antitone
     intro x
     exact B.repr.apply_symm_apply x
   set D₀ : W →L[𝕜] W := U' ∘L Diag ∘L U with hD₀_def
-  have hD₀An : ∀ n, D₀.approximationNumber n = d n := by
+  have hD₀An : ∀ n, (D₀.singularValue n : ℝ) = d n := by
     intro n
     refine le_antisymm ?_ ?_
     · rw [← hDiagAn n]
@@ -217,9 +217,9 @@ theorem exists_approximationNumber_eq_of_antitone
         intro x
         change Diag x = B.repr (B.repr.symm (Diag (B.repr (B.repr.symm x))))
         rw [B.repr.apply_symm_apply, B.repr.apply_symm_apply]
-      calc Diag.approximationNumber n = (U ∘L D₀ ∘L U').approximationNumber n := by
+      calc (Diag.singularValue n : ℝ) = ((U ∘L D₀ ∘L U').singularValue n : ℝ) := by
             rw [← hfact]
-        _ ≤ D₀.approximationNumber n :=
+        _ ≤ (D₀.singularValue n : ℝ) :=
           approximationNumber_comp_contractions_le U U' hUnorm hU'norm n
   -- Extension by zero to the whole space.
   refine ⟨W.subtypeL ∘L D₀ ∘L W.orthogonalProjectionOnto, fun n => ?_⟩

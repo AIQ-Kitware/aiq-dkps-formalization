@@ -128,14 +128,11 @@ theorem proposition4_1_directRotation_sourceExact_complex
             TauCeti.principalAngleSequence U V (n : ℕ) ≤
               TauCeti.vectorAngle ℂ (v n : H) (W (v n : H))) ∧
       (∀ n : ℕ,
-        (ContinuousLinearMap.approximationNumber
-            ((1 - D) ∘L U.starProjection) n : Real) =
+        ((((1 - D) ∘L U.starProjection).singularValue n : ℝ) : Real) =
           2 * Real.sin (TauCeti.principalAngleSequence U V n / 2)) ∧
       ∀ n : ℕ,
-        ContinuousLinearMap.approximationNumber
-            ((1 - D) ∘L U.starProjection) n ≤
-          ContinuousLinearMap.approximationNumber
-            ((1 - W) ∘L U.starProjection) n := by
+        (((1 - D) ∘L U.starProjection).singularValue n : ℝ) ≤
+          (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   obtain ⟨J⟩ := crossedDefectsEquivalent_of_isSourceDirectRotation U V hD
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_complex U V hcompact J W hWunitary hWmap
@@ -212,14 +209,11 @@ theorem proposition4_1_directRotation_sourceExact_real
             TauCeti.principalAngleSequence U V (n : ℕ) ≤
               TauCeti.vectorAngle ℝ (v n : E) (W (v n : E))) ∧
       (∀ n : ℕ,
-        (ContinuousLinearMap.approximationNumber
-            ((1 - D) ∘L U.starProjection) n : Real) =
+        ((((1 - D) ∘L U.starProjection).singularValue n : ℝ) : Real) =
           2 * Real.sin (TauCeti.principalAngleSequence U V n / 2)) ∧
       ∀ n : ℕ,
-        ContinuousLinearMap.approximationNumber
-            ((1 - D) ∘L U.starProjection) n ≤
-          ContinuousLinearMap.approximationNumber
-            ((1 - W) ∘L U.starProjection) n := by
+        (((1 - D) ∘L U.starProjection).singularValue n : ℝ) ≤
+          (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   obtain ⟨J⟩ := crossedDefectsEquivalent_of_isSourceDirectRotation U V hD
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_real U V hcompact J W hWunitary hWmap

@@ -1788,13 +1788,13 @@ theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
     have hmk : m ≤ k := by
       rw [hm]
       simpa using Finset.card_le_card (Finset.subset_univ s)
-    change B.kyFanGaugeReal m ≤ B.kyFanGaugeReal k
+    change (B.kyFanGauge m : ℝ) ≤ (B.kyFanGauge k : ℝ)
     rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
       ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_le_sum_of_subset_of_nonneg
       (fun x hx => Finset.mem_range.mpr
         (lt_of_lt_of_le (Finset.mem_range.mp hx) hmk))
-      (fun i _ _ => B.approximationNumber_nonneg i)
+      (fun i _ _ => (B.singularValue i).coe_nonneg)
   rw [hsumeq]
   linarith [hmain, hmono, (by linarith : (0 : ℝ) ≤ b - a)]
 
@@ -2324,13 +2324,13 @@ theorem sum_tangent_le_kyFan_of_invariantSubspace
     have hmk : m ≤ k := by
       rw [hm]
       simpa using Finset.card_le_card (Finset.subset_univ s)
-    change T.kyFanGaugeReal m ≤ T.kyFanGaugeReal k
+    change (T.kyFanGauge m : ℝ) ≤ (T.kyFanGauge k : ℝ)
     rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
       ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_le_sum_of_subset_of_nonneg
       (fun x hx => Finset.mem_range.mpr
         (lt_of_lt_of_le (Finset.mem_range.mp hx) hmk))
-      (fun i _ _ => T.approximationNumber_nonneg i)
+      (fun i _ _ => (T.singularValue i).coe_nonneg)
   rw [hsumeq]
   linarith [hmain, hmono]
 

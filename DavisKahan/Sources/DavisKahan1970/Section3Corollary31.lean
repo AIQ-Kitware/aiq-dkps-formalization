@@ -236,9 +236,9 @@ theorem compactAngleList_inj_iff {A : K₁ →L[𝕜] K₁} {B : K₂ →L[𝕜]
       rw [Real.sin_arcsin (by linarith) hs1]
       exact Real.sq_sqrt h0
     have h0A : 0 ≤ compactAngleEigenvalueList A n :=
-      ContinuousLinearMap.approximationNumber_nonneg _ _
+      (ContinuousLinearMap.singularValue _ _).coe_nonneg
     have h0B : 0 ≤ compactAngleEigenvalueList B n :=
-      ContinuousLinearMap.approximationNumber_nonneg _ _
+      (ContinuousLinearMap.singularValue _ _).coe_nonneg
     calc compactAngleEigenvalueList A n
         = Real.sin (compactAngleList A n) ^ 2 := (hsin _ h0A (hA n)).symm
       _ = Real.sin (compactAngleList B n) ^ 2 := by rw [h]

@@ -77,10 +77,10 @@ theorem tsum_singularValue_penalty_eq_tsum_eigenspace
   let : Fintype (A.singularValue ⁻¹' {mu}) := hfinite.fintype
   have hcard := finrank_eigenspace_eq_card_approximationNumber_eq hAc hA.isSelfAdjoint
     hA.re_inner_nonneg_left (show 0 < (mu : ℝ) by exact_mod_cast hmu)
-  have hequiv : {n : ℕ // A.approximationNumber n = (mu : ℝ)} ≃
+  have hequiv : {n : ℕ // (A.singularValue n : ℝ) = (mu : ℝ)} ≃
       (A.singularValue ⁻¹' {mu}) :=
     Equiv.subtypeEquivRight fun n => by
-      simp only [approximationNumber_eq_singularValue_toReal, Set.mem_preimage,
+      simp only [ Set.mem_preimage,
         Set.mem_singleton_iff, NNReal.coe_inj]
   rw [Nat.card_congr hequiv] at hcard
   rw [tsum_fintype, Finset.sum_const, Finset.card_univ, nsmul_eq_mul,

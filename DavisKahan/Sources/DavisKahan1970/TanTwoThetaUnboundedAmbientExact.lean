@@ -921,10 +921,10 @@ ambient spelling; `approximationNumber_reflectionTangentCorner` and
 off the singular values. -/
 theorem approximationNumber_tanTwoDirectedCorner
     (hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1) (n : ℕ) :
-    (projectionBlock Uᗮ U
-        (2 * (projectorDifference U V * doubleSecant U V))).approximationNumber n =
+    ((projectionBlock Uᗮ U
+        (2 * (projectorDifference U V * doubleSecant U V))).singularValue n : ℝ) =
       Real.tan (Real.arcsin
-        ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n)) := by
+        (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ))) := by
   have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
   have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
   have hsq : ‖U.offDiagBlock V.reflectionOperator *
@@ -979,12 +979,12 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex
     (hUb : ∀ x : A.domain, (x : Ea) ∈ Uᗮ →
       b * ‖(x : Ea)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Ea)⟫_ℂ)
     (hab : a < b) (hRmem : N.Mem (projectionBlock Uᗮ U B)) :
-    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : ℕ, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       (∀ n : ℕ,
-        (projectionBlock Uᗮ U
-            (2 * (projectorDifference U V * doubleSecant U V))).approximationNumber n =
+        ((projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))).singularValue n : ℝ) =
           Real.tan (Real.arcsin
-            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+            (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ)))) ∧
       N.Mem (projectionBlock Uᗮ U (2 * (projectorDifference U V * doubleSecant U V))) ∧
       (b - a) * N.gauge
           (projectionBlock Uᗮ U (2 * (projectorDifference U V * doubleSecant U V))) ≤
@@ -1038,12 +1038,12 @@ theorem tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex
     (hUb : ∀ x : A.domain, (x : Ea) ∈ Uᗮ →
       b * ‖(x : Ea)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Ea)⟫_ℂ)
     (hab : a < b) (hRmem : N.Mem (projectionBlock Uᗮ U B)) :
-    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : ℕ, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       (∀ n : ℕ,
-        (projectionBlock Uᗮ U
-            (2 * (projectorDifference U V * doubleSecant U V))).approximationNumber n =
+        ((projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))).singularValue n : ℝ) =
           Real.tan (Real.arcsin
-            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+            (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ)))) ∧
       N.Mem (projectionBlock Uᗮ U (2 * (projectorDifference U V * doubleSecant U V))) ∧
       (b - a) * N.gauge
           (projectionBlock Uᗮ U (2 * (projectorDifference U V * doubleSecant U V))) ≤

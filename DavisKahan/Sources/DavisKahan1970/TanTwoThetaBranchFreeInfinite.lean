@@ -132,7 +132,7 @@ theorem eq_subtypeL_comp_blockGraphCoordinate
 graph coordinate. -/
 theorem approximationNumber_blockGraphCoordinate
     (hTmem : ∀ x, T x ∈ Uᗮ) (hTzero : ∀ x ∈ Uᗮ, T x = 0) (n : ℕ) :
-    (blockGraphCoordinate T U).approximationNumber n = T.approximationNumber n := by
+    ((blockGraphCoordinate T U).singularValue n : ℝ) = (T.singularValue n : ℝ) := by
   have h := ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
     (blockGraphCoordinate T U)
   rw [← eq_subtypeL_comp_blockGraphCoordinate hTmem hTzero] at h
@@ -206,14 +206,14 @@ theorem sum_absDoubleAngleTangent_le_add_error
     (hab : a < b)
     (S : Finset ℕ) {ε : ℝ} (hε0 : 0 < ε) (hεhalf : ε ≤ 1 / 2)
     (hsmall : approximatePairErrorCoefficient A H T * ε ≤ (b - a) / 4) :
-    (b - a) * ∑ n ∈ S, absDoubleAngleTangent (approximationSingularValue n T) ≤
+    (b - a) * ∑ n ∈ S, absDoubleAngleTangent ((T.singularValue n : ℝ)) ≤
       2 * kyFanApproximationGauge S.card H +
         S.card * (branchFreeTotalErrorCoefficient A H T (b - a) * ε) := by
   classical
   have hd : 0 < b - a := by linarith
   have hε1 : ε ≤ 1 := by linarith
   set X : U →L[ℂ] Uᗮ := blockGraphCoordinate T U with hXdef
-  have hXnum : ∀ n, X.approximationNumber n = approximationSingularValue n T :=
+  have hXnum : ∀ n, (X.singularValue n : ℝ) = (T.singularValue n : ℝ) :=
     fun n => approximationNumber_blockGraphCoordinate hTmem hTzero n
   -- a family long enough to cover every index of `S`
   set k : ℕ := S.sup id + 1 with hkdef
@@ -229,9 +229,9 @@ theorem sum_absDoubleAngleTangent_le_add_error
       (p := fun n => n < F.count)
     push_cast [← this, hS₁def, hS₂def]
     ring
-  have hsumsplit : ∑ n ∈ S, absDoubleAngleTangent (approximationSingularValue n T) =
-      (∑ n ∈ S₁, absDoubleAngleTangent (approximationSingularValue n T)) +
-        ∑ n ∈ S₂, absDoubleAngleTangent (approximationSingularValue n T) := by
+  have hsumsplit : ∑ n ∈ S, absDoubleAngleTangent ((T.singularValue n : ℝ)) =
+      (∑ n ∈ S₁, absDoubleAngleTangent ((T.singularValue n : ℝ))) +
+        ∑ n ∈ S₂, absDoubleAngleTangent ((T.singularValue n : ℝ)) := by
     rw [hS₁def, hS₂def, Finset.sum_filter_add_sum_filter_not]
   -- (i) the selected indices, through the approximate-pair estimate
   set m : ℕ := S₁.card with hmdef
@@ -250,12 +250,12 @@ theorem sum_absDoubleAngleTangent_le_add_error
   set uu : Fin m → E := fun j => ((F.right (idx j) : U) : E) with huudef
   set vv : Fin m → E := fun j => ((F.left (idx j) : Uᗮ) : E) with hvvdef
   set tt : Fin m → ℝ :=
-    fun j => approximationSingularValue ((e j : ℕ)) T with httdef
+    fun j => (T.singularValue ((e j : ℕ)) : ℝ) with httdef
   have hu : Orthonormal ℂ uu :=
     orthonormal_coe_subtype (F.right_orthonormal.comp idx hidxinj)
   have hv : Orthonormal ℂ vv :=
     orthonormal_coe_subtype (F.left_orthonormal.comp idx hidxinj)
-  have hXidx : ∀ j : Fin m, X.approximationNumber (idx j : ℕ) = tt j := by
+  have hXidx : ∀ j : Fin m, (X.singularValue (idx j : ℕ) : ℝ) = tt j := by
     intro j
     rw [httdef]
     exact hXnum _
@@ -285,14 +285,14 @@ theorem sum_absDoubleAngleTangent_le_add_error
   have hpart₁ := sum_absDoubleAngleTangent_le_of_approximatePairs
     hA hH hAU hHU hHUperp hTmem hUb hUa hinv hab hu hv
     (fun j => (F.right (idx j)).2) (fun j => (F.left (idx j)).2)
-    (fun j => approximationSingularValue_nonneg _ _) hε1 hTuu hTvv hsmall
+    (fun j => (ContinuousLinearMap.singularValue _ _).coe_nonneg) hε1 hTuu hTvv hsmall
   have hreindex : ∑ j : Fin m, absDoubleAngleTangent (tt j) =
-      ∑ n ∈ S₁, absDoubleAngleTangent (approximationSingularValue n T) := by
+      ∑ n ∈ S₁, absDoubleAngleTangent ((T.singularValue n : ℝ)) := by
     rw [← Finset.sum_coe_sort S₁
-      (fun n : ℕ => absDoubleAngleTangent (approximationSingularValue n T))]
+      (fun n : ℕ => absDoubleAngleTangent ((T.singularValue n : ℝ)))]
     exact Equiv.sum_comp e.toEquiv
       (fun x : {x // x ∈ S₁} =>
-        absDoubleAngleTangent (approximationSingularValue (x : ℕ) T))
+        absDoubleAngleTangent ((T.singularValue (x : ℕ) : ℝ)))
   rw [hreindex] at hpart₁
   have hkyfanmono : kyFanApproximationGauge m H ≤
       kyFanApproximationGauge S.card H := by
@@ -303,28 +303,27 @@ theorem sum_absDoubleAngleTangent_le_add_error
         exact Finset.card_filter_le _ _
       exact fun n hn => Finset.mem_range.mpr
         (lt_of_lt_of_le (Finset.mem_range.mp hn) hcard)
-    · exact fun n _ _ => approximationSingularValue_nonneg _ _
+    · exact fun n _ _ => (ContinuousLinearMap.singularValue _ _).coe_nonneg
   -- (ii) the tail indices: the approximation number is at most `ε`, so the
   -- pole is far away for trivial reasons
   have htail : ∀ n ∈ S₂,
-      absDoubleAngleTangent (approximationSingularValue n T) ≤ 8 / 3 * ε := by
+      absDoubleAngleTangent ((T.singularValue n : ℝ)) ≤ 8 / 3 * ε := by
     intro n hn
     rw [hS₂def, Finset.mem_filter] at hn
     have hcount : F.count ≤ n := Nat.le_of_not_lt hn.2
-    have hsmalln : approximationSingularValue n T ≤ ε := by
+    have hsmalln : (T.singularValue n : ℝ) ≤ ε := by
       rw [← hXnum n]
       exact F.tail_small n hcount (hSk n hn.1)
-    have hn0 : 0 ≤ approximationSingularValue n T := approximationSingularValue_nonneg _ _
-    have hden : (3 : ℝ) / 4 ≤ 1 - approximationSingularValue n T ^ 2 := by nlinarith
-    have hdenabs : (3 : ℝ) / 4 ≤ |1 - approximationSingularValue n T ^ 2| :=
+    have hn0 : 0 ≤ (T.singularValue n : ℝ) := (ContinuousLinearMap.singularValue _ _).coe_nonneg
+    have hden : (3 : ℝ) / 4 ≤ 1 - (T.singularValue n : ℝ) ^ 2 := by nlinarith
+    have hdenabs : (3 : ℝ) / 4 ≤ |1 - (T.singularValue n : ℝ) ^ 2| :=
       hden.trans (le_abs_self _)
-    rw [absDoubleAngleTangent, div_le_iff₀ (by linarith : (0:ℝ) < |1 - approximationSingularValue
-      n T ^ 2|)]
+    rw [absDoubleAngleTangent, div_le_iff₀ (by linarith : (0:ℝ) < |1 - (T.singularValue n : ℝ) ^ 2|)]
     nlinarith
   have hpart₂ : ∑ n ∈ S₂,
-      absDoubleAngleTangent (approximationSingularValue n T) ≤
+      absDoubleAngleTangent ((T.singularValue n : ℝ)) ≤
         S₂.card * (8 / 3 * ε) := by
-    calc ∑ n ∈ S₂, absDoubleAngleTangent (approximationSingularValue n T)
+    calc ∑ n ∈ S₂, absDoubleAngleTangent ((T.singularValue n : ℝ))
         ≤ ∑ _n ∈ S₂, (8 / 3 * ε) := Finset.sum_le_sum htail
       _ = S₂.card * (8 / 3 * ε) := by
           rw [Finset.sum_const, nsmul_eq_mul]
@@ -340,7 +339,7 @@ theorem sum_absDoubleAngleTangent_le_add_error
   rw [hsumsplit, mul_add]
   unfold branchFreeTotalErrorCoefficient
   have hstep₂ : (b - a) * ∑ n ∈ S₂,
-      absDoubleAngleTangent (approximationSingularValue n T) ≤
+      absDoubleAngleTangent ((T.singularValue n : ℝ)) ≤
         S.card * ((b - a) * (8 / 3) * ε) := by
     have h := mul_le_mul_of_nonneg_left hpart₂ hd.le
     refine h.trans ?_
@@ -350,7 +349,7 @@ theorem sum_absDoubleAngleTangent_le_add_error
     refine mul_le_mul_of_nonneg_right hS₂le ?_
     positivity
   have hstep₁ : (b - a) * ∑ n ∈ S₁,
-      absDoubleAngleTangent (approximationSingularValue n T) ≤
+      absDoubleAngleTangent ((T.singularValue n : ℝ)) ≤
         2 * kyFanApproximationGauge S.card H +
           S.card * (branchFreeTangentErrorCoefficient A H T (b - a) * ε) := by
     refine hpart₁.trans ?_
@@ -385,7 +384,7 @@ theorem sum_absDoubleAngleTangent_le_of_invariantSubspace
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
     (hab : a < b)
     (S : Finset ℕ) :
-    (b - a) * ∑ n ∈ S, absDoubleAngleTangent (approximationSingularValue n T) ≤
+    (b - a) * ∑ n ∈ S, absDoubleAngleTangent ((T.singularValue n : ℝ)) ≤
       2 * kyFanApproximationGauge S.card H := by
   have hd : 0 < b - a := by linarith
   set E₀ : ℝ := approximatePairErrorCoefficient A H T with hE₀
@@ -457,8 +456,8 @@ theorem kyFan_absTanTwoTheta_le_of_invariantSubspace
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
     (hab : a < b)
     (tanTwoTheta : E₂ →L[ℂ] F₂) (π : ℕ ≃ ℕ)
-    (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
-      absDoubleAngleTangent (approximationSingularValue n T))
+    (htan : ∀ n, (tanTwoTheta.singularValue (π n) : ℝ) =
+      absDoubleAngleTangent ((T.singularValue n : ℝ)))
     (k : ℕ) :
     (b - a) * kyFanApproximationGauge k tanTwoTheta ≤
       2 * kyFanApproximationGauge k H := by
@@ -468,12 +467,11 @@ theorem kyFan_absTanTwoTheta_le_of_invariantSubspace
     rw [hSdef, Finset.card_image_of_injective _ π.symm.injective,
       Finset.card_range]
   have hgauge : kyFanApproximationGauge k tanTwoTheta =
-      ∑ n ∈ S, absDoubleAngleTangent (approximationSingularValue n T) := by
+      ∑ n ∈ S, absDoubleAngleTangent ((T.singularValue n : ℝ)) := by
     rw [hSdef, Finset.sum_image (fun x _ y _ h => π.symm.injective h)]
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [← htan (π.symm j), Equiv.apply_symm_apply]
-    rfl
   have h := sum_absDoubleAngleTangent_le_of_invariantSubspace hA hH hAU hHU
     hHUperp hTmem hTzero hUb hUa hinv hab S
   rw [hScard] at h
@@ -504,8 +502,8 @@ theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_invariantSubspace
     (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
     (tanTwoTheta : E →L[ℂ] E) (π : ℕ ≃ ℕ)
-    (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
-      absDoubleAngleTangent (approximationSingularValue n T))
+    (htan : ∀ n, (tanTwoTheta.singularValue (π n) : ℝ) =
+      absDoubleAngleTangent ((T.singularValue n : ℝ)))
     (hHmem : N.Mem H) :
     N.Mem tanTwoTheta ∧
       (b - a) * N.gaugeReal tanTwoTheta ≤ 2 * N.gaugeReal H := by

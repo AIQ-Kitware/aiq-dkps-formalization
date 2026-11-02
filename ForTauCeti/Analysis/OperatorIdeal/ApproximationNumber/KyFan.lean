@@ -19,10 +19,10 @@ The `k`th **Ky Fan gauge** of a bounded operator is the sum of its first `k` app
 numbers,
 
 ```
-T.kyFanGaugeReal k = ∑ n ∈ Finset.range k, T.approximationNumber n,
+(T.kyFanGauge k : ℝ) = ∑ n ∈ Finset.range k, (T.singularValue n : ℝ),
 ```
 
-so `kyFanGaugeReal 1` is the operator norm and the gauges increase to the nuclear norm.  Each is
+so `(T.kyFanGauge 1 : ℝ)` is the operator norm and the gauges increase to the nuclear norm.  Each is
 a norm on the two-sided ideal it defines, and the family of them determines every
 unitarily invariant norm — which is why the Ky Fan gauges, not the individual approximation
 numbers, are what an operator-ideal theory is built from.
@@ -83,51 +83,51 @@ variable {E : Type v} {F : Type w}
 /-- Approximation numbers are unchanged by negation.  Mathlib's staging layer has
 `approximationNumber_smul` but not this special case. -/
 @[simp] theorem approximationNumber_neg (T : E →L[𝕜] F) (n : ℕ) :
-    (-T).approximationNumber n = T.approximationNumber n := by
+    ((-T).singularValue n : ℝ) = (T.singularValue n : ℝ) := by
   rw [← neg_one_smul 𝕜 T, approximationNumber_smul]
   simp
 
 /-- Ky Fan gauges are unchanged by negation. -/
 @[simp] theorem kyFanGaugeReal_neg (T : E →L[𝕜] F) (k : ℕ) :
-    (-T).kyFanGaugeReal k = T.kyFanGaugeReal k :=
+    ((-T).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ) :=
   by
     rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
     exact Finset.sum_congr rfl fun n _ => T.approximationNumber_neg n
 
 /-- The zeroth Ky Fan gauge is the empty sum, hence zero. -/
-@[simp] theorem kyFanGaugeReal_zero_index (T : E →L[𝕜] F) : T.kyFanGaugeReal 0 = 0 := by
+@[simp] theorem kyFanGaugeReal_zero_index (T : E →L[𝕜] F) : (T.kyFanGauge 0 : ℝ) = 0 := by
   rw [kyFanGaugeReal_eq_sum]
   simp
 
 /-- The zero operator has zero Ky Fan gauge at every index. -/
-@[simp] theorem kyFanGaugeReal_zero (k : ℕ) : (0 : E →L[𝕜] F).kyFanGaugeReal k = 0 := by
+@[simp] theorem kyFanGaugeReal_zero (k : ℕ) : ((0 : E →L[𝕜] F).kyFanGauge k : ℝ) = 0 := by
   rw [kyFanGaugeReal_eq_sum]
   simp
 
 /-- Ky Fan gauges are absolutely homogeneous. -/
 theorem kyFanGaugeReal_smul (c : 𝕜) (T : E →L[𝕜] F) (k : ℕ) :
-    (c • T).kyFanGaugeReal k = ‖c‖ * T.kyFanGaugeReal k := by
+    ((c • T).kyFanGauge k : ℝ) = ‖c‖ * (T.kyFanGauge k : ℝ) := by
   rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
   simp only [approximationNumber_smul]
   rw [Finset.mul_sum]
 
 /-- Ky Fan gauges are nonnegative. -/
-theorem kyFanGaugeReal_nonneg (T : E →L[𝕜] F) (k : ℕ) : 0 ≤ T.kyFanGaugeReal k :=
-  by rw [kyFanGaugeReal_eq_sum]; exact Finset.sum_nonneg fun n _ => T.approximationNumber_nonneg n
+theorem kyFanGaugeReal_nonneg (T : E →L[𝕜] F) (k : ℕ) : 0 ≤ (T.kyFanGauge k : ℝ) :=
+  by rw [kyFanGaugeReal_eq_sum]; exact Finset.sum_nonneg fun n _ => (T.singularValue n).coe_nonneg
 
 /-- **The two-sided ideal inequality.** -/
 theorem kyFanGaugeReal_comp_le {G : Type x} {H : Type y}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R : H →L[𝕜] E) (k : ℕ) :
-    (L ∘L T ∘L R).kyFanGaugeReal k ≤ ‖L‖ * T.kyFanGaugeReal k * ‖R‖ := by
+    ((L ∘L T ∘L R).kyFanGauge k : ℝ) ≤ ‖L‖ * (T.kyFanGauge k : ℝ) * ‖R‖ := by
   calc
-    (L ∘L T ∘L R).kyFanGaugeReal k
-        ≤ ∑ n ∈ Finset.range k, (‖L‖ * T.approximationNumber n * ‖R‖) :=
+    ((L ∘L T ∘L R).kyFanGauge k : ℝ)
+        ≤ ∑ n ∈ Finset.range k, (‖L‖ * (T.singularValue n : ℝ) * ‖R‖) :=
       by
         rw [kyFanGaugeReal_eq_sum]
         exact Finset.sum_le_sum fun n _ => approximationNumber_comp_comp_le L T R n
-    _ = ‖L‖ * T.kyFanGaugeReal k * ‖R‖ := by
+    _ = ‖L‖ * (T.kyFanGauge k : ℝ) * ‖R‖ := by
       rw [kyFanGaugeReal_eq_sum]
       rw [Finset.mul_sum, Finset.sum_mul]
 
@@ -140,7 +140,7 @@ theorem kyFanGaugeReal_comp_eq_of_leftInverse {G : Type x}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     {ι : F →L[𝕜] G} {π : G →L[𝕜] F} (hπι : Function.LeftInverse π ι)
     (hι : ‖ι‖ ≤ 1) (hπ : ‖π‖ ≤ 1) (T : E →L[𝕜] F) (k : ℕ) :
-    (ι ∘L T).kyFanGaugeReal k = T.kyFanGaugeReal k :=
+    ((ι ∘L T).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ) :=
   by
     rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
     exact Finset.sum_congr rfl fun n _ =>
@@ -148,18 +148,18 @@ theorem kyFanGaugeReal_comp_eq_of_leftInverse {G : Type x}
 
 /-- The operator norm is the first term of every positive Ky Fan gauge. -/
 theorem opNorm_le_kyFanGauge (T : E →L[𝕜] F) {k : ℕ} (hk : 0 < k) :
-    ‖T‖ ≤ T.kyFanGaugeReal k := by
+    ‖T‖ ≤ (T.kyFanGauge k : ℝ) := by
   rw [kyFanGaugeReal_eq_sum]
   rw [← T.approximationNumber_index_zero]
-  exact Finset.single_le_sum (fun n _ => T.approximationNumber_nonneg n)
+  exact Finset.single_le_sum (fun n _ => (T.singularValue n).coe_nonneg)
     (Finset.mem_range.mpr hk)
 
 /-- Every Ky Fan gauge is bounded by `k` times the operator norm, so the ideal it defines
 contains every bounded operator when `k` is finite. -/
 theorem kyFanGaugeReal_le_nat_mul_opNorm (T : E →L[𝕜] F) (k : ℕ) :
-    T.kyFanGaugeReal k ≤ (k : ℝ) * ‖T‖ := by
+    (T.kyFanGauge k : ℝ) ≤ (k : ℝ) * ‖T‖ := by
   calc
-    T.kyFanGaugeReal k ≤ ∑ _n ∈ Finset.range k, ‖T‖ :=
+    (T.kyFanGauge k : ℝ) ≤ ∑ _n ∈ Finset.range k, ‖T‖ :=
       by
         rw [kyFanGaugeReal_eq_sum]
         exact Finset.sum_le_sum fun n _ => T.approximationNumber_le_norm n
@@ -175,12 +175,11 @@ variable {E : Type v} {F : Type w}
 
 /-- Ky Fan gauges are adjoint-invariant, since the approximation numbers are. -/
 theorem kyFanGaugeReal_adjoint (T : E →L[𝕜] F) (k : ℕ) :
-    T.adjoint.kyFanGaugeReal k = T.kyFanGaugeReal k := by
+    (T.adjoint.kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ) := by
   rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
   apply Finset.sum_congr rfl
   intro n hn
-  rw [approximationNumber_eq_singularValue_toReal,
-    approximationNumber_eq_singularValue_toReal, singularValue_adjoint]
+  rw [ singularValue_adjoint]
 
 end Adjoint
 
@@ -193,19 +192,19 @@ variable {E : Type v} {F : Type w}
 /-- In finite dimensions the Ky Fan gauge is the rectangular Ky Fan singular-value sum. -/
 theorem kyFanSum_eq_kyFanGauge (k : ℕ) (A : E →ₗ[𝕜] F) :
     A.kyFanSum k =
-      A.toContinuousLinearMap.kyFanGaugeReal k := by
+      (A.toContinuousLinearMap.kyFanGauge k : ℝ) := by
   rw [kyFanGaugeReal_eq_sum]
   rw [LinearMap.kyFanSum_def]
   refine Finset.sum_congr rfl fun n _ => ?_
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+  rw [
     ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
     LinearMap.coe_toContinuousLinearMap]
 
 /-- **Step 1 of the triangle inequality**: the finite-dimensional case, transported from the
 rectangular Ky Fan norm. -/
 theorem kyFanGaugeReal_add_le_of_finiteDimensional (k : ℕ) (A B : E →ₗ[𝕜] F) :
-    (A + B).toContinuousLinearMap.kyFanGaugeReal k ≤
-      A.toContinuousLinearMap.kyFanGaugeReal k + B.toContinuousLinearMap.kyFanGaugeReal k := by
+    ((A + B).toContinuousLinearMap.kyFanGauge k : ℝ) ≤
+      (A.toContinuousLinearMap.kyFanGauge k : ℝ) + (B.toContinuousLinearMap.kyFanGauge k : ℝ) := by
   rw [← kyFanSum_eq_kyFanGauge k (A + B),
     ← kyFanSum_eq_kyFanGauge k A, ← kyFanSum_eq_kyFanGauge k B]
   exact LinearMap.kyFanSum_add_le A B k
@@ -223,7 +222,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- Restricting to a larger source subspace can only increase an approximation number. -/
 theorem approximationNumber_restrict_mono (T : E →L[𝕜] F) (n : ℕ) {U V : Submodule 𝕜 E}
     (hUV : U ≤ V) :
-    (T ∘L U.subtypeL).approximationNumber n ≤ (T ∘L V.subtypeL).approximationNumber n := by
+    ((T ∘L U.subtypeL).singularValue n : ℝ) ≤ ((T ∘L V.subtypeL).singularValue n : ℝ) := by
   let J : U →L[𝕜] V :=
     (Submodule.inclusion hUV).mkContinuous 1 fun x => by
       -- names the application so the norm bound applies to it directly.
@@ -239,12 +238,12 @@ theorem approximationNumber_restrict_mono (T : E →L[𝕜] F) (n : ℕ) {U V : 
     rfl
   rw [hcomp]
   calc
-    ((T ∘L V.subtypeL) ∘L J).approximationNumber n
-        ≤ (T ∘L V.subtypeL).approximationNumber n * ‖J‖ :=
+    (((T ∘L V.subtypeL) ∘L J).singularValue n : ℝ)
+        ≤ ((T ∘L V.subtypeL).singularValue n : ℝ) * ‖J‖ :=
       (T ∘L V.subtypeL).approximationNumber_comp_le_mul_norm J n
-    _ ≤ (T ∘L V.subtypeL).approximationNumber n * 1 :=
-      mul_le_mul_of_nonneg_left hJnorm (ContinuousLinearMap.approximationNumber_nonneg _ _)
-    _ = (T ∘L V.subtypeL).approximationNumber n := by rw [mul_one]
+    _ ≤ ((T ∘L V.subtypeL).singularValue n : ℝ) * 1 :=
+      mul_le_mul_of_nonneg_left hJnorm ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
+    _ = ((T ∘L V.subtypeL).singularValue n : ℝ) := by rw [mul_one]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Compressing the codomain to a subspace that already contains the range preserves every
@@ -252,7 +251,7 @@ approximation number. -/
 theorem approximationNumber_orthogonalProjectionOnto_comp_eq
     (W : Submodule 𝕜 F) [W.HasOrthogonalProjection]
     (A : E →L[𝕜] F) (hA : ∀ x, A x ∈ W) (n : ℕ) :
-    (W.orthogonalProjectionOnto ∘L A).approximationNumber n = A.approximationNumber n := by
+    ((W.orthogonalProjectionOnto ∘L A).singularValue n : ℝ) = (A.singularValue n : ℝ) := by
   set AW : E →L[𝕜] W := W.orthogonalProjectionOnto ∘L A with hAW
   have hfactor : W.subtypeL ∘L AW = A := by
     ext x
@@ -264,28 +263,28 @@ theorem approximationNumber_orthogonalProjectionOnto_comp_eq
   have hsub : ‖W.subtypeL‖ ≤ (1 : ℝ) := W.norm_subtypeL_le
   refine le_antisymm ?_ ?_
   · calc
-      AW.approximationNumber n
-          ≤ ‖W.orthogonalProjectionOnto‖ * A.approximationNumber n :=
+      (AW.singularValue n : ℝ)
+          ≤ ‖W.orthogonalProjectionOnto‖ * (A.singularValue n : ℝ) :=
         ContinuousLinearMap.approximationNumber_comp_le_norm_mul
           W.orthogonalProjectionOnto A n
-      _ ≤ 1 * A.approximationNumber n :=
-        mul_le_mul_of_nonneg_right hproj (ContinuousLinearMap.approximationNumber_nonneg _ _)
-      _ = A.approximationNumber n := by rw [one_mul]
+      _ ≤ 1 * (A.singularValue n : ℝ) :=
+        mul_le_mul_of_nonneg_right hproj ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
+      _ = (A.singularValue n : ℝ) := by rw [one_mul]
   · rw [← hfactor]
     calc
-      (W.subtypeL ∘L AW).approximationNumber n
-          ≤ ‖W.subtypeL‖ * AW.approximationNumber n :=
+      ((W.subtypeL ∘L AW).singularValue n : ℝ)
+          ≤ ‖W.subtypeL‖ * (AW.singularValue n : ℝ) :=
         ContinuousLinearMap.approximationNumber_comp_le_norm_mul W.subtypeL AW n
-      _ ≤ 1 * AW.approximationNumber n :=
-        mul_le_mul_of_nonneg_right hsub (ContinuousLinearMap.approximationNumber_nonneg _ _)
-      _ = AW.approximationNumber n := by rw [one_mul]
+      _ ≤ 1 * (AW.singularValue n : ℝ) :=
+        mul_le_mul_of_nonneg_right hsub ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
+      _ = (AW.singularValue n : ℝ) := by rw [one_mul]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Ky Fan form of `approximationNumber_orthogonalProjectionOnto_comp_eq`. -/
 theorem kyFanGaugeReal_orthogonalProjectionOnto_comp_eq
     (W : Submodule 𝕜 F) [W.HasOrthogonalProjection]
     (A : E →L[𝕜] F) (hA : ∀ x, A x ∈ W) (k : ℕ) :
-    (W.orthogonalProjectionOnto ∘L A).kyFanGaugeReal k = A.kyFanGaugeReal k :=
+    ((W.orthogonalProjectionOnto ∘L A).kyFanGauge k : ℝ) = (A.kyFanGauge k : ℝ) :=
   by
     rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
     exact Finset.sum_congr rfl fun n _ =>
@@ -304,7 +303,7 @@ omit [CompleteSpace G] in
 Hilbert codomain.  The codomain is compressed onto the range of `A ⊕ B`, which is
 finite-dimensional and changes no approximation number. -/
 theorem kyFanGaugeReal_add_le_of_finiteDimensional_source (k : ℕ) (A B : V →L[𝕜] G) :
-    (A + B).kyFanGaugeReal k ≤ A.kyFanGaugeReal k + B.kyFanGaugeReal k := by
+    ((A + B).kyFanGauge k : ℝ) ≤ (A.kyFanGauge k : ℝ) + (B.kyFanGauge k : ℝ) := by
   let : CompleteSpace V := FiniteDimensional.complete 𝕜 V
   let C : V × V →L[𝕜] G :=
     A ∘L ContinuousLinearMap.fst 𝕜 V V + B ∘L ContinuousLinearMap.snd 𝕜 V V
@@ -332,12 +331,12 @@ theorem kyFanGaugeReal_add_le_of_finiteDimensional_source (k : ℕ) (A B : V →
   have htri := kyFanGaugeReal_add_le_of_finiteDimensional (𝕜 := 𝕜) k AW.toLinearMap BW.toLinearMap
   rw [hsumcont, hAWcont, hBWcont] at htri
   calc
-    (A + B).kyFanGaugeReal k
-        = (W.orthogonalProjectionOnto ∘L (A + B)).kyFanGaugeReal k :=
+    ((A + B).kyFanGauge k : ℝ)
+        = ((W.orthogonalProjectionOnto ∘L (A + B)).kyFanGauge k : ℝ) :=
       (kyFanGaugeReal_orthogonalProjectionOnto_comp_eq W (A + B) hAB k).symm
-    _ = (AW + BW).kyFanGaugeReal k := by rw [hsum]
-    _ ≤ AW.kyFanGaugeReal k + BW.kyFanGaugeReal k := htri
-    _ = A.kyFanGaugeReal k + B.kyFanGaugeReal k := by
+    _ = ((AW + BW).kyFanGauge k : ℝ) := by rw [hsum]
+    _ ≤ (AW.kyFanGauge k : ℝ) + (BW.kyFanGauge k : ℝ) := htri
+    _ = (A.kyFanGauge k : ℝ) + (B.kyFanGauge k : ℝ) := by
       rw [kyFanGaugeReal_orthogonalProjectionOnto_comp_eq W A hA k,
         kyFanGaugeReal_orthogonalProjectionOnto_comp_eq W B hB k]
 
@@ -365,10 +364,10 @@ the space itself, it is proved by complexification.  Stating the step this way i
 the two fields from needing two copies of the argument. -/
 theorem kyFanGaugeReal_add_le_of_exists_finiteRestriction {S T : E →L[𝕜] F}
     (hfr : ∀ (n : ℕ) (ε : ℝ), 0 < ε → ∃ v : Fin (n + 1) → E,
-      (S + T).approximationNumber n <
-        ((S + T) ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).approximationNumber n + ε)
+      ((S + T).singularValue n : ℝ) <
+        (((S + T) ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).singularValue n : ℝ) + ε)
     (k : ℕ) :
-    (S + T).kyFanGaugeReal k ≤ S.kyFanGaugeReal k + T.kyFanGaugeReal k := by
+    ((S + T).kyFanGauge k : ℝ) ≤ (S.kyFanGauge k : ℝ) + (T.kyFanGauge k : ℝ) := by
   classical
   rcases Nat.eq_zero_or_pos k with rfl | hkpos
   · simp
@@ -388,7 +387,7 @@ theorem kyFanGaugeReal_add_le_of_exists_finiteRestriction {S T : E →L[𝕜] F}
     ext x
     rfl
   have hterm : ∀ n ∈ Finset.range k,
-      (S + T).approximationNumber n ≤ (SV + TV).approximationNumber n + ε / (k : ℝ) := by
+      ((S + T).singularValue n : ℝ) ≤ ((SV + TV).singularValue n : ℝ) + ε / (k : ℝ) := by
     intro n hn
     let U : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range (v n))
     have hUV : U ≤ V := by
@@ -396,33 +395,33 @@ theorem kyFanGaugeReal_add_le_of_exists_finiteRestriction {S T : E →L[𝕜] F}
       rintro x ⟨j, rfl⟩
       exact Submodule.subset_span ⟨(⟨⟨n, Finset.mem_range.mp hn⟩, j⟩ : β), rfl⟩
     calc
-      (S + T).approximationNumber n
-          ≤ ((S + T) ∘L U.subtypeL).approximationNumber n + ε / (k : ℝ) := (hv n).le
-      _ ≤ ((S + T) ∘L V.subtypeL).approximationNumber n + ε / (k : ℝ) :=
+      ((S + T).singularValue n : ℝ)
+          ≤ (((S + T) ∘L U.subtypeL).singularValue n : ℝ) + ε / (k : ℝ) := (hv n).le
+      _ ≤ (((S + T) ∘L V.subtypeL).singularValue n : ℝ) + ε / (k : ℝ) :=
         by gcongr; exact (S + T).approximationNumber_restrict_mono n hUV
-      _ = (SV + TV).approximationNumber n + ε / (k : ℝ) := by rw [hsumRestrict]
-  have hlocal : (S + T).kyFanGaugeReal k ≤ (SV + TV).kyFanGaugeReal k + ε := by
+      _ = ((SV + TV).singularValue n : ℝ) + ε / (k : ℝ) := by rw [hsumRestrict]
+  have hlocal : ((S + T).kyFanGauge k : ℝ) ≤ ((SV + TV).kyFanGauge k : ℝ) + ε := by
     calc
-      (S + T).kyFanGaugeReal k ≤ ∑ n ∈ Finset.range k,
-          ((SV + TV).approximationNumber n + ε / (k : ℝ)) := by
+      ((S + T).kyFanGauge k : ℝ) ≤ ∑ n ∈ Finset.range k,
+          (((SV + TV).singularValue n : ℝ) + ε / (k : ℝ)) := by
             rw [kyFanGaugeReal_eq_sum]
             exact Finset.sum_le_sum hterm
-      _ = (SV + TV).kyFanGaugeReal k + (k : ℝ) * (ε / (k : ℝ)) := by
+      _ = ((SV + TV).kyFanGauge k : ℝ) + (k : ℝ) * (ε / (k : ℝ)) := by
         rw [kyFanGaugeReal_eq_sum, Finset.sum_add_distrib]
         simp [nsmul_eq_mul]
-      _ = (SV + TV).kyFanGaugeReal k + ε := by rw [mul_div_cancel₀ ε hkreal.ne']
-  have hrestrictS : SV.kyFanGaugeReal k ≤ S.kyFanGaugeReal k := by
+      _ = ((SV + TV).kyFanGauge k : ℝ) + ε := by rw [mul_div_cancel₀ ε hkreal.ne']
+  have hrestrictS : (SV.kyFanGauge k : ℝ) ≤ (S.kyFanGauge k : ℝ) := by
     rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
     exact Finset.sum_le_sum fun n _ => S.approximationNumber_comp_subtypeL_le n V
-  have hrestrictT : TV.kyFanGaugeReal k ≤ T.kyFanGaugeReal k := by
+  have hrestrictT : (TV.kyFanGauge k : ℝ) ≤ (T.kyFanGauge k : ℝ) := by
     rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
     exact Finset.sum_le_sum fun n _ => T.approximationNumber_comp_subtypeL_le n V
   calc
-    (S + T).kyFanGaugeReal k ≤ (SV + TV).kyFanGaugeReal k + ε := hlocal
-    _ ≤ (SV.kyFanGaugeReal k + TV.kyFanGaugeReal k) + ε := by
+    ((S + T).kyFanGauge k : ℝ) ≤ ((SV + TV).kyFanGauge k : ℝ) + ε := hlocal
+    _ ≤ ((SV.kyFanGauge k : ℝ) + (TV.kyFanGauge k : ℝ)) + ε := by
       gcongr
       exact kyFanGaugeReal_add_le_of_finiteDimensional_source k SV TV
-    _ ≤ (S.kyFanGaugeReal k + T.kyFanGaugeReal k) + ε := by gcongr
+    _ ≤ ((S.kyFanGauge k : ℝ) + (T.kyFanGauge k : ℝ)) + ε := by gcongr
 
 end Localization
 

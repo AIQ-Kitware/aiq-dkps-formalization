@@ -72,15 +72,15 @@ variable {𝕜 : Type u} [RCLike 𝕜] {E : Type v} {F : Type w}
 /-- Restriction to a subspace cannot increase an approximation number. -/
 theorem approximationNumber_comp_subtypeL_le
     (T : E →L[𝕜] F) (n : ℕ) (V : Submodule 𝕜 E) :
-    (T ∘L V.subtypeL).approximationNumber n ≤ T.approximationNumber n := by
+    ((T ∘L V.subtypeL).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) := by
   have h := T.approximationNumber_comp_le_mul_norm V.subtypeL n
   have hsub : ‖V.subtypeL‖ ≤ (1 : ℝ) := V.norm_subtypeL_le
   calc
-    (T ∘L V.subtypeL).approximationNumber n
-        ≤ T.approximationNumber n * ‖V.subtypeL‖ := h
-    _ ≤ T.approximationNumber n * 1 :=
-      mul_le_mul_of_nonneg_left hsub (T.approximationNumber_nonneg n)
-    _ = T.approximationNumber n := by rw [mul_one]
+    ((T ∘L V.subtypeL).singularValue n : ℝ)
+        ≤ (T.singularValue n : ℝ) * ‖V.subtypeL‖ := h
+    _ ≤ (T.singularValue n : ℝ) * 1 :=
+      mul_le_mul_of_nonneg_left hsub ((T.singularValue n).coe_nonneg)
+    _ = (T.singularValue n : ℝ) := by rw [mul_one]
 
 /-- The approximation numbers of the restrictions of `T` to the spans of `n + 1` vectors.
 
@@ -88,11 +88,11 @@ Linearly dependent families are deliberately not excluded: they merely contribut
 restrictions to subspaces of smaller dimension, which the supremum ignores. -/
 def finiteRestrictionApproximationNumbers (T : E →L[𝕜] F) (n : ℕ) : Set ℝ :=
   Set.range fun v : Fin (n + 1) → E =>
-    (T ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).approximationNumber n
+    ((T ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).singularValue n : ℝ)
 
 /-- The ambient approximation number bounds every finite restriction. -/
 theorem finiteRestrictionApproximationNumbers_upperBound (T : E →L[𝕜] F) (n : ℕ) :
-    T.approximationNumber n ∈ upperBounds (T.finiteRestrictionApproximationNumbers n) := by
+    (T.singularValue n : ℝ) ∈ upperBounds (T.finiteRestrictionApproximationNumbers n) := by
   rintro _ ⟨v, rfl⟩
   exact T.approximationNumber_comp_subtypeL_le n (Submodule.span 𝕜 (Set.range v))
 
@@ -115,18 +115,17 @@ variable {𝕜 : Type u} [RCLike 𝕜] {E : Type v} {F : Type w}
 approximation number of an `(n+1)`-generated restriction. -/
 theorem exists_finiteRestrictionApproximationNumber_gt_of_lt
     (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r)
-    (hr : r < T.approximationNumber n) :
+    (hr : r < (T.singularValue n : ℝ)) :
     ∃ v : Fin (n + 1) → E,
-      r < (T ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).approximationNumber n := by
+      r < ((T ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).singularValue n : ℝ) := by
   obtain ⟨s, hrs, v, hv, hV⟩ := TauCeti.hasMinMaxLowerBound_iff.mp h T n hr0
-    (by simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hr)
+    (by exact hr)
   let V : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range v)
   let b : Module.Basis (Fin (n + 1)) 𝕜 V := Module.Basis.span hv
   let w : Fin (n + 1) → V := fun i => b i
   have hw : LinearIndependent 𝕜 w := by
     simpa only [w] using b.linearIndependent
-  have hsNN : s ≤ (T ∘L V.subtypeL).approximationNumber n := by
-    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+  have hsNN : s ≤ ((T ∘L V.subtypeL).singularValue n : ℝ) := by
     apply (T ∘L V.subtypeL).le_singularValue_of_linearIndependent hw
     intro x _
     exact hV (x : E) x.property
@@ -141,12 +140,12 @@ formulation appropriate to `ℝ`; the family is nonempty and bounded above by th
 approximation number. -/
 theorem approximationNumber_isLUB_finiteRestrictions
     (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) :
-    IsLUB (T.finiteRestrictionApproximationNumbers n) (T.approximationNumber n) := by
+    IsLUB (T.finiteRestrictionApproximationNumbers n) ((T.singularValue n : ℝ)) := by
   refine ⟨T.finiteRestrictionApproximationNumbers_upperBound n, ?_⟩
   intro b hb
   -- Every upper bound of a nonempty family of nonnegative reals is nonnegative.
   have hb0 : 0 ≤ b :=
-    (ContinuousLinearMap.approximationNumber_nonneg _ n).trans (hb ⟨fun _ => 0, rfl⟩)
+    ((ContinuousLinearMap.singularValue _ n).coe_nonneg).trans (hb ⟨fun _ => 0, rfl⟩)
   by_contra hnot
   obtain ⟨v, hv⟩ :=
     h.exists_finiteRestrictionApproximationNumber_gt_of_lt T n hb0 (lt_of_not_ge hnot)
@@ -161,17 +160,16 @@ The forward direction is the hypothesis and the reverse is
 in which both halves of the min--max theorem appear together. -/
 theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
     (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r) :
-    r < T.approximationNumber n ↔
+    r < (T.singularValue n : ℝ) ↔
       ∃ s : ℝ, r < s ∧
         ∃ v : Fin (n + 1) → E, LinearIndependent 𝕜 v ∧
           ∀ x ∈ Submodule.span 𝕜 (Set.range v), s * ‖x‖ ≤ ‖T x‖ := by
   constructor
   · intro hr
     exact TauCeti.hasMinMaxLowerBound_iff.mp h T n hr0
-      (by simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hr)
+      (by exact hr)
   · rintro ⟨s, hrs, v, hv, hV⟩
     refine hrs.trans_le ?_
-    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
     exact T.le_singularValue_of_linearIndependent hv hV
 
 /-- Every positive tolerance admits a finite source restriction whose approximation number
@@ -182,12 +180,12 @@ bound rather than over `ℂ` alone. -/
 theorem exists_finiteRestrictionApproximationNumber_add_gt
     (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) (ε : ℝ) (hε : 0 < ε) :
     ∃ v : Fin (n + 1) → E,
-      T.approximationNumber n <
-        (T ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).approximationNumber n + ε := by
-  by_cases hsmall : T.approximationNumber n < ε
+      (T.singularValue n : ℝ) <
+        ((T ∘L (Submodule.span 𝕜 (Set.range v)).subtypeL).singularValue n : ℝ) + ε := by
+  by_cases hsmall : (T.singularValue n : ℝ) < ε
   · exact ⟨fun _ => 0, hsmall.trans_le
-      (le_add_of_nonneg_left (ContinuousLinearMap.approximationNumber_nonneg _ _))⟩
-  · have hεle : ε ≤ T.approximationNumber n := le_of_not_gt hsmall
+      (le_add_of_nonneg_left ((ContinuousLinearMap.singularValue _ _).coe_nonneg))⟩
+  · have hεle : ε ≤ (T.singularValue n : ℝ) := le_of_not_gt hsmall
     obtain ⟨v, hv⟩ := h.exists_finiteRestrictionApproximationNumber_gt_of_lt T n
       (sub_nonneg.mpr hεle) (sub_lt_self _ hε)
     exact ⟨v, by linarith⟩

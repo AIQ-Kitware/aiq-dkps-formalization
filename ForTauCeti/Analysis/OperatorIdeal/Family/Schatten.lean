@@ -57,33 +57,31 @@ that comparison *is* `kyFanGaugeReal_add_le` — so
 the native `PiLp` symmetric-gauge comparison applies, and its norm triangle
 inequality splits the right-hand side. -/
 theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →L[𝕜] F) (k : ℕ) :
-    TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (S + T).approximationNumber i) ≤
-      TauCeti.FiniteVector.lpGauge p (fun i : Fin k => S.approximationNumber i) +
-        TauCeti.FiniteVector.lpGauge p (fun i : Fin k => T.approximationNumber i) := by
+    TauCeti.FiniteVector.lpGauge p (fun i : Fin k => ((S + T).singularValue i : ℝ)) ≤
+      TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (S.singularValue i : ℝ)) +
+        TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (T.singularValue i : ℝ)) := by
   classical
   have hmaj : TauCeti.IsWeaklyMajorizedBy
-      (fun i : Fin k => (S + T).approximationNumber i)
-      (fun i : Fin k => S.approximationNumber i + T.approximationNumber i) := by
+      (fun i : Fin k => ((S + T).singularValue i : ℝ))
+      (fun i : Fin k => (S.singularValue i : ℝ) + (T.singularValue i : ℝ)) := by
     refine ⟨?_, ?_, ?_, ?_, ?_⟩
     · exact fun i j hij => (S + T).approximationNumber_antitone (by exact_mod_cast hij)
     · exact fun i j hij =>
         add_le_add (S.approximationNumber_antitone (by exact_mod_cast hij))
           (T.approximationNumber_antitone (by exact_mod_cast hij))
-    · exact fun i => (S + T).approximationNumber_nonneg i
+    · exact fun i => ((S + T).singularValue i).coe_nonneg
     · exact fun i =>
-        add_nonneg (S.approximationNumber_nonneg i) (T.approximationNumber_nonneg i)
+        add_nonneg ((S.singularValue i).coe_nonneg) ((T.singularValue i).coe_nonneg)
     · intro j
-      rw [TauCeti.prefixSum_eq_sum_range j (fun n => (S + T).approximationNumber n),
-        show (fun i : Fin k => S.approximationNumber i + T.approximationNumber i)
-          = (fun i : Fin k => (fun n => S.approximationNumber n + T.approximationNumber n) i)
+      rw [TauCeti.prefixSum_eq_sum_range j (fun n => ((S + T).singularValue n : ℝ)),
+        show (fun i : Fin k => (S.singularValue i : ℝ) + (T.singularValue i : ℝ))
+          = (fun i : Fin k => (fun n => (S.singularValue n : ℝ) + (T.singularValue n : ℝ)) i)
           from rfl,
         TauCeti.prefixSum_eq_sum_range j
-          (fun n => S.approximationNumber n + T.approximationNumber n),
+          (fun n => (S.singularValue n : ℝ) + (T.singularValue n : ℝ)),
         Finset.sum_add_distrib]
-      have h : (S + T).kyFanGaugeReal (min j k) ≤
-          S.kyFanGaugeReal (min j k) + T.kyFanGaugeReal (min j k) := by
-        change ((S + T).kyFanGauge (min j k) : ℝ) ≤
-          S.kyFanGauge (min j k) + T.kyFanGauge (min j k)
+      have h : ((S + T).kyFanGauge (min j k) : ℝ) ≤
+          (S.kyFanGauge (min j k) : ℝ) + (T.kyFanGauge (min j k) : ℝ) := by
         exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le S T (min j k)
       simpa only [kyFanGaugeReal_eq_sum] using h
   let _ : Fact (1 ≤ ENNReal.ofReal p) := ⟨by
@@ -102,7 +100,7 @@ section Gauge
 operator: it is `∞` exactly when `T` is not Schatten-`p`. -/
 @[expose]
 noncomputable def schattenENorm (p : ℝ) (T : E →L[𝕜] F) : ℝ≥0∞ :=
-  (∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ p) ^ p⁻¹
+  (∑' n : ℕ, ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p) ^ p⁻¹
 
 -- Reading the finite gauge in `ℝ≥0∞` is arithmetic; neither space needs to be complete.
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -111,27 +109,27 @@ theory, where the majorization argument lives, and the `ℝ≥0∞` gauge, where
 are stated unconditionally. -/
 theorem ofReal_lpGauge_approximationNumber {p : ℝ} (hp0 : 0 < p) (T : E →L[𝕜] F) (k : ℕ) :
     ENNReal.ofReal
-        (TauCeti.FiniteVector.lpGauge p (fun i : Fin k => T.approximationNumber i)) =
-      (∑ n ∈ Finset.range k, ENNReal.ofReal (T.approximationNumber n) ^ p) ^ p⁻¹ := by
-  have hsum : ∀ i : Fin k, |T.approximationNumber i| ^ p = T.approximationNumber i ^ p :=
-    fun i => by rw [abs_of_nonneg (T.approximationNumber_nonneg i)]
+        (TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (T.singularValue i : ℝ))) =
+      (∑ n ∈ Finset.range k, ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p) ^ p⁻¹ := by
+  have hsum : ∀ i : Fin k, |(T.singularValue i : ℝ)| ^ p = (T.singularValue i : ℝ) ^ p :=
+    fun i => by rw [abs_of_nonneg ((T.singularValue i).coe_nonneg)]
   rw [TauCeti.FiniteVector.lpGauge, one_div]
   rw [← ENNReal.ofReal_rpow_of_nonneg
     (Finset.sum_nonneg fun i _ => Real.rpow_nonneg (abs_nonneg _) _) (by positivity)]
   congr 1
   rw [ENNReal.ofReal_sum_of_nonneg fun i _ => Real.rpow_nonneg (abs_nonneg _) _,
     Fin.sum_univ_eq_sum_range
-      (fun m => ENNReal.ofReal (|T.approximationNumber m| ^ p)) k]
+      (fun m => ENNReal.ofReal (|(T.singularValue m : ℝ)| ^ p)) k]
   refine Finset.sum_congr rfl fun m _ => ?_
-  rw [abs_of_nonneg (T.approximationNumber_nonneg m),
-    ENNReal.ofReal_rpow_of_nonneg (T.approximationNumber_nonneg m) hp0.le]
+  rw [abs_of_nonneg ((T.singularValue m).coe_nonneg),
+    ENNReal.ofReal_rpow_of_nonneg ((T.singularValue m).coe_nonneg) hp0.le]
 
 -- A partial sum is at most its `tsum`; again no completeness is used.
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every truncated `ℓᵖ` gauge is dominated by the whole Schatten norm. -/
 theorem ofReal_lpGauge_le_schattenENorm {p : ℝ} (hp0 : 0 < p) (T : E →L[𝕜] F) (k : ℕ) :
     ENNReal.ofReal
-        (TauCeti.FiniteVector.lpGauge p (fun i : Fin k => T.approximationNumber i)) ≤
+        (TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (T.singularValue i : ℝ))) ≤
       T.schattenENorm p := by
   rw [ofReal_lpGauge_approximationNumber hp0 T k, schattenENorm]
   exact ENNReal.rpow_le_rpow (ENNReal.sum_le_tsum _) (by positivity)
@@ -150,14 +148,14 @@ theorem schattenENorm_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →L[𝕜] F) :
   have hp0 : (0 : ℝ) < p := lt_of_lt_of_le zero_lt_one hp
   set R := S.schattenENorm p + T.schattenENorm p with hR
   have hstep : ∀ k : ℕ,
-      (∑ n ∈ Finset.range k, ENNReal.ofReal ((S + T).approximationNumber n) ^ p) ^ p⁻¹ ≤ R := by
+      (∑ n ∈ Finset.range k, ENNReal.ofReal (((S + T).singularValue n : ℝ)) ^ p) ^ p⁻¹ ≤ R := by
     intro k
     rw [← ofReal_lpGauge_approximationNumber hp0 (S + T) k]
     calc ENNReal.ofReal
-          (TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (S + T).approximationNumber i))
+          (TauCeti.FiniteVector.lpGauge p (fun i : Fin k => ((S + T).singularValue i : ℝ)))
         ≤ ENNReal.ofReal
-            (TauCeti.FiniteVector.lpGauge p (fun i : Fin k => S.approximationNumber i) +
-              TauCeti.FiniteVector.lpGauge p (fun i : Fin k => T.approximationNumber i)) :=
+            (TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (S.singularValue i : ℝ)) +
+              TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (T.singularValue i : ℝ))) :=
           ENNReal.ofReal_le_ofReal (lpGauge_approximationNumber_add_le hp S T k)
       _ = _ := ENNReal.ofReal_add (TauCeti.FiniteVector.lpGauge_nonneg _ _)
           (TauCeti.FiniteVector.lpGauge_nonneg _ _)
@@ -165,11 +163,11 @@ theorem schattenENorm_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →L[𝕜] F) :
           (ofReal_lpGauge_le_schattenENorm hp0 T k)
   -- The partial sums are bounded by `R ^ p`, and `∑'` is their supremum.
   have hpow : ∀ k : ℕ,
-      ∑ n ∈ Finset.range k, ENNReal.ofReal ((S + T).approximationNumber n) ^ p ≤ R ^ p := by
+      ∑ n ∈ Finset.range k, ENNReal.ofReal (((S + T).singularValue n : ℝ)) ^ p ≤ R ^ p := by
     intro k
     have h := ENNReal.rpow_le_rpow (hstep k) hp0.le
     rwa [← ENNReal.rpow_mul, inv_mul_cancel₀ hp0.ne', ENNReal.rpow_one] at h
-  have htsum : ∑' n : ℕ, ENNReal.ofReal ((S + T).approximationNumber n) ^ p ≤ R ^ p :=
+  have htsum : ∑' n : ℕ, ENNReal.ofReal (((S + T).singularValue n : ℝ)) ^ p ≤ R ^ p :=
     ENNReal.tsum_eq_iSup_nat.trans_le (iSup_le hpow)
   have := ENNReal.rpow_le_rpow htsum (by positivity : (0 : ℝ) ≤ p⁻¹)
   rwa [← ENNReal.rpow_mul, mul_inv_cancel₀ hp0.ne', ENNReal.rpow_one] at this
@@ -182,8 +180,8 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- **Absolute homogeneity.** -/
 theorem schattenENorm_smul {p : ℝ} (hp0 : 0 < p) (c : 𝕜) (T : E →L[𝕜] F) :
     (c • T).schattenENorm p = ‖c‖ₑ * T.schattenENorm p := by
-  have hterm : ∀ n : ℕ, ENNReal.ofReal ((c • T).approximationNumber n) ^ p =
-      ‖c‖ₑ ^ p * ENNReal.ofReal (T.approximationNumber n) ^ p := by
+  have hterm : ∀ n : ℕ, ENNReal.ofReal (((c • T).singularValue n : ℝ)) ^ p =
+      ‖c‖ₑ ^ p * ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p := by
     intro n
     rw [approximationNumber_smul, ENNReal.ofReal_mul (norm_nonneg c), ofReal_norm,
       ENNReal.mul_rpow_of_nonneg _ _ hp0.le]
@@ -197,7 +195,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The Schatten norm dominates the operator norm**, being its zeroth term. -/
 theorem enorm_le_schattenENorm {p : ℝ} (hp0 : 0 < p) (T : E →L[𝕜] F) :
     ‖T‖ₑ ≤ T.schattenENorm p := by
-  have hz : ‖T‖ₑ ^ p ≤ ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ p := by
+  have hz : ‖T‖ₑ ^ p ≤ ∑' n : ℕ, ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p := by
     refine le_trans (le_of_eq ?_) (ENNReal.le_tsum 0)
     rw [← ofReal_norm, ← T.approximationNumber_index_zero]
   have := ENNReal.rpow_le_rpow hz (by positivity : (0 : ℝ) ≤ p⁻¹)
@@ -207,7 +205,7 @@ theorem enorm_le_schattenENorm {p : ℝ} (hp0 : 0 < p) (T : E →L[𝕜] F) :
 what makes the Schatten family *symmetric*. -/
 theorem schattenENorm_adjoint (p : ℝ) (T : E →L[𝕜] F) :
     T.adjoint.schattenENorm p = T.schattenENorm p := by
-  simp only [schattenENorm, approximationNumber_eq_singularValue_toReal,
+  simp only [schattenENorm,
     singularValue_adjoint]
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -217,19 +215,19 @@ theorem schattenENorm_comp_le {p : ℝ} (hp0 : 0 < p) {G H : Type*}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R : H →L[𝕜] E) :
     (L ∘L T ∘L R).schattenENorm p ≤ ‖L‖ₑ * T.schattenENorm p * ‖R‖ₑ := by
-  have hterm : ∀ n : ℕ, ENNReal.ofReal ((L ∘L T ∘L R).approximationNumber n) ^ p ≤
-      (‖L‖ₑ * ‖R‖ₑ) ^ p * ENNReal.ofReal (T.approximationNumber n) ^ p := by
+  have hterm : ∀ n : ℕ, ENNReal.ofReal (((L ∘L T ∘L R).singularValue n : ℝ)) ^ p ≤
+      (‖L‖ₑ * ‖R‖ₑ) ^ p * ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p := by
     intro n
     have h := ENNReal.ofReal_le_ofReal (approximationNumber_comp_comp_le L T R n)
     refine le_trans (ENNReal.rpow_le_rpow h hp0.le) (le_of_eq ?_)
     -- The `rw` chain this replaced repeated `ofReal_norm` twice and
     -- `mul_rpow_of_nonneg` three times, once per occurrence.
-    simp only [ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) (T.approximationNumber_nonneg n)),
+    simp only [ENNReal.ofReal_mul (mul_nonneg (norm_nonneg L) ((T.singularValue n).coe_nonneg)),
       ENNReal.ofReal_mul (norm_nonneg L), ofReal_norm,
       ENNReal.mul_rpow_of_nonneg _ _ hp0.le]
     ring
   calc (L ∘L T ∘L R).schattenENorm p
-      ≤ ((‖L‖ₑ * ‖R‖ₑ) ^ p * ∑' n : ℕ, ENNReal.ofReal (T.approximationNumber n) ^ p) ^ p⁻¹ := by
+      ≤ ((‖L‖ₑ * ‖R‖ₑ) ^ p * ∑' n : ℕ, ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p) ^ p⁻¹ := by
         refine ENNReal.rpow_le_rpow ?_ (by positivity)
         rw [← ENNReal.tsum_mul_left]
         exact ENNReal.tsum_le_tsum hterm
@@ -256,7 +254,7 @@ theorem schattenENorm_rpow_le_liminf {p : ℝ} (hp0 : 0 < p) {u : Filter ℕ} [u
     (hop : Filter.Tendsto (fun n => ‖T n - L‖) u (nhds 0)) :
     L.schattenENorm p ^ p ≤ Filter.liminf (fun n => (T n).schattenENorm p ^ p) u := by
   have hpow : ∀ S : E →L[𝕜] F, S.schattenENorm p ^ p
-      = ∑' i : ℕ, ENNReal.ofReal (S.approximationNumber i) ^ p := by
+      = ∑' i : ℕ, ENNReal.ofReal ((S.singularValue i : ℝ)) ^ p := by
     intro S
     rw [schattenENorm, ← ENNReal.rpow_mul, inv_mul_cancel₀ hp0.ne', ENNReal.rpow_one]
   simp only [hpow]
@@ -272,7 +270,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Schatten norm is unchanged by negation, term by term. -/
 @[simp] theorem schattenENorm_neg (p : ℝ) (T : E →L[𝕜] F) :
     (-T).schattenENorm p = T.schattenENorm p := by
-  simp only [schattenENorm, approximationNumber_eq_singularValue_toReal,
+  simp only [schattenENorm,
     ← neg_one_smul 𝕜 T, singularValue_smul, nnnorm_neg, nnnorm_one, one_mul]
 
 omit [CompleteSpace E] [CompleteSpace F] in

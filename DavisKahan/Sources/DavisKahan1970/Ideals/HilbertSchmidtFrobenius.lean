@@ -59,7 +59,7 @@ theorem approximationNumberEnergy_eq_ofReal_sum_sq_singularValues
   -- map; a continuous map is definitionally rebuilt from its own underlying
   -- linear map, so it transfers to `A` without any further hypothesis.
   have hsv : ∀ n : ℕ,
-      approximationSingularValue n A = A.toLinearMap.singularValues n := fun n =>
+      (A.singularValue n : ℝ) = A.toLinearMap.singularValues n := fun n =>
     approximationSingularValue_eq_singularValues A.toLinearMap n
   unfold approximationNumberEnergy
   rw [tsum_eq_sum (s := Finset.range (Module.finrank 𝕜 E))]

@@ -57,8 +57,8 @@ class HasApproximationNumberStrongCutoff
       StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E) →
       ∀ (n : ℕ) (K : E →L[𝕜] F),
         Tendsto
-          (fun i => approximationSingularValue n (K ∘L P i))
-          l (𝓝 (approximationSingularValue n K))
+          (fun i => ((K ∘L P i).singularValue n : ℝ))
+          l (𝓝 ((K.singularValue n : ℝ)))
 
 /-- The strong-cutoff convergence holds over `ℝ`.  Supplied as an instance so
 the field-generic development can be used at `ℝ` without naming the real proof. -/
@@ -84,8 +84,8 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_real
     (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ ER))
     (n : ℕ) (K : ER →L[ℝ] FR) :
     Tendsto
-      (fun i => approximationSingularValue n (K ∘L P i))
-      l (𝓝 (approximationSingularValue n K)) :=
+      (fun i => ((K ∘L P i).singularValue n : ℝ))
+      l (𝓝 ((K.singularValue n : ℝ))) :=
   ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real
     hPproj hP n K
 
@@ -114,8 +114,8 @@ theorem approximationSingularValue_comp_strongProjection_tendsto
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
     (n : ℕ) (K : E →L[𝕜] F) :
     Tendsto
-      (fun i => approximationSingularValue n (K ∘L P i))
-      l (𝓝 (approximationSingularValue n K)) :=
+      (fun i => ((K ∘L P i).singularValue n : ℝ))
+      l (𝓝 ((K.singularValue n : ℝ))) :=
   HasApproximationNumberStrongCutoff.tendsto_comp_strongProjection
     (𝕜 := 𝕜) hPproj hP n K
 

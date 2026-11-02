@@ -50,8 +50,8 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_real
     (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ E))
     (n : ℕ) (K : E →L[ℝ] F) :
     Tendsto
-      (fun i => approximationSingularValue n (K ∘L P i))
-      l (𝓝 (approximationSingularValue n K)) :=
+      (fun i => ((K ∘L P i).singularValue n : ℝ))
+      l (𝓝 ((K.singularValue n : ℝ))) :=
   approximationSingularValue_comp_strongProjection_tendsto_of_minMax
     TauCeti.HasMinMaxLowerBound.of_completeSpace hPproj hP n K
 

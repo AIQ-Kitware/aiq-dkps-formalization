@@ -288,8 +288,8 @@ omit [CompleteSpace A] [CompleteSpace B] in
 approximation number: both directions are a sandwich between the two contractions
 `modelInl` and `WithLp.fstL`. -/
 theorem approximationNumber_modelInl_comp_fstL (T : A →L[𝕜] A) (n : ℕ) :
-    (modelInl 𝕜 A B ∘L T ∘L WithLp.fstL 2 𝕜 A B).approximationNumber n =
-      T.approximationNumber n := by
+    ((modelInl 𝕜 A B ∘L T ∘L WithLp.fstL 2 𝕜 A B).singularValue n : ℝ) =
+      (T.singularValue n : ℝ) := by
   have hfactor : T = WithLp.fstL 2 𝕜 A B ∘L
       (modelInl 𝕜 A B ∘L T ∘L WithLp.fstL 2 𝕜 A B) ∘L modelInl 𝕜 A B := by
     refine ContinuousLinearMap.ext fun x => ?_
@@ -336,11 +336,11 @@ theorem isCompactOperator_halmosDefectBlock (d : HalmosAngleDatum 𝕜 E F)
 `sin² Θ₀`.**  This is what turns a prescribed angle sequence into a prescribed
 angle eigenvalue list. -/
 theorem approximationNumber_halmosDefectBlock (d : HalmosAngleDatum 𝕜 E F) (n : ℕ) :
-    ((sourceSubspace 𝕜 E F).starProjection ∘L
+    (((sourceSubspace 𝕜 E F).starProjection ∘L
         (ContinuousLinearMap.id 𝕜 (WithLp 2 (E × F)) -
           d.targetSubspace.starProjection) ∘L
-        (sourceSubspace 𝕜 E F).starProjection).approximationNumber n =
-      (d.sin₀ ∘L d.sin₀).approximationNumber n := by
+        (sourceSubspace 𝕜 E F).starProjection).singularValue n : ℝ) =
+      ((d.sin₀ ∘L d.sin₀).singularValue n : ℝ) := by
   rw [d.defectBlock_eq, approximationNumber_modelInl_comp_fstL]
 
 end GeneralDefect
@@ -385,7 +385,7 @@ theorem isCompactOperator_angleSinSqOp (hlim : Tendsto θ atTop (nhds 0)) :
 /-- The approximation numbers of `sin² Θ` are the prescribed `sin² θₙ`. -/
 theorem approximationNumber_angleSinSqOp (hθ0 : ∀ n, 0 ≤ θ n)
     (hθ2 : ∀ n, θ n ≤ Real.pi / 2) (hanti : Antitone θ) (n : ℕ) :
-    (angleSinSqOp 𝕜 θ).approximationNumber n = Real.sin (θ n) ^ 2 := by
+    ((angleSinSqOp 𝕜 θ).singularValue n : ℝ) = Real.sin (θ n) ^ 2 := by
   rw [angleSinSqOp,
     approximationNumber_diagOpLp _ _ _ (antitone_norm_angleSinSqSeq hθ0 hθ2 hanti) n,
     angleSinSqSeq, RCLike.norm_ofReal, abs_of_nonneg (sq_nonneg (Real.sin (θ n)))]
@@ -406,7 +406,7 @@ is strictly monotone on `[0, π/2]`, so this is the paper's decreasing angle
 sequence, reparametrized without loss. -/
 theorem approximationNumber_angleSequenceDefectBlock (hθ0 : ∀ n, 0 ≤ θ n)
     (hθ2 : ∀ n, θ n ≤ Real.pi / 2) (hanti : Antitone θ) (n : ℕ) :
-    (angleSequenceDefectBlock 𝕜 θ).approximationNumber n = Real.sin (θ n) ^ 2 := by
+    ((angleSequenceDefectBlock 𝕜 θ).singularValue n : ℝ) = Real.sin (θ n) ^ 2 := by
   rw [angleSequenceDefectBlock, approximationNumber_halmosDefectBlock,
     angleSequenceDatum_sin₀, angleSinOp_comp_angleSinOp,
     approximationNumber_angleSinSqOp hθ0 hθ2 hanti]
@@ -479,14 +479,14 @@ theorem isCompactOperator_angleSequenceZeroDefectBlock
 angle-`0` summands are invisible to the approximation numbers. -/
 theorem approximationNumber_angleSequenceZeroDefectBlock (hθ0 : ∀ n, 0 ≤ θ n)
     (hθ2 : ∀ n, θ n ≤ Real.pi / 2) (hanti : Antitone θ) (n : ℕ) :
-    ((sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
+    (((sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
             (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection ∘L
         (ContinuousLinearMap.id 𝕜
             (WithLp 2 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀) ×
               WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))) -
           (angleSequenceZeroDatum 𝕜 θ Z₀ Z₁).targetSubspace.starProjection) ∘L
         (sourceSubspace 𝕜 (WithLp 2 (AngleSequenceSpace 𝕜 × Z₀))
-            (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection).approximationNumber n =
+            (WithLp 2 (AngleSequenceSpace 𝕜 × Z₁))).starProjection).singularValue n : ℝ) =
       Real.sin (θ n) ^ 2 := by
   rw [approximationNumber_halmosDefectBlock, angleSequenceZeroDatum_sin₀_sq,
     approximationNumber_modelInl_comp_fstL, approximationNumber_angleSinSqOp hθ0 hθ2 hanti]

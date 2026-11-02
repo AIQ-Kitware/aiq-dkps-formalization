@@ -37,7 +37,6 @@ theorem gauge_schatten_gram_rpow (p : ℝ) (hp : 2 ≤ p) (T : E →L[ℂ] F) :
   apply tsum_congr
   intro n
   have hreal := ApproximationNumber.approximationNumber_gramOperator_complex T n
-  simp only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] at hreal
   have hsq : (T.adjoint ∘L T).singularValue n = T.singularValue n ^ 2 := by
     apply NNReal.coe_injective
     simpa only [ApproximationNumber.gramOperator, NNReal.coe_pow] using hreal

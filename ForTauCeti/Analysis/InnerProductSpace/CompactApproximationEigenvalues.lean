@@ -286,8 +286,7 @@ has rank more than `n` forces `t ≤ aₙ(A)`. -/
 theorem le_approximationNumber_of_lt_rank_eigenSpan (hAs : IsSelfAdjoint A)
     {S : Set ℝ} {t : ℝ} (ht : 0 ≤ t) (hS : ∀ s ∈ S, t ≤ s) {n : ℕ}
     (hn : (n : Cardinal) < Module.rank 𝕜 (eigenSpan A S)) :
-    t ≤ A.approximationNumber n := by
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+    t ≤ (A.singularValue n : ℝ) := by
   exact A.le_singularValue_of_lt_rank hn fun x hx =>
     le_norm_apply_of_mem_eigenSpan hAs ht hS hx
 
@@ -297,14 +296,13 @@ the min--max bound the span cannot then have rank more than `n`. -/
 theorem finiteDimensional_eigenSpan (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     {S : Set ℝ} {t : ℝ} (ht : 0 < t) (hS : ∀ s ∈ S, t ≤ s) :
     FiniteDimensional 𝕜 (eigenSpan A S) := by
-  obtain ⟨n, hn⟩ : ∃ n : ℕ, A.approximationNumber n < t := by
+  obtain ⟨n, hn⟩ : ∃ n : ℕ, (A.singularValue n : ℝ) < t := by
     have h := NNReal.tendsto_coe.mpr hAc.tendsto_singularValue
-    simp only [NNReal.coe_zero,
-      ← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] at h
+    simp only [NNReal.coe_zero] at h
     obtain ⟨N, hN⟩ := (Metric.tendsto_atTop.mp h) t ht
     refine ⟨N, ?_⟩
     have hd := hN N le_rfl
-    rwa [Real.dist_eq, sub_zero, abs_of_nonneg (A.approximationNumber_nonneg N)] at hd
+    rwa [Real.dist_eq, sub_zero, abs_of_nonneg ((A.singularValue N).coe_nonneg)] at hd
   have hrank : Module.rank 𝕜 (eigenSpan A S) ≤ (n : Cardinal) := by
     by_contra hcon
     exact absurd (le_approximationNumber_of_lt_rank_eigenSpan hAs ht.le hS
@@ -315,7 +313,7 @@ theorem finiteDimensional_eigenSpan (hAc : IsCompactOperator A) (hAs : IsSelfAdj
 which the approximation number has already dropped below `t`. -/
 theorem finrank_eigenSpan_le (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     {S : Set ℝ} {t : ℝ} (ht : 0 < t) (hS : ∀ s ∈ S, t ≤ s) {n : ℕ}
-    (hn : A.approximationNumber n < t) : finrank 𝕜 (eigenSpan A S) ≤ n := by
+    (hn : (A.singularValue n : ℝ) < t) : finrank 𝕜 (eigenSpan A S) ≤ n := by
   have := finiteDimensional_eigenSpan hAc hAs ht hS
   by_contra hcon
   refine absurd (le_approximationNumber_of_lt_rank_eigenSpan hAs ht.le hS ?_)
@@ -404,7 +402,7 @@ theorem approximationNumber_le_of_eigenSpan_cover (hAc : IsCompactOperator A)
     (hAs : IsSelfAdjoint A) (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) {S : Set ℝ} {c : ℝ}
     (hc : 0 ≤ c) (hcover : ∀ s : ℝ, c < s → s ∈ S)
     [FiniteDimensional 𝕜 (eigenSpan A S)] {n : ℕ} (hn : finrank 𝕜 (eigenSpan A S) ≤ n) :
-    A.approximationNumber n ≤ c := by
+    (A.singularValue n : ℝ) ≤ c := by
   set W : Submodule 𝕜 E := eigenSpan A S with hWdef
   have hinv : ∀ v ∈ W, A v ∈ W := eigenSpan_invariant A S
   have : CompleteSpace (W : Submodule 𝕜 E) := FiniteDimensional.complete 𝕜 W
@@ -428,7 +426,6 @@ theorem approximationNumber_le_of_eigenSpan_cover (hAc : IsCompactOperator A)
       exact RCLike.norm_ofReal _
     rw [hnormν, abs_of_nonneg hnonneg]
     exact hle
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   have hW : Module.rank 𝕜 W ≤ (n : Cardinal) := by
     rw [← Module.finrank_eq_rank' 𝕜 W]
     exact_mod_cast hn
@@ -533,7 +530,7 @@ rank-`dim` approximation. -/
 theorem le_approximationNumber_iff_lt_finrank_eigenSpan_Ici (hAc : IsCompactOperator A)
     (hAs : IsSelfAdjoint A) (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) {μ : ℝ} (hμ : 0 < μ)
     (n : ℕ) :
-    μ ≤ A.approximationNumber n ↔ n < finrank 𝕜 (eigenSpan A (Set.Ici μ)) := by
+    μ ≤ (A.singularValue n : ℝ) ↔ n < finrank 𝕜 (eigenSpan A (Set.Ici μ)) := by
   have hfd : FiniteDimensional 𝕜 (eigenSpan A (Set.Ici μ)) :=
     finiteDimensional_eigenSpan hAc hAs hμ fun s hs => hs
   constructor
@@ -556,7 +553,7 @@ theorem le_approximationNumber_iff_lt_finrank_eigenSpan_Ici (hAc : IsCompactOper
 theorem lt_approximationNumber_iff_lt_finrank_eigenSpan_Ioi (hAc : IsCompactOperator A)
     (hAs : IsSelfAdjoint A) (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) {μ : ℝ} (hμ : 0 < μ)
     (n : ℕ) :
-    μ < A.approximationNumber n ↔ n < finrank 𝕜 (eigenSpan A (Set.Ioi μ)) := by
+    μ < (A.singularValue n : ℝ) ↔ n < finrank 𝕜 (eigenSpan A (Set.Ioi μ)) := by
   obtain ⟨ν, hν, hνeq⟩ := exists_eigenSpan_Ici_eq_Ioi hAc hAs hμ
   have hν0 : 0 < ν := lt_trans hμ hν
   have : FiniteDimensional 𝕜 (eigenSpan A (Set.Ioi μ)) := by
@@ -564,10 +561,10 @@ theorem lt_approximationNumber_iff_lt_finrank_eigenSpan_Ioi (hAc : IsCompactOper
     exact finiteDimensional_eigenSpan hAc hAs hν0 fun s hs => hs
   constructor
   · intro hlt
-    have hpos : 0 < A.approximationNumber n := lt_trans hμ hlt
+    have hpos : 0 < (A.singularValue n : ℝ) := lt_trans hμ hlt
     have h1 := (le_approximationNumber_iff_lt_finrank_eigenSpan_Ici hAc hAs hApos hpos
       n).mp le_rfl
-    have hmono : eigenSpan A (Set.Ici (A.approximationNumber n)) ≤ eigenSpan A (Set.Ioi μ) :=
+    have hmono : eigenSpan A (Set.Ici ((A.singularValue n : ℝ))) ≤ eigenSpan A (Set.Ioi μ) :=
       eigenSpan_mono A fun s hs => lt_of_lt_of_le hlt hs
     exact lt_of_lt_of_le h1 (Submodule.finrank_mono hmono)
   · intro hlt
@@ -613,11 +610,11 @@ which must also cover `μ = 0`, that needs a trivial kernel. -/
 theorem finrank_eigenspace_eq_card_approximationNumber_eq (hAc : IsCompactOperator A)
     (hAs : IsSelfAdjoint A) (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) {μ : ℝ} (hμ : 0 < μ) :
     finrank 𝕜 (eigenspace A.toLinearMap (μ : 𝕜)) =
-      Nat.card {n : ℕ // A.approximationNumber n = μ} := by
+      Nat.card {n : ℕ // (A.singularValue n : ℝ) = μ} := by
   classical
   set N : ℕ := finrank 𝕜 (eigenSpan A (Set.Ici μ)) with hN
   set M : ℕ := finrank 𝕜 (eigenSpan A (Set.Ioi μ)) with hM
-  have hset : {n : ℕ | A.approximationNumber n = μ} = Set.Ico M N := by
+  have hset : {n : ℕ | (A.singularValue n : ℝ) = μ} = Set.Ico M N := by
     ext n
     simp only [Set.mem_ofPred_eq, Set.mem_Ico]
     constructor
@@ -631,19 +628,19 @@ theorem finrank_eigenspace_eq_card_approximationNumber_eq (hAc : IsCompactOperat
       · exact (le_approximationNumber_iff_lt_finrank_eigenSpan_Ici hAc hAs hApos hμ
           n).mp (le_of_eq h.symm)
     · rintro ⟨h1, h2⟩
-      have hge : μ ≤ A.approximationNumber n :=
+      have hge : μ ≤ (A.singularValue n : ℝ) :=
         (le_approximationNumber_iff_lt_finrank_eigenSpan_Ici hAc hAs hApos hμ n).mpr h2
-      have hle : ¬ μ < A.approximationNumber n := fun hcon =>
+      have hle : ¬ μ < (A.singularValue n : ℝ) := fun hcon =>
         absurd ((lt_approximationNumber_iff_lt_finrank_eigenSpan_Ioi hAc hAs hApos hμ
           n).mp hcon) (Nat.not_lt.mpr h1)
       exact le_antisymm (not_lt.mp hle) hge
-  have hcard : Nat.card {n : ℕ // A.approximationNumber n = μ} = N - M := by
-    have hcongrEquiv : {n : ℕ // A.approximationNumber n = μ} ≃
+  have hcard : Nat.card {n : ℕ // (A.singularValue n : ℝ) = μ} = N - M := by
+    have hcongrEquiv : {n : ℕ // (A.singularValue n : ℝ) = μ} ≃
         {n : ℕ // n ∈ Set.Ico M N} :=
       Equiv.subtypeEquivRight fun n => by
-        change n ∈ {n : ℕ | A.approximationNumber n = μ} ↔ n ∈ Set.Ico M N
+        change n ∈ {n : ℕ | (A.singularValue n : ℝ) = μ} ↔ n ∈ Set.Ico M N
         rw [hset]
-    have hcongr : Nat.card {n : ℕ // A.approximationNumber n = μ} =
+    have hcongr : Nat.card {n : ℕ // (A.singularValue n : ℝ) = μ} =
         Nat.card (Set.Ico M N : Set ℕ) := Nat.card_congr hcongrEquiv
     rw [hcongr, Nat.card_eq_fintype_card, Fintype.card_Ico, Nat.card_Ico]
   rw [hcard, hN, hM, finrank_eigenSpan_Ici hAc hAs hμ]
@@ -688,7 +685,7 @@ theorem finrank_eigenspace_congr_of_approximationNumber_eq {B : F →L[𝕜] F}
     (hBc : IsCompactOperator B) (hBs : IsSelfAdjoint B)
     (hBpos : ∀ x, 0 ≤ RCLike.re ⟪B x, x⟫_𝕜)
     (hB0 : eigenspace B.toLinearMap 0 = ⊥)
-    (hAB : ∀ n, A.approximationNumber n = B.approximationNumber n) (μ : 𝕜) :
+    (hAB : ∀ n, (A.singularValue n : ℝ) = (B.singularValue n : ℝ)) (μ : 𝕜) :
     finrank 𝕜 (eigenspace A.toLinearMap μ) = finrank 𝕜 (eigenspace B.toLinearMap μ) := by
   by_cases hpos : ∃ r : ℝ, 0 < r ∧ μ = (r : 𝕜)
   · obtain ⟨r, hr, rfl⟩ := hpos
@@ -713,7 +710,7 @@ theorem exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq {B : F
     (hBc : IsCompactOperator B) (hBs : IsSelfAdjoint B)
     (hBpos : ∀ x, 0 ≤ RCLike.re ⟪B x, x⟫_𝕜)
     (hB0 : eigenspace B.toLinearMap 0 = ⊥)
-    (hAB : ∀ n, A.approximationNumber n = B.approximationNumber n) :
+    (hAB : ∀ n, (A.singularValue n : ℝ) = (B.singularValue n : ℝ)) :
     ∃ W : E ≃ₗᵢ[𝕜] F, ∀ x, W (A x) = B (W x) :=
   exists_linearIsometryEquiv_intertwining_of_finrank_eigenspace_eq hAc hAs hBc hBs hA0 hB0
     (finrank_eigenspace_congr_of_approximationNumber_eq hAc hAs hApos hA0 hBc hBs hBpos hB0

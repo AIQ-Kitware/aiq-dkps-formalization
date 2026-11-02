@@ -121,7 +121,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_complex
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unbounded_infiniteTrial_ideal
       ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
@@ -130,7 +130,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_complex
       hCompression tanTheta0 htan
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
+      ← kyFanApproximationGauge_eq_kyFanGauge] at h
     exact h.2
 
 end Complex
@@ -165,7 +165,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_real
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unbounded_infiniteTrial_ideal_real A hA
       ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
@@ -174,7 +174,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_real
       hCompression tanTheta0 htan
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
+      ← kyFanApproximationGauge_eq_kyFanGauge] at h
     exact h.2
 
 end Real
@@ -245,7 +245,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_complex
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := D.trial.ideal_of_formBounds V
       ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
@@ -254,7 +254,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_complex
       tanTheta0 htan
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
+      ← kyFanApproximationGauge_eq_kyFanGauge] at h
     exact h.2
 
 end AppendixComplex
@@ -291,7 +291,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_real
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unboundedCompression_ideal_real
       ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
@@ -300,7 +300,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_real
       hcross tanTheta0 htan
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at h
+      ← kyFanApproximationGauge_eq_kyFanGauge] at h
     exact h.2
 
 end AppendixReal
@@ -333,7 +333,7 @@ theorem approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_comple
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (n : ℕ) :
-    approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1 :=
+    ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) < 1 :=
   D.trial.approximationSingularValue_sineBlock_lt_one V hdelta hupper
     (D.trial.crossed_lower_of_reducing V A D.mem_domain D.action_eq
       hV.mapsDomain hV.commutes hUnwanted) n
@@ -369,7 +369,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_complex
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (R : Z →L[ℂ] H) (hR : D.trial.residual = R)
     (hResidual : N.Mem R) :
-    (∀ n, approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1) ∧
+    (∀ n, ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) < 1) ∧
       ∃ tanTheta0 : Z →L[ℂ] H,
         HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
         N.Mem tanTheta0 ∧
@@ -404,7 +404,7 @@ theorem tanTheta_directed_unboundedRitz_normalizedUIN_complex
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (R : Z →L[ℂ] H) (hR : D.trial.residual = R)
     (hResidual : N.Mem R) :
-    (∀ n, approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1) ∧
+    (∀ n, ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) < 1) ∧
       ∃ tanTheta0 : Z →L[ℂ] H,
         HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
         N.Mem tanTheta0 ∧
@@ -439,7 +439,7 @@ theorem approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (n : ℕ) :
-    approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1 :=
+    ((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ) < 1 :=
   approximationSingularValue_sineBlockReal_lt_one_unboundedCompression
     D.trial V hdelta hupper
     (D.trial.crossed_lower_of_reducing V A D.mem_domain D.action_eq
@@ -464,7 +464,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_real
       (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (R : Z →L[ℝ] E) (hR : D.trial.residual = R)
     (hResidual : N.Mem R) :
-    (∀ n, approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1) ∧
+    (∀ n, ((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ) < 1) ∧
       ∃ tanTheta0 : Z →L[ℝ] E,
         HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0 ∧
         N.Mem tanTheta0 ∧
@@ -494,7 +494,7 @@ theorem tanTheta_directed_unboundedRitz_normalizedUIN_real
       (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (R : Z →L[ℝ] E) (hR : D.trial.residual = R)
     (hResidual : N.Mem R) :
-    (∀ n, approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1) ∧
+    (∀ n, ((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ) < 1) ∧
       ∃ tanTheta0 : Z →L[ℝ] E,
         HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0 ∧
         N.Mem tanTheta0 ∧

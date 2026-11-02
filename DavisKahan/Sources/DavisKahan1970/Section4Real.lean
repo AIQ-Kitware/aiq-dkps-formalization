@@ -99,7 +99,7 @@ private theorem real_approximationNumber_direct_le_competitor
     (hAnorm : ‖A‖ ≤ Real.sqrt 2)
     (hAsq : ∀ x, ‖A x‖ ^ 2 = 2 * ‖x‖ ^ 2 - 2 * inner ℝ (C x) x)
     (hBsq : ∀ x, 2 * ‖x‖ ^ 2 - 2 * ‖C x‖ * ‖x‖ ≤ ‖B x‖ ^ 2)
-    (n : ℕ) : A.approximationNumber n ≤ B.approximationNumber n := by
+    (n : ℕ) : (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ) := by
   let D : TauCeti.DavisKahan.Section4.CosineDisplacementData
       (complexify C) (complexify A) (complexify B) := {
     cosine_selfAdjoint :=
@@ -176,8 +176,8 @@ private theorem real_approximationNumber_direct_cosineCutoff_eq_sine
     (hBsq : ∀ x, 2 * ‖x‖ ^ 2 - 2 * ‖C x‖ * ‖x‖ <= ‖B x‖ ^ 2)
     (hSsq : ∀ x, ‖S x‖ ^ 2 = ‖x‖ ^ 2 - ‖C x‖ ^ 2)
     (n : ℕ) :
-    1 - ((A.approximationNumber n : Real) ^ 2) / 2 =
-      Real.sqrt (1 - ((S.approximationNumber n : Real) ^ 2)) := by
+    1 - (((A.singularValue n : ℝ) : Real) ^ 2) / 2 =
+      Real.sqrt (1 - (((S.singularValue n : ℝ) : Real) ^ 2)) := by
   let D : TauCeti.DavisKahan.Section4.CosineDisplacementData
       (complexify C) (complexify A) (complexify B) := {
     cosine_selfAdjoint :=
@@ -415,9 +415,9 @@ theorem proposition4_1_nonacute_real
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
-    (sourceRestrictedDisplacementR U
-        (TauCeti.DavisKahan.nonacuteDirectRotation U V J)).approximationNumber n ≤
-      (sourceRestrictedDisplacementR U W).approximationNumber n := by
+    ((sourceRestrictedDisplacementR U
+        (TauCeti.DavisKahan.nonacuteDirectRotation U V J)).singularValue n : ℝ) ≤
+      ((sourceRestrictedDisplacementR U W).singularValue n : ℝ) := by
   apply real_approximationNumber_direct_le_competitor
       (sourceCosineR U V)
       (sourceRestrictedDisplacementR U
@@ -452,7 +452,6 @@ theorem sourceRestrictedDisplacementR_sameApproximationSingularSequence (T : E �
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [← sourceRestrictedDisplacementR_extendDomainByZero U T]
   exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (ContinuousLinearMap.sameSingularValues_extendDomainByZero U
@@ -463,27 +462,23 @@ theorem Proposition4_1_nonacute_real
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
-    ContinuousLinearMap.approximationNumber
-        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-          U.starProjection) n ≤
-      ContinuousLinearMap.approximationNumber
-        ((1 - W) ∘L U.starProjection) n := by
+    (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+          U.starProjection).singularValue n : ℝ) ≤
+      (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   have hsource := proposition4_1_nonacute_real U V J W hWunitary hWmap n
   have hD := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacementR_sameApproximationSingularSequence U
       (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
   have hW := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacementR_sameApproximationSingularSequence U W) n
-  change approximationSingularValue n
-      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-        U.starProjection) ≤
-    approximationSingularValue n ((1 - W) ∘L U.starProjection)
+  change (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+        U.starProjection).singularValue n : ℝ) ≤
+    (((1 - W) ∘L U.starProjection).singularValue n : ℝ)
   calc
-    _ = approximationSingularValue n
-        (sourceRestrictedDisplacementR U
-          (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) := hD
-    _ ≤ approximationSingularValue n (sourceRestrictedDisplacementR U W) := by
-      simpa only [approximationSingularValue] using hsource
+    _ = ((sourceRestrictedDisplacementR U
+          (TauCeti.DavisKahan.nonacuteDirectRotation U V J)).singularValue n : ℝ) := hD
+    _ ≤ ((sourceRestrictedDisplacementR U W).singularValue n : ℝ) := by
+      exact hsource
     _ = _ := hW.symm
 
 /-- The nonacute real Proposition 4.1 dominance certificate. -/
@@ -553,9 +548,8 @@ is the correct reading past the compact case. -/
 theorem proposition4_1_real (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W) (n : ℕ) :
-    ContinuousLinearMap.approximationNumber
-        ((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L U.starProjection) n ≤
-      ContinuousLinearMap.approximationNumber ((1 - W) ∘L U.starProjection) n := by
+    (((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L U.starProjection).singularValue n : ℝ) ≤
+      (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   rw [← approximationNumber_complexify, ← approximationNumber_complexify,
     complexify_restrictedDisplacement, complexify_restrictedDisplacement,
     TauCeti.DavisKahan.complexify_directRotationR]
@@ -859,7 +853,7 @@ private theorem approximationNumber_gramOperator_real {X Y : Type*}
     [NormedAddCommGroup X] [InnerProductSpace ℝ X] [CompleteSpace X]
     [NormedAddCommGroup Y] [InnerProductSpace ℝ Y] [CompleteSpace Y]
     (A : X →L[ℝ] Y) (n : ℕ) :
-    (gramOperatorR A).approximationNumber n = A.approximationNumber n ^ 2 := by
+    ((gramOperatorR A).singularValue n : ℝ) = (A.singularValue n : ℝ) ^ 2 := by
   rw [← approximationNumber_complexify, complexify_gramOperator_real,
     TauCeti.ApproximationNumber.approximationNumber_gramOperator_complex,
     approximationNumber_complexify]
@@ -870,13 +864,13 @@ private theorem kyFanApproximationGauge_gramOperator_mono_real {X Y Z : Type*}
     [NormedAddCommGroup Y] [InnerProductSpace ℝ Y] [CompleteSpace Y]
     [NormedAddCommGroup Z] [InnerProductSpace ℝ Z] [CompleteSpace Z]
     (A : X →L[ℝ] Y) (B : X →L[ℝ] Z)
-    (h : ∀ n, A.approximationNumber n ≤ B.approximationNumber n) (k : ℕ) :
+    (h : ∀ n, (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ)) (k : ℕ) :
     kyFanApproximationGauge k (gramOperatorR A) ≤
       kyFanApproximationGauge k (gramOperatorR B) := by
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   rw [approximationNumber_gramOperator_real, approximationNumber_gramOperator_real]
-  nlinarith [h n, A.approximationNumber_nonneg n]
+  nlinarith [h n, (A.singularValue n).coe_nonneg]
 
 omit [CompleteSpace E] in
 /-- Even reflection blocks commute with scalar extension. -/
@@ -1043,14 +1037,14 @@ theorem proposition4_3_nonacute_real
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_real,
       orthogonalProjectionOnto_comp_gram_comp_subtypeL_real]
   have hU : ∀ n,
-      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-        U.subtypeL).approximationNumber n ≤
-      ((1 - W) ∘L U.subtypeL).approximationNumber n :=
+      (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+        U.subtypeL).singularValue n : ℝ) ≤
+      (((1 - W) ∘L U.subtypeL).singularValue n : ℝ) :=
     proposition4_1_nonacute_real U V J W hWunitary hWmap
   have hUperp : ∀ n,
-      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-        U.orthogonal.subtypeL).approximationNumber n ≤
-      ((1 - W) ∘L U.orthogonal.subtypeL).approximationNumber n := by
+      (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+        U.orthogonal.subtypeL).singularValue n : ℝ) ≤
+      (((1 - W) ∘L U.orthogonal.subtypeL).singularValue n : ℝ) := by
     intro n
     have h := proposition4_1_nonacute_real U.orthogonal V.orthogonal
       (TauCeti.DavisKahan.orthogonalCrossedDefectEquiv U V J) W hWunitary
@@ -1119,12 +1113,12 @@ theorem proposition4_1_compact_orthonormalVectors_real
       (ContinuousLinearMap.isPositive_adjoint_comp_self T).isSymmetric
   have hApos : ∀ x, 0 ≤ inner ℝ (A x) x :=
     fun x => (ContinuousLinearMap.isPositive_adjoint_comp_self T).inner_nonneg_left x
-  have hseq (n : ℕ) : A.approximationNumber n =
+  have hseq (n : ℕ) : (A.singularValue n : ℝ) =
       TauCeti.principalSineSequence U V n ^ 2 := by
     simpa only [A, T, TauCeti.principalSineSequence] using
       approximationNumber_gramOperator_real T n
   let e : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} ≃
-      {n : ℕ // 0 < A.approximationNumber n} :=
+      {n : ℕ // 0 < (A.singularValue n : ℝ)} :=
     { toFun := fun n => ⟨n, by rw [hseq]; nlinarith [n.2]⟩
       invFun := fun n => ⟨n, by
         have hn := n.2
@@ -1136,7 +1130,7 @@ theorem proposition4_1_compact_orthonormalVectors_real
     TauCeti.positiveApproximationEigenvector hAc hAs hApos (e n) (e n).2
   have hvon : Orthonormal ℝ v := by
     change Orthonormal ℝ
-      ((fun n : {n : ℕ // 0 < A.approximationNumber n} =>
+      ((fun n : {n : ℕ // 0 < (A.singularValue n : ℝ)} =>
         TauCeti.positiveApproximationEigenvector hAc hAs hApos n n.2) ∘ e)
     exact (TauCeti.orthonormal_positiveApproximationEigenvector hAc hAs hApos).comp
       e e.injective
@@ -1147,7 +1141,7 @@ theorem proposition4_1_compact_orthonormalVectors_real
   have hAx := TauCeti.apply_positiveApproximationEigenvector hAc hAs hApos
     (e n) (e n).2
   have hTx : ‖T x‖ = s := by
-    have hen : ((e n : {n : ℕ // 0 < A.approximationNumber n}) : ℕ) = (n : ℕ) := rfl
+    have hen : ((e n : {n : ℕ // 0 < (A.singularValue n : ℝ)}) : ℕ) = (n : ℕ) := rfl
     have hnormsq : ‖T x‖ ^ 2 = s ^ 2 := by
       calc
         ‖T x‖ ^ 2 = inner ℝ (A x) x := by
@@ -1232,9 +1226,8 @@ theorem proposition4_1_compact_nonacute_directRotationValues_real
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W)
     (n : ℕ) :
-    (ContinuousLinearMap.approximationNumber
-        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-          U.starProjection) n : Real) =
+    ((((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+          U.starProjection).singularValue n : ℝ) : Real) =
       2 * Real.sin (TauCeti.principalAngleSequence U V n / 2) := by
   let A : U →L[ℝ] E := sourceRestrictedDisplacementR U
     (TauCeti.DavisKahan.nonacuteDirectRotation U V J)
@@ -1261,7 +1254,7 @@ theorem proposition4_1_compact_nonacute_directRotationValues_real
   have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (sourceRestrictedDisplacementR_sameApproximationSingularSequence U
       (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
-  let a : Real := (A.approximationNumber n : Real)
+  let a : Real := ((A.singularValue n : ℝ) : Real)
   let theta : Real := TauCeti.principalAngleSequence U V n
   let shalf : Real := Real.sin (theta / 2)
   have hcos : Real.cos theta =
@@ -1271,7 +1264,7 @@ theorem proposition4_1_compact_nonacute_directRotationValues_real
       (by dsimp only [theta]; linarith [TauCeti.principalAngleSequence_nonneg U V n,
         Real.pi_pos]) (TauCeti.principalAngleSequence_le_pi_div_two U V n)
   have hcosApprox : Real.cos theta =
-      Real.sqrt (1 - ((TauCeti.principalSineOperator U V).approximationNumber n : Real) ^ 2) := by
+      Real.sqrt (1 - (((TauCeti.principalSineOperator U V).singularValue n : ℝ) : Real) ^ 2) := by
     simpa only [TauCeti.principalSineSequence] using hcos
   have hcutCos : 1 - a ^ 2 / 2 = Real.cos theta := by
     simpa only [a, A, S] using hcut.trans hcosApprox.symm
@@ -1293,14 +1286,12 @@ theorem proposition4_1_compact_nonacute_directRotationValues_real
       (by linarith [TauCeti.principalAngleSequence_le_pi_div_two U V n, Real.pi_pos])
   have ha0 : 0 <= a := by
     dsimp only [a]
-    exact A.approximationNumber_nonneg n
+    exact (A.singularValue n).coe_nonneg
   have ha : a = 2 * shalf := (sq_eq_sq₀ ha0 (mul_nonneg (by norm_num) hshalf0)).1 haSq
-  change (ContinuousLinearMap.approximationNumber
-      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-        U.starProjection) n : Real) = _
-  have hD : ContinuousLinearMap.approximationNumber
-      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-        U.starProjection) n = A.approximationNumber n := by
+  change ((((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+        U.starProjection).singularValue n : ℝ) : Real) = _
+  have hD : (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+        U.starProjection).singularValue n : ℝ) = (A.singularValue n : ℝ) := by
     simpa only [A] using hDseq
   rw [hD]
   simpa only [a, shalf, theta] using ha
@@ -1318,16 +1309,13 @@ theorem proposition4_1_compact_nonacute_real
           TauCeti.principalAngleSequence U V (n : ℕ) ≤
             TauCeti.vectorAngle ℝ (v n : E) (W (v n : E))) ∧
       (∀ n : ℕ,
-        (ContinuousLinearMap.approximationNumber
-            ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-              U.starProjection) n : Real) =
+        ((((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+              U.starProjection).singularValue n : ℝ) : Real) =
           2 * Real.sin (TauCeti.principalAngleSequence U V n / 2)) ∧
       ∀ n : ℕ,
-        ContinuousLinearMap.approximationNumber
-            ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-              U.starProjection) n ≤
-          ContinuousLinearMap.approximationNumber
-            ((1 - W) ∘L U.starProjection) n :=
+        (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+              U.starProjection).singularValue n : ℝ) ≤
+          (((1 - W) ∘L U.starProjection).singularValue n : ℝ) :=
   ⟨proposition4_1_compact_orthonormalVectors_real U V hcompact W hWunitary hWmap,
     proposition4_1_compact_nonacute_directRotationValues_real
       U V hcompact J W hWunitary hWmap,
@@ -1450,7 +1438,6 @@ private theorem nuclearENorm_gramOperatorR {X Y : Type v}
   rw [← A.tsum_singularValue_sq_eq_hilbertSchmidtEnergy b]
   refine tsum_congr fun n => ?_
   have h := approximationNumber_gramOperator_real A n
-  simp only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] at h
   have hn : (gramOperatorR A).singularValue n = (A.singularValue n) ^ 2 := by
     exact_mod_cast h
   rw [hn, ENNReal.coe_pow]
@@ -1496,8 +1483,7 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_hilbertSchmidt
     have hk' : ((gramOperatorR (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k
       : ℝ) ≤
         ((gramOperatorR (1 - W)).kyFanGauge k : ℝ) := by
-      simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
-        ContinuousLinearMap.kyFanGaugeReal] using hk
+      simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge] using hk
     exact ENNReal.coe_le_coe.mpr (NNReal.coe_le_coe.mp hk')
   rw [nuclearENorm_gramOperatorR, nuclearENorm_gramOperatorR] at hnuc
   rw [← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_natCast _ 2] at hnuc

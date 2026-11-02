@@ -155,8 +155,8 @@ readings, since every block appearing there is positive. -/
 theorem approximationNumber_eq_eigenvalues_of_isPositive [FiniteDimensional 𝕜 H]
     {S : H →L[𝕜] H} (hpos : (S : H →ₗ[𝕜] H).IsPositive)
     (i : Fin (finrank 𝕜 H)) :
-    S.approximationNumber (i : ℕ) = hpos.isSymmetric.eigenvalues rfl i := by
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    (S.singularValue (i : ℕ) : ℝ) = hpos.isSymmetric.eigenvalues rfl i := by
+  rw [
     ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
   exact TauCeti.singularValues_of_isPositive hpos i
 
@@ -193,8 +193,7 @@ by zeros. -/
 theorem approximationNumber_upperBlockShift_eq_zero_of_le [FiniteDimensional 𝕜 H]
     (A : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
     (alpha : ℝ) {n : ℕ} (hn : finrank 𝕜 (Pᗮ : Submodule 𝕜 H) ≤ n) :
-    (upperBlockShift A P alpha).approximationNumber n = 0 := by
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+    ((upperBlockShift A P alpha).singularValue n : ℝ) = 0 := by
   have hdim := (Submodule.finrank_mono (range_upperBlockShift_le A P alpha)).trans hn
   have hrank : (upperBlockShift A P alpha).rank ≤ (n : Cardinal) := by
     rw [LinearMap.rank, ← Module.finrank_eq_rank']
@@ -206,8 +205,7 @@ omit [CompleteSpace H] in
 theorem approximationNumber_lowerBlockShift_eq_zero_of_le [FiniteDimensional 𝕜 H]
     (A : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
     (alpha delta : ℝ) {n : ℕ} (hn : finrank 𝕜 P ≤ n) :
-    (lowerBlockShift A P alpha delta).approximationNumber n = 0 := by
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+    ((lowerBlockShift A P alpha delta).singularValue n : ℝ) = 0 := by
   have hdim := (Submodule.finrank_mono (range_lowerBlockShift_le A P alpha delta)).trans hn
   have hrank : (lowerBlockShift A P alpha delta).rank ≤ (n : Cardinal) := by
     rw [LinearMap.rank, ← Module.finrank_eq_rank']
@@ -227,8 +225,8 @@ the native cosine-map equations give the identification. -/
 theorem approximationNumber_cosineBlock_eq_principalCosines [FiniteDimensional 𝕜 H]
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
-    (cosineBlock P Q).approximationNumber i = Submodule.principalCosines Pᗮ Qᗮ i := by
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ((cosineBlock P Q).singularValue i : ℝ) = Submodule.principalCosines Pᗮ Qᗮ i := by
+  rw [
     ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
     Submodule.principalCosines_def, Submodule.cosThetaMap_def]
   rfl
@@ -240,8 +238,8 @@ theorem approximationNumber_lowerCosineBlock_eq_principalCosines
     [FiniteDimensional 𝕜 H]
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
-    (lowerCosineBlock P Q).approximationNumber i = Submodule.principalCosines P Q i := by
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    ((lowerCosineBlock P Q).singularValue i : ℝ) = Submodule.principalCosines P Q i := by
+  rw [
     ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
     Submodule.principalCosines_def, Submodule.cosThetaMap_def]
   rfl
@@ -265,10 +263,10 @@ angle `θ_i = arccos (a_i C₁)` of equation (1.16) is a genuine angle in
 theorem cos_arccos_approximationNumber_cosineBlock [FiniteDimensional 𝕜 H]
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
-    Real.cos (Real.arccos ((cosineBlock P Q).approximationNumber i)) =
-      (cosineBlock P Q).approximationNumber i :=
+    Real.cos (Real.arccos (((cosineBlock P Q).singularValue i : ℝ))) =
+      ((cosineBlock P Q).singularValue i : ℝ) :=
   Real.cos_arccos
-    (by linarith [ContinuousLinearMap.approximationNumber_nonneg (cosineBlock P Q) i])
+    (by linarith [((cosineBlock P Q).singularValue i).coe_nonneg])
     ((ContinuousLinearMap.approximationNumber_le_norm _ i).trans
       (norm_cosineBlock_le_one P Q))
 
@@ -324,13 +322,13 @@ theorem theorem8_1_upperApproximationRepulsion_angle [FiniteDimensional ℂ H]
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (upperBlockShift A P alpha).approximationNumber n ≤
+    ((upperBlockShift A P alpha).singularValue n : ℝ) ≤
       Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha)ᗮ 0 ^ 2 *
-        (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha) alpha).approximationNumber n := by
+            (hA.add hK)) alpha) alpha).singularValue n : ℝ) := by
   rw [← norm_cosineBlock_eq_principalCosines_zero]
   exact theorem8_1_upperApproximationRepulsion A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n
@@ -344,13 +342,13 @@ theorem theorem8_1_lowerApproximationRepulsion_angle [FiniteDimensional ℂ H]
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (lowerBlockShift A P alpha delta).approximationNumber n ≤
+    ((lowerBlockShift A P alpha delta).singularValue n : ℝ) ≤
       Submodule.principalCosines P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) 0 ^ 2 *
-        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha) alpha delta).approximationNumber n := by
+            (hA.add hK)) alpha) alpha delta).singularValue n : ℝ) := by
   rw [← norm_lowerCosineBlock_eq_principalCosines_zero]
   exact theorem8_1_lowerApproximationRepulsion A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n
@@ -375,28 +373,28 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle [FiniteDimensional ℂ H]
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (finrank ℂ H) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (finrank ℂ H) =>
-        (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
+              (hA.add hK)) alpha) alpha).singularValue (i : ℕ) : ℝ) *
           Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2) := by
   have hrw : (fun i : Fin (finrank ℂ H) =>
-      (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+      ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
+            (hA.add hK)) alpha) alpha).singularValue (i : ℕ) : ℝ) *
         Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2) =
       (fun i : Fin (finrank ℂ H) =>
-        (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
-          (cosineBlock P (canonicalLowBranch (A + K)
+              (hA.add hK)) alpha) alpha).singularValue (i : ℕ) : ℝ) *
+          ((cosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) := by
+              (hA.add hK)) alpha)).singularValue (i : ℕ) : ℝ) ^ 2) := by
     funext i
     rw [approximationNumber_cosineBlock_eq_principalCosines]
   rw [hrw]
@@ -416,28 +414,28 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle [FiniteDimensional ℂ H]
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (finrank ℂ H) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (finrank ℂ H) =>
-        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
+              (hA.add hK)) alpha) alpha delta).singularValue (i : ℕ) : ℝ) *
           Submodule.principalCosines P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) (i : ℕ) ^ 2) := by
   have hrw : (fun i : Fin (finrank ℂ H) =>
-      (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+      ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
+            (hA.add hK)) alpha) alpha delta).singularValue (i : ℕ) : ℝ) *
         Submodule.principalCosines P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) (i : ℕ) ^ 2) =
       (fun i : Fin (finrank ℂ H) =>
-        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
-          (lowerCosineBlock P (canonicalLowBranch (A + K)
+              (hA.add hK)) alpha) alpha delta).singularValue (i : ℕ) : ℝ) *
+          ((lowerCosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) := by
+              (hA.add hK)) alpha)).singularValue (i : ℕ) : ℝ) ^ 2) := by
     funext i
     rw [approximationNumber_lowerCosineBlock_eq_principalCosines]
   rw [hrw]
@@ -465,41 +463,41 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (finrank ℂ H) =>
-        (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i.rev : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (finrank ℂ H) =>
-        (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha).approximationNumber (i.rev : ℕ) *
+              (hA.add hK)) alpha) alpha).singularValue (i.rev : ℕ) : ℝ) *
           Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)ᗮ (i.rev : ℕ) ^ 2) := by
   have hL := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (finrank ℂ H) =>
-    (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+    ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
     (Fin.revPerm (n := finrank ℂ H))
   have hR := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (finrank ℂ H) =>
-    (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+    ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-          (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
+          (hA.add hK)) alpha) alpha).singularValue (i : ℕ) : ℝ) *
       Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2)
     (Fin.revPerm (n := finrank ℂ H))
   rw [show (fun i : Fin (finrank ℂ H) =>
-      (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ)) =
+      ((upperBlockShift A P alpha).singularValue (i.rev : ℕ) : ℝ)) =
       (fun i : Fin (finrank ℂ H) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ)) ∘
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ)) ∘
         (Fin.revPerm (n := finrank ℂ H)) from rfl,
     show (fun i : Fin (finrank ℂ H) =>
-      (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+      ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha) alpha).approximationNumber (i.rev : ℕ) *
+            (hA.add hK)) alpha) alpha).singularValue (i.rev : ℕ) : ℝ) *
         Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha)ᗮ (i.rev : ℕ) ^ 2) =
       (fun i : Fin (finrank ℂ H) =>
-        (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
+              (hA.add hK)) alpha) alpha).singularValue (i : ℕ) : ℝ) *
           Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2) ∘
@@ -519,41 +517,41 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (finrank ℂ H) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i.rev : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (finrank ℂ H) =>
-        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha delta).approximationNumber (i.rev : ℕ) *
+              (hA.add hK)) alpha) alpha delta).singularValue (i.rev : ℕ) : ℝ) *
           Submodule.principalCosines P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) (i.rev : ℕ) ^ 2) := by
   have hL := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (finrank ℂ H) =>
-    (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+    ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
     (Fin.revPerm (n := finrank ℂ H))
   have hR := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (finrank ℂ H) =>
-    (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+    ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-          (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
+          (hA.add hK)) alpha) alpha delta).singularValue (i : ℕ) : ℝ) *
       Submodule.principalCosines P (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha) (i : ℕ) ^ 2)
     (Fin.revPerm (n := finrank ℂ H))
   rw [show (fun i : Fin (finrank ℂ H) =>
-      (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ)) =
+      ((lowerBlockShift A P alpha delta).singularValue (i.rev : ℕ) : ℝ)) =
       (fun i : Fin (finrank ℂ H) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ)) ∘
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ)) ∘
         (Fin.revPerm (n := finrank ℂ H)) from rfl,
     show (fun i : Fin (finrank ℂ H) =>
-      (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+      ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-            (hA.add hK)) alpha) alpha delta).approximationNumber (i.rev : ℕ) *
+            (hA.add hK)) alpha) alpha delta).singularValue (i.rev : ℕ) : ℝ) *
         Submodule.principalCosines P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) (i.rev : ℕ) ^ 2) =
       (fun i : Fin (finrank ℂ H) =>
-        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
+              (hA.add hK)) alpha) alpha delta).singularValue (i : ℕ) : ℝ) *
           Submodule.principalCosines P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) (i : ℕ) ^ 2) ∘
@@ -609,13 +607,13 @@ theorem theorem8_1_upperApproximationRepulsion_angle_real [FiniteDimensional ℝ
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (upperBlockShift A P alpha).approximationNumber n ≤
+    ((upperBlockShift A P alpha).singularValue n : ℝ) ≤
       Submodule.principalCosines Pᗮ
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp)ᗮ 0 ^ 2 *
-        (upperBlockShift (A + K)
+        ((upperBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp) alpha).approximationNumber n := by
+            hKPperp) alpha).singularValue n : ℝ) := by
   rw [← norm_cosineBlock_eq_principalCosines_zero]
   exact theorem8_1_upperApproximationRepulsion_real A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n
@@ -632,13 +630,13 @@ theorem theorem8_1_lowerApproximationRepulsion_angle_real [FiniteDimensional ℝ
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (lowerBlockShift A P alpha delta).approximationNumber n ≤
+    ((lowerBlockShift A P alpha delta).singularValue n : ℝ) ≤
       Submodule.principalCosines P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) 0 ^ 2 *
-        (lowerBlockShift (A + K)
+        ((lowerBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp) alpha delta).approximationNumber n := by
+            hKPperp) alpha delta).singularValue n : ℝ) := by
   rw [← norm_lowerCosineBlock_eq_principalCosines_zero]
   exact theorem8_1_lowerApproximationRepulsion_real A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp n
@@ -662,28 +660,28 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_real [FiniteDimensional �
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift (A + K)
+        ((upperBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha).approximationNumber (i : ℕ) *
+              hKPperp) alpha).singularValue (i : ℕ) : ℝ) *
           Submodule.principalCosines Pᗮ
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)ᗮ (i : ℕ) ^ 2) := by
   have hrw : (fun i : Fin (Module.finrank ℝ E) =>
-      (upperBlockShift (A + K)
+      ((upperBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp) alpha).approximationNumber (i : ℕ) *
+            hKPperp) alpha).singularValue (i : ℕ) : ℝ) *
         Submodule.principalCosines Pᗮ
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp)ᗮ (i : ℕ) ^ 2) =
       (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift (A + K)
+        ((upperBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha).approximationNumber (i : ℕ) *
-          (cosineBlock P
+              hKPperp) alpha).singularValue (i : ℕ) : ℝ) *
+          ((cosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp)).approximationNumber (i : ℕ) ^ 2) := by
+              hKPperp)).singularValue (i : ℕ) : ℝ) ^ 2) := by
     funext i
     rw [approximationNumber_cosineBlock_eq_principalCosines]
   rw [hrw]
@@ -704,28 +702,28 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_real [FiniteDimensional �
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift (A + K)
+        ((lowerBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha delta).approximationNumber (i : ℕ) *
+              hKPperp) alpha delta).singularValue (i : ℕ) : ℝ) *
           Submodule.principalCosines P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) (i : ℕ) ^ 2) := by
   have hrw : (fun i : Fin (Module.finrank ℝ E) =>
-      (lowerBlockShift (A + K)
+      ((lowerBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp) alpha delta).approximationNumber (i : ℕ) *
+            hKPperp) alpha delta).singularValue (i : ℕ) : ℝ) *
         Submodule.principalCosines P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) (i : ℕ) ^ 2) =
       (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift (A + K)
+        ((lowerBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha delta).approximationNumber (i : ℕ) *
-          (lowerCosineBlock P
+              hKPperp) alpha delta).singularValue (i : ℕ) : ℝ) *
+          ((lowerCosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp)).approximationNumber (i : ℕ) ^ 2) := by
+              hKPperp)).singularValue (i : ℕ) : ℝ) ^ 2) := by
     funext i
     rw [approximationNumber_lowerCosineBlock_eq_principalCosines]
   rw [hrw]
@@ -748,41 +746,41 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i.rev : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift (A + K)
+        ((upperBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha).approximationNumber (i.rev : ℕ) *
+              hKPperp) alpha).singularValue (i.rev : ℕ) : ℝ) *
           Submodule.principalCosines Pᗮ
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)ᗮ (i.rev : ℕ) ^ 2) := by
   have hL := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (Module.finrank ℝ E) =>
-    (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+    ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
     (Fin.revPerm (n := Module.finrank ℝ E))
   have hR := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (Module.finrank ℝ E) =>
-    (upperBlockShift (A + K)
+    ((upperBlockShift (A + K)
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-          hKPperp) alpha).approximationNumber (i : ℕ) *
+          hKPperp) alpha).singularValue (i : ℕ) : ℝ) *
       Submodule.principalCosines Pᗮ
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp)ᗮ (i : ℕ) ^ 2)
     (Fin.revPerm (n := Module.finrank ℝ E))
   rw [show (fun i : Fin (Module.finrank ℝ E) =>
-      (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ)) =
+      ((upperBlockShift A P alpha).singularValue (i.rev : ℕ) : ℝ)) =
       (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ)) ∘
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ)) ∘
         (Fin.revPerm (n := Module.finrank ℝ E)) from rfl,
     show (fun i : Fin (Module.finrank ℝ E) =>
-      (upperBlockShift (A + K)
+      ((upperBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp) alpha).approximationNumber (i.rev : ℕ) *
+            hKPperp) alpha).singularValue (i.rev : ℕ) : ℝ) *
         Submodule.principalCosines Pᗮ
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp)ᗮ (i.rev : ℕ) ^ 2) =
       (fun i : Fin (Module.finrank ℝ E) =>
-        (upperBlockShift (A + K)
+        ((upperBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha).approximationNumber (i : ℕ) *
+              hKPperp) alpha).singularValue (i : ℕ) : ℝ) *
           Submodule.principalCosines Pᗮ
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)ᗮ (i : ℕ) ^ 2) ∘
@@ -804,41 +802,41 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i.rev : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift (A + K)
+        ((lowerBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha delta).approximationNumber (i.rev : ℕ) *
+              hKPperp) alpha delta).singularValue (i.rev : ℕ) : ℝ) *
           Submodule.principalCosines P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) (i.rev : ℕ) ^ 2) := by
   have hL := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (Module.finrank ℝ E) =>
-    (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+    ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
     (Fin.revPerm (n := Module.finrank ℝ E))
   have hR := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (Module.finrank ℝ E) =>
-    (lowerBlockShift (A + K)
+    ((lowerBlockShift (A + K)
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-          hKPperp) alpha delta).approximationNumber (i : ℕ) *
+          hKPperp) alpha delta).singularValue (i : ℕ) : ℝ) *
       Submodule.principalCosines P
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp) (i : ℕ) ^ 2)
     (Fin.revPerm (n := Module.finrank ℝ E))
   rw [show (fun i : Fin (Module.finrank ℝ E) =>
-      (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ)) =
+      ((lowerBlockShift A P alpha delta).singularValue (i.rev : ℕ) : ℝ)) =
       (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ)) ∘
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ)) ∘
         (Fin.revPerm (n := Module.finrank ℝ E)) from rfl,
     show (fun i : Fin (Module.finrank ℝ E) =>
-      (lowerBlockShift (A + K)
+      ((lowerBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp) alpha delta).approximationNumber (i.rev : ℕ) *
+            hKPperp) alpha delta).singularValue (i.rev : ℕ) : ℝ) *
         Submodule.principalCosines P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) (i.rev : ℕ) ^ 2) =
       (fun i : Fin (Module.finrank ℝ E) =>
-        (lowerBlockShift (A + K)
+        ((lowerBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-              hKPperp) alpha delta).approximationNumber (i : ℕ) *
+              hKPperp) alpha delta).singularValue (i : ℕ) : ℝ) *
           Submodule.principalCosines P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) (i : ℕ) ^ 2) ∘

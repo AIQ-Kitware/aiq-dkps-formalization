@@ -100,9 +100,9 @@ theorem opNorm_le_hilbertSchmidtNorm
   have hterm : ENNReal.ofReal (‖A‖ ^ 2) ≤ approximationNumberEnergy A := by
     unfold approximationNumberEnergy
     simpa using (ENNReal.le_tsum
-      (f := fun n : ℕ => ENNReal.ofReal ((approximationSingularValue n A) ^ 2)) 0 :
-      ENNReal.ofReal ((approximationSingularValue 0 A) ^ 2) ≤
-        ∑' n : ℕ, ENNReal.ofReal ((approximationSingularValue n A) ^ 2))
+      (f := fun n : ℕ => ENNReal.ofReal (((A.singularValue n : ℝ)) ^ 2)) 0 :
+      ENNReal.ofReal (((A.singularValue 0 : ℝ)) ^ 2) ≤
+        ∑' n : ℕ, ENNReal.ofReal (((A.singularValue n : ℝ)) ^ 2))
   have hreal : ‖A‖ ^ 2 ≤ (approximationNumberEnergy A).toReal := by
     have := ENNReal.toReal_mono hA hterm
     simpa [ENNReal.toReal_ofReal (sq_nonneg ‖A‖)] using this

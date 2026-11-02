@@ -625,7 +625,6 @@ theorem sameApproximationSingularValues_unboundedReflectionTangent
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   rw [ContinuousLinearMap.SameSingularValues.approximationNumber_eq h1 n,
     absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
   exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq

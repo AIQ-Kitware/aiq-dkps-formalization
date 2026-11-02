@@ -63,7 +63,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- Finite Ky Fan gauges are unchanged by the transport, term by term. -/
 theorem kyFanApproximationGauge_clm (k : ℕ) (T : E →L[𝕜] F) :
     kyFanApproximationGauge k (clm (e := e) T) = kyFanApproximationGauge k T := by
-  change (clm (e := e) T).kyFanGaugeReal k = T.kyFanGaugeReal k
+  change ((clm (e := e) T).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ)
   rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
     ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_congr rfl fun n _ => approximationNumber_clm (e := e) T n

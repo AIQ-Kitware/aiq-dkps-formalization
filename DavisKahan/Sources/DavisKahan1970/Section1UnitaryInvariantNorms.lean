@@ -100,12 +100,12 @@ theorem equation1_12_gauge_comp_starProjection_le
     kyFanApproximationGauge ν (K ∘L Ω.starProjection) ≤ kyFanApproximationGauge ν K := by
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   refine Finset.sum_le_sum fun n _ => ?_
-  calc (K ∘L Ω.starProjection).approximationNumber n
-      ≤ K.approximationNumber n * ‖Ω.starProjection‖ :=
+  calc ((K ∘L Ω.starProjection).singularValue n : ℝ)
+      ≤ (K.singularValue n : ℝ) * ‖Ω.starProjection‖ :=
         K.approximationNumber_comp_le_mul_norm _ n
-    _ ≤ K.approximationNumber n * 1 :=
-        mul_le_mul_of_nonneg_left Ω.starProjection_norm_le (K.approximationNumber_nonneg n)
-    _ = K.approximationNumber n := mul_one _
+    _ ≤ (K.singularValue n : ℝ) * 1 :=
+        mul_le_mul_of_nonneg_left Ω.starProjection_norm_le ((K.singularValue n).coe_nonneg)
+    _ = (K.singularValue n : ℝ) := mul_one _
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **Davis--Kahan 1970, (1.13), the `≤` half for two-sided compressions:**
@@ -120,15 +120,15 @@ theorem equation1_13_gauge_starProjection_comp_le
   refine Finset.sum_le_sum fun n _ => ?_
   have h := ContinuousLinearMap.approximationNumber_comp_comp_le
     Υ.starProjection K Ω.starProjection n
-  have h0 := K.approximationNumber_nonneg n
+  have h0 := (K.singularValue n).coe_nonneg
   have hΥ : ‖Υ.starProjection‖ ≤ 1 := Υ.starProjection_norm_le
   have hΩ : ‖Ω.starProjection‖ ≤ 1 := Ω.starProjection_norm_le
-  have hA : 0 ≤ ‖Υ.starProjection‖ * K.approximationNumber n :=
+  have hA : 0 ≤ ‖Υ.starProjection‖ * (K.singularValue n : ℝ) :=
     mul_nonneg (norm_nonneg _) h0
-  have hstep : ‖Υ.starProjection‖ * K.approximationNumber n * ‖Ω.starProjection‖
-      ≤ ‖Υ.starProjection‖ * K.approximationNumber n * 1 :=
+  have hstep : ‖Υ.starProjection‖ * (K.singularValue n : ℝ) * ‖Ω.starProjection‖
+      ≤ ‖Υ.starProjection‖ * (K.singularValue n : ℝ) * 1 :=
     mul_le_mul_of_nonneg_left hΩ hA
-  have hstep2 : ‖Υ.starProjection‖ * K.approximationNumber n ≤ 1 * K.approximationNumber n :=
+  have hstep2 : ‖Υ.starProjection‖ * (K.singularValue n : ℝ) ≤ 1 * (K.singularValue n : ℝ) :=
     mul_le_mul_of_nonneg_right hΥ h0
   linarith
 

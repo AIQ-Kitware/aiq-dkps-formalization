@@ -71,8 +71,8 @@ field at once. -/
 theorem approximationSingularValue_sinTwoThetaIdealBlock_real
     (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (n : ℕ) :
-    approximationSingularValue n (sinTwoThetaIdealBlock U V)
-      = approximationSingularValue n (Real.directedSinTwoAngleOperatorRC U V) := by
+    ((sinTwoThetaIdealBlock U V).singularValue n : ℝ)
+      = ((Real.directedSinTwoAngleOperatorRC U V).singularValue n : ℝ) := by
   rw [← ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
       (sinTwoThetaIdealBlock U V) n,
     complexify_sinTwoThetaIdealBlock U V]

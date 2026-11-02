@@ -439,8 +439,8 @@ theorem theorem8_1_upperSandwichApproximation_real
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (upperBlockShift A P alpha).approximationNumber n ≤
-      (ContinuousLinearMap.adjoint (cosineBlock P
+    ((upperBlockShift A P alpha).singularValue n : ℝ) ≤
+      ((ContinuousLinearMap.adjoint (cosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)) ∘L
         upperBlockShift (A + K)
@@ -448,7 +448,7 @@ theorem theorem8_1_upperSandwichApproximation_real
             hKPperp) alpha ∘L
         cosineBlock P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp)).approximationNumber n := by
+            hKPperp)).singularValue n : ℝ) := by
   have hAc : IsSelfAdjoint (complexify A) := (complexify_isSelfAdjoint_iff A).2 hA
   have hKc : IsSelfAdjoint (complexify K) := (complexify_isSelfAdjoint_iff K).2 hK
   have hsum : complexify A + complexify K = complexify (A + K) :=
@@ -466,11 +466,11 @@ theorem theorem8_1_upperSandwichApproximation_real
       Qc = canonicalLowBranch (complexify A + complexify K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hAc.add hKc))
           alpha →
-      (upperBlockShift (complexify A) (complexifySubmodule P) alpha
-          ).approximationNumber n ≤
-        (ContinuousLinearMap.adjoint (cosineBlock (complexifySubmodule P) Qc) ∘L
+      ((upperBlockShift (complexify A) (complexifySubmodule P) alpha
+          ).singularValue n : ℝ) ≤
+        ((ContinuousLinearMap.adjoint (cosineBlock (complexifySubmodule P) Qc) ∘L
           upperBlockShift (complexify A + complexify K) Qc alpha ∘L
-          cosineBlock (complexifySubmodule P) Qc).approximationNumber n := by
+          cosineBlock (complexifySubmodule P) Qc).singularValue n : ℝ) := by
     rintro Qc _ rfl
     exact theorem8_1_upperSandwichApproximation (complexify A) (complexify K)
       (complexifySubmodule P) hdelta hAc hKc
@@ -504,13 +504,13 @@ theorem theorem8_1_upperApproximationRepulsion_real
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (upperBlockShift A P alpha).approximationNumber n ≤
+    ((upperBlockShift A P alpha).singularValue n : ℝ) ≤
       ‖cosineBlock P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp)‖ ^ 2 *
-        (upperBlockShift (A + K)
+        ((upperBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp) alpha).approximationNumber n :=
+            hKPperp) alpha).singularValue n : ℝ) :=
   (theorem8_1_upperSandwichApproximation_real A K P hdelta hA hK hAP hPlow hPhigh
     hKP hKPperp n).trans (approximationNumber_adjoint_sandwich_le _ _ n)
 
@@ -528,8 +528,8 @@ theorem theorem8_1_lowerSandwichApproximation_real
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (lowerBlockShift A P alpha delta).approximationNumber n ≤
-      (ContinuousLinearMap.adjoint (lowerCosineBlock P
+    ((lowerBlockShift A P alpha delta).singularValue n : ℝ) ≤
+      ((ContinuousLinearMap.adjoint (lowerCosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)) ∘L
         lowerBlockShift (A + K)
@@ -537,7 +537,7 @@ theorem theorem8_1_lowerSandwichApproximation_real
             hKPperp) alpha delta ∘L
         lowerCosineBlock P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp)).approximationNumber n := by
+            hKPperp)).singularValue n : ℝ) := by
   have hAc : IsSelfAdjoint (complexify A) := (complexify_isSelfAdjoint_iff A).2 hA
   have hKc : IsSelfAdjoint (complexify K) := (complexify_isSelfAdjoint_iff K).2 hK
   have hsum : complexify A + complexify K = complexify (A + K) :=
@@ -554,11 +554,11 @@ theorem theorem8_1_lowerSandwichApproximation_real
       Qc = canonicalLowBranch (complexify A + complexify K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hAc.add hKc))
           alpha →
-      (lowerBlockShift (complexify A) (complexifySubmodule P) alpha delta
-          ).approximationNumber n ≤
-        (ContinuousLinearMap.adjoint (lowerCosineBlock (complexifySubmodule P) Qc) ∘L
+      ((lowerBlockShift (complexify A) (complexifySubmodule P) alpha delta
+          ).singularValue n : ℝ) ≤
+        ((ContinuousLinearMap.adjoint (lowerCosineBlock (complexifySubmodule P) Qc) ∘L
           lowerBlockShift (complexify A + complexify K) Qc alpha delta ∘L
-          lowerCosineBlock (complexifySubmodule P) Qc).approximationNumber n := by
+          lowerCosineBlock (complexifySubmodule P) Qc).singularValue n : ℝ) := by
     rintro Qc _ rfl
     exact theorem8_1_lowerSandwichApproximation (complexify A) (complexify K)
       (complexifySubmodule P) hdelta hAc hKc
@@ -590,13 +590,13 @@ theorem theorem8_1_lowerApproximationRepulsion_real
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
-    (lowerBlockShift A P alpha delta).approximationNumber n ≤
+    ((lowerBlockShift A P alpha delta).singularValue n : ℝ) ≤
       ‖lowerCosineBlock P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp)‖ ^ 2 *
-        (lowerBlockShift (A + K)
+        ((lowerBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
-            hKPperp) alpha delta).approximationNumber n :=
+            hKPperp) alpha delta).singularValue n : ℝ) :=
   (theorem8_1_lowerSandwichApproximation_real A K P hdelta hA hK hAP hPlow hPhigh
     hKP hKPperp n).trans (approximationNumber_adjoint_sandwich_le _ _ n)
 

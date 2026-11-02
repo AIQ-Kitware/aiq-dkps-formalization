@@ -130,14 +130,14 @@ theorem theorem8_1_upperWeightedWeakMajorization [FiniteDimensional ℂ H]
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℂ H) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       (fun i : Fin (Module.finrank ℂ H) =>
-        (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
-          (cosineBlock P (canonicalLowBranch (A + K)
+              (hA.add hK)) alpha) alpha).singularValue (i : ℕ) : ℝ) *
+          ((cosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) := by
+              (hA.add hK)) alpha)).singularValue (i : ℕ) : ℝ) ^ 2) := by
   set Q : Submodule ℂ H := canonicalLowBranch (A + K)
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
     with hQdef
@@ -149,11 +149,11 @@ theorem theorem8_1_upperWeightedWeakMajorization [FiniteDimensional ℂ H]
   -- Link one: the Weyl step of part (i), promoted from pointwise domination.
   have hstep1 : IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℂ H) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       (fun i : Fin (Module.finrank ℂ H) =>
-        (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
+        ((ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
           upperBlockShift (A + K) Q alpha ∘L
-          cosineBlock P Q).approximationNumber (i : ℕ)) :=
+          cosineBlock P Q).singularValue (i : ℕ) : ℝ)) :=
     IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
         (upperBlockShift A P alpha).approximationNumber_antitone (Fin.le_def.mp hij))
@@ -161,10 +161,10 @@ theorem theorem8_1_upperWeightedWeakMajorization [FiniteDimensional ℂ H]
         (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
           upperBlockShift (A + K) Q alpha ∘L
           cosineBlock P Q).approximationNumber_antitone (Fin.le_def.mp hij))
-      (fun i => (upperBlockShift A P alpha).approximationNumber_nonneg _)
-      (fun i => (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
+      (fun i => ((upperBlockShift A P alpha).singularValue _).coe_nonneg)
+      (fun i => ((ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
         upperBlockShift (A + K) Q alpha ∘L
-        cosineBlock P Q).approximationNumber_nonneg _)
+        cosineBlock P Q).singularValue _).coe_nonneg)
       (fun i => theorem8_1_upperSandwichApproximation A K P hdelta hA hK
         hAP hPlow hPhigh hKP hKPperp (i : ℕ))
   -- Link two: the generic positive-sandwich weak majorization.
@@ -191,14 +191,14 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion [FiniteDimensional ℂ H]
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (Module.finrank ℂ H) =>
-        (upperBlockShift A P alpha).approximationNumber (i : ℕ))
+        ((upperBlockShift A P alpha).singularValue (i : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (Module.finrank ℂ H) =>
-        (upperBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((upperBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
-          (cosineBlock P (canonicalLowBranch (A + K)
+              (hA.add hK)) alpha) alpha).singularValue (i : ℕ) : ℝ) *
+          ((cosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) :=
+              (hA.add hK)) alpha)).singularValue (i : ℕ) : ℝ) ^ 2) :=
   (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi)
     (theorem8_1_upperWeightedWeakMajorization A K P hdelta hA hK hAP
       hPlow hPhigh hKP hKPperp)
@@ -232,14 +232,14 @@ theorem theorem8_1_lowerWeightedWeakMajorization [FiniteDimensional ℂ H]
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℂ H) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       (fun i : Fin (Module.finrank ℂ H) =>
-        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
-          (lowerCosineBlock P (canonicalLowBranch (A + K)
+              (hA.add hK)) alpha) alpha delta).singularValue (i : ℕ) : ℝ) *
+          ((lowerCosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) := by
+              (hA.add hK)) alpha)).singularValue (i : ℕ) : ℝ) ^ 2) := by
   set Q : Submodule ℂ H := canonicalLowBranch (A + K)
     (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha
     with hQdef
@@ -251,11 +251,11 @@ theorem theorem8_1_lowerWeightedWeakMajorization [FiniteDimensional ℂ H]
   -- Link one: the lower Weyl step of part (i), promoted from pointwise domination.
   have hstep1 : IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℂ H) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       (fun i : Fin (Module.finrank ℂ H) =>
-        (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+        ((ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
           lowerBlockShift (A + K) Q alpha delta ∘L
-          lowerCosineBlock P Q).approximationNumber (i : ℕ)) :=
+          lowerCosineBlock P Q).singularValue (i : ℕ) : ℝ)) :=
     IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
         (lowerBlockShift A P alpha delta).approximationNumber_antitone
@@ -264,10 +264,10 @@ theorem theorem8_1_lowerWeightedWeakMajorization [FiniteDimensional ℂ H]
         (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
           lowerBlockShift (A + K) Q alpha delta ∘L
           lowerCosineBlock P Q).approximationNumber_antitone (Fin.le_def.mp hij))
-      (fun i => (lowerBlockShift A P alpha delta).approximationNumber_nonneg _)
-      (fun i => (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+      (fun i => ((lowerBlockShift A P alpha delta).singularValue _).coe_nonneg)
+      (fun i => ((ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
         lowerBlockShift (A + K) Q alpha delta ∘L
-        lowerCosineBlock P Q).approximationNumber_nonneg _)
+        lowerCosineBlock P Q).singularValue _).coe_nonneg)
       (fun i => theorem8_1_lowerSandwichApproximation A K P hdelta hA hK
         hAP hPlow hPhigh hKP hKPperp (i : ℕ))
   -- Link two: the generic positive-sandwich weak majorization.
@@ -292,14 +292,14 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion [FiniteDimensional ℂ H]
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
     Phi (fun i : Fin (Module.finrank ℂ H) =>
-        (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
+        ((lowerBlockShift A P alpha delta).singularValue (i : ℕ) : ℝ))
       ≤ Phi (fun i : Fin (Module.finrank ℂ H) =>
-        (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
+        ((lowerBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
-          (lowerCosineBlock P (canonicalLowBranch (A + K)
+              (hA.add hK)) alpha) alpha delta).singularValue (i : ℕ) : ℝ) *
+          ((lowerCosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-              (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) :=
+              (hA.add hK)) alpha)).singularValue (i : ℕ) : ℝ) ^ 2) :=
   (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi)
     (theorem8_1_lowerWeightedWeakMajorization A K P hdelta hA hK hAP
       hPlow hPhigh hKP hKPperp)

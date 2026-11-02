@@ -119,7 +119,7 @@ theorem symmetricNorming_of_kyFanDominant
       gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }))
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hM
+      ← kyFanApproximationGauge_eq_kyFanGauge] at hM
     exact hM.2
 
 /-- **The converse bridge: a source-norm estimate holds at every Fan-dominant

@@ -3442,3 +3442,46 @@ Their proofs consume native engines where available. Native finite-dimensional
 adjoint conjugation or an existential polar witness does not replace those full
 statements. Planar pair-sequence/determinant reductions and arbitrary-eigenframe
 paper theorems also remain.
+
+
+## 2026-11-02: consume the native approximation-number data representation
+
+Retire `ContinuousLinearMap.approximationNumber`,
+`TauCeti.ApproximationNumber.approximationSingularValue`,
+`ContinuousLinearMap.kyFanGaugeReal` and the obsolete
+`approximationNumber_eq_singularValue_toReal` conversion lemma. Maintained
+ForTauCeti, paper-facing and Challenge consumers now use
+`(T.singularValue n : ℝ)` and `(T.kyFanGauge k : ℝ)` directly. Partially
+applied real sequences use explicit coercion functions. No replacement aliases,
+notation, completeness requirements or nonnegative-real-threshold restrictions
+are introduced. Original signed real formulas remain signed real formulas.
+Redundant unfolding, coercion and positivity steps are removed where the native
+representation makes Lean discharge them directly.
+
+The native construction and elementary calculus are accepted in independent
+[#14501](https://github.com/TauCetiProject/TauCeti/pull/14501), integration
+`0095123bf736b0ed2b5df5986ee34f1b6640f0ea`, present in pin
+`463ab293070d4cb355d0a0e036469464070088bc`. That integration explicitly says
+it does not vendor or follow DKPS bulk port #13866. Shared roadmap targets do
+not make this a Kitware proof port. The original DKPS Basic source was adapted
+from Mathlib PR #32126; preserve that ancestry separately.
+
+Source anchors are `e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`
+`Basic.lean`, `Core.lean` and `CanonicalGauge.lean`; the earlier Basic source is
+`fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean`.
+Basic authors: Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta,
+Rawad Kansoh; Core: Jon Crall / OpenAI GPT-5.6 Thinking; CanonicalGauge:
+Jon Crall / GPT-6. All carry Kitware copyright and Apache-2.0 licensing.
+This checkpoint retires the data aliases, not every law in their old modules:
+shared scalar law wrappers and the separate `kyFanApproximationGauge` sum
+remain intermediate consumption work. They are not classified as unmatched.
+The genuine incomplete-target comparison/subspace transport, localization,
+strong-cutoff and broader positive-exponent mathematics is preserved.
+
+The same checkpoint deletes `ContinuousLinearMap.approximationNumber_nonneg`
+and `TauCeti.ApproximationNumber.approximationSingularValue_nonneg`. Their
+maintained callers use `NNReal.coe_nonneg` on native singular values directly;
+this order fact in pinned Mathlib `2cabef97b63d3275776b8b060d802de6a6fa1055`
+needs none of the extra Hilbert-space hypotheses
+of the old second wrapper. Original arbitrary-field and incomplete-space uses
+are preserved. Other shared scalar laws remain a subsequent consumption slice.

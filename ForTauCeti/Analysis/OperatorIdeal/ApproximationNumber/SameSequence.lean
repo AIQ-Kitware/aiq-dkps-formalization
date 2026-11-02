@@ -17,7 +17,7 @@ Two bounded operators, possibly between different pairs of Hilbert spaces, **hav
 approximation numbers** when their whole sequences agree:
 
 ```
-A.SameSingularValues B ↔ ∀ n, A.approximationNumber n = B.approximationNumber n.
+A.SameSingularValues B ↔ ∀ n, A.singularValue n = B.singularValue n.
 ```
 
 Since every unitarily invariant norm is a function of that sequence, this is the exact
@@ -104,10 +104,10 @@ estimate carries that same witness over to `B`.  It is rank-safe — no averagin
 against a second operator happens, so no rank doubling can occur. -/
 theorem approximationNumber_le_of_norm_apply_le
     (A : X →L[𝕜] Y) (B : X →L[𝕜] Z) (h : ∀ x : X, ‖A x‖ ≤ ‖B x‖) (n : ℕ) :
-    A.approximationNumber n ≤ B.approximationNumber n := by
+    (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ) := by
   by_contra hnot
-  have hlt : B.approximationNumber n < A.approximationNumber n := lt_of_not_ge hnot
-  have hB0 : 0 ≤ B.approximationNumber n := B.approximationNumber_nonneg n
+  have hlt : (B.singularValue n : ℝ) < (A.singularValue n : ℝ) := lt_of_not_ge hnot
+  have hB0 : 0 ≤ (B.singularValue n : ℝ) := (B.singularValue n).coe_nonneg
   have hmm : TauCeti.HasMinMaxLowerBound 𝕜 X Y := TauCeti.HasMinMaxLowerBound.of_completeSpace
   have hmm' : TauCeti.HasMinMaxLowerBound 𝕜 X Z := TauCeti.HasMinMaxLowerBound.of_completeSpace
   obtain ⟨s, hrs, v, hv, hV⟩ :=
@@ -125,7 +125,6 @@ theorem hasSameApproximationNumbers_of_norm_apply_eq
   apply (sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← approximationNumber_eq_singularValue_toReal]
   exact le_antisymm
     (approximationNumber_le_of_norm_apply_le A B (fun x => (h x).le) n)
     (approximationNumber_le_of_norm_apply_le B A (fun x => (h x).ge) n)

@@ -136,17 +136,17 @@ eigenvalue. -/
 theorem hasEigenvalue_approximationNumber_of_pos
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) (n : ℕ)
-    (hn : 0 < A.approximationNumber n) :
-    Module.End.HasEigenvalue A.toLinearMap ((A.approximationNumber n : ℝ) : 𝕜) := by
+    (hn : 0 < (A.singularValue n : ℝ)) :
+    Module.End.HasEigenvalue A.toLinearMap (((A.singularValue n : ℝ) : ℝ) : 𝕜) := by
   rw [Module.End.hasEigenvalue_iff]
   intro hbot
-  have hclosed : n < finrank 𝕜 (eigenSpan A (Set.Ici (A.approximationNumber n))) :=
+  have hclosed : n < finrank 𝕜 (eigenSpan A (Set.Ici ((A.singularValue n : ℝ)))) :=
     (le_approximationNumber_iff_lt_finrank_eigenSpan_Ici hAc hAs hApos hn n).mp le_rfl
-  have hopen : ¬ n < finrank 𝕜 (eigenSpan A (Set.Ioi (A.approximationNumber n))) := by
+  have hopen : ¬ n < finrank 𝕜 (eigenSpan A (Set.Ioi ((A.singularValue n : ℝ)))) := by
     intro hlt
     have hstrict :=
       (lt_approximationNumber_iff_lt_finrank_eigenSpan_Ioi hAc hAs hApos hn n).mpr hlt
-    exact (lt_irrefl (A.approximationNumber n)) hstrict
+    exact (lt_irrefl ((A.singularValue n : ℝ))) hstrict
   have hsplit := finrank_eigenSpan_Ici hAc hAs hn
   rw [hbot, finrank_bot, add_zero] at hsplit
   rw [hsplit] at hclosed
@@ -158,7 +158,7 @@ theorem exists_approximationNumber_eq_of_hasEigenvalue_pos
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) {μ : ℝ} (hμ : 0 < μ)
     (hEig : Module.End.HasEigenvalue A.toLinearMap (μ : 𝕜)) :
-    ∃ n : ℕ, A.approximationNumber n = μ := by
+    ∃ n : ℕ, (A.singularValue n : ℝ) = μ := by
   have hfdIci : FiniteDimensional 𝕜 (eigenSpan A (Set.Ici μ)) :=
     finiteDimensional_eigenSpan hAc hAs hμ fun s hs => hs
   have hfdEig : FiniteDimensional 𝕜 (eigenspace A.toLinearMap (μ : 𝕜)) :=
@@ -175,9 +175,9 @@ theorem exists_approximationNumber_eq_of_hasEigenvalue_pos
   have hnclosed : n < finrank 𝕜 (eigenSpan A (Set.Ici μ)) := by
     rw [hsplit]
     omega
-  have hge : μ ≤ A.approximationNumber n :=
+  have hge : μ ≤ (A.singularValue n : ℝ) :=
     (le_approximationNumber_iff_lt_finrank_eigenSpan_Ici hAc hAs hApos hμ n).mpr hnclosed
-  have hnstrict : ¬ μ < A.approximationNumber n := by
+  have hnstrict : ¬ μ < (A.singularValue n : ℝ) := by
     intro hlt
     have hopen :=
       (lt_approximationNumber_iff_lt_finrank_eigenSpan_Ioi hAc hAs hApos hμ n).mp hlt
@@ -190,11 +190,11 @@ theorem hasEigenvalue_ofReal_pos_iff_exists_approximationNumber_eq
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) {μ : ℝ} (hμ : 0 < μ) :
     Module.End.HasEigenvalue A.toLinearMap (μ : 𝕜) ↔
-      ∃ n : ℕ, A.approximationNumber n = μ := by
+      ∃ n : ℕ, (A.singularValue n : ℝ) = μ := by
   constructor
   · exact exists_approximationNumber_eq_of_hasEigenvalue_pos hAc hAs hApos hμ
   · rintro ⟨n, hn⟩
-    have hpos : 0 < A.approximationNumber n := hn.symm ▸ hμ
+    have hpos : 0 < (A.singularValue n : ℝ) := hn.symm ▸ hμ
     have hEig := hasEigenvalue_approximationNumber_of_pos hAc hAs hApos n hpos
     simpa only [hn] using hEig
 
@@ -263,15 +263,15 @@ private theorem norm_positiveEigenspaceVector
 private theorem positiveApproximation_index_lt
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (n : ℕ) (hn : 0 < A.approximationNumber n) :
-    n - finrank 𝕜 (eigenSpan A (Set.Ioi (A.approximationNumber n))) <
+    (n : ℕ) (hn : 0 < (A.singularValue n : ℝ)) :
+    n - finrank 𝕜 (eigenSpan A (Set.Ioi ((A.singularValue n : ℝ)))) <
       finrank 𝕜 (eigenspace A.toLinearMap
-        (((A.approximationNumber n : ℝ) : 𝕜))) := by
-  have hM : finrank 𝕜 (eigenSpan A (Set.Ioi (A.approximationNumber n))) ≤ n := by
+        ((((A.singularValue n : ℝ) : ℝ) : 𝕜))) := by
+  have hM : finrank 𝕜 (eigenSpan A (Set.Ioi ((A.singularValue n : ℝ)))) ≤ n := by
     by_contra h
     have hlt := (lt_approximationNumber_iff_lt_finrank_eigenSpan_Ioi
       hAc hAs hApos hn n).mpr (Nat.lt_of_not_ge h)
-    exact (lt_irrefl (A.approximationNumber n)) hlt
+    exact (lt_irrefl ((A.singularValue n : ℝ))) hlt
   have hN := (le_approximationNumber_iff_lt_finrank_eigenSpan_Ici
     hAc hAs hApos hn n).mp le_rfl
   have hs := finrank_eigenSpan_Ici hAc hAs hn
@@ -283,8 +283,8 @@ finite-dimensional eigenspace by subtracting the number of strictly larger eigen
 noncomputable def positiveApproximationEigenvector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (n : ℕ) (hn : 0 < A.approximationNumber n) : E := by
-  let μ := A.approximationNumber n
+    (n : ℕ) (hn : 0 < (A.singularValue n : ℝ)) : E := by
+  let μ := (A.singularValue n : ℝ)
   let W := eigenspace A.toLinearMap ((μ : ℝ) : 𝕜)
   let M := finrank 𝕜 (eigenSpan A (Set.Ioi μ))
   let N := finrank 𝕜 (eigenSpan A (Set.Ici μ))
@@ -305,9 +305,9 @@ noncomputable def positiveApproximationEigenvector
 theorem positiveApproximationEigenvector_mem_eigenspace
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (n : ℕ) (hn : 0 < A.approximationNumber n) :
+    (n : ℕ) (hn : 0 < (A.singularValue n : ℝ)) :
     positiveApproximationEigenvector hAc hAs hApos n hn ∈
-      eigenspace A.toLinearMap (((A.approximationNumber n : ℝ) : 𝕜)) := by
+      eigenspace A.toLinearMap ((((A.singularValue n : ℝ) : ℝ) : 𝕜)) := by
   classical
   unfold positiveApproximationEigenvector
   exact positiveEigenspaceVector_mem hAc hAs _ _ _
@@ -317,10 +317,10 @@ theorem positiveApproximationEigenvector_mem_eigenspace
 theorem norm_positiveApproximationEigenvector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (n : ℕ) (hn : 0 < A.approximationNumber n) :
+    (n : ℕ) (hn : 0 < (A.singularValue n : ℝ)) :
     ‖positiveApproximationEigenvector hAc hAs hApos n hn‖ = 1 := by
   classical
-  let μ := A.approximationNumber n
+  let μ := (A.singularValue n : ℝ)
   unfold positiveApproximationEigenvector
   exact norm_positiveEigenspaceVector hAc hAs _ _ _
     (positiveApproximation_index_lt hAc hAs hApos n hn)
@@ -329,7 +329,7 @@ theorem norm_positiveApproximationEigenvector
 theorem orthonormal_positiveApproximationEigenvector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) :
-    Orthonormal 𝕜 (fun n : {n : ℕ // 0 < A.approximationNumber n} =>
+    Orthonormal 𝕜 (fun n : {n : ℕ // 0 < (A.singularValue n : ℝ)} =>
       positiveApproximationEigenvector hAc hAs hApos n n.2) := by
   classical
   rw [orthonormal_iff_ite]
@@ -340,8 +340,8 @@ theorem orthonormal_positiveApproximationEigenvector
     exact inner_self_eq_one_of_norm_eq_one
       (norm_positiveApproximationEigenvector hAc hAs hApos n n.2)
   · rw [ite_eq_right hnm]
-    let μ := A.approximationNumber n
-    let ν := A.approximationNumber m
+    let μ := (A.singularValue n : ℝ)
+    let ν := (A.singularValue m : ℝ)
     by_cases hμν : μ = ν
     · dsimp only [μ, ν] at hμν
       unfold positiveApproximationEigenvector
@@ -359,23 +359,23 @@ theorem orthonormal_positiveApproximationEigenvector
       have hi : n - finrank 𝕜 (eigenSpan A (Set.Ioi ν)) <
           finrank 𝕜 (eigenspace A.toLinearMap ((ν : ℝ) : 𝕜)) := by
         have hi0 := positiveApproximation_index_lt hAc hAs hApos n n.2
-        have hIoi : eigenSpan A (Set.Ioi (A.approximationNumber n)) =
+        have hIoi : eigenSpan A (Set.Ioi ((A.singularValue n : ℝ))) =
             eigenSpan A (Set.Ioi ν) := by
-          change eigenSpan A (Set.Ioi (A.approximationNumber n)) =
-            eigenSpan A (Set.Ioi (A.approximationNumber m))
+          change eigenSpan A (Set.Ioi ((A.singularValue n : ℝ))) =
+            eigenSpan A (Set.Ioi ((A.singularValue m : ℝ)))
           rw [hμν]
         have hEig : eigenspace A.toLinearMap
-              (((A.approximationNumber n : ℝ) : 𝕜)) =
+              ((((A.singularValue n : ℝ) : ℝ) : 𝕜)) =
             eigenspace A.toLinearMap ((ν : ℝ) : 𝕜) := by
-          change eigenspace A.toLinearMap (((A.approximationNumber n : ℝ) : 𝕜)) =
-            eigenspace A.toLinearMap (((A.approximationNumber m : ℝ) : 𝕜))
+          change eigenspace A.toLinearMap ((((A.singularValue n : ℝ) : ℝ) : 𝕜)) =
+            eigenspace A.toLinearMap ((((A.singularValue m : ℝ) : ℝ) : 𝕜))
           rw [hμν]
         rwa [hIoi, hEig] at hi0
       have hj : m - finrank 𝕜 (eigenSpan A (Set.Ioi ν)) <
           finrank 𝕜 (eigenspace A.toLinearMap ((ν : ℝ) : 𝕜)) := by
         exact positiveApproximation_index_lt hAc hAs hApos m m.2
-      have hspan : eigenSpan A (Set.Ioi (A.approximationNumber n)) =
-          eigenSpan A (Set.Ioi (A.approximationNumber m)) := by rw [hμν]
+      have hspan : eigenSpan A (Set.Ioi ((A.singularValue n : ℝ))) =
+          eigenSpan A (Set.Ioi ((A.singularValue m : ℝ))) := by rw [hμν]
       rw [hspan]
       rw [inner_positiveEigenspaceVector hAc hAs ν (by simpa only [ν] using m.2) hi hj]
       rw [ite_eq_right]
@@ -396,9 +396,9 @@ approximation number. -/
 theorem apply_positiveApproximationEigenvector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (n : ℕ) (hn : 0 < A.approximationNumber n) :
+    (n : ℕ) (hn : 0 < (A.singularValue n : ℝ)) :
     A (positiveApproximationEigenvector hAc hAs hApos n hn) =
-      ((A.approximationNumber n : ℝ) : 𝕜) •
+      (((A.singularValue n : ℝ) : ℝ) : 𝕜) •
         positiveApproximationEigenvector hAc hAs hApos n hn :=
   Module.End.mem_eigenspace_iff.mp
     (positiveApproximationEigenvector_mem_eigenspace hAc hAs hApos n hn)

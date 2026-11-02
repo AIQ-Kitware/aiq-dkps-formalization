@@ -212,44 +212,42 @@ theorem approximationNumberEnergy_comp_starProjection
     apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro m
     apply NNReal.eq
-    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
-    have h1 : (A ∘L K.starProjection).approximationNumber m ≤
-        T.approximationNumber m := by
-      calc (A ∘L K.starProjection).approximationNumber m
-          = (T₀ ∘L K.orthogonalProjectionOnto).approximationNumber m := by
+    have h1 : ((A ∘L K.starProjection).singularValue m : ℝ) ≤
+        (T.singularValue m : ℝ) := by
+      calc ((A ∘L K.starProjection).singularValue m : ℝ)
+          = ((T₀ ∘L K.orthogonalProjectionOnto).singularValue m : ℝ) := by
             rw [hfac1]
-        _ ≤ T₀.approximationNumber m * ‖K.orthogonalProjectionOnto‖ :=
+        _ ≤ (T₀.singularValue m : ℝ) * ‖K.orthogonalProjectionOnto‖ :=
             T₀.approximationNumber_comp_le_mul_norm _ m
-        _ ≤ T₀.approximationNumber m * 1 :=
+        _ ≤ (T₀.singularValue m : ℝ) * 1 :=
             mul_le_mul_of_nonneg_left hprojK
-              (ContinuousLinearMap.approximationNumber_nonneg _ _)
-        _ = (L.subtypeL ∘L T).approximationNumber m := by rw [mul_one, hfac2]
-        _ ≤ ‖L.subtypeL‖ * T.approximationNumber m :=
+              ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
+        _ = ((L.subtypeL ∘L T).singularValue m : ℝ) := by rw [mul_one, hfac2]
+        _ ≤ ‖L.subtypeL‖ * (T.singularValue m : ℝ) :=
             ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ m
-        _ ≤ 1 * T.approximationNumber m :=
+        _ ≤ 1 * (T.singularValue m : ℝ) :=
             mul_le_mul_of_nonneg_right hsubL
-              (ContinuousLinearMap.approximationNumber_nonneg _ _)
-        _ = T.approximationNumber m := one_mul _
-    have h2 : T.approximationNumber m ≤
-        (A ∘L K.starProjection).approximationNumber m := by
-      calc T.approximationNumber m
-          = (L.orthogonalProjectionOnto ∘L T₀).approximationNumber m := by
+              ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
+        _ = (T.singularValue m : ℝ) := one_mul _
+    have h2 : (T.singularValue m : ℝ) ≤
+        ((A ∘L K.starProjection).singularValue m : ℝ) := by
+      calc (T.singularValue m : ℝ)
+          = ((L.orthogonalProjectionOnto ∘L T₀).singularValue m : ℝ) := by
             rw [← hfac3]
-        _ ≤ ‖L.orthogonalProjectionOnto‖ * T₀.approximationNumber m :=
+        _ ≤ ‖L.orthogonalProjectionOnto‖ * (T₀.singularValue m : ℝ) :=
             ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ m
-        _ ≤ 1 * T₀.approximationNumber m :=
+        _ ≤ 1 * (T₀.singularValue m : ℝ) :=
             mul_le_mul_of_nonneg_right hprojL
-              (ContinuousLinearMap.approximationNumber_nonneg _ _)
-        _ = ((A ∘L K.starProjection) ∘L K.subtypeL).approximationNumber m := by
+              ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
+        _ = (((A ∘L K.starProjection) ∘L K.subtypeL).singularValue m : ℝ) := by
             rw [one_mul, ← hfac4]
-        _ ≤ (A ∘L K.starProjection).approximationNumber m * ‖K.subtypeL‖ :=
+        _ ≤ ((A ∘L K.starProjection).singularValue m : ℝ) * ‖K.subtypeL‖ :=
             ContinuousLinearMap.approximationNumber_comp_le_mul_norm _ _ m
-        _ ≤ (A ∘L K.starProjection).approximationNumber m * 1 :=
+        _ ≤ ((A ∘L K.starProjection).singularValue m : ℝ) * 1 :=
             mul_le_mul_of_nonneg_left hsubK
-              (ContinuousLinearMap.approximationNumber_nonneg _ _)
-        _ = (A ∘L K.starProjection).approximationNumber m := mul_one _
-    show approximationSingularValue m _ = approximationSingularValue m _
-    unfold approximationSingularValue
+              ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
+        _ = ((A ∘L K.starProjection).singularValue m : ℝ) := mul_one _
+    show (ContinuousLinearMap.singularValue _ m : ℝ) = (ContinuousLinearMap.singularValue _ m : ℝ)
     exact_mod_cast le_antisymm h1 h2
   -- the compression has rank at most `n`
   -- The rank of `T` lives in the codomain universe and `Module.rank 𝕜 K` in the
@@ -266,10 +264,9 @@ theorem approximationNumberEnergy_comp_starProjection
       _ ≤ (n : Cardinal) := le_rfl
   -- singular values of the compression, and the finite Frobenius identity
   have hsv : ∀ m : ℕ,
-      approximationSingularValue m T = T.toLinearMap.singularValues m := by
+      (T.singularValue m : ℝ) = T.toLinearMap.singularValues m := by
     intro m
-    change T.approximationNumber m = T.toLinearMap.singularValues m
-    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    rw [
       ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
   have hfrob : ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2
       = ∑ k : Fin n, ‖T (c k)‖ ^ 2 :=
@@ -282,11 +279,11 @@ theorem approximationNumberEnergy_comp_starProjection
   rw [(SameApproximationSingularSequence.approximationNumberEnergy_eq hsame),
     approximationNumberEnergy_eq_sum_range_of_rank_le hTrank,
     ← Fin.sum_univ_eq_sum_range
-      (fun m => ENNReal.ofReal ((approximationSingularValue m T) ^ 2)) n,
+      (fun m => ENNReal.ofReal (((T.singularValue m : ℝ)) ^ 2)) n,
     ← ENNReal.ofReal_sum_of_nonneg fun k _ => sq_nonneg _,
     ← ENNReal.ofReal_sum_of_nonneg fun k _ => sq_nonneg _]
   congr 1
-  calc ∑ k : Fin n, (approximationSingularValue (k : ℕ) T) ^ 2
+  calc ∑ k : Fin n, ((T.singularValue (k : ℕ) : ℝ)) ^ 2
       = ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2 :=
         Finset.sum_congr rfl fun k _ => by rw [hsv (k : ℕ)]
     _ = ∑ k : Fin n, ‖T (c k)‖ ^ 2 := hfrob
@@ -376,9 +373,8 @@ inner-product source, so the coordinate result needs no field-specific proof. -/
 theorem approximationSingularValue_cutoff_tendsto {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) (n : ℕ) :
     Tendsto
-      (fun s : Finset ι => approximationSingularValue n
-        (A ∘L basisProjection b s))
-      atTop (𝓝 (approximationSingularValue n A)) :=
+      (fun s : Finset ι => ((A ∘L basisProjection b s).singularValue n : ℝ))
+      atTop (𝓝 ((A.singularValue n : ℝ))) :=
   approximationSingularValue_comp_strongProjection_tendsto_of_minMax
     TauCeti.HasMinMaxLowerBound.of_completeSpace
     (fun s => basisProjection_isOrthogonalProjection b s)
@@ -392,21 +388,21 @@ theorem approximationNumberEnergy_eq_iSup_cutoff {ι : Type*}
       ⨆ s : Finset ι,
         approximationNumberEnergy (A ∘L basisProjection b s) := by
   have hle : ∀ (s : Finset ι) (n : ℕ),
-      approximationSingularValue n (A ∘L basisProjection b s) ≤
-        approximationSingularValue n A := by
+      ((A ∘L basisProjection b s).singularValue n : ℝ) ≤
+        (A.singularValue n : ℝ) := by
     intro s n
     have hnormNN : ‖basisProjection b s‖ ≤ (1 : NNReal) := by
       exact_mod_cast (basisProjection_isOrthogonalProjection b s).norm_le_one
-    have hNN : (A ∘L basisProjection b s).approximationNumber n ≤
-        A.approximationNumber n := by
+    have hNN : ((A ∘L basisProjection b s).singularValue n : ℝ) ≤
+        (A.singularValue n : ℝ) := by
       calc
-        (A ∘L basisProjection b s).approximationNumber n
-            ≤ A.approximationNumber n * ‖basisProjection b s‖ :=
+        ((A ∘L basisProjection b s).singularValue n : ℝ)
+            ≤ (A.singularValue n : ℝ) * ‖basisProjection b s‖ :=
           A.approximationNumber_comp_le_mul_norm (basisProjection b s) n
-        _ ≤ A.approximationNumber n * 1 :=
+        _ ≤ (A.singularValue n : ℝ) * 1 :=
           mul_le_mul_of_nonneg_left hnormNN
-              (ContinuousLinearMap.approximationNumber_nonneg _ _)
-        _ = A.approximationNumber n := by rw [mul_one]
+              ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
+        _ = (A.singularValue n : ℝ) := by rw [mul_one]
     exact_mod_cast hNN
   apply le_antisymm
   · unfold approximationNumberEnergy
@@ -414,16 +410,16 @@ theorem approximationNumberEnergy_eq_iSup_cutoff {ι : Type*}
     refine iSup_le fun t => ?_
     have hten : Tendsto
         (fun s : Finset ι => ∑ n ∈ t, ENNReal.ofReal
-          ((approximationSingularValue n (A ∘L basisProjection b s)) ^ 2))
+          ((((A ∘L basisProjection b s).singularValue n : ℝ)) ^ 2))
         atTop (𝓝 (∑ n ∈ t, ENNReal.ofReal
-          ((approximationSingularValue n A) ^ 2))) := by
+          (((A.singularValue n : ℝ)) ^ 2))) := by
       refine tendsto_finsetSum _ fun n _ => ?_
       exact ENNReal.tendsto_ofReal
         ((approximationSingularValue_cutoff_tendsto b A n).pow 2)
     refine le_of_tendsto hten (Filter.Eventually.of_forall fun s => ?_)
     calc
       ∑ n ∈ t, ENNReal.ofReal
-          ((approximationSingularValue n (A ∘L basisProjection b s)) ^ 2)
+          ((((A ∘L basisProjection b s).singularValue n : ℝ)) ^ 2)
           ≤ approximationNumberEnergy (A ∘L basisProjection b s) :=
             ENNReal.sum_le_tsum t
       _ ≤ ⨆ t : Finset ι,
@@ -435,7 +431,7 @@ theorem approximationNumberEnergy_eq_iSup_cutoff {ι : Type*}
     unfold approximationNumberEnergy
     refine ENNReal.tsum_le_tsum fun n => ?_
     exact ENNReal.ofReal_le_ofReal (pow_le_pow_left₀
-      (approximationSingularValue_nonneg n _) (hle s n) 2)
+      ((ContinuousLinearMap.singularValue _ n).coe_nonneg) (hle s n) 2)
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- A nonnegative series is the supremum of its finite partial subsums. -/
@@ -454,8 +450,7 @@ theorem approximationNumberEnergy_eq_basisEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     approximationNumberEnergy A = hilbertSchmidtBasisEnergy b A := by
   rw [hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
-  simpa only [approximationNumberEnergy, approximationSingularValue,
-    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+  simpa only [approximationNumberEnergy,
     ENNReal.ofReal_pow NNReal.zero_le_coe, ENNReal.ofReal_coe_nnreal] using
     A.tsum_singularValue_sq_eq_hilbertSchmidtEnergy b
 
@@ -524,7 +519,7 @@ identify the paper's approximation-number presentation with those accepted objec
 against Milestone B3 of `TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md`. -/
 theorem approximationNumberEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    ∑' n : ℕ, ENNReal.ofReal (approximationSingularValue n A ^ 2) =
+    ∑' n : ℕ, ENNReal.ofReal ((A.singularValue n : ℝ) ^ 2) =
       A.hilbertSchmidtEnergy b := by
   rw [← hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy b A]
   exact approximationNumberEnergy_eq_basisEnergy b A

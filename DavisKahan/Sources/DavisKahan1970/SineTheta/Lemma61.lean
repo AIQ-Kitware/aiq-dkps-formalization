@@ -253,7 +253,7 @@ variable {E₀ E₁ F₀ F₁ : Type v}
 omit [CompleteSpace E₀] [CompleteSpace F₀] in
 /-- Approximation singular values decrease with the index. -/
 private theorem antitone_approximationSingularValue (A : E₀ →L[𝕜] F₀) :
-    Antitone fun n => approximationSingularValue n A := by
+    Antitone fun n => (A.singularValue n : ℝ) := by
   intro m n hmn
   exact_mod_cast A.approximationNumber_antitone hmn
 

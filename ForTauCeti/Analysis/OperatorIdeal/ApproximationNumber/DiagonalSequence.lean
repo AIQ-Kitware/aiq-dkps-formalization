@@ -201,7 +201,8 @@ eventually within `ε`, and truncating there gives a competitor of rank at most
 the rank bound `N ≤ n` is what makes the truncation admissible at `n`. -/
 theorem tendsto_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
     (hc : ∀ i, ‖c i‖ ≤ K) (hc0 : Tendsto c atTop (𝓝 0)) :
-    Tendsto (diagOpLp c hK hc).approximationNumber atTop (𝓝 0) := by
+    Tendsto (fun approximationIndex : ℕ => ((diagOpLp c hK hc).singularValue approximationIndex :
+        ℝ)) atTop (𝓝 0) := by
   refine Metric.tendsto_atTop.2 fun ε hε => ?_
   obtain ⟨N, hN⟩ := Metric.tendsto_atTop.1 hc0 (ε / 2) (half_pos hε)
   have htail : ∀ i, N ≤ i → ‖c i‖ ≤ ε / 2 := fun i hi => by
@@ -209,11 +210,11 @@ theorem tendsto_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 
   refine ⟨N, fun n hn => ?_⟩
   have hadm : (truncDiagOpLp c N hK hc).rank ≤ (n : Cardinal) :=
     (rank_truncDiagOpLp_le c N hK hc).trans (by exact_mod_cast hn)
-  have hbound : (diagOpLp c hK hc).approximationNumber n ≤ ε / 2 :=
+  have hbound : ((diagOpLp c hK hc).singularValue n : ℝ) ≤ ε / 2 :=
     ((diagOpLp c hK hc).approximationNumber_le_norm_sub hadm).trans
       (norm_sub_truncDiagOpLp_le c N hK hc (half_pos hε).le htail)
   rw [Real.dist_eq, sub_zero,
-    abs_of_nonneg ((diagOpLp c hK hc).approximationNumber_nonneg n)]
+    abs_of_nonneg (((diagOpLp c hK hc).singularValue n).coe_nonneg)]
   linarith
 
 /-- **The same operator is compact**, and on this route that is a corollary
@@ -228,8 +229,7 @@ theorem isCompactOperator_diagOpLp [ProperSpace 𝕜] (c : ℕ → 𝕜) {K : �
     IsCompactOperator (diagOpLp c hK hc) := by
   apply ContinuousLinearMap.isCompactOperator_of_tendsto_singularValue
   apply NNReal.tendsto_coe.mp
-  simpa only [NNReal.coe_zero,
-    ← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using
+  simpa only [NNReal.coe_zero] using
     tendsto_approximationNumber_diagOpLp c hK hc hc0
 
 /-- **The approximation numbers of a diagonal operator are bounded by its
@@ -244,7 +244,7 @@ the limit; **it never records the value, which is what
 `{lane:FTC-DIAGEXACT}` exists to supply.** -/
 theorem approximationNumber_diagOpLp_le (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
     (hc : ∀ i, ‖c i‖ ≤ K) (hanti : Antitone fun i => ‖c i‖) (n : ℕ) :
-    (diagOpLp c hK hc).approximationNumber n ≤ ‖c n‖ := by
+    ((diagOpLp c hK hc).singularValue n : ℝ) ≤ ‖c n‖ := by
   refine le_trans
     (ContinuousLinearMap.approximationNumber_le_norm_sub _ (rank_truncDiagOpLp_le c n hK hc)) ?_
   exact norm_sub_truncDiagOpLp_le c n hK hc (norm_nonneg _) fun i hi => hanti hi
@@ -273,9 +273,8 @@ where the hypothesis holds for `i ≤ n` by antitonicity and **vacuously for
 `i > n` because `x` lies in the span**. -/
 theorem le_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
     (hc : ∀ i, ‖c i‖ ≤ K) (hanti : Antitone fun i => ‖c i‖) (n : ℕ) :
-    ‖c n‖ ≤ (diagOpLp c hK hc).approximationNumber n := by
+    ‖c n‖ ≤ ((diagOpLp c hK hc).singularValue n : ℝ) := by
   classical
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   refine ContinuousLinearMap.le_singularValue_of_linearIndependent _
     (v := fun i : Fin (n + 1) =>
       (lp.single 2 (i : ℕ) (1 : 𝕜) : lp (fun _ : ℕ => 𝕜) 2)) ?_ ?_
@@ -311,7 +310,7 @@ This is the identity `{lane:FTC-DIAGEXACT}` was posted for, and the one
 bounded sequence, an operator realising it as an approximation-number sequence. -/
 theorem approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤ K)
     (hc : ∀ i, ‖c i‖ ≤ K) (hanti : Antitone fun i => ‖c i‖) (n : ℕ) :
-    (diagOpLp c hK hc).approximationNumber n = ‖c n‖ :=
+    ((diagOpLp c hK hc).singularValue n : ℝ) = ‖c n‖ :=
   le_antisymm (approximationNumber_diagOpLp_le c hK hc hanti n)
     (le_approximationNumber_diagOpLp c hK hc hanti n)
 

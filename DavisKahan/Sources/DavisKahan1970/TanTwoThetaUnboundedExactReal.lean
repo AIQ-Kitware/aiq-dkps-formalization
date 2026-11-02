@@ -66,28 +66,25 @@ complexification, with the orthogonal codomain handled through the ambient
 projection block so no dependent subtype rewrite is needed. -/
 private theorem approximationSingularValue_directedCorner_complexify
     (U : Submodule ℝ E) [U.HasOrthogonalProjection] (K : E →L[ℝ] E) (n : ℕ) :
-    approximationSingularValue n
-        (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
-          (complexify K)) =
-      approximationSingularValue n (blockCompression Uᗮ U K) := by
+    ((blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+          (complexify K)).singularValue n : ℝ) =
+      ((blockCompression Uᗮ U K).singularValue n : ℝ) := by
   have hc := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (projectionBlock_same_compression (complexifySubmodule U)ᗮ
       (complexifySubmodule U) (complexify K))
   have hr := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (projectionBlock_same_compression Uᗮ U K)
   calc
-    approximationSingularValue n
-        (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
-          (complexify K)) =
-        approximationSingularValue n
-          (projectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
-            (complexify K)) := (hc n).symm
-    _ = approximationSingularValue n (complexify (projectionBlock Uᗮ U K)) := by
+    ((blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+          (complexify K)).singularValue n : ℝ) =
+        ((projectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
+            (complexify K)).singularValue n : ℝ) := (hc n).symm
+    _ = ((complexify (projectionBlock Uᗮ U K)).singularValue n : ℝ) := by
       rw [projectionBlock_complexifySubmodule U K]
-    _ = approximationSingularValue n (projectionBlock Uᗮ U K) :=
+    _ = ((projectionBlock Uᗮ U K).singularValue n : ℝ) :=
       ComplexificationApproximation.approximationSingularValue_complexify
         (projectionBlock Uᗮ U K) n
-    _ = approximationSingularValue n (blockCompression Uᗮ U K) := hr n
+    _ = ((blockCompression Uᗮ U K).singularValue n : ℝ) := hr n
 
 /-- Every paper norm gives the same extended value to a real directed corner
 and to the corresponding corner of the complexified subspace. -/
@@ -775,11 +772,11 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b)
     (hRmem : N.Mem (blockCompression Uᗮ U B)) :
-    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : ℕ, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       (∀ n : ℕ,
-        (reflectionTangentCorner U V.reflectionOperator).approximationNumber n =
+        ((reflectionTangentCorner U V.reflectionOperator).singularValue n : ℝ) =
           Real.tan (Real.arcsin
-            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+            (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ)))) ∧
       N.Mem (reflectionTangentCorner U V.reflectionOperator) ∧
       (b - a) * N.gauge (reflectionTangentCorner U V.reflectionOperator) ≤
         2 * N.gauge (blockCompression Uᗮ U B) := by
@@ -812,18 +809,18 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
       (complexifySubmodule U) (complexifySubmodule V))
   -- the ideal block's approximation numbers are the real ones
   have hblock : ∀ n : ℕ,
-      (DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
-          (complexifySubmodule V)).approximationNumber n =
-        (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by
+      ((DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
+          (complexifySubmodule V)).singularValue n : ℝ) =
+        ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) := by
     intro n
     rw [← DavisKahan.complexify_sinTwoThetaIdealBlock U V]
     exact ComplexificationApproximation.approximationSingularValue_complexify
       (DavisKahan.sinTwoThetaIdealBlock U V) n
   -- the tangent corner's approximation numbers are the real ones
   have hcorner : ∀ n : ℕ,
-      (reflectionTangentCorner (complexifySubmodule U)
-          (complexify V.reflectionOperator)).approximationNumber n =
-        (reflectionTangentCorner U V.reflectionOperator).approximationNumber n := by
+      ((reflectionTangentCorner (complexifySubmodule U)
+          (complexify V.reflectionOperator)).singularValue n : ℝ) =
+        ((reflectionTangentCorner U V.reflectionOperator).singularValue n : ℝ) := by
     intro n
     rw [reflectionTangentCorner, reflectionTangentCorner,
       unboundedReflectionTangent_complexifySubmodule U V.reflectionOperator hCC]
@@ -877,15 +874,15 @@ complexified pair, so the identity is the complex one read through
 theorem approximationNumber_tanTwoDirectedCornerR
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1) (n : ℕ) :
-    (tanTwoDirectedCornerR U V).approximationNumber n =
+    ((tanTwoDirectedCornerR U V).singularValue n : ℝ) =
       Real.tan (Real.arcsin
-        ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n)) := by
+        (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ))) := by
   have hS1C : ‖(complexifySubmodule U).offDiagBlock
       (complexifySubmodule V).reflectionOperator‖ < 1 := by
     rwa [norm_offDiagonalPart_reflectionOperator_complexifySubmodule]
-  have hblock : (DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
-        (complexifySubmodule V)).approximationNumber n =
-      (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by
+  have hblock : ((DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
+        (complexifySubmodule V)).singularValue n : ℝ) =
+      ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) := by
     rw [← DavisKahan.complexify_sinTwoThetaIdealBlock U V]
     exact ComplexificationApproximation.approximationSingularValue_complexify
       (DavisKahan.sinTwoThetaIdealBlock U V) n
@@ -936,11 +933,11 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_real
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b)
     (hRmem : N.Mem (projectionBlock Uᗮ U B)) :
-    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : ℕ, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       (∀ n : ℕ,
-        (tanTwoDirectedCornerR U V).approximationNumber n =
+        ((tanTwoDirectedCornerR U V).singularValue n : ℝ) =
           Real.tan (Real.arcsin
-            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+            (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ)))) ∧
       N.Mem (tanTwoDirectedCornerR U V) ∧
       (b - a) * N.gauge (tanTwoDirectedCornerR U V) ≤
         2 * N.gauge (projectionBlock Uᗮ U B) := by
@@ -973,9 +970,9 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_real
       hV'.mapsDomain hV'.commutes hUaC hUbC hab
   -- the doubled sine's singular values are the real ones
   have hblock : ∀ n : ℕ,
-      (DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
-          (complexifySubmodule V)).approximationNumber n =
-        (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by
+      ((DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
+          (complexifySubmodule V)).singularValue n : ℝ) =
+        ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) := by
     intro n
     rw [← DavisKahan.complexify_sinTwoThetaIdealBlock U V]
     exact ComplexificationApproximation.approximationSingularValue_complexify
@@ -1027,11 +1024,11 @@ theorem tanTwoTheta_directed_unboundedResidual_normalizedUIN_real
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b)
     (hRmem : N.Mem (complexify (projectionBlock Uᗮ U B))) :
-    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : ℕ, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       (∀ n : ℕ,
-        (tanTwoDirectedCornerR U V).approximationNumber n =
+        ((tanTwoDirectedCornerR U V).singularValue n : ℝ) =
           Real.tan (Real.arcsin
-            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+            (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ)))) ∧
       N.Mem (tanTwoDirectedCornerR U V) ∧
       (b - a) * N.gauge (tanTwoDirectedCornerR U V) ≤
         2 * N.gauge (complexify (projectionBlock Uᗮ U B)) := by
@@ -1064,9 +1061,9 @@ theorem tanTwoTheta_directed_unboundedResidual_normalizedUIN_real
       (TauCeti.DavisKahan.reflectionOperator_mul_self_complex _)
       hV'.mapsDomain hV'.commutes hUaC hUbC hab
   have hblock : ∀ n : ℕ,
-      (DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
-          (complexifySubmodule V)).approximationNumber n =
-        (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by
+      ((DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
+          (complexifySubmodule V)).singularValue n : ℝ) =
+        ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) := by
     intro n
     rw [← DavisKahan.complexify_sinTwoThetaIdealBlock U V]
     exact ComplexificationApproximation.approximationSingularValue_complexify

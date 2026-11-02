@@ -44,8 +44,8 @@ omit [CompleteSpace E] [CompleteSpace F] in
 of every finite Ky Fan approximation gauge. -/
 theorem kyFanApproximationGauge_le_of_approximationSingularValue_le
     {A B : E →L[𝕜] F}
-    (h : ∀ n, approximationSingularValue n A ≤
-      approximationSingularValue n B) (k : ℕ) :
+    (h : ∀ n, (A.singularValue n : ℝ) ≤
+      (B.singularValue n : ℝ)) (k : ℕ) :
     kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B := by
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_le_sum fun n hn => h n
@@ -57,8 +57,8 @@ theorem mem_and_gauge_le_of_approximationSingularValue_le
     [N.toOperatorIdealFamily.IsKyFanDominant]
     {A B : E →L[𝕜] F}
     (hB : N.Mem B)
-    (h : ∀ n, approximationSingularValue n A ≤
-      approximationSingularValue n B) :
+    (h : ∀ n, (A.singularValue n : ℝ) ≤
+      (B.singularValue n : ℝ)) :
     N.Mem A ∧
       N.gaugeReal A ≤
         N.gaugeReal B := by
@@ -71,7 +71,7 @@ Proposition 4.1 for a pair of rectangular operators. -/
 structure RestrictedDisplacementApproximationDominance
     (A B : E →L[𝕜] F) : Prop where
   approximation_le : ∀ n,
-    approximationSingularValue n A ≤ approximationSingularValue n B
+    (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ)
 
 /-- Corollary 4.1 follows formally from a Proposition 4.1 certificate for every
 Fan-dominant ideal family. -/

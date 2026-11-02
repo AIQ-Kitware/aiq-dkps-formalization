@@ -56,12 +56,12 @@ structure ApproximateLeadingSingularFamily
   left : Fin count → E1
   right_orthonormal : Orthonormal ℂ right
   left_orthonormal : Orthonormal ℂ left
-  selected_large : ∀ i : Fin count, ε < X.approximationNumber i
+  selected_large : ∀ i : Fin count, ε < (X.singularValue i : ℝ)
   apply_residual : ∀ i : Fin count,
-    ‖X (right i) - (X.approximationNumber i : ℂ) • left i‖ ≤ ε
+    ‖X (right i) - ((X.singularValue i : ℝ) : ℂ) • left i‖ ≤ ε
   adjoint_residual : ∀ i : Fin count,
-    ‖X.adjoint (left i) - (X.approximationNumber i : ℂ) • right i‖ ≤ ε
-  tail_small : ∀ n, count ≤ n → n < k → X.approximationNumber n ≤ ε
+    ‖X.adjoint (left i) - ((X.singularValue i : ℝ) : ℂ) • right i‖ ≤ ε
+  tail_small : ∀ n, count ≤ n → n < k → (X.singularValue n : ℝ) ≤ ε
 
 namespace ApproximateLeadingSingularFamily
 
@@ -98,11 +98,11 @@ structure GramSpectralBandModel
   right_mem_polarInitial : ∀ i, right i ∈ (X.ker)ᗮ
   gram_residual : ∀ i,
     ‖ApproximationNumber.gramOperator X (right i) -
-      ((X.approximationNumber (i : ℕ)) ^ 2 : ℂ) • right i‖ ≤
-        ε * X.approximationNumber (i : ℕ) / 4
+      (((X.singularValue (i : ℕ) : ℝ)) ^ 2 : ℂ) • right i‖ ≤
+        ε * (X.singularValue (i : ℕ) : ℝ) / 4
   selected_large : ∀ i : Fin count,
-    ε < X.approximationNumber (i : ℕ)
-  tail_small : ∀ n, count ≤ n → n < k → X.approximationNumber n ≤ ε
+    ε < (X.singularValue (i : ℕ) : ℝ)
+  tail_small : ∀ n, count ≤ n → n < k → (X.singularValue n : ℝ) ≤ ε
 
 /-- Distinct value labels determine disjoint Gram bands. -/
 theorem gramBands_disjoint
@@ -154,11 +154,11 @@ theorem exists_gramSpectralBandModel
   have hcount_le : count ≤ k := by
     simpa only [count] using leadingCount_le X k ε
   have hselected : ∀ i : Fin count,
-      ε < X.approximationNumber (i : ℕ) := by
+      ε < (X.singularValue (i : ℕ) : ℝ) := by
     intro i
     exact approximationNumber_gt_of_lt_leadingCount X k ε i.isLt
   have htail : ∀ n, count ≤ n → n < k →
-      X.approximationNumber n ≤ ε := by
+      (X.singularValue n : ℝ) ≤ ε := by
     intro n hcountn hnk
     exact approximationNumber_le_of_leadingCount_le X k ε hcountn hnk
   by_cases hcount0 : count = 0
@@ -174,7 +174,7 @@ theorem exists_gramSpectralBandModel
         intro n _ hn
         exact htail n (by simpa only [hcount0] using Nat.zero_le n) hn
     }⟩
-  · let a : Fin count → ℝ := fun i => X.approximationNumber (i : ℕ)
+  · let a : Fin count → ℝ := fun i => (X.singularValue (i : ℕ) : ℝ)
     have ha : ∀ i, 0 < a i := by
       intro i
       exact hε.trans (hselected i)
@@ -194,14 +194,14 @@ theorem exists_gramSpectralBandModel
         simpa only [hi] using hηa i
       have hlow0 : 0 ≤ label.1 - η := by linarith
       have hlowlt :
-          label.1 - η < X.approximationNumber q := by
-        have hqval : X.approximationNumber q = label.1 := by
+          label.1 - η < (X.singularValue q : ℝ) := by
+        have hqval : (X.singularValue q : ℝ) = label.1 := by
           simpa only [a, q] using finiteValueLast_value a label
         rw [hqval]
         linarith
       have huplt :
-          X.approximationNumber p < label.1 + η := by
-        have hpval : X.approximationNumber p = label.1 := by
+          (X.singularValue p : ℝ) < label.1 + η := by
+        have hpval : (X.singularValue p : ℝ) = label.1 := by
           simpa only [a, p] using finiteValueFirst_value a label
         rw [hpval]
         linarith
@@ -328,8 +328,8 @@ theorem exists_gramSpectralBandModel
         (by simpa only [P, band] using hrightBand i)
     have hgramResidual : ∀ i : Fin count,
         ‖ApproximationNumber.gramOperator X (right i) -
-          ((X.approximationNumber (i : ℕ)) ^ 2 : ℂ) • right i‖ ≤
-            ε * X.approximationNumber (i : ℕ) / 4 := by
+          (((X.singularValue (i : ℕ) : ℝ)) ^ 2 : ℂ) • right i‖ ≤
+            ε * (X.singularValue (i : ℕ) : ℝ) / 4 := by
       intro i
       have hLabelEta : η < (indexEquiv.symm i).1.1 := by
         have h := hηa i
@@ -377,7 +377,7 @@ def GramSpectralBandModel.toApproximateLeadingSingularFamily
     tail_small := M.tail_small
   }
   · intro i
-    let value := X.approximationNumber (i : ℕ)
+    let value := (X.singularValue (i : ℕ) : ℝ)
     have hvalue : 0 < value := hε.trans_lt (M.selected_large i)
     have hgram :
         ‖ApproximationNumber.gramOperator X (M.right i) - (value : ℂ) ^ 2 • M.right i‖ ≤
@@ -401,7 +401,7 @@ def GramSpectralBandModel.toApproximateLeadingSingularFamily
       _ ≤ ε / 4 := hmod
       _ ≤ ε := by linarith
   · intro i
-    let value := X.approximationNumber (i : ℕ)
+    let value := (X.singularValue (i : ℕ) : ℝ)
     have hvalue : 0 < value := hε.trans_lt (M.selected_large i)
     have hgram :
         ‖ApproximationNumber.gramOperator X (M.right i) - (value : ℂ) ^ 2 • M.right i‖ ≤
@@ -440,55 +440,55 @@ theorem sum_doubleAngleTangent_le_selected_add_tail
     (hXr : ‖X‖ ≤ r)
     (F : ApproximateLeadingSingularFamily X k ε) :
     (∑ n ∈ Finset.range k,
-        DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber n)) ≤
+        DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ))) ≤
       (∑ i : Fin F.count,
-        DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i)) +
+        DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ))) +
         (k - F.count) * ((2 / (1 - r ^ 2)) * ε) := by
   classical
   have hcount := F.count_le
   rw [← Finset.sum_range_add_sum_Ico
     (f := fun n => DavisKahan.TanTwoTheta.doubleAngleTangent
-      (X.approximationNumber n)) hcount]
+      ((X.singularValue n : ℝ))) hcount]
   have hhead :
       (∑ n ∈ Finset.range F.count,
-          DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber n)) =
+          DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ))) =
         ∑ i : Fin F.count,
-          DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i) :=
+          DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ)) :=
     (Fin.sum_univ_eq_sum_range
       (fun n => DavisKahan.TanTwoTheta.doubleAngleTangent
-        (X.approximationNumber n)) F.count).symm
+        ((X.singularValue n : ℝ))) F.count).symm
   rw [hhead]
   apply add_le_add_right
   calc
     (∑ n ∈ Finset.Ico F.count k,
-        DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber n))
+        DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ)))
         ≤ ∑ _n ∈ Finset.Ico F.count k,
             ((2 / (1 - r ^ 2)) * ε) := by
           apply Finset.sum_le_sum
           intro n hn
           have hnmem := Finset.mem_Ico.mp hn
-          have han0 : 0 ≤ X.approximationNumber n :=
-            X.approximationNumber_nonneg n
-          have hane : X.approximationNumber n ≤ ε :=
+          have han0 : 0 ≤ (X.singularValue n : ℝ) :=
+            (X.singularValue n).coe_nonneg
+          have hane : (X.singularValue n : ℝ) ≤ ε :=
             F.tail_small n hnmem.1 hnmem.2
-          have hanr : X.approximationNumber n ≤ r :=
+          have hanr : (X.singularValue n : ℝ) ≤ r :=
             (X.approximationNumber_le_norm n).trans hXr
           unfold DavisKahan.TanTwoTheta.doubleAngleTangent
           have hdenr : 0 < 1 - r ^ 2 := by nlinarith
-          have hdena : 0 < 1 - (X.approximationNumber n) ^ 2 := by
+          have hdena : 0 < 1 - ((X.singularValue n : ℝ)) ^ 2 := by
             nlinarith
           apply (div_le_iff₀ hdena).2
           have hden_order :
-              1 - r ^ 2 ≤ 1 - (X.approximationNumber n) ^ 2 := by
+              1 - r ^ 2 ≤ 1 - ((X.singularValue n : ℝ)) ^ 2 := by
             nlinarith
           have hcoef0 : 0 ≤ (2 / (1 - r ^ 2)) * ε :=
             mul_nonneg (div_nonneg (by norm_num) hdenr.le) hε
           calc
-            2 * X.approximationNumber n ≤ 2 * ε := by nlinarith
+            2 * (X.singularValue n : ℝ) ≤ 2 * ε := by nlinarith
             _ = ((2 / (1 - r ^ 2)) * ε) * (1 - r ^ 2) := by
               field_simp [ne_of_gt hdenr]
             _ ≤ ((2 / (1 - r ^ 2)) * ε) *
-                (1 - (X.approximationNumber n) ^ 2) :=
+                (1 - ((X.singularValue n : ℝ)) ^ 2) :=
               mul_le_mul_of_nonneg_left hden_order hcoef0
     _ = (k - F.count) * ((2 / (1 - r ^ 2)) * ε) := by
           rw [Finset.sum_const, Nat.card_Ico, nsmul_eq_mul,

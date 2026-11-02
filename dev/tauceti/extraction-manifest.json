@@ -6,7 +6,7 @@
   "clusters": [
     {
       "cluster": "approximation-number",
-      "migration_note": "October 25: Family.Schatten retains broader positive-exponent power-sum results, including 0 < p < 1. Its obsolete schattenENorm_one/two wrappers were removed. Maintained Gram consumers now use accepted nuclear and Hilbert-Schmidt energy APIs directly, without importing this donor. The legacy real approximation-number view remains pending its own representation migration. October 26: preserve and register the genuine SubspaceTransport donor and its CanonicalGauge dependency. Its source-name facade is deleted; direct consumers use its native-carrier sameSingularValues_* declarations. These unmerged block-transport statements are not claimed upstreamed.",
+      "migration_note": "October 25: Family.Schatten retains broader positive-exponent power-sum results, including 0 < p < 1. Its obsolete schattenENorm_one/two wrappers were removed. Maintained Gram consumers now use accepted nuclear and Hilbert-Schmidt energy APIs directly, without importing this donor. The legacy real approximation-number view remains pending its own representation migration. October 26: preserve and register the genuine SubspaceTransport donor and its CanonicalGauge dependency. Its source-name facade is deleted; direct consumers use its native-carrier sameSingularValues_* declarations. These unmerged block-transport statements are not claimed upstreamed. November 2 canonical-data checkpoint: delete ContinuousLinearMap.approximationNumber, TauCeti.ApproximationNumber.approximationSingularValue and ContinuousLinearMap.kyFanGaugeReal, and the obsolete approximationNumber_eq_singularValue_toReal conversion lemma. All maintained consumers, including paper statements and Challenge conformance, use explicit real coercions of native ContinuousLinearMap.singularValue and kyFanGauge, with no new aliases or notation. This is equality of values, not a restriction to nonnegative real thresholds: original signed real expressions, negative thresholds, arbitrary exponents, dimension/completeness and scalar/universe scopes remain. Native construction and elementary laws are independent #14501 integration 0095123bf736b0ed2b5df5986ee34f1b6640f0ea in pin 463ab293070d4cb355d0a0e036469464070088bc; its integration explicitly disclaims following the DKPS bulk port #13866. Original source anchors e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Basic,Core,CanonicalGauge}.lean, earlier Basic fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean. Basic ancestry includes adaptation from Mathlib PR #32126; authors Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh; Core Jon Crall/OpenAI GPT-5.6 Thinking; CanonicalGauge Jon Crall/GPT-6; Kitware copyright, Apache-2.0. Shared scalar theorem wrappers and the separate kyFanApproximationGauge sum remain intermediate consumption work, not unmatched mathematics or a completed retirement of this cluster. Broader incomplete-target comparison/subspace transport, strong-cutoff/localization and positive-exponent results remain intact.",
       "roadmap_target": "SpectralSubspacePerturbation Part B (Approximation numbers and rectangular symmetric ideals) / public-api-integration-review PR 1",
       "roadmap_focus": "spectral-subspace-perturbation",
       "status": "staged-needs-current-validation",
@@ -521,7 +521,11 @@
         "ContinuousLinearMap.approximationNumber_comp_right_le",
         "ContinuousLinearMap.approximationNumber_comp_left_le",
         "ContinuousLinearMap.approximationNumber_comp_comp_le",
-        "ContinuousLinearMap.approximationNumber_smul"
+        "ContinuousLinearMap.approximationNumber_smul",
+        "TauCeti.ApproximationNumber.approximationSingularValue",
+        "ContinuousLinearMap.kyFanGaugeReal",
+        "ContinuousLinearMap.approximationNumber_eq_singularValue_toReal",
+        "TauCeti.ApproximationNumber.approximationSingularValue_nonneg"
       ],
       "current_namespace": "ContinuousLinearMap, Cardinal",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
@@ -543,8 +547,8 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax"
       ],
       "status": "partially-upstreamed",
-      "upstream_pr": null,
-      "migration_note": "Against TauCeti 273ea28e and Mathlib e3e75e86, the local real-valued approximationNumber constructor now coerces TauCeti ContinuousLinearMap.singularValue. Shared laws for best approximation, norm/rank bounds, perturbation, additive indices, composition, and homogeneity forward to TauCeti proofs. The real-valued infimum and API remain as a compatibility boundary for existing downstream estimates; continue migrating consumers before deleting this adapter and retain only genuinely missing results."
+      "upstream_pr": "#14501",
+      "migration_note": "Against TauCeti 273ea28e and Mathlib e3e75e86, the local real-valued approximationNumber constructor now coerces TauCeti ContinuousLinearMap.singularValue. Shared laws for best approximation, norm/rank bounds, perturbation, additive indices, composition, and homogeneity forward to TauCeti proofs. The real-valued infimum and API remain as a compatibility boundary for existing downstream estimates; continue migrating consumers before deleting this adapter and retain only genuinely missing results. November 2 canonical-data checkpoint: delete ContinuousLinearMap.approximationNumber, TauCeti.ApproximationNumber.approximationSingularValue and ContinuousLinearMap.kyFanGaugeReal, and the obsolete approximationNumber_eq_singularValue_toReal conversion lemma. All maintained consumers, including paper statements and Challenge conformance, use explicit real coercions of native ContinuousLinearMap.singularValue and kyFanGauge, with no new aliases or notation. This is equality of values, not a restriction to nonnegative real thresholds: original signed real expressions, negative thresholds, arbitrary exponents, dimension/completeness and scalar/universe scopes remain. Native construction and elementary laws are independent #14501 integration 0095123bf736b0ed2b5df5986ee34f1b6640f0ea in pin 463ab293070d4cb355d0a0e036469464070088bc; its integration explicitly disclaims following the DKPS bulk port #13866. Original source anchors e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Basic,Core,CanonicalGauge}.lean, earlier Basic fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean. Basic ancestry includes adaptation from Mathlib PR #32126; authors Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh; Core Jon Crall/OpenAI GPT-5.6 Thinking; CanonicalGauge Jon Crall/GPT-6; Kitware copyright, Apache-2.0. Shared scalar theorem wrappers and the separate kyFanApproximationGauge sum remain intermediate consumption work, not unmatched mathematics or a completed retirement of this cluster. Broader incomplete-target comparison/subspace transport, strong-cutoff/localization and positive-exponent results remain intact. The same checkpoint deletes ContinuousLinearMap.approximationNumber_nonneg and TauCeti.ApproximationNumber.approximationSingularValue_nonneg; every maintained caller uses NNReal.coe_nonneg on the native singular value directly, including all original arbitrary-field and incomplete-space scopes."
     },
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint",
@@ -2731,7 +2735,13 @@
         "ContinuousLinearMap.kyFanGauge_add_le_of_exists_finiteRestriction",
         "ContinuousLinearMap.kyFanGauge_add_le_of_hasMinMaxLowerBound",
         "ContinuousLinearMap.exists_finiteRestrictionApproximationNumber_add_gt",
-        "ContinuousLinearMap.kyFanGauge_add_le_complex"
+        "ContinuousLinearMap.kyFanGauge_add_le_complex",
+        "ContinuousLinearMap.approximationNumber",
+        "TauCeti.ApproximationNumber.approximationSingularValue",
+        "ContinuousLinearMap.kyFanGaugeReal",
+        "ContinuousLinearMap.approximationNumber_eq_singularValue_toReal",
+        "ContinuousLinearMap.approximationNumber_nonneg",
+        "TauCeti.ApproximationNumber.approximationSingularValue_nonneg"
       ],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
@@ -2752,8 +2762,8 @@
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence"
       ],
       "status": "partially-upstreamed",
-      "upstream_pr": null,
-      "migration_note": "Against TauCeti fa1365a1 and Mathlib e3e75e86, kyFanGaugeReal is only the real coercion of TauCeti's canonical NNReal gauge. The duplicate symmetric ideal-family module was deleted; the paper-facing norm package constructs its symmetric view directly from TauCeti.OperatorIdealFamily.kyFan. Local approximation-number localization and real-coercion support remain while their consumers are migrated."
+      "upstream_pr": "#14501",
+      "migration_note": "Against TauCeti fa1365a1 and Mathlib e3e75e86, kyFanGaugeReal is only the real coercion of TauCeti's canonical NNReal gauge. The duplicate symmetric ideal-family module was deleted; the paper-facing norm package constructs its symmetric view directly from TauCeti.OperatorIdealFamily.kyFan. Local approximation-number localization and real-coercion support remain while their consumers are migrated. November 2 canonical-data checkpoint: delete ContinuousLinearMap.approximationNumber, TauCeti.ApproximationNumber.approximationSingularValue and ContinuousLinearMap.kyFanGaugeReal, and the obsolete approximationNumber_eq_singularValue_toReal conversion lemma. All maintained consumers, including paper statements and Challenge conformance, use explicit real coercions of native ContinuousLinearMap.singularValue and kyFanGauge, with no new aliases or notation. This is equality of values, not a restriction to nonnegative real thresholds: original signed real expressions, negative thresholds, arbitrary exponents, dimension/completeness and scalar/universe scopes remain. Native construction and elementary laws are independent #14501 integration 0095123bf736b0ed2b5df5986ee34f1b6640f0ea in pin 463ab293070d4cb355d0a0e036469464070088bc; its integration explicitly disclaims following the DKPS bulk port #13866. Original source anchors e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Basic,Core,CanonicalGauge}.lean, earlier Basic fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean. Basic ancestry includes adaptation from Mathlib PR #32126; authors Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh; Core Jon Crall/OpenAI GPT-5.6 Thinking; CanonicalGauge Jon Crall/GPT-6; Kitware copyright, Apache-2.0. Shared scalar theorem wrappers and the separate kyFanApproximationGauge sum remain intermediate consumption work, not unmatched mathematics or a completed retirement of this cluster. Broader incomplete-target comparison/subspace transport, strong-cutoff/localization and positive-exponent results remain intact. The same checkpoint deletes ContinuousLinearMap.approximationNumber_nonneg and TauCeti.ApproximationNumber.approximationSingularValue_nonneg; every maintained caller uses NNReal.coe_nonneg on the native singular value directly, including all original arbitrary-field and incomplete-space scopes."
     },
     {
       "source_module": "DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric",

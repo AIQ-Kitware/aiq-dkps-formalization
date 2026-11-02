@@ -66,8 +66,8 @@ theorem lemma5_1_complex
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E))
     (n : ℕ) (K : E →L[ℂ] F) :
-    Tendsto (fun i => approximationSingularValue n (K ∘L P i))
-      l (𝓝 (approximationSingularValue n K)) :=
+    Tendsto (fun i => ((K ∘L P i).singularValue n : ℝ))
+      l (𝓝 ((K.singularValue n : ℝ))) :=
   DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto_complex
     hPproj hP n K
 
@@ -81,8 +81,8 @@ theorem lemma5_1_real
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ E))
     (n : ℕ) (K : E →L[ℝ] F) :
-    Tendsto (fun i => approximationSingularValue n (K ∘L P i))
-      l (𝓝 (approximationSingularValue n K)) :=
+    Tendsto (fun i => ((K ∘L P i).singularValue n : ℝ))
+      l (𝓝 ((K.singularValue n : ℝ))) :=
   DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto_real
     hPproj hP n K
 

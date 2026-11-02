@@ -59,8 +59,8 @@ noncomputable def directedSineBlock
 def HasDirectedTangentApproximationNumbers
     (Z V : Submodule 𝕜 H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (tanTheta0 : Z →L[𝕜] H) : Prop :=
-  ∀ n, tanTheta0.approximationNumber n =
-    Real.tan (Real.arcsin ((directedSineBlock Z V).approximationNumber n))
+  ∀ n, (tanTheta0.singularValue n : ℝ) =
+    Real.tan (Real.arcsin (((directedSineBlock Z V).singularValue n : ℝ)))
 
 section Transport
 
@@ -97,9 +97,9 @@ omit [CompleteSpace H] in
 theorem approximationNumber_directedSineBlock_transport
     (Z V : Submodule 𝕜 H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     [CompleteSpace Z] (n : ℕ) :
-    (directedSineBlock (ScalarTransport.submodule (e := e) Z)
-      (ScalarTransport.submodule (e := e) V)).approximationNumber n =
-      (directedSineBlock Z V).approximationNumber n := by
+    ((directedSineBlock (ScalarTransport.submodule (e := e) Z)
+      (ScalarTransport.submodule (e := e) V)).singularValue n : ℝ) =
+      ((directedSineBlock Z V).singularValue n : ℝ) := by
   rw [← scalarTransport_directedSineBlock (e := e) Z V]
   exact approximationNumber_scalarTransportSubspaceCLM (e := e) Z
     (directedSineBlock Z V) n
@@ -109,11 +109,10 @@ omit [CompleteSpace H] in
 theorem approximationSingularValue_directedSineBlock_transport
     (Z V : Submodule 𝕜 H) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     [CompleteSpace Z] (n : ℕ) :
-    approximationSingularValue n
-        (directedSineBlock (ScalarTransport.submodule (e := e) Z)
-          (ScalarTransport.submodule (e := e) V)) =
-      approximationSingularValue n (directedSineBlock Z V) := by
-  simpa only [approximationSingularValue] using
+    ((directedSineBlock (ScalarTransport.submodule (e := e) Z)
+          (ScalarTransport.submodule (e := e) V)).singularValue n : ℝ) =
+      ((directedSineBlock Z V).singularValue n : ℝ) := by
+  exact
     approximationNumber_directedSineBlock_transport (e := e) Z V n
 
 end Transport
@@ -138,7 +137,7 @@ theorem all_kyFan_core_rclike
           Vᗮ.starProjection (D.action z)⟫_𝕜)
     (k : ℕ) :
     delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (directedSineBlock Z V))) ≤
+        (((directedSineBlock Z V).singularValue n : ℝ))) ≤
       kyFanApproximationGauge k D.residual := by
   rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
   · let e := RCLikeIso.real h
@@ -150,13 +149,11 @@ theorem all_kyFan_core_rclike
     have hc := TauCeti.DavisKahan1970.all_kyFan_core_unboundedCompression_real D' V' hdelta hupper'
       hcross' k
     have hsine : ∀ n : ℕ,
-        approximationSingularValue n
-            (TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal
-              (ScalarTransport.submodule (e := e) Z) V') =
-          approximationSingularValue n (directedSineBlock Z V) := by
+        ((TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal
+              (ScalarTransport.submodule (e := e) Z) V').singularValue n : ℝ) =
+          ((directedSineBlock Z V).singularValue n : ℝ) := by
       intro n
-      change approximationSingularValue n
-          (directedSineBlock (ScalarTransport.submodule (e := e) Z) V') = _
+      change ((directedSineBlock (ScalarTransport.submodule (e := e) Z) V').singularValue n : ℝ) = _
       exact approximationSingularValue_directedSineBlock_transport (e := e) Z V n
     rw [D.kyFanApproximationGauge_scalarTransport_residual (e := e)] at hc
     simpa only [hsine] using hc
@@ -168,13 +165,11 @@ theorem all_kyFan_core_rclike
     have hcross' := D.crossedLower_scalarTransport (e := e) (V := V) hcross
     have hc := D'.all_kyFan_core V' hdelta hupper' hcross' k
     have hsine : ∀ n : ℕ,
-        approximationSingularValue n
-            (TauCeti.DavisKahan.TanTheta.theorem63DirectedSineBlock
-              (ScalarTransport.submodule (e := e) Z) V') =
-          approximationSingularValue n (directedSineBlock Z V) := by
+        ((TauCeti.DavisKahan.TanTheta.theorem63DirectedSineBlock
+              (ScalarTransport.submodule (e := e) Z) V').singularValue n : ℝ) =
+          ((directedSineBlock Z V).singularValue n : ℝ) := by
       intro n
-      change approximationSingularValue n
-          (directedSineBlock (ScalarTransport.submodule (e := e) Z) V') = _
+      change ((directedSineBlock (ScalarTransport.submodule (e := e) Z) V').singularValue n : ℝ) = _
       exact approximationSingularValue_directedSineBlock_transport (e := e) Z V n
     rw [D.kyFanApproximationGauge_scalarTransport_residual (e := e)] at hc
     simpa only [hsine] using hc
@@ -189,7 +184,7 @@ theorem approximationNumber_directedSineBlock_lt_one_rclike
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
           Vᗮ.starProjection (D.action z)⟫_𝕜)
     (n : ℕ) :
-    (directedSineBlock Z V).approximationNumber n < 1 := by
+    ((directedSineBlock Z V).singularValue n : ℝ) < 1 := by
   rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
   · let e := RCLikeIso.real h
     let D' := D.scalarTransport (e := e)
@@ -199,10 +194,9 @@ theorem approximationNumber_directedSineBlock_lt_one_rclike
     have hcross' := D.crossedLower_scalarTransport (e := e) (V := V) hcross
     have hc := TauCeti.DavisKahan1970.approximationSingularValue_sineBlockReal_lt_one_unboundedCompression
       D' V' hdelta hupper' hcross' n
-    change approximationSingularValue n
-        (directedSineBlock (ScalarTransport.submodule (e := e) Z) V') < 1 at hc
+    change ((directedSineBlock (ScalarTransport.submodule (e := e) Z) V').singularValue n : ℝ) < 1 at hc
     rw [approximationSingularValue_directedSineBlock_transport (e := e) Z V n] at hc
-    simpa only [approximationSingularValue] using hc
+    exact hc
   · let e := RCLikeIso.complex h
     let D' := D.scalarTransport (e := e)
     let V' := ScalarTransport.submodule (e := e) V
@@ -210,10 +204,9 @@ theorem approximationNumber_directedSineBlock_lt_one_rclike
       (D.semiboundedAbove_scalarTransport_iff (e := e)).2 hupper
     have hcross' := D.crossedLower_scalarTransport (e := e) (V := V) hcross
     have hc := D'.approximationSingularValue_sineBlock_lt_one V' hdelta hupper' hcross' n
-    change approximationSingularValue n
-        (directedSineBlock (ScalarTransport.submodule (e := e) Z) V') < 1 at hc
+    change ((directedSineBlock (ScalarTransport.submodule (e := e) Z) V').singularValue n : ℝ) < 1 at hc
     rw [approximationSingularValue_directedSineBlock_transport (e := e) Z V n] at hc
-    simpa only [approximationSingularValue] using hc
+    exact hc
 
 /-- **Strong unbounded directed `tan Θ₀`, scalar-generic over `RCLike`.** -/
 theorem symmetricNorming_rclike
@@ -234,10 +227,10 @@ theorem symmetricNorming_rclike
   have hcore := D.all_kyFan_core_rclike (V := V) hdelta hupper hcross k
   have htanKy : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (directedSineBlock Z V))) := by
+        (((directedSineBlock Z V).singularValue n : ℝ))) := by
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     exact Finset.sum_congr rfl fun n _ => by
-      simpa only [approximationSingularValue] using htan n
+      exact htan n
   rwa [htanKy]
 
 end UnboundedCompressionTrialData
@@ -293,14 +286,14 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_𝕜)
     (hResidual : N.Mem D.trial.residual) :
-    (∀ n, (TanTheta.directedSineBlock Z V).approximationNumber n < 1) ∧
+    (∀ n, ((TanTheta.directedSineBlock Z V).singularValue n : ℝ) < 1) ∧
       ∃ tanTheta0 : Z →L[𝕜] E,
         TanTheta.HasDirectedTangentApproximationNumbers Z V tanTheta0 ∧
         N.Mem tanTheta0 ∧
         delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual := by
   have hcross := D.trial.crossed_lower_of_reducing V A D.mem_domain D.action_eq
     hV.mapsDomain hV.commutes hUnwanted
-  have hlt : ∀ n, (TanTheta.directedSineBlock Z V).approximationNumber n < 1 :=
+  have hlt : ∀ n, ((TanTheta.directedSineBlock Z V).singularValue n : ℝ) < 1 :=
     fun n => D.trial.approximationNumber_directedSineBlock_lt_one_rclike
       (V := V) hdelta hupper hcross n
   refine ⟨hlt, ?_⟩
@@ -309,12 +302,11 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike
     let Z' := ScalarTransport.submodule (e := e) Z
     let V' := ScalarTransport.submodule (e := e) V
     have hlt' : ∀ n,
-        approximationSingularValue n
-          (TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal Z' V') < 1 := by
+        ((TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal Z' V').singularValue n : ℝ) < 1 := by
       intro n
-      change approximationSingularValue n (TanTheta.directedSineBlock Z' V') < 1
+      change ((TanTheta.directedSineBlock Z' V').singularValue n : ℝ) < 1
       rw [TanTheta.approximationSingularValue_directedSineBlock_transport (e := e) Z V n]
-      simpa only [approximationSingularValue] using hlt n
+      exact hlt n
     obtain ⟨T', hT'⟩ :=
       TauCeti.DavisKahan1970.exists_hasTheorem63DirectedTangentApproximationNumbersReal Z' V' hlt'
     let T : Z →L[𝕜] E :=
@@ -326,15 +318,15 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike
       have hTn := TanTheta.approximationNumber_scalarTransportSubspaceCLM
         (e := e) Z T n
       rw [htransport] at hTn
-      have hTshape : T'.approximationNumber n =
-          Real.tan (Real.arcsin ((TanTheta.directedSineBlock Z' V').approximationNumber n)) := by
-        simpa only [approximationSingularValue,
+      have hTshape : (T'.singularValue n : ℝ) =
+          Real.tan (Real.arcsin (((TanTheta.directedSineBlock Z' V').singularValue n : ℝ))) := by
+        simpa only [
           TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal,
           TanTheta.directedSineBlock] using hT' n
       calc
-        T.approximationNumber n = T'.approximationNumber n := hTn.symm
-        _ = Real.tan (Real.arcsin ((TanTheta.directedSineBlock Z' V').approximationNumber n)) := hTshape
-        _ = Real.tan (Real.arcsin ((TanTheta.directedSineBlock Z V).approximationNumber n)) := by
+        (T.singularValue n : ℝ) = (T'.singularValue n : ℝ) := hTn.symm
+        _ = Real.tan (Real.arcsin (((TanTheta.directedSineBlock Z' V').singularValue n : ℝ))) := hTshape
+        _ = Real.tan (Real.arcsin (((TanTheta.directedSineBlock Z V).singularValue n : ℝ))) := by
           rw [TanTheta.approximationNumber_directedSineBlock_transport (e := e) Z V n]
     obtain ⟨hmem, hbound⟩ :=
       tanTheta_directed_unboundedRitz_symmetricNorming_rclike N D hV
@@ -344,12 +336,11 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike
     let Z' := ScalarTransport.submodule (e := e) Z
     let V' := ScalarTransport.submodule (e := e) V
     have hlt' : ∀ n,
-        approximationSingularValue n
-          (TauCeti.DavisKahan.TanTheta.theorem63DirectedSineBlock Z' V') < 1 := by
+        ((TauCeti.DavisKahan.TanTheta.theorem63DirectedSineBlock Z' V').singularValue n : ℝ) < 1 := by
       intro n
-      change approximationSingularValue n (TanTheta.directedSineBlock Z' V') < 1
+      change ((TanTheta.directedSineBlock Z' V').singularValue n : ℝ) < 1
       rw [TanTheta.approximationSingularValue_directedSineBlock_transport (e := e) Z V n]
-      simpa only [approximationSingularValue] using hlt n
+      exact hlt n
     obtain ⟨T', hT'⟩ :=
       TauCeti.DavisKahan.TanTheta.exists_hasTheorem63DirectedTangentApproximationNumbersInfinite Z' V' hlt'
     let T : Z →L[𝕜] E :=
@@ -361,15 +352,15 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_exists_rclike
       have hTn := TanTheta.approximationNumber_scalarTransportSubspaceCLM
         (e := e) Z T n
       rw [htransport] at hTn
-      have hTshape : T'.approximationNumber n =
-          Real.tan (Real.arcsin ((TanTheta.directedSineBlock Z' V').approximationNumber n)) := by
-        simpa only [approximationSingularValue,
+      have hTshape : (T'.singularValue n : ℝ) =
+          Real.tan (Real.arcsin (((TanTheta.directedSineBlock Z' V').singularValue n : ℝ))) := by
+        simpa only [
           TauCeti.DavisKahan.TanTheta.theorem63DirectedSineBlock,
           TanTheta.directedSineBlock] using hT' n
       calc
-        T.approximationNumber n = T'.approximationNumber n := hTn.symm
-        _ = Real.tan (Real.arcsin ((TanTheta.directedSineBlock Z' V').approximationNumber n)) := hTshape
-        _ = Real.tan (Real.arcsin ((TanTheta.directedSineBlock Z V).approximationNumber n)) := by
+        (T.singularValue n : ℝ) = (T'.singularValue n : ℝ) := hTn.symm
+        _ = Real.tan (Real.arcsin (((TanTheta.directedSineBlock Z' V').singularValue n : ℝ))) := hTshape
+        _ = Real.tan (Real.arcsin (((TanTheta.directedSineBlock Z V).singularValue n : ℝ))) := by
           rw [TanTheta.approximationNumber_directedSineBlock_transport (e := e) Z V n]
     obtain ⟨hmem, hbound⟩ :=
       tanTheta_directed_unboundedRitz_symmetricNorming_rclike N D hV

@@ -98,7 +98,7 @@ private theorem kyFanGaugeReal_unitaryGroup_orbit
     (A : Fc →L[ℂ] Fc) (hA : A.IsSymmetric)
     (B : Ec →L[ℂ] Ec) (hB : B.IsSymmetric)
     (t : ℝ) (C : Ec →L[ℂ] Fc) (k : ℕ) :
-    (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)).kyFanGaugeReal k = C.kyFanGaugeReal k :=
+    ((unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)).kyFanGauge k : ℝ) = (C.kyFanGauge k : ℝ) :=
   ContinuousLinearMap.kyFanGaugeReal_unitary_comp_comp
     (unitaryGroup_mem_unitary A hA t) (unitaryGroup_mem_unitary B hB (-t)) C k
 
@@ -119,28 +119,28 @@ theorem kyFan_sylvester_le_of_generalSeparation_complex
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (hEq : ContinuousLinearMap.sylvester A B X = C) (k : ℕ) :
-    d * X.kyFanGaugeReal k ≤ (Real.pi / 2) * C.kyFanGaugeReal k := by
+    d * (X.kyFanGauge k : ℝ) ≤ (Real.pi / 2) * (C.kyFanGauge k : ℝ) := by
   rw [separatedSylvester_reconstruction hA hB hd hsep X C hEq]
   unfold separatedSylvesterSolution
   have hint := separatedSylvester_integrable hA hB hd C
   calc
-    d * (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
-          (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))).kyFanGaugeReal k
+    d * ((∫ t : ℝ, separatedSylvesterMultiplier d hd t •
+          (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))).kyFanGauge k : ℝ)
         ≤ d * ∫ t : ℝ,
-          (separatedSylvesterMultiplier d hd t •
-            (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))).kyFanGaugeReal k := by
+          ((separatedSylvesterMultiplier d hd t •
+            (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))).kyFanGauge k : ℝ) := by
       gcongr
       exact ContinuousLinearMap.kyFanGaugeReal_integral_le k hint
     _ = d * ∫ t : ℝ,
-          ‖separatedSylvesterMultiplier d hd t‖ * C.kyFanGaugeReal k := by
+          ‖separatedSylvesterMultiplier d hd t‖ * (C.kyFanGauge k : ℝ) := by
       congr 1
       apply integral_congr_ae
       filter_upwards [] with t
       rw [ContinuousLinearMap.kyFanGaugeReal_smul,
         kyFanGaugeReal_unitaryGroup_orbit A hA B hB t C k]
-    _ = d * ((∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖) * C.kyFanGaugeReal k) := by
+    _ = d * ((∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖) * (C.kyFanGauge k : ℝ)) := by
       rw [integral_mul_const]
-    _ = (Real.pi / 2) * C.kyFanGaugeReal k := by
+    _ = (Real.pi / 2) * (C.kyFanGauge k : ℝ) := by
       rw [l1_norm_separatedSylvesterMultiplier d hd]
       field_simp [ne_of_gt hd]
 
@@ -183,7 +183,7 @@ theorem kyFan_sylvester_le_of_generalSeparation_real
     {d : ℝ} (hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (hEq : ContinuousLinearMap.sylvester A B X = C) (k : ℕ) :
-    d * X.kyFanGaugeReal k ≤ (Real.pi / 2) * C.kyFanGaugeReal k := by
+    d * (X.kyFanGauge k : ℝ) ≤ (Real.pi / 2) * (C.kyFanGauge k : ℝ) := by
   have hfan := kyFan_sylvester_le_of_generalSeparation_complex
     ((complexify_isSymmetric_iff A).2 hA) ((complexify_isSymmetric_iff B).2 hB) hd
     (spectraSeparated_top_complexify hsep) (complexify_sylvesterEquation hEq) k

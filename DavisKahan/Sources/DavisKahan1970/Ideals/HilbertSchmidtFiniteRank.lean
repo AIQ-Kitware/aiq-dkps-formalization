@@ -46,11 +46,11 @@ theorem approximationSingularValue_eq_zero_of_rank_le
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} {n : ℕ}
     (hA : A.rank ≤ (n : Cardinal)) :
-    approximationSingularValue n A = 0 := by
-  have h : A.approximationNumber n ≤ ‖A - A‖ :=
+    (A.singularValue n : ℝ) = 0 := by
+  have h : (A.singularValue n : ℝ) ≤ ‖A - A‖ :=
     A.approximationNumber_le_norm_sub (R := A) hA
   rw [sub_self, norm_zero] at h
-  exact le_antisymm h (A.approximationNumber_nonneg n)
+  exact le_antisymm h ((A.singularValue n).coe_nonneg)
 
 /-- If `A` has rank at most `r`, every term after the first `r` terms of its
 approximation singular-value sequence vanishes. -/
@@ -61,7 +61,7 @@ theorem approximationSingularValue_eq_zero_of_rank_le_nat
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} {r n : ℕ}
     (hA : A.rank ≤ (r : Cardinal)) (hrn : r ≤ n) :
-    approximationSingularValue n A = 0 := by
+    (A.singularValue n : ℝ) = 0 := by
   apply approximationSingularValue_eq_zero_of_rank_le
   exact hA.trans (by exact_mod_cast hrn)
 
@@ -75,7 +75,7 @@ theorem approximationNumberEnergy_eq_sum_range_of_rank_le
     (hA : A.rank ≤ (r : Cardinal)) :
     approximationNumberEnergy A =
       ∑ n ∈ Finset.range r,
-        ENNReal.ofReal ((approximationSingularValue n A) ^ 2) := by
+        ENNReal.ofReal (((A.singularValue n : ℝ)) ^ 2) := by
   unfold approximationNumberEnergy
   rw [tsum_eq_sum (s := Finset.range r)]
   intro n hn
@@ -108,13 +108,13 @@ theorem approximationNumberEnergy_le_rank_mul_opNorm_sq
   rw [approximationNumberEnergy_eq_sum_range_of_rank_le hA]
   calc
     (∑ n ∈ Finset.range r,
-        ENNReal.ofReal ((approximationSingularValue n A) ^ 2))
+        ENNReal.ofReal (((A.singularValue n : ℝ)) ^ 2))
         ≤ ∑ _n ∈ Finset.range r, ENNReal.ofReal (‖A‖ ^ 2) := by
       apply Finset.sum_le_sum
       intro n hn
       exact ENNReal.ofReal_le_ofReal
         (pow_le_pow_left₀
-          (approximationSingularValue_nonneg n A)
+          ((A.singularValue n).coe_nonneg)
           (approximationSingularValue_le_opNorm n A) 2)
     _ = (r : ENNReal) * ENNReal.ofReal (‖A‖ ^ 2) := by
       simp [Finset.card_range, nsmul_eq_mul]

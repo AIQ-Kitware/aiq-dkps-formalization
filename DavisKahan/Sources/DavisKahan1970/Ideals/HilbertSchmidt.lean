@@ -48,7 +48,7 @@ def approximationNumberEnergy
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) : ENNReal :=
-  ∑' n : ℕ, ENNReal.ofReal ((approximationSingularValue n A) ^ 2)
+  ∑' n : ℕ, ENNReal.ofReal (((A.singularValue n : ℝ)) ^ 2)
 
 
 /-- The zero operator has zero Hilbert--Schmidt energy. -/
@@ -109,7 +109,6 @@ theorem approximationNumberEnergy_ne_top_adjoint_iff
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
   exact approximationSingularValue_adjoint n A
 
 
@@ -206,16 +205,16 @@ theorem approximationNumberEnergy_comp_le
   apply ENNReal.tsum_le_tsum
   intro n
   have hsing := approximationSingularValue_comp_le n L A R
-  have hnonneg : 0 ≤ approximationSingularValue n (L ∘L A ∘L R) :=
-    approximationSingularValue_nonneg _ _
+  have hnonneg : 0 ≤ ((L ∘L A ∘L R).singularValue n : ℝ) :=
+    (ContinuousLinearMap.singularValue _ _).coe_nonneg
   have hbound :
-      approximationSingularValue n (L ∘L A ∘L R) ^ 2 ≤
-        (‖L‖ * ‖R‖) ^ 2 * approximationSingularValue n A ^ 2 := by
+      ((L ∘L A ∘L R).singularValue n : ℝ) ^ 2 ≤
+        (‖L‖ * ‖R‖) ^ 2 * (A.singularValue n : ℝ) ^ 2 := by
     calc
-      approximationSingularValue n (L ∘L A ∘L R) ^ 2
-          ≤ (‖L‖ * approximationSingularValue n A * ‖R‖) ^ 2 :=
+      ((L ∘L A ∘L R).singularValue n : ℝ) ^ 2
+          ≤ (‖L‖ * (A.singularValue n : ℝ) * ‖R‖) ^ 2 :=
         pow_le_pow_left₀ hnonneg hsing 2
-      _ = (‖L‖ * ‖R‖) ^ 2 * approximationSingularValue n A ^ 2 := by ring
+      _ = (‖L‖ * ‖R‖) ^ 2 * (A.singularValue n : ℝ) ^ 2 := by ring
   rw [← ENNReal.ofReal_mul (sq_nonneg (‖L‖ * ‖R‖))]
   exact ENNReal.ofReal_le_ofReal hbound
 

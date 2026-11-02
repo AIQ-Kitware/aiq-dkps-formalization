@@ -103,7 +103,7 @@ theorem all_kyFan_bound
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
@@ -114,7 +114,7 @@ theorem all_kyFan_bound
     change kyFanApproximationGauge k S.operator = kyFanApproximationGauge k _ at hsame
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
       Theorem61Data.toKyFanProblem,
       Theorem61Data.canonicalSinTheta, hsame] using hmain.2
 
@@ -279,7 +279,7 @@ theorem all_kyFan_bound
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := (show TauCeti.SymmetricOperatorIdealFamily ℝ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hk
@@ -290,7 +290,7 @@ theorem all_kyFan_bound
     change kyFanApproximationGauge k S.operator = kyFanApproximationGauge k _ at hsame
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge,
+      ← kyFanApproximationGauge_eq_kyFanGauge,
       RealTheorem61Data.toKyFanProblem,
       RealTheorem61Data.canonicalSinTheta, hsame] using hmain.2
 

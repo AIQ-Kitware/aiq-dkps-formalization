@@ -80,28 +80,28 @@ This is the estimate Theorem 8.1(ii) needs on top of part (i), and it is exactly
 the printed factor: the paper's `‖C₁‖₁²` is the squared *bound* norm. -/
 theorem approximationNumber_adjoint_sandwich_le
     (M : F →L[𝕜] F) (C : E →L[𝕜] F) (n : ℕ) :
-    (ContinuousLinearMap.adjoint C ∘L M ∘L C).approximationNumber n ≤
-      ‖C‖ ^ 2 * M.approximationNumber n := by
+    ((ContinuousLinearMap.adjoint C ∘L M ∘L C).singularValue n : ℝ) ≤
+      ‖C‖ ^ 2 * (M.singularValue n : ℝ) := by
   have hleft :
-      (ContinuousLinearMap.adjoint C ∘L M ∘L C).approximationNumber n ≤
-        ‖ContinuousLinearMap.adjoint C‖ * (M ∘L C).approximationNumber n :=
+      ((ContinuousLinearMap.adjoint C ∘L M ∘L C).singularValue n : ℝ) ≤
+        ‖ContinuousLinearMap.adjoint C‖ * ((M ∘L C).singularValue n : ℝ) :=
     ContinuousLinearMap.approximationNumber_comp_le_norm_mul
       (ContinuousLinearMap.adjoint C) (M ∘L C) n
-  have hright : (M ∘L C).approximationNumber n ≤ M.approximationNumber n * ‖C‖ :=
+  have hright : ((M ∘L C).singularValue n : ℝ) ≤ (M.singularValue n : ℝ) * ‖C‖ :=
     ContinuousLinearMap.approximationNumber_comp_le_mul_norm M C n
   have hadj : ‖ContinuousLinearMap.adjoint C‖ = ‖C‖ :=
     ContinuousLinearMap.adjoint.norm_map C
-  calc (ContinuousLinearMap.adjoint C ∘L M ∘L C).approximationNumber n
-      ≤ ‖ContinuousLinearMap.adjoint C‖ * (M ∘L C).approximationNumber n := hleft
-    _ ≤ ‖ContinuousLinearMap.adjoint C‖ * (M.approximationNumber n * ‖C‖) := by
+  calc ((ContinuousLinearMap.adjoint C ∘L M ∘L C).singularValue n : ℝ)
+      ≤ ‖ContinuousLinearMap.adjoint C‖ * ((M ∘L C).singularValue n : ℝ) := hleft
+    _ ≤ ‖ContinuousLinearMap.adjoint C‖ * ((M.singularValue n : ℝ) * ‖C‖) := by
         gcongr
-    _ = ‖C‖ ^ 2 * M.approximationNumber n := by rw [hadj]; ring
+    _ = ‖C‖ ^ 2 * (M.singularValue n : ℝ) := by rw [hadj]; ring
 
 /-- The sandwich bound for a self-adjoint conjugator, the shape Theorem 8.1(ii)
 instantiates: `C₁` there is a compression of an orthogonal projection. -/
 theorem approximationNumber_sandwich_le_of_isSelfAdjoint
     {C : E →L[𝕜] E} (hC : IsSelfAdjoint C) (M : E →L[𝕜] E) (n : ℕ) :
-    (C ∘L M ∘L C).approximationNumber n ≤ ‖C‖ ^ 2 * M.approximationNumber n := by
+    ((C ∘L M ∘L C).singularValue n : ℝ) ≤ ‖C‖ ^ 2 * (M.singularValue n : ℝ) := by
   have h := approximationNumber_adjoint_sandwich_le M C n
   rwa [ContinuousLinearMap.isSelfAdjoint_iff'.mp hC] at h
 
@@ -138,7 +138,7 @@ printed part (ii) mentions in passing. -/
 theorem approximationNumber_mono_of_form_le
     {S T : E →L[ℂ] E} (hS : (0 : E →L[ℂ] E) ≤ S) (hT : (0 : E →L[ℂ] E) ≤ T)
     (h : ∀ x, RCLike.re ⟪x, S x⟫_ℂ ≤ RCLike.re ⟪x, T x⟫_ℂ) (n : ℕ) :
-    S.approximationNumber n ≤ T.approximationNumber n := by
+    (S.singularValue n : ℝ) ≤ (T.singularValue n : ℝ) := by
   have hsa : ∀ {R : E →L[ℂ] E}, (0 : E →L[ℂ] E) ≤ R → IsSelfAdjoint (CFC.sqrt R) :=
     fun {R} _ =>
       ((ContinuousLinearMap.nonneg_iff_isPositive).mp (CFC.sqrt_nonneg R)).isSelfAdjoint
@@ -165,17 +165,16 @@ theorem approximationNumber_mono_of_form_le
     intro x
     have := (hnormsq hS x).trans_le ((h x).trans_eq (hnormsq hT x).symm)
     exact (pow_le_pow_iff_left₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).mp this
-  calc S.approximationNumber n
-      = (ApproximationNumber.gramOperator (CFC.sqrt S)).approximationNumber n := by rw [hgram hS]
-    _ = (CFC.sqrt S).approximationNumber n ^ 2 :=
+  calc (S.singularValue n : ℝ)
+      = ((ApproximationNumber.gramOperator (CFC.sqrt S)).singularValue n : ℝ) := by rw [hgram hS]
+    _ = ((CFC.sqrt S).singularValue n : ℝ) ^ 2 :=
         approximationNumber_gramOperator_complex _ n
-    _ ≤ (CFC.sqrt T).approximationNumber n ^ 2 := by
+    _ ≤ ((CFC.sqrt T).singularValue n : ℝ) ^ 2 := by
         gcongr
-        · exact _root_.ContinuousLinearMap.approximationNumber_nonneg _ _
-        · exact _root_.ContinuousLinearMap.approximationNumber_le_of_norm_apply_le _ _ hle n
-    _ = (ApproximationNumber.gramOperator (CFC.sqrt T)).approximationNumber n :=
+        exact _root_.ContinuousLinearMap.approximationNumber_le_of_norm_apply_le _ _ hle n
+    _ = ((ApproximationNumber.gramOperator (CFC.sqrt T)).singularValue n : ℝ) :=
         (approximationNumber_gramOperator_complex _ n).symm
-    _ = T.approximationNumber n := by rw [hgram hT]
+    _ = (T.singularValue n : ℝ) := by rw [hgram hT]
 
 end ComplexWeylStep
 

@@ -58,12 +58,10 @@ theorem finite_proposition4_1_approximationSingularValue
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
-    approximationSingularValue n
-        (((LinearMap.id - (DavisKahan.FiniteDimensional.directRotation U V hacute).toLinearMap) ∘ₗ
-          U.starProjection.toLinearMap).toContinuousLinearMap) ≤
-      approximationSingularValue n
-        (((LinearMap.id - W.toLinearMap) ∘ₗ
-          U.starProjection.toLinearMap).toContinuousLinearMap) := by
+    ((((LinearMap.id - (DavisKahan.FiniteDimensional.directRotation U V hacute).toLinearMap) ∘ₗ
+          U.starProjection.toLinearMap).toContinuousLinearMap).singularValue n : ℝ) ≤
+      ((((LinearMap.id - W.toLinearMap) ∘ₗ
+          U.starProjection.toLinearMap).toContinuousLinearMap).singularValue n : ℝ) := by
   rw [approximationSingularValue_eq_singularValues,
     approximationSingularValue_eq_singularValues]
   exact finite_proposition4_1_singularValues U V hacute W hmap n

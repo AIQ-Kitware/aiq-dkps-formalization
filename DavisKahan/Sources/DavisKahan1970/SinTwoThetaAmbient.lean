@@ -171,7 +171,7 @@ theorem sinTheta_spectrum_block_all_kyFan
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     have hdnorm : ‖((d : ℝ) : ℂ)‖ = d := by simp [abs_of_pos hd]
     have : ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
@@ -187,7 +187,7 @@ theorem sinTheta_spectrum_block_all_kyFan
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
+      ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
     have hone := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
       (projectionBlock_same_compression Vᗮ U
       (((d : ℝ) : ℂ) • (1 : E →L[ℂ] E))).kyFanGaugeReal_eq k)

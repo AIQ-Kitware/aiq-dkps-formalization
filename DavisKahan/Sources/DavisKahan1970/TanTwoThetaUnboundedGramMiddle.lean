@@ -558,7 +558,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
   have hG0 : (0 : ℝ) ≤ kyFanApproximationGauge n (reflectionResidualCorner U B) := by
     rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     exact Finset.sum_nonneg fun m _ =>
-      (reflectionResidualCorner U B).approximationNumber_nonneg m
+      ((reflectionResidualCorner U B).singularValue m).coe_nonneg
   have hxU : ∀ i, x i ∈ U := fun i => Ω.mem_subspace_of_eq (hxΩ i)
   have hSU : ∀ i, U.offDiagBlock Z (x i) ∈ Uᗮ :=
     fun i => TauCeti.offDiagonalPart_mem_orthogonal_of_mem U Z (hxU i)
@@ -733,7 +733,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     (hτ : 0 ≤ τ) (Ω : TauCeti.BoundedCutoff A U τ) (k : ℕ)
     {θ : ℝ} (hθ : 0 < θ) (hθ1 : θ < 1) :
     (b - a) * ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
-        ((reflectionSineCorner U Z ∘L cutoffCorner Ω).approximationNumber p)) ≤
+        (((reflectionSineCorner U Z ∘L cutoffCorner Ω).singularValue p : ℝ))) ≤
       2 * kyFanApproximationGauge k (reflectionResidualCorner U B) +
         θ * (3 * k * kyFanApproximationGauge k (reflectionResidualCorner U B) /
               (2 * (√(1 - ‖U.offDiagBlock Z‖ ^ 2)) ^ 2) +
@@ -768,10 +768,10 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     have h2 := norm_cutoffCorner_le Ω
     nlinarith [norm_nonneg (reflectionSineCorner U Z),
       norm_nonneg (cutoffCorner Ω)]
-  have har : ∀ p, X.approximationNumber p ≤ r :=
+  have har : ∀ p, (X.singularValue p : ℝ) ≤ r :=
     fun p => le_trans (X.approximationNumber_le_norm p) hXnorm
-  have ha0 : ∀ p, 0 ≤ X.approximationNumber p :=
-    fun p => X.approximationNumber_nonneg p
+  have ha0 : ∀ p, 0 ≤ (X.singularValue p : ℝ) :=
+    fun p => (X.singularValue p).coe_nonneg
   have htan : ∀ s : ℝ, 0 ≤ s → s ≤ r →
       Real.tan (Real.arcsin s) = s / √(1 - s ^ 2) := fun s _ _ =>
     Real.tan_arcsin s
@@ -788,15 +788,15 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     swap
     · exact hle
     · exfalso
-      have h1 : θ < X.approximationNumber M.count :=
+      have h1 : θ < (X.singularValue M.count : ℝ) :=
         approximationNumber_gt_of_lt_leadingCount X k θ hlt
-      have h2 : X.approximationNumber M.count ≤ ρ :=
+      have h2 : (X.singularValue M.count : ℝ) ≤ ρ :=
         M.tail_small M.count le_rfl (lt_of_lt_of_le hlt hmk)
       linarith
   set y : Fin m → H := fun j => ((M.right (Fin.castLE hmc j) : U) : H) with hydef
-  set q : Fin m → ℝ := fun j => X.approximationNumber (j : ℕ) with hqdef
+  set q : Fin m → ℝ := fun j => (X.singularValue (j : ℕ) : ℝ) with hqdef
   have hqcast : ∀ j : Fin m,
-      X.approximationNumber ((Fin.castLE hmc j : Fin M.count) : ℕ) = q j :=
+      (X.singularValue ((Fin.castLE hmc j : Fin M.count) : ℕ) : ℝ) = q j :=
     fun j => rfl
   have hyon : Orthonormal ℂ y := by
     have hon0 : Orthonormal ℂ (fun j : Fin m => M.right (Fin.castLE hmc j)) :=
@@ -868,27 +868,27 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     hqθ hκq heig hc1 hcm
   -- the retained prefix, as a sum over `Finset.range m`
   have hretained : ∑ p ∈ Finset.range m, Real.tan (Real.arcsin
-      (X.approximationNumber p)) = ∑ j : Fin m, q j / √(1 - q j ^ 2) := by
+      ((X.singularValue p : ℝ))) = ∑ j : Fin m, q j / √(1 - q j ^ 2) := by
     rw [← Fin.sum_univ_eq_sum_range
-      (fun p => Real.tan (Real.arcsin (X.approximationNumber p))) m]
+      (fun p => Real.tan (Real.arcsin ((X.singularValue p : ℝ)))) m]
     exact Finset.sum_congr rfl fun j _ => Real.tan_arcsin _
   -- the dropped tail
   have htail : ∑ p ∈ Finset.Ico m k, Real.tan (Real.arcsin
-      (X.approximationNumber p)) ≤ (k : ℝ) * (θ / κ) := by
+      ((X.singularValue p : ℝ))) ≤ (k : ℝ) * (θ / κ) := by
     have hbd : ∀ p ∈ Finset.Ico m k, Real.tan (Real.arcsin
-        (X.approximationNumber p)) ≤ θ / κ := by
+        ((X.singularValue p : ℝ))) ≤ θ / κ := by
       intro p hp
       obtain ⟨hp1, hp2⟩ := Finset.mem_Ico.mp hp
-      have hle : X.approximationNumber p ≤ θ :=
+      have hle : (X.singularValue p : ℝ) ≤ θ :=
         approximationNumber_le_of_leadingCount_le X k θ hp1 hp2
       rw [Real.tan_arcsin]
-      have hden : κ ≤ √(1 - X.approximationNumber p ^ 2) :=
+      have hden : κ ≤ √(1 - (X.singularValue p : ℝ) ^ 2) :=
         hcκ _ (ha0 p) (har p)
-      have hden0 : 0 < √(1 - X.approximationNumber p ^ 2) := lt_of_lt_of_le hκ hden
+      have hden0 : 0 < √(1 - (X.singularValue p : ℝ) ^ 2) := lt_of_lt_of_le hκ hden
       rw [div_le_div_iff₀ hden0 hκ]
       nlinarith [ha0 p, hκ.le, hden]
     calc ∑ p ∈ Finset.Ico m k, Real.tan (Real.arcsin
-          (X.approximationNumber p)) ≤ ∑ _p ∈ Finset.Ico m k, θ / κ :=
+          ((X.singularValue p : ℝ))) ≤ ∑ _p ∈ Finset.Ico m k, θ / κ :=
           Finset.sum_le_sum hbd
       _ = (k - m : ℕ) * (θ / κ) := by
           rw [Finset.sum_const, Nat.card_Ico, nsmul_eq_mul]
@@ -898,18 +898,18 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
           have h2 : (0 : ℝ) ≤ θ / κ := by positivity
           exact mul_le_mul_of_nonneg_right h1 h2
   have hsplit : ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
-      (X.approximationNumber p)) =
+      ((X.singularValue p : ℝ))) =
       (∑ p ∈ Finset.range m, Real.tan (Real.arcsin
-        (X.approximationNumber p))) +
+        ((X.singularValue p : ℝ)))) +
       ∑ p ∈ Finset.Ico m k, Real.tan (Real.arcsin
-        (X.approximationNumber p)) :=
+        ((X.singularValue p : ℝ))) :=
     (Finset.sum_range_add_sum_Ico
-      (f := fun p => Real.tan (Real.arcsin (X.approximationNumber p))) hmk).symm
+      (f := fun p => Real.tan (Real.arcsin ((X.singularValue p : ℝ)))) hmk).symm
   -- assemble
   have hG0 : (0 : ℝ) ≤ kyFanApproximationGauge k (reflectionResidualCorner U B) := by
     rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     exact Finset.sum_nonneg fun p _ =>
-      (reflectionResidualCorner U B).approximationNumber_nonneg p
+      ((reflectionResidualCorner U B).singularValue p).coe_nonneg
   have hGm : kyFanApproximationGauge m (reflectionResidualCorner U B) ≤ kyFanApproximationGauge k (reflectionResidualCorner U B) :=
     TauCeti.DavisKahan.kyFanApproximationGauge_mono_length
       (reflectionResidualCorner U B) hmk
@@ -942,7 +942,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     linarith [h1, h2, hmE]
   rw [hsplit, mul_add, hretained]
   have hfinal : (b - a) * ∑ p ∈ Finset.Ico m k, Real.tan (Real.arcsin
-      (X.approximationNumber p)) ≤ (b - a) * ((k : ℝ) * (θ / κ)) :=
+      ((X.singularValue p : ℝ))) ≤ (b - a) * ((k : ℝ) * (θ / κ)) :=
     mul_le_mul_of_nonneg_left htail hδ.le
   have hθ4 : ρ ≤ θ := hρθ.le
   have hθ2θ : θ ^ 2 ≤ θ := by nlinarith [hθ, hθ1]
@@ -997,7 +997,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_of_cutoff
     (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     (hτ : 0 ≤ τ) (Ω : TauCeti.BoundedCutoff A U τ) (k : ℕ) :
     (b - a) * ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
-        ((reflectionSineCorner U Z ∘L cutoffCorner Ω).approximationNumber p)) ≤
+        (((reflectionSineCorner U Z ∘L cutoffCorner Ω).singularValue p : ℝ))) ≤
       2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
   classical
   set r : ℝ := ‖U.offDiagBlock Z‖ with hrdef
@@ -1009,7 +1009,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_of_cutoff
   have hG0 : (0 : ℝ) ≤ kyFanApproximationGauge k (reflectionResidualCorner U B) := by
     rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     exact Finset.sum_nonneg fun p _ =>
-      (reflectionResidualCorner U B).approximationNumber_nonneg p
+      ((reflectionResidualCorner U B).singularValue p).coe_nonneg
   set W : ℝ := 3 * (k : ℝ) * kyFanApproximationGauge k (reflectionResidualCorner U B) / (2 * κ ^ 2) +
       (k : ℝ) * (τ + |b|) / (4 * κ) + (b - a) * (k : ℝ) / κ with hWdef
   have hW0 : (0 : ℝ) ≤ W := by
@@ -1068,7 +1068,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan
       (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
     (k : ℕ) :
     (b - a) * ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
-        ((reflectionSineCorner U Z).approximationNumber p)) ≤
+        (((reflectionSineCorner U Z).singularValue p : ℝ))) ≤
       2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
   have hlim :=
     (tendsto_sum_tanArcsin_approximationNumber_reflectionSineCorner_comp hS1
@@ -1141,15 +1141,15 @@ theorem kyFanApproximationGauge_reflectionResidualCorner_le
     rw [ContinuousLinearMap.adjoint.norm_map]
     exact Uᗮ.norm_subtypeL_le
   have h2 : ‖U.subtypeL‖ ≤ 1 := U.norm_subtypeL_le
-  have h0 := approximationSingularValue_nonneg p K
+  have h0 := (K.singularValue p).coe_nonneg
   refine hcomp.trans ?_
-  calc ‖(Uᗮ.subtypeL : Uᗮ →L[𝕜] G).adjoint‖ * approximationSingularValue p K *
+  calc ‖(Uᗮ.subtypeL : Uᗮ →L[𝕜] G).adjoint‖ * (K.singularValue p : ℝ) *
         ‖U.subtypeL‖
-      ≤ 1 * approximationSingularValue p K * 1 := by
+      ≤ 1 * (K.singularValue p : ℝ) * 1 := by
         refine mul_le_mul (mul_le_mul h1 le_rfl h0 zero_le_one) h2
           (norm_nonneg U.subtypeL) ?_
         positivity
-    _ = approximationSingularValue p K := by ring
+    _ = (K.singularValue p : ℝ) := by ring
 
 end ScalarGenericAmbientBound
 

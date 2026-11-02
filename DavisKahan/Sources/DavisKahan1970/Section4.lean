@@ -149,12 +149,12 @@ theorem proposition4_1_compact_orthonormalVectors_complex
       (ContinuousLinearMap.isPositive_adjoint_comp_self T).isSymmetric
   have hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_ℂ :=
     fun x => (ContinuousLinearMap.isPositive_adjoint_comp_self T).re_inner_nonneg_left x
-  have hseq (n : ℕ) : A.approximationNumber n =
+  have hseq (n : ℕ) : (A.singularValue n : ℝ) =
       TauCeti.principalSineSequence U V n ^ 2 := by
     simpa only [A, T, TauCeti.principalSineSequence] using
       (TauCeti.ApproximationNumber.approximationNumber_gramOperator_complex T n)
   let e : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} ≃
-      {n : ℕ // 0 < A.approximationNumber n} :=
+      {n : ℕ // 0 < (A.singularValue n : ℝ)} :=
     { toFun := fun n => ⟨n, by rw [hseq]; nlinarith [n.2]⟩
       invFun := fun n => ⟨n, by
         have hn := n.2
@@ -166,7 +166,7 @@ theorem proposition4_1_compact_orthonormalVectors_complex
     TauCeti.positiveApproximationEigenvector hAc hAs hApos (e n) (e n).2
   have hvon : Orthonormal ℂ v := by
     change Orthonormal ℂ
-      ((fun n : {n : ℕ // 0 < A.approximationNumber n} =>
+      ((fun n : {n : ℕ // 0 < (A.singularValue n : ℝ)} =>
         TauCeti.positiveApproximationEigenvector hAc hAs hApos n n.2) ∘ e)
     exact (TauCeti.orthonormal_positiveApproximationEigenvector hAc hAs hApos).comp
       e e.injective
@@ -177,7 +177,7 @@ theorem proposition4_1_compact_orthonormalVectors_complex
   have hAx := TauCeti.apply_positiveApproximationEigenvector hAc hAs hApos
     (e n) (e n).2
   have hTx : ‖T x‖ = s := by
-    have hen : ((e n : {n : ℕ // 0 < A.approximationNumber n}) : ℕ) = (n : ℕ) := rfl
+    have hen : ((e n : {n : ℕ // 0 < (A.singularValue n : ℝ)}) : ℕ) = (n : ℕ) := rfl
     have hnormsq : ‖T x‖ ^ 2 = s ^ 2 := by
       calc
         ‖T x‖ ^ 2 = RCLike.re ⟪A x, x⟫_ℂ := by
@@ -260,9 +260,8 @@ theorem proposition4_1_compact_nonacute_directRotationValues_complex
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * U.starProjection = V.starProjection * W)
     (n : ℕ) :
-    (ContinuousLinearMap.approximationNumber
-        ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-          U.starProjection) n : Real) =
+    ((((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+          U.starProjection).singularValue n : ℝ) : Real) =
       2 * Real.sin (TauCeti.principalAngleSequence U V n / 2) := by
   let _ : CompleteSpace U :=
     (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
@@ -277,7 +276,7 @@ theorem proposition4_1_compact_nonacute_directRotationValues_complex
   have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
     (DavisKahan.Section4.sourceRestrictedDisplacement_sameApproximationSingularSequence
       U (DavisKahan.nonacuteDirectRotation U V J)) n
-  let a : Real := (A.approximationNumber n : Real)
+  let a : Real := ((A.singularValue n : ℝ) : Real)
   let theta : Real := TauCeti.principalAngleSequence U V n
   let shalf : Real := Real.sin (theta / 2)
   have hcos : Real.cos theta =
@@ -287,7 +286,7 @@ theorem proposition4_1_compact_nonacute_directRotationValues_complex
       (by dsimp only [theta]; linarith [TauCeti.principalAngleSequence_nonneg U V n,
         Real.pi_pos]) (TauCeti.principalAngleSequence_le_pi_div_two U V n)
   have hcosApprox : Real.cos theta =
-      Real.sqrt (1 - ((TauCeti.principalSineOperator U V).approximationNumber n : Real) ^ 2) := by
+      Real.sqrt (1 - (((TauCeti.principalSineOperator U V).singularValue n : ℝ) : Real) ^ 2) := by
     simpa only [TauCeti.principalSineSequence] using hcos
   have hcutCos : 1 - a ^ 2 / 2 = Real.cos theta := by
     simpa only [a, A, S] using hcut.trans hcosApprox.symm
@@ -310,13 +309,11 @@ theorem proposition4_1_compact_nonacute_directRotationValues_complex
     exact Real.sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith [Real.pi_pos])
   have ha0 : 0 <= a := by
     dsimp only [a]
-    exact A.approximationNumber_nonneg n
+    exact (A.singularValue n).coe_nonneg
   have ha : a = 2 * shalf := (sq_eq_sq₀ ha0 (mul_nonneg (by norm_num) hshalf0)).1 haSq
-  change (ContinuousLinearMap.approximationNumber
-      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) n : Real) = _
-  have hD : ContinuousLinearMap.approximationNumber
-      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection) n =
-      A.approximationNumber n := by
+  change ((((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection).singularValue n : ℝ) : Real) = _
+  have hD : (((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection).singularValue n : ℝ) =
+      (A.singularValue n : ℝ) := by
     simpa only [A] using hDseq
   rw [hD]
   simpa only [a, shalf, theta] using ha
@@ -336,16 +333,13 @@ theorem proposition4_1_compact_nonacute_complex
           TauCeti.principalAngleSequence U V (n : ℕ) ≤
             TauCeti.vectorAngle ℂ (v n : H) (W (v n : H))) ∧
       (∀ n : ℕ,
-        (ContinuousLinearMap.approximationNumber
-            ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-              U.starProjection) n : Real) =
+        ((((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+              U.starProjection).singularValue n : ℝ) : Real) =
           2 * Real.sin (TauCeti.principalAngleSequence U V n / 2)) ∧
       ∀ n : ℕ,
-        ContinuousLinearMap.approximationNumber
-            ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
-              U.starProjection) n ≤
-          ContinuousLinearMap.approximationNumber
-            ((1 - W) ∘L U.starProjection) n := by
+        (((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+              U.starProjection).singularValue n : ℝ) ≤
+          (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   refine ⟨proposition4_1_compact_orthonormalVectors_complex U V hcompact W hWunitary hWmap,
     ?_, fun n => ?_⟩
   · exact proposition4_1_compact_nonacute_directRotationValues_complex
@@ -682,8 +676,7 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_hilbertSchm
     rw [displacementSquare_eq_gramOperator, displacementSquare_eq_gramOperator] at hk
     have hk' : ((ApproximationNumber.gramOperator (1 - DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k : ℝ) ≤
         ((ApproximationNumber.gramOperator (1 - W)).kyFanGauge k : ℝ) := by
-      simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
-        ContinuousLinearMap.kyFanGaugeReal] using hk
+      simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge] using hk
     exact ENNReal.coe_le_coe.mpr (NNReal.coe_le_coe.mp hk')
   rw [nuclearENorm_gramOperator, nuclearENorm_gramOperator] at hnuc
   rw [← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_natCast _ 2] at hnuc

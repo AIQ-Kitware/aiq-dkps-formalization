@@ -78,8 +78,8 @@ theorem extendedGauge_smul (N : SymmetricNormingFunction)
     congr 1
     unfold prefixGauge approximationPrefix
     have hprefix :
-        (fun i : Fin n => approximationSingularValue (i : ℕ) (c • A)) =
-          ‖c‖ • (fun i : Fin n => approximationSingularValue (i : ℕ) A) := by
+        (fun i : Fin n => ((c • A).singularValue (i : ℕ) : ℝ)) =
+          ‖c‖ • (fun i : Fin n => (A.singularValue (i : ℕ) : ℝ)) := by
       funext i
       rw [approximationSingularValue_smul]
       simp [smul_eq_mul]
@@ -102,25 +102,24 @@ theorem prefixGauge_add_le
     · intro i j hij
       exact approximationSingularValue_antitone (A + B) (Fin.le_def.mp hij)
     · intro i
-      exact approximationSingularValue_nonneg _ _
+      exact (ContinuousLinearMap.singularValue _ _).coe_nonneg
     · intro m
       simp only [TauCeti.prefixSum_def]
       rcases le_or_gt m n with hm | hm
       · simp only [approximationPrefix, Pi.add_apply]
         rw [sum_filter_lt_eq_sum_fin hm
-            (fun k => approximationSingularValue k (A + B)),
+            (fun k => ((A + B).singularValue k : ℝ)),
           sum_filter_lt_eq_sum_fin hm
-            (fun k => approximationSingularValue k A +
-              approximationSingularValue k B),
+            (fun k => (A.singularValue k : ℝ) +
+              (B.singularValue k : ℝ)),
           Fin.sum_univ_eq_sum_range
-            (fun k => approximationSingularValue k (A + B)) m,
+            (fun k => ((A + B).singularValue k : ℝ)) m,
           Fin.sum_univ_eq_sum_range
-            (fun k => approximationSingularValue k A +
-              approximationSingularValue k B) m,
+            (fun k => (A.singularValue k : ℝ) +
+              (B.singularValue k : ℝ)) m,
           Finset.sum_add_distrib]
         simpa only [kyFanApproximationGauge_eq_kyFanGauge,
-          ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-          approximationSingularValue] using kyFanApproximationGauge_add_le m A B
+          ContinuousLinearMap.kyFanGaugeReal_eq_sum] using kyFanApproximationGauge_add_le m A B
       · have huniv :
           (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
           Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
@@ -208,22 +207,21 @@ theorem prefixGauge_le_of_all_kyFan_le_hetero (N : SymmetricNormingFunction)
   · intro i j hij
     exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
   · intro i
-    exact approximationSingularValue_nonneg _ _
+    exact (ContinuousLinearMap.singularValue _ _).coe_nonneg
   · intro m
     simp only [TauCeti.prefixSum_def]
     rcases le_or_gt m n with hm | hm
     · simp only [approximationPrefix]
       rw [sum_filter_lt_eq_sum_fin hm
-          (fun k => approximationSingularValue k A),
+          (fun k => (A.singularValue k : ℝ)),
         sum_filter_lt_eq_sum_fin hm
-          (fun k => approximationSingularValue k B),
+          (fun k => (B.singularValue k : ℝ)),
         Fin.sum_univ_eq_sum_range
-          (fun k => approximationSingularValue k A) m,
+          (fun k => (A.singularValue k : ℝ)) m,
         Fin.sum_univ_eq_sum_range
-          (fun k => approximationSingularValue k B) m]
+          (fun k => (B.singularValue k : ℝ)) m]
       simpa only [kyFanApproximationGauge_eq_kyFanGauge,
-        ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-        approximationSingularValue] using h m
+        ContinuousLinearMap.kyFanGaugeReal_eq_sum] using h m
     · have huniv :
         (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
         Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm

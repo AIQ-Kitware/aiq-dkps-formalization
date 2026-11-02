@@ -78,9 +78,9 @@ theorem kyFanApproximationGauge_mono_length
     kyFanApproximationGauge m K ≤ kyFanApproximationGauge k K := by
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   rw [← Finset.sum_range_add_sum_Ico
-    (f := fun n => K.approximationNumber n) hmk]
+    (f := fun n => (K.singularValue n : ℝ)) hmk]
   exact le_add_of_nonneg_right (Finset.sum_nonneg fun n _ =>
-    K.approximationNumber_nonneg n)
+    (K.singularValue n).coe_nonneg)
 
 section CompleteSpaces
 
@@ -97,24 +97,24 @@ theorem selected_doubleAngleTangent_le_kyFan_add_error
     (hXr : ‖X‖ ≤ r) {k : ℕ}
     (F : TauCeti.DavisKahan.ApproximateLeadingSingularFamily X k ε) :
     d * (∑ i : Fin F.count,
-        DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i)) ≤
+        DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ))) ≤
       2 * kyFanApproximationGauge k B.B01 +
         (F.count : ℝ) * uniformStablePairError B r ε := by
-  have hs0 : ∀ i : Fin F.count, 0 ≤ X.approximationNumber i :=
-    fun i => X.approximationNumber_nonneg i
-  have hsr : ∀ i : Fin F.count, X.approximationNumber i ≤ r :=
+  have hs0 : ∀ i : Fin F.count, 0 ≤ (X.singularValue i : ℝ) :=
+    fun i => (X.singularValue i).coe_nonneg
+  have hsr : ∀ i : Fin F.count, (X.singularValue i : ℝ) ≤ r :=
     fun i => (X.approximationNumber_le_norm i).trans hXr
-  have hs1 : ∀ i : Fin F.count, X.approximationNumber i < 1 :=
+  have hs1 : ∀ i : Fin F.count, (X.singularValue i : ℝ) < 1 :=
     fun i => (hsr i).trans_lt hr1
   have hpoint : ∀ i : Fin F.count,
-      d * DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i) ≤
+      d * DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ)) ≤
         2 * (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
           uniformStablePairError B r ε := by
     intro i
     calc
-      d * DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i)
+      d * DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ))
           ≤ 2 * (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
-              stablePairError B (X.approximationNumber i) ε :=
+              stablePairError B ((X.singularValue i : ℝ)) ε :=
         stableSingularPair_doubleAngleTangent_le B hd0 (hs0 i) (hs1 i)
           hε0 hA0 hA1 hX (F.norm_right i) (F.norm_left i)
           (F.apply_residual i) (F.adjoint_residual i)
@@ -124,16 +124,16 @@ theorem selected_doubleAngleTangent_le_kyFan_add_error
         exact stablePairError_le_uniform B (hs0 i) (hsr i) hr1 hε0
   have hsum :
       d * (∑ i : Fin F.count,
-          DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i)) ≤
+          DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ))) ≤
         2 * (∑ i : Fin F.count,
           (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ)) +
           (F.count : ℝ) * uniformStablePairError B r ε := by
     calc
       d * (∑ i : Fin F.count,
-          DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i))
+          DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ)))
           = ∑ i : Fin F.count,
               d * DavisKahan.TanTwoTheta.doubleAngleTangent
-                (X.approximationNumber i) := by
+                ((X.singularValue i : ℝ)) := by
               rw [Finset.mul_sum]
       _ ≤ ∑ i : Fin F.count,
             (2 * (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ) +
@@ -160,7 +160,7 @@ theorem selected_doubleAngleTangent_le_kyFan_add_error
   have hlen := kyFanApproximationGauge_mono_length B.B01 F.count_le
   calc
     d * (∑ i : Fin F.count,
-        DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i))
+        DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ)))
         ≤ 2 * (∑ i : Fin F.count,
           (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ)) +
             (F.count : ℝ) * uniformStablePairError B r ε := hsum
@@ -180,7 +180,7 @@ theorem transformed_prefix_le_kyFan_add_error
     (hXr : ‖X‖ ≤ r) {k : ℕ}
     (F : TauCeti.DavisKahan.ApproximateLeadingSingularFamily X k ε) :
     d * (∑ n ∈ Finset.range k,
-        DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber n)) ≤
+        DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ))) ≤
       2 * kyFanApproximationGauge k B.B01 +
         (F.count : ℝ) * uniformStablePairError B r ε +
         d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by
@@ -191,12 +191,12 @@ theorem transformed_prefix_le_kyFan_add_error
   have hmul := mul_le_mul_of_nonneg_left hprefix hd0
   calc
     d * (∑ n ∈ Finset.range k,
-        DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber n))
+        DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ)))
         ≤ d * ((∑ i : Fin F.count,
-              DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i)) +
+              DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ))) +
             (k - F.count) * ((2 / (1 - r ^ 2)) * ε)) := hmul
     _ = d * (∑ i : Fin F.count,
-          DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i)) +
+          DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ))) +
         d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by
           rw [Nat.cast_sub F.count_le]
           ring
@@ -213,7 +213,7 @@ theorem sharp_transformed_prefix
     {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
     (hcontractive : ‖X‖ < 1) (k : ℕ) :
     d * (∑ n ∈ Finset.range k,
-        DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber n)) ≤
+        DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ))) ≤
       2 * kyFanApproximationGauge k B.B01 := by
   let r : ℝ := (‖X‖ + 1) / 2
   have hr0 : 0 ≤ r := by dsimp [r]; positivity

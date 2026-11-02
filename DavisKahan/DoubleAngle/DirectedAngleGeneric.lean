@@ -95,7 +95,6 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike :
     apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro n
     apply NNReal.eq
-    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
     have hb := TauCeti.ScalarTransport.approximationNumber_clm (e := e)
       (sinTwoThetaIdealBlock U V) n
     have ha := TauCeti.ScalarTransport.approximationNumber_clm (e := e)
@@ -109,9 +108,8 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike :
     apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro n
     apply NNReal.eq
-    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
-    show ExactSinTheta.approximationSingularValue n _ =
-      ExactSinTheta.approximationSingularValue n _
+    show (ContinuousLinearMap.singularValue _ n : ℝ) =
+      (ContinuousLinearMap.singularValue _ n : ℝ)
     rw [approximationSingularValue_sinTwoThetaIdealBlock_real,
       ← ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
         (directedSinTwoAngleOperator _ _) n,

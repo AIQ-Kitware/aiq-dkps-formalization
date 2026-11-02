@@ -103,8 +103,8 @@ theorem approximationSingularValue_theorem63Residual_le_of_invariant
     (T E : H →L[ℂ] H) (Z : Submodule ℂ H) [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
     (hinv : ∀ x ∈ Z, (T + E) x ∈ Z) (n : ℕ) :
-    approximationSingularValue n (theorem63Residual T Z) ≤
-      approximationSingularValue n (E ∘L Z.subtypeL) := by
+    ((theorem63Residual T Z).singularValue n : ℝ) ≤
+      ((E ∘L Z.subtypeL).singularValue n : ℝ) := by
   rw [theorem63Residual_eq_neg_of_invariant T E Z hinv,
     approximationSingularValue_neg]
   have hcomp := approximationSingularValue_comp_le (𝕜 := ℂ) n
@@ -119,19 +119,19 @@ theorem approximationSingularValue_theorem63Residual_le_of_invariant
     ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
       simpa only [one_mul] using Submodule.norm_starProjection_apply_le Zᗮ x
   have hone : ‖(1 : Z →L[ℂ] Z)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have hnn : 0 ≤ approximationSingularValue n (E ∘L Z.subtypeL) :=
-    approximationSingularValue_nonneg _ _
+  have hnn : 0 ≤ ((E ∘L Z.subtypeL).singularValue n : ℝ) :=
+    (ContinuousLinearMap.singularValue _ _).coe_nonneg
   calc
     ‖(Zᗮ.starProjection : H →L[ℂ] H)‖ *
-        approximationSingularValue n (E ∘L Z.subtypeL) *
+        ((E ∘L Z.subtypeL).singularValue n : ℝ) *
           ‖(1 : Z →L[ℂ] Z)‖ ≤
-        1 * approximationSingularValue n (E ∘L Z.subtypeL) * 1 := by
+        1 * ((E ∘L Z.subtypeL).singularValue n : ℝ) * 1 := by
       have h1 : ‖(Zᗮ.starProjection : H →L[ℂ] H)‖ *
-          approximationSingularValue n (E ∘L Z.subtypeL) ≤
-          1 * approximationSingularValue n (E ∘L Z.subtypeL) :=
+          ((E ∘L Z.subtypeL).singularValue n : ℝ) ≤
+          1 * ((E ∘L Z.subtypeL).singularValue n : ℝ) :=
         mul_le_mul_of_nonneg_right hP hnn
       exact mul_le_mul h1 hone (norm_nonneg (1 : Z →L[ℂ] Z)) (by linarith)
-    _ = approximationSingularValue n (E ∘L Z.subtypeL) := by ring
+    _ = ((E ∘L Z.subtypeL).singularValue n : ℝ) := by ring
 
 /-- **Davis--Kahan Section 2, tangent theorem, perturbation form.**
 
@@ -206,11 +206,10 @@ theorem theorem6_3_perturbation_infiniteTrial
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hEmem fun k => ?_
   have hKyTan : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))) := by
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htan n
-    unfold approximationSingularValue at h
     exact h
   have hcore := theorem6_3_all_kyFan_core_infiniteTrial T V Z hT hV hdelta
     hCompressionUpper hUnwantedLower k
@@ -219,7 +218,6 @@ theorem theorem6_3_perturbation_infiniteTrial
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_le_sum fun n _ => ?_
     have h := approximationSingularValue_theorem63Residual_le_of_invariant T E Z hinv n
-    unfold approximationSingularValue at h
     exact h
   rw [hKyTan]
   exact hcore.trans hRE

@@ -201,11 +201,11 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmet
     (hUb : ∀ x : A.domain, (x : G) ∈ Uᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hRmem : N.Mem (blockCompression Uᗮ U B)) :
-    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : ℕ, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       (∀ n : ℕ,
-        (reflectionTangentCorner U V.reflectionOperator).approximationNumber n =
+        ((reflectionTangentCorner U V.reflectionOperator).singularValue n : ℝ) =
           Real.tan (Real.arcsin
-            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+            (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ)))) ∧
       N.Mem (reflectionTangentCorner U V.reflectionOperator) ∧
       (b - a) * N.gauge (reflectionTangentCorner U V.reflectionOperator) ≤
         2 * N.gauge (blockCompression Uᗮ U B) := by
@@ -216,7 +216,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmet
       hV.commutes hUa hUb hab
   have hsame := hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock U V
   have hcorner : ∀ n : ℕ,
-      (reflectionSineCorner U V.reflectionOperator).approximationNumber n < 1 := fun n =>
+      ((reflectionSineCorner U V.reflectionOperator).singularValue n : ℝ) < 1 := fun n =>
     lt_of_le_of_lt
       ((reflectionSineCorner U V.reflectionOperator).approximationNumber_le_norm n)
       (lt_of_le_of_lt norm_reflectionSineCorner_le hS1)

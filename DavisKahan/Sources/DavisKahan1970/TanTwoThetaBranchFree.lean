@@ -102,8 +102,8 @@ theorem tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike
     (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
     (tanTwoTheta : E →L[𝕜] E) (π : ℕ ≃ ℕ)
-    (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
-      DavisKahan.TanTwoTheta.absDoubleAngleTangent (approximationSingularValue n T))
+    (htan : ∀ n, (tanTwoTheta.singularValue (π n) : ℝ) =
+      DavisKahan.TanTwoTheta.absDoubleAngleTangent ((T.singularValue n : ℝ)))
     (hHmem : N.Mem H) :
     N.Mem tanTwoTheta ∧
       (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by
@@ -156,8 +156,8 @@ theorem tanTwoTheta_branchFree_bounded_symmetricNorming_complex
     (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
     (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
     (tanTwoTheta : E →L[ℂ] E) (π : ℕ ≃ ℕ)
-    (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
-      DavisKahan.TanTwoTheta.absDoubleAngleTangent (approximationSingularValue n T))
+    (htan : ∀ n, (tanTwoTheta.singularValue (π n) : ℝ) =
+      DavisKahan.TanTwoTheta.absDoubleAngleTangent ((T.singularValue n : ℝ)))
     (hHmem : N.Mem H) :
     N.Mem tanTwoTheta ∧
       (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by

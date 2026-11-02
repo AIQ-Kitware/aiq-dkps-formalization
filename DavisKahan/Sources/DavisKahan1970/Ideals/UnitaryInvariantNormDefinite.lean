@@ -41,7 +41,7 @@ theorem prefixGauge_one_eq_opNorm
     (N : SymmetricNormingFunction) (A : E →L[𝕜] F) :
     N.prefixGauge 1 A = ‖A‖ := by
   unfold prefixGauge approximationPrefix
-  have hvec : (fun i : Fin 1 => approximationSingularValue (i : ℕ) A) =
+  have hvec : (fun i : Fin 1 => (A.singularValue (i : ℕ) : ℝ)) =
       ‖A‖ • (fun _ : Fin 1 => (1 : ℝ)) := by
     funext i
     fin_cases i

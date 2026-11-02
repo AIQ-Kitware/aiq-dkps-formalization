@@ -185,7 +185,6 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
     ((IsWeaklyMajorizedBy.refl hyanti hy0).append_zero 1).antitone_left
   have hpady0 : ∀ i, 0 ≤ (Fin.append y (0 : Fin 1 → ℝ)) i :=
     ((IsWeaklyMajorizedBy.refl hyanti hy0).append_zero 1).nonneg_left
-
   have hsmall :
       ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((y) i : _))) =
         ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) := by
@@ -197,7 +196,6 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
       _ = ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) := by
         exact uinGauge_abs (kyFanFiniteNorm k n)
           (EuclideanSpace.basisFun (Fin n) ℂ) x
-
   have habspad :
       (fun i : Fin (n + 1) => |(Fin.append x (0 : Fin 1 → ℝ)) i|) =
         (Fin.append absx (0 : Fin 1 → ℝ)) := by
@@ -205,13 +203,11 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
     induction i using Fin.addCases with
     | left i => simp [absx]
     | right i => simp
-
   have hpermPad :
       (fun i : Fin (n + 1) => |(Fin.append x (0 : Fin 1 → ℝ)) i|) ∘
           zeroPadPerm pi =
         (Fin.append y (0 : Fin 1 → ℝ)) := by
     rw [habspad, append_zero_comp_zeroPadPerm]
-
   rw [SymmetricIdeal.zeroPad_eq_append_zero]
   calc
     ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => ((((Fin.append x (0 : Fin 1 → ℝ)))) i : _))) =
@@ -274,7 +270,7 @@ theorem kyFanNormingFunction_prefixGauge
       simp only [prefixSum_def]
       simp only [SymmetricNormingFunction.approximationPrefix]
       rw [TauCeti.sum_filter_lt_eq_sum_fin hkn
-        (fun m => approximationSingularValue m A)]
+        (fun m => (A.singularValue m : ℝ))]
       simpa only [SymmetricNormingFunction.approximationPrefix] using
         (SymmetricNormingFunction.sum_approximationPrefix k A)
     · rw [min_eq_right hnk]
@@ -283,7 +279,7 @@ theorem kyFanNormingFunction_prefixGauge
   · intro i j hij
     exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
   · intro i
-    exact approximationSingularValue_nonneg _ _
+    exact (ContinuousLinearMap.singularValue _ _).coe_nonneg
 
 private theorem kyFanApproximationGauge_mono_length_local
     {𝕜 : Type u} [RCLike 𝕜]
@@ -294,9 +290,9 @@ private theorem kyFanApproximationGauge_mono_length_local
     kyFanApproximationGauge m A ≤ kyFanApproximationGauge k A := by
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   rw [← Finset.sum_range_add_sum_Ico
-    (f := fun n => A.approximationNumber n) hmk]
+    (f := fun n => (A.singularValue n : ℝ)) hmk]
   exact le_add_of_nonneg_right (Finset.sum_nonneg fun n _ =>
-    A.approximationNumber_nonneg n)
+    (A.singularValue n).coe_nonneg)
 
 /-- The canonical infinite-dimensional extension of `kyFanNormingFunction k` is
 exactly the Ky Fan approximation gauge. -/
@@ -361,7 +357,7 @@ theorem all_kyFan_le_of_every_ext_finiteGaugeendedGauge_le
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     have hN := h (kyFanNormingFunction k hk)
     rw [kyFanNormingFunction_extendedGauge, kyFanNormingFunction_extendedGauge] at hN
@@ -380,7 +376,7 @@ theorem all_mul_kyFan_le_of_every_symmetricNorming_gauge_le
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp [kyFanApproximationGauge]
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     simpa [kyFanNormingFunction_gauge] using h (kyFanNormingFunction k hk)
 

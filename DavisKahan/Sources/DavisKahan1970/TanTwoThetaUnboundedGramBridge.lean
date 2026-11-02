@@ -441,17 +441,17 @@ finite-rank selection. -/
 theorem approximationNumber_reflectionTangentCorner_le
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hS1 : ‖U.offDiagBlock Z‖ < 1) (n : ℕ) :
-    (reflectionTangentCorner U Z).approximationNumber n ≤
+    ((reflectionTangentCorner U Z).singularValue n : ℝ) ≤
       Real.tan (Real.arcsin
-        ((reflectionSineCorner U Z).approximationNumber n)) := by
+        (((reflectionSineCorner U Z).singularValue n : ℝ))) := by
   have hCC : IsUnit (U.diagBlock Z * U.diagBlock Z) := by
     refine isUnit_diagonalPart_sq hZ2 ?_
     have h := norm_mul_le (U.offDiagBlock Z) (U.offDiagBlock Z)
     nlinarith [norm_nonneg (U.offDiagBlock Z)]
   have hX1 : ‖reflectionSineCorner U Z‖ < 1 :=
     lt_of_le_of_lt norm_reflectionSineCorner_le hS1
-  set sig := (reflectionSineCorner U Z).approximationNumber n with hsigdef
-  have hsig0 : 0 ≤ sig := ContinuousLinearMap.approximationNumber_nonneg _ _
+  set sig := ((reflectionSineCorner U Z).singularValue n : ℝ) with hsigdef
+  have hsig0 : 0 ≤ sig := (ContinuousLinearMap.singularValue _ _).coe_nonneg
   have hsiglt : sig < 1 :=
     lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n) hX1
   have hres := approximationNumber_le_of_gramResolvent (reflectionSineCorner U Z)
@@ -464,8 +464,8 @@ theorem approximationNumber_reflectionTangentCorner_le
     rw [Real.tan_arcsin, div_pow]
     congr 1
     nlinarith [hsqrt]
-  have hc0 : 0 ≤ (reflectionTangentCorner U Z).approximationNumber n :=
-    ContinuousLinearMap.approximationNumber_nonneg _ _
+  have hc0 : 0 ≤ ((reflectionTangentCorner U Z).singularValue n : ℝ) :=
+    (ContinuousLinearMap.singularValue _ _).coe_nonneg
   have ht0 : 0 ≤ Real.tan (Real.arcsin sig) := TanArcsin.tanArcsin_nonneg hsig0
   nlinarith [hres, htanSq]
 
@@ -489,9 +489,9 @@ singular values are that sequence, each directed angle appearing once. -/
 theorem approximationNumber_reflectionTangentCorner
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hS1 : ‖U.offDiagBlock Z‖ < 1) (n : ℕ) :
-    (reflectionTangentCorner U Z).approximationNumber n =
+    ((reflectionTangentCorner U Z).singularValue n : ℝ) =
       Real.tan (Real.arcsin
-        ((reflectionSineCorner U Z).approximationNumber n)) := by
+        (((reflectionSineCorner U Z).singularValue n : ℝ))) := by
   have hCC : IsUnit (U.diagBlock Z * U.diagBlock Z) := by
     refine isUnit_diagonalPart_sq hZ2 ?_
     have h := norm_mul_le (U.offDiagBlock Z) (U.offDiagBlock Z)
@@ -564,24 +564,21 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
-  calc (reflectionSineCorner U J).approximationNumber n
-      = (Uᗮ.subtypeL ∘L reflectionSineCorner U J ∘L
-          U.subtypeL.adjoint).approximationNumber n :=
+  calc ((reflectionSineCorner U J).singularValue n : ℝ)
+      = ((Uᗮ.subtypeL ∘L reflectionSineCorner U J ∘L
+          U.subtypeL.adjoint).singularValue n : ℝ) :=
         (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
           (ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
             (reflectionSineCorner U J)) n).symm
-    _ = (Uᗮ.starProjection ∘L J ∘L U.starProjection).approximationNumber n := by
+    _ = ((Uᗮ.starProjection ∘L J ∘L U.starProjection).singularValue n : ℝ) := by
         rw [hamb]
-    _ = (U.starProjection ∘L J ∘L Uᗮ.starProjection).approximationNumber n := by
+    _ = ((U.starProjection ∘L J ∘L Uᗮ.starProjection).singularValue n : ℝ) := by
         rw [← hstar, ContinuousLinearMap.star_eq_adjoint,
-          ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
-          ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
           ContinuousLinearMap.singularValue_adjoint]
-    _ = ((U.starProjection ∘L J ∘L Uᗮ.starProjection) ∘L J).approximationNumber n :=
+    _ = (((U.starProjection ∘L J ∘L Uᗮ.starProjection) ∘L J).singularValue n : ℝ) :=
         (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
           (ContinuousLinearMap.sameSingularValues_comp_right hJnorm hJnorm hJJ) n).symm
-    _ = (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by rw [hblock]
+    _ = ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) := by rw [hblock]
 
 end IdealBlockBridge
 
@@ -733,7 +730,7 @@ theorem kyFan_reflectionTangentCorner_le
     (hS1 : ‖U.offDiagBlock Z‖ < 1) (k : ℕ) :
     kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        ((reflectionSineCorner U Z).approximationNumber n)) := by
+        (((reflectionSineCorner U Z).singularValue n : ℝ))) := by
   rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   exact Finset.sum_le_sum fun n _ =>
     approximationNumber_reflectionTangentCorner_le hZsa hZ2 hS1 n
@@ -757,13 +754,13 @@ theorem tendsto_sum_tanArcsin_approximationNumber_reflectionSineCorner_comp
     (k : ℕ) :
     Filter.Tendsto
       (fun i => ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        ((reflectionSineCorner U Z ∘L P i).approximationNumber n)))
+        (((reflectionSineCorner U Z ∘L P i).singularValue n : ℝ))))
       l (nhds (∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        ((reflectionSineCorner U Z).approximationNumber n)))) := by
+        (((reflectionSineCorner U Z).singularValue n : ℝ))))) := by
   refine tendsto_finsetSum _ fun n _ => ?_
-  have h0 : 0 ≤ (reflectionSineCorner U Z).approximationNumber n :=
-    ContinuousLinearMap.approximationNumber_nonneg _ _
-  have h1 : (reflectionSineCorner U Z).approximationNumber n < 1 :=
+  have h0 : 0 ≤ ((reflectionSineCorner U Z).singularValue n : ℝ) :=
+    (ContinuousLinearMap.singularValue _ _).coe_nonneg
+  have h1 : ((reflectionSineCorner U Z).singularValue n : ℝ) < 1 :=
     lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n)
       (lt_of_le_of_lt norm_reflectionSineCorner_le hS1)
   exact (TanArcsin.continuousAt_tanArcsin h0 h1).tendsto.comp

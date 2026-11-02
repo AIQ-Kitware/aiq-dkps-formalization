@@ -74,7 +74,7 @@ the same way. -/
 noncomputable def compactAngleEigenvalueList
     {K : Type*} [NormedAddCommGroup K] [InnerProductSpace 𝕜 K]
     [CompleteSpace K] (A : K →L[𝕜] K) : ℕ → ℝ :=
-  fun n => A.approximationNumber n
+  fun n => (A.singularValue n : ℝ)
 
 /-- **Approximation numbers are a unitary invariant.**  Conjugating by a linear isometric
 equivalence sandwiches the operator between two contractions in both directions, so no
@@ -84,7 +84,7 @@ theorem approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] E} {B : F →L[𝕜] F}
     (h : BoundedOperatorsUnitaryEquivalent A B) (n : ℕ) :
-    A.approximationNumber n = B.approximationNumber n := by
+    (A.singularValue n : ℝ) = (B.singularValue n : ℝ) := by
   obtain ⟨U, hU⟩ := h
   have hUapp : ∀ x, B (U x) = U (A x) := fun x => (hU x).symm
   have hUnorm : ‖(U : E →L[𝕜] F)‖ ≤ 1 :=
@@ -239,8 +239,8 @@ The general fact is
 nothing about angles is reproved here. -/
 theorem approximationNumber_genericCosineBlock_eq_ambient
     (h : halmosTrivialPart U V = ⊥) (n : ℕ) :
-    (genericCosineBlock U V).approximationNumber n =
-      (U.starProjection ∘L V.starProjection ∘L U.starProjection).approximationNumber n := by
+    ((genericCosineBlock U V).singularValue n : ℝ) =
+      ((U.starProjection ∘L V.starProjection ∘L U.starProjection).singularValue n : ℝ) := by
   rw [← subtypeL_comp_genericCosineBlock_comp_orthogonalProjectionOnto U V h,
     TauCeti.ApproximationNumber.approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto
       (genericLeftHalf U V) (genericCosineBlock U V) n]

@@ -177,22 +177,22 @@ theorem norm_le_one_of_mem_unitary {L : E →L[𝕜] E}
 /-- Sandwiching between two contractions cannot increase a Ky Fan gauge. -/
 theorem kyFanGaugeReal_comp_comp_le_of_norm_le_one {L : F →L[𝕜] F} {R : E →L[𝕜] E}
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (T : E →L[𝕜] F) (k : ℕ) :
-    (L ∘L T ∘L R).kyFanGaugeReal k ≤ T.kyFanGaugeReal k := by
+    ((L ∘L T ∘L R).kyFanGauge k : ℝ) ≤ (T.kyFanGauge k : ℝ) := by
   refine (kyFanGaugeReal_comp_le L T R k).trans ?_
-  have hg : 0 ≤ T.kyFanGaugeReal k := T.kyFanGaugeReal_nonneg k
-  calc ‖L‖ * T.kyFanGaugeReal k * ‖R‖
-      ≤ 1 * T.kyFanGaugeReal k * ‖R‖ := by
+  have hg : 0 ≤ (T.kyFanGauge k : ℝ) := T.kyFanGaugeReal_nonneg k
+  calc ‖L‖ * (T.kyFanGauge k : ℝ) * ‖R‖
+      ≤ 1 * (T.kyFanGauge k : ℝ) * ‖R‖ := by
         exact mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right hL hg) (norm_nonneg R)
-    _ = T.kyFanGaugeReal k * ‖R‖ := by rw [one_mul]
-    _ ≤ T.kyFanGaugeReal k * 1 := mul_le_mul_of_nonneg_left hR hg
-    _ = T.kyFanGaugeReal k := mul_one _
+    _ = (T.kyFanGauge k : ℝ) * ‖R‖ := by rw [one_mul]
+    _ ≤ (T.kyFanGauge k : ℝ) * 1 := mul_le_mul_of_nonneg_left hR hg
+    _ = (T.kyFanGauge k : ℝ) := mul_one _
 
 /-- **Every finite Ky Fan gauge is invariant under multiplication by a unitary on either
 side.**  The `≥` half is the `≤` half applied to `T = L⋆ (L T R) R⋆`. -/
 theorem kyFanGaugeReal_unitary_comp_comp {L : F →L[𝕜] F} {R : E →L[𝕜] E}
     (hL : L ∈ unitary (F →L[𝕜] F)) (hR : R ∈ unitary (E →L[𝕜] E))
     (T : E →L[𝕜] F) (k : ℕ) :
-    (L ∘L T ∘L R).kyFanGaugeReal k = T.kyFanGaugeReal k := by
+    ((L ∘L T ∘L R).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ) := by
   refine le_antisymm (kyFanGaugeReal_comp_comp_le_of_norm_le_one (norm_le_one_of_mem_unitary hL)
     (norm_le_one_of_mem_unitary hR) T k) ?_
   have hrecover : (star L ∘L (L ∘L T ∘L R) ∘L star R) = T := by
@@ -206,8 +206,9 @@ theorem kyFanGaugeReal_unitary_comp_comp {L : F →L[𝕜] F} {R : E →L[𝕜] 
     simp only [comp_apply]
     rw [hx, hy]
   calc
-    T.kyFanGaugeReal k = (star L ∘L (L ∘L T ∘L R) ∘L star R).kyFanGaugeReal k := by rw [hrecover]
-    _ ≤ (L ∘L T ∘L R).kyFanGaugeReal k :=
+    (T.kyFanGauge k : ℝ) = ((star L ∘L (L ∘L T ∘L R) ∘L star R).kyFanGauge k : ℝ) := by rw
+        [hrecover]
+    _ ≤ ((L ∘L T ∘L R).kyFanGauge k : ℝ) :=
       kyFanGaugeReal_comp_comp_le_of_norm_le_one
         (norm_le_one_of_mem_unitary (Unitary.star_mem hL))
         (norm_le_one_of_mem_unitary (Unitary.star_mem hR)) _ k
@@ -228,7 +229,7 @@ without an `_apply` lemma, and that lemma has to unfold the definition, which un
 repository's Tau Ceti rubric would mean an `@[expose]` that buys nothing — every consumer
 wants the two theorems below, not the bundled object. -/
 private def kyFanGaugeSeminorm (k : ℕ) : Seminorm ℂ (E →L[ℂ] F) where
-  toFun T := T.kyFanGaugeReal k
+  toFun T := (T.kyFanGauge k : ℝ)
   map_zero' := kyFanGaugeReal_zero k
   add_le' S T := by
     change ((S + T).kyFanGauge k : ℝ) ≤ S.kyFanGauge k + T.kyFanGauge k
@@ -238,17 +239,17 @@ private def kyFanGaugeSeminorm (k : ℕ) : Seminorm ℂ (E →L[ℂ] F) where
 
 omit [CompleteSpace F] in
 private theorem kyFanGaugeSeminorm_apply (k : ℕ) (T : E →L[ℂ] F) :
-    kyFanGaugeSeminorm (E := E) (F := F) k T = T.kyFanGaugeReal k := rfl
+    kyFanGaugeSeminorm (E := E) (F := F) k T = (T.kyFanGauge k : ℝ) := rfl
 
 omit [CompleteSpace F] in
 /-- **A finite Ky Fan gauge is operator-norm continuous.**  It is a seminorm bounded by
 `k‖·‖`, hence Lipschitz. -/
 theorem continuous_kyFanGaugeReal (k : ℕ) :
-    Continuous fun T : E →L[ℂ] F => T.kyFanGaugeReal k := by
+    Continuous fun T : E →L[ℂ] F => (T.kyFanGauge k : ℝ) := by
   refine (LipschitzWith.of_dist_le_mul (K := Real.toNNReal (k : ℝ)) fun S T => ?_).continuous
   have h := abs_sub_map_le_sub (kyFanGaugeSeminorm (E := E) (F := F) k) S T
   rw [kyFanGaugeSeminorm_apply, kyFanGaugeSeminorm_apply, kyFanGaugeSeminorm_apply] at h
-  have hle : |S.kyFanGaugeReal k - T.kyFanGaugeReal k| ≤ (k : ℝ) * ‖S - T‖ :=
+  have hle : |(S.kyFanGauge k : ℝ) - (T.kyFanGauge k : ℝ)| ≤ (k : ℝ) * ‖S - T‖ :=
     h.trans (kyFanGaugeReal_le_nat_mul_opNorm (S - T) k)
   rwa [Real.dist_eq, dist_eq_norm, Real.coe_toNNReal _ (Nat.cast_nonneg k)]
 
@@ -257,7 +258,7 @@ integral of operators is at most the integral of the gauges. -/
 theorem kyFanGaugeReal_integral_le
     {α : Type*} [MeasurableSpace α] {μ : Measure α}
     (k : ℕ) {f : α → E →L[ℂ] F} (hf : Integrable f μ) :
-    (∫ a, f a ∂μ).kyFanGaugeReal k ≤ ∫ a, (f a).kyFanGaugeReal k ∂μ := by
+    ((∫ a, f a ∂μ).kyFanGauge k : ℝ) ≤ ∫ a, ((f a).kyFanGauge k : ℝ) ∂μ := by
   have h := seminorm_integral_le (kyFanGaugeSeminorm (E := E) (F := F) k)
     (Nat.cast_nonneg k) (fun T => kyFanGaugeReal_le_nat_mul_opNorm T k) hf
   rw [kyFanGaugeSeminorm_apply] at h

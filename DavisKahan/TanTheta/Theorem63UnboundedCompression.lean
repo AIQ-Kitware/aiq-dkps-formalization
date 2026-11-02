@@ -571,8 +571,7 @@ theorem all_kyFan_core_trunc {α δ : ℝ} (hδ : 0 < δ)
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
           Vᗮ.starProjection (D.action z)⟫_ℂ) (τ : ℝ) (k : ℕ) :
     δ * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n
-          (theorem63DirectedSineBlock (D.truncSpace τ) V))) ≤
+        (((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ))) ≤
       kyFanApproximationGauge k D.residual := by
   have hcore := (D.truncData V τ).all_kyFan_core_of_formBounds_infinite hδ
     (D.truncData_compression_upper V hupper τ) (D.truncData_crossed_lower V hcross τ) k
@@ -603,9 +602,8 @@ theorem truncSineBlock_eq (τ : ℝ) :
 /-- **The truncated sine block and the cut-off ambient sine block have the same
 approximation numbers.** -/
 theorem approximationSingularValue_truncSineBlock (τ : ℝ) (n : ℕ) :
-    approximationSingularValue n (theorem63DirectedSineBlock (D.truncSpace τ) V) =
-      approximationSingularValue n
-        (theorem63DirectedSineBlock Z V ∘L D.cutoff τ) := by
+    ((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ) =
+      ((theorem63DirectedSineBlock Z V ∘L D.cutoff τ).singularValue n : ℝ) := by
   set S : Z →L[ℂ] H := theorem63DirectedSineBlock Z V with hS
   have hcut : S ∘L D.cutoff τ = (S ∘L D.truncIncl τ) ∘L D.truncProj τ :=
     ContinuousLinearMap.ext fun z => by
@@ -621,36 +619,35 @@ theorem approximationSingularValue_truncSineBlock (τ : ℝ) (n : ℕ) :
       (ContinuousLinearMap.id ℂ H) (S ∘L D.cutoff τ) (D.truncIncl τ)
     rw [ContinuousLinearMap.id_comp] at h
     refine h.trans ?_
-    have hnn := approximationSingularValue_nonneg n (S ∘L D.cutoff τ)
+    have hnn := ((S ∘L D.cutoff τ).singularValue n).coe_nonneg
     calc
-      ‖ContinuousLinearMap.id ℂ H‖ * approximationSingularValue n (S ∘L D.cutoff τ) *
+      ‖ContinuousLinearMap.id ℂ H‖ * ((S ∘L D.cutoff τ).singularValue n : ℝ) *
           ‖D.truncIncl τ‖ ≤
-          1 * approximationSingularValue n (S ∘L D.cutoff τ) * 1 := by
+          1 * ((S ∘L D.cutoff τ).singularValue n : ℝ) * 1 := by
         refine mul_le_mul ?_ (D.norm_truncIncl_le τ) (norm_nonneg (D.truncIncl τ))
           (by positivity)
         exact mul_le_mul_of_nonneg_right ContinuousLinearMap.norm_id_le hnn
-      _ = approximationSingularValue n (S ∘L D.cutoff τ) := by ring
+      _ = ((S ∘L D.cutoff τ).singularValue n : ℝ) := by ring
   · rw [hcut, D.truncSineBlock_eq V τ]
     have h := approximationSingularValue_comp_le (𝕜 := ℂ) n
       (ContinuousLinearMap.id ℂ H) (S ∘L D.truncIncl τ) (D.truncProj τ)
     rw [ContinuousLinearMap.id_comp] at h
     refine h.trans ?_
-    have hnn := approximationSingularValue_nonneg n (S ∘L D.truncIncl τ)
+    have hnn := ((S ∘L D.truncIncl τ).singularValue n).coe_nonneg
     calc
-      ‖ContinuousLinearMap.id ℂ H‖ * approximationSingularValue n (S ∘L D.truncIncl τ) *
+      ‖ContinuousLinearMap.id ℂ H‖ * ((S ∘L D.truncIncl τ).singularValue n : ℝ) *
           ‖D.truncProj τ‖ ≤
-          1 * approximationSingularValue n (S ∘L D.truncIncl τ) * 1 := by
+          1 * ((S ∘L D.truncIncl τ).singularValue n : ℝ) * 1 := by
         refine mul_le_mul ?_ (D.norm_truncProj_le τ) (norm_nonneg (D.truncProj τ))
           (by positivity)
         exact mul_le_mul_of_nonneg_right ContinuousLinearMap.norm_id_le hnn
-      _ = approximationSingularValue n (S ∘L D.truncIncl τ) := by ring
+      _ = ((S ∘L D.truncIncl τ).singularValue n : ℝ) := by ring
 
 /-- **The truncated sine approximation numbers converge to the ambient ones** as the cutoff
 level grows without bound. -/
 theorem tendsto_approximationSingularValue_truncSineBlock (n : ℕ) :
-    Filter.Tendsto (fun τ : ℝ => approximationSingularValue n
-        (theorem63DirectedSineBlock (D.truncSpace τ) V)) Filter.atTop
-      (nhds (approximationSingularValue n (theorem63DirectedSineBlock Z V))) := by
+    Filter.Tendsto (fun τ : ℝ => ((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ)) Filter.atTop
+      (nhds (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
   have h := ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto_complex
     (P := fun τ : ℝ => D.cutoff τ) (l := Filter.atTop)
     (fun τ => D.isOrthogonalProjectionMap_cutoff τ) D.stronglyTendsto_cutoff n
@@ -660,8 +657,8 @@ theorem tendsto_approximationSingularValue_truncSineBlock (n : ℕ) :
 
 /-- Every truncated sine approximation number is at most the ambient one. -/
 theorem approximationSingularValue_truncSineBlock_le (τ : ℝ) (n : ℕ) :
-    approximationSingularValue n (theorem63DirectedSineBlock (D.truncSpace τ) V) ≤
-      approximationSingularValue n (theorem63DirectedSineBlock Z V) := by
+    ((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ) ≤
+      ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) := by
   rw [D.approximationSingularValue_truncSineBlock V τ n]
   exact approximationSingularValue_comp_le_of_isOrthogonalProjection
     (D.isOrthogonalProjectionMap_cutoff τ) n _
@@ -674,15 +671,15 @@ theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
           Vᗮ.starProjection (D.action z)⟫_ℂ) (n : ℕ) :
-    approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1 := by
+    ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) < 1 := by
   classical
   by_contra hcon
-  have ha_le : approximationSingularValue n (theorem63DirectedSineBlock Z V) ≤ 1 := by
+  have ha_le : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) ≤ 1 := by
     refine (approximationSingularValue_le_opNorm _ _).trans ?_
     refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => ?_
     rw [one_mul]
     exact theorem63DirectedSineBlock_apply_norm_le Z V z
-  have haeq : approximationSingularValue n (theorem63DirectedSineBlock Z V) = 1 :=
+  have haeq : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) = 1 :=
     le_antisymm ha_le (le_of_not_gt fun h => hcon h)
   set B : ℝ := kyFanApproximationGauge (n + 1) D.residual with hB_def
   have hB0 : 0 ≤ B := kyFanApproximationGauge_nonneg _ _
@@ -695,30 +692,24 @@ theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
   have hev := (D.tendsto_approximationSingularValue_truncSineBlock V n).eventually
     (eventually_gt_nhds (by rw [haeq]; exact hclt))
   obtain ⟨τ, hτ⟩ := hev.exists
-  have hτ0 : 0 ≤ approximationSingularValue n
-      (theorem63DirectedSineBlock (D.truncSpace τ) V) :=
-    approximationSingularValue_nonneg _ _
-  have hτ1 : approximationSingularValue n
-      (theorem63DirectedSineBlock (D.truncSpace τ) V) < 1 := by
+  have hτ0 : 0 ≤ ((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ) :=
+    (ContinuousLinearMap.singularValue _ _).coe_nonneg
+  have hτ1 : ((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ) < 1 := by
     have h := (D.truncData V τ).approximationSingularValue_sineBlock_lt_one_infiniteData
       hδ (D.truncData_compression_upper V hupper τ)
       (D.truncData_crossed_lower V hcross τ) n
     exact h
   have hmono : Real.tan (Real.arcsin c) ≤ Real.tan (Real.arcsin
-      (approximationSingularValue n
-        (theorem63DirectedSineBlock (D.truncSpace τ) V))) :=
+      (((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ))) :=
     TanArcsin.tanArcsin_le_tanArcsin hc0 hτ.le hτ1
   have hsum : Real.tan (Real.arcsin
-      (approximationSingularValue n
-        (theorem63DirectedSineBlock (D.truncSpace τ) V))) ≤
+      (((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ))) ≤
       ∑ m ∈ Finset.range (n + 1), Real.tan (Real.arcsin
-        (approximationSingularValue m
-          (theorem63DirectedSineBlock (D.truncSpace τ) V))) :=
+        (((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue m : ℝ))) :=
     Finset.single_le_sum
       (f := fun m => Real.tan (Real.arcsin
-        (approximationSingularValue m
-          (theorem63DirectedSineBlock (D.truncSpace τ) V))))
-      (fun m _ => TanArcsin.tanArcsin_nonneg (approximationSingularValue_nonneg _ _))
+        (((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue m : ℝ))))
+      (fun m _ => TanArcsin.tanArcsin_nonneg ((ContinuousLinearMap.singularValue _ _).coe_nonneg))
       (Finset.self_mem_range_succ n)
   have hfinal := D.all_kyFan_core_trunc V hδ hupper hcross τ (n + 1)
   have hCval : Real.tan (Real.arcsin c) = C := TanArcsin.tanArcsin_sin_arctan C
@@ -726,8 +717,7 @@ theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
     calc
       δ * C = δ * Real.tan (Real.arcsin c) := by rw [hCval]
       _ ≤ δ * ∑ m ∈ Finset.range (n + 1), Real.tan (Real.arcsin
-          (approximationSingularValue m
-            (theorem63DirectedSineBlock (D.truncSpace τ) V))) :=
+          (((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue m : ℝ))) :=
         mul_le_mul_of_nonneg_left (hmono.trans hsum) hδ.le
       _ ≤ B := hfinal
   have hCeq : δ * C = B + δ := by
@@ -746,27 +736,25 @@ theorem all_kyFan_core {α δ : ℝ} (hδ : 0 < δ)
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
           Vᗮ.starProjection (D.action z)⟫_ℂ) (k : ℕ) :
     δ * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))) ≤
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) ≤
       kyFanApproximationGauge k D.residual := by
   classical
   have hlt := D.approximationSingularValue_sineBlock_lt_one V hδ hupper hcross
   have hsum : Filter.Tendsto
       (fun τ : ℝ => ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n
-          (theorem63DirectedSineBlock (D.truncSpace τ) V)))) Filter.atTop
+        (((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ)))) Filter.atTop
       (nhds (∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))))) := by
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))))) := by
     refine tendsto_finsetSum (Finset.range k) fun n _ => ?_
     exact (TanArcsin.continuousAt_tanArcsin
-      (approximationSingularValue_nonneg n (theorem63DirectedSineBlock Z V))
+      (((theorem63DirectedSineBlock Z V).singularValue n).coe_nonneg)
       (hlt n)).tendsto.comp
       (D.tendsto_approximationSingularValue_truncSineBlock V n)
   have hmul : Filter.Tendsto
       (fun τ : ℝ => δ * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n
-          (theorem63DirectedSineBlock (D.truncSpace τ) V)))) Filter.atTop
+        (((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ)))) Filter.atTop
       (nhds (δ * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))))) :=
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))))) :=
     hsum.const_mul δ
   refine le_of_tendsto hmul ?_
   filter_upwards [] with τ
@@ -798,11 +786,10 @@ theorem ideal_of_formBounds
   have hcore := D.all_kyFan_core V hδ hupper hcross k
   have hKyTan : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
-        (approximationSingularValue n (theorem63DirectedSineBlock Z V))) := by
+        (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htan n
-    unfold approximationSingularValue at h
     exact h
   rw [hKyTan]
   exact hcore

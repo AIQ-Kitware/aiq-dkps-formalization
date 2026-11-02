@@ -264,8 +264,8 @@ omit [CompleteSpace E] [CompleteSpace F] in
 near-optimal real approximant and preserve both its rank and error norm. -/
 theorem approximationNumber_complexify_le
     (T : E →L[ℝ] F) (n : ℕ) :
-    (RealComplexification.complexify T).approximationNumber n ≤
-      T.approximationNumber n := by
+    ((RealComplexification.complexify T).singularValue n : ℝ) ≤
+      (T.singularValue n : ℝ) := by
   rw [T.approximationNumber_eq_iInf]
   let : Nonempty {R : E →L[ℝ] F // R.rank ≤ (n : Cardinal)} :=
     ⟨⟨0, by simp⟩⟩
@@ -275,7 +275,7 @@ theorem approximationNumber_complexify_le
     rw [rank_complexify]
     exact hR
   calc
-    (RealComplexification.complexify T).approximationNumber n ≤
+    ((RealComplexification.complexify T).singularValue n : ℝ) ≤
         ‖RealComplexification.complexify T -
           RealComplexification.complexify R‖ :=
       (RealComplexification.complexify T).approximationNumber_le_norm_sub hRc
@@ -289,24 +289,23 @@ real lower threshold supplies an `(n+1)`-vector min--max witness, and that
 witness complexifies with the same lower modulus. -/
 theorem approximationNumber_le_complexify
     (T : E →L[ℝ] F) (n : ℕ) :
-    T.approximationNumber n ≤
-      (RealComplexification.complexify T).approximationNumber n := by
+    (T.singularValue n : ℝ) ≤
+      ((RealComplexification.complexify T).singularValue n : ℝ) := by
   apply le_of_forall_lt
   intro r hr
   by_cases hr0 : 0 ≤ r
   case neg =>
     exact (lt_of_not_ge hr0).trans_le
-      (ContinuousLinearMap.approximationNumber_nonneg _ n)
+      ((ContinuousLinearMap.singularValue _ n).coe_nonneg)
   obtain ⟨s, hrs, v, hv, hV⟩ :=
     TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace T n hr0
-      (by simpa only [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hr)
+      (by exact hr)
   have hs0 : 0 ≤ s := hr0.trans hrs.le
   have hvC : LinearIndependent ℂ (fun i => ofReal (v i)) :=
     linearIndependent_ofReal hv
   have hlower := lowerBound_complex_span T v hs0 hV
   have hsNN : s ≤
-      (RealComplexification.complexify T).approximationNumber n := by
-    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+      ((RealComplexification.complexify T).singularValue n : ℝ) := by
     exact (RealComplexification.complexify T).le_singularValue_of_linearIndependent hvC hlower
   have hrsNN : r < (⟨s, hs0⟩ : NNReal) := by
     exact_mod_cast hrs
@@ -316,8 +315,8 @@ omit [CompleteSpace F] in
 /-- Approximation numbers are exactly preserved by real complexification. -/
 theorem approximationNumber_complexify
     (T : E →L[ℝ] F) (n : ℕ) :
-    (RealComplexification.complexify T).approximationNumber n =
-      T.approximationNumber n :=
+    ((RealComplexification.complexify T).singularValue n : ℝ) =
+      (T.singularValue n : ℝ) :=
   le_antisymm (approximationNumber_complexify_le T n)
     (approximationNumber_le_complexify T n)
 
@@ -326,8 +325,8 @@ omit [CompleteSpace F] in
 complexification. -/
 theorem approximationSingularValue_complexify
     (T : E →L[ℝ] F) (n : ℕ) :
-    approximationSingularValue n (RealComplexification.complexify T) =
-      approximationSingularValue n T := by
+    ((RealComplexification.complexify T).singularValue n : ℝ) =
+      (T.singularValue n : ℝ) := by
   exact approximationNumber_complexify T n
 
 omit [CompleteSpace F] in
@@ -337,7 +336,7 @@ theorem kyFanApproximationGauge_complexify
     (T : E →L[ℝ] F) (k : ℕ) :
     kyFanApproximationGauge k (RealComplexification.complexify T) =
       kyFanApproximationGauge k T := by
-  change (RealComplexification.complexify T).kyFanGaugeReal k = T.kyFanGaugeReal k
+  change ((RealComplexification.complexify T).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ)
   rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
     ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   apply Finset.sum_congr rfl

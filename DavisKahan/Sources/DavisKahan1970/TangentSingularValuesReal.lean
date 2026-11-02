@@ -84,19 +84,19 @@ projector difference `P_V − P_U`, whose singular values are the sines of the
 principal angles with their ambient multiplicity. -/
 theorem approximationNumber_tanAngleOperatorR
     (htr : ‖sinAngleOperatorR U V‖ < 1) (n : ℕ) :
-    (tanAngleOperatorR U V).approximationNumber n =
+    ((tanAngleOperatorR U V).singularValue n : ℝ) =
       Real.tan (Real.arcsin
-        ((V.starProjection - U.starProjection).approximationNumber n)) := by
+        (((V.starProjection - U.starProjection).singularValue n : ℝ))) := by
   have htrC := norm_sinAngleOperatorC_complexify_lt_one U V htr
-  have h1 : (tanAngleOperatorR U V).approximationNumber n =
-      (tanAngleOperatorC (complexifySubmodule U)
-        (complexifySubmodule V)).approximationNumber n := by
+  have h1 : ((tanAngleOperatorR U V).singularValue n : ℝ) =
+      ((tanAngleOperatorC (complexifySubmodule U)
+        (complexifySubmodule V)).singularValue n : ℝ) := by
     rw [← complexify_tanAngleOperatorR]
     exact (ComplexificationApproximation.approximationSingularValue_complexify
       (tanAngleOperatorR U V) n).symm
-  have h2 : (sinAngleOperatorC (complexifySubmodule U)
-      (complexifySubmodule V)).approximationNumber n =
-      (V.starProjection - U.starProjection).approximationNumber n := by
+  have h2 : ((sinAngleOperatorC (complexifySubmodule U)
+      (complexifySubmodule V)).singularValue n : ℝ) =
+      ((V.starProjection - U.starProjection).singularValue n : ℝ) := by
     rw [approximationNumber_sinAngleOperatorC, ← complexify_projectorDifference]
     exact ComplexificationApproximation.approximationSingularValue_complexify
       (V.starProjection - U.starProjection) n
@@ -106,11 +106,11 @@ theorem approximationNumber_tanAngleOperatorR
 `tan (arcsin aₙ)` above is a genuine tangent. -/
 theorem approximationNumber_projectorDifference_lt_one_real
     (htr : ‖sinAngleOperatorR U V‖ < 1) (n : ℕ) :
-    (V.starProjection - U.starProjection).approximationNumber n < 1 := by
+    ((V.starProjection - U.starProjection).singularValue n : ℝ) < 1 := by
   have htrC := norm_sinAngleOperatorC_complexify_lt_one U V htr
-  have h2 : (sinAngleOperatorC (complexifySubmodule U)
-      (complexifySubmodule V)).approximationNumber n =
-      (V.starProjection - U.starProjection).approximationNumber n := by
+  have h2 : ((sinAngleOperatorC (complexifySubmodule U)
+      (complexifySubmodule V)).singularValue n : ℝ) =
+      ((V.starProjection - U.starProjection).singularValue n : ℝ) := by
     rw [approximationNumber_sinAngleOperatorC, ← complexify_projectorDifference]
     exact ComplexificationApproximation.approximationSingularValue_complexify
       (V.starProjection - U.starProjection) n

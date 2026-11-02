@@ -80,7 +80,7 @@ theorem finiteSourceSingularValue_nonneg (A : E →L[ℂ] F)
 of the original ambient-codomain operator. -/
 theorem approximationSingularValue_eq_finiteSourceSingularValue
     (A : E →L[ℂ] F) (i : Fin (finrank ℂ E)) :
-    approximationSingularValue i A = finiteSourceSingularValue A i := by
+    (A.singularValue i : ℝ) = finiteSourceSingularValue A i := by
   let W : Submodule ℂ F := A.range
   let : FiniteDimensional ℂ W := by
     apply FiniteDimensional.of_surjective A.rangeRestrict.toLinearMap
@@ -99,7 +99,7 @@ theorem approximationSingularValue_eq_finiteSourceSingularValue
     change W.starProjection (A x) = A x
     exact W.starProjection_eq_self_iff.mpr (hA x)
   calc
-    approximationSingularValue i A = approximationSingularValue i AW :=
+    (A.singularValue i : ℝ) = (AW.singularValue i : ℝ) :=
       (approximationSingularValue_orthogonalProjectionOnto_comp_eq W A hA i).symm
     _ = AW.toLinearMap.singularValues i :=
       approximationSingularValue_eq_singularValues AW.toLinearMap i

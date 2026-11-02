@@ -16,8 +16,10 @@ public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 /-!
 # Approximation-number foundation and scalar-specific analytic endpoints
 
-This lower module contains the approximation-number definitions, scalar-generic
-algebraic laws, finite-dimensional Ky Fan bridge, and the accepted complex
+Approximation-number formulas use native `ContinuousLinearMap.singularValue`
+with explicit real coercions; the former `approximationSingularValue` data alias
+is retired. This lower module retains scalar-generic law statements, the
+finite-dimensional Ky Fan bridge, and the complex
 strong-cutoff and infinite-dimensional Ky Fan arguments. It intentionally does
 not import the real localization module, so the real proof can depend on this
 foundation without creating an import cycle.
@@ -65,24 +67,11 @@ def StronglyTendsto {ι : Type w} (T : ι → E →L[𝕜] E)
 def IsOrthogonalProjectionMap (P : E →L[𝕜] E) : Prop :=
   P ∘L P = P ∧ P.IsSymmetric
 
-/-- Zero-based approximation singular value, defined as the operator-norm
- distance to maps of rank at most `n`. -/
-@[expose] noncomputable def approximationSingularValue
-    (n : ℕ) (K : E →L[𝕜] F) : ℝ :=
-  K.approximationNumber n
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Approximation singular values are nonnegative. -/
-theorem approximationSingularValue_nonneg
-    (n : ℕ) (K : E →L[𝕜] F) :
-    0 ≤ approximationSingularValue n K := by
-  exact_mod_cast K.approximationNumber_nonneg n
-
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values of the zero map vanish. -/
 @[simp]
 theorem approximationSingularValue_zero_map (n : ℕ) :
-    approximationSingularValue n (0 : E →L[𝕜] F) = 0 := by
+    ((0 : E →L[𝕜] F).singularValue n : ℝ) = 0 := by
   exact (ContinuousLinearMap.approximationNumber_zero
       (𝕜 := 𝕜) (E := E) (F := F) n)
 
@@ -91,15 +80,15 @@ omit [CompleteSpace E] [CompleteSpace F] in
 @[simp]
 theorem approximationSingularValue_zero
     (K : E →L[𝕜] F) :
-    approximationSingularValue 0 K = ‖K‖ := by
+    (K.singularValue 0 : ℝ) = ‖K‖ := by
   exact K.approximationNumber_index_zero
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values are absolutely homogeneous. -/
 theorem approximationSingularValue_smul
     (n : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
-    approximationSingularValue n (c • K) =
-      ‖c‖ * approximationSingularValue n K := by
+    ((c • K).singularValue n : ℝ) =
+      ‖c‖ * (K.singularValue n : ℝ) := by
   exact (ContinuousLinearMap.approximationNumber_smul c K n)
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -107,15 +96,14 @@ omit [CompleteSpace E] [CompleteSpace F] in
 @[simp]
 theorem approximationSingularValue_neg
     (n : ℕ) (K : E →L[𝕜] F) :
-    approximationSingularValue n (-K) = approximationSingularValue n K := by
-  have h := approximationSingularValue_smul n (-1 : 𝕜) K
-  simpa using h
+    ((-K).singularValue n : ℝ) = (K.singularValue n : ℝ) := by
+  simp
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values decrease with the index. -/
 theorem approximationSingularValue_antitone
     (K : E →L[𝕜] F) :
-    Antitone (fun n => approximationSingularValue n K) := by
+    Antitone (fun n => (K.singularValue n : ℝ)) := by
   intro n m hnm
   exact_mod_cast K.approximationNumber_antitone hnm
 
@@ -123,24 +111,23 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every approximation singular value is controlled by operator norm. -/
 theorem approximationSingularValue_le_opNorm
     (n : ℕ) (K : E →L[𝕜] F) :
-    approximationSingularValue n K ≤ ‖K‖ := by
+    (K.singularValue n : ℝ) ≤ ‖K‖ := by
   exact_mod_cast K.approximationNumber_le_norm n
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Perturbation inequality at a fixed approximation index. -/
 theorem approximationSingularValue_add_le
     (n : ℕ) (K L : E →L[𝕜] F) :
-    approximationSingularValue n (K + L) ≤
-      approximationSingularValue n K + ‖L‖ := by
+    ((K + L).singularValue n : ℝ) ≤
+      (K.singularValue n : ℝ) + ‖L‖ := by
   exact_mod_cast K.approximationNumber_add_le_add_norm L n
 
 /-- Adjoint invariance of approximation singular values on Hilbert spaces. -/
 theorem approximationSingularValue_adjoint
     (n : ℕ) (K : E →L[𝕜] F) :
-    approximationSingularValue n K.adjoint =
-      approximationSingularValue n K := by
-  simp only [approximationSingularValue,
-    ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+    (K.adjoint.singularValue n : ℝ) =
+      (K.singularValue n : ℝ) := by
+  simp only [
     ContinuousLinearMap.singularValue_adjoint]
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -151,8 +138,8 @@ theorem approximationSingularValue_comp_le
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (n : ℕ) (L : F →L[𝕜] G) (K : E →L[𝕜] F)
     (R : H →L[𝕜] E) :
-    approximationSingularValue n (L ∘L K ∘L R)
-      ≤ ‖L‖ * approximationSingularValue n K * ‖R‖ := by
+    ((L ∘L K ∘L R).singularValue n : ℝ)
+      ≤ ‖L‖ * (K.singularValue n : ℝ) * ‖R‖ := by
   have h := ContinuousLinearMap.approximationNumber_comp_comp_le L K R n
   exact_mod_cast h
 
@@ -165,10 +152,9 @@ theorem approximationSingularValue_eq_singularValues
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 F₀]
     (A : E₀ →ₗ[𝕜] F₀) (n : ℕ) :
-    approximationSingularValue n A.toContinuousLinearMap =
+    (A.toContinuousLinearMap.singularValue n : ℝ) =
       A.singularValues n := by
-  change A.toContinuousLinearMap.approximationNumber n = A.singularValues n
-  rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+  rw [
     ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
     LinearMap.coe_toContinuousLinearMap]
 
@@ -274,14 +260,14 @@ statement about one projection with no net in sight, and it is the half a reader
 without reading the localization argument. -/
 theorem approximationSingularValue_comp_le_of_isOrthogonalProjection
     {P : E₀ →L[𝕜] E₀} (hP : IsOrthogonalProjectionMap P) (n : ℕ) (K : E₀ →L[𝕜] F₀) :
-    approximationSingularValue n (K ∘L P) ≤ approximationSingularValue n K := by
+    ((K ∘L P).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) := by
   have hnormNN : ‖P‖ ≤ (1 : ℝ) := by exact_mod_cast hP.norm_le_one
-  have hNN : (K ∘L P).approximationNumber n ≤ K.approximationNumber n := by
-    calc (K ∘L P).approximationNumber n ≤ K.approximationNumber n * ‖P‖ :=
+  have hNN : ((K ∘L P).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) := by
+    calc ((K ∘L P).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) * ‖P‖ :=
           K.approximationNumber_comp_le_mul_norm P n
-      _ ≤ K.approximationNumber n * 1 :=
-          mul_le_mul_of_nonneg_left hnormNN (K.approximationNumber_nonneg n)
-      _ = K.approximationNumber n := by rw [mul_one]
+      _ ≤ (K.singularValue n : ℝ) * 1 :=
+          mul_le_mul_of_nonneg_left hnormNN ((K.singularValue n).coe_nonneg)
+      _ = (K.singularValue n : ℝ) := by rw [mul_one]
   exact_mod_cast hNN
 
 omit [CompleteSpace F₀] [CompleteSpace E₀] in
@@ -300,24 +286,23 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E₀))
     (n : ℕ) (K : E₀ →L[𝕜] F₀) :
     Tendsto
-      (fun i => approximationSingularValue n (K ∘L P i))
-      l (𝓝 (approximationSingularValue n K)) := by
+      (fun i => ((K ∘L P i).singularValue n : ℝ))
+      l (𝓝 ((K.singularValue n : ℝ))) := by
   -- Two halves, and they are not symmetric.  `hUpper` is the ideal inequality and is now a
   -- lemma of its own; `hLower` is the whole content: pick a coercive subspace `V` witnessing
   -- `r < aₙ(K)`, note `K ∘ P i` agrees with `K` on `V` in the limit because `V` is
   -- finite-dimensional (`tendsto_opNorm_zero_of_finiteDimensional`), and transport the
   -- coercivity.  The min--max hypothesis enters only in producing `V`.
   have hUpper : ∀ i,
-      approximationSingularValue n (K ∘L P i) ≤ approximationSingularValue n K :=
+      ((K ∘L P i).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) :=
     fun i => approximationSingularValue_comp_le_of_isOrthogonalProjection (hPproj i) n K
   have hLower : ∀ r : ℝ,
-      r < approximationSingularValue n K →
-      ∀ᶠ i in l, r < approximationSingularValue n (K ∘L P i) := by
+      r < (K.singularValue n : ℝ) →
+      ∀ᶠ i in l, r < ((K ∘L P i).singularValue n : ℝ) := by
     intro r hr
     by_cases hr0 : 0 ≤ r
     · obtain ⟨s, hrs, v, hv, hV⟩ := TauCeti.hasMinMaxLowerBound_iff.mp hlb K n hr0
-        (by simpa only [approximationSingularValue,
-          ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] using hr)
+        (by exact hr)
       let c : ℝ := (r + s) / 2
       have hrc : r < c := by dsimp only [c]; linarith
       have hcs : c < s := by dsimp only [c]; linarith
@@ -343,8 +328,7 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
       have hsmall : ∀ᶠ i in l, ‖D i‖ < s - c :=
         hDnorm.eventually (Iio_mem_nhds (sub_pos.mpr hcs))
       filter_upwards [hsmall] with i hi
-      have hcNN : c ≤ (K ∘L P i).approximationNumber n := by
-        rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
+      have hcNN : c ≤ ((K ∘L P i).singularValue n : ℝ) := by
         apply (K ∘L P i).le_singularValue_of_linearIndependent hv
         intro x hxV
         have hDx : ‖D i ⟨x, hxV⟩‖ ≤ ‖D i‖ * ‖x‖ := (D i).le_opNorm ⟨x, hxV⟩
@@ -356,16 +340,16 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
         have hsx := hV x hxV
         change c * ‖x‖ ≤ ‖K (P i x)‖
         nlinarith [mul_le_mul_of_nonneg_right hi.le (norm_nonneg x)]
-      have hcReal : c ≤ approximationSingularValue n (K ∘L P i) := hcNN
+      have hcReal : c ≤ ((K ∘L P i).singularValue n : ℝ) := hcNN
       exact hrc.trans_le hcReal
     · have hrneg : r < 0 := lt_of_not_ge hr0
       filter_upwards [] with i
       exact hrneg.trans_le
-        (approximationSingularValue_nonneg n (K ∘L P i))
+        (((K ∘L P i).singularValue n).coe_nonneg)
   rw [Metric.tendsto_nhds]
   intro ε hε
   have hlower := hLower
-    (approximationSingularValue n K - ε) (by linarith)
+    ((K.singularValue n : ℝ) - ε) (by linarith)
   filter_upwards [hlower] with i hi
   rw [Real.dist_eq, abs_lt]
   constructor
@@ -383,8 +367,8 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
     (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₀))
     (n : ℕ) (K : E₀ →L[ℂ] F₀) :
     Tendsto
-      (fun i => approximationSingularValue n (K ∘L P i))
-      l (𝓝 (approximationSingularValue n K)) :=
+      (fun i => ((K ∘L P i).singularValue n : ℝ))
+      l (𝓝 ((K.singularValue n : ℝ))) :=
   approximationSingularValue_comp_strongProjection_tendsto_of_minMax
     TauCeti.HasMinMaxLowerBound.of_completeSpace hPproj hP n K
 
@@ -398,12 +382,12 @@ every statement below delegates to it. -/
 @[expose]
 noncomputable def kyFanApproximationGauge
     (k : ℕ) (K : E →L[𝕜] F) : ℝ :=
-  K.kyFanGaugeReal k
+  (K.kyFanGauge k : ℝ)
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The approximation-number Ky Fan gauge agrees definitionally with the Ky Fan gauge. -/
 theorem kyFanApproximationGauge_eq_kyFanGauge (k : ℕ) (K : E →L[𝕜] F) :
-    kyFanApproximationGauge k K = K.kyFanGaugeReal k := rfl
+    kyFanApproximationGauge k K = (K.kyFanGauge k : ℝ) := rfl
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Finite Ky Fan gauges are unchanged by negation. -/
@@ -506,8 +490,8 @@ the domain cannot decrease them. -/
 theorem approximationSingularValue_restrict_mono
     (T : E₀ →L[𝕜] F₀) (n : ℕ) {U V : Submodule 𝕜 E₀}
     (hUV : U ≤ V) :
-    approximationSingularValue n (T ∘L U.subtypeL) ≤
-      approximationSingularValue n (T ∘L V.subtypeL) :=
+    ((T ∘L U.subtypeL).singularValue n : ℝ) ≤
+      ((T ∘L V.subtypeL).singularValue n : ℝ) :=
   T.approximationNumber_restrict_mono n hUV
 
 /-- Composing with the orthogonal projection onto the range leaves every approximation
@@ -518,8 +502,8 @@ theorem approximationSingularValue_orthogonalProjectionOnto_comp_eq
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     (W : Submodule 𝕜 G) [W.HasOrthogonalProjection]
     (A : V →L[𝕜] G) (hA : ∀ x, A x ∈ W) (n : ℕ) :
-    approximationSingularValue n (W.orthogonalProjectionOnto ∘L A) =
-      approximationSingularValue n A :=
+    ((W.orthogonalProjectionOnto ∘L A).singularValue n : ℝ) =
+      (A.singularValue n : ℝ) :=
   ContinuousLinearMap.approximationNumber_orthogonalProjectionOnto_comp_eq W A hA n
 
 /-- Composing with the orthogonal projection onto the range leaves the Ky Fan gauge
@@ -662,13 +646,13 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
   rcases Nat.eq_zero_or_pos k with hk0 | hkpos
   · subst hk0
     exact ⟨y, x, hy, hx, by
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum, hε.le]⟩
+      simp [kyFanApproximationGauge, hε.le]⟩
   set δ : ℝ := ε / k with hδdef
   have hδ : 0 < δ := div_pos hε (by exact_mod_cast hkpos)
   -- a finite set of vectors whose span nearly attains the `n`-th approximation number
   have hstep : ∀ n : ℕ, ∃ S : Finset E,
-      K.approximationNumber n
-        < (K ∘L (Submodule.span 𝕜 (S : Set E)).subtypeL).approximationNumber n + δ := by
+      (K.singularValue n : ℝ)
+        < ((K ∘L (Submodule.span 𝕜 (S : Set E)).subtypeL).singularValue n : ℝ) + δ := by
     intro n
     obtain ⟨w, hw⟩ := hlb.exists_finiteRestrictionApproximationNumber_add_gt K n δ hδ
     refine ⟨Finset.image w Finset.univ, ?_⟩
@@ -690,15 +674,15 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
   have hgaugeW : kyFanApproximationGauge k K - ε
       ≤ kyFanApproximationGauge k (K ∘L W.subtypeL) := by
     have hterm : ∀ n ∈ Finset.range k,
-        K.approximationNumber n
-          < (K ∘L W.subtypeL).approximationNumber n + δ := by
+        (K.singularValue n : ℝ)
+          < ((K ∘L W.subtypeL).singularValue n : ℝ) + δ := by
       intro n hn
       have hmono := ContinuousLinearMap.approximationNumber_restrict_mono K n
         (hSW n (Finset.mem_range.mp hn))
       have hn' := hS n
       linarith
-    have hsum : ∑ n ∈ Finset.range k, K.approximationNumber n
-        ≤ (∑ n ∈ Finset.range k, (K ∘L W.subtypeL).approximationNumber n)
+    have hsum : ∑ n ∈ Finset.range k, (K.singularValue n : ℝ)
+        ≤ (∑ n ∈ Finset.range k, ((K ∘L W.subtypeL).singularValue n : ℝ))
           + (k : ℝ) * δ := by
       have := Finset.sum_le_sum (fun n hn => (hterm n hn).le)
       simpa [Finset.sum_add_distrib, mul_comm] using this

@@ -115,7 +115,7 @@ instance hasUnboundedSylvesterKyFan_complex :
     intro E F _ _ _ _ _ _ A B hA hB X C δ hδ hgap hEq k
     by_cases hk : k = 0
     · subst k
-      simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp [kyFanApproximationGauge]
     · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
       let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
         { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hkpos
@@ -123,7 +123,7 @@ instance hasUnboundedSylvesterKyFan_complex :
       have hraw := davisKahan1970_sylvester_complex N hA hB hδ hgap hEq
         (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
       simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← ContinuousLinearMap.kyFanGaugeReal.eq_def, ← kyFanApproximationGauge_eq_kyFanGauge] using hraw.2
+      ← kyFanApproximationGauge_eq_kyFanGauge] using hraw.2
 
 /-- `ℝ` satisfies the estimate, by the complexification descent. -/
 instance hasUnboundedSylvesterKyFan_real :

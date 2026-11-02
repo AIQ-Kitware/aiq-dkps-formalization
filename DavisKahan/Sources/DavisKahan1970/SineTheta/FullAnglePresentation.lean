@@ -224,9 +224,8 @@ theorem directedProjectionGap_orthogonal
       ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_starProjection V).adjoint_eq,
       (isSelfAdjoint_starProjection Uᗮ).adjoint_eq]
-  have h : T.adjoint.approximationNumber 0 = T.approximationNumber 0 := by
-    rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
-      ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
+  have h : (T.adjoint.singularValue 0 : ℝ) = (T.singularValue 0 : ℝ) := by
+    rw [
       ContinuousLinearMap.singularValue_adjoint]
   rw [ContinuousLinearMap.approximationNumber_index_zero,
     ContinuousLinearMap.approximationNumber_index_zero, hadj] at h

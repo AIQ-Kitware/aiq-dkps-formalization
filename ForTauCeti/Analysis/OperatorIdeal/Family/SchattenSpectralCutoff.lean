@@ -49,7 +49,6 @@ theorem finrank_eigenSpan_mul_cutoff_rpow_le_schatten_rpow
       have hreal := le_approximationNumber_of_lt_rank_eigenSpan hAs hc.le hS (n := k) (by
         rw [← Module.finrank_eq_rank' 𝕜 (eigenSpan A S)]
         exact_mod_cast Finset.mem_range.mp hk)
-      rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal] at hreal
       apply ENNReal.rpow_le_rpow _ (by linarith : 0 ≤ p)
       rw [← ENNReal.ofReal_coe_nnreal]
       exact ENNReal.ofReal_le_ofReal hreal

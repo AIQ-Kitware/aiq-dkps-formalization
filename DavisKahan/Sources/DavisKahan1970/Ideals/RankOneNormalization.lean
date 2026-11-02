@@ -69,7 +69,7 @@ theorem approximationSingularValue_rankOne
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {V : E →L[𝕜] F} (hVnorm : ‖V‖ = 1)
     (hVrank : V.rank ≤ (1 : Cardinal)) (n : ℕ) :
-    approximationSingularValue n V = if n = 0 then 1 else 0 := by
+    (V.singularValue n : ℝ) = if n = 0 then 1 else 0 := by
   rcases n with _ | n
   · simp [hVnorm]
   · rw [ite_eq_right (Nat.succ_ne_zero n)]
@@ -87,7 +87,7 @@ theorem prefixGauge_rankOne
     (hVnorm : ‖V‖ = 1) (hVrank : V.rank ≤ (1 : Cardinal)) (n : ℕ) :
     N.prefixGauge (n + 1) V = 1 := by
   unfold prefixGauge approximationPrefix
-  have hv : (fun i : Fin (n + 1) => approximationSingularValue (i : ℕ) V) =
+  have hv : (fun i : Fin (n + 1) => (V.singularValue (i : ℕ) : ℝ)) =
       firstCoordinateVector n := by
     funext i
     rw [approximationSingularValue_rankOne hVnorm hVrank]

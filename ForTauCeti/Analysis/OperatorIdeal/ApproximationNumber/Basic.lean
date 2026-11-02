@@ -13,72 +13,20 @@ public import Mathlib.LinearAlgebra.Dimension.DivisionRing
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 
 /-!
-# Approximation numbers of bounded operators
+# Real scalar statements about canonical approximation numbers
 
-Tau Ceti owns the canonical zero-based approximation number
-`ContinuousLinearMap.singularValue : ℕ → ℝ≥0`. This module keeps a real-valued
-view for existing downstream real analysis and forwards shared approximation
-laws to that upstream API. `approximationNumber_eq_iInf` records the real-valued
-infimum characterization used by remaining real-specific arguments.
+Tau Ceti owns the zero-based sequence
+`ContinuousLinearMap.singularValue : ℕ → ℝ≥0`. All maintained formulas now use
+that native sequence, with explicit coercions to `ℝ` where real analysis needs
+them. The former local `ContinuousLinearMap.approximationNumber` data alias is
+retired; no replacement alias or notation is introduced.
 
-The remaining results here deliberately stop before Hilbert-space-specific
-results: adjoint invariance, finite-dimensional singular-value identification,
-and infinite-dimensional min--max lower bounds live in sibling modules.
-
-## The index convention
-
-The operator-ideal literature is split.  Pietsch's `s`-numbers are one-based,
-`sₙ(T) = dist(T, {rank < n})` with `s₁(T) = ‖T‖`; here `aₙ(T)` is zero-based,
-`aₙ(T) = dist(T, {rank ≤ n})` with `a₀(T) = ‖T‖`, so `sₙ = a_{n-1}`.  Only one
-of the two is developed — carrying both would duplicate the whole API for an
-index shift — and the zero-based one is chosen because every downstream
-statement is off-by-one free in it:
-
-* the additive ideal inequality is `a_{m+n}(S + T) ≤ aₘ(S) + aₙ(T)`
-  (`ContinuousLinearMap.approximationNumber_add_le`), against the one-based
-  `s_{m+n-1}`;
-* the singular-value identification is `aₙ(T) = σₙ(T)`
-  (`ContinuousLinearMap.singularValue_eq_linearMap_singularValues`), a genuine
-  identity of indices, because Mathlib's `LinearMap.singularValues` is itself
-  zero-indexed; one-based numbering would put an `n - 1` — truncated
-  subtraction — into the flagship theorem of the development;
-* `a₀(T) = ‖T‖` needs no convention at `n = 0`, whereas the one-based `s₀` has
-  to be defined by fiat.
-
-The convention is recorded as decision 1 of
-`TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md` (Part A generality bar).
-
-## Main declarations
-
-* `ContinuousLinearMap.approximationNumber`: the real coercion of Tau Ceti's
-  `ContinuousLinearMap.singularValue`.
-* `ContinuousLinearMap.approximationNumber_le_norm_sub` and
-  `ContinuousLinearMap.le_approximationNumber_iff`: the characteristic upper and
-  lower bounds.  Together they replace unfolding the definition; the defining
-  infimum itself is available as
-  `ContinuousLinearMap.approximationNumber_eq_iInf`, which is deliberately not a
-  `simp` lemma.
-* `ContinuousLinearMap.approximationNumber_index_zero`: the **zeroth**
-  approximation number is the operator norm.  The index, not the operator, is
-  what is zero here; `ContinuousLinearMap.approximationNumber_zero` is the
-  companion statement about the zero operator, matching Mathlib's
-  `LinearMap.singularValues_zero`.
-* `ContinuousLinearMap.approximationNumber_antitone`: approximation numbers
-  decrease with the allowed rank.
-* `ContinuousLinearMap.approximationNumber_add_le`,
-  `approximationNumber_comp_le_norm_mul`, `approximationNumber_comp_le_mul_norm`,
-  `approximationNumber_comp_comp_le`: the additive and two-sided ideal
-  inequalities.
-* `ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse`: enlarging the
-  codomain along a contraction with a contractive left inverse changes nothing.
-* `ContinuousLinearMap.approximationNumber_smul`: absolute homogeneity.
-
-## Namespace note
-
-The real-valued compatibility view extends `ContinuousLinearMap` so existing
-real-valued estimates can use dot notation. Tau Ceti's canonical
-`ContinuousLinearMap.singularValue` remains the owning API; the local name does
-not define a second approximation sequence.
+The zero-based convention is `a₀(T) = ‖T‖` and
+`aₙ(T) = inf {‖T - R‖ | rank R ≤ n}`. The one-based Pietsch convention is
+`sₙ = a_{n-1}`. These scalar statements retain arbitrary nontrivially normed
+fields and seminormed source/target spaces, without Hilbert, completeness or
+dimension hypotheses. The remaining real-valued law statements are being
+consumed in dependency order; they do not own an approximation-number definition.
 
 ## Provenance
 
@@ -122,38 +70,26 @@ private instance approximationNumberIndexNonempty (n : ℕ) :
     Nonempty {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)} :=
   ⟨⟨0, by simp [LinearMap.rank_zero]⟩⟩
 
-/-- The **zero-based** approximation number `aₙ(T)`: the operator-norm distance
-from `T` to the continuous linear maps of rank **at most** `n`.
-
-The indexing is zero-based, so `a₀(T) = ‖T‖`
-(`ContinuousLinearMap.approximationNumber_index_zero`).  This differs from the
-one-based convention `sₙ(T) = dist(T, {rank < n})` common in the operator-ideal
-literature (Pietsch), for which `s₁(T) = ‖T‖`; the translation is
-`sₙ = a_{n-1}`.  The zero-based form is the one used throughout this
-development: see the module docstring for why. -/
-noncomputable def approximationNumber (T : E →L[𝕜] F) (n : ℕ) : ℝ :=
-  (T.singularValue n).toReal
-
 /-- The defining infimum.  Stated for proofs that genuinely need the
 construction; it is deliberately not a `simp` lemma, since a `ciInf` over a
 subtype is not a useful normal form for a norm-like quantity.  Prefer
 `ContinuousLinearMap.approximationNumber_le_norm_sub` and
 `ContinuousLinearMap.le_approximationNumber_iff`. -/
 theorem approximationNumber_eq_iInf (T : E →L[𝕜] F) (n : ℕ) :
-    T.approximationNumber n =
+    (T.singularValue n : ℝ) =
       ⨅ R : {R : E →L[𝕜] F // R.rank ≤ (n : Cardinal)}, ‖T - R.1‖ := by
-  rw [approximationNumber, T.singularValue_def, NNReal.coe_iInf]
+  rw [T.singularValue_def, NNReal.coe_iInf]
   simp only [coe_nnnorm]
 /-- Every admissible approximation of rank at most `n` bounds `aₙ(T)` above. -/
 theorem approximationNumber_le_norm_sub (T : E →L[𝕜] F) {n : ℕ}
     {R : E →L[𝕜] F} (hR : R.rank ≤ (n : Cardinal)) :
-    T.approximationNumber n ≤ ‖T - R‖ := by
+    (T.singularValue n : ℝ) ≤ ‖T - R‖ := by
   exact_mod_cast T.singularValue_le_nnnorm_sub (by exact_mod_cast hR)
 
 /-- Characteristic lower-bound property: `x` bounds `aₙ(T)` from below exactly
 when it bounds every admissible approximation error. -/
 theorem le_approximationNumber_iff (T : E →L[𝕜] F) {n : ℕ} {x : ℝ} :
-    x ≤ T.approximationNumber n ↔
+    x ≤ (T.singularValue n : ℝ) ↔
       ∀ R : E →L[𝕜] F, R.rank ≤ (n : Cardinal) → x ≤ ‖T - R‖ := by
   constructor
   · intro hx R hR
@@ -174,8 +110,7 @@ theorem approximationNumber_eq_norm_sub_of_forall_le (T : E →L[𝕜] F) {n : �
     {R : E →L[𝕜] F} (hR : R.rank ≤ (n : Cardinal))
     (hbest : ∀ S : E →L[𝕜] F, S.rank ≤ (n : Cardinal) →
       ‖T - R‖ ≤ ‖T - S‖) :
-    T.approximationNumber n = ‖T - R‖ := by
-  change (T.singularValue n).toReal = ‖T - R‖
+    (T.singularValue n : ℝ) = ‖T - R‖ := by
   have hbest' : ∀ S : E →L[𝕜] F, S.rank ≤ n →
       ‖T - R‖₊ ≤ ‖T - S‖₊ := by
     intro S hS
@@ -190,28 +125,19 @@ convention; see the module docstring.  Not to be confused with
 *operator*. -/
 @[simp]
 theorem approximationNumber_index_zero (T : E →L[𝕜] F) :
-    T.approximationNumber 0 = ‖T‖ := by
-  simp [approximationNumber, singularValue_zero]
+    (T.singularValue 0 : ℝ) = ‖T‖ := by
+  simp [singularValue_zero]
 
 /-- Approximation numbers decrease with the allowed rank. -/
 theorem approximationNumber_antitone (T : E →L[𝕜] F) :
-    Antitone T.approximationNumber := by
+    Antitone (fun approximationIndex : ℕ => (T.singularValue approximationIndex : ℝ)) := by
   intro n m hnm
   exact_mod_cast (T.antitone_singularValue hnm)
 
 /-- Every approximation number is bounded by the operator norm. -/
 theorem approximationNumber_le_norm (T : E →L[𝕜] F) (n : ℕ) :
-    T.approximationNumber n ≤ ‖T‖ := by
+    (T.singularValue n : ℝ) ≤ ‖T‖ := by
   exact_mod_cast T.singularValue_le_nnnorm n
-
-/-- Approximation numbers are nonnegative.  (With the real-valued codomain
-this is a theorem rather than a triviality; it is the price of matching the
-Mathlib convention for norm-like quantities.) -/
-theorem approximationNumber_nonneg (T : E →L[𝕜] F) (n : ℕ) :
-    0 ≤ T.approximationNumber n :=
-  by
-    change 0 ≤ (T.singularValue n).toReal
-    positivity
 
 /-- The zero operator has every approximation number equal to zero.  Named for
 the operator, as in Mathlib's `LinearMap.singularValues_zero`; the companion
@@ -219,8 +145,8 @@ the operator, as in Mathlib's `LinearMap.singularValues_zero`; the companion
 `0`. -/
 @[simp]
 theorem approximationNumber_zero (n : ℕ) :
-    (0 : E →L[𝕜] F).approximationNumber n = 0 := by
-  simp [approximationNumber, zero_singularValue]
+    ((0 : E →L[𝕜] F).singularValue n : ℝ) = 0 := by
+  simp [zero_singularValue]
 
 /-- **The rank cutoff.**  An operator of rank at most `n` is its own best
 approximation of rank at most `n`, so `aₙ(T) = 0`.
@@ -233,8 +159,7 @@ field is accepted as
 `ApproximationNumber.Compact`; it needs neither an inner product nor finite dimension. -/
 theorem approximationNumber_eq_zero_of_rank_le (T : E →L[𝕜] F) {n : ℕ}
     (hT : T.rank ≤ (n : Cardinal)) :
-    T.approximationNumber n = 0 := by
-  change (T.singularValue n).toReal = 0
+    (T.singularValue n : ℝ) = 0 := by
   rw [singularValue_eq_zero_of_rank_le (by exact_mod_cast hT)]
   rfl
 
@@ -243,7 +168,7 @@ theorem approximationNumber_eq_zero_of_rank_le (T : E →L[𝕜] F) {n : ℕ}
 consumer with a *finite* rank bound uses. -/
 theorem approximationNumber_eq_zero_of_rank_le_of_le (T : E →L[𝕜] F) {r n : ℕ}
     (hT : T.rank ≤ (r : Cardinal)) (hrn : r ≤ n) :
-    T.approximationNumber n = 0 :=
+    (T.singularValue n : ℝ) = 0 :=
   T.approximationNumber_eq_zero_of_rank_le
     (hT.trans (Nat.cast_le.mpr hrn))
 
@@ -255,8 +180,8 @@ theorem exists_rank_le_norm_sub_lt_approximationNumber_add (T : E →L[𝕜] F)
     (n : ℕ) {ε : ℝ} (hε : 0 < ε) :
     ∃ R : E →L[𝕜] F,
       R.rank ≤ (n : Cardinal) ∧
-        ‖T - R‖ < T.approximationNumber n + ε := by
-  have hlt : T.approximationNumber n < T.approximationNumber n + ε := by
+        ‖T - R‖ < (T.singularValue n : ℝ) + ε := by
+  have hlt : (T.singularValue n : ℝ) < (T.singularValue n : ℝ) + ε := by
     exact lt_add_of_pos_right _ hε
   rw [T.approximationNumber_eq_iInf] at hlt
   obtain ⟨⟨R, hR⟩, hdist⟩ := exists_lt_of_ciInf_lt hlt
@@ -267,7 +192,7 @@ index-shifted `ContinuousLinearMap.approximationNumber_add_le` is the sharper
 statement; this is its `n = 0` specialization in the second summand, kept
 separate because perturbation arguments want the norm on the right. -/
 theorem approximationNumber_add_le_add_norm (T S : E →L[𝕜] F) (n : ℕ) :
-    (T + S).approximationNumber n ≤ T.approximationNumber n + ‖S‖ := by
+    ((T + S).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) + ‖S‖ := by
   exact_mod_cast T.singularValue_add_le S n
 
 /-- **Each approximation number is `1`-Lipschitz in the operator norm:**
@@ -279,7 +204,7 @@ whole `s`-sequence moves no faster than the operator does.  In finite dimensions
 it specializes to Weyl's inequality for singular values, via
 `singularValue_eq_linearMap_singularValues`. -/
 theorem abs_approximationNumber_sub_approximationNumber_le (T S : E →L[𝕜] F) (n : ℕ) :
-    |T.approximationNumber n - S.approximationNumber n| ≤ ‖T - S‖ := by
+    |(T.singularValue n : ℝ) - (S.singularValue n : ℝ)| ≤ ‖T - S‖ := by
   exact_mod_cast T.abs_singularValue_sub_singularValue_le S n
 
 /-- The additive ideal inequality: `a_{m+n}(T + S) ≤ aₘ(T) + aₙ(S)`, because two
@@ -288,8 +213,8 @@ The index shift is exact in the zero-based convention — one-based `s`-numbers
 would carry an `m + n - 1` here. -/
 theorem approximationNumber_add_le
     (T S : E →L[𝕜] F) (m n : ℕ) :
-    (T + S).approximationNumber (m + n) ≤
-      T.approximationNumber m + S.approximationNumber n := by
+    ((T + S).singularValue (m + n) : ℝ) ≤
+      (T.singularValue m : ℝ) + (S.singularValue n : ℝ) := by
   exact_mod_cast T.singularValue_add_index_le S m n
 
 /-- **Composition multiplicativity across indices**: `a_{m+n}(S ∘ T) ≤ aₘ(S) · aₙ(T)`.
@@ -305,24 +230,24 @@ The residual then factors as `(S - R₁) ∘ (T - R₂)`, so the two approximati
 theorem approximationNumber_comp_add_le_mul
     {G : Type x} [NormedAddCommGroup G] [NormedSpace 𝕜 G]
     (S : F →L[𝕜] G) (T : E →L[𝕜] F) (m n : ℕ) :
-    (S ∘L T).approximationNumber (m + n) ≤
-      S.approximationNumber m * T.approximationNumber n := by
+    ((S ∘L T).singularValue (m + n) : ℝ) ≤
+      (S.singularValue m : ℝ) * (T.singularValue n : ℝ) := by
   exact_mod_cast S.singularValue_comp_add_le_mul T m n
 
 /-- Right ideal inequality for approximation numbers. -/
 theorem approximationNumber_comp_le_mul_norm
     {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     (T : E →L[𝕜] F) (A : G →L[𝕜] E) (n : ℕ) :
-    (T ∘L A).approximationNumber n ≤
-      T.approximationNumber n * ‖A‖ := by
+    ((T ∘L A).singularValue n : ℝ) ≤
+      (T.singularValue n : ℝ) * ‖A‖ := by
   exact_mod_cast T.singularValue_comp_le_right A n
 
 /-- Left ideal inequality for approximation numbers. -/
 theorem approximationNumber_comp_le_norm_mul
     {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     (B : F →L[𝕜] G) (T : E →L[𝕜] F) (n : ℕ) :
-    (B ∘L T).approximationNumber n ≤
-      ‖B‖ * T.approximationNumber n := by
+    ((B ∘L T).singularValue n : ℝ) ≤
+      ‖B‖ * (T.singularValue n : ℝ) := by
   exact_mod_cast B.singularValue_comp_le_left T n
 
 /-- Two-sided ideal inequality for approximation numbers. -/
@@ -332,8 +257,8 @@ theorem approximationNumber_comp_comp_le
     [SeminormedAddCommGroup H] [NormedSpace 𝕜 H]
     (L : F →L[𝕜] G) (T : E →L[𝕜] F) (R : H →L[𝕜] E)
     (n : ℕ) :
-    (L ∘L T ∘L R).approximationNumber n ≤
-      ‖L‖ * T.approximationNumber n * ‖R‖ := by
+    ((L ∘L T ∘L R).singularValue n : ℝ) ≤
+      ‖L‖ * (T.singularValue n : ℝ) * ‖R‖ := by
   exact_mod_cast L.singularValue_comp_comp_le T R n
 
 /-- **Approximation numbers do not see an enlargement of the codomain.**
@@ -351,29 +276,28 @@ theorem approximationNumber_comp_eq_of_leftInverse
     {G : Type x} [SeminormedAddCommGroup G] [NormedSpace 𝕜 G]
     {ι : F →L[𝕜] G} {π : G →L[𝕜] F} (hπι : Function.LeftInverse π ι)
     (hι : ‖ι‖ ≤ 1) (hπ : ‖π‖ ≤ 1) (T : E →L[𝕜] F) (n : ℕ) :
-    (ι ∘L T).approximationNumber n = T.approximationNumber n := by
+    ((ι ∘L T).singularValue n : ℝ) = (T.singularValue n : ℝ) := by
   have hcomp : π ∘L (ι ∘L T) = T := by
     ext x
     exact hπι (T x)
   refine le_antisymm ?_ ?_
-  · calc (ι ∘L T).approximationNumber n
-        ≤ ‖ι‖ * T.approximationNumber n := approximationNumber_comp_le_norm_mul ι T n
-      _ ≤ 1 * T.approximationNumber n :=
-        mul_le_mul_of_nonneg_right hι (T.approximationNumber_nonneg n)
-      _ = T.approximationNumber n := one_mul _
-  · calc T.approximationNumber n
-        = (π ∘L (ι ∘L T)).approximationNumber n := by rw [hcomp]
-      _ ≤ ‖π‖ * (ι ∘L T).approximationNumber n :=
+  · calc ((ι ∘L T).singularValue n : ℝ)
+        ≤ ‖ι‖ * (T.singularValue n : ℝ) := approximationNumber_comp_le_norm_mul ι T n
+      _ ≤ 1 * (T.singularValue n : ℝ) :=
+        mul_le_mul_of_nonneg_right hι ((T.singularValue n).coe_nonneg)
+      _ = (T.singularValue n : ℝ) := one_mul _
+  · calc (T.singularValue n : ℝ)
+        = ((π ∘L (ι ∘L T)).singularValue n : ℝ) := by rw [hcomp]
+      _ ≤ ‖π‖ * ((ι ∘L T).singularValue n : ℝ) :=
         approximationNumber_comp_le_norm_mul π (ι ∘L T) n
-      _ ≤ 1 * (ι ∘L T).approximationNumber n :=
-        mul_le_mul_of_nonneg_right hπ ((ι ∘L T).approximationNumber_nonneg n)
-      _ = (ι ∘L T).approximationNumber n := one_mul _
+      _ ≤ 1 * ((ι ∘L T).singularValue n : ℝ) :=
+        mul_le_mul_of_nonneg_right hπ (((ι ∘L T).singularValue n).coe_nonneg)
+      _ = ((ι ∘L T).singularValue n : ℝ) := one_mul _
 
 /-- Approximation numbers are absolutely homogeneous. -/
 @[simp]
 theorem approximationNumber_smul (c : 𝕜) (T : E →L[𝕜] F) (n : ℕ) :
-    (c • T).approximationNumber n = ‖c‖ * T.approximationNumber n := by
-  change ((c • T).singularValue n).toReal = ‖c‖ * (T.singularValue n).toReal
+    ((c • T).singularValue n : ℝ) = ‖c‖ * (T.singularValue n : ℝ) := by
   rw [T.singularValue_smul]
   simp
 

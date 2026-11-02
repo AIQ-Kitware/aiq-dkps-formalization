@@ -85,8 +85,8 @@ omit [CompleteSpace H] in
 theorem approximationNumber_scalarTransportSubspaceCLM
     (Z : Submodule 𝕜 H) [Z.HasOrthogonalProjection]
     (T : Z →L[𝕜] H) (n : ℕ) :
-    (scalarTransportSubspaceCLM (e := e) Z T).approximationNumber n =
-      T.approximationNumber n := by
+    ((scalarTransportSubspaceCLM (e := e) Z T).singularValue n : ℝ) =
+      (T.singularValue n : ℝ) := by
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   let I := LinearIsometryEquiv.refl 𝕂 (ScalarTransport e H)
   have hsame :
@@ -175,8 +175,8 @@ omit [CompleteSpace H] in
 theorem approximationNumber_scalarTransportSubspaceBlockCLM
     (Z W : Submodule 𝕜 H) [Z.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     (T : Z →L[𝕜] W) (n : ℕ) :
-    (scalarTransportSubspaceBlockCLM (e := e) Z W T).approximationNumber n =
-      T.approximationNumber n := by
+    ((scalarTransportSubspaceBlockCLM (e := e) Z W T).singularValue n : ℝ) =
+      (T.singularValue n : ℝ) := by
   let U := ScalarTransport.submoduleSubtypeEquiv (e := e) W
   let V := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   have hsame :
@@ -227,8 +227,8 @@ omit [CompleteSpace H] in
 theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLM
     (Z : Submodule 𝕜 H) [Z.HasOrthogonalProjection]
     (T : Z →L[𝕜] Zᗮ) (n : ℕ) :
-    (scalarTransportOrthogonalSubspaceBlockCLM (e := e) Z T).approximationNumber n =
-      T.approximationNumber n := by
+    ((scalarTransportOrthogonalSubspaceBlockCLM (e := e) Z T).singularValue n : ℝ) =
+      (T.singularValue n : ℝ) := by
   let U := ScalarTransport.orthogonalSubmoduleSubtypeEquiv (e := e) Z
   let V := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   have hsame :
@@ -245,8 +245,8 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
     (Z : Submodule 𝕜 H) [Z.HasOrthogonalProjection]
     (T : ScalarTransport.submodule (e := e) Z →L[𝕂]
       (ScalarTransport.submodule (e := e) Z)ᗮ) (n : ℕ) :
-    (scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T).approximationNumber n =
-      T.approximationNumber n := by
+    ((scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T).singularValue n : ℝ) =
+      (T.singularValue n : ℝ) := by
   let U := ScalarTransport.orthogonalSubmoduleSubtypeEquiv (e := e) Z
   let V := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   let X : ScalarTransport e Z →L[𝕂] ScalarTransport e Zᗮ :=
@@ -262,13 +262,13 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
         ((ScalarTransport.clmEquiv (e := e)).symm X) = X
     exact Equiv.apply_symm_apply (ScalarTransport.clmEquiv (e := e)) X
   calc
-    (scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T).approximationNumber n =
-        (ScalarTransport.clm (e := e)
-          (scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T)).approximationNumber n :=
+    ((scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T).singularValue n : ℝ) =
+        ((ScalarTransport.clm (e := e)
+          (scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T)).singularValue n : ℝ) :=
       (ScalarTransport.approximationNumber_clm (e := e)
         (scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T) n).symm
-    _ = X.approximationNumber n := by rw [hclm]
-    _ = T.approximationNumber n := (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+    _ = (X.singularValue n : ℝ) := by rw [hclm]
+    _ = (T.singularValue n : ℝ) := (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
       hcoord n).symm
 
 /-- The extended symmetric-norming gauge is unchanged by orthogonal-corner
@@ -343,13 +343,13 @@ theorem approximationNumber_scalarTransportSubspaceBlockCLMEquiv_symm
     (Z W : Submodule 𝕜 H) [Z.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     (T : ScalarTransport.submodule (e := e) Z →L[𝕂]
       ScalarTransport.submodule (e := e) W) (n : ℕ) :
-    ((scalarTransportSubspaceBlockCLMEquiv (e := e) Z W).symm T).approximationNumber n =
-      T.approximationNumber n := by
+    (((scalarTransportSubspaceBlockCLMEquiv (e := e) Z W).symm T).singularValue n : ℝ) =
+      (T.singularValue n : ℝ) := by
   have h := approximationNumber_scalarTransportSubspaceBlockCLM (e := e) Z W
     ((scalarTransportSubspaceBlockCLMEquiv (e := e) Z W).symm T) n
-  change (((scalarTransportSubspaceBlockCLMEquiv (e := e) Z W)
-      ((scalarTransportSubspaceBlockCLMEquiv (e := e) Z W).symm T)).approximationNumber n) =
-    ((scalarTransportSubspaceBlockCLMEquiv (e := e) Z W).symm T).approximationNumber n at h
+  change ((((scalarTransportSubspaceBlockCLMEquiv (e := e) Z W)
+      ((scalarTransportSubspaceBlockCLMEquiv (e := e) Z W).symm T)).singularValue n : ℝ)) =
+    (((scalarTransportSubspaceBlockCLMEquiv (e := e) Z W).symm T).singularValue n : ℝ) at h
   rw [Equiv.apply_symm_apply] at h
   exact h.symm
 
@@ -443,8 +443,8 @@ theorem kyFanApproximationGauge_scalarTransport_residual
   calc
     kyFanApproximationGauge k (D.scalarTransport (e := e)).residual =
         kyFanApproximationGauge k (ScalarTransport.clm (e := e) D.residual) := by
-      change ((D.scalarTransport (e := e)).residual).kyFanGaugeReal k =
-        (ScalarTransport.clm (e := e) D.residual).kyFanGaugeReal k
+      change (((D.scalarTransport (e := e)).residual).kyFanGauge k : ℝ) =
+        ((ScalarTransport.clm (e := e) D.residual).kyFanGauge k : ℝ)
       exact ContinuousLinearMap.SameSingularValues.kyFanGaugeReal_eq
         (ContinuousLinearMap.sameSingularValues_symm hcoord) k
     _ = kyFanApproximationGauge k D.residual :=

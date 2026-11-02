@@ -520,7 +520,7 @@ private theorem kyFan_core_of_le_finrank (data : Theorem63TrialData Z V)
           (theorem63DirectedSineBlock Z V)).orthonormal
         (castIndex i) (castIndex j))
   have hscalar : ∀ i : Fin k,
-      delta * approximationSingularValue (castIndex i) tanTheta0 ≤
+      delta * (tanTheta0.singularValue (castIndex i) : ℝ) ≤
         RCLike.re ⟪theorem63ResidualWitness Z V (castIndex i),
           data.residual (finiteSourceRightSingularBasis
             (theorem63DirectedSineBlock Z V) (castIndex i))⟫_ℂ := by
@@ -538,7 +538,7 @@ private theorem kyFan_core_of_le_finrank (data : Theorem63TrialData Z V)
     data.residual hu hv hscalar
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum] at hsum ⊢
   rw [Finset.mul_sum, ← Fin.sum_univ_eq_sum_range]
-  simpa [castIndex, approximationSingularValue] using hsum
+  simpa [castIndex] using hsum
 
 /-- **Theorem 6.3's Ky Fan root over trial-block data.**
 

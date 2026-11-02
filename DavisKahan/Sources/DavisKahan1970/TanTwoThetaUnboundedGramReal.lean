@@ -213,14 +213,12 @@ by complexification.**  This is what makes the descent of the `tan 2Θ` endpoint
 sound. -/
 theorem approximationSingularValue_blockCompression_complexify
     (K : E →L[ℝ] E) (n : ℕ) :
-    approximationSingularValue n
-        (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
-          (complexify K)) =
-      approximationSingularValue n (blockCompression Ω Γ K) := by
+    ((blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
+          (complexify K)).singularValue n : ℝ) =
+      ((blockCompression Ω Γ K).singularValue n : ℝ) := by
   calc
-    approximationSingularValue n
-        (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ) (complexify K)) =
-        approximationSingularValue n (complexify (blockCompression Ω Γ K)) := by
+    ((blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ) (complexify K)).singularValue n : ℝ) =
+        ((complexify (blockCompression Ω Γ K)).singularValue n : ℝ) := by
       rw [← blockCompression_complexify_equiv Ω Γ K]
       exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
         _ (complexifySubmoduleEquiv Γ).symm

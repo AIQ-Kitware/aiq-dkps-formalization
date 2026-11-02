@@ -358,7 +358,7 @@ private theorem approximationNumber_eq_tanArcsin_real
     {S Tg : F →L[Real] F} (hS : IsSelfAdjoint S) (hTg : IsSelfAdjoint Tg)
     (hSlt : ‖S‖ < 1)
     (hrel : Tg * Tg = S * S + Tg * Tg * (S * S)) (n : Nat) :
-    Tg.approximationNumber n = Real.tan (Real.arcsin (S.approximationNumber n)) := by
+    (Tg.singularValue n : ℝ) = Real.tan (Real.arcsin ((S.singularValue n : ℝ))) := by
   have hSC : IsSelfAdjoint (complexify S) := (complexify_isSelfAdjoint_iff S).2 hS
   have hTC : IsSelfAdjoint (complexify Tg) := (complexify_isSelfAdjoint_iff Tg).2 hTg
   have hSltC : ‖complexify S‖ < 1 := by
@@ -371,10 +371,10 @@ private theorem approximationNumber_eq_tanArcsin_real
   have hc := TauCeti.ApproximationNumber.approximationNumber_eq_tanArcsin
     hSC hTC hSltC hrelC n
   calc
-    Tg.approximationNumber n = (complexify Tg).approximationNumber n :=
+    (Tg.singularValue n : ℝ) = ((complexify Tg).singularValue n : ℝ) :=
       (ComplexificationApproximation.approximationNumber_complexify Tg n).symm
-    _ = Real.tan (Real.arcsin ((complexify S).approximationNumber n)) := hc
-    _ = Real.tan (Real.arcsin (S.approximationNumber n)) := by
+    _ = Real.tan (Real.arcsin (((complexify S).singularValue n : ℝ))) := hc
+    _ = Real.tan (Real.arcsin ((S.singularValue n : ℝ))) := by
       rw [ComplexificationApproximation.approximationNumber_complexify S n]
 
 private theorem approximationNumber_eq_tanArcsin_rclike
@@ -382,7 +382,7 @@ private theorem approximationNumber_eq_tanArcsin_rclike
     {S Tg : F →L[K] F} (hS : IsSelfAdjoint S) (hTg : IsSelfAdjoint Tg)
     (hSlt : ‖S‖ < 1)
     (hrel : Tg * Tg = S * S + Tg * Tg * (S * S)) (n : Nat) :
-    Tg.approximationNumber n = Real.tan (Real.arcsin (S.approximationNumber n)) := by
+    (Tg.singularValue n : ℝ) = Real.tan (Real.arcsin ((S.singularValue n : ℝ))) := by
   rcases RCLike.I_eq_zero_or_im_I_eq_one (K := K) with h | h
   · let e := RCLikeIso.real h
     have hS' : IsSelfAdjoint (TauCeti.ScalarTransport.clm (e := e) S) :=
@@ -405,12 +405,12 @@ private theorem approximationNumber_eq_tanArcsin_rclike
         TauCeti.ScalarTransport.clm_add] using ht
     have hr := approximationNumber_eq_tanArcsin_real hS' hT' hSlt' hrel' n
     calc
-      Tg.approximationNumber n =
-          (TauCeti.ScalarTransport.clm (e := e) Tg).approximationNumber n :=
+      (Tg.singularValue n : ℝ) =
+          ((TauCeti.ScalarTransport.clm (e := e) Tg).singularValue n : ℝ) :=
         (TauCeti.ScalarTransport.approximationNumber_clm (e := e) Tg n).symm
       _ = Real.tan (Real.arcsin
-          ((TauCeti.ScalarTransport.clm (e := e) S).approximationNumber n)) := hr
-      _ = Real.tan (Real.arcsin (S.approximationNumber n)) := by
+          (((TauCeti.ScalarTransport.clm (e := e) S).singularValue n : ℝ))) := hr
+      _ = Real.tan (Real.arcsin ((S.singularValue n : ℝ))) := by
         rw [TauCeti.ScalarTransport.approximationNumber_clm (e := e) S n]
   · let e := RCLikeIso.complex h
     have hS' : IsSelfAdjoint (TauCeti.ScalarTransport.clm (e := e) S) :=
@@ -434,12 +434,12 @@ private theorem approximationNumber_eq_tanArcsin_rclike
     have hc := TauCeti.ApproximationNumber.approximationNumber_eq_tanArcsin
       hS' hT' hSlt' hrel' n
     calc
-      Tg.approximationNumber n =
-          (TauCeti.ScalarTransport.clm (e := e) Tg).approximationNumber n :=
+      (Tg.singularValue n : ℝ) =
+          ((TauCeti.ScalarTransport.clm (e := e) Tg).singularValue n : ℝ) :=
         (TauCeti.ScalarTransport.approximationNumber_clm (e := e) Tg n).symm
       _ = Real.tan (Real.arcsin
-          ((TauCeti.ScalarTransport.clm (e := e) S).approximationNumber n)) := hc
-      _ = Real.tan (Real.arcsin (S.approximationNumber n)) := by
+          (((TauCeti.ScalarTransport.clm (e := e) S).singularValue n : ℝ))) := hc
+      _ = Real.tan (Real.arcsin ((S.singularValue n : ℝ))) := by
         rw [TauCeti.ScalarTransport.approximationNumber_clm (e := e) S n]
 
 private theorem spectrum_directedSinAngleOperator_lt_one
@@ -543,8 +543,8 @@ sequence `tan (arcsin a_n(sin Theta_0))`. -/
 theorem approximationNumber_sourceDirectedTanThetaOperator
     (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (htr : ‖directedSinAngleOperator U V‖ < 1) (n : Nat) :
-    (sourceDirectedTanThetaOperator U V).approximationNumber n =
-      Real.tan (Real.arcsin ((directedSinAngleOperator U V).approximationNumber n)) := by
+    ((sourceDirectedTanThetaOperator U V).singularValue n : ℝ) =
+      Real.tan (Real.arcsin (((directedSinAngleOperator U V).singularValue n : ℝ))) := by
   refine approximationNumber_eq_tanArcsin_rclike
     (isSelfAdjoint_directedSinAngleOperator U V)
     (isSelfAdjoint_sourceDirectedTanThetaOperator U V) htr ?_ n
@@ -633,9 +633,9 @@ sequence `tan (arcsin a_n(sin 2 Theta_0))`. -/
 theorem approximationNumber_sourceDirectedTanTwoThetaOperator
     (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hSlt : ‖sourceDirectedSinTwoThetaOperator U V‖ < 1) (n : Nat) :
-    (sourceDirectedTanTwoThetaOperator U V).approximationNumber n =
+    ((sourceDirectedTanTwoThetaOperator U V).singularValue n : ℝ) =
       Real.tan (Real.arcsin
-        ((sourceDirectedSinTwoThetaOperator U V).approximationNumber n)) := by
+        (((sourceDirectedSinTwoThetaOperator U V).singularValue n : ℝ))) := by
   exact approximationNumber_eq_tanArcsin_rclike
     (isSelfAdjoint_sourceDirectedSinTwoThetaOperator U V)
     (isSelfAdjoint_sourceDirectedTanTwoThetaOperator U V) hSlt
@@ -682,7 +682,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_K)
     (hResidual : N.Mem D.trial.residual) :
-    (∀ n, (TanTheta.directedSineBlock Z V).approximationNumber n < 1) ∧
+    (∀ n, ((TanTheta.directedSineBlock Z V).singularValue n : ℝ) < 1) ∧
       N.Mem (sourceDirectedTanThetaOperator Z V) ∧
       delta * N.gauge (sourceDirectedTanThetaOperator Z V) ≤
         N.gauge D.trial.residual := by
@@ -699,7 +699,6 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
     apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro n
     apply NNReal.eq
-    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
     rw [approximationNumber_sourceDirectedTanThetaOperator Z V htr n,
       hSseq_apply n, hTseq n]
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hTanSeq
@@ -730,7 +729,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_K)
     (hab : a < b)
     (hRmem : N.Mem (blockCompression Uᗮ U B)) :
-    (∀ n : Nat, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : Nat, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       N.Mem (sourceDirectedTanTwoThetaOperator V U) ∧
       (b - a) * N.gauge (sourceDirectedTanTwoThetaOperator V U) ≤
         2 * N.gauge (blockCompression Uᗮ U B) := by
@@ -753,7 +752,6 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
     apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
     intro n
     apply NNReal.eq
-    simp only [← ContinuousLinearMap.approximationNumber_eq_singularValue_toReal]
     rw [approximationNumber_sourceDirectedTanTwoThetaOperator V U hSlt n,
       hSseq_apply n, hTseq n]
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hTanSeq
@@ -848,7 +846,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_complex
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (hResidual : N.Mem D.trial.residual) :
-    (∀ n, (TanTheta.directedSineBlock Z V).approximationNumber n < 1) ∧
+    (∀ n, ((TanTheta.directedSineBlock Z V).singularValue n : ℝ) < 1) ∧
       N.Mem (sourceDirectedTanThetaOperator Z V) ∧
       delta * N.gauge (sourceDirectedTanThetaOperator Z V) ≤
         N.gauge D.trial.residual :=
@@ -868,7 +866,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_real
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (hResidual : N.Mem D.trial.residual) :
-    (∀ n, (TanTheta.directedSineBlock Z V).approximationNumber n < 1) ∧
+    (∀ n, ((TanTheta.directedSineBlock Z V).singularValue n : ℝ) < 1) ∧
       N.Mem (sourceDirectedTanThetaOperator Z V) ∧
       delta * N.gauge (sourceDirectedTanThetaOperator Z V) ≤
         N.gauge D.trial.residual :=
@@ -940,7 +938,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
       b * ‖(x : Ec)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Ec)⟫_ℂ)
     (hab : a < b)
     (hRmem : N.Mem (blockCompression Uᗮ U B)) :
-    (∀ n : Nat, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : Nat, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       N.Mem (sourceDirectedTanTwoThetaOperator V U) ∧
       (b - a) * N.gauge (sourceDirectedTanTwoThetaOperator V U) ≤
         2 * N.gauge (blockCompression Uᗮ U B) :=
@@ -964,7 +962,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
       b * ‖(x : Er)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Er)⟫_ℝ)
     (hab : a < b)
     (hRmem : N.Mem (blockCompression Uᗮ U B)) :
-    (∀ n : Nat, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+    (∀ n : Nat, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       N.Mem (sourceDirectedTanTwoThetaOperator V U) ∧
       (b - a) * N.gauge (sourceDirectedTanTwoThetaOperator V U) ≤
         2 * N.gauge (blockCompression Uᗮ U B) :=
