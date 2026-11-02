@@ -30,7 +30,7 @@ coordinatewise reduction on `EuclideanSpace`.
 module
 
 public import Mathlib
-public import ForTauCeti.Probability.Moments.SampleMean
+public import TauCeti.Probability.Moments.SampleMean
 
 public section
 
@@ -75,7 +75,7 @@ mean equals `r⁻²` times the sum of the individual mean-squared errors:
 Only pairwise independence and identical centring are needed (not identical
 distribution); the cross terms vanish by independence.  The proof upgrades the
 coordinate means to a Bochner mean (`bochner_mean_of_coord`) and applies the
-Mathlib-staged `TauCeti.integral_norm_sq_average_sub_eq_sum`.
+accepted `TauCeti.integral_norm_finiteMean_sub_sq`.
 
 PAPER CORRESPONDENCE: the additive form behind the paper's variance computation
 `E‖(X̄_i)_j· − (μ_i)_j·‖² = trace(cov[(X̄_i)_j·]) = γ_ij/r` (Appendix A.2). This
@@ -102,7 +102,12 @@ theorem integral_norm_sq_sampleMean_sub_mean_eq_sum
   have hbm : ∀ k, ∫ ω, X k ω ∂P = μ :=
     fun k => bochner_mean_of_coord P (X k) μ ((hL2 k).integrable one_le_two)
       (fun c => hmean k c)
-  exact TauCeti.integral_norm_sq_average_sub_eq_sum P hr X μ hL2 hbm hindep
+  let : Nonempty (Fin r) := ⟨⟨0, hr⟩⟩
+  have h := TauCeti.integral_norm_finiteMean_sub_sq
+    (μ := P) (X := X) (m := μ) hL2 hbm
+    (fun i j hij => hindep (Set.mem_univ i) (Set.mem_univ j) hij)
+  simpa only [TauCeti.finiteMean_eq_inv_smul_sum, Fintype.card_fin,
+    inv_pow] using h
 
 /--
 **iid corollary (equality form).**

@@ -196,14 +196,11 @@
       "roadmap_focus": "probability-concentration",
       "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "tauceti_population": "Staged in ForTauCeti. This module list is refreshed from the current import closure; it is not build evidence. Re-export and compile against Tau Ceti before submission.",
+      "tauceti_population": "Remaining local donor modules listed; centered scatter, sample mean, and Chebyshev donors have been retired in favor of accepted TauCeti APIs. Historical declarations remain in records.",
       "tauceti_target_marker": null,
       "staging_modules": [
         "ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable",
-        "ForTauCeti.MeasureTheory.CfcMeasurable",
-        "ForTauCeti.Probability.Moments.CenteredScatter",
-        "ForTauCeti.Probability.Moments.SampleMean",
-        "ForTauCeti.Probability.Moments.Variance"
+        "ForTauCeti.MeasureTheory.CfcMeasurable"
       ]
     },
     {
@@ -1988,7 +1985,12 @@
     },
     {
       "source_module": "ForMathlib.Probability.Moments.SampleMean",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.integral_sq_scaledSum_sub_of_pairwise_indep",
+        "TauCeti.integral_norm_sq_average_sub_eq_sum",
+        "TauCeti.integral_norm_sq_average_sub_of_iid",
+        "TauCeti.integral_norm_sq_average_sub_le_of_bound"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Probability.Moments.SampleMean",
       "final_tauceti_module": "TauCeti.Probability.Moments.SampleMean",
@@ -1996,12 +1998,19 @@
       "roadmap_target": "probability-concentration",
       "provenance_class": "moved; introduced at Davis--Kahan commit e9379f2; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.Convex.FiniteMean",
+        "TauCeti.Probability.Moments.SampleMean"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "Acharyya2024.SecondMoment",
+        "DkpsQuench2026.Spectral.Regularity",
+        "DkpsQuench2026.Response.RawSampling",
+        "DkpsQuench2026.Paper.EvaluationConcentration"
+      ],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/15962",
+      "migration_note": "Retired the complete 275-line SampleMean donor after replacing all direct consumers with the general real-Hilbert-space sample-mean API in TauCeti.Probability.Moments.SampleMean: integral_finiteMean_sub_sq (scalar), integral_norm_finiteMean_sub_sq (vector), integral_norm_finiteMean_sub_sq_of_forall_eq (iid/equal-MSE case), and integral_norm_finiteMean_sub_sq_le_of_forall_le (bound). Existing Acharyya/Quench paper theorem types remain unchanged; calls bridge Fin-scaled sums to finiteMean using finiteMean_eq_inv_smul_sum, with pairwise independence and Nonempty (Fin r) supplied explicitly. The original generic vector theorem was finite-dimensional, whereas TauCeti works in an arbitrary complete real Hilbert space. Retired the obsolete SampleMeanMSE comparator package and default config because its old declaration names no longer exist. Upstream PR #15962 (integrated at 8c6d1312b675b1443cb85c6de6dff4b8b8ba93c4) explicitly says its implementation was independent of the Kitware DKPS bulk port #13876; this is independent replacement, not transplanted proof. Original Kitware copyright, Jon Crall/Claude Opus 4.8 attribution, and Apache-2.0 source remain recoverable at e4637c3919ae:ForTauCeti/Probability/Moments/SampleMean.lean (Davis--Kahan origin e9379f2)."
     },
     {
       "source_module": "ForMathlib.Probability.Moments.Variance",

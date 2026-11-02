@@ -2301,3 +2301,46 @@ implementation was written independently of the DKPS bulk port #13876**.
 This is replacement by accepted mathematics, **not** a DKPS proof port.
 The separate `ForTauCeti/Probability/Moments/SampleMean.lean` still contains
 local finite-sample proofs and remains available for subsequent migration.
+
+
+## 2026-11-01: MSS-C02--C05 sample-mean donor consumption
+
+**Complete donor retirement.** Remove
+`ForTauCeti/Probability/Moments/SampleMean.lean`, the 275-line historical Kitware
+`ForMathlib` sample-mean implementation, and migrate its direct Acharyya and Quench
+consumers to `TauCeti.Probability.Moments.SampleMean`. The four retired declarations
+are `TauCeti.integral_sq_scaledSum_sub_of_pairwise_indep`,
+`TauCeti.integral_norm_sq_average_sub_eq_sum`,
+`TauCeti.integral_norm_sq_average_sub_of_iid`, and
+`TauCeti.integral_norm_sq_average_sub_le_of_bound`.
+
+**Accepted replacements.** The scalar identity uses
+`TauCeti.integral_finiteMean_sub_sq`; the vector identity uses
+`TauCeti.integral_norm_finiteMean_sub_sq`; the identical-error and uniformly
+bounded cases are supplied respectively by
+`TauCeti.integral_norm_finiteMean_sub_sq_of_forall_eq` and
+`TauCeti.integral_norm_finiteMean_sub_sq_le_of_forall_le`. The accepted API
+expresses the mean as `TauCeti.finiteMean`; DKPS call sites rewrite it by
+`TauCeti.finiteMean_eq_inv_smul_sum` and instantiate the nonempty `Fin r` index
+from the already-assumed positive sample count. The upstream vector theorem
+works for any complete real inner product space, strictly beyond the donor's
+finite-dimensional space assumption. Acharyya2024's coordinate-to-Bochner
+mean bridge and original paper statements are retained. Both Quench scalar
+spectral regularity estimates and the evaluation/raw-response moment bounds
+use upstream theorems directly. The generic SampleMeanMSE comparator fixture
+and runner entry are retired: they compare the removed generic donor to its
+own copied statements, while the unchanged Acharyya/Quench statements exercise
+the accepted replacement at the paper boundary. They impose no stronger
+mathematical contract. The original fixture is recoverable from Git history.
+
+**Lineage.** The DKPS donor was introduced at Davis--Kahan commit `e9379f2`,
+with original authors Jon Crall and Claude Opus 4.8, Copyright 2026
+Kitware, Inc., Apache-2.0. The last donor implementation is recoverable at
+`e4637c3919ae:ForTauCeti/Probability/Moments/SampleMean.lean` (and its
+original namespace/file in the prior Davis--Kahan history).
+[TauCeti #15962](https://github.com/TauCetiProject/TauCeti/pull/15962),
+integration commit `8c6d1312b675b1443cb85c6de6dff4b8b8ba93c4`,
+**explicitly identifies its implementation as independent of the DKPS bulk
+port #13876**. The PR's MSS-C01--C05 scope includes the uncentered
+Chebyshev theorem consumed in the preceding batch; this batch consumes
+MSS-C02--C05, not any unmerged higher-moment or matrix concentration work.

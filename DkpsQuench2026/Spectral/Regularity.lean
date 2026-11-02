@@ -21,6 +21,7 @@ public import DkpsQuench2026.Geometry.CenteredCovariance
 public import DkpsQuench2026.Spectral.GramSpectrum
 public import TauCeti.Analysis.Matrix.Eigenvalues
 public import TauCeti.Probability.Moments.Chebyshev
+public import TauCeti.Probability.Moments.SampleMean
 
 public section
 
@@ -295,9 +296,15 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
             integral_mono ((hL2 n i).sub (memLp_const c)).integrable_sq (integrable_const _) hle
         _ = 4 * B ^ 2 := by simp
     simp only [referenceCoordinateMean]
-    rw [TauCeti.integral_sq_scaledSum_sub_of_pairwise_indep (μref n) hn
-      (fun i ωref => ψ (f_ref n ωref i) a) c (fun i => hL2 n i) (fun i => hint_coord n i)
-      (hindep n)]
+    let : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
+    have hmse_eq := TauCeti.integral_finiteMean_sub_sq
+      (μ := μref n) (Z := fun i ωref => ψ (f_ref n ωref i) a) (c := c)
+      (fun i => hL2 n i) (fun i => hint_coord n i)
+      (fun i j hij => hindep n (Set.mem_univ i) (Set.mem_univ j) hij)
+    simp only [TauCeti.finiteMean_eq_inv_smul_sum, Fintype.card_fin,
+      smul_eq_mul] at hmse_eq
+    rw [← inv_pow] at hmse_eq
+    rw [hmse_eq]
     have hsum : ∑ i : Fin n, ∫ ωref, (ψ (f_ref n ωref i) a - c) ^ 2 ∂(μref n)
         ≤ (n : Real) * (4 * B ^ 2) := by
       calc ∑ i : Fin n, ∫ ωref, (ψ (f_ref n ωref i) a - c) ^ 2 ∂(μref n)
@@ -512,9 +519,16 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
             integral_mono ((hL2 n i).sub (memLp_const c)).integrable_sq (integrable_const _) hle
         _ = 4 * Bg ^ 2 := by simp
     simp only [referenceCoordinateProductMean]
-    rw [TauCeti.integral_sq_scaledSum_sub_of_pairwise_indep (μref n) hn
-      (fun i ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) c (fun i => hL2 n i)
-      (fun i => hint_coord n i) (hindep n)]
+    let : Nonempty (Fin n) := ⟨⟨0, hn⟩⟩
+    have hmse_eq := TauCeti.integral_finiteMean_sub_sq
+      (μ := μref n)
+      (Z := fun i ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) (c := c)
+      (fun i => hL2 n i) (fun i => hint_coord n i)
+      (fun i j hij => hindep n (Set.mem_univ i) (Set.mem_univ j) hij)
+    simp only [TauCeti.finiteMean_eq_inv_smul_sum, Fintype.card_fin,
+      smul_eq_mul] at hmse_eq
+    rw [← inv_pow] at hmse_eq
+    rw [hmse_eq]
     have hsum : ∑ i : Fin n,
         ∫ ωref, (ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b - c) ^ 2 ∂(μref n)
         ≤ (n : Real) * (4 * Bg ^ 2) := by

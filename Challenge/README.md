@@ -123,7 +123,6 @@ status in the repository.
 | RankFactorization | `Matrix.rank_le_iff_exists_eq_mul` | matrix form absent but must be related to abstract `rank_le_iff_exists_linearMap`; confirm framing/value |
 | RankPsdRealization | `Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self`, `Matrix.eigenvalues₀_eq_zero_of_le` | plain `posSemidef_conjTranspose_mul_self` already exists — only the rank-**control** is novel; confirm it's worth a PR |
 | RestrictCoverMeasurable | `measurable_of_iUnion_restrict` | clean countable analogue, but minor; confirm worth standing alone |
-| SampleMeanMSE | `integral_norm_sq_average_sub_of_iid`, `integral_norm_sq_average_sub_le_of_bound` | vector-valued (scalar variance exists); confirm not trivially derivable |
 | NearIsometry | `LinearMap.exists_linearIsometryEquiv_norm_sub_le`, `ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_le` | quantitative polar factor; niche |
 | CfcMeasurable | `measurable_cfc_comp`, `measurableSet_exists_mem_le` | involved proof; destination unsettled |
 | MatrixConcentration | `measure_forall_eigenvalues₀_ge_ge` (+ entrywise→operator helpers) | elementary route gives **loose `n`/`n²` constants**; Mathlib would want a matrix-Bernstein sharpening |

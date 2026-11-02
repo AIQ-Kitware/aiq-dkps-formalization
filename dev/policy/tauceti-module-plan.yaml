@@ -264,10 +264,6 @@ topics:
   modules:
   - Analysis.Matrix.SpectralFunctionMeasurable
   - Analysis.Matrix.SpectralProjection
-- id: T20
-  title: Sample moments and matrix concentration
-  modules:
-  - Probability.Moments.SampleMean
 - id: T21
   title: Matrix rank factorization and positive semidefiniteness
   modules:
@@ -577,10 +573,6 @@ rungs:
   seeds:
   - Analysis.Matrix.SpectralFunctionMeasurable
   - Analysis.Matrix.SpectralProjection
-- id: S
-  title: Sample moments and matrix concentration (T20)
-  seeds:
-  - Probability.Moments.SampleMean
 - id: T
   title: Matrix rank factorization and positive semidefiniteness (T21)
   seeds:

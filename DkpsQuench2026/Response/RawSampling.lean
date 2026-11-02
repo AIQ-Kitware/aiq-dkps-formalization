@@ -182,10 +182,15 @@ theorem integral_norm_sq_modelReplicateMean_sub_mean_le
     rw [Hraw.mean_entry n f k c] at h
     exact h
   -- Apply the universe-polymorphic sample-mean second-moment bound.
-  have hbound := TauCeti.integral_norm_sq_average_sub_le_of_bound
-    (μresp n) (Hraw.replicates_pos n) (Y n f) (μmodel f)
-    (Hraw.memLp_two n f) hmean (Hraw.pairwise_independent n f) (Hraw.second_moment n f)
-  simpa [modelReplicateMean, replicateMean] using hbound
+  let : Nonempty (Fin (replicates n)) := ⟨⟨0, Hraw.replicates_pos n⟩⟩
+  have hbound := TauCeti.integral_norm_finiteMean_sub_sq_le_of_forall_le
+    (μ := μresp n) (X := Y n f) (m := μmodel f)
+    (Hraw.memLp_two n f) hmean
+    (fun i j hij => (Hraw.pairwise_independent n f)
+      (Set.mem_univ i) (Set.mem_univ j) hij)
+    (Hraw.second_moment n f)
+  simpa only [TauCeti.finiteMean_eq_inv_smul_sum, Fintype.card_fin,
+    modelReplicateMean, replicateMean] using hbound
 
 /-- Uniform modelwise second moments transfer through random reference
 selection on the independent product space.

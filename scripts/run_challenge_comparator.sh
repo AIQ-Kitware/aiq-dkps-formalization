@@ -45,7 +45,6 @@ DEFAULT_CONFIGS=(
     "comparator/challenge-rank-factorization.json"
     "comparator/challenge-rank-psd-realization.json"
     "comparator/challenge-restrict-cover-measurable.json"
-    "comparator/challenge-sample-mean-mse.json"
     "comparator/challenge-near-isometry.json"
     "comparator/challenge-cfc-measurable.json"
     "comparator/challenge-matrix-concentration.json"

@@ -15,7 +15,7 @@ repository's `HighProbAtTop` interface when the replicate schedule grows.
 module
 
 public import DkpsQuench2026.Paper.EvaluationBridges
-public import ForTauCeti.Probability.Moments.SampleMean
+public import TauCeti.Probability.Moments.SampleMean
 public import TauCeti.Probability.Moments.Chebyshev
 public import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
 
@@ -66,10 +66,13 @@ theorem integral_sq_randomEmpiricalMean_sub_le
   have hsecondNorm : ∀ i, ∫ ω, ‖Z i ω - center‖ ^ 2 ∂P ≤ γ := by
     intro i
     simpa [Real.norm_eq_abs, sq_abs] using hsecond i
-  have h := TauCeti.integral_norm_sq_average_sub_le_of_bound
-    P hr Z center hL2 hmean hindep hsecondNorm
-  simpa [randomEmpiricalMean, empiricalMean, smul_eq_mul,
-    Real.norm_eq_abs, sq_abs] using h
+  let : Nonempty (Fin r) := ⟨⟨0, hr⟩⟩
+  have h := TauCeti.integral_norm_finiteMean_sub_sq_le_of_forall_le
+    (μ := P) (X := Z) (m := center) hL2 hmean
+    (fun i j hij => hindep (Set.mem_univ i) (Set.mem_univ j) hij)
+    hsecondNorm
+  simpa [randomEmpiricalMean, empiricalMean, TauCeti.finiteMean_eq_inv_smul_sum,
+    Fintype.card_fin, smul_eq_mul, Real.norm_eq_abs, sq_abs] using h
 
 /-- Chebyshev bound for a finite replicate average. -/
 theorem measure_randomEmpiricalMean_deviation_gt_le
